@@ -107,7 +107,7 @@ verify: ["yarn check:all"]
 | `large` | 8+ | 500+ | **SPLIT THIS** |
 
 ## Key Repo Rules (from ISSUE_GUIDE.md)
-- Never edit `lib/` — upstream mirrors
+- `lib/` is normal workspace code here—edit when the issue requires it (not a copy of another repo)
 - Never modify `core/mpc/` or `tss/` without explicit review approval
 - Use resolver pattern for chain-specific logic
 - Only edit `en.ts` for translations

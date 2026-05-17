@@ -33,6 +33,7 @@ export const PasscodeInput = ({
         validation={validation}
         validationMessages={validationMessages}
         value={value}
+        secureEntry
       />
     </>
   )

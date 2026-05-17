@@ -5,18 +5,26 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
-export const getCommonPlugins = (): PluginOption[] => [
+type GetCommonPluginsInput = {
+  nodePolyfills?: PluginOption
+  vultisigSdk?: PluginOption
+}
+
+export const getCommonPlugins = ({
+  nodePolyfills: nodePolyfillsPlugin = nodePolyfills({ exclude: ['fs'] }),
+  vultisigSdk: vultisigSdkPlugin = vultisigSdk(),
+}: GetCommonPluginsInput = {}): PluginOption[] => [
   // Configures `optimizeDeps.exclude` for the wasm-bindgen glue packages so
   // `new URL('*.wasm', import.meta.url)` inside them resolves next to the real
   // .wasm payload rather than against `.vite/deps/`. Owned by the SDK so we
   // get updates for free when new wasm packages are added.
-  vultisigSdk(),
+  vultisigSdkPlugin,
   react({
     babel: {
       plugins: [['babel-plugin-react-compiler', {}]],
     },
   }),
-  nodePolyfills({ exclude: ['fs'] }),
+  nodePolyfillsPlugin,
   wasm(),
   topLevelAwait(),
 ]

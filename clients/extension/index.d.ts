@@ -15,6 +15,19 @@ interface Window {
   providers: EthereumProvider[]
   vultisig: any
   keplr: any
+  getOfflineSigner: any
+  getOfflineSignerOnlyAmino: any
+  getOfflineSignerAuto: any
+  station: any
+  terra: any
+  isTerraExtensionAvailable?: boolean
+  isStationExtensionAvailable?: boolean
+  terraWallets?: Array<{ name: string; identifier: string; icon: string }>
+  interchainWallets?: Array<{
+    name: string
+    identifier: string
+    icon: string
+  }>
   vultiConnect: { getVaults: () => Promise<Vault[]> }
   phantom: any
   vultiConnectRouter: {
@@ -31,6 +44,7 @@ interface Window {
   isCtrl: boolean
   windowKeplr: any
   keplrRequestAccountsCallback: any
+  keplrRequestMetaIdSupport?: boolean
   tronWeb: any
   tronLink: any
   tonkeeper?: {

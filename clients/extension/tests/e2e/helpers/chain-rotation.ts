@@ -16,7 +16,7 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// State file location
+// State file location — ../../ from helpers/ is tests/e2e/, matching global-setup.ts / global-teardown.ts
 const STATE_FILE = path.join(__dirname, '../../.chain-rotation-state.json')
 
 /**

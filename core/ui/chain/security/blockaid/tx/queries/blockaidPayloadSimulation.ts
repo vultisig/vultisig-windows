@@ -1,6 +1,7 @@
+import { normalizeBlockaidEvmParsed } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationNormalize'
+import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { getBlockaidTxSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxSimulation'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { Query } from '@lib/ui/query/Query'
 import { UseQueryOptions } from '@tanstack/react-query'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -11,10 +12,7 @@ import {
   parseBlockaidEvmSimulation,
   parseBlockaidSolanaSimulation,
 } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { BlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/resolver'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { getBlockaidTxSimulationInput } from '@vultisig/core-mpc/security/blockaid/tx/simulation/input'
@@ -25,7 +23,7 @@ import { useMemo } from 'react'
 export const getBlockaidSimulationQueryWithParsing = (
   input: BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>
 ): UseQueryOptions<
-  BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo | null
+  BlockaidEvmSimulationView | BlockaidSolanaSimulationInfo | null
 > => {
   const baseQuery = getBlockaidTxSimulationQuery(input)
 
@@ -39,9 +37,11 @@ export const getBlockaidSimulationQueryWithParsing = (
           'assets_diffs' in sim.account_summary &&
           sim.account_summary.assets_diffs.length > 0
         ) {
-          return parseBlockaidEvmSimulation(
-            sim as BlockaidEVMSimulation,
-            input.chain
+          return normalizeBlockaidEvmParsed(
+            await parseBlockaidEvmSimulation(
+              sim as BlockaidEVMSimulation,
+              input.chain
+            )
           )
         }
         return null
@@ -113,11 +113,12 @@ export const useBlockaidPayloadSimulationQuery = ({
     [keysignPayload, walletCore]
   )
 
-  return usePotentialQuery(
+  return usePotentialQuery<
+    BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>,
+    BlockaidEvmSimulationView | BlockaidSolanaSimulationInfo | null,
+    Error
+  >(
     blockaidTxSimulationInput || undefined,
     getBlockaidSimulationQueryWithParsing
-  ) as Query<
-    BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo | null,
-    unknown
-  >
+  )
 }

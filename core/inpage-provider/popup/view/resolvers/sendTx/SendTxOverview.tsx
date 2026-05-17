@@ -1,6 +1,11 @@
 import { BlockaidSimulationContent } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationContent'
 import { BlockaidSimulationError } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationError'
 import { useBlockaidSimulationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/useBlockaidSimulationQuery'
+import { DappRequestHeader } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/DappRequestHeader'
+import {
+  DappRequestDivider,
+  DappRequestRow,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/components/DappRequestRow'
 import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import { NetworkFeeSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { SwapAmountDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/SwapAmountDisplay'
@@ -9,7 +14,11 @@ import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolver
 import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/query'
 import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
+import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
+import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
@@ -38,10 +47,7 @@ import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
@@ -50,8 +56,6 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useGetCoin } from './core/coin'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
@@ -113,8 +117,44 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     eager: false,
   })
 
+  const memo = keysignPayloadQuery.data?.memo
+  const isEvm = isChainOfKind(chain, 'evm')
+  const isContractMemo =
+    !!memo && memo.startsWith('0x') && memo.length > 2 && isEvm
+
+  const universalRouterSwap = useUniversalRouterSwap({ memo, chain })
+
+  const contractCallQuery = useEvmContractCallInfoQuery({
+    memo,
+    enabled:
+      isContractMemo &&
+      !universalRouterSwap.isPending &&
+      !universalRouterSwap.data,
+  })
+
+  const isContractDecodingPending =
+    isContractMemo &&
+    (universalRouterSwap.isPending ||
+      (!universalRouterSwap.data && contractCallQuery.isPending))
+
+  const isContractDecodingFailed =
+    isContractMemo && !universalRouterSwap.data && !!contractCallQuery.error
+
+  const extraPendingMessage = (() => {
+    if (gasEstimationDataQuery.isPending || isContractDecodingPending) {
+      return t('loading')
+    }
+    if (gasEstimationDataQuery.error || isContractDecodingFailed) {
+      return t('failed_to_process_transaction')
+    }
+    return undefined
+  })()
+
   return (
-    <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
+    <VerifyKeysignStart
+      keysignPayloadQuery={keysignPayloadQuery}
+      extraPendingMessage={extraPendingMessage}
+    >
       <MatchQuery
         value={gasEstimationDataQuery}
         pending={() => <PendingState />}
@@ -187,6 +227,8 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     padding={24}
                     radius={16}
                   >
+                    <DappRequestRow />
+                    <DappRequestDivider />
                     {(() => {
                       const swapPayloadValue = shouldBePresent(
                         keysignPayload.swapPayload?.value,
@@ -259,116 +301,124 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     publicKey={publicKey}
                   />
                 </>
-              ) : isChainOfKind(chain, 'evm') ? (
-                <BlockaidSimulationContent
-                  chain={chain}
-                  blockaidSimulationQuery={
-                    blockaidSimulationQuery as Query<
-                      BlockaidEvmSimulationInfo,
-                      unknown
-                    >
-                  }
-                  keysignPayload={keysignPayload}
-                  address={address}
-                  networkFeeProps={{
-                    keysignPayload,
-                    transactionPayload,
-                    chain,
-                    feeSettings,
-                    setFeeSettings,
-                    walletCore,
-                    publicKey,
-                  }}
-                  getCoin={getCoin}
-                />
-              ) : chain === Chain.Solana &&
-                keysignPayload.signData.case === 'signSolana' ? (
-                <>
-                  <BlockaidSimulationContent
-                    chain={chain}
-                    blockaidSimulationQuery={
-                      blockaidSimulationQuery as Query<
-                        BlockaidSolanaSimulationInfo,
-                        unknown
-                      >
-                    }
-                    keysignPayload={keysignPayload}
-                    address={address}
-                    networkFeeProps={{
-                      keysignPayload,
-                      transactionPayload,
-                      chain,
-                      feeSettings,
-                      setFeeSettings,
-                      walletCore,
-                      publicKey,
-                    }}
-                    getCoin={getCoin}
-                  />
-                  <SignSolanaDisplay
-                    signSolana={keysignPayload.signData.value}
-                  />
-                </>
-              ) : chain === Chain.Ton &&
-                keysignPayload.signData.case === 'signTon' ? (
-                <>
-                  <List>
-                    <ListItem description={address} title={t('from')} />
-                    <ListItem
-                      description={getKeysignChain(keysignPayload)}
-                      title={t('network')}
-                    />
-                  </List>
-                  <SignTonDisplay signTon={keysignPayload.signData.value} />
-                  <MemoSection memo={keysignPayload.memo} chain={chain} />
-                  <VStack bgColor="foreground" radius={16}>
-                    <NetworkFeeSection
-                      keysignPayload={keysignPayload}
-                      transactionPayload={transactionPayload}
-                      chain={chain}
-                      feeSettings={feeSettings}
-                      setFeeSettings={setFeeSettings}
-                      walletCore={walletCore}
-                      publicKey={publicKey}
-                    />
-                  </VStack>
-                </>
               ) : (
                 <>
-                  <List>
-                    <ListItem description={address} title={t('from')} />
-                    {keysignPayload.toAddress && (
-                      <ListItem
-                        description={keysignPayload.toAddress}
-                        title={t('to')}
-                      />
-                    )}
-                    {keysignPayload.toAmount && (
-                      <ListItem
-                        description={`${formatUnits(
-                          keysignPayload.toAmount,
-                          keysignPayload.coin?.decimals
-                        )} ${keysignPayload.coin?.ticker}`}
-                        title={t('amount')}
-                      />
-                    )}
-                    <ListItem
-                      description={getKeysignChain(keysignPayload)}
-                      title={t('network')}
-                    />
-                  </List>
-                  <MemoSection memo={keysignPayload.memo} chain={chain} />
-                  <VStack bgColor="foreground" radius={16}>
-                    <NetworkFeeSection
-                      keysignPayload={keysignPayload}
-                      transactionPayload={transactionPayload}
+                  <DappRequestHeader />
+                  {isChainOfKind(chain, 'evm') ? (
+                    <BlockaidSimulationContent
                       chain={chain}
-                      feeSettings={feeSettings}
-                      setFeeSettings={setFeeSettings}
-                      walletCore={walletCore}
-                      publicKey={publicKey}
+                      blockaidSimulationQuery={
+                        blockaidSimulationQuery as Query<
+                          BlockaidEvmSimulationView,
+                          unknown
+                        >
+                      }
+                      keysignPayload={keysignPayload}
+                      address={address}
+                      networkFeeProps={{
+                        keysignPayload,
+                        transactionPayload,
+                        chain,
+                        feeSettings,
+                        setFeeSettings,
+                        walletCore,
+                        publicKey,
+                      }}
+                      getCoin={getCoin}
                     />
-                  </VStack>
+                  ) : chain === Chain.Solana &&
+                    keysignPayload.signData.case === 'signSolana' ? (
+                    <>
+                      <BlockaidSimulationContent
+                        chain={chain}
+                        blockaidSimulationQuery={
+                          blockaidSimulationQuery as Query<
+                            BlockaidSolanaSimulationInfo,
+                            unknown
+                          >
+                        }
+                        keysignPayload={keysignPayload}
+                        address={address}
+                        networkFeeProps={{
+                          keysignPayload,
+                          transactionPayload,
+                          chain,
+                          feeSettings,
+                          setFeeSettings,
+                          walletCore,
+                          publicKey,
+                        }}
+                        getCoin={getCoin}
+                      />
+                      <SignSolanaDisplay
+                        signSolana={keysignPayload.signData.value}
+                      />
+                    </>
+                  ) : chain === Chain.Ton &&
+                    keysignPayload.signData.case === 'signTon' ? (
+                    <>
+                      <List>
+                        <ListItem description={address} title={t('from')} />
+                        <ListItem
+                          description={getKeysignChain(keysignPayload)}
+                          title={t('network')}
+                        />
+                      </List>
+                      <SignTonDisplay
+                        fromAddress={address}
+                        keysignPayload={keysignPayload}
+                        signTon={keysignPayload.signData.value}
+                      />
+                      <VStack bgColor="foreground" radius={16}>
+                        <NetworkFeeSection
+                          keysignPayload={keysignPayload}
+                          transactionPayload={transactionPayload}
+                          chain={chain}
+                          feeSettings={feeSettings}
+                          setFeeSettings={setFeeSettings}
+                          walletCore={walletCore}
+                          publicKey={publicKey}
+                        />
+                      </VStack>
+                    </>
+                  ) : (
+                    <>
+                      <List>
+                        <ListItem description={address} title={t('from')} />
+                        {keysignPayload.toAddress && (
+                          <ListItem
+                            description={keysignPayload.toAddress}
+                            title={t('to')}
+                          />
+                        )}
+                        {keysignPayload.toAmount && (
+                          <ListItem
+                            description={`${formatUnits(
+                              keysignPayload.toAmount,
+                              keysignPayload.coin?.decimals
+                            )} ${keysignPayload.coin?.ticker}`}
+                            title={t('amount')}
+                          />
+                        )}
+                        <ListItem
+                          description={getKeysignChain(keysignPayload)}
+                          title={t('network')}
+                        />
+                      </List>
+                      <MemoSection memo={keysignPayload.memo} chain={chain} />
+                      <VStack bgColor="foreground" radius={16}>
+                        <NetworkFeeSection
+                          keysignPayload={keysignPayload}
+                          transactionPayload={transactionPayload}
+                          chain={chain}
+                          feeSettings={feeSettings}
+                          setFeeSettings={setFeeSettings}
+                          walletCore={walletCore}
+                          publicKey={publicKey}
+                        />
+                      </VStack>
+                    </>
+                  )}
                 </>
               )}
               {keysignPayload.signData.case === 'signAmino' && (

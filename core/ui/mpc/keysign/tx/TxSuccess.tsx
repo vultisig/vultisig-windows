@@ -1,7 +1,13 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { hasBlockaidEvmChangesForSummary } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationNormalize'
 import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
+import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractApprovalCounterparty'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { lookupKnownEvmContract } from '@core/ui/chain/tx/utils/knownEvmContracts'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
+import { UniversalRouterSwapSummary } from '@core/ui/mpc/keysign/tx/swap/UniversalRouterSwapSummary'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -17,6 +23,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
@@ -67,10 +74,23 @@ export const TxSuccess = ({
     walletCore,
   })
 
+  const vaultCoins = useCurrentVaultCoins()
+
+  const { data: universalRouterSwap, isPending: isUniversalRouterPending } =
+    useUniversalRouterSwap({
+      memo: isContractExecution ? memo : undefined,
+      chain: coin.chain,
+    })
+
   const functionQuery = useQuery({
     queryKey: ['evmContractCallInfo', memo],
     queryFn: () => getEvmContractCallInfo(memo!),
-    enabled: isContractExecution && !!memo && memo.length > 2,
+    enabled:
+      isContractExecution &&
+      !isUniversalRouterPending &&
+      !universalRouterSwap &&
+      !!memo &&
+      memo.length > 2,
     staleTime: Infinity,
   })
 
@@ -79,8 +99,6 @@ export const TxSuccess = ({
   const resolvedLabel = rawFunctionName
     ? capitalizeFirstLetter(rawFunctionName)
     : undefined
-
-  const vaultCoins = useCurrentVaultCoins()
 
   const resolvedToken = useMemo(() => {
     if (!functionQuery.data) return null
@@ -122,7 +140,7 @@ export const TxSuccess = ({
       amount: formatted.numericValue,
       amountOverride:
         formatted.isSentinel && formatted.display
-          ? `${formatted.display} ${knownCoin.ticker}`
+          ? `${t('unlimited')} ${knownCoin.ticker}`
           : undefined,
     }
   }, [
@@ -131,18 +149,23 @@ export const TxSuccess = ({
     coin.chain,
     value.toAddress,
     rawFunctionName,
+    t,
   ])
 
   const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
-    if (!data) return null
-    if ('swap' in data && 'fromCoin' in data.swap) {
-      return { coin: data.swap.fromCoin, amount: data.swap.fromAmount }
+    if (!hasBlockaidEvmChangesForSummary(data)) {
+      return null
     }
-    if ('transfer' in data && 'fromCoin' in data.transfer) {
-      return { coin: data.transfer.fromCoin, amount: data.transfer.fromAmount }
-    }
-    return null
+    const { changes } = data
+    // Only adopt the simulation's send leg as the success hero when there's
+    // exactly one — multi-send shapes (e.g. multicalls that send several
+    // tokens) can't be summarised by a single coin/amount, so let the
+    // fallbacks (resolved token, txAction) handle them.
+    const sendChanges = changes.filter(c => c.direction === 'send')
+    if (sendChanges.length !== 1) return null
+    const [sendChange] = sendChanges
+    return { coin: sendChange.coin, amount: sendChange.amount }
   }, [blockaidSimulationQuery.data])
 
   const displayCoin = simulationSend?.coin ?? resolvedToken?.coin ?? coin
@@ -162,19 +185,69 @@ export const TxSuccess = ({
     value: txHash,
   })
 
+  // Prefer Blockaid simulation data (it covers more routers and accounts for
+  // on-chain state), then our local Universal Router decode, then the 4byte +
+  // single-token fallback. The UR decoder fills the gap Phase 2A left when
+  // Blockaid is offline or skips the request.
+  const showUniversalRouterSwap = !simulationSend && !!universalRouterSwap
+
+  // Done-screen parity with the verify screen: surface the labeled `tx.to`
+  // contract (when it's a recognized router/protocol) and the spender/operator
+  // for approval calls. Keeps the post-sign confirmation aligned with what
+  // the user just approved on the verify screen.
+  const evmChain = isChainOfKind(coin.chain, 'evm') ? coin.chain : null
+  const knownContract = evmChain
+    ? lookupKnownEvmContract({ address: value.toAddress, chain: evmChain })
+    : null
+  const approvalCounterparty =
+    evmChain && functionQuery.data
+      ? extractApprovalCounterparty(functionQuery.data)
+      : null
+
   return (
     <VStack gap={36} data-testid="tx-success">
       <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
-        <TxOverviewAmount
-          amount={displayAmount}
-          value={displayCoin}
-          actionLabel={
-            txAction?.action !== 'send' ? txAction?.labelKey : undefined
-          }
-          resolvedLabel={resolvedLabel}
-          amountOverride={displayAmountOverride}
-        />
+        {showUniversalRouterSwap ? (
+          <UniversalRouterSwapSummary
+            fromCoin={universalRouterSwap.fromCoin}
+            fromAmount={universalRouterSwap.fromAmount}
+            toCoin={universalRouterSwap.toCoin}
+            toAmount={universalRouterSwap.toAmount}
+          />
+        ) : (
+          <TxOverviewAmount
+            amount={displayAmount}
+            value={displayCoin}
+            actionLabel={
+              txAction?.action !== 'send' ? txAction?.labelKey : undefined
+            }
+            resolvedLabel={resolvedLabel}
+            amountOverride={displayAmountOverride}
+          />
+        )}
+        {evmChain && (knownContract || approvalCounterparty) && (
+          <List>
+            {knownContract && (
+              <ListItem
+                description={formatLabeledEvmAddress({
+                  address: value.toAddress,
+                  chain: evmChain,
+                })}
+                title={t('contract')}
+              />
+            )}
+            {approvalCounterparty && (
+              <ListItem
+                description={formatLabeledEvmAddress({
+                  address: approvalCounterparty.address,
+                  chain: evmChain,
+                })}
+                title={t(approvalCounterparty.labelKey)}
+              />
+            )}
+          </List>
+        )}
         {!skipBroadcast && (
           <List>
             <ListItem

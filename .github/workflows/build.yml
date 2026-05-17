@@ -105,6 +105,41 @@ jobs:
           name: extension-dist-${{ github.sha }}
           path: clients/extension/dist
 
+  extension-firefox:
+    needs: lint
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Prepare vultisig-sdk from main (patch package.json)
+        uses: ./.github/actions/prepare-vultisig-sdk-from-main
+        with:
+          yarn-version: ${{ env.YARN_VERSION }}
+
+      - name: Setup and install
+        uses: ./.github/actions/setup-yarn-monorepo
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          immutable-install: 'false'
+
+      - name: Build extension (Firefox)
+        run: yarn workspace @clients/extension build:firefox
+
+      - name: Upload dist to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-firefox-dist-${{ github.sha }}
+          path: clients/extension/dist
+
   build:
     needs: lint
     strategy:
@@ -132,7 +167,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Prepare vultisig-sdk from main (patch package.json)
-        if: matrix.build.os != 'windows-latest'
         uses: ./.github/actions/prepare-vultisig-sdk-from-main
         with:
           yarn-version: ${{ env.YARN_VERSION }}
@@ -141,7 +175,7 @@ jobs:
         uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
-          immutable-install: ${{ matrix.build.os == 'windows-latest' && 'true' || 'false' }}
+          immutable-install: 'false'
 
       - name: Build wails
         uses: dAppServer/wails-build-action@main

@@ -1,3 +1,4 @@
+import { BlockaidBalanceChanges } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidBalanceChanges'
 import { BlockaidSwapDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSwapDisplay'
 import { BlockaidTransferDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidTransferDisplay'
 import {
@@ -6,8 +7,16 @@ import {
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import type {
+  BlockaidEvmBalanceChange,
+  BlockaidEvmSimulationView,
+} from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
+import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractApprovalCounterparty'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -19,12 +28,8 @@ import { Text } from '@lib/ui/text'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { useQuery } from '@tanstack/react-query'
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
-import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
@@ -36,7 +41,7 @@ import { useTranslation } from 'react-i18next'
 type BlockaidSimulationContentProps =
   | {
       chain: EvmChain
-      blockaidSimulationQuery: Query<BlockaidEvmSimulationInfo, unknown>
+      blockaidSimulationQuery: Query<BlockaidEvmSimulationView, unknown>
       keysignPayload: KeysignPayload
       address: string
       networkFeeProps: NetworkFeeSectionProps
@@ -215,6 +220,36 @@ const BlockaidSolanaSimulationContent = ({
   )
 }
 
+type EvmDisplayShape =
+  | { kind: 'transfer'; change: BlockaidEvmBalanceChange }
+  | {
+      kind: 'swap'
+      from: BlockaidEvmBalanceChange
+      to: BlockaidEvmBalanceChange
+    }
+  | { kind: 'complex'; changes: BlockaidEvmBalanceChange[] }
+
+const classifyEvmChanges = (
+  changes: BlockaidEvmBalanceChange[]
+): EvmDisplayShape => {
+  if (changes.length === 1 && changes[0].direction === 'send') {
+    return { kind: 'transfer', change: changes[0] }
+  }
+  if (changes.length === 2) {
+    const [first, second] = changes
+    const send = first.direction === 'send' ? first : second
+    const receive = first.direction === 'receive' ? first : second
+    if (send.direction === 'send' && receive.direction === 'receive') {
+      const sendId = send.coin.id?.toLowerCase()
+      const receiveId = receive.coin.id?.toLowerCase()
+      if (sendId !== receiveId) {
+        return { kind: 'swap', from: send, to: receive }
+      }
+    }
+  }
+  return { kind: 'complex', changes }
+}
+
 const BlockaidEvmSimulationContent = ({
   blockaidSimulationQuery,
   keysignPayload,
@@ -236,30 +271,77 @@ const BlockaidEvmSimulationContent = ({
   return (
     <MatchQuery
       value={blockaidSimulationQuery}
-      success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) => {
+      success={(blockaidSimulationInfo: BlockaidEvmSimulationView) => {
         if (!blockaidSimulationInfo) {
           return fallback
         }
-        return matchRecordUnion(blockaidSimulationInfo, {
-          swap: swap => (
-            <BlockaidSwapDisplay
-              swap={swap}
+        if ('changes' in blockaidSimulationInfo) {
+          if (blockaidSimulationInfo.changes.length === 0) {
+            return fallback
+          }
+          const shape = classifyEvmChanges(blockaidSimulationInfo.changes)
+          if (shape.kind === 'transfer') {
+            return (
+              <BlockaidTransferDisplay
+                transfer={{
+                  fromCoin: shape.change.coin,
+                  fromAmount: shape.change.amount,
+                }}
+                fromAddress={address}
+                toAddress={keysignPayload.toAddress}
+                memo={keysignPayload.memo}
+                chain={chain}
+                networkFeeProps={networkFeeProps}
+              />
+            )
+          }
+          if (shape.kind === 'swap') {
+            return (
+              <BlockaidSwapDisplay
+                swap={{
+                  fromCoin: shape.from.coin,
+                  fromAmount: shape.from.amount,
+                  toCoin: shape.to.coin,
+                  toAmount: shape.to.amount,
+                }}
+                memo={keysignPayload.memo}
+                chain={chain}
+                networkFeeProps={networkFeeProps}
+              />
+            )
+          }
+          return (
+            <BlockaidBalanceChanges
+              changes={shape.changes}
               memo={keysignPayload.memo}
               chain={chain}
               networkFeeProps={networkFeeProps}
             />
-          ),
-          transfer: transfer => (
+          )
+        }
+        if ('swap' in blockaidSimulationInfo) {
+          return (
+            <BlockaidSwapDisplay
+              swap={blockaidSimulationInfo.swap}
+              memo={keysignPayload.memo}
+              chain={chain}
+              networkFeeProps={networkFeeProps}
+            />
+          )
+        }
+        if ('transfer' in blockaidSimulationInfo) {
+          return (
             <BlockaidTransferDisplay
-              transfer={transfer}
+              transfer={blockaidSimulationInfo.transfer}
               fromAddress={address}
               toAddress={keysignPayload.toAddress}
               memo={keysignPayload.memo}
               chain={chain}
               networkFeeProps={networkFeeProps}
             />
-          ),
-        })
+          )
+        }
+        return fallback
       }}
       error={() => fallback}
       pending={() => null}
@@ -285,11 +367,13 @@ const EvmCalldataFallback = ({
 }: EvmCalldataFallbackProps) => {
   const { t } = useTranslation()
   const memo = keysignPayload.memo
-  const contractCallQuery = useQuery({
-    queryKey: ['evmContractCallInfo', memo],
-    queryFn: () => getEvmContractCallInfo(memo!),
-    enabled: !!memo && memo.startsWith('0x') && memo.length > 2,
-    staleTime: Infinity,
+
+  const { data: universalRouterSwap, isPending: isUniversalRouterPending } =
+    useUniversalRouterSwap({ memo, chain })
+
+  const contractCallQuery = useEvmContractCallInfoQuery({
+    memo,
+    enabled: !isUniversalRouterPending && !universalRouterSwap,
   })
 
   const tokenPair = contractCallQuery.data
@@ -313,6 +397,10 @@ const EvmCalldataFallback = ({
     ? capitalizeFirstLetter(rawFunctionName)
     : undefined
 
+  const approvalCounterparty = contractCallQuery.data
+    ? extractApprovalCounterparty(contractCallQuery.data)
+    : null
+
   const amountItem =
     keysignPayload.toAmount && keysignPayload.coin ? (
       <ListItem
@@ -324,12 +412,43 @@ const EvmCalldataFallback = ({
       />
     ) : null
 
+  if (universalRouterSwap) {
+    return (
+      <BlockaidSwapDisplay
+        swap={{
+          fromCoin: universalRouterSwap.fromCoin,
+          fromAmount: universalRouterSwap.fromAmount,
+          toCoin: universalRouterSwap.toCoin,
+          toAmount: universalRouterSwap.toAmount,
+        }}
+        memo={memo}
+        chain={chain}
+        networkFeeProps={networkFeeProps}
+      />
+    )
+  }
+
   return (
     <>
       <List>
         <ListItem description={address} title={t('from')} />
         {keysignPayload.toAddress && (
-          <ListItem description={keysignPayload.toAddress} title={t('to')} />
+          <ListItem
+            description={formatLabeledEvmAddress({
+              address: keysignPayload.toAddress,
+              chain,
+            })}
+            title={t('to')}
+          />
+        )}
+        {approvalCounterparty && (
+          <ListItem
+            description={formatLabeledEvmAddress({
+              address: approvalCounterparty.address,
+              chain,
+            })}
+            title={t(approvalCounterparty.labelKey)}
+          />
         )}
         {tokenQuery.data && tokenPair ? (
           (() => {
@@ -340,6 +459,7 @@ const EvmCalldataFallback = ({
             })
             const ticker = tokenQuery.data.ticker
             const isUnlimited = fmt.isSentinel && !!fmt.display
+            const amountLabel = isUnlimited ? t('unlimited') : fmt.display
             return (
               <ListItem
                 icon={
@@ -352,11 +472,11 @@ const EvmCalldataFallback = ({
                     <HStack alignItems="center" gap={6}>
                       <Text as={TriangleAlertIcon} color="warning" size={14} />
                       <Text color="warning" size={12} weight={500}>
-                        {`${fmt.display} ${ticker}`}
+                        {`${amountLabel} ${ticker}`}
                       </Text>
                     </HStack>
-                  ) : fmt.display ? (
-                    `${fmt.display} ${ticker}`
+                  ) : amountLabel ? (
+                    `${amountLabel} ${ticker}`
                   ) : (
                     ticker
                   )

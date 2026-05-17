@@ -1,40 +1,21 @@
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
-import { useCallback, useEffect, useRef } from 'react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
+import { useCore } from '../../state/core'
 import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
+import { computePasscodeUnlockSessionExpiresAt } from '../../storage/passcodeUnlockSession'
 import { usePasscode } from '../state/passcode'
 
 export const PasscodeAutoLock = () => {
   const [passcode, setPasscode] = usePasscode()
   const passcodeAutoLock = shouldBePresent(usePasscodeAutoLock())
+  const { setPasscodeUnlockSession } = useCore()
 
   const [lastInteractionAt, setLastInteractionAt] = useState<number | null>(
     null
   )
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  const resetAutoLockTimer = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
-    }
-
-    if (!passcode) {
-      return
-    }
-
-    const lockDelayMs = convertDuration(passcodeAutoLock, 'min', 'ms')
-
-    timeoutRef.current = setTimeout(() => {
-      setPasscode(null)
-    }, lockDelayMs)
-  }, [passcodeAutoLock, passcode, setPasscode])
-
-  const handleUserInteraction = () => {
-    setLastInteractionAt(Date.now())
-  }
 
   useEffect(() => {
     if (passcode) {
@@ -62,6 +43,10 @@ export const PasscodeAutoLock = () => {
       'click',
     ]
 
+    const handleUserInteraction = () => {
+      setLastInteractionAt(Date.now())
+    }
+
     events.forEach(event => {
       document.addEventListener(event, handleUserInteraction, true)
     })
@@ -74,9 +59,25 @@ export const PasscodeAutoLock = () => {
   }, [passcode])
 
   useEffect(() => {
-    if (lastInteractionAt) {
-      resetAutoLockTimer()
+    if (!passcode || !lastInteractionAt) {
+      return
     }
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+
+    const lockDelayMs = convertDuration(passcodeAutoLock, 'min', 'ms')
+
+    timeoutRef.current = setTimeout(() => {
+      setPasscode(null)
+    }, lockDelayMs)
+
+    void setPasscodeUnlockSession({
+      passcode,
+      expiresAt: computePasscodeUnlockSessionExpiresAt(passcodeAutoLock),
+    })
 
     return () => {
       if (timeoutRef.current) {
@@ -84,7 +85,13 @@ export const PasscodeAutoLock = () => {
         timeoutRef.current = null
       }
     }
-  }, [lastInteractionAt, resetAutoLockTimer])
+  }, [
+    lastInteractionAt,
+    passcode,
+    passcodeAutoLock,
+    setPasscode,
+    setPasscodeUnlockSession,
+  ])
 
   return null
 }

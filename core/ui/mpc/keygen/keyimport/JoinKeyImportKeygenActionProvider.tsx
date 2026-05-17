@@ -2,11 +2,11 @@ import { featureFlags } from '@core/ui/featureFlags'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
-import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -33,6 +33,7 @@ import {
   useKeyImportChains,
 } from './state/keyImportChains'
 import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
+import { withKeyImportServerChains } from './utils/keyImportServerChains'
 
 export const JoinKeyImportKeygenActionProvider = ({
   children,
@@ -46,7 +47,7 @@ export const JoinKeyImportKeygenActionProvider = ({
   const isInitiatingDevice = useIsInitiatingDevice()
   const vaultOrders = useVaultOrders()
   const keyImportChainsRaw = useKeyImportChains()
-  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const isTssBatchingEnabled = useIsTssBatching()
   const isMLDSAEnabled = useIsMLDSAEnabled()
 
   const keygenAction: KeygenAction = async ({
@@ -210,7 +211,7 @@ export const JoinKeyImportKeygenActionProvider = ({
         chainKeyShares[chain] = result.keyshare
       }
 
-      const vault: Vault = {
+      const baseVault: Vault = {
         name: vaultName,
         publicKeys: {
           ecdsa: rootEcdsaResult.publicKey,
@@ -232,6 +233,10 @@ export const JoinKeyImportKeygenActionProvider = ({
         publicKeyMldsa: mldsaResult?.publicKey,
         keyShareMldsa: mldsaResult?.keyshare,
       }
+      const vault = withKeyImportServerChains(
+        baseVault,
+        getKeyImportDerivationGroups(chains).map(g => g.representativeChain)
+      )
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -364,7 +369,7 @@ export const JoinKeyImportKeygenActionProvider = ({
         keyShareMldsa = seqMldsaResult.keyshare
       }
 
-      const vault: Vault = {
+      const baseVault: Vault = {
         name: vaultName,
         publicKeys: {
           ecdsa: rootEcdsaResult.publicKey,
@@ -386,6 +391,10 @@ export const JoinKeyImportKeygenActionProvider = ({
         publicKeyMldsa,
         keyShareMldsa,
       }
+      const vault = withKeyImportServerChains(
+        baseVault,
+        derivationGroups.map(g => g.representativeChain)
+      )
 
       await setKeygenComplete({
         serverURL: serverUrl,

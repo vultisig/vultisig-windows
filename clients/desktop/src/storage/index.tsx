@@ -17,6 +17,7 @@ import { mldsaEnabledStorage } from './mldsaEnabled'
 import { onboardingStorage } from './onboarding'
 import { passcodeAutoLockStorage } from './passcodeAutoLock'
 import { passcodeEncryptionStorage } from './passcodeEncryption'
+import { passcodeUnlockSessionStorage } from './passcodeUnlockSession'
 import { referralsStorage } from './referrals'
 import { transactionHistoryStorage } from './transactionHistory'
 import { tssBatchingEnabledStorage } from './tssBatchingEnabled'
@@ -40,6 +41,7 @@ export const storage: CoreStorage = {
   ...coinFinderIgnoreStorage,
   ...passcodeEncryptionStorage,
   ...passcodeAutoLockStorage,
+  ...passcodeUnlockSessionStorage,
   ...referralsStorage,
   ...dismissedBannersStorage,
   ...circleVisibilityStorage,

@@ -1,6 +1,6 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { usePortfolioVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import {
   accountCoinKeyToString,
@@ -13,7 +13,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
 export const useVaultTotalBalanceQuery = () => {
-  const coins = useCurrentVaultCoins()
+  const coins = usePortfolioVaultCoins()
 
   const pricesQuery = useCoinPricesQuery({
     coins,

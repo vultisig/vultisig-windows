@@ -8,7 +8,7 @@ STANDARD
 
 - `core/mpc/` — MPC/TSS cryptographic operations. Do not modify without explicit review.
 - `tss/` — TSS Go bindings (Wails). Do not modify without explicit review.
-- `lib/` — Upstream mirror. Do not edit directly.
+- `lib/` — Shared UI/codegen/extension packages (`@lib/*`); first-class code in this repo.
 - `core/chain/chains/cosmos/qbtc/` — QBTC manual protobuf builder. SignDoc encoding must match iOS byte-for-byte for cross-device cosigning.
 
 ## Project Overview
@@ -42,7 +42,7 @@ vultisig-windows/
 │   ├── inpage-provider/ # Web3 injected provider
 │   ├── mpc/             # MPC/TSS operations
 │   └── ui/              # Shared UI components, i18n
-├── lib/                 # Upstream mirrors (do not edit)
+├── lib/                 # @lib/ui, @lib/codegen, @lib/extension
 ├── storage/             # Data persistence
 ├── tss/                 # TSS Go bindings
 ├── relay/               # Relay server

@@ -1,6 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
@@ -13,8 +14,9 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
-import { FC, ReactNode } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -22,17 +24,13 @@ import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
 import { DescriptionText, ListItemIconWrapper } from './vaultSettingsListStyles'
 
-type VaultSettingsPageProps = {
-  extraItems?: ReactNode
-}
-
-export const VaultSettingsPage: FC<VaultSettingsPageProps> = ({
-  extraItems,
-}) => {
+export const VaultSettingsPage: FC = () => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const navigate = useCoreNavigate()
   const isFastVault = hasServer(vault.signers)
+  const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
+  const canSignCustomMessage = Boolean(ethereumAddress.trim())
 
   return (
     <VStack fullHeight>
@@ -146,15 +144,20 @@ export const VaultSettingsPage: FC<VaultSettingsPageProps> = ({
             }
             description={
               <DescriptionText>
-                {t('sign_custom_message_description')}
+                {canSignCustomMessage
+                  ? t('sign_custom_message_description')
+                  : t('sign_custom_message_unavailable_imported_no_ethereum')}
               </DescriptionText>
             }
-            onClick={() => navigate({ id: 'signCustomMessage' })}
+            onClick={
+              canSignCustomMessage
+                ? () => navigate({ id: 'signCustomMessage' })
+                : undefined
+            }
             title={t('sign')}
-            hoverable
-            showArrow
+            hoverable={canSignCustomMessage}
+            showArrow={canSignCustomMessage}
           />
-          {extraItems}
         </SettingsSection>
         <DeleteItem
           icon={

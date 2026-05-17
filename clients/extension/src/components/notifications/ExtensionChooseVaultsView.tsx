@@ -26,7 +26,7 @@ export const ExtensionChooseVaultsView = () => {
   const allEnabled = vaults.length > 0 && vaults.every(v => v.enabled)
 
   const goBack = () => {
-    navigate({ id: 'notificationSettings' })
+    navigate({ id: 'vault' })
   }
 
   return (

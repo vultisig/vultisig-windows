@@ -12,6 +12,7 @@ import styled from 'styled-components'
 
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
+import { BuyVultPromoBanner } from '../banners/BuyVultPromoBanner/BuyVultPromoBanner'
 import { FollowOnXBanner } from '../banners/FollowOnXBanner/FollowOnXBanner'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
@@ -48,6 +49,12 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
         ]
       : []),
     {
+      id: 'buyVultPromo' as const,
+      component: (props: { onDismiss: () => void }) => (
+        <BuyVultPromoBanner onDismiss={props.onDismiss} />
+      ),
+    },
+    {
       id: 'followOnX' as const,
       component: (props: { onDismiss: () => void }) => (
         <FollowOnXBanner onDismiss={props.onDismiss} />
@@ -56,7 +63,7 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   ]
 
   return (
-    <VStack fullHeight>
+    <Container flexGrow>
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <BlurEffect />
         <BalanceWrapper data-testid="vault-overview-balance-wrapper">
@@ -69,9 +76,13 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
         <Divider />
         <VaultTabs />
       </StyledPageContent>
-    </VStack>
+    </Container>
   )
 }
+
+const Container = styled(VStack)`
+  min-height: 0;
+`
 
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};

@@ -57,5 +57,11 @@ export const callPopupFromBackground: PopupCallResolver = withInFlightCoalescer(
   {
     shouldCoalesce: ({ call }) =>
       mergeableInFlightPopupMethods.includes(getRecordUnionKey(call)),
+    // Coalesce mergeable popups by `(method, requestOrigin)` only — the
+    // default JSON.stringify key includes the chain, so parallel
+    // `grantVaultAccess` calls for different chains from the same dApp
+    // would each open their own popup and race the grant flow.
+    getKey: ({ call, context }) =>
+      `${getRecordUnionKey(call)}:${context.requestOrigin}`,
   }
 )

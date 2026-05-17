@@ -9,9 +9,29 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
+import { installKeplrProxyBridge } from '../providers/keplrProxyBridge'
 import { Solana } from '../providers/solana'
 import { registerWallet } from '../providers/solana/register'
 import { UTXO } from '../providers/utxo'
+
+// Wallet-picker descriptor pushed to `window.terraWallets` /
+// `window.interchainWallets`. Mirrors the `STATION_INFO` shape the official
+// Station extension uses — Terra dApps iterate these arrays to discover
+// installed Station-compatible wallets.
+const vultisigStationInfo = {
+  name: 'Vultisig',
+  identifier: 'vultisig',
+  icon: `data:image/svg+xml;utf8,${encodeURIComponent(VULTI_ICON_RAW_SVG)}`,
+}
+
+const pushToWalletArray = (key: 'terraWallets' | 'interchainWallets') => {
+  const existing = window[key]
+  if (Array.isArray(existing)) {
+    existing.push(vultisigStationInfo)
+  } else {
+    window[key] = [vultisigStationInfo]
+  }
+}
 
 export const injectToWindow = () => {
   const providers = createProviders()
@@ -77,6 +97,46 @@ export const injectToWindow = () => {
         writable: true,
       })
     )
+  }
+
+  // Keplr injection has to be synchronous. cosmos-kit dApps run an
+  // auto-reconnect effect on first render that reads `window.keplr` and
+  // clears their persisted wallet state if it's missing — so deferring
+  // this behind the async `setupContentScriptMessenger` path raced page
+  // refreshes and left users in a stuck "Connect Wallet does nothing"
+  // state. The `!window.keplr` guard preserves the existing wallet if
+  // another Keplr-compatible extension already injected one. Each
+  // helper is set behind its own existence check so a preexisting
+  // non-configurable global on one of them can't prevent the others
+  // from being defined.
+  if (!window.keplr) {
+    Object.defineProperty(window, 'keplr', {
+      value: providers.keplr,
+      configurable: false,
+      writable: false,
+    })
+    if (!window.getOfflineSigner) {
+      Object.defineProperty(window, 'getOfflineSigner', {
+        value: providers.keplr.getOfflineSigner.bind(providers.keplr),
+        configurable: false,
+        writable: false,
+      })
+    }
+    if (!window.getOfflineSignerOnlyAmino) {
+      Object.defineProperty(window, 'getOfflineSignerOnlyAmino', {
+        value: providers.keplr.getOfflineSignerOnlyAmino.bind(providers.keplr),
+        configurable: false,
+        writable: false,
+      })
+    }
+    if (!window.getOfflineSignerAuto) {
+      Object.defineProperty(window, 'getOfflineSignerAuto', {
+        value: providers.keplr.getOfflineSignerAuto.bind(providers.keplr),
+        configurable: false,
+        writable: false,
+      })
+    }
+    installKeplrProxyBridge(providers.keplr)
   }
 
   setupContentScriptMessenger(providers)
@@ -183,8 +243,26 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
-        keplr: {
-          value: providers.keplr,
+        station: {
+          value: providers.station,
+          configurable: false,
+          writable: false,
+        },
+        terra: {
+          value: providers.station,
+          configurable: false,
+          writable: false,
+        },
+        // Detection flags Terra dApps probe before showing Station in the
+        // wallet picker — both legacy (`isTerraExtensionAvailable`) and the
+        // newer interchain alias (`isStationExtensionAvailable`).
+        isTerraExtensionAvailable: {
+          value: true,
+          configurable: false,
+          writable: false,
+        },
+        isStationExtensionAvailable: {
+          value: true,
           configurable: false,
           writable: false,
         },
@@ -205,5 +283,12 @@ async function setupContentScriptMessenger(
         },
       })
     )
+
+    // Register Vultisig in the Station-style wallet-picker arrays. dApps
+    // iterate these to enumerate installed Station-compatible wallets, so
+    // missing this entry hides Vultisig from the picker even when
+    // `window.station` is present.
+    attempt(() => pushToWalletArray('terraWallets'))
+    attempt(() => pushToWalletArray('interchainWallets'))
   }
 }

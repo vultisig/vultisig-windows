@@ -1,30 +1,26 @@
+import { decryptVaultBackupWithPassword } from '@vultisig/lib-utils/encryption/vaultBackup/decryptVaultBackupWithPassword'
+import { Buffer } from 'buffer'
+
 type Input = {
   backup: ArrayBuffer
   password: string
 }
 
-export const decryptDatBackup = async ({ backup, password }: Input) => {
-  const passwordBytes = new TextEncoder().encode(password)
-  const passwordHash = await crypto.subtle.digest('SHA-256', passwordBytes)
-
-  const key = await crypto.subtle.importKey(
-    'raw',
-    passwordHash,
-    { name: 'AES-GCM' },
-    false,
-    ['decrypt']
+/**
+ * Decrypt raw `.dat` backup bytes (password-protected).
+ * Supports PBKDF2 + `VLT\x02` header (Android / iOS / current desktop) and legacy SHA-256(password) + AES-GCM.
+ */
+export const decryptDatBackup = async ({
+  backup,
+  password,
+}: Input): Promise<ArrayBuffer> => {
+  const plaintext = decryptVaultBackupWithPassword(
+    password,
+    Buffer.from(backup)
   )
-
-  const encryptedBytes = new Uint8Array(backup)
-  const nonce = encryptedBytes.slice(0, 12)
-  const ciphertextAndTag = encryptedBytes.slice(12)
-
-  return crypto.subtle.decrypt(
-    {
-      name: 'AES-GCM',
-      iv: nonce,
-    },
-    key,
-    ciphertextAndTag
-  )
+  const copy = Uint8Array.from(plaintext)
+  return copy.buffer.slice(
+    copy.byteOffset,
+    copy.byteOffset + copy.byteLength
+  ) as ArrayBuffer
 }
