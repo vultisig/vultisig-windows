@@ -8,8 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
@@ -74,18 +73,13 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
 
       const { chain } = coin
 
-      const publicKey = getPublicKey({
+      const address = getChainAddress({
         chain,
         walletCore,
         hexChainCode: vault.hexChainCode,
         publicKeys: vault.publicKeys,
+        publicKeyMldsa: vault.publicKeyMldsa,
         chainPublicKeys: vault.chainPublicKeys,
-      })
-
-      const address = deriveAddress({
-        chain,
-        publicKey,
-        walletCore,
       })
 
       return {

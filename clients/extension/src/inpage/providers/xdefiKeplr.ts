@@ -26,7 +26,7 @@ import {
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
 import { TW } from '@trustwallet/wallet-core'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getCosmosChainByChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
@@ -55,6 +55,7 @@ import { Cosmos } from './cosmos'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
 import {
   getKeplrCosmosChainInfos,
+  getKeplrSupportedChainByChainId,
   isNativeKeplrChainId,
 } from './keplrChainInfo'
 
@@ -271,6 +272,28 @@ const directHandler = (
   } as TransactionDetails
 }
 
+type CosmosSigningOutput = InstanceType<typeof TW.Cosmos.Proto.SigningOutput>
+
+// SDK's `deserializeSigningOutput<T extends Chain>` returns a union driven by
+// `DeriveChainKind<T>`. Both `cosmos` and `qbtc` kinds map to the same
+// `TW.Cosmos.Proto.SigningOutput` class (see `signingOutputs` in
+// `core-chain/tw/signingOutput`), but the generic widens through indexed
+// access. Validate the Cosmos-shape fields at the boundary and narrow.
+function assertCosmosSigningOutput(
+  output: unknown
+): asserts output is CosmosSigningOutput {
+  if (
+    !output ||
+    typeof output !== 'object' ||
+    typeof (output as { json?: unknown }).json !== 'string' ||
+    typeof (output as { serialized?: unknown }).serialized !== 'string'
+  ) {
+    throw new Error(
+      'Expected Cosmos signing output with `.json` and `.serialized` strings'
+    )
+  }
+}
+
 const standardCosmosCoinType = 118
 
 // Signing flows require Vultisig native support for the chain (transaction
@@ -279,17 +302,36 @@ const standardCosmosCoinType = 118
 // has no fallback — surface a Keplr-shaped error so dApps display a clear
 // "chain not supported" message instead of our generic assertion throw.
 const assertNativeChainForSigning = (chainId: string): void => {
-  if (!getCosmosChainByChainId(chainId)) {
+  if (!getKeplrSupportedChainByChainId(chainId)) {
     throw new Error(`Chain ${chainId} is not supported for signing`)
   }
 }
 
+const mldsaRequiredKeplrMessage =
+  'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
+
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
-  const nativeChain = getCosmosChainByChainId(chainId)
+  const nativeChain = getKeplrSupportedChainByChainId(chainId)
   if (nativeChain) {
     const { publicKey, address } = await requestAccount(nativeChain)
+
+    // `getAccount` returns `{ address: '', publicKey: '' }` for MLDSA chains
+    // when the selected vault has no `publicKeyMldsa`. Surface the same
+    // Unauthorized error the native `window.vultisig.qbtc` provider throws,
+    // otherwise downstream `getKey()` / signing fail at `bech32.decode('')`
+    // with an opaque error.
+    if (nativeChain === OtherChain.QBTC && !address) {
+      throw new EIP1193Error('Unauthorized', mldsaRequiredKeplrMessage)
+    }
+
     return [
       {
+        // QBTC signs with MLDSA-44; Keplr's `Algo` union predates
+        // post-quantum signing and only allows secp256k1/ed25519/sr25519.
+        // We declare secp256k1 so the cast typechecks, but the bytes in
+        // `pubkey` are the raw MLDSA hex from the vault. dApps that only
+        // pass the pubkey through to a broadcast are unaffected; dApps
+        // that verify signatures must use MLDSA verification regardless.
         algo: 'secp256k1',
         address,
         pubkey: hexToBytes(publicKey),
@@ -484,19 +526,26 @@ export class XDEFIKeplrProvider extends Keplr {
     fn: () => Promise<T>
   ): Promise<T> {
     return this.mutex.runExclusive(async () => {
-      const selectedChainId = await callBackground({
-        getAppChainId: { chainKind: 'cosmos' },
-      })
+      if (!getKeplrSupportedChainByChainId(chainId)) {
+        throw new EIP1193Error('UnrecognizedChain')
+      }
 
-      if (selectedChainId !== chainId) {
-        const chain = getCosmosChainByChainId(chainId)
-        if (!chain) {
-          throw new EIP1193Error('UnrecognizedChain')
-        }
-
-        await callBackground({
-          setAppChain: { cosmos: chain },
+      // `setAppChain({ cosmos })` drives the wallet UI's Cosmos chain
+      // switcher. QBTC isn't a `CosmosChain` (chain kind is `'qbtc'`) and
+      // has no equivalent active-chain state, so skip the call when the
+      // chainId isn't one of the SDK's CosmosChain values — the popup
+      // keysign payload carries the chain explicitly anyway.
+      const cosmosChain = getCosmosChainByChainId(chainId)
+      if (cosmosChain) {
+        const selectedChainId = await callBackground({
+          getAppChainId: { chainKind: 'cosmos' },
         })
+
+        if (selectedChainId !== chainId) {
+          await callBackground({
+            setAppChain: { cosmos: cosmosChain },
+          })
+        }
       }
 
       return fn()
@@ -520,7 +569,7 @@ export class XDEFIKeplrProvider extends Keplr {
     const suggested = await callBackground({ getKeplrSuggestedChains: {} })
     const nativeChains: Chain[] = []
     for (const chainId of requested) {
-      const chain = getCosmosChainByChainId(chainId)
+      const chain = getKeplrSupportedChainByChainId(chainId)
       if (chain) {
         nativeChains.push(chain)
         continue
@@ -657,7 +706,7 @@ export class XDEFIKeplrProvider extends Keplr {
         throw new Error('Signer does not match current account address')
       }
 
-      const chain = shouldBePresent(getCosmosChainByChainId(chainId))
+      const chain = shouldBePresent(getKeplrSupportedChainByChainId(chainId))
 
       const transactionDetails = aminoHandler(signDoc, chain)
 
@@ -674,6 +723,7 @@ export class XDEFIKeplrProvider extends Keplr {
       )
 
       const output = deserializeSigningOutput(chain, data)
+      assertCosmosSigningOutput(output)
 
       const aminoJson = JSON.parse(output.json)
       const stdTx = aminoJson.tx as {
@@ -735,12 +785,17 @@ export class XDEFIKeplrProvider extends Keplr {
         throw new Error('Signer does not match current account address')
       }
 
-      const chain = shouldBePresent(getCosmosChainByChainId(chainId))
+      const chain = shouldBePresent(getKeplrSupportedChainByChainId(chainId))
 
-      const normalizedAuthInfoBytes = normalizeCosmosAuthInfoFee(
-        new Uint8Array(signDoc.authInfoBytes),
-        chain
-      )
+      // `normalizeCosmosAuthInfoFee` swaps fee ticker → canonical denom for
+      // CosmosChain entries. QBTC's fee denom is already canonical (`qbtc`,
+      // matching the chain config base denom), so the normalization is a
+      // no-op and the helper isn't keyed for QBTC anyway.
+      const rawAuthInfoBytes = new Uint8Array(signDoc.authInfoBytes)
+      const normalizedAuthInfoBytes =
+        chain === OtherChain.QBTC
+          ? rawAuthInfoBytes
+          : normalizeCosmosAuthInfoFee(rawAuthInfoBytes, chain)
       const transactionDetails: TransactionDetails = directHandler(
         {
           bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
@@ -765,7 +820,9 @@ export class XDEFIKeplrProvider extends Keplr {
         { account: transactionDetails.from }
       )
 
-      const { serialized } = deserializeSigningOutput(chain, data)
+      const output = deserializeSigningOutput(chain, data)
+      assertCosmosSigningOutput(output)
+      const { serialized } = output
       const publicKey = Buffer.from(new Uint8Array(account.pubkey)).toString(
         'base64'
       )
