@@ -758,7 +758,6 @@ __metadata:
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
     "@bufbuild/protobuf": "npm:^2.11.0"
-    "@cosmjs/amino": "npm:^0.38.1"
     "@cosmjs/cosmwasm-stargate": "npm:^0.38.1"
     "@cosmjs/encoding": "npm:^0.38.1"
     "@cosmjs/math": "npm:^0.38.1"

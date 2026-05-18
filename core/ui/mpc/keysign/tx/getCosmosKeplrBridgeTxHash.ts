@@ -1,4 +1,3 @@
-import { StdFee } from '@cosmjs/amino'
 import { createWasmAminoConverters, wasmTypes } from '@cosmjs/cosmwasm-stargate'
 import { fromBase64, fromHex, toBase64 } from '@cosmjs/encoding'
 import { Int53 } from '@cosmjs/math'
@@ -19,6 +18,7 @@ import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
 import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing'
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { sha256 } from 'viem'
+import { z } from 'zod'
 
 const registry = new Registry([...defaultRegistryTypes, ...wasmTypes])
 const aminoTypes = new AminoTypes({
@@ -26,28 +26,51 @@ const aminoTypes = new AminoTypes({
   ...createWasmAminoConverters(),
 })
 
-type AminoStdTx = {
-  msg: Array<{ type: string; value: Record<string, unknown> }>
-  fee: StdFee
-  memo: string
-  signatures: Array<{
-    pub_key: { type: string; value: string }
-    signature: string
-  }>
-}
+const aminoCoinSchema = z.object({
+  denom: z.string(),
+  amount: z.string(),
+})
+
+const aminoStdTxSchema = z.object({
+  msg: z.array(
+    z.object({
+      type: z.string(),
+      value: z.record(z.string(), z.unknown()),
+    })
+  ),
+  fee: z.object({
+    amount: z.array(aminoCoinSchema),
+    gas: z.string(),
+    granter: z.string().optional(),
+    payer: z.string().optional(),
+  }),
+  memo: z.string().optional().default(''),
+  signatures: z
+    .array(
+      z.object({
+        pub_key: z.object({ type: z.string(), value: z.string() }),
+        signature: z.string(),
+      })
+    )
+    .min(1, 'Amino JSON output is missing signatures'),
+})
+
+const aminoOutputSchema = z.object({ tx: aminoStdTxSchema })
 
 const sha256UpperHex = (bytes: Uint8Array): string =>
   stripHexPrefix(sha256(bytes)).toUpperCase()
+
+type EncodeTxRawHashInput = {
+  bodyBytes: Uint8Array
+  authInfoBytes: Uint8Array
+  signature: Uint8Array
+}
 
 const encodeTxRawHash = ({
   bodyBytes,
   authInfoBytes,
   signature,
-}: {
-  bodyBytes: Uint8Array
-  authInfoBytes: Uint8Array
-  signature: Uint8Array
-}): string => {
+}: EncodeTxRawHashInput): string => {
   const txRaw = TxRaw.fromPartial({
     bodyBytes,
     authInfoBytes,
@@ -56,13 +79,24 @@ const encodeTxRawHash = ({
   return sha256UpperHex(TxRaw.encode(txRaw).finish())
 }
 
-const getKeysignPayloadPubkeyBase64 = (
-  keysignPayload: KeysignPayload,
+type GetKeysignPayloadPubkeyBase64Input = {
+  keysignPayload: KeysignPayload
   fallback: string
-): string => {
+}
+
+const getKeysignPayloadPubkeyBase64 = ({
+  keysignPayload,
+  fallback,
+}: GetKeysignPayloadPubkeyBase64Input): string => {
   const hex = keysignPayload.coin?.hexPublicKey
   if (!hex) return fallback
   return toBase64(fromHex(stripHexPrefix(hex)))
+}
+
+type GetCosmosKeplrBridgeTxHashInput = {
+  keysignPayload: KeysignPayload
+  signedAminoJson: string | undefined
+  signatureBytes: Uint8Array | undefined
 }
 
 /**
@@ -80,11 +114,7 @@ export const getCosmosKeplrBridgeTxHash = ({
   keysignPayload,
   signedAminoJson,
   signatureBytes,
-}: {
-  keysignPayload: KeysignPayload
-  signedAminoJson: string | undefined
-  signatureBytes: Uint8Array | undefined
-}): string => {
+}: GetCosmosKeplrBridgeTxHashInput): string => {
   const { signData } = keysignPayload
 
   if (signData.case === 'signDirect') {
@@ -102,13 +132,8 @@ export const getCosmosKeplrBridgeTxHash = ({
   }
 
   const json = shouldBePresent(signedAminoJson, 'WalletCore amino JSON output')
-  const parsed = JSON.parse(json) as { tx: AminoStdTx }
-  const stdTx = parsed.tx
-
+  const stdTx = aminoOutputSchema.parse(JSON.parse(json)).tx
   const [stdSignature] = stdTx.signatures
-  if (!stdSignature) {
-    throw new Error('Amino JSON output is missing signatures')
-  }
 
   const cosmosSpecific = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
@@ -116,10 +141,10 @@ export const getCosmosKeplrBridgeTxHash = ({
   )
   const pubkey = encodePubkey({
     type: 'tendermint/PubKeySecp256k1',
-    value: getKeysignPayloadPubkeyBase64(
+    value: getKeysignPayloadPubkeyBase64({
       keysignPayload,
-      stdSignature.pub_key.value
-    ),
+      fallback: stdSignature.pub_key.value,
+    }),
   })
   const sequence = Int53.fromString(
     cosmosSpecific.sequence.toString()
@@ -132,7 +157,7 @@ export const getCosmosKeplrBridgeTxHash = ({
       messages: stdTx.msg.map(msg =>
         aminoTypes.fromAmino({ type: msg.type, value: msg.value })
       ),
-      memo: stdTx.memo ?? '',
+      memo: stdTx.memo,
     },
   })
 
