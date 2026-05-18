@@ -75,6 +75,7 @@ export const ClaimPreparingTxPhase = ({
 
       const bodyBytes = buildClaimTxBody({
         claimer: qbtcAddress,
+        broadcaster: qbtcAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         proof: proof.proof,
         messageHash: proof.message_hash,
