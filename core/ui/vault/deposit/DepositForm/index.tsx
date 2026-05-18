@@ -6,6 +6,7 @@ import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/Action
 import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
 import { UnbondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnbondSpecific/UnbondForm'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import {
   Container,
   ErrorText,
@@ -30,6 +31,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
+import { cosmosStakingActions } from '../ChainAction'
 import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
@@ -94,15 +96,24 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const isUnstakeAction = selectedChainAction === 'unstake'
   const isMintAction = selectedChainAction === 'mint'
   const isRedeemAction = selectedChainAction === 'redeem'
+  const isCosmosStakingAction = isOneOf(selectedChainAction, cosmosStakingActions)
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
   const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'
   const shouldUseStakeRedesign =
     (isStakeAction || isUnstakeAction || isMintAction || isRedeemAction) &&
     entryPoint === 'defi'
+  const shouldUseCosmosStakingRedesign =
+    isCosmosStakingAction && entryPoint === 'defi'
   const shouldUseActionForm =
-    shouldUseBondRedesign || shouldUseUnbondRedesign || shouldUseStakeRedesign
+    shouldUseBondRedesign ||
+    shouldUseUnbondRedesign ||
+    shouldUseStakeRedesign ||
+    shouldUseCosmosStakingRedesign
 
+  // Cosmos staking actions display under "Stake / Unstake / Move / Claim"
+  // in the page header, matching Figma — the underlying ChainAction values
+  // (delegate / undelegate / redelegate / claim_rewards) stay protocol-correct.
   const defiActionPageTitle: Record<string, string> = {
     bond: t('bond'),
     unbond: t('unbond'),
@@ -110,6 +121,10 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     unstake: t('unstake'),
     mint: t('mint'),
     redeem: t('redeem'),
+    delegate: t('stake'),
+    undelegate: t('unstake'),
+    redelegate: t('move'),
+    claim_rewards: t('claim_rewards'),
   }
 
   const getPageTitle = () => {
@@ -164,6 +179,10 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                   isValid={isValid}
                   formValues={formValues}
                 />
+              </DepositDataProvider>
+            ) : shouldUseCosmosStakingRedesign ? (
+              <DepositDataProvider value={formValues}>
+                <DepositActionSpecific value={selectedChainAction} />
               </DepositDataProvider>
             ) : (
               <DepositDataProvider value={formValues}>
