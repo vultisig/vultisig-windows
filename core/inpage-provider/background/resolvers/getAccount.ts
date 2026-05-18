@@ -21,10 +21,12 @@ export const getAccount: BackgroundResolver<'getAccount'> = async ({
     }
   }
 
+  const signatureAlgorithm = getSignatureAlgorithm(chain)
+
   // MLDSA chains (e.g. QBTC) require a post-quantum key that older vaults
   // don't carry. Return empty so `requestAccount` re-prompts the user to
   // pick a vault that supports this chain, instead of throwing.
-  if (getSignatureAlgorithm(chain) === 'mldsa' && !vault.publicKeyMldsa) {
+  if (signatureAlgorithm === 'mldsa' && !vault.publicKeyMldsa) {
     return { address: '', publicKey: '' }
   }
 
@@ -39,7 +41,7 @@ export const getAccount: BackgroundResolver<'getAccount'> = async ({
     chainPublicKeys: vault.chainPublicKeys,
   })
 
-  if (getSignatureAlgorithm(chain) === 'mldsa') {
+  if (signatureAlgorithm === 'mldsa') {
     return {
       address,
       publicKey: assertField(vault, 'publicKeyMldsa'),

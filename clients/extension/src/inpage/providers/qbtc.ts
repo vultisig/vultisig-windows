@@ -10,15 +10,33 @@ import { getSharedHandlers } from './core/sharedHandlers'
 const mldsaRequiredMessage =
   'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
 
+type SharedHandlers = ReturnType<typeof getSharedHandlers>
+type SendTransactionParams = Parameters<SharedHandlers['send_transaction']>[0]
+
+// dApp-supplied params arrive typed as `unknown[]`. Validate the routing
+// boundary at runtime, then narrow to the shared handler's parameter shape.
+const parseSendTransactionParams = (
+  params: readonly unknown[]
+): SendTransactionParams => {
+  const [tx] = params
+  if (!tx || typeof tx !== 'object') {
+    throw new EIP1193Error('InvalidParams')
+  }
+  return [tx as SendTransactionParams[0]]
+}
+
 /**
  * Dedicated dApp provider for QBTC, exposed at `window.vultisig.qbtc`.
  *
  * QBTC is a post-quantum Cosmos SDK chain that signs with MLDSA-44 rather
- * than secp256k1/ed25519, so it cannot fit the Keplr provider shape (the
- * `algo` field and signature length don't match). This provider exposes a
- * QBTC-native surface via the shared handlers — `get_accounts`,
- * `request_accounts`, `send_transaction`, `get_transaction_by_hash` — and
- * routes signing through the existing MLDSA keysign pipeline.
+ * than secp256k1/ed25519. This provider is the QBTC-native surface
+ * (`get_accounts`, `request_accounts`, `send_transaction`,
+ * `get_transaction_by_hash`) with explicit MLDSA semantics — no `algo`
+ * spoofing, no Keplr signature-shape compromises.
+ *
+ * QBTC is also reachable via the Keplr compatibility route at chainId
+ * `qbtc-testnet` for dApps that can't be modified; see `xdefiKeplr.ts`.
+ * Both routes funnel into the same MLDSA keysign pipeline.
  */
 export class Qbtc extends EventEmitter {
   public chainId: string
@@ -53,10 +71,18 @@ export class Qbtc extends EventEmitter {
         return accounts
       }
 
-      if (data.method in handlers) {
-        return handlers[data.method as keyof typeof handlers](
-          data.params as any
+      if (data.method === 'send_transaction') {
+        return handlers.send_transaction(
+          parseSendTransactionParams(data.params)
         )
+      }
+
+      if (data.method === 'get_transaction_by_hash') {
+        const [hash] = data.params
+        if (typeof hash !== 'string') {
+          throw new EIP1193Error('InvalidParams')
+        }
+        return handlers.get_transaction_by_hash([hash])
       }
 
       throw new NotImplementedError(`QBTC method ${data.method}`)
@@ -69,8 +95,10 @@ export class Qbtc extends EventEmitter {
 
       return result
     } catch (error) {
-      callback?.(error as Error)
-      throw error
+      const normalizedError =
+        error instanceof Error ? error : new Error(String(error))
+      callback?.(normalizedError)
+      throw normalizedError
     }
   }
 }

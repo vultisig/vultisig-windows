@@ -272,6 +272,28 @@ const directHandler = (
   } as TransactionDetails
 }
 
+type CosmosSigningOutput = InstanceType<typeof TW.Cosmos.Proto.SigningOutput>
+
+// SDK's `deserializeSigningOutput<T extends Chain>` returns a union driven by
+// `DeriveChainKind<T>`. Both `cosmos` and `qbtc` kinds map to the same
+// `TW.Cosmos.Proto.SigningOutput` class (see `signingOutputs` in
+// `core-chain/tw/signingOutput`), but the generic widens through indexed
+// access. Validate the Cosmos-shape fields at the boundary and narrow.
+function assertCosmosSigningOutput(
+  output: unknown
+): asserts output is CosmosSigningOutput {
+  if (
+    !output ||
+    typeof output !== 'object' ||
+    typeof (output as { json?: unknown }).json !== 'string' ||
+    typeof (output as { serialized?: unknown }).serialized !== 'string'
+  ) {
+    throw new Error(
+      'Expected Cosmos signing output with `.json` and `.serialized` strings'
+    )
+  }
+}
+
 const standardCosmosCoinType = 118
 
 // Signing flows require Vultisig native support for the chain (transaction
@@ -285,10 +307,23 @@ const assertNativeChainForSigning = (chainId: string): void => {
   }
 }
 
+const mldsaRequiredKeplrMessage =
+  'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
+
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
   const nativeChain = getKeplrSupportedChainByChainId(chainId)
   if (nativeChain) {
     const { publicKey, address } = await requestAccount(nativeChain)
+
+    // `getAccount` returns `{ address: '', publicKey: '' }` for MLDSA chains
+    // when the selected vault has no `publicKeyMldsa`. Surface the same
+    // Unauthorized error the native `window.vultisig.qbtc` provider throws,
+    // otherwise downstream `getKey()` / signing fail at `bech32.decode('')`
+    // with an opaque error.
+    if (nativeChain === OtherChain.QBTC && !address) {
+      throw new EIP1193Error('Unauthorized', mldsaRequiredKeplrMessage)
+    }
+
     return [
       {
         // QBTC signs with MLDSA-44; Keplr's `Algo` union predates
@@ -687,13 +722,8 @@ export class XDEFIKeplrProvider extends Keplr {
         { account: transactionDetails.from }
       )
 
-      // QBTC's signing output is the same `TW.Cosmos.Proto.SigningOutput`
-      // class as Cosmos (see `signingOutputs` in core-chain/tw/signingOutput).
-      // The type system widens through the indexed access though, so cast
-      // back to the concrete Cosmos shape that holds `.json`/`.serialized`.
-      const output = deserializeSigningOutput(chain, data) as InstanceType<
-        typeof TW.Cosmos.Proto.SigningOutput
-      >
+      const output = deserializeSigningOutput(chain, data)
+      assertCosmosSigningOutput(output)
 
       const aminoJson = JSON.parse(output.json)
       const stdTx = aminoJson.tx as {
@@ -790,10 +820,9 @@ export class XDEFIKeplrProvider extends Keplr {
         { account: transactionDetails.from }
       )
 
-      const { serialized } = deserializeSigningOutput(
-        chain,
-        data
-      ) as InstanceType<typeof TW.Cosmos.Proto.SigningOutput>
+      const output = deserializeSigningOutput(chain, data)
+      assertCosmosSigningOutput(output)
+      const { serialized } = output
       const publicKey = Buffer.from(new Uint8Array(account.pubkey)).toString(
         'base64'
       )

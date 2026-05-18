@@ -21,7 +21,7 @@
    - [Ripple](#ripple-windowvultisigripple)
    - [MayaChain](#mayachain-windowvultisigmayachain)
    - [Dash](#dash-windowvultisigdash)
-   - [QBTC](#qbtc-windowvultisigqbtc)
+   - [QBTC](#qbtc-windowvultisigqbtc-and-windowkeplr)
    - [Plugin Provider](#plugin-provider-windowvultisigplugin)
 6. [Wallet Compatibility Layers](#wallet-compatibility-layers)
 7. [Steps to Integrate](#steps-to-integrate-with-vultisig-extension)
@@ -334,19 +334,27 @@ Supports TRC20 token transfers with automatic decoding and contract interaction.
 - `send_transaction`
 - `get_transaction_by_hash`
 
-### QBTC (`window.vultisig.qbtc`)
+### QBTC (`window.vultisig.qbtc` and `window.keplr`)
 
-QBTC is a post-quantum Cosmos SDK chain that signs with **ML-DSA-44** rather than secp256k1/ed25519, so it cannot use the Keplr provider shape. Vultisig exposes a dedicated QBTC provider with QBTC-native methods.
+QBTC is a post-quantum Cosmos SDK chain that signs with **ML-DSA-44** rather than secp256k1/ed25519. Vultisig exposes QBTC via two complementary surfaces:
 
-**Account Management:**
+- **`window.vultisig.qbtc`** -- recommended QBTC-native provider with explicit MLDSA semantics. Use this when you control the dApp client.
+- **`window.keplr`** (chainId `qbtc-testnet`) -- compatibility route for Keplr-shape dApps and cosmjs / cosmos-kit clients that can't be modified. The Keplr `algo` field is reported as `secp256k1` because the Keplr `Algo` union has no MLDSA enum, but the `pubKey` bytes returned are the real ML-DSA-44 key (see "Public key shape" below).
+
+**Account Management (`window.vultisig.qbtc`):**
 - `request_accounts` -- connect and return the QBTC bech32 address
 - `get_accounts` -- return the currently authorized QBTC address (or `[]`)
 
-**Transaction Management:**
+**Transaction Management (`window.vultisig.qbtc`):**
 - `send_transaction` -- sign and broadcast a QBTC transaction; returns the tx hash
 - `get_transaction_by_hash`
 
-**Vault requirement (important):** QBTC requires the user's vault to carry an ML-DSA public key (`vault.publicKeyMldsa`). MLDSA keygen is gated by the `Enable MLDSA` toggle in Vultisig Developer Options at vault creation time -- vaults created with the toggle off cannot use QBTC. If a dApp calls `request_accounts` against a vault without MLDSA support, the provider rejects with:
+**Keplr-compat methods (`window.keplr`):**
+- `enable('qbtc-testnet')`
+- `getKey('qbtc-testnet')` / `getOfflineSigner('qbtc-testnet').getAccounts()`
+- `signDirect(chainId, signer, signDoc)` / `signAmino(chainId, signer, signDoc)`
+
+**Vault requirement (important):** QBTC requires the user's vault to carry an ML-DSA public key (`vault.publicKeyMldsa`). MLDSA keygen is gated by the `Enable MLDSA` toggle in Vultisig Developer Options at vault creation time -- vaults created with the toggle off cannot use QBTC on either surface. If a dApp calls `window.vultisig.qbtc.request({ method: 'request_accounts' })` against a vault without MLDSA support, the provider rejects with:
 
 ```text
 EIP1193Error: QBTC requires an MLDSA-enabled vault. Enable MLDSA in
@@ -354,7 +362,7 @@ Vultisig Developer Options and create a new vault.
 code: 4100 (Unauthorized)
 ```
 
-**Public key shape:** Unlike other chains, the `publicKey` returned for QBTC is the raw ML-DSA-44 hex public key (~1312 bytes), not a 33-byte compressed secp256k1 key. dApps verifying signatures must use ML-DSA-44 verification, not standard Cosmos secp256k1 verification.
+**Public key shape:** Unlike other chains, the `publicKey` (or Keplr `pubKey`) returned for QBTC is the raw ML-DSA-44 hex public key (~1312 bytes), not a 33-byte compressed secp256k1 key. dApps verifying signatures must use ML-DSA-44 verification regardless of which surface they used; the `algo: 'secp256k1'` tag reported by `window.keplr.getKey('qbtc-testnet')` is a compatibility shim and does not describe the actual signing algorithm.
 
 ### Plugin Provider (`window.vultisig.plugin`)
 
@@ -515,6 +523,29 @@ const sendQbtc = async ({ from, to, value, memo }) => {
   });
   console.log("QBTC tx hash:", hash);
   return hash;
+};
+```
+
+#### QBTC via Keplr compatibility
+
+Use this route when a Keplr-shape dApp or a cosmjs / cosmos-kit client needs to talk to QBTC without code changes:
+
+```javascript
+const connectQbtcViaKeplr = async () => {
+  if (!window.keplr) {
+    console.error("Keplr-compat surface not available");
+    return;
+  }
+
+  await window.keplr.enable("qbtc-testnet");
+  const key = await window.keplr.getKey("qbtc-testnet");
+  console.log("QBTC address:", key.bech32Address);
+  // key.pubKey is the raw ML-DSA-44 public key (~1312 bytes).
+  // key.algo is reported as 'secp256k1' for Keplr API compatibility;
+  // verify signatures with ML-DSA-44 regardless.
+
+  const signer = window.keplr.getOfflineSigner("qbtc-testnet");
+  // Use `signer` with cosmjs's StargateClient.connectWithSigner to broadcast.
 };
 ```
 
