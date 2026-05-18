@@ -1,6 +1,8 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
+import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { sunToTrx } from '@vultisig/core-chain/chains/tron/resources'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
@@ -32,6 +34,20 @@ export const useDefiChainPortfolios = () => {
   })
   const tronResourcesQuery = useTronAccountResourcesQuery()
   const tronPricesQuery = useCoinPricesQuery({ coins: tronDefiCoins })
+
+  // Terra-family native staking — we surface a portfolio entry whenever the
+  // chain is enabled. Fiat is left at 0 until a price feed is wired; the
+  // chain card still renders so users can navigate into the staking surface.
+  const terraAddress = useCurrentVaultAddress(Chain.Terra)
+  const terraClassicAddress = useCurrentVaultAddress(Chain.TerraClassic)
+  const terraDelegationsQuery = useCosmosDelegationsQuery({
+    chain: Chain.Terra,
+    delegatorAddress: terraAddress ?? '',
+  })
+  const terraClassicDelegationsQuery = useCosmosDelegationsQuery({
+    chain: Chain.TerraClassic,
+    delegatorAddress: terraClassicAddress ?? '',
+  })
 
   const data = useMemo<DefiChainPortfolio[]>(() => {
     const portfolios: DefiChainPortfolio[] = []
@@ -95,6 +111,25 @@ export const useDefiChainPortfolios = () => {
       })
     }
 
+    if (enabledChains.includes(Chain.Terra)) {
+      portfolios.push({
+        chain: Chain.Terra,
+        totalFiat: 0,
+        positionsWithBalanceCount: terraDelegationsQuery.data?.length ?? 0,
+        isLoading: terraDelegationsQuery.isPending,
+      })
+    }
+
+    if (enabledChains.includes(Chain.TerraClassic)) {
+      portfolios.push({
+        chain: Chain.TerraClassic,
+        totalFiat: 0,
+        positionsWithBalanceCount:
+          terraClassicDelegationsQuery.data?.length ?? 0,
+        isLoading: terraClassicDelegationsQuery.isPending,
+      })
+    }
+
     return portfolios
   }, [
     enabledChains,
@@ -108,13 +143,20 @@ export const useDefiChainPortfolios = () => {
     tronResourcesQuery.isPending,
     tronPricesQuery.data,
     tronPricesQuery.isPending,
+    terraDelegationsQuery.data,
+    terraDelegationsQuery.isPending,
+    terraClassicDelegationsQuery.data,
+    terraClassicDelegationsQuery.isPending,
   ])
 
   const isPending =
     (enabledChains.includes(Chain.THORChain) && thorchainQuery.isPending) ||
     (enabledChains.includes(Chain.MayaChain) && mayaQuery.isPending) ||
     (enabledChains.includes(Chain.Tron) &&
-      (tronResourcesQuery.isPending || tronPricesQuery.isPending))
+      (tronResourcesQuery.isPending || tronPricesQuery.isPending)) ||
+    (enabledChains.includes(Chain.Terra) && terraDelegationsQuery.isPending) ||
+    (enabledChains.includes(Chain.TerraClassic) &&
+      terraClassicDelegationsQuery.isPending)
 
   const isTronEnabled = enabledChains.includes(Chain.Tron)
 

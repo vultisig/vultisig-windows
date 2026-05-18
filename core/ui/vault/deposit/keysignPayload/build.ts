@@ -1,9 +1,16 @@
 import { create } from '@bufbuild/protobuf'
+import { toBase64 } from '@cosmjs/encoding'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
-import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
+import {
+  Chain,
+  CosmosChain,
+  IbcEnabledCosmosChain,
+} from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
+import { getCosmosGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
 import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
@@ -27,6 +34,7 @@ import { TransactionType } from '@vultisig/core-mpc/types/vultisig/keysign/v1/bl
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   CosmosCoinSchema,
+  SignDirectSchema,
   WasmExecuteContractPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
@@ -36,7 +44,11 @@ import { match } from '@vultisig/lib-utils/match'
 import { mirrorRecord } from '@vultisig/lib-utils/record/mirrorRecord'
 import { FieldValues } from 'react-hook-form'
 
-import { ChainAction } from '../ChainAction'
+import {
+  ChainAction,
+  CosmosStakingAction,
+  cosmosStakingActions,
+} from '../ChainAction'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
   NativeTcyInput,
@@ -44,6 +56,10 @@ import {
   StakeKind,
   StcyInput,
 } from '../staking/types'
+import {
+  buildStakingSignDirectBytes,
+  type CosmosStakingInput,
+} from './cosmosStaking/encodeStakingMsgs'
 
 export type BuildDepositKeysignPayloadInput = {
   coin: AccountCoin
@@ -142,6 +158,17 @@ export const buildDepositKeysignPayload = async ({
     isDeposit: !isNonThorChainLp,
     transactionType,
   })
+
+  if (isOneOf(action, cosmosStakingActions)) {
+    return applyCosmosStakingSignData({
+      action: action as CosmosStakingAction,
+      coin,
+      depositData,
+      amountUnits,
+      publicKey,
+      keysignPayload,
+    })
+  }
 
   const stakeId = isStake
     ? withFallback(
@@ -411,4 +438,137 @@ export const buildDepositKeysignPayload = async ({
   }
 
   return keysignPayload
+}
+
+const cosmosStakingChains: readonly IbcEnabledCosmosChain[] = [
+  Chain.Terra,
+  Chain.TerraClassic,
+]
+
+const isCosmosStakingChain = (chain: Chain): chain is IbcEnabledCosmosChain =>
+  (cosmosStakingChains as readonly Chain[]).includes(chain)
+
+type ApplyCosmosStakingSignDataInput = {
+  action: CosmosStakingAction
+  coin: AccountCoin
+  depositData: FieldValues
+  amountUnits: string | undefined
+  publicKey: PublicKey
+  keysignPayload: ReturnType<typeof create<typeof KeysignPayloadSchema>>
+}
+
+const buildCosmosStakingInput = ({
+  action,
+  depositData,
+  amountUnits,
+}: {
+  action: CosmosStakingAction
+  depositData: FieldValues
+  amountUnits: string | undefined
+}): CosmosStakingInput => {
+  if (action === 'delegate') {
+    return {
+      action: 'delegate',
+      validatorAddress: shouldBePresent(
+        depositData.validatorAddress as string | undefined,
+        'validatorAddress'
+      ),
+      amount: shouldBePresent(amountUnits, 'amount'),
+    }
+  }
+  if (action === 'undelegate') {
+    return {
+      action: 'undelegate',
+      validatorAddress: shouldBePresent(
+        depositData.validatorAddress as string | undefined,
+        'validatorAddress'
+      ),
+      amount: shouldBePresent(amountUnits, 'amount'),
+    }
+  }
+  if (action === 'redelegate') {
+    return {
+      action: 'redelegate',
+      srcValidatorAddress: shouldBePresent(
+        depositData.srcValidatorAddress as string | undefined,
+        'srcValidatorAddress'
+      ),
+      dstValidatorAddress: shouldBePresent(
+        depositData.validatorAddress as string | undefined,
+        'validatorAddress'
+      ),
+      amount: shouldBePresent(amountUnits, 'amount'),
+    }
+  }
+  // claim_rewards
+  const validatorAddresses = depositData.validatorAddresses as
+    | string[]
+    | undefined
+  if (!validatorAddresses || validatorAddresses.length === 0) {
+    throw new Error(
+      'claim_rewards requires validatorAddresses (single-validator or bulk-claim list)'
+    )
+  }
+  return { action: 'claim_rewards', validatorAddresses }
+}
+
+const applyCosmosStakingSignData = ({
+  action,
+  coin,
+  depositData,
+  amountUnits,
+  publicKey,
+  keysignPayload,
+}: ApplyCosmosStakingSignDataInput) => {
+  if (!isCosmosStakingChain(coin.chain)) {
+    throw new Error(
+      `Cosmos staking action '${action}' is only supported on Terra-family chains, got ${coin.chain}`
+    )
+  }
+
+  const blockchainSpecific = keysignPayload.blockchainSpecific
+  if (blockchainSpecific.case !== 'cosmosSpecific') {
+    throw new Error(
+      `Cosmos staking requires cosmosSpecific blockchainSpecific, got ${blockchainSpecific.case}`
+    )
+  }
+  const { sequence, gas } = blockchainSpecific.value
+
+  // `isCosmosStakingChain` narrowed `coin.chain`, but `coin` itself is still
+  // typed as AccountCoin (chain: Chain). Re-form the CoinKey explicitly so the
+  // SDK helpers that demand `CoinKey<CosmosChain>` accept it.
+  const cosmosCoin = { ...coin, chain: coin.chain }
+  const input = buildCosmosStakingInput({ action, depositData, amountUnits })
+
+  const feeDenom = cosmosFeeCoinDenom[coin.chain]
+  const stakingDenom = getDenom(cosmosCoin as CoinKey<CosmosChain>)
+  const gasLimit = getCosmosGasLimit(cosmosCoin as CoinKey<CosmosChain>)
+  // Total fee in base units = gas (set by chainSpecific).
+  const feeAmount = { denom: feeDenom, amount: gas.toString() }
+
+  const { bodyBytes, authInfoBytes } = buildStakingSignDirectBytes({
+    input,
+    delegatorAddress: coin.address,
+    denom: stakingDenom,
+    publicKey: publicKey.data(),
+    sequence,
+    feeAmount,
+    gasLimit,
+  })
+
+  return create(KeysignPayloadSchema, {
+    ...keysignPayload,
+    contractPayload: { case: undefined },
+    memo: '',
+    toAddress: '',
+    toAmount: '0',
+    signData: {
+      case: 'signDirect',
+      value: create(SignDirectSchema, {
+        chainId: '',
+        bodyBytes: toBase64(bodyBytes),
+        authInfoBytes: toBase64(authInfoBytes),
+      }),
+    },
+  })
 }

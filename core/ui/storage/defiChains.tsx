@@ -17,6 +17,8 @@ export const supportedDefiChains = [
   Chain.THORChain,
   ...(featureFlags.mayaChain ? [Chain.MayaChain] : []),
   Chain.Tron,
+  Chain.Terra,
+  Chain.TerraClassic,
 ] as const satisfies readonly Chain[]
 
 export type SupportedDefiChain = (typeof supportedDefiChains)[number]
