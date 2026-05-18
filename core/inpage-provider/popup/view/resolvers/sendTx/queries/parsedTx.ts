@@ -5,7 +5,7 @@ import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { Query } from '@lib/ui/query/Query'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
-import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
@@ -69,7 +69,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
           return inputCoin
         },
         psbt: () => chainFeeCoin[Chain.Bitcoin],
-        polkadot: () => chainFeeCoin[OtherChain.Polkadot],
+        polkadot: ({ chain }) => chainFeeCoin[chain],
       })
 
       const { chain } = coin
