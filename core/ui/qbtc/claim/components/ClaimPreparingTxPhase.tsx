@@ -120,7 +120,7 @@ export const ClaimPreparingTxPhase = ({
         address: qbtcAddress,
       })
 
-      const bodyBytes = buildClaimTxBody({
+      const claimTxBodyInput = {
         claimer: qbtcAddress,
         broadcaster: qbtcAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
@@ -129,7 +129,9 @@ export const ClaimPreparingTxPhase = ({
         addressHash: proof.address_hash,
         qbtcAddressHash: proof.qbtc_address_hash,
         pubKeyHashSha256: proof.pub_key_hash_sha256,
-      })
+      }
+
+      const bodyBytes = buildClaimTxBody(claimTxBodyInput)
 
       const { hash, authInfoBytes } = buildClaimPreSignHash({
         bodyBytes,
