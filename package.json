@@ -18,7 +18,7 @@
     "typecheck": "tsgo --noEmit",
     "test": "vitest run",
     "knip": "knip",
-    "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
+    "check:all": "yarn lint && yarn typecheck && yarn test && yarn workspace @clients/extension test && yarn workspace @clients/desktop test:ci && yarn knip",
     "knip:fix": "knip --fix --allow-remove-files",
     "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn knip",
     "translate": "yarn workspace @core/ui translate",

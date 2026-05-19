@@ -10,7 +10,8 @@
     "dev": "vite",
     "build": "node --max-old-space-size=8192 ../../node_modules/typescript/bin/tsc && node --max-old-space-size=8192 ../../node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest --config vitest.config.mts",
+    "test:ci": "vitest run --config vitest.config.mts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
