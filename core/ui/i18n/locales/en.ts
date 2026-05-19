@@ -965,6 +965,11 @@ export const en = {
   select: 'Select',
   select_asset: 'Select asset',
   select_backup_file: 'Import your vault share',
+  select_vault_backup_share: 'Select vault share',
+  select_vault_backup_share_description:
+    'This backup contains multiple vault shares. Choose the share for this device.',
+  unsupported_vault_backup_file:
+    "This file doesn't look like a Vultisig vault backup. Pick a `.vult` or `.vult.zip` file exported from the Vultisig app.",
   select_chain: 'Select chain',
   select_chains: 'Select chains',
   select_chains_manually: 'Select chains manually',

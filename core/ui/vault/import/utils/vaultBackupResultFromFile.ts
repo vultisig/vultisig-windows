@@ -1,4 +1,5 @@
 import { isLikelyToBeDklsVaultBackup } from '@core/ui/vault/import/utils/isLikelyToBeDklsVaultBackup'
+import { UnsupportedVaultBackupFileError } from '@core/ui/vault/import/utils/UnsupportedVaultBackupFileError'
 import { vaultBackupResultFromFileContent } from '@core/ui/vault/import/utils/vaultBackupResultFromString'
 import {
   getFileExtension,
@@ -16,6 +17,11 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { readFileAsArrayBuffer } from '@vultisig/lib-utils/file/readFileAsArrayBuffer'
 
 const supportedEntryExtensions = new Set<string>(vaultBackupExtensions)
+const zipFileSignatures = [
+  [0x50, 0x4b, 0x03, 0x04],
+  [0x50, 0x4b, 0x05, 0x06],
+  [0x50, 0x4b, 0x07, 0x08],
+]
 
 type FileBytesInput = {
   name: string
@@ -40,20 +46,36 @@ export const vaultBackupResultFromFileBytes = async ({
   size,
   buffer,
 }: FileBytesInput): Promise<FileBasedVaultBackupResult> => {
-  const extension = getFileExtension(name)
+  try {
+    const extension = getFileExtension(name)
 
-  if (isVaultBackupArchiveExtension(extension)) {
-    return extractVaultBackupsFromArchive({ archiveName: name, buffer })
+    if (isVaultBackupArchiveExtension(extension) || isZipBuffer(buffer)) {
+      return extractVaultBackupsFromArchive({ archiveName: name, buffer })
+    }
+
+    const item = createBackupResultItem({
+      extension: getVaultBackupExtension(name),
+      buffer,
+      size,
+      name,
+    })
+
+    return [item]
+  } catch (error) {
+    if (error instanceof UnsupportedVaultBackupFileError) {
+      throw error
+    }
+
+    throw new UnsupportedVaultBackupFileError()
   }
+}
 
-  const item = createBackupResultItem({
-    extension: getVaultBackupExtension(name),
-    buffer,
-    size,
-    name,
-  })
+const isZipBuffer = (buffer: ArrayBuffer) => {
+  const bytes = new Uint8Array(buffer)
 
-  return [item]
+  return zipFileSignatures.some(signature =>
+    signature.every((byte, index) => bytes[index] === byte)
+  )
 }
 
 const createBackupResultItem = ({
@@ -79,7 +101,7 @@ const createBackupResultItem = ({
     ? { libType: 'DKLS' as const }
     : undefined
 
-  return override ? { result, override } : { result }
+  return override ? { name, result, override } : { name, result }
 }
 
 const toArrayBuffer = (value: Uint8Array) => value.slice().buffer
