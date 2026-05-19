@@ -23,6 +23,14 @@ type QbtcAccountInfoForClaim = {
   accountNumber: number
   sequence: number
   latestBlock: string
+  /**
+   * True when the chain has the account in its auth store. False on 404 —
+   * the address has never touched the chain. First-time claimers can't sign
+   * a SignDoc the chain will accept (the chain's auto-assigned
+   * `account_number` is unpredictable), so callers should route the tx
+   * through the proof service's server-side broadcast instead.
+   */
+  exists: boolean
 }
 
 /**
@@ -54,9 +62,9 @@ export const getQbtcAccountInfoForClaim = async ({
     ),
   ])
 
-  const { accountNumber, sequence } = await (async () => {
+  const { accountNumber, sequence, exists } = await (async () => {
     if (accountResponse.status === 404) {
-      return { accountNumber: 0, sequence: 0 }
+      return { accountNumber: 0, sequence: 0, exists: false }
     }
     if (!accountResponse.ok) {
       throw new Error(
@@ -67,6 +75,7 @@ export const getQbtcAccountInfoForClaim = async ({
     return {
       accountNumber: Number(data.account.account_number),
       sequence: Number(data.account.sequence),
+      exists: true,
     }
   })()
 
@@ -81,5 +90,6 @@ export const getQbtcAccountInfoForClaim = async ({
     accountNumber,
     sequence,
     latestBlock,
+    exists,
   }
 }
