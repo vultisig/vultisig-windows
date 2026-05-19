@@ -1,9 +1,10 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { ChainInfo } from '@keplr-wallet/types'
-import { CosmosChain } from '@vultisig/core-chain/Chain'
+import { CosmosChain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
@@ -13,6 +14,12 @@ type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
 // reject duplicate prefixes within a single chain set — including both
 // makes dApps see Terra as "not in wallet". Terra Classic is still
 // reachable through the Station provider's `switchNetwork('classic')`.
+//
+// QBTC is included here so Keplr-shaped dApps can connect via the
+// standard `window.keplr` API in addition to the dedicated
+// `window.vultisig.qbtc` provider. The signing path lies about `algo`
+// (MLDSA-44 doesn't fit Keplr's `'secp256k1' | 'ed25519'` union) — see
+// the QBTC branch in `getAccounts` inside `xdefiKeplr.ts`.
 const supportedKeplrChains = [
   CosmosChain.Cosmos,
   CosmosChain.Osmosis,
@@ -23,7 +30,20 @@ const supportedKeplrChains = [
   CosmosChain.Akash,
   CosmosChain.THORChain,
   CosmosChain.MayaChain,
+  OtherChain.QBTC,
 ] as const
+
+/** QBTC chain ID. Mirrors the constant used throughout the SDK (QBTCHelper, ClaimRunner) so dApps that query the live block header see the same chain ID Vultisig signs for. */
+const qbtcChainId = 'qbtc-testnet'
+
+/**
+ * QBTC isn't a `CosmosChain` in the SDK (it's `OtherChain.QBTC` because it
+ * signs with MLDSA-44, not secp256k1), so `getCosmosChainId` doesn't know
+ * about it. Centralize the chainId lookup so every site that resolves
+ * Keplr-known chains stays consistent.
+ */
+const getKeplrChainId = (chain: SupportedKeplrChain): string =>
+  chain === OtherChain.QBTC ? qbtcChainId : getCosmosChainId(chain)
 
 const bech32Prefix: Record<SupportedKeplrChain, string> = {
   Cosmos: 'cosmos',
@@ -35,6 +55,7 @@ const bech32Prefix: Record<SupportedKeplrChain, string> = {
   Akash: 'akash',
   THORChain: 'thor',
   MayaChain: 'maya',
+  QBTC: 'qbtc',
 }
 
 const bip44CoinType: Record<SupportedKeplrChain, number> = {
@@ -47,6 +68,7 @@ const bip44CoinType: Record<SupportedKeplrChain, number> = {
   Terra: 330,
   THORChain: 931,
   MayaChain: 931,
+  QBTC: 118,
 }
 
 const chainName: Record<SupportedKeplrChain, string> = {
@@ -59,11 +81,14 @@ const chainName: Record<SupportedKeplrChain, string> = {
   Akash: 'Akash',
   THORChain: 'THORChain',
   MayaChain: 'MayaChain',
+  QBTC: 'QBTC Testnet',
 }
 
 // Average gas price; low/high are derived as ±50% so dApps that read all
 // three slots get a sensible spread. THORChain / MayaChain use flat fees,
-// so 0 is the canonical "ignore gas price" value.
+// so 0 is the canonical "ignore gas price" value. QBTC has a flat
+// `min_tx_fee` of 800 uqbtc — pick a non-zero step so cosmos-kit fee
+// calculators don't underpay.
 const averageGasPrice: Record<SupportedKeplrChain, number> = {
   Cosmos: 0.025,
   Osmosis: 0.025,
@@ -74,6 +99,7 @@ const averageGasPrice: Record<SupportedKeplrChain, number> = {
   Akash: 0.025,
   THORChain: 0,
   MayaChain: 0,
+  QBTC: 0.004,
 }
 
 const buildBech32Config = (prefix: string) => ({
@@ -85,11 +111,19 @@ const buildBech32Config = (prefix: string) => ({
   bech32PrefixConsPub: `${prefix}valconspub`,
 })
 
+/** QBTC's fee denom matches the chain config (`base: 'qbtc'`). `cosmosFeeCoinDenom` is keyed by `CosmosChain` and doesn't include QBTC. */
+const getKeplrFeeDenom = (chain: SupportedKeplrChain): string =>
+  chain === OtherChain.QBTC ? 'qbtc' : cosmosFeeCoinDenom[chain]
+
+const getKeplrRpcUrl = (chain: SupportedKeplrChain): string =>
+  chain === OtherChain.QBTC ? qbtcRestUrl : cosmosRpcUrl[chain]
+
 const buildKeplrChainInfo = (chain: SupportedKeplrChain): ChainInfo => {
   const prefix = bech32Prefix[chain]
-  const denom = cosmosFeeCoinDenom[chain]
+  const denom = getKeplrFeeDenom(chain)
   const { ticker, decimals } = chainFeeCoin[chain]
   const average = averageGasPrice[chain]
+  const rpc = getKeplrRpcUrl(chain)
 
   const currency = {
     coinDenom: ticker,
@@ -107,9 +141,9 @@ const buildKeplrChainInfo = (chain: SupportedKeplrChain): ChainInfo => {
   }
 
   return {
-    rpc: cosmosRpcUrl[chain],
-    rest: cosmosRpcUrl[chain],
-    chainId: getCosmosChainId(chain),
+    rpc,
+    rest: rpc,
+    chainId: getKeplrChainId(chain),
     chainName: chainName[chain],
     bip44: { coinType: bip44CoinType[chain] },
     bech32Config: buildBech32Config(prefix),
@@ -121,8 +155,21 @@ const buildKeplrChainInfo = (chain: SupportedKeplrChain): ChainInfo => {
 }
 
 const nativeChainIds = new Set(
-  supportedKeplrChains.map(chain => getCosmosChainId(chain))
+  supportedKeplrChains.map(chain => getKeplrChainId(chain))
 )
+
+const chainByChainId = new Map<string, SupportedKeplrChain>(
+  supportedKeplrChains.map(chain => [getKeplrChainId(chain), chain])
+)
+
+/**
+ * Resolves a Keplr chain ID to one of Vultisig's supported chains. Combines
+ * the SDK's `getCosmosChainByChainId` (which only knows {@link CosmosChain})
+ * with QBTC, which is {@link OtherChain.QBTC} because it signs with MLDSA.
+ */
+export const getKeplrSupportedChainByChainId = (
+  chainId: string
+): SupportedKeplrChain | undefined => chainByChainId.get(chainId)
 
 /** True if `chainId` is one of Vultisig's hardcoded Cosmos chains. */
 export const isNativeKeplrChainId = (chainId: string): boolean =>
