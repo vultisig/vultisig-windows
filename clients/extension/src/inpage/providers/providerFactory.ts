@@ -6,6 +6,7 @@ import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { MAYAChain } from '@clients/extension/src/inpage/providers/maya'
 import { Plugin } from '@clients/extension/src/inpage/providers/plugin'
 import { Polkadot } from '@clients/extension/src/inpage/providers/polkadot'
+import { Qbtc } from '@clients/extension/src/inpage/providers/qbtc'
 import { Ripple } from '@clients/extension/src/inpage/providers/ripple'
 import { Solana } from '@clients/extension/src/inpage/providers/solana'
 import { Station } from '@clients/extension/src/inpage/providers/station'
@@ -45,6 +46,7 @@ export const createProviders = () => {
     mayachain: MAYAChain.getInstance(),
     plugin: new Plugin(),
     polkadot: Polkadot.getInstance(),
+    qbtc: Qbtc.getInstance(),
     ripple: Ripple.getInstance(),
     solana: vultisigSolanaProvider,
     station: Station.getInstance(keplrProvider),
