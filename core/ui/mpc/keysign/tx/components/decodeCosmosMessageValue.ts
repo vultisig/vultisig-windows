@@ -45,6 +45,7 @@ import {
 } from './osmosisValsetprefDecoders'
 
 type CosmosMessage = { typeUrl: string; value: Uint8Array; chainId?: string }
+type ThorchainMessageInput = { value: Uint8Array; chainId?: string }
 
 type KnownDecoder = (value: Uint8Array) => unknown
 type ChainAwareDecoder = (msg: CosmosMessage) => unknown
@@ -120,13 +121,10 @@ const knownDecoders: Record<string, KnownDecoder> = {
 const getThorchainAddressPrefix = (chainId?: string) =>
   chainId?.toLowerCase().includes('maya') ? 'maya' : 'thor'
 
-const toThorchainAddress = (value: Uint8Array, chainId?: string) =>
+const toThorchainAddress = ({ value, chainId }: ThorchainMessageInput) =>
   toBech32(getThorchainAddressPrefix(chainId), value)
 
-const decodeThorchainDeposit = ({
-  chainId,
-  value,
-}: CosmosMessage): unknown => {
+const decodeThorchainDeposit = ({ chainId, value }: CosmosMessage): unknown => {
   const decoded = TW.Cosmos.Proto.Message.THORChainDeposit.decode(value)
 
   return {
@@ -145,7 +143,7 @@ const decodeThorchainDeposit = ({
       decimals: Number(coin.decimals?.toString() ?? 0),
     })),
     memo: decoded.memo,
-    signer: toThorchainAddress(decoded.signer, chainId),
+    signer: toThorchainAddress({ value: decoded.signer, chainId }),
   }
 }
 
@@ -153,8 +151,8 @@ const decodeThorchainSend = ({ chainId, value }: CosmosMessage): unknown => {
   const decoded = TW.Cosmos.Proto.Message.THORChainSend.decode(value)
 
   return {
-    fromAddress: toThorchainAddress(decoded.fromAddress, chainId),
-    toAddress: toThorchainAddress(decoded.toAddress, chainId),
+    fromAddress: toThorchainAddress({ value: decoded.fromAddress, chainId }),
+    toAddress: toThorchainAddress({ value: decoded.toAddress, chainId }),
     amounts: decoded.amounts,
   }
 }
