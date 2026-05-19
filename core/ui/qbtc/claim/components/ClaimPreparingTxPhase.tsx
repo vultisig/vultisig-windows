@@ -73,15 +73,18 @@ export const ClaimPreparingTxPhase = ({
         baseUrl: proofServiceBaseUrl,
       })
 
-      const bodyBytes = buildClaimTxBody({
+      const claimTxBodyInput = {
         claimer: qbtcAddress,
+        broadcaster: qbtcAddress,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         proof: proof.proof,
         messageHash: proof.message_hash,
         addressHash: proof.address_hash,
         qbtcAddressHash: proof.qbtc_address_hash,
         pubKeyHashSha256: proof.pub_key_hash_sha256,
-      })
+      }
+
+      const bodyBytes = buildClaimTxBody(claimTxBodyInput)
 
       const accountInfo = await getQbtcAccountInfoForClaim({
         address: qbtcAddress,
