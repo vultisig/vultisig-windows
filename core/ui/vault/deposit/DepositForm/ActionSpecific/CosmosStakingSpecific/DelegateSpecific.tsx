@@ -12,17 +12,18 @@ import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { StakingAmountInput } from './StakingAmountInput'
 import { ValidatorPickerField } from './ValidatorPickerField'
 
 /**
- * Delegate form. Matches the Stake LUNA Figma screen:
- *   - "Amount" label and a centered large amount value
- *   - 25 / 50 / 75 / Max percentage pills
- *   - "Balance available" row
- *   - "Validator" field below the amount card; opens picker on click
+ * Delegate form — Stake LUNA Figma screen. Renders form content only;
+ * the bottom CTA is owned by `CosmosStakingFooterButton` at the page
+ * footer level so it stays pinned to the screen bottom outside the
+ * scrollable action area.
  *
- * The form's `validatorAddress` field is what the keysign payload builder
- * picks up for MsgDelegate.validator_address.
+ * The Amount card flex-grows so the layout matches Figma: card fills the
+ * vertical space between the header and the Validator field, with the
+ * centered amount input absorbing the spare height.
  */
 export const DelegateSpecific = () => {
   const { t } = useTranslation()
@@ -33,7 +34,7 @@ export const DelegateSpecific = () => {
   const balanceUi = fromChainAmount(balanceUnits, coin.decimals)
 
   return (
-    <VStack gap={16}>
+    <Layout>
       <Card>
         <Text size={14} color="regular">
           {t('amount')}
@@ -43,11 +44,13 @@ export const DelegateSpecific = () => {
             control={control}
             name="amount"
             render={({ field }) => (
-              <Text size={34} weight="500">
-                {field.value
-                  ? `${field.value} ${coin.ticker}`
-                  : `0 ${coin.ticker}`}
-              </Text>
+              <StakingAmountInput
+                value={(field.value as string | undefined) ?? ''}
+                onChange={v =>
+                  setValue('amount', v, { shouldValidate: true })
+                }
+                ticker={coin.ticker}
+              />
             )}
           />
         </CenteredAmount>
@@ -98,17 +101,20 @@ export const DelegateSpecific = () => {
           />
         )}
       />
-    </VStack>
+    </Layout>
   )
 }
 
-const Card = styled(VStack).attrs({ gap: 12 })`
+const Layout = styled(VStack).attrs({ flexGrow: true, gap: 16 })``
+
+const Card = styled(VStack).attrs({ gap: 12, flexGrow: true })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 12px;
 `
 
 const CenteredAmount = styled.div`
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;

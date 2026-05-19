@@ -1,10 +1,20 @@
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useState } from 'react'
 import styled from 'styled-components'
+
+import { useKeybaseAvatarQuery } from '../keybase/useKeybaseAvatarQuery'
 
 type ValidatorAvatarProps = {
   moniker: string
+  /**
+   * Keybase identity (the `description.identity` field on the validator;
+   * 16-hex PGP key fingerprint suffix). When present, we resolve a Keybase
+   * profile picture in the background and swap it in. When absent or the
+   * lookup fails, the deterministic initial avatar stays.
+   */
+  identity?: string
   size?: number
 }
 
@@ -37,6 +47,40 @@ const colorByLetter: Record<string, string> = {
   z: '#EEFF41',
 }
 
+export const ValidatorAvatar = ({
+  moniker,
+  identity,
+  size = 36,
+}: ValidatorAvatarProps) => {
+  const initial = (moniker.trim()[0] ?? '?').toUpperCase()
+  const bg = colorByLetter[initial.toLowerCase()] ?? '#7C8FFF'
+  const keybaseQuery = useKeybaseAvatarQuery(identity)
+  // `<img>` can still 404 after Keybase says the URL exists — track that
+  // separately so we drop back to the initial avatar without re-querying.
+  const [imageBroken, setImageBroken] = useState(false)
+
+  const avatarUrl = keybaseQuery.data
+  const showImage =
+    Boolean(avatarUrl) && !imageBroken && !keybaseQuery.isPending
+
+  return (
+    <Circle $size={size} $bg={bg}>
+      {showImage ? (
+        <AvatarImage
+          src={avatarUrl as string}
+          alt={moniker}
+          width={size}
+          height={size}
+          onError={() => setImageBroken(true)}
+          loading="lazy"
+        />
+      ) : (
+        <Initial size={Math.floor(size / 2.4)}>{initial}</Initial>
+      )}
+    </Circle>
+  )
+}
+
 const Circle = styled(HStack)<{ $size: number; $bg: string }>`
   width: ${({ $size }) => $size}px;
   height: ${({ $size }) => $size}px;
@@ -45,6 +89,7 @@ const Circle = styled(HStack)<{ $size: number; $bg: string }>`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 `
 
 const Initial = styled(Text)`
@@ -52,15 +97,8 @@ const Initial = styled(Text)`
   font-weight: 600;
 `
 
-export const ValidatorAvatar = ({
-  moniker,
-  size = 36,
-}: ValidatorAvatarProps) => {
-  const initial = (moniker.trim()[0] ?? '?').toUpperCase()
-  const bg = colorByLetter[initial.toLowerCase()] ?? '#7C8FFF'
-  return (
-    <Circle $size={size} $bg={bg}>
-      <Initial size={Math.floor(size / 2.4)}>{initial}</Initial>
-    </Circle>
-  )
-}
+const AvatarImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`

@@ -8,7 +8,10 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { type Validator } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
+import {
+  type UnbondingEntry,
+  type Validator,
+} from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -23,6 +26,18 @@ type CosmosDelegationCardProps = {
   pendingRewardsUnits: bigint
   /** Estimated APY as a Number in [0, 1]; rendered as percent. */
   apy?: number
+  /**
+   * Pending unbonding entries for this specific validator. When non-empty the
+   * card shows the unlock date and disables the Unstake button — the user
+   * has already started an unbond, so initiating another would race.
+   */
+  unbondingEntries?: UnbondingEntry[]
+  /**
+   * Chain-config unbonding period in days. Terra family is 21d; the param
+   * is `staking.unbonding_time` and varies per chain so the value flows in
+   * from the parent rather than being hard-coded here.
+   */
+  unbondingDays: number
   onAction: (
     action: Extract<ChainAction, 'undelegate' | 'redelegate' | 'delegate'>
   ) => void
@@ -41,6 +56,8 @@ export const CosmosDelegationCard = ({
   decimals,
   pendingRewardsUnits,
   apy,
+  unbondingEntries,
+  unbondingDays,
   onAction,
 }: CosmosDelegationCardProps) => {
   const { t } = useTranslation()
@@ -50,12 +67,23 @@ export const CosmosDelegationCard = ({
   // The Cosmos analog of THORChain "churn" is bond status / jailing.
   const isActive =
     validator.status === 'BOND_STATUS_BONDED' && !validator.jailed
-  const canUnstake = isActive && amount > 0n
+  // Earliest pending unbonding for this validator (ISO completion time).
+  // The lock disables Unstake until the unbonding completes — initiating
+  // a second one before the first lands is allowed by the chain but
+  // confuses the UX, so we surface the in-flight unbond instead.
+  const nextUnlock = (unbondingEntries ?? [])
+    .map(e => e.completionTime)
+    .sort()[0]
+  const isLocked = Boolean(nextUnlock)
+  const canUnstake = isActive && amount > 0n && !isLocked
 
   return (
     <Card>
       <Header>
-        <ValidatorAvatar moniker={validator.description.moniker} />
+        <ValidatorAvatar
+          moniker={validator.description.moniker}
+          identity={validator.description.identity}
+        />
         <VStack gap={2} flexGrow>
           <Text size={15} weight="500">
             {validator.description.moniker || 'Unnamed'}
@@ -139,6 +167,18 @@ export const CosmosDelegationCard = ({
           {t('stake')}
         </Button>
       </ButtonRow>
+      {isLocked && nextUnlock ? (
+        <UnbondingFooter>
+          <Text size={12} color="shy">
+            {t('unbonding_lock_label', { days: unbondingDays })}
+          </Text>
+          <Text size={12} color="shy">
+            {t('unbonding_unlocks_at', {
+              date: new Date(nextUnlock).toLocaleDateString(),
+            })}
+          </Text>
+        </UnbondingFooter>
+      ) : null}
     </Card>
   )
 }
@@ -164,6 +204,12 @@ const ButtonRow = styled(HStack).attrs({ gap: 8 })`
   > * {
     flex: 1;
   }
+`
+
+const UnbondingFooter = styled(HStack).attrs({
+  justifyContent: 'space-between',
+})`
+  padding-top: 4px;
 `
 
 const LabelWithIcon = styled(HStack).attrs({ gap: 6, alignItems: 'center' })``

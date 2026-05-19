@@ -48,7 +48,11 @@ export const ValidatorPickerField = ({
           </Text>
           {picked ? (
             <HStack alignItems="center" gap={8}>
-              <ValidatorAvatar moniker={picked.description.moniker} size={20} />
+              <ValidatorAvatar
+                moniker={picked.description.moniker}
+                identity={picked.description.identity}
+                size={20}
+              />
               <Text size={14} color="regular">
                 {picked.description.moniker || picked.operatorAddress}
               </Text>

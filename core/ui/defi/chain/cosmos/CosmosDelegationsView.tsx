@@ -18,6 +18,14 @@ import styled from 'styled-components'
 
 import { CosmosDelegationCard } from './CosmosDelegationCard'
 
+// Chain-config `staking.unbonding_time` per chain (in days). 21d is the
+// Terra-family default and the Cosmos Hub default. Sourced from a query in
+// the long run, but pinned here since it's stable for the launch chains.
+const unbondingDaysByChain: Partial<Record<IbcEnabledCosmosChain, number>> = {
+  Terra: 21,
+  TerraClassic: 21,
+}
+
 type CosmosDelegationsViewProps = {
   chain: IbcEnabledCosmosChain
   delegatorAddress: string
@@ -73,6 +81,13 @@ export const CosmosDelegationsView = ({
   const rewardsByValidator = new Map(
     (rewardsQuery.data?.rewards ?? []).map(r => [r.validatorAddress, r.reward])
   )
+  // Per-validator pending unbondings keyed by valoper. Empty array means
+  // no lock for that delegation; the card hides the unbonding line and
+  // leaves Unstake enabled.
+  const unbondingEntriesByValidator = new Map(
+    (unbondingsQuery.data ?? []).map(u => [u.validatorAddress, u.entries])
+  )
+  const unbondingDays = unbondingDaysByChain[chain] ?? 21
 
   // Aggregate totals across all delegations for the summary card.
   const totalStakedUnits = delegations.reduce(
@@ -82,13 +97,6 @@ export const CosmosDelegationsView = ({
   const totalStakedUi = fromChainAmount(totalStakedUnits, decimals)
   const totalFiat =
     priceUsd !== undefined ? Number(totalStakedUi) * priceUsd : 0
-
-  // Find the earliest pending unbonding completion across all entries. This
-  // backs the "Unlocks <date>" footer line below the delegation cards.
-  const allUnbondingEntries = (unbondingsQuery.data ?? []).flatMap(u =>
-    u.entries.map(e => e.completionTime)
-  )
-  const nextUnbonding = allUnbondingEntries.sort()[0]
 
   const coinKey = extractCoinKey(stakingCoin)
 
@@ -169,23 +177,12 @@ export const CosmosDelegationsView = ({
             ticker={ticker}
             decimals={decimals}
             pendingRewardsUnits={stakingDenomRewards}
+            unbondingEntries={unbondingEntriesByValidator.get(d.validatorAddress)}
+            unbondingDays={unbondingDays}
             onAction={action => launchAction(action, d.validatorAddress)}
           />
         )
       })}
-
-      {nextUnbonding && (
-        <UnbondingFooter>
-          <Text size={12} color="shy">
-            {t('unbonding_lock_label', { days: 21 })}
-          </Text>
-          <Text size={12} color="shy">
-            {t('unbonding_unlocks_at', {
-              date: new Date(nextUnbonding).toLocaleDateString(),
-            })}
-          </Text>
-        </UnbondingFooter>
-      )}
     </VStack>
   )
 }
@@ -201,10 +198,4 @@ const Divider = styled.hr`
   border: none;
   border-top: 1px solid ${getColor('foregroundExtra')};
   margin: 0;
-`
-
-const UnbondingFooter = styled(HStack).attrs({
-  justifyContent: 'space-between',
-})`
-  padding: 12px 16px;
 `

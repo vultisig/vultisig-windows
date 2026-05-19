@@ -1,6 +1,6 @@
-import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
-import { TextInput } from '@lib/ui/inputs/TextInput'
+import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
+import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
@@ -11,7 +11,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
 import { type Validator } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -81,12 +81,20 @@ export const ValidatorPickerSheet = ({
         </Button>
       }
     >
-      <VStack gap={16}>
-        <TextInput
-          placeholder={t('search')}
-          value={search}
-          onValueChange={setSearch}
-        />
+      <Layout>
+        <SearchWrapper>
+          <SearchIconBox>
+            <SearchIcon />
+          </SearchIconBox>
+          <SearchInputEl
+            type="text"
+            placeholder={t('search')}
+            value={search}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSearch(e.target.value)
+            }
+          />
+        </SearchWrapper>
         <MatchQuery
           value={query}
           pending={() => (
@@ -102,45 +110,46 @@ export const ValidatorPickerSheet = ({
             return (
               <ScrollList>
                 <VStack gap={8}>
-                  {filtered.map(v => (
-                    <ValidatorRow
-                      key={v.operatorAddress}
-                      onClick={() => setPicked(v.operatorAddress)}
-                      $selected={picked === v.operatorAddress}
-                    >
-                      <ValidatorAvatar moniker={v.description.moniker} />
-                      <VStack gap={2} flexGrow>
-                        <Text size={15} weight="500">
-                          {v.description.moniker || 'Unnamed'}
-                        </Text>
-                        <Text size={12} color="shy">
-                          {formatAmount(
-                            fromChainAmount(BigInt(v.tokens), decimals),
-                            { ticker }
-                          )}
-                        </Text>
-                      </VStack>
-                      <Match
-                        value={picked === v.operatorAddress ? 'on' : 'off'}
-                        on={() => (
-                          <Text size={14} color="primary" weight="500">
-                            {formatCommission(v.commission.rate)}
+                  {filtered.map(v => {
+                    const isSelected = picked === v.operatorAddress
+                    return (
+                      <ValidatorRow
+                        key={v.operatorAddress}
+                        onClick={() => setPicked(v.operatorAddress)}
+                        $selected={isSelected}
+                      >
+                        <ValidatorAvatar
+                          moniker={v.description.moniker}
+                          identity={v.description.identity}
+                        />
+                        <VStack gap={2} flexGrow>
+                          <Text size={15} weight="500">
+                            {v.description.moniker || 'Unnamed'}
                           </Text>
-                        )}
-                        off={() => (
-                          <Text size={14} color="regular">
-                            {formatCommission(v.commission.rate)}
+                          <Text size={12} color="shy">
+                            {formatAmount(
+                              fromChainAmount(BigInt(v.tokens), decimals),
+                              { ticker }
+                            )}
                           </Text>
-                        )}
-                      />
-                    </ValidatorRow>
-                  ))}
+                        </VStack>
+                        {isSelected ? (
+                          <SelectedCheck>
+                            <CircleCheckIcon />
+                          </SelectedCheck>
+                        ) : null}
+                        <Text size={14} color="regular">
+                          {formatCommission(v.commission.rate)}
+                        </Text>
+                      </ValidatorRow>
+                    )
+                  })}
                 </VStack>
               </ScrollList>
             )
           }}
         />
-      </VStack>
+      </Layout>
     </Modal>
   )
 }
@@ -155,8 +164,55 @@ const formatCommission = (rateDec: string): string => {
   return `${(n * 100).toFixed(2)}%`
 }
 
+const SearchWrapper = styled.div`
+  position: relative;
+  background: ${getColor('foreground')};
+  border-radius: 999px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+`
+
+const SearchIconBox = styled.div`
+  position: absolute;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  color: ${getColor('textShy')};
+  font-size: 18px;
+  pointer-events: none;
+`
+
+const SearchInputEl = styled.input`
+  width: 100%;
+  height: 100%;
+  padding: 0 16px 0 44px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: ${getColor('text')};
+  font-size: 15px;
+
+  &::placeholder {
+    color: ${getColor('textShy')};
+  }
+`
+
+const Layout = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  /* Modal capping content height — let the sheet fill the available viewport
+   * minus header/footer/padding. The browser-default scrollbar lives inside
+   * ScrollList below. */
+  height: min(calc(100vh - 220px), 720px);
+`
+
 const ScrollList = styled.div`
-  max-height: 480px;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 `
 
@@ -168,10 +224,16 @@ const ValidatorRow = styled(HStack)<{ $selected: boolean }>`
   background: ${({ $selected }) =>
     $selected ? getColor('foregroundExtra') : getColor('foreground')};
   cursor: pointer;
-  border: 1px solid
-    ${({ $selected }) => ($selected ? getColor('primary') : 'transparent')};
+  border: 1px solid transparent;
 
   &:hover {
     background: ${getColor('foregroundExtra')};
   }
+`
+
+const SelectedCheck = styled.div`
+  color: ${getColor('success')};
+  display: flex;
+  align-items: center;
+  font-size: 18px;
 `

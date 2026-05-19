@@ -11,6 +11,8 @@ import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { StakingAmountInput } from './StakingAmountInput'
+
 /**
  * Undelegate form. Matches the Unstake LUNA Figma screen:
  *   - "Amount" label
@@ -69,16 +71,14 @@ export const UndelegateSpecific = () => {
               const amt = Number(field.value ?? 0)
               const pct = stakedUi > 0 ? Math.round((amt / stakedUi) * 100) : 0
               return (
-                <VStack alignItems="center" gap={4}>
-                  <Text size={34} weight="500">
-                    {field.value
-                      ? `${field.value} ${coin.ticker}`
-                      : `0 ${coin.ticker}`}
-                  </Text>
-                  <Text size={14} color="shy">
-                    {pct}%
-                  </Text>
-                </VStack>
+                <StakingAmountInput
+                  value={(field.value as string | undefined) ?? ''}
+                  onChange={v =>
+                    setValue('amount', v, { shouldValidate: true })
+                  }
+                  ticker={coin.ticker}
+                  subtitle={`${pct}%`}
+                />
               )
             }}
           />

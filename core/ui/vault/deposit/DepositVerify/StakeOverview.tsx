@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BlockaidLogo } from '@core/ui/chain/security/blockaid/BlockaidLogo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -27,6 +28,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useCallback } from 'react'
@@ -49,9 +52,40 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
     unstake: t('you_are_unstaking'),
     mint: t('you_are_minting'),
     redeem: t('you_are_redeeming'),
+    delegate: t('you_are_staking'),
+    undelegate: t('you_are_unstaking'),
+    redelegate: t('you_are_moving'),
+    claim_rewards: t('you_are_claiming'),
   }
 
   const actionLabel = actionLabels[action] ?? t('you_are_staking')
+
+  // Cosmos native staking actions have no on-chain memo (the typed
+  // MsgDelegate / MsgUndelegate / etc. carry the data) and they target a
+  // validator instead of a recipient address, so the overview swaps the
+  // Memo row out for one or two Validator rows.
+  const cosmosStakingActions = [
+    'delegate',
+    'undelegate',
+    'redelegate',
+    'claim_rewards',
+  ] as const
+  const isCosmosStakingAction = isOneOf(action, cosmosStakingActions)
+  const validatorsQuery = useCosmosValidatorsQuery(
+    isCosmosStakingAction ? (coin.chain as IbcEnabledCosmosChain) : undefined
+  )
+  const resolveMoniker = (valoper: string | undefined) => {
+    if (!valoper) return null
+    const v = validatorsQuery.data?.find(x => x.operatorAddress === valoper)
+    if (!v) return formatWalletAddress(valoper)
+    const commissionPct = (Number(v.commission.rate) * 100).toFixed(0)
+    return `${v.description.moniker || formatWalletAddress(valoper)} (${commissionPct}% ${t('commission')})`
+  }
+  const dstValidator = depositData?.validatorAddress as string | undefined
+  const srcValidator = depositData?.srcValidatorAddress as string | undefined
+  const claimValidators = depositData?.validatorAddresses as
+    | string[]
+    | undefined
 
   // Only real unstake actions can be native TCY unstakes (memo like 'tcy-:5000'),
   // where the transaction amount is 0 and the percentage is encoded in the memo
@@ -123,23 +157,66 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
               </HStack>
             }
           />
-          <TransactionOverviewItem
-            label={t('memo')}
-            value={
-              memo ? (
-                <StyledTruncate
-                  size={14}
-                  text={memo}
-                  weight={500}
-                  width={220}
-                />
-              ) : (
-                <Text as="span" size={14} color="shy">
-                  —
+          {!isCosmosStakingAction && (
+            <TransactionOverviewItem
+              label={t('memo')}
+              value={
+                memo ? (
+                  <StyledTruncate
+                    size={14}
+                    text={memo}
+                    weight={500}
+                    width={220}
+                  />
+                ) : (
+                  <Text as="span" size={14} color="shy">
+                    —
+                  </Text>
+                )
+              }
+            />
+          )}
+          {isCosmosStakingAction && action === 'redelegate' && srcValidator && (
+            <TransactionOverviewItem
+              label={t('source_validator')}
+              value={
+                <Text as="span" size={14} weight={500}>
+                  {resolveMoniker(srcValidator)}
                 </Text>
-              )
-            }
-          />
+              }
+            />
+          )}
+          {isCosmosStakingAction && action !== 'claim_rewards' && dstValidator && (
+            <TransactionOverviewItem
+              label={
+                action === 'redelegate'
+                  ? t('destination_validator')
+                  : t('validator')
+              }
+              value={
+                <Text as="span" size={14} weight={500}>
+                  {resolveMoniker(dstValidator)}
+                </Text>
+              }
+            />
+          )}
+          {isCosmosStakingAction &&
+            action === 'claim_rewards' &&
+            claimValidators &&
+            claimValidators.length > 0 && (
+              <TransactionOverviewItem
+                label={t('validator')}
+                value={
+                  <Text as="span" size={14} weight={500}>
+                    {claimValidators.length === 1
+                      ? resolveMoniker(claimValidators[0])
+                      : t('claim_n_validators', {
+                          count: claimValidators.length,
+                        })}
+                  </Text>
+                }
+              />
+            )}
           <TransactionOverviewItem
             label={t('network')}
             value={

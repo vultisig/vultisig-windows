@@ -11,13 +11,14 @@ import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { StakingAmountInput } from './StakingAmountInput'
 import { ValidatorPickerField } from './ValidatorPickerField'
 
 /**
- * Redelegate form ("Move" action on the Active Delegations card). The source
- * valoper is preselected (passed via form defaults from the card). The user
- * picks an amount and a destination validator — the picker excludes the
- * source so the same valoper can't be both src and dst.
+ * Redelegate form ("Move"). Source valoper is pre-filled from the card; the
+ * user picks an amount and a destination validator. The bottom CTA lives at
+ * the page footer (`CosmosStakingFooterButton`) and flips through:
+ * Enter Amount → Select Validator → Continue.
  */
 export const RedelegateSpecific = () => {
   const { t } = useTranslation()
@@ -44,14 +45,15 @@ export const RedelegateSpecific = () => {
 
   const handleSliderChange = (percentage: number) => {
     if (stakedUnits === 0n) return
-    const units = (stakedUnits * BigInt(Math.round(percentage * 100))) / 10_000n
+    const units =
+      (stakedUnits * BigInt(Math.round(percentage * 100))) / 10_000n
     setValue('amount', fromChainAmount(units, coin.decimals), {
       shouldValidate: true,
     })
   }
 
   return (
-    <VStack gap={16}>
+    <Layout>
       <Card>
         <Text size={14} color="regular">
           {t('amount')}
@@ -61,11 +63,13 @@ export const RedelegateSpecific = () => {
             control={control}
             name="amount"
             render={({ field }) => (
-              <Text size={34} weight="500">
-                {field.value
-                  ? `${field.value} ${coin.ticker}`
-                  : `0 ${coin.ticker}`}
-              </Text>
+              <StakingAmountInput
+                value={(field.value as string | undefined) ?? ''}
+                onChange={v =>
+                  setValue('amount', v, { shouldValidate: true })
+                }
+                ticker={coin.ticker}
+              />
             )}
           />
         </CenteredAmount>
@@ -110,17 +114,20 @@ export const RedelegateSpecific = () => {
           />
         )}
       />
-    </VStack>
+    </Layout>
   )
 }
 
-const Card = styled(VStack).attrs({ gap: 12 })`
+const Layout = styled(VStack).attrs({ flexGrow: true, gap: 16 })``
+
+const Card = styled(VStack).attrs({ gap: 12, flexGrow: true })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 12px;
 `
 
 const CenteredAmount = styled.div`
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -102,10 +102,10 @@ export const TerraBannerContainer = styled.div`
 
 export const TerraLogoWrapper = styled.div`
   position: absolute;
-  right: -50px;
+  right: -30px;
   width: 200px;
   height: 200px;
-  top: 0%;
+  top: -5%;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
     width: 300px;

@@ -2,6 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
+import { CosmosStakingFooterButton } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/CosmosStakingSpecific/CosmosStakingFooterButton'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
 import { UnbondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnbondSpecific/UnbondForm'
@@ -321,11 +322,24 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
             </WithProgressIndicator>
           </PageContent>
         )}
-        <PageFooter>
-          <Button disabled={!isValid} type="submit">
-            {t('continue')}
-          </Button>
-        </PageFooter>
+        {/*
+         * Delegate and Redelegate use a tri-state footer button (Enter
+         * Amount → Select Validator → Continue) rendered at the page
+         * footer so it stays pinned to the screen bottom outside the
+         * scrollable action area. Other actions keep the default Continue.
+         */}
+        {selectedChainAction === 'delegate' ||
+        selectedChainAction === 'redelegate' ? (
+          <PageFooter>
+            <CosmosStakingFooterButton action={selectedChainAction} />
+          </PageFooter>
+        ) : (
+          <PageFooter>
+            <Button disabled={!isValid} type="submit">
+              {t('continue')}
+            </Button>
+          </PageFooter>
+        )}
       </VStack>
     </DepositFormHandlersProvider>
   )
