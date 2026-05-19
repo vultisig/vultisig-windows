@@ -14,5 +14,6 @@ export const useCosmosRewardsQuery = ({
   useQuery({
     queryKey: ['cosmosRewards', chain, delegatorAddress] as const,
     queryFn: () => getCosmosDelegatorRewards(chain, delegatorAddress),
+    enabled: delegatorAddress.length > 0,
     staleTime: 30_000,
   })

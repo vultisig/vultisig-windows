@@ -82,7 +82,7 @@ export const CosmosDelegationsView = ({
   // collapses to 0 — accurate for the inflation portion only.
   const apyQuery = useCosmosChainApyQuery({ chain, stakingDenom })
 
-  if (delegationsQuery.isPending || validatorsQuery.isPending || !stakingCoin) {
+  if (delegationsQuery.isPending || validatorsQuery.isPending) {
     return (
       <HStack justifyContent="center">
         <Spinner />
@@ -90,7 +90,11 @@ export const CosmosDelegationsView = ({
     )
   }
 
-  if (delegationsQuery.error || validatorsQuery.error) {
+  // No staking coin in the vault — the parent (`StakedPositions`) normally
+  // short-circuits to `DefiPositionEmptyState` first, but render an
+  // explicit failure here too so the view never silently spins forever
+  // if it's reached with a chain the vault hasn't derived.
+  if (delegationsQuery.error || validatorsQuery.error || !stakingCoin) {
     return (
       <HStack justifyContent="center">
         <Text color="danger">{t('failed_to_load')}</Text>

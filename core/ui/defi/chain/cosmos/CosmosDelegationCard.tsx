@@ -101,7 +101,7 @@ export const CosmosDelegationCard = ({
         />
         <VStack gap={2} flexGrow>
           <Text size={15} weight="500">
-            {validator.description.moniker || 'Unnamed'}
+            {validator.description.moniker || t('unnamed_validator')}
           </Text>
           <Text size={12} color="shy">
             {truncateValoper(validator.operatorAddress)}

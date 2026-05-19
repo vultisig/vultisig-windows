@@ -77,8 +77,12 @@ export const RedelegateSpecific = () => {
           control={control}
           name="amount"
           render={({ field }) => {
-            const amt = Number(field.value ?? 0)
-            const pct = stakedUi > 0 ? Math.round((amt / stakedUi) * 100) : 0
+            // Lone `.` passes the input regex but Number('.') is NaN.
+            const rawAmt = Number(field.value ?? 0)
+            const amt = Number.isFinite(rawAmt) ? rawAmt : 0
+            const rawPct =
+              stakedUi > 0 ? Math.round((amt / stakedUi) * 100) : 0
+            const pct = Math.min(100, Math.max(0, rawPct))
             return (
               <Slider
                 value={pct}

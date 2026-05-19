@@ -1162,6 +1162,7 @@ export const en = {
     'Used referral code can not be the same as your referral code',
   validator_address: 'Validator Address',
   invalid_validator_address: 'Invalid validator address',
+  unnamed_validator: 'Unnamed',
   source_validator: 'Source Validator',
   destination_validator: 'Destination Validator',
   redelegate_same_validator: 'Destination validator must differ from source',

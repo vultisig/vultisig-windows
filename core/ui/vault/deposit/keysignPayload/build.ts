@@ -9,6 +9,7 @@ import {
   IbcEnabledCosmosChain,
 } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosStakingGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
 import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
@@ -548,8 +549,17 @@ const applyCosmosStakingSignData = ({
   const msgCount =
     input.action === 'claim_rewards' ? input.validatorAddresses.length : 1
   const gasLimit = getCosmosStakingGasLimit({ chain: coin.chain, msgCount })
-  // Total fee in base units = gas (set by chainSpecific).
-  const feeAmount = { denom: feeDenom, amount: gas.toString() }
+  // `gas` from chainSpecific is the fee for a single-msg tx. For bulk
+  // `claim_rewards` (N MsgWithdrawDelegatorReward in one tx) we scale the
+  // fee by the same `msgCount`-aware ratio the gas-limit helper uses, so
+  // the gas-price the chain sees doesn't drop below the per-byte minimum
+  // when N is large. Single-msg actions keep the chainSpecific fee
+  // unchanged.
+  const singleMsgGasLimit = getCosmosStakingGasLimit({ chain: coin.chain })
+  const feeScale = gasLimit > 0n && singleMsgGasLimit > 0n
+    ? (gas * gasLimit) / singleMsgGasLimit
+    : gas
+  const feeAmount = { denom: feeDenom, amount: feeScale.toString() }
 
   const { bodyBytes, authInfoBytes } = buildStakingSignDirectBytes({
     input,
@@ -585,8 +595,13 @@ const applyCosmosStakingSignData = ({
     toAmount,
     signData: {
       case: 'signDirect',
+      // The cosmos signing resolver derives chainId itself via
+      // `getTwChainId({ walletCore, chain })`, so this field is decorative
+      // for the in-app path — but we still set it correctly so any
+      // downstream consumer (logging, debugging, dApp re-broadcast) sees
+      // the right domain on the payload instead of an empty string.
       value: create(SignDirectSchema, {
-        chainId: '',
+        chainId: getCosmosChainId(coin.chain),
         bodyBytes: toBase64(bodyBytes),
         authInfoBytes: toBase64(authInfoBytes),
       }),

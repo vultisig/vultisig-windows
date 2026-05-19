@@ -68,8 +68,14 @@ export const UndelegateSpecific = () => {
             control={control}
             name="amount"
             render={({ field }) => {
-              const amt = Number(field.value ?? 0)
-              const pct = stakedUi > 0 ? Math.round((amt / stakedUi) * 100) : 0
+              // `Number('.')` is NaN; the input regex `/^\d*\.?\d*$/`
+              // accepts a lone `.` so we have to guard here, otherwise
+              // the subtitle and slider render NaN%.
+              const rawAmt = Number(field.value ?? 0)
+              const amt = Number.isFinite(rawAmt) ? rawAmt : 0
+              const rawPct =
+                stakedUi > 0 ? Math.round((amt / stakedUi) * 100) : 0
+              const pct = Math.min(100, Math.max(0, rawPct))
               return (
                 <StakingAmountInput
                   value={(field.value as string | undefined) ?? ''}

@@ -99,18 +99,31 @@ type ComputeValidatorApyInput = {
   commissionRate: string
 }
 
+const clamp01 = (n: number): number => {
+  if (!Number.isFinite(n) || n < 0) return 0
+  if (n > 1) return 1
+  return n
+}
+
 /**
  * Per-validator APY combining chain-level data with the validator's
- * commission rate. Returns 0 when `bondedRatio` is 0 or `inflation` is 0,
- * which is what the math produces and accurate for the inflation portion.
+ * commission rate. All numeric inputs are parsed from remote Dec strings,
+ * so a malformed response can land NaN / negative / >1 values here.
+ * Clamp inflation, communityTax, and commission into `[0, 1]`, and bail
+ * out to 0 when bondedRatio is 0 / non-finite — better a missing APY row
+ * than a negative or NaN-tainted percent in the UI.
  */
 export const computeValidatorApy = ({
   chainData,
   commissionRate,
 }: ComputeValidatorApyInput): number => {
-  if (chainData.bondedRatio === 0 || chainData.inflation === 0) return 0
-  const baseApy =
-    (1 - chainData.communityTax) * (chainData.inflation / chainData.bondedRatio)
-  const commission = Number(commissionRate)
+  const inflation = clamp01(chainData.inflation)
+  const communityTax = clamp01(chainData.communityTax)
+  const commission = clamp01(Number(commissionRate))
+  const bondedRatio = chainData.bondedRatio
+  if (!Number.isFinite(bondedRatio) || bondedRatio <= 0 || inflation === 0) {
+    return 0
+  }
+  const baseApy = (1 - communityTax) * (inflation / bondedRatio)
   return baseApy * (1 - commission)
 }

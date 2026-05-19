@@ -60,13 +60,15 @@ export const DelegateSpecific = () => {
           render={({ field }) => (
             <PercentageSelector
               max={balanceUnits}
-              value={
-                field.value !== undefined && field.value !== ''
-                  ? BigInt(
-                      Math.floor(Number(field.value) * 10 ** coin.decimals)
-                    )
-                  : null
-              }
+              value={(() => {
+                // The amount input regex allows a lone `.` which `Number()`
+                // turns into NaN; `BigInt(NaN)` throws and crashes render.
+                // Treat any non-finite parse as "no value picked".
+                if (field.value === undefined || field.value === '') return null
+                const parsed = Number(field.value)
+                if (!Number.isFinite(parsed) || parsed < 0) return null
+                return BigInt(Math.floor(parsed * 10 ** coin.decimals))
+              })()}
               onChange={units => {
                 if (units === null) {
                   setValue('amount', '', { shouldValidate: true })

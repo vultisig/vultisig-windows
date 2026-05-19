@@ -22,6 +22,14 @@ type ValidatorPickerFieldProps = {
   onChange: (validatorAddress: string) => void
 }
 
+/**
+ * Inline form field that opens the validator picker sheet on activation
+ * and renders the currently-selected validator's avatar + moniker + a
+ * success check + edit affordance once one is picked.
+ *
+ * Used by `DelegateSpecific` (target validator) and `RedelegateSpecific`
+ * (destination validator, with the source excluded from the list).
+ */
 export const ValidatorPickerField = ({
   chain,
   ticker,
@@ -84,7 +92,11 @@ export const ValidatorPickerField = ({
   )
 }
 
-const FieldContainer = styled.div`
+// `<button>` keeps the opener keyboard-accessible (Space / Enter activate
+// it without extra `tabIndex` / `onKeyDown` wiring) and gives assistive
+// tech a built-in "button" role. type="button" prevents the native
+// submit-on-click that bare <button> elements have inside a <form>.
+const FieldContainer = styled.button.attrs({ type: 'button' as const })`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -93,9 +105,18 @@ const FieldContainer = styled.div`
   border-radius: 12px;
   cursor: pointer;
   background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  width: 100%;
 
   &:hover {
     background: ${getColor('foregroundExtra')};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${getColor('primary')};
+    outline-offset: 2px;
   }
 `
 

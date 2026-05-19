@@ -52,18 +52,20 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
 }
 
 // Cosmos validator (operator) addresses use the chain's account prefix
-// suffixed with `valoper` (e.g. `terravaloper1...`). The bech32 data section
-// is base32-ish (`02-9ac-hj-np-z`). We do not enforce the exact account
-// prefix here — both Terra and TerraClassic share `terra`, and a sloppy match
-// is still strict enough to block typos / wrong-chain pastes.
-const cosmosValidatorAddressPattern = /^[a-z]+valoper1[02-9ac-hj-np-z]{38,71}$/
+// suffixed with `valoper` (e.g. `terravaloper1...`). Both Terra v2 and
+// TerraClassic share the `terra` account prefix, so we lock the regex to
+// the family — pasting a Cosmos Hub `cosmosvaloper1...` into a LUNA
+// delegate form would be silently accepted by a chain-agnostic pattern
+// and surface as a late tx failure on broadcast.
+const terraValidatorAddressPattern =
+  /^terravaloper1[02-9ac-hj-np-z]{38,71}$/
 
 const validatorAddressSchema = (t: TFunction) =>
   z
     .string()
     .trim()
     .min(1, t('validator_address'))
-    .regex(cosmosValidatorAddressPattern, t('invalid_validator_address'))
+    .regex(terraValidatorAddressPattern, t('invalid_validator_address'))
 
 type GetChainActionConfigParams = {
   t: TFunction

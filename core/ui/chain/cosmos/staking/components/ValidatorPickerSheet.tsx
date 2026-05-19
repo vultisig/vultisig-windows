@@ -60,7 +60,15 @@ export const ValidatorPickerSheet = ({
           v.operatorAddress.toLowerCase().includes(needle)
         )
       })
-      .sort((a, b) => Number(BigInt(b.tokens) - BigInt(a.tokens)))
+      .sort((a, b) => {
+        // Voting power can exceed 2^53 uluna on large chains; comparing
+        // via Number() would clamp the diff to ±Infinity. Branch on the
+        // BigInt comparison directly to preserve order at any scale.
+        const at = BigInt(a.tokens)
+        const bt = BigInt(b.tokens)
+        if (bt === at) return 0
+        return bt > at ? 1 : -1
+      })
   }
 
   const handleConfirm = () => {
@@ -124,7 +132,7 @@ export const ValidatorPickerSheet = ({
                         />
                         <VStack gap={2} flexGrow>
                           <Text size={15} weight="500">
-                            {v.description.moniker || 'Unnamed'}
+                            {v.description.moniker || t('unnamed_validator')}
                           </Text>
                           <Text size={12} color="shy">
                             {formatAmount(
