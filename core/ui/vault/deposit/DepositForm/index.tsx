@@ -104,8 +104,12 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const shouldUseStakeRedesign =
     (isStakeAction || isUnstakeAction || isMintAction || isRedeemAction) &&
     entryPoint === 'defi'
-  const shouldUseCosmosStakingRedesign =
-    isCosmosStakingAction && entryPoint === 'defi'
+  // Cosmos staking actions ALWAYS use the redesigned form — entering via
+  // the Wallet "Function" picker (entryPoint !== 'defi') would otherwise
+  // fall back to the legacy renderer and double-render fields alongside
+  // `DepositActionSpecific`. The form shape (amount + pills + validator
+  // picker) is the same regardless of where the user came from.
+  const shouldUseCosmosStakingRedesign = isCosmosStakingAction
   const shouldUseActionForm =
     shouldUseBondRedesign ||
     shouldUseUnbondRedesign ||
@@ -129,6 +133,14 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   }
 
   const getPageTitle = () => {
+    // Cosmos staking actions get a typed title regardless of entry point
+    // (Wallet's Function picker hits this path too) — falling back to
+    // "Deposit" would mislabel a clearly-staking screen.
+    if (isCosmosStakingAction) {
+      const label = defiActionPageTitle[selectedChainAction]
+      if (label) return `${label} ${coin.ticker ?? ''}`.trim()
+    }
+
     const defiLabel =
       entryPoint === 'defi'
         ? defiActionPageTitle[selectedChainAction]
