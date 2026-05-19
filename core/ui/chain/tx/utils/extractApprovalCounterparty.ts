@@ -1,4 +1,7 @@
-import type { EvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
+type DecodedEvmContractCall = {
+  functionSignature: string
+  functionArguments: string
+}
 
 type ApprovalCounterparty = {
   address: string
@@ -21,7 +24,7 @@ type ApprovalCounterparty = {
  * users miss most often.
  */
 export const extractApprovalCounterparty = (
-  info: EvmContractCallInfo
+  info: DecodedEvmContractCall
 ): ApprovalCounterparty | null => {
   const fn = info.functionSignature.split('(')[0]
   if (fn !== 'approve' && fn !== 'setApprovalForAll') return null

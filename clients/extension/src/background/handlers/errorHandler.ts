@@ -53,8 +53,8 @@ const errors: Record<Type, { code: number; message: string }> = {
 export class EIP1193Error extends Error {
   code: number
 
-  constructor(type: Type) {
-    super(errors[type].message)
+  constructor(type: Type, customMessage?: string) {
+    super(customMessage ?? errors[type].message)
     this.code = errors[type].code
   }
 }

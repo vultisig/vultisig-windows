@@ -4,10 +4,12 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { bittensorConfig } from '@vultisig/core-chain/chains/bittensor/config'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { polkadotConfig } from '@vultisig/core-chain/chains/polkadot/config'
 import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
+import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import {
   FeeSettings,
@@ -45,6 +47,7 @@ import {
   TonMessageSchema,
   WasmExecuteContractPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchDiscriminatedUnion } from '@vultisig/lib-utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
@@ -61,7 +64,10 @@ import { applyCosmosFeeFromSignData } from './applyCosmosFeeFromSignData'
 export type BuildSendTxKeysignPayloadInput = {
   parsedTx: ParsedTx
   feeSettings?: FeeSettings<FeeSettingsChainKind> | null
-  publicKey: PublicKey
+  /** WalletCore public key; null for MLDSA chains (use {@link publicKeyMldsa}). */
+  publicKey: PublicKey | null
+  /** Vault's MLDSA hex public key, used for MLDSA chains (e.g. QBTC). */
+  publicKeyMldsa?: string
   walletCore: WalletCore
   vaultId: string
   localPartyId: string
@@ -90,6 +96,7 @@ export const buildSendTxKeysignPayload = async ({
   feeSettings,
   vaultId,
   publicKey,
+  publicKeyMldsa,
   walletCore,
   localPartyId,
   dappMetadata,
@@ -137,7 +144,12 @@ export const buildSendTxKeysignPayload = async ({
     }
   }
 
-  const hexPublicKey = Buffer.from(publicKey.data()).toString('hex')
+  const hexPublicKey =
+    getSignatureAlgorithm(chain) === 'mldsa'
+      ? shouldBePresent(publicKeyMldsa, 'publicKeyMldsa')
+      : Buffer.from(shouldBePresent(publicKey, 'publicKey').data()).toString(
+          'hex'
+        )
 
   const fromCoin = toCommCoin({
     ...coin,
@@ -512,7 +524,7 @@ export const buildSendTxKeysignPayload = async ({
   })
 
   if ('polkadot' in customTxData) {
-    const sp = customTxData.polkadot.signerPayload
+    const { chain: polkadotChain, signerPayload: sp } = customTxData.polkadot
     keysignPayload.blockchainSpecific = {
       case: 'polkadotSpecific',
       value: create(PolkadotSpecificSchema, {
@@ -522,7 +534,10 @@ export const buildSendTxKeysignPayload = async ({
         specVersion: parseInt(sp.specVersion, 16),
         transactionVersion: parseInt(sp.transactionVersion, 16),
         genesisHash: sp.genesisHash,
-        gas: polkadotConfig.fee,
+        gas:
+          polkadotChain === Chain.Bittensor
+            ? bittensorConfig.fee
+            : polkadotConfig.fee,
       }),
     }
   } else {
@@ -555,7 +570,7 @@ export const buildSendTxKeysignPayload = async ({
     keysignPayload = refineKeysignUtxo({
       keysignPayload,
       walletCore,
-      publicKey,
+      publicKey: shouldBePresent(publicKey, 'publicKey'),
     })
   }
 

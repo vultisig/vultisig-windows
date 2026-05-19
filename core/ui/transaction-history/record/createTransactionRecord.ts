@@ -5,6 +5,7 @@ import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getK
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
+import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackingUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -114,7 +115,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
   })
 }
 
-/** Returns the chain whose explorer should be used for the transaction hash. */
+/** Returns the chain associated with transaction status and record metadata. */
 const getSwapExplorerChain = (
   swapPayload: KeysignSwapPayload,
   sourceChain: Chain
@@ -140,11 +141,18 @@ export const createTransactionRecord = ({
     ? getSwapExplorerChain(swapPayload, sourceChain)
     : sourceChain
 
-  const explorerUrl = getBlockExplorerUrl({
-    chain: explorerChain,
-    entity: 'tx',
-    value: txHash,
-  })
+  const explorerUrl =
+    swapPayload != null
+      ? getSwapTrackingUrl({
+          swapPayload,
+          txHash,
+          sourceChain,
+        })
+      : getBlockExplorerUrl({
+          chain: explorerChain,
+          entity: 'tx',
+          value: txHash,
+        })
 
   const base = {
     id,
