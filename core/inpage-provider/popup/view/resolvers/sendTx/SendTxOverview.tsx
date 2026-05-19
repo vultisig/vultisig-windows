@@ -25,7 +25,7 @@ import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirect
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
 import { useCore } from '@core/ui/state/core'
-import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
   IconWrapper,
@@ -75,7 +75,7 @@ export const SendTxOverview = ({
 }: SendTxOverviewProps) => {
   const { coin, customTxData } = parsedTx
   const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultPublicKey(coin.chain)
+  const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
   const { t } = useTranslation()
   const getCoin = useGetCoin()
   const transactionPayload = usePopupInput<'sendTx'>()

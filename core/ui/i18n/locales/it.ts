@@ -254,6 +254,7 @@ export const it = {
   chain: 'Catena',
   chain_message_deposit: 'Deposito del messaggio {{chain}}',
   chains: 'Catene',
+  change: 'Cambia',
   change_passcode: 'Cambia codice di accesso',
   change_your_friends_referral:
     'Cambia il codice di riferimento degli amici utilizzato per gli scambi',

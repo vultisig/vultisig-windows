@@ -28,7 +28,10 @@ test.describe('Push Notifications Integration', () => {
 
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
-    if (!config) return
+    if (!config) {
+      test.skip()
+      return
+    }
     await ensureVaultExists(context, extensionId, config.vaultPath, config.password)
   })
 
@@ -203,7 +206,10 @@ test.describe('Push Notifications E2E Flow', () => {
 
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
-    if (!config) return
+    if (!config) {
+      test.skip()
+      return
+    }
     await ensureVaultExists(context, extensionId, config.vaultPath, config.password)
   })
 

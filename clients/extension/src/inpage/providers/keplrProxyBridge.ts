@@ -15,8 +15,7 @@ type StartProxyKeplr = Parameters<typeof InjectedKeplr.startProxy>[0]
  * flips to `setClientNotExist`, and the modal closes without flipping the
  * wallet to "Connected" — even though direct `window.keplr.*` calls succeed.
  *
- * Each cosmos-kit build bakes in its own metaId (Skeletonswap ships
- * `d_2hxd99brRo`) and namespaces messages as `proxy-request-<metaId>`.
+ * Each cosmos-kit build bakes in its own metaId and namespaces messages as `proxy-request-<metaId>`.
  * `InjectedKeplr.startProxy` only accepts its own metaId or the legacy
  * `proxy-request`, so we hand it a `parseMessage` that strips the suffix
  * and rewrites the type to the legacy form. The dApp's response listener

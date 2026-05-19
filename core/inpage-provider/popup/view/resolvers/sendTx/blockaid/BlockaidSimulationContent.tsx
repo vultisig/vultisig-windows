@@ -11,7 +11,9 @@ import type {
   BlockaidEvmBalanceChange,
   BlockaidEvmSimulationView,
 } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
+import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractApprovalCounterparty'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
@@ -395,6 +397,10 @@ const EvmCalldataFallback = ({
     ? capitalizeFirstLetter(rawFunctionName)
     : undefined
 
+  const approvalCounterparty = contractCallQuery.data
+    ? extractApprovalCounterparty(contractCallQuery.data)
+    : null
+
   const amountItem =
     keysignPayload.toAmount && keysignPayload.coin ? (
       <ListItem
@@ -427,7 +433,22 @@ const EvmCalldataFallback = ({
       <List>
         <ListItem description={address} title={t('from')} />
         {keysignPayload.toAddress && (
-          <ListItem description={keysignPayload.toAddress} title={t('to')} />
+          <ListItem
+            description={formatLabeledEvmAddress({
+              address: keysignPayload.toAddress,
+              chain,
+            })}
+            title={t('to')}
+          />
+        )}
+        {approvalCounterparty && (
+          <ListItem
+            description={formatLabeledEvmAddress({
+              address: approvalCounterparty.address,
+              chain,
+            })}
+            title={t(approvalCounterparty.labelKey)}
+          />
         )}
         {tokenQuery.data && tokenPair ? (
           (() => {
@@ -438,6 +459,7 @@ const EvmCalldataFallback = ({
             })
             const ticker = tokenQuery.data.ticker
             const isUnlimited = fmt.isSentinel && !!fmt.display
+            const amountLabel = isUnlimited ? t('unlimited') : fmt.display
             return (
               <ListItem
                 icon={
@@ -450,11 +472,11 @@ const EvmCalldataFallback = ({
                     <HStack alignItems="center" gap={6}>
                       <Text as={TriangleAlertIcon} color="warning" size={14} />
                       <Text color="warning" size={12} weight={500}>
-                        {`${fmt.display} ${ticker}`}
+                        {`${amountLabel} ${ticker}`}
                       </Text>
                     </HStack>
-                  ) : fmt.display ? (
-                    `${fmt.display} ${ticker}`
+                  ) : amountLabel ? (
+                    `${amountLabel} ${ticker}`
                   ) : (
                     ticker
                   )
