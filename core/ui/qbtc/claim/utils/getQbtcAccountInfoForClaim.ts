@@ -9,6 +9,21 @@ type AccountResponse = {
   }
 }
 
+const isAccountResponse = (data: unknown): data is AccountResponse => {
+  if (typeof data !== 'object' || data === null || !('account' in data)) {
+    return false
+  }
+  const { account } = data
+  return (
+    typeof account === 'object' &&
+    account !== null &&
+    'account_number' in account &&
+    typeof account.account_number === 'string' &&
+    'sequence' in account &&
+    typeof account.sequence === 'string'
+  )
+}
+
 /**
  * Quick existence probe for a QBTC address. Only hits
  * `/cosmos/auth/v1beta1/accounts/{addr}` — no latest-block call.
@@ -88,7 +103,10 @@ export const getQbtcAccountInfoForClaim = async ({
       `Failed to fetch QBTC account (${accountResponse.status}): ${accountResponse.statusText}`
     )
   }
-  const data: AccountResponse = await accountResponse.json()
+  const data: unknown = await accountResponse.json()
+  if (!isAccountResponse(data)) {
+    throw new Error(`Malformed QBTC account response for ${address}`)
+  }
   const accountNumber = Number(data.account.account_number)
   const sequence = Number(data.account.sequence)
   if (!Number.isSafeInteger(accountNumber) || accountNumber < 0) {
