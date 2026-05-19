@@ -91,6 +91,16 @@ export const getQbtcAccountInfoForClaim = async ({
   const data: AccountResponse = await accountResponse.json()
   const accountNumber = Number(data.account.account_number)
   const sequence = Number(data.account.sequence)
+  if (!Number.isSafeInteger(accountNumber) || accountNumber < 0) {
+    throw new Error(
+      `Invalid QBTC account_number for ${address}: ${data.account.account_number}`
+    )
+  }
+  if (!Number.isSafeInteger(sequence) || sequence < 0) {
+    throw new Error(
+      `Invalid QBTC sequence for ${address}: ${data.account.sequence}`
+    )
+  }
 
   const blockTimestampStr = blockData.block.header.time
   const blockTimestampNs =
