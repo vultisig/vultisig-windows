@@ -1098,7 +1098,7 @@ export const es = {
   auto: 'auto',
   backupShare: 'Compartir bóveda de respaldo',
   backup_password_info_cannot_be_reset:
-    'Recuerda: si olvidas la contraseña de tu bóveda, <b> se podrá </b> ni recuperar.',
+    'Recuerda: si olvidas la contraseña de tu bóveda, <b>no se podrá restablecer ni recuperar.</b>',
   backup_password_info_encrypt_with_password:
     'Si decide agregar una contraseña, esta se utilizará para <b>encriptar</b> el archivo de respaldo.',
   backup_password_info_secure_without_password:

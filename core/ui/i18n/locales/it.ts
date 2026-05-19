@@ -1097,7 +1097,7 @@ export const it = {
   auto: 'auto',
   backupShare: 'Condivisione del Vault di backup',
   backup_password_info_cannot_be_reset:
-    'Ricorda: se dimentichi la password del tuo vault, <b> potrai </b> o recuperarla.',
+    'Ricorda: se dimentichi la password del tuo vault, <b>non potrai reimpostarla né recuperarla.</b>',
   backup_password_info_encrypt_with_password:
     'Se si sceglie di aggiungere una password, questa verrà utilizzata per <b>crittografare</b> il file di backup.',
   backup_password_info_secure_without_password:

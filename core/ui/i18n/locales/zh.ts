@@ -1115,10 +1115,10 @@ export const zh = {
     '使用您之前创建的保险库密码，将您的保险库共享文件备份到云端。建议使用在线存储，安全的保险库共享文件正是为此而设计的。',
   backupsTitle: '<highlight>备份，</highlight>你的新恢复方法',
   backupsDescription:
-    '备份为您的保险库提供动力。每个设备都有其自身的备份。<w>自己的</w>备份。备份本身无法转移资金，它仅用于恢复。导入并恢复任何丢失的设备。',
+    '备份为您的保险库提供支持。每台设备都有其<w>自己的</w>备份。单独一个备份无法转移资金，仅用于恢复。导入并恢复任何丢失的设备。',
   backupEachDevice: '备份每个设备',
   backupEachDeviceDescription:
-    '设备备份<w>和</w>密码是关键。服务器只负责共同签名，可以申请备份。',
+    '设备备份<w>和</w>密码是关键。服务器只负责共同签名，并且可以请求备份。',
   storeBackupsSeparately: '单独存储备份',
   storeBackupsSeparatelyDescription:
     '将每个备份文件保存在不同的位置。即使其中一个备份文件泄露，您的资金仍然安全。',

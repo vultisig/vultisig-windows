@@ -1101,7 +1101,7 @@ export const pt = {
   backup_password_info_cannot_be_reset:
     'Lembre-se: se você esquecer a senha do seu cofre, ela <b>não poderá</b> ser redefinida ou recuperada.',
   backup_password_info_encrypt_with_password:
-    'Se você optar por adicionar uma senha, ela será usada para <b> o arquivo de </b> .',
+    'Se você optar por adicionar uma senha, ela será usada para <b>criptografar</b> o arquivo de backup.',
   backup_password_info_secure_without_password:
     'Por padrão, seu backup é <b>seguro sem</b> uma senha extra, já que você armazena os compartilhamentos do Vault em locais diferentes.',
   create: 'Criar',
@@ -1205,10 +1205,10 @@ export const pt = {
   backupsTitle:
     '<highlight>Cópias de segurança,</highlight> seu novo método de recuperação',
   backupsDescription:
-    'Os backups alimentam seu cofre. Cada dispositivo tem seu próprio sistema de backup.<w> ter</w> Backup. Um backup por si só não permite a transferência de fundos, serve apenas para recuperação. Importe e recupere qualquer dispositivo perdido.',
-  backupEachDevice: 'Faça backup de cada dispositivo.',
+    'Os backups sustentam seu cofre. Cada dispositivo tem seu <w>próprio</w> backup. Um backup sozinho não pode mover fundos, serve apenas para recuperação. Importe e recupere qualquer dispositivo perdido.',
+  backupEachDevice: 'Seu dispositivo é o condutor.',
   backupEachDeviceDescription:
-    'As chaves são as senhas de backup do dispositivo <w> e </w> . O servidor apenas coassina e um backup pode ser solicitado.',
+    'O backup do dispositivo <w>e</w> a senha são as chaves. O servidor apenas coassina, e um backup pode ser solicitado.',
   storeBackupsSeparately: 'Armazene os backups separadamente.',
   storeBackupsSeparatelyDescription:
     'Guarde cada backup em um local diferente. Se um deles for comprometido, seus fundos permanecerão seguros.',

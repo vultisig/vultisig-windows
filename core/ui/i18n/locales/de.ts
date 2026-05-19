@@ -1083,7 +1083,7 @@ export const de = {
     'Bestätigen Sie die Transaktion, indem Sie das Passwort Ihrer Serverfreigabe eingeben.',
   enter_your_seedphrase: 'Geben Sie Ihre Seed-Phrase ein',
   enter_seedphrase_subtitle:
-    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Unterstützt werden Seed-Phrasen der Längen <h> 12 oder 24 Wörter) </h> .',
+    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Unterstützt werden Seed-Phrasen mit <h>12 oder 24 Wörtern</h>.',
   mnemonic_placeholder: 'Geben Sie die 12 oder 24 Wörter Ihrer Seedphrase ein.',
   seedphrase_word_count_error:
     'Sie haben {{count}} Wörter eingegeben. Der Startsatz muss 12 oder 24 Wörter lang sein.',

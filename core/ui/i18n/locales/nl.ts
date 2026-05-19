@@ -1192,10 +1192,10 @@ export const nl = {
     'Maak online een back-up van uw kluis met hetzelfde kluiswachtwoord dat u eerder hebt aangemaakt. Online opslag wordt aanbevolen en veilige kluisshares zijn hiervoor ontworpen.',
   backupsTitle: '<highlight>Back-ups,</highlight> jouw nieuwe herstelmethode',
   backupsDescription:
-    'Backups vormen de basis van uw kluis. Elk apparaat heeft zijn eigen <w> back-up met </w> . Een back-up alleen kan geen geld overmaken, deze is uitsluitend bedoeld voor herstel. Importeer en herstel elk verloren apparaat.',
+    'Back-ups ondersteunen je kluis. Elk apparaat heeft zijn <w>eigen</w> back-up. Een back-up alleen kan geen geld verplaatsen, die is alleen voor herstel. Importeer en herstel elk verloren apparaat.',
   backupEachDevice: 'Maak een back-up van elk apparaat.',
   backupEachDeviceDescription:
-    'De apparaatback-upwachtwoorden <w> en </w> zijn de sleutels. De server ondertekent alleen mee, en er kan een back-up worden aangevraagd.',
+    'De apparaatback-up <w>en</w> het wachtwoord zijn de sleutels. De server ondertekent alleen mee en er kan een back-up worden aangevraagd.',
   storeBackupsSeparately: 'Bewaar back-ups apart.',
   storeBackupsSeparatelyDescription:
     'Bewaar elke back-up op een andere locatie. Mocht er één back-up verloren gaan, dan blijven uw gegevens veilig.',

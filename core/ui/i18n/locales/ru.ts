@@ -923,7 +923,7 @@ export const ru = {
   transaction_details: 'Детали транзакции',
   transaction_has_risk:
     'Транзакция с риском {{riskLevel}} обнаружена <provider></provider>',
-  transaction_successful: 'Транзакция <g> успешно завершена. Транзакция </g>',
+  transaction_successful: 'Транзакция <g>успешно выполнена</g>',
   transaction_could_not_be_parsed:
     'Эту транзакцию не удалось разобрать. Ниже показаны сырые данные транзакции.',
   raw_transaction_data: 'Сырые данные транзакции',

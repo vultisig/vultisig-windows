@@ -22,6 +22,22 @@ type TranslationIntegrityIssue = TranslationSyntaxIssue | TranslationShapeIssue
 
 type FlattenedTranslations = Map<string, string>
 
+type DiffCountsInput = {
+  source: SyntaxCounts
+  target: SyntaxCounts
+}
+
+type ExtractMatchesInput = {
+  text: string
+  pattern: RegExp
+}
+
+type FlattenTranslationsInput = {
+  record: TranslationRecord
+  locale: string
+  prefix?: string
+}
+
 const interpolationTokenPattern = /{{\s*([^{}]+?)\s*}}/g
 const i18nMarkupPattern = /<\/?\s*([A-Za-z][A-Za-z0-9]*)\b[^>]*?>/g
 const tagContentPattern = /<([A-Za-z][A-Za-z0-9]*)\b[^>]*>([\s\S]*?)<\/\1>/g
@@ -37,7 +53,7 @@ const toCounts = (values: string[]): SyntaxCounts => {
   return result
 }
 
-const diffCounts = (source: SyntaxCounts, target: SyntaxCounts): string[] => {
+const diffCounts = ({ source, target }: DiffCountsInput): string[] => {
   const result: string[] = []
 
   source.forEach((count, value) => {
@@ -52,7 +68,7 @@ const diffCounts = (source: SyntaxCounts, target: SyntaxCounts): string[] => {
   return result
 }
 
-const extractMatches = (text: string, pattern: RegExp): string[] => {
+const extractMatches = ({ text, pattern }: ExtractMatchesInput): string[] => {
   const result: string[] = []
 
   for (const match of text.matchAll(pattern)) {
@@ -118,8 +134,8 @@ const compareSyntax = ({
 }): TranslationSyntaxIssue | undefined => {
   const sourceCounts = toCounts(sourceValues)
   const targetCounts = toCounts(targetValues)
-  const missing = diffCounts(sourceCounts, targetCounts)
-  const extra = diffCounts(targetCounts, sourceCounts)
+  const missing = diffCounts({ source: sourceCounts, target: targetCounts })
+  const extra = diffCounts({ source: targetCounts, target: sourceCounts })
 
   if (missing.length === 0 && extra.length === 0) {
     return undefined
@@ -134,11 +150,11 @@ const compareSyntax = ({
   }
 }
 
-const flattenTranslations = (
-  record: TranslationRecord,
-  locale: string,
-  prefix = ''
-): {
+const flattenTranslations = ({
+  record,
+  locale,
+  prefix = '',
+}: FlattenTranslationsInput): {
   values: FlattenedTranslations
   shapeIssues: TranslationShapeIssue[]
 } => {
@@ -154,7 +170,11 @@ const flattenTranslations = (
     }
 
     if (typeof value === 'object' && value !== null) {
-      const nested = flattenTranslations(value, locale, fullKey)
+      const nested = flattenTranslations({
+        record: value,
+        locale,
+        prefix: fullKey,
+      })
 
       nested.values.forEach((nestedValue, nestedKey) => {
         values.set(nestedKey, nestedValue)
@@ -169,6 +189,9 @@ const flattenTranslations = (
   return { values, shapeIssues }
 }
 
+/**
+ * Compares one translated string against its source for preserved i18n syntax.
+ */
 export const findI18nSyntaxIssues = ({
   key,
   locale,
@@ -185,8 +208,14 @@ export const findI18nSyntaxIssues = ({
       key,
       locale,
       kind: 'interpolation',
-      sourceValues: extractMatches(source, interpolationTokenPattern),
-      targetValues: extractMatches(target, interpolationTokenPattern),
+      sourceValues: extractMatches({
+        text: source,
+        pattern: interpolationTokenPattern,
+      }),
+      targetValues: extractMatches({
+        text: target,
+        pattern: interpolationTokenPattern,
+      }),
     }),
     compareSyntax({
       key,
@@ -207,6 +236,9 @@ export const findI18nSyntaxIssues = ({
   return issues.filter(issue => issue !== undefined)
 }
 
+/**
+ * Compares a full locale record against the source locale.
+ */
 export const findTranslationIntegrityIssues = ({
   source,
   target,
@@ -216,8 +248,8 @@ export const findTranslationIntegrityIssues = ({
   target: TranslationRecord
   locale: string
 }): TranslationIntegrityIssue[] => {
-  const sourceEntries = flattenTranslations(source, locale)
-  const targetEntries = flattenTranslations(target, locale)
+  const sourceEntries = flattenTranslations({ record: source, locale })
+  const targetEntries = flattenTranslations({ record: target, locale })
   const issues: TranslationIntegrityIssue[] = [
     ...sourceEntries.shapeIssues,
     ...targetEntries.shapeIssues,
@@ -250,6 +282,9 @@ export const findTranslationIntegrityIssues = ({
   return issues
 }
 
+/**
+ * Replaces interpolation placeholders with stable sentinels before translation.
+ */
 export const protectInterpolationTokens = (text: string) => {
   const syntaxTokens: string[] = []
   const protectedText = text.replace(protectedSyntaxPattern, value => {
@@ -287,6 +322,9 @@ const isTranslationSyntaxIssue = (
   issue.kind === 'tag' ||
   issue.kind === 'tag-content'
 
+/**
+ * Formats an integrity issue for CLI output and translation errors.
+ */
 export const formatTranslationIntegrityIssue = (
   issue: TranslationIntegrityIssue
 ): string => {

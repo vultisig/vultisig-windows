@@ -15,6 +15,13 @@ type RecursiveRecord = {
   [key: string]: string | RecursiveRecord
 }
 
+type ProcessTranslationsInput = {
+  sourceCopy: RecursiveRecord
+  targetCopy: RecursiveRecord
+  fromLang: Language
+  toLang: Language
+}
+
 const copyDirectory = '../locales'
 
 const currentDirname = dirname(fileURLToPath(import.meta.url))
@@ -23,12 +30,12 @@ const workspaceRoot = path.resolve(currentDirname, '../../../..')
 const isRecursiveRecord = (value: unknown): value is RecursiveRecord =>
   typeof value === 'object' && value !== null
 
-const processTranslations = async (
-  sourceCopy: RecursiveRecord,
-  targetCopy: RecursiveRecord,
-  fromLang: Language,
-  toLang: Language
-): Promise<RecursiveRecord> => {
+const processTranslations = async ({
+  sourceCopy,
+  targetCopy,
+  fromLang,
+  toLang,
+}: ProcessTranslationsInput): Promise<RecursiveRecord> => {
   const result: RecursiveRecord = { ...targetCopy }
   const pendingTexts: string[] = []
   const pendingPaths: { key: string; path: string[] }[] = []
@@ -146,12 +153,12 @@ const sync = async () => {
       const oldCopy = translations[language]
       const oldSerialized = JSON.stringify(oldCopy, null, 2)
 
-      const result = await processTranslations(
+      const result = await processTranslations({
         sourceCopy,
-        oldCopy,
-        primaryLanguage,
-        language
-      )
+        targetCopy: oldCopy,
+        fromLang: primaryLanguage,
+        toLang: language,
+      })
 
       const newSerialized = JSON.stringify(result, null, 2)
 
