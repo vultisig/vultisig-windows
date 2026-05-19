@@ -696,7 +696,7 @@ export const es = {
   referral_extension_fee: 'Tarifa de extensión de referencia',
   referral_fee_amount_minimum: 'Mínimo {{amount}} RUNE',
   referral_landing_title:
-    'Invita a tus amigos. Gana recompensas. Ahorra en comisiones.',
+    'Invita a tus amigos. <g> Gana recompensas. </g> Ahorra en comisiones.',
   referral_program: 'Programa de referencias',
   referral_reg_fee: 'Tarifa de inscripción',
   referral_status: 'Estado',
@@ -875,7 +875,7 @@ export const es = {
   transaction_details: 'Detalles de la transacción',
   transaction_has_risk:
     'Transacción de riesgo {{riskLevel}} detectada por <provider></provider>',
-  transaction_successful: 'Transacción exitosa',
+  transaction_successful: 'Transacción <g> exitosa </g>',
   tron_bandwidth: 'Bandwidth',
   tron_energy: 'Energy',
   tron_freeze_button: 'Freeze',
@@ -912,8 +912,9 @@ export const es = {
   upgrade_now: 'Actualiza ahora',
   upgrade_now_prompt: 'Actualice su bóveda ahora',
   upgrade_shares_info:
-    'Creará nuevas copias de seguridad de Vault Share y las almacenará como lo hacía antes.',
-  upgrade_success: 'Bóveda actualizada correctamente',
+    '<b> Crearás nuevas copias de seguridad de Vault Share </b> y las almacenarás como lo hiciste anteriormente.',
+  upgrade_success:
+    'La actualización de la bóveda se realizó <b>correctamente.</b>',
   upgrade_vault: 'Mejora tu bóveda',
   upgrade_vault_description:
     'Actualice esta bóveda al <b>protocolo MPC más rápido del mundo</b> y firme más rápido que nunca.',
@@ -1073,14 +1074,14 @@ export const es = {
     'Confirme la transacción ingresando la contraseña de su recurso compartido del servidor.',
   enter_your_seedphrase: 'Ingresa tu frase semilla',
   enter_seedphrase_subtitle:
-    'Deje un espacio entre cada palabra. Se admiten frases de 12 o 24 palabras.',
+    'Deje un espacio entre cada palabra. Se admiten frases semilla de <h> de 12 o 24 palabras </h> .',
   mnemonic_placeholder: 'Ingresa las 12 o 24 palabras de tu frase semilla',
   seedphrase_word_count_error:
     'Ingresó {{count}} palabras. La frase inicial debe tener 12 o 24 palabras.',
   seedphrase_invalid_error:
     'La frase semilla no es correcta, por favor verifique todas las palabras.',
   import_seedphrase_onboarding_title:
-    'Estás entrando en una nueva era, dejando atrás las viejas frases semilla. Necesitarás:',
+    'Estás entrando en una nueva era, <g> dejando atrás las antiguas frases semilla. </g> Necesitarás:',
   installation_progress: 'Progreso de la instalación: {{progress}}%',
   no_active_chains_found: 'No se encontraron cadenas activas',
   no_active_chains_found_description:
@@ -1097,7 +1098,7 @@ export const es = {
   auto: 'auto',
   backupShare: 'Compartir bóveda de respaldo',
   backup_password_info_cannot_be_reset:
-    'Recuerde: si olvida la contraseña de su bóveda, no podrá restablecerla ni recuperarla.',
+    'Recuerda: si olvidas la contraseña de tu bóveda, <b> se podrá </b> ni recuperar.',
   backup_password_info_encrypt_with_password:
     'Si decide agregar una contraseña, esta se utilizará para <b>encriptar</b> el archivo de respaldo.',
   backup_password_info_secure_without_password:
@@ -1203,10 +1204,10 @@ export const es = {
   backupsTitle:
     '<highlight>Copias de seguridad,</highlight> tu nuevo método de recuperación',
   backupsDescription:
-    'En lugar de una sola frase semilla, su bóveda está protegida por varios dispositivos. Cada dispositivo tiene su propia copia de seguridad. Una copia de seguridad por sí sola no puede transferir fondos. Las copias de seguridad solo sirven para la recuperación.',
+    'Las copias de seguridad alimentan su bóveda. Cada dispositivo tiene su<w> propio</w> Copia de seguridad. Una copia de seguridad por sí sola no puede transferir fondos, solo sirve para la recuperación. Importa y recupera cualquier dispositivo perdido.',
   backupEachDevice: 'Realice una copia de seguridad de cada dispositivo',
   backupEachDeviceDescription:
-    'Esta es solo una copia de seguridad de su bóveda, repita este proceso para los demás dispositivos.',
+    'Las claves son las contraseñas <w> e </w> de la copia de seguridad del dispositivo. El servidor solo realiza la firma conjunta y se puede solicitar una copia de seguridad.',
   storeBackupsSeparately: 'Almacenar copias de seguridad por separado',
   storeBackupsSeparatelyDescription:
     'Guarda cada copia de seguridad en un lugar diferente. Si una se ve comprometida, tus fondos estarán seguros.',
@@ -1434,4 +1435,62 @@ export const es = {
   choose_vaults: 'Elegir bóvedas',
   manage_notifications_in_settings:
     'Puedes gestionar las notificaciones en la configuración del sistema.',
+  bech32_prefix: 'Prefijo de dirección',
+  chain_id: 'ID de cadena',
+  fee_currency: 'Moneda de la tarifa',
+  rest_endpoint: 'Punto final REST',
+  rpc_endpoint: 'Punto final RPC',
+  suggest_chain_subtitle: '{{site}} quiere añadir esta cadena a tu cartera.',
+  suggest_chain_title: 'Agregar cadena sugerida',
+  balance_changes: 'Cambios de equilibrio',
+  connect_dapp: 'Conectar dApp',
+  connect_website_subtitle: 'Conecta este sitio web con la extensión Vultisig.',
+  banner_carousel_go_to_banner: 'Ir al banner {{number}}',
+  buy_vult_banner_cta: 'Compra $VULT',
+  buy_vult_banner_subtitle: 'Y ahorre en comisiones de intercambio.',
+  buy_vult_banner_title: 'Compra $VULT',
+  vault_import_failed: 'No se pudo importar la bóveda: {{message}}',
+  qbtc_claim_title: 'Reclamación de QBTC',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'Cantidad de BTC',
+  qbtc_claim_no_claimable_utxos:
+    'No se encontraron UTXO reclamables para esta dirección.',
+  qbtc_claim_disabled_notice:
+    'Actualmente, la opción de reclamar está deshabilitada en la cadena QBTC.',
+  qbtc_claim_failed_to_load: 'No se pudieron cargar las UTXO reclamables.',
+  qbtc_claim_selected_count: '{{count}} de {{max}} seleccionado',
+  qbtc_claim_confirm: 'Reclamar seleccionado',
+  qbtc_claim_proving: 'Generando pruebas…',
+  qbtc_claim_proving_hint: 'Esto puede tardar varios minutos.',
+  qbtc_claim_broadcasting: 'Afirmación de radiodifusión…',
+  qbtc_claim_success_title: 'Reclamación exitosa',
+  qbtc_claim_utxos_claimed: 'UTXO afirman',
+  qbtc_claim_utxos_skipped: 'UTXO omitidos',
+  qbtc_claim_tx_hash: 'Hash de transacción',
+  qbtc_claim_copy_tx_hash: 'Copiar hash de transacción',
+  qbtc_claim_done: 'Hecho',
+  qbtc_claim_failed:
+    'La reclamación ha fallado. Por favor, inténtelo de nuevo.',
+  qbtc_claim_fast_vault_only:
+    'Actualmente, para reclamar una reclamación se requiere una Bóveda Rápida. La compatibilidad con la Bóveda Segura estará disponible próximamente.',
+  qbtc_claim_password_description:
+    'Ingrese su contraseña de Fast Vault para firmar conjuntamente la transacción de reclamación.',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Esta bóveda se importó sin Ethereum. La firma de mensajes personalizada requiere Ethereum, y las bóvedas importadas no pueden agregar cadenas que se omitieron durante la importación.',
+  jetton_transfer: 'Transferencia de Jetton',
+  nft_transfer: 'Transferencia NFT',
+  excess_gas_refund: 'Reembolso por exceso de gas',
+  forward_ton_amount: 'Cantidad de toneladas hacia adelante',
+  raw_payload: 'Carga útil sin procesar',
+  spender: 'Gastador',
+  operator: 'Operador',
+  contract: 'Contrato',
+  type: 'Tipo',
+  unlimited: 'Ilimitado',
+  verify_password_for: 'Verifique su contraseña para:',
+  vultisig_education: 'Educación Vultisig',
+  pool: 'Piscina',
+  paired_address: 'Dirección emparejada',
+  you_send: 'Tú envías',
+  you_receive: 'Usted recibe',
 }

@@ -498,7 +498,7 @@ export const de = {
   hold_for_paired_sign: 'Halten Sie für das gepaarte Zeichen',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
-    'Diese IBC-Transaktion enthält einen Vermerk, Vultisig unterstützt jedoch derzeit keine eingebetteten Vermerke in IBC-Überweisungsnachrichten.<br> Die Durchführung dieser Transaktion kann zu einem <b>unwiderruflichen Verlust der Gelder</b> führen.</b>',
+    'Diese IBC-Transaktion enthält ein Memo, aber Vultisig unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Die Durchführung dieser Transaktion kann zu <b>einem irreversiblen Verlust von Geldern</b> führen.',
   ibc_transaction_not_supporting_memo_title:
     'IBC-Transaktionsvermerk nicht unterstützt',
   ibc_transfer: 'IBC-Transfer',
@@ -702,7 +702,7 @@ export const de = {
   referral_extension_fee: 'Vermittlungsgebühr',
   referral_fee_amount_minimum: 'Mindestens {{amount}} RUNE',
   referral_landing_title:
-    '<0>Freunde einladen</0>. <1>Prämien verdienen</1>. Gebühren sparen.',
+    'Freunde einladen. <g> Prämien verdienen. </g> Gebühren sparen.',
   referral_program: 'Empfehlungsprogramm',
   referral_reg_fee: 'Anmeldegebühr',
   referral_status: 'Status',
@@ -879,7 +879,7 @@ export const de = {
   transaction_details: 'Transaktionsdetails',
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion vom <provider></provider> erkannt',
-  transaction_successful: 'Transaktion erfolgreich',
+  transaction_successful: 'Transaktion <g> erfolgreich </g>',
   tron_bandwidth: 'Bandwidth',
   tron_energy: 'Energy',
   tron_freeze_button: 'Freeze',
@@ -917,7 +917,7 @@ export const de = {
   upgrade_now_prompt: 'Rüsten Sie Ihren Tresor jetzt auf',
   upgrade_shares_info:
     '<b>Sie erstellen neue Vault Share-Backups</b> und speichern diese wie zuvor.',
-  upgrade_success: 'Vault wurde erfolgreich aktualisiert.',
+  upgrade_success: 'Vault hat <b> erfolgreich aktualisiert </b>',
   upgrade_vault: 'Verbessere deinen Tresor.',
   upgrade_vault_description:
     'Rüsten Sie diesen Tresor auf das <b>weltweit schnellste MPC-Protokoll</b> auf und signieren Sie schneller als je zuvor.',
@@ -1083,14 +1083,14 @@ export const de = {
     'Bestätigen Sie die Transaktion, indem Sie das Passwort Ihrer Serverfreigabe eingeben.',
   enter_your_seedphrase: 'Geben Sie Ihre Seed-Phrase ein',
   enter_seedphrase_subtitle:
-    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Es werden Startphrasen mit 12 oder 24 Wörtern unterstützt.',
+    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Unterstützt werden Seed-Phrasen der Längen <h> 12 oder 24 Wörter) </h> .',
   mnemonic_placeholder: 'Geben Sie die 12 oder 24 Wörter Ihrer Seedphrase ein.',
   seedphrase_word_count_error:
     'Sie haben {{count}} Wörter eingegeben. Der Startsatz muss 12 oder 24 Wörter lang sein.',
   seedphrase_invalid_error:
     'Der Seed-Phrase ist nicht korrekt, bitte überprüfen Sie alle Wörter.',
   import_seedphrase_onboarding_title:
-    'Sie treten in eine neue Ära ein und lassen alte Redewendungen hinter sich. Sie benötigen:',
+    'Sie treten in eine neue Ära ein, <g> lässt alte Seed-Phrasen hinter sich. </g> Sie benötigen:',
   installation_progress: 'Installationsfortschritt: {{progress}}%',
   no_active_chains_found: 'Keine aktiven Ketten gefunden',
   no_active_chains_found_description:
@@ -1110,7 +1110,7 @@ export const de = {
   backup_password_info_cannot_be_reset:
     'Wichtig: Wenn Sie Ihr Tresorpasswort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
   backup_password_info_encrypt_with_password:
-    'Wenn Sie ein Passwort hinzufügen, wird dieses verwendet, um die Sicherungsdatei zu verschlüsseln.',
+    'Wenn Sie ein Passwort hinzufügen, wird dieses zur <b>Verschlüsselung</b> der Sicherungsdatei verwendet.',
   backup_password_info_secure_without_password:
     'Standardmäßig ist Ihre Datensicherung <b>ohne</b> zusätzliches Passwort sicher, da Sie Vault-Freigaben an verschiedenen Orten speichern.',
   create: 'Erstellen',
@@ -1213,10 +1213,10 @@ export const de = {
     'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben. Online-Speicher wird empfohlen, und sichere Tresorfreigaben sind genau dafür konzipiert.',
   backupsTitle: '<highlight>Backups,</highlight> Ihre neue Genesungsmethode',
   backupsDescription:
-    'Anstelle einer einzelnen Seed-Phrase wird Ihr Tresor durch mehrere Geräte gesichert. Jedes Gerät verfügt über ein eigenes Backup. Ein Backup allein kann keine Gelder verschieben. Backups dienen ausschließlich der Wiederherstellung.',
+    'Backups speisen Ihren Datenspeicher. Jedes Gerät hat seine eigene Datensicherung.<w> eigen</w> Backup erstellen. Ein Backup allein kann keine Gelder verschieben, es dient nur der Wiederherstellung. Importieren und wiederherstellen Sie verlorene Daten von jedem Gerät.',
   backupEachDevice: 'Sichern Sie jedes Gerät',
   backupEachDeviceDescription:
-    'Dies ist nur eine Sicherungskopie Ihres Tresors. Wiederholen Sie diesen Vorgang für die anderen Geräte.',
+    'Die Geräte-Backup-Passwörter <w> und </w> sind die Schlüssel. Der Server führt lediglich eine Gegenzeichnung durch, und ein Backup kann angefordert werden.',
   storeBackupsSeparately: 'Backups separat speichern',
   storeBackupsSeparatelyDescription:
     'Bewahren Sie jedes Backup an einem anderen Ort auf. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
@@ -1448,4 +1448,64 @@ export const de = {
   choose_vaults: 'Tresore auswählen',
   manage_notifications_in_settings:
     'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
+  bech32_prefix: 'Adresspräfix',
+  chain_id: 'Ketten-ID',
+  fee_currency: 'Gebührenwährung',
+  rest_endpoint: 'REST-Endpunkt',
+  rpc_endpoint: 'RPC-Endpunkt',
+  suggest_chain_subtitle:
+    '{{site}} möchte diese Blockchain zu Ihrer Wallet hinzufügen.',
+  suggest_chain_title: 'Empfohlene Kette hinzufügen',
+  balance_changes: 'Bilanzveränderungen',
+  connect_dapp: 'Connect dApp',
+  connect_website_subtitle:
+    'Verbinden Sie diese Website mit der Vultisig-Erweiterung',
+  banner_carousel_go_to_banner: 'Gehe zum Banner {{number}}',
+  buy_vult_banner_cta: 'Kaufen Sie $VULT',
+  buy_vult_banner_subtitle: 'Und sparen Sie Tauschgebühren',
+  buy_vult_banner_title: 'Kaufen Sie $VULT',
+  vault_import_failed: 'Vault konnte nicht importiert werden: {{message}}',
+  qbtc_claim_title: 'QBTC-Anspruch',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'BTC-Betrag',
+  qbtc_claim_no_claimable_utxos:
+    'Für diese Adresse wurden keine einlösbaren UTXOs gefunden.',
+  qbtc_claim_disabled_notice:
+    'Das Einlösen von Ansprüchen ist auf der QBTC-Blockchain derzeit deaktiviert.',
+  qbtc_claim_failed_to_load: 'Fehler beim Laden der anrechenbaren UTXOs.',
+  qbtc_claim_selected_count: '{{count}} von {{max}} ausgewählt',
+  qbtc_claim_confirm: 'Anspruch ausgewählt',
+  qbtc_claim_proving: 'Generierung von Beweisen…',
+  qbtc_claim_proving_hint: 'Dies kann mehrere Minuten dauern.',
+  qbtc_claim_broadcasting: 'Rundfunkanspruch…',
+  qbtc_claim_success_title: 'Anspruch erfolgreich',
+  qbtc_claim_utxos_claimed: 'UTXOs behaupteten',
+  qbtc_claim_utxos_skipped: 'UTXOs übersprungen',
+  qbtc_claim_tx_hash: 'Transaktions-Hash',
+  qbtc_claim_copy_tx_hash: 'Kopiere den Transaktions-Hash',
+  qbtc_claim_done: 'Erledigt',
+  qbtc_claim_failed:
+    'Die Reklamation ist fehlgeschlagen. Bitte versuchen Sie es erneut.',
+  qbtc_claim_fast_vault_only:
+    'Für die Geltendmachung von Ansprüchen ist derzeit ein Fast Vault erforderlich. Die Unterstützung für Secure Vault ist in Vorbereitung.',
+  qbtc_claim_password_description:
+    'Geben Sie Ihr Fast Vault-Passwort ein, um die Schadensabwicklung mitzuunterzeichnen.',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Dieser Tresor wurde ohne Ethereum importiert. Für die benutzerdefinierte Nachrichtensignatur wird Ethereum benötigt, und importierte Tresore können keine Blockchains hinzufügen, die beim Import übersprungen wurden.',
+  jetton_transfer: 'Jetton Transfer',
+  nft_transfer: 'NFT-Überweisung',
+  excess_gas_refund: 'Rückerstattung für überschüssiges Gas',
+  forward_ton_amount: 'Forward-TON-Betrag',
+  raw_payload: 'Rohdaten',
+  spender: 'Spender',
+  operator: 'Operator',
+  contract: 'Vertrag',
+  type: 'Typ',
+  unlimited: 'Unbegrenzt',
+  verify_password_for: 'Überprüfen Sie Ihr Passwort für:',
+  vultisig_education: 'Vultisig Education',
+  pool: 'Pool',
+  paired_address: 'Zugeordnete Adresse',
+  you_send: 'Sie senden',
+  you_receive: 'Sie erhalten',
 }

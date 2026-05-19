@@ -726,7 +726,7 @@ export const nl = {
   referral_extension_fee: 'Referral-verlengingsfee',
   referral_fee_amount_minimum: 'Minimaal {{amount}} RUNE',
   referral_landing_title:
-    '<0>Nodig vrienden uit</0>. <1>Verdien rewards</1>. Bespaar op fees.',
+    'Nodig vrienden uit. <g> Verdien beloningen. </g> Bespaar op kosten.',
   referral_program: 'Referralprogramma',
   referral_reg_fee: 'Registratiefee',
   referral_status: 'Status',
@@ -928,7 +928,7 @@ export const nl = {
   transaction_details: 'Transactiedetails',
   transaction_has_risk:
     '{{riskLevel}}-risico transactie gedetecteerd door <provider></provider>',
-  transaction_successful: 'Transactie geslaagd',
+  transaction_successful: 'Transactie <g> succesvol </g>',
   transaction_could_not_be_parsed:
     'Deze transactie kon niet worden geparseerd. Ruwe transactiedata wordt hieronder getoond.',
   raw_transaction_data: 'Ruwe transactiedata',
@@ -1192,10 +1192,10 @@ export const nl = {
     'Maak online een back-up van uw kluis met hetzelfde kluiswachtwoord dat u eerder hebt aangemaakt. Online opslag wordt aanbevolen en veilige kluisshares zijn hiervoor ontworpen.',
   backupsTitle: '<highlight>Back-ups,</highlight> jouw nieuwe herstelmethode',
   backupsDescription:
-    'In plaats van één enkele herstelzin wordt uw kluis beveiligd door meerdere apparaten. Elk apparaat heeft zijn eigen back-up. Een back-up op zich kan geen geld overmaken. Back-ups zijn alleen bedoeld voor herstel.',
+    'Backups vormen de basis van uw kluis. Elk apparaat heeft zijn eigen <w> back-up met </w> . Een back-up alleen kan geen geld overmaken, deze is uitsluitend bedoeld voor herstel. Importeer en herstel elk verloren apparaat.',
   backupEachDevice: 'Maak een back-up van elk apparaat.',
   backupEachDeviceDescription:
-    'Dit is slechts één back-up van uw kluis; herhaal dit proces voor de andere apparaten.',
+    'De apparaatback-upwachtwoorden <w> en </w> zijn de sleutels. De server ondertekent alleen mee, en er kan een back-up worden aangevraagd.',
   storeBackupsSeparately: 'Bewaar back-ups apart.',
   storeBackupsSeparatelyDescription:
     'Bewaar elke back-up op een andere locatie. Mocht er één back-up verloren gaan, dan blijven uw gegevens veilig.',
@@ -1415,4 +1415,63 @@ export const nl = {
   choose_vaults: 'Kies kluizen',
   manage_notifications_in_settings:
     'Je kunt meldingen beheren in de systeeminstellingen.',
+  bech32_prefix: 'Adresvoorvoegsel',
+  chain_id: 'Ketting-ID',
+  fee_currency: 'Kostenvaluta',
+  rest_endpoint: 'REST-eindpunt',
+  rpc_endpoint: 'RPC-eindpunt',
+  suggest_chain_subtitle:
+    '{{site}} wil deze blockchain aan je portemonnee toevoegen.',
+  suggest_chain_title: 'Voeg de voorgestelde ketting toe',
+  balance_changes: 'Balanswijzigingen',
+  connect_dapp: 'Verbind dApp',
+  connect_website_subtitle: 'Koppel deze website aan de Vultisig-extensie.',
+  banner_carousel_go_to_banner: 'Ga naar banner {{number}}',
+  buy_vult_banner_cta: 'Koop $VULT',
+  buy_vult_banner_subtitle: 'En bespaar op wisselkosten.',
+  buy_vult_banner_title: 'Koop $VULT',
+  vault_import_failed: 'Kon kluis niet importeren: {{message}}',
+  qbtc_claim_title: 'QBTC-claim',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'BTC-bedrag',
+  qbtc_claim_no_claimable_utxos:
+    'Er zijn geen claimbare UTXO&#39;s gevonden voor dit adres.',
+  qbtc_claim_disabled_notice:
+    'Het claimen van bitcoins is momenteel uitgeschakeld op de QBTC-blockchain.',
+  qbtc_claim_failed_to_load:
+    'Het laden van de claimbare UTXO&#39;s is mislukt.',
+  qbtc_claim_selected_count: '{{count}} van {{max}} geselecteerd',
+  qbtc_claim_confirm: 'Geselecteerde claim',
+  qbtc_claim_proving: 'Bewijs genereren…',
+  qbtc_claim_proving_hint: 'Dit kan enkele minuten duren.',
+  qbtc_claim_broadcasting: 'Uitzendingsclaim…',
+  qbtc_claim_success_title: 'Claim succesvol',
+  qbtc_claim_utxos_claimed: 'UTXO&#39;s beweerden',
+  qbtc_claim_utxos_skipped: 'UTXO&#39;s overgeslagen',
+  qbtc_claim_tx_hash: 'Transactie-hash',
+  qbtc_claim_copy_tx_hash: 'Kopieer transactiehash',
+  qbtc_claim_done: 'Klaar',
+  qbtc_claim_failed: 'Claim mislukt. Probeer het opnieuw.',
+  qbtc_claim_fast_vault_only:
+    'Voor het claimen van gegevens is momenteel een Fast Vault vereist. Ondersteuning voor Secure Vault is in ontwikkeling.',
+  qbtc_claim_password_description:
+    'Voer uw Fast Vault-wachtwoord in om de claimtransactie mede te ondertekenen.',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Deze kluis is geïmporteerd zonder Ethereum. Voor het ondertekenen van aangepaste berichten is Ethereum vereist, en geïmporteerde kluizen kunnen geen blockchains toevoegen die tijdens het importeren zijn overgeslagen.',
+  jetton_transfer: 'Jetton-transfer',
+  nft_transfer: 'NFT-overdracht',
+  excess_gas_refund: 'Terugbetaling te veel gebruikte benzine',
+  forward_ton_amount: 'Toekomstig TON-bedrag',
+  raw_payload: 'Ruwe lading',
+  spender: 'Uitgever',
+  operator: 'Operator',
+  contract: 'Contract',
+  type: 'Type',
+  unlimited: 'Onbeperkt',
+  verify_password_for: 'Bevestig uw wachtwoord voor:',
+  vultisig_education: 'Vultisig Onderwijs',
+  pool: 'Zwembad',
+  paired_address: 'Gekoppeld adres',
+  you_send: 'Jij verzendt',
+  you_receive: 'U ontvangt',
 }
