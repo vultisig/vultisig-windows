@@ -10,7 +10,7 @@ import {
 } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
-import { getCosmosGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
+import { getCosmosStakingGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
 import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
@@ -542,7 +542,12 @@ const applyCosmosStakingSignData = ({
 
   const feeDenom = cosmosFeeCoinDenom[coin.chain]
   const stakingDenom = getDenom(cosmosCoin as CoinKey<CosmosChain>)
-  const gasLimit = getCosmosGasLimit(cosmosCoin as CoinKey<CosmosChain>)
+  // Bulk `claim_rewards` packs one `MsgWithdrawDelegatorReward` per
+   // validator; every other action is a single-msg tx. The SDK helper
+   // scales its base limit by msg count.
+  const msgCount =
+    input.action === 'claim_rewards' ? input.validatorAddresses.length : 1
+  const gasLimit = getCosmosStakingGasLimit({ chain: coin.chain, msgCount })
   // Total fee in base units = gas (set by chainSpecific).
   const feeAmount = { denom: feeDenom, amount: gas.toString() }
 
@@ -556,12 +561,28 @@ const applyCosmosStakingSignData = ({
     gasLimit,
   })
 
+  // `toAmount` drives the "Sent X LUNA" amount on the verify + Done
+   // screens. Set it to the user-input amount in base units for the actions
+   // that move tokens. `claim_rewards` carries no amount, so it stays at 0.
+  const toAmount =
+    input.action === 'claim_rewards' ? '0' : (amountUnits ?? '0')
+  // `toAddress` likewise drives "To" in the verify screen — show the
+  // validator (or destination validator for redelegate) instead of an empty
+  // string so consumers that don't know about cosmos staking specifics
+  // still display something useful.
+  const toAddress =
+    input.action === 'delegate' || input.action === 'undelegate'
+      ? input.validatorAddress
+      : input.action === 'redelegate'
+        ? input.dstValidatorAddress
+        : ''
+
   return create(KeysignPayloadSchema, {
     ...keysignPayload,
     contractPayload: { case: undefined },
     memo: '',
-    toAddress: '',
-    toAmount: '0',
+    toAddress,
+    toAmount,
     signData: {
       case: 'signDirect',
       value: create(SignDirectSchema, {

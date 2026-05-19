@@ -157,26 +157,20 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
               </HStack>
             }
           />
-          {!isCosmosStakingAction && (
+          {memo ? (
             <TransactionOverviewItem
               label={t('memo')}
               value={
-                memo ? (
-                  <StyledTruncate
-                    size={14}
-                    text={memo}
-                    weight={500}
-                    width={220}
-                  />
-                ) : (
-                  <Text as="span" size={14} color="shy">
-                    —
-                  </Text>
-                )
+                <StyledTruncate
+                  size={14}
+                  text={memo}
+                  weight={500}
+                  width={220}
+                />
               }
             />
-          )}
-          {isCosmosStakingAction && action === 'redelegate' && srcValidator && (
+          ) : null}
+          {isCosmosStakingAction && action === 'redelegate' && srcValidator ? (
             <TransactionOverviewItem
               label={t('source_validator')}
               value={
@@ -185,8 +179,10 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
                 </Text>
               }
             />
-          )}
-          {isCosmosStakingAction && action !== 'claim_rewards' && dstValidator && (
+          ) : null}
+          {isCosmosStakingAction &&
+          action !== 'claim_rewards' &&
+          dstValidator ? (
             <TransactionOverviewItem
               label={
                 action === 'redelegate'
@@ -199,24 +195,24 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
                 </Text>
               }
             />
-          )}
+          ) : null}
           {isCosmosStakingAction &&
-            action === 'claim_rewards' &&
-            claimValidators &&
-            claimValidators.length > 0 && (
-              <TransactionOverviewItem
-                label={t('validator')}
-                value={
-                  <Text as="span" size={14} weight={500}>
-                    {claimValidators.length === 1
-                      ? resolveMoniker(claimValidators[0])
-                      : t('claim_n_validators', {
-                          count: claimValidators.length,
-                        })}
-                  </Text>
-                }
-              />
-            )}
+          action === 'claim_rewards' &&
+          claimValidators &&
+          claimValidators.length > 0 ? (
+            <TransactionOverviewItem
+              label={t('validator')}
+              value={
+                <Text as="span" size={14} weight={500}>
+                  {claimValidators.length === 1
+                    ? resolveMoniker(claimValidators[0])
+                    : t('claim_n_validators', {
+                        count: claimValidators.length,
+                      })}
+                </Text>
+              }
+            />
+          ) : null}
           <TransactionOverviewItem
             label={t('network')}
             value={

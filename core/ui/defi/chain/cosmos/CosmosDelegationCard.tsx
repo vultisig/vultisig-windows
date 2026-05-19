@@ -1,7 +1,6 @@
 import { ValidatorAvatar } from '@core/ui/chain/cosmos/staking/components/ValidatorAvatar'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { Button } from '@lib/ui/buttons/Button'
-import { CalendarDaysIcon } from '@lib/ui/icons/CalendarDaysIcon'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -22,9 +21,14 @@ type CosmosDelegationCardProps = {
   fiat: number
   ticker: string
   decimals: number
-  /** Validator-level pending rewards in the staking denom, base units. */
-  pendingRewardsUnits: bigint
-  /** Estimated APY as a Number in [0, 1]; rendered as percent. */
+  /**
+   * Validator-level pending rewards in the staking denom, in base units
+   * (e.g. uluna). Fractional — Cosmos's distribution module accrues
+   * sub-base-unit rewards per block and only rounds down at withdraw time,
+   * so a fresh small stake can legitimately have e.g. 0.25 uluna pending.
+   */
+  pendingRewardsUnits: number
+  /** Per-validator APY in [0, 1] (e.g. 0.0785 for 7.85%). Hidden when 0 or undefined. */
   apy?: number
   /**
    * Pending unbonding entries for this specific validator. When non-empty the
@@ -62,7 +66,16 @@ export const CosmosDelegationCard = ({
 }: CosmosDelegationCardProps) => {
   const { t } = useTranslation()
   const stakedUi = fromChainAmount(amount, decimals)
-  const rewardsUi = fromChainAmount(pendingRewardsUnits, decimals)
+  // Format pending rewards: small fractional amounts get up to 6 decimals
+  // so users see "0.000001 LUNC" instead of a misleading "0 LUNC". Trim
+  // trailing zeroes for readability.
+  const rewardsUi = (() => {
+    const ui = pendingRewardsUnits / 10 ** decimals
+    if (ui === 0) return '0'
+    return ui
+      .toFixed(decimals)
+      .replace(/\.?0+$/, '')
+  })()
   // Mirror Figma: "Active" for bonded non-jailed, "Churned Out" otherwise.
   // The Cosmos analog of THORChain "churn" is bond status / jailing.
   const isActive =
@@ -104,7 +117,7 @@ export const CosmosDelegationCard = ({
           ${fiat.toFixed(2)}
         </Text>
       </Row>
-      {apy !== undefined && (
+      {apy !== undefined && apy > 0 ? (
         <Row>
           <LabelWithIcon>
             <IconBox>
@@ -118,33 +131,20 @@ export const CosmosDelegationCard = ({
             {(apy * 100).toFixed(2)}%
           </Text>
         </Row>
-      )}
+      ) : null}
       <Divider />
       <Row>
-        <VStack gap={4}>
-          <LabelWithIcon>
-            <IconBox>
-              <CalendarDaysIcon style={{ fontSize: 16 }} />
-            </IconBox>
-            <Text size={12} color="shy">
-              {t('next_churn')}
-            </Text>
-          </LabelWithIcon>
-          <Text size={14}>—</Text>
-        </VStack>
-        <VStack gap={4}>
-          <LabelWithIcon>
-            <IconBox>
-              <TrophyIcon style={{ fontSize: 16 }} />
-            </IconBox>
-            <Text size={12} color="shy">
-              {t('next_award')}
-            </Text>
-          </LabelWithIcon>
-          <Text size={14}>
-            {rewardsUi} {ticker}
+        <LabelWithIcon>
+          <IconBox>
+            <TrophyIcon style={{ fontSize: 16 }} />
+          </IconBox>
+          <Text size={12} color="shy">
+            {t('pending_rewards')}
           </Text>
-        </VStack>
+        </LabelWithIcon>
+        <Text size={14}>
+          {rewardsUi} {ticker}
+        </Text>
       </Row>
       <ButtonRow>
         <Button

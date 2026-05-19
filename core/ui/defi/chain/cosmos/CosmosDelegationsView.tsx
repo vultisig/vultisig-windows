@@ -1,4 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { computeValidatorApy } from '@core/ui/chain/cosmos/staking/queries/getCosmosChainApyData'
+import { useCosmosChainApyQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosChainApyQuery'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useCosmosRewardsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosRewardsQuery'
 import { useCosmosUnbondingsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosUnbondingsQuery'
@@ -12,6 +14,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -58,6 +61,18 @@ export const CosmosDelegationsView = ({
   const stakingCoin = vaultCoins.find(
     c => c.chain === chain && c.ticker === ticker
   )
+
+  // Canonical Cosmos staking denom for this chain (e.g. `uluna` for Terra
+  // family). The vault-stored `stakingCoin` doesn't carry an `id` field for
+  // Terra (`chainFeeCoin[Chain.Terra]` omits it), so anything that needs
+  // the denom — APY supply query, reward filtering — must use this map.
+  const stakingDenom = cosmosFeeCoinDenom[chain]
+
+  // Chain-wide APY inputs (inflation / bonded_ratio / community_tax).
+  // Per-validator APY is computed in the map below using each validator's
+  // commission. TerraClassic's inflation is 0 by governance so its APY
+  // collapses to 0 — accurate for the inflation portion only.
+  const apyQuery = useCosmosChainApyQuery({ chain, stakingDenom })
 
   if (delegationsQuery.isPending || validatorsQuery.isPending || !stakingCoin) {
     return (
@@ -158,16 +173,28 @@ export const CosmosDelegationsView = ({
       {delegations.map(d => {
         const validator = validatorByAddr.get(d.validatorAddress)
         if (!validator) return null
+        // Cosmos rewards come back as fractional Dec strings (e.g.
+        // "0.251137..uluna"). Sum as Number to preserve fractional
+        // precision (truncating to integer uluna wipes out small accruals
+        // on fresh stakes). Filter by `stakingDenom` rather than
+        // `stakingCoin.id` because some chain fee coin entries (Terra)
+        // omit the denom id.
         const stakingDenomRewards = (
           rewardsByValidator.get(d.validatorAddress) ?? []
         )
-          .filter(c => c.denom === stakingCoin.id)
-          .reduce((s, c) => s + BigInt(c.amount.split('.')[0] || '0'), 0n)
+          .filter(c => c.denom === stakingDenom)
+          .reduce((s, c) => s + Number(c.amount), 0)
         const amountUnits = BigInt(d.balance.amount)
         const fiat =
           priceUsd !== undefined
             ? Number(fromChainAmount(amountUnits, decimals)) * priceUsd
             : 0
+        const validatorApy = apyQuery.data
+          ? computeValidatorApy({
+              chainData: apyQuery.data,
+              commissionRate: validator.commission.rate,
+            })
+          : undefined
         return (
           <CosmosDelegationCard
             key={d.validatorAddress}
@@ -177,6 +204,7 @@ export const CosmosDelegationsView = ({
             ticker={ticker}
             decimals={decimals}
             pendingRewardsUnits={stakingDenomRewards}
+            apy={validatorApy}
             unbondingEntries={unbondingEntriesByValidator.get(d.validatorAddress)}
             unbondingDays={unbondingDays}
             onAction={action => launchAction(action, d.validatorAddress)}
