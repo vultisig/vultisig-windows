@@ -16,6 +16,7 @@ import {
   QbtcClaimResultData,
 } from './ClaimBroadcastingPhase'
 import { ClaimPreparingTxPhase } from './ClaimPreparingTxPhase'
+import { ClaimServerBroadcastWaitPhase } from './ClaimServerBroadcastWaitPhase'
 import { ClaimSignRound } from './ClaimSignRound'
 
 const qbtcChainId = 'qbtc-testnet'
@@ -50,6 +51,7 @@ type ClaimRunnerPhase =
         mldsaSig: KeysignSignature
       }
     }
+  | { serverBroadcastWait: { txHash: string } }
 
 /**
  * Orchestrates the full QBTC claim pipeline across multiple MPC sessions:
@@ -122,7 +124,7 @@ export const ClaimRunner = ({
               vault.publicKeyMldsa,
               'vault.publicKeyMldsa'
             )}
-            onFinish={ready =>
+            onReadyToSign={ready =>
               setPhase({
                 mldsaSign: {
                   signDocHashHex: ready.signDocHashHex,
@@ -131,6 +133,9 @@ export const ClaimRunner = ({
                   proof: ready.proof,
                 },
               })
+            }
+            onServerBroadcast={txHash =>
+              setPhase({ serverBroadcastWait: { txHash } })
             }
             onError={onError}
           />
@@ -158,6 +163,13 @@ export const ClaimRunner = ({
             bodyBytes={bodyBytes}
             authInfoBytes={authInfoBytes}
             mldsaSig={mldsaSig}
+            onSuccess={onSuccess}
+            onError={onError}
+          />
+        ),
+        serverBroadcastWait: ({ txHash }) => (
+          <ClaimServerBroadcastWaitPhase
+            txHash={txHash}
             onSuccess={onSuccess}
             onError={onError}
           />
