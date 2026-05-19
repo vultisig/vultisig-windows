@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { computeValidatorApy } from '@core/ui/chain/cosmos/staking/queries/getCosmosChainApyData'
 import { useCosmosChainApyQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosChainApyQuery'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
@@ -12,10 +13,12 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
-import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { coinKeyToString, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -36,8 +39,6 @@ type CosmosDelegationsViewProps = {
   ticker: string
   /** Staking-token base-unit exponent (Terra family = 6). */
   decimals: number
-  /** Spot price in USD for the staking token. */
-  priceUsd?: number
 }
 
 export const CosmosDelegationsView = ({
@@ -45,11 +46,11 @@ export const CosmosDelegationsView = ({
   delegatorAddress,
   ticker,
   decimals,
-  priceUsd,
 }: CosmosDelegationsViewProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const vaultCoins = useCurrentVaultCoins()
+  const formatFiatAmount = useFormatFiatAmount()
   const delegationsQuery = useCosmosDelegationsQuery({
     chain,
     delegatorAddress,
@@ -67,6 +68,13 @@ export const CosmosDelegationsView = ({
   // Terra (`chainFeeCoin[Chain.Terra]` omits it), so anything that needs
   // the denom — APY supply query, reward filtering — must use this map.
   const stakingDenom = cosmosFeeCoinDenom[chain]
+
+  // Same coin-price feed the Portfolio view uses. Routed by the fee coin's
+  // `priceProviderId` (e.g. `terra-luna-2`) — matching the Wallet tab.
+  // Stays undefined while loading; the UI falls through to `$0.00`.
+  const priceCoin = { ...chainFeeCoin[chain], chain }
+  const priceQuery = useCoinPricesQuery({ coins: [priceCoin] })
+  const priceUsd = priceQuery.data?.[coinKeyToString({ chain })]
 
   // Chain-wide APY inputs (inflation / bonded_ratio / community_tax).
   // Per-validator APY is computed in the map below using each validator's
@@ -150,7 +158,7 @@ export const CosmosDelegationsView = ({
               {totalStakedUi} {ticker}
             </Text>
             <Text size={14} color="shy">
-              ${totalFiat.toFixed(2)}
+              {formatFiatAmount(totalFiat)}
             </Text>
           </VStack>
         </HStack>

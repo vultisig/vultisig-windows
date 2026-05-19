@@ -1,3 +1,4 @@
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { ValidatorAvatar } from '@core/ui/chain/cosmos/staking/components/ValidatorAvatar'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { Button } from '@lib/ui/buttons/Button'
@@ -65,6 +66,7 @@ export const CosmosDelegationCard = ({
   onAction,
 }: CosmosDelegationCardProps) => {
   const { t } = useTranslation()
+  const formatFiatAmount = useFormatFiatAmount()
   const stakedUi = fromChainAmount(amount, decimals)
   // Format pending rewards: small fractional amounts get up to 6 decimals
   // so users see "0.000001 LUNC" instead of a misleading "0 LUNC". Trim
@@ -114,7 +116,7 @@ export const CosmosDelegationCard = ({
       <Row>
         <Text size={14}>{t('staked_label', { amount: stakedUi, ticker })}</Text>
         <Text size={14} color="shy">
-          ${fiat.toFixed(2)}
+          {formatFiatAmount(fiat)}
         </Text>
       </Row>
       {apy !== undefined && apy > 0 ? (
