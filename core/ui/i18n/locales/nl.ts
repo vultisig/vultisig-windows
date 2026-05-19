@@ -1426,7 +1426,7 @@ export const nl = {
   balance_changes: 'Balanswijzigingen',
   connect_dapp: 'Verbind dApp',
   connect_website_subtitle: 'Koppel deze website aan de Vultisig-extensie.',
-  banner_carousel_go_to_banner: 'Ga naar banner {{nummer}}',
+  banner_carousel_go_to_banner: 'Ga naar banner {{number}}',
   buy_vult_banner_cta: 'Koop $VULT',
   buy_vult_banner_subtitle: 'En bespaar op wisselkosten.',
   buy_vult_banner_title: 'Koop $VULT',

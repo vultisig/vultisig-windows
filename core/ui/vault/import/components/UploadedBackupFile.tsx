@@ -9,7 +9,7 @@ import styled from 'styled-components'
 export const UploadedBackupFile = ({ value }: ValueProp<File>) => {
   return (
     <UploadedContainer>
-      <IconContainer>
+      <IconContainer aria-hidden>
         <PageCheckIcon />
       </IconContainer>
       <Text color="primary" weight="600" size={14}>

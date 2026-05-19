@@ -1444,7 +1444,7 @@ export const es = {
   balance_changes: 'Cambios de equilibrio',
   connect_dapp: 'Conectar dApp',
   connect_website_subtitle: 'Conecta este sitio web con la extensión Vultisig.',
-  banner_carousel_go_to_banner: 'Ir al banner {{número}}',
+  banner_carousel_go_to_banner: 'Ir al banner {{number}}',
   buy_vult_banner_cta: 'Compra $VULT',
   buy_vult_banner_subtitle: 'Y ahorre en comisiones de intercambio.',
   buy_vult_banner_title: 'Compra $VULT',
