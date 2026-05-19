@@ -16,7 +16,10 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
-import { getQbtcAccountInfoForClaim } from '../utils/getQbtcAccountInfoForClaim'
+import {
+  getQbtcAccountExists,
+  getQbtcAccountInfoForClaim,
+} from '../utils/getQbtcAccountInfoForClaim'
 
 const qbtcChainId = 'qbtc-testnet'
 const proofServiceRBytes = 24
@@ -88,7 +91,7 @@ export const ClaimPreparingTxPhase = ({
 
   const { mutate, ...state } = useMutation({
     mutationFn: async (): Promise<ClaimPreparingTxMutationResult> => {
-      const accountInfo = await getQbtcAccountInfoForClaim({
+      const accountExists = await getQbtcAccountExists({
         address: qbtcAddress,
       })
 
@@ -100,10 +103,10 @@ export const ClaimPreparingTxPhase = ({
         claimerAddress: qbtcAddress,
         chainId: qbtcChainId,
         baseUrl: proofServiceBaseUrl,
-        broadcast: !accountInfo.exists,
+        broadcast: !accountExists,
       })
 
-      if (!accountInfo.exists) {
+      if (!accountExists) {
         return {
           kind: 'server',
           txHash: shouldBePresent(
@@ -112,6 +115,10 @@ export const ClaimPreparingTxPhase = ({
           ),
         }
       }
+
+      const accountInfo = await getQbtcAccountInfoForClaim({
+        address: qbtcAddress,
+      })
 
       const bodyBytes = buildClaimTxBody({
         claimer: qbtcAddress,

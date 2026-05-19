@@ -9,6 +9,31 @@ type AccountResponse = {
   }
 }
 
+/**
+ * Quick existence probe for a QBTC address. Only hits
+ * `/cosmos/auth/v1beta1/accounts/{addr}` — no latest-block call.
+ *
+ * Used to decide which claim path to take BEFORE we know we need the full
+ * signing metadata. A transient `/blocks/latest` failure must not abort the
+ * server-broadcast flow, which doesn't need it.
+ */
+export const getQbtcAccountExists = async ({
+  address,
+}: {
+  address: string
+}): Promise<boolean> => {
+  const response = await fetch(
+    `${qbtcRestUrl}/cosmos/auth/v1beta1/accounts/${address}`
+  )
+  if (response.status === 404) return false
+  if (!response.ok) {
+    throw new Error(
+      `Failed to probe QBTC account (${response.status}): ${response.statusText}`
+    )
+  }
+  return true
+}
+
 type BlockResponse = {
   block: {
     header: {
@@ -23,24 +48,15 @@ type QbtcAccountInfoForClaim = {
   accountNumber: number
   sequence: number
   latestBlock: string
-  /**
-   * True when the chain has the account in its auth store. False on 404 —
-   * the address has never touched the chain. First-time claimers can't sign
-   * a SignDoc the chain will accept (the chain's auto-assigned
-   * `account_number` is unpredictable), so callers should route the tx
-   * through the proof service's server-side broadcast instead.
-   */
-  exists: boolean
 }
 
 /**
- * Fetches account + latest block info for building a QBTC claim SignDoc.
- *
- * Unlike the SDK's `getQbtcAccountInfo`, this helper treats a 404 on the
- * account lookup as a valid "fresh account" state and defaults both
- * `accountNumber` and `sequence` to 0. A QBTC address doesn't exist
- * on-chain until its first transaction — which for most claimers IS the
- * claim tx.
+ * Fetches signing metadata (account number, sequence, latest block) for a
+ * QBTC address whose on-chain account already exists. Callers MUST check
+ * existence with {@link getQbtcAccountExists} first; this helper throws on
+ * a 404 because the wallet-direct claim path can't proceed without a real
+ * `account_number` (the chain's auto-assigned value is unpredictable and
+ * the SignDoc would never verify).
  *
  * Uses a raw `fetch` for the account endpoint so a 404 can be branched on
  * `response.status` directly instead of relying on a typed error class.
@@ -62,22 +78,19 @@ export const getQbtcAccountInfoForClaim = async ({
     ),
   ])
 
-  const { accountNumber, sequence, exists } = await (async () => {
-    if (accountResponse.status === 404) {
-      return { accountNumber: 0, sequence: 0, exists: false }
-    }
-    if (!accountResponse.ok) {
-      throw new Error(
-        `Failed to fetch QBTC account (${accountResponse.status}): ${accountResponse.statusText}`
-      )
-    }
-    const data: AccountResponse = await accountResponse.json()
-    return {
-      accountNumber: Number(data.account.account_number),
-      sequence: Number(data.account.sequence),
-      exists: true,
-    }
-  })()
+  if (accountResponse.status === 404) {
+    throw new Error(
+      `QBTC account ${address} not found — caller must probe getQbtcAccountExists first`
+    )
+  }
+  if (!accountResponse.ok) {
+    throw new Error(
+      `Failed to fetch QBTC account (${accountResponse.status}): ${accountResponse.statusText}`
+    )
+  }
+  const data: AccountResponse = await accountResponse.json()
+  const accountNumber = Number(data.account.account_number)
+  const sequence = Number(data.account.sequence)
 
   const blockTimestampStr = blockData.block.header.time
   const blockTimestampNs =
@@ -90,6 +103,5 @@ export const getQbtcAccountInfoForClaim = async ({
     accountNumber,
     sequence,
     latestBlock,
-    exists,
   }
 }
