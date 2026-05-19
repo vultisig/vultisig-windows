@@ -1,4 +1,4 @@
-import { toBase64, toHex } from '@cosmjs/encoding'
+import { toBase64, toBech32, toHex } from '@cosmjs/encoding'
 import { TW } from '@trustwallet/wallet-core'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import {
@@ -44,9 +44,10 @@ import {
   decodeMsgWithdrawDelegationRewards,
 } from './osmosisValsetprefDecoders'
 
-type CosmosMessage = { typeUrl: string; value: Uint8Array }
+type CosmosMessage = { typeUrl: string; value: Uint8Array; chainId?: string }
 
 type KnownDecoder = (value: Uint8Array) => unknown
+type ChainAwareDecoder = (msg: CosmosMessage) => unknown
 
 // Schemas bundled with cosmjs-types or @trustwallet/wallet-core. For anything
 // else we surface the raw base64 instead of a field-numbered approximation —
@@ -99,10 +100,6 @@ const knownDecoders: Record<string, KnownDecoder> = {
   '/ibc.applications.transfer.v1.MsgTransfer': v => MsgTransfer.decode(v),
   '/cosmwasm.wasm.v1.MsgExecuteContract': v => MsgExecuteContract.decode(v),
 
-  // THORChain (already used elsewhere in the codebase)
-  '/types.MsgDeposit': v => TW.Cosmos.Proto.Message.THORChainDeposit.decode(v),
-  '/types.MsgSend': v => TW.Cosmos.Proto.Message.THORChainSend.decode(v),
-
   // Osmosis valset-pref (hand-written — see osmosisValsetprefDecoders.ts)
   '/osmosis.valsetpref.v1beta1.MsgSetValidatorSetPreference': v =>
     decodeMsgSetValidatorSetPreference(v),
@@ -118,6 +115,54 @@ const knownDecoders: Record<string, KnownDecoder> = {
     decodeMsgWithdrawDelegationRewards(v),
   '/osmosis.valsetpref.v1beta1.MsgDelegateBondedTokens': v =>
     decodeMsgDelegateBondedTokens(v),
+}
+
+const getThorchainAddressPrefix = (chainId?: string) =>
+  chainId?.toLowerCase().includes('maya') ? 'maya' : 'thor'
+
+const toThorchainAddress = (value: Uint8Array, chainId?: string) =>
+  toBech32(getThorchainAddressPrefix(chainId), value)
+
+const decodeThorchainDeposit = ({
+  chainId,
+  value,
+}: CosmosMessage): unknown => {
+  const decoded = TW.Cosmos.Proto.Message.THORChainDeposit.decode(value)
+
+  return {
+    coins: decoded.coins.map(coin => ({
+      asset: coin.asset
+        ? {
+            chain: coin.asset.chain,
+            symbol: coin.asset.symbol,
+            ticker: coin.asset.ticker,
+            synth: coin.asset.synth ?? false,
+            trade: coin.asset.trade ?? false,
+            secured: coin.asset.secured ?? false,
+          }
+        : undefined,
+      amount: coin.amount,
+      decimals: Number(coin.decimals?.toString() ?? 0),
+    })),
+    memo: decoded.memo,
+    signer: toThorchainAddress(decoded.signer, chainId),
+  }
+}
+
+const decodeThorchainSend = ({ chainId, value }: CosmosMessage): unknown => {
+  const decoded = TW.Cosmos.Proto.Message.THORChainSend.decode(value)
+
+  return {
+    fromAddress: toThorchainAddress(decoded.fromAddress, chainId),
+    toAddress: toThorchainAddress(decoded.toAddress, chainId),
+    amounts: decoded.amounts,
+  }
+}
+
+const chainAwareDecoders: Record<string, ChainAwareDecoder> = {
+  // THORChain (already used elsewhere in the codebase)
+  '/types.MsgDeposit': decodeThorchainDeposit,
+  '/types.MsgSend': decodeThorchainSend,
 }
 
 const isPlainRecord = (value: unknown): value is Record<string, unknown> =>
@@ -143,6 +188,12 @@ const replaceJsonUnsafeValues = (value: unknown): unknown => {
  * rather than a half-decoded approximation with field numbers.
  */
 export const decodeCosmosMessageValue = (msg: CosmosMessage): unknown => {
+  const chainAware = chainAwareDecoders[msg.typeUrl]
+  if (chainAware) {
+    const result = attempt(() => chainAware(msg))
+    if ('data' in result) return replaceJsonUnsafeValues(result.data)
+  }
+
   const known = knownDecoders[msg.typeUrl]
   if (known) {
     const result = attempt(() => known(msg.value))

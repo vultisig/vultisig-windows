@@ -1,3 +1,4 @@
+import { TW } from '@trustwallet/wallet-core'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import {
   MsgBeginRedelegate,
@@ -94,6 +95,54 @@ describe('decodeCosmosMessageValue', () => {
       value,
     })
     expect(result).toBe('AQIDBA==')
+  })
+
+  it('renders Thorchain MsgDeposit signer and default asset fields for verification', () => {
+    const signer = Uint8Array.from(
+      Array.from({ length: 20 }, (_, index) => index + 1)
+    )
+    const value = TW.Cosmos.Proto.Message.THORChainDeposit.encode(
+      TW.Cosmos.Proto.Message.THORChainDeposit.create({
+        coins: [
+          {
+            asset: {
+              chain: 'XRP',
+              symbol: 'XRP',
+              ticker: 'XRP',
+              secured: true,
+            },
+            amount: '544899007',
+          },
+        ],
+        memo: '=:b:dest:8561/1/0:rj:50',
+        signer,
+      })
+    ).finish()
+
+    expect(
+      decodeCosmosMessageValue({
+        chainId: 'thorchain-1',
+        typeUrl: '/types.MsgDeposit',
+        value,
+      })
+    ).toEqual({
+      coins: [
+        {
+          asset: {
+            chain: 'XRP',
+            symbol: 'XRP',
+            ticker: 'XRP',
+            synth: false,
+            trade: false,
+            secured: true,
+          },
+          amount: '544899007',
+          decimals: 0,
+        },
+      ],
+      memo: '=:b:dest:8561/1/0:rj:50',
+      signer: 'thor1qypqxpq9qcrsszg2pvxq6rs0zqg3yyc5e949nr',
+    })
   })
 
   it('falls back to base64 if a known decoder throws on malformed bytes', () => {
