@@ -1,8 +1,8 @@
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -77,6 +77,20 @@ export const ActiveDelegationPicker = ({
                 </Text>
               </EmptyState>
             )
+          }
+          // Without validator metadata each delegation row falls back to
+          // `null` (no moniker / avatar / id to render), so the user sees
+          // an empty list and assumes no positions. Surface the validator
+          // query's own loading / error state instead.
+          if (validatorsQuery.isPending) {
+            return (
+              <HStack justifyContent="center">
+                <Spinner />
+              </HStack>
+            )
+          }
+          if (validatorsQuery.isError) {
+            return <Text color="danger">{t('failed_to_load_validators')}</Text>
           }
           const validators = validatorsQuery.data ?? []
           const validatorByAddr = new Map(
