@@ -8,6 +8,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -46,9 +48,7 @@ export const DelegateSpecific = () => {
             render={({ field }) => (
               <StakingAmountInput
                 value={(field.value as string | undefined) ?? ''}
-                onChange={v =>
-                  setValue('amount', v, { shouldValidate: true })
-                }
+                onChange={v => setValue('amount', v, { shouldValidate: true })}
                 ticker={coin.ticker}
               />
             )}
@@ -61,13 +61,18 @@ export const DelegateSpecific = () => {
             <PercentageSelector
               max={balanceUnits}
               value={(() => {
-                // The amount input regex allows a lone `.` which `Number()`
-                // turns into NaN; `BigInt(NaN)` throws and crashes render.
-                // Treat any non-finite parse as "no value picked".
+                // Parse as a decimal string to avoid JS float precision loss
+                // (a `Number * 10**decimals` round-trip drops digits past
+                // ~15 significant figures). The input regex permits `.` and
+                // trailing/leading dots which throw, and a user can type
+                // more fractional digits than the coin supports — both end
+                // up as `null` (no slider position picked).
                 if (field.value === undefined || field.value === '') return null
-                const parsed = Number(field.value)
-                if (!Number.isFinite(parsed) || parsed < 0) return null
-                return BigInt(Math.floor(parsed * 10 ** coin.decimals))
+                const result = attempt(() =>
+                  decimalStringToBigInt(String(field.value), coin.decimals)
+                )
+                if ('error' in result) return null
+                return result.data < 0n ? null : result.data
               })()}
               onChange={units => {
                 if (units === null) {

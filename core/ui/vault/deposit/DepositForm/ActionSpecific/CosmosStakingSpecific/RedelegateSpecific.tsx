@@ -1,3 +1,4 @@
+import { ActiveDelegationPicker } from '@core/ui/chain/cosmos/staking/components/ActiveDelegationPicker'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
@@ -33,6 +34,27 @@ export const RedelegateSpecific = () => {
     chain: chain as IbcEnabledCosmosChain,
     delegatorAddress: coin.address,
   })
+
+  // Wallet → Function entry has no source pre-filled; show the picker
+  // first. The Active Delegations card path passes `srcValidatorAddress`
+  // via form-defaults and skips this step. All hooks run unconditionally
+  // above so the order is stable across re-renders.
+  if (!srcValidatorAddress) {
+    return (
+      <ActiveDelegationPicker
+        chain={chain as IbcEnabledCosmosChain}
+        delegatorAddress={coin.address}
+        ticker={coin.ticker}
+        decimals={coin.decimals}
+        title={t('select_delegation_to_move')}
+        onSelect={({ validator }) =>
+          setValue('srcValidatorAddress', validator.operatorAddress, {
+            shouldValidate: true,
+          })
+        }
+      />
+    )
+  }
 
   const stakedUnits = (() => {
     if (!srcValidatorAddress || !delegationsQuery.data) return 0n

@@ -1,3 +1,4 @@
+import { ActiveDelegationPicker } from '@core/ui/chain/cosmos/staking/components/ActiveDelegationPicker'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
@@ -21,10 +22,12 @@ import { StakingAmountInput } from './StakingAmountInput'
  *   - "Balance available" row reflects the staked amount on the selected
  *     validator (not the wallet liquid balance)
  *
- * Source validator is preselected by the caller (the Active Delegations card
- * passes it via the form-defaults state). The form does not expose a picker
- * for the source — the user already chose the validator by clicking Unstake
- * on a specific delegation card.
+ * When entered from a DeFi Active Delegations card, `validatorAddress` is
+ * pre-filled via the navigation form-defaults and the picker step is
+ * skipped. When entered from the Wallet → Function picker there's no
+ * pre-selection, so we first render an `ActiveDelegationPicker` for the
+ * user to choose which delegation to unstake from; once picked, the form
+ * renders as normal.
  */
 export const UndelegateSpecific = () => {
   const { t } = useTranslation()
@@ -38,6 +41,27 @@ export const UndelegateSpecific = () => {
     chain: chain as IbcEnabledCosmosChain,
     delegatorAddress: coin.address,
   })
+
+  // Wallet → Function entry has no validator pre-filled; show the picker
+  // first. The Active Delegations card path passes `validatorAddress` via
+  // form-defaults and skips this step. All hooks run unconditionally above
+  // so the order is stable across re-renders.
+  if (!validatorAddress) {
+    return (
+      <ActiveDelegationPicker
+        chain={chain as IbcEnabledCosmosChain}
+        delegatorAddress={coin.address}
+        ticker={coin.ticker}
+        decimals={coin.decimals}
+        title={t('select_delegation_to_unstake')}
+        onSelect={({ validator }) =>
+          setValue('validatorAddress', validator.operatorAddress, {
+            shouldValidate: true,
+          })
+        }
+      />
+    )
+  }
 
   const stakedUnits = (() => {
     if (!validatorAddress || !delegationsQuery.data) return 0n

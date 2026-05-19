@@ -51,6 +51,14 @@ export const CosmosStakingFooterButton = ({
   const amountSet = Number.isFinite(numericAmount) && numericAmount > 0
   const validatorPicked = Boolean(validatorAddress)
 
+  // Redelegate from the Wallet → Function entry starts on the
+  // `ActiveDelegationPicker` step (source not yet picked). The footer
+  // CTA would prematurely offer to open the destination picker, so
+  // suppress it until source is chosen.
+  if (action === 'redelegate' && !srcValidatorAddress) {
+    return null
+  }
+
   if (!amountSet) {
     return (
       <Button disabled type="button">
