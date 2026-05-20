@@ -910,7 +910,7 @@ export const pt = {
   upgrade_now_prompt: 'Atualize seu cofre agora',
   upgrade_shares_info:
     '<b>Você criará novos backups do Vault Share</b> e os armazenará como fazia antes.',
-  upgrade_success: 'O Vault atualizou <b> com sucesso. </b>',
+  upgrade_success: 'Vault atualizado <b>com sucesso</b>',
   upgrade_vault: 'Melhore seu cofre',
   upgrade_vault_description:
     'Atualize este cofre para o <b>protocolo MPC mais rápido do mundo</b> e assine mais rápido do que nunca.',
@@ -1205,8 +1205,8 @@ export const pt = {
   backupsTitle:
     '<highlight>Cópias de segurança,</highlight> seu novo método de recuperação',
   backupsDescription:
-    'Os backups sustentam seu cofre. Cada dispositivo tem seu <w>próprio</w> backup. Um backup sozinho não pode mover fundos, serve apenas para recuperação. Importe e recupere qualquer dispositivo perdido.',
-  backupEachDevice: 'Seu dispositivo é o condutor.',
+    'Os backups protegem seu cofre. Cada dispositivo tem seu backup <w>próprio</w>. Um backup sozinho não pode mover fundos; ele serve apenas para recuperação. Importe e recupere qualquer dispositivo perdido.',
+  backupEachDevice: 'Faça backup de cada dispositivo',
   backupEachDeviceDescription:
     'O backup do dispositivo <w>e</w> a senha são as chaves. O servidor apenas coassina, e um backup pode ser solicitado.',
   storeBackupsSeparately: 'Armazene os backups separadamente.',
@@ -1247,7 +1247,7 @@ export const pt = {
   new_vault_setup_disclaimer:
     'Sua configuração foi alterada. Faça um novo backup.',
   manage_referral_title: 'Indicações Vultisig',
-  select_pool: 'Selecione a piscina',
+  select_pool: 'Selecione o pool',
   token_not_found_invalid: 'Endereço de contrato inválido',
   transaction_failed: 'Transação<error> fracassado</error>',
   transaction_pending: 'Transação pendente...',
@@ -1324,7 +1324,6 @@ export const pt = {
   date: 'Data',
   device_n_label: 'Dispositivo {{number}} - {{hash}}',
   remove_friends_referral: 'Remover encaminhamento',
-  enable_mldsa: 'Habilitar MLDSA',
   post_quantum_keygen: 'Geração de chaves pós-quânticas',
   post_quantum_keygen_description:
     'Gere uma chave pós-quântica (MLDSA) para este cofre.',
@@ -1339,7 +1338,7 @@ export const pt = {
   go_to_wallet: 'Acesse a carteira',
   i_understand: 'Eu entendo',
   i_understand_save_backup: 'Eu sei como salvar esse backup.',
-  left_pool: 'Piscina esquerda',
+  left_pool: 'Pool abandonado',
   looks_good: 'Parece bom',
   no_transactions_yet: 'Ainda não há transações.',
   review_vault_devices_subtitle:
@@ -1464,7 +1463,7 @@ export const pt = {
   qbtc_claim_confirm: 'Reivindicar selecionado',
   qbtc_claim_proving: 'Gerando provas…',
   qbtc_claim_proving_hint: 'Isso pode levar vários minutos.',
-  qbtc_claim_broadcasting: 'Alegação de transmissão…',
+  qbtc_claim_broadcasting: 'Broadcasting da reivindicação…',
   qbtc_claim_success_title: 'Reivindicação bem-sucedida',
   qbtc_claim_utxos_claimed: 'UTXOs reivindicados',
   qbtc_claim_utxos_skipped: 'UTXOs ignorados',
@@ -1481,7 +1480,7 @@ export const pt = {
   jetton_transfer: 'Transferência Jetton',
   nft_transfer: 'Transferência de NFT',
   excess_gas_refund: 'Reembolso de excesso de gás',
-  forward_ton_amount: 'Valor em toneladas (TON) a seguir',
+  forward_ton_amount: 'Valor de TON encaminhado',
   raw_payload: 'Carga útil bruta',
   spender: 'Gastador',
   operator: 'Operador',
@@ -1490,7 +1489,7 @@ export const pt = {
   unlimited: 'Ilimitado',
   verify_password_for: 'Confirme sua senha para:',
   vultisig_education: 'Educação Vultisig',
-  pool: 'Piscina',
+  pool: 'Pool',
   paired_address: 'Endereço emparelhado',
   you_send: 'Você envia',
   you_receive: 'Você recebe',

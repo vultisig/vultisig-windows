@@ -98,16 +98,23 @@ describe('i18n syntax integrity', () => {
 
   it('protects interpolation placeholders before machine translation', () => {
     const protectedText = protectInterpolationTokens(
-      'Not enough {{asset}} to cover {{feeType}} fees'
+      'Not enough {{asset}} to cover {{feeType}} fees in the TON Pool'
     )
 
     expect(protectedText.text).toBe(
-      'Not enough X_I18N_TOKEN_0_X to cover X_I18N_TOKEN_1_X fees'
+      'Not enough X_I18N_TOKEN_0_X to cover X_I18N_TOKEN_1_X fees in the X_I18N_TOKEN_2_X X_I18N_TOKEN_3_X'
     )
     expect(
       protectedText.restore(
-        'X_I18N_TOKEN_0_X insuficiente para cobrir taxas de X_I18N_TOKEN_1_X'
+        'X_I18N_TOKEN_0_X insuficiente para cobrir taxas de X_I18N_TOKEN_1_X no X_I18N_TOKEN_2_X X_I18N_TOKEN_3_X'
       )
-    ).toBe('{{asset}} insuficiente para cobrir taxas de {{feeType}}')
+    ).toBe(
+      '{{asset}} insuficiente para cobrir taxas de {{feeType}} no TON Pool'
+    )
+    expect(
+      protectedText.restore(
+        '<span>X_I18N_TOKEN_0_X</span> insuficiente para <span>X_I18N_TOKEN_1_X</span> no <span>X_I18N_TOKEN_2_X</span> <span>X_I18N_TOKEN_3_X</span>'
+      )
+    ).toBe('{{asset}} insuficiente para {{feeType}} no TON Pool')
   })
 })

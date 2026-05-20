@@ -6,16 +6,13 @@ import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { buildClaimTxBody } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/buildClaimTx'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
-import {
-  type ClaimProofResult,
-  generateClaimProof,
-} from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
+import { type ClaimProofResult } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
+import { generateClaimProofForClaim } from '../utils/generateClaimProofForClaim'
 import {
   getQbtcAccountExists,
   getQbtcAccountInfoForClaim,
@@ -95,7 +92,7 @@ export const ClaimPreparingTxPhase = ({
         address: qbtcAddress,
       })
 
-      const proof = await generateClaimProof({
+      const proofResult = await generateClaimProofForClaim({
         signatureR: padSigHex(btcSig.r, proofServiceRBytes),
         signatureS: padSigHex(btcSig.s, proofServiceSBytes),
         publicKey: compressedPubkeyHex,
@@ -106,15 +103,14 @@ export const ClaimPreparingTxPhase = ({
         broadcast: !accountExists,
       })
 
-      if (!accountExists) {
+      if (proofResult.kind === 'server') {
         return {
           kind: 'server',
-          txHash: shouldBePresent(
-            proof.tx_hash,
-            'proof.tx_hash on broadcast=true response'
-          ),
+          txHash: proofResult.txHash,
         }
       }
+
+      const { proof } = proofResult
 
       const accountInfo = await getQbtcAccountInfoForClaim({
         address: qbtcAddress,

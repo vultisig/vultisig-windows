@@ -1204,10 +1204,10 @@ export const es = {
   backupsTitle:
     '<highlight>Copias de seguridad,</highlight> tu nuevo método de recuperación',
   backupsDescription:
-    'Las copias de seguridad alimentan su bóveda. Cada dispositivo tiene su<w> propio</w> Copia de seguridad. Una copia de seguridad por sí sola no puede transferir fondos, solo sirve para la recuperación. Importa y recupera cualquier dispositivo perdido.',
+    'Las copias de seguridad protegen tu bóveda. Cada dispositivo tiene su copia de seguridad <w>propia</w>. Una copia de seguridad por sí sola no puede mover fondos; solo sirve para la recuperación. Importa y recupera cualquier dispositivo perdido.',
   backupEachDevice: 'Realice una copia de seguridad de cada dispositivo',
   backupEachDeviceDescription:
-    'Las claves son las contraseñas <w> e </w> de la copia de seguridad del dispositivo. El servidor solo realiza la firma conjunta y se puede solicitar una copia de seguridad.',
+    'La copia de seguridad del dispositivo <w>y</w> la contraseña son las claves. El servidor solo cofirma, y se puede solicitar una copia de seguridad.',
   storeBackupsSeparately: 'Almacenar copias de seguridad por separado',
   storeBackupsSeparatelyDescription:
     'Guarda cada copia de seguridad en un lugar diferente. Si una se ve comprometida, tus fondos estarán seguros.',
@@ -1321,7 +1321,6 @@ export const es = {
   date: 'Fecha',
   device_n_label: 'Dispositivo {{number}} - {{hash}}',
   remove_friends_referral: 'Eliminar referido',
-  enable_mldsa: 'Habilitar MLDSA',
   post_quantum_keygen: 'Generación de claves post-cuántica',
   post_quantum_keygen_description:
     'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
@@ -1462,9 +1461,9 @@ export const es = {
   qbtc_claim_confirm: 'Reclamar seleccionado',
   qbtc_claim_proving: 'Generando pruebas…',
   qbtc_claim_proving_hint: 'Esto puede tardar varios minutos.',
-  qbtc_claim_broadcasting: 'Afirmación de radiodifusión…',
+  qbtc_claim_broadcasting: 'Broadcasting de reclamación…',
   qbtc_claim_success_title: 'Reclamación exitosa',
-  qbtc_claim_utxos_claimed: 'UTXO afirman',
+  qbtc_claim_utxos_claimed: 'UTXOs reclamados',
   qbtc_claim_utxos_skipped: 'UTXO omitidos',
   qbtc_claim_tx_hash: 'Hash de transacción',
   qbtc_claim_copy_tx_hash: 'Copiar hash de transacción',
@@ -1480,7 +1479,7 @@ export const es = {
   jetton_transfer: 'Transferencia de Jetton',
   nft_transfer: 'Transferencia NFT',
   excess_gas_refund: 'Reembolso por exceso de gas',
-  forward_ton_amount: 'Cantidad de toneladas hacia adelante',
+  forward_ton_amount: 'Importe de TON reenviado',
   raw_payload: 'Carga útil sin procesar',
   spender: 'Gastador',
   operator: 'Operador',
@@ -1489,7 +1488,7 @@ export const es = {
   unlimited: 'Ilimitado',
   verify_password_for: 'Verifique su contraseña para:',
   vultisig_education: 'Educación Vultisig',
-  pool: 'Piscina',
+  pool: 'Pool',
   paired_address: 'Dirección emparejada',
   you_send: 'Tú envías',
   you_receive: 'Usted recibe',

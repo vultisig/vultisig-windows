@@ -1203,10 +1203,10 @@ export const it = {
   backupsTitle:
     '<highlight>Backup,</highlight> il tuo nuovo metodo di recupero',
   backupsDescription:
-    'I backup alimentano il tuo caveau. Ogni dispositivo ha il suo <w> di backup </w> . Un backup da solo non può spostare fondi, serve solo per il ripristino. Importa e recupera qualsiasi dispositivo perso',
+    'I backup proteggono il tuo vault. Ogni dispositivo ha il suo backup <w>personale</w>. Un backup da solo non può spostare fondi; serve solo per il ripristino. Importa e recupera qualsiasi dispositivo perso.',
   backupEachDevice: 'Eseguire il backup di ogni dispositivo',
   backupEachDeviceDescription:
-    'Le password di backup del dispositivo <w> e </w> sono le chiavi. Il server si limita a firmare congiuntamente ed è possibile richiedere un backup.',
+    'Il backup del dispositivo <w>e</w> la password sono le chiavi. Il server si limita a cofirmare e può essere richiesto un backup.',
   storeBackupsSeparately: 'Conservare i backup separatamente',
   storeBackupsSeparatelyDescription:
     'Conserva ogni backup in un posto diverso. Se uno viene compromesso, i tuoi fondi rimarranno al sicuro.',
@@ -1325,7 +1325,6 @@ export const it = {
   date: 'Data',
   device_n_label: 'Dispositivo {{number}} - {{hash}}',
   remove_friends_referral: 'Rimuovi il riferimento',
-  enable_mldsa: 'Abilitare MLDSA',
   post_quantum_keygen: 'Generazione di chiavi post-quantistiche',
   post_quantum_keygen_description:
     'Genera una chiave post-quantistica (MLDSA) per questo vault',
@@ -1340,7 +1339,7 @@ export const it = {
   go_to_wallet: 'Vai al portafoglio',
   i_understand: 'Capisco',
   i_understand_save_backup: 'Ho capito come salvare questo backup',
-  left_pool: 'Piscina sinistra',
+  left_pool: 'Pool abbandonato',
   looks_good: 'Sembra buono',
   no_transactions_yet: 'Nessuna transazione ancora',
   review_vault_devices_subtitle:
@@ -1467,7 +1466,7 @@ export const it = {
   qbtc_claim_confirm: 'Richiesta selezionata',
   qbtc_claim_proving: 'Generazione di prove…',
   qbtc_claim_proving_hint: 'Questa operazione può richiedere diversi minuti.',
-  qbtc_claim_broadcasting: 'Rivendicazione relativa alla trasmissione…',
+  qbtc_claim_broadcasting: 'Broadcasting della richiesta…',
   qbtc_claim_success_title: 'Richiesta accolta',
   qbtc_claim_utxos_claimed: 'UTXO rivendicati',
   qbtc_claim_utxos_skipped: 'UTXO saltati',

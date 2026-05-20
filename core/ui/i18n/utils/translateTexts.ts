@@ -46,6 +46,12 @@ export const translateTexts = async ({
       throw new Error('No translations')
     }
 
+    if (translations.length !== contents.length) {
+      throw new Error(
+        `Expected ${contents.length} translations, received ${translations.length}`
+      )
+    }
+
     result.push(
       ...translations.map((translation, index) => {
         let { translatedText } = translation

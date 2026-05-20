@@ -917,7 +917,7 @@ export const de = {
   upgrade_now_prompt: 'Rüsten Sie Ihren Tresor jetzt auf',
   upgrade_shares_info:
     '<b>Sie erstellen neue Vault Share-Backups</b> und speichern diese wie zuvor.',
-  upgrade_success: 'Vault hat <b> erfolgreich aktualisiert </b>',
+  upgrade_success: 'Vault wurde <b>erfolgreich</b> aktualisiert',
   upgrade_vault: 'Verbessere deinen Tresor.',
   upgrade_vault_description:
     'Rüsten Sie diesen Tresor auf das <b>weltweit schnellste MPC-Protokoll</b> auf und signieren Sie schneller als je zuvor.',
@@ -1213,10 +1213,10 @@ export const de = {
     'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben. Online-Speicher wird empfohlen, und sichere Tresorfreigaben sind genau dafür konzipiert.',
   backupsTitle: '<highlight>Backups,</highlight> Ihre neue Genesungsmethode',
   backupsDescription:
-    'Backups speisen Ihren Datenspeicher. Jedes Gerät hat seine eigene Datensicherung.<w> eigen</w> Backup erstellen. Ein Backup allein kann keine Gelder verschieben, es dient nur der Wiederherstellung. Importieren und wiederherstellen Sie verlorene Daten von jedem Gerät.',
+    'Backups schützen Ihren Vault. Jedes Gerät hat sein <w>eigenes</w> Backup. Ein Backup allein kann keine Gelder verschieben; es dient nur zur Wiederherstellung. Importieren und stellen Sie jedes verlorene Gerät wieder her.',
   backupEachDevice: 'Sichern Sie jedes Gerät',
   backupEachDeviceDescription:
-    'Die Geräte-Backup-Passwörter <w> und </w> sind die Schlüssel. Der Server führt lediglich eine Gegenzeichnung durch, und ein Backup kann angefordert werden.',
+    'Das Geräte-Backup <w>und</w> das Passwort sind die Schlüssel. Der Server signiert nur mit, und ein Backup kann angefordert werden.',
   storeBackupsSeparately: 'Backups separat speichern',
   storeBackupsSeparatelyDescription:
     'Bewahren Sie jedes Backup an einem anderen Ort auf. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
@@ -1334,7 +1334,6 @@ export const de = {
   date: 'Datum',
   device_n_label: 'Gerät {{number}} - {{hash}}',
   remove_friends_referral: 'Empfehlung entfernen',
-  enable_mldsa: 'MLDSA aktivieren',
   post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
   post_quantum_keygen_description:
     'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
@@ -1457,7 +1456,7 @@ export const de = {
     '{{site}} möchte diese Blockchain zu Ihrer Wallet hinzufügen.',
   suggest_chain_title: 'Empfohlene Kette hinzufügen',
   balance_changes: 'Bilanzveränderungen',
-  connect_dapp: 'Connect dApp',
+  connect_dapp: 'dApp verbinden',
   connect_website_subtitle:
     'Verbinden Sie diese Website mit der Vultisig-Erweiterung',
   banner_carousel_go_to_banner: 'Gehe zum Banner {{number}}',
@@ -1477,9 +1476,9 @@ export const de = {
   qbtc_claim_confirm: 'Anspruch ausgewählt',
   qbtc_claim_proving: 'Generierung von Beweisen…',
   qbtc_claim_proving_hint: 'Dies kann mehrere Minuten dauern.',
-  qbtc_claim_broadcasting: 'Rundfunkanspruch…',
+  qbtc_claim_broadcasting: 'Broadcasting des Anspruchs…',
   qbtc_claim_success_title: 'Anspruch erfolgreich',
-  qbtc_claim_utxos_claimed: 'UTXOs behaupteten',
+  qbtc_claim_utxos_claimed: 'UTXOs eingelöst',
   qbtc_claim_utxos_skipped: 'UTXOs übersprungen',
   qbtc_claim_tx_hash: 'Transaktions-Hash',
   qbtc_claim_copy_tx_hash: 'Kopiere den Transaktions-Hash',

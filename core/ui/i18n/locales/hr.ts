@@ -756,7 +756,7 @@ export const hr = {
   select_positions: 'Odaberite pozicije',
   select_positions_description:
     'Omogućite barem jednu poziciju za prikaz stanja i upravljanje pozicijama.',
-  liquidity_pools: 'Likvidnosni bazeni',
+  liquidity_pools: 'Likvidnosni poolovi',
   total_bonded: 'Ukupno vezano {{ticker}}',
   active_nodes: 'Aktivni Čvorovi',
   available_nodes: 'Available Nodes',
@@ -1184,10 +1184,10 @@ export const hr = {
   backupsTitle:
     '<highlight>Sigurnosne kopije,</highlight> vaša nova metoda oporavka',
   backupsDescription:
-    'Sigurnosne kopije pokreću vaš trezor. Svaki uređaj ima svoje<w> vlastiti</w> Sigurnosna kopija. Sama sigurnosna kopija ne može premjestiti sredstva, služi samo za oporavak. Uvezite i oporavite bilo koji izgubljeni uređaj',
+    'Sigurnosne kopije štite vaš trezor. Svaki uređaj ima svoju <w>vlastitu</w> sigurnosnu kopiju. Sama sigurnosna kopija ne može premještati sredstva; služi samo za oporavak. Uvezite i oporavite izgubljeni uređaj.',
   backupEachDevice: 'Napravite sigurnosnu kopiju svakog uređaja',
   backupEachDeviceDescription:
-    'Lozinke za sigurnosnu kopiju uređaja <w> i </w> su ključevi. Poslužitelj samo supotpisuje, a sigurnosna kopija se može zatražiti.',
+    'Sigurnosna kopija uređaja <w>i</w> lozinka su ključevi. Poslužitelj samo supotpisuje, a sigurnosna kopija se može zatražiti.',
   storeBackupsSeparately: 'Pohranite sigurnosne kopije odvojeno',
   storeBackupsSeparatelyDescription:
     'Svaku sigurnosnu kopiju čuvajte na drugom mjestu. Ako je jedna kompromitirana, vaša sredstva ostaju sigurna.',
@@ -1225,7 +1225,7 @@ export const hr = {
   new_vault_setup_disclaimer:
     'Vaša konfiguracija se promijenila, napravite novu sigurnosnu kopiju.',
   manage_referral_title: 'Vultisig preporuke',
-  select_pool: 'Odaberite bazen',
+  select_pool: 'Odaberite pool',
   token_not_found_invalid: 'Nevažeća adresa ugovora',
   transaction_failed: 'Transakcija<error> neuspješno</error>',
   transaction_pending: 'Transakcija na čekanju...',
@@ -1301,7 +1301,6 @@ export const hr = {
   date: 'Datum',
   device_n_label: 'Uređaj {{number}} - {{hash}}',
   remove_friends_referral: 'Ukloni preporuku',
-  enable_mldsa: 'Omogući MLDSA',
   post_quantum_keygen: 'Postkvantno generiranje ključeva',
   post_quantum_keygen_description:
     'Generiraj postkvantni (MLDSA) ključ za ovaj trezor',
@@ -1439,7 +1438,7 @@ export const hr = {
   qbtc_claim_confirm: 'Zahtjev je odabran',
   qbtc_claim_proving: 'Generiranje dokaza…',
   qbtc_claim_proving_hint: 'To može potrajati nekoliko minuta.',
-  qbtc_claim_broadcasting: 'Zahtjev za emitiranje…',
+  qbtc_claim_broadcasting: 'Broadcasting zahtjeva…',
   qbtc_claim_success_title: 'Zahtjev je uspješan',
   qbtc_claim_utxos_claimed: 'Zahtjevani UTXO-i',
   qbtc_claim_utxos_skipped: 'Preskočeni UTXO-i',
@@ -1456,7 +1455,7 @@ export const hr = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT prijenos',
   excess_gas_refund: 'Povrat viška goriva',
-  forward_ton_amount: 'Iznos TON-a unaprijed',
+  forward_ton_amount: 'Proslijeđeni TON iznos',
   raw_payload: 'Sirovi korisni teret',
   spender: 'Potrošač',
   operator: 'Operater',
@@ -1465,7 +1464,7 @@ export const hr = {
   unlimited: 'Neograničen',
   verify_password_for: 'Potvrdite svoju lozinku za:',
   vultisig_education: 'Vultisig obrazovanje',
-  pool: 'Bazen',
+  pool: 'Pool',
   paired_address: 'Uparena adresa',
   you_send: 'Vi šaljete',
   you_receive: 'Primate',

@@ -42,6 +42,43 @@ const interpolationTokenPattern = /{{\s*([^{}]+?)\s*}}/g
 const i18nMarkupPattern = /<\/?\s*([A-Za-z][A-Za-z0-9]*)\b[^>]*?>/g
 const tagContentPattern = /<([A-Za-z][A-Za-z0-9]*)\b[^>]*>([\s\S]*?)<\/\1>/g
 const protectedSyntaxPattern = /{{\s*[^{}]+?\s*}}/g
+const domainGlossaryTerms = [
+  '$VULT',
+  'Bandwidth Points',
+  'Fast Vault',
+  'Secure Vault',
+  'Vault Share',
+  'Vultisig Extension',
+  'Vultisig',
+  'Broadcasting',
+  'Ethereum',
+  'THORChain',
+  'Jetton',
+  'QBTC',
+  'UTXOs',
+  'UTXO',
+  'TXID',
+  'REST',
+  'RPC',
+  'TON',
+  'BTC',
+  'NFT',
+  'dApp',
+  'Pool',
+  'pool',
+]
+
+const escapeRegExp = (value: string): string =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const protectedDomainTermPattern = new RegExp(
+  `(^|[^A-Za-z0-9_$])(${domainGlossaryTerms
+    .slice()
+    .sort((first, second) => second.length - first.length)
+    .map(escapeRegExp)
+    .join('|')})(?=$|[^A-Za-z0-9_])`,
+  'g'
+)
 
 const toCounts = (values: string[]): SyntaxCounts => {
   const result: SyntaxCounts = new Map()
@@ -283,17 +320,24 @@ export const findTranslationIntegrityIssues = ({
 }
 
 /**
- * Replaces interpolation placeholders with stable sentinels before translation.
+ * Replaces i18n syntax and product domain words with stable sentinels before translation.
  */
 export const protectInterpolationTokens = (text: string) => {
   const syntaxTokens: string[] = []
-  const protectedText = text.replace(protectedSyntaxPattern, value => {
+  const protectToken = (value: string): string => {
     const tokenIndex = syntaxTokens.length
 
     syntaxTokens.push(value)
 
     return `X_I18N_TOKEN_${tokenIndex}_X`
-  })
+  }
+
+  const protectedText = text
+    .replace(protectedSyntaxPattern, protectToken)
+    .replace(
+      protectedDomainTermPattern,
+      (_, prefix: string, value: string) => `${prefix}${protectToken(value)}`
+    )
 
   const restore = (translatedText: string): string => {
     const restoreToken = (tokenIndex: string, fallback: string) => {
