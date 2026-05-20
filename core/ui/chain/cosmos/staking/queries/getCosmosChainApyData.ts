@@ -17,7 +17,7 @@ import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
  * total yield. We accept that for now; modelling tx-fee yield requires a
  * lookback window over distribution events.
  */
-export type CosmosChainApyData = {
+type CosmosChainApyData = {
   /** Current annual inflation as a decimal, e.g. 0.07 for 7%. */
   inflation: number
   /** `bonded_tokens / total_supply` for the staking denom, in [0, 1]. */
