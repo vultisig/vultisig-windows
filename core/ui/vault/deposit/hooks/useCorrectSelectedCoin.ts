@@ -104,6 +104,10 @@ export const useCorrectSelectedCoin = () => {
         remove_thor_lp: () => shouldBePresent(potentialRUNECoin),
         freeze: () => currentDepositCoin,
         unfreeze: () => currentDepositCoin,
+        delegate: () => currentDepositCoin,
+        undelegate: () => currentDepositCoin,
+        redelegate: () => currentDepositCoin,
+        claim_rewards: () => currentDepositCoin,
       })
     },
     [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]
