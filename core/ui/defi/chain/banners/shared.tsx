@@ -85,6 +85,36 @@ export const ThorchainLogoWrapper = styled.div`
   }
 `
 
+// Terra family banner — slight green/teal tint to match the LUNA brand.
+export const TerraBannerContainer = styled.div`
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  min-height: 122px;
+  border-radius: 16px;
+  border: 1px solid rgba(63, 168, 116, 0.17);
+  background: linear-gradient(
+    180deg,
+    rgba(63, 168, 116, 0.09) 0%,
+    rgba(17, 40, 74, 0) 100%
+  );
+`
+
+export const TerraLogoWrapper = styled.div`
+  position: absolute;
+  right: -30px;
+  width: 200px;
+  height: 200px;
+  top: -5%;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: 300px;
+    height: 300px;
+    top: -40%;
+    right: -7%;
+  }
+`
+
 export const MayachainBannerContainer = styled.div`
   padding: 24px;
   position: relative;

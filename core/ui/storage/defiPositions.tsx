@@ -97,6 +97,24 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       chain: Chain.MayaChain,
     },
   ],
+  [Chain.Terra]: [
+    {
+      id: 'terra-stake-luna',
+      name: 'LUNA',
+      ticker: 'LUNA',
+      type: 'stake',
+      chain: Chain.Terra,
+    },
+  ],
+  [Chain.TerraClassic]: [
+    {
+      id: 'terraclassic-stake-lunc',
+      name: 'LUNC',
+      ticker: 'LUNC',
+      type: 'stake',
+      chain: Chain.TerraClassic,
+    },
+  ],
 }
 
 const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {

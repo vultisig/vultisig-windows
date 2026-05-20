@@ -9,7 +9,7 @@ import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/construc
 import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation } from '@tanstack/react-query'
-import { OtherChain } from '@vultisig/core-chain/Chain'
+import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
@@ -42,6 +42,7 @@ import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
 
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
+import { getCosmosKeplrBridgeTxHash } from '../../tx/getCosmosKeplrBridgeTxHash'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
@@ -100,8 +101,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               return { txs: [tx] }
             }
 
-            // Polkadot dApp signPayload — bypass TW, sign raw payload
-            if (chain === OtherChain.Polkadot && payload.memo) {
+            // Substrate dApp signPayload — bypass TW, sign raw payload
+            if (
+              isOneOf(chain, [OtherChain.Polkadot, OtherChain.Bittensor]) &&
+              payload.memo
+            ) {
               const parseResult = attempt(
                 () => JSON.parse(payload.memo!) as PolkadotSignerPayloadJSON
               )
@@ -191,14 +195,36 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               })
             )
 
+            const isCosmosDAppSignFlow =
+              (payload.signData.case === 'signAmino' ||
+                payload.signData.case === 'signDirect') &&
+              payload.blockchainSpecific.case === 'cosmosSpecific'
+
             const txs: Tx[] = await Promise.all(
               compiledTxs.map(async compiledTx => {
                 const data = decodeSigningOutput(chain, compiledTx)
-                const hash = await getTxHash({ chain, tx: data })
+
+                if (isCosmosDAppSignFlow) {
+                  const cosmosOutput = decodeSigningOutput(
+                    Chain.Cosmos,
+                    compiledTx
+                  )
+                  const signature = cosmosOutput.signature
+                  return {
+                    data,
+                    hash: getCosmosKeplrBridgeTxHash({
+                      keysignPayload: payload,
+                      signedAminoJson: cosmosOutput.json ?? undefined,
+                      signatureBytes: signature
+                        ? new Uint8Array(signature)
+                        : undefined,
+                    }),
+                  }
+                }
 
                 return {
                   data,
-                  hash,
+                  hash: await getTxHash({ chain, tx: data }),
                 }
               })
             )

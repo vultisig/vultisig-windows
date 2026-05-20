@@ -59,6 +59,24 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     getPositionsQueryKey: address => ['tronAccountResources', address],
     poolQueryKeys: [],
   },
+  [Chain.Terra]: {
+    priceCoins: [],
+    getPositionsQueryKey: address => [
+      'cosmosDelegations',
+      Chain.Terra,
+      address,
+    ],
+    poolQueryKeys: [],
+  },
+  [Chain.TerraClassic]: {
+    priceCoins: [],
+    getPositionsQueryKey: address => [
+      'cosmosDelegations',
+      Chain.TerraClassic,
+      address,
+    ],
+    poolQueryKeys: [],
+  },
 }
 
 export const RefreshDefiData = () => {
@@ -67,6 +85,8 @@ export const RefreshDefiData = () => {
   const thorchainAddress = useCurrentVaultAddress(Chain.THORChain)
   const mayachainAddress = useCurrentVaultAddress(Chain.MayaChain)
   const tronAddress = useCurrentVaultAddress(Chain.Tron)
+  const terraAddress = useCurrentVaultAddress(Chain.Terra)
+  const terraClassicAddress = useCurrentVaultAddress(Chain.TerraClassic)
   const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
   const circleAccountQuery = useCircleAccountQuery()
   const isCircleVisible = useIsCircleVisible()
@@ -77,6 +97,8 @@ export const RefreshDefiData = () => {
         [Chain.THORChain]: thorchainAddress,
         [Chain.MayaChain]: mayachainAddress,
         [Chain.Tron]: tronAddress,
+        [Chain.Terra]: terraAddress,
+        [Chain.TerraClassic]: terraClassicAddress,
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {

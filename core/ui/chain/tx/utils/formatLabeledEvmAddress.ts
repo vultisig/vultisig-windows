@@ -1,5 +1,6 @@
 import type { EvmChain } from '@vultisig/core-chain/Chain'
-import { lookupKnownEvmContract } from '@vultisig/core-chain/chains/evm/contract/knownContracts'
+
+import { lookupKnownEvmContract } from './knownEvmContracts'
 
 type FormatLabeledEvmAddressInput = {
   address: string
@@ -30,7 +31,7 @@ export const formatLabeledEvmAddress = ({
   address,
   chain,
 }: FormatLabeledEvmAddressInput): string => {
-  const known = lookupKnownEvmContract(address, { chain })
+  const known = lookupKnownEvmContract({ address, chain })
   if (!known) return address
   return `${known.label} (${truncateMiddle(address)})`
 }

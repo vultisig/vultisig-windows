@@ -9,8 +9,8 @@ const StyledLabel = styled.span`
 `
 
 const StyledSpinner = styled(Spinner)`
-  left: 4px;
-  top: 4px;
+  left: 2px;
+  top: 2px;
 `
 
 const StyledSlider = styled.span<{ checked?: boolean }>`
@@ -132,7 +132,7 @@ export const Switch: FC<SwitchProps> = ({
         tabIndex={0}
       >
         <StyledSlider checked={checked}>
-          {loading && <StyledSpinner size={16} />}
+          {loading && <StyledSpinner size={20} />}
         </StyledSlider>
         {label ? (
           isValidElement(label) ? (

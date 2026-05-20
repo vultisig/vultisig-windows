@@ -14,6 +14,7 @@ import { runeCoin } from '../tokens'
 import { ThorchainBondPosition } from '../types'
 import { toDecimalFactor } from '../utils/decimals'
 import {
+  canUnbondNode,
   estimateNextChurn,
   parseBigint,
   parseNumber,
@@ -140,7 +141,7 @@ export const fetchBondPositions = async (
   churns: ChurnEntry[],
   networkInfo: NetworkInfo,
   health: HealthInfo,
-  canUnbond: boolean
+  chainAllowsUnbond: boolean
 ) => {
   // Return mock data for testing when no real bonded positions exist
   if (useMockBondPositions) {
@@ -162,6 +163,7 @@ export const fetchBondPositions = async (
           decimals: runeCoin.decimals,
           price: runePrice,
         }),
+        canUnbond: chainAllowsUnbond && canUnbondNode('churned out'),
       },
       {
         id: 'thor-bond-rune',
@@ -176,6 +178,7 @@ export const fetchBondPositions = async (
           decimals: runeCoin.decimals,
           price: runePrice,
         }),
+        canUnbond: chainAllowsUnbond && canUnbondNode('active'),
       },
     ]
 
@@ -183,7 +186,6 @@ export const fetchBondPositions = async (
       positions: mockPositions,
       totalBonded: mockAmount1 + mockAmount2,
       availableNodes: [],
-      canUnbond: true,
     }
   }
 
@@ -215,6 +217,7 @@ export const fetchBondPositions = async (
       price: prices[coinKeyToString(runeCoin)] ?? 0,
     })
 
+    const status = metrics?.status ?? toBondStatusLabel(node.status)
     positions.push({
       id: 'thor-bond-rune',
       nodeAddress: node.address,
@@ -222,8 +225,9 @@ export const fetchBondPositions = async (
       apy,
       nextReward,
       nextChurn,
-      status: metrics?.status ?? toBondStatusLabel(node.status),
+      status,
       fiatValue,
+      canUnbond: chainAllowsUnbond && canUnbondNode(status),
     })
   }
 
@@ -260,6 +264,5 @@ export const fetchBondPositions = async (
     positions,
     totalBonded,
     availableNodes,
-    canUnbond,
   }
 }

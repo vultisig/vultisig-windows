@@ -18,9 +18,9 @@
     "typecheck": "tsgo --noEmit",
     "test": "vitest run",
     "knip": "knip",
-    "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
+    "check:all": "yarn lint && yarn typecheck && yarn test && yarn workspace @clients/extension test && yarn workspace @clients/desktop test:ci && yarn workspace @core/ui i18n:check-integrity && yarn knip",
     "knip:fix": "knip --fix --allow-remove-files",
-    "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn knip",
+    "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn workspace @core/ui i18n:check-integrity && yarn knip",
     "translate": "yarn workspace @core/ui translate",
     "update": "yarn set version latest && yarn dlx npm-check-updates@latest -u --workspaces --root && yarn install"
   },
@@ -57,7 +57,7 @@
     "vitest": "^4.1.0"
   },
   "resolutions": {
-    "@trustwallet/wallet-core": "4.6.7",
+    "@trustwallet/wallet-core": "4.6.9",
     "viem": "npm:2.47.4",
     "@noble/hashes": "1.8.0",
     "@vultisig/mpc-types": "0.2.3",

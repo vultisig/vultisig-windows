@@ -47,7 +47,11 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
     (selectedChainAction === 'stake' ||
       selectedChainAction === 'unstake' ||
       selectedChainAction === 'mint' ||
-      selectedChainAction === 'redeem')
+      selectedChainAction === 'redeem' ||
+      selectedChainAction === 'delegate' ||
+      selectedChainAction === 'undelegate' ||
+      selectedChainAction === 'redelegate' ||
+      selectedChainAction === 'claim_rewards')
 
   if (shouldUseBondOverview) {
     return <BondOverview onBack={onBack} />

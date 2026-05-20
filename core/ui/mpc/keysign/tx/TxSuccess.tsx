@@ -5,6 +5,7 @@ import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractAppr
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { lookupKnownEvmContract } from '@core/ui/chain/tx/utils/knownEvmContracts'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { UniversalRouterSwapSummary } from '@core/ui/mpc/keysign/tx/swap/UniversalRouterSwapSummary'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
@@ -24,7 +25,6 @@ import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
-import { lookupKnownEvmContract } from '@vultisig/core-chain/chains/evm/contract/knownContracts'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
@@ -197,7 +197,7 @@ export const TxSuccess = ({
   // the user just approved on the verify screen.
   const evmChain = isChainOfKind(coin.chain, 'evm') ? coin.chain : null
   const knownContract = evmChain
-    ? lookupKnownEvmContract(value.toAddress, { chain: evmChain })
+    ? lookupKnownEvmContract({ address: value.toAddress, chain: evmChain })
     : null
   const approvalCounterparty =
     evmChain && functionQuery.data

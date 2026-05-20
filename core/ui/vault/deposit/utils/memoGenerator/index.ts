@@ -216,6 +216,14 @@ export const generateMemo = ({
       const basisPoints = Math.floor(pct * 100)
       return `-:${pool}:${basisPoints}`
     },
+    // Cosmos SDK native staking actions are encoded as typed proto messages,
+    // not memos. The keysign payload builder routes these through the
+    // `cosmos-msg` resolver kind, so this generator never needs to produce
+    // anything for them — empty string is the canonical "no memo" value.
+    delegate: () => '',
+    undelegate: () => '',
+    redelegate: () => '',
+    claim_rewards: () => '',
   })
 }
 

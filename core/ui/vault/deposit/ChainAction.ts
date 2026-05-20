@@ -4,6 +4,14 @@ import { Chain } from '@vultisig/core-chain/Chain'
 const cacaoPoolActions = ['add_cacao_pool', 'remove_cacao_pool'] as const
 type CacaoPoolAction = (typeof cacaoPoolActions)[number]
 
+export const cosmosStakingActions = [
+  'delegate',
+  'undelegate',
+  'redelegate',
+  'claim_rewards',
+] as const
+export type CosmosStakingAction = (typeof cosmosStakingActions)[number]
+
 export type ChainAction =
   | 'bond'
   | 'unbond'
@@ -26,6 +34,7 @@ export type ChainAction =
   | 'add_thor_lp'
   | 'remove_thor_lp'
   | CacaoPoolAction
+  | CosmosStakingAction
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: [
@@ -55,6 +64,8 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Kujira]: ['ibc_transfer', 'add_thor_lp'],
   [Chain.Osmosis]: ['ibc_transfer'],
   [Chain.Cosmos]: ['ibc_transfer', 'switch', 'add_thor_lp'],
+  [Chain.Terra]: ['ibc_transfer', ...cosmosStakingActions],
+  [Chain.TerraClassic]: ['ibc_transfer', ...cosmosStakingActions],
   [Chain.Tron]: ['freeze', 'unfreeze', 'add_thor_lp'],
   [Chain.Avalanche]: ['add_thor_lp'],
   [Chain.Base]: ['add_thor_lp'],

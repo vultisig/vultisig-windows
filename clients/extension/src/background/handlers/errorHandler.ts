@@ -65,12 +65,15 @@ export class EIP1193Error extends Error {
   code: number
   data?: unknown
 
-  constructor(typeOrInit: Type | EIP1193ErrorInit) {
-    const init =
-      typeof typeOrInit === 'string' ? errors[typeOrInit] : typeOrInit
-    super(init.message)
-    this.code = init.code
-    if (typeof typeOrInit !== 'string' && typeOrInit.data !== undefined) {
+  constructor(typeOrInit: Type | EIP1193ErrorInit, customMessage?: string) {
+    if (typeof typeOrInit === 'string') {
+      super(customMessage ?? errors[typeOrInit].message)
+      this.code = errors[typeOrInit].code
+      return
+    }
+    super(typeOrInit.message)
+    this.code = typeOrInit.code
+    if (typeOrInit.data !== undefined) {
       this.data = typeOrInit.data
     }
   }

@@ -34,6 +34,7 @@ type VerifyKeysignStartInput = {
   terms?: string[]
   toAddressLabel?: string
   extraPendingMessage?: string
+  footer?: ReactNode
 }
 
 const TermItem = styled(Checkbox)`
@@ -48,6 +49,7 @@ export const VerifyKeysignStart = ({
   terms = [],
   toAddressLabel,
   extraPendingMessage,
+  footer,
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -176,7 +178,7 @@ export const VerifyKeysignStart = ({
         )}
       </PageContent>
       <PageFooter>
-        <StartKeysignPrompt {...startKeysignPromptProps} />
+        {footer ?? <StartKeysignPrompt {...startKeysignPromptProps} />}
       </PageFooter>
     </>
   )
