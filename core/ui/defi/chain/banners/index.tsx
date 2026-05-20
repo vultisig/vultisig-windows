@@ -13,7 +13,9 @@ const chainBannerRegistry: Partial<
   [Chain.THORChain]: DefiThorchainBalanceBanner,
   [Chain.MayaChain]: DefiMayachainBalanceBanner,
   [Chain.Tron]: DefiTronBalanceBanner,
-  [Chain.Terra]: () => <DefiTerraChainBanner chain={Chain.Terra} title="Terra" />,
+  [Chain.Terra]: () => (
+    <DefiTerraChainBanner chain={Chain.Terra} title="Terra" />
+  ),
   [Chain.TerraClassic]: () => (
     <DefiTerraChainBanner chain={Chain.TerraClassic} title="Terra Classic" />
   ),

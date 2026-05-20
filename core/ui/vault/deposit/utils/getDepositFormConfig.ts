@@ -57,8 +57,7 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
 // the family — pasting a Cosmos Hub `cosmosvaloper1...` into a LUNA
 // delegate form would be silently accepted by a chain-agnostic pattern
 // and surface as a late tx failure on broadcast.
-const terraValidatorAddressPattern =
-  /^terravaloper1[02-9ac-hj-np-z]{38,71}$/
+const terraValidatorAddressPattern = /^terravaloper1[02-9ac-hj-np-z]{38,71}$/
 
 const validatorAddressSchema = (t: TFunction) =>
   z

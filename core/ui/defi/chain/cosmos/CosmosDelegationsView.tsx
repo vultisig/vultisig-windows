@@ -6,6 +6,7 @@ import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries
 import { useCosmosRewardsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosRewardsQuery'
 import { useCosmosUnbondingsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosUnbondingsQuery'
 import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
@@ -13,7 +14,6 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
@@ -217,7 +217,9 @@ export const CosmosDelegationsView = ({
             decimals={decimals}
             pendingRewardsUnits={stakingDenomRewards}
             apy={validatorApy}
-            unbondingEntries={unbondingEntriesByValidator.get(d.validatorAddress)}
+            unbondingEntries={unbondingEntriesByValidator.get(
+              d.validatorAddress
+            )}
             unbondingDays={unbondingDays}
             onAction={action => launchAction(action, d.validatorAddress)}
           />

@@ -7,7 +7,6 @@ import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/Action
 import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
 import { UnbondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnbondSpecific/UnbondForm'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
-import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import {
   Container,
   ErrorText,
@@ -27,6 +26,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { FC, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -97,7 +97,10 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const isUnstakeAction = selectedChainAction === 'unstake'
   const isMintAction = selectedChainAction === 'mint'
   const isRedeemAction = selectedChainAction === 'redeem'
-  const isCosmosStakingAction = isOneOf(selectedChainAction, cosmosStakingActions)
+  const isCosmosStakingAction = isOneOf(
+    selectedChainAction,
+    cosmosStakingActions
+  )
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
   const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'

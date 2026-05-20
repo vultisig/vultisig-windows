@@ -61,7 +61,11 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
   },
   [Chain.Terra]: {
     priceCoins: [],
-    getPositionsQueryKey: address => ['cosmosDelegations', Chain.Terra, address],
+    getPositionsQueryKey: address => [
+      'cosmosDelegations',
+      Chain.Terra,
+      address,
+    ],
     poolQueryKeys: [],
   },
   [Chain.TerraClassic]: {

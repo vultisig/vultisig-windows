@@ -1,5 +1,5 @@
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { ValidatorAvatar } from '@core/ui/chain/cosmos/staking/components/ValidatorAvatar'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { Button } from '@lib/ui/buttons/Button'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -74,9 +74,7 @@ export const CosmosDelegationCard = ({
   const rewardsUi = (() => {
     const ui = pendingRewardsUnits / 10 ** decimals
     if (ui === 0) return '0'
-    return ui
-      .toFixed(decimals)
-      .replace(/\.?0+$/, '')
+    return ui.toFixed(decimals).replace(/\.?0+$/, '')
   })()
   // Mirror Figma: "Active" for bonded non-jailed, "Churned Out" otherwise.
   // The Cosmos analog of THORChain "churn" is bond status / jailing.

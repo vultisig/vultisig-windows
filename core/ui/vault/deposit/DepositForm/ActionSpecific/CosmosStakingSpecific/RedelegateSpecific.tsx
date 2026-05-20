@@ -67,8 +67,7 @@ export const RedelegateSpecific = () => {
 
   const handleSliderChange = (percentage: number) => {
     if (stakedUnits === 0n) return
-    const units =
-      (stakedUnits * BigInt(Math.round(percentage * 100))) / 10_000n
+    const units = (stakedUnits * BigInt(Math.round(percentage * 100))) / 10_000n
     setValue('amount', fromChainAmount(units, coin.decimals), {
       shouldValidate: true,
     })
@@ -87,9 +86,7 @@ export const RedelegateSpecific = () => {
             render={({ field }) => (
               <StakingAmountInput
                 value={(field.value as string | undefined) ?? ''}
-                onChange={v =>
-                  setValue('amount', v, { shouldValidate: true })
-                }
+                onChange={v => setValue('amount', v, { shouldValidate: true })}
                 ticker={coin.ticker}
               />
             )}
@@ -102,8 +99,7 @@ export const RedelegateSpecific = () => {
             // Lone `.` passes the input regex but Number('.') is NaN.
             const rawAmt = Number(field.value ?? 0)
             const amt = Number.isFinite(rawAmt) ? rawAmt : 0
-            const rawPct =
-              stakedUi > 0 ? Math.round((amt / stakedUi) * 100) : 0
+            const rawPct = stakedUi > 0 ? Math.round((amt / stakedUi) * 100) : 0
             const pct = Math.min(100, Math.max(0, rawPct))
             return (
               <Slider
