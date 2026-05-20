@@ -720,7 +720,7 @@ export const ru = {
   referral_extension_fee: 'Комиссия продления referral',
   referral_fee_amount_minimum: 'Минимум {{amount}} RUNE',
   referral_landing_title:
-    '<0>Приглашайте друзей</0>. <1>Зарабатывайте награды</1>. Экономьте на комиссиях.',
+    'Приглашайте друзей. <g> Получайте вознаграждения. </g> Экономьте на комиссиях.',
   referral_program: 'Реферальная программа',
   referral_reg_fee: 'Регистрационная комиссия',
   referral_status: 'Статус',
@@ -923,7 +923,7 @@ export const ru = {
   transaction_details: 'Детали транзакции',
   transaction_has_risk:
     'Транзакция с риском {{riskLevel}} обнаружена <provider></provider>',
-  transaction_successful: 'Транзакция успешна',
+  transaction_successful: 'Транзакция <g>успешно выполнена</g>',
   transaction_could_not_be_parsed:
     'Эту транзакцию не удалось разобрать. Ниже показаны сырые данные транзакции.',
   raw_transaction_data: 'Сырые данные транзакции',
@@ -1186,10 +1186,10 @@ export const ru = {
   backupsTitle:
     '<highlight>Резервные копии,</highlight> ваш новый метод восстановления',
   backupsDescription:
-    'Вместо одной сид-фразы ваше хранилище защищено несколькими устройствами. Каждое устройство имеет свою собственную резервную копию. Резервная копия сама по себе не может перемещать средства. Резервные копии предназначены только для восстановления.',
+    'Резервные копии защищают ваше хранилище. У каждого устройства есть <w>собственная</w> резервная копия. Одна резервная копия не может перемещать средства; она нужна только для восстановления. Импортируйте и восстановите любое потерянное устройство.',
   backupEachDevice: 'Создайте резервные копии каждого устройства.',
   backupEachDeviceDescription:
-    'Это всего лишь одна резервная копия вашего хранилища, повторите этот процесс для остальных устройств.',
+    'Резервная копия устройства <w>и</w> пароль являются ключами. Сервер только совместно подписывает, а резервную копию можно запросить.',
   storeBackupsSeparately: 'Храните резервные копии отдельно.',
   storeBackupsSeparatelyDescription:
     'Храните каждую резервную копию в отдельном месте. Если одна из них будет скомпрометирована, ваши средства останутся в безопасности.',
@@ -1295,7 +1295,6 @@ export const ru = {
   date: 'Дата',
   device_n_label: 'Устройство {{number}} - {{hash}}',
   remove_friends_referral: 'Удалить реферал',
-  enable_mldsa: 'Включить MLDSA',
   post_quantum_keygen: 'Постквантовая генерация ключей',
   post_quantum_keygen_description:
     'Сгенерируйте постквантовый (MLDSA) ключ для этого хранилища.',
@@ -1408,4 +1407,63 @@ export const ru = {
   choose_vaults: 'Выберите хранилища',
   manage_notifications_in_settings:
     'Управлять уведомлениями можно в системных настройках.',
+  bech32_prefix: 'Префикс адреса',
+  chain_id: 'Идентификатор цепочки',
+  fee_currency: 'Валюта комиссии',
+  rest_endpoint: 'REST-конечная точка',
+  rpc_endpoint: 'Конечная точка RPC',
+  suggest_chain_subtitle: '{{site}} хочет добавить эту цепочку в ваш кошелек.',
+  suggest_chain_title: 'Добавить предложенную цепочку',
+  balance_changes: 'Изменения баланса',
+  connect_dapp: 'Подключить dApp',
+  connect_website_subtitle:
+    'Подключите этот сайт с помощью расширения Vultisig.',
+  banner_carousel_go_to_banner: 'Перейти к баннеру {{number}}',
+  buy_vult_banner_cta: 'Купить $VULT',
+  buy_vult_banner_subtitle: 'И сэкономьте на комиссиях за свопы.',
+  buy_vult_banner_title: 'Купить $VULT',
+  vault_import_failed: 'Не удалось импортировать хранилище: {{message}}',
+  qbtc_claim_title: 'Заявка на QBTC',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'Сумма в BTC',
+  qbtc_claim_no_claimable_utxos:
+    'Для этого адреса не найдено доступных для активации UTXO.',
+  qbtc_claim_disabled_notice:
+    'В настоящее время возможность получения выплат в блокчейне QBTC отключена.',
+  qbtc_claim_failed_to_load:
+    'Не удалось загрузить доступные для активации UTXO.',
+  qbtc_claim_selected_count: 'Из {{max}} выбран {{count}}',
+  qbtc_claim_confirm: 'Выбрана заявка',
+  qbtc_claim_proving: 'Создание доказательств…',
+  qbtc_claim_proving_hint: 'Это может занять несколько минут.',
+  qbtc_claim_broadcasting: 'Broadcasting заявки…',
+  qbtc_claim_success_title: 'Заявка успешно подана',
+  qbtc_claim_utxos_claimed: 'UTXOs заявлены',
+  qbtc_claim_utxos_skipped: 'UTXO пропущены',
+  qbtc_claim_tx_hash: 'Хэш транзакции',
+  qbtc_claim_copy_tx_hash: 'Скопировать хэш транзакции',
+  qbtc_claim_done: 'Сделанный',
+  qbtc_claim_failed: 'Заявка не прошла. Пожалуйста, попробуйте еще раз.',
+  qbtc_claim_fast_vault_only:
+    'В настоящее время для получения средств требуется Fast Vault. Поддержка Secure Vault появится в будущем.',
+  qbtc_claim_password_description:
+    'Введите свой пароль от Fast Vault, чтобы подписать транзакцию по заявке.',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Это хранилище было импортировано без Ethereum. Для пользовательской подписи сообщений необходим Ethereum, и в импортированные хранилища нельзя добавить цепочки, которые были пропущены при импорте.',
+  jetton_transfer: 'Jetton Transfer',
+  nft_transfer: 'NFT Transfer',
+  excess_gas_refund: 'Возврат излишне уплаченной суммы за газ',
+  forward_ton_amount: 'Сумма пересылаемого TON',
+  raw_payload: 'Необработанная полезная нагрузка',
+  spender: 'Спендер',
+  operator: 'Оператор',
+  contract: 'Контракт',
+  type: 'Тип',
+  unlimited: 'Без ограничений',
+  verify_password_for: 'Подтвердите свой пароль для:',
+  vultisig_education: 'Vultisig Education',
+  pool: 'Pool',
+  paired_address: 'Парный адрес',
+  you_send: 'Вы отправляете',
+  you_receive: 'Вы получаете',
 }

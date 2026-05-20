@@ -698,7 +698,7 @@ export const it = {
   referral_extension_fee: 'Commissione di estensione del referral',
   referral_fee_amount_minimum: 'Minimo {{amount}} RUNE',
   referral_landing_title:
-    '<0>Invita amici</0>. <1>Guadagna premi</1>. Risparmia sulle commissioni.',
+    'Invita gli amici. <g> Guadagna premi. </g> Risparmia sulle commissioni.',
   referral_program: 'Programma di segnalazione',
   referral_reg_fee: 'Quota di iscrizione',
   referral_status: 'Stato',
@@ -873,7 +873,7 @@ export const it = {
   transaction_details: 'Dettagli della transazione',
   transaction_has_risk:
     'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
-  transaction_successful: 'Transazione riuscita',
+  transaction_successful: 'Transazione <g> riuscita </g>',
   tron_bandwidth: 'Bandwidth',
   tron_energy: 'Energy',
   tron_freeze_button: 'Freeze',
@@ -1097,7 +1097,7 @@ export const it = {
   auto: 'auto',
   backupShare: 'Condivisione del Vault di backup',
   backup_password_info_cannot_be_reset:
-    'Ricorda: se dimentichi la password del tuo vault, non potrai reimpostarla o recuperarla.',
+    'Ricorda: se dimentichi la password del tuo vault, <b>non potrai reimpostarla né recuperarla.</b>',
   backup_password_info_encrypt_with_password:
     'Se si sceglie di aggiungere una password, questa verrà utilizzata per <b>crittografare</b> il file di backup.',
   backup_password_info_secure_without_password:
@@ -1203,10 +1203,10 @@ export const it = {
   backupsTitle:
     '<highlight>Backup,</highlight> il tuo nuovo metodo di recupero',
   backupsDescription:
-    'Invece di una singola seed phrase, il tuo vault è protetto da più dispositivi. Ogni dispositivo ha il proprio backup. Un backup da solo non può trasferire fondi. I backup servono solo per il ripristino.',
+    'I backup proteggono il tuo vault. Ogni dispositivo ha il suo backup <w>personale</w>. Un backup da solo non può spostare fondi; serve solo per il ripristino. Importa e recupera qualsiasi dispositivo perso.',
   backupEachDevice: 'Eseguire il backup di ogni dispositivo',
   backupEachDeviceDescription:
-    'Questo è solo un backup del tuo vault, ripeti questo processo per gli altri dispositivi.',
+    'Il backup del dispositivo <w>e</w> la password sono le chiavi. Il server si limita a cofirmare e può essere richiesto un backup.',
   storeBackupsSeparately: 'Conservare i backup separatamente',
   storeBackupsSeparatelyDescription:
     'Conserva ogni backup in un posto diverso. Se uno viene compromesso, i tuoi fondi rimarranno al sicuro.',
@@ -1325,7 +1325,6 @@ export const it = {
   date: 'Data',
   device_n_label: 'Dispositivo {{number}} - {{hash}}',
   remove_friends_referral: 'Rimuovi il riferimento',
-  enable_mldsa: 'Abilitare MLDSA',
   post_quantum_keygen: 'Generazione di chiavi post-quantistiche',
   post_quantum_keygen_description:
     'Genera una chiave post-quantistica (MLDSA) per questo vault',
@@ -1340,7 +1339,7 @@ export const it = {
   go_to_wallet: 'Vai al portafoglio',
   i_understand: 'Capisco',
   i_understand_save_backup: 'Ho capito come salvare questo backup',
-  left_pool: 'Piscina sinistra',
+  left_pool: 'Pool abbandonato',
   looks_good: 'Sembra buono',
   no_transactions_yet: 'Nessuna transazione ancora',
   review_vault_devices_subtitle:
@@ -1438,4 +1437,63 @@ export const it = {
   choose_vaults: 'Scegliete i caveau',
   manage_notifications_in_settings:
     'È possibile gestire le notifiche nelle impostazioni di sistema.',
+  bech32_prefix: 'Prefisso di indirizzo',
+  chain_id: 'ID della catena',
+  fee_currency: 'Valuta della commissione',
+  rest_endpoint: 'Endpoint REST',
+  rpc_endpoint: 'Endpoint RPC',
+  suggest_chain_subtitle:
+    '{{site}} desidera aggiungere questa catena al tuo portafoglio',
+  suggest_chain_title: 'Aggiungi la catena suggerita',
+  balance_changes: 'Modifiche di equilibrio',
+  connect_dapp: 'Connetti dApp',
+  connect_website_subtitle:
+    'Collega questo sito web con l&#39;estensione Vultisig',
+  banner_carousel_go_to_banner: 'Vai al banner {{number}}',
+  buy_vult_banner_cta: 'Acquista $VULT',
+  buy_vult_banner_subtitle: 'E risparmia sulle commissioni di scambio',
+  buy_vult_banner_title: 'Acquista $VULT',
+  vault_import_failed: 'Impossibile importare il vault: {{message}}',
+  qbtc_claim_title: 'Richiesta QBTC',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'Quantità di BTC',
+  qbtc_claim_no_claimable_utxos:
+    'Nessun UTXO riscattabile trovato per questo indirizzo.',
+  qbtc_claim_disabled_notice:
+    'Al momento, la possibilità di richiedere token è disabilitata sulla blockchain di QBTC.',
+  qbtc_claim_failed_to_load: 'Impossibile caricare gli UTXO rivendicabili.',
+  qbtc_claim_selected_count: '{{count}} di {{max}} selezionato',
+  qbtc_claim_confirm: 'Richiesta selezionata',
+  qbtc_claim_proving: 'Generazione di prove…',
+  qbtc_claim_proving_hint: 'Questa operazione può richiedere diversi minuti.',
+  qbtc_claim_broadcasting: 'Broadcasting della richiesta…',
+  qbtc_claim_success_title: 'Richiesta accolta',
+  qbtc_claim_utxos_claimed: 'UTXO rivendicati',
+  qbtc_claim_utxos_skipped: 'UTXO saltati',
+  qbtc_claim_tx_hash: 'Hash della transazione',
+  qbtc_claim_copy_tx_hash: 'Copia l&#39;hash della transazione',
+  qbtc_claim_done: 'Fatto',
+  qbtc_claim_failed: 'Richiesta non riuscita. Riprova.',
+  qbtc_claim_fast_vault_only:
+    'Al momento, per riscattare i propri beni è necessario un Fast Vault. Il supporto per Secure Vault sarà disponibile a breve.',
+  qbtc_claim_password_description:
+    'Inserisci la password di Fast Vault per controfirmare la transazione di richiesta.',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Questo vault è stato importato senza Ethereum. La firma personalizzata dei messaggi richiede Ethereum e i vault importati non possono aggiungere le blockchain che sono state saltate durante l&#39;importazione.',
+  jetton_transfer: 'Jetton Transfer',
+  nft_transfer: 'Trasferimento NFT',
+  excess_gas_refund: 'Rimborso per gas in eccesso',
+  forward_ton_amount: 'Importo TON inoltrato',
+  raw_payload: 'Carico utile grezzo',
+  spender: 'Spender',
+  operator: 'Operatore',
+  contract: 'Contratto',
+  type: 'Tipo',
+  unlimited: 'Illimitato',
+  verify_password_for: 'Conferma la tua password per:',
+  vultisig_education: 'Vultisig Education',
+  pool: 'Pool',
+  paired_address: 'Indirizzo accoppiato',
+  you_send: 'Tu invii',
+  you_receive: 'Riceverai',
 }

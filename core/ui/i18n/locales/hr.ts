@@ -687,7 +687,7 @@ export const hr = {
   referral_extension_fee: 'Naknada za produljenje preporuke',
   referral_fee_amount_minimum: 'Minimalno {{amount}} RUNE',
   referral_landing_title:
-    '<0>Pozovite prijatelje</0>. <1>Osvojite nagrade</1>. Uštedite na naknadama.',
+    'Pozovi prijatelje. <g> Zaradi nagrade. </g> Uštedi na naknadama.',
   referral_program: 'Program preporuka',
   referral_reg_fee: 'Kotizacija za registraciju',
   referral_status: 'Status',
@@ -756,7 +756,7 @@ export const hr = {
   select_positions: 'Odaberite pozicije',
   select_positions_description:
     'Omogućite barem jednu poziciju za prikaz stanja i upravljanje pozicijama.',
-  liquidity_pools: 'Likvidnosni bazeni',
+  liquidity_pools: 'Likvidnosni poolovi',
   total_bonded: 'Ukupno vezano {{ticker}}',
   active_nodes: 'Aktivni Čvorovi',
   available_nodes: 'Available Nodes',
@@ -859,7 +859,7 @@ export const hr = {
   transaction_details: 'Detalji transakcije',
   transaction_has_risk:
     '<provider></provider> je otkrio rizičnu transakciju {{riskLevel}}',
-  transaction_successful: 'Transakcija uspješna',
+  transaction_successful: 'Transakcija <g> uspješna </g>',
   tron_bandwidth: 'Bandwidth',
   tron_energy: 'Energy',
   tron_freeze_button: 'Freeze',
@@ -883,7 +883,7 @@ export const hr = {
   type_here: 'Upišite ovdje',
   unbond: 'Odvojiti se',
   unbond_with_lp: 'Odveži Maju',
-  unlock_discount_tier: 'Otključaj <b>{{tier}}<b> razinu',
+  unlock_discount_tier: 'Otključaj <b> {{tier}} </b> Razina',
   unlock_tier: 'Otključaj razinu',
   unmerge: 'Razdvoji',
   unfreeze: 'Unfreeze',
@@ -1079,7 +1079,7 @@ export const hr = {
   auto: 'auto',
   backupShare: 'Dijeljenje sigurnosne kopije trezora',
   backup_password_info_cannot_be_reset:
-    'Zapamtite: ako zaboravite lozinku za trezor, ona se *ne može* resetirati ili oporaviti.',
+    'Zapamtite: ako zaboravite lozinku za trezor, ne možete je <b> resetirati ili oporaviti. </b>',
   backup_password_info_encrypt_with_password:
     'Ako odaberete dodati lozinku, ona će se koristiti za <b>šifriranje</b> sigurnosne kopije datoteke.',
   backup_password_info_secure_without_password:
@@ -1184,10 +1184,10 @@ export const hr = {
   backupsTitle:
     '<highlight>Sigurnosne kopije,</highlight> vaša nova metoda oporavka',
   backupsDescription:
-    'Umjesto jedne početne fraze, vaš trezor je osiguran s više uređaja. Svaki uređaj ima svoju sigurnosnu kopiju. Sigurnosna kopija sama po sebi ne može premještati sredstva. Sigurnosne kopije služe samo za oporavak.',
+    'Sigurnosne kopije štite vaš trezor. Svaki uređaj ima svoju <w>vlastitu</w> sigurnosnu kopiju. Sama sigurnosna kopija ne može premještati sredstva; služi samo za oporavak. Uvezite i oporavite izgubljeni uređaj.',
   backupEachDevice: 'Napravite sigurnosnu kopiju svakog uređaja',
   backupEachDeviceDescription:
-    'Ovo je samo jedna sigurnosna kopija vašeg trezora, ponovite ovaj postupak za ostale uređaje.',
+    'Sigurnosna kopija uređaja <w>i</w> lozinka su ključevi. Poslužitelj samo supotpisuje, a sigurnosna kopija se može zatražiti.',
   storeBackupsSeparately: 'Pohranite sigurnosne kopije odvojeno',
   storeBackupsSeparatelyDescription:
     'Svaku sigurnosnu kopiju čuvajte na drugom mjestu. Ako je jedna kompromitirana, vaša sredstva ostaju sigurna.',
@@ -1225,7 +1225,7 @@ export const hr = {
   new_vault_setup_disclaimer:
     'Vaša konfiguracija se promijenila, napravite novu sigurnosnu kopiju.',
   manage_referral_title: 'Vultisig preporuke',
-  select_pool: 'Odaberite bazen',
+  select_pool: 'Odaberite pool',
   token_not_found_invalid: 'Nevažeća adresa ugovora',
   transaction_failed: 'Transakcija<error> neuspješno</error>',
   transaction_pending: 'Transakcija na čekanju...',
@@ -1301,7 +1301,6 @@ export const hr = {
   date: 'Datum',
   device_n_label: 'Uređaj {{number}} - {{hash}}',
   remove_friends_referral: 'Ukloni preporuku',
-  enable_mldsa: 'Omogući MLDSA',
   post_quantum_keygen: 'Postkvantno generiranje ključeva',
   post_quantum_keygen_description:
     'Generiraj postkvantni (MLDSA) ključ za ovaj trezor',
@@ -1411,4 +1410,62 @@ export const hr = {
   choose_vaults: 'Odaberite trezore',
   manage_notifications_in_settings:
     'Obavijestima možete upravljati u postavkama sustava.',
+  bech32_prefix: 'Prefiks adrese',
+  chain_id: 'ID lanca',
+  fee_currency: 'Valuta naknade',
+  rest_endpoint: 'REST krajnja točka',
+  rpc_endpoint: 'RPC krajnja točka',
+  suggest_chain_subtitle: '{{site}} želi dodati ovaj lanac u vaš novčanik',
+  suggest_chain_title: 'Dodaj predloženi lanac',
+  balance_changes: 'Promjene stanja',
+  connect_dapp: 'Poveži dApp',
+  connect_website_subtitle: 'Povežite ovu web stranicu s Vultisig ekstenzijom',
+  banner_carousel_go_to_banner: 'Idi na banner {{number}}',
+  buy_vult_banner_cta: 'Kupi $VULT',
+  buy_vult_banner_subtitle: 'I uštedite na naknadama za zamjenu',
+  buy_vult_banner_title: 'Kupi $VULT',
+  vault_import_failed: 'Nije moguće uvesti trezor: {{message}}',
+  qbtc_claim_title: 'Zahtjev za QBTC',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'Iznos BTC-a',
+  qbtc_claim_no_claimable_utxos:
+    'Za ovu adresu nisu pronađeni UTXO-ovi koji se mogu zatražiti.',
+  qbtc_claim_disabled_notice:
+    'Polaganje prava je trenutno onemogućeno na QBTC lancu.',
+  qbtc_claim_failed_to_load:
+    'Učitavanje UTXO-ova koji se mogu zatražiti nije uspjelo.',
+  qbtc_claim_selected_count: 'Odabran {{count}} od {{max}}',
+  qbtc_claim_confirm: 'Zahtjev je odabran',
+  qbtc_claim_proving: 'Generiranje dokaza…',
+  qbtc_claim_proving_hint: 'To može potrajati nekoliko minuta.',
+  qbtc_claim_broadcasting: 'Broadcasting zahtjeva…',
+  qbtc_claim_success_title: 'Zahtjev je uspješan',
+  qbtc_claim_utxos_claimed: 'Zahtjevani UTXO-i',
+  qbtc_claim_utxos_skipped: 'Preskočeni UTXO-i',
+  qbtc_claim_tx_hash: 'Hash transakcije',
+  qbtc_claim_copy_tx_hash: 'Kopiraj hash transakcije',
+  qbtc_claim_done: 'Gotovo',
+  qbtc_claim_failed: 'Zahtjev nije uspio. Pokušajte ponovno.',
+  qbtc_claim_fast_vault_only:
+    'Za polaganje prava trenutno je potreban Fast Vault. Podrška za Secure Vault uskoro će biti dostupna.',
+  qbtc_claim_password_description:
+    'Unesite svoju lozinku za Fast Vault kako biste supotpisali transakciju potraživanja.',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Ovaj je trezor uvezen bez Ethereuma. Prilagođeno potpisivanje poruka zahtijeva Ethereum, a uvezeni trezori ne mogu dodavati lance koji su preskočeni pri uvozu.',
+  jetton_transfer: 'Jetton Transfer',
+  nft_transfer: 'NFT prijenos',
+  excess_gas_refund: 'Povrat viška goriva',
+  forward_ton_amount: 'Proslijeđeni TON iznos',
+  raw_payload: 'Sirovi korisni teret',
+  spender: 'Potrošač',
+  operator: 'Operater',
+  contract: 'Ugovor',
+  type: 'Tip',
+  unlimited: 'Neograničen',
+  verify_password_for: 'Potvrdite svoju lozinku za:',
+  vultisig_education: 'Vultisig obrazovanje',
+  pool: 'Pool',
+  paired_address: 'Uparena adresa',
+  you_send: 'Vi šaljete',
+  you_receive: 'Primate',
 }
