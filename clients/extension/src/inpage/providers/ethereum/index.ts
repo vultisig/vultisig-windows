@@ -9,6 +9,8 @@ import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import EventEmitter from 'events'
 
+import { toEip1193Error } from './eip1193Translate'
+
 export { processSignature }
 
 export class Ethereum extends EventEmitter<EthereumProviderEvents> {
@@ -73,9 +75,13 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
 
   async request(data: RequestInput) {
     if (data.method in ethereumHandlers) {
-      return ethereumHandlers[data.method as keyof typeof ethereumHandlers](
-        data.params as never
-      )
+      try {
+        return await ethereumHandlers[
+          data.method as keyof typeof ethereumHandlers
+        ](data.params as never)
+      } catch (error) {
+        throw toEip1193Error(error)
+      }
     }
 
     throw new EIP1193Error('UnsupportedMethod')
