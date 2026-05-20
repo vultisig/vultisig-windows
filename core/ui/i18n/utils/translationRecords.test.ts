@@ -27,4 +27,24 @@ describe('translation record parsing', () => {
       'nested.styled': 'Keep <b>safe</b>',
     })
   })
+
+  it('ignores non-exported variables with the requested name', () => {
+    const record = readTranslationRecordFromSource({
+      exportName: 'en',
+      fileName: 'en.ts',
+      source: `
+        const en = {
+          backup: 'Wrong',
+        }
+
+        export const en = {
+          backup: 'Backup',
+        }
+      `,
+    })
+
+    expect(Object.fromEntries(flattenTranslationRecord({ record }))).toEqual({
+      backup: 'Backup',
+    })
+  })
 })

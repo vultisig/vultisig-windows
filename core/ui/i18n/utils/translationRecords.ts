@@ -10,6 +10,7 @@ import {
   type ObjectLiteralExpression,
   type PropertyName,
   ScriptTarget,
+  SyntaxKind,
 } from 'typescript'
 
 type TranslationRecord = {
@@ -105,6 +106,13 @@ export const readTranslationRecordFromSource = ({
 
   sourceFile.forEachChild(node => {
     if (!isVariableStatement(node)) {
+      return
+    }
+
+    const isExported = node.modifiers?.some(
+      modifier => modifier.kind === SyntaxKind.ExportKeyword
+    )
+    if (!isExported) {
       return
     }
 
