@@ -9,12 +9,16 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
+import { useQueryClient } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useClaimableUtxosQuery } from '../hooks/useClaimableUtxosQuery'
+import {
+  getClaimableUtxosQueryKey,
+  useClaimableUtxosQuery,
+} from '../hooks/useClaimableUtxosQuery'
 import { useClaimWithProofDisabledQuery } from '../hooks/useClaimWithProofDisabledQuery'
 import { QbtcClaimResultData } from './ClaimBroadcastingPhase'
 import { ClaimResult } from './ClaimResult'
@@ -35,6 +39,7 @@ export const QbtcClaimPage = () => {
   const utxosQuery = useClaimableUtxosQuery({ btcAddress })
   const disabledQuery = useClaimWithProofDisabledQuery()
   const securityType = useCurrentVaultSecurityType()
+  const queryClient = useQueryClient()
 
   const [step, setStep] = useState<ClaimStep>({ select: null })
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -62,6 +67,12 @@ export const QbtcClaimPage = () => {
 
   const handleRunnerSuccess = (data: QbtcClaimResultData) => {
     setSelected(new Set())
+    // Drop the cached UTXO list so the next visit shows fresh data —
+    // the SDK now filters UTXOs by on-chain entitled_amount, but the
+    // cached copy still includes the one we just claimed.
+    void queryClient.invalidateQueries({
+      queryKey: getClaimableUtxosQueryKey({ btcAddress }),
+    })
     setStep({ result: { data } })
   }
 
