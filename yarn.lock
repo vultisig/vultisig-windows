@@ -759,7 +759,11 @@ __metadata:
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
     "@bufbuild/protobuf": "npm:^2.11.0"
+    "@cosmjs/cosmwasm-stargate": "npm:^0.38.1"
     "@cosmjs/encoding": "npm:^0.38.1"
+    "@cosmjs/math": "npm:^0.38.1"
+    "@cosmjs/proto-signing": "npm:^0.38.1"
+    "@cosmjs/stargate": "npm:^0.38.1"
     "@floating-ui/react": "npm:^0.27.19"
     "@hookform/resolvers": "npm:^5.2.2"
     "@lib/codegen": "workspace:^"
