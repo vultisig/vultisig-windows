@@ -1,5 +1,4 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
-import { toEip1193Error } from '@clients/extension/src/inpage/providers/ethereum/eip1193Translate'
 import { EthereumProviderEvents } from '@clients/extension/src/inpage/providers/ethereum/events'
 import {
   ethereumHandlers,
@@ -9,6 +8,8 @@ import { addBackgroundEventListener } from '@core/inpage-provider/background/eve
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import EventEmitter from 'events'
+
+import { toEip1193Error } from './eip1193Translate'
 
 export { processSignature }
 
@@ -79,11 +80,6 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
           data.method as keyof typeof ethereumHandlers
         ](data.params as never)
       } catch (error) {
-        // EIP-1193 §5.4 mandates `ProviderRpcError`-shaped rejections.
-        // Resolvers that call `callPopup` reject with the raw
-        // `PopupError.RejectedByUser` string when the user dismisses
-        // the approval popup — translate here so dApps can rely on
-        // `error.code === 4001`.
         throw toEip1193Error(error)
       }
     }
