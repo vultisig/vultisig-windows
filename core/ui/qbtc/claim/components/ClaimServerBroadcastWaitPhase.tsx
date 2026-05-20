@@ -4,10 +4,10 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
-import { waitForClaimTxResult } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/broadcastClaimTx'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { waitForClaimTxResult } from '../utils/waitForClaimTxResult'
 import { QbtcClaimResultData } from './ClaimBroadcastingPhase'
 
 type ClaimServerBroadcastWaitPhaseProps = {

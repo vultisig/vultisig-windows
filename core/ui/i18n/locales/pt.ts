@@ -627,7 +627,7 @@ export const pt = {
     'Seus cofres aparecerão aqui. Comece criando um ou importando um cofre existente.',
   node_address: 'Endereço do nó',
   not_enough_asset_to_cover_gas_fees:
-    'Não há recursos suficientes para cobrir as despesas com gás.',
+    'Não há {{asset}} suficientes para cobrir as taxas de gás.',
   not_enough_funds: 'Fundos insuficientes',
   nothing_to_add: 'Nada a acrescentar',
   nothing_to_add_hint:
@@ -668,7 +668,7 @@ export const pt = {
   portfolio: 'Portfólio',
   portfolio_balance: 'Equilíbrio da carteira',
   positions: 'Cargos',
-  powered_by: 'Desenvolvido por <provedor></provedor>',
+  powered_by: 'Alimentado por <provider> </provider>',
   price: 'Preço',
   price_impact_average: 'Média',
   price_impact_good: 'Bom',
@@ -697,7 +697,7 @@ export const pt = {
   referral_extension_fee: 'Taxa de extensão de encaminhamento',
   referral_fee_amount_minimum: 'Mínimo de {{amount}} RUNE',
   referral_landing_title:
-    '<0>Convide amigos</0>. <1>Ganhe recompensas</1>. Economize em taxas.',
+    'Convide amigos. <g> Ganhe recompensas. </g> Economize em taxas.',
   referral_program: 'Programa de Encaminhamento',
   referral_reg_fee: 'Taxa de inscrição',
   referral_status: 'Status',
@@ -719,7 +719,7 @@ export const pt = {
   resource: 'Recurso',
   retry: 'Tentar novamente',
   risky_site_detected: 'Site malicioso detectado',
-  risky_transaction_detected: 'Transação de risco detectada ({riskLevel}}).',
+  risky_transaction_detected: 'Transação de risco {{riskLevel}} detectada',
   risky_tx_warning:
     'Esta transação envolve um endereço malicioso. Interagir com ele pode comprometer seus ativos. Prossiga somente se tiver certeza.',
   same_vault_share: 'Compartilhamento do mesmo cofre',
@@ -829,7 +829,7 @@ export const pt = {
   signing_transaction: 'Transação de assinatura',
   silver: 'Prata',
   site: 'Site',
-  site_has_risk: 'Site malicioso detectado por <provedor></provedor>',
+  site_has_risk: 'Site malicioso detectado por <provider> </provider>',
   skip: 'Pular',
   slippage: 'Deslizamento',
   something_went_wrong: 'Algo deu errado',
@@ -872,7 +872,7 @@ export const pt = {
   transaction_details: 'Detalhes da transação',
   transaction_has_risk:
     'Transação de risco {{riskLevel}} detectada por <provider></provider>',
-  transaction_successful: 'Transação concluída com sucesso',
+  transaction_successful: 'Transação <g> bem-sucedida </g>',
   tron_bandwidth: 'Bandwidth',
   tron_energy: 'Energy',
   tron_freeze_button: 'Freeze',
@@ -896,7 +896,7 @@ export const pt = {
   type_here: 'Digite aqui',
   unbond: 'Desvincular',
   unbond_with_lp: 'Desvincular Maya',
-  unlock_discount_tier: 'Desbloquear <b>{{tier}calb> Nível',
+  unlock_discount_tier: 'Desbloquear <b> {{tier}} </b> Nível',
   unlock_tier: 'Desbloquear nível',
   unmerge: 'Desfazer fusão',
   unfreeze: 'Unfreeze',
@@ -910,7 +910,7 @@ export const pt = {
   upgrade_now_prompt: 'Atualize seu cofre agora',
   upgrade_shares_info:
     '<b>Você criará novos backups do Vault Share</b> e os armazenará como fazia antes.',
-  upgrade_success: 'Atualização do cofre concluída com sucesso.',
+  upgrade_success: 'Vault atualizado <b>com sucesso</b>',
   upgrade_vault: 'Melhore seu cofre',
   upgrade_vault_description:
     'Atualize este cofre para o <b>protocolo MPC mais rápido do mundo</b> e assine mais rápido do que nunca.',
@@ -1082,7 +1082,7 @@ export const pt = {
   seedphrase_invalid_error:
     'A frase-semente está incorreta. Por favor, verifique todas as palavras.',
   import_seedphrase_onboarding_title:
-    'Você está entrando em uma nova era, deixando para trás frases-chave antigas. Você precisará de:',
+    'Você está entrando em uma nova era, <g> para trás </g> antigas frases de recuperação. Você precisará de:',
   installation_progress: 'Progresso da instalação: {{progress}}%',
   no_active_chains_found: 'Nenhuma cadeia ativa encontrada',
   no_active_chains_found_description:
@@ -1101,7 +1101,7 @@ export const pt = {
   backup_password_info_cannot_be_reset:
     'Lembre-se: se você esquecer a senha do seu cofre, ela <b>não poderá</b> ser redefinida ou recuperada.',
   backup_password_info_encrypt_with_password:
-    'Se você optar por adicionar uma senha, ela será usada para criptografar o arquivo de backup.',
+    'Se você optar por adicionar uma senha, ela será usada para <b>criptografar</b> o arquivo de backup.',
   backup_password_info_secure_without_password:
     'Por padrão, seu backup é <b>seguro sem</b> uma senha extra, já que você armazena os compartilhamentos do Vault em locais diferentes.',
   create: 'Criar',
@@ -1136,7 +1136,7 @@ export const pt = {
   unlock_discount_tier_description:
     'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todos os swaps.',
   unlock_discount_tier_description_ultimate:
-    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá uma isenção completa da taxa Vultisig em todas as trocas.',
+    'Ao possuir o token {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa Vultisig</b> em todas as trocas.',
   vaultOverview: 'Visão geral do cofre',
   vault_count_one: '{{count}} Cofre',
   vault_count_other: '{{count}} Cofres',
@@ -1205,10 +1205,10 @@ export const pt = {
   backupsTitle:
     '<highlight>Cópias de segurança,</highlight> seu novo método de recuperação',
   backupsDescription:
-    'Em vez de uma única frase mnemônica, seu cofre é protegido por múltiplos dispositivos. Cada dispositivo possui seu próprio backup. Um backup isolado não pode movimentar fundos. Os backups servem apenas para recuperação.',
-  backupEachDevice: 'Faça backup de cada dispositivo.',
+    'Os backups protegem seu cofre. Cada dispositivo tem seu backup <w>próprio</w>. Um backup sozinho não pode mover fundos; ele serve apenas para recuperação. Importe e recupere qualquer dispositivo perdido.',
+  backupEachDevice: 'Faça backup de cada dispositivo',
   backupEachDeviceDescription:
-    'Este é apenas um backup do seu cofre; repita este processo para os outros dispositivos.',
+    'O backup do dispositivo <w>e</w> a senha são as chaves. O servidor apenas coassina, e um backup pode ser solicitado.',
   storeBackupsSeparately: 'Armazene os backups separadamente.',
   storeBackupsSeparatelyDescription:
     'Guarde cada backup em um local diferente. Se um deles for comprometido, seus fundos permanecerão seguros.',
@@ -1247,7 +1247,7 @@ export const pt = {
   new_vault_setup_disclaimer:
     'Sua configuração foi alterada. Faça um novo backup.',
   manage_referral_title: 'Indicações Vultisig',
-  select_pool: 'Selecione a piscina',
+  select_pool: 'Selecione o pool',
   token_not_found_invalid: 'Endereço de contrato inválido',
   transaction_failed: 'Transação<error> fracassado</error>',
   transaction_pending: 'Transação pendente...',
@@ -1324,7 +1324,6 @@ export const pt = {
   date: 'Data',
   device_n_label: 'Dispositivo {{number}} - {{hash}}',
   remove_friends_referral: 'Remover encaminhamento',
-  enable_mldsa: 'Habilitar MLDSA',
   post_quantum_keygen: 'Geração de chaves pós-quânticas',
   post_quantum_keygen_description:
     'Gere uma chave pós-quântica (MLDSA) para este cofre.',
@@ -1339,7 +1338,7 @@ export const pt = {
   go_to_wallet: 'Acesse a carteira',
   i_understand: 'Eu entendo',
   i_understand_save_backup: 'Eu sei como salvar esse backup.',
-  left_pool: 'Piscina esquerda',
+  left_pool: 'Pool abandonado',
   looks_good: 'Parece bom',
   no_transactions_yet: 'Ainda não há transações.',
   review_vault_devices_subtitle:
@@ -1436,4 +1435,62 @@ export const pt = {
   choose_vaults: 'Escolha cofres',
   manage_notifications_in_settings:
     'Você pode gerenciar as notificações nas configurações do sistema.',
+  bech32_prefix: 'Prefixo de endereço',
+  chain_id: 'ID da cadeia',
+  fee_currency: 'Moeda da taxa',
+  rest_endpoint: 'Endpoint REST',
+  rpc_endpoint: 'Ponto final RPC',
+  suggest_chain_subtitle:
+    '{{site}} deseja adicionar esta cadeia à sua carteira.',
+  suggest_chain_title: 'Adicionar corrente sugerida',
+  balance_changes: 'Alterações de equilíbrio',
+  connect_dapp: 'Conectar dApp',
+  connect_website_subtitle: 'Conecte este site com a extensão Vultisig.',
+  banner_carousel_go_to_banner: 'Acesse o banner {{number}}',
+  buy_vult_banner_cta: 'Compre $VULT',
+  buy_vult_banner_subtitle: 'E economize nas taxas de swap.',
+  buy_vult_banner_title: 'Compre $VULT',
+  vault_import_failed: 'Não foi possível importar o cofre: {{message}}',
+  qbtc_claim_title: 'Reivindicação QBTC',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'Quantidade de BTC',
+  qbtc_claim_no_claimable_utxos:
+    'Não foram encontrados UTXOs reivindicáveis ​​para este endereço.',
+  qbtc_claim_disabled_notice:
+    'Atualmente, o resgate de tokens está desativado na blockchain QBTC.',
+  qbtc_claim_failed_to_load: 'Falha ao carregar UTXOs elegíveis para resgate.',
+  qbtc_claim_selected_count: '{{count}} de {{max}} selecionado',
+  qbtc_claim_confirm: 'Reivindicar selecionado',
+  qbtc_claim_proving: 'Gerando provas…',
+  qbtc_claim_proving_hint: 'Isso pode levar vários minutos.',
+  qbtc_claim_broadcasting: 'Broadcasting da reivindicação…',
+  qbtc_claim_success_title: 'Reivindicação bem-sucedida',
+  qbtc_claim_utxos_claimed: 'UTXOs reivindicados',
+  qbtc_claim_utxos_skipped: 'UTXOs ignorados',
+  qbtc_claim_tx_hash: 'Hash da transação',
+  qbtc_claim_copy_tx_hash: 'Copiar hash da transação',
+  qbtc_claim_done: 'Feito',
+  qbtc_claim_failed: 'A solicitação falhou. Tente novamente.',
+  qbtc_claim_fast_vault_only:
+    'Atualmente, o resgate requer um Fast Vault. O suporte para Secure Vault está a caminho.',
+  qbtc_claim_password_description:
+    'Insira sua senha do Fast Vault para coassinar a transação de reivindicação.',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Este cofre foi importado sem Ethereum. A assinatura de mensagens personalizadas requer Ethereum, e os cofres importados não podem adicionar cadeias que foram ignoradas na importação.',
+  jetton_transfer: 'Transferência Jetton',
+  nft_transfer: 'Transferência de NFT',
+  excess_gas_refund: 'Reembolso de excesso de gás',
+  forward_ton_amount: 'Valor de TON encaminhado',
+  raw_payload: 'Carga útil bruta',
+  spender: 'Gastador',
+  operator: 'Operador',
+  contract: 'Contrato',
+  type: 'Tipo',
+  unlimited: 'Ilimitado',
+  verify_password_for: 'Confirme sua senha para:',
+  vultisig_education: 'Educação Vultisig',
+  pool: 'Pool',
+  paired_address: 'Endereço emparelhado',
+  you_send: 'Você envia',
+  you_receive: 'Você recebe',
 }
