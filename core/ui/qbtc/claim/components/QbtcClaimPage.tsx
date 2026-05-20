@@ -65,19 +65,24 @@ export const QbtcClaimPage = () => {
 
   const handlePasswordCancel = () => setPendingUtxos(null)
 
-  const handleRunnerSuccess = (data: QbtcClaimResultData) => {
-    setSelected(new Set())
-    // Drop the cached UTXO list so the next visit shows fresh data —
-    // the SDK now filters UTXOs by on-chain entitled_amount, but the
-    // cached copy still includes the one we just claimed.
-    void queryClient.invalidateQueries({
+  // Drop the cached UTXO list so the next visit shows fresh data —
+  // the SDK filters UTXOs by on-chain entitled_amount, but the cached
+  // copy still includes the one we just claimed. Done on error too:
+  // a polling/network failure can still happen after the tx is on-chain.
+  const invalidateClaimableUtxos = () =>
+    queryClient.invalidateQueries({
       queryKey: getClaimableUtxosQueryKey({ btcAddress }),
     })
+
+  const handleRunnerSuccess = (data: QbtcClaimResultData) => {
+    setSelected(new Set())
+    void invalidateClaimableUtxos()
     setStep({ result: { data } })
   }
 
   const handleRunnerError = (err: Error) => {
     setError(err)
+    void invalidateClaimableUtxos()
     setStep({ select: null })
   }
 
