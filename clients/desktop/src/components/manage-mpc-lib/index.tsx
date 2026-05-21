@@ -1,10 +1,6 @@
 import { useVaultCreationMpcLib } from '@clients/desktop/src/mpc/state/vaultCreationMpcLib'
 import { useCore } from '@core/ui/state/core'
 import {
-  useIsMLDSAEnabled,
-  useSetIsMLDSAEnabledMutation,
-} from '@core/ui/storage/mldsaEnabled'
-import {
   useIsTssBatchingEnabled,
   useSetIsTssBatchingEnabledMutation,
 } from '@core/ui/storage/tssBatchingEnabled'
@@ -24,8 +20,6 @@ export const ManageMpcLib = () => {
   const gate = useClickGate()
   const isDKLS = value === 'DKLS'
 
-  const isMLDSAEnabled = useIsMLDSAEnabled()
-  const { mutate: setIsMLDSAEnabled } = useSetIsMLDSAEnabledMutation()
   const isTssBatchingEnabled = useIsTssBatchingEnabled()
   const { mutate: setIsTssBatchingEnabled } =
     useSetIsTssBatchingEnabledMutation()
@@ -48,11 +42,6 @@ export const ManageMpcLib = () => {
               checked={isDKLS}
               label={t('enable_dkls')}
               onChange={() => setValue(isDKLS ? 'GG20' : 'DKLS')}
-            />
-            <Switch
-              checked={isMLDSAEnabled}
-              label={t('enable_mldsa')}
-              onChange={() => setIsMLDSAEnabled(!isMLDSAEnabled)}
             />
             <Switch
               checked={isTssBatchingEnabled}

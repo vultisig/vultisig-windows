@@ -51,6 +51,21 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
   })
 }
 
+// Cosmos validator (operator) addresses use the chain's account prefix
+// suffixed with `valoper` (e.g. `terravaloper1...`). Both Terra v2 and
+// TerraClassic share the `terra` account prefix, so we lock the regex to
+// the family — pasting a Cosmos Hub `cosmosvaloper1...` into a LUNA
+// delegate form would be silently accepted by a chain-agnostic pattern
+// and surface as a late tx failure on broadcast.
+const terraValidatorAddressPattern = /^terravaloper1[02-9ac-hj-np-z]{38,71}$/
+
+const validatorAddressSchema = (t: TFunction) =>
+  z
+    .string()
+    .trim()
+    .min(1, t('validator_address'))
+    .regex(terraValidatorAddressPattern, t('invalid_validator_address'))
+
 type GetChainActionConfigParams = {
   t: TFunction
   coin: AccountCoin
@@ -768,6 +783,80 @@ export const getDepositFormConfig = ({
         amount: positiveAmountSchema(totalAmountAvailable, t),
         pool: z.string().min(1),
         pairedAddress: z.string().optional(),
+      }),
+    }),
+    delegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator_address'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        amount: positiveAmountSchema(totalAmountAvailable, t),
+        validatorAddress: validatorAddressSchema(t),
+      }),
+    }),
+    undelegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator_address'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        amount: positiveAmountSchema(totalAmountAvailable, t),
+        validatorAddress: validatorAddressSchema(t),
+      }),
+    }),
+    redelegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'srcValidatorAddress',
+          type: 'text',
+          label: t('source_validator'),
+          required: true,
+        },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('destination_validator'),
+          required: true,
+        },
+      ],
+      schema: z
+        .object({
+          amount: positiveAmountSchema(totalAmountAvailable, t),
+          srcValidatorAddress: validatorAddressSchema(t),
+          validatorAddress: validatorAddressSchema(t),
+        })
+        .superRefine((data, ctx) => {
+          if (data.srcValidatorAddress === data.validatorAddress) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t('redelegate_same_validator'),
+              path: ['validatorAddress'],
+            })
+          }
+        }),
+    }),
+    claim_rewards: () => ({
+      // Array shape covers both per-validator claim (one entry) and bulk claim
+      // (multiple MsgWithdrawDelegatorReward in one multi-msg tx). The UI
+      // populates this from active delegations; users don't type validator
+      // addresses for claim, they pick from the existing list.
+      fields: [],
+      schema: z.object({
+        validatorAddresses: z
+          .array(validatorAddressSchema(t))
+          .min(1, t('validator_address')),
       }),
     }),
     remove_thor_lp: () => ({

@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
+import { PopupError } from '@core/inpage-provider/popup/error'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock all external dependencies before importing the Ethereum provider
 vi.mock('@core/inpage-provider/background', () => ({
@@ -25,18 +25,26 @@ vi.mock('@clients/extension/src/inpage/providers/ethereum/handlers', () => ({
     eth_chainId: vi.fn(),
     eth_accounts: vi.fn(),
     eth_requestAccounts: vi.fn(),
+    eth_sendTransaction: vi.fn(),
+    eth_signTypedData_v4: vi.fn(),
+    personal_sign: vi.fn(),
+    wallet_watchAsset: vi.fn(),
   },
   processSignature: vi.fn((sig: string) => sig),
 }))
 
 // Now import the class under test and the mocked handlers
-import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum/index'
 import { ethereumHandlers } from '@clients/extension/src/inpage/providers/ethereum/handlers'
+import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum/index'
 
 const mockedHandlers = ethereumHandlers as unknown as {
   eth_chainId: ReturnType<typeof vi.fn>
   eth_accounts: ReturnType<typeof vi.fn>
   eth_requestAccounts: ReturnType<typeof vi.fn>
+  eth_sendTransaction: ReturnType<typeof vi.fn>
+  eth_signTypedData_v4: ReturnType<typeof vi.fn>
+  personal_sign: ReturnType<typeof vi.fn>
+  wallet_watchAsset: ReturnType<typeof vi.fn>
 }
 
 describe('Ethereum Provider', () => {
@@ -47,7 +55,11 @@ describe('Ethereum Provider', () => {
       ...(globalThis as any).window,
       ctrlEthProviders: undefined,
       isCtrl: undefined,
-      location: { href: 'https://example.com/', origin: 'https://example.com', pathname: '/' },
+      location: {
+        href: 'https://example.com/',
+        origin: 'https://example.com',
+        pathname: '/',
+      },
     }
     vi.clearAllMocks()
   })
@@ -118,7 +130,9 @@ describe('Ethereum Provider', () => {
 
     it('registers in window.ctrlEthProviders', () => {
       const instance = Ethereum.getInstance()
-      expect((globalThis as any).window.ctrlEthProviders['Ctrl Wallet']).toBe(instance)
+      expect((globalThis as any).window.ctrlEthProviders['Ctrl Wallet']).toBe(
+        instance
+      )
     })
   })
 
@@ -149,7 +163,10 @@ describe('Ethereum Provider', () => {
       const eth = new Ethereum()
 
       try {
-        await eth.request({ method: 'eth_nonexistentMethod' as any, params: [] })
+        await eth.request({
+          method: 'eth_nonexistentMethod' as any,
+          params: [],
+        })
         expect.fail('Should have thrown')
       } catch (error) {
         expect(error).toBeInstanceOf(EIP1193Error)
@@ -162,9 +179,122 @@ describe('Ethereum Provider', () => {
       const eth = new Ethereum()
       mockedHandlers.eth_accounts.mockResolvedValue(['0xabc'])
 
-      const result = await eth.request({ method: 'eth_accounts', params: ['arg1'] })
+      const result = await eth.request({
+        method: 'eth_accounts',
+        params: ['arg1'],
+      })
       expect(result).toEqual(['0xabc'])
       expect(mockedHandlers.eth_accounts).toHaveBeenCalledWith(['arg1'])
+    })
+
+    // The four popup-driven resolvers called out in #3928. All must
+    // surface a spec-conforming 4001 when the user dismisses the popup.
+    const popupMethods = [
+      'eth_sendTransaction',
+      'eth_signTypedData_v4',
+      'personal_sign',
+      'wallet_watchAsset',
+    ] as const
+
+    it.each(popupMethods)(
+      'translates PopupError.RejectedByUser from %s to EIP1193Error(UserRejectedRequest) (code 4001)',
+      async method => {
+        const eth = new Ethereum()
+        mockedHandlers[method].mockRejectedValue(PopupError.RejectedByUser)
+
+        await expect(eth.request({ method, params: [] })).rejects.toMatchObject(
+          {
+            code: 4001,
+            message: 'User rejected the request',
+          }
+        )
+        await expect(
+          eth.request({ method, params: [] })
+        ).rejects.toBeInstanceOf(EIP1193Error)
+      }
+    )
+
+    it('passes existing EIP1193Error through unchanged', async () => {
+      const eth = new Ethereum()
+      const original = new EIP1193Error('UnrecognizedChain')
+      mockedHandlers.eth_chainId.mockRejectedValue(original)
+
+      await expect(
+        eth.request({ method: 'eth_chainId', params: [] })
+      ).rejects.toBe(original)
+    })
+
+    it('preserves ProviderRpcError-shaped plain objects with code+message', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.eth_accounts.mockRejectedValue({
+        code: -32000,
+        message: 'upstream node error',
+      })
+
+      await expect(
+        eth.request({ method: 'eth_accounts', params: [] })
+      ).rejects.toMatchObject({
+        code: -32000,
+        message: 'upstream node error',
+      })
+      await expect(
+        eth.request({ method: 'eth_accounts', params: [] })
+      ).rejects.toBeInstanceOf(EIP1193Error)
+    })
+
+    it('preserves the `data` field on ProviderRpcError-shaped objects (e.g. revert reasons)', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.eth_sendTransaction.mockRejectedValue({
+        code: 3,
+        message: 'execution reverted',
+        data: '0x08c379a0',
+      })
+
+      await expect(
+        eth.request({ method: 'eth_sendTransaction', params: [] })
+      ).rejects.toMatchObject({
+        code: 3,
+        message: 'execution reverted',
+        data: '0x08c379a0',
+      })
+    })
+
+    it('preserves the message from a plain Error in the fallback path', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.wallet_watchAsset.mockRejectedValue(
+        new Error('Asset type not supported')
+      )
+
+      await expect(
+        eth.request({ method: 'wallet_watchAsset', params: [] })
+      ).rejects.toMatchObject({
+        code: -32603,
+        message: 'Asset type not supported',
+      })
+    })
+
+    it('uses a thrown string as the fallback message', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.eth_accounts.mockRejectedValue('some unexpected string')
+
+      await expect(
+        eth.request({ method: 'eth_accounts', params: [] })
+      ).rejects.toMatchObject({
+        code: -32603,
+        message: 'some unexpected string',
+      })
+    })
+
+    it('falls back to the default InternalError message for unknown shapes', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.eth_accounts.mockRejectedValue(null)
+
+      await expect(
+        eth.request({ method: 'eth_accounts', params: [] })
+      ).rejects.toMatchObject({
+        code: -32603,
+        message: 'Internal error',
+      })
     })
   })
 

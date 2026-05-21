@@ -6,6 +6,10 @@ import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
+import { ClaimRewardsSpecific } from './CosmosStakingSpecific/ClaimRewardsSpecific'
+import { DelegateSpecific } from './CosmosStakingSpecific/DelegateSpecific'
+import { RedelegateSpecific } from './CosmosStakingSpecific/RedelegateSpecific'
+import { UndelegateSpecific } from './CosmosStakingSpecific/UndelegateSpecific'
 import { CustomSpecific } from './CustomSpecific'
 import { FreezeSpecific } from './FreezeSpecific/FreezeSpecific'
 import { TronUnfreezeSpecific } from './FreezeSpecific/TronUnfreezeSpecific'
@@ -54,6 +58,10 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
         unfreeze: () => <TronUnfreezeSpecific />,
         custom: () => <CustomSpecific />,
         add_thor_lp: () => <ThorLpSpecific />,
+        delegate: () => <DelegateSpecific />,
+        undelegate: () => <UndelegateSpecific />,
+        redelegate: () => <RedelegateSpecific />,
+        claim_rewards: () => <ClaimRewardsSpecific />,
       }}
       else={() => null}
     />

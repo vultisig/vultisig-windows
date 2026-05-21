@@ -67,6 +67,10 @@ export const useAvailableChainActions = (chain: Chain) => {
         add_thor_lp: () =>
           chain === Chain.THORChain ? true : hasThorchainAddress,
         remove_thor_lp: () => true,
+        delegate: () => true,
+        undelegate: () => true,
+        redelegate: () => true,
+        claim_rewards: () => true,
       })
     )
   }, [

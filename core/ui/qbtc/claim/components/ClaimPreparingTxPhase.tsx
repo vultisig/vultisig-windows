@@ -6,16 +6,17 @@ import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { buildClaimTxBody } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/buildClaimTx'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
-import {
-  type ClaimProofResult,
-  generateClaimProof,
-} from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
+import { type ClaimProofResult } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
-import { getQbtcAccountInfoForClaim } from '../utils/getQbtcAccountInfoForClaim'
+import { generateClaimProofForClaim } from '../utils/generateClaimProofForClaim'
+import {
+  getQbtcAccountExists,
+  getQbtcAccountInfoForClaim,
+} from '../utils/getQbtcAccountInfoForClaim'
 
 const qbtcChainId = 'qbtc-testnet'
 const proofServiceRBytes = 24
@@ -41,14 +42,37 @@ type ClaimPreparingTxPhaseProps = {
   compressedPubkeyHex: string
   qbtcAddress: string
   mldsaPublicKeyHex: string
-  onFinish: (ready: ClaimPreparingTxResult) => void
+  /**
+   * Called when the claimer account already exists on chain. The caller will
+   * sign the returned SignDoc hash with the user's MLDSA key and broadcast
+   * it directly to the QBTC REST endpoint.
+   */
+  onReadyToSign: (ready: ClaimPreparingTxResult) => void
+  /**
+   * Called when the claimer account doesn't exist on chain yet. The proof
+   * service signs and broadcasts the claim itself with its own broadcaster
+   * key, and the returned `tx_hash` is what landed on chain. The caller
+   * just needs to wait for the tx to be included in a block.
+   */
+  onServerBroadcast: (txHash: string) => void
   onError: (error: Error) => void
 }
 
+type ClaimPreparingTxMutationResult =
+  | { kind: 'wallet'; ready: ClaimPreparingTxResult }
+  | { kind: 'server'; txHash: string }
+
 /**
- * Calls the proof service, fetches QBTC account info, and builds the MLDSA
- * SignDoc hash that will be signed in the next MPC round. This step is the
- * slow one — proof generation can take up to ~300s.
+ * Calls the proof service, fetches QBTC account info, and either builds the
+ * MLDSA SignDoc hash for the next MPC round (existing-account path) or hands
+ * the broadcast off to the proof service entirely (first-time-claimer path).
+ *
+ * First-time claimers can't sign a SignDoc the chain will accept — the chain's
+ * auto-assigned `account_number` is unpredictable — so we set `broadcast: true`
+ * on the /prove request and the service's pre-funded broadcaster account signs
+ * the cosmos tx. See btcq-org/qbtc#158.
+ *
+ * This step is the slow one — proof generation can take up to ~300s.
  */
 export const ClaimPreparingTxPhase = ({
   utxos,
@@ -56,14 +80,19 @@ export const ClaimPreparingTxPhase = ({
   compressedPubkeyHex,
   qbtcAddress,
   mldsaPublicKeyHex,
-  onFinish,
+  onReadyToSign,
+  onServerBroadcast,
   onError,
 }: ClaimPreparingTxPhaseProps) => {
   const { t } = useTranslation()
 
   const { mutate, ...state } = useMutation({
-    mutationFn: async (): Promise<ClaimPreparingTxResult> => {
-      const proof = await generateClaimProof({
+    mutationFn: async (): Promise<ClaimPreparingTxMutationResult> => {
+      const accountExists = await getQbtcAccountExists({
+        address: qbtcAddress,
+      })
+
+      const proofResult = await generateClaimProofForClaim({
         signatureR: padSigHex(btcSig.r, proofServiceRBytes),
         signatureS: padSigHex(btcSig.s, proofServiceSBytes),
         publicKey: compressedPubkeyHex,
@@ -71,6 +100,20 @@ export const ClaimPreparingTxPhase = ({
         claimerAddress: qbtcAddress,
         chainId: qbtcChainId,
         baseUrl: proofServiceBaseUrl,
+        broadcast: !accountExists,
+      })
+
+      if (proofResult.kind === 'server') {
+        return {
+          kind: 'server',
+          txHash: proofResult.txHash,
+        }
+      }
+
+      const { proof } = proofResult
+
+      const accountInfo = await getQbtcAccountInfoForClaim({
+        address: qbtcAddress,
       })
 
       const claimTxBodyInput = {
@@ -86,9 +129,6 @@ export const ClaimPreparingTxPhase = ({
 
       const bodyBytes = buildClaimTxBody(claimTxBodyInput)
 
-      const accountInfo = await getQbtcAccountInfoForClaim({
-        address: qbtcAddress,
-      })
       const { hash, authInfoBytes } = buildClaimPreSignHash({
         bodyBytes,
         chainId: qbtcChainId,
@@ -98,13 +138,22 @@ export const ClaimPreparingTxPhase = ({
       })
 
       return {
-        proof,
-        bodyBytes,
-        authInfoBytes,
-        signDocHashHex: Buffer.from(hash).toString('hex'),
+        kind: 'wallet',
+        ready: {
+          proof,
+          bodyBytes,
+          authInfoBytes,
+          signDocHashHex: Buffer.from(hash).toString('hex'),
+        },
       }
     },
-    onSuccess: onFinish,
+    onSuccess: result => {
+      if (result.kind === 'server') {
+        onServerBroadcast(result.txHash)
+      } else {
+        onReadyToSign(result.ready)
+      }
+    },
     onError,
   })
 
