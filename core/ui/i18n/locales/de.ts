@@ -1,201 +1,50 @@
 export const de = {
-  chainFunctions: {
-    custom: {
-      labels: {
-        customMemo: 'Benutzerdefinierte Notiz',
-      },
-      validations: {
-        customMemo: 'Eine individuelle Notiz ist erforderlich.',
-      },
-    },
-    vote: {
-      validations: {
-        proposalId: 'Eine Angebots-ID ist erforderlich.',
-      },
-      labels: {
-        proposalId: 'Vorschlags-ID',
-        support: 'Unterstützung',
-      },
-    },
-    amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
-    default_validation: 'Ungültige Eingabe',
-    optional_validation: 'Optional',
-  },
-  circle: {
-    banner_text:
-      'Ihre Gelder bleiben vollständig unter Ihrer Kontrolle. Die Circle-Rendite wird über sichere Off-Chain-Treasuries generiert. Sie können Ihr Geld jederzeit nach der Abrechnung abheben.',
-    deposit: 'Kaution',
-    introduction:
-      'Zahlen Sie Ihre USDC auf ein Circle-Konto ein und erhalten Sie Zinsen. Sicher in Ihrem Vultisig-Tresor.',
-    open_account: 'Konto eröffnen',
-    withdraw: 'Zurückziehen',
-    deposit_header: 'Einzahlung auf das Circle-Konto',
-    verify_deposit: 'Einzahlung prüfen',
-    withdraw_header: 'Aus dem Kreis austreten',
-    verify_withdraw: 'Auszahlung bestätigen',
-    apy_approx: 'Jahresüberschuss (ca.)',
-    apy_tooltip:
-      'Die Prämien werden Ihrem Guthaben automatisch gutgeschrieben.',
-  },
-  fastVaultSetup: {
-    backup: {
-      backThemUpNow: 'Sichern Sie sie jetzt',
-      checkEmail: 'Überprüfen Sie Ihre E-Mails zur Bestätigung.',
-      codeInfo:
-        'Dieser Code bestätigt, dass Sie Ihre Tresorfreigabe 1 per E-Mail erhalten haben.',
-      completeCustody:
-        'Es wird Ihnen zur vollständigen Selbstverwahrung übergeben!',
-      enterCode:
-        'Geben Sie den 4-stelligen Code ein, den wir Ihnen per E-Mail zugesendet haben.',
-      heldByServer: 'vom Server gespeichert',
-      online: 'online',
-      part1: 'Teil 1 der Tresoranteile wird sein',
-      securely: 'sicher, vorzugsweise',
-      shareSecurely: 'um den Zugang zu gewährleisten, vorzugsweise',
-      vaultShares: 'Ihr Tresor enthält 2 Aktien.',
-      sentTo: 'Gesendet an {{email}}.',
-      changeEmailAndRestartKeygen: 'E-Mail ändern und Keygen neu starten',
-      setNewStandard:
-        'Sie sind bereit, einen neuen Wallet-Standard zu verwenden.',
-      wellDone: 'Gut gemacht',
-    },
-    createVault: {
-      availablePlatforms: {
-        descriptionOne: 'verfügbar',
-        descriptionTwo: 'auf Android, iOS, macOS und Windows',
-      },
-      crossChain: {
-        descriptionOne: 'Kreuzkette.',
-        descriptionTwo:
-          'Tausche deine Lieblingsspielmarken alle in einem Tresor.',
-      },
-      multiFactor: {
-        descriptionOne: 'Multifaktor-Sicherheit,',
-        descriptionTwo: 'Beseitigung des einzigen Ausfallpunktes',
-      },
-      seedlessWallet: {
-        descriptionOne: 'eine Wallet ohne Seed,',
-        descriptionTwo: 'Lass dich nicht wieder betrügen',
-      },
-      selfCustodial: {
-        descriptionOne: 'Selbstverwahrung,',
-        descriptionTwo: 'die volle Kontrolle über Ihr Vermögen',
-      },
-    },
-    summary: {
-      agreementText: 'Ich habe gelesen und verstanden, was zu tun ist.',
-      ctaText: 'Erstelle deinen Tresor',
-      pillText: 'Tresoranteile',
-      select_preferred_chains: 'Wählen Sie Ihre bevorzugten Ketten',
-      start_using_vault: 'Beginnen Sie mit der Nutzung Ihres Tresors.',
-      summaryItemFourTitle:
-        'Speichern Sie Ihre Tresorfreigabe nicht auf dem Gerät selbst, um Verlust oder Beschädigung zu vermeiden.',
-      summaryItemOneTitle: 'Sichern Sie jede Vault-Freigabe separat.',
-      summaryItemThreeTitle:
-        'Alle Tresoranteile gewährleisten einen sicheren Zugriff auf Ihre Gelder.',
-      summaryItemTwoTitle:
-        'Bewahren Sie Vault-Freigaben an verschiedenen Orten auf',
-      title: 'Kurzzusammenfassung',
-    },
-    addOptionalHint: 'Füge einen optionalen Hinweis hinzu',
-    connectingWithServer: 'Verbindung zum Server wird hergestellt...',
-    emailSetupTitle:
-      'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
-    enterEmail: 'Geben Sie Ihre E-Mail ein',
-    enterHint: 'Hinweis eingeben',
-    hintDescription: 'Dies wird angezeigt, falls Sie Ihr Passwort vergessen.',
-    hintEmpty: 'Hinweis ist leer',
-    passwordCannotBeRecovered:
-      'Das Passwort kann nicht zurückgesetzt oder wiederhergestellt werden.',
-    preparingVault: 'Vorbereitung des Tresors',
-    takeMinute: 'Das sollte nur eine Sekunde dauern.',
-    addAnOptionalHint: 'Füge einen optionalen Hinweis hinzu',
-    passwordTooltip:
-      'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie bei der Verschlüsselung einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
-    referralModalTitle: 'Empfehlungscode',
-    referralModalSubtitle:
-      'Gib hier deinen Empfehlungscode ein. <b>Erhalte 10 % Rabatt auf jede Transaktion.</b>',
-    applyReferral: 'Empfehlung beantragen',
-    referralAdded: 'Empfehlung hinzugefügt',
-  },
-  referrals_summary: {
-    item_1: {
-      description:
-        'Wählen Sie einen Kurzcode und legen Sie Ihre Prämienauszahlung fest.',
-      title: 'Erstelle deinen Empfehlungscode',
-    },
-    item_2: {
-      description: 'Lade Freunde ein, deinen Code beim Tauschen zu verwenden.',
-      title: 'Mit Freunden teilen',
-    },
-    item_3: {
-      description:
-        'Lassen Sie sich jedes Mal in Ihrem bevorzugten Vermögenswert auszahlen, wenn gehandelt wird.',
-      title: 'Sammeln Sie automatisch Prämien',
-    },
-    item_4: {
-      description:
-        'Nutze einen Code von deinem Freund und spare Tauschgebühren.',
-      title: 'Empfehlungscode verwenden',
-    },
-  },
-  secureVaultSetup: {
-    backup: {
-      eachDeviceNeedsBackup: 'Jedes Gerät benötigt ein eigenes Backup.',
-      shares: 'Ihr Tresor enthält {{shares}} Aktien',
-    },
-  },
-  swap_terms: {
-    input: 'Der Tauschbetrag ist korrekt.',
-    output: 'Ich stimme dem Mindestbetrag zu, den ich erhalten werde.',
-  },
-  vaultCheckUpdatePage: {
-    applicationUpToDate: 'Die Anwendung ist auf dem neuesten Stand.',
-    downloadButton: 'Jetzt aktualisieren',
-    errorFetchingLatestVersion:
-      'Fehler beim Abrufen der neuesten Version: {{error}}',
-    fetchingLatestVersion: 'Die neueste Version wird abgerufen...',
-    title: 'Update prüfen',
-    update_is_available: 'Ein Update ist verfügbar',
-    version: 'Version {{latestVersion}}',
-  },
-  vault_setup_prop: {
-    fast: {
-      prop_0: 'Nur 1 Gerät erforderlich',
-      prop_1: 'Kleinere Geldbeträge für den täglichen Gebrauch aufbewahren',
-      prop_2: 'Vultiserver bestätigt sofort',
-      purpose: 'Als "Hot Wallet" verwenden',
-      title: 'Schnelle Einrichtung',
-    },
-    secure: {
-      prop_0: 'Maximale Sicherheit mit mehreren Geräten',
-      prop_1: 'Dank Geräte-Backups jederzeit verfügbar',
-      prop_2: 'Sichern Sie Vermögenswerte in beliebiger Höhe.',
-      purpose: 'Als „Cold Wallet“ verwenden',
-      title: 'Ultimative Sicherheit',
-    },
-  },
   accept_continue: 'Akzeptieren & fortfahren',
   action: 'Aktion',
   active: 'Aktiv',
+  agent: 'Agent',
+  agent_nav_tip_description:
+    'Vulti Agent ist verfügbar. Tippen Sie hier, um ihn einzurichten.',
+  agent_nav_tip_title: 'Neu!',
+  active_chains_found_one: 'Wir haben {{count}} aktive Ketten gefunden',
+  active_chains_found_other: 'Wir haben {{count}} aktive Ketten gefunden',
+  active_chains_warning:
+    'Jede zusätzliche Kette verlängert die Zeit zum Generieren Ihres Tresors und erhöht die Wahrscheinlichkeit eines Timeouts.',
   add_address: 'Adresse hinzufügen',
   add_folder: 'Ordner hinzufügen',
   add_friends_referral: 'Freunde werben',
   add_memo: 'Memo hinzufügen',
   add_new_vault: 'Neuen Tresor hinzufügen',
+  add_referral: 'Empfehlung hinzufügen',
   add_referral_code: 'Empfehlungscode speichern',
   add_to_address_book: 'Zum Adressbuch hinzufügen',
+  add_suggested_token: 'Vorschlagstoken hinzufügen',
+  bech32_prefix: 'Adresspräfix',
+  chain_id: 'Ketten-ID',
+  fee_currency: 'Gebührenwährung',
+  rest_endpoint: 'REST-Endpunkt',
+  rpc_endpoint: 'RPC-Endpunkt',
+  site_wants_to_add_token:
+    '{{site}} möchte dieses Token zu Ihrer Wallet hinzufügen',
+  suggest_chain_subtitle:
+    '{{site}} möchte diese Blockchain zu Ihrer Wallet hinzufügen.',
+  suggest_chain_title: 'Empfohlene Kette hinzufügen',
   add_token: '{{ticker}} Token hinzufügen',
   add_vaults_to_folder: 'Tresore auswählen',
   adding_token: 'Token wird hinzugefügt...',
   address: 'Adresse',
   address_book: 'Adressbuch',
+  address_book_no_eligible_addresses_title:
+    'Keine gespeicherten Adressen für {{chain}}',
+  address_book_no_eligible_addresses_description:
+    'Gespeicherte Adressen müssen mit der Kette übereinstimmen, in der Sie die Sendung übermitteln.',
   address_book_saved: 'Gespeicherte Adressen',
   address_book_vault: 'Meine Tresore',
   adjust_search_query: 'Versuchen Sie, Ihre Suchkriterien anzupassen.',
   advanced: 'Fortschrittlich',
   advanced_gas_fee: 'Vorauszahlung für Gas',
   all_vaults: 'Alle Tresore',
+  allowance: 'Zuschuss',
   allowance_amount: 'Zulagebetrag',
   allowance_spender: 'Taschengeldausgeber',
   amount: 'Menge',
@@ -212,22 +61,55 @@ export const de = {
   app_permissions: 'App-Berechtigungen',
   approval_tx: 'Genehmigung Tx',
   approve: 'Genehmigen',
+  reject: 'Ablehnen',
   applied_discounts: 'Angewandte Rabatte:',
   asset: 'Vermögenswert',
   assets: 'Vermögenswerte',
+  at_least_one_device: 'Mindestens ein Gerät',
+  at_least_one_device_subtitle:
+    'Jedes Gerät, auf dem Vultisig ausgeführt werden kann, ist geeignet.',
+  auto: 'Auto',
   auto_compound_into_label: 'Automatische Komposition in {{ticker}}',
   available: 'Verfügbar',
   back: 'Zurück',
   back_up_now: 'Jetzt sichern',
+  before_you_start: 'Bevor Sie beginnen...',
   backup: 'Backup',
   backupGuide: 'Backup-Anleitung',
+  backupVault: 'Backup-Tresor',
+  backupInCloudTitle: 'Verschlüsselt mit Ihrem Tresorpasswort',
+  backupInCloudDescription:
+    'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben. Online-Speicher wird empfohlen, und sichere Tresorfreigaben sind genau dafür konzipiert.',
+  backupShare: 'Backup-Tresor-Freigabe',
   backupShare2: 'Backup Share 2',
+  backupsTitle: '<highlight>Backups,</highlight> Ihre neue Genesungsmethode',
+  backupsDescription:
+    'Backups schützen Ihren Vault. Jedes Gerät hat sein <w>eigenes</w> Backup. Ein Backup allein kann keine Gelder verschieben; es dient nur zur Wiederherstellung. Importieren und stellen Sie jedes verlorene Gerät wieder her.',
+  backupEachDevice: 'Sichern Sie jedes Gerät',
+  backupEachDeviceDescription:
+    'Das Geräte-Backup <w>und</w> das Passwort sind die Schlüssel. Der Server signiert nur mit, und ein Backup kann angefordert werden.',
+  storeBackupsSeparately: 'Backups separat speichern',
+  storeBackupsSeparatelyDescription:
+    'Bewahren Sie jedes Backup an einem anderen Ort auf. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
+  backupShareWarning: 'Dies ist nur 1 Anteil Ihres Tresors.',
+  backupShareWarningRest:
+    'Wiederholen Sie diesen Vorgang für die anderen Geräte.',
   backup_description:
     'Sichern Sie Ihre Vault Share-Daten an einem bevorzugten Speicherort',
+  backup_email_description:
+    'Geben Sie die E-Mail-Adresse ein, um die Tresorfreigabe zu erhalten.',
   backup_now: 'Jetzt sichern',
   backup_password: 'Backup-Passwort',
+  backup_password_description:
+    'Geben Sie das Passwort ein, das Sie beim Erstellen dieses Tresors festgelegt haben.',
   backup_password_confirmation_title:
     'Möchten Sie Ihr Backup mit einem Passwort verschlüsseln?',
+  backup_password_info_cannot_be_reset:
+    'Wichtig: Wenn Sie Ihr Tresorpasswort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
+  backup_password_info_encrypt_with_password:
+    'Wenn Sie ein Passwort hinzufügen, wird dieses zur <b>Verschlüsselung</b> der Sicherungsdatei verwendet.',
+  backup_password_info_secure_without_password:
+    'Standardmäßig ist Ihre Datensicherung <b>ohne</b> zusätzliches Passwort sicher, da Sie Vault-Freigaben an verschiedenen Orten speichern.',
   backup_share_sent: 'Backup-Freigabe gesendet!',
   backup_share_sent_description:
     'Wir haben Ihnen soeben Ihre Sicherungskopie per E-Mail zugesendet. Sollten Sie die E-Mail nicht finden, überprüfen Sie bitte Ihren Spam-Ordner.',
@@ -235,21 +117,47 @@ export const de = {
   backup_without_password: 'Backup ohne Passwort',
   balance: 'Gleichgewicht',
   balance_available: 'Verfügbares Guthaben',
+  balance_changes: 'Bilanzveränderungen',
   base_fee: 'Grundgebühr',
   blockaid_security_scan: 'Blockaid-Sicherheitsscan',
   blockaid_simulation_failed: 'Transaktionssimulation fehlgeschlagen',
   blockaid_simulation_failed_description:
     'Diese Transaktion konnte nicht simuliert werden. Sie können trotzdem fortfahren, wir empfehlen Ihnen jedoch, die Transaktionsdetails sorgfältig zu prüfen.',
   transaction_scanned_by: 'Transaktion von {{provider}} geprüft',
+  broadcasted: 'Ausgestrahlt',
   bond: 'Bindung',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronze',
+  diamond: 'Diamant',
   buy: 'Kaufen',
   by_vultisig: 'von Vultisig',
   camera_access_blocked:
     'Der Kamerazugriff ist gesperrt. Bitte aktivieren Sie ihn in Ihren Browsereinstellungen.',
+  cache_password_for_5_min: 'Passwort 5 Minuten lang merken',
   cancel: 'Stornieren',
   chain: 'Kette',
+  chainFunctions: {
+    amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
+    custom: {
+      labels: {
+        customMemo: 'Benutzerdefinierte Notiz',
+      },
+      validations: {
+        customMemo: 'Eine individuelle Notiz ist erforderlich.',
+      },
+    },
+    default_validation: 'Ungültige Eingabe',
+    optional_validation: 'Optional',
+    vote: {
+      labels: {
+        proposalId: 'Vorschlags-ID',
+        support: 'Unterstützung',
+      },
+      validations: {
+        proposalId: 'Eine Angebots-ID ist erforderlich.',
+      },
+    },
+  },
   chain_message_deposit: '{{chain}} Nachrichteneinzahlung',
   chains: 'Ketten',
   change: 'Ändern',
@@ -259,9 +167,31 @@ export const de = {
   check_email: 'E-Mails prüfen',
   check_for_update: 'Auf Aktualisierung prüfen',
   chooseSetup: 'Einrichtung auswählen',
+  choose_a_password: 'Wählen Sie ein Passwort',
+  choose_a_password_description:
+    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b> <info />',
   choose_backup_method: 'Backup-Methode auswählen',
   choose_payout_asset: 'Auszahlungsgut auswählen',
+  choose_chains: 'Wählen Sie Ketten',
   choose_tokens: 'Token auswählen',
+  choose_vaults: 'Tresore auswählen',
+  deposited: 'Eingezahlt',
+  circle: {
+    banner_text:
+      'Ihre Gelder bleiben vollständig unter Ihrer Kontrolle. Die Circle-Rendite wird über sichere Off-Chain-Treasuries generiert. Sie können Ihr Geld jederzeit nach der Abrechnung abheben.',
+    deposit: 'Kaution',
+    deposit_header: 'Einzahlung auf das Circle-Konto',
+    verify_deposit: 'Einzahlung prüfen',
+    introduction:
+      'Zahlen Sie Ihre USDC auf ein Circle-Konto ein und erhalten Sie Zinsen. Sicher in Ihrem Vultisig-Tresor.',
+    open_account: 'Konto eröffnen',
+    withdraw: 'Zurückziehen',
+    withdraw_header: 'Aus dem Kreis austreten',
+    verify_withdraw: 'Auszahlung bestätigen',
+    apy_approx: 'Jahresüberschuss (ca.)',
+    apy_tooltip:
+      'Die Prämien werden Ihrem Guthaben automatisch gutgeschrieben.',
+  },
   clear: 'Klar',
   close: 'Schließen',
   coin_not_found_in_current_vault: 'Münze im aktuellen Tresor nicht gefunden.',
@@ -286,24 +216,39 @@ export const de = {
   collected_rewards: 'Gesammelte Prämien',
   coming_soon: 'Demnächst verfügbar',
   complete: 'Vollständig',
+  congrats: 'Glückwunsch!',
   confirm: 'Bestätigen',
+  confirmed: 'Bestätigt',
+  confirm_automation_creation: 'Automatisierungserstellung bestätigen',
   confirm_new_passcode: 'Neuen Passcode bestätigen',
   confirm_passcode: 'Passcode bestätigen',
   connect: 'Verbinden',
+  connect_dapp: 'dApp verbinden',
   connect_to_site: 'Verbinden Sie sich mit {{site}}',
+  connect_website_subtitle:
+    'Verbinden Sie diese Website mit der Vultisig-Erweiterung',
   connected_dapps: 'Verbundene dApps',
   connecting_to_server: 'Verbindung zum Server wird hergestellt',
   continue: 'Weitermachen',
   continue_anyway: 'Trotzdem fortfahren',
   continue_in_new_window: 'Im geöffneten Fenster fortfahren',
+  contract_execution: 'Vertragsabwicklung',
+  contract_interaction: 'Vertragsinteraktion',
   copy_address: 'Kopie Adresse',
+  create: 'Erstellen',
   create_folder: 'Ordner erstellen',
   create_new_vault: 'Neuen Tresor erstellen',
+  create_vault: 'Tresor erstellen',
   create_own_referral:
     'Erstelle deinen eigenen Code und verdiene <blue>20%</blue> an vermittelten Tauschgeschäften',
-  create_referral: 'Empfehlung erstellen',
   create_referral_form: 'Empfehlung erstellen',
   create_referral_title: 'Empfehlung erstellen',
+  create_referral: 'Empfehlung erstellen',
+  create_referral_desc:
+    'Erstelle deinen eigenen Code und verdiene!<c> 20%</c> bei vermittelten Swaps',
+  save_referral: 'Empfehlung speichern',
+  save_referral_desc:
+    'Speichere den Empfehlungscode eines Freundes und spare.<c> 10%</c> auf Tauschgeschäften.',
   creating_vault: 'Tresor erstellen',
   currency: 'Währung',
   current_expiry: 'Aktuelles Ablaufdatum',
@@ -312,6 +257,7 @@ export const de = {
   custom: 'Benutzerdefinierte Aktion',
   custom_token: 'Benutzerdefiniertes Token',
   customize_chains: 'Ketten individuell gestalten',
+  date: 'Datum',
   decrypting_vault_keyshares: 'Entschlüsselung der Tresor-Schlüsselanteile...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
@@ -335,6 +281,9 @@ export const de = {
   destination_address: 'Zieladresse',
   details: 'Details',
   developer_options: 'Entwickleroptionen',
+  device_backup: 'Gerätesicherung',
+  device_backup_description: 'Speichern Sie die Tresorfreigabe dieses Geräts.',
+  device_n_label: 'Gerät {{number}} - {{hash}}',
   devices: 'Geräte',
   digit_input_error_validation:
     'Fehler beim Überprüfen des Codes, bitte versuchen Sie es erneut.',
@@ -354,14 +303,29 @@ export const de = {
   edit_address: 'Adresse bearbeiten',
   edit_friends_referral: 'Freundesempfehlung bearbeiten',
   edit_referral: 'Überweisung bearbeiten',
+  remove_friends_referral: 'Empfehlung entfernen',
   edit_vaults: 'Tresore bearbeiten',
   email: 'E-Mail',
+  email_backup:
+    'Geben Sie Ihre E-Mail-Adresse ein, um Ihre Sicherungskopie zu erhalten.',
+  email_placeholder: 'Geben Sie Ihre E-Mail-Adresse ein.',
   email_required: 'E-Mail-Adresse erforderlich',
+  evm_chains: 'EVM-Ketten',
+  enable: 'Aktivieren',
+  enable_all: 'Alle aktivieren',
   enable_dkls: 'DKLS aktivieren',
+  enable_tss_batching: 'TSS-Batching aktivieren',
+  post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
+  post_quantum_keygen_description:
+    'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
+  post_quantum_key_already_generated:
+    'Dieser Tresor verfügt bereits über einen Post-Quanten-Schlüssel',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
   encrypting_vault_keyshares: 'Verschlüsselung der Tresor-Schlüsselanteile...',
+  enter: 'Eingeben',
   enter_address: 'Adresse eingeben',
+  enter_address_here: 'Adresse hier eingeben',
   enter_amount: 'Betrag eingeben',
   enter_folder_name: 'Ordnernamen eingeben',
   enter_memo: 'Memo eingeben',
@@ -373,12 +337,27 @@ export const de = {
   enter_referral_code_placeholder: 'Empfehlungscode eingeben',
   enter_up_to_4_characters_placeholder: 'Geben Sie bis zu 4 Zeichen ein',
   enter_vault_name: 'Tresornamen eingeben',
+  enter_your_email: 'Geben Sie Ihre E-Mail-Adresse ein',
+  enter_your_email_description:
+    'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
   enter_your_password: 'Geben Sie Ihr Passwort ein',
   entity_not_scanned:
     '{{entity}} wurde von <provider></provider> nicht gescannt.',
   entity_scanned: '{{entity}} wurde von <provider></provider> gescannt.',
+  error: 'FEHLER',
   est_network_fee: 'Geschätzte Netzwerkgebühr',
   expand_view: 'Ansicht erweitern',
+  open_as_side_panel: 'Als Seitenwand öffnen',
+  push_notifications: 'Push-Benachrichtigungen',
+  push_notifications_description:
+    'Lassen Sie sich benachrichtigen, wenn Ihre Unterschrift erforderlich ist oder ein Gerät Zugriff anfordert.',
+  push_notification_server_url: 'URL des Push-Benachrichtigungsservers',
+  push_notification_server_placeholder:
+    'Für die Produktionseinstellung leer lassen.',
+  desktop_push_notification_enable_failed:
+    'Push-Benachrichtigungen konnten nicht aktiviert werden. Bitte versuchen Sie es erneut.',
+  desktop_push_notification_disable_failed:
+    'Push-Benachrichtigungen konnten nicht deaktiviert werden. Bitte versuchen Sie es erneut.',
   expiration_date: 'Verfallsdatum',
   expiration_must_extend_by_exactly_one_year:
     'Die Gültigkeit kann nur um genau 1 Jahr verlängert werden.',
@@ -388,6 +367,7 @@ export const de = {
     'Nur DKLS-Tresore können in die Erweiterung importiert werden.',
   fallback_swap_warning:
     'Wir konnten diese Transaktion nicht simulieren. Bitte mit Vorsicht fortfahren.',
+  failed: 'Fehlgeschlagen',
   failed_to_connect_with_server: 'Verbindung zum Server fehlgeschlagen',
   failed_to_copy_address: 'Adresse konnte nicht kopiert werden',
   failed_to_copy_link: 'Link konnte nicht kopiert werden',
@@ -405,6 +385,7 @@ export const de = {
   failed_to_join_session: 'Beitritt zur Sitzung fehlgeschlagen.',
   failed_to_load: 'Fehler beim Laden',
   failed_to_migrate_storage: 'Speichermigration fehlgeschlagen',
+  failed_to_load_transactions: 'Transaktionen konnten nicht geladen werden.',
   failed_to_process_transaction: 'Transaktion konnte nicht verarbeitet werden',
   failed_to_process_url: 'URL konnte nicht verarbeitet werden',
   failed_to_read_qr_code: 'QR-Code konnte nicht gelesen werden',
@@ -448,6 +429,89 @@ export const de = {
   fast_vault_session_conflict: 'Tresor-Anteil stimmt nicht überein',
   fast_vault_session_conflict_description:
     'Ihr lokaler Tresor-Anteil stimmt nicht mit dem auf Vultiserver gespeicherten überein. Dies kann passieren, wenn dieselbe Seed-Phrase auf einem anderen Gerät importiert wurde.',
+  fast_vault_password_start_keysign_description:
+    'Bestätigen Sie die Transaktion, indem Sie das Passwort Ihrer Serverfreigabe eingeben.',
+  fastVaultSetup: {
+    addOptionalHint: 'Füge einen optionalen Hinweis hinzu',
+    addAnOptionalHint: 'Füge einen optionalen Hinweis hinzu',
+    backup: {
+      backThemUpNow: 'Sichern Sie sie jetzt',
+      checkEmail: 'Überprüfen Sie Ihre E-Mails zur Bestätigung.',
+      codeInfo:
+        'Dieser Code bestätigt, dass Sie Ihre Tresorfreigabe 1 per E-Mail erhalten haben.',
+      completeCustody:
+        'Es wird Ihnen zur vollständigen Selbstverwahrung übergeben!',
+      enterCode:
+        'Geben Sie den 4-stelligen Code ein, den wir Ihnen per E-Mail zugesendet haben.',
+      heldByServer: 'vom Server gespeichert',
+      online: 'online',
+      part1: 'Teil 1 der Tresoranteile wird sein',
+      securely: 'sicher, vorzugsweise',
+      shareSecurely: 'um den Zugang zu gewährleisten, vorzugsweise',
+      vaultShares: 'Ihr Tresor enthält 2 Aktien.',
+      sentTo: 'Gesendet an {{email}}.',
+      setNewStandard:
+        'Sie sind bereit, einen neuen Wallet-Standard zu verwenden.',
+      changeEmailAndRestartKeygen: 'E-Mail ändern und Keygen neu starten',
+      wellDone: 'Gut gemacht',
+    },
+    connectingWithServer: 'Verbindung zum Server wird hergestellt...',
+    createVault: {
+      availablePlatforms: {
+        descriptionOne: 'verfügbar',
+        descriptionTwo: 'auf Android, iOS, macOS und Windows',
+      },
+      crossChain: {
+        descriptionOne: 'Kreuzkette.',
+        descriptionTwo:
+          'Tausche deine Lieblingsspielmarken alle in einem Tresor.',
+      },
+      multiFactor: {
+        descriptionOne: 'Multifaktor-Sicherheit,',
+        descriptionTwo: 'Beseitigung des einzigen Ausfallpunktes',
+      },
+      seedlessWallet: {
+        descriptionOne: 'eine Wallet ohne Seed,',
+        descriptionTwo: 'Lass dich nicht wieder betrügen',
+      },
+      selfCustodial: {
+        descriptionOne: 'Selbstverwahrung,',
+        descriptionTwo: 'die volle Kontrolle über Ihr Vermögen',
+      },
+    },
+    emailSetupTitle:
+      'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
+    enterEmail: 'Geben Sie Ihre E-Mail ein',
+    enterHint: 'Hinweis eingeben',
+    hintDescription: 'Dies wird angezeigt, falls Sie Ihr Passwort vergessen.',
+    hintEmpty: 'Hinweis ist leer',
+    passwordCannotBeRecovered:
+      'Das Passwort kann nicht zurückgesetzt oder wiederhergestellt werden.',
+    passwordTooltip:
+      'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie bei der Verschlüsselung einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
+    preparingVault: 'Vorbereitung des Tresors',
+    referralModalTitle: 'Empfehlungscode',
+    referralModalSubtitle:
+      'Gib hier deinen Empfehlungscode ein. <b>Erhalte 10 % Rabatt auf jede Transaktion.</b>',
+    applyReferral: 'Empfehlung beantragen',
+    referralAdded: 'Empfehlung hinzugefügt',
+    summary: {
+      agreementText: 'Ich habe gelesen und verstanden, was zu tun ist.',
+      ctaText: 'Erstelle deinen Tresor',
+      pillText: 'Tresoranteile',
+      select_preferred_chains: 'Wählen Sie Ihre bevorzugten Ketten',
+      start_using_vault: 'Beginnen Sie mit der Nutzung Ihres Tresors.',
+      summaryItemFourTitle:
+        'Speichern Sie Ihre Tresorfreigabe nicht auf dem Gerät selbst, um Verlust oder Beschädigung zu vermeiden.',
+      summaryItemOneTitle: 'Sichern Sie jede Vault-Freigabe separat.',
+      summaryItemThreeTitle:
+        'Alle Tresoranteile gewährleisten einen sicheren Zugriff auf Ihre Gelder.',
+      summaryItemTwoTitle:
+        'Bewahren Sie Vault-Freigaben an verschiedenen Orten auf',
+      title: 'Kurzzusammenfassung',
+    },
+    takeMinute: 'Das sollte nur eine Sekunde dauern.',
+  },
   fast_sign: 'Schnelles Zeichen',
   fill_the_form: 'Füllen Sie das Formular aus.',
   find_custom_token: 'Benutzerdefiniertes Token finden',
@@ -456,6 +520,10 @@ export const de = {
   folder_name_required: 'Ein Ordnername ist erforderlich.',
   folder_at_least_one_vault_required: 'Mindestens ein Vault ist erforderlich',
   folders: 'Ordner',
+  banner_carousel_go_to_banner: 'Gehe zum Banner {{number}}',
+  buy_vult_banner_cta: 'Kaufen Sie $VULT',
+  buy_vult_banner_subtitle: 'Und sparen Sie Tauschgebühren',
+  buy_vult_banner_title: 'Kaufen Sie $VULT',
   follow_banner_button: 'Folge @Vultisig',
   follow_banner_subtitle: 'Vultisig baut mit Ihnen zusammen.',
   follow_banner_title: 'Folgen Sie uns auf X',
@@ -477,6 +545,7 @@ export const de = {
   github: 'GitHub',
   go_back: 'Geh zurück',
   go_to_vault: 'Gehe zum Tresor.',
+  go_to_wallet: 'Gehe zu deiner Brieftasche',
   gold: 'Gold',
   grant_camera_permission: 'Kameraerlaubnis erteilen',
   gwei: 'GWEI',
@@ -502,21 +571,55 @@ export const de = {
   ibc_transaction_not_supporting_memo_title:
     'IBC-Transaktionsvermerk nicht unterstützt',
   ibc_transfer: 'IBC-Transfer',
+  id: 'AUSWEIS',
+  i_understand: 'Ich verstehe',
+  i_understand_save_backup: 'Ich verstehe, wie man dieses Backup speichert.',
   import: 'Import',
   import_key: 'Importschlüssel',
+  import_seedphrase: 'Seedphrase importieren',
+  seedPhraseImportTip: 'Tipp: Sie können einen Browser als Gerät verwenden',
+  enter_your_seedphrase: 'Geben Sie Ihre Seed-Phrase ein',
+  enter_seedphrase_subtitle:
+    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Unterstützt werden Seed-Phrasen mit <h>12 oder 24 Wörtern</h>.',
+  mnemonic_placeholder: 'Geben Sie die 12 oder 24 Wörter Ihrer Seedphrase ein.',
+  seedphrase_word_count_error:
+    'Sie haben {{count}} Wörter eingegeben. Der Startsatz muss 12 oder 24 Wörter lang sein.',
+  seedphrase_invalid_error:
+    'Der Seed-Phrase ist nicht korrekt, bitte überprüfen Sie alle Wörter.',
+  seedphrase_duplicate_vault_error:
+    'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
+  fast_vault_exists_warning_title: 'Tresor existiert bereits',
+  fast_vault_exists_warning_description:
+    'Diese Seed-Phrase wurde bereits als Fast Vault auf einem anderen Gerät importiert. Wenn Sie fortfahren, wird der Server-Anteil ersetzt und das andere Gerät funktioniert nicht mehr.',
+  fast_vault_exists_warning_hint:
+    'Wenn Sie möchten, dass beide Geräte funktionieren, verwenden Sie stattdessen einen Secure Vault.',
+  import_seedphrase_description:
+    'Betritt es, erschaffe einen Tresor, schau nie zurück.',
+  import_seedphrase_onboarding_title:
+    'Sie treten in eine neue Ära ein, <g> lässt alte Seed-Phrasen hinter sich. </g> Sie benötigen:',
   import_vault: 'Import Vault',
+  import_vault_share: 'Vault-Freigabe importieren',
+  import_vault_share_description:
+    'Verwenden Sie eine Tresorfreigabe, um Ihren Tresor wiederherzustellen.',
+  import_vault_share_supported_files: 'Unterstützte Dateitypen: .bak & .vult',
   importing_vault: 'Vault wird importiert...',
+  incorrect_email: 'Falsche E-Mail-Adresse, bitte überprüfen Sie diese.',
   incorrect_password: 'Falsches Passwort',
+  vault_import_failed: 'Vault konnte nicht importiert werden: {{message}}',
   incorrect_url: 'Falsche URL',
   install_app: 'Installieren Sie die App „{{title}}“.',
   install_plugin: 'App installieren',
+  installation_progress: 'Installationsfortschritt: {{progress}}%',
   insufficient_balance: 'Unzureichendes Gleichgewicht',
+  insufficient_native_balance_for_fee:
+    'Unzureichendes Guthaben an nativen Token zur Bezahlung der Transaktionsgebühr',
   insufficient_gas_limit: 'Unzureichende Gasmenge',
   insufficient_gas_limit_description:
     'Geschätzter Gasverbrauch: {{estimated}}. Gaslimit: {{limit}}. Die Transaktion kann aufgrund unzureichenden Gasverbrauchs fehlschlagen.',
   invalid_email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
   invalid_file_format: 'Ungültiges Dateiformat',
   invalid_node_address: 'Die Knotenadresse ist ungültig.',
+  incorrect_passcode: 'Falsches Passwort.',
   invalid_passcode: 'Ungültiger Passcode',
   join_keygen: 'Keygen beitreten',
   join_keygen_slider1_note1: 'Vultisig ist',
@@ -554,6 +657,10 @@ export const de = {
     'Mehr Flexibilität ohne Kompromisse bei der Sicherheit.',
   join_keygen_slider7_title: 'Feature-Highlight',
   join_keysign: 'Treten Sie Keysign bei',
+  join_transaction: 'Beitrittstransaktion',
+  foreground_notification_generic: 'Transaktion vorbehaltlich der Genehmigung',
+  foreground_notification_send: 'Senden Sie {{amount}}',
+  foreground_notification_swap: 'Tausche {{from}} → {{to}}',
   join_reshare: 'Reshare beitreten',
   join_session: 'Sitzung beitreten',
   join_upgrade: 'Jetzt Upgrade beitreten',
@@ -565,25 +672,34 @@ export const de = {
     'QR-Code mit einem anderen Gerät scannen. {{recommended}}-Gerätekonfiguration empfohlen, {{min}} ist ausreichend.',
   keygen_failed:
     'Fehler bei der Schlüsselgenerierung. Bitte versuchen Sie es erneut.',
+  keygen_protocol_done: 'Erledigt',
+  keygen_protocol_running: 'Läuft',
   keys: 'Schlüssel',
   keysign: 'Keysign',
+  keysign_request: 'Schlüsselsignaturanfrage',
   label: 'Etikett',
   language: 'Sprache',
   learnMore: 'Mehr erfahren',
   leave: 'Verlassen',
+  left_pool: 'Pool verlassen',
   legal: 'Recht',
   link_copied: 'Link in die Zwischenablage kopiert',
   loading: 'Laden...',
+  local: 'Lokal',
   localMode: 'Sie befinden sich im lokalen Modus',
   lock_time: 'Sperrzeit',
   lock_vultisig_automatically_after:
     'Vultisig wird nach... automatisch gesperrt',
   looking_for_server: 'Suche nach FastVaultServer...',
+  looks_good: 'Sieht gut aus',
+  low: 'Niedrig',
   lp_units: 'LP-Einheiten',
   m_of_n_vault: '{{m}}-of-{{n}} Tresor',
   make_sure_chains:
     'Stellen Sie sicher, dass die gesuchte Kette aktiviert ist.',
   manage_chains: 'Kettenmanagement',
+  manage_notifications_in_settings:
+    'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
   max: 'Max',
   max_4_characters: 'Maximal 4 Zeichen',
   max_total_fees: 'Maximale Gesamtgebühr',
@@ -596,6 +712,8 @@ export const de = {
   method: 'Verfahren',
   method_required: 'Die Signaturmethode ist erforderlich.',
   mint: 'Minze',
+  minute_one: '{{count}} Minute',
+  minute_other: '{{count}} Minuten',
   missing_destination_address: 'Fehlende Zieladresse',
   missing_devices_for_migration:
     'Verbinden Sie sich mit den folgenden Geräten, um Ihren Tresor zu migrieren.',
@@ -608,9 +726,20 @@ export const de = {
   network_fee: 'Netzwerkgebühr',
   network_rate: 'Netzwerkrate',
   network_rate_required: 'Es wird eine Netzwerkrate benötigt.',
+  notification_sent_successfully:
+    'Die Benachrichtigung wurde erfolgreich versendet!',
+  notifications: 'Benachrichtigungen',
+  not_now: 'Nicht jetzt.',
   never: 'Niemals',
-  new_passcode: 'Neuer Passcode',
+  new: 'Neu',
   next: 'Nächste',
+  new_passcode: 'Neuer Passcode',
+  new_vault_setup: 'Neue Tresoreinrichtung',
+  new_vault_setup_disclaimer:
+    'Ihre Konfiguration hat sich geändert, erstellen Sie ein neues Backup.',
+  no_active_chains_found: 'Keine aktiven Ketten gefunden',
+  no_active_chains_found_description:
+    'Wir konnten unter dieser Seed-Phrase keine Assets feststellen.',
   no_chains_enabled: 'Keine Ketten aktiviert',
   no_chains_enabled_description:
     'Sie haben alle Ketten deaktiviert. Stellen Sie sicher, dass mindestens eine Kette aktiviert ist.',
@@ -622,15 +751,35 @@ export const de = {
     'Es wurden keine zusammenführbaren Token gefunden.',
   no_referral_yet: 'Noch keine Weiterleitung.',
   no_token_found: 'Token nicht gefunden',
+  no_transactions_yet: 'Bisher keine Transaktionen',
   no_tokens_found: 'Keine Token gefunden',
   no_positions_found: 'Keine Positionen gefunden',
   no_positions_selected: 'Keine Positionen ausgewählt',
   no_positions_selected_description:
     'Sie haben alle Positionen für diese Chain deaktiviert. Aktivieren Sie mindestens eine Position, um Salden anzuzeigen und Aktionen zu verwalten.',
+  total_bonded: 'Gesamt gebunden {{ticker}}',
+  active_nodes: 'Aktive Nodes',
+  vulti_node: 'VultiNode',
+  available_nodes: 'Verfügbare Knoten',
+  request_to_bond: 'Bond anfordern',
+  wait_until_node_churned: 'Warten Sie, bis der Node rotiert wird',
+  unstake_available_on: 'Unstake verfügbar am {{date}}',
+  bond_to_node: 'An Node binden',
+  liquidity_pools: 'Liquiditätspools',
+  apr: 'APR',
+  apy: 'APY',
+  bonded: 'Gebunden',
+  next_payout: 'Nächste Auszahlung',
+  estimated_reward: 'Geschätzte Belohnung',
+  next_churn: 'Nächste Rotation',
+  next_award: 'Nächste Belohnung',
+  percentage_zero: '0 %',
+  percentage_value: '{{value}}%',
   no_vaults: 'Noch keine Tresore',
   no_vaults_desc:
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen neuen Tresor oder importieren Sie einen vorhandenen.',
   node_address: 'Knotenadresse',
+  normal: 'Normal',
   not_enough_asset_to_cover_gas_fees:
     'Nicht genügend {{asset}}, um die Gaskosten zu decken',
   not_enough_funds: 'Nicht genügend Mittel',
@@ -638,6 +787,9 @@ export const de = {
   nothing_to_add_hint:
     'Alle Ihre Tresore sind bereits sortiert. Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
   of: 'von',
+  off: 'Aus',
+  on: 'An',
+  on_chain: 'auf {{chain}}',
   onboarding_description_1:
     'Vultisig ist ein sicherer Krypto-Tresor für mehrere Geräte, kompatibel mit allen gängigen Blockchains und über 10.000 Token. Vultisig bietet vollständige Selbstverwahrung.',
   onboarding_description_2:
@@ -649,6 +801,7 @@ export const de = {
   onboarding_greeting: 'Verabschieden Sie sich von <g>Seed Phrases</g>',
   operator_fee: 'Betreibergebühr',
   basis_points: 'Basispunkte',
+  optional: 'optional',
   optionalDevice: 'Optionales Gerät',
   or: 'oder',
   other: 'Andere',
@@ -656,24 +809,33 @@ export const de = {
   part: 'Teil',
   passcodes_do_not_match: 'Die Passwörter stimmen nicht überein',
   password: 'Passwort',
+  password_backup:
+    'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',
   password_do_not_match: 'Die Passwörter stimmen nicht überein.',
   password_pattern_error:
     'Das Passwort muss zwischen {{min}} und {{max}} Zeichen lang sein.',
   password_required: 'Passwort erforderlich',
   paste: 'Paste',
+  in_progress: 'Im Gange...',
   pending: 'Ausstehend',
   percentage: 'Prozentsatz',
   percentage_limit: 'Der Prozentsatz muss zwischen 0 und 100 liegen.',
   percentage_to_unstake: 'Prozentsatz zum Freigeben',
+  permissions: 'Berechtigungen',
   pick_referral_code: 'Empfehlungscode auswählen',
   platinum: 'Platin',
   plugin_info: 'App-Informationen',
+  automation_info: 'Automatisierungsinformationen',
   plugin_server_url: 'App-Server-URL',
+  app_install_timeout: 'Zeitüberschreitung bei der App-Installation (ms)',
+  app_install_timeout_invalid: 'Bitte geben Sie eine gültige Nummer ein.',
+  app_install_timeout_min: 'Muss 0 oder größer sein.',
   to_start_plugin_installation: 'Um die App-Installation zu starten',
   portfolio: 'Portfolio',
   portfolio_balance: 'Portfoliobilanz',
   positions: 'Positionen',
   powered_by: 'Bereitgestellt von <provider></provider>',
+  prepareVault: 'Vorbereitung des Tresors...',
   price: 'Preis',
   price_impact_average: 'Durchschnitt',
   price_impact_good: 'Gut',
@@ -687,11 +849,39 @@ export const de = {
   provide_camera_permission:
     'Bitte erteilen Sie Ihrer Kamera die Berechtigung zum Scannen des QR-Codes.',
   provider: 'Anbieter',
+  route: 'Route',
+  qbtc_claim_title: 'QBTC-Anspruch',
+  qbtc_claim_txid: 'TXID',
+  qbtc_claim_btc_amount: 'BTC-Betrag',
+  qbtc_claim_no_claimable_utxos:
+    'Für diese Adresse wurden keine einlösbaren UTXOs gefunden.',
+  qbtc_claim_disabled_notice:
+    'Das Einlösen von Ansprüchen ist auf der QBTC-Blockchain derzeit deaktiviert.',
+  qbtc_claim_failed_to_load: 'Fehler beim Laden der anrechenbaren UTXOs.',
+  qbtc_claim_selected_count: '{{count}} von {{max}} ausgewählt',
+  qbtc_claim_confirm: 'Anspruch ausgewählt',
+  qbtc_claim_proving: 'Generierung von Beweisen…',
+  qbtc_claim_proving_hint: 'Dies kann mehrere Minuten dauern.',
+  qbtc_claim_broadcasting: 'Broadcasting des Anspruchs…',
+  qbtc_claim_success_title: 'Anspruch erfolgreich',
+  qbtc_claim_utxos_claimed: 'UTXOs eingelöst',
+  qbtc_claim_utxos_skipped: 'UTXOs übersprungen',
+  qbtc_claim_tx_hash: 'Transaktions-Hash',
+  qbtc_claim_copy_tx_hash: 'Kopiere den Transaktions-Hash',
+  qbtc_claim_done: 'Erledigt',
+  qbtc_claim_failed:
+    'Die Reklamation ist fehlgeschlagen. Bitte versuchen Sie es erneut.',
+  qbtc_claim_fast_vault_only:
+    'Für die Geltendmachung von Ansprüchen ist derzeit ein Fast Vault erforderlich. Die Unterstützung für Secure Vault ist in Vorbereitung.',
+  qbtc_claim_password_description:
+    'Geben Sie Ihr Fast Vault-Passwort ein, um die Schadensabwicklung mitzuunterzeichnen.',
   qrCode: 'QR-Code',
   receive: 'Erhalten',
   receivedShare1Email: 'Vault Share 1 per Post erhalten',
   redeem: 'Tilgen',
   reenter_password: 'Kennwort erneut eingeben',
+  recover_vault_or_convert_seedphrase:
+    'Stellen Sie Ihren Tresor wieder her oder wandeln Sie Ihre Seedphrase in einen Tresor um.',
   referral_annual_fee: 'jährliche Empfehlungsgebühr',
   referral_code: 'Empfehlungscode',
   referral_code_no_whitespace: 'Leerzeichen sind nicht erlaubt',
@@ -706,7 +896,30 @@ export const de = {
   referral_program: 'Empfehlungsprogramm',
   referral_reg_fee: 'Anmeldegebühr',
   referral_status: 'Status',
+  manage_referral_title: 'Vultisig-Überweisungen',
   referrals_default_title: 'Verweisung',
+  referrals_summary: {
+    item_1: {
+      description:
+        'Wählen Sie einen Kurzcode und legen Sie Ihre Prämienauszahlung fest.',
+      title: 'Erstelle deinen Empfehlungscode',
+    },
+    item_2: {
+      description: 'Lade Freunde ein, deinen Code beim Tauschen zu verwenden.',
+      title: 'Mit Freunden teilen',
+    },
+    item_3: {
+      description:
+        'Lassen Sie sich jedes Mal in Ihrem bevorzugten Vermögenswert auszahlen, wenn gehandelt wird.',
+      title: 'Sammeln Sie automatisch Prämien',
+    },
+    item_4: {
+      description:
+        'Nutze einen Code von deinem Freund und spare Tauschgebühren.',
+      title: 'Empfehlungscode verwenden',
+    },
+  },
+  remove: 'Entfernen',
   remove_token: 'Token entfernen',
   rename: 'Umbenennen',
   rename_vault: 'Tresor umbenennen',
@@ -714,6 +927,8 @@ export const de = {
   request_from: 'Anfrage von',
   required_field_missing: 'Pflichtfeld fehlt',
   required_node_address: 'Die Knotenadresse ist erforderlich.',
+  resend_notification: 'Benachrichtigung erneut senden',
+  resend_notification_in: 'Benachrichtigung in {{time}} erneut senden',
   reshare: 'Weiter teilen',
   reshare_disclaimer:
     'Für alle Reshare-Aktionen ist stets eine bestimmte Anzahl an Geräten erforderlich.',
@@ -723,6 +938,9 @@ export const de = {
   reshare_your_vault: 'Teile deinen Tresor erneut',
   resource: 'Ressource',
   retry: 'Wiederholen',
+  review_vault_devices_subtitle:
+    'Vergewissern Sie sich, dass Sie die richtigen Geräte hinzugefügt haben:',
+  review_your_vault_devices: 'Überprüfen Sie Ihre Tresorgeräte',
   risky_site_detected: 'Schadhafte Website erkannt',
   risky_transaction_detected: '{{riskLevel}} Risikotransaktion erkannt',
   risky_tx_warning:
@@ -731,6 +949,16 @@ export const de = {
   save: 'Speichern',
   save_10_percent_on_swaps: 'Jetzt <blue>10%</blue> beim Tauschen sparen',
   save_changes: 'Änderungen speichern',
+  save_backup: 'Sicherungskopie speichern',
+  save_backup_description:
+    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud. Sie ist mit dem zuvor festgelegten Passwort zum Entsperren Ihres Tresors <b>verschlüsselt</b> .',
+  save_backup_description_2:
+    'Verwenden Sie für jede Datensicherung einen anderen Cloud-Dienst oder ein anderes Konto. Löschen Sie die Datei anschließend von diesem Gerät.',
+  save_backup_description_secure:
+    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Sichern Sie {{current}} von {{total}} in der Cloud',
+  save_backup_to_cloud: 'Backup in der Cloud speichern',
   save_code: 'Code speichern',
   save_swap_fees_with_referral:
     'Spare <blue>10%</blue> bei Tauschgeschäften – Füge eine Empfehlung hinzu',
@@ -744,9 +972,18 @@ export const de = {
   scan_with_devices_to_sign:
     'Scannen Sie mit Geräten, um an der Unterzeichnung der Transaktion teilzunehmen.',
   scanning: 'Scanvorgang...',
+  scanning_for_chains: 'Suche nach Ketten...',
+  scanning_for_chains_subtitle:
+    'Wir prüfen, welche Blockchains aktive Adressen für Ihre Seed-Phrase haben. <highlight>Dieser Vorgang kann bis zu 2 Minuten dauern.</highlight>',
   search: 'Suchen',
   search_field_placeholder: 'Suchen',
   secure: 'Sicher',
+  secureVaultSetup: {
+    backup: {
+      eachDeviceNeedsBackup: 'Jedes Gerät benötigt ein eigenes Backup.',
+      shares: 'Ihr Tresor enthält {{shares}} Aktien',
+    },
+  },
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one:
       'Fügen Sie mindestens noch {{count}} Gerät hinzu',
@@ -764,37 +1001,42 @@ export const de = {
   },
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie bei der Verschlüsselung einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
+  secure_backup_each_device: 'Sichern Sie jedes Gerät',
+  secure_backup_each_device_description:
+    'Sie erstellen insgesamt {{count}} Backups. Dies führen Sie auf jedem Gerät durch.',
+  secure_store_backups_separately_description:
+    'Speichern Sie jedes Backup in einem anderen Cloud-Speicher oder mit einem anderen Passwort. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
+  secure_notifications_are_here: 'Sichere Benachrichtigungen sind hier.',
+  secure_notifications_description:
+    'Sie erhalten Benachrichtigungen, wenn ein anderes Gerät versucht, Ihrem Tresor beizutreten oder wenn Ihre Unterschrift erforderlich ist.',
   security: 'Sicherheit',
   select: 'Wählen',
   select_asset: 'Anlage auswählen',
   select_backup_file: 'Importieren Sie Ihre Tresorfreigabe',
+  select_vault_backup_share: 'Tresorfreigabe auswählen',
+  select_vault_backup_share_description:
+    'Diese Sicherung enthält mehrere Tresorfreigaben. Wählen Sie die Freigabe für dieses Gerät aus.',
+  unsupported_vault_backup_file:
+    'Diese Datei sieht nicht wie ein Vultisig-Vault-Backup aus. Wählen Sie eine `.vult`- oder `.vult.zip`-Datei, die aus der Vultisig-App exportiert wurde.',
   select_chain: 'Select Chain',
   select_chains: 'Wählen',
+  select_chains_manually: 'Ketten manuell auswählen',
   select_positions: 'Positionen auswählen',
   select_positions_description:
     'Aktivieren Sie mindestens eine Position, um Salden anzuzeigen und Positionen zu verwalten.',
-  liquidity_pools: 'Liquiditätspools',
-  total_bonded: 'Gesamt gebunden {{ticker}}',
-  active_nodes: 'Aktive Nodes',
-  available_nodes: 'Available Nodes',
-  request_to_bond: 'Bond anfordern',
-  wait_until_node_churned: 'Warten Sie, bis der Node rotiert wird',
-  unstake_available_on: 'Unstake verfügbar am {{date}}',
-  bond_to_node: 'An Node binden',
-  next_churn: 'Nächste Rotation',
-  next_award: 'Nächste Belohnung',
-  apr: 'APR',
-  apy: 'APY',
-  bonded: 'Gebunden',
-  next_payout: 'Nächste Auszahlung',
-  estimated_reward: 'Geschätzte Belohnung',
+  compounded_token: 'Zusammengesetztes {{ticker}}',
   select_destination_chain: 'Zielkette auswählen',
+  select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
+  select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
+  select_pool: 'Pool auswählen',
   select_token: 'Token auswählen',
   select_vault: 'Wählen Sie einen Tresor aus.',
   select_vaults_to_backup: 'Zu sichernde Tresore auswählen',
   select_vaults_to_backup_description:
     'Wählen Sie aus, ob nur dieser Tresor oder alle Tresore in Ihrer App gesichert werden sollen.',
+  selected: 'ausgewählt',
   send: 'Schicken',
+  sends: 'Sendet',
   send_amount_exceeds_balance: 'Der Betrag übersteigt den Kontostand',
   send_invalid_receiver_address: 'Geben Sie eine gültige Empfängeradresse ein.',
   send_overview: 'Übersicht senden',
@@ -805,6 +1047,7 @@ export const de = {
   send_to: 'Senden an',
   sent: 'Gesendet',
   server_backup: 'Server-Backup',
+  server_backup_description: 'Server-Tresorfreigabe erneut anfordern.',
   session_init_failed: 'Sitzung konnte nicht initialisiert werden',
   set_expiration: 'Ablaufdatum festlegen (in Jahren)',
   set_passcode: 'Passcode festlegen',
@@ -824,6 +1067,8 @@ export const de = {
   signPrivately: 'Möchten Sie vertraulich unterschreiben?',
   sign_custom_message_description:
     'Benutzerdefinierte Nachricht unterschreiben',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'Dieser Tresor wurde ohne Ethereum importiert. Für die benutzerdefinierte Nachrichtensignatur wird Ethereum benötigt, und importierte Tresore können keine Blockchains hinzufügen, die beim Import übersprungen wurden.',
   sign_faster: 'Schneller unterschreiben als je zuvor',
   sign_message: 'Nachricht unterschreiben',
   sign_transaction: 'Transaktion signieren',
@@ -840,16 +1085,37 @@ export const de = {
   skip: 'Überspringen',
   slippage: 'Schlupf',
   something_went_wrong: 'Etwas ist schiefgelaufen.',
+  somethings_wrong: 'Irgendetwas stimmt nicht.',
   soon: 'Bald',
   stake: 'Einsatz',
-  staked_amount: 'Einsatzbetrag',
+  staked: 'Einsatz',
   transfer: 'Übertragen',
+  jetton_transfer: 'Jetton Transfer',
+  nft_transfer: 'NFT-Überweisung',
+  excess_gas_refund: 'Rückerstattung für überschüssiges Gas',
+  forward_ton_amount: 'Forward-TON-Betrag',
+  raw_payload: 'Rohdaten',
+  transferred: 'Übertragen',
+  staked_amount: 'Einsatzbetrag',
+  spender: 'Spender',
+  operator: 'Operator',
+  contract: 'Vertrag',
+  start: 'Start',
   start_reshare: 'Teilen starten',
+  status: 'Status',
+  success: 'Erfolg',
   successfully: 'Erfolgreich',
   support: 'Unterstützung',
   swap: 'Tauschen',
+  swaps: 'Tauschgeschäfte',
   swap_fee: 'Tauschgebühr',
   swap_overview: 'Tauschübersicht',
+  swap_same_asset:
+    'Ein Tausch zwischen demselben Vermögenswert ist nicht möglich.',
+  swap_terms: {
+    input: 'Der Tauschbetrag ist korrekt.',
+    output: 'Ich stimme dem Mindestbetrag zu, den ich erhalten werde.',
+  },
   switch: 'Schalten',
   switchToInternet: 'Zurück in den Internetmodus wechseln',
   switchToLocal: 'In den lokalen Modus wechseln',
@@ -857,11 +1123,13 @@ export const de = {
   terms_of_service: 'Nutzungsbedingungen',
   terms_required: 'Sie müssen den Bedingungen zustimmen.',
   this_device: 'Dieses Gerät',
+  this_device_suffix: '(dieses Gerät)',
   this_vault_only: 'Nur dieser Tresor',
   this_vault_share: 'dieses Geräte-Tresor teilen',
   thorchain_address: 'THORChain-Adresse',
   thorchain_address_required_for_referrals:
     'Sie benötigen eine THORChain-Adresse, um am Empfehlungsprogramm teilnehmen zu können.',
+  title: 'Titel',
   tns_alnum_only:
     'Der Empfehlungscode darf nur alphanumerische Zeichen enthalten.',
   tns_max_4_chars: 'Der Empfehlungscode darf maximal 4 Zeichen lang sein.',
@@ -870,16 +1138,32 @@ export const de = {
   tns_not_found: 'Empfehlungscode nicht gefunden',
   to: 'Zu',
   to_min_payout: 'min. Auszahlung',
+  today: 'Heute',
   to_asset: 'Zum Vermögenswert',
   token_not_found_description:
     'Mögliche Gründe: falscher Vertrag, nicht unterstützte Blockchain oder Token aus den Registern entfernt.',
+  token_not_found_invalid: 'Ungültige Vertragsadresse',
+  tokens: 'Token',
   total_fee: 'Gesamtgebühren',
   track: 'Schiene',
   transaction: 'Transaktion',
   transaction_details: 'Transaktionsdetails',
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion vom <provider></provider> erkannt',
+  transaction_failed: 'Transaktion<error> fehlgeschlagen</error>',
+  transaction_pending: 'Transaktion ausstehend...',
   transaction_successful: 'Transaktion <g> erfolgreich </g>',
+  transaction_could_not_be_parsed:
+    'Diese Transaktion konnte nicht analysiert werden. Die Rohdaten der Transaktion werden unten angezeigt.',
+  raw_transaction_data: 'Rohdaten der Transaktion',
+  transaction_history: 'Transaktionsverlauf',
+  transaction_instructions_summary:
+    'Zusammenfassung der Transaktionsanweisungen',
+  instruction: 'Anweisung',
+  program_id: 'Programm-ID',
+  accounts: 'Konten',
+  data_length: 'Datenlänge',
+  bytes: 'Bytes',
   tron_bandwidth: 'Bandwidth',
   tron_energy: 'Energy',
   tron_freeze_button: 'Freeze',
@@ -900,14 +1184,21 @@ export const de = {
     'Verwandle deinen Tresor in eine Prämienmaschine. Erstelle jetzt dein Empfehlungskonto und verdiene Geld.',
   twitter: 'Twitter',
   tx_hash: 'Transaktions-Hash',
+  type: 'Typ',
   type_here: 'Hier tippen',
   unbond: 'Entfesseln',
   unbond_with_lp: 'Entfessele Maya',
   unlock_discount_tier: 'Schalte die Stufe frei: <b>{{tier}}</b>',
+  unlock_discount_tier_description:
+    'Mit {{minBalance}} schalten Sie die {{tier}} Stufe frei und erhalten einen <b>{{bps}} bps Handelsgebührenrabatt</b> auf alle Tauschgeschäfte.',
+  unlock_discount_tier_description_ultimate:
+    'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   unlock_tier: 'Stufe freischalten',
+  ultimate: 'Ultimativ',
   unmerge: 'Aufheben',
   unfreeze: 'Unfreeze',
   unknown: 'Unbekannt',
+  unlimited: 'Unbegrenzt',
   unstake: 'Entkoppeln',
   unstake_share_token_label: '{{ticker}}',
   upgrade: 'Upgrade',
@@ -933,13 +1224,26 @@ export const de = {
   validator_address: 'Validatoradresse',
   value: 'Wert',
   vault: 'Gewölbe',
+  vaultCheckUpdatePage: {
+    applicationUpToDate: 'Die Anwendung ist auf dem neuesten Stand.',
+    downloadButton: 'Jetzt aktualisieren',
+    errorFetchingLatestVersion:
+      'Fehler beim Abrufen der neuesten Version: {{error}}',
+    fetchingLatestVersion: 'Die neueste Version wird abgerufen...',
+    title: 'Update prüfen',
+    update_is_available: 'Ein Update ist verfügbar',
+    version: 'Version {{latestVersion}}',
+  },
   vaultCreated: 'Tresor erstellt',
+  vaultOverview: 'Tresorübersicht',
   vault_already_exists: 'Vault "{{name}}" existiert bereits',
   vault_backup_page_password_info:
     'Speichern Sie Vault-Freigaben von verschiedenen Geräten niemals am selben Ort.',
   vault_backup_page_password_protection:
     'Optionaler Passwortschutz für Ihren Tresor',
   vault_backup_page_submit_loading_button_text: 'Speichern...',
+  vault_count_one: '{{count}} Tresor',
+  vault_count_other: '{{count}} Tresore',
   vault_delete_page_button: 'Tresor löschen',
   vault_delete_page_device_id: 'Geräte-ID',
   vault_delete_page_ecdsa_key: 'ECDSA-Schlüssel',
@@ -958,6 +1262,7 @@ export const de = {
   vault_details_page_signer_word: 'Unterzeichner',
   vault_details_page_vault_ECDSA: 'ECDSA',
   vault_details_page_vault_EDDSA: 'EdDSA',
+  vault_details_page_vault_MLDSA: 'MLDSA-Schlüssel',
   vault_details_page_vault_type: 'Tresortyp',
   vault_info: 'Tresorinformationen',
   vault_management: 'Tresor',
@@ -968,6 +1273,7 @@ export const de = {
   vault_name_max_length_error:
     'Der Tresorname darf maximal 50 Zeichen lang sein.',
   vault_name_required: 'Der Tresorname ist erforderlich.',
+  vault_notifications: 'Tresorbenachrichtigungen',
   vault_part: 'Tresor teilen',
   vault_password: 'Tresorpasswort',
   vault_qr_share: 'Aktie',
@@ -975,6 +1281,9 @@ export const de = {
     'Das Teilen von Inhalten wird von diesem Browser nicht unterstützt.',
   vault_qr_share_text: 'Schaut euch diesen Tresor-QR-Code an!',
   vault_qr_share_title: 'Vault QR-Code',
+  vault_ready_description:
+    'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',
+  vault_ready_to_use: 'Ihr Tresor ist einsatzbereit.',
   vault_rename_page_header_title: 'Bearbeiten Sie Ihren Tresornamen',
   vault_rename_page_name_error:
     'Der Tresorname muss zwischen 1 und 50 Zeichen lang sein.',
@@ -997,6 +1306,22 @@ export const de = {
     'Der Titel darf höchstens 50 Zeichen lang sein.',
   vault_settings_address_book_title_min_length_error:
     'Der Titel muss mindestens ein Zeichen lang sein.',
+  vault_setup_prop: {
+    fast: {
+      prop_0: 'Nur 1 Gerät erforderlich',
+      prop_1: 'Kleinere Geldbeträge für den täglichen Gebrauch aufbewahren',
+      prop_2: 'Vultiserver bestätigt sofort',
+      purpose: 'Als "Hot Wallet" verwenden',
+      title: 'Schnelle Einrichtung',
+    },
+    secure: {
+      prop_0: 'Maximale Sicherheit mit mehreren Geräten',
+      prop_1: 'Dank Geräte-Backups jederzeit verfügbar',
+      prop_2: 'Sichern Sie Vermögenswerte in beliebiger Höhe.',
+      purpose: 'Als „Cold Wallet“ verwenden',
+      title: 'Ultimative Sicherheit',
+    },
+  },
   vault_share_banner:
     'Mit diesem QR-Code können Sie eine Ansichtsversion Ihres Tresors freigeben.',
   vault_type_does_not_match: 'Der Tresortyp stimmt nicht überein.',
@@ -1004,12 +1329,17 @@ export const de = {
   vaults: 'Gewölbe',
   verify: 'Verifizieren',
   verify_password: 'Passwort bestätigen',
+  verify_password_for: 'Überprüfen Sie Ihr Passwort für:',
   verify_password_periodic_message_description:
     'Wir werden Sie regelmäßig bitten, Ihr Schnellanmeldepasswort zu bestätigen, damit Sie es sich immer merken können.',
   version: 'Version',
+  via: 'über',
+  view_on_explorer: 'Im Explorer anzeigen',
   vote: 'Abstimmung',
+  vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Vultisig-Gemeinde',
+  vultisig_education: 'Vultisig Education',
   vultisig_website: 'Vultisig-Website',
   waitingOnDevices: 'Warten auf Geräte...',
   waiting_for_devices_to_join: 'Warten auf den Beitritt weiterer Geräte',
@@ -1022,10 +1352,21 @@ export const de = {
   waiting_for_upgrade_start: 'Warten auf den Beginn des Upgrades...',
   wallet: 'Geldbörse',
   while_you_wait_vultisig_is: 'Während Sie warten, ist Vultisig...',
+  withdraw: 'Zurückziehen',
   withdraw_ruji_rewards: 'RUJI-Prämien auszahlen',
   add_cacao_pool: 'Zum CACAO-Pool hinzufügen',
   remove_cacao_pool: 'Aus dem CACAO-Pool entfernen',
+  add_thor_lp: 'Füge THORChain LP hinzu',
+  remove_thor_lp: 'THORChain LP entfernen',
+  pool: 'Pool',
+  paired_address: 'Zugeordnete Adresse',
+  lp_dust_amount_error:
+    'Unzureichendes RUNE-Guthaben. Mindestens {{amount}} RUNE werden als Staub für die LP-Auszahlung benötigt.',
+  lp_withdraw_percentage: 'Auszahlungsprozentsatz',
   wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
+  yesterday: 'Gestern',
+  you_send: 'Sie senden',
+  you_receive: 'Sie erhalten',
   you_are_bonding: 'Du bondest',
   you_are_unbonding: 'Du entbondest',
   you_are_sending: 'Du sendest',
@@ -1034,124 +1375,8 @@ export const de = {
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Ihr Tresor enthält {{shares}} Tresoranteile',
-  your_friends_referral_code: 'Der Empfehlungscode deines Freundes',
-  your_referral_code: 'Ihr Empfehlungscode',
-  your_referrals: 'Ihre Empfehlungen',
-  youre_swapping: 'Du tauschst',
-  diamond: 'Diamant',
-  ultimate: 'Ultimativ',
-  deposited: 'Eingezahlt',
-  withdraw: 'Zurückziehen',
-  account: 'Konto',
-  confirm_automation_creation: 'Automatisierungserstellung bestätigen',
-  id: 'AUSWEIS',
-  import_seedphrase: 'Seedphrase importieren',
-  seedPhraseImportTip: 'Tipp: Sie können einen Browser als Gerät verwenden',
-  import_seedphrase_description:
-    'Betritt es, erschaffe einen Tresor, schau nie zurück.',
-  import_vault_share: 'Vault-Freigabe importieren',
-  import_vault_share_description:
-    'Verwenden Sie eine Tresorfreigabe, um Ihren Tresor wiederherzustellen.',
-  import_vault_share_supported_files: 'Unterstützte Dateitypen: .bak & .vult',
-  new: 'Neu',
-  vulti_node: 'VultiNode',
-  percentage_zero: '0 %',
-  percentage_value: '{{value}}%',
-  automation_info: 'Automatisierungsinformationen',
-  app_install_timeout: 'Zeitüberschreitung bei der App-Installation (ms)',
-  app_install_timeout_invalid: 'Bitte geben Sie eine gültige Nummer ein.',
-  app_install_timeout_min: 'Muss 0 oder größer sein.',
-  recover_vault_or_convert_seedphrase:
-    'Stellen Sie Ihren Tresor wieder her oder wandeln Sie Ihre Seedphrase in einen Tresor um.',
-  active_chains_warning:
-    'Jede zusätzliche Kette verlängert die Zeit zum Generieren Ihres Tresors und erhöht die Wahrscheinlichkeit eines Timeouts.',
-  add_suggested_token: 'Vorschlagstoken hinzufügen',
-  site_wants_to_add_token:
-    '{{site}} möchte dieses Token zu Ihrer Wallet hinzufügen',
-  address_book_no_eligible_addresses_title:
-    'Keine gespeicherten Adressen für {{chain}}',
-  address_book_no_eligible_addresses_description:
-    'Gespeicherte Adressen müssen mit der Kette übereinstimmen, in der Sie die Sendung übermitteln.',
-  reject: 'Ablehnen',
-  at_least_one_device: 'Mindestens ein Gerät',
-  at_least_one_device_subtitle:
-    'Jedes Gerät, auf dem Vultisig ausgeführt werden kann, ist geeignet.',
-  before_you_start: 'Bevor Sie beginnen...',
-  evm_chains: 'EVM-Ketten',
-  enter_address_here: 'Adresse hier eingeben',
-  fast_vault_password_start_keysign_description:
-    'Bestätigen Sie die Transaktion, indem Sie das Passwort Ihrer Serverfreigabe eingeben.',
-  enter_your_seedphrase: 'Geben Sie Ihre Seed-Phrase ein',
-  enter_seedphrase_subtitle:
-    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Unterstützt werden Seed-Phrasen mit <h>12 oder 24 Wörtern</h>.',
-  mnemonic_placeholder: 'Geben Sie die 12 oder 24 Wörter Ihrer Seedphrase ein.',
-  seedphrase_word_count_error:
-    'Sie haben {{count}} Wörter eingegeben. Der Startsatz muss 12 oder 24 Wörter lang sein.',
-  seedphrase_invalid_error:
-    'Der Seed-Phrase ist nicht korrekt, bitte überprüfen Sie alle Wörter.',
-  import_seedphrase_onboarding_title:
-    'Sie treten in eine neue Ära ein, <g> lässt alte Seed-Phrasen hinter sich. </g> Sie benötigen:',
-  installation_progress: 'Installationsfortschritt: {{progress}}%',
-  no_active_chains_found: 'Keine aktiven Ketten gefunden',
-  no_active_chains_found_description:
-    'Wir konnten unter dieser Seed-Phrase keine Assets feststellen.',
-  scanning_for_chains: 'Suche nach Ketten...',
-  scanning_for_chains_subtitle:
-    'Wir prüfen, welche Blockchains aktive Adressen für Ihre Seed-Phrase haben. <highlight>Dieser Vorgang kann bis zu 2 Minuten dauern.</highlight>',
-  select_chains_manually: 'Ketten manuell auswählen',
-  your_seedphrase: 'Ihre Seedphrase',
-  your_seedphrase_subtitle:
-    'Betritt es, erschaffe einen Tresor, schau nie zurück',
-  active_chains_found_one: 'Wir haben {{count}} aktive Ketten gefunden',
-  active_chains_found_other: 'Wir haben {{count}} aktive Ketten gefunden',
-  allowance: 'Zuschuss',
-  auto: 'Auto',
-  backupShare: 'Backup-Tresor-Freigabe',
-  backup_password_info_cannot_be_reset:
-    'Wichtig: Wenn Sie Ihr Tresorpasswort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
-  backup_password_info_encrypt_with_password:
-    'Wenn Sie ein Passwort hinzufügen, wird dieses zur <b>Verschlüsselung</b> der Sicherungsdatei verwendet.',
-  backup_password_info_secure_without_password:
-    'Standardmäßig ist Ihre Datensicherung <b>ohne</b> zusätzliches Passwort sicher, da Sie Vault-Freigaben an verschiedenen Orten speichern.',
-  create: 'Erstellen',
-  device_backup: 'Gerätesicherung',
-  device_backup_description: 'Speichern Sie die Tresorfreigabe dieses Geräts.',
-  email_backup:
-    'Geben Sie Ihre E-Mail-Adresse ein, um Ihre Sicherungskopie zu erhalten.',
-  error: 'FEHLER',
-  local: 'Lokal',
-  low: 'Niedrig',
-  minute_one: '{{count}} Minute',
-  minute_other: '{{count}} Minuten',
-  normal: 'Normal',
-  off: 'Aus',
-  on: 'An',
-  on_chain: 'auf {{chain}}',
-  optional: 'optional',
-  password_backup:
-    'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',
-  permissions: 'Berechtigungen',
-  prepareVault: 'Vorbereitung des Tresors...',
-  remove: 'Entfernen',
-  compounded_token: 'Zusammengesetztes {{ticker}}',
-  select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
-  select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
-  selected: 'ausgewählt',
-  server_backup_description: 'Server-Tresorfreigabe erneut anfordern.',
-  staked: 'Einsatz',
-  start: 'Start',
-  success: 'Erfolg',
-  title: 'Titel',
-  tokens: 'Token',
-  unlock_discount_tier_description:
-    'Mit {{minBalance}} schalten Sie die {{tier}} Stufe frei und erhalten einen <b>{{bps}} bps Handelsgebührenrabatt</b> auf alle Tauschgeschäfte.',
-  unlock_discount_tier_description_ultimate:
-    'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
-  vaultOverview: 'Tresorübersicht',
-  vault_count_one: '{{count}} Tresor',
-  vault_count_other: '{{count}} Tresore',
-  vult: '$VULT',
   vaultSetupOverview: {
+    title: 'Ihre Tresorkonfiguration',
     fast: {
       badgeTitle: 'Schneller Tresor',
       badgeSubtitle: '2-Geräte-Setup',
@@ -1204,84 +1429,36 @@ export const de = {
       feature3Description:
         'Ideal für Teams, die gemeinsam genutzte Gelder und höherwertige Tresore verwalten, für die mehr Unterzeichner erforderlich sind.',
     },
-    title: 'Ihre Tresorkonfiguration',
   },
-  add_referral: 'Empfehlung hinzufügen',
-  backupVault: 'Backup-Tresor',
-  backupInCloudTitle: 'Verschlüsselt mit Ihrem Tresorpasswort',
-  backupInCloudDescription:
-    'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben. Online-Speicher wird empfohlen, und sichere Tresorfreigaben sind genau dafür konzipiert.',
-  backupsTitle: '<highlight>Backups,</highlight> Ihre neue Genesungsmethode',
-  backupsDescription:
-    'Backups schützen Ihren Vault. Jedes Gerät hat sein <w>eigenes</w> Backup. Ein Backup allein kann keine Gelder verschieben; es dient nur zur Wiederherstellung. Importieren und stellen Sie jedes verlorene Gerät wieder her.',
-  backupEachDevice: 'Sichern Sie jedes Gerät',
-  backupEachDeviceDescription:
-    'Das Geräte-Backup <w>und</w> das Passwort sind die Schlüssel. Der Server signiert nur mit, und ein Backup kann angefordert werden.',
-  storeBackupsSeparately: 'Backups separat speichern',
-  storeBackupsSeparatelyDescription:
-    'Bewahren Sie jedes Backup an einem anderen Ort auf. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
-  backupShareWarning: 'Dies ist nur 1 Anteil Ihres Tresors.',
-  backupShareWarningRest:
-    'Wiederholen Sie diesen Vorgang für die anderen Geräte.',
-  backup_email_description:
-    'Geben Sie die E-Mail-Adresse ein, um die Tresorfreigabe zu erhalten.',
-  backup_password_description:
-    'Geben Sie das Passwort ein, das Sie beim Erstellen dieses Tresors festgelegt haben.',
-  choose_a_password: 'Wählen Sie ein Passwort',
-  choose_a_password_description:
-    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b> <info />',
-  create_vault: 'Tresor erstellen',
-  create_referral_desc:
-    'Erstelle deinen eigenen Code und verdiene!<c> 20%</c> bei vermittelten Swaps',
-  save_referral: 'Empfehlung speichern',
-  save_referral_desc:
-    'Speichere den Empfehlungscode eines Freundes und spare.<c> 10%</c> auf Tauschgeschäften.',
-  email_placeholder: 'Geben Sie Ihre E-Mail-Adresse ein.',
-  enter: 'Eingeben',
-  enter_your_email: 'Geben Sie Ihre E-Mail-Adresse ein',
-  enter_your_email_description:
-    'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
-  seedphrase_duplicate_vault_error:
-    'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
-  fast_vault_exists_warning_title: 'Tresor existiert bereits',
-  fast_vault_exists_warning_description:
-    'Diese Seed-Phrase wurde bereits als Fast Vault auf einem anderen Gerät importiert. Wenn Sie fortfahren, wird der Server-Anteil ersetzt und das andere Gerät funktioniert nicht mehr.',
-  fast_vault_exists_warning_hint:
-    'Wenn Sie möchten, dass beide Geräte funktionieren, verwenden Sie stattdessen einen Secure Vault.',
-  incorrect_email: 'Falsche E-Mail-Adresse, bitte überprüfen Sie diese.',
-  insufficient_native_balance_for_fee:
-    'Unzureichendes Guthaben an nativen Token zur Bezahlung der Transaktionsgebühr',
-  incorrect_passcode: 'Falsches Passwort.',
-  new_vault_setup: 'Neue Tresoreinrichtung',
-  new_vault_setup_disclaimer:
-    'Ihre Konfiguration hat sich geändert, erstellen Sie ein neues Backup.',
-  manage_referral_title: 'Vultisig-Überweisungen',
-  select_pool: 'Pool auswählen',
-  token_not_found_invalid: 'Ungültige Vertragsadresse',
-  transaction_failed: 'Transaktion<error> fehlgeschlagen</error>',
-  transaction_pending: 'Transaktion ausstehend...',
-  transaction_could_not_be_parsed:
-    'Diese Transaktion konnte nicht analysiert werden. Die Rohdaten der Transaktion werden unten angezeigt.',
-  raw_transaction_data: 'Rohdaten der Transaktion',
-  transaction_instructions_summary:
-    'Zusammenfassung der Transaktionsanweisungen',
-  instruction: 'Anweisung',
-  program_id: 'Programm-ID',
-  accounts: 'Konten',
-  data_length: 'Datenlänge',
-  bytes: 'Bytes',
-  add_thor_lp: 'Füge THORChain LP hinzu',
-  remove_thor_lp: 'THORChain LP entfernen',
-  lp_dust_amount_error:
-    'Unzureichendes RUNE-Guthaben. Mindestens {{amount}} RUNE werden als Staub für die LP-Auszahlung benötigt.',
-  lp_withdraw_percentage: 'Auszahlungsprozentsatz',
+  your_friends_referral_code: 'Der Empfehlungscode deines Freundes',
+  your_referral_code: 'Ihr Empfehlungscode',
+  your_referrals: 'Ihre Empfehlungen',
+  your_seedphrase: 'Ihre Seedphrase',
+  your_seedphrase_subtitle:
+    'Betritt es, erschaffe einen Tresor, schau nie zurück',
+  youre_swapping: 'Du tauschst',
+  account: 'Konto',
+  session_history: 'Sitzungsverlauf',
   vultibot: 'VultiBot',
   vultibot_welcome: 'Hallo, ich bin VultiBot.',
   start_new_chat: 'Neuen Chat starten',
   new_chat: 'Neuer Chat',
   messages: 'Nachrichten',
+  failed_to_load_session_history: 'Sitzungsverlauf konnte nicht geladen werden',
+  agent_history_load_error_description:
+    'Bitte versuchen Sie es erneut. Sollte das Problem weiterhin bestehen, öffnen Sie den Chat von vorhin wieder oder starten Sie einen neuen.',
+  agent_history_empty_title: 'Noch keine Chats.',
+  agent_history_empty_description:
+    'Eröffne einen neuen Chat, und deine letzten Unterhaltungen werden hier angezeigt.',
   vultibot_description:
     'Ihr KI-gestützter Tresorassistent. Ich kann Geld tauschen, senden, Richtlinien automatisieren, Kontostände prüfen und Ihren Tresor verwalten.',
+  agent_what_to_do: 'Was möchten Sie tun?',
+  agent_help_description:
+    'Ich kann bei der Vorbereitung von Tauschvorgängen, Plugin-Aktionen und Automatisierungsregeln helfen.',
+  agent_prompt_show_plugins: 'Zeig mir Plugins und was sie können.',
+  agent_prompt_earn_apy: 'Ich möchte mit BTC eine jährliche Rendite erzielen.',
+  agent_prompt_send: 'Senden Sie den Betrag an ...',
+  agent_prompt_swap: 'Bereiten Sie einen Tausch von ETH zu BTC vor.',
   api_key_required: 'API-Schlüssel erforderlich',
   api_key_required_description:
     'Um VultiBot zu verwenden, legen Sie bitte Ihren Anthropic-API-Schlüssel als Umgebungsvariable fest, bevor Sie die App starten.',
@@ -1289,6 +1466,8 @@ export const de = {
   thinking: 'Denken',
   try_saying: 'Versuchen Sie Folgendes zu sagen',
   ask_about_plugins_policies: 'Fragen Sie nach Plugins und Richtlinien...',
+  approve_transaction: 'Transaktion genehmigen',
+  enter_vault_password: 'Tresorpasswort eingeben',
   signed_in: 'Eingeloggt',
   password_required_for_operation:
     'Bitte geben Sie Ihr Passwort für {{operation}} ein.',
@@ -1305,6 +1484,9 @@ export const de = {
   agent_session_expired:
     'Ihre Sitzung ist abgelaufen. Geben Sie Ihr Tresorpasswort ein, um die Verbindung wiederherzustellen.',
   agent_sign_in_failed: 'Anmeldung fehlgeschlagen',
+  agent_chat_options: 'Chat-Optionen',
+  agent_give_feedback: 'Feedback geben',
+  agent_delete_chat_session: 'Chat-Sitzung löschen',
   agent_signing_in: 'Anmelden...',
   agent_thinking_of_ideas: 'Ich denke über Ideen nach...',
   agent_tool_label: 'Werkzeug: {{tool}}',
@@ -1319,91 +1501,6 @@ export const de = {
   agent_tx_type_swap: 'Tauschen',
   agent_tx_type_transfer: 'Überweisen',
   agent_tx_view: 'Sicht',
-  open_as_side_panel: 'Als Seitenwand öffnen',
-  agent: 'Agent',
-  agent_nav_tip_description:
-    'Vulti Agent ist verfügbar. Tippen Sie hier, um ihn einzurichten.',
-  agent_nav_tip_title: 'Neu!',
-  broadcasted: 'Ausgestrahlt',
-  cache_password_for_5_min: 'Passwort 5 Minuten lang merken',
-  choose_chains: 'Wählen Sie Ketten',
-  congrats: 'Glückwunsch!',
-  confirmed: 'Bestätigt',
-  contract_execution: 'Vertragsabwicklung',
-  contract_interaction: 'Vertragsinteraktion',
-  date: 'Datum',
-  device_n_label: 'Gerät {{number}} - {{hash}}',
-  remove_friends_referral: 'Empfehlung entfernen',
-  post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
-  post_quantum_keygen_description:
-    'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
-  post_quantum_key_already_generated:
-    'Dieser Tresor verfügt bereits über einen Post-Quanten-Schlüssel',
-  push_notifications: 'Push-Benachrichtigungen',
-  push_notification_server_url: 'URL des Push-Benachrichtigungsservers',
-  push_notification_server_placeholder:
-    'Für die Produktionseinstellung leer lassen.',
-  failed: 'Fehlgeschlagen',
-  failed_to_load_transactions: 'Transaktionen konnten nicht geladen werden.',
-  go_to_wallet: 'Gehe zu deiner Brieftasche',
-  i_understand: 'Ich verstehe',
-  i_understand_save_backup: 'Ich verstehe, wie man dieses Backup speichert.',
-  left_pool: 'Pool verlassen',
-  looks_good: 'Sieht gut aus',
-  no_transactions_yet: 'Bisher keine Transaktionen',
-  review_vault_devices_subtitle:
-    'Vergewissern Sie sich, dass Sie die richtigen Geräte hinzugefügt haben:',
-  review_your_vault_devices: 'Überprüfen Sie Ihre Tresorgeräte',
-  save_backup: 'Sicherungskopie speichern',
-  save_backup_description:
-    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud. Sie ist mit dem zuvor festgelegten Passwort zum Entsperren Ihres Tresors <b>verschlüsselt</b> .',
-  save_backup_description_2:
-    'Verwenden Sie für jede Datensicherung einen anderen Cloud-Dienst oder ein anderes Konto. Löschen Sie die Datei anschließend von diesem Gerät.',
-  save_backup_description_secure:
-    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud.',
-  save_backup_n_of_n_to_cloud:
-    'Sichern Sie {{current}} von {{total}} in der Cloud',
-  save_backup_to_cloud: 'Backup in der Cloud speichern',
-  secure_backup_each_device: 'Sichern Sie jedes Gerät',
-  secure_backup_each_device_description:
-    'Sie erstellen insgesamt {{count}} Backups. Dies führen Sie auf jedem Gerät durch.',
-  secure_store_backups_separately_description:
-    'Speichern Sie jedes Backup in einem anderen Cloud-Speicher oder mit einem anderen Passwort. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
-  sends: 'Sendet',
-  somethings_wrong: 'Irgendetwas stimmt nicht.',
-  transferred: 'Übertragen',
-  status: 'Status',
-  swaps: 'Tauschgeschäfte',
-  swap_same_asset:
-    'Ein Tausch zwischen demselben Vermögenswert ist nicht möglich.',
-  this_device_suffix: '(dieses Gerät)',
-  today: 'Heute',
-  transaction_history: 'Transaktionsverlauf',
-  vault_details_page_vault_MLDSA: 'MLDSA-Schlüssel',
-  vault_ready_description:
-    'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',
-  vault_ready_to_use: 'Ihr Tresor ist einsatzbereit.',
-  view_on_explorer: 'Im Explorer anzeigen',
-  yesterday: 'Gestern',
-  session_history: 'Sitzungsverlauf',
-  failed_to_load_session_history: 'Sitzungsverlauf konnte nicht geladen werden',
-  agent_history_load_error_description:
-    'Bitte versuchen Sie es erneut. Sollte das Problem weiterhin bestehen, öffnen Sie den Chat von vorhin wieder oder starten Sie einen neuen.',
-  agent_history_empty_title: 'Noch keine Chats.',
-  agent_history_empty_description:
-    'Eröffne einen neuen Chat, und deine letzten Unterhaltungen werden hier angezeigt.',
-  agent_what_to_do: 'Was möchten Sie tun?',
-  agent_help_description:
-    'Ich kann bei der Vorbereitung von Tauschvorgängen, Plugin-Aktionen und Automatisierungsregeln helfen.',
-  agent_prompt_show_plugins: 'Zeig mir Plugins und was sie können.',
-  agent_prompt_earn_apy: 'Ich möchte mit BTC eine jährliche Rendite erzielen.',
-  agent_prompt_send: 'Senden Sie den Betrag an ...',
-  agent_prompt_swap: 'Bereiten Sie einen Tausch von ETH zu BTC vor.',
-  approve_transaction: 'Transaktion genehmigen',
-  enter_vault_password: 'Tresorpasswort eingeben',
-  agent_chat_options: 'Chat-Optionen',
-  agent_give_feedback: 'Feedback geben',
-  agent_delete_chat_session: 'Chat-Sitzung löschen',
   agent_analyzing: 'Analyse läuft...',
   agent_analyzed_for: 'Analysiert für {{duration}}s',
   agent_analyzed: 'Analysiert',
@@ -1415,96 +1512,40 @@ export const de = {
   agent_reauth_description:
     'Aus Sicherheitsgründen läuft die Autorisierung regelmäßig ab. Bitte bestätigen Sie, dass Sie Vulti Agent weiterhin verwenden möchten.',
   authorize: 'Autorisieren',
-  enable_tss_batching: 'TSS-Batching aktivieren',
-  keygen_protocol_done: 'Erledigt',
-  keygen_protocol_running: 'Läuft',
-  notification_sent_successfully:
-    'Die Benachrichtigung wurde erfolgreich versendet!',
-  resend_notification: 'Benachrichtigung erneut senden',
-  resend_notification_in: 'Benachrichtigung in {{time}} erneut senden',
-  desktop_push_notification_enable_failed:
-    'Push-Benachrichtigungen konnten nicht aktiviert werden. Bitte versuchen Sie es erneut.',
-  desktop_push_notification_disable_failed:
-    'Push-Benachrichtigungen konnten nicht deaktiviert werden. Bitte versuchen Sie es erneut.',
-  keysign_request: 'Schlüsselsignaturanfrage',
-  join_transaction: 'Beitrittstransaktion',
-  foreground_notification_generic: 'Transaktion vorbehaltlich der Genehmigung',
-  foreground_notification_send: 'Senden Sie {{amount}}',
-  foreground_notification_swap: 'Tausche {{from}} → {{to}}',
-  in_progress: 'Im Gange...',
-  route: 'Route',
-  via: 'über',
-  enable: 'Aktivieren',
-  enable_all: 'Alle aktivieren',
-  push_notifications_description:
-    'Lassen Sie sich benachrichtigen, wenn Ihre Unterschrift erforderlich ist oder ein Gerät Zugriff anfordert.',
-  notifications: 'Benachrichtigungen',
-  not_now: 'Nicht jetzt.',
-  secure_notifications_are_here: 'Sichere Benachrichtigungen sind hier.',
-  secure_notifications_description:
-    'Sie erhalten Benachrichtigungen, wenn ein anderes Gerät versucht, Ihrem Tresor beizutreten oder wenn Ihre Unterschrift erforderlich ist.',
-  vault_notifications: 'Tresorbenachrichtigungen',
-  choose_vaults: 'Tresore auswählen',
-  manage_notifications_in_settings:
-    'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
-  bech32_prefix: 'Adresspräfix',
-  chain_id: 'Ketten-ID',
-  fee_currency: 'Gebührenwährung',
-  rest_endpoint: 'REST-Endpunkt',
-  rpc_endpoint: 'RPC-Endpunkt',
-  suggest_chain_subtitle:
-    '{{site}} möchte diese Blockchain zu Ihrer Wallet hinzufügen.',
-  suggest_chain_title: 'Empfohlene Kette hinzufügen',
-  balance_changes: 'Bilanzveränderungen',
-  connect_dapp: 'dApp verbinden',
-  connect_website_subtitle:
-    'Verbinden Sie diese Website mit der Vultisig-Erweiterung',
-  banner_carousel_go_to_banner: 'Gehe zum Banner {{number}}',
-  buy_vult_banner_cta: 'Kaufen Sie $VULT',
-  buy_vult_banner_subtitle: 'Und sparen Sie Tauschgebühren',
-  buy_vult_banner_title: 'Kaufen Sie $VULT',
-  vault_import_failed: 'Vault konnte nicht importiert werden: {{message}}',
-  qbtc_claim_title: 'QBTC-Anspruch',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'BTC-Betrag',
-  qbtc_claim_no_claimable_utxos:
-    'Für diese Adresse wurden keine einlösbaren UTXOs gefunden.',
-  qbtc_claim_disabled_notice:
-    'Das Einlösen von Ansprüchen ist auf der QBTC-Blockchain derzeit deaktiviert.',
-  qbtc_claim_failed_to_load: 'Fehler beim Laden der anrechenbaren UTXOs.',
-  qbtc_claim_selected_count: '{{count}} von {{max}} ausgewählt',
-  qbtc_claim_confirm: 'Anspruch ausgewählt',
-  qbtc_claim_proving: 'Generierung von Beweisen…',
-  qbtc_claim_proving_hint: 'Dies kann mehrere Minuten dauern.',
-  qbtc_claim_broadcasting: 'Broadcasting des Anspruchs…',
-  qbtc_claim_success_title: 'Anspruch erfolgreich',
-  qbtc_claim_utxos_claimed: 'UTXOs eingelöst',
-  qbtc_claim_utxos_skipped: 'UTXOs übersprungen',
-  qbtc_claim_tx_hash: 'Transaktions-Hash',
-  qbtc_claim_copy_tx_hash: 'Kopiere den Transaktions-Hash',
-  qbtc_claim_done: 'Erledigt',
-  qbtc_claim_failed:
-    'Die Reklamation ist fehlgeschlagen. Bitte versuchen Sie es erneut.',
-  qbtc_claim_fast_vault_only:
-    'Für die Geltendmachung von Ansprüchen ist derzeit ein Fast Vault erforderlich. Die Unterstützung für Secure Vault ist in Vorbereitung.',
-  qbtc_claim_password_description:
-    'Geben Sie Ihr Fast Vault-Passwort ein, um die Schadensabwicklung mitzuunterzeichnen.',
-  sign_custom_message_unavailable_imported_no_ethereum:
-    'Dieser Tresor wurde ohne Ethereum importiert. Für die benutzerdefinierte Nachrichtensignatur wird Ethereum benötigt, und importierte Tresore können keine Blockchains hinzufügen, die beim Import übersprungen wurden.',
-  jetton_transfer: 'Jetton Transfer',
-  nft_transfer: 'NFT-Überweisung',
-  excess_gas_refund: 'Rückerstattung für überschüssiges Gas',
-  forward_ton_amount: 'Forward-TON-Betrag',
-  raw_payload: 'Rohdaten',
-  spender: 'Spender',
-  operator: 'Operator',
-  contract: 'Vertrag',
-  type: 'Typ',
-  unlimited: 'Unbegrenzt',
-  verify_password_for: 'Überprüfen Sie Ihr Passwort für:',
-  vultisig_education: 'Vultisig Education',
-  pool: 'Pool',
-  paired_address: 'Zugeordnete Adresse',
-  you_send: 'Sie senden',
-  you_receive: 'Sie erhalten',
+  invalid_validator_address: 'Ungültige Validierungsadresse',
+  unnamed_validator: 'Unbenannt',
+  select_delegation: 'Delegierung auswählen',
+  select_delegation_to_unstake:
+    'Wählen Sie die Delegation aus, deren Einsatz freigegeben werden soll.',
+  select_delegation_to_move: 'Wählen Sie die Delegierung zum Verschieben aus.',
+  failed_to_load_delegations: 'Delegierungen konnten nicht geladen werden',
+  source_validator: 'Quellcode-Validator',
+  destination_validator: 'Zielvalidierung',
+  redelegate_same_validator:
+    'Zielvalidierung muss sich von Quellvalidierung unterscheiden.',
+  delegate: 'Delegieren',
+  undelegate: 'Undelegate',
+  redelegate: 'Neudelegieren',
+  claim_rewards: 'Prämien einfordern',
+  select_validator: 'Auswahlvalidator',
+  delegate_to_new_validator: 'An neuen Validator delegieren',
+  active_delegations: 'Aktive Delegationen',
+  total_staked: 'Insgesamt eingesetzt {{ticker}}',
+  staked_label: 'Gestakelt: {{amount}} {{ticker}}',
+  unbonding_lock_label: '{{days}}-Tage-Entkopplungssperre',
+  unbonding_unlocks_at: 'Entsperrt {{date}}',
+  validator_status_active: 'Aktiv',
+  validator_status_churned_out: 'Ausgebeutet',
+  validator_voting_power: '{{amount}} {{ticker}}',
+  validator_commission: '{{rate}}%',
+  move: 'Bewegen',
+  validator: 'Validator',
+  pending_rewards: 'Ausstehende Prämien',
+  failed_to_load_rewards: 'Belohnungen konnten nicht geladen werden',
+  failed_to_load_validators: 'Validatoren konnten nicht geladen werden',
+  no_active_delegations: 'Keine aktiven Delegationen',
+  you_are_moving: 'Du bewegst dich',
+  you_are_claiming: 'Du behauptest',
+  commission: 'Kommission',
+  claim_n_validators: 'Anspruch von {{count}}-Validatoren',
 }
