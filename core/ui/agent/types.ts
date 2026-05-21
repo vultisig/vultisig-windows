@@ -1,4 +1,4 @@
-export type Action = {
+type Action = {
   id: string
   type: string
   title: string
@@ -6,14 +6,14 @@ export type Action = {
   params?: Record<string, unknown>
 }
 
-export type Suggestion = {
+type Suggestion = {
   id: string
   plugin_id: string
   title: string
   description: string
 }
 
-export type ToolCallStatus = 'running' | 'success' | 'error'
+type ToolCallStatus = 'running' | 'success' | 'error'
 
 export type ToolCallInfo = {
   actionType: string
@@ -25,7 +25,6 @@ export type ToolCallInfo = {
 }
 
 import type { AgentStep } from './timeline/TimelineEntry'
-export type { AgentStep } from './timeline/TimelineEntry'
 
 export type ChatMessage = {
   id: string

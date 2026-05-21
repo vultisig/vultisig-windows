@@ -1,4 +1,4 @@
-export type AppToolDeclaration = {
+type AppToolDeclaration = {
   name: string
   params: string
 }
@@ -125,7 +125,7 @@ export type TxTransaction = {
   metadata?: Record<string, unknown>
 }
 
-export type BackendMessage = {
+type BackendMessage = {
   id: string
   conversation_id: string
   role: string
@@ -134,20 +134,20 @@ export type BackendMessage = {
   created_at: string
 }
 
-export type BackendSuggestion = {
+type BackendSuggestion = {
   id: string
   plugin_id: string
   title: string
   description: string
 }
 
-export type PolicyReady = {
+type PolicyReady = {
   plugin_id: string
   configuration: Record<string, unknown>
   policy_suggest?: unknown
 }
 
-export type InstallRequired = {
+type InstallRequired = {
   plugin_id: string
   title: string
   description: string

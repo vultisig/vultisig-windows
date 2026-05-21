@@ -17,10 +17,13 @@ import { useVaults } from '../../storage/vaults'
 
 export const currentVaultContextId = 'CurrentVault'
 
-export const [CurrentVaultProvider, useCurrentVault, CurrentVaultContext] =
+const [CurrentVaultProviderValue, useCurrentVaultValue, CurrentVaultContext] =
   setupValueProvider<Vault & Partial<{ coins: AccountCoin[] }>>(
     currentVaultContextId
   )
+
+export const CurrentVaultProvider = CurrentVaultProviderValue
+export const useCurrentVault = useCurrentVaultValue
 
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()

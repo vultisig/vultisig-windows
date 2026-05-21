@@ -5,8 +5,10 @@ import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { ChainAction } from '../ChainAction'
 import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 
-export const [InternalDepositActionProvider, useDepositAction] =
+const [InternalDepositActionProvider, useDepositActionValue] =
   setupStateProvider<ChainAction>('DepositAction')
+
+export const useDepositAction = useDepositActionValue
 
 export const DepositActionProvider = ({ children }: ChildrenProp) => {
   const [{ coin: coinKey, action: preferredAction }] =

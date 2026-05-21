@@ -1,6 +1,6 @@
 {
   "name": "vultisig-windows",
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "yarn@4.15.0",
   "workspaces": [
     "./**",
     "!vendor/**"
@@ -25,16 +25,16 @@
     "update": "yarn set version latest && yarn dlx npm-check-updates@latest -u --workspaces --root && yarn install"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.3",
+    "@eslint/compat": "^2.1.0",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.2",
-    "@google-cloud/translate": "^9.3.0",
-    "@types/chrome": "^0.1.38",
-    "@types/node": "^25.5.0",
-    "@types/react": "^19.2.14",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
-    "@typescript-eslint/parser": "^8.57.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260316.1",
+    "@google-cloud/translate": "^9.4.1",
+    "@types/chrome": "^0.1.42",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
+    "@typescript/native-preview": "7.0.0-dev.20260316.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "concurrently": "^9.2.1",
     "eslint": "^9.39.2",
@@ -44,17 +44,17 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-storybook": "^10.2.19",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "eslint-plugin-storybook": "^10.4.0",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.4.0",
-    "knip": "^5.87.0",
-    "prettier": "^3.8.1",
-    "tsx": "^4.21.0",
+    "globals": "^17.6.0",
+    "knip": "^6.14.1",
+    "prettier": "^3.8.3",
+    "tsx": "^4.22.3",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.7"
   },
   "resolutions": {
     "@trustwallet/wallet-core": "4.6.9",
@@ -68,10 +68,11 @@
     "minimatch@^9.0.4": ">=9.0.7",
     "minimatch@^9.0.5": ">=9.0.7",
     "minimatch@^10.1.1": ">=10.2.3",
-    "@isaacs/brace-expansion": ">=5.0.1"
+    "@isaacs/brace-expansion": ">=5.0.1",
+    "esbuild": "0.27.4"
   },
   "dependencies": {
-    "@noble/curves": "^1.9.0",
+    "@noble/curves": "^2.2.0",
     "lottie-react": "^2.4.1",
     "react-markdown": "^10.1.0"
   }

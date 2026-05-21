@@ -27,7 +27,7 @@ type RegularTxData = IKeysignTransactionPayload & {
   coin: Coin
 }
 
-export type PolkadotDappTxData = {
+type PolkadotDappTxData = {
   chain: OtherChain.Polkadot | OtherChain.Bittensor
   signerPayload: PolkadotSignerPayloadJSON
 }

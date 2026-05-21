@@ -19,7 +19,7 @@ export type SetAppChainInput = {
   [K in ActiveChainKind]: { [P in K]: ChainOfKind<P> }
 }[ActiveChainKind]
 
-export type GetAccountInput = {
+type GetAccountInput = {
   chain: Chain
   /** When provided (e.g. from grantVaultAccess popup response), used instead of storage lookup to avoid races. */
   appSession?: VaultAppSession

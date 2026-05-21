@@ -25,8 +25,11 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Playground: Story = {
-  render: args => (
-    <Hoverable {...args}>
+  render: ({ horizontalOffset, verticalOffset }) => (
+    <Hoverable
+      horizontalOffset={horizontalOffset}
+      verticalOffset={verticalOffset}
+    >
       <EyeIcon />
     </Hoverable>
   ),

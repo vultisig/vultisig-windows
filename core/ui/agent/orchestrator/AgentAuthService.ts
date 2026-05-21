@@ -1,4 +1,4 @@
-import { secp256k1 } from '@noble/curves/secp256k1'
+import { secp256k1 } from '@noble/curves/secp256k1.js'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { keccak256, toBytes, toHex } from 'viem'
 import { z } from 'zod'
@@ -38,8 +38,7 @@ const authTokenSchema = z.object({
 
 function deriveEthereumAddress(compressedPubKeyHex: string): string {
   const normalized = compressedPubKeyHex.replace(/^0[xX]/, '')
-  const pubBytes =
-    secp256k1.ProjectivePoint.fromHex(normalized).toRawBytes(false)
+  const pubBytes = secp256k1.Point.fromHex(normalized).toBytes(false)
   const hash = keccak256(toBytes(toHex(pubBytes.slice(1))))
   return '0x' + hash.slice(-40)
 }

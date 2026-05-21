@@ -1,36 +1,30 @@
-export const agentStepCategories = [
-  'planning',
-  'proposing',
-  'executing',
-  'success',
-  'error',
-  'recurring',
-  'plugin',
-  'balance',
-  'history',
-] as const
+export type AgentStepCategory =
+  | 'planning'
+  | 'proposing'
+  | 'executing'
+  | 'success'
+  | 'error'
+  | 'recurring'
+  | 'plugin'
+  | 'balance'
+  | 'history'
 
-export type AgentStepCategory = (typeof agentStepCategories)[number]
-
-export const agentStepIconTypes = [
-  'loader',
-  'noteText',
-  'scroll',
-  'calculator',
-  'scanCube',
-  'buildingBlock',
-  'proposalCube',
-  'check',
-  'wallet',
-  'arrowUp',
-  'swapArrows',
-  'chatNotification',
-  'plugin',
-  'historyRefresh',
-  'warning',
-] as const
-
-export type AgentStepIconType = (typeof agentStepIconTypes)[number]
+export type AgentStepIconType =
+  | 'loader'
+  | 'noteText'
+  | 'scroll'
+  | 'calculator'
+  | 'scanCube'
+  | 'buildingBlock'
+  | 'proposalCube'
+  | 'check'
+  | 'wallet'
+  | 'arrowUp'
+  | 'swapArrows'
+  | 'chatNotification'
+  | 'plugin'
+  | 'historyRefresh'
+  | 'warning'
 
 export type AgentStep = {
   id: string

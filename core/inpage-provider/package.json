@@ -3,16 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@bufbuild/protobuf": "^2.11.0",
+    "@bufbuild/protobuf": "2.11.0",
     "@core/extension": "workspace:^",
     "@core/ui": "workspace:^",
     "@cosmjs/encoding": "^0.38.1",
-    "@keplr-wallet/types": "^0.13.13",
+    "@keplr-wallet/types": "^0.13.34",
     "@lib/extension": "workspace:^",
     "@lib/ui": "workspace:^",
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
-    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-query": "^5.100.11",
     "@trustwallet/wallet-core": "^4.6.9",
     "@vultisig/core-chain": "2.0.0",
     "@vultisig/core-config": "0.9.1",
@@ -21,11 +21,11 @@
     "bitcoinjs-lib": "^7.0.1",
     "cosmjs-types": "^0.11.0",
     "ethers": "^6.16.0",
-    "framer-motion": "^12.37.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-i18next": "^16.5.8",
-    "styled-components": "^6.3.11",
-    "viem": "^2.47.4"
+    "framer-motion": "^12.39.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-i18next": "^17.0.8",
+    "styled-components": "^6.4.2",
+    "viem": "^2.50.4"
   }
 }

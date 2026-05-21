@@ -9,8 +9,10 @@ type FocusedSendFieldContext = {
   field: FocusedSendField
 }
 
-export const [InternalSendFormFieldsStateProvider, useSendFormFieldState] =
+const [InternalSendFormFieldsStateProvider, useSendFormFieldStateValue] =
   setupStateProvider<FocusedSendFieldContext>('SendFormFieldStateProvider')
+
+export const useSendFormFieldState = useSendFormFieldStateValue
 
 export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
   const [state] = useCoreViewState<'send'>()
