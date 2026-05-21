@@ -7,8 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -31,30 +29,10 @@ type Store struct {
 
 // NewStore creates a new store
 func NewStore() (*Store, error) {
-	dbPath := os.Getenv(`VULTISIG_DB_PATH`)
-	if dbPath == "" {
-		if runtime.GOOS == "linux" {
-			homeDir, err := os.UserHomeDir()
-			if err != nil {
-				return nil, fmt.Errorf("failed to get user home directory: %w", err)
-			}
-			dbPath = filepath.Join(homeDir, ".vultisig")
-			// Create directory if it doesn't exist
-			if err := os.MkdirAll(dbPath, 0700); err != nil {
-				return nil, fmt.Errorf("failed to create vultisig directory: %w", err)
-			}
-		} else {
-			// Get the current running folder
-			exePath, err := os.Executable()
-			if err != nil {
-				return nil, fmt.Errorf("fail to get current directory, err: %w", err)
-			}
-			dbPath = exePath
-		}
+	dbFilePath, err := storeDBFilePath()
+	if err != nil {
+		return nil, err
 	}
-	exeDir := filepath.Dir(dbPath)
-	// Construct the full path to the database file
-	dbFilePath := filepath.Join(exeDir, DbFileName)
 
 	db, err := sql.Open("sqlite3", dbFilePath+"?_journal_mode=WAL")
 	if err != nil {

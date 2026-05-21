@@ -187,3 +187,6 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           package: false
+
+      - name: Run Go storage tests
+        run: go test ./storage
