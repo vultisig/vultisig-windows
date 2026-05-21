@@ -739,7 +739,7 @@ export const hr = {
   total_bonded: 'Ukupno vezano {{ticker}}',
   active_nodes: 'Aktivni Čvorovi',
   vulti_node: 'VultiNode',
-  available_nodes: 'Available Nodes',
+  available_nodes: 'Dostupni čvorovi',
   request_to_bond: 'Zatraži vezanje',
   wait_until_node_churned: 'Pričekajte dok čvor završi rotaciju',
   unstake_available_on: 'Unstake dostupan {{date}}',

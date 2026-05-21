@@ -658,7 +658,7 @@ export const nl = {
     'Scan QR met een ander apparaat. {{recommended}}-apparaten setup aanbevolen, {{min}} is voldoende.',
   keygen_failed: 'Key generation-fout. Probeer opnieuw.',
   keygen_protocol_done: 'Klaar',
-  keygen_protocol_running: 'Rennen',
+  keygen_protocol_running: 'Bezig',
   keys: 'Sleutels',
   keysign: 'Keysign',
   keysign_request: 'Sleutelondertekeningsverzoek',

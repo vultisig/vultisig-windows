@@ -760,7 +760,7 @@ export const de = {
   total_bonded: 'Gesamt gebunden {{ticker}}',
   active_nodes: 'Aktive Nodes',
   vulti_node: 'VultiNode',
-  available_nodes: 'Available Nodes',
+  available_nodes: 'Verfügbare Knoten',
   request_to_bond: 'Bond anfordern',
   wait_until_node_churned: 'Warten Sie, bis der Node rotiert wird',
   unstake_available_on: 'Unstake verfügbar am {{date}}',

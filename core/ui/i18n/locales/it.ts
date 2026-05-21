@@ -79,7 +79,7 @@ export const it = {
   backupVault: 'Vault di backup',
   backupInCloudTitle: 'Crittografato con la tua password Vault',
   backupInCloudDescription:
-    'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza. Si consiglia l&#39;archiviazione online e le condivisioni del vault sicure sono progettate per questo scopo.',
+    "Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza. Si consiglia l'archiviazione online e le condivisioni del vault sicure sono progettate per questo scopo.",
   backupShare: 'Condivisione del Vault di backup',
   backupShare2: 'Condivisione di backup 2',
   backupsTitle:
@@ -98,7 +98,7 @@ export const it = {
   backup_description:
     'Esegui il backup di Vault Share in una posizione preferita',
   backup_email_description:
-    'Inserisci l&#39;email per ricevere la condivisione del vault.',
+    "Inserisci l'email per ricevere la condivisione del vault.",
   backup_now: 'Esegui il backup ora',
   backup_password: 'Password di backup',
   backup_password_description:
@@ -225,8 +225,7 @@ export const it = {
   connect: 'Collegare',
   connect_dapp: 'Connetti dApp',
   connect_to_site: 'Connettiti a {{site}}',
-  connect_website_subtitle:
-    'Collega questo sito web con l&#39;estensione Vultisig',
+  connect_website_subtitle: "Collega questo sito web con l'estensione Vultisig",
   connected_dapps: 'dApp connesse',
   connecting_to_server: 'Connessione al server',
   continue: 'Continuare',
@@ -754,7 +753,7 @@ export const it = {
   total_bonded: 'Totale in bond {{ticker}}',
   active_nodes: 'Nodi Attivi',
   vulti_node: 'VultiNode',
-  available_nodes: 'Available Nodes',
+  available_nodes: 'Nodi disponibili',
   request_to_bond: 'Richiedi bond',
   wait_until_node_churned: 'Attendi che il nodo venga churnato',
   unstake_available_on: 'Sblocco disponibile il {{date}}',
@@ -860,7 +859,7 @@ export const it = {
   qbtc_claim_utxos_claimed: 'UTXO rivendicati',
   qbtc_claim_utxos_skipped: 'UTXO saltati',
   qbtc_claim_tx_hash: 'Hash della transazione',
-  qbtc_claim_copy_tx_hash: 'Copia l&#39;hash della transazione',
+  qbtc_claim_copy_tx_hash: "Copia l'hash della transazione",
   qbtc_claim_done: 'Fatto',
   qbtc_claim_failed: 'Richiesta non riuscita. Riprova.',
   qbtc_claim_fast_vault_only:
@@ -1008,7 +1007,7 @@ export const it = {
   select_vault_backup_share_description:
     'Questo backup contiene più condivisioni di vault. Scegli la condivisione per questo dispositivo.',
   unsupported_vault_backup_file:
-    'Questo file non sembra essere un backup del vault di Vultisig. Seleziona un file `.vult` o `.vult.zip` esportato dall&#39;app Vultisig.',
+    "Questo file non sembra essere un backup del vault di Vultisig. Seleziona un file `.vult` o `.vult.zip` esportato dall'app Vultisig.",
   select_chain: 'Seleziona catena',
   select_chains: 'Selezionare',
   select_chains_manually: 'Seleziona manualmente le catene',
@@ -1059,7 +1058,7 @@ export const it = {
   signPrivately: 'Vuoi firmare privatamente?',
   sign_custom_message_description: 'Firma un messaggio personalizzato',
   sign_custom_message_unavailable_imported_no_ethereum:
-    'Questo vault è stato importato senza Ethereum. La firma personalizzata dei messaggi richiede Ethereum e i vault importati non possono aggiungere le blockchain che sono state saltate durante l&#39;importazione.',
+    "Questo vault è stato importato senza Ethereum. La firma personalizzata dei messaggi richiede Ethereum e i vault importati non possono aggiungere le blockchain che sono state saltate durante l'importazione.",
   sign_faster: 'Firma più velocemente che mai',
   sign_message: 'Messaggio del segno',
   sign_transaction: 'Firma la transazione',
@@ -1076,7 +1075,7 @@ export const it = {
   skip: 'Saltare',
   slippage: 'slittamento',
   something_went_wrong: 'Qualcosa è andato storto',
-  somethings_wrong: 'C&#39;è qualcosa che non va',
+  somethings_wrong: "C'è qualcosa che non va",
   soon: 'Presto',
   stake: 'Palo',
   staked: 'Picchettato',
@@ -1272,7 +1271,7 @@ export const it = {
   vault_qr_share_title: 'Codice QR del caveau',
   vault_ready_description:
     'È tutto pronto! Avrai sempre il controllo di ogni transazione.',
-  vault_ready_to_use: 'La tua cassaforte è pronta per l&#39;uso.',
+  vault_ready_to_use: "La tua cassaforte è pronta per l'uso.",
   vault_rename_page_header_title: 'Modifica il nome del tuo vault',
   vault_rename_page_name_error:
     'Il nome del vault deve essere compreso tra 1 e 50 caratteri',
@@ -1383,7 +1382,7 @@ export const it = {
       badgeSubtitle: 'Vault a 2 dispositivi',
       feature1Title: 'Firma a 2 dispositivi',
       feature1Description:
-        'Ogni transazione necessita dell&#39;approvazione di entrambi i tuoi dispositivi.',
+        "Ogni transazione necessita dell'approvazione di entrambi i tuoi dispositivi.",
       feature2Title: 'Nessun singolo punto di errore',
       feature2Description:
         'Un dispositivo da solo non può trasferire fondi. Se un dispositivo viene smarrito o esposto, non può approvare autonomamente.',
@@ -1396,7 +1395,7 @@ export const it = {
       badgeSubtitle: 'Vault a 3 dispositivi',
       feature1Title: 'Firma a 2 dispositivi',
       feature1Description:
-        'Ogni transazione necessita dell&#39;approvazione di 2 dei tuoi 3 dispositivi.',
+        "Ogni transazione necessita dell'approvazione di 2 dei tuoi 3 dispositivi.",
       feature2Title: 'Nessun singolo punto di errore',
       feature2Description:
         'Un dispositivo da solo non può trasferire fondi. Se un dispositivo viene smarrito o esposto, non può approvare autonomamente.',
@@ -1439,17 +1438,17 @@ export const it = {
   agent_history_empty_description:
     'Avvia una nuova chat e le tue conversazioni recenti appariranno qui.',
   vultibot_description:
-    'Il tuo assistente virtuale basato sull&#39;intelligenza artificiale. Posso scambiare, inviare, automatizzare le polizze, controllare i saldi e gestire il tuo caveau.',
+    "Il tuo assistente virtuale basato sull'intelligenza artificiale. Posso scambiare, inviare, automatizzare le polizze, controllare i saldi e gestire il tuo caveau.",
   agent_what_to_do: 'Cosa ti piacerebbe fare?',
   agent_help_description:
     'Posso aiutarti a preparare scambi, azioni dei plugin e regole di automazione.',
   agent_prompt_show_plugins: 'Mostrami i plugin e le loro funzionalità.',
   agent_prompt_earn_apy: 'Voglio guadagnare APY su BTC',
-  agent_prompt_send: 'Invia l&#39;importo a...',
+  agent_prompt_send: "Invia l'importo a...",
   agent_prompt_swap: 'Prepara uno scambio da ETH a BTC',
   api_key_required: 'Chiave API richiesta',
   api_key_required_description:
-    'Per utilizzare VultiBot, imposta la tua chiave API Anthropic come variabile di ambiente prima di avviare l&#39;app.',
+    "Per utilizzare VultiBot, imposta la tua chiave API Anthropic come variabile di ambiente prima di avviare l'app.",
   type_a_message: 'Scrivi un messaggio...',
   thinking: 'Pensiero',
   try_saying: 'Prova a dire',
@@ -1465,7 +1464,7 @@ export const it = {
   agent_chat_render_error:
     'Si è verificato un problema durante il rendering della chat.',
   agent_connect_description:
-    'Inserisci la password del tuo vault per connetterti all&#39;agente. La tua password verrà utilizzata per firmare un messaggio di autenticazione.',
+    "Inserisci la password del tuo vault per connetterti all'agente. La tua password verrà utilizzata per firmare un messaggio di autenticazione.",
   agent_connect_now: 'Connettiti ora',
   agent_connected: 'Collegato',
   agent_connecting: 'Connessione in corso...',
@@ -1497,9 +1496,9 @@ export const it = {
   agent_welcome_description:
     'Il tuo vault ora è in grado di comprendere le richieste, automatizzare le azioni e aiutarti a gestire le tue criptovalute.',
   authorize_agent: 'Agente autorizzato',
-  reauthorize_vulti_agent: 'Riautorizza l&#39;agente Vulti',
+  reauthorize_vulti_agent: "Riautorizza l'agente Vulti",
   agent_reauth_description:
-    'Per motivi di sicurezza, l&#39;autorizzazione scade periodicamente. Conferma per continuare a utilizzare Vulti Agent.',
+    "Per motivi di sicurezza, l'autorizzazione scade periodicamente. Conferma per continuare a utilizzare Vulti Agent.",
   authorize: 'Autorizzare',
   invalid_validator_address: 'Indirizzo del validatore non valido',
   unnamed_validator: 'Senza nome',
