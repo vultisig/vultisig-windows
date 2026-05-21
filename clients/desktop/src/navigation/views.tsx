@@ -22,10 +22,33 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
+import { useVaults } from '@core/ui/storage/vaults'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
 import { VaultPage } from '@core/ui/vault/page'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
+import { useEffect } from 'react'
+
+const DesktopVaultPage = () => {
+  const vaults = useVaults()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (vaults.length === 0) {
+      navigate({ id: 'newVault' }, { replace: true })
+    }
+  }, [vaults.length, navigate])
+
+  if (vaults.length === 0) return null
+
+  return (
+    <>
+      <DesktopNotificationPrompt />
+      <VaultPage />
+    </>
+  )
+}
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: CheckUpdatePage,
@@ -66,12 +89,7 @@ const desktopSharedViewOverrides: Pick<
   'vault' | 'chooseVaults'
 > = {
   chooseVaults: DesktopChooseVaultsView,
-  vault: () => (
-    <>
-      <DesktopNotificationPrompt />
-      <VaultPage />
-    </>
-  ),
+  vault: DesktopVaultPage,
 }
 
 export const views: Views<AppViewId> = {
