@@ -7,7 +7,6 @@ import { areEqualCoins, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { sum } from '@vultisig/lib-utils/array/sum'
 import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useCallback, useMemo } from 'react'
 
 export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
@@ -15,12 +14,9 @@ export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
   const coins = useMemo(
     () =>
       withoutDuplicates(
-        value.map(key => {
-          const coin = shouldBePresent(
-            vaultCoins.find(coin => areEqualCoins(coin, key))
-          )
-
-          return coin
+        value.flatMap(key => {
+          const coin = vaultCoins.find(coin => areEqualCoins(coin, key))
+          return coin ? [coin] : []
         }),
         areEqualCoins
       ),
@@ -36,7 +32,7 @@ export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
         const total = sum(
           value.map(({ amount, decimals, ...coinKey }) => {
             const key = coinKeyToString(coinKey)
-            const price = prices[key]
+            const price = prices[key] ?? 0
 
             return price * fromChainAmount(amount, decimals)
           })
