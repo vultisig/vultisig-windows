@@ -98,7 +98,16 @@ This project depends on multiple packages from the [`vultisig-sdk`](https://gith
 - `@vultisig/core-mpc` — multi-party computation
 - `@vultisig/lib-utils` — shared utilities
 
-CI also runs a non-blocking compatibility check against the SDK `main` branch to catch integration issues early.
+CI builds against packed tarballs from the SDK `main` branch before installing dependencies. A plain local checkout uses the npm-published SDK versions from `yarn.lock`, so local builds can fail when Windows has merged code that depends on SDK changes that are versioned but not published yet.
+
+To make a local checkout match CI, run:
+
+```bash
+yarn sdk:use-main
+yarn dev:desktop
+```
+
+The command clones fresh SDK `main`, builds and packs the shared `@vultisig/*` packages, adds local tarball `resolutions` to `package.json`, and runs `yarn install`.
 
 ### Developing with the latest SDK (unreleased)
 
@@ -107,6 +116,8 @@ Since vultisig-sdk is a monorepo, `yarn link` won't work due to peer dependency 
 ```bash
 ./scripts/use-local-sdk.sh /path/to/vultisig-sdk
 ```
+
+Make sure `/path/to/vultisig-sdk` is on the branch you want to test. For the CI-equivalent setup, prefer `yarn sdk:use-main` so the SDK checkout is cloned from fresh `main`.
 
 This will build the SDK, pack all shared packages, add `resolutions` to `package.json`, and run `yarn install`.
 
@@ -119,7 +130,7 @@ yarn install
 
 ### Releasing
 
-Production builds always use npm-published SDK versions. Before releasing, ensure all `@vultisig/*` dependencies in `package.json` point to stable npm versions, not git references or local links.
+Release builds should use npm-published SDK versions. Before releasing, ensure all `@vultisig/*` dependencies in `package.json` point to stable npm versions, not git references or local links.
 
 ## Development Guidelines
 
