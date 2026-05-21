@@ -1,8 +1,8 @@
 import { CheckUpdate } from '@clients/desktop/src/components/check-update'
 import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
 import { AppViewId } from '@clients/desktop/src/navigation/AppView'
+import { DesktopVaultPage } from '@clients/desktop/src/navigation/DesktopVaultPage'
 import { DesktopChooseVaultsView } from '@clients/desktop/src/notifications/DesktopChooseVaultsView'
-import { DesktopNotificationPrompt } from '@clients/desktop/src/notifications/DesktopNotificationPrompt'
 import { DesktopNotificationSettingsPage } from '@clients/desktop/src/notifications/DesktopNotificationSettingsPage'
 import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
 import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
@@ -22,33 +22,9 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
-import { useVaults } from '@core/ui/storage/vaults'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
-import { VaultPage } from '@core/ui/vault/page'
-import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
-import { useEffect } from 'react'
-
-const DesktopVaultPage = () => {
-  const vaults = useVaults()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (vaults.length === 0) {
-      navigate({ id: 'newVault' }, { replace: true })
-    }
-  }, [vaults.length, navigate])
-
-  if (vaults.length === 0) return null
-
-  return (
-    <>
-      <DesktopNotificationPrompt />
-      <VaultPage />
-    </>
-  )
-}
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: CheckUpdatePage,
