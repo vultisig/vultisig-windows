@@ -11,7 +11,7 @@ import {
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
-import { getCosmosStakingGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
+import { getCosmosGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
 import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
@@ -457,6 +457,17 @@ type ApplyCosmosStakingSignDataInput = {
   publicKey: PublicKey
   keysignPayload: ReturnType<typeof create<typeof KeysignPayloadSchema>>
 }
+
+type GetCosmosStakingGasLimitInput = {
+  chain: CosmosChain
+  msgCount?: number
+}
+
+const getCosmosStakingGasLimit = ({
+  chain,
+  msgCount = 1,
+}: GetCosmosStakingGasLimitInput) =>
+  getCosmosGasLimit({ chain }) * BigInt(msgCount)
 
 const buildCosmosStakingInput = ({
   action,

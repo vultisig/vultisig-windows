@@ -1,4 +1,5 @@
 import { ValidatorAvatar } from '@core/ui/chain/cosmos/staking/components/ValidatorAvatar'
+import { type Validator } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { Button } from '@lib/ui/buttons/Button'
@@ -8,10 +9,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import {
-  type UnbondingEntry,
-  type Validator,
-} from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
+import { type UnbondingEntry } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

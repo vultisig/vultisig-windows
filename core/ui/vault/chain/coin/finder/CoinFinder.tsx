@@ -13,6 +13,7 @@ import { useEffect } from 'react'
 
 import { useCoinFinderIgnore } from '../../../../storage/coinFinderIgnore'
 import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
+import { shouldAutoSaveDiscoveredCoin } from './shouldAutoSaveDiscoveredCoin'
 
 export const CoinFinder = () => {
   const { data } = useCoinFinderQuery()
@@ -29,6 +30,7 @@ export const CoinFinder = () => {
     if (!data) return
 
     const newCoins = withoutRujiStakingReceiptCoins(data)
+      .filter(shouldAutoSaveDiscoveredCoin)
       .filter(coin => !coinFinderIgnore.some(c => areEqualCoins(c, coin)))
       .map(coin => {
         const existingCoinInfo = coins.find(c => areEqualCoins(c, coin))

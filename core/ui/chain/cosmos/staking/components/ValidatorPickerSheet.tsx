@@ -9,13 +9,15 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
-import { type Validator } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCosmosValidatorsQuery } from '../queries/useCosmosValidatorsQuery'
+import {
+  useCosmosValidatorsQuery,
+  type Validator,
+} from '../queries/useCosmosValidatorsQuery'
 import { ValidatorAvatar } from './ValidatorAvatar'
 
 type ValidatorPickerSheetProps = {
