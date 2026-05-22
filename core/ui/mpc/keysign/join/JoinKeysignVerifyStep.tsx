@@ -4,7 +4,7 @@ import { JoinKeysignTransactionVerify } from '@core/ui/mpc/keysign/join/tx/JoinK
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Button } from '@lib/ui/buttons/Button'
-import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
@@ -29,7 +29,7 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
         hasBorder
       />
       <PageContent>
-        <WithProgressIndicator value={0.6}>
+        <VStack flexGrow>
           <MatchRecordUnion
             value={keysignPayload}
             handlers={{
@@ -39,7 +39,7 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
               custom: value => <JoinKeysignCustomMessageVerify value={value} />,
             }}
           />
-        </WithProgressIndicator>
+        </VStack>
         <Button onClick={onFinish}>{t('join_keysign')}</Button>
       </PageContent>
     </>
