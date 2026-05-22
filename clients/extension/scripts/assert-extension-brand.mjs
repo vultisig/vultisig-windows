@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises'
+import { readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -32,9 +32,37 @@ const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(currentDir, '../dist')
 const manifestPath = path.resolve(distDir, 'manifest.json')
 const inpagePath = path.resolve(distDir, 'inpage.js')
+const assetsDir = path.resolve(distDir, 'assets')
+
+const readInpageAssetChunks = async () => {
+  let entries = []
+
+  try {
+    entries = await readdir(assetsDir, { withFileTypes: true })
+  } catch {
+    return ''
+  }
+
+  const inpageAssetPaths = entries
+    .filter(
+      entry =>
+        entry.isFile() &&
+        entry.name.endsWith('.js') &&
+        entry.name.includes('inpage')
+    )
+    .map(entry => path.resolve(assetsDir, entry.name))
+
+  const sources = await Promise.all(
+    inpageAssetPaths.map(filePath => readFile(filePath, 'utf8'))
+  )
+
+  return sources.join('\n')
+}
 
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
-const inpage = await readFile(inpagePath, 'utf8')
+const inpage = [await readFile(inpagePath, 'utf8'), await readInpageAssetChunks()]
+  .filter(Boolean)
+  .join('\n')
 
 const assertEqual = (actual, expectedValue, label) => {
   if (actual !== expectedValue) {
