@@ -23,7 +23,7 @@ const resolveProductBrand = (value?: string): ProductBrand => {
   }
 
   throw new Error(
-    `Unsupported VULTISIG_EXTENSION_BRAND "${value}". Expected "vultisig" or "station".`
+    `Unsupported __VULTISIG_PRODUCT_BRAND__ "${value}". Expected "vultisig" or "station".`
   )
 }
 

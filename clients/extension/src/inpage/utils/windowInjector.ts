@@ -24,9 +24,6 @@ const stationWalletInfo = {
   icon: currentExtensionBrandConfig.provider.icon,
 }
 
-const getEip6963Icon = () =>
-  currentExtensionBrandConfig.provider.icon as `data:image/${string}`
-
 const pushToWalletArray = (key: 'terraWallets' | 'interchainWallets') => {
   const existing = window[key]
   if (Array.isArray(existing)) {
@@ -64,7 +61,7 @@ export const injectToWindow = () => {
 
   announceProvider({
     info: {
-      icon: getEip6963Icon(),
+      icon: currentExtensionBrandConfig.provider.icon,
       name: currentExtensionBrandConfig.provider.eip6963Name,
       rdns: currentExtensionBrandConfig.provider.eip6963Rdns,
       uuid: uuidv4(),
@@ -190,7 +187,7 @@ async function setupContentScriptMessenger(
 
     announceProvider({
       info: {
-        icon: getEip6963Icon(),
+        icon: currentExtensionBrandConfig.provider.icon,
         name: currentExtensionBrandConfig.provider.eip6963Name,
         rdns: 'app.phantom',
         uuid: uuidv4(),
