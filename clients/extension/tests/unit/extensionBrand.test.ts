@@ -36,7 +36,7 @@ describe('extension brand config', () => {
 
   it('rejects unsupported extension brand selectors', () => {
     expect(() => resolveExtensionProductBrand('terra')).toThrow(
-      'Unsupported VULTISIG_EXTENSION_BRAND'
+      'Unsupported __VULTISIG_PRODUCT_BRAND__'
     )
   })
 
