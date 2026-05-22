@@ -51,6 +51,7 @@ import {
 } from '@wallet-standard/features'
 import bs58 from 'bs58'
 
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { bytesEqual, isVersionedTransaction } from '../../utils/functions'
 import { Callback } from '../constants'
 import icon from '../icon'
@@ -151,7 +152,7 @@ export class Solana implements Wallet {
       this.account = new VultisigSolanaWalletAccount({
         address,
         publicKey: publicKeyBytes,
-        label: 'Vultisig Extension',
+        label: currentExtensionBrandConfig.manifest.name,
         icon: this.icon,
       })
 
@@ -202,7 +203,7 @@ export class Solana implements Wallet {
       this.account = new VultisigSolanaWalletAccount({
         address,
         publicKey: publicKeyBytes,
-        label: 'Vultisig Extension',
+        label: currentExtensionBrandConfig.manifest.name,
         icon: this.icon,
       })
 
@@ -614,7 +615,7 @@ export class Solana implements Wallet {
   async handleNotification() {
     return Promise.reject({
       code: -32603,
-      message: 'This function is not supported by Vultisig',
+      message: `This function is not supported by ${currentExtensionBrandConfig.provider.walletPickerName}`,
     })
   }
 }
