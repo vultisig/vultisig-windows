@@ -405,6 +405,9 @@ const parseWallets = ({
   })
 }
 
+/**
+ * Classifies legacy Station localStorage snapshots without reading or writing browser storage.
+ */
 export const classifyStationLegacyWalletStorage = (
   snapshot: StationLegacyStorageSnapshot
 ): StationLegacyStorageClassification => {
