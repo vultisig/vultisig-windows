@@ -1,21 +1,23 @@
 /**
  * Swap Flow E2E Tests
  *
- * Tests real swap transactions with DYNAMIC chain selection based on actual balances.
- * FUND-DEPENDENT: Requires funded test vault.
+ * Two modes of coverage:
  *
- * APPROACH:
- * - Source: dynamically selected from chains with sufficient balance (> $2)
- * - Destination: chain with lowest balance (self-balancing over time)
- * - Amount: actual USD value ($2 worth), not percentage
+ * 1. DYNAMIC SWAP — picks source by highest balance, dest by lowest, amount
+ *    sized to SWAP_TARGET_USD (default $15, above TC inbound floor). Runs as
+ *    daily smoke. Override pair space with SWAPPABLE_CHAINS env.
  *
- * NATIVE-TO-NATIVE SWAPS ONLY:
- * - Swaps native/gas tokens between different chains
- * - Extension UI only supports BTC ↔ ETH swaps
+ * 2. ROUTE MATRIX — driven by SWAP_ROUTES env (csv of `from>to`, e.g.
+ *    "ethereum>sui,avalanche>zcash"). Used to exercise specific SwapKit /
+ *    THORChain / Maya / 1inch / Kyber / LI.FI routes on release. Each route
+ *    is its own test() so one failure doesn't cascade. If SWAP_ROUTES is
+ *    unset, the matrix block is skipped.
+ *
+ * FUND-DEPENDENT: Requires funded test vault. Set ENABLE_TX_SIGNING_TESTS=true.
  *
  * SAFETY MEASURES:
  * - Swaps go to vault's OWN address on destination chain
- * - Amounts are small (~$2)
+ * - Amounts default to ~$15 (above TC min, below cap-loss risk)
  * - Only swap fees + gas are consumed
  */
 
@@ -26,7 +28,14 @@ import { KeysignProgress } from '../page-objects/KeysignProgress.po'
 import { updateStaleness, type ChainId } from '../helpers/chain-rotation'
 import { waitForTxConfirmation } from '../helpers/tx-confirmation'
 import { ensureVaultExists, getVaultConfigFromEnv } from '../helpers/vault-import'
-import { getVaultBalances, selectSwapPair, canSwap, type SwapConfig } from '../helpers/dynamic-swap'
+import {
+  getVaultBalances,
+  selectSwapPair,
+  canSwap,
+  CHAIN_SYMBOLS,
+  SYMBOL_FALLBACK_AMOUNTS,
+  type SwapConfig,
+} from '../helpers/dynamic-swap'
 
 // Skip if fund-dependent tests not enabled
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
@@ -109,6 +118,10 @@ test.describe('Swap Flow', () => {
         return
       }
 
+      // Pre-broadcast safety gate — verify the form actually matches what we
+      // intended. Throws (does NOT broadcast) on mismatch.
+      await swapFlow.assertSelectionMatches(swapConfig.fromSymbol, swapConfig.toSymbol)
+
       // Execute swap
       await swapFlow.continue()
       await swapFlow.acceptTerms()
@@ -185,6 +198,114 @@ test.describe('Swap Flow', () => {
       await page.close()
     }
   })
+
+  /**
+   * Route matrix — drive arbitrary from>to pairs via env. Each pair runs as a
+   * separate test so one bad route doesn't poison the rest of the suite.
+   *
+   *   SWAP_ROUTES="ethereum>sui,avalanche>zcash" \
+   *   ENABLE_TX_SIGNING_TESTS=true \
+   *   npx playwright test --grep "route matrix"
+   *
+   * Per-pair amount override: `ethereum>sui:0.01` overrides the default
+   * SYMBOL_FALLBACK_AMOUNTS lookup. Useful for routes with non-standard mins.
+   */
+  const parsedRoutes = (process.env.SWAP_ROUTES || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean)
+    .map(entry => {
+      const [pair, amountOverride] = entry.split(':').map(s => s.trim())
+      const [from, to] = pair.split('>').map(s => s.trim().toLowerCase())
+      return { from, to, amountOverride }
+    })
+    .filter(r => r.from && r.to)
+
+  for (const route of parsedRoutes) {
+    const fromSymbol = CHAIN_SYMBOLS[route.from]
+    const toSymbol = CHAIN_SYMBOLS[route.to]
+    const amount =
+      route.amountOverride ||
+      (fromSymbol ? SYMBOL_FALLBACK_AMOUNTS[fromSymbol] : undefined) ||
+      '0.001'
+
+    test(`route matrix - ${route.from} -> ${route.to} (${amount} ${fromSymbol || '?'})`, async ({ context, extensionId }) => {
+      test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+      test.skip(!fromSymbol || !toSymbol, `Unknown chain in route ${route.from}>${route.to}`)
+
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const swapFlow = new SwapFlow(page, extensionId)
+      const keysignProgress = new KeysignProgress(page, extensionId)
+
+      try {
+        await vaultPage.goto()
+        await vaultPage.waitForView(15_000)
+
+        console.log(`\n🔄 Route matrix: ${amount} ${fromSymbol} (${route.from}) → ${toSymbol} (${route.to})`)
+
+        await navigateToSwap(page)
+        await swapFlow.waitForView()
+
+        await swapFlow.prepareSwapWithAmount(route.from, route.to, amount)
+
+        const expectedOutput = await swapFlow.getExpectedOutput()
+        if (!expectedOutput || expectedOutput === '0') {
+          console.log('⚠️ No quote received - route may be unavailable or amount below provider min')
+          test.skip()
+          return
+        }
+        console.log(`Quote: ${amount} ${fromSymbol} → ${expectedOutput} ${toSymbol}`)
+
+        const canContinue = await swapFlow.isContinueEnabled()
+        if (!canContinue) {
+          console.log('⚠️ Continue disabled - quote present but blocked (likely balance or min)')
+          test.skip()
+          return
+        }
+
+        // Pre-broadcast safety gate — refuse to broadcast if the form doesn't
+        // match the intended route (catches selectFromCoin falling back to USDC,
+        // selectToCoin silently no-op'ing when chain not in carousel, etc.)
+        await swapFlow.assertSelectionMatches(fromSymbol!, toSymbol!)
+
+        await swapFlow.continue()
+        await swapFlow.acceptTerms()
+        await swapFlow.sign()
+
+        await keysignProgress.waitForView(30_000)
+        const result = await keysignProgress.waitForComplete(180_000)
+
+        if (result === 'success') {
+          const txHash = await keysignProgress.getTxHash()
+          expect(txHash).toBeTruthy()
+          if (txHash) {
+            console.log(`✅ ${route.from}>${route.to} swap tx: ${txHash}`)
+            const confirmation = await waitForTxConfirmation(route.from as ChainId, txHash, 120_000)
+            expect(confirmation.confirmed).toBe(true)
+            updateStaleness([route.from as ChainId, route.to as ChainId], true)
+          }
+        } else {
+          const error = await keysignProgress.getError()
+          console.log(`❌ ${route.from}>${route.to} swap failed:`, error)
+          updateStaleness([route.from as ChainId, route.to as ChainId], false)
+
+          // Same tolerant-error policy as the dynamic-swap test: only hard-fail
+          // on errors that aren't liquidity/balance/route-availability noise.
+          if (
+            !error?.includes('insufficient') &&
+            !error?.includes('balance') &&
+            !error?.includes('no route') &&
+            !error?.includes('liquidity')
+          ) {
+            throw new Error(`Swap failed: ${error}`)
+          }
+        }
+      } finally {
+        await page.close()
+      }
+    })
+  }
 
   test('destination balance updates after swap', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')

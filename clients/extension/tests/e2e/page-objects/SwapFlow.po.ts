@@ -132,7 +132,10 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Map of coin symbols to chain names for swap selection
+   * Map of coin symbols to chain names for swap selection.
+   * Symbol uniqueness note: ETH belongs to multiple chains (Ethereum + L2s).
+   * For unambiguous routing, callers should drive via chain IDs through
+   * CHAIN_TO_NATIVE/getNativeSymbol, not symbol lookup.
    */
   private static readonly SYMBOL_TO_CHAIN: Record<string, string> = {
     BTC: 'Bitcoin',
@@ -140,31 +143,54 @@ export class SwapFlow extends BasePage {
     BNB: 'BSC',
     SOL: 'Solana',
     RUNE: 'THORChain',
+    CACAO: 'MayaChain',
     ATOM: 'Cosmos',
     MATIC: 'Polygon',
     AVAX: 'Avalanche',
     LTC: 'Litecoin',
     DOGE: 'Dogecoin',
+    BCH: 'Bitcoin-Cash',
+    DASH: 'Dash',
+    ZEC: 'Zcash',
+    KUJI: 'Kujira',
+    ADA: 'Cardano',
+    SUI: 'Sui',
+    TON: 'Ton',
+    TRX: 'Tron',
+    XRP: 'Ripple',
   }
 
   /**
    * Map chain IDs to their native token symbols.
-   * Used for cross-chain native token swaps.
+   * Used for cross-chain native token swaps. Covers the full SwapKit-enabled
+   * chain set (SDK 0.26+).
    */
   private static readonly CHAIN_TO_NATIVE: Record<string, string> = {
+    // SwapKit source chains
     ethereum: 'ETH',
-    bitcoin: 'BTC',
-    solana: 'SOL',
-    thorchain: 'RUNE',
-    bsc: 'BNB',
-    polygon: 'MATIC',
-    avalanche: 'AVAX',
     arbitrum: 'ETH',
     optimism: 'ETH',
     base: 'ETH',
-    litecoin: 'LTC',
-    dogecoin: 'DOGE',
+    bsc: 'BNB',
+    polygon: 'MATIC',
+    avalanche: 'AVAX',
+    solana: 'SOL',
+    // SwapKit destination-only chains
+    bitcoin: 'BTC',
+    bitcoincash: 'BCH',
+    cardano: 'ADA',
     cosmos: 'ATOM',
+    dash: 'DASH',
+    dogecoin: 'DOGE',
+    kujira: 'KUJI',
+    litecoin: 'LTC',
+    mayachain: 'CACAO',
+    ripple: 'XRP',
+    sui: 'SUI',
+    thorchain: 'RUNE',
+    ton: 'TON',
+    tron: 'TRX',
+    zcash: 'ZEC',
   }
 
   /**
@@ -505,6 +531,44 @@ export class SwapFlow extends BasePage {
    */
   async isContinueEnabled(): Promise<boolean> {
     return this.continueButton.isEnabled()
+  }
+
+  /**
+   * Pre-broadcast safety gate. Reads the visible from/to coin selectors and
+   * confirms they match the intended symbols. Throws if mismatch so callers
+   * can abort BEFORE clicking continue and broadcasting an unintended swap.
+   *
+   * Known failure mode this catches: selectFromCoin('ETH') clicks the chain
+   * carousel which switches to Ethereum context, but the token row defaults
+   * to USDC (or whatever appears first), so the form silently ends up with
+   * USDC>ETH instead of ETH>$DEST. Without this gate the test broadcasts
+   * real money on the wrong pair.
+   */
+  async assertSelectionMatches(fromSymbol: string, toSymbol: string): Promise<void> {
+    const fromText = ((await this.fromCoinSelector.textContent()) || '').toUpperCase()
+    const toText = ((await this.toCoinSelector.textContent()) || '').toUpperCase()
+
+    const fromOk = fromText.includes(fromSymbol.toUpperCase())
+    const toOk = toText.includes(toSymbol.toUpperCase())
+
+    // Catch the "fell back to USDC" failure mode explicitly. If the test was
+    // not expecting a stable, presence of a common stable symbol in the from
+    // selector is a strong signal the chain-carousel pick didn't actually
+    // select native.
+    const STABLE_SYMBOLS = ['USDC', 'USDT', 'DAI', 'TUSD', 'FRAX', 'LUSD']
+    const expectingStableSource = STABLE_SYMBOLS.includes(fromSymbol.toUpperCase())
+    const unexpectedStableInSource =
+      !expectingStableSource && STABLE_SYMBOLS.some(s => fromText.includes(s))
+
+    if (!fromOk || !toOk || unexpectedStableInSource) {
+      throw new Error(
+        `Swap form selection mismatch — refusing to broadcast.\n` +
+          `  Expected: ${fromSymbol} -> ${toSymbol}\n` +
+          `  From selector text: ${JSON.stringify(fromText)}\n` +
+          `  To selector text:   ${JSON.stringify(toText)}\n` +
+          `  Checks: fromOk=${fromOk} toOk=${toOk} unexpectedStableInSource=${unexpectedStableInSource}`
+      )
+    }
   }
 
   /**

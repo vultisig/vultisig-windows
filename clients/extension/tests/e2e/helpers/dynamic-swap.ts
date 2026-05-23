@@ -25,31 +25,84 @@ export interface SwapConfig {
   amountUsd: number    // USD value for logging
 }
 
-// Minimum USD value required for a swap source
-const MIN_SWAP_USD = 2.00
+// Minimum USD value required for a swap source.
+// TC native-inbound min is ~$5-10, so default $15 keeps swaps above floor.
+// Override with SWAP_MIN_USD env var for budget runs.
+const MIN_SWAP_USD = parseFloat(process.env.SWAP_MIN_USD || '15')
 
-// Target swap amount in USD
-const TARGET_SWAP_USD = 2.00
+// Target swap amount in USD. Override with SWAP_TARGET_USD.
+const TARGET_SWAP_USD = parseFloat(process.env.SWAP_TARGET_USD || '15')
 
-// Chain symbols (extension uses these in UI)
-const CHAIN_SYMBOLS: Record<string, string> = {
+// Chain symbols. Covers all SwapKit-enabled chains (SDK 0.26+) plus the
+// legacy native-swap chains. Used to parse vault balance text and map to
+// the native token symbol shown in the swap UI.
+export const CHAIN_SYMBOLS: Record<string, string> = {
+  // SwapKit source chains
   ethereum: 'ETH',
-  bitcoin: 'BTC',
-  thorchain: 'RUNE',
-  solana: 'SOL',
-  bsc: 'BNB',
-  polygon: 'MATIC',
   arbitrum: 'ETH',
   optimism: 'ETH',
-  avalanche: 'AVAX',
   base: 'ETH',
-  litecoin: 'LTC',
-  dogecoin: 'DOGE',
+  bsc: 'BNB',
+  polygon: 'MATIC',
+  avalanche: 'AVAX',
+  solana: 'SOL',
+  // SwapKit destination-only chains
+  bitcoin: 'BTC',
+  bitcoincash: 'BCH',
+  cardano: 'ADA',
   cosmos: 'ATOM',
+  dash: 'DASH',
+  dogecoin: 'DOGE',
+  kujira: 'KUJI',
+  litecoin: 'LTC',
+  mayachain: 'CACAO',
+  ripple: 'XRP',
+  sui: 'SUI',
+  thorchain: 'RUNE',
+  ton: 'TON',
+  tron: 'TRX',
+  zcash: 'ZEC',
 }
 
-// Chains available for swaps in extension UI (only BTC ↔ ETH)
-const SWAPPABLE_CHAINS = ['bitcoin', 'ethereum']
+// Chains available for swaps. Comma-separated env override drives both the
+// dynamic-pair selector and the route-matrix test. Default = full SwapKit
+// surface. Set SWAPPABLE_CHAINS=bitcoin,ethereum for the legacy smoke run.
+const SWAPPABLE_CHAINS = (process.env.SWAPPABLE_CHAINS || Object.keys(CHAIN_SYMBOLS).join(','))
+  .split(',')
+  .map(s => s.trim().toLowerCase())
+  .filter(Boolean)
+
+// Display names used in vault portfolio text. Falls back to titlecased chainId
+// for the common single-word chains. Anything multi-word or non-standard goes here.
+const CHAIN_DISPLAY_NAMES: Record<string, string> = {
+  bitcoincash: 'Bitcoin[ -]?Cash',
+  mayachain: 'MayaChain',
+}
+
+// Per-symbol fallback swap amounts (token units) when balance can't be parsed.
+// Sized to ~$15 at mid-2026 prices; conservative but above TC inbound floor.
+export const SYMBOL_FALLBACK_AMOUNTS: Record<string, string> = {
+  ETH: '0.005',
+  BTC: '0.00025',
+  BNB: '0.025',
+  MATIC: '20',
+  AVAX: '0.4',
+  SOL: '0.1',
+  RUNE: '4',
+  CACAO: '4',
+  ATOM: '2',
+  LTC: '0.15',
+  DOGE: '60',
+  BCH: '0.03',
+  DASH: '0.6',
+  ZEC: '0.6',
+  KUJI: '20',
+  ADA: '20',
+  SUI: '5',
+  TON: '3',
+  TRX: '50',
+  XRP: '7',
+}
 
 /**
  * Parse balances from the vault page.
@@ -70,9 +123,10 @@ export async function getVaultBalances(page: Page): Promise<ChainBalance[]> {
   for (const [chainId, symbol] of Object.entries(CHAIN_SYMBOLS)) {
     // Only consider swappable chains
     if (!SWAPPABLE_CHAINS.includes(chainId)) continue
-    
-    // Look for balance pattern: $XX.XX or $X,XXX.XX
-    const chainNamePattern = chainId.charAt(0).toUpperCase() + chainId.slice(1)
+
+    // Look for balance pattern: $XX.XX or $X,XXX.XX. Multi-word chains
+    // (Bitcoin-Cash, MayaChain, etc.) need an explicit display name override.
+    const chainNamePattern = CHAIN_DISPLAY_NAMES[chainId] || (chainId.charAt(0).toUpperCase() + chainId.slice(1))
     const balanceMatch = pageText.match(new RegExp(`${chainNamePattern}[^$]*\\$(\\d+[,.]?\\d*\\.?\\d*)`, 'i'))
     
     if (balanceMatch) {
@@ -139,14 +193,9 @@ export function selectSwapPair(balances: ChainBalance[]): SwapConfig | null {
     // Round to reasonable precision
     amount = tokensNeeded.toFixed(source.symbol === 'BTC' ? 8 : 6)
   } else {
-    // Fallback: use small fixed amounts
-    const fallbacks: Record<string, string> = {
-      ETH: '0.0008',
-      BTC: '0.00003',
-      RUNE: '0.5',
-      SOL: '0.02',
-    }
-    amount = fallbacks[source.symbol] || '0.001'
+    // Fallback when we can't read the live balance: use the per-symbol amount
+    // sized to ~TARGET_SWAP_USD. Final '0.001' is for unknown symbols.
+    amount = SYMBOL_FALLBACK_AMOUNTS[source.symbol] || '0.001'
   }
   
   console.log(`\n📊 Selected swap pair:`)
