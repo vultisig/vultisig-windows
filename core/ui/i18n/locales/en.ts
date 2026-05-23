@@ -817,6 +817,19 @@ export const en = {
   qbtc_claim_section_cta: 'Claim QBTC',
   qbtc_claim_card_title: 'Claimable QBTC',
   qbtc_claim_tab: 'Claim',
+  qbtc_onboarding_title: 'New quantum security',
+  qbtc_onboarding_subtitle:
+    'Classical keys can be broken by quantum computers. Enabling QBTC requires generating a new key pair.',
+  qbtc_onboarding_feature_generate_title: 'Generate your quantum key pair',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig runs a local MPC ceremony across your vault devices to produce a new key pair.',
+  qbtc_onboarding_feature_link_title: 'Link it to your existing vault',
+  qbtc_onboarding_feature_link_description:
+    'The quantum key is bound to your current vault share structure. No reshare needed.',
+  qbtc_onboarding_feature_claim_title: 'Claim and transact in QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Once generated, your eligible BTC UTXOs appear as claimable QBTC at a 1:1 ratio.',
+  qbtc_onboarding_get_started: 'Get started',
   qbtc_claim_description:
     'QBTC is a quantum-resistant version of BTC. Your existing BTC UTXOs are eligible to be claimed as QBTC at a 1:1 ratio. Select which UTXOs to claim below.',
   qbtc_claim_eligible_utxos: 'Eligible UTXOs',
