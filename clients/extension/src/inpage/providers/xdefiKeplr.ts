@@ -849,6 +849,18 @@ export class XDEFIKeplrProvider extends Keplr {
         throw new Error('Signer does not match current account address')
       }
 
+      // The function argument `chainId` drives chain-config lookups (fee
+      // denom, gas price, popup display); the `signDoc.chainId` field is the
+      // value the signature commits to. If those diverge the dApp would
+      // either trick us into picking the wrong fee/denom or end up with a
+      // signature whose committed chainId doesn't match the chain it asked us
+      // to switch to. Reject early — real Keplr does the same check.
+      if (signDoc.chainId !== chainId) {
+        throw new Error(
+          `signDoc.chainId (${signDoc.chainId}) does not match requested chainId (${chainId})`
+        )
+      }
+
       const chain = shouldBePresent(getKeplrSupportedChainByChainId(chainId))
 
       const rawBodyBytes = normalizeKeplrBytes(signDoc.bodyBytes)
