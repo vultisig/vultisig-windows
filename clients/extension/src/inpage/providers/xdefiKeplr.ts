@@ -487,15 +487,28 @@ const stripEndpoints = ({
 // actually exercises (`getKeysSettled`, `getKey`, `enable`, ...) we
 // override on `XDEFIKeplrProvider`, so this requester is reached only by
 // truly unhandled paths.
+// Keplr's `SimpleMessage` exposes its route via a `type()` method (symbol-
+// backed field), not a `type` property — naive property access would
+// stringify the function source into the error message.
+const readMessageType = (msg: unknown): string | undefined => {
+  if (!msg || typeof msg !== 'object') return undefined
+  const candidate = msg as { type?: unknown; method?: unknown }
+  if (typeof candidate.type === 'function') {
+    const result = (candidate.type as () => unknown).call(msg)
+    return typeof result === 'string' ? result : undefined
+  }
+  if (typeof candidate.type === 'string') return candidate.type
+  if (typeof candidate.method === 'string') return candidate.method
+  return undefined
+}
+
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
   }
   public async sendMessage(message: any, params: any): Promise<void> {
     const method =
-      (params && (params.type ?? params.method)) ??
-      (message && (message.type ?? message.method)) ??
-      'unknown'
+      readMessageType(params) ?? readMessageType(message) ?? 'unknown'
     throw new Error(`Keplr method '${method}' is not supported by Vultisig`)
   }
 }
@@ -715,6 +728,15 @@ export class XDEFIKeplrProvider extends Keplr {
     signOptions?: KeplrSignOptions
   ): Promise<OfflineAminoSigner | OfflineDirectSigner> {
     return this.getOfflineSigner(chainId, signOptions)
+  }
+
+  // Liveness probe used by cosmos-kit-based dApps (osmosis.zone, etc.)
+  // during their `Initializing Wallet Client` step. The base implementation
+  // calls `requester.sendMessage` directly via the free `sendSimpleMessage`
+  // helper — bypassing our instance-level `sendSimpleMessage` override — so
+  // without this method the requester throws and the dApp can't connect.
+  async ping(): Promise<void> {
+    return
   }
 
   async sendTx(): Promise<Uint8Array> {

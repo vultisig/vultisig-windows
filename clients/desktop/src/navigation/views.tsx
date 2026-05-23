@@ -1,8 +1,8 @@
 import { CheckUpdate } from '@clients/desktop/src/components/check-update'
 import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
 import { AppViewId } from '@clients/desktop/src/navigation/AppView'
+import { DesktopVaultPage } from '@clients/desktop/src/navigation/DesktopVaultPage'
 import { DesktopChooseVaultsView } from '@clients/desktop/src/notifications/DesktopChooseVaultsView'
-import { DesktopNotificationPrompt } from '@clients/desktop/src/notifications/DesktopNotificationPrompt'
 import { DesktopNotificationSettingsPage } from '@clients/desktop/src/notifications/DesktopNotificationSettingsPage'
 import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
 import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
@@ -24,7 +24,6 @@ import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvide
 import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
-import { VaultPage } from '@core/ui/vault/page'
 import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
@@ -66,12 +65,7 @@ const desktopSharedViewOverrides: Pick<
   'vault' | 'chooseVaults'
 > = {
   chooseVaults: DesktopChooseVaultsView,
-  vault: () => (
-    <>
-      <DesktopNotificationPrompt />
-      <VaultPage />
-    </>
-  ),
+  vault: DesktopVaultPage,
 }
 
 export const views: Views<AppViewId> = {
