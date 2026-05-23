@@ -8,8 +8,9 @@ const encodeAuthInfo = (input: Parameters<typeof AuthInfo.fromPartial>[0]) =>
 
 describe('injectKeplrFeeIfMissing', () => {
   it('injects a fee computed from gasLimit × gasPrice when fee.amount is empty', () => {
-    // Osmosis gas price is 0.025 uosmo/gas. With gasLimit 310823 that's
-    // ceil(310823 * 0.025) = ceil(7770.575) = 7771 uosmo.
+    // Osmosis gas price is 0.04 uosmo/gas (chain-registry "high" tier, set
+    // above the historical 0.025 average to clear the post-EIP-1559 floor).
+    // With gasLimit 310823 that's ceil(310823 * 0.04) = ceil(12432.92) = 12433.
     const input = encodeAuthInfo({
       signerInfos: [],
       fee: { amount: [], gasLimit: 310823n, payer: '', granter: '' },
@@ -18,8 +19,22 @@ describe('injectKeplrFeeIfMissing', () => {
     const out = injectKeplrFeeIfMissing({ authInfoBytes: input, chain: 'Osmosis' })
 
     const decoded = AuthInfo.decode(out)
-    expect(decoded.fee?.amount).toEqual([{ denom: 'uosmo', amount: '7771' }])
+    expect(decoded.fee?.amount).toEqual([{ denom: 'uosmo', amount: '12433' }])
     expect(decoded.fee?.gasLimit).toBe(310823n)
+  })
+
+  it('clears the Osmosis post-EIP-1559 fee floor (≥0.03 uosmo/gas)', () => {
+    // Regression for the case where Osmosis returned `required: 9325uosmo`
+    // for a 310823-gas tx — our injected fee must stay above that.
+    const input = encodeAuthInfo({
+      signerInfos: [],
+      fee: { amount: [], gasLimit: 310823n, payer: '', granter: '' },
+    })
+
+    const out = injectKeplrFeeIfMissing({ authInfoBytes: input, chain: 'Osmosis' })
+    const decoded = AuthInfo.decode(out)
+    const amount = BigInt(decoded.fee?.amount[0]?.amount ?? '0')
+    expect(amount).toBeGreaterThan(9325n)
   })
 
   it('leaves bytes unchanged when fee.amount is already populated', () => {

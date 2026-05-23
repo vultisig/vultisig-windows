@@ -89,9 +89,14 @@ const chainName: Record<SupportedKeplrChain, string> = {
 // so 0 is the canonical "ignore gas price" value. QBTC has a flat
 // `min_tx_fee` of 800 uqbtc — pick a non-zero step so cosmos-kit fee
 // calculators don't underpay.
+//
+// Osmosis runs an EIP-1559-style base-fee market where the network min has
+// floated above the historical 0.025 average. Use 0.04 (Keplr's chain-registry
+// "high" tier) so wallet-injected fees clear the current floor without an
+// extra RPC round-trip per signDirect.
 export const keplrAverageGasPrice: Record<SupportedKeplrChain, number> = {
   Cosmos: 0.025,
-  Osmosis: 0.025,
+  Osmosis: 0.04,
   Dydx: 12500000000,
   Kujira: 0.0034,
   Terra: 0.015,
