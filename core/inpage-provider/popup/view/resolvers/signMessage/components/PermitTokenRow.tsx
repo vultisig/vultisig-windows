@@ -4,6 +4,7 @@ import { useTokenMetadataQuery } from '@core/ui/chain/coin/addCustomToken/querie
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -41,12 +42,11 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
       })
     : null
 
-  const amountDisplay =
-    formatted?.display !== null && formatted?.display !== undefined
-      ? formatted.isSentinel
-        ? t('unlimited')
-        : `${formatted.display}${metadata?.ticker ? ` ${metadata.ticker}` : ''}`
-      : token.amount.toString()
+  const ticker = metadata?.ticker ?? ''
+  const isUnlimited = !!formatted?.isSentinel && !!formatted.display
+  const numericLabel = formatted?.display
+    ? `${formatted.display}${ticker ? ` ${ticker}` : ''}`
+    : `${token.amount.toString()}${ticker ? ` ${ticker}` : ''}`
 
   return (
     <>
@@ -88,9 +88,21 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
         <Text as="span" color="shy" size={14} weight={500} nowrap>
           {t('approval_amount')}
         </Text>
-        <Text as="span" size={14} weight={500}>
-          {amountDisplay}
-        </Text>
+        {isUnlimited ? (
+          <HStack alignItems="center" gap={6} wrap="nowrap">
+            <Text as={TriangleAlertIcon} color="warning" size={14} />
+            <Text as="span" color="warning" size={14} weight={500} nowrap>
+              {`${t('unlimited')}${ticker ? ` ${ticker}` : ''}`}
+            </Text>
+          </HStack>
+        ) : (
+          <MiddleTruncate
+            justifyContent="end"
+            size={14}
+            text={numericLabel}
+            weight={500}
+          />
+        )}
       </HStack>
     </>
   )
