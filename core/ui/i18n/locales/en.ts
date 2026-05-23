@@ -130,7 +130,6 @@ export const en = {
   cache_password_for_5_min: 'Remember password for 5 minutes',
   cancel: 'Cancel',
   chain: 'Chain',
-  chain_id: 'Chain ID',
   chainFunctions: {
     amountExceeded: 'Amount exceeds available balance',
     custom: {
@@ -1054,7 +1053,6 @@ export const en = {
   raw_message: 'Raw message',
   raw_payload: 'Raw Payload',
   transferred: 'Transferred',
-  spender: 'Spender',
   staked_amount: 'Staked Amount',
   spender: 'Spender',
   operator: 'Operator',
@@ -1145,7 +1143,6 @@ export const en = {
   type_here: 'Type Here',
   unbond: 'Unbond',
   unbond_with_lp: 'Unbond Maya',
-  unlimited: 'Unlimited',
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
   unlock_discount_tier_description:
     "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.",
