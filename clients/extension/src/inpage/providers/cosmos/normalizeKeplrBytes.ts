@@ -29,10 +29,20 @@ const isBufferJson = (value: unknown): value is BufferJson => {
   return value.type === 'Buffer' && Array.isArray(value.data)
 }
 
-const isValidByteArray = (arr: readonly unknown[]): arr is number[] =>
-  arr.every(
-    n => typeof n === 'number' && Number.isInteger(n) && n >= 0 && n <= 255
-  )
+// `Array.prototype.every` skips holes in sparse arrays — `Array(2).every(...)`
+// returns true vacuously even though `new Uint8Array(Array(2))` would later
+// fill those holes with zero, silently changing the bytes we'd sign. Walk the
+// indices explicitly so any missing element (`arr[i] === undefined`) fails
+// the `typeof === 'number'` check and the array is rejected.
+const isValidByteArray = (arr: readonly unknown[]): arr is number[] => {
+  for (let i = 0; i < arr.length; i += 1) {
+    const n = arr[i]
+    if (typeof n !== 'number' || !Number.isInteger(n) || n < 0 || n > 255) {
+      return false
+    }
+  }
+  return true
+}
 
 /**
  * Normalize a Keplr SignDoc byte field into a real `Uint8Array`.

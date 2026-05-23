@@ -76,4 +76,11 @@ describe('normalizeKeplrBytes', () => {
       normalizeKeplrBytes({ type: 'Buffer', data: [10, 999] })
     ).toThrow(/non-byte/i)
   })
+
+  it('throws on sparse arrays (Array.every skips holes; would silently zero-fill)', () => {
+    // eslint-disable-next-line no-sparse-arrays
+    const sparse = [1, , 3]
+    expect(() => normalizeKeplrBytes(sparse)).toThrow(/non-byte/i)
+    expect(() => normalizeKeplrBytes(new Array(3))).toThrow(/non-byte/i)
+  })
 })
