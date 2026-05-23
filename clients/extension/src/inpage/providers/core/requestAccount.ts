@@ -34,9 +34,18 @@ export const requestAccount = async (
       })
     )
     if (result.data?.appSession) {
-      return callBackground({
-        getAccount: { chain, appSession: result.data.appSession },
-      })
+      // Validate the post-grant fetch: if it rejects or returns an empty
+      // address (e.g. user picked a vault without a key for this chain),
+      // surface 4100 instead of leaking a raw error or returning `['']`.
+      const accountResult = await attempt(
+        callBackground({
+          getAccount: { chain, appSession: result.data.appSession },
+        })
+      )
+      if (accountResult.data?.address) {
+        return accountResult.data
+      }
+      throw new EIP1193Error('Unauthorized')
     }
     // Window closed via X aborts to RejectedByUser. A resolved-but-empty
     // response means the popup was dismissed mid-flow — treat as a user
