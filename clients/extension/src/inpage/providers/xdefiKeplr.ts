@@ -53,6 +53,7 @@ import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFrom
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
+import { normalizeKeplrBytes } from './cosmos/normalizeKeplrBytes'
 import {
   getKeplrCosmosChainInfos,
   getKeplrSupportedChainByChainId,
@@ -86,16 +87,50 @@ const aminoHandler = (
   } as TransactionDetails
 }
 
-const directHandler = (
-  signDoc: {
-    bodyBytes: string // base64 encoded
-    authInfoBytes: string // base64 encoded
-    chainId: string
-    accountNumber: string
+type DirectHandlerSignDoc = {
+  bodyBytes: string // base64 encoded
+  authInfoBytes: string // base64 encoded
+  chainId: string
+  accountNumber: string
+}
+
+// Fallback display payload when the dApp's bodyBytes can't be decoded as a
+// standard TxBody (e.g. chain-specific extension fields cosmjs-types doesn't
+// know about, or a non-standard envelope). Signing still proceeds because the
+// raw bytes are forwarded to the popup via `directPayload`.
+const genericDirectTransactionDetails = (
+  signDoc: DirectHandlerSignDoc,
+  chain: Chain,
+  signer: string
+): TransactionDetails => ({
+  asset: { ticker: chainFeeCoin[chain].ticker },
+  amount: { amount: '0', decimals: chainFeeCoin[chain].decimals },
+  from: signer,
+  directPayload: {
+    bodyBytes: signDoc.bodyBytes,
+    authInfoBytes: signDoc.authInfoBytes,
+    chainId: signDoc.chainId,
+    accountNumber: signDoc.accountNumber,
   },
-  chain: Chain
+  skipBroadcast: true,
+})
+
+const directHandler = (
+  signDoc: DirectHandlerSignDoc,
+  chain: Chain,
+  signer: string
 ): TransactionDetails => {
-  const txBody = TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
+  // Body decoding is best-effort — used only to enrich the popup's display
+  // info. If the dApp's TxBody has fields cosmjs-types can't parse (newer
+  // SDK additions, Osmosis/Injective extensions, etc.) fall back to a
+  // generic display and let the raw bytes flow through to keysign untouched.
+  const decoded = attempt(() =>
+    TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
+  )
+  if ('error' in decoded) {
+    return genericDirectTransactionDetails(signDoc, chain, signer)
+  }
+  const txBody = decoded.data
   const [message] = txBody.messages
   const memo = txBody.memo
 
@@ -787,25 +822,28 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getKeplrSupportedChainByChainId(chainId))
 
+      const rawBodyBytes = normalizeKeplrBytes(signDoc.bodyBytes)
+      const rawAuthInfoBytes = normalizeKeplrBytes(signDoc.authInfoBytes)
+
       // `normalizeCosmosAuthInfoFee` swaps fee ticker → canonical denom for
       // CosmosChain entries. QBTC's fee denom is already canonical (`qbtc`,
       // matching the chain config base denom), so the normalization is a
       // no-op and the helper isn't keyed for QBTC anyway.
-      const rawAuthInfoBytes = new Uint8Array(signDoc.authInfoBytes)
       const normalizedAuthInfoBytes =
         chain === OtherChain.QBTC
           ? rawAuthInfoBytes
           : normalizeCosmosAuthInfoFee(rawAuthInfoBytes, chain)
       const transactionDetails: TransactionDetails = directHandler(
         {
-          bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
+          bodyBytes: Buffer.from(rawBodyBytes).toString('base64'),
           authInfoBytes: Buffer.from(normalizedAuthInfoBytes).toString(
             'base64'
           ),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
         },
-        chain
+        chain,
+        signer
       )
 
       const [{ data }] = await callPopup(
