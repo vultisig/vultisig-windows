@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { QbtcClaimBanner } from '@core/ui/qbtc/claim/components/QbtcClaimBanner'
 import { QbtcClaimSection } from '@core/ui/qbtc/claim/components/QbtcClaimSection'
 import { useCore } from '@core/ui/state/core'
 import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
@@ -56,6 +57,7 @@ export const VaultChainPage = () => {
           {chain === Chain.Tron && <TronResourcesSection />}
           {chain === Chain.QBTC && <QbtcClaimSection />}
           <VaultChainTabs />
+          {chain === Chain.Bitcoin && <QbtcClaimBanner />}
         </StyledPageContent>
       </VStack>
       <BottomNavigation isActiveTabRoot={false} />
