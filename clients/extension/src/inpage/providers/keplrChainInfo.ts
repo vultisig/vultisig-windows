@@ -7,7 +7,7 @@ import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
-type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
+export type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
 
 // Terra Classic (columbus-5) deliberately omitted: it shares the `terra`
 // bech32 prefix with Terra v2 (phoenix-1), and cosmos-kit / wallet-kit
@@ -89,7 +89,7 @@ const chainName: Record<SupportedKeplrChain, string> = {
 // so 0 is the canonical "ignore gas price" value. QBTC has a flat
 // `min_tx_fee` of 800 uqbtc — pick a non-zero step so cosmos-kit fee
 // calculators don't underpay.
-const averageGasPrice: Record<SupportedKeplrChain, number> = {
+export const keplrAverageGasPrice: Record<SupportedKeplrChain, number> = {
   Cosmos: 0.025,
   Osmosis: 0.025,
   Dydx: 12500000000,
@@ -122,7 +122,7 @@ const buildKeplrChainInfo = (chain: SupportedKeplrChain): ChainInfo => {
   const prefix = bech32Prefix[chain]
   const denom = getKeplrFeeDenom(chain)
   const { ticker, decimals } = chainFeeCoin[chain]
-  const average = averageGasPrice[chain]
+  const average = keplrAverageGasPrice[chain]
   const rpc = getKeplrRpcUrl(chain)
 
   const currency = {

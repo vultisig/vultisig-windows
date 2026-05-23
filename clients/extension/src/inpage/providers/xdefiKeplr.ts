@@ -52,6 +52,7 @@ import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+import { injectKeplrFeeIfMissing } from './cosmos/injectKeplrFeeIfMissing'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
 import { normalizeKeplrBytes } from './cosmos/normalizeKeplrBytes'
 import {
@@ -853,14 +854,28 @@ export class XDEFIKeplrProvider extends Keplr {
       const rawBodyBytes = normalizeKeplrBytes(signDoc.bodyBytes)
       const rawAuthInfoBytes = normalizeKeplrBytes(signDoc.authInfoBytes)
 
+      // Several cosmos-kit dApps (Osmosis Zone's staking page being the
+      // canonical example) pass an empty `fee.amount` and rely on the wallet
+      // to fill it in — real Keplr injects a fee from gasLimit * gas price
+      // whenever `signOptions.preferNoSetFee` is falsy (the default). Match
+      // that behavior here, otherwise the chain rejects the broadcast with
+      // "Expected 1 fee denom attached, got 0: insufficient fee".
+      const withInjectedFee =
+        chain === OtherChain.QBTC || _signOptions?.preferNoSetFee
+          ? rawAuthInfoBytes
+          : injectKeplrFeeIfMissing({
+              authInfoBytes: rawAuthInfoBytes,
+              chain,
+            })
+
       // `normalizeCosmosAuthInfoFee` swaps fee ticker → canonical denom for
       // CosmosChain entries. QBTC's fee denom is already canonical (`qbtc`,
       // matching the chain config base denom), so the normalization is a
       // no-op and the helper isn't keyed for QBTC anyway.
       const normalizedAuthInfoBytes =
         chain === OtherChain.QBTC
-          ? rawAuthInfoBytes
-          : normalizeCosmosAuthInfoFee(rawAuthInfoBytes, chain)
+          ? withInjectedFee
+          : normalizeCosmosAuthInfoFee(withInjectedFee, chain)
       const transactionDetails: TransactionDetails = directHandler({
         signDoc: {
           bodyBytes: Buffer.from(rawBodyBytes).toString('base64'),
