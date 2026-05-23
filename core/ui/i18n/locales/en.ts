@@ -816,6 +816,7 @@ export const en = {
   qbtc_claim_title: 'QBTC Claim',
   qbtc_claim_section_cta: 'Claim QBTC',
   qbtc_claim_card_title: 'Claimable QBTC',
+  qbtc_claim_tab: 'Claim',
   qbtc_claim_description:
     'QBTC is a quantum-resistant version of BTC. Your existing BTC UTXOs are eligible to be claimed as QBTC at a 1:1 ratio. Select which UTXOs to claim below.',
   qbtc_claim_eligible_utxos: 'Eligible UTXOs',

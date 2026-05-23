@@ -1,4 +1,5 @@
 import { vStack } from '@lib/ui/layout/Stack'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 const coinIconUrl = '/core/images/qbtc-claim-card-coin.svg'
@@ -47,4 +48,17 @@ export const HeaderCardAmount = styled.span`
   font-weight: 500;
   line-height: 34px;
   letter-spacing: -0.56px;
+`
+
+export const TabStrip = styled.div`
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 20px;
+`
+
+export const ActiveTabItem = styled.div`
+  padding-top: 2px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid ${getColor('buttonPrimary')};
 `

@@ -15,10 +15,12 @@ import {
 } from '../hooks/useUtxoBlockHeightsQuery'
 import { ClaimableUtxoItem } from './ClaimableUtxoItem'
 import {
+  ActiveTabItem,
   HeaderCard,
   HeaderCardAmount,
   HeaderCardCoin,
   HeaderCardContent,
+  TabStrip,
 } from './ClaimUtxoSelection.styles'
 
 const btcDecimals = 8
@@ -113,6 +115,14 @@ export const ClaimUtxoSelection = ({
           </Text>
         </HeaderCardContent>
       </HeaderCard>
+
+      <TabStrip>
+        <ActiveTabItem>
+          <Text size={14} weight={500} height={20 / 14} color="regular">
+            {t('qbtc_claim_tab')}
+          </Text>
+        </ActiveTabItem>
+      </TabStrip>
 
       <Text size={12} height={16 / 12} color="shyExtra">
         {t('qbtc_claim_description')}
