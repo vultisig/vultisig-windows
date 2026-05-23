@@ -104,24 +104,28 @@ describe('requestAccount', () => {
     }
   })
 
-  it('throws EIP1193Error(InternalError) on other background errors', async () => {
-    // Background rejects with something other than Unauthorized
-    mockCallBackground.mockRejectedValue(new Error('Network failure'))
+  it('throws EIP1193Error(Unauthorized) on non-Unauthorized background errors (e.g. no vault)', async () => {
+    // Background rejects with something other than BackgroundError.Unauthorized
+    // — e.g. shouldBePresent('currentVaultId') throwing when no vault exists.
+    // Per EIP-1193, the dApp should see 4100 (Unauthorized), not -32603.
+    mockCallBackground.mockRejectedValue(new Error('currentVaultId is required'))
 
     try {
       await requestAccount(Chain.Ethereum)
       expect.fail('Should have thrown')
     } catch (error) {
       expect(error).toBeInstanceOf(EIP1193Error)
-      expect((error as EIP1193Error).code).toBe(-32603)
-      expect((error as EIP1193Error).message).toBe('Internal error')
+      expect((error as EIP1193Error).code).toBe(4100)
+      expect((error as EIP1193Error).message).toBe('Unauthorized')
     }
+    expect(mockCallPopup).not.toHaveBeenCalled()
   })
 
-  it('throws EIP1193Error(InternalError) when popup returns error other than RejectedByUser', async () => {
+  it('throws EIP1193Error(InternalError) when popup rejects with a non-PopupError', async () => {
     mockCallBackground.mockRejectedValueOnce(BackgroundError.Unauthorized)
 
-    // Popup rejects with something other than RejectedByUser
+    // Popup rejects with something other than RejectedByUser — this is a
+    // genuinely unexpected popup-internal failure.
     mockCallPopup.mockRejectedValue(new Error('popup crashed'))
 
     try {
@@ -131,6 +135,40 @@ describe('requestAccount', () => {
       expect(error).toBeInstanceOf(EIP1193Error)
       expect((error as EIP1193Error).code).toBe(-32603)
     }
+  })
+
+  it('throws EIP1193Error(UserRejectedRequest) when popup resolves without an appSession', async () => {
+    // Popup dismissed mid-flow (window closed without explicit reject signal).
+    mockCallBackground.mockRejectedValueOnce(BackgroundError.Unauthorized)
+    mockCallPopup.mockResolvedValue(undefined)
+
+    try {
+      await requestAccount(Chain.Ethereum)
+      expect.fail('Should have thrown')
+    } catch (error) {
+      expect(error).toBeInstanceOf(EIP1193Error)
+      expect((error as EIP1193Error).code).toBe(4001)
+    }
+  })
+
+  it('re-prompts via popup when vault is authorized but has no account for the chain', async () => {
+    // Authorized vault, but no key for this chain (e.g. mldsa chain on a vault
+    // without an mldsa key). getAccount returns { address: '' } — falsy address.
+    const appSession = {
+      vaultId: 'v1',
+      host: 'example.com',
+      url: 'https://example.com',
+    }
+    const accountData = { address: 'newAddress', publicKey: 'newKey' }
+    mockCallBackground
+      .mockResolvedValueOnce({ address: '', publicKey: '' })
+      .mockResolvedValueOnce(accountData)
+    mockCallPopup.mockResolvedValue({ appSession })
+
+    const result = await requestAccount(Chain.Solana)
+
+    expect(result).toEqual(accountData)
+    expect(mockCallPopup).toHaveBeenCalledTimes(1)
   })
 
   it('works with Solana chain', async () => {
