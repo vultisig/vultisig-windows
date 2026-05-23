@@ -9,6 +9,8 @@ export const depositEnabledChains = [
   Chain.Kujira,
   Chain.Osmosis,
   Chain.Cosmos,
+  Chain.Terra,
+  Chain.TerraClassic,
   Chain.Avalanche,
   Chain.Base,
   Chain.BitcoinCash,

@@ -17,17 +17,21 @@ import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
-import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
+import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
-import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
+import { useCore } from '@core/ui/state/core'
+import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { Button } from '@lib/ui/buttons/Button'
+import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
@@ -52,22 +56,33 @@ import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChai
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import {
+  getTransactionErrorMessage,
+  isSendTxOverviewErrorQuery,
+} from './sendTxOverviewError'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
+  onSendTxOverviewErrorChange?: (isActive: boolean) => void
 }
 
-export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
+export const SendTxOverview = ({
+  parsedTx,
+  onSendTxOverviewErrorChange,
+}: SendTxOverviewProps) => {
   const { coin, customTxData } = parsedTx
   const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultPublicKey(coin.chain)
+  const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
   const { t } = useTranslation()
   const getCoin = useGetCoin()
   const transactionPayload = usePopupInput<'sendTx'>()
 
   const { chain, address } = coin
+
+  const { goBack } = useCore()
 
   const [feeSettings, setFeeSettings] = useState<FeeSettings<'evm'> | null>(
     null
@@ -115,14 +130,73 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     eager: false,
   })
 
+  const memo = keysignPayloadQuery.data?.memo
+  const isEvm = isChainOfKind(chain, 'evm')
+  const isContractMemo =
+    !!memo && memo.startsWith('0x') && memo.length > 2 && isEvm
+
+  const universalRouterSwap = useUniversalRouterSwap({ memo, chain })
+
+  const contractCallQuery = useEvmContractCallInfoQuery({
+    memo,
+    enabled:
+      isContractMemo &&
+      !universalRouterSwap.isPending &&
+      !universalRouterSwap.data,
+  })
+
+  const isContractDecodingPending =
+    isContractMemo &&
+    (universalRouterSwap.isPending ||
+      (!universalRouterSwap.data && contractCallQuery.isPending))
+
+  const isContractDecodingFailed =
+    isContractMemo && !universalRouterSwap.data && !!contractCallQuery.error
+
+  const isSendTxOverviewError = isSendTxOverviewErrorQuery(
+    gasEstimationDataQuery
+  )
+
+  useEffect(() => {
+    onSendTxOverviewErrorChange?.(isSendTxOverviewError)
+  }, [isSendTxOverviewError, onSendTxOverviewErrorChange])
+
+  useEffect(
+    () => () => {
+      onSendTxOverviewErrorChange?.(false)
+    },
+    [onSendTxOverviewErrorChange]
+  )
+
+  const extraPendingMessage = (() => {
+    if (isSendTxOverviewError) {
+      return undefined
+    }
+    if (gasEstimationDataQuery.isPending || isContractDecodingPending) {
+      return t('loading')
+    }
+    if (isContractDecodingFailed) {
+      return t('failed_to_process_transaction')
+    }
+    return undefined
+  })()
+
   return (
-    <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
+    <VerifyKeysignStart
+      keysignPayloadQuery={keysignPayloadQuery}
+      extraPendingMessage={extraPendingMessage}
+      footer={
+        isSendTxOverviewError ? (
+          <Button onClick={goBack}>{t('back')}</Button>
+        ) : undefined
+      }
+    >
       <MatchQuery
         value={gasEstimationDataQuery}
         pending={() => <PendingState />}
         error={error => (
-          <FlowErrorPageContent
-            error={error}
+          <ErrorFallbackContent
+            error={getTransactionErrorMessage(error)}
             title={t('failed_to_process_transaction')}
           />
         )}

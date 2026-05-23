@@ -2,7 +2,7 @@ import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
-  useCurrentVaultPublicKey,
+  useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
@@ -27,7 +27,7 @@ export const useSendTxKeysignPayloadQuery = ({
 }) => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultPublicKey(parsedTx.coin.chain)
+  const publicKey = useCurrentVaultNullablePublicKey(parsedTx.coin.chain)
   const { requestFavicon, requestName, requestOrigin } =
     usePopupContext<'sendTx'>()
 
@@ -40,6 +40,7 @@ export const useSendTxKeysignPayloadQuery = ({
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
+      publicKeyMldsa: vault.publicKeyMldsa,
       dappMetadata: buildDappMetadata({
         requestFavicon,
         requestName,

@@ -12,6 +12,12 @@ import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 const rootDir = path.resolve(__dirname, '../..')
+const extensionNodePolyfills = (isFirefoxBuild = false) =>
+  nodePolyfills({
+    exclude: ['fs'],
+    ...(isFirefoxBuild ? { globals: { process: 'build' as const } } : {}),
+  })
+const extensionVultisigSdk = () => vultisigSdk({ browserGlobals: false })
 
 /** One physical copy of MPC entry + types across chunks (vultisig-windows#3831 / #3777). */
 const vultisigMpcDedupe: readonly string[] = [
@@ -19,6 +25,37 @@ const vultisigMpcDedupe: readonly string[] = [
   '@vultisig/mpc-types',
   '@vultisig/mpc-wasm',
 ]
+
+const getFirefoxManualChunk = (buildName: string, id: string) => {
+  const normalized = id.replace(/\\/g, '/')
+  const nodeModulesIndex = normalized.lastIndexOf('/node_modules/')
+  if (nodeModulesIndex >= 0) {
+    const packagePath = normalized.slice(nodeModulesIndex + 14)
+    const parts = packagePath.split('/')
+    const packageName = parts[0]?.startsWith('@')
+      ? `${parts[0]}-${parts[1]}`
+      : parts[0]
+
+    return packageName
+      ? `vendor-${buildName}-${packageName.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+      : `vendor-${buildName}`
+  }
+
+  if (normalized.includes('/clients/extension/src/inpage/providers/')) {
+    const providerPath = normalized.split('/src/inpage/providers/')[1]
+    const providerName = providerPath?.split('/')[0]?.replace(/\.[^.]+$/, '')
+    return providerName
+      ? `inpage-provider-${buildName}-${providerName}`
+      : undefined
+  }
+
+  return undefined
+}
+
+const getChunkInput = (chunk: string, isFirefoxBuild: boolean) =>
+  chunk === 'background' && isFirefoxBuild
+    ? 'src/background/firefox.ts'
+    : `src/${chunk}/index.ts`
 
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, rootDir)
@@ -34,6 +71,12 @@ export default defineConfig(async ({ mode }) => {
 
   const chunk = process.env.CHUNK
   const isDev = !!process.env.VITE_DEV_RELOAD
+  const isFirefoxBuild = process.env.VULTISIG_EXTENSION_TARGET === 'firefox'
+  const defines = {
+    ...featureFlagDefines,
+    ...envDefines,
+    __IS_FIREFOX_EXTENSION_BUILD__: JSON.stringify(isFirefoxBuild),
+  }
 
   const devBuildOptions = isDev
     ? { minify: false as const, reportCompressedSize: false }
@@ -45,13 +88,20 @@ export default defineConfig(async ({ mode }) => {
 
     switch (chunk) {
       case 'background':
-        plugins = [nodePolyfills({ exclude: ['fs'] }), wasm(), topLevelAwait()]
+        plugins = [
+          extensionNodePolyfills(isFirefoxBuild),
+          wasm(),
+          topLevelAwait(),
+        ]
         break
       case 'inpage':
-        format = 'iife'
+        format = isFirefoxBuild ? undefined : 'iife'
         plugins = [
           nodePolyfills({
             exclude: ['fs'],
+            ...(isFirefoxBuild
+              ? { globals: { process: 'build' as const } }
+              : {}),
             protocolImports: true,
           }),
         ]
@@ -61,9 +111,13 @@ export default defineConfig(async ({ mode }) => {
     }
 
     return {
-      define: { ...featureFlagDefines, ...envDefines },
+      define: defines,
       resolve: { dedupe: [...vultisigMpcDedupe] },
-      plugins: [vultisigSdk(), tsconfigPaths({ root: rootDir }), ...plugins],
+      plugins: [
+        extensionVultisigSdk(),
+        tsconfigPaths({ root: rootDir }),
+        ...plugins,
+      ],
       build: {
         copyPublicDir: false,
         emptyOutDir: false,
@@ -71,7 +125,10 @@ export default defineConfig(async ({ mode }) => {
         ...devBuildOptions,
         rollupOptions: {
           input: {
-            [chunk]: path.resolve(__dirname, `src/${chunk}/index.ts`),
+            [chunk]: path.resolve(
+              __dirname,
+              getChunkInput(chunk, isFirefoxBuild)
+            ),
           },
           onwarn: () => {},
           output: {
@@ -79,17 +136,23 @@ export default defineConfig(async ({ mode }) => {
             chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
             format,
+            manualChunks: isFirefoxBuild
+              ? (id: string) => getFirefoxManualChunk(chunk, id)
+              : undefined,
           },
         },
       },
     }
   } else {
     return {
-      define: { ...featureFlagDefines, ...envDefines },
+      define: defines,
       resolve: { dedupe: [...vultisigMpcDedupe] },
       plugins: [
         tsconfigPaths({ root: rootDir }),
-        ...getCommonPlugins(),
+        ...getCommonPlugins({
+          nodePolyfills: extensionNodePolyfills(isFirefoxBuild),
+          vultisigSdk: extensionVultisigSdk(),
+        }),
         viteStaticCopy({
           targets: getStaticCopyTargets(),
         }),
@@ -108,6 +171,9 @@ export default defineConfig(async ({ mode }) => {
             assetFileNames: 'assets/[name].[ext]',
             chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
+            manualChunks: isFirefoxBuild
+              ? (id: string) => getFirefoxManualChunk('app', id)
+              : undefined,
           },
         },
       },

@@ -2,6 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
+import { CosmosStakingFooterButton } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/CosmosStakingSpecific/CosmosStakingFooterButton'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
 import { UnbondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnbondSpecific/UnbondForm'
@@ -21,14 +22,17 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { FC, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
+import { cosmosStakingActions } from '../ChainAction'
 import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
@@ -93,15 +97,31 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const isUnstakeAction = selectedChainAction === 'unstake'
   const isMintAction = selectedChainAction === 'mint'
   const isRedeemAction = selectedChainAction === 'redeem'
+  const isCosmosStakingAction = isOneOf(
+    selectedChainAction,
+    cosmosStakingActions
+  )
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
   const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'
   const shouldUseStakeRedesign =
     (isStakeAction || isUnstakeAction || isMintAction || isRedeemAction) &&
     entryPoint === 'defi'
+  // Cosmos staking actions ALWAYS use the redesigned form — entering via
+  // the Wallet "Function" picker (entryPoint !== 'defi') would otherwise
+  // fall back to the legacy renderer and double-render fields alongside
+  // `DepositActionSpecific`. The form shape (amount + pills + validator
+  // picker) is the same regardless of where the user came from.
+  const shouldUseCosmosStakingRedesign = isCosmosStakingAction
   const shouldUseActionForm =
-    shouldUseBondRedesign || shouldUseUnbondRedesign || shouldUseStakeRedesign
+    shouldUseBondRedesign ||
+    shouldUseUnbondRedesign ||
+    shouldUseStakeRedesign ||
+    shouldUseCosmosStakingRedesign
 
+  // Cosmos staking actions display under "Stake / Unstake / Move / Claim"
+  // in the page header, matching Figma — the underlying ChainAction values
+  // (delegate / undelegate / redelegate / claim_rewards) stay protocol-correct.
   const defiActionPageTitle: Record<string, string> = {
     bond: t('bond'),
     unbond: t('unbond'),
@@ -109,9 +129,21 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     unstake: t('unstake'),
     mint: t('mint'),
     redeem: t('redeem'),
+    delegate: t('stake'),
+    undelegate: t('unstake'),
+    redelegate: t('move'),
+    claim_rewards: t('claim_rewards'),
   }
 
   const getPageTitle = () => {
+    // Cosmos staking actions get a typed title regardless of entry point
+    // (Wallet's Function picker hits this path too) — falling back to
+    // "Deposit" would mislabel a clearly-staking screen.
+    if (isCosmosStakingAction) {
+      const label = defiActionPageTitle[selectedChainAction]
+      if (label) return `${label} ${coin.ticker ?? ''}`.trim()
+    }
+
     const defiLabel =
       entryPoint === 'defi'
         ? defiActionPageTitle[selectedChainAction]
@@ -125,9 +157,6 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   }
 
   const pageTitle = getPageTitle()
-  const FormComponent = (
-    shouldUseActionForm ? ActionForm : PageContent
-  ) as typeof PageContent
 
   return (
     <DepositFormHandlersProvider
@@ -142,171 +171,191 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
         setTronResourceType,
       }}
     >
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={pageTitle}
-        hasBorder
-      />
-      <FormComponent
-        as="form"
-        flexGrow
-        gap={40}
-        onSubmit={handleSubmit(handleFormSubmit)}
-      >
-        {shouldUseBondRedesign ? (
-          <DepositDataProvider value={formValues}>
-            <BondForm
-              balance={balance}
-              errors={errors}
-              formValues={formValues}
-            />
-          </DepositDataProvider>
-        ) : shouldUseUnbondRedesign ? (
-          <DepositDataProvider value={formValues}>
-            <UnbondForm
-              balance={balance}
-              errors={errors}
-              isValid={isValid}
-              formValues={formValues}
-            />
-          </DepositDataProvider>
-        ) : shouldUseStakeRedesign ? (
-          <DepositDataProvider value={formValues}>
-            <StakeForm
-              balance={balance}
-              errors={errors}
-              formValues={formValues}
-              isUnstake={isUnstakeAction || isRedeemAction}
-            />
-          </DepositDataProvider>
-        ) : (
-          <WithProgressIndicator value={0.2}>
-            <InputContainer>
-              <InputFieldWrapper>
-                {t('chain_message_deposit', {
-                  chain: coin.chain,
-                })}
-              </InputFieldWrapper>
-            </InputContainer>
-            <Opener
-              renderOpener={({ onOpen }) => (
-                <Container onClick={onOpen}>
-                  <HStack alignItems="center" gap={8}>
-                    <Text weight="400" family="mono" size={16}>
-                      {t(selectedChainAction)}
-                    </Text>
-                  </HStack>
-                  <IconWrapper style={{ fontSize: 20 }}>
-                    <ChevronRightIcon />
-                  </IconWrapper>
-                </Container>
-              )}
-              renderContent={({ onClose }) => (
-                <DepositActionItemExplorer
-                  onClose={onClose}
-                  activeOption={selectedChainAction}
-                  options={availableActions}
-                  onOptionClick={option => {
-                    onClose()
-                    setSelectedChainAction(option)
-                  }}
+      <VStack as="form" fullHeight onSubmit={handleSubmit(handleFormSubmit)}>
+        <PageHeader
+          primaryControls={<PageHeaderBackButton />}
+          title={pageTitle}
+          hasBorder
+        />
+        {shouldUseActionForm ? (
+          <ActionForm flexGrow scrollable>
+            {shouldUseBondRedesign ? (
+              <DepositDataProvider value={formValues}>
+                <BondForm
+                  balance={balance}
+                  errors={errors}
+                  formValues={formValues}
                 />
-              )}
-            />
-
-            <DepositActionSpecific value={selectedChainAction} />
-
-            {selectedChainAction && fields.length > 0 && (
-              <VStack gap={12}>
-                {fields
-                  .filter(field => !field.hidden)
-                  .map(field => {
-                    const config = getBalanceDisplayConfig({
-                      chainAction: selectedChainAction,
-                      chain: coin.chain,
-                    })
-                    const showBalance = shouldShowBalance({
-                      fieldName: field.name,
-                      chainAction: selectedChainAction,
-                    })
-                    const showTickerWithBalance = shouldShowTicker({
-                      fieldName: field.name,
-                      chainAction: selectedChainAction,
-                      chain: coin.chain,
-                    })
-
-                    return (
-                      <InputContainer key={field.name}>
-                        <Text size={15} weight="400">
-                          {field.label}{' '}
-                          {showBalance && (
-                            <>
-                              (
-                              {config.balanceLabel === 'shares' ? (
-                                <>
-                                  {t('shares')}: {balance}
-                                </>
-                              ) : (
-                                <>
-                                  {t('balance')}: {balance}
-                                  {showTickerWithBalance &&
-                                    coin.ticker &&
-                                    ` ${coin.ticker}`}
-                                </>
-                              )}
-                              )
-                            </>
-                          )}
-                          {field.required ? (
-                            <Text as="span" color="danger" size={14}>
-                              *
-                            </Text>
-                          ) : (
-                            <Text as="span" size={14}>
-                              ({t('chainFunctions.optional_validation')})
-                            </Text>
-                          )}
-                        </Text>
-
-                        <TextInputWithPasteAction
-                          onWheel={e => e.currentTarget.blur()}
-                          type={field.type}
-                          step={
-                            field.name === 'amount'
-                              ? stepFromDecimals(coin.decimals)
-                              : undefined
-                          }
-                          min={0}
-                          {...register(field.name)}
-                          required={field.required}
-                        />
-
-                        {(touchedFields[field.name] ||
-                          dirtyFields[field.name]) &&
-                          errors[field.name] && (
-                            <ErrorText
-                              color="danger"
-                              size={13}
-                              className="error"
-                            >
-                              {t(errors[field.name]?.message as string, {
-                                defaultValue: t(
-                                  'chainFunctions.default_validation'
-                                ),
-                              })}
-                            </ErrorText>
-                          )}
-                      </InputContainer>
-                    )
-                  })}
-              </VStack>
+              </DepositDataProvider>
+            ) : shouldUseUnbondRedesign ? (
+              <DepositDataProvider value={formValues}>
+                <UnbondForm
+                  balance={balance}
+                  errors={errors}
+                  isValid={isValid}
+                  formValues={formValues}
+                />
+              </DepositDataProvider>
+            ) : shouldUseCosmosStakingRedesign ? (
+              <DepositDataProvider value={formValues}>
+                <DepositActionSpecific value={selectedChainAction} />
+              </DepositDataProvider>
+            ) : (
+              <DepositDataProvider value={formValues}>
+                <StakeForm
+                  balance={balance}
+                  errors={errors}
+                  formValues={formValues}
+                  isUnstake={isUnstakeAction || isRedeemAction}
+                />
+              </DepositDataProvider>
             )}
-          </WithProgressIndicator>
+          </ActionForm>
+        ) : (
+          <PageContent flexGrow scrollable>
+            <WithProgressIndicator value={0.2}>
+              <InputContainer>
+                <InputFieldWrapper>
+                  {t('chain_message_deposit', {
+                    chain: coin.chain,
+                  })}
+                </InputFieldWrapper>
+              </InputContainer>
+              <Opener
+                renderOpener={({ onOpen }) => (
+                  <Container onClick={onOpen}>
+                    <HStack alignItems="center" gap={8}>
+                      <Text weight="400" family="mono" size={16}>
+                        {t(selectedChainAction)}
+                      </Text>
+                    </HStack>
+                    <IconWrapper style={{ fontSize: 20 }}>
+                      <ChevronRightIcon />
+                    </IconWrapper>
+                  </Container>
+                )}
+                renderContent={({ onClose }) => (
+                  <DepositActionItemExplorer
+                    onClose={onClose}
+                    activeOption={selectedChainAction}
+                    options={availableActions}
+                    onOptionClick={option => {
+                      onClose()
+                      setSelectedChainAction(option)
+                    }}
+                  />
+                )}
+              />
+
+              <DepositActionSpecific value={selectedChainAction} />
+
+              {selectedChainAction && fields.length > 0 && (
+                <VStack gap={12}>
+                  {fields
+                    .filter(field => !field.hidden)
+                    .map(field => {
+                      const config = getBalanceDisplayConfig({
+                        chainAction: selectedChainAction,
+                        chain: coin.chain,
+                      })
+                      const showBalance = shouldShowBalance({
+                        fieldName: field.name,
+                        chainAction: selectedChainAction,
+                      })
+                      const showTickerWithBalance = shouldShowTicker({
+                        fieldName: field.name,
+                        chainAction: selectedChainAction,
+                        chain: coin.chain,
+                      })
+
+                      return (
+                        <InputContainer key={field.name}>
+                          <Text size={15} weight="400">
+                            {field.label}{' '}
+                            {showBalance && (
+                              <>
+                                (
+                                {config.balanceLabel === 'shares' ? (
+                                  <>
+                                    {t('shares')}: {balance}
+                                  </>
+                                ) : (
+                                  <>
+                                    {t('balance')}: {balance}
+                                    {showTickerWithBalance &&
+                                      coin.ticker &&
+                                      ` ${coin.ticker}`}
+                                  </>
+                                )}
+                                )
+                              </>
+                            )}
+                            {field.required ? (
+                              <Text as="span" color="danger" size={14}>
+                                *
+                              </Text>
+                            ) : (
+                              <Text as="span" size={14}>
+                                ({t('chainFunctions.optional_validation')})
+                              </Text>
+                            )}
+                          </Text>
+
+                          <TextInputWithPasteAction
+                            onWheel={e => e.currentTarget.blur()}
+                            type={field.type}
+                            step={
+                              field.name === 'amount'
+                                ? stepFromDecimals(coin.decimals)
+                                : undefined
+                            }
+                            min={0}
+                            {...register(field.name)}
+                            required={field.required}
+                          />
+
+                          {(touchedFields[field.name] ||
+                            dirtyFields[field.name]) &&
+                            errors[field.name] && (
+                              <ErrorText
+                                color="danger"
+                                size={13}
+                                className="error"
+                              >
+                                {t(errors[field.name]?.message as string, {
+                                  defaultValue: t(
+                                    'chainFunctions.default_validation'
+                                  ),
+                                })}
+                              </ErrorText>
+                            )}
+                        </InputContainer>
+                      )
+                    })}
+                </VStack>
+              )}
+            </WithProgressIndicator>
+          </PageContent>
         )}
-        <Button disabled={!isValid} type="submit">
-          {t('continue')}
-        </Button>
-      </FormComponent>
+        {/*
+         * Delegate and Redelegate use a tri-state footer button (Enter
+         * Amount → Select Validator → Continue) rendered at the page
+         * footer so it stays pinned to the screen bottom outside the
+         * scrollable action area. Other actions keep the default Continue.
+         */}
+        {selectedChainAction === 'delegate' ||
+        selectedChainAction === 'redelegate' ? (
+          <PageFooter>
+            <CosmosStakingFooterButton action={selectedChainAction} />
+          </PageFooter>
+        ) : (
+          <PageFooter>
+            <Button disabled={!isValid} type="submit">
+              {t('continue')}
+            </Button>
+          </PageFooter>
+        )}
+      </VStack>
     </DepositFormHandlersProvider>
   )
 }

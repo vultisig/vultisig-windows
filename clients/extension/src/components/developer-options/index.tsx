@@ -4,10 +4,6 @@ import {
   setDeveloperOptions,
 } from '@core/extension/storage/developerOptions'
 import { useCore } from '@core/ui/state/core'
-import {
-  useIsMLDSAEnabled,
-  useSetIsMLDSAEnabledMutation,
-} from '@core/ui/storage/mldsaEnabled'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import {
   useIsTssBatchingEnabled,
@@ -48,8 +44,6 @@ export const ExtensionDeveloperOptions = () => {
   const { version } = useCore()
   const clickCount = useRef(0)
   const refetchQueries = useRefetchQueries()
-  const isMLDSAEnabled = useIsMLDSAEnabled()
-  const { mutate: setIsMLDSAEnabled } = useSetIsMLDSAEnabledMutation()
   const isTssBatchingEnabled = useIsTssBatchingEnabled()
   const { mutate: setIsTssBatchingEnabled } =
     useSetIsTssBatchingEnabledMutation()
@@ -91,17 +85,14 @@ export const ExtensionDeveloperOptions = () => {
   return (
     <>
       <UnstyledButton onClick={handleClick}>
-        {`VULTISIG EXTENSION V${version}`}
+        <Text size={12} color="shy">
+          {`VULTISIG EXTENSION V${version}`}
+        </Text>
       </UnstyledButton>
 
       {visible && (
         <Modal onClose={() => setVisible(false)} title={t('developer_options')}>
           <VStack gap={16} fullHeight>
-            <Switch
-              checked={isMLDSAEnabled}
-              label={t('enable_mldsa')}
-              onChange={() => setIsMLDSAEnabled(!isMLDSAEnabled)}
-            />
             <Switch
               checked={isTssBatchingEnabled}
               label={t('enable_tss_batching')}

@@ -8,10 +8,18 @@ import { without } from '@vultisig/lib-utils/array/without'
 
 import { Language, languages, primaryLanguage } from '../Language'
 import { translations } from '../translations'
+import { findI18nSyntaxIssues } from '../utils/i18nSyntax'
 import { translateTexts } from '../utils/translateTexts'
 
 type RecursiveRecord = {
   [key: string]: string | RecursiveRecord
+}
+
+type ProcessTranslationsInput = {
+  sourceCopy: RecursiveRecord
+  targetCopy: RecursiveRecord
+  fromLang: Language
+  toLang: Language
 }
 
 const copyDirectory = '../locales'
@@ -19,16 +27,18 @@ const copyDirectory = '../locales'
 const currentDirname = dirname(fileURLToPath(import.meta.url))
 const workspaceRoot = path.resolve(currentDirname, '../../../..')
 
-const processTranslations = async (
-  sourceCopy: RecursiveRecord,
-  targetCopy: RecursiveRecord,
-  fromLang: Language,
-  toLang: Language
-): Promise<RecursiveRecord> => {
+const isRecursiveRecord = (value: unknown): value is RecursiveRecord =>
+  typeof value === 'object' && value !== null
+
+const processTranslations = async ({
+  sourceCopy,
+  targetCopy,
+  fromLang,
+  toLang,
+}: ProcessTranslationsInput): Promise<RecursiveRecord> => {
   const result: RecursiveRecord = { ...targetCopy }
-  const missingKeys: string[] = []
-  const missingTexts: string[] = []
-  const missingPaths: { key: string; path: string[] }[] = []
+  const pendingTexts: string[] = []
+  const pendingPaths: { key: string; path: string[] }[] = []
 
   const traverse = (
     source: RecursiveRecord,
@@ -42,47 +52,62 @@ const processTranslations = async (
     })
 
     Object.entries(source).forEach(([key, value]) => {
-      if (!(key in target)) {
-        if (typeof value === 'string') {
-          missingKeys.push(key)
-          missingTexts.push(value)
-          missingPaths.push({ key, path: currentPath })
-        } else if (typeof value === 'object') {
-          target[key] = {}
-          traverse(value as RecursiveRecord, target[key] as RecursiveRecord, [
-            ...currentPath,
-            key,
-          ])
+      const targetValue = target[key]
+
+      if (typeof value === 'string') {
+        if (
+          typeof targetValue !== 'string' ||
+          findI18nSyntaxIssues({
+            key: [...currentPath, key].join('.'),
+            locale: toLang,
+            source: value,
+            target: targetValue,
+          }).length > 0
+        ) {
+          pendingTexts.push(value)
+          pendingPaths.push({ key, path: currentPath })
         }
-      } else if (typeof value === 'object' && typeof target[key] === 'object') {
-        traverse(value as RecursiveRecord, target[key] as RecursiveRecord, [
-          ...currentPath,
-          key,
-        ])
+
+        return
+      }
+
+      if (!isRecursiveRecord(targetValue)) {
+        target[key] = {}
+      }
+
+      const nestedTarget = target[key]
+
+      if (isRecursiveRecord(nestedTarget)) {
+        traverse(value, nestedTarget, [...currentPath, key])
       }
     })
   }
 
   traverse(sourceCopy, result)
 
-  if (missingTexts.length > 0) {
+  if (pendingTexts.length > 0) {
     console.log(
-      `Found ${missingTexts.length} missing translations for ${toLang}`
+      `Found ${pendingTexts.length} missing or invalid translations for ${toLang}`
     )
     const translatedTexts = await translateTexts({
-      texts: missingTexts,
+      texts: pendingTexts,
       from: fromLang,
       to: toLang,
     })
 
-    missingPaths.forEach((item, index) => {
+    pendingPaths.forEach((item, index) => {
       let current = result
 
       for (const pathPart of item.path) {
-        if (!current[pathPart]) {
+        if (!isRecursiveRecord(current[pathPart])) {
           current[pathPart] = {}
         }
-        current = current[pathPart] as RecursiveRecord
+
+        const next = current[pathPart]
+
+        if (isRecursiveRecord(next)) {
+          current = next
+        }
       }
 
       current[item.key] = translatedTexts[index]
@@ -128,12 +153,12 @@ const sync = async () => {
       const oldCopy = translations[language]
       const oldSerialized = JSON.stringify(oldCopy, null, 2)
 
-      const result = await processTranslations(
+      const result = await processTranslations({
         sourceCopy,
-        oldCopy,
-        primaryLanguage,
-        language
-      )
+        targetCopy: oldCopy,
+        fromLang: primaryLanguage,
+        toLang: language,
+      })
 
       const newSerialized = JSON.stringify(result, null, 2)
 
@@ -155,5 +180,6 @@ const sync = async () => {
 }
 
 sync().catch(error => {
-  console.log(`i18n:sync failed (non-blocking): ${error.message}`)
+  console.log(`i18n:sync failed: ${error.message}`)
+  process.exitCode = 1
 })

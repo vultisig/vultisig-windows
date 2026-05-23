@@ -156,7 +156,7 @@ export const NotificationSettingsContent = ({
             </LeftColumn>
             <Switch
               checked={isEnabled}
-              disabled={isPending}
+              loading={isPending}
               onChange={onToggle}
             />
           </HStack>
@@ -187,7 +187,7 @@ export const NotificationSettingsContent = ({
                 </VaultRowLeft>
                 <Switch
                   checked={vault.enabled}
-                  disabled={isPending}
+                  loading={isPending}
                   onChange={enabled => {
                     onVaultToggle({ vaultId: vault.id, enabled })
                   }}

@@ -43,6 +43,10 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   remove_thor_lp: { showBalance: false, showTicker: false },
   freeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   unfreeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
+  delegate: { showBalance: true, balanceLabel: 'balance', showTicker: true },
+  undelegate: { showBalance: false, showTicker: true },
+  redelegate: { showBalance: false, showTicker: true },
+  claim_rewards: { showBalance: false, showTicker: false },
 }
 
 type GetBalanceDisplayConfigInput = {

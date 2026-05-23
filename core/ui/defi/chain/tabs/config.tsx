@@ -10,11 +10,17 @@ export type DefiChainPageTab = 'bonded' | 'staked' | 'lps'
 
 type DefiChainTabsOptions = {
   includeBonded?: boolean
+  /**
+   * The LPs tab only renders THORChain / MayaChain liquidity positions,
+   * so it's only meaningful for those chains. Other chains (Terra,
+   * Cosmos, Tron, Circle, …) get the same gating as `bonded`.
+   */
+  includeLps?: boolean
 }
 
 export const getDefiChainTabs = (
   t: TFunction,
-  { includeBonded = true }: DefiChainTabsOptions = {}
+  { includeBonded = true, includeLps = true }: DefiChainTabsOptions = {}
 ): Tab<DefiChainPageTab>[] => [
   ...(includeBonded
     ? [
@@ -30,7 +36,7 @@ export const getDefiChainTabs = (
     label: t('defiChainTabs.staked'),
     renderContent: StakedPositions,
   },
-  ...(featureFlags.defiLpsTab
+  ...(featureFlags.defiLpsTab && includeLps
     ? [
         {
           value: 'lps' as const,

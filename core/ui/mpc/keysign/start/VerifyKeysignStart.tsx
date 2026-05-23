@@ -33,6 +33,8 @@ type VerifyKeysignStartInput = {
   keysignPayloadQuery: Query<KeysignPayload>
   terms?: string[]
   toAddressLabel?: string
+  extraPendingMessage?: string
+  footer?: ReactNode
 }
 
 const TermItem = styled(Checkbox)`
@@ -46,6 +48,8 @@ export const VerifyKeysignStart = ({
   keysignPayloadQuery,
   terms = [],
   toAddressLabel,
+  extraPendingMessage,
+  footer,
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -97,6 +101,12 @@ export const VerifyKeysignStart = ({
       }
     }
 
+    if (extraPendingMessage) {
+      return {
+        disabledMessage: extraPendingMessage,
+      }
+    }
+
     if (keysignPayloadQuery.error) {
       if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
         return {
@@ -126,6 +136,7 @@ export const VerifyKeysignStart = ({
       ...(toAddressLabel ? { toAddressLabel } : {}),
     }
   }, [
+    extraPendingMessage,
     keysignPayloadQuery.data,
     keysignPayloadQuery.error,
     keysignPayloadQuery.isPending,
@@ -167,7 +178,7 @@ export const VerifyKeysignStart = ({
         )}
       </PageContent>
       <PageFooter>
-        <StartKeysignPrompt {...startKeysignPromptProps} />
+        {footer ?? <StartKeysignPrompt {...startKeysignPromptProps} />}
       </PageFooter>
     </>
   )

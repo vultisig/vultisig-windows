@@ -50,11 +50,31 @@ const errors: Record<Type, { code: number; message: string }> = {
   UnrecognizedChain: { code: 4902, message: 'Unrecognized chain ID' },
 } as const
 
+type EIP1193ErrorInit = {
+  code: number
+  message: string
+  data?: unknown
+}
+
+/**
+ * EIP-1193 §5.4 `ProviderRpcError`. Construct from a named `Type` for the
+ * standard codes, or from an explicit `{ code, message, data? }` to preserve
+ * upstream error shapes (e.g. JSON-RPC node errors with revert `data`).
+ */
 export class EIP1193Error extends Error {
   code: number
+  data?: unknown
 
-  constructor(type: Type) {
-    super(errors[type].message)
-    this.code = errors[type].code
+  constructor(typeOrInit: Type | EIP1193ErrorInit, customMessage?: string) {
+    if (typeof typeOrInit === 'string') {
+      super(customMessage ?? errors[typeOrInit].message)
+      this.code = errors[typeOrInit].code
+      return
+    }
+    super(typeOrInit.message)
+    this.code = typeOrInit.code
+    if (typeOrInit.data !== undefined) {
+      this.data = typeOrInit.data
+    }
   }
 }

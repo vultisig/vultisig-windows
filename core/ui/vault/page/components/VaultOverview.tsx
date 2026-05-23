@@ -63,7 +63,7 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   ]
 
   return (
-    <VStack fullHeight>
+    <Container flexGrow>
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <BlurEffect />
         <BalanceWrapper data-testid="vault-overview-balance-wrapper">
@@ -76,9 +76,13 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
         <Divider />
         <VaultTabs />
       </StyledPageContent>
-    </VStack>
+    </Container>
   )
 }
+
+const Container = styled(VStack)`
+  min-height: 0;
+`
 
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};

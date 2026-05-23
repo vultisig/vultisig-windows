@@ -7,7 +7,7 @@ import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { Chain, IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
 import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
@@ -19,6 +19,7 @@ import {
   resolveStakeTitle,
   resolveStakeToken,
 } from '../config/stakeUiResolver'
+import { CosmosDelegationsView } from '../cosmos/CosmosDelegationsView'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
@@ -35,7 +36,60 @@ type StakeActionType =
   | 'add_cacao_pool'
   | 'remove_cacao_pool'
 
+const cosmosNativeStakingChains: readonly IbcEnabledCosmosChain[] = [
+  Chain.Terra,
+  Chain.TerraClassic,
+]
+const isCosmosNativeStakingChain = (
+  chain: Chain
+): chain is IbcEnabledCosmosChain =>
+  (cosmosNativeStakingChains as readonly Chain[]).includes(chain)
+
+const tickerByCosmosStakingChain: Record<IbcEnabledCosmosChain, string> = {
+  [Chain.Terra]: 'LUNA',
+  [Chain.TerraClassic]: 'LUNC',
+  // Other IBC chains don't surface native staking on this view yet — set to
+  // their fee ticker so the Map type is exhaustive without unsafe casts.
+  [Chain.Cosmos]: 'ATOM',
+  [Chain.Osmosis]: 'OSMO',
+  [Chain.Kujira]: 'KUJI',
+  [Chain.Dydx]: 'DYDX',
+  [Chain.Noble]: 'USDC',
+  [Chain.Akash]: 'AKT',
+}
+
 export const StakedPositions = () => {
+  const chain = useCurrentDefiChain()
+  const selectedPositions = useDefiPositions(chain)
+  const vaultCoins = useCurrentVaultCoins()
+
+  if (isCosmosNativeStakingChain(chain)) {
+    const ticker = tickerByCosmosStakingChain[chain]
+    const stakingCoin = vaultCoins.find(
+      c => c.chain === chain && c.ticker === ticker
+    )
+    if (!stakingCoin) {
+      // Vault hasn't yet derived this chain. Fall through to the existing
+      // empty surface; the user can enable Terra in chain selection.
+      return <DefiPositionEmptyState />
+    }
+    if (selectedPositions.length === 0) {
+      return <DefiPositionEmptyState />
+    }
+    return (
+      <CosmosDelegationsView
+        chain={chain}
+        delegatorAddress={stakingCoin.address}
+        ticker={ticker}
+        decimals={stakingCoin.decimals}
+      />
+    )
+  }
+
+  return <ThorchainStakedPositions />
+}
+
+const ThorchainStakedPositions = () => {
   const chain = useCurrentDefiChain()
   const selectedPositions = useDefiPositions(chain)
   const { data, isPending, error } = useDefiChainPositionsQuery(chain)

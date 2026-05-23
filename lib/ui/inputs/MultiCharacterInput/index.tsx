@@ -23,6 +23,7 @@ export type MultiCharacterInputProps = InputProps<string | null> &
     includePasteButton?: boolean
     autoFocusFirst?: boolean
     validationMessages?: ValidationMessages
+    secureEntry?: boolean
   }
 
 export const MultiCharacterInput = ({
@@ -34,6 +35,7 @@ export const MultiCharacterInput = ({
   includePasteButton = true,
   autoFocusFirst = true,
   className,
+  secureEntry = false,
   ...rest
 }: MultiCharacterInputProps) => {
   const { t } = useTranslation()
@@ -54,7 +56,7 @@ export const MultiCharacterInput = ({
         {digits.map((digit, idx) => (
           <DigitInput
             key={idx}
-            type="text"
+            type={secureEntry ? 'password' : 'text'}
             inputMode="numeric"
             pattern="[0-9]*"
             maxLength={1}

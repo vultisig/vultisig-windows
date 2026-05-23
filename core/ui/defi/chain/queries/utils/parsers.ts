@@ -44,6 +44,9 @@ export const toBondStatusLabel = (status?: string) => {
   return bondStatusMap[normalized] ?? 'unknown'
 }
 
+export const canUnbondNode = (status: string) =>
+  status.toLowerCase() !== 'active'
+
 type EstimateNextChurnInput = {
   nextChurnHeight?: number
   currentHeight: number

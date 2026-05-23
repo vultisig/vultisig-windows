@@ -18,6 +18,9 @@ export const DefiChainTabs = () => {
   const { t } = useTranslation()
   const chain = useCurrentDefiChain()
   const includeBonding = chain === Chain.THORChain || chain === Chain.MayaChain
+  // LP positions are only modeled for THORChain / MayaChain — the LpPositions
+  // tab queries their LP services and would render empty for other chains.
+  const includeLps = chain === Chain.THORChain || chain === Chain.MayaChain
 
   const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
@@ -26,8 +29,12 @@ export const DefiChainTabs = () => {
   const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const tabs = useMemo(
-    () => getDefiChainTabs(t, { includeBonded: includeBonding }),
-    [t, includeBonding]
+    () =>
+      getDefiChainTabs(t, {
+        includeBonded: includeBonding,
+        includeLps,
+      }),
+    [t, includeBonding, includeLps]
   )
 
   useEffect(() => {
