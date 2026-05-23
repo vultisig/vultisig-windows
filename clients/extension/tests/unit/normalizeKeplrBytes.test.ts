@@ -50,4 +50,30 @@ describe('normalizeKeplrBytes', () => {
   it('throws on a numeric primitive (not an array)', () => {
     expect(() => normalizeKeplrBytes(42)).toThrow()
   })
+
+  it('throws on `__uint8array__` payload with non-hex characters', () => {
+    expect(() => normalizeKeplrBytes('__uint8array__zz')).toThrow(
+      /hex payload/i
+    )
+  })
+
+  it('throws on `__uint8array__` payload with odd-length hex', () => {
+    expect(() => normalizeKeplrBytes('__uint8array__0')).toThrow(/hex payload/i)
+  })
+
+  it('throws on a number[] containing out-of-range bytes', () => {
+    expect(() => normalizeKeplrBytes([10, 256])).toThrow(/non-byte/i)
+    expect(() => normalizeKeplrBytes([10, -1])).toThrow(/non-byte/i)
+  })
+
+  it('throws on a number[] containing non-integer values', () => {
+    expect(() => normalizeKeplrBytes([10, 1.5])).toThrow(/non-byte/i)
+    expect(() => normalizeKeplrBytes([10, Number.NaN])).toThrow(/non-byte/i)
+  })
+
+  it('throws on Buffer-shaped JSON with malformed data array', () => {
+    expect(() =>
+      normalizeKeplrBytes({ type: 'Buffer', data: [10, 999] })
+    ).toThrow(/non-byte/i)
+  })
 })

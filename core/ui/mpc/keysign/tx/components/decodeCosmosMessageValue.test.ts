@@ -57,9 +57,13 @@ describe('decodeCosmosMessageValue', () => {
     const result = decodeCosmosMessageValue({
       typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
       value: encoded,
-    }) as { delegatorAddress: string }
+    })
 
-    expect(result.delegatorAddress).toBe('osmo1abc')
+    expect(result).toEqual({
+      delegatorAddress: 'osmo1abc',
+      validatorAddress: 'osmovaloper1xyz',
+      amount: { denom: 'uosmo', amount: '500000' },
+    })
   })
 
   it('decodes /cosmos.staking.v1beta1.MsgBeginRedelegate', () => {
@@ -73,10 +77,14 @@ describe('decodeCosmosMessageValue', () => {
     const result = decodeCosmosMessageValue({
       typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
       value: encoded,
-    }) as { validatorSrcAddress: string; validatorDstAddress: string }
+    })
 
-    expect(result.validatorSrcAddress).toBe('osmovaloper1src')
-    expect(result.validatorDstAddress).toBe('osmovaloper1dst')
+    expect(result).toEqual({
+      delegatorAddress: 'osmo1abc',
+      validatorSrcAddress: 'osmovaloper1src',
+      validatorDstAddress: 'osmovaloper1dst',
+      amount: { denom: 'uosmo', amount: '250000' },
+    })
   })
 
   it('returns base64 for unknown typeUrls', () => {
@@ -107,10 +115,13 @@ describe('decodeCosmosMessageValue', () => {
         0x08, 0x2a, 0x12, 0x0a, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x31, 0x61,
         0x62, 0x63, 0x18, 0x01,
       ]),
-    }) as { proposalId: unknown }
+    })
 
-    expect(typeof result.proposalId).toBe('string')
-    expect(result.proposalId).toBe('42')
+    expect(result).toEqual({
+      proposalId: '42',
+      voter: 'cosmos1abc',
+      option: 1,
+    })
     // JSON.stringify shouldn't throw
     expect(() => JSON.stringify(result)).not.toThrow()
   })

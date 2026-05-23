@@ -62,12 +62,17 @@ type DelegatorAndCoin = {
   coin: Coin | undefined
 }
 
+type DecodeDelegatorAndCoinInput = {
+  bytes: Uint8Array
+  coinFieldNo: number
+}
+
 // `MsgDelegateToValidatorSet` and `MsgUndelegateFromRebalancedValidatorSet`
 // share this shape: { delegator string = 1; Coin coin = 2 }.
-const decodeDelegatorAndCoin = (
-  bytes: Uint8Array,
-  coinFieldNo: number
-): DelegatorAndCoin => {
+const decodeDelegatorAndCoin = ({
+  bytes,
+  coinFieldNo,
+}: DecodeDelegatorAndCoinInput): DelegatorAndCoin => {
   const reader = new BinaryReader(bytes)
   const out: DelegatorAndCoin = { delegator: '', coin: undefined }
   while (reader.pos < reader.len) {
@@ -86,17 +91,17 @@ const decodeDelegatorAndCoin = (
 
 export const decodeMsgDelegateToValidatorSet = (
   bytes: Uint8Array
-): DelegatorAndCoin => decodeDelegatorAndCoin(bytes, 2)
+): DelegatorAndCoin => decodeDelegatorAndCoin({ bytes, coinFieldNo: 2 })
 
 // NOTE: in the Osmosis proto, `MsgUndelegateFromValidatorSet.coin` is field 3
 // (field 2 is reserved/skipped in the schema). Don't "normalize" it to 2.
 export const decodeMsgUndelegateFromValidatorSet = (
   bytes: Uint8Array
-): DelegatorAndCoin => decodeDelegatorAndCoin(bytes, 3)
+): DelegatorAndCoin => decodeDelegatorAndCoin({ bytes, coinFieldNo: 3 })
 
 export const decodeMsgUndelegateFromRebalancedValidatorSet = (
   bytes: Uint8Array
-): DelegatorAndCoin => decodeDelegatorAndCoin(bytes, 2)
+): DelegatorAndCoin => decodeDelegatorAndCoin({ bytes, coinFieldNo: 2 })
 
 export const decodeMsgRedelegateValidatorSet = (
   bytes: Uint8Array

@@ -94,15 +94,21 @@ type DirectHandlerSignDoc = {
   accountNumber: string
 }
 
+type DirectHandlerInput = {
+  signDoc: DirectHandlerSignDoc
+  chain: Chain
+  signer: string
+}
+
 // Fallback display payload when the dApp's bodyBytes can't be decoded as a
 // standard TxBody (e.g. chain-specific extension fields cosmjs-types doesn't
 // know about, or a non-standard envelope). Signing still proceeds because the
 // raw bytes are forwarded to the popup via `directPayload`.
-const genericDirectTransactionDetails = (
-  signDoc: DirectHandlerSignDoc,
-  chain: Chain,
-  signer: string
-): TransactionDetails => ({
+const genericDirectTransactionDetails = ({
+  signDoc,
+  chain,
+  signer,
+}: DirectHandlerInput): TransactionDetails => ({
   asset: { ticker: chainFeeCoin[chain].ticker },
   amount: { amount: '0', decimals: chainFeeCoin[chain].decimals },
   from: signer,
@@ -115,11 +121,11 @@ const genericDirectTransactionDetails = (
   skipBroadcast: true,
 })
 
-const directHandler = (
-  signDoc: DirectHandlerSignDoc,
-  chain: Chain,
-  signer: string
-): TransactionDetails => {
+const directHandler = ({
+  signDoc,
+  chain,
+  signer,
+}: DirectHandlerInput): TransactionDetails => {
   // Body decoding is best-effort — used only to enrich the popup's display
   // info. If the dApp's TxBody has fields cosmjs-types can't parse (newer
   // SDK additions, Osmosis/Injective extensions, etc.) fall back to a
@@ -128,7 +134,7 @@ const directHandler = (
     TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
   )
   if ('error' in decoded) {
-    return genericDirectTransactionDetails(signDoc, chain, signer)
+    return genericDirectTransactionDetails({ signDoc, chain, signer })
   }
   const txBody = decoded.data
   const [message] = txBody.messages
@@ -855,8 +861,8 @@ export class XDEFIKeplrProvider extends Keplr {
         chain === OtherChain.QBTC
           ? rawAuthInfoBytes
           : normalizeCosmosAuthInfoFee(rawAuthInfoBytes, chain)
-      const transactionDetails: TransactionDetails = directHandler(
-        {
+      const transactionDetails: TransactionDetails = directHandler({
+        signDoc: {
           bodyBytes: Buffer.from(rawBodyBytes).toString('base64'),
           authInfoBytes: Buffer.from(normalizedAuthInfoBytes).toString(
             'base64'
@@ -865,8 +871,8 @@ export class XDEFIKeplrProvider extends Keplr {
           accountNumber: signDoc.accountNumber.toString(),
         },
         chain,
-        signer
-      )
+        signer,
+      })
 
       const [{ data }] = await callPopup(
         {

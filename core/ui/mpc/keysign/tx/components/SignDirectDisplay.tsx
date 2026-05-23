@@ -7,7 +7,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColor } from '@lib/ui/theme/ThemeColors'
 import { SignDirect } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
 
@@ -51,53 +50,56 @@ const StyledTitle = styled.span<Styles>`
   white-space: nowrap;
 `
 
+const buildDisplayData = (signDirect: SignDirect): Record<string, unknown> => {
+  try {
+    const bodyBytes = fromBase64(signDirect.bodyBytes)
+    const authInfoBytes = fromBase64(signDirect.authInfoBytes)
+    const txBody = TxBody.decode(bodyBytes)
+    const authInfo = AuthInfo.decode(authInfoBytes)
+
+    const messages = txBody.messages.map(decodeMessage)
+
+    const fee = authInfo.fee
+      ? {
+          amount: authInfo.fee.amount.map(coin => ({
+            denom: coin.denom,
+            amount: coin.amount,
+          })),
+          gasLimit: authInfo.fee.gasLimit?.toString() ?? '0',
+        }
+      : undefined
+
+    const signerInfo = authInfo.signerInfos[0]
+    const sequence = signerInfo?.sequence?.toString() ?? '0'
+
+    return {
+      chainId: signDirect.chainId,
+      accountNumber: signDirect.accountNumber,
+      sequence,
+      memo: txBody.memo,
+      messages,
+      fee,
+    }
+  } catch (error) {
+    // Surface whatever was thrown — Error.message when available, else its
+    // String() form — so the popup has a real reason for the decode failure.
+    return {
+      chainId: signDirect.chainId,
+      accountNumber: signDirect.accountNumber,
+      error: error instanceof Error ? error.message : String(error),
+      bodyBytes: signDirect.bodyBytes.substring(0, 100) + '...',
+      authInfoBytes: signDirect.authInfoBytes.substring(0, 100) + '...',
+    }
+  }
+}
+
 export const SignDirectDisplay = ({
   signDirect,
 }: {
   signDirect: SignDirect
 }) => {
   const { t } = useTranslation()
-
-  const displayData = useMemo(() => {
-    try {
-      const bodyBytes = fromBase64(signDirect.bodyBytes)
-      const authInfoBytes = fromBase64(signDirect.authInfoBytes)
-      const txBody = TxBody.decode(bodyBytes)
-      const authInfo = AuthInfo.decode(authInfoBytes)
-
-      const messages = txBody.messages.map(decodeMessage)
-
-      const fee = authInfo.fee
-        ? {
-            amount: authInfo.fee.amount.map(coin => ({
-              denom: coin.denom,
-              amount: coin.amount,
-            })),
-            gasLimit: authInfo.fee.gasLimit?.toString() ?? '0',
-          }
-        : undefined
-
-      const signerInfo = authInfo.signerInfos[0]
-      const sequence = signerInfo?.sequence?.toString() ?? '0'
-
-      return {
-        chainId: signDirect.chainId,
-        accountNumber: signDirect.accountNumber,
-        sequence,
-        memo: txBody.memo,
-        messages,
-        fee,
-      }
-    } catch (error) {
-      return {
-        chainId: signDirect.chainId,
-        accountNumber: signDirect.accountNumber,
-        error: error instanceof Error ? error.message : 'Failed to decode',
-        bodyBytes: signDirect.bodyBytes.substring(0, 100) + '...',
-        authInfoBytes: signDirect.authInfoBytes.substring(0, 100) + '...',
-      }
-    }
-  }, [signDirect])
+  const displayData = buildDisplayData(signDirect)
 
   return (
     <Panel>

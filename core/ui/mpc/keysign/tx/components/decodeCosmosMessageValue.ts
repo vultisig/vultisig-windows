@@ -120,16 +120,16 @@ const knownDecoders: Record<string, KnownDecoder> = {
     decodeMsgDelegateBondedTokens(v),
 }
 
+const isPlainRecord = (value: unknown): value is Record<string, unknown> =>
+  value !== null && typeof value === 'object'
+
 const replaceJsonUnsafeValues = (value: unknown): unknown => {
   if (typeof value === 'bigint') return value.toString()
   if (value instanceof Uint8Array) return toHex(value)
   if (Array.isArray(value)) return value.map(replaceJsonUnsafeValues)
-  if (value !== null && typeof value === 'object') {
+  if (isPlainRecord(value)) {
     return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>).map(([k, v]) => [
-        k,
-        replaceJsonUnsafeValues(v),
-      ])
+      Object.entries(value).map(([k, v]) => [k, replaceJsonUnsafeValues(v)])
     )
   }
   return value
