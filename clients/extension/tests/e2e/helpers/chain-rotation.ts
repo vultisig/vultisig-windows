@@ -49,12 +49,26 @@ export const SUPPORTED_CHAINS = {
   // UTXO chains
   bitcoin: { symbol: 'BTC', minSend: '0.00005', minSwap: '0.0005' },
   litecoin: { symbol: 'LTC', minSend: '0.001', minSwap: '0.01' },
-  dogecoin: { symbol: 'DOGE', minSend: '1', minSwap: '10' },
+  dogecoin: { symbol: 'DOGE', minSend: '5', minSwap: '20' },
+  bitcoincash: { symbol: 'BCH', minSend: '0.001', minSwap: '0.005' },
+  zcash: { symbol: 'ZEC', minSend: '0.05', minSwap: '0.2' },
+  dash: { symbol: 'DASH', minSend: '0.1', minSwap: '0.3' },
 
-  // Other chains
+  // Cosmos-based
   solana: { symbol: 'SOL', minSend: '0.01', minSwap: '0.02' },
   thorchain: { symbol: 'RUNE', minSend: '0.1', minSwap: '1' },
+  mayachain: { symbol: 'CACAO', minSend: '5', minSwap: '20' },
   cosmos: { symbol: 'ATOM', minSend: '0.01', minSwap: '0.1' },
+  osmosis: { symbol: 'OSMO', minSend: '0.5', minSwap: '2' },
+  kujira: { symbol: 'KUJI', minSend: '1', minSwap: '5' },
+
+  // Other chains
+  sui: { symbol: 'SUI', minSend: '0.5', minSwap: '2' },
+  ton: { symbol: 'TON', minSend: '0.3', minSwap: '1' },
+  tron: { symbol: 'TRX', minSend: '5', minSwap: '20' },
+  ripple: { symbol: 'XRP', minSend: '1', minSwap: '3' },
+  polkadot: { symbol: 'DOT', minSend: '0.5', minSwap: '2' },
+  cardano: { symbol: 'ADA', minSend: '5', minSwap: '20' },
 } as const
 
 export type ChainId = keyof typeof SUPPORTED_CHAINS
@@ -62,15 +76,23 @@ export type ChainId = keyof typeof SUPPORTED_CHAINS
 /**
  * Chains that are known to have funds in the test vault.
  * Update this list when vault balances change!
- * 
- * Current balances (as of 2026-03-10):
- * - THOR: ~27 RUNE ($27) - good swap source
- * - ETH: $15.67 - good swap source  
- * - SOL: ~0.033 SOL ($2.90) - destination only
- * - BTC: $0.00 (no funds!) - REMOVED
- * - BSC: $0 (no funds)
- * - Polygon: $0 (no funds)
- * 
+ *
+ * Confirmed funded (as of 2026-05-14, v1.0.60 release sweep):
+ * - bitcoin   — used in v1.0.60 broadcast 9e915d23...41585
+ * - ethereum  — used in v1.0.60 ETH→BTC swap 0x0fbae690...8fceed
+ * - thorchain — used in v1.0.60 broadcast 66F1DE93...1323539
+ * - solana    — small ($2-3) balance, destination only
+ * - bsc       — derived address present, balance unverified
+ *
+ * Pending funding (test vault has addresses, no balance yet):
+ *   EVM L2s     arbitrum, optimism, base, polygon, avalanche
+ *   UTXO peers  litecoin, dogecoin, bitcoincash, zcash, dash
+ *   Cosmos      mayachain, osmosis, kujira
+ *   Long-tail   sui, ton, tron, ripple, polkadot, cardano
+ *
+ * Lookup addresses via `npx playwright test --grep "exports all chain addresses"`.
+ * Promote a chain into FUNDED_CHAINS only after confirming a non-zero balance.
+ *
  * NOTE: Order matters for swap pairs! Higher balance chains first.
  * Last chain becomes destination-only (never a source).
  */
