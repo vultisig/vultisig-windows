@@ -12,6 +12,7 @@ export const BannerRoot = styled.div`
   position: relative;
   width: 100%;
   min-height: 156px;
+  margin-bottom: 32px;
   box-sizing: border-box;
   padding: 24px;
   border-radius: 12px;
