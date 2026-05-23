@@ -64,11 +64,15 @@ export const formatTokenAmount = ({
 }: FormatTokenAmountInput): FormattedTokenAmount => {
   const isApproval =
     !!functionName && unlimitedApprovalFunctions.has(functionName)
-  // maxUint160 is only treated as a sentinel for approval flows (Permit2
-  // uint160 amount). In other contexts a value that high would be a real,
-  // if absurd, transfer amount.
+  // maxUint160 is the Permit2-specific sentinel — only Permit2 functions pack
+  // the amount into a uint160. EIP-2612 `permit` and ERC-20 `approve` both use
+  // uint256, so a value of exactly 2^160-1 there would be a real (if absurd)
+  // amount, not "unlimited".
+  const isPermit2Uint160Approval =
+    functionName === 'permitSingle' || functionName === 'permitBatch'
   const isUnlimitedSentinel =
-    rawAmount === maxUint256 || (isApproval && rawAmount === maxUint160)
+    rawAmount === maxUint256 ||
+    (isPermit2Uint160Approval && rawAmount === maxUint160)
   if (isUnlimitedSentinel) {
     return {
       display: isApproval ? 'Unlimited' : null,
