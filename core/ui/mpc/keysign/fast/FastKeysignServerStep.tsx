@@ -96,8 +96,11 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             })
           }
 
-          // Polkadot dApp signPayload — bypass TW, send raw payload hash
-          if (chain === OtherChain.Polkadot && keysignPayload.memo) {
+          // Substrate dApp signPayload — bypass TW, send raw payload hash
+          if (
+            isOneOf(chain, [OtherChain.Polkadot, OtherChain.Bittensor]) &&
+            keysignPayload.memo
+          ) {
             const parseResult = attempt(
               () =>
                 JSON.parse(keysignPayload.memo!) as PolkadotSignerPayloadJSON
