@@ -62,7 +62,11 @@ export const getSwapFeeFromPayload = (
           // `swap_fee_chain` is a protobuf string; treat this resolver as the
           // single routing boundary where we cast back to the `Chain` union.
           chain: tx.swapFeeChain as Chain,
-          id: tx.swapFeeTokenId ?? '',
+          // Keep `id` absent when the SDK didn't populate it — native fee
+          // coins (e.g. ETH on Ethereum) have no token id. Coercing to ''
+          // here changes `coinKeyToString` from `"Ethereum"` to `"Ethereum:"`
+          // and breaks the vault-coin lookup, zeroing out the fiat value.
+          ...(tx.swapFeeTokenId ? { id: tx.swapFeeTokenId } : {}),
           amount: BigInt(tx.swapFee),
           decimals: tx.swapFeeDecimals,
         }
