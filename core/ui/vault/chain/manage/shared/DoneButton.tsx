@@ -13,7 +13,11 @@ export const DoneButton = ({ onClick, disabled }: DoneButtonProps) => {
   const { t } = useTranslation()
 
   return (
-    <StyledButton data-testid="manage-chains-done" onClick={onClick} disabled={disabled}>
+    <StyledButton
+      data-testid="manage-chains-done"
+      onClick={onClick}
+      disabled={disabled}
+    >
       <Text color="primaryAlt" as="span" size={14} weight={400}>
         {t('done')}
       </Text>

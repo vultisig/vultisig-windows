@@ -1,9 +1,6 @@
-/**
- * One-off Playwright config for v1.0.60 broadcast verification.
- * Identical to playwright.config.ts but with fund-dependent.dependencies removed.
- * Allows running the real-send / real-swap specs without being gated by the
- * v1.0.60 push-notification regression in the network project.
- */
+// Variant of playwright.config.ts that drops fund-dependent.dependencies so
+// real-send/real-swap specs can run without being gated by the v1.0.60
+// push-notification regression in the network project.
 import baseConfig from './playwright.config'
 import { defineConfig } from '@playwright/test'
 

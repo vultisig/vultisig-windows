@@ -55,7 +55,6 @@ export const SUPPORTED_CHAINS = {
   dash: { symbol: 'DASH', minSend: '0.1', minSwap: '0.3' },
 
   // Cosmos-based
-  solana: { symbol: 'SOL', minSend: '0.01', minSwap: '0.02' },
   thorchain: { symbol: 'RUNE', minSend: '0.1', minSwap: '1' },
   mayachain: { symbol: 'CACAO', minSend: '5', minSwap: '20' },
   cosmos: { symbol: 'ATOM', minSend: '0.01', minSwap: '0.1' },
@@ -63,6 +62,7 @@ export const SUPPORTED_CHAINS = {
   kujira: { symbol: 'KUJI', minSend: '1', minSwap: '5' },
 
   // Other chains
+  solana: { symbol: 'SOL', minSend: '0.01', minSwap: '0.02' },
   sui: { symbol: 'SUI', minSend: '0.5', minSwap: '2' },
   ton: { symbol: 'TON', minSend: '0.3', minSwap: '1' },
   tron: { symbol: 'TRX', minSend: '5', minSwap: '20' },

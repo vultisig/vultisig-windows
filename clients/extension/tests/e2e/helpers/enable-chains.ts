@@ -1,23 +1,7 @@
-/**
- * Enable Chains Helper
- *
- * Drives the Vultisig extension's chain-management UI to toggle on a list of
- * chains in the current vault. Used by `dump-vault-addresses.spec.ts` and any
- * future test that needs broader-than-default chain coverage.
- *
- * NOTE: This helper depends on UI selectors that are not yet testid-tagged in
- * source. If selectors break, dump the UI tree and adjust — see fallback chain
- * in `openChainManagement`. A clean fix is to add `data-testid="manage-chains-button"`
- * to the IconButton in `core/ui/vault/page/components/VaultTabs/VaultTabsHeader.tsx`.
- */
-
 import type { Page } from '@playwright/test'
 
-/**
- * Map of user-friendly chain keys to the actual `Chain` enum values from
- * @vultisig/core-chain. ChainItem renders `data-testid="chain-item-${coin.chain}"`
- * so the testid uses the enum value, NOT the user-friendly key.
- */
+// Maps user-friendly keys to the Chain enum value rendered into the
+// `chain-item-${coin.chain}` testid by ChainItem.
 export const CHAIN_UI_LABELS: Record<string, string> = {
   ethereum: 'Ethereum',
   bsc: 'BSC',
@@ -58,9 +42,6 @@ export const CHAIN_UI_LABELS: Record<string, string> = {
   bittensor: 'Bittensor',
 }
 
-/**
- * Opens the manage-chains screen from the vault page via the manage-chains-button testid.
- */
 async function openChainManagement(page: Page): Promise<void> {
   const button = page.getByTestId('manage-chains-button')
   await button.waitFor({ state: 'visible', timeout: 10_000 })
@@ -68,16 +49,10 @@ async function openChainManagement(page: Page): Promise<void> {
   await page.getByTestId('manage-chains-done').waitFor({ state: 'visible', timeout: 10_000 })
 }
 
-/**
- * Toggles each chain ON in the manage-chains screen, then taps Done.
- *
- * Idempotent: chains that are already enabled are detected via the
- * checkmark indicator and skipped.
- *
- * @param page    Playwright Page already at the Portfolio view
- * @param chains  Chain keys matching CHAIN_UI_LABELS (e.g. 'arbitrum', 'dash')
- */
-export async function enableChains(page: Page, chains: string[]): Promise<{ enabled: string[]; skipped: string[]; missing: string[] }> {
+export async function enableChains(
+  page: Page,
+  chains: string[]
+): Promise<{ enabled: string[]; skipped: string[]; missing: string[] }> {
   await openChainManagement(page)
 
   const enabled: string[] = []
@@ -90,27 +65,23 @@ export async function enableChains(page: Page, chains: string[]): Promise<{ enab
       missing.push(chain)
       continue
     }
-    const item = page.getByTestId(`chain-item-${enumValue}`)
-    const itemCount = await item.count()
-    if (itemCount === 0) {
+    const item = page.getByTestId(`chain-item-${enumValue}`).first()
+    if ((await item.count()) === 0) {
       missing.push(chain)
       continue
     }
 
-    const selected = await item.first().getAttribute('data-selected').catch(() => null)
+    const selected = await item.getAttribute('data-selected')
     if (selected === 'true') {
       skipped.push(chain)
       continue
     }
-    await item.first().scrollIntoViewIfNeeded()
-    await item.first().click()
+    await item.scrollIntoViewIfNeeded()
+    await item.click()
     enabled.push(chain)
   }
 
-  // Tap Done to commit
   await page.getByTestId('manage-chains-done').click({ timeout: 5_000 })
-
-  // Wait for navigation back to vault page
   await page.waitForTimeout(2_000)
 
   return { enabled, skipped, missing }

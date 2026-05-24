@@ -1,19 +1,8 @@
-/**
- * Dump Vault Addresses
- *
- * One-shot spec that imports the test vault and writes every chain address
- * present in chrome.storage to a JSON file. Used for QA chain top-up planning —
- * the file lists every address that needs funding to expand send/swap coverage.
- *
- * Output: tests/e2e/test-results/vault-addresses.json
- *
- * Run with:
- *   npx playwright test --config tests/e2e/playwright.config.broadcasts.ts \
- *     --project=fund-dependent --grep "dump-vault-addresses"
- *
- * Or against the standard config when network deps are healthy:
- *   npx playwright test --grep "dump-vault-addresses"
- */
+// One-shot QA spec: imports the test vault, enables an expanded chain set,
+// and dumps every derived address to test-results/vault-addresses.json for
+// funding planning. Run:
+//   npx playwright test --config tests/e2e/playwright.config.broadcasts.ts \
+//     --project=fund-dependent --grep "dump-vault-addresses"
 
 import * as fs from 'fs'
 import * as path from 'path'
@@ -21,7 +10,7 @@ import { fileURLToPath } from 'url'
 import { test, expect } from '../fixtures/extension-loader'
 import { ensureVaultExists, getVaultConfigFromEnv } from '../helpers/vault-import'
 import { getVaultAddresses } from '../helpers/vault-addresses'
-import { enableChains, CHAIN_UI_LABELS } from '../helpers/enable-chains'
+import { enableChains } from '../helpers/enable-chains'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
 const __filename = fileURLToPath(import.meta.url)
