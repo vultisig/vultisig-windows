@@ -4,8 +4,22 @@ import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
+import { OneInchTransaction } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+
+// The three coin-context fields on OneInchTransaction were added to the
+// .proto in vultisig/commondata#87 and are populated by vultisig-sdk#540.
+// They will appear on the generated `OneInchTransaction` type once the
+// SDK publishes a version that bundles those regenerated protobuf files.
+// Until then, augment the type locally so this file compiles against the
+// currently-published @vultisig/core-mpc. Pre-update payloads simply leave
+// these fields undefined and the guard below skips them.
+type OneInchTransactionWithSwapFeeCoin = OneInchTransaction & {
+  swapFeeChain?: string
+  swapFeeTokenId?: string
+  swapFeeDecimals?: number
+}
 
 /**
  * Extracts the swap-fee `SwapFee` from a built `KeysignPayload`.
@@ -41,7 +55,7 @@ export const getSwapFeeFromPayload = (
         }
       },
       general: ({ quote }) => {
-        const tx = quote?.tx
+        const tx = quote?.tx as OneInchTransactionWithSwapFeeCoin | undefined
         if (!tx || !tx.swapFee || tx.swapFee === '0') return undefined
         if (!tx.swapFeeChain || tx.swapFeeDecimals == null) return undefined
         return {

@@ -60,6 +60,10 @@ const getSwapFeeFromQuote = (
       matchRecordUnion<GeneralSwapTx, SwapFee | undefined>(tx, {
         evm: ({ affiliateFee }) => affiliateFee,
         solana: ({ swapFee }) => swapFee,
+        // Deposit-channel transfers (Chainflip etc.) carry no affiliate-fee
+        // metadata on the SwapQuote; the displayed swap fee for these falls
+        // back to the keysign payload's `swap_fee` when present.
+        transfer: () => undefined,
       }),
   })
 

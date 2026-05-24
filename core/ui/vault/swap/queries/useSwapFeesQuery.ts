@@ -65,6 +65,7 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
               },
               swap: swapFee,
             }),
+            transfer: () => ({ network }),
           })
         },
       })
