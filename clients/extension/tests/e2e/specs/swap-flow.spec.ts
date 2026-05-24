@@ -37,12 +37,10 @@ import {
   type SwapConfig,
 } from '../helpers/dynamic-swap'
 
-// Skip if fund-dependent tests not enabled
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 
 test.describe('Swap Flow', () => {
 
-  // Import vault before each test (each test gets a fresh browser context)
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
     if (!config) {
@@ -66,21 +64,18 @@ test.describe('Swap Flow', () => {
     const keysignProgress = new KeysignProgress(page, extensionId)
 
     try {
-      // Go to vault and read balances
       await vaultPage.goto()
       await vaultPage.waitForView(15_000)
 
       console.log('\n📊 Reading vault balances...')
       const balances = await getVaultBalances(page)
 
-      // Check if swap is possible
       if (!canSwap(balances)) {
         console.log('⚠️ Insufficient balance for swap - skipping')
         test.skip()
         return
       }
 
-      // Dynamically select best swap pair
       const swapConfig = selectSwapPair(balances)
       if (!swapConfig) {
         console.log('⚠️ Could not determine swap pair - skipping')
@@ -90,18 +85,15 @@ test.describe('Swap Flow', () => {
 
       console.log(`\n🔄 Executing swap: ${swapConfig.amount} ${swapConfig.fromSymbol} → ${swapConfig.toSymbol}`)
 
-      // Navigate to swap
       await navigateToSwap(page)
       await swapFlow.waitForView()
 
-      // Prepare swap with actual amount
       await swapFlow.prepareSwapWithAmount(
         swapConfig.fromChain,
         swapConfig.toChain,
         swapConfig.amount
       )
 
-      // Verify quote loaded
       const expectedOutput = await swapFlow.getExpectedOutput()
       if (!expectedOutput || expectedOutput === '0') {
         console.log('⚠️ No quote received - may need more funds or route unavailable')
@@ -110,7 +102,6 @@ test.describe('Swap Flow', () => {
       }
       console.log(`Quote: ${swapConfig.amount} ${swapConfig.fromSymbol} → ${expectedOutput} ${swapConfig.toSymbol}`)
 
-      // Check if continue is enabled
       const canContinue = await swapFlow.isContinueEnabled()
       if (!canContinue) {
         console.log('⚠️ Continue button disabled - amount may be too small')
@@ -118,16 +109,13 @@ test.describe('Swap Flow', () => {
         return
       }
 
-      // Pre-broadcast safety gate — verify the form actually matches what we
-      // intended. Throws (does NOT broadcast) on mismatch.
+      // Pre-broadcast safety gate — throws (does NOT broadcast) on form mismatch.
       await swapFlow.assertSelectionMatches(swapConfig.fromSymbol, swapConfig.toSymbol)
 
-      // Execute swap
       await swapFlow.continue()
       await swapFlow.acceptTerms()
       await swapFlow.sign()
 
-      // Wait for keysign
       await keysignProgress.waitForView(30_000)
       const result = await keysignProgress.waitForComplete(180_000)
 
@@ -146,7 +134,7 @@ test.describe('Swap Flow', () => {
         console.log(`❌ Swap failed:`, error)
         updateStaleness([swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId], false)
 
-        // Only fail on unexpected errors
+        // Tolerate liquidity/balance/route-availability errors; hard-fail on anything else.
         if (
           !error?.includes('insufficient') &&
           !error?.includes('balance') &&
@@ -173,14 +161,10 @@ test.describe('Swap Flow', () => {
       await navigateToSwap(page)
       await swapFlow.waitForView(10_000)
 
-      // Fill some amount to trigger quote
       await swapFlow.fillAmount('0.001')
       await page.waitForTimeout(500)
-
-      // Wait for quote
       await swapFlow.waitForQuote()
 
-      // Look for provider/aggregator info
       const providerInfo = page.locator(
         'text=/thorchain|maya|1inch|jupiter|lifi|provider|aggregator/i'
       )
@@ -264,9 +248,8 @@ test.describe('Swap Flow', () => {
           return
         }
 
-        // Pre-broadcast safety gate — refuse to broadcast if the form doesn't
-        // match the intended route (catches selectFromCoin falling back to USDC,
-        // selectToCoin silently no-op'ing when chain not in carousel, etc.)
+        // Pre-broadcast safety gate — catches selectFromCoin falling back to USDC,
+        // selectToCoin silently no-op'ing when chain not in carousel, etc.
         await swapFlow.assertSelectionMatches(fromSymbol!, toSymbol!)
 
         await swapFlow.continue()
@@ -290,8 +273,7 @@ test.describe('Swap Flow', () => {
           console.log(`❌ ${route.from}>${route.to} swap failed:`, error)
           updateStaleness([route.from as ChainId, route.to as ChainId], false)
 
-          // Same tolerant-error policy as the dynamic-swap test: only hard-fail
-          // on errors that aren't liquidity/balance/route-availability noise.
+          // Tolerate liquidity/balance/route-availability errors; hard-fail on anything else.
           if (
             !error?.includes('insufficient') &&
             !error?.includes('balance') &&
@@ -327,12 +309,7 @@ test.describe('Swap Flow', () => {
   })
 })
 
-/**
- * Navigate to the swap page.
- * Uses the vault action button with testid.
- */
 async function navigateToSwap(page: import('@playwright/test').Page): Promise<void> {
-  // Use the vault action button testid
   const swapButton = page.locator('[data-testid="vault-action-swap"]')
   await swapButton.waitFor({ state: 'visible', timeout: 5000 })
   await swapButton.click()

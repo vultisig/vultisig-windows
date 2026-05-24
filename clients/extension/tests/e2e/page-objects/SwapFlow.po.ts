@@ -1,27 +1,16 @@
-/**
- * Swap Flow Page Object Model
- *
- * Handles the complete swap transaction flow.
- */
-
 import { type Page, type Locator, expect } from '@playwright/test'
 import { BasePage } from './BasePage.po'
-import { 
-  waitForFormReady, 
-  waitForStackedFieldReady, 
+import {
+  waitForFormReady,
+  waitForStackedFieldReady,
   robustClick,
   waitForLoadingComplete,
-  debugElementState,
 } from '../helpers/ui-waits'
 
 export class SwapFlow extends BasePage {
   constructor(page: Page, extensionId: string) {
     super(page, extensionId)
   }
-
-  /**
-   * Locators
-   */
 
   get swapForm(): Locator {
     return this.page.locator('[data-testid="swap-form"]')
@@ -99,10 +88,7 @@ export class SwapFlow extends BasePage {
     return this.page.locator('[data-testid="swap-terms-checkbox"], input[type="checkbox"]')
   }
 
-  /**
-   * The sign/keysign button on the verify page.
-   * For fast vaults this shows "Fast Sign", for secure vaults "Sign".
-   */
+  // Fast vaults show "Fast Sign", secure vaults show "Sign".
   get signButton(): Locator {
     return this.page.getByRole('button', { name: /fast.sign|sign|confirm/i }).first()
   }
@@ -123,20 +109,12 @@ export class SwapFlow extends BasePage {
     return this.page.locator('[data-testid="max-amount"]').or(this.page.getByRole('button', { name: /max/i })).first()
   }
 
-  /**
-   * Wait for swap form to be fully visible and ready for interaction.
-   * This includes waiting for loading states and animations to complete.
-   */
   async waitForView(timeout = 10_000): Promise<void> {
     await waitForFormReady(this.page, 'swap-form', timeout)
   }
 
-  /**
-   * Map of coin symbols to chain names for swap selection.
-   * Symbol uniqueness note: ETH belongs to multiple chains (Ethereum + L2s).
-   * For unambiguous routing, callers should drive via chain IDs through
-   * CHAIN_TO_NATIVE/getNativeSymbol, not symbol lookup.
-   */
+  // ETH belongs to multiple chains (Ethereum + L2s) — for unambiguous routing
+  // callers should drive via chain IDs through CHAIN_TO_NATIVE/getNativeSymbol.
   private static readonly SYMBOL_TO_CHAIN: Record<string, string> = {
     BTC: 'Bitcoin',
     ETH: 'Ethereum',
@@ -160,11 +138,7 @@ export class SwapFlow extends BasePage {
     XRP: 'Ripple',
   }
 
-  /**
-   * Map chain IDs to their native token symbols.
-   * Used for cross-chain native token swaps. Covers the full SwapKit-enabled
-   * chain set (SDK 0.26+).
-   */
+  // Covers the full SwapKit-enabled chain set (SDK 0.26+).
   private static readonly CHAIN_TO_NATIVE: Record<string, string> = {
     // SwapKit source chains
     ethereum: 'ETH',
@@ -193,43 +167,26 @@ export class SwapFlow extends BasePage {
     zcash: 'ZEC',
   }
 
-  /**
-   * Get native token symbol for a chain ID.
-   */
   getNativeSymbol(chainId: string): string {
     return SwapFlow.CHAIN_TO_NATIVE[chainId.toLowerCase()] || chainId.toUpperCase()
   }
 
-  /**
-   * Select source coin in the swap form.
-   * Uses data-testid selectors for reliable element targeting.
-   * 
-   * The swap coin explorer has two parts:
-   * 1. Coin options list (showing tokens for the currently selected chain)
-   * 2. Chain carousel at bottom (to switch chains)
-   * 
-   * To select a different chain's native token, we click the chain in the carousel
-   * which both switches the chain AND selects the native token.
-   */
+  // Clicking a chain in the explorer's chain carousel switches chain AND selects its native token.
   async selectFromCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
 
-    // Wait for animations to complete
     await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
 
-    // Check if this coin is already selected
     const currentCoin = await this.swapForm.locator('[data-testid="swap-from-coin-selector"]').textContent().catch(() => '')
     if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
       console.log(`From coin ${coin} already selected`)
       return
     }
 
-    // Click the from coin selector to open the coin explorer
     await this.fromCoinSelector.click({ force: true })
     await this.page.waitForTimeout(800)
 
-    // For native tokens, clicking the chain in the carousel selects both chain and native token
     const chainOption = this.getExplorerChainOption(chainName)
     if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
       await chainOption.click({ force: true })
@@ -238,7 +195,6 @@ export class SwapFlow extends BasePage {
       return
     }
 
-    // Fallback: Look for the coin option directly
     const coinOption = this.getCoinOption(coin)
     if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
       await coinOption.click({ force: true })
@@ -250,36 +206,21 @@ export class SwapFlow extends BasePage {
     console.log(`Could not select from coin ${coin}`)
   }
 
-  /**
-   * Select destination coin in the swap form.
-   * Uses data-testid selectors for reliable element targeting.
-   * 
-   * The swap coin explorer has two parts:
-   * 1. Coin options list (showing tokens for the currently selected chain)
-   * 2. Chain carousel at bottom (to switch chains)
-   * 
-   * To select a different chain's native token, we click the chain in the carousel
-   * which both switches the chain AND selects the native token.
-   */
   async selectToCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
 
-    // Wait for animations
     await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
 
-    // Check if this coin is already selected
     const currentCoin = await this.swapForm.locator('[data-testid="swap-to-coin-selector"]').textContent().catch(() => '')
     if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
       console.log(`To coin ${coin} already selected`)
       return
     }
 
-    // Click the to coin selector to open the coin explorer
     await this.toCoinSelector.click({ force: true })
     await this.page.waitForTimeout(800)
 
-    // For native tokens, clicking the chain in the carousel selects both chain and native token
     const chainOption = this.getExplorerChainOption(chainName)
     if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
       await chainOption.click({ force: true })
@@ -288,7 +229,6 @@ export class SwapFlow extends BasePage {
       return
     }
 
-    // Fallback: Look for the coin option directly
     const coinOption = this.getCoinOption(coin)
     if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
       await coinOption.click({ force: true })
@@ -300,29 +240,17 @@ export class SwapFlow extends BasePage {
     console.log(`Could not select to coin ${coin}`)
   }
 
-  /**
-   * Fill swap amount using input with proper event simulation
-   */
   async fillAmount(amount: string): Promise<void> {
-    // Click to focus first (force to bypass overlay)
     await this.fromAmountInput.click({ force: true })
     await this.page.waitForTimeout(100)
-    
-    // Clear existing value
     await this.fromAmountInput.clear()
-    
-    // Type character by character (triggers input events)
+    // pressSequentially triggers per-char input events; blur triggers change.
     await this.fromAmountInput.pressSequentially(amount, { delay: 50 })
-    
-    // Blur to trigger change event
     await this.fromAmountInput.blur()
     await this.page.waitForTimeout(300)
   }
 
-  /**
-   * Click percentage button to set amount (more reliable than direct input)
-   * @param percent - 25, 50, 75, or 100 (max)
-   */
+  // percent: 25, 50, 75, or 100 (Max)
   async clickPercentage(percent: 25 | 50 | 75 | 100 = 25): Promise<void> {
     const btnText = percent === 100 ? 'Max' : `${percent}%`
     const btn = this.page.locator(`button:has-text("${btnText}")`)
@@ -331,78 +259,50 @@ export class SwapFlow extends BasePage {
     console.log(`Clicked ${btnText} button`)
   }
 
-  /**
-   * Click max button
-   */
   async clickMax(): Promise<void> {
     await this.maxButton.click()
     await this.page.waitForTimeout(300)
   }
 
-  /**
-   * Reverse the swap direction (swap from/to coins)
-   */
   async reverse(): Promise<void> {
     await this.reverseButton.click()
     await this.page.waitForTimeout(300)
   }
 
-  /**
-   * Wait for quote to load.
-   * The swap UI fetches quotes from various aggregators (THORChain, 1inch, etc.)
-   * which can take a few seconds. We wait for:
-   * 1. Any loading indicators to disappear
-   * 2. The expected output to appear (or continue button to be enabled)
-   */
+  // Quotes come from aggregators (THORChain/1inch/etc.) and can take seconds.
+  // Settle when an output appears, continue is enabled, or an error shows.
   async waitForQuote(timeout = 30_000): Promise<void> {
-    try {
-      // Wait for loading to appear then disappear
-      await this.quoteLoading.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {})
-      await this.quoteLoading.waitFor({ state: 'hidden', timeout }).catch(() => {})
-    } catch {
-      // Loading might be too fast to catch, which is fine
-    }
+    await this.quoteLoading.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {})
+    await this.quoteLoading.waitFor({ state: 'hidden', timeout }).catch(() => {})
 
-    // Wait for general loading states to complete
     await waitForLoadingComplete(this.page, timeout)
-    
-    // Wait for either:
-    // 1. The expected output to show a value
-    // 2. The continue button to be enabled
-    // 3. An error message to appear
+
     const startTime = Date.now()
     while (Date.now() - startTime < timeout) {
-      // Check if we have an output amount
       const output = await this.getExpectedOutput()
       if (output && output !== '0' && output !== '') {
         console.log(`Quote loaded: output = ${output}`)
         break
       }
-      
-      // Check if continue is enabled
+
       const canContinue = await this.isContinueEnabled().catch(() => false)
       if (canContinue) {
         console.log('Quote loaded: continue button is enabled')
         break
       }
-      
-      // Check for error state
+
       const errorText = this.page.locator('text=/no.route|insufficient|error|failed/i').first()
       if (await errorText.isVisible().catch(() => false)) {
         console.log('Quote failed: error message visible')
         break
       }
-      
+
       await this.page.waitForTimeout(500)
     }
 
-    // Final wait for UI to settle
     await this.page.waitForTimeout(500)
   }
 
-  /**
-   * Click continue to proceed to confirmation
-   */
   async continue(): Promise<void> {
     await waitForLoadingComplete(this.page)
     await expect(this.continueButton).toBeEnabled({ timeout: 10000 })
@@ -410,20 +310,15 @@ export class SwapFlow extends BasePage {
     await this.page.waitForTimeout(500)
   }
 
-  /**
-   * Accept terms if shown.
-   * The verify page may show multiple checkboxes. Each checkbox is a custom component
-   * with an invisible <input> inside a <label>. We click the <label> instead.
-   */
+  // The verify page may render multiple terms checkboxes as custom components
+  // (invisible <input> inside <label>) — click the label, not the input.
   async acceptTerms(): Promise<void> {
-    // Wait for any loading/animations to complete
     await waitForLoadingComplete(this.page)
     await this.page.waitForTimeout(300)
-    
-    // Primary strategy: Use data-testid terms checkboxes
+
     const termsCheckboxes = this.termsCheckboxes
     const termsCount = await termsCheckboxes.count()
-    
+
     if (termsCount > 0) {
       for (let i = 0; i < termsCount; i++) {
         await robustClick(termsCheckboxes.nth(i))
@@ -432,7 +327,6 @@ export class SwapFlow extends BasePage {
       return
     }
 
-    // Fallback: Use input[type="checkbox"]
     const checkboxes = this.page.locator('input[type="checkbox"]')
     const count = await checkboxes.count()
 
@@ -451,17 +345,12 @@ export class SwapFlow extends BasePage {
     }
   }
 
-  /**
-   * Initiate signing.
-   *
-   * For fast vaults, clicking "Fast Sign" opens a password modal.
-   */
+  // Fast vaults open a password modal after "Fast Sign".
   async sign(): Promise<void> {
     await waitForLoadingComplete(this.page)
     await robustClick(this.signButton)
     await this.page.waitForTimeout(500)
 
-    // Check if fast vault password modal appeared (using testid)
     if (await this.fastVaultPasswordModal.isVisible({ timeout: 3000 }).catch(() => false)) {
       const password = process.env.TEST_VAULT_PASSWORD || ''
       if (password) {
@@ -473,7 +362,6 @@ export class SwapFlow extends BasePage {
       }
     }
 
-    // Fallback: Check for generic password input
     const passwordInput = this.page.locator('input[type="password"], input[placeholder*="password" i]').first()
     if (await passwordInput.isVisible({ timeout: 2000 }).catch(() => false)) {
       const password = process.env.TEST_VAULT_PASSWORD || ''
@@ -490,25 +378,15 @@ export class SwapFlow extends BasePage {
     }
   }
 
-  /**
-   * Wait for swap success screen
-   */
   async waitForSuccess(timeout = 120_000): Promise<void> {
-    // Swaps can take longer than sends
     await this.successScreen.waitFor({ state: 'visible', timeout })
   }
 
-  /**
-   * Get transaction hash from success screen
-   */
   async getTxHash(): Promise<string> {
     await this.txHashDisplay.waitFor({ state: 'visible' })
     return (await this.txHashDisplay.textContent()) || ''
   }
 
-  /**
-   * Get expected output amount
-   */
   async getExpectedOutput(): Promise<string> {
     if (await this.toAmountDisplay.isVisible()) {
       return (await this.toAmountDisplay.textContent()) || ''
@@ -516,9 +394,6 @@ export class SwapFlow extends BasePage {
     return ''
   }
 
-  /**
-   * Get swap rate
-   */
   async getSwapRate(): Promise<string> {
     if (await this.rateDisplay.isVisible()) {
       return (await this.rateDisplay.textContent()) || ''
@@ -526,9 +401,6 @@ export class SwapFlow extends BasePage {
     return ''
   }
 
-  /**
-   * Check if continue button is enabled
-   */
   async isContinueEnabled(): Promise<boolean> {
     return this.continueButton.isEnabled()
   }
@@ -571,9 +443,6 @@ export class SwapFlow extends BasePage {
     }
   }
 
-  /**
-   * Prepare a swap (fills form but doesn't submit)
-   */
   async prepareSwap(fromCoin: string, toCoin: string, amount: string): Promise<void> {
     await this.selectFromCoin(fromCoin)
     await this.selectToCoin(toCoin)
@@ -581,12 +450,8 @@ export class SwapFlow extends BasePage {
     await this.waitForQuote()
   }
 
-  /**
-   * Prepare a cross-chain native token swap using chain IDs.
-   * Uses percentage buttons for more reliable quote triggering.
-   * @param percent - 25, 50, 75, or 100 (default 75 to meet minimum swap thresholds)
-   * @deprecated Use prepareSwapWithAmount for dynamic amount-based swaps
-   */
+  // @deprecated Use prepareSwapWithAmount for dynamic amount-based swaps.
+  // Default 75% picks a value above provider minimum thresholds.
   async prepareNativeSwap(fromChainId: string, toChainId: string, percent: 25 | 50 | 75 | 100 = 75): Promise<void> {
     const fromSymbol = this.getNativeSymbol(fromChainId)
     const toSymbol = this.getNativeSymbol(toChainId)
@@ -597,55 +462,38 @@ export class SwapFlow extends BasePage {
     await this.waitForQuote()
   }
 
-  /**
-   * Prepare a swap with an actual token amount (not percentage).
-   * 
-   * Uses the reverse button strategy: the UI defaults to BTC→ETH.
-   * If we want a different direction, we use the reverse button.
-   * 
-   * @param fromChainId - Source chain ID (e.g., 'bitcoin', 'ethereum')
-   * @param toChainId - Destination chain ID
-   * @param amount - Actual token amount to swap (e.g., '0.001')
-   */
+  // UI defaults to BTC→ETH; if our intended direction is the inverse, use the
+  // reverse button instead of re-selecting both sides.
   async prepareSwapWithAmount(fromChainId: string, toChainId: string, amount: string): Promise<void> {
     const fromSymbol = this.getNativeSymbol(fromChainId)
     const toSymbol = this.getNativeSymbol(toChainId)
     console.log(`Preparing swap: ${amount} ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId})`)
-    
-    // Wait for UI to stabilize
+
     await this.page.waitForTimeout(500)
-    
-    // Check what's currently selected (default is usually BTC→ETH)
+
     const currentFromText = await this.fromCoinSelector.textContent().catch(() => '') || ''
     const currentToText = await this.toCoinSelector.textContent().catch(() => '') || ''
-    
     console.log(`Current selection: ${currentFromText} → ${currentToText}`)
-    
-    // If the current selection is the reverse of what we want, click reverse
-    if (currentFromText.toUpperCase().includes(toSymbol) && 
+
+    if (currentFromText.toUpperCase().includes(toSymbol) &&
         currentToText.toUpperCase().includes(fromSymbol)) {
       console.log('Using reverse button to swap direction')
       await this.reverse()
       await this.page.waitForTimeout(500)
     } else if (!currentFromText.toUpperCase().includes(fromSymbol)) {
-      // Need to select the from coin
       await this.selectFromCoin(fromSymbol)
     }
-    
-    // Verify from coin is correct, then select to coin if needed
+
     const updatedToText = await this.toCoinSelector.textContent().catch(() => '') || ''
     if (!updatedToText.toUpperCase().includes(toSymbol)) {
       await this.selectToCoin(toSymbol)
     }
-    
+
     await this.fillAmount(amount)
     await this.waitForQuote()
   }
 
-  /**
-   * Complete the entire swap flow
-   * Warning: This will actually execute the swap if signing succeeds
-   */
+  // Executes a real swap if signing succeeds.
   async completeSwap(
     fromCoin: string,
     toCoin: string,
