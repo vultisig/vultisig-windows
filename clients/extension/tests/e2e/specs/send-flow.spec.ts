@@ -26,7 +26,7 @@ import { getVaultAddresses, getAddressForChain } from '../helpers/vault-addresse
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 
 function isChainId(value: string): value is ChainId {
-  return value in SUPPORTED_CHAINS
+  return Object.hasOwn(SUPPORTED_CHAINS, value)
 }
 
 function getConfiguredSendChains(): ChainId[] | null {
@@ -54,7 +54,18 @@ function getConfiguredSendChains(): ChainId[] | null {
 }
 
 function getSendAmount(chain: ChainId): string {
-  return process.env.VULTISIG_E2E_SEND_AMOUNT || SUPPORTED_CHAINS[chain].minSend
+  const configuredAmount = process.env.VULTISIG_E2E_SEND_AMOUNT?.trim()
+  if (!configuredAmount) {
+    return SUPPORTED_CHAINS[chain].minSend
+  }
+
+  if (!/^\d+(\.\d+)?$/.test(configuredAmount) || Number(configuredAmount) <= 0) {
+    throw new Error(
+      `Invalid VULTISIG_E2E_SEND_AMOUNT: "${configuredAmount}". Expected a positive decimal amount.`
+    )
+  }
+
+  return configuredAmount
 }
 
 // Get chains to test this run (outside test context for sharing)
