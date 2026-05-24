@@ -1,13 +1,15 @@
 import { Page } from '@playwright/test'
 
-export interface ChainBalance {
+/** Chain balance entry parsed from the vault portfolio UI. */
+export type ChainBalance = {
   chainId: string
   symbol: string
   balance: number
   balanceUsd: number
 }
 
-export interface SwapConfig {
+/** Resolved swap configuration (source + destination + amount). */
+export type SwapConfig = {
   fromChain: string
   toChain: string
   fromSymbol: string
@@ -16,13 +18,19 @@ export interface SwapConfig {
   amountUsd: number
 }
 
-// Minimum USD value required for a swap source.
-// TC native-inbound min is ~$5-10, so default $15 keeps swaps above floor.
-// Override with SWAP_MIN_USD env var for budget runs.
-const MIN_SWAP_USD = parseFloat(process.env.SWAP_MIN_USD || '15')
+const readUsdEnv = (name: string, fallback: number): number => {
+  const raw = process.env[name]
+  if (!raw) return fallback
+  const value = Number(raw)
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error(`Invalid ${name}: ${raw}`)
+  }
+  return value
+}
 
-// Target swap amount in USD. Override with SWAP_TARGET_USD.
-const TARGET_SWAP_USD = parseFloat(process.env.SWAP_TARGET_USD || '15')
+// TC native-inbound min is ~$5-10, so default $15 keeps swaps above floor.
+const MIN_SWAP_USD = readUsdEnv('SWAP_MIN_USD', 15)
+const TARGET_SWAP_USD = readUsdEnv('SWAP_TARGET_USD', 15)
 
 // Chain symbols. Covers all SwapKit-enabled chains (SDK 0.26+) plus the
 // legacy native-swap chains. Used to parse vault balance text and map to
@@ -58,7 +66,9 @@ export const CHAIN_SYMBOLS: Record<string, string> = {
 // Chains available for swaps. Comma-separated env override drives both the
 // dynamic-pair selector and the route-matrix test. Default = full SwapKit
 // surface. Set SWAPPABLE_CHAINS=bitcoin,ethereum for the legacy smoke run.
-const SWAPPABLE_CHAINS = (process.env.SWAPPABLE_CHAINS || Object.keys(CHAIN_SYMBOLS).join(','))
+const SWAPPABLE_CHAINS = (
+  process.env.SWAPPABLE_CHAINS || Object.keys(CHAIN_SYMBOLS).join(',')
+)
   .split(',')
   .map(s => s.trim().toLowerCase())
   .filter(Boolean)
@@ -100,22 +110,37 @@ export async function getVaultBalances(page: Page): Promise<ChainBalance[]> {
   const balances: ChainBalance[] = []
 
   await page.waitForTimeout(2000)
-  const pageText = await page.locator('body').textContent() || ''
+  const pageText = (await page.locator('body').textContent()) || ''
 
   for (const [chainId, symbol] of Object.entries(CHAIN_SYMBOLS)) {
     if (!SWAPPABLE_CHAINS.includes(chainId)) continue
 
     // Multi-word chains (Bitcoin-Cash, MayaChain) need an explicit display-name override.
-    const chainNamePattern = CHAIN_DISPLAY_NAMES[chainId] || (chainId.charAt(0).toUpperCase() + chainId.slice(1))
-    const balanceMatch = pageText.match(new RegExp(`${chainNamePattern}[^$]*\\$(\\d+[,.]?\\d*\\.?\\d*)`, 'i'))
+    const chainNamePattern =
+      CHAIN_DISPLAY_NAMES[chainId] ||
+      chainId.charAt(0).toUpperCase() + chainId.slice(1)
+    const balanceMatch = pageText.match(
+      new RegExp(`${chainNamePattern}[^$]*\\$(\\d+[,.]?\\d*\\.?\\d*)`, 'i')
+    )
     if (!balanceMatch) continue
 
     const usdValue = parseFloat(balanceMatch[1].replace(',', ''))
-    const tokenMatch = pageText.match(new RegExp(`(\\d+\\.\\d+)\\s*${symbol}`, 'i'))
+    // Search within the matched chain row only to avoid cross-chain symbol collisions
+    // (ethereum/arbitrum/optimism/base all share 'ETH'; searching pageText would reuse the first match).
+    const tokenMatch = balanceMatch[0].match(
+      new RegExp(`(\\d+\\.\\d+)\\s*${symbol}`, 'i')
+    )
     const tokenBalance = tokenMatch ? parseFloat(tokenMatch[1]) : 0
 
-    balances.push({ chainId, symbol, balance: tokenBalance, balanceUsd: usdValue })
-    console.log(`  ${chainId}: $${usdValue.toFixed(2)} (${tokenBalance} ${symbol})`)
+    balances.push({
+      chainId,
+      symbol,
+      balance: tokenBalance,
+      balanceUsd: usdValue,
+    })
+    console.log(
+      `  ${chainId}: $${usdValue.toFixed(2)} (${tokenBalance} ${symbol})`
+    )
   }
 
   return balances

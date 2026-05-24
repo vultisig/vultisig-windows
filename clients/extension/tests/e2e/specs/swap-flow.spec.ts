@@ -21,33 +21,43 @@
  * - Only swap fees + gas are consumed
  */
 
-import { test, expect } from '../fixtures/extension-loader'
-import { VaultPage } from '../page-objects/VaultPage.po'
-import { SwapFlow } from '../page-objects/SwapFlow.po'
-import { KeysignProgress } from '../page-objects/KeysignProgress.po'
-import { updateStaleness, type ChainId } from '../helpers/chain-rotation'
-import { waitForTxConfirmation } from '../helpers/tx-confirmation'
-import { ensureVaultExists, getVaultConfigFromEnv } from '../helpers/vault-import'
+import { expect, test } from '../fixtures/extension-loader'
 import {
-  getVaultBalances,
-  selectSwapPair,
+  type ChainId,
+  SUPPORTED_CHAINS,
+  updateStaleness,
+} from '../helpers/chain-rotation'
+import {
   canSwap,
   CHAIN_SYMBOLS,
+  getVaultBalances,
+  selectSwapPair,
   SYMBOL_FALLBACK_AMOUNTS,
-  type SwapConfig,
 } from '../helpers/dynamic-swap'
+import { waitForTxConfirmation } from '../helpers/tx-confirmation'
+import {
+  ensureVaultExists,
+  getVaultConfigFromEnv,
+} from '../helpers/vault-import'
+import { KeysignProgress } from '../page-objects/KeysignProgress.po'
+import { SwapFlow } from '../page-objects/SwapFlow.po'
+import { VaultPage } from '../page-objects/VaultPage.po'
 
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 
 test.describe('Swap Flow', () => {
-
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
     if (!config) {
       console.log('⚠️ No vault config, tests will likely fail')
       return
     }
-    const imported = await ensureVaultExists(context, extensionId, config.vaultPath, config.password)
+    const imported = await ensureVaultExists(
+      context,
+      extensionId,
+      config.vaultPath,
+      config.password
+    )
     if (imported) {
       console.log('✅ Vault imported for swap test')
     } else {
@@ -55,7 +65,10 @@ test.describe('Swap Flow', () => {
     }
   })
 
-  test('dynamic swap - based on actual balances', async ({ context, extensionId }) => {
+  test('dynamic swap - based on actual balances', async ({
+    context,
+    extensionId,
+  }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const page = await context.newPage()
@@ -83,24 +96,30 @@ test.describe('Swap Flow', () => {
         return
       }
 
-      console.log(`\n🔄 Executing swap: ${swapConfig.amount} ${swapConfig.fromSymbol} → ${swapConfig.toSymbol}`)
+      console.log(
+        `\n🔄 Executing swap: ${swapConfig.amount} ${swapConfig.fromSymbol} → ${swapConfig.toSymbol}`
+      )
 
       await navigateToSwap(page)
       await swapFlow.waitForView()
 
-      await swapFlow.prepareSwapWithAmount(
-        swapConfig.fromChain,
-        swapConfig.toChain,
-        swapConfig.amount
-      )
+      await swapFlow.prepareSwapWithAmount({
+        fromChainId: swapConfig.fromChain,
+        toChainId: swapConfig.toChain,
+        amount: swapConfig.amount,
+      })
 
       const expectedOutput = await swapFlow.getExpectedOutput()
       if (!expectedOutput || expectedOutput === '0') {
-        console.log('⚠️ No quote received - may need more funds or route unavailable')
+        console.log(
+          '⚠️ No quote received - may need more funds or route unavailable'
+        )
         test.skip()
         return
       }
-      console.log(`Quote: ${swapConfig.amount} ${swapConfig.fromSymbol} → ${expectedOutput} ${swapConfig.toSymbol}`)
+      console.log(
+        `Quote: ${swapConfig.amount} ${swapConfig.fromSymbol} → ${expectedOutput} ${swapConfig.toSymbol}`
+      )
 
       const canContinue = await swapFlow.isContinueEnabled()
       if (!canContinue) {
@@ -110,7 +129,10 @@ test.describe('Swap Flow', () => {
       }
 
       // Pre-broadcast safety gate — throws (does NOT broadcast) on form mismatch.
-      await swapFlow.assertSelectionMatches(swapConfig.fromSymbol, swapConfig.toSymbol)
+      await swapFlow.assertSelectionMatches({
+        fromSymbol: swapConfig.fromSymbol,
+        toSymbol: swapConfig.toSymbol,
+      })
 
       await swapFlow.continue()
       await swapFlow.acceptTerms()
@@ -125,14 +147,24 @@ test.describe('Swap Flow', () => {
 
         if (txHash) {
           console.log(`✅ Swap tx: ${txHash}`)
-          const confirmation = await waitForTxConfirmation(swapConfig.fromChain as ChainId, txHash, 120_000)
+          const confirmation = await waitForTxConfirmation(
+            swapConfig.fromChain as ChainId,
+            txHash,
+            120_000
+          )
           expect(confirmation.confirmed).toBe(true)
-          updateStaleness([swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId], true)
+          updateStaleness(
+            [swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId],
+            true
+          )
         }
       } else {
         const error = await keysignProgress.getError()
         console.log(`❌ Swap failed:`, error)
-        updateStaleness([swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId], false)
+        updateStaleness(
+          [swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId],
+          false
+        )
 
         // Tolerate liquidity/balance/route-availability errors; hard-fail on anything else.
         if (
@@ -149,7 +181,10 @@ test.describe('Swap Flow', () => {
     }
   })
 
-  test('swap flow shows provider and fees', async ({ context, extensionId }) => {
+  test('swap flow shows provider and fees', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
     const swapFlow = new SwapFlow(page, extensionId)
@@ -171,11 +206,22 @@ test.describe('Swap Flow', () => {
       const feeInfo = page.locator('text=/fee|cost|network fee|gas/i')
       const slippageInfo = page.locator('text=/slippage|price impact/i')
 
-      const hasProvider = await providerInfo.first().isVisible().catch(() => false)
-      const hasFee = await feeInfo.first().isVisible().catch(() => false)
-      const hasSlippage = await slippageInfo.first().isVisible().catch(() => false)
+      const hasProvider = await providerInfo
+        .first()
+        .isVisible()
+        .catch(() => false)
+      const hasFee = await feeInfo
+        .first()
+        .isVisible()
+        .catch(() => false)
+      const hasSlippage = await slippageInfo
+        .first()
+        .isVisible()
+        .catch(() => false)
 
-      console.log(`Provider info: ${hasProvider}, Fee info: ${hasFee}, Slippage: ${hasSlippage}`)
+      console.log(
+        `Provider info: ${hasProvider}, Fee info: ${hasFee}, Slippage: ${hasSlippage}`
+      )
     } catch (error) {
       console.log('Could not verify swap provider/fees:', error)
     } finally {
@@ -200,6 +246,14 @@ test.describe('Swap Flow', () => {
     .filter(Boolean)
     .map(entry => {
       const [pair, amountOverride] = entry.split(':').map(s => s.trim())
+      if (amountOverride) {
+        const parsedAmount = Number(amountOverride)
+        if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+          throw new Error(
+            `Invalid SWAP_ROUTES amount override "${amountOverride}" for "${entry}"`
+          )
+        }
+      }
       const [from, to] = pair.split('>').map(s => s.trim().toLowerCase())
       return { from, to, amountOverride }
     })
@@ -213,9 +267,15 @@ test.describe('Swap Flow', () => {
       (fromSymbol ? SYMBOL_FALLBACK_AMOUNTS[fromSymbol] : undefined) ||
       '0.001'
 
-    test(`route matrix - ${route.from} -> ${route.to} (${amount} ${fromSymbol || '?'})`, async ({ context, extensionId }) => {
+    test(`route matrix - ${route.from} -> ${route.to} (${amount} ${fromSymbol || '?'})`, async ({
+      context,
+      extensionId,
+    }) => {
       test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
-      test.skip(!fromSymbol || !toSymbol, `Unknown chain in route ${route.from}>${route.to}`)
+      test.skip(
+        !fromSymbol || !toSymbol,
+        `Unknown chain in route ${route.from}>${route.to}`
+      )
 
       const page = await context.newPage()
       const vaultPage = new VaultPage(page, extensionId)
@@ -226,31 +286,46 @@ test.describe('Swap Flow', () => {
         await vaultPage.goto()
         await vaultPage.waitForView(15_000)
 
-        console.log(`\n🔄 Route matrix: ${amount} ${fromSymbol} (${route.from}) → ${toSymbol} (${route.to})`)
+        console.log(
+          `\n🔄 Route matrix: ${amount} ${fromSymbol} (${route.from}) → ${toSymbol} (${route.to})`
+        )
 
         await navigateToSwap(page)
         await swapFlow.waitForView()
 
-        await swapFlow.prepareSwapWithAmount(route.from, route.to, amount)
+        await swapFlow.prepareSwapWithAmount({
+          fromChainId: route.from,
+          toChainId: route.to,
+          amount,
+        })
 
         const expectedOutput = await swapFlow.getExpectedOutput()
         if (!expectedOutput || expectedOutput === '0') {
-          console.log('⚠️ No quote received - route may be unavailable or amount below provider min')
+          console.log(
+            '⚠️ No quote received - route may be unavailable or amount below provider min'
+          )
           test.skip()
           return
         }
-        console.log(`Quote: ${amount} ${fromSymbol} → ${expectedOutput} ${toSymbol}`)
+        console.log(
+          `Quote: ${amount} ${fromSymbol} → ${expectedOutput} ${toSymbol}`
+        )
 
         const canContinue = await swapFlow.isContinueEnabled()
         if (!canContinue) {
-          console.log('⚠️ Continue disabled - quote present but blocked (likely balance or min)')
+          console.log(
+            '⚠️ Continue disabled - quote present but blocked (likely balance or min)'
+          )
           test.skip()
           return
         }
 
         // Pre-broadcast safety gate — catches selectFromCoin falling back to USDC,
         // selectToCoin silently no-op'ing when chain not in carousel, etc.
-        await swapFlow.assertSelectionMatches(fromSymbol!, toSymbol!)
+        await swapFlow.assertSelectionMatches({
+          fromSymbol: fromSymbol,
+          toSymbol: toSymbol,
+        })
 
         await swapFlow.continue()
         await swapFlow.acceptTerms()
@@ -264,14 +339,28 @@ test.describe('Swap Flow', () => {
           expect(txHash).toBeTruthy()
           if (txHash) {
             console.log(`✅ ${route.from}>${route.to} swap tx: ${txHash}`)
-            const confirmation = await waitForTxConfirmation(route.from as ChainId, txHash, 120_000)
+            const confirmation = await waitForTxConfirmation(
+              route.from,
+              txHash,
+              120_000
+            )
             expect(confirmation.confirmed).toBe(true)
-            updateStaleness([route.from as ChainId, route.to as ChainId], true)
+            if (
+              route.from in SUPPORTED_CHAINS &&
+              route.to in SUPPORTED_CHAINS
+            ) {
+              updateStaleness(
+                [route.from as ChainId, route.to as ChainId],
+                true
+              )
+            }
           }
         } else {
           const error = await keysignProgress.getError()
           console.log(`❌ ${route.from}>${route.to} swap failed:`, error)
-          updateStaleness([route.from as ChainId, route.to as ChainId], false)
+          if (route.from in SUPPORTED_CHAINS && route.to in SUPPORTED_CHAINS) {
+            updateStaleness([route.from as ChainId, route.to as ChainId], false)
+          }
 
           // Tolerate liquidity/balance/route-availability errors; hard-fail on anything else.
           if (
@@ -289,7 +378,10 @@ test.describe('Swap Flow', () => {
     })
   }
 
-  test('destination balance updates after swap', async ({ context, extensionId }) => {
+  test('destination balance updates after swap', async ({
+    context,
+    extensionId,
+  }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const page = await context.newPage()
@@ -309,7 +401,9 @@ test.describe('Swap Flow', () => {
   })
 })
 
-async function navigateToSwap(page: import('@playwright/test').Page): Promise<void> {
+async function navigateToSwap(
+  page: import('@playwright/test').Page
+): Promise<void> {
   const swapButton = page.locator('[data-testid="vault-action-swap"]')
   await swapButton.waitFor({ state: 'visible', timeout: 5000 })
   await swapButton.click()

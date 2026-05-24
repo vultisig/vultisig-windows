@@ -1,11 +1,23 @@
-import { type Page, type Locator, expect } from '@playwright/test'
-import { BasePage } from './BasePage.po'
+import { expect, type Locator, type Page } from '@playwright/test'
+
 import {
-  waitForFormReady,
-  waitForStackedFieldReady,
   robustClick,
+  waitForFormReady,
   waitForLoadingComplete,
+  waitForStackedFieldReady,
 } from '../helpers/ui-waits'
+import { BasePage } from './BasePage.po'
+
+type AssertSelectionMatchesInput = {
+  fromSymbol: string
+  toSymbol: string
+}
+
+type PrepareSwapWithAmountInput = {
+  fromChainId: string
+  toChainId: string
+  amount: string
+}
 
 export class SwapFlow extends BasePage {
   constructor(page: Page, extensionId: string) {
@@ -73,11 +85,16 @@ export class SwapFlow extends BasePage {
   }
 
   get reverseButton(): Locator {
-    return this.page.locator('[data-testid="swap-reverse"]').or(this.page.getByRole('button', { name: /reverse|switch/i })).first()
+    return this.page
+      .locator('[data-testid="swap-reverse"]')
+      .or(this.page.getByRole('button', { name: /reverse|switch/i }))
+      .first()
   }
 
   get quoteLoading(): Locator {
-    return this.page.locator('[data-testid="quote-loading"], .spinner, [role="progressbar"]')
+    return this.page.locator(
+      '[data-testid="quote-loading"], .spinner, [role="progressbar"]'
+    )
   }
 
   get quoteInfo(): Locator {
@@ -85,16 +102,23 @@ export class SwapFlow extends BasePage {
   }
 
   get termsCheckbox(): Locator {
-    return this.page.locator('[data-testid="swap-terms-checkbox"], input[type="checkbox"]')
+    return this.page.locator(
+      '[data-testid="swap-terms-checkbox"], input[type="checkbox"]'
+    )
   }
 
   // Fast vaults show "Fast Sign", secure vaults show "Sign".
   get signButton(): Locator {
-    return this.page.getByRole('button', { name: /fast.sign|sign|confirm/i }).first()
+    return this.page
+      .getByRole('button', { name: /fast.sign|sign|confirm/i })
+      .first()
   }
 
   get successScreen(): Locator {
-    return this.page.locator('[data-testid="swap-success"]').or(this.page.locator('text=/success|swapped|complete/i')).first()
+    return this.page
+      .locator('[data-testid="swap-success"]')
+      .or(this.page.locator('text=/success|swapped|complete/i'))
+      .first()
   }
 
   get txHashDisplay(): Locator {
@@ -106,7 +130,10 @@ export class SwapFlow extends BasePage {
   }
 
   get maxButton(): Locator {
-    return this.page.locator('[data-testid="max-amount"]').or(this.page.getByRole('button', { name: /max/i })).first()
+    return this.page
+      .locator('[data-testid="max-amount"]')
+      .or(this.page.getByRole('button', { name: /max/i }))
+      .first()
   }
 
   async waitForView(timeout = 10_000): Promise<void> {
@@ -168,7 +195,9 @@ export class SwapFlow extends BasePage {
   }
 
   getNativeSymbol(chainId: string): string {
-    return SwapFlow.CHAIN_TO_NATIVE[chainId.toLowerCase()] || chainId.toUpperCase()
+    return (
+      SwapFlow.CHAIN_TO_NATIVE[chainId.toLowerCase()] || chainId.toUpperCase()
+    )
   }
 
   // Clicking a chain in the explorer's chain carousel switches chain AND selects its native token.
@@ -178,7 +207,10 @@ export class SwapFlow extends BasePage {
     await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
 
-    const currentCoin = await this.swapForm.locator('[data-testid="swap-from-coin-selector"]').textContent().catch(() => '')
+    const currentCoin = await this.swapForm
+      .locator('[data-testid="swap-from-coin-selector"]')
+      .textContent()
+      .catch(() => '')
     if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
       console.log(`From coin ${coin} already selected`)
       return
@@ -212,7 +244,10 @@ export class SwapFlow extends BasePage {
     await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
 
-    const currentCoin = await this.swapForm.locator('[data-testid="swap-to-coin-selector"]').textContent().catch(() => '')
+    const currentCoin = await this.swapForm
+      .locator('[data-testid="swap-to-coin-selector"]')
+      .textContent()
+      .catch(() => '')
     if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
       console.log(`To coin ${coin} already selected`)
       return
@@ -272,8 +307,12 @@ export class SwapFlow extends BasePage {
   // Quotes come from aggregators (THORChain/1inch/etc.) and can take seconds.
   // Settle when an output appears, continue is enabled, or an error shows.
   async waitForQuote(timeout = 30_000): Promise<void> {
-    await this.quoteLoading.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {})
-    await this.quoteLoading.waitFor({ state: 'hidden', timeout }).catch(() => {})
+    await this.quoteLoading
+      .waitFor({ state: 'visible', timeout: 5000 })
+      .catch(() => {})
+    await this.quoteLoading
+      .waitFor({ state: 'hidden', timeout })
+      .catch(() => {})
 
     await waitForLoadingComplete(this.page, timeout)
 
@@ -291,7 +330,9 @@ export class SwapFlow extends BasePage {
         break
       }
 
-      const errorText = this.page.locator('text=/no.route|insufficient|error|failed/i').first()
+      const errorText = this.page
+        .locator('text=/no.route|insufficient|error|failed/i')
+        .first()
       if (await errorText.isVisible().catch(() => false)) {
         console.log('Quote failed: error message visible')
         break
@@ -335,7 +376,7 @@ export class SwapFlow extends BasePage {
       const isChecked = await checkbox.isChecked().catch(() => false)
       if (!isChecked) {
         const label = checkbox.locator('xpath=ancestor::label')
-        if (await label.count() > 0) {
+        if ((await label.count()) > 0) {
           await label.first().click({ force: true })
         } else {
           await checkbox.click({ force: true })
@@ -351,7 +392,11 @@ export class SwapFlow extends BasePage {
     await robustClick(this.signButton)
     await this.page.waitForTimeout(500)
 
-    if (await this.fastVaultPasswordModal.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (
+      await this.fastVaultPasswordModal
+        .isVisible({ timeout: 3000 })
+        .catch(() => false)
+    ) {
       const password = process.env.TEST_VAULT_PASSWORD || ''
       if (password) {
         await this.fastVaultPasswordInput.fill(password)
@@ -362,14 +407,18 @@ export class SwapFlow extends BasePage {
       }
     }
 
-    const passwordInput = this.page.locator('input[type="password"], input[placeholder*="password" i]').first()
+    const passwordInput = this.page
+      .locator('input[type="password"], input[placeholder*="password" i]')
+      .first()
     if (await passwordInput.isVisible({ timeout: 2000 }).catch(() => false)) {
       const password = process.env.TEST_VAULT_PASSWORD || ''
       if (password) {
         await passwordInput.fill(password)
         await this.page.waitForTimeout(300)
 
-        const confirmBtn = this.page.getByRole('button', { name: /confirm/i }).first()
+        const confirmBtn = this.page
+          .getByRole('button', { name: /confirm/i })
+          .first()
         if (await confirmBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
           await confirmBtn.click()
           await this.page.waitForTimeout(500)
@@ -416,21 +465,44 @@ export class SwapFlow extends BasePage {
    * USDC>ETH instead of ETH>$DEST. Without this gate the test broadcasts
    * real money on the wrong pair.
    */
-  async assertSelectionMatches(fromSymbol: string, toSymbol: string): Promise<void> {
-    const fromText = ((await this.fromCoinSelector.textContent()) || '').toUpperCase()
-    const toText = ((await this.toCoinSelector.textContent()) || '').toUpperCase()
+  // Splits selector text into uppercase tokens (A-Z0-9 only) for exact symbol matching.
+  // Prevents "USDC on Ethereum" from matching as "ETH".
+  private hasSelectedSymbol(text: string, symbol: string): boolean {
+    const tokens = text
+      .toUpperCase()
+      .split(/[^A-Z0-9]+/)
+      .filter(Boolean)
+    return tokens.includes(symbol.toUpperCase())
+  }
 
-    const fromOk = fromText.includes(fromSymbol.toUpperCase())
-    const toOk = toText.includes(toSymbol.toUpperCase())
+  /**
+   * Pre-broadcast safety gate: confirms the from/to coin selectors match the
+   * expected symbols before broadcast. Throws on mismatch.
+   */
+  async assertSelectionMatches({
+    fromSymbol,
+    toSymbol,
+  }: AssertSelectionMatchesInput): Promise<void> {
+    const fromText = (
+      (await this.fromCoinSelector.textContent()) || ''
+    ).toUpperCase()
+    const toText = (
+      (await this.toCoinSelector.textContent()) || ''
+    ).toUpperCase()
 
-    // Catch the "fell back to USDC" failure mode explicitly. If the test was
-    // not expecting a stable, presence of a common stable symbol in the from
-    // selector is a strong signal the chain-carousel pick didn't actually
-    // select native.
-    const STABLE_SYMBOLS = ['USDC', 'USDT', 'DAI', 'TUSD', 'FRAX', 'LUSD']
-    const expectingStableSource = STABLE_SYMBOLS.includes(fromSymbol.toUpperCase())
+    const fromOk = this.hasSelectedSymbol(fromText, fromSymbol)
+    const toOk = this.hasSelectedSymbol(toText, toSymbol)
+
+    // Catch the "fell back to USDC" failure mode. If the test was not expecting
+    // a stable, presence of a common stable symbol in the from selector is a
+    // strong signal the chain-carousel pick didn't select the native token.
+    const stableSymbols = ['USDC', 'USDT', 'DAI', 'TUSD', 'FRAX', 'LUSD']
+    const expectingStableSource = stableSymbols.includes(
+      fromSymbol.toUpperCase()
+    )
     const unexpectedStableInSource =
-      !expectingStableSource && STABLE_SYMBOLS.some(s => fromText.includes(s))
+      !expectingStableSource &&
+      stableSymbols.some(s => this.hasSelectedSymbol(fromText, s))
 
     if (!fromOk || !toOk || unexpectedStableInSource) {
       throw new Error(
@@ -443,7 +515,11 @@ export class SwapFlow extends BasePage {
     }
   }
 
-  async prepareSwap(fromCoin: string, toCoin: string, amount: string): Promise<void> {
+  async prepareSwap(
+    fromCoin: string,
+    toCoin: string,
+    amount: string
+  ): Promise<void> {
     await this.selectFromCoin(fromCoin)
     await this.selectToCoin(toCoin)
     await this.fillAmount(amount)
@@ -452,10 +528,16 @@ export class SwapFlow extends BasePage {
 
   // @deprecated Use prepareSwapWithAmount for dynamic amount-based swaps.
   // Default 75% picks a value above provider minimum thresholds.
-  async prepareNativeSwap(fromChainId: string, toChainId: string, percent: 25 | 50 | 75 | 100 = 75): Promise<void> {
+  async prepareNativeSwap(
+    fromChainId: string,
+    toChainId: string,
+    percent: 25 | 50 | 75 | 100 = 75
+  ): Promise<void> {
     const fromSymbol = this.getNativeSymbol(fromChainId)
     const toSymbol = this.getNativeSymbol(toChainId)
-    console.log(`Preparing native swap: ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId}) @ ${percent}%`)
+    console.log(
+      `Preparing native swap: ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId}) @ ${percent}%`
+    )
     await this.selectFromCoin(fromSymbol)
     await this.selectToCoin(toSymbol)
     await this.clickPercentage(percent)
@@ -464,28 +546,39 @@ export class SwapFlow extends BasePage {
 
   // UI defaults to BTC→ETH; if our intended direction is the inverse, use the
   // reverse button instead of re-selecting both sides.
-  async prepareSwapWithAmount(fromChainId: string, toChainId: string, amount: string): Promise<void> {
+  async prepareSwapWithAmount({
+    fromChainId,
+    toChainId,
+    amount,
+  }: PrepareSwapWithAmountInput): Promise<void> {
     const fromSymbol = this.getNativeSymbol(fromChainId)
     const toSymbol = this.getNativeSymbol(toChainId)
-    console.log(`Preparing swap: ${amount} ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId})`)
+    console.log(
+      `Preparing swap: ${amount} ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId})`
+    )
 
     await this.page.waitForTimeout(500)
 
-    const currentFromText = await this.fromCoinSelector.textContent().catch(() => '') || ''
-    const currentToText = await this.toCoinSelector.textContent().catch(() => '') || ''
+    const currentFromText =
+      (await this.fromCoinSelector.textContent().catch(() => '')) || ''
+    const currentToText =
+      (await this.toCoinSelector.textContent().catch(() => '')) || ''
     console.log(`Current selection: ${currentFromText} → ${currentToText}`)
 
-    if (currentFromText.toUpperCase().includes(toSymbol) &&
-        currentToText.toUpperCase().includes(fromSymbol)) {
+    if (
+      this.hasSelectedSymbol(currentFromText, toSymbol) &&
+      this.hasSelectedSymbol(currentToText, fromSymbol)
+    ) {
       console.log('Using reverse button to swap direction')
       await this.reverse()
       await this.page.waitForTimeout(500)
-    } else if (!currentFromText.toUpperCase().includes(fromSymbol)) {
+    } else if (!this.hasSelectedSymbol(currentFromText, fromSymbol)) {
       await this.selectFromCoin(fromSymbol)
     }
 
-    const updatedToText = await this.toCoinSelector.textContent().catch(() => '') || ''
-    if (!updatedToText.toUpperCase().includes(toSymbol)) {
+    const updatedToText =
+      (await this.toCoinSelector.textContent().catch(() => '')) || ''
+    if (!this.hasSelectedSymbol(updatedToText, toSymbol)) {
       await this.selectToCoin(toSymbol)
     }
 
