@@ -12,6 +12,7 @@ import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { getBlockaidTxValidationInput } from '@vultisig/core-mpc/security/blockaid/tx/validation/input'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -35,6 +36,7 @@ type VerifyKeysignStartInput = {
   toAddressLabel?: string
   extraPendingMessage?: string
   footer?: ReactNode
+  swapQuote?: SwapQuote
 }
 
 const TermItem = styled(Checkbox)`
@@ -50,6 +52,7 @@ export const VerifyKeysignStart = ({
   toAddressLabel,
   extraPendingMessage,
   footer,
+  swapQuote,
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -134,12 +137,14 @@ export const VerifyKeysignStart = ({
     return {
       keysignPayload: { keysign },
       ...(toAddressLabel ? { toAddressLabel } : {}),
+      ...(swapQuote ? { swapQuote } : {}),
     }
   }, [
     extraPendingMessage,
     keysignPayloadQuery.data,
     keysignPayloadQuery.error,
     keysignPayloadQuery.isPending,
+    swapQuote,
     t,
     termsAccepted,
     toAddressLabel,

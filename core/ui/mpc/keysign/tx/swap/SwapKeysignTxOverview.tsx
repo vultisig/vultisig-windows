@@ -1,6 +1,7 @@
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -13,6 +14,14 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { GeneralSwapTx } from '@vultisig/core-chain/swap/general/GeneralSwapQuote'
+import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/getNativeSwapDecimals'
+import {
+  SwapQuote,
+  SwapQuoteResult,
+} from '@vultisig/core-chain/swap/quote/SwapQuote'
+import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
@@ -29,11 +38,29 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useTxStatusQuery } from '../../../../chain/tx/status/useTxStatusQuery'
+import { useOptionalSwapQuote } from '../../state/swapQuote'
 import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
 import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
 import { TrackTxPrompt } from './TrackTxPrompt'
+
+const getSwapFeeFromQuote = (
+  swapQuote: SwapQuote,
+  toCoinKey: CoinKey
+): SwapFee | undefined =>
+  matchRecordUnion<SwapQuoteResult, SwapFee | undefined>(swapQuote.quote, {
+    native: ({ fees }) => ({
+      ...toCoinKey,
+      amount: BigInt(fees.total),
+      decimals: getNativeSwapDecimals(toCoinKey),
+    }),
+    general: ({ tx }) =>
+      matchRecordUnion<GeneralSwapTx, SwapFee | undefined>(tx, {
+        evm: ({ affiliateFee }) => affiliateFee,
+        solana: ({ swapFee }) => swapFee,
+      }),
+  })
 
 export const SwapKeysignTxOverview = ({
   value,
@@ -54,6 +81,12 @@ export const SwapKeysignTxOverview = ({
   const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
   const { chain: sourceChain } = shouldBePresent(fromCoin)
+
+  const swapQuote = useOptionalSwapQuote()
+  const swapFee =
+    swapQuote && toCoin
+      ? getSwapFeeFromQuote(swapQuote, { chain: toCoin.chain, id: toCoin.id })
+      : undefined
 
   const formattedFromAmount = useMemo(() => {
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
@@ -172,6 +205,13 @@ export const SwapKeysignTxOverview = ({
               <KeysignFeeAmount keysignPayload={value} />
             )}
           </TxFeeRow>
+          {swapFee && (
+            <TxFeeRow label={t('swap_fee')}>
+              <Text size={14} color="shy">
+                <SwapFeeFiatValue value={[swapFee]} />
+              </Text>
+            </TxFeeRow>
+          )}
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button
