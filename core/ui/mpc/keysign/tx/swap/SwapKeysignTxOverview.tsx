@@ -43,6 +43,7 @@ import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
 import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
+import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
 const getSwapFeeFromQuote = (
@@ -82,11 +83,17 @@ export const SwapKeysignTxOverview = ({
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
   const { chain: sourceChain } = shouldBePresent(fromCoin)
 
+  // Prefer the swap fee carried in the keysign payload (works for both
+  // initiator and cosigner). Fall back to the SwapQuote provider for older
+  // payloads built before the SDK populated the swap-fee fields — only the
+  // initiator has the quote in scope.
   const swapQuote = useOptionalSwapQuote()
+  const swapFeeFromPayload = getSwapFeeFromPayload(value)
   const swapFee =
-    swapQuote && toCoin
+    swapFeeFromPayload ??
+    (swapQuote && toCoin
       ? getSwapFeeFromQuote(swapQuote, { chain: toCoin.chain, id: toCoin.id })
-      : undefined
+      : undefined)
 
   const formattedFromAmount = useMemo(() => {
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
