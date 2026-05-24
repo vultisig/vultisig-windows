@@ -41,7 +41,7 @@ test.describe('Vault Address Dump', () => {
     await vaultPage.waitForView(15_000)
 
     console.log(`\n🔧 Enabling ${toEnable.length} chains: ${toEnable.join(', ')}\n`)
-    const result = await enableChains(page, toEnable)
+    const result = await enableChains({ page, chains: toEnable })
     console.log(`  enabled: ${result.enabled.join(', ') || '(none)'}`)
     console.log(`  already on: ${result.skipped.join(', ') || '(none)'}`)
     console.log(`  missing from UI: ${result.missing.join(', ') || '(none)'}`)

@@ -6,7 +6,12 @@ import { defineConfig } from '@playwright/test'
 
 const projects = (baseConfig.projects || []).map((p) => {
   if (p.name === 'fund-dependent') {
-    const existingMatch = Array.isArray(p.testMatch) ? p.testMatch : [p.testMatch as string]
+    const existingMatch =
+      p.testMatch == null
+        ? []
+        : Array.isArray(p.testMatch)
+          ? p.testMatch
+          : [p.testMatch]
     return {
       ...p,
       dependencies: [],

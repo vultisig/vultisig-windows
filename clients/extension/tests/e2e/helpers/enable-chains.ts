@@ -49,10 +49,15 @@ async function openChainManagement(page: Page): Promise<void> {
   await page.getByTestId('manage-chains-done').waitFor({ state: 'visible', timeout: 10_000 })
 }
 
-export async function enableChains(
-  page: Page,
+type EnableChainsInput = {
+  page: Page
   chains: string[]
-): Promise<{ enabled: string[]; skipped: string[]; missing: string[] }> {
+}
+
+export async function enableChains({
+  page,
+  chains,
+}: EnableChainsInput): Promise<{ enabled: string[]; skipped: string[]; missing: string[] }> {
   await openChainManagement(page)
 
   const enabled: string[] = []
