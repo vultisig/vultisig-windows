@@ -1,12 +1,27 @@
+import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { Text } from '@lib/ui/text'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
+import { useBitcoinChainTipHeightQuery } from '../hooks/useBitcoinChainTipHeightQuery'
+import {
+  useUtxoBlockHeightsQuery,
+  utxoKey,
+} from '../hooks/useUtxoBlockHeightsQuery'
 import { ClaimableUtxoItem } from './ClaimableUtxoItem'
+import {
+  ActiveTabItem,
+  HeaderCard,
+  HeaderCardAmount,
+  HeaderCardCoin,
+  HeaderCardContent,
+  TabStrip,
+} from './ClaimUtxoSelection.styles'
 
 const btcDecimals = 8
 const maxClaimUtxos = 50
@@ -19,12 +34,20 @@ type ClaimUtxoSelectionProps = {
   onConfirm: (selected: ClaimableUtxo[]) => void
 }
 
-const utxoKey = (utxo: ClaimableUtxo) => `${utxo.txid}:${utxo.vout}`
+const toBtc = (sats: number) => sats / 10 ** btcDecimals
+
+const formatTotalClaimable = (utxos: ClaimableUtxo[]) => {
+  const totalSats = utxos.reduce((sum, u) => sum + u.amount, 0)
+  return formatAmount(toBtc(totalSats), { precision: 'high' })
+}
 
 /**
- * Displays a selectable list of claimable QBTC UTXOs with a running total and
- * a "Claim Selected" CTA. Selection is controlled by the parent so it
- * survives unmounts (e.g. when retrying after an error).
+ * Header + selectable list of claimable QBTC UTXOs. Selection is controlled
+ * by the parent so it survives unmounts (e.g. when retrying after an error).
+ *
+ * The CTA label adapts: "Claim All" when every UTXO is selected, "Claim X of
+ * Y" otherwise. Disabled when nothing is selected or the parent gate is
+ * closed.
  */
 export const ClaimUtxoSelection = ({
   utxos,
@@ -34,6 +57,10 @@ export const ClaimUtxoSelection = ({
   onConfirm,
 }: ClaimUtxoSelectionProps) => {
   const { t } = useTranslation()
+  const btcAddress = useCurrentVaultAddress(Chain.Bitcoin)
+
+  const blockHeightsQuery = useUtxoBlockHeightsQuery({ btcAddress })
+  const chainTipQuery = useBitcoinChainTipHeightQuery()
 
   if (utxos.length === 0) {
     return (
@@ -55,13 +82,56 @@ export const ClaimUtxoSelection = ({
     onSelectedChange(next)
   }
 
-  const selectedUtxos = utxos.filter(utxo => selected.has(utxoKey(utxo)))
-  const totalSats = selectedUtxos.reduce((sum, utxo) => sum + utxo.amount, 0)
-  const totalBtc = totalSats / 10 ** btcDecimals
+  const selectedUtxos = utxos.filter(u => selected.has(utxoKey(u)))
+  const totalClaimable = formatTotalClaimable(utxos)
+  const allSelected = selected.size === utxos.length
   const hasSelection = selected.size > 0
+
+  const ctaLabel =
+    !hasSelection || allSelected
+      ? t('qbtc_claim_all')
+      : t('qbtc_claim_count', {
+          count: selected.size,
+          total: utxos.length,
+        })
+
+  const getBlocksAgo = (utxo: ClaimableUtxo): number | null => {
+    const utxoHeight = blockHeightsQuery.data?.get(utxoKey(utxo))
+    const tipHeight = chainTipQuery.data
+    if (!utxoHeight || !tipHeight || utxoHeight === 0) return null
+    return Math.max(0, tipHeight - utxoHeight)
+  }
 
   return (
     <VStack gap={16}>
+      <HeaderCard>
+        <HeaderCardCoin aria-hidden />
+        <HeaderCardContent>
+          <Text size={18} weight={500} height={28 / 18} color="regular">
+            {t('qbtc_claim_card_title')}
+          </Text>
+          <Text color="regular">
+            <HeaderCardAmount>{totalClaimable} QBTC</HeaderCardAmount>
+          </Text>
+        </HeaderCardContent>
+      </HeaderCard>
+
+      <TabStrip>
+        <ActiveTabItem>
+          <Text size={14} weight={500} height={20 / 14} color="regular">
+            {t('qbtc_claim_tab')}
+          </Text>
+        </ActiveTabItem>
+      </TabStrip>
+
+      <Text size={12} height={16 / 12} color="shyExtra">
+        {t('qbtc_claim_description')}
+      </Text>
+
+      <Text size={13} weight={500} color="shy">
+        {t('qbtc_claim_eligible_utxos')}
+      </Text>
+
       <List>
         {utxos.map(utxo => {
           const key = utxoKey(utxo)
@@ -71,36 +141,19 @@ export const ClaimUtxoSelection = ({
               value={utxo}
               isSelected={selected.has(key)}
               onToggle={() => toggle(key)}
+              blocksAgo={getBlocksAgo(utxo)}
             />
           )
         })}
       </List>
 
-      <HStack
-        fullWidth
-        alignItems="center"
-        justifyContent="space-between"
-        gap={12}
+      <Button
+        kind="primary"
+        disabled={!hasSelection || disabled}
+        onClick={() => onConfirm(selectedUtxos)}
       >
-        <VStack gap={4}>
-          <Text color="supporting" size={12}>
-            {t('qbtc_claim_selected_count', {
-              count: selected.size,
-              max: maxClaimUtxos,
-            })}
-          </Text>
-          <Text color="contrast" size={14} weight="600">
-            {formatAmount(totalBtc, { precision: 'high' })} BTC
-          </Text>
-        </VStack>
-        <Button
-          kind="primary"
-          disabled={!hasSelection || disabled}
-          onClick={() => onConfirm(selectedUtxos)}
-        >
-          {t('qbtc_claim_confirm')}
-        </Button>
-      </HStack>
+        {ctaLabel}
+      </Button>
     </VStack>
   )
 }

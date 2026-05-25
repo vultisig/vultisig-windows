@@ -126,7 +126,10 @@ test.describe('Provider Injection', () => {
 })
 
 test.describe('Ethereum Connect Flow', () => {
-  test('eth_requestAccounts triggers popup', async ({
+  // Regression for #3973: with no vault configured, eth_requestAccounts must
+  // reject with EIP-1193 4100 (Unauthorized), not the catch-all -32603
+  // (Internal error) that broke Privy and EVM DEX connect flows.
+  test('eth_requestAccounts with no vault rejects with code 4100', async ({
     context,
     testDappUrl,
   }) => {
@@ -137,26 +140,27 @@ test.describe('Ethereum Connect Flow', () => {
       timeout: 10_000,
     })
 
-    // Start the connection request — this should trigger a popup
-    // We can't complete the full flow without a vault, but we can verify
-    // the popup/error behavior
+    // Wrap in Promise.race with a sentinel so a dangling popup doesn't
+    // surface as a 60s Playwright timeout (same hazard as the
+    // wallet_switchEthereumChain test below).
     const result = await page.evaluate(async () => {
       try {
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts',
-          params: [],
-        })
+        const accounts = await Promise.race([
+          window.ethereum.request({
+            method: 'eth_requestAccounts',
+            params: [],
+          }),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('TEST_TIMEOUT')), 30_000)
+          ),
+        ])
         return { accounts }
       } catch (e: any) {
         return { error: e.message, code: e.code }
       }
     })
 
-    // Without a configured vault, we expect either:
-    // - A popup to open (which we'd need to interact with)
-    // - An error (no vault configured)
-    // Either outcome is valid — the point is the method dispatches correctly
-    expect(result).toBeDefined()
+    expect(result).toMatchObject({ code: 4100 })
   })
 
   test('eth_accounts returns empty array when not connected', async ({
