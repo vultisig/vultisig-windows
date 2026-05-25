@@ -21,6 +21,10 @@ type OneInchTransactionWithSwapFeeCoin = OneInchTransaction & {
   swapFeeDecimals?: number
 }
 
+const chainRegistry = new Set<string>(Object.values(Chain))
+
+const isKnownChain = (value: string): value is Chain => chainRegistry.has(value)
+
 /**
  * Extracts the swap-fee `SwapFee` from a built `KeysignPayload`.
  *
@@ -58,10 +62,12 @@ export const getSwapFeeFromPayload = (
         const tx = quote?.tx as OneInchTransactionWithSwapFeeCoin | undefined
         if (!tx || !tx.swapFee || tx.swapFee === '0') return undefined
         if (!tx.swapFeeChain || tx.swapFeeDecimals == null) return undefined
+        // `swap_fee_chain` is a protobuf string. Validate it against the known
+        // `Chain` set at this single routing boundary so unknown senders don't
+        // produce a broken `SwapFee` downstream.
+        if (!isKnownChain(tx.swapFeeChain)) return undefined
         return {
-          // `swap_fee_chain` is a protobuf string; treat this resolver as the
-          // single routing boundary where we cast back to the `Chain` union.
-          chain: tx.swapFeeChain as Chain,
+          chain: tx.swapFeeChain,
           // Keep `id` absent when the SDK didn't populate it — native fee
           // coins (e.g. ETH on Ethereum) have no token id. Coercing to ''
           // here changes `coinKeyToString` from `"Ethereum"` to `"Ethereum:"`
