@@ -117,4 +117,19 @@ describe('i18n syntax integrity', () => {
       )
     ).toBe('{{asset}} insuficiente para {{feeType}} no TON Pool')
   })
+
+  it('protects glossary terms before machine translation', () => {
+    const protectedText = protectInterpolationTokens(
+      'Connect dApp to DeFi with your Fast Vault'
+    )
+
+    expect(protectedText.text).toBe(
+      'Connect X_I18N_TOKEN_0_X to X_I18N_TOKEN_1_X with your X_I18N_TOKEN_2_X'
+    )
+    expect(
+      protectedText.restore(
+        'Conectar X_I18N_TOKEN_0_X a X_I18N_TOKEN_1_X con tu X_I18N_TOKEN_2_X'
+      )
+    ).toBe('Conectar dApp a DeFi con tu Fast Vault')
+  })
 })

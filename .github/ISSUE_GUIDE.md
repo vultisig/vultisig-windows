@@ -31,7 +31,7 @@ _How to fill the Vultisig issue template so agents AND humans produce great resu
 - **`lib/**`** — shared workspace packages (`@lib/*`); edit here when needed (same workflow as `core/`)
 - **DO NOT** modify `core/mpc/` or `tss/` without explicit review approval
 - Use resolver pattern for chain-specific logic (never switch on chain type)
-- Only edit `en.ts` for translations, run `yarn translate` to propagate
+- Only edit `en.ts` for translations, run `yarn translate` to propagate, then run `yarn i18n:review-quality`
 - Use `yarn check:all` as the verify command (covers lint + typecheck + test + knip)
 
 ---

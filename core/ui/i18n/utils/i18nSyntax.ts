@@ -1,3 +1,5 @@
+import { preservedI18nGlossaryTerms } from './i18nGlossary'
+
 type TranslationRecord = {
   readonly [key: string]: string | TranslationRecord
 }
@@ -42,37 +44,11 @@ const interpolationTokenPattern = /{{\s*([^{}]+?)\s*}}/g
 const i18nMarkupPattern = /<\/?\s*([A-Za-z][A-Za-z0-9]*)\b[^>]*?>/g
 const tagContentPattern = /<([A-Za-z][A-Za-z0-9]*)\b[^>]*>([\s\S]*?)<\/\1>/g
 const protectedSyntaxPattern = /{{\s*[^{}]+?\s*}}/g
-const domainGlossaryTerms = [
-  '$VULT',
-  'Bandwidth Points',
-  'Fast Vault',
-  'Secure Vault',
-  'Vault Share',
-  'Vultisig Extension',
-  'Vultisig',
-  'Broadcasting',
-  'Ethereum',
-  'THORChain',
-  'Jetton',
-  'QBTC',
-  'UTXOs',
-  'UTXO',
-  'TXID',
-  'REST',
-  'RPC',
-  'TON',
-  'BTC',
-  'NFT',
-  'dApp',
-  'Pool',
-  'pool',
-]
-
 const escapeRegExp = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 const protectedDomainTermPattern = new RegExp(
-  `(^|[^A-Za-z0-9_$])(${domainGlossaryTerms
+  `(^|[^A-Za-z0-9_$])(${preservedI18nGlossaryTerms
     .slice()
     .sort((first, second) => second.length - first.length)
     .map(escapeRegExp)

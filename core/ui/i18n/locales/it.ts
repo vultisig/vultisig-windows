@@ -225,7 +225,7 @@ export const it = {
   connect: 'Collegare',
   connect_dapp: 'Connetti dApp',
   connect_to_site: 'Connettiti a {{site}}',
-  connect_website_subtitle: "Collega questo sito web con l'estensione Vultisig",
+  connect_website_subtitle: 'Collega questo sito web con Vultisig Extension',
   connected_dapps: 'dApp connesse',
   connecting_to_server: 'Connessione al server',
   continue: 'Continuare',
@@ -843,15 +843,11 @@ export const it = {
   provider: 'Fornitore',
   route: 'Itinerario',
   qbtc_claim_title: 'Richiesta QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Quantità di BTC',
   qbtc_claim_no_claimable_utxos:
     'Nessun UTXO riscattabile trovato per questo indirizzo.',
   qbtc_claim_disabled_notice:
     'Al momento, la possibilità di richiedere token è disabilitata sulla blockchain di QBTC.',
   qbtc_claim_failed_to_load: 'Impossibile caricare gli UTXO rivendicabili.',
-  qbtc_claim_selected_count: '{{count}} di {{max}} selezionato',
-  qbtc_claim_confirm: 'Richiesta selezionata',
   qbtc_claim_proving: 'Generazione di prove…',
   qbtc_claim_proving_hint: 'Questa operazione può richiedere diversi minuti.',
   qbtc_claim_broadcasting: 'Broadcasting della richiesta…',
@@ -1535,4 +1531,42 @@ export const it = {
   you_are_claiming: 'Stai affermando',
   commission: 'commissione',
   claim_n_validators: 'Richiesta dai validatori {{count}}',
+  approval_amount: 'Importo approvato',
+  approval_expires: 'L&#39;approvazione scade',
+  deadline: 'Scadenza',
+  domain: 'Dominio',
+  no_expiry: 'Nessuna scadenza',
+  primary_type: 'Tipo primario',
+  qbtc_claim_banner_title:
+    'Lo stesso Bitcoin. A prova di computer quantistico.',
+  qbtc_claim_banner_subtitle: 'Richiedi il tuo QBTC',
+  qbtc_claim_banner_cta: 'Richiedi ora',
+  qbtc_claim_section_cta: 'Richiedi QBTC',
+  qbtc_claim_card_title: 'Riscuotibile QBTC',
+  qbtc_claim_tab: 'Reclamo',
+  qbtc_onboarding_title: 'Nuova sicurezza quantistica',
+  qbtc_onboarding_subtitle:
+    'Le chiavi classiche possono essere decifrate dai computer quantistici. L&#39;attivazione di QBTC richiede la generazione di una nuova coppia di chiavi.',
+  qbtc_onboarding_feature_generate_title:
+    'Genera la tua coppia di chiavi quantistiche',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig esegue una procedura MPC locale sui dispositivi del vault per generare una nuova coppia di chiavi.',
+  qbtc_onboarding_feature_link_title: 'Collegalo al tuo vault esistente',
+  qbtc_onboarding_feature_link_description:
+    'La chiave quantistica è associata alla struttura di condivisione del tuo vault corrente. Non è necessaria alcuna nuova condivisione.',
+  qbtc_onboarding_feature_claim_title:
+    'Richiedi e effettua transazioni in QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Una volta generati, i token BTC e UTXOs idonei appariranno come token QBTC riscattabili con un rapporto di 1:1.',
+  qbtc_onboarding_get_started: 'Inizia',
+  qbtc_claim_description:
+    'QBTC è una versione resistente ai computer quantistici di BTC. I tuoi BTC e UTXOs esistenti possono essere richiesti come QBTC con un rapporto 1:1. Seleziona quale UTXOs richiedere qui sotto.',
+  qbtc_claim_eligible_utxos: 'UTXOs idoneo',
+  qbtc_claim_confirmed_blocks_ago: 'Confermato · {{count}} blocchi fa',
+  qbtc_claim_pending_confirmation: 'In attesa di conferma',
+  qbtc_claim_all: 'Richiedi tutto',
+  qbtc_claim_count: 'Richiedi {{count}} di {{total}}',
+  raw_message: 'Messaggio grezzo',
+  token: 'Token',
+  token_approval: 'Approvazione del token',
 }

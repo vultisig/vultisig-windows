@@ -222,7 +222,7 @@ export const es = {
   connect: 'Conectar',
   connect_dapp: 'Conectar dApp',
   connect_to_site: 'Conectarse a {{site}}',
-  connect_website_subtitle: 'Conecta este sitio web con la extensión Vultisig.',
+  connect_website_subtitle: 'Conecta este sitio web con Vultisig Extension.',
   connected_dapps: 'DApps conectadas',
   connecting_to_server: 'Conectando con el servidor',
   continue: 'Continuar',
@@ -839,15 +839,11 @@ export const es = {
   provider: 'Proveedor',
   route: 'Ruta',
   qbtc_claim_title: 'Reclamación de QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Cantidad de BTC',
   qbtc_claim_no_claimable_utxos:
     'No se encontraron UTXO reclamables para esta dirección.',
   qbtc_claim_disabled_notice:
     'Actualmente, la opción de reclamar está deshabilitada en la cadena QBTC.',
   qbtc_claim_failed_to_load: 'No se pudieron cargar las UTXO reclamables.',
-  qbtc_claim_selected_count: '{{count}} de {{max}} seleccionado',
-  qbtc_claim_confirm: 'Reclamar seleccionado',
   qbtc_claim_proving: 'Generando pruebas…',
   qbtc_claim_proving_hint: 'Esto puede tardar varios minutos.',
   qbtc_claim_broadcasting: 'Broadcasting de reclamación…',
@@ -860,7 +856,7 @@ export const es = {
   qbtc_claim_failed:
     'La reclamación ha fallado. Por favor, inténtelo de nuevo.',
   qbtc_claim_fast_vault_only:
-    'Actualmente, para reclamar una reclamación se requiere una Bóveda Rápida. La compatibilidad con la Bóveda Segura estará disponible próximamente.',
+    'Actualmente, para reclamar se requiere Fast Vault. La compatibilidad con Secure Vault estará disponible próximamente.',
   qbtc_claim_password_description:
     'Ingrese su contraseña de Fast Vault para firmar conjuntamente la transacción de reclamación.',
   qrCode: 'código QR',
@@ -1533,4 +1529,40 @@ export const es = {
   you_are_claiming: 'Estás afirmando',
   commission: 'comisión',
   claim_n_validators: 'Reclamación de los validadores {{count}}',
+  approval_amount: 'Monto de aprobación',
+  approval_expires: 'La aprobación vence',
+  deadline: 'Fecha límite',
+  domain: 'Dominio',
+  no_expiry: 'Sin fecha de caducidad',
+  primary_type: 'Tipo primario',
+  qbtc_claim_banner_title: 'El mismo Bitcoin. A prueba de ataques cuánticos.',
+  qbtc_claim_banner_subtitle: 'Reclama tu QBTC',
+  qbtc_claim_banner_cta: 'Reclámalo ahora',
+  qbtc_claim_section_cta: 'Reclamar QBTC',
+  qbtc_claim_card_title: 'Reclamable QBTC',
+  qbtc_claim_tab: 'Afirmar',
+  qbtc_onboarding_title: 'Nueva seguridad cuántica',
+  qbtc_onboarding_subtitle:
+    'Las claves clásicas pueden ser descifradas por ordenadores cuánticos. Para habilitar QBTC es necesario generar un nuevo par de claves.',
+  qbtc_onboarding_feature_generate_title: 'Genera tu par de claves cuánticas',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig ejecuta una ceremonia MPC local en todos sus dispositivos de bóveda para producir un nuevo par de claves.',
+  qbtc_onboarding_feature_link_title: 'Vincúlalo a tu bóveda existente',
+  qbtc_onboarding_feature_link_description:
+    'La clave cuántica está vinculada a la estructura actual de compartición de su bóveda. No es necesario volver a compartirla.',
+  qbtc_onboarding_feature_claim_title:
+    'Reclamar y realizar transacciones en QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Una vez generados, sus BTC UTXOs elegibles aparecerán como QBTC reclamables en una proporción de 1:1.',
+  qbtc_onboarding_get_started: 'Comience',
+  qbtc_claim_description:
+    'QBTC es una versión resistente a la computación cuántica de BTC. Sus tokens BTC y UTXOs existentes pueden canjearse como QBTC en una proporción de 1:1. Seleccione qué token UTXOs desea canjear a continuación.',
+  qbtc_claim_eligible_utxos: 'Elegible UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Confirmado · {{count}} hace bloques',
+  qbtc_claim_pending_confirmation: 'Pendiente de confirmación',
+  qbtc_claim_all: 'Reclamar todo',
+  qbtc_claim_count: 'Reclamar {{count}} de {{total}}',
+  raw_message: 'Mensaje sin formato',
+  token: 'Simbólico',
+  token_approval: 'Aprobación de tokens',
 }
