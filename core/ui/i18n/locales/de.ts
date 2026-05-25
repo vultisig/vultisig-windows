@@ -851,15 +851,11 @@ export const de = {
   provider: 'Anbieter',
   route: 'Route',
   qbtc_claim_title: 'QBTC-Anspruch',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'BTC-Betrag',
   qbtc_claim_no_claimable_utxos:
     'Für diese Adresse wurden keine einlösbaren UTXOs gefunden.',
   qbtc_claim_disabled_notice:
     'Das Einlösen von Ansprüchen ist auf der QBTC-Blockchain derzeit deaktiviert.',
   qbtc_claim_failed_to_load: 'Fehler beim Laden der anrechenbaren UTXOs.',
-  qbtc_claim_selected_count: '{{count}} von {{max}} ausgewählt',
-  qbtc_claim_confirm: 'Anspruch ausgewählt',
   qbtc_claim_proving: 'Generierung von Beweisen…',
   qbtc_claim_proving_hint: 'Dies kann mehrere Minuten dauern.',
   qbtc_claim_broadcasting: 'Broadcasting des Anspruchs…',
@@ -1548,4 +1544,41 @@ export const de = {
   you_are_claiming: 'Du behauptest',
   commission: 'Kommission',
   claim_n_validators: 'Anspruch von {{count}}-Validatoren',
+  approval_amount: 'Genehmigungsbetrag',
+  approval_expires: 'Genehmigung läuft ab',
+  deadline: 'Frist',
+  domain: 'Domain',
+  no_expiry: 'Kein Verfallsdatum',
+  primary_type: 'Primärtyp',
+  qbtc_claim_banner_title: 'Dasselbe Bitcoin. Quantensicher.',
+  qbtc_claim_banner_subtitle: 'Fordern Sie Ihren QBTC an',
+  qbtc_claim_banner_cta: 'Jetzt beanspruchen',
+  qbtc_claim_section_cta: 'Anspruch QBTC',
+  qbtc_claim_card_title: 'Beanspruchbar QBTC',
+  qbtc_claim_tab: 'Beanspruchen',
+  qbtc_onboarding_title: 'Neue Quantensicherheit',
+  qbtc_onboarding_subtitle:
+    'Klassische Schlüssel können von Quantencomputern geknackt werden. Die Aktivierung von QBTC erfordert die Generierung eines neuen Schlüsselpaares.',
+  qbtc_onboarding_feature_generate_title:
+    'Generieren Sie Ihr Quantenschlüsselpaar',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig führt eine lokale MPC-Zeremonie auf Ihren Tresorgeräten durch, um ein neues Schlüsselpaar zu erzeugen.',
+  qbtc_onboarding_feature_link_title:
+    'Verknüpfen Sie es mit Ihrem bestehenden Tresor.',
+  qbtc_onboarding_feature_link_description:
+    'Der Quantenschlüssel ist an Ihre aktuelle Tresorfreigabestruktur gebunden. Eine erneute Freigabe ist nicht erforderlich.',
+  qbtc_onboarding_feature_claim_title: 'Beanspruchen und Transaktion in QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Nach der Generierung erscheinen Ihre berechtigten BTC UTXOs als einlösbare QBTC im Verhältnis 1:1.',
+  qbtc_onboarding_get_started: 'Los geht&#39;s!',
+  qbtc_claim_description:
+    'QBTC ist eine quantenresistente Version von BTC. Ihre bestehenden BTC und UTXOs können im Verhältnis 1:1 als QBTC beansprucht werden. Wählen Sie unten aus, welche UTXOs Sie beanspruchen möchten.',
+  qbtc_claim_eligible_utxos: 'Berechtigt UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Bestätigt · {{count}} Blöcke zuvor',
+  qbtc_claim_pending_confirmation: 'Bestätigung ausstehend',
+  qbtc_claim_all: 'Alle Ansprüche beanspruchen',
+  qbtc_claim_count: 'Anspruch {{count}} von {{total}}',
+  raw_message: 'Rohdaten',
+  token: 'Token',
+  token_approval: 'Token-Genehmigung',
 }
