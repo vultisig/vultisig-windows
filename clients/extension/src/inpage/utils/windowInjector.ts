@@ -1,4 +1,3 @@
-import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { createCardanoCip30InitialApi } from '@clients/extension/src/inpage/providers/cardanoCip30'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
@@ -9,6 +8,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { installKeplrProxyBridge } from '../providers/keplrProxyBridge'
 import { Solana } from '../providers/solana'
 import { registerWallet } from '../providers/solana/register'
@@ -18,18 +18,18 @@ import { UTXO } from '../providers/utxo'
 // `window.interchainWallets`. Mirrors the `STATION_INFO` shape the official
 // Station extension uses — Terra dApps iterate these arrays to discover
 // installed Station-compatible wallets.
-const vultisigStationInfo = {
-  name: 'Vultisig',
-  identifier: 'vultisig',
-  icon: `data:image/svg+xml;utf8,${encodeURIComponent(VULTI_ICON_RAW_SVG)}`,
+const stationWalletInfo = {
+  name: currentExtensionBrandConfig.provider.walletPickerName,
+  identifier: currentExtensionBrandConfig.provider.walletPickerIdentifier,
+  icon: currentExtensionBrandConfig.provider.icon,
 }
 
 const pushToWalletArray = (key: 'terraWallets' | 'interchainWallets') => {
   const existing = window[key]
   if (Array.isArray(existing)) {
-    existing.push(vultisigStationInfo)
+    existing.push(stationWalletInfo)
   } else {
-    window[key] = [vultisigStationInfo]
+    window[key] = [stationWalletInfo]
   }
 }
 
@@ -61,9 +61,9 @@ export const injectToWindow = () => {
 
   announceProvider({
     info: {
-      icon: VULTI_ICON_RAW_SVG,
-      name: 'Vultisig',
-      rdns: 'me.vultisig',
+      icon: currentExtensionBrandConfig.provider.icon,
+      name: currentExtensionBrandConfig.provider.eip6963Name,
+      rdns: currentExtensionBrandConfig.provider.eip6963Rdns,
       uuid: uuidv4(),
     },
     provider: ethereumProvider as unknown as EIP1193Provider,
@@ -187,8 +187,8 @@ async function setupContentScriptMessenger(
 
     announceProvider({
       info: {
-        icon: VULTI_ICON_RAW_SVG,
-        name: 'Vultisig',
+        icon: currentExtensionBrandConfig.provider.icon,
+        name: currentExtensionBrandConfig.provider.eip6963Name,
         rdns: 'app.phantom',
         uuid: uuidv4(),
       },
@@ -284,9 +284,9 @@ async function setupContentScriptMessenger(
       })
     )
 
-    // Register Vultisig in the Station-style wallet-picker arrays. dApps
+    // Register this build in the Station-style wallet-picker arrays. dApps
     // iterate these to enumerate installed Station-compatible wallets, so
-    // missing this entry hides Vultisig from the picker even when
+    // missing this entry hides the provider from the picker even when
     // `window.station` is present.
     attempt(() => pushToWalletArray('terraWallets'))
     attempt(() => pushToWalletArray('interchainWallets'))

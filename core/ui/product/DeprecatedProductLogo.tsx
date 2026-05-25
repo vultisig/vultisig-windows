@@ -1,6 +1,9 @@
 import { SVGProps } from 'react'
 
-export const DeprecatedProductLogo = (props: SVGProps<SVGSVGElement>) => (
+import { currentProductBrand } from './brand'
+import { StationProductLogo } from './StationProductLogo'
+
+const VultisigDeprecatedProductLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width="1em"
     height="1em"
@@ -199,3 +202,10 @@ export const DeprecatedProductLogo = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 )
+
+export const DeprecatedProductLogo = (props: SVGProps<SVGSVGElement>) =>
+  currentProductBrand === 'station' ? (
+    <StationProductLogo {...props} />
+  ) : (
+    <VultisigDeprecatedProductLogo {...props} />
+  )
