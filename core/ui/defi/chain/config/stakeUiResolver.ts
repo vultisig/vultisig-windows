@@ -22,6 +22,9 @@ type StakeActionConfig = {
   actionsDisabled?: boolean
 }
 
+/**
+ * Translation keys that the stake UI resolver can request from its caller.
+ */
 export type StakeUiTranslationKey =
   | 'compounded_token'
   | 'defi_add'
