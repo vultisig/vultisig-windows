@@ -5,6 +5,9 @@ import { formatUnits } from 'ethers'
 
 // 2^256 - 1 — the standard max-value sentinel used across DeFi.
 const maxUint256 = 2n ** 256n - 1n
+// 2^160 - 1 — Permit2 packs the approval amount into a uint160, so this is the
+// "unlimited" sentinel for permitSingle / permitBatch.
+const maxUint160 = 2n ** 160n - 1n
 
 // Functions where MAX_UINT256 means "unlimited approval" — the only case where
 // a sentinel label makes sense. For withdraw/repay MAX_UINT256 means "all
@@ -59,9 +62,18 @@ export const formatTokenAmount = ({
   decimals,
   functionName,
 }: FormatTokenAmountInput): FormattedTokenAmount => {
-  if (rawAmount === maxUint256) {
-    const isApproval =
-      !!functionName && unlimitedApprovalFunctions.has(functionName)
+  const isApproval =
+    !!functionName && unlimitedApprovalFunctions.has(functionName)
+  // maxUint160 is the Permit2-specific sentinel — only Permit2 functions pack
+  // the amount into a uint160. EIP-2612 `permit` and ERC-20 `approve` both use
+  // uint256, so a value of exactly 2^160-1 there would be a real (if absurd)
+  // amount, not "unlimited".
+  const isPermit2Uint160Approval =
+    functionName === 'permitSingle' || functionName === 'permitBatch'
+  const isUnlimitedSentinel =
+    rawAmount === maxUint256 ||
+    (isPermit2Uint160Approval && rawAmount === maxUint160)
+  if (isUnlimitedSentinel) {
     return {
       display: isApproval ? 'Unlimited' : null,
       isSentinel: true,
