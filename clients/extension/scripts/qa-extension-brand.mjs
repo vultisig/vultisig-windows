@@ -247,23 +247,25 @@ const assertRuntimeBrand = async ({ distDir, expected }) => {
   const profileDir = await mkdtemp(
     path.join(os.tmpdir(), 'vultisig-extension-brand-qa-')
   )
-  const server = await createTestServer()
-
-  const context = await chromium.launchPersistentContext(profileDir, {
-    headless: false,
-    args: [
-      `--disable-extensions-except=${distDir}`,
-      `--load-extension=${distDir}`,
-      '--no-first-run',
-      '--no-default-browser-check',
-      '--disable-default-apps',
-      '--disable-popup-blocking',
-      '--window-position=-3000,-3000',
-      '--window-size=480,600',
-    ],
-  })
+  let context
+  let server
 
   try {
+    server = await createTestServer()
+    context = await chromium.launchPersistentContext(profileDir, {
+      headless: false,
+      args: [
+        `--disable-extensions-except=${distDir}`,
+        `--load-extension=${distDir}`,
+        '--no-first-run',
+        '--no-default-browser-check',
+        '--disable-default-apps',
+        '--disable-popup-blocking',
+        '--window-position=-3000,-3000',
+        '--window-size=480,600',
+      ],
+    })
+
     const extensionId = await getExtensionId(context)
     const extensionPage = await context.newPage()
     await extensionPage.goto(`chrome-extension://${extensionId}/index.html`)
@@ -371,9 +373,11 @@ const assertRuntimeBrand = async ({ distDir, expected }) => {
       throw new Error('Station-compatible wallet-picker metadata was not found')
     }
   } finally {
-    await context.close()
-    await server.close()
-    await rm(profileDir, { recursive: true, force: true })
+    await Promise.allSettled([
+      context?.close(),
+      server?.close(),
+      rm(profileDir, { recursive: true, force: true }),
+    ])
   }
 }
 
