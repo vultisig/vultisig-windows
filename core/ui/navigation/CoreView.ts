@@ -145,6 +145,7 @@ export type CoreView =
   | { id: 'requestFastVaultBackup' }
   | { id: 'vultDiscount' }
   | { id: 'qbtcClaim' }
+  | { id: 'qbtcQuantumSecurityOnboarding' }
 
 export type CoreViewId = CoreView['id']
 

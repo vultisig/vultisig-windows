@@ -221,8 +221,7 @@ export const ru = {
   connect: 'Подключить',
   connect_dapp: 'Подключить dApp',
   connect_to_site: 'Подключиться к {{site}}',
-  connect_website_subtitle:
-    'Подключите этот сайт с помощью расширения Vultisig.',
+  connect_website_subtitle: 'Подключите этот сайт к Vultisig Extension.',
   connected_dapps: 'Подключённые dApps',
   connecting_to_server: 'Подключение к серверу',
   continue: 'Продолжить',
@@ -825,16 +824,12 @@ export const ru = {
   provider: 'Провайдер',
   route: 'Маршрут',
   qbtc_claim_title: 'Заявка на QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Сумма в BTC',
   qbtc_claim_no_claimable_utxos:
     'Для этого адреса не найдено доступных для активации UTXO.',
   qbtc_claim_disabled_notice:
     'В настоящее время возможность получения выплат в блокчейне QBTC отключена.',
   qbtc_claim_failed_to_load:
     'Не удалось загрузить доступные для активации UTXO.',
-  qbtc_claim_selected_count: 'Из {{max}} выбран {{count}}',
-  qbtc_claim_confirm: 'Выбрана заявка',
   qbtc_claim_proving: 'Создание доказательств…',
   qbtc_claim_proving_hint: 'Это может занять несколько минут.',
   qbtc_claim_broadcasting: 'Broadcasting заявки…',
@@ -1507,4 +1502,41 @@ export const ru = {
   you_are_claiming: 'Вы получаете',
   commission: 'комиссия',
   claim_n_validators: 'Получить от {{count}} валидаторов',
+  approval_amount: 'Сумма одобрения',
+  approval_expires: 'Срок действия одобрения истекает.',
+  deadline: 'Крайний срок',
+  domain: 'Домен',
+  no_expiry: 'Срок действия не ограничен.',
+  primary_type: 'Основной тип',
+  qbtc_claim_banner_title: 'Тот же Биткойн. Квантово-безопасный.',
+  qbtc_claim_banner_subtitle: 'Получите свой QBTC',
+  qbtc_claim_banner_cta: 'Заявите сейчас',
+  qbtc_claim_section_cta: 'Заявка QBTC',
+  qbtc_claim_card_title: 'QBTC можно получить',
+  qbtc_claim_tab: 'Требовать',
+  qbtc_onboarding_title: 'Новая квантовая безопасность',
+  qbtc_onboarding_subtitle:
+    'Классические ключи могут быть взломаны квантовыми компьютерами. Для активации QBTC требуется сгенерировать новую пару ключей.',
+  qbtc_onboarding_feature_generate_title:
+    'Сгенерируйте свою пару квантовых ключей.',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig запускает локальную церемонию MPC на ваших устройствах хранилища для создания новой пары ключей.',
+  qbtc_onboarding_feature_link_title: 'Свяжите его с существующим хранилищем.',
+  qbtc_onboarding_feature_link_description:
+    'Квантовый ключ привязан к вашей текущей структуре доступа к хранилищу. Перераспределение доступа не требуется.',
+  qbtc_onboarding_feature_claim_title:
+    'Заявить права на токены и совершить транзакцию в QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'После генерации ваши подходящие токены BTC и UTXOs будут отображаться как доступные для получения токены QBTC в соотношении 1:1.',
+  qbtc_onboarding_get_started: 'Начать',
+  qbtc_claim_description:
+    'QBTC — это квантово-устойчивая версия BTC. Ваши существующие BTC и UTXOs могут быть использованы в качестве QBTC в соотношении 1:1. Выберите, какой UTXOs использовать для получения, ниже.',
+  qbtc_claim_eligible_utxos: 'Подходящий UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Подтверждено · {{count}} блоков назад',
+  qbtc_claim_pending_confirmation: 'Ожидается подтверждение',
+  qbtc_claim_all: 'Забрать все',
+  qbtc_claim_count: 'Заявка {{count}} на {{total}}',
+  raw_message: 'Исходное сообщение',
+  token: 'Токен',
+  token_approval: 'Подтверждение токена',
 }

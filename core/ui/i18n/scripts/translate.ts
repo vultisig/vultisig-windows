@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { dirname } from 'node:path'
@@ -10,6 +11,10 @@ import { Language, languages, primaryLanguage } from '../Language'
 import { translations } from '../translations'
 import { findI18nSyntaxIssues } from '../utils/i18nSyntax'
 import { translateTexts } from '../utils/translateTexts'
+import {
+  flattenTranslationRecord,
+  readTranslationRecordFromSource,
+} from '../utils/translationRecords'
 
 type RecursiveRecord = {
   [key: string]: string | RecursiveRecord
@@ -20,21 +25,68 @@ type ProcessTranslationsInput = {
   targetCopy: RecursiveRecord
   fromLang: Language
   toLang: Language
+  changedSourceKeys: Set<string>
+}
+
+type GetChangedSourceKeysInput = {
+  sourceCopy: RecursiveRecord
 }
 
 const copyDirectory = '../locales'
 
 const currentDirname = dirname(fileURLToPath(import.meta.url))
 const workspaceRoot = path.resolve(currentDirname, '../../../..')
+const sourceLocaleFilePath = 'core/ui/i18n/locales/en.ts'
+const sourceChangeBaseRef = process.env.I18N_TRANSLATE_BASE_REF ?? 'HEAD'
 
 const isRecursiveRecord = (value: unknown): value is RecursiveRecord =>
   typeof value === 'object' && value !== null
+
+const readGitFile = (filePath: string): string | undefined => {
+  try {
+    return execFileSync('git', ['show', `${sourceChangeBaseRef}:${filePath}`], {
+      cwd: workspaceRoot,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+  } catch {
+    return undefined
+  }
+}
+
+const getChangedSourceKeys = ({
+  sourceCopy,
+}: GetChangedSourceKeysInput): Set<string> => {
+  const previousSource = readGitFile(sourceLocaleFilePath)
+  const changedKeys = new Set<string>()
+
+  if (!previousSource) {
+    return changedKeys
+  }
+
+  const previousCopy = readTranslationRecordFromSource({
+    source: previousSource,
+    exportName: primaryLanguage,
+    fileName: sourceLocaleFilePath,
+  })
+  const previousValues = flattenTranslationRecord({ record: previousCopy })
+  const currentValues = flattenTranslationRecord({ record: sourceCopy })
+
+  currentValues.forEach((value, key) => {
+    if (previousValues.get(key) !== value) {
+      changedKeys.add(key)
+    }
+  })
+
+  return changedKeys
+}
 
 const processTranslations = async ({
   sourceCopy,
   targetCopy,
   fromLang,
   toLang,
+  changedSourceKeys,
 }: ProcessTranslationsInput): Promise<RecursiveRecord> => {
   const result: RecursiveRecord = { ...targetCopy }
   const pendingTexts: string[] = []
@@ -53,12 +105,14 @@ const processTranslations = async ({
 
     Object.entries(source).forEach(([key, value]) => {
       const targetValue = target[key]
+      const keyPath = [...currentPath, key].join('.')
 
       if (typeof value === 'string') {
         if (
+          changedSourceKeys.has(keyPath) ||
           typeof targetValue !== 'string' ||
           findI18nSyntaxIssues({
-            key: [...currentPath, key].join('.'),
+            key: keyPath,
             locale: toLang,
             source: value,
             target: targetValue,
@@ -87,7 +141,7 @@ const processTranslations = async ({
 
   if (pendingTexts.length > 0) {
     console.log(
-      `Found ${pendingTexts.length} missing or invalid translations for ${toLang}`
+      `Found ${pendingTexts.length} missing, invalid, or outdated translations for ${toLang}`
     )
     const translatedTexts = await translateTexts({
       texts: pendingTexts,
@@ -147,6 +201,13 @@ const sync = async () => {
   process.env.GOOGLE_APPLICATION_CREDENTIALS = credentialsPath
 
   const sourceCopy = translations[primaryLanguage]
+  const changedSourceKeys = getChangedSourceKeys({ sourceCopy })
+
+  if (changedSourceKeys.size > 0) {
+    console.log(
+      `Found ${changedSourceKeys.size} changed English source string(s) since ${sourceChangeBaseRef}`
+    )
+  }
 
   await Promise.all(
     without(languages, primaryLanguage).map(async language => {
@@ -158,6 +219,7 @@ const sync = async () => {
         targetCopy: oldCopy,
         fromLang: primaryLanguage,
         toLang: language,
+        changedSourceKeys,
       })
 
       const newSerialized = JSON.stringify(result, null, 2)

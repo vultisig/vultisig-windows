@@ -57,6 +57,8 @@ export const ChainItem = ({
 
   return (
     <ChainCard
+      data-testid={`chain-item-${coin.chain}`}
+      data-selected={isSelected ? 'true' : 'false'}
       onClick={handleClick}
       isSelected={isSelected}
       isLoading={isLoading}

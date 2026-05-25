@@ -37,13 +37,14 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { vult } from '@vultisig/core-chain/coin/knownTokens'
-import { productWebsiteUrl } from '@vultisig/core-config'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import {
+  currentProductWebsiteUrl,
   discordReferralUrl,
+  shouldShowVultisigCommunity,
   vultisigEducationUrl,
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
@@ -242,48 +243,50 @@ export const SettingsPage: FC<Props> = props => {
               )}
             />
           </SettingsSection>
-          <SettingsSection title={t('vultisig_community')}>
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <TwitterIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(vultisigTwitterUrl)}
-              title={t('twitter')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <DiscordIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(discordReferralUrl)}
-              title={t('discord')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <GithubIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(vultisigWindowsGithubUrl)}
-              title={t('github')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <GlobusIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(productWebsiteUrl)}
-              title={t('vultisig_website')}
-              showArrow
-            />
-          </SettingsSection>
+          {shouldShowVultisigCommunity && (
+            <SettingsSection title={t('vultisig_community')}>
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <TwitterIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(vultisigTwitterUrl)}
+                title={t('twitter')}
+                showArrow
+              />
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <DiscordIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(discordReferralUrl)}
+                title={t('discord')}
+                showArrow
+              />
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <GithubIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(vultisigWindowsGithubUrl)}
+                title={t('github')}
+                showArrow
+              />
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <GlobusIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(currentProductWebsiteUrl)}
+                title={t('vultisig_website')}
+                showArrow
+              />
+            </SettingsSection>
+          )}
           <SettingsSection title={t('legal')}>
             <ListItem
               icon={
