@@ -46,10 +46,15 @@ import { TxStatusTracker } from '../TxStatusTracker'
 import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
-const getSwapFeeFromQuote = (
-  swapQuote: SwapQuote,
+type GetSwapFeeFromQuoteInput = {
+  swapQuote: SwapQuote
   toCoinKey: CoinKey
-): SwapFee | undefined =>
+}
+
+const getSwapFeeFromQuote = ({
+  swapQuote,
+  toCoinKey,
+}: GetSwapFeeFromQuoteInput): SwapFee | undefined =>
   matchRecordUnion<SwapQuoteResult, SwapFee | undefined>(swapQuote.quote, {
     native: ({ fees }) => ({
       ...toCoinKey,
@@ -96,7 +101,10 @@ export const SwapKeysignTxOverview = ({
   const swapFee =
     swapFeeFromPayload ??
     (swapQuote && toCoin
-      ? getSwapFeeFromQuote(swapQuote, { chain: toCoin.chain, id: toCoin.id })
+      ? getSwapFeeFromQuote({
+          swapQuote,
+          toCoinKey: { chain: toCoin.chain, id: toCoin.id },
+        })
       : undefined)
 
   const formattedFromAmount = useMemo(() => {
