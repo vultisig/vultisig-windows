@@ -42,15 +42,11 @@ export const es = {
   advanced: 'Avanzado',
   advanced_gas_fee: 'Tarifa de gas anticipada',
   all_vaults: 'Todas las bóvedas',
-  allowance: 'Prestación',
-  allowance_amount: 'Monto de la asignación',
-  allowance_spender: 'Gastador de asignaciones',
   amount: 'Cantidad',
   amount_must_be_non_negative: 'La cantidad no puede ser negativa.',
   amount_must_be_positive: 'La cantidad debe ser positiva.',
   amount_required: 'Se requiere cantidad',
   amount_to_unstake: 'Cantidad a deshacer',
-  and: 'y',
   app_lock_passcode: 'Código de acceso de bloqueo de aplicaciones',
   app_lock_passcode_description:
     'Agregue una capa adicional de seguridad al requerir un código de acceso para desbloquear la aplicación.',
@@ -66,20 +62,10 @@ export const es = {
   at_least_one_device: 'Al menos un dispositivo',
   at_least_one_device_subtitle:
     'Cualquier dispositivo que pueda ejecutar Vultisig funcionará.',
-  auto: 'auto',
-  auto_compound_into_label: 'Compuesto automático en {{ticker}}',
   available: 'Disponible',
   back: 'Atrás',
-  back_up_now: 'Realizar copia de seguridad ahora',
   before_you_start: 'Antes de empezar...',
   backup: 'Respaldo',
-  backupGuide: 'Guía de copias de seguridad',
-  backupVault: 'Bóveda de respaldo',
-  backupInCloudTitle: 'Cifrado con su contraseña de bóveda',
-  backupInCloudDescription:
-    'Realice una copia de seguridad de su recurso compartido de bóveda en línea con la misma contraseña que creó anteriormente. Se recomienda el almacenamiento en línea, ya que los recursos compartidos de bóveda seguros están diseñados para ello.',
-  backupShare: 'Compartir bóveda de respaldo',
-  backupShare2: 'Copia de seguridad compartida 2',
   backupsTitle:
     '<highlight>Copias de seguridad,</highlight> tu nuevo método de recuperación',
   backupsDescription:
@@ -90,13 +76,10 @@ export const es = {
   storeBackupsSeparately: 'Almacenar copias de seguridad por separado',
   storeBackupsSeparatelyDescription:
     'Guarda cada copia de seguridad en un lugar diferente. Si una se ve comprometida, tus fondos estarán seguros.',
-  backupShareWarning: 'Esta es solo una parte de su bóveda',
-  backupShareWarningRest: ', repita este proceso para los demás dispositivos.',
   backup_description:
     'Realice una copia de seguridad de su Vault Share en una ubicación preferida',
   backup_email_description:
     'Ingresa el correo electrónico para recibir la bóveda compartida.',
-  backup_now: 'Copia de seguridad ahora',
   backup_password: 'Contraseña de respaldo',
   backup_password_description:
     'Introduzca la contraseña que estableció al crear esta Bóveda.',
@@ -162,9 +145,7 @@ export const es = {
   change_passcode: 'Cambiar contraseña',
   change_your_friends_referral:
     'Cambiar amigos Código de referencia utilizado para intercambios',
-  check_email: 'Revisar el correo electrónico',
   check_for_update: 'Comprobar actualizaciones',
-  chooseSetup: 'Seleccione Configuración',
   choose_a_password: 'Elije una contraseña',
   choose_a_password_description:
     'Si desea una capa adicional de seguridad, elija una contraseña. <b>La contraseña no se puede recuperar.</b> <info />',
@@ -198,20 +179,14 @@ export const es = {
   adding_coin_to_vault: 'Añadiendo moneda a la bóveda...',
   defi_token_required_description:
     'Añade {{ticker}} desde Administrar tokens para hacer stake, unstake o bond.',
-  defi_add_chain_to_vault_title: 'Primero añade la cadena a tu bóveda',
-  defi_add_chain_to_vault_description:
-    'Activa una cadena en tu bóveda para gestionar aquí sus posiciones DeFi.',
   defi_add: 'Add',
   defi_remove: 'Remove',
   defi_lp_pool_title: 'Pool {{pool}}',
   position_label: 'Posición',
   defi_lp_position_form_title:
     '{{action, select, add {Agregar liquidez} remove {Retirar liquidez} other {Administrar liquidez}}}',
-  defi_lp_position_form_description:
-    'La gestión de liquidez para {{position}} estará disponible pronto.',
   manage_tokens: 'Administrar tokens',
   collected_rewards: 'Recompensas acumuladas',
-  coming_soon: 'Muy pronto',
   complete: 'Completo',
   congrats: '¡Felicitaciones!',
   confirm: 'Confirmar',
@@ -229,14 +204,10 @@ export const es = {
   continue_anyway: 'Continúa de todos modos',
   continue_in_new_window: 'Continuar en la ventana abierta',
   contract_execution: 'Ejecución del contrato',
-  contract_interaction: 'Interacción contractual',
   copy_address: 'Copiar dirección',
-  create: 'Crear',
   create_folder: 'Crear carpeta',
   create_new_vault: 'Crear nueva bóveda',
   create_vault: 'Crear bóveda',
-  create_own_referral:
-    'Crea tu propio código y gana un <blue>20%</blue> en intercambios referidos',
   create_referral_form: 'Crear referencia',
   create_referral_title: 'Crear referencia',
   create_referral: 'Crear referencia',
@@ -296,15 +267,12 @@ export const es = {
   discovering_mediator:
     'Descubriendo el servicio de mediación, por favor espere...',
   done: 'Hecho',
-  downloadVultisig:
-    "Descargue Vultisig en sus otros dispositivos y seleccione 'Escanear código QR'",
   edit_address: 'Editar dirección',
   edit_friends_referral: 'Editar recomendación de amistad',
   edit_referral: 'Editar referencia',
   remove_friends_referral: 'Eliminar referido',
   edit_vaults: 'Editar bóvedas',
   email: 'Correo electrónico',
-  email_backup: 'Ingresa tu email para recibir tu backup',
   email_placeholder: 'Introduzca su dirección de correo electrónico',
   email_required: 'Se requiere correo electrónico.',
   evm_chains: 'Cadenas EVM',
@@ -340,7 +308,6 @@ export const es = {
   enter_your_password: 'Ingrese su contraseña',
   entity_not_scanned: '{{entity}} no escaneado por <provider></provider>',
   entity_scanned: '{{entity}} escaneada por <provider></provider>',
-  error: 'ERROR',
   est_network_fee: 'Tarifa de red estimada',
   expand_view: 'Ampliar vista',
   open_as_side_panel: 'Abrir como panel lateral',
@@ -355,8 +322,6 @@ export const es = {
   desktop_push_notification_disable_failed:
     'No se pudieron desactivar las notificaciones push. Inténtalo de nuevo.',
   expiration_date: 'Fecha de expiración',
-  expiration_must_extend_by_exactly_one_year:
-    'La expiración solo se puede extender por exactamente 1 año',
   expiration_must_be_greater: 'La expiración debe ser mayor que {{value}}',
   expires_on: 'Caduca el',
   extension_vault_import_restriction:
@@ -417,90 +382,35 @@ export const es = {
     'Vultisig almacena y gestiona activos digitales de forma segura. Todas las acciones, como el envío o el intercambio, requieren el umbral de dispositivos para firmar transacciones.',
   faq_vultisig_make_money_title: '¿Cómo se utiliza Vultisig?',
   fast: 'Rápido',
-  fastVault: 'Bóveda rápida',
-  secureVault: 'Bóveda segura',
   fast_vault_session_conflict: 'Discrepancia en la parte de la bóveda',
   fast_vault_session_conflict_description:
     'Tu parte local de la bóveda no coincide con la almacenada en Vultiserver. Esto puede ocurrir si la misma frase semilla fue importada en otro dispositivo.',
   fast_vault_password_start_keysign_description:
     'Confirme la transacción ingresando la contraseña de su recurso compartido del servidor.',
   fastVaultSetup: {
-    addOptionalHint: 'Añadir una pista opcional',
-    addAnOptionalHint: 'Añadir una pista opcional',
     backup: {
-      backThemUpNow: 'respaldalos ahora',
-      checkEmail: 'Revisa tu correo electrónico para verificar',
       codeInfo:
         'Este código confirmará que has recibido tu recurso compartido de bóveda 1 por correo electrónico.',
-      completeCustody: '¡Se lo enviamos para su completa custodia!',
       enterCode:
         'Ingrese el código de 4 dígitos que le enviamos por correo electrónico',
-      heldByServer: 'retenido por el servidor',
-      online: 'en línea',
-      part1: 'La acción 1 de las acciones de la bóveda será',
-      securely: 'de forma segura, preferiblemente',
-      shareSecurely: 'para garantizar el acceso, preferiblemente',
-      vaultShares: 'Su bóveda contiene 2 acciones,',
       sentTo: 'Enviado a {{email}}.',
       setNewStandard: 'Estás listo para usar un nuevo estándar de billetera.',
       changeEmailAndRestartKeygen: 'Cambiar correo y reiniciar keygen',
       wellDone: 'Bien hecho',
     },
     connectingWithServer: 'Conectando con el servidor...',
-    createVault: {
-      availablePlatforms: {
-        descriptionOne: 'disponible',
-        descriptionTwo: 'en Android, iOS, macOS y Windows',
-      },
-      crossChain: {
-        descriptionOne: 'Cadena cruzada.',
-        descriptionTwo: 'Intercambia tus tokens favoritos en una sola bóveda',
-      },
-      multiFactor: {
-        descriptionOne: 'Seguridad multifactor,',
-        descriptionTwo: 'Eliminando el punto único de fallo',
-      },
-      seedlessWallet: {
-        descriptionOne: 'una billetera sin semillas,',
-        descriptionTwo: 'No te dejes estafar otra vez',
-      },
-      selfCustodial: {
-        descriptionOne: 'Autocustodia,',
-        descriptionTwo: 'Dando control total sobre sus activos',
-      },
-    },
     emailSetupTitle:
       'Este correo se utiliza para respaldo en la nube y no se comparte con terceros',
     enterEmail: 'Introduce tu correo electrónico',
-    enterHint: 'Introducir pista',
-    hintDescription: 'Esto se mostrará en caso de que olvides tu contraseña',
-    hintEmpty: 'La pista está vacía',
     passwordCannotBeRecovered:
       'La contraseña no se puede restablecer ni recuperar',
     passwordTooltip:
       'Esto ocurre porque la contraseña se usa para cifrar localmente el archivo de copia de seguridad, de forma similar a como se cifra un disco duro. En el siguiente paso, puede agregar una pista.',
-    preparingVault: 'Preparando la bóveda',
     referralModalTitle: 'Código de referencia',
     referralModalSubtitle:
       'Introduce tu código de referencia aquí. <b>¡Disfruta de un 10% de descuento en cada transacción!</b>',
     applyReferral: 'Solicitar referencia',
     referralAdded: 'Referencia añadida',
-    summary: {
-      agreementText: 'He leído y entiendo qué hacer.',
-      ctaText: 'Crea tu bóveda',
-      pillText: 'Acciones de bóveda',
-      select_preferred_chains: 'Selecciona tus cadenas preferidas',
-      start_using_vault: 'Comience a usar su bóveda',
-      summaryItemFourTitle:
-        'No guarde su recurso compartido de bóveda en el propio dispositivo, en caso de pérdida o daño.',
-      summaryItemOneTitle:
-        'Realice una copia de seguridad de cada recurso compartido de bóveda por separado',
-      summaryItemThreeTitle:
-        'Todas las acciones de bóveda garantizan un acceso seguro a sus fondos',
-      summaryItemTwoTitle:
-        'Mantenga las acciones de la bóveda en diferentes ubicaciones',
-      title: 'Resumen rápido',
-    },
     takeMinute: 'Esto sólo debería tomar un segundo.',
   },
   fast_sign: 'Señal rápida',
@@ -519,7 +429,6 @@ export const es = {
   follow_banner_subtitle: 'Vultisig construye contigo.',
   follow_banner_title: 'Síguenos en X',
   from: 'De',
-  from_asset: 'De Activo',
   freeze: 'Freeze',
   function_arguments: 'Argumentos de función',
   function_signature: 'Firma de función',
@@ -530,8 +439,6 @@ export const es = {
   gas_limit_tooltip_content:
     'El límite máximo de gasolina que pagará. Puede aumentarse si el límite de gasolina no es suficiente para enviar transacciones.',
   general: 'General',
-  generating_ecdsa_key: 'Generación de clave ECDSA',
-  generating_eddsa_key: 'Generación de clave EdDSA',
   get_started: 'Empezar',
   github: 'Github',
   go_back: 'Volver',
@@ -563,7 +470,6 @@ export const es = {
     'Memo de transacción de IBC no compatible',
   ibc_transfer: 'Transferencia de IBC',
   id: 'IDENTIFICACIÓN',
-  i_understand: 'Entiendo',
   i_understand_save_backup: 'Entiendo cómo guardar esta copia de seguridad.',
   import: 'Importar',
   import_key: 'Importar clave',
@@ -614,40 +520,6 @@ export const es = {
   incorrect_passcode: 'Código de acceso incorrecto.',
   invalid_passcode: 'Código de acceso no válido',
   join_keygen: 'Únase a Keygen',
-  join_keygen_slider1_note1: 'Vultisig es',
-  join_keygen_slider1_note2: 'totalmente de código abierto',
-  join_keygen_slider1_note3:
-    'Esto significa que cualquiera puede revisar el código, lo que garantiza total transparencia y confiabilidad.',
-  join_keygen_slider1_title: '¿Sabías?',
-  join_keygen_slider2_note1: 'No se necesitan frases iniciales',
-  join_keygen_slider2_note2:
-    'Vultisig utiliza recursos compartidos de bóveda fáciles de administrar, lo que lo hace más simple y seguro que las billeteras tradicionales.',
-  join_keygen_slider2_title: 'Consejo del día',
-  join_keygen_slider3_note1: 'Vultisig admite más de',
-  join_keygen_slider3_note2: '10.000 tokens',
-  join_keygen_slider3_note3:
-    'Ya sea que uses Bitcoin, Ethereum o un token menos conocido, Vultisig lo tiene cubierto.',
-  join_keygen_slider3_title: 'Dato curioso',
-  join_keygen_slider4_note1: 'Tu privacidad importa. Vultisig',
-  join_keygen_slider4_note2: 'no rastrea',
-  join_keygen_slider4_note3:
-    'sus actividades o requerir algún registro, garantizando su anonimato y privacidad.',
-  join_keygen_slider4_title: 'Perspectiva de seguridad',
-  join_keygen_slider5_note1: 'Auditado y seguro. Vultisig se somete a',
-  join_keygen_slider5_note2: 'auditorías de seguridad periódicas',
-  join_keygen_slider5_note3:
-    'para garantizar que sus activos estén protegidos contra cualquier amenaza.',
-  join_keygen_slider5_title: 'Charla técnica',
-  join_keygen_slider6_note1:
-    'Únase a miles. Miles de usuarios confían sus activos digitales a Vultisig. ¡Únase a nosotros!',
-  join_keygen_slider6_note2: 'comunidad segura y en crecimiento',
-  join_keygen_slider6_title: 'Rincón de la comunidad',
-  join_keygen_slider7_note1:
-    'Compatibilidad con múltiples dispositivos. Accede a tu bóveda de Vultisig.',
-  join_keygen_slider7_note2: 'desde múltiples dispositivos',
-  join_keygen_slider7_note3:
-    'Mejorando la flexibilidad sin comprometer la seguridad.',
-  join_keygen_slider7_title: 'Características destacadas',
   join_keysign: 'Únase a Keysign',
   join_transaction: 'Unirse a la transacción',
   foreground_notification_generic: 'Transacción pendiente de aprobación',
@@ -655,7 +527,6 @@ export const es = {
   foreground_notification_swap: 'Intercambiar {{from}} → {{to}}',
   join_reshare: 'Únete a Reshare',
   join_session: 'Unirse a la sesión',
-  join_upgrade: 'Únase a Upgrade',
   joining_keygen: 'Unirse a Keygen',
   joining_keysign: 'Unirse a Keysign',
   joining_session: 'Uniéndose a la sesión...',
@@ -663,11 +534,8 @@ export const es = {
   keygen_devices_requirements_info:
     'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recommended}}, {{min}} es suficiente.',
   keygen_failed: 'Error al generar la clave. Inténtalo de nuevo.',
-  keygen_protocol_done: 'Hecho',
-  keygen_protocol_running: 'Correr',
   keys: 'Llaves',
   keysign: 'Signo de clave',
-  keysign_request: 'Solicitud de clave',
   label: 'Etiqueta',
   language: 'Idioma',
   learnMore: 'Más información',
@@ -676,7 +544,6 @@ export const es = {
   legal: 'Legal',
   link_copied: 'Enlace copiado al portapapeles',
   loading: 'Cargando...',
-  local: 'Local',
   localMode: 'Estás en modo local',
   lock_time: 'Tiempo de bloqueo',
   lock_vultisig_automatically_after:
@@ -724,9 +591,6 @@ export const es = {
   new: 'Nuevo',
   next: 'Próximo',
   new_passcode: 'Nueva contraseña',
-  new_vault_setup: 'Nueva configuración de bóveda',
-  new_vault_setup_disclaimer:
-    'Su configuración cambió, haga una nueva copia de seguridad.',
   no_active_chains_found: 'No se encontraron cadenas activas',
   no_active_chains_found_description:
     'No detectamos ningún activo en esta frase semilla.',
@@ -769,8 +633,6 @@ export const es = {
     'Tus bóvedas aparecerán aquí. Empieza creando una o importando una existente.',
   node_address: 'Dirección de nodo',
   normal: 'Normal',
-  not_enough_asset_to_cover_gas_fees:
-    'No hay suficientes {{asset}} para cubrir las tarifas del gas',
   not_enough_funds: 'No hay fondos suficientes',
   nothing_to_add: 'Nada que añadir',
   nothing_to_add_hint:
@@ -778,7 +640,6 @@ export const es = {
   of: 'de',
   off: 'Apagado',
   on: 'En',
-  on_chain: 'en {{chain}}',
   onboarding_description_1:
     'Vultisig es una bóveda de criptomonedas segura y multidispositivo, compatible con las principales cadenas de bloques y con más de 10 000 tokens. Vultisig es totalmente autocustodiable.',
   onboarding_description_2:
@@ -787,18 +648,14 @@ export const es = {
     'Vultisig es una aplicación multidispositivo nativa. Requiere al menos dos dispositivos para crear una bóveda segura: uno de inicio y otro de emparejamiento.',
   onboarding_description_4:
     'Vultisig es una billetera sin frases semilla. En su lugar, utiliza recursos compartidos de bóveda fáciles de administrar. Cada dispositivo tiene su propio recurso compartido de bóveda que requiere una copia de seguridad independiente.',
-  onboarding_greeting: 'Dile adiós a las <g>frases semilla</g>',
   operator_fee: 'Tarifa del operador',
   basis_points: 'Puntos básicos',
-  optional: 'opcional',
   optionalDevice: 'Dispositivo opcional',
-  or: 'o',
   other: 'Otro',
   overview: 'Descripción general',
   part: 'parte',
   passcodes_do_not_match: 'Los códigos de acceso no coinciden',
   password: 'Contraseña',
-  password_backup: 'Protege tu bóveda y firma rápidamente.',
   password_do_not_match: 'Las contraseñas no coinciden',
   password_pattern_error:
     'La contraseña debe tener entre {{min}} y {{max}} caracteres',
@@ -809,7 +666,6 @@ export const es = {
   percentage: 'Porcentaje',
   percentage_limit: 'El porcentaje debe ser de 0 a 100',
   percentage_to_unstake: 'Porcentaje para dejar de apostar',
-  permissions: 'Permisos',
   pick_referral_code: 'Elija un código de referencia',
   platinum: 'Platino',
   plugin_info: 'Información de la aplicación',
@@ -823,7 +679,6 @@ export const es = {
   portfolio_balance: 'Saldo de la cartera',
   positions: 'Posiciones',
   powered_by: 'Desarrollado por <provider></provider>',
-  prepareVault: 'Preparando la bóveda...',
   price: 'Precio',
   price_impact_average: 'Promedio',
   price_impact_good: 'Bien',
@@ -850,8 +705,6 @@ export const es = {
   qbtc_claim_success_title: 'Reclamación exitosa',
   qbtc_claim_utxos_claimed: 'UTXOs reclamados',
   qbtc_claim_utxos_skipped: 'UTXO omitidos',
-  qbtc_claim_tx_hash: 'Hash de transacción',
-  qbtc_claim_copy_tx_hash: 'Copiar hash de transacción',
   qbtc_claim_done: 'Hecho',
   qbtc_claim_failed:
     'La reclamación ha fallado. Por favor, inténtelo de nuevo.',
@@ -859,9 +712,7 @@ export const es = {
     'Actualmente, para reclamar se requiere Fast Vault. La compatibilidad con Secure Vault estará disponible próximamente.',
   qbtc_claim_password_description:
     'Ingrese su contraseña de Fast Vault para firmar conjuntamente la transacción de reclamación.',
-  qrCode: 'código QR',
   receive: 'Recibir',
-  receivedShare1Email: 'Vault Share 1 recibido por correo',
   redeem: 'Canjear',
   reenter_password: 'Escriba la contraseña otra vez',
   recover_vault_or_convert_seedphrase:
@@ -904,7 +755,6 @@ export const es = {
       title: 'Utilice el código de referencia',
     },
   },
-  remove: 'Eliminar',
   remove_token: 'Eliminar token',
   rename: 'Rebautizar',
   rename_vault: 'Cambiar el nombre de la bóveda',
@@ -948,14 +798,9 @@ export const es = {
   save_swap_fees_with_referral:
     'Ahorre <blue>10%</blue> en intercambios - Agregar una referencia',
   saving_vault: 'Salvando la bóveda...',
-  scanThe: 'Escanea el',
   scan_qr: 'Escanear QR',
   scan_with_device_index: 'Escanear con el dispositivo {{index}}',
   scan_with_device_name: 'Escanear con {{name}}',
-  scan_with_devices:
-    'Escanee con dispositivos para unirse a la generación de bóveda',
-  scan_with_devices_to_sign:
-    'Escanee con dispositivos para participar en la firma de la transacción',
   scanning: 'exploración...',
   scanning_for_chains: 'Buscando cadenas...',
   scanning_for_chains_subtitle:
@@ -963,20 +808,12 @@ export const es = {
   search: 'Buscar',
   search_field_placeholder: 'Buscar',
   secure: 'Seguro',
-  secureVaultSetup: {
-    backup: {
-      eachDeviceNeedsBackup:
-        'Cada dispositivo necesita su propia copia de seguridad.',
-      shares: 'Su bóveda contiene {{shares}} acciones',
-    },
-  },
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: 'Añade al menos {{count}} dispositivo más',
     addAtLeastMoreDevices_other: 'Añade al menos {{count}} dispositivos más',
     devicePosition: '{{current}} de {{total}}',
     localModeWaiting: 'Modo local, esperando dispositivos',
     notWantToUseLocal: '¿No quieres usar modo local? Vuelve atrás.',
-    switchBack: 'Volver atrás',
     useStandardMode: 'Usar modo estándar',
     useLocalMode: 'Usar modo local',
     waitingForDeviceToJoin: 'Esperando a que se una un dispositivo',
@@ -1020,7 +857,6 @@ export const es = {
     'Seleccionar bóvedas para realizar copias de seguridad',
   select_vaults_to_backup_description:
     'Elija si desea realizar una copia de seguridad solo de esta bóveda o de todas las bóvedas de su aplicación.',
-  selected: 'seleccionado',
   send: 'Enviar',
   sends: 'Envía',
   send_amount_exceeds_balance: 'El monto excede el saldo',
@@ -1041,7 +877,6 @@ export const es = {
   set_passcode: 'Establecer contraseña',
   settings: 'Ajustes',
   share: 'Compartir',
-  share2StoredByYou: 'Vault Share 2 almacenado por usted',
   share_app: 'Comparte la aplicación',
   share_description:
     'Comparte tu código de referencia único para invitar a tus amigos. Ellos recibirán un descuento y, cuanto más operen, más ganarás, directamente en tu billetera.',
@@ -1065,7 +900,6 @@ export const es = {
   signing_address: 'Dirección de firma',
   signing_error: 'Error de firma. Inténtalo de nuevo.',
   signing_method: 'Método de firma',
-  signing_transaction: 'Transacción de firma',
   silver: 'Plata',
   site: 'Sitio',
   site_has_risk: 'Sitio malicioso detectado por <provider></provider>',
@@ -1087,11 +921,8 @@ export const es = {
   spender: 'Gastador',
   operator: 'Operador',
   contract: 'Contrato',
-  start: 'Comenzar',
   start_reshare: 'Empezar a compartir',
   status: 'Estado',
-  success: 'Éxito',
-  successfully: 'Exitosamente',
   support: 'Apoyo',
   swap: 'Intercambio',
   swaps: 'Intercambios',
@@ -1111,11 +942,9 @@ export const es = {
   this_device: 'Este dispositivo',
   this_device_suffix: '(este dispositivo)',
   this_vault_only: 'Sólo esta bóveda',
-  this_vault_share: 'Este dispositivo comparte la bóveda',
   thorchain_address: 'Dirección de THORChain',
   thorchain_address_required_for_referrals:
     'Necesita tener una dirección THORChain para utilizar el programa de referencia',
-  title: 'Título',
   tns_alnum_only:
     'El código de referencia debe contener únicamente caracteres alfanuméricos',
   tns_max_4_chars: 'El código de referencia no debe tener más de 4 caracteres',
@@ -1125,11 +954,9 @@ export const es = {
   to: 'A',
   to_min_payout: 'pago mín.',
   today: 'Hoy',
-  to_asset: 'Al activo',
   token_not_found_description:
     'Posibles razones: contrato incorrecto, cadena no compatible o token eliminado de los registros.',
   token_not_found_invalid: 'Dirección de contrato no válida',
-  tokens: 'fichas',
   total_fee: 'Tarifas totales',
   track: 'Pista',
   transaction: 'Transacción',
@@ -1139,8 +966,6 @@ export const es = {
   transaction_failed: 'Transacción<error> fallido</error>',
   transaction_pending: 'Transacción pendiente...',
   transaction_successful: 'Transacción <g> exitosa </g>',
-  transaction_could_not_be_parsed:
-    'No se pudo analizar esta transacción. Los datos sin procesar de la transacción se muestran a continuación.',
   raw_transaction_data: 'Datos de transacciones sin procesar',
   transaction_history: 'Historial de transacciones',
   transaction_instructions_summary: 'Resumen de instrucciones de transacción',
@@ -1157,13 +982,11 @@ export const es = {
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Ready to claim',
   tron_unfreeze_button: 'Unfreeze',
-  tron_your_holdings: 'Your holdings',
   tron_bandwidth_and_energy: 'Ancho de banda y energía',
   tron_bandwidth_description:
     'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
   tron_energy_description:
     'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
-  tron_got_it: 'Got It',
   try_again: 'Intentar otra vez',
   turn_your_vault_into_rewards_machine:
     'Convierte tu bóveda en una máquina de recompensas. Crea tu referido ahora y empieza a ganar.',
@@ -1217,8 +1040,6 @@ export const es = {
     update_is_available: 'La actualización está disponible',
     version: 'Versión {{latestVersion}}',
   },
-  vaultCreated: 'Bóveda creada',
-  vaultOverview: 'Descripción general de la bóveda',
   vault_already_exists: 'La bóveda "{{name}}" ya existe',
   vault_backup_page_password_info:
     'Nunca almacene recursos compartidos de Vault de diferentes dispositivos en la misma ubicación',
@@ -1267,7 +1088,6 @@ export const es = {
   vault_ready_description:
     '¡Todo listo! Mantienes el control de cada transacción.',
   vault_ready_to_use: 'Su bóveda está lista para usarse.',
-  vault_rename_page_header_title: 'Editar el nombre de su bóveda',
   vault_rename_page_name_error:
     'El nombre de la bóveda debe tener entre 1 y 50 caracteres',
   vault_selected: 'Bóveda seleccionada',
@@ -1289,22 +1109,6 @@ export const es = {
     'El título debe tener como máximo 50 caracteres.',
   vault_settings_address_book_title_min_length_error:
     'El título debe tener al menos 1 carácter.',
-  vault_setup_prop: {
-    fast: {
-      prop_0: 'Solo se necesita 1 dispositivo',
-      prop_1: 'Guarde fondos más pequeños para uso diario',
-      prop_2: 'Vultiserver firma instantáneamente',
-      purpose: 'Úselo como una "billetera caliente"',
-      title: 'Configuración rápida',
-    },
-    secure: {
-      prop_0: 'Máxima seguridad con múltiples dispositivos',
-      prop_1: 'Siempre accesible con copias de seguridad del dispositivo',
-      prop_2: 'Asegure cualquier cantidad de activos',
-      purpose: 'Úselo como una "billetera fría"',
-      title: 'Máxima seguridad',
-    },
-  },
   vault_share_banner:
     'Este código QR le permite compartir una versión de solo lectura de su bóveda',
   vault_type_does_not_match: 'El tipo de bóveda no coincide',
@@ -1319,7 +1123,6 @@ export const es = {
   via: 'a través de',
   view_on_explorer: 'Ver en Explorer',
   vote: 'Votar',
-  vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Comunidad Vultisig',
   vultisig_education: 'Educación Vultisig',
@@ -1330,11 +1133,7 @@ export const es = {
     'Su bóveda comenzará a generarse desde el momento en que finalice la configuración de su bóveda en su dispositivo principal',
   waiting_for_keygen_start: 'Esperando que comience la generación de claves...',
   waiting_for_keysign_start: 'Esperando que comience el proceso de firma...',
-  waiting_for_reshare_start:
-    'Esperando que comience a compartirse nuevamente...',
-  waiting_for_upgrade_start: 'Esperando que comience la actualización...',
   wallet: 'Billetera',
-  while_you_wait_vultisig_is: 'Mientras esperas, Vultisig está...',
   withdraw: 'Retirar',
   withdraw_ruji_rewards: 'Retirar recompensas RUJI',
   add_cacao_pool: 'Agregar al pool de CACAO',
@@ -1343,13 +1142,8 @@ export const es = {
   remove_thor_lp: 'Eliminar THORChain LP',
   pool: 'Pool',
   paired_address: 'Dirección emparejada',
-  lp_dust_amount_error:
-    'Saldo de runas insuficiente. Se requiere al menos {{amount}} runas como polvo para retirar LP.',
-  lp_withdraw_percentage: 'Porcentaje de retiro',
   wrong_vault_try_again: 'Dispositivo de emparejamiento o bóveda incorrecto.',
   yesterday: 'Ayer',
-  you_send: 'Tú envías',
-  you_receive: 'Usted recibe',
   you_are_bonding: 'Estás haciendo bond',
   you_are_unbonding: 'Estás haciendo unbond',
   you_are_sending: 'Estás enviando',
@@ -1357,7 +1151,6 @@ export const es = {
   you_are_unstaking: 'Estás haciendo unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
-  yourVaultShares: 'Su bóveda tiene {{shares}} acciones de bóveda',
   vaultSetupOverview: {
     title: 'La configuración de su bóveda',
     fast: {
@@ -1422,10 +1215,8 @@ export const es = {
   account: 'Cuenta',
   session_history: 'Historial de la sesión',
   vultibot: 'VultiBot',
-  vultibot_welcome: 'Hola, soy VultiBot',
   start_new_chat: 'Iniciar un nuevo chat',
   new_chat: 'Nuevo chat',
-  messages: 'mensajes',
   failed_to_load_session_history:
     'No se pudo cargar el historial de la sesión.',
   agent_history_load_error_description:
@@ -1433,8 +1224,6 @@ export const es = {
   agent_history_empty_title: 'Aún no hay chats',
   agent_history_empty_description:
     'Inicia un nuevo chat y tus conversaciones recientes aparecerán aquí.',
-  vultibot_description:
-    'Tu asistente de bóveda con IA. Puedo intercambiar, enviar, automatizar pólizas, consultar saldos y administrar tu bóveda.',
   agent_what_to_do: '¿Qué te gustaría hacer?',
   agent_help_description:
     'Puedo ayudar a preparar intercambios, acciones de complementos y reglas de automatización.',
@@ -1442,25 +1231,13 @@ export const es = {
   agent_prompt_earn_apy: 'Quiero obtener APY en BTC',
   agent_prompt_send: 'Enviar importe a...',
   agent_prompt_swap: 'Prepara un intercambio de ETH a BTC',
-  api_key_required: 'Se requiere clave API',
-  api_key_required_description:
-    'Para utilizar VultiBot, configure su clave API antrópica como una variable de entorno antes de iniciar la aplicación.',
-  type_a_message: 'Escribe un mensaje...',
-  thinking: 'Pensamiento',
-  try_saying: 'Intenta decir',
   ask_about_plugins_policies: 'Pregunte sobre complementos y políticas...',
   approve_transaction: 'Aprobar transacción',
   enter_vault_password: 'Introduzca la contraseña de la bóveda',
-  signed_in: 'Iniciado sesión',
   password_required_for_operation: 'Ingrese su contraseña para {{operation}}.',
   confirm_action: 'Confirmar acción',
   confirm_action_description: 'Por favor, confirma que deseas {{action}}.',
   agent_chat_render_error: 'Algo salió mal al representar el chat.',
-  agent_connect_description:
-    'Ingrese su contraseña de bóveda para conectarse al agente. Su contraseña se utiliza para firmar un mensaje de autenticación.',
-  agent_connect_now: 'Conéctate ahora',
-  agent_connected: 'Conectado',
-  agent_connecting: 'Conectando...',
   agent_operation_sign_in: 'iniciar sesión',
   agent_session_expired:
     'Tu sesión ha expirado. Introduce la contraseña de tu bóveda para volver a conectarte.',
@@ -1469,7 +1246,6 @@ export const es = {
   agent_give_feedback: 'Enviar comentarios',
   agent_delete_chat_session: 'Eliminar sesión de chat',
   agent_signing_in: 'Iniciando sesión...',
-  agent_thinking_of_ideas: 'Pensando en ideas...',
   agent_tool_label: 'Herramienta: {{tool}}',
   agent_tx_confirmed: 'Confirmado',
   agent_tx_failed: 'Fallido',
@@ -1517,8 +1293,6 @@ export const es = {
   unbonding_unlocks_at: 'Desbloquea {{date}}',
   validator_status_active: 'Activo',
   validator_status_churned_out: 'Producido en masa',
-  validator_voting_power: '{{amount}} {{ticker}}',
-  validator_commission: '{{rate}}%',
   move: 'Mover',
   validator: 'Validador',
   pending_rewards: 'Recompensas pendientes',
