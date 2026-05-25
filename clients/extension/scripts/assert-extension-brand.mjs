@@ -1,4 +1,4 @@
-import { readFile, readdir } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -60,7 +60,10 @@ const readInpageAssetChunks = async () => {
 }
 
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
-const inpage = [await readFile(inpagePath, 'utf8'), await readInpageAssetChunks()]
+const inpage = [
+  await readFile(inpagePath, 'utf8'),
+  await readInpageAssetChunks(),
+]
   .filter(Boolean)
   .join('\n')
 
