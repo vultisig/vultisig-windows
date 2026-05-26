@@ -1,3 +1,4 @@
+import { currentProductBrand } from '@core/ui/product/brand'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { SwapDiscount } from '@vultisig/core-chain/swap/discount/SwapDiscount'
@@ -14,15 +15,19 @@ type SwapDiscountInfoProps = {
 
 export const SwapDiscountInfo = ({ discounts }: SwapDiscountInfoProps) => {
   const { t } = useTranslation()
+  const visibleDiscounts =
+    currentProductBrand === 'station'
+      ? discounts.filter(discount => !('vult' in discount))
+      : discounts
 
-  if (discounts.length === 0) return null
+  if (visibleDiscounts.length === 0) return null
 
   return (
     <VStack gap={10}>
       <Text size={12} color="shy">
         {t('applied_discounts')}
       </Text>
-      {discounts.map((discount, index) =>
+      {visibleDiscounts.map((discount, index) =>
         matchRecordUnion<SwapDiscount, ReactNode>(discount, {
           vult: ({ tier }) => <VultDiscountRow key={index} value={tier} />,
           referral: () => <ReferralDiscountRow key={index} />,

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-type ProductBrand = 'vultisig' | 'station'
+export type ProductBrand = 'vultisig' | 'station'
 
 declare const __VULTISIG_PRODUCT_BRAND__: string | undefined
 

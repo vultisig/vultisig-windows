@@ -1,3 +1,4 @@
+import { currentProductBrand } from '@core/ui/product/brand'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -48,12 +49,16 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
           },
         ]
       : []),
-    {
-      id: 'buyVultPromo' as const,
-      component: (props: { onDismiss: () => void }) => (
-        <BuyVultPromoBanner onDismiss={props.onDismiss} />
-      ),
-    },
+    ...(currentProductBrand === 'vultisig'
+      ? [
+          {
+            id: 'buyVultPromo' as const,
+            component: (props: { onDismiss: () => void }) => (
+              <BuyVultPromoBanner onDismiss={props.onDismiss} />
+            ),
+          },
+        ]
+      : []),
     {
       id: 'followOnX' as const,
       component: (props: { onDismiss: () => void }) => (

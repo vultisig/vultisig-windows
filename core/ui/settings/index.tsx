@@ -3,6 +3,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { NotificationBubbleIcon } from '@core/ui/notifications/NotificationBubbleIcon'
+import { currentProductBrand } from '@core/ui/product/brand'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -71,6 +72,7 @@ export const SettingsPage: FC<Props> = props => {
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const addresses = useCurrentVaultAddresses()
   const areReferralEnabled = Boolean(addresses[Chain.THORChain])
+  const shouldShowVultDiscounts = currentProductBrand === 'vultisig'
 
   return (
     <>
@@ -106,16 +108,18 @@ export const SettingsPage: FC<Props> = props => {
               title={t('vault_settings')}
               showArrow
             />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <CoinsIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => navigate({ id: 'vultDiscount' })}
-              title={`$${vult.ticker} ${t('discount_tiers')}`}
-              showArrow
-            />
+            {shouldShowVultDiscounts && (
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <CoinsIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => navigate({ id: 'vultDiscount' })}
+                title={`$${vult.ticker} ${t('discount_tiers')}`}
+                showArrow
+              />
+            )}
           </SettingsSection>
 
           <SettingsSection title={t('general')}>

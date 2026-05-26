@@ -1,3 +1,4 @@
+import { currentProductBrand } from '@core/ui/product/brand'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { GlobusIcon } from '@lib/ui/icons/GlobusIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -18,6 +19,14 @@ import { useVultDiscountTierQuery } from './queries/tier'
 import { VultDiscountTier } from './tier'
 
 export const VultDiscountPage = () => {
+  if (currentProductBrand === 'station') {
+    return null
+  }
+
+  return <VultDiscountPageContent />
+}
+
+const VultDiscountPageContent = () => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
 

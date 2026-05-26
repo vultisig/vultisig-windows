@@ -11,6 +11,7 @@ import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { ChooseVaultsView } from '@core/ui/notifications/choose-vaults/ChooseVaultsView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
+import { currentProductBrand } from '@core/ui/product/brand'
 import { UploadQrPage } from '@core/ui/qr/upload'
 import { TransactionDetailPage } from '@core/ui/transaction-history/detail/TransactionDetailPage'
 import { TransactionHistoryPage } from '@core/ui/transaction-history/TransactionHistoryPage'
@@ -183,7 +184,8 @@ export const sharedViews: Views<SharedViewId> = {
   transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,
-  vultDiscount: VultDiscountPage,
+  vultDiscount:
+    currentProductBrand === 'station' ? VaultPage : VultDiscountPage,
   qbtcClaim: QbtcClaimPage,
   qbtcQuantumSecurityOnboarding: QuantumSecurityOnboardingPage,
 }
