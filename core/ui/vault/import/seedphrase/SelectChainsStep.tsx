@@ -5,11 +5,11 @@ import { Button } from '@lib/ui/buttons/Button'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { toggleInclusion } from '@vultisig/lib-utils/array/toggleInclusion'
+import { SEEDPHRASE_IMPORT_SUPPORTED_CHAINS } from '@vultisig/sdk'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { seedphraseImportSupportedChains } from './config'
 import { useSelectedChains } from './state/selectedChains'
 import { useFinishSeedphraseImport } from './utils/useFinishSeedphraseImport'
 
@@ -34,7 +34,7 @@ export const SelectChainsStep = () => {
   const [selectedChains, setSelectedChains] = useSelectedChains()
   const handleFinish = useFinishSeedphraseImport()
 
-  const allChains = seedphraseImportSupportedChains
+  const allChains = SEEDPHRASE_IMPORT_SUPPORTED_CHAINS
 
   const filteredChains = search
     ? allChains.filter(chain =>
