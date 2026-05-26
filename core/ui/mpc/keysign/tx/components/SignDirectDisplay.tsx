@@ -17,12 +17,15 @@ type DecodedMessage = {
   value: unknown
 }
 
-const decodeMessage = (msg: {
-  typeUrl: string
-  value: Uint8Array
-}): DecodedMessage => ({
+const decodeMessage = (
+  msg: {
+    typeUrl: string
+    value: Uint8Array
+  },
+  chainId: string
+): DecodedMessage => ({
   typeUrl: msg.typeUrl,
-  value: decodeCosmosMessageValue(msg),
+  value: decodeCosmosMessageValue({ ...msg, chainId }),
 })
 
 // JSON.stringify throws on bigint and renders Uint8Array as a positional
@@ -57,7 +60,9 @@ const buildDisplayData = (signDirect: SignDirect): Record<string, unknown> => {
     const txBody = TxBody.decode(bodyBytes)
     const authInfo = AuthInfo.decode(authInfoBytes)
 
-    const messages = txBody.messages.map(decodeMessage)
+    const messages = txBody.messages.map(msg =>
+      decodeMessage(msg, signDirect.chainId)
+    )
 
     const fee = authInfo.fee
       ? {
