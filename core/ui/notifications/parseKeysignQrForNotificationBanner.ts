@@ -72,11 +72,6 @@ const extractSwapCoins = (
         toCoin: v.toCoin,
         fromAmount: v.fromAmount,
       }),
-      swapkitSwapPayload: v => ({
-        fromCoin: v.fromCoin,
-        toCoin: v.toCoin,
-        fromAmount: v.fromAmount,
-      }),
     }
   )
   if (!row.fromCoin?.ticker || !row.toCoin?.ticker) {
