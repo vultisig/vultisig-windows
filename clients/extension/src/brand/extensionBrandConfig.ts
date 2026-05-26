@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import vultisigIconDataUri from '@clients/extension/src/inpage/icon'
+import vultisigIconDataUri from '../inpage/icon'
 
 export type ExtensionProductBrand = 'vultisig' | 'station'
 

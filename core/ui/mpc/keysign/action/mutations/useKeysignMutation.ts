@@ -7,7 +7,13 @@ import {
 } from '@core/ui/mpc/keysign/customMessage/chains'
 import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
 import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import {
+  buildQBTCSignDoc,
+  buildQBTCSignedTxFromDirect,
+} from '@core/ui/qbtc/dapp/buildQBTCSignedTxFromDirect'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { fromBase64 } from '@cosmjs/encoding'
+import { sha256 } from '@noble/hashes/sha256'
 import { useMutation } from '@tanstack/react-query'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
@@ -61,6 +67,54 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             // QBTC uses MLDSA keys — bypass WalletCore entirely
             if (chain === 'QBTC') {
+              const signatureAlgorithm = getSignatureAlgorithm(chain)
+              const coinType = getCoinType({ walletCore, chain })
+
+              // dApp signDirect path (`sign_and_broadcast`): the payload
+              // already carries proto-encoded bodyBytes + authInfoBytes that
+              // wrap arbitrary Cosmos SDK messages. Sign the SignDoc derived
+              // from those bytes directly, then re-assemble the TxRaw — no
+              // per-typeUrl branching required.
+              if (payload.signData.case === 'signDirect') {
+                const directValue = payload.signData.value
+                const bodyBytes = fromBase64(directValue.bodyBytes)
+                const authInfoBytes = fromBase64(directValue.authInfoBytes)
+                const accountNumber = BigInt(directValue.accountNumber)
+
+                const signDoc = buildQBTCSignDoc({
+                  bodyBytes,
+                  authInfoBytes,
+                  accountNumber,
+                })
+                const hashHex = Buffer.from(sha256(signDoc)).toString('hex')
+
+                const [signature] = await keysignAction({
+                  msgs: [hashHex],
+                  signatureAlgorithm,
+                  coinType,
+                  chain,
+                })
+
+                const { serialized, transactionHash } =
+                  buildQBTCSignedTxFromDirect({
+                    bodyBytes,
+                    authInfoBytes,
+                    accountNumber,
+                    derSignature: Buffer.from(signature.der_signature, 'hex'),
+                  })
+
+                const tx: Tx = {
+                  hash: transactionHash,
+                  data: deserializeSigningOutput(chain, { serialized }),
+                }
+
+                if (!payload.skipBroadcast) {
+                  await broadcastTx({ chain, tx: tx.data })
+                }
+
+                return { txs: [tx] }
+              }
+
               const cosmosSpecific = getBlockchainSpecificValue(
                 payload.blockchainSpecific,
                 'cosmosSpecific'
@@ -71,8 +125,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 cosmosSpecific,
               }).map(bytes => Buffer.from(bytes).toString('hex'))
 
-              const signatureAlgorithm = getSignatureAlgorithm(chain)
-              const coinType = getCoinType({ walletCore, chain })
               const signatures = await keysignAction({
                 msgs,
                 signatureAlgorithm,
