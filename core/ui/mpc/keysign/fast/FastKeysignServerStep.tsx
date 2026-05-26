@@ -7,10 +7,13 @@ import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
 import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import { buildQBTCSignDoc } from '@core/ui/qbtc/dapp/buildQBTCSignedTxFromDirect'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { fromBase64 } from '@cosmjs/encoding'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { sha256 } from '@noble/hashes/sha256'
 import { useMutation } from '@tanstack/react-query'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
@@ -72,14 +75,32 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
           // QBTC uses MLDSA — bypass WalletCore pubkey derivation and
           // build messages directly from the manual protobuf helper.
           if (chain === Chain.QBTC) {
-            const cosmosSpecific = getBlockchainSpecificValue(
-              keysignPayload.blockchainSpecific,
-              'cosmosSpecific'
-            )
-            const messages = getQBTCPreSignedImageHash({
-              keysignPayload,
-              cosmosSpecific,
-            }).map(bytes => Buffer.from(bytes).toString('hex'))
+            // dApp `sign_and_broadcast` carries arbitrary Cosmos messages via
+            // `signDirect`; the SignDoc hash must match what
+            // `useKeysignMutation` computes for the same payload, otherwise
+            // the Fast Vault server registers a different message_id and the
+            // client poll never resolves.
+            const messages =
+              keysignPayload.signData.case === 'signDirect'
+                ? (() => {
+                    const directValue = keysignPayload.signData.value
+                    const bodyBytes = fromBase64(directValue.bodyBytes)
+                    const authInfoBytes = fromBase64(directValue.authInfoBytes)
+                    const accountNumber = BigInt(directValue.accountNumber)
+                    const signDoc = buildQBTCSignDoc({
+                      bodyBytes,
+                      authInfoBytes,
+                      accountNumber,
+                    })
+                    return [Buffer.from(sha256(signDoc)).toString('hex')]
+                  })()
+                : getQBTCPreSignedImageHash({
+                    keysignPayload,
+                    cosmosSpecific: getBlockchainSpecificValue(
+                      keysignPayload.blockchainSpecific,
+                      'cosmosSpecific'
+                    ),
+                  }).map(bytes => Buffer.from(bytes).toString('hex'))
 
             return signWithServer({
               public_key: publicKeys.ecdsa,
