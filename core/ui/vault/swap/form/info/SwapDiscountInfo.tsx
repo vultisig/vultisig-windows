@@ -1,4 +1,3 @@
-import { currentProductBrand } from '@core/ui/product/brand'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { SwapDiscount } from '@vultisig/core-chain/swap/discount/SwapDiscount'
@@ -6,6 +5,7 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { currentProductBrand } from '../../../../product/brand'
 import { ReferralDiscountRow } from './ReferralDiscountRow'
 import { VultDiscountRow } from './VultDiscountRow'
 

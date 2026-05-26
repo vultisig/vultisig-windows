@@ -1,4 +1,3 @@
-import { currentProductBrand } from '@core/ui/product/brand'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { GlobusIcon } from '@lib/ui/icons/GlobusIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -13,6 +12,7 @@ import { vultWebsiteUrl } from '@vultisig/core-config'
 import { useTranslation } from 'react-i18next'
 
 import { PageHeaderBackButton } from '../../flow/PageHeaderBackButton'
+import { currentProductBrand } from '../../product/brand'
 import { useResponsiveness } from '../../providers/ResponsivenessProvider'
 import { useCore } from '../../state/core'
 import { useVultDiscountTierQuery } from './queries/tier'

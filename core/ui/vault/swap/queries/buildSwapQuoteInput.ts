@@ -1,8 +1,8 @@
-import { ProductBrand } from '@core/ui/product/brand'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import { FindSwapQuoteInput } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 
+import { ProductBrand } from '../../../product/brand'
 import { stationSwapAffiliateConfig } from '../affiliate/stationSwapAffiliateConfig'
 
 type BuildSwapQuoteInput = {

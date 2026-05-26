@@ -3,7 +3,6 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { NotificationBubbleIcon } from '@core/ui/notifications/NotificationBubbleIcon'
-import { currentProductBrand } from '@core/ui/product/brand'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -42,6 +41,7 @@ import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../product/brand'
 import {
   currentProductWebsiteUrl,
   discordReferralUrl,

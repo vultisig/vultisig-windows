@@ -1,4 +1,3 @@
-import { currentProductBrand } from '@core/ui/product/brand'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useVultDiscountTierQuery } from '@core/ui/vult/discount/queries/tier'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
@@ -6,6 +5,7 @@ import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
+import { currentProductBrand } from '../../../product/brand'
 import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../storage/referrals'
 import { useFromAmount } from '../state/fromAmount'

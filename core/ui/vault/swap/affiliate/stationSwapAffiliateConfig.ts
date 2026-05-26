@@ -1,5 +1,6 @@
 import { SwapAffiliateConfig } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __VULTISIG_STATION_KYBER_SOURCE__: string | undefined
 
 export const stationNativeSwapAffiliateName = 'stvs'

@@ -1,4 +1,3 @@
-import { currentProductBrand } from '@core/ui/product/brand'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -11,6 +10,7 @@ import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { RefObject } from 'react'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../../../product/brand'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
 import { BuyVultPromoBanner } from '../banners/BuyVultPromoBanner/BuyVultPromoBanner'
