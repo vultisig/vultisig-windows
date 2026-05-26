@@ -46,7 +46,7 @@ jobs:
           key: ${{ runner.os }}-eslint-${{ hashFiles('**/yarn.lock', 'eslint.config.mjs', 'clients/desktop/eslint.config.mjs') }}
 
       - name: Validate public files
-        run: yarn workspace @core/ui validate-public
+        run: yarn validate-public
 
       - name: Check for unused code
         run: yarn knip
