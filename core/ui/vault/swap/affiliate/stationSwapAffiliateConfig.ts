@@ -1,5 +1,7 @@
 import { SwapAffiliateConfig } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 
+declare const __VULTISIG_STATION_KYBER_SOURCE__: string | undefined
+
 export const stationNativeSwapAffiliateName = 'stvs'
 
 export const stationSwapAffiliateFeeReceiver =
