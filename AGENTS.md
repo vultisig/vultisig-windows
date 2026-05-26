@@ -20,6 +20,7 @@ yarn check:all   # lint + typecheck + test + knip
 3. `lib/` holds shared workspace packages (`@lib/ui`, `@lib/codegen`, `@lib/extension`) maintained in this repo like `core/`. Published `@vultisig/*` SDK packages come from npm when you bump dependencies.
 4. If adding user-facing text: only edit `en.ts`, run `yarn translate`, then `yarn i18n:review-quality`
 5. Chain-specific logic: use resolver pattern (never switch on chain type directly)
+6. If touching Vite `define` values, ambient build globals, Station/client flavor config, or product-brand branching, run `yarn check:client-build-flags`. It includes the desktop Wails frontend production compile and the Station extension flavor build, which can catch build-time global issues that `yarn check` misses.
 
 ## Patterns
 
