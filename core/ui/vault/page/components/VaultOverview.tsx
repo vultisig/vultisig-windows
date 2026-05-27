@@ -10,6 +10,7 @@ import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { RefObject } from 'react'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../../../product/brand'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
 import { BuyVultPromoBanner } from '../banners/BuyVultPromoBanner/BuyVultPromoBanner'
@@ -48,12 +49,16 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
           },
         ]
       : []),
-    {
-      id: 'buyVultPromo' as const,
-      component: (props: { onDismiss: () => void }) => (
-        <BuyVultPromoBanner onDismiss={props.onDismiss} />
-      ),
-    },
+    ...(currentProductBrand === 'vultisig'
+      ? [
+          {
+            id: 'buyVultPromo' as const,
+            component: (props: { onDismiss: () => void }) => (
+              <BuyVultPromoBanner onDismiss={props.onDismiss} />
+            ),
+          },
+        ]
+      : []),
     {
       id: 'followOnX' as const,
       component: (props: { onDismiss: () => void }) => (

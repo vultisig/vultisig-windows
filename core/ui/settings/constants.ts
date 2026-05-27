@@ -1,7 +1,7 @@
 import {
   currentProductBrand,
   currentProductBrandConfig,
-} from '@core/ui/product/brand'
+} from '../product/brand'
 
 export const vultisigWindowsGithubUrl =
   'https://github.com/vultisig/vultisig-windows'
