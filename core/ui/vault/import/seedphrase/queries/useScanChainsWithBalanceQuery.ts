@@ -5,9 +5,9 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
 import { deriveAddressFromMnemonic } from '@vultisig/core-chain/publicKey/address/deriveAddressFromMnemonic'
 import { deriveSolanaAddressWithPhantomPath } from '@vultisig/core-chain/publicKey/address/deriveSolanaAddressFromMnemonic'
+import { SEEDPHRASE_IMPORT_SUPPORTED_CHAINS } from '@vultisig/sdk'
 import { useMemo } from 'react'
 
-import { seedphraseImportSupportedChains } from '../config'
 import { useMnemonic } from '../state/mnemonic'
 
 type ScanChainsResult = {
@@ -21,10 +21,12 @@ export const useScanChainsWithBalanceQuery =
     const [mnemonic] = useMnemonic()
 
     const { trustWalletInputs, phantomSolanaInput } = useMemo(() => {
-      const trustWalletInputs = seedphraseImportSupportedChains.map(chain => ({
-        chain,
-        address: deriveAddressFromMnemonic({ chain, mnemonic, walletCore }),
-      }))
+      const trustWalletInputs = SEEDPHRASE_IMPORT_SUPPORTED_CHAINS.map(
+        chain => ({
+          chain,
+          address: deriveAddressFromMnemonic({ chain, mnemonic, walletCore }),
+        })
+      )
 
       const phantomSolanaInput = {
         chain: Chain.Solana,
@@ -72,7 +74,7 @@ export const useScanChainsWithBalanceQuery =
       const phantomSolanaBalance = balances?.[phantomSolanaKey] ?? 0n
 
       // All queries settled - filter chains with positive balance
-      const chainsWithBalance = seedphraseImportSupportedChains.filter(
+      const chainsWithBalance = SEEDPHRASE_IMPORT_SUPPORTED_CHAINS.filter(
         chain => {
           const input = trustWalletInputs.find(i => i.chain === chain)
           if (!input) return false
