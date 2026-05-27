@@ -1543,7 +1543,7 @@ export const ru = {
   station_migration_title: 'Перенести кошельки Station',
   station_migration_review_title: 'Проверка старых кошельков Station',
   station_migration_review_description:
-    'Это только чтение устаревшего хранилища расширения Station. Пока ни один кошельк не был перенесен, переподключен, удален или помечен как завершенный.',
+    'Это только чтение устаревшего хранилища расширения Station. Пока ни один кошелёк не был перенесён, переподключён, удалён или помечен как завершённый.',
   station_migration_settings_title: 'Перенести кошельки Station',
   station_migration_settings_description:
     'Просмотрите старые кошельки Station, обнаруженные на этом устройстве.',

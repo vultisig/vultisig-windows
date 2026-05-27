@@ -1614,7 +1614,7 @@ export const es = {
   station_migration_reason_encrypted_seed_not_string:
     'La clave encryptedSeed está presente, pero no es una cadena de texto.',
   station_migration_reason_encrypted_invalid_shape:
-    'La expresión &quot;encriptado&quot; está presente, pero no es ni una cadena de texto ni un objeto.',
+    'La clave "encrypted" está presente, pero no es ni una cadena de texto ni un objeto.',
   station_migration_reason_encrypted_private_key_missing_330:
     'Al objeto de clave privada cifrado le falta el tipo de moneda 330.',
   station_migration_reason_legacy_wallet_blob_not_string:

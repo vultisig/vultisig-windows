@@ -7,13 +7,14 @@ import {
 
 export type StationLegacyStorageReader = Pick<Storage, 'getItem'>
 
-export const stationLegacyLocalStorageKeys = [
-  stationLegacyStorageKeys.wallets,
-  stationLegacyStorageKeys.keys,
-  stationLegacyStorageKeys.passwordChallenge,
-  stationLegacyStorageKeys.connectedWallet,
-  stationLegacyStorageKeys.isMigrationDone,
-]
+export const stationLegacyLocalStorageKeys: ReadonlyArray<string> =
+  Object.freeze([
+    stationLegacyStorageKeys.wallets,
+    stationLegacyStorageKeys.keys,
+    stationLegacyStorageKeys.passwordChallenge,
+    stationLegacyStorageKeys.connectedWallet,
+    stationLegacyStorageKeys.isMigrationDone,
+  ])
 
 const getBrowserLocalStorage = (): StationLegacyStorageReader | undefined => {
   if (typeof window === 'undefined') return undefined

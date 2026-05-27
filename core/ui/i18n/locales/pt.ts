@@ -1610,7 +1610,7 @@ export const pt = {
   station_migration_reason_ledger_reconnect:
     'Station armazena os detalhes da conta pública desta carteira Ledger. Reconecte o dispositivo de hardware posteriormente para usá-lo em Station.',
   station_migration_reason_multisig:
-    'O token Station armazena apenas metadados multisig públicos. Ele não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
+    'A Station armazena apenas metadados multisig públicos. Ela não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
   station_migration_reason_encrypted_seed_not_string:
     'O encryptedSeed está presente, mas não é uma string.',
   station_migration_reason_encrypted_invalid_shape:

@@ -1569,7 +1569,7 @@ export const it = {
   raw_message: 'Messaggio grezzo',
   token: 'Token',
   token_approval: 'Approvazione del token',
-  skip_for_now: 'Per ora saltate.',
+  skip_for_now: 'Salta per ora',
   station_migration_title: 'Migrare i wallet Station',
   station_migration_review_title: 'Revisione dei vecchi portafogli Station',
   station_migration_review_description:
