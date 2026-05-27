@@ -52,7 +52,9 @@ import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+import { injectKeplrFeeIfMissing } from './cosmos/injectKeplrFeeIfMissing'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
+import { normalizeKeplrBytes } from './cosmos/normalizeKeplrBytes'
 import {
   getKeplrCosmosChainInfos,
   getKeplrSupportedChainByChainId,
@@ -86,16 +88,56 @@ const aminoHandler = (
   } as TransactionDetails
 }
 
-const directHandler = (
-  signDoc: {
-    bodyBytes: string // base64 encoded
-    authInfoBytes: string // base64 encoded
-    chainId: string
-    accountNumber: string
-  },
+type DirectHandlerSignDoc = {
+  bodyBytes: string // base64 encoded
+  authInfoBytes: string // base64 encoded
+  chainId: string
+  accountNumber: string
+}
+
+type DirectHandlerInput = {
+  signDoc: DirectHandlerSignDoc
   chain: Chain
-): TransactionDetails => {
-  const txBody = TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
+  signer: string
+}
+
+// Fallback display payload when the dApp's bodyBytes can't be decoded as a
+// standard TxBody (e.g. chain-specific extension fields cosmjs-types doesn't
+// know about, or a non-standard envelope). Signing still proceeds because the
+// raw bytes are forwarded to the popup via `directPayload`.
+const genericDirectTransactionDetails = ({
+  signDoc,
+  chain,
+  signer,
+}: DirectHandlerInput): TransactionDetails => ({
+  asset: { ticker: chainFeeCoin[chain].ticker },
+  amount: { amount: '0', decimals: chainFeeCoin[chain].decimals },
+  from: signer,
+  directPayload: {
+    bodyBytes: signDoc.bodyBytes,
+    authInfoBytes: signDoc.authInfoBytes,
+    chainId: signDoc.chainId,
+    accountNumber: signDoc.accountNumber,
+  },
+  skipBroadcast: true,
+})
+
+const directHandler = ({
+  signDoc,
+  chain,
+  signer,
+}: DirectHandlerInput): TransactionDetails => {
+  // Body decoding is best-effort — used only to enrich the popup's display
+  // info. If the dApp's TxBody has fields cosmjs-types can't parse (newer
+  // SDK additions, Osmosis/Injective extensions, etc.) fall back to a
+  // generic display and let the raw bytes flow through to keysign untouched.
+  const decoded = attempt(() =>
+    TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
+  )
+  if ('error' in decoded) {
+    return genericDirectTransactionDetails({ signDoc, chain, signer })
+  }
+  const txBody = decoded.data
   const [message] = txBody.messages
   const memo = txBody.memo
 
@@ -452,15 +494,28 @@ const stripEndpoints = ({
 // actually exercises (`getKeysSettled`, `getKey`, `enable`, ...) we
 // override on `XDEFIKeplrProvider`, so this requester is reached only by
 // truly unhandled paths.
+// Keplr's `SimpleMessage` exposes its route via a `type()` method (symbol-
+// backed field), not a `type` property — naive property access would
+// stringify the function source into the error message.
+const readMessageType = (msg: unknown): string | undefined => {
+  if (!msg || typeof msg !== 'object') return undefined
+  const candidate = msg as { type?: unknown; method?: unknown }
+  if (typeof candidate.type === 'function') {
+    const result = (candidate.type as () => unknown).call(msg)
+    return typeof result === 'string' ? result : undefined
+  }
+  if (typeof candidate.type === 'string') return candidate.type
+  if (typeof candidate.method === 'string') return candidate.method
+  return undefined
+}
+
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
   }
   public async sendMessage(message: any, params: any): Promise<void> {
     const method =
-      (params && (params.type ?? params.method)) ??
-      (message && (message.type ?? message.method)) ??
-      'unknown'
+      readMessageType(params) ?? readMessageType(message) ?? 'unknown'
     throw new Error(`Keplr method '${method}' is not supported by Vultisig`)
   }
 }
@@ -682,6 +737,15 @@ export class XDEFIKeplrProvider extends Keplr {
     return this.getOfflineSigner(chainId, signOptions)
   }
 
+  // Liveness probe used by cosmos-kit-based dApps (osmosis.zone, etc.)
+  // during their `Initializing Wallet Client` step. The base implementation
+  // calls `requester.sendMessage` directly via the free `sendSimpleMessage`
+  // helper — bypassing our instance-level `sendSimpleMessage` override — so
+  // without this method the requester throws and the dApp can't connect.
+  async ping(): Promise<void> {
+    return
+  }
+
   async sendTx(): Promise<Uint8Array> {
     // Keplr's `sendTx` broadcasts a fully signed transaction via Keplr's
     // background relay. Vultisig has no equivalent relay — dApps that
@@ -785,28 +849,57 @@ export class XDEFIKeplrProvider extends Keplr {
         throw new Error('Signer does not match current account address')
       }
 
+      // The function argument `chainId` drives chain-config lookups (fee
+      // denom, gas price, popup display); the `signDoc.chainId` field is the
+      // value the signature commits to. If those diverge the dApp would
+      // either trick us into picking the wrong fee/denom or end up with a
+      // signature whose committed chainId doesn't match the chain it asked us
+      // to switch to. Reject early — real Keplr does the same check.
+      if (signDoc.chainId !== chainId) {
+        throw new Error(
+          `signDoc.chainId (${signDoc.chainId}) does not match requested chainId (${chainId})`
+        )
+      }
+
       const chain = shouldBePresent(getKeplrSupportedChainByChainId(chainId))
+
+      const rawBodyBytes = normalizeKeplrBytes(signDoc.bodyBytes)
+      const rawAuthInfoBytes = normalizeKeplrBytes(signDoc.authInfoBytes)
+
+      // Several cosmos-kit dApps (Osmosis Zone's staking page being the
+      // canonical example) pass an empty `fee.amount` and rely on the wallet
+      // to fill it in — real Keplr injects a fee from gasLimit * gas price
+      // whenever `signOptions.preferNoSetFee` is falsy (the default). Match
+      // that behavior here, otherwise the chain rejects the broadcast with
+      // "Expected 1 fee denom attached, got 0: insufficient fee".
+      const withInjectedFee =
+        chain === OtherChain.QBTC || _signOptions?.preferNoSetFee
+          ? rawAuthInfoBytes
+          : injectKeplrFeeIfMissing({
+              authInfoBytes: rawAuthInfoBytes,
+              chain,
+            })
 
       // `normalizeCosmosAuthInfoFee` swaps fee ticker → canonical denom for
       // CosmosChain entries. QBTC's fee denom is already canonical (`qbtc`,
       // matching the chain config base denom), so the normalization is a
       // no-op and the helper isn't keyed for QBTC anyway.
-      const rawAuthInfoBytes = new Uint8Array(signDoc.authInfoBytes)
       const normalizedAuthInfoBytes =
         chain === OtherChain.QBTC
-          ? rawAuthInfoBytes
-          : normalizeCosmosAuthInfoFee(rawAuthInfoBytes, chain)
-      const transactionDetails: TransactionDetails = directHandler(
-        {
-          bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
+          ? withInjectedFee
+          : normalizeCosmosAuthInfoFee(withInjectedFee, chain)
+      const transactionDetails: TransactionDetails = directHandler({
+        signDoc: {
+          bodyBytes: Buffer.from(rawBodyBytes).toString('base64'),
           authInfoBytes: Buffer.from(normalizedAuthInfoBytes).toString(
             'base64'
           ),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
         },
-        chain
-      )
+        chain,
+        signer,
+      })
 
       const [{ data }] = await callPopup(
         {

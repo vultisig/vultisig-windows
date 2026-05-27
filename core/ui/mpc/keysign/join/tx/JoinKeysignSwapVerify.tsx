@@ -1,5 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
+import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
+import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import {
   ContainerWrapper,
   HorizontalLine,
@@ -48,6 +50,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
   const toAmount = Number(toAmountDecimal)
 
   const provider = getKeysignSwapProviderName(swapPayload)
+  const swapFee = getSwapFeeFromPayload(value)
 
   return (
     <>
@@ -102,6 +105,17 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
             title={t('network_fee')}
             extra={<KeysignFeeAmount keysignPayload={value} />}
           />
+          {swapFee && (
+            <ListItem
+              hoverable={false}
+              title={t('swap_fee')}
+              extra={
+                <Text color="shy">
+                  <SwapFeeFiatValue value={[swapFee]} />
+                </Text>
+              }
+            />
+          )}
         </List>
       </VStack>
     </>

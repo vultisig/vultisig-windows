@@ -5,6 +5,7 @@ import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@vultisig/core-mpc/types/vultisig/keygen/v1/keygen_message_pb'
@@ -66,6 +67,7 @@ export type CoreView =
         keysignPayload: KeysignMessagePayload
         password?: string
         toAddressLabel?: string
+        swapQuote?: SwapQuote
       }
     }
   | { id: 'languageSettings' }
@@ -143,6 +145,7 @@ export type CoreView =
   | { id: 'requestFastVaultBackup' }
   | { id: 'vultDiscount' }
   | { id: 'qbtcClaim' }
+  | { id: 'qbtcQuantumSecurityOnboarding' }
 
 export type CoreViewId = CoreView['id']
 

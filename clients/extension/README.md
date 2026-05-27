@@ -32,3 +32,29 @@ To build the VultiConnect extension, follow these steps:
 ## Integration Guide
 
 For details on integrating VultiConnect with your project, see the [Integration Guide](docs/integration-guide.md).
+
+## Linting
+
+From the repository root:
+
+```bash
+yarn workspace @clients/extension lint
+```
+
+The package `lint` script is the focused extension closeout gate. It checks maintained extension app source, `vite.config.ts`, and package build/dev scripts.
+
+For narrower changes, use:
+
+```bash
+yarn workspace @clients/extension lint:src
+yarn workspace @clients/extension lint:scripts
+```
+
+The test lint surface has existing historical violations, so it is separated from the normal focused gate:
+
+```bash
+yarn workspace @clients/extension lint:tests
+yarn workspace @clients/extension lint:all
+```
+
+Use those commands only when intentionally cleaning or changing that broader lint surface.

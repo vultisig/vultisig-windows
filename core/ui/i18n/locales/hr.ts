@@ -221,7 +221,7 @@ export const hr = {
   connect: 'Poveži se',
   connect_dapp: 'Poveži dApp',
   connect_to_site: 'Poveži se s {{site}}',
-  connect_website_subtitle: 'Povežite ovu web stranicu s Vultisig ekstenzijom',
+  connect_website_subtitle: 'Povežite ovu web stranicu s Vultisig Extension',
   connected_dapps: 'Povezane dApp-ove',
   connecting_to_server: 'Povezivanje sa serverom',
   continue: 'Nastaviti',
@@ -828,16 +828,12 @@ export const hr = {
   provider: 'Pružatelj usluga',
   route: 'Ruta',
   qbtc_claim_title: 'Zahtjev za QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Iznos BTC-a',
   qbtc_claim_no_claimable_utxos:
     'Za ovu adresu nisu pronađeni UTXO-ovi koji se mogu zatražiti.',
   qbtc_claim_disabled_notice:
     'Polaganje prava je trenutno onemogućeno na QBTC lancu.',
   qbtc_claim_failed_to_load:
     'Učitavanje UTXO-ova koji se mogu zatražiti nije uspjelo.',
-  qbtc_claim_selected_count: 'Odabran {{count}} od {{max}}',
-  qbtc_claim_confirm: 'Zahtjev je odabran',
   qbtc_claim_proving: 'Generiranje dokaza…',
   qbtc_claim_proving_hint: 'To može potrajati nekoliko minuta.',
   qbtc_claim_broadcasting: 'Broadcasting zahtjeva…',
@@ -1508,4 +1504,41 @@ export const hr = {
   you_are_claiming: 'Tvrdite',
   commission: 'provizija',
   claim_n_validators: 'Zahtjev od validatora {{count}}',
+  approval_amount: 'Iznos odobrenja',
+  approval_expires: 'Odobrenje istječe',
+  deadline: 'Rok',
+  domain: 'Domena',
+  no_expiry: 'Nema isteka',
+  primary_type: 'Primarna vrsta',
+  qbtc_claim_banner_title: 'Isti Bitcoin. Kvantno siguran.',
+  qbtc_claim_banner_subtitle: 'Zatražite svoj QBTC',
+  qbtc_claim_banner_cta: 'Zatražite odmah',
+  qbtc_claim_section_cta: 'Zahtjev QBTC',
+  qbtc_claim_card_title: 'Zahtjev QBTC',
+  qbtc_claim_tab: 'Zahtjev',
+  qbtc_onboarding_title: 'Nova kvantna sigurnost',
+  qbtc_onboarding_subtitle:
+    'Klasični ključevi mogu se probiti kvantnim računalima. Omogućavanje QBTC zahtijeva generiranje novog para ključeva.',
+  qbtc_onboarding_feature_generate_title:
+    'Generirajte svoj kvantni par ključeva',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig pokreće lokalnu MPC ceremoniju na vašim trezorskim uređajima kako bi se stvorio novi par ključeva.',
+  qbtc_onboarding_feature_link_title: 'Povežite ga s vašim postojećim trezorom',
+  qbtc_onboarding_feature_link_description:
+    'Kvantni ključ je vezan za vašu trenutnu strukturu dijeljenja trezora. Nije potrebno ponovno dijeljenje.',
+  qbtc_onboarding_feature_claim_title:
+    'Zatražite i izvršite transakciju u QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Nakon generiranja, vaš prihvatljivi BTC UTXOs prikazuje se kao QBTC koji se mogu zatražiti u omjeru 1:1.',
+  qbtc_onboarding_get_started: 'Započnite',
+  qbtc_claim_description:
+    'QBTC je kvantno otporna verzija BTC. Vaši postojeći BTC UTXOs ispunjavaju uvjete za preuzimanje kao QBTC u omjeru 1:1. Odaberite koji UTXOs želite preuzeti u nastavku.',
+  qbtc_claim_eligible_utxos: 'Ispunjava uvjete UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Potvrđeno · prije {{count}} blokova',
+  qbtc_claim_pending_confirmation: 'Čeka se potvrda',
+  qbtc_claim_all: 'Zatraži sve',
+  qbtc_claim_count: 'Zahtjev {{count}} od {{total}}',
+  raw_message: 'Sirova poruka',
+  token: 'Znak',
+  token_approval: 'Odobrenje tokena',
 }

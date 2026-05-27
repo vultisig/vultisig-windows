@@ -90,11 +90,7 @@ export const VaultSettingsPage: FC = () => {
                   {t('post_quantum_keygen_description')}
                 </DescriptionText>
               }
-              onClick={() =>
-                navigate({
-                  id: isFastVault ? 'singleKeygenFast' : 'singleKeygenSecure',
-                })
-              }
+              onClick={() => navigate({ id: 'qbtcQuantumSecurityOnboarding' })}
               title={t('post_quantum_keygen')}
               hoverable
               showArrow
