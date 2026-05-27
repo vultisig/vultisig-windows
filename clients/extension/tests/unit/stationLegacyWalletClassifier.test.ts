@@ -164,7 +164,7 @@ describe('classifyStationLegacyWalletStorage', () => {
     })
   })
 
-  it('classifies Ledger wallets as unsupported reconnect-only entries', () => {
+  it('classifies Ledger wallets as reconnect-only entries', () => {
     const result = classifyStationLegacyWalletStorage({
       wallets: JSON.stringify([
         {
@@ -182,9 +182,10 @@ describe('classifyStationLegacyWalletStorage', () => {
     expect(result.wallets[0]).toMatchObject({
       walletName: 'Ledger Wallet',
       walletType: 'ledger',
-      status: 'unsupported',
+      status: 'reconnect',
+      reasonCode: 'ledgerReconnectRequired',
       reason:
-        'Station only stores public account details for Ledger wallets, not keys Vultisig can convert into a vault.',
+        'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.',
       metadata: {
         index: 4,
         pubkey: { '330': 'ledger-pubkey' },
@@ -209,8 +210,9 @@ describe('classifyStationLegacyWalletStorage', () => {
       walletName: 'Multisig Wallet',
       walletType: 'multisig',
       status: 'unsupported',
+      reasonCode: 'multisigPublicMetadataOnly',
       reason:
-        'Station only stores public multisig metadata, not key material Vultisig can convert into a vault.',
+        'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.',
       metadata: {
         threshold: 2,
       },
@@ -229,6 +231,7 @@ describe('classifyStationLegacyWalletStorage', () => {
         storageKey: 'wallets',
         walletType: 'corruptStorage',
         status: 'corrupt',
+        reasonCode: 'malformedJson',
         reason: 'wallets contains malformed JSON.',
         metadata: {},
       },
@@ -251,6 +254,7 @@ describe('classifyStationLegacyWalletStorage', () => {
       walletType: 'unknown',
       status: 'unsupported',
       reason: 'Wallet entry does not match any known Station storage shape.',
+      reasonCode: 'unknownWalletShape',
     })
   })
 
@@ -280,6 +284,7 @@ describe('classifyStationLegacyWalletStorage', () => {
         storageIndex: 0,
         walletType: 'corruptWallet',
         status: 'corrupt',
+        reasonCode: 'walletEntryNotObject',
         reason: 'Wallet entry is not an object.',
         metadata: {},
       },
@@ -290,6 +295,7 @@ describe('classifyStationLegacyWalletStorage', () => {
         storageIndex: 1,
         walletType: 'corruptWallet',
         status: 'corrupt',
+        reasonCode: 'encryptedPrivateKeyMissing330',
         reason: 'encrypted private-key object is missing coin type 330.',
         metadata: {
           encrypted: {

@@ -27,6 +27,11 @@ export const i18nGlossary = [
     note: 'Brand name; keep exactly as written.',
   },
   {
+    term: 'Station',
+    preserve: true,
+    note: 'Brand name; keep exactly as written.',
+  },
+  {
     term: 'Vultiserver',
     preserve: true,
     note: 'Service name; keep exactly as written.',

@@ -100,7 +100,11 @@ export type CoreView =
     }
   | {
       id: 'setupVault'
-      state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
+      state: {
+        type?: VaultSecurityType
+        keyImportInput?: KeyImportInput
+        skipStationMigration?: boolean
+      }
     }
   | {
       id: 'setupVaultOverview'

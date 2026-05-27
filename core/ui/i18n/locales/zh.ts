@@ -1448,4 +1448,61 @@ export const zh = {
   raw_message: '原始信息',
   token: '令牌',
   token_approval: '代币批准',
+  skip_for_now: '暂时跳过',
+  station_migration_title: '迁移 Station 钱包',
+  station_migration_review_title: '查看旧的 Station 钱包',
+  station_migration_review_description:
+    '此功能仅读取旧版 Station 扩展存储。目前尚未迁移、重新连接、删除或标记为已完成任何钱包。',
+  station_migration_settings_title: '迁移 Station 钱包',
+  station_migration_settings_description:
+    '查看此设备上检测到的旧版 Station 钱包。',
+  station_migration_set_up_without_migrating: '无需迁移即可设置',
+  station_migration_no_wallets_found: '在此扩展存储中未找到旧版 Station 钱包。',
+  station_migration_summary_total_one: '{{count}} 钱包',
+  station_migration_summary_total_other: '{{count}} 钱包',
+  station_migration_status_supported: '支持',
+  station_migration_status_reconnect: '重新连接',
+  station_migration_status_unsupported: '不支持',
+  station_migration_status_corrupt: '无效的',
+  station_migration_status_needs_review: '需要审查',
+  station_migration_wallet_type_mnemonic: '加密种子和助记词',
+  station_migration_wallet_type_seed: '加密种子',
+  station_migration_wallet_type_private_key: '加密私钥',
+  station_migration_wallet_type_interchain_private_key: '加密的 Terra 私钥',
+  station_migration_wallet_type_legacy_private_key: '遗留的加密私钥块',
+  station_migration_wallet_type_ledger: 'Ledger硬件钱包',
+  station_migration_wallet_type_multisig: '多重签名钱包',
+  station_migration_wallet_type_unknown: '未知 Station 钱包格式',
+  station_migration_wallet_type_corrupt_storage: '无效存储',
+  station_migration_wallet_type_corrupt_wallet: '无效的钱包条目',
+  station_migration_reason_supported_mnemonic:
+    '加密钱包数据已保存，以便将来迁移时需要输入 Station 密码。',
+  station_migration_reason_supported_seed:
+    '已加密种子字节，以备将来迁移时需要输入 Station 密码。',
+  station_migration_reason_supported_private_key:
+    '已为将来导入 Terra 系列产品准备加密的私钥数据。',
+  station_migration_reason_supported_interchain_private_key:
+    '已加密的 Terra 私钥数据已准备就绪，可供将来导入。',
+  station_migration_reason_supported_legacy_private_key:
+    '已保存旧版加密私钥数据，以备将来导入。',
+  station_migration_reason_ledger_reconnect:
+    'Station 存储此 Ledger 钱包的公共账户详细信息。稍后重新连接硬件设备，即可在 Station 中使用它。',
+  station_migration_reason_multisig:
+    'Station 仅存储公共多重签名元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed 存在，但它不是字符串。',
+  station_migration_reason_encrypted_invalid_shape:
+    '加密内容存在，但既不是字符串也不是对象。',
+  station_migration_reason_encrypted_private_key_missing_330:
+    '加密的私钥对象缺少币种类型 330。',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    '旧版钱包数据块存在，但它不是字符串。',
+  station_migration_reason_unknown_wallet_shape:
+    '钱包条目与任何已知的 Station 存储格式都不匹配。',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} 包含格式错误的 JSON。',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} 必须是一个 JSON 数组。',
+  station_migration_reason_wallet_entry_not_object: '钱包条目不是一种对象。',
+  station_migration_reason_unsupported_fallback: '该钱包需要审核后才能迁移。',
 }
