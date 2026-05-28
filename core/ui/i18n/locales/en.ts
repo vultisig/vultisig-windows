@@ -1512,4 +1512,66 @@ export const en = {
   agent_reauth_description:
     'For security, authorization expires periodically.\nPlease confirm to continue using Vulti Agent.',
   authorize: 'Authorize',
+  skip_for_now: 'Skip for now',
+  station_migration_title: 'Migrate Station wallets',
+  station_migration_review_title: 'Review old Station wallets',
+  station_migration_review_description:
+    'This only reads legacy Station extension storage. No wallets are migrated, reconnected, deleted, or marked complete yet.',
+  station_migration_settings_title: 'Migrate Station wallets',
+  station_migration_settings_description:
+    'Review old Station wallets detected on this device.',
+  station_migration_set_up_without_migrating: 'Set up without migrating',
+  station_migration_no_wallets_found:
+    'No legacy Station wallets were found in this extension storage.',
+  station_migration_summary_total_one: '{{count}} wallet',
+  station_migration_summary_total_other: '{{count}} wallets',
+  station_migration_status_supported: 'Supported',
+  station_migration_status_reconnect: 'Reconnect',
+  station_migration_status_unsupported: 'Unsupported',
+  station_migration_status_corrupt: 'Invalid',
+  station_migration_status_needs_review: 'Needs review',
+  station_migration_wallet_type_mnemonic: 'Encrypted seed and mnemonic',
+  station_migration_wallet_type_seed: 'Encrypted seed',
+  station_migration_wallet_type_private_key: 'Encrypted private key',
+  station_migration_wallet_type_interchain_private_key:
+    'Encrypted Terra private keys',
+  station_migration_wallet_type_legacy_private_key:
+    'Legacy encrypted private-key blob',
+  station_migration_wallet_type_ledger: 'Ledger hardware wallet',
+  station_migration_wallet_type_multisig: 'Multisig wallet',
+  station_migration_wallet_type_unknown: 'Unknown Station wallet format',
+  station_migration_wallet_type_corrupt_storage: 'Invalid storage',
+  station_migration_wallet_type_corrupt_wallet: 'Invalid wallet entry',
+  station_migration_reason_supported_mnemonic:
+    'Encrypted wallet data is present for a future migration that asks for the Station password.',
+  station_migration_reason_supported_seed:
+    'Encrypted seed bytes are present for a future migration that asks for the Station password.',
+  station_migration_reason_supported_private_key:
+    'Encrypted private-key data is present for a future Terra-family import.',
+  station_migration_reason_supported_interchain_private_key:
+    'Encrypted Terra private-key data is present for a future import.',
+  station_migration_reason_supported_legacy_private_key:
+    'Legacy encrypted private-key data is present for a future import.',
+  station_migration_reason_ledger_reconnect:
+    'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.',
+  station_migration_reason_multisig:
+    'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed is present but is not a string.',
+  station_migration_reason_encrypted_invalid_shape:
+    'encrypted is present but is neither a string nor an object.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Encrypted private-key object is missing coin type 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Legacy wallet blob is present but is not a string.',
+  station_migration_reason_unknown_wallet_shape:
+    'Wallet entry does not match any known Station storage format.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} contains malformed JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} must be a JSON array.',
+  station_migration_reason_wallet_entry_not_object:
+    'Wallet entry is not an object.',
+  station_migration_reason_unsupported_fallback:
+    'This wallet needs review before it can be migrated.',
 }

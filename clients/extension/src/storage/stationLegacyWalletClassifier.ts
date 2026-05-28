@@ -1,4 +1,4 @@
-const stationLegacyStorageKeys: {
+export const stationLegacyStorageKeys: {
   wallets: 'wallets'
   keys: 'keys'
   passwordChallenge: 'passwordChallenge'
@@ -12,13 +12,16 @@ const stationLegacyStorageKeys: {
   isMigrationDone: 'isMigrationDone',
 }
 
-type StationLegacyWalletStorageKey =
+export type StationLegacyWalletStorageKey =
   | typeof stationLegacyStorageKeys.wallets
   | typeof stationLegacyStorageKeys.keys
 
-type StationLegacyStorageSnapshot = Record<string, string | null | undefined>
+export type StationLegacyStorageSnapshot = Record<
+  string,
+  string | null | undefined
+>
 
-type StationLegacyWalletType =
+export type StationLegacyWalletType =
   | 'mnemonic'
   | 'seed'
   | 'privateKey'
@@ -30,9 +33,25 @@ type StationLegacyWalletType =
   | 'corruptStorage'
   | 'corruptWallet'
 
-type StationLegacyWalletStatus = 'supported' | 'unsupported' | 'corrupt'
+export type StationLegacyWalletStatus =
+  | 'supported'
+  | 'reconnect'
+  | 'unsupported'
+  | 'corrupt'
 
-type StationLegacyWalletMetadata = {
+export type StationLegacyWalletReasonCode =
+  | 'ledgerReconnectRequired'
+  | 'multisigPublicMetadataOnly'
+  | 'encryptedSeedNotString'
+  | 'encryptedInvalidShape'
+  | 'encryptedPrivateKeyMissing330'
+  | 'legacyWalletBlobNotString'
+  | 'unknownWalletShape'
+  | 'malformedJson'
+  | 'storageNotArray'
+  | 'walletEntryNotObject'
+
+export type StationLegacyWalletMetadata = {
   address?: string
   bluetooth?: boolean
   encrypted?: string | Record<string, string>
@@ -50,18 +69,19 @@ type StationLegacyWalletMetadata = {
   words?: Record<string, string>
 }
 
-type StationLegacyWalletClassification = {
+export type StationLegacyWalletClassification = {
   walletName: string
   source: 'localStorage'
   storageKey: StationLegacyWalletStorageKey
   storageIndex?: number
   walletType: StationLegacyWalletType
   status: StationLegacyWalletStatus
+  reasonCode?: StationLegacyWalletReasonCode
   reason?: string
   metadata: StationLegacyWalletMetadata
 }
 
-type StationLegacyStorageClassification = {
+export type StationLegacyStorageClassification = {
   wallets: StationLegacyWalletClassification[]
   metadata: {
     connectedWallet?: string
@@ -72,10 +92,10 @@ type StationLegacyStorageClassification = {
 }
 
 const ledgerUnsupportedReason =
-  'Station only stores public account details for Ledger wallets, not keys Vultisig can convert into a vault.'
+  'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.'
 
 const multisigUnsupportedReason =
-  'Station only stores public multisig metadata, not key material Vultisig can convert into a vault.'
+  'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.'
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -192,6 +212,7 @@ const getCommonMetadata = (
 const createClassification = ({
   record,
   reason,
+  reasonCode,
   status,
   storageIndex,
   storageKey,
@@ -199,6 +220,7 @@ const createClassification = ({
 }: {
   record: Record<string, unknown>
   reason?: string
+  reasonCode?: StationLegacyWalletReasonCode
   status: StationLegacyWalletStatus
   storageIndex: number
   storageKey: StationLegacyWalletStorageKey
@@ -210,15 +232,18 @@ const createClassification = ({
   storageIndex,
   walletType,
   status,
+  reasonCode,
   reason,
   metadata: getCommonMetadata(record),
 })
 
 const createStorageCorruptionResult = ({
   reason,
+  reasonCode,
   storageKey,
 }: {
   reason: string
+  reasonCode: StationLegacyWalletReasonCode
   storageKey: StationLegacyWalletStorageKey
 }): StationLegacyWalletClassification => ({
   walletName: storageKey,
@@ -226,6 +251,7 @@ const createStorageCorruptionResult = ({
   storageKey,
   walletType: 'corruptStorage',
   status: 'corrupt',
+  reasonCode,
   reason,
   metadata: {},
 })
@@ -243,7 +269,8 @@ const classifyWalletRecord = ({
     return createClassification({
       record,
       reason: ledgerUnsupportedReason,
-      status: 'unsupported',
+      reasonCode: 'ledgerReconnectRequired',
+      status: 'reconnect',
       storageIndex,
       storageKey,
       walletType: 'ledger',
@@ -254,6 +281,7 @@ const classifyWalletRecord = ({
     return createClassification({
       record,
       reason: multisigUnsupportedReason,
+      reasonCode: 'multisigPublicMetadataOnly',
       status: 'unsupported',
       storageIndex,
       storageKey,
@@ -266,6 +294,7 @@ const classifyWalletRecord = ({
       return createClassification({
         record,
         reason: 'encryptedSeed is present but is not a string.',
+        reasonCode: 'encryptedSeedNotString',
         status: 'corrupt',
         storageIndex,
         storageKey,
@@ -298,6 +327,7 @@ const classifyWalletRecord = ({
       return createClassification({
         record,
         reason: 'encrypted is present but is neither a string nor an object.',
+        reasonCode: 'encryptedInvalidShape',
         status: 'corrupt',
         storageIndex,
         storageKey,
@@ -309,6 +339,7 @@ const classifyWalletRecord = ({
       return createClassification({
         record,
         reason: 'encrypted private-key object is missing coin type 330.',
+        reasonCode: 'encryptedPrivateKeyMissing330',
         status: 'corrupt',
         storageIndex,
         storageKey,
@@ -330,6 +361,7 @@ const classifyWalletRecord = ({
       return createClassification({
         record,
         reason: 'legacy wallet blob is present but is not a string.',
+        reasonCode: 'legacyWalletBlobNotString',
         status: 'corrupt',
         storageIndex,
         storageKey,
@@ -349,6 +381,7 @@ const classifyWalletRecord = ({
   return createClassification({
     record,
     reason: 'Wallet entry does not match any known Station storage shape.',
+    reasonCode: 'unknownWalletShape',
     status: 'unsupported',
     storageIndex,
     storageKey,
@@ -373,6 +406,7 @@ const parseWallets = ({
     return [
       createStorageCorruptionResult({
         reason: `${storageKey} contains malformed JSON.`,
+        reasonCode: 'malformedJson',
         storageKey,
       }),
     ]
@@ -382,6 +416,7 @@ const parseWallets = ({
     return [
       createStorageCorruptionResult({
         reason: `${storageKey} must be a JSON array.`,
+        reasonCode: 'storageNotArray',
         storageKey,
       }),
     ]
@@ -396,6 +431,7 @@ const parseWallets = ({
         storageIndex,
         walletType: 'corruptWallet',
         status: 'corrupt',
+        reasonCode: 'walletEntryNotObject',
         reason: 'Wallet entry is not an object.',
         metadata: {},
       }

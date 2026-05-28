@@ -1565,4 +1565,68 @@ export const es = {
   raw_message: 'Mensaje sin formato',
   token: 'Simbólico',
   token_approval: 'Aprobación de tokens',
+  skip_for_now: 'Saltar por ahora',
+  station_migration_title: 'Migrar las carteras Station',
+  station_migration_review_title: 'Revisar las antiguas carteras Station',
+  station_migration_review_description:
+    'Esto solo lee el almacenamiento de la extensión heredada Station. Aún no se han migrado, reconectado, eliminado ni marcado como completadas las carteras.',
+  station_migration_settings_title: 'Migrar las carteras Station',
+  station_migration_settings_description:
+    'Revisar las carteras antiguas Station detectadas en este dispositivo.',
+  station_migration_set_up_without_migrating: 'Configurar sin migrar',
+  station_migration_no_wallets_found:
+    'No se encontraron carteras antiguas Station en este almacenamiento de extensión.',
+  station_migration_summary_total_one: 'Cartera {{count}}',
+  station_migration_summary_total_other: 'Carteras {{count}}',
+  station_migration_status_supported: 'Compatible',
+  station_migration_status_reconnect: 'Reconectar',
+  station_migration_status_unsupported: 'Sin soporte',
+  station_migration_status_corrupt: 'Inválido',
+  station_migration_status_needs_review: 'Necesita revisión',
+  station_migration_wallet_type_mnemonic: 'Semilla encriptada y mnemotécnica',
+  station_migration_wallet_type_seed: 'Semilla cifrada',
+  station_migration_wallet_type_private_key: 'Clave privada cifrada',
+  station_migration_wallet_type_interchain_private_key:
+    'Claves privadas cifradas de Terra',
+  station_migration_wallet_type_legacy_private_key:
+    'Bloque de clave privada cifrada heredada',
+  station_migration_wallet_type_ledger: 'Cartera de hardware Ledger',
+  station_migration_wallet_type_multisig: 'Cartera multifirma',
+  station_migration_wallet_type_unknown:
+    'Formato de billetera Station desconocido',
+  station_migration_wallet_type_corrupt_storage: 'Almacenamiento no válido',
+  station_migration_wallet_type_corrupt_wallet:
+    'Entrada de billetera no válida',
+  station_migration_reason_supported_mnemonic:
+    'Los datos cifrados de la cartera están disponibles para una futura migración que solicitará la contraseña Station.',
+  station_migration_reason_supported_seed:
+    'Se incluyen bytes de semilla cifrados para una futura migración que solicitará la contraseña Station.',
+  station_migration_reason_supported_private_key:
+    'Los datos de clave privada cifrados están disponibles para una futura importación a la familia Terra.',
+  station_migration_reason_supported_interchain_private_key:
+    'Los datos de clave privada de Terra, cifrados, están disponibles para una futura importación.',
+  station_migration_reason_supported_legacy_private_key:
+    'Los datos de clave privada cifrados heredados están disponibles para una futura importación.',
+  station_migration_reason_ledger_reconnect:
+    'Station almacena los detalles de la cuenta pública para esta billetera Ledger. Vuelva a conectar el dispositivo de hardware más tarde para usarlo en Station.',
+  station_migration_reason_multisig:
+    'Station solo almacena metadatos multifirma públicos. No almacena claves privadas que puedan convertirse en una bóveda Vultisig.',
+  station_migration_reason_encrypted_seed_not_string:
+    'La clave encryptedSeed está presente, pero no es una cadena de texto.',
+  station_migration_reason_encrypted_invalid_shape:
+    'La clave "encrypted" está presente, pero no es ni una cadena de texto ni un objeto.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Al objeto de clave privada cifrado le falta el tipo de moneda 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'El blob de la billetera heredada está presente, pero no es una cadena de texto.',
+  station_migration_reason_unknown_wallet_shape:
+    'La entrada de la cartera no coincide con ningún formato de almacenamiento Station conocido.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} contiene JSON con formato incorrecto.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} debe ser una matriz JSON.',
+  station_migration_reason_wallet_entry_not_object:
+    'La entrada de la cartera no es un objeto.',
+  station_migration_reason_unsupported_fallback:
+    'Esta billetera necesita ser revisada antes de poder ser migrada.',
 }

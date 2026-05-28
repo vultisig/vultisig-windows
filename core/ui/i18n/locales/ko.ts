@@ -1526,4 +1526,66 @@ export const ko = {
   raw_message: '원본 메시지',
   token: '토큰',
   token_approval: '토큰 승인',
+  skip_for_now: '지금은 건너뛰세요',
+  station_migration_title: 'Station 지갑을 마이그레이션하세요',
+  station_migration_review_title: '기존 Station 지갑을 검토하세요',
+  station_migration_review_description:
+    '이 작업은 기존 Station 확장 저장소만 읽습니다. 아직 어떤 지갑도 마이그레이션, 재연결, 삭제 또는 완료로 표시되지 않았습니다.',
+  station_migration_settings_title: 'Station 지갑을 마이그레이션하세요',
+  station_migration_settings_description:
+    '이 기기에서 감지된 이전 Station 지갑을 검토하세요.',
+  station_migration_set_up_without_migrating: '마이그레이션 없이 설정',
+  station_migration_no_wallets_found:
+    '이 확장 저장소에서 기존 Station 지갑이 발견되지 않았습니다.',
+  station_migration_summary_total_one: '{{count}} 지갑',
+  station_migration_summary_total_other: '{{count}} 지갑',
+  station_migration_status_supported: '지원됨',
+  station_migration_status_reconnect: '다시 연결',
+  station_migration_status_unsupported: '지원되지 않음',
+  station_migration_status_corrupt: '유효하지 않은',
+  station_migration_status_needs_review: '검토 필요',
+  station_migration_wallet_type_mnemonic: '암호화된 시드와 니모닉',
+  station_migration_wallet_type_seed: '암호화된 시드',
+  station_migration_wallet_type_private_key: '암호화된 개인 키',
+  station_migration_wallet_type_interchain_private_key:
+    '암호화된 Terra 개인 키',
+  station_migration_wallet_type_legacy_private_key:
+    '기존 암호화된 개인 키 블롭',
+  station_migration_wallet_type_ledger: '레저 하드웨어 지갑',
+  station_migration_wallet_type_multisig: '멀티시그 지갑',
+  station_migration_wallet_type_unknown: '알 수 없는 Station 지갑 형식',
+  station_migration_wallet_type_corrupt_storage: '잘못된 저장소',
+  station_migration_wallet_type_corrupt_wallet: '잘못된 지갑 입력입니다',
+  station_migration_reason_supported_mnemonic:
+    '암호화된 지갑 데이터는 향후 마이그레이션을 위해 존재하며, 해당 마이그레이션에서 Station 암호를 요구합니다.',
+  station_migration_reason_supported_seed:
+    '암호화된 시드 바이트는 향후 마이그레이션에서 Station 암호를 요청할 때 사용됩니다.',
+  station_migration_reason_supported_private_key:
+    '암호화된 개인 키 데이터가 향후 Terra 제품군 가져오기를 위해 존재합니다.',
+  station_migration_reason_supported_interchain_private_key:
+    '암호화된 Terra 개인 키 데이터가 향후 가져오기를 위해 준비되어 있습니다.',
+  station_migration_reason_supported_legacy_private_key:
+    '기존에 암호화된 개인 키 데이터가 향후 가져오기를 위해 존재합니다.',
+  station_migration_reason_ledger_reconnect:
+    'Station에는 이 Ledger 지갑의 공개 계정 정보가 저장됩니다. 나중에 하드웨어 장치를 다시 연결하여 Station에서 사용하세요.',
+  station_migration_reason_multisig:
+    'Station는 공개 멀티시그 메타데이터만 저장합니다. Vultisig 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed는 존재하지만 문자열이 아닙니다.',
+  station_migration_reason_encrypted_invalid_shape:
+    'encrypted는 존재하지만 문자열도 아니고 객체도 아닙니다.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    '암호화된 개인 키 객체에 코인 유형 330이 누락되었습니다.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    '기존 지갑의 블롭이 존재하지만 문자열은 아닙니다.',
+  station_migration_reason_unknown_wallet_shape:
+    '지갑 항목이 알려진 Station 저장 형식과 일치하지 않습니다.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}}에 잘못된 형식의 JSON이 포함되어 있습니다.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}}는 JSON 배열이어야 합니다.',
+  station_migration_reason_wallet_entry_not_object:
+    '지갑 항목은 객체가 아닙니다.',
+  station_migration_reason_unsupported_fallback:
+    '이 지갑은 이전하기 전에 검토가 필요합니다.',
 }

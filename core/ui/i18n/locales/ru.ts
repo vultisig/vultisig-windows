@@ -1539,4 +1539,67 @@ export const ru = {
   raw_message: 'Исходное сообщение',
   token: 'Токен',
   token_approval: 'Подтверждение токена',
+  skip_for_now: 'Пропустите пока что',
+  station_migration_title: 'Перенести кошельки Station',
+  station_migration_review_title: 'Проверка старых кошельков Station',
+  station_migration_review_description:
+    'Это только чтение устаревшего хранилища расширения Station. Пока ни один кошелёк не был перенесён, переподключён, удалён или помечен как завершённый.',
+  station_migration_settings_title: 'Перенести кошельки Station',
+  station_migration_settings_description:
+    'Просмотрите старые кошельки Station, обнаруженные на этом устройстве.',
+  station_migration_set_up_without_migrating: 'Настройка без миграции.',
+  station_migration_no_wallets_found:
+    'В хранилище этого расширения не обнаружено устаревших кошельков Station.',
+  station_migration_summary_total_one: 'Кошелек {{count}}',
+  station_migration_summary_total_other: 'Кошельки {{count}}',
+  station_migration_status_supported: 'Поддерживается',
+  station_migration_status_reconnect: 'Восстановить соединение',
+  station_migration_status_unsupported: 'Неподдерживаемый',
+  station_migration_status_corrupt: 'Неверный',
+  station_migration_status_needs_review: 'Требуется пересмотр',
+  station_migration_wallet_type_mnemonic:
+    'Зашифрованное начальное значение и мнемоническое правило',
+  station_migration_wallet_type_seed: 'Зашифрованное начальное значение',
+  station_migration_wallet_type_private_key: 'Зашифрованный закрытый ключ',
+  station_migration_wallet_type_interchain_private_key:
+    'Зашифрованные закрытые ключи Terra',
+  station_migration_wallet_type_legacy_private_key:
+    'Устаревший зашифрованный блок закрытого ключа',
+  station_migration_wallet_type_ledger: 'Аппаратный кошелек Ledger',
+  station_migration_wallet_type_multisig: 'Кошелек с мультиподписью',
+  station_migration_wallet_type_unknown: 'Неизвестный формат кошелька Station',
+  station_migration_wallet_type_corrupt_storage: 'Недопустимое хранилище',
+  station_migration_wallet_type_corrupt_wallet: 'Неверная запись в кошельке',
+  station_migration_reason_supported_mnemonic:
+    'Зашифрованные данные кошелька присутствуют для будущей миграции, при которой потребуется пароль Station.',
+  station_migration_reason_supported_seed:
+    'Зашифрованные начальные байты присутствуют для будущей миграции, при которой будет запрошен пароль Station.',
+  station_migration_reason_supported_private_key:
+    'Зашифрованные данные закрытого ключа доступны для будущего импорта в семейство Terra.',
+  station_migration_reason_supported_interchain_private_key:
+    'Зашифрованные данные закрытого ключа Terra доступны для импорта в будущем.',
+  station_migration_reason_supported_legacy_private_key:
+    'Устаревшие зашифрованные данные закрытого ключа доступны для импорта в будущем.',
+  station_migration_reason_ledger_reconnect:
+    'В Station хранятся общедоступные данные учетной записи для этого кошелька Ledger. Подключите аппаратное устройство позже, чтобы использовать его в Station.',
+  station_migration_reason_multisig:
+    'Station хранит только открытые метаданные мультиподписи. Он не хранит закрытые ключи, которые можно преобразовать в хранилище Vultisig.',
+  station_migration_reason_encrypted_seed_not_string:
+    'Параметр encryptedSeed присутствует, но не является строкой.',
+  station_migration_reason_encrypted_invalid_shape:
+    'Зашифрованное значение присутствует, но не является ни строкой, ни объектом.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'В зашифрованном объекте закрытого ключа отсутствует тип монеты 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Устаревший объект Wallet Blob присутствует, но не является строкой.',
+  station_migration_reason_unknown_wallet_shape:
+    'Запись в кошельке не соответствует ни одному известному формату хранения Station.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} содержит некорректный JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} должен быть массивом JSON.',
+  station_migration_reason_wallet_entry_not_object:
+    'Запись в кошельке не является объектом.',
+  station_migration_reason_unsupported_fallback:
+    'Перед переносом данных из этого кошелька требуется его проверка.',
 }
