@@ -40,7 +40,7 @@ import {
   CosmosMsg,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { attempt } from '@vultisig/lib-utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { match } from '@vultisig/lib-utils/match'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
@@ -1008,6 +1008,10 @@ export class XDEFIKeplrProvider extends Keplr {
    * Paired with `signArbitrary`. Pure secp256k1 verification — reconstructs
    * the ADR-36 sign-doc from `(signer, data)`, confirms the supplied pubkey
    * actually derives to `signer`, then checks the signature over the digest.
+   *
+   * Inputs come from the dApp, so malformed base64/bech32/signature must
+   * resolve to `false` (the contract Keplr consumers expect) rather than
+   * rejecting the promise — hence the `attempt` + `false` fallback.
    */
   async verifyArbitrary(
     _chainId: string,
@@ -1015,23 +1019,28 @@ export class XDEFIKeplrProvider extends Keplr {
     data: string | Uint8Array,
     signature: StdSignature
   ): Promise<boolean> {
-    const dataBytes =
-      typeof data === 'string' ? new TextEncoder().encode(data) : data
-    const dataBase64 = Buffer.from(dataBytes).toString('base64')
+    return withFallback(
+      attempt(() => {
+        const dataBytes =
+          typeof data === 'string' ? new TextEncoder().encode(data) : data
+        const dataBase64 = Buffer.from(dataBytes).toString('base64')
 
-    const digest = sha256(serializeAdr36SignDoc(signer, dataBase64))
+        const digest = sha256(serializeAdr36SignDoc({ signer, dataBase64 }))
 
-    const pubkey = fromBase64(signature.pub_key.value)
-    const sigBytes = fromBase64(signature.signature)
-    if (sigBytes.length !== 64) return false
+        const pubkey = fromBase64(signature.pub_key.value)
+        const sigBytes = fromBase64(signature.signature)
+        if (sigBytes.length !== 64) return false
 
-    const derivedAddress = bech32.encode(
-      bech32.decode(signer).prefix,
-      bech32.toWords(ripemd160(sha256(pubkey)))
+        const derivedAddress = bech32.encode(
+          bech32.decode(signer).prefix,
+          bech32.toWords(ripemd160(sha256(pubkey)))
+        )
+        if (!areLowerCaseEqual(derivedAddress, signer)) return false
+
+        return secp256k1.verify(sigBytes, digest, pubkey)
+      }),
+      false
     )
-    if (!areLowerCaseEqual(derivedAddress, signer)) return false
-
-    return secp256k1.verify(sigBytes, digest, pubkey)
   }
 
   /**

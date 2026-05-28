@@ -84,7 +84,7 @@ export const Overview = () => {
     // The signed digest is sha256 of the canonical ADR-36 StdSignDoc; carry
     // those bytes (hex) through to `getCustomMessageHex`, which hashes them.
     cosmos_sign_arbitrary: ({ data }) =>
-      hexlify(serializeAdr36SignDoc(address, data)),
+      hexlify(serializeAdr36SignDoc({ signer: address, dataBase64: data })),
   })
 
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
