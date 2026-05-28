@@ -21,6 +21,7 @@
     "validate-public": "yarn workspace @core/ui validate-public",
     "knip": "knip",
     "check:all": "yarn validate-public && yarn lint && yarn typecheck && yarn test && yarn workspace @clients/extension test && yarn workspace @clients/desktop test:ci && yarn workspace @core/ui i18n:check-integrity && yarn i18n:review-quality --strict && yarn knip",
+    "check:client-build-flags": "yarn build:desktop && yarn build:extension:station",
     "knip:fix": "knip --fix --allow-remove-files",
     "check": "yarn validate-public && concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn workspace @core/ui i18n:check-integrity && yarn i18n:review-quality --strict && yarn knip",
     "translate": "yarn workspace @core/ui translate",
