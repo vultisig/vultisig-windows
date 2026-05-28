@@ -24,6 +24,8 @@
     "lint:tests": "eslint 'tests/**/*.{js,jsx,ts,tsx}'",
     "lint:all": "eslint .",
     "preview": "vite preview",
+    "qa:brand": "node scripts/qa-extension-brand.mjs vultisig",
+    "qa:brand:station": "node scripts/qa-extension-brand.mjs station",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config tests/unit/vitest.config.ts",
     "test:unit": "vitest run --config tests/unit/vitest.config.ts",
