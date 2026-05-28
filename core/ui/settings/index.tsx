@@ -41,6 +41,7 @@ import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../product/brand'
 import {
   currentProductWebsiteUrl,
   discordReferralUrl,
@@ -71,6 +72,7 @@ export const SettingsPage: FC<Props> = props => {
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const addresses = useCurrentVaultAddresses()
   const areReferralEnabled = Boolean(addresses[Chain.THORChain])
+  const shouldShowVultDiscounts = currentProductBrand === 'vultisig'
 
   return (
     <>
@@ -106,16 +108,18 @@ export const SettingsPage: FC<Props> = props => {
               title={t('vault_settings')}
               showArrow
             />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <CoinsIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => navigate({ id: 'vultDiscount' })}
-              title={`$${vult.ticker} ${t('discount_tiers')}`}
-              showArrow
-            />
+            {shouldShowVultDiscounts && (
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <CoinsIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => navigate({ id: 'vultDiscount' })}
+                title={`$${vult.ticker} ${t('discount_tiers')}`}
+                showArrow
+              />
+            )}
           </SettingsSection>
 
           <SettingsSection title={t('general')}>

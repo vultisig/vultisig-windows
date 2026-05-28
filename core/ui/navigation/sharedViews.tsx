@@ -47,6 +47,7 @@ import { ManageDefiChainsPage } from '../defi/manage/ManageDefiChainsPage'
 import { DefiPage } from '../defi/page/DefiPage'
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+import { currentProductBrand } from '../product/brand'
 import { QbtcClaimPage } from '../qbtc/claim/components/QbtcClaimPage'
 import { QuantumSecurityOnboardingPage } from '../qbtc/onboarding/QuantumSecurityOnboardingPage'
 import { RequestFastVaultBackup } from '../vault/backup/fast/request'
@@ -183,7 +184,8 @@ export const sharedViews: Views<SharedViewId> = {
   transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,
-  vultDiscount: VultDiscountPage,
+  vultDiscount:
+    currentProductBrand === 'station' ? VaultPage : VultDiscountPage,
   qbtcClaim: QbtcClaimPage,
   qbtcQuantumSecurityOnboarding: QuantumSecurityOnboardingPage,
 }

@@ -5,6 +5,7 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { currentProductBrand } from '../../../../product/brand'
 import { ReferralDiscountRow } from './ReferralDiscountRow'
 import { VultDiscountRow } from './VultDiscountRow'
 
@@ -14,15 +15,19 @@ type SwapDiscountInfoProps = {
 
 export const SwapDiscountInfo = ({ discounts }: SwapDiscountInfoProps) => {
   const { t } = useTranslation()
+  const visibleDiscounts =
+    currentProductBrand === 'station'
+      ? discounts.filter(discount => !('vult' in discount))
+      : discounts
 
-  if (discounts.length === 0) return null
+  if (visibleDiscounts.length === 0) return null
 
   return (
     <VStack gap={10}>
       <Text size={12} color="shy">
         {t('applied_discounts')}
       </Text>
-      {discounts.map((discount, index) =>
+      {visibleDiscounts.map((discount, index) =>
         matchRecordUnion<SwapDiscount, ReactNode>(discount, {
           vult: ({ tier }) => <VultDiscountRow key={index} value={tier} />,
           referral: () => <ReferralDiscountRow key={index} />,

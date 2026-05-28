@@ -72,6 +72,12 @@ export default defineConfig(async ({ mode }) => {
     __VULTISIG_VERIFIER_URL__: JSON.stringify(
       env.VULTISIG_VERIFIER_URL || 'https://verifier.vultisig.com'
     ),
+    __VULTISIG_STATION_KYBER_SOURCE__: JSON.stringify(
+      env.VULTISIG_STATION_KYBER_SOURCE ||
+        process.env.VULTISIG_STATION_KYBER_SOURCE ||
+        env.VITE_VULTISIG_STATION_KYBER_SOURCE ||
+        ''
+    ),
   }
 
   const chunk = process.env.CHUNK

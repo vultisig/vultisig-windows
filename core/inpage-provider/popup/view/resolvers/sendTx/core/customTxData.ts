@@ -27,8 +27,35 @@ type RegularTxData = IKeysignTransactionPayload & {
   coin: Coin
 }
 
+type SubstrateChain = OtherChain.Polkadot | OtherChain.Bittensor
+
+const bittensorGenesisHash =
+  '0x2f0555cc76fc2840a25a6ea3b9637146806f1f44b090c175ffde2a7e5ab36c03'
+const polkadotGenesisHash =
+  '0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3'
+
+const substrateChainByGenesisHash: Record<string, SubstrateChain> = {
+  [bittensorGenesisHash]: OtherChain.Bittensor,
+  [polkadotGenesisHash]: OtherChain.Polkadot,
+}
+
+const getSubstrateChain = (genesisHash: unknown): SubstrateChain => {
+  if (typeof genesisHash !== 'string') {
+    throw new Error('Missing Substrate genesis hash')
+  }
+
+  const chain = substrateChainByGenesisHash[genesisHash.toLowerCase()]
+
+  if (!chain) {
+    throw new Error('Unsupported Substrate genesis hash')
+  }
+
+  return chain
+}
+
+/** Substrate dApp transaction data whose chain is derived from its genesis hash. */
 export type PolkadotDappTxData = {
-  chain: OtherChain.Polkadot | OtherChain.Bittensor
+  chain: SubstrateChain
   signerPayload: PolkadotSignerPayloadJSON
 }
 
@@ -124,7 +151,12 @@ export const getCustomTxData = ({
       serialized: async ({ data, chain, params }) => {
         if (chain === OtherChain.Polkadot || chain === OtherChain.Bittensor) {
           const signerPayload = JSON.parse(data[0]) as PolkadotSignerPayloadJSON
-          return { polkadot: { chain, signerPayload } }
+          return {
+            polkadot: {
+              chain: getSubstrateChain(signerPayload.genesisHash),
+              signerPayload,
+            },
+          }
         }
 
         const publicKey = getPublicKey({

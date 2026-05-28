@@ -12,12 +12,21 @@ import { vultWebsiteUrl } from '@vultisig/core-config'
 import { useTranslation } from 'react-i18next'
 
 import { PageHeaderBackButton } from '../../flow/PageHeaderBackButton'
+import { currentProductBrand } from '../../product/brand'
 import { useResponsiveness } from '../../providers/ResponsivenessProvider'
 import { useCore } from '../../state/core'
 import { useVultDiscountTierQuery } from './queries/tier'
 import { VultDiscountTier } from './tier'
 
 export const VultDiscountPage = () => {
+  if (currentProductBrand === 'station') {
+    return null
+  }
+
+  return <VultDiscountPageContent />
+}
+
+const VultDiscountPageContent = () => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
 

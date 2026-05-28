@@ -56,9 +56,9 @@
       "failureCount": 1
     },
     "thorchain": {
-      "lastTested": 1773199819057,
+      "lastTested": 1778991100808,
       "successCount": 12,
-      "failureCount": 0
+      "failureCount": 1
     },
     "cosmos": {
       "lastTested": 0,
@@ -66,5 +66,5 @@
       "failureCount": 0
     }
   },
-  "lastUpdated": 1773199878458
+  "lastUpdated": 1778991100808
 }

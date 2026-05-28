@@ -6,6 +6,10 @@ import EventEmitter from 'events'
 import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { Callback } from '../constants'
 import { getSharedHandlers } from './core/sharedHandlers'
+import {
+  handleQbtcSignAndBroadcast,
+  parseSignAndBroadcastParams,
+} from './qbtcSignAndBroadcast'
 
 const mldsaRequiredMessage =
   'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
@@ -31,8 +35,13 @@ const parseSendTransactionParams = (
  * QBTC is a post-quantum Cosmos SDK chain that signs with MLDSA-44 rather
  * than secp256k1/ed25519. This provider is the QBTC-native surface
  * (`get_accounts`, `request_accounts`, `send_transaction`,
- * `get_transaction_by_hash`) with explicit MLDSA semantics — no `algo`
- * spoofing, no Keplr signature-shape compromises.
+ * `sign_and_broadcast`, `get_transaction_by_hash`) with explicit MLDSA
+ * semantics — no `algo` spoofing, no Keplr signature-shape compromises.
+ *
+ * `send_transaction` is the legacy bank-send shortcut; new dApp flows that
+ * need to sign arbitrary Cosmos SDK messages (`MsgVote`, `MsgDelegate`,
+ * `MsgWithdrawDelegatorReward`, etc.) should use `sign_and_broadcast` —
+ * see {@link handleQbtcSignAndBroadcast} for the accepted shape.
  *
  * QBTC is also reachable via the Keplr compatibility route at chainId
  * `qbtc-testnet` for dApps that can't be modified; see `xdefiKeplr.ts`.
@@ -74,6 +83,12 @@ export class Qbtc extends EventEmitter {
       if (data.method === 'send_transaction') {
         return handlers.send_transaction(
           parseSendTransactionParams(data.params)
+        )
+      }
+
+      if (data.method === 'sign_and_broadcast') {
+        return handleQbtcSignAndBroadcast(
+          parseSignAndBroadcastParams(data.params)
         )
       }
 
