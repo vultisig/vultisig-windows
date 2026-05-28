@@ -247,6 +247,57 @@ func TestLegacyExecutableDBFilePathCandidatesIncludesExecutableDir(t *testing.T)
 	}
 }
 
+func TestLegacyExecutableDBFilePathCandidatesIncludesWindowsPortablePaths(t *testing.T) {
+	homeDir := filepath.Join(t.TempDir(), "Users", "alice")
+	executablePath := filepath.Join(t.TempDir(), "Program Files", "Vultisig", "vultisig.exe")
+
+	candidates := legacyExecutableDBFilePathCandidates(storeDBPathConfig{
+		goos:           "windows",
+		executablePath: executablePath,
+		homeDir:        homeDir,
+	})
+
+	expected := []string{
+		filepath.Join(homeDir, "Downloads", DbFileName),
+		filepath.Join(homeDir, "Desktop", DbFileName),
+		filepath.Join(homeDir, "Documents", DbFileName),
+	}
+	for _, want := range expected {
+		found := false
+		for _, c := range candidates {
+			if c == want {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("expected candidate %q in %v", want, candidates)
+		}
+	}
+}
+
+func TestMigrateLegacyDBFindsPortableDBInDownloads(t *testing.T) {
+	homeDir := t.TempDir()
+	downloadsDBFilePath := filepath.Join(homeDir, "Downloads", DbFileName)
+	targetDBFilePath := filepath.Join(t.TempDir(), "target", DbFileName)
+
+	writeFile(t, downloadsDBFilePath, "portable-db")
+	if err := os.MkdirAll(filepath.Dir(targetDBFilePath), 0700); err != nil {
+		t.Fatal(err)
+	}
+
+	candidates := legacyExecutableDBFilePathCandidates(storeDBPathConfig{
+		goos:    "windows",
+		homeDir: homeDir,
+	})
+
+	if err := migrateLegacyDB(targetDBFilePath, candidates); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, targetDBFilePath, "portable-db")
+}
+
 func TestLegacyExecutableDBFilePathCandidatesPrefersWindowsVirtualStore(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		t.Skip("Windows VirtualStore paths use Windows filepath semantics")

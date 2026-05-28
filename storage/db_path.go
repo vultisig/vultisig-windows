@@ -70,6 +70,10 @@ func currentStoreDBPathConfig() (storeDBPathConfig, error) {
 			return config, fmt.Errorf("failed to get user cache directory: %w", err)
 		}
 		config.cacheDir = cacheDir
+
+		// homeDir is used to locate portable-exe migration candidates (Downloads,
+		// Desktop, etc.); non-fatal if unavailable.
+		config.homeDir, _ = os.UserHomeDir()
 	case "darwin":
 		configDir, err := os.UserConfigDir()
 		if err != nil {
@@ -135,20 +139,27 @@ func shouldMigrateLegacyExecutableDB(config storeDBPathConfig) bool {
 }
 
 func legacyExecutableDBFilePathCandidates(config storeDBPathConfig) []string {
-	if config.executablePath == "" {
-		return nil
+	candidates := make([]string, 0, 6)
+
+	if config.executablePath != "" {
+		executableDir := filepath.Dir(config.executablePath)
+
+		if config.goos == "windows" && config.localAppData != "" {
+			if virtualStoreDir, ok := windowsVirtualStoreDir(config.localAppData, executableDir); ok {
+				candidates = append(candidates, filepath.Join(virtualStoreDir, DbFileName))
+			}
+		}
+
+		candidates = append(candidates, filepath.Join(executableDir, DbFileName))
 	}
 
-	executableDir := filepath.Dir(config.executablePath)
-	candidates := make([]string, 0, 2)
-
-	if config.goos == "windows" && config.localAppData != "" {
-		if virtualStoreDir, ok := windowsVirtualStoreDir(config.localAppData, executableDir); ok {
-			candidates = append(candidates, filepath.Join(virtualStoreDir, DbFileName))
+	// On Windows, also check common user-profile directories where a portable exe
+	// would have been run from before the NSIS installer was introduced.
+	if config.goos == "windows" && config.homeDir != "" {
+		for _, subDir := range []string{"Downloads", "Desktop", "Documents"} {
+			candidates = append(candidates, filepath.Join(config.homeDir, subDir, DbFileName))
 		}
 	}
-
-	candidates = append(candidates, filepath.Join(executableDir, DbFileName))
 
 	return candidates
 }
