@@ -1,25 +1,24 @@
-import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
-import { WalletCore } from '@trustwallet/wallet-core'
+import type { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import type { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getEvmContractCallHexSignature } from '@vultisig/core-chain/chains/evm/contract/call/hexSignature'
 import { getEvmContractCallSignatures } from '@vultisig/core-chain/chains/evm/contract/call/signatures'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
-import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
-import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
-import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import type { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
+import type { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { Psbt } from 'bitcoinjs-lib'
 
-import { IKeysignTransactionPayload, ITransactionPayload } from '../interfaces'
-import { parseSolanaTx } from './solana/parser'
-import { SolanaTxData } from './solana/types/types'
+import type {
+  IKeysignTransactionPayload,
+  ITransactionPayload,
+} from '../interfaces'
+import type { SolanaTxData } from './solana/types/types'
 import { restrictPsbtToInputs } from './utxo/restrictPsbt'
 
 type RegularTxData = IKeysignTransactionPayload & {
@@ -159,6 +158,11 @@ export const getCustomTxData = ({
           }
         }
 
+        const [{ getPublicKey }, { deriveAddress }] = await Promise.all([
+          import('@vultisig/core-chain/publicKey/getPublicKey'),
+          import('@vultisig/core-chain/publicKey/address/deriveAddress'),
+        ])
+
         const publicKey = getPublicKey({
           chain,
           walletCore,
@@ -193,6 +197,11 @@ export const getCustomTxData = ({
           }
           return { psbt }
         }
+
+        const [{ toCommCoin }, { parseSolanaTx }] = await Promise.all([
+          import('@vultisig/core-mpc/types/utils/commCoin'),
+          import('./solana/parser'),
+        ])
 
         return {
           solana: await parseSolanaTx({

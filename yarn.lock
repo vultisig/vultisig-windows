@@ -561,11 +561,11 @@ __metadata:
     "@tanstack/react-query-persist-client": "npm:^5.90.24"
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
-    "@vultisig/core-chain": "npm:2.2.5"
+    "@vultisig/core-chain": "npm:2.4.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.2.20"
+    "@vultisig/core-mpc": "npm:1.3.0"
     "@vultisig/lib-utils": "npm:0.10.1"
-    "@vultisig/sdk": "npm:1.1.3"
+    "@vultisig/sdk": "npm:1.3.0"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -622,10 +622,10 @@ __metadata:
     "@types/react-dom": "npm:^19.2.3"
     "@types/web-push": "npm:^3"
     "@types/ws": "npm:^8"
-    "@vultisig/core-chain": "npm:2.2.5"
-    "@vultisig/core-mpc": "npm:1.2.20"
+    "@vultisig/core-chain": "npm:2.4.0"
+    "@vultisig/core-mpc": "npm:1.3.0"
     "@vultisig/lib-utils": "npm:0.10.1"
-    "@vultisig/sdk": "npm:1.1.3"
+    "@vultisig/sdk": "npm:1.3.0"
     "@wallet-standard/base": "npm:^1.1.0"
     "@wallet-standard/features": "npm:^1.1.0"
     bech32: "npm:^2.0.0"
@@ -714,9 +714,9 @@ __metadata:
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-query-persist-client": "npm:^5.90.24"
     "@trustwallet/wallet-core": "npm:^4.6.9"
-    "@vultisig/core-chain": "npm:2.2.5"
+    "@vultisig/core-chain": "npm:2.4.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.2.20"
+    "@vultisig/core-mpc": "npm:1.3.0"
     "@vultisig/lib-utils": "npm:0.10.1"
     react: "npm:^19.2.4"
     react-i18next: "npm:^16.5.8"
@@ -738,9 +738,9 @@ __metadata:
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.90.21"
     "@trustwallet/wallet-core": "npm:^4.6.9"
-    "@vultisig/core-chain": "npm:2.2.5"
+    "@vultisig/core-chain": "npm:2.4.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.2.20"
+    "@vultisig/core-mpc": "npm:1.3.0"
     "@vultisig/lib-utils": "npm:0.10.1"
     bitcoinjs-lib: "npm:^7.0.1"
     cosmjs-types: "npm:^0.11.0"
@@ -785,11 +785,11 @@ __metadata:
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitejs/plugin-react": "npm:^5.1.3"
-    "@vultisig/core-chain": "npm:2.2.5"
+    "@vultisig/core-chain": "npm:2.4.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.2.20"
+    "@vultisig/core-mpc": "npm:1.3.0"
     "@vultisig/lib-utils": "npm:0.10.1"
-    "@vultisig/sdk": "npm:1.1.3"
+    "@vultisig/sdk": "npm:1.3.0"
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
@@ -2478,13 +2478,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mysten/bcs@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "@mysten/bcs@npm:2.0.3"
+"@mysten/bcs@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "@mysten/bcs@npm:2.0.5"
   dependencies:
-    "@mysten/utils": "npm:^0.3.1"
+    "@mysten/utils": "npm:^0.3.3"
     "@scure/base": "npm:^2.0.0"
-  checksum: 10c0/27be1c7b1614d883baac5249634539ac9751fd78cc014bb75a60444ad088f12efdd83ba39d6f27efc9aec28e497ce053a019c25a213fdf475d19d2c24d3d29aa
+  checksum: 10c0/ef86f7deb9376e337b8dd6e55a13a8f12d3ef21eb0dd01f7a5410f5105ff0f19560d9d74d00fc07e0912c26469b26d079ca2b5201abcc978a5efa15f1e876e3e
   languageName: node
   linkType: hard
 
@@ -2511,13 +2511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mysten/sui@npm:^2.3.0":
-  version: 2.16.0
-  resolution: "@mysten/sui@npm:2.16.0"
+"@mysten/sui@npm:^2.17.0":
+  version: 2.17.0
+  resolution: "@mysten/sui@npm:2.17.0"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.2.0"
-    "@mysten/bcs": "npm:^2.0.3"
-    "@mysten/utils": "npm:^0.3.1"
+    "@mysten/bcs": "npm:^2.0.5"
+    "@mysten/utils": "npm:^0.3.3"
     "@noble/curves": "npm:^2.0.1"
     "@noble/hashes": "npm:^2.0.1"
     "@protobuf-ts/grpcweb-transport": "npm:^2.11.1"
@@ -2530,30 +2530,7 @@ __metadata:
     graphql: "npm:^16.12.0"
     poseidon-lite: "npm:0.2.1"
     valibot: "npm:^1.2.0"
-  checksum: 10c0/b6593fa4afa9928bc59b71966714e51cf1eb38a9991843ba69f20c956e67d2e372e944d1854542c9ea49610dfbc32f33658d9f56e256f39db5ce28515ff4e5ba
-  languageName: node
-  linkType: hard
-
-"@mysten/sui@npm:^2.8.0":
-  version: 2.8.0
-  resolution: "@mysten/sui@npm:2.8.0"
-  dependencies:
-    "@graphql-typed-document-node/core": "npm:^3.2.0"
-    "@mysten/bcs": "npm:^2.0.3"
-    "@mysten/utils": "npm:^0.3.1"
-    "@noble/curves": "npm:^2.0.1"
-    "@noble/hashes": "npm:^2.0.1"
-    "@protobuf-ts/grpcweb-transport": "npm:^2.11.1"
-    "@protobuf-ts/runtime": "npm:^2.11.1"
-    "@protobuf-ts/runtime-rpc": "npm:^2.11.1"
-    "@scure/base": "npm:^2.0.0"
-    "@scure/bip32": "npm:^2.0.1"
-    "@scure/bip39": "npm:^2.0.1"
-    gql.tada: "npm:^1.9.0"
-    graphql: "npm:^16.12.0"
-    poseidon-lite: "npm:0.2.1"
-    valibot: "npm:^1.2.0"
-  checksum: 10c0/6d67677116f118d1a4a73a335cb9dabafbb5b703c6d5a973247e846845aea6a7f4f74deeaba9e50770d595d67a7fc39787a2cabfc384303cb8f284f5d9395208
+  checksum: 10c0/d9e5cbb67fb0f2e10f4136284a6a9d382862a2401e1e957db339442e95c90a95b3c762d65d7e5a5ca72514493b317226feda84cdb1b3569a5cab9924edb90ff5
   languageName: node
   linkType: hard
 
@@ -2566,12 +2543,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mysten/utils@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@mysten/utils@npm:0.3.1"
+"@mysten/utils@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@mysten/utils@npm:0.3.3"
   dependencies:
     "@scure/base": "npm:^2.0.0"
-  checksum: 10c0/d28cc00c3b072dfd2a64f8908fa2063dead56dbe8bb9dd63458c755bf19c1806a7b038696ba63a1a7cdddb7c4a1d510acab26da5deeb99202f2bbb2b1bba25ef
+  checksum: 10c0/e04876af863679dbe16ad9272a069881a8d1254f3e0296d2f76cec1fc13f972f4ba75a92d6554be8853db742f5c31035c8f2a5bd86695a53dfbebe6913a45580
   languageName: node
   linkType: hard
 
@@ -6346,9 +6323,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-chain@npm:2.2.5":
-  version: 2.2.5
-  resolution: "@vultisig/core-chain@npm:2.2.5"
+"@vultisig/core-chain@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@vultisig/core-chain@npm:2.4.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.11.0"
@@ -6357,7 +6334,7 @@ __metadata:
     "@cosmjs/proto-signing": "npm:^0.38.1"
     "@cosmjs/stargate": "npm:^0.38.1"
     "@lifi/sdk": "npm:^3.16.2"
-    "@mysten/sui": "npm:^2.8.0"
+    "@mysten/sui": "npm:^2.17.0"
     "@noble/hashes": "npm:^1.8.0"
     "@polkadot/api": "npm:^16.5.4"
     "@polkadot/util": "npm:^14.0.1"
@@ -6378,9 +6355,9 @@ __metadata:
     ethers: "npm:^6.16.0"
     i18next: "npm:^26.0.8"
     tiny-secp256k1: "npm:^2.2.4"
-    viem: "npm:^2.48.4"
+    viem: "npm:^2.51.0"
     xrpl: "npm:^4.6.0"
-  checksum: 10c0/9f4e3968221cd886a088b550fb827668fad90ee304a6ebfc35405c54b6310f5c478e6b5967d071bb9e397942e048b72794ca6a69be56279e550b76bac533fb1f
+  checksum: 10c0/1f5292baa17a816afef67a4dbf72b714d0eb0640f6cc6636ebbfab130cb6317deedfbe8b499ab83823f6782dc28ddb7eff945120b6e09e9b27bceca8ab95bcd5
   languageName: node
   linkType: hard
 
@@ -6391,18 +6368,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-mpc@npm:1.2.20":
-  version: 1.2.20
-  resolution: "@vultisig/core-mpc@npm:1.2.20"
+"@vultisig/core-mpc@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@vultisig/core-mpc@npm:1.3.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.11.0"
     "@cosmjs/encoding": "npm:^0.39.0"
-    "@mysten/sui": "npm:^2.8.0"
+    "@mysten/sui": "npm:^2.17.0"
     "@noble/hashes": "npm:^1.8.0"
     "@solana/web3.js": "npm:^1.98.4"
     "@trustwallet/wallet-core": "npm:^4.6.9"
-    "@vultisig/core-chain": "npm:2.2.5"
+    "@vultisig/core-chain": "npm:2.4.0"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/lib-dkls": "npm:0.9.0"
     "@vultisig/lib-mldsa": "npm:0.9.0"
@@ -6414,8 +6391,8 @@ __metadata:
     buffer: "npm:^6.0.3"
     cosmjs-types: "npm:^0.11.0"
     long: "npm:^5.3.2"
-    viem: "npm:^2.48.4"
-  checksum: 10c0/695056561f252eefc5e64b1ad1acbeac3ad3c1a3f0281fd0174dc62e5d998dc63f3595e404cbf0e4e3a1622974b58da76d898782bef2099a601f163033ed9ca0
+    viem: "npm:^2.51.0"
+  checksum: 10c0/8ddcee6aea5d0f9db75d7e7f8fc20387ea5b34e830747c79a5bc2159fe04f4a06549f7e89505bfe45fadfed767295d8589cbd02bb9a116c752917d395470e44b
   languageName: node
   linkType: hard
 
@@ -6463,9 +6440,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/sdk@npm:1.1.3":
-  version: 1.1.3
-  resolution: "@vultisig/sdk@npm:1.1.3"
+"@vultisig/sdk@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@vultisig/sdk@npm:1.3.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.11.0"
@@ -6476,7 +6453,7 @@ __metadata:
     "@formatjs/intl-numberformat": "npm:^8.15.0"
     "@formatjs/intl-pluralrules": "npm:^5.4.0"
     "@lifi/sdk": "npm:^3.15.5"
-    "@mysten/sui": "npm:^2.3.0"
+    "@mysten/sui": "npm:^2.17.0"
     "@noble/hashes": "npm:^1.8.0"
     "@polkadot/api": "npm:^16.4.6"
     "@scure/bip39": "npm:^1.6.0"
@@ -6513,7 +6490,7 @@ __metadata:
     tiny-secp256k1: "npm:^2.2.4"
     util: "npm:^0.12.5"
     uuid: "npm:^13.0.0"
-    viem: "npm:^2.48.4"
+    viem: "npm:^2.51.0"
     vite-plugin-node-polyfills: "npm:^0.26.0"
     vite-plugin-wasm: "npm:^3.6.0"
     ws: "npm:^8.18.0"
@@ -6533,7 +6510,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/6f160705a4e978cf65ec1b7ebb870f1b3b83a537abb70bdb6285496fe6b9483aadfb6fc42bf8da15f91af91c51e4a3abbe0b489393f8a3e7b71c55e045868760
+  checksum: 10c0/f1839d6755767b56843bc2ab18798fe1d727217023611d0b76e14703f002c88341294fa013645a8c5ccddb3e26e2e85ae845b69800fcc1ab5c6816f733952b62
   languageName: node
   linkType: hard
 
