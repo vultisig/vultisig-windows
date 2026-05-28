@@ -3,7 +3,10 @@ import { addBackgroundEventListener } from '@core/inpage-provider/background/eve
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
 import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { serializeAdr36SignDoc } from '@core/ui/mpc/keysign/customMessage/adr36'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
+import { ripemd160, sha256 } from '@cosmjs/crypto'
+import { fromBase64 } from '@cosmjs/encoding'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -25,6 +28,7 @@ import {
   StdSignDoc,
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
+import { secp256k1 } from '@noble/curves/secp256k1'
 import { TW } from '@trustwallet/wallet-core'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getCosmosChainByChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
@@ -948,37 +952,86 @@ export class XDEFIKeplrProvider extends Keplr {
    * ADR-36 arbitrary-message signing — used by Leap-style "sign-in-with-
    * cosmos" auth flows and several governance dApps.
    *
-   * Not yet implemented: ADR-36 signs the canonical JSON of a
-   * `StdSignDoc{MsgSignData}` directly, which doesn't fit Vultisig's
-   * existing keysign pipeline (TW.Cosmos signs transaction sign-docs,
-   * not raw amino bytes). Wiring this requires a new MPC primitive that
-   * signs raw bytes with the Cosmos-Hub secp256k1 key.
-   *
-   * Throwing here (instead of resolving `undefined` from the inherited
-   * base requester) gives dApps a deterministic signal to fall back to
-   * alternative auth methods.
+   * ADR-36 wraps the data in a fixed `StdSignDoc{MsgSignData}` envelope and
+   * signs `sha256(serialized signDoc)` with the chain's secp256k1 key. That
+   * digest is signed through the same custom-message keysign path EVM
+   * `personal_sign` uses, so no transaction-compiler involvement is needed.
+   * The popup returns the `r‖s‖recovery` bytes; we drop the recovery byte and
+   * base64-encode `r‖s` into a Keplr `StdSignature`.
    */
   async signArbitrary(
-    _chainId: string,
-    _signer: string,
-    _data: string | Uint8Array
+    chainId: string,
+    signer: string,
+    data: string | Uint8Array
   ): Promise<StdSignature> {
-    throw new Error('Keplr.signArbitrary is not supported by Vultisig')
+    assertNativeChainForSigning(chainId)
+    return this.runWithChain(chainId, async () => {
+      const chain = getCosmosChainByChainId(chainId)
+      if (!chain) {
+        throw new Error(
+          `Keplr.signArbitrary is not supported for chain ${chainId}`
+        )
+      }
+
+      const [account] = await getAccounts(chainId)
+      if (!areLowerCaseEqual(signer, account.address)) {
+        throw new Error('Signer does not match current account address')
+      }
+
+      const dataBytes =
+        typeof data === 'string' ? new TextEncoder().encode(data) : data
+      const dataBase64 = Buffer.from(dataBytes).toString('base64')
+
+      const signatureHex = await callPopup(
+        {
+          signMessage: {
+            cosmos_sign_arbitrary: { chain, data: dataBase64 },
+          },
+        },
+        { account: account.address }
+      )
+
+      // rawWithRecoveryId format: r(32) || s(32) || recovery(1).
+      const rs = Buffer.from(signatureHex, 'hex').subarray(0, 64)
+
+      return {
+        pub_key: {
+          type: 'tendermint/PubKeySecp256k1',
+          value: Buffer.from(account.pubkey).toString('base64'),
+        },
+        signature: Buffer.from(rs).toString('base64'),
+      }
+    })
   }
 
   /**
-   * Paired with `signArbitrary`. Pure signature verification could be
-   * implemented standalone (it's just secp256k1 against the ADR-36
-   * canonical sign-doc), but verifying a signature we can't produce has
-   * limited utility — defer until `signArbitrary` lands.
+   * Paired with `signArbitrary`. Pure secp256k1 verification — reconstructs
+   * the ADR-36 sign-doc from `(signer, data)`, confirms the supplied pubkey
+   * actually derives to `signer`, then checks the signature over the digest.
    */
   async verifyArbitrary(
     _chainId: string,
-    _signer: string,
-    _data: string | Uint8Array,
-    _signature: StdSignature
+    signer: string,
+    data: string | Uint8Array,
+    signature: StdSignature
   ): Promise<boolean> {
-    throw new Error('Keplr.verifyArbitrary is not supported by Vultisig')
+    const dataBytes =
+      typeof data === 'string' ? new TextEncoder().encode(data) : data
+    const dataBase64 = Buffer.from(dataBytes).toString('base64')
+
+    const digest = sha256(serializeAdr36SignDoc(signer, dataBase64))
+
+    const pubkey = fromBase64(signature.pub_key.value)
+    const sigBytes = fromBase64(signature.signature)
+    if (sigBytes.length !== 64) return false
+
+    const derivedAddress = bech32.encode(
+      bech32.decode(signer).prefix,
+      bech32.toWords(ripemd160(sha256(pubkey)))
+    )
+    if (!areLowerCaseEqual(derivedAddress, signer)) return false
+
+    return secp256k1.verify(sigBytes, digest, pubkey)
   }
 
   /**

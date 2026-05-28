@@ -3,7 +3,7 @@ import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
 import { match } from '@vultisig/lib-utils/match'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { TypedDataEncoder } from 'ethers'
-import { keccak256 } from 'viem'
+import { keccak256, sha256 } from 'viem'
 
 import { CustomMessageSupportedChain } from './chains'
 
@@ -31,6 +31,9 @@ export const getCustomMessageHex = ({
 
   return match(getChainKind(chain), {
     evm: () => stripHexPrefix(keccak256(bytes)),
+    // ADR-36 (Keplr signArbitrary): `message` carries the canonical
+    // StdSignDoc{MsgSignData} bytes; the signed digest is their sha256.
+    cosmos: () => stripHexPrefix(sha256(bytes)),
     solana: () => Buffer.from(bytes).toString('hex'),
     ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
