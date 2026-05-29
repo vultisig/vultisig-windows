@@ -14,6 +14,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StakeCard } from '../components/stake/StakeCard'
+import type { StakeUiTranslationKey } from '../config/stakeUiResolver'
 import {
   resolveStakeActions,
   resolveStakeTitle,
@@ -101,8 +102,10 @@ const ThorchainStakedPositions = () => {
   const [pendingEnableById, setPendingEnableById] = useState<
     Record<string, boolean>
   >({})
-  const translate = (key: string, params?: Record<string, unknown>) =>
-    t(key as any, params as any) as string
+  const translate = (
+    key: StakeUiTranslationKey,
+    params?: Record<string, unknown>
+  ) => t(key, params)
 
   const actionsDisabled = chain !== Chain.THORChain && chain !== Chain.MayaChain
 
@@ -239,7 +242,7 @@ const ThorchainStakedPositions = () => {
         } = resolveStakeActions({
           chain,
           position,
-          translate: key => t(key as any),
+          translate: key => t(key),
         })
         const cardActionsDisabled =
           actionsDisabled || resolverDisabled || missingCoinAndBlocked

@@ -11,9 +11,11 @@ import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signM
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
 import { toDisplayMessageString } from '@core/inpage-provider/popup/view/utils/toDisplayMessage'
+import { serializeAdr36SignDoc } from '@core/ui/mpc/keysign/customMessage/adr36'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { fromBase64 } from '@cosmjs/encoding'
 import { Match } from '@lib/ui/base/Match'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -79,6 +81,10 @@ export const Overview = () => {
 
       return `${prefix}${message}`
     },
+    // The signed digest is sha256 of the canonical ADR-36 StdSignDoc; carry
+    // those bytes (hex) through to `getCustomMessageHex`, which hashes them.
+    cosmos_sign_arbitrary: ({ data }) =>
+      hexlify(serializeAdr36SignDoc({ signer: address, dataBase64: data })),
   })
 
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
@@ -98,12 +104,15 @@ export const Overview = () => {
           : new TextEncoder().encode(message)
       return toDisplayMessageString(bytes)
     },
+    cosmos_sign_arbitrary: ({ data }) =>
+      toDisplayMessageString(fromBase64(data)),
   })
 
   const type = matchRecordUnion<SignMessageInput, SignMessageType>(input, {
     eth_signTypedData_v4: () => 'default',
     sign_message: () => 'default',
     personal_sign: ({ type }) => type,
+    cosmos_sign_arbitrary: () => 'default',
   })
 
   const typedData = matchRecordUnion<
@@ -113,6 +122,7 @@ export const Overview = () => {
     eth_signTypedData_v4: ({ chain, message }) => ({ chain, payload: message }),
     sign_message: () => undefined,
     personal_sign: () => undefined,
+    cosmos_sign_arbitrary: () => undefined,
   })
 
   const pluginId = matchRecordUnion<SignMessageInput, string | undefined>(
@@ -121,6 +131,7 @@ export const Overview = () => {
       eth_signTypedData_v4: () => undefined,
       sign_message: () => undefined,
       personal_sign: ({ pluginId }) => pluginId,
+      cosmos_sign_arbitrary: () => undefined,
     }
   )
 
