@@ -67,7 +67,7 @@ export const UtxoFeeSettingsForm: React.FC<UtxoFeeSettingsFormProps> = ({
             options={feePriorities}
             value={value && 'priority' in value ? value.priority : null}
             onChange={priority => onChange({ priority })}
-            renderOption={t}
+            renderOption={option => t(option)}
           />
         </InputContainer>
         <AmountTextInput
