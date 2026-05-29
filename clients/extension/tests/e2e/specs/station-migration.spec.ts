@@ -129,8 +129,8 @@ const createStationFixture = async () => {
   ]
 
   return {
+    encryptedUnlockProbe: await encryptStationSecret({ message: 'station-ok' }),
     keys,
-    passwordChallenge: await encryptStationSecret({ message: 'station-ok' }),
     wallets,
   }
 }
@@ -149,7 +149,7 @@ const seedLegacyStorage = async (page: import('@playwright/test').Page) => {
     localStorage.clear()
     localStorage.setItem('wallets', JSON.stringify(legacyFixture.wallets))
     localStorage.setItem('keys', JSON.stringify(legacyFixture.keys))
-    localStorage.setItem('passwordChallenge', legacyFixture.passwordChallenge)
+    localStorage.setItem('passwordChallenge', legacyFixture.encryptedUnlockProbe)
     await chrome.storage.local.clear()
   }, fixture)
 }
