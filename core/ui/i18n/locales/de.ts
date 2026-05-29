@@ -1585,7 +1585,7 @@ export const de = {
   station_migration_title: 'Station Wallets migrieren',
   station_migration_review_title: 'Alte Station-Wallets überprüfen',
   station_migration_review_description:
-    'Hierbei wird lediglich der Speicher der alten Station-Erweiterung gelesen. Bisher wurden keine Wallets migriert, neu verbunden, gelöscht oder als abgeschlossen markiert.',
+    'Geben Sie Ihr Station-Passwort ein, um unterstützte Wallets lokal zu entschlüsseln. Der bestehende Station-Speicher bleibt erhalten.',
   station_migration_settings_title: 'Station Wallets migrieren',
   station_migration_settings_description:
     'Überprüfen Sie die auf diesem Gerät erkannten alten Station Wallets.',
@@ -1644,4 +1644,45 @@ export const de = {
     'Der Wallet-Eintrag ist kein Objekt.',
   station_migration_reason_unsupported_fallback:
     'Diese Wallet muss vor der Migration überprüft werden.',
+  station_migration_status_ready: 'Bereit',
+  station_migration_status_failed: 'Fehlgeschlagen',
+  station_migration_password_title: 'Unterstützte Wallets entsperren',
+  station_migration_password_description:
+    'Ihr Station-Passwort verbleibt auf diesem Gerät und wird nur zum Entschlüsseln alter Station-Wallet-Daten verwendet.',
+  station_migration_password_label: 'Station Passwort',
+  station_migration_password_invalid:
+    'Mit diesem Passwort konnte keine unterstützte Station-Wallet entsperrt werden.',
+  station_migration_check_wallets: 'Portemonnaies prüfen',
+  station_migration_migrate_wallet: 'Wandern',
+  station_migration_ready_source: 'Validiert von {{source}}.',
+  station_migration_source_mnemonic: 'Merkhilfe',
+  station_migration_source_seed: 'Seed-Bytes',
+  station_migration_source_private_key: 'privater Schlüssel',
+  station_migration_failure_incorrect_password:
+    'Das Passwort konnte diese Wallet nicht entschlüsseln.',
+  station_migration_failure_missing_encrypted_value:
+    'In dieser Wallet fehlt das für die Migration benötigte verschlüsselte Schlüsselmaterial.',
+  station_migration_failure_invalid_seed:
+    'Die entschlüsselten Seed-Daten sind ungültig.',
+  station_migration_failure_invalid_legacy_wallet:
+    'Die entschlüsselten Legacy-Wallet-Daten sind ungültig.',
+  station_migration_failure_metadata_mismatch:
+    'Der entschlüsselte Schlüssel stimmt nicht mit der alten Adresse Station oder dem alten öffentlichen Schlüssel überein.',
+  station_migration_failure_unsupported:
+    'Dieser Wallet-Typ kann nicht mit einem Passwort migriert werden.',
+  station_migration_failure_split_interchain_private_keys:
+    'Diese Wallet verwendet separate private Schlüssel für Terra und Terra Classic. Bei dieser Migration können nur passende Schlüssel der Terra-Familie importiert werden.',
+  station_migration_status_importing: 'Importieren',
+  station_migration_status_migrated: 'Migriert',
+  station_migration_status_skipped: 'Übersprungen',
+  station_migration_status_reason_importing:
+    'Der Import wurde gestartet. Kehren Sie hierher zurück, sobald die Einrichtung abgeschlossen ist, falls diese Zeile nicht aktualisiert wird.',
+  station_migration_status_reason_migrated:
+    'Diese Wallet wurde in Vultisig importiert. Der alte Speicher Station bleibt erhalten.',
+  station_migration_status_reason_skipped:
+    'Diese Wallet wurde übersprungen. Sie können sie jederzeit wieder entsperren, wenn Sie bereit sind.',
+  station_migration_status_reason_vault_import_failed:
+    'Der Vault-Import ist während der Schlüsselgenerierung fehlgeschlagen. Entsperren Sie diese Wallet erneut, um es noch einmal zu versuchen.',
+  station_migration_status_reason_vault_save_failed:
+    'Der Vault-Import wurde abgeschlossen, das Speichern des Vaults Vultisig ist jedoch fehlgeschlagen. Entsperren Sie diese Wallet erneut, um es noch einmal zu versuchen.',
 }

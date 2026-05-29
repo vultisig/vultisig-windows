@@ -1573,7 +1573,7 @@ export const it = {
   station_migration_title: 'Migrare i wallet Station',
   station_migration_review_title: 'Revisione dei vecchi portafogli Station',
   station_migration_review_description:
-    'Questa operazione legge solo la memoria di archiviazione legacy dell&#39;estensione Station. Nessun portafoglio è stato ancora migrato, riconnesso, eliminato o contrassegnato come completato.',
+    'Inserisci la password Station per decrittografare localmente i wallet supportati. I dati memorizzati nella versione precedente di Station rimarranno intatti.',
   station_migration_settings_title: 'Migrare i wallet Station',
   station_migration_settings_description:
     'Esamina i vecchi portafogli Station rilevati su questo dispositivo.',
@@ -1633,4 +1633,45 @@ export const it = {
     'La voce del portafoglio non è un oggetto.',
   station_migration_reason_unsupported_fallback:
     'Questo portafoglio necessita di revisione prima di poter essere migrato.',
+  station_migration_status_ready: 'Pronto',
+  station_migration_status_failed: 'Fallito',
+  station_migration_password_title: 'Sblocca i portafogli supportati',
+  station_migration_password_description:
+    'La password Station rimane su questo dispositivo e viene utilizzata solo per decrittografare i vecchi dati del portafoglio Station.',
+  station_migration_password_label: 'Station password',
+  station_migration_password_invalid:
+    'Quella password non ha sbloccato alcun portafoglio Station supportato.',
+  station_migration_check_wallets: 'Controlla i portafogli',
+  station_migration_migrate_wallet: 'Migrare',
+  station_migration_ready_source: 'Convalidato da {{source}}.',
+  station_migration_source_mnemonic: 'mnemonico',
+  station_migration_source_seed: 'byte di seed',
+  station_migration_source_private_key: 'chiave privata',
+  station_migration_failure_incorrect_password:
+    'La password non è riuscita a decifrare questo portafoglio.',
+  station_migration_failure_missing_encrypted_value:
+    'A questo portafoglio manca il materiale crittografato necessario per la migrazione.',
+  station_migration_failure_invalid_seed:
+    'I dati seed decifrati non sono validi.',
+  station_migration_failure_invalid_legacy_wallet:
+    'I dati del portafoglio legacy decrittografati non sono validi.',
+  station_migration_failure_metadata_mismatch:
+    'La chiave decifrata non corrisponde al vecchio indirizzo Station o alla chiave pubblica.',
+  station_migration_failure_unsupported:
+    'Questo tipo di portafoglio non può essere migrato con una password.',
+  station_migration_failure_split_interchain_private_keys:
+    'Questo portafoglio ha chiavi private separate per Terra e Terra Classic. Questa migrazione può importare solo chiavi corrispondenti della famiglia Terra.',
+  station_migration_status_importing: 'importazione',
+  station_migration_status_migrated: 'Migrato',
+  station_migration_status_skipped: 'Saltato',
+  station_migration_status_reason_importing:
+    'L&#39;importazione è stata avviata. Se questa riga non si aggiorna, tornare qui al termine della configurazione.',
+  station_migration_status_reason_migrated:
+    'Questo portafoglio è stato importato in Vultisig. Il vecchio archivio Station è ancora conservato.',
+  station_migration_status_reason_skipped:
+    'Questo portafoglio è stato saltato. Puoi sbloccarlo di nuovo quando vuoi.',
+  station_migration_status_reason_vault_import_failed:
+    'L&#39;importazione del vault non è riuscita durante la generazione della chiave. Sblocca nuovamente questo portafoglio per riprovare.',
+  station_migration_status_reason_vault_save_failed:
+    'L&#39;importazione del vault è stata completata, ma il salvataggio del vault Vultisig non è riuscito. Sblocca nuovamente questo portafoglio per riprovare.',
 }

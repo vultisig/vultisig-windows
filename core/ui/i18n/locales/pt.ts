@@ -1570,7 +1570,7 @@ export const pt = {
   station_migration_title: 'Migrar carteiras Station',
   station_migration_review_title: 'Analisar carteiras antigas Station',
   station_migration_review_description:
-    'Esta operação lê apenas o armazenamento da extensão legada Station. Nenhuma carteira foi migrada, reconectada, excluída ou marcada como concluída ainda.',
+    'Insira sua senha Station para descriptografar carteiras compatíveis localmente. O armazenamento legado de Station permanece intacto.',
   station_migration_settings_title: 'Migrar carteiras Station',
   station_migration_settings_description:
     'Analisar carteiras antigas Station detectadas neste dispositivo.',
@@ -1629,4 +1629,45 @@ export const pt = {
     'A entrada da carteira não é um objeto.',
   station_migration_reason_unsupported_fallback:
     'Esta carteira precisa ser analisada antes de ser migrada.',
+  station_migration_status_ready: 'Preparar',
+  station_migration_status_failed: 'Fracassado',
+  station_migration_password_title: 'Desbloquear carteiras compatíveis',
+  station_migration_password_description:
+    'A sua senha Station permanece neste dispositivo e é usada apenas para descriptografar dados antigos da carteira Station.',
+  station_migration_password_label: 'Senha Station',
+  station_migration_password_invalid:
+    'Essa senha não desbloqueou nenhuma carteira Station compatível.',
+  station_migration_check_wallets: 'Confira as carteiras',
+  station_migration_migrate_wallet: 'Migrar',
+  station_migration_ready_source: 'Validado a partir de {{source}}.',
+  station_migration_source_mnemonic: 'mnemônico',
+  station_migration_source_seed: 'bytes de semente',
+  station_migration_source_private_key: 'chave privada',
+  station_migration_failure_incorrect_password:
+    'A senha não conseguiu descriptografar esta carteira.',
+  station_migration_failure_missing_encrypted_value:
+    'Esta carteira não possui o material de chave criptografada necessário para a migração.',
+  station_migration_failure_invalid_seed:
+    'Os dados iniciais descriptografados não são válidos.',
+  station_migration_failure_invalid_legacy_wallet:
+    'Os dados da carteira legada descriptografados não são válidos.',
+  station_migration_failure_metadata_mismatch:
+    'A chave descriptografada não corresponde ao endereço Station ou à chave pública antiga.',
+  station_migration_failure_unsupported:
+    'Este tipo de carteira não pode ser migrado com uma senha.',
+  station_migration_failure_split_interchain_private_keys:
+    'Esta carteira possui chaves privadas Terra e Terra Classic separadas. Esta migração só pode importar chaves da família Terra correspondentes.',
+  station_migration_status_importing: 'Importação',
+  station_migration_status_migrated: 'Migrado',
+  station_migration_status_skipped: 'Ignorado',
+  station_migration_status_reason_importing:
+    'A importação foi iniciada. Retorne aqui após a conclusão da configuração, caso esta linha não seja atualizada.',
+  station_migration_status_reason_migrated:
+    'Esta carteira foi importada para Vultisig. O armazenamento antigo em Station ainda está preservado.',
+  station_migration_status_reason_skipped:
+    'Esta carteira foi ignorada. Você pode desbloqueá-la novamente quando estiver pronto.',
+  station_migration_status_reason_vault_import_failed:
+    'A importação do cofre falhou durante a geração da chave. Desbloqueie esta carteira novamente para tentar mais uma vez.',
+  station_migration_status_reason_vault_save_failed:
+    'A importação do cofre foi concluída, mas a gravação do cofre Vultisig falhou. Desbloqueie esta carteira novamente para tentar mais uma vez.',
 }

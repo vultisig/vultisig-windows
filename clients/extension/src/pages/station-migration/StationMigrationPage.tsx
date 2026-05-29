@@ -1,11 +1,20 @@
 import {
+  setStationLegacyMigrationStatusRecord,
+  setStationLegacyMigrationStatusRecords,
+  StationLegacyMigrationPersistentStatus,
+  StationLegacyMigrationStatusRecord,
+} from '@clients/extension/src/storage/stationLegacyMigrationStatus'
+import {
   StationLegacyWalletClassification,
   StationLegacyWalletStatus,
 } from '@clients/extension/src/storage/stationLegacyWalletClassifier'
+import { useStationLegacyMigrationStatusRecords } from '@clients/extension/src/storage/useStationLegacyMigrationStatusRecords'
 import { useStationLegacyWalletStorageClassification } from '@clients/extension/src/storage/useStationLegacyWalletStorageClassification'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { currentProductBrand } from '@core/ui/product/brand'
 import { Button } from '@lib/ui/buttons/Button'
+import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
@@ -17,11 +26,18 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text, TextColor } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { TFunction } from 'i18next'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AppView } from '../../navigation/AppView'
 import { shouldShowStationLegacyMigration } from './stationLegacyMigrationGate'
+import {
+  decryptStationLegacyWallet,
+  getStationLegacyWalletId,
+  StationLegacyMigrationFailureCode,
+  StationLegacyMigrationResult,
+} from './stationLegacyWalletMigration'
 
 type StationMigrationPageSource = 'setup' | 'settings'
 
@@ -41,8 +57,18 @@ export const StationMigrationPage = ({ onSkip, source = 'setup' }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate<AppView>()
   const goBack = useNavigateBack()
+  const walletCore = useAssertWalletCore()
+  const [password, setPassword] = useState('')
+  const [passwordError, setPasswordError] = useState<string | undefined>()
+  const [isChecking, setIsChecking] = useState(false)
+  const [results, setResults] = useState<
+    Record<string, StationLegacyMigrationResult>
+  >({})
   const isStationBrand = currentProductBrand === 'station'
   const classification = useStationLegacyWalletStorageClassification({
+    enabled: isStationBrand,
+  })
+  const migrationStatusRecords = useStationLegacyMigrationStatusRecords({
     enabled: isStationBrand,
   })
   const wallets = classification.wallets
@@ -52,7 +78,26 @@ export const StationMigrationPage = ({ onSkip, source = 'setup' }: Props) => {
     productBrand: currentProductBrand,
   })
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    const updatedAt = Date.now()
+    await setStationLegacyMigrationStatusRecords(
+      Object.fromEntries(
+        supportedWallets.map(wallet => {
+          const walletId = getStationLegacyWalletId(wallet)
+
+          return [
+            walletId,
+            {
+              status: 'skipped',
+              updatedAt,
+              walletId,
+              walletName: wallet.walletName,
+            } satisfies StationLegacyMigrationStatusRecord,
+          ]
+        })
+      )
+    )
+
     if (onSkip) {
       onSkip()
       return
@@ -70,6 +115,35 @@ export const StationMigrationPage = ({ onSkip, source = 'setup' }: Props) => {
     source === 'settings'
       ? t('skip_for_now')
       : t('station_migration_set_up_without_migrating')
+
+  const supportedWallets = wallets.filter(
+    wallet => wallet.status === 'supported'
+  )
+  const canCheckWallets = supportedWallets.length > 0 && password.length > 0
+
+  const handleCheckWallets = async () => {
+    if (!canCheckWallets || isChecking) return
+
+    setPasswordError(undefined)
+    setIsChecking(true)
+    try {
+      const nextResults = await Promise.all(
+        supportedWallets.map(wallet =>
+          decryptStationLegacyWallet({ wallet, password, walletCore })
+        )
+      )
+      const nextResultRecord = Object.fromEntries(
+        nextResults.map(result => [result.walletId, result])
+      )
+      setResults(nextResultRecord)
+
+      if (nextResults.every(result => result.status === 'failed')) {
+        setPasswordError(t('station_migration_password_invalid'))
+      }
+    } finally {
+      setIsChecking(false)
+    }
+  }
 
   return (
     <VStack fullHeight>
@@ -91,11 +165,43 @@ export const StationMigrationPage = ({ onSkip, source = 'setup' }: Props) => {
         {shouldShowMigration ? (
           <>
             <MigrationSummary wallets={wallets} />
+            {supportedWallets.length > 0 && (
+              <Panel>
+                <VStack gap={12}>
+                  <VStack gap={4}>
+                    <Text color="contrast" weight={600} size={16} height={1.2}>
+                      {t('station_migration_password_title')}
+                    </Text>
+                    <Text color="shy" size={13} height={1.4}>
+                      {t('station_migration_password_description')}
+                    </Text>
+                  </VStack>
+                  <PasswordInput
+                    value={password}
+                    onValueChange={setPassword}
+                    label={t('station_migration_password_label')}
+                    error={passwordError}
+                    validation={passwordError ? 'invalid' : undefined}
+                  />
+                  <Button
+                    loading={isChecking}
+                    disabled={!canCheckWallets}
+                    onClick={handleCheckWallets}
+                  >
+                    {t('station_migration_check_wallets')}
+                  </Button>
+                </VStack>
+              </Panel>
+            )}
             <Panel withSections data-testid="station-migration-wallet-list">
               {wallets.map(wallet => (
                 <StationMigrationWalletItem
                   key={`${wallet.storageKey}-${wallet.storageIndex ?? 'storage'}`}
                   wallet={wallet}
+                  result={results[getStationLegacyWalletId(wallet)]}
+                  persistedStatus={
+                    migrationStatusRecords[getStationLegacyWalletId(wallet)]
+                  }
                 />
               ))}
             </Panel>
@@ -172,12 +278,46 @@ const SummaryItem = ({ label, value }: { label: string; value: number }) => (
 )
 
 const StationMigrationWalletItem = ({
+  persistedStatus,
+  result,
   wallet,
 }: {
+  persistedStatus?: StationLegacyMigrationStatusRecord
+  result?: StationLegacyMigrationResult
   wallet: StationLegacyWalletClassification
 }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate<AppView>()
   const reason = getWalletReason({ t, wallet })
+  const visibleStatus =
+    result?.status ?? persistedStatus?.status ?? wallet.status
+
+  const handleMigrate = async () => {
+    if (result?.status !== 'ready') return
+
+    await setStationLegacyMigrationStatusRecord({
+      status: 'importing',
+      updatedAt: Date.now(),
+      walletId: result.walletId,
+      walletName: result.walletName,
+      source: result.source,
+    })
+
+    navigate({
+      id: 'setupVault',
+      state: {
+        keyImportInput: {
+          ...result.keyImportInput,
+          stationMigration: {
+            walletId: result.walletId,
+            walletName: result.walletName,
+            source: result.source,
+          },
+        },
+        skipStationMigration: true,
+      },
+    })
+  }
 
   return (
     <ListItem
@@ -190,13 +330,13 @@ const StationMigrationWalletItem = ({
           </Text>
           <StatusBadge>
             <Text
-              color={walletStatusColor[wallet.status]}
+              color={getVisibleStatusColor(visibleStatus)}
               size={11}
               weight={600}
               height={1}
               nowrap
             >
-              {getWalletStatusLabel({ t, status: wallet.status })}
+              {getVisibleStatusLabel({ t, status: visibleStatus })}
             </Text>
           </StatusBadge>
         </WalletTitleRow>
@@ -207,11 +347,35 @@ const StationMigrationWalletItem = ({
             {getWalletTypeLabel({ t, wallet })}
           </Text>
           <Text color="shy" size={12} height={1.35}>
-            {reason}
+            {result?.status === 'failed'
+              ? getMigrationFailureReason({
+                  t,
+                  failureCode: result.failureCode,
+                })
+              : persistedStatus
+                ? getPersistedStatusReason({
+                    t,
+                    status: persistedStatus,
+                  })
+                : reason}
           </Text>
+          {result?.status === 'ready' && (
+            <Text color="success" size={12} height={1.35}>
+              {t('station_migration_ready_source', {
+                source: getMigrationSourceLabel({ t, source: result.source }),
+              })}
+            </Text>
+          )}
         </VStack>
       }
       status={wallet.status === 'corrupt' ? 'error' : 'default'}
+      extra={
+        result?.status === 'ready' ? (
+          <Button size="sm" onClick={handleMigrate}>
+            {t('station_migration_migrate_wallet')}
+          </Button>
+        ) : undefined
+      }
     />
   )
 }
@@ -233,6 +397,90 @@ const getWalletStatusLabel = ({
       return t('station_migration_status_unsupported')
     case 'corrupt':
       return t('station_migration_status_corrupt')
+  }
+}
+
+type VisibleStatus =
+  | StationLegacyWalletStatus
+  | StationLegacyMigrationPersistentStatus
+  | StationLegacyMigrationResult['status']
+
+const getVisibleStatusColor = (status: VisibleStatus): TextColor => {
+  if (status === 'ready') return 'success'
+  if (status === 'failed') return 'danger'
+  if (status === 'importing') return 'warning'
+  if (status === 'migrated') return 'success'
+  if (status === 'skipped') return 'shy'
+
+  return walletStatusColor[status]
+}
+
+const getVisibleStatusLabel = ({
+  status,
+  t,
+}: TranslationInput & { status: VisibleStatus }) => {
+  if (status === 'ready') return t('station_migration_status_ready')
+  if (status === 'failed') return t('station_migration_status_failed')
+  if (status === 'importing') return t('station_migration_status_importing')
+  if (status === 'migrated') return t('station_migration_status_migrated')
+  if (status === 'skipped') return t('station_migration_status_skipped')
+
+  return getWalletStatusLabel({ t, status })
+}
+
+const getPersistedStatusReason = ({
+  status,
+  t,
+}: TranslationInput & { status: StationLegacyMigrationStatusRecord }) => {
+  switch (status.status) {
+    case 'importing':
+      return t('station_migration_status_reason_importing')
+    case 'migrated':
+      return t('station_migration_status_reason_migrated')
+    case 'skipped':
+      return t('station_migration_status_reason_skipped')
+    case 'failed':
+      return status.failureCode === 'vaultSaveFailed'
+        ? t('station_migration_status_reason_vault_save_failed')
+        : t('station_migration_status_reason_vault_import_failed')
+  }
+}
+
+const getMigrationSourceLabel = ({
+  source,
+  t,
+}: TranslationInput & {
+  source: Extract<StationLegacyMigrationResult, { status: 'ready' }>['source']
+}) => {
+  switch (source) {
+    case 'mnemonic':
+      return t('station_migration_source_mnemonic')
+    case 'seed':
+      return t('station_migration_source_seed')
+    case 'privateKey':
+      return t('station_migration_source_private_key')
+  }
+}
+
+const getMigrationFailureReason = ({
+  failureCode,
+  t,
+}: TranslationInput & { failureCode: StationLegacyMigrationFailureCode }) => {
+  switch (failureCode) {
+    case 'incorrectPassword':
+      return t('station_migration_failure_incorrect_password')
+    case 'missingEncryptedValue':
+      return t('station_migration_failure_missing_encrypted_value')
+    case 'invalidSeed':
+      return t('station_migration_failure_invalid_seed')
+    case 'invalidLegacyWallet':
+      return t('station_migration_failure_invalid_legacy_wallet')
+    case 'metadataMismatch':
+      return t('station_migration_failure_metadata_mismatch')
+    case 'splitInterchainPrivateKeys':
+      return t('station_migration_failure_split_interchain_private_keys')
+    case 'unsupported':
+      return t('station_migration_failure_unsupported')
   }
 }
 

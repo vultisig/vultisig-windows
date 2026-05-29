@@ -7,6 +7,7 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { isServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { useTranslation } from 'react-i18next'
 
 import { InitiateFastVaultBackup } from './InitiateFastVaultBackup'
@@ -24,12 +25,16 @@ type BackupFastVaultProps = OnFinishProp &
   OnBackProp & {
     password: string
     onChangeEmailAndRestart?: () => void
+    onVaultSaveError?: (error: Error) => void | Promise<void>
+    onVaultSaved?: (vault: Vault) => void | Promise<void>
   }
 
 export const BackupFastVault = ({
   onBack,
   password,
   onChangeEmailAndRestart,
+  onVaultSaveError,
+  onVaultSaved,
 }: BackupFastVaultProps) => {
   const { t } = useTranslation()
 
@@ -59,6 +64,8 @@ export const BackupFastVault = ({
           title={t('creating_vault')}
           onFinish={toNextStep}
           onBack={onBack}
+          onVaultSaveError={onVaultSaveError}
+          onVaultSaved={onVaultSaved}
         />
       )}
       emailVerification={() => (

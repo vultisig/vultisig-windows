@@ -1545,7 +1545,7 @@ export const hr = {
   station_migration_title: 'Migrirajte Station novčanike',
   station_migration_review_title: 'Pregledajte stare Station novčanike',
   station_migration_review_description:
-    'Ovo čita samo naslijeđenu pohranu proširenja Station. Nijedan novčanik još nije migriran, ponovno povezan, izbrisan ili označen kao dovršen.',
+    'Unesite svoju lozinku za Station za lokalno dešifriranje podržanih novčanika. Stara pohrana Station ostaje netaknuta.',
   station_migration_settings_title: 'Migrirajte Station novčanike',
   station_migration_settings_description:
     'Pregledajte stare Station novčanike otkrivene na ovom uređaju.',
@@ -1603,4 +1603,45 @@ export const hr = {
     'Unos u novčanik nije objekt.',
   station_migration_reason_unsupported_fallback:
     'Ovaj novčanik treba pregledati prije nego što se može migrirati.',
+  station_migration_status_ready: 'Spreman',
+  station_migration_status_failed: 'Neuspješno',
+  station_migration_password_title: 'Otključajte podržane novčanike',
+  station_migration_password_description:
+    'Vaša lozinka za Station ostaje na ovom uređaju i koristi se samo za dešifriranje starih podataka novčanika Station.',
+  station_migration_password_label: 'Lozinka Station',
+  station_migration_password_invalid:
+    'Ta lozinka nije otključala nijedan podržani Station novčanik.',
+  station_migration_check_wallets: 'Provjerite novčanike',
+  station_migration_migrate_wallet: 'Migrirati',
+  station_migration_ready_source: 'Potvrđeno od strane {{source}}.',
+  station_migration_source_mnemonic: 'mnemonički',
+  station_migration_source_seed: 'početni bajtovi',
+  station_migration_source_private_key: 'privatni ključ',
+  station_migration_failure_incorrect_password:
+    'Lozinka nije mogla dešifrirati ovaj novčanik.',
+  station_migration_failure_missing_encrypted_value:
+    'Ovom novčaniku nedostaje šifrirani ključni materijal potreban za migraciju.',
+  station_migration_failure_invalid_seed:
+    'Dešifrirani početni podaci nisu valjani.',
+  station_migration_failure_invalid_legacy_wallet:
+    'Dešifrirani podaci naslijeđenog novčanika nisu valjani.',
+  station_migration_failure_metadata_mismatch:
+    'Dešifrirani ključ ne odgovara staroj adresi Station ili javnom ključu.',
+  station_migration_failure_unsupported:
+    'Ova vrsta novčanika ne može se migrirati s lozinkom.',
+  station_migration_failure_split_interchain_private_keys:
+    'Ovaj novčanik ima odvojene privatne ključeve Terra i Terra Classic. Ova migracija može uvesti samo odgovarajuće ključeve obitelji Terra.',
+  station_migration_status_importing: 'Uvoz',
+  station_migration_status_migrated: 'Migrirano',
+  station_migration_status_skipped: 'Preskočeno',
+  station_migration_status_reason_importing:
+    'Uvoz je započeo. Vratite se ovdje nakon završetka postavljanja ako se ovaj redak ne ažurira.',
+  station_migration_status_reason_migrated:
+    'Ovaj novčanik je uvezen u Vultisig. Stara pohrana Station je još uvijek sačuvana.',
+  station_migration_status_reason_skipped:
+    'Ovaj novčanik je preskočen. Možete ga ponovno otključati kad god budete spremni.',
+  station_migration_status_reason_vault_import_failed:
+    'Uvoz iz trezora nije uspio tijekom generiranja ključa. Ponovno otključajte ovaj novčanik da biste pokušali ponovno.',
+  station_migration_status_reason_vault_save_failed:
+    'Uvoz iz trezora je završen, ali spremanje trezora Vultisig nije uspjelo. Ponovno otključajte ovaj novčanik za ponovni pokušaj.',
 }

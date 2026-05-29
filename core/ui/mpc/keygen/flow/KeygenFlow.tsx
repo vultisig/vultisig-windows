@@ -12,6 +12,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { match } from '@vultisig/lib-utils/match'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { useEffect, useMemo } from 'react'
@@ -29,15 +30,21 @@ const PendingWrapper = styled.div`
 
 type KeygenFlowProps = OnBackProp &
   Partial<OnFinishProp> & {
+    onKeygenError?: (error: Error) => void | Promise<void>
     password?: string
     onChangeEmailAndRestart?: () => void
+    onVaultSaveError?: (error: Error) => void | Promise<void>
+    onVaultSaved?: (vault: Vault) => void | Promise<void>
   }
 
 export const KeygenFlow = ({
   onBack,
   onFinish,
+  onKeygenError,
   password,
   onChangeEmailAndRestart,
+  onVaultSaveError,
+  onVaultSaved,
 }: KeygenFlowProps) => {
   const {
     step,
@@ -45,6 +52,11 @@ export const KeygenFlow = ({
     ...keygenMutationState
   } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
+  useEffect(() => {
+    if (keygenMutationState.isError) {
+      onKeygenError?.(keygenMutationState.error)
+    }
+  }, [keygenMutationState.error, keygenMutationState.isError, onKeygenError])
   const { t } = useTranslation()
 
   const keygenOperation = useKeygenOperation()
@@ -82,6 +94,8 @@ export const KeygenFlow = ({
                 onBack={onBack}
                 password={password}
                 onChangeEmailAndRestart={onChangeEmailAndRestart}
+                onVaultSaveError={onVaultSaveError}
+                onVaultSaved={onVaultSaved}
               />
             )
           }
@@ -94,6 +108,8 @@ export const KeygenFlow = ({
                   value={vault}
                   onFinish={onFinish}
                   onBack={onBack}
+                  onVaultSaveError={onVaultSaveError}
+                  onVaultSaved={onVaultSaved}
                 />
               )}
               to={() => (
@@ -101,6 +117,8 @@ export const KeygenFlow = ({
                   onBack={onBack}
                   password={password}
                   onChangeEmailAndRestart={onChangeEmailAndRestart}
+                  onVaultSaveError={onVaultSaveError}
+                  onVaultSaved={onVaultSaved}
                 />
               )}
             />

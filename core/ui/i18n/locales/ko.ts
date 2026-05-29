@@ -1530,7 +1530,7 @@ export const ko = {
   station_migration_title: 'Station 지갑을 마이그레이션하세요',
   station_migration_review_title: '기존 Station 지갑을 검토하세요',
   station_migration_review_description:
-    '이 작업은 기존 Station 확장 저장소만 읽습니다. 아직 어떤 지갑도 마이그레이션, 재연결, 삭제 또는 완료로 표시되지 않았습니다.',
+    '지원되는 지갑을 로컬에서 복호화하려면 Station 암호를 입력하십시오. 기존 Station 저장소는 그대로 유지됩니다.',
   station_migration_settings_title: 'Station 지갑을 마이그레이션하세요',
   station_migration_settings_description:
     '이 기기에서 감지된 이전 Station 지갑을 검토하세요.',
@@ -1588,4 +1588,45 @@ export const ko = {
     '지갑 항목은 객체가 아닙니다.',
   station_migration_reason_unsupported_fallback:
     '이 지갑은 이전하기 전에 검토가 필요합니다.',
+  station_migration_status_ready: '준비가 된',
+  station_migration_status_failed: '실패한',
+  station_migration_password_title: '지원되는 지갑 잠금 해제',
+  station_migration_password_description:
+    'Station 비밀번호는 이 기기에 저장되며 이전 Station 지갑 데이터를 복호화하는 데에만 사용됩니다.',
+  station_migration_password_label: 'Station 비밀번호',
+  station_migration_password_invalid:
+    '해당 비밀번호로는 지원되는 Station 지갑을 잠금 해제할 수 없습니다.',
+  station_migration_check_wallets: '지갑을 확인하세요',
+  station_migration_migrate_wallet: '이주하다',
+  station_migration_ready_source: '{{source}}에서 유효성이 검증되었습니다.',
+  station_migration_source_mnemonic: '기억술',
+  station_migration_source_seed: '시드 바이트',
+  station_migration_source_private_key: '개인 키',
+  station_migration_failure_incorrect_password:
+    '비밀번호로 이 지갑을 해독할 수 없습니다.',
+  station_migration_failure_missing_encrypted_value:
+    '이 지갑에는 마이그레이션에 필요한 암호화 키 자료가 없습니다.',
+  station_migration_failure_invalid_seed:
+    '복호화된 시드 데이터가 유효하지 않습니다.',
+  station_migration_failure_invalid_legacy_wallet:
+    '복호화된 기존 지갑 데이터가 유효하지 않습니다.',
+  station_migration_failure_metadata_mismatch:
+    '복호화된 키가 이전 Station 주소 또는 공개 키와 일치하지 않습니다.',
+  station_migration_failure_unsupported:
+    '이 지갑 유형은 비밀번호를 사용하여 마이그레이션할 수 없습니다.',
+  station_migration_failure_split_interchain_private_keys:
+    '이 지갑은 Terra와 Terra Classic 개인 키가 각각 분리되어 있습니다. 이 마이그레이션은 동일한 Terra 계열 키만 가져올 수 있습니다.',
+  station_migration_status_importing: '수입',
+  station_migration_status_migrated: '마이그레이션됨',
+  station_migration_status_skipped: '건너뛰었습니다',
+  station_migration_status_reason_importing:
+    '가져오기가 시작되었습니다. 설정이 완료되면 이 행이 업데이트되지 않을 경우 여기로 돌아오십시오.',
+  station_migration_status_reason_migrated:
+    '이 지갑은 Vultisig로 가져왔습니다. 이전 Station 저장소는 그대로 유지됩니다.',
+  station_migration_status_reason_skipped:
+    '이 지갑은 건너뛰었습니다. 준비가 되면 언제든지 다시 잠금 해제할 수 있습니다.',
+  station_migration_status_reason_vault_import_failed:
+    '키 생성 중 Vault 가져오기에 실패했습니다. 다시 시도하려면 지갑 잠금을 해제하세요.',
+  station_migration_status_reason_vault_save_failed:
+    '볼트 가져오기는 완료되었지만 Vultisig 볼트 저장에 실패했습니다. 다시 시도하려면 이 지갑의 잠금을 해제하세요.',
 }
