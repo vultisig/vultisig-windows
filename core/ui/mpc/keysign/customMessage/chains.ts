@@ -1,7 +1,8 @@
-import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
+import { Chain, CosmosChain, EvmChain } from '@vultisig/core-chain/Chain'
 
 export const customMessageSupportedChains = [
   ...Object.values(EvmChain),
+  ...Object.values(CosmosChain),
   Chain.Solana,
   Chain.Ton,
   Chain.Tron,

@@ -2,7 +2,12 @@ import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { ChainInfo } from '@keplr-wallet/types'
-import { Chain, EvmChain, OtherChain } from '@vultisig/core-chain/Chain'
+import {
+  Chain,
+  CosmosChain,
+  EvmChain,
+  OtherChain,
+} from '@vultisig/core-chain/Chain'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { SerializedSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
 import { Tx } from '@vultisig/core-chain/tx'
@@ -70,6 +75,13 @@ export type SignMessageInput =
         useTronHeader?: boolean
         isV2?: boolean
         message: string
+      }
+    }
+  | {
+      cosmos_sign_arbitrary: {
+        chain: CosmosChain
+        // base64-encoded arbitrary payload (ADR-36 MsgSignData `data`)
+        data: string
       }
     }
 
