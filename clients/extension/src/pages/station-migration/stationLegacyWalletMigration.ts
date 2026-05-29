@@ -338,7 +338,12 @@ export const decryptStationLegacyWallet = async ({
             ciphertext: wallet.metadata.wallet,
             password,
           })
-          const parsed = JSON.parse(decrypted)
+          let parsed: unknown
+          try {
+            parsed = JSON.parse(decrypted)
+          } catch {
+            return failure('invalidLegacyWallet')
+          }
           if (!hasLegacyPrivateKey(parsed)) {
             return failure('invalidLegacyWallet')
           }

@@ -183,4 +183,30 @@ describe('station legacy wallet migration', () => {
       failureCode: 'metadataMismatch',
     })
   })
+
+  it('reports invalid legacy wallet when decrypted legacy JSON is malformed', async () => {
+    const { decryptStationLegacyWallet } =
+      await import('@clients/extension/src/pages/station-migration/stationLegacyWalletMigration')
+
+    await expect(
+      decryptStationLegacyWallet({
+        wallet: {
+          walletName: 'QA Legacy Wallet',
+          source: 'localStorage',
+          storageKey: 'keys',
+          storageIndex: 0,
+          walletType: 'legacyPrivateKey',
+          status: 'supported',
+          metadata: {
+            wallet: '{not-json',
+          },
+        },
+        password: 'station-password',
+        walletCore: {},
+      })
+    ).resolves.toMatchObject({
+      status: 'failed',
+      failureCode: 'invalidLegacyWallet',
+    })
+  })
 })
