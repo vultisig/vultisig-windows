@@ -55,6 +55,8 @@ export const en = {
   app_locked: 'App Locked',
   app_locked_description: 'Enter your passcode to continue.',
   app_permissions: 'App Permissions',
+  approval_amount: 'Approval amount',
+  approval_expires: 'Approval expires',
   approval_tx: 'Approval Tx',
   approve: 'Approve',
   reject: 'Reject',
@@ -246,6 +248,8 @@ export const en = {
   custom_token: 'Custom Token',
   customize_chains: 'Customize chains',
   date: 'Date',
+  deadline: 'Deadline',
+  domain: 'Domain',
   decrypting_vault_keyshares: 'Decrypting vault keyshares...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
@@ -701,6 +705,7 @@ export const en = {
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   no_active_chains_found: 'No active chains found',
+  no_expiry: 'No expiry',
   no_active_chains_found_description:
     "We didn't detect any assets on this seed phrase.",
   no_chains_enabled: 'No chains enabled',
@@ -800,6 +805,7 @@ export const en = {
   price_impact_average: 'Average',
   price_impact_good: 'Good',
   price_impact_high: 'High Impact',
+  primary_type: 'Primary type',
   prioritize_vultisig: 'Prioritize Vultisig',
   priority: 'Priority',
   priority_fee: 'Priority fee',
@@ -810,15 +816,37 @@ export const en = {
     'Please provide camera permission to scan the QR code',
   provider: 'Provider',
   route: 'Route',
+  qbtc_claim_banner_title: 'Same Bitcoin. Quantum-safe.',
+  qbtc_claim_banner_subtitle: 'Claim your QBTC',
+  qbtc_claim_banner_cta: 'Claim Now',
   qbtc_claim_title: 'QBTC Claim',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'BTC Amount',
+  qbtc_claim_section_cta: 'Claim QBTC',
+  qbtc_claim_card_title: 'Claimable QBTC',
+  qbtc_claim_tab: 'Claim',
+  qbtc_onboarding_title: 'New quantum security',
+  qbtc_onboarding_subtitle:
+    'Classical keys can be broken by quantum computers. Enabling QBTC requires generating a new key pair.',
+  qbtc_onboarding_feature_generate_title: 'Generate your quantum key pair',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig runs a local MPC ceremony across your vault devices to produce a new key pair.',
+  qbtc_onboarding_feature_link_title: 'Link it to your existing vault',
+  qbtc_onboarding_feature_link_description:
+    'The quantum key is bound to your current vault share structure. No reshare needed.',
+  qbtc_onboarding_feature_claim_title: 'Claim and transact in QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Once generated, your eligible BTC UTXOs appear as claimable QBTC at a 1:1 ratio.',
+  qbtc_onboarding_get_started: 'Get started',
+  qbtc_claim_description:
+    'QBTC is a quantum-resistant version of BTC. Your existing BTC UTXOs are eligible to be claimed as QBTC at a 1:1 ratio. Select which UTXOs to claim below.',
+  qbtc_claim_eligible_utxos: 'Eligible UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Confirmed · {{count}} blocks ago',
+  qbtc_claim_pending_confirmation: 'Pending confirmation',
+  qbtc_claim_all: 'Claim All',
+  qbtc_claim_count: 'Claim {{count}} of {{total}}',
   qbtc_claim_no_claimable_utxos: 'No claimable UTXOs found for this address.',
   qbtc_claim_disabled_notice:
     'Claiming is currently disabled on the QBTC chain.',
   qbtc_claim_failed_to_load: 'Failed to load claimable UTXOs.',
-  qbtc_claim_selected_count: '{{count}} of {{max}} selected',
-  qbtc_claim_confirm: 'Claim selected',
   qbtc_claim_proving: 'Generating proof…',
   qbtc_claim_proving_hint: 'This can take several minutes.',
   qbtc_claim_broadcasting: 'Broadcasting claim…',
@@ -1044,6 +1072,7 @@ export const en = {
   nft_transfer: 'NFT Transfer',
   excess_gas_refund: 'Excess Gas Refund',
   forward_ton_amount: 'Forward TON Amount',
+  raw_message: 'Raw message',
   raw_payload: 'Raw Payload',
   transferred: 'Transferred',
   staked_amount: 'Staked Amount',
@@ -1087,6 +1116,8 @@ export const en = {
   to_min_payout: 'min. payout',
   today: 'Today',
   to_asset: 'To Asset',
+  token: 'Token',
+  token_approval: 'Token Approval',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
   token_not_found_invalid: 'Invalid contract address',
@@ -1481,4 +1512,66 @@ export const en = {
   agent_reauth_description:
     'For security, authorization expires periodically.\nPlease confirm to continue using Vulti Agent.',
   authorize: 'Authorize',
+  skip_for_now: 'Skip for now',
+  station_migration_title: 'Migrate Station wallets',
+  station_migration_review_title: 'Review old Station wallets',
+  station_migration_review_description:
+    'This only reads legacy Station extension storage. No wallets are migrated, reconnected, deleted, or marked complete yet.',
+  station_migration_settings_title: 'Migrate Station wallets',
+  station_migration_settings_description:
+    'Review old Station wallets detected on this device.',
+  station_migration_set_up_without_migrating: 'Set up without migrating',
+  station_migration_no_wallets_found:
+    'No legacy Station wallets were found in this extension storage.',
+  station_migration_summary_total_one: '{{count}} wallet',
+  station_migration_summary_total_other: '{{count}} wallets',
+  station_migration_status_supported: 'Supported',
+  station_migration_status_reconnect: 'Reconnect',
+  station_migration_status_unsupported: 'Unsupported',
+  station_migration_status_corrupt: 'Invalid',
+  station_migration_status_needs_review: 'Needs review',
+  station_migration_wallet_type_mnemonic: 'Encrypted seed and mnemonic',
+  station_migration_wallet_type_seed: 'Encrypted seed',
+  station_migration_wallet_type_private_key: 'Encrypted private key',
+  station_migration_wallet_type_interchain_private_key:
+    'Encrypted Terra private keys',
+  station_migration_wallet_type_legacy_private_key:
+    'Legacy encrypted private-key blob',
+  station_migration_wallet_type_ledger: 'Ledger hardware wallet',
+  station_migration_wallet_type_multisig: 'Multisig wallet',
+  station_migration_wallet_type_unknown: 'Unknown Station wallet format',
+  station_migration_wallet_type_corrupt_storage: 'Invalid storage',
+  station_migration_wallet_type_corrupt_wallet: 'Invalid wallet entry',
+  station_migration_reason_supported_mnemonic:
+    'Encrypted wallet data is present for a future migration that asks for the Station password.',
+  station_migration_reason_supported_seed:
+    'Encrypted seed bytes are present for a future migration that asks for the Station password.',
+  station_migration_reason_supported_private_key:
+    'Encrypted private-key data is present for a future Terra-family import.',
+  station_migration_reason_supported_interchain_private_key:
+    'Encrypted Terra private-key data is present for a future import.',
+  station_migration_reason_supported_legacy_private_key:
+    'Legacy encrypted private-key data is present for a future import.',
+  station_migration_reason_ledger_reconnect:
+    'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.',
+  station_migration_reason_multisig:
+    'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed is present but is not a string.',
+  station_migration_reason_encrypted_invalid_shape:
+    'encrypted is present but is neither a string nor an object.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Encrypted private-key object is missing coin type 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Legacy wallet blob is present but is not a string.',
+  station_migration_reason_unknown_wallet_shape:
+    'Wallet entry does not match any known Station storage format.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} contains malformed JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} must be a JSON array.',
+  station_migration_reason_wallet_entry_not_object:
+    'Wallet entry is not an object.',
+  station_migration_reason_unsupported_fallback:
+    'This wallet needs review before it can be migrated.',
 }

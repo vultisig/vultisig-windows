@@ -222,7 +222,7 @@ export const es = {
   connect: 'Conectar',
   connect_dapp: 'Conectar dApp',
   connect_to_site: 'Conectarse a {{site}}',
-  connect_website_subtitle: 'Conecta este sitio web con la extensión Vultisig.',
+  connect_website_subtitle: 'Conecta este sitio web con Vultisig Extension.',
   connected_dapps: 'DApps conectadas',
   connecting_to_server: 'Conectando con el servidor',
   continue: 'Continuar',
@@ -839,15 +839,11 @@ export const es = {
   provider: 'Proveedor',
   route: 'Ruta',
   qbtc_claim_title: 'Reclamación de QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Cantidad de BTC',
   qbtc_claim_no_claimable_utxos:
     'No se encontraron UTXO reclamables para esta dirección.',
   qbtc_claim_disabled_notice:
     'Actualmente, la opción de reclamar está deshabilitada en la cadena QBTC.',
   qbtc_claim_failed_to_load: 'No se pudieron cargar las UTXO reclamables.',
-  qbtc_claim_selected_count: '{{count}} de {{max}} seleccionado',
-  qbtc_claim_confirm: 'Reclamar seleccionado',
   qbtc_claim_proving: 'Generando pruebas…',
   qbtc_claim_proving_hint: 'Esto puede tardar varios minutos.',
   qbtc_claim_broadcasting: 'Broadcasting de reclamación…',
@@ -860,7 +856,7 @@ export const es = {
   qbtc_claim_failed:
     'La reclamación ha fallado. Por favor, inténtelo de nuevo.',
   qbtc_claim_fast_vault_only:
-    'Actualmente, para reclamar una reclamación se requiere una Bóveda Rápida. La compatibilidad con la Bóveda Segura estará disponible próximamente.',
+    'Actualmente, para reclamar se requiere Fast Vault. La compatibilidad con Secure Vault estará disponible próximamente.',
   qbtc_claim_password_description:
     'Ingrese su contraseña de Fast Vault para firmar conjuntamente la transacción de reclamación.',
   qrCode: 'código QR',
@@ -1533,4 +1529,104 @@ export const es = {
   you_are_claiming: 'Estás afirmando',
   commission: 'comisión',
   claim_n_validators: 'Reclamación de los validadores {{count}}',
+  approval_amount: 'Monto de aprobación',
+  approval_expires: 'La aprobación vence',
+  deadline: 'Fecha límite',
+  domain: 'Dominio',
+  no_expiry: 'Sin fecha de caducidad',
+  primary_type: 'Tipo primario',
+  qbtc_claim_banner_title: 'El mismo Bitcoin. A prueba de ataques cuánticos.',
+  qbtc_claim_banner_subtitle: 'Reclama tu QBTC',
+  qbtc_claim_banner_cta: 'Reclámalo ahora',
+  qbtc_claim_section_cta: 'Reclamar QBTC',
+  qbtc_claim_card_title: 'Reclamable QBTC',
+  qbtc_claim_tab: 'Afirmar',
+  qbtc_onboarding_title: 'Nueva seguridad cuántica',
+  qbtc_onboarding_subtitle:
+    'Las claves clásicas pueden ser descifradas por ordenadores cuánticos. Para habilitar QBTC es necesario generar un nuevo par de claves.',
+  qbtc_onboarding_feature_generate_title: 'Genera tu par de claves cuánticas',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig ejecuta una ceremonia MPC local en todos sus dispositivos de bóveda para producir un nuevo par de claves.',
+  qbtc_onboarding_feature_link_title: 'Vincúlalo a tu bóveda existente',
+  qbtc_onboarding_feature_link_description:
+    'La clave cuántica está vinculada a la estructura actual de compartición de su bóveda. No es necesario volver a compartirla.',
+  qbtc_onboarding_feature_claim_title:
+    'Reclamar y realizar transacciones en QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Una vez generados, sus BTC UTXOs elegibles aparecerán como QBTC reclamables en una proporción de 1:1.',
+  qbtc_onboarding_get_started: 'Comience',
+  qbtc_claim_description:
+    'QBTC es una versión resistente a la computación cuántica de BTC. Sus tokens BTC y UTXOs existentes pueden canjearse como QBTC en una proporción de 1:1. Seleccione qué token UTXOs desea canjear a continuación.',
+  qbtc_claim_eligible_utxos: 'Elegible UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Confirmado · {{count}} hace bloques',
+  qbtc_claim_pending_confirmation: 'Pendiente de confirmación',
+  qbtc_claim_all: 'Reclamar todo',
+  qbtc_claim_count: 'Reclamar {{count}} de {{total}}',
+  raw_message: 'Mensaje sin formato',
+  token: 'Simbólico',
+  token_approval: 'Aprobación de tokens',
+  skip_for_now: 'Saltar por ahora',
+  station_migration_title: 'Migrar las carteras Station',
+  station_migration_review_title: 'Revisar las antiguas carteras Station',
+  station_migration_review_description:
+    'Esto solo lee el almacenamiento de la extensión heredada Station. Aún no se han migrado, reconectado, eliminado ni marcado como completadas las carteras.',
+  station_migration_settings_title: 'Migrar las carteras Station',
+  station_migration_settings_description:
+    'Revisar las carteras antiguas Station detectadas en este dispositivo.',
+  station_migration_set_up_without_migrating: 'Configurar sin migrar',
+  station_migration_no_wallets_found:
+    'No se encontraron carteras antiguas Station en este almacenamiento de extensión.',
+  station_migration_summary_total_one: 'Cartera {{count}}',
+  station_migration_summary_total_other: 'Carteras {{count}}',
+  station_migration_status_supported: 'Compatible',
+  station_migration_status_reconnect: 'Reconectar',
+  station_migration_status_unsupported: 'Sin soporte',
+  station_migration_status_corrupt: 'Inválido',
+  station_migration_status_needs_review: 'Necesita revisión',
+  station_migration_wallet_type_mnemonic: 'Semilla encriptada y mnemotécnica',
+  station_migration_wallet_type_seed: 'Semilla cifrada',
+  station_migration_wallet_type_private_key: 'Clave privada cifrada',
+  station_migration_wallet_type_interchain_private_key:
+    'Claves privadas cifradas de Terra',
+  station_migration_wallet_type_legacy_private_key:
+    'Bloque de clave privada cifrada heredada',
+  station_migration_wallet_type_ledger: 'Cartera de hardware Ledger',
+  station_migration_wallet_type_multisig: 'Cartera multifirma',
+  station_migration_wallet_type_unknown:
+    'Formato de billetera Station desconocido',
+  station_migration_wallet_type_corrupt_storage: 'Almacenamiento no válido',
+  station_migration_wallet_type_corrupt_wallet:
+    'Entrada de billetera no válida',
+  station_migration_reason_supported_mnemonic:
+    'Los datos cifrados de la cartera están disponibles para una futura migración que solicitará la contraseña Station.',
+  station_migration_reason_supported_seed:
+    'Se incluyen bytes de semilla cifrados para una futura migración que solicitará la contraseña Station.',
+  station_migration_reason_supported_private_key:
+    'Los datos de clave privada cifrados están disponibles para una futura importación a la familia Terra.',
+  station_migration_reason_supported_interchain_private_key:
+    'Los datos de clave privada de Terra, cifrados, están disponibles para una futura importación.',
+  station_migration_reason_supported_legacy_private_key:
+    'Los datos de clave privada cifrados heredados están disponibles para una futura importación.',
+  station_migration_reason_ledger_reconnect:
+    'Station almacena los detalles de la cuenta pública para esta billetera Ledger. Vuelva a conectar el dispositivo de hardware más tarde para usarlo en Station.',
+  station_migration_reason_multisig:
+    'Station solo almacena metadatos multifirma públicos. No almacena claves privadas que puedan convertirse en una bóveda Vultisig.',
+  station_migration_reason_encrypted_seed_not_string:
+    'La clave encryptedSeed está presente, pero no es una cadena de texto.',
+  station_migration_reason_encrypted_invalid_shape:
+    'La clave "encrypted" está presente, pero no es ni una cadena de texto ni un objeto.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Al objeto de clave privada cifrado le falta el tipo de moneda 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'El blob de la billetera heredada está presente, pero no es una cadena de texto.',
+  station_migration_reason_unknown_wallet_shape:
+    'La entrada de la cartera no coincide con ningún formato de almacenamiento Station conocido.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} contiene JSON con formato incorrecto.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} debe ser una matriz JSON.',
+  station_migration_reason_wallet_entry_not_object:
+    'La entrada de la cartera no es un objeto.',
+  station_migration_reason_unsupported_fallback:
+    'Esta billetera necesita ser revisada antes de poder ser migrada.',
 }

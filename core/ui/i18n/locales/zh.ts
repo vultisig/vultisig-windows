@@ -777,13 +777,9 @@ export const zh = {
   provider: '提供者',
   route: '路线',
   qbtc_claim_title: 'QBTC 声明',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: '比特币金额',
   qbtc_claim_no_claimable_utxos: '此地址未找到可认领的UTXO。',
   qbtc_claim_disabled_notice: 'QBTC链上的申领功能目前已禁用。',
   qbtc_claim_failed_to_load: '无法加载可认领的UTXO。',
-  qbtc_claim_selected_count: '已选择{{max}}中的{{count}}',
-  qbtc_claim_confirm: '索赔已选中',
   qbtc_claim_proving: '正在生成证明……',
   qbtc_claim_proving_hint: '这可能需要几分钟时间。',
   qbtc_claim_broadcasting: '正在 Broadcasting 申领……',
@@ -795,8 +791,9 @@ export const zh = {
   qbtc_claim_done: '完毕',
   qbtc_claim_failed: '申领失败，请重试。',
   qbtc_claim_fast_vault_only:
-    '目前领取权益需要使用快速保险库。安全保险库的支持即将推出。',
-  qbtc_claim_password_description: '输入您的快速保险库密码以共同签署索赔交易。',
+    '目前申领需要 Fast Vault。Secure Vault 支持即将推出。',
+  qbtc_claim_password_description:
+    '输入您的 Fast Vault 密码以共同签署申领交易。',
   qrCode: '二维码',
   receive: '收到',
   receivedShare1Email: '通过邮件收到 Vault Share 1',
@@ -974,7 +971,7 @@ export const zh = {
   signPrivately: '想私下签署吗？?',
   sign_custom_message_description: '签名自定义消息',
   sign_custom_message_unavailable_imported_no_ethereum:
-    '此金库导入时未包含以太坊。自定义消息签名需要以太坊，且导入的金库无法添加导入时遗漏的链。',
+    '此金库导入时未包含 Ethereum。自定义消息签名需要 Ethereum，且导入的金库无法添加导入时遗漏的链。',
   sign_faster: '签名速度比以往任何时候都快',
   sign_message: '签名信息',
   sign_transaction: '签署交易',
@@ -996,7 +993,7 @@ export const zh = {
   stake: '赌注',
   staked: '已下注',
   transfer: '转账',
-  jetton_transfer: '杰顿转运',
+  jetton_transfer: 'Jetton 转移',
   nft_transfer: 'NFT转移',
   excess_gas_refund: '多余 gas 退款',
   forward_ton_amount: '转发的 TON 数量',
@@ -1416,4 +1413,96 @@ export const zh = {
   you_are_claiming: '你声称',
   commission: '委员会',
   claim_n_validators: '来自 {{count}} 验证者的声明',
+  approval_amount: '批准金额',
+  approval_expires: '批准到期',
+  deadline: '最后期限',
+  domain: '领域',
+  no_expiry: '无有效期',
+  primary_type: '主要类型',
+  qbtc_claim_banner_title: '同样的比特币。量子安全。',
+  qbtc_claim_banner_subtitle: '领取您的 QBTC',
+  qbtc_claim_banner_cta: '立即领取',
+  qbtc_claim_section_cta: '申领 QBTC',
+  qbtc_claim_card_title: '可申领 QBTC',
+  qbtc_claim_tab: '宣称',
+  qbtc_onboarding_title: '新量子安全',
+  qbtc_onboarding_subtitle:
+    '量子计算机可以破解经典密钥。启用 QBTC 需要生成新的密钥对。',
+  qbtc_onboarding_feature_generate_title: '生成量子密钥对',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig 在您的保险库设备上运行本地 MPC 仪式，以生成新的密钥对。',
+  qbtc_onboarding_feature_link_title: '将其链接到您现有的保险库。',
+  qbtc_onboarding_feature_link_description:
+    '量子密钥已绑定到您当前的保险库共享结构，无需重新共享。',
+  qbtc_onboarding_feature_claim_title: '在 QBTC 中申领和交易',
+  qbtc_onboarding_feature_claim_description:
+    '一旦生成，您符合条件的 BTC UTXOs 将以 1:1 的比例显示为可申领的 QBTC。',
+  qbtc_onboarding_get_started: '开始使用',
+  qbtc_claim_description:
+    'QBTC 是 BTC 的抗量子版本。您现有的 BTC 和 UTXOs 可以按 1:1 的比例兑换为 QBTC。请在下方选择要兑换的 UTXOs。',
+  qbtc_claim_eligible_utxos: '符合条件的 UTXOs',
+  qbtc_claim_confirmed_blocks_ago: '已确认 · {{count}} 个区块前',
+  qbtc_claim_pending_confirmation: '待确认',
+  qbtc_claim_all: '全部领取',
+  qbtc_claim_count: '{{count}} 的 {{total}} 声明',
+  raw_message: '原始信息',
+  token: '令牌',
+  token_approval: '代币批准',
+  skip_for_now: '暂时跳过',
+  station_migration_title: '迁移 Station 钱包',
+  station_migration_review_title: '查看旧的 Station 钱包',
+  station_migration_review_description:
+    '此功能仅读取旧版 Station 扩展存储。目前尚未迁移、重新连接、删除或标记为已完成任何钱包。',
+  station_migration_settings_title: '迁移 Station 钱包',
+  station_migration_settings_description:
+    '查看此设备上检测到的旧版 Station 钱包。',
+  station_migration_set_up_without_migrating: '无需迁移即可设置',
+  station_migration_no_wallets_found: '在此扩展存储中未找到旧版 Station 钱包。',
+  station_migration_summary_total_one: '{{count}} 钱包',
+  station_migration_summary_total_other: '{{count}} 钱包',
+  station_migration_status_supported: '支持',
+  station_migration_status_reconnect: '重新连接',
+  station_migration_status_unsupported: '不支持',
+  station_migration_status_corrupt: '无效的',
+  station_migration_status_needs_review: '需要审查',
+  station_migration_wallet_type_mnemonic: '加密种子和助记词',
+  station_migration_wallet_type_seed: '加密种子',
+  station_migration_wallet_type_private_key: '加密私钥',
+  station_migration_wallet_type_interchain_private_key: '加密的 Terra 私钥',
+  station_migration_wallet_type_legacy_private_key: '遗留的加密私钥块',
+  station_migration_wallet_type_ledger: 'Ledger硬件钱包',
+  station_migration_wallet_type_multisig: '多重签名钱包',
+  station_migration_wallet_type_unknown: '未知 Station 钱包格式',
+  station_migration_wallet_type_corrupt_storage: '无效存储',
+  station_migration_wallet_type_corrupt_wallet: '无效的钱包条目',
+  station_migration_reason_supported_mnemonic:
+    '加密钱包数据已保存，以便将来迁移时需要输入 Station 密码。',
+  station_migration_reason_supported_seed:
+    '已加密种子字节，以备将来迁移时需要输入 Station 密码。',
+  station_migration_reason_supported_private_key:
+    '已为将来导入 Terra 系列产品准备加密的私钥数据。',
+  station_migration_reason_supported_interchain_private_key:
+    '已加密的 Terra 私钥数据已准备就绪，可供将来导入。',
+  station_migration_reason_supported_legacy_private_key:
+    '已保存旧版加密私钥数据，以备将来导入。',
+  station_migration_reason_ledger_reconnect:
+    'Station 存储此 Ledger 钱包的公共账户详细信息。稍后重新连接硬件设备，即可在 Station 中使用它。',
+  station_migration_reason_multisig:
+    'Station 仅存储公共多重签名元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed 存在，但它不是字符串。',
+  station_migration_reason_encrypted_invalid_shape:
+    '加密内容存在，但既不是字符串也不是对象。',
+  station_migration_reason_encrypted_private_key_missing_330:
+    '加密的私钥对象缺少币种类型 330。',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    '旧版钱包数据块存在，但它不是字符串。',
+  station_migration_reason_unknown_wallet_shape:
+    '钱包条目与任何已知的 Station 存储格式都不匹配。',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} 包含格式错误的 JSON。',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} 必须是一个 JSON 数组。',
+  station_migration_reason_wallet_entry_not_object: '钱包条目不是一种对象。',
+  station_migration_reason_unsupported_fallback: '该钱包需要审核后才能迁移。',
 }

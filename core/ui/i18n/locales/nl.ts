@@ -221,7 +221,7 @@ export const nl = {
   connect: 'Verbinden',
   connect_dapp: 'Verbind dApp',
   connect_to_site: 'Verbinden met {{site}}',
-  connect_website_subtitle: 'Koppel deze website aan de Vultisig-extensie.',
+  connect_website_subtitle: 'Koppel deze website aan Vultisig Extension.',
   connected_dapps: 'Verbonden dApps',
   connecting_to_server: 'Verbinden met server',
   continue: 'Doorgaan',
@@ -830,16 +830,12 @@ export const nl = {
   provider: 'Provider',
   route: 'Route',
   qbtc_claim_title: 'QBTC-claim',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'BTC-bedrag',
   qbtc_claim_no_claimable_utxos:
     'Er zijn geen claimbare UTXO&#39;s gevonden voor dit adres.',
   qbtc_claim_disabled_notice:
     'Het claimen van bitcoins is momenteel uitgeschakeld op de QBTC-blockchain.',
   qbtc_claim_failed_to_load:
     'Het laden van de claimbare UTXO&#39;s is mislukt.',
-  qbtc_claim_selected_count: '{{count}} van {{max}} geselecteerd',
-  qbtc_claim_confirm: 'Geselecteerde claim',
   qbtc_claim_proving: 'Bewijs genereren…',
   qbtc_claim_proving_hint: 'Dit kan enkele minuten duren.',
   qbtc_claim_broadcasting: 'Broadcasting claim…',
@@ -1514,4 +1510,101 @@ export const nl = {
   you_are_claiming: 'Je beweert',
   commission: 'commissie',
   claim_n_validators: 'Claim van {{count}}-validators',
+  approval_amount: 'Goedkeuringsbedrag',
+  approval_expires: 'Goedkeuring verloopt',
+  deadline: 'Termijn',
+  domain: 'Domein',
+  no_expiry: 'Geen vervaldatum',
+  primary_type: 'Primair type',
+  qbtc_claim_banner_title: 'Hetzelfde als Bitcoin. Kwantumveilig.',
+  qbtc_claim_banner_subtitle: 'Claim uw QBTC',
+  qbtc_claim_banner_cta: 'Claim nu',
+  qbtc_claim_section_cta: 'Claim QBTC',
+  qbtc_claim_card_title: 'Claimbare QBTC',
+  qbtc_claim_tab: 'Claim',
+  qbtc_onboarding_title: 'Nieuwe kwantumbeveiliging',
+  qbtc_onboarding_subtitle:
+    'Klassieke sleutels kunnen door kwantumcomputers worden gekraakt. Om QBTC te activeren, moet een nieuw sleutelpaar worden gegenereerd.',
+  qbtc_onboarding_feature_generate_title: 'Genereer uw kwantum-sleutelpaar',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig voert een lokale MPC-ceremonie uit op al uw kluisapparaten om een ​​nieuw sleutelpaar te genereren.',
+  qbtc_onboarding_feature_link_title: 'Koppel het aan uw bestaande kluis.',
+  qbtc_onboarding_feature_link_description:
+    'De kwantumsleutel is gekoppeld aan uw huidige kluisdelingsstructuur. Opnieuw delen is niet nodig.',
+  qbtc_onboarding_feature_claim_title: 'Claim en verhandel in QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Zodra ze gegenereerd zijn, verschijnen uw in aanmerking komende BTC UTXOs als claimbare QBTC in een verhouding van 1:1.',
+  qbtc_onboarding_get_started: 'Aan de slag',
+  qbtc_claim_description:
+    'QBTC is een kwantumresistente versie van BTC. Uw bestaande BTC en UTXOs komen in aanmerking om te worden geclaimd als QBTC in een verhouding van 1:1. Selecteer hieronder welke UTXOs u wilt claimen.',
+  qbtc_claim_eligible_utxos: 'Geschikte UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Bevestigd · {{count}} blokken geleden',
+  qbtc_claim_pending_confirmation: 'Bevestiging in afwachting',
+  qbtc_claim_all: 'Claim alles',
+  qbtc_claim_count: 'Claim {{count}} van {{total}}',
+  raw_message: 'Onbewerkt bericht',
+  token: 'Token',
+  token_approval: 'Tokengoedkeuring',
+  skip_for_now: 'Sla dit voorlopig over.',
+  station_migration_title: 'Migreer Station wallets',
+  station_migration_review_title: 'Bekijk oude Station wallets',
+  station_migration_review_description:
+    'Dit leest alleen de oude Station-extensieopslag. Er zijn nog geen wallets gemigreerd, opnieuw verbonden, verwijderd of als voltooid gemarkeerd.',
+  station_migration_settings_title: 'Migreer Station wallets',
+  station_migration_settings_description:
+    'Controleer de oude Station wallets die op dit apparaat zijn gedetecteerd.',
+  station_migration_set_up_without_migrating: 'Instellen zonder migratie',
+  station_migration_no_wallets_found:
+    'Er zijn geen oudere Station wallets gevonden in deze extensieopslag.',
+  station_migration_summary_total_one: '{{count}} portemonnee',
+  station_migration_summary_total_other: '{{count}} wallets',
+  station_migration_status_supported: 'Ondersteund',
+  station_migration_status_reconnect: 'Opnieuw verbinding maken',
+  station_migration_status_unsupported: 'Niet ondersteund',
+  station_migration_status_corrupt: 'Ongeldig',
+  station_migration_status_needs_review: 'Moet beoordeeld worden',
+  station_migration_wallet_type_mnemonic: 'Versleutelde seed en mnemonic',
+  station_migration_wallet_type_seed: 'Versleutelde seed',
+  station_migration_wallet_type_private_key: 'Versleutelde privésleutel',
+  station_migration_wallet_type_interchain_private_key:
+    'Versleutelde Terra privésleutels',
+  station_migration_wallet_type_legacy_private_key:
+    'Legacy versleutelde privésleutelblob',
+  station_migration_wallet_type_ledger: 'Ledger hardware wallet',
+  station_migration_wallet_type_multisig: 'Multisig-wallet',
+  station_migration_wallet_type_unknown: 'Onbekend Station-walletformaat',
+  station_migration_wallet_type_corrupt_storage: 'Ongeldige opslag',
+  station_migration_wallet_type_corrupt_wallet: 'Ongeldige portemonnee-invoer',
+  station_migration_reason_supported_mnemonic:
+    'Versleutelde portemonneegegevens zijn aanwezig voor een toekomstige migratie waarbij het wachtwoord Station nodig is.',
+  station_migration_reason_supported_seed:
+    'Versleutelde seed-bytes zijn aanwezig voor een toekomstige migratie waarbij het wachtwoord Station wordt opgevraagd.',
+  station_migration_reason_supported_private_key:
+    'Versleutelde privé-sleutelgegevens zijn aanwezig voor een toekomstige import binnen de Terra-familie.',
+  station_migration_reason_supported_interchain_private_key:
+    'Versleutelde Terra-privésleutelgegevens zijn aanwezig voor een toekomstige import.',
+  station_migration_reason_supported_legacy_private_key:
+    'Versleutelde privé-sleutelgegevens uit het verleden zijn aanwezig voor een toekomstige import.',
+  station_migration_reason_ledger_reconnect:
+    'Station slaat de openbare accountgegevens voor deze Ledger-wallet op. Sluit het hardwareapparaat later opnieuw aan om het in Station te gebruiken.',
+  station_migration_reason_multisig:
+    'Station slaat alleen openbare multisig-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een Vultisig-kluis.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed is aanwezig, maar is geen tekenreeks.',
+  station_migration_reason_encrypted_invalid_shape:
+    'De versleutelde waarde is aanwezig, maar het is noch een tekenreeks, noch een object.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Het versleutelde object met de privésleutel mist munttype 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'De legacy wallet-blob is aanwezig, maar is geen tekenreeks.',
+  station_migration_reason_unknown_wallet_shape:
+    'De wallet-invoer komt niet overeen met een bekend Station-opslagformaat.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} bevat onjuist opgemaakte JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} moet een JSON-array zijn.',
+  station_migration_reason_wallet_entry_not_object:
+    'De portemonnee-ingang is geen object.',
+  station_migration_reason_unsupported_fallback:
+    'Deze portemonnee moet eerst gecontroleerd worden voordat deze gemigreerd kan worden.',
 }

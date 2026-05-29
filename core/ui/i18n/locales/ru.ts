@@ -221,8 +221,7 @@ export const ru = {
   connect: 'Подключить',
   connect_dapp: 'Подключить dApp',
   connect_to_site: 'Подключиться к {{site}}',
-  connect_website_subtitle:
-    'Подключите этот сайт с помощью расширения Vultisig.',
+  connect_website_subtitle: 'Подключите этот сайт к Vultisig Extension.',
   connected_dapps: 'Подключённые dApps',
   connecting_to_server: 'Подключение к серверу',
   continue: 'Продолжить',
@@ -825,16 +824,12 @@ export const ru = {
   provider: 'Провайдер',
   route: 'Маршрут',
   qbtc_claim_title: 'Заявка на QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Сумма в BTC',
   qbtc_claim_no_claimable_utxos:
     'Для этого адреса не найдено доступных для активации UTXO.',
   qbtc_claim_disabled_notice:
     'В настоящее время возможность получения выплат в блокчейне QBTC отключена.',
   qbtc_claim_failed_to_load:
     'Не удалось загрузить доступные для активации UTXO.',
-  qbtc_claim_selected_count: 'Из {{max}} выбран {{count}}',
-  qbtc_claim_confirm: 'Выбрана заявка',
   qbtc_claim_proving: 'Создание доказательств…',
   qbtc_claim_proving_hint: 'Это может занять несколько минут.',
   qbtc_claim_broadcasting: 'Broadcasting заявки…',
@@ -1507,4 +1502,104 @@ export const ru = {
   you_are_claiming: 'Вы получаете',
   commission: 'комиссия',
   claim_n_validators: 'Получить от {{count}} валидаторов',
+  approval_amount: 'Сумма одобрения',
+  approval_expires: 'Срок действия одобрения истекает.',
+  deadline: 'Крайний срок',
+  domain: 'Домен',
+  no_expiry: 'Срок действия не ограничен.',
+  primary_type: 'Основной тип',
+  qbtc_claim_banner_title: 'Тот же Биткойн. Квантово-безопасный.',
+  qbtc_claim_banner_subtitle: 'Получите свой QBTC',
+  qbtc_claim_banner_cta: 'Заявите сейчас',
+  qbtc_claim_section_cta: 'Заявка QBTC',
+  qbtc_claim_card_title: 'QBTC можно получить',
+  qbtc_claim_tab: 'Требовать',
+  qbtc_onboarding_title: 'Новая квантовая безопасность',
+  qbtc_onboarding_subtitle:
+    'Классические ключи могут быть взломаны квантовыми компьютерами. Для активации QBTC требуется сгенерировать новую пару ключей.',
+  qbtc_onboarding_feature_generate_title:
+    'Сгенерируйте свою пару квантовых ключей.',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig запускает локальную церемонию MPC на ваших устройствах хранилища для создания новой пары ключей.',
+  qbtc_onboarding_feature_link_title: 'Свяжите его с существующим хранилищем.',
+  qbtc_onboarding_feature_link_description:
+    'Квантовый ключ привязан к вашей текущей структуре доступа к хранилищу. Перераспределение доступа не требуется.',
+  qbtc_onboarding_feature_claim_title:
+    'Заявить права на токены и совершить транзакцию в QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'После генерации ваши подходящие токены BTC и UTXOs будут отображаться как доступные для получения токены QBTC в соотношении 1:1.',
+  qbtc_onboarding_get_started: 'Начать',
+  qbtc_claim_description:
+    'QBTC — это квантово-устойчивая версия BTC. Ваши существующие BTC и UTXOs могут быть использованы в качестве QBTC в соотношении 1:1. Выберите, какой UTXOs использовать для получения, ниже.',
+  qbtc_claim_eligible_utxos: 'Подходящий UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Подтверждено · {{count}} блоков назад',
+  qbtc_claim_pending_confirmation: 'Ожидается подтверждение',
+  qbtc_claim_all: 'Забрать все',
+  qbtc_claim_count: 'Заявка {{count}} на {{total}}',
+  raw_message: 'Исходное сообщение',
+  token: 'Токен',
+  token_approval: 'Подтверждение токена',
+  skip_for_now: 'Пропустите пока что',
+  station_migration_title: 'Перенести кошельки Station',
+  station_migration_review_title: 'Проверка старых кошельков Station',
+  station_migration_review_description:
+    'Это только чтение устаревшего хранилища расширения Station. Пока ни один кошелёк не был перенесён, переподключён, удалён или помечен как завершённый.',
+  station_migration_settings_title: 'Перенести кошельки Station',
+  station_migration_settings_description:
+    'Просмотрите старые кошельки Station, обнаруженные на этом устройстве.',
+  station_migration_set_up_without_migrating: 'Настройка без миграции.',
+  station_migration_no_wallets_found:
+    'В хранилище этого расширения не обнаружено устаревших кошельков Station.',
+  station_migration_summary_total_one: 'Кошелек {{count}}',
+  station_migration_summary_total_other: 'Кошельки {{count}}',
+  station_migration_status_supported: 'Поддерживается',
+  station_migration_status_reconnect: 'Восстановить соединение',
+  station_migration_status_unsupported: 'Неподдерживаемый',
+  station_migration_status_corrupt: 'Неверный',
+  station_migration_status_needs_review: 'Требуется пересмотр',
+  station_migration_wallet_type_mnemonic:
+    'Зашифрованное начальное значение и мнемоническое правило',
+  station_migration_wallet_type_seed: 'Зашифрованное начальное значение',
+  station_migration_wallet_type_private_key: 'Зашифрованный закрытый ключ',
+  station_migration_wallet_type_interchain_private_key:
+    'Зашифрованные закрытые ключи Terra',
+  station_migration_wallet_type_legacy_private_key:
+    'Устаревший зашифрованный блок закрытого ключа',
+  station_migration_wallet_type_ledger: 'Аппаратный кошелек Ledger',
+  station_migration_wallet_type_multisig: 'Кошелек с мультиподписью',
+  station_migration_wallet_type_unknown: 'Неизвестный формат кошелька Station',
+  station_migration_wallet_type_corrupt_storage: 'Недопустимое хранилище',
+  station_migration_wallet_type_corrupt_wallet: 'Неверная запись в кошельке',
+  station_migration_reason_supported_mnemonic:
+    'Зашифрованные данные кошелька присутствуют для будущей миграции, при которой потребуется пароль Station.',
+  station_migration_reason_supported_seed:
+    'Зашифрованные начальные байты присутствуют для будущей миграции, при которой будет запрошен пароль Station.',
+  station_migration_reason_supported_private_key:
+    'Зашифрованные данные закрытого ключа доступны для будущего импорта в семейство Terra.',
+  station_migration_reason_supported_interchain_private_key:
+    'Зашифрованные данные закрытого ключа Terra доступны для импорта в будущем.',
+  station_migration_reason_supported_legacy_private_key:
+    'Устаревшие зашифрованные данные закрытого ключа доступны для импорта в будущем.',
+  station_migration_reason_ledger_reconnect:
+    'В Station хранятся общедоступные данные учетной записи для этого кошелька Ledger. Подключите аппаратное устройство позже, чтобы использовать его в Station.',
+  station_migration_reason_multisig:
+    'Station хранит только открытые метаданные мультиподписи. Он не хранит закрытые ключи, которые можно преобразовать в хранилище Vultisig.',
+  station_migration_reason_encrypted_seed_not_string:
+    'Параметр encryptedSeed присутствует, но не является строкой.',
+  station_migration_reason_encrypted_invalid_shape:
+    'Зашифрованное значение присутствует, но не является ни строкой, ни объектом.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'В зашифрованном объекте закрытого ключа отсутствует тип монеты 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Устаревший объект Wallet Blob присутствует, но не является строкой.',
+  station_migration_reason_unknown_wallet_shape:
+    'Запись в кошельке не соответствует ни одному известному формату хранения Station.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} содержит некорректный JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} должен быть массивом JSON.',
+  station_migration_reason_wallet_entry_not_object:
+    'Запись в кошельке не является объектом.',
+  station_migration_reason_unsupported_fallback:
+    'Перед переносом данных из этого кошелька требуется его проверка.',
 }

@@ -1,6 +1,8 @@
 import { ChildrenProp } from '@lib/ui/props'
 import { createContext, useContext, useEffect, useState } from 'react'
 
+import { currentProductBrand } from './brand'
+
 type StartupSplashState = {
   hasCompletedStartupSplash: boolean
   completeStartupSplash: () => void
@@ -15,7 +17,10 @@ const StartupSplashContext = createContext<StartupSplashState>(
   defaultStartupSplashState
 )
 
-const splashSessionKey = 'hasCompletedStartupSplash'
+const splashSessionKey =
+  currentProductBrand === 'station'
+    ? 'stationHasCompletedStartupSplash'
+    : 'hasCompletedStartupSplash'
 
 const hasSessionStorage =
   typeof chrome !== 'undefined' && !!chrome.storage?.session

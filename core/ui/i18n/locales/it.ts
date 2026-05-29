@@ -225,7 +225,7 @@ export const it = {
   connect: 'Collegare',
   connect_dapp: 'Connetti dApp',
   connect_to_site: 'Connettiti a {{site}}',
-  connect_website_subtitle: "Collega questo sito web con l'estensione Vultisig",
+  connect_website_subtitle: 'Collega questo sito web con Vultisig Extension',
   connected_dapps: 'dApp connesse',
   connecting_to_server: 'Connessione al server',
   continue: 'Continuare',
@@ -843,15 +843,11 @@ export const it = {
   provider: 'Fornitore',
   route: 'Itinerario',
   qbtc_claim_title: 'Richiesta QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Quantità di BTC',
   qbtc_claim_no_claimable_utxos:
     'Nessun UTXO riscattabile trovato per questo indirizzo.',
   qbtc_claim_disabled_notice:
     'Al momento, la possibilità di richiedere token è disabilitata sulla blockchain di QBTC.',
   qbtc_claim_failed_to_load: 'Impossibile caricare gli UTXO rivendicabili.',
-  qbtc_claim_selected_count: '{{count}} di {{max}} selezionato',
-  qbtc_claim_confirm: 'Richiesta selezionata',
   qbtc_claim_proving: 'Generazione di prove…',
   qbtc_claim_proving_hint: 'Questa operazione può richiedere diversi minuti.',
   qbtc_claim_broadcasting: 'Broadcasting della richiesta…',
@@ -1535,4 +1531,106 @@ export const it = {
   you_are_claiming: 'Stai affermando',
   commission: 'commissione',
   claim_n_validators: 'Richiesta dai validatori {{count}}',
+  approval_amount: 'Importo approvato',
+  approval_expires: 'L&#39;approvazione scade',
+  deadline: 'Scadenza',
+  domain: 'Dominio',
+  no_expiry: 'Nessuna scadenza',
+  primary_type: 'Tipo primario',
+  qbtc_claim_banner_title:
+    'Lo stesso Bitcoin. A prova di computer quantistico.',
+  qbtc_claim_banner_subtitle: 'Richiedi il tuo QBTC',
+  qbtc_claim_banner_cta: 'Richiedi ora',
+  qbtc_claim_section_cta: 'Richiedi QBTC',
+  qbtc_claim_card_title: 'Riscuotibile QBTC',
+  qbtc_claim_tab: 'Reclamo',
+  qbtc_onboarding_title: 'Nuova sicurezza quantistica',
+  qbtc_onboarding_subtitle:
+    'Le chiavi classiche possono essere decifrate dai computer quantistici. L&#39;attivazione di QBTC richiede la generazione di una nuova coppia di chiavi.',
+  qbtc_onboarding_feature_generate_title:
+    'Genera la tua coppia di chiavi quantistiche',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig esegue una procedura MPC locale sui dispositivi del vault per generare una nuova coppia di chiavi.',
+  qbtc_onboarding_feature_link_title: 'Collegalo al tuo vault esistente',
+  qbtc_onboarding_feature_link_description:
+    'La chiave quantistica è associata alla struttura di condivisione del tuo vault corrente. Non è necessaria alcuna nuova condivisione.',
+  qbtc_onboarding_feature_claim_title:
+    'Richiedi e effettua transazioni in QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Una volta generati, i token BTC e UTXOs idonei appariranno come token QBTC riscattabili con un rapporto di 1:1.',
+  qbtc_onboarding_get_started: 'Inizia',
+  qbtc_claim_description:
+    'QBTC è una versione resistente ai computer quantistici di BTC. I tuoi BTC e UTXOs esistenti possono essere richiesti come QBTC con un rapporto 1:1. Seleziona quale UTXOs richiedere qui sotto.',
+  qbtc_claim_eligible_utxos: 'UTXOs idoneo',
+  qbtc_claim_confirmed_blocks_ago: 'Confermato · {{count}} blocchi fa',
+  qbtc_claim_pending_confirmation: 'In attesa di conferma',
+  qbtc_claim_all: 'Richiedi tutto',
+  qbtc_claim_count: 'Richiedi {{count}} di {{total}}',
+  raw_message: 'Messaggio grezzo',
+  token: 'Token',
+  token_approval: 'Approvazione del token',
+  skip_for_now: 'Salta per ora',
+  station_migration_title: 'Migrare i wallet Station',
+  station_migration_review_title: 'Revisione dei vecchi portafogli Station',
+  station_migration_review_description:
+    'Questa operazione legge solo la memoria di archiviazione legacy dell&#39;estensione Station. Nessun portafoglio è stato ancora migrato, riconnesso, eliminato o contrassegnato come completato.',
+  station_migration_settings_title: 'Migrare i wallet Station',
+  station_migration_settings_description:
+    'Esamina i vecchi portafogli Station rilevati su questo dispositivo.',
+  station_migration_set_up_without_migrating: 'Configurazione senza migrazione',
+  station_migration_no_wallets_found:
+    'In questa estensione di archiviazione non è stato trovato alcun portafoglio legacy Station.',
+  station_migration_summary_total_one: 'Portafoglio {{count}}',
+  station_migration_summary_total_other: 'portafogli {{count}}',
+  station_migration_status_supported: 'Supportato',
+  station_migration_status_reconnect: 'Ricollega',
+  station_migration_status_unsupported: 'Non supportato',
+  station_migration_status_corrupt: 'Non valido',
+  station_migration_status_needs_review: 'Necessita di revisione',
+  station_migration_wallet_type_mnemonic: 'Seed crittografato e mnemonico',
+  station_migration_wallet_type_seed: 'Seed crittografato',
+  station_migration_wallet_type_private_key: 'Chiave privata crittografata',
+  station_migration_wallet_type_interchain_private_key:
+    'Chiavi private Terra crittografate',
+  station_migration_wallet_type_legacy_private_key:
+    'Blob di chiave privata crittografata legacy',
+  station_migration_wallet_type_ledger: 'Portafoglio hardware Ledger',
+  station_migration_wallet_type_multisig: 'Portafoglio multisig',
+  station_migration_wallet_type_unknown:
+    'Formato del portafoglio sconosciuto Station',
+  station_migration_wallet_type_corrupt_storage: 'Memoria non valida',
+  station_migration_wallet_type_corrupt_wallet:
+    'Inserimento del portafoglio non valido',
+  station_migration_reason_supported_mnemonic:
+    'I dati del portafoglio crittografati sono presenti per una futura migrazione che richiede la password Station.',
+  station_migration_reason_supported_seed:
+    'Sono presenti byte di seeding crittografati per una futura migrazione che richiederà la password Station.',
+  station_migration_reason_supported_private_key:
+    'I dati della chiave privata crittografata sono presenti per una futura importazione nella famiglia Terra.',
+  station_migration_reason_supported_interchain_private_key:
+    'I dati crittografati della chiave privata di Terra sono presenti per una futura importazione.',
+  station_migration_reason_supported_legacy_private_key:
+    'I dati della chiave privata crittografata preesistente sono presenti per una futura importazione.',
+  station_migration_reason_ledger_reconnect:
+    'Station memorizza i dettagli dell&#39;account pubblico per questo portafoglio Ledger. Ricollega il dispositivo hardware in seguito per utilizzarlo in Station.',
+  station_migration_reason_multisig:
+    'Station memorizza solo i metadati pubblici multisig. Non memorizza le chiavi private che possono essere convertite in un vault Vultisig.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed è presente ma non è una stringa.',
+  station_migration_reason_encrypted_invalid_shape:
+    'La parola chiave `encrypted` è presente ma non è né una stringa né un oggetto.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'L&#39;oggetto chiave privata crittografata non supporta il tipo di moneta 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Il blob del portafoglio legacy è presente ma non è una stringa.',
+  station_migration_reason_unknown_wallet_shape:
+    'La voce del portafoglio non corrisponde ad alcun formato di archiviazione Station conosciuto.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} contiene JSON non valido.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} deve essere un array JSON.',
+  station_migration_reason_wallet_entry_not_object:
+    'La voce del portafoglio non è un oggetto.',
+  station_migration_reason_unsupported_fallback:
+    'Questo portafoglio necessita di revisione prima di poter essere migrato.',
 }

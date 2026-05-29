@@ -2,6 +2,8 @@ import { VStack } from '@lib/ui/layout/Stack'
 import Lottie from 'lottie-react'
 import { useEffect } from 'react'
 
+import { currentProductBrand } from './brand'
+import { ProductLogo } from './ProductLogo'
 import splashScreen from './splash-screen.json'
 import { useStartupSplash } from './startupSplash'
 
@@ -14,6 +16,8 @@ const splashAnimationDurationMs = Math.ceil(
 const splashCompletionFallbackMs =
   splashAnimationDurationMs + fallbackDurationBufferMs
 
+const stationSplashCompletionMs = 650
+
 export const ProductLogoBlock = () => {
   const { completeStartupSplash, hasCompletedStartupSplash } =
     useStartupSplash()
@@ -21,20 +25,29 @@ export const ProductLogoBlock = () => {
   useEffect(() => {
     if (hasCompletedStartupSplash) return
 
-    const timeoutId = setTimeout(() => {
-      completeStartupSplash()
-    }, splashCompletionFallbackMs)
+    const timeoutId = setTimeout(
+      () => {
+        completeStartupSplash()
+      },
+      currentProductBrand === 'station'
+        ? stationSplashCompletionMs
+        : splashCompletionFallbackMs
+    )
 
     return () => clearTimeout(timeoutId)
   }, [completeStartupSplash, hasCompletedStartupSplash])
 
   return (
     <VStack alignItems="center" justifyContent="center" fullSize>
-      <Lottie
-        animationData={splashScreen}
-        loop={false}
-        onComplete={completeStartupSplash}
-      />
+      {currentProductBrand === 'station' ? (
+        <ProductLogo style={{ fontSize: 96 }} />
+      ) : (
+        <Lottie
+          animationData={splashScreen}
+          loop={false}
+          onComplete={completeStartupSplash}
+        />
+      )}
     </VStack>
   )
 }

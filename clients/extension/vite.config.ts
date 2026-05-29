@@ -10,6 +10,11 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
+import {
+  getExtensionBrandConfig,
+  resolveExtensionProductBrand,
+} from './src/brand/extensionBrandConfig'
+import { extensionBrandVitePlugin } from './src/brand/extensionBrandVitePlugin'
 
 const rootDir = path.resolve(__dirname, '../..')
 const extensionNodePolyfills = (isFirefoxBuild = false) =>
@@ -67,15 +72,26 @@ export default defineConfig(async ({ mode }) => {
     __VULTISIG_VERIFIER_URL__: JSON.stringify(
       env.VULTISIG_VERIFIER_URL || 'https://verifier.vultisig.com'
     ),
+    __VULTISIG_STATION_KYBER_SOURCE__: JSON.stringify(
+      env.VULTISIG_STATION_KYBER_SOURCE ||
+        process.env.VULTISIG_STATION_KYBER_SOURCE ||
+        env.VITE_VULTISIG_STATION_KYBER_SOURCE ||
+        ''
+    ),
   }
 
   const chunk = process.env.CHUNK
   const isDev = !!process.env.VITE_DEV_RELOAD
   const isFirefoxBuild = process.env.VULTISIG_EXTENSION_TARGET === 'firefox'
+  const productBrand = resolveExtensionProductBrand(
+    process.env.VULTISIG_EXTENSION_BRAND
+  )
+  const extensionBrandConfig = getExtensionBrandConfig(productBrand)
   const defines = {
     ...featureFlagDefines,
     ...envDefines,
     __IS_FIREFOX_EXTENSION_BUILD__: JSON.stringify(isFirefoxBuild),
+    __VULTISIG_PRODUCT_BRAND__: JSON.stringify(productBrand),
   }
 
   const devBuildOptions = isDev
@@ -116,6 +132,10 @@ export default defineConfig(async ({ mode }) => {
       plugins: [
         extensionVultisigSdk(),
         tsconfigPaths({ root: rootDir }),
+        extensionBrandVitePlugin({
+          config: extensionBrandConfig,
+          extensionDir: __dirname,
+        }),
         ...plugins,
       ],
       build: {
@@ -152,6 +172,10 @@ export default defineConfig(async ({ mode }) => {
         ...getCommonPlugins({
           nodePolyfills: extensionNodePolyfills(isFirefoxBuild),
           vultisigSdk: extensionVultisigSdk(),
+        }),
+        extensionBrandVitePlugin({
+          config: extensionBrandConfig,
+          extensionDir: __dirname,
         }),
         viteStaticCopy({
           targets: getStaticCopyTargets(),

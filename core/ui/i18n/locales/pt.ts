@@ -224,7 +224,7 @@ export const pt = {
   connect: 'Conectar',
   connect_dapp: 'Conectar dApp',
   connect_to_site: 'Conecte-se ao {{site}}',
-  connect_website_subtitle: 'Conecte este site com a extensão Vultisig.',
+  connect_website_subtitle: 'Conecte este site com Vultisig Extension.',
   connected_dapps: 'dApps conectados',
   connecting_to_server: 'Conectando ao servidor',
   continue: 'Continuar',
@@ -842,15 +842,11 @@ export const pt = {
   provider: 'Fornecedor',
   route: 'Rota',
   qbtc_claim_title: 'Reivindicação QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Quantidade de BTC',
   qbtc_claim_no_claimable_utxos:
     'Não foram encontrados UTXOs reivindicáveis ​​para este endereço.',
   qbtc_claim_disabled_notice:
     'Atualmente, o resgate de tokens está desativado na blockchain QBTC.',
   qbtc_claim_failed_to_load: 'Falha ao carregar UTXOs elegíveis para resgate.',
-  qbtc_claim_selected_count: '{{count}} de {{max}} selecionado',
-  qbtc_claim_confirm: 'Reivindicar selecionado',
   qbtc_claim_proving: 'Gerando provas…',
   qbtc_claim_proving_hint: 'Isso pode levar vários minutos.',
   qbtc_claim_broadcasting: 'Broadcasting da reivindicação…',
@@ -1534,4 +1530,103 @@ export const pt = {
   you_are_claiming: 'Você está alegando',
   commission: 'comissão',
   claim_n_validators: 'Declaração dos validadores {{count}}',
+  approval_amount: 'Valor aprovado',
+  approval_expires: 'A aprovação expira',
+  deadline: 'Prazo final',
+  domain: 'Domínio',
+  no_expiry: 'Sem data de validade',
+  primary_type: 'Tipo primário',
+  qbtc_claim_banner_title: 'O mesmo Bitcoin. Seguro contra ataques quânticos.',
+  qbtc_claim_banner_subtitle: 'Reivindique seu QBTC',
+  qbtc_claim_banner_cta: 'Reivindique agora',
+  qbtc_claim_section_cta: 'Reivindique QBTC',
+  qbtc_claim_card_title: 'QBTC reivindicável',
+  qbtc_claim_tab: 'Alegar',
+  qbtc_onboarding_title: 'Nova segurança quântica',
+  qbtc_onboarding_subtitle:
+    'As chaves clássicas podem ser quebradas por computadores quânticos. Habilitar QBTC requer a geração de um novo par de chaves.',
+  qbtc_onboarding_feature_generate_title: 'Gere seu par de chaves quânticas.',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig executa uma cerimônia MPC local em seus dispositivos de cofre para gerar um novo par de chaves.',
+  qbtc_onboarding_feature_link_title: 'Conecte-o ao seu cofre existente.',
+  qbtc_onboarding_feature_link_description:
+    'A chave quântica está vinculada à sua estrutura de compartilhamento de cofre atual. Não é necessário compartilhar novamente.',
+  qbtc_onboarding_feature_claim_title:
+    'Reivindique e realize transações em QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Uma vez gerados, seus tokens elegíveis BTC e UTXOs aparecerão como tokens resgatáveis ​​QBTC em uma proporção de 1:1.',
+  qbtc_onboarding_get_started: 'Comece agora',
+  qbtc_claim_description:
+    'QBTC é uma versão resistente a ataques quânticos de BTC. Seus BTC e UTXOs existentes podem ser reivindicados como QBTC na proporção de 1:1. Selecione qual UTXOs você deseja reivindicar abaixo.',
+  qbtc_claim_eligible_utxos: 'Token UTXOs elegível',
+  qbtc_claim_confirmed_blocks_ago: 'Confirmado · {{count}} blocos atrás',
+  qbtc_claim_pending_confirmation: 'Confirmação pendente',
+  qbtc_claim_all: 'Reivindicar tudo',
+  qbtc_claim_count: 'Reivindique {{count}} de {{total}}',
+  raw_message: 'Mensagem bruta',
+  token: 'Token',
+  token_approval: 'Aprovação de token',
+  skip_for_now: 'Por enquanto, pule esta etapa.',
+  station_migration_title: 'Migrar carteiras Station',
+  station_migration_review_title: 'Analisar carteiras antigas Station',
+  station_migration_review_description:
+    'Esta operação lê apenas o armazenamento da extensão legada Station. Nenhuma carteira foi migrada, reconectada, excluída ou marcada como concluída ainda.',
+  station_migration_settings_title: 'Migrar carteiras Station',
+  station_migration_settings_description:
+    'Analisar carteiras antigas Station detectadas neste dispositivo.',
+  station_migration_set_up_without_migrating: 'Configurar sem migrar',
+  station_migration_no_wallets_found:
+    'Nenhuma carteira Station legada foi encontrada neste armazenamento de extensão.',
+  station_migration_summary_total_one: 'Carteira {{count}}',
+  station_migration_summary_total_other: 'Carteiras {{count}}',
+  station_migration_status_supported: 'Apoiado',
+  station_migration_status_reconnect: 'Reconectar',
+  station_migration_status_unsupported: 'Sem suporte',
+  station_migration_status_corrupt: 'Inválido',
+  station_migration_status_needs_review: 'Precisa de revisão',
+  station_migration_wallet_type_mnemonic: 'Semente criptografada e mnemônica',
+  station_migration_wallet_type_seed: 'Semente criptografada',
+  station_migration_wallet_type_private_key: 'Chave privada criptografada',
+  station_migration_wallet_type_interchain_private_key:
+    'Chaves privadas Terra criptografadas',
+  station_migration_wallet_type_legacy_private_key:
+    'Blob de chave privada criptografada legado',
+  station_migration_wallet_type_ledger: 'Carteira de hardware Ledger',
+  station_migration_wallet_type_multisig: 'Carteira multisig',
+  station_migration_wallet_type_unknown:
+    'Formato de carteira Station desconhecido',
+  station_migration_wallet_type_corrupt_storage: 'Armazenamento inválido',
+  station_migration_wallet_type_corrupt_wallet: 'Entrada de carteira inválida',
+  station_migration_reason_supported_mnemonic:
+    'Os dados criptografados da carteira estão presentes para uma futura migração que solicitará a senha Station.',
+  station_migration_reason_supported_seed:
+    'Os bytes de semente criptografados estão presentes para uma futura migração que solicitará a senha Station.',
+  station_migration_reason_supported_private_key:
+    'Os dados criptografados da chave privada estão presentes para uma futura importação da família Terra.',
+  station_migration_reason_supported_interchain_private_key:
+    'Os dados criptografados da chave privada do Terra estão presentes para uma futura importação.',
+  station_migration_reason_supported_legacy_private_key:
+    'Os dados legados criptografados da chave privada estão presentes para uma futura importação.',
+  station_migration_reason_ledger_reconnect:
+    'Station armazena os detalhes da conta pública desta carteira Ledger. Reconecte o dispositivo de hardware posteriormente para usá-lo em Station.',
+  station_migration_reason_multisig:
+    'A Station armazena apenas metadados multisig públicos. Ela não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
+  station_migration_reason_encrypted_seed_not_string:
+    'O encryptedSeed está presente, mas não é uma string.',
+  station_migration_reason_encrypted_invalid_shape:
+    'O valor criptografado está presente, mas não é uma string nem um objeto.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'O objeto de chave privada criptografada não possui o tipo de moeda 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'O blob da carteira legada está presente, mas não é uma string.',
+  station_migration_reason_unknown_wallet_shape:
+    'A entrada da carteira não corresponde a nenhum formato de armazenamento Station conhecido.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} contém JSON malformado.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} deve ser uma matriz JSON.',
+  station_migration_reason_wallet_entry_not_object:
+    'A entrada da carteira não é um objeto.',
+  station_migration_reason_unsupported_fallback:
+    'Esta carteira precisa ser analisada antes de ser migrada.',
 }

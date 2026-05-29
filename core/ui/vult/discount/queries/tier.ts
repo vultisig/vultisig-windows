@@ -10,7 +10,13 @@ import { Address } from 'viem'
 const thorguardNftAddress: Address =
   '0xa98b29a8f5a247802149c268ecf860b8308b7291'
 
-export const useVultDiscountTierQuery = () => {
+type UseVultDiscountTierQueryInput = {
+  enabled?: boolean
+}
+
+export const useVultDiscountTierQuery = ({
+  enabled = true,
+}: UseVultDiscountTierQueryInput = {}) => {
   const address = useCurrentVaultAddress(Chain.Ethereum)
 
   return useQuery({
@@ -26,7 +32,7 @@ export const useVultDiscountTierQuery = () => {
       ])
       return getVultDiscountTier({ vultBalance, thorguardNftBalance })
     },
-    enabled: !!address,
+    enabled: enabled && !!address,
     initialData: address ? undefined : null,
   })
 }

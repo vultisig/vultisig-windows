@@ -56,6 +56,7 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
       <VerifyKeysignStart
         keysignPayloadQuery={keysignPayloadQuery}
         terms={translatedTerms}
+        swapQuote={swapQuote}
       >
         <ContainerWrapper radius={16}>
           <VStack bgColor="foreground" gap={24} padding={24} radius={16}>

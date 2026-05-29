@@ -221,7 +221,7 @@ export const hr = {
   connect: 'Poveži se',
   connect_dapp: 'Poveži dApp',
   connect_to_site: 'Poveži se s {{site}}',
-  connect_website_subtitle: 'Povežite ovu web stranicu s Vultisig ekstenzijom',
+  connect_website_subtitle: 'Povežite ovu web stranicu s Vultisig Extension',
   connected_dapps: 'Povezane dApp-ove',
   connecting_to_server: 'Povezivanje sa serverom',
   continue: 'Nastaviti',
@@ -828,16 +828,12 @@ export const hr = {
   provider: 'Pružatelj usluga',
   route: 'Ruta',
   qbtc_claim_title: 'Zahtjev za QBTC',
-  qbtc_claim_txid: 'TXID',
-  qbtc_claim_btc_amount: 'Iznos BTC-a',
   qbtc_claim_no_claimable_utxos:
     'Za ovu adresu nisu pronađeni UTXO-ovi koji se mogu zatražiti.',
   qbtc_claim_disabled_notice:
     'Polaganje prava je trenutno onemogućeno na QBTC lancu.',
   qbtc_claim_failed_to_load:
     'Učitavanje UTXO-ova koji se mogu zatražiti nije uspjelo.',
-  qbtc_claim_selected_count: 'Odabran {{count}} od {{max}}',
-  qbtc_claim_confirm: 'Zahtjev je odabran',
   qbtc_claim_proving: 'Generiranje dokaza…',
   qbtc_claim_proving_hint: 'To može potrajati nekoliko minuta.',
   qbtc_claim_broadcasting: 'Broadcasting zahtjeva…',
@@ -1508,4 +1504,103 @@ export const hr = {
   you_are_claiming: 'Tvrdite',
   commission: 'provizija',
   claim_n_validators: 'Zahtjev od validatora {{count}}',
+  approval_amount: 'Iznos odobrenja',
+  approval_expires: 'Odobrenje istječe',
+  deadline: 'Rok',
+  domain: 'Domena',
+  no_expiry: 'Nema isteka',
+  primary_type: 'Primarna vrsta',
+  qbtc_claim_banner_title: 'Isti Bitcoin. Kvantno siguran.',
+  qbtc_claim_banner_subtitle: 'Zatražite svoj QBTC',
+  qbtc_claim_banner_cta: 'Zatražite odmah',
+  qbtc_claim_section_cta: 'Zahtjev QBTC',
+  qbtc_claim_card_title: 'Zahtjev QBTC',
+  qbtc_claim_tab: 'Zahtjev',
+  qbtc_onboarding_title: 'Nova kvantna sigurnost',
+  qbtc_onboarding_subtitle:
+    'Klasični ključevi mogu se probiti kvantnim računalima. Omogućavanje QBTC zahtijeva generiranje novog para ključeva.',
+  qbtc_onboarding_feature_generate_title:
+    'Generirajte svoj kvantni par ključeva',
+  qbtc_onboarding_feature_generate_description:
+    'Vultisig pokreće lokalnu MPC ceremoniju na vašim trezorskim uređajima kako bi se stvorio novi par ključeva.',
+  qbtc_onboarding_feature_link_title: 'Povežite ga s vašim postojećim trezorom',
+  qbtc_onboarding_feature_link_description:
+    'Kvantni ključ je vezan za vašu trenutnu strukturu dijeljenja trezora. Nije potrebno ponovno dijeljenje.',
+  qbtc_onboarding_feature_claim_title:
+    'Zatražite i izvršite transakciju u QBTC',
+  qbtc_onboarding_feature_claim_description:
+    'Nakon generiranja, vaš prihvatljivi BTC UTXOs prikazuje se kao QBTC koji se mogu zatražiti u omjeru 1:1.',
+  qbtc_onboarding_get_started: 'Započnite',
+  qbtc_claim_description:
+    'QBTC je kvantno otporna verzija BTC. Vaši postojeći BTC UTXOs ispunjavaju uvjete za preuzimanje kao QBTC u omjeru 1:1. Odaberite koji UTXOs želite preuzeti u nastavku.',
+  qbtc_claim_eligible_utxos: 'Ispunjava uvjete UTXOs',
+  qbtc_claim_confirmed_blocks_ago: 'Potvrđeno · prije {{count}} blokova',
+  qbtc_claim_pending_confirmation: 'Čeka se potvrda',
+  qbtc_claim_all: 'Zatraži sve',
+  qbtc_claim_count: 'Zahtjev {{count}} od {{total}}',
+  raw_message: 'Sirova poruka',
+  token: 'Znak',
+  token_approval: 'Odobrenje tokena',
+  skip_for_now: 'Preskoči za sada',
+  station_migration_title: 'Migrirajte Station novčanike',
+  station_migration_review_title: 'Pregledajte stare Station novčanike',
+  station_migration_review_description:
+    'Ovo čita samo naslijeđenu pohranu proširenja Station. Nijedan novčanik još nije migriran, ponovno povezan, izbrisan ili označen kao dovršen.',
+  station_migration_settings_title: 'Migrirajte Station novčanike',
+  station_migration_settings_description:
+    'Pregledajte stare Station novčanike otkrivene na ovom uređaju.',
+  station_migration_set_up_without_migrating: 'Postavljanje bez migracije',
+  station_migration_no_wallets_found:
+    'U ovom proširenom skladištu nisu pronađeni naslijeđeni Station novčanici.',
+  station_migration_summary_total_one: 'Novčanik {{count}}',
+  station_migration_summary_total_other: 'Novčanici {{count}}',
+  station_migration_status_supported: 'Podržano',
+  station_migration_status_reconnect: 'Ponovno se poveži',
+  station_migration_status_unsupported: 'Nepodržano',
+  station_migration_status_corrupt: 'Nevažeće',
+  station_migration_status_needs_review: 'Potreban je pregled',
+  station_migration_wallet_type_mnemonic: 'Šifrirano sjeme i mnemotehnika',
+  station_migration_wallet_type_seed: 'Šifrirano sjeme',
+  station_migration_wallet_type_private_key: 'Šifrirani privatni ključ',
+  station_migration_wallet_type_interchain_private_key:
+    'Šifrirani privatni ključevi Terre',
+  station_migration_wallet_type_legacy_private_key:
+    'Zastarjeli šifrirani blob s privatnim ključem',
+  station_migration_wallet_type_ledger: 'Ledger hardverski novčanik',
+  station_migration_wallet_type_multisig: 'Višestruki potpisni novčanik',
+  station_migration_wallet_type_unknown: 'Nepoznati format novčanika Station',
+  station_migration_wallet_type_corrupt_storage: 'Nevažeća pohrana',
+  station_migration_wallet_type_corrupt_wallet: 'Nevažeći unos u novčanik',
+  station_migration_reason_supported_mnemonic:
+    'Šifrirani podaci novčanika prisutni su za buduću migraciju koja traži lozinku Station.',
+  station_migration_reason_supported_seed:
+    'Šifrirani početni bajtovi prisutni su za buduću migraciju koja traži lozinku Station.',
+  station_migration_reason_supported_private_key:
+    'Šifrirani podaci privatnog ključa prisutni su za budući uvoz Terra-family.',
+  station_migration_reason_supported_interchain_private_key:
+    'Šifrirani podaci privatnog ključa Terra dostupni su za budući uvoz.',
+  station_migration_reason_supported_legacy_private_key:
+    'Za budući uvoz prisutni su naslijeđeni šifrirani podaci privatnog ključa.',
+  station_migration_reason_ledger_reconnect:
+    'Station pohranjuje podatke javnog računa za ovaj Ledger novčanik. Kasnije ponovno spojite hardverski uređaj da biste ga koristili u Station.',
+  station_migration_reason_multisig:
+    'Station pohranjuje samo javne metapodatke s višestrukim potpisom. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u Vultisig trezor.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed je prisutan, ali nije niz znakova.',
+  station_migration_reason_encrypted_invalid_shape:
+    'Vrijednost &quot;encrypted&quot; je prisutna, ali nije ni niz znakova ni objekt.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Kriptiranom objektu privatnog ključa nedostaje tip kovanice 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Prisutan je stari blob novčanika, ali nije niz znakova.',
+  station_migration_reason_unknown_wallet_shape:
+    'Unos u novčanik ne odgovara nijednom poznatom formatu pohrane Station.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} sadrži oštećeni JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} mora biti JSON niz.',
+  station_migration_reason_wallet_entry_not_object:
+    'Unos u novčanik nije objekt.',
+  station_migration_reason_unsupported_fallback:
+    'Ovaj novčanik treba pregledati prije nego što se može migrirati.',
 }
