@@ -34,6 +34,58 @@ const getStorageArea = () => {
   return chrome.storage?.local
 }
 
+const stationLegacyMigrationPersistentStatuses: readonly StationLegacyMigrationPersistentStatus[] =
+  ['failed', 'importing', 'migrated', 'skipped']
+
+const stationLegacyMigrationPersistentFailureCodes: readonly StationLegacyMigrationPersistentFailureCode[] =
+  ['vaultImportFailed', 'vaultSaveFailed']
+
+const stationLegacyMigrationSources = ['mnemonic', 'privateKey', 'seed']
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const isOneOf = <T extends string>(
+  options: readonly T[],
+  value: unknown
+): value is T =>
+  typeof value === 'string' && options.some(option => option === value)
+
+const isMigrationStatusRecord = (
+  value: unknown
+): value is StationLegacyMigrationStatusRecord => {
+  if (!isRecord(value)) return false
+
+  if (
+    !isOneOf(stationLegacyMigrationPersistentStatuses, value.status) ||
+    typeof value.walletId !== 'string' ||
+    typeof value.walletName !== 'string' ||
+    typeof value.updatedAt !== 'number'
+  ) {
+    return false
+  }
+
+  if (
+    value.source !== undefined &&
+    !isOneOf(stationLegacyMigrationSources, value.source)
+  ) {
+    return false
+  }
+
+  if (value.vaultId !== undefined && typeof value.vaultId !== 'string') {
+    return false
+  }
+
+  if (
+    value.failureCode !== undefined &&
+    !isOneOf(stationLegacyMigrationPersistentFailureCodes, value.failureCode)
+  ) {
+    return false
+  }
+
+  return true
+}
+
 export const getStationLegacyMigrationStatusRecords =
   async (): Promise<StationLegacyMigrationStatusRecords> => {
     const storageArea = getStorageArea()
@@ -42,9 +94,14 @@ export const getStationLegacyMigrationStatusRecords =
     const result = await storageArea.get(stationLegacyMigrationStatusStorageKey)
     const value = result[stationLegacyMigrationStatusStorageKey]
 
-    return value && typeof value === 'object'
-      ? (value as StationLegacyMigrationStatusRecords)
-      : {}
+    if (!isRecord(value)) return {}
+
+    return Object.fromEntries(
+      Object.entries(value).filter(
+        (entry): entry is [string, StationLegacyMigrationStatusRecord] =>
+          isMigrationStatusRecord(entry[1])
+      )
+    )
   }
 
 export const setStationLegacyMigrationStatusRecord = async (

@@ -1629,7 +1629,7 @@ export const pt = {
     'A entrada da carteira não é um objeto.',
   station_migration_reason_unsupported_fallback:
     'Esta carteira precisa ser analisada antes de ser migrada.',
-  station_migration_status_ready: 'Preparar',
+  station_migration_status_ready: 'Pronto',
   station_migration_status_failed: 'Fracassado',
   station_migration_password_title: 'Desbloquear carteiras compatíveis',
   station_migration_password_description:

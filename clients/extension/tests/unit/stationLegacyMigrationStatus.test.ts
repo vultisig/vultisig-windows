@@ -6,7 +6,7 @@ import {
   shouldSuppressStationLegacyMigrationForSetup,
   stationLegacyMigrationStatusStorageKey,
 } from '@clients/extension/src/storage/stationLegacyMigrationStatus'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 const createClassification = (
   statusRecord?: StationLegacyStorageClassification['wallets'][number]['status']
@@ -32,6 +32,10 @@ const createClassification = (
 })
 
 describe('station legacy migration status storage', () => {
+  beforeEach(async () => {
+    await chrome.storage.local.clear()
+  })
+
   it('persists migration records without touching legacy localStorage keys', async () => {
     await setStationLegacyMigrationStatusRecord({
       status: 'importing',
@@ -98,5 +102,41 @@ describe('station legacy migration status storage', () => {
         statusRecords: {},
       })
     ).toBe(false)
+  })
+
+  it('ignores malformed records loaded from chrome storage', async () => {
+    await chrome.storage.local.set({
+      [stationLegacyMigrationStatusStorageKey]: {
+        valid: {
+          status: 'migrated',
+          updatedAt: 1,
+          vaultId: 'vault-id',
+          walletId: 'wallets:0',
+          walletName: 'QA Station Wallet',
+        },
+        invalidStatus: {
+          status: 'ready',
+          updatedAt: 1,
+          walletId: 'wallets:1',
+          walletName: 'Ready is not persisted',
+        },
+        invalidUpdatedAt: {
+          status: 'skipped',
+          updatedAt: 'yesterday',
+          walletId: 'wallets:2',
+          walletName: 'Bad timestamp',
+        },
+      },
+    })
+
+    await expect(getStationLegacyMigrationStatusRecords()).resolves.toEqual({
+      valid: {
+        status: 'migrated',
+        updatedAt: 1,
+        vaultId: 'vault-id',
+        walletId: 'wallets:0',
+        walletName: 'QA Station Wallet',
+      },
+    })
   })
 })

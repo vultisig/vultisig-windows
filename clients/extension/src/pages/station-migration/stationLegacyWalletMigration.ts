@@ -74,6 +74,12 @@ const toKeyImportInput = (
   chains: stationMigrationChains,
 })
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const hasLegacyPrivateKey = (value: unknown): value is { privateKey: string } =>
+  isRecord(value) && typeof value.privateKey === 'string'
+
 const getExpectedAddresses = (
   wallet: StationLegacyWalletClassification
 ): string[] => {
@@ -255,12 +261,26 @@ export const decryptStationLegacyWallet = async ({
             }
             source = 'mnemonic'
             break
-          } catch {
-            material = await decryptSeedMaterial({
-              wallet,
-              password,
-              walletCore,
-            })
+          } catch (error) {
+            if (!wallet.metadata.encryptedSeed) {
+              throw error
+            }
+
+            try {
+              material = await decryptSeedMaterial({
+                wallet,
+                password,
+                walletCore,
+              })
+            } catch (seedError) {
+              const message =
+                error instanceof Error ? error.message : String(error)
+              if (message.toLowerCase().includes('metadata mismatch')) {
+                throw error
+              }
+
+              throw seedError
+            }
             source = 'seed'
             break
           }
@@ -318,8 +338,8 @@ export const decryptStationLegacyWallet = async ({
             ciphertext: wallet.metadata.wallet,
             password,
           })
-          const parsed = JSON.parse(decrypted) as { privateKey?: unknown }
-          if (typeof parsed.privateKey !== 'string') {
+          const parsed = JSON.parse(decrypted)
+          if (!hasLegacyPrivateKey(parsed)) {
             return failure('invalidLegacyWallet')
           }
           material = deriveStationTerraKeyMaterial({

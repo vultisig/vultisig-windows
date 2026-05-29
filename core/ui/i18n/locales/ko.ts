@@ -1597,7 +1597,7 @@ export const ko = {
   station_migration_password_invalid:
     '해당 비밀번호로는 지원되는 Station 지갑을 잠금 해제할 수 없습니다.',
   station_migration_check_wallets: '지갑을 확인하세요',
-  station_migration_migrate_wallet: '이주하다',
+  station_migration_migrate_wallet: '마이그레이션',
   station_migration_ready_source: '{{source}}에서 유효성이 검증되었습니다.',
   station_migration_source_mnemonic: '기억술',
   station_migration_source_seed: '시드 바이트',
@@ -1616,7 +1616,7 @@ export const ko = {
     '이 지갑 유형은 비밀번호를 사용하여 마이그레이션할 수 없습니다.',
   station_migration_failure_split_interchain_private_keys:
     '이 지갑은 Terra와 Terra Classic 개인 키가 각각 분리되어 있습니다. 이 마이그레이션은 동일한 Terra 계열 키만 가져올 수 있습니다.',
-  station_migration_status_importing: '수입',
+  station_migration_status_importing: '가져오는 중',
   station_migration_status_migrated: '마이그레이션됨',
   station_migration_status_skipped: '건너뛰었습니다',
   station_migration_status_reason_importing:

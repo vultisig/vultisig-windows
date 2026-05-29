@@ -15,7 +15,7 @@ import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { match } from '@vultisig/lib-utils/match'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -51,11 +51,18 @@ export const KeygenFlow = ({
     mutate: startKeygen,
     ...keygenMutationState
   } = useKeygenMutation()
+  const hasReportedKeygenError = useRef(false)
   useEffect(startKeygen, [startKeygen])
   useEffect(() => {
-    if (keygenMutationState.isError) {
-      onKeygenError?.(keygenMutationState.error)
+    if (!keygenMutationState.isError) {
+      hasReportedKeygenError.current = false
+      return
     }
+
+    if (hasReportedKeygenError.current) return
+
+    hasReportedKeygenError.current = true
+    onKeygenError?.(keygenMutationState.error)
   }, [keygenMutationState.error, keygenMutationState.isError, onKeygenError])
   const { t } = useTranslation()
 

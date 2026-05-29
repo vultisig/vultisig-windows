@@ -18,7 +18,7 @@ export const SetupSecureVaultPage = () => {
       ? keyImportInput.stationMigration
       : undefined
 
-  const markStationMigration = ({
+  const markStationMigration = async ({
     failureCode,
     status,
     vault,
@@ -29,7 +29,7 @@ export const SetupSecureVaultPage = () => {
   }) => {
     if (!stationMigration) return
 
-    void setStationLegacyMigrationStatusRecord({
+    await setStationLegacyMigrationStatusRecord({
       ...stationMigration,
       status,
       updatedAt: Date.now(),

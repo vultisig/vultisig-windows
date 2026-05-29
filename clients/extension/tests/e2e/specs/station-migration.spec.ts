@@ -136,11 +136,23 @@ const createStationFixture = async () => {
 }
 
 const getManifestName = (page: import('@playwright/test').Page) =>
-  page.evaluate(() =>
-    fetch(chrome.runtime.getURL('manifest.json'))
-      .then(response => response.json())
-      .then(manifest => manifest.name as string)
-  )
+  page.evaluate(async () => {
+    const manifest = await fetch(chrome.runtime.getURL('manifest.json')).then(
+      response => response.json()
+    )
+
+    if (
+      typeof manifest === 'object' &&
+      manifest !== null &&
+      !Array.isArray(manifest) &&
+      'name' in manifest &&
+      typeof manifest.name === 'string'
+    ) {
+      return manifest.name
+    }
+
+    return ''
+  })
 
 const seedLegacyStorage = async (page: import('@playwright/test').Page) => {
   const fixture = await createStationFixture()
@@ -278,9 +290,13 @@ test.describe('Station legacy migration', () => {
       .first()
       .fill(stationPassword)
     await page.getByRole('button', { name: 'Check wallets' }).click()
-    await expect(page.getByText('Ready').first()).toBeVisible()
+    const mnemonicWallet = page
+      .getByTestId('station-migration-wallet-item')
+      .filter({ has: page.getByText('QA Mnemonic Wallet') })
+
+    await expect(mnemonicWallet.getByText('Ready')).toBeVisible()
     await expect(
-      page.getByRole('button', { name: 'Migrate' }).first()
+      mnemonicWallet.getByRole('button', { name: 'Migrate' })
     ).toBeVisible()
     await expectNoHorizontalOverflow(page)
     await page.screenshot({
@@ -314,8 +330,8 @@ test.describe('Station legacy migration', () => {
       animations: 'disabled',
     })
 
-    await page.getByText('QA Mnemonic Wallet').scrollIntoViewIfNeeded()
-    await page.getByRole('button', { name: 'Migrate' }).first().click()
+    await mnemonicWallet.scrollIntoViewIfNeeded()
+    await mnemonicWallet.getByRole('button', { name: 'Migrate' }).click()
     await expect(
       page.getByRole('button', { name: 'Get Started' })
     ).toBeVisible()

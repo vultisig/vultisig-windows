@@ -1638,7 +1638,7 @@ export const es = {
   station_migration_password_invalid:
     'Esa contraseña no desbloqueó ninguna billetera Station compatible.',
   station_migration_check_wallets: 'Revisar las carteras',
-  station_migration_migrate_wallet: 'Emigrar',
+  station_migration_migrate_wallet: 'Migrar',
   station_migration_ready_source: 'Validado desde {{source}}.',
   station_migration_source_mnemonic: 'mnemotécnico',
   station_migration_source_seed: 'bytes semilla',
@@ -1657,7 +1657,7 @@ export const es = {
     'Este tipo de monedero no se puede migrar con una contraseña.',
   station_migration_failure_split_interchain_private_keys:
     'Esta cartera tiene claves privadas separadas para Terra y Terra Classic. Esta migración solo puede importar claves coincidentes de la familia Terra.',
-  station_migration_status_importing: 'Importador',
+  station_migration_status_importing: 'Importando',
   station_migration_status_migrated: 'Migrado',
   station_migration_status_skipped: 'Saltado',
   station_migration_status_reason_importing:

@@ -1529,7 +1529,7 @@ export const zh = {
   station_migration_failure_unsupported: '这种类型的钱包无法通过密码进行迁移。',
   station_migration_failure_split_interchain_private_keys:
     '此钱包拥有独立的 Terra 和 Terra Classic 私钥。此次迁移只能导入匹配的 Terra 系列密钥。',
-  station_migration_status_importing: '输入',
+  station_migration_status_importing: '导入中',
   station_migration_status_migrated: '已迁移',
   station_migration_status_skipped: '跳过',
   station_migration_status_reason_importing:

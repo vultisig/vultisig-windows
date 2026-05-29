@@ -1638,7 +1638,7 @@ export const it = {
   station_migration_password_title: 'Sblocca i portafogli supportati',
   station_migration_password_description:
     'La password Station rimane su questo dispositivo e viene utilizzata solo per decrittografare i vecchi dati del portafoglio Station.',
-  station_migration_password_label: 'Station password',
+  station_migration_password_label: 'Password di Station',
   station_migration_password_invalid:
     'Quella password non ha sbloccato alcun portafoglio Station supportato.',
   station_migration_check_wallets: 'Controlla i portafogli',

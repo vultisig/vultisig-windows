@@ -1653,7 +1653,7 @@ export const de = {
   station_migration_password_invalid:
     'Mit diesem Passwort konnte keine unterstützte Station-Wallet entsperrt werden.',
   station_migration_check_wallets: 'Portemonnaies prüfen',
-  station_migration_migrate_wallet: 'Wandern',
+  station_migration_migrate_wallet: 'Migrieren',
   station_migration_ready_source: 'Validiert von {{source}}.',
   station_migration_source_mnemonic: 'Merkhilfe',
   station_migration_source_seed: 'Seed-Bytes',

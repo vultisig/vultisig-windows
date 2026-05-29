@@ -116,9 +116,14 @@ export const StationMigrationPage = ({ onSkip, source = 'setup' }: Props) => {
       ? t('skip_for_now')
       : t('station_migration_set_up_without_migrating')
 
-  const supportedWallets = wallets.filter(
-    wallet => wallet.status === 'supported'
-  )
+  const supportedWallets = wallets.filter(wallet => {
+    if (wallet.status !== 'supported') return false
+
+    const persistedStatus =
+      migrationStatusRecords[getStationLegacyWalletId(wallet)]?.status
+
+    return persistedStatus !== 'migrated' && persistedStatus !== 'skipped'
+  })
   const canCheckWallets = supportedWallets.length > 0 && password.length > 0
 
   const handleCheckWallets = async () => {
