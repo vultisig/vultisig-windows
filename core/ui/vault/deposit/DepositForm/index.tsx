@@ -331,7 +331,15 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                             return (
                               <TextInputWithPasteAction
                                 onWheel={e => e.currentTarget.blur()}
-                                type={field.type}
+                                // Number fields use `type="text"` + decimal
+                                // inputMode so onChange fires on every key
+                                // (the native `type="number"` swallows
+                                // intermediate invalid characters like `-`
+                                // before our sanitizer sees them).
+                                type={isNumberField ? 'text' : field.type}
+                                inputMode={
+                                  isNumberField ? 'decimal' : undefined
+                                }
                                 step={
                                   field.name === 'amount'
                                     ? stepFromDecimals(coin.decimals)
