@@ -9,6 +9,7 @@ import { getAccount } from './getAccount'
 import { getAppChain } from './getAppChain'
 import { getAppChainId } from './getAppChainId'
 import { getTx } from './getTx'
+import { hasAppSession } from './hasAppSession'
 import { hasChainInVault } from './hasChainInVault'
 import {
   addKeplrSuggestedChain,
@@ -29,6 +30,7 @@ export const backgroundResolvers: BackgroundResolvers = {
   setVaultChain,
   getAccount,
   signOut,
+  hasAppSession,
   evmClientRequest,
   exportVault,
   getTx,
