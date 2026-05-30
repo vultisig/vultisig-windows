@@ -313,14 +313,28 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                             const handleNumberChange = (
                               e: ChangeEvent<HTMLInputElement>
                             ) => {
-                              let value = e.target.value.replace(/-/g, '')
+                              // Strip only a leading `-` (matches the Send
+                              // page's lenient negative-stripping for
+                              // positive-only fields). Embedded `-` (e.g.
+                              // `0-2`, `5-`, `--5`) falls through to the
+                              // regex below and is rejected — silently
+                              // collapsing `0-2` into `02` would change user
+                              // intent.
+                              const rawValue = e.target.value
+                              let value = rawValue.startsWith('-')
+                                ? rawValue.slice(1)
+                                : rawValue
                               if (value.startsWith('.')) {
                                 value = `0${value}`
                               }
                               if (value !== '' && !/^\d*\.?\d*$/.test(value)) {
+                                // Fall back to the current form value when
+                                // the user hasn't typed yet, so prefilled
+                                // defaults survive the first invalid
+                                // keystroke/paste.
                                 e.target.value =
                                   lastValidNumberInputs.current[field.name] ??
-                                  ''
+                                  String(getValues(field.name) ?? '')
                                 return
                               }
                               lastValidNumberInputs.current[field.name] = value
