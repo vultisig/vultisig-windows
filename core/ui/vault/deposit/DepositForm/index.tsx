@@ -27,7 +27,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
-import { FC, useState } from 'react'
+import { ChangeEvent, FC, useRef, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -61,6 +61,12 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
 
   const [tronResourceType, setTronResourceType] =
     useState<TronResourceType>('BANDWIDTH')
+
+  // Tracks the last accepted text per number-typed field so we can revert the
+  // DOM when the user types/pastes something that does not match a single-dot
+  // decimal (e.g. `0-2`, `0.0.0.01`). Uncontrolled `register()` inputs offer
+  // no other way to undo an invalid keystroke without re-rendering the form.
+  const lastValidNumberInputs = useRef<Record<string, string>>({})
 
   const { balance } = useDepositBalance({
     selectedChainAction,
@@ -301,18 +307,47 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                             )}
                           </Text>
 
-                          <TextInputWithPasteAction
-                            onWheel={e => e.currentTarget.blur()}
-                            type={field.type}
-                            step={
-                              field.name === 'amount'
-                                ? stepFromDecimals(coin.decimals)
-                                : undefined
+                          {(() => {
+                            const fieldRegister = register(field.name)
+                            const isNumberField = field.type === 'number'
+                            const handleNumberChange = (
+                              e: ChangeEvent<HTMLInputElement>
+                            ) => {
+                              let value = e.target.value.replace(/-/g, '')
+                              if (value.startsWith('.')) {
+                                value = `0${value}`
+                              }
+                              if (value !== '' && !/^\d*\.?\d*$/.test(value)) {
+                                e.target.value =
+                                  lastValidNumberInputs.current[field.name] ??
+                                  ''
+                                return
+                              }
+                              lastValidNumberInputs.current[field.name] = value
+                              e.target.value = value
+                              fieldRegister.onChange(e)
                             }
-                            min={0}
-                            {...register(field.name)}
-                            required={field.required}
-                          />
+
+                            return (
+                              <TextInputWithPasteAction
+                                onWheel={e => e.currentTarget.blur()}
+                                type={field.type}
+                                step={
+                                  field.name === 'amount'
+                                    ? stepFromDecimals(coin.decimals)
+                                    : undefined
+                                }
+                                min={0}
+                                {...fieldRegister}
+                                onChange={
+                                  isNumberField
+                                    ? handleNumberChange
+                                    : fieldRegister.onChange
+                                }
+                                required={field.required}
+                              />
+                            )
+                          })()}
 
                           {(touchedFields[field.name] ||
                             dirtyFields[field.name]) &&
