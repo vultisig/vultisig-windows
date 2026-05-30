@@ -328,13 +328,19 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                                 value = `0${value}`
                               }
                               if (value !== '' && !/^\d*\.?\d*$/.test(value)) {
-                                // Fall back to the current form value when
-                                // the user hasn't typed yet, so prefilled
-                                // defaults survive the first invalid
-                                // keystroke/paste.
-                                e.target.value =
-                                  lastValidNumberInputs.current[field.name] ??
-                                  String(getValues(field.name) ?? '')
+                                // Prefer the current form value over the
+                                // cached last-valid input. A programmatic
+                                // `setValue()` from elsewhere keeps the form
+                                // state fresh but leaves `lastValidNumberInputs`
+                                // stale, and the cache also covers the case
+                                // where the user has not typed yet so a
+                                // prefilled default survives the first
+                                // invalid keystroke/paste.
+                                e.target.value = String(
+                                  getValues(field.name) ??
+                                    lastValidNumberInputs.current[field.name] ??
+                                    ''
+                                )
                                 return
                               }
                               lastValidNumberInputs.current[field.name] = value
