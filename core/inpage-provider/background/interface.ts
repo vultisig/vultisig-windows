@@ -32,6 +32,7 @@ export type BackgroundInterface = {
   setVaultChain: Method<SetAppChainInput>
   getAccount: Method<GetAccountInput, { address: string; publicKey: string }>
   signOut: Method<{}>
+  hasAppSession: Method<{}, boolean>
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
   exportVault: Method<{}, VaultExport>
   getTx: Method<{ chain: Chain; hash: string }, unknown>

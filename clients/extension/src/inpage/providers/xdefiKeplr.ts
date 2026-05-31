@@ -671,6 +671,21 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   /**
+   * Reports whether the host has an active vault grant. cosmos-kit / graz
+   * adapters call this on hydration to decide between auto-reconnect and
+   * showing the connect button; the inherited base routes through our
+   * requester and throws, which surfaces an unhandled rejection in the
+   * dApp console and confuses some adapters.
+   *
+   * Vultisig's `appSession` is host-keyed (not host+chain-keyed), so the
+   * `chainIds` argument is accepted for API compatibility but ignored:
+   * either the host holds a grant for everything it can query, or nothing.
+   */
+  async isEnabled(_chainIds: string | string[]): Promise<boolean> {
+    return callBackground({ hasAppSession: {} })
+  }
+
+  /**
    * Keplr-shaped chain list for every Cosmos chain Vultisig exposes natively
    * plus any chains a dApp has registered via `experimentalSuggestChain`.
    * cosmos-kit dApps probe this BEFORE showing their
