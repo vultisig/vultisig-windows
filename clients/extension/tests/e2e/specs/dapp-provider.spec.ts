@@ -11,14 +11,22 @@
  */
 
 import { test, expect } from '../fixtures/extension-loader'
-import type { Page } from '@playwright/test'
+import type { BrowserContext, Page } from '@playwright/test'
 import { DAppApproval } from '../page-objects/DAppApproval.po'
 import { TEST_DAPP_HTML } from '../fixtures/dapp-page.fixture'
 import http from 'http'
+import {
+  ensureVaultExists,
+  getVaultConfigFromEnv,
+} from '../helpers/vault-import'
 
 // Store DApp server at module level for sharing
 let dappServer: http.Server | null = null
 let dappUrl: string = ''
+
+const connectedAccountPattern = /^Connected:\s+0x[a-fA-F0-9]{40}\s+\(Chain:\s+.+\)$/
+const evmAddressPattern = /0x[a-fA-F0-9]{40}/
+const signaturePattern = /^Signature:\s+0x[a-fA-F0-9]{130,}$/
 
 test.describe('DApp Provider', () => {
   test.beforeAll(async () => {
@@ -46,7 +54,15 @@ test.describe('DApp Provider', () => {
   /**
    * Helper to wait for and get approval popup
    */
-  async function waitForApprovalPopup(context: any, extensionId: string): Promise<Page | null> {
+  async function waitForApprovalPopup(context: BrowserContext, extensionId: string): Promise<Page | null> {
+    const existingPopup = context.pages().find(
+      (p: Page) => !p.isClosed() && p.url().includes(`chrome-extension://${extensionId}`)
+    )
+    if (existingPopup) {
+      await existingPopup.waitForLoadState('domcontentloaded')
+      return existingPopup
+    }
+
     // Wait for new page to open (approval popup)
     const popupPromise = context.waitForEvent('page', { timeout: 15000 })
 
@@ -62,6 +78,112 @@ test.describe('DApp Provider', () => {
       )
       return popup || null
     }
+  }
+
+  async function ensureDappProviderVault(
+    context: BrowserContext,
+    extensionId: string
+  ): Promise<{ vaultPath: string; password: string }> {
+    const config = getVaultConfigFromEnv()
+    if (!config) {
+      throw new Error(
+        'DApp provider approval tests require TEST_VAULT_PATH and TEST_VAULT_PASSWORD'
+      )
+    }
+
+    const vaultReady = await ensureVaultExists(
+      context,
+      extensionId,
+      config.vaultPath,
+      config.password
+    )
+
+    if (!vaultReady) {
+      throw new Error('DApp provider approval tests require an imported test vault')
+    }
+
+    return config
+  }
+
+  async function approveRequiredDappRequest(
+    context: BrowserContext,
+    extensionId: string,
+    requestName: string,
+    waitForClose = true
+  ): Promise<DAppApproval> {
+    const popup = await waitForApprovalPopup(context, extensionId)
+
+    if (!popup || popup.isClosed()) {
+      throw new Error(`${requestName} did not open a DApp approval popup`)
+    }
+
+    const approval = new DAppApproval(popup, extensionId)
+    await approval.waitForView(10_000)
+    await approval.approve()
+    if (waitForClose) {
+      await approval.waitForClose()
+    }
+
+    return approval
+  }
+
+  async function submitFastVaultPasswordIfPrompted(
+    popup: Page,
+    password: string
+  ): Promise<void> {
+    const passwordInput = popup
+      .locator(
+        '[data-testid="fast-vault-password-input"], input[type="password"], input[placeholder*="password" i]'
+      )
+      .first()
+
+    const isPasswordPromptVisible = await passwordInput
+      .isVisible({ timeout: 5_000 })
+      .catch(() => false)
+
+    if (!isPasswordPromptVisible) {
+      return
+    }
+
+    await passwordInput.fill(password)
+
+    const confirmButton = popup
+      .locator('[data-testid="fast-vault-submit"]')
+      .or(popup.getByRole('button', { name: /confirm/i }))
+      .first()
+
+    await expect(confirmButton).toBeEnabled({ timeout: 5_000 })
+    await confirmButton.click()
+  }
+
+  async function connectDappWallet(
+    page: Page,
+    context: BrowserContext,
+    extensionId: string
+  ): Promise<string> {
+    const connectButton = page.locator('[data-testid="connect-wallet"]')
+    await connectButton.click()
+
+    await approveRequiredDappRequest(
+      context,
+      extensionId,
+      'eth_requestAccounts'
+    )
+
+    const connectResult = page.locator('[data-testid="connect-result"]')
+    await expect(
+      connectResult,
+      'eth_requestAccounts should resolve to a connected EVM account'
+    ).toHaveText(connectedAccountPattern, { timeout: 10_000 })
+
+    const resultText = await connectResult.textContent()
+    const address = resultText?.match(evmAddressPattern)?.[0]
+
+    if (!address) {
+      throw new Error(`Connected result did not include an EVM address: ${resultText}`)
+    }
+
+    return address
   }
 
   test('window.ethereum injected on test DApp page', async ({ context }) => {
@@ -89,117 +211,56 @@ test.describe('DApp Provider', () => {
   })
 
   test('eth_requestAccounts - popup opens - approve - address returned', async ({ context, extensionId }) => {
+    await ensureDappProviderVault(context, extensionId)
+
     const page = await context.newPage()
 
-    await page.goto(dappUrl)
-    await page.waitForLoadState('domcontentloaded')
-    await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
+    try {
+      await page.goto(dappUrl)
+      await page.waitForLoadState('domcontentloaded')
+      await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
 
-    // Click connect button on DApp
-    const connectButton = page.locator('[data-testid="connect-wallet"]')
-    await connectButton.click()
-
-    // Wait for approval popup
-    const popup = await waitForApprovalPopup(context, extensionId)
-
-    if (popup) {
-      const approval = new DAppApproval(popup, extensionId)
-
-      try {
-        await approval.waitForView(10_000)
-
-        // Check request type
-        const requestType = await approval.getRequestType()
-        console.log('Request type:', requestType)
-
-        // Approve the connection
-        await approval.approve()
-        await approval.waitForClose()
-      } catch (error) {
-        console.log('Approval flow error:', error)
-        // May need vault setup first
-      }
+      await connectDappWallet(page, context, extensionId)
+    } finally {
+      await page.close()
     }
-
-    // Check DApp received address
-    await page.waitForTimeout(2000)
-    const connectResult = page.locator('[data-testid="connect-result"]')
-    const resultText = await connectResult.textContent()
-
-    // Should either have address or error about no vault
-    expect(resultText).toBeTruthy()
-    console.log('Connect result:', resultText)
-
-    await page.close()
   })
 
   test('personal_sign - popup shows message - approve - signature returned', async ({ context, extensionId }) => {
+    const config = await ensureDappProviderVault(context, extensionId)
+
     const page = await context.newPage()
 
-    await page.goto(dappUrl)
-    await page.waitForLoadState('domcontentloaded')
-    await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
+    try {
+      await page.goto(dappUrl)
+      await page.waitForLoadState('domcontentloaded')
+      await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
 
-    // First connect (if needed)
-    const connectButton = page.locator('[data-testid="connect-wallet"]')
-    await connectButton.click()
+      await connectDappWallet(page, context, extensionId)
 
-    // Handle connect popup
-    let popup = await waitForApprovalPopup(context, extensionId)
-    if (popup && !popup.isClosed()) {
-      const approval = new DAppApproval(popup, extensionId)
-      try {
-        await approval.waitForView(5000)
-        await approval.approve()
-      } catch {
-        // Already connected
-      }
-    }
-
-    await page.waitForTimeout(1000)
-
-    // Now sign message
-    const signButton = page.locator('[data-testid="sign-message"]')
-    if (await signButton.isEnabled({ timeout: 5000 }).catch(() => false)) {
+      const signButton = page.locator('[data-testid="sign-message"]')
+      await expect(
+        signButton,
+        'personal_sign requires the DApp wallet connection to enable signing'
+      ).toBeEnabled({ timeout: 10_000 })
       await signButton.click()
 
-      // Wait for sign popup
-      popup = await waitForApprovalPopup(context, extensionId)
+      const approval = await approveRequiredDappRequest(
+        context,
+        extensionId,
+        'personal_sign',
+        false
+      )
+      await submitFastVaultPasswordIfPrompted(approval.page, config.password)
 
-      if (popup && !popup.isClosed()) {
-        const approval = new DAppApproval(popup, extensionId)
-
-        try {
-          await approval.waitForView(10_000)
-
-          // Get message being signed
-          const message = await approval.getMessage()
-          console.log('Message to sign:', message)
-
-          // Approve signature
-          await approval.approve()
-          await approval.waitForClose()
-
-          // Check DApp received signature
-          await page.waitForTimeout(2000)
-          const signResult = page.locator('[data-testid="sign-result"]')
-          const resultText = await signResult.textContent()
-
-          console.log('Sign result:', resultText)
-
-          // Should contain "Signature:" or "0x" if successful
-          if (resultText?.includes('Signature') || resultText?.includes('0x')) {
-            expect(resultText).toContain('0x')
-          }
-        } catch (error) {
-          console.log('Sign flow error:', error)
-        }
-      }
-    } else {
-      console.log('Sign button not enabled - wallet may not be connected')
+      const signResult = page.locator('[data-testid="sign-result"]')
+      await expect(
+        signResult,
+        'personal_sign should resolve to an EVM signature'
+      ).toHaveText(signaturePattern, { timeout: 120_000 })
+    } finally {
+      await page.close()
     }
-
-    await page.close()
   })
 
   test('wallet_switchEthereumChain - chainChanged event fires', async ({ context, extensionId }) => {
