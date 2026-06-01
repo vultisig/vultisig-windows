@@ -11,7 +11,32 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
 
+import { TransactionOverviewFiatAmount } from './TransactionOverviewFiatAmount'
+
 type OverviewCoin = CoinKey & Pick<CoinMetadata, 'decimals' | 'ticker' | 'logo'>
+
+type HeroAmountProps = {
+  coin: OverviewCoin
+  amount: number
+  highPrecision?: boolean
+}
+
+const HeroAmount = ({ coin, amount, highPrecision }: HeroAmountProps) => (
+  <VStack gap={2}>
+    <HStack alignItems="center" gap={4}>
+      <Text as="span" size={17}>
+        {formatAmount(
+          amount,
+          highPrecision ? { precision: 'high' } : undefined
+        )}
+      </Text>
+      <Text as="span" color="shy" size={17}>
+        {coin.ticker}
+      </Text>
+    </HStack>
+    <TransactionOverviewFiatAmount coin={coin} amount={amount} />
+  </VStack>
+)
 
 type TransactionOverviewAmountProps = {
   label: ReactNode
@@ -48,24 +73,21 @@ export const TransactionOverviewAmount = ({
           </Text>
           <HStack alignItems="center" gap={8}>
             <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-            <HStack alignItems="center" gap={4}>
-              <Text as="span" size={17}>
-                <MatchQuery
-                  value={keysignPayloadQuery}
-                  pending={() => <Spinner />}
-                  error={() => formatAmount(fallbackAmount)}
-                  success={payload =>
-                    formatAmount(
-                      fromChainAmount(getPayloadAmount(payload), coin.decimals),
-                      { precision: 'high' }
-                    )
-                  }
+            <MatchQuery
+              value={keysignPayloadQuery}
+              pending={() => <Spinner />}
+              error={() => <HeroAmount coin={coin} amount={fallbackAmount} />}
+              success={payload => (
+                <HeroAmount
+                  coin={coin}
+                  amount={fromChainAmount(
+                    getPayloadAmount(payload),
+                    coin.decimals
+                  )}
+                  highPrecision
                 />
-              </Text>
-              <Text as="span" color="shy" size={17}>
-                {coin.ticker}
-              </Text>
-            </HStack>
+              )}
+            />
           </HStack>
         </VStack>
       }
