@@ -45,6 +45,13 @@ export default defineConfig(async ({ mode }) => {
       __FAST_VAULT_URL__: JSON.stringify(env.FAST_VAULT_URL || ''),
       __RELAY_URL__: JSON.stringify(env.RELAY_URL || ''),
     },
+    // MPC keygen runs each protocol in its own Web Worker (issue #3754); the
+    // worker bundle needs the same WASM + SDK plugins so it can lazily
+    // instantiate its own DKLS/Schnorr/MLDSA engine.
+    worker: {
+      format: 'es' as const,
+      plugins: () => [tsconfigPaths({ root: rootDir }), ...getCommonPlugins()],
+    },
     plugins: [
       tsconfigPaths({ root: rootDir }),
       ...getCommonPlugins(),

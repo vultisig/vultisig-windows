@@ -167,6 +167,19 @@ export default defineConfig(async ({ mode }) => {
     return {
       define: defines,
       resolve: { dedupe: [...vultisigMpcDedupe] },
+      // MPC keygen runs each protocol in its own Web Worker (issue #3754); the
+      // worker bundle needs the same WASM + SDK plugins so it can lazily
+      // instantiate its own DKLS/Schnorr/MLDSA engine.
+      worker: {
+        format: 'es' as const,
+        plugins: () => [
+          tsconfigPaths({ root: rootDir }),
+          extensionVultisigSdk(),
+          extensionNodePolyfills(isFirefoxBuild),
+          wasm(),
+          topLevelAwait(),
+        ],
+      },
       plugins: [
         tsconfigPaths({ root: rootDir }),
         ...getCommonPlugins({
