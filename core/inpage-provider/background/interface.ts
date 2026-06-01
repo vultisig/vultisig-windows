@@ -2,7 +2,7 @@ import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { KeplrSuggestedChainsRecord } from '@core/extension/storage/keplrSuggestedChains'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { ChainInfo } from '@keplr-wallet/types'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
 import { ChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CoinKey, CoinMetadata, Token } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
@@ -32,9 +32,14 @@ export type BackgroundInterface = {
   setVaultChain: Method<SetAppChainInput>
   getAccount: Method<GetAccountInput, { address: string; publicKey: string }>
   signOut: Method<{}>
+  hasAppSession: Method<{}, boolean>
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
   exportVault: Method<{}, VaultExport>
   getTx: Method<{ chain: Chain; hash: string }, unknown>
+  broadcastTx: Method<
+    { chain: CosmosChain; txBytes: string },
+    { txHash: string }
+  >
   getTokenMetadata: Method<
     Token<CoinKey<ChainWithTokenMetadataDiscovery>>,
     CoinMetadata

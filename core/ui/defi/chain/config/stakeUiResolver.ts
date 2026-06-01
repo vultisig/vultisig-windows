@@ -22,10 +22,24 @@ type StakeActionConfig = {
   actionsDisabled?: boolean
 }
 
+/**
+ * Translation keys that the stake UI resolver can request from its caller.
+ */
+export type StakeUiTranslationKey =
+  | 'compounded_token'
+  | 'defi_add'
+  | 'defi_remove'
+  | 'mint'
+  | 'redeem'
+  | 'staked'
+
 type ResolverInput = {
   chain: Chain
   position: ThorchainStakePosition
-  translate: (key: string, params?: Record<string, unknown>) => string
+  translate: (
+    key: StakeUiTranslationKey,
+    params?: Record<string, unknown>
+  ) => string
 }
 
 const tokenById: Partial<Record<Chain, Record<string, Coin>>> = {
@@ -102,7 +116,10 @@ export const resolveStakeActions = ({
 type TitleResolverInput = {
   position: ThorchainStakePosition
   coin: Coin
-  translate: (key: string, params?: Record<string, unknown>) => string
+  translate: (
+    key: StakeUiTranslationKey,
+    params?: Record<string, unknown>
+  ) => string
 }
 
 export const resolveStakeTitle = ({

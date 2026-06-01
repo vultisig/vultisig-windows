@@ -8,7 +8,7 @@ import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { useFromAmount } from '../../state/fromAmount'
@@ -46,25 +46,31 @@ export const ManageFromAmount = () => {
     }
   }, [value, trimmedDecimalString, inputValue, decimals])
 
-  const handleInputValueChange = useCallback(
-    (value: string) => {
-      value = value.replace(/-/g, '')
-      if (value === '') {
-        setInputValue('')
-        setValue?.(null)
-        return
-      }
+  const handleInputValueChange = (value: string) => {
+    value = value.replace(/-/g, '')
 
-      try {
-        const chainAmount = decimalStringToBigInt(value, decimals)
-        setInputValue(value)
-        setValue?.(chainAmount)
-      } catch {
-        return
-      }
-    },
-    [decimals, setValue]
-  )
+    if (value.startsWith('.')) {
+      value = `0${value}`
+    }
+
+    if (value === '') {
+      setInputValue('')
+      setValue?.(null)
+      return
+    }
+
+    if (!/^\d*\.?\d*$/.test(value)) {
+      return
+    }
+
+    try {
+      const chainAmount = decimalStringToBigInt(value, decimals)
+      setInputValue(value)
+      setValue?.(chainAmount)
+    } catch {
+      return
+    }
+  }
 
   const suggestions = isFeeCoinSelected
     ? [0.25, 0.5, 0.75]

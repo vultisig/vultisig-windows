@@ -4,7 +4,11 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { BinaryWriter } from 'cosmjs-types/binary'
 import { AuthInfo } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 
-import { keplrAverageGasPrice, SupportedKeplrChain } from '../keplrChainInfo'
+import {
+  keplrAverageGasPrice,
+  keplrMinInjectedFee,
+  SupportedKeplrChain,
+} from '../keplrChainInfo'
 
 // Excludes QBTC (handled separately because its fee denom isn't in
 // `cosmosFeeCoinDenom`) and narrows back down to CosmosChain so the
@@ -55,7 +59,14 @@ export const injectKeplrFeeIfMissing = ({
   // out, rounding up so the fee never falls below the chain's minimum.
   const scale = 1_000_000_000n
   const scaledPrice = BigInt(Math.ceil(gasPrice * Number(scale)))
-  const feeAmountInt = (gasLimitBigInt * scaledPrice + scale - 1n) / scale
+  const computedFee = (gasLimitBigInt * scaledPrice + scale - 1n) / scale
+
+  // Some chains require a higher minimum fee than `gasLimit * gasPrice`
+  // produces (e.g. Akash, where a staking tx's computed fee falls below the
+  // network's accepted minimum). Floor the injected amount so the broadcast
+  // isn't rejected for an insufficient fee.
+  const minFee = keplrMinInjectedFee[chain] ?? 0n
+  const feeAmountInt = computedFee > minFee ? computedFee : minFee
 
   const denom = cosmosFeeCoinDenom[chain]
 

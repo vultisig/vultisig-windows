@@ -44,15 +44,11 @@ export const pt = {
   advanced: 'Avançado',
   advanced_gas_fee: 'Taxa de gás antecipada',
   all_vaults: 'Todos os cofres',
-  allowance: 'Mesada',
-  allowance_amount: 'Valor do subsídio',
-  allowance_spender: 'gastador de mesada',
   amount: 'Quantia',
   amount_must_be_non_negative: 'O valor não pode ser negativo.',
   amount_must_be_positive: 'O valor deve ser positivo.',
   amount_required: 'É necessário informar o valor.',
   amount_to_unstake: 'Valor a retirar da aposta',
-  and: 'e',
   app_lock_passcode: 'Senha de bloqueio do aplicativo',
   app_lock_passcode_description:
     'Adicione uma camada extra de segurança exigindo uma senha para desbloquear o aplicativo.',
@@ -68,20 +64,10 @@ export const pt = {
   at_least_one_device: 'Pelo menos um dispositivo',
   at_least_one_device_subtitle:
     'Qualquer dispositivo que consiga executar o Vultisig funcionará.',
-  auto: 'auto',
-  auto_compound_into_label: 'Composto automaticamente em {{ticker}}',
   available: 'Disponível',
   back: 'Voltar',
-  back_up_now: 'Voltar ao início',
   before_you_start: 'Antes de começar...',
   backup: 'Backup',
-  backupGuide: 'Guia de backup',
-  backupVault: 'Cofre de backup',
-  backupInCloudTitle: 'Criptografado com a sua senha do cofre.',
-  backupInCloudDescription:
-    'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente. O armazenamento online é recomendado e os compartilhamentos de cofre seguros são projetados para isso.',
-  backupShare: 'Compartilhamento do cofre de backup',
-  backupShare2: 'Compartilhamento de backup 2',
   backupsTitle:
     '<highlight>Cópias de segurança,</highlight> seu novo método de recuperação',
   backupsDescription:
@@ -92,13 +78,10 @@ export const pt = {
   storeBackupsSeparately: 'Armazene os backups separadamente.',
   storeBackupsSeparatelyDescription:
     'Guarde cada backup em um local diferente. Se um deles for comprometido, seus fundos permanecerão seguros.',
-  backupShareWarning: 'Esta é apenas 1 parte do seu cofre.',
-  backupShareWarningRest: 'Repita esse processo para os outros dispositivos.',
   backup_description:
     'Faça backup do seu Vault Share em um local de sua preferência.',
   backup_email_description:
     'Insira o endereço de e-mail para receber a partilha do cofre.',
-  backup_now: 'Faça backup agora',
   backup_password: 'Senha de backup',
   backup_password_description:
     'Digite a senha que você definiu ao criar este cofre.',
@@ -164,9 +147,7 @@ export const pt = {
   change_passcode: 'Alterar código de acesso',
   change_your_friends_referral:
     'Alterar amigos Código de indicação usado para trocas',
-  check_email: 'Verifique seu e-mail',
   check_for_update: 'Verifique se há atualizações',
-  chooseSetup: 'Selecione Configurar',
   choose_a_password: 'Escolha uma senha',
   choose_a_password_description:
     'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b> <info />',
@@ -200,20 +181,14 @@ export const pt = {
   adding_coin_to_vault: 'Adicionando moeda ao cofre...',
   defi_token_required_description:
     'Adicione {{ticker}} em Gerenciar tokens para fazer stake, unstake ou bond.',
-  defi_add_chain_to_vault_title: 'Adicione a cadeia ao cofre primeiro',
-  defi_add_chain_to_vault_description:
-    'Ative uma cadeia no seu cofre para gerenciar aqui suas posições DeFi.',
   defi_add: 'Add',
   defi_remove: 'Remove',
   defi_lp_pool_title: 'Pool {{pool}}',
   position_label: 'Posição',
   defi_lp_position_form_title:
     '{{action, select, add {Adicionar liquidez} remove {Remover liquidez} other {Gerenciar liquidez}}}',
-  defi_lp_position_form_description:
-    'Gerenciar liquidez para {{position}} estará disponível em breve.',
   manage_tokens: 'Gerenciar tokens',
   collected_rewards: 'Recompensas acumuladas',
-  coming_soon: 'Em breve',
   complete: 'Completo',
   congrats: 'Parabéns!',
   confirm: 'Confirmar',
@@ -231,14 +206,10 @@ export const pt = {
   continue_anyway: 'Continue mesmo assim',
   continue_in_new_window: 'Continue na janela aberta.',
   contract_execution: 'Execução de Contrato',
-  contract_interaction: 'Interação contratual',
   copy_address: 'Copiar endereço',
-  create: 'Criar',
   create_folder: 'Criar pasta',
   create_new_vault: 'Criar novo cofre',
   create_vault: 'Criar cofre',
-  create_own_referral:
-    'Crie seu próprio código e ganhe <blue>20%</blue> em trocas indicadas',
   create_referral_form: 'Criar referência',
   create_referral_title: 'Criar indicação',
   create_referral: 'Criar indicação',
@@ -296,15 +267,12 @@ export const pt = {
     'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',
   discovering_mediator: 'Descobrindo o serviço de mediação, aguarde...',
   done: 'Feito',
-  downloadVultisig:
-    "Baixe o Vultisig em seus outros dispositivos e selecione 'Escanear código QR'.",
   edit_address: 'Editar endereço',
   edit_friends_referral: 'Editar Indicação de Amigo',
   edit_referral: 'Editar encaminhamento',
   remove_friends_referral: 'Remover encaminhamento',
   edit_vaults: 'Editar Cofres',
   email: 'E-mail',
-  email_backup: 'Insira seu e-mail para receber seu backup.',
   email_placeholder: 'Insira seu endereço de e-mail',
   email_required: 'É necessário enviar um e-mail.',
   evm_chains: 'Cadeias EVM',
@@ -341,7 +309,6 @@ export const pt = {
   enter_your_password: 'Digite sua senha',
   entity_not_scanned: '{{entity}} não foi escaneado por <provider></provider>',
   entity_scanned: '{{entity}} escaneado por <provider></provider>',
-  error: 'ERRO',
   est_network_fee: 'Taxa de rede estimada',
   expand_view: 'Ampliar visualização',
   open_as_side_panel: 'Abrir como painel lateral',
@@ -356,8 +323,6 @@ export const pt = {
   desktop_push_notification_disable_failed:
     'Não foi possível desativar as notificações push. Tente novamente.',
   expiration_date: 'Data de validade',
-  expiration_must_extend_by_exactly_one_year:
-    'A validade só pode ser prorrogada por exatamente 1 ano.',
   expiration_must_be_greater: 'A expiração deve ser maior que {{value}}',
   expires_on: 'Expira em',
   extension_vault_import_restriction:
@@ -421,88 +386,33 @@ export const pt = {
     'A Vultisig armazena e gerencia ativos digitais com segurança. Todas as ações, como envio ou troca, exigem que os dispositivos assinem as transações.',
   faq_vultisig_make_money_title: 'Como se utiliza o Vultisig?',
   fast: 'Rápido',
-  fastVault: 'Cofre Rápido',
-  secureVault: 'Cofre Seguro',
   fast_vault_session_conflict: 'Incompatibilidade na parte do cofre',
   fast_vault_session_conflict_description:
     'Sua parte local do cofre não corresponde à armazenada no Vultiserver. Isso pode acontecer se a mesma frase-semente foi importada em outro dispositivo.',
   fast_vault_password_start_keysign_description:
     'Confirme a transação inserindo a senha do seu compartilhamento de servidor.',
   fastVaultSetup: {
-    addOptionalHint: 'Adicione uma dica opcional',
-    addAnOptionalHint: 'Adicione uma dica opcional',
     backup: {
-      backThemUpNow: 'apoiem-nos agora',
-      checkEmail: 'Verifique seu e-mail para confirmar.',
       codeInfo:
         'Este código confirmará que você recebeu sua primeira parcela do cofre por e-mail.',
-      completeCustody: 'É enviado para você para que o guarde completamente!',
       enterCode: 'Digite o código de 4 dígitos que enviamos por e-mail.',
-      heldByServer: 'mantido pelo servidor',
-      online: 'on-line',
-      part1: 'A primeira parte das ações do cofre será',
-      securely: 'com segurança, de preferência',
-      shareSecurely: 'para garantir o acesso, de preferência',
-      vaultShares: 'Seu cofre contém 2 ações.',
       sentTo: 'Enviado para {{email}}.',
       setNewStandard: 'Você está pronto para usar um novo padrão de carteira.',
       changeEmailAndRestartKeygen: 'Alterar e-mail e reiniciar keygen',
       wellDone: 'Bom trabalho',
     },
     connectingWithServer: 'Conectando com o servidor...',
-    createVault: {
-      availablePlatforms: {
-        descriptionOne: 'disponível',
-        descriptionTwo: 'no Android, iOS, macOS e Windows',
-      },
-      crossChain: {
-        descriptionOne: 'Cadeia cruzada.',
-        descriptionTwo:
-          'Troque todos os seus tokens favoritos em um único cofre.',
-      },
-      multiFactor: {
-        descriptionOne: 'Segurança multifatorial,',
-        descriptionTwo: 'Eliminar o ponto único de falha',
-      },
-      seedlessWallet: {
-        descriptionOne: 'uma carteira sem sementes,',
-        descriptionTwo: 'Não caia em golpes novamente.',
-      },
-      selfCustodial: {
-        descriptionOne: 'Autogestão,',
-        descriptionTwo: 'dando controle total sobre seus ativos',
-      },
-    },
     emailSetupTitle:
       'Este email é utilizado para backup na nuvem e não é compartilhado com terceiros',
     enterEmail: 'Insira seu email',
-    enterHint: 'Digite a dica',
-    hintDescription: 'Esta mensagem será exibida caso você esqueça sua senha.',
-    hintEmpty: 'A dica está vazia',
     passwordCannotBeRecovered: 'A senha não pode ser redefinida ou recuperada.',
     passwordTooltip:
       'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. Na próxima etapa, você terá a opção de adicionar uma dica.',
-    preparingVault: 'Preparando o cofre',
     referralModalTitle: 'Código de indicação',
     referralModalSubtitle:
       'Insira seu código de indicação aqui. <b>Aproveite 10% de desconto em todas as compras.</b>',
     applyReferral: 'Aplicar indicação',
     referralAdded: 'Indicação adicionada',
-    summary: {
-      agreementText: 'Eu li e entendi o que fazer.',
-      ctaText: 'Crie seu cofre',
-      pillText: 'Ações do cofre',
-      select_preferred_chains: 'Selecione suas correntes preferidas',
-      start_using_vault: 'Comece a usar seu cofre',
-      summaryItemFourTitle:
-        'Não armazene sua parte do cofre no próprio dispositivo, para evitar perda ou danos.',
-      summaryItemOneTitle:
-        'Faça backup de cada compartilhamento do cofre separadamente.',
-      summaryItemThreeTitle:
-        'Todas as cotas do cofre garantem acesso seguro aos seus fundos.',
-      summaryItemTwoTitle: 'Mantenha as ações do cofre em locais diferentes.',
-      title: 'Resumo rápido',
-    },
     takeMinute: 'Isso deve levar apenas um segundo.',
   },
   fast_sign: 'Assinatura rápida',
@@ -521,7 +431,6 @@ export const pt = {
   follow_banner_subtitle: 'Vultisig está construindo com você.',
   follow_banner_title: 'Siga-nos no X',
   from: 'De',
-  from_asset: 'Do ativo',
   freeze: 'Freeze',
   function_arguments: 'Argumentos da função',
   function_signature: 'Assinatura da função',
@@ -532,8 +441,6 @@ export const pt = {
   gas_limit_tooltip_content:
     'O valor máximo de gás que você pagará. Pode ser aumentado se o limite de gás não for suficiente para enviar transações.',
   general: 'Em geral',
-  generating_ecdsa_key: 'Geração de chave ECDSA',
-  generating_eddsa_key: 'Gerando a chave EdDSA',
   get_started: 'Comece agora',
   github: 'Github',
   go_back: 'Volte',
@@ -566,7 +473,6 @@ export const pt = {
     'Memorando de transação IBC não suportado',
   ibc_transfer: 'Transferência IBC',
   id: 'EU IA',
-  i_understand: 'Eu entendo',
   i_understand_save_backup: 'Eu sei como salvar esse backup.',
   import: 'Importar',
   import_key: 'Chave de importação',
@@ -617,40 +523,6 @@ export const pt = {
   incorrect_passcode: 'Senha incorreta.',
   invalid_passcode: 'Senha inválida',
   join_keygen: 'Junte-se ao Keygen',
-  join_keygen_slider1_note1: 'Vultisig é',
-  join_keygen_slider1_note2: 'totalmente de código aberto',
-  join_keygen_slider1_note3:
-    'Isso significa que qualquer pessoa pode revisar o código, garantindo total transparência e confiabilidade.',
-  join_keygen_slider1_title: 'Você sabia?',
-  join_keygen_slider2_note1: 'Não são necessárias frases-semente.',
-  join_keygen_slider2_note2:
-    'O Vultisig utiliza compartilhamentos de cofre fáceis de gerenciar, tornando-o mais simples e seguro do que as carteiras tradicionais.',
-  join_keygen_slider2_title: 'Dica do dia',
-  join_keygen_slider3_note1: 'Vultisig suporta mais de',
-  join_keygen_slider3_note2: '10.000 tokens',
-  join_keygen_slider3_note3:
-    'Quer você utilize Bitcoin, Ethereum ou um token menos conhecido, a Vultisig tem a solução ideal para você.',
-  join_keygen_slider3_title: 'Curiosidade',
-  join_keygen_slider4_note1: 'Sua privacidade é importante. Vultisig',
-  join_keygen_slider4_note2: 'não rastreia',
-  join_keygen_slider4_note3:
-    'suas atividades ou necessidade de qualquer cadastro, garantindo seu anonimato e privacidade.',
-  join_keygen_slider4_title: 'Informações de segurança',
-  join_keygen_slider5_note1: 'Auditado e seguro. Vultisig passa por...',
-  join_keygen_slider5_note2: 'auditorias de segurança regulares',
-  join_keygen_slider5_note3:
-    'Para garantir que seus ativos estejam protegidos contra quaisquer ameaças.',
-  join_keygen_slider5_title: 'Conversa sobre tecnologia',
-  join_keygen_slider6_note1:
-    'Junte-se a milhares. Milhares de usuários confiam na Vultisig para proteger seus ativos digitais. Faça parte da nossa comunidade.',
-  join_keygen_slider6_note2: 'comunidade segura e em crescimento',
-  join_keygen_slider6_title: 'Espaço Comunitário',
-  join_keygen_slider7_note1:
-    'Compatibilidade com múltiplos dispositivos. Acesse seu cofre Vultisig.',
-  join_keygen_slider7_note2: 'de vários dispositivos',
-  join_keygen_slider7_note3:
-    'Aumentar a flexibilidade sem comprometer a segurança.',
-  join_keygen_slider7_title: 'Destaque do recurso',
   join_keysign: 'Junte-se à Keysign',
   join_transaction: 'Participar da transação',
   foreground_notification_generic: 'Transação pendente de aprovação.',
@@ -658,7 +530,6 @@ export const pt = {
   foreground_notification_swap: 'Trocar {{from}} → {{to}}',
   join_reshare: 'Participe do Reshare',
   join_session: 'Participar da sessão',
-  join_upgrade: 'Atualize para participar',
   joining_keygen: 'Participando do Keygen',
   joining_keysign: 'Junte-se à Keysign',
   joining_session: 'Participando da sessão...',
@@ -666,11 +537,8 @@ export const pt = {
   keygen_devices_requirements_info:
     'Escaneie o QR Code com outro dispositivo. {{recommended}} - configuração de dispositivo recomendada, {{min}} é suficiente.',
   keygen_failed: 'Erro na geração da chave. Tente novamente.',
-  keygen_protocol_done: 'Feito',
-  keygen_protocol_running: 'Correndo',
   keys: 'Chaves',
   keysign: 'Keysign',
-  keysign_request: 'Solicitação de assinatura de chave',
   label: 'Rótulo',
   language: 'Linguagem',
   learnMore: 'Saber mais',
@@ -679,7 +547,6 @@ export const pt = {
   legal: 'Jurídico',
   link_copied: 'Link copiado para a área de transferência',
   loading: 'Carregando...',
-  local: 'Local',
   localMode: 'Você está no modo local.',
   lock_time: 'Horário de bloqueio',
   lock_vultisig_automatically_after:
@@ -727,9 +594,6 @@ export const pt = {
   new: 'Novo',
   next: 'Próximo',
   new_passcode: 'Nova senha',
-  new_vault_setup: 'Nova configuração do cofre',
-  new_vault_setup_disclaimer:
-    'Sua configuração foi alterada. Faça um novo backup.',
   no_active_chains_found: 'Nenhuma cadeia ativa encontrada',
   no_active_chains_found_description:
     'Não detectamos nenhum recurso associado a essa frase inicial.',
@@ -772,8 +636,6 @@ export const pt = {
     'Seus cofres aparecerão aqui. Comece criando um ou importando um cofre existente.',
   node_address: 'Endereço do nó',
   normal: 'Normal',
-  not_enough_asset_to_cover_gas_fees:
-    'Não há {{asset}} suficientes para cobrir as taxas de gás.',
   not_enough_funds: 'Fundos insuficientes',
   nothing_to_add: 'Nada a acrescentar',
   nothing_to_add_hint:
@@ -781,7 +643,6 @@ export const pt = {
   of: 'de',
   off: 'Desligado',
   on: 'Sobre',
-  on_chain: 'em {{chain}}',
   onboarding_description_1:
     'Vultisig é um cofre criptográfico seguro e multidispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. Vultisig é totalmente autocustodial.',
   onboarding_description_2:
@@ -790,18 +651,14 @@ export const pt = {
     'Vultisig é um aplicativo nativamente para múltiplos dispositivos. Requer pelo menos dois dispositivos para criar um cofre seguro: um dispositivo iniciador e um dispositivo de emparelhamento.',
   onboarding_description_4:
     'Vultisig é uma carteira sem frases-semente. Em vez disso, utiliza compartilhamentos de cofre fáceis de gerenciar. Cada dispositivo possui seu próprio compartilhamento de cofre exclusivo, que requer um backup separado.',
-  onboarding_greeting: 'Diga adeus às <g>frases-semente</g>',
   operator_fee: 'Taxa de Operador',
   basis_points: 'Pontos base',
-  optional: 'opcional',
   optionalDevice: 'Dispositivo opcional',
-  or: 'ou',
   other: 'Outro',
   overview: 'Visão geral',
   part: 'papel',
   passcodes_do_not_match: 'As senhas não coincidem.',
   password: 'Senha',
-  password_backup: 'Proteja seu cofre e assine rapidamente.',
   password_do_not_match: 'As senhas não coincidem.',
   password_pattern_error:
     'A senha deve ter entre {{min}} e {{max}} caracteres.',
@@ -812,7 +669,6 @@ export const pt = {
   percentage: 'Percentagem',
   percentage_limit: 'A porcentagem deve ser de 0 a 100.',
   percentage_to_unstake: 'Percentagem para Desinvestir',
-  permissions: 'Permissões',
   pick_referral_code: 'Escolha o código de indicação',
   platinum: 'Platina',
   plugin_info: 'Informações do aplicativo',
@@ -826,7 +682,6 @@ export const pt = {
   portfolio_balance: 'Equilíbrio da carteira',
   positions: 'Cargos',
   powered_by: 'Alimentado por <provider> </provider>',
-  prepareVault: 'Preparando o cofre...',
   price: 'Preço',
   price_impact_average: 'Média',
   price_impact_good: 'Bom',
@@ -853,17 +708,13 @@ export const pt = {
   qbtc_claim_success_title: 'Reivindicação bem-sucedida',
   qbtc_claim_utxos_claimed: 'UTXOs reivindicados',
   qbtc_claim_utxos_skipped: 'UTXOs ignorados',
-  qbtc_claim_tx_hash: 'Hash da transação',
-  qbtc_claim_copy_tx_hash: 'Copiar hash da transação',
   qbtc_claim_done: 'Feito',
   qbtc_claim_failed: 'A solicitação falhou. Tente novamente.',
   qbtc_claim_fast_vault_only:
     'Atualmente, o resgate requer um Fast Vault. O suporte para Secure Vault está a caminho.',
   qbtc_claim_password_description:
     'Insira sua senha do Fast Vault para coassinar a transação de reivindicação.',
-  qrCode: 'Código QR',
   receive: 'Receber',
-  receivedShare1Email: 'Compartilhamento do Vault 1 recebido via correio',
   redeem: 'Resgatar',
   reenter_password: 'Digite novamente a senha',
   recover_vault_or_convert_seedphrase:
@@ -905,7 +756,6 @@ export const pt = {
       title: 'Use o código de indicação',
     },
   },
-  remove: 'Remover',
   remove_token: 'Remover token',
   rename: 'Renomear',
   rename_vault: 'Renomear Cofre',
@@ -949,14 +799,9 @@ export const pt = {
   save_swap_fees_with_referral:
     'Economize <blue>10%</blue> em trocas - Adicione uma indicação',
   saving_vault: 'Salvando o cofre...',
-  scanThe: 'Escaneie o',
   scan_qr: 'Escaneie o QR Code',
   scan_with_device_index: 'Digitalize com o dispositivo {{index}}',
   scan_with_device_name: 'Digitalize com {{name}}',
-  scan_with_devices:
-    'Escaneie com dispositivos para participar da geração do cofre.',
-  scan_with_devices_to_sign:
-    'Escaneie com dispositivos para participar da assinatura da transação.',
   scanning: 'digitalizando...',
   scanning_for_chains: 'Procurando correntes...',
   scanning_for_chains_subtitle:
@@ -964,12 +809,6 @@ export const pt = {
   search: 'Procurar',
   search_field_placeholder: 'Procurar',
   secure: 'Seguro',
-  secureVaultSetup: {
-    backup: {
-      eachDeviceNeedsBackup: 'Cada dispositivo precisa de seu próprio backup.',
-      shares: 'Seu cofre contém {{shares}} ações',
-    },
-  },
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: 'Adicione pelo menos mais {{count}} dispositivo',
     addAtLeastMoreDevices_other:
@@ -977,7 +816,6 @@ export const pt = {
     devicePosition: '{{current}} de {{total}}',
     localModeWaiting: 'Modo local, aguardando dispositivos',
     notWantToUseLocal: 'Não quer usar o modo local? Volte.',
-    switchBack: 'Voltar',
     useStandardMode: 'Usar modo padrão',
     useLocalMode: 'Usar modo local',
     waitingForDeviceToJoin: 'Aguardando um dispositivo entrar',
@@ -1019,7 +857,6 @@ export const pt = {
   select_vaults_to_backup: 'Selecione os cofres para fazer backup',
   select_vaults_to_backup_description:
     'Escolha se deseja fazer backup apenas deste cofre ou de todos os cofres do seu aplicativo.',
-  selected: 'selecionado',
   send: 'Enviar',
   sends: 'Envia',
   send_amount_exceeds_balance: 'O valor excede o saldo.',
@@ -1039,7 +876,6 @@ export const pt = {
   set_passcode: 'Definir senha',
   settings: 'Configurações',
   share: 'Compartilhar',
-  share2StoredByYou: 'Compartilhamento do cofre 2 armazenado por você',
   share_app: 'Compartilhe o aplicativo',
   share_description:
     'Compartilhe seu código de indicação exclusivo para convidar amigos. Eles ganham um desconto e, quanto mais negociarem, mais você ganha — diretamente na sua carteira.',
@@ -1063,7 +899,6 @@ export const pt = {
   signing_address: 'Endereço de assinatura',
   signing_error: 'Erro ao assinar. Tente novamente.',
   signing_method: 'Método de assinatura',
-  signing_transaction: 'Transação de assinatura',
   silver: 'Prata',
   site: 'Site',
   site_has_risk: 'Site malicioso detectado por <provider> </provider>',
@@ -1085,11 +920,8 @@ export const pt = {
   spender: 'Gastador',
   operator: 'Operador',
   contract: 'Contrato',
-  start: 'Começar',
   start_reshare: 'Começar a compartilhar',
   status: 'Status',
-  success: 'Sucesso',
-  successfully: 'Com sucesso',
   support: 'Apoiar',
   swap: 'Trocar',
   swaps: 'Trocas',
@@ -1109,11 +941,9 @@ export const pt = {
   this_device: 'Este dispositivo',
   this_device_suffix: '(este dispositivo)',
   this_vault_only: 'Somente este cofre',
-  this_vault_share: 'este dispositivo cofre compartilhar',
   thorchain_address: 'Endereço THORChain',
   thorchain_address_required_for_referrals:
     'Você precisa ter um endereço THORChain para usar o programa de indicação.',
-  title: 'Título',
   tns_alnum_only:
     'O código de indicação deve conter apenas caracteres alfanuméricos.',
   tns_max_4_chars: 'O código de indicação não deve ter mais de 4 caracteres.',
@@ -1123,11 +953,9 @@ export const pt = {
   to: 'Para',
   to_min_payout: 'pagamento mín.',
   today: 'Hoje',
-  to_asset: 'Para o ativo',
   token_not_found_description:
     'Possíveis motivos: contrato incorreto, blockchain não suportada ou token removido dos registros.',
   token_not_found_invalid: 'Endereço de contrato inválido',
-  tokens: 'fichas',
   total_fee: 'Taxas totais',
   track: 'Acompanhar',
   transaction: 'Transação',
@@ -1137,8 +965,6 @@ export const pt = {
   transaction_failed: 'Transação<error> fracassado</error>',
   transaction_pending: 'Transação pendente...',
   transaction_successful: 'Transação <g> bem-sucedida </g>',
-  transaction_could_not_be_parsed:
-    'Esta transação não pôde ser analisada. Os dados brutos da transação são mostrados abaixo.',
   raw_transaction_data: 'Dados brutos de transação',
   transaction_history: 'Histórico de transações',
   transaction_instructions_summary: 'Resumo das instruções de transação',
@@ -1155,13 +981,11 @@ export const pt = {
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Ready to claim',
   tron_unfreeze_button: 'Unfreeze',
-  tron_your_holdings: 'Your holdings',
   tron_bandwidth_and_energy: 'Largura de banda e energia',
   tron_bandwidth_description:
     'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
   tron_energy_description:
     'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
-  tron_got_it: 'Got It',
   try_again: 'Tente novamente',
   turn_your_vault_into_rewards_machine:
     'Transforme seu cofre em uma máquina de recompensas. Crie seu cadastro de indicação agora e comece a ganhar.',
@@ -1217,8 +1041,6 @@ export const pt = {
     update_is_available: 'A atualização está disponível.',
     version: 'Versão {{latestVersion}}',
   },
-  vaultCreated: 'Cofre criado',
-  vaultOverview: 'Visão geral do cofre',
   vault_already_exists: 'O Vault "{{name}}" já existe.',
   vault_backup_page_password_info:
     'Nunca armazene compartilhamentos do Vault de dispositivos diferentes no mesmo local.',
@@ -1267,7 +1089,6 @@ export const pt = {
   vault_ready_description:
     'Está tudo pronto! Você mantém o controle de todas as transações.',
   vault_ready_to_use: 'Seu cofre está pronto para uso.',
-  vault_rename_page_header_title: 'Edite o nome do seu cofre',
   vault_rename_page_name_error:
     'O nome do cofre deve ter entre 1 e 50 caracteres.',
   vault_selected: 'Cofre selecionado',
@@ -1289,22 +1110,6 @@ export const pt = {
     'O título deve ter no máximo 50 caracteres.',
   vault_settings_address_book_title_min_length_error:
     'O título deve ter pelo menos 1 caractere.',
-  vault_setup_prop: {
-    fast: {
-      prop_0: 'Apenas 1 dispositivo necessário',
-      prop_1: 'Guarde quantias menores para uso diário.',
-      prop_2: 'Vultiserver assina instantaneamente',
-      purpose: 'Use como uma "carteira quente"',
-      title: 'Configuração rápida',
-    },
-    secure: {
-      prop_0: 'Segurança máxima com múltiplos dispositivos',
-      prop_1: 'Sempre acessível com backups do dispositivo',
-      prop_2: 'Proteja qualquer quantia de ativos',
-      purpose: 'Use como uma "carteira fria"',
-      title: 'Segurança máxima',
-    },
-  },
   vault_share_banner:
     'Este código QR permite que você compartilhe uma versão somente leitura do seu cofre.',
   vault_type_does_not_match: 'O tipo de cofre não corresponde.',
@@ -1319,7 +1124,6 @@ export const pt = {
   via: 'via',
   view_on_explorer: 'Visualizar no Explorador',
   vote: 'Voto',
-  vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Comunidade Vultisig',
   vultisig_education: 'Educação Vultisig',
@@ -1330,10 +1134,7 @@ export const pt = {
     'Seu cofre começará a ser gerado assim que você finalizar a configuração dele no seu dispositivo principal.',
   waiting_for_keygen_start: 'Aguardando o início da geração de chaves...',
   waiting_for_keysign_start: 'Aguardando o início do processo de assinatura...',
-  waiting_for_reshare_start: 'Aguardando o início do compartilhamento...',
-  waiting_for_upgrade_start: 'Aguardando o início da atualização...',
   wallet: 'Carteira',
-  while_you_wait_vultisig_is: 'Enquanto você espera, Vultisig está...',
   withdraw: 'Retirar',
   withdraw_ruji_rewards: 'Retirar recompensas RUJI',
   add_cacao_pool: 'Adicionar ao pool CACAO',
@@ -1342,13 +1143,8 @@ export const pt = {
   remove_thor_lp: 'Remover THORChain LP',
   pool: 'Pool',
   paired_address: 'Endereço emparelhado',
-  lp_dust_amount_error:
-    'Saldo insuficiente de RUNAS. É necessário pelo menos {{amount}} RUNAS como pó para saque de LP.',
-  lp_withdraw_percentage: 'Percentual de saque',
   wrong_vault_try_again: 'Cofre ou dispositivo de emparelhamento incorretos.',
   yesterday: 'Ontem',
-  you_send: 'Você envia',
-  you_receive: 'Você recebe',
   you_are_bonding: 'Você está bondando',
   you_are_unbonding: 'Você está desfazendo bond',
   you_are_sending: 'Você está enviando',
@@ -1356,7 +1152,6 @@ export const pt = {
   you_are_unstaking: 'Você está desfazendo stake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
-  yourVaultShares: 'Seu cofre possui {{shares}} ações do cofre.',
   vaultSetupOverview: {
     title: 'Configuração do seu cofre',
     fast: {
@@ -1422,18 +1217,14 @@ export const pt = {
   account: 'Conta',
   session_history: 'Histórico da sessão',
   vultibot: 'VultiBot',
-  vultibot_welcome: 'Olá, eu sou o VultiBot.',
   start_new_chat: 'Iniciar novo bate-papo',
   new_chat: 'Novo bate-papo',
-  messages: 'mensagens',
   failed_to_load_session_history: 'Falha ao carregar o histórico da sessão',
   agent_history_load_error_description:
     'Por favor, tente novamente. Se o problema persistir, reabra o chat de onde parou ou inicie um novo.',
   agent_history_empty_title: 'Ainda não há conversas.',
   agent_history_empty_description:
     'Inicie um novo bate-papo e suas conversas recentes aparecerão aqui.',
-  vultibot_description:
-    'Seu assistente de cofre com inteligência artificial. Posso trocar, enviar, automatizar políticas, verificar saldos e gerenciar seu cofre.',
   agent_what_to_do: 'O que você gostaria de fazer?',
   agent_help_description:
     'Posso ajudar a preparar trocas, ações de plugins e regras de automação.',
@@ -1441,27 +1232,15 @@ export const pt = {
   agent_prompt_earn_apy: 'Quero ganhar APY com BTC',
   agent_prompt_send: 'Enviar o valor para ...',
   agent_prompt_swap: 'Prepare uma troca de ETH por BTC',
-  api_key_required: 'Chave de API necessária',
-  api_key_required_description:
-    'Para usar o VultiBot, defina sua chave de API da Anthropic como uma variável de ambiente antes de iniciar o aplicativo.',
-  type_a_message: 'Digite uma mensagem...',
-  thinking: 'Pensamento',
-  try_saying: 'Tente dizer',
   ask_about_plugins_policies: 'Pergunte sobre plugins e políticas...',
   approve_transaction: 'Aprovar transação',
   enter_vault_password: 'Digite a senha do cofre',
-  signed_in: 'Assinado',
   password_required_for_operation:
     'Por favor, insira sua senha para {{operation}}.',
   confirm_action: 'Confirmar ação',
   confirm_action_description:
     'Por favor, confirme que deseja realizar {{action}}.',
   agent_chat_render_error: 'Ocorreu um erro ao renderizar o chat.',
-  agent_connect_description:
-    'Digite a senha do seu cofre para se conectar ao agente. Sua senha é usada para assinar uma mensagem de autenticação.',
-  agent_connect_now: 'Conecte-se agora',
-  agent_connected: 'Conectado',
-  agent_connecting: 'Conectando...',
   agent_operation_sign_in: 'entrar',
   agent_session_expired:
     'Sua sessão expirou. Digite a senha do seu cofre para se reconectar.',
@@ -1470,7 +1249,6 @@ export const pt = {
   agent_give_feedback: 'Dê seu feedback',
   agent_delete_chat_session: 'Excluir sessão de bate-papo',
   agent_signing_in: 'Entrando...',
-  agent_thinking_of_ideas: 'Pensando em ideias...',
   agent_tool_label: 'Ferramenta: {{tool}}',
   agent_tx_confirmed: 'Confirmado',
   agent_tx_failed: 'Fracassado',
@@ -1518,8 +1296,6 @@ export const pt = {
   unbonding_unlocks_at: 'Desbloqueia {{date}}',
   validator_status_active: 'Ativo',
   validator_status_churned_out: 'Produzido em massa',
-  validator_voting_power: '{{amount}} {{ticker}}',
-  validator_commission: '{{rate}}%',
   move: 'Mover',
   validator: 'Validador',
   pending_rewards: 'Recompensas pendentes',
