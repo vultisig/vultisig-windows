@@ -32,9 +32,9 @@ async function globalSetup(config: FullConfig): Promise<void> {
   // 2. Check test vault configuration
   const testVaultPath = process.env.TEST_VAULT_PATH
   if (testVaultPath && existsSync(testVaultPath)) {
-    console.log('✅ Test vault configured:', testVaultPath)
+    console.log('✅ Test vault configured')
   } else if (testVaultPath) {
-    console.warn('⚠️  Test vault path set but file not found:', testVaultPath)
+    console.warn('⚠️  Test vault path set but file not found')
   } else {
     console.log('ℹ️  No test vault configured (some tests will be skipped)')
   }
