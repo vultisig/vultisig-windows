@@ -92,6 +92,7 @@ export default defineConfig({
         '**/transaction-history.spec.ts',
         '**/address-book.spec.ts',
         '**/visual-regression.spec.ts',
+        '**/station-migration.spec.ts',
       ],
       use: {
         launchOptions: {

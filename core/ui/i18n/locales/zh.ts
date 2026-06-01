@@ -1241,7 +1241,7 @@ export const zh = {
   station_migration_title: '迁移 Station 钱包',
   station_migration_review_title: '查看旧的 Station 钱包',
   station_migration_review_description:
-    '此功能仅读取旧版 Station 扩展存储。目前尚未迁移、重新连接、删除或标记为已完成任何钱包。',
+    '输入您的 Station 密码以在本地解密受支持的钱包。旧版 Station 存储将保持不变。',
   station_migration_settings_title: '迁移 Station 钱包',
   station_migration_settings_description:
     '查看此设备上检测到的旧版 Station 钱包。',
@@ -1294,4 +1294,41 @@ export const zh = {
     '{{storageKey}} 必须是一个 JSON 数组。',
   station_migration_reason_wallet_entry_not_object: '钱包条目不是一种对象。',
   station_migration_reason_unsupported_fallback: '该钱包需要审核后才能迁移。',
+  station_migration_status_ready: '准备好',
+  station_migration_status_failed: '失败的',
+  station_migration_password_title: '解锁支持的钱包',
+  station_migration_password_description:
+    '您的 Station 密码保留在此设备上，仅用于解密旧的 Station 钱包数据。',
+  station_migration_password_label: 'Station 密码',
+  station_migration_password_invalid:
+    '该密码无法解锁任何受支持的 Station 钱包。',
+  station_migration_check_wallets: '检查钱包',
+  station_migration_migrate_wallet: '迁移',
+  station_migration_ready_source: '已从 {{source}} 验证。',
+  station_migration_source_mnemonic: '记忆法',
+  station_migration_source_seed: '种子字节',
+  station_migration_source_private_key: '私钥',
+  station_migration_failure_incorrect_password: '密码无法解密此钱包。',
+  station_migration_failure_missing_encrypted_value:
+    '此钱包缺少迁移所需的加密密钥材料。',
+  station_migration_failure_invalid_seed: '解密后的种子数据无效。',
+  station_migration_failure_invalid_legacy_wallet: '解密后的历史钱包数据无效。',
+  station_migration_failure_metadata_mismatch:
+    '解密后的密钥与旧的 Station 地址或公钥不匹配。',
+  station_migration_failure_unsupported: '这种类型的钱包无法通过密码进行迁移。',
+  station_migration_failure_split_interchain_private_keys:
+    '此钱包拥有独立的 Terra 和 Terra Classic 私钥。此次迁移只能导入匹配的 Terra 系列密钥。',
+  station_migration_status_importing: '导入中',
+  station_migration_status_migrated: '已迁移',
+  station_migration_status_skipped: '跳过',
+  station_migration_status_reason_importing:
+    '导入已开始。如果此行未更新，请在设置完成后返回此处。',
+  station_migration_status_reason_migrated:
+    '此钱包已导入到 Vultisig 中。旧的 Station 存储空间仍然保留。',
+  station_migration_status_reason_skipped:
+    '此钱包已被跳过。您可以随时重新解锁。',
+  station_migration_status_reason_vault_import_failed:
+    '密钥生成过程中，Vault 导入失败。请重新解锁此钱包重试。',
+  station_migration_status_reason_vault_save_failed:
+    'Vault 导入完成，但保存 Vultisig Vault 失败。请重新解锁此钱包重试。',
 }

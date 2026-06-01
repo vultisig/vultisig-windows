@@ -27,7 +27,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
-import { FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -61,6 +61,12 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
 
   const [tronResourceType, setTronResourceType] =
     useState<TronResourceType>('BANDWIDTH')
+
+  // Tracks the last accepted text per number-typed field so we can revert the
+  // DOM when the user types/pastes something that does not match a single-dot
+  // decimal (e.g. `0-2`, `0.0.0.01`). Uncontrolled `register()` inputs offer
+  // no other way to undo an invalid keystroke without re-rendering the form.
+  const lastValidNumberInputs = useRef<Record<string, string>>({})
 
   const { balance } = useDepositBalance({
     selectedChainAction,
@@ -310,18 +316,75 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                             )}
                           </Text>
 
-                          <TextInputWithPasteAction
-                            onWheel={e => e.currentTarget.blur()}
-                            type={field.type}
-                            step={
-                              field.name === 'amount'
-                                ? stepFromDecimals(coin.decimals)
-                                : undefined
+                          {(() => {
+                            const fieldRegister = register(field.name)
+                            const isNumberField = field.type === 'number'
+                            const handleNumberChange = (
+                              e: ChangeEvent<HTMLInputElement>
+                            ) => {
+                              // Strip only a leading `-` (matches the Send
+                              // page's lenient negative-stripping for
+                              // positive-only fields). Embedded `-` (e.g.
+                              // `0-2`, `5-`, `--5`) falls through to the
+                              // regex below and is rejected — silently
+                              // collapsing `0-2` into `02` would change user
+                              // intent.
+                              const rawValue = e.target.value
+                              let value = rawValue.startsWith('-')
+                                ? rawValue.slice(1)
+                                : rawValue
+                              if (value.startsWith('.')) {
+                                value = `0${value}`
+                              }
+                              if (value !== '' && !/^\d*\.?\d*$/.test(value)) {
+                                // Prefer the current form value over the
+                                // cached last-valid input. A programmatic
+                                // `setValue()` from elsewhere keeps the form
+                                // state fresh but leaves `lastValidNumberInputs`
+                                // stale, and the cache also covers the case
+                                // where the user has not typed yet so a
+                                // prefilled default survives the first
+                                // invalid keystroke/paste.
+                                e.target.value = String(
+                                  getValues(field.name) ??
+                                    lastValidNumberInputs.current[field.name] ??
+                                    ''
+                                )
+                                return
+                              }
+                              lastValidNumberInputs.current[field.name] = value
+                              e.target.value = value
+                              fieldRegister.onChange(e)
                             }
-                            min={0}
-                            {...register(field.name)}
-                            required={field.required}
-                          />
+
+                            return (
+                              <TextInputWithPasteAction
+                                onWheel={e => e.currentTarget.blur()}
+                                // Number fields use `type="text"` + decimal
+                                // inputMode so onChange fires on every key
+                                // (the native `type="number"` swallows
+                                // intermediate invalid characters like `-`
+                                // before our sanitizer sees them).
+                                type={isNumberField ? 'text' : field.type}
+                                inputMode={
+                                  isNumberField ? 'decimal' : undefined
+                                }
+                                step={
+                                  field.name === 'amount'
+                                    ? stepFromDecimals(coin.decimals)
+                                    : undefined
+                                }
+                                min={0}
+                                {...fieldRegister}
+                                onChange={
+                                  isNumberField
+                                    ? handleNumberChange
+                                    : fieldRegister.onChange
+                                }
+                                required={field.required}
+                              />
+                            )
+                          })()}
 
                           {(touchedFields[field.name] ||
                             dirtyFields[field.name]) &&

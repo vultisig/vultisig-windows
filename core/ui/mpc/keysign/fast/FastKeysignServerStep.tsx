@@ -32,7 +32,10 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getKeyImportServerChains } from '../../keygen/keyimport/utils/keyImportServerChains'
+import {
+  getKeyImportServerChains,
+  getStationKeyImportRootChains,
+} from '../../keygen/keyimport/utils/keyImportServerChains'
 import {
   customMessageDefaultChain,
   customMessageSupportedChains,
@@ -60,10 +63,21 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
   const walletCore = useAssertWalletCore()
 
   const serverChains = getKeyImportServerChains(vault)
+  const stationRootChains = getStationKeyImportRootChains(vault)
   const toServerChain = (chain: Chain): Chain =>
     serverChains
       ? resolveServerChainForKeyImport({ chain, serverChains })
       : chain
+  const isStationRootChain = (chain: Chain) =>
+    stationRootChains?.includes(chain) ?? false
+  const getServerSignChain = (chain: Chain): Chain | '' =>
+    isStationRootChain(chain) ? '' : toServerChain(chain)
+  const getServerDerivePath = (chain: Chain): string =>
+    isStationRootChain(chain)
+      ? 'm'
+      : walletCore.CoinTypeExt.derivationPath(
+          getCoinType({ walletCore, chain })
+        )
 
   const { mutate, ...state } = useMutation({
     mutationFn: async () => {
@@ -107,13 +121,11 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
               messages,
               session: sessionId,
               hex_encryption_key: hexEncryptionKey,
-              derive_path: walletCore.CoinTypeExt.derivationPath(
-                getCoinType({ walletCore, chain })
-              ),
+              derive_path: getServerDerivePath(chain),
               is_ecdsa: false,
               mldsa: true,
               vault_password: password,
-              chain,
+              chain: getServerSignChain(chain),
             })
           }
 
@@ -141,12 +153,10 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
                 messages,
                 session: sessionId,
                 hex_encryption_key: hexEncryptionKey,
-                derive_path: walletCore.CoinTypeExt.derivationPath(
-                  getCoinType({ walletCore, chain })
-                ),
+                derive_path: getServerDerivePath(chain),
                 is_ecdsa: false,
                 vault_password: password,
-                chain: toServerChain(chain),
+                chain: getServerSignChain(chain),
               })
             }
           }
@@ -180,12 +190,10 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             messages,
             session: sessionId,
             hex_encryption_key: hexEncryptionKey,
-            derive_path: walletCore.CoinTypeExt.derivationPath(
-              getCoinType({ walletCore, chain })
-            ),
+            derive_path: getServerDerivePath(chain),
             is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
-            chain: toServerChain(chain),
+            chain: getServerSignChain(chain),
           })
         },
         custom: async ({
@@ -204,15 +212,10 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             messages: [hexMessage],
             session: sessionId,
             hex_encryption_key: hexEncryptionKey,
-            derive_path: walletCore.CoinTypeExt.derivationPath(
-              getCoinType({
-                walletCore,
-                chain,
-              })
-            ),
+            derive_path: getServerDerivePath(chain),
             is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
-            chain: toServerChain(chain),
+            chain: getServerSignChain(chain),
           })
         },
       })
