@@ -1326,7 +1326,7 @@ export const nl = {
   station_migration_title: 'Migreer Station wallets',
   station_migration_review_title: 'Bekijk oude Station wallets',
   station_migration_review_description:
-    'Dit leest alleen de oude Station-extensieopslag. Er zijn nog geen wallets gemigreerd, opnieuw verbonden, verwijderd of als voltooid gemarkeerd.',
+    'Voer uw Station-wachtwoord in om ondersteunde wallets lokaal te decoderen. De oude Station-opslag blijft intact.',
   station_migration_settings_title: 'Migreer Station wallets',
   station_migration_settings_description:
     'Controleer de oude Station wallets die op dit apparaat zijn gedetecteerd.',
@@ -1384,4 +1384,45 @@ export const nl = {
     'De portemonnee-ingang is geen object.',
   station_migration_reason_unsupported_fallback:
     'Deze portemonnee moet eerst gecontroleerd worden voordat deze gemigreerd kan worden.',
+  station_migration_status_ready: 'Klaar',
+  station_migration_status_failed: 'Mislukt',
+  station_migration_password_title: 'Ondersteunde wallets ontgrendelen',
+  station_migration_password_description:
+    'Uw Station-wachtwoord blijft op dit apparaat staan ​​en wordt alleen gebruikt om oude Station-walletgegevens te decoderen.',
+  station_migration_password_label: 'Station wachtwoord',
+  station_migration_password_invalid:
+    'Dat wachtwoord ontgrendelde geen enkele ondersteunde Station-wallet.',
+  station_migration_check_wallets: 'Controleer portemonnees',
+  station_migration_migrate_wallet: 'Migreren',
+  station_migration_ready_source: 'Geverifieerd vanuit {{source}}.',
+  station_migration_source_mnemonic: 'ezelsbruggetje',
+  station_migration_source_seed: 'zaadbytes',
+  station_migration_source_private_key: 'privésleutel',
+  station_migration_failure_incorrect_password:
+    'Het wachtwoord kon deze portemonnee niet decoderen.',
+  station_migration_failure_missing_encrypted_value:
+    'Deze portemonnee mist het versleutelde sleutelmateriaal dat nodig is voor de migratie.',
+  station_migration_failure_invalid_seed:
+    'De onversleutelde seed-gegevens zijn ongeldig.',
+  station_migration_failure_invalid_legacy_wallet:
+    'De onversleutelde gegevens van de oude wallet zijn ongeldig.',
+  station_migration_failure_metadata_mismatch:
+    'De onversleutelde sleutel komt niet overeen met het oude Station-adres of de openbare sleutel.',
+  station_migration_failure_unsupported:
+    'Dit type portemonnee kan niet met een wachtwoord worden gemigreerd.',
+  station_migration_failure_split_interchain_private_keys:
+    'Deze wallet heeft aparte privésleutels voor Terra en Terra Classic. Bij deze migratie kunnen alleen overeenkomende sleutels uit de Terra-familie worden geïmporteerd.',
+  station_migration_status_importing: 'Importeren',
+  station_migration_status_migrated: 'Gemigreerd',
+  station_migration_status_skipped: 'Overgeslagen',
+  station_migration_status_reason_importing:
+    'De import is gestart. Keer hier terug nadat de installatie is voltooid als deze rij niet wordt bijgewerkt.',
+  station_migration_status_reason_migrated:
+    'Deze wallet is geïmporteerd in Vultisig. De oude opslaglocatie Station is nog steeds bewaard.',
+  station_migration_status_reason_skipped:
+    'Deze portemonnee is overgeslagen. Je kunt hem weer ontgrendelen wanneer je er klaar voor bent.',
+  station_migration_status_reason_vault_import_failed:
+    'Het importeren van de kluis is mislukt tijdens het genereren van de sleutel. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
+  station_migration_status_reason_vault_save_failed:
+    'Het importeren van de kluis is voltooid, maar het opslaan van de kluis Vultisig is mislukt. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
 }

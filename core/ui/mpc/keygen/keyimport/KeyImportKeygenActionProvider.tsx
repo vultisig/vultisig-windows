@@ -38,10 +38,17 @@ import {
 import { runKeyImportViaWorkers } from '../../worker/runKeyImportViaWorkers'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
-import { useKeyImportInput } from './state/keyImportInput'
+import {
+  isStationTerraRootKeyImportInput,
+  KeyImportInput,
+  useKeyImportInput,
+} from './state/keyImportInput'
 import { buildKeyImportProtocolSpecs } from './utils/buildKeyImportProtocolSpecs'
 import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
-import { withKeyImportServerChains } from './utils/keyImportServerChains'
+import {
+  withKeyImportServerChains,
+  withStationKeyImportRootChains,
+} from './utils/keyImportServerChains'
 
 type KeyShareResult = {
   keyshare: string
@@ -106,13 +113,18 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, onStepStart, onStepComplete, signers }) => {
-      const { mnemonic, chains } = keyImportInput
+      const { chains } = keyImportInput
+      const isStationTerraRoot =
+        isStationTerraRootKeyImportInput(keyImportInput)
 
       let hdWallet: ReturnType<
         typeof walletCore.HDWallet.createWithMnemonic
       > | null = null
-      if (isInitiatingDevice) {
-        hdWallet = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
+      if (isInitiatingDevice && !isStationTerraRoot) {
+        hdWallet = walletCore.HDWallet.createWithMnemonic(
+          keyImportInput.mnemonic,
+          ''
+        )
       }
 
       const sharedDklsParams: SharedDklsParams = {
@@ -126,20 +138,26 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
       }
 
       let rootEcdsaPrivateKeyHex: string | undefined
-      if (isInitiatingDevice && hdWallet) {
+      if (isInitiatingDevice && isStationTerraRoot) {
+        rootEcdsaPrivateKeyHex = keyImportInput.privateKeyHex
+      } else if (isInitiatingDevice && hdWallet) {
         const masterKey = hdWallet.getMasterKey(walletCore.Curve.secp256k1)
         rootEcdsaPrivateKeyHex = Buffer.from(masterKey.data()).toString('hex')
       }
 
       let rootEddsaPrivateKeyHex: string | undefined
-      if (isInitiatingDevice && hdWallet) {
+      if (isInitiatingDevice && isStationTerraRoot) {
+        rootEddsaPrivateKeyHex = keyImportInput.privateKeyHex
+      } else if (isInitiatingDevice && hdWallet) {
         const masterKey = hdWallet.getMasterKey(walletCore.Curve.ed25519)
         const masterKeyData = new Uint8Array(masterKey.data())
         const clampedKey = clampThenUniformScalar(masterKeyData)
         rootEddsaPrivateKeyHex = Buffer.from(clampedKey).toString('hex')
       }
 
-      const derivationGroups = getKeyImportDerivationGroups(chains)
+      const derivationGroups = isStationTerraRoot
+        ? []
+        : getKeyImportDerivationGroups(chains)
 
       if (isTssBatchingEnabled) {
         const vault = await runBatchKeyImport({
@@ -207,7 +225,14 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         hexChainCode
       )
 
-      const chainPublicKeys: Partial<Record<Chain, string>> = {}
+      const chainPublicKeys: Partial<Record<Chain, string>> = isStationTerraRoot
+        ? Object.fromEntries(
+            keyImportInput.chains.map(chain => [
+              chain,
+              keyImportInput.publicKeyHex,
+            ])
+          )
+        : {}
       const chainKeyShares: Partial<Record<Chain, string>> = {}
       const keyShares: VaultKeyShares = {
         ecdsa: rootEcdsaResult.keyshare,
@@ -227,7 +252,9 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
             representativeChain,
             hdWallet,
             walletCore,
-            usePhantomSolanaPath: keyImportInput.usePhantomSolanaPath,
+            usePhantomSolanaPath: isStationTerraRoot
+              ? undefined
+              : keyImportInput.usePhantomSolanaPath,
             algorithm,
           })
         }
@@ -298,10 +325,16 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         chainPublicKeys,
         chainKeyShares,
       }
-      const vault = withKeyImportServerChains(
+      const vaultWithServerChains = withKeyImportServerChains(
         baseVault,
         derivationGroups.map(g => g.representativeChain)
       )
+      const vault = isStationTerraRoot
+        ? withStationKeyImportRootChains(
+            vaultWithServerChains,
+            keyImportInput.chains
+          )
+        : vaultWithServerChains
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -346,7 +379,7 @@ type BatchKeyImportInput = {
   derivationGroups: ReturnType<typeof getKeyImportDerivationGroups>
   hdWallet: any
   walletCore: any
-  keyImportInput: { usePhantomSolanaPath?: boolean }
+  keyImportInput: KeyImportInput
   isInitiatingDevice: boolean
   isMLDSAEnabled: boolean
   vaultName: string
@@ -410,7 +443,11 @@ async function runBatchKeyImport({
             representativeChain,
             hdWallet,
             walletCore,
-            usePhantomSolanaPath: keyImportInput.usePhantomSolanaPath,
+            usePhantomSolanaPath: isStationTerraRootKeyImportInput(
+              keyImportInput
+            )
+              ? undefined
+              : keyImportInput.usePhantomSolanaPath,
             algorithm: curve,
           })
         : '',
@@ -459,7 +496,15 @@ async function runBatchKeyImport({
   const rootEcdsaResult = shouldBePresent(resultsById.get('p-ecdsa'))
   const rootEddsaResult = shouldBePresent(resultsById.get('p-eddsa'))
 
-  const chainPublicKeys: Partial<Record<Chain, string>> = {}
+  const chainPublicKeys: Partial<Record<Chain, string>> =
+    isStationTerraRootKeyImportInput(keyImportInput)
+      ? Object.fromEntries(
+          keyImportInput.chains.map(chain => [
+            chain,
+            keyImportInput.publicKeyHex,
+          ])
+        )
+      : {}
   const chainKeyShares: Partial<Record<Chain, string>> = {}
   const keyShares: VaultKeyShares = {
     ecdsa: rootEcdsaResult.keyshare,
@@ -494,10 +539,16 @@ async function runBatchKeyImport({
     publicKeyMldsa: mldsaResult?.publicKey,
     keyShareMldsa: mldsaResult?.keyshare,
   }
-  const vault = withKeyImportServerChains(
+  const vaultWithServerChains = withKeyImportServerChains(
     baseVault,
     derivationGroups.map(g => g.representativeChain)
   )
+  const vault = isStationTerraRootKeyImportInput(keyImportInput)
+    ? withStationKeyImportRootChains(
+        vaultWithServerChains,
+        keyImportInput.chains
+      )
+    : vaultWithServerChains
 
   await setKeygenComplete({
     serverURL: serverUrl,

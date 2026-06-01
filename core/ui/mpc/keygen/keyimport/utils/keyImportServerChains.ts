@@ -11,8 +11,10 @@ import { Vault } from '@vultisig/core-mpc/vault/Vault'
  * to the persisted vault object and read it through this typed accessor.
  */
 const FIELD = 'keyImportServerChains' as const
+const stationRootField = 'stationKeyImportRootChains' as const
 
 type WithServerChains = { [FIELD]?: readonly Chain[] }
+type WithStationRootChains = { [stationRootField]?: readonly Chain[] }
 
 export const getKeyImportServerChains = (
   vault: Vault
@@ -22,3 +24,14 @@ export const withKeyImportServerChains = (
   vault: Vault,
   chains: readonly Chain[]
 ): Vault => ({ ...vault, [FIELD]: chains }) as Vault & WithServerChains
+
+export const getStationKeyImportRootChains = (
+  vault: Vault
+): readonly Chain[] | undefined =>
+  (vault as Vault & WithStationRootChains)[stationRootField]
+
+export const withStationKeyImportRootChains = (
+  vault: Vault,
+  chains: readonly Chain[]
+): Vault =>
+  ({ ...vault, [stationRootField]: chains }) as Vault & WithStationRootChains
