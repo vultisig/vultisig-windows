@@ -1343,7 +1343,7 @@ export const es = {
   station_migration_title: 'Migrar las carteras Station',
   station_migration_review_title: 'Revisar las antiguas carteras Station',
   station_migration_review_description:
-    'Esto solo lee el almacenamiento de la extensión heredada Station. Aún no se han migrado, reconectado, eliminado ni marcado como completadas las carteras.',
+    'Introduzca su contraseña Station para descifrar localmente las carteras compatibles. El almacenamiento heredado Station se mantiene intacto.',
   station_migration_settings_title: 'Migrar las carteras Station',
   station_migration_settings_description:
     'Revisar las carteras antiguas Station detectadas en este dispositivo.',
@@ -1403,4 +1403,45 @@ export const es = {
     'La entrada de la cartera no es un objeto.',
   station_migration_reason_unsupported_fallback:
     'Esta billetera necesita ser revisada antes de poder ser migrada.',
+  station_migration_status_ready: 'Listo',
+  station_migration_status_failed: 'Fallido',
+  station_migration_password_title: 'Desbloquea las carteras compatibles',
+  station_migration_password_description:
+    'Su contraseña Station permanece en este dispositivo y solo se utiliza para descifrar los datos antiguos de la cartera Station.',
+  station_migration_password_label: 'Contraseña Station',
+  station_migration_password_invalid:
+    'Esa contraseña no desbloqueó ninguna billetera Station compatible.',
+  station_migration_check_wallets: 'Revisar las carteras',
+  station_migration_migrate_wallet: 'Migrar',
+  station_migration_ready_source: 'Validado desde {{source}}.',
+  station_migration_source_mnemonic: 'mnemotécnico',
+  station_migration_source_seed: 'bytes semilla',
+  station_migration_source_private_key: 'clave privada',
+  station_migration_failure_incorrect_password:
+    'La contraseña no pudo descifrar esta billetera.',
+  station_migration_failure_missing_encrypted_value:
+    'A esta cartera le falta el material de clave encriptada necesario para la migración.',
+  station_migration_failure_invalid_seed:
+    'Los datos de la semilla descifrada no son válidos.',
+  station_migration_failure_invalid_legacy_wallet:
+    'Los datos descifrados de la billetera antigua no son válidos.',
+  station_migration_failure_metadata_mismatch:
+    'La clave descifrada no coincide con la antigua dirección Station ni con la clave pública.',
+  station_migration_failure_unsupported:
+    'Este tipo de monedero no se puede migrar con una contraseña.',
+  station_migration_failure_split_interchain_private_keys:
+    'Esta cartera tiene claves privadas separadas para Terra y Terra Classic. Esta migración solo puede importar claves coincidentes de la familia Terra.',
+  station_migration_status_importing: 'Importando',
+  station_migration_status_migrated: 'Migrado',
+  station_migration_status_skipped: 'Saltado',
+  station_migration_status_reason_importing:
+    'Se ha iniciado la importación. Si esta fila no se actualiza, vuelva aquí una vez finalizada la configuración.',
+  station_migration_status_reason_migrated:
+    'Esta cartera se importó a Vultisig. El almacenamiento antiguo Station aún se conserva.',
+  station_migration_status_reason_skipped:
+    'Esta cartera se omitió. Puedes desbloquearla de nuevo cuando quieras.',
+  station_migration_status_reason_vault_import_failed:
+    'La importación de la bóveda falló durante la generación de claves. Desbloquea esta billetera nuevamente para intentarlo de nuevo.',
+  station_migration_status_reason_vault_save_failed:
+    'La importación de la bóveda se completó, pero falló al guardar la bóveda Vultisig. Desbloquee esta billetera nuevamente para intentarlo de nuevo.',
 }

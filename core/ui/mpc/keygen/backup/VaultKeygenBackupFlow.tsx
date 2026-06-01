@@ -1,5 +1,6 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 
 import { BackupFastVault } from '../../../vault/backup/fast/BackupFastVault'
 import { BackupSecureVault } from '../../../vault/backup/secure/BackupSecureVault'
@@ -9,6 +10,8 @@ type VaultKeygenBackupFlowProps = OnFinishProp &
   OnBackProp & {
     password?: string
     onChangeEmailAndRestart?: () => void
+    onVaultSaveError?: (error: Error) => void | Promise<void>
+    onVaultSaved?: (vault: Vault) => void | Promise<void>
   }
 
 export const VaultKeygenBackupFlow = ({
@@ -16,6 +19,8 @@ export const VaultKeygenBackupFlow = ({
   onBack,
   password = '',
   onChangeEmailAndRestart,
+  onVaultSaveError,
+  onVaultSaved,
 }: VaultKeygenBackupFlowProps) => {
   const vault = useCurrentVault()
 
@@ -26,6 +31,8 @@ export const VaultKeygenBackupFlow = ({
         onFinish={onFinish}
         onBack={onBack}
         onChangeEmailAndRestart={onChangeEmailAndRestart}
+        onVaultSaveError={onVaultSaveError}
+        onVaultSaved={onVaultSaved}
       />
     )
   }
