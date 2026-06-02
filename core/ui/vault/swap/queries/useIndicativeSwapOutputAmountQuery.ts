@@ -8,7 +8,6 @@ import {
   Query,
 } from '@lib/ui/query/Query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { useMemo } from 'react'
 
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
@@ -38,49 +37,42 @@ export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
   const fromPriceQuery = useCoinPriceQuery({ coin: fromCoin })
   const toPriceQuery = useCoinPriceQuery({ coin: toCoin })
 
-  const queriesRecord = useMemo(
-    () => ({
+  const pricesQuery = useCombineQueries({
+    queries: {
       fromPrice: fromPriceQuery,
       toPrice: toPriceQuery,
-    }),
-    [fromPriceQuery, toPriceQuery]
-  )
-
-  const pricesQuery = useCombineQueries({
-    queries: queriesRecord,
+    },
     joinData: data => data,
     eager: false,
   })
 
-  return useMemo((): Query<number> => {
-    if (fromAmount === null) {
+  if (fromAmount === null) {
+    return inactiveQuery
+  }
+
+  if (pricesQuery.data) {
+    const { fromPrice, toPrice } = pricesQuery.data
+
+    if (toPrice <= 0) {
       return inactiveQuery
     }
 
-    if (pricesQuery.data) {
-      const { fromPrice, toPrice } = pricesQuery.data
+    return getResolvedQuery(
+      getIndicativeSwapOutputAmount({
+        amount: fromChainAmount(fromAmount, fromCoin.decimals),
+        fromPrice,
+        toPrice,
+      })
+    )
+  }
 
-      if (toPrice <= 0) {
-        return inactiveQuery
-      }
+  if (pricesQuery.isPending) {
+    return pendingQuery
+  }
 
-      return getResolvedQuery(
-        getIndicativeSwapOutputAmount({
-          amount: fromChainAmount(fromAmount, fromCoin.decimals),
-          fromPrice,
-          toPrice,
-        })
-      )
-    }
-
-    if (pricesQuery.isPending) {
-      return pendingQuery
-    }
-
-    return {
-      data: undefined,
-      isPending: false,
-      error: pricesQuery.error,
-    }
-  }, [fromAmount, fromCoin.decimals, pricesQuery])
+  return {
+    data: undefined,
+    isPending: false,
+    error: pricesQuery.error,
+  }
 }
