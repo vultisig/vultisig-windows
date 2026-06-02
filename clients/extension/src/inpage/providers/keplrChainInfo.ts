@@ -107,6 +107,19 @@ export const keplrAverageGasPrice: Record<SupportedKeplrChain, number> = {
   QBTC: 0.004,
 }
 
+// Lower bound (in the chain's fee denom base units) for a wallet-injected
+// fee. `gasLimit * gasPrice` can land below what the chain's validators
+// actually accept — Akash's chain-registry gas price (0.025 uakt/gas)
+// yields only 7500 uakt (0.0075 AKT) on a ~300k-gas delegation, which the
+// network's mempool rejects. Floor the injected amount to the minimum the
+// chain expects. Only chains that need a floor above their computed fee are
+// listed; everything else relies on `gasLimit * gasPrice` alone.
+export const keplrMinInjectedFee: Partial<Record<SupportedKeplrChain, bigint>> =
+  {
+    // 0.025 AKT — the minimum fee Akash validators accept for staking txs.
+    Akash: 25_000n,
+  }
+
 const buildBech32Config = (prefix: string) => ({
   bech32PrefixAccAddr: prefix,
   bech32PrefixAccPub: `${prefix}pub`,

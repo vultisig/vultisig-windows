@@ -1,11 +1,12 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { JoinKeysignCustomMessageVerify } from '@core/ui/mpc/keysign/join/JoinKeysignCustomMessageVerify'
+import { JoinKeysignButton } from '@core/ui/mpc/keysign/join/tx/JoinKeysignButton'
 import { JoinKeysignTransactionVerify } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTransactionVerify'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
-import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { getKeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
@@ -28,20 +29,26 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
         title={t('verify')}
         hasBorder
       />
-      <PageContent>
-        <VStack flexGrow>
-          <MatchRecordUnion
-            value={keysignPayload}
-            handlers={{
-              keysign: payload => (
-                <JoinKeysignTransactionVerify value={payload} />
-              ),
-              custom: value => <JoinKeysignCustomMessageVerify value={value} />,
-            }}
-          />
-        </VStack>
-        <Button onClick={onFinish}>{t('join_keysign')}</Button>
-      </PageContent>
+      <MatchRecordUnion
+        value={keysignPayload}
+        handlers={{
+          keysign: payload => (
+            <JoinKeysignTransactionVerify value={payload} onFinish={onFinish} />
+          ),
+          custom: value => (
+            <>
+              <PageContent scrollable>
+                <VStack flexGrow>
+                  <JoinKeysignCustomMessageVerify value={value} />
+                </VStack>
+              </PageContent>
+              <PageFooter>
+                <JoinKeysignButton onClick={onFinish} />
+              </PageFooter>
+            </>
+          ),
+        }}
+      />
     </>
   )
 }

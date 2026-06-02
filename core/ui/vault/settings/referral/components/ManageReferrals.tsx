@@ -6,10 +6,8 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { ImageAvatarSparkleIcon } from '@lib/ui/icons/ImageAvatarSparkleIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
-import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -58,59 +56,68 @@ export const ManageReferrals = ({
           <>
             <PageHeader
               primaryControls={<PageHeaderBackButton />}
-              title={t('save_referral')}
+              title={t('manage_referral_title')}
             />
-            <PageContent alignItems="center" overflow="hidden">
-              <SafeImage
-                src="/core/images/crypto-natives.png"
-                render={props => <VStack as="img" {...props} />}
-              />
+            <PageContent alignItems="center" scrollable>
+              <DiscoveryContent
+                fullWidth
+                maxWidth={480}
+                flexGrow
+                justifyContent="space-between"
+                gap={16}
+              >
+                <HeroIllustration src="/core/referral-hero.webp" alt="" />
+                <VStack gap={14} fullWidth>
+                  <ActionItem onClick={() => setView('saveReferral')}>
+                    <VStack gap={12}>
+                      <HStack alignItems="center" gap={8} wrap="wrap">
+                        <Text as={MegaphoneIcon} color="primaryAlt" size={24} />
+                        <ActionTitle as="span">
+                          {t('save_referral')}
+                        </ActionTitle>
+                        {Boolean(friendReferral) && (
+                          <Text as="span" color="success" size={13}>
+                            {t('active')}
+                          </Text>
+                        )}
+                      </HStack>
+                      <ActionDescription color="shy" as="span">
+                        <Trans
+                          i18nKey="save_referral_desc"
+                          components={{
+                            c: <Text as="span" color="primaryAlt" size={13} />,
+                          }}
+                        />
+                      </ActionDescription>
+                    </VStack>
+                    <ChevronRightIcon fontSize={20} />
+                  </ActionItem>
+                  <ActionItem onClick={() => setView('createReferral')}>
+                    <VStack gap={12}>
+                      <HStack alignItems="center" gap={8} wrap="wrap">
+                        <Text
+                          as={ImageAvatarSparkleIcon}
+                          color="info"
+                          size={24}
+                        />
+                        <ActionTitle as="span">
+                          {t('create_referral')}
+                        </ActionTitle>
+                      </HStack>
+                      <ActionDescription color="shy" as="span">
+                        <Trans
+                          i18nKey="create_referral_desc"
+                          components={{
+                            c: <Text as="span" color="primaryAlt" size={13} />,
+                          }}
+                        />
+                      </ActionDescription>
+                    </VStack>
+                    <ChevronRightIcon fontSize={20} />
+                  </ActionItem>
+                </VStack>
+              </DiscoveryContent>
             </PageContent>
-            <PageFooter gap={14}>
-              <ActionItem onClick={() => setView('saveReferral')}>
-                <VStack gap={12}>
-                  <HStack alignItems="center" gap={8}>
-                    <Text as={MegaphoneIcon} color="info" size={24} />
-                    <Text as="span" size={17}>
-                      {t('save_referral')}
-                    </Text>
-                    {Boolean(friendReferral) && (
-                      <Text as="span" color="success" size={13}>
-                        {t('active')}
-                      </Text>
-                    )}
-                  </HStack>
-                  <Text color="shy" size={13}>
-                    <Trans
-                      i18nKey="save_referral_desc"
-                      components={{
-                        c: <Text as="span" color="primaryAlt" size={13} />,
-                      }}
-                    />
-                  </Text>
-                </VStack>
-                <ChevronRightIcon fontSize={20} />
-              </ActionItem>
-              <ActionItem onClick={() => setView('createReferral')}>
-                <VStack gap={12}>
-                  <HStack alignItems="center" gap={8}>
-                    <Text as={ImageAvatarSparkleIcon} color="info" size={24} />
-                    <Text as="span" size={17}>
-                      {t('create_referral')}
-                    </Text>
-                  </HStack>
-                  <Text color="shy" size={13}>
-                    <Trans
-                      i18nKey="create_referral_desc"
-                      components={{
-                        c: <Text as="span" color="primaryAlt" size={13} />,
-                      }}
-                    />
-                  </Text>
-                </VStack>
-                <ChevronRightIcon fontSize={20} />
-              </ActionItem>
-            </PageFooter>
           </>
         )}
         createReferral={() => (
@@ -167,10 +174,36 @@ export const ManageReferrals = ({
   )
 }
 
+const DiscoveryContent = styled(VStack)`
+  min-height: 100%;
+`
+
+const HeroIllustration = styled.img`
+  align-self: center;
+  display: block;
+  height: auto;
+  max-width: 375px;
+  width: 100%;
+`
+
+const ActionTitle = styled(Text)`
+  line-height: ${20 / 17};
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0;
+`
+
+const ActionDescription = styled(Text)`
+  line-height: ${18 / 13};
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+`
+
 const ActionItem = styled(HStack)`
   align-items: center;
   background-color: ${getColor('foreground')};
-  border-radius: 24px;
+  border-radius: 16px;
   cursor: pointer;
   gap: 24px;
   justify-content: space-between;

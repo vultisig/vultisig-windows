@@ -15,6 +15,7 @@ import {
 import {
   AccountData,
   AminoSignResponse,
+  BroadcastMode,
   ChainInfo,
   ChainInfoWithoutEndpoints,
   DirectSignResponse,
@@ -671,6 +672,21 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   /**
+   * Reports whether the host has an active vault grant. cosmos-kit / graz
+   * adapters call this on hydration to decide between auto-reconnect and
+   * showing the connect button; the inherited base routes through our
+   * requester and throws, which surfaces an unhandled rejection in the
+   * dApp console and confuses some adapters.
+   *
+   * Vultisig's `appSession` is host-keyed (not host+chain-keyed), so the
+   * `chainIds` argument is accepted for API compatibility but ignored:
+   * either the host holds a grant for everything it can query, or nothing.
+   */
+  async isEnabled(_chainIds: string | string[]): Promise<boolean> {
+    return callBackground({ hasAppSession: {} })
+  }
+
+  /**
    * Keplr-shaped chain list for every Cosmos chain Vultisig exposes natively
    * plus any chains a dApp has registered via `experimentalSuggestChain`.
    * cosmos-kit dApps probe this BEFORE showing their
@@ -750,14 +766,31 @@ export class XDEFIKeplrProvider extends Keplr {
     return
   }
 
-  async sendTx(): Promise<Uint8Array> {
-    // Keplr's `sendTx` broadcasts a fully signed transaction via Keplr's
-    // background relay. Vultisig has no equivalent relay — dApps that
-    // need to broadcast should do so via their own RPC client after
-    // `signAmino` / `signDirect`. Throwing here (instead of resolving
-    // `undefined` from the inherited base requester) gives the dApp a
-    // deterministic signal to fall back to its own broadcast.
-    throw new Error('Keplr.sendTx is not supported by Vultisig')
+  async sendTx(
+    chainId: string,
+    tx: Uint8Array,
+    _mode: BroadcastMode
+  ): Promise<Uint8Array> {
+    // cosmos-kit dApps sign with `signDirect` / `signAmino` (which Vultisig
+    // handles with `skipBroadcast`) and then call `sendTx` with the encoded
+    // `TxRaw` bytes to publish the transaction. Broadcasting runs in the
+    // background service worker — like real Keplr — so it isn't blocked by the
+    // dApp page's CSP via the SDK's shared broadcast path. Returns the tx-hash
+    // bytes the dApp uses to track inclusion. `_mode` is ignored — the SDK
+    // broadcast resolver picks the broadcast semantics.
+    const chain = getCosmosChainByChainId(chainId)
+    if (!chain) {
+      throw new Error(`Keplr.sendTx is not supported for chain ${chainId}`)
+    }
+
+    const { txHash } = await callBackground({
+      broadcastTx: {
+        chain,
+        txBytes: Buffer.from(tx).toString('base64'),
+      },
+    })
+
+    return hexToBytes(txHash)
   }
   async sendMessage() {}
 

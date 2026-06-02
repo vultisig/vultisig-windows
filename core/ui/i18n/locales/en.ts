@@ -1297,7 +1297,7 @@ export const en = {
   station_migration_title: 'Migrate Station wallets',
   station_migration_review_title: 'Review old Station wallets',
   station_migration_review_description:
-    'This only reads legacy Station extension storage. No wallets are migrated, reconnected, deleted, or marked complete yet.',
+    'Enter your Station password to decrypt supported wallets locally. Legacy Station storage is kept intact.',
   station_migration_settings_title: 'Migrate Station wallets',
   station_migration_settings_description:
     'Review old Station wallets detected on this device.',
@@ -1311,6 +1311,47 @@ export const en = {
   station_migration_status_unsupported: 'Unsupported',
   station_migration_status_corrupt: 'Invalid',
   station_migration_status_needs_review: 'Needs review',
+  station_migration_status_ready: 'Ready',
+  station_migration_status_failed: 'Failed',
+  station_migration_status_importing: 'Importing',
+  station_migration_status_migrated: 'Migrated',
+  station_migration_status_skipped: 'Skipped',
+  station_migration_status_reason_importing:
+    'Import was started. Return here after setup finishes if this row does not update.',
+  station_migration_status_reason_migrated:
+    'This wallet was imported into Vultisig. Old Station storage is still preserved.',
+  station_migration_status_reason_skipped:
+    'This wallet was skipped. You can unlock it again whenever you are ready.',
+  station_migration_status_reason_vault_import_failed:
+    'Vault import failed during key generation. Unlock this wallet again to retry.',
+  station_migration_status_reason_vault_save_failed:
+    'Vault import completed, but saving the Vultisig vault failed. Unlock this wallet again to retry.',
+  station_migration_password_title: 'Unlock supported wallets',
+  station_migration_password_description:
+    'Your Station password stays on this device and is only used to decrypt old Station wallet data.',
+  station_migration_password_label: 'Station password',
+  station_migration_password_invalid:
+    'That password did not unlock any supported Station wallet.',
+  station_migration_check_wallets: 'Check wallets',
+  station_migration_migrate_wallet: 'Migrate',
+  station_migration_ready_source: 'Validated from {{source}}.',
+  station_migration_source_mnemonic: 'mnemonic',
+  station_migration_source_seed: 'seed bytes',
+  station_migration_source_private_key: 'private key',
+  station_migration_failure_incorrect_password:
+    'The password could not decrypt this wallet.',
+  station_migration_failure_missing_encrypted_value:
+    'This wallet is missing the encrypted key material needed for migration.',
+  station_migration_failure_invalid_seed:
+    'The decrypted seed data is not valid.',
+  station_migration_failure_invalid_legacy_wallet:
+    'The decrypted legacy wallet data is not valid.',
+  station_migration_failure_metadata_mismatch:
+    'The decrypted key does not match the old Station address or public key.',
+  station_migration_failure_split_interchain_private_keys:
+    'This wallet has separate Terra and Terra Classic private keys. This migration can only import matching Terra-family keys.',
+  station_migration_failure_unsupported:
+    'This wallet type cannot be migrated with a password.',
   station_migration_wallet_type_mnemonic: 'Encrypted seed and mnemonic',
   station_migration_wallet_type_seed: 'Encrypted seed',
   station_migration_wallet_type_private_key: 'Encrypted private key',

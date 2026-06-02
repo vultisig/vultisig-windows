@@ -1323,7 +1323,7 @@ export const ru = {
   station_migration_title: 'Перенести кошельки Station',
   station_migration_review_title: 'Проверка старых кошельков Station',
   station_migration_review_description:
-    'Это только чтение устаревшего хранилища расширения Station. Пока ни один кошелёк не был перенесён, переподключён, удалён или помечен как завершённый.',
+    'Введите свой пароль Station для локальной расшифровки поддерживаемых кошельков. Хранилище Station, созданное ранее, остается нетронутым.',
   station_migration_settings_title: 'Перенести кошельки Station',
   station_migration_settings_description:
     'Просмотрите старые кошельки Station, обнаруженные на этом устройстве.',
@@ -1382,4 +1382,45 @@ export const ru = {
     'Запись в кошельке не является объектом.',
   station_migration_reason_unsupported_fallback:
     'Перед переносом данных из этого кошелька требуется его проверка.',
+  station_migration_status_ready: 'Готовый',
+  station_migration_status_failed: 'Неуспешный',
+  station_migration_password_title: 'Разблокируйте поддерживаемые кошельки',
+  station_migration_password_description:
+    'Ваш пароль Station хранится на этом устройстве и используется только для расшифровки старых данных кошелька Station.',
+  station_migration_password_label: 'Station пароль',
+  station_migration_password_invalid:
+    'Этот пароль не разблокировал ни один из поддерживаемых кошельков Station.',
+  station_migration_check_wallets: 'Проверьте кошельки',
+  station_migration_migrate_wallet: 'Мигрировать',
+  station_migration_ready_source: 'Проверено на основе {{source}}.',
+  station_migration_source_mnemonic: 'мнемоническое правило',
+  station_migration_source_seed: 'начальные байты',
+  station_migration_source_private_key: 'закрытый ключ',
+  station_migration_failure_incorrect_password:
+    'Не удалось расшифровать этот кошелек с помощью введенного пароля.',
+  station_migration_failure_missing_encrypted_value:
+    'В этом кошельке отсутствует зашифрованный ключ, необходимый для миграции.',
+  station_migration_failure_invalid_seed:
+    'Расшифрованные исходные данные недействительны.',
+  station_migration_failure_invalid_legacy_wallet:
+    'Расшифрованные устаревшие данные кошелька недействительны.',
+  station_migration_failure_metadata_mismatch:
+    'Расшифрованный ключ не соответствует старому адресу Station или открытому ключу.',
+  station_migration_failure_unsupported:
+    'Этот тип кошелька нельзя перенести с помощью пароля.',
+  station_migration_failure_split_interchain_private_keys:
+    'Этот кошелек имеет отдельные приватные ключи Terra и Terra Classic. В рамках этой миграции можно импортировать только совпадающие ключи семейства Terra.',
+  station_migration_status_importing: 'Импорт',
+  station_migration_status_migrated: 'Мигрировал',
+  station_migration_status_skipped: 'Пропущено',
+  station_migration_status_reason_importing:
+    'Импорт начат. Вернитесь сюда после завершения настройки, если эта строка не обновится.',
+  station_migration_status_reason_migrated:
+    'Этот кошелек был импортирован в Vultisig. Старое хранилище Station сохранено.',
+  station_migration_status_reason_skipped:
+    'Этот кошелек был пропущен. Вы можете разблокировать его снова, когда будете готовы.',
+  station_migration_status_reason_vault_import_failed:
+    'Импорт хранилища не удался во время генерации ключа. Для повторной попытки разблокируйте этот кошелек.',
+  station_migration_status_reason_vault_save_failed:
+    'Импорт хранилища завершен, но сохранение хранилища Vultisig не удалось. Разблокируйте этот кошелек еще раз, чтобы повторить попытку.',
 }

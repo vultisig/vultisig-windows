@@ -4,6 +4,7 @@ import { Match } from '@lib/ui/base/Match'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnBackProp } from '@lib/ui/props'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 
 import { MigrateSuccess } from '../migrate/MigrateSuccess'
 import { KeygenFlowSuccess } from './KeygenFlowSuccess'
@@ -11,12 +12,16 @@ import { KeygenFlowSuccess } from './KeygenFlowSuccess'
 type KeygenFlowEndingProps = OnBackProp & {
   password?: string
   onChangeEmailAndRestart?: () => void
+  onVaultSaveError?: (error: Error) => void | Promise<void>
+  onVaultSaved?: (vault: Vault) => void | Promise<void>
 }
 
 export const KeygenFlowEnding = ({
   onBack,
   password,
   onChangeEmailAndRestart,
+  onVaultSaveError,
+  onVaultSaved,
 }: KeygenFlowEndingProps) => {
   const keygenOperation = useKeygenOperation()
 
@@ -28,6 +33,8 @@ export const KeygenFlowEnding = ({
           onBack={onBack}
           password={password}
           onChangeEmailAndRestart={onChangeEmailAndRestart}
+          onVaultSaveError={onVaultSaveError}
+          onVaultSaved={onVaultSaved}
         />
       )}
       to={() => (
