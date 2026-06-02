@@ -26,6 +26,7 @@ const getIndicativeSwapOutputAmount = ({
   return (amount * fromPrice) / toPrice
 }
 
+/** Returns a price-based output estimate while a firm swap quote is loading. */
 export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
   const [fromAmount] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
