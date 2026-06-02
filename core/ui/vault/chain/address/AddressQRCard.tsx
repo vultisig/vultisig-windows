@@ -160,7 +160,6 @@ export const AddressQRCard = ({
 
     if (!address) return
 
-    const shareTitle = `${t('receive')} ${displayName}`
     const node = qrNodeRef.current
 
     if (node && navigator.canShare) {
@@ -175,10 +174,7 @@ export const AddressQRCard = ({
           throw new Error('File sharing not supported')
         }
 
-        await navigator.share({
-          files: [file],
-          title: shareTitle,
-        })
+        await navigator.share({ files: [file] })
       })
 
       if ('data' in result) return
@@ -188,7 +184,7 @@ export const AddressQRCard = ({
 
     void navigator
       .share({
-        title: shareTitle,
+        title: `${t('receive')} ${displayName}`,
         text: address,
       })
       .catch(() => undefined)
