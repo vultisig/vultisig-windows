@@ -147,20 +147,28 @@ async function setupContentScriptMessenger(
 ) {
   const ethereumProvider = providers.ethereum
 
-  const [vultisigDefaultProvider, hasSolanaResult] = await Promise.all([
-    callBackground({ getIsWalletPrioritized: {} }),
-    attempt(callBackground({ hasChainInVault: { chain: Chain.Solana } })),
-  ])
+  const [vultisigDefaultProvider, hasSolanaResult, hasSuiResult] =
+    await Promise.all([
+      callBackground({ getIsWalletPrioritized: {} }),
+      attempt(callBackground({ hasChainInVault: { chain: Chain.Solana } })),
+      attempt(callBackground({ hasChainInVault: { chain: Chain.Sui } })),
+    ])
   const hasSolana = hasSolanaResult.data ?? false
+  const hasSui = hasSuiResult.data ?? false
 
   const phantomProvider = {
     bitcoin: new UTXO(UtxoChain.Bitcoin, 'phantom-override'),
     ethereum: ethereumProvider,
     ...(hasSolana && { solana: providers.solana }),
+    ...(hasSui && { sui: providers.sui }),
   }
 
   if (hasSolana) {
     registerWallet(providers.solana)
+  }
+
+  if (hasSui) {
+    registerWallet(providers.sui)
   }
 
   if (vultisigDefaultProvider) {
