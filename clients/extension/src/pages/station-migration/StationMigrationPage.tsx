@@ -288,18 +288,19 @@ const StationMigrationWalletItem = ({
   const reason = getWalletReason({ t, wallet })
   const visibleStatus =
     result?.status ?? persistedStatus?.status ?? wallet.status
-  const description =
-    result?.status === 'failed'
+  const description = result
+    ? result.status === 'failed'
       ? getMigrationFailureReason({
           t,
           failureCode: result.failureCode,
         })
-      : persistedStatus
-        ? getPersistedStatusReason({
-            t,
-            status: persistedStatus,
-          })
-        : reason
+      : reason
+    : persistedStatus
+      ? getPersistedStatusReason({
+          t,
+          status: persistedStatus,
+        })
+      : reason
 
   const handleMigrate = async () => {
     if (result?.status !== 'ready') return

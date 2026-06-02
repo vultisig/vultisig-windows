@@ -1,4 +1,5 @@
 import { expect, test } from '../fixtures/extension-loader'
+import type { BrowserContext, Locator, Page } from '@playwright/test'
 
 const stationPassword = 'station-test-password'
 const popupPath = 'index.html?view=popup'
@@ -290,32 +291,108 @@ const fillFastVaultSetup = async ({
   name,
   page,
 }: {
-  context: import('@playwright/test').BrowserContext
+  context: BrowserContext
   email: string
   name: string
-  page: import('@playwright/test').Page
+  page: Page
 }) => {
-  let activePage = page
-  const clickGetStarted = async () => {
+  const findActiveSetupPage = async () => {
+    for (const candidatePage of [...context.pages()].reverse()) {
+      if (candidatePage.isClosed()) {
+        continue
+      }
+
+      const showsSetup = await candidatePage
+        .getByText('Your vault setup')
+        .isVisible()
+        .catch(() => false)
+      const showsGetStarted = await candidatePage
+        .getByRole('button', { name: 'Get Started' })
+        .first()
+        .isVisible()
+        .catch(() => false)
+
+      if (showsSetup || showsGetStarted) {
+        return candidatePage
+      }
+    }
+
+    return page
+  }
+
+  let activePage = await findActiveSetupPage()
+
+  type PageAdvanceResult =
+    | {
+        type: 'opened'
+        page: Page
+      }
+    | {
+        type: 'same'
+      }
+
+  const clickAndUsePageWith = async ({
+    click,
+    expected,
+    timeout = 15_000,
+  }: {
+    click: () => Promise<void>
+    expected: (page: Page) => Locator
+    timeout?: number
+  }) => {
     const previousPage = activePage
+    const openedPagePromise: Promise<PageAdvanceResult> = context
+      .waitForEvent('page', { timeout })
+      .then(openedPage => ({
+        type: 'opened',
+        page: openedPage,
+      }))
+
+    await click()
+
+    const samePagePromise: Promise<PageAdvanceResult> = expected(previousPage)
+      .waitFor({ state: 'visible', timeout })
+      .then(() => ({
+        type: 'same',
+      }))
+    const result = await Promise.race([openedPagePromise, samePagePromise])
+
+    if (result.type === 'same') {
+      return
+    }
+
+    await result.page.waitForLoadState('domcontentloaded')
+    activePage = result.page
+    await expect(expected(activePage)).toBeVisible({ timeout })
+    await previousPage.close().catch(() => undefined)
+  }
+
+  const clickGetStarted = async (expected: (page: Page) => Locator) => {
     const button = activePage
       .getByRole('button', { name: 'Get Started' })
       .first()
     await expect(button).toBeVisible()
-    const openedPagePromise = context
-      .waitForEvent('page', { timeout: 2_000 })
-      .catch(() => undefined)
-    await button.click()
-    const openedPage = await openedPagePromise
-    if (openedPage) {
-      await openedPage.waitForLoadState('domcontentloaded')
-      activePage = openedPage
-      await previousPage.close().catch(() => undefined)
-    }
+    await expect(button).toBeEnabled()
+    await clickAndUsePageWith({
+      click: () => button.click(),
+      expected,
+    })
   }
 
-  await clickGetStarted()
-  await clickGetStarted()
+  const isOnVaultSetupOverview = await activePage
+    .getByText('Your vault setup')
+    .isVisible()
+    .catch(() => false)
+
+  if (!isOnVaultSetupOverview) {
+    await clickGetStarted(nextPage => nextPage.getByText('Your vault setup'))
+  }
+
+  await clickGetStarted(nextPage =>
+    nextPage
+      .getByTestId('vault-name-input')
+      .or(nextPage.getByRole('button', { name: 'Continue' }))
+  )
 
   const continueButton = activePage.getByRole('button', { name: 'Continue' })
   if (await continueButton.isVisible().catch(() => false)) {
@@ -328,17 +405,14 @@ const fillFastVaultSetup = async ({
   await activePage.getByTestId('vault-email-next').click()
   await activePage.getByTestId('vault-password-input').fill(fastVaultPassword)
   await activePage.getByTestId('vault-password-confirm').fill(fastVaultPassword)
-  const previousPage = activePage
-  const openedPagePromise = context
-    .waitForEvent('page', { timeout: 2_000 })
-    .catch(() => undefined)
-  await activePage.getByTestId('create-vault-button').click()
-  const openedPage = await openedPagePromise
-  if (openedPage) {
-    await openedPage.waitForLoadState('domcontentloaded')
-    activePage = openedPage
-    await previousPage.close().catch(() => undefined)
-  }
+  await clickAndUsePageWith({
+    click: () => activePage.getByTestId('create-vault-button').click(),
+    expected: nextPage =>
+      nextPage.getByText(
+        /Connecting (to|with) server|Backups, your new recovery method|Failed to connect with server/
+      ).first(),
+    timeout: 60_000,
+  })
 
   return activePage
 }

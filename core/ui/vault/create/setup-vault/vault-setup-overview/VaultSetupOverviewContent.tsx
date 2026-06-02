@@ -18,6 +18,7 @@ type VaultSetupOverviewContentProps = {
   selectedDeviceCount: number
   onBack: () => void
   onGetStarted: () => void
+  isGetStartedLoading?: boolean
 }
 
 const badgeIconRecord = {
@@ -29,6 +30,7 @@ export const VaultSetupOverviewContent = ({
   selectedDeviceCount,
   onBack,
   onGetStarted,
+  isGetStartedLoading = false,
 }: VaultSetupOverviewContentProps) => {
   const { t } = useTranslation()
   const { key, securityType } = getVaultSetupVariant(selectedDeviceCount)
@@ -42,7 +44,8 @@ export const VaultSetupOverviewContent = ({
         <Button
           style={{ width: '100%' }}
           onClick={onGetStarted}
-          loading={isLoading}
+          disabled={isLoading || isGetStartedLoading}
+          loading={isLoading || isGetStartedLoading}
         >
           {t('get_started')}
         </Button>
