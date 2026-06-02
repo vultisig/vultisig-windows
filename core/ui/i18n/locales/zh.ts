@@ -1250,7 +1250,6 @@ export const zh = {
   station_migration_summary_total_one: '{{count}} 钱包',
   station_migration_summary_total_other: '{{count}} 钱包',
   station_migration_status_supported: '支持',
-  station_migration_status_reconnect: '重新连接',
   station_migration_status_unsupported: '不支持',
   station_migration_status_corrupt: '无效的',
   station_migration_status_needs_review: '需要审查',
@@ -1274,8 +1273,6 @@ export const zh = {
     '已加密的 Terra 私钥数据已准备就绪，可供将来导入。',
   station_migration_reason_supported_legacy_private_key:
     '已保存旧版加密私钥数据，以备将来导入。',
-  station_migration_reason_ledger_reconnect:
-    'Station 存储此 Ledger 钱包的公共账户详细信息。稍后重新连接硬件设备，即可在 Station 中使用它。',
   station_migration_reason_multisig:
     'Station 仅存储公共多重签名元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
   station_migration_reason_encrypted_seed_not_string:
@@ -1331,4 +1328,6 @@ export const zh = {
     '密钥生成过程中，Vault 导入失败。请重新解锁此钱包重试。',
   station_migration_status_reason_vault_save_failed:
     'Vault 导入完成，但保存 Vultisig Vault 失败。请重新解锁此钱包重试。',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station 仅存储公开的 Ledger 元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
 }

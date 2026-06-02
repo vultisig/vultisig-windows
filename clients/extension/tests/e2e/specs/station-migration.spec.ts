@@ -2,6 +2,11 @@ import { expect, test } from '../fixtures/extension-loader'
 
 const stationPassword = 'station-test-password'
 const popupPath = 'index.html?view=popup'
+const expectedMnemonicTerraAddress =
+  'terra1amdttz2937a3dytmxmkany53pp6ma6dy4vsllv'
+const expectedMnemonicPublicKeyHex =
+  '02acb4bc267db7774614bf6011c59929b006c2554386a3090baff0b3fc418ec044'
+const fastVaultPassword = 'StationFastVault123!'
 
 type LegacyWalletFixture = Record<string, unknown>
 
@@ -42,7 +47,9 @@ const encryptStationSecret = async ({
   return `${toHex(salt)}${toHex(iv)}${toBase64(new Uint8Array(encrypted))}`
 }
 
-const createStationFixture = async () => {
+const createStationFixture = async ({
+  includeFullReviewRows = true,
+}: { includeFullReviewRows?: boolean } = {}) => {
   const mnemonic =
     'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'
   const seedHex = toHex(
@@ -66,57 +73,80 @@ const createStationFixture = async () => {
     message: JSON.stringify({ privateKey: privateKeyHex }),
   })
 
-  const wallets: LegacyWalletFixture[] = [
-    {
-      name: 'QA Mnemonic Wallet',
-      encryptedMnemonic,
-      encryptedSeed,
-      index: 0,
+  const mnemonicWallet: LegacyWalletFixture = {
+    name: 'QA Mnemonic Wallet',
+    encryptedMnemonic,
+    encryptedSeed,
+    index: 0,
+    address: expectedMnemonicTerraAddress,
+    pubkey: {
+      '330': Buffer.from(expectedMnemonicPublicKeyHex, 'hex').toString(
+        'base64'
+      ),
     },
-    {
-      name: 'QA Seed Only',
-      encryptedSeed,
-      index: 1,
+  }
+  const realTerraLedgerWallet: LegacyWalletFixture = {
+    name: 'QA Real Terra Ledger',
+    ledger: true,
+    address: 'terra1jgpxyjazrhqd70n5ftkfs970r5j5kh4703entd',
+    addresses: {
+      'mars-1': 'mars1jgpxyjazrhqd70n5ftkfs970r5j5kh475g62uk',
+      'phoenix-1': 'terra1jgpxyjazrhqd70n5ftkfs970r5j5kh4703entd',
     },
-    {
-      name: 'QA Raw Private Key',
-      encrypted: encryptedPrivateKey,
+    network: 'mainnet',
+    pubkey: {
+      '330': 'AwJz0UAWqWO9VHE8T1jJFzsYifcF8is2Oi9qyy5gtU97',
     },
-    {
-      name: 'QA Interchain Key',
-      encrypted: {
-        '330': encryptedPrivateKey,
-        '118': encryptedPrivateKey,
-      },
-    },
-    {
-      name: 'QA Split Interchain',
-      encrypted: {
-        '330': encryptedPrivateKey,
-        '118': encryptedAlternatePrivateKey,
-      },
-    },
-    {
-      name: 'QA Metadata Mismatch',
-      encrypted: encryptedPrivateKey,
-      address: 'terra1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnyw93e',
-    },
-    {
-      name: 'QA Ledger Account',
-      ledger: true,
-      address: 'terra1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnyw93e',
-    },
-    {
-      name: 'QA Multisig Account',
-      multisig: true,
-      pubkeys: ['A'.repeat(44), 'B'.repeat(44)],
-      threshold: 2,
-    },
-    {
-      name: 'QA Corrupt Seed',
-      encryptedSeed: 123,
-    },
-  ]
+  }
+  const wallets: LegacyWalletFixture[] = includeFullReviewRows
+    ? [
+        mnemonicWallet,
+        {
+          name: 'QA Seed Only',
+          encryptedSeed,
+          index: 1,
+        },
+        {
+          name: 'QA Raw Private Key',
+          encrypted: encryptedPrivateKey,
+        },
+        {
+          name: 'QA Interchain Key',
+          encrypted: {
+            '330': encryptedPrivateKey,
+            '118': encryptedPrivateKey,
+          },
+        },
+        {
+          name: 'QA Split Interchain',
+          encrypted: {
+            '330': encryptedPrivateKey,
+            '118': encryptedAlternatePrivateKey,
+          },
+        },
+        {
+          name: 'QA Metadata Mismatch',
+          encrypted: encryptedPrivateKey,
+          address: 'terra1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnyw93e',
+        },
+        {
+          name: 'QA Ledger Account',
+          ledger: true,
+          address: 'terra1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnyw93e',
+        },
+        realTerraLedgerWallet,
+        {
+          name: 'QA Multisig Account',
+          multisig: true,
+          pubkeys: ['A'.repeat(44), 'B'.repeat(44)],
+          threshold: 2,
+        },
+        {
+          name: 'QA Corrupt Seed',
+          encryptedSeed: 123,
+        },
+      ]
+    : [mnemonicWallet, realTerraLedgerWallet]
   const keys: LegacyWalletFixture[] = [
     {
       name: 'QA Legacy Private Key',
@@ -130,7 +160,7 @@ const createStationFixture = async () => {
 
   return {
     encryptedUnlockProbe: await encryptStationSecret({ message: 'station-ok' }),
-    keys,
+    keys: includeFullReviewRows ? keys : [],
     wallets,
   }
 }
@@ -154,25 +184,35 @@ const getManifestName = (page: import('@playwright/test').Page) =>
     return ''
   })
 
-const seedLegacyStorage = async (page: import('@playwright/test').Page) => {
-  const fixture = await createStationFixture()
-
+const seedLegacyStorage = async ({
+  fixture,
+  page,
+}: {
+  fixture?: Awaited<ReturnType<typeof createStationFixture>>
+  page: import('@playwright/test').Page
+}) => {
+  const legacyFixture = fixture ?? (await createStationFixture())
   await page.evaluate(async legacyFixture => {
     localStorage.clear()
     localStorage.setItem('wallets', JSON.stringify(legacyFixture.wallets))
     localStorage.setItem('keys', JSON.stringify(legacyFixture.keys))
-    localStorage.setItem('passwordChallenge', legacyFixture.encryptedUnlockProbe)
+    localStorage.setItem(
+      'passwordChallenge',
+      legacyFixture.encryptedUnlockProbe
+    )
     await chrome.storage.local.clear()
-  }, fixture)
+  }, legacyFixture)
 }
 
 const openStationMigrationWithFixture = async ({
   context,
   extensionId,
+  fixture,
   page,
 }: {
   context: import('@playwright/test').BrowserContext
   extensionId: string
+  fixture?: Awaited<ReturnType<typeof createStationFixture>>
   page: import('@playwright/test').Page
 }) => {
   await page.goto(`chrome-extension://${extensionId}/${popupPath}`)
@@ -180,7 +220,7 @@ const openStationMigrationWithFixture = async ({
   const manifestName = await getManifestName(page)
   test.skip(manifestName !== 'Station Wallet', 'Station-only migration UI')
 
-  await seedLegacyStorage(page)
+  await seedLegacyStorage({ fixture, page })
   await page.goto(`chrome-extension://${extensionId}/${popupPath}`)
 
   const skipButton = page.getByRole('button', { name: 'Skip' })
@@ -244,6 +284,151 @@ const expectNoHorizontalOverflow = async (
   expect(overflowingElements).toEqual([])
 }
 
+const fillFastVaultSetup = async ({
+  context,
+  email,
+  name,
+  page,
+}: {
+  context: import('@playwright/test').BrowserContext
+  email: string
+  name: string
+  page: import('@playwright/test').Page
+}) => {
+  let activePage = page
+  const clickGetStarted = async () => {
+    const previousPage = activePage
+    const button = activePage
+      .getByRole('button', { name: 'Get Started' })
+      .first()
+    await expect(button).toBeVisible()
+    const openedPagePromise = context
+      .waitForEvent('page', { timeout: 2_000 })
+      .catch(() => undefined)
+    await button.click()
+    const openedPage = await openedPagePromise
+    if (openedPage) {
+      await openedPage.waitForLoadState('domcontentloaded')
+      activePage = openedPage
+      await previousPage.close().catch(() => undefined)
+    }
+  }
+
+  await clickGetStarted()
+  await clickGetStarted()
+
+  const continueButton = activePage.getByRole('button', { name: 'Continue' })
+  if (await continueButton.isVisible().catch(() => false)) {
+    await continueButton.click()
+  }
+
+  await activePage.getByTestId('vault-name-input').fill(name)
+  await activePage.getByTestId('vault-name-next').click()
+  await activePage.getByTestId('vault-email-input').fill(email)
+  await activePage.getByTestId('vault-email-next').click()
+  await activePage.getByTestId('vault-password-input').fill(fastVaultPassword)
+  await activePage.getByTestId('vault-password-confirm').fill(fastVaultPassword)
+  const previousPage = activePage
+  const openedPagePromise = context
+    .waitForEvent('page', { timeout: 2_000 })
+    .catch(() => undefined)
+  await activePage.getByTestId('create-vault-button').click()
+  const openedPage = await openedPagePromise
+  if (openedPage) {
+    await openedPage.waitForLoadState('domcontentloaded')
+    activePage = openedPage
+    await previousPage.close().catch(() => undefined)
+  }
+
+  return activePage
+}
+
+const waitForMigratedMnemonicVault = async ({
+  name,
+  page,
+}: {
+  name: string
+  page: import('@playwright/test').Page
+}) =>
+  page.waitForFunction(
+    ({ expectedAddress, expectedPublicKey, walletName }) => {
+      return chrome.storage.local
+        .get([
+          'currentVaultId',
+          'vaults',
+          'vaultsCoins',
+          'stationLegacyMigrationStatus',
+        ])
+        .then(storage => {
+          const vaults = Array.isArray(storage.vaults) ? storage.vaults : []
+          const statusRecords =
+            typeof storage.stationLegacyMigrationStatus === 'object' &&
+            storage.stationLegacyMigrationStatus !== null
+              ? Object.values(
+                  storage.stationLegacyMigrationStatus as Record<
+                    string,
+                    Record<string, unknown>
+                  >
+                )
+              : []
+          const migrationStatus = statusRecords.find(
+            record =>
+              record.walletName === 'QA Mnemonic Wallet' &&
+              record.status === 'migrated' &&
+              typeof record.vaultId === 'string'
+          )
+          if (!migrationStatus) return false
+          if (storage.currentVaultId !== migrationStatus.vaultId) return false
+
+          const vault = vaults.find(
+            (candidate: Record<string, unknown>) =>
+              candidate.name === walletName &&
+              typeof candidate.chainPublicKeys === 'object' &&
+              candidate.chainPublicKeys !== null &&
+              (candidate.chainPublicKeys as Record<string, string>).Terra ===
+                expectedPublicKey &&
+              (candidate.chainPublicKeys as Record<string, string>)
+                .TerraClassic === expectedPublicKey &&
+              ['Terra', 'TerraClassic'].every(chain =>
+                (
+                  (candidate as { stationKeyImportRootChains?: unknown })
+                    .stationKeyImportRootChains as unknown[]
+                )?.includes(chain)
+              )
+          ) as Record<string, unknown> | undefined
+          if (!vault) return false
+
+          const vaultCoins =
+            typeof storage.vaultsCoins === 'object' &&
+            storage.vaultsCoins !== null
+              ? (
+                  storage.vaultsCoins as Record<
+                    string,
+                    Array<Record<string, unknown>>
+                  >
+                )[migrationStatus.vaultId as string]
+              : undefined
+          return (
+            Array.isArray(vaultCoins) &&
+            vaultCoins.some(
+              coin => coin.chain === 'Terra' && coin.address === expectedAddress
+            ) &&
+            vaultCoins.some(
+              coin =>
+                coin.chain === 'TerraClassic' &&
+                coin.address === expectedAddress
+            )
+          )
+        })
+    },
+    {
+      expectedAddress: expectedMnemonicTerraAddress,
+      expectedPublicKey: expectedMnemonicPublicKeyHex,
+      walletName: name,
+    },
+    { timeout: 180_000 }
+  )
+
 test.describe('Station legacy migration', () => {
   test('checks realistic legacy wallets and routes ready wallets into setup', async ({
     context,
@@ -251,20 +436,42 @@ test.describe('Station legacy migration', () => {
   }, testInfo) => {
     const popupPage = await context.newPage()
     await popupPage.setViewportSize({ width: 480, height: 600 })
+    const fixture = await createStationFixture({ includeFullReviewRows: true })
     const page = await openStationMigrationWithFixture({
       context,
       extensionId,
+      fixture,
       page: popupPage,
     })
     await page.setViewportSize({ width: 480, height: 720 })
 
     await expect(page.getByTestId('station-migration-summary')).toContainText(
-      '11'
+      '12'
+    )
+    await expect(page.getByTestId('station-migration-summary')).toContainText(
+      '7'
+    )
+    await expect(page.getByTestId('station-migration-summary')).toContainText(
+      '5'
     )
     await expect(page.getByText('QA Mnemonic Wallet')).toBeVisible()
     await expect(page.getByText('QA Ledger Account')).toBeVisible()
+    await expect(page.getByText('QA Real Terra Ledger')).toBeVisible()
     await expect(page.getByText('QA Multisig Account')).toBeVisible()
     await expect(page.getByText('QA Corrupt Seed')).toBeVisible()
+    await expect(page.getByText('Reconnect')).toHaveCount(0)
+    await expect(
+      page.getByRole('button', { name: 'Connect Ledger' })
+    ).toHaveCount(0)
+    const ledgerWallet = page
+      .getByTestId('station-migration-wallet-item')
+      .filter({ has: page.getByText('QA Real Terra Ledger') })
+    await expect(ledgerWallet.getByText('Unsupported')).toBeVisible()
+    await expect(
+      ledgerWallet.getByText(
+        'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Vultisig vault.'
+      )
+    ).toBeVisible()
     await expectNoHorizontalOverflow(page)
 
     await page
@@ -352,6 +559,73 @@ test.describe('Station legacy migration', () => {
     await page.close()
   })
 
+  test('creates a Fast Vault from a Station software wallet and preserves its Terra address', async ({
+    context,
+    extensionId,
+  }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== 'network',
+      'full vault creation uses the Fast Vault server'
+    )
+    test.setTimeout(240_000)
+
+    const popupPage = await context.newPage()
+    await popupPage.setViewportSize({ width: 480, height: 600 })
+    const fixture = await createStationFixture({ includeFullReviewRows: false })
+    const page = await openStationMigrationWithFixture({
+      context,
+      extensionId,
+      fixture,
+      page: popupPage,
+    })
+    await page.setViewportSize({ width: 480, height: 720 })
+
+    await page
+      .locator('input[type="password"], input[type="text"]')
+      .first()
+      .fill(stationPassword)
+    await page.getByRole('button', { name: 'Check wallets' }).click()
+
+    const mnemonicWallet = page
+      .getByTestId('station-migration-wallet-item')
+      .filter({ has: page.getByText('QA Mnemonic Wallet') })
+    await expect(mnemonicWallet.getByText('Ready')).toBeVisible()
+    await mnemonicWallet.getByRole('button', { name: 'Migrate' }).click()
+
+    const vaultName = `Station QA ${Date.now()}`
+    const setupPage = await fillFastVaultSetup({
+      context,
+      email: `station-migration-${Date.now()}@example.com`,
+      name: vaultName,
+      page,
+    })
+    await waitForMigratedMnemonicVault({ name: vaultName, page: setupPage })
+    await expect(setupPage.locator('body')).not.toContainText(
+      /Connecting (to|with) server/,
+      { timeout: 60_000 }
+    )
+    await expect(setupPage.locator('body')).not.toContainText(
+      'Failed to connect with server'
+    )
+    await expect(setupPage.locator('body')).toContainText(
+      'Backups, your new recovery method',
+      { timeout: 60_000 }
+    )
+    await expect(setupPage.locator('body')).not.toContainText(
+      'Failed to connect with server'
+    )
+
+    await setupPage.screenshot({
+      path: testInfo.outputPath(
+        'station-migration-fast-vault-created-backup-step.png'
+      ),
+      animations: 'disabled',
+    })
+
+    await setupPage.close()
+    await page.close()
+  })
+
   test('keeps migration hidden in the default Vultisig build', async ({
     context,
     extensionId,
@@ -362,7 +636,7 @@ test.describe('Station legacy migration', () => {
     const manifestName = await getManifestName(popupPage)
     test.skip(manifestName === 'Station Wallet', 'Default-brand guard')
 
-    await seedLegacyStorage(popupPage)
+    await seedLegacyStorage({ page: popupPage })
     await popupPage.goto(`chrome-extension://${extensionId}/${popupPath}`)
 
     const setupPage = await openSetupFromPopup({
