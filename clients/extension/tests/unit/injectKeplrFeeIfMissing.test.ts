@@ -1,7 +1,6 @@
+import { injectKeplrFeeIfMissing } from '@clients/extension/src/inpage/providers/cosmos/injectKeplrFeeIfMissing'
 import { AuthInfo } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { describe, expect, it } from 'vitest'
-
-import { injectKeplrFeeIfMissing } from '@clients/extension/src/inpage/providers/cosmos/injectKeplrFeeIfMissing'
 
 const encodeAuthInfo = (input: Parameters<typeof AuthInfo.fromPartial>[0]) =>
   AuthInfo.encode(AuthInfo.fromPartial(input)).finish()
@@ -16,7 +15,10 @@ describe('injectKeplrFeeIfMissing', () => {
       fee: { amount: [], gasLimit: 310823n, payer: '', granter: '' },
     })
 
-    const out = injectKeplrFeeIfMissing({ authInfoBytes: input, chain: 'Osmosis' })
+    const out = injectKeplrFeeIfMissing({
+      authInfoBytes: input,
+      chain: 'Osmosis',
+    })
 
     const decoded = AuthInfo.decode(out)
     expect(decoded.fee?.amount).toEqual([{ denom: 'uosmo', amount: '12433' }])
@@ -31,10 +33,47 @@ describe('injectKeplrFeeIfMissing', () => {
       fee: { amount: [], gasLimit: 310823n, payer: '', granter: '' },
     })
 
-    const out = injectKeplrFeeIfMissing({ authInfoBytes: input, chain: 'Osmosis' })
+    const out = injectKeplrFeeIfMissing({
+      authInfoBytes: input,
+      chain: 'Osmosis',
+    })
     const decoded = AuthInfo.decode(out)
     const amount = BigInt(decoded.fee?.amount[0]?.amount ?? '0')
     expect(amount).toBeGreaterThan(9325n)
+  })
+
+  it('floors the Akash injected fee to the chain minimum (0.025 AKT)', () => {
+    // A delegation runs ~300k gas; at 0.025 uakt/gas that computes to only
+    // 7500 uakt (0.0075 AKT), below Akash's accepted minimum. The injected
+    // fee must be floored to 25000 uakt (0.025 AKT).
+    const input = encodeAuthInfo({
+      signerInfos: [],
+      fee: { amount: [], gasLimit: 300000n, payer: '', granter: '' },
+    })
+
+    const out = injectKeplrFeeIfMissing({
+      authInfoBytes: input,
+      chain: 'Akash',
+    })
+
+    const decoded = AuthInfo.decode(out)
+    expect(decoded.fee?.amount).toEqual([{ denom: 'uakt', amount: '25000' }])
+  })
+
+  it('keeps the computed Akash fee when it already exceeds the minimum', () => {
+    // 2,000,000 gas × 0.025 uakt/gas = 50000 uakt, above the 25000 floor.
+    const input = encodeAuthInfo({
+      signerInfos: [],
+      fee: { amount: [], gasLimit: 2_000_000n, payer: '', granter: '' },
+    })
+
+    const out = injectKeplrFeeIfMissing({
+      authInfoBytes: input,
+      chain: 'Akash',
+    })
+
+    const decoded = AuthInfo.decode(out)
+    expect(decoded.fee?.amount).toEqual([{ denom: 'uakt', amount: '50000' }])
   })
 
   it('leaves bytes unchanged when fee.amount is already populated', () => {
@@ -48,7 +87,10 @@ describe('injectKeplrFeeIfMissing', () => {
       },
     })
 
-    const out = injectKeplrFeeIfMissing({ authInfoBytes: input, chain: 'Osmosis' })
+    const out = injectKeplrFeeIfMissing({
+      authInfoBytes: input,
+      chain: 'Osmosis',
+    })
 
     expect(Array.from(out)).toEqual(Array.from(input))
   })
@@ -59,7 +101,10 @@ describe('injectKeplrFeeIfMissing', () => {
       fee: { amount: [], gasLimit: 0n, payer: '', granter: '' },
     })
 
-    const out = injectKeplrFeeIfMissing({ authInfoBytes: input, chain: 'Osmosis' })
+    const out = injectKeplrFeeIfMissing({
+      authInfoBytes: input,
+      chain: 'Osmosis',
+    })
 
     expect(Array.from(out)).toEqual(Array.from(input))
   })
