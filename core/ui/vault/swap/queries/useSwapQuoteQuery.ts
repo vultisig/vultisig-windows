@@ -1,6 +1,8 @@
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useVultDiscountTierQuery } from '@core/ui/vult/discount/queries/tier'
+import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { pendingQuery } from '@lib/ui/query/Query'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -15,10 +17,45 @@ import { buildSwapQuoteInput } from './buildSwapQuoteInput'
 
 export const swapQuoteQueryKeyPrefix = 'swapQuote'
 
+const quoteAmountDebounceMs = 300
+
+export const shouldDebouncedSwapQuoteAmountShowPending = ({
+  fromAmount,
+  debouncedFromAmount,
+}: {
+  fromAmount: bigint | null
+  debouncedFromAmount: bigint | null
+}) =>
+  fromAmount !== null && fromAmount > 0n && fromAmount !== debouncedFromAmount
+
+export const getDebouncedSwapQuoteAmount = ({
+  fromAmount,
+  debouncedFromAmount,
+}: {
+  fromAmount: bigint | null
+  debouncedFromAmount: bigint | null
+}) => {
+  if (fromAmount === null || fromAmount === 0n) {
+    return undefined
+  }
+
+  if (
+    shouldDebouncedSwapQuoteAmountShowPending({
+      fromAmount,
+      debouncedFromAmount,
+    })
+  ) {
+    return undefined
+  }
+
+  return fromAmount
+}
+
 export const useSwapQuoteQuery = () => {
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
   const [fromAmount] = useFromAmount()
+  const debouncedFromAmount = useDebounce(fromAmount, quoteAmountDebounceMs)
   const vaultId = useAssertCurrentVaultId()
   const referralQuery = useFriendReferralQuery(vaultId)
 
@@ -31,10 +68,18 @@ export const useSwapQuoteQuery = () => {
   })
 
   const notSameAsset = areEqualCoins(fromCoinKey, toCoinKey) ? undefined : true
+  const shouldShowAmountPending = shouldDebouncedSwapQuoteAmountShowPending({
+    fromAmount,
+    debouncedFromAmount,
+  })
+  const quoteAmount = getDebouncedSwapQuoteAmount({
+    fromAmount,
+    debouncedFromAmount,
+  })
 
-  return useStateDependentQuery(
+  const query = useStateDependentQuery(
     {
-      fromAmount: fromAmount || undefined,
+      fromAmount: quoteAmount || undefined,
       referral: referralQuery.data,
       vultDiscountTier: useVultDiscounts ? vultDiscountTierQuery.data : null,
       notSameAsset,
@@ -56,4 +101,6 @@ export const useSwapQuoteQuery = () => {
       }
     }
   )
+
+  return shouldShowAmountPending ? pendingQuery : query
 }
