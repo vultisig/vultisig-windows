@@ -45,6 +45,35 @@ import { VaultPage } from '../page-objects/VaultPage.po'
 
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 
+const parseVisibleAmount = (value: string) => {
+  const normalized = value.replace(/,/g, '')
+  const match = normalized.match(/\d+(?:\.\d+)?/)
+
+  return match ? Number(match[0]) : 0
+}
+
+const getDifferentAmount = (amount: string) => {
+  const value = Number(amount)
+  const nextValue = Number.isFinite(value) && value > 0 ? value * 2.5 : 0.0025
+
+  return nextValue.toFixed(8).replace(/\.?0+$/, '')
+}
+
+const pasteAmount = async (
+  page: import('@playwright/test').Page,
+  swapFlow: SwapFlow,
+  amount: string
+) => {
+  await swapFlow.fromAmountInput.click({ force: true })
+  await page.evaluate(async value => {
+    await navigator.clipboard.writeText(value)
+  }, amount)
+  await page.keyboard.press('ControlOrMeta+V')
+}
+
+const readOutputAmount = async (swapFlow: SwapFlow) =>
+  parseVisibleAmount(await swapFlow.getExpectedOutput())
+
 test.describe('Swap Flow', () => {
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
@@ -224,6 +253,83 @@ test.describe('Swap Flow', () => {
       )
     } catch (error) {
       console.log('Could not verify swap provider/fees:', error)
+    } finally {
+      await page.close()
+    }
+  })
+
+  test('swap quote amount stays responsive while firm quote resolves', async ({
+    context,
+    extensionId,
+  }, testInfo) => {
+    const page = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
+    const swapFlow = new SwapFlow(page, extensionId)
+
+    try {
+      await vaultPage.goto()
+      await vaultPage.waitForView(15_000)
+
+      const balances = await getVaultBalances(page)
+      if (!canSwap(balances)) {
+        test.skip(true, 'Insufficient balance for swap quote UX')
+        return
+      }
+
+      const swapConfig = selectSwapPair(balances)
+      if (!swapConfig) {
+        test.skip(true, 'Could not determine swap pair')
+        return
+      }
+
+      await navigateToSwap(page)
+      await swapFlow.waitForView(10_000)
+
+      await swapFlow.prepareSwapWithAmount({
+        fromChainId: swapConfig.fromChain,
+        toChainId: swapConfig.toChain,
+        amount: swapConfig.amount,
+      })
+
+      await expect
+        .poll(() => readOutputAmount(swapFlow), {
+          timeout: 30_000,
+          intervals: [500],
+        })
+        .toBeGreaterThan(0)
+
+      const firmOutput = await readOutputAmount(swapFlow)
+      expect(firmOutput).toBeGreaterThan(0)
+
+      const pastedAmount = getDifferentAmount(swapConfig.amount)
+      await pasteAmount(page, swapFlow, pastedAmount)
+
+      await expect
+        .poll(() => readOutputAmount(swapFlow), {
+          timeout: 250,
+          intervals: [50],
+        })
+        .toBeGreaterThan(0)
+
+      const immediateOutput = await readOutputAmount(swapFlow)
+      expect(immediateOutput).not.toBeCloseTo(firmOutput, 8)
+
+      const screenshotPath = testInfo.outputPath(
+        'swap-quote-ux-real-workflow.png'
+      )
+      await page.screenshot({
+        path: screenshotPath,
+        fullPage: true,
+      })
+      await testInfo.attach('swap quote UX real workflow', {
+        path: screenshotPath,
+        contentType: 'image/png',
+      })
+
+      const canContinue = await swapFlow.isContinueEnabled().catch(() => false)
+      console.log(
+        `Swap quote UX: ${swapConfig.amount} ${swapConfig.fromSymbol} quote=${firmOutput}; pasted ${pastedAmount}, immediate output=${immediateOutput}; continueEnabled=${canContinue}`
+      )
     } finally {
       await page.close()
     }
