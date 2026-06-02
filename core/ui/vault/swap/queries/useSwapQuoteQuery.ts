@@ -19,22 +19,28 @@ export const swapQuoteQueryKeyPrefix = 'swapQuote'
 
 const quoteAmountDebounceMs = 300
 
+type ShouldDebouncedSwapQuoteAmountShowPendingInput = {
+  fromAmount: bigint | null
+  debouncedFromAmount: bigint | null
+}
+
+/** Checks whether the quote UI should stay pending while amount debounce catches up. */
 export const shouldDebouncedSwapQuoteAmountShowPending = ({
   fromAmount,
   debouncedFromAmount,
-}: {
-  fromAmount: bigint | null
-  debouncedFromAmount: bigint | null
-}) =>
+}: ShouldDebouncedSwapQuoteAmountShowPendingInput) =>
   fromAmount !== null && fromAmount > 0n && fromAmount !== debouncedFromAmount
 
+type GetDebouncedSwapQuoteAmountInput = {
+  fromAmount: bigint | null
+  debouncedFromAmount: bigint | null
+}
+
+/** Returns the amount that is ready to drive a swap quote query. */
 export const getDebouncedSwapQuoteAmount = ({
   fromAmount,
   debouncedFromAmount,
-}: {
-  fromAmount: bigint | null
-  debouncedFromAmount: bigint | null
-}) => {
+}: GetDebouncedSwapQuoteAmountInput) => {
   if (fromAmount === null || fromAmount === 0n) {
     return undefined
   }
