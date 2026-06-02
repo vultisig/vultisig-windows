@@ -187,12 +187,17 @@ export class Sui implements Wallet {
   }
 
   #syncFromBackground = async ({ emit = true }: { emit?: boolean } = {}) => {
-    const { data } = await attempt(
+    const result = await attempt(
       callBackground({ getAccount: { chain: Chain.Sui } })
     )
 
-    const address = data?.address
-    const publicKey = data?.publicKey
+    // Don't desync wallet state on transient transport failures — only treat
+    // a successful response with no account as a real disconnect.
+    if ('error' in result) {
+      return
+    }
+
+    const { address, publicKey } = result.data
 
     if (!address || !publicKey) {
       this.#clearAccount(emit)

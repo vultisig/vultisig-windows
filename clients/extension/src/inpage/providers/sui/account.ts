@@ -39,7 +39,7 @@ export class VultisigSuiWalletAccount implements WalletAccount {
     icon,
   }: Omit<WalletAccount, 'chains' | 'features'>) {
     this.address = address
-    this.#publicKey = publicKey
+    this.#publicKey = publicKey.slice()
     this.#chains = chains
     this.#features = features
     this.label = label
