@@ -59,11 +59,17 @@ const getDifferentAmount = (amount: string) => {
   return nextValue.toFixed(8).replace(/\.?0+$/, '')
 }
 
-const pasteAmount = async (
+type PasteAmountInput = {
   page: import('@playwright/test').Page,
-  swapFlow: SwapFlow,
+  swapFlow: SwapFlow
   amount: string
-) => {
+}
+
+const pasteAmount = async ({
+  page,
+  swapFlow,
+  amount,
+}: PasteAmountInput) => {
   await swapFlow.fromAmountInput.click({ force: true })
   await page.evaluate(async value => {
     await navigator.clipboard.writeText(value)
@@ -291,25 +297,19 @@ test.describe('Swap Flow', () => {
         amount: swapConfig.amount,
       })
 
-      await expect
-        .poll(() => readOutputAmount(swapFlow), {
-          timeout: 30_000,
-          intervals: [500],
-        })
-        .toBeGreaterThan(0)
-
+      await swapFlow.waitForQuote()
       const firmOutput = await readOutputAmount(swapFlow)
       expect(firmOutput).toBeGreaterThan(0)
 
       const pastedAmount = getDifferentAmount(swapConfig.amount)
-      await pasteAmount(page, swapFlow, pastedAmount)
+      await pasteAmount({ page, swapFlow, amount: pastedAmount })
 
       await expect
         .poll(() => readOutputAmount(swapFlow), {
-          timeout: 250,
-          intervals: [50],
+          timeout: 500,
+          intervals: [50, 100],
         })
-        .toBeGreaterThan(0)
+        .not.toBeCloseTo(firmOutput, 8)
 
       const immediateOutput = await readOutputAmount(swapFlow)
       expect(immediateOutput).not.toBeCloseTo(firmOutput, 8)
