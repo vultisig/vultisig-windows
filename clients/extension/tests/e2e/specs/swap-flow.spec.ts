@@ -54,7 +54,7 @@ const parseVisibleAmount = (value: string) => {
 
 const getDifferentAmount = (amount: string) => {
   const value = Number(amount)
-  const nextValue = Number.isFinite(value) && value > 0 ? value * 2.5 : 0.0025
+  const nextValue = Number.isFinite(value) && value > 0 ? value / 2 : 0.0025
 
   return nextValue.toFixed(8).replace(/\.?0+$/, '')
 }
@@ -303,6 +303,7 @@ test.describe('Swap Flow', () => {
 
       const pastedAmount = getDifferentAmount(swapConfig.amount)
       await pasteAmount({ page, swapFlow, amount: pastedAmount })
+      await expect(swapFlow.continueButton).toBeDisabled({ timeout: 250 })
 
       await expect
         .poll(() => readOutputAmount(swapFlow), {
