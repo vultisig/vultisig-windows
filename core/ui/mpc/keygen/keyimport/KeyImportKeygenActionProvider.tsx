@@ -22,16 +22,20 @@ import {
   setKeygenComplete,
   waitForKeygenComplete,
 } from '@vultisig/core-mpc/keygenComplete'
-import { initializeMpcLib } from '@vultisig/core-mpc/lib/initialize'
-import { MldsaKeygen } from '@vultisig/core-mpc/mldsa/mldsaKeygen'
 import { MpcLib } from '@vultisig/core-mpc/mpcLib'
 import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
 import { clampThenUniformScalar } from '@vultisig/core-mpc/utils/ed25519ScalarClamp'
 import { Vault, VaultKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { without } from '@vultisig/lib-utils/array/without'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
+import {
+  MldsaProtocolSpec,
+  SharedMpcParams,
+} from '../../worker/keygenWorkerProtocol'
+import { runKeyImportViaWorkers } from '../../worker/runKeyImportViaWorkers'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {
@@ -39,6 +43,7 @@ import {
   KeyImportInput,
   useKeyImportInput,
 } from './state/keyImportInput'
+import { buildKeyImportProtocolSpecs } from './utils/buildKeyImportProtocolSpecs'
 import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
 import {
   withKeyImportServerChains,
@@ -165,7 +170,6 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           walletCore,
           keyImportInput,
           isInitiatingDevice,
-          encryptionKeyHex,
           isMLDSAEnabled,
           vaultName,
           localPartyId,
@@ -377,7 +381,6 @@ type BatchKeyImportInput = {
   walletCore: any
   keyImportInput: KeyImportInput
   isInitiatingDevice: boolean
-  encryptionKeyHex: string
   isMLDSAEnabled: boolean
   vaultName: string
   localPartyId: string
@@ -389,265 +392,11 @@ type BatchKeyImportInput = {
   onStepComplete: (step: KeygenStep) => void
 }
 
-type ChainKeygenResult = {
-  chains: Chain[]
-  result: KeyShareResult
-}
-
-type DklsProtocolSpec = {
-  instance: DKLS
-  privateKeyHex: string
-  setupMessageId: string | undefined
-  protocolMessageId: string
-  chains?: Chain[]
-}
-
-type SchnorrProtocolSpec = {
-  instance: Schnorr
-  privateKeyHex: string
-  setupMessageId: string
-  protocolMessageId: string
-  chains?: Chain[]
-}
-
-type RunDklsTrackInput = {
-  sharedDklsParams: SharedDklsParams
-  hexChainCode: string
-  rootEcdsaPrivateKeyHex: string
-  ecdsaGroups: ReturnType<typeof getKeyImportDerivationGroups>
-  hdWallet: any
-  walletCore: any
-  isInitiatingDevice: boolean
-  usePhantomSolanaPath?: boolean
-  onStepComplete: (step: KeygenStep) => void
-}
-
 /**
- * Phase 1 (setup upload): sequentially calls prepareKeyImportSetup for the
- * root and every per-chain ECDSA keygen. All setup messages are uploaded to
- * the relay upfront because the server's initImportProtocols fetches them
- * serially before launching any keygen goroutine — if we upload per-chain
- * setups after root keygen completes, the server times out waiting.
- *
- * Phase 2 (message exchange): sequentially runs startKeyImportWithRetry for
- * each protocol, which reuses the pending session created in Phase 1. vs_wasm
- * is not safe for concurrent use within the same curve, so exchanges must
- * also run one-at-a-time on the shared DKLS engine.
- *
- * Per-chain keygens use hexChainCode directly rather than
- * rootEcdsaResult.chaincode because the root hasn't run yet at Phase 1 time.
- * For key import the initiator defines the chain code, so these are the same
- * bytes that keyShare.rootChainCode() returns.
- */
-async function runDklsTrack({
-  sharedDklsParams,
-  hexChainCode,
-  rootEcdsaPrivateKeyHex,
-  ecdsaGroups,
-  hdWallet,
-  walletCore,
-  isInitiatingDevice,
-  usePhantomSolanaPath,
-  onStepComplete,
-}: RunDklsTrackInput): Promise<{
-  rootResult: KeyShareResult
-  chainResults: ChainKeygenResult[]
-}> {
-  const makeDkls = () =>
-    new DKLS(
-      { keyimport: true },
-      sharedDklsParams.isInitiateDevice,
-      sharedDklsParams.serverUrl,
-      sharedDklsParams.sessionId,
-      sharedDklsParams.localPartyId,
-      sharedDklsParams.signers,
-      sharedDklsParams.oldKeygenCommittee,
-      sharedDklsParams.hexEncryptionKey
-    )
-
-  const protocols: DklsProtocolSpec[] = [
-    {
-      instance: makeDkls(),
-      privateKeyHex: rootEcdsaPrivateKeyHex,
-      setupMessageId: undefined,
-      protocolMessageId: 'p-ecdsa',
-    },
-    ...ecdsaGroups.map(({ representativeChain, chains: groupChains }) => {
-      const privateKeyHex =
-        isInitiatingDevice && hdWallet
-          ? deriveChainPrivateKey({
-              representativeChain,
-              hdWallet,
-              walletCore,
-              usePhantomSolanaPath,
-              algorithm: 'ecdsa',
-            })
-          : ''
-
-      return {
-        instance: makeDkls(),
-        privateKeyHex,
-        setupMessageId: representativeChain,
-        protocolMessageId: `p-${representativeChain}`,
-        chains: groupChains,
-      }
-    }),
-  ]
-
-  for (const { instance, privateKeyHex, setupMessageId } of protocols) {
-    await instance.prepareKeyImportSetup(
-      privateKeyHex,
-      hexChainCode,
-      setupMessageId
-    )
-  }
-
-  const [rootSpec, ...chainSpecs] = protocols
-
-  const rootResult = await rootSpec.instance.startKeyImportWithRetry(
-    rootSpec.privateKeyHex,
-    hexChainCode,
-    rootSpec.setupMessageId,
-    rootSpec.protocolMessageId
-  )
-  onStepComplete('ecdsa')
-
-  const chainResults: ChainKeygenResult[] = []
-  for (const {
-    instance,
-    privateKeyHex,
-    setupMessageId,
-    protocolMessageId,
-    chains: groupChains,
-  } of chainSpecs) {
-    const result = await instance.startKeyImportWithRetry(
-      privateKeyHex,
-      hexChainCode,
-      setupMessageId,
-      protocolMessageId
-    )
-    chainResults.push({ chains: groupChains!, result })
-  }
-
-  return { rootResult, chainResults }
-}
-
-type RunSchnorrTrackInput = {
-  sharedDklsParams: SharedDklsParams
-  hexChainCode: string
-  rootEddsaPrivateKeyHex: string
-  eddsaGroups: ReturnType<typeof getKeyImportDerivationGroups>
-  hdWallet: any
-  walletCore: any
-  isInitiatingDevice: boolean
-  usePhantomSolanaPath?: boolean
-  onStepComplete: (step: KeygenStep) => void
-}
-
-/**
- * Same two-phase pattern as runDklsTrack, on the shared Schnorr WASM engine.
- * See runDklsTrack for the setup-upfront rationale.
- */
-async function runSchnorrTrack({
-  sharedDklsParams,
-  hexChainCode,
-  rootEddsaPrivateKeyHex,
-  eddsaGroups,
-  hdWallet,
-  walletCore,
-  isInitiatingDevice,
-  usePhantomSolanaPath,
-  onStepComplete,
-}: RunSchnorrTrackInput): Promise<{
-  rootResult: KeyShareResult
-  chainResults: ChainKeygenResult[]
-}> {
-  const makeSchnorr = () =>
-    new Schnorr(
-      { keyimport: true },
-      sharedDklsParams.isInitiateDevice,
-      sharedDklsParams.serverUrl,
-      sharedDklsParams.sessionId,
-      sharedDklsParams.localPartyId,
-      sharedDklsParams.signers,
-      sharedDklsParams.oldKeygenCommittee,
-      sharedDklsParams.hexEncryptionKey,
-      new Uint8Array()
-    )
-
-  const protocols: SchnorrProtocolSpec[] = [
-    {
-      instance: makeSchnorr(),
-      privateKeyHex: rootEddsaPrivateKeyHex,
-      setupMessageId: 'eddsa_key_import',
-      protocolMessageId: 'p-eddsa',
-    },
-    ...eddsaGroups.map(({ representativeChain, chains: groupChains }) => {
-      const privateKeyHex =
-        isInitiatingDevice && hdWallet
-          ? deriveChainPrivateKey({
-              representativeChain,
-              hdWallet,
-              walletCore,
-              usePhantomSolanaPath,
-              algorithm: 'eddsa',
-            })
-          : ''
-
-      return {
-        instance: makeSchnorr(),
-        privateKeyHex,
-        setupMessageId: representativeChain,
-        protocolMessageId: `p-${representativeChain}`,
-        chains: groupChains,
-      }
-    }),
-  ]
-
-  for (const { instance, privateKeyHex, setupMessageId } of protocols) {
-    await instance.prepareKeyImportSetup(
-      privateKeyHex,
-      hexChainCode,
-      setupMessageId
-    )
-  }
-
-  const [rootSpec, ...chainSpecs] = protocols
-
-  const rootResult = await rootSpec.instance.startKeyImportWithRetry(
-    rootSpec.privateKeyHex,
-    hexChainCode,
-    rootSpec.setupMessageId,
-    rootSpec.protocolMessageId
-  )
-  onStepComplete('eddsa')
-
-  const chainResults: ChainKeygenResult[] = []
-  for (const {
-    instance,
-    privateKeyHex,
-    setupMessageId,
-    protocolMessageId,
-    chains: groupChains,
-  } of chainSpecs) {
-    const result = await instance.startKeyImportWithRetry(
-      privateKeyHex,
-      hexChainCode,
-      setupMessageId,
-      protocolMessageId
-    )
-    chainResults.push({ chains: groupChains!, result })
-  }
-
-  return { rootResult, chainResults }
-}
-
-/**
- * Runs key import protocols in parallel across curves (DKLS, Schnorr, MLDSA)
- * but serially within each curve. vs_wasm engines are per-curve singletons
- * and not reentrant, so running multiple DKLS sessions concurrently corrupts
- * WASM memory. Message IDs (p-ecdsa, p-eddsa, p-mldsa, p-{chain}) match the
- * server's /batch/import handler.
+ * Runs key import with one MPC session per Web Worker — true parallel keygen
+ * across curves AND across chains (issue #3754). Each worker is an isolated
+ * realm with its own DKLS/Schnorr/MLDSA WASM instance, so same-curve sessions
+ * no longer serialize on a single shared engine.
  */
 async function runBatchKeyImport({
   sharedDklsParams,
@@ -659,7 +408,6 @@ async function runBatchKeyImport({
   walletCore,
   keyImportInput,
   isInitiatingDevice,
-  encryptionKeyHex,
   isMLDSAEnabled,
   vaultName,
   localPartyId,
@@ -672,23 +420,49 @@ async function runBatchKeyImport({
 }: BatchKeyImportInput): Promise<Vault> {
   onStepStart('prepareVault')
 
-  // Warm up the WASM engine BEFORE starting parallel tracks. `initializeMpcLib`
-  // uses `memoizeAsync` which only caches on completion — concurrent calls before
-  // the first one finishes will double-instantiate the WASM modules and corrupt
-  // pointers inside Rust sessions ("memory access out of bounds" on outputMessage).
-  await initializeMpcLib('ecdsa')
-  await initializeMpcLib('eddsa')
+  const shared: SharedMpcParams = {
+    isInitiateDevice: sharedDklsParams.isInitiateDevice,
+    serverUrl: sharedDklsParams.serverUrl,
+    sessionId: sharedDklsParams.sessionId,
+    localPartyId: sharedDklsParams.localPartyId,
+    signers: sharedDklsParams.signers,
+    oldKeygenCommittee: sharedDklsParams.oldKeygenCommittee,
+    hexEncryptionKey: sharedDklsParams.hexEncryptionKey,
+  }
 
-  const ecdsaGroups = derivationGroups.filter(
-    ({ representativeChain }) =>
-      signatureAlgorithms[getChainKind(representativeChain)] === 'ecdsa'
-  )
-  const eddsaGroups = derivationGroups.filter(
-    ({ representativeChain }) =>
-      signatureAlgorithms[getChainKind(representativeChain)] === 'eddsa'
-  )
+  const { specs, chainsById } = buildKeyImportProtocolSpecs({
+    shared,
+    hexChainCode,
+    derivationGroups,
+    uploadSetup: true,
+    rootEcdsaPrivateKeyHex,
+    rootEddsaPrivateKeyHex,
+    getChainPrivateKeyHex: ({ representativeChain, curve }) =>
+      isInitiatingDevice && hdWallet
+        ? deriveChainPrivateKey({
+            representativeChain,
+            hdWallet,
+            walletCore,
+            usePhantomSolanaPath: isStationTerraRootKeyImportInput(
+              keyImportInput
+            )
+              ? undefined
+              : keyImportInput.usePhantomSolanaPath,
+            algorithm: curve,
+          })
+        : '',
+  })
 
   const includeMldsa = featureFlags.mldsaKeygen && isMLDSAEnabled
+
+  const mldsaSpec: MldsaProtocolSpec | undefined = includeMldsa
+    ? {
+        id: 'p-mldsa',
+        shared,
+        messageId: 'p-mldsa',
+        setupMessageId: 'p-mldsa-setup',
+      }
+    : undefined
 
   onStepComplete('prepareVault')
   onStepStart('ecdsa')
@@ -700,63 +474,27 @@ async function runBatchKeyImport({
     onStepStart('mldsa')
   }
 
-  const dklsTrackPromise = runDklsTrack({
-    sharedDklsParams,
-    hexChainCode,
-    rootEcdsaPrivateKeyHex,
-    ecdsaGroups,
-    hdWallet,
-    walletCore,
-    isInitiatingDevice,
-    usePhantomSolanaPath: isStationTerraRootKeyImportInput(keyImportInput)
-      ? undefined
-      : keyImportInput.usePhantomSolanaPath,
-    onStepComplete,
+  const completedChainIds = new Set<string>()
+  const { resultsById, mldsaResult } = await runKeyImportViaWorkers({
+    keyImportSpecs: specs,
+    mldsaSpec,
+    onExchangeComplete: id => {
+      if (id === 'p-ecdsa') {
+        onStepComplete('ecdsa')
+      } else if (id === 'p-eddsa') {
+        onStepComplete('eddsa')
+      } else {
+        completedChainIds.add(id)
+        if (completedChainIds.size === chainsById.size) {
+          onStepComplete('chainKeys')
+        }
+      }
+    },
+    onMldsaComplete: () => onStepComplete('mldsa'),
   })
 
-  const schnorrTrackPromise = runSchnorrTrack({
-    sharedDklsParams,
-    hexChainCode,
-    rootEddsaPrivateKeyHex,
-    eddsaGroups,
-    hdWallet,
-    walletCore,
-    isInitiatingDevice,
-    usePhantomSolanaPath: isStationTerraRootKeyImportInput(keyImportInput)
-      ? undefined
-      : keyImportInput.usePhantomSolanaPath,
-    onStepComplete,
-  })
-
-  const mldsaPromise = includeMldsa
-    ? new MldsaKeygen(
-        isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        encryptionKeyHex,
-        { messageId: 'p-mldsa', setupMessageId: 'p-mldsa-setup' }
-      )
-        .startKeygenWithRetry()
-        .then(r => {
-          onStepComplete('mldsa')
-          return r
-        })
-    : Promise.resolve(undefined)
-
-  const [dklsTrack, schnorrTrack, mldsaResult] = await Promise.all([
-    dklsTrackPromise,
-    schnorrTrackPromise,
-    mldsaPromise,
-  ])
-
-  if (derivationGroups.length > 0) {
-    onStepComplete('chainKeys')
-  }
-
-  const rootEcdsaResult = dklsTrack.rootResult
-  const rootEddsaResult = schnorrTrack.rootResult
+  const rootEcdsaResult = shouldBePresent(resultsById.get('p-ecdsa'))
+  const rootEddsaResult = shouldBePresent(resultsById.get('p-eddsa'))
 
   const chainPublicKeys: Partial<Record<Chain, string>> =
     isStationTerraRootKeyImportInput(keyImportInput)
@@ -773,10 +511,8 @@ async function runBatchKeyImport({
     eddsa: rootEddsaResult.keyshare,
   }
 
-  for (const { chains: groupChains, result } of [
-    ...dklsTrack.chainResults,
-    ...schnorrTrack.chainResults,
-  ]) {
+  for (const [id, groupChains] of chainsById) {
+    const result = shouldBePresent(resultsById.get(id))
     for (const chain of groupChains) {
       chainPublicKeys[chain] = result.publicKey
       chainKeyShares[chain] = result.keyshare

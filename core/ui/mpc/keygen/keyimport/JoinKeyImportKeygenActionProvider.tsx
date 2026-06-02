@@ -26,12 +26,18 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
+import {
+  MldsaProtocolSpec,
+  SharedMpcParams,
+} from '../../worker/keygenWorkerProtocol'
+import { runKeyImportViaWorkers } from '../../worker/runKeyImportViaWorkers'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {
   parseKeyImportChains,
   useKeyImportChains,
 } from './state/keyImportChains'
+import { buildKeyImportProtocolSpecs } from './utils/buildKeyImportProtocolSpecs'
 import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
 import { withKeyImportServerChains } from './utils/keyImportServerChains'
 
@@ -71,133 +77,75 @@ export const JoinKeyImportKeygenActionProvider = ({
     if (isTssBatchingEnabled) {
       onStepStart('prepareVault')
 
-      const dklsKeygen = new DKLS(
-        { keyimport: true },
-        sharedDklsParams.isInitiateDevice,
-        sharedDklsParams.serverUrl,
-        sharedDklsParams.sessionId,
-        sharedDklsParams.localPartyId,
-        sharedDklsParams.signers,
-        sharedDklsParams.oldKeygenCommittee,
-        sharedDklsParams.hexEncryptionKey
-      )
+      const shared: SharedMpcParams = {
+        isInitiateDevice: sharedDklsParams.isInitiateDevice,
+        serverUrl: sharedDklsParams.serverUrl,
+        sessionId: sharedDklsParams.sessionId,
+        localPartyId: sharedDklsParams.localPartyId,
+        signers: sharedDklsParams.signers,
+        oldKeygenCommittee: sharedDklsParams.oldKeygenCommittee,
+        hexEncryptionKey: sharedDklsParams.hexEncryptionKey,
+      }
 
-      const schnorrKeygen = new Schnorr(
-        { keyimport: true },
-        sharedDklsParams.isInitiateDevice,
-        sharedDklsParams.serverUrl,
-        sharedDklsParams.sessionId,
-        sharedDklsParams.localPartyId,
-        sharedDklsParams.signers,
-        sharedDklsParams.oldKeygenCommittee,
-        sharedDklsParams.hexEncryptionKey,
-        new Uint8Array()
-      )
+      const derivationGroups = getKeyImportDerivationGroups(chains)
+
+      // Joiners have no mnemonic: every private key is empty and setups are
+      // received from the relay rather than uploaded. Grouping by derivation
+      // path keeps the message IDs identical to the initiator's
+      // (`p-${representativeChain}`) — iterating raw chains would request
+      // setups the initiator never creates for same-path chains and hang.
+      const { specs, chainsById } = buildKeyImportProtocolSpecs({
+        shared,
+        hexChainCode,
+        derivationGroups,
+        uploadSetup: false,
+        rootEcdsaPrivateKeyHex: '',
+        rootEddsaPrivateKeyHex: '',
+        getChainPrivateKeyHex: () => '',
+      })
 
       const includeMldsa = featureFlags.mldsaKeygen && isMLDSAEnabled
+
+      const mldsaSpec: MldsaProtocolSpec | undefined = includeMldsa
+        ? {
+            id: 'p-mldsa',
+            shared,
+            messageId: 'p-mldsa',
+            setupMessageId: 'p-mldsa-setup',
+          }
+        : undefined
 
       onStepComplete('prepareVault')
       onStepStart('ecdsa')
       onStepStart('eddsa')
-      if (chains.length > 0) {
+      if (derivationGroups.length > 0) {
         onStepStart('chainKeys')
       }
       if (includeMldsa) {
         onStepStart('mldsa')
       }
 
-      const mldsaPromise = includeMldsa
-        ? new MldsaKeygen(
-            isInitiatingDevice,
-            serverUrl,
-            sessionId,
-            localPartyId,
-            signers,
-            encryptionKeyHex,
-            { messageId: 'p-mldsa', setupMessageId: 'p-mldsa-setup' }
-          )
-            .startKeygenWithRetry()
-            .then(r => {
-              onStepComplete('mldsa')
-              return r
-            })
-        : Promise.resolve(undefined)
-
-      const chainPromises = chains.map(async chain => {
-        const chainKind = getChainKind(chain)
-        const algorithm = signatureAlgorithms[chainKind]
-
-        let result
-        if (algorithm === 'ecdsa') {
-          const chainDkls = new DKLS(
-            { keyimport: true },
-            sharedDklsParams.isInitiateDevice,
-            sharedDklsParams.serverUrl,
-            sharedDklsParams.sessionId,
-            sharedDklsParams.localPartyId,
-            sharedDklsParams.signers,
-            sharedDklsParams.oldKeygenCommittee,
-            sharedDklsParams.hexEncryptionKey
-          )
-          result = await chainDkls.startKeyImportWithRetry(
-            '',
-            hexChainCode,
-            chain,
-            `p-${chain}`
-          )
-        } else {
-          const chainSchnorr = new Schnorr(
-            { keyimport: true },
-            sharedDklsParams.isInitiateDevice,
-            sharedDklsParams.serverUrl,
-            sharedDklsParams.sessionId,
-            sharedDklsParams.localPartyId,
-            sharedDklsParams.signers,
-            sharedDklsParams.oldKeygenCommittee,
-            sharedDklsParams.hexEncryptionKey,
-            new Uint8Array()
-          )
-          result = await chainSchnorr.startKeyImportWithRetry(
-            '',
-            hexChainCode,
-            chain,
-            `p-${chain}`
-          )
-        }
-
-        return { chain, result }
+      const completedChainIds = new Set<string>()
+      const { resultsById, mldsaResult } = await runKeyImportViaWorkers({
+        keyImportSpecs: specs,
+        mldsaSpec,
+        onExchangeComplete: id => {
+          if (id === 'p-ecdsa') {
+            onStepComplete('ecdsa')
+          } else if (id === 'p-eddsa') {
+            onStepComplete('eddsa')
+          } else {
+            completedChainIds.add(id)
+            if (completedChainIds.size === chainsById.size) {
+              onStepComplete('chainKeys')
+            }
+          }
+        },
+        onMldsaComplete: () => onStepComplete('mldsa'),
       })
 
-      const chainKeysPromise =
-        chainPromises.length > 0
-          ? Promise.all(chainPromises).then(results => {
-              onStepComplete('chainKeys')
-              return results
-            })
-          : Promise.resolve([])
-
-      const [rootEcdsaResult, rootEddsaResult, mldsaResult, chainResults] =
-        await Promise.all([
-          dklsKeygen
-            .startKeyImportWithRetry('', hexChainCode, undefined, 'p-ecdsa')
-            .then(r => {
-              onStepComplete('ecdsa')
-              return r
-            }),
-          schnorrKeygen
-            .startKeyImportWithRetry(
-              '',
-              hexChainCode,
-              'eddsa_key_import',
-              'p-eddsa'
-            )
-            .then(r => {
-              onStepComplete('eddsa')
-              return r
-            }),
-          mldsaPromise,
-          chainKeysPromise,
-        ])
+      const rootEcdsaResult = shouldBePresent(resultsById.get('p-ecdsa'))
+      const rootEddsaResult = shouldBePresent(resultsById.get('p-eddsa'))
 
       const chainPublicKeys: Partial<Record<Chain, string>> = {}
       const chainKeyShares: Partial<Record<Chain, string>> = {}
@@ -206,9 +154,12 @@ export const JoinKeyImportKeygenActionProvider = ({
         eddsa: rootEddsaResult.keyshare,
       }
 
-      for (const { chain, result } of chainResults) {
-        chainPublicKeys[chain] = result.publicKey
-        chainKeyShares[chain] = result.keyshare
+      for (const [id, groupChains] of chainsById) {
+        const result = shouldBePresent(resultsById.get(id))
+        for (const chain of groupChains) {
+          chainPublicKeys[chain] = result.publicKey
+          chainKeyShares[chain] = result.keyshare
+        }
       }
 
       const baseVault: Vault = {
@@ -235,7 +186,7 @@ export const JoinKeyImportKeygenActionProvider = ({
       }
       const vault = withKeyImportServerChains(
         baseVault,
-        getKeyImportDerivationGroups(chains).map(g => g.representativeChain)
+        derivationGroups.map(g => g.representativeChain)
       )
 
       await setKeygenComplete({
