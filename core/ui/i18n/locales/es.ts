@@ -462,7 +462,6 @@ export const es = {
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
   hold: 'Mantener',
-  hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transacción de IBC incluye una nota, pero Vultisig actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
@@ -1443,4 +1442,5 @@ export const es = {
     'La importación de la bóveda se completó, pero falló al guardar la bóveda Vultisig. Desbloquee esta billetera nuevamente para intentarlo de nuevo.',
   station_migration_reason_ledger_public_metadata_only:
     'Station solo almacena metadatos públicos de Ledger. No almacena claves privadas que puedan convertirse en una bóveda Vultisig.',
+  paired: 'Emparejado',
 }

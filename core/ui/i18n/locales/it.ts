@@ -466,7 +466,6 @@ export const it = {
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
   hold: 'Mantieni',
-  hold_for_paired_sign: 'Tieni premuto per il segno accoppiato',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:
     "Questa transazione IBC include un promemoria, ma Vultisig attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
@@ -1446,4 +1445,5 @@ export const it = {
     'L&#39;importazione del vault è stata completata, ma il salvataggio del vault Vultisig non è riuscito. Sblocca nuovamente questo portafoglio per riprovare.',
   station_migration_reason_ledger_public_metadata_only:
     'Station memorizza solo i metadati pubblici del Ledger. Non memorizza le chiavi private che possono essere convertite in un vault Vultisig.',
+  paired: 'Accoppiati',
 }

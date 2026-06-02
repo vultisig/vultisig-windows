@@ -468,7 +468,6 @@ export const de = {
   hide_balance: 'Gleichgewicht ausblenden',
   hide_defi_balance: 'DeFi-Guthaben ausblenden',
   hold: 'Halten',
-  hold_for_paired_sign: 'Halten Sie für das gepaarte Zeichen',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
     'Diese IBC-Transaktion enthält ein Memo, aber Vultisig unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Die Durchführung dieser Transaktion kann zu <b>einem irreversiblen Verlust von Geldern</b> führen.',
@@ -1456,4 +1455,5 @@ export const de = {
     'Der Vault-Import wurde abgeschlossen, das Speichern des Vaults Vultisig ist jedoch fehlgeschlagen. Entsperren Sie diese Wallet erneut, um es noch einmal zu versuchen.',
   station_migration_reason_ledger_public_metadata_only:
     'Station speichert ausschließlich öffentliche Ledger-Metadaten. Es speichert keine privaten Schlüssel, die in einen Vultisig-Tresor konvertiert werden können.',
+  paired: 'Paar',
 }

@@ -425,7 +425,6 @@ export const zh = {
   hide_balance: '隐藏余额',
   hide_defi_balance: '隐藏DeFi余额',
   hold: '持有',
-  hold_for_paired_sign: '保持配对符号',
   how_it_works: '工作原理',
   ibc_transaction_not_supporting_memo_desc:
     '此 IBC 交易包含备注，但 Vultisig 目前不支持在 IBC 转账消息中嵌入备注。<br>继续进行此交易可能会导致<b>资金的不可逆转损失</b>。',
@@ -1330,4 +1329,5 @@ export const zh = {
     'Vault 导入完成，但保存 Vultisig Vault 失败。请重新解锁此钱包重试。',
   station_migration_reason_ledger_public_metadata_only:
     'Station 仅存储公开的 Ledger 元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
+  paired: '成对',
 }
