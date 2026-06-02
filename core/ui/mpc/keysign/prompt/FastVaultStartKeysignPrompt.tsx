@@ -2,7 +2,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { useCallback, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -31,51 +31,41 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   const keysignPayload =
     'keysignPayload' in props ? props.keysignPayload : undefined
 
-  const executeNavigation = useCallback(
-    (securityType: VaultSecurityType) => {
-      if (securityType === 'fast') {
-        setShowModal(true)
-        return
-      } else {
-        navigate({
-          id: 'keysign',
-          state: {
-            ...props,
-            keysignPayload: shouldBePresent(keysignPayload),
-            securityType,
-          },
-        })
-      }
-    },
-    [props, keysignPayload, navigate]
-  )
-
-  const onGetPassword = useCallback(
-    ({ password }: FastVaultPasswordModalResult) => {
-      navigate({
-        id: 'keysign',
-        state: {
-          ...props,
-          keysignPayload: shouldBePresent(keysignPayload),
-          securityType: 'fast',
-          password,
-        },
-      })
-    },
-    [props, keysignPayload, navigate]
-  )
-
-  const buttonProps = useMemo(() => {
-    if (!keysignPayload) {
-      return {
-        disabled: 'disabledMessage' in props ? props.disabledMessage : true,
-      }
+  const executeNavigation = (securityType: VaultSecurityType) => {
+    if (securityType === 'fast') {
+      setShowModal(true)
+      return
     }
 
-    return {
-      disabled: false,
-    }
-  }, [keysignPayload, props])
+    navigate({
+      id: 'keysign',
+      state: {
+        ...props,
+        keysignPayload: shouldBePresent(keysignPayload),
+        securityType,
+      },
+    })
+  }
+
+  const onGetPassword = ({ password }: FastVaultPasswordModalResult) => {
+    navigate({
+      id: 'keysign',
+      state: {
+        ...props,
+        keysignPayload: shouldBePresent(keysignPayload),
+        securityType: 'fast',
+        password,
+      },
+    })
+  }
+
+  const buttonProps = {
+    disabled: keysignPayload
+      ? false
+      : 'disabledMessage' in props
+        ? props.disabledMessage
+        : true,
+  }
 
   return (
     <>

@@ -1445,5 +1445,5 @@ export const it = {
     'L&#39;importazione del vault è stata completata, ma il salvataggio del vault Vultisig non è riuscito. Sblocca nuovamente questo portafoglio per riprovare.',
   station_migration_reason_ledger_public_metadata_only:
     'Station memorizza solo i metadati pubblici del Ledger. Non memorizza le chiavi private che possono essere convertite in un vault Vultisig.',
-  paired: 'Accoppiati',
+  paired: 'Accoppiato',
 }

@@ -1329,5 +1329,5 @@ export const zh = {
     'Vault 导入完成，但保存 Vultisig Vault 失败。请重新解锁此钱包重试。',
   station_migration_reason_ledger_public_metadata_only:
     'Station 仅存储公开的 Ledger 元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
-  paired: '成对',
+  paired: '配对',
 }

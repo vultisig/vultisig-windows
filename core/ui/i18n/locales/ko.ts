@@ -1408,5 +1408,5 @@ export const ko = {
     '볼트 가져오기는 완료되었지만 Vultisig 볼트 저장에 실패했습니다. 다시 시도하려면 이 지갑의 잠금을 해제하세요.',
   station_migration_reason_ledger_public_metadata_only:
     'Station은 공개 Ledger 메타데이터만 저장합니다. Vultisig 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
-  paired: '짝을 이룬',
+  paired: '페어링',
 }
