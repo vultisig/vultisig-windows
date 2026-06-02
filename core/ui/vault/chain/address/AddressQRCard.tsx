@@ -15,7 +15,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
-import { useCallback } from 'react'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { toPng } from 'html-to-image'
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'react-qr-code'
 import styled from 'styled-components'
@@ -135,6 +137,7 @@ export const AddressQRCard = ({
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(chain)
   const { addToast } = useToast()
+  const qrNodeRef = useRef<HTMLDivElement | null>(null)
 
   const displayName = coin?.ticker || chain
 
@@ -149,27 +152,54 @@ export const AddressQRCard = ({
     }
   }, [address, addToast, chain, onClose])
 
-  const handleShare = useCallback(() => {
+  const handleShare = useCallback(async () => {
     if (onShare) {
       onShare()
       return
     }
 
-    if (!navigator.share || !address) return
+    if (!address) return
+
+    const shareTitle = `${t('receive')} ${displayName}`
+    const node = qrNodeRef.current
+
+    if (node && navigator.canShare) {
+      const result = await attempt(async () => {
+        const dataUrl = await toPng(node)
+        const blob = await (await fetch(dataUrl)).blob()
+        const file = new File([blob], `${displayName}.png`, {
+          type: 'image/png',
+        })
+
+        if (!navigator.canShare({ files: [file] })) {
+          throw new Error('File sharing not supported')
+        }
+
+        await navigator.share({
+          files: [file],
+          title: shareTitle,
+          text: address,
+        })
+      })
+
+      if ('data' in result) return
+    }
+
+    if (!navigator.share) return
 
     void navigator
       .share({
-        title: `Receive ${chain}`,
+        title: shareTitle,
         text: address,
       })
       .catch(() => undefined)
-  }, [address, chain, onShare])
+  }, [address, displayName, onShare, t])
 
   if (!address) return null
 
   return (
     <Container>
-      <QRContainer>
+      <QRContainer ref={qrNodeRef}>
         <QRWrapper>
           <QRCode
             value={address}
