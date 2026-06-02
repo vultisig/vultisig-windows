@@ -43,15 +43,11 @@ export const nl = {
   advanced: 'Geavanceerd',
   advanced_gas_fee: 'Geavanceerde gas fee',
   all_vaults: 'Alle kluizen',
-  allowance: 'Toestemming',
-  allowance_amount: 'Toestemmingsbedrag',
-  allowance_spender: 'Toestemmingsspender',
   amount: 'Bedrag',
   amount_must_be_non_negative: 'Bedrag mag niet negatief zijn',
   amount_must_be_positive: 'Bedrag moet positief zijn',
   amount_required: 'Bedrag is verplicht',
   amount_to_unstake: 'Bedrag om te unstaken',
-  and: 'en',
   app_lock_passcode: 'App-vergrendelingspincode',
   app_lock_passcode_description:
     'Voeg een extra beveiligingslaag toe door een pincode te vereisen om de app te ontgrendelen.',
@@ -66,20 +62,10 @@ export const nl = {
   assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
   at_least_one_device_subtitle: 'Elk apparaat dat Vultisig kan draaien werkt.',
-  auto: 'auto',
-  auto_compound_into_label: 'Automatisch compounding naar {{ticker}}',
   available: 'Beschikbaar',
   back: 'Terug',
-  back_up_now: 'Nu back-uppen',
   before_you_start: 'Voordat je begint...',
   backup: 'Back-up',
-  backupGuide: 'Back-upgids',
-  backupVault: 'Back-upkluis',
-  backupInCloudTitle: 'Versleuteld met uw kluiswachtwoord',
-  backupInCloudDescription:
-    'Maak online een back-up van uw kluis met hetzelfde kluiswachtwoord dat u eerder hebt aangemaakt. Online opslag wordt aanbevolen en veilige kluisshares zijn hiervoor ontworpen.',
-  backupShare: 'Back-up kluis-share',
-  backupShare2: 'Back-up share 2',
   backupsTitle: '<highlight>Back-ups,</highlight> jouw nieuwe herstelmethode',
   backupsDescription:
     'Back-ups ondersteunen je kluis. Elk apparaat heeft zijn <w>eigen</w> back-up. Een back-up alleen kan geen geld verplaatsen, die is alleen voor herstel. Importeer en herstel elk verloren apparaat.',
@@ -89,13 +75,10 @@ export const nl = {
   storeBackupsSeparately: 'Bewaar back-ups apart.',
   storeBackupsSeparatelyDescription:
     'Bewaar elke back-up op een andere locatie. Mocht er één back-up verloren gaan, dan blijven uw gegevens veilig.',
-  backupShareWarning: 'Dit is slechts 1 aandeel in uw kluis.',
-  backupShareWarningRest: 'Herhaal dit proces voor de andere apparaten.',
   backup_description:
     'Maak een back-up van je kluis-share op een gewenste locatie',
   backup_email_description:
     'Voer het e-mailadres in om de link naar de kluis te ontvangen.',
-  backup_now: 'Nu back-uppen',
   backup_password: 'Back-upwachtwoord',
   backup_password_description:
     'Voer het wachtwoord in dat u hebt ingesteld bij het aanmaken van deze kluis.',
@@ -161,9 +144,7 @@ export const nl = {
   change_passcode: 'Pincode wijzigen',
   change_your_friends_referral:
     'Gebruikte referralcode van vriend wijzigen voor swaps',
-  check_email: 'E-mail controleren',
   check_for_update: 'Controleren op updates',
-  chooseSetup: 'Setup kiezen',
   choose_a_password: 'Kies een wachtwoord',
   choose_a_password_description:
     'Wilt u extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b> <info />',
@@ -197,20 +178,14 @@ export const nl = {
   adding_coin_to_vault: 'Coin toevoegen aan kluis...',
   defi_token_required_description:
     'Voeg {{ticker}} toe aan deze kluis via Tokens beheren om te staken, unstaken of bonden.',
-  defi_add_chain_to_vault_title: 'Voeg eerst de chain toe aan je kluis',
-  defi_add_chain_to_vault_description:
-    'Schakel een chain in je kluis in om hier de DeFi-posities te beheren.',
   defi_add: 'Toevoegen',
   defi_remove: 'Verwijderen',
   defi_lp_pool_title: '{{pool}}-pool',
   position_label: 'Positie',
   defi_lp_position_form_title:
     '{{action, select, add {Liquiditeit toevoegen} remove {Liquiditeit verwijderen} other {Liquiditeit beheren}}}',
-  defi_lp_position_form_description:
-    'Liquiditeit beheren voor {{position}} komt binnenkort.',
   manage_tokens: 'Tokens beheren',
   collected_rewards: 'Verzamelde rewards',
-  coming_soon: 'Binnenkort',
   complete: 'Voltooien',
   congrats: 'Gefeliciteerd!',
   confirm: 'Bevestigen',
@@ -228,14 +203,10 @@ export const nl = {
   continue_anyway: 'Toch doorgaan',
   continue_in_new_window: 'Doorgaan in het geopende venster',
   contract_execution: 'Contractuitvoering',
-  contract_interaction: 'Contractinteractie',
   copy_address: 'Adres kopiëren',
-  create: 'Aanmaken',
   create_folder: 'Map aanmaken',
   create_new_vault: 'Nieuwe kluis aanmaken',
   create_vault: 'Maak een kluis aan',
-  create_own_referral:
-    'Maak je eigen code en verdien <blue>20%</blue> op doorverwezen swaps',
   create_referral_form: 'Referral aanmaken',
   create_referral_title: 'Referral aanmaken',
   create_referral: 'Referral aanmaken',
@@ -293,15 +264,12 @@ export const nl = {
     'Houd $VULT aan om lagere trading fees te ontgrendelen.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
-  downloadVultisig:
-    "Download Vultisig op je andere apparaat/apparaten en kies 'QR-code scannen'",
   edit_address: 'Adres bewerken',
   edit_friends_referral: 'Referral van vriend bewerken',
   edit_referral: 'Referral bewerken',
   remove_friends_referral: 'Verwijder verwijzing',
   edit_vaults: 'Kluizen bewerken',
   email: 'E-mail',
-  email_backup: 'Voer je e-mail in om je back-up te ontvangen',
   email_placeholder: 'Voer uw e-mailadres in',
   email_required: 'E-mail is verplicht',
   evm_chains: 'EVM-chains',
@@ -337,7 +305,6 @@ export const nl = {
   enter_your_password: 'Voer je wachtwoord in',
   entity_not_scanned: '{{entity}} niet gescand door <provider></provider>',
   entity_scanned: '{{entity}} gescand door <provider></provider>',
-  error: 'FOUT',
   est_network_fee: 'Geschatte netwerkfee',
   expand_view: 'Weergave uitvouwen',
   open_as_side_panel: 'Openen als zijpaneel',
@@ -352,8 +319,6 @@ export const nl = {
   desktop_push_notification_disable_failed:
     'Pushmeldingen konden niet worden uitgeschakeld. Probeer het opnieuw.',
   expiration_date: 'Vervaldatum',
-  expiration_must_extend_by_exactly_one_year:
-    'Vervaldatum kan alleen met precies 1 jaar worden verlengd',
   expiration_must_be_greater: 'Vervaldatum moet groter zijn dan {{value}}',
   expires_on: 'Vervalt op',
   extension_vault_import_restriction:
@@ -413,30 +378,16 @@ export const nl = {
     'Vultisig bewaart en beheert digitale assets veilig. Alle acties, zoals verzenden of swappen, vereisen dat de drempel van apparaten transacties ondertekent.',
   faq_vultisig_make_money_title: 'Hoe wordt Vultisig gebruikt?',
   fast: 'Snel',
-  fastVault: 'Fast Vault',
-  secureVault: 'Veilige Kluis',
   fast_vault_session_conflict: 'Kluis-aandeel komt niet overeen',
   fast_vault_session_conflict_description:
     'Uw lokale kluis-aandeel komt niet overeen met het aandeel op Vultiserver. Dit kan gebeuren als dezelfde seed phrase op een ander apparaat is geïmporteerd.',
   fast_vault_password_start_keysign_description:
     'Bevestig de transactie door het wachtwoord van je server-share in te voeren.',
   fastVaultSetup: {
-    addOptionalHint: 'Een optionele hint toevoegen',
-    addAnOptionalHint: 'Voeg een optionele hint toe',
     backup: {
-      backThemUpNow: 'nu back-uppen',
-      checkEmail: 'Controleer je e-mail om te verifiëren',
       codeInfo:
         'Deze code bevestigt dat je kluis-share 1 via e-mail hebt ontvangen',
-      completeCustody:
-        'Het wordt naar je gestuurd voor volledige self-custody!',
       enterCode: 'Voer de 4-cijferige code in die we je mailden',
-      heldByServer: 'beheerd door de server',
-      online: 'online',
-      part1: 'Share 1 van de kluis-shares zal worden',
-      securely: 'veilig, bij voorkeur',
-      shareSecurely: 'om toegang te garanderen, bij voorkeur',
-      vaultShares: 'Je kluis heeft 2 shares,',
       sentTo: 'Verzonden naar {{email}}.',
       setNewStandard:
         'Je bent klaar om een ​​nieuwe portemonneestandaard te gebruiken.',
@@ -444,57 +395,17 @@ export const nl = {
       wellDone: 'Goed gedaan',
     },
     connectingWithServer: 'Verbinden met server...',
-    createVault: {
-      availablePlatforms: {
-        descriptionOne: 'beschikbaar',
-        descriptionTwo: 'op Android, iOS, macOS en Windows',
-      },
-      crossChain: {
-        descriptionOne: 'Cross-chain.',
-        descriptionTwo: 'Swap je favoriete tokens allemaal in één kluis',
-      },
-      multiFactor: {
-        descriptionOne: 'Multi-factor beveiliging,',
-        descriptionTwo: 'Het single point of failure verwijderen',
-      },
-      seedlessWallet: {
-        descriptionOne: 'een seedless wallet,',
-        descriptionTwo: 'laat je niet opnieuw scammen',
-      },
-      selfCustodial: {
-        descriptionOne: 'Self-custodial,',
-        descriptionTwo: 'met volledige controle over je assets',
-      },
-    },
     emailSetupTitle:
       'Dit e-mailadres wordt gebruikt voor cloudback-up en wordt niet gedeeld met derden',
     enterEmail: 'Voer je e-mail in',
-    enterHint: 'Hint invoeren',
-    hintDescription: 'Dit wordt getoond als je je wachtwoord vergeet',
-    hintEmpty: 'Hint is leeg',
     passwordCannotBeRecovered: 'Wachtwoord kan niet worden gereset of hersteld',
     passwordTooltip:
       'Dit gebeurt omdat het wachtwoord wordt gebruikt om het back-upbestand lokaal te versleutelen, net zoals een harde schijf wordt versleuteld. In de volgende stap kunt u een hint toevoegen.',
-    preparingVault: 'Kluis voorbereiden',
     referralModalTitle: 'Verwijzingscode',
     referralModalSubtitle:
       'Voer hier uw verwijzingscode in. <b>Profiteer van 10% korting op elke transactie.</b>',
     applyReferral: 'Verwijzing aanvragen',
     referralAdded: 'Verwijzing toegevoegd',
-    summary: {
-      agreementText: 'Ik heb gelezen en begrijp wat ik moet doen',
-      ctaText: 'Maak je kluis aan',
-      pillText: 'Kluis-shares',
-      select_preferred_chains: 'Selecteer je voorkeurschains',
-      start_using_vault: 'Begin je kluis te gebruiken',
-      summaryItemFourTitle:
-        'Sla je kluis-share niet op het apparaat zelf op, voor het geval van verlies of schade',
-      summaryItemOneTitle: 'Back-up elke kluis-share afzonderlijk',
-      summaryItemThreeTitle:
-        'Alle kluis-shares zorgen voor veilige toegang tot je funds',
-      summaryItemTwoTitle: 'Bewaar kluis-shares op verschillende locaties',
-      title: 'Korte samenvatting',
-    },
     takeMinute: 'Dit duurt maar een moment',
   },
   fast_sign: 'Snel ondertekenen',
@@ -513,7 +424,6 @@ export const nl = {
   follow_banner_subtitle: 'Vultisig bouwt samen met jou.',
   follow_banner_title: 'Volg ons op X',
   from: 'Van',
-  from_asset: 'Van-asset',
   freeze: 'Freeze',
   function_arguments: 'Functie-argumenten',
   function_signature: 'Functie-signature',
@@ -524,8 +434,6 @@ export const nl = {
   gas_limit_tooltip_content:
     'De maximale hoeveelheid gas die je betaalt. Kan worden verhoogd als de gaslimiet niet voldoende is om transacties te verzenden',
   general: 'Algemeen',
-  generating_ecdsa_key: 'ECDSA-sleutel genereren',
-  generating_eddsa_key: 'EdDSA-sleutel genereren',
   get_started: 'Aan de slag',
   github: 'GitHub',
   go_back: 'Ga terug',
@@ -556,7 +464,6 @@ export const nl = {
     'IBC-transactiememo niet ondersteund',
   ibc_transfer: 'IBC-transfer',
   id: 'ID',
-  i_understand: 'Ik begrijp',
   i_understand_save_backup: 'Ik begrijp hoe ik deze back-up moet opslaan.',
   import: 'Importeren',
   import_key: 'Sleutel importeren',
@@ -607,40 +514,6 @@ export const nl = {
   incorrect_passcode: 'Onjuiste toegangscode.',
   invalid_passcode: 'Ongeldige pincode',
   join_keygen: 'Deelnemen aan Keygen',
-  join_keygen_slider1_note1: 'Vultisig is',
-  join_keygen_slider1_note2: 'volledig open source',
-  join_keygen_slider1_note3:
-    'Dit betekent dat iedereen de code kan bekijken, wat volledige transparantie en betrouwbaarheid garandeert.',
-  join_keygen_slider1_title: 'Wist je dat?',
-  join_keygen_slider2_note1: 'Geen seed phrases nodig',
-  join_keygen_slider2_note2:
-    'Vultisig gebruikt makkelijk te beheren kluis-shares, wat eenvoudiger en veiliger is dan traditionele wallets.',
-  join_keygen_slider2_title: 'Tip van de dag',
-  join_keygen_slider3_note1: 'Vultisig ondersteunt meer dan',
-  join_keygen_slider3_note2: '10.000 tokens',
-  join_keygen_slider3_note3:
-    'Of je nu Bitcoin, Ethereum of een minder bekende token gebruikt, Vultisig dekt het.',
-  join_keygen_slider3_title: 'Leuk weetje',
-  join_keygen_slider4_note1: 'Je privacy is belangrijk. Vultisig',
-  join_keygen_slider4_note2: 'volgt',
-  join_keygen_slider4_note3:
-    'je activiteiten niet en vereist geen registratie, zodat je anonimiteit en privacy behouden blijven.',
-  join_keygen_slider4_title: 'Beveiligingsinzicht',
-  join_keygen_slider5_note1: 'Geaudit en veilig. Vultisig ondergaat',
-  join_keygen_slider5_note2: 'regelmatige security-audits',
-  join_keygen_slider5_note3:
-    'om te zorgen dat je assets beschermd zijn tegen bedreigingen.',
-  join_keygen_slider5_title: 'Tech talk',
-  join_keygen_slider6_note1:
-    'Sluit je aan bij duizenden. Duizenden gebruikers vertrouwen Vultisig met hun digitale assets. Word deel van onze',
-  join_keygen_slider6_note2: 'veilige en groeiende community',
-  join_keygen_slider6_title: 'Community-hoek',
-  join_keygen_slider7_note1:
-    'Multi-device compatibiliteit. Toegang tot je Vultisig-kluis',
-  join_keygen_slider7_note2: 'vanaf meerdere apparaten',
-  join_keygen_slider7_note3:
-    'voor meer flexibiliteit zonder concessies aan veiligheid.',
-  join_keygen_slider7_title: 'Feature-highlight',
   join_keysign: 'Deelnemen aan Keysign',
   join_transaction: 'Deelnemen aan transactie',
   foreground_notification_generic:
@@ -649,7 +522,6 @@ export const nl = {
   foreground_notification_swap: 'Wissel {{from}} → {{to}}',
   join_reshare: 'Deelnemen aan Reshare',
   join_session: 'Deelnemen aan sessie',
-  join_upgrade: 'Deelnemen aan upgrade',
   joining_keygen: 'Deelnemen aan Keygen',
   joining_keysign: 'Deelnemen aan Keysign',
   joining_session: 'Deelnemen aan sessie...',
@@ -657,11 +529,8 @@ export const nl = {
   keygen_devices_requirements_info:
     'Scan QR met een ander apparaat. {{recommended}}-apparaten setup aanbevolen, {{min}} is voldoende.',
   keygen_failed: 'Key generation-fout. Probeer opnieuw.',
-  keygen_protocol_done: 'Klaar',
-  keygen_protocol_running: 'Bezig',
   keys: 'Sleutels',
   keysign: 'Keysign',
-  keysign_request: 'Sleutelondertekeningsverzoek',
   label: 'Label',
   language: 'Taal',
   learnMore: 'Meer info',
@@ -670,7 +539,6 @@ export const nl = {
   legal: 'Juridisch',
   link_copied: 'Link gekopieerd naar klembord',
   loading: 'Laden...',
-  local: 'Lokaal',
   localMode: 'Je bent in lokale modus',
   lock_time: 'Vergrendeltijd',
   lock_vultisig_automatically_after: 'Vultisig automatisch vergrendelen na...',
@@ -716,9 +584,6 @@ export const nl = {
   new: 'Nieuw',
   next: 'Volgende',
   new_passcode: 'Nieuwe pincode',
-  new_vault_setup: 'Nieuwe kluis-setup',
-  new_vault_setup_disclaimer:
-    'Je configuratie is gewijzigd; maak een nieuwe back-up.',
   no_active_chains_found: 'Geen actieve chains gevonden',
   no_active_chains_found_description:
     'We hebben geen assets gedetecteerd op deze seed phrase.',
@@ -761,8 +626,6 @@ export const nl = {
     'Je kluizen verschijnen hier. Begin met het aanmaken van een kluis of importeer een bestaande',
   node_address: 'Node-adres',
   normal: 'Normaal',
-  not_enough_asset_to_cover_gas_fees:
-    'Niet genoeg {{asset}} om gas fees te dekken',
   not_enough_funds: 'Onvoldoende funds',
   nothing_to_add: 'Niets toe te voegen',
   nothing_to_add_hint:
@@ -770,7 +633,6 @@ export const nl = {
   of: 'van',
   off: 'Uit',
   on: 'Aan',
-  on_chain: 'op {{chain}}',
   onboarding_description_1:
     'Vultisig is een veilige, multi-device crypto-kluis, compatibel met alle grote blockchains en 10.000+ tokens. Vultisig is volledig self-custodial.',
   onboarding_description_2:
@@ -779,18 +641,14 @@ export const nl = {
     'Vultisig is van nature een multi-device applicatie. Er zijn minimaal twee apparaten nodig om een veilige kluis aan te maken: één initiërend en één koppelapparaat.',
   onboarding_description_4:
     'Vultisig is een wallet zonder seed phrases. In plaats daarvan gebruikt het makkelijk te beheren kluis-shares. Elk apparaat heeft een unieke kluis-share die apart geback-upt moet worden.',
-  onboarding_greeting: 'Zeg gedag tegen <g>seed phrases</g>',
   operator_fee: 'Operatorfee',
   basis_points: 'Basispunten',
-  optional: 'optioneel',
   optionalDevice: 'Optioneel apparaat',
-  or: 'of',
   other: 'Overig',
   overview: 'Overzicht',
   part: 'deel',
   passcodes_do_not_match: 'Pincodes komen niet overeen',
   password: 'Wachtwoord',
-  password_backup: 'Bescherm je kluis en fast sign.',
   password_do_not_match: 'Wachtwoorden komen niet overeen',
   password_pattern_error:
     'Wachtwoord moet tussen {{min}} en {{max}} tekens zijn',
@@ -801,7 +659,6 @@ export const nl = {
   percentage: 'Percentage',
   percentage_limit: 'Percentage moet 0-100 zijn',
   percentage_to_unstake: 'Percentage om te unstaken',
-  permissions: 'Machtigingen',
   pick_referral_code: 'Referralcode kiezen',
   platinum: 'Platina',
   plugin_info: 'App-info',
@@ -815,7 +672,6 @@ export const nl = {
   portfolio_balance: 'Portfoliosaldo',
   positions: 'Posities',
   powered_by: 'Aangedreven door <provider></provider>',
-  prepareVault: 'Kluis voorbereiden...',
   price: 'Prijs',
   price_impact_average: 'Gemiddeld',
   price_impact_good: 'Goed',
@@ -842,17 +698,13 @@ export const nl = {
   qbtc_claim_success_title: 'Claim succesvol',
   qbtc_claim_utxos_claimed: 'UTXOs geclaimd',
   qbtc_claim_utxos_skipped: 'UTXO&#39;s overgeslagen',
-  qbtc_claim_tx_hash: 'Transactie-hash',
-  qbtc_claim_copy_tx_hash: 'Kopieer transactiehash',
   qbtc_claim_done: 'Klaar',
   qbtc_claim_failed: 'Claim mislukt. Probeer het opnieuw.',
   qbtc_claim_fast_vault_only:
     'Voor het claimen van gegevens is momenteel een Fast Vault vereist. Ondersteuning voor Secure Vault is in ontwikkeling.',
   qbtc_claim_password_description:
     'Voer uw Fast Vault-wachtwoord in om de claimtransactie mede te ondertekenen.',
-  qrCode: 'QR-code',
   receive: 'Ontvangen',
-  receivedShare1Email: 'Kluis-share 1 ontvangen via e-mail',
   redeem: 'Inwisselen',
   reenter_password: 'Wachtwoord opnieuw invoeren',
   recover_vault_or_convert_seedphrase:
@@ -893,7 +745,6 @@ export const nl = {
       title: 'Referralcode gebruiken',
     },
   },
-  remove: 'Verwijderen',
   remove_token: 'Token verwijderen',
   rename: 'Hernoemen',
   rename_vault: 'Kluis hernoemen',
@@ -937,14 +788,9 @@ export const nl = {
   save_swap_fees_with_referral:
     'Bespaar <blue>10%</blue> op swaps - Voeg een referral toe',
   saving_vault: 'Kluis opslaan...',
-  scanThe: 'Scan de',
   scan_qr: 'QR scannen',
   scan_with_device_index: 'Scannen met apparaat {{index}}',
   scan_with_device_name: 'Scannen met {{name}}',
-  scan_with_devices:
-    'Scan met apparaten om deel te nemen aan het genereren van de kluis',
-  scan_with_devices_to_sign:
-    'Scan met apparaten om deel te nemen aan het ondertekenen van de transactie',
   scanning: 'scannen...',
   scanning_for_chains: 'Scannen naar chains...',
   scanning_for_chains_subtitle:
@@ -952,19 +798,12 @@ export const nl = {
   search: 'Zoeken',
   search_field_placeholder: 'Zoeken',
   secure: 'Veilig',
-  secureVaultSetup: {
-    backup: {
-      eachDeviceNeedsBackup: 'elk apparaat heeft een eigen back-up nodig.',
-      shares: 'Je kluis heeft {{shares}} shares',
-    },
-  },
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: 'Voeg nog minstens {{count}} apparaat toe',
     addAtLeastMoreDevices_other: 'Voeg nog minstens {{count}} apparaten toe',
     devicePosition: '{{current}} van {{total}}',
     localModeWaiting: 'Lokale modus, wacht op apparaten',
     notWantToUseLocal: 'Geen lokale modus gebruiken? Schakel terug.',
-    switchBack: 'Schakel terug',
     useStandardMode: 'Gebruik standaardmodus',
     useLocalMode: 'Gebruik lokale modus',
     waitingForDeviceToJoin: 'Wachten tot apparaat deelneemt',
@@ -1006,7 +845,6 @@ export const nl = {
   select_vaults_to_backup: 'Selecteer kluizen om te back-uppen',
   select_vaults_to_backup_description:
     'Kies of je alleen deze kluis back-upt of alle kluizen in je app.',
-  selected: 'geselecteerd',
   send: 'Verzenden',
   sends: 'Verzendt',
   send_amount_exceeds_balance: 'Bedrag overschrijdt saldo',
@@ -1025,7 +863,6 @@ export const nl = {
   set_passcode: 'Pincode instellen',
   settings: 'Instellingen',
   share: 'Delen',
-  share2StoredByYou: 'Kluis-share 2 door jou opgeslagen',
   share_app: 'De app delen',
   share_description:
     'Deel je unieke referralcode om vrienden uit te nodigen. Zij krijgen korting en hoe meer zij traden, hoe meer jij verdient — direct naar je wallet.',
@@ -1049,7 +886,6 @@ export const nl = {
   signing_address: 'Ondertekenadres',
   signing_error: 'Ondertekenfout. Probeer opnieuw.',
   signing_method: 'Ondertekenmethode',
-  signing_transaction: 'Transactie ondertekenen',
   silver: 'Zilver',
   site: 'Site',
   site_has_risk: 'Kwaadaardige site gedetecteerd door <provider></provider>',
@@ -1071,11 +907,8 @@ export const nl = {
   spender: 'Uitgever',
   operator: 'Operator',
   contract: 'Contract',
-  start: 'Start',
   start_reshare: 'Reshare starten',
   status: 'Status',
-  success: 'Succes',
-  successfully: 'Succesvol',
   support: 'Support',
   swap: 'Swappen',
   swaps: 'Ruilen',
@@ -1096,11 +929,9 @@ export const nl = {
   this_device: 'Dit apparaat',
   this_device_suffix: '(dit apparaat)',
   this_vault_only: 'Alleen deze kluis',
-  this_vault_share: 'kluis-share van dit apparaat',
   thorchain_address: 'THORChain-adres',
   thorchain_address_required_for_referrals:
     'Je hebt een THORChain-adres nodig om het referralprogramma te gebruiken',
-  title: 'Titel',
   tns_alnum_only: 'Referralcode mag alleen alfanumerieke tekens bevatten',
   tns_max_4_chars: 'Referralcode mag maximaal 4 tekens bevatten',
   tns_missing_thor_alias: 'Referralcode moet een THOR-chain alias hebben',
@@ -1108,11 +939,9 @@ export const nl = {
   to: 'Naar',
   to_min_payout: 'min. uitbetaling',
   today: 'Vandaag',
-  to_asset: 'Naar-asset',
   token_not_found_description:
     'Mogelijke redenen: verkeerd contract, niet-ondersteunde chain, of token verwijderd uit registries.',
   token_not_found_invalid: 'Ongeldig contractadres',
-  tokens: 'tokens',
   total_fee: 'Totale fees',
   track: 'Volgen',
   transaction: 'Transactie',
@@ -1122,8 +951,6 @@ export const nl = {
   transaction_failed: 'Transactie<error> mislukt</error>',
   transaction_pending: 'Transactie in behandeling...',
   transaction_successful: 'Transactie <g> succesvol </g>',
-  transaction_could_not_be_parsed:
-    'Deze transactie kon niet worden geparseerd. Ruwe transactiedata wordt hieronder getoond.',
   raw_transaction_data: 'Ruwe transactiedata',
   transaction_history: 'Transactiegeschiedenis',
   transaction_instructions_summary: 'Samenvatting van transactie-instructies',
@@ -1140,13 +967,11 @@ export const nl = {
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Ready to claim',
   tron_unfreeze_button: 'Unfreeze',
-  tron_your_holdings: 'Your holdings',
   tron_bandwidth_and_energy: 'Bandbreedte & Energie',
   tron_bandwidth_description:
     'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
   tron_energy_description:
     'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
-  tron_got_it: 'Got It',
   try_again: 'Opnieuw proberen',
   turn_your_vault_into_rewards_machine:
     'Maak van je kluis een rewards-machine. Maak nu je referral aan en begin te verdienen.',
@@ -1200,8 +1025,6 @@ export const nl = {
     update_is_available: 'Update is beschikbaar',
     version: 'Versie {{latestVersion}}',
   },
-  vaultCreated: 'Kluis aangemaakt',
-  vaultOverview: 'Kluisoverzicht',
   vault_already_exists: 'Kluis "{{name}}" bestaat al',
   vault_backup_page_password_info:
     'Sla kluis-shares van verschillende apparaten nooit op dezelfde locatie op',
@@ -1248,7 +1071,6 @@ export const nl = {
   vault_ready_description:
     'Je bent helemaal klaar! Je behoudt de controle over elke transactie.',
   vault_ready_to_use: 'Uw kluis is klaar voor gebruik.',
-  vault_rename_page_header_title: 'Bewerk je kluisnaam',
   vault_rename_page_name_error: 'Kluisnaam moet tussen 1 en 50 tekens zijn',
   vault_selected: 'Kluis geselecteerd',
   vault_server_share_bad_request:
@@ -1268,22 +1090,6 @@ export const nl = {
     'Titel mag maximaal 50 tekens lang zijn.',
   vault_settings_address_book_title_min_length_error:
     'Titel moet minstens 1 teken lang zijn.',
-  vault_setup_prop: {
-    fast: {
-      prop_0: 'Slechts 1 apparaat nodig',
-      prop_1: 'Bewaar kleinere bedragen voor dagelijks gebruik',
-      prop_2: 'Vultiserver co-tekent direct',
-      purpose: 'Gebruik als een "hot wallet"',
-      title: 'Snelle setup',
-    },
-    secure: {
-      prop_0: 'Maximale beveiliging met meerdere apparaten',
-      prop_1: 'Altijd toegankelijk met apparaatback-ups',
-      prop_2: 'Beveilig elke hoeveelheid assets',
-      purpose: 'Gebruik als een "cold wallet"',
-      title: 'Ultieme beveiliging',
-    },
-  },
   vault_share_banner:
     'Met deze QR-code deel je een view-only versie van je kluis',
   vault_type_does_not_match: 'Kluistype komt niet overeen',
@@ -1298,7 +1104,6 @@ export const nl = {
   via: 'via',
   view_on_explorer: 'Bekijken in Verkenner',
   vote: 'Stemmen',
-  vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Vultisig-community',
   vultisig_education: 'Vultisig Onderwijs',
@@ -1309,10 +1114,7 @@ export const nl = {
     'Je kluis begint te genereren zodra je de setup op je hoofdapparaat afrondt',
   waiting_for_keygen_start: 'Wachten tot key generation start...',
   waiting_for_keysign_start: 'Wachten tot het ondertekenen begint...',
-  waiting_for_reshare_start: 'Wachten tot reshare start...',
-  waiting_for_upgrade_start: 'Wachten tot upgrade start...',
   wallet: 'Wallet',
-  while_you_wait_vultisig_is: 'Terwijl je wacht, is Vultisig...',
   withdraw: 'Opnemen',
   withdraw_ruji_rewards: 'RUJI-rewards opnemen',
   add_cacao_pool: 'Toevoegen aan CACAO-pool',
@@ -1321,13 +1123,8 @@ export const nl = {
   remove_thor_lp: 'Verwijder THORChain LP',
   pool: 'Pool',
   paired_address: 'Gekoppeld adres',
-  lp_dust_amount_error:
-    'Onvoldoende RUNE-saldo. Er is minimaal {{amount}} RUNE nodig als stof voor LP-opname.',
-  lp_withdraw_percentage: 'Opnamepercentage',
   wrong_vault_try_again: 'Verkeerde kluis of koppelapparaat.',
   yesterday: 'Gisteren',
-  you_send: 'Jij verzendt',
-  you_receive: 'U ontvangt',
   you_are_bonding: 'Je bent aan het bonden',
   you_are_unbonding: 'Je bent aan het unbonden',
   you_are_sending: 'Je bent aan het verzenden',
@@ -1335,7 +1132,6 @@ export const nl = {
   you_are_unstaking: 'Je bent aan het unstaken',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
-  yourVaultShares: 'Je kluis heeft {{shares}} kluis-shares',
   vaultSetupOverview: {
     title: 'Uw kluisinstellingen',
     fast: {
@@ -1401,10 +1197,8 @@ export const nl = {
   account: 'Account',
   session_history: 'Sessiegeschiedenis',
   vultibot: 'VultiBot',
-  vultibot_welcome: 'Hallo, ik ben VultiBot',
   start_new_chat: 'Start een nieuwe chat',
   new_chat: 'Nieuwe chat',
-  messages: 'berichten',
   failed_to_load_session_history:
     'Het laden van de sessiegeschiedenis is mislukt.',
   agent_history_load_error_description:
@@ -1412,8 +1206,6 @@ export const nl = {
   agent_history_empty_title: 'Nog geen chats',
   agent_history_empty_description:
     'Start een nieuwe chat en je recente gesprekken verschijnen hier.',
-  vultibot_description:
-    'Jouw AI-gestuurde kluisassistent. Ik kan geld wisselen, versturen, beleidsregels automatiseren, saldi controleren en je kluis beheren.',
   agent_what_to_do: 'Wat zou je graag willen doen?',
   agent_help_description:
     'Ik kan helpen bij het voorbereiden van swaps, plugin-acties en automatiseringsregels.',
@@ -1421,27 +1213,15 @@ export const nl = {
   agent_prompt_earn_apy: 'Ik wil rendement (APY) behalen op BTC.',
   agent_prompt_send: 'Stuur het bedrag naar ...',
   agent_prompt_swap: 'Bereid een swap voor van ETH naar BTC.',
-  api_key_required: 'API-sleutel vereist',
-  api_key_required_description:
-    'Om VultiBot te gebruiken, moet u uw Anthropic API-sleutel als omgevingsvariabele instellen voordat u de app start.',
-  type_a_message: 'Typ een bericht...',
-  thinking: 'Denken',
-  try_saying: 'Probeer eens te zeggen',
   ask_about_plugins_policies: 'Vraag naar plugins en beleid...',
   approve_transaction: 'Transactie goedkeuren',
   enter_vault_password: 'Voer het kluiswachtwoord in',
-  signed_in: 'Ingelogd',
   password_required_for_operation: 'Voer uw wachtwoord in voor {{operation}}.',
   confirm_action: 'Bevestig actie',
   confirm_action_description:
     'Bevestig alstublieft dat u {{action}} wilt uitvoeren.',
   agent_chat_render_error:
     'Er is iets misgegaan bij het weergeven van de chat.',
-  agent_connect_description:
-    'Voer uw kluiswachtwoord in om verbinding te maken met de agent. Uw wachtwoord wordt gebruikt om een ​​authenticatiebericht te ondertekenen.',
-  agent_connect_now: 'Maak nu verbinding',
-  agent_connected: 'Aangesloten',
-  agent_connecting: 'Verbinden...',
   agent_operation_sign_in: 'inloggen',
   agent_session_expired:
     'Je sessie is verlopen. Voer je kluiswachtwoord in om opnieuw verbinding te maken.',
@@ -1450,7 +1230,6 @@ export const nl = {
   agent_give_feedback: 'Geef feedback',
   agent_delete_chat_session: 'Chatsessie verwijderen',
   agent_signing_in: 'Aanmelden...',
-  agent_thinking_of_ideas: 'Ideeën bedenken...',
   agent_tool_label: 'Gereedschap: {{tool}}',
   agent_tx_confirmed: 'Bevestigd',
   agent_tx_failed: 'Mislukt',
@@ -1498,8 +1277,6 @@ export const nl = {
   unbonding_unlocks_at: 'Ontgrendelt {{date}}',
   validator_status_active: 'Actief',
   validator_status_churned_out: 'Uitgestoten',
-  validator_voting_power: '{{amount}} {{ticker}}',
-  validator_commission: '{{rate}}%',
   move: 'Beweging',
   validator: 'Validator',
   pending_rewards: 'In afwachting zijnde beloningen',
@@ -1545,4 +1322,107 @@ export const nl = {
   raw_message: 'Onbewerkt bericht',
   token: 'Token',
   token_approval: 'Tokengoedkeuring',
+  skip_for_now: 'Sla dit voorlopig over.',
+  station_migration_title: 'Migreer Station wallets',
+  station_migration_review_title: 'Bekijk oude Station wallets',
+  station_migration_review_description:
+    'Voer uw Station-wachtwoord in om ondersteunde wallets lokaal te decoderen. De oude Station-opslag blijft intact.',
+  station_migration_settings_title: 'Migreer Station wallets',
+  station_migration_settings_description:
+    'Controleer de oude Station wallets die op dit apparaat zijn gedetecteerd.',
+  station_migration_set_up_without_migrating: 'Instellen zonder migratie',
+  station_migration_no_wallets_found:
+    'Er zijn geen oudere Station wallets gevonden in deze extensieopslag.',
+  station_migration_summary_total_one: '{{count}} portemonnee',
+  station_migration_summary_total_other: '{{count}} wallets',
+  station_migration_status_supported: 'Ondersteund',
+  station_migration_status_reconnect: 'Opnieuw verbinding maken',
+  station_migration_status_unsupported: 'Niet ondersteund',
+  station_migration_status_corrupt: 'Ongeldig',
+  station_migration_status_needs_review: 'Moet beoordeeld worden',
+  station_migration_wallet_type_mnemonic: 'Versleutelde seed en mnemonic',
+  station_migration_wallet_type_seed: 'Versleutelde seed',
+  station_migration_wallet_type_private_key: 'Versleutelde privésleutel',
+  station_migration_wallet_type_interchain_private_key:
+    'Versleutelde Terra privésleutels',
+  station_migration_wallet_type_legacy_private_key:
+    'Legacy versleutelde privésleutelblob',
+  station_migration_wallet_type_ledger: 'Ledger hardware wallet',
+  station_migration_wallet_type_multisig: 'Multisig-wallet',
+  station_migration_wallet_type_unknown: 'Onbekend Station-walletformaat',
+  station_migration_wallet_type_corrupt_storage: 'Ongeldige opslag',
+  station_migration_wallet_type_corrupt_wallet: 'Ongeldige portemonnee-invoer',
+  station_migration_reason_supported_mnemonic:
+    'Versleutelde portemonneegegevens zijn aanwezig voor een toekomstige migratie waarbij het wachtwoord Station nodig is.',
+  station_migration_reason_supported_seed:
+    'Versleutelde seed-bytes zijn aanwezig voor een toekomstige migratie waarbij het wachtwoord Station wordt opgevraagd.',
+  station_migration_reason_supported_private_key:
+    'Versleutelde privé-sleutelgegevens zijn aanwezig voor een toekomstige import binnen de Terra-familie.',
+  station_migration_reason_supported_interchain_private_key:
+    'Versleutelde Terra-privésleutelgegevens zijn aanwezig voor een toekomstige import.',
+  station_migration_reason_supported_legacy_private_key:
+    'Versleutelde privé-sleutelgegevens uit het verleden zijn aanwezig voor een toekomstige import.',
+  station_migration_reason_ledger_reconnect:
+    'Station slaat de openbare accountgegevens voor deze Ledger-wallet op. Sluit het hardwareapparaat later opnieuw aan om het in Station te gebruiken.',
+  station_migration_reason_multisig:
+    'Station slaat alleen openbare multisig-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een Vultisig-kluis.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed is aanwezig, maar is geen tekenreeks.',
+  station_migration_reason_encrypted_invalid_shape:
+    'De versleutelde waarde is aanwezig, maar het is noch een tekenreeks, noch een object.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Het versleutelde object met de privésleutel mist munttype 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'De legacy wallet-blob is aanwezig, maar is geen tekenreeks.',
+  station_migration_reason_unknown_wallet_shape:
+    'De wallet-invoer komt niet overeen met een bekend Station-opslagformaat.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} bevat onjuist opgemaakte JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} moet een JSON-array zijn.',
+  station_migration_reason_wallet_entry_not_object:
+    'De portemonnee-ingang is geen object.',
+  station_migration_reason_unsupported_fallback:
+    'Deze portemonnee moet eerst gecontroleerd worden voordat deze gemigreerd kan worden.',
+  station_migration_status_ready: 'Klaar',
+  station_migration_status_failed: 'Mislukt',
+  station_migration_password_title: 'Ondersteunde wallets ontgrendelen',
+  station_migration_password_description:
+    'Uw Station-wachtwoord blijft op dit apparaat staan ​​en wordt alleen gebruikt om oude Station-walletgegevens te decoderen.',
+  station_migration_password_label: 'Station wachtwoord',
+  station_migration_password_invalid:
+    'Dat wachtwoord ontgrendelde geen enkele ondersteunde Station-wallet.',
+  station_migration_check_wallets: 'Controleer portemonnees',
+  station_migration_migrate_wallet: 'Migreren',
+  station_migration_ready_source: 'Geverifieerd vanuit {{source}}.',
+  station_migration_source_mnemonic: 'ezelsbruggetje',
+  station_migration_source_seed: 'zaadbytes',
+  station_migration_source_private_key: 'privésleutel',
+  station_migration_failure_incorrect_password:
+    'Het wachtwoord kon deze portemonnee niet decoderen.',
+  station_migration_failure_missing_encrypted_value:
+    'Deze portemonnee mist het versleutelde sleutelmateriaal dat nodig is voor de migratie.',
+  station_migration_failure_invalid_seed:
+    'De onversleutelde seed-gegevens zijn ongeldig.',
+  station_migration_failure_invalid_legacy_wallet:
+    'De onversleutelde gegevens van de oude wallet zijn ongeldig.',
+  station_migration_failure_metadata_mismatch:
+    'De onversleutelde sleutel komt niet overeen met het oude Station-adres of de openbare sleutel.',
+  station_migration_failure_unsupported:
+    'Dit type portemonnee kan niet met een wachtwoord worden gemigreerd.',
+  station_migration_failure_split_interchain_private_keys:
+    'Deze wallet heeft aparte privésleutels voor Terra en Terra Classic. Bij deze migratie kunnen alleen overeenkomende sleutels uit de Terra-familie worden geïmporteerd.',
+  station_migration_status_importing: 'Importeren',
+  station_migration_status_migrated: 'Gemigreerd',
+  station_migration_status_skipped: 'Overgeslagen',
+  station_migration_status_reason_importing:
+    'De import is gestart. Keer hier terug nadat de installatie is voltooid als deze rij niet wordt bijgewerkt.',
+  station_migration_status_reason_migrated:
+    'Deze wallet is geïmporteerd in Vultisig. De oude opslaglocatie Station is nog steeds bewaard.',
+  station_migration_status_reason_skipped:
+    'Deze portemonnee is overgeslagen. Je kunt hem weer ontgrendelen wanneer je er klaar voor bent.',
+  station_migration_status_reason_vault_import_failed:
+    'Het importeren van de kluis is mislukt tijdens het genereren van de sleutel. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
+  station_migration_status_reason_vault_save_failed:
+    'Het importeren van de kluis is voltooid, maar het opslaan van de kluis Vultisig is mislukt. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
 }

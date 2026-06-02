@@ -59,6 +59,7 @@ type Props = {
   insiderOptions?: ReactNode
   prioritize?: ReactNode
   sidePanel?: ReactNode
+  stationMigration?: ReactNode
   checkUpdate?: ReactNode
 }
 
@@ -120,6 +121,7 @@ export const SettingsPage: FC<Props> = props => {
                 showArrow
               />
             )}
+            {client === 'extension' && props.stationMigration}
           </SettingsSection>
 
           <SettingsSection title={t('general')}>

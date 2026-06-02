@@ -193,7 +193,7 @@ export async function importVaultViaUI(
 
   // Verify vault file exists
   if (!existsSync(vaultPath)) {
-    console.error(`Vault file not found: ${vaultPath}`)
+    console.error('Vault file not found at configured path')
     return false
   }
 
@@ -217,7 +217,7 @@ export async function importVaultViaUI(
 
     // Upload the file
     await fileInput.setInputFiles(vaultPath)
-    console.log('✅ File uploaded:', vaultPath)
+    console.log('✅ Vault file uploaded')
     await page.waitForTimeout(1500)
 
     // Click Continue button
@@ -320,7 +320,7 @@ export async function ensureVaultExists(
     }
 
     if (!existsSync(vaultPath)) {
-      console.log(`⚠️ Vault file not found: ${vaultPath}`)
+      console.log('⚠️ Vault file not found at configured path')
       return false
     }
 

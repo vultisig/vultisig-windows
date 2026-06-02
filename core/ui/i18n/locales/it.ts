@@ -44,15 +44,11 @@ export const it = {
   advanced: 'Avanzato',
   advanced_gas_fee: 'Commissione gas anticipata',
   all_vaults: 'Tutti i caveau',
-  allowance: 'Indennità',
-  allowance_amount: "Importo dell'indennità",
-  allowance_spender: 'Spendere indennità',
   amount: 'Quantità',
   amount_must_be_non_negative: "L'importo non può essere negativo",
   amount_must_be_positive: "L'importo deve essere positivo",
   amount_required: "L'importo è richiesto",
   amount_to_unstake: 'Importo da annullare',
-  and: 'E',
   app_lock_passcode: 'Codice di accesso al blocco app',
   app_lock_passcode_description:
     "Aggiungi un ulteriore livello di sicurezza richiedendo un codice di accesso per sbloccare l'app.",
@@ -68,20 +64,10 @@ export const it = {
   at_least_one_device: 'Almeno un dispositivo',
   at_least_one_device_subtitle:
     'Qualsiasi dispositivo in grado di eseguire Vultisig funzionerà.',
-  auto: 'auto',
-  auto_compound_into_label: 'Autocomposizione in {{ticker}}',
   available: 'Disponibile',
   back: 'Indietro',
-  back_up_now: 'Esegui il backup ora',
   before_you_start: 'Prima di iniziare...',
   backup: 'Backup',
-  backupGuide: 'Guida al backup',
-  backupVault: 'Vault di backup',
-  backupInCloudTitle: 'Crittografato con la tua password Vault',
-  backupInCloudDescription:
-    "Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza. Si consiglia l'archiviazione online e le condivisioni del vault sicure sono progettate per questo scopo.",
-  backupShare: 'Condivisione del Vault di backup',
-  backupShare2: 'Condivisione di backup 2',
   backupsTitle:
     '<highlight>Backup,</highlight> il tuo nuovo metodo di recupero',
   backupsDescription:
@@ -92,14 +78,10 @@ export const it = {
   storeBackupsSeparately: 'Conservare i backup separatamente',
   storeBackupsSeparatelyDescription:
     'Conserva ogni backup in un posto diverso. Se uno viene compromesso, i tuoi fondi rimarranno al sicuro.',
-  backupShareWarning: 'Questa è solo una quota del tuo caveau',
-  backupShareWarningRest:
-    ', ripetere questo procedimento per gli altri dispositivi.',
   backup_description:
     'Esegui il backup di Vault Share in una posizione preferita',
   backup_email_description:
     "Inserisci l'email per ricevere la condivisione del vault.",
-  backup_now: 'Esegui il backup ora',
   backup_password: 'Password di backup',
   backup_password_description:
     'Inserisci la password che hai impostato durante la creazione di questo Vault.',
@@ -165,9 +147,7 @@ export const it = {
   change_passcode: 'Cambia codice di accesso',
   change_your_friends_referral:
     'Cambia il codice di riferimento degli amici utilizzato per gli scambi',
-  check_email: 'Controlla la posta elettronica',
   check_for_update: 'Controlla gli aggiornamenti',
-  chooseSetup: 'Scegli Impostazione',
   choose_a_password: 'Scegli una password',
   choose_a_password_description:
     'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b> <info />',
@@ -201,20 +181,14 @@ export const it = {
   adding_coin_to_vault: 'Aggiunta della moneta al caveau...',
   defi_token_required_description:
     'Aggiungi {{ticker}} da Gestisci token per eseguire staking, unstaking o bonding.',
-  defi_add_chain_to_vault_title: 'Aggiungi prima la chain al caveau',
-  defi_add_chain_to_vault_description:
-    'Attiva una chain nel tuo caveau per gestirne qui le posizioni DeFi.',
   defi_add: 'Add',
   defi_remove: 'Remove',
   defi_lp_pool_title: 'Pool {{pool}}',
   position_label: 'Posizione',
   defi_lp_position_form_title:
     '{{action, select, add {Aggiungi liquidità} remove {Rimuovi liquidità} other {Gestisci liquidità}}}',
-  defi_lp_position_form_description:
-    'La gestione della liquidità per {{position}} sarà disponibile a breve.',
   manage_tokens: 'Gestisci token',
   collected_rewards: 'Ricompense raccolte',
-  coming_soon: 'Prossimamente',
   complete: 'Completare',
   congrats: 'Congratulazioni!',
   confirm: 'Confermare',
@@ -232,14 +206,10 @@ export const it = {
   continue_anyway: 'Continua comunque',
   continue_in_new_window: 'Continua nella finestra aperta',
   contract_execution: 'Esecuzione del contratto',
-  contract_interaction: 'Interazione contrattuale',
   copy_address: 'Copia indirizzo',
-  create: 'Creare',
   create_folder: 'Crea cartella',
   create_new_vault: 'Crea nuovo vault',
   create_vault: 'Crea un caveau',
-  create_own_referral:
-    'Crea il tuo codice e guadagna il <blue>20%</blue> sugli scambi segnalati',
   create_referral_form: 'Crea referral',
   create_referral_title: 'Crea referral',
   create_referral: 'Crea referral',
@@ -299,15 +269,12 @@ export const it = {
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
   discovering_mediator: 'Servizio di mediazione in corso, attendere prego...',
   done: 'Fatto',
-  downloadVultisig:
-    'Scarica Vultisig sugli altri tuoi dispositivi e seleziona "Scansiona codice QR"',
   edit_address: 'Modifica indirizzo',
   edit_friends_referral: 'Modifica referral amico',
   edit_referral: 'Modifica referral',
   remove_friends_referral: 'Rimuovi il riferimento',
   edit_vaults: 'Modifica Vault',
   email: 'E-mail',
-  email_backup: 'Inserisci la tua email per ricevere il backup',
   email_placeholder: 'Inserisci il tuo indirizzo email',
   email_required: "L'email è obbligatoria",
   evm_chains: 'Catene EVM',
@@ -344,7 +311,6 @@ export const it = {
   enter_your_password: 'Inserisci la tua password',
   entity_not_scanned: '{{entity}} non scansionato da <provider></provider>',
   entity_scanned: '{{entity}} scansionata da <provider></provider>',
-  error: 'ERRORE',
   est_network_fee: 'Costo stimato della rete',
   expand_view: 'Espandi vista',
   open_as_side_panel: 'Apri come pannello laterale',
@@ -359,8 +325,6 @@ export const it = {
   desktop_push_notification_disable_failed:
     'Impossibile disattivare le notifiche push. Riprova.',
   expiration_date: 'Data di scadenza',
-  expiration_must_extend_by_exactly_one_year:
-    'La scadenza può essere estesa solo di 1 anno esatto',
   expiration_must_be_greater: 'La scadenza deve essere maggiore di {{value}}',
   expires_on: 'Scade il',
   extension_vault_import_restriction:
@@ -421,30 +385,17 @@ export const it = {
     "Vultisig archivia e gestisce in modo sicuro le risorse digitali. Tutte le azioni, come l'invio o lo scambio, richiedono la soglia dei dispositivi per firmare le transazioni.",
   faq_vultisig_make_money_title: 'Come si usa Vultisig?',
   fast: 'Veloce',
-  fastVault: 'Deposito veloce',
-  secureVault: 'Deposito sicuro',
   fast_vault_session_conflict: 'Mancata corrispondenza della quota del vault',
   fast_vault_session_conflict_description:
     'La quota locale del vault non corrisponde a quella archiviata su Vultiserver. Ciò può verificarsi se la stessa frase seed è stata importata su un altro dispositivo.',
   fast_vault_password_start_keysign_description:
     'Conferma la transazione inserendo la password della condivisione del tuo server.',
   fastVaultSetup: {
-    addOptionalHint: 'Aggiungi un suggerimento facoltativo',
-    addAnOptionalHint: 'Aggiungi un suggerimento facoltativo',
     backup: {
-      backThemUpNow: 'sosteneteli ora',
-      checkEmail: 'Controlla la tua e-mail per verificare',
       codeInfo:
         'Questo codice confermerà che hai ricevuto la tua quota Vault 1 via e-mail',
-      completeCustody: 'Ti viene inviato per la completa custodia!',
       enterCode:
         'Inserisci il codice di 4 cifre che ti abbiamo inviato via email',
-      heldByServer: 'tenuto dal server',
-      online: 'in linea',
-      part1: 'La quota 1 delle quote del vault sarà',
-      securely: 'in modo sicuro, preferibilmente',
-      shareSecurely: "per garantire l'accesso, preferibilmente",
-      vaultShares: 'Il tuo caveau contiene 2 azioni,',
       sentTo: 'Inviato a {{email}}.',
       setNewStandard:
         'Sei pronto a utilizzare un nuovo standard per i portafogli digitali.',
@@ -452,62 +403,18 @@ export const it = {
       wellDone: 'Ben fatto',
     },
     connectingWithServer: 'Connessione con il server...',
-    createVault: {
-      availablePlatforms: {
-        descriptionOne: 'disponibile',
-        descriptionTwo: 'su Android, iOS, macOS e Windows',
-      },
-      crossChain: {
-        descriptionOne: 'Catena incrociata.',
-        descriptionTwo:
-          'Scambia tutti i tuoi gettoni preferiti in un unico caveau',
-      },
-      multiFactor: {
-        descriptionOne: 'Sicurezza multifattoriale,',
-        descriptionTwo: 'Eliminazione del singolo punto di errore',
-      },
-      seedlessWallet: {
-        descriptionOne: 'un portafoglio senza semi,',
-        descriptionTwo: 'non farti truffare di nuovo',
-      },
-      selfCustodial: {
-        descriptionOne: 'Auto-affidamento,',
-        descriptionTwo: 'dando il controllo completo sui tuoi beni',
-      },
-    },
     emailSetupTitle:
       'Questa email viene utilizzata per il backup cloud e non viene condivisa con terze parti',
     enterEmail: 'Inserisci la tua email',
-    enterHint: 'Inserisci suggerimento',
-    hintDescription:
-      'Questo verrà mostrato nel caso in cui dimenticassi la password',
-    hintEmpty: 'Il suggerimento è vuoto',
     passwordCannotBeRecovered:
       'La password non può essere reimpostata o recuperata',
     passwordTooltip:
       'Ciò si verifica perché la password viene utilizzata per crittografare localmente il file di backup, in modo simile a come viene crittografato un disco rigido. Nel passaggio successivo, è possibile aggiungere un suggerimento.',
-    preparingVault: 'Preparazione del caveau',
     referralModalTitle: 'Codice di riferimento',
     referralModalSubtitle:
       'Inserisci qui il tuo codice di riferimento. <b>Approfitta del 10% di sconto su ogni transazione.</b>',
     applyReferral: 'Applica referral',
     referralAdded: 'Riferimento aggiunto',
-    summary: {
-      agreementText: 'Ho letto e capito cosa fare',
-      ctaText: 'Crea il tuo caveau',
-      pillText: 'Condivisioni Vault',
-      select_preferred_chains: 'Seleziona le tue catene preferite',
-      start_using_vault: 'Inizia a usare il tuo caveau',
-      summaryItemFourTitle:
-        'Non archiviare la condivisione del vault sul dispositivo stesso, in caso di smarrimento o danneggiamento',
-      summaryItemOneTitle:
-        'Eseguire il backup di ogni condivisione del vault separatamente',
-      summaryItemThreeTitle:
-        'Tutte le condivisioni del vault garantiscono un accesso sicuro ai tuoi fondi',
-      summaryItemTwoTitle:
-        'Conserva le condivisioni del vault in posizioni diverse',
-      title: 'Riepilogo rapido',
-    },
     takeMinute: 'Dovrebbe richiedere solo un secondo',
   },
   fast_sign: 'Segnale veloce',
@@ -526,7 +433,6 @@ export const it = {
   follow_banner_subtitle: 'Vultisig costruisce con te.',
   follow_banner_title: 'Seguici su X',
   from: 'Da',
-  from_asset: 'Da Asset',
   freeze: 'Freeze',
   function_arguments: 'Argomenti della funzione',
   function_signature: 'Firma della funzione',
@@ -537,8 +443,6 @@ export const it = {
   gas_limit_tooltip_content:
     "L'importo massimo di carburante che pagherai. Può essere aumentato se il limite di carburante non è sufficiente per inviare transazioni.",
   general: 'Generale',
-  generating_ecdsa_key: 'Generazione della chiave ECDSA',
-  generating_eddsa_key: 'Generazione della chiave EdDSA',
   get_started: 'Per iniziare',
   github: 'Github',
   go_back: 'Torna indietro',
@@ -570,7 +474,6 @@ export const it = {
     'Promemoria transazione IBC non supportato',
   ibc_transfer: 'Trasferimento IBC',
   id: 'ID',
-  i_understand: 'Capisco',
   i_understand_save_backup: 'Ho capito come salvare questo backup',
   import: 'Importare',
   import_key: 'Chiave di importazione',
@@ -620,40 +523,6 @@ export const it = {
   incorrect_passcode: 'Codice di accesso errato.',
   invalid_passcode: 'Codice di accesso non valido',
   join_keygen: 'Unisciti a Keygen',
-  join_keygen_slider1_note1: 'Vultisig è',
-  join_keygen_slider1_note2: 'completamente open source',
-  join_keygen_slider1_note3:
-    'Ciò significa che chiunque può consultare il codice, garantendo la massima trasparenza e affidabilità.',
-  join_keygen_slider1_title: 'Lo sapevate?',
-  join_keygen_slider2_note1: 'Nessuna frase iniziale necessaria',
-  join_keygen_slider2_note2:
-    'Vultisig utilizza condivisioni di vault facili da gestire, rendendolo più semplice e sicuro rispetto ai portafogli tradizionali.',
-  join_keygen_slider2_title: 'Consiglio del giorno',
-  join_keygen_slider3_note1: 'Vultisig supporta oltre',
-  join_keygen_slider3_note2: '10.000 gettoni',
-  join_keygen_slider3_note3:
-    'Che tu utilizzi Bitcoin, Ethereum o un token meno conosciuto, Vultisig ha la soluzione che fa per te.',
-  join_keygen_slider3_title: 'Fatto divertente',
-  join_keygen_slider4_note1: 'La tua privacy è importante. Vultisig',
-  join_keygen_slider4_note2: 'non tiene traccia',
-  join_keygen_slider4_note3:
-    'le tue attività né richiedono alcuna registrazione, garantendo il tuo anonimato e la tua privacy.',
-  join_keygen_slider4_title: 'Approfondimento sulla sicurezza',
-  join_keygen_slider5_note1: 'Controllato e sicuro. Vultisig è sottoposto a',
-  join_keygen_slider5_note2: 'controlli di sicurezza regolari',
-  join_keygen_slider5_note3:
-    'per garantire che i tuoi beni siano protetti da qualsiasi minaccia.',
-  join_keygen_slider5_title: 'Tech Talk',
-  join_keygen_slider6_note1:
-    'Unisciti a migliaia di persone. Migliaia di utenti affidano a Vultisig i loro asset digitali. Diventa parte del nostro team.',
-  join_keygen_slider6_note2: 'comunità sicura e in crescita',
-  join_keygen_slider6_title: 'Angolo della comunità',
-  join_keygen_slider7_note1:
-    'Compatibilità multi-dispositivo. Accedi al tuo vault Vultisig',
-  join_keygen_slider7_note2: 'da più dispositivi',
-  join_keygen_slider7_note3:
-    'aumentando la flessibilità senza compromettere la sicurezza.',
-  join_keygen_slider7_title: 'Caratteristica in evidenza',
   join_keysign: 'Unisciti a Keysign',
   join_transaction: 'Partecipa alla transazione',
   foreground_notification_generic: 'Transazione in attesa di approvazione',
@@ -661,7 +530,6 @@ export const it = {
   foreground_notification_swap: 'Scambia {{from}} → {{to}}',
   join_reshare: 'Unisciti a Reshare',
   join_session: 'Partecipa alla sessione',
-  join_upgrade: "Unisciti all'aggiornamento",
   joining_keygen: 'Unirsi a Keygen',
   joining_keysign: 'Unirsi a Keysign',
   joining_session: 'Partecipazione alla sessione...',
@@ -669,11 +537,8 @@ export const it = {
   keygen_devices_requirements_info:
     'Scansiona il QR con un altro dispositivo. Si consiglia la configurazione del dispositivo {{recommended}}, {{min}} è sufficiente.',
   keygen_failed: 'Errore di generazione della chiave. Riprova.',
-  keygen_protocol_done: 'Fatto',
-  keygen_protocol_running: 'Corsa',
   keys: 'Chiavi',
   keysign: 'Segno chiave',
-  keysign_request: 'Richiesta di firma digitale',
   label: 'Etichetta',
   language: 'Lingua',
   learnMore: 'Saperne di più',
@@ -682,7 +547,6 @@ export const it = {
   legal: 'Legal',
   link_copied: 'Collegamento copiato negli appunti',
   loading: 'Caricamento...',
-  local: 'Locale',
   localMode: 'Sei in modalità locale',
   lock_time: 'Tempo di blocco',
   lock_vultisig_automatically_after: 'Blocca Vultisig automaticamente dopo...',
@@ -728,9 +592,6 @@ export const it = {
   new: 'Nuovo',
   next: 'Prossimo',
   new_passcode: 'Nuovo codice di accesso',
-  new_vault_setup: 'Nuova configurazione del Vault',
-  new_vault_setup_disclaimer:
-    'La configurazione è cambiata, esegui un nuovo backup.',
   no_active_chains_found: 'Nessuna catena attiva trovata',
   no_active_chains_found_description:
     'Non abbiamo rilevato alcuna risorsa in questa frase seed.',
@@ -773,8 +634,6 @@ export const it = {
     'I tuoi vault appariranno qui. Inizia creandone uno o importandone uno esistente.',
   node_address: 'Indirizzo del nodo',
   normal: 'Normale',
-  not_enough_asset_to_cover_gas_fees:
-    'Non abbastanza {{asset}} per coprire le spese del carburante',
   not_enough_funds: 'Fondi insufficienti',
   nothing_to_add: 'Niente da aggiungere',
   nothing_to_add_hint:
@@ -782,7 +641,6 @@ export const it = {
   of: 'Di',
   off: 'Spento',
   on: 'SU',
-  on_chain: 'su {{chain}}',
   onboarding_description_1:
     'Vultisig è un caveau crittografico sicuro e multi-dispositivo, compatibile con tutte le principali blockchain e con oltre 10.000 token. Vultisig è completamente auto-custodito.',
   onboarding_description_2:
@@ -791,18 +649,14 @@ export const it = {
     "Vultisig è nativamente un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare un vault sicuro: un dispositivo di avvio e uno di associazione.",
   onboarding_description_4:
     'Vultisig è un portafoglio senza seed phrase. Utilizza invece condivisioni vault facili da gestire. Ogni dispositivo ha la sua condivisione vault unica che necessita di un backup separato.',
-  onboarding_greeting: 'Dì addio alle <g>frasi seme</g>',
   operator_fee: "Tariffa dell'operatore",
   basis_points: 'Punti base',
-  optional: 'opzionale',
   optionalDevice: 'Dispositivo opzionale',
-  or: 'O',
   other: 'Altro',
   overview: 'Panoramica',
   part: 'parte',
   passcodes_do_not_match: 'I codici di accesso non corrispondono',
   password: 'Password',
-  password_backup: 'Proteggi il tuo caveau e firma subito.',
   password_do_not_match: 'Le password non corrispondono',
   password_pattern_error:
     'La password deve essere compresa tra {{min}} e {{max}} caratteri',
@@ -813,7 +667,6 @@ export const it = {
   percentage: 'Percentuale',
   percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',
   percentage_to_unstake: 'Percentuale da annullare',
-  permissions: 'Permessi',
   pick_referral_code: 'Scegli il codice di riferimento',
   platinum: 'Platino',
   plugin_info: "Informazioni sull'app",
@@ -827,7 +680,6 @@ export const it = {
   portfolio_balance: 'Saldo del portafoglio',
   positions: 'Posizioni',
   powered_by: 'Fornito da <provider></provider>',
-  prepareVault: 'Preparazione del caveau...',
   price: 'Prezzo',
   price_impact_average: 'Media',
   price_impact_good: 'Bene',
@@ -854,17 +706,13 @@ export const it = {
   qbtc_claim_success_title: 'Richiesta accolta',
   qbtc_claim_utxos_claimed: 'UTXO rivendicati',
   qbtc_claim_utxos_skipped: 'UTXO saltati',
-  qbtc_claim_tx_hash: 'Hash della transazione',
-  qbtc_claim_copy_tx_hash: "Copia l'hash della transazione",
   qbtc_claim_done: 'Fatto',
   qbtc_claim_failed: 'Richiesta non riuscita. Riprova.',
   qbtc_claim_fast_vault_only:
     'Al momento, per riscattare i propri beni è necessario un Fast Vault. Il supporto per Secure Vault sarà disponibile a breve.',
   qbtc_claim_password_description:
     'Inserisci la password di Fast Vault per controfirmare la transazione di richiesta.',
-  qrCode: 'Codice QR',
   receive: 'Ricevere',
-  receivedShare1Email: 'Vault Share 1 ricevuto via posta',
   redeem: 'Riscattare',
   reenter_password: 'Reinserisci la password',
   recover_vault_or_convert_seedphrase:
@@ -907,7 +755,6 @@ export const it = {
       title: 'Usa il codice di riferimento',
     },
   },
-  remove: 'Rimuovere',
   remove_token: 'Rimuovi token',
   rename: 'Rinominare',
   rename_vault: 'Rinomina Vault',
@@ -951,14 +798,9 @@ export const it = {
   save_swap_fees_with_referral:
     'Risparmia il <blue>10%</blue> sugli scambi - Aggiungi un referral',
   saving_vault: 'Salvataggio Vault...',
-  scanThe: 'Scansiona il',
   scan_qr: 'Scansiona il codice QR',
   scan_with_device_index: 'Scansiona con il dispositivo {{index}}',
   scan_with_device_name: 'Scansiona con {{name}}',
-  scan_with_devices:
-    'Scansiona con i dispositivi per partecipare alla generazione del vault',
-  scan_with_devices_to_sign:
-    'Scansiona con i dispositivi per partecipare alla firma della transazione',
   scanning: 'scansione...',
   scanning_for_chains: 'Ricerca catene in corso...',
   scanning_for_chains_subtitle:
@@ -966,19 +808,12 @@ export const it = {
   search: 'Ricerca',
   search_field_placeholder: 'Ricerca',
   secure: 'Sicuro',
-  secureVaultSetup: {
-    backup: {
-      eachDeviceNeedsBackup: 'ogni dispositivo necessita del proprio backup.',
-      shares: 'Il tuo caveau contiene {{shares}} azioni',
-    },
-  },
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: 'Aggiungi almeno altri {{count}} dispositivo',
     addAtLeastMoreDevices_other: 'Aggiungi almeno altri {{count}} dispositivi',
     devicePosition: '{{current}} di {{total}}',
     localModeWaiting: 'Modalità locale, in attesa dei dispositivi',
     notWantToUseLocal: 'Non vuoi usare la modalità locale? Torna indietro.',
-    switchBack: 'Torna indietro',
     useStandardMode: 'Usa modalità standard',
     useLocalMode: 'Usa modalità locale',
     waitingForDeviceToJoin: 'In attesa che un dispositivo si unisca',
@@ -1020,7 +855,6 @@ export const it = {
   select_vaults_to_backup: 'Seleziona i Vault di cui eseguire il backup',
   select_vaults_to_backup_description:
     'Scegli se eseguire il backup solo di questo vault o di tutti i vault nella tua app.',
-  selected: 'selezionato',
   send: 'Inviare',
   sends: 'Invii',
   send_amount_exceeds_balance: "L'importo supera il saldo",
@@ -1040,7 +874,6 @@ export const it = {
   set_passcode: 'Imposta codice di accesso',
   settings: 'Impostazioni',
   share: 'Condividere',
-  share2StoredByYou: 'Vault Share 2 archiviato da te',
   share_app: "Condividi l'app",
   share_description:
     'Condividi il tuo codice di riferimento univoco per invitare i tuoi amici. Riceveranno uno sconto e più scambi faranno, più guadagni, direttamente sul tuo portafoglio.',
@@ -1064,7 +897,6 @@ export const it = {
   signing_address: 'Indirizzo di firma',
   signing_error: 'Errore di firma. Riprova.',
   signing_method: 'Metodo di firma',
-  signing_transaction: 'Firma della transazione',
   silver: 'Argento',
   site: 'Sito',
   site_has_risk: 'Sito dannoso rilevato da <provider></provider>',
@@ -1086,11 +918,8 @@ export const it = {
   spender: 'Spender',
   operator: 'Operatore',
   contract: 'Contratto',
-  start: 'Inizio',
   start_reshare: 'Avvia la condivisione',
   status: 'Stato',
-  success: 'Successo',
-  successfully: 'Con successo',
   support: 'Supporto',
   swap: 'Scambio',
   swaps: 'Scambi',
@@ -1110,11 +939,9 @@ export const it = {
   this_device: 'Questo dispositivo',
   this_device_suffix: '(questo dispositivo)',
   this_vault_only: 'Solo questo Vault',
-  this_vault_share: 'questa condivisione del vault del dispositivo',
   thorchain_address: 'Indirizzo THORChain',
   thorchain_address_required_for_referrals:
     'Devi avere un indirizzo THORChain per utilizzare il programma di referral',
-  title: 'Titolo',
   tns_alnum_only:
     'Il codice di riferimento deve contenere solo caratteri alfanumerici',
   tns_max_4_chars:
@@ -1125,11 +952,9 @@ export const it = {
   to: 'A',
   to_min_payout: 'pagamento min.',
   today: 'Oggi',
-  to_asset: 'Per asset',
   token_not_found_description:
     'Possibili motivi: contratto errato, catena non supportata o token rimosso dai registri.',
   token_not_found_invalid: 'Indirizzo contrattuale non valido',
-  tokens: 'gettoni',
   total_fee: 'Totale commissioni',
   track: 'Traccia',
   transaction: 'Transazione',
@@ -1139,8 +964,6 @@ export const it = {
   transaction_failed: 'Transazione<error> fallito</error>',
   transaction_pending: 'Transazione in sospeso...',
   transaction_successful: 'Transazione <g> riuscita </g>',
-  transaction_could_not_be_parsed:
-    'Impossibile analizzare questa transazione. I dati grezzi della transazione sono riportati di seguito.',
   raw_transaction_data: 'Dati di transazione grezzi',
   transaction_history: 'Cronologia delle transazioni',
   transaction_instructions_summary:
@@ -1158,13 +981,11 @@ export const it = {
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Ready to claim',
   tron_unfreeze_button: 'Unfreeze',
-  tron_your_holdings: 'Your holdings',
   tron_bandwidth_and_energy: 'Larghezza di banda e energia',
   tron_bandwidth_description:
     'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
   tron_energy_description:
     'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
-  tron_got_it: 'Got It',
   try_again: 'Riprova',
   turn_your_vault_into_rewards_machine:
     'Trasforma il tuo caveau in una macchina per vincere premi. Crea subito il tuo referral e inizia a guadagnare.',
@@ -1218,8 +1039,6 @@ export const it = {
     update_is_available: "L'aggiornamento è disponibile",
     version: 'Versione {{latestVersion}}',
   },
-  vaultCreated: 'Vault creato',
-  vaultOverview: 'Panoramica del Vault',
   vault_already_exists: 'Il caveau "{{name}}" esiste già',
   vault_backup_page_password_info:
     'Non archiviare mai le condivisioni Vault di dispositivi diversi nella stessa posizione',
@@ -1268,7 +1087,6 @@ export const it = {
   vault_ready_description:
     'È tutto pronto! Avrai sempre il controllo di ogni transazione.',
   vault_ready_to_use: "La tua cassaforte è pronta per l'uso.",
-  vault_rename_page_header_title: 'Modifica il nome del tuo vault',
   vault_rename_page_name_error:
     'Il nome del vault deve essere compreso tra 1 e 50 caratteri',
   vault_selected: 'Vault selezionato',
@@ -1289,22 +1107,6 @@ export const it = {
     'Il titolo deve contenere al massimo 50 caratteri.',
   vault_settings_address_book_title_min_length_error:
     'Il titolo deve essere lungo almeno 1 carattere.',
-  vault_setup_prop: {
-    fast: {
-      prop_0: 'È necessario solo 1 dispositivo',
-      prop_1: "Conserva fondi più piccoli per l'uso quotidiano",
-      prop_2: 'Vultiserver co-firma istantaneamente',
-      purpose: 'Utilizzare come "portafoglio caldo"',
-      title: 'Configurazione rapida',
-    },
-    secure: {
-      prop_0: 'Massima sicurezza con più dispositivi',
-      prop_1: 'Sempre accessibile con i backup dei dispositivi',
-      prop_2: 'Metti al sicuro qualsiasi quantità di beni',
-      purpose: 'Utilizzare come "portafoglio freddo"',
-      title: 'Sicurezza definitiva',
-    },
-  },
   vault_share_banner:
     'Questo codice QR ti consente di condividere una versione di sola visualizzazione del tuo Vault',
   vault_type_does_not_match: 'Il tipo di vault non corrisponde',
@@ -1319,7 +1121,6 @@ export const it = {
   via: 'via',
   view_on_explorer: 'Visualizza su Esplora risorse',
   vote: 'Votare',
-  vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Comunità di Vultisig',
   vultisig_education: 'Vultisig Education',
@@ -1331,10 +1132,7 @@ export const it = {
   waiting_for_keygen_start:
     "In attesa dell'avvio della generazione delle chiavi...",
   waiting_for_keysign_start: "In attesa dell'inizio del processo di firma...",
-  waiting_for_reshare_start: 'In attesa che inizi la ricondivisione...',
-  waiting_for_upgrade_start: "In attesa dell'inizio dell'aggiornamento...",
   wallet: 'Portafoglio',
-  while_you_wait_vultisig_is: 'Mentre aspetti, Vultisig è...',
   withdraw: 'Ritirare',
   withdraw_ruji_rewards: 'Ritira i premi RUJI',
   add_cacao_pool: 'Aggiungi al pool CACAO',
@@ -1343,13 +1141,8 @@ export const it = {
   remove_thor_lp: 'Rimuovi THORChain LP',
   pool: 'Pool',
   paired_address: 'Indirizzo accoppiato',
-  lp_dust_amount_error:
-    'Saldo RUNE insufficiente. Sono necessarie almeno {{amount}} RUNE come polvere per il prelievo di LP.',
-  lp_withdraw_percentage: 'Percentuale di prelievo',
   wrong_vault_try_again: 'Vault o dispositivo di associazione errati.',
   yesterday: 'Ieri',
-  you_send: 'Tu invii',
-  you_receive: 'Riceverai',
   you_are_bonding: 'Stai facendo bond',
   you_are_unbonding: 'Stai facendo unbond',
   you_are_sending: 'Stai inviando',
@@ -1357,7 +1150,6 @@ export const it = {
   you_are_unstaking: 'Stai facendo unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
-  yourVaultShares: 'Il tuo vault ha {{shares}} condivisioni Vault',
   vaultSetupOverview: {
     title: 'La configurazione del tuo caveau',
     fast: {
@@ -1422,10 +1214,8 @@ export const it = {
   account: 'Account',
   session_history: 'Cronologia della sessione',
   vultibot: 'VultiBot',
-  vultibot_welcome: 'Ciao, sono VultiBot',
   start_new_chat: 'Avvia una nuova chat',
   new_chat: 'Nuova chat',
-  messages: 'messaggi',
   failed_to_load_session_history:
     'Impossibile caricare la cronologia della sessione',
   agent_history_load_error_description:
@@ -1433,8 +1223,6 @@ export const it = {
   agent_history_empty_title: 'Nessuna chat ancora',
   agent_history_empty_description:
     'Avvia una nuova chat e le tue conversazioni recenti appariranno qui.',
-  vultibot_description:
-    "Il tuo assistente virtuale basato sull'intelligenza artificiale. Posso scambiare, inviare, automatizzare le polizze, controllare i saldi e gestire il tuo caveau.",
   agent_what_to_do: 'Cosa ti piacerebbe fare?',
   agent_help_description:
     'Posso aiutarti a preparare scambi, azioni dei plugin e regole di automazione.',
@@ -1442,16 +1230,9 @@ export const it = {
   agent_prompt_earn_apy: 'Voglio guadagnare APY su BTC',
   agent_prompt_send: "Invia l'importo a...",
   agent_prompt_swap: 'Prepara uno scambio da ETH a BTC',
-  api_key_required: 'Chiave API richiesta',
-  api_key_required_description:
-    "Per utilizzare VultiBot, imposta la tua chiave API Anthropic come variabile di ambiente prima di avviare l'app.",
-  type_a_message: 'Scrivi un messaggio...',
-  thinking: 'Pensiero',
-  try_saying: 'Prova a dire',
   ask_about_plugins_policies: 'Chiedi informazioni su plugin e policy...',
   approve_transaction: 'Approva la transazione',
   enter_vault_password: 'Inserisci la password del caveau',
-  signed_in: 'Registrato',
   password_required_for_operation:
     'Inserisci la tua password per {{operation}}.',
   confirm_action: 'Conferma azione',
@@ -1459,11 +1240,6 @@ export const it = {
     'Si prega di confermare che si desidera {{action}}.',
   agent_chat_render_error:
     'Si è verificato un problema durante il rendering della chat.',
-  agent_connect_description:
-    "Inserisci la password del tuo vault per connetterti all'agente. La tua password verrà utilizzata per firmare un messaggio di autenticazione.",
-  agent_connect_now: 'Connettiti ora',
-  agent_connected: 'Collegato',
-  agent_connecting: 'Connessione in corso...',
   agent_operation_sign_in: 'registrazione',
   agent_session_expired:
     'La tua sessione è scaduta. Inserisci la password del tuo vault per riconnetterti.',
@@ -1472,7 +1248,6 @@ export const it = {
   agent_give_feedback: 'Fornisci un feedback',
   agent_delete_chat_session: 'Elimina sessione di chat',
   agent_signing_in: 'Accesso in corso...',
-  agent_thinking_of_ideas: 'Pensando alle idee...',
   agent_tool_label: 'Strumento: {{tool}}',
   agent_tx_confirmed: 'Confermato',
   agent_tx_failed: 'Fallito',
@@ -1519,8 +1294,6 @@ export const it = {
   unbonding_unlocks_at: 'Sblocca {{date}}',
   validator_status_active: 'Attivo',
   validator_status_churned_out: 'Prodotto',
-  validator_voting_power: '{{amount}} {{ticker}}',
-  validator_commission: '{{rate}}%',
   move: 'Mossa',
   validator: 'Abilitatore',
   pending_rewards: 'Ricompense in sospeso',
@@ -1569,4 +1342,109 @@ export const it = {
   raw_message: 'Messaggio grezzo',
   token: 'Token',
   token_approval: 'Approvazione del token',
+  skip_for_now: 'Salta per ora',
+  station_migration_title: 'Migrare i wallet Station',
+  station_migration_review_title: 'Revisione dei vecchi portafogli Station',
+  station_migration_review_description:
+    'Inserisci la password Station per decrittografare localmente i wallet supportati. I dati memorizzati nella versione precedente di Station rimarranno intatti.',
+  station_migration_settings_title: 'Migrare i wallet Station',
+  station_migration_settings_description:
+    'Esamina i vecchi portafogli Station rilevati su questo dispositivo.',
+  station_migration_set_up_without_migrating: 'Configurazione senza migrazione',
+  station_migration_no_wallets_found:
+    'In questa estensione di archiviazione non è stato trovato alcun portafoglio legacy Station.',
+  station_migration_summary_total_one: 'Portafoglio {{count}}',
+  station_migration_summary_total_other: 'portafogli {{count}}',
+  station_migration_status_supported: 'Supportato',
+  station_migration_status_reconnect: 'Ricollega',
+  station_migration_status_unsupported: 'Non supportato',
+  station_migration_status_corrupt: 'Non valido',
+  station_migration_status_needs_review: 'Necessita di revisione',
+  station_migration_wallet_type_mnemonic: 'Seed crittografato e mnemonico',
+  station_migration_wallet_type_seed: 'Seed crittografato',
+  station_migration_wallet_type_private_key: 'Chiave privata crittografata',
+  station_migration_wallet_type_interchain_private_key:
+    'Chiavi private Terra crittografate',
+  station_migration_wallet_type_legacy_private_key:
+    'Blob di chiave privata crittografata legacy',
+  station_migration_wallet_type_ledger: 'Portafoglio hardware Ledger',
+  station_migration_wallet_type_multisig: 'Portafoglio multisig',
+  station_migration_wallet_type_unknown:
+    'Formato del portafoglio sconosciuto Station',
+  station_migration_wallet_type_corrupt_storage: 'Memoria non valida',
+  station_migration_wallet_type_corrupt_wallet:
+    'Inserimento del portafoglio non valido',
+  station_migration_reason_supported_mnemonic:
+    'I dati del portafoglio crittografati sono presenti per una futura migrazione che richiede la password Station.',
+  station_migration_reason_supported_seed:
+    'Sono presenti byte di seeding crittografati per una futura migrazione che richiederà la password Station.',
+  station_migration_reason_supported_private_key:
+    'I dati della chiave privata crittografata sono presenti per una futura importazione nella famiglia Terra.',
+  station_migration_reason_supported_interchain_private_key:
+    'I dati crittografati della chiave privata di Terra sono presenti per una futura importazione.',
+  station_migration_reason_supported_legacy_private_key:
+    'I dati della chiave privata crittografata preesistente sono presenti per una futura importazione.',
+  station_migration_reason_ledger_reconnect:
+    'Station memorizza i dettagli dell&#39;account pubblico per questo portafoglio Ledger. Ricollega il dispositivo hardware in seguito per utilizzarlo in Station.',
+  station_migration_reason_multisig:
+    'Station memorizza solo i metadati pubblici multisig. Non memorizza le chiavi private che possono essere convertite in un vault Vultisig.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed è presente ma non è una stringa.',
+  station_migration_reason_encrypted_invalid_shape:
+    'La parola chiave `encrypted` è presente ma non è né una stringa né un oggetto.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'L&#39;oggetto chiave privata crittografata non supporta il tipo di moneta 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Il blob del portafoglio legacy è presente ma non è una stringa.',
+  station_migration_reason_unknown_wallet_shape:
+    'La voce del portafoglio non corrisponde ad alcun formato di archiviazione Station conosciuto.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} contiene JSON non valido.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} deve essere un array JSON.',
+  station_migration_reason_wallet_entry_not_object:
+    'La voce del portafoglio non è un oggetto.',
+  station_migration_reason_unsupported_fallback:
+    'Questo portafoglio necessita di revisione prima di poter essere migrato.',
+  station_migration_status_ready: 'Pronto',
+  station_migration_status_failed: 'Fallito',
+  station_migration_password_title: 'Sblocca i portafogli supportati',
+  station_migration_password_description:
+    'La password Station rimane su questo dispositivo e viene utilizzata solo per decrittografare i vecchi dati del portafoglio Station.',
+  station_migration_password_label: 'Password di Station',
+  station_migration_password_invalid:
+    'Quella password non ha sbloccato alcun portafoglio Station supportato.',
+  station_migration_check_wallets: 'Controlla i portafogli',
+  station_migration_migrate_wallet: 'Migrare',
+  station_migration_ready_source: 'Convalidato da {{source}}.',
+  station_migration_source_mnemonic: 'mnemonico',
+  station_migration_source_seed: 'byte di seed',
+  station_migration_source_private_key: 'chiave privata',
+  station_migration_failure_incorrect_password:
+    'La password non è riuscita a decifrare questo portafoglio.',
+  station_migration_failure_missing_encrypted_value:
+    'A questo portafoglio manca il materiale crittografato necessario per la migrazione.',
+  station_migration_failure_invalid_seed:
+    'I dati seed decifrati non sono validi.',
+  station_migration_failure_invalid_legacy_wallet:
+    'I dati del portafoglio legacy decrittografati non sono validi.',
+  station_migration_failure_metadata_mismatch:
+    'La chiave decifrata non corrisponde al vecchio indirizzo Station o alla chiave pubblica.',
+  station_migration_failure_unsupported:
+    'Questo tipo di portafoglio non può essere migrato con una password.',
+  station_migration_failure_split_interchain_private_keys:
+    'Questo portafoglio ha chiavi private separate per Terra e Terra Classic. Questa migrazione può importare solo chiavi corrispondenti della famiglia Terra.',
+  station_migration_status_importing: 'importazione',
+  station_migration_status_migrated: 'Migrato',
+  station_migration_status_skipped: 'Saltato',
+  station_migration_status_reason_importing:
+    'L&#39;importazione è stata avviata. Se questa riga non si aggiorna, tornare qui al termine della configurazione.',
+  station_migration_status_reason_migrated:
+    'Questo portafoglio è stato importato in Vultisig. Il vecchio archivio Station è ancora conservato.',
+  station_migration_status_reason_skipped:
+    'Questo portafoglio è stato saltato. Puoi sbloccarlo di nuovo quando vuoi.',
+  station_migration_status_reason_vault_import_failed:
+    'L&#39;importazione del vault non è riuscita durante la generazione della chiave. Sblocca nuovamente questo portafoglio per riprovare.',
+  station_migration_status_reason_vault_save_failed:
+    'L&#39;importazione del vault è stata completata, ma il salvataggio del vault Vultisig non è riuscito. Sblocca nuovamente questo portafoglio per riprovare.',
 }

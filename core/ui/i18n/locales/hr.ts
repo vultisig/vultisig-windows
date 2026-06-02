@@ -42,15 +42,11 @@ export const hr = {
   advanced: 'Napredno',
   advanced_gas_fee: 'Naknada za gorivo',
   all_vaults: 'Svi trezori',
-  allowance: 'Dodatak',
-  allowance_amount: 'Iznos naknade',
-  allowance_spender: 'Potrošač džeparca',
   amount: 'Iznositi',
   amount_must_be_non_negative: 'Iznos ne smije biti negativan',
   amount_must_be_positive: 'Iznos mora biti pozitivan',
   amount_required: 'Potreban je iznos',
   amount_to_unstake: 'Iznos za poništavanje uloga',
-  and: 'i',
   app_lock_passcode: 'Lozinka za zaključavanje aplikacije',
   app_lock_passcode_description:
     'Dodajte dodatni sloj sigurnosti tako što ćete zahtijevati lozinku za otključavanje aplikacije.',
@@ -66,20 +62,10 @@ export const hr = {
   at_least_one_device: 'Barem jedan uređaj',
   at_least_one_device_subtitle:
     'Radit će bilo koji uređaj koji može pokrenuti Vultisig.',
-  auto: 'auto',
-  auto_compound_into_label: 'Automatsko spajanje u {{ticker}}',
   available: 'Dostupno',
   back: 'Nazad',
-  back_up_now: 'Sigurnosno kopiraj sada',
   before_you_start: 'Prije nego što počnete...',
   backup: 'Sigurnosna kopija',
-  backupGuide: 'Vodič za sigurnosno kopiranje',
-  backupVault: 'Sigurnosni trezor',
-  backupInCloudTitle: 'Šifrirano vašom lozinkom za trezor',
-  backupInCloudDescription:
-    'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku koju ste ranije kreirali. Preporučuje se online pohrana, a sigurna dijeljenja trezora su namijenjena upravo za to.',
-  backupShare: 'Dijeljenje sigurnosne kopije trezora',
-  backupShare2: 'Sigurnosna kopija dijeljenja 2',
   backupsTitle:
     '<highlight>Sigurnosne kopije,</highlight> vaša nova metoda oporavka',
   backupsDescription:
@@ -90,12 +76,9 @@ export const hr = {
   storeBackupsSeparately: 'Pohranite sigurnosne kopije odvojeno',
   storeBackupsSeparatelyDescription:
     'Svaku sigurnosnu kopiju čuvajte na drugom mjestu. Ako je jedna kompromitirana, vaša sredstva ostaju sigurna.',
-  backupShareWarning: 'Ovo je samo 1 dio tvog trezora',
-  backupShareWarningRest: ', ponovite ovaj postupak za ostale uređaje.',
   backup_description:
     'Napravite sigurnosnu kopiju Vault Share-a na željenu lokaciju',
   backup_email_description: 'Unesite e-poštu za primanje dijeljenja trezora.',
-  backup_now: 'Sigurnosno kopiraj sada',
   backup_password: 'Sigurnosna kopija lozinke',
   backup_password_description:
     'Unesite lozinku koju ste postavili prilikom izrade ovog trezora.',
@@ -161,9 +144,7 @@ export const hr = {
   change_passcode: 'Promjena lozinke',
   change_your_friends_referral:
     'Promjena referalnog koda prijatelja koji se koristi za zamjene',
-  check_email: 'Provjerite e-poštu',
   check_for_update: 'Provjeri ažuriranja',
-  chooseSetup: 'Odaberite Postavljanje',
   choose_a_password: 'Odaberite lozinku',
   choose_a_password_description:
     'Ako želite dodatni sloj sigurnosti, odaberite lozinku. <b>Lozinka se ne može oporaviti.</b> <info />',
@@ -197,20 +178,14 @@ export const hr = {
   adding_coin_to_vault: 'Dodavanje novčića u trezor...',
   defi_token_required_description:
     'Dodajte {{ticker}} kroz Upravljanje tokenima kako biste mogli stakeati, unstakeati ili bondati.',
-  defi_add_chain_to_vault_title: 'Prvo dodajte chain u trezor',
-  defi_add_chain_to_vault_description:
-    'Aktivirajte chain u trezoru kako biste ovdje upravljali DeFi pozicijama.',
   defi_add: 'Add',
   defi_remove: 'Remove',
   defi_lp_pool_title: 'Pool {{pool}}',
   position_label: 'Pozicija',
   defi_lp_position_form_title:
     '{{action, select, add {Dodaj likvidnost} remove {Ukloni likvidnost} other {Upravljaj likvidnošću}}}',
-  defi_lp_position_form_description:
-    'Upravljanje likvidnošću za {{position}} stiže uskoro.',
   manage_tokens: 'Upravljaj tokenima',
   collected_rewards: 'Sakupljene nagrade',
-  coming_soon: 'Uskoro',
   complete: 'Završeno',
   congrats: 'Čestitam!',
   confirm: 'Potvrdi',
@@ -228,14 +203,10 @@ export const hr = {
   continue_anyway: 'Nastavi svejedno',
   continue_in_new_window: 'Nastavite u otvorenom prozoru',
   contract_execution: 'Izvršenje ugovora',
-  contract_interaction: 'Ugovorna interakcija',
   copy_address: 'Kopiraj adresu',
-  create: 'Stvoriti',
   create_folder: 'Izradi mapu',
   create_new_vault: 'Izradi novi trezor',
   create_vault: 'Izradi trezor',
-  create_own_referral:
-    'Izradite vlastiti kod i zaradite <blue>20%</blue> na preporučenim zamjenama',
   create_referral_form: 'Izradi preporuku',
   create_referral_title: 'Izradi preporuku',
   create_referral: 'Izradi preporuku',
@@ -292,15 +263,12 @@ export const hr = {
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
   discovering_mediator: 'Otkrivanje usluge posrednika, molimo pričekajte...',
   done: 'Gotovo',
-  downloadVultisig:
-    "Preuzmite Vultisig na svoje druge uređaje i odaberite 'Skeniraj QR kod'",
   edit_address: 'Uredi adresu',
   edit_friends_referral: 'Uredi preporuku prijatelja',
   edit_referral: 'Uredi preporuku',
   remove_friends_referral: 'Ukloni preporuku',
   edit_vaults: 'Uredi trezore',
   email: 'E-pošta',
-  email_backup: 'Unesite svoju e-poštu kako biste primili sigurnosnu kopiju',
   email_placeholder: 'Unesite svoju adresu e-pošte',
   email_required: 'E-pošta je obavezna',
   evm_chains: 'EVM lanci',
@@ -336,7 +304,6 @@ export const hr = {
   entity_not_scanned:
     '{{entity}} nije skeniran od strane <provider></provider>',
   entity_scanned: '{{entity}} skeniran od strane <provider></provider>',
-  error: 'POGREŠKA',
   est_network_fee: 'Procijenjena mrežna naknada',
   expand_view: 'Proširi prikaz',
   open_as_side_panel: 'Otvori kao bočnu ploču',
@@ -351,8 +318,6 @@ export const hr = {
   desktop_push_notification_disable_failed:
     'Nije moguće onemogućiti push obavijesti. Pokušajte ponovno.',
   expiration_date: 'Datum isteka',
-  expiration_must_extend_by_exactly_one_year:
-    'Rok valjanosti može se produžiti samo za točno 1 godinu',
   expiration_must_be_greater: 'Istek mora biti veći od {{value}}',
   expires_on: 'Istječe',
   extension_vault_import_restriction:
@@ -413,88 +378,33 @@ export const hr = {
     'Vultisig sigurno pohranjuje i upravlja digitalnom imovinom. Sve radnje, poput slanja ili zamjene, zahtijevaju prag uređaja za potpisivanje transakcija.',
   faq_vultisig_make_money_title: 'Kako se koristi Vultisig?',
   fast: 'Brzo',
-  fastVault: 'Brzi trezor',
-  secureVault: 'Siguran trezor',
   fast_vault_session_conflict: 'Nepodudarnost dijela trezora',
   fast_vault_session_conflict_description:
     'Vaš lokalni dio trezora ne odgovara onom pohranjenom na Vultiservu. To se može dogoditi ako je ista početna fraza uvezena na drugom uređaju.',
   fast_vault_password_start_keysign_description:
     'Potvrdite transakciju unosom lozinke vašeg dijeljenog servera.',
   fastVaultSetup: {
-    addOptionalHint: 'Dodajte neobavezni savjet',
-    addAnOptionalHint: 'Dodajte neobavezni savjet',
     backup: {
-      backThemUpNow: 'napravite im sigurnosnu kopiju sada',
-      checkEmail: 'Provjerite svoju e-poštu za potvrdu',
       codeInfo:
         'Ovaj kod će potvrditi da ste primili svoj trezor dijeljenja 1 putem e-pošte',
-      completeCustody: 'Šalje vam se na potpuno samostalno čuvanje!',
       enterCode: 'Unesite 4-znamenkasti kod koji smo vam poslali e-poštom',
-      heldByServer: 'drži poslužitelj',
-      online: 'online',
-      part1: 'Dionica 1 od dionica trezora bit će',
-      securely: 'sigurno, po mogućnosti',
-      shareSecurely: 'kako bi se osigurao pristup, po mogućnosti',
-      vaultShares: 'U vašem trezoru se nalaze 2 dionice,',
       sentTo: 'Poslano na {{email}}.',
       setNewStandard: 'Spremni ste za korištenje novog standarda novčanika.',
       changeEmailAndRestartKeygen: 'Promijeni e-mail i ponovno pokreni keygen',
       wellDone: 'Bravo',
     },
     connectingWithServer: 'Povezivanje sa serverom...',
-    createVault: {
-      availablePlatforms: {
-        descriptionOne: 'dostupno',
-        descriptionTwo: 'na Androidu, iOS-u, macOS-u i Windowsima',
-      },
-      crossChain: {
-        descriptionOne: 'Križni lanac.',
-        descriptionTwo: 'Zamijenite svoje omiljene žetone sve u jednom trezoru',
-      },
-      multiFactor: {
-        descriptionOne: 'Višefaktorska sigurnost,',
-        descriptionTwo: 'Uklanjanje jedinstvene točke kvara',
-      },
-      seedlessWallet: {
-        descriptionOne: 'novčanik bez sjemena,',
-        descriptionTwo: 'nemoj se opet dati prevariti',
-      },
-      selfCustodial: {
-        descriptionOne: 'Samostalno skrbništvo,',
-        descriptionTwo: 'dajući vam potpunu kontrolu nad vašom imovinom',
-      },
-    },
     emailSetupTitle:
       'Ova e-pošta se koristi za sigurnosnu kopiju u oblaku i ne dijeli se s trećim stranama',
     enterEmail: 'Unesite svoju e-poštu',
-    enterHint: 'Unesite savjet',
-    hintDescription: 'Ovo će se prikazati u slučaju da zaboravite lozinku',
-    hintEmpty: 'Savjet je prazan',
     passwordCannotBeRecovered: 'Lozinku nije moguće resetirati ili oporaviti',
     passwordTooltip:
       'To se događa jer se lozinka koristi za lokalno šifriranje datoteke sigurnosne kopije, slično kao što se šifrira tvrdi disk. U sljedećem koraku imate mogućnost dodati podsjetnik.',
-    preparingVault: 'Priprema trezora',
     referralModalTitle: 'Referral kod',
     referralModalSubtitle:
       'Unesite svoj referalni kod ovdje. <b>Iskoristite 10% popusta na svaku transakciju.</b>',
     applyReferral: 'Primijeni preporuku',
     referralAdded: 'Preporuka dodana',
-    summary: {
-      agreementText: 'Pročitao/la sam i razumijem što trebam učiniti',
-      ctaText: 'Izradite svoj trezor',
-      pillText: 'Dijeljenje u trezoru',
-      select_preferred_chains: 'Odaberite svoje željene lance',
-      start_using_vault: 'Počnite koristiti svoj trezor',
-      summaryItemFourTitle:
-        'Ne pohranjujte udio u trezoru na samom uređaju, u slučaju gubitka ili oštećenja',
-      summaryItemOneTitle:
-        'Sigurnosna kopija svakog dijeljenog trezora zasebno',
-      summaryItemThreeTitle:
-        'Svi trezorski udjeli osiguravaju siguran pristup vašim sredstvima',
-      summaryItemTwoTitle:
-        'Držite dijeljene datoteke trezora na različitim lokacijama',
-      title: 'Kratki sažetak',
-    },
     takeMinute: 'Ovo bi trebalo trajati samo sekundu',
   },
   fast_sign: 'Brzi znak',
@@ -513,7 +423,6 @@ export const hr = {
   follow_banner_subtitle: 'Vultisig gradi s vama.',
   follow_banner_title: 'Pratite nas na X-u',
   from: 'Iz',
-  from_asset: 'Iz imovine',
   freeze: 'Freeze',
   function_arguments: 'Argumenti funkcije',
   function_signature: 'Potpis funkcije',
@@ -524,8 +433,6 @@ export const hr = {
   gas_limit_tooltip_content:
     'Maksimalna količina goriva koju ćete platiti. Može se povećati ako limit goriva nije dovoljan za slanje transakcija.',
   general: 'General',
-  generating_ecdsa_key: 'Generiranje ECDSA ključa',
-  generating_eddsa_key: 'Generiranje EdDSA ključa',
   get_started: 'Započnite',
   github: 'Github',
   go_back: 'Natrag',
@@ -556,7 +463,6 @@ export const hr = {
     'IBC dopis o transakciji nije podržan',
   ibc_transfer: 'Prijenos IBC-a',
   id: 'ID',
-  i_understand: 'Razumijem',
   i_understand_save_backup: 'Razumijem kako spremiti ovu sigurnosnu kopiju',
   import: 'Uvoz',
   import_key: 'Uvoz ključa',
@@ -606,40 +512,6 @@ export const hr = {
   incorrect_passcode: 'Netočna lozinka.',
   invalid_passcode: 'Nevažeća lozinka',
   join_keygen: 'Pridružite se Keygenu',
-  join_keygen_slider1_note1: 'Vultisig je',
-  join_keygen_slider1_note2: 'potpuno otvorenog koda',
-  join_keygen_slider1_note3:
-    'To znači da svatko može pregledati kod, što osigurava potpunu transparentnost i pouzdanost.',
-  join_keygen_slider1_title: 'Jeste li znali?',
-  join_keygen_slider2_note1: 'Nisu potrebne početne fraze',
-  join_keygen_slider2_note2:
-    'Vultisig koristi lako upravljive trezorske dijeljene resurse, što ga čini jednostavnijim i sigurnijim od tradicionalnih novčanika.',
-  join_keygen_slider2_title: 'Savjet dana',
-  join_keygen_slider3_note1: 'Vultisig podržava preko',
-  join_keygen_slider3_note2: '10.000 tokena',
-  join_keygen_slider3_note3:
-    'Bez obzira koristite li Bitcoin, Ethereum ili manje poznati token, Vultisig vam nudi sve što vam je potrebno.',
-  join_keygen_slider3_title: 'Zanimljiva činjenica',
-  join_keygen_slider4_note1: 'Vaša privatnost je važna. Vultisig',
-  join_keygen_slider4_note2: 'ne prati',
-  join_keygen_slider4_note3:
-    'vaše aktivnosti ili zahtijevaju bilo kakvu registraciju, osiguravajući vašu anonimnost i privatnost.',
-  join_keygen_slider4_title: 'Sigurnosni uvid',
-  join_keygen_slider5_note1: 'Revidirano i sigurno. Vultisig prolazi',
-  join_keygen_slider5_note2: 'redovite sigurnosne revizije',
-  join_keygen_slider5_note3:
-    'kako biste osigurali da je vaša imovina zaštićena od bilo kakvih prijetnji.',
-  join_keygen_slider5_title: 'Tehnološki razgovor',
-  join_keygen_slider6_note1:
-    'Pridružite se tisućama. Tisuće korisnika povjeravaju svoju digitalnu imovinu Vultisigu. Postanite dio našeg',
-  join_keygen_slider6_note2: 'sigurna i rastuća zajednica',
-  join_keygen_slider6_title: 'Kutak zajednice',
-  join_keygen_slider7_note1:
-    'Kompatibilnost s više uređaja. Pristupite svom Vultisig trezoru',
-  join_keygen_slider7_note2: 's više uređaja',
-  join_keygen_slider7_note3:
-    'povećanje fleksibilnosti bez ugrožavanja sigurnosti.',
-  join_keygen_slider7_title: 'Istaknuta značajka',
   join_keysign: 'Pridruži se ključnom znaku',
   join_transaction: 'Pridruži se transakciji',
   foreground_notification_generic: 'Transakcija čeka odobrenje',
@@ -647,7 +519,6 @@ export const hr = {
   foreground_notification_swap: 'Zamijeni {{from}} → {{to}}',
   join_reshare: 'Pridruži se ponovnom dijeljenju',
   join_session: 'Pridruži se sesiji',
-  join_upgrade: 'Pridruži se nadogradnji',
   joining_keygen: 'Pridruživanje Keygenu',
   joining_keysign: 'Ključni znak spajanja',
   joining_session: 'Pridruživanje sesiji...',
@@ -655,11 +526,8 @@ export const hr = {
   keygen_devices_requirements_info:
     'Skenirajte QR s drugim uređajem. {{recommended}}-preporučuje se postavljanje uređaja, {{min}} je dovoljno.',
   keygen_failed: 'Pogreška u generiranju ključa. Pokušajte ponovno.',
-  keygen_protocol_done: 'Gotovo',
-  keygen_protocol_running: 'Trčanje',
   keys: 'Ključevi',
   keysign: 'Ključni znak',
-  keysign_request: 'Zahtjev za ključni znak',
   label: 'Označiti',
   language: 'Jezik',
   learnMore: 'Saznajte više',
@@ -668,7 +536,6 @@ export const hr = {
   legal: 'Pravno',
   link_copied: 'Veza kopirana u međuspremnik',
   loading: 'Učitavanje...',
-  local: 'Lokalno',
   localMode: 'U lokalnom ste načinu rada',
   lock_time: 'Vrijeme zaključavanja',
   lock_vultisig_automatically_after: 'Automatski zaključaj Vultisig nakon...',
@@ -714,9 +581,6 @@ export const hr = {
   new: 'Novi',
   next: 'Sljedeći',
   new_passcode: 'Nova lozinka',
-  new_vault_setup: 'Postavljanje novog trezora',
-  new_vault_setup_disclaimer:
-    'Vaša konfiguracija se promijenila, napravite novu sigurnosnu kopiju.',
   no_active_chains_found: 'Nisu pronađeni aktivni lanci',
   no_active_chains_found_description:
     'Nismo pronašli nikakva sredstva za ovu početnu frazu.',
@@ -759,8 +623,6 @@ export const hr = {
     'Vaši će se trezori pojaviti ovdje. Započnite stvaranjem jednog ili uvozom postojećeg trezora.',
   node_address: 'Adresa čvora',
   normal: 'Normalan',
-  not_enough_asset_to_cover_gas_fees:
-    'Nema dovoljno {{asset}} za pokrivanje troškova goriva',
   not_enough_funds: 'Nema dovoljno sredstava',
   nothing_to_add: 'Nema što dodati',
   nothing_to_add_hint:
@@ -768,7 +630,6 @@ export const hr = {
   of: 'od',
   off: 'Isključeno',
   on: 'Na',
-  on_chain: 'na {{chain}}',
   onboarding_description_1:
     'Vultisig je siguran kripto trezor za više uređaja, kompatibilan sa svim glavnim blockchain mrežama i više od 10 000 tokena. Vultisig ima potpuno samostalno čuvanje.',
   onboarding_description_2:
@@ -777,18 +638,14 @@ export const hr = {
     'Vultisig je izvorno aplikacija za više uređaja. Za stvaranje sigurnog trezora potrebna su barem dva uređaja. Jedan uređaj za inicijalizaciju i jedan uređaj za uparivanje.',
   onboarding_description_4:
     'Vultisig je novčanik bez početnih fraza. Umjesto toga koristi lako upravljive trezorske dijeljene resurse. Svaki uređaj ima svoj jedinstveni trezorski dijeljeni resurs koji zahtijeva zasebnu sigurnosnu kopiju.',
-  onboarding_greeting: 'Recite zbogom <g>temeljnim frazama</g>',
   operator_fee: 'Naknada operatera',
   basis_points: 'Bazni bodovi',
-  optional: 'opcionalno',
   optionalDevice: 'Dodatni uređaj',
-  or: 'ili',
   other: 'Ostalo',
   overview: 'Pregled',
   part: 'dio',
   passcodes_do_not_match: 'Lozinke se ne podudaraju',
   password: 'Lozinka',
-  password_backup: 'Zaštitite svoj trezor i brzo se prijavite.',
   password_do_not_match: 'Lozinke se ne podudaraju',
   password_pattern_error: 'Lozinka mora imati između {{min}} i {{max}} znakova',
   password_required: 'Lozinka je obavezna',
@@ -798,7 +655,6 @@ export const hr = {
   percentage: 'Postotak',
   percentage_limit: 'Postotak mora biti od 0 do 100',
   percentage_to_unstake: 'Postotak za uklanjanje uloga',
-  permissions: 'Dozvole',
   pick_referral_code: 'Odaberite referalni kod',
   platinum: 'Platina',
   plugin_info: 'Informacije o aplikaciji',
@@ -812,7 +668,6 @@ export const hr = {
   portfolio_balance: 'Stanje portfelja',
   positions: 'Pozicije',
   powered_by: 'Pokreće <provider></provider>',
-  prepareVault: 'Priprema trezora...',
   price: 'Cijena',
   price_impact_average: 'Prosječno',
   price_impact_good: 'Dobro',
@@ -840,17 +695,13 @@ export const hr = {
   qbtc_claim_success_title: 'Zahtjev je uspješan',
   qbtc_claim_utxos_claimed: 'Zahtjevani UTXO-i',
   qbtc_claim_utxos_skipped: 'Preskočeni UTXO-i',
-  qbtc_claim_tx_hash: 'Hash transakcije',
-  qbtc_claim_copy_tx_hash: 'Kopiraj hash transakcije',
   qbtc_claim_done: 'Gotovo',
   qbtc_claim_failed: 'Zahtjev nije uspio. Pokušajte ponovno.',
   qbtc_claim_fast_vault_only:
     'Za polaganje prava trenutno je potreban Fast Vault. Podrška za Secure Vault uskoro će biti dostupna.',
   qbtc_claim_password_description:
     'Unesite svoju lozinku za Fast Vault kako biste supotpisali transakciju potraživanja.',
-  qrCode: 'QR kod',
   receive: 'Primi',
-  receivedShare1Email: 'Vault Share 1 primljen poštom',
   redeem: 'Otkupiti',
   reenter_password: 'Ponovno unesite lozinku',
   recover_vault_or_convert_seedphrase:
@@ -891,7 +742,6 @@ export const hr = {
       title: 'Koristite referalni kod',
     },
   },
-  remove: 'Ukloniti',
   remove_token: 'Ukloni token',
   rename: 'Preimenovati',
   rename_vault: 'Preimenuj trezor',
@@ -934,14 +784,9 @@ export const hr = {
   save_swap_fees_with_referral:
     'Uštedite <blue>10%</blue> na zamjenama - Dodajte preporuku',
   saving_vault: 'Spremanje trezora...',
-  scanThe: 'Skeniraj',
   scan_qr: 'Skeniraj QR kod',
   scan_with_device_index: 'Skeniraj s uređajem {{index}}',
   scan_with_device_name: 'Skeniraj s {{name}}',
-  scan_with_devices:
-    'Skenirajte s uređajima kako biste se pridružili generiranju trezora',
-  scan_with_devices_to_sign:
-    'Skenirajte uređajima za sudjelovanje u potpisivanju transakcije',
   scanning: 'skeniranje...',
   scanning_for_chains: 'Skeniranje lanaca...',
   scanning_for_chains_subtitle:
@@ -949,19 +794,12 @@ export const hr = {
   search: 'Pretraživanje',
   search_field_placeholder: 'Pretraživanje',
   secure: 'Siguran',
-  secureVaultSetup: {
-    backup: {
-      eachDeviceNeedsBackup: 'svaki uređaj treba vlastitu sigurnosnu kopiju.',
-      shares: 'Vaš trezor sadrži {{shares}} dionica',
-    },
-  },
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: 'Dodaj još najmanje {{count}} uređaj',
     addAtLeastMoreDevices_other: 'Dodaj još najmanje {{count}} uređaja',
     devicePosition: '{{current}} od {{total}}',
     localModeWaiting: 'Lokalni način rada, čeka uređaje',
     notWantToUseLocal: 'Ne želite koristiti lokalni način? Vrati se.',
-    switchBack: 'Vrati se',
     useStandardMode: 'Koristi standardni način',
     useLocalMode: 'Koristi lokalni način',
     waitingForDeviceToJoin: 'Čeka se pridruživanje uređaja',
@@ -1003,7 +841,6 @@ export const hr = {
   select_vaults_to_backup: 'Odaberite trezore za sigurnosno kopiranje',
   select_vaults_to_backup_description:
     'Odaberite želite li sigurnosno kopirati samo ovaj trezor ili sve trezore u aplikaciji.',
-  selected: 'odabrano',
   send: 'Poslati',
   sends: 'Šalje',
   send_amount_exceeds_balance: 'Iznos premašuje saldo',
@@ -1023,7 +860,6 @@ export const hr = {
   set_passcode: 'Postavi lozinku',
   settings: 'Postavke',
   share: 'Udio',
-  share2StoredByYou: 'Vault Share 2 pohranjeno od strane vas',
   share_app: 'Podijelite aplikaciju',
   share_description:
     'Podijelite svoj jedinstveni referalni kod kako biste pozvali prijatelje. Oni dobivaju popust i što više trguju, to više zarađujete — izravno u svoj novčanik.',
@@ -1047,7 +883,6 @@ export const hr = {
   signing_address: 'Adresa za potpisivanje',
   signing_error: 'Pogreška pri potpisivanju. Pokušajte ponovno.',
   signing_method: 'Metoda potpisivanja',
-  signing_transaction: 'Potpisivanje transakcije',
   silver: 'Srebro',
   site: 'Stranica',
   site_has_risk: 'Zlonamjernu stranicu otkrio je <provider></provider>',
@@ -1069,11 +904,8 @@ export const hr = {
   spender: 'Potrošač',
   operator: 'Operater',
   contract: 'Ugovor',
-  start: 'Start',
   start_reshare: 'Započni ponovno dijeljenje',
   status: 'Status',
-  success: 'Uspjeh',
-  successfully: 'Uspješno',
   support: 'Podrška',
   swap: 'Zamjena',
   swaps: 'Zamjene',
@@ -1093,11 +925,9 @@ export const hr = {
   this_device: 'Ovaj uređaj',
   this_device_suffix: '(ovaj uređaj)',
   this_vault_only: 'Samo ovaj trezor',
-  this_vault_share: 'dijeljenje ovog trezora uređaja',
   thorchain_address: 'THORChain adresa',
   thorchain_address_required_for_referrals:
     'Za korištenje programa preporuka potrebna vam je THORChain adresa',
-  title: 'Titula',
   tns_alnum_only: 'Referral kod mora sadržavati samo alfanumeričke znakove',
   tns_max_4_chars: 'Referral kod ne smije biti duži od 4 znaka',
   tns_missing_thor_alias: 'Referalni kod mora imati alias THOR lanca',
@@ -1105,11 +935,9 @@ export const hr = {
   to: 'Do',
   to_min_payout: 'min. isplata',
   today: 'Danas',
-  to_asset: 'Do imovine',
   token_not_found_description:
     'Mogući razlozi: pogrešan ugovor, nepodržani lanac ili token uklonjen iz registara.',
   token_not_found_invalid: 'Nevažeća adresa ugovora',
-  tokens: 'žetoni',
   total_fee: 'Ukupne naknade',
   track: 'Staza',
   transaction: 'Transakcija',
@@ -1119,8 +947,6 @@ export const hr = {
   transaction_failed: 'Transakcija<error> neuspješno</error>',
   transaction_pending: 'Transakcija na čekanju...',
   transaction_successful: 'Transakcija <g> uspješna </g>',
-  transaction_could_not_be_parsed:
-    'Ova transakcija nije mogla biti analizirana. Neobrađeni podaci o transakciji prikazani su u nastavku.',
   raw_transaction_data: 'Sirovi podaci o transakcijama',
   transaction_history: 'Povijest transakcija',
   transaction_instructions_summary: 'Sažetak uputa za transakciju',
@@ -1137,13 +963,11 @@ export const hr = {
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Ready to claim',
   tron_unfreeze_button: 'Unfreeze',
-  tron_your_holdings: 'Your holdings',
   tron_bandwidth_and_energy: 'Propusnost i energija',
   tron_bandwidth_description:
     'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
   tron_energy_description:
     'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
-  tron_got_it: 'Got It',
   try_again: 'Pokušaj ponovno',
   turn_your_vault_into_rewards_machine:
     'Pretvorite svoj trezor u stroj za nagrade. Izradite svoju preporuku odmah i počnite zarađivati.',
@@ -1198,8 +1022,6 @@ export const hr = {
     update_is_available: 'Ažuriranje je dostupno',
     version: 'Verzija {{latestVersion}}',
   },
-  vaultCreated: 'Trezor je kreiran',
-  vaultOverview: 'Pregled trezora',
   vault_already_exists: 'Trezor "{{name}}" već postoji',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijeljene datoteke Vaulta s različitih uređaja na istu lokaciju',
@@ -1246,7 +1068,6 @@ export const hr = {
   vault_ready_description:
     'Spremni ste! Vi imate kontrolu nad svakom transakcijom.',
   vault_ready_to_use: 'Vaš trezor je spreman za korištenje',
-  vault_rename_page_header_title: 'Uredite naziv svog trezora',
   vault_rename_page_name_error: 'Naziv trezora mora biti između 1 i 50 znakova',
   vault_selected: 'Odabrani trezor',
   vault_server_share_bad_request:
@@ -1266,22 +1087,6 @@ export const hr = {
     'Naslov mora imati najviše 50 znakova.',
   vault_settings_address_book_title_min_length_error:
     'Naslov mora biti dug barem 1 znak.',
-  vault_setup_prop: {
-    fast: {
-      prop_0: 'Potreban je samo 1 uređaj',
-      prop_1: 'Spremite manja sredstva za svakodnevnu upotrebu',
-      prop_2: 'Vultiserver odmah supotpisuje',
-      purpose: 'Koristite kao "vrući novčanik"',
-      title: 'Brzo postavljanje',
-    },
-    secure: {
-      prop_0: 'Maksimalna sigurnost s više uređaja',
-      prop_1: 'Uvijek dostupno uz sigurnosne kopije uređaja',
-      prop_2: 'Osigurajte bilo koju količinu imovine',
-      purpose: 'Koristite kao "hladni novčanik"',
-      title: 'Vrhunska sigurnost',
-    },
-  },
   vault_share_banner:
     'Ovaj QR kod vam omogućuje dijeljenje verzije vašeg trezora samo za pregled',
   vault_type_does_not_match: 'Vrsta trezora se ne podudara',
@@ -1296,7 +1101,6 @@ export const hr = {
   via: 'preko',
   view_on_explorer: 'Prikaži u Exploreru',
   vote: 'Glasanje',
-  vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Vultisig zajednica',
   vultisig_education: 'Vultisig obrazovanje',
@@ -1307,10 +1111,7 @@ export const hr = {
     'Vaš će se trezor početi generirati od trenutka kada završite s postavljanjem trezora na glavnom uređaju.',
   waiting_for_keygen_start: 'Čekanje početka generiranja ključa...',
   waiting_for_keysign_start: 'Čeka se početak procesa potpisivanja...',
-  waiting_for_reshare_start: 'Čekanje početka ponovnog dijeljenja...',
-  waiting_for_upgrade_start: 'Čekanje početka nadogradnje...',
   wallet: 'Novčanik',
-  while_you_wait_vultisig_is: 'Dok čekate, Vultisig je...',
   withdraw: 'Povući',
   withdraw_ruji_rewards: 'Isplata RUJI nagrada',
   add_cacao_pool: 'Dodaj u CACAO pool',
@@ -1319,13 +1120,8 @@ export const hr = {
   remove_thor_lp: 'Uklonite THORChain LP',
   pool: 'Pool',
   paired_address: 'Uparena adresa',
-  lp_dust_amount_error:
-    'Nedovoljan saldo RUNE. Za isplatu LP-a potrebno je najmanje {{amount}} RUNE kao prašina.',
-  lp_withdraw_percentage: 'Postotak isplate',
   wrong_vault_try_again: 'Pogrešan trezor ili upareni uređaj.',
   yesterday: 'Jučer',
-  you_send: 'Vi šaljete',
-  you_receive: 'Primate',
   you_are_bonding: 'Bondate',
   you_are_unbonding: 'Povlačite bond',
   you_are_sending: 'Šaljete',
@@ -1333,7 +1129,6 @@ export const hr = {
   you_are_unstaking: 'Povlačite stake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
-  yourVaultShares: 'Vaš trezor ima {{shares}} dijeljenih trezora',
   vaultSetupOverview: {
     title: 'Postavke vašeg trezora',
     fast: {
@@ -1398,18 +1193,14 @@ export const hr = {
   account: 'Račun',
   session_history: 'Povijest sesije',
   vultibot: 'VultiBot',
-  vultibot_welcome: 'Bok, ja sam VultiBot',
   start_new_chat: 'Započni novi razgovor',
   new_chat: 'Novi razgovor',
-  messages: 'poruke',
   failed_to_load_session_history: 'Nije uspjelo učitavanje povijesti sesije',
   agent_history_load_error_description:
     'Pokušajte ponovno. Ako problem i dalje postoji, ponovno otvorite chat od prije trenutak ili započnite novi.',
   agent_history_empty_title: 'Još nema razgovora',
   agent_history_empty_description:
     'Započnite novi chat i vaši nedavni razgovori će se pojaviti ovdje.',
-  vultibot_description:
-    'Vaš asistent za trezor s umjetnom inteligencijom. Mogu mijenjati, slati, automatizirati police, provjeravati stanja i upravljati vašim trezorom.',
   agent_what_to_do: 'Što biste željeli raditi?',
   agent_help_description:
     'Mogu pomoći u pripremi zamjena, akcija dodataka i pravila automatizacije.',
@@ -1417,26 +1208,14 @@ export const hr = {
   agent_prompt_earn_apy: 'Želim zaraditi APY na BTC-u',
   agent_prompt_send: 'Pošaljite iznos na ...',
   agent_prompt_swap: 'Pripremite zamjenu iz ETH u BTC',
-  api_key_required: 'Potreban API ključ',
-  api_key_required_description:
-    'Za korištenje VultiBota, prije pokretanja aplikacije postavite svoj Anthropic API ključ kao varijablu okruženja.',
-  type_a_message: 'Upišite poruku...',
-  thinking: 'Razmišljanje',
-  try_saying: 'Pokušajte reći',
   ask_about_plugins_policies: 'Pitajte o dodacima i pravilima...',
   approve_transaction: 'Odobri transakciju',
   enter_vault_password: 'Unesite lozinku trezora',
-  signed_in: 'Prijavljen',
   password_required_for_operation:
     'Molimo unesite svoju lozinku za {{operation}}.',
   confirm_action: 'Potvrdi radnju',
   confirm_action_description: 'Molimo potvrdite da želite {{action}}.',
   agent_chat_render_error: 'Došlo je do pogreške prilikom prikazivanja chata.',
-  agent_connect_description:
-    'Unesite lozinku za trezor da biste se povezali s agentom. Vaša se lozinka koristi za potpisivanje poruke za autentifikaciju.',
-  agent_connect_now: 'Poveži se sada',
-  agent_connected: 'Povezano',
-  agent_connecting: 'Povezivanje...',
   agent_operation_sign_in: 'prijava',
   agent_session_expired:
     'Vaša je sesija istekla. Unesite lozinku trezora za ponovno povezivanje.',
@@ -1445,7 +1224,6 @@ export const hr = {
   agent_give_feedback: 'Pošaljite povratne informacije',
   agent_delete_chat_session: 'Izbriši sesiju chata',
   agent_signing_in: 'Prijava...',
-  agent_thinking_of_ideas: 'Razmišljanje o idejama...',
   agent_tool_label: 'Alat: {{tool}}',
   agent_tx_confirmed: 'Potvrđeno',
   agent_tx_failed: 'Neuspješno',
@@ -1492,8 +1270,6 @@ export const hr = {
   unbonding_unlocks_at: 'Otključava {{date}}',
   validator_status_active: 'Aktivan',
   validator_status_churned_out: 'Izbačeno',
-  validator_voting_power: '{{amount}} {{ticker}}',
-  validator_commission: '{{rate}}%',
   move: 'Potez',
   validator: 'Validator',
   pending_rewards: 'Nagrade na čekanju',
@@ -1541,4 +1317,107 @@ export const hr = {
   raw_message: 'Sirova poruka',
   token: 'Znak',
   token_approval: 'Odobrenje tokena',
+  skip_for_now: 'Preskoči za sada',
+  station_migration_title: 'Migrirajte Station novčanike',
+  station_migration_review_title: 'Pregledajte stare Station novčanike',
+  station_migration_review_description:
+    'Unesite svoju lozinku za Station za lokalno dešifriranje podržanih novčanika. Stara pohrana Station ostaje netaknuta.',
+  station_migration_settings_title: 'Migrirajte Station novčanike',
+  station_migration_settings_description:
+    'Pregledajte stare Station novčanike otkrivene na ovom uređaju.',
+  station_migration_set_up_without_migrating: 'Postavljanje bez migracije',
+  station_migration_no_wallets_found:
+    'U ovom proširenom skladištu nisu pronađeni naslijeđeni Station novčanici.',
+  station_migration_summary_total_one: 'Novčanik {{count}}',
+  station_migration_summary_total_other: 'Novčanici {{count}}',
+  station_migration_status_supported: 'Podržano',
+  station_migration_status_reconnect: 'Ponovno se poveži',
+  station_migration_status_unsupported: 'Nepodržano',
+  station_migration_status_corrupt: 'Nevažeće',
+  station_migration_status_needs_review: 'Potreban je pregled',
+  station_migration_wallet_type_mnemonic: 'Šifrirano sjeme i mnemotehnika',
+  station_migration_wallet_type_seed: 'Šifrirano sjeme',
+  station_migration_wallet_type_private_key: 'Šifrirani privatni ključ',
+  station_migration_wallet_type_interchain_private_key:
+    'Šifrirani privatni ključevi Terre',
+  station_migration_wallet_type_legacy_private_key:
+    'Zastarjeli šifrirani blob s privatnim ključem',
+  station_migration_wallet_type_ledger: 'Ledger hardverski novčanik',
+  station_migration_wallet_type_multisig: 'Višestruki potpisni novčanik',
+  station_migration_wallet_type_unknown: 'Nepoznati format novčanika Station',
+  station_migration_wallet_type_corrupt_storage: 'Nevažeća pohrana',
+  station_migration_wallet_type_corrupt_wallet: 'Nevažeći unos u novčanik',
+  station_migration_reason_supported_mnemonic:
+    'Šifrirani podaci novčanika prisutni su za buduću migraciju koja traži lozinku Station.',
+  station_migration_reason_supported_seed:
+    'Šifrirani početni bajtovi prisutni su za buduću migraciju koja traži lozinku Station.',
+  station_migration_reason_supported_private_key:
+    'Šifrirani podaci privatnog ključa prisutni su za budući uvoz Terra-family.',
+  station_migration_reason_supported_interchain_private_key:
+    'Šifrirani podaci privatnog ključa Terra dostupni su za budući uvoz.',
+  station_migration_reason_supported_legacy_private_key:
+    'Za budući uvoz prisutni su naslijeđeni šifrirani podaci privatnog ključa.',
+  station_migration_reason_ledger_reconnect:
+    'Station pohranjuje podatke javnog računa za ovaj Ledger novčanik. Kasnije ponovno spojite hardverski uređaj da biste ga koristili u Station.',
+  station_migration_reason_multisig:
+    'Station pohranjuje samo javne metapodatke s višestrukim potpisom. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u Vultisig trezor.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed je prisutan, ali nije niz znakova.',
+  station_migration_reason_encrypted_invalid_shape:
+    'Vrijednost &quot;encrypted&quot; je prisutna, ali nije ni niz znakova ni objekt.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    'Kriptiranom objektu privatnog ključa nedostaje tip kovanice 330.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    'Prisutan je stari blob novčanika, ali nije niz znakova.',
+  station_migration_reason_unknown_wallet_shape:
+    'Unos u novčanik ne odgovara nijednom poznatom formatu pohrane Station.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}} sadrži oštećeni JSON.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}} mora biti JSON niz.',
+  station_migration_reason_wallet_entry_not_object:
+    'Unos u novčanik nije objekt.',
+  station_migration_reason_unsupported_fallback:
+    'Ovaj novčanik treba pregledati prije nego što se može migrirati.',
+  station_migration_status_ready: 'Spreman',
+  station_migration_status_failed: 'Neuspješno',
+  station_migration_password_title: 'Otključajte podržane novčanike',
+  station_migration_password_description:
+    'Vaša lozinka za Station ostaje na ovom uređaju i koristi se samo za dešifriranje starih podataka novčanika Station.',
+  station_migration_password_label: 'Lozinka Station',
+  station_migration_password_invalid:
+    'Ta lozinka nije otključala nijedan podržani Station novčanik.',
+  station_migration_check_wallets: 'Provjerite novčanike',
+  station_migration_migrate_wallet: 'Migrirati',
+  station_migration_ready_source: 'Potvrđeno od strane {{source}}.',
+  station_migration_source_mnemonic: 'mnemonički',
+  station_migration_source_seed: 'početni bajtovi',
+  station_migration_source_private_key: 'privatni ključ',
+  station_migration_failure_incorrect_password:
+    'Lozinka nije mogla dešifrirati ovaj novčanik.',
+  station_migration_failure_missing_encrypted_value:
+    'Ovom novčaniku nedostaje šifrirani ključni materijal potreban za migraciju.',
+  station_migration_failure_invalid_seed:
+    'Dešifrirani početni podaci nisu valjani.',
+  station_migration_failure_invalid_legacy_wallet:
+    'Dešifrirani podaci naslijeđenog novčanika nisu valjani.',
+  station_migration_failure_metadata_mismatch:
+    'Dešifrirani ključ ne odgovara staroj adresi Station ili javnom ključu.',
+  station_migration_failure_unsupported:
+    'Ova vrsta novčanika ne može se migrirati s lozinkom.',
+  station_migration_failure_split_interchain_private_keys:
+    'Ovaj novčanik ima odvojene privatne ključeve Terra i Terra Classic. Ova migracija može uvesti samo odgovarajuće ključeve obitelji Terra.',
+  station_migration_status_importing: 'Uvoz',
+  station_migration_status_migrated: 'Migrirano',
+  station_migration_status_skipped: 'Preskočeno',
+  station_migration_status_reason_importing:
+    'Uvoz je započeo. Vratite se ovdje nakon završetka postavljanja ako se ovaj redak ne ažurira.',
+  station_migration_status_reason_migrated:
+    'Ovaj novčanik je uvezen u Vultisig. Stara pohrana Station je još uvijek sačuvana.',
+  station_migration_status_reason_skipped:
+    'Ovaj novčanik je preskočen. Možete ga ponovno otključati kad god budete spremni.',
+  station_migration_status_reason_vault_import_failed:
+    'Uvoz iz trezora nije uspio tijekom generiranja ključa. Ponovno otključajte ovaj novčanik da biste pokušali ponovno.',
+  station_migration_status_reason_vault_save_failed:
+    'Uvoz iz trezora je završen, ali spremanje trezora Vultisig nije uspjelo. Ponovno otključajte ovaj novčanik za ponovni pokušaj.',
 }

@@ -7,6 +7,7 @@ import { ReshareFastVault } from '@clients/extension/src/components/settings/res
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SingleKeygenFastVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenFastVault'
 import { SingleKeygenSecureVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenSecureVault'
+import { StationMigrationSettingsEntry } from '@clients/extension/src/components/settings/StationMigrationSettingsEntry'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
@@ -14,6 +15,7 @@ import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKey
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
+import { StationMigrationPage } from '@clients/extension/src/pages/station-migration/StationMigrationPage'
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
@@ -25,6 +27,7 @@ import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPag
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
 import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
+import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { Views } from '@lib/ui/navigation/Views'
 import { useEffect } from 'react'
 
@@ -53,6 +56,12 @@ const ExtensionVaultPage = () => {
   )
 }
 
+const StationMigrationRoute = () => {
+  const [state] = useViewState<{ source?: 'setup' | 'settings' } | undefined>()
+
+  return <StationMigrationPage source={state?.source} />
+}
+
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
   importSeedphrase: ImportSeedphrasePage,
@@ -79,6 +88,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
     <SettingsPage
       insiderOptions={<ExtensionDeveloperOptions />}
       prioritize={<Prioritize />}
+      stationMigration={<StationMigrationSettingsEntry />}
       expandView={<ExpandView />}
       sidePanel={<ManageSidePanel />}
     />
@@ -92,6 +102,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       </ResponsivenessProvider>
     </ExpandViewGuard>
   ),
+  stationMigration: StationMigrationRoute,
 }
 
 const extensionSharedViewOverrides: Pick<

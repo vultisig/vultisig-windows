@@ -52,16 +52,16 @@ export function loadTestVaultContent(): string | null {
   }
 
   if (!existsSync(TEST_VAULT_CONFIG.path)) {
-    console.warn(`⚠️  Vault file not found: ${TEST_VAULT_CONFIG.path}`)
+    console.warn('⚠️  Vault file not found at configured path')
     return null
   }
 
   try {
     const content = readFileSync(TEST_VAULT_CONFIG.path, 'utf-8')
-    console.log(`✅ Loaded vault from: ${TEST_VAULT_CONFIG.path}`)
+    console.log('✅ Loaded configured vault')
     return content
-  } catch (error) {
-    console.error(`❌ Failed to read vault file: ${error}`)
+  } catch {
+    console.error('❌ Failed to read configured vault file')
     return null
   }
 }

@@ -536,13 +536,13 @@ export const getDepositFormConfig = ({
         {
           name: 'proposalId',
           type: 'text',
-          label: 'chainFunctions.vote.labels.proposalId',
+          label: t('chainFunctions.vote.labels.proposalId'),
           required: true,
         },
         {
           name: 'support',
           type: 'boolean',
-          label: 'chainFunctions.vote.labels.support',
+          label: t('chainFunctions.vote.labels.support'),
           required: true,
         },
       ],

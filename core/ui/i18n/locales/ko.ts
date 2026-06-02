@@ -43,15 +43,11 @@ export const ko = {
   advanced: '고급의',
   advanced_gas_fee: '선불 가스 요금',
   all_vaults: '모든 금고',
-  allowance: '용돈',
-  allowance_amount: '허용 금액',
-  allowance_spender: '용돈 쓰는 사람',
   amount: '양',
   amount_must_be_non_negative: '금액은 음수가 아니어야 합니다.',
   amount_must_be_positive: '금액은 양수여야 합니다.',
   amount_required: '금액이 필요합니다',
   amount_to_unstake: '언스테이킹 금액',
-  and: '그리고',
   app_lock_passcode: '앱 잠금 암호',
   app_lock_passcode_description:
     '앱 잠금 해제에 암호를 요구하여 보안을 강화하세요.',
@@ -67,20 +63,10 @@ export const ko = {
   at_least_one_device: '최소 한 개의 기기',
   at_least_one_device_subtitle:
     'Vultisig를 실행할 수 있는 모든 기기에서 작동합니다.',
-  auto: '자동',
-  auto_compound_into_label: '{{ticker}}로 자동 복리 계산',
   available: '사용 가능',
   back: '뒤쪽에',
-  back_up_now: '지금 백업하세요',
   before_you_start: '시작하기 전에...',
   backup: '지원',
-  backupGuide: '백업 가이드',
-  backupVault: '볼트 백업',
-  backupInCloudTitle: '금고 비밀번호로 암호화됨',
-  backupInCloudDescription:
-    '이전에 생성한 동일한 비밀번호를 사용하여 온라인으로 금고 공유 폴더를 백업하십시오. 온라인 저장을 권장하며, 안전한 금고 공유 폴더는 이를 위해 설계되었습니다.',
-  backupShare: 'Backup Vault 공유',
-  backupShare2: '백업 공유 2',
   backupsTitle: '<highlight>백업,</highlight> 새로운 회복 방법',
   backupsDescription:
     '백업은 Vault를 보호합니다. 각 기기에는 <w>자체</w> 백업이 있습니다. 백업만으로는 자금을 이동할 수 없으며 복구에만 사용됩니다. 분실한 기기를 가져와 복구하세요.',
@@ -90,11 +76,8 @@ export const ko = {
   storeBackupsSeparately: '백업 파일은 별도로 저장하세요.',
   storeBackupsSeparatelyDescription:
     '각 백업 파일을 서로 다른 장소에 보관하세요. 하나가 손상되더라도 자금은 안전하게 보호됩니다.',
-  backupShareWarning: '이것은 금고의 1주차에 ​​불과합니다.',
-  backupShareWarningRest: '다른 기기들에 대해서도 이 과정을 반복하십시오.',
   backup_description: 'Vault Share를 원하는 위치에 백업하세요',
   backup_email_description: '금고 공유를 받을 이메일 주소를 입력하세요.',
-  backup_now: '시작하기',
   backup_password: '백업 비밀번호',
   backup_password_description:
     '이 Vault를 생성할 때 설정한 비밀번호를 입력하십시오.',
@@ -159,9 +142,7 @@ export const ko = {
   change: '변경',
   change_passcode: '비밀번호 변경',
   change_your_friends_referral: '친구 변경 추천 코드 (교환에 사용)',
-  check_email: '이메일을 확인하세요',
   check_for_update: '업데이트 확인',
-  chooseSetup: '설정을 선택하세요',
   choose_a_password: '비밀번호를 선택하세요',
   choose_a_password_description:
     '보안을 강화하려면 비밀번호를 설정하세요. <b>비밀번호는 복구할 수 없습니다.</b> <info />',
@@ -196,20 +177,14 @@ export const ko = {
   adding_coin_to_vault: '금고에 동전을 넣는 중...',
   defi_token_required_description:
     '토큰 관리에서 {{ticker}}를 이 볼트에 추가하여 스테이킹, 언스테이킹 또는 본딩을 진행하세요.',
-  defi_add_chain_to_vault_title: '먼저 체인을 금고에 추가하세요.',
-  defi_add_chain_to_vault_description:
-    '여기에서 볼트에 있는 체인을 활성화하여 DeFi 포지션을 관리하세요.',
   defi_add: '추가하다',
   defi_remove: '제거하다',
   defi_lp_pool_title: '{{pool}} 풀',
   position_label: '위치',
   defi_lp_position_form_title:
     '{{action, select, add {유동성 추가} remove {유동성 제거} other {유동성 관리}}}',
-  defi_lp_position_form_description:
-    '{{position}}에 대한 유동성 관리 기능이 곧 제공될 예정입니다.',
   manage_tokens: '토큰 관리',
   collected_rewards: '획득한 보상',
-  coming_soon: '곧 출시 예정',
   complete: '완벽한',
   congrats: '축하해요!',
   confirm: '확인하다',
@@ -227,14 +202,10 @@ export const ko = {
   continue_anyway: '계속하세요',
   continue_in_new_window: '열린 창에서 계속하세요',
   contract_execution: '계약 실행',
-  contract_interaction: '계약 상호 작용',
   copy_address: '주소 복사',
-  create: '만들다',
   create_folder: '폴더 생성',
   create_new_vault: '새 볼트 생성',
   create_vault: '금고 생성',
-  create_own_referral:
-    '나만의 코드를 만들고 수익을 올리세요<blue> 20%</blue> 추천 스왑에 대해',
   create_referral_form: '추천 생성',
   create_referral_title: '추천 생성',
   create_referral: '추천 생성',
@@ -292,15 +263,12 @@ export const ko = {
     '$VULT를 보유하면 거래 수수료를 낮출 수 있습니다.',
   discovering_mediator: '중재자 서비스를 찾는 중입니다. 잠시 기다려 주세요...',
   done: '완료',
-  downloadVultisig:
-    '다른 기기에 Vultisig 앱을 다운로드하고 &#39;QR 코드 스캔&#39;을 선택하세요.',
   edit_address: '주소 수정',
   edit_friends_referral: '친구 추천 수정',
   edit_referral: '추천 수정',
   remove_friends_referral: '추천 제거',
   edit_vaults: '금고 편집',
   email: '이메일',
-  email_backup: '백업 파일을 받으려면 이메일 주소를 입력하세요.',
   email_placeholder: '이메일 주소를 입력하세요',
   email_required: '이메일 주소는 필수입니다.',
   evm_chains: 'EVM 체인',
@@ -336,7 +304,6 @@ export const ko = {
   enter_your_password: '비밀번호를 입력하세요',
   entity_not_scanned: '{{entity}}는 스캔되지 않았습니다.<provider></provider>',
   entity_scanned: '{{entity}}가 스캔함<provider></provider>',
-  error: '오류',
   est_network_fee: '예상 네트워크 수수료',
   expand_view: '확대 보기',
   open_as_side_panel: '측면 패널로 열기',
@@ -351,8 +318,6 @@ export const ko = {
   desktop_push_notification_disable_failed:
     '푸시 알림을 비활성화할 수 없습니다. 다시 시도해 주세요.',
   expiration_date: '만료일',
-  expiration_must_extend_by_exactly_one_year:
-    '만료일은 정확히 1년까지만 연장할 수 있습니다.',
   expiration_must_be_greater: '만료 기간은 {{value}}보다 길어야 합니다.',
   expires_on: '만료일',
   extension_vault_import_restriction:
@@ -411,85 +376,32 @@ export const ko = {
     'Vultisig는 디지털 자산을 안전하게 저장하고 관리합니다. 송금이나 교환과 같은 모든 작업에는 거래 서명에 필요한 기기 수가 정해져 있습니다.',
   faq_vultisig_make_money_title: 'Vultisig는 어떻게 사용되나요?',
   fast: '빠른',
-  fastVault: '패스트 볼트',
-  secureVault: '안전 금고',
   fast_vault_session_conflict: '금고 공유 불일치',
   fast_vault_session_conflict_description:
     '로컬 볼트 공유 위치가 Vultiserver에 저장된 위치와 일치하지 않습니다. 동일한 시드 구문을 다른 기기에서 가져온 경우 이러한 문제가 발생할 수 있습니다.',
   fast_vault_password_start_keysign_description:
     '서버 공유 비밀번호를 입력하여 거래를 확인하세요.',
   fastVaultSetup: {
-    addOptionalHint: '힌트 추가 (선택 사항)',
-    addAnOptionalHint: '선택적 힌트를 추가합니다.',
     backup: {
-      backThemUpNow: '지금 바로 백업하세요',
-      checkEmail: '이메일을 확인하여 인증하세요.',
       codeInfo: '이렇게 하면 공동 서명자가 활성화됩니다.',
-      completeCustody: '이것은 귀하께서 직접 보관하실 수 있도록 보내드립니다!',
       enterCode: '이메일로 수신된 4자리 코드',
-      heldByServer: '서버에 저장됨',
-      online: '온라인',
-      part1: '금고 공유 지분 1은 다음과 같습니다.',
-      securely: '안전하게, 가급적이면',
-      shareSecurely: '접근을 보장하기 위해, 가급적이면',
-      vaultShares: '귀하의 금고에는 2주가 보관되어 있습니다.',
       sentTo: '({{email}})로 보내세요',
       setNewStandard: '이제 새로운 지갑 표준을 사용할 준비가 되었습니다.',
       changeEmailAndRestartKeygen: '다른 이메일을 사용하세요',
       wellDone: '잘하셨어요',
     },
     connectingWithServer: '서버에 연결 중...',
-    createVault: {
-      availablePlatforms: {
-        descriptionOne: '사용 가능',
-        descriptionTwo: 'Android, iOS, macOS 및 Windows에서 사용 가능',
-      },
-      crossChain: {
-        descriptionOne: '크로스체인.',
-        descriptionTwo: '즐겨 사용하는 토큰을 한 곳에서 모두 교환하세요.',
-      },
-      multiFactor: {
-        descriptionOne: '다중 요소 보안',
-        descriptionTwo: '단일 장애 지점 제거',
-      },
-      seedlessWallet: {
-        descriptionOne: '씨앗이 없는 지갑,',
-        descriptionTwo: '다시는 사기를 당하지 마세요',
-      },
-      selfCustodial: {
-        descriptionOne: '자가 양육,',
-        descriptionTwo: '자산에 대한 완전한 통제권을 부여합니다.',
-      },
-    },
     emailSetupTitle:
       '이 이메일은 클라우드 백업에 사용되며 제3자와 공유되지 않습니다',
     enterEmail: '이메일을 입력하세요',
-    enterHint: '힌트를 입력하세요',
-    hintDescription: '비밀번호를 잊어버린 경우 이 내용이 표시됩니다.',
-    hintEmpty: '힌트가 비어 있습니다',
     passwordCannotBeRecovered: '비밀번호는 재설정하거나 복구할 수 없습니다.',
     passwordTooltip:
       '이는 암호가 하드 드라이브 암호화 방식과 유사하게 백업 파일을 로컬에서 암호화하는 데 사용되기 때문입니다. 다음 단계에서 힌트를 추가할 수 있습니다.',
-    preparingVault: '금고 준비 중',
     referralModalTitle: '추천 코드',
     referralModalSubtitle:
       '여기에 추천 코드를 입력하세요. <b>모든 거래에서 10% 할인을 받으세요.</b>',
     applyReferral: '추천 신청',
     referralAdded: '추천 추가됨',
-    summary: {
-      agreementText: '저는 해야 할 일을 읽고 이해했습니다.',
-      ctaText: '금고를 만드세요',
-      pillText: '볼트 셰어즈',
-      select_preferred_chains: '선호하는 체인점을 선택하세요',
-      start_using_vault: '금고 사용을 시작하세요',
-      summaryItemFourTitle:
-        '분실이나 파손에 대비하여 금고 공유 자금을 기기 자체에 저장하지 마십시오.',
-      summaryItemOneTitle: '각 볼트 공유 폴더를 개별적으로 백업하십시오.',
-      summaryItemThreeTitle:
-        '모든 금고 공유는 귀하의 자금에 대한 안전한 접근을 보장합니다.',
-      summaryItemTwoTitle: '금고 공유 자산을 서로 다른 위치에 보관하세요.',
-      title: '간략한 요약',
-    },
     takeMinute: '이건 잠깐이면 될 겁니다.',
   },
   fast_sign: '빠른 서명',
@@ -508,7 +420,6 @@ export const ko = {
   follow_banner_subtitle: 'Vultisig는 여러분과 함께 만들어갑니다.',
   follow_banner_title: 'X에서 저희를 팔로우하세요',
   from: '에서',
-  from_asset: '자산에서',
   freeze: '꼭 매달리게 하다',
   function_arguments: '함수 인자',
   function_signature: '함수 시그니처',
@@ -519,8 +430,6 @@ export const ko = {
   gas_limit_tooltip_content:
     '지불해야 할 최대 가스량입니다. 가스 한도가 거래를 전송하기에 충분하지 않은 경우 늘릴 수 있습니다.',
   general: '일반적인',
-  generating_ecdsa_key: 'ECDSA 키 생성',
-  generating_eddsa_key: 'EdDSA 키 생성 중',
   get_started: '시작하기',
   github: '깃허브',
   go_back: '뒤로 가기',
@@ -551,7 +460,6 @@ export const ko = {
     'IBC 거래 메모는 지원되지 않습니다.',
   ibc_transfer: 'IBC 전송',
   id: 'ID',
-  i_understand: '이해합니다',
   i_understand_save_backup: '저는 이 백업을 저장하는 방법을 알고 있습니다.',
   import: '수입',
   import_key: '가져오기 키',
@@ -601,40 +509,6 @@ export const ko = {
   incorrect_passcode: '잘못된 비밀번호입니다.',
   invalid_passcode: '잘못된 비밀번호입니다',
   join_keygen: 'Keygen에 가입하세요',
-  join_keygen_slider1_note1: '불티시그는',
-  join_keygen_slider1_note2: '완전 오픈 소스',
-  join_keygen_slider1_note3:
-    '이는 누구나 코드를 검토할 수 있어 완전한 투명성과 신뢰성을 보장한다는 의미입니다.',
-  join_keygen_slider1_title: '알고 계셨나요?',
-  join_keygen_slider2_note1: '시드 구문이 필요하지 않습니다',
-  join_keygen_slider2_note2:
-    'Vultisig는 관리하기 쉬운 금고 공유 방식을 사용하여 기존 지갑보다 간편하고 안전합니다.',
-  join_keygen_slider2_title: '오늘의 팁',
-  join_keygen_slider3_note1: 'Vultisig는 다음을 지원합니다.',
-  join_keygen_slider3_note2: '10,000 토큰',
-  join_keygen_slider3_note3:
-    '비트코인, 이더리움 또는 덜 알려진 토큰을 사용하든 상관없이 Vultisig가 도와드립니다.',
-  join_keygen_slider3_title: '재밌는 사실',
-  join_keygen_slider4_note1: '개인정보 보호는 중요합니다. Vultisig',
-  join_keygen_slider4_note2: '추적하지 않습니다',
-  join_keygen_slider4_note3:
-    '귀하의 활동에는 어떠한 등록도 필요하지 않으며, 익명성과 개인정보 보호를 보장합니다.',
-  join_keygen_slider4_title: '보안 인사이트',
-  join_keygen_slider5_note1:
-    '감사 및 보안 완료. Vultisig는 다음과 같은 절차를 거칩니다.',
-  join_keygen_slider5_note2: '정기적인 보안 감사',
-  join_keygen_slider5_note3:
-    '귀하의 자산이 어떠한 위협으로부터도 보호되도록 보장합니다.',
-  join_keygen_slider5_title: '테크 토크',
-  join_keygen_slider6_note1:
-    '수천 명의 사용자와 함께하세요. 수많은 사용자가 디지털 자산을 Vultisig에 맡기고 있습니다. 지금 바로 Vultisig의 일원이 되어 보세요.',
-  join_keygen_slider6_note2: '안전하고 성장하는 커뮤니티',
-  join_keygen_slider6_title: '커뮤니티 코너',
-  join_keygen_slider7_note1:
-    '다양한 기기와의 호환성. Vultisig 금고에 접속하세요.',
-  join_keygen_slider7_note2: '여러 기기에서',
-  join_keygen_slider7_note3: '보안을 저해하지 않으면서 유연성을 향상시킵니다.',
-  join_keygen_slider7_title: '주요 기능',
   join_keysign: 'Keysign에 가입하세요',
   join_transaction: '참여 거래',
   foreground_notification_generic: '승인 대기 중인 거래',
@@ -642,7 +516,6 @@ export const ko = {
   foreground_notification_swap: '{{from}} → {{to}}로 교환',
   join_reshare: 'Reshare에 가입하세요',
   join_session: '세션 참여하기',
-  join_upgrade: '업그레이드 가입',
   joining_keygen: 'Keygen에 참여하기',
   joining_keysign: 'Keysign에 가입하세요',
   joining_session: '세션 참여 중...',
@@ -650,11 +523,8 @@ export const ko = {
   keygen_devices_requirements_info:
     '다른 기기로 QR 코드를 스캔하세요. {{recommended}} 기기 설정이 권장되며, {{min}}이면 충분합니다.',
   keygen_failed: '키 생성 오류입니다. 다시 시도해 주세요.',
-  keygen_protocol_done: '완료',
-  keygen_protocol_running: '달리기',
   keys: '열쇠',
   keysign: '키사인',
-  keysign_request: '키사인 요청',
   label: '상표',
   language: '언어',
   learnMore: '더 알아보기',
@@ -663,7 +533,6 @@ export const ko = {
   legal: '합법적인',
   link_copied: '링크가 클립보드에 복사되었습니다',
   loading: '로딩 중...',
-  local: '현지의',
   localMode: '로컬 모드입니다',
   lock_time: '잠금 시간',
   lock_vultisig_automatically_after: 'Vultisig를 자동으로 잠금 처리합니다...',
@@ -709,8 +578,6 @@ export const ko = {
   new: '새로운',
   next: '다음',
   new_passcode: '새 비밀번호',
-  new_vault_setup: '새로운 금고 설정',
-  new_vault_setup_disclaimer: '설정이 변경되었습니다. 새 백업을 만드십시오.',
   no_active_chains_found: '활성 체인이 발견되지 않았습니다.',
   no_active_chains_found_description:
     '해당 시드 구문에서 자산을 발견하지 못했습니다.',
@@ -753,8 +620,6 @@ export const ko = {
     '여기에 사용자 지정 볼트가 표시됩니다. 먼저 볼트를 생성하거나 기존 볼트를 가져오세요.',
   node_address: '노드 주소',
   normal: '정상',
-  not_enough_asset_to_cover_gas_fees:
-    '가스 요금을 충당하기에 {{asset}}이 부족합니다.',
   not_enough_funds: '자금이 부족합니다',
   nothing_to_add: '더 이상 추가할 내용이 없습니다.',
   nothing_to_add_hint:
@@ -762,7 +627,6 @@ export const ko = {
   of: '~의',
   off: '끄다',
   on: '~에',
-  on_chain: '{{chain}}에서',
   onboarding_description_1:
     'Vultisig는 모든 주요 블록체인 및 10,000개 이상의 토큰과 호환되는 안전한 다중 기기 암호화폐 보관소입니다. Vultisig는 완전한 자체 보관 방식을 채택하고 있습니다.',
   onboarding_description_2:
@@ -771,18 +635,14 @@ export const ko = {
     'Vultisig는 기본적으로 여러 기기를 지원하는 애플리케이션입니다. 안전한 저장소를 생성하려면 최소 두 대의 기기가 필요합니다. 하나는 저장소 생성을 위한 기기이고, 다른 하나는 연결될 기기입니다.',
   onboarding_description_4:
     'Vultisig는 시드 구문이 없는 지갑입니다. 대신 관리하기 쉬운 볼트 공유를 사용합니다. 모든 기기는 고유한 볼트 공유를 가지며, 별도의 백업이 필요합니다.',
-  onboarding_greeting: '작별 인사를 하세요<g> 시드 구문</g>',
   operator_fee: '운영자 수수료',
   basis_points: '기준점',
-  optional: '선택 과목',
   optionalDevice: '선택 사양 장치',
-  or: '또는',
   other: '다른',
   overview: '개요',
   part: '부분',
   passcodes_do_not_match: '비밀번호가 일치하지 않습니다.',
   password: '비밀번호',
-  password_backup: '금고를 안전하게 보호하고 빠르게 서명하세요.',
   password_do_not_match: '비밀번호가 일치하지 않습니다',
   password_pattern_error: '비밀번호는 {{min}}자에서 {{max}}자 사이여야 합니다.',
   password_required: '비밀번호가 필요합니다',
@@ -792,7 +652,6 @@ export const ko = {
   percentage: '백분율',
   percentage_limit: '백분율은 0~100% 범위 내에 있어야 합니다.',
   percentage_to_unstake: '지분 해제 비율',
-  permissions: '권한',
   pick_referral_code: '추천 코드를 선택하세요',
   platinum: '백금',
   plugin_info: '앱 정보',
@@ -806,7 +665,6 @@ export const ko = {
   portfolio_balance: '포트폴리오 잔액',
   positions: '직위',
   powered_by: 'Powered by<provider></provider>',
-  prepareVault: '금고 준비 중...',
   price: '가격',
   price_impact_average: '평균',
   price_impact_good: '좋은',
@@ -832,17 +690,13 @@ export const ko = {
   qbtc_claim_success_title: '청구 성공',
   qbtc_claim_utxos_claimed: 'UTXOs 청구됨',
   qbtc_claim_utxos_skipped: 'UTXO가 건너뛰었습니다',
-  qbtc_claim_tx_hash: '거래 해시',
-  qbtc_claim_copy_tx_hash: '거래 해시 복사',
   qbtc_claim_done: '완료',
   qbtc_claim_failed: '청구가 실패했습니다. 다시 시도해 주세요.',
   qbtc_claim_fast_vault_only:
     '현재 클레임을 위해서는 Fast Vault가 필요합니다. Secure Vault 지원은 곧 제공될 예정입니다.',
   qbtc_claim_password_description:
     '청구 거래에 공동 서명하려면 Fast Vault 비밀번호를 입력하십시오.',
-  qrCode: 'QR 코드',
   receive: '받다',
-  receivedShare1Email: 'Vault Share 1을 우편으로 받았습니다.',
   redeem: '상환하다',
   reenter_password: '비밀번호를 다시 입력하세요',
   recover_vault_or_convert_seedphrase:
@@ -882,7 +736,6 @@ export const ko = {
       title: '추천 코드를 사용하세요',
     },
   },
-  remove: '제거하다',
   remove_token: '토큰 제거',
   rename: '이름 변경',
   rename_vault: '금고 이름 변경',
@@ -924,12 +777,9 @@ export const ko = {
   save_swap_fees_with_referral:
     '구하다<blue> 10%</blue> 스왑 거래 시 - 추천인 추가',
   saving_vault: '금고를 구하는 중...',
-  scanThe: '스캔하세요',
   scan_qr: 'QR 코드를 스캔하세요',
   scan_with_device_index: '{{index}} 장치로 스캔하세요',
   scan_with_device_name: '{{name}}으로 스캔하세요',
-  scan_with_devices: '기기를 스캔하여 금고 세대에 참여하세요',
-  scan_with_devices_to_sign: '거래 서명에 참여하려면 기기를 스캔하세요.',
   scanning: '스캐닝...',
   scanning_for_chains: '체인을 검색하는 중...',
   scanning_for_chains_subtitle:
@@ -937,12 +787,6 @@ export const ko = {
   search: '찾다',
   search_field_placeholder: '찾다',
   secure: '안전한',
-  secureVaultSetup: {
-    backup: {
-      eachDeviceNeedsBackup: '각 장치마다 자체 백업이 필요합니다.',
-      shares: '귀하의 금고에는 {{shares}}주가 있습니다.',
-    },
-  },
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: '최소 {{count}}개의 기기를 추가하세요',
     addAtLeastMoreDevices_other: '최소 {{count}}개의 기기를 추가하세요',
@@ -950,7 +794,6 @@ export const ko = {
     localModeWaiting: '로컬 모드, 장치 대기 중',
     notWantToUseLocal:
       '로컬 환경을 사용하고 싶지 않으세요? 이전 버전으로 되돌리세요.',
-    switchBack: '스위치백',
     useStandardMode: '표준 모드를 ​​사용하세요',
     useLocalMode: '로컬 모드를 사용하세요',
     waitingForDeviceToJoin: '기기 연결을 기다리는 중',
@@ -992,7 +835,6 @@ export const ko = {
   select_vaults_to_backup: '백업할 볼트를 선택하세요',
   select_vaults_to_backup_description:
     '이 볼트만 백업할지 아니면 앱에 있는 모든 볼트를 백업할지 선택하세요.',
-  selected: '선택된',
   send: '보내다',
   sends: '보낸다',
   send_amount_exceeds_balance: '금액이 잔액을 초과합니다',
@@ -1011,7 +853,6 @@ export const ko = {
   set_passcode: '암호 설정',
   settings: '설정',
   share: '공유하다',
-  share2StoredByYou: 'Vault Share 2는 사용자가 저장했습니다.',
   share_app: '앱을 공유하세요',
   share_description:
     '나만의 추천 코드를 공유하여 친구를 초대하세요. 친구는 할인을 받고, 친구가 거래할수록 당신의 수익도 늘어납니다. 수익은 당신의 금고로 바로 지급됩니다.',
@@ -1035,7 +876,6 @@ export const ko = {
   signing_address: '서명 주소',
   signing_error: '서명 오류입니다. 다시 시도해 주세요.',
   signing_method: '서명 방식',
-  signing_transaction: '서명 거래',
   silver: '은',
   site: '대지',
   site_has_risk: '악성 사이트가 감지되었습니다.<provider></provider>',
@@ -1057,11 +897,8 @@ export const ko = {
   spender: '돈 쓰는 사람',
   operator: '연산자',
   contract: '계약',
-  start: '시작',
   start_reshare: '공유 시작',
   status: '상태',
-  success: '성공',
-  successfully: '성공적으로',
   support: '지원하다',
   swap: '교환',
   swaps: '스왑',
@@ -1081,11 +918,9 @@ export const ko = {
   this_device: '이 장치',
   this_device_suffix: '(이 장치)',
   this_vault_only: '이 금고에만 해당',
-  this_vault_share: '이 장치 보관소 공유',
   thorchain_address: 'THORChain 주소',
   thorchain_address_required_for_referrals:
     '추천 프로그램을 이용하려면 THORChain 주소가 필요합니다.',
-  title: '제목',
   tns_alnum_only: '추천 코드는 영숫자만 포함해야 합니다.',
   tns_max_4_chars: '추천 코드는 4자 이하여야 합니다.',
   tns_missing_thor_alias: '추천 코드에는 THOR 체인 별칭이 있어야 합니다.',
@@ -1093,11 +928,9 @@ export const ko = {
   to: '에게',
   to_min_payout: '최소 지급액',
   today: '오늘',
-  to_asset: '자산으로',
   token_not_found_description:
     '가능한 원인: 잘못된 계약, 지원되지 않는 체인 또는 토큰이 레지스트리에서 삭제됨.',
   token_not_found_invalid: '잘못된 계약 주소입니다',
-  tokens: '토큰',
   total_fee: '총 수수료',
   track: '길',
   transaction: '거래',
@@ -1107,8 +940,6 @@ export const ko = {
   transaction_failed: '거래<error> 실패한</error>',
   transaction_pending: '거래 진행 중...',
   transaction_successful: '거래<g> 성공적인</g>',
-  transaction_could_not_be_parsed:
-    '이 거래를 분석할 수 없습니다. 거래 원본 데이터는 아래에 표시됩니다.',
   raw_transaction_data: '원시 거래 데이터',
   transaction_history: '거래 내역',
   transaction_instructions_summary: '거래 지침 요약',
@@ -1125,13 +956,11 @@ export const ko = {
   tron_pending_withdrawals: '보류 중인 출금',
   tron_ready_to_claim: '수령 준비 완료',
   tron_unfreeze_button: '녹이다',
-  tron_your_holdings: '보유 자산',
   tron_bandwidth_and_energy: '대역폭 및 에너지',
   tron_bandwidth_description:
     'TRON에서 모든 거래(일반 토큰 전송 및 스마트 계약 상호 작용 포함)에는 대역폭 포인트가 필요합니다. 모든 TRON 사용자는 매일 600 대역폭 포인트를 무료로 받으며, 이는 일반적인 토큰 전송을 약 두 번 할 수 있는 양입니다. 또한 TRX를 스테이킹하여 추가 대역폭 포인트를 획득하고, 일일 잔액을 늘려 더 많은 거래를 처리할 수 있습니다. 충분한 대역폭 포인트가 있으면 토큰 전송, TRX 스테이킹 또는 스마트 계약 상호 작용을 할 때 가스 수수료로 TRX를 지불하지 않아도 됩니다.',
   tron_energy_description:
     '스마트 계약 비용을 할인해 줍니다. 에너지가 부족할 경우 TRX로 수수료를 충당합니다. 녹색 미터는 스테이킹된 TRX에서 매일 충전되는 에너지를 보여줍니다. 스테이킹된 TRX가 많을수록 더 많은 에너지를 얻습니다. 24시간마다 충전됩니다. 거래 실패 시 에너지가 소진되며 환불되지 않습니다.',
-  tron_got_it: '알았어요',
   try_again: '다시 시도하세요',
   turn_your_vault_into_rewards_machine:
     '금고를 보상 지급 시스템으로 바꿔보세요. 지금 바로 추천 코드를 생성하고 적립을 시작하세요.',
@@ -1198,8 +1027,6 @@ export const ko = {
   unbonding_unlocks_at: '{{date}} 잠금 해제',
   validator_status_active: '활동적인',
   validator_status_churned_out: '대량 생산됨',
-  validator_voting_power: '{{amount}} {{ticker}}',
-  validator_commission: '{{rate}}%',
   move: '이동하다',
   validator: '검증자',
   pending_rewards: '보상 예정',
@@ -1217,8 +1044,6 @@ export const ko = {
     update_is_available: '업데이트가 가능합니다',
     version: '버전 {{latestVersion}}',
   },
-  vaultCreated: 'Vault가 생성되었습니다',
-  vaultOverview: '금고 개요',
   vault_already_exists: 'Vault &quot;{{name}}&quot;이 이미 존재합니다.',
   vault_backup_page_password_info:
     '서로 다른 기기의 Vault 공유 파일을 같은 위치에 저장하지 마십시오.',
@@ -1265,7 +1090,6 @@ export const ko = {
   vault_ready_description:
     '모든 준비가 완료되었습니다! 모든 거래는 고객님께서 직접 관리하실 수 있습니다.',
   vault_ready_to_use: '금고를 사용하실 준비가 되었습니다.',
-  vault_rename_page_header_title: '금고 이름을 수정하세요',
   vault_rename_page_name_error: '금고 이름은 1자에서 50자 사이여야 합니다.',
   vault_selected: '선택된 금고',
   vault_server_share_bad_request:
@@ -1286,22 +1110,6 @@ export const ko = {
     '제목은 최대 50자까지 가능합니다.',
   vault_settings_address_book_title_min_length_error:
     '제목은 최소 1자 이상이어야 합니다.',
-  vault_setup_prop: {
-    fast: {
-      prop_0: '기기는 하나만 있으면 됩니다.',
-      prop_1: '일상생활에 필요한 소액을 모아두세요.',
-      prop_2: 'Vultiserver는 즉시 공동 서명을 합니다.',
-      purpose: '&quot;핫 월렛&quot;으로 사용하세요',
-      title: '빠른 설치',
-    },
-    secure: {
-      prop_0: '여러 기기에서 최대 보안을 제공합니다.',
-      prop_1: '기기 백업을 통해 항상 접근 가능합니다.',
-      prop_2: '자산의 액수를 안전하게 보호하세요',
-      purpose: '&quot;콜드 월렛&quot;으로 사용하세요.',
-      title: '궁극의 보안',
-    },
-  },
   vault_share_banner:
     '이 QR 코드를 사용하면 Vault의 보기 전용 버전을 공유할 수 있습니다.',
   vault_type_does_not_match: '금고 유형이 일치하지 않습니다.',
@@ -1316,7 +1124,6 @@ export const ko = {
   via: '~을 통해',
   view_on_explorer: '익스플로러에서 보기',
   vote: '투표',
-  vult: '$VULT',
   vultisig: '불티시그',
   vultisig_community: '불티시그 커뮤니티',
   vultisig_education: 'Vultisig Education',
@@ -1327,10 +1134,7 @@ export const ko = {
     '메인 기기에서 금고 설정을 완료하는 순간부터 금고 데이터 생성이 시작됩니다.',
   waiting_for_keygen_start: '키 생성 시작을 기다리는 중...',
   waiting_for_keysign_start: '서명 절차가 시작되기를 기다리는 중...',
-  waiting_for_reshare_start: '재공유 시작을 기다리는 중...',
-  waiting_for_upgrade_start: '업그레이드가 시작될 때까지 기다리는 중...',
   wallet: '지갑',
-  while_you_wait_vultisig_is: '기다리시는 동안, Vultisig는...',
   withdraw: '철회하다',
   withdraw_ruji_rewards: 'RUJI 리워드 인출',
   add_cacao_pool: '카카오 풀에 추가',
@@ -1339,13 +1143,8 @@ export const ko = {
   remove_thor_lp: 'THORChain LP를 제거하세요',
   pool: 'Pool',
   paired_address: '쌍을 이룬 주소',
-  lp_dust_amount_error:
-    '룬 잔액이 부족합니다. LP를 인출하려면 최소 {{amount}} 룬이 가루로 필요합니다.',
-  lp_withdraw_percentage: '인출 비율',
   wrong_vault_try_again: '잘못된 볼트 또는 페어링 장치입니다.',
   yesterday: '어제',
-  you_send: '당신이 보내는',
-  you_receive: '당신은 받습니다',
   you_are_bonding: '당신들은 유대감을 형성하고 있어요',
   you_are_unbonding: '당신은 연결을 끊고 있습니다',
   you_are_sending: '보내는 중입니다',
@@ -1357,7 +1156,6 @@ export const ko = {
   claim_n_validators: '{{count}} 검증자로부터의 클레임',
   you_are_minting: '당신은 돈을 모으고 있어요',
   you_are_redeeming: '당신은 환불하고 있습니다',
-  yourVaultShares: '귀하의 금고에는 {{shares}}개의 금고 지분이 있습니다.',
   vaultSetupOverview: {
     title: '금고 설정',
     fast: {
@@ -1420,18 +1218,14 @@ export const ko = {
   account: '계정',
   session_history: '세션 기록',
   vultibot: '불티',
-  vultibot_welcome: '안녕하세요, 저는 불티입니다.',
   start_new_chat: '새 채팅 시작',
   new_chat: '새 채팅',
-  messages: '메시지',
   failed_to_load_session_history: '세션 기록을 불러오는 데 실패했습니다.',
   agent_history_load_error_description:
     '다시 시도해 주세요. 문제가 계속되면 방금 전 채팅을 다시 열거나 새 채팅을 시작하세요.',
   agent_history_empty_title: '아직 채팅이 없습니다',
   agent_history_empty_description:
     '새 채팅을 시작하면 최근 대화 내용이 여기에 표시됩니다.',
-  vultibot_description:
-    '인공지능 기반 금고 관리 도우미입니다. 환전, 송금, 정책 자동화, 잔액 조회, 금고 관리까지 모두 가능합니다.',
   agent_what_to_do: '무엇을 하고 싶으세요?',
   agent_help_description:
     '저는 스왑, 플러그인 작업 및 자동화 규칙 준비를 도와드릴 수 있습니다.',
@@ -1439,26 +1233,14 @@ export const ko = {
   agent_prompt_earn_apy: '비트코인으로 연이율(APY)을 얻고 싶습니다.',
   agent_prompt_send: '... 금액을 보내주세요.',
   agent_prompt_swap: '이더리움(ETH)을 비트코인(BTC)으로 교환할 준비를 하세요.',
-  api_key_required: 'API 키가 필요합니다',
-  api_key_required_description:
-    'Vulti를 사용하려면 앱을 시작하기 전에 Anthropic API 키를 환경 변수로 설정하십시오.',
-  type_a_message: '메시지를 입력하세요...',
-  thinking: '생각',
-  try_saying: '이렇게 말해 보세요',
   ask_about_plugins_policies: '플러그인과 정책에 대해 문의하세요...',
   approve_transaction: '거래 승인',
   enter_vault_password: '금고 비밀번호를 입력하세요',
-  signed_in: '로그인됨',
   password_required_for_operation:
     '{{operation}}에 대한 비밀번호를 입력하세요.',
   confirm_action: '확인 작업',
   confirm_action_description: '{{action}}을(를) 원하시는지 확인해 주세요.',
   agent_chat_render_error: '채팅을 렌더링하는 중 오류가 발생했습니다.',
-  agent_connect_description:
-    '에이전트에 연결하려면 금고 암호를 입력하십시오. 암호는 인증 메시지에 서명하는 데 사용됩니다.',
-  agent_connect_now: '지금 연결하세요',
-  agent_connected: '연결됨',
-  agent_connecting: '연결 중...',
   agent_operation_sign_in: '로그인',
   agent_session_expired:
     '세션이 만료되었습니다. 다시 연결하려면 금고 비밀번호를 입력하세요.',
@@ -1467,7 +1249,6 @@ export const ko = {
   agent_give_feedback: '피드백을 제공해주세요',
   agent_delete_chat_session: '채팅 세션 삭제',
   agent_signing_in: '로그인 중...',
-  agent_thinking_of_ideas: '아이디어를 생각해 보는 중...',
   agent_tool_label: '도구: {{tool}}',
   agent_tx_confirmed: '확인됨',
   agent_tx_failed: '실패한',
@@ -1526,4 +1307,107 @@ export const ko = {
   raw_message: '원본 메시지',
   token: '토큰',
   token_approval: '토큰 승인',
+  skip_for_now: '지금은 건너뛰세요',
+  station_migration_title: 'Station 지갑을 마이그레이션하세요',
+  station_migration_review_title: '기존 Station 지갑을 검토하세요',
+  station_migration_review_description:
+    '지원되는 지갑을 로컬에서 복호화하려면 Station 암호를 입력하십시오. 기존 Station 저장소는 그대로 유지됩니다.',
+  station_migration_settings_title: 'Station 지갑을 마이그레이션하세요',
+  station_migration_settings_description:
+    '이 기기에서 감지된 이전 Station 지갑을 검토하세요.',
+  station_migration_set_up_without_migrating: '마이그레이션 없이 설정',
+  station_migration_no_wallets_found:
+    '이 확장 저장소에서 기존 Station 지갑이 발견되지 않았습니다.',
+  station_migration_summary_total_one: '{{count}} 지갑',
+  station_migration_summary_total_other: '{{count}} 지갑',
+  station_migration_status_supported: '지원됨',
+  station_migration_status_reconnect: '다시 연결',
+  station_migration_status_unsupported: '지원되지 않음',
+  station_migration_status_corrupt: '유효하지 않은',
+  station_migration_status_needs_review: '검토 필요',
+  station_migration_wallet_type_mnemonic: '암호화된 시드와 니모닉',
+  station_migration_wallet_type_seed: '암호화된 시드',
+  station_migration_wallet_type_private_key: '암호화된 개인 키',
+  station_migration_wallet_type_interchain_private_key:
+    '암호화된 Terra 개인 키',
+  station_migration_wallet_type_legacy_private_key:
+    '기존 암호화된 개인 키 블롭',
+  station_migration_wallet_type_ledger: '레저 하드웨어 지갑',
+  station_migration_wallet_type_multisig: '멀티시그 지갑',
+  station_migration_wallet_type_unknown: '알 수 없는 Station 지갑 형식',
+  station_migration_wallet_type_corrupt_storage: '잘못된 저장소',
+  station_migration_wallet_type_corrupt_wallet: '잘못된 지갑 입력입니다',
+  station_migration_reason_supported_mnemonic:
+    '암호화된 지갑 데이터는 향후 마이그레이션을 위해 존재하며, 해당 마이그레이션에서 Station 암호를 요구합니다.',
+  station_migration_reason_supported_seed:
+    '암호화된 시드 바이트는 향후 마이그레이션에서 Station 암호를 요청할 때 사용됩니다.',
+  station_migration_reason_supported_private_key:
+    '암호화된 개인 키 데이터가 향후 Terra 제품군 가져오기를 위해 존재합니다.',
+  station_migration_reason_supported_interchain_private_key:
+    '암호화된 Terra 개인 키 데이터가 향후 가져오기를 위해 준비되어 있습니다.',
+  station_migration_reason_supported_legacy_private_key:
+    '기존에 암호화된 개인 키 데이터가 향후 가져오기를 위해 존재합니다.',
+  station_migration_reason_ledger_reconnect:
+    'Station에는 이 Ledger 지갑의 공개 계정 정보가 저장됩니다. 나중에 하드웨어 장치를 다시 연결하여 Station에서 사용하세요.',
+  station_migration_reason_multisig:
+    'Station는 공개 멀티시그 메타데이터만 저장합니다. Vultisig 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
+  station_migration_reason_encrypted_seed_not_string:
+    'encryptedSeed는 존재하지만 문자열이 아닙니다.',
+  station_migration_reason_encrypted_invalid_shape:
+    'encrypted는 존재하지만 문자열도 아니고 객체도 아닙니다.',
+  station_migration_reason_encrypted_private_key_missing_330:
+    '암호화된 개인 키 객체에 코인 유형 330이 누락되었습니다.',
+  station_migration_reason_legacy_wallet_blob_not_string:
+    '기존 지갑의 블롭이 존재하지만 문자열은 아닙니다.',
+  station_migration_reason_unknown_wallet_shape:
+    '지갑 항목이 알려진 Station 저장 형식과 일치하지 않습니다.',
+  station_migration_reason_malformed_json:
+    '{{storageKey}}에 잘못된 형식의 JSON이 포함되어 있습니다.',
+  station_migration_reason_storage_not_array:
+    '{{storageKey}}는 JSON 배열이어야 합니다.',
+  station_migration_reason_wallet_entry_not_object:
+    '지갑 항목은 객체가 아닙니다.',
+  station_migration_reason_unsupported_fallback:
+    '이 지갑은 이전하기 전에 검토가 필요합니다.',
+  station_migration_status_ready: '준비가 된',
+  station_migration_status_failed: '실패한',
+  station_migration_password_title: '지원되는 지갑 잠금 해제',
+  station_migration_password_description:
+    'Station 비밀번호는 이 기기에 저장되며 이전 Station 지갑 데이터를 복호화하는 데에만 사용됩니다.',
+  station_migration_password_label: 'Station 비밀번호',
+  station_migration_password_invalid:
+    '해당 비밀번호로는 지원되는 Station 지갑을 잠금 해제할 수 없습니다.',
+  station_migration_check_wallets: '지갑을 확인하세요',
+  station_migration_migrate_wallet: '마이그레이션',
+  station_migration_ready_source: '{{source}}에서 유효성이 검증되었습니다.',
+  station_migration_source_mnemonic: '기억술',
+  station_migration_source_seed: '시드 바이트',
+  station_migration_source_private_key: '개인 키',
+  station_migration_failure_incorrect_password:
+    '비밀번호로 이 지갑을 해독할 수 없습니다.',
+  station_migration_failure_missing_encrypted_value:
+    '이 지갑에는 마이그레이션에 필요한 암호화 키 자료가 없습니다.',
+  station_migration_failure_invalid_seed:
+    '복호화된 시드 데이터가 유효하지 않습니다.',
+  station_migration_failure_invalid_legacy_wallet:
+    '복호화된 기존 지갑 데이터가 유효하지 않습니다.',
+  station_migration_failure_metadata_mismatch:
+    '복호화된 키가 이전 Station 주소 또는 공개 키와 일치하지 않습니다.',
+  station_migration_failure_unsupported:
+    '이 지갑 유형은 비밀번호를 사용하여 마이그레이션할 수 없습니다.',
+  station_migration_failure_split_interchain_private_keys:
+    '이 지갑은 Terra와 Terra Classic 개인 키가 각각 분리되어 있습니다. 이 마이그레이션은 동일한 Terra 계열 키만 가져올 수 있습니다.',
+  station_migration_status_importing: '가져오는 중',
+  station_migration_status_migrated: '마이그레이션됨',
+  station_migration_status_skipped: '건너뛰었습니다',
+  station_migration_status_reason_importing:
+    '가져오기가 시작되었습니다. 설정이 완료되면 이 행이 업데이트되지 않을 경우 여기로 돌아오십시오.',
+  station_migration_status_reason_migrated:
+    '이 지갑은 Vultisig로 가져왔습니다. 이전 Station 저장소는 그대로 유지됩니다.',
+  station_migration_status_reason_skipped:
+    '이 지갑은 건너뛰었습니다. 준비가 되면 언제든지 다시 잠금 해제할 수 있습니다.',
+  station_migration_status_reason_vault_import_failed:
+    '키 생성 중 Vault 가져오기에 실패했습니다. 다시 시도하려면 지갑 잠금을 해제하세요.',
+  station_migration_status_reason_vault_save_failed:
+    '볼트 가져오기는 완료되었지만 Vultisig 볼트 저장에 실패했습니다. 다시 시도하려면 이 지갑의 잠금을 해제하세요.',
 }

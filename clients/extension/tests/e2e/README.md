@@ -27,6 +27,31 @@ yarn test:e2e tests/e2e/specs/swap-flow.spec.ts
 yarn test:e2e tests/e2e/specs/swap-flow.spec.ts --headed
 ```
 
+## Brand QA
+
+Use the brand QA commands after building an extension dist when changing
+manifest metadata, provider identity, wallet-picker injection, brand assets, or
+white-label build plumbing.
+
+```bash
+# Default Vultisig Chromium dist
+yarn workspace @clients/extension build
+yarn workspace @clients/extension qa:brand
+
+# Station Chromium dist
+yarn workspace @clients/extension build:station
+yarn workspace @clients/extension qa:brand:station
+
+# Firefox dist static bundle/manifest check
+yarn workspace @clients/extension build:firefox
+yarn workspace @clients/extension qa:brand --skip-browser
+```
+
+The QA command validates manifest name, description, author, icon paths, the
+primary EIP-6963 announcement filtered by expected `rdns`, and
+`window.terraWallets` / `window.interchainWallets` metadata. The static pass
+also scans split Firefox inpage chunks.
+
 ## Environment Setup
 
 Create `tests/e2e/.env` with your vault credentials:

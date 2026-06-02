@@ -1,4 +1,5 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { isStationTerraRootKeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInput'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
@@ -23,12 +24,16 @@ export const SetupVaultOverviewPage = () => {
   const ecdsaPublicKey =
     isFastVault && keyImportInput
       ? withFallback(
-          attempt(() =>
-            deriveEcdsaPublicKeyFromMnemonic({
+          attempt(() => {
+            if (isStationTerraRootKeyImportInput(keyImportInput)) {
+              return keyImportInput.publicKeyHex
+            }
+
+            return deriveEcdsaPublicKeyFromMnemonic({
               mnemonic: keyImportInput.mnemonic,
               walletCore,
             })
-          ),
+          }),
           null
         )
       : null
