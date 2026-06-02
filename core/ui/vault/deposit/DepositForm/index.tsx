@@ -27,7 +27,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
-import { ChangeEvent, FC, useRef, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -82,6 +82,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     setValue,
     getValues,
     control,
+    trigger,
     formState: { errors, isValid, touchedFields, dirtyFields },
   } = useForm<FormData>({
     resolver: zodResolver(schema as any),
@@ -92,6 +93,14 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
       ...(formDefaults ?? {}),
     },
   })
+
+  // Re-validate when the selected coin or its balance changes — the resolver
+  // schema rebuilds with the new max, but react-hook-form only re-runs
+  // validation on field changes, so switching coins would otherwise leave
+  // a stale "valid" amount that exceeds the new balance.
+  useEffect(() => {
+    trigger()
+  }, [coin.id, balance, trigger])
 
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data)
