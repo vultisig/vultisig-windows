@@ -178,7 +178,6 @@ export const AddressQRCard = ({
         await navigator.share({
           files: [file],
           title: shareTitle,
-          text: address,
         })
       })
 
