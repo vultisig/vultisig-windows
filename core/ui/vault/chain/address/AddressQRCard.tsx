@@ -169,13 +169,10 @@ export const AddressQRCard = ({
         return new File([blob], `${displayName}.png`, { type: 'image/png' })
       })
 
-      if (
-        'data' in fileResult &&
-        navigator.canShare({ files: [fileResult.data] })
-      ) {
-        await navigator
-          .share({ files: [fileResult.data] })
-          .catch(() => undefined)
+      const file = 'data' in fileResult ? fileResult.data : undefined
+
+      if (file && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file] }).catch(() => undefined)
         return
       }
     }
