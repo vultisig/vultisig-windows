@@ -66,6 +66,10 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
               swap: swapFee,
             }),
             transfer: () => ({ network }),
+            // CowSwap settlement is gas-less (solvers pay); `network` here only
+            // reflects any one-off VaultRelayer approval. The partner fee is
+            // embedded in the order's appData, not a discrete swap fee.
+            cowswap_order: () => ({ network }),
           })
         },
       })

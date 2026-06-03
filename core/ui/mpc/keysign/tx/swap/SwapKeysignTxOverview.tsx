@@ -69,6 +69,9 @@ const getSwapFeeFromQuote = ({
         // metadata on the SwapQuote; the displayed swap fee for these falls
         // back to the keysign payload's `swap_fee` when present.
         transfer: () => undefined,
+        // CowSwap's partner fee is taken from the order proceeds via appData,
+        // not surfaced as a discrete on-chain SwapFee — nothing extra to show.
+        cowswap_order: () => undefined,
       }),
   })
 
