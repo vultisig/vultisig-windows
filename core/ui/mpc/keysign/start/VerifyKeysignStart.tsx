@@ -7,7 +7,6 @@ import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
@@ -24,10 +23,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
-import { BlockaidNoScanStatus } from '../../../chain/security/blockaid/scan/BlockaidNoScanStatus'
-import { BlockaidScanning } from '../../../chain/security/blockaid/scan/BlockaidScanning'
-import { BlockaidScanStatusContainer } from '../../../chain/security/blockaid/scan/BlockaidScanStatusContainer'
-import { BlockaidTxValidationResult } from '../../../chain/security/blockaid/tx/BlockaidTxValidationResult'
+import { BlockaidTxScanStatus } from '../../../chain/security/blockaid/tx/BlockaidTxScanStatus'
 
 type VerifyKeysignStartInput = {
   children: ReactNode
@@ -154,15 +150,7 @@ export const VerifyKeysignStart = ({
   return (
     <>
       <PageContent gap={12} scrollable>
-        {isBlockaidEnabled && (
-          <MatchQuery
-            value={txScanQuery}
-            success={value => <BlockaidTxValidationResult value={value} />}
-            pending={() => <BlockaidScanning />}
-            error={() => <BlockaidNoScanStatus entity="tx" />}
-            inactive={() => <BlockaidScanStatusContainer />}
-          />
-        )}
+        {isBlockaidEnabled && <BlockaidTxScanStatus value={txScanQuery} />}
 
         {children}
 
