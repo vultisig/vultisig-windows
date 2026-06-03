@@ -163,21 +163,21 @@ export const AddressQRCard = ({
     const node = qrNodeRef.current
 
     if (node && navigator.canShare) {
-      const result = await attempt(async () => {
+      const fileResult = await attempt(async () => {
         const dataUrl = await toPng(node)
         const blob = await (await fetch(dataUrl)).blob()
-        const file = new File([blob], `${displayName}.png`, {
-          type: 'image/png',
-        })
-
-        if (!navigator.canShare({ files: [file] })) {
-          throw new Error('File sharing not supported')
-        }
-
-        await navigator.share({ files: [file] })
+        return new File([blob], `${displayName}.png`, { type: 'image/png' })
       })
 
-      if ('data' in result) return
+      if (
+        'data' in fileResult &&
+        navigator.canShare({ files: [fileResult.data] })
+      ) {
+        await navigator
+          .share({ files: [fileResult.data] })
+          .catch(() => undefined)
+        return
+      }
     }
 
     if (!navigator.share) return
