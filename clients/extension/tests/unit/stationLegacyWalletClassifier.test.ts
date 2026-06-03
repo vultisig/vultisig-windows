@@ -164,7 +164,7 @@ describe('classifyStationLegacyWalletStorage', () => {
     })
   })
 
-  it('classifies Ledger wallets as reconnect-only entries', () => {
+  it('classifies Ledger wallets as unsupported public metadata entries', () => {
     const result = classifyStationLegacyWalletStorage({
       wallets: JSON.stringify([
         {
@@ -182,10 +182,10 @@ describe('classifyStationLegacyWalletStorage', () => {
     expect(result.wallets[0]).toMatchObject({
       walletName: 'Ledger Wallet',
       walletType: 'ledger',
-      status: 'reconnect',
-      reasonCode: 'ledgerReconnectRequired',
+      status: 'unsupported',
+      reasonCode: 'ledgerPublicMetadataOnly',
       reason:
-        'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.',
+        'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Vultisig vault.',
       metadata: {
         index: 4,
         pubkey: { '330': 'ledger-pubkey' },

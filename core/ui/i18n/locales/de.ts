@@ -1367,7 +1367,6 @@ export const de = {
   station_migration_summary_total_one: '{{count}} Wallet',
   station_migration_summary_total_other: '{{count}} Wallets',
   station_migration_status_supported: 'Unterstützt',
-  station_migration_status_reconnect: 'Wiederverbinden',
   station_migration_status_unsupported: 'Nicht unterstützt',
   station_migration_status_corrupt: 'Ungültig',
   station_migration_status_needs_review: 'Überprüfung erforderlich',
@@ -1394,8 +1393,6 @@ export const de = {
     'Verschlüsselte Terra-Privatschlüsseldaten sind für einen späteren Import vorhanden.',
   station_migration_reason_supported_legacy_private_key:
     'Für einen späteren Import sind verschlüsselte Legacy-Daten des privaten Schlüssels vorhanden.',
-  station_migration_reason_ledger_reconnect:
-    'Station speichert die öffentlichen Kontodaten für diese Ledger-Wallet. Verbinden Sie das Hardwaregerät später erneut, um es in Station zu verwenden.',
   station_migration_reason_multisig:
     'Station speichert ausschließlich öffentliche Multisig-Metadaten. Es speichert keine privaten Schlüssel, die in einen Vultisig-Tresor konvertiert werden können.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1457,4 +1454,6 @@ export const de = {
     'Der Vault-Import ist während der Schlüsselgenerierung fehlgeschlagen. Entsperren Sie diese Wallet erneut, um es noch einmal zu versuchen.',
   station_migration_status_reason_vault_save_failed:
     'Der Vault-Import wurde abgeschlossen, das Speichern des Vaults Vultisig ist jedoch fehlgeschlagen. Entsperren Sie diese Wallet erneut, um es noch einmal zu versuchen.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station speichert ausschließlich öffentliche Ledger-Metadaten. Es speichert keine privaten Schlüssel, die in einen Vultisig-Tresor konvertiert werden können.',
 }

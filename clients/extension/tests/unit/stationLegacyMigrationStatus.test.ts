@@ -70,7 +70,9 @@ describe('station legacy migration status storage', () => {
     })
 
     const storage = await chrome.storage.local.get()
-    expect(Object.keys(storage)).toEqual([stationLegacyMigrationStatusStorageKey])
+    expect(Object.keys(storage)).toEqual([
+      stationLegacyMigrationStatusStorageKey,
+    ])
   })
 
   it('suppresses setup prompt only when supported wallets have terminal records', () => {
@@ -98,7 +100,7 @@ describe('station legacy migration status storage', () => {
     ).toBe(true)
     expect(
       shouldSuppressStationLegacyMigrationForSetup({
-        classification: createClassification('reconnect'),
+        classification: createClassification('unsupported'),
         statusRecords: {},
       })
     ).toBe(false)
