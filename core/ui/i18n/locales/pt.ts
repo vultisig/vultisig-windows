@@ -1356,7 +1356,6 @@ export const pt = {
   station_migration_summary_total_one: 'Carteira {{count}}',
   station_migration_summary_total_other: 'Carteiras {{count}}',
   station_migration_status_supported: 'Apoiado',
-  station_migration_status_reconnect: 'Reconectar',
   station_migration_status_unsupported: 'Sem suporte',
   station_migration_status_corrupt: 'Inválido',
   station_migration_status_needs_review: 'Precisa de revisão',
@@ -1383,8 +1382,6 @@ export const pt = {
     'Os dados criptografados da chave privada do Terra estão presentes para uma futura importação.',
   station_migration_reason_supported_legacy_private_key:
     'Os dados legados criptografados da chave privada estão presentes para uma futura importação.',
-  station_migration_reason_ledger_reconnect:
-    'Station armazena os detalhes da conta pública desta carteira Ledger. Reconecte o dispositivo de hardware posteriormente para usá-lo em Station.',
   station_migration_reason_multisig:
     'A Station armazena apenas metadados multisig públicos. Ela não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1446,4 +1443,6 @@ export const pt = {
     'A importação do cofre falhou durante a geração da chave. Desbloqueie esta carteira novamente para tentar mais uma vez.',
   station_migration_status_reason_vault_save_failed:
     'A importação do cofre foi concluída, mas a gravação do cofre Vultisig falhou. Desbloqueie esta carteira novamente para tentar mais uma vez.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station armazena apenas metadados públicos do Ledger. Não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
 }

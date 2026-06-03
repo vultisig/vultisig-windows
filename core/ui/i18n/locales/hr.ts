@@ -1331,7 +1331,6 @@ export const hr = {
   station_migration_summary_total_one: 'Novčanik {{count}}',
   station_migration_summary_total_other: 'Novčanici {{count}}',
   station_migration_status_supported: 'Podržano',
-  station_migration_status_reconnect: 'Ponovno se poveži',
   station_migration_status_unsupported: 'Nepodržano',
   station_migration_status_corrupt: 'Nevažeće',
   station_migration_status_needs_review: 'Potreban je pregled',
@@ -1357,8 +1356,6 @@ export const hr = {
     'Šifrirani podaci privatnog ključa Terra dostupni su za budući uvoz.',
   station_migration_reason_supported_legacy_private_key:
     'Za budući uvoz prisutni su naslijeđeni šifrirani podaci privatnog ključa.',
-  station_migration_reason_ledger_reconnect:
-    'Station pohranjuje podatke javnog računa za ovaj Ledger novčanik. Kasnije ponovno spojite hardverski uređaj da biste ga koristili u Station.',
   station_migration_reason_multisig:
     'Station pohranjuje samo javne metapodatke s višestrukim potpisom. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u Vultisig trezor.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1420,4 +1417,6 @@ export const hr = {
     'Uvoz iz trezora nije uspio tijekom generiranja ključa. Ponovno otključajte ovaj novčanik da biste pokušali ponovno.',
   station_migration_status_reason_vault_save_failed:
     'Uvoz iz trezora je završen, ali spremanje trezora Vultisig nije uspjelo. Ponovno otključajte ovaj novčanik za ponovni pokušaj.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station pohranjuje samo javne Ledger metapodatke. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u trezor Vultisig.',
 }

@@ -1353,7 +1353,6 @@ export const es = {
   station_migration_summary_total_one: 'Cartera {{count}}',
   station_migration_summary_total_other: 'Carteras {{count}}',
   station_migration_status_supported: 'Compatible',
-  station_migration_status_reconnect: 'Reconectar',
   station_migration_status_unsupported: 'Sin soporte',
   station_migration_status_corrupt: 'Inválido',
   station_migration_status_needs_review: 'Necesita revisión',
@@ -1381,8 +1380,6 @@ export const es = {
     'Los datos de clave privada de Terra, cifrados, están disponibles para una futura importación.',
   station_migration_reason_supported_legacy_private_key:
     'Los datos de clave privada cifrados heredados están disponibles para una futura importación.',
-  station_migration_reason_ledger_reconnect:
-    'Station almacena los detalles de la cuenta pública para esta billetera Ledger. Vuelva a conectar el dispositivo de hardware más tarde para usarlo en Station.',
   station_migration_reason_multisig:
     'Station solo almacena metadatos multifirma públicos. No almacena claves privadas que puedan convertirse en una bóveda Vultisig.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1444,4 +1441,6 @@ export const es = {
     'La importación de la bóveda falló durante la generación de claves. Desbloquea esta billetera nuevamente para intentarlo de nuevo.',
   station_migration_status_reason_vault_save_failed:
     'La importación de la bóveda se completó, pero falló al guardar la bóveda Vultisig. Desbloquee esta billetera nuevamente para intentarlo de nuevo.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station solo almacena metadatos públicos de Ledger. No almacena claves privadas que puedan convertirse en una bóveda Vultisig.',
 }

@@ -48,7 +48,6 @@ type Props = {
 
 const walletStatusColor: Record<StationLegacyWalletStatus, TextColor> = {
   supported: 'success',
-  reconnect: 'warning',
   unsupported: 'shy',
   corrupt: 'danger',
 }
@@ -237,9 +236,6 @@ const MigrationSummary = ({
   const supportedCount = wallets.filter(
     wallet => wallet.status === 'supported'
   ).length
-  const reconnectCount = wallets.filter(
-    wallet => wallet.status === 'reconnect'
-  ).length
   const unsupportedCount = wallets.filter(
     wallet => wallet.status === 'unsupported'
   ).length
@@ -258,10 +254,6 @@ const MigrationSummary = ({
       <SummaryItem
         label={t('station_migration_status_supported')}
         value={supportedCount}
-      />
-      <SummaryItem
-        label={t('station_migration_status_reconnect')}
-        value={reconnectCount}
       />
       <SummaryItem
         label={t('station_migration_status_needs_review')}
@@ -296,6 +288,19 @@ const StationMigrationWalletItem = ({
   const reason = getWalletReason({ t, wallet })
   const visibleStatus =
     result?.status ?? persistedStatus?.status ?? wallet.status
+  const description = result
+    ? result.status === 'failed'
+      ? getMigrationFailureReason({
+          t,
+          failureCode: result.failureCode,
+        })
+      : reason
+    : persistedStatus
+      ? getPersistedStatusReason({
+          t,
+          status: persistedStatus,
+        })
+      : reason
 
   const handleMigrate = async () => {
     if (result?.status !== 'ready') return
@@ -352,17 +357,7 @@ const StationMigrationWalletItem = ({
             {getWalletTypeLabel({ t, wallet })}
           </Text>
           <Text color="shy" size={12} height={1.35}>
-            {result?.status === 'failed'
-              ? getMigrationFailureReason({
-                  t,
-                  failureCode: result.failureCode,
-                })
-              : persistedStatus
-                ? getPersistedStatusReason({
-                    t,
-                    status: persistedStatus,
-                  })
-                : reason}
+            {description}
           </Text>
           {result?.status === 'ready' && (
             <Text color="success" size={12} height={1.35}>
@@ -396,8 +391,6 @@ const getWalletStatusLabel = ({
   switch (status) {
     case 'supported':
       return t('station_migration_status_supported')
-    case 'reconnect':
-      return t('station_migration_status_reconnect')
     case 'unsupported':
       return t('station_migration_status_unsupported')
     case 'corrupt':
@@ -522,8 +515,8 @@ const getWalletReason = ({
   wallet,
 }: TranslationInput & { wallet: StationLegacyWalletClassification }) => {
   switch (wallet.reasonCode) {
-    case 'ledgerReconnectRequired':
-      return t('station_migration_reason_ledger_reconnect')
+    case 'ledgerPublicMetadataOnly':
+      return t('station_migration_reason_ledger_public_metadata_only')
     case 'multisigPublicMetadataOnly':
       return t('station_migration_reason_multisig')
     case 'encryptedSeedNotString':
@@ -568,7 +561,7 @@ const getWalletReason = ({
 
 const SummaryGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   overflow: hidden;
   border-radius: 8px;

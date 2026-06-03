@@ -1307,7 +1307,6 @@ export const en = {
   station_migration_summary_total_one: '{{count}} wallet',
   station_migration_summary_total_other: '{{count}} wallets',
   station_migration_status_supported: 'Supported',
-  station_migration_status_reconnect: 'Reconnect',
   station_migration_status_unsupported: 'Unsupported',
   station_migration_status_corrupt: 'Invalid',
   station_migration_status_needs_review: 'Needs review',
@@ -1374,8 +1373,8 @@ export const en = {
     'Encrypted Terra private-key data is present for a future import.',
   station_migration_reason_supported_legacy_private_key:
     'Legacy encrypted private-key data is present for a future import.',
-  station_migration_reason_ledger_reconnect:
-    'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Vultisig vault.',
   station_migration_reason_multisig:
     'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.',
   station_migration_reason_encrypted_seed_not_string:
