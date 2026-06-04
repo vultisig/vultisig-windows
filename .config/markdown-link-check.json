@@ -14,6 +14,9 @@
       "pattern": "^https://github\\.com/vultisig/vultisig-knowledge"
     },
     {
+      "pattern": "^https://wails\\.io/docs/gettingstarted/installation/?$"
+    },
+    {
       "pattern": "^vultisig-sdk/$"
     },
     {
