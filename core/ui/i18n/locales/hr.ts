@@ -455,7 +455,6 @@ export const hr = {
   hide_balance: 'Sakrij stanje',
   hide_defi_balance: 'Sakrij DeFi stanje',
   hold: 'Drži',
-  hold_for_paired_sign: 'Držite za upareni znak',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
     'Ova IBC transakcija uključuje memorandum, ali Vultisig trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
@@ -1419,4 +1418,5 @@ export const hr = {
     'Uvoz iz trezora je završen, ali spremanje trezora Vultisig nije uspjelo. Ponovno otključajte ovaj novčanik za ponovni pokušaj.',
   station_migration_reason_ledger_public_metadata_only:
     'Station pohranjuje samo javne Ledger metapodatke. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u trezor Vultisig.',
+  paired: 'Upareno',
 }

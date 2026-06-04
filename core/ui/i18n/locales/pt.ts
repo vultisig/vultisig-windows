@@ -465,7 +465,6 @@ export const pt = {
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
   hold: 'Manter',
-  hold_for_paired_sign: 'Aguarde o sinal emparelhado',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transação IBC inclui um memorando, mas a Vultisig atualmente não suporta a incorporação de memorandos em mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
@@ -1445,4 +1444,5 @@ export const pt = {
     'A importação do cofre foi concluída, mas a gravação do cofre Vultisig falhou. Desbloqueie esta carteira novamente para tentar mais uma vez.',
   station_migration_reason_ledger_public_metadata_only:
     'Station armazena apenas metadados públicos do Ledger. Não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
+  paired: 'Emparelhado',
 }

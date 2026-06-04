@@ -454,7 +454,6 @@ export const ru = {
   hide_balance: 'Скрыть баланс',
   hide_defi_balance: 'Скрыть DeFi-баланс',
   hold: 'Держать',
-  hold_for_paired_sign: 'Удерживайте для парной подписи',
   how_it_works: 'Как это работает',
   ibc_transaction_not_supporting_memo_desc:
     'Эта IBC-транзакция содержит memo, но Vultisig сейчас не поддерживает встраивание memo в сообщения IBC-перевода.<br> Продолжение может привести к <b>необратимой потере средств</b>.',
@@ -1422,4 +1421,5 @@ export const ru = {
     'Импорт хранилища завершен, но сохранение хранилища Vultisig не удалось. Разблокируйте этот кошелек еще раз, чтобы повторить попытку.',
   station_migration_reason_ledger_public_metadata_only:
     'Station хранит только общедоступные метаданные Ledger. Он не хранит закрытые ключи, которые можно преобразовать в хранилище Vultisig.',
+  paired: 'Создать пару',
 }

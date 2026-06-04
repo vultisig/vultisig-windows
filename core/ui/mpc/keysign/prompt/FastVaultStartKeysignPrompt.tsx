@@ -1,10 +1,8 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
+import { HStack } from '@lib/ui/layout/Stack'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { Milliseconds } from '@vultisig/lib-utils/time'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -16,129 +14,77 @@ import {
 } from '../../fast/FastVaultPasswordModal'
 import { StartKeysignPromptProps } from './StartKeysignPromptProps'
 
-const clickDurationThreshold: Milliseconds = 300
-const registerPressDelay: Milliseconds = 200
-const requiredPressDuration: Milliseconds = 1600
-
-const Container = styled(Button)`
-  position: relative;
-  overflow: hidden;
+const FastSignButton = styled(Button)`
+  flex: 1;
+  min-width: 0;
 `
 
-const Fill = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  pointer-events: none;
-  background: ${getColor('mistExtra')};
-  width: 0%;
-  animation: fillProgress ${requiredPressDuration - registerPressDelay}ms linear
-    ${registerPressDelay}ms forwards;
-
-  @keyframes fillProgress {
-    from {
-      width: 0%;
-    }
-    to {
-      width: 100%;
-    }
-  }
+const PairedButton = styled(Button)`
+  flex: 0 0 132px;
 `
 
 export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const [showModal, setShowModal] = useState(false)
-  const [startPressingAt, setStartPressingAt] = useState<null | number>(null)
 
   const keysignPayload =
     'keysignPayload' in props ? props.keysignPayload : undefined
 
-  const executeNavigation = useCallback(
-    (securityType: VaultSecurityType) => {
-      if (securityType === 'fast') {
-        setShowModal(true)
-        return
-      } else {
-        navigate({
-          id: 'keysign',
-          state: {
-            ...props,
-            keysignPayload: shouldBePresent(keysignPayload),
-            securityType,
-          },
-        })
-      }
-    },
-    [props, keysignPayload, navigate]
-  )
-
-  const onGetPassword = useCallback(
-    ({ password }: FastVaultPasswordModalResult) => {
-      navigate({
-        id: 'keysign',
-        state: {
-          ...props,
-          keysignPayload: shouldBePresent(keysignPayload),
-          securityType: 'fast',
-          password,
-        },
-      })
-    },
-    [props, keysignPayload, navigate]
-  )
-  useEffect(() => {
-    if (!startPressingAt) return
-
-    const interval = setTimeout(() => {
-      executeNavigation('secure')
-    }, requiredPressDuration)
-
-    return () => clearTimeout(interval)
-  }, [executeNavigation, startPressingAt])
-
-  const buttonProps = useMemo(() => {
-    if (!keysignPayload) {
-      return {
-        disabled: 'disabledMessage' in props ? props.disabledMessage : true,
-      }
+  const executeNavigation = (securityType: VaultSecurityType) => {
+    if (securityType === 'fast') {
+      setShowModal(true)
+      return
     }
 
-    return {
-      onPointerDown: () => {
-        setStartPressingAt(Date.now())
+    navigate({
+      id: 'keysign',
+      state: {
+        ...props,
+        keysignPayload: shouldBePresent(keysignPayload),
+        securityType,
       },
-      onPointerUp: () => {
-        if (!startPressingAt) return
+    })
+  }
 
-        const durationSincePress = Date.now() - startPressingAt
+  const onGetPassword = ({ password }: FastVaultPasswordModalResult) => {
+    navigate({
+      id: 'keysign',
+      state: {
+        ...props,
+        keysignPayload: shouldBePresent(keysignPayload),
+        securityType: 'fast',
+        password,
+      },
+    })
+  }
 
-        if (durationSincePress < clickDurationThreshold) {
-          executeNavigation('fast')
-        } else {
-          setStartPressingAt(null)
-        }
-      },
-      onPointerLeave: () => {
-        setStartPressingAt(null)
-      },
-    }
-  }, [executeNavigation, startPressingAt, keysignPayload, props])
+  const buttonProps = {
+    disabled: keysignPayload
+      ? false
+      : 'disabledMessage' in props
+        ? props.disabledMessage
+        : true,
+  }
 
   return (
-    <VStack gap={12}>
-      <Text
-        size={14}
-        color="shy"
-        style={{ textAlign: 'center', width: '100%' }}
-      >
-        {t('hold_for_paired_sign')}
-      </Text>
-      <Container {...buttonProps}>
-        {t('fast_sign')}
-        {startPressingAt && <Fill />}
-      </Container>
+    <>
+      <HStack gap={12} fullWidth>
+        <FastSignButton
+          {...buttonProps}
+          onClick={() => executeNavigation('fast')}
+        >
+          {t('fast_sign')}
+        </FastSignButton>
+        <PairedButton
+          {...buttonProps}
+          kind="secondary"
+          icon={<TabletSmartphoneIcon />}
+          onClick={() => executeNavigation('secure')}
+        >
+          {t('paired')}
+        </PairedButton>
+      </HStack>
       <FastVaultPasswordModal
         showModal={showModal}
         onBack={() => setShowModal(false)}
@@ -146,6 +92,6 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         description={t('fast_vault_password_start_keysign_description')}
         withPasswordCache
       />
-    </VStack>
+    </>
   )
 }
