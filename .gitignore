@@ -48,6 +48,8 @@ Thumbs.db
 *.temp
 
 # Coverage files
+coverage/
+**/coverage/
 *.coverprofile
 *.cover.out
 
@@ -121,3 +123,6 @@ google-credentials.json
 .cursor/
 .agents/
 .codex/
+
+# Vultisig ops local AI config
+.claude/
