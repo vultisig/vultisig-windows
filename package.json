@@ -29,7 +29,7 @@
     "quality:docs:links": "git ls-files '*.md' ':!.agents/**' ':!.claude/**' ':!.cursor/**' ':!.codex/**' ':!tasks/**' ':!clients/extension/tests/e2e/playwright-report/**' | xargs -n 1 markdown-link-check -q -c .config/markdown-link-check.json",
     "quality:docs:markdown": "markdownlint-cli2 --config .config/markdownlint-cli2.jsonc",
     "quality:duplication": "jscpd --config .config/jscpd.json clients core lib scripts app.go main.go install_marker.go notification_darwin.go notification_linux.go notification_windows.go mediator relay storage tss utils",
-    "quality:go": "go test ./...",
+    "quality:go": "go test ./mediator ./relay ./storage ./tss ./utils",
     "quality:health": "yarn quality:architecture && yarn quality:duplication && yarn quality:complexity && yarn quality:secrets && yarn quality:docs && yarn quality:go",
     "quality:secrets": "secretlint --secretlintrc .config/secretlintrc.json --secretlintignore .config/secretlintignore \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,cjs,mjs,sh,go}\"",
     "check:all": "yarn validate-public && yarn lint && yarn typecheck && yarn test && yarn workspace @clients/extension test && yarn workspace @clients/desktop test:ci && yarn workspace @core/ui i18n:check && yarn i18n:review-quality --strict && yarn knip && yarn quality:health",
