@@ -2,7 +2,18 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getCowSwapOrderStatus } from '@vultisig/core-chain/swap/general/cowswap/api/getCowSwapOrderStatus'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 
-import { SwapTransactionRecord } from '../core'
+import { SwapTransactionRecord, TransactionRecord } from '../core'
+
+/** A pending CowSwap order: `txHash` is the orderbook UID, not a chain hash. */
+export const getCowSwapOrderApiBase = (
+  record: TransactionRecord
+): { record: SwapTransactionRecord; apiBase: string } | null => {
+  if (record.type !== 'swap') {
+    return null
+  }
+  const { cowSwapOrderApiBase } = record.data
+  return cowSwapOrderApiBase ? { record, apiBase: cowSwapOrderApiBase } : null
+}
 
 type GetCowSwapOrderRecordUpdateInput = {
   record: SwapTransactionRecord

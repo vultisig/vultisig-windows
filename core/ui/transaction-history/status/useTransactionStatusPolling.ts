@@ -3,12 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { useRef } from 'react'
 
+import { TransactionRecord, TransactionRecordStatus } from '../core'
 import {
-  SwapTransactionRecord,
-  TransactionRecord,
-  TransactionRecordStatus,
-} from '../core'
-import { getCowSwapOrderRecordUpdate } from './getCowSwapOrderRecordUpdate'
+  getCowSwapOrderApiBase,
+  getCowSwapOrderRecordUpdate,
+} from './getCowSwapOrderRecordUpdate'
 import { toRecordStatus } from './toRecordStatus'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
@@ -20,17 +19,6 @@ const stalePendingThresholdMs = 5 * 60 * 1000
 const isStaleTransaction = (record: TransactionRecord): boolean => {
   const elapsed = Date.now() - new Date(record.timestamp).getTime()
   return elapsed > stalePendingThresholdMs
-}
-
-/** A pending CowSwap order: `txHash` is the orderbook UID, not a chain hash. */
-const getCowSwapOrderApiBase = (
-  record: TransactionRecord
-): { record: SwapTransactionRecord; apiBase: string } | null => {
-  if (record.type !== 'swap') {
-    return null
-  }
-  const { cowSwapOrderApiBase } = record.data
-  return cowSwapOrderApiBase ? { record, apiBase: cowSwapOrderApiBase } : null
 }
 
 /** Polls chain status for a single pending transaction and updates its record when finalized. */
