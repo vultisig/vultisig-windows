@@ -1443,4 +1443,11 @@ export const es = {
   station_migration_reason_ledger_public_metadata_only:
     'Station solo almacena metadatos públicos de Ledger. No almacena claves privadas que puedan convertirse en una bóveda {{productName}}.',
   paired: 'Emparejado',
+  plugin_marketplace_signin_description:
+    'Inicia sesión con tu bóveda {{productName}} para acceder a las aplicaciones que automatizan tus activos digitales.',
+  plugin_marketplace_welcome:
+    'Bienvenido al mercado de plugins {{productName}}',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Las aplicaciones nunca pueden firmar transacciones que usted no apruebe previamente.',
+  extension_version: '{{brand}} V{{version}}',
 }

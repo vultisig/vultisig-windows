@@ -1444,4 +1444,11 @@ export const pt = {
   station_migration_reason_ledger_public_metadata_only:
     'Station armazena apenas metadados públicos do Ledger. Não armazena chaves privadas que possam ser convertidas em um cofre {{productName}}.',
   paired: 'Emparelhado',
+  plugin_marketplace_signin_description:
+    'Inicie sessão com o seu cofre {{productName}} para aceder a aplicações que automatizam os seus ativos digitais.',
+  plugin_marketplace_welcome:
+    'Bem-vindo ao Marketplace de Plugins {{productName}}',
+  plugin_permissions_brand_safety_notice:
+    'O aplicativo {{productName}} nunca poderá assinar transações que você não aprove previamente.',
+  extension_version: '{{brand}} V{{version}}',
 }

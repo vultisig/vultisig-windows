@@ -1420,4 +1420,10 @@ export const hr = {
   station_migration_reason_ledger_public_metadata_only:
     'Station pohranjuje samo javne Ledger metapodatke. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u trezor {{productName}}.',
   paired: 'Upareno',
+  plugin_marketplace_signin_description:
+    'Prijavite se sa svojim {{productName}} trezorom za pristup aplikacijama za automatizaciju vaše digitalne imovine',
+  plugin_marketplace_welcome: 'Dobrodošli na tržište dodataka {{productName}}',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Aplikacije nikada ne mogu potpisivati ​​transakcije koje prethodno niste odobrili.',
+  extension_version: '{{brand}} V{{version}}',
 }

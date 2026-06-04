@@ -1455,4 +1455,11 @@ export const de = {
   station_migration_reason_ledger_public_metadata_only:
     'Station speichert ausschließlich öffentliche Ledger-Metadaten. Es speichert keine privaten Schlüssel, die in einen {{productName}}-Tresor konvertiert werden können.',
   paired: 'Paar',
+  plugin_marketplace_signin_description:
+    'Melden Sie sich mit Ihrem {{productName}} Vault an, um auf Apps zuzugreifen und Ihre digitalen Assets zu automatisieren.',
+  plugin_marketplace_welcome:
+    'Willkommen im {{productName}} Plugin Marketplace',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Apps können niemals Transaktionen signieren, die Sie nicht vorher genehmigen.',
+  extension_version: '{{brand}} V{{version}}',
 }

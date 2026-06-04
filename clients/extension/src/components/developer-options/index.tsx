@@ -91,7 +91,10 @@ export const ExtensionDeveloperOptions = () => {
     <>
       <UnstyledButton onClick={handleClick}>
         <Text size={12} color="shy">
-          {`${currentProductBrandConfig.extensionName.toUpperCase()} V${version}`}
+          {t('extension_version', {
+            brand: currentProductBrandConfig.extensionName.toUpperCase(),
+            version,
+          })}
         </Text>
       </UnstyledButton>
 

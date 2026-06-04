@@ -1426,4 +1426,11 @@ export const nl = {
   station_migration_reason_ledger_public_metadata_only:
     'Station slaat alleen openbare Ledger-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een {{productName}}-kluis.',
   paired: 'Gekoppeld',
+  plugin_marketplace_signin_description:
+    'Meld u aan met uw {{productName}} Vault om toegang te krijgen tot apps waarmee u uw digitale activa kunt automatiseren.',
+  plugin_marketplace_welcome:
+    'Welkom bij de {{productName}} Plugin Marketplace.',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Apps kunnen nooit transacties ondertekenen die u niet eerst goedkeurt.',
+  extension_version: '{{brand}} V{{version}}',
 }

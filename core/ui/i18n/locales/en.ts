@@ -653,11 +653,18 @@ export const en = {
   pick_referral_code: 'Pick Referral Code',
   platinum: 'Platinum',
   plugin_info: 'App Info',
+  plugin_marketplace_signin_description:
+    'Sign in with your {{productName}} Vault to access Apps to automate your digital Assets',
+  plugin_marketplace_welcome:
+    'Welcome to the {{productName}} Plugin Marketplace',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Apps can never sign transactions you do not first approve.',
   automation_info: 'Automation Info',
   plugin_server_url: 'App Server URL',
   app_install_timeout: 'App Install Timeout (ms)',
   app_install_timeout_invalid: 'Please enter a valid number.',
   app_install_timeout_min: 'Must be 0 or greater.',
+  extension_version: '{{brand}} V{{version}}',
   to_start_plugin_installation: 'To start the plugin installation',
   portfolio: 'Portfolio',
   portfolio_balance: 'Portfolio Balance',

@@ -67,6 +67,14 @@ const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const extensionDir = path.resolve(currentDir, '..')
 const rootDir = path.resolve(extensionDir, '../..')
 
+const toPosixPath = value => value.split(path.sep).join('/')
+
+const getRootRelativePath = filePath =>
+  toPosixPath(path.relative(rootDir, filePath))
+
+const getDistRelativePath = ({ distDir, filePath }) =>
+  toPosixPath(path.relative(distDir, filePath))
+
 const readArgs = () => {
   const args = process.argv.slice(2)
   const options = {
@@ -648,11 +656,13 @@ const assertStationLocaleText = async () => {
 
   for (const filePath of localePaths) {
     const source = await readFile(filePath, 'utf8')
+    const relativeFilePath = getRootRelativePath(filePath)
+
     for (const { keyPath, value } of getLocaleStringEntries(source)) {
       for (const variableName of getProductInterpolationVariableNames(value)) {
         if (!productBrandInterpolationKeys.has(variableName)) {
           failures.push(
-            `${path.relative(rootDir, filePath)}:${keyPath}: unknown product interpolation variable "{{${variableName}}}"`
+            `${relativeFilePath}:${keyPath}: unknown product interpolation variable "{{${variableName}}}"`
           )
         }
       }
@@ -663,15 +673,13 @@ const assertStationLocaleText = async () => {
 
       const policy = stationRawVultisigLocalePolicy[keyPath]
       if (!policy) {
-        failures.push(
-          `${path.relative(rootDir, filePath)}:${keyPath}: ${value}`
-        )
+        failures.push(`${relativeFilePath}:${keyPath}: ${value}`)
         continue
       }
 
       if (policy.exposure !== 'vultisigOnly') {
         failures.push(
-          `${path.relative(rootDir, filePath)}:${keyPath}: raw Vultisig policy must be Vultisig-only`
+          `${relativeFilePath}:${keyPath}: raw Vultisig policy must be Vultisig-only`
         )
         continue
       }
@@ -710,18 +718,21 @@ const sourceStringAllowlist = [
   /core\/ui\/i18n\/utils\/i18nGlossary\.ts$/,
 ]
 
-const shouldAuditSourceFile = filePath =>
-  (filePath.endsWith('.ts') || filePath.endsWith('.tsx')) &&
-  !filePath.includes('/locales/') &&
-  !filePath.includes('/coverage/') &&
-  !filePath.includes('/tests/') &&
-  !filePath.endsWith('.test.ts') &&
-  !filePath.endsWith('.test.tsx') &&
-  !filePath.endsWith('.spec.ts') &&
-  !filePath.endsWith('.spec.tsx') &&
-  !sourceStringAllowlist.some(pattern =>
-    pattern.test(path.relative(rootDir, filePath))
+const shouldAuditSourceFile = filePath => {
+  const relativeFilePath = getRootRelativePath(filePath)
+
+  return (
+    (relativeFilePath.endsWith('.ts') || relativeFilePath.endsWith('.tsx')) &&
+    !relativeFilePath.includes('/locales/') &&
+    !relativeFilePath.includes('/coverage/') &&
+    !relativeFilePath.includes('/tests/') &&
+    !relativeFilePath.endsWith('.test.ts') &&
+    !relativeFilePath.endsWith('.test.tsx') &&
+    !relativeFilePath.endsWith('.spec.ts') &&
+    !relativeFilePath.endsWith('.spec.tsx') &&
+    !sourceStringAllowlist.some(pattern => pattern.test(relativeFilePath))
   )
+}
 
 const assertNoStationHardcodedVisibleBrand = async () => {
   const sourceRoots = [
@@ -739,7 +750,7 @@ const assertNoStationHardcodedVisibleBrand = async () => {
 
   for (const filePath of sourcePaths) {
     const source = await readFile(filePath, 'utf8')
-    const relativeFilePath = path.relative(rootDir, filePath)
+    const relativeFilePath = getRootRelativePath(filePath)
 
     if (relativeFilePath.startsWith('core/ui/')) {
       for (const importedName of getDisallowedCoreConfigProductBrandImports(
@@ -809,12 +820,14 @@ const assertNoStationDistBrandReferences = async distDir => {
     const source = await readFile(filePath, 'utf8')
 
     if (disallowedStationSourceTextPattern.test(source)) {
-      failures.push(`${path.relative(distDir, filePath)}: raw Vultisig text`)
+      failures.push(
+        `${getDistRelativePath({ distDir, filePath })}: raw Vultisig text`
+      )
     }
 
     if (disallowedStationAssetPattern.test(source)) {
       failures.push(
-        `${path.relative(distDir, filePath)}: Vultisig asset reference`
+        `${getDistRelativePath({ distDir, filePath })}: Vultisig asset reference`
       )
     }
   }

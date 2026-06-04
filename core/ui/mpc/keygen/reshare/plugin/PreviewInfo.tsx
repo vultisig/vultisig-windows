@@ -95,8 +95,9 @@ export const PreviewInfo: FC<
                   weight={500}
                   centerHorizontally
                 >
-                  {currentProductBrandConfig.name} Apps can never sign
-                  transactions you do not first approve.
+                  {t('plugin_permissions_brand_safety_notice', {
+                    productName: currentProductBrandConfig.name,
+                  })}
                 </Text>
               </VStack>
             </VStack>

@@ -1413,4 +1413,11 @@ export const ko = {
   station_migration_reason_ledger_public_metadata_only:
     'Station은 공개 Ledger 메타데이터만 저장합니다. {{productName}} 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
   paired: '페어링',
+  plugin_marketplace_signin_description:
+    '{{productName}} Vault로 로그인하여 디지털 자산 자동화 앱에 액세스하세요.',
+  plugin_marketplace_welcome:
+    '{{productName}} 플러그인 마켓플레이스에 오신 것을 환영합니다',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} 앱은 사용자가 먼저 승인하지 않은 거래에는 절대 서명할 수 없습니다.',
+  extension_version: '{{brand}} V{{version}}',
 }

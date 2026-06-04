@@ -81,11 +81,14 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
       >
         <ProductLogo style={{ fontSize: 60 }} />
         <Text size={22} weight={500} centerHorizontally>
-          Welcome to the {currentProductBrandConfig.name} Plugin Marketplace
+          {t('plugin_marketplace_welcome', {
+            productName: currentProductBrandConfig.name,
+          })}
         </Text>
         <Text color="shy" size={12} weight={500} centerHorizontally>
-          Sign in with your {currentProductBrandConfig.name} Vault to access
-          Apps to automate your digital Assets
+          {t('plugin_marketplace_signin_description', {
+            productName: currentProductBrandConfig.name,
+          })}
         </Text>
       </StyledPageContent>
       <PageFooter>

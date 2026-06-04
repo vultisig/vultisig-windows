@@ -1449,4 +1449,11 @@ export const it = {
   station_migration_reason_ledger_public_metadata_only:
     'Station memorizza solo i metadati pubblici del Ledger. Non memorizza le chiavi private che possono essere convertite in un vault {{productName}}.',
   paired: 'Accoppiato',
+  plugin_marketplace_signin_description:
+    'Accedi con il tuo Vault {{productName}} per accedere alle app e automatizzare le tue risorse digitali.',
+  plugin_marketplace_welcome:
+    'Benvenuti nel Marketplace del plugin {{productName}}',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Le app non possono mai firmare transazioni che tu non approvi prima.',
+  extension_version: '{{brand}} V{{version}}',
 }

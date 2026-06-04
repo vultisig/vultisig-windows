@@ -6,6 +6,9 @@ type ProductBrandInterpolationConfig = {
   websiteUrl: string
 }
 
+/**
+ * Builds default i18n interpolation variables from a product brand config.
+ */
 export const getProductBrandInterpolation = ({
   extensionName,
   name,

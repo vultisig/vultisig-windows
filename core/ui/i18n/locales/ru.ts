@@ -1423,4 +1423,11 @@ export const ru = {
   station_migration_reason_ledger_public_metadata_only:
     'Station хранит только общедоступные метаданные Ledger. Он не хранит закрытые ключи, которые можно преобразовать в хранилище {{productName}}.',
   paired: 'Создать пару',
+  plugin_marketplace_signin_description:
+    'Войдите в систему, используя свой {{productName}} Vault, чтобы получить доступ к приложениям для автоматизации управления цифровыми активами.',
+  plugin_marketplace_welcome:
+    'Добро пожаловать на торговую площадку плагинов {{productName}}.',
+  plugin_permissions_brand_safety_notice:
+    'Приложения {{productName}} никогда не смогут подписывать транзакции, которые вы предварительно не одобрите.',
+  extension_version: '{{brand}} V{{version}}',
 }

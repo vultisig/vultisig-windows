@@ -1329,4 +1329,10 @@ export const zh = {
   station_migration_reason_ledger_public_metadata_only:
     'Station 仅存储公开的 Ledger 元数据。它不存储可以转换为 {{productName}} 保险库的私钥。',
   paired: '配对',
+  plugin_marketplace_signin_description:
+    '使用您的 {{productName}} Vault 登录以访问应用程序，从而实现您的数字资产自动化管理。',
+  plugin_marketplace_welcome: '欢迎来到 {{productName}} 插件市场',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} 应用程序永远无法签署未经您事先批准的交易。',
+  extension_version: '{{brand}} V{{version}}',
 }
