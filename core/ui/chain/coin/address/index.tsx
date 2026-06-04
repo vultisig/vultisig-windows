@@ -12,6 +12,8 @@ import { FramedQrCode } from '@lib/ui/qr/FramedQrCode'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { currentProductBrandConfig } from '../../../product/brand'
+
 export const AddressPage = () => {
   const [{ address }] = useCoreViewState<'address'>()
 
@@ -32,7 +34,7 @@ export const AddressPage = () => {
             value={
               <PrintableQrCode
                 title={t('address')}
-                brandLabel={t('vultisig')}
+                brandLabel={currentProductBrandConfig.name}
                 value={address}
                 rows={[{ label: t('address'), value: address }]}
               />

@@ -3,6 +3,10 @@ import {
   getDeveloperOptions,
   setDeveloperOptions,
 } from '@core/extension/storage/developerOptions'
+import {
+  currentProductBrand,
+  currentProductBrandConfig,
+} from '@core/ui/product/brand'
 import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import {
@@ -48,6 +52,7 @@ export const ExtensionDeveloperOptions = () => {
   const { mutate: setIsTssBatchingEnabled } =
     useSetIsTssBatchingEnabledMutation()
   const [pushServerUrlValue, setPushServerUrlValue] = useState('')
+  const shouldShowPluginServerUrl = currentProductBrand !== 'station'
 
   useEffect(() => {
     if (visible) {
@@ -86,7 +91,7 @@ export const ExtensionDeveloperOptions = () => {
     <>
       <UnstyledButton onClick={handleClick}>
         <Text size={12} color="shy">
-          {`VULTISIG EXTENSION V${version}`}
+          {`${currentProductBrandConfig.extensionName.toUpperCase()} V${version}`}
         </Text>
       </UnstyledButton>
 
@@ -124,27 +129,31 @@ export const ExtensionDeveloperOptions = () => {
               fullHeight
             >
               <VStack gap={8}>
-                <TextInput
-                  {...register('pluginMarketplaceBaseUrl')}
-                  label={t('plugin_server_url')}
-                  onValueChange={value =>
-                    setValue('pluginMarketplaceBaseUrl', value)
-                  }
-                  validation={
-                    isValid
-                      ? 'valid'
-                      : errors.pluginMarketplaceBaseUrl
-                        ? 'invalid'
-                        : undefined
-                  }
-                  autoFocus
-                />
-                {errors.pluginMarketplaceBaseUrl &&
-                  errors.pluginMarketplaceBaseUrl.message && (
-                    <Text color="danger" size={12}>
-                      {errors.pluginMarketplaceBaseUrl.message}
-                    </Text>
-                  )}
+                {shouldShowPluginServerUrl && (
+                  <>
+                    <TextInput
+                      {...register('pluginMarketplaceBaseUrl')}
+                      label={t('plugin_server_url')}
+                      onValueChange={value =>
+                        setValue('pluginMarketplaceBaseUrl', value)
+                      }
+                      validation={
+                        isValid
+                          ? 'valid'
+                          : errors.pluginMarketplaceBaseUrl
+                            ? 'invalid'
+                            : undefined
+                      }
+                      autoFocus
+                    />
+                    {errors.pluginMarketplaceBaseUrl &&
+                      errors.pluginMarketplaceBaseUrl.message && (
+                        <Text color="danger" size={12}>
+                          {errors.pluginMarketplaceBaseUrl.message}
+                        </Text>
+                      )}
+                  </>
+                )}
                 <TextInput
                   {...register('appInstallTimeout', { valueAsNumber: true })}
                   label={t('app_install_timeout')}

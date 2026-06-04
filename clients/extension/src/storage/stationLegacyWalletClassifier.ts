@@ -88,10 +88,10 @@ export type StationLegacyStorageClassification = {
 }
 
 const ledgerUnsupportedReason =
-  'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Vultisig vault.'
+  'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Station vault.'
 
 const multisigUnsupportedReason =
-  'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.'
+  'Station only stores public multisig metadata. It does not store private keys that can be converted into a Station vault.'
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)

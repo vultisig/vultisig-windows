@@ -15,7 +15,7 @@
     "build:content": "tsc -b && cross-env CHUNK=content vite build",
     "build:inpage": "tsc -b && cross-env CHUNK=inpage vite build",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 npm-run-all --serial build:app build:background build:content build:inpage && node scripts/assert-extension-brand.mjs vultisig",
-    "build:station": "node scripts/clean-dist.mjs && cross-env NODE_OPTIONS=--max-old-space-size=8192 VULTISIG_EXTENSION_BRAND=station npm-run-all --serial build:app build:background build:content build:inpage && node scripts/assert-extension-brand.mjs station",
+    "build:station": "node scripts/clean-dist.mjs && cross-env NODE_OPTIONS=--max-old-space-size=8192 VULTISIG_EXTENSION_BRAND=station npm-run-all --serial build:app build:background build:content build:inpage && node scripts/qa-extension-brand.mjs station --skip-browser",
     "build:firefox": "node scripts/clean-dist.mjs && cross-env NODE_OPTIONS=--max-old-space-size=8192 VULTISIG_EXTENSION_TARGET=firefox yarn build && node scripts/prepare-firefox-build.mjs",
     "dev": "node watch.js",
     "lint": "yarn lint:src && yarn lint:scripts",

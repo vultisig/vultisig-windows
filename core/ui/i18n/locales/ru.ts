@@ -61,7 +61,7 @@ export const ru = {
   assets: 'активы',
   at_least_one_device: 'Минимум одно устройство',
   at_least_one_device_subtitle:
-    'Подойдёт любое устройство, способное запускать Vultisig.',
+    'Подойдёт любое устройство, способное запускать {{productName}}.',
   available: 'Доступно',
   back: 'Назад',
   before_you_start: 'Перед началом...',
@@ -110,7 +110,7 @@ export const ru = {
   bronze: 'Бронза',
   diamond: 'Алмаз',
   buy: 'Купить',
-  by_vultisig: 'от Vultisig',
+  by_vultisig: 'от {{productName}}',
   camera_access_blocked:
     'Доступ к камере заблокирован. Включите его в настройках браузера.',
   cache_password_for_5_min: 'Запомнить пароль на 5 минут',
@@ -161,7 +161,7 @@ export const ru = {
     deposit_header: 'Внести на аккаунт Circle',
     verify_deposit: 'Подтвердить внесение',
     introduction:
-      'Внесите свои $USDC на аккаунт Circle и получайте доход. Безопасно внутри вашего хранилища Vultisig.',
+      'Внесите свои $USDC на аккаунт Circle и получайте доход. Безопасно внутри вашего хранилища {{productName}}.',
     open_account: 'Открыть аккаунт',
     withdraw: 'Вывести',
     withdraw_header: 'Вывести из Circle',
@@ -196,7 +196,7 @@ export const ru = {
   connect: 'Подключить',
   connect_dapp: 'Подключить dApp',
   connect_to_site: 'Подключиться к {{site}}',
-  connect_website_subtitle: 'Подключите этот сайт к Vultisig Extension.',
+  connect_website_subtitle: 'Подключите этот сайт к {{productExtensionName}}.',
   connected_dapps: 'Подключённые dApps',
   connecting_to_server: 'Подключение к серверу',
   continue: 'Продолжить',
@@ -346,20 +346,22 @@ export const ru = {
   failed_to_save_vault: 'Не удалось сохранить хранилище',
   faq: 'FAQ',
   faq_comparison_content:
-    'Основано на MPC-технологии, которая устраняет необходимость seed phrase и поддерживает несколько блокчейнов, делая Vultisig гибким и chain-agnostic.',
-  faq_comparison_title: 'Чем Vultisig отличается от других multisig-кошельков?',
+    'Основано на MPC-технологии, которая устраняет необходимость seed phrase и поддерживает несколько блокчейнов, делая {{productName}} гибким и chain-agnostic.',
+  faq_comparison_title:
+    'Чем {{productName}} отличается от других multisig-кошельков?',
   faq_data_protection_content:
-    'Vultisig не хранит никакую информацию о пользователях из мобильных приложений.',
+    '{{productName}} не хранит никакую информацию о пользователях из мобильных приложений.',
   faq_data_protection_title:
-    'Как Vultisig обеспечивает приватность и защиту данных?',
+    'Как {{productName}} обеспечивает приватность и защиту данных?',
   faq_is_open_source_content:
-    'Да, Vultisig — open source и проходил аудиты безопасности. Доступны и отчёты аудитов, и исходный код.',
-  faq_is_open_source_title: 'Vultisig — open source и прошёл аудит?',
+    'Да, {{productName}} — open source и проходил аудиты безопасности. Доступны и отчёты аудитов, и исходный код.',
+  faq_is_open_source_title: '{{productName}} — open source и прошёл аудит?',
   faq_need_to_register_content:
-    'Vultisig поддерживает основные криптовалюты и токены: более 30 сетей и их токены доступны сейчас.',
-  faq_need_to_register_title: 'Какие криптовалюты поддерживает Vultisig?',
+    '{{productName}} поддерживает основные криптовалюты и токены: более 30 сетей и их токены доступны сейчас.',
+  faq_need_to_register_title:
+    'Какие криптовалюты поддерживает {{productName}}?',
   faq_recover_assets_content:
-    'Vultisig бесплатен. При отправке действуют только стандартные сетевые комиссии. Для свопов и мостов взимается комиссия 0,5% (50 bps).',
+    '{{productName}} бесплатен. При отправке действуют только стандартные сетевые комиссии. Для свопов и мостов взимается комиссия 0,5% (50 bps).',
   faq_recover_assets_title: 'Какие комиссии и расходы?',
   faq_secure_crypto_vault_content:
     'Да, если вы сохранили и имеете доступ к резервным копиям при создании хранилища. Вы можете импортировать эти резервные копии на новом устройстве и восстановить доступ к активам.',
@@ -367,13 +369,13 @@ export const ru = {
     'Могу ли я восстановить активы при потере устройства?',
   faq_setup_crypto_vault_content:
     'Это безопасный кошелёк с многофакторной аутентификацией на базе MPC для управления цифровыми активами. Транзакции требуют подтверждения несколькими устройствами.',
-  faq_setup_crypto_vault_title: 'Что такое Vultisig?',
+  faq_setup_crypto_vault_title: 'Что такое {{productName}}?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig даёт повышенную безопасность через multi-device аутентификацию, поддержку многих блокчейнов, простое восстановление, и отсутствие seed phrases и трекинга.',
-  faq_supported_cryptocurrencies_title: 'В чём преимущества Vultisig?',
+    '{{productName}} даёт повышенную безопасность через multi-device аутентификацию, поддержку многих блокчейнов, простое восстановление, и отсутствие seed phrases и трекинга.',
+  faq_supported_cryptocurrencies_title: 'В чём преимущества {{productName}}?',
   faq_vultisig_make_money_content:
-    'Vultisig безопасно хранит и управляет цифровыми активами. Все действия, такие как отправка или своп, требуют подписи пороговым числом устройств.',
-  faq_vultisig_make_money_title: 'Как используется Vultisig?',
+    '{{productName}} безопасно хранит и управляет цифровыми активами. Все действия, такие как отправка или своп, требуют подписи пороговым числом устройств.',
+  faq_vultisig_make_money_title: 'Как используется {{productName}}?',
   fast: 'Быстро',
   fast_vault_session_conflict: 'Несоответствие доли хранилища',
   fast_vault_session_conflict_description:
@@ -440,7 +442,7 @@ export const ru = {
   grant_camera_permission: 'Разрешить доступ к камере',
   gwei: 'GWEI',
   header_tooltip_content:
-    'Реферальная программа применяется к свопам THORChain на best-effort основе. Чтобы использовать referral Vultisig, нужно зарегистрировать THORName. Стоимость регистрации — 10 RUNE и 1 RUNE за каждый год, оплачивается сети THORChain.',
+    'Реферальная программа применяется к свопам THORChain на best-effort основе. Чтобы использовать referral {{productName}}, нужно зарегистрировать THORName. Стоимость регистрации — 10 RUNE и 1 RUNE за каждый год, оплачивается сети THORChain.',
   header_tooltip_title: 'Реферальная программа',
   having_trouble_scanning_help: 'Помощь по сканированию QR',
   having_trouble_scanning: 'Проблемы со сканированием?',
@@ -456,7 +458,7 @@ export const ru = {
   hold: 'Держать',
   how_it_works: 'Как это работает',
   ibc_transaction_not_supporting_memo_desc:
-    'Эта IBC-транзакция содержит memo, но Vultisig сейчас не поддерживает встраивание memo в сообщения IBC-перевода.<br> Продолжение может привести к <b>необратимой потере средств</b>.',
+    'Эта IBC-транзакция содержит memo, но {{productName}} сейчас не поддерживает встраивание memo в сообщения IBC-перевода.<br> Продолжение может привести к <b>необратимой потере средств</b>.',
   ibc_transaction_not_supporting_memo_title:
     'Memo в IBC-транзакции не поддерживается',
   ibc_transfer: 'IBC-перевод',
@@ -537,7 +539,7 @@ export const ru = {
   loading: 'Загрузка...',
   localMode: 'Вы в локальном режиме',
   lock_time: 'Время блокировки',
-  lock_vultisig_automatically_after: 'Автоблокировка Vultisig через...',
+  lock_vultisig_automatically_after: 'Автоблокировка {{productName}} через...',
   looking_for_server: 'Поиск FastVaultServer...',
   looks_good: 'Выглядит хорошо.',
   low: 'Низкий',
@@ -630,13 +632,13 @@ export const ru = {
   off: 'Выкл',
   on: 'Вкл',
   onboarding_description_1:
-    'Vultisig — безопасное multi-device криптохранилище, совместимое со всеми основными блокчейнами и 10 000+ токенами. Vultisig полностью self-custodial.',
+    '{{productName}} — безопасное multi-device криптохранилище, совместимое со всеми основными блокчейнами и 10 000+ токенами. {{productName}} полностью self-custodial.',
   onboarding_description_2:
-    'Vultisig не отслеживает вашу активность и не требует регистрации. Vultisig полностью open source, обеспечивая прозрачность и доверие.',
+    '{{productName}} не отслеживает вашу активность и не требует регистрации. {{productName}} полностью open source, обеспечивая прозрачность и доверие.',
   onboarding_description_3:
-    'Vultisig изначально multi-device приложение. Требуется минимум два устройства для создания безопасного хранилища: одно основное и одно для сопряжения.',
+    '{{productName}} изначально multi-device приложение. Требуется минимум два устройства для создания безопасного хранилища: одно основное и одно для сопряжения.',
   onboarding_description_4:
-    'Vultisig — кошелёк без seed phrase. Вместо этого используются удобные доли хранилища. У каждого устройства своя доля, которую нужно отдельно резервировать.',
+    '{{productName}} — кошелёк без seed phrase. Вместо этого используются удобные доли хранилища. У каждого устройства своя доля, которую нужно отдельно резервировать.',
   operator_fee: 'Комиссия оператора',
   basis_points: 'Базисные пункты',
   optionalDevice: 'Необязательное устройство',
@@ -671,7 +673,7 @@ export const ru = {
   price_impact_average: 'Среднее',
   price_impact_good: 'Хорошее',
   price_impact_high: 'Высокое влияние',
-  prioritize_vultisig: 'Приоритизировать Vultisig',
+  prioritize_vultisig: 'Приоритизировать {{productName}}',
   priority: 'Приоритет',
   priority_fee: 'Приоритетная комиссия',
   privacy_policy: 'Политика конфиденциальности',
@@ -719,7 +721,7 @@ export const ru = {
   referral_program: 'Реферальная программа',
   referral_reg_fee: 'Регистрационная комиссия',
   referral_status: 'Статус',
-  manage_referral_title: 'Рекомендации Vultisig',
+  manage_referral_title: 'Рекомендации {{productName}}',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -825,7 +827,7 @@ export const ru = {
   select_vault_backup_share_description:
     'Эта резервная копия содержит несколько общих папок хранилища. Выберите папку для этого устройства.',
   unsupported_vault_backup_file:
-    'Этот файл не похож на резервную копию хранилища Vultisig. Выберите файл с расширением `.vult` или `.vult.zip`, экспортированный из приложения Vultisig.',
+    'Этот файл не похож на резервную копию хранилища {{productName}}. Выберите файл с расширением `.vult` или `.vult.zip`, экспортированный из приложения {{productName}}.',
   select_chain: 'Выбрать сеть',
   select_chains: 'Выбрать сети',
   select_chains_manually: 'Выбрать сети вручную',
@@ -1098,10 +1100,9 @@ export const ru = {
   via: 'с помощью',
   view_on_explorer: 'Просмотреть в обозревателе',
   vote: 'Голосовать',
-  vultisig: 'Vultisig',
-  vultisig_community: 'Сообщество Vultisig',
-  vultisig_education: 'Vultisig Education',
-  vultisig_website: 'Сайт Vultisig',
+  vultisig_community: 'Сообщество {{productName}}',
+  vultisig_education: '{{productName}} Education',
+  vultisig_website: 'Сайт {{productName}}',
   waitingOnDevices: 'Ожидание устройств...',
   waiting_for_devices_to_join: 'Ожидание подключения других устройств',
   waiting_for_devices_to_join_description:
@@ -1299,7 +1300,7 @@ export const ru = {
   qbtc_onboarding_feature_generate_title:
     'Сгенерируйте свою пару квантовых ключей.',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig запускает локальную церемонию MPC на ваших устройствах хранилища для создания новой пары ключей.',
+    '{{productName}} запускает локальную церемонию MPC на ваших устройствах хранилища для создания новой пары ключей.',
   qbtc_onboarding_feature_link_title: 'Свяжите его с существующим хранилищем.',
   qbtc_onboarding_feature_link_description:
     'Квантовый ключ привязан к вашей текущей структуре доступа к хранилищу. Перераспределение доступа не требуется.',
@@ -1359,7 +1360,7 @@ export const ru = {
   station_migration_reason_supported_legacy_private_key:
     'Устаревшие зашифрованные данные закрытого ключа доступны для импорта в будущем.',
   station_migration_reason_multisig:
-    'Station хранит только открытые метаданные мультиподписи. Он не хранит закрытые ключи, которые можно преобразовать в хранилище Vultisig.',
+    'Station хранит только открытые метаданные мультиподписи. Он не хранит закрытые ключи, которые можно преобразовать в хранилище {{productName}}.',
   station_migration_reason_encrypted_seed_not_string:
     'Параметр encryptedSeed присутствует, но не является строкой.',
   station_migration_reason_encrypted_invalid_shape:
@@ -1412,14 +1413,14 @@ export const ru = {
   station_migration_status_reason_importing:
     'Импорт начат. Вернитесь сюда после завершения настройки, если эта строка не обновится.',
   station_migration_status_reason_migrated:
-    'Этот кошелек был импортирован в Vultisig. Старое хранилище Station сохранено.',
+    'Этот кошелек был импортирован в {{productName}}. Старое хранилище Station сохранено.',
   station_migration_status_reason_skipped:
     'Этот кошелек был пропущен. Вы можете разблокировать его снова, когда будете готовы.',
   station_migration_status_reason_vault_import_failed:
     'Импорт хранилища не удался во время генерации ключа. Для повторной попытки разблокируйте этот кошелек.',
   station_migration_status_reason_vault_save_failed:
-    'Импорт хранилища завершен, но сохранение хранилища Vultisig не удалось. Разблокируйте этот кошелек еще раз, чтобы повторить попытку.',
+    'Импорт хранилища завершен, но сохранение хранилища {{productName}} не удалось. Разблокируйте этот кошелек еще раз, чтобы повторить попытку.',
   station_migration_reason_ledger_public_metadata_only:
-    'Station хранит только общедоступные метаданные Ledger. Он не хранит закрытые ключи, которые можно преобразовать в хранилище Vultisig.',
+    'Station хранит только общедоступные метаданные Ledger. Он не хранит закрытые ключи, которые можно преобразовать в хранилище {{productName}}.',
   paired: 'Создать пару',
 }

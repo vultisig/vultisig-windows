@@ -19,6 +19,7 @@ import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { useTranslation } from 'react-i18next'
 
+import { currentProductBrandConfig } from '../../product/brand'
 import { getVaultExportUid } from '../../vault/export/core/uid'
 
 export const DownloadKeysignQrCode = () => {
@@ -76,7 +77,7 @@ export const DownloadKeysignQrCode = () => {
             <PrintableQrCode
               value={data}
               title={t('join_keysign')}
-              brandLabel={t('vultisig')}
+              brandLabel={currentProductBrandConfig.name}
               rows={rows}
             />
           }

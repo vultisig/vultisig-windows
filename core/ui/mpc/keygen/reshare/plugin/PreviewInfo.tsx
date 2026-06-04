@@ -23,6 +23,8 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrandConfig } from '../../../../product/brand'
+
 export const PreviewInfo: FC<
   OnFinishProp<FastVaultPasswordModalResult> & ValueProp<Plugin>
 > = ({ value: { description, logo_url, permissions, title }, onFinish }) => {
@@ -93,8 +95,8 @@ export const PreviewInfo: FC<
                   weight={500}
                   centerHorizontally
                 >
-                  Vultisig Apps can never sign transactions you do not first
-                  approve.
+                  {currentProductBrandConfig.name} Apps can never sign
+                  transactions you do not first approve.
                 </Text>
               </VStack>
             </VStack>

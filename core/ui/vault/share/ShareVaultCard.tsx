@@ -6,14 +6,15 @@ import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { productRootDomain } from '@vultisig/core-config'
 import QRCode from 'react-qr-code'
 import styled, { useTheme } from 'styled-components'
 
+import { currentProductBrandConfig } from '../../product/brand'
 import { getVaultExportUid } from '../export/core/uid'
 
 const cardWidth = 345
 const qrCodeSize = cardWidth - 105
+const productWebsiteHost = new URL(currentProductBrandConfig.websiteUrl).host
 
 const Container = styled.div`
   max-width: ${toSizeUnit(cardWidth)};
@@ -79,7 +80,7 @@ export const ShareVaultCard = () => {
         />
       </QrCodeWrapper>
       <Text color="shyExtra" weight={500} size={13} cropped>
-        {productRootDomain}
+        {productWebsiteHost}
       </Text>
     </Container>
   )

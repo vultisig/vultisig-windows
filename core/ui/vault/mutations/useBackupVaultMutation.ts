@@ -1,7 +1,6 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useMutation } from '@tanstack/react-query'
-import { productName } from '@vultisig/core-config'
 import { getSevenZip } from '@vultisig/core-mpc/compression/getSevenZip'
 import { toCommVault } from '@vultisig/core-mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_container_pb'
@@ -14,6 +13,7 @@ import { match } from '@vultisig/lib-utils/match'
 
 import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { currentProductBrandConfig } from '../../product/brand'
 import { useCore } from '../../state/core'
 import { useVaults } from '../../storage/vaults'
 
@@ -117,7 +117,7 @@ export const useBackupVaultMutation = ({
         const sevenZip = await getSevenZip()
         const fileNames: string[] = []
         const archiveName = `${[
-          productName.toLowerCase(),
+          currentProductBrandConfig.name.toLowerCase(),
           'backups',
           Math.floor(Date.now() / 1000),
         ].join('_')}.zip`

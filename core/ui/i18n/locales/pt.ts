@@ -63,7 +63,7 @@ export const pt = {
   assets: 'Ativos',
   at_least_one_device: 'Pelo menos um dispositivo',
   at_least_one_device_subtitle:
-    'Qualquer dispositivo que consiga executar o Vultisig funcionará.',
+    'Qualquer dispositivo que consiga executar o {{productName}} funcionará.',
   available: 'Disponível',
   back: 'Voltar',
   before_you_start: 'Antes de começar...',
@@ -113,7 +113,7 @@ export const pt = {
   bronze: 'Bronze',
   diamond: 'Diamante',
   buy: 'Comprar',
-  by_vultisig: 'por Vultisig',
+  by_vultisig: 'por {{productName}}',
   camera_access_blocked:
     'O acesso à câmera está bloqueado. Por favor, habilite-o nas configurações do seu navegador.',
   cache_password_for_5_min: 'Lembre-se da senha por 5 minutos.',
@@ -164,7 +164,7 @@ export const pt = {
     deposit_header: 'Depósito na conta Circle',
     verify_deposit: 'Verificar depósito',
     introduction:
-      'Deposite seus USDC em uma conta Circle e ganhe rendimentos. Tudo em segurança dentro do seu cofre Vultisig.',
+      'Deposite seus USDC em uma conta Circle e ganhe rendimentos. Tudo em segurança dentro do seu cofre {{productName}}.',
     open_account: 'Abrir conta',
     withdraw: 'Retirar',
     withdraw_header: 'Retirar-se do Círculo',
@@ -199,7 +199,7 @@ export const pt = {
   connect: 'Conectar',
   connect_dapp: 'Conectar dApp',
   connect_to_site: 'Conecte-se ao {{site}}',
-  connect_website_subtitle: 'Conecte este site com Vultisig Extension.',
+  connect_website_subtitle: 'Conecte este site com {{productExtensionName}}.',
   connected_dapps: 'dApps conectados',
   connecting_to_server: 'Conectando ao servidor',
   continue: 'Continuar',
@@ -354,22 +354,22 @@ export const pt = {
   failed_to_save_vault: 'Falha ao salvar o cofre',
   faq: 'Perguntas frequentes',
   faq_comparison_content:
-    'É construído com tecnologia MPC, que elimina a necessidade de frases-semente e suporta múltiplas blockchains, tornando o Vultisig flexível e independente da cadeia de blockchain.',
+    'É construído com tecnologia MPC, que elimina a necessidade de frases-semente e suporta múltiplas blockchains, tornando o {{productName}} flexível e independente da cadeia de blockchain.',
   faq_comparison_title:
-    'Como o Vultisig se compara a outras carteiras multisig?',
+    'Como o {{productName}} se compara a outras carteiras multisig?',
   faq_data_protection_content:
-    'A Vultisig não armazena nenhuma informação do usuário proveniente de seus aplicativos móveis.',
+    'A {{productName}} não armazena nenhuma informação do usuário proveniente de seus aplicativos móveis.',
   faq_data_protection_title:
-    'Como a Vultisig lida com a privacidade e a proteção de dados?',
+    'Como a {{productName}} lida com a privacidade e a proteção de dados?',
   faq_is_open_source_content:
-    'Sim, o Vultisig é de código aberto e passou por auditorias de segurança. Tanto os relatórios de auditoria quanto o código-fonte estão acessíveis.',
-  faq_is_open_source_title: 'Vultisig é de código aberto e auditado?',
+    'Sim, o {{productName}} é de código aberto e passou por auditorias de segurança. Tanto os relatórios de auditoria quanto o código-fonte estão acessíveis.',
+  faq_is_open_source_title: '{{productName}} é de código aberto e auditado?',
   faq_need_to_register_content:
-    'A Vultisig oferece suporte às principais criptomoedas e tokens, com mais de 30 blockchains e seus respectivos tokens disponíveis atualmente.',
+    'A {{productName}} oferece suporte às principais criptomoedas e tokens, com mais de 30 blockchains e seus respectivos tokens disponíveis atualmente.',
   faq_need_to_register_title:
-    'Quais criptomoedas são suportadas pela Vultisig?',
+    'Quais criptomoedas são suportadas pela {{productName}}?',
   faq_recover_assets_content:
-    'O Vultisig é gratuito. Apenas as taxas de rede padrão se aplicam ao envio. Para swaps e bridges, há uma taxa de 0,5% (50 bps).',
+    'O {{productName}} é gratuito. Apenas as taxas de rede padrão se aplicam ao envio. Para swaps e bridges, há uma taxa de 0,5% (50 bps).',
   faq_recover_assets_title: 'Quais são as taxas e os custos?',
   faq_secure_crypto_vault_content:
     'Sim, desde que você tenha salvo e tenha acesso aos seus backups ao criar o cofre. Você pode importar esses backups em um novo dispositivo para recuperar o acesso aos seus arquivos.',
@@ -377,14 +377,14 @@ export const pt = {
     'Posso recuperar meus bens se perder um dispositivo?',
   faq_setup_crypto_vault_content:
     'É uma carteira segura com autenticação múltipla baseada na tecnologia MPC, usada para gerenciar ativos digitais. As transações exigem aprovação de múltiplos dispositivos.',
-  faq_setup_crypto_vault_title: 'O que é Vultisig?',
+  faq_setup_crypto_vault_title: 'O que é {{productName}}?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig oferece segurança aprimorada com autenticação em múltiplos dispositivos, suporte para diversas blockchains, opções de recuperação fáceis e sem frases-semente ou rastreamento de usuários.',
+    '{{productName}} oferece segurança aprimorada com autenticação em múltiplos dispositivos, suporte para diversas blockchains, opções de recuperação fáceis e sem frases-semente ou rastreamento de usuários.',
   faq_supported_cryptocurrencies_title:
-    'Quais são os benefícios de usar o Vultisig?',
+    'Quais são os benefícios de usar o {{productName}}?',
   faq_vultisig_make_money_content:
-    'A Vultisig armazena e gerencia ativos digitais com segurança. Todas as ações, como envio ou troca, exigem que os dispositivos assinem as transações.',
-  faq_vultisig_make_money_title: 'Como se utiliza o Vultisig?',
+    'A {{productName}} armazena e gerencia ativos digitais com segurança. Todas as ações, como envio ou troca, exigem que os dispositivos assinem as transações.',
+  faq_vultisig_make_money_title: 'Como se utiliza o {{productName}}?',
   fast: 'Rápido',
   fast_vault_session_conflict: 'Incompatibilidade na parte do cofre',
   fast_vault_session_conflict_description:
@@ -450,7 +450,7 @@ export const pt = {
   grant_camera_permission: 'Conceder permissão à câmera',
   gwei: 'GWEI',
   header_tooltip_content:
-    'O programa de indicação é aplicado em swaps THORChain e funciona com base no princípio do melhor esforço. Você precisa registrar um THORName para usar o programa de indicação Vultisig. A taxa de registro é de 10 RUNE e 1 RUNE por ano, paga à rede THORChain.',
+    'O programa de indicação é aplicado em swaps THORChain e funciona com base no princípio do melhor esforço. Você precisa registrar um THORName para usar o programa de indicação {{productName}}. A taxa de registro é de 10 RUNE e 1 RUNE por ano, paga à rede THORChain.',
   header_tooltip_title: 'Programa de Encaminhamento',
   having_trouble_scanning_help: 'Ajuda para digitalizar QR',
   having_trouble_scanning: 'Problemas para escanear?',
@@ -467,7 +467,7 @@ export const pt = {
   hold: 'Manter',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
-    'Esta transação IBC inclui um memorando, mas a Vultisig atualmente não suporta a incorporação de memorandos em mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
+    'Esta transação IBC inclui um memorando, mas a {{productName}} atualmente não suporta a incorporação de memorandos em mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
   ibc_transaction_not_supporting_memo_title:
     'Memorando de transação IBC não suportado',
   ibc_transfer: 'Transferência IBC',
@@ -549,7 +549,7 @@ export const pt = {
   localMode: 'Você está no modo local.',
   lock_time: 'Horário de bloqueio',
   lock_vultisig_automatically_after:
-    'Bloquear Vultisig automaticamente após...',
+    'Bloquear {{productName}} automaticamente após...',
   looking_for_server: 'Procurando por FastVaultServer...',
   looks_good: 'Parece bom',
   low: 'Baixo',
@@ -643,13 +643,13 @@ export const pt = {
   off: 'Desligado',
   on: 'Sobre',
   onboarding_description_1:
-    'Vultisig é um cofre criptográfico seguro e multidispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. Vultisig é totalmente autocustodial.',
+    '{{productName}} é um cofre criptográfico seguro e multidispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. {{productName}} é totalmente autocustodial.',
   onboarding_description_2:
-    'O Vultisig não rastreia suas atividades nem exige qualquer tipo de cadastro. O Vultisig é totalmente de código aberto, garantindo transparência e confiança.',
+    'O {{productName}} não rastreia suas atividades nem exige qualquer tipo de cadastro. O {{productName}} é totalmente de código aberto, garantindo transparência e confiança.',
   onboarding_description_3:
-    'Vultisig é um aplicativo nativamente para múltiplos dispositivos. Requer pelo menos dois dispositivos para criar um cofre seguro: um dispositivo iniciador e um dispositivo de emparelhamento.',
+    '{{productName}} é um aplicativo nativamente para múltiplos dispositivos. Requer pelo menos dois dispositivos para criar um cofre seguro: um dispositivo iniciador e um dispositivo de emparelhamento.',
   onboarding_description_4:
-    'Vultisig é uma carteira sem frases-semente. Em vez disso, utiliza compartilhamentos de cofre fáceis de gerenciar. Cada dispositivo possui seu próprio compartilhamento de cofre exclusivo, que requer um backup separado.',
+    '{{productName}} é uma carteira sem frases-semente. Em vez disso, utiliza compartilhamentos de cofre fáceis de gerenciar. Cada dispositivo possui seu próprio compartilhamento de cofre exclusivo, que requer um backup separado.',
   operator_fee: 'Taxa de Operador',
   basis_points: 'Pontos base',
   optionalDevice: 'Dispositivo opcional',
@@ -685,7 +685,7 @@ export const pt = {
   price_impact_average: 'Média',
   price_impact_good: 'Bom',
   price_impact_high: 'Alto impacto',
-  prioritize_vultisig: 'Priorize Vultisig',
+  prioritize_vultisig: 'Priorize {{productName}}',
   priority: 'Prioridade',
   priority_fee: 'Taxa prioritária',
   privacy_policy: 'política de Privacidade',
@@ -732,7 +732,7 @@ export const pt = {
   referral_program: 'Programa de Encaminhamento',
   referral_reg_fee: 'Taxa de inscrição',
   referral_status: 'Status',
-  manage_referral_title: 'Indicações Vultisig',
+  manage_referral_title: 'Indicações {{productName}}',
   referrals_default_title: 'Encaminhamento',
   referrals_summary: {
     item_1: {
@@ -839,7 +839,7 @@ export const pt = {
   select_vault_backup_share_description:
     'Este backup contém várias pastas compartilhadas do cofre. Selecione a pasta compartilhada para este dispositivo.',
   unsupported_vault_backup_file:
-    'Este arquivo não parece ser um backup do Vultisig Vault. Selecione um arquivo `.vult` ou `.vult.zip` exportado do aplicativo Vultisig.',
+    'Este arquivo não parece ser um backup do {{productName}} Vault. Selecione um arquivo `.vult` ou `.vult.zip` exportado do aplicativo {{productName}}.',
   select_chain: 'Selecione a corrente',
   select_chains: 'Selecione',
   select_chains_manually: 'Selecione as correntes manualmente',
@@ -1123,10 +1123,9 @@ export const pt = {
   via: 'via',
   view_on_explorer: 'Visualizar no Explorador',
   vote: 'Voto',
-  vultisig: 'Vultisig',
-  vultisig_community: 'Comunidade Vultisig',
-  vultisig_education: 'Educação Vultisig',
-  vultisig_website: 'Site Vultisig',
+  vultisig_community: 'Comunidade {{productName}}',
+  vultisig_education: 'Educação {{productName}}',
+  vultisig_website: 'Site {{productName}}',
   waitingOnDevices: 'Aguardando dispositivos...',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem.',
   waiting_for_devices_to_join_description:
@@ -1322,7 +1321,7 @@ export const pt = {
     'As chaves clássicas podem ser quebradas por computadores quânticos. Habilitar QBTC requer a geração de um novo par de chaves.',
   qbtc_onboarding_feature_generate_title: 'Gere seu par de chaves quânticas.',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig executa uma cerimônia MPC local em seus dispositivos de cofre para gerar um novo par de chaves.',
+    '{{productName}} executa uma cerimônia MPC local em seus dispositivos de cofre para gerar um novo par de chaves.',
   qbtc_onboarding_feature_link_title: 'Conecte-o ao seu cofre existente.',
   qbtc_onboarding_feature_link_description:
     'A chave quântica está vinculada à sua estrutura de compartilhamento de cofre atual. Não é necessário compartilhar novamente.',
@@ -1382,7 +1381,7 @@ export const pt = {
   station_migration_reason_supported_legacy_private_key:
     'Os dados legados criptografados da chave privada estão presentes para uma futura importação.',
   station_migration_reason_multisig:
-    'A Station armazena apenas metadados multisig públicos. Ela não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
+    'A Station armazena apenas metadados multisig públicos. Ela não armazena chaves privadas que possam ser convertidas em um cofre {{productName}}.',
   station_migration_reason_encrypted_seed_not_string:
     'O encryptedSeed está presente, mas não é uma string.',
   station_migration_reason_encrypted_invalid_shape:
@@ -1435,14 +1434,14 @@ export const pt = {
   station_migration_status_reason_importing:
     'A importação foi iniciada. Retorne aqui após a conclusão da configuração, caso esta linha não seja atualizada.',
   station_migration_status_reason_migrated:
-    'Esta carteira foi importada para Vultisig. O armazenamento antigo em Station ainda está preservado.',
+    'Esta carteira foi importada para {{productName}}. O armazenamento antigo em Station ainda está preservado.',
   station_migration_status_reason_skipped:
     'Esta carteira foi ignorada. Você pode desbloqueá-la novamente quando estiver pronto.',
   station_migration_status_reason_vault_import_failed:
     'A importação do cofre falhou durante a geração da chave. Desbloqueie esta carteira novamente para tentar mais uma vez.',
   station_migration_status_reason_vault_save_failed:
-    'A importação do cofre foi concluída, mas a gravação do cofre Vultisig falhou. Desbloqueie esta carteira novamente para tentar mais uma vez.',
+    'A importação do cofre foi concluída, mas a gravação do cofre {{productName}} falhou. Desbloqueie esta carteira novamente para tentar mais uma vez.',
   station_migration_reason_ledger_public_metadata_only:
-    'Station armazena apenas metadados públicos do Ledger. Não armazena chaves privadas que possam ser convertidas em um cofre Vultisig.',
+    'Station armazena apenas metadados públicos do Ledger. Não armazena chaves privadas que possam ser convertidas em um cofre {{productName}}.',
   paired: 'Emparelhado',
 }
