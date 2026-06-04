@@ -447,7 +447,6 @@ export const en = {
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
   hold: 'Hold',
-  hold_for_paired_sign: 'Hold for paired sign',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
     'This IBC transaction includes a memo, but Vultisig currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
@@ -1162,6 +1161,7 @@ export const en = {
   add_thor_lp: 'Add THORChain LP',
   remove_thor_lp: 'Remove THORChain LP',
   pool: 'Pool',
+  paired: 'Paired',
   paired_address: 'Paired Address',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   yesterday: 'Yesterday',

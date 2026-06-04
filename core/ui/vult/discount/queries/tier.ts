@@ -14,6 +14,8 @@ type UseVultDiscountTierQueryInput = {
   enabled?: boolean
 }
 
+const vultDiscountTierStaleTime = 5 * 60 * 1000
+
 export const useVultDiscountTierQuery = ({
   enabled = true,
 }: UseVultDiscountTierQueryInput = {}) => {
@@ -33,6 +35,7 @@ export const useVultDiscountTierQuery = ({
       return getVultDiscountTier({ vultBalance, thorguardNftBalance })
     },
     enabled: enabled && !!address,
-    initialData: address ? undefined : null,
+    placeholderData: null,
+    staleTime: vultDiscountTierStaleTime,
   })
 }
