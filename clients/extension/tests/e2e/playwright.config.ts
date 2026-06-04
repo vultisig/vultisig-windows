@@ -118,6 +118,7 @@ export default defineConfig({
         '**/router.spec.ts',
         '**/push-notifications.spec.ts',
         '**/push-notifications-integration.spec.ts',
+        '**/station-migration.spec.ts',
       ],
       use: {
         launchOptions: {

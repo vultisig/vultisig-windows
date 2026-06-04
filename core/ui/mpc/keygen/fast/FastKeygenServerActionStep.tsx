@@ -4,7 +4,7 @@ import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { FC, useEffect, useMemo } from 'react'
+import { FC, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useKeygenOperation } from '../state/currentKeygenOperationType'
@@ -14,13 +14,19 @@ export const FastKeygenServerActionStep: FC<OnFinishProp> = ({ onFinish }) => {
   const { mutate, ...mutationState } = useFastKeygenServerActionMutation({
     onSuccess: onFinish,
   })
+  const hasStartedRef = useRef(false)
   const keygenOperation = useKeygenOperation()
 
   const isPluginReshare = useMemo(() => {
     return 'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
   }, [keygenOperation])
 
-  useEffect(() => mutate(), [mutate])
+  useEffect(() => {
+    if (hasStartedRef.current) return
+
+    hasStartedRef.current = true
+    mutate()
+  }, [mutate])
 
   return isPluginReshare ? null : (
     <>

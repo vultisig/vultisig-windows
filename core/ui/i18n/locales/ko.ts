@@ -1321,7 +1321,6 @@ export const ko = {
   station_migration_summary_total_one: '{{count}} 지갑',
   station_migration_summary_total_other: '{{count}} 지갑',
   station_migration_status_supported: '지원됨',
-  station_migration_status_reconnect: '다시 연결',
   station_migration_status_unsupported: '지원되지 않음',
   station_migration_status_corrupt: '유효하지 않은',
   station_migration_status_needs_review: '검토 필요',
@@ -1347,8 +1346,6 @@ export const ko = {
     '암호화된 Terra 개인 키 데이터가 향후 가져오기를 위해 준비되어 있습니다.',
   station_migration_reason_supported_legacy_private_key:
     '기존에 암호화된 개인 키 데이터가 향후 가져오기를 위해 존재합니다.',
-  station_migration_reason_ledger_reconnect:
-    'Station에는 이 Ledger 지갑의 공개 계정 정보가 저장됩니다. 나중에 하드웨어 장치를 다시 연결하여 Station에서 사용하세요.',
   station_migration_reason_multisig:
     'Station는 공개 멀티시그 메타데이터만 저장합니다. Vultisig 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1410,4 +1407,6 @@ export const ko = {
     '키 생성 중 Vault 가져오기에 실패했습니다. 다시 시도하려면 지갑 잠금을 해제하세요.',
   station_migration_status_reason_vault_save_failed:
     '볼트 가져오기는 완료되었지만 Vultisig 볼트 저장에 실패했습니다. 다시 시도하려면 이 지갑의 잠금을 해제하세요.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station은 공개 Ledger 메타데이터만 저장합니다. Vultisig 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
 }

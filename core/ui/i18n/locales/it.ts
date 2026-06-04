@@ -1356,7 +1356,6 @@ export const it = {
   station_migration_summary_total_one: 'Portafoglio {{count}}',
   station_migration_summary_total_other: 'portafogli {{count}}',
   station_migration_status_supported: 'Supportato',
-  station_migration_status_reconnect: 'Ricollega',
   station_migration_status_unsupported: 'Non supportato',
   station_migration_status_corrupt: 'Non valido',
   station_migration_status_needs_review: 'Necessita di revisione',
@@ -1384,8 +1383,6 @@ export const it = {
     'I dati crittografati della chiave privata di Terra sono presenti per una futura importazione.',
   station_migration_reason_supported_legacy_private_key:
     'I dati della chiave privata crittografata preesistente sono presenti per una futura importazione.',
-  station_migration_reason_ledger_reconnect:
-    'Station memorizza i dettagli dell&#39;account pubblico per questo portafoglio Ledger. Ricollega il dispositivo hardware in seguito per utilizzarlo in Station.',
   station_migration_reason_multisig:
     'Station memorizza solo i metadati pubblici multisig. Non memorizza le chiavi private che possono essere convertite in un vault Vultisig.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1447,4 +1444,6 @@ export const it = {
     'L&#39;importazione del vault non è riuscita durante la generazione della chiave. Sblocca nuovamente questo portafoglio per riprovare.',
   station_migration_status_reason_vault_save_failed:
     'L&#39;importazione del vault è stata completata, ma il salvataggio del vault Vultisig non è riuscito. Sblocca nuovamente questo portafoglio per riprovare.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station memorizza solo i metadati pubblici del Ledger. Non memorizza le chiavi private che possono essere convertite in un vault Vultisig.',
 }

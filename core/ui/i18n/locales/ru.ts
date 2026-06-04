@@ -1333,7 +1333,6 @@ export const ru = {
   station_migration_summary_total_one: 'Кошелек {{count}}',
   station_migration_summary_total_other: 'Кошельки {{count}}',
   station_migration_status_supported: 'Поддерживается',
-  station_migration_status_reconnect: 'Восстановить соединение',
   station_migration_status_unsupported: 'Неподдерживаемый',
   station_migration_status_corrupt: 'Неверный',
   station_migration_status_needs_review: 'Требуется пересмотр',
@@ -1360,8 +1359,6 @@ export const ru = {
     'Зашифрованные данные закрытого ключа Terra доступны для импорта в будущем.',
   station_migration_reason_supported_legacy_private_key:
     'Устаревшие зашифрованные данные закрытого ключа доступны для импорта в будущем.',
-  station_migration_reason_ledger_reconnect:
-    'В Station хранятся общедоступные данные учетной записи для этого кошелька Ledger. Подключите аппаратное устройство позже, чтобы использовать его в Station.',
   station_migration_reason_multisig:
     'Station хранит только открытые метаданные мультиподписи. Он не хранит закрытые ключи, которые можно преобразовать в хранилище Vultisig.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1423,4 +1420,6 @@ export const ru = {
     'Импорт хранилища не удался во время генерации ключа. Для повторной попытки разблокируйте этот кошелек.',
   station_migration_status_reason_vault_save_failed:
     'Импорт хранилища завершен, но сохранение хранилища Vultisig не удалось. Разблокируйте этот кошелек еще раз, чтобы повторить попытку.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station хранит только общедоступные метаданные Ledger. Он не хранит закрытые ключи, которые можно преобразовать в хранилище Vultisig.',
 }

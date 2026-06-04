@@ -1336,7 +1336,6 @@ export const nl = {
   station_migration_summary_total_one: '{{count}} portemonnee',
   station_migration_summary_total_other: '{{count}} wallets',
   station_migration_status_supported: 'Ondersteund',
-  station_migration_status_reconnect: 'Opnieuw verbinding maken',
   station_migration_status_unsupported: 'Niet ondersteund',
   station_migration_status_corrupt: 'Ongeldig',
   station_migration_status_needs_review: 'Moet beoordeeld worden',
@@ -1362,8 +1361,6 @@ export const nl = {
     'Versleutelde Terra-privésleutelgegevens zijn aanwezig voor een toekomstige import.',
   station_migration_reason_supported_legacy_private_key:
     'Versleutelde privé-sleutelgegevens uit het verleden zijn aanwezig voor een toekomstige import.',
-  station_migration_reason_ledger_reconnect:
-    'Station slaat de openbare accountgegevens voor deze Ledger-wallet op. Sluit het hardwareapparaat later opnieuw aan om het in Station te gebruiken.',
   station_migration_reason_multisig:
     'Station slaat alleen openbare multisig-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een Vultisig-kluis.',
   station_migration_reason_encrypted_seed_not_string:
@@ -1425,4 +1422,6 @@ export const nl = {
     'Het importeren van de kluis is mislukt tijdens het genereren van de sleutel. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
   station_migration_status_reason_vault_save_failed:
     'Het importeren van de kluis is voltooid, maar het opslaan van de kluis Vultisig is mislukt. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station slaat alleen openbare Ledger-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een Vultisig-kluis.',
 }
