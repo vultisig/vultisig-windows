@@ -32,7 +32,8 @@
     "test:unit:watch": "vitest --config tests/unit/vitest.config.ts",
     "test:integration": "vitest run --config tests/integration/vitest.config.ts",
     "test:all": "yarn test:unit && yarn test:integration",
-    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts"
+    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
+    "test:e2e:provider-smoke": "playwright test --config tests/e2e/playwright.config.ts tests/e2e/extension-ui.spec.ts --project=network --no-deps"
   },
   "dependencies": {
     "@core/extension": "workspace:^",

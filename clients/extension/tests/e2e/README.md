@@ -20,6 +20,9 @@ yarn test:e2e
 # Run a subset of projects (faster local verification without signing tests)
 yarn test:e2e --project=ui-isolated --project=network
 
+# Run the CI provider smoke against a built extension dist
+yarn test:e2e:provider-smoke
+
 # Run a specific test file
 yarn test:e2e tests/e2e/specs/swap-flow.spec.ts
 
@@ -51,6 +54,24 @@ The QA command validates manifest name, description, author, icon paths, the
 primary EIP-6963 announcement filtered by expected `rdns`, and
 `window.terraWallets` / `window.interchainWallets` metadata. The static pass
 also scans split Firefox inpage chunks.
+
+## CI Coverage
+
+`.github/workflows/build.yml` runs the automatic extension lanes on pull
+requests and `main`:
+
+- Default Chromium extension build, followed by
+  `yarn test:e2e:provider-smoke` under `xvfb-run`. This loads the built
+  extension and verifies the injected provider appears on HTTP test pages.
+- Station extension build through `yarn workspace @clients/extension
+  build:station`, which includes the static Station brand/artifact QA pass.
+- Firefox extension build through `yarn workspace @clients/extension
+  build:firefox`, followed by `yarn workspace @clients/extension qa:brand
+  --skip-browser` against the post-processed Firefox artifact.
+
+Funded send/swap/broadcast coverage and broader manual release-readiness checks
+remain outside ordinary PR CI because they require real vault credentials,
+native balances, or manual product signoff.
 
 ## Environment Setup
 
