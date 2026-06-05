@@ -59,12 +59,16 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
           },
         ]
       : []),
-    {
-      id: 'followOnX' as const,
-      component: (props: { onDismiss: () => void }) => (
-        <FollowOnXBanner onDismiss={props.onDismiss} />
-      ),
-    },
+    ...(currentProductBrand === 'vultisig'
+      ? [
+          {
+            id: 'followOnX' as const,
+            component: (props: { onDismiss: () => void }) => (
+              <FollowOnXBanner onDismiss={props.onDismiss} />
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (

@@ -11,5 +11,9 @@ export const vultisigTwitterUrl = 'https://x.com/vultisig'
 export const currentProductWebsiteUrl = currentProductBrandConfig.websiteUrl
 export const vultisigPrivacyPolicyUrl = `${currentProductWebsiteUrl}/privacy`
 export const vultisigTermsOfServiceUrl = `${currentProductWebsiteUrl}/termofservice`
-export const vultisigEducationUrl = 'https://docs.vultisig.com'
+const vultisigEducationUrl = 'https://docs.vultisig.com'
+export const currentProductEducationUrl =
+  currentProductBrand === 'station'
+    ? currentProductWebsiteUrl
+    : vultisigEducationUrl
 export const shouldShowVultisigCommunity = currentProductBrand === 'vultisig'

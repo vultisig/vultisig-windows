@@ -54,6 +54,7 @@ import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
@@ -354,8 +355,7 @@ const assertNativeChainForSigning = (chainId: string): void => {
   }
 }
 
-const mldsaRequiredKeplrMessage =
-  'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
+const mldsaRequiredKeplrMessage = `QBTC requires an MLDSA-enabled vault. Enable MLDSA in ${currentExtensionBrandConfig.provider.walletPickerName} Developer Options and create a new vault.`
 
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
   const nativeChain = getKeplrSupportedChainByChainId(chainId)
@@ -521,7 +521,9 @@ class XDEFIMessageRequester {
   public async sendMessage(message: any, params: any): Promise<void> {
     const method =
       readMessageType(params) ?? readMessageType(message) ?? 'unknown'
-    throw new Error(`Keplr method '${method}' is not supported by Vultisig`)
+    throw new Error(
+      `Keplr method '${method}' is not supported by ${currentExtensionBrandConfig.provider.walletPickerName}`
+    )
   }
 }
 
@@ -1100,7 +1102,7 @@ export class XDEFIKeplrProvider extends Keplr {
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
     throw new Error(
-      'Keplr.experimentalSignEIP712CosmosTx_v0 is not supported by Vultisig'
+      `Keplr.experimentalSignEIP712CosmosTx_v0 is not supported by ${currentExtensionBrandConfig.provider.walletPickerName}`
     )
   }
 

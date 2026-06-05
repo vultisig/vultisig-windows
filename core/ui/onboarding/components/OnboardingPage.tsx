@@ -2,7 +2,6 @@ import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding
 import { Button } from '@lib/ui/buttons/Button'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -10,6 +9,9 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
+
+import { currentProductBrandConfig } from '../../product/brand'
+import { ProductLogo } from '../../product/ProductLogo'
 
 const steps = [1, 2, 3, 4] as const
 
@@ -28,9 +30,9 @@ export const OnboardingPage = () => {
         flexGrow
       >
         <HStack gap={8}>
-          <VultisigLogoIcon fontSize={44} />
+          <ProductLogo fontSize={44} />
           <Text color="contrast" size={36} weight="600">
-            {t('vultisig')}
+            {currentProductBrandConfig.name}
           </Text>
         </HStack>
         <SafeImage

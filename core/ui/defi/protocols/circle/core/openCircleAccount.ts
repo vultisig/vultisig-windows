@@ -1,6 +1,6 @@
-import { productName } from '@vultisig/core-config'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
+import { currentProductBrandConfig } from '../../../../product/brand'
 import { circleApiUrl } from './config'
 
 type CreateCircleWalletBody = {
@@ -10,7 +10,7 @@ type CreateCircleWalletBody = {
   name: string
 }
 
-const defaultVaultName = `${productName} Vault`
+const defaultVaultName = `${currentProductBrandConfig.name} Vault`
 
 export const openCircleAccount = (ownerAddress: string) => {
   const body: CreateCircleWalletBody = {

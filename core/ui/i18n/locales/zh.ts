@@ -58,7 +58,7 @@ export const zh = {
   asset: '资产',
   assets: '资产',
   at_least_one_device: '至少一台设备',
-  at_least_one_device_subtitle: '任何能运行 Vultisig 的设备都可以。',
+  at_least_one_device_subtitle: '任何能运行 {{productName}} 的设备都可以。',
   available: '可用的',
   back: '后退',
   before_you_start: '开始之前……',
@@ -103,7 +103,7 @@ export const zh = {
   bronze: '青铜',
   diamond: '钻石',
   buy: '买',
-  by_vultisig: '作者：Vultisig',
+  by_vultisig: '作者：{{productName}}',
   camera_access_blocked: '摄像头访问已被阻止。请在浏览器设置中启用此功能。',
   cache_password_for_5_min: '记住密码 5 分钟',
   cancel: '取消',
@@ -152,7 +152,7 @@ export const zh = {
     deposit_header: '存款至 Circle 账户',
     verify_deposit: '核实存款',
     introduction:
-      '将您的 USDC 存入 Circle 账户即可赚取收益。安全存放于您的 Vultisig 金库中。',
+      '将您的 USDC 存入 Circle 账户即可赚取收益。安全存放于您的 {{productName}} 金库中。',
     open_account: '开户',
     withdraw: '提取',
     withdraw_header: '退出圈子',
@@ -186,7 +186,7 @@ export const zh = {
   connect: '连接',
   connect_dapp: '连接 dApp',
   connect_to_site: '连接到 {{site}}',
-  connect_website_subtitle: '将此网站与 Vultisig Extension 连接',
+  connect_website_subtitle: '将此网站与 {{productExtensionName}} 连接',
   connected_dapps: '互联的去中心化应用',
   connecting_to_server: '正在连接服务器',
   continue: '继续',
@@ -325,32 +325,32 @@ export const zh = {
   failed_to_save_vault: '保存金库失败',
   faq: '常问问题',
   faq_comparison_content:
-    '它基于 MPC 技术构建，无需助记词，并支持多个区块链，使 Vultisig 具有灵活性和链无关性。',
-  faq_comparison_title: 'Vultisig 与其他多重签名钱包相比如何？?',
+    '它基于 MPC 技术构建，无需助记词，并支持多个区块链，使 {{productName}} 具有灵活性和链无关性。',
+  faq_comparison_title: '{{productName}} 与其他多重签名钱包相比如何？?',
   faq_data_protection_content:
-    'Vultisig 不会在其移动应用程序中存储任何用户信息。',
-  faq_data_protection_title: 'Vultisig如何处理隐私和数据保护问题？?',
+    '{{productName}} 不会在其移动应用程序中存储任何用户信息。',
+  faq_data_protection_title: '{{productName}}如何处理隐私和数据保护问题？?',
   faq_is_open_source_content:
-    '是的，Vultisig是开源软件，并且已经过安全审计。审计报告和源代码都是公开的。',
-  faq_is_open_source_title: 'Vultisig是开源软件并且经过审计吗？?',
+    '是的，{{productName}}是开源软件，并且已经过安全审计。审计报告和源代码都是公开的。',
+  faq_is_open_source_title: '{{productName}}是开源软件并且经过审计吗？?',
   faq_need_to_register_content:
-    'Vultisig 支持主流加密货币和代币，目前支持超过 30 种加密货币及其代币。',
-  faq_need_to_register_title: 'Vultisig支持哪些加密货币？?',
+    '{{productName}} 支持主流加密货币和代币，目前支持超过 30 种加密货币及其代币。',
+  faq_need_to_register_title: '{{productName}}支持哪些加密货币？?',
   faq_recover_assets_content:
-    'Vultisig 可以免费使用。发送资金仅需支付标准网络费用。而对于资金交换和桥接，则收取 0.5%（50 个基点）的手续费。',
+    '{{productName}} 可以免费使用。发送资金仅需支付标准网络费用。而对于资金交换和桥接，则收取 0.5%（50 个基点）的手续费。',
   faq_recover_assets_title: '费用和成本是多少？?',
   faq_secure_crypto_vault_content:
     '是的，只要您在创建保险库时保存了备份并可以访问这些备份，您就可以在新设备上导入这些备份以重新访问您的资产。',
   faq_secure_crypto_vault_title: '如果我丢失了设备，可以追回我的资产吗？?',
   faq_setup_crypto_vault_content:
     '它是一款基于多方计算（MPC）技术的安全多重认证钱包，用于管理数字资产。交易需要多个设备的授权。',
-  faq_setup_crypto_vault_title: 'Vultisig是什么？?',
+  faq_setup_crypto_vault_title: '{{productName}}是什么？?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig 提供增强的安全性，支持多设备身份验证、支持多种区块链、易于恢复，并且没有助记词或用户跟踪。',
-  faq_supported_cryptocurrencies_title: '使用Vultisig有哪些好处？?',
+    '{{productName}} 提供增强的安全性，支持多设备身份验证、支持多种区块链、易于恢复，并且没有助记词或用户跟踪。',
+  faq_supported_cryptocurrencies_title: '使用{{productName}}有哪些好处？?',
   faq_vultisig_make_money_content:
-    'Vultisig 安全地存储和管理数字资产。所有操作，例如发送或交换，都需要达到一定的设备数量才能对交易进行签名。',
-  faq_vultisig_make_money_title: 'Vultisig 如何使用？?',
+    '{{productName}} 安全地存储和管理数字资产。所有操作，例如发送或交换，都需要达到一定的设备数量才能对交易进行签名。',
+  faq_vultisig_make_money_title: '{{productName}} 如何使用？?',
   fast: '快速地',
   fast_vault_session_conflict: '保险库份额不匹配',
   fast_vault_session_conflict_description:
@@ -414,7 +414,7 @@ export const zh = {
   grant_camera_permission: '授予相机权限',
   gwei: '格威',
   header_tooltip_content:
-    '推荐计划适用于 THORChain 代币兑换，并尽力确保成功。您需要注册一个 THORName 才能使用 Vultisig 推荐计划。注册费为 10 RUNE，每年 1 RUNE，这笔费用将支付给 THORChain 网络。',
+    '推荐计划适用于 THORChain 代币兑换，并尽力确保成功。您需要注册一个 THORName 才能使用 {{productName}} 推荐计划。注册费为 10 RUNE，每年 1 RUNE，这笔费用将支付给 THORChain 网络。',
   header_tooltip_title: '推荐计划',
   having_trouble_scanning_help: '二维码扫描帮助',
   having_trouble_scanning: '扫描遇到问题？',
@@ -427,7 +427,7 @@ export const zh = {
   hold: '持有',
   how_it_works: '工作原理',
   ibc_transaction_not_supporting_memo_desc:
-    '此 IBC 交易包含备注，但 Vultisig 目前不支持在 IBC 转账消息中嵌入备注。<br>继续进行此交易可能会导致<b>资金的不可逆转损失</b>。',
+    '此 IBC 交易包含备注，但 {{productName}} 目前不支持在 IBC 转账消息中嵌入备注。<br>继续进行此交易可能会导致<b>资金的不可逆转损失</b>。',
   ibc_transaction_not_supporting_memo_title: '不支持IBC交易备忘录',
   ibc_transfer: 'IBC 转账',
   id: 'ID',
@@ -502,7 +502,7 @@ export const zh = {
   loading: '加载中...',
   localMode: '您处于本地模式',
   lock_time: '锁定时间',
-  lock_vultisig_automatically_after: 'Vultisig 会自动锁定，之后……',
+  lock_vultisig_automatically_after: '{{productName}} 会自动锁定，之后……',
   looking_for_server: '正在寻找 FastVaultServer...',
   looks_good: '看起来不错',
   low: '低的',
@@ -591,13 +591,13 @@ export const zh = {
   off: '离开',
   on: '在',
   onboarding_description_1:
-    'Vultisig是一个安全可靠的多设备加密保险库，兼容所有主流区块链和超过10000种代币。Vultisig完全支持自托管。',
+    '{{productName}}是一个安全可靠的多设备加密保险库，兼容所有主流区块链和超过10000种代币。{{productName}}完全支持自托管。',
   onboarding_description_2:
-    'Vultisig 不会追踪您的活动，也不需要任何注册。Vultisig 完全开源，确保透明度和信任度。',
+    '{{productName}} 不会追踪您的活动，也不需要任何注册。{{productName}} 完全开源，确保透明度和信任度。',
   onboarding_description_3:
-    'Vultisig 本身就是一个多设备应用程序。创建安全保险库至少需要两台设备：一台发起设备和一台配对设备。',
+    '{{productName}} 本身就是一个多设备应用程序。创建安全保险库至少需要两台设备：一台发起设备和一台配对设备。',
   onboarding_description_4:
-    'Vultisig 是一款无需助记词的钱包。它采用易于管理的保险库共享机制。每个设备都有其独特的保险库共享，需要单独备份。',
+    '{{productName}} 是一款无需助记词的钱包。它采用易于管理的保险库共享机制。每个设备都有其独特的保险库共享，需要单独备份。',
   operator_fee: '运营商费用',
   basis_points: '基点',
   optionalDevice: '可选设备',
@@ -632,7 +632,7 @@ export const zh = {
   price_impact_average: '平均的',
   price_impact_good: '好的',
   price_impact_high: '高影响力',
-  prioritize_vultisig: '优先考虑 Vultisig',
+  prioritize_vultisig: '优先考虑 {{productName}}',
   priority: '优先事项',
   priority_fee: '优先费',
   privacy_policy: '隐私政策',
@@ -675,7 +675,7 @@ export const zh = {
   referral_program: '推荐计划',
   referral_reg_fee: '注册费',
   referral_status: '地位',
-  manage_referral_title: 'Vultisig 转诊',
+  manage_referral_title: '{{productName}} 转诊',
   referrals_default_title: '转诊',
   referrals_summary: {
     item_1: {
@@ -773,7 +773,7 @@ export const zh = {
   select_vault_backup_share_description:
     '此备份包含多个存储库共享。请选择此设备的共享。',
   unsupported_vault_backup_file:
-    '这个文件看起来不像Vultisig Vault的备份文件。请选择一个从Vultisig应用程序导出的`.vult`或`.vult.zip`文件。',
+    '这个文件看起来不像{{productName}} Vault的备份文件。请选择一个从{{productName}}应用程序导出的`.vult`或`.vult.zip`文件。',
   select_chain: '选择链',
   select_chains: '选择',
   select_chains_manually: '手动选择链',
@@ -1033,10 +1033,9 @@ export const zh = {
   via: '通过',
   view_on_explorer: '在资源管理器中查看',
   vote: '投票',
-  vultisig: '沃尔蒂西格',
-  vultisig_community: 'Vultisig 社区',
-  vultisig_education: 'Vultisig 教育',
-  vultisig_website: 'Vultisig 网站',
+  vultisig_community: '{{productName}} 社区',
+  vultisig_education: '{{productName}} 教育',
+  vultisig_website: '{{productName}} 网站',
   waitingOnDevices: '正在等待设备……',
   waiting_for_devices_to_join: '等待其他设备加入',
   waiting_for_devices_to_join_description:
@@ -1218,7 +1217,7 @@ export const zh = {
     '量子计算机可以破解经典密钥。启用 QBTC 需要生成新的密钥对。',
   qbtc_onboarding_feature_generate_title: '生成量子密钥对',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig 在您的保险库设备上运行本地 MPC 仪式，以生成新的密钥对。',
+    '{{productName}} 在您的保险库设备上运行本地 MPC 仪式，以生成新的密钥对。',
   qbtc_onboarding_feature_link_title: '将其链接到您现有的保险库。',
   qbtc_onboarding_feature_link_description:
     '量子密钥已绑定到您当前的保险库共享结构，无需重新共享。',
@@ -1273,7 +1272,7 @@ export const zh = {
   station_migration_reason_supported_legacy_private_key:
     '已保存旧版加密私钥数据，以备将来导入。',
   station_migration_reason_multisig:
-    'Station 仅存储公共多重签名元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
+    'Station 仅存储公共多重签名元数据。它不存储可以转换为 {{productName}} 保险库的私钥。',
   station_migration_reason_encrypted_seed_not_string:
     'encryptedSeed 存在，但它不是字符串。',
   station_migration_reason_encrypted_invalid_shape:
@@ -1320,14 +1319,20 @@ export const zh = {
   station_migration_status_reason_importing:
     '导入已开始。如果此行未更新，请在设置完成后返回此处。',
   station_migration_status_reason_migrated:
-    '此钱包已导入到 Vultisig 中。旧的 Station 存储空间仍然保留。',
+    '此钱包已导入到 {{productName}} 中。旧的 Station 存储空间仍然保留。',
   station_migration_status_reason_skipped:
     '此钱包已被跳过。您可以随时重新解锁。',
   station_migration_status_reason_vault_import_failed:
     '密钥生成过程中，Vault 导入失败。请重新解锁此钱包重试。',
   station_migration_status_reason_vault_save_failed:
-    'Vault 导入完成，但保存 Vultisig Vault 失败。请重新解锁此钱包重试。',
+    'Vault 导入完成，但保存 {{productName}} Vault 失败。请重新解锁此钱包重试。',
   station_migration_reason_ledger_public_metadata_only:
-    'Station 仅存储公开的 Ledger 元数据。它不存储可以转换为 Vultisig 保险库的私钥。',
+    'Station 仅存储公开的 Ledger 元数据。它不存储可以转换为 {{productName}} 保险库的私钥。',
   paired: '配对',
+  plugin_marketplace_signin_description:
+    '使用您的 {{productName}} Vault 登录以访问应用程序，从而实现您的数字资产自动化管理。',
+  plugin_marketplace_welcome: '欢迎来到 {{productName}} 插件市场',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} 应用程序永远无法签署未经您事先批准的交易。',
+  extension_version: '{{brand}} V{{version}}',
 }

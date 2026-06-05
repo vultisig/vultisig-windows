@@ -10,10 +10,10 @@ import {
   FastVaultPasswordModalResult,
 } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { currentProductBrandConfig } from '@core/ui/product/brand'
+import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
-import { SafeImage } from '@lib/ui/images/SafeImage'
-import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -79,18 +79,16 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
         justifyContent="flex-end"
         scrollable
       >
-        <SafeImage
-          src="/assets/install-app-logo.png"
-          render={props => (
-            <VStack as="img" height={60} width={60} {...props} />
-          )}
-        />
+        <ProductLogo style={{ fontSize: 60 }} />
         <Text size={22} weight={500} centerHorizontally>
-          Welcome to the Vultisig Plugin Marketplace
+          {t('plugin_marketplace_welcome', {
+            productName: currentProductBrandConfig.name,
+          })}
         </Text>
         <Text color="shy" size={12} weight={500} centerHorizontally>
-          Sign in with your Vultisig Vault to access Apps to automate your
-          digital Assets
+          {t('plugin_marketplace_signin_description', {
+            productName: currentProductBrandConfig.name,
+          })}
         </Text>
       </StyledPageContent>
       <PageFooter>

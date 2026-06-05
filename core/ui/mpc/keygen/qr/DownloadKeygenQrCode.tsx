@@ -14,6 +14,7 @@ import { ValueProp } from '@lib/ui/props'
 import { getKeygenThreshold } from '@vultisig/core-mpc/getKeygenThreshold'
 import { useTranslation } from 'react-i18next'
 
+import { currentProductBrandConfig } from '../../../product/brand'
 import { getVaultExportUid } from '../../../vault/export/core/uid'
 
 const prefix = 'VaultKeygenQR'
@@ -75,7 +76,7 @@ export const DownloadKeygenQrCode = ({
         <PrintableQrCode
           value={value}
           title={t('join_keygen')}
-          brandLabel={t('vultisig')}
+          brandLabel={currentProductBrandConfig.name}
           rows={rows}
         />
       }

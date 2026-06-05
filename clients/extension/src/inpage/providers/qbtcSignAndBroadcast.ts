@@ -16,6 +16,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { getQbtcAccountInfo } from '@vultisig/core-chain/chains/cosmos/qbtc/getQbtcAccountInfo'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 
 type QbtcSignAndBroadcastParams = {
   from: string
@@ -95,8 +96,7 @@ export const parseSignAndBroadcastParams = (
   }
 }
 
-const mldsaRequiredMessage =
-  'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
+const mldsaRequiredMessage = `QBTC requires an MLDSA-enabled vault. Enable MLDSA in ${currentExtensionBrandConfig.provider.walletPickerName} Developer Options and create a new vault.`
 
 /**
  * Implements `vultisig.qbtc.request({ method: 'sign_and_broadcast' })`.

@@ -5,8 +5,8 @@ import {
   BlockaidSupportedEvmChain,
 } from '@vultisig/core-chain/security/blockaid/evmChains'
 import type { BlockaidValidation } from '@vultisig/core-chain/security/blockaid/tx/validation/api/core'
-import { productRootDomain } from '@vultisig/core-config'
 
+import { currentProductBrandConfig } from '../../../product/brand'
 import type { ToolHandler } from '../types'
 
 type BlockaidScanResponse = {
@@ -55,7 +55,7 @@ export const handleScanTx: ToolHandler = async input => {
       },
       chain: blockaidChain,
       metadata: {
-        domain: productRootDomain,
+        domain: new URL(currentProductBrandConfig.websiteUrl).host,
       },
     }
   )
