@@ -456,7 +456,6 @@ export const nl = {
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
   hold: 'Vasthouden',
-  hold_for_paired_sign: 'Vasthouden voor gekoppelde handtekening',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
     'Deze IBC-transactie bevat een memo, maar Vultisig ondersteunt momenteel geen memos binnen IBC transfer-berichten.<br> Doorgaan met deze transactie kan leiden tot <b>onomkeerbaar verlies van funds</b>.',
@@ -1424,4 +1423,5 @@ export const nl = {
     'Het importeren van de kluis is voltooid, maar het opslaan van de kluis Vultisig is mislukt. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
   station_migration_reason_ledger_public_metadata_only:
     'Station slaat alleen openbare Ledger-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een Vultisig-kluis.',
+  paired: 'Gekoppeld',
 }

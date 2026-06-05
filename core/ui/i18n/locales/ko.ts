@@ -452,7 +452,6 @@ export const ko = {
   hide_balance: '잔액 숨기기',
   hide_defi_balance: 'DeFi 잔액 숨기기',
   hold: '잡고 있다',
-  hold_for_paired_sign: '짝지어진 신호를 기다려 주세요.',
   how_it_works: '작동 방식',
   ibc_transaction_not_supporting_memo_desc:
     '이 IBC 거래에는 메모가 포함되어 있지만, Vultisig는 현재 IBC 전송 메시지 내에 메모를 삽입하는 기능을 지원하지 않습니다.<br> 이 거래를 진행할 경우 <b>돌이킬 수 없는 자금 손실이</b> 발생할 수 있습니다.',
@@ -1409,4 +1408,5 @@ export const ko = {
     '볼트 가져오기는 완료되었지만 Vultisig 볼트 저장에 실패했습니다. 다시 시도하려면 이 지갑의 잠금을 해제하세요.',
   station_migration_reason_ledger_public_metadata_only:
     'Station은 공개 Ledger 메타데이터만 저장합니다. Vultisig 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
+  paired: '페어링',
 }
