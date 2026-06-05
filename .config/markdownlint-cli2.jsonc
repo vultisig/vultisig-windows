@@ -1,0 +1,26 @@
+{
+  "config": {
+    "default": false,
+    "MD018": true,
+    "MD019": true,
+    "MD020": true,
+    "MD021": true,
+    "MD042": true,
+    "MD051": true
+  },
+  "globs": [
+    "*.md",
+    ".github/**/*.md",
+    "clients/**/*.md",
+    "core/**/*.md",
+    "docs/**/*.md",
+    "lib/**/*.md",
+    "#.agents",
+    "#.claude",
+    "#.cursor",
+    "#.codex",
+    "#clients/extension/tests/e2e/playwright-report",
+    "#tasks",
+    "#**/CHANGELOG.md"
+  ]
+}
