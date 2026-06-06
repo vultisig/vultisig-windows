@@ -160,11 +160,6 @@ export const pt = {
   circle: {
     banner_text:
       'Os fundos permanecem totalmente sob o controle do seu cofre. O rendimento do Circle é gerado por meio de tesourarias seguras fora da blockchain. Saque a qualquer momento após a liquidação.',
-    deposit: 'Depósito',
-    deposit_header: 'Depósito na conta Circle',
-    verify_deposit: 'Verificar depósito',
-    introduction:
-      'Deposite seus USDC em uma conta Circle e ganhe rendimentos. Tudo em segurança dentro do seu cofre {{productName}}.',
     open_account: 'Abrir conta',
     withdraw: 'Retirar',
     withdraw_header: 'Retirar-se do Círculo',

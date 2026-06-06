@@ -157,11 +157,6 @@ export const ru = {
   circle: {
     banner_text:
       'Средства полностью остаются под контролем вашего хранилища. Аккаунты Circle — self-custodial, а доход формируется через безопасные офчейн-казначейства.',
-    deposit: 'Внести',
-    deposit_header: 'Внести на аккаунт Circle',
-    verify_deposit: 'Подтвердить внесение',
-    introduction:
-      'Внесите свои $USDC на аккаунт Circle и получайте доход. Безопасно внутри вашего хранилища {{productName}}.',
     open_account: 'Открыть аккаунт',
     withdraw: 'Вывести',
     withdraw_header: 'Вывести из Circle',

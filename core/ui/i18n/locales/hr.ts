@@ -157,11 +157,6 @@ export const hr = {
   circle: {
     banner_text:
       'Sredstva ostaju u potpunosti pod kontrolom vašeg trezora. Prinos Circlea generira se putem sigurnih izvanmrežnih blagajni. Povucite novac bilo kada nakon namire.',
-    deposit: 'Polog',
-    deposit_header: 'Uplata na Circle račun',
-    verify_deposit: 'Potvrdi uplatu',
-    introduction:
-      'Uplatite svoj $USDC na Circle račun i ostvarite prinos. Sigurno unutar vašeg {{productName}} trezora.',
     open_account: 'Otvori račun',
     withdraw: 'Povući',
     withdraw_header: 'Povuci se iz kruga',

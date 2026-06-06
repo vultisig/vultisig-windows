@@ -155,11 +155,6 @@ export const ko = {
   circle: {
     banner_text:
       '자금은 전적으로 귀하의 금고 관리 하에 있습니다. 서클 계정은 자체 관리형이며 수익은 안전한 오프체인 재무부를 통해 발생합니다.',
-    deposit: '보증금',
-    deposit_header: '서클 계좌로 입금',
-    verify_deposit: '입금 확인',
-    introduction:
-      '$USDC를 Circle 계정에 입금하고 수익을 얻으세요. {{productName}} 금고에서 안전하게 보관할 수 있습니다.',
     open_account: '계좌 개설',
     withdraw: '철회하다',
     withdraw_header: '서클에서 탈퇴',

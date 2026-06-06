@@ -160,11 +160,6 @@ export const it = {
   circle: {
     banner_text:
       'I fondi rimangono completamente sotto il controllo del tuo caveau. Il rendimento di Circle è generato tramite tesorerie off-chain sicure. Puoi prelevare in qualsiasi momento dopo il regolamento.',
-    deposit: 'Depositare',
-    deposit_header: 'Deposito sul conto Circle',
-    verify_deposit: 'Verifica deposito',
-    introduction:
-      'Deposita i tuoi $USDC su un conto Circle e guadagna. In tutta sicurezza, nel tuo caveau {{productName}}.',
     open_account: 'Apri conto',
     withdraw: 'Ritirare',
     withdraw_header: 'Ritirarsi dal Cerchio',
