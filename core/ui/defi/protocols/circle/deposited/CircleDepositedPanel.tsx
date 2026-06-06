@@ -14,7 +14,6 @@ import styled from 'styled-components'
 import { ChainEntityIcon } from '../../../../chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '../../../../chain/coin/icon/utils/getCoinLogoSrc'
 import { CircleAccountFiatBalance } from '../banner/CircleAccountFiatBalance'
-import { CircleDepositButton } from '../components/CircleDepositButton'
 import { CircleWithdrawButton } from '../components/CircleWithdrawButton'
 import { OpenCircleAccount } from '../components/OpenCircleAccount'
 import { circleApy } from '../core/config'
@@ -78,7 +77,6 @@ export const CircleDepositedPanel = () => {
         {circleAccount ? (
           <UniformColumnGrid gap={16}>
             {hasBalance && <CircleWithdrawButton />}
-            <CircleDepositButton />
           </UniformColumnGrid>
         ) : (
           <OpenCircleAccount />

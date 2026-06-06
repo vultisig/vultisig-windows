@@ -158,11 +158,6 @@ export const nl = {
   circle: {
     banner_text:
       'Fondsen blijven volledig onder controle van je kluis. Circle-accounts zijn self-custodial en rendement wordt gegenereerd via veilige off-chain treasuries.',
-    deposit: 'Storten',
-    deposit_header: 'Storten naar Circle-account',
-    verify_deposit: 'Storting verifiëren',
-    introduction:
-      'Stort je $USDC in een Circle-account en verdien rendement. Veilig binnen je {{productName}}-kluis.',
     open_account: 'Account openen',
     withdraw: 'Opnemen',
     withdraw_header: 'Opnemen van Circle',

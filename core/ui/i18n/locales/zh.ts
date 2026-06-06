@@ -148,11 +148,6 @@ export const zh = {
   circle: {
     banner_text:
       '资金始终完全由您的金库控制。Circle收益通过安全的链下金库产生。结算后即可随时提现。',
-    deposit: '订金',
-    deposit_header: '存款至 Circle 账户',
-    verify_deposit: '核实存款',
-    introduction:
-      '将您的 USDC 存入 Circle 账户即可赚取收益。安全存放于您的 {{productName}} 金库中。',
     open_account: '开户',
     withdraw: '提取',
     withdraw_header: '退出圈子',

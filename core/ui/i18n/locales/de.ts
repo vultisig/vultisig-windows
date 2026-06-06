@@ -159,11 +159,6 @@ export const de = {
   circle: {
     banner_text:
       'Ihre Gelder bleiben vollständig unter Ihrer Kontrolle. Die Circle-Rendite wird über sichere Off-Chain-Treasuries generiert. Sie können Ihr Geld jederzeit nach der Abrechnung abheben.',
-    deposit: 'Kaution',
-    deposit_header: 'Einzahlung auf das Circle-Konto',
-    verify_deposit: 'Einzahlung prüfen',
-    introduction:
-      'Zahlen Sie Ihre USDC auf ein Circle-Konto ein und erhalten Sie Zinsen. Sicher in Ihrem {{productName}}-Tresor.',
     open_account: 'Konto eröffnen',
     withdraw: 'Zurückziehen',
     withdraw_header: 'Aus dem Kreis austreten',

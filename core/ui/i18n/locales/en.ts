@@ -154,11 +154,6 @@ export const en = {
   circle: {
     banner_text:
       "Funds remain fully under your vault's control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.",
-    deposit: 'Deposit',
-    deposit_header: 'Deposit to Circle Account',
-    verify_deposit: 'Verify Deposit',
-    introduction:
-      'Deposit your $USDC into a Circle account and earn yield. Securely within your {{productName}} vault.',
     open_account: 'Open Account',
     withdraw: 'Withdraw',
     withdraw_header: 'Withdraw from Circle',

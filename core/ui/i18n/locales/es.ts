@@ -158,11 +158,6 @@ export const es = {
   circle: {
     banner_text:
       'Los fondos permanecen bajo el control total de su bóveda. El rendimiento de Circle se genera mediante tesorerías seguras fuera de la cadena. Puede retirar sus fondos en cualquier momento después de la liquidación.',
-    deposit: 'Depósito',
-    deposit_header: 'Depósito a la cuenta Circle',
-    verify_deposit: 'Verificar depósito',
-    introduction:
-      'Deposita tus $USDC en una cuenta Circle y obtén ganancias. De forma segura en tu bóveda de {{productName}}.',
     open_account: 'Abrir cuenta',
     withdraw: 'Retirar',
     withdraw_header: 'Retirarse del Círculo',
