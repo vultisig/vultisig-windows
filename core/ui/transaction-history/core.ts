@@ -50,6 +50,11 @@ export type SwapTransactionData = {
   toDecimals: number
   provider?: string
   route?: string
+  /** Present only for CowSwap RFQ orders. The orderbook API base lets the
+   * status poller poll the off-chain order by UID (the record's `txHash`)
+   * instead of a chain tx hash. Once the order settles, the poller replaces
+   * `txHash` with the on-chain settlement hash. */
+  cowSwapOrderApiBase?: string
 }
 
 export type SendTransactionRecord = TransactionRecordBase & {
