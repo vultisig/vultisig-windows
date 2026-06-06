@@ -67,6 +67,9 @@ const formatCowSwapOrderSignature = (signature: KeysignSignature): string => {
     throw new Error('Incomplete signature for CowSwap order')
   }
   const recoveryId = parseInt(recovery_id, 16)
+  if (Number.isNaN(recoveryId)) {
+    throw new Error(`Invalid recovery_id for CowSwap order: ${recovery_id}`)
+  }
   const v = recoveryId < 27 ? recoveryId + 27 : recoveryId
   return `0x${r}${s}${v.toString(16).padStart(2, '0')}`
 }
