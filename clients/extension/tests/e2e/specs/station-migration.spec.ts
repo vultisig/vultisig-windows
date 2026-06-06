@@ -1,5 +1,6 @@
-import { expect, test } from '../fixtures/extension-loader'
 import type { BrowserContext, Locator, Page } from '@playwright/test'
+
+import { expect, test } from '../fixtures/extension-loader'
 
 const stationPassword = 'station-test-password'
 const popupPath = 'index.html?view=popup'
@@ -408,9 +409,11 @@ const fillFastVaultSetup = async ({
   await clickAndUsePageWith({
     click: () => activePage.getByTestId('create-vault-button').click(),
     expected: nextPage =>
-      nextPage.getByText(
-        /Connecting (to|with) server|Backups, your new recovery method|Failed to connect with server/
-      ).first(),
+      nextPage
+        .getByText(
+          /Connecting (to|with) server|Backups, your new recovery method|Failed to connect with server/
+        )
+        .first(),
     timeout: 60_000,
   })
 
@@ -543,7 +546,7 @@ test.describe('Station legacy migration', () => {
     await expect(ledgerWallet.getByText('Unsupported')).toBeVisible()
     await expect(
       ledgerWallet.getByText(
-        'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Vultisig vault.'
+        'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Station vault.'
       )
     ).toBeVisible()
     await expectNoHorizontalOverflow(page)

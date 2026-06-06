@@ -4,6 +4,7 @@ import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedErr
 import EventEmitter from 'events'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { Callback } from '../constants'
 import { getSharedHandlers } from './core/sharedHandlers'
 import {
@@ -11,8 +12,7 @@ import {
   parseSignAndBroadcastParams,
 } from './qbtcSignAndBroadcast'
 
-const mldsaRequiredMessage =
-  'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
+const mldsaRequiredMessage = `QBTC requires an MLDSA-enabled vault. Enable MLDSA in ${currentExtensionBrandConfig.provider.walletPickerName} Developer Options and create a new vault.`
 
 type SharedHandlers = ReturnType<typeof getSharedHandlers>
 type SendTransactionParams = Parameters<SharedHandlers['send_transaction']>[0]

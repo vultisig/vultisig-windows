@@ -3,6 +3,7 @@ import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { keccak256, toBytes, toHex } from 'viem'
 import { z } from 'zod'
 
+import { currentProductBrandConfig } from '../../product/brand'
 import { ethereumSignHash } from '../tools/shared/ethereumSigning'
 import {
   fastVaultKeysign,
@@ -63,7 +64,7 @@ function generateAuthMessage(publicKeyEcdsa: string): string {
     .replace(/(\.\d{3})\d*/, '$1Z')
 
   return JSON.stringify({
-    message: 'Sign into Vultisig Plugin Marketplace',
+    message: `Sign into ${currentProductBrandConfig.name} Plugin Marketplace`,
     nonce: generateNonce(),
     expiresAt,
     address,

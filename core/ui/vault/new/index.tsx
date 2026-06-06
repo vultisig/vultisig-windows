@@ -12,6 +12,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrandConfig } from '../../product/brand'
 import { ProductLogo } from '../../product/ProductLogo'
 import { ImportVaultButton } from './ImportVaultButton'
 
@@ -75,7 +76,7 @@ export const NewVaultPage = () => {
             <ProductLogo />
           </LogoContainer>
           <Text color="contrast" weight={500} size={28}>
-            {t('vultisig')}
+            {currentProductBrandConfig.name}
           </Text>
         </VStack>
       </PageContent>

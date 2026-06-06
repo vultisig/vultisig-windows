@@ -4,15 +4,14 @@ import { Backdrop } from '@lib/ui/modal/Backdrop'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrandConfig } from '../../product/brand'
 import { useResponsiveness } from '../../providers/ResponsivenessProvider'
 import { ShareAppModalContent } from './ShareAppModalContent'
 
 export const ShareAppModal = ({ onClose }: OnCloseProp) => {
   const { isSmall } = useResponsiveness()
-  const { t } = useTranslation()
 
   if (isSmall) {
     return (
@@ -20,7 +19,7 @@ export const ShareAppModal = ({ onClose }: OnCloseProp) => {
         <Backdrop onClose={onClose} />
         <Wrapper>
           <Text size={15} weight={500} centerHorizontally>
-            {t('vultisig')}
+            {currentProductBrandConfig.name}
           </Text>
           <ShareAppModalContent />
         </Wrapper>
@@ -29,7 +28,7 @@ export const ShareAppModal = ({ onClose }: OnCloseProp) => {
   }
 
   return (
-    <Modal onClose={onClose} title="Vultisig">
+    <Modal onClose={onClose} title={currentProductBrandConfig.name}>
       <DesktopModalWrapper>
         <ShareAppModalContent />
       </DesktopModalWrapper>

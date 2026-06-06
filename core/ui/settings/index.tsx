@@ -43,10 +43,10 @@ import styled from 'styled-components'
 
 import { currentProductBrand } from '../product/brand'
 import {
+  currentProductEducationUrl,
   currentProductWebsiteUrl,
   discordReferralUrl,
   shouldShowVultisigCommunity,
-  vultisigEducationUrl,
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
   vultisigTwitterUrl,
@@ -227,7 +227,7 @@ export const SettingsPage: FC<Props> = props => {
                   <BooksIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl(vultisigEducationUrl)}
+              onClick={() => openUrl(currentProductEducationUrl)}
               title={t('vultisig_education')}
               showArrow
             />

@@ -1,5 +1,6 @@
-const unsupportedVaultBackupFileMessage =
-  "This file doesn't look like a Vultisig vault backup. Pick a `.vult` or `.vult.zip` file exported from the Vultisig app."
+import { currentProductBrandConfig } from '../../../product/brand'
+
+const unsupportedVaultBackupFileMessage = `This file doesn't look like a ${currentProductBrandConfig.name} vault backup. Pick a \`.vult\` or \`.vult.zip\` file exported from the ${currentProductBrandConfig.name} app.`
 
 export class UnsupportedVaultBackupFileError extends Error {
   constructor() {

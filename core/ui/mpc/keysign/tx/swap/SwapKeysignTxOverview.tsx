@@ -48,11 +48,13 @@ import { TrackTxPrompt } from './TrackTxPrompt'
 
 type GetSwapFeeFromQuoteInput = {
   swapQuote: SwapQuote
+  fromCoin: CoinKey & { decimals: number }
   toCoinKey: CoinKey
 }
 
 const getSwapFeeFromQuote = ({
   swapQuote,
+  fromCoin,
   toCoinKey,
 }: GetSwapFeeFromQuoteInput): SwapFee | undefined =>
   matchRecordUnion<SwapQuoteResult, SwapFee | undefined>(swapQuote.quote, {
@@ -69,9 +71,18 @@ const getSwapFeeFromQuote = ({
         // metadata on the SwapQuote; the displayed swap fee for these falls
         // back to the keysign payload's `swap_fee` when present.
         transfer: () => undefined,
-        // CowSwap's partner fee is taken from the order proceeds via appData,
-        // not surfaced as a discrete on-chain SwapFee — nothing extra to show.
-        cowswap_order: () => undefined,
+        cowswap_order: ({ feeAmount }) => {
+          const amount = BigInt(feeAmount)
+
+          return amount > 0n
+            ? {
+                chain: fromCoin.chain,
+                id: fromCoin.id,
+                amount,
+                decimals: fromCoin.decimals,
+              }
+            : undefined
+        },
       }),
   })
 
@@ -106,6 +117,7 @@ export const SwapKeysignTxOverview = ({
     (swapQuote && toCoin
       ? getSwapFeeFromQuote({
           swapQuote,
+          fromCoin,
           toCoinKey: { chain: toCoin.chain, id: toCoin.id },
         })
       : undefined)

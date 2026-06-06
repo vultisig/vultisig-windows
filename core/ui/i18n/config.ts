@@ -4,6 +4,7 @@ import Backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
 
 import { primaryLanguage } from './Language'
+import { productBrandInterpolation } from './productBrandInterpolation'
 import { translations } from './translations'
 
 const i18nInstance = i18n.use(Backend).use(initReactI18next)
@@ -13,6 +14,7 @@ i18nInstance.init({
   fallbackLng: primaryLanguage,
   debug: false,
   interpolation: {
+    defaultVariables: productBrandInterpolation,
     escapeValue: false,
   },
   returnNull: false,

@@ -1,5 +1,6 @@
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/getNativeSwapDecimals'
 import {
   SwapQuote,
@@ -8,9 +9,11 @@ import {
 import { SwapFees } from '@vultisig/core-chain/swap/SwapFee'
 import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
+import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { useSwapKeysignPayloadQuery } from '../keysignPayload/query'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
@@ -18,6 +21,11 @@ import { useSwapToCoin } from '../state/toCoin'
 export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
+  const vaultCoins = useCurrentVaultCoins()
+  const fromCoin = useMemo(
+    () => vaultCoins.find(coin => areEqualCoins(coin, fromCoinKey)),
+    [fromCoinKey, vaultCoins]
+  )
   const keysignPayloadQuery = useSwapKeysignPayloadQuery(swapQuote)
   const publicKey = useCurrentVaultPublicKey(fromCoinKey.chain)
   const walletCore = useAssertWalletCore()
@@ -66,10 +74,23 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
               swap: swapFee,
             }),
             transfer: () => ({ network }),
-            // CowSwap settlement is gas-less (solvers pay); `network` here only
-            // reflects any one-off VaultRelayer approval. The partner fee is
-            // embedded in the order's appData, not a discrete swap fee.
-            cowswap_order: () => ({ network }),
+            cowswap_order: ({ feeAmount }) => {
+              const swapAmount = BigInt(feeAmount)
+
+              return {
+                network,
+                ...(swapAmount > 0n && fromCoin
+                  ? {
+                      swap: {
+                        chain: fromCoin.chain,
+                        id: fromCoin.id,
+                        amount: swapAmount,
+                        decimals: fromCoin.decimals,
+                      },
+                    }
+                  : {}),
+              }
+            },
           })
         },
       })

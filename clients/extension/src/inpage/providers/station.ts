@@ -18,6 +18,7 @@ import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedErr
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { requestAccount } from './core/requestAccount'
 import { stationFeeToAmino, stationMsgToAmino } from './stationProtoAmino'
 import {
@@ -658,7 +659,7 @@ export class Station {
   ): Promise<{ success: true; network: NetworkName }> {
     if (!isSupportedNetwork(network)) {
       throw new Error(
-        `Station switchNetwork: unsupported network '${network}' — Vultisig only exposes 'mainnet' and 'classic'.`
+        `Station switchNetwork: unsupported network '${network}' — ${currentExtensionBrandConfig.provider.walletPickerName} only exposes 'mainnet' and 'classic'.`
       )
     }
 

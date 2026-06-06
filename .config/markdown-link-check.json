@@ -1,0 +1,32 @@
+{
+  "aliveStatusCodes": [200, 206, 429],
+  "ignorePatterns": [
+    {
+      "pattern": "^mailto:"
+    },
+    {
+      "pattern": "^http://localhost(?::\\d+)?(?:/|$)"
+    },
+    {
+      "pattern": "^https://github\\.com/vultisig/vultisig-windows/(issues|pull)/"
+    },
+    {
+      "pattern": "^https://github\\.com/vultisig/vultisig-knowledge"
+    },
+    {
+      "pattern": "^https://wails\\.io/docs/gettingstarted/installation/?$"
+    },
+    {
+      "pattern": "^vultisig-sdk/$"
+    },
+    {
+      "pattern": "^https://airdrop\\.vultisig\\.com/import$"
+    },
+    {
+      "pattern": "^https://store\\.vultisigplugin\\.app/$"
+    }
+  ],
+  "retryCount": 2,
+  "retryOn429": true,
+  "timeout": "5s"
+}
