@@ -35,11 +35,12 @@ export const signSuiPersonalMessage = async ({
   signature: string
   bytes: string
 }> => {
-  // Match Solana's pattern: pass the message through as a decoded string. UTF-8
-  // round-trip is lossless for the common SIWE / text-message case; binary
-  // messages should be sent in hex form (`0x…`) so getCustomMessageHex
-  // re-decodes them as bytes.
-  const messageString = new TextDecoder().decode(Buffer.from(message))
+  // Send the raw bytes as `0x…` hex so the popup digest helper
+  // (`getCustomMessageHex` Sui case) recovers the exact original bytes via
+  // its hex-decode branch. UTF-8 round-tripping would corrupt non-text
+  // payloads (binary blobs, certain CJK normalisations, etc.) and produce
+  // signatures over altered bytes.
+  const messageString = `0x${Buffer.from(message).toString('hex')}`
 
   const signatureHex = await callPopup({
     signMessage: {
@@ -100,13 +101,13 @@ const hasToJson = (value: unknown): value is HasToJson =>
   typeof value === 'object' &&
   value !== null &&
   'toJSON' in value &&
-  typeof (value as HasToJson).toJSON === 'function'
+  typeof value.toJSON === 'function'
 
 const hasSerialize = (value: unknown): value is HasSerialize =>
   typeof value === 'object' &&
   value !== null &&
   'serialize' in value &&
-  typeof (value as HasSerialize).serialize === 'function'
+  typeof value.serialize === 'function'
 
 const isUint8Array = (value: unknown): value is Uint8Array =>
   value instanceof Uint8Array

@@ -297,22 +297,35 @@ export class Sui implements Wallet {
       throw new Error('invalid account')
     }
     const { signature, bytes } = await this.#buildAndSign(transaction)
-    const result = (await executeSuiTransaction({
+    const result = await executeSuiTransaction({
       transactionBytesBase64: bytes,
       signature,
-    })) as
-      | {
-          digest: string
-          rawEffects?: number[]
-        }
-      | undefined
+    })
+
+    // Fail fast if the execute response is missing a digest. Returning an
+    // empty digest would make dApps treat a failed broadcast as a success.
+    if (
+      typeof result !== 'object' ||
+      result === null ||
+      !('digest' in result) ||
+      typeof result.digest !== 'string' ||
+      result.digest.length === 0
+    ) {
+      throw new Error('Sui transaction execution failed: missing digest')
+    }
+
+    const rawEffects =
+      'rawEffects' in result && Array.isArray(result.rawEffects)
+        ? result.rawEffects
+        : undefined
+
     return {
-      digest: result?.digest ?? '',
+      digest: result.digest,
       signature,
       bytes,
       // @mysten/dapp-kit consumers expect base64 raw effects.
-      effects: result?.rawEffects
-        ? Buffer.from(new Uint8Array(result.rawEffects)).toString('base64')
+      effects: rawEffects
+        ? Buffer.from(new Uint8Array(rawEffects)).toString('base64')
         : '',
     }
   }
