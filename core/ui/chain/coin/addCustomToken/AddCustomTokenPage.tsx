@@ -8,7 +8,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { EmptyState } from '@lib/ui/status/EmptyState'
-import { isValidTokenId } from '@vultisig/core-chain/utils/isValidTokenId'
+import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -19,9 +19,9 @@ export const AddCustomTokenPage = () => {
   const walletCore = useAssertWalletCore()
 
   const isValid = value
-    ? isValidTokenId({
+    ? isValidAddress({
         chain,
-        id: value,
+        address: value,
         walletCore,
       })
     : false
