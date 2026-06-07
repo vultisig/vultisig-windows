@@ -70,12 +70,6 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   return (
     <>
       <HStack gap={12} fullWidth>
-        <FastSignButton
-          {...buttonProps}
-          onClick={() => executeNavigation('fast')}
-        >
-          {t('fast_sign')}
-        </FastSignButton>
         <PairedButton
           {...buttonProps}
           kind="secondary"
@@ -84,6 +78,12 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         >
           {t('paired')}
         </PairedButton>
+        <FastSignButton
+          {...buttonProps}
+          onClick={() => executeNavigation('fast')}
+        >
+          {t('fast_sign')}
+        </FastSignButton>
       </HStack>
       <FastVaultPasswordModal
         showModal={showModal}
