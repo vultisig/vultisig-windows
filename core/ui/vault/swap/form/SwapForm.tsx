@@ -13,7 +13,7 @@ import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { SwapError, SwapErrorCode } from '@vultisig/core-chain/swap/SwapError'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
-import { FC, useEffect, useMemo, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -34,22 +34,14 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
 
   const { t } = useTranslation()
 
-  const resolveErrorMessage = useMemo(
-    () => (err: unknown) => {
-      // The SDK classifies a provider trading halt as a typed error, so key off
-      // the code rather than string-matching the (English) message.
-      if (
-        err instanceof SwapError &&
-        err.code === SwapErrorCode.TradingHalted
-      ) {
-        return t('swap_trading_halted')
-      }
-      return extractErrorMsg(err)
-    },
-    [t]
-  )
+  // The SDK classifies a provider trading halt as a typed error, so key off the
+  // code rather than string-matching the (English) message.
+  const resolveErrorMessage = (err: unknown) =>
+    err instanceof SwapError && err.code === SwapErrorCode.TradingHalted
+      ? t('swap_trading_halted')
+      : extractErrorMsg(err)
 
-  const errorMessage = useMemo(() => {
+  const errorMessage = (() => {
     if (isPending) {
       return t('loading')
     }
@@ -63,7 +55,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
     }
 
     return validationErrorMessage
-  }, [validationErrorMessage, error, isPending, t, resolveErrorMessage])
+  })()
 
   useEffect(() => {
     if (
@@ -79,12 +71,12 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
   }, [autoSubmit, errorMessage, swapQuoteQuery.data, onFinish, setViewState])
 
   // Display error for ReverseSwap button (excludes non-error states like loading/fill_the_form)
-  const displayErrorMessage = useMemo(() => {
+  const displayErrorMessage = (() => {
     if (isPending) return null
     if (error) return resolveErrorMessage(error)
     if (validationErrorMessage === undefined) return null
     return validationErrorMessage
-  }, [validationErrorMessage, error, isPending, resolveErrorMessage])
+  })()
 
   const handleSubmit = () => {
     if (!errorMessage) {
