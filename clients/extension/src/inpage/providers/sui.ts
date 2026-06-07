@@ -26,6 +26,12 @@ import { requestAccount } from './core/requestAccount'
 import { getSharedHandlers } from './core/sharedHandlers'
 import { VultisigSuiWalletAccount } from './sui/account'
 import { SuiChains } from './sui/chains'
+import {
+  buildSuiTransactionBytes,
+  executeSuiTransaction,
+  signSuiPersonalMessage,
+  signSuiTransaction,
+} from './sui/sign'
 
 const frozenChains = Object.freeze([...SuiChains] as const)
 
@@ -40,8 +46,40 @@ const SuiSignAndExecuteTransactionBlock = 'sui:signAndExecuteTransactionBlock'
 const SuiSignAndExecuteTransaction = 'sui:signAndExecuteTransaction'
 const SuiReportTransactionEffects = 'sui:reportTransactionEffects'
 
-const suiSigningNotImplemented =
-  'Sui transaction and message signing is not yet supported. Detection and connect are available; signing is coming in a follow-up release.'
+// Sui Wallet Standard feature input shapes — kept loose (`unknown`) where we
+// only forward the value to @mysten/sui SDK helpers that already validate it.
+type SuiSignMessageInput = {
+  message: Uint8Array
+  account: { address: string }
+}
+
+type SuiSignPersonalMessageInput = SuiSignMessageInput
+
+type SuiSignTransactionInput = {
+  transaction: unknown
+  account: { address: string }
+}
+
+type SuiSignTransactionBlockInput = {
+  transactionBlock: unknown
+  account: { address: string }
+}
+
+type SuiSignAndExecuteTransactionInput = SuiSignTransactionInput & {
+  options?: {
+    showEffects?: boolean
+    showEvents?: boolean
+    showObjectChanges?: boolean
+    showBalanceChanges?: boolean
+    showInput?: boolean
+    showRawInput?: boolean
+    showRawEffects?: boolean
+  }
+}
+
+type SuiSignAndExecuteTransactionBlockInput = SuiSignTransactionBlockInput & {
+  options?: SuiSignAndExecuteTransactionInput['options']
+}
 
 export class Sui implements Wallet {
   public static instance: Sui | null = null
@@ -75,27 +113,44 @@ export class Sui implements Wallet {
     StandardEventsFeature & {
       [SuiSignMessage]: {
         version: '1.0.0'
-        signMessage: (...args: unknown[]) => Promise<unknown>
+        signMessage: (
+          input: SuiSignMessageInput
+        ) => Promise<{ signature: string; messageBytes: string }>
       }
       [SuiSignPersonalMessage]: {
         version: '1.1.0'
-        signPersonalMessage: (...args: unknown[]) => Promise<unknown>
+        signPersonalMessage: (
+          input: SuiSignPersonalMessageInput
+        ) => Promise<{ signature: string; bytes: string }>
       }
       [SuiSignTransactionBlock]: {
         version: '1.0.0'
-        signTransactionBlock: (...args: unknown[]) => Promise<unknown>
+        signTransactionBlock: (
+          input: SuiSignTransactionBlockInput
+        ) => Promise<{ signature: string; transactionBlockBytes: string }>
       }
       [SuiSignTransaction]: {
         version: '2.0.0'
-        signTransaction: (...args: unknown[]) => Promise<unknown>
+        signTransaction: (
+          input: SuiSignTransactionInput
+        ) => Promise<{ signature: string; bytes: string }>
       }
       [SuiSignAndExecuteTransactionBlock]: {
         version: '1.0.0'
-        signAndExecuteTransactionBlock: (...args: unknown[]) => Promise<unknown>
+        signAndExecuteTransactionBlock: (
+          input: SuiSignAndExecuteTransactionBlockInput
+        ) => Promise<unknown>
       }
       [SuiSignAndExecuteTransaction]: {
         version: '2.0.0'
-        signAndExecuteTransaction: (...args: unknown[]) => Promise<unknown>
+        signAndExecuteTransaction: (
+          input: SuiSignAndExecuteTransactionInput
+        ) => Promise<{
+          digest: string
+          signature: string
+          bytes: string
+          effects: string
+        }>
       }
       [SuiReportTransactionEffects]: {
         version: '1.0.0'
@@ -117,27 +172,27 @@ export class Sui implements Wallet {
       },
       [SuiSignMessage]: {
         version: '1.0.0',
-        signMessage: this.#notImplemented,
+        signMessage: this.#signMessage,
       },
       [SuiSignPersonalMessage]: {
         version: '1.1.0',
-        signPersonalMessage: this.#notImplemented,
+        signPersonalMessage: this.#signPersonalMessage,
       },
       [SuiSignTransactionBlock]: {
         version: '1.0.0',
-        signTransactionBlock: this.#notImplemented,
+        signTransactionBlock: this.#signTransactionBlock,
       },
       [SuiSignTransaction]: {
         version: '2.0.0',
-        signTransaction: this.#notImplemented,
+        signTransaction: this.#signTransaction,
       },
       [SuiSignAndExecuteTransactionBlock]: {
         version: '1.0.0',
-        signAndExecuteTransactionBlock: this.#notImplemented,
+        signAndExecuteTransactionBlock: this.#signAndExecuteTransactionBlock,
       },
       [SuiSignAndExecuteTransaction]: {
         version: '2.0.0',
-        signAndExecuteTransaction: this.#notImplemented,
+        signAndExecuteTransaction: this.#signAndExecuteTransaction,
       },
       [SuiReportTransactionEffects]: {
         version: '1.0.0',
@@ -154,8 +209,127 @@ export class Sui implements Wallet {
     void this.#syncFromBackground({ emit: false })
   }
 
-  #notImplemented = async (..._args: unknown[]): Promise<never> => {
-    throw new NotImplementedError(suiSigningNotImplemented)
+  #assertConnected(): VultisigSuiWalletAccount {
+    if (!this.account) throw new Error('not connected')
+    return this.account
+  }
+
+  #signPersonalMessage = async ({
+    message,
+    account,
+  }: SuiSignPersonalMessageInput): Promise<{
+    signature: string
+    bytes: string
+  }> => {
+    const connected = this.#assertConnected()
+    if (account.address !== connected.address) {
+      throw new Error('invalid account')
+    }
+    return signSuiPersonalMessage({
+      message,
+      publicKey: connected.publicKey,
+    })
+  }
+
+  #signMessage = async ({
+    message,
+    account,
+  }: SuiSignMessageInput): Promise<{
+    signature: string
+    messageBytes: string
+  }> => {
+    const { signature, bytes } = await this.#signPersonalMessage({
+      message,
+      account,
+    })
+    return { signature, messageBytes: bytes }
+  }
+
+  #buildAndSign = async (
+    transaction: unknown
+  ): Promise<{ signature: string; bytes: string }> => {
+    const connected = this.#assertConnected()
+    const transactionBytesBase64 = await buildSuiTransactionBytes({
+      sender: connected.address,
+      transaction,
+    })
+    return signSuiTransaction({
+      transactionBytesBase64,
+      publicKey: connected.publicKey,
+    })
+  }
+
+  #signTransaction = async ({
+    transaction,
+    account,
+  }: SuiSignTransactionInput): Promise<{
+    signature: string
+    bytes: string
+  }> => {
+    const connected = this.#assertConnected()
+    if (account.address !== connected.address) {
+      throw new Error('invalid account')
+    }
+    return this.#buildAndSign(transaction)
+  }
+
+  #signTransactionBlock = async ({
+    transactionBlock,
+    account,
+  }: SuiSignTransactionBlockInput): Promise<{
+    signature: string
+    transactionBlockBytes: string
+  }> => {
+    const connected = this.#assertConnected()
+    if (account.address !== connected.address) {
+      throw new Error('invalid account')
+    }
+    const { signature, bytes } = await this.#buildAndSign(transactionBlock)
+    return { signature, transactionBlockBytes: bytes }
+  }
+
+  #signAndExecuteTransaction = async ({
+    transaction,
+    account,
+  }: SuiSignAndExecuteTransactionInput) => {
+    const connected = this.#assertConnected()
+    if (account.address !== connected.address) {
+      throw new Error('invalid account')
+    }
+    const { signature, bytes } = await this.#buildAndSign(transaction)
+    const result = (await executeSuiTransaction({
+      transactionBytesBase64: bytes,
+      signature,
+    })) as
+      | {
+          digest: string
+          rawEffects?: number[]
+        }
+      | undefined
+    return {
+      digest: result?.digest ?? '',
+      signature,
+      bytes,
+      // @mysten/dapp-kit consumers expect base64 raw effects.
+      effects: result?.rawEffects
+        ? Buffer.from(new Uint8Array(result.rawEffects)).toString('base64')
+        : '',
+    }
+  }
+
+  #signAndExecuteTransactionBlock = async ({
+    transactionBlock,
+    account,
+  }: SuiSignAndExecuteTransactionBlockInput) => {
+    const connected = this.#assertConnected()
+    if (account.address !== connected.address) {
+      throw new Error('invalid account')
+    }
+    const { signature, bytes } = await this.#buildAndSign(transactionBlock)
+    return executeSuiTransaction({
+      transactionBytesBase64: bytes,
+      signature,
+    })
   }
 
   #setAccount(address: string, publicKeyHex: string) {

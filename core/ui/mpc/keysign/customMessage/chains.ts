@@ -4,6 +4,7 @@ export const customMessageSupportedChains = [
   ...Object.values(EvmChain),
   ...Object.values(CosmosChain),
   Chain.Solana,
+  Chain.Sui,
   Chain.Ton,
   Chain.Tron,
   Chain.Polkadot,
