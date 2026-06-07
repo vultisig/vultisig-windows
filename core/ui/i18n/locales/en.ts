@@ -932,6 +932,8 @@ export const en = {
   swap_fee: 'Swap Fee',
   swap_overview: 'Swap overview',
   swap_same_asset: 'Cannot swap between the same asset',
+  swap_trading_halted:
+    'Trading for this asset is temporarily halted. Please try again later.',
   swap_terms: {
     input: 'The swap amount is correct',
     output: "I agree with the min. amount I'll receive",
