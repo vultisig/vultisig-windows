@@ -1,5 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
+import { DevicesIcon } from '@lib/ui/icons/DevicesIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useState } from 'react'
@@ -73,7 +73,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         <PairedButton
           {...buttonProps}
           kind="secondary"
-          icon={<TabletSmartphoneIcon />}
+          icon={<DevicesIcon />}
           onClick={() => executeNavigation('secure')}
         >
           {t('paired')}
