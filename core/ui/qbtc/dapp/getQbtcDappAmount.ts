@@ -8,11 +8,16 @@ type QbtcDisplayAmount = { amount: string; decimals: number }
 
 type RawCoin = { denom: string; amount: string }
 
+const isIntegerString = (value: string): boolean => /^[+-]?\d+$/.test(value)
+
 const isRawCoin = (value: unknown): value is RawCoin =>
-  !!value &&
+  value != null &&
   typeof value === 'object' &&
-  typeof (value as RawCoin).denom === 'string' &&
-  typeof (value as RawCoin).amount === 'string'
+  'denom' in value &&
+  'amount' in value &&
+  typeof value.denom === 'string' &&
+  typeof value.amount === 'string' &&
+  isIntegerString(value.amount)
 
 /**
  * Pulls the native-denom coin out of a Cosmos message value. Most messages
