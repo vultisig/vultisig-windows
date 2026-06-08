@@ -21,6 +21,7 @@
     "#.codex",
     "#clients/extension/tests/e2e/playwright-report",
     "#tasks",
-    "#**/CHANGELOG.md"
+    "#**/CHANGELOG.md",
+    "!**/node_modules/**"
   ]
 }
