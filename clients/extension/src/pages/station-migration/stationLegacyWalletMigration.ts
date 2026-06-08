@@ -81,14 +81,16 @@ const hasLegacyPrivateKey = (value: unknown): value is { privateKey: string } =>
   isRecord(value) && typeof value.privateKey === 'string'
 
 const getExpectedAddresses = (
-  wallet: StationLegacyWalletClassification
+  wallet: StationLegacyWalletClassification,
+  coinType?: StationTerraCoinType
 ): string[] => {
   const addresses = new Set<string>()
   const { address, words } = wallet.metadata
 
   if (address) addresses.add(address)
 
-  for (const wordsValue of [words?.['330'], words?.['118']]) {
+  const coinTypes = coinType ? [String(coinType)] : ['330', '118']
+  for (const wordsValue of coinTypes.map(coinType => words?.[coinType])) {
     if (!wordsValue) continue
     try {
       addresses.add(addressFromStationWords(wordsValue))
@@ -101,12 +103,14 @@ const getExpectedAddresses = (
 }
 
 const getExpectedPublicKeys = (
-  wallet: StationLegacyWalletClassification
+  wallet: StationLegacyWalletClassification,
+  coinType?: StationTerraCoinType
 ): string[] => {
   const publicKeys = new Set<string>()
   const { pubkey } = wallet.metadata
 
-  for (const value of [pubkey?.['330'], pubkey?.['118']]) {
+  const coinTypes = coinType ? [String(coinType)] : ['330', '118']
+  for (const value of coinTypes.map(coinType => pubkey?.[coinType])) {
     if (value) publicKeys.add(value)
   }
 
@@ -120,8 +124,8 @@ const validateAgainstMetadata = ({
   material: StationTerraKeyMaterial
   wallet: StationLegacyWalletClassification
 }) => {
-  const expectedAddresses = getExpectedAddresses(wallet)
-  const expectedPublicKeys = getExpectedPublicKeys(wallet)
+  const expectedAddresses = getExpectedAddresses(wallet, material.coinType)
+  const expectedPublicKeys = getExpectedPublicKeys(wallet, material.coinType)
 
   if (
     expectedAddresses.length > 0 &&
@@ -195,11 +199,15 @@ const decryptSeedMaterial = async ({
 }
 
 const decryptPrivateKeyMaterial = async ({
+  coinType,
   encrypted,
   password,
   wallet,
   walletCore,
-}: DecryptStationLegacyWalletInput & { encrypted: string }) => {
+}: DecryptStationLegacyWalletInput & {
+  coinType?: StationTerraCoinType
+  encrypted: string
+}) => {
   const privateKeyHex = await decryptStationLegacySecret({
     ciphertext: encrypted,
     password,
@@ -209,7 +217,12 @@ const decryptPrivateKeyMaterial = async ({
     walletCore,
   })
 
-  if (!validateAgainstMetadata({ material, wallet })) {
+  if (
+    !validateAgainstMetadata({
+      material: coinType ? { ...material, coinType } : material,
+      wallet,
+    })
+  ) {
     throw new Error('Station metadata mismatch')
   }
 
@@ -313,6 +326,7 @@ export const decryptStationLegacyWallet = async ({
           return failure('missingEncryptedValue')
         }
         material = await decryptPrivateKeyMaterial({
+          coinType: 330,
           encrypted: wallet.metadata.encrypted['330'],
           password,
           wallet,
@@ -320,6 +334,7 @@ export const decryptStationLegacyWallet = async ({
         })
         if (wallet.metadata.encrypted['118']) {
           const terraClassicMaterial = await decryptPrivateKeyMaterial({
+            coinType: 118,
             encrypted: wallet.metadata.encrypted['118'],
             password,
             wallet,
