@@ -1,5 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
+import { DevicesIcon } from '@lib/ui/icons/DevicesIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useState } from 'react'
@@ -70,20 +70,20 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   return (
     <>
       <HStack gap={12} fullWidth>
+        <PairedButton
+          {...buttonProps}
+          kind="secondary"
+          icon={<DevicesIcon />}
+          onClick={() => executeNavigation('secure')}
+        >
+          {t('paired')}
+        </PairedButton>
         <FastSignButton
           {...buttonProps}
           onClick={() => executeNavigation('fast')}
         >
           {t('fast_sign')}
         </FastSignButton>
-        <PairedButton
-          {...buttonProps}
-          kind="secondary"
-          icon={<TabletSmartphoneIcon />}
-          onClick={() => executeNavigation('secure')}
-        >
-          {t('paired')}
-        </PairedButton>
       </HStack>
       <FastVaultPasswordModal
         showModal={showModal}
