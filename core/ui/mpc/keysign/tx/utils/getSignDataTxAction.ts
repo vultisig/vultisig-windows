@@ -101,7 +101,7 @@ const parseSignDirectMessage = (
   chain: CosmosChain,
   chainFeeDenom: string,
   decimals: number
-): Partial<SignDataTxAction> | null => {
+): SignDataTxAction | null => {
   if (
     typeUrl === CosmosMsgType.MSG_SEND_URL ||
     typeUrl === CosmosMsgType.THORCHAIN_MSG_SEND_URL
@@ -310,61 +310,14 @@ export const getSignDataTxAction = (
       )
       if (!result) continue
 
-      if (result.action === 'send' && result.amount !== undefined) {
+      // Accumulate the first send amount but keep scanning: a later non-send
+      // message (e.g. a staking action in a multi-message tx) takes priority.
+      if (result.action === 'send') {
         if (firstSendAmount === undefined) firstSendAmount = result.amount
         continue
       }
 
-      if (
-        result.action === 'contract_execution' &&
-        'contractAddress' in result
-      ) {
-        return result as SignDataTxAction
-      }
-      if (result.action === 'deposit' && result.amount !== undefined) {
-        return {
-          action: 'deposit',
-          labelKey: 'deposited',
-          amount: result.amount,
-        }
-      }
-      if (result.action === 'transfer' && result.amount !== undefined) {
-        return {
-          action: 'transfer',
-          labelKey: 'transferred',
-          amount: result.amount,
-        }
-      }
-      if (result.action === 'leave_pool') {
-        return { action: 'leave_pool', labelKey: 'left_pool' }
-      }
-      if (result.action === 'delegate') {
-        return {
-          action: 'delegate',
-          labelKey: 'delegate',
-          amount: result.amount,
-        }
-      }
-      if (result.action === 'undelegate') {
-        return {
-          action: 'undelegate',
-          labelKey: 'undelegate',
-          amount: result.amount,
-        }
-      }
-      if (result.action === 'redelegate') {
-        return {
-          action: 'redelegate',
-          labelKey: 'redelegate',
-          amount: result.amount,
-        }
-      }
-      if (result.action === 'vote') {
-        return { action: 'vote', labelKey: 'vote' }
-      }
-      if (result.action === 'claim_rewards') {
-        return { action: 'claim_rewards', labelKey: 'claim_rewards' }
-      }
+      return result
     }
 
     return {
