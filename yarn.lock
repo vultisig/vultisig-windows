@@ -812,6 +812,7 @@ __metadata:
     "@keplr-wallet/types": "npm:^0.13.13"
     "@lib/extension": "workspace:^"
     "@lib/ui": "workspace:^"
+    "@mysten/sui": "npm:^1.45.2"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.90.21"
