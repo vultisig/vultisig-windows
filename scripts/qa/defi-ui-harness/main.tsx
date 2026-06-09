@@ -35,16 +35,19 @@ const vault = createQaVault({
 
 const queryClient = createDefiQaQueryClient()
 
-seedStoredSettings(queryClient)
-seedCircleAccount(queryClient, {
+seedStoredSettings({ queryClient })
+seedCircleAccount({
+  queryClient,
   ownerAddress: qaOwnerAddress,
   accountAddress: qaCircleAccountAddress,
 })
-seedCoinBalance(queryClient, {
+seedCoinBalance({
+  queryClient,
   coin: circleAccountUsdc,
   balance: 125_000_000n,
 })
-seedCoinPrices(queryClient, {
+seedCoinPrices({
+  queryClient,
   prices: [
     {
       coin: usdc,

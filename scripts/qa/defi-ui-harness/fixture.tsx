@@ -32,18 +32,21 @@ type CreateQaVaultInput = {
 }
 
 type SeedStoredSettingsInput = {
+  queryClient: QueryClient
   fiatCurrency?: FiatCurrency
   language?: string
   isBalanceVisible?: boolean
 }
 
 type SeedCircleAccountInput = {
+  queryClient: QueryClient
   ownerAddress: string
   accountAddress: string
   accountId?: string
 }
 
 type SeedCoinBalanceInput = {
+  queryClient: QueryClient
   coin: AccountCoin
   balance: bigint
 }
@@ -54,6 +57,7 @@ type SeedCoinPrice = {
 }
 
 type SeedCoinPricesInput = {
+  queryClient: QueryClient
   fiatCurrency?: FiatCurrency
   prices: SeedCoinPrice[]
 }
@@ -76,6 +80,12 @@ export const qaEthCoin: AccountCoin = {
   decimals: 18,
 }
 
+/**
+ * Creates a deterministic fake vault with valid key shapes for DeFi UI QA.
+ *
+ * @param input - Vault name and account coins to expose through storage.
+ * @returns A QA vault object compatible with core vault providers.
+ */
 export const createQaVault = ({ name, coins }: CreateQaVaultInput): QaVault => ({
   name,
   publicKeys: {
@@ -99,6 +109,11 @@ export const createQaVault = ({ name, coins }: CreateQaVaultInput): QaVault => (
   coins,
 })
 
+/**
+ * Creates a React Query client configured for deterministic harness fixtures.
+ *
+ * @returns A query client with app defaults and infinite stale time.
+ */
 export const createDefiQaQueryClient = () =>
   new QueryClient({
     defaultOptions: {
@@ -109,37 +124,52 @@ export const createDefiQaQueryClient = () =>
     },
   })
 
-export const seedStoredSettings = (
-  queryClient: QueryClient,
-  {
-    fiatCurrency = 'usd',
-    language = 'en',
-    isBalanceVisible = true,
-  }: SeedStoredSettingsInput = {}
-) => {
+/**
+ * Seeds storage-backed UI settings that DeFi screens expect to be loaded.
+ *
+ * @param input - Query client plus optional fiat currency, language, and balance visibility values.
+ * @returns Nothing; values are written into the query cache.
+ */
+export const seedStoredSettings = ({
+  queryClient,
+  fiatCurrency = 'usd',
+  language = 'en',
+  isBalanceVisible = true,
+}: SeedStoredSettingsInput) => {
   queryClient.setQueryData([StorageKey.fiatCurrency], fiatCurrency)
   queryClient.setQueryData([StorageKey.language], language)
   queryClient.setQueryData([StorageKey.isBalanceVisible], isBalanceVisible)
 }
 
-export const seedCircleAccount = (
-  queryClient: QueryClient,
-  {
-    ownerAddress,
-    accountAddress,
-    accountId = 'qa-circle-account',
-  }: SeedCircleAccountInput
-) => {
+/**
+ * Seeds the Circle protocol account lookup for a vault owner address.
+ *
+ * @param input - Query client, owner address, protocol account address, and optional account id.
+ * @returns Nothing; the Circle account response is written into the query cache.
+ */
+export const seedCircleAccount = ({
+  queryClient,
+  ownerAddress,
+  accountAddress,
+  accountId = 'qa-circle-account',
+}: SeedCircleAccountInput) => {
   queryClient.setQueryData(getCircleAccountQueryKey({ ownerAddress }), {
     id: accountId,
     address: accountAddress,
   })
 }
 
-export const seedCoinBalance = (
-  queryClient: QueryClient,
-  { coin, balance }: SeedCoinBalanceInput
-) => {
+/**
+ * Seeds a coin balance using the same query key shape as production balance hooks.
+ *
+ * @param input - Query client, account coin, and chain-unit balance.
+ * @returns Nothing; the balance record is written into the query cache.
+ */
+export const seedCoinBalance = ({
+  queryClient,
+  coin,
+  balance,
+}: SeedCoinBalanceInput) => {
   const coinKey = extractAccountCoinKey(coin)
 
   queryClient.setQueryData(getBalanceQueryKey(coinKey), {
@@ -147,10 +177,17 @@ export const seedCoinBalance = (
   })
 }
 
-export const seedCoinPrices = (
-  queryClient: QueryClient,
-  { fiatCurrency = 'usd', prices }: SeedCoinPricesInput
-) => {
+/**
+ * Seeds fiat prices using the normalized query key shape used by production price hooks.
+ *
+ * @param input - Query client, optional fiat currency, and coin price records.
+ * @returns Nothing; the price record is written into the query cache.
+ */
+export const seedCoinPrices = ({
+  queryClient,
+  fiatCurrency = 'usd',
+  prices,
+}: SeedCoinPricesInput) => {
   const coins = prices.map(({ coin: { chain, id, priceProviderId } }) => ({
     chain,
     id,
@@ -248,6 +285,12 @@ const createQaCoreState = (vault: QaVault): CoreState => {
   }
 }
 
+/**
+ * Wraps a DeFi screen with the providers needed to render against QA fixtures.
+ *
+ * @param props - Children, query client, and fake vault for the harness tree.
+ * @returns The provider tree used by DeFi UI harness scenarios.
+ */
 export const DefiQaProviders = ({
   queryClient,
   vault,
