@@ -61,7 +61,8 @@ export const nl = {
   asset: 'Asset',
   assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
-  at_least_one_device_subtitle: 'Elk apparaat dat Vultisig kan draaien werkt.',
+  at_least_one_device_subtitle:
+    'Elk apparaat dat {{productName}} kan draaien werkt.',
   available: 'Beschikbaar',
   back: 'Terug',
   before_you_start: 'Voordat je begint...',
@@ -110,7 +111,7 @@ export const nl = {
   bronze: 'Brons',
   diamond: 'Diamant',
   buy: 'Kopen',
-  by_vultisig: 'door Vultisig',
+  by_vultisig: 'door {{productName}}',
   camera_access_blocked:
     'Cameratoegang is geblokkeerd. Schakel dit in via je browserinstellingen.',
   cache_password_for_5_min: 'Onthoud het wachtwoord gedurende 5 minuten.',
@@ -157,11 +158,6 @@ export const nl = {
   circle: {
     banner_text:
       'Fondsen blijven volledig onder controle van je kluis. Circle-accounts zijn self-custodial en rendement wordt gegenereerd via veilige off-chain treasuries.',
-    deposit: 'Storten',
-    deposit_header: 'Storten naar Circle-account',
-    verify_deposit: 'Storting verifiëren',
-    introduction:
-      'Stort je $USDC in een Circle-account en verdien rendement. Veilig binnen je Vultisig-kluis.',
     open_account: 'Account openen',
     withdraw: 'Opnemen',
     withdraw_header: 'Opnemen van Circle',
@@ -196,7 +192,7 @@ export const nl = {
   connect: 'Verbinden',
   connect_dapp: 'Verbind dApp',
   connect_to_site: 'Verbinden met {{site}}',
-  connect_website_subtitle: 'Koppel deze website aan Vultisig Extension.',
+  connect_website_subtitle: 'Koppel deze website aan {{productExtensionName}}.',
   connected_dapps: 'Verbonden dApps',
   connecting_to_server: 'Verbinden met server',
   continue: 'Doorgaan',
@@ -347,22 +343,22 @@ export const nl = {
   failed_to_save_vault: 'Kluis opslaan mislukt',
   faq: 'FAQ',
   faq_comparison_content:
-    'Het is gebouwd op MPC-technologie, die seed phrases overbodig maakt en meerdere blockchains ondersteunt, waardoor Vultisig flexibel en chain-agnostisch is.',
+    'Het is gebouwd op MPC-technologie, die seed phrases overbodig maakt en meerdere blockchains ondersteunt, waardoor {{productName}} flexibel en chain-agnostisch is.',
   faq_comparison_title:
-    'Hoe verhoudt Vultisig zich tot andere multisig-wallets?',
+    'Hoe verhoudt {{productName}} zich tot andere multisig-wallets?',
   faq_data_protection_content:
-    'Vultisig slaat geen gebruikersinformatie op vanuit de mobiele apps.',
+    '{{productName}} slaat geen gebruikersinformatie op vanuit de mobiele apps.',
   faq_data_protection_title:
-    'Hoe gaat Vultisig om met privacy en gegevensbescherming?',
+    'Hoe gaat {{productName}} om met privacy en gegevensbescherming?',
   faq_is_open_source_content:
-    'Ja, Vultisig is open source en heeft beveiligingsaudits ondergaan. Zowel de auditrapporten als de broncode zijn toegankelijk.',
-  faq_is_open_source_title: 'Is Vultisig open source en geaudit?',
+    'Ja, {{productName}} is open source en heeft beveiligingsaudits ondergaan. Zowel de auditrapporten als de broncode zijn toegankelijk.',
+  faq_is_open_source_title: 'Is {{productName}} open source en geaudit?',
   faq_need_to_register_content:
-    'Vultisig ondersteunt grote cryptocurrencies en tokens, met meer dan 30 chains en hun tokens, momenteel beschikbaar.',
+    '{{productName}} ondersteunt grote cryptocurrencies en tokens, met meer dan 30 chains en hun tokens, momenteel beschikbaar.',
   faq_need_to_register_title:
-    'Welke cryptocurrencies worden door Vultisig ondersteund?',
+    'Welke cryptocurrencies worden door {{productName}} ondersteund?',
   faq_recover_assets_content:
-    'Vultisig is gratis te gebruiken. Alleen standaard netwerkfees gelden voor verzenden. En voor swaps en bridges is er een fee van 0,5% (50 bps).',
+    '{{productName}} is gratis te gebruiken. Alleen standaard netwerkfees gelden voor verzenden. En voor swaps en bridges is er een fee van 0,5% (50 bps).',
   faq_recover_assets_title: 'Wat zijn de fees en kosten?',
   faq_secure_crypto_vault_content:
     'Ja, zolang je je back-ups hebt opgeslagen en toegang hebt tot de back-ups bij het aanmaken van de kluis. Je kunt deze back-ups op een nieuw apparaat importeren om weer toegang tot je assets te krijgen.',
@@ -370,13 +366,14 @@ export const nl = {
     'Kan ik mijn assets herstellen als ik een apparaat verlies?',
   faq_setup_crypto_vault_content:
     'Het is een veilige, multi-authenticatie wallet op basis van MPC-technologie om digitale assets te beheren. Transacties vereisen goedkeuring van meerdere apparaten.',
-  faq_setup_crypto_vault_title: 'Wat is Vultisig?',
+  faq_setup_crypto_vault_title: 'Wat is {{productName}}?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig biedt betere beveiliging met multi-device authenticatie, ondersteuning voor veel blockchains, eenvoudige herstelopties, en geen seed phrases of user tracking.',
-  faq_supported_cryptocurrencies_title: 'Wat zijn de voordelen van Vultisig?',
+    '{{productName}} biedt betere beveiliging met multi-device authenticatie, ondersteuning voor veel blockchains, eenvoudige herstelopties, en geen seed phrases of user tracking.',
+  faq_supported_cryptocurrencies_title:
+    'Wat zijn de voordelen van {{productName}}?',
   faq_vultisig_make_money_content:
-    'Vultisig bewaart en beheert digitale assets veilig. Alle acties, zoals verzenden of swappen, vereisen dat de drempel van apparaten transacties ondertekent.',
-  faq_vultisig_make_money_title: 'Hoe wordt Vultisig gebruikt?',
+    '{{productName}} bewaart en beheert digitale assets veilig. Alle acties, zoals verzenden of swappen, vereisen dat de drempel van apparaten transacties ondertekent.',
+  faq_vultisig_make_money_title: 'Hoe wordt {{productName}} gebruikt?',
   fast: 'Snel',
   fast_vault_session_conflict: 'Kluis-aandeel komt niet overeen',
   fast_vault_session_conflict_description:
@@ -443,7 +440,7 @@ export const nl = {
   grant_camera_permission: 'Cameratoestemming geven',
   gwei: 'GWEI',
   header_tooltip_content:
-    'Het referralprogramma wordt toegepast op THORChain-swaps en gebeurt op best-effort basis. Je moet een THORName registreren om de Vultisig-referral te gebruiken. De registratiefee is 10 RUNE en 1 RUNE per jaar, betaald aan het THORChain-netwerk.',
+    'Het referralprogramma wordt toegepast op THORChain-swaps en gebeurt op best-effort basis. Je moet een THORName registreren om de {{productName}}-referral te gebruiken. De registratiefee is 10 RUNE en 1 RUNE per jaar, betaald aan het THORChain-netwerk.',
   header_tooltip_title: 'Referralprogramma',
   having_trouble_scanning_help: 'Hulp bij QR-scannen',
   having_trouble_scanning: 'Problemen met scannen?',
@@ -456,10 +453,9 @@ export const nl = {
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
   hold: 'Vasthouden',
-  hold_for_paired_sign: 'Vasthouden voor gekoppelde handtekening',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
-    'Deze IBC-transactie bevat een memo, maar Vultisig ondersteunt momenteel geen memos binnen IBC transfer-berichten.<br> Doorgaan met deze transactie kan leiden tot <b>onomkeerbaar verlies van funds</b>.',
+    'Deze IBC-transactie bevat een memo, maar {{productName}} ondersteunt momenteel geen memos binnen IBC transfer-berichten.<br> Doorgaan met deze transactie kan leiden tot <b>onomkeerbaar verlies van funds</b>.',
   ibc_transaction_not_supporting_memo_title:
     'IBC-transactiememo niet ondersteund',
   ibc_transfer: 'IBC-transfer',
@@ -541,7 +537,8 @@ export const nl = {
   loading: 'Laden...',
   localMode: 'Je bent in lokale modus',
   lock_time: 'Vergrendeltijd',
-  lock_vultisig_automatically_after: 'Vultisig automatisch vergrendelen na...',
+  lock_vultisig_automatically_after:
+    '{{productName}} automatisch vergrendelen na...',
   looking_for_server: 'Zoeken naar FastVaultServer...',
   looks_good: 'Ziet er goed uit',
   low: 'Laag',
@@ -634,13 +631,13 @@ export const nl = {
   off: 'Uit',
   on: 'Aan',
   onboarding_description_1:
-    'Vultisig is een veilige, multi-device crypto-kluis, compatibel met alle grote blockchains en 10.000+ tokens. Vultisig is volledig self-custodial.',
+    '{{productName}} is een veilige, multi-device crypto-kluis, compatibel met alle grote blockchains en 10.000+ tokens. {{productName}} is volledig self-custodial.',
   onboarding_description_2:
-    'Vultisig volgt je activiteiten niet en vereist geen registratie. Vultisig is volledig open source, wat transparantie en vertrouwen garandeert.',
+    '{{productName}} volgt je activiteiten niet en vereist geen registratie. {{productName}} is volledig open source, wat transparantie en vertrouwen garandeert.',
   onboarding_description_3:
-    'Vultisig is van nature een multi-device applicatie. Er zijn minimaal twee apparaten nodig om een veilige kluis aan te maken: één initiërend en één koppelapparaat.',
+    '{{productName}} is van nature een multi-device applicatie. Er zijn minimaal twee apparaten nodig om een veilige kluis aan te maken: één initiërend en één koppelapparaat.',
   onboarding_description_4:
-    'Vultisig is een wallet zonder seed phrases. In plaats daarvan gebruikt het makkelijk te beheren kluis-shares. Elk apparaat heeft een unieke kluis-share die apart geback-upt moet worden.',
+    '{{productName}} is een wallet zonder seed phrases. In plaats daarvan gebruikt het makkelijk te beheren kluis-shares. Elk apparaat heeft een unieke kluis-share die apart geback-upt moet worden.',
   operator_fee: 'Operatorfee',
   basis_points: 'Basispunten',
   optionalDevice: 'Optioneel apparaat',
@@ -676,7 +673,7 @@ export const nl = {
   price_impact_average: 'Gemiddeld',
   price_impact_good: 'Goed',
   price_impact_high: 'Hoge impact',
-  prioritize_vultisig: 'Vultisig prioriteren',
+  prioritize_vultisig: '{{productName}} prioriteren',
   priority: 'Prioriteit',
   priority_fee: 'Prioriteitsfee',
   privacy_policy: 'Privacybeleid',
@@ -723,7 +720,7 @@ export const nl = {
   referral_program: 'Referralprogramma',
   referral_reg_fee: 'Registratiefee',
   referral_status: 'Status',
-  manage_referral_title: 'Verwijzingen naar Vultisig',
+  manage_referral_title: 'Verwijzingen naar {{productName}}',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -828,7 +825,7 @@ export const nl = {
   select_vault_backup_share_description:
     'Deze back-up bevat meerdere gedeelde mappen in de kluis. Kies de map voor dit apparaat.',
   unsupported_vault_backup_file:
-    'Dit bestand lijkt geen back-up van een Vultisig-kluis te zijn. Kies een `.vult`- of `.vult.zip`-bestand dat is geëxporteerd vanuit de Vultisig-app.',
+    'Dit bestand lijkt geen back-up van een {{productName}}-kluis te zijn. Kies een `.vult`- of `.vult.zip`-bestand dat is geëxporteerd vanuit de {{productName}}-app.',
   select_chain: 'Chain selecteren',
   select_chains: 'Chains selecteren',
   select_chains_manually: 'Chains handmatig selecteren',
@@ -1104,10 +1101,9 @@ export const nl = {
   via: 'via',
   view_on_explorer: 'Bekijken in Verkenner',
   vote: 'Stemmen',
-  vultisig: 'Vultisig',
-  vultisig_community: 'Vultisig-community',
-  vultisig_education: 'Vultisig Onderwijs',
-  vultisig_website: 'Vultisig-website',
+  vultisig_community: '{{productName}}-community',
+  vultisig_education: '{{productName}} Onderwijs',
+  vultisig_website: '{{productName}}-website',
   waitingOnDevices: 'Wachten op apparaten...',
   waiting_for_devices_to_join: 'Wachten tot andere apparaten deelnemen',
   waiting_for_devices_to_join_description:
@@ -1304,7 +1300,7 @@ export const nl = {
     'Klassieke sleutels kunnen door kwantumcomputers worden gekraakt. Om QBTC te activeren, moet een nieuw sleutelpaar worden gegenereerd.',
   qbtc_onboarding_feature_generate_title: 'Genereer uw kwantum-sleutelpaar',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig voert een lokale MPC-ceremonie uit op al uw kluisapparaten om een ​​nieuw sleutelpaar te genereren.',
+    '{{productName}} voert een lokale MPC-ceremonie uit op al uw kluisapparaten om een ​​nieuw sleutelpaar te genereren.',
   qbtc_onboarding_feature_link_title: 'Koppel het aan uw bestaande kluis.',
   qbtc_onboarding_feature_link_description:
     'De kwantumsleutel is gekoppeld aan uw huidige kluisdelingsstructuur. Opnieuw delen is niet nodig.',
@@ -1336,7 +1332,6 @@ export const nl = {
   station_migration_summary_total_one: '{{count}} portemonnee',
   station_migration_summary_total_other: '{{count}} wallets',
   station_migration_status_supported: 'Ondersteund',
-  station_migration_status_reconnect: 'Opnieuw verbinding maken',
   station_migration_status_unsupported: 'Niet ondersteund',
   station_migration_status_corrupt: 'Ongeldig',
   station_migration_status_needs_review: 'Moet beoordeeld worden',
@@ -1362,10 +1357,8 @@ export const nl = {
     'Versleutelde Terra-privésleutelgegevens zijn aanwezig voor een toekomstige import.',
   station_migration_reason_supported_legacy_private_key:
     'Versleutelde privé-sleutelgegevens uit het verleden zijn aanwezig voor een toekomstige import.',
-  station_migration_reason_ledger_reconnect:
-    'Station slaat de openbare accountgegevens voor deze Ledger-wallet op. Sluit het hardwareapparaat later opnieuw aan om het in Station te gebruiken.',
   station_migration_reason_multisig:
-    'Station slaat alleen openbare multisig-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een Vultisig-kluis.',
+    'Station slaat alleen openbare multisig-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een {{productName}}-kluis.',
   station_migration_reason_encrypted_seed_not_string:
     'encryptedSeed is aanwezig, maar is geen tekenreeks.',
   station_migration_reason_encrypted_invalid_shape:
@@ -1418,11 +1411,21 @@ export const nl = {
   station_migration_status_reason_importing:
     'De import is gestart. Keer hier terug nadat de installatie is voltooid als deze rij niet wordt bijgewerkt.',
   station_migration_status_reason_migrated:
-    'Deze wallet is geïmporteerd in Vultisig. De oude opslaglocatie Station is nog steeds bewaard.',
+    'Deze wallet is geïmporteerd in {{productName}}. De oude opslaglocatie Station is nog steeds bewaard.',
   station_migration_status_reason_skipped:
     'Deze portemonnee is overgeslagen. Je kunt hem weer ontgrendelen wanneer je er klaar voor bent.',
   station_migration_status_reason_vault_import_failed:
     'Het importeren van de kluis is mislukt tijdens het genereren van de sleutel. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
   station_migration_status_reason_vault_save_failed:
-    'Het importeren van de kluis is voltooid, maar het opslaan van de kluis Vultisig is mislukt. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
+    'Het importeren van de kluis is voltooid, maar het opslaan van de kluis {{productName}} is mislukt. Ontgrendel deze portemonnee opnieuw om het nogmaals te proberen.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station slaat alleen openbare Ledger-metadata op. Het slaat geen privésleutels op die kunnen worden omgezet in een {{productName}}-kluis.',
+  paired: 'Gekoppeld',
+  plugin_marketplace_signin_description:
+    'Meld u aan met uw {{productName}} Vault om toegang te krijgen tot apps waarmee u uw digitale activa kunt automatiseren.',
+  plugin_marketplace_welcome:
+    'Welkom bij de {{productName}} Plugin Marketplace.',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Apps kunnen nooit transacties ondertekenen die u niet eerst goedkeurt.',
+  extension_version: '{{brand}} V{{version}}',
 }

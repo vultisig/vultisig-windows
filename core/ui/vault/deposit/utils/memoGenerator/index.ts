@@ -92,7 +92,7 @@ export const generateMemo = ({
 
             const raw = (depositFormData as any).percentage
 
-            const pct = typeof raw === 'string' ? Number(raw) : Number(raw)
+            const pct = Number(raw)
             if (!Number.isFinite(pct) || pct <= 0 || pct > 100) {
               throw new Error('Percentage must be 0-100')
             }

@@ -66,6 +66,9 @@ jobs:
       - name: Run typecheck
         run: yarn typecheck
 
+      - name: Run code health detectors
+        run: yarn quality:health
+
   extension:
     needs: lint
     runs-on: ubuntu-22.04

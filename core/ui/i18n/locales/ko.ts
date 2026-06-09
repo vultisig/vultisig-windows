@@ -62,7 +62,7 @@ export const ko = {
   assets: '자산',
   at_least_one_device: '최소 한 개의 기기',
   at_least_one_device_subtitle:
-    'Vultisig를 실행할 수 있는 모든 기기에서 작동합니다.',
+    '{{productName}}를 실행할 수 있는 모든 기기에서 작동합니다.',
   available: '사용 가능',
   back: '뒤쪽에',
   before_you_start: '시작하기 전에...',
@@ -109,7 +109,7 @@ export const ko = {
   bronze: '청동',
   diamond: '다이아몬드',
   buy: '구입하다',
-  by_vultisig: 'Vultisig 지음',
+  by_vultisig: '{{productName}} 지음',
   camera_access_blocked:
     '카메라 접근이 차단되었습니다. 브라우저 설정에서 카메라 접근을 허용해 주세요.',
   cache_password_for_5_min: '5분 동안 비밀번호를 기억하세요',
@@ -155,11 +155,6 @@ export const ko = {
   circle: {
     banner_text:
       '자금은 전적으로 귀하의 금고 관리 하에 있습니다. 서클 계정은 자체 관리형이며 수익은 안전한 오프체인 재무부를 통해 발생합니다.',
-    deposit: '보증금',
-    deposit_header: '서클 계좌로 입금',
-    verify_deposit: '입금 확인',
-    introduction:
-      '$USDC를 Circle 계정에 입금하고 수익을 얻으세요. Vultisig 금고에서 안전하게 보관할 수 있습니다.',
     open_account: '계좌 개설',
     withdraw: '철회하다',
     withdraw_header: '서클에서 탈퇴',
@@ -195,7 +190,8 @@ export const ko = {
   connect: '연결하다',
   connect_dapp: 'dApp 연결',
   connect_to_site: '{{site}}에 연결하세요',
-  connect_website_subtitle: '이 웹사이트를 Vultisig Extension에 연결하세요.',
+  connect_website_subtitle:
+    '이 웹사이트를 {{productExtensionName}}에 연결하세요.',
   connected_dapps: '연결된 dApps',
   connecting_to_server: '서버에 연결 중',
   continue: '계속하다',
@@ -346,21 +342,23 @@ export const ko = {
   failed_to_save_vault: '금고를 저장하는 데 실패했습니다.',
   faq: '자주 묻는 질문',
   faq_comparison_content:
-    'Vultisig는 MPC 기술을 기반으로 구축되어 시드 구문이 필요 없으며 여러 블록체인을 지원하므로 유연하고 체인에 구애받지 않습니다.',
+    '{{productName}}는 MPC 기술을 기반으로 구축되어 시드 구문이 필요 없으며 여러 블록체인을 지원하므로 유연하고 체인에 구애받지 않습니다.',
   faq_comparison_title:
-    'Vultisig는 다른 멀티시그 지갑과 비교했을 때 어떤 차이점이 있나요?',
+    '{{productName}}는 다른 멀티시그 지갑과 비교했을 때 어떤 차이점이 있나요?',
   faq_data_protection_content:
-    'Vultisig는 모바일 앱에서 사용자 정보를 저장하지 않습니다.',
+    '{{productName}}는 모바일 앱에서 사용자 정보를 저장하지 않습니다.',
   faq_data_protection_title:
-    'Vultisig는 개인정보 및 데이터 보호를 어떻게 처리하나요?',
+    '{{productName}}는 개인정보 및 데이터 보호를 어떻게 처리하나요?',
   faq_is_open_source_content:
-    '네, Vultisig는 오픈 소스이며 보안 감사를 거쳤습니다. 감사 보고서와 소스 코드 모두 접근 가능합니다.',
-  faq_is_open_source_title: 'Vultisig는 오픈 소스이며 감사를 받았습니까?',
+    '네, {{productName}}는 오픈 소스이며 보안 감사를 거쳤습니다. 감사 보고서와 소스 코드 모두 접근 가능합니다.',
+  faq_is_open_source_title:
+    '{{productName}}는 오픈 소스이며 감사를 받았습니까?',
   faq_need_to_register_content:
-    'Vultisig는 현재 30개 이상의 블록체인과 해당 토큰을 포함하여 주요 암호화폐 및 토큰을 지원합니다.',
-  faq_need_to_register_title: 'Vultisig에서 지원하는 암호화폐는 무엇인가요?',
+    '{{productName}}는 현재 30개 이상의 블록체인과 해당 토큰을 포함하여 주요 암호화폐 및 토큰을 지원합니다.',
+  faq_need_to_register_title:
+    '{{productName}}에서 지원하는 암호화폐는 무엇인가요?',
   faq_recover_assets_content:
-    'Vultisig는 무료로 이용할 수 있습니다. 송금 시에는 표준 네트워크 수수료만 부과되며, 스왑 및 브리지 거래에는 0.5%(50bps)의 수수료가 발생합니다.',
+    '{{productName}}는 무료로 이용할 수 있습니다. 송금 시에는 표준 네트워크 수수료만 부과되며, 스왑 및 브리지 거래에는 0.5%(50bps)의 수수료가 발생합니다.',
   faq_recover_assets_title: '수수료 및 비용은 얼마인가요?',
   faq_secure_crypto_vault_content:
     '네, 볼트를 생성할 때 백업을 저장해 두었고 백업에 접근할 수 있는 권한이 있다면 가능합니다. 새 기기에서 이러한 백업을 가져와 자산에 다시 접근할 수 있습니다.',
@@ -368,13 +366,14 @@ export const ko = {
     '기기를 분실했을 경우 자산을 복구할 수 있나요?',
   faq_setup_crypto_vault_content:
     'MPC 기술 기반의 안전한 다중 인증 지갑으로, 디지털 자산 관리에 사용됩니다. 거래는 여러 기기의 승인을 필요로 합니다.',
-  faq_setup_crypto_vault_title: 'Vultisig는 무엇인가요?',
+  faq_setup_crypto_vault_title: '{{productName}}는 무엇인가요?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig는 다중 장치 인증, 다양한 블록체인 지원, 간편한 복구 옵션, 시드 구문 및 사용자 추적 불필요 등의 강화된 보안 기능을 제공합니다.',
-  faq_supported_cryptocurrencies_title: 'Vultisig 사용의 이점은 무엇입니까?',
+    '{{productName}}는 다중 장치 인증, 다양한 블록체인 지원, 간편한 복구 옵션, 시드 구문 및 사용자 추적 불필요 등의 강화된 보안 기능을 제공합니다.',
+  faq_supported_cryptocurrencies_title:
+    '{{productName}} 사용의 이점은 무엇입니까?',
   faq_vultisig_make_money_content:
-    'Vultisig는 디지털 자산을 안전하게 저장하고 관리합니다. 송금이나 교환과 같은 모든 작업에는 거래 서명에 필요한 기기 수가 정해져 있습니다.',
-  faq_vultisig_make_money_title: 'Vultisig는 어떻게 사용되나요?',
+    '{{productName}}는 디지털 자산을 안전하게 저장하고 관리합니다. 송금이나 교환과 같은 모든 작업에는 거래 서명에 필요한 기기 수가 정해져 있습니다.',
+  faq_vultisig_make_money_title: '{{productName}}는 어떻게 사용되나요?',
   fast: '빠른',
   fast_vault_session_conflict: '금고 공유 불일치',
   fast_vault_session_conflict_description:
@@ -439,7 +438,7 @@ export const ko = {
   grant_camera_permission: '카메라 촬영 권한을 부여해 주세요',
   gwei: 'GWEI',
   header_tooltip_content:
-    '추천 프로그램은 THORChain 스왑에 적용되며 최선을 다해 지원합니다. Vultisig 추천을 사용하려면 THORName을 등록해야 합니다. 등록비는 10 RUNE이며, 매년 1 RUNE씩 THORChain 네트워크에 지급됩니다.',
+    '추천 프로그램은 THORChain 스왑에 적용되며 최선을 다해 지원합니다. {{productName}} 추천을 사용하려면 THORName을 등록해야 합니다. 등록비는 10 RUNE이며, 매년 1 RUNE씩 THORChain 네트워크에 지급됩니다.',
   header_tooltip_title: '추천 프로그램',
   having_trouble_scanning_help: 'QR 스캔 도움말',
   having_trouble_scanning: '스캔에 문제가 있으신가요?',
@@ -452,10 +451,9 @@ export const ko = {
   hide_balance: '잔액 숨기기',
   hide_defi_balance: 'DeFi 잔액 숨기기',
   hold: '잡고 있다',
-  hold_for_paired_sign: '짝지어진 신호를 기다려 주세요.',
   how_it_works: '작동 방식',
   ibc_transaction_not_supporting_memo_desc:
-    '이 IBC 거래에는 메모가 포함되어 있지만, Vultisig는 현재 IBC 전송 메시지 내에 메모를 삽입하는 기능을 지원하지 않습니다.<br> 이 거래를 진행할 경우 <b>돌이킬 수 없는 자금 손실이</b> 발생할 수 있습니다.',
+    '이 IBC 거래에는 메모가 포함되어 있지만, {{productName}}는 현재 IBC 전송 메시지 내에 메모를 삽입하는 기능을 지원하지 않습니다.<br> 이 거래를 진행할 경우 <b>돌이킬 수 없는 자금 손실이</b> 발생할 수 있습니다.',
   ibc_transaction_not_supporting_memo_title:
     'IBC 거래 메모는 지원되지 않습니다.',
   ibc_transfer: 'IBC 전송',
@@ -535,7 +533,8 @@ export const ko = {
   loading: '로딩 중...',
   localMode: '로컬 모드입니다',
   lock_time: '잠금 시간',
-  lock_vultisig_automatically_after: 'Vultisig를 자동으로 잠금 처리합니다...',
+  lock_vultisig_automatically_after:
+    '{{productName}}를 자동으로 잠금 처리합니다...',
   looking_for_server: 'FastVaultServer를 찾고 있습니다...',
   looks_good: '좋아 보인다',
   low: '낮은',
@@ -628,13 +627,13 @@ export const ko = {
   off: '끄다',
   on: '~에',
   onboarding_description_1:
-    'Vultisig는 모든 주요 블록체인 및 10,000개 이상의 토큰과 호환되는 안전한 다중 기기 암호화폐 보관소입니다. Vultisig는 완전한 자체 보관 방식을 채택하고 있습니다.',
+    '{{productName}}는 모든 주요 블록체인 및 10,000개 이상의 토큰과 호환되는 안전한 다중 기기 암호화폐 보관소입니다. {{productName}}는 완전한 자체 보관 방식을 채택하고 있습니다.',
   onboarding_description_2:
-    'Vultisig는 사용자의 활동을 추적하거나 등록을 요구하지 않습니다. Vultisig는 완전한 오픈 소스 소프트웨어로, 투명성과 신뢰성을 보장합니다.',
+    '{{productName}}는 사용자의 활동을 추적하거나 등록을 요구하지 않습니다. {{productName}}는 완전한 오픈 소스 소프트웨어로, 투명성과 신뢰성을 보장합니다.',
   onboarding_description_3:
-    'Vultisig는 기본적으로 여러 기기를 지원하는 애플리케이션입니다. 안전한 저장소를 생성하려면 최소 두 대의 기기가 필요합니다. 하나는 저장소 생성을 위한 기기이고, 다른 하나는 연결될 기기입니다.',
+    '{{productName}}는 기본적으로 여러 기기를 지원하는 애플리케이션입니다. 안전한 저장소를 생성하려면 최소 두 대의 기기가 필요합니다. 하나는 저장소 생성을 위한 기기이고, 다른 하나는 연결될 기기입니다.',
   onboarding_description_4:
-    'Vultisig는 시드 구문이 없는 지갑입니다. 대신 관리하기 쉬운 볼트 공유를 사용합니다. 모든 기기는 고유한 볼트 공유를 가지며, 별도의 백업이 필요합니다.',
+    '{{productName}}는 시드 구문이 없는 지갑입니다. 대신 관리하기 쉬운 볼트 공유를 사용합니다. 모든 기기는 고유한 볼트 공유를 가지며, 별도의 백업이 필요합니다.',
   operator_fee: '운영자 수수료',
   basis_points: '기준점',
   optionalDevice: '선택 사양 장치',
@@ -669,7 +668,7 @@ export const ko = {
   price_impact_average: '평균',
   price_impact_good: '좋은',
   price_impact_high: '높은 충격',
-  prioritize_vultisig: 'Vultisig를 우선시하세요',
+  prioritize_vultisig: '{{productName}}를 우선시하세요',
   priority: '우선 사항',
   priority_fee: '우선 수수료',
   privacy_policy: '개인정보 보호정책',
@@ -715,7 +714,7 @@ export const ko = {
   referral_program: '추천 프로그램',
   referral_reg_fee: '등록비',
   referral_status: '상태',
-  manage_referral_title: 'Vultisig 추천',
+  manage_referral_title: '{{productName}} 추천',
   referrals_default_title: '추천',
   referrals_summary: {
     item_1: {
@@ -818,7 +817,7 @@ export const ko = {
   select_vault_backup_share_description:
     '이 백업에는 여러 개의 볼트 공유가 포함되어 있습니다. 이 장치에 사용할 공유를 선택하십시오.',
   unsupported_vault_backup_file:
-    '이 파일은 Vultisig 볼트 백업 파일처럼 보이지 않습니다. Vultisig 앱에서 내보낸 `.vult` 또는 `.vult.zip` 파일을 선택하세요.',
+    '이 파일은 {{productName}} 볼트 백업 파일처럼 보이지 않습니다. {{productName}} 앱에서 내보낸 `.vult` 또는 `.vult.zip` 파일을 선택하세요.',
   select_chain: '체인을 선택하세요',
   select_chains: '체인점을 선택하세요',
   select_chains_manually: '체인을 수동으로 선택하세요',
@@ -1124,10 +1123,9 @@ export const ko = {
   via: '~을 통해',
   view_on_explorer: '익스플로러에서 보기',
   vote: '투표',
-  vultisig: '불티시그',
-  vultisig_community: '불티시그 커뮤니티',
-  vultisig_education: 'Vultisig Education',
-  vultisig_website: 'Vultisig 웹사이트',
+  vultisig_community: '{{productName}} 커뮤니티',
+  vultisig_education: '{{productName}} Education',
+  vultisig_website: '{{productName}} 웹사이트',
   waitingOnDevices: '기기들을 기다리는 중...',
   waiting_for_devices_to_join: '다른 기기들이 연결될 때까지 기다리는 중입니다.',
   waiting_for_devices_to_join_description:
@@ -1289,7 +1287,7 @@ export const ko = {
     '기존 키는 양자 컴퓨터로 해독될 수 있습니다. QBTC를 활성화하려면 새로운 키 쌍을 생성해야 합니다.',
   qbtc_onboarding_feature_generate_title: '양자 키 쌍을 생성하세요',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig는 새 키 쌍을 생성하기 위해 볼트 장치 전체에서 로컬 MPC 의식을 실행합니다.',
+    '{{productName}}는 새 키 쌍을 생성하기 위해 볼트 장치 전체에서 로컬 MPC 의식을 실행합니다.',
   qbtc_onboarding_feature_link_title: '기존 금고에 연결하세요',
   qbtc_onboarding_feature_link_description:
     '양자 키는 현재 사용 중인 금고 공유 구조에 연결되어 있습니다. 재공유는 필요하지 않습니다.',
@@ -1321,7 +1319,6 @@ export const ko = {
   station_migration_summary_total_one: '{{count}} 지갑',
   station_migration_summary_total_other: '{{count}} 지갑',
   station_migration_status_supported: '지원됨',
-  station_migration_status_reconnect: '다시 연결',
   station_migration_status_unsupported: '지원되지 않음',
   station_migration_status_corrupt: '유효하지 않은',
   station_migration_status_needs_review: '검토 필요',
@@ -1347,10 +1344,8 @@ export const ko = {
     '암호화된 Terra 개인 키 데이터가 향후 가져오기를 위해 준비되어 있습니다.',
   station_migration_reason_supported_legacy_private_key:
     '기존에 암호화된 개인 키 데이터가 향후 가져오기를 위해 존재합니다.',
-  station_migration_reason_ledger_reconnect:
-    'Station에는 이 Ledger 지갑의 공개 계정 정보가 저장됩니다. 나중에 하드웨어 장치를 다시 연결하여 Station에서 사용하세요.',
   station_migration_reason_multisig:
-    'Station는 공개 멀티시그 메타데이터만 저장합니다. Vultisig 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
+    'Station는 공개 멀티시그 메타데이터만 저장합니다. {{productName}} 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
   station_migration_reason_encrypted_seed_not_string:
     'encryptedSeed는 존재하지만 문자열이 아닙니다.',
   station_migration_reason_encrypted_invalid_shape:
@@ -1403,11 +1398,21 @@ export const ko = {
   station_migration_status_reason_importing:
     '가져오기가 시작되었습니다. 설정이 완료되면 이 행이 업데이트되지 않을 경우 여기로 돌아오십시오.',
   station_migration_status_reason_migrated:
-    '이 지갑은 Vultisig로 가져왔습니다. 이전 Station 저장소는 그대로 유지됩니다.',
+    '이 지갑은 {{productName}}로 가져왔습니다. 이전 Station 저장소는 그대로 유지됩니다.',
   station_migration_status_reason_skipped:
     '이 지갑은 건너뛰었습니다. 준비가 되면 언제든지 다시 잠금 해제할 수 있습니다.',
   station_migration_status_reason_vault_import_failed:
     '키 생성 중 Vault 가져오기에 실패했습니다. 다시 시도하려면 지갑 잠금을 해제하세요.',
   station_migration_status_reason_vault_save_failed:
-    '볼트 가져오기는 완료되었지만 Vultisig 볼트 저장에 실패했습니다. 다시 시도하려면 이 지갑의 잠금을 해제하세요.',
+    '볼트 가져오기는 완료되었지만 {{productName}} 볼트 저장에 실패했습니다. 다시 시도하려면 이 지갑의 잠금을 해제하세요.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station은 공개 Ledger 메타데이터만 저장합니다. {{productName}} 볼트로 변환할 수 있는 개인 키는 저장하지 않습니다.',
+  paired: '페어링',
+  plugin_marketplace_signin_description:
+    '{{productName}} Vault로 로그인하여 디지털 자산 자동화 앱에 액세스하세요.',
+  plugin_marketplace_welcome:
+    '{{productName}} 플러그인 마켓플레이스에 오신 것을 환영합니다',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} 앱은 사용자가 먼저 승인하지 않은 거래에는 절대 서명할 수 없습니다.',
+  extension_version: '{{brand}} V{{version}}',
 }

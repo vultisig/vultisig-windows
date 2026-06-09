@@ -61,7 +61,7 @@ export const es = {
   assets: 'Activos',
   at_least_one_device: 'Al menos un dispositivo',
   at_least_one_device_subtitle:
-    'Cualquier dispositivo que pueda ejecutar Vultisig funcionará.',
+    'Cualquier dispositivo que pueda ejecutar {{productName}} funcionará.',
   available: 'Disponible',
   back: 'Atrás',
   before_you_start: 'Antes de empezar...',
@@ -111,7 +111,7 @@ export const es = {
   bronze: 'Bronce',
   diamond: 'Diamante',
   buy: 'Comprar',
-  by_vultisig: 'por Vultisig',
+  by_vultisig: 'por {{productName}}',
   camera_access_blocked:
     'El acceso a la cámara está bloqueado. Habilítalo en la configuración de tu navegador.',
   cache_password_for_5_min: 'Recuerda la contraseña durante 5 minutos.',
@@ -158,11 +158,6 @@ export const es = {
   circle: {
     banner_text:
       'Los fondos permanecen bajo el control total de su bóveda. El rendimiento de Circle se genera mediante tesorerías seguras fuera de la cadena. Puede retirar sus fondos en cualquier momento después de la liquidación.',
-    deposit: 'Depósito',
-    deposit_header: 'Depósito a la cuenta Circle',
-    verify_deposit: 'Verificar depósito',
-    introduction:
-      'Deposita tus $USDC en una cuenta Circle y obtén ganancias. De forma segura en tu bóveda de Vultisig.',
     open_account: 'Abrir cuenta',
     withdraw: 'Retirar',
     withdraw_header: 'Retirarse del Círculo',
@@ -197,7 +192,8 @@ export const es = {
   connect: 'Conectar',
   connect_dapp: 'Conectar dApp',
   connect_to_site: 'Conectarse a {{site}}',
-  connect_website_subtitle: 'Conecta este sitio web con Vultisig Extension.',
+  connect_website_subtitle:
+    'Conecta este sitio web con {{productExtensionName}}.',
   connected_dapps: 'DApps conectadas',
   connecting_to_server: 'Conectando con el servidor',
   continue: 'Continuar',
@@ -350,22 +346,22 @@ export const es = {
   failed_to_save_vault: 'No se pudo guardar la bóveda',
   faq: 'Preguntas frecuentes',
   faq_comparison_content:
-    'Está construido sobre tecnología MPC, que elimina la necesidad de frases semilla y admite múltiples cadenas de bloques, lo que hace que Vultisig sea flexible y agnóstico en cuanto a cadena.',
+    'Está construido sobre tecnología MPC, que elimina la necesidad de frases semilla y admite múltiples cadenas de bloques, lo que hace que {{productName}} sea flexible y agnóstico en cuanto a cadena.',
   faq_comparison_title:
-    '¿Cómo se compara Vultisig con otras billeteras multifirma?',
+    '¿Cómo se compara {{productName}} con otras billeteras multifirma?',
   faq_data_protection_content:
-    'Vultisig no almacena ninguna información del usuario de sus aplicaciones móviles.',
+    '{{productName}} no almacena ninguna información del usuario de sus aplicaciones móviles.',
   faq_data_protection_title:
-    '¿Cómo gestiona Vultisig la privacidad y la protección de datos?',
+    '¿Cómo gestiona {{productName}} la privacidad y la protección de datos?',
   faq_is_open_source_content:
-    'Sí, Vultisig es de código abierto y ha sido sometido a auditorías de seguridad. Tanto los informes de auditoría como el código fuente son accesibles.',
-  faq_is_open_source_title: '¿Vultisig es de código abierto y auditado?',
+    'Sí, {{productName}} es de código abierto y ha sido sometido a auditorías de seguridad. Tanto los informes de auditoría como el código fuente son accesibles.',
+  faq_is_open_source_title: '¿{{productName}} es de código abierto y auditado?',
   faq_need_to_register_content:
-    'Vultisig admite las principales criptomonedas y tokens, con más de 30 cadenas y sus tokens, actualmente disponibles.',
+    '{{productName}} admite las principales criptomonedas y tokens, con más de 30 cadenas y sus tokens, actualmente disponibles.',
   faq_need_to_register_title:
-    '¿Qué criptomonedas son compatibles con Vultisig?',
+    '¿Qué criptomonedas son compatibles con {{productName}}?',
   faq_recover_assets_content:
-    'Vultisig es gratuito. Solo se aplican las tarifas de red estándar para el envío. Para intercambios y puentes, hay una tarifa del 0,5 % (50 puntos básicos).',
+    '{{productName}} es gratuito. Solo se aplican las tarifas de red estándar para el envío. Para intercambios y puentes, hay una tarifa del 0,5 % (50 puntos básicos).',
   faq_recover_assets_title: '¿Cuáles son las tarifas y costos?',
   faq_secure_crypto_vault_content:
     'Sí, siempre que hayas guardado tus copias de seguridad y tengas acceso a ellas al crear la bóveda. Puedes importarlas a un nuevo dispositivo para recuperar el acceso a tus activos.',
@@ -373,14 +369,14 @@ export const es = {
     '¿Puedo recuperar mis activos si pierdo un dispositivo?',
   faq_setup_crypto_vault_content:
     'Es una billetera segura con autenticación múltiple basada en tecnología MPC que se utiliza para gestionar activos digitales. Las transacciones requieren la aprobación de múltiples dispositivos.',
-  faq_setup_crypto_vault_title: '¿Qué es Vultisig?',
+  faq_setup_crypto_vault_title: '¿Qué es {{productName}}?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig ofrece seguridad mejorada con autenticación multidispositivo, soporte para muchas cadenas de bloques, opciones de recuperación fáciles y sin frases semilla ni seguimiento de usuarios.',
+    '{{productName}} ofrece seguridad mejorada con autenticación multidispositivo, soporte para muchas cadenas de bloques, opciones de recuperación fáciles y sin frases semilla ni seguimiento de usuarios.',
   faq_supported_cryptocurrencies_title:
-    '¿Cuáles son los beneficios de utilizar Vultisig?',
+    '¿Cuáles son los beneficios de utilizar {{productName}}?',
   faq_vultisig_make_money_content:
-    'Vultisig almacena y gestiona activos digitales de forma segura. Todas las acciones, como el envío o el intercambio, requieren el umbral de dispositivos para firmar transacciones.',
-  faq_vultisig_make_money_title: '¿Cómo se utiliza Vultisig?',
+    '{{productName}} almacena y gestiona activos digitales de forma segura. Todas las acciones, como el envío o el intercambio, requieren el umbral de dispositivos para firmar transacciones.',
+  faq_vultisig_make_money_title: '¿Cómo se utiliza {{productName}}?',
   fast: 'Rápido',
   fast_vault_session_conflict: 'Discrepancia en la parte de la bóveda',
   fast_vault_session_conflict_description:
@@ -448,7 +444,7 @@ export const es = {
   grant_camera_permission: 'Conceder permiso para la cámara',
   gwei: 'GWEI',
   header_tooltip_content:
-    'El programa de referidos se aplica a los swaps de THORChain y se basa en el mejor esfuerzo. Necesita registrar un THORName para usar el programa de referidos de Vultisig. La cuota de registro es de 10 RUNE y 1 RUNE por año, que se paga a la red THORChain.',
+    'El programa de referidos se aplica a los swaps de THORChain y se basa en el mejor esfuerzo. Necesita registrar un THORName para usar el programa de referidos de {{productName}}. La cuota de registro es de 10 RUNE y 1 RUNE por año, que se paga a la red THORChain.',
   header_tooltip_title: 'Programa de referencias',
   having_trouble_scanning_help: 'Ayuda para escanear QR',
   having_trouble_scanning: 'Problemas para escanear?',
@@ -462,10 +458,9 @@ export const es = {
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
   hold: 'Mantener',
-  hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
-    'Esta transacción de IBC incluye una nota, pero Vultisig actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
+    'Esta transacción de IBC incluye una nota, pero {{productName}} actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
   ibc_transaction_not_supporting_memo_title:
     'Memo de transacción de IBC no compatible',
   ibc_transfer: 'Transferencia de IBC',
@@ -547,7 +542,7 @@ export const es = {
   localMode: 'Estás en modo local',
   lock_time: 'Tiempo de bloqueo',
   lock_vultisig_automatically_after:
-    'Bloquear Vultisig automáticamente después de...',
+    'Bloquear {{productName}} automáticamente después de...',
   looking_for_server: 'Buscando FastVaultServer...',
   looks_good: 'Se ve bien',
   low: 'Bajo',
@@ -641,13 +636,13 @@ export const es = {
   off: 'Apagado',
   on: 'En',
   onboarding_description_1:
-    'Vultisig es una bóveda de criptomonedas segura y multidispositivo, compatible con las principales cadenas de bloques y con más de 10 000 tokens. Vultisig es totalmente autocustodiable.',
+    '{{productName}} es una bóveda de criptomonedas segura y multidispositivo, compatible con las principales cadenas de bloques y con más de 10 000 tokens. {{productName}} es totalmente autocustodiable.',
   onboarding_description_2:
-    'Vultisig no rastrea tus actividades ni requiere registro. Vultisig es completamente de código abierto, lo que garantiza transparencia y confianza.',
+    '{{productName}} no rastrea tus actividades ni requiere registro. {{productName}} es completamente de código abierto, lo que garantiza transparencia y confianza.',
   onboarding_description_3:
-    'Vultisig es una aplicación multidispositivo nativa. Requiere al menos dos dispositivos para crear una bóveda segura: uno de inicio y otro de emparejamiento.',
+    '{{productName}} es una aplicación multidispositivo nativa. Requiere al menos dos dispositivos para crear una bóveda segura: uno de inicio y otro de emparejamiento.',
   onboarding_description_4:
-    'Vultisig es una billetera sin frases semilla. En su lugar, utiliza recursos compartidos de bóveda fáciles de administrar. Cada dispositivo tiene su propio recurso compartido de bóveda que requiere una copia de seguridad independiente.',
+    '{{productName}} es una billetera sin frases semilla. En su lugar, utiliza recursos compartidos de bóveda fáciles de administrar. Cada dispositivo tiene su propio recurso compartido de bóveda que requiere una copia de seguridad independiente.',
   operator_fee: 'Tarifa del operador',
   basis_points: 'Puntos básicos',
   optionalDevice: 'Dispositivo opcional',
@@ -683,7 +678,7 @@ export const es = {
   price_impact_average: 'Promedio',
   price_impact_good: 'Bien',
   price_impact_high: 'Alto impacto',
-  prioritize_vultisig: 'Priorizar Vultisig',
+  prioritize_vultisig: 'Priorizar {{productName}}',
   priority: 'Prioridad',
   priority_fee: 'Tarifa prioritaria',
   privacy_policy: 'política de privacidad',
@@ -731,7 +726,7 @@ export const es = {
   referral_program: 'Programa de referencias',
   referral_reg_fee: 'Tarifa de inscripción',
   referral_status: 'Estado',
-  manage_referral_title: 'Referencias de Vultisig',
+  manage_referral_title: 'Referencias de {{productName}}',
   referrals_default_title: 'Remisión',
   referrals_summary: {
     item_1: {
@@ -839,7 +834,7 @@ export const es = {
   select_vault_backup_share_description:
     'Esta copia de seguridad contiene varios recursos compartidos de bóveda. Seleccione el recurso compartido para este dispositivo.',
   unsupported_vault_backup_file:
-    'Este archivo no parece una copia de seguridad de Vultisig Vault. Seleccione un archivo `.vult` o `.vult.zip` exportado desde la aplicación Vultisig.',
+    'Este archivo no parece una copia de seguridad de {{productName}} Vault. Seleccione un archivo `.vult` o `.vult.zip` exportado desde la aplicación {{productName}}.',
   select_chain: 'Seleccionar cadena',
   select_chains: 'Seleccionar',
   select_chains_manually: 'Seleccionar cadenas manualmente',
@@ -1123,10 +1118,9 @@ export const es = {
   via: 'a través de',
   view_on_explorer: 'Ver en Explorer',
   vote: 'Votar',
-  vultisig: 'Vultisig',
-  vultisig_community: 'Comunidad Vultisig',
-  vultisig_education: 'Educación Vultisig',
-  vultisig_website: 'Sitio web de Vultisig',
+  vultisig_community: 'Comunidad {{productName}}',
+  vultisig_education: 'Educación {{productName}}',
+  vultisig_website: 'Sitio web de {{productName}}',
   waitingOnDevices: 'Esperando dispositivos...',
   waiting_for_devices_to_join: 'Esperando a que se unan otros dispositivos',
   waiting_for_devices_to_join_description:
@@ -1320,7 +1314,7 @@ export const es = {
     'Las claves clásicas pueden ser descifradas por ordenadores cuánticos. Para habilitar QBTC es necesario generar un nuevo par de claves.',
   qbtc_onboarding_feature_generate_title: 'Genera tu par de claves cuánticas',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig ejecuta una ceremonia MPC local en todos sus dispositivos de bóveda para producir un nuevo par de claves.',
+    '{{productName}} ejecuta una ceremonia MPC local en todos sus dispositivos de bóveda para producir un nuevo par de claves.',
   qbtc_onboarding_feature_link_title: 'Vincúlalo a tu bóveda existente',
   qbtc_onboarding_feature_link_description:
     'La clave cuántica está vinculada a la estructura actual de compartición de su bóveda. No es necesario volver a compartirla.',
@@ -1353,7 +1347,6 @@ export const es = {
   station_migration_summary_total_one: 'Cartera {{count}}',
   station_migration_summary_total_other: 'Carteras {{count}}',
   station_migration_status_supported: 'Compatible',
-  station_migration_status_reconnect: 'Reconectar',
   station_migration_status_unsupported: 'Sin soporte',
   station_migration_status_corrupt: 'Inválido',
   station_migration_status_needs_review: 'Necesita revisión',
@@ -1381,10 +1374,8 @@ export const es = {
     'Los datos de clave privada de Terra, cifrados, están disponibles para una futura importación.',
   station_migration_reason_supported_legacy_private_key:
     'Los datos de clave privada cifrados heredados están disponibles para una futura importación.',
-  station_migration_reason_ledger_reconnect:
-    'Station almacena los detalles de la cuenta pública para esta billetera Ledger. Vuelva a conectar el dispositivo de hardware más tarde para usarlo en Station.',
   station_migration_reason_multisig:
-    'Station solo almacena metadatos multifirma públicos. No almacena claves privadas que puedan convertirse en una bóveda Vultisig.',
+    'Station solo almacena metadatos multifirma públicos. No almacena claves privadas que puedan convertirse en una bóveda {{productName}}.',
   station_migration_reason_encrypted_seed_not_string:
     'La clave encryptedSeed está presente, pero no es una cadena de texto.',
   station_migration_reason_encrypted_invalid_shape:
@@ -1437,11 +1428,21 @@ export const es = {
   station_migration_status_reason_importing:
     'Se ha iniciado la importación. Si esta fila no se actualiza, vuelva aquí una vez finalizada la configuración.',
   station_migration_status_reason_migrated:
-    'Esta cartera se importó a Vultisig. El almacenamiento antiguo Station aún se conserva.',
+    'Esta cartera se importó a {{productName}}. El almacenamiento antiguo Station aún se conserva.',
   station_migration_status_reason_skipped:
     'Esta cartera se omitió. Puedes desbloquearla de nuevo cuando quieras.',
   station_migration_status_reason_vault_import_failed:
     'La importación de la bóveda falló durante la generación de claves. Desbloquea esta billetera nuevamente para intentarlo de nuevo.',
   station_migration_status_reason_vault_save_failed:
-    'La importación de la bóveda se completó, pero falló al guardar la bóveda Vultisig. Desbloquee esta billetera nuevamente para intentarlo de nuevo.',
+    'La importación de la bóveda se completó, pero falló al guardar la bóveda {{productName}}. Desbloquee esta billetera nuevamente para intentarlo de nuevo.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station solo almacena metadatos públicos de Ledger. No almacena claves privadas que puedan convertirse en una bóveda {{productName}}.',
+  paired: 'Emparejado',
+  plugin_marketplace_signin_description:
+    'Inicia sesión con tu bóveda {{productName}} para acceder a las aplicaciones que automatizan tus activos digitales.',
+  plugin_marketplace_welcome:
+    'Bienvenido al mercado de plugins {{productName}}',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Las aplicaciones nunca pueden firmar transacciones que usted no apruebe previamente.',
+  extension_version: '{{brand}} V{{version}}',
 }

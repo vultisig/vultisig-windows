@@ -1,3 +1,5 @@
+import { currentProductBrandConfig } from '../../../product/brand'
+
 type PluginInfo = {
   id: string
   aliases: string[]
@@ -15,7 +17,7 @@ const knownPlugins: PluginInfo[] = [
   {
     id: 'vultisig-fees-feee',
     aliases: ['fee', 'fees'],
-    name: 'Vultisig Fees',
+    name: `${currentProductBrandConfig.name} Fees`,
     serverUrl: 'https://plugin-fees.prod.plugins.vultisig.com',
   },
   {

@@ -76,20 +76,20 @@ export const WithdrawablePositions = ({ value }: ValueProp<AccountCoin>) => {
                 <HStack alignItems="center" justifyContent="space-between">
                   <HStack alignItems="center" gap={12}>
                     <CoinIcon style={{ fontSize: 32 }} coin={value} />
-                    <Text weight="700" color="contrast" size={20}>
+                    <Text weight={500} color="contrast" size={20}>
                       {value.ticker} ({t('merged')})
                     </Text>
                   </HStack>
                   <Text
                     size={20}
-                    weight="700"
+                    weight={500}
                     color="contrast"
                     centerVertically
                   >
                     {formatFiatAmount(rujiFiat)}
                   </Text>
                 </HStack>
-                <Text size={20} weight="700" color="contrast" centerVertically>
+                <Text size={20} weight={500} color="contrast" centerVertically>
                   {totalSharesFormatted}
                 </Text>
               </VStack>

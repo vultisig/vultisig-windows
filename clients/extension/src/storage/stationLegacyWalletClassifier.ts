@@ -33,14 +33,10 @@ export type StationLegacyWalletType =
   | 'corruptStorage'
   | 'corruptWallet'
 
-export type StationLegacyWalletStatus =
-  | 'supported'
-  | 'reconnect'
-  | 'unsupported'
-  | 'corrupt'
+export type StationLegacyWalletStatus = 'supported' | 'unsupported' | 'corrupt'
 
 export type StationLegacyWalletReasonCode =
-  | 'ledgerReconnectRequired'
+  | 'ledgerPublicMetadataOnly'
   | 'multisigPublicMetadataOnly'
   | 'encryptedSeedNotString'
   | 'encryptedInvalidShape'
@@ -92,10 +88,10 @@ export type StationLegacyStorageClassification = {
 }
 
 const ledgerUnsupportedReason =
-  'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.'
+  'Station only stores public Ledger metadata. It does not store private keys that can be converted into a Station vault.'
 
 const multisigUnsupportedReason =
-  'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.'
+  'Station only stores public multisig metadata. It does not store private keys that can be converted into a Station vault.'
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -269,8 +265,8 @@ const classifyWalletRecord = ({
     return createClassification({
       record,
       reason: ledgerUnsupportedReason,
-      reasonCode: 'ledgerReconnectRequired',
-      status: 'reconnect',
+      reasonCode: 'ledgerPublicMetadataOnly',
+      status: 'unsupported',
       storageIndex,
       storageKey,
       walletType: 'ledger',

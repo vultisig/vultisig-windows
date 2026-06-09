@@ -4,6 +4,10 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'
+import {
+  getCowSwapOrderApiBase,
+  getCowSwapOrderRecordUpdate,
+} from './getCowSwapOrderRecordUpdate'
 import { toRecordStatus } from './toRecordStatus'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
@@ -33,6 +37,23 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
       try {
         await Promise.all(
           pendingRecords.map(async record => {
+            // CowSwap orders settle off-chain: `txHash` is the orderbook UID,
+            // not a chain hash. Poll the orderbook and skip the chain stale
+            // path, which would otherwise fail a still-valid order at the
+            // 5-min cutoff (orders stay open up to their orderbook expiry).
+            const cowSwapOrder = getCowSwapOrderApiBase(record)
+            if (cowSwapOrder) {
+              const { record: updatedRecord } =
+                await getCowSwapOrderRecordUpdate({
+                  record: cowSwapOrder.record,
+                  apiBase: cowSwapOrder.apiBase,
+                })
+              if (updatedRecord) {
+                updateRecord(updatedRecord)
+              }
+              return
+            }
+
             const result = await attempt(() =>
               getTxStatus({ chain: record.chain, hash: record.txHash })
             )

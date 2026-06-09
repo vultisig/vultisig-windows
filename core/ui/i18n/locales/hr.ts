@@ -61,7 +61,7 @@ export const hr = {
   assets: 'Imovina',
   at_least_one_device: 'Barem jedan uređaj',
   at_least_one_device_subtitle:
-    'Radit će bilo koji uređaj koji može pokrenuti Vultisig.',
+    'Radit će bilo koji uređaj koji može pokrenuti {{productName}}.',
   available: 'Dostupno',
   back: 'Nazad',
   before_you_start: 'Prije nego što počnete...',
@@ -110,7 +110,7 @@ export const hr = {
   bronze: 'Bronza',
   diamond: 'Dijamant',
   buy: 'Kupiti',
-  by_vultisig: 'od Vultisiga',
+  by_vultisig: 'od {{productName}}a',
   camera_access_blocked:
     'Pristup kameri je blokiran. Molimo omogućite ga u postavkama preglednika.',
   cache_password_for_5_min: 'Zapamti lozinku 5 minuta',
@@ -157,11 +157,6 @@ export const hr = {
   circle: {
     banner_text:
       'Sredstva ostaju u potpunosti pod kontrolom vašeg trezora. Prinos Circlea generira se putem sigurnih izvanmrežnih blagajni. Povucite novac bilo kada nakon namire.',
-    deposit: 'Polog',
-    deposit_header: 'Uplata na Circle račun',
-    verify_deposit: 'Potvrdi uplatu',
-    introduction:
-      'Uplatite svoj $USDC na Circle račun i ostvarite prinos. Sigurno unutar vašeg Vultisig trezora.',
     open_account: 'Otvori račun',
     withdraw: 'Povući',
     withdraw_header: 'Povuci se iz kruga',
@@ -196,7 +191,8 @@ export const hr = {
   connect: 'Poveži se',
   connect_dapp: 'Poveži dApp',
   connect_to_site: 'Poveži se s {{site}}',
-  connect_website_subtitle: 'Povežite ovu web stranicu s Vultisig Extension',
+  connect_website_subtitle:
+    'Povežite ovu web stranicu s {{productExtensionName}}',
   connected_dapps: 'Povezane dApp-ove',
   connecting_to_server: 'Povezivanje sa serverom',
   continue: 'Nastaviti',
@@ -347,21 +343,21 @@ export const hr = {
   failed_to_save_vault: 'Spremanje trezora nije uspjelo',
   faq: 'Često postavljana pitanja',
   faq_comparison_content:
-    'Izgrađen je na MPC tehnologiji, koja eliminira potrebu za početnim frazama i podržava više blockchaina, čineći Vultisig fleksibilnim i neovisnim o lancu.',
+    'Izgrađen je na MPC tehnologiji, koja eliminira potrebu za početnim frazama i podržava više blockchaina, čineći {{productName}} fleksibilnim i neovisnim o lancu.',
   faq_comparison_title:
-    'Kako se Vultisig uspoređuje s drugim multisign novčanicima?',
+    'Kako se {{productName}} uspoređuje s drugim multisign novčanicima?',
   faq_data_protection_content:
-    'Vultisig ne pohranjuje nikakve korisničke podatke iz svojih mobilnih aplikacija.',
+    '{{productName}} ne pohranjuje nikakve korisničke podatke iz svojih mobilnih aplikacija.',
   faq_data_protection_title:
-    'Kako Vultisig rješava probleme s privatnošću i zaštitom podataka?',
+    'Kako {{productName}} rješava probleme s privatnošću i zaštitom podataka?',
   faq_is_open_source_content:
-    'Da, Vultisig je otvorenog koda i prošao je sigurnosne revizije. I izvješća revizije i izvorni kod su dostupni.',
-  faq_is_open_source_title: 'Je li Vultisig otvorenog koda i revidiran?',
+    'Da, {{productName}} je otvorenog koda i prošao je sigurnosne revizije. I izvješća revizije i izvorni kod su dostupni.',
+  faq_is_open_source_title: 'Je li {{productName}} otvorenog koda i revidiran?',
   faq_need_to_register_content:
-    'Vultisig podržava glavne kriptovalute i tokene, s preko 30 lanaca i njihovih tokena, trenutno dostupnih.',
-  faq_need_to_register_title: 'Koje kriptovalute podržava Vultisig?',
+    '{{productName}} podržava glavne kriptovalute i tokene, s preko 30 lanaca i njihovih tokena, trenutno dostupnih.',
+  faq_need_to_register_title: 'Koje kriptovalute podržava {{productName}}?',
   faq_recover_assets_content:
-    'Vultisig je besplatan za korištenje. Za slanje se primjenjuju samo standardne mrežne naknade. Za swapove i mostove naplaćuje se naknada od 0,5% (50 bps).',
+    '{{productName}} je besplatan za korištenje. Za slanje se primjenjuju samo standardne mrežne naknade. Za swapove i mostove naplaćuje se naknada od 0,5% (50 bps).',
   faq_recover_assets_title: 'Koje su naknade i troškovi?',
   faq_secure_crypto_vault_content:
     'Da, pod uvjetom da ste spremili sigurnosne kopije i imate pristup njima prilikom izrade trezora. Ove sigurnosne kopije možete uvesti na novi uređaj kako biste ponovno dobili pristup svojim resursima.',
@@ -369,14 +365,14 @@ export const hr = {
     'Mogu li povratiti svoju imovinu ako izgubim uređaj?',
   faq_setup_crypto_vault_content:
     'To je siguran novčanik s višestrukom autentifikacijom temeljen na MPC tehnologiji koji se koristi za upravljanje digitalnom imovinom. Transakcije zahtijevaju odobrenje s više uređaja.',
-  faq_setup_crypto_vault_title: 'Što je Vultisig?',
+  faq_setup_crypto_vault_title: 'Što je {{productName}}?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig nudi poboljšanu sigurnost s autentifikacijom na više uređaja, podrškom za mnoge blockchaineove, jednostavnim opcijama oporavka i bez sjemenskih fraza ili praćenja korisnika.',
+    '{{productName}} nudi poboljšanu sigurnost s autentifikacijom na više uređaja, podrškom za mnoge blockchaineove, jednostavnim opcijama oporavka i bez sjemenskih fraza ili praćenja korisnika.',
   faq_supported_cryptocurrencies_title:
-    'Koje su prednosti korištenja Vultisiga?',
+    'Koje su prednosti korištenja {{productName}}a?',
   faq_vultisig_make_money_content:
-    'Vultisig sigurno pohranjuje i upravlja digitalnom imovinom. Sve radnje, poput slanja ili zamjene, zahtijevaju prag uređaja za potpisivanje transakcija.',
-  faq_vultisig_make_money_title: 'Kako se koristi Vultisig?',
+    '{{productName}} sigurno pohranjuje i upravlja digitalnom imovinom. Sve radnje, poput slanja ili zamjene, zahtijevaju prag uređaja za potpisivanje transakcija.',
+  faq_vultisig_make_money_title: 'Kako se koristi {{productName}}?',
   fast: 'Brzo',
   fast_vault_session_conflict: 'Nepodudarnost dijela trezora',
   fast_vault_session_conflict_description:
@@ -442,7 +438,7 @@ export const hr = {
   grant_camera_permission: 'Odobri dopuštenje za kameru',
   gwei: 'GWEI',
   header_tooltip_content:
-    'Program preporuka primjenjuje se na THORChain swapove i temelji se na najboljem naporu. Morate registrirati THORNAme da biste koristili Vultisig preporuku. Naknada za registraciju iznosi 10 RUNE i 1 RUNE za svaku godinu, koja se plaća THORChain mreži.',
+    'Program preporuka primjenjuje se na THORChain swapove i temelji se na najboljem naporu. Morate registrirati THORName da biste koristili {{productName}} preporuku. Naknada za registraciju iznosi 10 RUNE i 1 RUNE za svaku godinu, koja se plaća THORChain mreži.',
   header_tooltip_title: 'Program preporuka',
   having_trouble_scanning_help: 'Pomoc pri skeniranju QR koda',
   having_trouble_scanning: 'Problemi sa skeniranjem?',
@@ -455,10 +451,9 @@ export const hr = {
   hide_balance: 'Sakrij stanje',
   hide_defi_balance: 'Sakrij DeFi stanje',
   hold: 'Drži',
-  hold_for_paired_sign: 'Držite za upareni znak',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
-    'Ova IBC transakcija uključuje memorandum, ali Vultisig trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
+    'Ova IBC transakcija uključuje memorandum, ali {{productName}} trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
   ibc_transaction_not_supporting_memo_title:
     'IBC dopis o transakciji nije podržan',
   ibc_transfer: 'Prijenos IBC-a',
@@ -538,7 +533,8 @@ export const hr = {
   loading: 'Učitavanje...',
   localMode: 'U lokalnom ste načinu rada',
   lock_time: 'Vrijeme zaključavanja',
-  lock_vultisig_automatically_after: 'Automatski zaključaj Vultisig nakon...',
+  lock_vultisig_automatically_after:
+    'Automatski zaključaj {{productName}} nakon...',
   looking_for_server: 'Tražim FastVaultServer...',
   looks_good: 'Izgleda dobro',
   low: 'Nisko',
@@ -631,13 +627,13 @@ export const hr = {
   off: 'Isključeno',
   on: 'Na',
   onboarding_description_1:
-    'Vultisig je siguran kripto trezor za više uređaja, kompatibilan sa svim glavnim blockchain mrežama i više od 10 000 tokena. Vultisig ima potpuno samostalno čuvanje.',
+    '{{productName}} je siguran kripto trezor za više uređaja, kompatibilan sa svim glavnim blockchain mrežama i više od 10 000 tokena. {{productName}} ima potpuno samostalno čuvanje.',
   onboarding_description_2:
-    'Vultisig ne prati vaše aktivnosti niti zahtijeva ikakve registracije. Vultisig je potpuno otvorenog koda, što osigurava transparentnost i povjerenje.',
+    '{{productName}} ne prati vaše aktivnosti niti zahtijeva ikakve registracije. {{productName}} je potpuno otvorenog koda, što osigurava transparentnost i povjerenje.',
   onboarding_description_3:
-    'Vultisig je izvorno aplikacija za više uređaja. Za stvaranje sigurnog trezora potrebna su barem dva uređaja. Jedan uređaj za inicijalizaciju i jedan uređaj za uparivanje.',
+    '{{productName}} je izvorno aplikacija za više uređaja. Za stvaranje sigurnog trezora potrebna su barem dva uređaja. Jedan uređaj za inicijalizaciju i jedan uređaj za uparivanje.',
   onboarding_description_4:
-    'Vultisig je novčanik bez početnih fraza. Umjesto toga koristi lako upravljive trezorske dijeljene resurse. Svaki uređaj ima svoj jedinstveni trezorski dijeljeni resurs koji zahtijeva zasebnu sigurnosnu kopiju.',
+    '{{productName}} je novčanik bez početnih fraza. Umjesto toga koristi lako upravljive trezorske dijeljene resurse. Svaki uređaj ima svoj jedinstveni trezorski dijeljeni resurs koji zahtijeva zasebnu sigurnosnu kopiju.',
   operator_fee: 'Naknada operatera',
   basis_points: 'Bazni bodovi',
   optionalDevice: 'Dodatni uređaj',
@@ -672,7 +668,7 @@ export const hr = {
   price_impact_average: 'Prosječno',
   price_impact_good: 'Dobro',
   price_impact_high: 'Visok utjecaj',
-  prioritize_vultisig: 'Dajte prioritet Vultisigu',
+  prioritize_vultisig: 'Dajte prioritet {{productName}}u',
   priority: 'Prioritet',
   priority_fee: 'Prioritetna naknada',
   privacy_policy: 'Pravila o privatnosti',
@@ -720,7 +716,7 @@ export const hr = {
   referral_program: 'Program preporuka',
   referral_reg_fee: 'Kotizacija za registraciju',
   referral_status: 'Status',
-  manage_referral_title: 'Vultisig preporuke',
+  manage_referral_title: '{{productName}} preporuke',
   referrals_default_title: 'Preporuka',
   referrals_summary: {
     item_1: {
@@ -824,7 +820,7 @@ export const hr = {
   select_vault_backup_share_description:
     'Ova sigurnosna kopija sadrži više dijeljenih trezora. Odaberite dijeljenje za ovaj uređaj.',
   unsupported_vault_backup_file:
-    'Ova datoteka ne izgleda kao sigurnosna kopija Vultisig trezora. Odaberite datoteku `.vult` ili `.vult.zip` izvezenu iz Vultisig aplikacije.',
+    'Ova datoteka ne izgleda kao sigurnosna kopija {{productName}} trezora. Odaberite datoteku `.vult` ili `.vult.zip` izvezenu iz {{productName}} aplikacije.',
   select_chain: 'Odaberite lanac',
   select_chains: 'Odaberite',
   select_chains_manually: 'Ručni odabir lanaca',
@@ -1101,10 +1097,9 @@ export const hr = {
   via: 'preko',
   view_on_explorer: 'Prikaži u Exploreru',
   vote: 'Glasanje',
-  vultisig: 'Vultisig',
-  vultisig_community: 'Vultisig zajednica',
-  vultisig_education: 'Vultisig obrazovanje',
-  vultisig_website: 'Vultisig web stranica',
+  vultisig_community: '{{productName}} zajednica',
+  vultisig_education: '{{productName}} obrazovanje',
+  vultisig_website: '{{productName}} web stranica',
   waitingOnDevices: 'Čekanje na uređaje...',
   waiting_for_devices_to_join: 'Čekanje pridruživanja drugih uređaja',
   waiting_for_devices_to_join_description:
@@ -1298,7 +1293,7 @@ export const hr = {
   qbtc_onboarding_feature_generate_title:
     'Generirajte svoj kvantni par ključeva',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig pokreće lokalnu MPC ceremoniju na vašim trezorskim uređajima kako bi se stvorio novi par ključeva.',
+    '{{productName}} pokreće lokalnu MPC ceremoniju na vašim trezorskim uređajima kako bi se stvorio novi par ključeva.',
   qbtc_onboarding_feature_link_title: 'Povežite ga s vašim postojećim trezorom',
   qbtc_onboarding_feature_link_description:
     'Kvantni ključ je vezan za vašu trenutnu strukturu dijeljenja trezora. Nije potrebno ponovno dijeljenje.',
@@ -1331,7 +1326,6 @@ export const hr = {
   station_migration_summary_total_one: 'Novčanik {{count}}',
   station_migration_summary_total_other: 'Novčanici {{count}}',
   station_migration_status_supported: 'Podržano',
-  station_migration_status_reconnect: 'Ponovno se poveži',
   station_migration_status_unsupported: 'Nepodržano',
   station_migration_status_corrupt: 'Nevažeće',
   station_migration_status_needs_review: 'Potreban je pregled',
@@ -1357,10 +1351,8 @@ export const hr = {
     'Šifrirani podaci privatnog ključa Terra dostupni su za budući uvoz.',
   station_migration_reason_supported_legacy_private_key:
     'Za budući uvoz prisutni su naslijeđeni šifrirani podaci privatnog ključa.',
-  station_migration_reason_ledger_reconnect:
-    'Station pohranjuje podatke javnog računa za ovaj Ledger novčanik. Kasnije ponovno spojite hardverski uređaj da biste ga koristili u Station.',
   station_migration_reason_multisig:
-    'Station pohranjuje samo javne metapodatke s višestrukim potpisom. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u Vultisig trezor.',
+    'Station pohranjuje samo javne metapodatke s višestrukim potpisom. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u {{productName}} trezor.',
   station_migration_reason_encrypted_seed_not_string:
     'encryptedSeed je prisutan, ali nije niz znakova.',
   station_migration_reason_encrypted_invalid_shape:
@@ -1413,11 +1405,20 @@ export const hr = {
   station_migration_status_reason_importing:
     'Uvoz je započeo. Vratite se ovdje nakon završetka postavljanja ako se ovaj redak ne ažurira.',
   station_migration_status_reason_migrated:
-    'Ovaj novčanik je uvezen u Vultisig. Stara pohrana Station je još uvijek sačuvana.',
+    'Ovaj novčanik je uvezen u {{productName}}. Stara pohrana Station je još uvijek sačuvana.',
   station_migration_status_reason_skipped:
     'Ovaj novčanik je preskočen. Možete ga ponovno otključati kad god budete spremni.',
   station_migration_status_reason_vault_import_failed:
     'Uvoz iz trezora nije uspio tijekom generiranja ključa. Ponovno otključajte ovaj novčanik da biste pokušali ponovno.',
   station_migration_status_reason_vault_save_failed:
-    'Uvoz iz trezora je završen, ali spremanje trezora Vultisig nije uspjelo. Ponovno otključajte ovaj novčanik za ponovni pokušaj.',
+    'Uvoz iz trezora je završen, ali spremanje trezora {{productName}} nije uspjelo. Ponovno otključajte ovaj novčanik za ponovni pokušaj.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station pohranjuje samo javne Ledger metapodatke. Ne pohranjuje privatne ključeve koji se mogu pretvoriti u trezor {{productName}}.',
+  paired: 'Upareno',
+  plugin_marketplace_signin_description:
+    'Prijavite se sa svojim {{productName}} trezorom za pristup aplikacijama za automatizaciju vaše digitalne imovine',
+  plugin_marketplace_welcome: 'Dobrodošli na tržište dodataka {{productName}}',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Aplikacije nikada ne mogu potpisivati ​​transakcije koje prethodno niste odobrili.',
+  extension_version: '{{brand}} V{{version}}',
 }

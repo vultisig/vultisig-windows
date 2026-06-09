@@ -5,12 +5,14 @@
     "lib/ui/form/FormCheckBadge.tsx"
   ],
   "ignoreBinaries": [
+    "go",
     "wails"
   ],
   "ignoreDependencies": [
+    "@secretlint/secretlint-rule-preset-recommend",
+    "@vitest/coverage-v8",
     "babel-plugin-react-compiler",
-    "@vultisig/mpc-types",
-    "@vultisig/mpc-wasm"
+    "markdown-link-check"
   ],
   "workspaces": {
     "clients/desktop": {
@@ -36,7 +38,6 @@
         "@fontsource/montserrat",
         "@fontsource/roboto-mono",
         "@testing-library/jest-dom",
-        "@testing-library/react",
         "@types/express",
         "@types/web-push",
         "express",

@@ -60,7 +60,8 @@ export const en = {
   asset: 'Asset',
   assets: 'Assets',
   at_least_one_device: 'At least one device',
-  at_least_one_device_subtitle: 'Any device that can run Vultisig will work.',
+  at_least_one_device_subtitle:
+    'Any device that can run {{productName}} will work.',
   available: 'Available',
   back: 'Back',
   before_you_start: 'Before you start...',
@@ -107,7 +108,7 @@ export const en = {
   bronze: 'Bronze',
   diamond: 'Diamond',
   buy: 'Buy',
-  by_vultisig: 'by Vultisig',
+  by_vultisig: 'by {{productName}}',
   camera_access_blocked:
     'Camera access is blocked. Please enable it in your browser settings.',
   cache_password_for_5_min: 'Remember password for 5 minutes',
@@ -153,11 +154,6 @@ export const en = {
   circle: {
     banner_text:
       "Funds remain fully under your vault's control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.",
-    deposit: 'Deposit',
-    deposit_header: 'Deposit to Circle Account',
-    verify_deposit: 'Verify Deposit',
-    introduction:
-      'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
     open_account: 'Open Account',
     withdraw: 'Withdraw',
     withdraw_header: 'Withdraw from Circle',
@@ -191,7 +187,8 @@ export const en = {
   connect: 'Connect',
   connect_dapp: 'Connect dApp',
   connect_to_site: 'Connect to {{site}}',
-  connect_website_subtitle: 'Connect this website with Vultisig Extension',
+  connect_website_subtitle:
+    'Connect this website with {{productExtensionName}}',
   connected_dapps: 'Connected dApps',
   connecting_to_server: 'Connecting to server',
   continue: 'Continue',
@@ -341,35 +338,36 @@ export const en = {
   failed_to_save_vault: 'Failed to save vault',
   faq: 'FAQ',
   faq_comparison_content:
-    'It is built on MPC technology, which eliminates the need for seed phrases and supports multiple blockchains, making Vultisig flexible and chain-agnostic.',
-  faq_comparison_title: 'How does Vultisig compare to other multisig wallets?',
+    'It is built on MPC technology, which eliminates the need for seed phrases and supports multiple blockchains, making {{productName}} flexible and chain-agnostic.',
+  faq_comparison_title:
+    'How does {{productName}} compare to other multisig wallets?',
   faq_data_protection_content:
-    'Vultisig does not store any user information from its mobile apps.',
+    '{{productName}} does not store any user information from its mobile apps.',
   faq_data_protection_title:
-    'How does Vultisig handle privacy and data protection?',
+    'How does {{productName}} handle privacy and data protection?',
   faq_is_open_source_content:
-    'Yes, Vultisig is open source and has undergone security audits. Both the audit reports and the source code are accessible.',
-  faq_is_open_source_title: 'Is Vultisig open source and audited?',
+    'Yes, {{productName}} is open source and has undergone security audits. Both the audit reports and the source code are accessible.',
+  faq_is_open_source_title: 'Is {{productName}} open source and audited?',
   faq_need_to_register_content:
-    'Vultisig supports major cryptocurrencies and tokens, with over 30 chains and their tokens, currently available.',
+    '{{productName}} supports major cryptocurrencies and tokens, with over 30 chains and their tokens, currently available.',
   faq_need_to_register_title:
-    'What cryptocurrencies are supported by Vultisig?',
+    'What cryptocurrencies are supported by {{productName}}?',
   faq_recover_assets_content:
-    "Vultisig is free to use. Only standard network fees apply to sending. And for swaps and bridges, there's a 0.5% (50 bps) fee.",
+    "{{productName}} is free to use. Only standard network fees apply to sending. And for swaps and bridges, there's a 0.5% (50 bps) fee.",
   faq_recover_assets_title: 'What are the fees and costs?',
   faq_secure_crypto_vault_content:
     'Yes, as long as you saved and have access to your backups when creating the vault. You can import these backups on a new device to regain access to your assets.',
   faq_secure_crypto_vault_title: 'Can I recover my assets if I lose a device?',
   faq_setup_crypto_vault_content:
     'It is a secure, multi-authentication wallet based on MPC technology that is used to manage digital assets. Transactions require approval from multiple devices.',
-  faq_setup_crypto_vault_title: 'What is Vultisig?',
+  faq_setup_crypto_vault_title: 'What is {{productName}}?',
   faq_supported_cryptocurrencies_content:
-    'Vultisig offers enhanced security with multi-device authentication, support for many blockchains, easy recovery options, and no seed phrases or user tracking.',
+    '{{productName}} offers enhanced security with multi-device authentication, support for many blockchains, easy recovery options, and no seed phrases or user tracking.',
   faq_supported_cryptocurrencies_title:
-    'What are the benefits of using Vultisig?',
+    'What are the benefits of using {{productName}}?',
   faq_vultisig_make_money_content:
-    'Vultisig securely stores and manages digital assets. All actions, such as sending or swapping, require the threshold of devices to sign transactions.',
-  faq_vultisig_make_money_title: 'How is Vultisig used?',
+    '{{productName}} securely stores and manages digital assets. All actions, such as sending or swapping, require the threshold of devices to sign transactions.',
+  faq_vultisig_make_money_title: 'How is {{productName}} used?',
   fast: 'Fast',
   fast_vault_session_conflict: 'Vault Share Mismatch',
   fast_vault_session_conflict_description:
@@ -434,7 +432,7 @@ export const en = {
   grant_camera_permission: 'Grant Camera Permission',
   gwei: 'GWEI',
   header_tooltip_content:
-    'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
+    'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the {{productName}} referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
   header_tooltip_title: 'Referral Program',
   having_trouble_scanning_help: 'QR scanning help',
   having_trouble_scanning: 'Having trouble scanning?',
@@ -447,10 +445,9 @@ export const en = {
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
   hold: 'Hold',
-  hold_for_paired_sign: 'Hold for paired sign',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
-    'This IBC transaction includes a memo, but Vultisig currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
+    'This IBC transaction includes a memo, but {{productName}} currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
   ibc_transaction_not_supporting_memo_title:
     'IBC Transaction Memo Not Supported',
   ibc_transfer: 'IBC Transfer',
@@ -528,7 +525,8 @@ export const en = {
   loading: 'Loading...',
   localMode: "You're in local mode",
   lock_time: 'Lock Time',
-  lock_vultisig_automatically_after: 'Lock Vultisig automatically after...',
+  lock_vultisig_automatically_after:
+    'Lock {{productName}} automatically after...',
   looking_for_server: 'Looking for FastVaultServer...',
   looks_good: 'Looks good',
   low: 'Low',
@@ -622,13 +620,13 @@ export const en = {
   off: 'Off',
   on: 'On',
   onboarding_description_1:
-    'Vultisig is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. Vultisig is fully self-custodial.',
+    '{{productName}} is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. {{productName}} is fully self-custodial.',
   onboarding_description_2:
-    'Vultisig does not track your activities or require any registrations. Vultisig is fully open-source, ensuring transparency and trust.',
+    '{{productName}} does not track your activities or require any registrations. {{productName}} is fully open-source, ensuring transparency and trust.',
   onboarding_description_3:
-    'Vultisig is natively a multi-device application. Requiring at least two devices to create a secure vault. One initiating and one pairing device.',
+    '{{productName}} is natively a multi-device application. Requiring at least two devices to create a secure vault. One initiating and one pairing device.',
   onboarding_description_4:
-    'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
+    '{{productName}} is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   operator_fee: "Operator's Fee",
   basis_points: 'Basis Points',
   optionalDevice: 'Optional Device',
@@ -650,11 +648,18 @@ export const en = {
   pick_referral_code: 'Pick Referral Code',
   platinum: 'Platinum',
   plugin_info: 'App Info',
+  plugin_marketplace_signin_description:
+    'Sign in with your {{productName}} Vault to access Apps to automate your digital Assets',
+  plugin_marketplace_welcome:
+    'Welcome to the {{productName}} Plugin Marketplace',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Apps can never sign transactions you do not first approve.',
   automation_info: 'Automation Info',
   plugin_server_url: 'App Server URL',
   app_install_timeout: 'App Install Timeout (ms)',
   app_install_timeout_invalid: 'Please enter a valid number.',
   app_install_timeout_min: 'Must be 0 or greater.',
+  extension_version: '{{brand}} V{{version}}',
   to_start_plugin_installation: 'To start the plugin installation',
   portfolio: 'Portfolio',
   portfolio_balance: 'Portfolio Balance',
@@ -665,7 +670,7 @@ export const en = {
   price_impact_good: 'Good',
   price_impact_high: 'High Impact',
   primary_type: 'Primary type',
-  prioritize_vultisig: 'Prioritize Vultisig',
+  prioritize_vultisig: 'Prioritize {{productName}}',
   priority: 'Priority',
   priority_fee: 'Priority fee',
   privacy_policy: 'Privacy Policy',
@@ -687,7 +692,7 @@ export const en = {
     'Classical keys can be broken by quantum computers. Enabling QBTC requires generating a new key pair.',
   qbtc_onboarding_feature_generate_title: 'Generate your quantum key pair',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig runs a local MPC ceremony across your vault devices to produce a new key pair.',
+    '{{productName}} runs a local MPC ceremony across your vault devices to produce a new key pair.',
   qbtc_onboarding_feature_link_title: 'Link it to your existing vault',
   qbtc_onboarding_feature_link_description:
     'The quantum key is bound to your current vault share structure. No reshare needed.',
@@ -736,7 +741,7 @@ export const en = {
   referral_program: 'Referral Program',
   referral_reg_fee: 'Registration Fee',
   referral_status: 'Status',
-  manage_referral_title: 'Vultisig Referrals',
+  manage_referral_title: '{{productName}} Referrals',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -839,7 +844,7 @@ export const en = {
   select_vault_backup_share_description:
     'This backup contains multiple vault shares. Choose the share for this device.',
   unsupported_vault_backup_file:
-    "This file doesn't look like a Vultisig vault backup. Pick a `.vult` or `.vult.zip` file exported from the Vultisig app.",
+    "This file doesn't look like a {{productName}} vault backup. Pick a `.vult` or `.vult.zip` file exported from the {{productName}} app.",
   select_chain: 'Select chain',
   select_chains: 'Select chains',
   select_chains_manually: 'Select chains manually',
@@ -1144,10 +1149,9 @@ export const en = {
   via: 'via',
   view_on_explorer: 'View on Explorer',
   vote: 'Vote',
-  vultisig: 'Vultisig',
-  vultisig_community: 'Vultisig Community',
-  vultisig_education: 'Vultisig Education',
-  vultisig_website: 'Vultisig Website',
+  vultisig_community: '{{productName}} Community',
+  vultisig_education: '{{productName}} Education',
+  vultisig_website: '{{productName}} Website',
   waitingOnDevices: 'Waiting on devices...',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
   waiting_for_devices_to_join_description:
@@ -1162,6 +1166,7 @@ export const en = {
   add_thor_lp: 'Add THORChain LP',
   remove_thor_lp: 'Remove THORChain LP',
   pool: 'Pool',
+  paired: 'Paired',
   paired_address: 'Paired Address',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   yesterday: 'Yesterday',
@@ -1307,7 +1312,6 @@ export const en = {
   station_migration_summary_total_one: '{{count}} wallet',
   station_migration_summary_total_other: '{{count}} wallets',
   station_migration_status_supported: 'Supported',
-  station_migration_status_reconnect: 'Reconnect',
   station_migration_status_unsupported: 'Unsupported',
   station_migration_status_corrupt: 'Invalid',
   station_migration_status_needs_review: 'Needs review',
@@ -1319,13 +1323,13 @@ export const en = {
   station_migration_status_reason_importing:
     'Import was started. Return here after setup finishes if this row does not update.',
   station_migration_status_reason_migrated:
-    'This wallet was imported into Vultisig. Old Station storage is still preserved.',
+    'This wallet was imported into {{productName}}. Old Station storage is still preserved.',
   station_migration_status_reason_skipped:
     'This wallet was skipped. You can unlock it again whenever you are ready.',
   station_migration_status_reason_vault_import_failed:
     'Vault import failed during key generation. Unlock this wallet again to retry.',
   station_migration_status_reason_vault_save_failed:
-    'Vault import completed, but saving the Vultisig vault failed. Unlock this wallet again to retry.',
+    'Vault import completed, but saving the {{productName}} vault failed. Unlock this wallet again to retry.',
   station_migration_password_title: 'Unlock supported wallets',
   station_migration_password_description:
     'Your Station password stays on this device and is only used to decrypt old Station wallet data.',
@@ -1374,10 +1378,10 @@ export const en = {
     'Encrypted Terra private-key data is present for a future import.',
   station_migration_reason_supported_legacy_private_key:
     'Legacy encrypted private-key data is present for a future import.',
-  station_migration_reason_ledger_reconnect:
-    'Station stores public account details for this Ledger wallet. Reconnect the hardware device later to use it in Station.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station only stores public Ledger metadata. It does not store private keys that can be converted into a {{productName}} vault.',
   station_migration_reason_multisig:
-    'Station only stores public multisig metadata. It does not store private keys that can be converted into a Vultisig vault.',
+    'Station only stores public multisig metadata. It does not store private keys that can be converted into a {{productName}} vault.',
   station_migration_reason_encrypted_seed_not_string:
     'encryptedSeed is present but is not a string.',
   station_migration_reason_encrypted_invalid_shape:

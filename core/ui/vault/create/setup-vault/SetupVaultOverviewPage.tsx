@@ -95,6 +95,7 @@ export const SetupVaultOverviewPage = () => {
       selectedDeviceCount={selectedDeviceCount}
       onBack={goBack}
       onGetStarted={handleGetStarted}
+      isGetStartedLoading={isFastVault && !!ecdsaPublicKey && isCheckingVault}
     />
   )
 }

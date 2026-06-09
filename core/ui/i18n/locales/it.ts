@@ -63,7 +63,7 @@ export const it = {
   assets: 'Attività',
   at_least_one_device: 'Almeno un dispositivo',
   at_least_one_device_subtitle:
-    'Qualsiasi dispositivo in grado di eseguire Vultisig funzionerà.',
+    'Qualsiasi dispositivo in grado di eseguire {{productName}} funzionerà.',
   available: 'Disponibile',
   back: 'Indietro',
   before_you_start: 'Prima di iniziare...',
@@ -113,7 +113,7 @@ export const it = {
   bronze: 'Bronzo',
   diamond: 'Diamante',
   buy: 'Acquistare',
-  by_vultisig: 'di Vultisig',
+  by_vultisig: 'di {{productName}}',
   camera_access_blocked:
     "L'accesso alla telecamera è bloccato. Abilitalo nelle impostazioni del tuo browser.",
   cache_password_for_5_min: 'Ricorda la password per 5 minuti',
@@ -160,11 +160,6 @@ export const it = {
   circle: {
     banner_text:
       'I fondi rimangono completamente sotto il controllo del tuo caveau. Il rendimento di Circle è generato tramite tesorerie off-chain sicure. Puoi prelevare in qualsiasi momento dopo il regolamento.',
-    deposit: 'Depositare',
-    deposit_header: 'Deposito sul conto Circle',
-    verify_deposit: 'Verifica deposito',
-    introduction:
-      'Deposita i tuoi $USDC su un conto Circle e guadagna. In tutta sicurezza, nel tuo caveau Vultisig.',
     open_account: 'Apri conto',
     withdraw: 'Ritirare',
     withdraw_header: 'Ritirarsi dal Cerchio',
@@ -199,7 +194,8 @@ export const it = {
   connect: 'Collegare',
   connect_dapp: 'Connetti dApp',
   connect_to_site: 'Connettiti a {{site}}',
-  connect_website_subtitle: 'Collega questo sito web con Vultisig Extension',
+  connect_website_subtitle:
+    'Collega questo sito web con {{productExtensionName}}',
   connected_dapps: 'dApp connesse',
   connecting_to_server: 'Connessione al server',
   continue: 'Continuare',
@@ -354,21 +350,23 @@ export const it = {
   failed_to_save_vault: 'Impossibile salvare il vault',
   faq: 'Domande frequenti',
   faq_comparison_content:
-    'È basato sulla tecnologia MPC, che elimina la necessità di frasi seed e supporta più blockchain, rendendo Vultisig flessibile e indipendente dalla catena.',
+    'È basato sulla tecnologia MPC, che elimina la necessità di frasi seed e supporta più blockchain, rendendo {{productName}} flessibile e indipendente dalla catena.',
   faq_comparison_title:
-    'Come si confronta Vultisig con altri portafogli multisig?',
+    'Come si confronta {{productName}} con altri portafogli multisig?',
   faq_data_protection_content:
-    'Vultisig non memorizza alcuna informazione utente dalle sue app mobili.',
+    '{{productName}} non memorizza alcuna informazione utente dalle sue app mobili.',
   faq_data_protection_title:
-    'Come gestisce Vultisig la privacy e la protezione dei dati?',
+    'Come gestisce {{productName}} la privacy e la protezione dei dati?',
   faq_is_open_source_content:
-    'Sì, Vultisig è open source ed è stato sottoposto a controlli di sicurezza. Sia i report di audit che il codice sorgente sono accessibili.',
-  faq_is_open_source_title: 'Vultisig è open source e sottoposto a verifica?',
+    'Sì, {{productName}} è open source ed è stato sottoposto a controlli di sicurezza. Sia i report di audit che il codice sorgente sono accessibili.',
+  faq_is_open_source_title:
+    '{{productName}} è open source e sottoposto a verifica?',
   faq_need_to_register_content:
-    'Vultisig supporta le principali criptovalute e token, con oltre 30 catene e i relativi token attualmente disponibili.',
-  faq_need_to_register_title: 'Quali criptovalute sono supportate da Vultisig?',
+    '{{productName}} supporta le principali criptovalute e token, con oltre 30 catene e i relativi token attualmente disponibili.',
+  faq_need_to_register_title:
+    'Quali criptovalute sono supportate da {{productName}}?',
   faq_recover_assets_content:
-    "Vultisig è gratuito. Per l'invio si applicano solo le commissioni di rete standard. Per swap e bridge, è prevista una commissione dello 0,5% (50 bps).",
+    "{{productName}} è gratuito. Per l'invio si applicano solo le commissioni di rete standard. Per swap e bridge, è prevista una commissione dello 0,5% (50 bps).",
   faq_recover_assets_title: 'Quali sono le tariffe e i costi?',
   faq_secure_crypto_vault_content:
     "Sì, a condizione che tu abbia salvato e abbia accesso ai tuoi backup durante la creazione del vault. Puoi importare questi backup su un nuovo dispositivo per riottenere l'accesso ai tuoi asset.",
@@ -376,14 +374,14 @@ export const it = {
     'Posso recuperare i miei beni se perdo un dispositivo?',
   faq_setup_crypto_vault_content:
     "Si tratta di un portafoglio sicuro e multi-autenticazione basato sulla tecnologia MPC, utilizzato per gestire asset digitali. Le transazioni richiedono l'approvazione da più dispositivi.",
-  faq_setup_crypto_vault_title: "Che cos'è Vultisig?",
+  faq_setup_crypto_vault_title: "Che cos'è {{productName}}?",
   faq_supported_cryptocurrencies_content:
-    'Vultisig offre una sicurezza avanzata con autenticazione multi-dispositivo, supporto per numerose blockchain, semplici opzioni di ripristino e nessuna frase seed o tracciamento degli utenti.',
+    '{{productName}} offre una sicurezza avanzata con autenticazione multi-dispositivo, supporto per numerose blockchain, semplici opzioni di ripristino e nessuna frase seed o tracciamento degli utenti.',
   faq_supported_cryptocurrencies_title:
-    "Quali sono i vantaggi dell'utilizzo di Vultisig?",
+    "Quali sono i vantaggi dell'utilizzo di {{productName}}?",
   faq_vultisig_make_money_content:
-    "Vultisig archivia e gestisce in modo sicuro le risorse digitali. Tutte le azioni, come l'invio o lo scambio, richiedono la soglia dei dispositivi per firmare le transazioni.",
-  faq_vultisig_make_money_title: 'Come si usa Vultisig?',
+    "{{productName}} archivia e gestisce in modo sicuro le risorse digitali. Tutte le azioni, come l'invio o lo scambio, richiedono la soglia dei dispositivi per firmare le transazioni.",
+  faq_vultisig_make_money_title: 'Come si usa {{productName}}?',
   fast: 'Veloce',
   fast_vault_session_conflict: 'Mancata corrispondenza della quota del vault',
   fast_vault_session_conflict_description:
@@ -452,7 +450,7 @@ export const it = {
   grant_camera_permission: "Concedi l'autorizzazione alla telecamera",
   gwei: 'GWEI',
   header_tooltip_content:
-    'Il programma di referral si applica agli scambi THORChain e si basa sul principio del "best effort". È necessario registrare un THORName per utilizzare il referral Vultisig. La quota di registrazione è di 10 RUNE e 1 RUNE all\'anno, che viene versata alla rete THORChain.',
+    'Il programma di referral si applica agli scambi THORChain e si basa sul principio del "best effort". È necessario registrare un THORName per utilizzare il referral {{productName}}. La quota di registrazione è di 10 RUNE e 1 RUNE all\'anno, che viene versata alla rete THORChain.',
   header_tooltip_title: 'Programma di segnalazione',
   having_trouble_scanning_help: 'Aiuto per la scansione QR',
   having_trouble_scanning: 'Problemi con la scansione?',
@@ -466,10 +464,9 @@ export const it = {
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
   hold: 'Mantieni',
-  hold_for_paired_sign: 'Tieni premuto per il segno accoppiato',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:
-    "Questa transazione IBC include un promemoria, ma Vultisig attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
+    "Questa transazione IBC include un promemoria, ma {{productName}} attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
   ibc_transaction_not_supporting_memo_title:
     'Promemoria transazione IBC non supportato',
   ibc_transfer: 'Trasferimento IBC',
@@ -549,7 +546,8 @@ export const it = {
   loading: 'Caricamento...',
   localMode: 'Sei in modalità locale',
   lock_time: 'Tempo di blocco',
-  lock_vultisig_automatically_after: 'Blocca Vultisig automaticamente dopo...',
+  lock_vultisig_automatically_after:
+    'Blocca {{productName}} automaticamente dopo...',
   looking_for_server: 'Cerco FastVaultServer...',
   looks_good: 'Sembra buono',
   low: 'Basso',
@@ -642,13 +640,13 @@ export const it = {
   off: 'Spento',
   on: 'SU',
   onboarding_description_1:
-    'Vultisig è un caveau crittografico sicuro e multi-dispositivo, compatibile con tutte le principali blockchain e con oltre 10.000 token. Vultisig è completamente auto-custodito.',
+    '{{productName}} è un caveau crittografico sicuro e multi-dispositivo, compatibile con tutte le principali blockchain e con oltre 10.000 token. {{productName}} è completamente auto-custodito.',
   onboarding_description_2:
-    'Vultisig non traccia le tue attività né richiede alcuna registrazione. Vultisig è completamente open source, garantendo trasparenza e affidabilità.',
+    '{{productName}} non traccia le tue attività né richiede alcuna registrazione. {{productName}} è completamente open source, garantendo trasparenza e affidabilità.',
   onboarding_description_3:
-    "Vultisig è nativamente un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare un vault sicuro: un dispositivo di avvio e uno di associazione.",
+    "{{productName}} è nativamente un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare un vault sicuro: un dispositivo di avvio e uno di associazione.",
   onboarding_description_4:
-    'Vultisig è un portafoglio senza seed phrase. Utilizza invece condivisioni vault facili da gestire. Ogni dispositivo ha la sua condivisione vault unica che necessita di un backup separato.',
+    '{{productName}} è un portafoglio senza seed phrase. Utilizza invece condivisioni vault facili da gestire. Ogni dispositivo ha la sua condivisione vault unica che necessita di un backup separato.',
   operator_fee: "Tariffa dell'operatore",
   basis_points: 'Punti base',
   optionalDevice: 'Dispositivo opzionale',
@@ -684,7 +682,7 @@ export const it = {
   price_impact_average: 'Media',
   price_impact_good: 'Bene',
   price_impact_high: 'Alto impatto',
-  prioritize_vultisig: 'Dare priorità a Vultisig',
+  prioritize_vultisig: 'Dare priorità a {{productName}}',
   priority: 'Priorità',
   priority_fee: 'Tariffa prioritaria',
   privacy_policy: 'politica sulla riservatezza',
@@ -731,7 +729,7 @@ export const it = {
   referral_program: 'Programma di segnalazione',
   referral_reg_fee: 'Quota di iscrizione',
   referral_status: 'Stato',
-  manage_referral_title: 'Riferimenti Vultisig',
+  manage_referral_title: 'Riferimenti {{productName}}',
   referrals_default_title: 'Riferimento',
   referrals_summary: {
     item_1: {
@@ -838,7 +836,7 @@ export const it = {
   select_vault_backup_share_description:
     'Questo backup contiene più condivisioni di vault. Scegli la condivisione per questo dispositivo.',
   unsupported_vault_backup_file:
-    "Questo file non sembra essere un backup del vault di Vultisig. Seleziona un file `.vult` o `.vult.zip` esportato dall'app Vultisig.",
+    "Questo file non sembra essere un backup del vault di {{productName}}. Seleziona un file `.vult` o `.vult.zip` esportato dall'app {{productName}}.",
   select_chain: 'Seleziona catena',
   select_chains: 'Selezionare',
   select_chains_manually: 'Seleziona manualmente le catene',
@@ -1121,10 +1119,9 @@ export const it = {
   via: 'via',
   view_on_explorer: 'Visualizza su Esplora risorse',
   vote: 'Votare',
-  vultisig: 'Vultisig',
-  vultisig_community: 'Comunità di Vultisig',
-  vultisig_education: 'Vultisig Education',
-  vultisig_website: 'Sito web Vultisig',
+  vultisig_community: 'Comunità di {{productName}}',
+  vultisig_education: '{{productName}} Education',
+  vultisig_website: 'Sito web {{productName}}',
   waitingOnDevices: 'In attesa dei dispositivi...',
   waiting_for_devices_to_join: 'In attesa che altri dispositivi si uniscano',
   waiting_for_devices_to_join_description:
@@ -1323,7 +1320,7 @@ export const it = {
   qbtc_onboarding_feature_generate_title:
     'Genera la tua coppia di chiavi quantistiche',
   qbtc_onboarding_feature_generate_description:
-    'Vultisig esegue una procedura MPC locale sui dispositivi del vault per generare una nuova coppia di chiavi.',
+    '{{productName}} esegue una procedura MPC locale sui dispositivi del vault per generare una nuova coppia di chiavi.',
   qbtc_onboarding_feature_link_title: 'Collegalo al tuo vault esistente',
   qbtc_onboarding_feature_link_description:
     'La chiave quantistica è associata alla struttura di condivisione del tuo vault corrente. Non è necessaria alcuna nuova condivisione.',
@@ -1356,7 +1353,6 @@ export const it = {
   station_migration_summary_total_one: 'Portafoglio {{count}}',
   station_migration_summary_total_other: 'portafogli {{count}}',
   station_migration_status_supported: 'Supportato',
-  station_migration_status_reconnect: 'Ricollega',
   station_migration_status_unsupported: 'Non supportato',
   station_migration_status_corrupt: 'Non valido',
   station_migration_status_needs_review: 'Necessita di revisione',
@@ -1384,10 +1380,8 @@ export const it = {
     'I dati crittografati della chiave privata di Terra sono presenti per una futura importazione.',
   station_migration_reason_supported_legacy_private_key:
     'I dati della chiave privata crittografata preesistente sono presenti per una futura importazione.',
-  station_migration_reason_ledger_reconnect:
-    'Station memorizza i dettagli dell&#39;account pubblico per questo portafoglio Ledger. Ricollega il dispositivo hardware in seguito per utilizzarlo in Station.',
   station_migration_reason_multisig:
-    'Station memorizza solo i metadati pubblici multisig. Non memorizza le chiavi private che possono essere convertite in un vault Vultisig.',
+    'Station memorizza solo i metadati pubblici multisig. Non memorizza le chiavi private che possono essere convertite in un vault {{productName}}.',
   station_migration_reason_encrypted_seed_not_string:
     'encryptedSeed è presente ma non è una stringa.',
   station_migration_reason_encrypted_invalid_shape:
@@ -1440,11 +1434,21 @@ export const it = {
   station_migration_status_reason_importing:
     'L&#39;importazione è stata avviata. Se questa riga non si aggiorna, tornare qui al termine della configurazione.',
   station_migration_status_reason_migrated:
-    'Questo portafoglio è stato importato in Vultisig. Il vecchio archivio Station è ancora conservato.',
+    'Questo portafoglio è stato importato in {{productName}}. Il vecchio archivio Station è ancora conservato.',
   station_migration_status_reason_skipped:
     'Questo portafoglio è stato saltato. Puoi sbloccarlo di nuovo quando vuoi.',
   station_migration_status_reason_vault_import_failed:
     'L&#39;importazione del vault non è riuscita durante la generazione della chiave. Sblocca nuovamente questo portafoglio per riprovare.',
   station_migration_status_reason_vault_save_failed:
-    'L&#39;importazione del vault è stata completata, ma il salvataggio del vault Vultisig non è riuscito. Sblocca nuovamente questo portafoglio per riprovare.',
+    'L&#39;importazione del vault è stata completata, ma il salvataggio del vault {{productName}} non è riuscito. Sblocca nuovamente questo portafoglio per riprovare.',
+  station_migration_reason_ledger_public_metadata_only:
+    'Station memorizza solo i metadati pubblici del Ledger. Non memorizza le chiavi private che possono essere convertite in un vault {{productName}}.',
+  paired: 'Accoppiato',
+  plugin_marketplace_signin_description:
+    'Accedi con il tuo Vault {{productName}} per accedere alle app e automatizzare le tue risorse digitali.',
+  plugin_marketplace_welcome:
+    'Benvenuti nel Marketplace del plugin {{productName}}',
+  plugin_permissions_brand_safety_notice:
+    '{{productName}} Le app non possono mai firmare transazioni che tu non approvi prima.',
+  extension_version: '{{brand}} V{{version}}',
 }

@@ -40,6 +40,14 @@ export type BackgroundInterface = {
     { chain: CosmosChain; txBytes: string },
     { txHash: string }
   >
+  suiBuildTransaction: Method<
+    { transactionJson: string; sender: string },
+    { transactionBytes: string }
+  >
+  suiExecuteTransaction: Method<
+    { transactionBytes: string; signature: string },
+    unknown
+  >
   getTokenMetadata: Method<
     Token<CoinKey<ChainWithTokenMetadataDiscovery>>,
     CoinMetadata

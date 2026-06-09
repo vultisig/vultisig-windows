@@ -67,6 +67,7 @@ export type SignMessageInput =
       sign_message: {
         chain:
           | OtherChain.Solana
+          | OtherChain.Sui
           | OtherChain.Ton
           | OtherChain.Tron
           | OtherChain.Polkadot
@@ -75,6 +76,14 @@ export type SignMessageInput =
         useTronHeader?: boolean
         isV2?: boolean
         message: string
+      }
+    }
+  | {
+      // base64-encoded prepared Sui transaction block bytes
+      // (output of @mysten/sui Transaction.build()).
+      sui_sign_transaction: {
+        chain: OtherChain.Sui
+        transactionBytes: string
       }
     }
   | {
