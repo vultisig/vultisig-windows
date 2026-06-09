@@ -33,9 +33,18 @@ const labelKeyMap = {
 
 export type TransactionHistoryTagProps = {
   type: TransactionHistoryTagType
+  /**
+   * Pre-resolved label override. When provided it replaces the default
+   * `type`-derived label (the icon still follows `type`) — used to surface
+   * Cosmos message actions like "Delegate"/"Vote" on otherwise-send records.
+   */
+  label?: string
 }
 
-export const TransactionHistoryTag = ({ type }: TransactionHistoryTagProps) => {
+export const TransactionHistoryTag = ({
+  type,
+  label,
+}: TransactionHistoryTagProps) => {
   const { t } = useTranslation()
   const Icon = iconMap[type]
   const labelKey = labelKeyMap[type]
@@ -44,7 +53,7 @@ export const TransactionHistoryTag = ({ type }: TransactionHistoryTagProps) => {
     <TagPill>
       <Icon style={{ fontSize: 12 }} aria-hidden />
       <Text variant="caption" color="info">
-        {t(labelKey)}
+        {label ?? t(labelKey)}
       </Text>
     </TagPill>
   )
