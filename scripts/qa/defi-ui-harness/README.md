@@ -7,7 +7,7 @@ temporary app by hand.
 yarn qa:defi-ui-harness
 ```
 
-Open <http://127.0.0.1:5177>. The default scenario renders Circle with a funded
+Open `http://127.0.0.1:5177`. The default scenario renders Circle with a funded
 protocol account. Use Playwright or the in-app browser to capture the important
 states:
 
