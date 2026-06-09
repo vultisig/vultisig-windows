@@ -1,5 +1,6 @@
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -17,6 +18,20 @@ import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
+const fromAmountInputDebounceMs = 300
+
+const parseAmountInputValue = (value: string, decimals: number) => {
+  if (value === '') {
+    return null
+  }
+
+  try {
+    return decimalStringToBigInt(value, decimals)
+  } catch {
+    return undefined
+  }
+}
+
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
@@ -30,14 +45,18 @@ export const ManageFromAmount = () => {
     ? fullDecimalString.replace(/\.?0+$/, '')
     : fullDecimalString
   const [inputValue, setInputValue] = useState<string>(trimmedDecimalString)
+  const inputAmount = parseAmountInputValue(inputValue, decimals)
+  const debouncedInputAmount = useDebounce(
+    inputAmount,
+    fromAmountInputDebounceMs
+  )
   const isFeeCoinSelected = isFeeCoin(fromCoinKey)
 
   useEffect(() => {
     // Only update input if the value changed externally (not from user typing)
     // We detect this by checking if the value changed but the input doesn't match
     if (value !== previousValueRef.current) {
-      const currentInputAsBigInt =
-        inputValue === '' ? null : decimalStringToBigInt(inputValue, decimals)
+      const currentInputAsBigInt = parseAmountInputValue(inputValue, decimals)
       if (currentInputAsBigInt !== value) {
         // Remove trailing zeros from the decimal string for display
         setInputValue(trimmedDecimalString)
@@ -46,7 +65,21 @@ export const ManageFromAmount = () => {
     }
   }, [value, trimmedDecimalString, inputValue, decimals])
 
-  const handleInputValueChange = (value: string) => {
+  useEffect(() => {
+    if (
+      debouncedInputAmount === undefined ||
+      debouncedInputAmount !== inputAmount
+    ) {
+      return
+    }
+
+    if (debouncedInputAmount !== value) {
+      previousValueRef.current = debouncedInputAmount
+      setValue?.(debouncedInputAmount)
+    }
+  }, [debouncedInputAmount, inputAmount, setValue, value])
+
+  const handleInputValueChange = (value: string, shouldCommitNow = false) => {
     value = value.replace(/-/g, '')
 
     if (value.startsWith('.')) {
@@ -55,7 +88,10 @@ export const ManageFromAmount = () => {
 
     if (value === '') {
       setInputValue('')
-      setValue?.(null)
+      if (shouldCommitNow) {
+        previousValueRef.current = null
+        setValue?.(null)
+      }
       return
     }
 
@@ -63,12 +99,15 @@ export const ManageFromAmount = () => {
       return
     }
 
-    try {
-      const chainAmount = decimalStringToBigInt(value, decimals)
-      setInputValue(value)
-      setValue?.(chainAmount)
-    } catch {
+    const chainAmount = parseAmountInputValue(value, decimals)
+    if (chainAmount === undefined) {
       return
+    }
+
+    setInputValue(value)
+    if (shouldCommitNow) {
+      previousValueRef.current = chainAmount
+      setValue?.(chainAmount)
     }
   }
 
@@ -86,6 +125,10 @@ export const ManageFromAmount = () => {
           onWheel={event => event.currentTarget.blur()}
           value={inputValue}
           onValueChange={handleInputValueChange}
+          onPaste={event => {
+            event.preventDefault()
+            handleInputValueChange(event.clipboardData.getData('text'), true)
+          }}
           data-testid="swap-from-amount-input"
         />
         {value !== null && (
@@ -121,7 +164,7 @@ export const ManageFromAmount = () => {
                   const trimmed = cropped.includes('.')
                     ? cropped.replace(/\.?0+$/, '')
                     : cropped
-                  handleInputValueChange(trimmed)
+                  handleInputValueChange(trimmed, true)
                 }}
                 key={suggestion}
                 value={suggestion}

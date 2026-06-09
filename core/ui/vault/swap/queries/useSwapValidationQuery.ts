@@ -18,11 +18,14 @@ export const useSwapValidationQuery = () => {
   const coin = useCurrentVaultCoin(fromCoinKey)
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const swapQuoteQuery = useSwapQuoteQuery()
+  const firmSwapQuoteQuery = swapQuoteQuery.isPlaceholderData
+    ? { ...swapQuoteQuery, data: undefined, isPending: true }
+    : swapQuoteQuery
 
   const combined = useCombineQueries({
     queries: {
       balance: balanceQuery,
-      swapQuote: swapQuoteQuery,
+      swapQuote: firmSwapQuoteQuery,
     },
     joinData: ({ balance }) => {
       if (amount === null || amount === undefined) {
