@@ -7,6 +7,7 @@ type DecodedPureValue =
   | { kind: 'u8'; value: number }
   | { kind: 'u64'; value: bigint }
   | { kind: 'u128'; value: bigint }
+  | { kind: 'u256'; value: bigint }
   | { kind: 'address'; value: string }
   | { kind: 'bytes'; byteLength: number }
 
@@ -69,7 +70,7 @@ export const decodePureValue = (
         break
       case 'u256':
         if (bytes.length === 32)
-          return { kind: 'u128', value: readLeBigInt(bytes) }
+          return { kind: 'u256', value: readLeBigInt(bytes) }
         break
       case 'address':
         if (bytes.length === 32) return { kind: 'address', value: hex(bytes) }
@@ -109,6 +110,8 @@ export const decodedPureLabel = (decoded: DecodedPureValue): string => {
       return 'u64'
     case 'u128':
       return 'u128'
+    case 'u256':
+      return 'u256'
     case 'address':
       return 'address'
     case 'bytes':
@@ -131,6 +134,7 @@ export const decodedPureDisplay = (
       return decoded.value.toString()
     case 'u64':
     case 'u128':
+    case 'u256':
       return decoded.value.toLocaleString('en-US')
     case 'address':
       return decoded.value

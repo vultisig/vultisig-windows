@@ -21,24 +21,32 @@ const suiNativeCoinType = '0x2::sui::SUI'
 // Native SUI must be modelled as a fee coin (no `id`), otherwise `CoinIcon`
 // renders the chain-badge overlay on top of the token logo via
 // `shouldDisplayChainLogo`.
-const toCoin = (asset: BlockaidSuiAsset): Coin => {
-  const base = {
+const toCoin = (asset: BlockaidSuiAsset): Coin<OtherChain.Sui> => {
+  const base: Coin<OtherChain.Sui> = {
     chain: OtherChain.Sui,
     ticker: asset.symbol,
     decimals: asset.decimals,
     logo: asset.logo,
   }
-  if (asset.coinType === suiNativeCoinType) {
-    return base as Coin
-  }
-  return { ...base, id: asset.coinType } as Coin
+  if (asset.coinType === suiNativeCoinType) return base
+  return { ...base, id: asset.coinType }
 }
 
-const formatAmount = (amount: bigint, decimals: number): string =>
+type FormatAmountInput = { amount: bigint; decimals: number }
+
+const formatAmount = ({ amount, decimals }: FormatAmountInput): string =>
   Number(formatUnits(amount, decimals)).toString()
 
 type SuiTxIntentDisplayProps = { intent: BlockaidSuiSimulationInfo }
 
+/**
+ * Renders the Blockaid-derived "You're swapping" / "You're sending" headline
+ * for a Sui dApp transaction. Mirrors the swap section of the sendTx popup
+ * used by Solana, so users see the same shape (logo + amount + ticker + arrow
+ * + divider) regardless of which chain the dApp is on. Reads the `intent`
+ * shape produced by `parseBlockaidSuiSimulation`; the parent component is
+ * responsible for hiding this panel when the parser returns `null`.
+ */
 export const SuiTxIntentDisplay: FC<SuiTxIntentDisplayProps> = ({ intent }) => {
   const { t } = useTranslation()
   if ('swap' in intent) {
@@ -50,7 +58,7 @@ export const SuiTxIntentDisplay: FC<SuiTxIntentDisplayProps> = ({ intent }) => {
         </Text>
         <SwapAmountDisplay
           coin={toCoin(from)}
-          amount={formatAmount(fromAmount, from.decimals)}
+          amount={formatAmount({ amount: fromAmount, decimals: from.decimals })}
         />
         <HStack alignItems="center" gap={21}>
           <IconWrapper>
@@ -60,7 +68,7 @@ export const SuiTxIntentDisplay: FC<SuiTxIntentDisplayProps> = ({ intent }) => {
         </HStack>
         <SwapAmountDisplay
           coin={toCoin(to)}
-          amount={formatAmount(toAmount, to.decimals)}
+          amount={formatAmount({ amount: toAmount, decimals: to.decimals })}
         />
       </VStack>
     )
@@ -73,7 +81,7 @@ export const SuiTxIntentDisplay: FC<SuiTxIntentDisplayProps> = ({ intent }) => {
       </Text>
       <SwapAmountDisplay
         coin={toCoin(from)}
-        amount={formatAmount(fromAmount, from.decimals)}
+        amount={formatAmount({ amount: fromAmount, decimals: from.decimals })}
       />
     </VStack>
   )

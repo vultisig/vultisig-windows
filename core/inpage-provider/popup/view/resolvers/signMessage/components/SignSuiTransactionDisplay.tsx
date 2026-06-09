@@ -11,7 +11,7 @@ import {
 } from '@core/inpage-provider/popup/view/resolvers/signMessage/core/sui/decodePure'
 import {
   knownMoveCallEntry,
-  knownObjectLabel,
+  knownObjectLabelKey,
 } from '@core/inpage-provider/popup/view/resolvers/signMessage/core/sui/knownEntities'
 import {
   SuiArgument,
@@ -243,9 +243,12 @@ const InputRow: FC<InputRowProps> = ({ input, index, hint, objectInfo }) => {
   }
   const isMutable =
     input.objectKind === 'SharedObject' ? input.mutable : undefined
-  const friendlyName =
-    knownObjectLabel(input.objectId) ??
-    (objectInfo?.type ? shortenMoveType(objectInfo.type) : undefined)
+  const knownObjectKey = knownObjectLabelKey(input.objectId)
+  const friendlyName = knownObjectKey
+    ? t(knownObjectKey)
+    : objectInfo?.type
+      ? shortenMoveType(objectInfo.type)
+      : undefined
   return (
     <VStack gap={2}>
       <Text size={13} weight={500} color="contrast">
@@ -261,6 +264,20 @@ const InputRow: FC<InputRowProps> = ({ input, index, hint, objectInfo }) => {
 
 type SignSuiTransactionDisplayProps = { data: SuiTxData }
 
+/**
+ * Decoded view of a Sui Programmable Transaction Block, rendered above the
+ * raw-bytes collapse in the sign-message popup. Shows sender + gas data,
+ * plus collapsable Commands and Inputs sections.
+ *
+ * Fires a `useSuiPtbMetadataQuery` for every distinct MoveCall and object
+ * input — function ABIs feed an `InputHint` map so Pure inputs are decoded
+ * against the Move type the consuming call actually expects (disambiguates
+ * `bool` / `u8`, decodes addresses correctly even when they share the
+ * 32-byte width of `u256`), and object type tags resolve hashes to readable
+ * names (`coin::Coin<sui::SUI>`, `pool::Pool<...>`, etc.). The query is
+ * cached for 5 minutes; per-call failures are tolerated and the affected
+ * row falls back to the by-length / raw-hex rendering.
+ */
 export const SignSuiTransactionDisplay: FC<SignSuiTransactionDisplayProps> = ({
   data,
 }) => {
@@ -326,8 +343,8 @@ export const SignSuiTransactionDisplay: FC<SignSuiTransactionDisplayProps> = ({
                   key={index}
                   command={command}
                   index={index}
-                  knownLabel={known?.label}
-                  paramNames={known?.params}
+                  knownLabel={known ? t(known.labelKey) : undefined}
+                  paramNames={known?.paramKeys?.map(k => t(k))}
                 />
               )
             })}
