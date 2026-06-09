@@ -54,13 +54,21 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
       autoSubmit &&
       !autoSubmittedRef.current &&
       !errorMessage &&
+      !swapQuoteQuery.isPlaceholderData &&
       swapQuoteQuery.data
     ) {
       autoSubmittedRef.current = true
       setViewState(prev => ({ ...prev, autoSubmit: undefined }))
       onFinish(swapQuoteQuery.data)
     }
-  }, [autoSubmit, errorMessage, swapQuoteQuery.data, onFinish, setViewState])
+  }, [
+    autoSubmit,
+    errorMessage,
+    swapQuoteQuery.data,
+    swapQuoteQuery.isPlaceholderData,
+    onFinish,
+    setViewState,
+  ])
 
   // Display error for ReverseSwap button (excludes non-error states like loading/fill_the_form)
   const displayErrorMessage = useMemo(() => {
@@ -71,7 +79,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
   }, [validationErrorMessage, error, isPending])
 
   const handleSubmit = () => {
-    if (!errorMessage) {
+    if (!errorMessage && !swapQuoteQuery.isPlaceholderData) {
       const swapQuote = shouldBePresent(swapQuoteQuery.data, 'swap quote')
       onFinish(swapQuote)
     }

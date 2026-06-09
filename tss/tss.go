@@ -139,12 +139,12 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 				KeyShare:  eddsaKeyShare,
 			},
 		},
-		LocalPartyID:  localPartyID,
-		ResharePrefix: "",
-		Order:         0,
-		IsBackedUp:    false,
-		Coins:         []storage.Coin{},
-		LibType:       "GG20",
+		LocalPartyID:                 localPartyID,
+		ResharePrefix:                "",
+		Order:                        0,
+		IsBackedUp:                   false,
+		Coins:                        []storage.Coin{},
+		LibType:                      "GG20",
 		LastPasswordVerificationTime: time.Now().UnixMilli(),
 	}
 
@@ -167,9 +167,9 @@ func (t *TssService) startMessageDownload(serverURL, session, localPartyID, hexE
 	tssService mtss.Service,
 	messageID string) (chan struct{}, *sync.WaitGroup) {
 	t.Logger.WithFields(logrus.Fields{
-		"session":          session,
-		"localPartyID":     localPartyID,
-		"hexEncryptionKey": hexEncryptionKey,
+		"session":      session,
+		"localPartyID": localPartyID,
+		"messageID":    messageID,
 	}).Info("Start downloading messages")
 
 	endCh := make(chan struct{})
