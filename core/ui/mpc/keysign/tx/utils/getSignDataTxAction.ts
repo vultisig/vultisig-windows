@@ -9,6 +9,11 @@ import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChai
 import type { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
+import {
+  MsgBeginRedelegate,
+  MsgDelegate,
+  MsgUndelegate,
+} from 'cosmjs-types/cosmos/staking/v1beta1/tx'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
@@ -24,6 +29,11 @@ type SignDataTxAction =
     }
   | { action: 'deposit'; labelKey: 'deposited'; amount: number }
   | { action: 'transfer'; labelKey: 'transferred'; amount: number }
+  | { action: 'delegate'; labelKey: 'delegate'; amount?: number }
+  | { action: 'undelegate'; labelKey: 'undelegate'; amount?: number }
+  | { action: 'redelegate'; labelKey: 'redelegate'; amount?: number }
+  | { action: 'vote'; labelKey: 'vote' }
+  | { action: 'claim_rewards'; labelKey: 'claim_rewards' }
 
 const sumAmountForDenom = (
   amounts: readonly { denom: string; amount: string }[],
@@ -175,6 +185,49 @@ const parseSignDirectMessage = (
     return { action: 'leave_pool', labelKey: 'left_pool' }
   }
 
+  if (typeUrl === CosmosMsgType.MSG_DELEGATE_URL) {
+    const result = attempt(() => MsgDelegate.decode(value))
+    if ('error' in result) return null
+    const coin = result.data.amount
+    const amount = coin
+      ? sumAmountForDenom([coin], chainFeeDenom, decimals)
+      : undefined
+    return { action: 'delegate', labelKey: 'delegate', amount }
+  }
+
+  if (typeUrl === CosmosMsgType.MSG_UNDELEGATE_URL) {
+    const result = attempt(() => MsgUndelegate.decode(value))
+    if ('error' in result) return null
+    const coin = result.data.amount
+    const amount = coin
+      ? sumAmountForDenom([coin], chainFeeDenom, decimals)
+      : undefined
+    return { action: 'undelegate', labelKey: 'undelegate', amount }
+  }
+
+  if (typeUrl === CosmosMsgType.MSG_BEGIN_REDELEGATE_URL) {
+    const result = attempt(() => MsgBeginRedelegate.decode(value))
+    if ('error' in result) return null
+    const coin = result.data.amount
+    const amount = coin
+      ? sumAmountForDenom([coin], chainFeeDenom, decimals)
+      : undefined
+    return { action: 'redelegate', labelKey: 'redelegate', amount }
+  }
+
+  if (typeUrl === CosmosMsgType.MSG_WITHDRAW_DELEGATOR_REWARD_URL) {
+    return { action: 'claim_rewards', labelKey: 'claim_rewards' }
+  }
+
+  // Gov vote (v1 and v1beta1) carries no transferable amount — surface the
+  // action label only.
+  if (
+    typeUrl === '/cosmos.gov.v1.MsgVote' ||
+    typeUrl === '/cosmos.gov.v1beta1.MsgVote'
+  ) {
+    return { action: 'vote', labelKey: 'vote' }
+  }
+
   return null
 }
 
@@ -284,6 +337,33 @@ export const getSignDataTxAction = (
       }
       if (result.action === 'leave_pool') {
         return { action: 'leave_pool', labelKey: 'left_pool' }
+      }
+      if (result.action === 'delegate') {
+        return {
+          action: 'delegate',
+          labelKey: 'delegate',
+          amount: result.amount,
+        }
+      }
+      if (result.action === 'undelegate') {
+        return {
+          action: 'undelegate',
+          labelKey: 'undelegate',
+          amount: result.amount,
+        }
+      }
+      if (result.action === 'redelegate') {
+        return {
+          action: 'redelegate',
+          labelKey: 'redelegate',
+          amount: result.amount,
+        }
+      }
+      if (result.action === 'vote') {
+        return { action: 'vote', labelKey: 'vote' }
+      }
+      if (result.action === 'claim_rewards') {
+        return { action: 'claim_rewards', labelKey: 'claim_rewards' }
       }
     }
 

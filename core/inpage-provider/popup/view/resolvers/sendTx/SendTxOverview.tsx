@@ -1,6 +1,7 @@
 import { BlockaidSimulationContent } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationContent'
 import { BlockaidSimulationError } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationError'
 import { useBlockaidSimulationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/useBlockaidSimulationQuery'
+import { CosmosTxTypeRow } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/CosmosTxTypeRow'
 import { DappRequestHeader } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/DappRequestHeader'
 import {
   DappRequestDivider,
@@ -420,6 +421,7 @@ export const SendTxOverview = ({
                   ) : (
                     <>
                       <List>
+                        <CosmosTxTypeRow keysignPayload={keysignPayload} />
                         <ListItem description={address} title={t('from')} />
                         {keysignPayload.toAddress && (
                           <ListItem

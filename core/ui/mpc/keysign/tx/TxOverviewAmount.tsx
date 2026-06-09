@@ -16,6 +16,11 @@ type TxActionLabelKey =
   | 'contract_execution'
   | 'deposited'
   | 'transferred'
+  | 'delegate'
+  | 'undelegate'
+  | 'redelegate'
+  | 'vote'
+  | 'claim_rewards'
 
 type TxOverviewAmountProps = ValueProp<Coin> & {
   amount: number
