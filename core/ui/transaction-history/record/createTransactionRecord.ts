@@ -19,6 +19,7 @@ import {
   SwapTransactionRecord,
   TransactionRecord,
 } from '../core'
+import { getPrimaryCosmosMessageTypeUrl } from './getPrimaryCosmosMessageTypeUrl'
 
 type CreateTransactionRecordInput = {
   payload: KeysignPayload
@@ -40,6 +41,7 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
     tokenId: coin.id,
     decimals: coin.decimals,
     memo: payload.memo || undefined,
+    messageTypeUrl: getPrimaryCosmosMessageTypeUrl(payload),
   }
 }
 
