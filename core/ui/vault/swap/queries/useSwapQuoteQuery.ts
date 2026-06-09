@@ -3,6 +3,7 @@ import { useVultDiscountTierQuery } from '@core/ui/vult/discount/queries/tier'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { pendingQuery } from '@lib/ui/query/Query'
+import { keepPreviousData } from '@tanstack/react-query'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -103,10 +104,13 @@ export const useSwapQuoteQuery = () => {
       return {
         queryKey: [swapQuoteQueryKeyPrefix, input],
         queryFn: async () => findSwapQuote(input),
+        placeholderData: keepPreviousData,
         retry: false,
       }
     }
   )
 
-  return shouldShowAmountPending ? pendingQuery : query
+  return shouldShowAmountPending
+    ? { ...pendingQuery, isPlaceholderData: false }
+    : query
 }
