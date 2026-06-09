@@ -106,6 +106,14 @@ const isKnownSuiModuleCallKey = (
 ): key is Extract<keyof typeof knownSuiModuleCallKeys, string> =>
   Object.hasOwn(knownSuiModuleCallKeys, key)
 
+/**
+ * Look up the i18n key for a Sui framework singleton (`Clock`,
+ * `SuiSystemState`, etc.) by its on-chain object id. The id is left-padded
+ * to 32 bytes before matching so callers don't need to pre-format short
+ * forms like `0x6`. Returns `undefined` when the object isn't in the
+ * static framework map — the popup falls back to the live `multiGetObjects`
+ * type tag in that case.
+ */
 export const knownObjectLabelKey = (
   objectId: string
 ): SuiKnownObjectKey | undefined => {
@@ -119,6 +127,15 @@ type KnownMoveCallEntryInput = {
   function: string
 }
 
+/**
+ * Look up i18n metadata for a `MoveCall` against the Sui standard library —
+ * a `labelKey` for the friendly verb (e.g. `sui_call_coin_zero` for
+ * `0x2::coin::zero`) and, when known, `paramKeys` naming each positional
+ * argument. Caller normalisation is handled internally (the package id is
+ * left-padded to 32 bytes), so passing `command.package` / `command.module`
+ * / `command.function` straight from the decoded PTB works. Returns
+ * `undefined` for any call outside the static map.
+ */
 export const knownMoveCallEntry = ({
   package: pkg,
   module,
