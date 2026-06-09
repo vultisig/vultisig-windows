@@ -332,11 +332,11 @@ export const SignSuiTransactionDisplay: FC<SignSuiTransactionDisplayProps> = ({
             {data.commands.map((command, index) => {
               const known =
                 command.kind === 'MoveCall'
-                  ? knownMoveCallEntry(
-                      command.package,
-                      command.module,
-                      command.function
-                    )
+                  ? knownMoveCallEntry({
+                      package: command.package,
+                      module: command.module,
+                      function: command.function,
+                    })
                   : undefined
               return (
                 <CommandRow

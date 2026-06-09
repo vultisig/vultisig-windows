@@ -93,24 +93,37 @@ type SuiParamKey = NonNullable<
 
 const normalisePackageId = (pkg: string): string => pad32(pkg)
 
+// Type predicates so `Object.hasOwn` narrows the candidate `key` to the
+// literal union under the static map's keys. Lets us index the map without
+// a type assertion.
+const isKnownSuiObjectKey = (
+  key: string
+): key is Extract<keyof typeof knownSuiObjectKeys, string> =>
+  Object.hasOwn(knownSuiObjectKeys, key)
+
+const isKnownSuiModuleCallKey = (
+  key: string
+): key is Extract<keyof typeof knownSuiModuleCallKeys, string> =>
+  Object.hasOwn(knownSuiModuleCallKeys, key)
+
 export const knownObjectLabelKey = (
   objectId: string
 ): SuiKnownObjectKey | undefined => {
   const padded = pad32(objectId)
-  if (padded in knownSuiObjectKeys) {
-    return knownSuiObjectKeys[padded as keyof typeof knownSuiObjectKeys]
-  }
-  return undefined
+  return isKnownSuiObjectKey(padded) ? knownSuiObjectKeys[padded] : undefined
 }
 
-export const knownMoveCallEntry = (
-  pkg: string,
-  module: string,
-  fn: string
-): ModuleEntry | undefined => {
+type KnownMoveCallEntryInput = {
+  package: string
+  module: string
+  function: string
+}
+
+export const knownMoveCallEntry = ({
+  package: pkg,
+  module,
+  function: fn,
+}: KnownMoveCallEntryInput): ModuleEntry | undefined => {
   const key = `${normalisePackageId(pkg)}::${module}::${fn}`
-  if (key in knownSuiModuleCallKeys) {
-    return knownSuiModuleCallKeys[key as keyof typeof knownSuiModuleCallKeys]
-  }
-  return undefined
+  return isKnownSuiModuleCallKey(key) ? knownSuiModuleCallKeys[key] : undefined
 }
