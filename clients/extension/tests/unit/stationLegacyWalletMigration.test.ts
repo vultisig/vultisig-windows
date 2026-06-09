@@ -29,18 +29,25 @@ vi.mock('@vultisig/core-chain/station/importPrimitives', () => ({
 
 const createStationMaterial = ({
   address = 'terra1matchingaddress',
+  coinType,
+  privateKeyHex = '01'.repeat(32),
+  publicKeyHex = '02'.repeat(33),
   publicKeyBase64 = 'matching-public-key',
   source = 'privateKey',
 }: {
   address?: string
+  coinType?: StationTerraKeyMaterial['coinType']
+  privateKeyHex?: string
+  publicKeyHex?: string
   publicKeyBase64?: string
   source?: StationTerraKeyMaterial['source']
 } = {}): StationTerraKeyMaterial => ({
   source,
-  privateKeyHex: '01'.repeat(32),
-  publicKeyHex: '02'.repeat(33),
+  privateKeyHex,
+  publicKeyHex,
   publicKeyBase64,
   address,
+  coinType,
   chainPublicKeys: [],
 })
 
@@ -71,6 +78,24 @@ const createMnemonicWallet = (
   metadata: {
     encryptedMnemonic: 'encrypted-mnemonic',
     encryptedSeed: '01'.repeat(64),
+    ...metadata,
+  },
+})
+
+const createInterchainPrivateKeyWallet = (
+  metadata: StationLegacyWalletClassification['metadata'] = {}
+): StationLegacyWalletClassification => ({
+  walletName: 'QA Interchain Private Key',
+  source: 'localStorage',
+  storageKey: 'wallets',
+  storageIndex: 0,
+  walletType: 'interchainPrivateKey',
+  status: 'supported',
+  metadata: {
+    encrypted: {
+      '330': 'decrypted-private-key-330',
+      '118': 'decrypted-private-key-118',
+    },
     ...metadata,
   },
 })
@@ -130,6 +155,138 @@ describe('station legacy wallet migration', () => {
       status: 'failed',
       failureCode: 'metadataMismatch',
     })
+  })
+
+  it('validates mnemonic material against the matching Station coin type metadata only', async () => {
+    const { decryptStationLegacyWallet } =
+      await import('@clients/extension/src/pages/station-migration/stationLegacyWalletMigration')
+
+    vi.mocked(deriveStationTerraKeyMaterial).mockImplementation(({ source }) =>
+      createStationMaterial({
+        coinType: source.kind === 'privateKey' ? undefined : source.coinType,
+        source: source.kind,
+      })
+    )
+
+    await expect(
+      decryptStationLegacyWallet({
+        wallet: createMnemonicWallet({
+          address: 'terra1matchingaddress',
+          pubkey: {
+            '330': 'matching-public-key',
+            '118': 'different-public-key',
+          },
+        }),
+        password: 'station-password',
+        walletCore: {},
+      })
+    ).resolves.toMatchObject({
+      status: 'ready',
+      source: 'mnemonic',
+    })
+  })
+
+  it('validates interchain private keys against matching coin type metadata before split detection', async () => {
+    const { decryptStationLegacyWallet } =
+      await import('@clients/extension/src/pages/station-migration/stationLegacyWalletMigration')
+
+    vi.mocked(deriveStationTerraKeyMaterial).mockImplementation(({ source }) =>
+      source.kind === 'privateKey' &&
+      source.privateKeyHex === 'decrypted-private-key-118'
+        ? createStationMaterial({
+            address: 'terra1classicaddress',
+            privateKeyHex: '02'.repeat(32),
+            publicKeyBase64: 'terra-classic-public-key',
+            source: source.kind,
+          })
+        : createStationMaterial({
+            address: 'terra1terraaddress',
+            privateKeyHex: '01'.repeat(32),
+            publicKeyBase64: 'terra-public-key',
+            source: source.kind,
+          })
+    )
+
+    await expect(
+      decryptStationLegacyWallet({
+        wallet: createInterchainPrivateKeyWallet({
+          pubkey: {
+            '330': 'terra-public-key',
+            '118': 'terra-classic-public-key',
+          },
+        }),
+        password: 'station-password',
+        walletCore: {},
+      })
+    ).resolves.toMatchObject({
+      status: 'failed',
+      failureCode: 'splitInterchainPrivateKeys',
+    })
+  })
+
+  it('keeps multiple supported Station wallets as distinct ready migration results', async () => {
+    const { decryptStationLegacyWallet } =
+      await import('@clients/extension/src/pages/station-migration/stationLegacyWalletMigration')
+
+    vi.mocked(deriveStationTerraKeyMaterial).mockImplementation(({ source }) =>
+      source.kind === 'privateKey' &&
+      source.privateKeyHex === 'decrypted-private-key-1'
+        ? createStationMaterial({
+            address: 'terra1walletone',
+            privateKeyHex: '01'.repeat(32),
+            publicKeyHex: '02'.repeat(33),
+            publicKeyBase64: 'wallet-one-public-key',
+            source: source.kind,
+          })
+        : createStationMaterial({
+            address: 'terra1wallettwo',
+            privateKeyHex: '03'.repeat(32),
+            publicKeyHex: '04'.repeat(33),
+            publicKeyBase64: 'wallet-two-public-key',
+            source: source.kind,
+          })
+    )
+
+    const results = await Promise.all([
+      decryptStationLegacyWallet({
+        wallet: createPrivateKeyWallet({
+          encrypted: 'decrypted-private-key-1',
+          pubkey: { '330': 'wallet-one-public-key' },
+        }),
+        password: 'station-password',
+        walletCore: {},
+      }),
+      decryptStationLegacyWallet({
+        wallet: {
+          ...createPrivateKeyWallet({
+            encrypted: 'decrypted-private-key-2',
+            pubkey: { '330': 'wallet-two-public-key' },
+          }),
+          storageIndex: 1,
+          walletName: 'QA Private Key 2',
+        },
+        password: 'station-password',
+        walletCore: {},
+      }),
+    ])
+
+    expect(Object.fromEntries(results.map(result => [result.walletId, result])))
+      .toMatchObject({
+        'wallets:0': {
+          status: 'ready',
+          keyImportInput: {
+            privateKeyHex: '01'.repeat(32),
+            publicKeyHex: '02'.repeat(33),
+          },
+        },
+        'wallets:1': {
+          status: 'ready',
+          keyImportInput: {
+            privateKeyHex: '03'.repeat(32),
+            publicKeyHex: '04'.repeat(33),
+          },
+        },
+      })
   })
 
   it('falls back from a stale mnemonic to a matching encrypted seed', async () => {
