@@ -1,4 +1,4 @@
-import { TFunction } from 'i18next'
+import { createInstance } from 'i18next'
 import { describe, expect, it } from 'vitest'
 
 import {
@@ -7,9 +7,12 @@ import {
   getTransactionTagLabel,
 } from './cosmosMessageLabel'
 
-// Identity translator: returns the key it's given so assertions can check which
-// translation key was selected without loading the real i18n resources.
-const identityT = ((key: string) => key) as unknown as TFunction
+// A real i18next instance with no resources: t(key) returns the key verbatim,
+// giving an identity translator with a genuine TFunction type (no casts), so
+// assertions can check which translation key was selected.
+const i18n = createInstance()
+void i18n.init({ lng: 'en', resources: {} })
+const identityT = i18n.t
 
 describe('getCosmosMessageLabelKey', () => {
   it('maps known staking/gov/distribution typeUrls to translation keys', () => {
