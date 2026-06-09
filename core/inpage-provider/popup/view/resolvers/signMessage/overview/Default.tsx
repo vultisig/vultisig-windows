@@ -39,6 +39,7 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
   const { goHome } = useCore()
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const isFinished = Boolean(signature)
+  const isTransaction = method === 'sui_sign_transaction'
 
   const formattedMessage = useMemo(() => {
     try {
@@ -53,7 +54,13 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t(isFinished ? 'overview' : 'sign_message')}
+        title={t(
+          isFinished
+            ? 'overview'
+            : isTransaction
+              ? 'sign_transaction'
+              : 'sign_message'
+        )}
         hasBorder
       />
       <PageContent gap={16} scrollable>
@@ -73,7 +80,15 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
             </Text>
           </Collapse>
         ) : (
-          <Collapse title={t(typedData ? 'raw_message' : 'message')}>
+          <Collapse
+            title={t(
+              typedData
+                ? 'raw_message'
+                : isTransaction
+                  ? 'raw_transaction_data'
+                  : 'message'
+            )}
+          >
             {formattedMessage ? (
               <Text color="info" family="mono" size={14} weight={500}>
                 <pre style={{ width: '100%' }}>
