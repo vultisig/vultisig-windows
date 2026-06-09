@@ -110,5 +110,7 @@ export const useSwapQuoteQuery = () => {
     }
   )
 
-  return shouldShowAmountPending ? pendingQuery : query
+  return shouldShowAmountPending
+    ? { ...pendingQuery, isPlaceholderData: false }
+    : query
 }
