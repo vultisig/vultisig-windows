@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCore } from '@core/ui/state/core'
 import { ShareVaultCard } from '@core/ui/vault/share/ShareVaultCard'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -21,6 +22,7 @@ const StyledButton = styled(Button)`
 
 export const ShareVaultPage = () => {
   const { t } = useTranslation()
+  const { saveFile } = useCore()
   const vault = useCurrentVault()
 
   const { name } = vault
@@ -32,7 +34,8 @@ export const ShareVaultPage = () => {
       try {
         const dataUrl = await toPng(node)
         const blob = await (await fetch(dataUrl)).blob()
-        const file = new File([blob], `${name}.png`, { type: 'image/png' })
+        const fileName = `${name}.png`
+        const file = new File([blob], fileName, { type: 'image/png' })
 
         // Share only the file — some targets (e.g. Telegram) drop the image
         // when title/text are also present and send just the text.
@@ -43,12 +46,7 @@ export const ShareVaultPage = () => {
         } else {
           // Web Share with files is unsupported (e.g. Chrome on Linux);
           // fall back to downloading the QR image.
-          const link = document.createElement('a')
-          link.href = dataUrl
-          link.download = `${name}.png`
-          document.body.appendChild(link)
-          link.click()
-          link.remove()
+          await saveFile({ name: fileName, blob })
         }
       } catch (error) {
         console.error('Error sharing image:', error)

@@ -1,6 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useCore } from '@core/ui/state/core'
 import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
@@ -135,6 +136,7 @@ export const AddressQRCard = ({
   onClose,
 }: AddressQRCardProps) => {
   const { t } = useTranslation()
+  const { saveFile } = useCore()
   const address = useCurrentVaultAddress(chain)
   const { addToast } = useToast()
   const qrNodeRef = useRef<HTMLDivElement | null>(null)
@@ -163,17 +165,15 @@ export const AddressQRCard = ({
     const node = qrNodeRef.current
 
     if (node) {
+      const fileName = `${displayName}.png`
       const imageResult = await attempt(async () => {
         const dataUrl = await toPng(node)
         const blob = await (await fetch(dataUrl)).blob()
-        const file = new File([blob], `${displayName}.png`, {
-          type: 'image/png',
-        })
-        return { dataUrl, file }
+        return { blob, file: new File([blob], fileName, { type: 'image/png' }) }
       })
 
       if (imageResult.data) {
-        const { dataUrl, file } = imageResult.data
+        const { blob, file } = imageResult.data
 
         if (navigator.canShare?.({ files: [file] })) {
           await navigator.share({ files: [file] }).catch(() => undefined)
@@ -182,12 +182,7 @@ export const AddressQRCard = ({
 
         // Web Share with files is unsupported (e.g. Chrome on Linux);
         // fall back to downloading the QR image.
-        const link = document.createElement('a')
-        link.href = dataUrl
-        link.download = `${displayName}.png`
-        document.body.appendChild(link)
-        link.click()
-        link.remove()
+        await saveFile({ name: fileName, blob })
         return
       }
     }
@@ -200,7 +195,7 @@ export const AddressQRCard = ({
         text: address,
       })
       .catch(() => undefined)
-  }, [address, displayName, onShare, t])
+  }, [address, displayName, onShare, saveFile, t])
 
   if (!address) return null
 
