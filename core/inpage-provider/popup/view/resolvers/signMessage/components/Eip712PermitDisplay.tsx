@@ -11,6 +11,7 @@ import { EvmChain } from '@vultisig/core-chain/Chain'
 import { TypedDataDomain } from 'ethers'
 import { FC, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 type Eip712PermitDisplayProps = {
   chain: EvmChain
@@ -177,6 +178,15 @@ const formatPrimitive = (value: unknown): string => {
   return String(value)
 }
 
+// Long, unbroken values (keys, hashes) are flex items inside a nowrap row.
+// `min-width: 0` lets the cell shrink below its content so `break-word` can
+// wrap instead of widening the row and forcing horizontal scroll.
+const RowValue = styled(Text)`
+  min-width: 0;
+  flex: 1;
+  text-align: right;
+`
+
 const Row: FC<{ label: string; value: React.ReactNode }> = ({
   label,
   value,
@@ -191,9 +201,9 @@ const Row: FC<{ label: string; value: React.ReactNode }> = ({
       {label}
     </Text>
     {typeof value === 'string' ? (
-      <Text as="span" size={14} weight={500}>
+      <RowValue as="span" size={14} weight={500}>
         {value}
-      </Text>
+      </RowValue>
     ) : (
       value
     )}
