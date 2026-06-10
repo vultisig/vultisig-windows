@@ -162,17 +162,32 @@ export const AddressQRCard = ({
 
     const node = qrNodeRef.current
 
-    if (node && navigator.canShare) {
-      const fileResult = await attempt(async () => {
+    if (node) {
+      const imageResult = await attempt(async () => {
         const dataUrl = await toPng(node)
         const blob = await (await fetch(dataUrl)).blob()
-        return new File([blob], `${displayName}.png`, { type: 'image/png' })
+        const file = new File([blob], `${displayName}.png`, {
+          type: 'image/png',
+        })
+        return { dataUrl, file }
       })
 
-      const file = 'data' in fileResult ? fileResult.data : undefined
+      if (imageResult.data) {
+        const { dataUrl, file } = imageResult.data
 
-      if (file && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file] }).catch(() => undefined)
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] }).catch(() => undefined)
+          return
+        }
+
+        // Web Share with files is unsupported (e.g. Chrome on Linux);
+        // fall back to downloading the QR image.
+        const link = document.createElement('a')
+        link.href = dataUrl
+        link.download = `${displayName}.png`
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
         return
       }
     }
