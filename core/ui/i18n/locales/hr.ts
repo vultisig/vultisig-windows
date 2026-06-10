@@ -1445,7 +1445,7 @@ export const hr = {
   sui_gas_price: 'Cijena plina',
   sui_input_pure: 'Čisto',
   sui_inputs: 'Ulazi ({{count}})',
-  sui_make_move_vec: 'Vektor Make Move',
+  sui_make_move_vec: 'Vektor poteza',
   sui_merge_coins: 'Spoji kovanice',
   sui_merge_into: 'Spoji izvor(e) {{count}} u {{destination}}',
   sui_modules: 'Moduli',

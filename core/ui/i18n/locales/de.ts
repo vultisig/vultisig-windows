@@ -1468,7 +1468,7 @@ export const de = {
   sui_call_coin_from_balance: 'Guthaben in Münzen einwickeln',
   sui_call_coin_into_balance: 'Münze auspacken, um das Gleichgewicht zu halten',
   sui_call_coin_join: 'Münzen zusammenführen',
-  sui_call_coin_split: 'Split Coin',
+  sui_call_coin_split: 'Münze teilen',
   sui_call_coin_value: 'Münzwert ablesen',
   sui_call_coin_zero: 'Leere Münze erstellen',
   sui_call_transfer_freeze_object: 'Objekt einfrieren',

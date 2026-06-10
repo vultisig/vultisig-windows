@@ -1462,7 +1462,7 @@ export const it = {
   sui_call_coin_from_balance: 'Avvolgi il resto in monete',
   sui_call_coin_into_balance:
     'Togli la moneta dall&#39;involucro per bilanciare',
-  sui_call_coin_join: 'Merge Coins',
+  sui_call_coin_join: 'Unisci monete',
   sui_call_coin_split: 'Dividere la moneta',
   sui_call_coin_value: 'Leggi il valore della moneta',
   sui_call_coin_zero: 'Crea moneta vuota',
