@@ -34,14 +34,19 @@ export const ShareVaultPage = () => {
         const blob = await (await fetch(dataUrl)).blob()
         const file = new File([blob], `${name}.png`, { type: 'image/png' })
 
-        if (navigator.share) {
-          await navigator.share({
-            files: [file],
-            title: t('vault_qr_share_title'),
-            text: t('vault_qr_share_text'),
-          })
+        // Share only the file — some targets (e.g. Telegram) drop the image
+        // when title/text are also present and send just the text.
+        const shareData = { files: [file] }
+
+        if (navigator.canShare?.(shareData)) {
+          await navigator.share(shareData)
         } else {
-          alert(t('vault_qr_share_not_supported'))
+          // Web Share with files is unsupported (e.g. Chrome on Linux);
+          // fall back to downloading the QR image.
+          const link = document.createElement('a')
+          link.href = dataUrl
+          link.download = `${name}.png`
+          link.click()
         }
       } catch (error) {
         console.error('Error sharing image:', error)
