@@ -5,7 +5,7 @@ import {
   useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { getSendFeeEstimate } from '@vultisig/core-mpc/keysign/send/getSendFeeEstimate'
@@ -54,6 +54,7 @@ export const useSendFeeEstimateQuery = () => {
     ],
     queryFn: () => getSendFeeEstimate(input!),
     enabled: !!receiver && balance != null && input != null,
+    placeholderData: keepPreviousData,
     ...noRefetchQueryOptions,
     retry: (failureCount, error) => {
       if (error instanceof BuildKeysignPayloadError) {

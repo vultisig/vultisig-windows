@@ -1,4 +1,11 @@
 import { create } from '@bufbuild/protobuf'
+import { buildQBTCDirectPayload } from '@core/ui/qbtc/dapp/buildQBTCDirectPayload'
+import { QbtcDappMessage } from '@core/ui/qbtc/dapp/encodeAnyMessage'
+import {
+  qbtcChainId,
+  qbtcDefaultFeeAmount,
+  qbtcFeeDenom,
+} from '@core/ui/qbtc/dapp/qbtcDirectConstants'
 import { toBase64 } from '@cosmjs/encoding'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
@@ -60,6 +67,7 @@ import {
 import {
   buildStakingSignDirectBytes,
   type CosmosStakingInput,
+  toEncodeObjects,
 } from './cosmosStaking/encodeStakingMsgs'
 
 export type BuildDepositKeysignPayloadInput = {
@@ -75,7 +83,14 @@ export type BuildDepositKeysignPayloadInput = {
   transactionType?: TransactionType
   vaultId: string
   localPartyId: string
-  publicKey: PublicKey
+  /**
+   * WalletCore public key for ECDSA/EdDSA chains. `null` for MLDSA chains
+   * (e.g. QBTC), which have no WalletCore key type — those pass the hex key
+   * via {@link BuildDepositKeysignPayloadInput.hexPublicKeyOverride} instead.
+   */
+  publicKey: PublicKey | null
+  /** Hex MLDSA public key (`vault.publicKeyMldsa`) for MLDSA chains. */
+  hexPublicKeyOverride?: string
   libType: KeysignLibType
   walletCore: WalletCore
 }
@@ -95,8 +110,18 @@ export const buildDepositKeysignPayload = async ({
   vaultId,
   localPartyId,
   publicKey,
+  hexPublicKeyOverride,
   libType,
 }: BuildDepositKeysignPayloadInput) => {
+  const hexPublicKey =
+    hexPublicKeyOverride ??
+    (publicKey ? Buffer.from(publicKey.data()).toString('hex') : undefined)
+  if (!hexPublicKey) {
+    throw new Error(
+      'buildDepositKeysignPayload requires publicKey or hexPublicKeyOverride'
+    )
+  }
+
   const isUnmerge = action === 'unmerge'
   const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
   const isTonFunction = coin.chain === Chain.Ton
@@ -113,7 +138,7 @@ export const buildDepositKeysignPayload = async ({
     coin: toCommCoin({
       ...coin,
       address: coin.address,
-      hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
+      hexPublicKey,
     }),
     memo,
     vaultLocalPartyId: localPartyId,
@@ -167,6 +192,7 @@ export const buildDepositKeysignPayload = async ({
       depositData,
       amountUnits,
       publicKey,
+      hexPublicKey,
       keysignPayload,
     })
   }
@@ -449,12 +475,29 @@ const cosmosStakingChains: readonly IbcEnabledCosmosChain[] = [
 const isCosmosStakingChain = (chain: Chain): chain is IbcEnabledCosmosChain =>
   (cosmosStakingChains as readonly Chain[]).includes(chain)
 
+// QBTC signs Cosmos staking txs with ML-DSA (~2.4 KB signature) rather than
+// secp256k1. `MsgBeginRedelegate` — the heaviest single-msg staking path —
+// out-of-gasses against the Terra-family floor, so QBTC requests 800k. The fee
+// is unchanged: qbtc-testnet has no minimum gas price and enforces a flat
+// `min_tx_fee`, and `block.max_gas = -1`, so the larger budget is free.
+const qbtcStakingBaseGasLimit = 800_000n
+
+const getQbtcStakingGasLimit = (msgCount: number): bigint => {
+  const n = BigInt(Math.max(1, msgCount))
+  // Mirror the Terra helper's msg-count scaling: each extra msg (bulk
+  // `claim_rewards`) adds roughly a quarter of the base cost.
+  return qbtcStakingBaseGasLimit + ((n - 1n) * qbtcStakingBaseGasLimit) / 4n
+}
+
 type ApplyCosmosStakingSignDataInput = {
   action: CosmosStakingAction
   coin: AccountCoin
   depositData: FieldValues
   amountUnits: string | undefined
-  publicKey: PublicKey
+  /** WalletCore key for Terra-family chains; `null` for QBTC (ML-DSA). */
+  publicKey: PublicKey | null
+  /** Hex public key (compressed secp256k1 or ML-DSA) for the signer info. */
+  hexPublicKey: string
   keysignPayload: ReturnType<typeof create<typeof KeysignPayloadSchema>>
 }
 
@@ -519,11 +562,13 @@ const applyCosmosStakingSignData = ({
   depositData,
   amountUnits,
   publicKey,
+  hexPublicKey,
   keysignPayload,
 }: ApplyCosmosStakingSignDataInput) => {
-  if (!isCosmosStakingChain(coin.chain)) {
+  const isQbtc = coin.chain === Chain.QBTC
+  if (!isQbtc && !isCosmosStakingChain(coin.chain)) {
     throw new Error(
-      `Cosmos staking action '${action}' is only supported on Terra-family chains, got ${coin.chain}`
+      `Cosmos staking action '${action}' is only supported on Terra-family chains and QBTC, got ${coin.chain}`
     )
   }
 
@@ -533,48 +578,88 @@ const applyCosmosStakingSignData = ({
       `Cosmos staking requires cosmosSpecific blockchainSpecific, got ${blockchainSpecific.case}`
     )
   }
-  const { sequence, gas } = blockchainSpecific.value
+  const { sequence, gas, accountNumber } = blockchainSpecific.value
 
-  // `isCosmosStakingChain` narrowed `coin.chain`, but `coin` itself is still
-  // typed as AccountCoin (chain: Chain). Re-form the CoinKey explicitly so the
-  // SDK helpers that demand `CoinKey<CosmosChain>` accept it.
-  const cosmosCoin = { ...coin, chain: coin.chain }
   const input = buildCosmosStakingInput({ action, depositData, amountUnits })
-
-  const feeDenom = cosmosFeeCoinDenom[coin.chain]
-  const stakingDenom = getDenom(cosmosCoin as CoinKey<CosmosChain>)
   // Bulk `claim_rewards` packs one `MsgWithdrawDelegatorReward` per
-  // validator; every other action is a single-msg tx. The SDK helper
+  // validator; every other action is a single-msg tx. The gas-limit helper
   // scales its base limit by msg count.
   const msgCount =
     input.action === 'claim_rewards' ? input.validatorAddresses.length : 1
-  const gasLimit = getCosmosStakingGasLimit({ chain: coin.chain, msgCount })
-  // `gas` from chainSpecific is the fee for a single-msg tx. For bulk
-  // `claim_rewards` (N MsgWithdrawDelegatorReward in one tx) we scale the
-  // fee by the same `msgCount`-aware ratio the gas-limit helper uses, so
-  // the gas-price the chain sees doesn't drop below the per-byte minimum
-  // when N is large. Single-msg actions keep the chainSpecific fee
-  // unchanged.
-  const singleMsgGasLimit = getCosmosStakingGasLimit({ chain: coin.chain })
-  const feeScale =
-    gasLimit > 0n && singleMsgGasLimit > 0n
-      ? (gas * gasLimit) / singleMsgGasLimit
-      : gas
-  const feeAmount = { denom: feeDenom, amount: feeScale.toString() }
 
-  const { bodyBytes, authInfoBytes } = buildStakingSignDirectBytes({
-    input,
-    delegatorAddress: coin.address,
-    denom: stakingDenom,
-    publicKey: publicKey.data(),
-    sequence,
-    feeAmount,
-    gasLimit,
-  })
+  // Each branch produces the proto-direct `bodyBytes` / `authInfoBytes` pair
+  // as base64 strings ready for `SignDirect`. QBTC builds them via its manual
+  // ML-DSA protobuf path (no WalletCore key); Terra-family chains use the
+  // shared secp256k1 encoder.
+  const { bodyBytes, authInfoBytes, chainId } = isQbtc
+    ? (() => {
+        const gasLimit = getQbtcStakingGasLimit(msgCount)
+        // `toEncodeObjects` returns cosmjs `EncodeObject[]` ({ typeUrl, value });
+        // map to the QBTC dApp message shape so the proto encoder consumes the
+        // staking msgs (the typeUrls are registered in `messageRegistry`).
+        const messages: QbtcDappMessage[] = toEncodeObjects({
+          input,
+          delegatorAddress: coin.address,
+          denom: qbtcFeeDenom,
+        }).map(({ typeUrl, value }) => ({ typeUrl, value }))
+        const { bodyBytes, authInfoBytes } = buildQBTCDirectPayload({
+          messages,
+          hexPublicKey,
+          sequence,
+          fee: {
+            // qbtc-testnet enforces a flat `min_tx_fee`; keep the fee at that
+            // minimum regardless of msg count (no minimum gas price).
+            amount: [{ denom: qbtcFeeDenom, amount: qbtcDefaultFeeAmount }],
+            gas: gasLimit.toString(),
+          },
+        })
+        return { bodyBytes, authInfoBytes, chainId: qbtcChainId }
+      })()
+    : (() => {
+        // `isCosmosStakingChain` narrowed `coin.chain`, but `coin` itself is
+        // still typed as AccountCoin (chain: Chain). Re-form the CoinKey
+        // explicitly so the SDK helpers that demand `CoinKey<CosmosChain>`
+        // accept it.
+        const stakingChain = coin.chain as IbcEnabledCosmosChain
+        const cosmosCoin = { ...coin, chain: stakingChain }
+        const feeDenom = cosmosFeeCoinDenom[stakingChain]
+        const stakingDenom = getDenom(cosmosCoin as CoinKey<CosmosChain>)
+        const gasLimit = getCosmosStakingGasLimit({
+          chain: stakingChain,
+          msgCount,
+        })
+        // `gas` from chainSpecific is the fee for a single-msg tx. For bulk
+        // `claim_rewards` we scale the fee by the same `msgCount`-aware ratio
+        // the gas-limit helper uses, so the gas-price the chain sees doesn't
+        // drop below the per-byte minimum when N is large. Single-msg actions
+        // keep the chainSpecific fee unchanged.
+        const singleMsgGasLimit = getCosmosStakingGasLimit({
+          chain: stakingChain,
+        })
+        const feeScale =
+          gasLimit > 0n && singleMsgGasLimit > 0n
+            ? (gas * gasLimit) / singleMsgGasLimit
+            : gas
+        const feeAmount = { denom: feeDenom, amount: feeScale.toString() }
+        const built = buildStakingSignDirectBytes({
+          input,
+          delegatorAddress: coin.address,
+          denom: stakingDenom,
+          publicKey: shouldBePresent(publicKey, 'publicKey').data(),
+          sequence,
+          feeAmount,
+          gasLimit,
+        })
+        return {
+          bodyBytes: toBase64(built.bodyBytes),
+          authInfoBytes: toBase64(built.authInfoBytes),
+          chainId: getCosmosChainId(stakingChain),
+        }
+      })()
 
-  // `toAmount` drives the "Sent X LUNA" amount on the verify + Done
-  // screens. Set it to the user-input amount in base units for the actions
-  // that move tokens. `claim_rewards` carries no amount, so it stays at 0.
+  // `toAmount` drives the "Sent X" amount on the verify + Done screens. Set it
+  // to the user-input amount in base units for the actions that move tokens.
+  // `claim_rewards` carries no amount, so it stays at 0.
   const toAmount = input.action === 'claim_rewards' ? '0' : (amountUnits ?? '0')
   // `toAddress` likewise drives "To" in the verify screen — show the
   // validator (or destination validator for redelegate) instead of an empty
@@ -601,9 +686,14 @@ const applyCosmosStakingSignData = ({
       // downstream consumer (logging, debugging, dApp re-broadcast) sees
       // the right domain on the payload instead of an empty string.
       value: create(SignDirectSchema, {
-        chainId: getCosmosChainId(coin.chain),
-        bodyBytes: toBase64(bodyBytes),
-        authInfoBytes: toBase64(authInfoBytes),
+        chainId,
+        bodyBytes,
+        authInfoBytes,
+        // Required by the QBTC ML-DSA keysign path, which derives the SignDoc
+        // from these bytes + accountNumber. Decorative for the Terra-family
+        // WalletCore path (it reads accountNumber from cosmosSpecific), but
+        // set it for both so the payload is self-describing.
+        accountNumber: accountNumber.toString(),
       }),
     },
   })

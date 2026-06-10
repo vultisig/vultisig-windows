@@ -8,7 +8,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { type Validator } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ChangeEvent, useState } from 'react'
@@ -19,7 +19,7 @@ import { useCosmosValidatorsQuery } from '../queries/useCosmosValidatorsQuery'
 import { ValidatorAvatar } from './ValidatorAvatar'
 
 type ValidatorPickerSheetProps = {
-  chain: IbcEnabledCosmosChain
+  chain: StakingChain
   /** Native staking-token ticker shown for voting power, e.g. `LUNA`. */
   ticker: string
   /** Base-unit exponent of the staking token (Terra/TerraClassic = 6). */
@@ -32,6 +32,12 @@ type ValidatorPickerSheetProps = {
   onSelect: (validator: Validator) => void
 }
 
+/**
+ * Bottom-sheet validator picker for the delegate / redelegate forms. Lists the
+ * chain's bonded validators (searchable), highlights the current selection, and
+ * optionally excludes one validator (the redelegate source). Calls `onSelect`
+ * with the chosen validator and `onClose` to dismiss.
+ */
 export const ValidatorPickerSheet = ({
   chain,
   ticker,

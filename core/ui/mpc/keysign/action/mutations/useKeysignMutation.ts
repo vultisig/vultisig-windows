@@ -13,7 +13,7 @@ import {
 } from '@core/ui/qbtc/dapp/buildQBTCSignedTxFromDirect'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { fromBase64 } from '@cosmjs/encoding'
-import { sha256 } from '@noble/hashes/sha256'
+import { sha256 } from '@noble/hashes/sha2.js'
 import { useMutation } from '@tanstack/react-query'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
@@ -47,6 +47,10 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
 
+import {
+  getCowSwapKeysignData,
+  signCowSwapOrder,
+} from '../../cowswap/cowSwapKeysign'
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 import { getCosmosKeplrBridgeTxHash } from '../../tx/getCosmosKeplrBridgeTxHash'
 
@@ -64,6 +68,21 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
         {
           keysign: async payload => {
             const chain = getKeysignChain(payload)
+
+            // CowSwap RFQ: off-chain order signed via EIP-712 and submitted to
+            // the orderbook instead of broadcast. Diverges from every chain tx
+            // path, so handle it before the standard flow.
+            const cowswapData = getCowSwapKeysignData(payload)
+            if (cowswapData) {
+              return signCowSwapOrder({
+                payload,
+                cowswapData,
+                chain,
+                walletCore,
+                vault,
+                keysignAction,
+              })
+            }
 
             // QBTC uses MLDSA keys — bypass WalletCore entirely
             if (chain === 'QBTC') {

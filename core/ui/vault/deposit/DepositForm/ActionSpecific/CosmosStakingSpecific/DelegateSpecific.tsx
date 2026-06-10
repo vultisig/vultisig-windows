@@ -6,7 +6,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
@@ -100,7 +100,7 @@ export const DelegateSpecific = () => {
         name="validatorAddress"
         render={({ field }) => (
           <ValidatorPickerField
-            chain={chain as IbcEnabledCosmosChain}
+            chain={chain as StakingChain}
             ticker={coin.ticker}
             decimals={coin.decimals}
             value={field.value as string | undefined}

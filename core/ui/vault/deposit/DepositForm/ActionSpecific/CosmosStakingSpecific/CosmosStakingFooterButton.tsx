@@ -3,7 +3,7 @@ import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProv
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -84,7 +84,7 @@ export const CosmosStakingFooterButton = ({
           )}
           renderContent={({ onClose }) => (
             <ValidatorPickerSheet
-              chain={chain as IbcEnabledCosmosChain}
+              chain={chain as StakingChain}
               ticker={coin.ticker}
               decimals={coin.decimals}
               selectedValidatorAddress={field.value as string | undefined}

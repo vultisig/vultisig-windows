@@ -1,5 +1,6 @@
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useCosmosRewardsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosRewardsQuery'
+import { stakingDenomForChain } from '@core/ui/chain/cosmos/staking/stakingDenom'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -7,8 +8,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
-import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -37,15 +37,15 @@ export const ClaimRewardsSpecific = () => {
     name: 'validatorAddresses',
   }) as string[] | undefined
 
-  const stakingDenom = cosmosFeeCoinDenom[chain as IbcEnabledCosmosChain]
+  const stakingDenom = stakingDenomForChain(chain as StakingChain)
 
   const delegationsQuery = useCosmosDelegationsQuery({
-    chain: chain as IbcEnabledCosmosChain,
+    chain: chain as StakingChain,
     delegatorAddress: coin.address,
   })
 
   const rewardsQuery = useCosmosRewardsQuery({
-    chain: chain as IbcEnabledCosmosChain,
+    chain: chain as StakingChain,
     delegatorAddress: coin.address,
   })
 

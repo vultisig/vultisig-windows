@@ -19,6 +19,8 @@ import {
 import { setAppChain } from './setAppChain'
 import { setVaultChain } from './setVaultChain'
 import { signOut } from './signOut'
+import { suiBuildTransaction } from './suiBuildTransaction'
+import { suiExecuteTransaction } from './suiExecuteTransaction'
 
 type BackgroundResolvers = {
   [K in BackgroundMethod]: BackgroundResolver<K>
@@ -41,4 +43,6 @@ export const backgroundResolvers: BackgroundResolvers = {
   hasChainInVault,
   getKeplrSuggestedChains,
   addKeplrSuggestedChain,
+  suiBuildTransaction,
+  suiExecuteTransaction,
 }

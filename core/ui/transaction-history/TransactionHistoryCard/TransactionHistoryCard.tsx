@@ -51,6 +51,8 @@ export type TransactionHistoryCardPill =
 export type TransactionHistoryCardProps = {
   /** Transaction type shown in the tag (send, receive, swap, approve). */
   tagType: TransactionHistoryTagType
+  /** Optional pre-resolved tag label override (e.g. "Delegate" for staking). */
+  tagLabel?: string
   /** Card state: successful (green), pending (neutral), or error (red). */
   status: TransactionHistoryCardStatus
   /** USD amount, e.g. "$1,000.54". */
@@ -74,6 +76,7 @@ export type TransactionHistoryCardProps = {
 
 export const TransactionHistoryCard = ({
   tagType,
+  tagLabel,
   status,
   amountUsd,
   amountCrypto,
@@ -99,7 +102,7 @@ export const TransactionHistoryCard = ({
   return (
     <Card>
       <TopRow>
-        <TransactionHistoryTag type={tagType} />
+        <TransactionHistoryTag type={tagType} label={tagLabel} />
         <StatusLabel $status={status}>{statusLabel}</StatusLabel>
       </TopRow>
 

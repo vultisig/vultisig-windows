@@ -2,6 +2,7 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -30,7 +31,7 @@ export const useSendValidationQuery = () => {
     })
   )
 
-  return useTransformQueryData(
+  const validationQuery = useTransformQueryData(
     balanceQuery,
     useCallback(
       balance =>
@@ -62,4 +63,24 @@ export const useSendValidationQuery = () => {
       ]
     )
   )
+
+  // A fee-coin send can't be validated until its fee is known. While the fee
+  // estimate is still loading, keep the form pending instead of reporting it
+  // as valid — otherwise Continue briefly enables (e.g. amount === balance,
+  // where the verdict flips once the fee arrives and amount + fee exceeds
+  // balance).
+  const isFeeRequiredButUnknown =
+    isFeeCoin(coin) &&
+    feeEstimateQuery.data == null &&
+    feeEstimateQuery.error == null
+
+  if (
+    isFeeRequiredButUnknown &&
+    validationQuery.data != null &&
+    isRecordEmpty(validationQuery.data)
+  ) {
+    return { ...validationQuery, data: undefined, isPending: true }
+  }
+
+  return validationQuery
 }

@@ -1,4 +1,8 @@
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
+import {
+  getSuiPersonalMessageDigest,
+  getSuiTransactionDataDigest,
+} from '@vultisig/core-chain/chains/sui/sign'
 import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
 import { match } from '@vultisig/lib-utils/match'
 import { omit } from '@vultisig/lib-utils/record/omit'
@@ -11,6 +15,27 @@ type GetCustomMessageHexInput = {
   chain: CustomMessageSupportedChain
   message: string
   method: string
+}
+
+const getSuiDigestHex = ({
+  message,
+  method,
+}: {
+  message: string
+  method: string
+}): string => {
+  if (method === 'sui_sign_transaction') {
+    // `message` is the base64-encoded prepared transaction block bytes.
+    const txBytes = Buffer.from(message, 'base64')
+    return Buffer.from(getSuiTransactionDataDigest(txBytes)).toString('hex')
+  }
+
+  // Personal message — `getSuiPersonalMessageDigest` handles the BCS
+  // `vector<u8>` wrap and the PersonalMessage intent.
+  const messageBytes = message.startsWith('0x')
+    ? Buffer.from(stripHexPrefix(message), 'hex')
+    : new TextEncoder().encode(message)
+  return Buffer.from(getSuiPersonalMessageDigest(messageBytes)).toString('hex')
 }
 
 export const getCustomMessageHex = ({
@@ -35,6 +60,7 @@ export const getCustomMessageHex = ({
     // StdSignDoc{MsgSignData} bytes; the signed digest is their sha256.
     cosmos: () => stripHexPrefix(sha256(bytes)),
     solana: () => Buffer.from(bytes).toString('hex'),
+    sui: () => getSuiDigestHex({ message, method }),
     ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
     polkadot: () => Buffer.from(bytes).toString('hex'),

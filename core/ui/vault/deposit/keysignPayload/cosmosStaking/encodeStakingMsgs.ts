@@ -43,7 +43,13 @@ type ToEncodeObjectsInput = {
   denom: string
 }
 
-const toEncodeObjects = ({
+/**
+ * Maps a {@link CosmosStakingInput} to the cosmos-sdk message objects
+ * (`{ typeUrl, value }`) for the action. Exported so chains that build their
+ * own SignDoc bytes (e.g. QBTC's manual MLDSA protobuf path) can reuse the
+ * exact same message shapes instead of duplicating the typeUrl/value mapping.
+ */
+export const toEncodeObjects = ({
   input,
   delegatorAddress,
   denom,

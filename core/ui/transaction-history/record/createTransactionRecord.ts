@@ -1,4 +1,5 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { decodeCowSwapKeysignData } from '@vultisig/core-chain/swap/general/cowswap/keysign/cowSwapKeysignData'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
@@ -18,6 +19,7 @@ import {
   SwapTransactionRecord,
   TransactionRecord,
 } from '../core'
+import { getPrimaryCosmosMessageTypeUrl } from './getPrimaryCosmosMessageTypeUrl'
 
 type CreateTransactionRecordInput = {
   payload: KeysignPayload
@@ -39,6 +41,7 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
     tokenId: coin.id,
     decimals: coin.decimals,
     memo: payload.memo || undefined,
+    messageTypeUrl: getPrimaryCosmosMessageTypeUrl(payload),
   }
 }
 
@@ -95,6 +98,14 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         shouldBePresent(general.toCoin, 'general swap toCoin')
       )
 
+      // CowSwap orders carry their orderbook API base in the (otherwise unused
+      // for off-chain orders) tx.data field — surface it so the status poller
+      // can poll the order by UID.
+      const cowSwapData =
+        general.provider === 'cowswap'
+          ? decodeCowSwapKeysignData(general.quote?.tx?.data ?? '')
+          : null
+
       return {
         fromToken: from.token,
         fromAmount: general.fromAmount,
@@ -110,6 +121,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         toDecimals: to.decimals,
         provider,
         route: `${from.token} → ${to.token}`,
+        ...(cowSwapData ? { cowSwapOrderApiBase: cowSwapData.apiBase } : {}),
       }
     },
   })

@@ -33,6 +33,14 @@ export type SendTransactionData = {
   decimals: number
   feeEstimate?: string
   memo?: string
+  /**
+   * For Cosmos SDK chains (QBTC dApp txs and in-wallet staking), the typeUrl of
+   * the primary (first) message in the signed `TxBody`, e.g.
+   * `/cosmos.staking.v1beta1.MsgDelegate`. Drives the history tag label so a
+   * delegate/vote/claim tx isn't mislabeled as a plain "Send". Undefined for
+   * non-Cosmos sends, which keep the default "Send" label.
+   */
+  messageTypeUrl?: string
 }
 
 export type SwapTransactionData = {
@@ -50,6 +58,11 @@ export type SwapTransactionData = {
   toDecimals: number
   provider?: string
   route?: string
+  /** Present only for CowSwap RFQ orders. The orderbook API base lets the
+   * status poller poll the off-chain order by UID (the record's `txHash`)
+   * instead of a chain tx hash. Once the order settles, the poller replaces
+   * `txHash` with the on-chain settlement hash. */
+  cowSwapOrderApiBase?: string
 }
 
 export type SendTransactionRecord = TransactionRecordBase & {

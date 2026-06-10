@@ -7,12 +7,12 @@ import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type ValidatorPickerFieldProps = {
-  chain: IbcEnabledCosmosChain
+  chain: StakingChain
   ticker: string
   decimals: number
   /** Currently-selected valoper, if any. */

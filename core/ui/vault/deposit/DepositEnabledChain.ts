@@ -11,6 +11,7 @@ export const depositEnabledChains = [
   Chain.Cosmos,
   Chain.Terra,
   Chain.TerraClassic,
+  Chain.QBTC,
   Chain.Avalanche,
   Chain.Base,
   Chain.BitcoinCash,
