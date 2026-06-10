@@ -4,6 +4,7 @@ import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { solanaRpcUrl } from '@vultisig/core-chain/chains/solana/client'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
 import { parseBlockaidSolanaSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
@@ -32,6 +33,19 @@ type ParseSolanaTxInput = {
   swapProvider: string
 }
 
+/**
+ * Falls back to raw Solana review when no parser can prove destination or amount.
+ */
+export const getSolanaRawTxFallback = (
+  transactions: string[]
+): SolanaTxData => ({
+  raw: {
+    inputCoin: chainFeeCoin.Solana,
+    inAmount: '0',
+    transactions,
+  },
+})
+
 export const parseSolanaTx = async ({
   fromCoin,
   walletCore,
@@ -40,10 +54,7 @@ export const parseSolanaTx = async ({
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
   const connection = new Connection(solanaRpcUrl)
-  const inputTx = Uint8Array.from(Buffer.from(data[0], 'base64'))
-  const txInputDataArray = Object.values(inputTx)
-  const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
-  const buffer = Buffer.from(txInputDataBuffer)
+  const buffer = Buffer.from(data[0], 'base64')
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
     buffer
@@ -192,14 +203,5 @@ export const parseSolanaTx = async ({
     }
   }
 
-  const solanaFeeCoin = await getCoin({ chain: Chain.Solana })
-  return {
-    transfer: {
-      authority: fromCoin.address,
-      inputCoin: solanaFeeCoin,
-      inAmount: '0',
-      receiverAddress: '',
-      rawTransactions: data,
-    },
-  }
+  return getSolanaRawTxFallback(data)
 }
