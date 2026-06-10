@@ -11,6 +11,7 @@ import {
   QbtcDappMessage,
   UnsupportedQbtcMessageTypeError,
 } from '@core/ui/qbtc/dapp/encodeAnyMessage'
+import { getQbtcDappAmount } from '@core/ui/qbtc/dapp/getQbtcDappAmount'
 import { qbtcChainId } from '@core/ui/qbtc/dapp/qbtcDirectConstants'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getQbtcAccountInfo } from '@vultisig/core-chain/chains/cosmos/qbtc/getQbtcAccountInfo'
@@ -151,6 +152,7 @@ export const handleQbtcSignAndBroadcast = async (
     asset: { ticker: 'QBTC' },
     from,
     memo,
+    amount: getQbtcDappAmount(messages),
     directPayload: {
       bodyBytes,
       authInfoBytes,

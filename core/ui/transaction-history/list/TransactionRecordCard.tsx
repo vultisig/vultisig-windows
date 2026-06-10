@@ -13,8 +13,10 @@ import {
 } from '@vultisig/core-chain/coin/Coin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { useTranslation } from 'react-i18next'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'
+import { getTransactionTagLabel } from '../cosmosMessageLabel'
 import {
   TransactionHistoryCard,
   TransactionHistoryCardPill,
@@ -39,6 +41,8 @@ type TransactionDisplayData = {
   symbol: string
   pill: TransactionHistoryCardPill
   coin: (CoinKey & { logo: string }) | undefined
+  /** Cosmos message typeUrl driving the tag label, when present. */
+  messageTypeUrl?: string
 }
 
 const formatCryptoAmount = (amount: number): string =>
@@ -117,6 +121,7 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
           logo: record.data.tokenLogo,
         }
       : undefined,
+    messageTypeUrl: record.data.messageTypeUrl,
   }
 }
 
@@ -168,9 +173,14 @@ const useFiatDisplay = (record: TransactionRecord, cryptoAmount: number) => {
 export const TransactionRecordCard = ({
   record,
 }: TransactionRecordCardProps) => {
+  const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const display = getDisplayData(record)
   const amountUsd = useFiatDisplay(record, display.cryptoAmount)
+  const tagLabel = getTransactionTagLabel({
+    messageTypeUrl: display.messageTypeUrl,
+    t,
+  })
 
   const handleClick = () =>
     navigate({ id: 'transactionDetail', state: { id: record.id } })
@@ -190,6 +200,7 @@ export const TransactionRecordCard = ({
     >
       <TransactionHistoryCard
         tagType={display.tagType}
+        tagLabel={tagLabel}
         status={statusToCardStatus[record.status]}
         amountUsd={amountUsd}
         amountCrypto={display.amountCrypto}

@@ -75,6 +75,42 @@ const getRootRelativePath = filePath =>
 const getDistRelativePath = ({ distDir, filePath }) =>
   toPosixPath(path.relative(distDir, filePath))
 
+const buildCommandByBrand = {
+  station: 'yarn build:extension:station',
+  vultisig: 'yarn build:extension',
+}
+
+const getBrandByManifestName = manifestName =>
+  Object.entries(expectedByBrand).find(
+    ([, expected]) => expected.manifestName === manifestName
+  )?.[0]
+
+const getManifestBrandMismatchHint = ({
+  actualManifestName,
+  brand,
+  distDir,
+}) => {
+  const actualBrand = getBrandByManifestName(actualManifestName)
+
+  if (!actualBrand || actualBrand === brand) {
+    return ''
+  }
+
+  const expectedName = expectedByBrand[brand].manifestName
+  const distLabel = getRootRelativePath(distDir)
+  const buildCommand = buildCommandByBrand[brand]
+  const gateHint =
+    brand === 'station'
+      ? ' The full client flag gate also rebuilds it: yarn check:client-build-flags.'
+      : ''
+
+  return (
+    `\n\n${distLabel} appears to contain a ${actualManifestName} build, ` +
+    `not ${expectedName}. Rebuild the expected flavor before QA: ` +
+    `${buildCommand}.${gateHint}`
+  )
+}
+
 const readArgs = () => {
   const args = process.argv.slice(2)
   const options = {
@@ -114,10 +150,10 @@ const readArgs = () => {
   return options
 }
 
-const assertEqual = (actual, expectedValue, label) => {
+const assertEqual = (actual, expectedValue, label, hint = '') => {
   if (actual !== expectedValue) {
     throw new Error(
-      `${label} mismatch. Expected "${expectedValue}", received "${actual}".`
+      `${label} mismatch. Expected "${expectedValue}", received "${actual}".${hint}`
     )
   }
 }
@@ -219,7 +255,16 @@ const assertStaticBrand = async ({ brand, distDir, expected }) => {
   const inpageSource = await readInpageSources(distDir)
   const iconSourceDir = getIconSourceDir(brand)
 
-  assertEqual(manifest.name, expected.manifestName, 'manifest.name')
+  assertEqual(
+    manifest.name,
+    expected.manifestName,
+    'manifest.name',
+    getManifestBrandMismatchHint({
+      actualManifestName: manifest.name,
+      brand,
+      distDir,
+    })
+  )
   assertEqual(
     manifest.description,
     expected.manifestDescription,

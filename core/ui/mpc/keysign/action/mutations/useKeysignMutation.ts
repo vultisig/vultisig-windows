@@ -13,7 +13,7 @@ import {
 } from '@core/ui/qbtc/dapp/buildQBTCSignedTxFromDirect'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { fromBase64 } from '@cosmjs/encoding'
-import { sha256 } from '@noble/hashes/sha256'
+import { sha256 } from '@noble/hashes/sha2.js'
 import { useMutation } from '@tanstack/react-query'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
