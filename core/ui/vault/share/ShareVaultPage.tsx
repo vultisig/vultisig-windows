@@ -46,7 +46,9 @@ export const ShareVaultPage = () => {
           const link = document.createElement('a')
           link.href = dataUrl
           link.download = `${name}.png`
+          document.body.appendChild(link)
           link.click()
+          link.remove()
         }
       } catch (error) {
         console.error('Error sharing image:', error)
