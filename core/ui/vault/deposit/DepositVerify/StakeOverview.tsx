@@ -28,7 +28,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
@@ -72,7 +72,7 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
   ] as const
   const isCosmosStakingAction = isOneOf(action, cosmosStakingActions)
   const validatorsQuery = useCosmosValidatorsQuery(
-    isCosmosStakingAction ? (coin.chain as IbcEnabledCosmosChain) : undefined
+    isCosmosStakingAction ? (coin.chain as StakingChain) : undefined
   )
   const resolveMoniker = (valoper: string | undefined) => {
     if (!valoper) return null

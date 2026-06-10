@@ -6,7 +6,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import {
   type Delegation,
   type Validator,
@@ -17,7 +17,7 @@ import styled from 'styled-components'
 import { ValidatorAvatar } from './ValidatorAvatar'
 
 type ActiveDelegationPickerProps = {
-  chain: IbcEnabledCosmosChain
+  chain: StakingChain
   delegatorAddress: string
   /** Staking-token ticker (LUNA / LUNC). */
   ticker: string

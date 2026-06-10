@@ -1,9 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
-import { getCosmosDelegations } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
+import {
+  getCosmosDelegations,
+  StakingChain,
+} from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 
 type UseCosmosDelegationsQueryInput = {
-  chain: IbcEnabledCosmosChain
+  chain: StakingChain
   delegatorAddress: string
 }
 

@@ -5,6 +5,7 @@ import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
+import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
@@ -66,6 +67,14 @@ export const useCurrentVaultAddress = (chain: Chain) => {
     if (existing) return existing
 
     if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[chain]) {
+      return ''
+    }
+
+    // MLDSA chains (e.g. QBTC) can only derive an address from the vault's
+    // post-quantum key. Vaults created before MLDSA keygen don't have one, so
+    // they simply have no address on these chains — return empty rather than
+    // throwing (callers treat '' as "not derivable / disabled").
+    if (getSignatureAlgorithm(chain) === 'mldsa' && !vault.publicKeyMldsa) {
       return ''
     }
 

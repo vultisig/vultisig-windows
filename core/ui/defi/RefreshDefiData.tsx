@@ -77,6 +77,11 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     ],
     poolQueryKeys: [],
   },
+  [Chain.QBTC]: {
+    priceCoins: [],
+    getPositionsQueryKey: address => ['cosmosDelegations', Chain.QBTC, address],
+    poolQueryKeys: [],
+  },
 }
 
 export const RefreshDefiData = () => {
@@ -87,6 +92,7 @@ export const RefreshDefiData = () => {
   const tronAddress = useCurrentVaultAddress(Chain.Tron)
   const terraAddress = useCurrentVaultAddress(Chain.Terra)
   const terraClassicAddress = useCurrentVaultAddress(Chain.TerraClassic)
+  const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
   const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
   const circleAccountQuery = useCircleAccountQuery()
   const isCircleVisible = useIsCircleVisible()
@@ -99,6 +105,7 @@ export const RefreshDefiData = () => {
         [Chain.Tron]: tronAddress,
         [Chain.Terra]: terraAddress,
         [Chain.TerraClassic]: terraClassicAddress,
+        [Chain.QBTC]: qbtcAddress,
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {

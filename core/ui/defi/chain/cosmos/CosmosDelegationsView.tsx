@@ -6,6 +6,7 @@ import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries
 import { useCosmosRewardsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosRewardsQuery'
 import { useCosmosUnbondingsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosUnbondingsQuery'
 import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
+import { stakingDenomForChain } from '@core/ui/chain/cosmos/staking/stakingDenom'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -15,8 +16,8 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
-import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { coinKeyToString, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
@@ -27,17 +28,18 @@ import { CosmosDelegationCard } from './CosmosDelegationCard'
 // Chain-config `staking.unbonding_time` per chain (in days). 21d is the
 // Terra-family default and the Cosmos Hub default. Sourced from a query in
 // the long run, but pinned here since it's stable for the launch chains.
-const unbondingDaysByChain: Partial<Record<IbcEnabledCosmosChain, number>> = {
+const unbondingDaysByChain: Partial<Record<StakingChain, number>> = {
   Terra: 21,
   TerraClassic: 21,
+  QBTC: 21,
 }
 
 type CosmosDelegationsViewProps = {
-  chain: IbcEnabledCosmosChain
+  chain: StakingChain
   delegatorAddress: string
-  /** Staking-token ticker for display (e.g. LUNA / LUNC). */
+  /** Staking-token ticker for display (e.g. LUNA / LUNC / QBTC). */
   ticker: string
-  /** Staking-token base-unit exponent (Terra family = 6). */
+  /** Staking-token base-unit exponent (Terra family = 6, QBTC = 8). */
   decimals: number
 }
 
@@ -64,10 +66,10 @@ export const CosmosDelegationsView = ({
   )
 
   // Canonical Cosmos staking denom for this chain (e.g. `uluna` for Terra
-  // family). The vault-stored `stakingCoin` doesn't carry an `id` field for
-  // Terra (`chainFeeCoin[Chain.Terra]` omits it), so anything that needs
-  // the denom — APY supply query, reward filtering — must use this map.
-  const stakingDenom = cosmosFeeCoinDenom[chain]
+  // family, `qbtc` for QBTC). The vault-stored `stakingCoin` doesn't carry an
+  // `id` field for Terra (`chainFeeCoin[Chain.Terra]` omits it), so anything
+  // that needs the denom — APY supply query, reward filtering — must use this.
+  const stakingDenom = stakingDenomForChain(chain)
 
   // Same coin-price feed the Portfolio view uses. Routed by the fee coin's
   // `priceProviderId` (e.g. `terra-luna-2`) — matching the Wallet tab.
@@ -79,8 +81,13 @@ export const CosmosDelegationsView = ({
   // Chain-wide APY inputs (inflation / bonded_ratio / community_tax).
   // Per-validator APY is computed in the map below using each validator's
   // commission. TerraClassic's inflation is 0 by governance so its APY
-  // collapses to 0 — accurate for the inflation portion only.
-  const apyQuery = useCosmosChainApyQuery({ chain, stakingDenom })
+  // collapses to 0 — accurate for the inflation portion only. QBTC has no
+  // x/mint module, so disable the APY query for it (the card hides APY when
+  // undefined).
+  const apyQuery = useCosmosChainApyQuery({
+    chain: chain === Chain.QBTC ? undefined : chain,
+    stakingDenom,
+  })
 
   if (delegationsQuery.isPending || validatorsQuery.isPending) {
     return (

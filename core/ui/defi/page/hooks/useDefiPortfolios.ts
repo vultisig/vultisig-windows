@@ -80,6 +80,18 @@ export const useDefiChainPortfolios = () => {
     coins: [{ ...chainFeeCoin[Chain.TerraClassic], chain: Chain.TerraClassic }],
   })
 
+  // QBTC native staking. Same shape as Terra, but QBTC has no spot-price feed
+  // on the testnet, so the fiat rollup is 0 — the position count still surfaces
+  // the staked balance in the DeFi tab.
+  const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
+  const qbtcDelegationsQuery = useCosmosDelegationsQuery({
+    chain: Chain.QBTC,
+    delegatorAddress: qbtcAddress ?? '',
+  })
+  const qbtcPricesQuery = useCoinPricesQuery({
+    coins: [{ ...chainFeeCoin[Chain.QBTC], chain: Chain.QBTC }],
+  })
+
   const data = useMemo<DefiChainPortfolio[]>(() => {
     const portfolios: DefiChainPortfolio[] = []
 
@@ -176,6 +188,19 @@ export const useDefiChainPortfolios = () => {
       })
     }
 
+    if (enabledChains.includes(Chain.QBTC)) {
+      portfolios.push({
+        chain: Chain.QBTC,
+        totalFiat: cosmosStakedFiat({
+          delegations: qbtcDelegationsQuery.data,
+          price: qbtcPricesQuery.data?.[coinKeyToString({ chain: Chain.QBTC })],
+          decimals: chainFeeCoin[Chain.QBTC].decimals,
+        }),
+        positionsWithBalanceCount: qbtcDelegationsQuery.data?.length ?? 0,
+        isLoading: qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending,
+      })
+    }
+
     return portfolios
   }, [
     enabledChains,
@@ -197,6 +222,10 @@ export const useDefiChainPortfolios = () => {
     terraPricesQuery.isPending,
     terraClassicPricesQuery.data,
     terraClassicPricesQuery.isPending,
+    qbtcDelegationsQuery.data,
+    qbtcDelegationsQuery.isPending,
+    qbtcPricesQuery.data,
+    qbtcPricesQuery.isPending,
   ])
 
   const isPending =
@@ -208,7 +237,9 @@ export const useDefiChainPortfolios = () => {
       (terraDelegationsQuery.isPending || terraPricesQuery.isPending)) ||
     (enabledChains.includes(Chain.TerraClassic) &&
       (terraClassicDelegationsQuery.isPending ||
-        terraClassicPricesQuery.isPending))
+        terraClassicPricesQuery.isPending)) ||
+    (enabledChains.includes(Chain.QBTC) &&
+      (qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending))
 
   const isTronEnabled = enabledChains.includes(Chain.Tron)
 
