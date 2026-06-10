@@ -93,18 +93,23 @@ type SuiParamKey = NonNullable<
 
 const normalisePackageId = (pkg: string): string => pad32(pkg)
 
-// Type predicates so `Object.hasOwn` narrows the candidate `key` to the
-// literal union under the static map's keys. Lets us index the map without
-// a type assertion.
+// Type predicates so the runtime presence check narrows the candidate `key`
+// to the literal union under the static map's keys. Lets us index the map
+// without a type assertion. `Object.prototype.hasOwnProperty.call` is used
+// instead of `Object.hasOwn` because the extension build config targets a
+// pre-ES2022 lib that doesn't include the latter; semantics are identical.
+const hasOwnProp = (obj: object, key: string): boolean =>
+  Object.prototype.hasOwnProperty.call(obj, key)
+
 const isKnownSuiObjectKey = (
   key: string
 ): key is Extract<keyof typeof knownSuiObjectKeys, string> =>
-  Object.hasOwn(knownSuiObjectKeys, key)
+  hasOwnProp(knownSuiObjectKeys, key)
 
 const isKnownSuiModuleCallKey = (
   key: string
 ): key is Extract<keyof typeof knownSuiModuleCallKeys, string> =>
-  Object.hasOwn(knownSuiModuleCallKeys, key)
+  hasOwnProp(knownSuiModuleCallKeys, key)
 
 /**
  * Look up the i18n key for a Sui framework singleton (`Clock`,
