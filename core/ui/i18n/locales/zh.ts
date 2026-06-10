@@ -1330,4 +1330,5 @@ export const zh = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} 应用程序永远无法签署未经您事先批准的交易。',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted: '该资产交易暂时停止，请稍后再试。',
 }

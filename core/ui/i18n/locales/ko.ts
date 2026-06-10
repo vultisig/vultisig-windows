@@ -1415,4 +1415,6 @@ export const ko = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} 앱은 사용자가 먼저 승인하지 않은 거래에는 절대 서명할 수 없습니다.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    '해당 자산의 거래가 일시적으로 중단되었습니다. 잠시 후 다시 시도해 주세요.',
 }

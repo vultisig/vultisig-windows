@@ -1445,4 +1445,6 @@ export const es = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} Las aplicaciones nunca pueden firmar transacciones que usted no apruebe previamente.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    'La negociación de este activo está temporalmente suspendida. Inténtelo de nuevo más tarde.',
 }

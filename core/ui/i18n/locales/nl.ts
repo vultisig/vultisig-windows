@@ -1428,4 +1428,6 @@ export const nl = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} Apps kunnen nooit transacties ondertekenen die u niet eerst goedkeurt.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    'De handel in dit actief is tijdelijk stopgezet. Probeer het later opnieuw.',
 }
