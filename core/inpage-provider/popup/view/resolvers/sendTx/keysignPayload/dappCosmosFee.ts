@@ -7,7 +7,7 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 
-export type DappCosmosFeeAmount = { denom: string; amount: string }
+type DappCosmosFeeAmount = { denom: string; amount: string }
 
 const executeContractMsgTypes: ReadonlySet<string> = new Set([
   CosmosMsgType.MSG_EXECUTE_CONTRACT,
