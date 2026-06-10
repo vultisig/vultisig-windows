@@ -1,4 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { cosmosStakedFiat } from '@core/ui/chain/cosmos/staking/cosmosStakedFiat'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
@@ -23,28 +24,6 @@ export type DefiChainPortfolio = {
   totalFiat: number
   positionsWithBalanceCount: number
   isLoading: boolean
-}
-
-type CosmosStakedFiatInput = {
-  delegations: { balance: { amount: string } }[] | undefined
-  price: number | undefined
-  decimals: number
-}
-
-// Sum staked base-units (uluna for Terra family) across all delegations,
-// scale by decimals, and multiply by the USD spot price. Returns 0 while
-// either query is loading so the row renders the spinner cleanly.
-const cosmosStakedFiat = ({
-  delegations,
-  price,
-  decimals,
-}: CosmosStakedFiatInput): number => {
-  if (!delegations || price === undefined) return 0
-  const totalUnits = delegations.reduce(
-    (acc, d) => acc + Number(d.balance.amount),
-    0
-  )
-  return (totalUnits / 10 ** decimals) * price
 }
 
 export const useDefiChainPortfolios = () => {
@@ -78,6 +57,18 @@ export const useDefiChainPortfolios = () => {
   })
   const terraClassicPricesQuery = useCoinPricesQuery({
     coins: [{ ...chainFeeCoin[Chain.TerraClassic], chain: Chain.TerraClassic }],
+  })
+
+  // QBTC native staking. Same shape as Terra, but QBTC has no spot-price feed
+  // on the testnet, so the fiat rollup is 0 — the position count still surfaces
+  // the staked balance in the DeFi tab.
+  const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
+  const qbtcDelegationsQuery = useCosmosDelegationsQuery({
+    chain: Chain.QBTC,
+    delegatorAddress: qbtcAddress ?? '',
+  })
+  const qbtcPricesQuery = useCoinPricesQuery({
+    coins: [{ ...chainFeeCoin[Chain.QBTC], chain: Chain.QBTC }],
   })
 
   const data = useMemo<DefiChainPortfolio[]>(() => {
@@ -176,6 +167,19 @@ export const useDefiChainPortfolios = () => {
       })
     }
 
+    if (enabledChains.includes(Chain.QBTC)) {
+      portfolios.push({
+        chain: Chain.QBTC,
+        totalFiat: cosmosStakedFiat({
+          delegations: qbtcDelegationsQuery.data,
+          price: qbtcPricesQuery.data?.[coinKeyToString({ chain: Chain.QBTC })],
+          decimals: chainFeeCoin[Chain.QBTC].decimals,
+        }),
+        positionsWithBalanceCount: qbtcDelegationsQuery.data?.length ?? 0,
+        isLoading: qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending,
+      })
+    }
+
     return portfolios
   }, [
     enabledChains,
@@ -197,6 +201,10 @@ export const useDefiChainPortfolios = () => {
     terraPricesQuery.isPending,
     terraClassicPricesQuery.data,
     terraClassicPricesQuery.isPending,
+    qbtcDelegationsQuery.data,
+    qbtcDelegationsQuery.isPending,
+    qbtcPricesQuery.data,
+    qbtcPricesQuery.isPending,
   ])
 
   const isPending =
@@ -208,7 +216,9 @@ export const useDefiChainPortfolios = () => {
       (terraDelegationsQuery.isPending || terraPricesQuery.isPending)) ||
     (enabledChains.includes(Chain.TerraClassic) &&
       (terraClassicDelegationsQuery.isPending ||
-        terraClassicPricesQuery.isPending))
+        terraClassicPricesQuery.isPending)) ||
+    (enabledChains.includes(Chain.QBTC) &&
+      (qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending))
 
   const isTronEnabled = enabledChains.includes(Chain.Tron)
 
