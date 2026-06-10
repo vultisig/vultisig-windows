@@ -139,6 +139,9 @@ export default defineConfig(async ({ mode }) => {
         ...plugins,
       ],
       build: {
+        // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
+        // downlevel pass cannot transform the current dependency graph.
+        target: 'esnext',
         copyPublicDir: false,
         emptyOutDir: false,
         manifest: false,
@@ -182,6 +185,9 @@ export default defineConfig(async ({ mode }) => {
         }),
       ],
       build: {
+        // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
+        // downlevel pass cannot transform the current dependency graph.
+        target: 'esnext',
         emptyOutDir: false,
         manifest: false,
         ...devBuildOptions,
