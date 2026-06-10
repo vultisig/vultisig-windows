@@ -54,6 +54,11 @@ export const parseSolanaTx = async ({
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
   const connection = new Connection(solanaRpcUrl)
+  if (!data[0]) {
+    throw new Error(
+      'Invalid Solana transaction: missing serialized transaction data'
+    )
+  }
   const buffer = Buffer.from(data[0], 'base64')
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
