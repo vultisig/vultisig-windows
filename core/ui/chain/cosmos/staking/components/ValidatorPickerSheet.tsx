@@ -32,6 +32,12 @@ type ValidatorPickerSheetProps = {
   onSelect: (validator: Validator) => void
 }
 
+/**
+ * Bottom-sheet validator picker for the delegate / redelegate forms. Lists the
+ * chain's bonded validators (searchable), highlights the current selection, and
+ * optionally excludes one validator (the redelegate source). Calls `onSelect`
+ * with the chosen validator and `onClose` to dismiss.
+ */
 export const ValidatorPickerSheet = ({
   chain,
   ticker,

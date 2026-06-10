@@ -594,12 +594,16 @@ const applyCosmosStakingSignData = ({
   const { bodyBytes, authInfoBytes, chainId } = isQbtc
     ? (() => {
         const gasLimit = getQbtcStakingGasLimit(msgCount)
+        // `toEncodeObjects` returns cosmjs `EncodeObject[]` ({ typeUrl, value });
+        // map to the QBTC dApp message shape so the proto encoder consumes the
+        // staking msgs (the typeUrls are registered in `messageRegistry`).
+        const messages: QbtcDappMessage[] = toEncodeObjects({
+          input,
+          delegatorAddress: coin.address,
+          denom: qbtcFeeDenom,
+        }).map(({ typeUrl, value }) => ({ typeUrl, value }))
         const { bodyBytes, authInfoBytes } = buildQBTCDirectPayload({
-          messages: toEncodeObjects({
-            input,
-            delegatorAddress: coin.address,
-            denom: qbtcFeeDenom,
-          }) as QbtcDappMessage[],
+          messages,
           hexPublicKey,
           sequence,
           fee: {

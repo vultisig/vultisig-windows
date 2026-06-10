@@ -9,6 +9,11 @@ type UseCosmosRewardsQueryInput = {
   delegatorAddress: string
 }
 
+/**
+ * Fetches the pending (unclaimed) staking rewards per validator for a delegator
+ * on a Cosmos staking chain. Disabled until `delegatorAddress` is known;
+ * results are cached for 30s.
+ */
 export const useCosmosRewardsQuery = ({
   chain,
   delegatorAddress,

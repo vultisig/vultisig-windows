@@ -36,6 +36,12 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+/**
+ * Verify-screen overview for deposit/stake actions. Renders the action label,
+ * amount, fee and total, swapping the memo row for validator row(s) on Cosmos
+ * native staking actions (delegate / undelegate / redelegate / claim). `onBack`
+ * returns to the form.
+ */
 export const StakeOverview = ({ onBack }: OnBackProp) => {
   const { t } = useTranslation()
   const depositData = useDepositData()

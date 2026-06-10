@@ -9,6 +9,11 @@ type UseCosmosUnbondingsQueryInput = {
   delegatorAddress: string
 }
 
+/**
+ * Fetches the in-progress unbonding delegations (entries with their completion
+ * times) for a delegator on a Cosmos staking chain. Disabled until
+ * `delegatorAddress` is known; results are cached for 30s.
+ */
 export const useCosmosUnbondingsQuery = ({
   chain,
   delegatorAddress,

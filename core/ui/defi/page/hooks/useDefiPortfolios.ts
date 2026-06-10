@@ -1,4 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { cosmosStakedFiat } from '@core/ui/chain/cosmos/staking/cosmosStakedFiat'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
@@ -23,28 +24,6 @@ export type DefiChainPortfolio = {
   totalFiat: number
   positionsWithBalanceCount: number
   isLoading: boolean
-}
-
-type CosmosStakedFiatInput = {
-  delegations: { balance: { amount: string } }[] | undefined
-  price: number | undefined
-  decimals: number
-}
-
-// Sum staked base-units (uluna for Terra family) across all delegations,
-// scale by decimals, and multiply by the USD spot price. Returns 0 while
-// either query is loading so the row renders the spinner cleanly.
-const cosmosStakedFiat = ({
-  delegations,
-  price,
-  decimals,
-}: CosmosStakedFiatInput): number => {
-  if (!delegations || price === undefined) return 0
-  const totalUnits = delegations.reduce(
-    (acc, d) => acc + Number(d.balance.amount),
-    0
-  )
-  return (totalUnits / 10 ** decimals) * price
 }
 
 export const useDefiChainPortfolios = () => {

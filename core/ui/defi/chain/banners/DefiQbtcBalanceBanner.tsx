@@ -1,4 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { cosmosStakedFiat } from '@core/ui/chain/cosmos/staking/cosmosStakedFiat'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -39,17 +40,12 @@ export const DefiQbtcBalanceBanner = () => {
   const priceCoin = { ...chainFeeCoin[Chain.QBTC], chain: Chain.QBTC }
   const priceQuery = useCoinPricesQuery({ coins: [priceCoin] })
   const price = priceQuery.data?.[coinKeyToString({ chain: Chain.QBTC })]
-  const decimals = chainFeeCoin[Chain.QBTC].decimals
 
-  const totalFiat =
-    delegationsQuery.data && price !== undefined
-      ? (delegationsQuery.data.reduce(
-          (acc, d) => acc + Number(d.balance.amount),
-          0
-        ) /
-          10 ** decimals) *
-        price
-      : 0
+  const totalFiat = cosmosStakedFiat({
+    delegations: delegationsQuery.data,
+    price,
+    decimals: chainFeeCoin[Chain.QBTC].decimals,
+  })
 
   return (
     <TerraBannerContainer>

@@ -9,6 +9,11 @@ type UseCosmosDelegationsQueryInput = {
   delegatorAddress: string
 }
 
+/**
+ * Fetches the active delegations (per-validator staked balances) for a
+ * delegator on a Cosmos staking chain. Disabled until `delegatorAddress` is
+ * known; results are cached for 30s.
+ */
 export const useCosmosDelegationsQuery = ({
   chain,
   delegatorAddress,

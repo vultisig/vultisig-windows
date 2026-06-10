@@ -38,6 +38,11 @@ type ActiveDelegationPickerProps = {
  * card already supplies `validatorAddress` / `srcValidatorAddress` via
  * the form-defaults.
  */
+/**
+ * Picker that lists the delegator's current delegations (the validators they
+ * have staked to) for the undelegate / redelegate-source step. Calls `onSelect`
+ * with the chosen delegation's validator.
+ */
 export const ActiveDelegationPicker = ({
   chain,
   delegatorAddress,
