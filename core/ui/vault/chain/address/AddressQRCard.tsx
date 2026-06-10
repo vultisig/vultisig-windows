@@ -185,6 +185,9 @@ export const AddressQRCard = ({
         await saveFile({ name: fileName, blob })
         return
       }
+
+      // Image generation failed — log before falling back to text-only share.
+      console.error('Error sharing image:', imageResult.error)
     }
 
     if (!navigator.share) return
