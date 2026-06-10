@@ -34,8 +34,18 @@ const toCoin = (asset: BlockaidSuiAsset): Coin<OtherChain.Sui> => {
 
 type FormatAmountInput = { amount: bigint; decimals: number }
 
-const formatAmount = ({ amount, decimals }: FormatAmountInput): string =>
-  Number(formatUnits(amount, decimals)).toString()
+// Keep the exact `formatUnits` string output. Running it through `Number()`
+// would lose precision on amounts beyond JS's 2^53 safe range and would
+// switch large/small values into scientific notation in the signing
+// prompt — both unacceptable for an approval-time display where the user
+// is verifying what they're authorising.
+const formatAmount = ({ amount, decimals }: FormatAmountInput): string => {
+  const raw = formatUnits(amount, decimals)
+  if (!raw.includes('.')) return raw
+  // Trim cosmetic trailing zeros after the decimal, then drop a dangling
+  // dot left behind by a whole-number value ("1.0" → "1").
+  return raw.replace(/0+$/, '').replace(/\.$/, '')
+}
 
 type SuiTxIntentDisplayProps = { intent: BlockaidSuiSimulationInfo }
 
