@@ -14,6 +14,9 @@ const executeContractMsgTypes: ReadonlySet<string> = new Set([
   CosmosMsgType.MSG_EXECUTE_CONTRACT_URL,
 ])
 
+/**
+ * Extracts dApp-signed Cosmos fee amounts from Amino or Direct sign data.
+ */
 export const getDappCosmosFeeAmounts = (
   signData: KeysignPayload['signData']
 ): readonly DappCosmosFeeAmount[] | undefined => {
@@ -30,6 +33,9 @@ export const getDappCosmosFeeAmounts = (
   return undefined
 }
 
+/**
+ * Checks whether Cosmos sign data contains an execute-contract message.
+ */
 export const isExecuteContractSignData = (
   signData: KeysignPayload['signData']
 ): boolean => {
@@ -71,13 +77,18 @@ const shouldDisplaySignedDappCosmosFee = ({
   getCosmosChainKind(chain) === 'ibcEnabled' ||
   isExecuteContractSignData(keysignPayload.signData)
 
+type GetNonNativeDappCosmosFeeDisplayInput = {
+  keysignPayload: KeysignPayload
+  chain: CosmosChain
+}
+
+/**
+ * Formats signed non-native Cosmos dApp fees when the signed fee is paid by the transaction.
+ */
 export const getNonNativeDappCosmosFeeDisplay = ({
   keysignPayload,
   chain,
-}: {
-  keysignPayload: KeysignPayload
-  chain: CosmosChain
-}): string | null => {
+}: GetNonNativeDappCosmosFeeDisplayInput): string | null => {
   if (!shouldDisplaySignedDappCosmosFee({ keysignPayload, chain })) {
     return null
   }
