@@ -1,3 +1,4 @@
+import { getNonNativeDappCosmosFeeDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/dappCosmosFee'
 import { ManageEvmFee } from '@core/inpage-provider/popup/view/resolvers/sendTx/ManageEvmFee'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -5,6 +6,7 @@ import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVa
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
+import { getColor } from '@lib/ui/theme/getters'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -17,6 +19,15 @@ import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+const DappCosmosFeeDescription = styled.span`
+  color: ${getColor('textShy')};
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  overflow-wrap: anywhere;
+`
 
 export type NetworkFeeSectionProps = {
   keysignPayload: KeysignPayload
@@ -52,6 +63,12 @@ export const NetworkFeeSection = ({
             walletCore,
             publicKey: publicKey as PublicKey,
           })
+          const nonNativeDappCosmosFeeDisplay = isChainOfKind(chain, 'cosmos')
+            ? getNonNativeDappCosmosFeeDisplay({
+                keysignPayload,
+                chain,
+              })
+            : null
 
           const getEvmValues = () => {
             if (!isChainOfKind(chain, 'evm')) {
@@ -81,10 +98,18 @@ export const NetworkFeeSection = ({
           return (
             <List>
               <ListItem
-                description={formatAmount(
-                  fromChainAmount(feeAmount, chainFeeCoin[chain].decimals),
-                  chainFeeCoin[chain]
-                )}
+                description={
+                  nonNativeDappCosmosFeeDisplay ? (
+                    <DappCosmosFeeDescription>
+                      {nonNativeDappCosmosFeeDisplay}
+                    </DappCosmosFeeDescription>
+                  ) : (
+                    formatAmount(
+                      fromChainAmount(feeAmount, chainFeeCoin[chain].decimals),
+                      chainFeeCoin[chain]
+                    )
+                  )
+                }
                 extra={
                   isChainOfKind(chain, 'evm') && evmValues ? (
                     <ManageEvmFee
@@ -95,7 +120,11 @@ export const NetworkFeeSection = ({
                     />
                   ) : null
                 }
-                title={t('est_network_fee')}
+                title={t(
+                  nonNativeDappCosmosFeeDisplay
+                    ? 'network_fee'
+                    : 'est_network_fee'
+                )}
                 hoverable={false}
               />
               {transactionPayload.transactionDetails.msgPayload?.case ===
