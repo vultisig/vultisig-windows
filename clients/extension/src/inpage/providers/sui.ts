@@ -255,7 +255,7 @@ export class Sui implements Wallet {
     })
     return signSuiTransaction({
       transactionBytesBase64,
-      publicKey: connected.publicKey,
+      account: connected.address,
     })
   }
 

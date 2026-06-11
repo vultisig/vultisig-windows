@@ -18,4 +18,6 @@ export const getTxAmount = ({ coin, customTxData }: ParsedTx) =>
       return sendAmount
     },
     polkadot: () => BigInt(0),
+    // Pre-built PTB: the amount is encoded in the bytes, not surfaced here.
+    sui: () => BigInt(0),
   })

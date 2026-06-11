@@ -79,14 +79,6 @@ export type SignMessageInput =
       }
     }
   | {
-      // base64-encoded prepared Sui transaction block bytes
-      // (output of @mysten/sui Transaction.build()).
-      sui_sign_transaction: {
-        chain: OtherChain.Sui
-        transactionBytes: string
-      }
-    }
-  | {
       cosmos_sign_arbitrary: {
         chain: CosmosChain
         // base64-encoded arbitrary payload (ADR-36 MsgSignData `data`)

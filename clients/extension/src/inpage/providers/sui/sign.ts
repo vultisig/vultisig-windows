@@ -2,6 +2,7 @@ import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { buildSuiSerializedSignature } from '@vultisig/core-chain/chains/sui/sign'
+import { deserializeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
 
 const hexToBytes = (hex: string): Uint8Array => Buffer.from(hex, 'hex')
 
@@ -60,36 +61,48 @@ export const signSuiPersonalMessage = async ({
 type SignSuiTransactionInput = {
   // Already-built Sui PTB bytes (base64).
   transactionBytesBase64: string
-  publicKey: Uint8Array
+  // Connected Sui address — routes the popup to the vault that owns it.
+  account: string
 }
 
 /**
- * Sign an already-built Sui transaction block via the custom-message keysign
- * flow. The `transactionBytesBase64` must already be the BCS bytes of the
- * built PTB — see `buildSuiTransactionBytes` for the helper that calls into
- * the background to build from a `Transaction` / `{ toJSON }` wrapper.
+ * Sign an already-built Sui transaction block through the standard keysign
+ * pipeline (`signSui` keysign payload). The `transactionBytesBase64` must
+ * already be the BCS bytes of the built PTB — see `buildSuiTransactionBytes`
+ * for the helper that calls into the background to build from a `Transaction`
+ * / `{ toJSON }` wrapper.
+ *
+ * WalletCore signs the bytes via `signDirectMessage` and returns a Sui
+ * `SigningOutput` whose `signature` is already the Wallet Standard wire
+ * signature (`flag || sig || pubKey`, base64) — no manual assembly needed.
  */
 export const signSuiTransaction = async ({
   transactionBytesBase64,
-  publicKey,
+  account,
 }: SignSuiTransactionInput): Promise<{
   signature: string
   bytes: string
 }> => {
-  const signatureHex = await callPopup({
-    signMessage: {
-      sui_sign_transaction: {
-        chain: Chain.Sui,
-        transactionBytes: transactionBytesBase64,
+  const [result] = await callPopup(
+    {
+      sendTx: {
+        serialized: {
+          data: [transactionBytesBase64],
+          // The dApp owns broadcasting: `sui:signTransaction` returns the
+          // signature, and `sui:signAndExecuteTransaction*` broadcasts via
+          // `executeSuiTransaction`. Never broadcast from the keysign pipeline.
+          skipBroadcast: true,
+          chain: Chain.Sui,
+        },
       },
     },
-  })
+    { account }
+  )
+
+  const { signature } = deserializeSigningOutput(Chain.Sui, result.data)
 
   return {
-    signature: serializeSuiSignatureBase64({
-      signatureHex: String(signatureHex),
-      publicKey,
-    }),
+    signature,
     bytes: transactionBytesBase64,
   }
 }

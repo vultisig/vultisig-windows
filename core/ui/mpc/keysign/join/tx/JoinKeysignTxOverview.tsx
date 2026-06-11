@@ -30,6 +30,8 @@ import { useTranslation } from 'react-i18next'
 
 import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
+import { parseSuiTx } from '../../tx/sui/parser'
+import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
 
 /**
  * Joiner verify view for a regular transfer. Renders the same card-based
@@ -110,6 +112,20 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
       : null
 
   const keysignPayloadQuery = getResolvedQuery(value)
+
+  // Sui dApp signing carries a pre-built PTB with no transfer amount/recipient,
+  // so the standard "You're sending" card would read an empty 0-SUI transfer.
+  // Decode the bytes and show the actual command/input breakdown instead, so
+  // the joiner sees exactly what it is co-signing.
+  if (value.signData.case === 'signSui') {
+    const suiTxData = parseSuiTx(value.signData.value.unsignedTxMsg)
+    return (
+      <>
+        <BlockaidTxScan keysignPayloadQuery={keysignPayloadQuery} />
+        {suiTxData ? <SignSuiDisplay data={suiTxData} /> : null}
+      </>
+    )
+  }
 
   return (
     <>
