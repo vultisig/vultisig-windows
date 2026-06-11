@@ -4,17 +4,17 @@
   "private": true,
   "dependencies": {
     "@core/ui": "workspace:^",
-    "@keplr-wallet/types": "^0.13.13",
+    "@keplr-wallet/types": "^0.13.38",
     "@lib/extension": "workspace:^",
     "@lib/ui": "workspace:^",
-    "@tanstack/react-query": "^5.90.21",
-    "@tanstack/react-query-persist-client": "^5.90.24",
-    "@trustwallet/wallet-core": "^4.6.9",
+    "@tanstack/react-query": "^5.101.0",
+    "@tanstack/react-query-persist-client": "^5.101.0",
+    "@trustwallet/wallet-core": "^4.6.13",
     "@vultisig/core-chain": "2.15.0",
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "1.5.0",
     "@vultisig/lib-utils": "0.10.1",
-    "react": "^19.2.4",
+    "react": "19.2.4",
     "react-i18next": "^16.5.8"
   }
 }
