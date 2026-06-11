@@ -85,9 +85,6 @@ export const Overview = () => {
     // those bytes (hex) through to `getCustomMessageHex`, which hashes them.
     cosmos_sign_arbitrary: ({ data }) =>
       hexlify(serializeAdr36SignDoc({ signer: address, dataBase64: data })),
-    // Sui PTBs — `getCustomMessageHex` reads `transactionBytes` (base64)
-    // via the `method === 'sui_sign_transaction'` branch. Pass-through here.
-    sui_sign_transaction: ({ transactionBytes }) => transactionBytes,
   })
 
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
@@ -109,8 +106,6 @@ export const Overview = () => {
     },
     cosmos_sign_arbitrary: ({ data }) =>
       toDisplayMessageString(fromBase64(data)),
-    sui_sign_transaction: ({ transactionBytes }) =>
-      toDisplayMessageString(fromBase64(transactionBytes)),
   })
 
   const type = matchRecordUnion<SignMessageInput, SignMessageType>(input, {
@@ -118,7 +113,6 @@ export const Overview = () => {
     sign_message: () => 'default',
     personal_sign: ({ type }) => type,
     cosmos_sign_arbitrary: () => 'default',
-    sui_sign_transaction: () => 'default',
   })
 
   const typedData = matchRecordUnion<
@@ -129,7 +123,6 @@ export const Overview = () => {
     sign_message: () => undefined,
     personal_sign: () => undefined,
     cosmos_sign_arbitrary: () => undefined,
-    sui_sign_transaction: () => undefined,
   })
 
   const pluginId = matchRecordUnion<SignMessageInput, string | undefined>(
@@ -139,7 +132,6 @@ export const Overview = () => {
       sign_message: () => undefined,
       personal_sign: ({ pluginId }) => pluginId,
       cosmos_sign_arbitrary: () => undefined,
-      sui_sign_transaction: () => undefined,
     }
   )
 

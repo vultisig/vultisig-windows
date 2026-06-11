@@ -43,6 +43,8 @@ import {
   SignDirectSchema,
   SignSolana,
   SignSolanaSchema,
+  SignSui,
+  SignSuiSchema,
   SignTonSchema,
   TonMessageSchema,
   WasmExecuteContractPayloadSchema,
@@ -169,6 +171,7 @@ export const buildSendTxKeysignPayload = async ({
       psbt: psbt =>
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -220,6 +223,7 @@ export const buildSendTxKeysignPayload = async ({
         return undefined
       },
       polkadot: ({ signerPayload }) => JSON.stringify(signerPayload),
+      sui: () => undefined,
     }
   )
 
@@ -309,6 +313,7 @@ export const buildSendTxKeysignPayload = async ({
     solana: () => ({ case: undefined }),
     psbt: () => ({ case: undefined }),
     polkadot: () => ({ case: undefined }),
+    sui: () => ({ case: undefined }),
   })
 
   const swapPayload = matchRecordUnion<
@@ -356,6 +361,7 @@ export const buildSendTxKeysignPayload = async ({
       }),
     psbt: () => ({ case: undefined }),
     polkadot: () => ({ case: undefined }),
+    sui: () => ({ case: undefined }),
   })
 
   const aminoPayload = matchRecordUnion<CustomTxData, SignAmino | undefined>(
@@ -383,6 +389,7 @@ export const buildSendTxKeysignPayload = async ({
       solana: () => undefined,
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -408,6 +415,7 @@ export const buildSendTxKeysignPayload = async ({
       solana: () => undefined,
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -434,6 +442,7 @@ export const buildSendTxKeysignPayload = async ({
       },
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -467,6 +476,7 @@ export const buildSendTxKeysignPayload = async ({
     solana: () => undefined,
     psbt: () => undefined,
     polkadot: () => undefined,
+    sui: () => undefined,
   })
 
   const bitcoinPayload = matchRecordUnion<
@@ -481,7 +491,20 @@ export const buildSendTxKeysignPayload = async ({
         senderAddress: coin.address,
       }),
     polkadot: () => undefined,
+    sui: () => undefined,
   })
+
+  const suiPayload = matchRecordUnion<CustomTxData, SignSui | undefined>(
+    customTxData,
+    {
+      regular: () => undefined,
+      solana: () => undefined,
+      psbt: () => undefined,
+      polkadot: () => undefined,
+      sui: ({ transactionBytes }) =>
+        create(SignSuiSchema, { unsignedTxMsg: transactionBytes }),
+    }
+  )
 
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
@@ -499,7 +522,9 @@ export const buildSendTxKeysignPayload = async ({
               }
             : bitcoinPayload !== undefined
               ? { case: 'signBitcoin', value: bitcoinPayload }
-              : { case: undefined, value: undefined }
+              : suiPayload !== undefined
+                ? { case: 'signSui', value: suiPayload }
+                : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
     validateTonComment(memo)
@@ -554,6 +579,7 @@ export const buildSendTxKeysignPayload = async ({
         solana: () => false,
         psbt: () => false,
         polkadot: () => false,
+        sui: () => false,
       }),
       transactionType: getTransactionType(),
       timeoutTimestamp: getTimeoutTimestamp(),

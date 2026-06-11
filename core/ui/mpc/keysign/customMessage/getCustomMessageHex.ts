@@ -1,8 +1,5 @@
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
-import {
-  getSuiPersonalMessageDigest,
-  getSuiTransactionDataDigest,
-} from '@vultisig/core-chain/chains/sui/sign'
+import { getSuiPersonalMessageDigest } from '@vultisig/core-chain/chains/sui/sign'
 import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
 import { match } from '@vultisig/lib-utils/match'
 import { omit } from '@vultisig/lib-utils/record/omit'
@@ -17,21 +14,11 @@ type GetCustomMessageHexInput = {
   method: string
 }
 
-const getSuiDigestHex = ({
-  message,
-  method,
-}: {
-  message: string
-  method: string
-}): string => {
-  if (method === 'sui_sign_transaction') {
-    // `message` is the base64-encoded prepared transaction block bytes.
-    const txBytes = Buffer.from(message, 'base64')
-    return Buffer.from(getSuiTransactionDataDigest(txBytes)).toString('hex')
-  }
-
-  // Personal message — `getSuiPersonalMessageDigest` handles the BCS
-  // `vector<u8>` wrap and the PersonalMessage intent.
+// Sui custom messages are personal messages only — built Sui transactions go
+// through the standard keysign pipeline (`signSui` keysign payload), not here.
+// `getSuiPersonalMessageDigest` handles the BCS `vector<u8>` wrap and the
+// PersonalMessage intent.
+const getSuiDigestHex = ({ message }: { message: string }): string => {
   const messageBytes = message.startsWith('0x')
     ? Buffer.from(stripHexPrefix(message), 'hex')
     : new TextEncoder().encode(message)
@@ -60,7 +47,7 @@ export const getCustomMessageHex = ({
     // StdSignDoc{MsgSignData} bytes; the signed digest is their sha256.
     cosmos: () => stripHexPrefix(sha256(bytes)),
     solana: () => Buffer.from(bytes).toString('hex'),
-    sui: () => getSuiDigestHex({ message, method }),
+    sui: () => getSuiDigestHex({ message }),
     ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
     polkadot: () => Buffer.from(bytes).toString('hex'),

@@ -26,6 +26,7 @@
     "@hookform/resolvers": "^5.4.0",
     "@lib/codegen": "workspace:^",
     "@lib/ui": "workspace:^",
+    "@mysten/sui": "^1.45.2",
     "@noble/hashes": "1.8.0",
     "@polkadot/util": "^14.0.3",
     "@polkadot/util-crypto": "^14.0.3",

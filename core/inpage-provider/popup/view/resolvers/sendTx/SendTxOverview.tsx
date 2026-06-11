@@ -14,6 +14,7 @@ import { ParsedTx } from '@core/inpage-provider/popup/view/resolvers/sendTx/core
 import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/gasEstimation/getGasEstimationQuery'
 import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/query'
 import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
+import { SuiTxIntentDisplay } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/SuiTxIntentDisplay'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -25,6 +26,8 @@ import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDi
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
+import { parseSuiTx } from '@core/ui/mpc/keysign/tx/sui/parser'
+import { SignSuiDisplay } from '@core/ui/mpc/keysign/tx/sui/SignSuiDisplay'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
 import {
@@ -47,9 +50,15 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { Query } from '@lib/ui/query/Query'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { useQuery } from '@tanstack/react-query'
+import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
+import {
+  BlockaidSuiSimulation,
+  parseBlockaidSuiSimulation,
+} from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
@@ -97,6 +106,36 @@ export const SendTxOverview = ({
   const blockaidSimulationQuery = useBlockaidSimulationQuery({
     keysignPayloadQuery,
     walletCore,
+  })
+
+  // Sui dApp signing carries the already-built PTB. Decode it for the human
+  // readable command breakdown and ask Blockaid for the predicted balance
+  // changes — the popup runs in the extension context, so the dApp page's CSP
+  // doesn't block the scan. The generic `useBlockaidSimulationQuery` above is
+  // inactive for Sui (it only covers EVM + Solana), so we scan here directly.
+  const suiTransactionBytes =
+    'sui' in customTxData ? customTxData.sui.transactionBytes : null
+
+  const suiTxData = suiTransactionBytes ? parseSuiTx(suiTransactionBytes) : null
+
+  const suiIntentQuery = useQuery({
+    queryKey: ['blockaidSuiScan', address, suiTransactionBytes],
+    queryFn: async () => {
+      const simulation = (await getTxBlockaidSimulation({
+        chain: OtherChain.Sui,
+        data: {
+          chain: 'mainnet',
+          options: ['simulation'],
+          account_address: address,
+          transaction: suiTransactionBytes ?? '',
+          metadata: {},
+        },
+      })) as BlockaidSuiSimulation
+      return parseBlockaidSuiSimulation(simulation)
+    },
+    enabled: !!suiTransactionBytes,
+    staleTime: 30_000,
+    retry: false,
   })
 
   const gasEstimationInput = useTransformQueryData(
@@ -417,6 +456,21 @@ export const SendTxOverview = ({
                           publicKey={publicKey}
                         />
                       </VStack>
+                    </>
+                  ) : chain === Chain.Sui &&
+                    keysignPayload.signData.case === 'signSui' ? (
+                    <>
+                      <List>
+                        <ListItem description={address} title={t('from')} />
+                        <ListItem
+                          description={getKeysignChain(keysignPayload)}
+                          title={t('network')}
+                        />
+                      </List>
+                      {suiIntentQuery.data ? (
+                        <SuiTxIntentDisplay intent={suiIntentQuery.data} />
+                      ) : null}
+                      {suiTxData ? <SignSuiDisplay data={suiTxData} /> : null}
                     </>
                   ) : (
                     <>

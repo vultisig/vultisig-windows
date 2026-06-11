@@ -58,6 +58,15 @@ export type PolkadotDappTxData = {
   signerPayload: PolkadotSignerPayloadJSON
 }
 
+/**
+ * Sui Wallet Standard dApp transaction data: the already-built PTB (BCS bytes,
+ * base64). It is signed verbatim via the `signSui` keysign payload — coins,
+ * gas and recipients are baked into the bytes, so nothing is reconstructed.
+ */
+export type SuiDappTxData = {
+  transactionBytes: string
+}
+
 export type CustomTxData =
   | {
       regular: RegularTxData
@@ -70,6 +79,9 @@ export type CustomTxData =
     }
   | {
       polkadot: PolkadotDappTxData
+    }
+  | {
+      sui: SuiDappTxData
     }
 
 type GetCustomTxDataInput = {
@@ -156,6 +168,13 @@ export const getCustomTxData = ({
               signerPayload,
             },
           }
+        }
+
+        // Sui dApps ship a single already-built PTB (base64 BCS bytes). We
+        // forward it verbatim to the `signSui` keysign payload — there is no
+        // per-account input restriction or coin selection to apply here.
+        if (chain === OtherChain.Sui) {
+          return { sui: { transactionBytes: data[0] } }
         }
 
         const [{ getPublicKey }, { deriveAddress }] = await Promise.all([

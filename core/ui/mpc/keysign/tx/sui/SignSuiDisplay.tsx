@@ -1,34 +1,20 @@
-import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
-import {
-  collectInputHints,
-  InputHint,
-  renderMoveType,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/core/sui/abi'
-import {
-  decodedPureDisplay,
-  decodedPureLabel,
-  decodePureValue,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/core/sui/decodePure'
-import {
-  knownMoveCallEntry,
-  knownObjectLabelKey,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/core/sui/knownEntities'
-import {
-  SuiArgument,
-  SuiCommand,
-  SuiPtbInput,
-  SuiTxData,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/core/sui/types'
-import {
-  SuiObjectInfo,
-  useSuiPtbMetadataQuery,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/core/sui/useSuiPtbMetadata'
+import { Collapse } from '@lib/ui/layout/Collapse'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { collectInputHints, InputHint, renderMoveType } from './abi'
+import {
+  decodedPureDisplay,
+  decodedPureLabel,
+  decodePureValue,
+} from './decodePure'
+import { knownMoveCallEntry, knownObjectLabelKey } from './knownEntities'
+import { SuiArgument, SuiCommand, SuiPtbInput, SuiTxData } from './types'
+import { SuiObjectInfo, useSuiPtbMetadataQuery } from './useSuiPtbMetadata'
 
 const mistPerSui = 1_000_000_000n
 
@@ -262,7 +248,7 @@ const InputRow: FC<InputRowProps> = ({ input, index, hint, objectInfo }) => {
   )
 }
 
-type SignSuiTransactionDisplayProps = { data: SuiTxData }
+type SignSuiDisplayProps = { data: SuiTxData }
 
 /**
  * Decoded view of a Sui Programmable Transaction Block, rendered above the
@@ -278,9 +264,7 @@ type SignSuiTransactionDisplayProps = { data: SuiTxData }
  * cached for 5 minutes; per-call failures are tolerated and the affected
  * row falls back to the by-length / raw-hex rendering.
  */
-export const SignSuiTransactionDisplay: FC<SignSuiTransactionDisplayProps> = ({
-  data,
-}) => {
+export const SignSuiDisplay: FC<SignSuiDisplayProps> = ({ data }) => {
   const { t } = useTranslation()
   const metadataQuery = useSuiPtbMetadataQuery(data)
   const abis = metadataQuery.data?.abis ?? new Map()
@@ -324,10 +308,7 @@ export const SignSuiTransactionDisplay: FC<SignSuiTransactionDisplayProps> = ({
         </VStack>
       </Panel>
       {data.commands.length > 0 && (
-        <Collapse
-          title={t('sui_commands', { count: data.commands.length })}
-          transparent
-        >
+        <Collapse title={t('sui_commands', { count: data.commands.length })}>
           <VStack gap={12}>
             {data.commands.map((command, index) => {
               const known =
@@ -352,10 +333,7 @@ export const SignSuiTransactionDisplay: FC<SignSuiTransactionDisplayProps> = ({
         </Collapse>
       )}
       {data.inputs.length > 0 && (
-        <Collapse
-          title={t('sui_inputs', { count: data.inputs.length })}
-          transparent
-        >
+        <Collapse title={t('sui_inputs', { count: data.inputs.length })}>
           <VStack gap={8}>
             {data.inputs.map((input, index) => (
               <InputRow
