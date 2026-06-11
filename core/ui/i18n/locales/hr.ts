@@ -1058,9 +1058,6 @@ export const hr = {
   vault_part: 'Dijeljenje trezora',
   vault_password: 'Lozinka trezora',
   vault_qr_share: 'Udio',
-  vault_qr_share_not_supported: 'Dijeljenje nije podržano u ovom pregledniku.',
-  vault_qr_share_text: 'Pogledajte ovaj QR kod trezora!',
-  vault_qr_share_title: 'QR kod trezora',
   vault_ready_description:
     'Spremni ste! Vi imate kontrolu nad svakom transakcijom.',
   vault_ready_to_use: 'Vaš trezor je spreman za korištenje',

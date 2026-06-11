@@ -3,6 +3,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { match } from '@vultisig/lib-utils/match'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
@@ -52,19 +53,31 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
 }
 
 // Cosmos validator (operator) addresses use the chain's account prefix
-// suffixed with `valoper` (e.g. `terravaloper1...`). Both Terra v2 and
-// TerraClassic share the `terra` account prefix, so we lock the regex to
-// the family — pasting a Cosmos Hub `cosmosvaloper1...` into a LUNA
-// delegate form would be silently accepted by a chain-agnostic pattern
-// and surface as a late tx failure on broadcast.
-const terraValidatorAddressPattern = /^terravaloper1[02-9ac-hj-np-z]{38,71}$/
+// suffixed with `valoper` (e.g. `terravaloper1...`). We lock the regex to the
+// chain's own HRP — pasting a Cosmos Hub `cosmosvaloper1...` into a LUNA
+// delegate form would be silently accepted by a chain-agnostic pattern and
+// surface as a late tx failure on broadcast. Both Terra v2 and TerraClassic
+// share the `terra` account prefix; QBTC uses `qbtc`.
+const validatorHrpByChain: Partial<Record<Chain, string>> = {
+  [Chain.Terra]: 'terra',
+  [Chain.TerraClassic]: 'terra',
+  [Chain.QBTC]: 'qbtc',
+}
 
-const validatorAddressSchema = (t: TFunction) =>
+const validatorAddressPattern = (chain: Chain): RegExp => {
+  const hrp = shouldBePresent(
+    validatorHrpByChain[chain],
+    `validator HRP for ${chain}`
+  )
+  return new RegExp(`^${hrp}valoper1[02-9ac-hj-np-z]{38,71}$`)
+}
+
+const validatorAddressSchema = (t: TFunction, chain: Chain) =>
   z
     .string()
     .trim()
     .min(1, t('validator_address'))
-    .regex(terraValidatorAddressPattern, t('invalid_validator_address'))
+    .regex(validatorAddressPattern(chain), t('invalid_validator_address'))
 
 type GetChainActionConfigParams = {
   t: TFunction
@@ -797,7 +810,7 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         amount: positiveAmountSchema(totalAmountAvailable, t),
-        validatorAddress: validatorAddressSchema(t),
+        validatorAddress: validatorAddressSchema(t, chain),
       }),
     }),
     undelegate: () => ({
@@ -812,7 +825,7 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         amount: positiveAmountSchema(totalAmountAvailable, t),
-        validatorAddress: validatorAddressSchema(t),
+        validatorAddress: validatorAddressSchema(t, chain),
       }),
     }),
     redelegate: () => ({
@@ -834,8 +847,8 @@ export const getDepositFormConfig = ({
       schema: z
         .object({
           amount: positiveAmountSchema(totalAmountAvailable, t),
-          srcValidatorAddress: validatorAddressSchema(t),
-          validatorAddress: validatorAddressSchema(t),
+          srcValidatorAddress: validatorAddressSchema(t, chain),
+          validatorAddress: validatorAddressSchema(t, chain),
         })
         .superRefine((data, ctx) => {
           if (data.srcValidatorAddress === data.validatorAddress) {
@@ -855,7 +868,7 @@ export const getDepositFormConfig = ({
       fields: [],
       schema: z.object({
         validatorAddresses: z
-          .array(validatorAddressSchema(t))
+          .array(validatorAddressSchema(t, chain))
           .min(1, t('validator_address')),
       }),
     }),

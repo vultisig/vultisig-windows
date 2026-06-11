@@ -145,6 +145,51 @@ export const MayachainLogoWrapper = styled.div`
   }
 `
 
+// Right-side glow halo with a chain logo centered inside it — used by banners
+// that don't ship a pre-composited brand glyph (e.g. QBTC). The `::before`
+// blurred radial gradient is the glow; `::after` is the thin ring; the logo
+// sits on top, bled slightly off the right edge to mirror the Terra hero.
+export const BannerLogoGlow = styled.div`
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      rgba(51, 204, 204, 0.35) 0%,
+      rgba(2, 18, 43, 0) 100%
+    );
+    filter: blur(24px);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 24px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 255, 200, 0.35);
+    box-shadow: 0 0 40px rgba(0, 255, 200, 0.25);
+  }
+`
+
+export const BannerLogoImage = styled.img`
+  ${sameDimensions(80)};
+  position: relative;
+  border-radius: 50%;
+`
+
 export const ChainTitle = styled(Text)`
   font-family: Brockmann, sans-serif;
   font-size: 18px;

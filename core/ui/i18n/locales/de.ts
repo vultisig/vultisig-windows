@@ -1085,10 +1085,6 @@ export const de = {
   vault_part: 'Tresor teilen',
   vault_password: 'Tresorpasswort',
   vault_qr_share: 'Aktie',
-  vault_qr_share_not_supported:
-    'Das Teilen von Inhalten wird von diesem Browser nicht unterstützt.',
-  vault_qr_share_text: 'Schaut euch diesen Tresor-QR-Code an!',
-  vault_qr_share_title: 'Vault QR-Code',
   vault_ready_description:
     'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',
   vault_ready_to_use: 'Ihr Tresor ist einsatzbereit.',

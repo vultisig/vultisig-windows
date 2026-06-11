@@ -1076,10 +1076,6 @@ export const es = {
   vault_part: 'Compartir bóveda',
   vault_password: 'Contraseña de la bóveda',
   vault_qr_share: 'Compartir',
-  vault_qr_share_not_supported:
-    'Compartir no es compatible con este navegador.',
-  vault_qr_share_text: '¡Mira este código QR de la bóveda!',
-  vault_qr_share_title: 'Código QR de la bóveda',
   vault_ready_description:
     '¡Todo listo! Mantienes el control de cada transacción.',
   vault_ready_to_use: 'Su bóveda está lista para usarse.',

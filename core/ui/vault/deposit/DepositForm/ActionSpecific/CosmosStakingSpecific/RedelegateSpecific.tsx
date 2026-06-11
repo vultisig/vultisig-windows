@@ -7,7 +7,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -31,7 +31,7 @@ export const RedelegateSpecific = () => {
   }) as string | undefined
 
   const delegationsQuery = useCosmosDelegationsQuery({
-    chain: chain as IbcEnabledCosmosChain,
+    chain: chain as StakingChain,
     delegatorAddress: coin.address,
   })
 
@@ -42,7 +42,7 @@ export const RedelegateSpecific = () => {
   if (!srcValidatorAddress) {
     return (
       <ActiveDelegationPicker
-        chain={chain as IbcEnabledCosmosChain}
+        chain={chain as StakingChain}
         delegatorAddress={coin.address}
         ticker={coin.ticker}
         decimals={coin.decimals}
@@ -127,7 +127,7 @@ export const RedelegateSpecific = () => {
         name="validatorAddress"
         render={({ field }) => (
           <ValidatorPickerField
-            chain={chain as IbcEnabledCosmosChain}
+            chain={chain as StakingChain}
             ticker={coin.ticker}
             decimals={coin.decimals}
             value={field.value as string | undefined}

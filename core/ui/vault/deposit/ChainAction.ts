@@ -66,6 +66,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Cosmos]: ['ibc_transfer', 'switch', 'add_thor_lp'],
   [Chain.Terra]: ['ibc_transfer', ...cosmosStakingActions],
   [Chain.TerraClassic]: ['ibc_transfer', ...cosmosStakingActions],
+  [Chain.QBTC]: [...cosmosStakingActions],
   [Chain.Tron]: ['freeze', 'unfreeze', 'add_thor_lp'],
   [Chain.Avalanche]: ['add_thor_lp'],
   [Chain.Base]: ['add_thor_lp'],

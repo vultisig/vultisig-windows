@@ -1,7 +1,7 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
-  useCurrentVaultPublicKey,
+  useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
@@ -29,7 +29,7 @@ export const useDepositKeysignPayloadQuery = (
   const depositData = useDepositData()
   const [coin] = useDepositCoin()
   const vault = useCurrentVault()
-  const publicKey = useCurrentVaultPublicKey(coin.chain)
+  const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
   const walletCore = useAssertWalletCore()
 
   const receiver = useDepositReceiver()
@@ -59,6 +59,7 @@ export const useDepositKeysignPayloadQuery = (
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
+      hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
       libType: toKeysignLibType(vault),
       walletCore,
     }),

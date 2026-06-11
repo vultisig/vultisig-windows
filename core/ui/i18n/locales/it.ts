@@ -1078,10 +1078,6 @@ export const it = {
   vault_part: 'Condivisione Vault',
   vault_password: 'Password del caveau',
   vault_qr_share: 'Condividere',
-  vault_qr_share_not_supported:
-    'Condivisione non supportata su questo browser.',
-  vault_qr_share_text: "Dai un'occhiata al codice QR di questo caveau!",
-  vault_qr_share_title: 'Codice QR del caveau',
   vault_ready_description:
     'È tutto pronto! Avrai sempre il controllo di ogni transazione.',
   vault_ready_to_use: "La tua cassaforte è pronta per l'uso.",

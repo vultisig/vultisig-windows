@@ -1062,9 +1062,6 @@ export const nl = {
   vault_part: 'Kluis-share',
   vault_password: 'Kluiswachtwoord',
   vault_qr_share: 'Delen',
-  vault_qr_share_not_supported: 'Delen wordt niet ondersteund in deze browser.',
-  vault_qr_share_text: 'Bekijk deze kluis-QR-code!',
-  vault_qr_share_title: 'Kluis-QR-code',
   vault_ready_description:
     'Je bent helemaal klaar! Je behoudt de controle over elke transactie.',
   vault_ready_to_use: 'Uw kluis is klaar voor gebruik.',

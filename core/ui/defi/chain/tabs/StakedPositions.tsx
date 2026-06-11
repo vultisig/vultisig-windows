@@ -7,7 +7,8 @@ import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
-import { Chain, IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
@@ -37,18 +38,18 @@ type StakeActionType =
   | 'add_cacao_pool'
   | 'remove_cacao_pool'
 
-const cosmosNativeStakingChains: readonly IbcEnabledCosmosChain[] = [
+const cosmosNativeStakingChains: readonly StakingChain[] = [
   Chain.Terra,
   Chain.TerraClassic,
+  Chain.QBTC,
 ]
-const isCosmosNativeStakingChain = (
-  chain: Chain
-): chain is IbcEnabledCosmosChain =>
+const isCosmosNativeStakingChain = (chain: Chain): chain is StakingChain =>
   (cosmosNativeStakingChains as readonly Chain[]).includes(chain)
 
-const tickerByCosmosStakingChain: Record<IbcEnabledCosmosChain, string> = {
+const tickerByCosmosStakingChain: Record<StakingChain, string> = {
   [Chain.Terra]: 'LUNA',
   [Chain.TerraClassic]: 'LUNC',
+  [Chain.QBTC]: 'QBTC',
   // Other IBC chains don't surface native staking on this view yet — set to
   // their fee ticker so the Map type is exhaustive without unsafe casts.
   [Chain.Cosmos]: 'ATOM',

@@ -1,12 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
-import { getCosmosUnbondingDelegations } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
+import {
+  getCosmosUnbondingDelegations,
+  StakingChain,
+} from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 
 type UseCosmosUnbondingsQueryInput = {
-  chain: IbcEnabledCosmosChain
+  chain: StakingChain
   delegatorAddress: string
 }
 
+/**
+ * Fetches the in-progress unbonding delegations (entries with their completion
+ * times) for a delegator on a Cosmos staking chain. Disabled until
+ * `delegatorAddress` is known; results are cached for 30s.
+ */
 export const useCosmosUnbondingsQuery = ({
   chain,
   delegatorAddress,

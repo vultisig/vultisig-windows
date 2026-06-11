@@ -1076,10 +1076,6 @@ export const pt = {
   vault_part: 'Compartilhamento do cofre',
   vault_password: 'Senha do cofre',
   vault_qr_share: 'Compartilhar',
-  vault_qr_share_not_supported:
-    'O compartilhamento não é compatível com este navegador.',
-  vault_qr_share_text: 'Confira este código QR do cofre!',
-  vault_qr_share_title: 'Código QR do cofre',
   vault_ready_description:
     'Está tudo pronto! Você mantém o controle de todas as transações.',
   vault_ready_to_use: 'Seu cofre está pronto para uso.',

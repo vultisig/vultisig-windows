@@ -1083,9 +1083,6 @@ export const ko = {
   vault_part: '금고 공유',
   vault_password: '금고 비밀번호',
   vault_qr_share: '공유하다',
-  vault_qr_share_not_supported: '이 브라우저에서는 공유가 지원되지 않습니다.',
-  vault_qr_share_text: '이 금고 QR 코드를 확인해 보세요!',
-  vault_qr_share_title: '금고 QR 코드',
   vault_ready_description:
     '모든 준비가 완료되었습니다! 모든 거래는 고객님께서 직접 관리하실 수 있습니다.',
   vault_ready_to_use: '금고를 사용하실 준비가 되었습니다.',

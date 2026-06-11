@@ -1056,9 +1056,6 @@ export const ru = {
   vault_part: 'Доля хранилища',
   vault_password: 'Пароль хранилища',
   vault_qr_share: 'Поделиться',
-  vault_qr_share_not_supported: 'Поделиться не поддерживается в этом браузере.',
-  vault_qr_share_text: 'Посмотрите этот QR-код хранилища!',
-  vault_qr_share_title: 'QR-код хранилища',
   vault_ready_description:
     'Всё готово! Вы сохраняете контроль над каждой транзакцией.',
   vault_ready_to_use: 'Ваше хранилище готово к использованию.',
