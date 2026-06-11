@@ -54,7 +54,7 @@ export const BackupFileDropzone = ({
 
   return (
     <>
-      <Container $hasError={hasError} {...getRootProps()}>
+      <Container {...getRootProps()} $hasError={hasError}>
         {hasError ? (
           <VStack gap={16} alignItems="center">
             <ErrorIconContainer>

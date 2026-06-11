@@ -1158,9 +1158,6 @@ export const en = {
   vault_part: 'Vault Share',
   vault_password: 'Vault Password',
   vault_qr_share: 'Share',
-  vault_qr_share_not_supported: 'Sharing not supported on this browser.',
-  vault_qr_share_text: 'Check out this vault QR code!',
-  vault_qr_share_title: 'Vault QR Code',
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",
   vault_ready_to_use: 'Your vault is ready to use',
