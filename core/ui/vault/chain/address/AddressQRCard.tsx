@@ -1,6 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useCore } from '@core/ui/state/core'
 import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
@@ -135,6 +136,7 @@ export const AddressQRCard = ({
   onClose,
 }: AddressQRCardProps) => {
   const { t } = useTranslation()
+  const { saveFile } = useCore()
   const address = useCurrentVaultAddress(chain)
   const { addToast } = useToast()
   const qrNodeRef = useRef<HTMLDivElement | null>(null)
@@ -162,19 +164,30 @@ export const AddressQRCard = ({
 
     const node = qrNodeRef.current
 
-    if (node && navigator.canShare) {
-      const fileResult = await attempt(async () => {
+    if (node) {
+      const fileName = `${displayName}.png`
+      const imageResult = await attempt(async () => {
         const dataUrl = await toPng(node)
         const blob = await (await fetch(dataUrl)).blob()
-        return new File([blob], `${displayName}.png`, { type: 'image/png' })
+        return { blob, file: new File([blob], fileName, { type: 'image/png' }) }
       })
 
-      const file = 'data' in fileResult ? fileResult.data : undefined
+      if (imageResult.data) {
+        const { blob, file } = imageResult.data
 
-      if (file && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file] }).catch(() => undefined)
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] }).catch(() => undefined)
+          return
+        }
+
+        // Web Share with files is unsupported (e.g. Chrome on Linux);
+        // fall back to downloading the QR image.
+        await saveFile({ name: fileName, blob })
         return
       }
+
+      // Image generation failed — log before falling back to text-only share.
+      console.error('Error sharing image:', imageResult.error)
     }
 
     if (!navigator.share) return
@@ -185,7 +198,7 @@ export const AddressQRCard = ({
         text: address,
       })
       .catch(() => undefined)
-  }, [address, displayName, onShare, t])
+  }, [address, displayName, onShare, saveFile, t])
 
   if (!address) return null
 
