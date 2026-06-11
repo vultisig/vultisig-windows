@@ -55,10 +55,7 @@ import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
-import {
-  BlockaidSuiSimulation,
-  parseBlockaidSuiSimulation,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
+import { parseBlockaidSuiSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
@@ -121,7 +118,7 @@ export const SendTxOverview = ({
   const suiIntentQuery = useQuery({
     queryKey: ['blockaidSuiScan', address, suiTransactionBytes],
     queryFn: async () => {
-      const simulation = (await getTxBlockaidSimulation({
+      const simulation = await getTxBlockaidSimulation({
         chain: OtherChain.Sui,
         data: {
           chain: 'mainnet',
@@ -130,7 +127,7 @@ export const SendTxOverview = ({
           transaction: suiTransactionBytes ?? '',
           metadata: {},
         },
-      })) as BlockaidSuiSimulation
+      })
       return parseBlockaidSuiSimulation(simulation)
     },
     enabled: !!suiTransactionBytes,
