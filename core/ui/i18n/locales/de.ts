@@ -1453,6 +1453,8 @@ export const de = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} Apps können niemals Transaktionen signieren, die Sie nicht vorher genehmigen.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    'Der Handel mit diesem Wertpapier ist vorübergehend ausgesetzt. Bitte versuchen Sie es später erneut.',
   sui_arguments: 'Argumente',
   sui_call_balance_destroy_zero: 'Zerstöre leeres Gleichgewicht',
   sui_call_balance_join: 'Zusammenführungssalden',

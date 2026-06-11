@@ -1422,6 +1422,8 @@ export const ru = {
   plugin_permissions_brand_safety_notice:
     'Приложения {{productName}} никогда не смогут подписывать транзакции, которые вы предварительно не одобрите.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    'Торги этим активом временно приостановлены. Пожалуйста, попробуйте позже.',
   sui_arguments: 'Аргументы',
   sui_call_balance_destroy_zero: 'Уничтожьте пустой баланс',
   sui_call_balance_join: 'Объединение балансов',

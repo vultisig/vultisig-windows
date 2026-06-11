@@ -1327,6 +1327,7 @@ export const zh = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} 应用程序永远无法签署未经您事先批准的交易。',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted: '该资产交易暂时停止，请稍后再试。',
   sui_arguments: '论点',
   sui_call_balance_destroy_zero: '摧毁空虚的平衡',
   sui_call_balance_join: '合并余额',

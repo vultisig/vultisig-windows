@@ -1418,6 +1418,8 @@ export const hr = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} Aplikacije nikada ne mogu potpisivati ​​transakcije koje prethodno niste odobrili.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    'Trgovanje ovom imovinom je privremeno zaustavljeno. Pokušajte ponovno kasnije.',
   sui_arguments: 'Argumenti',
   sui_call_balance_destroy_zero: 'Uništi prazan saldo',
   sui_call_balance_join: 'Spoji stanja',

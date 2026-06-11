@@ -1425,6 +1425,8 @@ export const nl = {
   plugin_permissions_brand_safety_notice:
     '{{productName}} Apps kunnen nooit transacties ondertekenen die u niet eerst goedkeurt.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    'De handel in dit actief is tijdelijk stopgezet. Probeer het later opnieuw.',
   sui_arguments: 'Argumenten',
   sui_call_balance_destroy_zero: 'Vernietig lege balans',
   sui_call_balance_join: 'Saldo&#39;s samenvoegen',

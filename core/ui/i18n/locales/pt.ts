@@ -1442,6 +1442,8 @@ export const pt = {
   plugin_permissions_brand_safety_notice:
     'O aplicativo {{productName}} nunca poderá assinar transações que você não aprove previamente.',
   extension_version: '{{brand}} V{{version}}',
+  swap_trading_halted:
+    'A negociação deste ativo está temporariamente suspensa. Tente novamente mais tarde.',
   sui_arguments: 'Argumentos',
   sui_call_balance_destroy_zero: 'Destruir equilíbrio vazio',
   sui_call_balance_join: 'Consolidar saldos',
