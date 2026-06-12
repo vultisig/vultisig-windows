@@ -97,6 +97,7 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
         })
       },
       [fromCoin, fromCoinKey, publicKey, swapQuote.quote, toCoinKey, walletCore]
-    )
+    ),
+    ['swapFees', fromCoinKey, toCoinKey, fromCoin, swapQuote.quote]
   )
 }

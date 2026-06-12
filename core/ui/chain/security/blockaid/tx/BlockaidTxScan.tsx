@@ -36,7 +36,8 @@ export const BlockaidTxScan = ({
         return getBlockaidTxValidationInput({ payload, walletCore })
       },
       [isBlockaidEnabled, walletCore]
-    )
+    ),
+    ['blockaidTxValidationInput', isBlockaidEnabled]
   )
 
   const txScanQuery = usePotentialQuery(

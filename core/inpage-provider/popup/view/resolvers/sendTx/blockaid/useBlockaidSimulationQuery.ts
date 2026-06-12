@@ -27,7 +27,8 @@ export const useBlockaidSimulationQuery = ({
     useCallback(
       payload => getBlockaidPayloadSimulationInput({ payload, walletCore }),
       [walletCore]
-    )
+    ),
+    ['blockaidPayloadSimulationInput']
   )
 
   const simulationQuery = usePotentialQuery<

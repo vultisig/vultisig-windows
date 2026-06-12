@@ -29,7 +29,6 @@ import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDispla
 import { parseSuiTx } from '@core/ui/mpc/keysign/tx/sui/parser'
 import { SignSuiDisplay } from '@core/ui/mpc/keysign/tx/sui/SignSuiDisplay'
 import { useCore } from '@core/ui/state/core'
-import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
   IconWrapper,
@@ -82,7 +81,6 @@ export const SendTxOverview = ({
 }: SendTxOverviewProps) => {
   const { coin, customTxData } = parsedTx
   const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
   const { t } = useTranslation()
   const getCoin = useGetCoin()
   const transactionPayload = usePopupInput<'sendTx'>()
@@ -370,8 +368,6 @@ export const SendTxOverview = ({
                     chain={chain}
                     feeSettings={feeSettings}
                     setFeeSettings={setFeeSettings}
-                    walletCore={walletCore}
-                    publicKey={publicKey}
                   />
                 </>
               ) : (
@@ -394,8 +390,6 @@ export const SendTxOverview = ({
                         chain,
                         feeSettings,
                         setFeeSettings,
-                        walletCore,
-                        publicKey,
                       }}
                       getCoin={getCoin}
                     />
@@ -418,8 +412,6 @@ export const SendTxOverview = ({
                           chain,
                           feeSettings,
                           setFeeSettings,
-                          walletCore,
-                          publicKey,
                         }}
                         getCoin={getCoin}
                       />
@@ -449,8 +441,6 @@ export const SendTxOverview = ({
                           chain={chain}
                           feeSettings={feeSettings}
                           setFeeSettings={setFeeSettings}
-                          walletCore={walletCore}
-                          publicKey={publicKey}
                         />
                       </VStack>
                     </>
@@ -502,8 +492,6 @@ export const SendTxOverview = ({
                           chain={chain}
                           feeSettings={feeSettings}
                           setFeeSettings={setFeeSettings}
-                          walletCore={walletCore}
-                          publicKey={publicKey}
                         />
                       </VStack>
                     </>

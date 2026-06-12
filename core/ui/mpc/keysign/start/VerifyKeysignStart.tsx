@@ -73,7 +73,8 @@ export const VerifyKeysignStart = ({
         })
       },
       [isBlockaidEnabled, walletCore]
-    )
+    ),
+    ['keysignStartBlockaidTxValidationInput', isBlockaidEnabled]
   )
 
   const txScanQueryBase = usePotentialQuery(

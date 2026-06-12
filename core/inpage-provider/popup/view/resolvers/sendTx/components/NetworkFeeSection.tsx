@@ -1,22 +1,18 @@
 import { getNonNativeDappCosmosFeeDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/dappCosmosFee'
 import { ManageEvmFee } from '@core/inpage-provider/popup/view/resolvers/sendTx/ManageEvmFee'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
+import { useKeysignFee } from '@core/ui/mpc/keysign/fee/useKeysignFee'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { getColor } from '@lib/ui/theme/getters'
-import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
@@ -36,8 +32,6 @@ export type NetworkFeeSectionProps = {
   chain: Chain
   feeSettings: FeeSettings<'evm'> | null
   setFeeSettings: (settings: FeeSettings<'evm'> | null) => void
-  walletCore: ReturnType<typeof useAssertWalletCore>
-  publicKey: ReturnType<typeof useCurrentVaultNullablePublicKey>
 }
 
 export const NetworkFeeSection = ({
@@ -46,32 +40,9 @@ export const NetworkFeeSection = ({
   chain,
   feeSettings,
   setFeeSettings,
-  walletCore,
-  publicKey,
 }: NetworkFeeSectionProps) => {
   const { t } = useTranslation()
-  const feeAmountQuery = useQuery({
-    queryKey: ['networkFee', keysignPayload, publicKey, walletCore, chain],
-    queryFn: () => {
-      if (publicKey !== null) {
-        return getFeeAmount({
-          keysignPayload,
-          walletCore,
-          publicKey,
-        })
-      }
-
-      if (getChainKind(chain) !== 'qbtc') {
-        throw new Error('Missing WalletCore public key for fee estimation')
-      }
-
-      const cosmosSpecific = getBlockchainSpecificValue(
-        keysignPayload.blockchainSpecific,
-        'cosmosSpecific'
-      )
-      return cosmosSpecific.gas
-    },
-  })
+  const feeAmountQuery = useKeysignFee(keysignPayload)
 
   return (
     <MatchRecordUnion
