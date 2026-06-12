@@ -1,18 +1,13 @@
 /**
- * Regression test for the bitfrost.xyz Zcash bridge failure: WalletCore's
- * planner charges an OP_RETURN output as a fixed ~34 bytes regardless of
- * memo length, while ZIP-317 charges ~one logical action per 34 memo bytes.
- * At the default 100 sats/byte, a dApp send with a memo of ~92+ bytes plans
- * a fee below the conventional fee and every node rejects the broadcast
- * with "tx unpaid action limit exceeded".
- *
- * Exercises the real planner end-to-end and verifies the bump formula used
- * by enforceZcashConventionalFee: the divisor must be the planner's own
- * fee-per-byteFee ratio, not the larger real serialized size.
+ * WalletCore's planner charges an OP_RETURN output as a fixed ~34 bytes
+ * regardless of memo length, while ZIP-317 charges ~one logical action per
+ * 34 memo bytes — so memo sends can plan below the conventional fee.
+ * Exercises the real planner to verify the bump formula in
+ * enforceZcashConventionalFee compensates.
  */
 import { initWasm, TW, WalletCore } from '@trustwallet/wallet-core'
 import Long from 'long'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 
 import { ceilDiv, getZcashConventionalFee } from './zip317'
 
@@ -72,8 +67,13 @@ const getConventionalFee = (memoLength: number): bigint =>
   })
 
 describe('Zcash memo sends vs ZIP-317', () => {
-  it('pins the WalletCore quirk: plan fee is flat across memo sizes', async () => {
-    const walletCore = await initWasm()
+  let walletCore: WalletCore
+
+  beforeAll(async () => {
+    walletCore = await initWasm()
+  })
+
+  it('pins the WalletCore quirk: plan fee is flat across memo sizes', () => {
     const fee80 = planZcashSend({ walletCore, byteFee: 100n, memoLength: 80 })
     const fee200 = planZcashSend({ walletCore, byteFee: 100n, memoLength: 200 })
 
@@ -82,8 +82,7 @@ describe('Zcash memo sends vs ZIP-317', () => {
     expect(fee80).toBe(fee200)
   })
 
-  it('underpays ZIP-317 at 100 sats/byte once the memo reaches ~120 bytes', async () => {
-    const walletCore = await initWasm()
+  it('underpays ZIP-317 at 100 sats/byte once the memo reaches ~120 bytes', () => {
     const planFee = planZcashSend({
       walletCore,
       byteFee: 100n,
@@ -93,8 +92,7 @@ describe('Zcash memo sends vs ZIP-317', () => {
     expect(planFee).toBeLessThan(getConventionalFee(120))
   })
 
-  it('meets the conventional fee after one planner-ratio bump', async () => {
-    const walletCore = await initWasm()
+  it('meets the conventional fee after one planner-ratio bump', () => {
     const byteFee = 100n
     const memoLength = 120
     const planFee = planZcashSend({ walletCore, byteFee, memoLength })

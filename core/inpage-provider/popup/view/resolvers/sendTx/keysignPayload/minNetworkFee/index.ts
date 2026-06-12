@@ -99,12 +99,10 @@ type EnforceZcashConventionalFeeInput = EnforceMinNetworkFeeInput & {
 
 /**
  * Enforce the ZIP-317 conventional fee on Zcash transactions we plan
- * ourselves. This is load-bearing for memo sends: WalletCore's planner
- * charges an OP_RETURN output as a fixed ~34 bytes regardless of memo
- * length, while ZIP-317 charges ~one action per 34 memo bytes — so any
- * dApp send with a memo of ~92 bytes or more underpays the conventional
- * fee at the default 100 sats/byte and every node rejects the broadcast.
- * It also covers manual fee-settings overrides and future byte-fee cuts.
+ * ourselves. Load-bearing for memo sends: WalletCore's planner charges an
+ * OP_RETURN output as a fixed ~34 bytes while ZIP-317 charges ~one action
+ * per 34 memo bytes, so long-memo plans fall below the conventional fee.
+ * Also covers manual fee-settings overrides and future byte-fee cuts.
  */
 const enforceZcashConventionalFee = async ({
   bumpsLeft = maxByteFeeBumps,
@@ -139,10 +137,7 @@ const enforceZcashConventionalFee = async ({
     keysignPayload.blockchainSpecific,
     'utxoSpecific'
   )
-  // The bump divisor must be the PLANNER's fee-per-byteFee ratio
-  // (planFee / byteFee), not the real serialized size: the planner
-  // under-sizes OP_RETURN outputs, so dividing by the larger real size
-  // yields a byteFee that still plans below the conventional fee.
+  // Must divide by the planner's own fee ratio, not the real serialized size.
   const currentByteFee = BigInt(utxoSpecific.byteFee || '0')
   const plannerVsize =
     currentByteFee > 0n && planFee > 0n
