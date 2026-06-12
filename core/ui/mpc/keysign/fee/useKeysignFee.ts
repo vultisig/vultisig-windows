@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
@@ -12,21 +13,26 @@ export const useKeysignFee = (keysignPayload: KeysignPayload) => {
   const publicKey = useCurrentVaultNullablePublicKey(chain)
   const walletCore = useAssertWalletCore()
 
-  if (publicKey !== null) {
-    return getFeeAmount({
-      keysignPayload,
-      walletCore,
-      publicKey,
-    })
-  }
+  return useQuery({
+    queryKey: ['keysignFee', keysignPayload, publicKey, walletCore],
+    queryFn: () => {
+      if (publicKey !== null) {
+        return getFeeAmount({
+          keysignPayload,
+          walletCore,
+          publicKey,
+        })
+      }
 
-  if (getChainKind(chain) !== 'qbtc') {
-    throw new Error('Missing WalletCore public key for fee estimation')
-  }
+      if (getChainKind(chain) !== 'qbtc') {
+        throw new Error('Missing WalletCore public key for fee estimation')
+      }
 
-  const cosmosSpecific = getBlockchainSpecificValue(
-    keysignPayload.blockchainSpecific,
-    'cosmosSpecific'
-  )
-  return cosmosSpecific.gas
+      const cosmosSpecific = getBlockchainSpecificValue(
+        keysignPayload.blockchainSpecific,
+        'cosmosSpecific'
+      )
+      return cosmosSpecific.gas
+    },
+  })
 }

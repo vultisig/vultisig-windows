@@ -168,7 +168,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             publicKeys,
             chainPublicKeys,
           })
-          const inputs = getEncodedSigningInputs({
+          const inputs = await getEncodedSigningInputs({
             keysignPayload,
             walletCore,
             publicKey,

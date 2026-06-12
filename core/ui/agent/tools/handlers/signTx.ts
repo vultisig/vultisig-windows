@@ -62,7 +62,7 @@ export const handleSignTx: ToolHandler = async (input, context) => {
   const coinType = getCoinType({ walletCore, chain })
   const derivePath = walletCore.CoinTypeExt.derivationPath(coinType)
 
-  const encodedInputs = getEncodedSigningInputs({
+  const encodedInputs = await getEncodedSigningInputs({
     keysignPayload,
     walletCore,
     publicKey,

@@ -225,7 +225,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               chainPublicKeys: vault.chainPublicKeys,
             })
 
-            const inputs = getEncodedSigningInputs({
+            const inputs = await getEncodedSigningInputs({
               keysignPayload: payload,
               walletCore,
               publicKey,
