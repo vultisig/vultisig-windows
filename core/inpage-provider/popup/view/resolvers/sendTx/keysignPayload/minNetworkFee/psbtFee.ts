@@ -7,6 +7,7 @@ const txOverheadVsize = 11n
 /** P2TR key-path spend — the smallest standard input, so vsize stays a lower bound. */
 const minInputVsize = 57n
 
+/** Serialized size of each PSBT output in bytes (value + script length + script). */
 export const getPsbtOutputSizes = (psbt: Psbt): bigint[] =>
   psbt.txOutputs.map(({ script }) => outputBaseSize + BigInt(script.length))
 

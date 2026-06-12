@@ -2,7 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { UtxoChain } from '@vultisig/core-chain/Chain'
-import { getChainKind } from '@vultisig/core-chain/ChainKind'
+import { toChainKindRecordUnion } from '@vultisig/core-chain/ChainKind'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
 import { getUtxoSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/utxo'
@@ -12,14 +12,14 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { bigIntMax } from '@vultisig/lib-utils/bigint/bigIntMax'
 import { bigIntSum } from '@vultisig/lib-utils/bigint/bigIntSum'
-import { match } from '@vultisig/lib-utils/match'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { CustomTxData } from '../../core/customTxData'
 import { getPsbtFee, getPsbtMinVsize, getPsbtOutputSizes } from './psbtFee'
 import { ceilDiv, getZcashConventionalFee } from './zip317'
 
-type MinNetworkFeeInput = {
+type EnforceMinNetworkFeeInput = {
   keysignPayload: KeysignPayload
   customTxData: CustomTxData
   walletCore: WalletCore
@@ -54,7 +54,12 @@ const getOpReturnOutputSize = (memo: string): bigint => {
   return 9n + pushOverhead + BigInt(dataSize)
 }
 
-const assertPsbtFee = (chain: UtxoChain, psbt: Psbt): void => {
+type AssertPsbtFeeInput = {
+  chain: UtxoChain
+  psbt: Psbt
+}
+
+const assertPsbtFee = ({ chain, psbt }: AssertPsbtFeeInput): void => {
   const fee = getPsbtFee(psbt)
   if (fee === null) return
 
@@ -73,15 +78,24 @@ const assertPsbtFee = (chain: UtxoChain, psbt: Psbt): void => {
   )
 }
 
-const getZcashPlannedOutputSizes = (
-  change: bigint,
+type GetZcashPlannedOutputSizesInput = {
+  change: bigint
   memo: string | undefined
-): bigint[] => {
+}
+
+const getZcashPlannedOutputSizes = ({
+  change,
+  memo,
+}: GetZcashPlannedOutputSizesInput): bigint[] => {
   const sizes = [p2pkhOutputSize]
   if (change > 0n) sizes.push(p2pkhOutputSize)
   if (memo) sizes.push(getOpReturnOutputSize(memo))
 
   return sizes
+}
+
+type EnforceZcashConventionalFeeInput = EnforceMinNetworkFeeInput & {
+  bumpsLeft?: number
 }
 
 /**
@@ -90,10 +104,10 @@ const getZcashPlannedOutputSizes = (
  * floor makes the guarantee structural, covering manual fee-settings
  * overrides and any future byte-fee reduction.
  */
-const enforceZcashConventionalFee = async (
-  input: MinNetworkFeeInput,
-  bumpsLeft = maxByteFeeBumps
-): Promise<KeysignPayload> => {
+const enforceZcashConventionalFee = async ({
+  bumpsLeft = maxByteFeeBumps,
+  ...input
+}: EnforceZcashConventionalFeeInput): Promise<KeysignPayload> => {
   const { keysignPayload, walletCore, publicKey } = input
   const [signingInput] = await getUtxoSigningInputs({
     keysignPayload,
@@ -106,10 +120,10 @@ const enforceZcashConventionalFee = async (
     shouldBePresent(plan.fee, 'UTXO signing input plan fee').toString()
   )
   const inputCount = plan.utxos?.length ?? 0
-  const outputSizes = getZcashPlannedOutputSizes(
-    BigInt(plan.change?.toString() ?? '0'),
-    keysignPayload.memo
-  )
+  const outputSizes = getZcashPlannedOutputSizes({
+    change: BigInt(plan.change?.toString() ?? '0'),
+    memo: keysignPayload.memo,
+  })
   const conventionalFee = getZcashConventionalFee({ inputCount, outputSizes })
   if (planFee >= conventionalFee) return keysignPayload
 
@@ -128,37 +142,44 @@ const enforceZcashConventionalFee = async (
     BigInt(inputCount) * p2pkhInputSize +
     bigIntSum(outputSizes)
   const bumpedByteFee = bigIntMax(
-    ceilDiv(conventionalFee, estimatedVsize),
+    ceilDiv({ value: conventionalFee, divisor: estimatedVsize }),
     BigInt(utxoSpecific.byteFee || '0') + 1n
   )
 
-  const bumpedPayload = await refineKeysignUtxo({
-    keysignPayload: {
-      ...keysignPayload,
-      blockchainSpecific: {
-        case: 'utxoSpecific',
-        value: create(UTXOSpecificSchema, {
-          ...utxoSpecific,
-          byteFee: bumpedByteFee.toString(),
-        }),
-      },
-    } as KeysignPayload,
+  const bumpedKeysignPayload: KeysignPayload = {
+    ...keysignPayload,
+    blockchainSpecific: {
+      case: 'utxoSpecific',
+      value: create(UTXOSpecificSchema, {
+        ...utxoSpecific,
+        byteFee: bumpedByteFee.toString(),
+      }),
+    },
+  }
+
+  const refinedPayload = await refineKeysignUtxo({
+    keysignPayload: bumpedKeysignPayload,
     walletCore,
     publicKey: shouldBePresent(publicKey, 'publicKey'),
   })
 
-  return enforceZcashConventionalFee(
-    { ...input, keysignPayload: bumpedPayload },
-    bumpsLeft - 1
-  )
+  return enforceZcashConventionalFee({
+    ...input,
+    keysignPayload: refinedPayload,
+    bumpsLeft: bumpsLeft - 1,
+  })
 }
 
-const enforceMinUtxoFee = async (
-  chain: UtxoChain,
-  input: MinNetworkFeeInput
-): Promise<KeysignPayload> => {
+type EnforceMinUtxoFeeInput = EnforceMinNetworkFeeInput & {
+  chain: UtxoChain
+}
+
+const enforceMinUtxoFee = async ({
+  chain,
+  ...input
+}: EnforceMinUtxoFeeInput): Promise<KeysignPayload> => {
   if ('psbt' in input.customTxData) {
-    assertPsbtFee(chain, input.customTxData.psbt)
+    assertPsbtFee({ chain, psbt: input.customTxData.psbt })
 
     return input.keysignPayload
   }
@@ -184,13 +205,13 @@ const enforceMinUtxoFee = async (
  *  - remaining kinds: fee computed by us from chain config or network quotes
  */
 export const enforceMinNetworkFee = (
-  input: MinNetworkFeeInput
+  input: EnforceMinNetworkFeeInput
 ): Promise<KeysignPayload> => {
   const chain = getKeysignChain(input.keysignPayload)
   const noOp = async () => input.keysignPayload
 
-  return match(getChainKind(chain), {
-    utxo: () => enforceMinUtxoFee(chain as UtxoChain, input),
+  return matchRecordUnion(toChainKindRecordUnion(chain), {
+    utxo: utxoChain => enforceMinUtxoFee({ ...input, chain: utxoChain }),
     evm: noOp,
     cosmos: noOp,
     solana: noOp,

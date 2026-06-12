@@ -25,6 +25,16 @@ describe('getZcashConventionalFee', () => {
     ).toBe(20_000n)
   })
 
+  it('charges input actions from serialized bytes, not raw count', () => {
+    // 75 P2PKH inputs: ceil(75 * 148 / 150) = 74 actions, not 75
+    expect(
+      getZcashConventionalFee({
+        inputCount: 75,
+        outputSizes: [p2pkhOutput, p2pkhOutput],
+      })
+    ).toBe(370_000n)
+  })
+
   it('counts large OP_RETURN outputs as multiple actions', () => {
     // 80-byte memo: 9 + 3 + 80 = 92 bytes -> with two p2pkh outputs,
     // ceil(160 / 34) = 5 actions -> 25,000 zats
