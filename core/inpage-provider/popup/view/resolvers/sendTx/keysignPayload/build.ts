@@ -62,6 +62,7 @@ import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
 import { TronMsgType } from '../interfaces'
 import { applyCosmosFeeFromSignData } from './applyCosmosFeeFromSignData'
+import { enforceMinNetworkFee } from './minNetworkFee'
 
 export type BuildSendTxKeysignPayloadInput = {
   parsedTx: ParsedTx
@@ -600,5 +601,10 @@ export const buildSendTxKeysignPayload = async ({
     })
   }
 
-  return keysignPayload
+  return enforceMinNetworkFee({
+    keysignPayload,
+    customTxData,
+    walletCore,
+    publicKey,
+  })
 }
