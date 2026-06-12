@@ -4,7 +4,7 @@ import {
   getBlockaidSimulationQueryWithParsing,
 } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { BlockaidSimulationSupportedChain } from '@vultisig/core-chain/security/blockaid/simulationChains'
@@ -22,7 +22,7 @@ export const useBlockaidSimulationQuery = ({
   keysignPayloadQuery,
   walletCore,
 }: UseBlockaidSimulationQueryInput) => {
-  const blockaidTxSimulationInput = useTransformQueryData(
+  const blockaidTxSimulationInput = useTransformQueryDataAsync(
     keysignPayloadQuery,
     useCallback(
       payload => getBlockaidPayloadSimulationInput({ payload, walletCore }),

@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useMemo } from 'react'
 
@@ -32,4 +33,36 @@ export const useTransformQueryData = <
       error,
     }
   }, [queryResult, transform])
+}
+
+export const useTransformQueryDataAsync = <TInput, TOutput, TError = unknown>(
+  queryResult: Query<TInput, TError>,
+  transform: (data: TInput) => Promise<TOutput>
+): Query<TOutput, TError | Error> => {
+  const initialData = queryResult.data
+  const transformQuery = useQuery({
+    queryKey: ['transformQueryDataAsync', initialData, transform],
+    queryFn: () => {
+      if (initialData === undefined) {
+        throw new Error('Missing query data')
+      }
+
+      return transform(initialData)
+    },
+    enabled: initialData !== undefined && queryResult.error === null,
+  })
+
+  if (initialData === undefined) {
+    return {
+      data: undefined,
+      error: queryResult.error,
+      isPending: queryResult.isPending,
+    }
+  }
+
+  return {
+    data: transformQuery.data,
+    error: queryResult.error ?? transformQuery.error,
+    isPending: queryResult.isPending || transformQuery.isPending,
+  }
 }

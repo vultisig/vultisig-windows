@@ -593,7 +593,7 @@ export const buildSendTxKeysignPayload = async ({
   }
 
   if (needsUtxoInfo) {
-    keysignPayload = refineKeysignUtxo({
+    keysignPayload = await refineKeysignUtxo({
       keysignPayload,
       walletCore,
       publicKey: shouldBePresent(publicKey, 'publicKey'),

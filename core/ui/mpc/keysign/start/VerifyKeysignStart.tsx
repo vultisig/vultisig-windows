@@ -8,7 +8,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
@@ -59,10 +59,10 @@ export const VerifyKeysignStart = ({
 
   const walletCore = useAssertWalletCore()
 
-  const txScanInput = useTransformQueryData(
+  const txScanInput = useTransformQueryDataAsync(
     keysignPayloadQuery,
     useCallback(
-      payload => {
+      async payload => {
         if (!isBlockaidEnabled) {
           return null
         }

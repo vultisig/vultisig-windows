@@ -1,4 +1,4 @@
-import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQueryData'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/getNativeSwapDecimals'
@@ -30,15 +30,15 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
   const publicKey = useCurrentVaultPublicKey(fromCoinKey.chain)
   const walletCore = useAssertWalletCore()
 
-  return useTransformQueryData(
+  return useTransformQueryDataAsync(
     keysignPayloadQuery,
-    (keysignPayload): SwapFees => {
+    async (keysignPayload): Promise<SwapFees> => {
       const { chain } = fromCoinKey
       const fromFeeCoin = chainFeeCoin[chain]
 
       const network = {
         ...fromFeeCoin,
-        amount: getFeeAmount({
+        amount: await getFeeAmount({
           keysignPayload,
           walletCore,
           publicKey,
