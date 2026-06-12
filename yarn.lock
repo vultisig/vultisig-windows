@@ -887,6 +887,7 @@ __metadata:
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
     framer-motion: "npm:^12.40.0"
+    long: "npm:^5.3.2"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     react-i18next: "npm:^16.5.8"
