@@ -10,7 +10,7 @@ import { bigIntSum } from '@vultisig/lib-utils/bigint/bigIntSum'
 const marginalFee = 5000n
 const graceActions = 2n
 /** Serialized size of a signed transparent P2PKH input (ZIP-317 §3.1). */
-const p2pkhInputSize = 148n
+export const p2pkhInputSize = 148n
 const inputActionSize = 150n
 const outputActionSize = 34n
 

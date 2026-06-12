@@ -17,7 +17,7 @@ import { Psbt } from 'bitcoinjs-lib'
 
 import { CustomTxData } from '../../core/customTxData'
 import { getPsbtFee, getPsbtMinVsize, getPsbtOutputSizes } from './psbtFee'
-import { ceilDiv, getZcashConventionalFee } from './zip317'
+import { ceilDiv, getZcashConventionalFee, p2pkhInputSize } from './zip317'
 
 type EnforceMinNetworkFeeInput = {
   keysignPayload: KeysignPayload
@@ -40,7 +40,6 @@ const relayFloorPerVbyte: Record<UtxoChain, bigint> = {
   [UtxoChain.Zcash]: 0n,
 }
 
-const p2pkhInputSize = 148n
 const p2pkhOutputSize = 34n
 const zcashTxOverhead = 30n
 const maxByteFeeBumps = 3
