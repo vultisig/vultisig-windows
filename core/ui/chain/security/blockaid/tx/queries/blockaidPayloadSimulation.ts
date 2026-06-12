@@ -2,8 +2,7 @@ import { normalizeBlockaidEvmParsed } from '@core/ui/chain/security/blockaid/tx/
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { getBlockaidTxSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxSimulation'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { UseQueryOptions } from '@tanstack/react-query'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { BlockaidSimulationSupportedChain } from '@vultisig/core-chain/security/blockaid/simulationChains'
@@ -113,7 +112,7 @@ export const useBlockaidPayloadSimulationQuery = ({
       }),
   })
 
-  return usePotentialQuery<
+  const simulationQuery = usePotentialQuery<
     BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>,
     BlockaidEvmSimulationView | BlockaidSolanaSimulationInfo | null,
     Error
@@ -121,4 +120,10 @@ export const useBlockaidPayloadSimulationQuery = ({
     blockaidTxSimulationInput.data || undefined,
     getBlockaidSimulationQueryWithParsing
   )
+
+  return {
+    ...simulationQuery,
+    error: blockaidTxSimulationInput.error ?? simulationQuery.error,
+    isPending: blockaidTxSimulationInput.isPending || simulationQuery.isPending,
+  }
 }

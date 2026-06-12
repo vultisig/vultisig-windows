@@ -7,6 +7,7 @@ import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQuer
 import { Query } from '@lib/ui/query/Query'
 import { getBlockaidTxValidationInput } from '@vultisig/core-mpc/security/blockaid/tx/validation/input'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useCallback } from 'react'
 
 type BlockaidTxScanProps = {
   keysignPayloadQuery: Query<KeysignPayload>
@@ -26,23 +27,31 @@ export const BlockaidTxScan = ({
 
   const txScanInput = useTransformQueryDataAsync(
     keysignPayloadQuery,
-    async payload => {
-      if (!isBlockaidEnabled) {
-        return null
-      }
+    useCallback(
+      async payload => {
+        if (!isBlockaidEnabled) {
+          return null
+        }
 
-      return getBlockaidTxValidationInput({ payload, walletCore })
-    }
+        return getBlockaidTxValidationInput({ payload, walletCore })
+      },
+      [isBlockaidEnabled, walletCore]
+    )
   )
 
   const txScanQuery = usePotentialQuery(
     txScanInput.data || undefined,
     getBlockaidTxValidationQuery
   )
+  const mergedTxScanQuery = {
+    ...txScanQuery,
+    error: txScanInput.error ?? txScanQuery.error,
+    isPending: txScanInput.isPending || txScanQuery.isPending,
+  }
 
   if (!isBlockaidEnabled) {
     return null
   }
 
-  return <BlockaidTxScanStatus value={txScanQuery} />
+  return <BlockaidTxScanStatus value={mergedTxScanQuery} />
 }

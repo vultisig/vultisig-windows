@@ -8,9 +8,9 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { getColor } from '@lib/ui/theme/getters'
 import { useQuery } from '@tanstack/react-query'
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
@@ -51,13 +51,26 @@ export const NetworkFeeSection = ({
 }: NetworkFeeSectionProps) => {
   const { t } = useTranslation()
   const feeAmountQuery = useQuery({
-    queryKey: ['networkFee', keysignPayload, publicKey, walletCore],
-    queryFn: () =>
-      getFeeAmount({
-        keysignPayload,
-        walletCore,
-        publicKey: publicKey as PublicKey,
-      }),
+    queryKey: ['networkFee', keysignPayload, publicKey, walletCore, chain],
+    queryFn: () => {
+      if (publicKey !== null) {
+        return getFeeAmount({
+          keysignPayload,
+          walletCore,
+          publicKey,
+        })
+      }
+
+      if (getChainKind(chain) !== 'qbtc') {
+        throw new Error('Missing WalletCore public key for fee estimation')
+      }
+
+      const cosmosSpecific = getBlockchainSpecificValue(
+        keysignPayload.blockchainSpecific,
+        'cosmosSpecific'
+      )
+      return cosmosSpecific.gas
+    },
   })
 
   return (
@@ -65,9 +78,6 @@ export const NetworkFeeSection = ({
       value={transactionPayload}
       handlers={{
         keysign: transactionPayload => {
-          // MLDSA chains (QBTC) have no WalletCore `PublicKey`. Their fee
-          // resolver doesn't read this field — `getQbtcFeeAmount` returns
-          // `cosmosSpecific.gas` directly — so the cast is safe at runtime.
           const nonNativeDappCosmosFeeDisplay = isChainOfKind(chain, 'cosmos')
             ? getNonNativeDappCosmosFeeDisplay({
                 keysignPayload,

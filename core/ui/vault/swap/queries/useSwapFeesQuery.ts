@@ -9,7 +9,7 @@ import {
 import { SwapFees } from '@vultisig/core-chain/swap/SwapFee'
 import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
@@ -32,68 +32,71 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
 
   return useTransformQueryDataAsync(
     keysignPayloadQuery,
-    async (keysignPayload): Promise<SwapFees> => {
-      const { chain } = fromCoinKey
-      const fromFeeCoin = chainFeeCoin[chain]
+    useCallback(
+      async (keysignPayload): Promise<SwapFees> => {
+        const { chain } = fromCoinKey
+        const fromFeeCoin = chainFeeCoin[chain]
 
-      const network = {
-        ...fromFeeCoin,
-        amount: await getFeeAmount({
-          keysignPayload,
-          walletCore,
-          publicKey,
-        }),
-        decimals: fromFeeCoin.decimals,
-      }
+        const network = {
+          ...fromFeeCoin,
+          amount: await getFeeAmount({
+            keysignPayload,
+            walletCore,
+            publicKey,
+          }),
+          decimals: fromFeeCoin.decimals,
+        }
 
-      return matchRecordUnion<SwapQuoteResult, SwapFees>(swapQuote.quote, {
-        native: ({ fees }) => {
-          const swapAmount = BigInt(fees.total)
+        return matchRecordUnion<SwapQuoteResult, SwapFees>(swapQuote.quote, {
+          native: ({ fees }) => {
+            const swapAmount = BigInt(fees.total)
 
-          return {
-            swap: {
-              ...toCoinKey,
-              amount: swapAmount,
-              decimals: getNativeSwapDecimals(toCoinKey),
-            },
-            network,
-          }
-        },
-        general: ({ tx }) => {
-          return matchRecordUnion(tx, {
-            evm: ({ affiliateFee }) => ({
-              network,
-              ...(affiliateFee ? { swap: affiliateFee } : {}),
-            }),
-            solana: ({ networkFee, swapFee }) => ({
-              network: {
-                chain: chain,
-                amount: BigInt(networkFee),
-                decimals: fromFeeCoin.decimals,
+            return {
+              swap: {
+                ...toCoinKey,
+                amount: swapAmount,
+                decimals: getNativeSwapDecimals(toCoinKey),
               },
-              swap: swapFee,
-            }),
-            transfer: () => ({ network }),
-            cowswap_order: ({ feeAmount }) => {
-              const swapAmount = BigInt(feeAmount)
-
-              return {
+              network,
+            }
+          },
+          general: ({ tx }) => {
+            return matchRecordUnion(tx, {
+              evm: ({ affiliateFee }) => ({
                 network,
-                ...(swapAmount > 0n && fromCoin
-                  ? {
-                      swap: {
-                        chain: fromCoin.chain,
-                        id: fromCoin.id,
-                        amount: swapAmount,
-                        decimals: fromCoin.decimals,
-                      },
-                    }
-                  : {}),
-              }
-            },
-          })
-        },
-      })
-    }
+                ...(affiliateFee ? { swap: affiliateFee } : {}),
+              }),
+              solana: ({ networkFee, swapFee }) => ({
+                network: {
+                  chain: chain,
+                  amount: BigInt(networkFee),
+                  decimals: fromFeeCoin.decimals,
+                },
+                swap: swapFee,
+              }),
+              transfer: () => ({ network }),
+              cowswap_order: ({ feeAmount }) => {
+                const swapAmount = BigInt(feeAmount)
+
+                return {
+                  network,
+                  ...(swapAmount > 0n && fromCoin
+                    ? {
+                        swap: {
+                          chain: fromCoin.chain,
+                          id: fromCoin.id,
+                          amount: swapAmount,
+                          decimals: fromCoin.decimals,
+                        },
+                      }
+                    : {}),
+                }
+              },
+            })
+          },
+        })
+      },
+      [fromCoin, fromCoinKey, publicKey, swapQuote.quote, toCoinKey, walletCore]
+    )
   )
 }

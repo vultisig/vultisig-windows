@@ -35,6 +35,10 @@ export const useTransformQueryData = <
   }, [queryResult, transform])
 }
 
+/**
+ * Transforms resolved query data with an async transform while preserving the
+ * source query's pending and error state.
+ */
 export const useTransformQueryDataAsync = <TInput, TOutput, TError = unknown>(
   queryResult: Query<TInput, TError>,
   transform: (data: TInput) => Promise<TOutput>

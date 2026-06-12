@@ -30,7 +30,7 @@ export const useBlockaidSimulationQuery = ({
     )
   )
 
-  return usePotentialQuery<
+  const simulationQuery = usePotentialQuery<
     BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>,
     BlockaidEvmSimulationView | BlockaidSolanaSimulationInfo | null,
     Error
@@ -38,4 +38,10 @@ export const useBlockaidSimulationQuery = ({
     blockaidTxSimulationInput.data || undefined,
     getBlockaidSimulationQueryWithParsing
   )
+
+  return {
+    ...simulationQuery,
+    error: blockaidTxSimulationInput.error ?? simulationQuery.error,
+    isPending: blockaidTxSimulationInput.isPending || simulationQuery.isPending,
+  }
 }

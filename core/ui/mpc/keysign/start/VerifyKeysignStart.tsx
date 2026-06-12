@@ -76,10 +76,15 @@ export const VerifyKeysignStart = ({
     )
   )
 
-  const txScanQuery = usePotentialQuery(
+  const txScanQueryBase = usePotentialQuery(
     txScanInput.data || undefined,
     getBlockaidTxValidationQuery
   )
+  const txScanQuery = {
+    ...txScanQueryBase,
+    error: txScanInput.error ?? txScanQueryBase.error,
+    isPending: txScanInput.isPending || txScanQueryBase.isPending,
+  }
 
   const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
     if (termsAccepted.some(term => !term)) {
