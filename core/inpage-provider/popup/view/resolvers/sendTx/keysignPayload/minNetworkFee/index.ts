@@ -3,6 +3,10 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { UtxoChain } from '@vultisig/core-chain/Chain'
 import { toChainKindRecordUnion } from '@vultisig/core-chain/ChainKind'
+import {
+  ceilDiv,
+  getZcashConventionalFee,
+} from '@vultisig/core-chain/chains/utxo/fee/zip317'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
 import { getUtxoSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/utxo'
@@ -16,8 +20,8 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { CustomTxData } from '../../core/customTxData'
+import { p2pkhInputSize } from './p2pkhInputSize'
 import { getPsbtFee, getPsbtMinVsize, getPsbtOutputSizes } from './psbtFee'
-import { ceilDiv, getZcashConventionalFee, p2pkhInputSize } from './zip317'
 
 type EnforceMinNetworkFeeInput = {
   keysignPayload: KeysignPayload

@@ -52,7 +52,7 @@
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^16.3.0",
     "@tonconnect/protocol": "^2.4.0",
-    "@vultisig/core-chain": "2.15.1",
+    "@vultisig/core-chain": "2.15.2",
     "@vultisig/core-mpc": "1.6.1",
     "@vultisig/lib-utils": "0.10.1",
     "@vultisig/sdk": "2.2.1",

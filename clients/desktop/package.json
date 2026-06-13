@@ -38,7 +38,7 @@
     "@lib/ui": "workspace:^",
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-query-persist-client": "^5.101.0",
-    "@vultisig/core-chain": "2.15.1",
+    "@vultisig/core-chain": "2.15.2",
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "1.6.1",
     "@vultisig/lib-utils": "0.10.1",
