@@ -970,6 +970,12 @@ export const ko = {
   unbond: '언본드',
   unbond_with_lp: '언본드 마야',
   ultimate: '궁극적인',
+  unlock_discount_tier: '{{tier}} 티어 잠금 해제',
+  unlock_discount_tier_description:
+    '{{minBalance}}를 보유하면 {{tier}} 등급이 활성화되어 모든 스왑 거래에 대해 {{bps}} bps의 거래 수수료 할인을 받게 됩니다.',
+  unlock_discount_tier_description_ultimate:
+    '{{minBalance}}를 보유하면 {{tier}} 등급이 활성화되어 모든 스왑 거래에 대한 Vultisig 수수료가 완전히 면제됩니다.',
+  unlock_tier: '잠금 해제 티어',
   unmerge: '병합 해제',
   unfreeze: '녹이다',
   unknown: '알려지지 않은',

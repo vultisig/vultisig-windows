@@ -37,13 +37,14 @@ const tierStyles: Record<VultDiscountTier, TierStyles> = {
 export const discountTierFooterBackground = (value: VultDiscountTier): string =>
   tierStyles[value].footer
 
-export const DiscountTierContainer = styled.div`
+export const DiscountTierContainer = styled.div<{ $clickable?: boolean }>`
   display: flex;
   flex-direction: column;
   align-self: stretch;
   overflow: hidden;
   border-radius: 16px;
   background: #061b3a;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
 `
 
 export const DiscountTierContent = styled.div`

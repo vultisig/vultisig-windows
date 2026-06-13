@@ -1051,6 +1051,12 @@ export const en = {
   unbond: 'Unbond',
   unbond_with_lp: 'Unbond Maya',
   ultimate: 'Ultimate',
+  unlock_discount_tier: 'Unlock {{tier}} Tier',
+  unlock_discount_tier_description:
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a {{bps}}bps trading fee discount on all swaps.",
+  unlock_discount_tier_description_ultimate:
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a complete Vultisig fee waiver on all swaps.",
+  unlock_tier: 'Unlock Tier',
   unmerge: 'Unmerge',
   unfreeze: 'Unfreeze',
   unknown: 'Unknown',

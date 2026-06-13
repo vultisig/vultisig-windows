@@ -994,6 +994,12 @@ export const it = {
   unbond: 'Slegare',
   unbond_with_lp: 'Maya non legata',
   ultimate: 'Definitivo',
+  unlock_discount_tier: 'Sblocca il livello {{tier}}',
+  unlock_discount_tier_description:
+    'Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai uno sconto sulle commissioni di trading di {{bps}} bps su tutti gli swap.',
+  unlock_discount_tier_description_ultimate:
+    "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'esenzione completa dalle commissioni Vultisig su tutti gli swap.",
+  unlock_tier: 'Sblocca livello',
   unmerge: 'Separare',
   unfreeze: 'Unfreeze',
   unknown: 'Sconosciuto',

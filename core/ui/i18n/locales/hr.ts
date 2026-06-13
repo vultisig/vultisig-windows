@@ -974,6 +974,12 @@ export const hr = {
   unbond: 'Odvojiti se',
   unbond_with_lp: 'Odveži Maju',
   ultimate: 'Krajnji',
+  unlock_discount_tier: 'Otključaj  {{tier}}  Razina',
+  unlock_discount_tier_description:
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od {{bps}} bps naknade za trgovanje na sve swapove.',
+  unlock_discount_tier_description_ultimate:
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti potpuno oslobađanje od Vultisig naknade za sve swapove.',
+  unlock_tier: 'Otključaj razinu',
   unmerge: 'Razdvoji',
   unfreeze: 'Unfreeze',
   unknown: 'Nepoznato',
