@@ -20,7 +20,7 @@ import { useCreateCoinMutation } from '../../../storage/coins'
 import { discountTierFooterBackground } from './container'
 import { discountTierIcons } from './icons'
 
-const UnlockTierFooter = styled.button<ValueProp<VultDiscountTier>>`
+const UnlockTierFooter = styled.button<{ $tier: VultDiscountTier }>`
   display: flex;
   align-self: stretch;
   padding: 14px;
@@ -28,7 +28,7 @@ const UnlockTierFooter = styled.button<ValueProp<VultDiscountTier>>`
   align-items: center;
   gap: 8px;
   border: none;
-  background: ${({ value }) => discountTierFooterBackground(value)};
+  background: ${({ $tier }) => discountTierFooterBackground($tier)};
   cursor: pointer;
 
   color: #f0f4fc;
@@ -70,7 +70,7 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
   return (
     <>
       <UnlockTierFooter
-        value={value}
+        $tier={value}
         onClick={event => {
           event.stopPropagation()
           setIsOpen(true)
