@@ -26,6 +26,7 @@ import { discountTierIcons } from './icons'
 const UnlockTierFooter = styled.button`
   display: flex;
   align-self: stretch;
+  width: 100%;
   padding: ${discountTierFooterOverlap + 14}px 14px 14px;
   justify-content: center;
   align-items: center;
