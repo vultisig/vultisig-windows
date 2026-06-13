@@ -992,11 +992,11 @@ export const es = {
   unbond: 'Desatar',
   unbond_with_lp: 'Maya desvinculada',
   ultimate: 'Último',
-  unlock_discount_tier: 'Desbloquear {{tier}} nivel',
+  unlock_discount_tier: 'Desbloquear <b>{{tier}}</b> nivel',
   unlock_discount_tier_description:
-    'Al mantener {{minBalance}}, desbloqueará el nivel {{tier}} y recibirá un {{bps}} bps de descuento en la tarifa comercial en todos los swaps.',
+    'Al mantener {{minBalance}}, desbloqueará el nivel {{tier}} y recibirá un <b>{{bps}} bps de descuento en la tarifa comercial</b> en todos los swaps.',
   unlock_discount_tier_description_ultimate:
-    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una exención completa de la tarifa de Vultisig en todos los intercambios.',
+    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
   unlock_tier: 'Desbloquear nivel',
   unmerge: 'Separar',
   unfreeze: 'Unfreeze',

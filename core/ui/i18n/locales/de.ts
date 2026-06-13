@@ -999,11 +999,11 @@ export const de = {
   unbond: 'Entfesseln',
   unbond_with_lp: 'Entfessele Maya',
   ultimate: 'Ultimativ',
-  unlock_discount_tier: 'Schalte die Stufe frei: {{tier}}',
+  unlock_discount_tier: 'Schalte die Stufe frei: <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Mit {{minBalance}} schalten Sie die {{tier}} Stufe frei und erhalten einen {{bps}} bps Handelsgebührenrabatt auf alle Tauschgeschäfte.',
+    'Mit {{minBalance}} schalten Sie die {{tier}} Stufe frei und erhalten einen <b>{{bps}} bps Handelsgebührenrabatt</b> auf alle Tauschgeschäfte.',
   unlock_discount_tier_description_ultimate:
-    'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen vollständigen Vultisig-Gebührenverzicht für alle Tauschgeschäfte.',
+    'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   unlock_tier: 'Stufe freischalten',
   unmerge: 'Aufheben',
   unfreeze: 'Unfreeze',

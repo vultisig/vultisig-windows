@@ -975,11 +975,11 @@ export const ru = {
   unbond: 'Unbond',
   unbond_with_lp: 'Unbond Maya',
   ultimate: 'Ultimate',
-  unlock_discount_tier: 'Разблокировать уровень {{tier}}',
+  unlock_discount_tier: 'Разблокировать уровень <b>{{tier}}</b>',
   unlock_discount_tier_description:
-    'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите скидку {{bps}} bps на торговые комиссии для всех свопов.',
+    'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>скидку {{bps}} bps на торговые комиссии</b> для всех свопов.',
   unlock_discount_tier_description_ultimate:
-    'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите полную отмену комиссии Vultisig для всех свопов.',
+    'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>полную отмену комиссии Vultisig</b> для всех свопов.',
   unlock_tier: 'Разблокировать уровень',
   unmerge: 'Разъединить',
   unfreeze: 'Unfreeze',

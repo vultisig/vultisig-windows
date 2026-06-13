@@ -918,11 +918,11 @@ export const zh = {
   unbond: '解绑',
   unbond_with_lp: '解开玛雅',
   ultimate: '最终的',
-  unlock_discount_tier: '解锁 {{tier}} 层',
+  unlock_discount_tier: '解锁 <b>{{tier}}</b> 层',
   unlock_discount_tier_description:
-    '持有 {{minBalance}}，即可解锁 {{tier}} 等级，并在所有掉期交易中获得 {{bps}} bps 交易费折扣。',
+    '持有 {{minBalance}}，即可解锁 {{tier}} 等级，并在所有掉期交易中获得 <b>{{bps}} bps 交易费折扣</b>。',
   unlock_discount_tier_description_ultimate:
-    '持有 {{minBalance}}，即可解锁 {{tier}} 等级，并获得所有兑换的 完全 Vultisig 手续费豁免。',
+    '持有 {{minBalance}}，即可解锁 {{tier}} 等级，并获得所有兑换的 <b>完全 Vultisig 手续费豁免</b>。',
   unlock_tier: '解锁等级',
   unmerge: '取消合并',
   unfreeze: 'Unfreeze',

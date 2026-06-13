@@ -979,11 +979,11 @@ export const nl = {
   unbond: 'Unbonden',
   unbond_with_lp: 'Unbond Maya',
   ultimate: 'Ultimate',
-  unlock_discount_tier: '{{tier}}-niveau ontgrendelen',
+  unlock_discount_tier: '<b>{{tier}}</b>-niveau ontgrendelen',
   unlock_discount_tier_description:
-    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en ontvang je {{bps}} bps korting op trading fees voor alle swaps.',
+    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en ontvang je <b>{{bps}} bps korting op trading fees</b> voor alle swaps.',
   unlock_discount_tier_description_ultimate:
-    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je volledige kwijtschelding van Vultisig-fee op alle swaps.',
+    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>volledige kwijtschelding van Vultisig-fee</b> op alle swaps.',
   unlock_tier: 'Niveau ontgrendelen',
   unmerge: 'Ontsamenvoegen',
   unfreeze: 'Unfreeze',

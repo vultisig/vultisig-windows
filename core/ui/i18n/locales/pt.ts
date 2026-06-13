@@ -990,11 +990,11 @@ export const pt = {
   unbond: 'Desvincular',
   unbond_with_lp: 'Desvincular Maya',
   ultimate: 'Final',
-  unlock_discount_tier: 'Desbloquear  {{tier}}  Nível',
+  unlock_discount_tier: 'Desbloquear <b> {{tier}} </b> Nível',
   unlock_discount_tier_description:
-    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de {{bps}} bps na taxa de negociação em todos os swaps.',
+    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todos os swaps.',
   unlock_discount_tier_description_ultimate:
-    'Ao possuir o token {{minBalance}}, você desbloqueará o nível {{tier}} e receberá isenção total da taxa Vultisig em todas as trocas.',
+    'Ao possuir o token {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa Vultisig</b> em todas as trocas.',
   unlock_tier: 'Desbloquear nível',
   unmerge: 'Desfazer fusão',
   unfreeze: 'Unfreeze',
