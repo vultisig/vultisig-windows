@@ -11,41 +11,22 @@ import {
   vultDiscountTierMinBalances,
 } from '@vultisig/core-chain/swap/affiliate/config'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { useState } from 'react'
+import { CSSProperties, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCreateCoinMutation } from '../../../storage/coins'
-import {
-  discountTierFooterBackground,
-  discountTierFooterOverlap,
-} from './container'
+import { DiscountTierFooterBox } from './container'
 import { discountTierIcons } from './icons'
 
-const UnlockTierFooter = styled.button`
-  display: flex;
-  align-self: stretch;
-  width: 100%;
-  padding: ${discountTierFooterOverlap + 14}px 14px 14px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border: none;
-  cursor: pointer;
+type UnlockDiscountTierProps = ValueProp<VultDiscountTier> & {
+  style?: CSSProperties
+}
 
-  color: #f0f4fc;
-  font-family: Brockmann;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 22px;
-
-  &:hover {
-    opacity: 0.92;
-  }
-`
-
-export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
+export const UnlockDiscountTier = ({
+  value,
+  style,
+}: UnlockDiscountTierProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const [isOpen, setIsOpen] = useState(false)
@@ -72,15 +53,16 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
 
   return (
     <>
-      <UnlockTierFooter
-        style={{ background: discountTierFooterBackground(value) }}
+      <DiscountTierFooterBox
+        value={value}
+        style={{ cursor: 'pointer', ...style }}
         onClick={event => {
           event.stopPropagation()
           setIsOpen(true)
         }}
       >
         {t('unlock_tier')}
-      </UnlockTierFooter>
+      </DiscountTierFooterBox>
       <ResponsiveModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

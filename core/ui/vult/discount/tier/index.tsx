@@ -3,17 +3,18 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { VultDiscountTier as VultDiscountTierType } from '@vultisig/core-chain/swap/affiliate/config'
-import { useState } from 'react'
+import { CSSProperties, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ActiveDiscountTierFooter } from './active-indicator'
 import { DiscountTierBps } from './bps'
 import {
-  DiscountTierAccent,
   DiscountTierContainer,
   DiscountTierContent,
   DiscountTierDarkSection,
-  discountTierFooterPeekStyles,
+  discountTierFooterHeight,
+  discountTierFooterOverlap,
+  discountTierFooterPeek,
 } from './container'
 import { VultDiscountTierHeader } from './header'
 import { DiscountTierMinBalance } from './minBalance'
@@ -23,9 +24,14 @@ type VultDiscountTierProps = ValueProp<VultDiscountTierType> & {
   activeDiscountTier: VultDiscountTierType | null
 }
 
-// Delay before the coloured footer slides out, so it follows the dark
-// section opening rather than animating alongside it.
-const footerRevealDelay = 240
+// The coloured footer only starts sliding out once the dark section has
+// finished expanding (~300ms) plus a short pause.
+const footerRevealDelayMs = 800
+
+const collapsedFooterMargin = -(
+  discountTierFooterHeight - discountTierFooterPeek
+)
+const revealedFooterMargin = -discountTierFooterOverlap
 
 export const VultDiscountTier = ({
   value,
@@ -41,6 +47,14 @@ export const VultDiscountTier = ({
     if (!isActive) {
       setIsExpanded(prev => !prev)
     }
+  }
+
+  const footerStyle: CSSProperties = {
+    marginTop: showDetails ? revealedFooterMargin : collapsedFooterMargin,
+    transition: 'margin-top 350ms ease',
+    transitionDelay:
+      !isActive && isExpanded ? `${footerRevealDelayMs}ms` : '0ms',
+    pointerEvents: showDetails ? 'auto' : 'none',
   }
 
   return (
@@ -72,21 +86,11 @@ export const VultDiscountTier = ({
             </VStack>
           </AnimatedVisibility>
         </DiscountTierContent>
-        {showDetails ? null : <DiscountTierAccent value={value} />}
       </DiscountTierDarkSection>
       {isActive ? (
-        <div style={discountTierFooterPeekStyles}>
-          <ActiveDiscountTierFooter value={value} />
-        </div>
+        <ActiveDiscountTierFooter value={value} style={footerStyle} />
       ) : (
-        <AnimatedVisibility
-          isOpen={isExpanded}
-          animationConfig="exitToTop"
-          delay={footerRevealDelay}
-          overlayStyles={discountTierFooterPeekStyles}
-        >
-          <UnlockDiscountTier value={value} />
-        </AnimatedVisibility>
+        <UnlockDiscountTier value={value} style={footerStyle} />
       )}
     </DiscountTierContainer>
   )
