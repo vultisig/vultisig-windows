@@ -3,76 +3,60 @@ import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import styled from 'styled-components'
 
 type TierStyles = {
-  background: string
-  borderBottom: string
-  boxShadow: string
+  accent: string
+  footer: string
 }
 
 const tierStyles: Record<VultDiscountTier, TierStyles> = {
   bronze: {
-    background: `radial-gradient(77.32% 55% at 57.64% 132.91%, rgba(219, 87, 39, 0.40) 0%, rgba(6, 27, 58, 0.00) 100%),
-      linear-gradient(218deg, rgba(6, 27, 58, 0.00) 55%, rgba(219, 87, 39, 0.40) 104.56%),
-      linear-gradient(164deg, rgba(6, 27, 58, 0.00) 47.12%, rgba(219, 87, 39, 0.40) 126.16%),
-      linear-gradient(0deg, rgba(6, 27, 58, 0.50) 0%, rgba(6, 27, 58, 0.50) 100%), #061B3A`,
-    borderBottom: '2px solid rgba(51, 119, 217, 0.21)',
-    boxShadow: '0 4px 16.6px 0 rgba(219, 87, 39, 0.07) inset',
+    accent: 'linear-gradient(90deg, rgba(50, 118, 217, 0.21) 0%, #DB5727 100%)',
+    footer: 'linear-gradient(180deg, #993B1E 0%, #FF6333 100%)',
   },
   silver: {
-    background: `linear-gradient(204deg, rgba(6, 27, 58, 0.00) 42.72%, rgba(201, 214, 232, 0.40) 122.24%),
-      radial-gradient(77.52% 55% at 54.43% 138.19%, rgba(201, 214, 232, 0.40) 0%, rgba(6, 27, 58, 0.00) 100%),
-      linear-gradient(164deg, rgba(6, 27, 58, 0.00) 47.12%, rgba(201, 214, 232, 0.40) 126.16%),
-      linear-gradient(0deg, rgba(6, 27, 58, 0.50) 0%, rgba(6, 27, 58, 0.50) 100%), #061B3A`,
-    borderBottom: '2px solid rgba(51, 119, 217, 0.22)',
-    boxShadow: '0 4px 16.6px 0 rgba(201, 214, 232, 0.14) inset',
+    accent: 'linear-gradient(90deg, rgba(50, 118, 217, 0.22) 0%, #C9D6E8 100%)',
+    footer: 'linear-gradient(180deg, #7C8A9E 0%, #C9D6E8 100%)',
   },
   gold: {
-    background: `radial-gradient(89.11% 60% at 72.66% 127.89%, rgba(255, 194, 92, 0.60) 0%, rgba(6, 27, 58, 0.00) 100%),
-      linear-gradient(204deg, rgba(6, 27, 58, 0.00) 42.72%, rgba(255, 194, 92, 0.50) 122.24%),
-      linear-gradient(164deg, rgba(6, 27, 58, 0.00) 47.12%, rgba(255, 194, 92, 0.50) 126.16%),
-      linear-gradient(0deg, rgba(6, 27, 58, 0.50) 0%, rgba(6, 27, 58, 0.50) 100%), #061B3A`,
-    borderBottom: '2px solid rgba(51, 119, 217, 0.20)',
-    boxShadow: '0 4px 16.6px 0 rgba(255, 194, 92, 0.15) inset',
+    accent: 'linear-gradient(90deg, rgba(50, 118, 217, 0.20) 0%, #FFC25C 100%)',
+    footer: 'linear-gradient(180deg, #997437 0%, #FFC25C 100%)',
   },
   platinum: {
-    background: `radial-gradient(67.3% 48% at 54.43% 117.84%, rgba(51, 230, 191, 0.60) 0%, rgba(6, 27, 58, 0.00) 100%),
-      linear-gradient(204deg, rgba(6, 27, 58, 0.00) 42.72%, rgba(51, 230, 191, 0.60) 122.24%),
-      linear-gradient(150deg, rgba(6, 27, 58, 0.00) 49.38%, rgba(72, 121, 253, 0.60) 109.62%),
-      linear-gradient(0deg, rgba(6, 27, 58, 0.50) 0%, rgba(6, 27, 58, 0.50) 100%), #061B3A`,
-    borderBottom: '2px solid #294772',
-    boxShadow: '0 8px 26px 0 rgba(19, 200, 157, 0.26) inset',
+    accent: 'linear-gradient(90deg, #294772 2%, #4779FC 30%, #33E6BF 100%)',
+    footer: 'linear-gradient(180deg, #4779FC 0%, #33E6BF 100%)',
   },
   diamond: {
-    background: `radial-gradient(82.33% 58% at 66.75% 125.38%, rgba(0, 204, 255, 0.60) 0%, rgba(6, 27, 58, 0.00) 100%),
-      linear-gradient(205deg, rgba(6, 27, 58, 0.00) 35.49%, rgba(151, 71, 255, 0.60) 121.65%),
-      linear-gradient(150deg, rgba(6, 27, 58, 0.00) 49.38%, rgba(151, 71, 255, 0.60) 109.62%),
-      linear-gradient(0deg, rgba(6, 27, 58, 0.50) 0%, rgba(6, 27, 58, 0.50) 100%), #061B3A`,
-    borderBottom: '2px solid #9747FF',
-    boxShadow: '0 8px 26px 0 rgba(19, 61, 200, 0.36) inset',
+    accent: 'linear-gradient(90deg, #9747FF 0%, #00CCFF 100%)',
+    footer: 'linear-gradient(160deg, #9747FF 0%, #00CCFF 100%)',
   },
   ultimate: {
-    background: `radial-gradient(95.09% 70% at 35.96% 118.34%, rgba(255, 194, 92, 0.60) 0%, rgba(6, 27, 58, 0.00) 100%),
-      linear-gradient(205deg, rgba(6, 27, 58, 0.00) 35.49%, rgba(72, 121, 253, 0.70) 121.65%),
-      linear-gradient(133deg, rgba(6, 27, 58, 0.00) 51.68%, rgba(249, 195, 105, 0.70) 99.67%),
-      linear-gradient(0deg, rgba(6, 27, 58, 0.50) 0%, rgba(6, 27, 58, 0.50) 100%), #061B3A`,
-    borderBottom: '2px solid #041022',
-    boxShadow: '0 8px 26px 0 rgba(240, 212, 100, 0.26) inset',
+    accent: `linear-gradient(90deg, #031022 0%, #104AA0 25%, #FFC25C 47%, #FFFFFF 54%, #0F4594 73%, #E8B662 85%, #FFFAF3 100%)`,
+    footer: `linear-gradient(135deg, #031022 0%, #104AA0 25%, #FFC25C 47%, #FFFFFF 54%, #0F4594 73%, #E8B662 85%, #FFFAF3 100%)`,
   },
 }
 
-type DiscountTierContainerProps = ValueProp<VultDiscountTier> & {
-  $hasUnlockButton?: boolean
-}
+export const discountTierFooterBackground = (value: VultDiscountTier): string =>
+  tierStyles[value].footer
 
-export const DiscountTierContainer = styled.div<DiscountTierContainerProps>`
+export const DiscountTierContainer = styled.div`
   display: flex;
-  padding: 16px;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
   align-self: stretch;
+  overflow: hidden;
   border-radius: 16px;
+  background: #061b3a;
+`
 
-  background: ${({ value }) => tierStyles[value].background};
-  border-bottom: ${({ value }) => tierStyles[value].borderBottom};
-  box-shadow: ${({ value }) => tierStyles[value].boxShadow};
+export const DiscountTierContent = styled.div`
+  display: flex;
+  padding: 24px 20px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  align-self: stretch;
+`
+
+export const DiscountTierAccent = styled.div<ValueProp<VultDiscountTier>>`
+  height: 1px;
+  align-self: stretch;
+  background: ${({ value }) => tierStyles[value].accent};
 `

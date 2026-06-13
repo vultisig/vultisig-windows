@@ -253,7 +253,6 @@ export const nl = {
   digit_input_success_validation: 'Verificatie geslaagd',
   disconnect_all: 'Alles verbreken',
   discord: 'Discord',
-  discount: 'Korting',
   complete_fee_waive: 'Geen kosten',
   discount_tiers: 'Kortingsniveaus',
   discount_tiers_description:
@@ -452,7 +451,6 @@ export const nl = {
   having_trouble_scanning_tip_3: 'Houd beide apparaten even stil',
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
-  hold: 'Vasthouden',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
     'Deze IBC-transactie bevat een memo, maar {{productName}} ondersteunt momenteel geen memos binnen IBC transfer-berichten.<br> Doorgaan met deze transactie kan leiden tot <b>onomkeerbaar verlies van funds</b>.',
@@ -568,6 +566,7 @@ export const nl = {
   missing_thorchain_address: 'THORChain-adres ontbreekt',
   more: 'meer',
   moreInfo: 'Meer info',
+  more_coming_soon: 'Binnenkort meer',
   name: 'Naam',
   name_your_vault: 'Geef je kluis een naam',
   network: 'Netwerk',
@@ -909,6 +908,7 @@ export const nl = {
   support: 'Support',
   swap: 'Swappen',
   swaps: 'Ruilen',
+  swap_discount: 'Swapkorting',
   swap_fee: 'Swap fee',
   swap_overview: 'Swap-overzicht',
   swap_same_asset:
@@ -978,12 +978,6 @@ export const nl = {
   type_here: 'Typ hier',
   unbond: 'Unbonden',
   unbond_with_lp: 'Unbond Maya',
-  unlock_discount_tier: '<b>{{tier}}</b>-niveau ontgrendelen',
-  unlock_discount_tier_description:
-    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en ontvang je <b>{{bps}} bps korting op trading fees</b> voor alle swaps.',
-  unlock_discount_tier_description_ultimate:
-    'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>volledige kwijtschelding van Vultisig-fee</b> op alle swaps.',
-  unlock_tier: 'Niveau ontgrendelen',
   ultimate: 'Ultimate',
   unmerge: 'Ontsamenvoegen',
   unfreeze: 'Unfreeze',

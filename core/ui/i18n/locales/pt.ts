@@ -255,7 +255,6 @@ export const pt = {
   digit_input_success_validation: 'Verificação concluída com sucesso.',
   disconnect_all: 'Desconectar tudo',
   discord: 'Discórdia',
-  discount: 'Desconto',
   complete_fee_waive: 'Sem Taxa',
   discount_tiers: 'Níveis de desconto',
   discount_tiers_description:
@@ -459,7 +458,6 @@ export const pt = {
     'Mantenha ambos os dispositivos estaveis por um momento',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
-  hold: 'Manter',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transação IBC inclui um memorando, mas a {{productName}} atualmente não suporta a incorporação de memorandos em mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
@@ -575,6 +573,7 @@ export const pt = {
   missing_thorchain_address: 'Endereço THORChain ausente',
   more: 'mais',
   moreInfo: 'Mais informações',
+  more_coming_soon: 'Em breve mais',
   name: 'Nome',
   name_your_vault: 'Dê um nome ao seu cofre.',
   network: 'Rede',
@@ -919,6 +918,7 @@ export const pt = {
   support: 'Apoiar',
   swap: 'Trocar',
   swaps: 'Trocas',
+  swap_discount: 'Desconto de troca',
   swap_fee: 'Taxa de troca',
   swap_overview: 'Visão geral da troca',
   swap_same_asset: 'Não é possível trocar entre ativos do mesmo tipo.',
@@ -989,12 +989,6 @@ export const pt = {
   type_here: 'Digite aqui',
   unbond: 'Desvincular',
   unbond_with_lp: 'Desvincular Maya',
-  unlock_discount_tier: 'Desbloquear <b> {{tier}} </b> Nível',
-  unlock_discount_tier_description:
-    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todos os swaps.',
-  unlock_discount_tier_description_ultimate:
-    'Ao possuir o token {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa Vultisig</b> em todas as trocas.',
-  unlock_tier: 'Desbloquear nível',
   ultimate: 'Final',
   unmerge: 'Desfazer fusão',
   unfreeze: 'Unfreeze',

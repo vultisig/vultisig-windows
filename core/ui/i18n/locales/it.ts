@@ -258,7 +258,6 @@ export const it = {
   digit_input_success_validation: 'Verifica riuscita',
   disconnect_all: 'Disconnetti tutto',
   discord: 'Discordia',
-  discount: 'Sconto',
   complete_fee_waive: 'Nessuna commissione',
   discount_tiers: 'Livelli di sconto',
   discount_tiers_description:
@@ -463,7 +462,6 @@ export const it = {
     'Tieni entrambi i dispositivi fermi per un momento',
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
-  hold: 'Mantieni',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:
     "Questa transazione IBC include un promemoria, ma {{productName}} attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
@@ -577,6 +575,7 @@ export const it = {
   missing_thorchain_address: 'Indirizzo THORChain mancante',
   more: 'Di più',
   moreInfo: 'Maggiori informazioni',
+  more_coming_soon: 'Altro in arrivo',
   name: 'Nome',
   name_your_vault: 'Dai un nome al tuo Vault',
   network: 'Rete',
@@ -921,6 +920,7 @@ export const it = {
   support: 'Supporto',
   swap: 'Scambio',
   swaps: 'Scambi',
+  swap_discount: 'Sconto swap',
   swap_fee: 'Commissione di swap',
   swap_overview: 'Panoramica dello scambio',
   swap_same_asset: 'Non è possibile scambiare tra lo stesso asset',
@@ -993,12 +993,6 @@ export const it = {
   type_here: 'Scrivi qui',
   unbond: 'Slegare',
   unbond_with_lp: 'Maya non legata',
-  unlock_discount_tier: 'Sblocca il livello <b>{{tier}}</b>',
-  unlock_discount_tier_description:
-    'Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai uno sconto sulle commissioni di trading di <b>{{bps}} bps</b> su tutti gli swap.',
-  unlock_discount_tier_description_ultimate:
-    "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
-  unlock_tier: 'Sblocca livello',
   ultimate: 'Definitivo',
   unmerge: 'Separare',
   unfreeze: 'Unfreeze',

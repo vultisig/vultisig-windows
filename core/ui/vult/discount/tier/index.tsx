@@ -1,15 +1,18 @@
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
-import {
-  VultDiscountTier as VultDiscountTierType,
-  vultDiscountTiers,
-} from '@vultisig/core-chain/swap/affiliate/config'
+import { Text } from '@lib/ui/text'
+import { VultDiscountTier as VultDiscountTierType } from '@vultisig/core-chain/swap/affiliate/config'
+import { useTranslation } from 'react-i18next'
 
-import { ActiveDiscountTierIndicator } from './active-indicator'
-import { DiscountTierContainer } from './container'
+import { ActiveDiscountTierFooter } from './active-indicator'
+import { DiscountTierBps } from './bps'
+import {
+  DiscountTierAccent,
+  DiscountTierContainer,
+  DiscountTierContent,
+} from './container'
 import { VultDiscountTierHeader } from './header'
 import { DiscountTierMinBalance } from './minBalance'
-import { UnlockDiscountTier } from './unlock'
 
 type VultDiscountTierProps = ValueProp<VultDiscountTierType> & {
   activeDiscountTier: VultDiscountTierType | null
@@ -19,25 +22,30 @@ export const VultDiscountTier = ({
   value,
   activeDiscountTier,
 }: VultDiscountTierProps) => {
+  const { t } = useTranslation()
   const isActive = activeDiscountTier === value
 
-  const isUnlockable = (() => {
-    if (!activeDiscountTier) {
-      return true
-    }
-    const activeIndex = vultDiscountTiers.indexOf(activeDiscountTier)
-    const currentIndex = vultDiscountTiers.indexOf(value)
-    return currentIndex > activeIndex
-  })()
-
   return (
-    <DiscountTierContainer value={value} $hasUnlockButton={isUnlockable}>
-      <VultDiscountTierHeader value={value} />
-      <HStack alignItems="center" justifyContent="space-between" fullWidth>
-        <DiscountTierMinBalance value={value} />
-        {isActive && <ActiveDiscountTierIndicator />}
-      </HStack>
-      {isUnlockable && <UnlockDiscountTier value={value} />}
+    <DiscountTierContainer>
+      <DiscountTierContent>
+        <HStack alignItems="center" justifyContent="space-between" fullWidth>
+          <VultDiscountTierHeader value={value} />
+          <DiscountTierMinBalance value={value} />
+        </HStack>
+        {isActive && (
+          <VStack alignItems="center" gap={12}>
+            <DiscountTierBps value={value} />
+            <Text size={13} color="shy">
+              {t('more_coming_soon')}
+            </Text>
+          </VStack>
+        )}
+      </DiscountTierContent>
+      {isActive ? (
+        <ActiveDiscountTierFooter value={value} />
+      ) : (
+        <DiscountTierAccent value={value} />
+      )}
     </DiscountTierContainer>
   )
 }

@@ -252,7 +252,6 @@ export const ko = {
   digit_input_success_validation: '인증 성공',
   disconnect_all: '모든 연결을 끊으세요',
   discord: '불화',
-  discount: '할인',
   complete_fee_waive: '수수료 없음',
   discount_tiers: '할인 등급',
   discount_tiers_description:
@@ -450,7 +449,6 @@ export const ko = {
     '두 기기를 잠시 동안 움직이지 않게 고정하세요.',
   hide_balance: '잔액 숨기기',
   hide_defi_balance: 'DeFi 잔액 숨기기',
-  hold: '잡고 있다',
   how_it_works: '작동 방식',
   ibc_transaction_not_supporting_memo_desc:
     '이 IBC 거래에는 메모가 포함되어 있지만, {{productName}}는 현재 IBC 전송 메시지 내에 메모를 삽입하는 기능을 지원하지 않습니다.<br> 이 거래를 진행할 경우 <b>돌이킬 수 없는 자금 손실이</b> 발생할 수 있습니다.',
@@ -564,6 +562,7 @@ export const ko = {
   missing_thorchain_address: 'THORChain 주소가 누락되었습니다',
   more: '더',
   moreInfo: '더 자세한 정보',
+  more_coming_soon: '곧 더 추가됩니다',
   name: '이름',
   name_your_vault: '금고 이름을 지정하세요',
   network: '회로망',
@@ -901,6 +900,7 @@ export const ko = {
   support: '지원하다',
   swap: '교환',
   swaps: '스왑',
+  swap_discount: '스왑 할인',
   swap_fee: '교환 수수료',
   swap_overview: '스왑 개요',
   swap_same_asset: '동일한 자산 간에는 교환할 수 없습니다.',
@@ -969,12 +969,6 @@ export const ko = {
   type_here: '여기에 입력하세요',
   unbond: '언본드',
   unbond_with_lp: '언본드 마야',
-  unlock_discount_tier: '<b>{{tier}}</b> 티어 잠금 해제',
-  unlock_discount_tier_description:
-    '{{minBalance}}를 보유하면 {{tier}} 등급이 활성화되어 모든 스왑 거래에 대해 <b>{{bps}} bps의 거래 수수료 할인을</b> 받게 됩니다.',
-  unlock_discount_tier_description_ultimate:
-    '{{minBalance}}를 보유하면 {{tier}} 등급이 활성화되어 모든 스왑 거래에 대한 <b>Vultisig 수수료가 완전히</b> 면제됩니다.',
-  unlock_tier: '잠금 해제 티어',
   ultimate: '궁극적인',
   unmerge: '병합 해제',
   unfreeze: '녹이다',
