@@ -26,7 +26,7 @@ type VultDiscountTierProps = ValueProp<VultDiscountTierType> & {
 
 // The coloured footer only starts sliding out once the dark section has
 // finished expanding (~300ms) plus a short pause.
-const footerRevealDelayMs = 800
+const footerRevealDelayMs = 600
 
 const collapsedFooterMargin = -(
   discountTierFooterHeight - discountTierFooterPeek
