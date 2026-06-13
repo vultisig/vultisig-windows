@@ -1,5 +1,6 @@
 import { ValueProp } from '@lib/ui/props'
 import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
+import { CSSProperties } from 'react'
 import styled from 'styled-components'
 
 type TierStyles = {
@@ -37,14 +38,40 @@ const tierStyles: Record<VultDiscountTier, TierStyles> = {
 export const discountTierFooterBackground = (value: VultDiscountTier): string =>
   tierStyles[value].footer
 
+/**
+ * How far the coloured footer tucks behind the dark section so it appears to
+ * slide out from behind it.
+ */
+export const discountTierFooterOverlap = 18
+
+/**
+ * Wrapper styles that place the coloured footer behind the dark section,
+ * peeking out from below it.
+ */
+export const discountTierFooterPeekStyles: CSSProperties = {
+  position: 'relative',
+  zIndex: 0,
+  marginTop: -discountTierFooterOverlap,
+  alignSelf: 'stretch',
+}
+
 export const DiscountTierContainer = styled.div<{ $clickable?: boolean }>`
   display: flex;
   flex-direction: column;
   align-self: stretch;
+  position: relative;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+`
+
+export const DiscountTierDarkSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  position: relative;
+  z-index: 1;
   overflow: hidden;
   border-radius: 16px;
   background: #061b3a;
-  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
 `
 
 export const DiscountTierContent = styled.div`
@@ -57,7 +84,7 @@ export const DiscountTierContent = styled.div`
 `
 
 export const DiscountTierAccent = styled.div<ValueProp<VultDiscountTier>>`
-  height: 1px;
+  height: 2px;
   align-self: stretch;
   background: ${({ value }) => tierStyles[value].accent};
 `

@@ -17,17 +17,21 @@ import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCreateCoinMutation } from '../../../storage/coins'
-import { discountTierFooterBackground } from './container'
+import {
+  discountTierFooterBackground,
+  discountTierFooterOverlap,
+} from './container'
 import { discountTierIcons } from './icons'
 
 const UnlockTierFooter = styled.button`
   display: flex;
   align-self: stretch;
-  padding: 14px;
+  padding: ${discountTierFooterOverlap + 14}px 14px 14px;
   justify-content: center;
   align-items: center;
   gap: 8px;
   border: none;
+  border-radius: 16px;
   cursor: pointer;
 
   color: #f0f4fc;

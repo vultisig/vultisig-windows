@@ -4,15 +4,19 @@ import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { discountTierFooterBackground } from './container'
+import {
+  discountTierFooterBackground,
+  discountTierFooterOverlap,
+} from './container'
 
 const Container = styled.div<ValueProp<VultDiscountTier>>`
   display: flex;
   align-self: stretch;
-  padding: 14px;
+  padding: ${discountTierFooterOverlap + 14}px 14px 14px;
   justify-content: center;
   align-items: center;
   gap: 8px;
+  border-radius: 16px;
 
   background: ${({ value }) => discountTierFooterBackground(value)};
 
