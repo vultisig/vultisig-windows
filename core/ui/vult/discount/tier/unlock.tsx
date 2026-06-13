@@ -31,7 +31,6 @@ const UnlockTierFooter = styled.button`
   align-items: center;
   gap: 8px;
   border: none;
-  border-radius: 16px;
   cursor: pointer;
 
   color: #f0f4fc;

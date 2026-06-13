@@ -16,7 +16,6 @@ const Container = styled.div<ValueProp<VultDiscountTier>>`
   justify-content: center;
   align-items: center;
   gap: 8px;
-  border-radius: 16px;
 
   background: ${({ value }) => discountTierFooterBackground(value)};
 

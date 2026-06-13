@@ -39,14 +39,14 @@ export const discountTierFooterBackground = (value: VultDiscountTier): string =>
   tierStyles[value].footer
 
 /**
- * How far the coloured footer tucks behind the dark section so it appears to
- * slide out from behind it.
+ * How far the coloured footer tucks behind the dark section so the tier
+ * colour peeks through the dark section's rounded bottom corners.
  */
-export const discountTierFooterOverlap = 18
+export const discountTierFooterOverlap = 16
 
 /**
  * Wrapper styles that place the coloured footer behind the dark section,
- * peeking out from below it.
+ * peeking out from below it. The card clips the footer's bottom corners.
  */
 export const discountTierFooterPeekStyles: CSSProperties = {
   position: 'relative',
@@ -60,6 +60,9 @@ export const DiscountTierContainer = styled.div<{ $clickable?: boolean }>`
   flex-direction: column;
   align-self: stretch;
   position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #061b3a;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
 `
 
