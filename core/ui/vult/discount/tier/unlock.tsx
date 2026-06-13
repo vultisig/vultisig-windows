@@ -17,9 +17,10 @@ import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCreateCoinMutation } from '../../../storage/coins'
+import { discountTierFooterBackground } from './container'
 import { discountTierIcons } from './icons'
 
-const UnlockTierFooter = styled.button`
+const UnlockTierFooter = styled.button<ValueProp<VultDiscountTier>>`
   display: flex;
   align-self: stretch;
   padding: 14px;
@@ -27,18 +28,17 @@ const UnlockTierFooter = styled.button`
   align-items: center;
   gap: 8px;
   border: none;
-  border-top: 1px solid rgba(72, 121, 253, 0.32);
-  background: #11284a;
+  background: ${({ value }) => discountTierFooterBackground(value)};
   cursor: pointer;
 
   color: #f0f4fc;
   font-family: Brockmann;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 22px;
 
   &:hover {
-    background: #16335c;
+    opacity: 0.92;
   }
 `
 
@@ -70,6 +70,7 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
   return (
     <>
       <UnlockTierFooter
+        value={value}
         onClick={event => {
           event.stopPropagation()
           setIsOpen(true)
