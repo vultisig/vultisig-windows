@@ -875,6 +875,7 @@ export const en = {
   send_terms_0: "I'm sending to the right address",
   send_terms_1: 'The amount is correct',
   send_to: 'Send to',
+  send_to_different_address: 'Send to Different Address',
   sent: 'Sent',
   server_backup: 'Server Backup',
   server_backup_description: 'Request Server Vault Share again.',
