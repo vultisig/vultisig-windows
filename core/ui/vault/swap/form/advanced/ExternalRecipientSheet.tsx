@@ -5,9 +5,10 @@ import { AddressBookModalContent } from '@core/ui/vault/send/addresses/component
 import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Modal } from '@lib/ui/modal'
+import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnCloseProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -38,11 +39,17 @@ export const ExternalRecipientSheet = ({
   const { getClipboardText } = useCore()
   const [toCoin] = useSwapToCoin()
   const [view, setView] = useState<View>('default')
+  const [draft, setDraft] = useState(value)
+
+  const apply = () => {
+    onChange(draft)
+    onClose()
+  }
 
   const handlePaste = async () => {
     const result = await attempt(getClipboardText)
     if ('data' in result && result.data) {
-      onChange(result.data.trim())
+      setDraft(result.data.trim())
     }
   }
 
@@ -50,7 +57,7 @@ export const ExternalRecipientSheet = ({
     <AdvancedSheet
       title={t('use_external_recipient')}
       onClose={onClose}
-      onConfirm={onClose}
+      onConfirm={apply}
       leftIcon={<SheetBackIcon />}
     >
       <VStack gap={8}>
@@ -64,8 +71,8 @@ export const ExternalRecipientSheet = ({
         </HStack>
         <AddressInput
           placeholder={t('enter_address_here')}
-          value={value}
-          onChange={event => onChange(event.target.value)}
+          value={draft}
+          onChange={event => setDraft(event.target.value)}
         />
         <HStack gap={8}>
           <ActionButton onClick={handlePaste}>
@@ -86,10 +93,10 @@ export const ExternalRecipientSheet = ({
         </HStack>
       </VStack>
       {view === 'scanner' && (
-        <Modal
-          title=""
+        <ResponsiveModal
+          isOpen
           onClose={() => setView('default')}
-          withDefaultStructure={false}
+          modalProps={{ withDefaultStructure: false }}
         >
           <ScannerOverlay>
             <PageHeader
@@ -101,19 +108,19 @@ export const ExternalRecipientSheet = ({
             />
             <ScanQrView
               onFinish={scanned => {
-                onChange(scanned.trim())
+                setDraft(scanned.trim())
                 setView('default')
               }}
             />
           </ScannerOverlay>
-        </Modal>
+        </ResponsiveModal>
       )}
       {view === 'addressBook' && (
         <AddressBookModalContent
           coin={toCoin}
           onClose={() => setView('default')}
           onSelect={selected => {
-            onChange(selected)
+            setDraft(selected)
             setView('default')
           }}
         />
@@ -161,8 +168,12 @@ const ActionButton = styled.button`
 `
 
 const ScannerOverlay = styled(VStack)`
-  width: min(420px, 100vw);
-  height: 80vh;
+  width: 100%;
+  height: 70vh;
   background: ${getColor('background')};
   overflow: hidden;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: min(420px, 100vw);
+  }
 `
