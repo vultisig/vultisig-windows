@@ -1,5 +1,5 @@
-import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { getCircleAccountQueryKey } from '@core/ui/defi/protocols/circle/queries/circleAccount'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
@@ -86,13 +86,14 @@ export const qaEthCoin: AccountCoin = {
  * @param input - Vault name and account coins to expose through storage.
  * @returns A QA vault object compatible with core vault providers.
  */
-export const createQaVault = ({ name, coins }: CreateQaVaultInput): QaVault => ({
+export const createQaVault = ({
+  name,
+  coins,
+}: CreateQaVaultInput): QaVault => ({
   name,
   publicKeys: {
-    ecdsa:
-      '02acb4bc267db7774614bf6011c59929b006c2554386a3090baff0b3fc418ec044',
-    eddsa:
-      'a60409ef95ab55eb22d69b7f7504415358fee3657e665052780dce532409ef56',
+    ecdsa: '02acb4bc267db7774614bf6011c59929b006c2554386a3090baff0b3fc418ec044',
+    eddsa: 'a60409ef95ab55eb22d69b7f7504415358fee3657e665052780dce532409ef56',
   },
   signers: ['qa-device'],
   createdAt: 1_700_000_000_000,
@@ -275,6 +276,8 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     getIsMLDSAEnabled: async () => false,
     getIsTssBatchingEnabled: async () => false,
     setIsTssBatchingEnabled: noop,
+    getCustomRpcOverrides: async () => ({}),
+    setCustomRpcOverrides: noop,
     getTransactionRecords: async () => [],
     saveTransactionRecord: noop,
     updateTransactionRecord: noop,

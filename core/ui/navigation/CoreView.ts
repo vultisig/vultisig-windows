@@ -143,6 +143,9 @@ export type CoreView =
   | { id: 'vaults' }
   | { id: 'renameVault' }
   | { id: 'vaultSettings' }
+  | { id: 'vaultSettingsAdvanced' }
+  | { id: 'customRpc' }
+  | { id: 'customRpcDetail'; state: { chain: Chain } }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
   | { id: 'passcodeAutoLock' }
