@@ -1,4 +1,3 @@
-import { useOptionalRequestOrigin } from '@core/inpage-provider/popup/view/state/context'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
@@ -58,15 +57,16 @@ import {
   getCachedSignature,
   setCachedSignature,
 } from '../../customMessage/signatureCache'
+import { useKeysignRequestOrigin } from '../../state/keysignRequestOrigin'
 import { getCosmosKeplrBridgeTxHash } from '../../tx/getCosmosKeplrBridgeTxHash'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
 
-  // dApp origin for the custom-message signature cache; undefined in non-popup
-  // (in-app) keysign flows. See signatureCache.ts.
-  const requestOrigin = useOptionalRequestOrigin()
+  // dApp origin for the custom-message signature cache; undefined for in-app
+  // keysign flows. See signatureCache.ts.
+  const requestOrigin = useKeysignRequestOrigin()
 
   const keysignAction = useKeysignAction()
   const mutationListener = useKeysignMutationListener()

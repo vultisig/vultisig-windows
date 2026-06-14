@@ -68,6 +68,11 @@ export type CoreView =
         password?: string
         toAddressLabel?: string
         swapQuote?: SwapQuote
+        /**
+         * dApp origin for the custom-message signature cache (issue #1147).
+         * Set only for dApp sign-message flows; undefined for in-app keysigns.
+         */
+        requestOrigin?: string
       }
     }
   | { id: 'languageSettings' }

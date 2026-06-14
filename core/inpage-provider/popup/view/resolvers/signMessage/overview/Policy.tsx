@@ -91,7 +91,7 @@ export const PolicyOverview: FC<
   const onGetPassword = ({ password }: FastVaultPasswordModalResult) => {
     navigate({
       id: 'keysign',
-      state: { keysignPayload, securityType: 'fast', password },
+      state: { keysignPayload, securityType: 'fast', password, requestOrigin },
     })
   }
 

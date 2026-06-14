@@ -13,6 +13,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
+import { KeysignRequestOriginProvider } from '../state/keysignRequestOrigin'
 import { SwapQuoteProvider } from '../state/swapQuote'
 
 const keysignSteps = ['server', 'keysign'] as const
@@ -21,8 +22,9 @@ export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
   const { goBack } = useCore()
-  const [{ keysignPayload, password, toAddressLabel, swapQuote }] =
-    useCoreViewState<'keysign'>()
+  const [
+    { keysignPayload, password, toAddressLabel, swapQuote, requestOrigin },
+  ] = useCoreViewState<'keysign'>()
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: goBack,
@@ -47,11 +49,15 @@ export const StartFastKeysignFlow = ({
                 render={() => (
                   <KeysignActionProvider>
                     <KeysignMessagePayloadProvider value={keysignPayload}>
-                      <SwapQuoteProvider value={swapQuote}>
-                        <TransactionRecorderProvider>
-                          <KeysignSigningStep toAddressLabel={toAddressLabel} />
-                        </TransactionRecorderProvider>
-                      </SwapQuoteProvider>
+                      <KeysignRequestOriginProvider value={requestOrigin}>
+                        <SwapQuoteProvider value={swapQuote}>
+                          <TransactionRecorderProvider>
+                            <KeysignSigningStep
+                              toAddressLabel={toAddressLabel}
+                            />
+                          </TransactionRecorderProvider>
+                        </SwapQuoteProvider>
+                      </KeysignRequestOriginProvider>
                     </KeysignMessagePayloadProvider>
                   </KeysignActionProvider>
                 )}
