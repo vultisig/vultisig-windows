@@ -252,7 +252,6 @@ export const hr = {
   digit_input_success_validation: 'Verifikacija uspješna',
   disconnect_all: 'Isključi sve',
   discord: 'Nesklad',
-  discount: 'Popust',
   complete_fee_waive: 'Bez naknade',
   discount_tiers: 'Razine popusta',
   discount_tiers_description:
@@ -450,7 +449,6 @@ export const hr = {
   having_trouble_scanning_tip_3: 'Drzite oba uredaja mirno trenutak',
   hide_balance: 'Sakrij stanje',
   hide_defi_balance: 'Sakrij DeFi stanje',
-  hold: 'Drži',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
     'Ova IBC transakcija uključuje memorandum, ali {{productName}} trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
@@ -564,6 +562,7 @@ export const hr = {
   missing_thorchain_address: 'Nedostaje THORChain adresa',
   more: 'više',
   moreInfo: 'Više informacija',
+  more_coming_soon: 'Uskoro više',
   name: 'Ime',
   name_your_vault: 'Imenujte svoj trezor',
   network: 'Mreža',
@@ -905,6 +904,7 @@ export const hr = {
   support: 'Podrška',
   swap: 'Zamjena',
   swaps: 'Zamjene',
+  swap_discount: 'Popust na zamjenu',
   swap_fee: 'Naknada za zamjenu',
   swap_overview: 'Pregled zamjene',
   swap_same_asset: 'Nije moguće zamijeniti između istih sredstava',
@@ -973,13 +973,13 @@ export const hr = {
   type_here: 'Upišite ovdje',
   unbond: 'Odvojiti se',
   unbond_with_lp: 'Odveži Maju',
+  ultimate: 'Krajnji',
   unlock_discount_tier: 'Otključaj <b> {{tier}} </b> Razina',
   unlock_discount_tier_description:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
   unlock_discount_tier_description_ultimate:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
   unlock_tier: 'Otključaj razinu',
-  ultimate: 'Krajnji',
   unmerge: 'Razdvoji',
   unfreeze: 'Unfreeze',
   unknown: 'Nepoznato',
