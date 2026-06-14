@@ -911,6 +911,9 @@ export const en = {
   site_has_risk: 'Malicious site detected by <provider></provider>',
   skip: 'Skip',
   slippage: 'Slippage',
+  slippage_custom: 'Custom',
+  slippage_helper:
+    'Limits how much the price can change before execution is canceled.',
   slippage_tolerance: 'Slippage Tolerance',
   something_went_wrong: 'Something went wrong',
   somethings_wrong: "Something's wrong",
