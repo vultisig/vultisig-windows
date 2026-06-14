@@ -25,7 +25,10 @@ export const CustomRpcSettingsRow = () => {
   const { data: tier } = useVultDiscountTierQuery()
   const theme = useTheme()
 
-  const isEligible = hasReachedTier(tier ?? null, 'silver')
+  const isEligible = hasReachedTier({
+    current: tier ?? null,
+    required: 'silver',
+  })
 
   const badgeColor =
     isEligible && tier

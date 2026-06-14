@@ -21,7 +21,10 @@ import { useCustomRpcOverrides } from './customRpcOverrides'
 export const CustomRpcOverridesSync = () => {
   const overrides = useCustomRpcOverrides()
   const { data: tier } = useVultDiscountTierQuery()
-  const isEligible = hasReachedTier(tier ?? null, 'silver')
+  const isEligible = hasReachedTier({
+    current: tier ?? null,
+    required: 'silver',
+  })
 
   useEffect(() => {
     setCustomRpcOverrides(isEligible ? overrides : {})
