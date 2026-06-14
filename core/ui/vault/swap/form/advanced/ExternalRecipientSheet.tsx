@@ -1,14 +1,10 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
+import { ScanQrModal } from '@core/ui/qr/components/ScanQrModal'
 import { useCore } from '@core/ui/state/core'
 import { AddressBookModalContent } from '@core/ui/vault/send/addresses/components/AddressBookModal'
 import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnCloseProp } from '@lib/ui/props'
-import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -93,27 +89,13 @@ export const ExternalRecipientSheet = ({
         </HStack>
       </VStack>
       {view === 'scanner' && (
-        <ResponsiveModal
-          isOpen
+        <ScanQrModal
           onClose={() => setView('default')}
-          modalProps={{ withDefaultStructure: false }}
-        >
-          <ScannerOverlay>
-            <PageHeader
-              hasBorder
-              title={t('scan_qr')}
-              primaryControls={
-                <PageHeaderBackButton onClick={() => setView('default')} />
-              }
-            />
-            <ScanQrView
-              onFinish={scanned => {
-                setDraft(scanned.trim())
-                setView('default')
-              }}
-            />
-          </ScannerOverlay>
-        </ResponsiveModal>
+          onFinish={scanned => {
+            setDraft(scanned.trim())
+            setView('default')
+          }}
+        />
       )}
       {view === 'addressBook' && (
         <AddressBookModalContent
@@ -164,16 +146,5 @@ const ActionButton = styled.button`
 
   &:hover {
     background: ${getColor('foregroundExtra')};
-  }
-`
-
-const ScannerOverlay = styled(VStack)`
-  width: 100%;
-  height: 70vh;
-  background: ${getColor('background')};
-  overflow: hidden;
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    width: min(420px, 100vw);
   }
 `
