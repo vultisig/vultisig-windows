@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { GlobusIcon } from '@lib/ui/icons/GlobusIcon'
+import { RadioTowerIcon } from '@lib/ui/icons/RadioTowerIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
@@ -41,7 +41,7 @@ export const CustomRpcSettingsRow = () => {
     <ListItem
       icon={
         <ListItemIconWrapper>
-          <GlobusIcon />
+          <RadioTowerIcon />
         </ListItemIconWrapper>
       }
       description={
