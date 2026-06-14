@@ -6,7 +6,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
-import { useVultDiscountTierQuery } from '../../../vult/discount/queries/tier'
+import { useHighestVaultDiscountTier } from '../../../vult/discount/queries/anyVaultTier'
 import { discountTierColors } from '../../../vult/discount/tier/colors'
 import { hasReachedTier } from '../../../vult/discount/tierOrder'
 import {
@@ -16,19 +16,17 @@ import {
 
 /**
  * Custom RPC entry on the Advanced screen. App-wide custom RPC endpoints are a
- * Silver-tier perk: a qualifying user opens the chain list, while everyone else
- * is routed to the discount tiers upsell.
+ * Silver-tier perk, evaluated across ALL vaults: if any one vault qualifies the
+ * user opens the chain list, otherwise they are routed to the discount tiers
+ * upsell. The badge shows the user's highest tier.
  */
 export const CustomRpcSettingsRow = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { data: tier } = useVultDiscountTierQuery()
+  const { tier } = useHighestVaultDiscountTier()
   const theme = useTheme()
 
-  const isEligible = hasReachedTier({
-    current: tier ?? null,
-    required: 'silver',
-  })
+  const isEligible = hasReachedTier({ current: tier, required: 'silver' })
 
   const badgeColor =
     isEligible && tier

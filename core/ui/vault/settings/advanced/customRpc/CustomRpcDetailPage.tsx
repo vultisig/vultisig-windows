@@ -46,7 +46,13 @@ export const CustomRpcDetailPage = () => {
 
   const trimmed = value.trim()
   const isValid = isValidRpcUrl(trimmed)
-  const showInvalid = trimmed.length > 0 && !isValid
+  const isEmpty = trimmed.length === 0
+  const showInvalid = !isEmpty && !isValid
+
+  // Saving an emptied field clears an existing override (falls back to default).
+  const clearsExisting = isEmpty && Boolean(existingOverride)
+  const canSave = isValid || clearsExisting
+  const isSaving = setOverride.isPending || clearOverride.isPending
 
   const onValueChange = (next: string) => {
     setValue(next)
@@ -54,6 +60,14 @@ export const CustomRpcDetailPage = () => {
   }
 
   const goBack = () => navigate({ id: 'customRpc' })
+
+  const onSave = () => {
+    if (clearsExisting) {
+      clearOverride.mutate(chain, { onSuccess: goBack })
+    } else {
+      setOverride.mutate({ chain, url: trimmed }, { onSuccess: goBack })
+    }
+  }
 
   return (
     <VStack fullHeight>
@@ -89,11 +103,9 @@ export const CustomRpcDetailPage = () => {
           </Button>
           <Button
             style={{ flex: 1 }}
-            disabled={!isValid || setOverride.isPending}
-            loading={setOverride.isPending}
-            onClick={() =>
-              setOverride.mutate({ chain, url: trimmed }, { onSuccess: goBack })
-            }
+            disabled={!canSave || isSaving}
+            loading={isSaving}
+            onClick={onSave}
           >
             {t('save')}
           </Button>
