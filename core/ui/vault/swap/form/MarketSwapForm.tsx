@@ -18,6 +18,7 @@ import styled from 'styled-components'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
+import { AdvancedSwapSettings } from './advanced/AdvancedSwapSettings'
 
 export const MarketSwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
   const {
@@ -114,13 +115,16 @@ export const MarketSwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
           <SwapInfo />
         </VStack>
       </VStack>
-      <Button
-        disabled={!!errorMessage}
-        type="submit"
-        data-testid="swap-continue"
-      >
-        {t('continue')}
-      </Button>
+      <VStack gap={20}>
+        <AdvancedSwapSettings />
+        <Button
+          disabled={!!errorMessage}
+          type="submit"
+          data-testid="swap-continue"
+        >
+          {t('continue')}
+        </Button>
+      </VStack>
     </PageContent>
   )
 }
