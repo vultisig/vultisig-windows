@@ -18,7 +18,6 @@ import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { VaultChainPositionsSection } from '../positions/VaultChainPositionsSection'
 import { useSearchChainToken } from '../state/searchChainTokenProvider'
 
 const StyledPanel = styled(Panel)`
@@ -92,7 +91,6 @@ export const Tokens = () => {
           )
         }}
       />
-      <VaultChainPositionsSection />
     </VStack>
   )
 }
