@@ -28,6 +28,8 @@ import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
+import { parseSuiTx } from './sui/parser'
+import { SignSuiDisplay } from './sui/SignSuiDisplay'
 
 type KeysignTxOverviewProps = {
   toAddressLabel?: string
@@ -76,6 +78,11 @@ export const KeysignTxOverview = ({
     value: txHash,
   })
 
+  const suiTxData =
+    keysignPayload.signData.case === 'signSui'
+      ? parseSuiTx(keysignPayload.signData.value.unsignedTxMsg)
+      : null
+
   return (
     <>
       {showAmountOrAction && (
@@ -91,6 +98,7 @@ export const KeysignTxOverview = ({
           }
         />
       )}
+      {suiTxData && <SignSuiDisplay data={suiTxData} />}
       <Panel>
         <SeparatedByLine gap={16}>
           {!keysignPayload.skipBroadcast && (

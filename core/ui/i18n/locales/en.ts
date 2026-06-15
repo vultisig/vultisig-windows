@@ -250,7 +250,6 @@ export const en = {
   digit_input_success_validation: 'Verification successful',
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
-  discount: 'Discount',
   complete_fee_waive: 'No Fee',
   discount_tiers: 'Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
@@ -444,7 +443,6 @@ export const en = {
   having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
-  hold: 'Hold',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
     'This IBC transaction includes a memo, but {{productName}} currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
@@ -556,6 +554,7 @@ export const en = {
   missing_thorchain_address: 'Missing THORChain Address',
   more: 'more',
   moreInfo: 'More Info',
+  more_coming_soon: 'More coming soon',
   name: 'Name',
   name_your_vault: 'Name your vault',
   network: 'Network',
@@ -978,9 +977,12 @@ export const en = {
   support: 'Support',
   swap: 'Swap',
   swaps: 'Swaps',
+  swap_discount: 'Swap Discount',
   swap_fee: 'Swap Fee',
   swap_overview: 'Swap overview',
   swap_same_asset: 'Cannot swap between the same asset',
+  swap_trading_halted:
+    'Trading for this asset is temporarily halted. Please try again later.',
   swap_terms: {
     input: 'The swap amount is correct',
     output: "I agree with the min. amount I'll receive",
@@ -1048,13 +1050,13 @@ export const en = {
   type_here: 'Type Here',
   unbond: 'Unbond',
   unbond_with_lp: 'Unbond Maya',
+  ultimate: 'Ultimate',
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
   unlock_discount_tier_description:
     "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.",
   unlock_discount_tier_description_ultimate:
     "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>complete Vultisig fee waiver</b> on all swaps.",
   unlock_tier: 'Unlock Tier',
-  ultimate: 'Ultimate',
   unmerge: 'Unmerge',
   unfreeze: 'Unfreeze',
   unknown: 'Unknown',
@@ -1158,9 +1160,6 @@ export const en = {
   vault_part: 'Vault Share',
   vault_password: 'Vault Password',
   vault_qr_share: 'Share',
-  vault_qr_share_not_supported: 'Sharing not supported on this browser.',
-  vault_qr_share_text: 'Check out this vault QR code!',
-  vault_qr_share_title: 'Vault QR Code',
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",
   vault_ready_to_use: 'Your vault is ready to use',

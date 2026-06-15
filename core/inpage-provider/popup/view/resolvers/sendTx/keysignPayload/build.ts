@@ -43,6 +43,8 @@ import {
   SignDirectSchema,
   SignSolana,
   SignSolanaSchema,
+  SignSui,
+  SignSuiSchema,
   SignTonSchema,
   TonMessageSchema,
   WasmExecuteContractPayloadSchema,
@@ -60,6 +62,7 @@ import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
 import { TronMsgType } from '../interfaces'
 import { applyCosmosFeeFromSignData } from './applyCosmosFeeFromSignData'
+import { enforceMinNetworkFee } from './minNetworkFee'
 
 export type BuildSendTxKeysignPayloadInput = {
   parsedTx: ParsedTx
@@ -169,6 +172,7 @@ export const buildSendTxKeysignPayload = async ({
       psbt: psbt =>
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -220,6 +224,7 @@ export const buildSendTxKeysignPayload = async ({
         return undefined
       },
       polkadot: ({ signerPayload }) => JSON.stringify(signerPayload),
+      sui: () => undefined,
     }
   )
 
@@ -309,6 +314,7 @@ export const buildSendTxKeysignPayload = async ({
     solana: () => ({ case: undefined }),
     psbt: () => ({ case: undefined }),
     polkadot: () => ({ case: undefined }),
+    sui: () => ({ case: undefined }),
   })
 
   const swapPayload = matchRecordUnion<
@@ -356,6 +362,7 @@ export const buildSendTxKeysignPayload = async ({
       }),
     psbt: () => ({ case: undefined }),
     polkadot: () => ({ case: undefined }),
+    sui: () => ({ case: undefined }),
   })
 
   const aminoPayload = matchRecordUnion<CustomTxData, SignAmino | undefined>(
@@ -383,6 +390,7 @@ export const buildSendTxKeysignPayload = async ({
       solana: () => undefined,
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -408,6 +416,7 @@ export const buildSendTxKeysignPayload = async ({
       solana: () => undefined,
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -434,6 +443,7 @@ export const buildSendTxKeysignPayload = async ({
       },
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
     }
   )
 
@@ -467,6 +477,7 @@ export const buildSendTxKeysignPayload = async ({
     solana: () => undefined,
     psbt: () => undefined,
     polkadot: () => undefined,
+    sui: () => undefined,
   })
 
   const bitcoinPayload = matchRecordUnion<
@@ -481,7 +492,20 @@ export const buildSendTxKeysignPayload = async ({
         senderAddress: coin.address,
       }),
     polkadot: () => undefined,
+    sui: () => undefined,
   })
+
+  const suiPayload = matchRecordUnion<CustomTxData, SignSui | undefined>(
+    customTxData,
+    {
+      regular: () => undefined,
+      solana: () => undefined,
+      psbt: () => undefined,
+      polkadot: () => undefined,
+      sui: ({ transactionBytes }) =>
+        create(SignSuiSchema, { unsignedTxMsg: transactionBytes }),
+    }
+  )
 
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
@@ -499,7 +523,9 @@ export const buildSendTxKeysignPayload = async ({
               }
             : bitcoinPayload !== undefined
               ? { case: 'signBitcoin', value: bitcoinPayload }
-              : { case: undefined, value: undefined }
+              : suiPayload !== undefined
+                ? { case: 'signSui', value: suiPayload }
+                : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
     validateTonComment(memo)
@@ -554,6 +580,7 @@ export const buildSendTxKeysignPayload = async ({
         solana: () => false,
         psbt: () => false,
         polkadot: () => false,
+        sui: () => false,
       }),
       transactionType: getTransactionType(),
       timeoutTimestamp: getTimeoutTimestamp(),
@@ -567,12 +594,17 @@ export const buildSendTxKeysignPayload = async ({
   }
 
   if (needsUtxoInfo) {
-    keysignPayload = refineKeysignUtxo({
+    keysignPayload = await refineKeysignUtxo({
       keysignPayload,
       walletCore,
       publicKey: shouldBePresent(publicKey, 'publicKey'),
     })
   }
 
-  return keysignPayload
+  return enforceMinNetworkFee({
+    keysignPayload,
+    customTxData,
+    walletCore,
+    publicKey,
+  })
 }

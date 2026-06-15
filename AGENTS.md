@@ -21,6 +21,7 @@ yarn check:all   # lint + typecheck + test + knip
 4. If adding user-facing text: only edit `en.ts`, run `yarn translate`, then `yarn i18n:review-quality`; `yarn check` also runs the structural and unused-key i18n gates
 5. Chain-specific logic: use resolver pattern (never switch on chain type directly)
 6. If touching Vite `define` values, ambient build globals, Station/client flavor config, or product-brand branching, run `yarn check:client-build-flags`. It includes the desktop Wails frontend production compile and the Station extension flavor build, which can catch build-time global issues that `yarn check` misses.
+7. If adding or editing Markdown docs, run `yarn quality:docs:links` before finish. GitHub's `lint` job runs `yarn quality:health`, which includes the Markdown dead-link checker; `yarn check` does not cover this docs-link gate.
 
 ## Patterns
 

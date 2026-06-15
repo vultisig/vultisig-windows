@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCore } from '@core/ui/state/core'
 import { ShareVaultCard } from '@core/ui/vault/share/ShareVaultCard'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -21,6 +22,7 @@ const StyledButton = styled(Button)`
 
 export const ShareVaultPage = () => {
   const { t } = useTranslation()
+  const { saveFile } = useCore()
   const vault = useCurrentVault()
 
   const { name } = vault
@@ -32,16 +34,19 @@ export const ShareVaultPage = () => {
       try {
         const dataUrl = await toPng(node)
         const blob = await (await fetch(dataUrl)).blob()
-        const file = new File([blob], `${name}.png`, { type: 'image/png' })
+        const fileName = `${name}.png`
+        const file = new File([blob], fileName, { type: 'image/png' })
 
-        if (navigator.share) {
-          await navigator.share({
-            files: [file],
-            title: t('vault_qr_share_title'),
-            text: t('vault_qr_share_text'),
-          })
+        // Share only the file — some targets (e.g. Telegram) drop the image
+        // when title/text are also present and send just the text.
+        const shareData = { files: [file] }
+
+        if (navigator.canShare?.(shareData)) {
+          await navigator.share(shareData)
         } else {
-          alert(t('vault_qr_share_not_supported'))
+          // Web Share with files is unsupported (e.g. Chrome on Linux);
+          // fall back to downloading the QR image.
+          await saveFile({ name: fileName, blob })
         }
       } catch (error) {
         console.error('Error sharing image:', error)

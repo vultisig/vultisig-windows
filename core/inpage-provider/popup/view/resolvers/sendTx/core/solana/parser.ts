@@ -113,7 +113,7 @@ export const parseSolanaTx = async ({
       walletCore,
     })
 
-    const blockaidTxSimulationInput = getBlockaidTxSimulationInput({
+    const blockaidTxSimulationInput = await getBlockaidTxSimulationInput({
       payload: keysignPayload,
       walletCore,
     })
