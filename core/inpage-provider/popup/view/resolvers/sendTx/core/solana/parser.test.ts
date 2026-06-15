@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import { getSolanaRawTxFallback, parseSolanaTx } from './parser'
-
-type ParseSolanaTxInput = Parameters<typeof parseSolanaTx>[0]
+import {
+  getSerializedSolanaTxBuffer,
+  getSolanaRawTxFallback,
+} from './rawTxFallback'
 
 describe('getSolanaRawTxFallback', () => {
   it('uses the raw review path instead of synthesizing a blank transfer', () => {
@@ -19,19 +20,9 @@ describe('getSolanaRawTxFallback', () => {
   })
 })
 
-describe('parseSolanaTx', () => {
-  it('fails with a controlled error when serialized transaction data is missing', async () => {
-    await expect(
-      parseSolanaTx({
-        data: [],
-        fromCoin: { address: 'sender' } as ParseSolanaTxInput['fromCoin'],
-        getCoin: async () => {
-          throw new Error('not expected')
-        },
-        swapProvider: 'dapp',
-        walletCore: {} as ParseSolanaTxInput['walletCore'],
-      })
-    ).rejects.toThrow(
+describe('getSerializedSolanaTxBuffer', () => {
+  it('fails with a controlled error when serialized transaction data is missing', () => {
+    expect(() => getSerializedSolanaTxBuffer([])).toThrow(
       'Invalid Solana transaction: missing serialized transaction data'
     )
   })

@@ -4,7 +4,6 @@ import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { solanaRpcUrl } from '@vultisig/core-chain/chains/solana/client'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
 import { parseBlockaidSolanaSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
@@ -22,6 +21,10 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import { parseProgramCall } from './parseProgramCall'
+import {
+  getSerializedSolanaTxBuffer,
+  getSolanaRawTxFallback,
+} from './rawTxFallback'
 import { AddressTableLookup, SolanaTxData } from './types/types'
 import { mergedKeys, resolveAddressTableKeys } from './utils'
 
@@ -33,18 +36,7 @@ type ParseSolanaTxInput = {
   swapProvider: string
 }
 
-/**
- * Falls back to raw Solana review when no parser can prove destination or amount.
- */
-export const getSolanaRawTxFallback = (
-  transactions: string[]
-): SolanaTxData => ({
-  raw: {
-    inputCoin: chainFeeCoin.Solana,
-    inAmount: '0',
-    transactions,
-  },
-})
+export { getSolanaRawTxFallback } from './rawTxFallback'
 
 export const parseSolanaTx = async ({
   fromCoin,
@@ -54,12 +46,7 @@ export const parseSolanaTx = async ({
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
   const connection = new Connection(solanaRpcUrl)
-  if (!data[0]) {
-    throw new Error(
-      'Invalid Solana transaction: missing serialized transaction data'
-    )
-  }
-  const buffer = Buffer.from(data[0], 'base64')
+  const buffer = getSerializedSolanaTxBuffer(data)
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
     buffer
