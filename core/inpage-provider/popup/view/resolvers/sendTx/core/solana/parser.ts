@@ -36,8 +36,6 @@ type ParseSolanaTxInput = {
   swapProvider: string
 }
 
-export { getSolanaRawTxFallback } from './rawTxFallback'
-
 export const parseSolanaTx = async ({
   fromCoin,
   walletCore,
