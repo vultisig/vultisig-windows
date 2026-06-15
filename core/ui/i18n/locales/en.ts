@@ -177,6 +177,7 @@ export const en = {
     '{{action, select, add {Add liquidity} remove {Remove liquidity} other {Manage liquidity}}}',
   manage_tokens: 'Manage tokens',
   collected_rewards: 'Collected rewards',
+  coming_soon: 'Coming soon',
   complete: 'Complete',
   congrats: 'Congrats!',
   confirm: 'Confirm',
@@ -979,6 +980,9 @@ export const en = {
   swaps: 'Swaps',
   swap_discount: 'Swap Discount',
   swap_fee: 'Swap Fee',
+  swap_limit_orders: 'Limit orders',
+  swap_mode_limit: 'Limit',
+  swap_mode_market: 'Market',
   swap_overview: 'Swap overview',
   swap_same_asset: 'Cannot swap between the same asset',
   swap_trading_halted:
