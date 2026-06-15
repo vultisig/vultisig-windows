@@ -69,6 +69,7 @@ import {
   type CosmosStakingInput,
   toEncodeObjects,
 } from './cosmosStaking/encodeStakingMsgs'
+import { scaleCosmosStakingFee } from './cosmosStaking/scaleCosmosStakingFee'
 
 export type BuildDepositKeysignPayloadInput = {
   coin: AccountCoin
@@ -636,10 +637,11 @@ const applyCosmosStakingSignData = ({
         const singleMsgGasLimit = getCosmosStakingGasLimit({
           chain: stakingChain,
         })
-        const feeScale =
-          gasLimit > 0n && singleMsgGasLimit > 0n
-            ? (gas * gasLimit) / singleMsgGasLimit
-            : gas
+        const feeScale = scaleCosmosStakingFee({
+          gas,
+          gasLimit,
+          singleMsgGasLimit,
+        })
         const feeAmount = { denom: feeDenom, amount: feeScale.toString() }
         const built = buildStakingSignDirectBytes({
           input,

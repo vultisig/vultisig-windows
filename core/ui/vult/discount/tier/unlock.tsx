@@ -12,13 +12,14 @@ import {
   vultDiscountTierMinBalances,
 } from '@vultisig/core-chain/swap/affiliate/config'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { useState } from 'react'
+import { CSSProperties, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { discountTierColors } from './colors'
+import { DiscountTierFooterBox } from './container'
 import { discountTierIcons } from './icons'
 import { UltimateGradientText } from './UltimateGradientText'
 
@@ -48,31 +49,14 @@ const Description = styled.p`
   }
 `
 
-const UnlockButton = styled.button`
-  display: flex;
-  height: 44px;
-  padding: 12px 24px;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  align-self: stretch;
-  border-radius: 99px;
-  border: 1px solid #4879fd;
-  background: #11284a;
-  cursor: pointer;
+type UnlockDiscountTierProps = ValueProp<VultDiscountTier> & {
+  style?: CSSProperties
+}
 
-  color: #f0f4fc;
-  font-family: Brockmann;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-
-  &:hover {
-    opacity: 0.9;
-  }
-`
-
-export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
+export const UnlockDiscountTier = ({
+  value,
+  style,
+}: UnlockDiscountTierProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const [isOpen, setIsOpen] = useState(false)
@@ -83,15 +67,22 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
 
   return (
     <>
-      <UnlockButton onClick={() => setIsOpen(true)}>
+      <DiscountTierFooterBox
+        value={value}
+        style={{ cursor: 'pointer', ...style }}
+        onClick={event => {
+          event.stopPropagation()
+          setIsOpen(true)
+        }}
+      >
         {t('unlock_tier')}
-      </UnlockButton>
+      </DiscountTierFooterBox>
       <ResponsiveModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         grabbable
       >
-        <VStack alignItems="center" gap={36}>
+        <VStack alignItems="center" gap={36} padding="8px 24px 24px">
           <VStack alignItems="center" gap={26}>
             <Icon fontSize={72} />
             <Title value={value}>

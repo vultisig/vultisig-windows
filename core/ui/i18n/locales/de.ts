@@ -256,7 +256,6 @@ export const de = {
   digit_input_success_validation: 'Überprüfung erfolgreich',
   disconnect_all: 'Alle Verbindungen trennen',
   discord: 'Zwietracht',
-  discount: 'Rabatt',
   complete_fee_waive: 'Keine Gebühr',
   discount_tiers: 'Rabattstufen',
   discount_tiers_description:
@@ -462,7 +461,6 @@ export const de = {
     'Halten Sie beide Geräte einen Moment lang ruhig',
   hide_balance: 'Gleichgewicht ausblenden',
   hide_defi_balance: 'DeFi-Guthaben ausblenden',
-  hold: 'Halten',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
     'Diese IBC-Transaktion enthält ein Memo, aber {{productName}} unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Die Durchführung dieser Transaktion kann zu <b>einem irreversiblen Verlust von Geldern</b> führen.',
@@ -578,6 +576,7 @@ export const de = {
   missing_thorchain_address: 'Fehlende THORChain-Adresse',
   more: 'mehr',
   moreInfo: 'Mehr Infos',
+  more_coming_soon: 'Mehr in Kürze',
   name: 'Name',
   name_your_vault: 'Benennen Sie Ihren Tresor',
   network: 'Netzwerk',
@@ -926,6 +925,7 @@ export const de = {
   support: 'Unterstützung',
   swap: 'Tauschen',
   swaps: 'Tauschgeschäfte',
+  swap_discount: 'Swap-Rabatt',
   swap_fee: 'Tauschgebühr',
   swap_overview: 'Tauschübersicht',
   swap_same_asset:
@@ -998,13 +998,13 @@ export const de = {
   type_here: 'Hier tippen',
   unbond: 'Entfesseln',
   unbond_with_lp: 'Entfessele Maya',
+  ultimate: 'Ultimativ',
   unlock_discount_tier: 'Schalte die Stufe frei: <b>{{tier}}</b>',
   unlock_discount_tier_description:
     'Mit {{minBalance}} schalten Sie die {{tier}} Stufe frei und erhalten einen <b>{{bps}} bps Handelsgebührenrabatt</b> auf alle Tauschgeschäfte.',
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   unlock_tier: 'Stufe freischalten',
-  ultimate: 'Ultimativ',
   unmerge: 'Aufheben',
   unfreeze: 'Unfreeze',
   unknown: 'Unbekannt',
