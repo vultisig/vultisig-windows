@@ -9,6 +9,7 @@ import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AdvancedSheet } from './AdvancedSheet'
+import { GasLimitSheet } from './GasLimitSheet'
 import { ExternalRecipientIcon } from './icons/ExternalRecipientIcon'
 import { GasLimitIcon } from './icons/GasLimitIcon'
 import { SlippageIcon } from './icons/SlippageIcon'
@@ -18,6 +19,8 @@ import { SlippageSheet } from './SlippageSheet'
 type AdvancedSwapSettingsSheetProps = OnCloseProp & {
   slippage: SlippageValue
   onSlippageChange: (value: SlippageValue) => void
+  gasLimit: string
+  onGasLimitChange: (value: string) => void
 }
 
 type SettingRow = {
@@ -32,9 +35,13 @@ export const AdvancedSwapSettingsSheet = ({
   onClose,
   slippage,
   onSlippageChange,
+  gasLimit,
+  onGasLimitChange,
 }: AdvancedSwapSettingsSheetProps) => {
   const { t } = useTranslation()
-  const [openSheet, setOpenSheet] = useState<'slippage' | null>(null)
+  const [openSheet, setOpenSheet] = useState<'slippage' | 'gasLimit' | null>(
+    null
+  )
 
   const rows: SettingRow[] = [
     {
@@ -48,7 +55,8 @@ export const AdvancedSwapSettingsSheet = ({
       key: 'gasLimit',
       icon: <GasLimitIcon />,
       title: t('gas_limit'),
-      value: t('auto'),
+      value: gasLimit || t('auto'),
+      onClick: () => setOpenSheet('gasLimit'),
     },
     {
       key: 'externalRecipient',
@@ -90,6 +98,13 @@ export const AdvancedSwapSettingsSheet = ({
         <SlippageSheet
           value={slippage}
           onChange={onSlippageChange}
+          onClose={() => setOpenSheet(null)}
+        />
+      )}
+      {openSheet === 'gasLimit' && (
+        <GasLimitSheet
+          value={gasLimit}
+          onChange={onGasLimitChange}
           onClose={() => setOpenSheet(null)}
         />
       )}

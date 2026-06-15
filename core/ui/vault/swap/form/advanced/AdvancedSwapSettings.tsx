@@ -12,6 +12,7 @@ export const AdvancedSwapSettings = () => {
   const { t } = useTranslation()
   const [isOpen, { set: open, unset: close }] = useBoolean(false)
   const [slippage, setSlippage] = useState<SlippageValue>(defaultSlippage)
+  const [gasLimit, setGasLimit] = useState('')
 
   return (
     <>
@@ -25,6 +26,8 @@ export const AdvancedSwapSettings = () => {
           onClose={close}
           slippage={slippage}
           onSlippageChange={setSlippage}
+          gasLimit={gasLimit}
+          onGasLimitChange={setGasLimit}
         />
       )}
     </>
