@@ -51,7 +51,13 @@ export const CustomRpcDetailPage = () => {
 
   // Saving an emptied field clears an existing override (falls back to default).
   const clearsExisting = isEmpty && Boolean(existingOverride)
-  const canSave = isValid || clearsExisting
+  // Don't let a known-bad endpoint be persisted: if the current value was
+  // tested and came back wrong-chain / invalid / unreachable, block Save until
+  // it's changed (editing the field resets the probe result). A successful or
+  // un-run probe doesn't gate Save, so testing stays advisory.
+  const probeFailed =
+    probe.data !== undefined && probe.data.status !== 'reachable'
+  const canSave = (isValid || clearsExisting) && !probeFailed
   const isSaving = setOverride.isPending || clearOverride.isPending
 
   const onValueChange = (next: string) => {
