@@ -3,6 +3,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -21,12 +22,18 @@ export const GasLimitSheet = ({
   onClose,
 }: GasLimitSheetProps) => {
   const { t } = useTranslation()
+  const [draft, setDraft] = useState(value)
+
+  const apply = () => {
+    onChange(draft)
+    onClose()
+  }
 
   return (
     <AdvancedSheet
       title={t('gas_limit')}
       onClose={onClose}
-      onConfirm={onClose}
+      onConfirm={apply}
       leftIcon={<SheetBackIcon />}
     >
       <VStack gap={8}>
@@ -41,8 +48,8 @@ export const GasLimitSheet = ({
         <GasInput
           inputMode="numeric"
           placeholder={t('auto')}
-          value={value}
-          onChange={event => onChange(event.target.value.replace(/\D/g, ''))}
+          value={draft}
+          onChange={event => setDraft(event.target.value.replace(/\D/g, ''))}
         />
       </VStack>
     </AdvancedSheet>

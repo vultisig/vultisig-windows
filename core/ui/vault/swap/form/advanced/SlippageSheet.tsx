@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AdvancedSheet } from './AdvancedSheet'
+import { SheetBackIcon } from './icons/SheetBackIcon'
 import { SlippageMode, SlippageValue } from './slippage'
 
 type SlippageSheetProps = OnCloseProp & {
@@ -25,6 +26,7 @@ export const SlippageSheet = ({
   onClose,
 }: SlippageSheetProps) => {
   const { t } = useTranslation()
+  const [draft, setDraft] = useState<SlippageValue>(value)
   const [customText, setCustomText] = useState(
     value.mode === 'custom' && value.customPercent
       ? String(value.customPercent)
@@ -34,8 +36,18 @@ export const SlippageSheet = ({
   const presetLabel = (mode: Exclude<SlippageMode, 'custom'>) =>
     mode === 'auto' ? t('auto') : `${mode}%`
 
+  const apply = () => {
+    onChange(draft)
+    onClose()
+  }
+
   return (
-    <AdvancedSheet title={t('slippage')} onClose={onClose} onConfirm={onClose}>
+    <AdvancedSheet
+      title={t('slippage')}
+      onClose={onClose}
+      onConfirm={apply}
+      leftIcon={<SheetBackIcon />}
+    >
       <Text size={14} weight={400} color="shy">
         {t('slippage_helper')}
       </Text>
@@ -43,7 +55,7 @@ export const SlippageSheet = ({
         {presetModes.map(mode => (
           <ListItem
             key={mode}
-            onClick={() => onChange({ ...value, mode })}
+            onClick={() => setDraft({ ...draft, mode })}
             title={
               <Text size={14} weight={400} color="shyExtra">
                 {presetLabel(mode)}
@@ -51,15 +63,15 @@ export const SlippageSheet = ({
             }
             extra={
               <Checkbox
-                value={value.mode === mode}
-                onChange={() => onChange({ ...value, mode })}
+                value={draft.mode === mode}
+                onChange={() => setDraft({ ...draft, mode })}
               />
             }
           />
         ))}
         <ListItem
           onClick={() =>
-            onChange({ mode: 'custom', customPercent: value.customPercent })
+            setDraft({ mode: 'custom', customPercent: draft.customPercent })
           }
           title={
             <HStack alignItems="center" gap={6}>
@@ -73,7 +85,7 @@ export const SlippageSheet = ({
                 onChange={event => {
                   const next = event.target.value
                   setCustomText(next)
-                  onChange({ mode: 'custom', customPercent: Number(next) || 0 })
+                  setDraft({ mode: 'custom', customPercent: Number(next) || 0 })
                 }}
               />
               <Text size={14} weight={400} color="shyExtra">
@@ -83,9 +95,9 @@ export const SlippageSheet = ({
           }
           extra={
             <Checkbox
-              value={value.mode === 'custom'}
+              value={draft.mode === 'custom'}
               onChange={() =>
-                onChange({ mode: 'custom', customPercent: value.customPercent })
+                setDraft({ mode: 'custom', customPercent: draft.customPercent })
               }
             />
           }

@@ -13,6 +13,7 @@ export const AdvancedSwapSettings = () => {
   const [isOpen, { set: open, unset: close }] = useBoolean(false)
   const [slippage, setSlippage] = useState<SlippageValue>(defaultSlippage)
   const [gasLimit, setGasLimit] = useState('')
+  const [externalRecipient, setExternalRecipient] = useState('')
 
   return (
     <>
@@ -28,6 +29,8 @@ export const AdvancedSwapSettings = () => {
           onSlippageChange={setSlippage}
           gasLimit={gasLimit}
           onGasLimitChange={setGasLimit}
+          externalRecipient={externalRecipient}
+          onExternalRecipientChange={setExternalRecipient}
         />
       )}
     </>

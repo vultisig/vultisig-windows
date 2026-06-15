@@ -9,6 +9,7 @@ import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AdvancedSheet } from './AdvancedSheet'
+import { ExternalRecipientSheet } from './ExternalRecipientSheet'
 import { GasLimitSheet } from './GasLimitSheet'
 import { ExternalRecipientIcon } from './icons/ExternalRecipientIcon'
 import { GasLimitIcon } from './icons/GasLimitIcon'
@@ -21,7 +22,12 @@ type AdvancedSwapSettingsSheetProps = OnCloseProp & {
   onSlippageChange: (value: SlippageValue) => void
   gasLimit: string
   onGasLimitChange: (value: string) => void
+  externalRecipient: string
+  onExternalRecipientChange: (value: string) => void
 }
+
+const shortenAddress = (address: string) =>
+  `${address.slice(0, 4)}…${address.slice(-4)}`
 
 type SettingRow = {
   key: string
@@ -37,11 +43,13 @@ export const AdvancedSwapSettingsSheet = ({
   onSlippageChange,
   gasLimit,
   onGasLimitChange,
+  externalRecipient,
+  onExternalRecipientChange,
 }: AdvancedSwapSettingsSheetProps) => {
   const { t } = useTranslation()
-  const [openSheet, setOpenSheet] = useState<'slippage' | 'gasLimit' | null>(
-    null
-  )
+  const [openSheet, setOpenSheet] = useState<
+    'slippage' | 'gasLimit' | 'externalRecipient' | null
+  >(null)
 
   const rows: SettingRow[] = [
     {
@@ -62,7 +70,8 @@ export const AdvancedSwapSettingsSheet = ({
       key: 'externalRecipient',
       icon: <ExternalRecipientIcon />,
       title: t('use_external_recipient'),
-      value: t('off'),
+      value: externalRecipient ? shortenAddress(externalRecipient) : t('off'),
+      onClick: () => setOpenSheet('externalRecipient'),
     },
   ]
 
@@ -105,6 +114,13 @@ export const AdvancedSwapSettingsSheet = ({
         <GasLimitSheet
           value={gasLimit}
           onChange={onGasLimitChange}
+          onClose={() => setOpenSheet(null)}
+        />
+      )}
+      {openSheet === 'externalRecipient' && (
+        <ExternalRecipientSheet
+          value={externalRecipient}
+          onChange={onExternalRecipientChange}
           onClose={() => setOpenSheet(null)}
         />
       )}
