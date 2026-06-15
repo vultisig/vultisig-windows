@@ -1,5 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Tab, Tabs } from '@lib/ui/base/Tabs'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { hStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ChildrenProp, IsActiveProp, OnFinishProp } from '@lib/ui/props'
@@ -45,8 +46,8 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
         value={swapMode}
         onValueChange={setSwapMode}
         triggersContainer={SwapModeTabsHeader}
-        triggerSlot={({ tab: { label }, isActive }) => (
-          <TriggerItem isActive={isActive}>
+        triggerSlot={({ tab: { label }, isActive, ...triggerProps }) => (
+          <TriggerItem {...triggerProps} isActive={isActive}>
             <Text
               size={14}
               as="span"
@@ -70,7 +71,7 @@ const Header = styled.div`
   padding: 16px 16px 0;
 `
 
-const TriggerItem = styled.div<IsActiveProp>`
+const TriggerItem = styled(UnstyledButton)<IsActiveProp>`
   width: fit-content;
   padding-bottom: 6px;
   cursor: pointer;
