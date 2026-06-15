@@ -5,6 +5,7 @@ import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
 import { StartupSplashProvider } from '@core/ui/product/startupSplash'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
+import { CustomRpcOverridesSync } from '@core/ui/storage/CustomRpcOverridesSync'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { useVaults } from '@core/ui/storage/vaults'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
@@ -45,6 +46,7 @@ const VaultDependentContent = () => {
     <ActiveVaultOnly>
       <CoinFinder />
       <CoinsMetadataManager />
+      <CustomRpcOverridesSync />
     </ActiveVaultOnly>
   )
 }

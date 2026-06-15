@@ -7,6 +7,7 @@ import { circleVisibilityStorage } from './circleVisibility'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
+import { customRpcOverridesStorage } from './customRpcOverrides'
 import { defiChainsStorage } from './defiChains'
 import { defiPositionsStorage } from './defiPositions'
 import { dismissedBannersStorage } from './dismissedBanners'
@@ -47,5 +48,6 @@ export const storage: CoreStorage = {
   ...circleVisibilityStorage,
   ...mldsaEnabledStorage,
   ...tssBatchingEnabledStorage,
+  ...customRpcOverridesStorage,
   ...transactionHistoryStorage,
 }
