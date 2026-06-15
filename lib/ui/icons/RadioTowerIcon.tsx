@@ -2,6 +2,7 @@ import { FC } from 'react'
 
 import { SvgProps } from '../props'
 
+/** Broadcast/antenna tower icon, used for the Custom RPC settings entry. */
 export const RadioTowerIcon: FC<SvgProps> = props => (
   <svg
     fill="none"
