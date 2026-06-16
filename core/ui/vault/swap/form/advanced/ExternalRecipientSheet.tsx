@@ -38,7 +38,7 @@ export const ExternalRecipientSheet = ({
   const [draft, setDraft] = useState(value)
 
   const apply = () => {
-    onChange(draft)
+    onChange(draft.trim())
     onClose()
   }
 
