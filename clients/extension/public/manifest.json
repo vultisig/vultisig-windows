@@ -41,9 +41,9 @@
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval' http://localhost;object-src 'self'"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval';object-src 'self'"
   },
-  "host_permissions": ["https://*/*", "http://localhost/*"],
+  "host_permissions": ["https://*/*"],
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
