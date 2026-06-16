@@ -5,9 +5,11 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSwapFromCoin } from '../../state/fromCoin'
 import { AdvancedSheet } from './AdvancedSheet'
 import { ExternalRecipientSheet } from './ExternalRecipientSheet'
 import { GasLimitSheet } from './GasLimitSheet'
@@ -47,9 +49,15 @@ export const AdvancedSwapSettingsSheet = ({
   onExternalRecipientChange,
 }: AdvancedSwapSettingsSheetProps) => {
   const { t } = useTranslation()
+  const [fromCoinKey] = useSwapFromCoin()
   const [openSheet, setOpenSheet] = useState<
     'slippage' | 'gasLimit' | 'externalRecipient' | null
   >(null)
+
+  // A custom gas limit only applies to EVM source transactions (see the
+  // `gasLimitOverride` guard in the SDK keysign builder), so the row is hidden
+  // for non-EVM swaps where it has no effect.
+  const isEvmSwap = isChainOfKind(fromCoinKey.chain, 'evm')
 
   const rows: SettingRow[] = [
     {
@@ -59,13 +67,17 @@ export const AdvancedSwapSettingsSheet = ({
       value: formatSlippage(slippage, t('auto')),
       onClick: () => setOpenSheet('slippage'),
     },
-    {
-      key: 'gasLimit',
-      icon: <GasLimitIcon />,
-      title: t('gas_limit'),
-      value: gasLimit || t('auto'),
-      onClick: () => setOpenSheet('gasLimit'),
-    },
+    ...(isEvmSwap
+      ? [
+          {
+            key: 'gasLimit',
+            icon: <GasLimitIcon />,
+            title: t('gas_limit'),
+            value: gasLimit || t('auto'),
+            onClick: () => setOpenSheet('gasLimit'),
+          },
+        ]
+      : []),
     {
       key: 'externalRecipient',
       icon: <ExternalRecipientIcon />,
