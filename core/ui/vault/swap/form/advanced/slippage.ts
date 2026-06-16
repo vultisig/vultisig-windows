@@ -27,3 +27,19 @@ export const formatSlippage = (
     '3': () => '3%',
     custom: () => `${customPercent}%`,
   })
+
+/**
+ * Slippage tolerance as a percent for the swap quote (e.g. `0.5` = 0.5%), or
+ * `undefined` for `Auto` so the SDK keeps each provider's default.
+ */
+export const slippageToPercent = ({
+  mode,
+  customPercent,
+}: SlippageValue): number | undefined =>
+  match(mode, {
+    auto: () => undefined,
+    '0.5': () => 0.5,
+    '1': () => 1,
+    '3': () => 3,
+    custom: () => (customPercent > 0 ? customPercent : undefined),
+  })

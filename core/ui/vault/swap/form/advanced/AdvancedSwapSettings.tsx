@@ -1,19 +1,16 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { Text } from '@lib/ui/text'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useAdvancedSwapSettings } from '../../state/advancedSettings'
 import { AdvancedSwapSettingsSheet } from './AdvancedSwapSettingsSheet'
-import { defaultSlippage, SlippageValue } from './slippage'
 
 export const AdvancedSwapSettings = () => {
   const { t } = useTranslation()
   const [isOpen, { set: open, unset: close }] = useBoolean(false)
-  const [slippage, setSlippage] = useState<SlippageValue>(defaultSlippage)
-  const [gasLimit, setGasLimit] = useState('')
-  const [externalRecipient, setExternalRecipient] = useState('')
+  const [settings, setSettings] = useAdvancedSwapSettings()
 
   return (
     <>
@@ -25,12 +22,18 @@ export const AdvancedSwapSettings = () => {
       {isOpen && (
         <AdvancedSwapSettingsSheet
           onClose={close}
-          slippage={slippage}
-          onSlippageChange={setSlippage}
-          gasLimit={gasLimit}
-          onGasLimitChange={setGasLimit}
-          externalRecipient={externalRecipient}
-          onExternalRecipientChange={setExternalRecipient}
+          slippage={settings.slippage}
+          onSlippageChange={slippage =>
+            setSettings(prev => ({ ...prev, slippage }))
+          }
+          gasLimit={settings.gasLimit}
+          onGasLimitChange={gasLimit =>
+            setSettings(prev => ({ ...prev, gasLimit }))
+          }
+          externalRecipient={settings.externalRecipient}
+          onExternalRecipientChange={externalRecipient =>
+            setSettings(prev => ({ ...prev, externalRecipient }))
+          }
         />
       )}
     </>
