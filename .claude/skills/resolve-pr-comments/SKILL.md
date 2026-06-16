@@ -72,6 +72,21 @@ For CodeRabbit specifically, after pushing fixes, post these as **top-level** PR
 
 For human reviewers, resolve the threads in the GitHub UI or ask the reviewer to confirm.
 
+## Handle incomplete / rate-limited reviews
+
+CodeRabbit may post a **"Review limit reached"** warning instead of a real review. When it does,
+the PR is **not** fully reviewed — do not treat missing comments as "looks clean."
+
+- **Time-based limit** ("more reviews available in N minutes"): resets on its own, but CodeRabbit
+  will not re-review this commit automatically. After the window, re-trigger with
+  `@coderabbitai review` (top-level comment) or push a new commit.
+- **Credits exhausted** ("used up its prepaid credits" / "credit purchases are no longer
+  available"): this is a billing state, not a timing one. Re-triggering won't help until the org
+  enables the review add-on. **Flag it to the user — do not retry in a loop and do not change
+  billing.**
+
+Do not automate re-triggering on a timer: past the plan's limit, reviews are billed per file.
+
 ## Goal
 - Every comment answered **in its own thread**, all threads resolved, all checks pass,
   PR merge-ready.
