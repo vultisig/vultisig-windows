@@ -71,17 +71,23 @@ export const ExternalRecipientSheet = ({
           onChange={event => setDraft(event.target.value)}
         />
         <HStack gap={8}>
-          <ActionButton onClick={handlePaste}>
+          <ActionButton aria-label={t('paste')} onClick={handlePaste}>
             <IconWrapper size={20}>
               <PasteAddressIcon />
             </IconWrapper>
           </ActionButton>
-          <ActionButton onClick={() => setView('scanner')}>
+          <ActionButton
+            aria-label={t('scan_qr')}
+            onClick={() => setView('scanner')}
+          >
             <IconWrapper size={20} color="text">
               <ScanQrIcon />
             </IconWrapper>
           </ActionButton>
-          <ActionButton onClick={() => setView('addressBook')}>
+          <ActionButton
+            aria-label={t('address_book')}
+            onClick={() => setView('addressBook')}
+          >
             <IconWrapper size={20} color="text">
               <AddressBookIcon />
             </IconWrapper>
