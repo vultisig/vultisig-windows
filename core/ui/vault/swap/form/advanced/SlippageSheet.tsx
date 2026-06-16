@@ -20,6 +20,18 @@ type SlippageSheetProps = OnCloseProp & {
 
 const presetModes: Exclude<SlippageMode, 'custom'>[] = ['auto', '0.5', '1', '3']
 
+// Sanity cap for a manually entered slippage tolerance (percent).
+const maxSlippagePercent = 50
+
+/** Clamp a typed custom slippage to a finite value within [0, max]. */
+const toValidSlippagePercent = (raw: string): number => {
+  const parsed = Number(raw)
+  if (!Number.isFinite(parsed)) {
+    return 0
+  }
+  return Math.min(Math.max(parsed, 0), maxSlippagePercent)
+}
+
 export const SlippageSheet = ({
   value,
   onChange,
@@ -85,7 +97,10 @@ export const SlippageSheet = ({
                 onChange={event => {
                   const next = event.target.value
                   setCustomText(next)
-                  setDraft({ mode: 'custom', customPercent: Number(next) || 0 })
+                  setDraft({
+                    mode: 'custom',
+                    customPercent: toValidSlippagePercent(next),
+                  })
                 }}
               />
               <Text size={14} weight={400} color="shyExtra">
