@@ -9,6 +9,7 @@ import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type AdvancedSheetProps = ChildrenProp &
@@ -30,33 +31,47 @@ export const AdvancedSheet = ({
   onConfirm,
   leftIcon,
   children,
-}: AdvancedSheetProps) => (
-  <ResponsiveModal
-    isOpen
-    onClose={onClose}
-    modalProps={{ withDefaultStructure: false }}
-  >
-    <Wrapper gap={20}>
-      <HStack alignItems="center" justifyContent="space-between" gap={12}>
-        <IconButton kind="secondary" size="lg" onClick={onClose}>
-          {leftIcon ?? <CrossIcon />}
-        </IconButton>
-        <Text
-          size={16}
-          weight={500}
-          color="contrast"
-          style={{ flex: 1, textAlign: 'center' }}
-        >
-          {title}
-        </Text>
-        <IconButton kind="primary" size="lg" onClick={onConfirm ?? onClose}>
-          <CheckIcon />
-        </IconButton>
-      </HStack>
-      {children}
-    </Wrapper>
-  </ResponsiveModal>
-)
+}: AdvancedSheetProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <ResponsiveModal
+      isOpen
+      onClose={onClose}
+      modalProps={{ withDefaultStructure: false }}
+    >
+      <Wrapper gap={20}>
+        <HStack alignItems="center" justifyContent="space-between" gap={12}>
+          <IconButton
+            aria-label={t('close')}
+            kind="secondary"
+            size="lg"
+            onClick={onClose}
+          >
+            {leftIcon ?? <CrossIcon />}
+          </IconButton>
+          <Text
+            size={16}
+            weight={500}
+            color="contrast"
+            style={{ flex: 1, textAlign: 'center' }}
+          >
+            {title}
+          </Text>
+          <IconButton
+            aria-label={t('confirm')}
+            kind="primary"
+            size="lg"
+            onClick={onConfirm ?? onClose}
+          >
+            <CheckIcon />
+          </IconButton>
+        </HStack>
+        {children}
+      </Wrapper>
+    </ResponsiveModal>
+  )
+}
 
 const Wrapper = styled(VStack)`
   width: 100%;
