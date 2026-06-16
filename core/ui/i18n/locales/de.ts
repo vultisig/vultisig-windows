@@ -1511,7 +1511,7 @@ export const de = {
   auto: 'Auto',
   coming_soon: 'Demnächst verfügbar',
   custom_rpc: 'Benutzerdefinierte RPCs',
-  custom_rpc_chip_custom: 'Brauch',
+  custom_rpc_chip_custom: 'Benutzerdefiniert',
   custom_rpc_chip_default: 'Standard',
   custom_rpc_description: 'Verwenden Sie Ihre eigenen Knoten pro Kette',
   custom_rpc_invalid_response: 'Unerwartete Antwort von diesem Endpunkt',
@@ -1531,7 +1531,7 @@ export const de = {
   vult_tier_label: '{{tier}} Tier',
   vult_tier_required: 'Silber-Stufe erforderlich',
   send_to_different_address: 'An eine andere Adresse senden',
-  slippage_custom: 'Brauch',
+  slippage_custom: 'Benutzerdefiniert',
   slippage_helper:
     'Legt fest, wie stark sich der Preis ändern darf, bevor die Ausführung abgebrochen wird.',
   slippage_tolerance: 'Schlupftoleranz',

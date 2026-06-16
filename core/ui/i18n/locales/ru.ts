@@ -1480,7 +1480,7 @@ export const ru = {
   auto: 'Авто',
   coming_soon: 'Вскоре',
   custom_rpc: 'Пользовательские RPC',
-  custom_rpc_chip_custom: 'Обычай',
+  custom_rpc_chip_custom: 'Пользовательский',
   custom_rpc_chip_default: 'По умолчанию',
   custom_rpc_description: 'Используйте собственные узлы для каждой цепочки.',
   custom_rpc_invalid_response: 'Неожиданный ответ от этой конечной точки.',
@@ -1500,7 +1500,7 @@ export const ru = {
   vult_tier_label: '{{tier}} Уровень',
   vult_tier_required: 'Требуется серебряный уровень.',
   send_to_different_address: 'Отправить на другой адрес',
-  slippage_custom: 'Обычай',
+  slippage_custom: 'Пользовательский',
   slippage_helper:
     'Ограничивает диапазон изменения цены до отмены исполнения ордера.',
   slippage_tolerance: 'Допустимое проскальзывание',
