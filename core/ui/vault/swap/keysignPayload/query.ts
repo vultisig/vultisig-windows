@@ -18,6 +18,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
+import { useAdvancedSwapSettings } from '../state/advancedSettings'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
@@ -32,6 +33,9 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const walletCore = useAssertWalletCore()
   const fromPublicKey = useCurrentVaultPublicKey(fromCoin.chain)
   const toPublicKey = useCurrentVaultPublicKey(toCoin.chain)
+
+  const [{ gasLimit }] = useAdvancedSwapSettings()
+  const gasLimitOverride = gasLimit ? BigInt(gasLimit) : undefined
 
   const input: BuildSwapKeysignPayloadInput = useMemo(
     () => ({
@@ -48,11 +52,13 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
       toPublicKey,
       libType: toKeysignLibType(vault),
       walletCore,
+      gasLimitOverride,
     }),
     [
       fromAmount,
       fromCoin,
       fromPublicKey,
+      gasLimitOverride,
       swapQuote,
       toCoin,
       toPublicKey,
