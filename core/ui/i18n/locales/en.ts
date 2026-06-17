@@ -40,6 +40,8 @@ export const en = {
   advanced: 'Advanced',
   advanced_description: 'Reshare, manage security or sign messages.',
   advanced_gas_fee: 'Advanced gas fee',
+  advanced_settings: 'Advanced Settings',
+  advanced_swap: 'Advanced swap',
   all_vaults: 'All Vaults',
   amount: 'Amount',
   amount_must_be_non_negative: 'Amount must be non-negative',
@@ -63,6 +65,7 @@ export const en = {
   at_least_one_device: 'At least one device',
   at_least_one_device_subtitle:
     'Any device that can run {{productName}} will work.',
+  auto: 'Auto',
   available: 'Available',
   back: 'Back',
   before_you_start: 'Before you start...',
@@ -892,6 +895,7 @@ export const en = {
   send_terms_0: "I'm sending to the right address",
   send_terms_1: 'The amount is correct',
   send_to: 'Send to',
+  send_to_different_address: 'Send to Different Address',
   sent: 'Sent',
   server_backup: 'Server Backup',
   server_backup_description: 'Request Server Vault Share again.',
@@ -928,6 +932,10 @@ export const en = {
   site_has_risk: 'Malicious site detected by <provider></provider>',
   skip: 'Skip',
   slippage: 'Slippage',
+  slippage_custom: 'Custom',
+  slippage_helper:
+    'Limits how much the price can change before execution is canceled.',
+  slippage_tolerance: 'Slippage Tolerance',
   something_went_wrong: 'Something went wrong',
   somethings_wrong: "Something's wrong",
   soon: 'Soon',
@@ -1103,6 +1111,7 @@ export const en = {
   upload_qr_code_image: 'Upload QR Code',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_with_address: 'Upload QR code with address',
+  use_external_recipient: 'Use External Recipient',
   use_referral_code: 'Use referral Code',
   used_referral_error:
     'Used referral code can not be the same as your referral code',
