@@ -72,7 +72,7 @@ export const ExternalRecipientSheet = ({
         />
         <HStack gap={8}>
           <ActionButton aria-label={t('paste')} onClick={handlePaste}>
-            <IconWrapper size={20}>
+            <IconWrapper size={20} color="text">
               <PasteAddressIcon />
             </IconWrapper>
           </ActionButton>
