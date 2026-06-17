@@ -14,6 +14,7 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { RujiMergedPositionCard } from '../components/stake/RujiMergedPositionCard'
 import { StakeCard } from '../components/stake/StakeCard'
 import type { StakeUiTranslationKey } from '../config/stakeUiResolver'
 import {
@@ -88,7 +89,12 @@ export const StakedPositions = () => {
     )
   }
 
-  return <ThorchainStakedPositions />
+  return (
+    <VStack gap={12}>
+      {chain === Chain.THORChain ? <RujiMergedPositionCard /> : null}
+      <ThorchainStakedPositions />
+    </VStack>
+  )
 }
 
 const ThorchainStakedPositions = () => {

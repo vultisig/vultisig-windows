@@ -1,6 +1,6 @@
 ---
 name: resolve-pr-comments
-description: Address CodeRabbit or other AI reviewer comments on a PR to make it merge-ready.
+description: Address CodeRabbit or other reviewer comments on a PR to make it merge-ready.
 disable-model-invocation: true
 ---
 
@@ -12,10 +12,16 @@ Provide the PR link or number.
 ## Workflow
 
 ### 1. Fetch Review Comments
-Use GitHub MCP `pull_request_read` with method `get_review_comments`. Focus on `IsResolved: false`.
+List the unresolved review comments and capture each comment's `id` (you need it to reply
+in-thread). Take comments where `in_reply_to_id == null` — those are the thread roots.
+
+```bash
+gh api repos/{owner}/{repo}/pulls/<PR>/comments --paginate \
+  --jq '.[] | select(.in_reply_to_id == null) | {id, path, line, user: .user.login, body}'
+```
 
 ### 2. Evaluate Critically
-AI reviewers can be wrong. Before implementing:
+Reviewers (human or AI) can be wrong. Before implementing:
 - **Verify the claim** — does the code actually have the issue?
 - **Question severity** — "critical" labels are often overstated
 - **Check if code works** — suggestion may be based on misunderstanding
@@ -29,11 +35,58 @@ Implement fixes. Skip invalid suggestions.
 yarn check
 ```
 
-### 5. Push and Resolve
+### 5. Reply In-Thread to Each Comment
+
+This applies to **all reviewers** — CodeRabbit and humans alike.
+
+Reply to the **specific review comment**, in its thread, using the comment `id` from step 1.
+Either of these endpoints keeps the reply attached to the thread:
+
 ```bash
-git add -A && git commit -m "address review comments" && git push
-yarn tsx .cursor/skills/resolve-pr-comments/scripts/resolve-pr-comments.ts <PR_NUMBER>
+# Preferred: dedicated reply endpoint
+gh api --method POST repos/{owner}/{repo}/pulls/<PR>/comments/<COMMENT_ID>/replies \
+  -f body='Fixed in <commit_sha> — <what changed>.'
+
+# Equivalent: in_reply_to on the create-comment endpoint
+gh api --method POST repos/{owner}/{repo}/pulls/<PR>/comments \
+  -f body='Fixed in <commit_sha> — <what changed>.' -F in_reply_to=<COMMENT_ID>
 ```
 
+**Never** reply with `gh pr comment` (or any top-level / issue comment) for review feedback.
+A top-level comment is detached from the thread: the reviewer can't tie it to their finding,
+the conversation can't be resolved, and the thread keeps looking unanswered.
+
+When you disagree with a comment, still reply in-thread explaining why, instead of silently
+skipping it.
+
+### 6. Push, Re-review, Resolve
+```bash
+git add -A && git commit -m "address review comments" && git push
+```
+
+For CodeRabbit specifically, after pushing fixes, post these as **top-level** PR comments
+(CodeRabbit commands are not thread replies):
+- `@coderabbitai review` — re-review the new changes (also use this if a prior review stopped
+  early / hit a limit)
+- `@coderabbitai resolve` — mark its addressed comments as resolved
+
+For human reviewers, resolve the threads in the GitHub UI or ask the reviewer to confirm.
+
+## Handle incomplete / rate-limited reviews
+
+CodeRabbit may post a **"Review limit reached"** warning instead of a real review. When it does,
+the PR is **not** fully reviewed — do not treat missing comments as "looks clean."
+
+- **Time-based limit** ("more reviews available in N minutes"): resets on its own, but CodeRabbit
+  will not re-review this commit automatically. After the window, re-trigger with
+  `@coderabbitai review` (top-level comment) or push a new commit.
+- **Credits exhausted** ("used up its prepaid credits" / "credit purchases are no longer
+  available"): this is a billing state, not a timing one. Re-triggering won't help until the org
+  enables the review add-on. **Flag it to the user — do not retry in a loop and do not change
+  billing.**
+
+Do not automate re-triggering on a timer: past the plan's limit, reviews are billed per file.
+
 ## Goal
-- All threads resolved, all checks pass, PR merge-ready
+- Every comment answered **in its own thread**, all threads resolved, all checks pass,
+  PR merge-ready.

@@ -251,7 +251,6 @@ export const ru = {
   digit_input_success_validation: 'Проверка прошла успешно',
   disconnect_all: 'Отключить всё',
   discord: 'Discord',
-  discount: 'Скидка',
   complete_fee_waive: 'Без комиссии',
   discount_tiers: 'Уровни скидок',
   discount_tiers_description:
@@ -450,7 +449,6 @@ export const ru = {
     'Держите оба устройства неподвижно на мгновение',
   hide_balance: 'Скрыть баланс',
   hide_defi_balance: 'Скрыть DeFi-баланс',
-  hold: 'Держать',
   how_it_works: 'Как это работает',
   ibc_transaction_not_supporting_memo_desc:
     'Эта IBC-транзакция содержит memo, но {{productName}} сейчас не поддерживает встраивание memo в сообщения IBC-перевода.<br> Продолжение может привести к <b>необратимой потере средств</b>.',
@@ -564,6 +562,7 @@ export const ru = {
   missing_thorchain_address: 'Отсутствует THORChain-адрес',
   more: 'ещё',
   moreInfo: 'Подробнее',
+  more_coming_soon: 'Скоро ещё',
   name: 'Имя',
   name_your_vault: 'Назовите ваше хранилище',
   network: 'Сеть',
@@ -906,6 +905,7 @@ export const ru = {
   support: 'Поддержка',
   swap: 'Своп',
   swaps: 'Свопы',
+  swap_discount: 'Скидка на обмен',
   swap_fee: 'Комиссия свопа',
   swap_overview: 'Обзор свопа',
   swap_same_asset: 'Невозможно обменять один и тот же актив.',
@@ -974,13 +974,13 @@ export const ru = {
   type_here: 'Введите здесь',
   unbond: 'Unbond',
   unbond_with_lp: 'Unbond Maya',
+  ultimate: 'Ultimate',
   unlock_discount_tier: 'Разблокировать уровень <b>{{tier}}</b>',
   unlock_discount_tier_description:
     'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>скидку {{bps}} bps на торговые комиссии</b> для всех свопов.',
   unlock_discount_tier_description_ultimate:
     'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>полную отмену комиссии Vultisig</b> для всех свопов.',
   unlock_tier: 'Разблокировать уровень',
-  ultimate: 'Ultimate',
   unmerge: 'Разъединить',
   unfreeze: 'Unfreeze',
   unknown: 'Неизвестно',

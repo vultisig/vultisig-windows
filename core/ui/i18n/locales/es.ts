@@ -255,7 +255,6 @@ export const es = {
   digit_input_success_validation: 'Verificación exitosa',
   disconnect_all: 'Desconectar todo',
   discord: 'Discordia',
-  discount: 'Descuento',
   complete_fee_waive: 'Sin tarifa',
   discount_tiers: 'Niveles de descuento',
   discount_tiers_description:
@@ -457,7 +456,6 @@ export const es = {
     'Mantenga ambos dispositivos quietos por un momento',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
-  hold: 'Mantener',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transacción de IBC incluye una nota, pero {{productName}} actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
@@ -573,6 +571,7 @@ export const es = {
   missing_thorchain_address: 'Falta la dirección de THORChain',
   more: 'más',
   moreInfo: 'Más información',
+  more_coming_soon: 'Próximamente más',
   name: 'Nombre',
   name_your_vault: 'Ponle nombre a tu bóveda',
   network: 'Red',
@@ -921,6 +920,7 @@ export const es = {
   support: 'Apoyo',
   swap: 'Intercambio',
   swaps: 'Intercambios',
+  swap_discount: 'Descuento de swap',
   swap_fee: 'Comisión de intercambio',
   swap_overview: 'Descripción general del intercambio',
   swap_same_asset: 'No se puede intercambiar entre activos iguales.',
@@ -991,13 +991,13 @@ export const es = {
   type_here: 'Escribe aquí',
   unbond: 'Desatar',
   unbond_with_lp: 'Maya desvinculada',
+  ultimate: 'Último',
   unlock_discount_tier: 'Desbloquear <b>{{tier}}</b> nivel',
   unlock_discount_tier_description:
     'Al mantener {{minBalance}}, desbloqueará el nivel {{tier}} y recibirá un <b>{{bps}} bps de descuento en la tarifa comercial</b> en todos los swaps.',
   unlock_discount_tier_description_ultimate:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
   unlock_tier: 'Desbloquear nivel',
-  ultimate: 'Último',
   unmerge: 'Separar',
   unfreeze: 'Unfreeze',
   unknown: 'Desconocido',

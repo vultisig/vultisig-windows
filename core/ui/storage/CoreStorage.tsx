@@ -5,6 +5,7 @@ import { CircleVisibilityStorage } from './circleVisibility'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
+import { CustomRpcOverridesStorage } from './customRpcOverrides'
 import { DefiChainsStorage } from './defiChains'
 import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
@@ -44,4 +45,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   DismissedBannersStorage &
   MLDSAEnabledStorage &
   TssBatchingEnabledStorage &
+  CustomRpcOverridesStorage &
   TransactionHistoryStorage

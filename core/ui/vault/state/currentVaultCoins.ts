@@ -1,4 +1,5 @@
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
+import { withoutThorchainLpCoins } from '@core/ui/chain/coin/thorchain/isThorchainLpCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
@@ -23,14 +24,17 @@ export const useCurrentVaultCoins = () => {
 }
 
 /**
- * {@link useCurrentVaultCoins} minus THORChain RUJI staking receipt (sRUJI).
- * Use for portfolio UX: balances, fiat totals, swap/send pickers, refresh.
- * Keep {@link useCurrentVaultCoins} for storage-accurate flows (manage tokens,
- * CoinFinder dedupe, resolving a send `coin` key that may still reference a
- * legacy receipt row).
+ * {@link useCurrentVaultCoins} minus DeFi-only THORChain entries: the RUJI
+ * staking receipt (sRUJI) and Rujira LP tokens (`LP-…`). Use for portfolio UX:
+ * balances, fiat totals, swap/send pickers, refresh. LP positions are surfaced
+ * under `DeFi → LPs` instead. Keep {@link useCurrentVaultCoins} for
+ * storage-accurate flows (manage tokens, CoinFinder dedupe, resolving a send
+ * `coin` key that may still reference a legacy receipt/LP row).
  */
 export const usePortfolioVaultCoins = () =>
-  withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+  withoutThorchainLpCoins(
+    withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+  )
 
 export const usePortfolioVaultChainCoins = (chain: string) =>
   usePortfolioVaultCoins().filter(coin => coin.chain === chain)
