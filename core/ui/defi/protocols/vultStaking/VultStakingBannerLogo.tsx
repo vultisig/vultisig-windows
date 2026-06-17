@@ -10,14 +10,22 @@ const ringViewHeight = 206
 const ringCenterX = 101.283
 const ringCenterY = 102.43
 
-const ringWidth = 220
+const defaultRingWidth = 220
+const badgeFontSize = 90
+
+type VultStakingBannerLogoProps = {
+  /** Ring artwork width in px; the badge scales with it. Defaults to 220. */
+  width?: number
+}
 
 /**
  * VULT staking banner artwork: the brand badge centred inside the glowing blue
  * concentric rings, anchored to the right edge of the banner (rings bleed
  * off-edge, matching the design).
  */
-export const VultStakingBannerLogo = () => {
+export const VultStakingBannerLogo = ({
+  width = defaultRingWidth,
+}: VultStakingBannerLogoProps = {}) => {
   const id = useId()
   const outerGlow = `${id}-outer-glow`
   const innerGlow = `${id}-inner-glow`
@@ -25,7 +33,7 @@ export const VultStakingBannerLogo = () => {
   const innerStroke = `${id}-inner-stroke`
 
   return (
-    <Graphic>
+    <Graphic $width={width}>
       <Rings
         viewBox={`0 0 ${ringViewWidth} ${ringViewHeight}`}
         fill="none"
@@ -163,18 +171,18 @@ export const VultStakingBannerLogo = () => {
           </linearGradient>
         </defs>
       </Rings>
-      <Badge style={{ fontSize: 90 }} />
+      <Badge style={{ fontSize: (badgeFontSize * width) / defaultRingWidth }} />
     </Graphic>
   )
 }
 
-const Graphic = styled.div`
+const Graphic = styled.div<{ $width: number }>`
   position: absolute;
   right: -36px;
   top: 70%;
   transform: translateY(-50%);
-  width: ${ringWidth}px;
-  height: ${(ringWidth * ringViewHeight) / ringViewWidth}px;
+  width: ${({ $width }) => $width}px;
+  height: ${({ $width }) => ($width * ringViewHeight) / ringViewWidth}px;
   pointer-events: none;
 `
 

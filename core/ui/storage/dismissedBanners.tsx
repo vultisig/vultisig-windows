@@ -10,6 +10,7 @@ export type BannerId =
   | 'migrate'
   | 'agentNavigationCoachmark'
   | 'buyVultPromo'
+  | 'stakeVultPromo'
 
 type GetDismissedBannersFunction = () => Promise<BannerId[]>
 type SetDismissedBannersFunction = (banners: BannerId[]) => Promise<void>

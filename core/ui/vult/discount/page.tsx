@@ -15,6 +15,7 @@ import { PageHeaderBackButton } from '../../flow/PageHeaderBackButton'
 import { currentProductBrand } from '../../product/brand'
 import { useResponsiveness } from '../../providers/ResponsivenessProvider'
 import { useCore } from '../../state/core'
+import { StakeVultPromoBannerSlot } from '../../vault/page/banners/StakeVultPromoBanner/StakeVultPromoBannerSlot'
 import { useVultDiscountTierQuery } from './queries/tier'
 import { VultDiscountTier } from './tier'
 
@@ -47,6 +48,7 @@ const VultDiscountPageContent = () => {
       />
       <FitPageContent contentMaxWidth={isTabletOrLarger ? 600 : 360}>
         <VStack gap={24}>
+          <StakeVultPromoBannerSlot />
           <img src="/core/images/vult-banner.png" alt="Vult Banner" />
           <VStack gap={12}>
             <Text size={14} weight={400}>

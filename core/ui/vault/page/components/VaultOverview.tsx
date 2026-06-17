@@ -15,6 +15,8 @@ import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
 import { BuyVultPromoBanner } from '../banners/BuyVultPromoBanner/BuyVultPromoBanner'
 import { FollowOnXBanner } from '../banners/FollowOnXBanner/FollowOnXBanner'
+import { StakeVultPromoBanner } from '../banners/StakeVultPromoBanner/StakeVultPromoBanner'
+import { useStakeVultBannerEligibility } from '../banners/StakeVultPromoBanner/useStakeVultBannerEligibility'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 import { VaultTabs } from './VaultTabs/VaultTabs'
@@ -37,6 +39,7 @@ type VaultOverviewProps = {
 
 export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   const { libType } = useCurrentVault()
+  const showStakeVultBanner = useStakeVultBannerEligibility()
 
   const banners = [
     ...(libType !== 'DKLS'
@@ -45,6 +48,16 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
             id: 'migrate' as const,
             component: (props: { onDismiss: () => void }) => (
               <MigrateVaultPrompt onDismiss={props.onDismiss} />
+            ),
+          },
+        ]
+      : []),
+    ...(currentProductBrand === 'vultisig' && showStakeVultBanner
+      ? [
+          {
+            id: 'stakeVultPromo' as const,
+            component: (props: { onDismiss: () => void }) => (
+              <StakeVultPromoBanner onDismiss={props.onDismiss} />
             ),
           },
         ]

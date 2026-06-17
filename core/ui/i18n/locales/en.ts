@@ -1248,6 +1248,10 @@ export const en = {
       'Unstaking starts a {{duration}} cooldown. Your VULT can be claimed once it ends.',
     unstake_cooldown_term_generic:
       'Your funds will be available to claim once the redemption period ends.',
+    banner_title: 'Upgrade your $VULT',
+    banner_subtitle:
+      'Stake your $VULT to unlock exclusive benefits and lower trading fees.',
+    banner_cta: 'Stake now',
   },
   waitingOnDevices: 'Waiting on devices...',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
