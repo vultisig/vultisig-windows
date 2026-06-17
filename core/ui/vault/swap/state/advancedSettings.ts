@@ -2,7 +2,7 @@ import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
 import { defaultSlippage, SlippageValue } from '../form/advanced/slippage'
 
-export type AdvancedSwapSettings = {
+type AdvancedSwapSettings = {
   slippage: SlippageValue
   /** Custom EVM gas limit as a digit string; empty means "auto". */
   gasLimit: string
