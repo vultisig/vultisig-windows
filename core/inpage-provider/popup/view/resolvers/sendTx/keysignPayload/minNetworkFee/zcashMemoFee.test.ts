@@ -6,10 +6,12 @@
  * enforceZcashConventionalFee compensates.
  */
 import { initWasm, TW, WalletCore } from '@trustwallet/wallet-core'
+import {
+  ceilDiv,
+  getZcashConventionalFee,
+} from '@vultisig/core-chain/chains/utxo/fee/zip317'
 import Long from 'long'
 import { beforeAll, describe, expect, it } from 'vitest'
-
-import { ceilDiv, getZcashConventionalFee } from './zip317'
 
 const zcashAddress = 't1PoLLLwEcVhqMBhk53tANtSepnPXAQJkPM'
 
