@@ -16,6 +16,7 @@ type PendingUnstakeCardProps = {
   request: PendingUnstake
 }
 
+/** A single pending unstake request row with Claim / Cancel actions. */
 export const PendingUnstakeCard = ({ request }: PendingUnstakeCardProps) => {
   const { t, i18n } = useTranslation()
   const [, setViewState] = useVultStakingViewState()

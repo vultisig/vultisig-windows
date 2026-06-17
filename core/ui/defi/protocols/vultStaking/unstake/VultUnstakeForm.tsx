@@ -4,20 +4,23 @@ import { OnFinishProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { sVultCoin, vultCoin } from '../core/config'
-import { formatCooldownDuration } from '../core/formatCooldownDuration'
 import { useStakedVultBalanceQuery } from '../queries/useStakedVultBalanceQuery'
 import { useVultCooldownQuery } from '../queries/useVultCooldownQuery'
 
+const secondsPerDay = 86400n
+
+/** Amount form for unstaking (ceiling = staked sVULT) with the cooldown note. */
 export const VultUnstakeForm = ({ onFinish }: OnFinishProp<bigint>) => {
   const { t } = useTranslation()
   const balanceQuery = useStakedVultBalanceQuery()
   const { data: cooldown } = useVultCooldownQuery()
 
+  const cooldownDays =
+    cooldown !== undefined ? Number(cooldown / secondsPerDay) : 0
+
   const note =
-    cooldown !== undefined
-      ? t('vultStaking.unstake_cooldown_term', {
-          duration: formatCooldownDuration(cooldown),
-        })
+    cooldownDays >= 1
+      ? t('vultStaking.unstake_cooldown_term', { days: cooldownDays })
       : t('vultStaking.unstake_cooldown_term_generic')
 
   return (

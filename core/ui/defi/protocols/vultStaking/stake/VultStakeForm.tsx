@@ -4,6 +4,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { vultCoin } from '../core/config'
 import { useVultBalanceQuery } from '../queries/useVultBalanceQuery'
 
+/** Amount form for staking VULT (ceiling = available VULT balance). */
 export const VultStakeForm = ({ onFinish }: OnFinishProp<bigint>) => {
   const balanceQuery = useVultBalanceQuery()
 

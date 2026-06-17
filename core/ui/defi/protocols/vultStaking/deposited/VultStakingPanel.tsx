@@ -17,6 +17,7 @@ import { useStakedVultFiatBalanceQuery } from '../queries/useStakedVultFiatBalan
 import { useVultStakingViewState } from '../state/vultStakingViewState'
 import { VultLogoIcon } from '../VultLogoIcon'
 
+/** Staked-balance card with Stake / Unstake actions. */
 export const VultStakingPanel = () => {
   const { t } = useTranslation()
   const [, setViewState] = useVultStakingViewState()

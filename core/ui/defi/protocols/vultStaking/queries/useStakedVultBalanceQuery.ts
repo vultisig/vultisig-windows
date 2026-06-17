@@ -11,9 +11,10 @@ import { sVultCoin, vultStakingChain } from '../core/config'
 export const useStakedVultBalanceQuery = (): Query<bigint> => {
   const address = useCurrentVaultAddress(vultStakingChain)
 
-  const balanceQuery = useQuery(
-    getBalanceQueryOptions(extractAccountCoinKey({ ...sVultCoin, address }))
-  )
+  const balanceQuery = useQuery({
+    ...getBalanceQueryOptions(extractAccountCoinKey({ ...sVultCoin, address })),
+    enabled: Boolean(address),
+  })
 
   return useTransformQueryData(balanceQuery, data => Object.values(data)[0])
 }

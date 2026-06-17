@@ -7,6 +7,7 @@ import { useVultStakingViewState } from '../state/vultStakingViewState'
 import { VultStakeVerify } from './verify/VultStakeVerify'
 import { VultStakeForm } from './VultStakeForm'
 
+/** Stake flow: amount entry, then the keysign verify step. */
 export const VultStakeView = () => {
   const { t } = useTranslation()
   const [, setViewState] = useVultStakingViewState()

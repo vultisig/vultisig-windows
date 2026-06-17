@@ -1,5 +1,5 @@
 import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
-import { getAbiItem, zeroAddress } from 'viem'
+import { getAbiItem, isAddress, zeroAddress } from 'viem'
 
 import { sVultAbi } from './abi'
 import {
@@ -30,12 +30,16 @@ type GetPendingUnstakesInput = {
 export const getPendingUnstakes = async ({
   ownerAddress,
 }: GetPendingUnstakesInput): Promise<PendingUnstake[]> => {
+  if (!isAddress(ownerAddress)) {
+    return []
+  }
+
   const client = getEvmClient(vultStakingEvmChain)
 
   const logs = await client.getLogs({
     address: sVultAddress,
     event: getAbiItem({ abi: sVultAbi, name: 'UnstakeRequested' }),
-    args: { owner: ownerAddress as `0x${string}` },
+    args: { owner: ownerAddress },
     fromBlock: sVultDeploymentBlock,
     toBlock: 'latest',
   })

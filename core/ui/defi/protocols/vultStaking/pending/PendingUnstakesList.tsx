@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { usePendingUnstakesQuery } from '../queries/usePendingUnstakesQuery'
 import { PendingUnstakeCard } from './PendingUnstakeCard'
 
+/** The vault's pending unstake requests, or nothing when there are none. */
 export const PendingUnstakesList = () => {
   const { t } = useTranslation()
   const query = usePendingUnstakesQuery()

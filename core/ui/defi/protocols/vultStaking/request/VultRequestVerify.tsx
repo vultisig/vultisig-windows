@@ -3,7 +3,12 @@ import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
 
-import { sVultAddress, vultCoin, vultStakingName } from '../core/config'
+import {
+  sVultAddress,
+  sVultCoin,
+  vultCoin,
+  vultStakingName,
+} from '../core/config'
 import { PendingUnstake } from '../core/getPendingUnstakes'
 import {
   useVultCancelUnstakeKeysignPayloadQuery,
@@ -51,7 +56,7 @@ export const VultRequestVerify = ({
           : t('vultStaking.cancel_unstake')
       }
       keysignPayloadQuery={mode === 'claim' ? claimQuery : cancelQuery}
-      coin={vultCoin}
+      coin={mode === 'claim' ? vultCoin : sVultCoin}
       amount={request.amount}
       amountLabel={
         mode === 'claim'

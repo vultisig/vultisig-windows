@@ -1,5 +1,6 @@
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { useQuery } from '@tanstack/react-query'
+import { isAddress } from 'viem'
 
 import { vultStakingChain } from '../core/config'
 import { getPendingUnstakes } from '../core/getPendingUnstakes'
@@ -14,5 +15,6 @@ export const usePendingUnstakesQuery = () => {
   return useQuery({
     queryKey: getPendingUnstakesQueryKey(ownerAddress),
     queryFn: () => getPendingUnstakes({ ownerAddress }),
+    enabled: isAddress(ownerAddress),
   })
 }

@@ -19,6 +19,7 @@ import { VultStakingBannerLogo } from '../VultStakingBannerLogo'
 
 type VultStakingTab = 'deposited'
 
+/** Full VULT staking page: balance banner, deposited tab, panel, and pending unstakes. */
 export const VultStakingHomeView = () => {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<VultStakingTab>('deposited')

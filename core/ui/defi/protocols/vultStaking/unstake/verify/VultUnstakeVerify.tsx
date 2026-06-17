@@ -10,6 +10,7 @@ import { VultStakingTxVerify } from '../../verify/VultStakingTxVerify'
 
 type VultUnstakeVerifyProps = ValueProp<bigint> & OnBackProp
 
+/** Verify and sign a requestUnstake (starts the cooldown). */
 export const VultUnstakeVerify = ({
   value: amount,
   onBack,
