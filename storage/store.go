@@ -104,9 +104,19 @@ func (s *Store) SaveVault(vault *Vault) error {
 		"chain_key_shares",
 		"public_key_mldsa",
 	}
-	query := fmt.Sprintf(`INSERT OR REPLACE INTO vaults (%s) VALUES (%s)`,
+	updates := make([]string, 0, len(columns)-1)
+	for _, column := range columns {
+		if column == "public_key_ecdsa" {
+			continue
+		}
+		updates = append(updates, fmt.Sprintf("%s = excluded.%s", column, column))
+	}
+	query := fmt.Sprintf(
+		`INSERT INTO vaults (%s) VALUES (%s) ON CONFLICT(public_key_ecdsa) DO UPDATE SET %s`,
 		strings.Join(columns, ", "),
-		generatePlaceholders(len(columns)))
+		generatePlaceholders(len(columns)),
+		strings.Join(updates, ", "),
+	)
 
 	var chainPublicKeys interface{}
 	if vault.ChainPublicKeys != nil {

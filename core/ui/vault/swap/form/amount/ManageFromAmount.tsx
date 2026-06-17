@@ -1,6 +1,5 @@
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -17,8 +16,6 @@ import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
-
-const fromAmountInputDebounceMs = 300
 
 const parseAmountInputValue = (value: string, decimals: number) => {
   if (value === '') {
@@ -45,11 +42,6 @@ export const ManageFromAmount = () => {
     ? fullDecimalString.replace(/\.?0+$/, '')
     : fullDecimalString
   const [inputValue, setInputValue] = useState<string>(trimmedDecimalString)
-  const inputAmount = parseAmountInputValue(inputValue, decimals)
-  const debouncedInputAmount = useDebounce(
-    inputAmount,
-    fromAmountInputDebounceMs
-  )
   const isFeeCoinSelected = isFeeCoin(fromCoinKey)
 
   useEffect(() => {
@@ -65,21 +57,7 @@ export const ManageFromAmount = () => {
     }
   }, [value, trimmedDecimalString, inputValue, decimals])
 
-  useEffect(() => {
-    if (
-      debouncedInputAmount === undefined ||
-      debouncedInputAmount !== inputAmount
-    ) {
-      return
-    }
-
-    if (debouncedInputAmount !== value) {
-      previousValueRef.current = debouncedInputAmount
-      setValue?.(debouncedInputAmount)
-    }
-  }, [debouncedInputAmount, inputAmount, setValue, value])
-
-  const handleInputValueChange = (value: string, shouldCommitNow = false) => {
+  const handleInputValueChange = (value: string) => {
     value = value.replace(/-/g, '')
 
     if (value.startsWith('.')) {
@@ -88,10 +66,8 @@ export const ManageFromAmount = () => {
 
     if (value === '') {
       setInputValue('')
-      if (shouldCommitNow) {
-        previousValueRef.current = null
-        setValue?.(null)
-      }
+      previousValueRef.current = null
+      setValue?.(null)
       return
     }
 
@@ -105,10 +81,8 @@ export const ManageFromAmount = () => {
     }
 
     setInputValue(value)
-    if (shouldCommitNow) {
-      previousValueRef.current = chainAmount
-      setValue?.(chainAmount)
-    }
+    previousValueRef.current = chainAmount
+    setValue?.(chainAmount)
   }
 
   const suggestions = isFeeCoinSelected
@@ -127,7 +101,7 @@ export const ManageFromAmount = () => {
           onValueChange={handleInputValueChange}
           onPaste={event => {
             event.preventDefault()
-            handleInputValueChange(event.clipboardData.getData('text'), true)
+            handleInputValueChange(event.clipboardData.getData('text'))
           }}
           data-testid="swap-from-amount-input"
         />
@@ -164,7 +138,7 @@ export const ManageFromAmount = () => {
                   const trimmed = cropped.includes('.')
                     ? cropped.replace(/\.?0+$/, '')
                     : cropped
-                  handleInputValueChange(trimmed, true)
+                  handleInputValueChange(trimmed)
                 }}
                 key={suggestion}
                 value={suggestion}

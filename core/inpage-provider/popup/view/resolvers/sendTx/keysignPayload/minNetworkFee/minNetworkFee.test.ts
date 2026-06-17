@@ -1,8 +1,8 @@
+import { getZcashConventionalFee } from '@vultisig/core-chain/chains/utxo/fee/zip317'
 import { networks, payments, Psbt } from 'bitcoinjs-lib'
 import { describe, expect, it } from 'vitest'
 
 import { getPsbtFee, getPsbtMinVsize } from './psbtFee'
-import { getZcashConventionalFee } from './zip317'
 
 const p2pkhOutput = 34n
 
