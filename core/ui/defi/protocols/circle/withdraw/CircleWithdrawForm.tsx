@@ -1,10 +1,18 @@
+import { DefiAmountForm } from '@core/ui/defi/shared/DefiAmountForm'
 import { OnFinishProp } from '@lib/ui/props'
+import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 
 import { useCircleAccountUsdcBalanceQuery } from '../queries/circleAccountUsdcBalance'
-import { CircleAmountForm } from '../shared/CircleAmountForm'
 
 export const CircleWithdrawForm = ({ onFinish }: OnFinishProp<bigint>) => {
   const balanceQuery = useCircleAccountUsdcBalanceQuery()
 
-  return <CircleAmountForm balanceQuery={balanceQuery} onFinish={onFinish} />
+  return (
+    <DefiAmountForm
+      balanceQuery={balanceQuery}
+      ticker={usdc.ticker}
+      decimals={usdc.decimals}
+      onFinish={onFinish}
+    />
+  )
 }

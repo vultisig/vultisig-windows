@@ -3,29 +3,29 @@ import { TitleHeader } from '@core/ui/flow/TitleHeader'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useTranslation } from 'react-i18next'
 
-import { useCircleViewState } from '../state/circleViewState'
-import { CircleWithdrawForm } from './CircleWithdrawForm'
-import { CircleWithdrawVerify } from './verify/CircleWithdrawVerify'
+import { useVultStakingViewState } from '../state/vultStakingViewState'
+import { VultStakeVerify } from './verify/VultStakeVerify'
+import { VultStakeForm } from './VultStakeForm'
 
-export const CircleWithdrawView = () => {
+export const VultStakeView = () => {
   const { t } = useTranslation()
-  const [, setCircleViewState] = useCircleViewState()
+  const [, setViewState] = useVultStakingViewState()
 
   return (
     <ValueTransfer<bigint>
       from={({ onFinish }) => (
         <>
           <TitleHeader
-            title={t('circle.withdraw_header')}
-            onBack={() => setCircleViewState('home')}
+            title={t('vultStaking.deposit_header')}
+            onBack={() => setViewState({ type: 'home' })}
           />
           <DefiPageContainer>
-            <CircleWithdrawForm onFinish={onFinish} />
+            <VultStakeForm onFinish={onFinish} />
           </DefiPageContainer>
         </>
       )}
       to={({ value, onBack }) => (
-        <CircleWithdrawVerify value={value} onBack={onBack} />
+        <VultStakeVerify value={value} onBack={onBack} />
       )}
     />
   )

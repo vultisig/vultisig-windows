@@ -18,6 +18,7 @@ import { useMayaDefiPositionsQuery } from '../../chain/queries/useMayaDefiPositi
 import { useThorchainDefiPositionsQuery } from '../../chain/queries/useThorchainDefiPositionsQuery'
 import { aggregateDefiPositions } from '../../chain/services/defiPositionAggregator'
 import { useCircleAccountUsdcFiatBalanceQuery } from '../../protocols/circle/queries/useCircleAccountUsdcFiatBalanceQuery'
+import { useStakedVultFiatBalanceQuery } from '../../protocols/vultStaking/queries/useStakedVultFiatBalanceQuery'
 
 export type DefiChainPortfolio = {
   chain: Chain
@@ -241,6 +242,7 @@ export const useDefiPortfolioBalance = () => {
   const portfolios = useDefiChainPortfolios()
   const isCircleIncluded = useIsCircleIncluded()
   const circleFiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
+  const vultStakingFiatBalanceQuery = useStakedVultFiatBalanceQuery()
 
   const total = useMemo(() => {
     if (portfolios.isPending || circleFiatBalanceQuery.isPending) {
@@ -255,13 +257,17 @@ export const useDefiPortfolioBalance = () => {
       ? (circleFiatBalanceQuery.data ?? 0)
       : 0
 
-    return chainTotal + circleTotal
+    // VULT staking is always part of the DeFi portfolio total.
+    const vultStakingTotal = vultStakingFiatBalanceQuery.data ?? 0
+
+    return chainTotal + circleTotal + vultStakingTotal
   }, [
     portfolios.data,
     portfolios.isPending,
     circleFiatBalanceQuery.data,
     circleFiatBalanceQuery.isPending,
     isCircleIncluded,
+    vultStakingFiatBalanceQuery.data,
   ])
 
   return {

@@ -20,15 +20,21 @@ type HeroAmountInputProps = InputProps<bigint | null> & {
 
 const placeholder = formatAmount(0)
 
+const baseFontSize = 34
+const minFontSize = 16
+const tickerGap = 4
+
 export const HeroAmountInput = ({
   value,
   onChange,
   ticker,
   decimals,
 }: HeroAmountInputProps) => {
+  const containerRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLSpanElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputWidth, setInputWidth] = useState<number | undefined>(undefined)
+  const [fontSize, setFontSize] = useState(baseFontSize)
   const [isReady, setIsReady] = useState(false)
 
   const displayValue =
@@ -51,27 +57,28 @@ export const HeroAmountInput = ({
     }
   }, [value, trimmedDisplayValue, inputValue, decimals])
 
+  // Measure the number + ticker at the base font, then scale the font down so the
+  // whole amount fits its container (long 18-decimal values would otherwise
+  // overflow). Short values keep the base font (scale = 1).
   const measureWidth = (text: string) => {
     if (!measureRef.current) return 0
     measureRef.current.textContent = text
-    const width = measureRef.current.offsetWidth
-    const padding = 8
-    return width + padding
+    return measureRef.current.offsetWidth
   }
 
   useLayoutEffect(() => {
-    if (inputWidth === undefined) {
-      const placeholderWidth = measureWidth(placeholder)
-      setInputWidth(placeholderWidth)
-      setIsReady(true)
-      return
-    }
+    const numberWidth = measureWidth(inputValue || placeholder)
+    const tickerWidth = measureWidth(ticker)
+    const available = containerRef.current?.clientWidth ?? 0
+    const total = numberWidth + tickerGap + tickerWidth
 
-    const text = inputValue || ''
-    const measureText = text || placeholder
-    const width = measureWidth(measureText)
-    setInputWidth(width)
-  }, [inputValue, inputWidth])
+    const scale =
+      available > 0 && total > available ? (available * 0.96) / total : 1
+
+    setFontSize(Math.max(minFontSize, baseFontSize * scale))
+    setInputWidth(numberWidth * scale + 8)
+    setIsReady(true)
+  }, [inputValue, ticker])
 
   useEffect(() => {
     if (isReady && inputRef.current) {
@@ -107,7 +114,7 @@ export const HeroAmountInput = ({
   )
 
   return (
-    <Container>
+    <Container ref={containerRef}>
       <InputWrapper>
         <MeasureSpan ref={measureRef} aria-hidden />
         <StyledInput
@@ -119,12 +126,14 @@ export const HeroAmountInput = ({
           onChange={e => handleChange(e.target.value)}
           style={
             inputWidth !== undefined
-              ? { width: `${inputWidth}px` }
+              ? { width: `${inputWidth}px`, fontSize: `${fontSize}px` }
               : { opacity: 0 }
           }
         />
       </InputWrapper>
-      <Ticker color="shy">{ticker}</Ticker>
+      <Ticker color="shy" style={{ fontSize: `${fontSize}px` }}>
+        {ticker}
+      </Ticker>
     </Container>
   )
 }
@@ -132,7 +141,10 @@ export const HeroAmountInput = ({
 const Container = styled(HStack)`
   align-items: baseline;
   justify-content: center;
-  gap: 4px;
+  gap: ${tickerGap}px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 `
 
 const InputWrapper = styled.div`
@@ -145,7 +157,7 @@ const MeasureSpan = styled.span`
   pointer-events: none;
   visibility: hidden;
   white-space: pre;
-  font-size: 34px;
+  font-size: ${baseFontSize}px;
   font-weight: 500;
   line-height: 37px;
   letter-spacing: -1px;
@@ -155,7 +167,7 @@ const StyledInput = styled.input`
   border: none;
   background: transparent;
   text-align: left;
-  font-size: 34px;
+  font-size: ${baseFontSize}px;
   font-weight: 500;
   line-height: 37px;
   letter-spacing: -1px;
@@ -172,7 +184,7 @@ const StyledInput = styled.input`
 `
 
 const Ticker = styled(Text)`
-  font-size: 34px;
+  font-size: ${baseFontSize}px;
   font-weight: 500;
   line-height: 37px;
   letter-spacing: -1px;

@@ -49,6 +49,14 @@ type VerifyTransactionOverviewProps = {
   receiverAddressLabel?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>
+  /**
+   * Overrides how the displayed amount is read from the payload. Defaults to
+   * `toAmount`; contract-call flows (e.g. staking) whose token amount lives in
+   * the calldata pass a resolver that returns the real amount instead.
+   */
+  getPayloadAmount?: (payload: KeysignPayload) => bigint | number | string
+  /** Overrides the amount row label (defaults to "You're sending"). */
+  amountLabel?: ReactNode
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
   children?: ReactNode
 }
@@ -64,6 +72,8 @@ export const VerifyTransactionOverview = ({
   receiverAddressLabel,
   chain,
   keysignPayloadQuery,
+  getPayloadAmount,
+  amountLabel,
   renderFeeExtra,
   children,
 }: VerifyTransactionOverviewProps) => {
@@ -95,10 +105,11 @@ export const VerifyTransactionOverview = ({
   return (
     <List border="gradient" radius={16}>
       <TransactionOverviewAmount
-        label={t('you_are_sending')}
+        label={amountLabel ?? t('you_are_sending')}
         coin={coin}
         fallbackAmount={formattedAmount}
         keysignPayloadQuery={keysignPayloadQuery}
+        getPayloadAmount={getPayloadAmount}
       />
       <TransactionOverviewItem
         label={t('from')}

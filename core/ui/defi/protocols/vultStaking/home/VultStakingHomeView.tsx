@@ -1,27 +1,42 @@
 import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
+import { DefiBalanceBanner } from '@core/ui/defi/shared/DefiBalanceBanner'
 import { DefiPageContainer } from '@core/ui/defi/shared/DefiPageContainer'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { Tab, Tabs } from '@lib/ui/base/Tabs'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { TabsHeader, TriggerItem } from '../../../chain/tabs/DefiChainTabs'
-import { CircleBanner } from '../banner/CircleBanner'
-import { CircleContent } from '../CircleContent'
+import { vultStakingName } from '../core/config'
+import { VultStakingPanel } from '../deposited/VultStakingPanel'
+import { PendingUnstakesList } from '../pending/PendingUnstakesList'
+import { useStakedVultFiatBalanceQuery } from '../queries/useStakedVultFiatBalanceQuery'
+import { VultStakingBannerLogo } from '../VultStakingBannerLogo'
 
-type CircleTab = 'deposited'
+type VultStakingTab = 'deposited'
 
-export const CircleHomeView = () => {
+export const VultStakingHomeView = () => {
   const { t } = useTranslation()
-  const [activeTab, setActiveTab] = useState<CircleTab>('deposited')
+  const [activeTab, setActiveTab] = useState<VultStakingTab>('deposited')
+  const fiatBalanceQuery = useStakedVultFiatBalanceQuery()
 
-  const tabs: Tab<CircleTab>[] = [
+  const tabs: Tab<VultStakingTab>[] = [
     {
       value: 'deposited',
       label: t('deposited'),
-      renderContent: () => <CircleContent />,
+      renderContent: () => (
+        <VStack gap={12}>
+          <Description size={14} color="shy">
+            {t('vultStaking.description')}
+          </Description>
+          <VultStakingPanel />
+          <PendingUnstakesList />
+        </VStack>
+      ),
     },
   ]
 
@@ -33,7 +48,11 @@ export const CircleHomeView = () => {
       />
       <DefiPageContainer>
         <VStack gap={12} flexGrow>
-          <CircleBanner />
+          <DefiBalanceBanner
+            title={vultStakingName}
+            logo={<VultStakingBannerLogo />}
+            fiatQuery={fiatBalanceQuery}
+          />
           <Tabs
             tabs={tabs}
             value={activeTab}
@@ -52,3 +71,7 @@ export const CircleHomeView = () => {
     </>
   )
 }
+
+const Description = styled(Text)`
+  line-height: 20px;
+`

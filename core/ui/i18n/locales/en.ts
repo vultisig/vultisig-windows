@@ -1225,6 +1225,30 @@ export const en = {
   vultisig_community: '{{productName}} Community',
   vultisig_education: '{{productName}} Education',
   vultisig_website: '{{productName}} Website',
+  vultStaking: {
+    stake: 'Stake',
+    unstake: 'Unstake',
+    deposit_header: 'Deposit VULT',
+    withdraw_header: 'Withdraw VULT',
+    claim: 'Claim',
+    cancel: 'Cancel',
+    cancel_unstake: 'Cancel Unstake',
+    staked: '$VULT staked',
+    description:
+      'Staking $VULT gives you multiple exclusive benefits in the Vultisig Ecosystem like Swap Discounts, Increased Inference Limits and much more to come.',
+    verify_stake: 'Verify Stake',
+    verify_unstake: 'Verify Unstake',
+    youre_unstaking: "You're unstaking",
+    youre_claiming: "You're claiming",
+    youre_cancelling: "You're cancelling",
+    pending_unstakes: 'Unstaking',
+    unstaking_amount: 'Unstaking {{amount}}',
+    ready_to_claim: 'Ready to claim',
+    unstake_cooldown_term:
+      'Unstaking starts a {{duration}} cooldown. Your VULT can be claimed once it ends.',
+    unstake_cooldown_term_generic:
+      'Your funds will be available to claim once the redemption period ends.',
+  },
   waitingOnDevices: 'Waiting on devices...',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
   waiting_for_devices_to_join_description:

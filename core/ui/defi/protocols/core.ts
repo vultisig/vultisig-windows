@@ -1,1 +1,1 @@
-export type DefiProtocol = 'circle'
+export type DefiProtocol = 'circle' | 'vultStaking'

@@ -26,6 +26,9 @@ import {
   getCircleAccountQueryKey,
   useCircleAccountQuery,
 } from './protocols/circle/queries/circleAccount'
+import { sVultCoin, vultCoin } from './protocols/vultStaking/core/config'
+import { getPendingUnstakesQueryKey } from './protocols/vultStaking/queries/usePendingUnstakesQuery'
+import { vultCooldownQueryKey } from './protocols/vultStaking/queries/useVultCooldownQuery'
 
 type DefiRefreshConfig = {
   priceCoins: Coin[]
@@ -138,6 +141,19 @@ export const RefreshDefiData = () => {
           )
         }
       }
+
+      // VULT staking is always visible, so its data always refreshes.
+      queryKeys.push(
+        getCoinPricesQueryKeys({ coins: [vultCoin], fiatCurrency }),
+        getBalanceQueryKey(
+          extractAccountCoinKey({ ...vultCoin, address: ethereumAddress })
+        ),
+        getBalanceQueryKey(
+          extractAccountCoinKey({ ...sVultCoin, address: ethereumAddress })
+        ),
+        vultCooldownQueryKey,
+        getPendingUnstakesQueryKey(ethereumAddress)
+      )
 
       await refetchQueries(...queryKeys)
     },
