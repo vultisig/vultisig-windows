@@ -70,7 +70,16 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   return useQuery({
     queryKey: [
       'swapKeysignPayload',
-      omit(input, 'walletCore', 'fromPublicKey', 'toPublicKey'),
+      {
+        ...omit(
+          input,
+          'walletCore',
+          'fromPublicKey',
+          'toPublicKey',
+          'gasLimitOverride'
+        ),
+        gasLimitOverride: gasLimitOverride?.toString(),
+      },
     ],
     queryFn: () => buildSwapKeysignPayload(input),
     ...noRefetchQueryOptions,
