@@ -61,12 +61,12 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
               <Text color="shy" weight="500" size={12} centerVertically>
                 {isLoading ? (
                   <Spinner size={12} />
-                ) : positionsWithBalanceCount > 0 ? (
-                  <BalanceVisibilityAware>
-                    {positionsWithBalanceCount} {t('positions')}
-                  </BalanceVisibilityAware>
                 ) : (
-                  t('no_positions_found')
+                  <BalanceVisibilityAware>
+                    {positionsWithBalanceCount > 0
+                      ? `${positionsWithBalanceCount} ${t('positions')}`
+                      : t('no_positions_found')}
+                  </BalanceVisibilityAware>
                 )}
               </Text>
             </VStack>
