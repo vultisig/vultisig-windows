@@ -25,7 +25,10 @@ export const formatSlippage = (
     '0.5': () => '0.5%',
     '1': () => '1%',
     '3': () => '3%',
-    custom: () => `${customPercent}%`,
+    // A non-positive custom value is treated as "no override" (Auto) by
+    // slippageToPercent, so display it the same way to keep the row and the
+    // quote input in sync.
+    custom: () => (customPercent > 0 ? `${customPercent}%` : autoLabel),
   })
 
 /**
