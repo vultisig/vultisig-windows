@@ -1,26 +1,16 @@
-import { create } from '@bufbuild/protobuf'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { UtxoChain } from '@vultisig/core-chain/Chain'
 import { toChainKindRecordUnion } from '@vultisig/core-chain/ChainKind'
-import {
-  ceilDiv,
-  getZcashConventionalFee,
-} from '@vultisig/core-chain/chains/utxo/fee/zip317'
-import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
+import { getZcashConventionalFee } from '@vultisig/core-chain/chains/utxo/fee/zip317'
 import { getUtxoSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/utxo'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
-import { UTXOSpecificSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { bigIntMax } from '@vultisig/lib-utils/bigint/bigIntMax'
-import { bigIntSum } from '@vultisig/lib-utils/bigint/bigIntSum'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { CustomTxData } from '../../core/customTxData'
-import { p2pkhInputSize } from './p2pkhInputSize'
 import { getPsbtFee, getPsbtMinVsize, getPsbtOutputSizes } from './psbtFee'
 
 type EnforceMinNetworkFeeInput = {
@@ -45,8 +35,6 @@ const relayFloorPerVbyte: Record<UtxoChain, bigint> = {
 }
 
 const p2pkhOutputSize = 34n
-const zcashTxOverhead = 30n
-const maxByteFeeBumps = 3
 
 const memoEncoder = new TextEncoder()
 
@@ -97,21 +85,18 @@ const getZcashPlannedOutputSizes = ({
   return sizes
 }
 
-type EnforceZcashConventionalFeeInput = EnforceMinNetworkFeeInput & {
-  bumpsLeft?: number
-}
-
 /**
- * Enforce the ZIP-317 conventional fee on Zcash transactions we plan
- * ourselves. Load-bearing for memo sends: WalletCore's planner charges an
- * OP_RETURN output as a fixed ~34 bytes while ZIP-317 charges ~one action
- * per 34 memo bytes, so long-memo plans fall below the conventional fee.
- * Also covers manual fee-settings overrides and future byte-fee cuts.
+ * Pre-sign safety check that the Zcash plan meets the ZIP-317 conventional
+ * fee. The SDK signing-input resolver now raises memo-send fees to clear this
+ * floor at plan time — WalletCore's zip_0317 planner sizes an OP_RETURN output
+ * as a flat ~34 bytes and ignores byteFee, so it plans memo sends one logical
+ * action short with no way to raise the fee in that mode. This guard blocks
+ * pre-sign if a plan still underpays, rather than starting a keysign ceremony
+ * the network is guaranteed to reject.
  */
-const enforceZcashConventionalFee = async ({
-  bumpsLeft = maxByteFeeBumps,
-  ...input
-}: EnforceZcashConventionalFeeInput): Promise<KeysignPayload> => {
+const enforceZcashConventionalFee = async (
+  input: EnforceMinNetworkFeeInput
+): Promise<KeysignPayload> => {
   const { keysignPayload, walletCore, publicKey } = input
   const [signingInput] = await getUtxoSigningInputs({
     keysignPayload,
@@ -131,51 +116,9 @@ const enforceZcashConventionalFee = async ({
   const conventionalFee = getZcashConventionalFee({ inputCount, outputSizes })
   if (planFee >= conventionalFee) return keysignPayload
 
-  if (bumpsLeft === 0) {
-    throw new Error(
-      `Failed to meet the Zcash minimum network fee (ZIP-317): planned ${planFee} zats, required ${conventionalFee}`
-    )
-  }
-
-  const utxoSpecific = getBlockchainSpecificValue(
-    keysignPayload.blockchainSpecific,
-    'utxoSpecific'
+  throw new Error(
+    `Failed to meet the Zcash minimum network fee (ZIP-317): planned ${planFee} zats, required ${conventionalFee}`
   )
-  // Must divide by the planner's own fee ratio, not the real serialized size.
-  const currentByteFee = BigInt(utxoSpecific.byteFee || '0')
-  const plannerVsize =
-    currentByteFee > 0n && planFee > 0n
-      ? planFee / currentByteFee
-      : zcashTxOverhead +
-        BigInt(inputCount) * p2pkhInputSize +
-        bigIntSum(outputSizes)
-  const bumpedByteFee = bigIntMax(
-    ceilDiv({ value: conventionalFee, divisor: plannerVsize }),
-    currentByteFee + 1n
-  )
-
-  const bumpedKeysignPayload: KeysignPayload = {
-    ...keysignPayload,
-    blockchainSpecific: {
-      case: 'utxoSpecific',
-      value: create(UTXOSpecificSchema, {
-        ...utxoSpecific,
-        byteFee: bumpedByteFee.toString(),
-      }),
-    },
-  }
-
-  const refinedPayload = await refineKeysignUtxo({
-    keysignPayload: bumpedKeysignPayload,
-    walletCore,
-    publicKey: shouldBePresent(publicKey, 'publicKey'),
-  })
-
-  return enforceZcashConventionalFee({
-    ...input,
-    keysignPayload: refinedPayload,
-    bumpsLeft: bumpsLeft - 1,
-  })
 }
 
 type EnforceMinUtxoFeeInput = EnforceMinNetworkFeeInput & {
