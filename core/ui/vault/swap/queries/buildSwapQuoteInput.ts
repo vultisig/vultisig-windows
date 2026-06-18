@@ -12,6 +12,8 @@ type BuildSwapQuoteInput = {
   referral?: string | null
   vultDiscountTier?: VultDiscountTier | null
   productBrand: ProductBrand
+  slippageTolerance?: number
+  recipient?: string
 }
 
 export const buildSwapQuoteInput = ({
@@ -21,12 +23,16 @@ export const buildSwapQuoteInput = ({
   referral,
   vultDiscountTier,
   productBrand,
+  slippageTolerance,
+  recipient,
 }: BuildSwapQuoteInput): FindSwapQuoteInput => {
   const baseInput = {
     from,
     to,
     amount,
     referral: referral ?? undefined,
+    slippageTolerance,
+    recipient,
   }
 
   if (productBrand === 'station') {
