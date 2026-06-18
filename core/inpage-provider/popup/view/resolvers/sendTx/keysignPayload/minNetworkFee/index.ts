@@ -39,10 +39,30 @@ const p2pkhOutputSize = 34n
 const memoEncoder = new TextEncoder()
 
 const getOpReturnOutputSize = (memo: string): bigint => {
-  const dataSize = memoEncoder.encode(memo).length
-  const pushOverhead = dataSize <= 75 ? 2n : 3n
+  const dataSize = BigInt(memoEncoder.encode(memo).length)
 
-  return 9n + pushOverhead + BigInt(dataSize)
+  // OP_RETURN (1 byte) + push opcode bytes for `dataSize`.
+  const pushOverhead =
+    dataSize <= 75n
+      ? 2n
+      : dataSize <= 0xffn
+        ? 3n
+        : dataSize <= 0xffffn
+          ? 4n
+          : 6n
+  const scriptSize = pushOverhead + dataSize
+
+  // CompactSize encoding of the script length prefix.
+  const scriptLengthSize =
+    scriptSize < 0xfdn
+      ? 1n
+      : scriptSize <= 0xffffn
+        ? 3n
+        : scriptSize <= 0xffffffffn
+          ? 5n
+          : 9n
+
+  return 8n + scriptLengthSize + scriptSize
 }
 
 type AssertPsbtFeeInput = {
