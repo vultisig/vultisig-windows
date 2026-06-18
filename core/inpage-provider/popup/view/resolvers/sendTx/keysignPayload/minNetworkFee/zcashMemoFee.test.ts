@@ -2,8 +2,10 @@
  * WalletCore's planner charges an OP_RETURN output as a fixed ~34 bytes
  * regardless of memo length, while ZIP-317 charges ~one logical action per
  * 34 memo bytes — so memo sends can plan below the conventional fee.
- * Exercises the real planner to verify the bump formula in
- * enforceZcashConventionalFee compensates.
+ * Exercises the real planner to pin the quirk and the byteFee-mode bump the
+ * SDK signing-input resolver (getUtxoSigningInputs) uses to compensate: in
+ * WalletCore's zip_0317 mode byteFee is ignored, so the resolver re-plans with
+ * zip_0317 off — where (as below) raising byteFee raises the fee.
  */
 import { initWasm, TW, WalletCore } from '@trustwallet/wallet-core'
 import {
@@ -80,7 +82,7 @@ describe('Zcash memo sends vs ZIP-317', () => {
     const fee200 = planZcashSend({ walletCore, byteFee: 100n, memoLength: 200 })
 
     // If this ever fails, WalletCore started sizing OP_RETURN correctly —
-    // re-evaluate whether the bump in enforceZcashConventionalFee still fires.
+    // re-evaluate whether the SDK resolver's conventional-fee bump still fires.
     expect(fee80).toBe(fee200)
   })
 
