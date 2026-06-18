@@ -9,11 +9,17 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 export type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
 
-// Terra Classic (columbus-5) deliberately omitted: it shares the `terra`
-// bech32 prefix with Terra v2 (phoenix-1), and cosmos-kit / wallet-kit
-// reject duplicate prefixes within a single chain set — including both
-// makes dApps see Terra as "not in wallet". Terra Classic is still
-// reachable through the Station provider's `switchNetwork('classic')`.
+// Terra Classic (columbus-5) is resolvable and signable by chainID, but is
+// kept out of the *advertised* chain list (see `advertisedKeplrChains`): it
+// shares the `terra` bech32 prefix with Terra v2 (phoenix-1), and some
+// cosmos-kit / wallet-kit dApps build a prefix→chain map from the enumerated
+// `getChainInfosWithoutEndpoints()` list, where a duplicate `terra` prefix
+// makes them resolve Terra to the wrong chain and show it as "not in wallet".
+// Terra Classic dApps connect through their own Station extension
+// connector, which probes `window.station.keplr.getKey('columbus-5')`
+// — a chainID-keyed call routed here that is unaffected by enumeration, so it
+// must resolve. (Terra Classic also remains reachable through the Station
+// provider's `switchNetwork('classic')`.)
 //
 // QBTC is included here so Keplr-shaped dApps can connect via the
 // standard `window.keplr` API in addition to the dedicated
@@ -26,12 +32,23 @@ const supportedKeplrChains = [
   CosmosChain.Dydx,
   CosmosChain.Kujira,
   CosmosChain.Terra,
+  CosmosChain.TerraClassic,
   CosmosChain.Noble,
   CosmosChain.Akash,
   CosmosChain.THORChain,
   CosmosChain.MayaChain,
   OtherChain.QBTC,
 ] as const
+
+// Chains advertised in the enumerated `getChainInfosWithoutEndpoints()`
+// response. Excludes Terra Classic so dApps that register chains by bech32
+// prefix don't collide Terra v2 (`phoenix-1`) and Terra Classic
+// (`columbus-5`), which share the `terra` prefix. Per-chainID lookups
+// (`getKey`, `enable`, signing) still resolve Terra Classic via
+// `supportedKeplrChains`.
+const advertisedKeplrChains = supportedKeplrChains.filter(
+  chain => chain !== CosmosChain.TerraClassic
+)
 
 /** QBTC chain ID. Mirrors the constant used throughout the SDK (QBTCHelper, ClaimRunner) so dApps that query the live block header see the same chain ID Vultisig signs for. */
 const qbtcChainId = 'qbtc-testnet'
@@ -51,6 +68,7 @@ const bech32Prefix: Record<SupportedKeplrChain, string> = {
   Dydx: 'dydx',
   Kujira: 'kujira',
   Terra: 'terra',
+  TerraClassic: 'terra',
   Noble: 'noble',
   Akash: 'akash',
   THORChain: 'thor',
@@ -66,6 +84,7 @@ const bip44CoinType: Record<SupportedKeplrChain, number> = {
   Noble: 118,
   Akash: 118,
   Terra: 330,
+  TerraClassic: 330,
   THORChain: 931,
   MayaChain: 931,
   QBTC: 118,
@@ -77,6 +96,7 @@ const chainName: Record<SupportedKeplrChain, string> = {
   Dydx: 'dYdX',
   Kujira: 'Kujira',
   Terra: 'Terra',
+  TerraClassic: 'Terra Classic',
   Noble: 'Noble',
   Akash: 'Akash',
   THORChain: 'THORChain',
@@ -100,6 +120,10 @@ export const keplrAverageGasPrice: Record<SupportedKeplrChain, number> = {
   Dydx: 12500000000,
   Kujira: 0.0034,
   Terra: 0.015,
+  // Terra Classic's on-chain minimum gas price for uluna is far higher than
+  // Terra v2's; mirror the Station provider's `classic` gas price so injected
+  // fees clear the network floor.
+  TerraClassic: 28.325,
   Noble: 0.025,
   Akash: 0.025,
   THORChain: 0,
@@ -203,7 +227,7 @@ export const isNativeKeplrChainId = (chainId: string): boolean =>
  */
 export const getKeplrCosmosChainInfos = async (): Promise<ChainInfo[]> => {
   const suggested = await callBackground({ getKeplrSuggestedChains: {} })
-  const native = supportedKeplrChains.map(buildKeplrChainInfo)
+  const native = advertisedKeplrChains.map(buildKeplrChainInfo)
   const additions = Object.values(suggested).filter(
     info => !nativeChainIds.has(info.chainId)
   )

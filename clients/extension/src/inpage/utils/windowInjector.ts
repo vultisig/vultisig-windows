@@ -139,6 +139,64 @@ export const injectToWindow = () => {
     installKeplrProxyBridge(providers.keplr)
   }
 
+  // Terra/Station injection mirrors the Keplr treatment above: synchronous
+  // and ungated. Cosmos/Terra discovery must not depend on EVM precedence
+  // (the "Prioritize Vultisig" setting) — that flag only exists to win the
+  // `window.ethereum` fight with other EVM wallets. dApps that snapshot
+  // installed wallets on page load can also miss a late injection deferred
+  // behind the async `setupContentScriptMessenger` background round-trip.
+  // The `!window.station` / `!window.terra` guards defer to the official
+  // Station extension when it injected first; the `terraWallets` /
+  // `interchainWallets` arrays still advertise this build as its own picker
+  // row so the two extensions co-exist instead of silently clobbering each
+  // other. Each global is set behind its own existence check so a
+  // preexisting non-configurable one can't block the others.
+  if (!window.station) {
+    attempt(() =>
+      Object.defineProperty(window, 'station', {
+        value: providers.station,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  if (!window.terra) {
+    attempt(() =>
+      Object.defineProperty(window, 'terra', {
+        value: providers.station,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  // Detection flags Terra dApps probe before showing Station in the wallet
+  // picker — both legacy (`isTerraExtensionAvailable`) and the newer
+  // interchain alias (`isStationExtensionAvailable`).
+  if (!window.isTerraExtensionAvailable) {
+    attempt(() =>
+      Object.defineProperty(window, 'isTerraExtensionAvailable', {
+        value: true,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  if (!window.isStationExtensionAvailable) {
+    attempt(() =>
+      Object.defineProperty(window, 'isStationExtensionAvailable', {
+        value: true,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  // Register this build in the Station-style wallet-picker arrays. dApps
+  // iterate these to enumerate installed Station-compatible wallets, so
+  // missing this entry hides the provider from the picker even when
+  // `window.station` is present.
+  attempt(() => pushToWalletArray('terraWallets'))
+  attempt(() => pushToWalletArray('interchainWallets'))
+
   setupContentScriptMessenger(providers)
 }
 
@@ -251,29 +309,6 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
-        station: {
-          value: providers.station,
-          configurable: false,
-          writable: false,
-        },
-        terra: {
-          value: providers.station,
-          configurable: false,
-          writable: false,
-        },
-        // Detection flags Terra dApps probe before showing Station in the
-        // wallet picker — both legacy (`isTerraExtensionAvailable`) and the
-        // newer interchain alias (`isStationExtensionAvailable`).
-        isTerraExtensionAvailable: {
-          value: true,
-          configurable: false,
-          writable: false,
-        },
-        isStationExtensionAvailable: {
-          value: true,
-          configurable: false,
-          writable: false,
-        },
         injectedWeb3: {
           value: {
             ...(window.injectedWeb3 || {}),
@@ -291,12 +326,5 @@ async function setupContentScriptMessenger(
         },
       })
     )
-
-    // Register this build in the Station-style wallet-picker arrays. dApps
-    // iterate these to enumerate installed Station-compatible wallets, so
-    // missing this entry hides the provider from the picker even when
-    // `window.station` is present.
-    attempt(() => pushToWalletArray('terraWallets'))
-    attempt(() => pushToWalletArray('interchainWallets'))
   }
 }
