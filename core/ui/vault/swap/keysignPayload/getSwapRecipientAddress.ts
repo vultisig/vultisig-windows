@@ -28,9 +28,9 @@ export const getSwapRecipientAddress = (
 
   return matchRecordUnion(swapPayload, {
     native: () => getNativeSwapMemoDestination(keysignPayload.memo),
-    general: ({ quote }) => {
+    general: ({ provider, quote }) => {
       const data = quote?.tx?.data
-      if (!data) {
+      if (provider !== 'cowswap' || !data) {
         return undefined
       }
 
