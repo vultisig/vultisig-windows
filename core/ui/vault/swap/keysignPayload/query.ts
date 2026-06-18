@@ -16,8 +16,8 @@ import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { omit } from '@vultisig/lib-utils/record/omit'
-import { useMemo } from 'react'
 
+import { useAdvancedSwapSettings } from '../state/advancedSettings'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
@@ -33,38 +33,39 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const fromPublicKey = useCurrentVaultPublicKey(fromCoin.chain)
   const toPublicKey = useCurrentVaultPublicKey(toCoin.chain)
 
-  const input: BuildSwapKeysignPayloadInput = useMemo(
-    () => ({
-      fromCoin,
-      toCoin,
-      amount: fromChainAmount(
-        shouldBePresent(fromAmount, 'fromAmount'),
-        fromCoin.decimals
-      ),
-      swapQuote,
-      vaultId: getVaultId(vault),
-      localPartyId: vault.localPartyId,
-      fromPublicKey,
-      toPublicKey,
-      libType: toKeysignLibType(vault),
-      walletCore,
-    }),
-    [
-      fromAmount,
-      fromCoin,
-      fromPublicKey,
-      swapQuote,
-      toCoin,
-      toPublicKey,
-      vault,
-      walletCore,
-    ]
-  )
+  const [{ gasLimit }] = useAdvancedSwapSettings()
+  const gasLimitOverride = gasLimit ? BigInt(gasLimit) : undefined
+
+  const input: BuildSwapKeysignPayloadInput = {
+    fromCoin,
+    toCoin,
+    amount: fromChainAmount(
+      shouldBePresent(fromAmount, 'fromAmount'),
+      fromCoin.decimals
+    ),
+    swapQuote,
+    vaultId: getVaultId(vault),
+    localPartyId: vault.localPartyId,
+    fromPublicKey,
+    toPublicKey,
+    libType: toKeysignLibType(vault),
+    walletCore,
+    gasLimitOverride,
+  }
 
   return useQuery({
     queryKey: [
       'swapKeysignPayload',
-      omit(input, 'walletCore', 'fromPublicKey', 'toPublicKey'),
+      {
+        ...omit(
+          input,
+          'walletCore',
+          'fromPublicKey',
+          'toPublicKey',
+          'gasLimitOverride'
+        ),
+        gasLimitOverride: gasLimitOverride?.toString(),
+      },
     ],
     queryFn: () => buildSwapKeysignPayload(input),
     ...noRefetchQueryOptions,

@@ -11,6 +11,8 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { currentProductBrand } from '../../../product/brand'
 import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../storage/referrals'
+import { slippageToPercent } from '../form/advanced/slippage'
+import { useAdvancedSwapSettings } from '../state/advancedSettings'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
@@ -69,6 +71,10 @@ export const useSwapQuoteQuery = () => {
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
+  const [advancedSettings] = useAdvancedSwapSettings()
+  const slippageTolerance = slippageToPercent(advancedSettings.slippage)
+  const recipient = advancedSettings.externalRecipient.trim() || undefined
+
   const useVultDiscounts = currentProductBrand === 'vultisig'
   const vultDiscountTierQuery = useVultDiscountTierQuery({
     enabled: useVultDiscounts,
@@ -99,6 +105,8 @@ export const useSwapQuoteQuery = () => {
         referral,
         vultDiscountTier,
         productBrand: currentProductBrand,
+        slippageTolerance,
+        recipient,
       })
 
       return {

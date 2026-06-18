@@ -16,6 +16,12 @@ type GasLimitSheetProps = OnCloseProp & {
   onChange: (value: string) => void
 }
 
+/**
+ * Advanced Swap sub-sheet for entering a custom EVM gas limit (in units). Shows
+ * a single digit-only input that reflects the current value; an empty value
+ * means "auto" (the aggregator's estimate stands). Edits a local draft and only
+ * commits it via `onChange` on confirm.
+ */
 export const GasLimitSheet = ({
   value,
   onChange,
