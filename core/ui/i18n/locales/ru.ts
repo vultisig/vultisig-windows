@@ -1508,4 +1508,5 @@ export const ru = {
   swap_mode_limit: 'Лимит',
   swap_mode_market: 'Рынок',
   use_external_recipient: 'Использовать внешнего получателя',
+  swap_external_recipient_warning: 'Отправка на внешний адрес',
 }

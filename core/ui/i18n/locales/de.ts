@@ -1539,4 +1539,5 @@ export const de = {
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externen Empfänger verwenden',
+  swap_external_recipient_warning: 'Senden an eine externe Adresse',
 }

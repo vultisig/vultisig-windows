@@ -1498,4 +1498,5 @@ export const ko = {
   swap_mode_limit: '한계',
   swap_mode_market: '시장',
   use_external_recipient: '외부 수신자 사용',
+  swap_external_recipient_warning: '외부 주소로 전송',
 }
