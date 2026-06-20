@@ -30,7 +30,7 @@ export const AddCustomTokenPrompt = () => {
           <PlusIcon />
         </CustomIconWrapper>
         <TextWrapper>
-          <Text cropped color="contrast" size={12} weight={500}>
+          <Text color="contrast" size={12} weight={500}>
             {t('custom_token')}
           </Text>
         </TextWrapper>
