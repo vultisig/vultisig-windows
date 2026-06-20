@@ -222,6 +222,8 @@ export const en = {
   custom_rpc_chip_custom: 'Custom',
   custom_rpc_chip_default: 'Default',
   custom_rpc_description: 'Use your own nodes per chain',
+  custom_rpc_gate_description:
+    'Point Vultisig at your own nodes. Faster queries, higher rate limits, and full privacy per chain.',
   custom_rpc_invalid_response: 'Unexpected response from this endpoint',
   custom_rpc_invalid_url: 'Enter a valid http(s) URL',
   custom_rpc_list_subtitle:

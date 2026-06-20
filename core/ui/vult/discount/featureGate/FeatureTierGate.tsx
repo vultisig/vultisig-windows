@@ -2,7 +2,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
+import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
@@ -37,8 +37,8 @@ type FeatureTierGateProps = {
 }
 
 /**
- * Reusable bottom-sheet shown when a tier-locked feature is tapped without the
- * required VULT tier. Parameterised by the gated feature (icon/title/description)
+ * Reusable centered dialog shown when a tier-locked feature is tapped without
+ * the required VULT tier. Parameterised by the gated feature (icon/title/description)
  * and the required tier; shows the threshold, the vault's VULT balance, and a
  * "Get $VULT" CTA that routes to the swap with VULT preselected.
  */
@@ -58,82 +58,97 @@ export const FeatureTierGate = ({
   const TierIcon = discountTierIcons[requiredTier]
   const accent = discountTierColors[requiredTier].toCssValue()
 
+  if (!isOpen) return null
+
   return (
-    <ResponsiveModal isOpen={isOpen} onClose={onClose} grabbable>
-      <VStack alignItems="center" gap={20} padding="8px 16px 16px">
-        <VStack alignItems="center" gap={32} fullWidth>
-          <IconBadge>{icon}</IconBadge>
-          <VStack alignItems="center" gap={16}>
-            <Text size={22} weight={500} centerHorizontally>
-              {title}
-            </Text>
-            <Text
-              size={14}
-              weight={500}
-              color="shy"
-              centerHorizontally
-              height="large"
-            >
-              {description}
-            </Text>
+    <Modal onClose={onClose} withDefaultStructure={false}>
+      <Sheet>
+        <VStack alignItems="center" gap={20} padding="24px 16px 16px">
+          <VStack alignItems="center" gap={32} fullWidth>
+            <IconBadge>{icon}</IconBadge>
+            <VStack alignItems="center" gap={16}>
+              <Text size={22} weight={500} centerHorizontally>
+                {title}
+              </Text>
+              <Text
+                size={14}
+                weight={500}
+                color="shy"
+                centerHorizontally
+                height="large"
+              >
+                {description}
+              </Text>
+            </VStack>
           </VStack>
-        </VStack>
-        <FooterGroup>
-          <RequirementCard>
-            <Text size={13} weight={500} color="shy">
-              {t('feature_gate_requires')}
-            </Text>
-            <HStack alignItems="center" gap={12}>
-              <TierIcon fontSize={36} />
-              <VStack gap={2}>
-                <Text size={14} weight={500}>
-                  {t('feature_gate_requires_tier', { tier: t(requiredTier) })}
-                </Text>
-                <Text size={13} weight={500} color="shy">
-                  {t('feature_gate_hold_at_least', {
-                    amount: formatAmount(
-                      vultDiscountTierMinBalances[requiredTier],
-                      { ticker: vult.ticker }
-                    ),
+          <FooterGroup>
+            <RequirementCard>
+              <Text size={13} weight={500} color="shy">
+                {t('feature_gate_requires')}
+              </Text>
+              <HStack alignItems="center" gap={12}>
+                <TierIcon fontSize={36} />
+                <VStack gap={2}>
+                  <Text size={14} weight={500}>
+                    {t('feature_gate_requires_tier', { tier: t(requiredTier) })}
+                  </Text>
+                  <Text size={13} weight={500} color="shy">
+                    {t('feature_gate_hold_at_least', {
+                      amount: formatAmount(
+                        vultDiscountTierMinBalances[requiredTier],
+                        { ticker: vult.ticker }
+                      ),
+                    })}
+                  </Text>
+                </VStack>
+              </HStack>
+              <BalanceRow>
+                <HStack alignItems="center" gap={6}>
+                  <IconWrapper>
+                    <WalletIcon />
+                  </IconWrapper>
+                  <Text size={13} weight={500} color="shy">
+                    {t('feature_gate_your_balance')}
+                  </Text>
+                </HStack>
+                <Text size={13} weight={500} style={{ color: accent }}>
+                  {formatAmount(balanceQuery.data ?? 0, {
+                    ticker: vult.ticker,
                   })}
                 </Text>
-              </VStack>
-            </HStack>
-            <BalanceRow>
-              <HStack alignItems="center" gap={6}>
-                <IconWrapper>
-                  <WalletIcon />
-                </IconWrapper>
-                <Text size={13} weight={500} color="shy">
-                  {t('feature_gate_your_balance')}
-                </Text>
-              </HStack>
-              <Text size={13} weight={500} style={{ color: accent }}>
-                {formatAmount(balanceQuery.data ?? 0, { ticker: vult.ticker })}
-              </Text>
-            </BalanceRow>
-          </RequirementCard>
-          <GetVultButton
-            $gradient={discountTierGradients[requiredTier]}
-            disabled={isPending}
-            onClick={() =>
-              createCoin(vult, {
-                onSuccess: coin => {
-                  navigate({
-                    id: 'swap',
-                    state: { toCoin: extractCoinKey(coin) },
-                  })
-                },
-              })
-            }
-          >
-            {isPending ? <Spinner /> : t('get_vult')}
-          </GetVultButton>
-        </FooterGroup>
-      </VStack>
-    </ResponsiveModal>
+              </BalanceRow>
+            </RequirementCard>
+            <GetVultButton
+              $gradient={discountTierGradients[requiredTier]}
+              disabled={isPending}
+              onClick={() =>
+                createCoin(vult, {
+                  onSuccess: coin => {
+                    navigate({
+                      id: 'swap',
+                      state: { toCoin: extractCoinKey(coin) },
+                    })
+                  },
+                })
+              }
+            >
+              {isPending ? <Spinner /> : t('get_vult')}
+            </GetVultButton>
+          </FooterGroup>
+        </VStack>
+      </Sheet>
+    </Modal>
   )
 }
+
+const Sheet = styled.div`
+  width: min(360px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  background: ${getColor('background')};
+  border: 1px solid #11284a;
+  border-radius: 24px;
+`
 
 const IconBadge = styled.div`
   display: flex;
@@ -174,6 +189,7 @@ const RequirementCard = styled(VStack)`
 const BalanceRow = styled(HStack)`
   align-items: center;
   justify-content: space-between;
+  margin-top: 10px;
   padding: 16px;
   border-radius: 14px;
   background: #0d2240;

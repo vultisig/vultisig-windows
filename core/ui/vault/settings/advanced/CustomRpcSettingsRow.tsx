@@ -71,7 +71,7 @@ export const CustomRpcSettingsRow = () => {
           onClose={() => setIsGateOpen(false)}
           icon={<RadioTowerIcon />}
           title={t('custom_rpc')}
-          description={t('custom_rpc_description')}
+          description={t('custom_rpc_gate_description')}
           requiredTier={requiredTier}
         />
       ) : null}
