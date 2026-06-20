@@ -269,6 +269,7 @@ const networkPrimaryChain: Record<SupportedNetworkName, SupportedStationChain> =
     classic: Chain.TerraClassic,
   }
 
+/** Returns the Station primary chain for a supported Station network. */
 export const getStationPrimaryChainForNetwork = (
   network: SupportedNetworkName
 ): SupportedStationChain => networkPrimaryChain[network]
