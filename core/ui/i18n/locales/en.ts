@@ -1008,6 +1008,7 @@ export const en = {
   swap: 'Swap',
   swaps: 'Swaps',
   swap_discount: 'Swap Discount',
+  swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
   swap_limit_orders: 'Limit orders',
   swap_mode_limit: 'Limit',

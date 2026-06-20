@@ -1526,4 +1526,5 @@ export const es = {
   swap_mode_limit: 'Límite',
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Utilizar destinatario externo',
+  swap_external_recipient_warning: 'Enviar a una dirección externa',
 }

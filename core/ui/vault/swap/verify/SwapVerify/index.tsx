@@ -14,6 +14,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -134,6 +135,12 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
         <VStack bgColor="foreground" gap={24} padding={12} radius={16}>
           <VerifySwapFees swapQuote={swapQuote} />
         </VStack>
+        <MatchQuery
+          value={keysignPayloadQuery}
+          success={keysignPayload => (
+            <SwapVerifyRecipient keysignPayload={keysignPayload} />
+          )}
+        />
       </VerifyKeysignStart>
     </>
   )

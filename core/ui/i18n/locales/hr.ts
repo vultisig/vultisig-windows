@@ -1504,4 +1504,5 @@ export const hr = {
   swap_mode_limit: 'Ograničiti',
   swap_mode_market: 'Tržište',
   use_external_recipient: 'Koristi vanjskog primatelja',
+  swap_external_recipient_warning: 'Slanje na vanjsku adresu',
 }

@@ -1528,4 +1528,5 @@ export const pt = {
   swap_mode_limit: 'Limite',
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Usar destinatário externo',
+  swap_external_recipient_warning: 'Envio para um endereço externo',
 }
