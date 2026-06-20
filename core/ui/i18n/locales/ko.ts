@@ -1499,4 +1499,11 @@ export const ko = {
   swap_mode_market: '시장',
   use_external_recipient: '외부 수신자 사용',
   swap_external_recipient_warning: '외부 주소로 전송',
+  custom_rpc_gate_description:
+    'Vultisig를 자체 노드에 지정하세요. 더 빠른 쿼리, 더 높은 처리량 제한, 그리고 체인별 완벽한 개인 정보 보호를 누릴 수 있습니다.',
+  feature_gate_requires: '필수 사항',
+  feature_gate_requires_tier: '$VULT {{tier}} 티어 이상',
+  feature_gate_hold_at_least: '금고에 최소 {{amount}} 토큰을 보유하세요.',
+  feature_gate_your_balance: '잔액',
+  get_vult: '$VULT를 가져오세요',
 }

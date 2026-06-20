@@ -1535,4 +1535,11 @@ export const it = {
   swap_mode_market: 'Mercato',
   use_external_recipient: 'Utilizzare un destinatario esterno',
   swap_external_recipient_warning: 'Invio a un indirizzo esterno',
+  custom_rpc_gate_description:
+    'Punta Vultisig ai tuoi nodi. Query più veloci, limiti di frequenza più elevati e privacy completa per ogni catena.',
+  feature_gate_requires: 'Richiede',
+  feature_gate_requires_tier: '$VULT {{tier}} Livello o superiore',
+  feature_gate_hold_at_least: 'Conserva almeno {{amount}} nel tuo vault',
+  feature_gate_your_balance: 'Il tuo saldo',
+  get_vult: 'Ottieni $VULT',
 }

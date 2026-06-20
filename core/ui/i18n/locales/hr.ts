@@ -1505,4 +1505,11 @@ export const hr = {
   swap_mode_market: 'Tržište',
   use_external_recipient: 'Koristi vanjskog primatelja',
   swap_external_recipient_warning: 'Slanje na vanjsku adresu',
+  custom_rpc_gate_description:
+    'Usmjerite Vultisig na vlastite čvorove. Brži upiti, veća ograničenja brzine i potpuna privatnost po lancu.',
+  feature_gate_requires: 'Zahtijeva',
+  feature_gate_requires_tier: '$VULT {{tier}} Razina ili viša',
+  feature_gate_hold_at_least: 'Držite barem {{amount}} u svom trezoru',
+  feature_gate_your_balance: 'Vaš saldo',
+  get_vult: 'Uzmi $VULT',
 }

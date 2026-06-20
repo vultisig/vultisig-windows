@@ -1410,4 +1410,11 @@ export const zh = {
   swap_mode_market: '市场',
   use_external_recipient: '使用外部收件人',
   swap_external_recipient_warning: '发送到外部地址',
+  custom_rpc_gate_description:
+    '将 Vultisig 指向您自己的节点。更快的查询速度、更高的速率限制以及每条链的完全隐私。',
+  feature_gate_requires: '需要',
+  feature_gate_requires_tier: '$VULT {{tier}} 等级或以上',
+  feature_gate_hold_at_least: '你的金库中至少要持有 {{amount}}。',
+  feature_gate_your_balance: '您的余额',
+  get_vult: '获取 $VULT',
 }
