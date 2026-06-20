@@ -3,9 +3,11 @@ import { RadioTowerIcon } from '@lib/ui/icons/RadioTowerIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
+import { FeatureTierGate } from '../../../vult/discount/featureGate/FeatureTierGate'
 import { useHighestVaultDiscountTier } from '../../../vult/discount/queries/anyVaultTier'
 import { discountTierColors } from '../../../vult/discount/tier/colors'
 import { hasReachedTier } from '../../../vult/discount/tierOrder'
@@ -13,6 +15,8 @@ import {
   DescriptionText,
   ListItemIconWrapper,
 } from '../vaultSettingsListStyles'
+
+const requiredTier = 'silver'
 
 /**
  * Custom RPC entry on the Advanced screen. App-wide custom RPC endpoints are a
@@ -25,8 +29,9 @@ export const CustomRpcSettingsRow = () => {
   const navigate = useCoreNavigate()
   const { tier } = useHighestVaultDiscountTier()
   const theme = useTheme()
+  const [isGateOpen, setIsGateOpen] = useState(false)
 
-  const isEligible = hasReachedTier({ current: tier, required: 'silver' })
+  const isEligible = hasReachedTier({ current: tier, required: requiredTier })
 
   const badgeColor =
     isEligible && tier
@@ -38,27 +43,39 @@ export const CustomRpcSettingsRow = () => {
       : t('vult_tier_required')
 
   return (
-    <ListItem
-      icon={
-        <ListItemIconWrapper>
-          <RadioTowerIcon />
-        </ListItemIconWrapper>
-      }
-      description={
-        <DescriptionText>{t('custom_rpc_description')}</DescriptionText>
-      }
-      onClick={() =>
-        navigate(isEligible ? { id: 'customRpc' } : { id: 'vultDiscount' })
-      }
-      title={
-        <HStack alignItems="center" gap={8}>
-          <Text as="span">{t('custom_rpc')}</Text>
-          <TierBadge $color={badgeColor}>{badgeLabel}</TierBadge>
-        </HStack>
-      }
-      hoverable
-      showArrow
-    />
+    <>
+      <ListItem
+        icon={
+          <ListItemIconWrapper>
+            <RadioTowerIcon />
+          </ListItemIconWrapper>
+        }
+        description={
+          <DescriptionText>{t('custom_rpc_description')}</DescriptionText>
+        }
+        onClick={() =>
+          isEligible ? navigate({ id: 'customRpc' }) : setIsGateOpen(true)
+        }
+        title={
+          <HStack alignItems="center" gap={8}>
+            <Text as="span">{t('custom_rpc')}</Text>
+            <TierBadge $color={badgeColor}>{badgeLabel}</TierBadge>
+          </HStack>
+        }
+        hoverable
+        showArrow
+      />
+      {isGateOpen ? (
+        <FeatureTierGate
+          isOpen={isGateOpen}
+          onClose={() => setIsGateOpen(false)}
+          icon={<RadioTowerIcon />}
+          title={t('custom_rpc')}
+          description={t('custom_rpc_description')}
+          requiredTier={requiredTier}
+        />
+      ) : null}
+    </>
   )
 }
 
