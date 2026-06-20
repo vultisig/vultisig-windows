@@ -20,6 +20,7 @@ import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   areEqualCoins,
   Coin,
+  coinKeyToString,
   extractCoinKey,
 } from '@vultisig/core-chain/coin/Coin'
 import { getSolanaCoingeckoId } from '@vultisig/core-chain/coin/coingecko/getCoingeckoId'
@@ -159,9 +160,9 @@ export const ManageVaultChainCoinsPage = () => {
         </VStack>
         <ItemGrid>
           <AddCustomTokenPrompt />
-          {filteredCoins.map((coin, index) => (
+          {filteredCoins.map(coin => (
             <TokenItem
-              key={index}
+              key={coinKeyToString(coin)}
               value={coin}
               currentCoins={currentCoins}
               onToggle={handleToggle}
