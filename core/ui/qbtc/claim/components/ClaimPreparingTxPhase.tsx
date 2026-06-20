@@ -18,7 +18,7 @@ import {
   getQbtcAccountInfoForClaim,
 } from '../utils/getQbtcAccountInfoForClaim'
 
-const qbtcChainId = 'qbtc-testnet'
+const qbtcChainId = 'qbtc'
 const proofServiceRBytes = 24
 const proofServiceSBytes = 32
 const proofServiceBaseUrl = 'https://api.vultisig.com/qbtc-proof'

@@ -4,7 +4,7 @@
  */
 
 /** Cosmos SDK chain ID used in the SignDoc. */
-export const qbtcChainId = 'qbtc-testnet'
+export const qbtcChainId = 'qbtc'
 
 /** Native fee denom for QBTC. */
 export const qbtcFeeDenom = 'qbtc'
