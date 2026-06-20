@@ -23,6 +23,7 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { parseProgramCall } from './parseProgramCall'
 import {
   getSerializedSolanaTxBuffer,
+  getSolanaMultiTxRawFallback,
   getSolanaRawTxFallback,
 } from './rawTxFallback'
 import { AddressTableLookup, SolanaTxData } from './types/types'
@@ -43,11 +44,12 @@ export const parseSolanaTx = async ({
   getCoin,
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
-  const buffer = getSerializedSolanaTxBuffer(data)
-  if (data.length > 1) {
-    return getSolanaRawTxFallback(data)
+  const multiTxRawFallback = getSolanaMultiTxRawFallback(data)
+  if (multiTxRawFallback) {
+    return multiTxRawFallback
   }
 
+  const buffer = getSerializedSolanaTxBuffer(data)
   const connection = new Connection(solanaRpcUrl)
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
