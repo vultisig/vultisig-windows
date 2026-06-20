@@ -780,7 +780,7 @@ export class XDEFIKeplrProvider extends Keplr {
     // dApp page's CSP via the SDK's shared broadcast path. Returns the tx-hash
     // bytes the dApp uses to track inclusion. `_mode` is ignored — the SDK
     // broadcast resolver picks the broadcast semantics.
-    const chain = getCosmosChainByChainId(chainId)
+    const chain = getKeplrSupportedChainByChainId(chainId)
     if (!chain) {
       throw new Error(`Keplr.sendTx is not supported for chain ${chainId}`)
     }
