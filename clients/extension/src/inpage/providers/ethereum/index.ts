@@ -18,6 +18,7 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   public connected: boolean
   public isCtrl: boolean
   public isMetaMask: boolean
+  public isTronLink: boolean
   public isVultiConnect: boolean
   public isXDEFI: boolean
   public networkVersion: string
@@ -31,6 +32,12 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     this.connected = false
     this.isCtrl = true
     this.isMetaMask = true
+    // The real TronLink extension serves Ethereum + BNB Smart Chain through
+    // plain `window.ethereum` tagged with `isTronLink`. dApps that detect
+    // TronLink read this flag and then route their `eth_*` / `wallet_*`
+    // requests to `window.ethereum`, so exposing it lets Vultisig serve the
+    // EVM half of TronLink-aware multichain flows.
+    this.isTronLink = true
     this.isVultiConnect = true
     this.isXDEFI = true
     this.networkVersion = '1'
