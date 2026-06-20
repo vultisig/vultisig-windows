@@ -19,7 +19,7 @@ import { ClaimPreparingTxPhase } from './ClaimPreparingTxPhase'
 import { ClaimServerBroadcastWaitPhase } from './ClaimServerBroadcastWaitPhase'
 import { ClaimSignRound } from './ClaimSignRound'
 
-const qbtcChainId = 'qbtc-testnet'
+const qbtcChainId = 'qbtc'
 
 type ClaimRunnerProps = {
   utxos: ClaimableUtxo[]

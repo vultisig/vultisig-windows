@@ -51,7 +51,7 @@ const advertisedKeplrChains = supportedKeplrChains.filter(
 )
 
 /** QBTC chain ID. Mirrors the constant used throughout the SDK (QBTCHelper, ClaimRunner) so dApps that query the live block header see the same chain ID Vultisig signs for. */
-const qbtcChainId = 'qbtc-testnet'
+const qbtcChainId = 'qbtc'
 
 /**
  * QBTC isn't a `CosmosChain` in the SDK (it's `OtherChain.QBTC` because it

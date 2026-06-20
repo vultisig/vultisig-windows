@@ -44,7 +44,7 @@ const parseSendTransactionParams = (
  * see {@link handleQbtcSignAndBroadcast} for the accepted shape.
  *
  * QBTC is also reachable via the Keplr compatibility route at chainId
- * `qbtc-testnet` for dApps that can't be modified; see `xdefiKeplr.ts`.
+ * `qbtc` for dApps that can't be modified; see `xdefiKeplr.ts`.
  * Both routes funnel into the same MLDSA keysign pipeline.
  */
 export class Qbtc extends EventEmitter {
