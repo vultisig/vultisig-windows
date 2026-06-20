@@ -43,8 +43,12 @@ export const parseSolanaTx = async ({
   getCoin,
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
-  const connection = new Connection(solanaRpcUrl)
   const buffer = getSerializedSolanaTxBuffer(data)
+  if (data.length > 1) {
+    return getSolanaRawTxFallback(data)
+  }
+
+  const connection = new Connection(solanaRpcUrl)
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
     buffer
