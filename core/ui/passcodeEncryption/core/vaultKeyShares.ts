@@ -19,16 +19,21 @@ import {
 
 type EncryptInput = VaultAllKeyShares & { key: string }
 
+type MapAllKeyShareValuesInput = {
+  allKeyShares: VaultAllKeyShares
+  transform: (values: string[]) => Promise<string[]>
+}
+
 /**
  * Flatten a vault's shares (key shares + chain key shares + MLDSA) into a single
  * ordered list, run them through one passcode cipher call (so the whole vault
  * costs a single PBKDF2 derivation), then scatter the results back into the
  * original shape.
  */
-const mapAllKeyShareValues = async (
-  { keyShares, chainKeyShares, keyShareMldsa }: VaultAllKeyShares,
-  transform: (values: string[]) => Promise<string[]>
-): Promise<VaultAllKeyShares> => {
+const mapAllKeyShareValues = async ({
+  allKeyShares: { keyShares, chainKeyShares, keyShareMldsa },
+  transform,
+}: MapAllKeyShareValuesInput): Promise<VaultAllKeyShares> => {
   const keyShareAlgos = getRecordKeys(keyShares)
   const chainShares = chainKeyShares ?? {}
   const chainKeys = getRecordKeys(chainShares)
@@ -62,14 +67,16 @@ export const encryptVaultAllKeyShares = ({
   key,
   ...allKeyShares
 }: EncryptInput): Promise<VaultAllKeyShares> =>
-  mapAllKeyShareValues(allKeyShares, async values =>
-    (
-      await encryptWithPasscode(
-        key,
-        values.map(value => Buffer.from(value, plainTextEncoding))
-      )
-    ).map(blob => blob.toString(encryptedEncoding))
-  )
+  mapAllKeyShareValues({
+    allKeyShares,
+    transform: async values =>
+      (
+        await encryptWithPasscode({
+          passcode: key,
+          values: values.map(value => Buffer.from(value, plainTextEncoding)),
+        })
+      ).map(blob => blob.toString(encryptedEncoding)),
+  })
 
 /**
  * Decrypt a vault's key shares. New-format shares share one PBKDF2 derivation;
@@ -79,24 +86,31 @@ export const decryptVaultAllKeyShares = ({
   key,
   ...allKeyShares
 }: EncryptInput): Promise<VaultAllKeyShares> =>
-  mapAllKeyShareValues(allKeyShares, async values =>
-    (
-      await decryptWithPasscode(
-        key,
-        values.map(value => Buffer.from(value, encryptedEncoding))
-      )
-    ).map(plaintext => plaintext.toString(plainTextEncoding))
-  )
+  mapAllKeyShareValues({
+    allKeyShares,
+    transform: async values =>
+      (
+        await decryptWithPasscode({
+          passcode: key,
+          values: values.map(value => Buffer.from(value, encryptedEncoding)),
+        })
+      ).map(plaintext => plaintext.toString(plainTextEncoding)),
+  })
+
+type MapVaultsKeySharesInput = {
+  vaults: Vault[]
+  transform: (vault: Vault) => Promise<VaultAllKeyShares>
+}
 
 /**
  * Re-key every vault's shares concurrently, returning a `vaultId -> shares` map
  * for `updateVaultsKeyShares`. Derivations run in parallel (WebCrypto), so bulk
  * passcode set/change/disable does not serialize one ~derivation per vault.
  */
-export const mapVaultsKeyShares = async (
-  vaults: Vault[],
-  transform: (vault: Vault) => Promise<VaultAllKeyShares>
-): Promise<Record<string, VaultAllKeyShares>> =>
+export const mapVaultsKeyShares = async ({
+  vaults,
+  transform,
+}: MapVaultsKeySharesInput): Promise<Record<string, VaultAllKeyShares>> =>
   Object.fromEntries(
     await Promise.all(
       vaults.map(

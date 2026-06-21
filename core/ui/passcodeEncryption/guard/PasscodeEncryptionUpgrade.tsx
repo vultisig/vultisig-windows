@@ -1,6 +1,6 @@
 import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { useVaults } from '@core/ui/storage/vaults'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import {
   isLegacyEncryptedPasscodeBlob,
@@ -19,6 +19,11 @@ export const PasscodeEncryptionUpgrade = () => {
   const vaults = useVaults()
   const { mutate, isPending } = useUpgradePasscodeEncryptionMutation()
 
+  // Attempt once per upgrade episode: if the mutation fails (corrupt blob,
+  // storage error), `shouldUpgrade` stays true and `isPending` flips back to
+  // false — without this guard the effect would re-fire in a tight loop.
+  const attempted = useRef(false)
+
   const shouldUpgrade =
     !!passcode &&
     passcodeEncryption !== null &&
@@ -26,7 +31,13 @@ export const PasscodeEncryptionUpgrade = () => {
       isLegacyEncryptedPasscodeBlob(passcodeEncryption.encryptedSample))
 
   useEffect(() => {
-    if (shouldUpgrade && !isPending) {
+    if (!shouldUpgrade) {
+      attempted.current = false
+      return
+    }
+
+    if (!isPending && !attempted.current) {
+      attempted.current = true
       mutate()
     }
   }, [shouldUpgrade, isPending, mutate])

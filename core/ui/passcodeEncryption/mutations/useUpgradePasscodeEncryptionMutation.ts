@@ -5,6 +5,7 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { encryptSample } from '../core/sample'
@@ -30,17 +31,25 @@ export const useUpgradePasscodeEncryptionMutation = () => {
   const passcodeEncryption = usePasscodeEncryption()
   const vaults = useVaults()
 
+  // Latest active passcode, so a concurrent change/disable (which captures and
+  // rewrites under a different key) makes this background upgrade abort before
+  // it overwrites records with stale-key blobs.
+  const livePasscodeRef = useRef(passcode)
+  livePasscodeRef.current = passcode
+
   return useMutation({
     mutationFn: async () => {
       const key = shouldBePresent(passcode, 'passcode')
       const { encryptedSample } = shouldBePresent(passcodeEncryption)
 
+      const isPasscodeStale = () => livePasscodeRef.current !== key
+
       const legacyVaults = vaults.filter(vaultKeySharesNeedPasscodeUpgrade)
 
       if (legacyVaults.length > 0) {
-        const vaultsKeyShares = await mapVaultsKeyShares(
-          legacyVaults,
-          async vault => {
+        const vaultsKeyShares = await mapVaultsKeyShares({
+          vaults: legacyVaults,
+          transform: async vault => {
             const decrypted = await decryptVaultAllKeyShares({
               key,
               keyShares: vault.keyShares,
@@ -48,17 +57,21 @@ export const useUpgradePasscodeEncryptionMutation = () => {
               keyShareMldsa: vault.keyShareMldsa,
             })
             return encryptVaultAllKeyShares({ ...decrypted, key })
-          }
-        )
+          },
+        })
+
+        if (isPasscodeStale()) return
 
         await updateVaultsKeyShares(vaultsKeyShares)
         await refetchQueries([StorageKey.vaults])
       }
 
       if (isLegacyEncryptedPasscodeBlob(encryptedSample)) {
-        await setPasscodeEncryption({
-          encryptedSample: await encryptSample({ key, value: uuidv4() }),
-        })
+        const encrypted = await encryptSample({ key, value: uuidv4() })
+
+        if (isPasscodeStale()) return
+
+        await setPasscodeEncryption({ encryptedSample: encrypted })
         await refetchQueries([StorageKey.passcodeEncryption])
       }
     },

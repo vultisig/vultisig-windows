@@ -27,14 +27,16 @@ export const useSetPasscodeMutation = () => {
         value: sample,
       })
 
-      const vaultsKeyShares = await mapVaultsKeyShares(vaults, vault =>
-        encryptVaultAllKeyShares({
-          keyShares: vault.keyShares,
-          chainKeyShares: vault.chainKeyShares,
-          keyShareMldsa: vault.keyShareMldsa,
-          key: passcode,
-        })
-      )
+      const vaultsKeyShares = await mapVaultsKeyShares({
+        vaults,
+        transform: vault =>
+          encryptVaultAllKeyShares({
+            keyShares: vault.keyShares,
+            chainKeyShares: vault.chainKeyShares,
+            keyShareMldsa: vault.keyShareMldsa,
+            key: passcode,
+          }),
+      })
 
       await updateVaultsKeyShares(vaultsKeyShares)
       await refetchQueries([StorageKey.vaults])

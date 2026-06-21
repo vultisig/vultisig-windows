@@ -29,17 +29,20 @@ export const useChangePasscodeMutation = () => {
         value: sample,
       })
 
-      const vaultsKeyShares = await mapVaultsKeyShares(vaults, async vault => {
-        const decrypted = await decryptVaultAllKeyShares({
-          key,
-          keyShares: vault.keyShares,
-          chainKeyShares: vault.chainKeyShares,
-          keyShareMldsa: vault.keyShareMldsa,
-        })
-        return encryptVaultAllKeyShares({
-          ...decrypted,
-          key: newPasscode,
-        })
+      const vaultsKeyShares = await mapVaultsKeyShares({
+        vaults,
+        transform: async vault => {
+          const decrypted = await decryptVaultAllKeyShares({
+            key,
+            keyShares: vault.keyShares,
+            chainKeyShares: vault.chainKeyShares,
+            keyShareMldsa: vault.keyShareMldsa,
+          })
+          return encryptVaultAllKeyShares({
+            ...decrypted,
+            key: newPasscode,
+          })
+        },
       })
 
       await updateVaultsKeyShares(vaultsKeyShares)

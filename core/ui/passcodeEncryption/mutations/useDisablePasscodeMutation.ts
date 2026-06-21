@@ -20,14 +20,16 @@ export const useDisablePasscodeMutation = () => {
     mutationFn: async () => {
       const key = shouldBePresent(passcode, 'passcode')
 
-      const vaultsKeyShares = await mapVaultsKeyShares(vaults, vault =>
-        decryptVaultAllKeyShares({
-          key,
-          keyShares: vault.keyShares,
-          chainKeyShares: vault.chainKeyShares,
-          keyShareMldsa: vault.keyShareMldsa,
-        })
-      )
+      const vaultsKeyShares = await mapVaultsKeyShares({
+        vaults,
+        transform: vault =>
+          decryptVaultAllKeyShares({
+            key,
+            keyShares: vault.keyShares,
+            chainKeyShares: vault.chainKeyShares,
+            keyShareMldsa: vault.keyShareMldsa,
+          }),
+      })
 
       await updateVaultsKeyShares(vaultsKeyShares)
       await refetchQueries([StorageKey.vaults])

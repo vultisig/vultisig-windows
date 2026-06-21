@@ -16,9 +16,10 @@ export const encryptSample = async ({
   key,
   value,
 }: Entry<string, string>): Promise<string> => {
-  const [blob] = await encryptWithPasscode(key, [
-    Buffer.from(value, plainTextEncoding),
-  ])
+  const [blob] = await encryptWithPasscode({
+    passcode: key,
+    values: [Buffer.from(value, plainTextEncoding)],
+  })
   return blob.toString(encryptedEncoding)
 }
 
@@ -26,8 +27,9 @@ export const decryptSample = async ({
   key,
   value,
 }: Entry<string, string>): Promise<string> => {
-  const [plaintext] = await decryptWithPasscode(key, [
-    Buffer.from(value, encryptedEncoding),
-  ])
+  const [plaintext] = await decryptWithPasscode({
+    passcode: key,
+    values: [Buffer.from(value, encryptedEncoding)],
+  })
   return plaintext.toString(plainTextEncoding)
 }
