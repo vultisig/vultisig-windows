@@ -1,7 +1,9 @@
 import { encryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/encryptWithAesGcm'
 import { decryptVaultBackupWithPassword } from '@vultisig/lib-utils/encryption/vaultBackup/decryptVaultBackupWithPassword'
-import { VAULT_BACKUP_BLOB_MAGIC } from '@vultisig/lib-utils/encryption/vaultBackup/vaultBackupConstants'
-import { createCipheriv, createHash, randomBytes } from 'crypto'
+import {
+  VAULT_BACKUP_BLOB_MAGIC,
+  VAULT_BACKUP_MAGIC_LEN,
+} from '@vultisig/lib-utils/encryption/vaultBackup/vaultBackupConstants'
 import { describe, expect, it } from 'vitest'
 
 import {
@@ -11,20 +13,43 @@ import {
 } from './passcodeCipher'
 
 const passcode = '12345'
+const nonceLength = 12
 const shares = [
   Buffer.from('ecdsa-share'),
   Buffer.from('eddsa-share'),
   Buffer.from('mldsa-share'),
 ]
 
-/** A legacy `SHA-256(passcode)` blob (`nonce || ciphertext || tag`) whose random
- * 12-byte nonce happens to start with the PBKDF2 magic bytes. */
-const legacyBlobWithMagicNonce = (value: Buffer): Buffer => {
-  const key = createHash('sha256').update(passcode).digest()
-  const iv = Buffer.concat([VAULT_BACKUP_BLOB_MAGIC, randomBytes(8)])
-  const cipher = createCipheriv('aes-256-gcm', key, iv)
-  const ciphertext = Buffer.concat([cipher.update(value), cipher.final()])
-  return Buffer.concat([iv, ciphertext, cipher.getAuthTag()])
+/**
+ * A legacy blob (`nonce || ciphertext || tag`, key = `SHA-256(passcode)`) whose
+ * random nonce is forced to start with the PBKDF2 magic bytes. Built with the
+ * same WebCrypto path the production legacy fallback uses.
+ */
+const legacyBlobWithMagicNonce = async (value: Buffer): Promise<Buffer> => {
+  const { subtle } = globalThis.crypto
+  const digest = await subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(passcode)
+  )
+  const key = await subtle.importKey('raw', digest, 'AES-GCM', false, [
+    'encrypt',
+  ])
+
+  const nonce = new Uint8Array(nonceLength)
+  nonce.set(new Uint8Array(VAULT_BACKUP_BLOB_MAGIC))
+  nonce.set(
+    globalThis.crypto.getRandomValues(
+      new Uint8Array(nonceLength - VAULT_BACKUP_MAGIC_LEN)
+    ),
+    VAULT_BACKUP_MAGIC_LEN
+  )
+
+  const sealed = await subtle.encrypt(
+    { name: 'AES-GCM', iv: nonce },
+    key,
+    new Uint8Array(value)
+  )
+  return Buffer.concat([Buffer.from(nonce), Buffer.from(sealed)])
 }
 
 describe('passcodeCipher', () => {
@@ -90,7 +115,7 @@ describe('passcodeCipher', () => {
     // Long enough that the blob clears the PBKDF2 header+tag length check, so it
     // is first attempted as PBKDF2 and must fall back to the legacy KDF.
     const value = Buffer.from('a-key-share-long-enough-to-collide')
-    const legacy = legacyBlobWithMagicNonce(value)
+    const legacy = await legacyBlobWithMagicNonce(value)
 
     const [decrypted] = await decryptWithPasscode({
       passcode,
