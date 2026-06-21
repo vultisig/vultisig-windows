@@ -52,11 +52,13 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const vault = vaults.find(vault => getVaultId(vault) === id)
 
   // Decryption runs the PBKDF2 KDF, so it happens asynchronously (off the UI
-  // thread) and the result is tagged with its vault id — until it resolves (or
-  // when no passcode is set) the vault is provided with its stored shares, never
-  // a previous vault's decrypted shares.
+  // thread). The result is tagged with the exact source vault object it was
+  // derived from, not just the vault id: a reshare keeps the same id
+  // (`publicKeys.ecdsa`) but changes the key shares, so an id-only tag could
+  // merge stale shares. Until decryption resolves (or when no passcode is set)
+  // the vault is provided with its stored shares.
   const [decrypted, setDecrypted] = useState<{
-    vaultId: string
+    sourceVault: Vault
     shares: VaultAllKeyShares
   } | null>(null)
 
@@ -66,7 +68,6 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       return
     }
 
-    const vaultId = getVaultId(vault)
     let cancelled = false
 
     decryptVaultAllKeyShares({
@@ -77,7 +78,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     })
       .then(shares => {
         if (!cancelled) {
-          setDecrypted({ vaultId, shares })
+          setDecrypted({ sourceVault: vault, shares })
         }
       })
       .catch(() => {
@@ -92,7 +93,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   }, [vault, passcode])
 
   const value =
-    vault && decrypted && decrypted.vaultId === getVaultId(vault)
+    vault && decrypted?.sourceVault === vault
       ? { ...vault, ...decrypted.shares }
       : vault
 
