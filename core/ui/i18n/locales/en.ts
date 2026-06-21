@@ -1010,6 +1010,8 @@ export const en = {
   swap_discount: 'Swap Discount',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
+  swap_invalid_external_recipient:
+    'Recipient address is not valid for {{chain}}',
   swap_limit_orders: 'Limit orders',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Market',
