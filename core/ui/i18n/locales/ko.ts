@@ -888,7 +888,7 @@ export const ko = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT 전송',
   excess_gas_refund: '초과 가스 환불',
-  forward_ton_amount: '전달 TON 금액',
+  forward_ton_amount: '전달 GRAM 금액',
   raw_payload: '원시 페이로드',
   transferred: '이관됨',
   staked_amount: '스테이킹 금액',

@@ -945,7 +945,7 @@ export const en = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT Transfer',
   excess_gas_refund: 'Excess Gas Refund',
-  forward_ton_amount: 'Forward TON Amount',
+  forward_ton_amount: 'Forward GRAM Amount',
   raw_message: 'Raw message',
   raw_payload: 'Raw Payload',
   transferred: 'Transferred',

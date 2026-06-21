@@ -906,7 +906,7 @@ export const pt = {
   jetton_transfer: 'Transferência Jetton',
   nft_transfer: 'Transferência de NFT',
   excess_gas_refund: 'Reembolso de excesso de gás',
-  forward_ton_amount: 'Valor de TON encaminhado',
+  forward_ton_amount: 'Valor de GRAM encaminhado',
   raw_payload: 'Carga útil bruta',
   transferred: 'Transferido',
   staked_amount: 'Valor apostado',
