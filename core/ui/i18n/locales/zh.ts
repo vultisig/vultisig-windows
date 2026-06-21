@@ -837,7 +837,7 @@ export const zh = {
   jetton_transfer: 'Jetton 转移',
   nft_transfer: 'NFT转移',
   excess_gas_refund: '多余 gas 退款',
-  forward_ton_amount: '转发的 TON 数量',
+  forward_ton_amount: '转发的 GRAM 数量',
   raw_payload: '原始有效载荷',
   transferred: '已转移',
   staked_amount: '投注金额',

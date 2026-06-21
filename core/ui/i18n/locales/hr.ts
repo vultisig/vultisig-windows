@@ -892,7 +892,7 @@ export const hr = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT prijenos',
   excess_gas_refund: 'Povrat viška goriva',
-  forward_ton_amount: 'Proslijeđeni TON iznos',
+  forward_ton_amount: 'Proslijeđeni GRAM iznos',
   raw_payload: 'Sirovi korisni teret',
   transferred: 'Preneseno',
   staked_amount: 'Uloženi iznos',

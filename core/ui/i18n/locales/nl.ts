@@ -896,7 +896,7 @@ export const nl = {
   jetton_transfer: 'Jetton-transfer',
   nft_transfer: 'NFT-overdracht',
   excess_gas_refund: 'Terugbetaling van overtollig gas',
-  forward_ton_amount: 'Doorgestuurd TON-bedrag',
+  forward_ton_amount: 'Doorgestuurd GRAM-bedrag',
   raw_payload: 'Ruwe lading',
   transferred: 'Overgeplaatst',
   staked_amount: 'Gestaked bedrag',

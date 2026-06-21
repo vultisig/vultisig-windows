@@ -893,7 +893,7 @@ export const ru = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT Transfer',
   excess_gas_refund: 'Возврат излишне уплаченной суммы за газ',
-  forward_ton_amount: 'Сумма пересылаемого TON',
+  forward_ton_amount: 'Сумма пересылаемого GRAM',
   raw_payload: 'Необработанная полезная нагрузка',
   transferred: 'Переведено',
   staked_amount: 'Застейканная сумма',

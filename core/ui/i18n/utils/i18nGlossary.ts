@@ -114,7 +114,12 @@ export const i18nGlossary = [
   {
     term: 'TON',
     preserve: true,
-    note: 'Chain/token name; never translate as a unit of weight.',
+    note: 'Network name (The Open Network); never translate as a unit of weight. The native token rebranded TON -> GRAM (2026-06-15).',
+  },
+  {
+    term: 'GRAM',
+    preserve: true,
+    note: 'Native token ticker of The Open Network (formerly TON); keep exactly as written.',
   },
   {
     term: 'Jetton',
