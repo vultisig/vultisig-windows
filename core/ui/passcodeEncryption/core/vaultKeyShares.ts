@@ -1,80 +1,136 @@
 import {
+  getVaultId,
+  Vault,
   VaultAllKeyShares,
-  VaultKeyShares,
 } from '@vultisig/core-mpc/vault/Vault'
-import { decryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/decryptWithAesGcm'
-import { encryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/encryptWithAesGcm'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import {
   encryptedEncoding,
   plainTextEncoding,
 } from '@vultisig/lib-utils/encryption/config'
-import { recordMap } from '@vultisig/lib-utils/record/recordMap'
+import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
+import { recordFromKeys } from '@vultisig/lib-utils/record/recordFromKeys'
 
-type Input = {
-  keyShares: VaultKeyShares
-  key: string
-}
-
-const encryptVaultKeyShares = ({ keyShares, key }: Input) =>
-  recordMap(keyShares, value =>
-    encryptWithAesGcm({
-      key,
-      value: Buffer.from(value, plainTextEncoding),
-    }).toString(encryptedEncoding)
-  )
-
-const decryptVaultKeyShares = ({ keyShares, key }: Input) =>
-  recordMap(keyShares, value =>
-    decryptWithAesGcm({
-      key,
-      value: Buffer.from(value, encryptedEncoding),
-    }).toString(plainTextEncoding)
-  )
+import {
+  decryptWithPasscode,
+  encryptWithPasscode,
+  isLegacyPasscodeBlob,
+} from './passcodeCipher'
 
 type EncryptInput = VaultAllKeyShares & { key: string }
 
-export const encryptVaultAllKeyShares = ({
-  keyShares,
-  chainKeyShares,
-  keyShareMldsa,
-  key,
-}: EncryptInput): VaultAllKeyShares => ({
-  keyShares: encryptVaultKeyShares({ keyShares, key }),
-  chainKeyShares: chainKeyShares
-    ? recordMap(chainKeyShares, value =>
-        encryptWithAesGcm({
-          key,
-          value: Buffer.from(value, plainTextEncoding),
-        }).toString(encryptedEncoding)
-      )
-    : undefined,
-  keyShareMldsa: keyShareMldsa
-    ? encryptWithAesGcm({
-        key,
-        value: Buffer.from(keyShareMldsa, plainTextEncoding),
-      }).toString(encryptedEncoding)
-    : undefined,
-})
+/**
+ * Flatten a vault's shares (key shares + chain key shares + MLDSA) into a single
+ * ordered list, run them through one passcode cipher call (so the whole vault
+ * costs a single PBKDF2 derivation), then scatter the results back into the
+ * original shape.
+ */
+const mapAllKeyShareValues = async (
+  { keyShares, chainKeyShares, keyShareMldsa }: VaultAllKeyShares,
+  transform: (values: string[]) => Promise<string[]>
+): Promise<VaultAllKeyShares> => {
+  const keyShareAlgos = getRecordKeys(keyShares)
+  const chainShares = chainKeyShares ?? {}
+  const chainKeys = getRecordKeys(chainShares)
 
+  const flat = [
+    ...keyShareAlgos.map(algo => keyShares[algo]),
+    ...chainKeys.map(chain => shouldBePresent(chainShares[chain])),
+    ...(keyShareMldsa !== undefined ? [keyShareMldsa] : []),
+  ]
+
+  const out = await transform(flat)
+
+  const keyShareCount = keyShareAlgos.length
+  const chainCount = chainKeys.length
+
+  return {
+    keyShares: recordFromKeys(keyShareAlgos, (_algo, index) => out[index]),
+    chainKeyShares: chainKeyShares
+      ? recordFromKeys(chainKeys, (_chain, index) => out[keyShareCount + index])
+      : undefined,
+    keyShareMldsa:
+      keyShareMldsa !== undefined ? out[keyShareCount + chainCount] : undefined,
+  }
+}
+
+/**
+ * Encrypt a vault's key shares at rest with the passcode cipher (PBKDF2 +
+ * AES-256-GCM, one derivation per vault). See {@link encryptWithPasscode}.
+ */
+export const encryptVaultAllKeyShares = ({
+  key,
+  ...allKeyShares
+}: EncryptInput): Promise<VaultAllKeyShares> =>
+  mapAllKeyShareValues(allKeyShares, async values =>
+    (
+      await encryptWithPasscode(
+        key,
+        values.map(value => Buffer.from(value, plainTextEncoding))
+      )
+    ).map(blob => blob.toString(encryptedEncoding))
+  )
+
+/**
+ * Decrypt a vault's key shares. New-format shares share one PBKDF2 derivation;
+ * legacy `SHA-256(passcode)` shares fall back transparently.
+ */
 export const decryptVaultAllKeyShares = ({
+  key,
+  ...allKeyShares
+}: EncryptInput): Promise<VaultAllKeyShares> =>
+  mapAllKeyShareValues(allKeyShares, async values =>
+    (
+      await decryptWithPasscode(
+        key,
+        values.map(value => Buffer.from(value, encryptedEncoding))
+      )
+    ).map(plaintext => plaintext.toString(plainTextEncoding))
+  )
+
+/**
+ * Re-key every vault's shares concurrently, returning a `vaultId -> shares` map
+ * for `updateVaultsKeyShares`. Derivations run in parallel (WebCrypto), so bulk
+ * passcode set/change/disable does not serialize one ~derivation per vault.
+ */
+export const mapVaultsKeyShares = async (
+  vaults: Vault[],
+  transform: (vault: Vault) => Promise<VaultAllKeyShares>
+): Promise<Record<string, VaultAllKeyShares>> =>
+  Object.fromEntries(
+    await Promise.all(
+      vaults.map(
+        async (vault): Promise<[string, VaultAllKeyShares]> => [
+          getVaultId(vault),
+          await transform(vault),
+        ]
+      )
+    )
+  )
+
+/**
+ * A stored passcode-encrypted blob is legacy when it lacks the PBKDF2 magic
+ * header (i.e. it still uses the weak `SHA-256(passcode)` KDF). Applies to both
+ * key shares and the passcode sample.
+ */
+export const isLegacyEncryptedPasscodeBlob = (value: string): boolean =>
+  isLegacyPasscodeBlob(Buffer.from(value, encryptedEncoding))
+
+/**
+ * Whether any of a vault's encrypted shares still use the legacy
+ * `SHA-256(passcode)` KDF and should be re-encrypted with PBKDF2 on unlock.
+ * Only meaningful while passcode encryption is enabled.
+ */
+export const vaultKeySharesNeedPasscodeUpgrade = ({
   keyShares,
   chainKeyShares,
   keyShareMldsa,
-  key,
-}: EncryptInput): VaultAllKeyShares => ({
-  keyShares: decryptVaultKeyShares({ keyShares, key }),
-  chainKeyShares: chainKeyShares
-    ? recordMap(chainKeyShares, value =>
-        decryptWithAesGcm({
-          key,
-          value: Buffer.from(value, encryptedEncoding),
-        }).toString(plainTextEncoding)
-      )
-    : undefined,
-  keyShareMldsa: keyShareMldsa
-    ? decryptWithAesGcm({
-        key,
-        value: Buffer.from(keyShareMldsa, encryptedEncoding),
-      }).toString(plainTextEncoding)
-    : undefined,
-})
+}: VaultAllKeyShares): boolean => {
+  const values = [
+    ...Object.values(keyShares),
+    ...Object.values(chainKeyShares ?? {}),
+    ...(keyShareMldsa ? [keyShareMldsa] : []),
+  ].filter((value): value is string => Boolean(value))
+
+  return values.some(isLegacyEncryptedPasscodeBlob)
+}

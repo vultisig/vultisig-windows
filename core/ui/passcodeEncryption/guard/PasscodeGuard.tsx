@@ -7,6 +7,7 @@ import { PasscodeAutoLock } from '../autoLock/PasscodeAutoLock'
 import { usePasscodeUnlockSession } from '../autoLock/usePasscodeUnlockSession'
 import { usePasscode } from '../state/passcode'
 import { EnterPasscode } from './EnterPasscode'
+import { PasscodeEncryptionUpgrade } from './PasscodeEncryptionUpgrade'
 
 export const PasscodeGuard = () => {
   const [passcode] = usePasscode()
@@ -36,6 +37,9 @@ export const PasscodeGuard = () => {
             <EnterPasscode />
           </TakeWholeSpaceAbsolutely>
         </>
+      )}
+      {hasPasscodeEnabled && !isLocked && !pendingPasscodeUnlockRestore && (
+        <PasscodeEncryptionUpgrade />
       )}
     </>
   )

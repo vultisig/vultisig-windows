@@ -1,15 +1,15 @@
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
-import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
-import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
-import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useCore } from '../../state/core'
 import { StorageKey } from '../../storage/StorageKey'
 import { useVaults } from '../../storage/vaults'
 import { encryptSample } from '../core/sample'
-import { encryptVaultAllKeyShares } from '../core/vaultKeyShares'
+import {
+  encryptVaultAllKeyShares,
+  mapVaultsKeyShares,
+} from '../core/vaultKeyShares'
 import { usePasscode } from '../state/passcode'
 
 export const useSetPasscodeMutation = () => {
@@ -22,20 +22,18 @@ export const useSetPasscodeMutation = () => {
     mutationFn: async (passcode: string) => {
       const sample = uuidv4()
 
-      const encryptedSample = encryptSample({
+      const encryptedSample = await encryptSample({
         key: passcode,
         value: sample,
       })
 
-      const vaultsKeyShares = recordMap(
-        recordFromItems(vaults, getVaultId),
-        ({ keyShares, chainKeyShares, keyShareMldsa }) =>
-          encryptVaultAllKeyShares({
-            keyShares,
-            chainKeyShares,
-            keyShareMldsa,
-            key: passcode,
-          })
+      const vaultsKeyShares = await mapVaultsKeyShares(vaults, vault =>
+        encryptVaultAllKeyShares({
+          keyShares: vault.keyShares,
+          chainKeyShares: vault.chainKeyShares,
+          keyShareMldsa: vault.keyShareMldsa,
+          key: passcode,
+        })
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)

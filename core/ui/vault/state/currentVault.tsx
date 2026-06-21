@@ -6,8 +6,12 @@ import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { hasServer, isServer } from '@vultisig/core-mpc/devices/localPartyId'
-import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
-import { useMemo } from 'react'
+import {
+  getVaultId,
+  Vault,
+  VaultAllKeyShares,
+} from '@vultisig/core-mpc/vault/Vault'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
@@ -45,31 +49,52 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const vaults = useVaults()
   const [passcode] = usePasscode()
 
-  const value = useMemo(() => {
-    const vault = vaults.find(vault => getVaultId(vault) === id)
+  const vault = vaults.find(vault => getVaultId(vault) === id)
 
-    if (vault && passcode) {
-      try {
-        const { keyShares, chainKeyShares, keyShareMldsa } =
-          decryptVaultAllKeyShares({
-            keyShares: vault.keyShares,
-            chainKeyShares: vault.chainKeyShares,
-            keyShareMldsa: vault.keyShareMldsa,
-            key: passcode,
-          })
-        return {
-          ...vault,
-          keyShares,
-          chainKeyShares,
-          keyShareMldsa,
-        }
-      } catch {
-        return vault
-      }
+  // Decryption runs the PBKDF2 KDF, so it happens asynchronously (off the UI
+  // thread) and the result is tagged with its vault id — until it resolves (or
+  // when no passcode is set) the vault is provided with its stored shares, never
+  // a previous vault's decrypted shares.
+  const [decrypted, setDecrypted] = useState<{
+    vaultId: string
+    shares: VaultAllKeyShares
+  } | null>(null)
+
+  useEffect(() => {
+    if (!vault || !passcode) {
+      setDecrypted(null)
+      return
     }
 
-    return vault
-  }, [vaults, id, passcode])
+    const vaultId = getVaultId(vault)
+    let cancelled = false
+
+    decryptVaultAllKeyShares({
+      keyShares: vault.keyShares,
+      chainKeyShares: vault.chainKeyShares,
+      keyShareMldsa: vault.keyShareMldsa,
+      key: passcode,
+    })
+      .then(shares => {
+        if (!cancelled) {
+          setDecrypted({ vaultId, shares })
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDecrypted(null)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [vault, passcode])
+
+  const value =
+    vault && decrypted && decrypted.vaultId === getVaultId(vault)
+      ? { ...vault, ...decrypted.shares }
+      : vault
 
   return (
     <CurrentVaultContext.Provider value={value}>
