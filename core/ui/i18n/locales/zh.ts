@@ -1410,4 +1410,5 @@ export const zh = {
   swap_mode_market: '市场',
   use_external_recipient: '使用外部收件人',
   swap_external_recipient_warning: '发送到外部地址',
+  manage_positions: '管理职位',
 }

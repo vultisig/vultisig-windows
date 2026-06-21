@@ -1512,4 +1512,5 @@ export const nl = {
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externe ontvanger gebruiken',
   swap_external_recipient_warning: 'Verzenden naar een extern adres',
+  manage_positions: 'Posities beheren',
 }

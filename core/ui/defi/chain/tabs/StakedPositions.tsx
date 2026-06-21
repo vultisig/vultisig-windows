@@ -74,10 +74,10 @@ export const StakedPositions = () => {
     if (!stakingCoin) {
       // Vault hasn't yet derived this chain. Fall through to the existing
       // empty surface; the user can enable Terra in chain selection.
-      return <DefiPositionEmptyState />
+      return <DefiPositionEmptyState returnTab="staked" />
     }
     if (selectedPositions.length === 0) {
-      return <DefiPositionEmptyState />
+      return <DefiPositionEmptyState returnTab="staked" />
     }
     return (
       <CosmosDelegationsView
@@ -141,7 +141,7 @@ const ThorchainStakedPositions = () => {
   }
 
   if (selectedPositions.length === 0) {
-    return <DefiPositionEmptyState />
+    return <DefiPositionEmptyState returnTab="staked" />
   }
 
   const selected = new Set(selectedPositions)
@@ -149,7 +149,7 @@ const ThorchainStakedPositions = () => {
     data?.stake?.positions.filter(position => selected.has(position.id)) ?? []
 
   if (!isPending && positions.length === 0) {
-    return <DefiPositionEmptyState />
+    return <DefiPositionEmptyState returnTab="staked" />
   }
 
   const autoEnableCoinIfNeeded = async (coinId: string, token: any) => {

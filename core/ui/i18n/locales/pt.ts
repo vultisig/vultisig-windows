@@ -1529,4 +1529,5 @@ export const pt = {
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Usar destinatário externo',
   swap_external_recipient_warning: 'Envio para um endereço externo',
+  manage_positions: 'Gerenciar Cargos',
 }

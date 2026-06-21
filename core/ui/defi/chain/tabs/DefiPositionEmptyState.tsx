@@ -1,3 +1,5 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { Button } from '@lib/ui/buttons/Button'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -6,8 +8,19 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const DefiPositionEmptyState = () => {
+import { useCurrentDefiChain } from '../useCurrentDefiChain'
+import { DefiChainPageTab } from './config'
+
+type DefiPositionEmptyStateProps = {
+  returnTab?: DefiChainPageTab
+}
+
+export const DefiPositionEmptyState = ({
+  returnTab,
+}: DefiPositionEmptyStateProps) => {
   const { t } = useTranslation()
+  const chain = useCurrentDefiChain()
+  const navigate = useCoreNavigate()
 
   return (
     <EmptyWrapper>
@@ -24,6 +37,18 @@ export const DefiPositionEmptyState = () => {
           </Text>
         </VStack>
       </VStack>
+      <CtaWrapper>
+        <Button
+          onClick={() =>
+            navigate({
+              id: 'manageDefiPositions',
+              state: { chain, returnTab },
+            })
+          }
+        >
+          {t('manage_positions')}
+        </Button>
+      </CtaWrapper>
     </EmptyWrapper>
   )
 }
@@ -36,4 +61,8 @@ const EmptyWrapper = styled.div`
   padding: 40px 20px;
   background-color: ${getColor('foreground')};
   border-radius: 12px;
+`
+
+const CtaWrapper = styled.div`
+  width: fit-content;
 `
