@@ -144,7 +144,7 @@ export const BondedPositions = () => {
   }
 
   if (selectedPositions.length === 0) {
-    return <DefiPositionEmptyState />
+    return <DefiPositionEmptyState returnTab="bonded" />
   }
 
   const selected = new Set(selectedPositions)

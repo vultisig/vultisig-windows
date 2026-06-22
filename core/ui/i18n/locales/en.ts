@@ -611,6 +611,7 @@ export const en = {
   no_positions_selected: 'No positions selected',
   no_positions_selected_description:
     "You've disabled all positions for this chain. Enable at least one position to view balances and manage actions.",
+  manage_positions: 'Manage Positions',
   total_bonded: 'Total Bonded {{ticker}}',
   active_nodes: 'Active Nodes',
   vulti_node: 'VultiNode',
