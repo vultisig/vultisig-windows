@@ -264,7 +264,7 @@ export const LpPositions = () => {
   }
 
   if (selectedPositions.length === 0) {
-    return <DefiPositionEmptyState />
+    return <DefiPositionEmptyState returnTab="lps" />
   }
 
   const lpDataMap = new Map((lpQuery.data ?? []).map(d => [d.position.id, d]))

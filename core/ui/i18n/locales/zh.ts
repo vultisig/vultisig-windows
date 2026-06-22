@@ -837,7 +837,7 @@ export const zh = {
   jetton_transfer: 'Jetton 转移',
   nft_transfer: 'NFT转移',
   excess_gas_refund: '多余 gas 退款',
-  forward_ton_amount: '转发的 TON 数量',
+  forward_ton_amount: '转发的 GRAM 数量',
   raw_payload: '原始有效载荷',
   transferred: '已转移',
   staked_amount: '投注金额',
@@ -1417,4 +1417,5 @@ export const zh = {
   feature_gate_hold_at_least: '你的金库中至少要持有 {{amount}}。',
   feature_gate_your_balance: '您的余额',
   get_vult: '获取 $VULT',
+  manage_positions: '管理仓位',
 }

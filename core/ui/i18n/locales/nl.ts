@@ -896,7 +896,7 @@ export const nl = {
   jetton_transfer: 'Jetton-transfer',
   nft_transfer: 'NFT-overdracht',
   excess_gas_refund: 'Terugbetaling van overtollig gas',
-  forward_ton_amount: 'Doorgestuurd TON-bedrag',
+  forward_ton_amount: 'Doorgestuurd GRAM-bedrag',
   raw_payload: 'Ruwe lading',
   transferred: 'Overgeplaatst',
   staked_amount: 'Gestaked bedrag',
@@ -1519,4 +1519,5 @@ export const nl = {
   feature_gate_hold_at_least: 'Bewaar ten minste {{amount}} in je kluis.',
   feature_gate_your_balance: 'Uw saldo',
   get_vult: 'Haal $VULT op',
+  manage_positions: 'Posities beheren',
 }

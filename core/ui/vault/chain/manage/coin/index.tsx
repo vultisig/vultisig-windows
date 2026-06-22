@@ -14,13 +14,13 @@ import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoin
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { EmptyState } from '@lib/ui/status/EmptyState'
 import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   areEqualCoins,
   Coin,
+  coinKeyToString,
   extractCoinKey,
 } from '@vultisig/core-chain/coin/Coin'
 import { getSolanaCoingeckoId } from '@vultisig/core-chain/coin/coingecko/getCoingeckoId'
@@ -158,27 +158,18 @@ export const ManageVaultChainCoinsPage = () => {
           </Text>
           <SearchInput value={search} onChange={setSearch} />
         </VStack>
-        {filteredCoins.length > 0 || !search.trim() ? (
-          <ItemGrid>
-            <AddCustomTokenPrompt />
-            {filteredCoins.map((coin, index) => (
-              <TokenItem
-                key={index}
-                value={coin}
-                currentCoins={currentCoins}
-                onToggle={handleToggle}
-                isLoading={isLoading}
-              />
-            ))}
-          </ItemGrid>
-        ) : (
-          <VStack gap={24} alignItems="center">
-            <EmptyState title={t('no_tokens_found')} />
-            <ItemGrid>
-              <AddCustomTokenPrompt />
-            </ItemGrid>
-          </VStack>
-        )}
+        <ItemGrid>
+          <AddCustomTokenPrompt />
+          {filteredCoins.map(coin => (
+            <TokenItem
+              key={coinKeyToString(coin)}
+              value={coin}
+              currentCoins={currentCoins}
+              onToggle={handleToggle}
+              isLoading={isLoading}
+            />
+          ))}
+        </ItemGrid>
       </PageContent>
     </VStack>
   )

@@ -888,7 +888,7 @@ export const ko = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT 전송',
   excess_gas_refund: '초과 가스 환불',
-  forward_ton_amount: '전달 TON 금액',
+  forward_ton_amount: '전달 GRAM 금액',
   raw_payload: '원시 페이로드',
   transferred: '이관됨',
   staked_amount: '스테이킹 금액',
@@ -1506,4 +1506,5 @@ export const ko = {
   feature_gate_hold_at_least: '금고에 최소 {{amount}} 토큰을 보유하세요.',
   feature_gate_your_balance: '잔액',
   get_vult: '$VULT를 가져오세요',
+  manage_positions: '포지션 관리',
 }

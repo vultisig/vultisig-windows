@@ -613,6 +613,7 @@ export const en = {
   no_positions_selected: 'No positions selected',
   no_positions_selected_description:
     "You've disabled all positions for this chain. Enable at least one position to view balances and manage actions.",
+  manage_positions: 'Manage Positions',
   total_bonded: 'Total Bonded {{ticker}}',
   active_nodes: 'Active Nodes',
   vulti_node: 'VultiNode',
@@ -952,7 +953,7 @@ export const en = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT Transfer',
   excess_gas_refund: 'Excess Gas Refund',
-  forward_ton_amount: 'Forward TON Amount',
+  forward_ton_amount: 'Forward GRAM Amount',
   raw_message: 'Raw message',
   raw_payload: 'Raw Payload',
   transferred: 'Transferred',
@@ -1017,6 +1018,8 @@ export const en = {
   swap_discount: 'Swap Discount',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
+  swap_invalid_external_recipient:
+    'Recipient address is not valid for {{chain}}',
   swap_limit_orders: 'Limit orders',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Market',

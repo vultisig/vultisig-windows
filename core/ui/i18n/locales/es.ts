@@ -908,7 +908,7 @@ export const es = {
   jetton_transfer: 'Transferencia de Jetton',
   nft_transfer: 'Transferencia NFT',
   excess_gas_refund: 'Reembolso por exceso de gas',
-  forward_ton_amount: 'Importe de TON reenviado',
+  forward_ton_amount: 'Importe de GRAM reenviado',
   raw_payload: 'Carga útil sin procesar',
   transferred: 'Transferido',
   staked_amount: 'Cantidad apostada',
@@ -1534,4 +1534,5 @@ export const es = {
   feature_gate_hold_at_least: 'Mantén al menos {{amount}} en tu bóveda.',
   feature_gate_your_balance: 'Tu saldo',
   get_vult: 'Obtén $VULT',
+  manage_positions: 'Gestionar posiciones',
 }

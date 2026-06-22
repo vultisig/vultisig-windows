@@ -913,7 +913,7 @@ export const de = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT-Überweisung',
   excess_gas_refund: 'Rückerstattung für überschüssiges Gas',
-  forward_ton_amount: 'Forward-TON-Betrag',
+  forward_ton_amount: 'Forward-GRAM-Betrag',
   raw_payload: 'Rohdaten',
   transferred: 'Übertragen',
   staked_amount: 'Einsatzbetrag',
@@ -1548,4 +1548,5 @@ export const de = {
     'Halten Sie mindestens {{amount}} in Ihrem Tresor bereit.',
   feature_gate_your_balance: 'Ihr Guthaben',
   get_vult: 'Hol dir $VULT',
+  manage_positions: 'Positionen verwalten',
 }

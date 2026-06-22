@@ -892,7 +892,7 @@ export const hr = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT prijenos',
   excess_gas_refund: 'Povrat viška goriva',
-  forward_ton_amount: 'Proslijeđeni TON iznos',
+  forward_ton_amount: 'Proslijeđeni GRAM iznos',
   raw_payload: 'Sirovi korisni teret',
   transferred: 'Preneseno',
   staked_amount: 'Uloženi iznos',
@@ -1512,4 +1512,5 @@ export const hr = {
   feature_gate_hold_at_least: 'Držite barem {{amount}} u svom trezoru',
   feature_gate_your_balance: 'Vaš saldo',
   get_vult: 'Uzmi $VULT',
+  manage_positions: 'Upravljanje pozicijama',
 }

@@ -893,7 +893,7 @@ export const ru = {
   jetton_transfer: 'Jetton Transfer',
   nft_transfer: 'NFT Transfer',
   excess_gas_refund: 'Возврат излишне уплаченной суммы за газ',
-  forward_ton_amount: 'Сумма пересылаемого TON',
+  forward_ton_amount: 'Сумма пересылаемого GRAM',
   raw_payload: 'Необработанная полезная нагрузка',
   transferred: 'Переведено',
   staked_amount: 'Застейканная сумма',
@@ -1517,4 +1517,5 @@ export const ru = {
     'Храните в своем хранилище как минимум {{amount}}.',
   feature_gate_your_balance: 'Ваш баланс',
   get_vult: 'Получить $VULT',
+  manage_positions: 'Управление позициями',
 }

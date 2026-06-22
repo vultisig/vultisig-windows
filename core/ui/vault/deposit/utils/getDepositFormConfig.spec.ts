@@ -23,7 +23,7 @@ const t: TFunction = ((key: string) => key) as TFunction
 const tonCoin = {
   chain: Chain.Ton,
   id: 'ton',
-  ticker: 'TON',
+  ticker: 'GRAM',
   decimals: 9,
   address: 'sender',
 }
