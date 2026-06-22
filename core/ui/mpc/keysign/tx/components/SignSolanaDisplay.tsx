@@ -35,6 +35,7 @@ const StyledTitle = styled.span<Styles>`
 `
 
 type InstructionSummary = {
+  transactionIndex: number
   index: number
   programId: string
   instructionType: string | null
@@ -90,7 +91,8 @@ const getInstructionType = (
 }
 
 const parseSolanaTransactionInstructions = (
-  rawMessageBase64: string
+  rawMessageBase64: string,
+  transactionIndex: number
 ): InstructionSummary[] => {
   try {
     const buffer = Buffer.from(rawMessageBase64, 'base64')
@@ -111,6 +113,7 @@ const parseSolanaTransactionInstructions = (
         const instructionType = getInstructionType(programId, instructionData)
 
         return {
+          transactionIndex,
           index: index + 1,
           programId,
           instructionType,
@@ -129,6 +132,7 @@ const parseSolanaTransactionInstructions = (
         )
 
         return {
+          transactionIndex,
           index: index + 1,
           programId: ix.programId.toBase58(),
           instructionType,
@@ -150,12 +154,22 @@ export const SignSolanaDisplay = ({
   const { t } = useTranslation()
   const instructionsSummary = useMemo(() => {
     const allInstructions: InstructionSummary[] = []
-    signSolana.rawTransactions.forEach(tx => {
-      const instructions = parseSolanaTransactionInstructions(tx)
+    signSolana.rawTransactions.forEach((tx, index) => {
+      const instructions = parseSolanaTransactionInstructions(tx, index + 1)
       allInstructions.push(...instructions)
     })
     return allInstructions
   }, [signSolana.rawTransactions])
+  const transactionCount = signSolana.rawTransactions.length
+  const rawTransactionData = useMemo(() => {
+    if (transactionCount <= 1) {
+      return signSolana.rawTransactions.join('\n')
+    }
+
+    return signSolana.rawTransactions
+      .map((transaction, index) => `#${index + 1}\n${transaction}`)
+      .join('\n\n')
+  }, [signSolana.rawTransactions, transactionCount])
 
   return (
     <VStack gap={16}>
@@ -167,9 +181,9 @@ export const SignSolanaDisplay = ({
             </StyledTitle>
             <VStack gap={8}>
               {instructionsSummary.map(ix => (
-                <VStack key={ix.index} gap={4}>
+                <VStack key={`${ix.transactionIndex}-${ix.index}`} gap={4}>
                   <Text size={13} weight={500} color="contrast">
-                    {t('instruction')} {ix.index}
+                    {t('instruction')} {ix.transactionIndex}.{ix.index}
                     {ix.instructionType && `: ${ix.instructionType}`}
                   </Text>
                   <Text size={12} color="shy">
@@ -188,7 +202,7 @@ export const SignSolanaDisplay = ({
       <Panel>
         <VStack gap={12} scrollable={true}>
           <StyledTitle color={'text'} fontSize={14}>
-            {t('raw_transaction_data')}
+            {t('raw_transaction_data')} ({transactionCount})
           </StyledTitle>
           <Text color="info" family="mono" size={14} weight={500}>
             <pre
@@ -208,7 +222,7 @@ export const SignSolanaDisplay = ({
                   overflowWrap: 'break-word',
                 }}
               >
-                {signSolana.rawTransactions.join('\n')}
+                {rawTransactionData}
               </code>
             </pre>
           </Text>
