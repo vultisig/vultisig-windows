@@ -7,6 +7,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -118,6 +119,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
           )}
         </List>
       </VStack>
+      <SwapVerifyRecipient keysignPayload={value} />
     </>
   )
 }
