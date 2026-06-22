@@ -1,3 +1,4 @@
+import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
 import { decryptSample } from '@core/ui/passcodeEncryption/core/sample'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
@@ -8,8 +9,7 @@ import { panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { attempt } from '@vultisig/lib-utils/attempt'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -52,36 +52,41 @@ export const EnterPasscode = () => {
 
   const [inputValue, setInputValue] = useState<string | null>(null)
   const [, setPasscode] = usePasscode()
+  const [isInvalid, setIsInvalid] = useState(false)
 
-  const isDisabled = useMemo(() => {
-    if (!inputValue) {
-      return t('enter_passcode')
+  const isComplete =
+    !!inputValue &&
+    inputValue.length === passcodeEncryptionConfig.passcodeLength
+
+  // Validate only once the full passcode is entered, and asynchronously:
+  // decryptSample runs the PBKDF2 key derivation, so validating synchronously on
+  // every keystroke would block the UI. On success the passcode unlocks the app.
+  useEffect(() => {
+    if (!isComplete) {
+      setIsInvalid(false)
+      return
     }
 
     const { encryptedSample } = shouldBePresent(passcodeEncryption)
-    const decryptedSampleResult = attempt(() =>
-      decryptSample({
-        key: inputValue,
-        value: encryptedSample,
+    let cancelled = false
+
+    decryptSample({ key: inputValue, value: encryptedSample })
+      .then(() => {
+        if (!cancelled) {
+          setIsInvalid(false)
+          setPasscode(inputValue)
+        }
       })
-    )
+      .catch(() => {
+        if (!cancelled) {
+          setIsInvalid(true)
+        }
+      })
 
-    if ('error' in decryptedSampleResult) {
-      return t('invalid_passcode')
+    return () => {
+      cancelled = true
     }
-
-    return false
-  }, [inputValue, passcodeEncryption, t])
-
-  const handleSubmit = useCallback(() => {
-    setPasscode(inputValue)
-  }, [inputValue, setPasscode])
-
-  useEffect(() => {
-    if (inputValue && !isDisabled) {
-      handleSubmit()
-    }
-  }, [inputValue, isDisabled, handleSubmit])
+  }, [isComplete, inputValue, passcodeEncryption, setPasscode])
 
   return (
     <Wrapper>
@@ -97,11 +102,9 @@ export const EnterPasscode = () => {
         <Content>
           <PasscodeInput
             onChange={setInputValue}
-            validation={
-              inputValue ? (isDisabled ? 'invalid' : 'valid') : undefined
-            }
+            validation={isInvalid ? 'invalid' : undefined}
             validationMessages={
-              isDisabled ? { invalid: isDisabled } : undefined
+              isInvalid ? { invalid: t('invalid_passcode') } : undefined
             }
             value={inputValue}
             autoFocus
