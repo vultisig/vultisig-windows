@@ -1547,5 +1547,5 @@ export const de = {
   feature_gate_hold_at_least:
     'Halten Sie mindestens {{amount}} in Ihrem Tresor bereit.',
   feature_gate_your_balance: 'Ihr Guthaben',
-  get_vult: 'Get $VULT',
+  get_vult: 'Hol dir $VULT',
 }
