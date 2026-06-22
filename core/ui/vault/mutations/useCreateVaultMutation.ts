@@ -10,7 +10,6 @@ import {
   Vault,
 } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { pipe } from '@vultisig/lib-utils/pipe'
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
@@ -37,25 +36,19 @@ export const useCreateVaultMutation = (
 
   return useMutation({
     mutationFn: async (input: Vault) => {
-      const vault = await createVault(
-        pipe(input, vault => {
-          if (hasPasscodeEncryption) {
-            const key = shouldBePresent(passcode)
-            const encrypted = encryptVaultAllKeyShares({
-              keyShares: vault.keyShares,
-              chainKeyShares: vault.chainKeyShares,
-              keyShareMldsa: vault.keyShareMldsa,
-              key,
-            })
-            return {
-              ...vault,
-              ...encrypted,
-            }
+      const vaultToCreate = hasPasscodeEncryption
+        ? {
+            ...input,
+            ...(await encryptVaultAllKeyShares({
+              keyShares: input.keyShares,
+              chainKeyShares: input.chainKeyShares,
+              keyShareMldsa: input.keyShareMldsa,
+              key: shouldBePresent(passcode),
+            })),
           }
+        : input
 
-          return vault
-        })
-      )
+      const vault = await createVault(vaultToCreate)
 
       const chainsToCreate = isKeyImportVault(vault)
         ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))

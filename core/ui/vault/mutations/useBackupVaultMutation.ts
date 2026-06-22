@@ -75,7 +75,7 @@ export const useBackupVaultMutation = ({
 
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
-      const getVault = (id: string) => {
+      const getVault = async (id: string) => {
         const vault = shouldBePresent(
           vaults.find(vault => getVaultId(vault) === id),
           `Vault with id ${id}`
@@ -85,7 +85,7 @@ export const useBackupVaultMutation = ({
           return vault
         }
 
-        const decrypted = decryptVaultAllKeyShares({
+        const decrypted = await decryptVaultAllKeyShares({
           keyShares: vault.keyShares,
           chainKeyShares: vault.chainKeyShares,
           keyShareMldsa: vault.keyShareMldsa,
@@ -101,7 +101,7 @@ export const useBackupVaultMutation = ({
       const getFile = async () => {
         if (vaultIds.length === 1) {
           const [vaultId] = vaultIds
-          const vault = getVault(vaultId)
+          const vault = await getVault(vaultId)
           const base64Data = createBackup(vault, password)
 
           const blob = new Blob([base64Data], {
@@ -123,13 +123,13 @@ export const useBackupVaultMutation = ({
         ].join('_')}.zip`
 
         try {
-          vaultIds.forEach(vaultId => {
-            const vault = getVault(vaultId)
+          for (const vaultId of vaultIds) {
+            const vault = await getVault(vaultId)
             const base64 = createBackup(vault, password)
             const name = getExportName(vault)
             sevenZip.FS.writeFile(name, base64)
             fileNames.push(name)
-          })
+          }
 
           sevenZip.callMain(['a', archiveName, ...fileNames])
           const archiveBytes = sevenZip.FS.readFile(archiveName)
