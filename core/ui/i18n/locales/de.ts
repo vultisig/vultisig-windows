@@ -1540,5 +1540,13 @@ export const de = {
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externen Empfänger verwenden',
   swap_external_recipient_warning: 'Senden an eine externe Adresse',
+  custom_rpc_gate_description:
+    'Platzieren Sie Vultisig auf Ihren eigenen Knoten. Schnellere Abfragen, höhere Ratenlimits und vollständige Privatsphäre pro Kette.',
+  feature_gate_requires: 'Erfordert',
+  feature_gate_requires_tier: '$VULT {{tier}} Stufe oder höher',
+  feature_gate_hold_at_least:
+    'Halten Sie mindestens {{amount}} in Ihrem Tresor bereit.',
+  feature_gate_your_balance: 'Ihr Guthaben',
+  get_vult: 'Hol dir $VULT',
   manage_positions: 'Positionen verwalten',
 }

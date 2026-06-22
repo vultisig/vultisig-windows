@@ -1509,5 +1509,13 @@ export const ru = {
   swap_mode_market: 'Рынок',
   use_external_recipient: 'Использовать внешнего получателя',
   swap_external_recipient_warning: 'Отправка на внешний адрес',
+  custom_rpc_gate_description:
+    'Направьте Vultisig на свои собственные узлы. Более быстрые запросы, более высокие лимиты скорости и полная конфиденциальность для каждой цепочки.',
+  feature_gate_requires: 'Требует',
+  feature_gate_requires_tier: '$VULT {{tier}} Уровень или выше',
+  feature_gate_hold_at_least:
+    'Храните в своем хранилище как минимум {{amount}}.',
+  feature_gate_your_balance: 'Ваш баланс',
+  get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
 }

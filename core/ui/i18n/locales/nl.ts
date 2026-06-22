@@ -1512,5 +1512,12 @@ export const nl = {
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externe ontvanger gebruiken',
   swap_external_recipient_warning: 'Verzenden naar een extern adres',
+  custom_rpc_gate_description:
+    'Koppel Vultisig aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
+  feature_gate_requires: 'Vereist',
+  feature_gate_requires_tier: '$VULT {{tier}} Niveau of hoger',
+  feature_gate_hold_at_least: 'Bewaar ten minste {{amount}} in je kluis.',
+  feature_gate_your_balance: 'Uw saldo',
+  get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
 }

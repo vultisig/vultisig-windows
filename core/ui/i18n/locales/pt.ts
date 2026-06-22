@@ -1529,5 +1529,12 @@ export const pt = {
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Usar destinatário externo',
   swap_external_recipient_warning: 'Envio para um endereço externo',
+  custom_rpc_gate_description:
+    'Aponte Vultisig para seus próprios nós. Consultas mais rápidas, limites de taxa mais altos e privacidade total por cadeia.',
+  feature_gate_requires: 'Requer',
+  feature_gate_requires_tier: '$VULT {{tier}} Nível ou superior',
+  feature_gate_hold_at_least: 'Guarde pelo menos {{amount}} em seu cofre.',
+  feature_gate_your_balance: 'Seu saldo',
+  get_vult: 'Obtenha $VULT',
   manage_positions: 'Gerenciar posições',
 }

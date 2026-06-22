@@ -2,29 +2,14 @@ import { ValueProp } from '@lib/ui/props'
 import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import styled from 'styled-components'
 
-type TierStyles = {
-  footer: string
-}
-
-const tierStyles: Record<VultDiscountTier, TierStyles> = {
-  bronze: {
-    footer: 'linear-gradient(180deg, #993B1E 0%, #FF6333 100%)',
-  },
-  silver: {
-    footer: 'linear-gradient(180deg, #7C8A9E 0%, #C9D6E8 100%)',
-  },
-  gold: {
-    footer: 'linear-gradient(180deg, #997437 0%, #FFC25C 100%)',
-  },
-  platinum: {
-    footer: 'linear-gradient(180deg, #4779FC 0%, #33E6BF 100%)',
-  },
-  diamond: {
-    footer: 'linear-gradient(160deg, #9747FF 0%, #00CCFF 100%)',
-  },
-  ultimate: {
-    footer: `linear-gradient(135deg, #031022 0%, #104AA0 25%, #FFC25C 47%, #FFFFFF 54%, #0F4594 73%, #E8B662 85%, #FFFAF3 100%)`,
-  },
+/** Per-tier brand gradient, shared by the tier footer and the feature-gate CTA. */
+export const discountTierGradients: Record<VultDiscountTier, string> = {
+  bronze: 'linear-gradient(180deg, #993B1E 0%, #FF6333 100%)',
+  silver: 'linear-gradient(180deg, #7C8A9E 0%, #C9D6E8 100%)',
+  gold: 'linear-gradient(180deg, #997437 0%, #FFC25C 100%)',
+  platinum: 'linear-gradient(180deg, #4779FC 0%, #33E6BF 100%)',
+  diamond: 'linear-gradient(160deg, #9747FF 0%, #00CCFF 100%)',
+  ultimate: `linear-gradient(135deg, #031022 0%, #104AA0 25%, #FFC25C 47%, #FFFFFF 54%, #0F4594 73%, #E8B662 85%, #FFFAF3 100%)`,
 }
 
 /** How much of the coloured footer stays tucked behind the dark section. */
@@ -78,7 +63,7 @@ export const DiscountTierFooterBox = styled.div<ValueProp<VultDiscountTier>>`
   align-items: center;
   gap: 8px;
 
-  background: ${({ value }) => tierStyles[value].footer};
+  background: ${({ value }) => discountTierGradients[value]};
 
   color: #f0f4fc;
   text-align: center;
