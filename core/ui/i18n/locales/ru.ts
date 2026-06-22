@@ -1481,21 +1481,16 @@ export const ru = {
   coming_soon: 'Вскоре',
   custom_rpc: 'Пользовательские RPC',
   custom_rpc_chip_custom: 'Пользовательский',
-  custom_rpc_chip_default: 'По умолчанию',
   custom_rpc_description: 'Используйте собственные узлы для каждой цепочки.',
   custom_rpc_invalid_response: 'Неожиданный ответ от этой конечной точки.',
   custom_rpc_invalid_url: 'Введите действительный URL-адрес http(s).',
-  custom_rpc_list_subtitle:
-    'Направьте цепочку на свой собственный узел. Оставьте значение по умолчанию для использования конечных точек Vultisig.',
   custom_rpc_reachable: 'Доступен · {{ms}} мс',
   custom_rpc_reachable_unverified:
     'Доступен · {{ms}} мс — идентификация сети не подтверждена',
   custom_rpc_reset_button: 'Сбросить до значений по умолчанию',
-  custom_rpc_test_button: 'Тест',
   custom_rpc_testing: 'Тестирование…',
   custom_rpc_unreachable: 'Конечная точка недоступна',
   custom_rpc_url_hint: 'https://your-node.example',
-  custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'Этот конечный пункт обслуживает другую цепочку.',
   vult_tier_label: '{{tier}} Уровень',
   vult_tier_required: 'Требуется серебряный уровень.',
@@ -1518,4 +1513,11 @@ export const ru = {
   feature_gate_your_balance: 'Ваш баланс',
   get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
+  custom_rpc_default_endpoint: 'КОНЕЧНАЯ ТОЧКА ПО УМОЛЧАНИЮ',
+  custom_rpc_editor_hint:
+    'Нажмите для редактирования. Поддерживаются только HTTPS-адреса.',
+  custom_rpc_save_button: 'Сохранить RPC',
+  custom_rpc_saved: 'Настройки RPC сохранены',
+  swap_invalid_external_recipient:
+    'Адрес получателя недействителен для {{chain}}',
 }

@@ -1484,21 +1484,16 @@ export const nl = {
   coming_soon: 'Binnenkort beschikbaar',
   custom_rpc: 'Aangepaste RPC&#39;s',
   custom_rpc_chip_custom: 'Aangepast',
-  custom_rpc_chip_default: 'Standaard',
   custom_rpc_description: 'Gebruik je eigen knooppunten per keten.',
   custom_rpc_invalid_response: 'Onverwachte reactie van dit eindpunt',
   custom_rpc_invalid_url: 'Voer een geldige http(s)-URL in.',
-  custom_rpc_list_subtitle:
-    'Richt een keten op je eigen knooppunt. Laat de standaardinstelling staan ​​om de eindpunten van Vultisig te gebruiken.',
   custom_rpc_reachable: 'Bereikbaar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Bereikbaar · {{ms}} ms — netwerkidentiteit niet geverifieerd',
   custom_rpc_reset_button: 'Terugzetten naar standaardinstellingen',
-  custom_rpc_test_button: 'Test',
   custom_rpc_testing: 'Testen…',
   custom_rpc_unreachable: 'Eindpunt onbereikbaar',
   custom_rpc_url_hint: 'https://jouw-node.voorbeeld',
-  custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'Dit eindpunt bedient een andere keten.',
   vult_tier_label: '{{tier}} Tier',
   vult_tier_required: 'Zilveren niveau vereist',
@@ -1520,4 +1515,11 @@ export const nl = {
   feature_gate_your_balance: 'Uw saldo',
   get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
+  custom_rpc_default_endpoint: 'STANDAARD EINDPUNT',
+  custom_rpc_editor_hint:
+    'Tik om te bewerken. Ondersteunt alleen HTTPS-eindpunten.',
+  custom_rpc_save_button: 'Sla RPC op',
+  custom_rpc_saved: 'RPC instellingen opgeslagen',
+  swap_invalid_external_recipient:
+    'Het ontvangersadres is niet geldig voor {{chain}}',
 }

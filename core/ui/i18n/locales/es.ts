@@ -1499,21 +1499,16 @@ export const es = {
   coming_soon: 'Muy pronto',
   custom_rpc: 'RPC personalizados',
   custom_rpc_chip_custom: 'Costumbre',
-  custom_rpc_chip_default: 'Por defecto',
   custom_rpc_description: 'Utilice sus propios nodos por cadena.',
   custom_rpc_invalid_response: 'Respuesta inesperada de este punto final.',
   custom_rpc_invalid_url: 'Introduzca una URL http(s) válida',
-  custom_rpc_list_subtitle:
-    'Dirige una cadena a tu propio nodo. Deja la configuración predeterminada para usar los puntos finales de Vultisig.',
   custom_rpc_reachable: 'Accesible · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Accesible · {{ms}} ms — identidad de red no verificada',
   custom_rpc_reset_button: 'Restablecer a valores predeterminados',
-  custom_rpc_test_button: 'Prueba',
   custom_rpc_testing: 'Pruebas…',
   custom_rpc_unreachable: 'Punto final inaccesible',
   custom_rpc_url_hint: 'https://tu-nodo.ejemplo',
-  custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Este punto final sirve a una cadena diferente',
   vult_tier_label: '{{tier}} Nivel',
   vult_tier_required: 'Se requiere el nivel Plata.',
@@ -1535,4 +1530,10 @@ export const es = {
   feature_gate_your_balance: 'Tu saldo',
   get_vult: 'Obtén $VULT',
   manage_positions: 'Gestionar posiciones',
+  custom_rpc_default_endpoint: 'PUNTO FINAL PREDETERMINADO',
+  custom_rpc_editor_hint: 'Toca para editar. Solo admite conexiones HTTPS.',
+  custom_rpc_save_button: 'Guardar RPC',
+  custom_rpc_saved: 'Configuración de RPC guardada',
+  swap_invalid_external_recipient:
+    'La dirección del destinatario no es válida para {{chain}}.',
 }

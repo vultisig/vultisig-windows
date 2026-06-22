@@ -3,23 +3,40 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCustomRpcOverrides } from '@core/ui/storage/customRpcOverrides'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { SearchField } from '@lib/ui/search/SearchField'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { customRpcSupportedChains } from '@vultisig/core-chain/chains/customRpc/customRpcSupportedChains'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { DescriptionText } from '../../vaultSettingsListStyles'
 
 export const CustomRpcPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const overrides = useCustomRpcOverrides()
+  const [search, setSearch] = useState('')
+
+  const chains = useMemo(() => {
+    const normalized = search.trim().toLowerCase()
+    if (!normalized) {
+      return customRpcSupportedChains
+    }
+
+    return customRpcSupportedChains.filter(chain => {
+      const coin = chainFeeCoin[chain]
+
+      return (
+        chain.toLowerCase().includes(normalized) ||
+        coin.ticker.toLowerCase().includes(normalized)
+      )
+    })
+  }, [search])
 
   return (
     <VStack fullHeight>
@@ -31,65 +48,103 @@ export const CustomRpcPage = () => {
         }
         title={t('custom_rpc')}
       />
-      <PageContent gap={14} flexGrow scrollable>
-        <Text color="shy" size={12}>
-          {t('custom_rpc_list_subtitle')}
-        </Text>
-        <List>
-          {customRpcSupportedChains.map(chain => {
-            const customUrl = overrides[chain]
+      <PageContent gap={24} flexGrow scrollable>
+        <VStack gap={16}>
+          <Text as="h2" size={22} weight="500">
+            {t('select_chain')}
+          </Text>
+          <SearchField value={search} onSearch={setSearch} />
+        </VStack>
+        {chains.length ? (
+          <ChainGrid>
+            {chains.map(chain => {
+              const coin = chainFeeCoin[chain]
+              const customUrl = overrides[chain]
 
-            return (
-              <ListItem
-                key={chain}
-                icon={
-                  <ChainEntityIcon
-                    value={getChainLogoSrc(chain)}
-                    style={{ fontSize: 32 }}
-                  />
-                }
-                title={chain}
-                description={
-                  customUrl ? (
-                    <CustomUrlText>{customUrl}</CustomUrlText>
-                  ) : undefined
-                }
-                extra={
-                  <StatusChip isCustom={Boolean(customUrl)}>
-                    {customUrl
-                      ? t('custom_rpc_chip_custom')
-                      : t('custom_rpc_chip_default')}
-                  </StatusChip>
-                }
-                onClick={() =>
-                  navigate({ id: 'customRpcDetail', state: { chain } })
-                }
-                hoverable
-                showArrow
-              />
-            )
-          })}
-        </List>
+              return (
+                <ChainTile
+                  key={chain}
+                  onClick={() =>
+                    navigate({ id: 'customRpcDetail', state: { chain } })
+                  }
+                >
+                  <ChainIconFrame $isCustom={Boolean(customUrl)}>
+                    <ChainEntityIcon
+                      value={getChainLogoSrc(chain)}
+                      style={{ fontSize: 40 }}
+                    />
+                    {customUrl && (
+                      <EditBadge aria-label={t('custom_rpc_chip_custom')}>
+                        <PencilIcon />
+                      </EditBadge>
+                    )}
+                  </ChainIconFrame>
+                  <ChainName size={12} weight="500" cropped>
+                    {coin.ticker}
+                  </ChainName>
+                </ChainTile>
+              )
+            })}
+          </ChainGrid>
+        ) : (
+          <Text color="shy" size={14} centerHorizontally>
+            {t('no_chains_found')}
+          </Text>
+        )}
       </PageContent>
     </VStack>
   )
 }
 
-const CustomUrlText = styled(DescriptionText)`
-  display: block;
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+const ChainGrid = styled.div`
+  display: grid;
+  gap: 24px 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 `
 
-const StatusChip = styled.span<{ isCustom: boolean }>`
-  border-radius: 99px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  white-space: nowrap;
-  background: ${getColor('mist')};
-  color: ${({ isCustom }) =>
-    isCustom ? getColor('primaryAlt') : getColor('textShy')};
+const ChainTile = styled.button`
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: ${getColor('text')};
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-width: 0;
+  padding: 0;
+`
+
+const ChainIconFrame = styled.div<{ $isCustom: boolean }>`
+  align-items: center;
+  background: ${getColor('foreground')};
+  border: 1.5px solid
+    ${({ $isCustom }) =>
+      $isCustom ? getColor('foregroundSuper') : 'transparent'};
+  border-radius: 24px;
+  display: flex;
+  height: 74px;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+`
+
+const EditBadge = styled.div`
+  align-items: center;
+  background: ${getColor('foregroundSuper')};
+  border-bottom-right-radius: 25px;
+  border-top-left-radius: 40px;
+  bottom: 0;
+  color: ${getColor('text')};
+  display: flex;
+  font-size: 12px;
+  height: 24px;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  width: 30px;
+`
+
+const ChainName = styled(Text)`
+  max-width: 100%;
 `

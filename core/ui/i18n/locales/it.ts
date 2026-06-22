@@ -1507,21 +1507,16 @@ export const it = {
   coming_soon: 'Prossimamente',
   custom_rpc: 'RPC personalizzati',
   custom_rpc_chip_custom: 'Personalizzato',
-  custom_rpc_chip_default: 'Predefinito',
   custom_rpc_description: 'Utilizza i tuoi nodi per catena',
   custom_rpc_invalid_response: 'Risposta inattesa da questo endpoint',
   custom_rpc_invalid_url: 'Inserisci un URL http(s) valido',
-  custom_rpc_list_subtitle:
-    'Punta la catena verso il tuo nodo. Lascia l&#39;impostazione predefinita per utilizzare gli endpoint di Vultisig.',
   custom_rpc_reachable: 'Raggiungibile · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Raggiungibile · {{ms}} ms — identità di rete non verificata',
   custom_rpc_reset_button: 'Ripristina le impostazioni predefinite',
-  custom_rpc_test_button: 'Test',
   custom_rpc_testing: 'Test…',
   custom_rpc_unreachable: 'Punto di accesso irraggiungibile',
   custom_rpc_url_hint: 'https://your-node.example',
-  custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Questo endpoint serve una catena diversa',
   vult_tier_label: 'Livello {{tier}}',
   vult_tier_required: 'Livello Argento richiesto',
@@ -1543,4 +1538,10 @@ export const it = {
   feature_gate_your_balance: 'Il tuo saldo',
   get_vult: 'Ottieni $VULT',
   manage_positions: 'Gestisci posizioni',
+  custom_rpc_default_endpoint: 'ENDPOINT PREDEFINITO',
+  custom_rpc_editor_hint: 'Tocca per modificare. Supporta solo endpoint HTTPS.',
+  custom_rpc_save_button: 'Salva RPC',
+  custom_rpc_saved: 'Impostazioni RPC salvate',
+  swap_invalid_external_recipient:
+    'L&#39;indirizzo del destinatario non è valido per {{chain}}',
 }

@@ -1477,21 +1477,16 @@ export const hr = {
   coming_soon: 'Uskoro',
   custom_rpc: 'Prilagođeni RPC-ovi',
   custom_rpc_chip_custom: 'Običaj',
-  custom_rpc_chip_default: 'Zadano',
   custom_rpc_description: 'Koristite vlastite čvorove po lancu',
   custom_rpc_invalid_response: 'Neočekivani odgovor s ove krajnje točke',
   custom_rpc_invalid_url: 'Unesite valjani http(s) URL',
-  custom_rpc_list_subtitle:
-    'Usmjerite lanac na vlastiti čvor. Ostavite zadane postavke za korištenje krajnjih točaka Vultisig.',
   custom_rpc_reachable: 'Dostupno · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Dostupno · {{ms}} ms — identitet mreže nije provjeren',
   custom_rpc_reset_button: 'Vrati na zadano',
-  custom_rpc_test_button: 'Test',
   custom_rpc_testing: 'Testiranje…',
   custom_rpc_unreachable: 'Krajnja točka nije dostupna',
   custom_rpc_url_hint: 'https://your-node.example',
-  custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Ova krajnja točka opslužuje drugi lanac',
   vult_tier_label: 'Razina {{tier}}',
   vult_tier_required: 'Potrebna srebrna razina',
@@ -1513,4 +1508,11 @@ export const hr = {
   feature_gate_your_balance: 'Vaš saldo',
   get_vult: 'Uzmi $VULT',
   manage_positions: 'Upravljanje pozicijama',
+  custom_rpc_default_endpoint: 'ZADANA KRAJNJA TOČKA',
+  custom_rpc_editor_hint:
+    'Dodirnite za uređivanje. Podržava samo HTTPS krajnje točke.',
+  custom_rpc_save_button: 'Spremi RPC',
+  custom_rpc_saved: 'Postavke RPC spremljene',
+  swap_invalid_external_recipient:
+    'Adresa primatelja nije valjana za {{chain}}',
 }

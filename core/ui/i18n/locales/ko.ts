@@ -1470,22 +1470,17 @@ export const ko = {
   coming_soon: '곧 출시 예정',
   custom_rpc: '사용자 정의 RPC',
   custom_rpc_chip_custom: '관습',
-  custom_rpc_chip_default: '기본',
   custom_rpc_description: '체인별로 자체 노드를 사용하십시오.',
   custom_rpc_invalid_response:
     '이 엔드포인트에서 예상치 못한 응답이 발생했습니다.',
   custom_rpc_invalid_url: '유효한 http(s) URL을 입력하세요',
-  custom_rpc_list_subtitle:
-    '자신의 노드를 가리키도록 체인을 설정하세요. 기본값을 유지하면 Vultisig의 엔드포인트를 사용합니다.',
   custom_rpc_reachable: '도달 가능 · {{ms}} ms',
   custom_rpc_reachable_unverified:
     '연결 가능 · {{ms}} ms — 네트워크 ID가 확인되지 않았습니다',
   custom_rpc_reset_button: '기본 설정으로 재설정',
-  custom_rpc_test_button: '시험',
   custom_rpc_testing: '테스트 중…',
   custom_rpc_unreachable: '엔드포인트에 연결할 수 없습니다.',
   custom_rpc_url_hint: 'https://your-node.example',
-  custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: '이 엔드포인트는 다른 체인을 제공합니다.',
   vult_tier_label: '{{tier}} 티어',
   vult_tier_required: '실버 등급 필요',
@@ -1507,4 +1502,10 @@ export const ko = {
   feature_gate_your_balance: '잔액',
   get_vult: '$VULT를 가져오세요',
   manage_positions: '포지션 관리',
+  custom_rpc_default_endpoint: '기본 엔드포인트',
+  custom_rpc_editor_hint: '탭하여 편집하세요. HTTPS 엔드포인트만 지원합니다.',
+  custom_rpc_save_button: 'RPC 저장',
+  custom_rpc_saved: 'RPC 설정이 저장되었습니다.',
+  swap_invalid_external_recipient:
+    '수신자 주소가 {{chain}}에 대해 유효하지 않습니다.',
 }

@@ -1512,21 +1512,16 @@ export const de = {
   coming_soon: 'Demnächst verfügbar',
   custom_rpc: 'Benutzerdefinierte RPCs',
   custom_rpc_chip_custom: 'Benutzerdefiniert',
-  custom_rpc_chip_default: 'Standard',
   custom_rpc_description: 'Verwenden Sie Ihre eigenen Knoten pro Kette',
   custom_rpc_invalid_response: 'Unerwartete Antwort von diesem Endpunkt',
   custom_rpc_invalid_url: 'Geben Sie eine gültige http(s)-URL ein.',
-  custom_rpc_list_subtitle:
-    'Richten Sie eine Kette auf Ihren eigenen Knoten aus. Belassen Sie die Standardeinstellung, um die Endpunkte von Vultisig zu verwenden.',
   custom_rpc_reachable: 'Erreichbar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Erreichbar · {{ms}} ms — Netzwerkidentität nicht verifiziert',
   custom_rpc_reset_button: 'Auf Standardeinstellungen zurücksetzen',
-  custom_rpc_test_button: 'Prüfen',
   custom_rpc_testing: 'Testen…',
   custom_rpc_unreachable: 'Endpunkt nicht erreichbar',
   custom_rpc_url_hint: 'https://your-node.example',
-  custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'Dieser Endpunkt dient einer anderen Kette',
   vult_tier_label: '{{tier}} Tier',
   vult_tier_required: 'Silber-Stufe erforderlich',
@@ -1549,4 +1544,11 @@ export const de = {
   feature_gate_your_balance: 'Ihr Guthaben',
   get_vult: 'Hol dir $VULT',
   manage_positions: 'Positionen verwalten',
+  custom_rpc_default_endpoint: 'STANDARD-ENDPUNKT',
+  custom_rpc_editor_hint:
+    'Zum Bearbeiten tippen. Unterstützt nur HTTPS-Endpunkte.',
+  custom_rpc_save_button: 'Speichern Sie RPC',
+  custom_rpc_saved: 'RPC-Einstellungen gespeichert',
+  swap_invalid_external_recipient:
+    'Die Empfängeradresse ist für {{chain}} ungültig.',
 }
