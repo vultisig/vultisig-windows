@@ -30,7 +30,7 @@ export const FlowErrorPageContent = ({
         />
       </PageContent>
       <PageFooter alignItems="center" gap={12}>
-        {action ? action : <Button onClick={goBack}>{t('back')}</Button>}
+        {action ? action : <Button onClick={goBack}>{t('try_again')}</Button>}
         <Text color="shy" size={12}>
           {t('version')} {version}
         </Text>

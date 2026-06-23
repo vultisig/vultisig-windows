@@ -33,15 +33,17 @@ export const ErrorFallbackContent = ({
   return (
     <VStack alignItems="center" gap={30} justifyContent="center" flexGrow>
       <ErrorStatusIcon variant={variant} />
-      <VStack alignItems="center" gap={14} maxWidth={320}>
-        <Text size={17} weight={500} color="contrast" centerHorizontally>
-          {title}
-        </Text>
-        {description ? (
-          <Text size={13} weight={500} color="shyExtra" centerHorizontally>
-            {description}
+      <VStack alignItems="center" gap={24} fullWidth>
+        <VStack alignItems="center" gap={14} maxWidth={320}>
+          <Text size={17} weight={500} color="contrast" centerHorizontally>
+            {title}
           </Text>
-        ) : null}
+          {description ? (
+            <Text size={13} weight={500} color="shyExtra" centerHorizontally>
+              {description}
+            </Text>
+          ) : null}
+        </VStack>
         {exactError ? (
           <ShowExactErrorCard
             role="button"
@@ -71,7 +73,6 @@ export const ErrorFallbackContent = ({
 
 const ShowExactErrorCard = styled(HStack)`
   width: 100%;
-  margin-top: 10px;
   border-radius: 16px;
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};

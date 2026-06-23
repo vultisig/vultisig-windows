@@ -8,6 +8,9 @@ type ErrorStatusIconProps = {
   variant: ErrorStatusVariant
 }
 
+const ringPath =
+  'M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z'
+
 /**
  * Concentric-circle hero graphic with a centered status badge, matching the
  * Figma error screen. Renders a red ✕ for hard failures and an amber ⚠ for
@@ -18,33 +21,22 @@ export const ErrorStatusIcon = ({ variant }: ErrorStatusIconProps) => (
     <Ring size={262} />
     <Ring size={135} />
     <Ring size={73} />
-    <Badge variant={variant}>
-      {match(variant, {
-        error: () => (
-          <Glyph
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M16 8L8 16M8 8l8 8" />
-          </Glyph>
-        ),
-        warning: () => (
-          <Glyph
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 7v6M12 16.5h.01" />
-          </Glyph>
-        ),
-      })}
+    <Badge
+      variant={variant}
+      viewBox="0 0 24 24"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle className="badge-fill" cx={12} cy={12} r={12} />
+      <path
+        className="badge-stroke"
+        strokeWidth={2}
+        d={match(variant, {
+          error: () => `M15 9L9 15M9 9L15 15 ${ringPath}`,
+          warning: () => `M12 8V12M12 16H12.01 ${ringPath}`,
+        })}
+      />
     </Badge>
   </Hero>
 )
@@ -67,23 +59,20 @@ const Ring = styled.div<{ size: number }>`
   transform: translate(-50%, -50%);
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 50%;
+  opacity: 0.5;
 `
 
-const Badge = styled.div<{ variant: ErrorStatusVariant }>`
+const Badge = styled.svg<{ variant: ErrorStatusVariant }>`
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 24px;
   height: 24px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px ${getColor('background')};
-  background: ${({ variant }) =>
-    getColor(variant === 'error' ? 'danger' : 'idle')};
-  color: ${getColor('background')};
-`
+  flex-shrink: 0;
 
-const Glyph = styled.svg`
-  width: 14px;
-  height: 14px;
+  .badge-fill {
+    fill: ${({ variant }) => getColor(variant === 'error' ? 'danger' : 'idle')};
+  }
+
+  .badge-stroke {
+    stroke: ${getColor('background')};
+  }
 `
