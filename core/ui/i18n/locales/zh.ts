@@ -647,8 +647,14 @@ export const zh = {
   qbtc_claim_utxos_skipped: 'UTXO 跳过',
   qbtc_claim_done: '完毕',
   qbtc_claim_failed: '申领失败，请重试。',
-  qbtc_claim_fast_vault_only:
-    '目前申领需要 Fast Vault。Secure Vault 支持即将推出。',
+  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_description:
+    'This device will co-sign a QBTC claim with its Bitcoin key. The claim is recomputed from this vault, so there is no transaction to review.',
+  qbtc_claim_cosign_amount: 'Amount',
+  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+  qbtc_claim_cosign_success:
+    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
   qbtc_claim_password_description:
     '输入您的 Fast Vault 密码以共同签署申领交易。',
   receive: '收到',

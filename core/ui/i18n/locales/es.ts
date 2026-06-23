@@ -702,8 +702,14 @@ export const es = {
   qbtc_claim_done: 'Hecho',
   qbtc_claim_failed:
     'La reclamación ha fallado. Por favor, inténtelo de nuevo.',
-  qbtc_claim_fast_vault_only:
-    'Actualmente, para reclamar se requiere Fast Vault. La compatibilidad con Secure Vault estará disponible próximamente.',
+  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_description:
+    'This device will co-sign a QBTC claim with its Bitcoin key. The claim is recomputed from this vault, so there is no transaction to review.',
+  qbtc_claim_cosign_amount: 'Amount',
+  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+  qbtc_claim_cosign_success:
+    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
   qbtc_claim_password_description:
     'Ingrese su contraseña de Fast Vault para firmar conjuntamente la transacción de reclamación.',
   receive: 'Recibir',

@@ -47,6 +47,7 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
 
+import { getClaimMessageHashHex } from '../../../../qbtc/claim/utils/getClaimMessageHashHex'
 import {
   getCowSwapKeysignData,
   signCowSwapOrder,
@@ -67,6 +68,34 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
         payload,
         {
           keysign: async payload => {
+            // Secure-vault QBTC claim round 1: a flag-only Bitcoin payload.
+            // Recompute the claim hash from THIS device's own vault (never
+            // trust the wire) and BTC-ECDSA co-sign it. The hash is fully
+            // determined by the vault, so a compromised initiator cannot
+            // divert this signature to an arbitrary Bitcoin spend.
+            if (payload.isQbtcClaim) {
+              const messageHashHex = getClaimMessageHashHex({
+                vault,
+                walletCore,
+              })
+              const [signature] = await keysignAction({
+                msgs: [messageHashHex],
+                signatureAlgorithm: 'ecdsa',
+                coinType: getCoinType({ walletCore, chain: Chain.Bitcoin }),
+                chain: Chain.Bitcoin,
+              })
+
+              const result = generateSignature({
+                walletCore,
+                signature,
+                signatureFormat: signatureFormats.utxo,
+              })
+
+              return {
+                signature: Buffer.from(result).toString('hex'),
+              }
+            }
+
             const chain = getKeysignChain(payload)
 
             // CowSwap RFQ: off-chain order signed via EIP-712 and submitted to

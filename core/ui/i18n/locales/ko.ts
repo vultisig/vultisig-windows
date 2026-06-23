@@ -690,8 +690,14 @@ export const ko = {
   qbtc_claim_utxos_skipped: 'UTXO가 건너뛰었습니다',
   qbtc_claim_done: '완료',
   qbtc_claim_failed: '청구가 실패했습니다. 다시 시도해 주세요.',
-  qbtc_claim_fast_vault_only:
-    '현재 클레임을 위해서는 Fast Vault가 필요합니다. Secure Vault 지원은 곧 제공될 예정입니다.',
+  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_description:
+    'This device will co-sign a QBTC claim with its Bitcoin key. The claim is recomputed from this vault, so there is no transaction to review.',
+  qbtc_claim_cosign_amount: 'Amount',
+  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+  qbtc_claim_cosign_success:
+    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
   qbtc_claim_password_description:
     '청구 거래에 공동 서명하려면 Fast Vault 비밀번호를 입력하십시오.',
   receive: '받다',
