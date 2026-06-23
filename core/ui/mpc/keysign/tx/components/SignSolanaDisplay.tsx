@@ -15,7 +15,6 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js'
 import { SignSolana } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
 
@@ -41,6 +40,11 @@ type InstructionSummary = {
   instructionType: string | null
   accountsCount: number
   dataLength: number
+}
+
+type ParseSolanaTransactionInstructionsInput = {
+  rawMessageBase64: string
+  transactionIndex: number
 }
 
 const systemProgramId = SystemProgram.programId.toBase58()
@@ -90,10 +94,10 @@ const getInstructionType = (
   return null
 }
 
-const parseSolanaTransactionInstructions = (
-  rawMessageBase64: string,
-  transactionIndex: number
-): InstructionSummary[] => {
+const parseSolanaTransactionInstructions = ({
+  rawMessageBase64,
+  transactionIndex,
+}: ParseSolanaTransactionInstructionsInput): InstructionSummary[] => {
   try {
     const buffer = Buffer.from(rawMessageBase64, 'base64')
     const txInputDataArray = Object.values(buffer)
@@ -152,24 +156,19 @@ export const SignSolanaDisplay = ({
   signSolana: SignSolana
 }) => {
   const { t } = useTranslation()
-  const instructionsSummary = useMemo(() => {
-    const allInstructions: InstructionSummary[] = []
-    signSolana.rawTransactions.forEach((tx, index) => {
-      const instructions = parseSolanaTransactionInstructions(tx, index + 1)
-      allInstructions.push(...instructions)
+  const instructionsSummary = signSolana.rawTransactions.flatMap((tx, index) =>
+    parseSolanaTransactionInstructions({
+      rawMessageBase64: tx,
+      transactionIndex: index + 1,
     })
-    return allInstructions
-  }, [signSolana.rawTransactions])
+  )
   const transactionCount = signSolana.rawTransactions.length
-  const rawTransactionData = useMemo(() => {
-    if (transactionCount <= 1) {
-      return signSolana.rawTransactions.join('\n')
-    }
-
-    return signSolana.rawTransactions
-      .map((transaction, index) => `#${index + 1}\n${transaction}`)
-      .join('\n\n')
-  }, [signSolana.rawTransactions, transactionCount])
+  const rawTransactionData =
+    transactionCount <= 1
+      ? signSolana.rawTransactions.join('\n')
+      : signSolana.rawTransactions
+          .map((transaction, index) => `#${index + 1}\n${transaction}`)
+          .join('\n\n')
 
   return (
     <VStack gap={16}>
