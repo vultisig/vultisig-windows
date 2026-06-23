@@ -52,7 +52,7 @@ export const ErrorFallbackContent = ({
   const exactError = error ? extractErrorMsg(error) : undefined
 
   return (
-    <VStack alignItems="center" gap={30} justifyContent="center" flexGrow>
+    <VStack alignItems="center" gap={64} justifyContent="center" flexGrow>
       <ErrorStatusIcon variant={variant} />
       <VStack alignItems="center" gap={24} fullWidth>
         <VStack alignItems="center" gap={14} maxWidth={320}>

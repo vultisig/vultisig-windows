@@ -1525,4 +1525,6 @@ export const ru = {
   show_exact_error: 'Показать точную ошибку',
   swap_invalid_external_recipient:
     'Адрес получателя недействителен для {{chain}}',
+  signing_error_description:
+    'Одно из ваших устройств не ответило вовремя. Проверьте подключение и попробуйте снова.',
 }

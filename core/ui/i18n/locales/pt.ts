@@ -1544,4 +1544,6 @@ export const pt = {
   show_exact_error: 'Mostrar erro exato',
   swap_invalid_external_recipient:
     'O endereço do destinatário não é válido para {{chain}}',
+  signing_error_description:
+    'Um dos seus dispositivos não respondeu a tempo. Verifique sua conexão e tente novamente.',
 }

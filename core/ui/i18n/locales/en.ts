@@ -939,6 +939,8 @@ export const en = {
   signed_signature: 'Signed Signature',
   signing_address: 'Signing Address',
   signing_error: 'Signing Error. Please try again.',
+  signing_error_description:
+    "One of your devices didn't respond in time. Check your connection and try again.",
   signing_method: 'Signing Method',
   silver: 'Silver',
   site: 'Site',

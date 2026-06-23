@@ -182,6 +182,7 @@ export const KeysignSigningStep = ({
             variant="error"
             error={error}
             title={t('signing_error')}
+            description={t('signing_error_description')}
           />
         )
       }}

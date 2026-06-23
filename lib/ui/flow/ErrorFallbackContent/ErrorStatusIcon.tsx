@@ -51,8 +51,8 @@ const Hero = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 262px;
-  height: 262px;
+  width: 24px;
+  height: 24px;
 `
 
 const Ring = styled.div<{ size: number }>`

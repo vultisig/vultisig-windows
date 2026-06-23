@@ -1556,4 +1556,6 @@ export const de = {
   show_exact_error: 'Genauen Fehler anzeigen',
   swap_invalid_external_recipient:
     'Die Empfängeradresse ist für {{chain}} ungültig.',
+  signing_error_description:
+    'Eines Ihrer Geräte hat nicht rechtzeitig reagiert. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
 }

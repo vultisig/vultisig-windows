@@ -1424,4 +1424,6 @@ export const zh = {
   report_bug: '报告错误',
   show_exact_error: '显示确切错误',
   swap_invalid_external_recipient: '收件人地址对 {{chain}} 无效。',
+  signing_error_description:
+    '您的某个设备未及时响应。请检查您的网络连接并重试。',
 }

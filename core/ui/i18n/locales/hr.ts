@@ -1520,4 +1520,6 @@ export const hr = {
   show_exact_error: 'Prikaži točnu grešku',
   swap_invalid_external_recipient:
     'Adresa primatelja nije valjana za {{chain}}',
+  signing_error_description:
+    'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
 }

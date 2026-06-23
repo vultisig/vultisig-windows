@@ -1527,4 +1527,6 @@ export const nl = {
   show_exact_error: 'Geef de exacte fout weer',
   swap_invalid_external_recipient:
     'Het ontvangersadres is niet geldig voor {{chain}}',
+  signing_error_description:
+    'Een van uw apparaten reageerde niet op tijd. Controleer uw verbinding en probeer het opnieuw.',
 }

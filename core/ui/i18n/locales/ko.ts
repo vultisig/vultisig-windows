@@ -1514,4 +1514,6 @@ export const ko = {
   show_exact_error: '정확한 오류 표시',
   swap_invalid_external_recipient:
     '수신자 주소가 {{chain}}에 대해 유효하지 않습니다.',
+  signing_error_description:
+    '사용 중인 기기 중 하나가 제때 응답하지 않았습니다. 연결 상태를 확인하고 다시 시도해 주세요.',
 }
