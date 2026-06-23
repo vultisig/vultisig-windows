@@ -690,14 +690,14 @@ export const ko = {
   qbtc_claim_utxos_skipped: 'UTXO가 건너뛰었습니다',
   qbtc_claim_done: '완료',
   qbtc_claim_failed: '청구가 실패했습니다. 다시 시도해 주세요.',
-  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_title: 'QBTC 클레임에 공동 서명',
   qbtc_claim_cosign_description:
-    'This device will co-sign a QBTC claim with its Bitcoin key. The claim is recomputed from this vault, so there is no transaction to review.',
-  qbtc_claim_cosign_amount: 'Amount',
-  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
-  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+    '아래의 청구 요청을 검토하신 후, 이 금고의 비트코인 ​​키로 공동 서명하는 것을 승인해 주세요.',
+  qbtc_claim_cosign_amount: '양',
+  qbtc_claim_cosign_btc_address: '비트코인 주소(소유권 증명)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
   qbtc_claim_cosign_success:
-    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
+    'QBTC 클레임에 공동 서명하셨습니다. 다른 기기에서 서명을 완료하고 브로드캐스트할 것입니다.',
   qbtc_claim_password_description:
     '청구 거래에 공동 서명하려면 Fast Vault 비밀번호를 입력하십시오.',
   receive: '받다',
@@ -1513,4 +1513,6 @@ export const ko = {
   feature_gate_your_balance: '잔액',
   get_vult: '$VULT를 가져오세요',
   manage_positions: '포지션 관리',
+  swap_invalid_external_recipient:
+    '수신자 주소가 {{chain}}에 대해 유효하지 않습니다.',
 }

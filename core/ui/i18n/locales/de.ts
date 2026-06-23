@@ -711,12 +711,12 @@ export const de = {
     'Die Reklamation ist fehlgeschlagen. Bitte versuchen Sie es erneut.',
   qbtc_claim_cosign_title: 'Co-sign QBTC claim',
   qbtc_claim_cosign_description:
-    'This device will co-sign a QBTC claim with its Bitcoin key. The claim is recomputed from this vault, so there is no transaction to review.',
-  qbtc_claim_cosign_amount: 'Amount',
-  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
-  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+    'Prüfen Sie den unten stehenden Anspruchsantrag und genehmigen Sie anschließend die Mitunterzeichnung mit dem Bitcoin-Schlüssel dieses Tresors.',
+  qbtc_claim_cosign_amount: 'Menge',
+  qbtc_claim_cosign_btc_address: 'Bitcoin-Adresse (Eigentumsnachweis)',
+  qbtc_claim_cosign_qbtc_address: 'Adresse QBTC (Anspruchsempfänger)',
   qbtc_claim_cosign_success:
-    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
+    'Sie haben den Anspruch QBTC mitsigniert. Das andere Gerät wird ihn abschließen und senden.',
   qbtc_claim_password_description:
     'Geben Sie Ihr Fast Vault-Passwort ein, um die Schadensabwicklung mitzuunterzeichnen.',
   receive: 'Erhalten',
@@ -1555,4 +1555,6 @@ export const de = {
   feature_gate_your_balance: 'Ihr Guthaben',
   get_vult: 'Hol dir $VULT',
   manage_positions: 'Positionen verwalten',
+  swap_invalid_external_recipient:
+    'Die Empfängeradresse ist für {{chain}} ungültig.',
 }

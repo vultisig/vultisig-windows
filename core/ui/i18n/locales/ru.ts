@@ -692,14 +692,15 @@ export const ru = {
   qbtc_claim_utxos_skipped: 'UTXO пропущены',
   qbtc_claim_done: 'Готово',
   qbtc_claim_failed: 'Заявка не прошла. Пожалуйста, попробуйте еще раз.',
-  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_title: 'Подписать совместно заявку QBTC',
   qbtc_claim_cosign_description:
-    'This device will co-sign a QBTC claim with its Bitcoin key. The claim is recomputed from this vault, so there is no transaction to review.',
-  qbtc_claim_cosign_amount: 'Amount',
-  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
-  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+    'Ознакомьтесь с запросом на получение средств ниже, а затем подтвердите его, подписав его совместно с биткойн-ключом этого хранилища.',
+  qbtc_claim_cosign_amount: 'Количество',
+  qbtc_claim_cosign_btc_address:
+    'Биткоин-адрес (подтверждение права собственности)',
+  qbtc_claim_cosign_qbtc_address: 'Адрес QBTC (получатель заявки)',
   qbtc_claim_cosign_success:
-    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
+    'Вы подписали совместно запрос QBTC. Другое устройство завершит его и передаст дальше.',
   qbtc_claim_password_description:
     'Введите свой пароль от Fast Vault, чтобы подписать транзакцию по заявке.',
   receive: 'Получить',
@@ -1524,4 +1525,6 @@ export const ru = {
   feature_gate_your_balance: 'Ваш баланс',
   get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
+  swap_invalid_external_recipient:
+    'Адрес получателя недействителен для {{chain}}',
 }

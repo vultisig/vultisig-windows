@@ -696,14 +696,14 @@ export const nl = {
   qbtc_claim_utxos_skipped: 'UTXO&#39;s overgeslagen',
   qbtc_claim_done: 'Klaar',
   qbtc_claim_failed: 'Claim mislukt. Probeer het opnieuw.',
-  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_title: 'Medeonderteken de QBTC-claim',
   qbtc_claim_cosign_description:
-    'This device will co-sign a QBTC claim with its Bitcoin key. The claim is recomputed from this vault, so there is no transaction to review.',
-  qbtc_claim_cosign_amount: 'Amount',
-  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
-  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+    'Bekijk het onderstaande claimverzoek en keur vervolgens de medeondertekening ervan goed met de Bitcoin-sleutel van deze kluis.',
+  qbtc_claim_cosign_amount: 'Hoeveelheid',
+  qbtc_claim_cosign_btc_address: 'Bitcoin-adres (bewijs van eigendom)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
   qbtc_claim_cosign_success:
-    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
+    'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
   qbtc_claim_password_description:
     'Voer uw Fast Vault-wachtwoord in om de claimtransactie mede te ondertekenen.',
   receive: 'Ontvangen',
@@ -1526,4 +1526,6 @@ export const nl = {
   feature_gate_your_balance: 'Uw saldo',
   get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
+  swap_invalid_external_recipient:
+    'Het ontvangersadres is niet geldig voor {{chain}}',
 }

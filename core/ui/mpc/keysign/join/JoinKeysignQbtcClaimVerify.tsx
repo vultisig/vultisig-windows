@@ -9,6 +9,7 @@ import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
@@ -26,10 +27,14 @@ export const JoinKeysignQbtcClaimVerify = ({
 
   const coin = shouldBePresent(value.coin, 'QBTC claim coin')
 
-  const claimedAmount = formatAmount(
-    fromChainAmount(BigInt(value.toAmount), coin.decimals),
-    { precision: 'high' }
+  // `toAmount` comes off the wire — guard the BigInt parse so a malformed value
+  // shows a placeholder instead of crashing the verify screen.
+  const parsedAmount = attempt(() =>
+    formatAmount(fromChainAmount(BigInt(value.toAmount), coin.decimals), {
+      precision: 'high',
+    })
   )
+  const claimedAmount = 'data' in parsedAmount ? parsedAmount.data : '—'
 
   return (
     <VStack gap={16}>
