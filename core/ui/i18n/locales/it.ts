@@ -1543,4 +1543,11 @@ export const it = {
   feature_gate_your_balance: 'Il tuo saldo',
   get_vult: 'Ottieni $VULT',
   manage_positions: 'Gestisci posizioni',
+  copied: 'Copiato',
+  copy: 'Copia',
+  error_message: 'Messaggio di errore',
+  report_bug: 'Segnala un bug',
+  show_exact_error: 'Mostra l&#39;errore esatto',
+  swap_invalid_external_recipient:
+    'L&#39;indirizzo del destinatario non è valido per {{chain}}',
 }

@@ -1513,4 +1513,11 @@ export const hr = {
   feature_gate_your_balance: 'Vaš saldo',
   get_vult: 'Uzmi $VULT',
   manage_positions: 'Upravljanje pozicijama',
+  copied: 'Kopirano',
+  copy: 'Kopirati',
+  error_message: 'Poruka o pogrešci',
+  report_bug: 'Prijavi grešku',
+  show_exact_error: 'Prikaži točnu grešku',
+  swap_invalid_external_recipient:
+    'Adresa primatelja nije valjana za {{chain}}',
 }

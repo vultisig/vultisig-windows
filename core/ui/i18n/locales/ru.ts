@@ -1518,4 +1518,11 @@ export const ru = {
   feature_gate_your_balance: 'Ваш баланс',
   get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
+  copied: 'Скопировано',
+  copy: 'Копия',
+  error_message: 'Сообщение об ошибке',
+  report_bug: 'Сообщить об ошибке',
+  show_exact_error: 'Показать точную ошибку',
+  swap_invalid_external_recipient:
+    'Адрес получателя недействителен для {{chain}}',
 }

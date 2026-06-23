@@ -1535,4 +1535,11 @@ export const es = {
   feature_gate_your_balance: 'Tu saldo',
   get_vult: 'Obtén $VULT',
   manage_positions: 'Gestionar posiciones',
+  copied: 'Copiado',
+  copy: 'Copiar',
+  error_message: 'Mensaje de error',
+  report_bug: 'Informar de un error',
+  show_exact_error: 'Mostrar error exacto',
+  swap_invalid_external_recipient:
+    'La dirección del destinatario no es válida para {{chain}}.',
 }

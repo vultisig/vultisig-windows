@@ -1418,4 +1418,10 @@ export const zh = {
   feature_gate_your_balance: '您的余额',
   get_vult: '获取 $VULT',
   manage_positions: '管理仓位',
+  copied: '已复制',
+  copy: '复制',
+  error_message: '错误信息',
+  report_bug: '报告错误',
+  show_exact_error: '显示确切错误',
+  swap_invalid_external_recipient: '收件人地址对 {{chain}} 无效。',
 }

@@ -1549,4 +1549,11 @@ export const de = {
   feature_gate_your_balance: 'Ihr Guthaben',
   get_vult: 'Hol dir $VULT',
   manage_positions: 'Positionen verwalten',
+  copied: 'Kopiert',
+  copy: 'Kopie',
+  error_message: 'Fehlermeldung',
+  report_bug: 'Fehler melden',
+  show_exact_error: 'Genauen Fehler anzeigen',
+  swap_invalid_external_recipient:
+    'Die Empfängeradresse ist für {{chain}} ungültig.',
 }

@@ -1520,4 +1520,11 @@ export const nl = {
   feature_gate_your_balance: 'Uw saldo',
   get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
+  copied: 'Gekopieerd',
+  copy: 'Kopiëren',
+  error_message: 'Foutmelding',
+  report_bug: 'Een bug melden',
+  show_exact_error: 'Geef de exacte fout weer',
+  swap_invalid_external_recipient:
+    'Het ontvangersadres is niet geldig voor {{chain}}',
 }

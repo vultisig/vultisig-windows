@@ -1507,4 +1507,11 @@ export const ko = {
   feature_gate_your_balance: '잔액',
   get_vult: '$VULT를 가져오세요',
   manage_positions: '포지션 관리',
+  copied: '복사됨',
+  copy: '복사',
+  error_message: '오류 메시지',
+  report_bug: '버그 신고',
+  show_exact_error: '정확한 오류 표시',
+  swap_invalid_external_recipient:
+    '수신자 주소가 {{chain}}에 대해 유효하지 않습니다.',
 }

@@ -1537,4 +1537,11 @@ export const pt = {
   feature_gate_your_balance: 'Seu saldo',
   get_vult: 'Obtenha $VULT',
   manage_positions: 'Gerenciar posições',
+  copied: 'Copiado',
+  copy: 'Cópia',
+  error_message: 'Mensagem de erro',
+  report_bug: 'Reportar um bug',
+  show_exact_error: 'Mostrar erro exato',
+  swap_invalid_external_recipient:
+    'O endereço do destinatário não é válido para {{chain}}',
 }

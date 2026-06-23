@@ -1,84 +1,86 @@
-import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
+import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
+import { ReactNode, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export type ErrorFallbackContentProps = TitleProp & { error?: unknown }
+import { ErrorStatusIcon, ErrorStatusVariant } from './ErrorStatusIcon'
+import { ShowExactErrorModal } from './ShowExactErrorModal'
+
+export type ErrorFallbackContentProps = TitleProp & {
+  error?: unknown
+  description?: ReactNode
+  variant?: ErrorStatusVariant
+  onReportBug?: () => void
+}
 
 export const ErrorFallbackContent = ({
   error,
   title,
+  description,
+  variant = 'warning',
+  onReportBug,
 }: ErrorFallbackContentProps) => {
+  const { t } = useTranslation()
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+
+  const exactError = error ? extractErrorMsg(error) : undefined
+
   return (
-    <VStack alignItems="center" gap={24} justifyContent="center" flexGrow>
-      <IconWrapper alignItems="center" justifyContent="center">
-        <CircleAlertIcon />
-      </IconWrapper>
-      <VStack alignItems="center" gap={12} maxWidth={350}>
-        <Text size={22} color="idle" centerHorizontally>
+    <VStack alignItems="center" gap={30} justifyContent="center" flexGrow>
+      <ErrorStatusIcon variant={variant} />
+      <VStack alignItems="center" gap={14} maxWidth={320}>
+        <Text size={17} weight={500} color="contrast" centerHorizontally>
           {title}
         </Text>
-        {error ? (
-          <Text
-            color="shy"
-            size={14}
-            style={{ wordBreak: 'break-word', maxWidth: '100%' }}
-            centerHorizontally
-          >
-            {extractErrorMsg(error)}
+        {description ? (
+          <Text size={13} weight={500} color="shyExtra" centerHorizontally>
+            {description}
           </Text>
         ) : null}
+        {exactError ? (
+          <ShowExactErrorCard
+            role="button"
+            tabIndex={0}
+            onClick={() => setIsErrorModalOpen(true)}
+            alignItems="center"
+            justifyContent="space-between"
+            gap={4}
+          >
+            <Text size={14} weight={500} color="shyExtra">
+              {t('show_exact_error')}
+            </Text>
+            <ChevronDownIcon />
+          </ShowExactErrorCard>
+        ) : null}
       </VStack>
+      {isErrorModalOpen && exactError ? (
+        <ShowExactErrorModal
+          message={exactError}
+          onReportBug={onReportBug}
+          onClose={() => setIsErrorModalOpen(false)}
+        />
+      ) : null}
     </VStack>
   )
 }
 
-const IconWrapper = styled(HStack)`
-  border-color: ${getColor('idle')};
-  border-radius: 50%;
-  border-style: solid;
-  border-width: 1px;
+const ShowExactErrorCard = styled(HStack)`
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 16px;
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+  padding: 20px;
+  cursor: pointer;
+  color: ${getColor('contrast')};
   font-size: 20px;
-  height: 24px;
-  padding: 1px;
-  position: relative;
-  width: 24px;
 
-  svg {
-    fill: ${getColor('idle')};
-    color: ${getColor('foreground')};
-  }
-
-  &::after {
-    border-color: ${getColor('foregroundDark')};
-    border-radius: 50%;
-    border-style: solid;
-    border-width: 1px;
-    content: '';
-    height: 136px;
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 136px;
-    z-index: -1;
-  }
-
-  &::before {
-    border-color: ${getColor('foregroundDark')};
-    border-radius: 50%;
-    border-style: solid;
-    border-width: 1px;
-    content: '';
-    height: 72px;
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 72px;
-    z-index: -1;
+  &:hover {
+    background: ${getColor('foregroundDark')};
   }
 `
