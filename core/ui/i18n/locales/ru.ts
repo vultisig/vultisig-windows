@@ -1519,7 +1519,7 @@ export const ru = {
   get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
   copied: 'Скопировано',
-  copy: 'Копия',
+  copy: 'Копировать',
   error_message: 'Сообщение об ошибке',
   report_bug: 'Сообщить об ошибке',
   show_exact_error: 'Показать точную ошибку',

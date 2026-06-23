@@ -1550,7 +1550,7 @@ export const de = {
   get_vult: 'Hol dir $VULT',
   manage_positions: 'Positionen verwalten',
   copied: 'Kopiert',
-  copy: 'Kopie',
+  copy: 'Kopieren',
   error_message: 'Fehlermeldung',
   report_bug: 'Fehler melden',
   show_exact_error: 'Genauen Fehler anzeigen',

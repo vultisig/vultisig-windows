@@ -15,6 +15,15 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
 
+/**
+ * Props for {@link ShowExactErrorModal}.
+ *
+ * @property message - Raw technical error text rendered inside the sheet.
+ * @property onReportBug - Invoked by the "Report Bug" action after the raw error
+ *   is copied to the clipboard; typically opens the Vultisig Discord support
+ *   channel. When omitted, the "Report Bug" action is hidden.
+ * @property onClose - Closes the sheet (from `OnCloseProp`).
+ */
 type ShowExactErrorModalProps = OnCloseProp & {
   message: string
   onReportBug?: () => void

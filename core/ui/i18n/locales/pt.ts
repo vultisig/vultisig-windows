@@ -1538,7 +1538,7 @@ export const pt = {
   get_vult: 'Obtenha $VULT',
   manage_positions: 'Gerenciar posições',
   copied: 'Copiado',
-  copy: 'Cópia',
+  copy: 'Copiar',
   error_message: 'Mensagem de erro',
   report_bug: 'Reportar um bug',
   show_exact_error: 'Mostrar erro exato',

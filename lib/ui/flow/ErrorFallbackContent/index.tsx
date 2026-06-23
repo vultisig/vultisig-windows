@@ -69,7 +69,14 @@ export const ErrorFallbackContent = ({
           <ShowExactErrorCard
             role="button"
             tabIndex={0}
+            aria-haspopup="dialog"
             onClick={() => setIsErrorModalOpen(true)}
+            onKeyDown={event => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                setIsErrorModalOpen(true)
+              }
+            }}
             alignItems="center"
             justifyContent="space-between"
             gap={4}
@@ -104,5 +111,10 @@ const ShowExactErrorCard = styled(HStack)`
 
   &:hover {
     background: ${getColor('foregroundDark')};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${getColor('contrast')};
+    outline-offset: 2px;
   }
 `
