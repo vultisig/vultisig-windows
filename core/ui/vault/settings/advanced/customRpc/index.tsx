@@ -13,7 +13,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { customRpcSupportedChains } from '@vultisig/core-chain/chains/customRpc/customRpcSupportedChains'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { ChangeEvent, useMemo, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -34,22 +34,18 @@ export const CustomRpcPage = () => {
   const overrides = useCustomRpcOverrides()
   const [search, setSearch] = useState('')
 
-  const chains = useMemo(() => {
-    const normalized = search.trim().toLowerCase()
-    if (!normalized) {
-      return customRpcSupportedChains
-    }
+  const normalized = search.trim().toLowerCase()
+  const chains = normalized
+    ? customRpcSupportedChains.filter(chain => {
+        const coin = chainFeeCoin[chain]
+        const displayName = getCustomRpcChainName(chain)
 
-    return customRpcSupportedChains.filter(chain => {
-      const coin = chainFeeCoin[chain]
-      const displayName = getCustomRpcChainName(chain)
-
-      return (
-        displayName.toLowerCase().includes(normalized) ||
-        coin.ticker.toLowerCase().includes(normalized)
-      )
-    })
-  }, [search])
+        return (
+          displayName.toLowerCase().includes(normalized) ||
+          coin.ticker.toLowerCase().includes(normalized)
+        )
+      })
+    : customRpcSupportedChains
 
   return (
     <VStack fullHeight>
@@ -138,6 +134,7 @@ const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => (
       value={value}
       onChange={onChange}
       placeholder={placeholder}
+      aria-label={placeholder}
     />
   </SearchWrapper>
 )

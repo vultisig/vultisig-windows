@@ -75,7 +75,8 @@ export const CustomRpcDetailPage = () => {
   const clearsExisting = isEmpty && Boolean(existingOverride)
   // A failed save-time probe blocks persisting the endpoint until the field changes.
   const probeFailed =
-    probe.data !== undefined && probe.data.status !== 'reachable'
+    probe.isError ||
+    (probe.data !== undefined && probe.data.status !== 'reachable')
   const canSave = (isValid || clearsExisting) && !probeFailed
   const isSaving = setOverride.isPending || clearOverride.isPending
 
@@ -95,9 +96,9 @@ export const CustomRpcDetailPage = () => {
         },
       })
     } else {
-      const result = await probe.mutateAsync(trimmed)
+      const result = await probe.mutateAsync(trimmed).catch(() => undefined)
 
-      if (result.status !== 'reachable') {
+      if (result?.status !== 'reachable') {
         return
       }
 
@@ -146,7 +147,11 @@ export const CustomRpcDetailPage = () => {
               {t('custom_rpc_invalid_url')}
             </Text>
           )}
-          <TestResult isTesting={probe.isPending} result={probe.data} />
+          <TestResult
+            hasError={probe.isError}
+            isTesting={probe.isPending}
+            result={probe.data}
+          />
           {existingOverride && defaultRpcUrl && (
             <DefaultEndpointCard>
               <Text size={14} color="shy" weight="500" height={20 / 14}>
@@ -264,11 +269,12 @@ const DefaultEndpointText = styled(Text)`
 `
 
 type TestResultProps = {
+  hasError: boolean
   isTesting: boolean
   result: Awaited<ReturnType<typeof probeRpcHealth>> | undefined
 }
 
-const TestResult = ({ isTesting, result }: TestResultProps) => {
+const TestResult = ({ hasError, isTesting, result }: TestResultProps) => {
   const { t } = useTranslation()
 
   if (isTesting) {
@@ -279,16 +285,24 @@ const TestResult = ({ isTesting, result }: TestResultProps) => {
     )
   }
 
-  if (!result) {
+  if (!result && !hasError) {
     return null
   }
 
-  if (result.status === 'reachable') {
+  if (result?.status === 'reachable') {
     return (
       <Text color="success" size={12}>
         {result.networkVerified
           ? t('custom_rpc_reachable', { ms: result.latencyMs })
           : t('custom_rpc_reachable_unverified', { ms: result.latencyMs })}
+      </Text>
+    )
+  }
+
+  if (!result) {
+    return (
+      <Text color="danger" size={12}>
+        {t('custom_rpc_unreachable')}
       </Text>
     )
   }

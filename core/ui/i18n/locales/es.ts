@@ -1498,7 +1498,7 @@ export const es = {
   auto: 'Auto',
   coming_soon: 'Muy pronto',
   custom_rpc: 'RPC personalizados',
-  custom_rpc_chip_custom: 'Costumbre',
+  custom_rpc_chip_custom: 'Personalizado',
   custom_rpc_description: 'Utilice sus propios nodos por cadena.',
   custom_rpc_invalid_response: 'Respuesta inesperada de este punto final.',
   custom_rpc_invalid_url: 'Introduzca una URL HTTPS válida.',
@@ -1512,7 +1512,7 @@ export const es = {
   custom_rpc_wrong_chain: 'Este punto final sirve a una cadena diferente',
   vult_tier_required: 'VULT TIER',
   send_to_different_address: 'Enviar a una dirección diferente',
-  slippage_custom: 'Costumbre',
+  slippage_custom: 'Personalizado',
   slippage_helper:
     'Limita cuánto puede variar el precio antes de que se cancele la ejecución.',
   slippage_tolerance: 'Tolerancia de deslizamiento',
