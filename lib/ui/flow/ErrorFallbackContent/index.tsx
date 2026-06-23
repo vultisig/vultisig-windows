@@ -11,6 +11,20 @@ import styled from 'styled-components'
 import { ErrorStatusIcon, ErrorStatusVariant } from './ErrorStatusIcon'
 import { ShowExactErrorModal } from './ShowExactErrorModal'
 
+/**
+ * Props for {@link ErrorFallbackContent}.
+ *
+ * @property title - Human-readable error name shown as the primary message.
+ * @property error - Raw error surfaced behind the "Show exact error" sheet. When
+ *   omitted, the disclosure card is hidden.
+ * @property description - Plain-language explanation and the action to take,
+ *   rendered under the title.
+ * @property variant - Status icon variant: `error` (red ✕, hard failure) or
+ *   `warning` (amber ⚠, recoverable / precondition error). Defaults to `warning`.
+ * @property onReportBug - Invoked from the "Report Bug" action in the exact-error
+ *   sheet; typically opens the Vultisig Discord support channel. When omitted, the
+ *   "Report Bug" action is hidden.
+ */
 export type ErrorFallbackContentProps = TitleProp & {
   error?: unknown
   description?: ReactNode
@@ -18,6 +32,13 @@ export type ErrorFallbackContentProps = TitleProp & {
   onReportBug?: () => void
 }
 
+/**
+ * Friendly, actionable error screen. Renders the concentric-circle hero graphic
+ * with a red ✕ / amber ⚠ status badge, the error title and description, and—when
+ * a raw error is provided—a "Show exact error" card that opens
+ * {@link ShowExactErrorModal} with Copy / Report Bug actions. Leads with the
+ * human-readable message instead of dumping the raw exception.
+ */
 export const ErrorFallbackContent = ({
   error,
   title,
