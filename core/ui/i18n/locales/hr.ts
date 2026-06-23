@@ -695,7 +695,7 @@ export const hr = {
   qbtc_claim_cosign_title: 'Supotpišite zahtjev QBTC',
   qbtc_claim_cosign_description:
     'Pregledajte zahtjev za polaganje prava u nastavku, a zatim odobrite njegovo supotpisivanje Bitcoin ključem ovog trezora.',
-  qbtc_claim_cosign_amount: 'Iznositi',
+  qbtc_claim_cosign_amount: 'Iznos',
   qbtc_claim_cosign_btc_address: 'Bitcoin adresa (dokaz vlasništva)',
   qbtc_claim_cosign_qbtc_address: 'Adresa QBTC (primatelj zahtjeva)',
   qbtc_claim_cosign_success:
