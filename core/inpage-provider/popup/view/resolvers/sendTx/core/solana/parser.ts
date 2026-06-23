@@ -176,7 +176,9 @@ export const parseSolanaTx = async ({
   )
 
   if (parsedTx && 'raw' in parsedTx) {
-    return getSolanaRawTxFallback(data)
+    return {
+      raw: parsedTx.raw,
+    }
   }
 
   if (parsedTx && 'transfer' in parsedTx) {
