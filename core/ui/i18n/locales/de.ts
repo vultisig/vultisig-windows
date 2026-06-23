@@ -1549,4 +1549,8 @@ export const de = {
   feature_gate_your_balance: 'Ihr Guthaben',
   get_vult: 'Hol dir $VULT',
   manage_positions: 'Positionen verwalten',
+  advanced_swap_settings_gate_description:
+    'Optimieren Sie Ihre Swaps mit individueller Slippage, Gaslimit und einer externen Empfängeradresse.',
+  swap_invalid_external_recipient:
+    'Die Empfängeradresse ist für {{chain}} ungültig.',
 }

@@ -1518,4 +1518,8 @@ export const ru = {
   feature_gate_your_balance: 'Ваш баланс',
   get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
+  advanced_swap_settings_gate_description:
+    'Настройте параметры свопов с помощью настраиваемого проскальзывания, лимита газа и внешнего адреса получателя.',
+  swap_invalid_external_recipient:
+    'Адрес получателя недействителен для {{chain}}',
 }

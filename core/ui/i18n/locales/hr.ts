@@ -1513,4 +1513,8 @@ export const hr = {
   feature_gate_your_balance: 'Vaš saldo',
   get_vult: 'Uzmi $VULT',
   manage_positions: 'Upravljanje pozicijama',
+  advanced_swap_settings_gate_description:
+    'Prilagodite svoje swapove prilagođenim proklizavanjem, ograničenjem plina i vanjskom adresom primatelja.',
+  swap_invalid_external_recipient:
+    'Adresa primatelja nije valjana za {{chain}}',
 }

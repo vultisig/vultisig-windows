@@ -1507,4 +1507,8 @@ export const ko = {
   feature_gate_your_balance: '잔액',
   get_vult: '$VULT를 가져오세요',
   manage_positions: '포지션 관리',
+  advanced_swap_settings_gate_description:
+    '사용자 지정 슬리피지, 가스 한도 및 외부 수취인 주소를 사용하여 스왑을 세밀하게 조정하세요.',
+  swap_invalid_external_recipient:
+    '수신자 주소가 {{chain}}에 대해 유효하지 않습니다.',
 }

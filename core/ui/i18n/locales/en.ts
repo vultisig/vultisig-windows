@@ -41,6 +41,8 @@ export const en = {
   advanced_description: 'Reshare, manage security or sign messages.',
   advanced_gas_fee: 'Advanced gas fee',
   advanced_settings: 'Advanced Settings',
+  advanced_swap_settings_gate_description:
+    'Fine-tune your swaps with custom slippage, gas limit, and an external recipient address.',
   advanced_swap: 'Advanced swap',
   all_vaults: 'All Vaults',
   amount: 'Amount',

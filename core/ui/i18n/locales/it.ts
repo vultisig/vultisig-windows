@@ -1543,4 +1543,8 @@ export const it = {
   feature_gate_your_balance: 'Il tuo saldo',
   get_vult: 'Ottieni $VULT',
   manage_positions: 'Gestisci posizioni',
+  advanced_swap_settings_gate_description:
+    'Ottimizza i tuoi scambi con slittamento personalizzato, limite di gas e indirizzo del destinatario esterno.',
+  swap_invalid_external_recipient:
+    'L&#39;indirizzo del destinatario non è valido per {{chain}}',
 }

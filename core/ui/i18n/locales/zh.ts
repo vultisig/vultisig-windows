@@ -1418,4 +1418,7 @@ export const zh = {
   feature_gate_your_balance: '您的余额',
   get_vult: '获取 $VULT',
   manage_positions: '管理仓位',
+  advanced_swap_settings_gate_description:
+    '通过自定义滑点、gas限制和外部接收地址来微调您的交易。',
+  swap_invalid_external_recipient: '收件人地址对 {{chain}} 无效。',
 }

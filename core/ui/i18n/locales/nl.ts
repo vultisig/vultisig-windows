@@ -1520,4 +1520,8 @@ export const nl = {
   feature_gate_your_balance: 'Uw saldo',
   get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
+  advanced_swap_settings_gate_description:
+    'Optimaliseer uw swaps met aangepaste slippage, gaslimiet en een extern ontvangeradres.',
+  swap_invalid_external_recipient:
+    'Het ontvangersadres is niet geldig voor {{chain}}',
 }
