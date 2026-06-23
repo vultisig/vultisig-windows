@@ -8,9 +8,6 @@ type ErrorStatusIconProps = {
   variant: ErrorStatusVariant
 }
 
-const ringPath =
-  'M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z'
-
 /**
  * Concentric-circle hero graphic with a centered status badge, matching the
  * Figma error screen. Renders a red ✕ for hard failures and an amber ⚠ for
@@ -21,22 +18,30 @@ export const ErrorStatusIcon = ({ variant }: ErrorStatusIconProps) => (
     <Ring size={262} />
     <Ring size={135} />
     <Ring size={73} />
-    <Badge
-      variant={variant}
-      viewBox="0 0 24 24"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
+    <Badge variant={variant} viewBox="0 0 24 24" fill="none">
       <circle className="badge-fill" cx={12} cy={12} r={12} />
-      <path
-        className="badge-stroke"
-        strokeWidth={2}
-        d={match(variant, {
-          error: () => `M15 9L9 15M9 9L15 15 ${ringPath}`,
-          warning: () => `M12 8V12M12 16H12.01 ${ringPath}`,
-        })}
-      />
+      {match(variant, {
+        error: () => (
+          <>
+            <path
+              className="badge-stroke"
+              strokeWidth={1.5}
+              strokeLinecap="square"
+              d="M7.76953 7.77148L16.2279 16.2298M16.2279 7.77148L7.76953 16.2298"
+            />
+            <circle className="badge-stroke" cx={12} cy={12} r={10.5} />
+          </>
+        ),
+        warning: () => (
+          <path
+            className="badge-stroke"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+          />
+        ),
+      })}
     </Badge>
   </Hero>
 )
@@ -73,6 +78,7 @@ const Badge = styled.svg<{ variant: ErrorStatusVariant }>`
   }
 
   .badge-stroke {
+    fill: none;
     stroke: ${getColor('background')};
   }
 `
