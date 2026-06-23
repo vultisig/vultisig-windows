@@ -24,3 +24,15 @@ export const getSolanaRawTxFallback = (
     transactions,
   },
 })
+
+export const getSolanaMultiTxRawFallback = (
+  transactions: string[]
+): SolanaTxData | undefined => {
+  if (transactions.length <= 1) {
+    return undefined
+  }
+
+  getSerializedSolanaTxBuffer(transactions)
+
+  return getSolanaRawTxFallback(transactions)
+}
