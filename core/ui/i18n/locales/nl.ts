@@ -1486,7 +1486,7 @@ export const nl = {
   custom_rpc_chip_custom: 'Aangepast',
   custom_rpc_description: 'Gebruik je eigen knooppunten per keten.',
   custom_rpc_invalid_response: 'Onverwachte reactie van dit eindpunt',
-  custom_rpc_invalid_url: 'Voer een geldige http(s)-URL in.',
+  custom_rpc_invalid_url: 'Voer een geldige HTTPS-URL in.',
   custom_rpc_reachable: 'Bereikbaar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Bereikbaar · {{ms}} ms — netwerkidentiteit niet geverifieerd',
@@ -1495,8 +1495,7 @@ export const nl = {
   custom_rpc_unreachable: 'Eindpunt onbereikbaar',
   custom_rpc_url_hint: 'https://jouw-node.voorbeeld',
   custom_rpc_wrong_chain: 'Dit eindpunt bedient een andere keten.',
-  vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: 'Zilveren niveau vereist',
+  vult_tier_required: 'VULT TIER',
   send_to_different_address: 'Verzenden naar een ander adres',
   slippage_custom: 'Aangepast',
   slippage_helper:

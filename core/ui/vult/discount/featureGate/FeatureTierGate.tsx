@@ -2,7 +2,8 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Modal } from '@lib/ui/modal'
+import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
@@ -37,7 +38,7 @@ type FeatureTierGateProps = {
 }
 
 /**
- * Reusable centered dialog shown when a tier-locked feature is tapped without
+ * Reusable responsive prompt shown when a tier-locked feature is tapped without
  * the required VULT tier. Parameterised by the gated feature (icon/title/description)
  * and the required tier; shows the threshold, the vault's VULT balance, and a
  * "Get $VULT" CTA that routes to the swap with VULT preselected.
@@ -57,13 +58,20 @@ export const FeatureTierGate = ({
 
   const TierIcon = discountTierIcons[requiredTier]
   const accent = discountTierColors[requiredTier].toCssValue()
+  const dialogLabel = typeof title === 'string' ? title : undefined
 
   if (!isOpen) return null
 
   return (
-    <Modal onClose={onClose} withDefaultStructure={false}>
-      <Sheet>
-        <VStack alignItems="center" gap={20} padding="24px 16px 16px">
+    <ResponsiveModal
+      isOpen={isOpen}
+      onClose={onClose}
+      grabbable
+      mobileFullWidth
+      modalProps={{ withDefaultStructure: false }}
+    >
+      <DialogFrame role="dialog" aria-modal aria-label={dialogLabel}>
+        <VStack alignItems="center" gap={20} padding="40px 15px 16px">
           <VStack alignItems="center" gap={32} fullWidth>
             <IconBadge>{icon}</IconBadge>
             <VStack alignItems="center" gap={16}>
@@ -90,7 +98,9 @@ export const FeatureTierGate = ({
                 <TierIcon fontSize={36} />
                 <VStack gap={2}>
                   <Text size={14} weight={500}>
-                    {t('feature_gate_requires_tier', { tier: t(requiredTier) })}
+                    {t('feature_gate_requires_tier', {
+                      tier: t(requiredTier),
+                    })}
                   </Text>
                   <Text size={13} weight={500} color="shy">
                     {t('feature_gate_hold_at_least', {
@@ -136,18 +146,26 @@ export const FeatureTierGate = ({
             </GetVultButton>
           </FooterGroup>
         </VStack>
-      </Sheet>
-    </Modal>
+      </DialogFrame>
+    </ResponsiveModal>
   )
 }
 
-const Sheet = styled.div`
-  width: min(360px, calc(100vw - 32px));
-  max-height: calc(100vh - 64px);
-  overflow-y: auto;
+const DialogFrame = styled.div`
+  width: 100%;
+  height: min(627px, calc(100vh - 48px));
+  min-height: 0;
   background: ${getColor('background')};
-  border: 1px solid #11284a;
-  border-radius: 24px;
+  overflow-y: auto;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: min(480px, calc(100vw - 32px));
+    height: auto;
+    max-height: calc(100vh - 80px);
+    border: 1px solid ${getColor('mistExtra')};
+    border-radius: 38px;
+    box-shadow: 0 15px 75px rgba(0, 0, 0, 0.18);
+  }
 `
 
 const IconBadge = styled.div`
@@ -159,6 +177,7 @@ const IconBadge = styled.div`
   border-radius: 50%;
   background: #03132c;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 18px rgba(12, 78, 255, 0.18);
   font-size: 20px;
   color: #0439c7;
 `
@@ -183,17 +202,22 @@ const RequirementCard = styled(VStack)`
   padding: 24px 20px 16px;
   border-radius: 24px 24px 20px 20px;
   background: ${getColor('foreground')};
-  border: 1px solid #11284a;
+  border: 1px solid ${getColor('foregroundExtra')};
 `
 
 const BalanceRow = styled(HStack)`
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
+  gap: 12px;
   padding: 16px;
   border-radius: 14px;
   background: #0d2240;
-  border: 1px solid #11284a;
+  border: 1px solid ${getColor('foregroundExtra')};
+
+  > * {
+    min-width: 0;
+  }
 `
 
 const GetVultButton = styled(UnstyledButton)<{ $gradient: string }>`

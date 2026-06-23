@@ -1473,7 +1473,7 @@ export const ko = {
   custom_rpc_description: '체인별로 자체 노드를 사용하십시오.',
   custom_rpc_invalid_response:
     '이 엔드포인트에서 예상치 못한 응답이 발생했습니다.',
-  custom_rpc_invalid_url: '유효한 http(s) URL을 입력하세요',
+  custom_rpc_invalid_url: '유효한 HTTPS URL을 입력하세요',
   custom_rpc_reachable: '도달 가능 · {{ms}} ms',
   custom_rpc_reachable_unverified:
     '연결 가능 · {{ms}} ms — 네트워크 ID가 확인되지 않았습니다',
@@ -1482,8 +1482,7 @@ export const ko = {
   custom_rpc_unreachable: '엔드포인트에 연결할 수 없습니다.',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: '이 엔드포인트는 다른 체인을 제공합니다.',
-  vult_tier_label: '{{tier}} 티어',
-  vult_tier_required: '실버 등급 필요',
+  vult_tier_required: 'VULT TIER',
   send_to_different_address: '다른 주소로 보내기',
   slippage_custom: '관습',
   slippage_helper:

@@ -1483,7 +1483,7 @@ export const ru = {
   custom_rpc_chip_custom: 'Пользовательский',
   custom_rpc_description: 'Используйте собственные узлы для каждой цепочки.',
   custom_rpc_invalid_response: 'Неожиданный ответ от этой конечной точки.',
-  custom_rpc_invalid_url: 'Введите действительный URL-адрес http(s).',
+  custom_rpc_invalid_url: 'Введите действительный HTTPS-адрес.',
   custom_rpc_reachable: 'Доступен · {{ms}} мс',
   custom_rpc_reachable_unverified:
     'Доступен · {{ms}} мс — идентификация сети не подтверждена',
@@ -1492,8 +1492,7 @@ export const ru = {
   custom_rpc_unreachable: 'Конечная точка недоступна',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Этот конечный пункт обслуживает другую цепочку.',
-  vult_tier_label: '{{tier}} Уровень',
-  vult_tier_required: 'Требуется серебряный уровень.',
+  vult_tier_required: 'VULT TIER',
   send_to_different_address: 'Отправить на другой адрес',
   slippage_custom: 'Пользовательский',
   slippage_helper:

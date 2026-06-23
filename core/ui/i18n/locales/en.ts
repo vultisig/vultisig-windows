@@ -224,7 +224,7 @@ export const en = {
   custom_rpc_gate_description:
     'Point Vultisig at your own nodes. Faster queries, higher rate limits, and full privacy per chain.',
   custom_rpc_invalid_response: 'Unexpected response from this endpoint',
-  custom_rpc_invalid_url: 'Enter a valid http(s) URL',
+  custom_rpc_invalid_url: 'Enter a valid HTTPS URL',
   custom_rpc_default_endpoint: 'DEFAULT ENDPOINT',
   custom_rpc_editor_hint: 'Tap to edit. Supports HTTPS endpoints only.',
   custom_rpc_reachable: 'Reachable · {{ms}} ms',
@@ -616,8 +616,7 @@ export const en = {
   total_bonded: 'Total Bonded {{ticker}}',
   active_nodes: 'Active Nodes',
   vulti_node: 'VultiNode',
-  vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: 'Silver Tier Required',
+  vult_tier_required: 'VULT TIER',
   feature_gate_requires: 'Requires',
   feature_gate_requires_tier: '$VULT {{tier}} Tier or above',
   feature_gate_hold_at_least: 'Hold at least {{amount}} in your vault',

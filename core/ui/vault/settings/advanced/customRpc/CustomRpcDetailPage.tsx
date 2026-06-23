@@ -9,8 +9,8 @@ import {
 } from '@core/ui/storage/customRpcOverrides'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
+import { PageContent as BasePageContent } from '@lib/ui/page/PageContent'
+import { PageFooter as BasePageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -27,13 +27,15 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { getCustomRpcChainName } from '.'
+
 const isValidRpcUrl = (raw: string): boolean => {
   const result = attempt(() => new URL(raw))
   if ('error' in result) {
     return false
   }
   const { protocol, hostname } = result.data
-  return (protocol === 'http:' || protocol === 'https:') && hostname.length > 0
+  return protocol === 'https:' && hostname.length > 0
 }
 
 const getDefaultRpcUrl = (chain: Chain) => {
@@ -115,71 +117,103 @@ export const CustomRpcDetailPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={goBack} />}
-        title={chain}
+        title={`${getCustomRpcChainName(chain)} RPC`}
       />
-      <PageContent gap={16} flexGrow scrollable>
-        <RpcInputField>
-          <Text as="label" color="shy" size={14} weight="500">
-            {t('rpc_endpoint')}
-          </Text>
-          <RpcTextAreaWrapper $invalid={showInvalid}>
-            <RpcTextArea
-              placeholder={t('custom_rpc_url_hint')}
-              value={value}
-              onChange={event => onValueChange(event.currentTarget.value)}
-            />
-            <PasteAction onPaste={onValueChange} />
-          </RpcTextAreaWrapper>
-          <Text size={13}>{t('custom_rpc_editor_hint')}</Text>
-        </RpcInputField>
-        {showInvalid && (
-          <Text color="danger" size={12}>
-            {t('custom_rpc_invalid_url')}
-          </Text>
-        )}
-        <TestResult isTesting={probe.isPending} result={probe.data} />
-        {existingOverride && defaultRpcUrl && (
-          <DefaultEndpointCard>
-            <Text size={14} color="shy" weight="500">
-              {t('custom_rpc_default_endpoint')}
+      <PageContent flexGrow scrollable>
+        <ContentFrame>
+          <RpcInputField>
+            <RpcFieldLabel
+              as="label"
+              color="shy"
+              size={14}
+              weight="500"
+              height={20 / 14}
+            >
+              {t('rpc_endpoint')}
+            </RpcFieldLabel>
+            <RpcTextAreaWrapper $invalid={showInvalid}>
+              <RpcTextArea
+                placeholder={t('custom_rpc_url_hint')}
+                value={value}
+                onChange={event => onValueChange(event.currentTarget.value)}
+              />
+              <PasteAction onPaste={onValueChange} />
+            </RpcTextAreaWrapper>
+            <Text variant="footnote">{t('custom_rpc_editor_hint')}</Text>
+          </RpcInputField>
+          {showInvalid && (
+            <Text color="danger" size={12}>
+              {t('custom_rpc_invalid_url')}
             </Text>
-            <DefaultEndpointText size={14} color="shy">
-              {defaultRpcUrl}
-            </DefaultEndpointText>
-          </DefaultEndpointCard>
-        )}
+          )}
+          <TestResult isTesting={probe.isPending} result={probe.data} />
+          {existingOverride && defaultRpcUrl && (
+            <DefaultEndpointCard>
+              <Text size={14} color="shy" weight="500" height={20 / 14}>
+                {t('custom_rpc_default_endpoint')}
+              </Text>
+              <DefaultEndpointText size={14} color="shy" height={20 / 14}>
+                {defaultRpcUrl}
+              </DefaultEndpointText>
+            </DefaultEndpointCard>
+          )}
+        </ContentFrame>
       </PageContent>
-      <PageFooter gap={12}>
-        <Button
-          disabled={!canSave || isSaving || probe.isPending}
-          loading={isSaving || probe.isPending}
-          onClick={onSave}
-        >
-          {t('custom_rpc_save_button')}
-        </Button>
-        {existingOverride && (
+      <PageFooter>
+        <FooterFrame>
           <Button
-            kind="secondary"
-            loading={clearOverride.isPending}
-            onClick={() =>
-              clearOverride.mutate(chain, {
-                onSuccess: () => {
-                  addToast({ message: t('custom_rpc_saved') })
-                  goBack()
-                },
-              })
-            }
+            disabled={!canSave || isSaving || probe.isPending}
+            loading={isSaving || probe.isPending}
+            onClick={onSave}
           >
-            {t('custom_rpc_reset_button')}
+            {t('custom_rpc_save_button')}
           </Button>
-        )}
+          {existingOverride && (
+            <Button
+              kind="secondary"
+              loading={clearOverride.isPending}
+              onClick={() =>
+                clearOverride.mutate(chain, {
+                  onSuccess: () => {
+                    addToast({ message: t('custom_rpc_saved') })
+                    goBack()
+                  },
+                })
+              }
+            >
+              {t('custom_rpc_reset_button')}
+            </Button>
+          )}
+        </FooterFrame>
       </PageFooter>
     </VStack>
   )
 }
 
+const PageContent = styled(BasePageContent)`
+  align-items: center;
+`
+
+const PageFooter = styled(BasePageFooter)`
+  align-items: center;
+`
+
+const ContentFrame = styled(VStack)`
+  gap: 16px;
+  width: min(100%, 343px);
+`
+
+const FooterFrame = styled(VStack)`
+  gap: 12px;
+  width: min(100%, 343px);
+`
+
 const RpcInputField = styled(VStack)`
   gap: 8px;
+`
+
+const RpcFieldLabel = styled(Text)`
+  text-transform: uppercase;
 `
 
 const RpcTextAreaWrapper = styled.div<{ $invalid: boolean }>`
@@ -201,6 +235,7 @@ const RpcTextArea = styled.textarea`
   flex: 1;
   font: inherit;
   font-size: 14px;
+  font-weight: 500;
   line-height: 20px;
   min-width: 0;
   outline: 0;
@@ -220,7 +255,7 @@ const DefaultEndpointCard = styled(VStack)`
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundSuper')};
   border-radius: 12px;
-  gap: 18px;
+  gap: 20px;
   padding: 16px;
 `
 

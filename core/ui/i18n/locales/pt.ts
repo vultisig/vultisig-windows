@@ -1503,7 +1503,7 @@ export const pt = {
   custom_rpc_chip_custom: 'Personalizado',
   custom_rpc_description: 'Use seus próprios nós por cadeia',
   custom_rpc_invalid_response: 'Resposta inesperada deste endpoint',
-  custom_rpc_invalid_url: 'Insira um URL http(s) válido',
+  custom_rpc_invalid_url: 'Insira um URL HTTPS válido',
   custom_rpc_reachable: 'Acessível · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Acessível · {{ms}} ms — identidade de rede não verificada',
@@ -1512,8 +1512,7 @@ export const pt = {
   custom_rpc_unreachable: 'Ponto final inacessível',
   custom_rpc_url_hint: 'https://seu-nó.exemplo',
   custom_rpc_wrong_chain: 'Este ponto final serve uma cadeia diferente',
-  vult_tier_label: '{{tier}} Nível',
-  vult_tier_required: 'Nível Prata obrigatório',
+  vult_tier_required: 'VULT TIER',
   send_to_different_address: 'Enviar para um endereço diferente',
   slippage_custom: 'Personalizado',
   slippage_helper:

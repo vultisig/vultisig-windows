@@ -1479,7 +1479,7 @@ export const hr = {
   custom_rpc_chip_custom: 'Običaj',
   custom_rpc_description: 'Koristite vlastite čvorove po lancu',
   custom_rpc_invalid_response: 'Neočekivani odgovor s ove krajnje točke',
-  custom_rpc_invalid_url: 'Unesite valjani http(s) URL',
+  custom_rpc_invalid_url: 'Unesite valjani HTTPS URL',
   custom_rpc_reachable: 'Dostupno · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Dostupno · {{ms}} ms — identitet mreže nije provjeren',
@@ -1488,8 +1488,7 @@ export const hr = {
   custom_rpc_unreachable: 'Krajnja točka nije dostupna',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Ova krajnja točka opslužuje drugi lanac',
-  vult_tier_label: 'Razina {{tier}}',
-  vult_tier_required: 'Potrebna srebrna razina',
+  vult_tier_required: 'VULT TIER',
   send_to_different_address: 'Pošalji na drugu adresu',
   slippage_custom: 'Običaj',
   slippage_helper:

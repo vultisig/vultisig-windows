@@ -1514,7 +1514,7 @@ export const de = {
   custom_rpc_chip_custom: 'Benutzerdefiniert',
   custom_rpc_description: 'Verwenden Sie Ihre eigenen Knoten pro Kette',
   custom_rpc_invalid_response: 'Unerwartete Antwort von diesem Endpunkt',
-  custom_rpc_invalid_url: 'Geben Sie eine gültige http(s)-URL ein.',
+  custom_rpc_invalid_url: 'Geben Sie eine gültige HTTPS-URL ein.',
   custom_rpc_reachable: 'Erreichbar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Erreichbar · {{ms}} ms — Netzwerkidentität nicht verifiziert',
@@ -1523,8 +1523,7 @@ export const de = {
   custom_rpc_unreachable: 'Endpunkt nicht erreichbar',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Dieser Endpunkt dient einer anderen Kette',
-  vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: 'Silber-Stufe erforderlich',
+  vult_tier_required: 'VULT TIER',
   send_to_different_address: 'An eine andere Adresse senden',
   slippage_custom: 'Benutzerdefiniert',
   slippage_helper:

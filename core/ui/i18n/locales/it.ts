@@ -1509,7 +1509,7 @@ export const it = {
   custom_rpc_chip_custom: 'Personalizzato',
   custom_rpc_description: 'Utilizza i tuoi nodi per catena',
   custom_rpc_invalid_response: 'Risposta inattesa da questo endpoint',
-  custom_rpc_invalid_url: 'Inserisci un URL http(s) valido',
+  custom_rpc_invalid_url: 'Inserisci un URL HTTPS valido',
   custom_rpc_reachable: 'Raggiungibile · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Raggiungibile · {{ms}} ms — identità di rete non verificata',
@@ -1518,8 +1518,7 @@ export const it = {
   custom_rpc_unreachable: 'Punto di accesso irraggiungibile',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Questo endpoint serve una catena diversa',
-  vult_tier_label: 'Livello {{tier}}',
-  vult_tier_required: 'Livello Argento richiesto',
+  vult_tier_required: 'VULT TIER',
   send_to_different_address: 'Inviare a un indirizzo diverso',
   slippage_custom: 'Personalizzato',
   slippage_helper:

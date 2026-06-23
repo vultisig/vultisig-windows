@@ -5,11 +5,10 @@ import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 import { FeatureTierGate } from '../../../vult/discount/featureGate/FeatureTierGate'
 import { useVultDiscountTierQuery } from '../../../vult/discount/queries/tier'
-import { discountTierColors } from '../../../vult/discount/tier/colors'
 import { hasReachedTier } from '../../../vult/discount/tierOrder'
 import {
   DescriptionText,
@@ -23,18 +22,8 @@ export const CustomRpcSettingsRow = () => {
   const navigate = useCoreNavigate()
   const [isGateOpen, setIsGateOpen] = useState(false)
   const tier = useVultDiscountTierQuery().data ?? null
-  const theme = useTheme()
 
   const isEligible = hasReachedTier({ current: tier, required: requiredTier })
-
-  const badgeColor =
-    isEligible && tier
-      ? discountTierColors[tier].toCssValue()
-      : theme.colors.textShy.toCssValue()
-  const badgeLabel =
-    isEligible && tier
-      ? t('vult_tier_label', { tier: t(tier) })
-      : t('vult_tier_required')
 
   return (
     <>
@@ -53,7 +42,7 @@ export const CustomRpcSettingsRow = () => {
         title={
           <HStack alignItems="center" gap={8}>
             <Text as="span">{t('custom_rpc')}</Text>
-            <TierBadge $color={badgeColor}>{badgeLabel}</TierBadge>
+            <TierBadge>{t('vult_tier_required')}</TierBadge>
           </HStack>
         }
         hoverable
@@ -73,12 +62,14 @@ export const CustomRpcSettingsRow = () => {
   )
 }
 
-const TierBadge = styled.span<{ $color: string }>`
-  border: 1px solid ${({ $color }) => $color};
+const TierBadge = styled.span`
+  background: ${({ theme }) => theme.colors.foregroundDark.toCssValue()};
+  border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
   border-radius: 99px;
-  color: ${({ $color }) => $color};
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding: 2px 8px;
+  color: ${({ theme }) => theme.colors.primaryAccentFour.toCssValue()};
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12px;
+  line-height: 16px;
+  padding: 3px 8px;
 `
