@@ -702,8 +702,15 @@ export const es = {
   qbtc_claim_done: 'Hecho',
   qbtc_claim_failed:
     'La reclamación ha fallado. Por favor, inténtelo de nuevo.',
-  qbtc_claim_fast_vault_only:
-    'Actualmente, para reclamar se requiere Fast Vault. La compatibilidad con Secure Vault estará disponible próximamente.',
+  qbtc_claim_cosign_title: 'Firma conjunta de la reclamación QBTC',
+  qbtc_claim_cosign_description:
+    'Revise la solicitud de reclamación a continuación y, a continuación, apruebe la firma conjunta con la clave Bitcoin de esta bóveda.',
+  qbtc_claim_cosign_amount: 'Cantidad',
+  qbtc_claim_cosign_btc_address: 'Dirección de Bitcoin (prueba de propiedad)',
+  qbtc_claim_cosign_qbtc_address:
+    'Dirección QBTC (destinatario de la reclamación)',
+  qbtc_claim_cosign_success:
+    'Has firmado conjuntamente la reclamación QBTC. El otro dispositivo la finalizará y la transmitirá.',
   qbtc_claim_password_description:
     'Ingrese su contraseña de Fast Vault para firmar conjuntamente la transacción de reclamación.',
   receive: 'Recibir',
@@ -1535,4 +1542,6 @@ export const es = {
   feature_gate_your_balance: 'Tu saldo',
   get_vult: 'Obtén $VULT',
   manage_positions: 'Gestionar posiciones',
+  swap_invalid_external_recipient:
+    'La dirección del destinatario no es válida para {{chain}}.',
 }
