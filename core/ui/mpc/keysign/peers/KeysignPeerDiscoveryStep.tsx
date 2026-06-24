@@ -77,7 +77,7 @@ export const KeysignPeerDiscoveryStep = ({
       <MpcPeersCorrector />
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        secondaryControls={<DownloadKeysignQrCode />}
+        secondaryControls={<DownloadKeysignQrCode value={payload} />}
         title={t('scan_qr')}
         hasBorder
       />

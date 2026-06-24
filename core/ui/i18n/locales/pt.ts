@@ -703,8 +703,15 @@ export const pt = {
   qbtc_claim_utxos_skipped: 'UTXOs ignorados',
   qbtc_claim_done: 'Feito',
   qbtc_claim_failed: 'A solicitação falhou. Tente novamente.',
-  qbtc_claim_fast_vault_only:
-    'Atualmente, o resgate requer um Fast Vault. O suporte para Secure Vault está a caminho.',
+  qbtc_claim_cosign_title: 'Assinar em conjunto a declaração QBTC',
+  qbtc_claim_cosign_description:
+    'Analise o pedido de reivindicação abaixo e, em seguida, aprove a assinatura conjunta com a chave Bitcoin deste cofre.',
+  qbtc_claim_cosign_amount: 'Quantia',
+  qbtc_claim_cosign_btc_address:
+    'Endereço Bitcoin (comprovante de propriedade)',
+  qbtc_claim_cosign_qbtc_address: 'Endereço QBTC (destinatário da solicitação)',
+  qbtc_claim_cosign_success:
+    'Você assinou em conjunto a declaração QBTC. O outro dispositivo irá concluir e transmiti-la.',
   qbtc_claim_password_description:
     'Insira sua senha do Fast Vault para coassinar a transação de reivindicação.',
   receive: 'Receber',
@@ -1537,8 +1544,8 @@ export const pt = {
   feature_gate_your_balance: 'Seu saldo',
   get_vult: 'Obtenha $VULT',
   manage_positions: 'Gerenciar posições',
-  advanced_swap_settings_gate_description:
-    'Ajuste suas trocas com slippage personalizado, limite de gás e um endereço de destinatário externo.',
   swap_invalid_external_recipient:
     'O endereço do destinatário não é válido para {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Ajuste suas trocas com slippage personalizado, limite de gás e um endereço de destinatário externo.',
 }

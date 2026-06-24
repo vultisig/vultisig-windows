@@ -647,8 +647,14 @@ export const zh = {
   qbtc_claim_utxos_skipped: 'UTXO 跳过',
   qbtc_claim_done: '完毕',
   qbtc_claim_failed: '申领失败，请重试。',
-  qbtc_claim_fast_vault_only:
-    '目前申领需要 Fast Vault。Secure Vault 支持即将推出。',
+  qbtc_claim_cosign_title: '共同签名 QBTC 声明',
+  qbtc_claim_cosign_description:
+    '请查看下面的索赔请求，然后批准使用此金库的比特币密钥对其进行共同签名。',
+  qbtc_claim_cosign_amount: '数量',
+  qbtc_claim_cosign_btc_address: '比特币地址（所有权证明）',
+  qbtc_claim_cosign_qbtc_address: 'QBTC 地址（索赔接收人）',
+  qbtc_claim_cosign_success:
+    '您已共同签署了 QBTC 声明。另一台设备将完成并广播该声明。',
   qbtc_claim_password_description:
     '输入您的 Fast Vault 密码以共同签署申领交易。',
   receive: '收到',
@@ -1418,7 +1424,7 @@ export const zh = {
   feature_gate_your_balance: '您的余额',
   get_vult: '获取 $VULT',
   manage_positions: '管理仓位',
+  swap_invalid_external_recipient: '收件人地址对 {{chain}} 无效。',
   advanced_swap_settings_gate_description:
     '通过自定义滑点、gas限制和外部接收地址来微调您的交易。',
-  swap_invalid_external_recipient: '收件人地址对 {{chain}} 无效。',
 }

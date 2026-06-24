@@ -753,8 +753,14 @@ export const en = {
   qbtc_claim_utxos_skipped: 'UTXOs skipped',
   qbtc_claim_done: 'Done',
   qbtc_claim_failed: 'Claim failed. Please try again.',
-  qbtc_claim_fast_vault_only:
-    'Claiming currently requires a Fast Vault. Secure Vault support is on the way.',
+  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_description:
+    "Review the claim request below, then approve co-signing it with this vault's Bitcoin key.",
+  qbtc_claim_cosign_amount: 'Amount',
+  qbtc_claim_cosign_btc_address: 'Bitcoin address (ownership proof)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC address (claim recipient)',
+  qbtc_claim_cosign_success:
+    "You've co-signed the QBTC claim. The other device will finish and broadcast it.",
   qbtc_claim_password_description:
     'Enter your Fast Vault password to co-sign the claim transaction.',
   receive: 'Receive',
