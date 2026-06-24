@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-
 import { Chain } from '@vultisig/core-chain/Chain'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock external dependencies
 const mockCallBackground = vi.fn()
@@ -31,7 +30,20 @@ vi.mock('@clients/extension/src/inpage/providers/icon', () => ({
 
 // Mock Solana account (must be a constructor for `new VultisigSolanaWalletAccount(...)`)
 vi.mock('@clients/extension/src/inpage/providers/solana/account', () => ({
-  VultisigSolanaWalletAccount: vi.fn().mockImplementation(function (this: { address: string; publicKey: Uint8Array; label: string; icon: string }, opts: { address: string; publicKey: Uint8Array; label?: string; icon?: string }) {
+  VultisigSolanaWalletAccount: vi.fn().mockImplementation(function (
+    this: {
+      address: string
+      publicKey: Uint8Array
+      label: string
+      icon: string
+    },
+    opts: {
+      address: string
+      publicKey: Uint8Array
+      label?: string
+      icon?: string
+    }
+  ) {
     this.address = opts.address
     this.publicKey = opts.publicKey
     this.label = opts.label ?? ''
@@ -68,13 +80,16 @@ vi.mock('@vultisig/core-chain/tw/signingOutput', () => ({
 // Mock shouldBePresent
 vi.mock('@vultisig/lib-utils/assert/shouldBePresent', () => ({
   shouldBePresent: vi.fn((v: unknown) => {
-    if (v === null || v === undefined) throw new Error('Expected value to be present')
+    if (v === null || v === undefined)
+      throw new Error('Expected value to be present')
     return v
   }),
 }))
 
 vi.mock('@vultisig/lib-utils/attempt', async () => {
-  const actual = await vi.importActual<typeof import('@vultisig/lib-utils/attempt')>('@vultisig/lib-utils/attempt')
+  const actual = await vi.importActual<
+    typeof import('@vultisig/lib-utils/attempt')
+  >('@vultisig/lib-utils/attempt')
   return actual
 })
 
@@ -109,12 +124,18 @@ vi.mock('@solana/web3.js', () => {
 })
 
 // Mock @core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils
-vi.mock('@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils', () => ({
-  getTransactionAuthority: vi.fn(),
-}))
+vi.mock(
+  '@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils',
+  () => ({
+    getTransactionAuthority: vi.fn(),
+  })
+)
 
 // Mock @core/inpage-provider/popup/view/resolvers/sendTx/interfaces
-vi.mock('@core/inpage-provider/popup/view/resolvers/sendTx/interfaces', () => ({}))
+vi.mock(
+  '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces',
+  () => ({})
+)
 
 // Mock bs58
 vi.mock('bs58', () => ({
@@ -246,7 +267,10 @@ describe('Solana Provider', () => {
       await sol.connect()
 
       // Mock the account property directly since VultisigSolanaWalletAccount is mocked
-      ;(sol as any).account = { address: 'SolAddr', publicKey: new Uint8Array(32) }
+      ;(sol as any).account = {
+        address: 'SolAddr',
+        publicKey: new Uint8Array(32),
+      }
 
       const hexSig = 'aabbccdd'
       mockCallPopup.mockResolvedValue(hexSig)
@@ -264,6 +288,72 @@ describe('Solana Provider', () => {
           },
         },
       })
+    })
+  })
+
+  describe('signAndSendAllTransactions()', () => {
+    it('rejects an empty batch with the wallet-standard parameter error', async () => {
+      const sol = new Solana('VultiConnect')
+
+      await expect(sol.signAndSendAllTransactions([])).rejects.toEqual({
+        code: -32000,
+        message: 'Missing or invalid parameters.',
+      })
+    })
+
+    it('signs and broadcasts the whole batch and returns one signature per transaction', async () => {
+      const sol = new Solana('VultiConnect')
+      const transactions = [{ id: 'tx1' }, { id: 'tx2' }] as any[]
+      const signTransactions = vi.fn().mockResolvedValue([
+        {
+          signatures: [{ signature: new Uint8Array(Buffer.from('sig-one')) }],
+        },
+        {
+          signatures: [{ signature: new Uint8Array(Buffer.from('sig-two')) }],
+        },
+      ])
+      ;(sol as any).signTransactions = signTransactions
+
+      const result = await sol.signAndSendAllTransactions(transactions)
+
+      expect(signTransactions).toHaveBeenCalledWith(transactions, false)
+      expect(result).toEqual([
+        { signature: 'sig-one' },
+        { signature: 'sig-two' },
+      ])
+    })
+
+    it('rejects signed transactions with placeholder zero signatures', async () => {
+      const sol = new Solana('VultiConnect')
+      ;(sol as any).signTransactions = vi
+        .fn()
+        .mockResolvedValue([
+          { signatures: [{ signature: new Uint8Array(64) }] },
+        ])
+
+      await expect(
+        sol.signAndSendAllTransactions([{ id: 'tx' }] as any)
+      ).rejects.toThrow('Transaction has no signatures')
+    })
+  })
+
+  describe('signAndSendTransaction()', () => {
+    it('returns the legacy transaction signature bytes without encoding the signature pair object', async () => {
+      const sol = new Solana('VultiConnect')
+      const transaction = { id: 'tx' } as any
+      const signTransactions = vi.fn().mockResolvedValue([
+        {
+          signatures: [
+            { signature: new Uint8Array(Buffer.from('single-signature')) },
+          ],
+        },
+      ])
+      ;(sol as any).signTransactions = signTransactions
+
+      const result = await sol.signAndSendTransaction(transaction)
+
+      expect(signTransactions).toHaveBeenCalledWith([transaction], false)
+      expect(result).toEqual({ signature: 'single-signature' })
     })
   })
 
