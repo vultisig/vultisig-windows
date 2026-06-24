@@ -1524,7 +1524,7 @@ export const it = {
   custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Questo endpoint serve una catena diversa',
   vult_tier_label: 'Livello {{tier}}',
-  vult_tier_required: 'Livello Argento richiesto',
+  vult_tier_required: 'Livello {{tier}} richiesto',
   send_to_different_address: 'Inviare a un indirizzo diverso',
   slippage_custom: 'Personalizzato',
   slippage_helper:

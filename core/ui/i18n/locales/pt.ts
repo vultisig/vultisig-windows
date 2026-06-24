@@ -1518,7 +1518,7 @@ export const pt = {
   custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Este ponto final serve uma cadeia diferente',
   vult_tier_label: '{{tier}} Nível',
-  vult_tier_required: 'Nível Prata obrigatório',
+  vult_tier_required: 'Nível {{tier}} necessário',
   send_to_different_address: 'Enviar para um endereço diferente',
   slippage_custom: 'Personalizado',
   slippage_helper:

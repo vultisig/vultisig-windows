@@ -1501,7 +1501,7 @@ export const nl = {
   custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'Dit eindpunt bedient een andere keten.',
   vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: 'Zilveren niveau vereist',
+  vult_tier_required: '{{tier}} Vereiste tier',
   send_to_different_address: 'Verzenden naar een ander adres',
   slippage_custom: 'Aangepast',
   slippage_helper:

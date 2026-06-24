@@ -5,12 +5,11 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 import { FeatureTierGate } from '../../../../vult/discount/featureGate/FeatureTierGate'
-import { useHighestVaultDiscountTier } from '../../../../vult/discount/queries/anyVaultTier'
-import { discountTierColors } from '../../../../vult/discount/tier/colors'
-import { hasReachedTier } from '../../../../vult/discount/tierOrder'
+import { TierBadge } from '../../../../vult/discount/featureGate/TierBadge'
+import { useTierBadge } from '../../../../vult/discount/featureGate/useTierBadge'
 import { useAdvancedSwapSettings } from '../../state/advancedSettings'
 import { AdvancedSwapSettingsSheet } from './AdvancedSwapSettingsSheet'
 
@@ -24,31 +23,28 @@ const requiredTier = 'silver'
  */
 export const AdvancedSwapSettings = () => {
   const { t } = useTranslation()
-  const theme = useTheme()
   const [isOpen, { set: open, unset: close }] = useBoolean(false)
   const [isGateOpen, setIsGateOpen] = useState(false)
   const [settings, setSettings] = useAdvancedSwapSettings()
-  const { tier } = useHighestVaultDiscountTier()
-
-  const isEligible = hasReachedTier({ current: tier, required: requiredTier })
-
-  const badgeColor =
-    isEligible && tier
-      ? discountTierColors[tier].toCssValue()
-      : theme.colors.textShy.toCssValue()
-  const badgeLabel =
-    isEligible && tier
-      ? t('vult_tier_label', { tier: t(tier) })
-      : t('vult_tier_required')
+  const { isEligible, isPending, badge } = useTierBadge({ requiredTier })
 
   return (
     <>
-      <Trigger onClick={() => (isEligible ? open() : setIsGateOpen(true))}>
+      <Trigger
+        onClick={() => {
+          if (isPending) return
+          if (isEligible) {
+            open()
+          } else {
+            setIsGateOpen(true)
+          }
+        }}
+      >
         <HStack alignItems="center" gap={8}>
           <Text size={14} color="shy">
             {t('advanced_settings')}
           </Text>
-          <TierBadge $color={badgeColor}>{badgeLabel}</TierBadge>
+          <TierBadge badge={badge} />
         </HStack>
       </Trigger>
       {isOpen && (
@@ -88,14 +84,4 @@ const Trigger = styled(UnstyledButton)`
   &:hover {
     opacity: 0.8;
   }
-`
-
-const TierBadge = styled.span<{ $color: string }>`
-  border: 1px solid ${({ $color }) => $color};
-  border-radius: 99px;
-  color: ${({ $color }) => $color};
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding: 2px 8px;
 `
