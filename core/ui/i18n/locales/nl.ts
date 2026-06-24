@@ -696,14 +696,8 @@ export const nl = {
   qbtc_claim_utxos_skipped: 'UTXO&#39;s overgeslagen',
   qbtc_claim_done: 'Klaar',
   qbtc_claim_failed: 'Claim mislukt. Probeer het opnieuw.',
-  qbtc_claim_cosign_title: 'Medeonderteken de QBTC-claim',
-  qbtc_claim_cosign_description:
-    'Bekijk het onderstaande claimverzoek en keur vervolgens de medeondertekening ervan goed met de Bitcoin-sleutel van deze kluis.',
-  qbtc_claim_cosign_amount: 'Hoeveelheid',
-  qbtc_claim_cosign_btc_address: 'Bitcoin-adres (bewijs van eigendom)',
-  qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
-  qbtc_claim_cosign_success:
-    'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
+  qbtc_claim_fast_vault_only:
+    'Voor het claimen van gegevens is momenteel een Fast Vault vereist. Ondersteuning voor Secure Vault is in ontwikkeling.',
   qbtc_claim_password_description:
     'Voer uw Fast Vault-wachtwoord in om de claimtransactie mede te ondertekenen.',
   receive: 'Ontvangen',
@@ -1526,8 +1520,15 @@ export const nl = {
   feature_gate_your_balance: 'Uw saldo',
   get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
+  copied: 'Gekopieerd',
+  copy: 'Kopiëren',
+  error_message: 'Foutmelding',
+  report_bug: 'Een bug melden',
+  show_exact_error: 'Geef de exacte fout weer',
   swap_invalid_external_recipient:
     'Het ontvangersadres is niet geldig voor {{chain}}',
   advanced_swap_settings_gate_description:
     'Optimaliseer uw swaps met aangepaste slippage, gaslimiet en een extern ontvangeradres.',
+  signing_error_description:
+    'Een van uw apparaten reageerde niet op tijd. Controleer uw verbinding en probeer het opnieuw.',
 }

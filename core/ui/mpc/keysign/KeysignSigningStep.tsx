@@ -192,14 +192,20 @@ export const KeysignSigningStep = ({
         if (isSessionConflict) {
           return (
             <FullPageFlowErrorState
+              variant="warning"
               title={t('fast_vault_session_conflict')}
-              error={new Error(t('fast_vault_session_conflict_description'))}
+              description={t('fast_vault_session_conflict_description')}
             />
           )
         }
 
         return (
-          <FullPageFlowErrorState error={error} title={t('signing_error')} />
+          <FullPageFlowErrorState
+            variant="error"
+            error={error}
+            title={t('signing_error')}
+            description={t('signing_error_description')}
+          />
         )
       }}
       pending={() => (

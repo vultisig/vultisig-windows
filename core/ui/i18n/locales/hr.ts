@@ -700,6 +700,8 @@ export const hr = {
   qbtc_claim_cosign_qbtc_address: 'Adresa QBTC (primatelj zahtjeva)',
   qbtc_claim_cosign_success:
     'Supotpisali ste zahtjev QBTC. Drugi uređaj će ga završiti i emitirati.',
+  qbtc_claim_fast_vault_only:
+    'Za polaganje prava trenutno je potreban Fast Vault. Podrška za Secure Vault uskoro će biti dostupna.',
   qbtc_claim_password_description:
     'Unesite svoju lozinku za Fast Vault kako biste supotpisali transakciju potraživanja.',
   receive: 'Primi',
@@ -1519,8 +1521,15 @@ export const hr = {
   feature_gate_your_balance: 'Vaš saldo',
   get_vult: 'Uzmi $VULT',
   manage_positions: 'Upravljanje pozicijama',
+  copied: 'Kopirano',
+  copy: 'Kopirati',
+  error_message: 'Poruka o pogrešci',
+  report_bug: 'Prijavi grešku',
+  show_exact_error: 'Prikaži točnu grešku',
   swap_invalid_external_recipient:
     'Adresa primatelja nije valjana za {{chain}}',
   advanced_swap_settings_gate_description:
     'Prilagodite svoje swapove prilagođenim proklizavanjem, ograničenjem plina i vanjskom adresom primatelja.',
+  signing_error_description:
+    'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
 }

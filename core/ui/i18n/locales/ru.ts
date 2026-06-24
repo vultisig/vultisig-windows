@@ -692,15 +692,8 @@ export const ru = {
   qbtc_claim_utxos_skipped: 'UTXO пропущены',
   qbtc_claim_done: 'Готово',
   qbtc_claim_failed: 'Заявка не прошла. Пожалуйста, попробуйте еще раз.',
-  qbtc_claim_cosign_title: 'Подписать совместно заявку QBTC',
-  qbtc_claim_cosign_description:
-    'Ознакомьтесь с запросом на получение средств ниже, а затем подтвердите его, подписав его совместно с биткойн-ключом этого хранилища.',
-  qbtc_claim_cosign_amount: 'Количество',
-  qbtc_claim_cosign_btc_address:
-    'Биткоин-адрес (подтверждение права собственности)',
-  qbtc_claim_cosign_qbtc_address: 'Адрес QBTC (получатель заявки)',
-  qbtc_claim_cosign_success:
-    'Вы подписали совместно запрос QBTC. Другое устройство завершит его и передаст дальше.',
+  qbtc_claim_fast_vault_only:
+    'В настоящее время для получения средств требуется Fast Vault. Поддержка Secure Vault появится в будущем.',
   qbtc_claim_password_description:
     'Введите свой пароль от Fast Vault, чтобы подписать транзакцию по заявке.',
   receive: 'Получить',
@@ -1525,8 +1518,15 @@ export const ru = {
   feature_gate_your_balance: 'Ваш баланс',
   get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
+  copied: 'Скопировано',
+  copy: 'Копировать',
+  error_message: 'Сообщение об ошибке',
+  report_bug: 'Сообщить об ошибке',
+  show_exact_error: 'Показать точную ошибку',
   swap_invalid_external_recipient:
     'Адрес получателя недействителен для {{chain}}',
   advanced_swap_settings_gate_description:
     'Настройте параметры свопов с помощью настраиваемого проскальзывания, лимита газа и внешнего адреса получателя.',
+  signing_error_description:
+    'Одно из ваших устройств не ответило вовремя. Проверьте подключение и попробуйте снова.',
 }
