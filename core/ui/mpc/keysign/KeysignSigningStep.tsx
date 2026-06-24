@@ -59,6 +59,28 @@ export const KeysignSigningStep = ({
             value={payload}
             handlers={{
               keysign: payload => {
+                // A QBTC claim co-sign produces a raw signature, not a tx —
+                // the initiating device broadcasts. Show a simple confirmation
+                // instead of the tx-overview path (which expects `txs`).
+                if (payload.isQbtcClaim) {
+                  return (
+                    <>
+                      <PageContent alignItems="center" scrollable>
+                        <VStack gap={16} maxWidth={576} fullWidth>
+                          <Panel>
+                            <Text>{t('qbtc_claim_cosign_success')}</Text>
+                          </Panel>
+                        </VStack>
+                      </PageContent>
+                      <PageFooter alignItems="center">
+                        <VStack maxWidth={576} fullWidth>
+                          <Button onClick={goHome}>{t('complete')}</Button>
+                        </VStack>
+                      </PageFooter>
+                    </>
+                  )
+                }
+
                 const { swapPayload } = payload
                 const isSwapTx = swapPayload && swapPayload.value
                 const txs = getRecordUnionValue(result, 'txs')

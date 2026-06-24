@@ -1,5 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { JoinKeysignCustomMessageVerify } from '@core/ui/mpc/keysign/join/JoinKeysignCustomMessageVerify'
+import { JoinKeysignQbtcClaimVerify } from '@core/ui/mpc/keysign/join/JoinKeysignQbtcClaimVerify'
 import { JoinKeysignButton } from '@core/ui/mpc/keysign/join/tx/JoinKeysignButton'
 import { JoinKeysignTransactionVerify } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTransactionVerify'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -32,9 +33,24 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
       <MatchRecordUnion
         value={keysignPayload}
         handlers={{
-          keysign: payload => (
-            <JoinKeysignTransactionVerify value={payload} onFinish={onFinish} />
-          ),
+          keysign: payload =>
+            payload.isQbtcClaim ? (
+              <>
+                <PageContent scrollable>
+                  <VStack flexGrow>
+                    <JoinKeysignQbtcClaimVerify value={payload} />
+                  </VStack>
+                </PageContent>
+                <PageFooter>
+                  <JoinKeysignButton onClick={onFinish} />
+                </PageFooter>
+              </>
+            ) : (
+              <JoinKeysignTransactionVerify
+                value={payload}
+                onFinish={onFinish}
+              />
+            ),
           custom: value => (
             <>
               <PageContent scrollable>
