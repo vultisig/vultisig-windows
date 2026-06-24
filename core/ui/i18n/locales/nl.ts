@@ -1532,7 +1532,7 @@ export const nl = {
   qbtc_claim_cosign_title: 'Medeonderteken de QBTC-claim',
   qbtc_claim_cosign_description:
     'Bekijk het onderstaande claimverzoek en keur vervolgens de medeondertekening ervan goed met de Bitcoin-sleutel van deze kluis.',
-  qbtc_claim_cosign_amount: 'Hoeveelheid',
+  qbtc_claim_cosign_amount: 'Bedrag',
   qbtc_claim_cosign_btc_address: 'Bitcoin-adres (bewijs van eigendom)',
   qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
   qbtc_claim_cosign_success:

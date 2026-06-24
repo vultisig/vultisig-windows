@@ -1519,7 +1519,7 @@ export const ko = {
   qbtc_claim_cosign_title: 'QBTC 클레임에 공동 서명',
   qbtc_claim_cosign_description:
     '아래의 청구 요청을 검토하신 후, 이 금고의 비트코인 ​​키로 공동 서명하는 것을 승인해 주세요.',
-  qbtc_claim_cosign_amount: '양',
+  qbtc_claim_cosign_amount: '금액',
   qbtc_claim_cosign_btc_address: '비트코인 주소(소유권 증명)',
   qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
   qbtc_claim_cosign_success:

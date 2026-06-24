@@ -1558,12 +1558,12 @@ export const de = {
     'Optimieren Sie Ihre Swaps mit individueller Slippage, Gaslimit und einer externen Empfängeradresse.',
   signing_error_description:
     'Eines Ihrer Geräte hat nicht rechtzeitig reagiert. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
-  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_title: 'QBTC-Claim mitsignieren',
   qbtc_claim_cosign_description:
-    'Prüfen Sie den unten stehenden Anspruchsantrag und genehmigen Sie anschließend die Mitunterzeichnung mit dem Bitcoin-Schlüssel dieses Tresors.',
-  qbtc_claim_cosign_amount: 'Menge',
+    'Prüfen Sie die Claim-Anfrage unten und genehmigen Sie anschließend die Mitsignatur mit dem Bitcoin-Schlüssel dieses Vaults.',
+  qbtc_claim_cosign_amount: 'Betrag',
   qbtc_claim_cosign_btc_address: 'Bitcoin-Adresse (Eigentumsnachweis)',
-  qbtc_claim_cosign_qbtc_address: 'Adresse QBTC (Anspruchsempfänger)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC-Adresse (Claim-Empfänger)',
   qbtc_claim_cosign_success:
-    'Sie haben den Anspruch QBTC mitsigniert. Das andere Gerät wird ihn abschließen und senden.',
+    'Sie haben den QBTC-Claim mitunterzeichnet. Das andere Gerät schließt ihn ab und broadcastet ihn.',
 }
