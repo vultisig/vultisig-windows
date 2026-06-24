@@ -353,7 +353,7 @@ const QrFrame = styled.div<{ $isLocalMode: boolean }>`
 
 const QrFrameInner = styled.div`
   background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 24px;
   padding: 16px;
 `
