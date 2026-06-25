@@ -692,14 +692,8 @@ export const hr = {
   qbtc_claim_utxos_skipped: 'Preskočeni UTXO-i',
   qbtc_claim_done: 'Gotovo',
   qbtc_claim_failed: 'Zahtjev nije uspio. Pokušajte ponovno.',
-  qbtc_claim_cosign_title: 'Supotpišite zahtjev QBTC',
-  qbtc_claim_cosign_description:
-    'Pregledajte zahtjev za polaganje prava u nastavku, a zatim odobrite njegovo supotpisivanje Bitcoin ključem ovog trezora.',
-  qbtc_claim_cosign_amount: 'Iznos',
-  qbtc_claim_cosign_btc_address: 'Bitcoin adresa (dokaz vlasništva)',
-  qbtc_claim_cosign_qbtc_address: 'Adresa QBTC (primatelj zahtjeva)',
-  qbtc_claim_cosign_success:
-    'Supotpisali ste zahtjev QBTC. Drugi uređaj će ga završiti i emitirati.',
+  qbtc_claim_fast_vault_only:
+    'Za polaganje prava trenutno je potreban Fast Vault. Podrška za Secure Vault uskoro će biti dostupna.',
   qbtc_claim_password_description:
     'Unesite svoju lozinku za Fast Vault kako biste supotpisali transakciju potraživanja.',
   receive: 'Primi',
@@ -1519,6 +1513,13 @@ export const hr = {
   feature_gate_your_balance: 'Vaš saldo',
   get_vult: 'Uzmi $VULT',
   manage_positions: 'Upravljanje pozicijama',
+  copied: 'Kopirano',
+  copy: 'Kopirati',
+  error_message: 'Poruka o pogrešci',
+  report_bug: 'Prijavi grešku',
+  show_exact_error: 'Prikaži točnu grešku',
   swap_invalid_external_recipient:
     'Adresa primatelja nije valjana za {{chain}}',
+  signing_error_description:
+    'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
 }

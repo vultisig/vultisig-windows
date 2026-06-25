@@ -1,3 +1,4 @@
+import { reportBugUrl } from '@core/ui/errors/constants'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -12,9 +13,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const reportErrorUrl =
-  'https://discord.com/channels/1203844257220395078/1294500829482450944'
 
 const StackTrace = styled.pre`
   ${text({
@@ -59,7 +57,7 @@ export const RootErrorFallback = ({
           {info && <StackTrace>{info.componentStack}</StackTrace>}
         </VStack>
         <UniformColumnGrid gap={20}>
-          <Button kind="secondary" onClick={() => openUrl(reportErrorUrl)}>
+          <Button kind="secondary" onClick={() => openUrl(reportBugUrl)}>
             {t('report_error')}
           </Button>
           <Button
