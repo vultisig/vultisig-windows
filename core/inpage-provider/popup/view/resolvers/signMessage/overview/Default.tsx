@@ -100,7 +100,10 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
         {isFinished ? (
           <Button onClick={goHome}>{t('complete')}</Button>
         ) : (
-          <StartKeysignPrompt keysignPayload={keysignPayload} />
+          <StartKeysignPrompt
+            keysignPayload={keysignPayload}
+            requestOrigin={requestOrigin}
+          />
         )}
       </PageFooter>
     </>

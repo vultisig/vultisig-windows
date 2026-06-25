@@ -9,12 +9,13 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
+import { KeysignRequestOriginProvider } from '../state/keysignRequestOrigin'
 import { SwapQuoteProvider } from '../state/swapQuote'
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
-  const [{ keysignPayload, toAddressLabel, swapQuote }] =
+  const [{ keysignPayload, toAddressLabel, swapQuote, requestOrigin }] =
     useCoreViewState<'keysign'>()
 
   return (
@@ -34,14 +35,16 @@ export const StartSecureKeysignFlow = ({
             render={() => (
               <KeysignActionProvider>
                 <KeysignMessagePayloadProvider value={keysignPayload}>
-                  <SwapQuoteProvider value={swapQuote}>
-                    <TransactionRecorderProvider>
-                      <KeysignSigningStep
-                        onBack={onBack}
-                        toAddressLabel={toAddressLabel}
-                      />
-                    </TransactionRecorderProvider>
-                  </SwapQuoteProvider>
+                  <KeysignRequestOriginProvider value={requestOrigin}>
+                    <SwapQuoteProvider value={swapQuote}>
+                      <TransactionRecorderProvider>
+                        <KeysignSigningStep
+                          onBack={onBack}
+                          toAddressLabel={toAddressLabel}
+                        />
+                      </TransactionRecorderProvider>
+                    </SwapQuoteProvider>
+                  </KeysignRequestOriginProvider>
                 </KeysignMessagePayloadProvider>
               </KeysignActionProvider>
             )}

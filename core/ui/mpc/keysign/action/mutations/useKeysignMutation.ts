@@ -41,6 +41,7 @@ import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChai
 import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
 import { generateSignature } from '@vultisig/core-mpc/tx/signature/generateSignature'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
@@ -53,11 +54,20 @@ import {
   signCowSwapOrder,
 } from '../../cowswap/cowSwapKeysign'
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
+import {
+  getCachedSignature,
+  setCachedSignature,
+} from '../../customMessage/signatureCache'
+import { useKeysignRequestOrigin } from '../../state/keysignRequestOrigin'
 import { getCosmosKeplrBridgeTxHash } from '../../tx/getCosmosKeplrBridgeTxHash'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
+
+  // dApp origin for the custom-message signature cache; undefined for in-app
+  // keysign flows. See signatureCache.ts.
+  const requestOrigin = useKeysignRequestOrigin()
 
   const keysignAction = useKeysignAction()
   const mutationListener = useKeysignMutationListener()
@@ -354,6 +364,32 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             const hexMessage = getCustomMessageHex({ chain, message, method })
 
+            // Deterministic-signing middle ground (TEST-ONLY, issue #1147):
+            // replay a recent signature for the exact same dApp+vault+message so
+            // a single login flow observes a stable signature. RAM-only and
+            // short-lived — see signatureCache.ts for the caveats.
+            //
+            // The cache is scoped per dApp origin so one site cannot read
+            // another site's cached signature. If the origin is unknown (e.g.
+            // an in-app keysign that is not a dApp request) we skip the cache
+            // entirely rather than risk an origin-less, cross-site entry.
+            const cacheKeyInput = requestOrigin
+              ? {
+                  origin: requestOrigin,
+                  vaultId: getVaultId(vault),
+                  chain,
+                  method,
+                  hexMessage,
+                }
+              : undefined
+
+            const cached = cacheKeyInput
+              ? await getCachedSignature(cacheKeyInput)
+              : undefined
+            if (cached) {
+              return { signature: cached }
+            }
+
             const [signature] = await keysignAction({
               msgs: [hexMessage],
               signatureAlgorithm: signatureAlgorithms[chainKind],
@@ -367,8 +403,14 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               signatureFormat: signatureFormats[chainKind],
             })
 
+            const signatureHex = Buffer.from(result).toString('hex')
+
+            if (cacheKeyInput) {
+              await setCachedSignature(cacheKeyInput, signatureHex)
+            }
+
             return {
-              signature: Buffer.from(result).toString('hex'),
+              signature: signatureHex,
             }
           },
         }
