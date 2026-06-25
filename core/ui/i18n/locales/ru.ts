@@ -1498,7 +1498,7 @@ export const ru = {
   custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'Этот конечный пункт обслуживает другую цепочку.',
   vult_tier_label: '{{tier}} Уровень',
-  vult_tier_required: 'Требуется серебряный уровень.',
+  vult_tier_required: '{{tier}} Требуется уровень',
   send_to_different_address: 'Отправить на другой адрес',
   slippage_custom: 'Пользовательский',
   slippage_helper:
@@ -1525,6 +1525,8 @@ export const ru = {
   show_exact_error: 'Показать точную ошибку',
   swap_invalid_external_recipient:
     'Адрес получателя недействителен для {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Настройте параметры свопов с помощью настраиваемого проскальзывания, лимита газа и внешнего адреса получателя.',
   signing_error_description:
     'Одно из ваших устройств не ответило вовремя. Проверьте подключение и попробуйте снова.',
 }

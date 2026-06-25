@@ -1488,7 +1488,7 @@ export const ko = {
   custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: '이 엔드포인트는 다른 체인을 제공합니다.',
   vult_tier_label: '{{tier}} 티어',
-  vult_tier_required: '실버 등급 필요',
+  vult_tier_required: '{{tier}} 등급 필요',
   send_to_different_address: '다른 주소로 보내기',
   slippage_custom: '관습',
   slippage_helper:
@@ -1514,6 +1514,8 @@ export const ko = {
   show_exact_error: '정확한 오류 표시',
   swap_invalid_external_recipient:
     '수신자 주소가 {{chain}}에 대해 유효하지 않습니다.',
+  advanced_swap_settings_gate_description:
+    '사용자 지정 슬리피지, 가스 한도 및 외부 수취인 주소를 사용하여 스왑을 세밀하게 조정하세요.',
   signing_error_description:
     '사용 중인 기기 중 하나가 제때 응답하지 않았습니다. 연결 상태를 확인하고 다시 시도해 주세요.',
 }

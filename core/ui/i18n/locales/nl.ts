@@ -1501,7 +1501,7 @@ export const nl = {
   custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'Dit eindpunt bedient een andere keten.',
   vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: 'Zilveren niveau vereist',
+  vult_tier_required: '{{tier}} Vereiste tier',
   send_to_different_address: 'Verzenden naar een ander adres',
   slippage_custom: 'Aangepast',
   slippage_helper:
@@ -1527,6 +1527,8 @@ export const nl = {
   show_exact_error: 'Geef de exacte fout weer',
   swap_invalid_external_recipient:
     'Het ontvangersadres is niet geldig voor {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Optimaliseer uw swaps met aangepaste slippage, gaslimiet en een extern ontvangeradres.',
   signing_error_description:
     'Een van uw apparaten reageerde niet op tijd. Controleer uw verbinding en probeer het opnieuw.',
 }

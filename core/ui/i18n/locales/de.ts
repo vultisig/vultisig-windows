@@ -1529,7 +1529,7 @@ export const de = {
   custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'Dieser Endpunkt dient einer anderen Kette',
   vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: 'Silber-Stufe erforderlich',
+  vult_tier_required: '{{tier}} Stufe erforderlich',
   send_to_different_address: 'An eine andere Adresse senden',
   slippage_custom: 'Benutzerdefiniert',
   slippage_helper:
@@ -1556,6 +1556,8 @@ export const de = {
   show_exact_error: 'Genauen Fehler anzeigen',
   swap_invalid_external_recipient:
     'Die Empfängeradresse ist für {{chain}} ungültig.',
+  advanced_swap_settings_gate_description:
+    'Optimieren Sie Ihre Swaps mit individueller Slippage, Gaslimit und einer externen Empfängeradresse.',
   signing_error_description:
     'Eines Ihrer Geräte hat nicht rechtzeitig reagiert. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
 }

@@ -692,6 +692,14 @@ export const hr = {
   qbtc_claim_utxos_skipped: 'Preskočeni UTXO-i',
   qbtc_claim_done: 'Gotovo',
   qbtc_claim_failed: 'Zahtjev nije uspio. Pokušajte ponovno.',
+  qbtc_claim_cosign_title: 'Supotpišite zahtjev QBTC',
+  qbtc_claim_cosign_description:
+    'Pregledajte zahtjev za polaganje prava u nastavku, a zatim odobrite njegovo supotpisivanje Bitcoin ključem ovog trezora.',
+  qbtc_claim_cosign_amount: 'Iznositi',
+  qbtc_claim_cosign_btc_address: 'Bitcoin adresa (dokaz vlasništva)',
+  qbtc_claim_cosign_qbtc_address: 'Adresa QBTC (primatelj zahtjeva)',
+  qbtc_claim_cosign_success:
+    'Supotpisali ste zahtjev QBTC. Drugi uređaj će ga završiti i emitirati.',
   qbtc_claim_fast_vault_only:
     'Za polaganje prava trenutno je potreban Fast Vault. Podrška za Secure Vault uskoro će biti dostupna.',
   qbtc_claim_password_description:
@@ -1494,7 +1502,7 @@ export const hr = {
   custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Ova krajnja točka opslužuje drugi lanac',
   vult_tier_label: 'Razina {{tier}}',
-  vult_tier_required: 'Potrebna srebrna razina',
+  vult_tier_required: '{{tier}} Potrebna razina',
   send_to_different_address: 'Pošalji na drugu adresu',
   slippage_custom: 'Običaj',
   slippage_helper:
@@ -1520,6 +1528,8 @@ export const hr = {
   show_exact_error: 'Prikaži točnu grešku',
   swap_invalid_external_recipient:
     'Adresa primatelja nije valjana za {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Prilagodite svoje swapove prilagođenim proklizavanjem, ograničenjem plina i vanjskom adresom primatelja.',
   signing_error_description:
     'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
 }

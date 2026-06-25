@@ -1516,7 +1516,7 @@ export const es = {
   custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Este punto final sirve a una cadena diferente',
   vult_tier_label: '{{tier}} Nivel',
-  vult_tier_required: 'Se requiere el nivel Plata.',
+  vult_tier_required: 'Se requiere nivel {{tier}}',
   send_to_different_address: 'Enviar a una dirección diferente',
   slippage_custom: 'Costumbre',
   slippage_helper:
@@ -1542,6 +1542,8 @@ export const es = {
   show_exact_error: 'Mostrar error exacto',
   swap_invalid_external_recipient:
     'La dirección del destinatario no es válida para {{chain}}.',
+  advanced_swap_settings_gate_description:
+    'Optimiza tus intercambios con deslizamiento personalizado, límite de gas y una dirección de destinatario externa.',
   signing_error_description:
     'Uno de tus dispositivos no respondió a tiempo. Comprueba tu conexión e inténtalo de nuevo.',
 }

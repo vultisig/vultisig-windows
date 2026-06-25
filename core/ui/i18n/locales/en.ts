@@ -41,6 +41,8 @@ export const en = {
   advanced_description: 'Reshare, manage security or sign messages.',
   advanced_gas_fee: 'Advanced gas fee',
   advanced_settings: 'Advanced Settings',
+  advanced_swap_settings_gate_description:
+    'Fine-tune your swaps with custom slippage, gas limit, and an external recipient address.',
   advanced_swap: 'Advanced swap',
   all_vaults: 'All Vaults',
   amount: 'Amount',
@@ -621,7 +623,7 @@ export const en = {
   active_nodes: 'Active Nodes',
   vulti_node: 'VultiNode',
   vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: 'Silver Tier Required',
+  vult_tier_required: '{{tier}} Tier Required',
   feature_gate_requires: 'Requires',
   feature_gate_requires_tier: '$VULT {{tier}} Tier or above',
   feature_gate_hold_at_least: 'Hold at least {{amount}} in your vault',

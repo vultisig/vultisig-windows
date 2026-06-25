@@ -5,12 +5,10 @@ import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
 
 import { FeatureTierGate } from '../../../vult/discount/featureGate/FeatureTierGate'
-import { useHighestVaultDiscountTier } from '../../../vult/discount/queries/anyVaultTier'
-import { discountTierColors } from '../../../vult/discount/tier/colors'
-import { hasReachedTier } from '../../../vult/discount/tierOrder'
+import { TierBadge } from '../../../vult/discount/featureGate/TierBadge'
+import { useTierBadge } from '../../../vult/discount/featureGate/useTierBadge'
 import {
   DescriptionText,
   ListItemIconWrapper,
@@ -27,20 +25,8 @@ const requiredTier = 'silver'
 export const CustomRpcSettingsRow = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { tier } = useHighestVaultDiscountTier()
-  const theme = useTheme()
   const [isGateOpen, setIsGateOpen] = useState(false)
-
-  const isEligible = hasReachedTier({ current: tier, required: requiredTier })
-
-  const badgeColor =
-    isEligible && tier
-      ? discountTierColors[tier].toCssValue()
-      : theme.colors.textShy.toCssValue()
-  const badgeLabel =
-    isEligible && tier
-      ? t('vult_tier_label', { tier: t(tier) })
-      : t('vult_tier_required')
+  const { isEligible, isPending, badge } = useTierBadge({ requiredTier })
 
   return (
     <>
@@ -53,13 +39,18 @@ export const CustomRpcSettingsRow = () => {
         description={
           <DescriptionText>{t('custom_rpc_description')}</DescriptionText>
         }
-        onClick={() =>
-          isEligible ? navigate({ id: 'customRpc' }) : setIsGateOpen(true)
-        }
+        onClick={() => {
+          if (isPending) return
+          if (isEligible) {
+            navigate({ id: 'customRpc' })
+          } else {
+            setIsGateOpen(true)
+          }
+        }}
         title={
           <HStack alignItems="center" gap={8}>
             <Text as="span">{t('custom_rpc')}</Text>
-            <TierBadge $color={badgeColor}>{badgeLabel}</TierBadge>
+            <TierBadge badge={badge} />
           </HStack>
         }
         hoverable
@@ -78,13 +69,3 @@ export const CustomRpcSettingsRow = () => {
     </>
   )
 }
-
-const TierBadge = styled.span<{ $color: string }>`
-  border: 1px solid ${({ $color }) => $color};
-  border-radius: 99px;
-  color: ${({ $color }) => $color};
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding: 2px 8px;
-`
