@@ -227,11 +227,11 @@ export const en = {
   custom_rpc_chip_default: 'Default',
   custom_rpc_description: 'Use your own nodes per chain',
   custom_rpc_gate_description:
-    'Point Vultisig at your own nodes. Faster queries, higher rate limits, and full privacy per chain.',
+    'Point {{productName}} at your own nodes. Faster queries, higher rate limits, and full privacy per chain.',
   custom_rpc_invalid_response: 'Unexpected response from this endpoint',
   custom_rpc_invalid_url: 'Enter a valid http(s) URL',
   custom_rpc_list_subtitle:
-    "Point a chain at your own node. Leave default to use Vultisig's endpoints.",
+    "Point a chain at your own node. Leave default to use {{productName}}'s endpoints.",
   custom_rpc_reachable: 'Reachable · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Reachable · {{ms}} ms — network identity not verified',

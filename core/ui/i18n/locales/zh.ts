@@ -647,8 +647,6 @@ export const zh = {
   qbtc_claim_utxos_skipped: 'UTXO 跳过',
   qbtc_claim_done: '完毕',
   qbtc_claim_failed: '申领失败，请重试。',
-  qbtc_claim_fast_vault_only:
-    '目前申领需要 Fast Vault。Secure Vault 支持即将推出。',
   qbtc_claim_password_description:
     '输入您的 Fast Vault 密码以共同签署申领交易。',
   receive: '收到',
@@ -1389,7 +1387,7 @@ export const zh = {
   custom_rpc_invalid_response: '此端点出现意外响应',
   custom_rpc_invalid_url: '请输入有效的 http(s) URL',
   custom_rpc_list_subtitle:
-    '将链指向您自己的节点。保留默认设置以使用 Vultisig 的端点。',
+    '将链指向您自己的节点。保留默认设置以使用 {{productName}} 的端点。',
   custom_rpc_reachable: '可达 · {{ms}} 毫秒',
   custom_rpc_reachable_unverified: '可达 · {{ms}} 毫秒 — 网络身份未验证',
   custom_rpc_reset_button: '重置为默认值',
@@ -1411,7 +1409,7 @@ export const zh = {
   use_external_recipient: '使用外部收件人',
   swap_external_recipient_warning: '发送到外部地址',
   custom_rpc_gate_description:
-    '将 Vultisig 指向您自己的节点。更快的查询速度、更高的速率限制以及每条链的完全隐私。',
+    '将 {{productName}} 指向您自己的节点。更快的查询速度、更高的速率限制以及每条链的完全隐私。',
   feature_gate_requires: '需要',
   feature_gate_requires_tier: '$VULT {{tier}} 等级或以上',
   feature_gate_hold_at_least: '你的金库中至少要持有 {{amount}}。',
@@ -1428,4 +1426,12 @@ export const zh = {
     '通过自定义滑点、gas限制和外部接收地址来微调您的交易。',
   signing_error_description:
     '您的某个设备未及时响应。请检查您的网络连接并重试。',
+  qbtc_claim_cosign_title: '共同签名 QBTC 声明',
+  qbtc_claim_cosign_description:
+    '请查看下面的索赔请求，然后批准使用此金库的比特币密钥对其进行共同签名。',
+  qbtc_claim_cosign_amount: '数量',
+  qbtc_claim_cosign_btc_address: '比特币地址（所有权证明）',
+  qbtc_claim_cosign_qbtc_address: 'QBTC 地址（索赔接收人）',
+  qbtc_claim_cosign_success:
+    '您已共同签署了 QBTC 声明。另一台设备将完成并广播该声明。',
 }

@@ -705,8 +705,6 @@ export const it = {
   qbtc_claim_utxos_skipped: 'UTXO saltati',
   qbtc_claim_done: 'Fatto',
   qbtc_claim_failed: 'Richiesta non riuscita. Riprova.',
-  qbtc_claim_fast_vault_only:
-    'Al momento, per riscattare i propri beni è necessario un Fast Vault. Il supporto per Secure Vault sarà disponibile a breve.',
   qbtc_claim_password_description:
     'Inserisci la password di Fast Vault per controfirmare la transazione di richiesta.',
   receive: 'Ricevere',
@@ -1512,7 +1510,7 @@ export const it = {
   custom_rpc_invalid_response: 'Risposta inattesa da questo endpoint',
   custom_rpc_invalid_url: 'Inserisci un URL http(s) valido',
   custom_rpc_list_subtitle:
-    'Punta la catena verso il tuo nodo. Lascia l&#39;impostazione predefinita per utilizzare gli endpoint di Vultisig.',
+    'Punta la catena verso il tuo nodo. Lascia l&#39;impostazione predefinita per utilizzare gli endpoint di {{productName}}.',
   custom_rpc_reachable: 'Raggiungibile · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Raggiungibile · {{ms}} ms — identità di rete non verificata',
@@ -1536,7 +1534,7 @@ export const it = {
   use_external_recipient: 'Utilizzare un destinatario esterno',
   swap_external_recipient_warning: 'Invio a un indirizzo esterno',
   custom_rpc_gate_description:
-    'Punta Vultisig ai tuoi nodi. Query più veloci, limiti di frequenza più elevati e privacy completa per ogni catena.',
+    'Punta {{productName}} ai tuoi nodi. Query più veloci, limiti di frequenza più elevati e privacy completa per ogni catena.',
   feature_gate_requires: 'Richiede',
   feature_gate_requires_tier: '$VULT {{tier}} Livello o superiore',
   feature_gate_hold_at_least: 'Conserva almeno {{amount}} nel tuo vault',
@@ -1554,4 +1552,13 @@ export const it = {
     'Ottimizza i tuoi scambi con slittamento personalizzato, limite di gas e indirizzo del destinatario esterno.',
   signing_error_description:
     'Uno dei tuoi dispositivi non ha risposto in tempo. Verifica la connessione e riprova.',
+  qbtc_claim_cosign_title: 'Co-firma la rivendicazione QBTC',
+  qbtc_claim_cosign_description:
+    'Esamina la richiesta di rivendicazione qui sotto, quindi approva la controfirma utilizzando la chiave Bitcoin di questo vault.',
+  qbtc_claim_cosign_amount: 'Quantità',
+  qbtc_claim_cosign_btc_address: 'Indirizzo Bitcoin (prova di proprietà)',
+  qbtc_claim_cosign_qbtc_address:
+    'Indirizzo QBTC (destinatario della richiesta)',
+  qbtc_claim_cosign_success:
+    'Hai controfirmato la rivendicazione QBTC. L&#39;altro dispositivo la completerà e la trasmetterà.',
 }
