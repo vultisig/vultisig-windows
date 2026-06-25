@@ -32,7 +32,7 @@ const Overlay = styled.div`
 
 const Card = styled(VStack)`
   background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 34px;
   box-shadow: 0px 15px 75px rgba(0, 0, 0, 0.18);
   overflow: hidden;

@@ -67,7 +67,7 @@ const CustomIconWrapper = styled.div`
   font-size: 27.5px;
   color: ${getColor('buttonPrimary')};
   border-radius: 24px;
-  border: 1.5px dashed ${getColor('foregroundSuper')};
+  border: 1.5px dashed ${getColor('foregroundExtra')};
   opacity: 0.6;
   background: ${getColor('foreground')};
 `

@@ -340,8 +340,8 @@ const ProviderPill = styled(HStack).attrs({
   padding: 8px 12px;
   border-radius: 12px 0 16px 0;
   background: ${getColor('buttonSecondary')};
-  border-top: 1px solid ${getColor('foregroundSuper')};
-  border-left: 1px solid ${getColor('foregroundSuper')};
+  border-top: 1px solid ${getColor('foregroundExtra')};
+  border-left: 1px solid ${getColor('foregroundExtra')};
   position: absolute;
   right: -16px;
   bottom: -16px;

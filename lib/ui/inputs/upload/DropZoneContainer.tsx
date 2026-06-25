@@ -12,7 +12,7 @@ export const DropZoneContainer = styled.div`
   ${centerContent};
   ${borderRadius.m};
   padding: 20px;
-  border: 1px dashed ${getColor('foregroundSuper')};
+  border: 1px dashed ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `
 

@@ -41,7 +41,7 @@ const collapsibleVariants = {
 const SectionContainer = styled.div`
   border-radius: 16px;
   background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
   overflow: hidden;
 `
 
