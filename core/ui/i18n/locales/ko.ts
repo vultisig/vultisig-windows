@@ -1467,7 +1467,7 @@ export const ko = {
   auto: '자동',
   coming_soon: '곧 출시 예정',
   custom_rpc: '사용자 정의 RPC',
-  custom_rpc_chip_custom: '관습',
+  custom_rpc_chip_custom: '사용자 지정',
   custom_rpc_chip_default: '기본',
   custom_rpc_description: '체인별로 자체 노드를 사용하십시오.',
   custom_rpc_invalid_response:
@@ -1488,7 +1488,7 @@ export const ko = {
   vult_tier_label: '{{tier}} 티어',
   vult_tier_required: '{{tier}} 등급 필요',
   send_to_different_address: '다른 주소로 보내기',
-  slippage_custom: '관습',
+  slippage_custom: '사용자 지정',
   slippage_helper:
     '주문이 취소되기 전에 가격이 변동할 수 있는 최대 범위를 제한합니다.',
   slippage_tolerance: '미끄러짐 허용 오차',

@@ -1482,7 +1482,7 @@ export const hr = {
   auto: 'Auto',
   coming_soon: 'Uskoro',
   custom_rpc: 'Prilagođeni RPC-ovi',
-  custom_rpc_chip_custom: 'Običaj',
+  custom_rpc_chip_custom: 'Prilagođeno',
   custom_rpc_chip_default: 'Zadano',
   custom_rpc_description: 'Koristite vlastite čvorove po lancu',
   custom_rpc_invalid_response: 'Neočekivani odgovor s ove krajnje točke',
@@ -1502,7 +1502,7 @@ export const hr = {
   vult_tier_label: 'Razina {{tier}}',
   vult_tier_required: '{{tier}} Potrebna razina',
   send_to_different_address: 'Pošalji na drugu adresu',
-  slippage_custom: 'Običaj',
+  slippage_custom: 'Prilagođeno',
   slippage_helper:
     'Ograničava koliko se cijena može promijeniti prije nego što se izvršenje otkaže.',
   slippage_tolerance: 'Tolerancija klizanja',
