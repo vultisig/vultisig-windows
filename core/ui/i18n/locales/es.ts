@@ -702,8 +702,6 @@ export const es = {
   qbtc_claim_done: 'Hecho',
   qbtc_claim_failed:
     'La reclamación ha fallado. Por favor, inténtelo de nuevo.',
-  qbtc_claim_fast_vault_only:
-    'Actualmente, para reclamar se requiere Fast Vault. La compatibilidad con Secure Vault estará disponible próximamente.',
   qbtc_claim_password_description:
     'Ingrese su contraseña de Fast Vault para firmar conjuntamente la transacción de reclamación.',
   receive: 'Recibir',
@@ -1504,7 +1502,7 @@ export const es = {
   custom_rpc_invalid_response: 'Respuesta inesperada de este punto final.',
   custom_rpc_invalid_url: 'Introduzca una URL http(s) válida',
   custom_rpc_list_subtitle:
-    'Dirige una cadena a tu propio nodo. Deja la configuración predeterminada para usar los puntos finales de Vultisig.',
+    'Dirige una cadena a tu propio nodo. Deja la configuración predeterminada para usar los puntos finales de {{productName}}.',
   custom_rpc_reachable: 'Accesible · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Accesible · {{ms}} ms — identidad de red no verificada',
@@ -1528,7 +1526,7 @@ export const es = {
   use_external_recipient: 'Utilizar destinatario externo',
   swap_external_recipient_warning: 'Enviar a una dirección externa',
   custom_rpc_gate_description:
-    'Apunte Vultisig a sus propios nodos. Consultas más rápidas, límites de velocidad más altos y privacidad total por cadena.',
+    'Apunte {{productName}} a sus propios nodos. Consultas más rápidas, límites de velocidad más altos y privacidad total por cadena.',
   feature_gate_requires: 'Requiere',
   feature_gate_requires_tier: '$VULT {{tier}} Nivel o superior',
   feature_gate_hold_at_least: 'Mantén al menos {{amount}} en tu bóveda.',
@@ -1546,4 +1544,13 @@ export const es = {
     'Optimiza tus intercambios con deslizamiento personalizado, límite de gas y una dirección de destinatario externa.',
   signing_error_description:
     'Uno de tus dispositivos no respondió a tiempo. Comprueba tu conexión e inténtalo de nuevo.',
+  qbtc_claim_cosign_title: 'Firma conjunta de la reclamación QBTC',
+  qbtc_claim_cosign_description:
+    'Revise la solicitud de reclamación a continuación y, a continuación, apruebe la firma conjunta con la clave Bitcoin de esta bóveda.',
+  qbtc_claim_cosign_amount: 'Cantidad',
+  qbtc_claim_cosign_btc_address: 'Dirección de Bitcoin (prueba de propiedad)',
+  qbtc_claim_cosign_qbtc_address:
+    'Dirección QBTC (destinatario de la reclamación)',
+  qbtc_claim_cosign_success:
+    'Has firmado conjuntamente la reclamación QBTC. El otro dispositivo la finalizará y la transmitirá.',
 }

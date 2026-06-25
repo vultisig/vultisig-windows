@@ -700,8 +700,6 @@ export const hr = {
   qbtc_claim_cosign_qbtc_address: 'Adresa QBTC (primatelj zahtjeva)',
   qbtc_claim_cosign_success:
     'Supotpisali ste zahtjev QBTC. Drugi uređaj će ga završiti i emitirati.',
-  qbtc_claim_fast_vault_only:
-    'Za polaganje prava trenutno je potreban Fast Vault. Podrška za Secure Vault uskoro će biti dostupna.',
   qbtc_claim_password_description:
     'Unesite svoju lozinku za Fast Vault kako biste supotpisali transakciju potraživanja.',
   receive: 'Primi',
@@ -1490,7 +1488,7 @@ export const hr = {
   custom_rpc_invalid_response: 'Neočekivani odgovor s ove krajnje točke',
   custom_rpc_invalid_url: 'Unesite valjani http(s) URL',
   custom_rpc_list_subtitle:
-    'Usmjerite lanac na vlastiti čvor. Ostavite zadane postavke za korištenje krajnjih točaka Vultisig.',
+    'Usmjerite lanac na vlastiti čvor. Ostavite zadane postavke za korištenje krajnjih točaka {{productName}}.',
   custom_rpc_reachable: 'Dostupno · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Dostupno · {{ms}} ms — identitet mreže nije provjeren',
@@ -1514,7 +1512,7 @@ export const hr = {
   use_external_recipient: 'Koristi vanjskog primatelja',
   swap_external_recipient_warning: 'Slanje na vanjsku adresu',
   custom_rpc_gate_description:
-    'Usmjerite Vultisig na vlastite čvorove. Brži upiti, veća ograničenja brzine i potpuna privatnost po lancu.',
+    'Usmjerite {{productName}} na vlastite čvorove. Brži upiti, veća ograničenja brzine i potpuna privatnost po lancu.',
   feature_gate_requires: 'Zahtijeva',
   feature_gate_requires_tier: '$VULT {{tier}} Razina ili viša',
   feature_gate_hold_at_least: 'Držite barem {{amount}} u svom trezoru',

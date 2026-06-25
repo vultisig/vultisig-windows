@@ -709,8 +709,6 @@ export const de = {
   qbtc_claim_done: 'Erledigt',
   qbtc_claim_failed:
     'Die Reklamation ist fehlgeschlagen. Bitte versuchen Sie es erneut.',
-  qbtc_claim_fast_vault_only:
-    'Für die Geltendmachung von Ansprüchen ist derzeit ein Fast Vault erforderlich. Die Unterstützung für Secure Vault ist in Vorbereitung.',
   qbtc_claim_password_description:
     'Geben Sie Ihr Fast Vault-Passwort ein, um die Schadensabwicklung mitzuunterzeichnen.',
   receive: 'Erhalten',
@@ -1517,7 +1515,7 @@ export const de = {
   custom_rpc_invalid_response: 'Unerwartete Antwort von diesem Endpunkt',
   custom_rpc_invalid_url: 'Geben Sie eine gültige http(s)-URL ein.',
   custom_rpc_list_subtitle:
-    'Richten Sie eine Kette auf Ihren eigenen Knoten aus. Belassen Sie die Standardeinstellung, um die Endpunkte von Vultisig zu verwenden.',
+    'Richten Sie eine Kette auf Ihren eigenen Knoten aus. Belassen Sie die Standardeinstellung, um die Endpunkte von {{productName}} zu verwenden.',
   custom_rpc_reachable: 'Erreichbar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Erreichbar · {{ms}} ms — Netzwerkidentität nicht verifiziert',
@@ -1541,7 +1539,7 @@ export const de = {
   use_external_recipient: 'Externen Empfänger verwenden',
   swap_external_recipient_warning: 'Senden an eine externe Adresse',
   custom_rpc_gate_description:
-    'Platzieren Sie Vultisig auf Ihren eigenen Knoten. Schnellere Abfragen, höhere Ratenlimits und vollständige Privatsphäre pro Kette.',
+    'Platzieren Sie {{productName}} auf Ihren eigenen Knoten. Schnellere Abfragen, höhere Ratenlimits und vollständige Privatsphäre pro Kette.',
   feature_gate_requires: 'Erfordert',
   feature_gate_requires_tier: '$VULT {{tier}} Stufe oder höher',
   feature_gate_hold_at_least:
@@ -1560,4 +1558,12 @@ export const de = {
     'Optimieren Sie Ihre Swaps mit individueller Slippage, Gaslimit und einer externen Empfängeradresse.',
   signing_error_description:
     'Eines Ihrer Geräte hat nicht rechtzeitig reagiert. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_description:
+    'Prüfen Sie den unten stehenden Anspruchsantrag und genehmigen Sie anschließend die Mitunterzeichnung mit dem Bitcoin-Schlüssel dieses Tresors.',
+  qbtc_claim_cosign_amount: 'Menge',
+  qbtc_claim_cosign_btc_address: 'Bitcoin-Adresse (Eigentumsnachweis)',
+  qbtc_claim_cosign_qbtc_address: 'Adresse QBTC (Anspruchsempfänger)',
+  qbtc_claim_cosign_success:
+    'Sie haben den Anspruch QBTC mitsigniert. Das andere Gerät wird ihn abschließen und senden.',
 }

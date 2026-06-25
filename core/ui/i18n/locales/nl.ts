@@ -696,8 +696,6 @@ export const nl = {
   qbtc_claim_utxos_skipped: 'UTXO&#39;s overgeslagen',
   qbtc_claim_done: 'Klaar',
   qbtc_claim_failed: 'Claim mislukt. Probeer het opnieuw.',
-  qbtc_claim_fast_vault_only:
-    'Voor het claimen van gegevens is momenteel een Fast Vault vereist. Ondersteuning voor Secure Vault is in ontwikkeling.',
   qbtc_claim_password_description:
     'Voer uw Fast Vault-wachtwoord in om de claimtransactie mede te ondertekenen.',
   receive: 'Ontvangen',
@@ -1489,7 +1487,7 @@ export const nl = {
   custom_rpc_invalid_response: 'Onverwachte reactie van dit eindpunt',
   custom_rpc_invalid_url: 'Voer een geldige http(s)-URL in.',
   custom_rpc_list_subtitle:
-    'Richt een keten op je eigen knooppunt. Laat de standaardinstelling staan ​​om de eindpunten van Vultisig te gebruiken.',
+    'Richt een keten op je eigen knooppunt. Laat de standaardinstelling staan ​​om de eindpunten van {{productName}} te gebruiken.',
   custom_rpc_reachable: 'Bereikbaar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Bereikbaar · {{ms}} ms — netwerkidentiteit niet geverifieerd',
@@ -1513,7 +1511,7 @@ export const nl = {
   use_external_recipient: 'Externe ontvanger gebruiken',
   swap_external_recipient_warning: 'Verzenden naar een extern adres',
   custom_rpc_gate_description:
-    'Koppel Vultisig aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
+    'Koppel {{productName}} aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
   feature_gate_requires: 'Vereist',
   feature_gate_requires_tier: '$VULT {{tier}} Niveau of hoger',
   feature_gate_hold_at_least: 'Bewaar ten minste {{amount}} in je kluis.',
@@ -1531,4 +1529,12 @@ export const nl = {
     'Optimaliseer uw swaps met aangepaste slippage, gaslimiet en een extern ontvangeradres.',
   signing_error_description:
     'Een van uw apparaten reageerde niet op tijd. Controleer uw verbinding en probeer het opnieuw.',
+  qbtc_claim_cosign_title: 'Medeonderteken de QBTC-claim',
+  qbtc_claim_cosign_description:
+    'Bekijk het onderstaande claimverzoek en keur vervolgens de medeondertekening ervan goed met de Bitcoin-sleutel van deze kluis.',
+  qbtc_claim_cosign_amount: 'Hoeveelheid',
+  qbtc_claim_cosign_btc_address: 'Bitcoin-adres (bewijs van eigendom)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
+  qbtc_claim_cosign_success:
+    'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
 }

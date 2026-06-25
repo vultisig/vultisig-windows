@@ -692,8 +692,6 @@ export const ru = {
   qbtc_claim_utxos_skipped: 'UTXO пропущены',
   qbtc_claim_done: 'Готово',
   qbtc_claim_failed: 'Заявка не прошла. Пожалуйста, попробуйте еще раз.',
-  qbtc_claim_fast_vault_only:
-    'В настоящее время для получения средств требуется Fast Vault. Поддержка Secure Vault появится в будущем.',
   qbtc_claim_password_description:
     'Введите свой пароль от Fast Vault, чтобы подписать транзакцию по заявке.',
   receive: 'Получить',
@@ -1486,7 +1484,7 @@ export const ru = {
   custom_rpc_invalid_response: 'Неожиданный ответ от этой конечной точки.',
   custom_rpc_invalid_url: 'Введите действительный URL-адрес http(s).',
   custom_rpc_list_subtitle:
-    'Направьте цепочку на свой собственный узел. Оставьте значение по умолчанию для использования конечных точек Vultisig.',
+    'Направьте цепочку на свой собственный узел. Оставьте значение по умолчанию для использования конечных точек {{productName}}.',
   custom_rpc_reachable: 'Доступен · {{ms}} мс',
   custom_rpc_reachable_unverified:
     'Доступен · {{ms}} мс — идентификация сети не подтверждена',
@@ -1510,7 +1508,7 @@ export const ru = {
   use_external_recipient: 'Использовать внешнего получателя',
   swap_external_recipient_warning: 'Отправка на внешний адрес',
   custom_rpc_gate_description:
-    'Направьте Vultisig на свои собственные узлы. Более быстрые запросы, более высокие лимиты скорости и полная конфиденциальность для каждой цепочки.',
+    'Направьте {{productName}} на свои собственные узлы. Более быстрые запросы, более высокие лимиты скорости и полная конфиденциальность для каждой цепочки.',
   feature_gate_requires: 'Требует',
   feature_gate_requires_tier: '$VULT {{tier}} Уровень или выше',
   feature_gate_hold_at_least:
@@ -1529,4 +1527,13 @@ export const ru = {
     'Настройте параметры свопов с помощью настраиваемого проскальзывания, лимита газа и внешнего адреса получателя.',
   signing_error_description:
     'Одно из ваших устройств не ответило вовремя. Проверьте подключение и попробуйте снова.',
+  qbtc_claim_cosign_title: 'Подписать совместно заявку QBTC',
+  qbtc_claim_cosign_description:
+    'Ознакомьтесь с запросом на получение средств ниже, а затем подтвердите его, подписав его совместно с биткойн-ключом этого хранилища.',
+  qbtc_claim_cosign_amount: 'Количество',
+  qbtc_claim_cosign_btc_address:
+    'Биткоин-адрес (подтверждение права собственности)',
+  qbtc_claim_cosign_qbtc_address: 'Адрес QBTC (получатель заявки)',
+  qbtc_claim_cosign_success:
+    'Вы подписали совместно запрос QBTC. Другое устройство завершит его и передаст дальше.',
 }

@@ -19,7 +19,7 @@
     "@rive-app/react-webgl2": "4.26.2",
     "@tanstack/query-core": "^5.101.0",
     "@tanstack/react-query": "^5.101.0",
-    "@vultisig/lib-utils": "0.10.1",
+    "@vultisig/lib-utils": "0.10.2",
     "i18next": "^25.8.18",
     "lottie-react": "^2.4.1",
     "react": "19.2.4",

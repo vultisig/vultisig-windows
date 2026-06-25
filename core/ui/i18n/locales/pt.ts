@@ -703,8 +703,6 @@ export const pt = {
   qbtc_claim_utxos_skipped: 'UTXOs ignorados',
   qbtc_claim_done: 'Feito',
   qbtc_claim_failed: 'A solicitação falhou. Tente novamente.',
-  qbtc_claim_fast_vault_only:
-    'Atualmente, o resgate requer um Fast Vault. O suporte para Secure Vault está a caminho.',
   qbtc_claim_password_description:
     'Insira sua senha do Fast Vault para coassinar a transação de reivindicação.',
   receive: 'Receber',
@@ -1506,7 +1504,7 @@ export const pt = {
   custom_rpc_invalid_response: 'Resposta inesperada deste endpoint',
   custom_rpc_invalid_url: 'Insira um URL http(s) válido',
   custom_rpc_list_subtitle:
-    'Aponte uma cadeia para o seu próprio nó. Deixe a configuração padrão para usar os endpoints de Vultisig.',
+    'Aponte uma cadeia para o seu próprio nó. Deixe a configuração padrão para usar os endpoints de {{productName}}.',
   custom_rpc_reachable: 'Acessível · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Acessível · {{ms}} ms — identidade de rede não verificada',
@@ -1530,7 +1528,7 @@ export const pt = {
   use_external_recipient: 'Usar destinatário externo',
   swap_external_recipient_warning: 'Envio para um endereço externo',
   custom_rpc_gate_description:
-    'Aponte Vultisig para seus próprios nós. Consultas mais rápidas, limites de taxa mais altos e privacidade total por cadeia.',
+    'Aponte {{productName}} para seus próprios nós. Consultas mais rápidas, limites de taxa mais altos e privacidade total por cadeia.',
   feature_gate_requires: 'Requer',
   feature_gate_requires_tier: '$VULT {{tier}} Nível ou superior',
   feature_gate_hold_at_least: 'Guarde pelo menos {{amount}} em seu cofre.',
@@ -1548,4 +1546,13 @@ export const pt = {
     'Ajuste suas trocas com slippage personalizado, limite de gás e um endereço de destinatário externo.',
   signing_error_description:
     'Um dos seus dispositivos não respondeu a tempo. Verifique sua conexão e tente novamente.',
+  qbtc_claim_cosign_title: 'Assinar em conjunto a declaração QBTC',
+  qbtc_claim_cosign_description:
+    'Analise o pedido de reivindicação abaixo e, em seguida, aprove a assinatura conjunta com a chave Bitcoin deste cofre.',
+  qbtc_claim_cosign_amount: 'Quantia',
+  qbtc_claim_cosign_btc_address:
+    'Endereço Bitcoin (comprovante de propriedade)',
+  qbtc_claim_cosign_qbtc_address: 'Endereço QBTC (destinatário da solicitação)',
+  qbtc_claim_cosign_success:
+    'Você assinou em conjunto a declaração QBTC. O outro dispositivo irá concluir e transmiti-la.',
 }

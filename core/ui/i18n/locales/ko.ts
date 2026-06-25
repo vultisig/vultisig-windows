@@ -690,8 +690,6 @@ export const ko = {
   qbtc_claim_utxos_skipped: 'UTXO가 건너뛰었습니다',
   qbtc_claim_done: '완료',
   qbtc_claim_failed: '청구가 실패했습니다. 다시 시도해 주세요.',
-  qbtc_claim_fast_vault_only:
-    '현재 클레임을 위해서는 Fast Vault가 필요합니다. Secure Vault 지원은 곧 제공될 예정입니다.',
   qbtc_claim_password_description:
     '청구 거래에 공동 서명하려면 Fast Vault 비밀번호를 입력하십시오.',
   receive: '받다',
@@ -1476,7 +1474,7 @@ export const ko = {
     '이 엔드포인트에서 예상치 못한 응답이 발생했습니다.',
   custom_rpc_invalid_url: '유효한 http(s) URL을 입력하세요',
   custom_rpc_list_subtitle:
-    '자신의 노드를 가리키도록 체인을 설정하세요. 기본값을 유지하면 Vultisig의 엔드포인트를 사용합니다.',
+    '자신의 노드를 가리키도록 체인을 설정하세요. 기본값을 유지하면 {{productName}}의 엔드포인트를 사용합니다.',
   custom_rpc_reachable: '도달 가능 · {{ms}} ms',
   custom_rpc_reachable_unverified:
     '연결 가능 · {{ms}} ms — 네트워크 ID가 확인되지 않았습니다',
@@ -1500,7 +1498,7 @@ export const ko = {
   use_external_recipient: '외부 수신자 사용',
   swap_external_recipient_warning: '외부 주소로 전송',
   custom_rpc_gate_description:
-    'Vultisig를 자체 노드에 지정하세요. 더 빠른 쿼리, 더 높은 처리량 제한, 그리고 체인별 완벽한 개인 정보 보호를 누릴 수 있습니다.',
+    '{{productName}}를 자체 노드에 지정하세요. 더 빠른 쿼리, 더 높은 처리량 제한, 그리고 체인별 완벽한 개인 정보 보호를 누릴 수 있습니다.',
   feature_gate_requires: '필수 사항',
   feature_gate_requires_tier: '$VULT {{tier}} 티어 이상',
   feature_gate_hold_at_least: '금고에 최소 {{amount}} 토큰을 보유하세요.',
@@ -1518,4 +1516,12 @@ export const ko = {
     '사용자 지정 슬리피지, 가스 한도 및 외부 수취인 주소를 사용하여 스왑을 세밀하게 조정하세요.',
   signing_error_description:
     '사용 중인 기기 중 하나가 제때 응답하지 않았습니다. 연결 상태를 확인하고 다시 시도해 주세요.',
+  qbtc_claim_cosign_title: 'QBTC 클레임에 공동 서명',
+  qbtc_claim_cosign_description:
+    '아래의 청구 요청을 검토하신 후, 이 금고의 비트코인 ​​키로 공동 서명하는 것을 승인해 주세요.',
+  qbtc_claim_cosign_amount: '양',
+  qbtc_claim_cosign_btc_address: '비트코인 주소(소유권 증명)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
+  qbtc_claim_cosign_success:
+    'QBTC 클레임에 공동 서명하셨습니다. 다른 기기에서 서명을 완료하고 브로드캐스트할 것입니다.',
 }
