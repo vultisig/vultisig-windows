@@ -7,6 +7,11 @@ const isStaleTransaction = (record: TransactionRecord): boolean => {
   return elapsed > stalePendingThresholdMs
 }
 
+/**
+ * Decides whether a pending record should be marked failed by the client-side
+ * stale timeout. Swap records stay pending until an authoritative provider
+ * status resolves them.
+ */
 export const shouldFailStaleTransaction = (
   record: TransactionRecord
 ): boolean => record.type === 'send' && isStaleTransaction(record)
