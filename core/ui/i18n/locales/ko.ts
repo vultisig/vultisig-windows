@@ -1524,4 +1524,6 @@ export const ko = {
   qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
   qbtc_claim_cosign_success:
     'QBTC 클레임에 공동 서명하셨습니다. 다른 기기에서 서명을 완료하고 브로드캐스트할 것입니다.',
+  qbtc_onboarding_key_warning:
+    'QBTC를 활성화하면 새로운 양자 키와 QBTC 주소가 생성됩니다. 이 볼트에 이미 다른 장치나 가져오기를 통해 양자 키가 있는 경우, 이전에 생성된 QBTC 자금은 새 주소에서 접근할 수 없을 수 있습니다. 생성 후에는 이 볼트를 백업하십시오.',
 }

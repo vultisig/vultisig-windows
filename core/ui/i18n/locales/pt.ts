@@ -1555,4 +1555,6 @@ export const pt = {
   qbtc_claim_cosign_qbtc_address: 'Endereço QBTC (destinatário da solicitação)',
   qbtc_claim_cosign_success:
     'Você assinou em conjunto a declaração QBTC. O outro dispositivo irá concluir e transmiti-la.',
+  qbtc_onboarding_key_warning:
+    'Habilitar QBTC cria uma nova chave quântica e um endereço QBTC. Se este cofre já possuía uma chave quântica em outro dispositivo ou importação, os fundos QBTC anteriores podem não estar acessíveis a partir do novo endereço. Faça backup deste cofre após a geração.',
 }

@@ -1561,4 +1561,6 @@ export const it = {
     'Indirizzo QBTC (destinatario della richiesta)',
   qbtc_claim_cosign_success:
     'Hai controfirmato la rivendicazione QBTC. L&#39;altro dispositivo la completerà e la trasmetterà.',
+  qbtc_onboarding_key_warning:
+    'L&#39;attivazione di QBTC crea una nuova chiave quantistica e un nuovo indirizzo QBTC. Se questo vault conteneva già una chiave quantistica su un altro dispositivo o importata, i fondi QBTC precedentemente creati potrebbero non essere accessibili dal nuovo indirizzo. Eseguire un backup di questo vault dopo la generazione.',
 }

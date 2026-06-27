@@ -1537,4 +1537,6 @@ export const nl = {
   qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
   qbtc_claim_cosign_success:
     'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
+  qbtc_onboarding_key_warning:
+    'Door QBTC in te schakelen, wordt een nieuwe kwantumsleutel en een nieuw QBTC-adres aangemaakt. Als deze kluis al een kwantumsleutel op een ander apparaat of via een import had, zijn de eerder aangemaakte QBTC-tegoeden mogelijk niet toegankelijk vanaf het nieuwe adres. Maak na het aanmaken van deze kluis een back-up.',
 }

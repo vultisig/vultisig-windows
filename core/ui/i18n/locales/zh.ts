@@ -1434,4 +1434,6 @@ export const zh = {
   qbtc_claim_cosign_qbtc_address: 'QBTC 地址（索赔接收人）',
   qbtc_claim_cosign_success:
     '您已共同签署了 QBTC 声明。另一台设备将完成并广播该声明。',
+  qbtc_onboarding_key_warning:
+    '启用 QBTC 会创建一个新的量子密钥和 QBTC 地址。如果此金库在其他设备或导入过程中已存在量子密钥，则可能无法从新地址访问之前的 QBTC 资金。生成后请备份此金库。',
 }

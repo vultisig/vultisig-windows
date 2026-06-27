@@ -1553,4 +1553,6 @@ export const es = {
     'Dirección QBTC (destinatario de la reclamación)',
   qbtc_claim_cosign_success:
     'Has firmado conjuntamente la reclamación QBTC. El otro dispositivo la finalizará y la transmitirá.',
+  qbtc_onboarding_key_warning:
+    'Al habilitar QBTC, se crea una nueva clave cuántica y una dirección QBTC. Si esta bóveda ya tenía una clave cuántica en otro dispositivo o importación, es posible que los fondos QBTC anteriores no sean accesibles desde la nueva dirección. Realice una copia de seguridad de esta bóveda después de su generación.',
 }

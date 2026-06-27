@@ -1530,4 +1530,6 @@ export const hr = {
     'Prilagodite svoje swapove prilagođenim proklizavanjem, ograničenjem plina i vanjskom adresom primatelja.',
   signing_error_description:
     'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
+  qbtc_onboarding_key_warning:
+    'Omogućavanjem QBTC stvara se novi kvantni ključ i adresa QBTC. Ako ovaj trezor već ima kvantni ključ na drugom uređaju ili uvozu, ranija sredstva QBTC možda neće biti dostupna s nove adrese. Napravite sigurnosnu kopiju ovog trezora nakon generiranja.',
 }

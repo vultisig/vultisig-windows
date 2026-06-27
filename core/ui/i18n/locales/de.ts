@@ -1566,4 +1566,6 @@ export const de = {
   qbtc_claim_cosign_qbtc_address: 'Adresse QBTC (Anspruchsempfänger)',
   qbtc_claim_cosign_success:
     'Sie haben den Anspruch QBTC mitsigniert. Das andere Gerät wird ihn abschließen und senden.',
+  qbtc_onboarding_key_warning:
+    'Durch Aktivieren von QBTC wird ein neuer Quantenschlüssel und eine neue Adresse QBTC erstellt. Falls dieser Tresor bereits einen Quantenschlüssel auf einem anderen Gerät oder durch einen Import besitzt, sind zuvor gespeicherte Guthaben unter QBTC möglicherweise nicht über die neue Adresse zugänglich. Sichern Sie diesen Tresor nach der Generierung.',
 }

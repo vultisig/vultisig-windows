@@ -727,6 +727,8 @@ export const en = {
   qbtc_onboarding_title: 'New quantum security',
   qbtc_onboarding_subtitle:
     'Classical keys can be broken by quantum computers. Enabling QBTC requires generating a new key pair.',
+  qbtc_onboarding_key_warning:
+    'Enabling QBTC creates a new quantum key and QBTC address. If this vault already had a quantum key on another device or import, earlier QBTC funds may not be accessible from the new address. Back up this vault after generation.',
   qbtc_onboarding_feature_generate_title: 'Generate your quantum key pair',
   qbtc_onboarding_feature_generate_description:
     '{{productName}} runs a local MPC ceremony across your vault devices to produce a new key pair.',
