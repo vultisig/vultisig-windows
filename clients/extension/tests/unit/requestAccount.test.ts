@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-
 import { BackgroundError } from '@core/inpage-provider/background/error'
 import { PopupError } from '@core/inpage-provider/popup/error'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // We need to mock callBackground and callPopup before importing requestAccount
 const mockCallBackground = vi.fn()
@@ -16,7 +15,6 @@ vi.mock('@core/inpage-provider/popup', () => ({
 }))
 
 import { requestAccount } from '@clients/extension/src/inpage/providers/core/requestAccount'
-
 // We need to know the Chain enum value for Solana
 import { Chain } from '@vultisig/core-chain/Chain'
 
@@ -41,7 +39,11 @@ describe('requestAccount', () => {
 
   it('falls through to popup on BackgroundError.Unauthorized, then retries', async () => {
     const accountData = { address: '0xABCDEF' }
-    const appSession = { vaultId: 'v1', host: 'example.com', url: 'https://example.com' }
+    const appSession = {
+      vaultId: 'v1',
+      host: 'example.com',
+      url: 'https://example.com',
+    }
 
     // First call: background rejects with Unauthorized
     mockCallBackground
@@ -69,7 +71,11 @@ describe('requestAccount', () => {
   })
 
   it('passes preselectFastVault option to popup', async () => {
-    const appSession = { vaultId: 'v1', host: 'example.com', url: 'https://example.com' }
+    const appSession = {
+      vaultId: 'v1',
+      host: 'example.com',
+      url: 'https://example.com',
+    }
     mockCallBackground
       .mockRejectedValueOnce(BackgroundError.Unauthorized)
       .mockResolvedValueOnce({ address: '0x123' })
@@ -81,6 +87,32 @@ describe('requestAccount', () => {
     expect(mockCallPopup).toHaveBeenCalledWith({
       grantVaultAccess: {
         preselectFastVault: true,
+        chain: Chain.Ethereum,
+      },
+    })
+  })
+
+  it('opens the popup when the initial getAccount fails with a bridge transport error', async () => {
+    const appSession = {
+      vaultId: 'v1',
+      host: 'example.com',
+      url: 'https://example.com',
+    }
+    const accountData = { address: '0x123' }
+
+    mockCallBackground
+      .mockRejectedValueOnce(
+        'Failed to send message to background script after 3 attempts: The message port closed before a response was received.'
+      )
+      .mockResolvedValueOnce(accountData)
+    mockCallPopup.mockResolvedValue({ appSession })
+
+    const result = await requestAccount(Chain.Ethereum)
+
+    expect(result).toEqual(accountData)
+    expect(mockCallPopup).toHaveBeenCalledWith({
+      grantVaultAccess: {
+        preselectFastVault: undefined,
         chain: Chain.Ethereum,
       },
     })
@@ -103,7 +135,9 @@ describe('requestAccount', () => {
     // Background rejects with something other than BackgroundError.Unauthorized
     // — e.g. shouldBePresent('currentVaultId') throwing when no vault exists.
     // Per EIP-1193, the dApp should see 4100 (Unauthorized), not -32603.
-    mockCallBackground.mockRejectedValue(new Error('currentVaultId is required'))
+    mockCallBackground.mockRejectedValue(
+      new Error('currentVaultId is required')
+    )
 
     await expect(requestAccount(Chain.Ethereum)).rejects.toMatchObject({
       code: 4100,
