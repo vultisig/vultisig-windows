@@ -29,16 +29,16 @@ export const VotingCountdown = ({
   }
 
   const { days, hours, minutes } = remaining
-  const duration =
+  const label =
     days > 0
-      ? t('qbtc_gov.duration_days_hours', { days, hours })
+      ? t('qbtc_gov.ends_in_days_hours', { days, hours })
       : hours > 0
-        ? t('qbtc_gov.duration_hours_minutes', { hours, minutes })
-        : t('qbtc_gov.duration_minutes', { minutes })
+        ? t('qbtc_gov.ends_in_hours_minutes', { hours, minutes })
+        : t('qbtc_gov.ends_in_minutes', { minutes })
 
   return (
     <Text size={12} color="shy">
-      {t('qbtc_gov.voting_ends_in', { duration })}
+      {label}
     </Text>
   )
 }
