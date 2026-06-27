@@ -27,7 +27,12 @@ export const useQbtcVoteKeysignPayloadQuery = ({
   const walletCore = useAssertWalletCore()
 
   return useQuery<KeysignMessagePayload>({
-    queryKey: ['qbtcVoteKeysignPayload', proposalId, selection] as const,
+    queryKey: [
+      'qbtcVoteKeysignPayload',
+      voterAddress,
+      proposalId,
+      selection,
+    ] as const,
     queryFn: () =>
       buildQbtcVoteKeysignPayload({
         vault,

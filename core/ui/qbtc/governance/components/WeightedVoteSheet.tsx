@@ -41,7 +41,7 @@ export const WeightedVoteSheet = ({
   )
   const isValid = total === 100
 
-  const adjust = (option: string, delta: number) =>
+  const adjust = ({ option, delta }: { option: string; delta: number }) =>
     setWeights(prev => ({
       ...prev,
       [option]: clampPercent((prev[option] ?? 0) + delta),
@@ -73,11 +73,11 @@ export const WeightedVoteSheet = ({
                 <Text size={14}>{t(qbtcVoteOptionLabelKey[option])}</Text>
               </HStack>
               <HStack alignItems="center" gap={12}>
-                <StepperButton onClick={() => adjust(option, -step)}>
+                <StepperButton onClick={() => adjust({ option, delta: -step })}>
                   −
                 </StepperButton>
                 <PercentValue>{weights[option] ?? 0}%</PercentValue>
-                <StepperButton onClick={() => adjust(option, step)}>
+                <StepperButton onClick={() => adjust({ option, delta: step })}>
                   +
                 </StepperButton>
               </HStack>

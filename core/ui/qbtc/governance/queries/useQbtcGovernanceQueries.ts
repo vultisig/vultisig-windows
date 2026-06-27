@@ -3,6 +3,7 @@ import { getQbtcGovParams } from '@vultisig/core-chain/chains/cosmos/qbtc/govern
 import { getQbtcMyVote } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/getQbtcMyVote'
 import { getQbtcProposals } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/getQbtcProposals'
 import { getQbtcProposalTally } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/getQbtcProposalTally'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 /** All QBTC governance proposals (active + past), newest first. */
 export const useQbtcProposalsQuery = () =>
@@ -57,11 +58,18 @@ export const useQbtcMyVotesQuery = ({
   useQuery({
     queryKey: ['qbtcGovernanceMyVotes', voter, proposalIds] as const,
     queryFn: async () => {
+      // Isolate per-proposal failures so one bad lookup doesn't drop the
+      // voted badges for every other proposal.
       const votes = await Promise.all(
-        proposalIds.map(async proposalId => ({
-          proposalId,
-          vote: await getQbtcMyVote({ proposalId, voter }),
-        }))
+        proposalIds.map(async proposalId => {
+          const result = await attempt(() =>
+            getQbtcMyVote({ proposalId, voter })
+          )
+          return {
+            proposalId,
+            vote: 'data' in result ? result.data : null,
+          }
+        })
       )
       return Object.fromEntries(
         votes.map(({ proposalId, vote }) => [proposalId, vote])

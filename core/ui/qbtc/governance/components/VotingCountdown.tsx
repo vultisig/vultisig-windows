@@ -1,11 +1,13 @@
 import { Text } from '@lib/ui/text'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getQbtcVotingRemaining } from '../presentation'
 
 /**
  * Renders "Ends in 1d 4h" / "Ends in 12m" / "Voting ended" for a proposal's
- * voting window. Renders nothing when no end time is known.
+ * voting window, re-evaluating every minute so the remaining time stays
+ * current. Renders nothing when no end time is known.
  */
 export const VotingCountdown = ({
   votingEndTime,
@@ -13,10 +15,12 @@ export const VotingCountdown = ({
   votingEndTime: string | undefined
 }) => {
   const { t } = useTranslation()
-  const remaining = getQbtcVotingRemaining({
-    votingEndTime,
-    nowMs: Date.now(),
-  })
+  const [nowMs, setNowMs] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 60_000)
+    return () => clearInterval(id)
+  }, [])
+  const remaining = getQbtcVotingRemaining({ votingEndTime, nowMs })
 
   if (!remaining) return null
 
