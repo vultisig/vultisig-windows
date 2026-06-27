@@ -65,6 +65,7 @@ export type BackgroundMethod = keyof BackgroundInterface
 export const authorizedBackgroundMethods = [
   'getAccount',
   'setAppChain',
+  'setVaultChain',
   'exportVault',
 ] as const satisfies readonly BackgroundMethod[]
 
