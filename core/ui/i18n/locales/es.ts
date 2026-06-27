@@ -1561,7 +1561,7 @@ export const es = {
   keygen_failed_description:
     'La creación de la bóveda se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
   same_vault_share_description:
-    'Por favor, cambie la carpeta compartida para firmar. Dos dispositivos no pueden usar la misma carpeta compartida para la firma conjunta.',
+    'Por favor, cambie el recurso compartido de la bóveda para firmar. Dos dispositivos no pueden usar el mismo recurso compartido de la bóveda para la firma conjunta.',
   vault_is_not_loaded: 'La bóveda no está cargada.',
   vault_is_not_loaded_description:
     'Por favor, importe el recurso compartido correcto.',

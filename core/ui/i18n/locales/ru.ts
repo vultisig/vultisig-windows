@@ -1536,7 +1536,7 @@ export const ru = {
   qbtc_claim_cosign_qbtc_address: 'Адрес QBTC (получатель заявки)',
   qbtc_claim_cosign_success:
     'Вы подписали совместно запрос QBTC. Другое устройство завершит его и передаст дальше.',
-  camera_permission_required: 'Разрешение на съемку не предоставлено.',
+  camera_permission_required: 'Доступ к камере не предоставлен.',
   camera_permission_required_description:
     'Для продолжения требуется разрешение на использование камеры. Пожалуйста, включите его в настройках.',
   swap_insufficient_funds:

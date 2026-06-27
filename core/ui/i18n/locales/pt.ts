@@ -1556,9 +1556,9 @@ export const pt = {
   qbtc_claim_cosign_qbtc_address: 'Endereço QBTC (destinatário da solicitação)',
   qbtc_claim_cosign_success:
     'Você assinou em conjunto a declaração QBTC. O outro dispositivo irá concluir e transmiti-la.',
-  camera_permission_required: 'Permissão para filmagem não concedida.',
+  camera_permission_required: 'Permissão da câmera não concedida.',
   camera_permission_required_description:
-    'É necessário conceder permissão à câmera para prosseguir. Por favor, habilite-a nas Configurações.',
+    'É necessário permitir o acesso à câmera para prosseguir. Ative-o nas Configurações.',
   swap_insufficient_funds:
     'Fundos insuficientes para realizar a troca. Por favor, adicione fundos à sua carteira.',
   keygen_failed_description:

@@ -1443,5 +1443,5 @@ export const zh = {
   same_vault_share_description:
     '请更改签名共享设置。两台设备不能使用同一个保险库共享进行共同签名。',
   vault_is_not_loaded: 'Vault 未加载',
-  vault_is_not_loaded_description: '请导入正确的股票。',
+  vault_is_not_loaded_description: '请导入正确的保险库共享。',
 }

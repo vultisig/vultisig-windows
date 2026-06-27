@@ -1524,7 +1524,7 @@ export const ko = {
   qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
   qbtc_claim_cosign_success:
     'QBTC 클레임에 공동 서명하셨습니다. 다른 기기에서 서명을 완료하고 브로드캐스트할 것입니다.',
-  camera_permission_required: '카메라 촬영 권한이 허용되지 않았습니다.',
+  camera_permission_required: '카메라 권한이 허용되지 않았습니다.',
   camera_permission_required_description:
     '진행하려면 카메라 권한이 필요합니다. 설정에서 카메라 권한을 활성화해 주세요.',
   swap_insufficient_funds:
@@ -1532,7 +1532,7 @@ export const ko = {
   keygen_failed_description:
     '연결 상태가 좋지 않아 볼트 생성 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
   same_vault_share_description:
-    '서명할 공유 폴더를 변경해 주세요. 두 기기가 동일한 볼트 공유 폴더를 공동 서명에 사용할 수 없습니다.',
+    '서명에 사용할 볼트 공유를 변경해 주세요. 두 기기는 동일한 볼트 공유를 공동 서명에 사용할 수 없습니다.',
   vault_is_not_loaded: 'Vault가 로드되지 않았습니다.',
-  vault_is_not_loaded_description: '올바른 공유 파일을 가져오세요.',
+  vault_is_not_loaded_description: '올바른 볼트 공유를 가져오세요.',
 }

@@ -1545,7 +1545,7 @@ export const nl = {
   keygen_failed_description:
     'Het aanmaken van de kluis is vertraagd vanwege een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
   same_vault_share_description:
-    'Wijzig de gedeelde map naar &#39;ondertekenen&#39;. Twee apparaten kunnen niet dezelfde gedeelde map gebruiken voor gezamenlijke ondertekening.',
+    'Wijzig de kluis-share die je voor ondertekenen gebruikt. Twee apparaten kunnen niet dezelfde kluis-share gebruiken voor gezamenlijke ondertekening.',
   vault_is_not_loaded: 'Vault is niet geladen',
-  vault_is_not_loaded_description: 'Importeer het juiste aandeel.',
+  vault_is_not_loaded_description: 'Importeer de juiste kluis-share.',
 }
