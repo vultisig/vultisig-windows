@@ -472,7 +472,7 @@ export const nl = {
   seedphrase_invalid_error:
     'Seed phrase is niet correct, controleer alle woorden.',
   seedphrase_duplicate_vault_error:
-    'Deze seed phrase is al geïmporteerd als kluis &quot;{{vaultName}}&quot;. Als u deze opnieuw importeert, wordt de bestaande kluis vervangen.',
+    'Deze seed phrase is al geïmporteerd als vault &quot;{{vaultName}}&quot;. Importeer een andere seed phrase.',
   fast_vault_exists_warning_title: 'Kluis bestaat al',
   fast_vault_exists_warning_description:
     'Deze seed phrase is al geïmporteerd als snelle kluis op een ander apparaat. Als u doorgaat, wordt het serveraandeel vervangen en werkt het andere apparaat niet meer.',
@@ -1051,7 +1051,7 @@ export const nl = {
   vault_info: 'Kluisinfo',
   vault_management: 'Kluis',
   vault_name: 'Kluisnaam',
-  vault_name_already_exists: 'Kluisnaam moet uniek zijn',
+  vault_name_already_exists: 'Kies een andere kluisnaam.',
   vault_name_description:
     'Je kunt je kluis later altijd hernoemen in de instellingen',
   vault_name_max_length_error: 'Kluisnaam moet korter zijn dan 50 tekens',
@@ -1537,4 +1537,15 @@ export const nl = {
   qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
   qbtc_claim_cosign_success:
     'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
+  camera_permission_required: 'Cameratoestemming niet verleend',
+  camera_permission_required_description:
+    'Cameratoegang is vereist om verder te gaan. Schakel deze in via de instellingen.',
+  swap_insufficient_funds:
+    'Onvoldoende saldo om de transactie uit te voeren. Stort geld op de wallet.',
+  keygen_failed_description:
+    'Het aanmaken van de kluis is vertraagd vanwege een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
+  same_vault_share_description:
+    'Wijzig de gedeelde map naar &#39;ondertekenen&#39;. Twee apparaten kunnen niet dezelfde gedeelde map gebruiken voor gezamenlijke ondertekening.',
+  vault_is_not_loaded: 'Vault is niet geladen',
+  vault_is_not_loaded_description: 'Importeer het juiste aandeel.',
 }
