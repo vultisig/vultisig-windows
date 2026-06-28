@@ -65,7 +65,7 @@ const ProposalsList = ({
   const past = proposals.filter(p => !isActiveQbtcProposal(p.status))
 
   const myVotesQuery = useQbtcMyVotesQuery({
-    proposalIds: active.map(p => p.id),
+    proposalIds: proposals.map(p => p.id),
     voter: voterAddress ?? '',
   })
 
