@@ -1535,4 +1535,22 @@ export const ko = {
     '서명에 사용할 볼트 공유를 변경해 주세요. 두 기기는 동일한 볼트 공유를 공동 서명에 사용할 수 없습니다.',
   vault_is_not_loaded: 'Vault가 로드되지 않았습니다.',
   vault_is_not_loaded_description: '올바른 볼트 공유를 가져오세요.',
+  ton_nominator_pool: '지명자 Pool',
+  ton_stake_title: '스테이크 {{ticker}}',
+  ton_stake_cta: '스테이크 {{ticker}}',
+  ton_stake_select_pool: 'Pool 를 선택하세요',
+  ton_stake_min: '최소 {{amount}}',
+  ton_stake_below_minimum:
+    '금액은 최소 {{amount}} {{ticker}} 이상이어야 합니다.',
+  ton_stake_insufficient_balance: '이 지분에 대한 잔액이 부족합니다.',
+  ton_stake_no_pools: '추천인 풀이 없습니다',
+  ton_stake_empty_title: '{{ticker}} 로 보상을 받으세요',
+  ton_stake_empty_description:
+    '{{ticker}} 지명자 pool 에 스테이킹하여 스테이킹 보상을 받으세요.',
+  ton_stake_chain_not_enabled: 'TON 활성화하여 스테이킹하세요.',
+  ton_stake_unsupported_pool: '이 pool 구현은 스테이킹을 지원하지 않습니다.',
+  ton_unstake_unsupported_pool:
+    '이 pool 구현은 언스테이킹을 지원하지 않습니다.',
+  ton_withdrawal_pending: '출금 대기 중 — {{date}} 잠금 해제',
+  ton_stake_pool_picker_header: 'Pool',
 }

@@ -1542,4 +1542,22 @@ export const hr = {
   vault_is_not_loaded: 'Trezor nije učitan',
   vault_is_not_loaded_description:
     'Molimo uvezite ispravnu dijeljenu datoteku.',
+  ton_nominator_pool: 'Nominator Pool',
+  ton_stake_title: 'Ulog {{ticker}}',
+  ton_stake_cta: 'Ulog {{ticker}}',
+  ton_stake_select_pool: 'Odaberite Pool',
+  ton_stake_min: 'Minimalno {{amount}}',
+  ton_stake_below_minimum: 'Iznos mora biti najmanje {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Nedovoljan saldo za ovaj ulog',
+  ton_stake_no_pools: 'Nema dostupnih skupova nominatora',
+  ton_stake_empty_title: 'Zaradite nagrade na svom {{ticker}}',
+  ton_stake_empty_description:
+    'Uložite {{ticker}} u nominator pool kako biste zaradili nagrade za ulaganje.',
+  ton_stake_chain_not_enabled: 'Omogući TON za ulaganje.',
+  ton_stake_unsupported_pool:
+    'Ova implementacija pool nije podržana za ulaganje.',
+  ton_unstake_unsupported_pool:
+    'Ova implementacija pool nije podržana za uklanjanje udjela.',
+  ton_withdrawal_pending: 'Isplata na čekanju — otključava {{date}}',
+  ton_stake_pool_picker_header: 'Pool',
 }

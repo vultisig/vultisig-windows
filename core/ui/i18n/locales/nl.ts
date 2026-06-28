@@ -1548,4 +1548,23 @@ export const nl = {
     'Wijzig de kluis-share die je voor ondertekenen gebruikt. Twee apparaten kunnen niet dezelfde kluis-share gebruiken voor gezamenlijke ondertekening.',
   vault_is_not_loaded: 'Vault is niet geladen',
   vault_is_not_loaded_description: 'Importeer de juiste kluis-share.',
+  ton_nominator_pool: 'Nominator Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Selecteer een Pool',
+  ton_stake_min: 'Minimum {{amount}}',
+  ton_stake_below_minimum:
+    'Het bedrag moet minimaal {{amount}} {{ticker}} zijn.',
+  ton_stake_insufficient_balance: 'Onvoldoende saldo voor deze inzet.',
+  ton_stake_no_pools: 'Er zijn geen kandidatenpools beschikbaar.',
+  ton_stake_empty_title: 'Verdien beloningen met je {{ticker}}',
+  ton_stake_empty_description:
+    'Zet {{ticker}} in bij een nominator pool om stakingbeloningen te verdienen.',
+  ton_stake_chain_not_enabled: 'Schakel TON in voor staking.',
+  ton_stake_unsupported_pool:
+    'Deze pool implementatie wordt niet ondersteund voor staking.',
+  ton_unstake_unsupported_pool:
+    'Deze pool implementatie wordt niet ondersteund voor het ontstaken van de token.',
+  ton_withdrawal_pending: 'Opname in behandeling — ontgrendelt {{date}}',
+  ton_stake_pool_picker_header: 'Pool',
 }

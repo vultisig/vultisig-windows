@@ -1565,4 +1565,23 @@ export const es = {
   vault_is_not_loaded: 'La bóveda no está cargada.',
   vault_is_not_loaded_description:
     'Por favor, importe el recurso compartido correcto.',
+  ton_nominator_pool: 'Nominador Pool',
+  ton_stake_title: 'Participación {{ticker}}',
+  ton_stake_cta: 'Participación {{ticker}}',
+  ton_stake_select_pool: 'Seleccione un Pool',
+  ton_stake_min: 'Mínimo {{amount}}',
+  ton_stake_below_minimum:
+    'La cantidad debe ser al menos {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Saldo insuficiente para esta apuesta',
+  ton_stake_no_pools: 'No hay grupos de nominadores disponibles',
+  ton_stake_empty_title: 'Gana recompensas con tu {{ticker}}',
+  ton_stake_empty_description:
+    'Deposita {{ticker}} en un nominador pool para obtener recompensas por staking.',
+  ton_stake_chain_not_enabled: 'Habilite TON para realizar staking.',
+  ton_stake_unsupported_pool:
+    'Esta implementación pool no es compatible con el staking.',
+  ton_unstake_unsupported_pool:
+    'Esta implementación pool no es compatible con el retiro de staking.',
+  ton_withdrawal_pending: 'Retiro pendiente: desbloquea {{date}}',
+  ton_stake_pool_picker_header: 'Pool',
 }

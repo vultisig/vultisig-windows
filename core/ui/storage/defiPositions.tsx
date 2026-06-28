@@ -124,6 +124,15 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       chain: Chain.QBTC,
     },
   ],
+  [Chain.Ton]: [
+    {
+      id: 'ton-stake-ton',
+      name: 'TON',
+      ticker: 'TON',
+      type: 'stake',
+      chain: Chain.Ton,
+    },
+  ],
 }
 
 const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {

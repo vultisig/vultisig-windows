@@ -1547,4 +1547,22 @@ export const ru = {
     'Пожалуйста, измените общий доступ на подпись. Два устройства не могут использовать один и тот же общий доступ к хранилищу для совместной подписи.',
   vault_is_not_loaded: 'Хранилище не загружено',
   vault_is_not_loaded_description: 'Пожалуйста, импортируйте правильную долю.',
+  ton_nominator_pool: 'Номинатор Pool',
+  ton_stake_title: 'Ставка {{ticker}}',
+  ton_stake_cta: 'Ставка {{ticker}}',
+  ton_stake_select_pool: 'Выберите Pool',
+  ton_stake_min: 'Минимальный {{amount}}',
+  ton_stake_below_minimum: 'Сумма должна быть не менее {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Недостаточный баланс для этой ставки.',
+  ton_stake_no_pools: 'Нет доступных списков номинантов.',
+  ton_stake_empty_title: 'Получайте вознаграждения с помощью вашего {{ticker}}',
+  ton_stake_empty_description:
+    'Вложите {{ticker}} в номинатор pool чтобы получить вознаграждение за стейкинг.',
+  ton_stake_chain_not_enabled: 'Разрешить стейкинг для TON .',
+  ton_stake_unsupported_pool:
+    'Данная реализация pool не поддерживается для стейкинга.',
+  ton_unstake_unsupported_pool:
+    'Данная реализация pool не поддерживается для вывода средств из стейкинга.',
+  ton_withdrawal_pending: 'Ожидается вывод средств — разблокирует {{date}}',
+  ton_stake_pool_picker_header: 'Pool',
 }

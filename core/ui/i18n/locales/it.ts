@@ -1573,4 +1573,23 @@ export const it = {
     'Modifica la condivisione per la firma. Due dispositivi non possono utilizzare la stessa condivisione del vault per la firma congiunta.',
   vault_is_not_loaded: 'Il vault non è caricato',
   vault_is_not_loaded_description: 'Si prega di importare la quota corretta.',
+  ton_nominator_pool: 'Nominatore Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Seleziona Pool',
+  ton_stake_min: '{{amount}} minimo',
+  ton_stake_below_minimum:
+    'L&#39;importo deve essere almeno {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Saldo insufficiente per questa puntata',
+  ton_stake_no_pools: 'Nessun pool di nominatori disponibile',
+  ton_stake_empty_title: 'Guadagna premi sul tuo {{ticker}}',
+  ton_stake_empty_description:
+    'Metti in staking {{ticker}} su un nominatore pool per guadagnare ricompense di staking.',
+  ton_stake_chain_not_enabled: 'Abilitare TON per lo staking.',
+  ton_stake_unsupported_pool:
+    'Questa implementazione pool non è supportata per lo staking.',
+  ton_unstake_unsupported_pool:
+    'Questa implementazione pool non è supportata per lo sblocco in staking.',
+  ton_withdrawal_pending: 'Prelievo in sospeso — sblocca {{date}}',
+  ton_stake_pool_picker_header: 'Pool',
 }

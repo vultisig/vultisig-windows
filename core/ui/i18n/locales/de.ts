@@ -1578,4 +1578,24 @@ export const de = {
   vault_is_not_loaded: 'Vault ist nicht geladen',
   vault_is_not_loaded_description:
     'Bitte importieren Sie die richtige Freigabe.',
+  ton_nominator_pool: 'Nominator Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Wählen Sie ein Pool aus.',
+  ton_stake_min: 'Minimum {{amount}}',
+  ton_stake_below_minimum:
+    'Der Betrag muss mindestens {{amount}} {{ticker}} betragen.',
+  ton_stake_insufficient_balance:
+    'Unzureichendes Gleichgewicht für diesen Einsatz',
+  ton_stake_no_pools: 'Keine Nominierungspools verfügbar',
+  ton_stake_empty_title: 'Sichern Sie sich Prämien mit Ihrem {{ticker}}',
+  ton_stake_empty_description:
+    'Setzen Sie {{ticker}} in einen Nominator pool ein, um Staking-Belohnungen zu erhalten.',
+  ton_stake_chain_not_enabled: 'Aktivieren Sie TON zum Staking.',
+  ton_stake_unsupported_pool:
+    'Diese pool -Implementierung wird für Staking nicht unterstützt.',
+  ton_unstake_unsupported_pool:
+    'Diese pool -Implementierung wird für das Unstaking nicht unterstützt.',
+  ton_withdrawal_pending: 'Auszahlung ausstehend — schaltet {{date}} frei',
+  ton_stake_pool_picker_header: 'Pool',
 }

@@ -1568,4 +1568,22 @@ export const pt = {
   vault_is_not_loaded: 'O cofre não está carregado.',
   vault_is_not_loaded_description:
     'Por favor, importe o compartilhamento correto.',
+  ton_nominator_pool: 'Nominador Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Selecione um Pool',
+  ton_stake_min: 'Mínimo {{amount}}',
+  ton_stake_below_minimum: 'O valor deve ser pelo menos {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Saldo insuficiente para esta aposta',
+  ton_stake_no_pools: 'Não há grupos de indicados disponíveis.',
+  ton_stake_empty_title: 'Ganhe recompensas com seu {{ticker}}',
+  ton_stake_empty_description:
+    'Faça staking {{ticker}} em um nominador pool para ganhar recompensas de staking.',
+  ton_stake_chain_not_enabled: 'Habilite o TON para staking.',
+  ton_stake_unsupported_pool:
+    'Esta implementação pool não é suportada para staking.',
+  ton_unstake_unsupported_pool:
+    'Esta implementação pool não é suportada para desinvestimento.',
+  ton_withdrawal_pending: 'Saque pendente — desbloqueia {{date}}',
+  ton_stake_pool_picker_header: 'Pool',
 }
