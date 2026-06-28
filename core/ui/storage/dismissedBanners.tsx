@@ -115,12 +115,22 @@ export const useDismissedBanners = () => {
   }
 }
 
-const useSetDismissedBannersMutation = () => {
-  const { setDismissedBanners } = useCore()
+const useDismissBannerMutation = () => {
+  const { getDismissedBanners, setDismissedBanners } = useCore()
   const refetchQueries = useRefetchQueries()
 
-  const mutationFn: SetDismissedBannersFunction = async input => {
-    await setDismissedBanners(input)
+  const mutationFn = async (bannerId: BannerId) => {
+    // Read the latest stored state at mutation time rather than merging against
+    // a render-time snapshot, so quick successive dismissals don't drop each
+    // other's entries.
+    const current = migrateDismissedBanners(
+      await getDismissedBanners(),
+      Date.now()
+    )
+    await setDismissedBanners({
+      ...current,
+      [bannerId]: { dismissedAt: Date.now() },
+    })
     await refetchQueries([StorageKey.dismissedBanners])
   }
 
@@ -130,14 +140,7 @@ const useSetDismissedBannersMutation = () => {
 }
 
 export const useDismissBanner = () => {
-  const { data } = useDismissedBannersQuery()
-  const { mutateAsync } = useSetDismissedBannersMutation()
+  const { mutateAsync } = useDismissBannerMutation()
 
-  return async (bannerId: BannerId) => {
-    const current = data || {}
-    await mutateAsync({
-      ...current,
-      [bannerId]: { dismissedAt: Date.now() },
-    })
-  }
+  return (bannerId: BannerId) => mutateAsync(bannerId)
 }
