@@ -35,7 +35,9 @@ export const FastKeygenServerActionStep: FC<OnFinishProp> = ({ onFinish }) => {
         value={mutationState}
         error={error => (
           <FlowErrorPageContent
+            variant="warning"
             title={t('failed_to_connect_with_server')}
+            description={t('keygen_failed_description')}
             error={error}
           />
         )}

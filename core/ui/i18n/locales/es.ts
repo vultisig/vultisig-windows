@@ -477,7 +477,7 @@ export const es = {
   seedphrase_invalid_error:
     'La frase semilla no es correcta, por favor verifique todas las palabras.',
   seedphrase_duplicate_vault_error:
-    'Esta frase inicial ya se importó como bóveda &quot;{{vaultName}}&quot;. Al volver a importarla, se reemplazaría la bóveda existente.',
+    'Esta frase semilla ya está importada como vault &quot;{{vaultName}}&quot;. Por favor, importe otra frase semilla.',
   fast_vault_exists_warning_title: 'La bóveda ya existe',
   fast_vault_exists_warning_description:
     'Esta frase semilla ya fue importada como bóveda rápida en otro dispositivo. Si continúa, se reemplazará la parte del servidor y el otro dispositivo dejará de funcionar.',
@@ -1064,7 +1064,7 @@ export const es = {
   vault_info: 'Información de la bóveda',
   vault_management: 'Bóveda',
   vault_name: 'Nombre de la bóveda',
-  vault_name_already_exists: 'El nombre de la bóveda debe ser único',
+  vault_name_already_exists: 'Por favor, elija un nombre de bóveda diferente.',
   vault_name_description:
     'Siempre puedes cambiar el nombre de tu bóveda más tarde en la configuración',
   vault_name_max_length_error:
@@ -1553,4 +1553,16 @@ export const es = {
     'Dirección QBTC (destinatario de la reclamación)',
   qbtc_claim_cosign_success:
     'Has firmado conjuntamente la reclamación QBTC. El otro dispositivo la finalizará y la transmitirá.',
+  camera_permission_required: 'No se concede permiso para usar la cámara.',
+  camera_permission_required_description:
+    'Se requiere permiso para usar la cámara para continuar. Por favor, actívalo en Ajustes.',
+  swap_insufficient_funds:
+    'Fondos insuficientes para realizar el intercambio. Por favor, deposite fondos en la billetera.',
+  keygen_failed_description:
+    'La creación de la bóveda se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
+  same_vault_share_description:
+    'Por favor, cambie el recurso compartido de la bóveda para firmar. Dos dispositivos no pueden usar el mismo recurso compartido de la bóveda para la firma conjunta.',
+  vault_is_not_loaded: 'La bóveda no está cargada.',
+  vault_is_not_loaded_description:
+    'Por favor, importe el recurso compartido correcto.',
 }

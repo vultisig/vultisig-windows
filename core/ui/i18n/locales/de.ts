@@ -482,7 +482,7 @@ export const de = {
   seedphrase_invalid_error:
     'Der Seed-Phrase ist nicht korrekt, bitte überprüfen Sie alle Wörter.',
   seedphrase_duplicate_vault_error:
-    'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
+    'Diese Seed-Phrase ist bereits als Vault &quot;{{vaultName}}&quot; importiert. Bitte importieren Sie eine andere Seed-Phrase.',
   fast_vault_exists_warning_title: 'Tresor existiert bereits',
   fast_vault_exists_warning_description:
     'Diese Seed-Phrase wurde bereits als Fast Vault auf einem anderen Gerät importiert. Wenn Sie fortfahren, wird der Server-Anteil ersetzt und das andere Gerät funktioniert nicht mehr.',
@@ -1073,7 +1073,7 @@ export const de = {
   vault_info: 'Tresorinformationen',
   vault_management: 'Tresor',
   vault_name: 'Tresorname',
-  vault_name_already_exists: 'Der Tresorname muss eindeutig sein.',
+  vault_name_already_exists: 'Bitte wählen Sie einen anderen Tresornamen.',
   vault_name_description:
     'Sie können Ihren Tresor später jederzeit in den Einstellungen umbenennen.',
   vault_name_max_length_error:
@@ -1566,4 +1566,16 @@ export const de = {
   qbtc_claim_cosign_qbtc_address: 'Adresse QBTC (Anspruchsempfänger)',
   qbtc_claim_cosign_success:
     'Sie haben den Anspruch QBTC mitsigniert. Das andere Gerät wird ihn abschließen und senden.',
+  camera_permission_required: 'Kameraerlaubnis nicht erteilt',
+  camera_permission_required_description:
+    'Für diesen Vorgang ist die Kameraberechtigung erforderlich. Bitte aktivieren Sie diese in den Einstellungen.',
+  swap_insufficient_funds:
+    'Für den Tausch ist nicht genügend Guthaben vorhanden. Bitte laden Sie Ihr Wallet auf.',
+  keygen_failed_description:
+    'Die Erstellung des Tresors wurde aufgrund einer schlechten Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
+  same_vault_share_description:
+    'Bitte ändern Sie die Freigabe auf „Signieren“. Zwei Geräte können nicht dieselbe Tresorfreigabe zum gemeinsamen Signieren verwenden.',
+  vault_is_not_loaded: 'Vault ist nicht geladen',
+  vault_is_not_loaded_description:
+    'Bitte importieren Sie die richtige Freigabe.',
 }

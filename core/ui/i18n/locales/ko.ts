@@ -471,7 +471,7 @@ export const ko = {
   seedphrase_invalid_error:
     '시드 구문이 올바르지 않습니다. 모든 단어를 확인해 주세요.',
   seedphrase_duplicate_vault_error:
-    '이 시드 구문은 이미 &quot;{{vaultName}}&quot; 볼트로 가져왔습니다. 다시 가져오면 기존 볼트가 덮어쓰여집니다.',
+    '이 시드 구문은 이미 &quot;{{vaultName}}&quot;라는 이름으로 볼트에 불러와졌습니다. 다른 시드 구문을 불러오세요.',
   fast_vault_exists_warning_title: '볼트는 이미 존재합니다',
   fast_vault_exists_warning_description:
     '이 시드 구문은 이미 다른 장치의 빠른 저장소로 가져왔습니다. 계속 진행하면 서버 공유가 교체되고 다른 장치가 작동을 멈춥니다.',
@@ -1072,7 +1072,7 @@ export const ko = {
   vault_info: '금고 정보',
   vault_management: '금고',
   vault_name: '금고 이름',
-  vault_name_already_exists: '금고 이름은 고유해야 합니다.',
+  vault_name_already_exists: '다른 금고 이름을 선택해 주세요.',
   vault_name_description:
     '설정에서 언제든지 나중에 금고 이름을 변경할 수 있습니다.',
   vault_name_max_length_error: '금고 이름은 50자 미만이어야 합니다.',
@@ -1524,4 +1524,15 @@ export const ko = {
   qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
   qbtc_claim_cosign_success:
     'QBTC 클레임에 공동 서명하셨습니다. 다른 기기에서 서명을 완료하고 브로드캐스트할 것입니다.',
+  camera_permission_required: '카메라 권한이 허용되지 않았습니다.',
+  camera_permission_required_description:
+    '진행하려면 카메라 권한이 필요합니다. 설정에서 카메라 권한을 활성화해 주세요.',
+  swap_insufficient_funds:
+    '스왑을 실행하기에 자금이 부족합니다. 지갑에 자금을 충전해 주세요.',
+  keygen_failed_description:
+    '연결 상태가 좋지 않아 볼트 생성 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
+  same_vault_share_description:
+    '서명에 사용할 볼트 공유를 변경해 주세요. 두 기기는 동일한 볼트 공유를 공동 서명에 사용할 수 없습니다.',
+  vault_is_not_loaded: 'Vault가 로드되지 않았습니다.',
+  vault_is_not_loaded_description: '올바른 볼트 공유를 가져오세요.',
 }
