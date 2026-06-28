@@ -42,7 +42,7 @@ export const useSwapValidationQuery = () => {
       }
 
       if (amount > balance) {
-        return t('insufficient_balance')
+        return t('swap_insufficient_funds')
       }
 
       return null

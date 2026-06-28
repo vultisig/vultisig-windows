@@ -484,7 +484,7 @@ export const it = {
   seedphrase_invalid_error:
     'La frase iniziale non è corretta, verifica tutte le parole.',
   seedphrase_duplicate_vault_error:
-    'Questa frase seed è già stata importata come vault &quot;{{vaultName}}&quot;. Importandola nuovamente, il vault esistente verrebbe sostituito.',
+    'Questa frase di recupero è già stata importata come vault &quot;{{vaultName}}&quot;. Si prega di importare un&#39;altra frase di recupero.',
   fast_vault_exists_warning_title: 'Il vault esiste già',
   fast_vault_exists_warning_description:
     "Questa frase seed è già stata importata come vault veloce su un altro dispositivo. Continuando, la quota del server verrà sostituita e l'altro dispositivo smetterà di funzionare.",
@@ -1067,7 +1067,7 @@ export const it = {
   vault_info: 'Informazioni sul caveau',
   vault_management: 'Caveau',
   vault_name: 'Nome del caveau',
-  vault_name_already_exists: 'Il nome del vault deve essere univoco',
+  vault_name_already_exists: 'Scegli un nome diverso per il vault.',
   vault_name_description:
     'Puoi sempre rinominare il tuo vault in seguito nelle impostazioni',
   vault_name_max_length_error:
@@ -1606,4 +1606,16 @@ export const it = {
     ends_in_hours_minutes: 'Termina in {{hours}}h {{minutes}}m',
     ends_in_minutes: 'Termina in {{minutes}}m',
   },
+  camera_permission_required:
+    'Autorizzazione all&#39;utilizzo della fotocamera non concessa',
+  camera_permission_required_description:
+    'Per procedere è necessaria l&#39;autorizzazione per scattare foto. Abilitala nelle Impostazioni.',
+  swap_insufficient_funds:
+    'Fondi insufficienti per eseguire lo scambio. Si prega di versare fondi nel portafoglio.',
+  keygen_failed_description:
+    'La creazione del vault è stata rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
+  same_vault_share_description:
+    'Modifica la condivisione per la firma. Due dispositivi non possono utilizzare la stessa condivisione del vault per la firma congiunta.',
+  vault_is_not_loaded: 'Il vault non è caricato',
+  vault_is_not_loaded_description: 'Si prega di importare la quota corretta.',
 }

@@ -438,7 +438,7 @@ export const zh = {
     '您输入了 {{count}} 个单词。种子短语必须为 12 或 24 个单词。',
   seedphrase_invalid_error: '助记词不正确，请核对所有单词。',
   seedphrase_duplicate_vault_error:
-    '此种子短语已导入为保险库”{{vaultName}}”。再次导入将会替换现有保险库。',
+    '此助记词已导入为保险库“{{vaultName}}”。请导入另一个助记词。',
   fast_vault_exists_warning_title: '保险库已存在',
   fast_vault_exists_warning_description:
     '此种子短语已在另一台设备上作为快速保险库导入。继续操作将替换服务器份额，另一台设备将停止工作。',
@@ -984,7 +984,7 @@ export const zh = {
   vault_info: '保险库信息',
   vault_management: '保险库',
   vault_name: '保险库名称',
-  vault_name_already_exists: '保险库名称必须唯一',
+  vault_name_already_exists: '请选择其他保险库名称。',
   vault_name_description: '您随时可以在设置中重命名您的保险库。',
   vault_name_max_length_error: '保险库名称必须少于 50 个字符',
   vault_name_required: '必须填写保险库名称。',
@@ -1479,4 +1479,14 @@ export const zh = {
     ends_in_hours_minutes: '剩余 {{hours}}h {{minutes}}m',
     ends_in_minutes: '剩余 {{minutes}}m',
   },
+  camera_permission_required: '未授予相机权限',
+  camera_permission_required_description:
+    '需要相机权限才能继续。请在“设置”中启用它。',
+  swap_insufficient_funds: '钱包余额不足，无法完成兑换。请充值钱包。',
+  keygen_failed_description:
+    '由于网络连接不良，Vault 创建速度变慢。您可以重试或等待重新连接。',
+  same_vault_share_description:
+    '请更改签名共享设置。两台设备不能使用同一个保险库共享进行共同签名。',
+  vault_is_not_loaded: 'Vault 未加载',
+  vault_is_not_loaded_description: '请导入正确的股票。',
 }

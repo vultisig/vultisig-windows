@@ -480,7 +480,7 @@ export const pt = {
   seedphrase_invalid_error:
     'A frase-semente está incorreta. Por favor, verifique todas as palavras.',
   seedphrase_duplicate_vault_error:
-    'Esta frase-semente já foi importada como cofre &quot;{{vaultName}}&quot;. Importá-la novamente substituiria o cofre existente.',
+    'Esta frase mnemônica já foi importada como o cofre &quot;{{vaultName}}&quot;. Importe outra frase mnemônica.',
   fast_vault_exists_warning_title: 'O cofre já existe',
   fast_vault_exists_warning_description:
     'Esta frase-semente já foi importada como cofre rápido em outro dispositivo. Se continuar, a parte do servidor será substituída e o outro dispositivo deixará de funcionar.',
@@ -1065,7 +1065,8 @@ export const pt = {
   vault_info: 'Informações do cofre',
   vault_management: 'Cofre',
   vault_name: 'Nome do cofre',
-  vault_name_already_exists: 'O nome do cofre deve ser único.',
+  vault_name_already_exists:
+    'Por favor, escolha um nome diferente para o cofre.',
   vault_name_description:
     'Você sempre poderá renomear seu cofre posteriormente nas configurações.',
   vault_name_max_length_error:
@@ -1600,4 +1601,16 @@ export const pt = {
     ends_in_hours_minutes: 'Termina em {{hours}}h {{minutes}}m',
     ends_in_minutes: 'Termina em {{minutes}}m',
   },
+  camera_permission_required: 'Permissão para filmagem não concedida.',
+  camera_permission_required_description:
+    'É necessário conceder permissão à câmera para prosseguir. Por favor, habilite-a nas Configurações.',
+  swap_insufficient_funds:
+    'Fundos insuficientes para realizar a troca. Por favor, adicione fundos à sua carteira.',
+  keygen_failed_description:
+    'A criação do cofre foi lenta devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
+  same_vault_share_description:
+    'Por favor, altere o compartilhamento para assinatura. Dois dispositivos não podem usar o mesmo compartilhamento do cofre para co-assinatura.',
+  vault_is_not_loaded: 'O cofre não está carregado.',
+  vault_is_not_loaded_description:
+    'Por favor, importe o compartilhamento correto.',
 }
