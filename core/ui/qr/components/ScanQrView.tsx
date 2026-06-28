@@ -13,7 +13,16 @@ import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
+
+const ScannerGlobalStyle = createGlobalStyle`
+  body {
+    background-image: url('/core/images/qr-scanner-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    max-width: 100% !important;
+  }
+`
 
 const GlassContainer = styled(VStack)`
   flex-grow: 1;
@@ -42,32 +51,37 @@ export const ScanQrView = ({
   return (
     <>
       <PageContent>
-        <GlassContainer>
-          <MatchQuery
-            value={permissionsQuery}
-            success={permission => (
-              <Match
-                value={permission}
-                granted={() => <QrScanner onFinish={onFinish} />}
-                prompt={() => <CameraPermission />}
-                denied={() => <CameraPermission />}
-              />
-            )}
-            pending={() => (
+        <MatchQuery
+          value={permissionsQuery}
+          success={permission => (
+            <Match
+              value={permission}
+              granted={() => (
+                <>
+                  <ScannerGlobalStyle />
+                  <GlassContainer>
+                    <QrScanner onFinish={onFinish} />
+                  </GlassContainer>
+                </>
+              )}
+              prompt={() => <CameraPermission />}
+              denied={() => <CameraPermission />}
+            />
+          )}
+          pending={() => (
+            <GlassContainer>
               <Center>
                 <Spinner />
               </Center>
-            )}
-            error={error => (
-              <Center>
-                <ErrorFallbackContent
-                  title={t('failed_to_get_camera_permission')}
-                  error={error}
-                />
-              </Center>
-            )}
-          />
-        </GlassContainer>
+            </GlassContainer>
+          )}
+          error={error => (
+            <ErrorFallbackContent
+              title={t('failed_to_get_camera_permission')}
+              error={error}
+            />
+          )}
+        />
       </PageContent>
       {onUploadQrViewRequest && (
         <PageFooter alignItems="center">
