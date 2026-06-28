@@ -470,7 +470,7 @@ export const hr = {
   seedphrase_invalid_error:
     'Početna fraza nije ispravna, molimo provjerite sve riječi.',
   seedphrase_duplicate_vault_error:
-    'Ova početna fraza je već uvezena kao trezor &quot;{{vaultName}}&quot;. Ponovnim uvozom zamijenio bi se postojeći trezor.',
+    'Ova početna fraza je već uvezena kao trezor &quot;{{vaultName}}&quot;. Molimo uvezite drugu početnu frazu.',
   fast_vault_exists_warning_title: 'Trezor već postoji',
   fast_vault_exists_warning_description:
     'Ova početna fraza već je uvezena kao brzi trezor na drugom uređaju. Ako nastavite, zamijenit će se udio na poslužitelju i drugi uređaj će prestati raditi.',
@@ -1055,7 +1055,7 @@ export const hr = {
   vault_info: 'Informacije o trezoru',
   vault_management: 'Trezor',
   vault_name: 'Naziv trezora',
-  vault_name_already_exists: 'Naziv trezora mora biti jedinstven',
+  vault_name_already_exists: 'Molimo odaberite drugo ime trezora.',
   vault_name_description:
     'Svoj trezor uvijek možete kasnije preimenovati u postavkama',
   vault_name_max_length_error: 'Naziv trezora mora biti kraći od 50 znakova',
@@ -1530,4 +1530,16 @@ export const hr = {
     'Prilagodite svoje swapove prilagođenim proklizavanjem, ograničenjem plina i vanjskom adresom primatelja.',
   signing_error_description:
     'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
+  camera_permission_required: 'Dozvola za kameru nije odobrena',
+  camera_permission_required_description:
+    'Za nastavak je potrebno dopuštenje za kameru. Omogućite ga u Postavkama.',
+  swap_insufficient_funds:
+    'Nema dovoljno sredstava za izvršenje zamjene. Molimo vas da uplatite sredstva u novčanik.',
+  keygen_failed_description:
+    'Izrada trezora usporena je zbog loše povezivosti. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
+  same_vault_share_description:
+    'Promijenite dijeljenje za potpisivanje. Dva uređaja ne mogu koristiti isto dijeljenje trezora za supotpisivanje.',
+  vault_is_not_loaded: 'Trezor nije učitan',
+  vault_is_not_loaded_description:
+    'Molimo uvezite ispravnu dijeljenu datoteku.',
 }

@@ -117,6 +117,9 @@ export const en = {
   by_vultisig: 'by {{productName}}',
   camera_access_blocked:
     'Camera access is blocked. Please enable it in your browser settings.',
+  camera_permission_required: 'Camera permission not granted',
+  camera_permission_required_description:
+    'Camera permission is required to proceed. Please enable it in Settings.',
   cache_password_for_5_min: 'Remember password for 5 minutes',
   cancel: 'Cancel',
   chain: 'Chain',
@@ -494,7 +497,7 @@ export const en = {
   seedphrase_invalid_error:
     'Seed phrase is not correct, please verify all words.',
   seedphrase_duplicate_vault_error:
-    'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
+    'This seed phrase is already imported as vault "{{vaultName}}". Please import another seed phrase.',
   fast_vault_exists_warning_title: 'Vault Already Exists',
   fast_vault_exists_warning_description:
     'This seed phrase was already imported as a fast vault on another device. Continuing will replace the server share, and the other device will stop working.',
@@ -516,6 +519,8 @@ export const en = {
   install_plugin: 'Install App',
   installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
+  swap_insufficient_funds:
+    'Insufficient funds to execute the swap. Please fund the wallet.',
   insufficient_native_balance_for_fee:
     'Insufficient native token balance to pay for the transaction fee',
   insufficient_gas_limit: 'Insufficient Gas Limit',
@@ -541,6 +546,8 @@ export const en = {
   keygen_devices_requirements_info:
     'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',
   keygen_failed: 'Key Generation Error. Please try again.',
+  keygen_failed_description:
+    'Vault creation slowed due to poor connectivity. You can retry or wait for reconnection.',
   keys: 'Keys',
   keysign: 'Keysign',
   label: 'Label',
@@ -831,6 +838,8 @@ export const en = {
   risky_tx_warning:
     'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',
   same_vault_share: 'Same vault share',
+  same_vault_share_description:
+    'Please change the share to sign. Two devices cannot use the same vault share for co-signing.',
   save: 'Save',
   save_10_percent_on_swaps: 'Save <blue>10%</blue> on swaps now',
   save_changes: 'Save Changes',
@@ -1211,7 +1220,7 @@ export const en = {
   vault_info: 'Vault Info',
   vault_management: 'Vault',
   vault_name: 'Vault Name',
-  vault_name_already_exists: 'Vault name must be unique',
+  vault_name_already_exists: 'Please choose a different Vault name.',
   vault_name_description:
     'You can always rename your vault later in the settings',
   vault_name_max_length_error: 'Vault name must be less than 50 characters',
@@ -1277,6 +1286,8 @@ export const en = {
   paired: 'Paired',
   paired_address: 'Paired Address',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
+  vault_is_not_loaded: 'Vault is not loaded',
+  vault_is_not_loaded_description: 'Please import the correct share.',
   yesterday: 'Yesterday',
   you_are_bonding: "You're bonding",
   you_are_unbonding: "You're unbonding",
