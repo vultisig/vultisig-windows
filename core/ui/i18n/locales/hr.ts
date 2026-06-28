@@ -1549,7 +1549,7 @@ export const hr = {
   ton_stake_min: 'Minimalno {{amount}}',
   ton_stake_below_minimum: 'Iznos mora biti najmanje {{amount}} {{ticker}}',
   ton_stake_insufficient_balance: 'Nedovoljan saldo za ovaj ulog',
-  ton_stake_no_pools: 'Nema dostupnih skupova nominatora',
+  ton_stake_no_pools: 'Nema dostupnih staking poola',
   ton_stake_empty_title: 'Zaradite nagrade na svom {{ticker}}',
   ton_stake_empty_description:
     'Uložite {{ticker}} u nominator pool kako biste zaradili nagrade za ulaganje.',

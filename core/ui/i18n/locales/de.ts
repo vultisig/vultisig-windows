@@ -1587,7 +1587,7 @@ export const de = {
     'Der Betrag muss mindestens {{amount}} {{ticker}} betragen.',
   ton_stake_insufficient_balance:
     'Unzureichendes Gleichgewicht für diesen Einsatz',
-  ton_stake_no_pools: 'Keine Nominierungspools verfügbar',
+  ton_stake_no_pools: 'Keine Staking-Pools verfügbar',
   ton_stake_empty_title: 'Sichern Sie sich Prämien mit Ihrem {{ticker}}',
   ton_stake_empty_description:
     'Setzen Sie {{ticker}} in einen Nominator pool ein, um Staking-Belohnungen zu erhalten.',

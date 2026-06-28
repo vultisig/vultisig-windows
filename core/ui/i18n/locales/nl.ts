@@ -1556,7 +1556,7 @@ export const nl = {
   ton_stake_below_minimum:
     'Het bedrag moet minimaal {{amount}} {{ticker}} zijn.',
   ton_stake_insufficient_balance: 'Onvoldoende saldo voor deze inzet.',
-  ton_stake_no_pools: 'Er zijn geen kandidatenpools beschikbaar.',
+  ton_stake_no_pools: 'Er zijn geen stakingpools beschikbaar.',
   ton_stake_empty_title: 'Verdien beloningen met je {{ticker}}',
   ton_stake_empty_description:
     'Zet {{ticker}} in bij een nominator pool om stakingbeloningen te verdienen.',

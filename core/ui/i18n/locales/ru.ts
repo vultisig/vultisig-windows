@@ -1554,7 +1554,7 @@ export const ru = {
   ton_stake_min: 'Минимальный {{amount}}',
   ton_stake_below_minimum: 'Сумма должна быть не менее {{amount}} {{ticker}}',
   ton_stake_insufficient_balance: 'Недостаточный баланс для этой ставки.',
-  ton_stake_no_pools: 'Нет доступных списков номинантов.',
+  ton_stake_no_pools: 'Пулы для размещения ставок недоступны.',
   ton_stake_empty_title: 'Получайте вознаграждения с помощью вашего {{ticker}}',
   ton_stake_empty_description:
     'Вложите {{ticker}} в номинатор pool чтобы получить вознаграждение за стейкинг.',

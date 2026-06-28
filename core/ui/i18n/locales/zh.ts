@@ -1451,7 +1451,7 @@ export const zh = {
   ton_stake_min: '最小{{amount}}',
   ton_stake_below_minimum: '金额必须至少为{{amount}} {{ticker}}',
   ton_stake_insufficient_balance: '账户余额不足以支付这笔赌注。',
-  ton_stake_no_pools: '暂无提名人名单',
+  ton_stake_no_pools: '暂无可用质押池',
   ton_stake_empty_title: '使用您的{{ticker}}赚取奖励',
   ton_stake_empty_description: '将{{ticker}}质押给提名人pool以赚取质押奖励。',
   ton_stake_chain_not_enabled: '启用TON进行质押。',

@@ -1187,7 +1187,7 @@ export const en = {
   ton_stake_min: 'Minimum {{amount}}',
   ton_stake_below_minimum: 'Amount must be at least {{amount}} {{ticker}}',
   ton_stake_insufficient_balance: 'Insufficient balance for this stake',
-  ton_stake_no_pools: 'No nominator pools available',
+  ton_stake_no_pools: 'No staking pools available',
   ton_stake_empty_title: 'Earn rewards on your {{ticker}}',
   ton_stake_empty_description:
     'Stake {{ticker}} into a nominator pool to earn staking rewards.',

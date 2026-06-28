@@ -263,6 +263,7 @@ export const useDefiChainPortfolios = () => {
     (enabledChains.includes(Chain.QBTC) &&
       (qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending)) ||
     (enabledChains.includes(Chain.Ton) &&
+      tonSelectedPositions.length > 0 &&
       (tonStakePositionQuery.isPending || tonPricesQuery.isPending))
 
   const isTronEnabled = enabledChains.includes(Chain.Tron)

@@ -1581,7 +1581,7 @@ export const it = {
   ton_stake_below_minimum:
     'L&#39;importo deve essere almeno {{amount}} {{ticker}}',
   ton_stake_insufficient_balance: 'Saldo insufficiente per questa puntata',
-  ton_stake_no_pools: 'Nessun pool di nominatori disponibile',
+  ton_stake_no_pools: 'Non sono disponibili pool di staking.',
   ton_stake_empty_title: 'Guadagna premi sul tuo {{ticker}}',
   ton_stake_empty_description:
     'Metti in staking {{ticker}} su un nominatore pool per guadagnare ricompense di staking.',

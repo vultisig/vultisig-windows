@@ -1543,7 +1543,7 @@ export const ko = {
   ton_stake_below_minimum:
     '금액은 최소 {{amount}} {{ticker}} 이상이어야 합니다.',
   ton_stake_insufficient_balance: '이 지분에 대한 잔액이 부족합니다.',
-  ton_stake_no_pools: '추천인 풀이 없습니다',
+  ton_stake_no_pools: '스테이킹 풀이 없습니다',
   ton_stake_empty_title: '{{ticker}} 로 보상을 받으세요',
   ton_stake_empty_description:
     '{{ticker}} 지명자 pool 에 스테이킹하여 스테이킹 보상을 받으세요.',

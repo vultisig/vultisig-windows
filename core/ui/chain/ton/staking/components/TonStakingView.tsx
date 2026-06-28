@@ -69,6 +69,19 @@ export const TonStakingView = () => {
     )
   }
 
+  // Handle the failure branch explicitly: otherwise a transient tonapi error
+  // falls through to the empty-state CTA and a wallet that may already be
+  // staked is shown the "stake now" screen.
+  if (positionQuery.error) {
+    return (
+      <VStack gap={8} alignItems="center">
+        <Text size={14} color="danger" centerHorizontally>
+          {t('failed_to_load')}
+        </Text>
+      </VStack>
+    )
+  }
+
   const position = positionQuery.data
 
   if (!position) {

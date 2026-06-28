@@ -1573,7 +1573,7 @@ export const es = {
   ton_stake_below_minimum:
     'La cantidad debe ser al menos {{amount}} {{ticker}}',
   ton_stake_insufficient_balance: 'Saldo insuficiente para esta apuesta',
-  ton_stake_no_pools: 'No hay grupos de nominadores disponibles',
+  ton_stake_no_pools: 'No hay grupos de apuestas disponibles',
   ton_stake_empty_title: 'Gana recompensas con tu {{ticker}}',
   ton_stake_empty_description:
     'Deposita {{ticker}} en un nominador pool para obtener recompensas por staking.',
