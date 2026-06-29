@@ -237,36 +237,34 @@ export const useDefiChainPortfolios = () => {
   }
 }
 
+/**
+ * DeFi portfolio total, resolved progressively. `data` sums the chains (and the
+ * Circle USDC balance) that have already landed, so the header shows a running
+ * total instead of blocking on the slowest chain. `isUpdating` stays true while
+ * any chain or the Circle balance is still pending so the UI can render an
+ * "updating" affordance alongside the partial number.
+ */
 export const useDefiPortfolioBalance = () => {
   const portfolios = useDefiChainPortfolios()
   const isCircleIncluded = useIsCircleIncluded()
   const circleFiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
 
-  const total = useMemo(() => {
-    if (portfolios.isPending || circleFiatBalanceQuery.isPending) {
-      return undefined
-    }
+  const resolvedChains = portfolios.data.filter(
+    portfolio => !portfolio.isLoading
+  )
+  const chainTotal = sum(resolvedChains.map(portfolio => portfolio.totalFiat))
 
-    const chainTotal = sum(
-      portfolios.data.map(portfolio => portfolio.totalFiat)
-    )
+  const isCirclePending = isCircleIncluded && circleFiatBalanceQuery.isPending
+  const isCircleResolved = isCircleIncluded && !circleFiatBalanceQuery.isPending
+  const circleTotal = isCircleResolved ? (circleFiatBalanceQuery.data ?? 0) : 0
 
-    const circleTotal = isCircleIncluded
-      ? (circleFiatBalanceQuery.data ?? 0)
-      : 0
-
-    return chainTotal + circleTotal
-  }, [
-    portfolios.data,
-    portfolios.isPending,
-    circleFiatBalanceQuery.data,
-    circleFiatBalanceQuery.isPending,
-    isCircleIncluded,
-  ])
+  const resolvedCount = resolvedChains.length + (isCircleResolved ? 1 : 0)
+  const isUpdating = portfolios.isPending || isCirclePending
 
   return {
-    ...portfolios,
-    data: total,
+    data: resolvedCount > 0 ? chainTotal + circleTotal : undefined,
+    isPending: resolvedCount === 0 && isUpdating,
+    isUpdating,
     error: portfolios.error,
   }
 }

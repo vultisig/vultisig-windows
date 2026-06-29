@@ -34,11 +34,16 @@ export const DefiPortfolioBalance = () => {
             </HStack>
           )}
           success={value => (
-            <Text size={34}>
-              <BalanceVisibilityAware size="l">
-                {formatFiatAmount(value)}
-              </BalanceVisibilityAware>
-            </Text>
+            <HStack gap={8} alignItems="center">
+              <Text size={34}>
+                <BalanceVisibilityAware size="l">
+                  {formatFiatAmount(value)}
+                </BalanceVisibilityAware>
+              </Text>
+              {query.isUpdating ? (
+                <Spinner size="0.9em" style={{ opacity: 0.5 }} />
+              ) : null}
+            </HStack>
           )}
         />
         <ManageVaultBalanceVisibility
