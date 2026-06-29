@@ -9,9 +9,13 @@ import { EIP1193Error } from '../../../background/handlers/errorHandler'
 
 const isBridgeTransportError = (error: unknown) => {
   const message = error instanceof Error ? error.message : String(error)
+  const unwrappedMessage = message.replace(
+    /^Failed to send message to background script after \d+ attempts:\s*/i,
+    ''
+  )
 
-  return /Failed to send message to background script|Receiving end does not exist|Could not establish connection|message port closed|Extension context invalidated/i.test(
-    message
+  return /Receiving end does not exist|Could not establish connection|message port closed|Extension context invalidated/i.test(
+    unwrappedMessage
   )
 }
 

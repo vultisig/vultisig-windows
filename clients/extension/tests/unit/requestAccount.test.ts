@@ -118,6 +118,18 @@ describe('requestAccount', () => {
     })
   })
 
+  it('does not open the popup for wrapped non-transport bridge errors', async () => {
+    mockCallBackground.mockRejectedValue(
+      'Failed to send message to background script after 3 attempts: Permission denied'
+    )
+
+    await expect(requestAccount(Chain.Ethereum)).rejects.toMatchObject({
+      code: 4100,
+      message: 'Unauthorized',
+    })
+    expect(mockCallPopup).not.toHaveBeenCalled()
+  })
+
   it('throws EIP1193Error(UserRejectedRequest) when user rejects popup', async () => {
     // Background rejects with Unauthorized so popup is shown
     mockCallBackground.mockRejectedValueOnce(BackgroundError.Unauthorized)
