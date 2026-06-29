@@ -53,6 +53,8 @@ import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAut
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
 import { currentProductBrand } from '../product/brand'
 import { QbtcClaimPage } from '../qbtc/claim/components/QbtcClaimPage'
+import { QbtcGovernanceProposalPage } from '../qbtc/governance/components/QbtcGovernanceProposalPage'
+import { QbtcGovernanceVotePage } from '../qbtc/governance/components/QbtcGovernanceVotePage'
 import { QuantumSecurityOnboardingPage } from '../qbtc/onboarding/QuantumSecurityOnboardingPage'
 import { RequestFastVaultBackup } from '../vault/backup/fast/request'
 import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
@@ -121,6 +123,8 @@ export type SharedViewId = Extract<
   | 'vultDiscount'
   | 'qbtcClaim'
   | 'qbtcQuantumSecurityOnboarding'
+  | 'qbtcGovernanceProposal'
+  | 'qbtcGovernanceVote'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -200,4 +204,6 @@ export const sharedViews: Views<SharedViewId> = {
     currentProductBrand === 'station' ? VaultPage : VultDiscountPage,
   qbtcClaim: QbtcClaimPage,
   qbtcQuantumSecurityOnboarding: QuantumSecurityOnboardingPage,
+  qbtcGovernanceProposal: QbtcGovernanceProposalPage,
+  qbtcGovernanceVote: QbtcGovernanceVotePage,
 }
