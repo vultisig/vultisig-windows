@@ -127,8 +127,8 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
   [Chain.Ton]: [
     {
       id: 'ton-stake-ton',
-      name: 'TON',
-      ticker: 'TON',
+      name: 'GRAM',
+      ticker: 'GRAM',
       type: 'stake',
       chain: Chain.Ton,
     },
