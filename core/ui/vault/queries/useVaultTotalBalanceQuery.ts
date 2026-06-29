@@ -32,7 +32,7 @@ export const useVaultTotalBalanceQuery = (): VaultTotalBalanceQuery => {
   const balances = balancesQuery.data ?? {}
 
   let resolvedCount = 0
-  const data = sum(
+  const total = sum(
     coins.map(coin => {
       const price = prices[coinKeyToString(coin)]
       const amount =
@@ -51,11 +51,14 @@ export const useVaultTotalBalanceQuery = (): VaultTotalBalanceQuery => {
     })
   )
 
+  // An empty vault is a settled zero, not a loading state — resolve it to 0 so
+  // callers (e.g. the delete-vault page) read a number instead of undefined.
+  const isSettledZero = coins.length === 0
   const isUpdating = pricesQuery.isPending || balancesQuery.isPending
 
   return {
-    data: resolvedCount > 0 ? data : undefined,
-    isPending: resolvedCount === 0 && isUpdating,
+    data: resolvedCount > 0 || isSettledZero ? total : undefined,
+    isPending: resolvedCount === 0 && !isSettledZero && isUpdating,
     isUpdating,
     error: [...balancesQuery.errors, ...pricesQuery.errors][0] ?? null,
   }

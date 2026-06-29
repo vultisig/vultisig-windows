@@ -255,8 +255,12 @@ export const useDefiPortfolioBalance = () => {
   const chainTotal = sum(resolvedChains.map(portfolio => portfolio.totalFiat))
 
   const isCirclePending = isCircleIncluded && circleFiatBalanceQuery.isPending
-  const isCircleResolved = isCircleIncluded && !circleFiatBalanceQuery.isPending
-  const circleTotal = isCircleResolved ? (circleFiatBalanceQuery.data ?? 0) : 0
+  // Count Circle only on success — a failed query is no longer pending but its
+  // data is undefined, so treating "not pending" as resolved would silently
+  // mask the failure as a zero contribution.
+  const isCircleResolved =
+    isCircleIncluded && circleFiatBalanceQuery.data !== undefined
+  const circleTotal = isCircleResolved ? circleFiatBalanceQuery.data : 0
 
   const resolvedCount = resolvedChains.length + (isCircleResolved ? 1 : 0)
   const isUpdating = portfolios.isPending || isCirclePending
@@ -265,6 +269,8 @@ export const useDefiPortfolioBalance = () => {
     data: resolvedCount > 0 ? chainTotal + circleTotal : undefined,
     isPending: resolvedCount === 0 && isUpdating,
     isUpdating,
-    error: portfolios.error,
+    error:
+      portfolios.error ??
+      (isCircleIncluded ? circleFiatBalanceQuery.error : null),
   }
 }
