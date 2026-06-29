@@ -40,6 +40,8 @@ import styled from 'styled-components'
 
 import { useTxHash } from '../../../chain/state/txHash'
 import { useCore } from '../../../state/core'
+import { getTxSuccessAmountPresentation } from './getTxSuccessAmountPresentation'
+import { TransactionStatusAnimation } from './TransactionStatusAnimation'
 import { TxStatusTracker } from './TxStatusTracker'
 
 export const TxSuccess = ({
@@ -178,6 +180,14 @@ export const TxSuccess = ({
   const displayAmountOverride = simulationSend
     ? undefined
     : resolvedToken?.amountOverride
+  const txActionLabel =
+    txAction?.action !== 'send' ? txAction?.labelKey : undefined
+  const amountPresentation = getTxSuccessAmountPresentation({
+    amount: displayAmount,
+    amountOverride: displayAmountOverride,
+    skipBroadcast,
+    txActionLabel,
+  })
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
@@ -206,7 +216,11 @@ export const TxSuccess = ({
 
   return (
     <VStack gap={36} data-testid="tx-success">
-      <TxStatusTracker chain={coin.chain} hash={txHash} />
+      {skipBroadcast ? (
+        <TransactionStatusAnimation status="success" />
+      ) : (
+        <TxStatusTracker chain={coin.chain} hash={txHash} />
+      )}
       <VStack gap={8}>
         {showUniversalRouterSwap ? (
           <UniversalRouterSwapSummary
@@ -219,11 +233,10 @@ export const TxSuccess = ({
           <TxOverviewAmount
             amount={displayAmount}
             value={displayCoin}
-            actionLabel={
-              txAction?.action !== 'send' ? txAction?.labelKey : undefined
-            }
+            actionLabel={amountPresentation.actionLabel}
             resolvedLabel={resolvedLabel}
             amountOverride={displayAmountOverride}
+            hideZeroAmount={amountPresentation.hideZeroAmount}
           />
         )}
         {evmChain && (knownContract || approvalCounterparty) && (
@@ -248,8 +261,8 @@ export const TxSuccess = ({
             )}
           </List>
         )}
-        {!skipBroadcast && (
-          <List>
+        <List>
+          {!skipBroadcast && (
             <ListItem
               hoverable
               extra={
@@ -283,14 +296,14 @@ export const TxSuccess = ({
                 </Text>
               }
             />
-            <ListItem
-              onClick={onSeeTxDetails}
-              title={<Text size={14}>{t('transaction_details')}</Text>}
-              hoverable
-              showArrow
-            />
-          </List>
-        )}
+          )}
+          <ListItem
+            onClick={onSeeTxDetails}
+            title={<Text size={14}>{t('transaction_details')}</Text>}
+            hoverable
+            showArrow
+          />
+        </List>
       </VStack>
     </VStack>
   )
