@@ -54,7 +54,11 @@ export const DefiTonBalanceBanner = () => {
   const priceQuery = useCoinPricesQuery({ coins: [priceCoin] })
   const price = priceQuery.data?.[coinKeyToString({ chain: Chain.Ton })]
 
-  const isLoading = positionQuery.isPending || priceQuery.isPending
+  // A disabled query (no TON address) stays `isPending: true` forever, so gate
+  // the spinner on the address being present — otherwise the banner would spin
+  // indefinitely when TON isn't derived.
+  const isLoading =
+    !!tonAddress && (positionQuery.isPending || priceQuery.isPending)
 
   const stakedUi = positionQuery.data
     ? Number(

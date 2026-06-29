@@ -100,8 +100,10 @@ const TonStakePageContent = ({ coin }: { coin: AccountCoin }) => {
   })()
 
   // Add-more reuses the existing pool (its `min_stake` isn't re-fetched), so
-  // fall back to a conservative 1-TON floor — real pools require far more, this
-  // only guards dust. First-time stakes use the picked pool's minimum.
+  // fall back to the deposit buffer as the pool minimum — combined with the
+  // buffer added below this yields a conservative ~2 TON floor that only guards
+  // against dust top-ups (the pool's real total minimum is already satisfied by
+  // the existing stake). First-time stakes use the picked pool's minimum.
   const poolMinUnits = selectedPool
     ? selectedPool.minStake
     : tonStakingDepositBuffer

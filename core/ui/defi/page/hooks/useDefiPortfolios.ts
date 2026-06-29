@@ -76,8 +76,8 @@ export const useDefiChainPortfolios = () => {
 
   // TON nominator-pool staking. The aggregated position (active + pending
   // deposit) is read live from tonapi; its TON value × spot price rolls into
-  // the DeFi total. Like Tron, it's surfaced whenever a stake exists — no
-  // per-position opt-in.
+  // the DeFi total. Opt-in like the other chains: the rollup below is gated on
+  // `tonSelectedPositions` so a disabled position contributes nothing.
   const tonAddress = useCurrentVaultAddress(Chain.Ton)
   const tonStakePositionQuery = useTonStakePositionQuery(tonAddress)
   const tonPricesQuery = useCoinPricesQuery({

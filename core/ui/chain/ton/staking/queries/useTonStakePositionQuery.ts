@@ -21,8 +21,7 @@ type TonStakePosition = {
   stakedAmount: bigint
   /** APY as a percentage (e.g. `13.27`), or undefined when unavailable. */
   apr?: number
-  /** `false` while a withdrawal is pending (funds locked until the cycle ends). */
-  canStake: boolean
+  /** `true` while a withdrawal is pending (funds locked until the cycle ends). */
   withdrawalPending: boolean
   /** Unix seconds the validation cycle ends — roughly when a withdrawal unlocks. */
   withdrawalUnlockTime?: number
@@ -62,7 +61,6 @@ const fetchTonStakePosition = async (
     // tonapi already reports `apy` as a percentage (13.27 = 13.27%) — the unit
     // `StakeCard` renders directly.
     apr: poolInfo?.apy,
-    canStake: !withdrawalPending,
     withdrawalPending,
     withdrawalUnlockTime: withdrawalPending ? poolInfo?.cycleEnd : undefined,
   }

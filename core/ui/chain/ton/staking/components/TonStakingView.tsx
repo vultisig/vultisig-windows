@@ -16,10 +16,10 @@ import { useTranslation } from 'react-i18next'
 import { useStakeTonAsSend } from '../hooks/useStakeTonAsSend'
 
 /**
- * TON nominator-pool staking on the DeFi/Earn "Staked" tab. Unlike THORChain
- * and Cosmos staking, the position is read live from tonapi (a wallet stakes
- * into one nominator pool at a time) and is NOT gated behind the per-position
- * opt-in — whenever a stake exists it is shown and counted.
+ * TON nominator-pool staking on the DeFi/Earn "Staked" tab. The position is read
+ * live from tonapi (a wallet stakes into one nominator pool at a time). Like the
+ * other chains it is opt-in: `StakedPositions` renders the empty state when the
+ * `ton-stake-ton` position is disabled, so this view only renders when enabled.
  */
 export const TonStakingView = () => {
   const { t, i18n } = useTranslation()
