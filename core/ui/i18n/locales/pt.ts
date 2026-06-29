@@ -230,6 +230,7 @@ export const pt = {
     bonded: 'Bonded',
     staked: 'Staked',
     lps: 'LPs',
+    governance: 'Governança',
   },
   vaultTabs: {
     portfolio: 'Portfólio',
@@ -479,7 +480,7 @@ export const pt = {
   seedphrase_invalid_error:
     'A frase-semente está incorreta. Por favor, verifique todas as palavras.',
   seedphrase_duplicate_vault_error:
-    'Esta frase-semente já foi importada como cofre &quot;{{vaultName}}&quot;. Importá-la novamente substituiria o cofre existente.',
+    'Esta frase mnemônica já foi importada como o cofre &quot;{{vaultName}}&quot;. Importe outra frase mnemônica.',
   fast_vault_exists_warning_title: 'O cofre já existe',
   fast_vault_exists_warning_description:
     'Esta frase-semente já foi importada como cofre rápido em outro dispositivo. Se continuar, a parte do servidor será substituída e o outro dispositivo deixará de funcionar.',
@@ -1064,7 +1065,8 @@ export const pt = {
   vault_info: 'Informações do cofre',
   vault_management: 'Cofre',
   vault_name: 'Nome do cofre',
-  vault_name_already_exists: 'O nome do cofre deve ser único.',
+  vault_name_already_exists:
+    'Por favor, escolha um nome diferente para o cofre.',
   vault_name_description:
     'Você sempre poderá renomear seu cofre posteriormente nas configurações.',
   vault_name_max_length_error:
@@ -1130,7 +1132,6 @@ export const pt = {
   remove_thor_lp: 'Remover THORChain LP',
   pool: 'Pool',
   paired_address: 'Endereço emparelhado',
-  wrong_vault_try_again: 'Cofre ou dispositivo de emparelhamento incorretos.',
   yesterday: 'Ontem',
   you_are_bonding: 'Você está bondando',
   you_are_unbonding: 'Você está desfazendo bond',
@@ -1499,21 +1500,21 @@ export const pt = {
   coming_soon: 'Em breve',
   custom_rpc: 'RPCs personalizados',
   custom_rpc_chip_custom: 'Personalizado',
-  custom_rpc_chip_default: 'Padrão',
   custom_rpc_description: 'Use seus próprios nós por cadeia',
   custom_rpc_invalid_response: 'Resposta inesperada deste endpoint',
   custom_rpc_invalid_url: 'Insira um URL http(s) válido',
-  custom_rpc_list_subtitle:
-    'Aponte uma cadeia para o seu próprio nó. Deixe a configuração padrão para usar os endpoints de {{productName}}.',
   custom_rpc_reachable: 'Acessível · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Acessível · {{ms}} ms — identidade de rede não verificada',
   custom_rpc_reset_button: 'Restaurar para as configurações padrão',
-  custom_rpc_test_button: 'Teste',
+  custom_rpc_default_endpoint: 'PONTO DE ENDEREÇO ​​PADRÃO',
+  custom_rpc_editor_hint:
+    'Toque para editar. Compatível apenas com endpoints HTTPS.',
+  custom_rpc_save_button: 'Salvar RPC',
+  custom_rpc_saved: 'Configurações RPC salvas',
   custom_rpc_testing: 'Testando…',
   custom_rpc_unreachable: 'Ponto final inacessível',
   custom_rpc_url_hint: 'https://seu-nó.exemplo',
-  custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Este ponto final serve uma cadeia diferente',
   vult_tier_label: '{{tier}} Nível',
   vult_tier_required: 'Nível {{tier}} necessário',
@@ -1557,4 +1558,60 @@ export const pt = {
     'Você assinou em conjunto a declaração QBTC. O outro dispositivo irá concluir e transmiti-la.',
   qbtc_onboarding_key_warning:
     'Habilitar QBTC cria uma nova chave quântica e um endereço QBTC. Se este cofre já possuía uma chave quântica em outro dispositivo ou importação, os fundos QBTC anteriores podem não estar acessíveis a partir do novo endereço. Faça backup deste cofre após a geração.',
+  qbtc_gov: {
+    status: {
+      passed: 'Aprovado',
+      voting: 'Votação',
+      rejected: 'Rejeitado',
+      failed: 'Fracassado',
+      deposit: 'Depósito',
+      unspecified: 'Desconhecido',
+    },
+    option: {
+      yes: 'Sim',
+      abstain: 'Abster-se',
+      no: 'Não',
+      noWithVeto: 'Não com veto',
+    },
+    proposal_number: 'Proposta nº {{id}}',
+    untitled_proposal: 'Proposta sem título',
+    active_section: 'Ativo',
+    past_section: 'Passado',
+    no_proposals: 'Ainda não há propostas.',
+    proposal_not_found: 'Proposta não encontrada',
+    voting_ended: 'A votação terminou.',
+    voted_label: 'Votado · {{option}}',
+    summary: 'Resumo',
+    tally: 'Contagem',
+    quorum: 'Quorum',
+    no_votes_yet: 'Ainda não há votos.',
+    voting_window: 'Janela de votação',
+    voting_start: 'Início',
+    voting_end: 'Fim',
+    messages: 'Mensagens',
+    cast_vote: 'Faça seu voto',
+    change_vote: 'Mude seu voto',
+    weighted_vote_cta: 'Voto ponderado',
+    weighted_vote_title: 'Voto ponderado',
+    weighted_total: 'Total',
+    submit_weighted_vote: 'Enviar voto ponderado',
+    your_vote: 'Seu voto',
+    confirm_vote: 'Confirmar voto',
+    enable_qbtc_to_vote: 'Habilite QBTC neste cofre para votar.',
+    ends_in_days_hours: 'Termina em {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Termina em {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Termina em {{minutes}}m',
+  },
+  camera_permission_required: 'Permissão para filmagem não concedida.',
+  camera_permission_required_description:
+    'É necessário conceder permissão à câmera para prosseguir. Por favor, habilite-a nas Configurações.',
+  swap_insufficient_funds:
+    'Fundos insuficientes para realizar a troca. Por favor, adicione fundos à sua carteira.',
+  keygen_failed_description:
+    'A criação do cofre foi lenta devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
+  same_vault_share_description:
+    'Por favor, altere o compartilhamento para assinatura. Dois dispositivos não podem usar o mesmo compartilhamento do cofre para co-assinatura.',
+  vault_is_not_loaded: 'O cofre não está carregado.',
+  vault_is_not_loaded_description:
+    'Por favor, importe o compartilhamento correto.',
 }

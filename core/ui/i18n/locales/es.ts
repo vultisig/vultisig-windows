@@ -228,6 +228,7 @@ export const es = {
     bonded: 'Bonded',
     staked: 'Staked',
     lps: 'LPs',
+    governance: 'Gobernancia',
   },
   vaultTabs: {
     portfolio: 'Portafolio',
@@ -477,7 +478,7 @@ export const es = {
   seedphrase_invalid_error:
     'La frase semilla no es correcta, por favor verifique todas las palabras.',
   seedphrase_duplicate_vault_error:
-    'Esta frase inicial ya se importó como bóveda &quot;{{vaultName}}&quot;. Al volver a importarla, se reemplazaría la bóveda existente.',
+    'Esta frase semilla ya está importada como vault &quot;{{vaultName}}&quot;. Por favor, importe otra frase semilla.',
   fast_vault_exists_warning_title: 'La bóveda ya existe',
   fast_vault_exists_warning_description:
     'Esta frase semilla ya fue importada como bóveda rápida en otro dispositivo. Si continúa, se reemplazará la parte del servidor y el otro dispositivo dejará de funcionar.',
@@ -1064,7 +1065,7 @@ export const es = {
   vault_info: 'Información de la bóveda',
   vault_management: 'Bóveda',
   vault_name: 'Nombre de la bóveda',
-  vault_name_already_exists: 'El nombre de la bóveda debe ser único',
+  vault_name_already_exists: 'Por favor, elija un nombre de bóveda diferente.',
   vault_name_description:
     'Siempre puedes cambiar el nombre de tu bóveda más tarde en la configuración',
   vault_name_max_length_error:
@@ -1130,7 +1131,6 @@ export const es = {
   remove_thor_lp: 'Eliminar THORChain LP',
   pool: 'Pool',
   paired_address: 'Dirección emparejada',
-  wrong_vault_try_again: 'Dispositivo de emparejamiento o bóveda incorrecto.',
   yesterday: 'Ayer',
   you_are_bonding: 'Estás haciendo bond',
   you_are_unbonding: 'Estás haciendo unbond',
@@ -1497,21 +1497,20 @@ export const es = {
   coming_soon: 'Muy pronto',
   custom_rpc: 'RPC personalizados',
   custom_rpc_chip_custom: 'Costumbre',
-  custom_rpc_chip_default: 'Por defecto',
   custom_rpc_description: 'Utilice sus propios nodos por cadena.',
   custom_rpc_invalid_response: 'Respuesta inesperada de este punto final.',
   custom_rpc_invalid_url: 'Introduzca una URL http(s) válida',
-  custom_rpc_list_subtitle:
-    'Dirige una cadena a tu propio nodo. Deja la configuración predeterminada para usar los puntos finales de {{productName}}.',
   custom_rpc_reachable: 'Accesible · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Accesible · {{ms}} ms — identidad de red no verificada',
   custom_rpc_reset_button: 'Restablecer a valores predeterminados',
-  custom_rpc_test_button: 'Prueba',
+  custom_rpc_default_endpoint: 'PUNTO FINAL PREDETERMINADO',
+  custom_rpc_editor_hint: 'Toca para editar. Solo admite conexiones HTTPS.',
+  custom_rpc_save_button: 'Guardar RPC',
+  custom_rpc_saved: 'Configuración de RPC guardada',
   custom_rpc_testing: 'Pruebas…',
   custom_rpc_unreachable: 'Punto final inaccesible',
   custom_rpc_url_hint: 'https://tu-nodo.ejemplo',
-  custom_rpc_url_label: 'URL RPC',
   custom_rpc_wrong_chain: 'Este punto final sirve a una cadena diferente',
   vult_tier_label: '{{tier}} Nivel',
   vult_tier_required: 'Se requiere nivel {{tier}}',
@@ -1555,4 +1554,60 @@ export const es = {
     'Has firmado conjuntamente la reclamación QBTC. El otro dispositivo la finalizará y la transmitirá.',
   qbtc_onboarding_key_warning:
     'Al habilitar QBTC, se crea una nueva clave cuántica y una dirección QBTC. Si esta bóveda ya tenía una clave cuántica en otro dispositivo o importación, es posible que los fondos QBTC anteriores no sean accesibles desde la nueva dirección. Realice una copia de seguridad de esta bóveda después de su generación.',
+  qbtc_gov: {
+    status: {
+      passed: 'Aprobado',
+      voting: 'Votación',
+      rejected: 'Rechazado',
+      failed: 'Fallido',
+      deposit: 'Depósito',
+      unspecified: 'Desconocido',
+    },
+    option: {
+      yes: 'Sí',
+      abstain: 'Abstención',
+      no: 'No',
+      noWithVeto: 'No con veto',
+    },
+    proposal_number: 'Propuesta n.º {{id}}',
+    untitled_proposal: 'Propuesta sin título',
+    active_section: 'Activo',
+    past_section: 'Pasado',
+    no_proposals: 'Aún no hay propuestas.',
+    proposal_not_found: 'Propuesta no encontrada',
+    voting_ended: 'La votación ha terminado.',
+    voted_label: 'Votado · {{option}}',
+    summary: 'Resumen',
+    tally: 'Recuento',
+    quorum: 'Quórum',
+    no_votes_yet: 'Aún no hay votos.',
+    voting_window: 'Ventana de votación',
+    voting_start: 'Inicio',
+    voting_end: 'Fin',
+    messages: 'Mensajes',
+    cast_vote: 'Emite tu voto',
+    change_vote: 'Cambia tu voto',
+    weighted_vote_cta: 'Voto ponderado',
+    weighted_vote_title: 'Voto ponderado',
+    weighted_total: 'Total',
+    submit_weighted_vote: 'Emitir voto ponderado',
+    your_vote: 'Tu voto',
+    confirm_vote: 'Confirmar voto',
+    enable_qbtc_to_vote: 'Habilite QBTC en esta bóveda para votar.',
+    ends_in_days_hours: 'Termina en {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Termina en {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Termina en {{minutes}}m',
+  },
+  camera_permission_required: 'No se concede permiso para usar la cámara.',
+  camera_permission_required_description:
+    'Se requiere permiso para usar la cámara para continuar. Por favor, actívalo en Ajustes.',
+  swap_insufficient_funds:
+    'Fondos insuficientes para realizar el intercambio. Por favor, deposite fondos en la billetera.',
+  keygen_failed_description:
+    'La creación de la bóveda se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
+  same_vault_share_description:
+    'Por favor, cambie la carpeta compartida para firmar. Dos dispositivos no pueden usar la misma carpeta compartida para la firma conjunta.',
+  vault_is_not_loaded: 'La bóveda no está cargada.',
+  vault_is_not_loaded_description:
+    'Por favor, importe el recurso compartido correcto.',
 }
