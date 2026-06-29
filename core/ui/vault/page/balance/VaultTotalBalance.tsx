@@ -30,16 +30,21 @@ export const VaultTotalBalance = () => {
           </HStack>
         )}
         success={value => (
-          <Text
-            color="contrast"
-            size={28}
-            centerVertically
-            data-testid="balance-value"
-          >
-            <BalanceVisibilityAware size="l">
-              {formatFiatAmount(value)}
-            </BalanceVisibilityAware>
-          </Text>
+          <HStack gap={8} alignItems="center">
+            <Text
+              color="contrast"
+              size={28}
+              centerVertically
+              data-testid="balance-value"
+            >
+              <BalanceVisibilityAware size="l">
+                {formatFiatAmount(value)}
+              </BalanceVisibilityAware>
+            </Text>
+            {query.isUpdating ? (
+              <Spinner size="0.9em" style={{ opacity: 0.5 }} />
+            ) : null}
+          </HStack>
         )}
       />
       <ManageVaultBalanceVisibility />
