@@ -260,7 +260,7 @@ export const useDefiPortfolioBalance = () => {
   // mask the failure as a zero contribution.
   const isCircleResolved =
     isCircleIncluded && circleFiatBalanceQuery.data !== undefined
-  const circleTotal = isCircleResolved ? circleFiatBalanceQuery.data : 0
+  const circleTotal = isCircleResolved ? (circleFiatBalanceQuery.data ?? 0) : 0
 
   const resolvedCount = resolvedChains.length + (isCircleResolved ? 1 : 0)
   const isUpdating = portfolios.isPending || isCirclePending
