@@ -387,10 +387,10 @@ export function getVaultConfigFromEnv(): {
   vaultPath: string
   password: string
 } | null {
-  const vaultPath = process.env.TEST_VAULT_PATH ?? process.env.VAULT_SHARE_PATH
-  const password = process.env.TEST_VAULT_PASSWORD ?? process.env.VAULT_PASSWORD
+  const vaultPath = firstPresentEnv('TEST_VAULT_PATH', 'VAULT_SHARE_PATH')
+  const password = firstPresentEnv('TEST_VAULT_PASSWORD', 'VAULT_PASSWORD')
 
-  if (!vaultPath || !password) {
+  if (!vaultPath || !password || !existsSync(vaultPath)) {
     return null
   }
 
@@ -404,20 +404,27 @@ export function getSecureVaultConfigFromEnv(): Array<{
   vaultPath: string
   password: string
 }> {
-  const sharesEnv =
-    process.env.SECURE_VAULT_SHARES ??
-    [process.env.SECURE_VAULT_SHARE1, process.env.SECURE_VAULT_SHARE2]
-      .filter(Boolean)
-      .join(',')
-  const password = process.env.SECURE_VAULT_PASSWORD
+  const sharesEnv = firstPresentEnv('SECURE_VAULT_SHARES')
+  const password = firstPresentEnv('SECURE_VAULT_PASSWORD')
 
-  if (!sharesEnv || !password) {
+  const sharePaths =
+    sharesEnv?.split(',') ??
+    [
+      firstPresentEnv('SECURE_VAULT_SHARE1'),
+      firstPresentEnv('SECURE_VAULT_SHARE2'),
+    ].filter((share): share is string => Boolean(share))
+
+  if (!password) {
     return []
   }
 
-  return sharesEnv
-    .split(',')
+  return sharePaths
     .map(s => s.trim())
     .filter(s => existsSync(s))
     .map(vaultPath => ({ vaultPath, password }))
 }
+
+const firstPresentEnv = (...names: string[]) =>
+  names
+    .map(name => process.env[name]?.trim())
+    .find((value): value is string => Boolean(value))

@@ -5,6 +5,8 @@
  * Uses the actual UI flow via importVaultViaUI helper.
  */
 
+import type { Locator } from '@playwright/test'
+
 import { expect, test } from '../fixtures/extension-loader'
 import {
   getSecureVaultConfigFromEnv,
@@ -14,6 +16,26 @@ import {
 import { VaultPage } from '../page-objects/VaultPage.po'
 
 const getWrongPassword = (password: string) => `${password}-wrong-password`
+
+const isVisibleWithin = async (locator: Locator, timeout = 3_000) => {
+  try {
+    await locator.waitFor({ state: 'visible', timeout })
+    return true
+  } catch {
+    return false
+  }
+}
+
+const clickFirstVisible = async (...locators: Locator[]) => {
+  for (const locator of locators) {
+    if (await isVisibleWithin(locator)) {
+      await locator.click()
+      return true
+    }
+  }
+
+  return false
+}
 
 test.describe('Vault Import', () => {
   test('import FastVault .vult file with password succeeds', async ({
@@ -130,7 +152,7 @@ test.describe('Vault Import', () => {
 
       // Find Import button
       const importBtn = page.getByText(/import/i).first()
-      if (!(await importBtn.isVisible({ timeout: 5000 }).catch(() => false))) {
+      if (!(await isVisibleWithin(importBtn, 5_000))) {
         console.log('Import button not visible, skipping')
         test.skip()
         return
@@ -143,9 +165,7 @@ test.describe('Vault Import', () => {
       const importShareOption = page
         .getByText(/import.*vault.*share|vault.*share/i)
         .first()
-      if (
-        await importShareOption.isVisible({ timeout: 3000 }).catch(() => false)
-      ) {
+      if (await isVisibleWithin(importShareOption)) {
         await importShareOption.click()
         await page.waitForTimeout(500)
       }
@@ -158,24 +178,27 @@ test.describe('Vault Import', () => {
 
       // Click Continue
       const continueBtn = page.getByRole('button', { name: /continue/i })
-      if (await continueBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      if (await isVisibleWithin(continueBtn)) {
         await continueBtn.click()
         await page.waitForTimeout(500)
       }
 
       // Enter WRONG password
       const passwordInput = page.locator('input[type="password"]')
-      if (await passwordInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+      if (await isVisibleWithin(passwordInput)) {
         await passwordInput.fill(getWrongPassword(config.password))
         await page.waitForTimeout(300)
 
         // Submit
-        const submitBtn = page.locator('[data-testid="fast-vault-submit"]').or(
-          page.getByRole('button', {
-            name: /submit|confirm|continue|unlock/i,
-          })
+        const submitted = await clickFirstVisible(
+          page.locator('[data-testid="fast-vault-submit"]').first(),
+          page
+            .getByRole('button', {
+              name: /submit|confirm|continue|unlock/i,
+            })
+            .first()
         )
-        await submitBtn.first().click()
+        expect(submitted).toBe(true)
         await page.waitForTimeout(1500)
 
         // Should show error or stay on password page (not navigate to vault)
