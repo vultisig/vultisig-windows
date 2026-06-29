@@ -231,6 +231,7 @@ export const it = {
     bonded: 'Bonded',
     staked: 'Staked',
     lps: 'LPs',
+    governance: 'Governance',
   },
   vaultTabs: {
     portfolio: 'Portafoglio',
@@ -483,7 +484,7 @@ export const it = {
   seedphrase_invalid_error:
     'La frase iniziale non è corretta, verifica tutte le parole.',
   seedphrase_duplicate_vault_error:
-    'Questa frase seed è già stata importata come vault &quot;{{vaultName}}&quot;. Importandola nuovamente, il vault esistente verrebbe sostituito.',
+    'Questa frase di recupero è già stata importata come vault &quot;{{vaultName}}&quot;. Si prega di importare un&#39;altra frase di recupero.',
   fast_vault_exists_warning_title: 'Il vault esiste già',
   fast_vault_exists_warning_description:
     "Questa frase seed è già stata importata come vault veloce su un altro dispositivo. Continuando, la quota del server verrà sostituita e l'altro dispositivo smetterà di funzionare.",
@@ -705,8 +706,6 @@ export const it = {
   qbtc_claim_utxos_skipped: 'UTXO saltati',
   qbtc_claim_done: 'Fatto',
   qbtc_claim_failed: 'Richiesta non riuscita. Riprova.',
-  qbtc_claim_fast_vault_only:
-    'Al momento, per riscattare i propri beni è necessario un Fast Vault. Il supporto per Secure Vault sarà disponibile a breve.',
   qbtc_claim_password_description:
     'Inserisci la password di Fast Vault per controfirmare la transazione di richiesta.',
   receive: 'Ricevere',
@@ -1068,7 +1067,7 @@ export const it = {
   vault_info: 'Informazioni sul caveau',
   vault_management: 'Caveau',
   vault_name: 'Nome del caveau',
-  vault_name_already_exists: 'Il nome del vault deve essere univoco',
+  vault_name_already_exists: 'Scegli un nome diverso per il vault.',
   vault_name_description:
     'Puoi sempre rinominare il tuo vault in seguito nelle impostazioni',
   vault_name_max_length_error:
@@ -1134,7 +1133,6 @@ export const it = {
   remove_thor_lp: 'Rimuovi THORChain LP',
   pool: 'Pool',
   paired_address: 'Indirizzo accoppiato',
-  wrong_vault_try_again: 'Vault o dispositivo di associazione errati.',
   yesterday: 'Ieri',
   you_are_bonding: 'Stai facendo bond',
   you_are_unbonding: 'Stai facendo unbond',
@@ -1509,16 +1507,21 @@ export const it = {
   custom_rpc_chip_custom: 'Personalizzato',
   custom_rpc_description: 'Utilizza i tuoi nodi per catena',
   custom_rpc_invalid_response: 'Risposta inattesa da questo endpoint',
-  custom_rpc_invalid_url: 'Inserisci un URL HTTPS valido',
+  custom_rpc_invalid_url: 'Inserisci un URL http(s) valido',
   custom_rpc_reachable: 'Raggiungibile · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Raggiungibile · {{ms}} ms — identità di rete non verificata',
   custom_rpc_reset_button: 'Ripristina le impostazioni predefinite',
+  custom_rpc_default_endpoint: 'ENDPOINT PREDEFINITO',
+  custom_rpc_editor_hint: 'Tocca per modificare. Supporta solo endpoint HTTPS.',
+  custom_rpc_save_button: 'Salva RPC',
+  custom_rpc_saved: 'Impostazioni RPC salvate',
   custom_rpc_testing: 'Test…',
   custom_rpc_unreachable: 'Punto di accesso irraggiungibile',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Questo endpoint serve una catena diversa',
-  vult_tier_required: 'VULT TIER',
+  vult_tier_label: 'Livello {{tier}}',
+  vult_tier_required: 'Livello {{tier}} richiesto',
   send_to_different_address: 'Inviare a un indirizzo diverso',
   slippage_custom: 'Personalizzato',
   slippage_helper:
@@ -1530,17 +1533,87 @@ export const it = {
   use_external_recipient: 'Utilizzare un destinatario esterno',
   swap_external_recipient_warning: 'Invio a un indirizzo esterno',
   custom_rpc_gate_description:
-    'Punta Vultisig ai tuoi nodi. Query più veloci, limiti di frequenza più elevati e privacy completa per ogni catena.',
+    'Punta {{productName}} ai tuoi nodi. Query più veloci, limiti di frequenza più elevati e privacy completa per ogni catena.',
   feature_gate_requires: 'Richiede',
   feature_gate_requires_tier: '$VULT {{tier}} Livello o superiore',
   feature_gate_hold_at_least: 'Conserva almeno {{amount}} nel tuo vault',
   feature_gate_your_balance: 'Il tuo saldo',
   get_vult: 'Ottieni $VULT',
   manage_positions: 'Gestisci posizioni',
-  custom_rpc_default_endpoint: 'ENDPOINT PREDEFINITO',
-  custom_rpc_editor_hint: 'Tocca per modificare. Supporta solo endpoint HTTPS.',
-  custom_rpc_save_button: 'Salva RPC',
-  custom_rpc_saved: 'Impostazioni RPC salvate',
+  copied: 'Copiato',
+  copy: 'Copia',
+  error_message: 'Messaggio di errore',
+  report_bug: 'Segnala un bug',
+  show_exact_error: 'Mostra l&#39;errore esatto',
   swap_invalid_external_recipient:
     'L&#39;indirizzo del destinatario non è valido per {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Ottimizza i tuoi scambi con slittamento personalizzato, limite di gas e indirizzo del destinatario esterno.',
+  signing_error_description:
+    'Uno dei tuoi dispositivi non ha risposto in tempo. Verifica la connessione e riprova.',
+  qbtc_claim_cosign_title: 'Co-firma la rivendicazione QBTC',
+  qbtc_claim_cosign_description:
+    'Esamina la richiesta di rivendicazione qui sotto, quindi approva la controfirma utilizzando la chiave Bitcoin di questo vault.',
+  qbtc_claim_cosign_amount: 'Quantità',
+  qbtc_claim_cosign_btc_address: 'Indirizzo Bitcoin (prova di proprietà)',
+  qbtc_claim_cosign_qbtc_address:
+    'Indirizzo QBTC (destinatario della richiesta)',
+  qbtc_claim_cosign_success:
+    'Hai controfirmato la rivendicazione QBTC. L&#39;altro dispositivo la completerà e la trasmetterà.',
+  qbtc_gov: {
+    status: {
+      passed: 'Superato',
+      voting: 'Votazione',
+      rejected: 'Respinto',
+      failed: 'Fallito',
+      deposit: 'Deposito',
+      unspecified: 'Sconosciuto',
+    },
+    option: {
+      yes: 'Sì',
+      abstain: 'Astenersi',
+      no: 'No',
+      noWithVeto: 'No con diritto di veto',
+    },
+    proposal_number: 'Proposta #{{id}}',
+    untitled_proposal: 'Proposta senza titolo',
+    active_section: 'Attivo',
+    past_section: 'Precedenti',
+    no_proposals: 'Nessuna proposta ancora',
+    proposal_not_found: 'Proposta non trovata',
+    voting_ended: 'Votazione conclusa',
+    voted_label: 'Votato · {{option}}',
+    summary: 'Riepilogo',
+    tally: 'Conteggio',
+    quorum: 'Quorum',
+    no_votes_yet: 'Nessun voto ancora',
+    voting_window: 'Finestra di votazione',
+    voting_start: 'Inizio',
+    voting_end: 'Fine',
+    messages: 'Messaggi',
+    cast_vote: 'Esprimi il tuo voto',
+    change_vote: 'Cambia il tuo voto',
+    weighted_vote_cta: 'Voto ponderato',
+    weighted_vote_title: 'Voto ponderato',
+    weighted_total: 'Totale',
+    submit_weighted_vote: 'Invia voto ponderato',
+    your_vote: 'Il tuo voto',
+    confirm_vote: 'Conferma il voto',
+    enable_qbtc_to_vote: 'Abilita QBTC in questo vault per votare.',
+    ends_in_days_hours: 'Termina in {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Termina in {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Termina in {{minutes}}m',
+  },
+  camera_permission_required:
+    'Autorizzazione all&#39;utilizzo della fotocamera non concessa',
+  camera_permission_required_description:
+    'Per procedere è necessaria l&#39;autorizzazione per scattare foto. Abilitala nelle Impostazioni.',
+  swap_insufficient_funds:
+    'Fondi insufficienti per eseguire lo scambio. Si prega di versare fondi nel portafoglio.',
+  keygen_failed_description:
+    'La creazione del vault è stata rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
+  same_vault_share_description:
+    'Modifica la condivisione per la firma. Due dispositivi non possono utilizzare la stessa condivisione del vault per la firma congiunta.',
+  vault_is_not_loaded: 'Il vault non è caricato',
+  vault_is_not_loaded_description: 'Si prega di importare la quota corretta.',
 }

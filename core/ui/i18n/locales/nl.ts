@@ -227,6 +227,7 @@ export const nl = {
     bonded: 'Gebond',
     staked: 'Gestaked',
     lps: "LP's",
+    governance: 'Bestuur',
   },
   vaultTabs: {
     portfolio: 'Portfolio',
@@ -472,7 +473,7 @@ export const nl = {
   seedphrase_invalid_error:
     'Seed phrase is niet correct, controleer alle woorden.',
   seedphrase_duplicate_vault_error:
-    'Deze seed phrase is al geïmporteerd als kluis &quot;{{vaultName}}&quot;. Als u deze opnieuw importeert, wordt de bestaande kluis vervangen.',
+    'Deze seed phrase is al geïmporteerd als vault &quot;{{vaultName}}&quot;. Importeer een andere seed phrase.',
   fast_vault_exists_warning_title: 'Kluis bestaat al',
   fast_vault_exists_warning_description:
     'Deze seed phrase is al geïmporteerd als snelle kluis op een ander apparaat. Als u doorgaat, wordt het serveraandeel vervangen en werkt het andere apparaat niet meer.',
@@ -696,8 +697,6 @@ export const nl = {
   qbtc_claim_utxos_skipped: 'UTXO&#39;s overgeslagen',
   qbtc_claim_done: 'Klaar',
   qbtc_claim_failed: 'Claim mislukt. Probeer het opnieuw.',
-  qbtc_claim_fast_vault_only:
-    'Voor het claimen van gegevens is momenteel een Fast Vault vereist. Ondersteuning voor Secure Vault is in ontwikkeling.',
   qbtc_claim_password_description:
     'Voer uw Fast Vault-wachtwoord in om de claimtransactie mede te ondertekenen.',
   receive: 'Ontvangen',
@@ -1053,7 +1052,7 @@ export const nl = {
   vault_info: 'Kluisinfo',
   vault_management: 'Kluis',
   vault_name: 'Kluisnaam',
-  vault_name_already_exists: 'Kluisnaam moet uniek zijn',
+  vault_name_already_exists: 'Kies een andere kluisnaam.',
   vault_name_description:
     'Je kunt je kluis later altijd hernoemen in de instellingen',
   vault_name_max_length_error: 'Kluisnaam moet korter zijn dan 50 tekens',
@@ -1116,7 +1115,6 @@ export const nl = {
   remove_thor_lp: 'Verwijder THORChain LP',
   pool: 'Pool',
   paired_address: 'Gekoppeld adres',
-  wrong_vault_try_again: 'Verkeerde kluis of koppelapparaat.',
   yesterday: 'Gisteren',
   you_are_bonding: 'Je bent aan het bonden',
   you_are_unbonding: 'Je bent aan het unbonden',
@@ -1486,16 +1484,22 @@ export const nl = {
   custom_rpc_chip_custom: 'Aangepast',
   custom_rpc_description: 'Gebruik je eigen knooppunten per keten.',
   custom_rpc_invalid_response: 'Onverwachte reactie van dit eindpunt',
-  custom_rpc_invalid_url: 'Voer een geldige HTTPS-URL in.',
+  custom_rpc_invalid_url: 'Voer een geldige http(s)-URL in.',
   custom_rpc_reachable: 'Bereikbaar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Bereikbaar · {{ms}} ms — netwerkidentiteit niet geverifieerd',
   custom_rpc_reset_button: 'Terugzetten naar standaardinstellingen',
+  custom_rpc_default_endpoint: 'STANDAARD EINDPUNT',
+  custom_rpc_editor_hint:
+    'Tik om te bewerken. Ondersteunt alleen HTTPS-eindpunten.',
+  custom_rpc_save_button: 'Sla RPC op',
+  custom_rpc_saved: 'RPC instellingen opgeslagen',
   custom_rpc_testing: 'Testen…',
   custom_rpc_unreachable: 'Eindpunt onbereikbaar',
   custom_rpc_url_hint: 'https://jouw-node.voorbeeld',
   custom_rpc_wrong_chain: 'Dit eindpunt bedient een andere keten.',
-  vult_tier_required: 'VULT TIER',
+  vult_tier_label: '{{tier}} Tier',
+  vult_tier_required: '{{tier}} Vereiste tier',
   send_to_different_address: 'Verzenden naar een ander adres',
   slippage_custom: 'Aangepast',
   slippage_helper:
@@ -1507,18 +1511,85 @@ export const nl = {
   use_external_recipient: 'Externe ontvanger gebruiken',
   swap_external_recipient_warning: 'Verzenden naar een extern adres',
   custom_rpc_gate_description:
-    'Koppel Vultisig aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
+    'Koppel {{productName}} aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
   feature_gate_requires: 'Vereist',
   feature_gate_requires_tier: '$VULT {{tier}} Niveau of hoger',
   feature_gate_hold_at_least: 'Bewaar ten minste {{amount}} in je kluis.',
   feature_gate_your_balance: 'Uw saldo',
   get_vult: 'Haal $VULT op',
   manage_positions: 'Posities beheren',
-  custom_rpc_default_endpoint: 'STANDAARD EINDPUNT',
-  custom_rpc_editor_hint:
-    'Tik om te bewerken. Ondersteunt alleen HTTPS-eindpunten.',
-  custom_rpc_save_button: 'Sla RPC op',
-  custom_rpc_saved: 'RPC instellingen opgeslagen',
+  copied: 'Gekopieerd',
+  copy: 'Kopiëren',
+  error_message: 'Foutmelding',
+  report_bug: 'Een bug melden',
+  show_exact_error: 'Geef de exacte fout weer',
   swap_invalid_external_recipient:
     'Het ontvangersadres is niet geldig voor {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Optimaliseer uw swaps met aangepaste slippage, gaslimiet en een extern ontvangeradres.',
+  signing_error_description:
+    'Een van uw apparaten reageerde niet op tijd. Controleer uw verbinding en probeer het opnieuw.',
+  qbtc_claim_cosign_title: 'Medeonderteken de QBTC-claim',
+  qbtc_claim_cosign_description:
+    'Bekijk het onderstaande claimverzoek en keur vervolgens de medeondertekening ervan goed met de Bitcoin-sleutel van deze kluis.',
+  qbtc_claim_cosign_amount: 'Hoeveelheid',
+  qbtc_claim_cosign_btc_address: 'Bitcoin-adres (bewijs van eigendom)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
+  qbtc_claim_cosign_success:
+    'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
+  qbtc_gov: {
+    status: {
+      passed: 'Aangenomen',
+      voting: 'Stemming',
+      rejected: 'Afgewezen',
+      failed: 'Mislukt',
+      deposit: 'Borg',
+      unspecified: 'Onbekend',
+    },
+    option: {
+      yes: 'Ja',
+      abstain: 'Onthouding',
+      no: 'Nee',
+      noWithVeto: 'Nee met veto',
+    },
+    proposal_number: 'Voorstel #{{id}}',
+    untitled_proposal: 'Voorstel zonder titel',
+    active_section: 'Actief',
+    past_section: 'Verleden',
+    no_proposals: 'Nog geen voorstellen',
+    proposal_not_found: 'Voorstel niet gevonden',
+    voting_ended: 'De stemming is afgelopen.',
+    voted_label: 'Gestemd · {{option}}',
+    summary: 'Samenvatting',
+    tally: 'Telling',
+    quorum: 'Quorum',
+    no_votes_yet: 'Nog geen stemmen',
+    voting_window: 'Stemvenster',
+    voting_start: 'Begin',
+    voting_end: 'Einde',
+    messages: 'Berichten',
+    cast_vote: 'Breng uw stem uit',
+    change_vote: 'Wijzig je stem',
+    weighted_vote_cta: 'Gewogen stem',
+    weighted_vote_title: 'Gewogen stem',
+    weighted_total: 'Totaal',
+    submit_weighted_vote: 'Dien een gewogen stem in',
+    your_vote: 'Jouw stem',
+    confirm_vote: 'Bevestig je stem',
+    enable_qbtc_to_vote: 'Schakel QBTC in deze kluis in om te kunnen stemmen.',
+    ends_in_days_hours: 'Eindigt in {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Eindigt in {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Eindigt in {{minutes}}m',
+  },
+  camera_permission_required: 'Cameratoestemming niet verleend',
+  camera_permission_required_description:
+    'Cameratoegang is vereist om verder te gaan. Schakel deze in via de instellingen.',
+  swap_insufficient_funds:
+    'Onvoldoende saldo om de transactie uit te voeren. Stort geld op de wallet.',
+  keygen_failed_description:
+    'Het aanmaken van de kluis is vertraagd vanwege een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
+  same_vault_share_description:
+    'Wijzig de gedeelde map naar &#39;ondertekenen&#39;. Twee apparaten kunnen niet dezelfde gedeelde map gebruiken voor gezamenlijke ondertekening.',
+  vault_is_not_loaded: 'Vault is niet geladen',
+  vault_is_not_loaded_description: 'Importeer het juiste aandeel.',
 }

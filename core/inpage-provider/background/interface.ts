@@ -2,7 +2,7 @@ import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { KeplrSuggestedChainsRecord } from '@core/extension/storage/keplrSuggestedChains'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { ChainInfo } from '@keplr-wallet/types'
-import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
+import { Chain, CosmosChain, OtherChain } from '@vultisig/core-chain/Chain'
 import { ChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CoinKey, CoinMetadata, Token } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
@@ -25,6 +25,8 @@ export type GetAccountInput = {
   appSession?: VaultAppSession
 }
 
+type BroadcastTxChain = CosmosChain | OtherChain.QBTC
+
 export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   setAppChain: Method<SetAppChainInput>
@@ -37,7 +39,7 @@ export type BackgroundInterface = {
   exportVault: Method<{}, VaultExport>
   getTx: Method<{ chain: Chain; hash: string }, unknown>
   broadcastTx: Method<
-    { chain: CosmosChain; txBytes: string },
+    { chain: BroadcastTxChain; txBytes: string },
     { txHash: string }
   >
   suiBuildTransaction: Method<

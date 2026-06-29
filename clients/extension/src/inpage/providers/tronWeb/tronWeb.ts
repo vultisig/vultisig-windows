@@ -1,3 +1,4 @@
+import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
   TransactionDetails,
@@ -99,13 +100,21 @@ class VultisigTronWebTrx extends Trx {
             )
 
             if (trc20Transfer) {
+              const tokenMetadata = await callBackground({
+                getTokenMetadata: { chain: Chain.Tron, id: contractAddress },
+              }).catch(() => {
+                throw new Error(
+                  `Could not resolve TRC-20 token metadata for ${contractAddress}. Refusing to sign with unknown decimals.`
+                )
+              })
+
               asset = {
-                ticker: 'TRC20',
+                ticker: tokenMetadata.ticker,
                 contractAddress,
               }
               amount = {
                 amount: trc20Transfer.amount.toString(),
-                decimals: 6,
+                decimals: tokenMetadata.decimals,
               }
             }
 

@@ -230,6 +230,7 @@ export const de = {
     bonded: 'Bonded',
     staked: 'Staked',
     lps: 'LPs',
+    governance: 'Governance',
   },
   vaultTabs: {
     portfolio: 'Portfolio',
@@ -482,7 +483,7 @@ export const de = {
   seedphrase_invalid_error:
     'Der Seed-Phrase ist nicht korrekt, bitte überprüfen Sie alle Wörter.',
   seedphrase_duplicate_vault_error:
-    'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
+    'Diese Seed-Phrase ist bereits als Vault &quot;{{vaultName}}&quot; importiert. Bitte importieren Sie eine andere Seed-Phrase.',
   fast_vault_exists_warning_title: 'Tresor existiert bereits',
   fast_vault_exists_warning_description:
     'Diese Seed-Phrase wurde bereits als Fast Vault auf einem anderen Gerät importiert. Wenn Sie fortfahren, wird der Server-Anteil ersetzt und das andere Gerät funktioniert nicht mehr.',
@@ -709,8 +710,6 @@ export const de = {
   qbtc_claim_done: 'Erledigt',
   qbtc_claim_failed:
     'Die Reklamation ist fehlgeschlagen. Bitte versuchen Sie es erneut.',
-  qbtc_claim_fast_vault_only:
-    'Für die Geltendmachung von Ansprüchen ist derzeit ein Fast Vault erforderlich. Die Unterstützung für Secure Vault ist in Vorbereitung.',
   qbtc_claim_password_description:
     'Geben Sie Ihr Fast Vault-Passwort ein, um die Schadensabwicklung mitzuunterzeichnen.',
   receive: 'Erhalten',
@@ -1075,7 +1074,7 @@ export const de = {
   vault_info: 'Tresorinformationen',
   vault_management: 'Tresor',
   vault_name: 'Tresorname',
-  vault_name_already_exists: 'Der Tresorname muss eindeutig sein.',
+  vault_name_already_exists: 'Bitte wählen Sie einen anderen Tresornamen.',
   vault_name_description:
     'Sie können Ihren Tresor später jederzeit in den Einstellungen umbenennen.',
   vault_name_max_length_error:
@@ -1142,7 +1141,6 @@ export const de = {
   remove_thor_lp: 'THORChain LP entfernen',
   pool: 'Pool',
   paired_address: 'Zugeordnete Adresse',
-  wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
   yesterday: 'Gestern',
   you_are_bonding: 'Du bondest',
   you_are_unbonding: 'Du entbondest',
@@ -1514,16 +1512,22 @@ export const de = {
   custom_rpc_chip_custom: 'Benutzerdefiniert',
   custom_rpc_description: 'Verwenden Sie Ihre eigenen Knoten pro Kette',
   custom_rpc_invalid_response: 'Unerwartete Antwort von diesem Endpunkt',
-  custom_rpc_invalid_url: 'Geben Sie eine gültige HTTPS-URL ein.',
+  custom_rpc_invalid_url: 'Geben Sie eine gültige http(s)-URL ein.',
   custom_rpc_reachable: 'Erreichbar · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Erreichbar · {{ms}} ms — Netzwerkidentität nicht verifiziert',
   custom_rpc_reset_button: 'Auf Standardeinstellungen zurücksetzen',
+  custom_rpc_default_endpoint: 'STANDARD-ENDPUNKT',
+  custom_rpc_editor_hint:
+    'Zum Bearbeiten tippen. Unterstützt nur HTTPS-Endpunkte.',
+  custom_rpc_save_button: 'Speichern Sie RPC',
+  custom_rpc_saved: 'RPC-Einstellungen gespeichert',
   custom_rpc_testing: 'Testen…',
   custom_rpc_unreachable: 'Endpunkt nicht erreichbar',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Dieser Endpunkt dient einer anderen Kette',
-  vult_tier_required: 'VULT TIER',
+  vult_tier_label: '{{tier}} Tier',
+  vult_tier_required: '{{tier}} Stufe erforderlich',
   send_to_different_address: 'An eine andere Adresse senden',
   slippage_custom: 'Benutzerdefiniert',
   slippage_helper:
@@ -1535,7 +1539,7 @@ export const de = {
   use_external_recipient: 'Externen Empfänger verwenden',
   swap_external_recipient_warning: 'Senden an eine externe Adresse',
   custom_rpc_gate_description:
-    'Platzieren Sie Vultisig auf Ihren eigenen Knoten. Schnellere Abfragen, höhere Ratenlimits und vollständige Privatsphäre pro Kette.',
+    'Platzieren Sie {{productName}} auf Ihren eigenen Knoten. Schnellere Abfragen, höhere Ratenlimits und vollständige Privatsphäre pro Kette.',
   feature_gate_requires: 'Erfordert',
   feature_gate_requires_tier: '$VULT {{tier}} Stufe oder höher',
   feature_gate_hold_at_least:
@@ -1543,11 +1547,80 @@ export const de = {
   feature_gate_your_balance: 'Ihr Guthaben',
   get_vult: 'Hol dir $VULT',
   manage_positions: 'Positionen verwalten',
-  custom_rpc_default_endpoint: 'STANDARD-ENDPUNKT',
-  custom_rpc_editor_hint:
-    'Zum Bearbeiten tippen. Unterstützt nur HTTPS-Endpunkte.',
-  custom_rpc_save_button: 'Speichern Sie RPC',
-  custom_rpc_saved: 'RPC-Einstellungen gespeichert',
+  copied: 'Kopiert',
+  copy: 'Kopieren',
+  error_message: 'Fehlermeldung',
+  report_bug: 'Fehler melden',
+  show_exact_error: 'Genauen Fehler anzeigen',
   swap_invalid_external_recipient:
     'Die Empfängeradresse ist für {{chain}} ungültig.',
+  advanced_swap_settings_gate_description:
+    'Optimieren Sie Ihre Swaps mit individueller Slippage, Gaslimit und einer externen Empfängeradresse.',
+  signing_error_description:
+    'Eines Ihrer Geräte hat nicht rechtzeitig reagiert. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+  qbtc_claim_cosign_title: 'Co-sign QBTC claim',
+  qbtc_claim_cosign_description:
+    'Prüfen Sie den unten stehenden Anspruchsantrag und genehmigen Sie anschließend die Mitunterzeichnung mit dem Bitcoin-Schlüssel dieses Tresors.',
+  qbtc_claim_cosign_amount: 'Menge',
+  qbtc_claim_cosign_btc_address: 'Bitcoin-Adresse (Eigentumsnachweis)',
+  qbtc_claim_cosign_qbtc_address: 'Adresse QBTC (Anspruchsempfänger)',
+  qbtc_claim_cosign_success:
+    'Sie haben den Anspruch QBTC mitsigniert. Das andere Gerät wird ihn abschließen und senden.',
+  qbtc_gov: {
+    status: {
+      passed: 'Angenommen',
+      voting: 'Abstimmung',
+      rejected: 'Abgelehnt',
+      failed: 'Fehlgeschlagen',
+      deposit: 'Kaution',
+      unspecified: 'Unbekannt',
+    },
+    option: {
+      yes: 'Ja',
+      abstain: 'Enthaltung',
+      no: 'Nein',
+      noWithVeto: 'Nein, mit Veto',
+    },
+    proposal_number: 'Vorschlag #{{id}}',
+    untitled_proposal: 'Unbetitelter Vorschlag',
+    active_section: 'Aktiv',
+    past_section: 'Vergangenheit',
+    no_proposals: 'Noch keine Vorschläge',
+    proposal_not_found: 'Vorschlag nicht gefunden',
+    voting_ended: 'Die Abstimmung endete',
+    voted_label: 'Abgestimmt · {{option}}',
+    summary: 'Zusammenfassung',
+    tally: 'Stimmverteilung',
+    quorum: 'Quorum',
+    no_votes_yet: 'Noch keine Stimmen.',
+    voting_window: 'Abstimmungsfenster',
+    voting_start: 'Beginn',
+    voting_end: 'Ende',
+    messages: 'Nachrichten',
+    cast_vote: 'Geben Sie Ihre Stimme ab',
+    change_vote: 'Ändern Sie Ihre Stimme',
+    weighted_vote_cta: 'Gewichtete Stimme',
+    weighted_vote_title: 'Gewichtete Stimme',
+    weighted_total: 'Gesamt',
+    submit_weighted_vote: 'Gewichtete Stimme abgeben',
+    your_vote: 'Ihre Stimme',
+    confirm_vote: 'Abstimmung bestätigen',
+    enable_qbtc_to_vote:
+      'Aktivieren Sie QBTC in diesem Tresor, um abzustimmen.',
+    ends_in_days_hours: 'Endet in {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Endet in {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Endet in {{minutes}}m',
+  },
+  camera_permission_required: 'Kameraerlaubnis nicht erteilt',
+  camera_permission_required_description:
+    'Für diesen Vorgang ist die Kameraberechtigung erforderlich. Bitte aktivieren Sie diese in den Einstellungen.',
+  swap_insufficient_funds:
+    'Für den Tausch ist nicht genügend Guthaben vorhanden. Bitte laden Sie Ihr Wallet auf.',
+  keygen_failed_description:
+    'Die Erstellung des Tresors wurde aufgrund einer schlechten Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
+  same_vault_share_description:
+    'Bitte ändern Sie die Freigabe auf „Signieren“. Zwei Geräte können nicht dieselbe Tresorfreigabe zum gemeinsamen Signieren verwenden.',
+  vault_is_not_loaded: 'Vault ist nicht geladen',
+  vault_is_not_loaded_description:
+    'Bitte importieren Sie die richtige Freigabe.',
 }

@@ -1,3 +1,4 @@
+import { QbtcGovernanceTab } from '@core/ui/qbtc/governance/components/QbtcGovernanceTab'
 import { Tab } from '@lib/ui/base/Tabs'
 import { TFunction } from 'i18next'
 
@@ -6,7 +7,7 @@ import { BondedPositions } from './BondedPositions'
 import { LpPositions } from './LpPositions'
 import { StakedPositions } from './StakedPositions'
 
-export type DefiChainPageTab = 'bonded' | 'staked' | 'lps'
+export type DefiChainPageTab = 'bonded' | 'staked' | 'lps' | 'governance'
 
 type DefiChainTabsOptions = {
   includeBonded?: boolean
@@ -16,11 +17,17 @@ type DefiChainTabsOptions = {
    * Cosmos, Tron, Circle, …) get the same gating as `bonded`.
    */
   includeLps?: boolean
+  /** QBTC-only governance segment (proposal browsing + on-chain voting). */
+  includeGovernance?: boolean
 }
 
 export const getDefiChainTabs = (
   t: TFunction,
-  { includeBonded = true, includeLps = true }: DefiChainTabsOptions = {}
+  {
+    includeBonded = true,
+    includeLps = true,
+    includeGovernance = false,
+  }: DefiChainTabsOptions = {}
 ): Tab<DefiChainPageTab>[] => [
   ...(includeBonded
     ? [
@@ -42,6 +49,15 @@ export const getDefiChainTabs = (
           value: 'lps' as const,
           label: t('defiChainTabs.lps'),
           renderContent: LpPositions,
+        },
+      ]
+    : []),
+  ...(includeGovernance
+    ? [
+        {
+          value: 'governance' as const,
+          label: t('defiChainTabs.governance'),
+          renderContent: QbtcGovernanceTab,
         },
       ]
     : []),

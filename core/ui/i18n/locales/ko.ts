@@ -226,6 +226,7 @@ export const ko = {
     bonded: '본디드',
     staked: '스테이킹됨',
     lps: 'LPs',
+    governance: '통치',
   },
   vaultTabs: {
     portfolio: '포트폴리오',
@@ -471,7 +472,7 @@ export const ko = {
   seedphrase_invalid_error:
     '시드 구문이 올바르지 않습니다. 모든 단어를 확인해 주세요.',
   seedphrase_duplicate_vault_error:
-    '이 시드 구문은 이미 &quot;{{vaultName}}&quot; 볼트로 가져왔습니다. 다시 가져오면 기존 볼트가 덮어쓰여집니다.',
+    '이 시드 구문은 이미 &quot;{{vaultName}}&quot;라는 이름으로 볼트에 불러와졌습니다. 다른 시드 구문을 불러오세요.',
   fast_vault_exists_warning_title: '볼트는 이미 존재합니다',
   fast_vault_exists_warning_description:
     '이 시드 구문은 이미 다른 장치의 빠른 저장소로 가져왔습니다. 계속 진행하면 서버 공유가 교체되고 다른 장치가 작동을 멈춥니다.',
@@ -690,8 +691,6 @@ export const ko = {
   qbtc_claim_utxos_skipped: 'UTXO가 건너뛰었습니다',
   qbtc_claim_done: '완료',
   qbtc_claim_failed: '청구가 실패했습니다. 다시 시도해 주세요.',
-  qbtc_claim_fast_vault_only:
-    '현재 클레임을 위해서는 Fast Vault가 필요합니다. Secure Vault 지원은 곧 제공될 예정입니다.',
   qbtc_claim_password_description:
     '청구 거래에 공동 서명하려면 Fast Vault 비밀번호를 입력하십시오.',
   receive: '받다',
@@ -1074,7 +1073,7 @@ export const ko = {
   vault_info: '금고 정보',
   vault_management: '금고',
   vault_name: '금고 이름',
-  vault_name_already_exists: '금고 이름은 고유해야 합니다.',
+  vault_name_already_exists: '다른 금고 이름을 선택해 주세요.',
   vault_name_description:
     '설정에서 언제든지 나중에 금고 이름을 변경할 수 있습니다.',
   vault_name_max_length_error: '금고 이름은 50자 미만이어야 합니다.',
@@ -1138,7 +1137,6 @@ export const ko = {
   remove_thor_lp: 'THORChain LP를 제거하세요',
   pool: 'Pool',
   paired_address: '쌍을 이룬 주소',
-  wrong_vault_try_again: '잘못된 볼트 또는 페어링 장치입니다.',
   yesterday: '어제',
   you_are_bonding: '당신들은 유대감을 형성하고 있어요',
   you_are_unbonding: '당신은 연결을 끊고 있습니다',
@@ -1473,16 +1471,21 @@ export const ko = {
   custom_rpc_description: '체인별로 자체 노드를 사용하십시오.',
   custom_rpc_invalid_response:
     '이 엔드포인트에서 예상치 못한 응답이 발생했습니다.',
-  custom_rpc_invalid_url: '유효한 HTTPS URL을 입력하세요',
+  custom_rpc_invalid_url: '유효한 http(s) URL을 입력하세요',
   custom_rpc_reachable: '도달 가능 · {{ms}} ms',
   custom_rpc_reachable_unverified:
     '연결 가능 · {{ms}} ms — 네트워크 ID가 확인되지 않았습니다',
   custom_rpc_reset_button: '기본 설정으로 재설정',
+  custom_rpc_default_endpoint: '기본 엔드포인트',
+  custom_rpc_editor_hint: '탭하여 편집하세요. HTTPS 엔드포인트만 지원합니다.',
+  custom_rpc_save_button: 'RPC 저장',
+  custom_rpc_saved: 'RPC 설정이 저장되었습니다.',
   custom_rpc_testing: '테스트 중…',
   custom_rpc_unreachable: '엔드포인트에 연결할 수 없습니다.',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: '이 엔드포인트는 다른 체인을 제공합니다.',
-  vult_tier_required: 'VULT TIER',
+  vult_tier_label: '{{tier}} 티어',
+  vult_tier_required: '{{tier}} 등급 필요',
   send_to_different_address: '다른 주소로 보내기',
   slippage_custom: '사용자 지정',
   slippage_helper:
@@ -1494,17 +1497,85 @@ export const ko = {
   use_external_recipient: '외부 수신자 사용',
   swap_external_recipient_warning: '외부 주소로 전송',
   custom_rpc_gate_description:
-    'Vultisig를 자체 노드에 지정하세요. 더 빠른 쿼리, 더 높은 처리량 제한, 그리고 체인별 완벽한 개인 정보 보호를 누릴 수 있습니다.',
+    '{{productName}}를 자체 노드에 지정하세요. 더 빠른 쿼리, 더 높은 처리량 제한, 그리고 체인별 완벽한 개인 정보 보호를 누릴 수 있습니다.',
   feature_gate_requires: '필수 사항',
   feature_gate_requires_tier: '$VULT {{tier}} 티어 이상',
   feature_gate_hold_at_least: '금고에 최소 {{amount}} 토큰을 보유하세요.',
   feature_gate_your_balance: '잔액',
   get_vult: '$VULT를 가져오세요',
   manage_positions: '포지션 관리',
-  custom_rpc_default_endpoint: '기본 엔드포인트',
-  custom_rpc_editor_hint: '탭하여 편집하세요. HTTPS 엔드포인트만 지원합니다.',
-  custom_rpc_save_button: 'RPC 저장',
-  custom_rpc_saved: 'RPC 설정이 저장되었습니다.',
+  copied: '복사됨',
+  copy: '복사',
+  error_message: '오류 메시지',
+  report_bug: '버그 신고',
+  show_exact_error: '정확한 오류 표시',
   swap_invalid_external_recipient:
     '수신자 주소가 {{chain}}에 대해 유효하지 않습니다.',
+  advanced_swap_settings_gate_description:
+    '사용자 지정 슬리피지, 가스 한도 및 외부 수취인 주소를 사용하여 스왑을 세밀하게 조정하세요.',
+  signing_error_description:
+    '사용 중인 기기 중 하나가 제때 응답하지 않았습니다. 연결 상태를 확인하고 다시 시도해 주세요.',
+  qbtc_claim_cosign_title: 'QBTC 클레임에 공동 서명',
+  qbtc_claim_cosign_description:
+    '아래의 청구 요청을 검토하신 후, 이 금고의 비트코인 ​​키로 공동 서명하는 것을 승인해 주세요.',
+  qbtc_claim_cosign_amount: '양',
+  qbtc_claim_cosign_btc_address: '비트코인 주소(소유권 증명)',
+  qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
+  qbtc_claim_cosign_success:
+    'QBTC 클레임에 공동 서명하셨습니다. 다른 기기에서 서명을 완료하고 브로드캐스트할 것입니다.',
+  qbtc_gov: {
+    status: {
+      passed: '통과됨',
+      voting: '투표',
+      rejected: '거절됨',
+      failed: '실패',
+      deposit: '보증금',
+      unspecified: '알 수 없음',
+    },
+    option: {
+      yes: '예',
+      abstain: '기권',
+      no: '아니요',
+      noWithVeto: '거부권 행사',
+    },
+    proposal_number: '제안 #{{id}}',
+    untitled_proposal: '제목 없는 제안',
+    active_section: '진행 중',
+    past_section: '종료됨',
+    no_proposals: '아직 제안이 없습니다',
+    proposal_not_found: '제안을 찾을 수 없습니다.',
+    voting_ended: '투표가 종료되었습니다',
+    ends_in_days_hours: '{{days}}d {{hours}}h 남음',
+    ends_in_hours_minutes: '{{hours}}h {{minutes}}m 남음',
+    ends_in_minutes: '{{minutes}}m 남음',
+    voted_label: '투표 완료 · {{option}}',
+    summary: '요약',
+    tally: '집계',
+    quorum: '정족수',
+    no_votes_yet: '아직 투표가 없습니다',
+    voting_window: '투표 기간',
+    voting_start: '시작',
+    voting_end: '끝',
+    messages: '메시지',
+    cast_vote: '투표하세요',
+    change_vote: '투표를 변경하세요',
+    weighted_vote_cta: '가중 투표',
+    weighted_vote_title: '가중 투표',
+    weighted_total: '합계',
+    submit_weighted_vote: '가중 투표 제출',
+    your_vote: '당신의 투표',
+    confirm_vote: '투표를 확인하세요',
+    enable_qbtc_to_vote: '투표하려면 이 볼트에서 QBTC를 활성화하세요.',
+  },
+  camera_permission_required: '카메라 촬영 권한이 허용되지 않았습니다.',
+  camera_permission_required_description:
+    '진행하려면 카메라 권한이 필요합니다. 설정에서 카메라 권한을 활성화해 주세요.',
+  swap_insufficient_funds:
+    '스왑을 실행하기에 자금이 부족합니다. 지갑에 자금을 충전해 주세요.',
+  keygen_failed_description:
+    '연결 상태가 좋지 않아 볼트 생성 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
+  same_vault_share_description:
+    '서명할 공유 폴더를 변경해 주세요. 두 기기가 동일한 볼트 공유 폴더를 공동 서명에 사용할 수 없습니다.',
+  vault_is_not_loaded: 'Vault가 로드되지 않았습니다.',
+  vault_is_not_loaded_description: '올바른 공유 파일을 가져오세요.',
 }

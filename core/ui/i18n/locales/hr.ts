@@ -227,6 +227,7 @@ export const hr = {
     bonded: 'Bonded',
     staked: 'Staked',
     lps: 'LPs',
+    governance: 'Upravljanje',
   },
   vaultTabs: {
     portfolio: 'Portfelj',
@@ -470,7 +471,7 @@ export const hr = {
   seedphrase_invalid_error:
     'Početna fraza nije ispravna, molimo provjerite sve riječi.',
   seedphrase_duplicate_vault_error:
-    'Ova početna fraza je već uvezena kao trezor &quot;{{vaultName}}&quot;. Ponovnim uvozom zamijenio bi se postojeći trezor.',
+    'Ova početna fraza je već uvezena kao trezor &quot;{{vaultName}}&quot;. Molimo uvezite drugu početnu frazu.',
   fast_vault_exists_warning_title: 'Trezor već postoji',
   fast_vault_exists_warning_description:
     'Ova početna fraza već je uvezena kao brzi trezor na drugom uređaju. Ako nastavite, zamijenit će se udio na poslužitelju i drugi uređaj će prestati raditi.',
@@ -692,8 +693,14 @@ export const hr = {
   qbtc_claim_utxos_skipped: 'Preskočeni UTXO-i',
   qbtc_claim_done: 'Gotovo',
   qbtc_claim_failed: 'Zahtjev nije uspio. Pokušajte ponovno.',
-  qbtc_claim_fast_vault_only:
-    'Za polaganje prava trenutno je potreban Fast Vault. Podrška za Secure Vault uskoro će biti dostupna.',
+  qbtc_claim_cosign_title: 'Supotpišite zahtjev QBTC',
+  qbtc_claim_cosign_description:
+    'Pregledajte zahtjev za polaganje prava u nastavku, a zatim odobrite njegovo supotpisivanje Bitcoin ključem ovog trezora.',
+  qbtc_claim_cosign_amount: 'Iznositi',
+  qbtc_claim_cosign_btc_address: 'Bitcoin adresa (dokaz vlasništva)',
+  qbtc_claim_cosign_qbtc_address: 'Adresa QBTC (primatelj zahtjeva)',
+  qbtc_claim_cosign_success:
+    'Supotpisali ste zahtjev QBTC. Drugi uređaj će ga završiti i emitirati.',
   qbtc_claim_password_description:
     'Unesite svoju lozinku za Fast Vault kako biste supotpisali transakciju potraživanja.',
   receive: 'Primi',
@@ -1049,7 +1056,7 @@ export const hr = {
   vault_info: 'Informacije o trezoru',
   vault_management: 'Trezor',
   vault_name: 'Naziv trezora',
-  vault_name_already_exists: 'Naziv trezora mora biti jedinstven',
+  vault_name_already_exists: 'Molimo odaberite drugo ime trezora.',
   vault_name_description:
     'Svoj trezor uvijek možete kasnije preimenovati u postavkama',
   vault_name_max_length_error: 'Naziv trezora mora biti kraći od 50 znakova',
@@ -1112,7 +1119,6 @@ export const hr = {
   remove_thor_lp: 'Uklonite THORChain LP',
   pool: 'Pool',
   paired_address: 'Uparena adresa',
-  wrong_vault_try_again: 'Pogrešan trezor ili upareni uređaj.',
   yesterday: 'Jučer',
   you_are_bonding: 'Bondate',
   you_are_unbonding: 'Povlačite bond',
@@ -1479,16 +1485,22 @@ export const hr = {
   custom_rpc_chip_custom: 'Prilagođeno',
   custom_rpc_description: 'Koristite vlastite čvorove po lancu',
   custom_rpc_invalid_response: 'Neočekivani odgovor s ove krajnje točke',
-  custom_rpc_invalid_url: 'Unesite valjani HTTPS URL',
+  custom_rpc_invalid_url: 'Unesite valjani http(s) URL',
   custom_rpc_reachable: 'Dostupno · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Dostupno · {{ms}} ms — identitet mreže nije provjeren',
   custom_rpc_reset_button: 'Vrati na zadano',
+  custom_rpc_default_endpoint: 'ZADANA KRAJNJA TOČKA',
+  custom_rpc_editor_hint:
+    'Dodirnite za uređivanje. Podržava samo HTTPS krajnje točke.',
+  custom_rpc_save_button: 'Spremi RPC',
+  custom_rpc_saved: 'Postavke RPC spremljene',
   custom_rpc_testing: 'Testiranje…',
   custom_rpc_unreachable: 'Krajnja točka nije dostupna',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Ova krajnja točka opslužuje drugi lanac',
-  vult_tier_required: 'VULT TIER',
+  vult_tier_label: 'Razina {{tier}}',
+  vult_tier_required: '{{tier}} Potrebna razina',
   send_to_different_address: 'Pošalji na drugu adresu',
   slippage_custom: 'Prilagođeno',
   slippage_helper:
@@ -1500,18 +1512,78 @@ export const hr = {
   use_external_recipient: 'Koristi vanjskog primatelja',
   swap_external_recipient_warning: 'Slanje na vanjsku adresu',
   custom_rpc_gate_description:
-    'Usmjerite Vultisig na vlastite čvorove. Brži upiti, veća ograničenja brzine i potpuna privatnost po lancu.',
+    'Usmjerite {{productName}} na vlastite čvorove. Brži upiti, veća ograničenja brzine i potpuna privatnost po lancu.',
   feature_gate_requires: 'Zahtijeva',
   feature_gate_requires_tier: '$VULT {{tier}} Razina ili viša',
   feature_gate_hold_at_least: 'Držite barem {{amount}} u svom trezoru',
   feature_gate_your_balance: 'Vaš saldo',
   get_vult: 'Uzmi $VULT',
   manage_positions: 'Upravljanje pozicijama',
-  custom_rpc_default_endpoint: 'ZADANA KRAJNJA TOČKA',
-  custom_rpc_editor_hint:
-    'Dodirnite za uređivanje. Podržava samo HTTPS krajnje točke.',
-  custom_rpc_save_button: 'Spremi RPC',
-  custom_rpc_saved: 'Postavke RPC spremljene',
+  copied: 'Kopirano',
+  copy: 'Kopirati',
+  error_message: 'Poruka o pogrešci',
+  report_bug: 'Prijavi grešku',
+  show_exact_error: 'Prikaži točnu grešku',
   swap_invalid_external_recipient:
     'Adresa primatelja nije valjana za {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Prilagodite svoje swapove prilagođenim proklizavanjem, ograničenjem plina i vanjskom adresom primatelja.',
+  signing_error_description:
+    'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
+  qbtc_gov: {
+    status: {
+      passed: 'Prihvaćen',
+      voting: 'Glasanje',
+      rejected: 'Odbijeno',
+      failed: 'Neuspješno',
+      deposit: 'Polog',
+      unspecified: 'Nepoznato',
+    },
+    option: {
+      yes: 'Da',
+      abstain: 'Suzdržan',
+      no: 'Ne',
+      noWithVeto: 'Ne s pravom veta',
+    },
+    proposal_number: 'Prijedlog #{{id}}',
+    untitled_proposal: 'Prijedlog bez naslova',
+    active_section: 'Aktivan',
+    past_section: 'Prethodni',
+    no_proposals: 'Još nema prijedloga',
+    proposal_not_found: 'Prijedlog nije pronađen',
+    voting_ended: 'Glasanje je završeno',
+    voted_label: 'Glasao · {{option}}',
+    summary: 'Sažetak',
+    tally: 'Rezultati glasanja',
+    quorum: 'Kvorum',
+    no_votes_yet: 'Još nema glasova',
+    voting_window: 'Glasački prozor',
+    voting_start: 'Počinje',
+    voting_end: 'Završava',
+    messages: 'Poruke',
+    cast_vote: 'Dajte svoj glas',
+    change_vote: 'Promijenite svoj glas',
+    weighted_vote_cta: 'Ponderirani glas',
+    weighted_vote_title: 'Ponderirani glas',
+    weighted_total: 'Ukupno',
+    submit_weighted_vote: 'Pošalji ponderirani glas',
+    your_vote: 'Vaš glas',
+    confirm_vote: 'Potvrdi glas',
+    enable_qbtc_to_vote: 'Omogućite QBTC u ovom trezoru za glasanje.',
+    ends_in_days_hours: 'Završava za {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Završava za {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Završava za {{minutes}}m',
+  },
+  camera_permission_required: 'Dozvola za kameru nije odobrena',
+  camera_permission_required_description:
+    'Za nastavak je potrebno dopuštenje za kameru. Omogućite ga u Postavkama.',
+  swap_insufficient_funds:
+    'Nema dovoljno sredstava za izvršenje zamjene. Molimo vas da uplatite sredstva u novčanik.',
+  keygen_failed_description:
+    'Izrada trezora usporena je zbog slabe veze. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
+  same_vault_share_description:
+    'Promijenite dijeljenje za potpisivanje. Dva uređaja ne mogu koristiti isto dijeljenje trezora za supotpisivanje.',
+  vault_is_not_loaded: 'Trezor nije učitan',
+  vault_is_not_loaded_description:
+    'Molimo uvezite ispravnu dijeljenu datoteku.',
 }

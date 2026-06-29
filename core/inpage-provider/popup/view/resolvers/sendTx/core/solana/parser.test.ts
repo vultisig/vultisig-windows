@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   getSerializedSolanaTxBuffer,
+  getSolanaMultiTxRawFallback,
   getSolanaRawTxFallback,
 } from './rawTxFallback'
 
@@ -25,5 +26,24 @@ describe('getSerializedSolanaTxBuffer', () => {
     expect(() => getSerializedSolanaTxBuffer([])).toThrow(
       'Invalid Solana transaction: missing serialized transaction data'
     )
+  })
+})
+
+describe('getSolanaMultiTxRawFallback', () => {
+  it('uses raw review for multi-transaction approvals', async () => {
+    const transactions = [
+      Buffer.from('first-transaction').toString('base64'),
+      Buffer.from('second-transaction').toString('base64'),
+    ]
+
+    const parsed = getSolanaMultiTxRawFallback(transactions)
+
+    expect(parsed).toMatchObject({
+      raw: {
+        inAmount: '0',
+        inputCoin: { chain: 'Solana' },
+        transactions,
+      },
+    })
   })
 })

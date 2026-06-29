@@ -8,7 +8,7 @@ export const peerOption = css`
   padding: 16px;
   border-radius: 16px;
 
-  border: 1px dashed ${getColor('foregroundSuper')};
+  border: 1px dashed ${getColor('foregroundExtra')};
 
   ${hStack({ gap: 8, alignItems: 'center' })}
 `
@@ -22,7 +22,7 @@ export const PeerOptionContainer = styled(UnstyledButton)<IsActiveProp>`
   padding: 16px;
   border-radius: 16px;
 
-  border: 1px dashed ${getColor('foregroundSuper')};
+  border: 1px dashed ${getColor('foregroundExtra')};
 
   ${hStack({ gap: 8, alignItems: 'center' })}
 

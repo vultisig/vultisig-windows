@@ -216,7 +216,7 @@ const NavSurface = styled.div`
   pointer-events: none;
   background: rgba(19, 46, 86, 0.6);
   backdrop-filter: blur(32px);
-  border-top: 1px solid ${getColor('foregroundSuper')};
+  border-top: 1px solid ${getColor('foregroundExtra')};
 `
 
 const TabsRow = styled.div`

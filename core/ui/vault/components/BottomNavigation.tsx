@@ -121,7 +121,7 @@ const ContainerOld = styled.div`
   background: rgba(19, 46, 86, 0.6);
   backdrop-filter: blur(32px);
   padding: 8px 12px 10px 12px;
-  border-top: 1px solid #1b3f73;
+  border-top: 1px solid ${getColor('foregroundExtra')};
 
   @supports (padding-bottom: calc(0px + env(safe-area-inset-bottom))) {
     height: calc(${bottomNavigationHeight}px + env(safe-area-inset-bottom));

@@ -4,13 +4,13 @@ import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
-import { computeAllClaimHashes } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/computeClaimHashes'
 import { type ClaimProofResult } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useState } from 'react'
 
+import { getClaimMessageHashHex } from '../utils/getClaimMessageHashHex'
 import {
   ClaimBroadcastingPhase,
   QbtcClaimResultData,
@@ -19,11 +19,10 @@ import { ClaimPreparingTxPhase } from './ClaimPreparingTxPhase'
 import { ClaimServerBroadcastWaitPhase } from './ClaimServerBroadcastWaitPhase'
 import { ClaimSignRound } from './ClaimSignRound'
 
-const qbtcChainId = 'qbtc'
-
 type ClaimRunnerProps = {
   utxos: ClaimableUtxo[]
-  password: string
+  /** Fast-vault password. Absent for secure vaults (second-device co-sign). */
+  password?: string
   onSuccess: (result: QbtcClaimResultData) => void
   onError: (error: Error) => void
 }
@@ -66,7 +65,6 @@ export const ClaimRunner = ({
 }: ClaimRunnerProps) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
-  const btcAddress = useCurrentVaultAddress(Chain.Bitcoin)
   const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
 
   const [claimInputs] = useState(() => {
@@ -77,16 +75,11 @@ export const ClaimRunner = ({
       chainPublicKeys: vault.chainPublicKeys,
       chain: Chain.Bitcoin,
     })
-    const compressedPubkey = btcPublicKey.data()
-    const compressedPubkeyHex = Buffer.from(compressedPubkey).toString('hex')
+    const compressedPubkeyHex = Buffer.from(btcPublicKey.data()).toString('hex')
 
-    const { messageHash } = computeAllClaimHashes({
-      btcAddress,
-      compressedPubkey,
-      qbtcAddress,
-      chainId: qbtcChainId,
-    })
-    const messageHashHex = Buffer.from(messageHash).toString('hex')
+    // Same derivation a secure-vault co-signer uses, so both sign an identical
+    // round-1 hash.
+    const messageHashHex = getClaimMessageHashHex({ vault, walletCore })
 
     return { compressedPubkeyHex, messageHashHex }
   })
@@ -103,6 +96,9 @@ export const ClaimRunner = ({
             signatureAlgorithm="ecdsa"
             chain={Chain.Bitcoin}
             password={password}
+            claimAmount={String(
+              utxos.reduce((sum, utxo) => sum + utxo.amount, 0)
+            )}
             onFinish={btcSig =>
               setPhase({
                 preparingTx: {

@@ -155,7 +155,12 @@ export const KeygenFlow = ({
               primaryControls={<PageHeaderBackButton />}
             />
           )}
-          <FlowErrorPageContent title={t('keygen_failed')} error={error} />
+          <FlowErrorPageContent
+            variant="warning"
+            title={t('keygen_failed')}
+            description={t('keygen_failed_description')}
+            error={error}
+          />
         </>
       )}
       pending={() => (

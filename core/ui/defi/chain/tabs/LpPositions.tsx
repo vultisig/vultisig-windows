@@ -34,7 +34,7 @@ const Card = styled(Panel)`
   padding: 20px;
   border-radius: 24px;
   background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
 `
 
 const SectionRow = styled(HStack)`

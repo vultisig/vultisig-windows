@@ -58,7 +58,7 @@ const ReceiveSearchField = styled(SearchField)`
   color: ${getColor('contrast')};
 
   border-radius: 99px;
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   box-shadow:
     0 0 4px 0 rgba(240, 244, 252, 0.04) inset,

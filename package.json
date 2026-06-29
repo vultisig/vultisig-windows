@@ -83,7 +83,7 @@
     "vitest": "4.1.0"
   },
   "resolutions": {
-    "@trustwallet/wallet-core": "4.6.13",
+    "@trustwallet/wallet-core": "4.6.15",
     "viem": "npm:2.47.4",
     "@bufbuild/protobuf": "^2.12.0",
     "@vultisig/mpc-types": "0.2.3",

@@ -35,7 +35,7 @@ const Wrapper = styled.div`
   })};
 
   border-radius: 24px;
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foregroundExtra')};
 
   @media ${mediaQuery.tabletDeviceAndUp} {

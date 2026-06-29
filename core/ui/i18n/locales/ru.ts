@@ -226,6 +226,7 @@ export const ru = {
     bonded: 'Bonded',
     staked: 'Staked',
     lps: 'LPs',
+    governance: 'Управление',
   },
   vaultTabs: {
     portfolio: 'Портфель',
@@ -470,7 +471,7 @@ export const ru = {
     'Вы ввели {{count}} слов. Seed phrase должна содержать 12 или 24 слова',
   seedphrase_invalid_error: 'Seed phrase неверна, проверьте все слова.',
   seedphrase_duplicate_vault_error:
-    'Эта фраза уже импортирована как хранилище &quot;{{vaultName}}&quot;. Повторный импорт заменит существующее хранилище.',
+    'Эта сид-фраза уже импортирована в хранилище как &quot;{{vaultName}}&quot;. Пожалуйста, импортируйте другую сид-фразу.',
   fast_vault_exists_warning_title: 'Хранилище уже существует',
   fast_vault_exists_warning_description:
     'Эта сид-фраза уже была импортирована как быстрое хранилище на другом устройстве. Если продолжить, серверная доля будет заменена, и другое устройство перестанет работать.',
@@ -692,8 +693,6 @@ export const ru = {
   qbtc_claim_utxos_skipped: 'UTXO пропущены',
   qbtc_claim_done: 'Готово',
   qbtc_claim_failed: 'Заявка не прошла. Пожалуйста, попробуйте еще раз.',
-  qbtc_claim_fast_vault_only:
-    'В настоящее время для получения средств требуется Fast Vault. Поддержка Secure Vault появится в будущем.',
   qbtc_claim_password_description:
     'Введите свой пароль от Fast Vault, чтобы подписать транзакцию по заявке.',
   receive: 'Получить',
@@ -1047,7 +1046,7 @@ export const ru = {
   vault_info: 'Информация о хранилище',
   vault_management: 'Хранилище',
   vault_name: 'Имя хранилища',
-  vault_name_already_exists: 'Имя хранилища должно быть уникальным',
+  vault_name_already_exists: 'Пожалуйста, выберите другое имя хранилища.',
   vault_name_description:
     'Вы всегда сможете переименовать хранилище позже в настройках',
   vault_name_max_length_error: 'Имя хранилища должно быть короче 50 символов',
@@ -1110,7 +1109,6 @@ export const ru = {
   remove_thor_lp: 'Удалить THORChain LP',
   pool: 'Pool',
   paired_address: 'Парный адрес',
-  wrong_vault_try_again: 'Неверное хранилище или парное устройство.',
   yesterday: 'Вчера',
   you_are_bonding: 'Вы выполняете bond',
   you_are_unbonding: 'Вы выполняете unbond',
@@ -1483,16 +1481,22 @@ export const ru = {
   custom_rpc_chip_custom: 'Пользовательский',
   custom_rpc_description: 'Используйте собственные узлы для каждой цепочки.',
   custom_rpc_invalid_response: 'Неожиданный ответ от этой конечной точки.',
-  custom_rpc_invalid_url: 'Введите действительный HTTPS-адрес.',
+  custom_rpc_invalid_url: 'Введите действительный URL-адрес http(s).',
   custom_rpc_reachable: 'Доступен · {{ms}} мс',
   custom_rpc_reachable_unverified:
     'Доступен · {{ms}} мс — идентификация сети не подтверждена',
   custom_rpc_reset_button: 'Сбросить до значений по умолчанию',
+  custom_rpc_default_endpoint: 'КОНЕЧНАЯ ТОЧКА ПО УМОЛЧАНИЮ',
+  custom_rpc_editor_hint:
+    'Нажмите для редактирования. Поддерживаются только HTTPS-адреса.',
+  custom_rpc_save_button: 'Сохранить RPC',
+  custom_rpc_saved: 'Настройки RPC сохранены',
   custom_rpc_testing: 'Тестирование…',
   custom_rpc_unreachable: 'Конечная точка недоступна',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Этот конечный пункт обслуживает другую цепочку.',
-  vult_tier_required: 'VULT TIER',
+  vult_tier_label: '{{tier}} Уровень',
+  vult_tier_required: '{{tier}} Требуется уровень',
   send_to_different_address: 'Отправить на другой адрес',
   slippage_custom: 'Пользовательский',
   slippage_helper:
@@ -1504,7 +1508,7 @@ export const ru = {
   use_external_recipient: 'Использовать внешнего получателя',
   swap_external_recipient_warning: 'Отправка на внешний адрес',
   custom_rpc_gate_description:
-    'Направьте Vultisig на свои собственные узлы. Более быстрые запросы, более высокие лимиты скорости и полная конфиденциальность для каждой цепочки.',
+    'Направьте {{productName}} на свои собственные узлы. Более быстрые запросы, более высокие лимиты скорости и полная конфиденциальность для каждой цепочки.',
   feature_gate_requires: 'Требует',
   feature_gate_requires_tier: '$VULT {{tier}} Уровень или выше',
   feature_gate_hold_at_least:
@@ -1512,11 +1516,80 @@ export const ru = {
   feature_gate_your_balance: 'Ваш баланс',
   get_vult: 'Получить $VULT',
   manage_positions: 'Управление позициями',
-  custom_rpc_default_endpoint: 'КОНЕЧНАЯ ТОЧКА ПО УМОЛЧАНИЮ',
-  custom_rpc_editor_hint:
-    'Нажмите для редактирования. Поддерживаются только HTTPS-адреса.',
-  custom_rpc_save_button: 'Сохранить RPC',
-  custom_rpc_saved: 'Настройки RPC сохранены',
+  copied: 'Скопировано',
+  copy: 'Копировать',
+  error_message: 'Сообщение об ошибке',
+  report_bug: 'Сообщить об ошибке',
+  show_exact_error: 'Показать точную ошибку',
   swap_invalid_external_recipient:
     'Адрес получателя недействителен для {{chain}}',
+  advanced_swap_settings_gate_description:
+    'Настройте параметры свопов с помощью настраиваемого проскальзывания, лимита газа и внешнего адреса получателя.',
+  signing_error_description:
+    'Одно из ваших устройств не ответило вовремя. Проверьте подключение и попробуйте снова.',
+  qbtc_claim_cosign_title: 'Подписать совместно заявку QBTC',
+  qbtc_claim_cosign_description:
+    'Ознакомьтесь с запросом на получение средств ниже, а затем подтвердите его, подписав его совместно с биткойн-ключом этого хранилища.',
+  qbtc_claim_cosign_amount: 'Количество',
+  qbtc_claim_cosign_btc_address:
+    'Биткоин-адрес (подтверждение права собственности)',
+  qbtc_claim_cosign_qbtc_address: 'Адрес QBTC (получатель заявки)',
+  qbtc_claim_cosign_success:
+    'Вы подписали совместно запрос QBTC. Другое устройство завершит его и передаст дальше.',
+  qbtc_gov: {
+    status: {
+      passed: 'Принято',
+      voting: 'Голосование',
+      rejected: 'Отклонено',
+      failed: 'Провалено',
+      deposit: 'Вклад',
+      unspecified: 'Неизвестный',
+    },
+    option: {
+      yes: 'Да',
+      abstain: 'Воздержаться',
+      no: 'Нет',
+      noWithVeto: 'Нет с правом вето',
+    },
+    proposal_number: 'Предложение #{{id}}',
+    untitled_proposal: 'Предложение без названия',
+    active_section: 'Активный',
+    past_section: 'Прошлое',
+    no_proposals: 'Предложений пока нет.',
+    proposal_not_found: 'Предложение не найдено',
+    voting_ended: 'Голосование завершилось.',
+    voted_label: 'Проголосовали · {{option}}',
+    summary: 'Краткое содержание',
+    tally: 'Подсчёт голосов',
+    quorum: 'Кворум',
+    no_votes_yet: 'Голосов пока нет',
+    voting_window: 'Окно голосования',
+    voting_start: 'Начало',
+    voting_end: 'Конец',
+    messages: 'Сообщения',
+    cast_vote: 'Проголосуйте',
+    change_vote: 'Измените свой голос',
+    weighted_vote_cta: 'Взвешенное голосование',
+    weighted_vote_title: 'Взвешенное голосование',
+    weighted_total: 'Итого',
+    submit_weighted_vote: 'Отправить взвешенный голос',
+    your_vote: 'Ваш голос',
+    confirm_vote: 'Подтвердить голос',
+    enable_qbtc_to_vote:
+      'Включите токены QBTC в этом хранилище для голосования.',
+    ends_in_days_hours: 'Закончится через {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Закончится через {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Закончится через {{minutes}}m',
+  },
+  camera_permission_required: 'Разрешение на съемку не предоставлено.',
+  camera_permission_required_description:
+    'Для продолжения требуется разрешение на использование камеры. Пожалуйста, включите его в настройках.',
+  swap_insufficient_funds:
+    'Недостаточно средств для выполнения обмена. Пожалуйста, пополните кошелек.',
+  keygen_failed_description:
+    'Создание хранилища замедлилось из-за плохого соединения. Вы можете повторить попытку или дождаться восстановления соединения.',
+  same_vault_share_description:
+    'Пожалуйста, измените общий доступ на подпись. Два устройства не могут использовать один и тот же общий доступ к хранилищу для совместной подписи.',
+  vault_is_not_loaded: 'Хранилище не загружено',
+  vault_is_not_loaded_description: 'Пожалуйста, импортируйте правильную долю.',
 }

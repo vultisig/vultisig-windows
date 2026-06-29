@@ -1,4 +1,5 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -11,6 +12,7 @@ import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { qbtcChainId } from '../../dapp/qbtcDirectConstants'
 import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
 import { generateClaimProofForClaim } from '../utils/generateClaimProofForClaim'
 import {
@@ -18,7 +20,6 @@ import {
   getQbtcAccountInfoForClaim,
 } from '../utils/getQbtcAccountInfoForClaim'
 
-const qbtcChainId = 'qbtc'
 const proofServiceRBytes = 24
 const proofServiceSBytes = 32
 const proofServiceBaseUrl = 'https://api.vultisig.com/qbtc-proof'
@@ -85,6 +86,7 @@ export const ClaimPreparingTxPhase = ({
   onError,
 }: ClaimPreparingTxPhaseProps) => {
   const { t } = useTranslation()
+  const securityType = useCurrentVaultSecurityType()
 
   const { mutate, ...state } = useMutation({
     mutationFn: async (): Promise<ClaimPreparingTxMutationResult> => {
@@ -100,7 +102,10 @@ export const ClaimPreparingTxPhase = ({
         claimerAddress: qbtcAddress,
         chainId: qbtcChainId,
         baseUrl: proofServiceBaseUrl,
-        broadcast: !accountExists,
+        // Secure vaults have no client-side MLDSA round — the proof service
+        // signs and broadcasts MsgClaimWithProof for them (matches Android).
+        // Fast vaults sign the SignDoc locally unless the account is new.
+        broadcast: securityType === 'secure' ? true : !accountExists,
       })
 
       if (proofResult.kind === 'server') {
