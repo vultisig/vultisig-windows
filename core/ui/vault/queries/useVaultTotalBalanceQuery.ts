@@ -17,7 +17,7 @@ import { sum } from '@vultisig/lib-utils/array/sum'
  * stays true while any coin is still pending so the UI can render an
  * "updating" affordance alongside the partial number.
  */
-export type VaultTotalBalanceQuery = Query<number> & { isUpdating: boolean }
+type VaultTotalBalanceQuery = Query<number> & { isUpdating: boolean }
 
 export const useVaultTotalBalanceQuery = (): VaultTotalBalanceQuery => {
   const coins = usePortfolioVaultCoins()
