@@ -1569,7 +1569,7 @@ export const pt = {
       yes: 'Sim',
       abstain: 'Abster-se',
       no: 'Não',
-      noWithVeto: 'Não com veto',
+      noWithVeto: 'Não, com veto.',
     },
     proposal_number: 'Proposta nº {{id}}',
     untitled_proposal: 'Proposta sem título',
@@ -1584,7 +1584,7 @@ export const pt = {
     quorum: 'Quorum',
     no_votes_yet: 'Ainda não há votos.',
     voting_window: 'Janela de votação',
-    voting_start: 'Início',
+    voting_start: 'Começa',
     voting_end: 'Fim',
     messages: 'Mensagens',
     cast_vote: 'Faça seu voto',
@@ -1596,9 +1596,9 @@ export const pt = {
     your_vote: 'Seu voto',
     confirm_vote: 'Confirmar voto',
     enable_qbtc_to_vote: 'Habilite QBTC neste cofre para votar.',
-    ends_in_days_hours: 'Termina em {{days}}d {{hours}}h',
-    ends_in_hours_minutes: 'Termina em {{hours}}h {{minutes}}m',
-    ends_in_minutes: 'Termina em {{minutes}}m',
+    ends_in_days_hours: 'Termina em {{days}} d {{hours}} h',
+    ends_in_hours_minutes: 'Termina em {{hours}} h {{minutes}} m',
+    ends_in_minutes: 'Termina em {{minutes}} m',
   },
   camera_permission_required: 'Permissão para filmagem não concedida.',
   camera_permission_required_description:
@@ -1612,4 +1612,22 @@ export const pt = {
   vault_is_not_loaded: 'O cofre não está carregado.',
   vault_is_not_loaded_description:
     'Por favor, importe o compartilhamento correto.',
+  ton_nominator_pool: 'Nominador Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Selecione um Pool',
+  ton_stake_min: 'Mínimo {{amount}}',
+  ton_stake_below_minimum: 'O valor deve ser pelo menos {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Saldo insuficiente para esta aposta',
+  ton_stake_no_pools: 'Não há pools de staking disponíveis.',
+  ton_stake_empty_title: 'Ganhe recompensas com seu {{ticker}}',
+  ton_stake_empty_description:
+    'Faça staking {{ticker}} em um nominador pool para ganhar recompensas de staking.',
+  ton_stake_chain_not_enabled: 'Habilite o TON para staking.',
+  ton_stake_unsupported_pool:
+    'Esta implementação pool não é suportada para staking.',
+  ton_unstake_unsupported_pool:
+    'Esta implementação pool não é suportada para desinvestimento.',
+  ton_withdrawal_pending: 'Saque pendente — desbloqueia {{date}}',
+  ton_stake_pool_picker_header: 'Pool',
 }

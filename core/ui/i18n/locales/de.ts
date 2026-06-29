@@ -1521,7 +1521,7 @@ export const de = {
   custom_rpc_editor_hint:
     'Zum Bearbeiten tippen. Unterstützt nur HTTPS-Endpunkte.',
   custom_rpc_save_button: 'Speichern Sie RPC',
-  custom_rpc_saved: 'RPC-Einstellungen gespeichert',
+  custom_rpc_saved: 'RPC -Einstellungen gespeichert',
   custom_rpc_testing: 'Testen…',
   custom_rpc_unreachable: 'Endpunkt nicht erreichbar',
   custom_rpc_url_hint: 'https://your-node.example',
@@ -1568,20 +1568,20 @@ export const de = {
     'Sie haben den Anspruch QBTC mitsigniert. Das andere Gerät wird ihn abschließen und senden.',
   qbtc_gov: {
     status: {
-      passed: 'Angenommen',
-      voting: 'Abstimmung',
+      passed: 'Bestanden',
+      voting: 'Wählen',
       rejected: 'Abgelehnt',
       failed: 'Fehlgeschlagen',
-      deposit: 'Einzahlung',
+      deposit: 'Kaution',
       unspecified: 'Unbekannt',
     },
     option: {
       yes: 'Ja',
-      abstain: 'Enthaltung',
-      no: 'Nein',
+      abstain: 'Verzichten',
+      no: 'NEIN',
       noWithVeto: 'Nein, mit Veto',
     },
-    proposal_number: 'Vorschlag #{{id}}',
+    proposal_number: 'Vorschlag Nr. {{id}}',
     untitled_proposal: 'Unbetitelter Vorschlag',
     active_section: 'Aktiv',
     past_section: 'Vergangenheit',
@@ -1590,11 +1590,11 @@ export const de = {
     voting_ended: 'Die Abstimmung endete',
     voted_label: 'Abgestimmt · {{option}}',
     summary: 'Zusammenfassung',
-    tally: 'Stimmverteilung',
+    tally: 'Übereinstimmen',
     quorum: 'Quorum',
     no_votes_yet: 'Noch keine Stimmen.',
     voting_window: 'Abstimmungsfenster',
-    voting_start: 'Beginn',
+    voting_start: 'Beginnt',
     voting_end: 'Ende',
     messages: 'Nachrichten',
     cast_vote: 'Geben Sie Ihre Stimme ab',
@@ -1607,9 +1607,9 @@ export const de = {
     confirm_vote: 'Abstimmung bestätigen',
     enable_qbtc_to_vote:
       'Aktivieren Sie QBTC in diesem Tresor, um abzustimmen.',
-    ends_in_days_hours: 'Endet in {{days}}d {{hours}}h',
-    ends_in_hours_minutes: 'Endet in {{hours}}h {{minutes}}m',
-    ends_in_minutes: 'Endet in {{minutes}}m',
+    ends_in_days_hours: 'Endet in {{days}} d {{hours}} h',
+    ends_in_hours_minutes: 'Endet in {{hours}} h {{minutes}} m',
+    ends_in_minutes: 'Endet in {{minutes}} m',
   },
   camera_permission_required: 'Kameraerlaubnis nicht erteilt',
   camera_permission_required_description:
@@ -1623,4 +1623,24 @@ export const de = {
   vault_is_not_loaded: 'Vault ist nicht geladen',
   vault_is_not_loaded_description:
     'Bitte importieren Sie die richtige Freigabe.',
+  ton_nominator_pool: 'Nominator Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Wählen Sie ein Pool aus.',
+  ton_stake_min: 'Minimum {{amount}}',
+  ton_stake_below_minimum:
+    'Der Betrag muss mindestens {{amount}} {{ticker}} betragen.',
+  ton_stake_insufficient_balance:
+    'Unzureichendes Gleichgewicht für diesen Einsatz',
+  ton_stake_no_pools: 'Keine Staking-Pools verfügbar',
+  ton_stake_empty_title: 'Sichern Sie sich Prämien mit Ihrem {{ticker}}',
+  ton_stake_empty_description:
+    'Setzen Sie {{ticker}} in einen Nominator pool ein, um Staking-Belohnungen zu erhalten.',
+  ton_stake_chain_not_enabled: 'Aktivieren Sie TON zum Staking.',
+  ton_stake_unsupported_pool:
+    'Diese pool -Implementierung wird für Staking nicht unterstützt.',
+  ton_unstake_unsupported_pool:
+    'Diese pool -Implementierung wird für das Unstaking nicht unterstützt.',
+  ton_withdrawal_pending: 'Auszahlung ausstehend — schaltet {{date}} frei',
+  ton_stake_pool_picker_header: 'Pool',
 }

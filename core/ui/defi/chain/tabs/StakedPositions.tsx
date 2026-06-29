@@ -1,3 +1,4 @@
+import { TonStakingView } from '@core/ui/chain/ton/staking/components/TonStakingView'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useRemoveFromCoinFinderIgnoreMutation } from '@core/ui/storage/coinFinderIgnore'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
@@ -65,6 +66,13 @@ export const StakedPositions = () => {
   const chain = useCurrentDefiChain()
   const selectedPositions = useDefiPositions(chain)
   const vaultCoins = useCurrentVaultCoins()
+
+  if (chain === Chain.Ton) {
+    if (selectedPositions.length === 0) {
+      return <DefiPositionEmptyState returnTab="staked" />
+    }
+    return <TonStakingView />
+  }
 
   if (isCosmosNativeStakingChain(chain)) {
     const ticker = tickerByCosmosStakingChain[chain]

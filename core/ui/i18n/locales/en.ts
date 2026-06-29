@@ -1223,6 +1223,24 @@ export const en = {
   failed_to_load_rewards: 'Failed to load rewards',
   failed_to_load_validators: 'Failed to load validators',
   no_active_delegations: 'No active delegations',
+  ton_nominator_pool: 'Nominator Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Select a Pool',
+  ton_stake_pool_picker_header: 'Pool',
+  ton_stake_min: 'Minimum {{amount}}',
+  ton_stake_below_minimum: 'Amount must be at least {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Insufficient balance for this stake',
+  ton_stake_no_pools: 'No staking pools available',
+  ton_stake_empty_title: 'Earn rewards on your {{ticker}}',
+  ton_stake_empty_description:
+    'Stake {{ticker}} into a nominator pool to earn staking rewards.',
+  ton_stake_chain_not_enabled: 'Enable TON to stake.',
+  ton_stake_unsupported_pool:
+    'This pool implementation is not supported for staking.',
+  ton_unstake_unsupported_pool:
+    'This pool implementation is not supported for unstaking.',
+  ton_withdrawal_pending: 'Withdrawal pending — unlocks {{date}}',
   value: 'Value',
   vault: 'Vault',
   vaultCheckUpdatePage: {

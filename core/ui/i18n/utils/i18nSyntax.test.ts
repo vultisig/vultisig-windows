@@ -102,7 +102,7 @@ describe('i18n syntax integrity', () => {
     )
 
     expect(protectedText.text).toBe(
-      'Not enough X_I18N_TOKEN_0_X to cover X_I18N_TOKEN_1_X fees in the X_I18N_TOKEN_2_X X_I18N_TOKEN_3_X'
+      'Not enough <span class="notranslate">X_I18N_TOKEN_0_X</span> to cover <span class="notranslate">X_I18N_TOKEN_1_X</span> fees in the <span class="notranslate">X_I18N_TOKEN_2_X</span> <span class="notranslate">X_I18N_TOKEN_3_X</span>'
     )
     expect(
       protectedText.restore(
@@ -124,7 +124,7 @@ describe('i18n syntax integrity', () => {
     )
 
     expect(protectedText.text).toBe(
-      'Connect X_I18N_TOKEN_0_X to X_I18N_TOKEN_1_X with your X_I18N_TOKEN_2_X'
+      'Connect <span class="notranslate">X_I18N_TOKEN_0_X</span> to <span class="notranslate">X_I18N_TOKEN_1_X</span> with your <span class="notranslate">X_I18N_TOKEN_2_X</span>'
     )
     expect(
       protectedText.restore(
