@@ -1260,8 +1260,7 @@ export const es = {
   invalid_validator_address: 'Dirección de validador no válida',
   unnamed_validator: 'Sin nombre',
   select_delegation: 'Seleccionar delegación',
-  select_delegation_to_unstake:
-    'Seleccione la delegación para hacer unstake.',
+  select_delegation_to_unstake: 'Seleccione la delegación para hacer unstake.',
   select_delegation_to_move: 'Seleccione la delegación para mover',
   failed_to_load_delegations: 'Error al cargar las delegaciones.',
   source_validator: 'Validador de origen',

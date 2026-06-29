@@ -1329,7 +1329,7 @@ export const de = {
   qbtc_onboarding_feature_claim_title: 'Beanspruchen und Transaktion in QBTC',
   qbtc_onboarding_feature_claim_description:
     'Nach der Generierung erscheinen Ihre berechtigten BTC UTXOs als einlösbare QBTC im Verhältnis 1:1.',
-  qbtc_onboarding_get_started: 'Los geht\'s',
+  qbtc_onboarding_get_started: "Los geht's",
   qbtc_claim_description:
     'QBTC ist eine quantenresistente Version von BTC. Ihre bestehenden BTC und UTXOs können im Verhältnis 1:1 als QBTC beansprucht werden. Wählen Sie unten aus, welche UTXOs Sie beanspruchen möchten.',
   qbtc_claim_eligible_utxos: 'Berechtigt UTXOs',
