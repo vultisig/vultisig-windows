@@ -1,8 +1,7 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
-import { HStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -31,6 +30,9 @@ export const AdvancedSwapSettings = () => {
   return (
     <>
       <Trigger
+        aria-label={t('advanced_settings')}
+        data-testid="advanced-swap-settings"
+        kind="secondary"
         onClick={() => {
           if (isPending) return
           if (isEligible) {
@@ -39,13 +41,13 @@ export const AdvancedSwapSettings = () => {
             setIsGateOpen(true)
           }
         }}
+        size="lg"
+        title={t('advanced_settings')}
       >
-        <HStack alignItems="center" gap={8}>
-          <Text size={14} color="shy">
-            {t('advanced_settings')}
-          </Text>
-          <TierBadge badge={badge} />
-        </HStack>
+        <IconWrapper size={20}>
+          <SettingsIcon />
+        </IconWrapper>
+        <TierBadge badge={badge} />
       </Trigger>
       {isOpen && (
         <AdvancedSwapSettingsSheet
@@ -78,10 +80,7 @@ export const AdvancedSwapSettings = () => {
   )
 }
 
-const Trigger = styled(UnstyledButton)`
-  align-self: center;
-
-  &:hover {
-    opacity: 0.8;
-  }
+const Trigger = styled(IconButton)`
+  gap: 6px;
+  padding: 0 10px;
 `
