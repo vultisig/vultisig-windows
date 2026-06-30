@@ -21,6 +21,8 @@ export const DefiChainTabs = () => {
   // LP positions are only modeled for THORChain / MayaChain — the LpPositions
   // tab queries their LP services and would render empty for other chains.
   const includeLps = chain === Chain.THORChain || chain === Chain.MayaChain
+  // QBTC is the only chain exposing the in-app governance segment.
+  const includeGovernance = chain === Chain.QBTC
 
   const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
@@ -33,8 +35,9 @@ export const DefiChainTabs = () => {
       getDefiChainTabs(t, {
         includeBonded: includeBonding,
         includeLps,
+        includeGovernance,
       }),
-    [t, includeBonding, includeLps]
+    [t, includeBonding, includeLps, includeGovernance]
   )
 
   useEffect(() => {

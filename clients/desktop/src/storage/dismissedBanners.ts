@@ -1,6 +1,6 @@
 import {
-  BannerId,
   DismissedBannersStorage,
+  StoredDismissedBanners,
 } from '@core/ui/storage/dismissedBanners'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
@@ -8,12 +8,12 @@ import { persistentStorage } from '../state/persistentState'
 
 export const dismissedBannersStorage: DismissedBannersStorage = {
   getDismissedBanners: async () => {
-    const value = persistentStorage.getItem<BannerId[]>(
+    const value = persistentStorage.getItem<StoredDismissedBanners>(
       StorageKey.dismissedBanners
     )
 
     if (value === undefined) {
-      return []
+      return {}
     }
 
     return value

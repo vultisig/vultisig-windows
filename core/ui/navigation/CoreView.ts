@@ -3,6 +3,7 @@ import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInp
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { QbtcVoteSelection } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/proposal'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
@@ -129,6 +130,13 @@ export type CoreView =
   | { id: 'manageDefiChains' }
   | { id: 'manageDefiPositions'; state: { chain: Chain; returnTab?: string } }
   | {
+      id: 'tonStake'
+      state: {
+        existingPoolAddress?: string
+        existingPoolImplementation?: string
+      }
+    }
+  | {
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }
@@ -153,6 +161,11 @@ export type CoreView =
   | { id: 'vultDiscount' }
   | { id: 'qbtcClaim' }
   | { id: 'qbtcQuantumSecurityOnboarding' }
+  | { id: 'qbtcGovernanceProposal'; state: { proposalId: string } }
+  | {
+      id: 'qbtcGovernanceVote'
+      state: { proposalId: string; vote: QbtcVoteSelection }
+    }
 
 export type CoreViewId = CoreView['id']
 

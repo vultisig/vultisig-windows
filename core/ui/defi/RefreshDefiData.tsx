@@ -14,6 +14,7 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { QueryKey, useMutation } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 
@@ -82,6 +83,11 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     getPositionsQueryKey: address => ['cosmosDelegations', Chain.QBTC, address],
     poolQueryKeys: [],
   },
+  [Chain.Ton]: {
+    priceCoins: [{ ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }],
+    getPositionsQueryKey: address => ['tonStakePosition', address],
+    poolQueryKeys: [['tonStakingPools']],
+  },
 }
 
 export const RefreshDefiData = () => {
@@ -93,6 +99,7 @@ export const RefreshDefiData = () => {
   const terraAddress = useCurrentVaultAddress(Chain.Terra)
   const terraClassicAddress = useCurrentVaultAddress(Chain.TerraClassic)
   const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
+  const tonAddress = useCurrentVaultAddress(Chain.Ton)
   const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
   const circleAccountQuery = useCircleAccountQuery()
   const isCircleVisible = useIsCircleVisible()
@@ -106,6 +113,7 @@ export const RefreshDefiData = () => {
         [Chain.Terra]: terraAddress,
         [Chain.TerraClassic]: terraClassicAddress,
         [Chain.QBTC]: qbtcAddress,
+        [Chain.Ton]: tonAddress,
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {

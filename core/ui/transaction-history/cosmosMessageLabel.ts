@@ -24,6 +24,8 @@ const labelKeyByTypeUrl: Record<string, CosmosMessageLabelKey> = {
   [CosmosMsgType.MSG_WITHDRAW_DELEGATOR_REWARD_URL]: 'claim_rewards',
   '/cosmos.gov.v1.MsgVote': 'vote',
   '/cosmos.gov.v1beta1.MsgVote': 'vote',
+  '/cosmos.gov.v1.MsgVoteWeighted': 'vote',
+  '/cosmos.gov.v1beta1.MsgVoteWeighted': 'vote',
 }
 
 /** Translation key for a known Cosmos message typeUrl, or undefined. */
