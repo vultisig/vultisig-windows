@@ -12,6 +12,16 @@ export const cosmosStakingActions = [
 ] as const
 export type CosmosStakingAction = (typeof cosmosStakingActions)[number]
 
+/**
+ * Solana native staking ops. Distinct names (not the generic `stake`/`unstake`)
+ * keep routing unambiguous against THORChain/TON. Deactivate begins the
+ * ~1-epoch cooldown on a stake account; withdraw moves the cooled-down lamports
+ * back to the wallet (no claim path — rewards auto-compound). Delegate and the
+ * guided move-stake ops land in later phases.
+ */
+export const solanaStakingActions = ['solana_unstake', 'solana_withdraw'] as const
+export type SolanaStakingAction = (typeof solanaStakingActions)[number]
+
 export type ChainAction =
   | 'bond'
   | 'unbond'
@@ -35,6 +45,7 @@ export type ChainAction =
   | 'remove_thor_lp'
   | CacaoPoolAction
   | CosmosStakingAction
+  | SolanaStakingAction
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: [
@@ -61,6 +72,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   ],
   [Chain.Dydx]: ['vote'],
   [Chain.Ton]: ['stake', 'unstake'],
+  [Chain.Solana]: [...solanaStakingActions],
   [Chain.Kujira]: ['ibc_transfer', 'add_thor_lp'],
   [Chain.Osmosis]: ['ibc_transfer'],
   [Chain.Cosmos]: ['ibc_transfer', 'switch', 'add_thor_lp'],

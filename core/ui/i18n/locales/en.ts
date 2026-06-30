@@ -1210,6 +1210,13 @@ export const en = {
   undelegate: 'Undelegate',
   redelegate: 'Redelegate',
   claim_rewards: 'Claim Rewards',
+  solana_unstake: 'Unstake',
+  solana_withdraw: 'Withdraw',
+  solana_staking_stake_account: 'Stake account',
+  solana_staking_unstake_notice:
+    'Deactivating begins a cooldown — your stake stays locked for ~{{days}} days before you can withdraw.',
+  solana_staking_withdrawable_amount: 'Withdrawable amount',
+  solana_staking_withdraw_ready_notice: 'Cooled down and ready to withdraw.',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',

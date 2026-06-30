@@ -892,5 +892,24 @@ export const getDepositFormConfig = ({
         pool: z.string().min(1),
       }),
     }),
+    // Solana deactivate / withdraw operate on a stake account prefilled from
+    // the DeFi tab, so their fields are hidden. Withdraw also carries the
+    // (prefilled) withdrawable amount for the verify/Done display.
+    solana_unstake: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+      ],
+      schema: z.object({ stakeAccount: z.string().trim().min(1) }),
+    }),
+    solana_withdraw: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        { name: 'amount', type: 'number', label: t('amount'), hidden: true },
+      ],
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
+      }),
+    }),
   })
 }
