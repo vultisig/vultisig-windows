@@ -1500,4 +1500,7 @@ export const zh = {
   ton_unstake_unsupported_pool: '此pool实现不支持取消质押。',
   ton_withdrawal_pending: '提现待处理——解锁{{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: '网络拒绝了这笔交易',
+  broadcast_error_description:
+    '您的设备已签署交易，但网络拒绝了该交易。请查看下方链上原因，然后重新签署以重试。',
 }

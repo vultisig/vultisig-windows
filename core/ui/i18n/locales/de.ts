@@ -1641,4 +1641,7 @@ export const de = {
     'Diese pool -Implementierung wird für das Unstaking nicht unterstützt.',
   ton_withdrawal_pending: 'Auszahlung ausstehend — schaltet {{date}} frei',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: 'Das Netzwerk hat diese Transaktion abgelehnt.',
+  broadcast_error_description:
+    'Ihre Geräte haben die Transaktion signiert, aber das Netzwerk hat sie abgelehnt. Überprüfen Sie den unten stehenden Grund in der Blockchain und signieren Sie die Transaktion erneut, um es noch einmal zu versuchen.',
 }

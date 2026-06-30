@@ -1624,4 +1624,7 @@ export const es = {
     'Esta implementación pool no es compatible con el retiro de staking.',
   ton_withdrawal_pending: 'Retiro pendiente: desbloquea {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: 'La red rechazó esta transacción.',
+  broadcast_error_description:
+    'Tus dispositivos firmaron la transacción, pero la red la rechazó. Revisa el motivo en la cadena de bloques a continuación y vuelve a firmar para intentarlo de nuevo.',
 }

@@ -1632,4 +1632,7 @@ export const it = {
     'Questa implementazione pool non è supportata per lo sblocco in staking.',
   ton_withdrawal_pending: 'Prelievo in sospeso — sblocca {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: 'La rete ha rifiutato questa transazione',
+  broadcast_error_description:
+    'I tuoi dispositivi hanno firmato la transazione, ma la rete l&#39;ha rifiutata. Esamina il motivo registrato sulla blockchain riportato di seguito, quindi firma nuovamente per riprovare.',
 }
