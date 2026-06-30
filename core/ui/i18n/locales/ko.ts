@@ -1594,4 +1594,7 @@ export const ko = {
     '이 pool 구현은 언스테이킹을 지원하지 않습니다.',
   ton_withdrawal_pending: '출금 대기 중 — {{date}} 잠금 해제',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: '네트워크에서 이 거래를 거부했습니다.',
+  broadcast_error_description:
+    '기기에서 거래에 서명했지만 네트워크에서 거부되었습니다. 아래 온체인 거부 사유를 확인하신 후 다시 서명하여 시도해 주세요.',
 }

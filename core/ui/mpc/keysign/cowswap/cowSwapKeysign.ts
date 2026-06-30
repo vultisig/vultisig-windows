@@ -16,7 +16,6 @@ import {
   deserializeSigningOutput,
 } from '@vultisig/core-chain/tw/signingOutput'
 import { Tx } from '@vultisig/core-chain/tx'
-import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import { KeysignResult } from '@vultisig/core-mpc/keysign/KeysignResult'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
@@ -31,6 +30,7 @@ import { Buffer } from 'buffer'
 import { TypedDataEncoder } from 'ethers'
 
 import { KeysignAction } from '../action/state/keysignAction'
+import { broadcastKeysignTx } from '../broadcastKeysignTx'
 
 /**
  * Recover the CowSwap order carried in a keysign payload, or `null` for any
@@ -177,7 +177,7 @@ export const signCowSwapOrder = async ({
     const hash = await getTxHash({ chain, tx: data })
 
     if (!payload.skipBroadcast) {
-      await broadcastTx({ chain, tx: data })
+      await broadcastKeysignTx({ chain, tx: data })
     }
 
     txs.push({ data, hash })

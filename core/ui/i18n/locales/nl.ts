@@ -1609,4 +1609,7 @@ export const nl = {
     'Deze pool implementatie wordt niet ondersteund voor het ontstaken van de token.',
   ton_withdrawal_pending: 'Opname in behandeling — ontgrendelt {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: 'Het netwerk heeft deze transactie geweigerd.',
+  broadcast_error_description:
+    'Uw apparaten hebben de transactie ondertekend, maar het netwerk heeft deze afgewezen. Bekijk de on-chain reden hieronder en onderteken de transactie opnieuw om het nogmaals te proberen.',
 }

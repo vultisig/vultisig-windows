@@ -1628,4 +1628,7 @@ export const pt = {
     'Esta implementação pool não é suportada para desinvestimento.',
   ton_withdrawal_pending: 'Saque pendente — desbloqueia {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: 'A rede rejeitou esta transação.',
+  broadcast_error_description:
+    'Seus dispositivos assinaram a transação, mas a rede a rejeitou. Confira o motivo na blockchain abaixo e tente novamente.',
 }

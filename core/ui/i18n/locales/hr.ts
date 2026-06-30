@@ -1602,4 +1602,7 @@ export const hr = {
     'Ova implementacija pool nije podržana za uklanjanje udjela.',
   ton_withdrawal_pending: 'Isplata na čekanju — otključava {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  broadcast_error: 'Mreža je odbila ovu transakciju',
+  broadcast_error_description:
+    'Vaši su uređaji potpisali transakciju, ali ju je mreža odbila. Pregledajte razlog na lancu u nastavku, a zatim se ponovno prijavite za ponovni pokušaj.',
 }

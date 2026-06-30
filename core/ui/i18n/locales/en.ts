@@ -108,6 +108,9 @@ export const en = {
   blockaid_simulation_failed_description:
     'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
   transaction_scanned_by: 'Transaction scanned by {{provider}}',
+  broadcast_error: 'The network rejected this transaction',
+  broadcast_error_description:
+    'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
   broadcasted: 'Broadcasted',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
