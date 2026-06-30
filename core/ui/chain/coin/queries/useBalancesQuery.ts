@@ -77,6 +77,10 @@ const getBatchedEvmCoinBalance = (input: CoinBalanceResolverInput<EvmChain>) =>
     })
   })
 
+/**
+ * Resolves a coin balance, batching EVM requests issued in the same microtask
+ * per chain and wallet address while preserving the existing non-EVM resolver.
+ */
 export const getCoinBalanceQueryAmount = (input: CoinBalanceResolverInput) => {
   if (isChainOfKind(input.chain, 'evm')) {
     return getBatchedEvmCoinBalance(input as CoinBalanceResolverInput<EvmChain>)
