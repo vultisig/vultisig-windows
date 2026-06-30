@@ -15,7 +15,7 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
  * `extractErrorMsg` surfaces the real reason under "Show exact error".
  */
 export class BroadcastError extends Error {
-  override readonly cause: unknown
+  readonly cause: unknown
 
   constructor(cause: unknown) {
     super(extractBroadcastReason(cause))
