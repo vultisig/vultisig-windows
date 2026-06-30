@@ -1,4 +1,4 @@
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
@@ -14,7 +14,6 @@ import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVis
 export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery()
   const fiatCurrency = useFiatCurrency()
-  const formatFiatAmount = useFormatFiatAmount()
 
   const { t } = useTranslation()
 
@@ -38,7 +37,7 @@ export const VaultTotalBalance = () => {
               data-testid="balance-value"
             >
               <BalanceVisibilityAware size="l">
-                {formatFiatAmount(value)}
+                <AnimatedFiatAmount value={value} cacheKey="vault-total" />
               </BalanceVisibilityAware>
             </Text>
             {query.isUpdating ? (
