@@ -38,4 +38,17 @@ describe('getTxSuccessAmountPresentation', () => {
       hideZeroAmount: false,
     })
   })
+
+  it('preserves labeled zero-amount skip-broadcast results', () => {
+    expect(
+      getTxSuccessAmountPresentation({
+        amount: 0,
+        skipBroadcast: true,
+        txActionLabel: 'deposited',
+      })
+    ).toEqual({
+      actionLabel: 'deposited',
+      hideZeroAmount: false,
+    })
+  })
 })

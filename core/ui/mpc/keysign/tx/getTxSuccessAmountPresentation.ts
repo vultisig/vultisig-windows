@@ -13,7 +13,8 @@ export const getTxSuccessAmountPresentation = ({
   skipBroadcast,
   txActionLabel,
 }: GetTxSuccessAmountPresentationInput) => {
-  const hideZeroAmount = !!skipBroadcast && !amountOverride && amount === 0
+  const hideZeroAmount =
+    !!skipBroadcast && !txActionLabel && !amountOverride && amount === 0
 
   return {
     actionLabel: hideZeroAmount ? 'signed_signature' : txActionLabel,
