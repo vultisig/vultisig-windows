@@ -8,16 +8,10 @@ import {
   getCowSwapOrderApiBase,
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
+import { shouldFailStaleTransaction } from './staleTransaction'
 import { toRecordStatus } from './toRecordStatus'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
-
-const stalePendingThresholdMs = 5 * 60 * 1000
-
-const isStaleTransaction = (record: TransactionRecord): boolean => {
-  const elapsed = Date.now() - new Date(record.timestamp).getTime()
-  return elapsed > stalePendingThresholdMs
-}
 
 /** Checks chain status for pending/broadcasted transactions and updates their status in storage. */
 export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
@@ -59,7 +53,7 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
             )
 
             if ('error' in result) {
-              if (isStaleTransaction(record)) {
+              if (shouldFailStaleTransaction(record)) {
                 updateRecord({ ...record, status: 'failed' })
               }
               return
@@ -67,7 +61,7 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
 
             const newStatus = toRecordStatus[result.data.status]
 
-            if (newStatus === 'pending' && isStaleTransaction(record)) {
+            if (newStatus === 'pending' && shouldFailStaleTransaction(record)) {
               updateRecord({ ...record, status: 'failed' })
               return
             }
