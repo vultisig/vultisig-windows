@@ -873,7 +873,6 @@ export const es = {
   share_app: 'Comparte la aplicación',
   share_description:
     'Comparte tu código de referencia único para invitar a tus amigos. Ellos recibirán un descuento y, cuanto más operen, más ganarás, directamente en tu billetera.',
-  share_vault_qr: 'Compartir código QR de Vault',
   shares: 'Acciones',
   show_balance: 'Mostrar saldo',
   show_defi_balance: 'Mostrar saldo DeFi',
@@ -1074,7 +1073,6 @@ export const es = {
   vault_notifications: 'Notificaciones de la bóveda',
   vault_part: 'Parte de la bóveda',
   vault_password: 'Contraseña de la bóveda',
-  vault_qr_share: 'Compartir',
   vault_ready_description:
     '¡Todo listo! Mantienes el control de cada transacción.',
   vault_ready_to_use: 'Su bóveda está lista para usarse.',

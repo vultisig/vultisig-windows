@@ -861,7 +861,6 @@ export const nl = {
   share_app: 'De app delen',
   share_description:
     'Deel je unieke referralcode om vrienden uit te nodigen. Zij krijgen korting en hoe meer zij traden, hoe meer jij verdient — direct naar je wallet.',
-  share_vault_qr: 'Kluis-QR delen',
   shares: 'Shares',
   show_balance: 'Saldo tonen',
   show_defi_balance: 'DeFi-saldo tonen',
@@ -1060,7 +1059,6 @@ export const nl = {
   vault_notifications: 'Kluismeldingen',
   vault_part: 'Kluis-share',
   vault_password: 'Kluiswachtwoord',
-  vault_qr_share: 'Delen',
   vault_ready_description:
     'Je bent helemaal klaar! Je behoudt de controle over elke transactie.',
   vault_ready_to_use: 'Uw kluis is klaar voor gebruik.',

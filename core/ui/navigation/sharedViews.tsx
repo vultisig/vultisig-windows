@@ -62,7 +62,6 @@ import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvi
 import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
-import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
@@ -119,7 +118,6 @@ export type SharedViewId = Extract<
   | 'transactionDetail'
   | 'transactionHistory'
   | 'faq'
-  | 'shareVault'
   | 'vultDiscount'
   | 'qbtcClaim'
   | 'qbtcQuantumSecurityOnboarding'
@@ -199,7 +197,6 @@ export const sharedViews: Views<SharedViewId> = {
   transactionDetail: TransactionDetailPage,
   transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
-  shareVault: ShareVaultPage,
   vultDiscount:
     currentProductBrand === 'station' ? VaultPage : VultDiscountPage,
   qbtcClaim: QbtcClaimPage,
