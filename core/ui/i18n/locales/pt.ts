@@ -1547,15 +1547,15 @@ export const pt = {
     'Ajuste suas trocas com slippage personalizado, limite de gás e um endereço de destinatário externo.',
   signing_error_description:
     'Um dos seus dispositivos não respondeu a tempo. Verifique sua conexão e tente novamente.',
-  qbtc_claim_cosign_title: 'Assinar em conjunto a declaração QBTC',
+  qbtc_claim_cosign_title: 'Coassinar reivindicação QBTC',
   qbtc_claim_cosign_description:
     'Analise o pedido de reivindicação abaixo e, em seguida, aprove a assinatura conjunta com a chave Bitcoin deste cofre.',
-  qbtc_claim_cosign_amount: 'Quantia',
+  qbtc_claim_cosign_amount: 'Valor',
   qbtc_claim_cosign_btc_address:
     'Endereço Bitcoin (comprovante de propriedade)',
   qbtc_claim_cosign_qbtc_address: 'Endereço QBTC (destinatário da solicitação)',
   qbtc_claim_cosign_success:
-    'Você assinou em conjunto a declaração QBTC. O outro dispositivo irá concluir e transmiti-la.',
+    'Você coassinou a reivindicação QBTC. O outro dispositivo irá concluí-la e transmiti-la.',
   qbtc_gov: {
     status: {
       passed: 'Aprovado',

@@ -1425,14 +1425,14 @@ export const zh = {
     '通过自定义滑点、gas限制和外部接收地址来微调您的交易。',
   signing_error_description:
     '您的某个设备未及时响应。请检查您的网络连接并重试。',
-  qbtc_claim_cosign_title: '共同签名 QBTC 声明',
+  qbtc_claim_cosign_title: '共同签署 QBTC 申领',
   qbtc_claim_cosign_description:
-    '请查看下面的索赔请求，然后批准使用此金库的比特币密钥对其进行共同签名。',
+    '请查看下面的认领请求，然后批准使用此金库的比特币密钥对其进行共同签名。',
   qbtc_claim_cosign_amount: '数量',
   qbtc_claim_cosign_btc_address: '比特币地址（所有权证明）',
-  qbtc_claim_cosign_qbtc_address: 'QBTC 地址（索赔接收人）',
+  qbtc_claim_cosign_qbtc_address: 'QBTC 地址（申领接收方）',
   qbtc_claim_cosign_success:
-    '您已共同签署了 QBTC 声明。另一台设备将完成并广播该声明。',
+    '您已共同签署 QBTC 申领。另一台设备将完成并广播该申领。',
   qbtc_gov: {
     status: {
       passed: '通过',

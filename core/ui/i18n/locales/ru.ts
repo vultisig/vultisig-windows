@@ -1530,7 +1530,7 @@ export const ru = {
   qbtc_claim_cosign_title: 'Подписать совместно заявку QBTC',
   qbtc_claim_cosign_description:
     'Ознакомьтесь с запросом на получение средств ниже, а затем подтвердите его, подписав его совместно с биткойн-ключом этого хранилища.',
-  qbtc_claim_cosign_amount: 'Количество',
+  qbtc_claim_cosign_amount: 'Сумма',
   qbtc_claim_cosign_btc_address:
     'Биткоин-адрес (подтверждение права собственности)',
   qbtc_claim_cosign_qbtc_address: 'Адрес QBTC (получатель заявки)',

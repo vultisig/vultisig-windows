@@ -1550,15 +1550,15 @@ export const it = {
     'Ottimizza i tuoi scambi con slittamento personalizzato, limite di gas e indirizzo del destinatario esterno.',
   signing_error_description:
     'Uno dei tuoi dispositivi non ha risposto in tempo. Verifica la connessione e riprova.',
-  qbtc_claim_cosign_title: 'Co-firma la rivendicazione QBTC',
+  qbtc_claim_cosign_title: 'Controfirma la richiesta QBTC',
   qbtc_claim_cosign_description:
-    'Esamina la richiesta di rivendicazione qui sotto, quindi approva la controfirma utilizzando la chiave Bitcoin di questo vault.',
-  qbtc_claim_cosign_amount: 'Quantità',
+    'Esamina la richiesta qui sotto, quindi approva la controfirma con la chiave Bitcoin di questo vault.',
+  qbtc_claim_cosign_amount: 'Importo',
   qbtc_claim_cosign_btc_address: 'Indirizzo Bitcoin (prova di proprietà)',
   qbtc_claim_cosign_qbtc_address:
     'Indirizzo QBTC (destinatario della richiesta)',
   qbtc_claim_cosign_success:
-    'Hai controfirmato la rivendicazione QBTC. L&#39;altro dispositivo la completerà e la trasmetterà.',
+    "Hai controfirmato la richiesta QBTC. L'altro dispositivo la completerà e la trasmetterà.",
   qbtc_gov: {
     status: {
       passed: 'Superato',
