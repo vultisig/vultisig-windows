@@ -908,7 +908,15 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         stakeAccount: z.string().trim().min(1),
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        // The withdraw amount is the stake account's withdrawable lamports
+        // (prefilled, not editable) — it is unrelated to the wallet's liquid
+        // SOL balance and routinely exceeds it (you're withdrawing FROM the
+        // stake account). Require only a positive value; capping at the liquid
+        // `totalAmountAvailable` would wrongly disable Continue.
+        amount: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('amount_must_be_positive'))
+        ),
       }),
     }),
   })
