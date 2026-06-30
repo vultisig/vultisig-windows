@@ -877,7 +877,6 @@ export const de = {
   share_app: 'Teile die App',
   share_description:
     'Teile deinen persönlichen Empfehlungscode, um Freunde einzuladen. Sie erhalten einen Rabatt, und je mehr sie handeln, desto mehr verdienst du – direkt in deiner Wallet.',
-  share_vault_qr: 'Tresor-QR-Code teilen',
   shares: 'Anteile',
   show_balance: 'Guthaben anzeigen',
   show_defi_balance: 'DeFi-Guthaben anzeigen',
@@ -1083,7 +1082,6 @@ export const de = {
   vault_notifications: 'Tresorbenachrichtigungen',
   vault_part: 'Tresoranteil',
   vault_password: 'Tresorpasswort',
-  vault_qr_share: 'Teilen',
   vault_ready_description:
     'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',
   vault_ready_to_use: 'Ihr Tresor ist einsatzbereit.',

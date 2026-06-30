@@ -871,7 +871,6 @@ export const pt = {
   share_app: 'Compartilhe o aplicativo',
   share_description:
     'Compartilhe seu código de indicação exclusivo para convidar amigos. Eles ganham um desconto e, quanto mais negociarem, mais você ganha — diretamente na sua carteira.',
-  share_vault_qr: 'QR Code do Share Vault',
   shares: 'Ações',
   show_balance: 'Mostrar saldo',
   show_defi_balance: 'Mostrar saldo DeFi',
@@ -1075,7 +1074,6 @@ export const pt = {
   vault_notifications: 'Notificações do Vault',
   vault_part: 'Compartilhamento do cofre',
   vault_password: 'Senha do cofre',
-  vault_qr_share: 'Compartilhar',
   vault_ready_description:
     'Está tudo pronto! Você mantém o controle de todas as transações.',
   vault_ready_to_use: 'Seu cofre está pronto para uso.',

@@ -873,7 +873,6 @@ export const it = {
   share_app: "Condividi l'app",
   share_description:
     'Condividi il tuo codice di riferimento univoco per invitare i tuoi amici. Riceveranno uno sconto e più scambi faranno, più guadagni, direttamente sul tuo portafoglio.',
-  share_vault_qr: 'Condividi Vault QR',
   shares: 'Azioni',
   show_balance: 'Mostra saldo',
   show_defi_balance: 'Mostra saldo DeFi',
@@ -1076,7 +1075,6 @@ export const it = {
   vault_notifications: 'Notifiche del Vault',
   vault_part: 'Condivisione Vault',
   vault_password: 'Password del caveau',
-  vault_qr_share: 'Condividere',
   vault_ready_description:
     'È tutto pronto! Avrai sempre il controllo di ogni transazione.',
   vault_ready_to_use: "La tua cassaforte è pronta per l'uso.",

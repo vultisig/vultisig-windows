@@ -49,7 +49,6 @@ export type CoreView =
     }
   | { id: 'referral' }
   | { id: 'importVault' }
-  | { id: 'shareVault' }
   | {
       id: 'joinKeygen'
       state: {

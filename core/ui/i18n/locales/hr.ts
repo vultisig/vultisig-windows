@@ -865,7 +865,6 @@ export const hr = {
   share_app: 'Podijelite aplikaciju',
   share_description:
     'Podijelite svoj jedinstveni referalni kod kako biste pozvali prijatelje. Oni dobivaju popust i što više trguju, to više zarađujete — izravno u svoj novčanik.',
-  share_vault_qr: 'Podijeli QR kod trezora',
   shares: 'Dionice',
   show_balance: 'Prikaži stanje',
   show_defi_balance: 'Prikaži DeFi stanje',
@@ -1064,7 +1063,6 @@ export const hr = {
   vault_notifications: 'Obavijesti o trezoru',
   vault_part: 'Dijeljenje trezora',
   vault_password: 'Lozinka trezora',
-  vault_qr_share: 'Udio',
   vault_ready_description:
     'Spremni ste! Vi imate kontrolu nad svakom transakcijom.',
   vault_ready_to_use: 'Vaš trezor je spreman za korištenje',

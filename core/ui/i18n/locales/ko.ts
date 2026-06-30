@@ -853,7 +853,6 @@ export const ko = {
   share_app: '앱을 공유하세요',
   share_description:
     '나만의 추천 코드를 공유하여 친구를 초대하세요. 친구는 할인을 받고, 친구가 거래할수록 당신의 수익도 늘어납니다. 수익은 당신의 금고로 바로 지급됩니다.',
-  share_vault_qr: '볼트 QR 공유',
   shares: '주식',
   show_balance: '균형을 보여주세요',
   show_defi_balance: 'DeFi 잔액을 표시합니다.',
@@ -1081,7 +1080,6 @@ export const ko = {
   vault_notifications: '금고 알림',
   vault_part: '금고 공유',
   vault_password: '금고 비밀번호',
-  vault_qr_share: '공유하다',
   vault_ready_description:
     '모든 준비가 완료되었습니다! 모든 거래는 고객님께서 직접 관리하실 수 있습니다.',
   vault_ready_to_use: '금고를 사용하실 준비가 되었습니다.',

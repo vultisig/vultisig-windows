@@ -980,7 +980,6 @@ export const en = {
   share_app: 'Share The App',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
-  share_vault_qr: 'Share Vault QR',
   shares: 'Shares',
   show_balance: 'Show balance',
   show_exact_error: 'Show exact error',
@@ -1290,7 +1289,6 @@ export const en = {
   vault_notifications: 'Vault Notifications',
   vault_part: 'Vault Share',
   vault_password: 'Vault Password',
-  vault_qr_share: 'Share',
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",
   vault_ready_to_use: 'Your vault is ready to use',

@@ -802,7 +802,6 @@ export const zh = {
   share_app: '分享应用',
   share_description:
     '分享您的专属邀请码邀请好友。好友可享受折扣，交易越多，您获得的奖励就越多——直接存入您的钱包。',
-  share_vault_qr: '共享金库二维码',
   shares: '份额',
   show_balance: '显示平衡',
   show_defi_balance: '显示DeFi余额',
@@ -991,7 +990,6 @@ export const zh = {
   vault_notifications: '保险库通知',
   vault_part: '金库共享',
   vault_password: '保险库密码',
-  vault_qr_share: '分享',
   vault_ready_description: '一切就绪！您将掌控每一笔交易。',
   vault_ready_to_use: '您的保险库已准备就绪，可以使用了。',
   vault_rename_page_name_error: '保险库名称长度必须介于 1 到 50 个字符之间。',
