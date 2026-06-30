@@ -26,11 +26,14 @@ export const AdvancedSwapSettings = () => {
   const [isGateOpen, setIsGateOpen] = useState(false)
   const [settings, setSettings] = useAdvancedSwapSettings()
   const { isEligible, isPending, badge } = useTierBadge({ requiredTier })
+  const triggerLabel = badge
+    ? `${t('advanced_settings')}: ${badge.label}`
+    : t('advanced_settings')
 
   return (
     <>
       <Trigger
-        aria-label={t('advanced_settings')}
+        aria-label={triggerLabel}
         data-testid="advanced-swap-settings"
         kind="secondary"
         onClick={() => {
