@@ -14,6 +14,7 @@ import { EntityWithTicker } from '@vultisig/lib-utils/entities/EntityWithTicker'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import styled from 'styled-components'
 
+import { FiatAmountText } from '../../chain/components/FiatAmountText'
 import { useFormatFiatAmount } from '../../chain/hooks/useFormatFiatAmount'
 
 const PriceBadge = styled.div`
@@ -54,7 +55,7 @@ export const VaultChainCoinItem = ({
             </Text>
             <PriceBadge>
               <Text weight={500} color="shyExtra" size={12}>
-                {formatFiatAmount(price ?? 0)}
+                <FiatAmountText value={price ?? 0} />
               </Text>
             </PriceBadge>
           </VStack>
