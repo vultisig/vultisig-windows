@@ -13,7 +13,7 @@
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
     "@tanstack/react-query": "^5.101.0",
-    "@trustwallet/wallet-core": "^4.6.15",
+    "@trustwallet/wallet-core": "^4.7.0",
     "@vultisig/core-chain": "2.19.0",
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "1.8.11",

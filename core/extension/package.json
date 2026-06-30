@@ -9,7 +9,7 @@
     "@lib/ui": "workspace:^",
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-query-persist-client": "^5.101.0",
-    "@trustwallet/wallet-core": "^4.6.15",
+    "@trustwallet/wallet-core": "^4.7.0",
     "@vultisig/core-chain": "2.19.0",
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "1.8.11",
