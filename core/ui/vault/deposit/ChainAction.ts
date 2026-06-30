@@ -19,7 +19,10 @@ export type CosmosStakingAction = (typeof cosmosStakingActions)[number]
  * back to the wallet (no claim path — rewards auto-compound). Delegate and the
  * guided move-stake ops land in later phases.
  */
-export const solanaStakingActions = ['solana_unstake', 'solana_withdraw'] as const
+export const solanaStakingActions = [
+  'solana_unstake',
+  'solana_withdraw',
+] as const
 export type SolanaStakingAction = (typeof solanaStakingActions)[number]
 
 export type ChainAction =
