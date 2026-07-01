@@ -8,7 +8,7 @@ import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { RefObject } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { currentProductBrand } from '../../../product/brand'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
@@ -96,11 +96,24 @@ const Container = styled(VStack)`
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};
   position: relative;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      gap: 20px;
+      padding-top: 24px;
+    `}
 `
 
 const BalanceWrapper = styled.div`
   ${vStack({ alignItems: 'center', gap: 24 })};
   position: relative;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      gap: 20px;
+    `}
 `
 
 const BlurEffect = styled.div`
@@ -125,10 +138,22 @@ const BlurEffect = styled.div`
     width: 600px;
     top: -25px;
   }
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      display: none;
+    `}
 `
 
 const Divider = styled.div`
   height: 1px;
   align-self: stretch;
   background: ${getColor('foregroundExtra')};
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      background: ${theme.colors.foregroundSuper.toCssValue()};
+    `}
 `
