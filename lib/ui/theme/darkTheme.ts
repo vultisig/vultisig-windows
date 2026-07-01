@@ -5,6 +5,8 @@ import { sharedColors } from './shared'
 
 export const darkTheme: DefaultTheme = {
   name: 'dark',
+  fontFamily: "'Brockmann', sans-serif",
+  iconStyle: 'vultisig',
   colors: {
     ...sharedColors,
 

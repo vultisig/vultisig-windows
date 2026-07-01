@@ -9,6 +9,7 @@ import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
+import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
@@ -22,7 +23,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 type VaultChainItemProps = {
   balance: VaultChainBalance
@@ -43,6 +44,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
 
   const { t } = useTranslation()
   const { addToast } = useToast()
+  const { iconStyle } = useTheme()
 
   const handleCopyAddress = async (
     e: React.MouseEvent | React.KeyboardEvent
@@ -146,7 +148,11 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 </Text>
               </VStack>
               <IconWrapper>
-                <ChevronRightIcon />
+                {iconStyle === 'station' ? (
+                  <StationChevronRightSmallIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
               </IconWrapper>
             </HStack>
           </HStack>

@@ -8,6 +8,7 @@ import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoi
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { StationCheckmarkSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { vStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -15,8 +16,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { useMemo } from 'react'
-import styled from 'styled-components'
-import { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type ChainItemProps = ValueProp<Coin> & {
   isSelected?: boolean
@@ -31,6 +31,7 @@ export const ChainItem = ({
   const currentCoins = useCurrentVaultNativeCoins()
   const createCoin = useCreateCoinMutation()
   const deleteCoin = useDeleteCoinMutation()
+  const { iconStyle } = useTheme()
 
   const currentCoin = useMemo(() => {
     return currentCoins.find(c => areEqualCoins(c, coin))
@@ -70,7 +71,11 @@ export const ChainItem = ({
         />
         {isSelected && (
           <CheckBadge color="primary" size={12}>
-            <CheckmarkIcon />
+            {iconStyle === 'station' ? (
+              <StationCheckmarkSmallIcon />
+            ) : (
+              <CheckmarkIcon />
+            )}
           </CheckBadge>
         )}
       </ChainIconWrapper>
@@ -120,6 +125,19 @@ const ChainIconWrapper = styled.div<IsActiveProp>`
       border: 1.5px solid ${getColor('foregroundSuper')};
       background: ${getColor('foreground')};
     `}
+
+  ${({ theme, isActive }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      background: ${theme.colors.foreground.withAlpha(0.5).toCssValue()};
+      opacity: ${isActive ? 1 : 0.5};
+
+      ${isActive &&
+      css`
+        border: 1.5px solid ${theme.colors.foregroundExtra.toCssValue()};
+        background: ${theme.colors.foreground.toCssValue()};
+      `}
+    `}
 `
 
 const CheckBadge = styled(IconWrapper)`
@@ -131,4 +149,11 @@ const CheckBadge = styled(IconWrapper)`
   border-radius: 40px 0 25px 0;
   background: ${getColor('foregroundSuper')};
   font-weight: 600;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      background: ${theme.colors.foregroundExtra.toCssValue()};
+      color: ${theme.colors.primary.toCssValue()};
+    `}
 `
