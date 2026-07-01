@@ -1,10 +1,10 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
-import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
+import { useVaultChainTotalBalanceQuery } from '@core/ui/vault/queries/useVaultChainTotalBalanceQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -12,8 +12,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
-import { sum } from '@vultisig/lib-utils/array/sum'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -34,8 +32,7 @@ const AddressPill = styled(HStack)`
 export const VaultChainOverview = () => {
   const chain = useCurrentVaultChain()
   const address = useCurrentVaultAddress(chain)
-  const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
-  const formatFiatAmount = useFormatFiatAmount()
+  const totalBalanceQuery = useVaultChainTotalBalanceQuery(chain)
   const { t } = useTranslation()
 
   return (
@@ -52,28 +49,24 @@ export const VaultChainOverview = () => {
         </HStack>
         <VStack alignItems="center" gap={8}>
           <MatchQuery
-            value={vaultCoinsQuery}
+            value={totalBalanceQuery}
             error={() => t('failed_to_load')}
             pending={() => <Spinner />}
-            success={coins => {
-              const total = sum(
-                coins.map(({ amount, decimals, price = 0 }) =>
-                  getCoinValue({
-                    amount,
-                    decimals,
-                    price,
-                  })
-                )
-              )
-
-              return (
+            success={value => (
+              <HStack gap={8} alignItems="center">
                 <Text size={32} weight="700" color="contrast" centerVertically>
                   <BalanceVisibilityAware>
-                    {formatFiatAmount(total)}
+                    <AnimatedFiatAmount
+                      value={value}
+                      cacheKey={`chain-total-${chain}`}
+                    />
                   </BalanceVisibilityAware>
                 </Text>
-              )
-            }}
+                {totalBalanceQuery.isUpdating ? (
+                  <Spinner size="0.9em" style={{ opacity: 0.5 }} />
+                ) : null}
+              </HStack>
+            )}
           />
           <AddressPill alignItems="center" gap={4}>
             <Text weight={500} color="info" size={12}>
