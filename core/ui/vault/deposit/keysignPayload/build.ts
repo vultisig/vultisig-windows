@@ -761,6 +761,7 @@ const applySolanaStakingSignData = ({
     )
 
   const stakeAccount = depositData['stakeAccount']
+  const validatorAddress = depositData['validatorAddress']
   const amount = amountUnits ? BigInt(amountUnits) : 0n
 
   const requireStakeAccount = (): string => {
@@ -768,6 +769,13 @@ const applySolanaStakingSignData = ({
       throw new Error(`Solana staking '${action}' requires 'stakeAccount'`)
     }
     return stakeAccount
+  }
+
+  const requireValidator = (): string => {
+    if (typeof validatorAddress !== 'string' || validatorAddress.length === 0) {
+      throw new Error(`Solana staking '${action}' requires 'validatorAddress'`)
+    }
+    return validatorAddress
   }
 
   const { payload, toAddress, toAmount } = match<
@@ -791,6 +799,33 @@ const applySolanaStakingSignData = ({
           lamports: amount,
         } as const,
         toAddress: account,
+        toAmount: amount.toString(),
+      }
+    },
+    // Move-stake step 1: deactivate the account (byte-identical to a plain
+    // deactivate). No amount; the whole account cools down before re-delegation.
+    solana_move_stake: () => {
+      const account = requireStakeAccount()
+      return {
+        payload: { op: 'moveStakeDeactivate', stakeAccount: account } as const,
+        toAddress: account,
+        toAmount: '0',
+      }
+    },
+    // Move-stake step 2: re-delegate the cooled-down account to validator B. The
+    // existing account is set explicitly so wallet-core re-delegates it rather
+    // than deriving a fresh one.
+    solana_finish_move: () => {
+      const account = requireStakeAccount()
+      const votePubkey = requireValidator()
+      return {
+        payload: {
+          op: 'moveStakeRedelegate',
+          stakeAccount: account,
+          votePubkey,
+          lamports: amount,
+        } as const,
+        toAddress: votePubkey,
         toAmount: amount.toString(),
       }
     },

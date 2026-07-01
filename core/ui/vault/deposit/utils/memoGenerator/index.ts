@@ -228,6 +228,8 @@ export const generateMemo = ({
     // unsigned transaction (signSolana.rawTransactions), not a memo string.
     solana_unstake: () => '',
     solana_withdraw: () => '',
+    solana_move_stake: () => '',
+    solana_finish_move: () => '',
   })
 }
 

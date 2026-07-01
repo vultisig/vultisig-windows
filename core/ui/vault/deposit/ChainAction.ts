@@ -22,6 +22,8 @@ export type CosmosStakingAction = (typeof cosmosStakingActions)[number]
 export const solanaStakingActions = [
   'solana_unstake',
   'solana_withdraw',
+  'solana_move_stake',
+  'solana_finish_move',
 ] as const
 export type SolanaStakingAction = (typeof solanaStakingActions)[number]
 
