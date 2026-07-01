@@ -14,7 +14,7 @@ import styled from 'styled-components'
 
 import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
 
-const chainsWithoutMemoSupport: Chain[] = [Chain.Cardano, Chain.Sui]
+const chainsWithoutMemoSupport: Chain[] = [Chain.Sui]
 
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()
