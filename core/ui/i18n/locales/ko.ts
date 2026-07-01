@@ -1103,8 +1103,6 @@ export const ko = {
     '제목은 최대 50자까지 가능합니다.',
   vault_settings_address_book_title_min_length_error:
     '제목은 최소 1자 이상이어야 합니다.',
-  vault_share_banner:
-    '이 QR 코드를 사용하면 Vault의 보기 전용 버전을 공유할 수 있습니다.',
   vault_type_does_not_match: '금고 유형이 일치하지 않습니다.',
   vault_value: '금고 가치',
   vaults: '금고',
@@ -1521,6 +1519,8 @@ export const ko = {
   qbtc_claim_cosign_qbtc_address: 'QBTC 주소(클레임 수신자)',
   qbtc_claim_cosign_success:
     'QBTC 클레임에 공동 서명하셨습니다. 다른 기기에서 서명을 완료하고 브로드캐스트할 것입니다.',
+  qbtc_onboarding_key_warning:
+    'QBTC를 활성화하면 새로운 양자 키와 QBTC 주소가 생성됩니다. 이 볼트에 이미 다른 장치나 가져오기를 통해 양자 키가 있는 경우, 이전에 생성된 QBTC 자금은 새 주소에서 접근할 수 없을 수 있습니다. 생성 후에는 이 볼트를 백업하십시오.',
   qbtc_gov: {
     status: {
       passed: '통과됨',
@@ -1596,5 +1596,12 @@ export const ko = {
   ton_stake_pool_picker_header: 'Pool',
   broadcast_error: '네트워크에서 이 거래를 거부했습니다.',
   broadcast_error_description:
-    '기기에서 거래에 서명했지만 네트워크에서 거부되었습니다. 아래 온체인 거부 사유를 확인하신 후 다시 서명하여 시도해 주세요.',
+    '귀하의 기기에서 거래에 서명했지만 네트워크에서 거부되었습니다. 아래의 온체인 거부 사유를 확인하신 후 다시 서명하여 시도해 주세요.',
+  solana_unstake: '언스테이킹',
+  solana_withdraw: '철회하다',
+  solana_staking_stake_account: '지분 계정',
+  solana_staking_unstake_notice:
+    '비활성화하면 쿨다운이 시작됩니다. 출금하기 전까지 약 {{days}} 일 동안 자금이 잠겨 있습니다.',
+  solana_staking_withdrawable_amount: '인출 가능 금액',
+  solana_staking_withdraw_ready_notice: '식어서 철수할 준비가 되었습니다.',
 }

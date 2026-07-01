@@ -979,7 +979,7 @@ export const it = {
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Larghezza di banda e energia',
   tron_bandwidth_description:
-    'I punti di larghezza di banda sono necessari per ogni transazione su TRON, compresi sia gli invii standard di token sia le interazioni con gli smart contract. Ogni utente TRON riceve 600 punti di larghezza di banda gratuiti al giorno, sufficienti a coprire circa due invii di base. Inoltre, puoi guadagnare punti di larghezza di banda extra mettendo in staking TRX, aumentando il tuo saldo giornaliero per supportare più transazioni. Se disponi di punti di larghezza di banda sufficienti, puoi inviare token, mettere in staking TRX o interagire con gli smart contract senza pagare TRX per le commissioni di gas.',
+    'I Bandwidth Points sono necessari per ogni transazione su TRON, compresi sia gli invii standard di token sia le interazioni con gli smart contract. Ogni utente TRON riceve 600 Bandwidth Points gratuiti al giorno, sufficienti a coprire circa due invii di base. Inoltre, puoi guadagnare Bandwidth Points extra mettendo in staking TRX, aumentando il tuo saldo giornaliero per supportare più transazioni. Se disponi di Bandwidth Points sufficienti, puoi inviare token, mettere in staking TRX o interagire con gli smart contract senza pagare TRX per le commissioni di gas.',
   tron_energy_description:
     "Riduce i costi degli smart contract. Se insufficiente, TRX copre la commissione. L'indicatore verde mostra l'energia giornaliera derivante dal TRX in staking. Più TRX in staking significa più energia. Si ricarica ogni 24 ore. Le transazioni non riuscite consumano più energia e non vengono rimborsate.",
   try_again: 'Riprova',
@@ -1098,8 +1098,6 @@ export const it = {
     'Il titolo deve contenere al massimo 50 caratteri.',
   vault_settings_address_book_title_min_length_error:
     'Il titolo deve essere lungo almeno 1 carattere.',
-  vault_share_banner:
-    'Questo codice QR ti consente di condividere una versione di sola visualizzazione del tuo Vault',
   vault_type_does_not_match: 'Il tipo di vault non corrisponde',
   vault_value: 'Valore del caveau',
   vaults: 'Caveau',
@@ -1142,7 +1140,7 @@ export const it = {
   vaultSetupOverview: {
     title: 'La configurazione del tuo caveau',
     fast: {
-      badgeTitle: 'Cassaforte veloce',
+      badgeTitle: 'Fast Vault',
       badgeSubtitle: 'Configurazione a 2 dispositivi',
       feature1Title: 'Firma su 1 dispositivo',
       feature1Description:
@@ -1557,6 +1555,8 @@ export const it = {
     'Indirizzo QBTC (destinatario della richiesta)',
   qbtc_claim_cosign_success:
     "Hai controfirmato la richiesta QBTC. L'altro dispositivo la completerà e la trasmetterà.",
+  qbtc_onboarding_key_warning:
+    'L&#39;attivazione di QBTC crea una nuova chiave quantistica e un nuovo indirizzo QBTC. Se questo vault conteneva già una chiave quantistica su un altro dispositivo o importata, i fondi QBTC precedentemente creati potrebbero non essere accessibili dal nuovo indirizzo. Eseguire un backup di questo vault dopo la generazione.',
   qbtc_gov: {
     status: {
       passed: 'Superato',
@@ -1635,4 +1635,11 @@ export const it = {
   broadcast_error: 'La rete ha rifiutato questa transazione',
   broadcast_error_description:
     'I tuoi dispositivi hanno firmato la transazione, ma la rete l&#39;ha rifiutata. Esamina il motivo registrato sulla blockchain riportato di seguito, quindi firma nuovamente per riprovare.',
+  solana_unstake: 'Sbloccare',
+  solana_withdraw: 'Ritirare',
+  solana_staking_stake_account: 'Conto di staking',
+  solana_staking_unstake_notice:
+    'La disattivazione avvia un periodo di raffreddamento: la tua quota rimarrà bloccata per circa {{days}} giorni prima che tu possa prelevare.',
+  solana_staking_withdrawable_amount: 'Importo prelevabile',
+  solana_staking_withdraw_ready_notice: 'Raffreddato e pronto per il ritiro.',
 }

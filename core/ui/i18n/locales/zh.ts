@@ -642,7 +642,7 @@ export const zh = {
   qbtc_claim_failed_to_load: '无法加载可认领的UTXO。',
   qbtc_claim_proving: '正在生成证明……',
   qbtc_claim_proving_hint: '这可能需要几分钟时间。',
-  qbtc_claim_broadcasting: '正在广播申领……',
+  qbtc_claim_broadcasting: '正在 Broadcasting 申领……',
   qbtc_claim_success_title: '申领成功',
   qbtc_claim_utxos_claimed: 'UTXO 已申领',
   qbtc_claim_utxos_skipped: 'UTXO 跳过',
@@ -903,7 +903,7 @@ export const zh = {
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: '带宽和能量',
   tron_bandwidth_description:
-    'TRON 上的每笔交易都需要带宽点数，包括标准代币转账和智能合约交互。每个 TRON 用户每天可获得 600 个免费带宽点数，大约可覆盖两笔基本转账。此外，您还可以通过质押 TRX 赚取额外的带宽点数，从而增加每日额度以支持更多交易。如果您拥有足够的带宽点数，即可发送代币、质押 TRX 或与智能合约交互，而无需支付 TRX 作为 Gas 费用。',
+    'TRON 上的每笔交易都需要 Bandwidth Points，包括标准代币转账和智能合约交互。每个 TRON 用户每天可获得 600 个免费 Bandwidth Points，大约可覆盖两笔基本转账。此外，您还可以通过质押 TRX 赚取额外的 Bandwidth Points，从而增加每日额度以支持更多交易。如果您拥有足够的 Bandwidth Points，即可发送代币、质押 TRX 或与智能合约交互，而无需支付 TRX 作为 Gas 费用。',
   tron_energy_description:
     '降低智能合约成本。如果能量不足，则由 TRX 支付费用。绿色仪表显示来自质押 TRX 的每日能量。质押的 TRX 越多，能量越多。每 24 小时补充一次。失败的交易会消耗更多能量且不予退还。',
   try_again: '重试',
@@ -1009,7 +1009,6 @@ export const zh = {
     '标题长度不得超过50个字符。',
   vault_settings_address_book_title_min_length_error:
     '标题长度必须至少为 1 个字符。',
-  vault_share_banner: '此二维码可用于分享您的保险库的只读版本。',
   vault_type_does_not_match: '保险库类型不匹配',
   vault_value: '金库价值',
   vaults: '金库',
@@ -1431,6 +1430,8 @@ export const zh = {
   qbtc_claim_cosign_qbtc_address: 'QBTC 地址（申领接收方）',
   qbtc_claim_cosign_success:
     '您已共同签署 QBTC 申领。另一台设备将完成并广播该申领。',
+  qbtc_onboarding_key_warning:
+    '启用 QBTC 会创建一个新的量子密钥和 QBTC 地址。如果此金库在其他设备或导入过程中已存在量子密钥，则可能无法从新地址访问之前的 QBTC 资金。生成后请备份此金库。',
   qbtc_gov: {
     status: {
       passed: '通过',
@@ -1503,4 +1504,11 @@ export const zh = {
   broadcast_error: '网络拒绝了这笔交易',
   broadcast_error_description:
     '您的设备已签署交易，但网络拒绝了该交易。请查看下方链上原因，然后重新签署以重试。',
+  solana_unstake: '取消抵押',
+  solana_withdraw: '提取',
+  solana_staking_stake_account: '权益账户',
+  solana_staking_unstake_notice:
+    '停用后会开始冷却期——您的质押将被锁定约{{days}}天，之后您才能提取。',
+  solana_staking_withdrawable_amount: '可提取金额',
+  solana_staking_withdraw_ready_notice: '冷静下来，准备撤退。',
 }
