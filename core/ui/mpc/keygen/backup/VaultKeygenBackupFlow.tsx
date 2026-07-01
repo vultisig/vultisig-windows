@@ -37,5 +37,5 @@ export const VaultKeygenBackupFlow = ({
     )
   }
 
-  return <BackupSecureVault onFinish={onFinish} />
+  return <BackupSecureVault />
 }
