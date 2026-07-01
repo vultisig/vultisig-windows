@@ -1,6 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
@@ -32,6 +33,7 @@ const AddressPill = styled(HStack)`
 export const VaultChainOverview = () => {
   const chain = useCurrentVaultChain()
   const address = useCurrentVaultAddress(chain)
+  const currentVaultId = useAssertCurrentVaultId()
   const totalBalanceQuery = useVaultChainTotalBalanceQuery(chain)
   const { t } = useTranslation()
 
@@ -58,7 +60,7 @@ export const VaultChainOverview = () => {
                   <BalanceVisibilityAware>
                     <AnimatedFiatAmount
                       value={value}
-                      cacheKey={`chain-total-${chain}`}
+                      cacheKey={`chain-total-${currentVaultId}-${chain}`}
                     />
                   </BalanceVisibilityAware>
                 </Text>

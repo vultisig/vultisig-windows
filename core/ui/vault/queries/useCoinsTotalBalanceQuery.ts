@@ -56,9 +56,10 @@ export const useCoinsTotalBalanceQuery = (
   )
 
   // An empty coin set is a settled zero, not a loading state — resolve it to 0 so
-  // callers read a number instead of undefined.
+  // callers read a number instead of undefined, and never flag it as updating.
   const isSettledZero = coins.length === 0
-  const isUpdating = pricesQuery.isPending || balancesQuery.isPending
+  const isUpdating =
+    !isSettledZero && (pricesQuery.isPending || balancesQuery.isPending)
 
   return {
     data: resolvedCount > 0 || isSettledZero ? total : undefined,
