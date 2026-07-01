@@ -1,7 +1,7 @@
 import { ThemeColors } from './ThemeColors'
 import { ThemeName } from './ThemeName'
 
-const iconStyles = ['vultisig', 'station'] as const
+export const iconStyles = ['vultisig', 'station'] as const
 export type IconStyle = (typeof iconStyles)[number]
 
 export type Theme = {

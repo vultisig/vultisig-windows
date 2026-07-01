@@ -2,11 +2,12 @@ import { HSLA } from '@lib/ui/colors/HSLA'
 import { DefaultTheme } from 'styled-components'
 
 import { sharedColors } from './shared'
+import { iconStyles } from './Theme'
 
 export const darkTheme: DefaultTheme = {
   name: 'dark',
   fontFamily: "'Brockmann', sans-serif",
-  iconStyle: 'vultisig',
+  iconStyle: iconStyles[0],
   colors: {
     ...sharedColors,
 

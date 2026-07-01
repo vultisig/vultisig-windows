@@ -2,11 +2,12 @@ import { HSLA } from '@lib/ui/colors/HSLA'
 import { DefaultTheme } from 'styled-components'
 
 import { sharedColors } from './shared'
+import { iconStyles } from './Theme'
 
 export const stationTheme: DefaultTheme = {
   name: 'dark',
   fontFamily: "'Montserrat', 'Brockmann', sans-serif",
-  iconStyle: 'station',
+  iconStyle: iconStyles[1],
   colors: {
     ...sharedColors,
 
