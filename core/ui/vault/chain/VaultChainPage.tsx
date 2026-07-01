@@ -11,10 +11,10 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar, PageContent } from '@lib/ui/page/PageContent'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import styled from 'styled-components'
 
 import { useCurrentVaultAddress } from '../state/currentVaultCoins'
+import { getVaultChainAddressExplorerUrl } from './getVaultChainAddressExplorerUrl'
 import { RefreshVaultChainBalance } from './RefreshVaultChainBalance'
 import { VaultChainTabs } from './tabs/VaultChainTabs'
 import { TronResourcesSection } from './tron/TronResourcesSection'
@@ -26,10 +26,9 @@ export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
   const address = useCurrentVaultAddress(chain)
 
-  const blockExplorerUrl = getBlockExplorerUrl({
+  const blockExplorerUrl = getVaultChainAddressExplorerUrl({
+    address,
     chain,
-    entity: 'address',
-    value: address,
   })
 
   return (
