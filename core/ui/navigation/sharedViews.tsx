@@ -5,6 +5,7 @@ import { AgentChatPage } from '@core/ui/agent/components/AgentChatPage'
 import { AgentPage } from '@core/ui/agent/components/AgentPage'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
+import { TonStakePage } from '@core/ui/chain/ton/staking/TonStakePage'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
@@ -61,7 +62,6 @@ import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvi
 import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
-import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
@@ -83,6 +83,7 @@ export type SharedViewId = Extract<
   | 'languageSettings'
   | 'manageDefiChains'
   | 'manageDefiPositions'
+  | 'tonStake'
   | 'lpPositionForm'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
@@ -117,7 +118,6 @@ export type SharedViewId = Extract<
   | 'transactionDetail'
   | 'transactionHistory'
   | 'faq'
-  | 'shareVault'
   | 'vultDiscount'
   | 'qbtcClaim'
   | 'qbtcQuantumSecurityOnboarding'
@@ -156,6 +156,7 @@ export const sharedViews: Views<SharedViewId> = {
   languageSettings: LanguagePage,
   manageDefiChains: ManageDefiChainsPage,
   manageDefiPositions: ManageDefiPositionsPage,
+  tonStake: TonStakePage,
   lpPositionForm: LpPositionFormPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
@@ -196,7 +197,6 @@ export const sharedViews: Views<SharedViewId> = {
   transactionDetail: TransactionDetailPage,
   transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
-  shareVault: ShareVaultPage,
   vultDiscount:
     currentProductBrand === 'station' ? VaultPage : VultDiscountPage,
   qbtcClaim: QbtcClaimPage,

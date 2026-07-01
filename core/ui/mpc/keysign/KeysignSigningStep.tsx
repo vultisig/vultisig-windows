@@ -32,6 +32,7 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { BroadcastError } from './broadcastKeysignTx'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
 type KeysignSigningStepProps = Partial<OnBackProp> & { toAddressLabel?: string }
@@ -195,6 +196,20 @@ export const KeysignSigningStep = ({
               variant="warning"
               title={t('fast_vault_session_conflict')}
               description={t('fast_vault_session_conflict_description')}
+            />
+          )
+        }
+
+        // Signing succeeded but the network rejected the broadcast — headline it
+        // as an on-chain failure, not a device/connection timeout. The raw RPC
+        // reason stays available under "Show exact error".
+        if (error instanceof BroadcastError) {
+          return (
+            <FullPageFlowErrorState
+              variant="error"
+              error={error}
+              title={t('broadcast_error')}
+              description={t('broadcast_error_description')}
             />
           )
         }

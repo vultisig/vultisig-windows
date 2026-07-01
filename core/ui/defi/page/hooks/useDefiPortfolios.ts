@@ -1,9 +1,11 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { cosmosStakedFiat } from '@core/ui/chain/cosmos/staking/cosmosStakedFiat'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
+import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { sunToTrx } from '@vultisig/core-chain/chains/tron/resources'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
@@ -30,6 +32,7 @@ export const useDefiChainPortfolios = () => {
   const enabledChains = useDefiChains()
   const thorchainSelectedPositions = useDefiPositions(Chain.THORChain)
   const mayaSelectedPositions = useDefiPositions(Chain.MayaChain)
+  const tonSelectedPositions = useDefiPositions(Chain.Ton)
   const thorchainQuery = useThorchainDefiPositionsQuery()
   const mayaQuery = useMayaDefiPositionsQuery({
     enabled: enabledChains.includes(Chain.MayaChain),
@@ -69,6 +72,16 @@ export const useDefiChainPortfolios = () => {
   })
   const qbtcPricesQuery = useCoinPricesQuery({
     coins: [{ ...chainFeeCoin[Chain.QBTC], chain: Chain.QBTC }],
+  })
+
+  // TON nominator-pool staking. The aggregated position (active + pending
+  // deposit) is read live from tonapi; its TON value × spot price rolls into
+  // the DeFi total. Opt-in like the other chains: the rollup below is gated on
+  // `tonSelectedPositions` so a disabled position contributes nothing.
+  const tonAddress = useCurrentVaultAddress(Chain.Ton)
+  const tonStakePositionQuery = useTonStakePositionQuery(tonAddress)
+  const tonPricesQuery = useCoinPricesQuery({
+    coins: [{ ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }],
   })
 
   const data = useMemo<DefiChainPortfolio[]>(() => {
@@ -180,6 +193,31 @@ export const useDefiChainPortfolios = () => {
       })
     }
 
+    if (enabledChains.includes(Chain.Ton)) {
+      // Respect the position opt-in: a disabled `ton-stake-ton` hides the
+      // balance and count, matching the "No positions selected" empty state.
+      const isSelected = tonSelectedPositions.length > 0
+      const position = isSelected ? tonStakePositionQuery.data : undefined
+      const price = tonPricesQuery.data?.[coinKeyToString({ chain: Chain.Ton })]
+      const stakedUi = position
+        ? Number(
+            fromChainAmount(
+              position.stakedAmount,
+              chainFeeCoin[Chain.Ton].decimals
+            )
+          )
+        : 0
+
+      portfolios.push({
+        chain: Chain.Ton,
+        totalFiat: price !== undefined ? stakedUi * price : 0,
+        positionsWithBalanceCount: position ? 1 : 0,
+        isLoading:
+          isSelected &&
+          (tonStakePositionQuery.isPending || tonPricesQuery.isPending),
+      })
+    }
+
     return portfolios
   }, [
     enabledChains,
@@ -205,6 +243,11 @@ export const useDefiChainPortfolios = () => {
     qbtcDelegationsQuery.isPending,
     qbtcPricesQuery.data,
     qbtcPricesQuery.isPending,
+    tonSelectedPositions,
+    tonStakePositionQuery.data,
+    tonStakePositionQuery.isPending,
+    tonPricesQuery.data,
+    tonPricesQuery.isPending,
   ])
 
   const isPending =
@@ -218,7 +261,10 @@ export const useDefiChainPortfolios = () => {
       (terraClassicDelegationsQuery.isPending ||
         terraClassicPricesQuery.isPending)) ||
     (enabledChains.includes(Chain.QBTC) &&
-      (qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending))
+      (qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending)) ||
+    (enabledChains.includes(Chain.Ton) &&
+      tonSelectedPositions.length > 0 &&
+      (tonStakePositionQuery.isPending || tonPricesQuery.isPending))
 
   const isTronEnabled = enabledChains.includes(Chain.Tron)
 
@@ -237,36 +283,40 @@ export const useDefiChainPortfolios = () => {
   }
 }
 
+/**
+ * DeFi portfolio total, resolved progressively. `data` sums the chains (and the
+ * Circle USDC balance) that have already landed, so the header shows a running
+ * total instead of blocking on the slowest chain. `isUpdating` stays true while
+ * any chain or the Circle balance is still pending so the UI can render an
+ * "updating" affordance alongside the partial number.
+ */
 export const useDefiPortfolioBalance = () => {
   const portfolios = useDefiChainPortfolios()
   const isCircleIncluded = useIsCircleIncluded()
   const circleFiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
 
-  const total = useMemo(() => {
-    if (portfolios.isPending || circleFiatBalanceQuery.isPending) {
-      return undefined
-    }
+  const resolvedChains = portfolios.data.filter(
+    portfolio => !portfolio.isLoading
+  )
+  const chainTotal = sum(resolvedChains.map(portfolio => portfolio.totalFiat))
 
-    const chainTotal = sum(
-      portfolios.data.map(portfolio => portfolio.totalFiat)
-    )
+  const isCirclePending = isCircleIncluded && circleFiatBalanceQuery.isPending
+  // Count Circle only on success — a failed query is no longer pending but its
+  // data is undefined, so treating "not pending" as resolved would silently
+  // mask the failure as a zero contribution.
+  const isCircleResolved =
+    isCircleIncluded && circleFiatBalanceQuery.data !== undefined
+  const circleTotal = isCircleResolved ? (circleFiatBalanceQuery.data ?? 0) : 0
 
-    const circleTotal = isCircleIncluded
-      ? (circleFiatBalanceQuery.data ?? 0)
-      : 0
-
-    return chainTotal + circleTotal
-  }, [
-    portfolios.data,
-    portfolios.isPending,
-    circleFiatBalanceQuery.data,
-    circleFiatBalanceQuery.isPending,
-    isCircleIncluded,
-  ])
+  const resolvedCount = resolvedChains.length + (isCircleResolved ? 1 : 0)
+  const isUpdating = portfolios.isPending || isCirclePending
 
   return {
-    ...portfolios,
-    data: total,
-    error: portfolios.error,
+    data: resolvedCount > 0 ? chainTotal + circleTotal : undefined,
+    isPending: resolvedCount === 0 && isUpdating,
+    isUpdating,
+    error:
+      portfolios.error ??
+      (isCircleIncluded ? circleFiatBalanceQuery.error : null),
   }
 }

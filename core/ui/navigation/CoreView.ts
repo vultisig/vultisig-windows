@@ -49,7 +49,6 @@ export type CoreView =
     }
   | { id: 'referral' }
   | { id: 'importVault' }
-  | { id: 'shareVault' }
   | {
       id: 'joinKeygen'
       state: {
@@ -129,6 +128,13 @@ export type CoreView =
   | { id: 'defiChainDetail'; state: { chain: Chain; tab?: string } }
   | { id: 'manageDefiChains' }
   | { id: 'manageDefiPositions'; state: { chain: Chain; returnTab?: string } }
+  | {
+      id: 'tonStake'
+      state: {
+        existingPoolAddress?: string
+        existingPoolImplementation?: string
+      }
+    }
   | {
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }

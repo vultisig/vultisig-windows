@@ -9,7 +9,6 @@ export type AppView =
   | { id: 'importVaultFromFile'; state: { filePath: string } }
   | { id: 'migrateVault' }
   | { id: 'onboarding' }
-  | { id: 'shareVault' }
   | { id: 'vaultFolder'; state: { id: string } }
 
 export type AppViewId = AppView['id']

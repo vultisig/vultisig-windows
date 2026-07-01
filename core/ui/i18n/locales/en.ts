@@ -108,6 +108,9 @@ export const en = {
   blockaid_simulation_failed_description:
     'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
   transaction_scanned_by: 'Transaction scanned by {{provider}}',
+  broadcast_error: 'The network rejected this transaction',
+  broadcast_error_description:
+    'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
   broadcasted: 'Broadcasted',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
@@ -982,7 +985,6 @@ export const en = {
   share_app: 'Share The App',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
-  share_vault_qr: 'Share Vault QR',
   shares: 'Shares',
   show_balance: 'Show balance',
   show_exact_error: 'Show exact error',
@@ -1210,6 +1212,13 @@ export const en = {
   undelegate: 'Undelegate',
   redelegate: 'Redelegate',
   claim_rewards: 'Claim Rewards',
+  solana_unstake: 'Unstake',
+  solana_withdraw: 'Withdraw',
+  solana_staking_stake_account: 'Stake account',
+  solana_staking_unstake_notice:
+    'Deactivating begins a cooldown — your stake stays locked for ~{{days}} days before you can withdraw.',
+  solana_staking_withdrawable_amount: 'Withdrawable amount',
+  solana_staking_withdraw_ready_notice: 'Cooled down and ready to withdraw.',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',
@@ -1225,6 +1234,24 @@ export const en = {
   failed_to_load_rewards: 'Failed to load rewards',
   failed_to_load_validators: 'Failed to load validators',
   no_active_delegations: 'No active delegations',
+  ton_nominator_pool: 'Nominator Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Select a Pool',
+  ton_stake_pool_picker_header: 'Pool',
+  ton_stake_min: 'Minimum {{amount}}',
+  ton_stake_below_minimum: 'Amount must be at least {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Insufficient balance for this stake',
+  ton_stake_no_pools: 'No staking pools available',
+  ton_stake_empty_title: 'Earn rewards on your {{ticker}}',
+  ton_stake_empty_description:
+    'Stake {{ticker}} into a nominator pool to earn staking rewards.',
+  ton_stake_chain_not_enabled: 'Enable TON to stake.',
+  ton_stake_unsupported_pool:
+    'This pool implementation is not supported for staking.',
+  ton_unstake_unsupported_pool:
+    'This pool implementation is not supported for unstaking.',
+  ton_withdrawal_pending: 'Withdrawal pending — unlocks {{date}}',
   value: 'Value',
   vault: 'Vault',
   vaultCheckUpdatePage: {
@@ -1274,7 +1301,6 @@ export const en = {
   vault_notifications: 'Vault Notifications',
   vault_part: 'Vault Share',
   vault_password: 'Vault Password',
-  vault_qr_share: 'Share',
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",
   vault_ready_to_use: 'Your vault is ready to use',
@@ -1298,8 +1324,6 @@ export const en = {
     'Title must be at most 50 characters long.',
   vault_settings_address_book_title_min_length_error:
     'Title must be at least 1 character long.',
-  vault_share_banner:
-    'This QR Code lets you share a view-only version of your Vault',
   vault_type_does_not_match: 'Vault type does not match',
   vault_value: 'Vault Value',
   vaults: 'Vaults',

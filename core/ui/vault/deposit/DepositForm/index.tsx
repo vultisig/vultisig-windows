@@ -32,7 +32,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
-import { cosmosStakingActions } from '../ChainAction'
+import { cosmosStakingActions, solanaStakingActions } from '../ChainAction'
 import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
@@ -116,6 +116,10 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     selectedChainAction,
     cosmosStakingActions
   )
+  const isSolanaStakingAction = isOneOf(
+    selectedChainAction,
+    solanaStakingActions
+  )
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
   const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'
@@ -128,11 +132,14 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   // `DepositActionSpecific`. The form shape (amount + pills + validator
   // picker) is the same regardless of where the user came from.
   const shouldUseCosmosStakingRedesign = isCosmosStakingAction
+  // Solana native staking actions always use their bespoke read-only screens.
+  const shouldUseSolanaStakingRedesign = isSolanaStakingAction
   const shouldUseActionForm =
     shouldUseBondRedesign ||
     shouldUseUnbondRedesign ||
     shouldUseStakeRedesign ||
-    shouldUseCosmosStakingRedesign
+    shouldUseCosmosStakingRedesign ||
+    shouldUseSolanaStakingRedesign
 
   // Cosmos staking actions display under "Stake / Unstake / Move / Claim"
   // in the page header, matching Figma — the underlying ChainAction values
@@ -148,13 +155,15 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     undelegate: t('unstake'),
     redelegate: t('move'),
     claim_rewards: t('claim_rewards'),
+    solana_unstake: t('unstake'),
+    solana_withdraw: t('solana_withdraw'),
   }
 
   const getPageTitle = () => {
     // Cosmos staking actions get a typed title regardless of entry point
     // (Wallet's Function picker hits this path too) — falling back to
     // "Deposit" would mislabel a clearly-staking screen.
-    if (isCosmosStakingAction) {
+    if (isCosmosStakingAction || isSolanaStakingAction) {
       const label = defiActionPageTitle[selectedChainAction]
       if (label) return `${label} ${coin.ticker ?? ''}`.trim()
     }
@@ -211,7 +220,8 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                   formValues={formValues}
                 />
               </DepositDataProvider>
-            ) : shouldUseCosmosStakingRedesign ? (
+            ) : shouldUseCosmosStakingRedesign ||
+              shouldUseSolanaStakingRedesign ? (
               <DepositDataProvider value={formValues}>
                 <DepositActionSpecific value={selectedChainAction} />
               </DepositDataProvider>
