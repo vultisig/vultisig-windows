@@ -21,9 +21,9 @@ export const SolanaFinishMoveSpecific = () => {
   const { t } = useTranslation()
   const [{ control }] = useDepositFormHandlers()
   const [coin] = useDepositCoin()
-  const stakeAccount = useWatch({ control, name: 'stakeAccount' }) as
-    | string
-    | undefined
+  const watchedStakeAccount = useWatch({ control, name: 'stakeAccount' })
+  const stakeAccount =
+    typeof watchedStakeAccount === 'string' ? watchedStakeAccount : undefined
 
   return (
     <Layout>
@@ -43,7 +43,7 @@ export const SolanaFinishMoveSpecific = () => {
         render={({ field }) => (
           <SolanaValidatorPickerField
             ticker={coin.ticker}
-            value={field.value as string | undefined}
+            value={typeof field.value === 'string' ? field.value : undefined}
             onChange={field.onChange}
           />
         )}

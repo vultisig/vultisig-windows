@@ -121,7 +121,16 @@ export const SolanaValidatorPickerSheet = ({
                     return (
                       <ValidatorRow
                         key={v.votePubkey}
+                        role="radio"
+                        aria-checked={isSelected}
+                        tabIndex={0}
                         onClick={() => setPicked(v.votePubkey)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            setPicked(v.votePubkey)
+                          }
+                        }}
                         $selected={isSelected}
                       >
                         <SolanaValidatorAvatar

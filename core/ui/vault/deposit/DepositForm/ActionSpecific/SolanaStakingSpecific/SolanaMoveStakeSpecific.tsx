@@ -19,9 +19,9 @@ import { SolanaStakingInfoCard } from './SolanaStakingInfoCard'
 export const SolanaMoveStakeSpecific = () => {
   const { t } = useTranslation()
   const [{ control }] = useDepositFormHandlers()
-  const stakeAccount = useWatch({ control, name: 'stakeAccount' }) as
-    | string
-    | undefined
+  const watchedStakeAccount = useWatch({ control, name: 'stakeAccount' })
+  const stakeAccount =
+    typeof watchedStakeAccount === 'string' ? watchedStakeAccount : undefined
 
   return (
     <SolanaStakingInfoCard
