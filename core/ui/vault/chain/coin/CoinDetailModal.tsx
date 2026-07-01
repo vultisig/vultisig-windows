@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCore } from '@core/ui/state/core'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -102,7 +103,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
             </Text>
             <NetworkBadge>
               <Text size={13} color="shyExtra">
-                {formatFiatAmount(coin.price || 0)}
+                <FiatAmountText value={coin.price || 0} />
               </Text>
             </NetworkBadge>
           </InfoRow>

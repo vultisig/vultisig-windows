@@ -17,6 +17,8 @@ import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { MintSpecific } from './MintUnmintSpecific/MintSpecific/MintSpecific'
 import { RedeemSpecific } from './MintUnmintSpecific/RedeemSpecific/RedeemSpecific'
+import { SolanaUnstakeSpecific } from './SolanaStakingSpecific/SolanaUnstakeSpecific'
+import { SolanaWithdrawSpecific } from './SolanaStakingSpecific/SolanaWithdrawSpecific'
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { SwitchSpecific } from './SwitchSpecific'
@@ -62,6 +64,8 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
         undelegate: () => <UndelegateSpecific />,
         redelegate: () => <RedelegateSpecific />,
         claim_rewards: () => <ClaimRewardsSpecific />,
+        solana_unstake: () => <SolanaUnstakeSpecific />,
+        solana_withdraw: () => <SolanaWithdrawSpecific />,
       }}
       else={() => null}
     />

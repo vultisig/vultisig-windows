@@ -977,7 +977,7 @@ export const es = {
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Ancho de banda y energía',
   tron_bandwidth_description:
-    'Los puntos de ancho de banda son necesarios para cada transacción en TRON, incluyendo tanto los envíos estándar de tokens como las interacciones con contratos inteligentes. Cada usuario de TRON recibe 600 puntos de ancho de banda gratuitos al día, que pueden cubrir aproximadamente dos envíos básicos. Además, puedes obtener puntos de ancho de banda adicionales haciendo staking de TRX, aumentando tu saldo diario para admitir más transacciones. Si tienes suficientes puntos de ancho de banda, puedes enviar tokens, hacer staking de TRX o interactuar con contratos inteligentes sin pagar TRX en comisiones de gas.',
+    'Los Bandwidth Points son necesarios para cada transacción en TRON, incluyendo tanto los envíos estándar de tokens como las interacciones con contratos inteligentes. Cada usuario de TRON recibe 600 Bandwidth Points gratuitos al día, que pueden cubrir aproximadamente dos envíos básicos. Además, puedes obtener Bandwidth Points adicionales haciendo staking de TRX, aumentando tu saldo diario para admitir más transacciones. Si tienes suficientes Bandwidth Points, puedes enviar tokens, hacer staking de TRX o interactuar con contratos inteligentes sin pagar TRX en comisiones de gas.',
   tron_energy_description:
     'Reduce los costes de los contratos inteligentes. Si es insuficiente, TRX cubre la comisión. El medidor verde muestra la energía diaria del TRX en staking. Cuanto más TRX en staking, más energía. Se recarga cada 24 h. Las transacciones fallidas consumen más energía y no se reembolsan.',
   try_again: 'Intentar otra vez',
@@ -1071,7 +1071,7 @@ export const es = {
     'El nombre de la bóveda debe tener menos de 50 caracteres',
   vault_name_required: 'El nombre de la bóveda es obligatorio',
   vault_notifications: 'Notificaciones de la bóveda',
-  vault_part: 'Parte de la bóveda',
+  vault_part: 'Vault Share',
   vault_password: 'Contraseña de la bóveda',
   vault_ready_description:
     '¡Todo listo! Mantienes el control de cada transacción.',
@@ -1097,8 +1097,6 @@ export const es = {
     'El título debe tener como máximo 50 caracteres.',
   vault_settings_address_book_title_min_length_error:
     'El título debe tener al menos 1 carácter.',
-  vault_share_banner:
-    'Este código QR le permite compartir una versión de solo lectura de su bóveda',
   vault_type_does_not_match: 'El tipo de bóveda no coincide',
   vault_value: 'Valor de la bóveda',
   vaults: 'bóvedas',
@@ -1549,6 +1547,8 @@ export const es = {
     'Dirección QBTC (destinatario de la reclamación)',
   qbtc_claim_cosign_success:
     'Has firmado conjuntamente la reclamación QBTC. El otro dispositivo la finalizará y la transmitirá.',
+  qbtc_onboarding_key_warning:
+    'Al habilitar QBTC, se crea una nueva clave cuántica y una dirección QBTC. Si esta bóveda ya tenía una clave cuántica en otro dispositivo o importación, es posible que los fondos QBTC anteriores no sean accesibles desde la nueva dirección. Realice una copia de seguridad de esta bóveda después de su generación.',
   qbtc_gov: {
     status: {
       passed: 'Aprobado',
@@ -1627,4 +1627,12 @@ export const es = {
   broadcast_error: 'La red rechazó esta transacción.',
   broadcast_error_description:
     'Tus dispositivos firmaron la transacción, pero la red la rechazó. Revisa el motivo en la cadena de bloques a continuación y vuelve a firmar para intentarlo de nuevo.',
+  solana_unstake: 'Deshacer la apuesta',
+  solana_withdraw: 'Retirar',
+  solana_staking_stake_account: 'Cuenta de participación',
+  solana_staking_unstake_notice:
+    'La desactivación inicia un período de espera: su participación permanece bloqueada durante ~ {{days}} días antes de que pueda retirarla.',
+  solana_staking_withdrawable_amount: 'Cantidad retirable',
+  solana_staking_withdraw_ready_notice:
+    'Ya se ha enfriado y está listo para retirarse.',
 }

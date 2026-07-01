@@ -781,6 +781,8 @@ export const en = {
   qbtc_onboarding_title: 'New quantum security',
   qbtc_onboarding_subtitle:
     'Classical keys can be broken by quantum computers. Enabling QBTC requires generating a new key pair.',
+  qbtc_onboarding_key_warning:
+    'Enabling QBTC creates a new quantum key and QBTC address. If this vault already had a quantum key on another device or import, earlier QBTC funds may not be accessible from the new address. Back up this vault after generation.',
   qbtc_onboarding_feature_generate_title: 'Generate your quantum key pair',
   qbtc_onboarding_feature_generate_description:
     '{{productName}} runs a local MPC ceremony across your vault devices to produce a new key pair.',
@@ -1210,6 +1212,13 @@ export const en = {
   undelegate: 'Undelegate',
   redelegate: 'Redelegate',
   claim_rewards: 'Claim Rewards',
+  solana_unstake: 'Unstake',
+  solana_withdraw: 'Withdraw',
+  solana_staking_stake_account: 'Stake account',
+  solana_staking_unstake_notice:
+    'Deactivating begins a cooldown — your stake stays locked for ~{{days}} days before you can withdraw.',
+  solana_staking_withdrawable_amount: 'Withdrawable amount',
+  solana_staking_withdraw_ready_notice: 'Cooled down and ready to withdraw.',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',
@@ -1315,8 +1324,6 @@ export const en = {
     'Title must be at most 50 characters long.',
   vault_settings_address_book_title_min_length_error:
     'Title must be at least 1 character long.',
-  vault_share_banner:
-    'This QR Code lets you share a view-only version of your Vault',
   vault_type_does_not_match: 'Vault type does not match',
   vault_value: 'Vault Value',
   vaults: 'Vaults',

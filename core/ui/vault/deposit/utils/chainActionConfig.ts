@@ -47,6 +47,8 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   undelegate: { showBalance: false, showTicker: true },
   redelegate: { showBalance: false, showTicker: true },
   claim_rewards: { showBalance: false, showTicker: false },
+  solana_unstake: { showBalance: false, showTicker: true },
+  solana_withdraw: { showBalance: false, showTicker: true },
 }
 
 type GetBalanceDisplayConfigInput = {

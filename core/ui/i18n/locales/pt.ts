@@ -975,7 +975,7 @@ export const pt = {
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Largura de banda e energia',
   tron_bandwidth_description:
-    'Os pontos de largura de banda são necessários para cada transação na TRON, incluindo tanto os envios padrão de tokens quanto as interações com contratos inteligentes. Cada usuário da TRON recebe 600 pontos de largura de banda gratuitos por dia, o que cobre aproximadamente dois envios básicos. Além disso, você pode ganhar pontos de largura de banda extras fazendo staking de TRX, aumentando seu saldo diário para suportar mais transações. Se tiver pontos de largura de banda suficientes, você pode enviar tokens, fazer staking de TRX ou interagir com contratos inteligentes sem pagar TRX em taxas de gás.',
+    'Os Bandwidth Points são necessários para cada transação na TRON, incluindo tanto os envios padrão de tokens quanto as interações com contratos inteligentes. Cada usuário da TRON recebe 600 Bandwidth Points gratuitos por dia, o que cobre aproximadamente dois envios básicos. Além disso, você pode ganhar Bandwidth Points extras fazendo staking de TRX, aumentando seu saldo diário para suportar mais transações. Se tiver Bandwidth Points suficientes, você pode enviar tokens, fazer staking de TRX ou interagir com contratos inteligentes sem pagar TRX em taxas de gás.',
   tron_energy_description:
     'Reduz os custos de contratos inteligentes. Se for insuficiente, o TRX cobre a taxa. O medidor verde mostra a energia diária do TRX em staking. Mais TRX em staking significa mais energia. Recarrega a cada 24 h. Transações com falha consomem mais energia e não são reembolsadas.',
   try_again: 'Tente novamente',
@@ -1098,8 +1098,6 @@ export const pt = {
     'O título deve ter no máximo 50 caracteres.',
   vault_settings_address_book_title_min_length_error:
     'O título deve ter pelo menos 1 caractere.',
-  vault_share_banner:
-    'Este código QR permite que você compartilhe uma versão somente leitura do seu cofre.',
   vault_type_does_not_match: 'O tipo de cofre não corresponde.',
   vault_value: 'Valor do cofre',
   vaults: 'Cofres',
@@ -1554,6 +1552,8 @@ export const pt = {
   qbtc_claim_cosign_qbtc_address: 'Endereço QBTC (destinatário da solicitação)',
   qbtc_claim_cosign_success:
     'Você coassinou a reivindicação QBTC. O outro dispositivo irá concluí-la e transmiti-la.',
+  qbtc_onboarding_key_warning:
+    'Habilitar QBTC cria uma nova chave quântica e um endereço QBTC. Se este cofre já possuía uma chave quântica em outro dispositivo ou importação, os fundos QBTC anteriores podem não estar acessíveis a partir do novo endereço. Faça backup deste cofre após a geração.',
   qbtc_gov: {
     status: {
       passed: 'Aprovado',
@@ -1631,4 +1631,11 @@ export const pt = {
   broadcast_error: 'A rede rejeitou esta transação.',
   broadcast_error_description:
     'Seus dispositivos assinaram a transação, mas a rede a rejeitou. Confira o motivo na blockchain abaixo e tente novamente.',
+  solana_unstake: 'Desvincule',
+  solana_withdraw: 'Retirar',
+  solana_staking_stake_account: 'Conta de participação',
+  solana_staking_unstake_notice:
+    'A desativação inicia um período de espera — seu token permanece bloqueado por aproximadamente {{days}} dias antes que você possa sacar.',
+  solana_staking_withdrawable_amount: 'Valor que pode ser levantado',
+  solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
 }

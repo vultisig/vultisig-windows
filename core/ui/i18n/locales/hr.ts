@@ -967,7 +967,7 @@ export const hr = {
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Propusnost i energija',
   tron_bandwidth_description:
-    'Bodovi propusnosti potrebni su za svaku transakciju na TRON-u, uključujući i standardna slanja tokena i interakcije s pametnim ugovorima. Svaki korisnik TRON-a dnevno dobiva 600 besplatnih bodova propusnosti, što može pokriti otprilike dva osnovna slanja. Osim toga, dodatne bodove propusnosti možete zaraditi stakanjem TRX-a, čime povećavate svoju dnevnu zalihu kako biste podržali više transakcija. Ako imate dovoljno bodova propusnosti, možete slati tokene, stakati TRX ili komunicirati s pametnim ugovorima bez plaćanja TRX-a za naknade za plin.',
+    'Bandwidth Points potrebni su za svaku transakciju na TRON-u, uključujući i standardna slanja tokena i interakcije s pametnim ugovorima. Svaki korisnik TRON-a dnevno dobiva 600 besplatnih Bandwidth Points, što može pokriti otprilike dva osnovna slanja. Osim toga, dodatne Bandwidth Points možete zaraditi stakanjem TRX-a, čime povećavate svoju dnevnu zalihu kako biste podržali više transakcija. Ako imate dovoljno Bandwidth Points, možete slati tokene, stakati TRX ili komunicirati s pametnim ugovorima bez plaćanja TRX-a za naknade za plin.',
   tron_energy_description:
     'Smanjuje troškove pametnih ugovora. Ako je nedovoljna, TRX pokriva naknadu. Zeleni mjerač prikazuje dnevnu energiju iz stakanog TRX-a. Više stakanog TRX-a znači više energije. Obnavlja se svaka 24 sata. Neuspjele transakcije troše više energije i ne vraćaju se.',
   try_again: 'Pokušaj ponovno',
@@ -1085,8 +1085,6 @@ export const hr = {
     'Naslov mora imati najviše 50 znakova.',
   vault_settings_address_book_title_min_length_error:
     'Naslov mora biti dug barem 1 znak.',
-  vault_share_banner:
-    'Ovaj QR kod vam omogućuje dijeljenje verzije vašeg trezora samo za pregled',
   vault_type_does_not_match: 'Vrsta trezora se ne podudara',
   vault_value: 'Vrijednost trezora',
   vaults: 'Trezori',
@@ -1528,6 +1526,8 @@ export const hr = {
     'Prilagodite svoje swapove prilagođenim proklizavanjem, ograničenjem plina i vanjskom adresom primatelja.',
   signing_error_description:
     'Jedan od vaših uređaja nije odgovorio na vrijeme. Provjerite vezu i pokušajte ponovno.',
+  qbtc_onboarding_key_warning:
+    'Omogućavanjem QBTC stvara se novi kvantni ključ i adresa QBTC. Ako ovaj trezor već ima kvantni ključ na drugom uređaju ili uvozu, ranija sredstva QBTC možda neće biti dostupna s nove adrese. Napravite sigurnosnu kopiju ovog trezora nakon generiranja.',
   qbtc_gov: {
     status: {
       passed: 'Prošao',
@@ -1591,7 +1591,7 @@ export const hr = {
   ton_stake_min: 'Minimalno {{amount}}',
   ton_stake_below_minimum: 'Iznos mora biti najmanje {{amount}} {{ticker}}',
   ton_stake_insufficient_balance: 'Nedovoljan saldo za ovaj ulog',
-  ton_stake_no_pools: 'Nema dostupnih staking poola',
+  ton_stake_no_pools: 'Nema dostupnih staking pool-ova',
   ton_stake_empty_title: 'Zaradite nagrade na svom {{ticker}}',
   ton_stake_empty_description:
     'Uložite {{ticker}} u nominator pool kako biste zaradili nagrade za ulaganje.',
@@ -1605,4 +1605,11 @@ export const hr = {
   broadcast_error: 'Mreža je odbila ovu transakciju',
   broadcast_error_description:
     'Vaši su uređaji potpisali transakciju, ali ju je mreža odbila. Pregledajte razlog na lancu u nastavku, a zatim se ponovno prijavite za ponovni pokušaj.',
+  solana_unstake: 'Ukloni klađenje',
+  solana_withdraw: 'Povući',
+  solana_staking_stake_account: 'Ulog računa',
+  solana_staking_unstake_notice:
+    'Deaktiviranjem započinje hlađenje — vaš ulog ostaje zaključan ~ {{days}} dana prije nego što možete isplatiti novac.',
+  solana_staking_withdrawable_amount: 'Iznos za isplatu',
+  solana_staking_withdraw_ready_notice: 'Ohlađeno i spremno za povlačenje.',
 }

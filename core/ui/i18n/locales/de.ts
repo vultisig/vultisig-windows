@@ -984,7 +984,7 @@ export const de = {
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Bandbreite & Energie',
   tron_bandwidth_description:
-    'Bandbreitenpunkte werden für jede Transaktion auf TRON benötigt, sowohl für standardmäßige Token-Sendungen als auch für Interaktionen mit Smart Contracts. Jeder TRON-Nutzer erhält täglich 600 kostenlose Bandbreitenpunkte, die ungefähr zwei einfache Sendungen abdecken. Zusätzlich können Sie weitere Bandbreitenpunkte durch das Staking von TRX verdienen und so Ihr tägliches Guthaben erhöhen, um mehr Transaktionen zu unterstützen. Wenn Sie genügend Bandbreitenpunkte haben, können Sie Token senden, TRX staken oder mit Smart Contracts interagieren, ohne TRX als Gas-Gebühren zu zahlen.',
+    'Bandwidth Points werden für jede Transaktion auf TRON benötigt, sowohl für standardmäßige Token-Sendungen als auch für Interaktionen mit Smart Contracts. Jeder TRON-Nutzer erhält täglich 600 kostenlose Bandwidth Points, die ungefähr zwei einfache Sendungen abdecken. Zusätzlich können Sie weitere Bandwidth Points durch das Staking von TRX verdienen und so Ihr tägliches Guthaben erhöhen, um mehr Transaktionen zu unterstützen. Wenn Sie genügend Bandwidth Points haben, können Sie Token senden, TRX staken oder mit Smart Contracts interagieren, ohne TRX als Gas-Gebühren zu zahlen.',
   tron_energy_description:
     'Reduziert die Kosten von Smart Contracts. Bei unzureichender Energie deckt TRX die Gebühr. Die grüne Anzeige zeigt die tägliche Energie aus gestaktem TRX. Mehr gestaktes TRX bedeutet mehr Energie. Wird alle 24 Stunden aufgefüllt. Fehlgeschlagene Transaktionen verbrauchen mehr Energie und werden nicht erstattet.',
   try_again: 'Versuchen Sie es erneut',
@@ -1080,7 +1080,7 @@ export const de = {
     'Der Tresorname darf maximal 50 Zeichen lang sein.',
   vault_name_required: 'Der Tresorname ist erforderlich.',
   vault_notifications: 'Tresorbenachrichtigungen',
-  vault_part: 'Tresoranteil',
+  vault_part: 'Vault Share',
   vault_password: 'Tresorpasswort',
   vault_ready_description:
     'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',
@@ -1106,8 +1106,6 @@ export const de = {
     'Der Titel darf höchstens 50 Zeichen lang sein.',
   vault_settings_address_book_title_min_length_error:
     'Der Titel muss mindestens ein Zeichen lang sein.',
-  vault_share_banner:
-    'Mit diesem QR-Code können Sie eine Ansichtsversion Ihres Tresors freigeben.',
   vault_type_does_not_match: 'Der Tresortyp stimmt nicht überein.',
   vault_value: 'Tresorwert',
   vaults: 'Tresore',
@@ -1564,6 +1562,8 @@ export const de = {
   qbtc_claim_cosign_qbtc_address: 'QBTC-Adresse (Claim-Empfänger)',
   qbtc_claim_cosign_success:
     'Sie haben den QBTC-Claim mitunterzeichnet. Das andere Gerät schließt ihn ab und broadcastet ihn.',
+  qbtc_onboarding_key_warning:
+    'Durch Aktivieren von QBTC wird ein neuer Quantenschlüssel und eine neue Adresse QBTC erstellt. Falls dieser Tresor bereits einen Quantenschlüssel auf einem anderen Gerät oder durch einen Import besitzt, sind zuvor gespeicherte Guthaben unter QBTC möglicherweise nicht über die neue Adresse zugänglich. Sichern Sie diesen Tresor nach der Generierung.',
   qbtc_gov: {
     status: {
       passed: 'Bestanden',
@@ -1644,4 +1644,11 @@ export const de = {
   broadcast_error: 'Das Netzwerk hat diese Transaktion abgelehnt.',
   broadcast_error_description:
     'Ihre Geräte haben die Transaktion signiert, aber das Netzwerk hat sie abgelehnt. Überprüfen Sie den unten stehenden Grund in der Blockchain und signieren Sie die Transaktion erneut, um es noch einmal zu versuchen.',
+  solana_unstake: 'Entkoppeln',
+  solana_withdraw: 'Zurückziehen',
+  solana_staking_stake_account: 'Stake-Konto',
+  solana_staking_unstake_notice:
+    'Durch die Deaktivierung beginnt eine Wartezeit – Ihr Einsatz bleibt für ca. {{days}} Tage gesperrt, bevor Sie ihn abheben können.',
+  solana_staking_withdrawable_amount: 'Abhebbarer Betrag',
+  solana_staking_withdraw_ready_notice: 'Abgekühlt und bereit zum Rückzug.',
 }

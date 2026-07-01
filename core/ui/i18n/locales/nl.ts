@@ -964,7 +964,7 @@ export const nl = {
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Bandbreedte & Energie',
   tron_bandwidth_description:
-    'Bandbreedtepunten zijn vereist voor elke transactie op TRON, inclusief zowel standaard tokenoverdrachten als interacties met smart contracts. Elke TRON-gebruiker ontvangt dagelijks 600 gratis bandbreedtepunten, wat ongeveer twee basisoverdrachten dekt. Daarnaast kun je extra bandbreedtepunten verdienen door TRX te staken, waardoor je dagelijkse saldo toeneemt om meer transacties te ondersteunen. Als je voldoende bandbreedtepunten hebt, kun je tokens verzenden, TRX staken of met smart contracts communiceren zonder TRX aan gas fees te betalen.',
+    'Bandwidth Points zijn vereist voor elke transactie op TRON, inclusief zowel standaard tokenoverdrachten als interacties met smart contracts. Elke TRON-gebruiker ontvangt dagelijks 600 gratis Bandwidth Points, wat ongeveer twee basisoverdrachten dekt. Daarnaast kun je extra Bandwidth Points verdienen door TRX te staken, waardoor je dagelijkse saldo toeneemt om meer transacties te ondersteunen. Als je voldoende Bandwidth Points hebt, kun je tokens verzenden, TRX staken of met smart contracts communiceren zonder TRX aan gas fees te betalen.',
   tron_energy_description:
     'Verlaagt de kosten van smart contracts. Bij onvoldoende energie dekt TRX de kosten. De groene meter toont de dagelijkse energie uit gestakete TRX. Meer gestakete TRX betekent meer energie. Wordt elke 24 uur aangevuld. Mislukte transacties verbruiken meer energie en worden niet terugbetaald.',
   try_again: 'Opnieuw proberen',
@@ -1081,8 +1081,6 @@ export const nl = {
     'Titel mag maximaal 50 tekens lang zijn.',
   vault_settings_address_book_title_min_length_error:
     'Titel moet minstens 1 teken lang zijn.',
-  vault_share_banner:
-    'Met deze QR-code deel je een view-only versie van je kluis',
   vault_type_does_not_match: 'Kluistype komt niet overeen',
   vault_value: 'Kluiswaarde',
   vaults: 'Kluizen',
@@ -1535,6 +1533,8 @@ export const nl = {
   qbtc_claim_cosign_qbtc_address: 'QBTC-adres (claimontvanger)',
   qbtc_claim_cosign_success:
     'Je hebt de claim QBTC medeondertekend. Het andere apparaat zal de claim voltooien en verzenden.',
+  qbtc_onboarding_key_warning:
+    'Door QBTC in te schakelen, wordt een nieuwe kwantumsleutel en een nieuw QBTC-adres aangemaakt. Als deze kluis al een kwantumsleutel op een ander apparaat of via een import had, zijn de eerder aangemaakte QBTC-tegoeden mogelijk niet toegankelijk vanaf het nieuwe adres. Maak na het aanmaken van deze kluis een back-up.',
   qbtc_gov: {
     status: {
       passed: 'Geslaagd',
@@ -1612,4 +1612,12 @@ export const nl = {
   broadcast_error: 'Het netwerk heeft deze transactie geweigerd.',
   broadcast_error_description:
     'Uw apparaten hebben de transactie ondertekend, maar het netwerk heeft deze afgewezen. Bekijk de on-chain reden hieronder en onderteken de transactie opnieuw om het nogmaals te proberen.',
+  solana_unstake: 'Ontkoppelen',
+  solana_withdraw: 'Terugtrekken',
+  solana_staking_stake_account: 'Inzetaccount',
+  solana_staking_unstake_notice:
+    'Na deactivering treedt een afkoelperiode in werking — uw inzet blijft ongeveer {{days}} dagen geblokkeerd voordat u deze kunt opnemen.',
+  solana_staking_withdrawable_amount: 'Opneembaar bedrag',
+  solana_staking_withdraw_ready_notice:
+    'Afgekoeld en klaar om te worden opgenomen.',
 }

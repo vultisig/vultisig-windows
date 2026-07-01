@@ -2724,29 +2724,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mysten/sui@npm:^2.19.0":
-  version: 2.20.0
-  resolution: "@mysten/sui@npm:2.20.0"
-  dependencies:
-    "@graphql-typed-document-node/core": "npm:^3.2.0"
-    "@mysten/bcs": "npm:^2.1.0"
-    "@mysten/utils": "npm:^0.4.0"
-    "@noble/curves": "npm:^2.2.0"
-    "@noble/hashes": "npm:^2.2.0"
-    "@protobuf-ts/grpcweb-transport": "npm:^2.11.1"
-    "@protobuf-ts/runtime": "npm:^2.11.1"
-    "@protobuf-ts/runtime-rpc": "npm:^2.11.1"
-    "@scure/base": "npm:^2.2.0"
-    "@scure/bip32": "npm:^2.2.0"
-    "@scure/bip39": "npm:^2.2.0"
-    gql.tada: "npm:^1.10.1"
-    graphql: "npm:^16.14.2"
-    poseidon-lite: "npm:0.2.1"
-    valibot: "npm:^1.4.1"
-  checksum: 10c0/eb509c242f60c12d36a7f43934d64fab452e2f6eb9e28c97ba1044d135fb7ae6888934eeed7b7f9195f11e0fae7e1ed3239ddf63fc384d349a22287a53ec6034
-  languageName: node
-  linkType: hard
-
 "@mysten/sui@npm:^2.20.1":
   version: 2.20.1
   resolution: "@mysten/sui@npm:2.20.1"
@@ -4461,9 +4438,9 @@ __metadata:
     "@core/ui": "workspace:^"
     "@lib/ui": "workspace:^"
     "@tanstack/react-query": "npm:^5.101.0"
-    "@vultisig/core-chain": "npm:2.17.8"
+    "@vultisig/core-chain": "npm:2.22.2"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.5"
+    "@vultisig/core-mpc": "npm:1.8.16"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     styled-components: "npm:6.3.11"
@@ -6575,43 +6552,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-chain@npm:2.17.8":
-  version: 2.17.8
-  resolution: "@vultisig/core-chain@npm:2.17.8"
-  dependencies:
-    7z-wasm: "npm:^1.2.0"
-    "@bufbuild/protobuf": "npm:^2.12.0"
-    "@cosmjs/amino": "npm:^0.39.0"
-    "@cosmjs/encoding": "npm:^0.39.0"
-    "@cosmjs/proto-signing": "npm:^0.39.0"
-    "@cosmjs/stargate": "npm:^0.39.0"
-    "@lifi/sdk": "npm:^4.0.0"
-    "@mysten/sui": "npm:^2.19.0"
-    "@noble/hashes": "npm:^1.8.0"
-    "@polkadot/api": "npm:^16.5.6"
-    "@polkadot/util": "npm:^14.0.3"
-    "@polkadot/util-crypto": "npm:^14.0.3"
-    "@solana/spl-token": "npm:^0.4.14"
-    "@solana/web3.js": "npm:^1.98.4"
-    "@ton/core": "npm:^0.63.1"
-    "@ton/crypto": "npm:^3.3.0"
-    "@trustwallet/wallet-core": "npm:^4.6.15"
-    "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/lib-utils": "npm:0.10.2"
-    bip32: "npm:^5.0.1"
-    bitcoinjs-lib: "npm:^7.0.1"
-    bs58: "npm:^6.0.0"
-    bs58check: "npm:^4.0.0"
-    cbor-x: "npm:^1.6.4"
-    date-fns: "npm:^4.4.0"
-    ethers: "npm:^6.17.0"
-    tiny-secp256k1: "npm:^2.2.4"
-    viem: "npm:^2.52.2"
-    xrpl: "npm:^5.0.0"
-  checksum: 10c0/57a387e785c82a3f09be9273e74e71ab12bcfceaee1e0f30565de518621dc584f5af5b67caf270090656821080d4ab686895ed1f37fa503f3281c7a1c8a3e8c6
-  languageName: node
-  linkType: hard
-
 "@vultisig/core-chain@npm:2.22.2":
   version: 2.22.2
   resolution: "@vultisig/core-chain@npm:2.22.2"
@@ -6685,34 +6625,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-mpc@npm:1.8.5":
-  version: 1.8.5
-  resolution: "@vultisig/core-mpc@npm:1.8.5"
-  dependencies:
-    7z-wasm: "npm:^1.2.0"
-    "@bufbuild/protobuf": "npm:^2.12.0"
-    "@cosmjs/encoding": "npm:^0.39.0"
-    "@mysten/sui": "npm:^2.19.0"
-    "@noble/hashes": "npm:^1.8.0"
-    "@solana/web3.js": "npm:^1.98.4"
-    "@trustwallet/wallet-core": "npm:^4.6.15"
-    "@vultisig/core-chain": "npm:2.17.8"
-    "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/lib-dkls": "npm:0.9.0"
-    "@vultisig/lib-mldsa": "npm:0.9.0"
-    "@vultisig/lib-schnorr": "npm:0.9.0"
-    "@vultisig/lib-utils": "npm:0.10.2"
-    "@vultisig/mpc-types": "npm:0.2.3"
-    bitcoinjs-lib: "npm:^7.0.1"
-    bs58: "npm:^6.0.0"
-    buffer: "npm:^6.0.3"
-    cosmjs-types: "npm:^0.11.0"
-    long: "npm:^5.3.2"
-    viem: "npm:^2.52.2"
-  checksum: 10c0/e555836865f919d7f6afeee7b4d6681f9cf9b53168c70a393b4fc88222bb45b03a4846ace182dbafabcf550f8492613bd97dd9baca49ee7ce2d093501654f869
-  languageName: node
-  linkType: hard
-
 "@vultisig/lib-dkls@npm:0.9.0":
   version: 0.9.0
   resolution: "@vultisig/lib-dkls@npm:0.9.0"
@@ -6731,18 +6643,6 @@ __metadata:
   version: 0.9.0
   resolution: "@vultisig/lib-schnorr@npm:0.9.0"
   checksum: 10c0/813f13345f83bf182ce41d2d64d6cb3a0cfc6b3c104d3f2bde2d34a14590d69cb9bd6754f7f554f5fd4bc5e87921cc31c59c2168ed1d2ccdd0183c75a596760f
-  languageName: node
-  linkType: hard
-
-"@vultisig/lib-utils@npm:0.10.2":
-  version: 0.10.2
-  resolution: "@vultisig/lib-utils@npm:0.10.2"
-  dependencies:
-    buffer: "npm:^6.0.3"
-    long: "npm:^5.3.2"
-    tldts: "npm:^6.1.0"
-    viem: "npm:^2.52.2"
-  checksum: 10c0/c77f2d45096a408635a432b6ae40bcfd66fb3c2e4ccbb6695a35af5d0283c79ad6634acd54348eb05766499aed8ce4e7c2cd442b53953e8f51b5e98b5d7a2eb6
   languageName: node
   linkType: hard
 
