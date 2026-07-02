@@ -56,6 +56,10 @@ export const isAppSessionAuthorizedForChain = ({
     return appSession.authorizedChains.includes(chain)
   }
 
+  if (appSession.isAccountAccessGranted === false) {
+    return false
+  }
+
   return true
 }
 

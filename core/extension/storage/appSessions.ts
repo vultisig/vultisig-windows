@@ -85,6 +85,7 @@ const mergeAuthorizedChains = (
   previous?: Chain[],
   next?: Chain[]
 ): Chain[] | undefined => {
+  const hasExplicitChainSet = previous !== undefined || next !== undefined
   const chains = [...(previous ?? [])]
 
   for (const chain of next ?? []) {
@@ -93,7 +94,7 @@ const mergeAuthorizedChains = (
     }
   }
 
-  return chains.length ? chains : undefined
+  return hasExplicitChainSet ? chains : undefined
 }
 
 export const setExclusiveVaultAppSession = ({

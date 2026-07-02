@@ -137,10 +137,9 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const displayDomain = hostKey
 
   const chainFilter = input.chain
-  const approvedChains = [
-    ...(input.chain ? [input.chain] : []),
-    ...(input.chains ?? []),
-  ]
+  const approvedChains = Array.from(
+    new Set([...(input.chain ? [input.chain] : []), ...(input.chains ?? [])])
+  )
   const eligibleVaults = chainFilter
     ? allVaults.filter(
         vault =>

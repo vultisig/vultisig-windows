@@ -81,4 +81,17 @@ describe('app session chain authorization', () => {
       })
     ).toBe(false)
   })
+
+  it('does not treat a chainless denied session as legacy authorized', () => {
+    expect(
+      isAppSessionAuthorizedForChain({
+        appSession: {
+          host: 'example.com',
+          url: 'https://example.com',
+          isAccountAccessGranted: false,
+        },
+        chain: Chain.Polygon,
+      })
+    ).toBe(false)
+  })
 })
