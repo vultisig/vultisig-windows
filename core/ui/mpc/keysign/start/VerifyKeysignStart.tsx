@@ -31,6 +31,12 @@ type VerifyKeysignStartInput = {
   terms?: string[]
   toAddressLabel?: string
   extraPendingMessage?: string
+  /**
+   * Blocks the start-keysign button with this message even when the payload is
+   * ready. Use for pre-keysign gates such as an insufficient-funds check that
+   * would otherwise waste an MPC ceremony on a transaction that can't broadcast.
+   */
+  disabledMessage?: string
   footer?: ReactNode
   swapQuote?: SwapQuote
 }
@@ -47,6 +53,7 @@ export const VerifyKeysignStart = ({
   terms = [],
   toAddressLabel,
   extraPendingMessage,
+  disabledMessage,
   footer,
   swapQuote,
 }: VerifyKeysignStartInput) => {
@@ -136,12 +143,17 @@ export const VerifyKeysignStart = ({
       return {}
     }
 
+    if (disabledMessage) {
+      return { disabledMessage }
+    }
+
     return {
       keysignPayload: { keysign },
       ...(toAddressLabel ? { toAddressLabel } : {}),
       ...(swapQuote ? { swapQuote } : {}),
     }
   }, [
+    disabledMessage,
     extraPendingMessage,
     keysignPayloadQuery.data,
     keysignPayloadQuery.error,
