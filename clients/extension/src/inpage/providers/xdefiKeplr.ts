@@ -644,14 +644,13 @@ export class XDEFIKeplrProvider extends Keplr {
     if (nativeChains.length === 0) return
 
     // Serialize the first chain through `requestAccount` so the
-    // grant-vault popup surfaces exactly once. Running every chain
-    // through `requestAccount` in parallel raced multiple popups against
-    // each other — only one would win, the others returned no
-    // `appSession` and the dApp got back `EIP1193Error('InternalError')`.
-    // Subsequent chains piggyback on the same dApp authorization via
-    // `getAccount`, which is silent (no popup) once the host is granted.
+    // grant-vault popup surfaces exactly once while recording the full
+    // requested chain set. Running every chain through `requestAccount` in
+    // parallel raced multiple popups against each other — only one would
+    // win, the others returned no `appSession` and the dApp got back
+    // `EIP1193Error('InternalError')`.
     const [primary, ...rest] = nativeChains
-    await requestAccount(primary)
+    await requestAccount(primary, { chains: nativeChains })
     await Promise.all(
       rest.map(chain => callBackground({ getAccount: { chain } }))
     )

@@ -9,7 +9,7 @@ import { EIP1193Error } from '../../../background/handlers/errorHandler'
 
 export const requestAccount = async (
   chain: Chain,
-  options?: { preselectFastVault?: boolean }
+  options?: { preselectFastVault?: boolean; chains?: readonly Chain[] }
 ) => {
   const { error, data } = await attempt(
     callBackground({
@@ -30,6 +30,7 @@ export const requestAccount = async (
         grantVaultAccess: {
           preselectFastVault: options?.preselectFastVault,
           chain,
+          ...(options?.chains ? { chains: options.chains } : {}),
         },
       })
     )

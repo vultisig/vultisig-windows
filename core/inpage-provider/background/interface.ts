@@ -31,7 +31,6 @@ export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   setAppChain: Method<SetAppChainInput>
   getAppChain: GetAppChainMethod
-  setVaultChain: Method<SetAppChainInput>
   getAccount: Method<GetAccountInput, { address: string; publicKey: string }>
   signOut: Method<{}>
   hasAppSession: Method<{}, boolean>
@@ -65,7 +64,6 @@ export type BackgroundMethod = keyof BackgroundInterface
 export const authorizedBackgroundMethods = [
   'getAccount',
   'setAppChain',
-  'setVaultChain',
   'exportVault',
 ] as const satisfies readonly BackgroundMethod[]
 

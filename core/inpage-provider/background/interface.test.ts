@@ -3,7 +3,11 @@ import { describe, expect, it } from 'vitest'
 import { authorizedBackgroundMethods } from './interface'
 
 describe('authorizedBackgroundMethods', () => {
-  it('requires an authorized app session before changing the global vault chain', () => {
-    expect(authorizedBackgroundMethods).toContain('setVaultChain')
+  it('does not expose a global vault chain setter to dApps', () => {
+    expect(authorizedBackgroundMethods).toEqual([
+      'getAccount',
+      'setAppChain',
+      'exportVault',
+    ])
   })
 })

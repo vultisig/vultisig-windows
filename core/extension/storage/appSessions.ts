@@ -1,6 +1,7 @@
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 
@@ -21,6 +22,8 @@ type UpdateAppSessionFieldsInput = {
 export type AppSession = {
   host: string
   url: string
+  authorizedChains?: Chain[]
+  isAccountAccessGranted?: boolean
   selectedEVMChainId?: string
   selectedCosmosChainId?: string
   icon?: string
@@ -78,21 +81,56 @@ export const updateAppSession = ({
     return updatedSession
   })
 
+const mergeAuthorizedChains = (
+  previous?: Chain[],
+  next?: Chain[]
+): Chain[] | undefined => {
+  const chains = [...(previous ?? [])]
+
+  for (const chain of next ?? []) {
+    if (!chains.includes(chain)) {
+      chains.push(chain)
+    }
+  }
+
+  return chains.length ? chains : undefined
+}
+
 export const setExclusiveVaultAppSession = ({
   vaultId,
   ...session
 }: VaultAppSession): Promise<void> =>
   serializeAppSessionsMutation(async () => {
     const allSessions = await getVaultsAppSessions()
+    const existingSession = allSessions[vaultId]?.[session.host]
     const sessionsWithoutHost = recordMap(allSessions, vaultSessions =>
       omit(vaultSessions, session.host)
     )
+    const authorizedChains = mergeAuthorizedChains(
+      existingSession?.authorizedChains,
+      session.authorizedChains
+    )
+    const wasAccountAccessGranted =
+      existingSession?.isAccountAccessGranted === true ||
+      (existingSession !== undefined &&
+        existingSession.isAccountAccessGranted === undefined &&
+        existingSession.authorizedChains === undefined)
+    const isAccountAccessGranted =
+      wasAccountAccessGranted || session.isAccountAccessGranted === true
+    const nextSession = {
+      ...existingSession,
+      ...session,
+      ...(authorizedChains ? { authorizedChains } : {}),
+      ...(isAccountAccessGranted || session.isAccountAccessGranted === false
+        ? { isAccountAccessGranted }
+        : {}),
+    }
 
     await setVaultsAppSessions({
       ...sessionsWithoutHost,
       [vaultId]: {
         ...sessionsWithoutHost[vaultId],
-        [session.host]: session,
+        [session.host]: nextSession,
       },
     })
   })
