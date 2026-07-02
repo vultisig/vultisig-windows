@@ -7,6 +7,9 @@ import styled, { css, DefaultTheme } from 'styled-components'
 type TextVariant =
   | 'h1Hero'
   | 'h1Regular'
+  | 'stationTitle1'
+  | 'stationBodyS'
+  | 'stationCaption2'
   | 'title3'
   | 'footnote'
   | 'caption'
@@ -27,6 +30,24 @@ const textVariantsRecord: Record<
     height: 'large',
     weight: 500,
     cropped: false,
+  },
+  stationTitle1: {
+    size: 28,
+    weight: 500,
+    height: 34 / 28,
+    letterSpacing: -0.64,
+  },
+  stationBodyS: {
+    size: 14,
+    weight: 500,
+    height: 20 / 14,
+    letterSpacing: 0,
+  },
+  stationCaption2: {
+    size: 10,
+    weight: 500,
+    height: 14 / 10,
+    letterSpacing: 0.12,
   },
   title3: {
     size: 17,

@@ -5,11 +5,15 @@ import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CircleICloseIcon } from '@lib/ui/icons/CircleICloseIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import {
+  StationCircleXmarkFilledIcon,
+  StationMagnifierIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { SearchField } from '@lib/ui/search/SearchField'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDeferredValue, useEffect, useState, useTransition } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 const debounceDelayMs = 250
 
@@ -28,6 +32,7 @@ export const SearchChain = ({
   const debouncedValue = useDebounce(inputValue, debounceDelayMs)
   const deferredValue = useDeferredValue(debouncedValue)
   const [, startTransition] = useTransition()
+  const { iconStyle } = useTheme()
 
   useEffect(() => {
     setInputValue(searchQuery)
@@ -72,7 +77,11 @@ export const SearchChain = ({
                 onSearch={nextValue => setInputValue(nextValue)}
               />
               <CloseButton onClick={handleClose}>
-                <CircleICloseIcon />
+                {iconStyle === 'station' ? (
+                  <StationCircleXmarkFilledIcon />
+                ) : (
+                  <CircleICloseIcon />
+                )}
               </CloseButton>
             </SearchFieldWrapper>
           </motion.div>
@@ -86,7 +95,11 @@ export const SearchChain = ({
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
           <IconButton kind="secondary" onClick={handleOpen} size="lg">
-            <SearchIcon />
+            {iconStyle === 'station' ? (
+              <StationMagnifierIcon />
+            ) : (
+              <SearchIcon />
+            )}
           </IconButton>
         </motion.div>
       )}
@@ -122,7 +135,13 @@ const CloseButton = styled(UnstyledButton)`
   width: fit-content;
 
   svg {
-    color: ${getColor('foreground')};
-    fill: ${getColor('textShy')};
+    color: ${({ theme }) =>
+      theme.iconStyle === 'station'
+        ? theme.colors.textShy.toCssValue()
+        : theme.colors.foreground.toCssValue()};
+    fill: ${({ theme }) =>
+      theme.iconStyle === 'station'
+        ? 'currentColor'
+        : theme.colors.textShy.toCssValue()};
   }
 `

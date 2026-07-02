@@ -16,12 +16,14 @@ import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { vStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
+import { stationTheme } from '@lib/ui/theme/stationTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import React from 'react'
 import styled from 'styled-components'
 
 import { NotificationBannerProvider } from './notifications/NotificationBannerProvider'
+import { currentProductBrand } from './product/brand'
 
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
@@ -57,8 +59,10 @@ export const CoreApp = ({
   migrationsManager: MigrationsManager,
   isLimited = false,
 }: CoreAppProps) => {
+  const theme = currentProductBrand === 'station' ? stationTheme : darkTheme
+
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <CoreProvider value={coreState}>
         <StartupSplashProvider>
