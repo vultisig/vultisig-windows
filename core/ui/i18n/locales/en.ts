@@ -1214,11 +1214,17 @@ export const en = {
   claim_rewards: 'Claim Rewards',
   solana_unstake: 'Unstake',
   solana_withdraw: 'Withdraw',
+  solana_move_stake: 'Move',
+  solana_finish_move: 'Finish Move',
   solana_staking_stake_account: 'Stake account',
   solana_staking_unstake_notice:
     'Deactivating begins a cooldown — your stake stays locked for ~{{days}} days before you can withdraw.',
   solana_staking_withdrawable_amount: 'Withdrawable amount',
   solana_staking_withdraw_ready_notice: 'Cooled down and ready to withdraw.',
+  solana_staking_move_notice:
+    'Moving stake is multi-step and spans epochs: this deactivates the account now; after the ~{{days}}-day cooldown, finish moving it to the new validator.',
+  solana_staking_finish_move_notice:
+    'This re-delegates the cooled-down stake account to the new validator and completes the move.',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',

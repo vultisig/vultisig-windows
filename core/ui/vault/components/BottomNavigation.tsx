@@ -6,6 +6,10 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import {
+  StationLayers2FilledIcon,
+  StationWalletFilledIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
@@ -13,7 +17,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 import { AgentBottomNavigationContent } from './AgentBottomNavigationContent'
 
@@ -31,6 +35,7 @@ export const BottomNavigation = ({
 }: BottomNavigationProps) => {
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -64,7 +69,11 @@ export const BottomNavigation = ({
           isActive={activeTab === 'wallet'}
           onClick={() => handleTabChangeOld('wallet')}
         >
-          <WalletIcon />
+          {iconStyle === 'station' ? (
+            <StationWalletFilledIcon />
+          ) : (
+            <WalletIcon />
+          )}
           <Text as="span" size={10}>
             {t('wallet')}
           </Text>
@@ -76,7 +85,11 @@ export const BottomNavigation = ({
           isActive={activeTab === 'defi'}
           onClick={() => handleTabChangeOld('defi')}
         >
-          <CoinsAddIcon />
+          {iconStyle === 'station' ? (
+            <StationLayers2FilledIcon />
+          ) : (
+            <CoinsAddIcon />
+          )}
           <Text as="span" size={10}>
             {t('defi')}
           </Text>
@@ -118,7 +131,10 @@ const ContainerOld = styled.div`
     justifyContent: 'center',
     alignItems: 'flex-end',
   })};
-  background: rgba(19, 46, 86, 0.6);
+  background: ${({ theme }) =>
+    theme.iconStyle === 'station'
+      ? theme.colors.foreground.withAlpha(0.5).toCssValue()
+      : 'rgba(19, 46, 86, 0.6)'};
   backdrop-filter: blur(32px);
   padding: 8px 12px 10px 12px;
   border-top: 1px solid ${getColor('foregroundExtra')};
@@ -131,7 +147,10 @@ const ContainerOld = styled.div`
 
 const CameraButton = styled(UnstyledButton)`
   ${round};
-  background: #4879fd;
+  background: ${({ theme }) =>
+    theme.iconStyle === 'station'
+      ? theme.colors.buttonPrimary.toCssValue()
+      : '#4879fd'};
   ${centerContent};
   ${sameDimensions(centerButtonSize)};
   font-size: 24px;
@@ -141,7 +160,10 @@ const CameraButton = styled(UnstyledButton)`
   margin-bottom: 12px;
 
   &:hover {
-    background: #5a8aff;
+    background: ${({ theme }) =>
+      theme.iconStyle === 'station'
+        ? theme.colors.buttonHover.toCssValue()
+        : '#5a8aff'};
   }
 `
 

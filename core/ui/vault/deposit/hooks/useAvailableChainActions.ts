@@ -73,6 +73,8 @@ export const useAvailableChainActions = (chain: Chain) => {
         claim_rewards: () => true,
         solana_unstake: () => true,
         solana_withdraw: () => true,
+        solana_move_stake: () => true,
+        solana_finish_move: () => true,
       })
     )
   }, [

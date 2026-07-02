@@ -11,13 +11,18 @@ import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { AgentIcon } from '@lib/ui/icons/AgentIcon'
 import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import {
+  StationCreditCardIcon,
+  StationLayers2FilledIcon,
+  StationWalletFilledIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 const navHeight = 66
 const cameraButtonSize = 56
@@ -37,6 +42,7 @@ export const AgentBottomNavigationContent = ({
   onCameraPress,
 }: AgentBottomNavigationContentProps) => {
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
   const dismissBanner = useDismissBanner()
   const { hasLoaded, isBannerDismissed } = useDismissedBanners()
   const [isCoachmarkOpen, setIsCoachmarkOpen] = useState(false)
@@ -130,7 +136,11 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'wallet'}
             onClick={() => onTabChange('wallet')}
           >
-            <WalletIcon />
+            {iconStyle === 'station' ? (
+              <StationWalletFilledIcon />
+            ) : (
+              <WalletIcon />
+            )}
             <Text as="span" size={10}>
               {t('wallet')}
             </Text>
@@ -139,7 +149,11 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'defi'}
             onClick={() => onTabChange('defi')}
           >
-            <CoinsAddIcon />
+            {iconStyle === 'station' ? (
+              <StationLayers2FilledIcon />
+            ) : (
+              <CoinsAddIcon />
+            )}
             <Text as="span" size={10}>
               {t('defi')}
             </Text>
@@ -155,7 +169,11 @@ export const AgentBottomNavigationContent = ({
               onTabChange('agent')
             }}
           >
-            <AgentIcon />
+            {iconStyle === 'station' ? (
+              <StationCreditCardIcon />
+            ) : (
+              <AgentIcon />
+            )}
             <Text as="span" size={10}>
               {t('agent')}
             </Text>
@@ -214,7 +232,10 @@ const NavSurface = styled.div`
   inset: 0;
   z-index: 25;
   pointer-events: none;
-  background: rgba(19, 46, 86, 0.6);
+  background: ${({ theme }) =>
+    theme.iconStyle === 'station'
+      ? theme.colors.foreground.withAlpha(0.5).toCssValue()
+      : 'rgba(19, 46, 86, 0.6)'};
   backdrop-filter: blur(32px);
   border-top: 1px solid ${getColor('foregroundExtra')};
 `
@@ -235,14 +256,20 @@ const FloatingCamera = styled(UnstyledButton)`
   ${round};
   ${centerContent};
   ${sameDimensions(cameraButtonSize)};
-  background: #4879fd;
+  background: ${({ theme }) =>
+    theme.iconStyle === 'station'
+      ? theme.colors.buttonPrimary.toCssValue()
+      : '#4879fd'};
   font-size: 24px;
   color: ${getColor('text')};
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: all 0.2s;
 
   &:hover {
-    background: #5a8aff;
+    background: ${({ theme }) =>
+      theme.iconStyle === 'station'
+        ? theme.colors.buttonHover.toCssValue()
+        : '#5a8aff'};
   }
 
   @supports (bottom: calc(0px + env(safe-area-inset-bottom))) {
