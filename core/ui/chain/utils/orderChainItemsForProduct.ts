@@ -2,12 +2,13 @@ import { Chain } from '@vultisig/core-chain/Chain'
 
 import { ProductBrand } from '../../product/brand'
 
-const stationPriorityChains = [Chain.Terra, Chain.TerraClassic] as const
+const stationPriorityChains: readonly Chain[] = [
+  Chain.Terra,
+  Chain.TerraClassic,
+]
 
 const getStationChainPriority = (chain: Chain) => {
-  const index = stationPriorityChains.indexOf(
-    chain as (typeof stationPriorityChains)[number]
-  )
+  const index = stationPriorityChains.indexOf(chain)
 
   return index === -1 ? stationPriorityChains.length : index
 }
@@ -18,6 +19,15 @@ type OrderChainItemsForProductInput<T> = {
   productBrand: ProductBrand
 }
 
+/**
+ * Sorts chain-backed items for a product brand.
+ *
+ * @template T Item type to sort.
+ * @param items Items that should be returned in sorted order.
+ * @param getChain Resolves the chain represented by each item.
+ * @param productBrand Product brand that controls brand-specific ordering.
+ * @returns A sorted array of the provided items.
+ */
 export const orderChainItemsForProduct = <T>({
   items,
   getChain,
