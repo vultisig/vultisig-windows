@@ -1,11 +1,13 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useSolanaEpochInfoQuery } from '@core/ui/chain/solana/staking/queries/useSolanaEpochInfoQuery'
 import { useSolanaStakeAccountsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaStakeAccountsQuery'
 import { useSolanaValidatorsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaValidatorsQuery'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
-import { VStack } from '@lib/ui/layout/Stack'
+import { SafeImage } from '@lib/ui/images/SafeImage'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -22,8 +24,26 @@ import {
 } from '@vultisig/core-chain/chains/solana/staking/models/validator'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { SolanaDelegationCard } from './SolanaDelegationCard'
+
+const TotalStakedLogo = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+`
+
+const TotalStakedLogoFallback = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 20px;
+`
 
 /**
  * Solana native staking on the DeFi tab. Lists the vault's stake accounts as
@@ -93,18 +113,27 @@ export const SolanaStakeDefiView = () => {
           background: 'rgba(255,255,255,0.04)',
         }}
       >
-        <Text size={14} color="shy">
-          {t('solana_staking_total_staked', { ticker: solCoin.ticker })}
-        </Text>
-        <Text size={24} weight={600}>
-          {`${totalStaked.toFixed(6)} ${solCoin.ticker}`}
-        </Text>
-        {priceUsd > 0 ? (
-          <Text
-            size={13}
-            color="shy"
-          >{`$${(totalStaked * priceUsd).toFixed(2)}`}</Text>
-        ) : null}
+        <HStack gap={12} alignItems="center">
+          <SafeImage
+            src={getChainLogoSrc(Chain.Solana)}
+            render={props => <TotalStakedLogo {...props} />}
+            fallback={<TotalStakedLogoFallback>◎</TotalStakedLogoFallback>}
+          />
+          <VStack gap={4}>
+            <Text size={14} color="shy">
+              {t('solana_staking_total_staked', { ticker: solCoin.ticker })}
+            </Text>
+            <Text size={24} weight={600}>
+              {`${totalStaked.toFixed(6)} ${solCoin.ticker}`}
+            </Text>
+            {priceUsd > 0 ? (
+              <Text
+                size={13}
+                color="shy"
+              >{`$${(totalStaked * priceUsd).toFixed(2)}`}</Text>
+            ) : null}
+          </VStack>
+        </HStack>
         <Button onClick={onDelegate}>
           {t('solana_staking_delegate_new_validator')}
         </Button>
@@ -122,8 +151,8 @@ export const SolanaStakeDefiView = () => {
               <SolanaDelegationCard
                 key={row.stakeAccount.pubkey}
                 row={row}
-                // APY display lands with the APY resolver in Phase 6; the card
-                // hides the row while it is undefined.
+                // APY display is wired once the SDK apyResolver publishes
+                // (PR #930); the card hides the APY row while this is undefined.
                 apy={undefined}
                 ticker={solCoin.ticker}
                 priceUsd={priceUsd}

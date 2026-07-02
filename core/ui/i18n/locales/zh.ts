@@ -1530,4 +1530,6 @@ export const zh = {
   solana_staking_activating_notice: '激活——从下一个纪元开始获得奖励。',
   solana_staking_deactivating_notice: '失活——冷却后才能取出。',
   solana_staking_inactive_notice: '处于非活跃状态——已冷却，准备撤退。',
+  validator_commission_short: '{{value}} % 手续费',
+  solana_staking_min_delegation: '最小委托数量为{{amount}} {{ticker}}',
 }

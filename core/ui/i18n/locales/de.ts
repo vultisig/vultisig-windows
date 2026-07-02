@@ -1673,4 +1673,7 @@ export const de = {
     'Deaktivierung – Abkühlphase, bevor das Gerät zurückgezogen werden kann.',
   solana_staking_inactive_notice:
     'Inaktiv – abgekühlt und bereit zur Auszahlung.',
+  validator_commission_short: '{{value}} % Gebühr',
+  solana_staking_min_delegation:
+    'Die minimale Delegation ist {{amount}} {{ticker}}',
 }

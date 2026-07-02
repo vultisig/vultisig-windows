@@ -1231,6 +1231,7 @@ export const en = {
   solana_staking_stake_accounts: 'Stake Accounts',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Rent reserve',
+  solana_staking_min_delegation: 'Minimum delegation is {{amount}} {{ticker}}',
   solana_staking_state_active: 'Active',
   solana_staking_state_activating: 'Activating',
   solana_staking_state_deactivating: 'Deactivating',
@@ -1241,6 +1242,7 @@ export const en = {
     'Deactivating — cooling down before it can be withdrawn.',
   solana_staking_inactive_notice:
     'Inactive — cooled down and ready to withdraw.',
+  validator_commission_short: '{{value}}% fee',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',

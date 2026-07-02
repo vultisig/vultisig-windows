@@ -4,6 +4,7 @@ import { ComponentType } from 'react'
 import { DefiChainBalanceBannerFallback } from './DefiChainBalanceBannerFallback'
 import { DefiMayachainBalanceBanner } from './DefiMayachainBalanceBanner'
 import { DefiQbtcBalanceBanner } from './DefiQbtcBalanceBanner'
+import { DefiSolanaBalanceBanner } from './DefiSolanaBalanceBanner'
 import { DefiTerraChainBanner } from './DefiTerraChainBanner'
 import { DefiThorchainBalanceBanner } from './DefiThorchainBalanceBanner'
 import { DefiTonBalanceBanner } from './DefiTonBalanceBanner'
@@ -23,6 +24,7 @@ const chainBannerRegistry: Partial<
   ),
   [Chain.QBTC]: DefiQbtcBalanceBanner,
   [Chain.Ton]: DefiTonBalanceBanner,
+  [Chain.Solana]: DefiSolanaBalanceBanner,
 }
 
 type DefiChainBalanceBannerProps = {

@@ -1642,4 +1642,6 @@ export const nl = {
     'Deactiveren — afkoelen voordat het kan worden teruggetrokken.',
   solana_staking_inactive_notice:
     'Inactief — afgekoeld en klaar om te worden verwijderd.',
+  validator_commission_short: '{{value}} % kosten',
+  solana_staking_min_delegation: 'Minimale delegatie is {{amount}} {{ticker}}',
 }

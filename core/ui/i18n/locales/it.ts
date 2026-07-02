@@ -1664,4 +1664,6 @@ export const it = {
     'Disattivazione: raffreddamento prima di poter essere estratto.',
   solana_staking_inactive_notice:
     'Inattivo: raffreddato e pronto per il ritiro.',
+  validator_commission_short: '{{value}} % commissione',
+  solana_staking_min_delegation: 'La delega minima è {{amount}} {{ticker}}',
 }

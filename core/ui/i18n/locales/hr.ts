@@ -1634,4 +1634,7 @@ export const hr = {
     'Deaktiviranje — hlađenje prije nego što se može povući.',
   solana_staking_inactive_notice:
     'Neaktivno — ohlađeno i spremno za povlačenje.',
+  validator_commission_short: '{{value}} % provizije',
+  solana_staking_min_delegation:
+    'Minimalna delegacija je {{amount}} {{ticker}}',
 }

@@ -1,5 +1,9 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  solanaStakingConfig,
+  solDecimals,
+} from '@vultisig/core-chain/chains/solana/staking/config'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
@@ -16,6 +20,11 @@ import {
   toOptionalNumber,
   toRequiredNumber,
 } from './validationHelpers'
+
+// Solana Stake program minimum active delegation, in whole SOL (1 SOL on
+// mainnet). Derived from the SDK config so the floor tracks a single source.
+const solanaMinDelegationSol =
+  Number(solanaStakingConfig.minDelegationFloorLamports) / 10 ** solDecimals
 
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>
@@ -906,7 +915,20 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        // Solana's Stake program enforces a 1 SOL minimum active delegation;
+        // a DelegateStake below it reverts on-chain with
+        // StakeError.InsufficientDelegation (custom error 0xc). The entered
+        // amount IS the active stake (funding = amount + rent), so gate the
+        // amount directly on the 1 SOL floor.
+        amount: positiveAmountSchema(totalAmountAvailable, t).refine(
+          value => Number(value) >= solanaMinDelegationSol,
+          {
+            message: t('solana_staking_min_delegation', {
+              amount: solanaMinDelegationSol,
+              ticker: chainFeeCoin[Chain.Solana].ticker,
+            }),
+          }
+        ),
         validatorAddress: z.string().trim().min(1, t('validator_address')),
       }),
     }),

@@ -137,25 +137,29 @@ export const SolanaValidatorPickerSheet = ({
                           name={validatorDisplayName(v)}
                           logoUrl={validatorLogoUrl(v)}
                         />
-                        <VStack gap={2} flexGrow>
-                          <Text size={15} weight="500">
+                        <NameColumn gap={2} flexGrow>
+                          <Text size={15} weight="500" nowrap cropped>
                             {validatorDisplayName(v)}
                           </Text>
-                          <Text size={12} color="shy">
+                          <Text size={12} color="shy" nowrap cropped>
                             {formatAmount(
                               fromChainAmount(v.activatedStake, solDecimals),
                               { ticker }
                             )}
                           </Text>
-                        </VStack>
+                        </NameColumn>
                         {isSelected ? (
                           <SelectedCheck>
                             <CircleCheckIcon />
                           </SelectedCheck>
                         ) : null}
-                        <Text size={14} color="regular">
-                          {`${v.commission}%`}
-                        </Text>
+                        <RightColumn>
+                          <Text size={14} color="regular" nowrap>
+                            {t('validator_commission_short', {
+                              value: v.commission,
+                            })}
+                          </Text>
+                        </RightColumn>
                       </ValidatorRow>
                     )
                   })}
@@ -233,9 +237,24 @@ const ValidatorRow = styled(HStack)<{ $selected: boolean }>`
   }
 `
 
+// `min-width: 0` lets this flex child shrink below its content width so the
+// name/stake lines truncate with an ellipsis instead of forcing the row wider
+// than the sheet (which made the whole list scroll horizontally).
+const NameColumn = styled(VStack)`
+  min-width: 0;
+`
+
 const SelectedCheck = styled.div`
   color: ${getColor('success')};
   display: flex;
   align-items: center;
   font-size: 18px;
+`
+
+// Right-aligned APY (green) over the commission — fixed width so a long
+// validator name truncates against it instead of pushing it off-screen.
+const RightColumn = styled(VStack)`
+  flex-shrink: 0;
+  align-items: flex-end;
+  gap: 2px;
 `

@@ -1626,4 +1626,7 @@ export const ko = {
     '비활성화 — 제거하기 전에 식히는 과정입니다.',
   solana_staking_inactive_notice:
     '비활성 상태 — 냉각되어 철수 준비가 완료되었습니다.',
+  validator_commission_short: '{{value}} % 수수료',
+  solana_staking_min_delegation:
+    '최소 위임 크기는 {{amount}} {{ticker}} 입니다.',
 }

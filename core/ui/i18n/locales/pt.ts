@@ -1660,4 +1660,6 @@ export const pt = {
     'Desativação — resfriamento antes de poder ser retirado.',
   solana_staking_inactive_notice:
     'Inativo — resfriado e pronto para ser retirado.',
+  validator_commission_short: '{{value}} % taxa',
+  solana_staking_min_delegation: 'A delegação mínima é {{amount}} {{ticker}}',
 }

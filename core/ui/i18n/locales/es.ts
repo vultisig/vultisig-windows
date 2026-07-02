@@ -1656,4 +1656,7 @@ export const es = {
   solana_staking_deactivating_notice:
     'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
   solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
+  validator_commission_short: '{{value}} % de comisión',
+  solana_staking_min_delegation:
+    'La delegación mínima es {{amount}} {{ticker}}',
 }

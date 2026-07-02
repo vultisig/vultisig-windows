@@ -1639,4 +1639,7 @@ export const ru = {
   solana_staking_deactivating_notice:
     'Деактивация — охлаждение перед извлечением.',
   solana_staking_inactive_notice: 'Неактивен — остыл и готов к изъятию.',
+  validator_commission_short: '{{value}} % комиссия',
+  solana_staking_min_delegation:
+    'Минимальный объем делегированных полномочий: {{amount}} {{ticker}}',
 }
