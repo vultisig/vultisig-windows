@@ -1640,4 +1640,10 @@ export const pt = {
   solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
   external_recipient_tooltip_content:
     'Envie os fundos trocados para um endereço de carteira diferente do seu.',
+  solana_move_stake: 'Mover',
+  solana_finish_move: 'Movimento final',
+  solana_staking_move_notice:
+    'A transferência de stake é um processo de várias etapas e abrange diferentes épocas: esta ação desativa a conta agora; após o período de espera de ~ {{days}} dias, conclua a transferência para o novo validador.',
+  solana_staking_finish_move_notice:
+    'Isso redistribui a conta de stake em período de inatividade para o novo validador e conclui a movimentação.',
 }
