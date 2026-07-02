@@ -1612,4 +1612,26 @@ export const hr = {
     'Deaktiviranjem započinje hlađenje — vaš ulog ostaje zaključan ~ {{days}} dana prije nego što možete isplatiti novac.',
   solana_staking_withdrawable_amount: 'Iznos za isplatu',
   solana_staking_withdraw_ready_notice: 'Ohlađeno i spremno za povlačenje.',
+  solana_delegate: 'Ulog',
+  solana_move_stake: 'Potez',
+  solana_finish_move: 'Završi potez',
+  solana_staking_move_notice:
+    'Premještanje uloga je višekoračno i obuhvaća epohe: ovo sada deaktivira račun; nakon ~ {{days}} dana hlađenja, završite premještanje na novi validator.',
+  solana_staking_finish_move_notice:
+    'Ovim se ohlađeni ulog račun ponovno delegira novom validatoru i dovršava se preseljenje.',
+  solana_staking_total_staked: 'Ukupno uloženo {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegat novom validatoru',
+  solana_staking_stake_accounts: 'Računi udjela',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Rezerva za najamninu',
+  solana_staking_state_active: 'Aktivan',
+  solana_staking_state_activating: 'Aktiviranje',
+  solana_staking_state_deactivating: 'Deaktiviranje',
+  solana_staking_state_inactive: 'Neaktivno',
+  solana_staking_activating_notice:
+    'Aktiviranje — zarađuje nagrade iz sljedeće epohe.',
+  solana_staking_deactivating_notice:
+    'Deaktiviranje — hlađenje prije nego što se može povući.',
+  solana_staking_inactive_notice:
+    'Neaktivno — ohlađeno i spremno za povlačenje.',
 }

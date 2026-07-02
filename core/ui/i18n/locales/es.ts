@@ -1635,4 +1635,25 @@ export const es = {
   solana_staking_withdrawable_amount: 'Cantidad retirable',
   solana_staking_withdraw_ready_notice:
     'Ya se ha enfriado y está listo para retirarse.',
+  solana_delegate: 'Apostar',
+  solana_move_stake: 'Mover',
+  solana_finish_move: 'Finalizar movimiento',
+  solana_staking_move_notice:
+    'El traslado de la participación es un proceso de varios pasos que abarca varias épocas: esto desactiva la cuenta ahora; después del período de espera de ~ {{days}} días, finalice el traslado al nuevo validador.',
+  solana_staking_finish_move_notice:
+    'Esto vuelve a delegar la cuenta de participación enfriada al nuevo validador y completa la transferencia.',
+  solana_staking_total_staked: 'Total apostado {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegar al nuevo validador',
+  solana_staking_stake_accounts: 'Cuentas de participación',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Reserva de alquiler',
+  solana_staking_state_active: 'Activo',
+  solana_staking_state_activating: 'Activando',
+  solana_staking_state_deactivating: 'Desactivando',
+  solana_staking_state_inactive: 'Inactivo',
+  solana_staking_activating_notice:
+    'Activar: obtiene recompensas de la siguiente época.',
+  solana_staking_deactivating_notice:
+    'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
+  solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
 }

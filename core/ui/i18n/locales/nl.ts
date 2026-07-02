@@ -1620,4 +1620,26 @@ export const nl = {
   solana_staking_withdrawable_amount: 'Opneembaar bedrag',
   solana_staking_withdraw_ready_notice:
     'Afgekoeld en klaar om te worden opgenomen.',
+  solana_delegate: 'Inzet',
+  solana_move_stake: 'Beweging',
+  solana_finish_move: 'Voltooi de zet',
+  solana_staking_move_notice:
+    'Het overzetten van de stake is een proces in meerdere stappen en strekt zich uit over verschillende periodes: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen kunt u de stake overzetten naar de nieuwe validator.',
+  solana_staking_finish_move_notice:
+    'Hiermee wordt de afgekoelde stake-account opnieuw toegewezen aan de nieuwe validator en is de overdracht voltooid.',
+  solana_staking_total_staked: 'Totaal ingezette {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegeer aan nieuwe validator',
+  solana_staking_stake_accounts: 'Inzetrekeningen',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Huurreserve',
+  solana_staking_state_active: 'Actief',
+  solana_staking_state_activating: 'Activeren',
+  solana_staking_state_deactivating: 'Deactiveren',
+  solana_staking_state_inactive: 'Inactief',
+  solana_staking_activating_notice:
+    'Activeren levert beloningen op vanaf het volgende tijdperk.',
+  solana_staking_deactivating_notice:
+    'Deactiveren — afkoelen voordat het kan worden teruggetrokken.',
+  solana_staking_inactive_notice:
+    'Inactief — afgekoeld en klaar om te worden verwijderd.',
 }

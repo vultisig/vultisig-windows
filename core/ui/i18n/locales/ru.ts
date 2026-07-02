@@ -1618,4 +1618,25 @@ export const ru = {
     'Деактивация запускает период ожидания — ваши средства остаются заблокированными примерно на {{days}} дней, прежде чем вы сможете их вывести.',
   solana_staking_withdrawable_amount: 'Сумма, доступная для снятия',
   solana_staking_withdraw_ready_notice: 'Остыл и готов к извлечению.',
+  solana_delegate: 'Ставка',
+  solana_move_stake: 'Двигаться',
+  solana_finish_move: 'Завершающий ход',
+  solana_staking_move_notice:
+    'Перемещение стейка — это многоэтапный процесс, охватывающий несколько эпох: сейчас это деактивирует аккаунт; после истечения ~ {{days}} -дневного периода ожидания завершите перемещение стейка к новому валидатору.',
+  solana_staking_finish_move_notice:
+    'Это переводит остывший стейкинговый счет новому валидатору и завершает перемещение.',
+  solana_staking_total_staked: 'Total Staked {{ticker}}',
+  solana_staking_delegate_new_validator: 'Делегировать новому валидатору',
+  solana_staking_stake_accounts: 'Счета ставок',
+  solana_staking_apy: 'АПИ',
+  solana_staking_rent_reserve: 'Резерв на арендную плату',
+  solana_staking_state_active: 'Активный',
+  solana_staking_state_activating: 'Активация',
+  solana_staking_state_deactivating: 'Деактивация',
+  solana_staking_state_inactive: 'Неактивный',
+  solana_staking_activating_notice:
+    'Активация — приносит награды из следующей эпохи.',
+  solana_staking_deactivating_notice:
+    'Деактивация — охлаждение перед извлечением.',
+  solana_staking_inactive_notice: 'Неактивен — остыл и готов к изъятию.',
 }

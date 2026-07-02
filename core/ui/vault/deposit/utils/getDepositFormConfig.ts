@@ -892,6 +892,24 @@ export const getDepositFormConfig = ({
         pool: z.string().min(1),
       }),
     }),
+    // Solana delegate: stake an amount from the wallet's liquid SOL to a chosen
+    // validator (create + delegate a new stake account). The amount IS bounded
+    // by the liquid balance here, so the standard positive-amount schema fits.
+    solana_delegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        amount: positiveAmountSchema(totalAmountAvailable, t),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+      }),
+    }),
     // Solana deactivate / withdraw operate on a stake account prefilled from
     // the DeFi tab, so their fields are hidden. Withdraw also carries the
     // (prefilled) withdrawable amount for the verify/Done display.

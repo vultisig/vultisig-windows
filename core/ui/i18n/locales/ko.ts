@@ -1604,4 +1604,26 @@ export const ko = {
     '비활성화하면 쿨다운이 시작됩니다. 출금하기 전까지 약 {{days}} 일 동안 자금이 잠겨 있습니다.',
   solana_staking_withdrawable_amount: '인출 가능 금액',
   solana_staking_withdraw_ready_notice: '식어서 철수할 준비가 되었습니다.',
+  solana_delegate: '말뚝',
+  solana_move_stake: '이동하다',
+  solana_finish_move: '동작 마무리',
+  solana_staking_move_notice:
+    '스테이킹 이전은 여러 단계를 거치며 여러 에포크에 걸쳐 진행됩니다. 현재 계정은 비활성화되며, 약 {{days}} 일의 쿨다운 기간이 지난 후 새로운 검증자로 이전이 완료됩니다.',
+  solana_staking_finish_move_notice:
+    '이로써 쿨링된 스테이킹 계정이 새로운 검증자에게 재위임되고 이전이 완료됩니다.',
+  solana_staking_total_staked: '총 스테이킹 금액 {{ticker}}',
+  solana_staking_delegate_new_validator: '새로운 검증자에게 위임',
+  solana_staking_stake_accounts: '이해관계자 계정',
+  solana_staking_apy: '에이피',
+  solana_staking_rent_reserve: '임대료 적립금',
+  solana_staking_state_active: '활동적인',
+  solana_staking_state_activating: '활성화 중',
+  solana_staking_state_deactivating: '비활성화',
+  solana_staking_state_inactive: '비활성화됨',
+  solana_staking_activating_notice:
+    '활성화하면 다음 에포크부터 보상을 획득할 수 있습니다.',
+  solana_staking_deactivating_notice:
+    '비활성화 — 제거하기 전에 식히는 과정입니다.',
+  solana_staking_inactive_notice:
+    '비활성 상태 — 냉각되어 철수 준비가 완료되었습니다.',
 }

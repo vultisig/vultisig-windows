@@ -1651,4 +1651,26 @@ export const de = {
     'Durch die Deaktivierung beginnt eine Wartezeit – Ihr Einsatz bleibt für ca. {{days}} Tage gesperrt, bevor Sie ihn abheben können.',
   solana_staking_withdrawable_amount: 'Abhebbarer Betrag',
   solana_staking_withdraw_ready_notice: 'Abgekühlt und bereit zum Rückzug.',
+  solana_delegate: 'Einsatz',
+  solana_move_stake: 'Bewegen',
+  solana_finish_move: 'Finish Move',
+  solana_staking_move_notice:
+    'Der Transfer des Einsatzes erfolgt in mehreren Schritten und erstreckt sich über mehrere Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlphase von ~ {{days}} Tagen wird der Transfer zum neuen Validator abgeschlossen.',
+  solana_staking_finish_move_notice:
+    'Dadurch wird das ruhende Stake-Konto an den neuen Validator delegiert und der Vorgang abgeschlossen.',
+  solana_staking_total_staked: 'Insgesamt eingesetzt {{ticker}}',
+  solana_staking_delegate_new_validator: 'An neuen Validator delegieren',
+  solana_staking_stake_accounts: 'Stake-Konten',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Mietreserve',
+  solana_staking_state_active: 'Aktiv',
+  solana_staking_state_activating: 'Aktivierung',
+  solana_staking_state_deactivating: 'Deaktivierung',
+  solana_staking_state_inactive: 'Inaktiv',
+  solana_staking_activating_notice:
+    'Aktivierung — bringt Belohnungen ab der nächsten Epoche ein.',
+  solana_staking_deactivating_notice:
+    'Deaktivierung – Abkühlphase, bevor das Gerät zurückgezogen werden kann.',
+  solana_staking_inactive_notice:
+    'Inaktiv – abgekühlt und bereit zur Auszahlung.',
 }

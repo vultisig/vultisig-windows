@@ -1638,4 +1638,26 @@ export const pt = {
     'A desativação inicia um período de espera — seu token permanece bloqueado por aproximadamente {{days}} dias antes que você possa sacar.',
   solana_staking_withdrawable_amount: 'Valor que pode ser levantado',
   solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
+  solana_delegate: 'Estaca',
+  solana_move_stake: 'Mover',
+  solana_finish_move: 'Movimento final',
+  solana_staking_move_notice:
+    'A transferência de stake é um processo de várias etapas e abrange diferentes épocas: esta ação desativa a conta agora; após o período de espera de ~ {{days}} dias, conclua a transferência para o novo validador.',
+  solana_staking_finish_move_notice:
+    'Isso redistribui a conta de stake em período de inatividade para o novo validador e conclui a movimentação.',
+  solana_staking_total_staked: 'Total em staking {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegar ao novo validador',
+  solana_staking_stake_accounts: 'Contas de participação',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Reserva de aluguel',
+  solana_staking_state_active: 'Ativo',
+  solana_staking_state_activating: 'Ativando',
+  solana_staking_state_deactivating: 'Desativando',
+  solana_staking_state_inactive: 'Inativo',
+  solana_staking_activating_notice:
+    'Ativar — garante recompensas a partir da próxima época.',
+  solana_staking_deactivating_notice:
+    'Desativação — resfriamento antes de poder ser retirado.',
+  solana_staking_inactive_notice:
+    'Inativo — resfriado e pronto para ser retirado.',
 }

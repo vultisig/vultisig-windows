@@ -1,6 +1,7 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { cosmosStakedFiat } from '@core/ui/chain/cosmos/staking/cosmosStakedFiat'
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
+import { useSolanaStakeAccountsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaStakeAccountsQuery'
 import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
@@ -82,6 +83,17 @@ export const useDefiChainPortfolios = () => {
   const tonStakePositionQuery = useTonStakePositionQuery(tonAddress)
   const tonPricesQuery = useCoinPricesQuery({
     coins: [{ ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }],
+  })
+
+  // Solana native staking: total staked = sum of the delegated stake across the
+  // wallet's on-chain stake accounts (discovered on-chain, no opt-in), rolled
+  // up at spot price. One card per wallet, count = number of delegations.
+  const solanaAddress = useCurrentVaultAddress(Chain.Solana)
+  const solanaStakeAccountsQuery = useSolanaStakeAccountsQuery(
+    solanaAddress ?? ''
+  )
+  const solanaPricesQuery = useCoinPricesQuery({
+    coins: [{ ...chainFeeCoin[Chain.Solana], chain: Chain.Solana }],
   })
 
   const data = useMemo<DefiChainPortfolio[]>(() => {
@@ -218,6 +230,29 @@ export const useDefiChainPortfolios = () => {
       })
     }
 
+    if (enabledChains.includes(Chain.Solana)) {
+      const accounts = (solanaStakeAccountsQuery.data ?? []).filter(
+        account => account.delegation !== undefined
+      )
+      const stakedLamports = accounts.reduce(
+        (total, account) => total + (account.delegation?.stake ?? 0n),
+        0n
+      )
+      const stakedUi = Number(
+        fromChainAmount(stakedLamports, chainFeeCoin[Chain.Solana].decimals)
+      )
+      const price =
+        solanaPricesQuery.data?.[coinKeyToString({ chain: Chain.Solana })]
+
+      portfolios.push({
+        chain: Chain.Solana,
+        totalFiat: price !== undefined ? stakedUi * price : 0,
+        positionsWithBalanceCount: accounts.length,
+        isLoading:
+          solanaStakeAccountsQuery.isPending || solanaPricesQuery.isPending,
+      })
+    }
+
     return portfolios
   }, [
     enabledChains,
@@ -248,6 +283,10 @@ export const useDefiChainPortfolios = () => {
     tonStakePositionQuery.isPending,
     tonPricesQuery.data,
     tonPricesQuery.isPending,
+    solanaStakeAccountsQuery.data,
+    solanaStakeAccountsQuery.isPending,
+    solanaPricesQuery.data,
+    solanaPricesQuery.isPending,
   ])
 
   const isPending =
@@ -264,7 +303,9 @@ export const useDefiChainPortfolios = () => {
       (qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending)) ||
     (enabledChains.includes(Chain.Ton) &&
       tonSelectedPositions.length > 0 &&
-      (tonStakePositionQuery.isPending || tonPricesQuery.isPending))
+      (tonStakePositionQuery.isPending || tonPricesQuery.isPending)) ||
+    (enabledChains.includes(Chain.Solana) &&
+      (solanaStakeAccountsQuery.isPending || solanaPricesQuery.isPending))
 
   const isTronEnabled = enabledChains.includes(Chain.Tron)
 
