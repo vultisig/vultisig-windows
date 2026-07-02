@@ -1620,4 +1620,6 @@ export const nl = {
   solana_staking_withdrawable_amount: 'Opneembaar bedrag',
   solana_staking_withdraw_ready_notice:
     'Afgekoeld en klaar om te worden opgenomen.',
+  external_recipient_tooltip_content:
+    'Stuur het omgewisselde geld naar een ander walletadres in plaats van naar je eigen adres.',
 }

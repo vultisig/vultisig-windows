@@ -1612,4 +1612,6 @@ export const hr = {
     'Deaktiviranjem započinje hlađenje — vaš ulog ostaje zaključan ~ {{days}} dana prije nego što možete isplatiti novac.',
   solana_staking_withdrawable_amount: 'Iznos za isplatu',
   solana_staking_withdraw_ready_notice: 'Ohlađeno i spremno za povlačenje.',
+  external_recipient_tooltip_content:
+    'Pošaljite zamijenjena sredstva na drugu adresu novčanika umjesto na svoju.',
 }

@@ -1511,4 +1511,6 @@ export const zh = {
     '停用后会开始冷却期——您的质押将被锁定约{{days}}天，之后您才能提取。',
   solana_staking_withdrawable_amount: '可提取金额',
   solana_staking_withdraw_ready_notice: '冷静下来，准备撤退。',
+  external_recipient_tooltip_content:
+    '将兑换后的资金发送到另一个钱包地址，而不是您自己的钱包地址。',
 }
