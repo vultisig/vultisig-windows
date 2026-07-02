@@ -63,6 +63,7 @@ export const DefiPortfolioHeader = () => {
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               <IconButton
+                data-testid="manage-defi-chains-button"
                 kind="secondary"
                 onClick={() => navigate({ id: 'manageDefiChains' })}
                 style={{

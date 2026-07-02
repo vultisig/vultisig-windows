@@ -1612,4 +1612,10 @@ export const hr = {
     'Deaktiviranjem započinje hlađenje — vaš ulog ostaje zaključan ~ {{days}} dana prije nego što možete isplatiti novac.',
   solana_staking_withdrawable_amount: 'Iznos za isplatu',
   solana_staking_withdraw_ready_notice: 'Ohlađeno i spremno za povlačenje.',
+  solana_move_stake: 'Potez',
+  solana_finish_move: 'Završi potez',
+  solana_staking_move_notice:
+    'Premještanje uloga je višekoračno i obuhvaća epohe: ovo sada deaktivira račun; nakon ~ {{days}} dana hlađenja, završite premještanje na novi validator.',
+  solana_staking_finish_move_notice:
+    'Ovim se ohlađeni ulog račun ponovno delegira novom validatoru i dovršava premještanje.',
 }

@@ -5,13 +5,14 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 import { DefiChainPortfolio } from '../hooks/useDefiPortfolios'
 
@@ -25,6 +26,7 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
 
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
+  const { iconStyle } = useTheme()
 
   const handleClick = () => {
     navigate({ id: 'defiChainDetail', state: { chain } })
@@ -35,7 +37,7 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
       <HStack fullWidth alignItems="center" gap={12}>
         <ChainEntityIcon
           value={getChainLogoSrc(chain)}
-          style={{ fontSize: 32 }}
+          style={{ fontSize: iconStyle === 'station' ? 36 : 32 }}
         />
 
         <HStack
@@ -71,7 +73,11 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
               </Text>
             </VStack>
             <IconWrapper>
-              <ChevronRightIcon />
+              {iconStyle === 'station' ? (
+                <StationChevronRightSmallIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
             </IconWrapper>
           </HStack>
         </HStack>
@@ -88,4 +94,17 @@ const StyledPanel = styled(Panel)`
   &:hover {
     background-color: ${getColor('foregroundExtra')};
   }
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      border-radius: 0;
+      background: ${theme.colors.foreground.toCssValue()};
+      max-height: none;
+      padding: 12px;
+
+      &:hover {
+        background: ${theme.colors.foregroundDark.toCssValue()};
+      }
+    `}
 `

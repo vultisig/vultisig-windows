@@ -1635,4 +1635,10 @@ export const es = {
   solana_staking_withdrawable_amount: 'Cantidad retirable',
   solana_staking_withdraw_ready_notice:
     'Ya se ha enfriado y está listo para retirarse.',
+  solana_move_stake: 'Mover',
+  solana_finish_move: 'Finalizar movimiento',
+  solana_staking_move_notice:
+    'El traslado de la participación es un proceso de varios pasos que abarca varias épocas: esto desactiva la cuenta ahora; después del período de espera de ~ {{days}} días, finalice el traslado al nuevo validador.',
+  solana_staking_finish_move_notice:
+    'Esto vuelve a delegar la cuenta de participación enfriada al nuevo validador y completa la transferencia.',
 }

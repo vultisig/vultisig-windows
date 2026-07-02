@@ -1,7 +1,6 @@
 import { useCore } from '@core/ui/state/core'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
-import { defaultChains } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import {
@@ -15,10 +14,12 @@ import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { encryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { currentProductBrand } from '../../product/brand'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { StorageKey } from '../../storage/StorageKey'
+import { getDefaultVaultChains } from '../chains/defaultVaultChains'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
@@ -52,7 +53,7 @@ export const useCreateVaultMutation = (
 
       const chainsToCreate = isKeyImportVault(vault)
         ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))
-        : defaultChains
+        : getDefaultVaultChains(currentProductBrand)
 
       const coins = await Promise.all(
         chainsToCreate.map(async chain => {

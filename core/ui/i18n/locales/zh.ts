@@ -1511,4 +1511,10 @@ export const zh = {
     '停用后会开始冷却期——您的质押将被锁定约{{days}}天，之后您才能提取。',
   solana_staking_withdrawable_amount: '可提取金额',
   solana_staking_withdraw_ready_notice: '冷静下来，准备撤退。',
+  solana_move_stake: '移动',
+  solana_finish_move: '完成移动',
+  solana_staking_move_notice:
+    '转移质押是多步骤的，并且跨越多个纪元：这会立即停用账户；在 ~ {{days}}天的冷却期后，完成将其转移到新的验证者。',
+  solana_staking_finish_move_notice:
+    '这会将冷却后的质押账户重新委托给新的验证者，从而完成转移。',
 }
