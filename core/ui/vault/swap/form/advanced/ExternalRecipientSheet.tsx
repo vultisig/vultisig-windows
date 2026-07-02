@@ -63,6 +63,7 @@ export const ExternalRecipientSheet = ({
             {t('send_to_different_address')}
           </Text>
           <Tooltip
+            placement="top"
             content={<Text>{t('external_recipient_tooltip_content')}</Text>}
             renderOpener={props => (
               <IconWrapper size={16} color="textShy" {...props}>
