@@ -137,7 +137,7 @@ const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-height: ${({ theme }) => (theme.iconStyle === 'station' ? 48 : 42)}px;
+  max-height: 48px;
   position: relative;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 

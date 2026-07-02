@@ -1604,4 +1604,10 @@ export const ko = {
     '비활성화하면 쿨다운이 시작됩니다. 출금하기 전까지 약 {{days}} 일 동안 자금이 잠겨 있습니다.',
   solana_staking_withdrawable_amount: '인출 가능 금액',
   solana_staking_withdraw_ready_notice: '식어서 철수할 준비가 되었습니다.',
+  solana_move_stake: '이동하다',
+  solana_finish_move: '동작 마무리',
+  solana_staking_move_notice:
+    '스테이킹 이전은 여러 단계를 거치며 여러 에포크에 걸쳐 진행됩니다. 현재 계정은 비활성화되며, 약 {{days}} 일의 쿨다운 기간이 지난 후 새로운 검증자로 이전이 완료됩니다.',
+  solana_staking_finish_move_notice:
+    '이로써 쿨링된 스테이킹 계정이 새로운 검증자에게 재위임되고 이전이 완료됩니다.',
 }
