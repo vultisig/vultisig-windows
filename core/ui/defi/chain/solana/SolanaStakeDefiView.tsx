@@ -1,5 +1,6 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useSolanaApyInputsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaApyInputsQuery'
 import { useSolanaEpochInfoQuery } from '@core/ui/chain/solana/staking/queries/useSolanaEpochInfoQuery'
 import { useSolanaStakeAccountsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaStakeAccountsQuery'
 import { useSolanaValidatorsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaValidatorsQuery'
@@ -12,6 +13,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { resolveValidatorApy } from '@vultisig/core-chain/chains/solana/staking/apyResolver'
 import { solDecimals } from '@vultisig/core-chain/chains/solana/staking/config'
 import { evaluateCooldown } from '@vultisig/core-chain/chains/solana/staking/cooldownGate'
 import {
@@ -19,6 +21,7 @@ import {
   stakeActivationState,
 } from '@vultisig/core-chain/chains/solana/staking/models/stakeAccount'
 import {
+  networkActivatedStake,
   SolanaValidator,
   validatorDisplayName,
 } from '@vultisig/core-chain/chains/solana/staking/models/validator'
@@ -64,6 +67,7 @@ export const SolanaStakeDefiView = () => {
   const stakeAccountsQuery = useSolanaStakeAccountsQuery(owner)
   const validatorsQuery = useSolanaValidatorsQuery()
   const epochQuery = useSolanaEpochInfoQuery()
+  const apyInputsQuery = useSolanaApyInputsQuery()
   const pricesQuery = useCoinPricesQuery({
     coins: solCoin ? [extractCoinKey(solCoin)] : [],
   })
@@ -80,9 +84,13 @@ export const SolanaStakeDefiView = () => {
     ? (pricesQuery.data?.[solCoin.priceProviderId] ?? 0)
     : 0
 
+  const validators = validatorsQuery.data ?? []
   const validatorByVote = new Map<string, SolanaValidator>(
-    (validatorsQuery.data ?? []).map(v => [v.votePubkey, v])
+    validators.map(v => [v.votePubkey, v])
   )
+  // Network-wide activated stake — the fractionStaked denominator for the APY
+  // fallback. Must be the full-set sum, not any single validator's stake.
+  const totalActivatedStake = networkActivatedStake(validators)
   const currentEpoch = epochQuery.data?.epoch ?? 0n
 
   const rows = (stakeAccountsQuery.data ?? [])
@@ -147,13 +155,20 @@ export const SolanaStakeDefiView = () => {
             {t('solana_staking_stake_accounts')}
           </Text>
           {rows.map(row => {
+            const validator = validatorByVote.get(row.votePubkey)
+            const apy = validator
+              ? resolveValidatorApy({
+                  validator,
+                  inflationRate: apyInputsQuery.data?.inflationRate,
+                  totalSupplyLamports: apyInputsQuery.data?.totalSupplyLamports,
+                  totalActivatedStake,
+                })
+              : undefined
             return (
               <SolanaDelegationCard
                 key={row.stakeAccount.pubkey}
                 row={row}
-                // APY display is wired once the SDK apyResolver publishes
-                // (PR #930); the card hides the APY row while this is undefined.
-                apy={undefined}
+                apy={apy}
                 ticker={solCoin.ticker}
                 priceUsd={priceUsd}
                 onUnstake={() => onAccountAction('solana_unstake', row)}

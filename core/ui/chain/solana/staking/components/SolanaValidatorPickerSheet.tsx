@@ -1,3 +1,4 @@
+import { useSolanaApyInputsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaApyInputsQuery'
 import { useSolanaValidatorsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaValidatorsQuery'
 import { Button } from '@lib/ui/buttons/Button'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
@@ -9,8 +10,10 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { resolveValidatorApy } from '@vultisig/core-chain/chains/solana/staking/apyResolver'
 import { solDecimals } from '@vultisig/core-chain/chains/solana/staking/config'
 import {
+  networkActivatedStake,
   SolanaValidator,
   validatorDisplayName,
   validatorLogoUrl,
@@ -50,6 +53,10 @@ export const SolanaValidatorPickerSheet = ({
   const [picked, setPicked] = useState<string | undefined>(selectedVotePubkey)
 
   const query = useSolanaValidatorsQuery()
+  const apyInputsQuery = useSolanaApyInputsQuery()
+  // Network-wide activated stake (full set, incl. delinquent) — the
+  // fractionStaked denominator for the APY fallback, not a per-validator value.
+  const totalActivatedStake = networkActivatedStake(query.data ?? [])
 
   const filter = (validators: SolanaValidator[]) => {
     const needle = search.trim().toLowerCase()
@@ -153,13 +160,29 @@ export const SolanaValidatorPickerSheet = ({
                             <CircleCheckIcon />
                           </SelectedCheck>
                         ) : null}
-                        <RightColumn>
-                          <Text size={14} color="regular" nowrap>
-                            {t('validator_commission_short', {
-                              value: v.commission,
-                            })}
-                          </Text>
-                        </RightColumn>
+                        {(() => {
+                          const apy = resolveValidatorApy({
+                            validator: v,
+                            inflationRate: apyInputsQuery.data?.inflationRate,
+                            totalSupplyLamports:
+                              apyInputsQuery.data?.totalSupplyLamports,
+                            totalActivatedStake,
+                          })
+                          return (
+                            <RightColumn>
+                              <Text size={14} weight="500" color="success">
+                                {apy !== undefined
+                                  ? `${(apy * 100).toFixed(2)}%`
+                                  : '—'}
+                              </Text>
+                              <Text size={11} color="shy" nowrap>
+                                {t('validator_commission_short', {
+                                  value: v.commission,
+                                })}
+                              </Text>
+                            </RightColumn>
+                          )
+                        })()}
                       </ValidatorRow>
                     )
                   })}
