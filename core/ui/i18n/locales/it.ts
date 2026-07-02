@@ -1644,4 +1644,10 @@ export const it = {
   solana_staking_withdraw_ready_notice: 'Raffreddato e pronto per il ritiro.',
   external_recipient_tooltip_content:
     'Invia i fondi scambiati a un indirizzo di portafoglio diverso dal tuo.',
+  solana_move_stake: 'Mossa',
+  solana_finish_move: 'Fine della mossa',
+  solana_staking_move_notice:
+    'Lo spostamento della quota è un processo a più fasi che si estende su diverse epoche: questa operazione disattiva l&#39;account ora; dopo il periodo di raffreddamento di ~ {{days}} giorni, completa il trasferimento al nuovo validatore.',
+  solana_staking_finish_move_notice:
+    'Questa operazione riassegna il conto di staking in attesa di completamento al nuovo validatore e completa il trasferimento.',
 }
