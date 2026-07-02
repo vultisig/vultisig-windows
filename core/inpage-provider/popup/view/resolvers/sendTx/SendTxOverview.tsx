@@ -248,7 +248,13 @@ export const SendTxOverview = ({
     if (isSendTxOverviewError) {
       return undefined
     }
-    if (gasEstimationDataQuery.isPending || isContractDecodingPending) {
+    if (
+      gasEstimationDataQuery.isPending ||
+      isContractDecodingPending ||
+      // Keep the start button disabled until the native balance is known, or
+      // the insufficient-funds gate below would be bypassed during its load.
+      (isEvm && nativeBalanceQuery.isPending)
+    ) {
       return t('loading')
     }
     if (isContractDecodingFailed) {
