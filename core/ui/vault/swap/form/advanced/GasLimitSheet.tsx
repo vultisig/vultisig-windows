@@ -52,7 +52,7 @@ export const GasLimitSheet = ({
             placement="top"
             content={<Text>{t('gas_limit_tooltip_content')}</Text>}
             renderOpener={props => (
-              <IconWrapper size={16} color="textShy" {...props}>
+              <IconWrapper size={16} color="textShy" tabIndex={0} {...props}>
                 <SheetInfoIcon />
               </IconWrapper>
             )}

@@ -66,7 +66,7 @@ export const ExternalRecipientSheet = ({
             placement="top"
             content={<Text>{t('external_recipient_tooltip_content')}</Text>}
             renderOpener={props => (
-              <IconWrapper size={16} color="textShy" {...props}>
+              <IconWrapper size={16} color="textShy" tabIndex={0} {...props}>
                 <SheetInfoIcon />
               </IconWrapper>
             )}
