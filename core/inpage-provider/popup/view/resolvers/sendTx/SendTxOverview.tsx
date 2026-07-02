@@ -12,6 +12,7 @@ import { NetworkFeeSection } from '@core/inpage-provider/popup/view/resolvers/se
 import { SwapAmountDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/SwapAmountDisplay'
 import { ParsedTx } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/parsedTx'
 import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/gasEstimation/getGasEstimationQuery'
+import { getNonNativeDappCosmosFeeDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/dappCosmosFee'
 import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/query'
 import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
 import { SuiTxIntentDisplay } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/SuiTxIntentDisplay'
@@ -30,6 +31,7 @@ import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDispla
 import { parseSuiTx } from '@core/ui/mpc/keysign/tx/sui/parser'
 import { SignSuiDisplay } from '@core/ui/mpc/keysign/tx/sui/SignSuiDisplay'
 import { useCore } from '@core/ui/state/core'
+import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
   IconWrapper,
@@ -58,11 +60,13 @@ import {
   extractAccountCoinKey,
 } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
 import { parseBlockaidSuiSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -108,6 +112,34 @@ export const SendTxOverview = ({
   const nativeBalanceQuery = useBalanceQuery(
     extractAccountCoinKey({ ...chainFeeCoin[chain], address })
   )
+
+  const publicKey = useCurrentVaultNullablePublicKey(chain)
+
+  // Chains whose dApp keysign we can gate on native funds before signing: the
+  // wallet knows both the native value and the fee up front, and the node
+  // rejects `value + fee > balance` at broadcast (mirrors the in-wallet send
+  // form). Others can't form a meaningful check — Sui/Polkadot don't surface a
+  // value, UTXO pre-selects its inputs, and Solana txs are dApp-built.
+  const canCheckFunds =
+    isChainOfKind(chain, 'evm') ||
+    isChainOfKind(chain, 'cosmos') ||
+    isChainOfKind(chain, 'ton')
+
+  const nativeFeeQuery = useQuery({
+    queryKey: [
+      'dappNativeFee',
+      keysignPayloadQuery.data,
+      publicKey,
+      walletCore,
+    ],
+    queryFn: () =>
+      getFeeAmount({
+        keysignPayload: shouldBePresent(keysignPayloadQuery.data),
+        walletCore,
+        publicKey: shouldBePresent(publicKey),
+      }),
+    enabled: canCheckFunds && !!keysignPayloadQuery.data && !!publicKey,
+  })
 
   const blockaidSimulationQuery = useBlockaidSimulationQuery({
     keysignPayloadQuery,
@@ -179,33 +211,40 @@ export const SendTxOverview = ({
   const memo = keysignPayloadQuery.data?.memo
   const isEvm = isChainOfKind(chain, 'evm')
 
-  // Gate an EVM keysign before it starts: the node requires the account to
-  // cover `value + gasLimit * maxFeePerGas`, so a dApp tx that exceeds the
-  // native balance is rejected at broadcast — after the MPC ceremony has
-  // already run. Block it here instead, mirroring the in-wallet send form.
+  // Gate keysign before it starts: the node rejects a tx whose
+  // `value + fee` exceeds the native balance at broadcast — after the MPC
+  // ceremony has already run. Block it here instead, mirroring the in-wallet
+  // send form. Applies to EVM, Cosmos and Ton (see `canCheckFunds`).
   const insufficientFundsMessage = (() => {
     const payload = keysignPayloadQuery.data
     const nativeBalance = nativeBalanceQuery.data
+    const fee = nativeFeeQuery.data
 
-    if (!isEvm || !payload || nativeBalance == null) {
+    if (!canCheckFunds || !payload || nativeBalance == null || fee == null) {
       return undefined
     }
 
-    const evmSpecific = getBlockchainSpecificValue(
-      payload.blockchainSpecific,
-      'ethereumSpecific'
-    )
+    // A Cosmos dApp tx can pay its fee in a non-native token; that amount isn't
+    // comparable to the native balance, so don't gate those.
+    if (
+      isChainOfKind(chain, 'cosmos') &&
+      getNonNativeDappCosmosFeeDisplay({ keysignPayload: payload, chain })
+    ) {
+      return undefined
+    }
 
-    const value = BigInt(payload.toAmount)
-    const maxGasFee =
-      BigInt(evmSpecific.gasLimit) * BigInt(evmSpecific.maxFeePerGasWei)
+    // `toAmount` is native for EVM (it's the tx `value`), but for Cosmos/Ton it
+    // is only native when the sent coin is the fee coin — a token amount there
+    // must not be added to the native fee.
+    const nativeValue =
+      isChainOfKind(chain, 'evm') || isFeeCoin(coin)
+        ? BigInt(payload.toAmount)
+        : 0n
 
-    if (value > 0n) {
-      if (value + maxGasFee > nativeBalance) {
-        return t('insufficient_balance')
-      }
-    } else if (maxGasFee > nativeBalance) {
-      return t('insufficient_native_balance_for_fee')
+    if (nativeValue + fee > nativeBalance) {
+      return nativeValue > 0n
+        ? t('insufficient_balance')
+        : t('insufficient_native_balance_for_fee')
     }
 
     return undefined
@@ -253,9 +292,10 @@ export const SendTxOverview = ({
     if (
       gasEstimationDataQuery.isPending ||
       isContractDecodingPending ||
-      // Keep the start button disabled until the native balance is known, or
-      // the insufficient-funds gate below would be bypassed during its load.
-      (isEvm && nativeBalanceQuery.isPending)
+      // Keep the start button disabled until the balance and fee are known, or
+      // the insufficient-funds gate below would be bypassed during their load.
+      (canCheckFunds &&
+        (nativeBalanceQuery.isPending || nativeFeeQuery.isPending))
     ) {
       return t('loading')
     }
