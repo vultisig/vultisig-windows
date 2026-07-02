@@ -110,6 +110,8 @@ export const useCorrectSelectedCoin = () => {
         claim_rewards: () => currentDepositCoin,
         solana_unstake: () => currentDepositCoin,
         solana_withdraw: () => currentDepositCoin,
+        solana_move_stake: () => currentDepositCoin,
+        solana_finish_move: () => currentDepositCoin,
       })
     },
     [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]

@@ -919,5 +919,36 @@ export const getDepositFormConfig = ({
         ),
       }),
     }),
+    // Move-stake step 1 (deactivate): operates on a prefilled stake account,
+    // no amount and no destination yet (chosen at finish-move).
+    solana_move_stake: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+      ],
+      schema: z.object({ stakeAccount: z.string().trim().min(1) }),
+    }),
+    // Move-stake step 2 (re-delegate): prefilled stake account + re-delegatable
+    // amount (unrelated to liquid SOL, so require only > 0) + a destination
+    // validator picked inline on the screen.
+    solana_finish_move: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
+        { name: 'amount', type: 'number', label: t('amount'), hidden: true },
+      ],
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+        amount: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('amount_must_be_positive'))
+        ),
+      }),
+    }),
   })
 }

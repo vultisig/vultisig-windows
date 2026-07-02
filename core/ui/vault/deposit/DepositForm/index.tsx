@@ -157,6 +157,8 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     claim_rewards: t('claim_rewards'),
     solana_unstake: t('unstake'),
     solana_withdraw: t('solana_withdraw'),
+    solana_move_stake: t('solana_move_stake'),
+    solana_finish_move: t('solana_finish_move'),
   }
 
   const getPageTitle = () => {
