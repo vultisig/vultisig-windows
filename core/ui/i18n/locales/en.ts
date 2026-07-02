@@ -358,6 +358,8 @@ export const en = {
   enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
+  external_recipient_tooltip_content:
+    'Send the swapped funds to a different wallet address instead of your own.',
   enter_amount: 'Enter Amount',
   enter_folder_name: 'Enter folder name',
   enter_memo: 'Enter Memo',

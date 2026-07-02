@@ -3,6 +3,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -47,9 +48,14 @@ export const GasLimitSheet = ({
           <Text size={14} weight={500} color="shy">
             {t('gas_limit')}
           </Text>
-          <IconWrapper size={16} color="textShy">
-            <SheetInfoIcon />
-          </IconWrapper>
+          <Tooltip
+            content={<Text>{t('gas_limit_tooltip_content')}</Text>}
+            renderOpener={props => (
+              <IconWrapper size={16} color="textShy" {...props}>
+                <SheetInfoIcon />
+              </IconWrapper>
+            )}
+          />
         </HStack>
         <GasInput
           inputMode="numeric"

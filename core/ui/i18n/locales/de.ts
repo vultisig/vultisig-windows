@@ -1651,4 +1651,6 @@ export const de = {
     'Durch die Deaktivierung beginnt eine Wartezeit – Ihr Einsatz bleibt für ca. {{days}} Tage gesperrt, bevor Sie ihn abheben können.',
   solana_staking_withdrawable_amount: 'Abhebbarer Betrag',
   solana_staking_withdraw_ready_notice: 'Abgekühlt und bereit zum Rückzug.',
+  external_recipient_tooltip_content:
+    'Senden Sie die getauschten Gelder an eine andere Wallet-Adresse als Ihre eigene.',
 }

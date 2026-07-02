@@ -1642,4 +1642,6 @@ export const it = {
     'La disattivazione avvia un periodo di raffreddamento: la tua quota rimarrà bloccata per circa {{days}} giorni prima che tu possa prelevare.',
   solana_staking_withdrawable_amount: 'Importo prelevabile',
   solana_staking_withdraw_ready_notice: 'Raffreddato e pronto per il ritiro.',
+  external_recipient_tooltip_content:
+    'Invia i fondi scambiati a un indirizzo di portafoglio diverso dal tuo.',
 }

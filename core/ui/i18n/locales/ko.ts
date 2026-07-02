@@ -1604,4 +1604,6 @@ export const ko = {
     '비활성화하면 쿨다운이 시작됩니다. 출금하기 전까지 약 {{days}} 일 동안 자금이 잠겨 있습니다.',
   solana_staking_withdrawable_amount: '인출 가능 금액',
   solana_staking_withdraw_ready_notice: '식어서 철수할 준비가 되었습니다.',
+  external_recipient_tooltip_content:
+    '교환된 자금을 본인의 지갑 주소가 아닌 다른 지갑 주소로 보내세요.',
 }
