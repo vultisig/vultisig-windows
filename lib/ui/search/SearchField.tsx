@@ -1,10 +1,11 @@
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import { StationMagnifierIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type SearchFieldProps = UiProps & {
   placeholderKey?: string
@@ -21,6 +22,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
   const [uncontrolledValue, setUncontrolledValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextValue = event.target.value
@@ -42,7 +44,11 @@ export const SearchField: React.FC<SearchFieldProps> = ({
     >
       {!isFocused && (
         <SearchIconWrapper>
-          <SearchIcon strokeWidth={2.5} />
+          {iconStyle === 'station' ? (
+            <StationMagnifierIcon />
+          ) : (
+            <SearchIcon strokeWidth={2.5} />
+          )}
         </SearchIconWrapper>
       )}
       <StyledInput
@@ -61,9 +67,20 @@ export const SearchField: React.FC<SearchFieldProps> = ({
 const Wrapper = styled(HStack)`
   position: relative;
   background-color: ${getColor('foreground')};
-  border-radius: 10px;
+  border-radius: ${({ theme }) =>
+    theme.iconStyle === 'station' ? '99px' : '10px'};
   height: 48px;
   flex: none;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      background-color: ${theme.colors.foregroundDark.toCssValue()};
+      border: 1px solid ${theme.colors.foregroundExtra.toCssValue()};
+      box-shadow:
+        inset 0 0 4px rgba(240, 244, 252, 0.04),
+        inset 0 0 8px rgba(240, 244, 252, 0.03);
+    `}
 `
 
 const SearchIconWrapper = styled(VStack)`
@@ -78,17 +95,19 @@ const SearchIconWrapper = styled(VStack)`
 const StyledInput = styled.input.attrs({ autoComplete: 'off' })`
   width: 100%;
   padding-left: 32px;
-  line-height: 20px;
-  font-size: 16px;
+  line-height: ${({ theme }) => (theme.iconStyle === 'station' ? 18 : 20)}px;
+  font-size: ${({ theme }) => (theme.iconStyle === 'station' ? 13 : 16)}px;
   border-radius: 4px;
   outline: none;
   transition: border-color 0.2s;
   background-color: transparent;
   color: ${getColor('contrast')};
-  font-weight: 400;
+  font-weight: ${({ theme }) => (theme.iconStyle === 'station' ? 500 : 400)};
+  letter-spacing: ${({ theme }) =>
+    theme.iconStyle === 'station' ? '0.06px' : 0};
 
   &::placeholder {
     color: ${getColor('textShy')};
-    font-weight: 400;
+    font-weight: ${({ theme }) => (theme.iconStyle === 'station' ? 500 : 400)};
   }
 `
