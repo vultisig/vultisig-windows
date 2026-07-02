@@ -1620,7 +1620,7 @@ export const nl = {
   solana_staking_withdrawable_amount: 'Opneembaar bedrag',
   solana_staking_withdraw_ready_notice:
     'Afgekoeld en klaar om te worden opgenomen.',
-  solana_move_stake: 'Beweging',
+  solana_move_stake: 'Verplaatsen',
   solana_finish_move: 'Voltooi de zet',
   solana_staking_move_notice:
     'Het overzetten van de stake is een proces in meerdere stappen en strekt zich uit over verschillende periodes: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen kunt u de stake overzetten naar de nieuwe validator.',
