@@ -1614,7 +1614,13 @@ export const nl = {
     'Uw apparaten hebben de transactie ondertekend, maar het netwerk heeft deze afgewezen. Bekijk de on-chain reden hieronder en onderteken de transactie opnieuw om het nogmaals te proberen.',
   solana_unstake: 'Ontkoppelen',
   solana_withdraw: 'Terugtrekken',
+  solana_move_stake: 'Verplaatsen',
+  solana_finish_move: 'Verplaatsing voltooien',
   solana_staking_stake_account: 'Inzetaccount',
+  solana_staking_move_notice:
+    'Stake verplaatsen gebeurt in meerdere stappen en verspreid over epochs: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen voltooit u de verplaatsing naar de nieuwe validator.',
+  solana_staking_finish_move_notice:
+    'Hiermee wordt het afgekoelde stake-account opnieuw gedelegeerd aan de nieuwe validator en wordt de verplaatsing voltooid.',
   solana_staking_unstake_notice:
     'Na deactivering treedt een afkoelperiode in werking — uw inzet blijft ongeveer {{days}} dagen geblokkeerd voordat u deze kunt opnemen.',
   solana_staking_withdrawable_amount: 'Opneembaar bedrag',
