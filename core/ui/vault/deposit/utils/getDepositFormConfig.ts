@@ -892,5 +892,63 @@ export const getDepositFormConfig = ({
         pool: z.string().min(1),
       }),
     }),
+    // Solana deactivate / withdraw operate on a stake account prefilled from
+    // the DeFi tab, so their fields are hidden. Withdraw also carries the
+    // (prefilled) withdrawable amount for the verify/Done display.
+    solana_unstake: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+      ],
+      schema: z.object({ stakeAccount: z.string().trim().min(1) }),
+    }),
+    solana_withdraw: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        { name: 'amount', type: 'number', label: t('amount'), hidden: true },
+      ],
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        // The withdraw amount is the stake account's withdrawable lamports
+        // (prefilled, not editable) — it is unrelated to the wallet's liquid
+        // SOL balance and routinely exceeds it (you're withdrawing FROM the
+        // stake account). Require only a positive value; capping at the liquid
+        // `totalAmountAvailable` would wrongly disable Continue.
+        amount: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('amount_must_be_positive'))
+        ),
+      }),
+    }),
+    // Move-stake step 1 (deactivate): operates on a prefilled stake account,
+    // no amount and no destination yet (chosen at finish-move).
+    solana_move_stake: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+      ],
+      schema: z.object({ stakeAccount: z.string().trim().min(1) }),
+    }),
+    // Move-stake step 2 (re-delegate): prefilled stake account + re-delegatable
+    // amount (unrelated to liquid SOL, so require only > 0) + a destination
+    // validator picked inline on the screen.
+    solana_finish_move: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
+        { name: 'amount', type: 'number', label: t('amount'), hidden: true },
+      ],
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+        amount: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('amount_must_be_positive'))
+        ),
+      }),
+    }),
   })
 }

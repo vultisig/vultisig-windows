@@ -224,6 +224,12 @@ export const generateMemo = ({
     undelegate: () => '',
     redelegate: () => '',
     claim_rewards: () => '',
+    // Solana staking carries no memo — the op is encoded in the relayed
+    // unsigned transaction (signSolana.rawTransactions), not a memo string.
+    solana_unstake: () => '',
+    solana_withdraw: () => '',
+    solana_move_stake: () => '',
+    solana_finish_move: () => '',
   })
 }
 

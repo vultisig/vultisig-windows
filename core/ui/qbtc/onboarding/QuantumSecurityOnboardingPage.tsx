@@ -7,6 +7,7 @@ import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { HStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -79,6 +80,8 @@ export const QuantumSecurityOnboardingPage = () => {
             {t('qbtc_onboarding_subtitle')}
           </Text>
         </TitleStack>
+
+        <WarningBlock>{t('qbtc_onboarding_key_warning')}</WarningBlock>
 
         <HeroFrame aria-hidden />
 

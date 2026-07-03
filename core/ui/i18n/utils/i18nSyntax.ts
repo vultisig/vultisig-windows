@@ -305,7 +305,13 @@ export const protectInterpolationTokens = (text: string) => {
 
     syntaxTokens.push(value)
 
-    return `X_I18N_TOKEN_${tokenIndex}_X`
+    // Wrap the sentinel in a `notranslate` span: the bare `X_I18N_TOKEN_n_X`
+    // sentinel contains the English word "TOKEN", which some target languages
+    // (e.g. Korean → "토큰") translate, corrupting the sentinel so the
+    // interpolation/tag cannot be restored. `text/html` translation honors
+    // `class="notranslate"`, keeping the inner sentinel verbatim. `restore`
+    // strips the span wrapper (and still matches the bare form as a fallback).
+    return `<span class="notranslate">X_I18N_TOKEN_${tokenIndex}_X</span>`
   }
 
   const protectedText = text

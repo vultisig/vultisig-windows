@@ -20,6 +20,7 @@ export const supportedDefiChains = [
   Chain.Terra,
   Chain.TerraClassic,
   Chain.QBTC,
+  Chain.Ton,
 ] as const satisfies readonly Chain[]
 
 export type SupportedDefiChain = (typeof supportedDefiChains)[number]

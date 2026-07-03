@@ -1,4 +1,4 @@
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
@@ -14,7 +14,6 @@ import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVis
 export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery()
   const fiatCurrency = useFiatCurrency()
-  const formatFiatAmount = useFormatFiatAmount()
 
   const { t } = useTranslation()
 
@@ -30,16 +29,21 @@ export const VaultTotalBalance = () => {
           </HStack>
         )}
         success={value => (
-          <Text
-            color="contrast"
-            size={28}
-            centerVertically
-            data-testid="balance-value"
-          >
-            <BalanceVisibilityAware size="l">
-              {formatFiatAmount(value)}
-            </BalanceVisibilityAware>
-          </Text>
+          <HStack gap={8} alignItems="center">
+            <Text
+              color="contrast"
+              size={28}
+              centerVertically
+              data-testid="balance-value"
+            >
+              <BalanceVisibilityAware size="l">
+                <AnimatedFiatAmount value={value} cacheKey="vault-total" />
+              </BalanceVisibilityAware>
+            </Text>
+            {query.isUpdating ? (
+              <Spinner size="0.9em" style={{ opacity: 0.5 }} />
+            ) : null}
+          </HStack>
         )}
       />
       <ManageVaultBalanceVisibility />

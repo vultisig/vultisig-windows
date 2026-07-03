@@ -31,10 +31,14 @@ import {
   yieldBearingTokensIdToContractMap,
   yieldContractsByBaseDenom,
 } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/config'
+import { solanaConfig } from '@vultisig/core-chain/chains/solana/solanaConfig'
+import { buildUnsignedStakingTx } from '@vultisig/core-chain/chains/solana/staking/tx/buildUnsignedStakingTx'
+import { SolanaStakingPayload } from '@vultisig/core-chain/chains/solana/staking/tx/stakingPayload'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
+import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
 import { KeysignLibType } from '@vultisig/core-mpc/mpcLib'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -43,12 +47,14 @@ import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/
 import {
   CosmosCoinSchema,
   SignDirectSchema,
+  SignSolanaSchema,
   WasmExecuteContractPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
+import { maxBigInt } from '@vultisig/lib-utils/math/maxBigInt'
 import { mirrorRecord } from '@vultisig/lib-utils/record/mirrorRecord'
 import { FieldValues } from 'react-hook-form'
 
@@ -56,6 +62,8 @@ import {
   ChainAction,
   CosmosStakingAction,
   cosmosStakingActions,
+  SolanaStakingAction,
+  solanaStakingActions,
 } from '../ChainAction'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
@@ -194,6 +202,18 @@ export const buildDepositKeysignPayload = async ({
       amountUnits,
       publicKey,
       hexPublicKey,
+      keysignPayload,
+    })
+  }
+
+  if (isOneOf(action, solanaStakingActions)) {
+    return applySolanaStakingSignData({
+      action: action as SolanaStakingAction,
+      coin,
+      depositData,
+      amountUnits,
+      hexPublicKey,
+      walletCore,
       keysignPayload,
     })
   }
@@ -697,6 +717,146 @@ const applyCosmosStakingSignData = ({
         // set it for both so the payload is self-describing.
         accountNumber: accountNumber.toString(),
       }),
+    },
+  })
+}
+
+type ApplySolanaStakingSignDataInput = {
+  action: SolanaStakingAction
+  coin: AccountCoin
+  depositData: FieldValues
+  amountUnits?: string
+  hexPublicKey: string
+  walletCore: WalletCore
+  keysignPayload: ReturnType<typeof create<typeof KeysignPayloadSchema>>
+}
+
+/**
+ * Resolves the `signSolana` artefact for a Solana deactivate / withdraw op. The
+ * stake account + amount live on the local-only deposit form, so the initiating
+ * device builds the unsigned transaction ONCE here (pinning the recent
+ * blockhash) and relays the raw bytes via `SignSolana.rawTransactions`. Every
+ * co-signing device signs the byte-identical message through the raw-transaction
+ * path — the MPC byte-parity guarantee. Mirrors iOS `SolanaStakingSignDataResolver`.
+ */
+const applySolanaStakingSignData = ({
+  action,
+  coin,
+  depositData,
+  amountUnits,
+  hexPublicKey,
+  walletCore,
+  keysignPayload,
+}: ApplySolanaStakingSignDataInput) => {
+  if (coin.chain !== Chain.Solana) {
+    throw new Error(
+      `Solana staking action '${action}' is only supported on Solana, got ${coin.chain}`
+    )
+  }
+
+  const { recentBlockHash, priorityFee, computeLimit } =
+    getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'solanaSpecific'
+    )
+
+  const stakeAccount = depositData['stakeAccount']
+  const validatorAddress = depositData['validatorAddress']
+  const amount = amountUnits ? BigInt(amountUnits) : 0n
+
+  const requireStakeAccount = (): string => {
+    if (typeof stakeAccount !== 'string' || stakeAccount.length === 0) {
+      throw new Error(`Solana staking '${action}' requires 'stakeAccount'`)
+    }
+    return stakeAccount
+  }
+
+  const requireValidator = (): string => {
+    if (typeof validatorAddress !== 'string' || validatorAddress.length === 0) {
+      throw new Error(`Solana staking '${action}' requires 'validatorAddress'`)
+    }
+    return validatorAddress
+  }
+
+  const { payload, toAddress, toAmount } = match<
+    SolanaStakingAction,
+    { payload: SolanaStakingPayload; toAddress: string; toAmount: string }
+  >(action, {
+    solana_unstake: () => {
+      const account = requireStakeAccount()
+      return {
+        payload: { op: 'unstake', stakeAccount: account } as const,
+        toAddress: account,
+        toAmount: '0',
+      }
+    },
+    solana_withdraw: () => {
+      const account = requireStakeAccount()
+      return {
+        payload: {
+          op: 'withdraw',
+          stakeAccount: account,
+          lamports: amount,
+        } as const,
+        toAddress: account,
+        toAmount: amount.toString(),
+      }
+    },
+    // Move-stake step 1: deactivate the account (byte-identical to a plain
+    // deactivate). No amount; the whole account cools down before re-delegation.
+    solana_move_stake: () => {
+      const account = requireStakeAccount()
+      return {
+        payload: { op: 'moveStakeDeactivate', stakeAccount: account } as const,
+        toAddress: account,
+        toAmount: '0',
+      }
+    },
+    // Move-stake step 2: re-delegate the cooled-down account to validator B. The
+    // existing account is set explicitly so wallet-core re-delegates it rather
+    // than deriving a fresh one.
+    solana_finish_move: () => {
+      const account = requireStakeAccount()
+      const votePubkey = requireValidator()
+      return {
+        payload: {
+          op: 'moveStakeRedelegate',
+          stakeAccount: account,
+          votePubkey,
+          lamports: amount,
+        } as const,
+        toAddress: votePubkey,
+        toAmount: amount.toString(),
+      }
+    },
+  })
+
+  const rawTransaction = buildUnsignedStakingTx({
+    walletCore,
+    payload,
+    sender: coin.address,
+    hexPublicKey,
+    recentBlockHash,
+    // Floor at the config minimum so co-signers all encode the same
+    // `setComputeUnitPrice` instruction when the wire value is missing.
+    priorityFeePrice: maxBigInt(
+      priorityFee ? BigInt(priorityFee) : 0n,
+      BigInt(solanaConfig.priorityFeePrice)
+    ),
+    priorityFeeLimit: computeLimit
+      ? Number(computeLimit)
+      : solanaConfig.priorityFeeLimit,
+  })
+
+  return create(KeysignPayloadSchema, {
+    ...keysignPayload,
+    contractPayload: { case: undefined },
+    memo: '',
+    toAddress,
+    toAmount,
+    signData: {
+      case: 'signSolana',
+      value: create(SignSolanaSchema, { rawTransactions: [rawTransaction] }),
     },
   })
 }

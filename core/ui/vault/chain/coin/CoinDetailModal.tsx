@@ -1,8 +1,10 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCore } from '@core/ui/state/core'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
+import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
@@ -50,7 +52,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
       }}
     >
       <ContentContainer>
-        <VStack alignItems="center" fullWidth>
+        <VStack alignItems="center" fullWidth style={{ zIndex: 2 }}>
           <HStack justifyContent="space-between" fullWidth gap={8}>
             <ModalCloseButton
               style={{ color: 'hsl(215, 40%, 85%)', fontSize: 16 }}
@@ -64,9 +66,12 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
           </HStack>
           <HStack alignItems="center" gap={8}>
             <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-            <Text size={20} weight={600} color="contrast">
-              {coin.ticker}
-            </Text>
+            <CoinTicker
+              ticker={coin.ticker}
+              size={20}
+              weight={600}
+              maxWidth={240}
+            />
           </HStack>
         </VStack>
         <VStack alignItems="center" gap={8}>
@@ -75,7 +80,13 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
               {formatFiatAmount(fiatValue)}
             </BalanceVisibilityAware>
           </Text>
-          <Text size={15} weight={500} color="shy">
+          <Text
+            size={15}
+            weight={500}
+            color="shy"
+            cropped
+            style={{ maxWidth: 240 }}
+          >
             <BalanceVisibilityAware>
               {formatAmount(balance, { precision: 'high' })} {coin.ticker}
             </BalanceVisibilityAware>
@@ -102,7 +113,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
             </Text>
             <NetworkBadge>
               <Text size={13} color="shyExtra">
-                {formatFiatAmount(coin.price || 0)}
+                <FiatAmountText value={coin.price || 0} />
               </Text>
             </NetworkBadge>
           </InfoRow>

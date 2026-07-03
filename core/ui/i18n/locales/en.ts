@@ -108,6 +108,9 @@ export const en = {
   blockaid_simulation_failed_description:
     'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
   transaction_scanned_by: 'Transaction scanned by {{provider}}',
+  broadcast_error: 'The network rejected this transaction',
+  broadcast_error_description:
+    'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
   broadcasted: 'Broadcasted',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
@@ -117,6 +120,9 @@ export const en = {
   by_vultisig: 'by {{productName}}',
   camera_access_blocked:
     'Camera access is blocked. Please enable it in your browser settings.',
+  camera_permission_required: 'Camera permission not granted',
+  camera_permission_required_description:
+    'Camera permission is required to proceed. Please enable it in Settings.',
   cache_password_for_5_min: 'Remember password for 5 minutes',
   cancel: 'Cancel',
   chain: 'Chain',
@@ -224,23 +230,22 @@ export const en = {
   custom: 'Custom Action',
   custom_rpc: 'Custom RPCs',
   custom_rpc_chip_custom: 'Custom',
-  custom_rpc_chip_default: 'Default',
   custom_rpc_description: 'Use your own nodes per chain',
   custom_rpc_gate_description:
     'Point {{productName}} at your own nodes. Faster queries, higher rate limits, and full privacy per chain.',
   custom_rpc_invalid_response: 'Unexpected response from this endpoint',
   custom_rpc_invalid_url: 'Enter a valid http(s) URL',
-  custom_rpc_list_subtitle:
-    "Point a chain at your own node. Leave default to use {{productName}}'s endpoints.",
   custom_rpc_reachable: 'Reachable · {{ms}} ms',
   custom_rpc_reachable_unverified:
     'Reachable · {{ms}} ms — network identity not verified',
   custom_rpc_reset_button: 'Reset to default',
-  custom_rpc_test_button: 'Test',
+  custom_rpc_default_endpoint: 'DEFAULT ENDPOINT',
+  custom_rpc_editor_hint: 'Tap to edit. Supports HTTPS endpoints only.',
+  custom_rpc_save_button: 'Save RPC',
+  custom_rpc_saved: 'RPC settings saved',
   custom_rpc_testing: 'Testing…',
   custom_rpc_unreachable: 'Endpoint unreachable',
   custom_rpc_url_hint: 'https://your-node.example',
-  custom_rpc_url_label: 'RPC URL',
   custom_rpc_wrong_chain: 'This endpoint serves a different chain',
   custom_token: 'Custom Token',
   customize_chains: 'Customize chains',
@@ -254,6 +259,51 @@ export const en = {
     bonded: 'Bonded',
     staked: 'Staked',
     lps: 'LPs',
+    governance: 'Governance',
+  },
+  qbtc_gov: {
+    status: {
+      passed: 'Passed',
+      voting: 'Voting',
+      rejected: 'Rejected',
+      failed: 'Failed',
+      deposit: 'Deposit',
+      unspecified: 'Unknown',
+    },
+    option: {
+      yes: 'Yes',
+      abstain: 'Abstain',
+      no: 'No',
+      noWithVeto: 'No with veto',
+    },
+    proposal_number: 'Proposal #{{id}}',
+    untitled_proposal: 'Untitled proposal',
+    active_section: 'Active',
+    past_section: 'Past',
+    no_proposals: 'No proposals yet',
+    proposal_not_found: 'Proposal not found',
+    voting_ended: 'Voting ended',
+    ends_in_days_hours: 'Ends in {{days}}d {{hours}}h',
+    ends_in_hours_minutes: 'Ends in {{hours}}h {{minutes}}m',
+    ends_in_minutes: 'Ends in {{minutes}}m',
+    voted_label: 'Voted · {{option}}',
+    summary: 'Summary',
+    tally: 'Tally',
+    quorum: 'Quorum',
+    no_votes_yet: 'No votes yet',
+    voting_window: 'Voting window',
+    voting_start: 'Starts',
+    voting_end: 'Ends',
+    messages: 'Messages',
+    cast_vote: 'Cast your vote',
+    change_vote: 'Change your vote',
+    weighted_vote_cta: 'Weighted vote',
+    weighted_vote_title: 'Weighted vote',
+    weighted_total: 'Total',
+    submit_weighted_vote: 'Submit weighted vote',
+    your_vote: 'Your vote',
+    confirm_vote: 'Confirm vote',
+    enable_qbtc_to_vote: 'Enable QBTC in this vault to vote.',
   },
   vaultTabs: {
     portfolio: 'Portfolio',
@@ -308,6 +358,8 @@ export const en = {
   enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
+  external_recipient_tooltip_content:
+    'Send the swapped funds to a different wallet address instead of your own.',
   enter_amount: 'Enter Amount',
   enter_folder_name: 'Enter folder name',
   enter_memo: 'Enter Memo',
@@ -494,7 +546,7 @@ export const en = {
   seedphrase_invalid_error:
     'Seed phrase is not correct, please verify all words.',
   seedphrase_duplicate_vault_error:
-    'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
+    'This seed phrase is already imported as vault "{{vaultName}}". Please import another seed phrase.',
   fast_vault_exists_warning_title: 'Vault Already Exists',
   fast_vault_exists_warning_description:
     'This seed phrase was already imported as a fast vault on another device. Continuing will replace the server share, and the other device will stop working.',
@@ -516,6 +568,8 @@ export const en = {
   install_plugin: 'Install App',
   installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
+  swap_insufficient_funds:
+    'Insufficient funds to execute the swap. Please fund the wallet.',
   insufficient_native_balance_for_fee:
     'Insufficient native token balance to pay for the transaction fee',
   insufficient_gas_limit: 'Insufficient Gas Limit',
@@ -541,6 +595,8 @@ export const en = {
   keygen_devices_requirements_info:
     'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',
   keygen_failed: 'Key Generation Error. Please try again.',
+  keygen_failed_description:
+    'Vault creation slowed due to poor connectivity. You can retry or wait for reconnection.',
   keys: 'Keys',
   keysign: 'Keysign',
   label: 'Label',
@@ -727,6 +783,8 @@ export const en = {
   qbtc_onboarding_title: 'New quantum security',
   qbtc_onboarding_subtitle:
     'Classical keys can be broken by quantum computers. Enabling QBTC requires generating a new key pair.',
+  qbtc_onboarding_key_warning:
+    'Enabling QBTC creates a new quantum key and QBTC address. If this vault already had a quantum key on another device or import, earlier QBTC funds may not be accessible from the new address. Back up this vault after generation.',
   qbtc_onboarding_feature_generate_title: 'Generate your quantum key pair',
   qbtc_onboarding_feature_generate_description:
     '{{productName}} runs a local MPC ceremony across your vault devices to produce a new key pair.',
@@ -831,6 +889,8 @@ export const en = {
   risky_tx_warning:
     'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',
   same_vault_share: 'Same vault share',
+  same_vault_share_description:
+    'Please change the share to sign. Two devices cannot use the same vault share for co-signing.',
   save: 'Save',
   save_10_percent_on_swaps: 'Save <blue>10%</blue> on swaps now',
   save_changes: 'Save Changes',
@@ -927,7 +987,6 @@ export const en = {
   share_app: 'Share The App',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
-  share_vault_qr: 'Share Vault QR',
   shares: 'Shares',
   show_balance: 'Show balance',
   show_exact_error: 'Show exact error',
@@ -1155,6 +1214,19 @@ export const en = {
   undelegate: 'Undelegate',
   redelegate: 'Redelegate',
   claim_rewards: 'Claim Rewards',
+  solana_unstake: 'Unstake',
+  solana_withdraw: 'Withdraw',
+  solana_move_stake: 'Move',
+  solana_finish_move: 'Finish Move',
+  solana_staking_stake_account: 'Stake account',
+  solana_staking_unstake_notice:
+    'Deactivating begins a cooldown — your stake stays locked for ~{{days}} days before you can withdraw.',
+  solana_staking_withdrawable_amount: 'Withdrawable amount',
+  solana_staking_withdraw_ready_notice: 'Cooled down and ready to withdraw.',
+  solana_staking_move_notice:
+    'Moving stake is multi-step and spans epochs: this deactivates the account now; after the ~{{days}}-day cooldown, finish moving it to the new validator.',
+  solana_staking_finish_move_notice:
+    'This re-delegates the cooled-down stake account to the new validator and completes the move.',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',
@@ -1170,6 +1242,24 @@ export const en = {
   failed_to_load_rewards: 'Failed to load rewards',
   failed_to_load_validators: 'Failed to load validators',
   no_active_delegations: 'No active delegations',
+  ton_nominator_pool: 'Nominator Pool',
+  ton_stake_title: 'Stake {{ticker}}',
+  ton_stake_cta: 'Stake {{ticker}}',
+  ton_stake_select_pool: 'Select a Pool',
+  ton_stake_pool_picker_header: 'Pool',
+  ton_stake_min: 'Minimum {{amount}}',
+  ton_stake_below_minimum: 'Amount must be at least {{amount}} {{ticker}}',
+  ton_stake_insufficient_balance: 'Insufficient balance for this stake',
+  ton_stake_no_pools: 'No staking pools available',
+  ton_stake_empty_title: 'Earn rewards on your {{ticker}}',
+  ton_stake_empty_description:
+    'Stake {{ticker}} into a nominator pool to earn staking rewards.',
+  ton_stake_chain_not_enabled: 'Enable TON to stake.',
+  ton_stake_unsupported_pool:
+    'This pool implementation is not supported for staking.',
+  ton_unstake_unsupported_pool:
+    'This pool implementation is not supported for unstaking.',
+  ton_withdrawal_pending: 'Withdrawal pending — unlocks {{date}}',
   value: 'Value',
   vault: 'Vault',
   vaultCheckUpdatePage: {
@@ -1211,7 +1301,7 @@ export const en = {
   vault_info: 'Vault Info',
   vault_management: 'Vault',
   vault_name: 'Vault Name',
-  vault_name_already_exists: 'Vault name must be unique',
+  vault_name_already_exists: 'Please choose a different Vault name.',
   vault_name_description:
     'You can always rename your vault later in the settings',
   vault_name_max_length_error: 'Vault name must be less than 50 characters',
@@ -1219,7 +1309,6 @@ export const en = {
   vault_notifications: 'Vault Notifications',
   vault_part: 'Vault Share',
   vault_password: 'Vault Password',
-  vault_qr_share: 'Share',
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",
   vault_ready_to_use: 'Your vault is ready to use',
@@ -1243,8 +1332,6 @@ export const en = {
     'Title must be at most 50 characters long.',
   vault_settings_address_book_title_min_length_error:
     'Title must be at least 1 character long.',
-  vault_share_banner:
-    'This QR Code lets you share a view-only version of your Vault',
   vault_type_does_not_match: 'Vault type does not match',
   vault_value: 'Vault Value',
   vaults: 'Vaults',
@@ -1276,7 +1363,8 @@ export const en = {
   pool: 'Pool',
   paired: 'Paired',
   paired_address: 'Paired Address',
-  wrong_vault_try_again: 'Wrong Vault or Pair Device.',
+  vault_is_not_loaded: 'Vault is not loaded',
+  vault_is_not_loaded_description: 'Please import the correct share.',
   yesterday: 'Yesterday',
   you_are_bonding: "You're bonding",
   you_are_unbonding: "You're unbonding",

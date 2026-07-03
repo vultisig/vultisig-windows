@@ -27,7 +27,6 @@ import {
   deserializeSigningOutput,
 } from '@vultisig/core-chain/tw/signingOutput'
 import { Tx } from '@vultisig/core-chain/tx'
-import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import {
   getQBTCPreSignedImageHash,
@@ -48,6 +47,7 @@ import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
 
 import { getClaimMessageHashHex } from '../../../../qbtc/claim/utils/getClaimMessageHashHex'
+import { broadcastKeysignTx } from '../../broadcastKeysignTx'
 import {
   getCowSwapKeysignData,
   signCowSwapOrder,
@@ -157,7 +157,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 }
 
                 if (!payload.skipBroadcast) {
-                  await broadcastTx({ chain, tx: tx.data })
+                  await broadcastKeysignTx({ chain, tx: tx.data })
                 }
 
                 return { txs: [tx] }
@@ -195,7 +195,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               }
 
               if (!payload.skipBroadcast) {
-                await broadcastTx({ chain, tx: tx.data })
+                await broadcastKeysignTx({ chain, tx: tx.data })
               }
 
               return { txs: [tx] }
@@ -334,7 +334,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 txs.map(
                   ({ data }) =>
                     () =>
-                      broadcastTx({ chain, tx: data })
+                      broadcastKeysignTx({ chain, tx: data })
                 )
               )
             }

@@ -219,11 +219,13 @@ const parseSignDirectMessage = (
     return { action: 'claim_rewards', labelKey: 'claim_rewards' }
   }
 
-  // Gov vote (v1 and v1beta1) carries no transferable amount — surface the
-  // action label only.
+  // Gov vote (single + weighted, v1 and v1beta1) carries no transferable
+  // amount — surface the action label only.
   if (
     typeUrl === '/cosmos.gov.v1.MsgVote' ||
-    typeUrl === '/cosmos.gov.v1beta1.MsgVote'
+    typeUrl === '/cosmos.gov.v1beta1.MsgVote' ||
+    typeUrl === '/cosmos.gov.v1.MsgVoteWeighted' ||
+    typeUrl === '/cosmos.gov.v1beta1.MsgVoteWeighted'
   ) {
     return { action: 'vote', labelKey: 'vote' }
   }
