@@ -100,7 +100,7 @@ const mergeAuthorizedChains = (
 export const setExclusiveVaultAppSession = ({
   vaultId,
   ...session
-}: VaultAppSession): Promise<void> =>
+}: VaultAppSession): Promise<VaultAppSession> =>
   serializeAppSessionsMutation(async () => {
     const allSessions = await getVaultsAppSessions()
     const existingSession = allSessions[vaultId]?.[session.host]
@@ -134,6 +134,8 @@ export const setExclusiveVaultAppSession = ({
         [session.host]: nextSession,
       },
     })
+
+    return { vaultId, ...nextSession }
   })
 
 export type VaultAppSessionKey = Pick<VaultAppSession, 'vaultId' | 'host'>

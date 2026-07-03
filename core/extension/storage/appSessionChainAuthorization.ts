@@ -37,14 +37,6 @@ export const getAppSessionFieldsForApprovedChains = ({
   return { authorizedChains }
 }
 
-export const getAppSessionFieldsForApprovedChain = (
-  chain?: Chain
-): Partial<AppSession> =>
-  getAppSessionFieldsForApprovedChains({
-    chains: chain ? [chain] : undefined,
-    selectedChain: chain,
-  })
-
 export const isAppSessionAuthorizedForChain = ({
   appSession,
   chain,

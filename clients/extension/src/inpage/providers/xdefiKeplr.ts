@@ -1,4 +1,5 @@
 import { callBackground } from '@core/inpage-provider/background'
+import { BackgroundError } from '@core/inpage-provider/background/error'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
@@ -1202,8 +1203,55 @@ export class XDEFIKeplrProvider extends Keplr {
    * per-entry `rejected` instead of failing the whole batch.
    */
   async getKeysSettled(chainIds: string[]): Promise<SettledResponses<Key>> {
+    const nativeChains = chainIds.reduce<Chain[]>((result, chainId) => {
+      const chain = getKeplrSupportedChainByChainId(chainId)
+      if (chain && !result.includes(chain)) {
+        result.push(chain)
+      }
+
+      return result
+    }, [])
+    const authorizationResults = await Promise.all(
+      nativeChains.map(async chain => {
+        const result = await attempt(() =>
+          callBackground({ getAccount: { chain } })
+        )
+
+        return { chain, result }
+      })
+    )
+    const chainsNeedingGrant = authorizationResults
+      .filter(({ result }) => 'error' in result)
+      .flatMap(({ chain, result }) =>
+        'error' in result && result.error === BackgroundError.Unauthorized
+          ? [chain]
+          : []
+      )
+    const grantResult =
+      chainsNeedingGrant.length > 0
+        ? await attempt(() =>
+            callPopup({
+              grantVaultAccess: {
+                chain: chainsNeedingGrant[0],
+                chains: nativeChains,
+              },
+            })
+          )
+        : undefined
+
     return Promise.all(
       chainIds.map(async chainId => {
+        if (grantResult && 'error' in grantResult) {
+          const nativeChain = getKeplrSupportedChainByChainId(chainId)
+          if (nativeChain && chainsNeedingGrant.includes(nativeChain)) {
+            const reason =
+              grantResult.error instanceof Error
+                ? grantResult.error
+                : new Error(String(grantResult.error))
+            return { status: 'rejected', reason } as const
+          }
+        }
+
         const result = await attempt(() => this.getKey(chainId))
         if ('error' in result) {
           const reason =

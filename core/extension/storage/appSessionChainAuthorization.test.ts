@@ -3,7 +3,6 @@ import { getEvmChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
 import { describe, expect, it } from 'vitest'
 
 import {
-  getAppSessionFieldsForApprovedChain,
   getAppSessionFieldsForApprovedChains,
   isAppSessionAuthorizedForAccounts,
   isAppSessionAuthorizedForChain,
@@ -11,7 +10,12 @@ import {
 
 describe('app session chain authorization', () => {
   it('marks an approved EVM chain as both authorized and selected', () => {
-    expect(getAppSessionFieldsForApprovedChain(Chain.Polygon)).toEqual({
+    expect(
+      getAppSessionFieldsForApprovedChains({
+        chains: [Chain.Polygon],
+        selectedChain: Chain.Polygon,
+      })
+    ).toEqual({
       authorizedChains: [Chain.Polygon],
       selectedEVMChainId: getEvmChainId(Chain.Polygon),
     })

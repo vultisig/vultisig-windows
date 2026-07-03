@@ -1622,4 +1622,10 @@ export const nl = {
     'Afgekoeld en klaar om te worden opgenomen.',
   external_recipient_tooltip_content:
     'Stuur het omgewisselde geld naar een ander walletadres in plaats van naar je eigen adres.',
+  solana_move_stake: 'Beweging',
+  solana_finish_move: 'Voltooi de zet',
+  solana_staking_move_notice:
+    'Het overzetten van de stake is een proces in meerdere stappen en strekt zich uit over verschillende periodes: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen kunt u de stake overzetten naar de nieuwe validator.',
+  solana_staking_finish_move_notice:
+    'Hiermee wordt de afgekoelde stake-account opnieuw toegewezen aan de nieuwe validator en is de overdracht voltooid.',
 }
