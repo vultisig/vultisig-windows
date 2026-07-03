@@ -1638,4 +1638,6 @@ export const pt = {
     'A desativação inicia um período de espera — seu token permanece bloqueado por aproximadamente {{days}} dias antes que você possa sacar.',
   solana_staking_withdrawable_amount: 'Valor que pode ser levantado',
   solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
+  external_recipient_tooltip_content:
+    'Envie os fundos trocados para um endereço de carteira diferente do seu.',
 }

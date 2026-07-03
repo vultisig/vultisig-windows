@@ -1635,4 +1635,6 @@ export const es = {
   solana_staking_withdrawable_amount: 'Cantidad retirable',
   solana_staking_withdraw_ready_notice:
     'Ya se ha enfriado y está listo para retirarse.',
+  external_recipient_tooltip_content:
+    'Envía los fondos intercambiados a una dirección de billetera diferente a la tuya.',
 }
