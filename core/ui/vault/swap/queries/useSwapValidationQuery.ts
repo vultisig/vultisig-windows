@@ -14,11 +14,13 @@ import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
 
+/** Input for swap amount and balance validation. */
 type GetSwapBalanceValidationErrorInput = {
   amount: bigint | null | undefined
   balance: bigint
 }
 
+/** Returns the synchronous validation error for a swap amount and available balance. */
 export const getSwapBalanceValidationError = ({
   amount,
   balance,
@@ -38,6 +40,7 @@ export const getSwapBalanceValidationError = ({
   return null
 }
 
+/** Input for swap validation that does not depend on async quote or balance data. */
 type GetImmediateSwapValidationErrorInput = {
   fromCoinKey: Parameters<typeof areEqualCoins>[0]
   toCoinKey: Parameters<typeof areEqualCoins>[1]
@@ -45,6 +48,7 @@ type GetImmediateSwapValidationErrorInput = {
   walletCore: WalletCore
 }
 
+/** Returns the synchronous validation error for same-asset and external-recipient checks. */
 export const getImmediateSwapValidationError = ({
   fromCoinKey,
   toCoinKey,
