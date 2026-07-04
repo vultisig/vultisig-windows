@@ -8,8 +8,6 @@ import {
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
 import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
 import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
-import { isTrustedProductOrigin } from '@core/inpage-provider/popup/view/resolvers/signMessage/utils'
-import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
 import { toDisplayMessageString } from '@core/inpage-provider/popup/view/utils/toDisplayMessage'
@@ -39,6 +37,8 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
+import { usePopupContext } from '../../../state/context'
+import { isTrustedProductOrigin } from '../utils'
 
 export const Overview = () => {
   const { t } = useTranslation()

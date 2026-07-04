@@ -3,7 +3,6 @@ import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage
 import { Request } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Request'
 import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Sender'
 import { SignMessageOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
-import { isTrustedProductOrigin } from '@core/inpage-provider/popup/view/resolvers/signMessage/utils'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
@@ -23,6 +22,8 @@ import { Text } from '@lib/ui/text'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { isTrustedProductOrigin } from '../utils'
 
 export const ConnectOverview: FC<SignMessageOverview> = ({
   address,
