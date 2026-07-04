@@ -1637,7 +1637,13 @@ export const it = {
     'I tuoi dispositivi hanno firmato la transazione, ma la rete l&#39;ha rifiutata. Esamina il motivo registrato sulla blockchain riportato di seguito, quindi firma nuovamente per riprovare.',
   solana_unstake: 'Sbloccare',
   solana_withdraw: 'Ritirare',
+  solana_move_stake: 'Sposta',
+  solana_finish_move: 'Completa spostamento',
   solana_staking_stake_account: 'Conto di staking',
+  solana_staking_move_notice:
+    'Lo spostamento dello stake richiede più passaggi e attraversa più epoche: questo disattiva ora l’account; dopo il periodo di raffreddamento di circa {{days}} giorni, completa lo spostamento verso il nuovo validatore.',
+  solana_staking_finish_move_notice:
+    'Questo ridelega l’account di stake raffreddato al nuovo validatore e completa lo spostamento.',
   solana_staking_unstake_notice:
     'La disattivazione avvia un periodo di raffreddamento: la tua quota rimarrà bloccata per circa {{days}} giorni prima che tu possa prelevare.',
   solana_staking_withdrawable_amount: 'Importo prelevabile',

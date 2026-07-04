@@ -1646,7 +1646,13 @@ export const de = {
     'Ihre Geräte haben die Transaktion signiert, aber das Netzwerk hat sie abgelehnt. Überprüfen Sie den unten stehenden Grund in der Blockchain und signieren Sie die Transaktion erneut, um es noch einmal zu versuchen.',
   solana_unstake: 'Entkoppeln',
   solana_withdraw: 'Zurückziehen',
+  solana_move_stake: 'Verschieben',
+  solana_finish_move: 'Verschieben abschließen',
   solana_staking_stake_account: 'Stake-Konto',
+  solana_staking_move_notice:
+    'Das Verschieben von Stake erfolgt in mehreren Schritten und über mehrere Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlzeit von etwa {{days}} Tagen können Sie das Verschieben zum neuen Validator abschließen.',
+  solana_staking_finish_move_notice:
+    'Dadurch wird das abgekühlte Stake-Konto erneut an den neuen Validator delegiert und das Verschieben abgeschlossen.',
   solana_staking_unstake_notice:
     'Durch die Deaktivierung beginnt eine Wartezeit – Ihr Einsatz bleibt für ca. {{days}} Tage gesperrt, bevor Sie ihn abheben können.',
   solana_staking_withdrawable_amount: 'Abhebbarer Betrag',
