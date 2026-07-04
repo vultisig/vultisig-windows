@@ -1628,4 +1628,5 @@ export const nl = {
     'Afgekoeld en klaar om te worden opgenomen.',
   external_recipient_tooltip_content:
     'Stuur het omgewisselde geld naar een ander walletadres in plaats van naar je eigen adres.',
+  blockaid_simulation_pending: 'Transactie simuleren…',
 }

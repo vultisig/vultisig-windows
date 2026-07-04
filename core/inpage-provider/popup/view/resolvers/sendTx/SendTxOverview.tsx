@@ -71,6 +71,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { hasBlockaidSimulationErrorBanner } from './blockaid/blockaidSimulationErrorBanner'
+import { BlockaidSimulationPending } from './blockaid/BlockaidSimulationPending'
 import {
   getTransactionErrorMessage,
   isSendTxOverviewErrorQuery,
@@ -349,7 +350,7 @@ export const SendTxOverview = ({
                   value={blockaidSimulationQuery}
                   error={() => <BlockaidSimulationError />}
                   success={() => null}
-                  pending={() => null}
+                  pending={() => <BlockaidSimulationPending />}
                   inactive={() => null}
                 />
               )}

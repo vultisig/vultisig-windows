@@ -1646,4 +1646,5 @@ export const pt = {
   solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
   external_recipient_tooltip_content:
     'Envie os fundos trocados para um endereço de carteira diferente do seu.',
+  blockaid_simulation_pending: 'Simulação de transação…',
 }
