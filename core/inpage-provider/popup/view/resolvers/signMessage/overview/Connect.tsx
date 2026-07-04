@@ -3,6 +3,7 @@ import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage
 import { Request } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Request'
 import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Sender'
 import { SignMessageOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
+import { isTrustedProductOrigin } from '@core/inpage-provider/popup/view/resolvers/signMessage/utils'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
@@ -14,12 +15,12 @@ import { currentProductBrandConfig } from '@core/ui/product/brand'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { attempt } from '@vultisig/lib-utils/attempt'
-import { FC, useMemo, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -34,14 +35,6 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const navigate = useCoreNavigate()
   const [showPasswordModal, setShowPasswordModal] = useState(false)
-
-  const displayMessage = useMemo(() => {
-    const { data, error } = attempt(() => JSON.parse(message))
-
-    if (error) return ''
-
-    return data.message as string
-  }, [message])
 
   const onGetPassword = ({ password }: FastVaultPasswordModalResult) => {
     navigate({
@@ -59,8 +52,12 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
       />
       <PageContent gap={16} scrollable>
         <Animation />
-        <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
-        <Request address={address} message={displayMessage} />
+        <Sender
+          favicon={requestFavicon}
+          origin={requestOrigin}
+          isValidated={isTrustedProductOrigin(requestOrigin)}
+        />
+        <Request address={address} message={message} />
         <Collapse title={t('signed_signature')}>
           <Text as="span" color="info" size={14} weight={500}>
             {signature}
@@ -90,6 +87,21 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
             productName: currentProductBrandConfig.name,
           })}
         </Text>
+        {!!message && (
+          <VStack fullWidth>
+            <Collapse title={t('message')}>
+              <Text
+                as="span"
+                color="info"
+                size={14}
+                weight={500}
+                style={{ overflowWrap: 'anywhere' }}
+              >
+                {message}
+              </Text>
+            </Collapse>
+          </VStack>
+        )}
       </StyledPageContent>
       <PageFooter>
         <Button onClick={() => setShowPasswordModal(true)}>
