@@ -11,9 +11,14 @@ import { riskLevelIcon } from '../riskLevelIcon'
 import { BlockaidScanStatusContainer } from '../scan/BlockaidScanStatusContainer'
 import { getBlockaidScanEntityName } from '../utils/entity'
 
+type BlockaidSiteScanResultProps = ValueProp<BlockaidSiteScanResultType> & {
+  onAcknowledgeRisk?: () => void
+}
+
 export const BlockaidSiteScanResult = ({
   value,
-}: ValueProp<BlockaidSiteScanResultType>) => {
+  onAcknowledgeRisk,
+}: BlockaidSiteScanResultProps) => {
   const { colors } = useTheme()
   const { t } = useTranslation()
 
@@ -27,6 +32,7 @@ export const BlockaidSiteScanResult = ({
         <BlockaidOverlay
           riskLevel={riskLevel}
           title={t('risky_site_detected')}
+          onProceed={onAcknowledgeRisk}
         />
         <BlockaidScanStatusContainer
           style={{
