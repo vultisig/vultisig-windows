@@ -10,9 +10,9 @@
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-query-persist-client": "^5.101.0",
     "@trustwallet/wallet-core": "^4.7.0",
-    "@vultisig/core-chain": "2.22.2",
+    "@vultisig/core-chain": "2.23.0",
     "@vultisig/core-config": "0.9.1",
-    "@vultisig/core-mpc": "1.8.16",
+    "@vultisig/core-mpc": "1.8.17",
     "@vultisig/lib-utils": "0.10.4",
     "react": "19.2.4",
     "react-i18next": "^16.5.8"

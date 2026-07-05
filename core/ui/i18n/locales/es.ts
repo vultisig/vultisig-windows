@@ -1629,7 +1629,13 @@ export const es = {
     'Tus dispositivos firmaron la transacción, pero la red la rechazó. Revisa el motivo en la cadena de bloques a continuación y vuelve a firmar para intentarlo de nuevo.',
   solana_unstake: 'Deshacer la apuesta',
   solana_withdraw: 'Retirar',
+  solana_move_stake: 'Mover',
+  solana_finish_move: 'Finalizar movimiento',
   solana_staking_stake_account: 'Cuenta de participación',
+  solana_staking_move_notice:
+    'Mover el stake requiere varios pasos y abarca varias épocas: esto desactiva la cuenta ahora; después del periodo de enfriamiento de ~{{days}} días, finaliza el movimiento al nuevo validador.',
+  solana_staking_finish_move_notice:
+    'Esto vuelve a delegar la cuenta de stake ya enfriada al nuevo validador y completa el movimiento.',
   solana_staking_unstake_notice:
     'La desactivación inicia un período de espera: su participación permanece bloqueada durante ~ {{days}} días antes de que pueda retirarla.',
   solana_staking_withdrawable_amount: 'Cantidad retirable',
@@ -1637,4 +1643,5 @@ export const es = {
     'Ya se ha enfriado y está listo para retirarse.',
   external_recipient_tooltip_content:
     'Envía los fondos intercambiados a una dirección de billetera diferente a la tuya.',
+  blockaid_simulation_pending: 'Simulando transacción…',
 }
