@@ -1519,4 +1519,5 @@ export const zh = {
   solana_staking_withdraw_ready_notice: '冷静下来，准备撤退。',
   external_recipient_tooltip_content:
     '将兑换后的资金发送到另一个钱包地址，而不是您自己的钱包地址。',
+  blockaid_simulation_pending: '模拟交易…',
 }
