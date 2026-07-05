@@ -6,17 +6,19 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
 
 import { BlockaidLogo } from '../BlockaidLogo'
-import { BlockaidOverlay } from '../BlockaidOverlay'
 import { riskLevelIcon } from '../riskLevelIcon'
 import { BlockaidScanStatusContainer } from '../scan/BlockaidScanStatusContainer'
 import { getBlockaidScanEntityName } from '../utils/entity'
+import { BlockaidSiteScanMaliciousOverlay } from './BlockaidSiteScanMaliciousOverlay'
 
 type BlockaidSiteScanResultProps = ValueProp<BlockaidSiteScanResultType> & {
+  domain: string
   onAcknowledgeRisk?: () => void
 }
 
 export const BlockaidSiteScanResult = ({
   value,
+  domain,
   onAcknowledgeRisk,
 }: BlockaidSiteScanResultProps) => {
   const { colors } = useTheme()
@@ -29,10 +31,9 @@ export const BlockaidSiteScanResult = ({
 
     return (
       <>
-        <BlockaidOverlay
-          riskLevel={riskLevel}
-          title={t('risky_site_detected')}
-          onProceed={onAcknowledgeRisk}
+        <BlockaidSiteScanMaliciousOverlay
+          domain={domain}
+          onAcknowledgeRisk={onAcknowledgeRisk}
         />
         <BlockaidScanStatusContainer
           style={{

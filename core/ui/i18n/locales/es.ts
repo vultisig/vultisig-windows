@@ -1644,4 +1644,7 @@ export const es = {
   external_recipient_tooltip_content:
     'Envía los fondos intercambiados a una dirección de billetera diferente a la tuya.',
   blockaid_simulation_pending: 'Simulando transacción…',
+  malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
+  malicious_dapp_detected_description:
+    'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
 }

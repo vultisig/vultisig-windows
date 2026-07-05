@@ -1613,4 +1613,7 @@ export const ko = {
   external_recipient_tooltip_content:
     '교환된 자금을 본인의 지갑 주소가 아닌 다른 지갑 주소로 보내세요.',
   blockaid_simulation_pending: '거래 시뮬레이션 중…',
+  malicious_dapp_detected: '악성 dApp 가 감지되었습니다.',
+  malicious_dapp_detected_description:
+    'Blockaid에서 {{dapp}} 악성 토큰으로 표시했습니다. 진행하기 전에 항상 직접 조사하십시오.',
 }

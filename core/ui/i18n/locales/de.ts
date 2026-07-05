@@ -1660,4 +1660,7 @@ export const de = {
   external_recipient_tooltip_content:
     'Senden Sie die getauschten Gelder an eine andere Wallet-Adresse als Ihre eigene.',
   blockaid_simulation_pending: 'Transaktion wird simuliert…',
+  malicious_dapp_detected: 'Bösartiges dApp erkannt',
+  malicious_dapp_detected_description:
+    '{{dapp}} wurde von Blockaid als schädlich eingestuft. Führen Sie immer eigene Recherchen durch, bevor Sie fortfahren.',
 }

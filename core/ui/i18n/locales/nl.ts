@@ -1629,4 +1629,7 @@ export const nl = {
   external_recipient_tooltip_content:
     'Stuur het omgewisselde geld naar een ander walletadres in plaats van naar je eigen adres.',
   blockaid_simulation_pending: 'Transactie simuleren…',
+  malicious_dapp_detected: 'Kwaadaardige dApp gedetecteerd',
+  malicious_dapp_detected_description:
+    '{{dapp}} is door Blockaid als schadelijk aangemerkt. Doe altijd zelf onderzoek voordat u verdergaat.',
 }

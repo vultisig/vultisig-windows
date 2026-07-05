@@ -290,6 +290,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
               success={value => (
                 <BlockaidSiteScanResult
                   value={value}
+                  domain={displayDomain}
                   onAcknowledgeRisk={() => setHasAcknowledgedSiteRisk(true)}
                 />
               )}

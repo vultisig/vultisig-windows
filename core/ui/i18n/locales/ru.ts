@@ -1627,4 +1627,7 @@ export const ru = {
   external_recipient_tooltip_content:
     'Отправьте переведенные средства на другой адрес кошелька, а не на свой собственный.',
   blockaid_simulation_pending: 'Имитация транзакции…',
+  malicious_dapp_detected: 'Обнаружен вредоносный dApp',
+  malicious_dapp_detected_description:
+    '{{dapp}} помечен Blockaid как вредоносный. Всегда проводите собственное исследование, прежде чем продолжить.',
 }

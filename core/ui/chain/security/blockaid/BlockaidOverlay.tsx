@@ -29,14 +29,12 @@ const DismissButton = styled(UnstyledButton)`
 type BlockaidOverlayProps = TitleProp & {
   riskLevel: RiskLevel
   description?: string
-  onProceed?: () => void
 }
 
 export const BlockaidOverlay = ({
   riskLevel,
   description,
   title,
-  onProceed,
 }: BlockaidOverlayProps) => {
   const [isDismissed, { set: dismiss }] = useBoolean(false)
 
@@ -57,12 +55,7 @@ export const BlockaidOverlay = ({
       footer={
         <VStack gap={20}>
           <Button onClick={goBack}>{t('go_back')}</Button>
-          <DismissButton
-            onClick={() => {
-              onProceed?.()
-              dismiss()
-            }}
-          >
+          <DismissButton onClick={dismiss}>
             {t('continue_anyway')}
           </DismissButton>
         </VStack>
