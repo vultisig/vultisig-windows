@@ -3,7 +3,6 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
-import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text, text } from '@lib/ui/text'
@@ -44,7 +43,7 @@ const ContinueButton = styled(UnstyledButton)`
 
 type BlockaidSiteScanMaliciousOverlayProps = {
   domain: string
-  onAcknowledgeRisk?: () => void
+  onAcknowledgeRisk: () => void
 }
 
 export const BlockaidSiteScanMaliciousOverlay = ({
@@ -53,9 +52,6 @@ export const BlockaidSiteScanMaliciousOverlay = ({
 }: BlockaidSiteScanMaliciousOverlayProps) => {
   const { t } = useTranslation()
   const { goBack } = useCore()
-  const [isDismissed, { set: dismiss }] = useBoolean(false)
-
-  if (isDismissed) return null
 
   return (
     <BodyPortal>
@@ -78,12 +74,7 @@ export const BlockaidSiteScanMaliciousOverlay = ({
           </Text>
           <VStack fullWidth gap={20}>
             <Button onClick={goBack}>{t('go_back')}</Button>
-            <ContinueButton
-              onClick={() => {
-                onAcknowledgeRisk?.()
-                dismiss()
-              }}
-            >
+            <ContinueButton onClick={onAcknowledgeRisk}>
               {t('continue_anyway')}
             </ContinueButton>
           </VStack>

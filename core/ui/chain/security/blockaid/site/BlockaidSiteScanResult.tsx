@@ -13,12 +13,14 @@ import { BlockaidSiteScanMaliciousOverlay } from './BlockaidSiteScanMaliciousOve
 
 type BlockaidSiteScanResultProps = ValueProp<BlockaidSiteScanResultType> & {
   domain: string
-  onAcknowledgeRisk?: () => void
+  isRiskAcknowledged: boolean
+  onAcknowledgeRisk: () => void
 }
 
 export const BlockaidSiteScanResult = ({
   value,
   domain,
+  isRiskAcknowledged,
   onAcknowledgeRisk,
 }: BlockaidSiteScanResultProps) => {
   const { colors } = useTheme()
@@ -31,10 +33,12 @@ export const BlockaidSiteScanResult = ({
 
     return (
       <>
-        <BlockaidSiteScanMaliciousOverlay
-          domain={domain}
-          onAcknowledgeRisk={onAcknowledgeRisk}
-        />
+        {!isRiskAcknowledged && (
+          <BlockaidSiteScanMaliciousOverlay
+            domain={domain}
+            onAcknowledgeRisk={onAcknowledgeRisk}
+          />
+        )}
         <BlockaidScanStatusContainer
           style={{
             color: colors.danger.toCssValue(),
