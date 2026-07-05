@@ -70,6 +70,8 @@ import { formatUnits } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { hasBlockaidSimulationErrorBanner } from './blockaid/blockaidSimulationErrorBanner'
+import { BlockaidSimulationPending } from './blockaid/BlockaidSimulationPending'
 import {
   getTransactionErrorMessage,
   isSendTxOverviewErrorQuery,
@@ -343,16 +345,15 @@ export const SendTxOverview = ({
                   </VStack>
                 </Panel>
               )}
-              {isChainOfKind(chain, 'evm') ||
-                (chain === Chain.Solana && (
-                  <MatchQuery
-                    value={blockaidSimulationQuery}
-                    error={() => <BlockaidSimulationError />}
-                    success={() => null}
-                    pending={() => null}
-                    inactive={() => null}
-                  />
-                ))}
+              {hasBlockaidSimulationErrorBanner(chain) && (
+                <MatchQuery
+                  value={blockaidSimulationQuery}
+                  error={() => <BlockaidSimulationError />}
+                  success={() => null}
+                  pending={() => <BlockaidSimulationPending />}
+                  inactive={() => null}
+                />
+              )}
               {hasSwapPayload ? (
                 <>
                   <VStack

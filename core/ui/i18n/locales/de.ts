@@ -1659,4 +1659,5 @@ export const de = {
   solana_staking_withdraw_ready_notice: 'Abgekühlt und bereit zum Rückzug.',
   external_recipient_tooltip_content:
     'Senden Sie die getauschten Gelder an eine andere Wallet-Adresse als Ihre eigene.',
+  blockaid_simulation_pending: 'Transaktion wird simuliert…',
 }

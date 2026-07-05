@@ -1620,4 +1620,5 @@ export const hr = {
   solana_staking_withdraw_ready_notice: 'Ohlađeno i spremno za povlačenje.',
   external_recipient_tooltip_content:
     'Pošaljite zamijenjena sredstva na drugu adresu novčanika umjesto na svoju.',
+  blockaid_simulation_pending: 'Simuliranje transakcije…',
 }

@@ -1643,4 +1643,5 @@ export const es = {
     'Ya se ha enfriado y está listo para retirarse.',
   external_recipient_tooltip_content:
     'Envía los fondos intercambiados a una dirección de billetera diferente a la tuya.',
+  blockaid_simulation_pending: 'Simulando transacción…',
 }

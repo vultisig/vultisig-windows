@@ -1626,4 +1626,5 @@ export const ru = {
   solana_staking_withdraw_ready_notice: 'Остыл и готов к извлечению.',
   external_recipient_tooltip_content:
     'Отправьте переведенные средства на другой адрес кошелька, а не на свой собственный.',
+  blockaid_simulation_pending: 'Имитация транзакции…',
 }

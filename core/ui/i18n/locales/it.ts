@@ -1650,4 +1650,5 @@ export const it = {
   solana_staking_withdraw_ready_notice: 'Raffreddato e pronto per il ritiro.',
   external_recipient_tooltip_content:
     'Invia i fondi scambiati a un indirizzo di portafoglio diverso dal tuo.',
+  blockaid_simulation_pending: 'Simulazione della transazione…',
 }
