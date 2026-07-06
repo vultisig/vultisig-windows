@@ -698,9 +698,6 @@ export const zh = {
   resend_notification: '重新发送通知',
   resend_notification_in: '稍后重新发送通知 {{time}}',
   reshare: '转发',
-  reshare_disclaimer: '所有重新共享操作都需要达到一定的设备数量阈值。',
-  reshare_explanation:
-    '重新共享功能可用于刷新、扩展或减少 Vault 中的设备数量。',
   reshare_vault_description: '与新委员会重新共享保险库',
   reshare_your_vault: '重新分享您的保险库',
   resource: '资源',
@@ -1523,4 +1520,17 @@ export const zh = {
   malicious_dapp_detected: '检测到恶意dApp',
   malicious_dapp_detected_description:
     '{{dapp}}已被 Blockaid 标记为恶意程序。操作前请务必自行调查。',
+  before_you_reshare: '转发前请先阅读',
+  before_you_reshare_subtitle:
+    '重新共享会重新生成您的金库共享。但在此之前，您需要了解一些事项。',
+  i_understand: '我明白',
+  join_reshare_description: '您收到来自其他设备的转发请求。',
+  reshare_vault_subtitle: '更新您的保险库设置。添加或删除设备，或刷新共享。',
+  reshare_warning_cosigners_title: '所有共同签署人必须在线',
+  reshare_warning_cosigners_description:
+    '您保险库中的所有现有设备都需要参与重新共享会话。',
+  reshare_warning_old_backups_title: '旧备份将停止工作',
+  reshare_warning_old_backups_description:
+    '所有现有的 .vult 文件都将失效。重新共享后，您需要创建新的备份。',
+  start_reshare_description: '您正在更改此保险库的设备设置。',
 }

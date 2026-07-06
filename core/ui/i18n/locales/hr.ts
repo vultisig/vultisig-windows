@@ -754,10 +754,6 @@ export const hr = {
   resend_notification: 'Ponovno pošalji obavijest',
   resend_notification_in: 'Ponovno pošalji obavijest za {{time}}',
   reshare: 'Ponovno podijeli',
-  reshare_disclaimer:
-    'Za sve radnje ponovnog dijeljenja prag uređaja je uvijek potreban.',
-  reshare_explanation:
-    'Ponovno dijeljenje može se koristiti za osvježavanje, proširenje ili smanjenje broja uređaja u trezoru.',
   reshare_vault_description: 'Ponovno podijeli trezor s novim odborom',
   reshare_your_vault: 'Ponovno podijelite svoj trezor',
   resource: 'Resurs',
@@ -1624,4 +1620,20 @@ export const hr = {
   malicious_dapp_detected: 'Otkriven zlonamjerni dApp',
   malicious_dapp_detected_description:
     'Blockaid je označio {{dapp}} kao zlonamjeran. Uvijek provedite vlastito istraživanje prije nego što nastavite.',
+  before_you_reshare: 'Prije ponovnog dijeljenja',
+  before_you_reshare_subtitle:
+    'Ponovnim dijeljenjem se regeneriraju vaši trezorski udjeli. Prvo treba znati nekoliko stvari.',
+  i_understand: 'Razumijem',
+  join_reshare_description:
+    'Primili ste zahtjev za ponovno dijeljenje s drugog uređaja.',
+  reshare_vault_subtitle:
+    'Ažurirajte postavke trezora. Dodajte ili uklonite uređaje ili osvježite dijeljene datoteke.',
+  reshare_warning_cosigners_title: 'Svi supotpisnici moraju biti online',
+  reshare_warning_cosigners_description:
+    'Svaki trenutni uređaj u vašem trezoru mora sudjelovati u sesiji ponovnog dijeljenja.',
+  reshare_warning_old_backups_title:
+    'Stare sigurnosne kopije prestat će raditi',
+  reshare_warning_old_backups_description:
+    'Sve postojeće .vult datoteke postaju nevažeće. Nakon ponovnog dijeljenja morat ćete stvoriti nove sigurnosne kopije.',
+  start_reshare_description: 'Mijenjate postavke uređaja ovog trezora.',
 }

@@ -1,57 +1,49 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
-import { Button } from '@lib/ui/buttons/Button'
-import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { InfoBlock } from '@lib/ui/status/InfoBlock'
-import { Text } from '@lib/ui/text'
+import { Match } from '@lib/ui/base/Match'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
+
+import { ReshareVaultIntroStep } from './ReshareVaultIntroStep'
+import { ReshareVaultWarningStep } from './ReshareVaultWarningStep'
+
+const steps = ['intro', 'warning'] as const
 
 export const ReshareVaultPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const { goBack } = useCore()
   const securityType = useCurrentVaultSecurityType()
+  const { step, toNextStep, toPreviousStep } = useStepNavigation({
+    steps,
+    onExit: goBack,
+  })
 
   return (
-    <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('reshare')}
-        hasBorder
-      />
-      <PageContent gap={8} alignItems="center" justifyContent="center" flexGrow>
-        <Text color="contrast" size={20} weight="600">
-          {t('reshare_your_vault')}
-        </Text>
-        <Text color="supporting" size={14}>
-          {t('reshare_explanation')}
-        </Text>
-      </PageContent>
-      <PageFooter gap={16}>
-        <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
-        <Button
-          onClick={() =>
+    <Match
+      value={step}
+      intro={() => (
+        <ReshareVaultIntroStep
+          onBack={goBack}
+          onStartReshare={toNextStep}
+          onJoinReshare={() =>
+            navigate({ id: 'uploadQr', state: { title: t('join_reshare') } })
+          }
+        />
+      )}
+      warning={() => (
+        <ReshareVaultWarningStep
+          onBack={toPreviousStep}
+          onConfirm={() =>
             match(securityType, {
               fast: () => navigate({ id: 'reshareVaultFast' }),
               secure: () => navigate({ id: 'reshareVaultSecure' }),
             })
           }
-        >
-          {t('start_reshare')}
-        </Button>
-        <Button
-          kind="secondary"
-          onClick={() =>
-            navigate({ id: 'uploadQr', state: { title: t('join_reshare') } })
-          }
-        >
-          {t('join_reshare')}
-        </Button>
-      </PageFooter>
-    </VStack>
+        />
+      )}
+    />
   )
 }
