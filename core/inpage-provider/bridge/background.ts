@@ -1,4 +1,3 @@
-import type { VaultAppSession } from '@core/extension/storage/appSessions'
 import { runBridgeBackgroundAgent } from '@lib/extension/bridge/background'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -36,25 +35,25 @@ function resolveBackgroundCall({
   return resolver({ input, context })
 }
 
-/** If this is a getAccount call with appSession in input, return that session (avoids storage race after grantVaultAccess). */
-function getPassedAppSession(
-  message: InpageProviderBridgeMessage
-): { appSession: VaultAppSession } | null {
-  const result = matchRecordUnion<
-    InpageProviderBridgeMessage,
-    { appSession: VaultAppSession } | false
-  >(message, {
+/**
+ * Whether this is a `getAccount` call carrying an `appSession` in its input.
+ * The `grantVaultAccess` popup echoes the freshly created session back on the
+ * immediate follow-up `getAccount` (see `requestAccount`); its presence is used
+ * only as a hint that a grant just happened, so authorization tolerates the
+ * post-write storage race. The object's contents are never trusted — the
+ * session is always re-derived from storage against the trusted origin.
+ */
+function hasPassedAppSession(message: InpageProviderBridgeMessage): boolean {
+  return matchRecordUnion<InpageProviderBridgeMessage, boolean>(message, {
     background: ({ call }) => {
       if (getRecordUnionKey(call) !== 'getAccount') return false
       const input = getRecordUnionValue(call, 'getAccount') as {
-        appSession?: VaultAppSession
+        appSession?: unknown
       }
-      if (!input?.appSession) return false
-      return { appSession: input.appSession }
+      return !!input?.appSession
     },
     popup: () => false,
   })
-  return result && typeof result === 'object' ? result : null
 }
 
 /** Whether this message is for an authorized method (needs app session from storage). */
@@ -67,17 +66,15 @@ function messageRequiresAuth(message: InpageProviderBridgeMessage): boolean {
   })
 }
 
-/** Build call context: use passed session for getAccount when present, else authorize from storage when required. */
+/** Build call context: authorize from storage (bound to the trusted origin) for authorized methods. */
 async function buildCallContext(
   message: InpageProviderBridgeMessage,
   initialContext: CallContext
 ): Promise<CallContext> {
-  const passedSession = getPassedAppSession(message)
-  if (passedSession) {
-    return { ...initialContext, appSession: passedSession.appSession }
-  }
   if (messageRequiresAuth(message)) {
-    return authorizeContext(initialContext)
+    return authorizeContext(initialContext, {
+      retryOnMissing: hasPassedAppSession(message),
+    })
   }
   return initialContext
 }
