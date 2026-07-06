@@ -198,7 +198,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
   const modalContent = (
     <ModalBody>
       <Header>
-        <HeaderBackButton onClick={onClose}>
+        <HeaderBackButton onClick={onClose} aria-label={t('back')}>
           {isStation ? <StationChevronLeftIcon /> : <ChevronLeftIcon />}
         </HeaderBackButton>
         <Text size={14} weight="500" color="contrast">

@@ -10,7 +10,6 @@ import styled, { css, useTheme } from 'styled-components'
 type SearchFieldProps = UiProps & {
   autoFocus?: boolean
   showPlaceholderWhenFocused?: boolean
-  placeholderKey?: string
   value?: string
   onSearch?: (query: string) => void
 }
