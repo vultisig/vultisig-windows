@@ -1621,9 +1621,12 @@ export const nl = {
   solana_staking_withdraw_ready_notice:
     'Afgekoeld en klaar om te worden opgenomen.',
   solana_move_stake: 'Verplaatsen',
-  solana_finish_move: 'Voltooi de zet',
+  solana_finish_move: 'Verplaatsing voltooien',
   solana_staking_move_notice:
-    'Het overzetten van de stake is een proces in meerdere stappen en strekt zich uit over verschillende periodes: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen kunt u de stake overzetten naar de nieuwe validator.',
+    'Stake verplaatsen gebeurt in meerdere stappen en verspreid over epochs: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen voltooit u de verplaatsing naar de nieuwe validator.',
   solana_staking_finish_move_notice:
-    'Hiermee wordt de afgekoelde stake-account opnieuw toegewezen aan de nieuwe validator en is de overdracht voltooid.',
+    'Hiermee wordt het afgekoelde stake-account opnieuw gedelegeerd aan de nieuwe validator en wordt de verplaatsing voltooid.',
+  external_recipient_tooltip_content:
+    'Stuur het omgewisselde geld naar een ander walletadres in plaats van naar je eigen adres.',
+  blockaid_simulation_pending: 'Transactie simuleren…',
 }

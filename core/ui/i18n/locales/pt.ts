@@ -1639,9 +1639,12 @@ export const pt = {
   solana_staking_withdrawable_amount: 'Valor que pode ser levantado',
   solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
   solana_move_stake: 'Mover',
-  solana_finish_move: 'Movimento final',
+  solana_finish_move: 'Finalizar movimentação',
   solana_staking_move_notice:
-    'A transferência de stake é um processo de várias etapas e abrange diferentes épocas: esta ação desativa a conta agora; após o período de espera de ~ {{days}} dias, conclua a transferência para o novo validador.',
+    'Mover o stake exige várias etapas e atravessa épocas: isso desativa a conta agora; após o período de espera de ~{{days}} dias, finalize a movimentação para o novo validador.',
   solana_staking_finish_move_notice:
-    'Isso redistribui a conta de stake em período de inatividade para o novo validador e conclui a movimentação.',
+    'Isso redelega a conta de stake já resfriada ao novo validador e conclui a movimentação.',
+  external_recipient_tooltip_content:
+    'Envie os fundos trocados para um endereço de carteira diferente do seu.',
+  blockaid_simulation_pending: 'Simulação de transação…',
 }
