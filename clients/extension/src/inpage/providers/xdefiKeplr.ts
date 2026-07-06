@@ -74,17 +74,29 @@ const aminoHandler = (
   const { msgs, fee, memo } = signDoc
   const [message] = msgs
 
+  // The moved coin lives in a different field per amino message type:
+  // IBC `MsgTransfer` → `token` (a single coin), `MsgSend` → `amount[0]`,
+  // wasm `MsgExecuteContract` → `funds[0]`. Reading only `funds` reported a
+  // `0` amount for sends and IBC transfers, so the popup displayed `0` and any
+  // downstream native-value check (insufficient-funds gate) misread the amount.
+  const sentCoin =
+    message.value.token ?? message.value.amount?.[0] ?? message.value.funds?.[0]
+
   return {
     asset: {
       chain: chain,
-      ticker: message.value.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
+      ticker: sentCoin?.denom ?? chainFeeCoin[chain].ticker,
     },
     amount: {
-      amount: message.value.funds?.[0]?.amount ?? '0',
+      amount: sentCoin?.amount ?? '0',
       decimals: chainFeeCoin[chain].decimals,
     },
     from: message.value.sender ?? message.value.from_address ?? undefined,
-    to: message.value.contract ?? message.value.to_address ?? undefined,
+    to:
+      message.value.contract ??
+      message.value.to_address ??
+      message.value.receiver ??
+      undefined,
     data: memo,
     aminoPayload: {
       msgs: signDoc.msgs as CosmosMsg[],
