@@ -16,6 +16,7 @@ import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/r
 import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
 import { SuiTxIntentDisplay } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/SuiTxIntentDisplay'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
+import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
@@ -52,7 +53,11 @@ import { Text } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
-import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  AccountCoin,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
 import { parseBlockaidSuiSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
@@ -65,6 +70,8 @@ import { formatUnits } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { hasBlockaidSimulationErrorBanner } from './blockaid/blockaidSimulationErrorBanner'
+import { BlockaidSimulationPending } from './blockaid/BlockaidSimulationPending'
 import {
   getTransactionErrorMessage,
   isSendTxOverviewErrorQuery,
@@ -97,6 +104,10 @@ export const SendTxOverview = ({
     parsedTx,
     feeSettings: feeSettings || undefined,
   })
+
+  const nativeBalanceQuery = useBalanceQuery(
+    extractAccountCoinKey({ ...chainFeeCoin[chain], address })
+  )
 
   const blockaidSimulationQuery = useBlockaidSimulationQuery({
     keysignPayloadQuery,
@@ -167,6 +178,38 @@ export const SendTxOverview = ({
 
   const memo = keysignPayloadQuery.data?.memo
   const isEvm = isChainOfKind(chain, 'evm')
+
+  // Gate an EVM keysign before it starts: the node requires the account to
+  // cover `value + gasLimit * maxFeePerGas`, so a dApp tx that exceeds the
+  // native balance is rejected at broadcast — after the MPC ceremony has
+  // already run. Block it here instead, mirroring the in-wallet send form.
+  const insufficientFundsMessage = (() => {
+    const payload = keysignPayloadQuery.data
+    const nativeBalance = nativeBalanceQuery.data
+
+    if (!isEvm || !payload || nativeBalance == null) {
+      return undefined
+    }
+
+    const evmSpecific = getBlockchainSpecificValue(
+      payload.blockchainSpecific,
+      'ethereumSpecific'
+    )
+
+    const value = BigInt(payload.toAmount)
+    const maxGasFee =
+      BigInt(evmSpecific.gasLimit) * BigInt(evmSpecific.maxFeePerGasWei)
+
+    if (value > 0n) {
+      if (value + maxGasFee > nativeBalance) {
+        return t('insufficient_balance')
+      }
+    } else if (maxGasFee > nativeBalance) {
+      return t('insufficient_native_balance_for_fee')
+    }
+
+    return undefined
+  })()
   const isContractMemo =
     !!memo && memo.startsWith('0x') && memo.length > 2 && isEvm
 
@@ -207,7 +250,13 @@ export const SendTxOverview = ({
     if (isSendTxOverviewError) {
       return undefined
     }
-    if (gasEstimationDataQuery.isPending || isContractDecodingPending) {
+    if (
+      gasEstimationDataQuery.isPending ||
+      isContractDecodingPending ||
+      // Keep the start button disabled until the native balance is known, or
+      // the insufficient-funds gate below would be bypassed during its load.
+      (isEvm && nativeBalanceQuery.isPending)
+    ) {
       return t('loading')
     }
     if (isContractDecodingFailed) {
@@ -220,6 +269,7 @@ export const SendTxOverview = ({
     <VerifyKeysignStart
       keysignPayloadQuery={keysignPayloadQuery}
       extraPendingMessage={extraPendingMessage}
+      disabledMessage={insufficientFundsMessage}
       footer={
         isSendTxOverviewError ? (
           <Button onClick={goBack}>{t('back')}</Button>
@@ -257,6 +307,21 @@ export const SendTxOverview = ({
 
           return (
             <>
+              {insufficientFundsMessage && (
+                <Panel>
+                  <VStack gap={12} alignItems="center">
+                    <TriangleAlertIcon color="danger" fontSize={24} />
+                    <Text
+                      size={15}
+                      weight={500}
+                      color="danger"
+                      centerHorizontally
+                    >
+                      {insufficientFundsMessage}
+                    </Text>
+                  </VStack>
+                </Panel>
+              )}
               {isInsufficientGas && (
                 <Panel>
                   <VStack gap={12} alignItems="center">
@@ -280,16 +345,15 @@ export const SendTxOverview = ({
                   </VStack>
                 </Panel>
               )}
-              {isChainOfKind(chain, 'evm') ||
-                (chain === Chain.Solana && (
-                  <MatchQuery
-                    value={blockaidSimulationQuery}
-                    error={() => <BlockaidSimulationError />}
-                    success={() => null}
-                    pending={() => null}
-                    inactive={() => null}
-                  />
-                ))}
+              {hasBlockaidSimulationErrorBanner(chain) && (
+                <MatchQuery
+                  value={blockaidSimulationQuery}
+                  error={() => <BlockaidSimulationError />}
+                  success={() => null}
+                  pending={() => <BlockaidSimulationPending />}
+                  inactive={() => null}
+                />
+              )}
               {hasSwapPayload ? (
                 <>
                   <VStack

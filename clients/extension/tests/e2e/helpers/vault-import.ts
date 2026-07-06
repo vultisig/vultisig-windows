@@ -11,17 +11,17 @@
  * 4. ImportVaultPage -> Upload file -> Enter password -> Continue -> VaultPage
  */
 
-import type { Page, BrowserContext } from '@playwright/test'
-import { existsSync } from 'fs'
+import type { BrowserContext, Page } from '@playwright/test'
 import { config } from 'dotenv'
+import { existsSync } from 'fs'
 import { resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 // Load .env from e2e directory
-const __edir = fileURLToPath(new URL('..', import.meta.url))
-config({ path: resolve(__edir, '.env') })
+const e2eDir = fileURLToPath(new URL('..', import.meta.url))
+config({ path: resolve(e2eDir, '.env') })
 
-export interface VaultImportConfig {
+export type VaultImportConfig = {
   vaultPath: string
   password: string
   extensionId: string
@@ -31,16 +31,23 @@ export interface VaultImportConfig {
  * Wait for the extension UI to be fully loaded
  */
 async function waitForExtensionUI(page: Page, timeout = 15_000): Promise<void> {
-  await page.waitForFunction(() => {
-    // Wait for React to render and have visible buttons
-    const buttons = document.querySelectorAll('button')
-    const hasVisibleButtons = buttons.length > 0 && Array.from(buttons).some(b => b.offsetParent !== null)
+  await page.waitForFunction(
+    () => {
+      // Wait for React to render and have visible buttons
+      const buttons = document.querySelectorAll('button')
+      const hasVisibleButtons =
+        buttons.length > 0 &&
+        Array.from(buttons).some(b => b.offsetParent !== null)
 
-    // Or wait for text content
-    const hasContent = document.body.textContent && document.body.textContent.trim().length > 10
+      // Or wait for text content
+      const hasContent =
+        document.body.textContent &&
+        document.body.textContent.trim().length > 10
 
-    return hasVisibleButtons || hasContent
-  }, { timeout })
+      return hasVisibleButtons || hasContent
+    },
+    { timeout }
+  )
 }
 
 /**
@@ -67,8 +74,14 @@ export async function isOnVaultPage(page: Page): Promise<boolean> {
   const hasVaultPage = await vaultPage.isVisible().catch(() => false)
 
   // Also check for balance or chain list which indicate vault is loaded
-  const hasBalance = await page.locator('text=/\\$|USD|Balance/i').isVisible().catch(() => false)
-  const hasChains = await page.locator('[data-testid="chain-list"]').isVisible().catch(() => false)
+  const hasBalance = await page
+    .locator('text=/\\$|USD|Balance/i')
+    .isVisible()
+    .catch(() => false)
+  const hasChains = await page
+    .locator('[data-testid="chain-list"]')
+    .isVisible()
+    .catch(() => false)
 
   return hasVaultPage || hasBalance || hasChains
 }
@@ -82,11 +95,17 @@ export async function isOnFileUploadPage(page: Page): Promise<boolean> {
   const hasImportForm = await importForm.isVisible().catch(() => false)
 
   // Check for file input
-  const fileInputCount = await page.locator('input[type="file"]').count().catch(() => 0)
+  const fileInputCount = await page
+    .locator('input[type="file"]')
+    .count()
+    .catch(() => 0)
   const hasFileInput = fileInputCount > 0
 
   // Check for dropzone text
-  const hasDropzoneText = await page.getByText(/select.*backup.*file|click.*browse|drop.*file/i).isVisible().catch(() => false)
+  const hasDropzoneText = await page
+    .getByText(/select.*backup.*file|click.*browse|drop.*file/i)
+    .isVisible()
+    .catch(() => false)
 
   return hasImportForm || hasFileInput || hasDropzoneText
 }
@@ -95,8 +114,14 @@ export async function isOnFileUploadPage(page: Page): Promise<boolean> {
  * Check if we're on the import options page (shows "Import Seedphrase" and "Import vault share")
  */
 export async function isOnImportOptionsPage(page: Page): Promise<boolean> {
-  const hasImportShare = await page.getByText(/import.*vault.*share/i).isVisible().catch(() => false)
-  const hasImportSeedphrase = await page.getByText(/import.*seedphrase/i).isVisible().catch(() => false)
+  const hasImportShare = await page
+    .getByText(/import.*vault.*share/i)
+    .isVisible()
+    .catch(() => false)
+  const hasImportSeedphrase = await page
+    .getByText(/import.*seedphrase/i)
+    .isVisible()
+    .catch(() => false)
 
   return hasImportShare || hasImportSeedphrase
 }
@@ -104,7 +129,10 @@ export async function isOnImportOptionsPage(page: Page): Promise<boolean> {
 /**
  * Navigate through onboarding to the file upload import page
  */
-export async function navigateToFileImport(page: Page, extensionId: string): Promise<boolean> {
+export async function navigateToFileImport(
+  page: Page,
+  extensionId: string
+): Promise<boolean> {
   try {
     // Go to extension
     await page.goto(`chrome-extension://${extensionId}/index.html`)
@@ -148,7 +176,9 @@ export async function navigateToFileImport(page: Page, extensionId: string): Pro
 
       // Click "Import vault share" option
       const importShareButton = page.getByText(/import.*vault.*share/i).first()
-      if (await importShareButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      if (
+        await importShareButton.isVisible({ timeout: 3000 }).catch(() => false)
+      ) {
         console.log('✅ Found "Import vault share" option, clicking...')
         await importShareButton.click()
         await page.waitForTimeout(1000)
@@ -169,7 +199,10 @@ export async function navigateToFileImport(page: Page, extensionId: string): Pro
     }
 
     console.log('⚠️ Could not navigate to file upload page')
-    const pageText = await page.locator('body').textContent().catch(() => '')
+    const pageText = await page
+      .locator('body')
+      .textContent()
+      .catch(() => '')
     console.log('Final page content:', pageText?.substring(0, 500))
     return false
   } catch (error) {
@@ -228,8 +261,12 @@ export async function importVaultViaUI(
       await page.waitForTimeout(2000)
     } else {
       // Fallback to generic continue button
-      const genericContinue = page.getByRole('button', { name: /continue/i }).first()
-      if (await genericContinue.isEnabled({ timeout: 3000 }).catch(() => false)) {
+      const genericContinue = page
+        .getByRole('button', { name: /continue/i })
+        .first()
+      if (
+        await genericContinue.isEnabled({ timeout: 3000 }).catch(() => false)
+      ) {
         console.log('✅ Found generic Continue button, clicking...')
         await genericContinue.click()
         await page.waitForTimeout(2000)
@@ -244,12 +281,16 @@ export async function importVaultViaUI(
       await page.waitForTimeout(500)
 
       // Click Continue again after password
-      const continueAfterPassword = page.locator('[data-testid="import-continue"]')
+      const continueAfterPassword = page.locator(
+        '[data-testid="import-continue"]'
+      )
       if (await continueAfterPassword.isVisible().catch(() => false)) {
         console.log('✅ Clicking Continue after password...')
         await continueAfterPassword.click()
       } else {
-        const genericContinue = page.getByRole('button', { name: /continue|unlock|import/i }).first()
+        const genericContinue = page
+          .getByRole('button', { name: /continue|unlock|import/i })
+          .first()
         if (await genericContinue.isEnabled().catch(() => false)) {
           await genericContinue.click()
         }
@@ -265,7 +306,8 @@ export async function importVaultViaUI(
       console.log('✅ Vault imported successfully')
     } else {
       // Check for error message
-      const errorText = await page.locator('[role="alert"], text=/error|invalid|wrong|failed/i')
+      const errorText = await page
+        .locator('[role="alert"], text=/error|invalid|wrong|failed/i')
         .textContent()
         .catch(() => null)
       if (errorText) {
@@ -273,7 +315,10 @@ export async function importVaultViaUI(
       } else {
         console.error('Import did not complete - not on vault page')
         console.log('Current URL:', page.url())
-        const bodyText = await page.locator('body').textContent().catch(() => '')
+        const bodyText = await page
+          .locator('body')
+          .textContent()
+          .catch(() => '')
         console.log('Page content:', bodyText?.substring(0, 500))
       }
     }
@@ -338,11 +383,14 @@ export async function ensureVaultExists(
 /**
  * Get vault import config from environment variables
  */
-export function getVaultConfigFromEnv(): { vaultPath: string; password: string } | null {
-  const vaultPath = process.env.TEST_VAULT_PATH
-  const password = process.env.TEST_VAULT_PASSWORD
+export function getVaultConfigFromEnv(): {
+  vaultPath: string
+  password: string
+} | null {
+  const vaultPath = firstPresentEnv('TEST_VAULT_PATH', 'VAULT_SHARE_PATH')
+  const password = firstPresentEnv('TEST_VAULT_PASSWORD', 'VAULT_PASSWORD')
 
-  if (!vaultPath || !password) {
+  if (!vaultPath || !password || !existsSync(vaultPath)) {
     return null
   }
 
@@ -352,17 +400,31 @@ export function getVaultConfigFromEnv(): { vaultPath: string; password: string }
 /**
  * Get secure vault import config from environment variables
  */
-export function getSecureVaultConfigFromEnv(): Array<{ vaultPath: string; password: string }> {
-  const sharesEnv = process.env.SECURE_VAULT_SHARES
-  const password = process.env.SECURE_VAULT_PASSWORD
+export function getSecureVaultConfigFromEnv(): Array<{
+  vaultPath: string
+  password: string
+}> {
+  const sharesEnv = firstPresentEnv('SECURE_VAULT_SHARES')
+  const password = firstPresentEnv('SECURE_VAULT_PASSWORD')
 
-  if (!sharesEnv || !password) {
+  const sharePaths =
+    sharesEnv?.split(',') ??
+    [
+      firstPresentEnv('SECURE_VAULT_SHARE1'),
+      firstPresentEnv('SECURE_VAULT_SHARE2'),
+    ].filter((share): share is string => Boolean(share))
+
+  if (!password) {
     return []
   }
 
-  return sharesEnv
-    .split(',')
+  return sharePaths
     .map(s => s.trim())
     .filter(s => existsSync(s))
     .map(vaultPath => ({ vaultPath, password }))
 }
+
+const firstPresentEnv = (...names: string[]) =>
+  names
+    .map(name => process.env[name]?.trim())
+    .find((value): value is string => Boolean(value))
