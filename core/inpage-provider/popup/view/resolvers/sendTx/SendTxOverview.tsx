@@ -235,11 +235,18 @@ export const SendTxOverview = ({
 
     // `toAmount` is native for EVM (it's the tx `value`), but for Cosmos/Ton it
     // is only native when the sent coin is the fee coin — a token amount there
-    // must not be added to the native fee.
+    // must not be added to the native fee. Ton Connect also batches up to
+    // `maxMessages` transfers into a single request while `toAmount` carries
+    // only the first, so sum every message's native amount for the Ton gate.
     const nativeValue =
-      isChainOfKind(chain, 'evm') || isFeeCoin(coin)
-        ? BigInt(payload.toAmount)
-        : 0n
+      payload.signData.case === 'signTon'
+        ? payload.signData.value.tonMessages.reduce(
+            (sum, message) => sum + BigInt(message.amount),
+            0n
+          )
+        : isChainOfKind(chain, 'evm') || isFeeCoin(coin)
+          ? BigInt(payload.toAmount)
+          : 0n
 
     if (nativeValue + fee > nativeBalance) {
       return nativeValue > 0n
