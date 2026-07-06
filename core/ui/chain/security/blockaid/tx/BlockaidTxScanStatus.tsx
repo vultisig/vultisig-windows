@@ -2,12 +2,12 @@ import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/Bloc
 import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
 import { BlockaidScanStatusContainer } from '@core/ui/chain/security/blockaid/scan/BlockaidScanStatusContainer'
 import { BlockaidTxValidationResult } from '@core/ui/chain/security/blockaid/tx/BlockaidTxValidationResult'
+import { BlockaidTxScanResult } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxValidation'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
-import { BlockaidValidationResult } from '@vultisig/core-chain/security/blockaid/tx/validation/core'
 
 type BlockaidTxScanStatusProps = {
-  value: Query<BlockaidValidationResult | undefined>
+  value: Query<BlockaidTxScanResult | undefined>
 }
 
 /**
