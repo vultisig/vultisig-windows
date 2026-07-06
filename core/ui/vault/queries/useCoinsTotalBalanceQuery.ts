@@ -55,16 +55,21 @@ export const useCoinsTotalBalanceQuery = (
     })
   )
 
-  // An empty coin set is a settled zero, not a loading state — resolve it to 0 so
-  // callers read a number instead of undefined, and never flag it as updating.
-  const isSettledZero = coins.length === 0
+  const error = [...balancesQuery.errors, ...pricesQuery.errors][0] ?? null
+
+  const noCoins = coins.length === 0
   const isUpdating =
-    !isSettledZero && (pricesQuery.isPending || balancesQuery.isPending)
+    !noCoins && (pricesQuery.isPending || balancesQuery.isPending)
+  // A settled zero: no coins at all, or every coin has settled (not loading, no
+  // error) without a resolvable price/balance. Both are final zeros — resolve to
+  // 0 so callers render "$0.00" instead of a blank header.
+  const isSettledZero =
+    noCoins || (!isUpdating && !error && resolvedCount === 0)
 
   return {
     data: resolvedCount > 0 || isSettledZero ? total : undefined,
     isPending: resolvedCount === 0 && !isSettledZero && isUpdating,
     isUpdating,
-    error: [...balancesQuery.errors, ...pricesQuery.errors][0] ?? null,
+    error,
   }
 }
