@@ -1520,4 +1520,7 @@ export const zh = {
   external_recipient_tooltip_content:
     '将兑换后的资金发送到另一个钱包地址，而不是您自己的钱包地址。',
   blockaid_simulation_pending: '模拟交易…',
+  malicious_dapp_detected: '检测到恶意dApp',
+  malicious_dapp_detected_description:
+    '{{dapp}}已被 Blockaid 标记为恶意程序。操作前请务必自行调查。',
 }

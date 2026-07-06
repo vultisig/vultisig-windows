@@ -1621,4 +1621,7 @@ export const hr = {
   external_recipient_tooltip_content:
     'Pošaljite zamijenjena sredstva na drugu adresu novčanika umjesto na svoju.',
   blockaid_simulation_pending: 'Simuliranje transakcije…',
+  malicious_dapp_detected: 'Otkriven zlonamjerni dApp',
+  malicious_dapp_detected_description:
+    'Blockaid je označio {{dapp}} kao zlonamjeran. Uvijek provedite vlastito istraživanje prije nego što nastavite.',
 }

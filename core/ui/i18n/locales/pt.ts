@@ -1647,4 +1647,7 @@ export const pt = {
   external_recipient_tooltip_content:
     'Envie os fundos trocados para um endereço de carteira diferente do seu.',
   blockaid_simulation_pending: 'Simulação de transação…',
+  malicious_dapp_detected: 'Token malicioso dApp detectado',
+  malicious_dapp_detected_description:
+    '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
 }

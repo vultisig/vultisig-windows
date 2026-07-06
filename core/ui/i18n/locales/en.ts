@@ -618,6 +618,9 @@ export const en = {
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
   make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
+  malicious_dapp_detected: 'Malicious dApp detected',
+  malicious_dapp_detected_description:
+    '{{dapp}} has been flagged as malicious by Blockaid. Always do your own research before proceeding.',
   manage_chains: 'Manage Chains',
   manage_notifications_in_settings:
     'You can manage notifications in system settings.',
