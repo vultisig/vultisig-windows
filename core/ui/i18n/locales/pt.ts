@@ -1633,18 +1633,21 @@ export const pt = {
     'Seus dispositivos assinaram a transação, mas a rede a rejeitou. Confira o motivo na blockchain abaixo e tente novamente.',
   solana_unstake: 'Desvincule',
   solana_withdraw: 'Retirar',
-  solana_move_stake: 'Mover',
-  solana_finish_move: 'Finalizar movimentação',
   solana_staking_stake_account: 'Conta de participação',
-  solana_staking_move_notice:
-    'Mover o stake exige várias etapas e atravessa épocas: isso desativa a conta agora; após o período de espera de ~{{days}} dias, finalize a movimentação para o novo validador.',
-  solana_staking_finish_move_notice:
-    'Isso redelega a conta de stake já resfriada ao novo validador e conclui a movimentação.',
   solana_staking_unstake_notice:
     'A desativação inicia um período de espera — seu token permanece bloqueado por aproximadamente {{days}} dias antes que você possa sacar.',
   solana_staking_withdrawable_amount: 'Valor que pode ser levantado',
   solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
+  solana_move_stake: 'Mover',
+  solana_finish_move: 'Finalizar movimentação',
+  solana_staking_move_notice:
+    'Mover o stake exige várias etapas e atravessa épocas: isso desativa a conta agora; após o período de espera de ~{{days}} dias, finalize a movimentação para o novo validador.',
+  solana_staking_finish_move_notice:
+    'Isso redelega a conta de stake já resfriada ao novo validador e conclui a movimentação.',
   external_recipient_tooltip_content:
     'Envie os fundos trocados para um endereço de carteira diferente do seu.',
   blockaid_simulation_pending: 'Simulação de transação…',
+  malicious_dapp_detected: 'Token malicioso dApp detectado',
+  malicious_dapp_detected_description:
+    '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
 }

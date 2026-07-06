@@ -1,6 +1,8 @@
+import { orderChainItemsForProduct } from '@core/ui/chain/utils/orderChainItemsForProduct'
 import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { currentProductBrand } from '@core/ui/product/brand'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import {
   isSupportedDefiChain,
@@ -67,10 +69,15 @@ export const ManageDefiChainsPage = () => {
       )
     }
 
-    return [...chains].sort((a, b) => a.chain.localeCompare(b.chain))
+    return orderChainItemsForProduct({
+      items: chains,
+      getChain: item => item.chain,
+      productBrand: currentProductBrand,
+    })
   }, [chainAvailability, search])
 
   const hasNoItems = filteredChains.length === 0 && !showCircle
+  const isStation = currentProductBrand === 'station'
 
   const toggleDraft = (chain: Chain) => {
     if (!isSupportedDefiChain(chain)) return
@@ -128,12 +135,16 @@ export const ManageDefiChainsPage = () => {
             description={saveError}
           />
         )}
-        <SearchInput value={search} onChange={setSearch} />
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          data-testid="defi-chain-search-input"
+        />
         {hasNoItems ? (
           <EmptyState title={t('no_chains_found')} />
         ) : (
           <ItemGrid>
-            {showCircle && <CircleItem />}
+            {showCircle && !isStation && <CircleItem />}
             {filteredChains.map(({ chain, canEnable }) => (
               <DefiChainItem
                 key={chain}
@@ -143,6 +154,7 @@ export const ManageDefiChainsPage = () => {
                 onToggle={() => toggleDraft(chain)}
               />
             ))}
+            {showCircle && isStation && <CircleItem />}
           </ItemGrid>
         )}
       </PageContent>

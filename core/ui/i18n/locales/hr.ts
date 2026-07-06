@@ -1607,18 +1607,21 @@ export const hr = {
     'Vaši su uređaji potpisali transakciju, ali ju je mreža odbila. Pregledajte razlog na lancu u nastavku, a zatim se ponovno prijavite za ponovni pokušaj.',
   solana_unstake: 'Ukloni klađenje',
   solana_withdraw: 'Povući',
-  solana_move_stake: 'Premjesti',
-  solana_finish_move: 'Dovrši premještanje',
   solana_staking_stake_account: 'Ulog računa',
-  solana_staking_move_notice:
-    'Premještanje uloga odvija se u više koraka i traje kroz više epoha: ovo sada deaktivira račun; nakon razdoblja hlađenja od oko {{days}} dana dovršite premještanje na novog validatora.',
-  solana_staking_finish_move_notice:
-    'Ovo ponovno delegira ohlađeni račun uloga novom validatoru i dovršava premještanje.',
   solana_staking_unstake_notice:
     'Deaktiviranjem započinje hlađenje — vaš ulog ostaje zaključan ~ {{days}} dana prije nego što možete isplatiti novac.',
   solana_staking_withdrawable_amount: 'Iznos za isplatu',
   solana_staking_withdraw_ready_notice: 'Ohlađeno i spremno za povlačenje.',
+  solana_move_stake: 'Premjesti',
+  solana_finish_move: 'Dovrši premještanje',
+  solana_staking_move_notice:
+    'Premještanje uloga odvija se u više koraka i traje kroz više epoha: ovo sada deaktivira račun; nakon razdoblja hlađenja od oko {{days}} dana dovršite premještanje na novog validatora.',
+  solana_staking_finish_move_notice:
+    'Ovo ponovno delegira ohlađeni račun uloga novom validatoru i dovršava premještanje.',
   external_recipient_tooltip_content:
     'Pošaljite zamijenjena sredstva na drugu adresu novčanika umjesto na svoju.',
   blockaid_simulation_pending: 'Simuliranje transakcije…',
+  malicious_dapp_detected: 'Otkriven zlonamjerni dApp',
+  malicious_dapp_detected_description:
+    'Blockaid je označio {{dapp}} kao zlonamjeran. Uvijek provedite vlastito istraživanje prije nego što nastavite.',
 }

@@ -1,7 +1,6 @@
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ValueProp } from '@lib/ui/props'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { BlockaidValidationResult as BlockaidValidationResultType } from '@vultisig/core-chain/security/blockaid/tx/validation/core'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { Trans, useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
@@ -11,11 +10,12 @@ import { BlockaidOverlay } from '../BlockaidOverlay'
 import { riskLevelIcon } from '../riskLevelIcon'
 import { BlockaidScanStatusContainer } from '../scan/BlockaidScanStatusContainer'
 import { getBlockaidScanEntityName } from '../utils/entity'
+import { BlockaidTxScanResult } from './queries/blockaidTxValidation'
 import { getRiskyTxColor } from './utils/color'
 
 export const BlockaidTxValidationResult = ({
   value,
-}: ValueProp<BlockaidValidationResultType>) => {
+}: ValueProp<BlockaidTxScanResult>) => {
   const { colors } = useTheme()
 
   const { t } = useTranslation()
@@ -25,17 +25,19 @@ export const BlockaidTxValidationResult = ({
 
     const color = getRiskyTxColor(value.level, colors)
 
+    const warning = value.description ?? t('risky_tx_warning')
+
     return (
       <>
         <BlockaidOverlay
           riskLevel={value.level}
-          description={t('risky_tx_warning')}
+          description={warning}
           title={t('risky_transaction_detected', {
             riskLevel: capitalizeFirstLetter(value.level),
           })}
         />
         <Tooltip
-          content={t('risky_tx_warning')}
+          content={warning}
           renderOpener={props => (
             <BlockaidScanStatusContainer
               {...props}
