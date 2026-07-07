@@ -892,6 +892,8 @@ export const en = {
   reshare_warning_old_backups_title: 'Old backups will stop working',
   reshare_warning_old_backups_description:
     "Any existing .vult files become invalid. You'll need to create fresh backups after resharing.",
+  reshare_success_title: 'Vault reshared',
+  reshare_success_title_highlight: 'successfully',
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',

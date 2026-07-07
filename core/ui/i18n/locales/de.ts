@@ -1675,4 +1675,6 @@ export const de = {
     'Alle vorhandenen .vult-Dateien werden ungültig. Sie müssen nach der erneuten Freigabe neue Sicherungskopien erstellen.',
   start_reshare_description:
     'Sie ändern die Gerätekonfiguration dieses Tresors.',
+  reshare_success_title: 'Vault erneut geteilt',
+  reshare_success_title_highlight: 'erfolgreich',
 }

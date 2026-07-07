@@ -1645,4 +1645,6 @@ export const nl = {
     'Alle bestaande .vult-bestanden worden ongeldig. U moet na het opnieuw delen nieuwe back-ups maken.',
   start_reshare_description:
     'U wijzigt de apparaatinstellingen van deze kluis.',
+  reshare_success_title: 'Vault opnieuw gedeeld',
+  reshare_success_title_highlight: 'succesvol',
 }

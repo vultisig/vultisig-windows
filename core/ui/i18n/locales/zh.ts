@@ -1533,4 +1533,6 @@ export const zh = {
   reshare_warning_old_backups_description:
     '所有现有的 .vult 文件都将失效。重新共享后，您需要创建新的备份。',
   start_reshare_description: '您正在更改此保险库的设备设置。',
+  reshare_success_title: 'Vault 重新共享',
+  reshare_success_title_highlight: '成功地',
 }

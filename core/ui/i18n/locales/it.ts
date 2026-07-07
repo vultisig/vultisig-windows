@@ -1667,4 +1667,6 @@ export const it = {
     'Tutti i file .vult esistenti diventeranno non validi. Sarà necessario creare nuovi backup dopo la condivisione.',
   start_reshare_description:
     'Stai modificando la configurazione del dispositivo di questo vault.',
+  reshare_success_title: 'Vault ricondiviso',
+  reshare_success_title_highlight: 'con successo',
 }
