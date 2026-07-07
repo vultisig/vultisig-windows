@@ -20,17 +20,25 @@ type ResponsiveModalProps = {
   containerStyles?: React.CSSProperties
   grabbable?: boolean
   mobileFullWidth?: boolean
+  mobilePresentation?: 'drawer' | 'fullscreen'
 }
 
-const MobileDrawer = styled(VStack)<{ $fullWidth: boolean }>`
+const MobileDrawer = styled(VStack)<{
+  $fullScreen: boolean
+  $fullWidth: boolean
+}>`
   position: fixed;
+  top: ${({ $fullScreen }) => ($fullScreen ? 0 : 'auto')};
   bottom: 0;
-  left: ${({ $fullWidth }) => ($fullWidth ? 0 : 16)}px;
-  right: ${({ $fullWidth }) => ($fullWidth ? 0 : 16)}px;
+  left: ${({ $fullScreen, $fullWidth }) =>
+    $fullScreen || $fullWidth ? 0 : 16}px;
+  right: ${({ $fullScreen, $fullWidth }) =>
+    $fullScreen || $fullWidth ? 0 : 16}px;
   background: ${getColor('background')};
-  max-height: 90vh;
+  height: ${({ $fullScreen }) => ($fullScreen ? '100dvh' : 'auto')};
+  max-height: ${({ $fullScreen }) => ($fullScreen ? 'none' : '90vh')};
   overflow: hidden;
-  border-radius: 24px 24px 0 0;
+  border-radius: ${({ $fullScreen }) => ($fullScreen ? 0 : '24px 24px 0 0')};
   overscroll-behavior: contain;
   z-index: 1000;
 
@@ -95,6 +103,7 @@ export const ResponsiveModal = ({
   containerStyles,
   grabbable = false,
   mobileFullWidth = false,
+  mobilePresentation = 'drawer',
 }: ResponsiveModalProps) => {
   const isTabletAndUp = useIsTabletDeviceAndUp()
   const drawerRef = useRef<HTMLDivElement | null>(null)
@@ -173,6 +182,7 @@ export const ResponsiveModal = ({
       <MobileBackdrop onClick={onClose}>
         <MobileDrawer
           ref={drawerRef}
+          $fullScreen={mobilePresentation === 'fullscreen'}
           $fullWidth={mobileFullWidth}
           style={{
             transform: `translate3d(0, ${translateY}px, 0)`,

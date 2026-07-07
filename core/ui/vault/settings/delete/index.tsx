@@ -172,7 +172,7 @@ const Item = styled.div`
 
   border-radius: 12px;
   border: 1px solid ${getColor('foregroundExtra')};
-  background: rgba(11, 26, 58, 0.5);
+  background: ${getColor('foreground')};
   min-width: 0;
 `
 
