@@ -8,7 +8,8 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { solDecimals } from '@vultisig/core-chain/chains/solana/staking/config'
-import { coinKeyToString, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 
 import {
   BalanceValue,
@@ -36,12 +37,13 @@ export const DefiSolanaBalanceBanner = () => {
 
   const stakeAccountsQuery = useSolanaStakeAccountsQuery(owner)
   const pricesQuery = useCoinPricesQuery({
-    coins: solCoin ? [extractCoinKey(solCoin)] : [],
+    coins: solCoin
+      ? [{ ...chainFeeCoin[Chain.Solana], chain: Chain.Solana }]
+      : [],
   })
 
-  const priceUsd = solCoin
-    ? (pricesQuery.data?.[coinKeyToString(extractCoinKey(solCoin))] ?? 0)
-    : 0
+  const priceUsd =
+    pricesQuery.data?.[coinKeyToString({ chain: Chain.Solana })] ?? 0
 
   const totalStaked = (stakeAccountsQuery.data ?? [])
     .filter(account => account.delegation !== undefined)

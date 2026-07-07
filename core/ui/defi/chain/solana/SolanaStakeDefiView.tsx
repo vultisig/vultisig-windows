@@ -1,4 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useSolanaApyInputsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaApyInputsQuery'
 import { useSolanaEpochInfoQuery } from '@core/ui/chain/solana/staking/queries/useSolanaEpochInfoQuery'
@@ -24,8 +25,11 @@ import {
   networkActivatedStake,
   SolanaValidator,
   validatorDisplayName,
+  validatorLogoUrl,
 } from '@vultisig/core-chain/chains/solana/staking/models/validator'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { coinKeyToString, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -60,6 +64,7 @@ export const SolanaStakeDefiView = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const coins = useCurrentVaultCoins()
+  const formatFiatAmount = useFormatFiatAmount()
 
   const solCoin = coins.find(c => c.chain === Chain.Solana && !c.id)
 
@@ -69,7 +74,9 @@ export const SolanaStakeDefiView = () => {
   const epochQuery = useSolanaEpochInfoQuery()
   const apyInputsQuery = useSolanaApyInputsQuery()
   const pricesQuery = useCoinPricesQuery({
-    coins: solCoin ? [extractCoinKey(solCoin)] : [],
+    coins: solCoin
+      ? [{ ...chainFeeCoin[Chain.Solana], chain: Chain.Solana }]
+      : [],
   })
 
   if (!solCoin) {
@@ -81,7 +88,7 @@ export const SolanaStakeDefiView = () => {
   }
 
   const priceUsd =
-    pricesQuery.data?.[coinKeyToString(extractCoinKey(solCoin))] ?? 0
+    pricesQuery.data?.[coinKeyToString({ chain: Chain.Solana })] ?? 0
 
   const validators = validatorsQuery.data ?? []
   const validatorByVote = new Map<string, SolanaValidator>(
@@ -131,13 +138,12 @@ export const SolanaStakeDefiView = () => {
               {t('solana_staking_total_staked', { ticker: solCoin.ticker })}
             </Text>
             <Text size={24} weight={600}>
-              {`${totalStaked.toFixed(6)} ${solCoin.ticker}`}
+              {formatAmount(totalStaked, { ticker: solCoin.ticker })}
             </Text>
             {priceUsd > 0 ? (
-              <Text
-                size={13}
-                color="shy"
-              >{`$${(totalStaked * priceUsd).toFixed(2)}`}</Text>
+              <Text size={13} color="shy">
+                {formatFiatAmount(totalStaked * priceUsd)}
+              </Text>
             ) : null}
           </VStack>
         </HStack>
@@ -170,6 +176,7 @@ export const SolanaStakeDefiView = () => {
                 apy={apy}
                 ticker={solCoin.ticker}
                 priceUsd={priceUsd}
+                logoUrl={validator ? validatorLogoUrl(validator) : undefined}
                 onUnstake={() => onAccountAction('solana_unstake', row)}
                 onWithdraw={() => onAccountAction('solana_withdraw', row)}
                 onMove={() => onAccountAction('solana_move_stake', row)}

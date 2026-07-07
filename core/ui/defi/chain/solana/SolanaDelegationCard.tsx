@@ -1,7 +1,13 @@
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { SolanaValidatorAvatar } from '@core/ui/chain/solana/staking/components/SolanaValidatorAvatar'
 import { Button } from '@lib/ui/buttons/Button'
+import { PercentIcon } from '@lib/ui/icons/PercentIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { SolanaStakeRow } from './SolanaStakeDefiView'
 
@@ -10,6 +16,7 @@ type SolanaDelegationCardProps = {
   apy: number | undefined
   ticker: string
   priceUsd: number
+  logoUrl?: string
   onUnstake: () => void
   onWithdraw: () => void
   onMove: () => void
@@ -36,23 +43,28 @@ const stateColor = {
   inactive: 'shy',
 } as const
 
+const shortAddress = (address: string) =>
+  address.length > 8 ? `${address.slice(0, 4)}…${address.slice(-4)}` : address
+
 /**
- * One Solana stake-account row on the DeFi tab: validator + activation-state
- * badge, delegated amount (+ fiat), APY, rent reserve, a state notice, and the
- * actions available for the account's lifecycle stage. Mirrors iOS
- * `DefiChainStakedPositionView` for Solana.
+ * One Solana stake-account row on the DeFi tab: validator avatar + vote-account
+ * address + activation-state badge, delegated amount (+ fiat), APY, rent
+ * reserve, a state notice, and the actions available for the account's
+ * lifecycle stage. Mirrors iOS `DefiChainStakedPositionView` for Solana.
  */
 export const SolanaDelegationCard = ({
   row,
   apy,
   ticker,
   priceUsd,
+  logoUrl,
   onUnstake,
   onWithdraw,
   onMove,
   onStake,
 }: SolanaDelegationCardProps) => {
   const { t } = useTranslation()
+  const formatFiatAmount = useFormatFiatAmount()
   const notice = row.state !== 'active' ? stateNoticeKey[row.state] : undefined
 
   return (
@@ -64,29 +76,46 @@ export const SolanaDelegationCard = ({
         background: 'rgba(255,255,255,0.04)',
       }}
     >
-      <HStack justifyContent="space-between" alignItems="center">
-        <Text weight={500}>{row.validatorName}</Text>
+      <HStack justifyContent="space-between" alignItems="center" gap={8}>
+        <HStack gap={8} alignItems="center">
+          <SolanaValidatorAvatar
+            name={row.validatorName}
+            logoUrl={logoUrl}
+            size={36}
+          />
+          <VStack gap={2}>
+            <Text weight={500}>{row.validatorName}</Text>
+            <Text size={12} color="shy">
+              {shortAddress(row.stakeAccount.pubkey)}
+            </Text>
+          </VStack>
+        </HStack>
         <Text size={13} color={stateColor[row.state]}>
           {t(stateLabelKey[row.state])}
         </Text>
       </HStack>
 
       <HStack justifyContent="space-between" alignItems="center">
-        <Text
-          weight={500}
-        >{`${row.delegatedAmount.toFixed(6)} ${ticker}`}</Text>
+        <Text weight={500}>
+          {formatAmount(row.delegatedAmount, { ticker })}
+        </Text>
         {priceUsd > 0 ? (
           <Text size={13} color="shy">
-            {`$${(row.delegatedAmount * priceUsd).toFixed(2)}`}
+            {formatFiatAmount(row.delegatedAmount * priceUsd)}
           </Text>
         ) : null}
       </HStack>
 
       {apy !== undefined ? (
-        <HStack justifyContent="space-between">
-          <Text size={13} color="shy">
-            {t('solana_staking_apy')}
-          </Text>
+        <HStack justifyContent="space-between" alignItems="center">
+          <HStack gap={6} alignItems="center">
+            <ApyIconBox>
+              <PercentIcon />
+            </ApyIconBox>
+            <Text size={13} color="shy">
+              {t('solana_staking_apy')}
+            </Text>
+          </HStack>
           <Text size={13} color="success">{`${(apy * 100).toFixed(2)}%`}</Text>
         </HStack>
       ) : null}
@@ -96,7 +125,7 @@ export const SolanaDelegationCard = ({
           {t('solana_staking_rent_reserve')}
         </Text>
         <Text size={13} color="supporting">
-          {`${row.rentReserve.toFixed(6)} ${ticker}`}
+          {formatAmount(row.rentReserve, { ticker })}
         </Text>
       </HStack>
 
@@ -128,3 +157,9 @@ export const SolanaDelegationCard = ({
     </VStack>
   )
 }
+
+const ApyIconBox = styled.span`
+  display: inline-flex;
+  align-items: center;
+  color: ${getColor('textShy')};
+`
