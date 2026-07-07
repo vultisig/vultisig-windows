@@ -1650,4 +1650,6 @@ export const nl = {
   reshare_backup_old_backups_wont_work: 'Oude back-ups werken niet.',
   reshare_backup_old_backups_wont_work_description:
     'Back-ups van eerdere kluisconfiguraties kunnen niet worden gebruikt. Alleen back-ups die tijdens deze configuratie zijn gemaakt, zijn geldig.',
+  reshare_min_devices_required:
+    'Er zijn minimaal {{count}} -apparaten vereist.',
 }

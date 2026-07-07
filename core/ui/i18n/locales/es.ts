@@ -1667,4 +1667,5 @@ export const es = {
     'Las copias de seguridad antiguas no funcionarán.',
   reshare_backup_old_backups_wont_work_description:
     'No se pueden utilizar las copias de seguridad de configuraciones de bóveda anteriores. Solo son válidas las copias de seguridad creadas durante esta configuración.',
+  reshare_min_devices_required: 'Se requieren al menos dispositivos {{count}}',
 }

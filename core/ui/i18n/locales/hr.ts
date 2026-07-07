@@ -1641,4 +1641,5 @@ export const hr = {
   reshare_backup_old_backups_wont_work: 'Stare sigurnosne kopije neće raditi',
   reshare_backup_old_backups_wont_work_description:
     'Sigurnosne kopije iz prethodnih postavki trezora ne mogu se koristiti. Valjane su samo sigurnosne kopije stvorene tijekom ove postavke.',
+  reshare_min_devices_required: 'Potrebno je najmanje {{count}} uređaja',
 }

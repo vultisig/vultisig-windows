@@ -30,3 +30,14 @@ export const Reshare: Story = {
     submitText: 'Next',
   },
 }
+
+// Larger vault: dragging below the minimum disables the CTA and shows the
+// "At least N devices required" message.
+export const ReshareBelowThreshold: Story = {
+  args: {
+    initialIndex: 0,
+    minSelectableIndex: 3,
+    submitText: 'Next',
+    belowMinSubmitText: 'At least 4 devices required',
+  },
+}

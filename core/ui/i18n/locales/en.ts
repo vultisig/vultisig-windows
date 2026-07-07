@@ -886,6 +886,7 @@ export const en = {
   reshare_backup_old_backups_wont_work: "Old backups won't work",
   reshare_backup_old_backups_wont_work_description:
     "Backups from previous vault setups can't be used. Only backups created during this setup are valid.",
+  reshare_min_devices_required: 'At least {{count}} devices required',
   reshare_vault_description: 'Reshare vault with a new committee',
   reshare_vault_subtitle:
     'Update your vault setup. Add or remove devices, or refresh shares.',

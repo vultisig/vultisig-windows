@@ -1538,4 +1538,5 @@ export const zh = {
   reshare_backup_old_backups_wont_work: '旧的备份将无法使用。',
   reshare_backup_old_backups_wont_work_description:
     '之前库设置中的备份无法使用。只有本次设置过程中创建的备份才有效。',
+  reshare_min_devices_required: '至少需要{{count}}设备',
 }
