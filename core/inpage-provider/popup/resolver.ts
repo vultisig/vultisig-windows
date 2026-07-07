@@ -49,11 +49,15 @@ export type PopupOptions = {
   shouldClosePopup?: boolean
 }
 
+type PopupCallResolverInput<M extends PopupMethod> = M extends PopupMethod
+  ? {
+      call: PopupCall<M>
+      options: PopupOptions
+      context: MethodBasedContext<M, AuthorizedPopupMethod>
+    }
+  : never
+
 export type PopupCallResolver<M extends PopupMethod = PopupMethod> = Resolver<
-  {
-    call: PopupCall<M>
-    options: PopupOptions
-    context: MethodBasedContext<M, AuthorizedPopupMethod>
-  },
+  PopupCallResolverInput<M>,
   Promise<PopupInterface[M]['output']>
 >

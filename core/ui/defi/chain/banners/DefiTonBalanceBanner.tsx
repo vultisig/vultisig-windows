@@ -1,7 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
-import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Image } from '@lib/ui/image/Image'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -11,7 +9,8 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
-import { BalanceValue, BannerContent, ChainTitle } from './shared'
+import { DefiBannerBalance } from './DefiBannerBalance'
+import { BannerContent, ChainTitle } from './shared'
 
 // TON-blue tint to match the brand, mirroring how the Tron banner tints red.
 const TonBannerContainer = styled.div`
@@ -47,7 +46,6 @@ const TonLogoWrapper = styled.div`
  * THORChain banner.
  */
 export const DefiTonBalanceBanner = () => {
-  const formatFiatAmount = useFormatFiatAmount()
   const tonAddress = useCurrentVaultAddress(Chain.Ton)
   const positionQuery = useTonStakePositionQuery(tonAddress)
   const priceCoin = { ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }
@@ -84,11 +82,7 @@ export const DefiTonBalanceBanner = () => {
         {isLoading ? (
           <Spinner size={20} />
         ) : (
-          <BalanceValue>
-            <BalanceVisibilityAware>
-              {formatFiatAmount(totalFiat)}
-            </BalanceVisibilityAware>
-          </BalanceValue>
+          <DefiBannerBalance chain={Chain.Ton} value={totalFiat} />
         )}
       </BannerContent>
     </TonBannerContainer>

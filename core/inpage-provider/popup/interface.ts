@@ -88,7 +88,12 @@ export type SignMessageInput =
 
 export type PopupInterface = {
   grantVaultAccess: Method<
-    { preselectFastVault?: boolean; chain?: Chain },
+    {
+      preselectFastVault?: boolean
+      chain?: Chain
+      chains?: readonly Chain[]
+      shouldGrantAccountAccess?: boolean
+    },
     { appSession: VaultAppSession }
   >
   exportVaults: Method<{}, VaultExport[]>

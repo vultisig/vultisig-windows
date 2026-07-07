@@ -8,13 +8,16 @@ import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
 type SearchFieldProps = UiProps & {
-  placeholderKey?: string
+  autoFocus?: boolean
+  showPlaceholderWhenFocused?: boolean
   value?: string
   onSearch?: (query: string) => void
 }
 
 export const SearchField: React.FC<SearchFieldProps> = ({
+  autoFocus = true,
   onSearch,
+  showPlaceholderWhenFocused = false,
   value,
   className,
   style,
@@ -42,7 +45,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
       alignItems="center"
       gap={8}
     >
-      {!isFocused && (
+      {(!isFocused || showPlaceholderWhenFocused) && (
         <SearchIconWrapper>
           {iconStyle === 'station' ? (
             <StationMagnifierIcon />
@@ -52,13 +55,17 @@ export const SearchField: React.FC<SearchFieldProps> = ({
         </SearchIconWrapper>
       )}
       <StyledInput
-        autoFocus
+        autoFocus={autoFocus}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         type="text"
         value={query}
         onChange={handleChange}
-        placeholder={!isFocused ? t('search_field_placeholder') : ''}
+        placeholder={
+          !isFocused || showPlaceholderWhenFocused
+            ? t('search_field_placeholder')
+            : ''
+        }
       />
     </Wrapper>
   )
