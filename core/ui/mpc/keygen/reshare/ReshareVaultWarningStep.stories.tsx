@@ -9,6 +9,13 @@ const meta: Meta<typeof ReshareVaultWarningStep> = {
     onBack: () => {},
     onConfirm: () => {},
   },
+  decorators: [
+    Story => (
+      <div style={{ height: '100vh' }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 export default meta
 

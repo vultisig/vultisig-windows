@@ -1,31 +1,30 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { RadioTowerIcon } from '@lib/ui/icons/RadioTowerIcon'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { ReshareCosignersIcon } from './ReshareCosignersIcon'
+import { ReshareOldBackupsIcon } from './ReshareOldBackupsIcon'
+
 type ReshareVaultWarningStepProps = {
   onBack: () => void
   onConfirm: () => void
 }
 
-const IconBox = styled.div`
-  align-items: center;
-  background: ${({ theme }) =>
-    theme.colors.idle.getVariant({ a: () => 0.12 }).toCssValue()};
-  border-radius: 10px;
-  color: ${getColor('idle')};
-  display: flex;
-  flex-shrink: 0;
-  height: 36px;
-  justify-content: center;
-  width: 36px;
+const Header = styled(VStack)`
+  padding: 24px 16px 8px;
+`
+
+const WarningCard = styled.div`
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 20px;
+  padding: 20px;
 `
 
 export const ReshareVaultWarningStep = ({
@@ -36,12 +35,12 @@ export const ReshareVaultWarningStep = ({
 
   const warnings: { icon: ReactNode; title: string; description: string }[] = [
     {
-      icon: <TriangleAlertIcon fontSize={20} />,
+      icon: <ReshareOldBackupsIcon />,
       title: t('reshare_warning_old_backups_title'),
       description: t('reshare_warning_old_backups_description'),
     },
     {
-      icon: <RadioTowerIcon fontSize={20} />,
+      icon: <ReshareCosignersIcon />,
       title: t('reshare_warning_cosigners_title'),
       description: t('reshare_warning_cosigners_description'),
     },
@@ -52,30 +51,32 @@ export const ReshareVaultWarningStep = ({
       onBack={onBack}
       footer={<Button onClick={onConfirm}>{t('i_understand')}</Button>}
     >
-      <VStack gap={24} flexGrow justifyContent="center">
-        <VStack gap={8}>
+      <VStack gap={28} flexGrow>
+        <Header gap={8}>
           <Text color="contrast" size={22} weight={500} centerHorizontally>
             {t('before_you_reshare')}
           </Text>
-          <Text color="supporting" size={14} centerHorizontally>
+          <Text color="shy" size={13} weight={500} centerHorizontally>
             {t('before_you_reshare_subtitle')}
           </Text>
-        </VStack>
+        </Header>
         <VStack gap={12}>
           {warnings.map(({ icon, title, description }) => (
-            <Panel key={title}>
-              <HStack gap={12}>
-                <IconBox>{icon}</IconBox>
-                <VStack gap={4}>
-                  <Text color="contrast" size={16} weight={500}>
+            <WarningCard key={title}>
+              <HStack gap={12} alignItems="flex-start">
+                <IconWrapper color="idle" size={24}>
+                  {icon}
+                </IconWrapper>
+                <VStack gap={8}>
+                  <Text color="contrast" size={15} weight={500}>
                     {title}
                   </Text>
-                  <Text color="supporting" size={14}>
+                  <Text color="shy" size={13} weight={500}>
                     {description}
                   </Text>
                 </VStack>
               </HStack>
-            </Panel>
+            </WarningCard>
           ))}
         </VStack>
       </VStack>

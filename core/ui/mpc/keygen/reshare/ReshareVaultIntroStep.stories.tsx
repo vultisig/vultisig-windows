@@ -10,6 +10,13 @@ const meta: Meta<typeof ReshareVaultIntroStep> = {
     onStartReshare: () => {},
     onJoinReshare: () => {},
   },
+  decorators: [
+    Story => (
+      <div style={{ height: '100vh' }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 export default meta
 
