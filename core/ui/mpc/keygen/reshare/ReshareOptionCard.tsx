@@ -45,7 +45,7 @@ export const ReshareOptionCard = ({
         {description}
       </Text>
     </VStack>
-    <IconWrapper color="textShyExtra" size={18}>
+    <IconWrapper color="textShyExtra" size={14}>
       <ReshareChevronRightIcon />
     </IconWrapper>
   </Card>
