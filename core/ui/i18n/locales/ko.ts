@@ -1620,7 +1620,7 @@ export const ko = {
   solana_staking_total_staked: '총 스테이킹 금액 {{ticker}}',
   solana_staking_delegate_new_validator: '새로운 검증자에게 위임',
   solana_staking_stake_accounts: '이해관계자 계정',
-  solana_staking_apy: '에이피',
+  solana_staking_apy: 'APY',
   solana_staking_rent_reserve: '임대료 적립금',
   solana_staking_min_delegation:
     '최소 위임 크기는 {{amount}} {{ticker}} 입니다.',

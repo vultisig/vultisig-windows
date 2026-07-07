@@ -1631,10 +1631,10 @@ export const ru = {
   malicious_dapp_detected_description:
     '{{dapp}} помечен Blockaid как вредоносный. Всегда проводите собственное исследование, прежде чем продолжить.',
   solana_delegate: 'Ставка',
-  solana_staking_total_staked: 'Total Staked {{ticker}}',
+  solana_staking_total_staked: 'Всего в стейкинге {{ticker}}',
   solana_staking_delegate_new_validator: 'Делегировать новому валидатору',
   solana_staking_stake_accounts: 'Счета ставок',
-  solana_staking_apy: 'АПИ',
+  solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Резерв на арендную плату',
   solana_staking_min_delegation:
     'Минимальный объем делегированных полномочий: {{amount}} {{ticker}}',
