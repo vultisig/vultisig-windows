@@ -1638,4 +1638,7 @@ export const hr = {
   start_reshare_description: 'Mijenjate postavke uređaja ovog trezora.',
   reshare_success_title: 'Trezor je ponovno podijeljen',
   reshare_success_title_highlight: 'uspješno',
+  reshare_backup_old_backups_wont_work: 'Stare sigurnosne kopije neće raditi',
+  reshare_backup_old_backups_wont_work_description:
+    'Sigurnosne kopije iz prethodnih postavki trezora ne mogu se koristiti. Valjane su samo sigurnosne kopije stvorene tijekom ove postavke.',
 }

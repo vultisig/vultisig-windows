@@ -1663,4 +1663,8 @@ export const es = {
     'Estás cambiando la configuración del dispositivo de esta bóveda.',
   reshare_success_title: 'Bóveda compartida nuevamente',
   reshare_success_title_highlight: 'exitosamente',
+  reshare_backup_old_backups_wont_work:
+    'Las copias de seguridad antiguas no funcionarán.',
+  reshare_backup_old_backups_wont_work_description:
+    'No se pueden utilizar las copias de seguridad de configuraciones de bóveda anteriores. Solo son válidas las copias de seguridad creadas durante esta configuración.',
 }

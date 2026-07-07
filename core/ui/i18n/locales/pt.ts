@@ -1665,4 +1665,7 @@ export const pt = {
     'Você está alterando a configuração do dispositivo deste cofre.',
   reshare_success_title: 'Cofre compartilhado novamente',
   reshare_success_title_highlight: 'com sucesso',
+  reshare_backup_old_backups_wont_work: 'Os backups antigos não funcionarão.',
+  reshare_backup_old_backups_wont_work_description:
+    'Não é possível usar backups de configurações anteriores do cofre. Somente backups criados durante esta configuração são válidos.',
 }

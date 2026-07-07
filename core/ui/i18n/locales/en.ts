@@ -883,6 +883,9 @@ export const en = {
   resend_notification: 'Resend notification',
   resend_notification_in: 'Resend notification in {{time}}',
   reshare: 'Reshare',
+  reshare_backup_old_backups_wont_work: "Old backups won't work",
+  reshare_backup_old_backups_wont_work_description:
+    "Backups from previous vault setups can't be used. Only backups created during this setup are valid.",
   reshare_vault_description: 'Reshare vault with a new committee',
   reshare_vault_subtitle:
     'Update your vault setup. Add or remove devices, or refresh shares.',

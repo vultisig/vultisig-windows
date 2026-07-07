@@ -1535,4 +1535,7 @@ export const zh = {
   start_reshare_description: '您正在更改此保险库的设备设置。',
   reshare_success_title: 'Vault 重新共享',
   reshare_success_title_highlight: '成功地',
+  reshare_backup_old_backups_wont_work: '旧的备份将无法使用。',
+  reshare_backup_old_backups_wont_work_description:
+    '之前库设置中的备份无法使用。只有本次设置过程中创建的备份才有效。',
 }
