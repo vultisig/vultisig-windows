@@ -1,10 +1,8 @@
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { Image } from '@lib/ui/image/Image'
 import { IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
 
+import { DefiBannerBalance } from './DefiBannerBalance'
 import {
-  BalanceValue,
   BannerContent,
   ChainTitle,
   TerraBannerContainer,
@@ -29,11 +27,10 @@ type DefiTerraBalanceBannerProps = {
  * is no longer needed.
  */
 export const DefiTerraBalanceBanner = ({
+  chain,
   totalFiat,
   title,
 }: DefiTerraBalanceBannerProps) => {
-  const formatFiatAmount = useFormatFiatAmount()
-
   return (
     <TerraBannerContainer>
       <TerraLogoWrapper>
@@ -45,11 +42,7 @@ export const DefiTerraBalanceBanner = ({
       </TerraLogoWrapper>
       <BannerContent gap={8} style={{ alignItems: 'flex-start' }}>
         <ChainTitle>{title}</ChainTitle>
-        <BalanceValue>
-          <BalanceVisibilityAware>
-            {formatFiatAmount(totalFiat)}
-          </BalanceVisibilityAware>
-        </BalanceValue>
+        <DefiBannerBalance chain={chain} value={totalFiat} />
       </BannerContent>
     </TerraBannerContainer>
   )

@@ -1635,12 +1635,16 @@ export const es = {
   solana_staking_withdrawable_amount: 'Cantidad retirable',
   solana_staking_withdraw_ready_notice:
     'Ya se ha enfriado y está listo para retirarse.',
-  external_recipient_tooltip_content:
-    'Envía los fondos intercambiados a una dirección de billetera diferente a la tuya.',
   solana_move_stake: 'Mover',
   solana_finish_move: 'Finalizar movimiento',
   solana_staking_move_notice:
-    'El traslado de la participación es un proceso de varios pasos que abarca varias épocas: esto desactiva la cuenta ahora; después del período de espera de ~ {{days}} días, finalice el traslado al nuevo validador.',
+    'Mover el stake requiere varios pasos y abarca varias épocas: esto desactiva la cuenta ahora; después del periodo de enfriamiento de ~{{days}} días, finaliza el movimiento al nuevo validador.',
   solana_staking_finish_move_notice:
-    'Esto vuelve a delegar la cuenta de participación enfriada al nuevo validador y completa la transferencia.',
+    'Esto vuelve a delegar la cuenta de stake ya enfriada al nuevo validador y completa el movimiento.',
+  external_recipient_tooltip_content:
+    'Envía los fondos intercambiados a una dirección de billetera diferente a la tuya.',
+  blockaid_simulation_pending: 'Simulando transacción…',
+  malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
+  malicious_dapp_detected_description:
+    'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
 }
