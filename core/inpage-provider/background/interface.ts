@@ -37,7 +37,6 @@ export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   setAppChain: Method<SetAppChainInput>
   getAppChain: GetAppChainMethod
-  setVaultChain: Method<SetAppChainInput>
   getAccount: Method<GetAccountInput, { address: string; publicKey: string }>
   signOut: Method<{}>
   hasAppSession: Method<{}, boolean>

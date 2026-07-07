@@ -1,3 +1,4 @@
+import { getAppSessionFieldsForApprovedChains } from '@core/extension/storage/appSessionChainAuthorization'
 import { useSetExclusiveVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
@@ -129,6 +130,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   context: { requestOrigin, requestFavicon },
 }) => {
   const { t } = useTranslation()
+  const shouldGrantAccountAccess = input.shouldGrantAccountAccess ?? true
   const allVaults = useVaults()
   const currentVaultId = useCurrentVaultId()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -136,6 +138,9 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const displayDomain = hostKey
 
   const chainFilter = input.chain
+  const approvedChains = Array.from(
+    new Set([...(input.chain ? [input.chain] : []), ...(input.chains ?? [])])
+  )
   const eligibleVaults = chainFilter
     ? allVaults.filter(
         vault =>
@@ -174,6 +179,11 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           host: hostKey,
           url: requestOrigin,
           icon: requestFavicon,
+          isAccountAccessGranted: shouldGrantAccountAccess,
+          ...getAppSessionFieldsForApprovedChains({
+            chains: approvedChains,
+            selectedChain: input.chain,
+          }),
         }),
         setCurrentVaultId(vaultId),
       ])
