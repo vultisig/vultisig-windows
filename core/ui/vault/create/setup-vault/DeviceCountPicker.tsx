@@ -3,6 +3,7 @@ import { useDeviceSelectionAnimation } from '@core/ui/vault/create/setup-vault/h
 import { Button } from '@lib/ui/buttons/Button'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
+import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -33,12 +34,27 @@ const TopGradient = styled.div`
 `
 
 const AnimationContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   max-width: ${animationMaxWidth}px;
   aspect-ratio: ${animationMaxWidth} / 600;
+`
+
+// The device cards + slider label live inside the Rive artboard, so a
+// "threshold not met" state is drawn on top of that region instead.
+const BelowMinOverlay = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 45%;
+  bottom: 0;
+  background: ${getColor('background')};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 type DeviceCountPickerProps = {
@@ -51,6 +67,12 @@ type DeviceCountPickerProps = {
   submitText?: ReactNode
   /** CTA label shown (disabled) while the selection is below `minSelectableIndex`. */
   belowMinSubmitText?: ReactNode
+  /**
+   * Rendered over the Rive device-card region while the selection is below
+   * `minSelectableIndex` (receives the current slider index) — used to draw the
+   * "Threshold not met" card.
+   */
+  renderBelowMin?: (selectedDeviceCount: number) => ReactNode
 }
 
 export const DeviceCountPicker = ({
@@ -60,6 +82,7 @@ export const DeviceCountPicker = ({
   minSelectableIndex = 0,
   submitText,
   belowMinSubmitText,
+  renderBelowMin,
 }: DeviceCountPickerProps) => {
   const { t } = useTranslation()
   const { RiveComponent, selectedDeviceCount } = useDeviceSelectionAnimation({
@@ -91,6 +114,11 @@ export const DeviceCountPicker = ({
         <VStack flexGrow alignItems="center" justifyContent="center">
           <AnimationContainer>
             <RiveComponent style={{ width: '100%', height: '100%' }} />
+            {isBelowMin && renderBelowMin ? (
+              <BelowMinOverlay>
+                {renderBelowMin(selectedDeviceCount)}
+              </BelowMinOverlay>
+            ) : null}
           </AnimationContainer>
         </VStack>
       </ScreenLayout>

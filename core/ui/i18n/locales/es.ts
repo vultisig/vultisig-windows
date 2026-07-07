@@ -1668,4 +1668,8 @@ export const es = {
   reshare_backup_old_backups_wont_work_description:
     'No se pueden utilizar las copias de seguridad de configuraciones de bóveda anteriores. Solo son válidas las copias de seguridad creadas durante esta configuración.',
   reshare_min_devices_required: 'Se requieren al menos dispositivos {{count}}',
+  reshare_more_devices_required: 'Se necesitan más dispositivos',
+  reshare_threshold_not_met: 'Umbral no alcanzado',
+  reshare_threshold_not_met_description:
+    'Estás intentando reducir el número de dispositivos de {{from}} a {{to}} , pero esta bóveda requiere {{count}} firmantes activos para mantenerse segura.',
 }
