@@ -1539,4 +1539,8 @@ export const zh = {
   reshare_backup_old_backups_wont_work_description:
     '之前库设置中的备份无法使用。只有本次设置过程中创建的备份才有效。',
   reshare_min_devices_required: '至少需要{{count}}设备',
+  reshare_more_devices_required: '需要更多设备',
+  reshare_threshold_not_met: '未达到阈值',
+  reshare_threshold_not_met_description:
+    '您正在尝试将设备数量从{{from}}减少到{{to}} ，但此保险库需要{{count}}个活跃签名者才能保持安全。',
 }

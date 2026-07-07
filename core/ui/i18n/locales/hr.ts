@@ -1642,4 +1642,8 @@ export const hr = {
   reshare_backup_old_backups_wont_work_description:
     'Sigurnosne kopije iz prethodnih postavki trezora ne mogu se koristiti. Valjane su samo sigurnosne kopije stvorene tijekom ove postavke.',
   reshare_min_devices_required: 'Potrebno je najmanje {{count}} uređaja',
+  reshare_more_devices_required: 'Potrebno je više uređaja',
+  reshare_threshold_not_met: 'Prag nije dosegnut',
+  reshare_threshold_not_met_description:
+    'Pokušavate smanjiti broj uređaja s {{from}} na {{to}} , ali ovaj trezor zahtijeva {{count}} aktivnih potpisnika kako bi ostao siguran.',
 }

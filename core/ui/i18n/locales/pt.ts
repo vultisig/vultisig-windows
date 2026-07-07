@@ -1670,4 +1670,8 @@ export const pt = {
     'Não é possível usar backups de configurações anteriores do cofre. Somente backups criados durante esta configuração são válidos.',
   reshare_min_devices_required:
     'São necessários pelo menos {{count}} dispositivos.',
+  reshare_more_devices_required: 'São necessários mais dispositivos.',
+  reshare_threshold_not_met: 'Limiar não atingido',
+  reshare_threshold_not_met_description:
+    'Você está tentando reduzir o número de dispositivos de {{from}} para {{to}} , mas este cofre requer {{count}} signatários ativos para permanecer seguro.',
 }

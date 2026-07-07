@@ -1673,4 +1673,8 @@ export const it = {
   reshare_backup_old_backups_wont_work_description:
     'I backup creati durante precedenti configurazioni del vault non possono essere utilizzati. Sono validi solo i backup creati durante questa configurazione.',
   reshare_min_devices_required: 'Sono necessari almeno dispositivi {{count}}',
+  reshare_more_devices_required: 'Sono necessari più dispositivi',
+  reshare_threshold_not_met: 'Soglia non raggiunta',
+  reshare_threshold_not_met_description:
+    'Stai cercando di ridurre il numero di dispositivi da {{from}} a {{to}} , ma questo vault richiede {{count}} firmatari attivi per rimanere sicuro.',
 }

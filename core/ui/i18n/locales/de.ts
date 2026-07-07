@@ -1681,4 +1681,8 @@ export const de = {
   reshare_backup_old_backups_wont_work_description:
     'Backups aus früheren Vault-Konfigurationen können nicht verwendet werden. Nur Backups, die während dieser Konfiguration erstellt wurden, sind gültig.',
   reshare_min_devices_required: 'Mindestens {{count}} -Geräte erforderlich',
+  reshare_more_devices_required: 'Weitere Geräte erforderlich',
+  reshare_threshold_not_met: 'Schwellenwert nicht erreicht',
+  reshare_threshold_not_met_description:
+    'Sie versuchen, die Anzahl der Geräte von {{from}} auf {{to}} zu reduzieren, aber dieser Tresor benötigt {{count}} aktive Signierer, um sicher zu bleiben.',
 }

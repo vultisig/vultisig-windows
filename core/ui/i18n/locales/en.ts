@@ -883,6 +883,10 @@ export const en = {
   resend_notification: 'Resend notification',
   resend_notification_in: 'Resend notification in {{time}}',
   reshare: 'Reshare',
+  reshare_more_devices_required: 'More devices required',
+  reshare_threshold_not_met: 'Threshold not met',
+  reshare_threshold_not_met_description:
+    "You're trying to reduce the number of devices from {{from}} to {{to}}, but this vault requires {{count}} active signers to stay secure.",
   reshare_backup_old_backups_wont_work: "Old backups won't work",
   reshare_backup_old_backups_wont_work_description:
     "Backups from previous vault setups can't be used. Only backups created during this setup are valid.",

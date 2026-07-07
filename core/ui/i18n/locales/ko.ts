@@ -1634,4 +1634,8 @@ export const ko = {
   reshare_backup_old_backups_wont_work_description:
     '이전 볼트 설정에서 생성된 백업은 사용할 수 없습니다. 이번 설정 과정에서 생성된 백업만 유효합니다.',
   reshare_min_devices_required: '최소 {{count}} 개의 장치가 필요합니다.',
+  reshare_more_devices_required: '더 많은 장치가 필요합니다',
+  reshare_threshold_not_met: '임계값 미충족',
+  reshare_threshold_not_met_description:
+    '{{from}} 에서 {{to}} 로 장치 수를 줄이려고 하지만, 이 볼트의 보안을 유지하려면 {{count}} 명의 활성 서명자가 필요합니다.',
 }

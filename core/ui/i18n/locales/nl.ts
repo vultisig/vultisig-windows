@@ -1652,4 +1652,8 @@ export const nl = {
     'Back-ups van eerdere kluisconfiguraties kunnen niet worden gebruikt. Alleen back-ups die tijdens deze configuratie zijn gemaakt, zijn geldig.',
   reshare_min_devices_required:
     'Er zijn minimaal {{count}} -apparaten vereist.',
+  reshare_more_devices_required: 'Meer apparaten nodig',
+  reshare_threshold_not_met: 'Drempelwaarde niet bereikt',
+  reshare_threshold_not_met_description:
+    'Je probeert het aantal apparaten te verminderen van {{from}} naar {{to}} , maar deze kluis vereist actieve ondertekenaars {{count}} om veilig te blijven.',
 }
