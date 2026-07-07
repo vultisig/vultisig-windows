@@ -7,7 +7,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 import { SearchChain } from './controls/SearchChain'
 
@@ -86,6 +86,12 @@ const Wrapper = styled.div`
   })};
 
   margin-bottom: 16px;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      margin-bottom: 12px;
+    `}
 `
 
 const TabsHeaderContainer = styled.div`
@@ -103,6 +109,12 @@ const TrailingGroup = styled(motion.div)`
   align-items: center;
   justify-content: flex-end;
   min-width: 0;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      gap: 12px;
+    `}
 `
 
 const SearchArea = styled(motion.div)`
@@ -110,6 +122,12 @@ const SearchArea = styled(motion.div)`
   justify-content: flex-end;
   min-width: 0;
   overflow: hidden;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      align-items: center;
+    `}
 `
 
 const ManageButtonMotion = styled(motion.div)`

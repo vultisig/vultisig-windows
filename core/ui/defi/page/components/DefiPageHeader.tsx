@@ -92,7 +92,7 @@ export const DefiPageHeader = ({
         <PageHeader
           hasBorder
           secondaryControls={headerControls}
-          title={<VaultSelector value={vault} />}
+          title={<VaultSelector placement="pageHeader" value={vault} />}
         />
       </NormalContent>
     </HeaderContainer>

@@ -21,7 +21,13 @@ export type SetAppChainInput = {
 
 export type GetAccountInput = {
   chain: Chain
-  /** When provided (e.g. from grantVaultAccess popup response), used instead of storage lookup to avoid races. */
+  /**
+   * Echoed back from the grantVaultAccess popup response on the immediate
+   * follow-up call. Its presence signals a grant just happened so background
+   * authorization tolerates the post-write storage race (#3973); its contents
+   * are not trusted — authorization is always re-derived from storage against
+   * the trusted request origin.
+   */
   appSession?: VaultAppSession
 }
 

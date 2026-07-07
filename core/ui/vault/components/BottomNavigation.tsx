@@ -134,7 +134,7 @@ const ContainerOld = styled.div`
   background: ${({ theme }) =>
     theme.iconStyle === 'station'
       ? theme.colors.foreground.withAlpha(0.5).toCssValue()
-      : 'rgba(19, 46, 86, 0.6)'};
+      : theme.colors.foreground.toCssValue()};
   backdrop-filter: blur(32px);
   padding: 8px 12px 10px 12px;
   border-top: 1px solid ${getColor('foregroundExtra')};

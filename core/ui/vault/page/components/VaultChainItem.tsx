@@ -23,7 +23,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type VaultChainItemProps = {
   balance: VaultChainBalance
@@ -85,7 +85,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
       <HStack fullWidth alignItems="center" gap={12}>
         <ChainEntityIcon
           value={getChainLogoSrc(chain)}
-          style={{ fontSize: 32 }}
+          style={{ fontSize: iconStyle === 'station' ? 36 : 32 }}
         />
 
         <VStack fullWidth alignItems="start" gap={12}>
@@ -170,6 +170,18 @@ const StyledPanel = styled(Panel)`
   &:hover {
     background-color: ${getColor('foregroundExtra')};
   }
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      border-radius: 0;
+      background: ${theme.colors.foreground.toCssValue()};
+      padding: 12px;
+
+      &:hover {
+        background: ${theme.colors.foregroundDark.toCssValue()};
+      }
+    `}
 `
 
 const AddressRow = styled(HStack)`

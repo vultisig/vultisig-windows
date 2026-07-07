@@ -1,4 +1,5 @@
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { hasServer, isServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { getKeygenThreshold } from '@vultisig/core-mpc/getKeygenThreshold'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
@@ -13,8 +14,8 @@ const PillContainer = styled.div`
   align-items: center;
   gap: 10px;
   border-radius: 8px;
-  border: 1px solid #11284a;
-  background: #061b3a;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background: ${getColor('foreground')};
 `
 
 type VaultSignersPillProps = {

@@ -1,12 +1,13 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { StationCheckmarkSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { vStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type DefiItemProps = {
   icon: ReactNode
@@ -27,6 +28,8 @@ export const DefiItem = ({
   isDisabled = false,
   onClick,
 }: DefiItemProps) => {
+  const { iconStyle } = useTheme()
+
   return (
     <Container onClick={onClick} isLoading={isPending} isDisabled={isDisabled}>
       <IconContainer isActive={isSelected} isDisabled={isDisabled}>
@@ -35,7 +38,11 @@ export const DefiItem = ({
         </IconWrapper>
         {isSelected && (
           <CheckBadge color="primary" size={12}>
-            <CheckmarkIcon />
+            {iconStyle === 'station' ? (
+              <StationCheckmarkSmallIcon />
+            ) : (
+              <CheckmarkIcon />
+            )}
           </CheckBadge>
         )}
       </IconContainer>
@@ -89,6 +96,20 @@ const IconContainer = styled.div<IconContainerProps>`
       border: 1.5px solid ${getColor('foregroundSuper')};
       background: ${getColor('foreground')};
     `}
+
+  ${({ theme, isActive, isDisabled }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      background: ${theme.colors.foreground.withAlpha(0.5).toCssValue()};
+      opacity: ${isDisabled ? 0.4 : isActive ? 1 : 0.5};
+
+      ${isActive &&
+      !isDisabled &&
+      css`
+        border: 1.5px solid ${theme.colors.foregroundExtra.toCssValue()};
+        background: ${theme.colors.foreground.toCssValue()};
+      `}
+    `}
 `
 
 const CheckBadge = styled(IconWrapper)`
@@ -100,4 +121,11 @@ const CheckBadge = styled(IconWrapper)`
   border-radius: 40px 0 25px 0;
   background: ${getColor('foregroundSuper')};
   font-weight: 600;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      background: ${theme.colors.foregroundExtra.toCssValue()};
+      color: ${theme.colors.primary.toCssValue()};
+    `}
 `
