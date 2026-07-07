@@ -10,7 +10,20 @@ import { KeygenFlowSuccessContent } from './KeygenFlowSuccessContent'
 
 const animationDuration = 6000
 
-export const KeygenFlowSuccess = () => {
+type KeygenFlowSuccessProps = {
+  /**
+   * Called instead of navigating home once the success animation has played —
+   * used when this screen is an intermediate step (e.g. before the reshare
+   * backup guide) rather than the terminal screen.
+   */
+  onFinish?: () => void
+  durationMs?: number
+}
+
+export const KeygenFlowSuccess = ({
+  onFinish,
+  durationMs = animationDuration,
+}: KeygenFlowSuccessProps = {}) => {
   const { t } = useTranslation()
   const securityType = useCurrentVaultSecurityType()
   const keygenOperation = useKeygenOperation()
@@ -40,11 +53,15 @@ export const KeygenFlowSuccess = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      navigate({ id: 'vault' })
-    }, animationDuration)
+      if (onFinish) {
+        onFinish()
+      } else {
+        navigate({ id: 'vault' })
+      }
+    }, durationMs)
 
     return () => clearTimeout(timeoutId)
-  }, [navigate])
+  }, [navigate, onFinish, durationMs])
 
   return <KeygenFlowSuccessContent title={title} securityType={securityType} />
 }
