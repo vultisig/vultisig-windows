@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ReshareDevicesGraphic } from './ReshareDevicesGraphic'
-import { ReshareGlow } from './ReshareGlow'
 import { ReshareOptionCard } from './ReshareOptionCard'
 
 type ReshareVaultIntroStepProps = {
@@ -22,13 +21,15 @@ const Wrapper = styled.div`
 `
 
 const GlowLayer = styled.div`
-  left: 50%;
+  background: radial-gradient(
+    circle 260px at 50% 44%,
+    rgba(72, 121, 253, 0.18),
+    rgba(4, 57, 199, 0.06) 45%,
+    transparent 72%
+  );
+  inset: 0;
   pointer-events: none;
   position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  width: 393px;
-  max-width: 130%;
   z-index: 0;
 `
 
@@ -69,9 +70,7 @@ export const ReshareVaultIntroStep = ({
       }
     >
       <Wrapper>
-        <GlowLayer>
-          <ReshareGlow />
-        </GlowLayer>
+        <GlowLayer />
         <Foreground gap={12}>
           <VStack gap={8}>
             <Text as="h1" color="contrast" size={28} weight={500}>
