@@ -1628,6 +1628,8 @@ export const ko = {
   reshare_warning_old_backups_description:
     '기존의 .vult 파일은 모두 무효화됩니다. 공유를 다시 수행한 후에는 새 백업 파일을 생성해야 합니다.',
   start_reshare_description: '이 금고의 장치 설정을 변경하고 있습니다.',
+  reshare_success_title: 'Vault 재공유',
+  reshare_success_title_highlight: '성공적으로',
   reshare_backup_old_backups_wont_work: '기존 백업 파일은 작동하지 않습니다.',
   reshare_backup_old_backups_wont_work_description:
     '이전 볼트 설정에서 생성된 백업은 사용할 수 없습니다. 이번 설정 과정에서 생성된 백업만 유효합니다.',

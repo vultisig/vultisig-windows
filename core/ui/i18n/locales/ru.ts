@@ -1643,6 +1643,8 @@ export const ru = {
     'Все существующие файлы с расширением .vult становятся недействительными. После повторного предоставления доступа вам потребуется создать новые резервные копии.',
   start_reshare_description:
     'Вы изменяете настройки устройства этого хранилища.',
+  reshare_success_title: 'Хранилище повторно доступно',
+  reshare_success_title_highlight: 'успешно',
   reshare_backup_old_backups_wont_work:
     'Старые резервные копии работать не будут.',
   reshare_backup_old_backups_wont_work_description:

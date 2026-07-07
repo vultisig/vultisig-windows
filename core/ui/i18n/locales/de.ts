@@ -1675,6 +1675,8 @@ export const de = {
     'Alle vorhandenen .vult-Dateien werden ungültig. Sie müssen nach der erneuten Freigabe neue Sicherungskopien erstellen.',
   start_reshare_description:
     'Sie ändern die Gerätekonfiguration dieses Tresors.',
+  reshare_success_title: 'Vault erneut geteilt',
+  reshare_success_title_highlight: 'erfolgreich',
   reshare_backup_old_backups_wont_work: 'Alte Backups funktionieren nicht.',
   reshare_backup_old_backups_wont_work_description:
     'Backups aus früheren Vault-Konfigurationen können nicht verwendet werden. Nur Backups, die während dieser Konfiguration erstellt wurden, sind gültig.',
