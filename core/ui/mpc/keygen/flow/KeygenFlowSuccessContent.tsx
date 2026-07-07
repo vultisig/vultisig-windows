@@ -11,14 +11,17 @@ import styled from 'styled-components'
 type KeygenFlowSuccessContentProps = {
   title: ReactNode
   securityType: VaultSecurityType
+  /** `.riv` filename (no extension) to override the default keygen animation. */
+  animationSource?: string
 }
 
 export const KeygenFlowSuccessContent = ({
   title,
   securityType,
+  animationSource,
 }: KeygenFlowSuccessContentProps) => {
   const { RiveComponent } = useRive({
-    src: `/core/animations/keygen-${securityType}.riv`,
+    src: `/core/animations/${animationSource ?? `keygen-${securityType}`}.riv`,
     stateMachines: 'State Machine 1',
     autoplay: true,
   })
