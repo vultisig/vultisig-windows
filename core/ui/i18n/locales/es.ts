@@ -1661,4 +1661,8 @@ export const es = {
     'Los archivos .vult existentes dejarán de ser válidos. Deberá crear copias de seguridad nuevas después de volver a compartirlos.',
   start_reshare_description:
     'Estás cambiando la configuración del dispositivo de esta bóveda.',
+  reshare_backup_old_backups_wont_work:
+    'Las copias de seguridad antiguas no funcionarán.',
+  reshare_backup_old_backups_wont_work_description:
+    'No se pueden utilizar las copias de seguridad de configuraciones de bóveda anteriores. Solo son válidas las copias de seguridad creadas durante esta configuración.',
 }

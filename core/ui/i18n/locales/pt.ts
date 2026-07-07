@@ -1663,4 +1663,7 @@ export const pt = {
     'Todos os arquivos .vult existentes serão invalidados. Você precisará criar novos backups após o compartilhamento.',
   start_reshare_description:
     'Você está alterando a configuração do dispositivo deste cofre.',
+  reshare_backup_old_backups_wont_work: 'Os backups antigos não funcionarão.',
+  reshare_backup_old_backups_wont_work_description:
+    'Não é possível usar backups de configurações anteriores do cofre. Somente backups criados durante esta configuração são válidos.',
 }
