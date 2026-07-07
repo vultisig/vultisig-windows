@@ -710,11 +710,11 @@ __metadata:
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
-    "@vultisig/core-chain": "npm:2.22.2"
+    "@vultisig/core-chain": "npm:2.23.1"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.16"
+    "@vultisig/core-mpc": "npm:1.8.18"
     "@vultisig/lib-utils": "npm:0.10.4"
-    "@vultisig/sdk": "npm:2.13.2"
+    "@vultisig/sdk": "npm:2.17.1"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -773,10 +773,10 @@ __metadata:
     "@types/react-dom": "npm:^19.2.3"
     "@types/web-push": "npm:^3"
     "@types/ws": "npm:^8"
-    "@vultisig/core-chain": "npm:2.22.2"
-    "@vultisig/core-mpc": "npm:1.8.16"
+    "@vultisig/core-chain": "npm:2.23.1"
+    "@vultisig/core-mpc": "npm:1.8.18"
     "@vultisig/lib-utils": "npm:0.10.4"
-    "@vultisig/sdk": "npm:2.13.2"
+    "@vultisig/sdk": "npm:2.17.1"
     "@wallet-standard/base": "npm:^1.1.1"
     "@wallet-standard/features": "npm:^1.1.1"
     bech32: "npm:^2.0.0"
@@ -872,9 +872,9 @@ __metadata:
     "@tanstack/react-query": "npm:^5.101.0"
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.22.2"
+    "@vultisig/core-chain": "npm:2.23.1"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.16"
+    "@vultisig/core-mpc": "npm:1.8.18"
     "@vultisig/lib-utils": "npm:0.10.4"
     react: "npm:19.2.4"
     react-i18next: "npm:^16.5.8"
@@ -896,9 +896,9 @@ __metadata:
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.22.2"
+    "@vultisig/core-chain": "npm:2.23.1"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.16"
+    "@vultisig/core-mpc": "npm:1.8.18"
     "@vultisig/lib-utils": "npm:0.10.4"
     bitcoinjs-lib: "npm:^7.0.1"
     cosmjs-types: "npm:^0.11.0"
@@ -946,11 +946,11 @@ __metadata:
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitejs/plugin-react": "npm:5.1.3"
-    "@vultisig/core-chain": "npm:2.22.2"
+    "@vultisig/core-chain": "npm:2.23.1"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.16"
+    "@vultisig/core-mpc": "npm:1.8.18"
     "@vultisig/lib-utils": "npm:0.10.4"
-    "@vultisig/sdk": "npm:2.13.2"
+    "@vultisig/sdk": "npm:2.17.1"
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
@@ -6590,6 +6590,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vultisig/core-chain@npm:2.23.1":
+  version: 2.23.1
+  resolution: "@vultisig/core-chain@npm:2.23.1"
+  dependencies:
+    7z-wasm: "npm:^1.2.0"
+    "@bufbuild/protobuf": "npm:^2.12.0"
+    "@cosmjs/amino": "npm:^0.39.0"
+    "@cosmjs/encoding": "npm:^0.39.0"
+    "@cosmjs/proto-signing": "npm:^0.39.0"
+    "@cosmjs/stargate": "npm:^0.39.0"
+    "@lifi/sdk": "npm:^4.0.0"
+    "@mysten/sui": "npm:^2.20.1"
+    "@noble/hashes": "npm:^1.8.0"
+    "@polkadot/api": "npm:^16.5.6"
+    "@polkadot/util": "npm:^14.0.3"
+    "@polkadot/util-crypto": "npm:^14.0.3"
+    "@solana/spl-token": "npm:^0.4.14"
+    "@solana/web3.js": "npm:^1.98.4"
+    "@ton/core": "npm:^0.63.1"
+    "@ton/crypto": "npm:^3.3.0"
+    "@trustwallet/wallet-core": "npm:^4.7.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/lib-utils": "npm:0.10.4"
+    bip32: "npm:^5.0.1"
+    bitcoinjs-lib: "npm:^7.0.1"
+    bs58: "npm:^6.0.0"
+    bs58check: "npm:^4.0.0"
+    cbor-x: "npm:^1.6.4"
+    date-fns: "npm:^4.4.0"
+    ethers: "npm:^6.17.0"
+    long: "npm:^5.3.2"
+    tiny-secp256k1: "npm:^2.2.4"
+    viem: "npm:^2.53.1"
+    xrpl: "npm:^5.0.0"
+  checksum: 10c0/4c20efec0c7c2c6ce773ac58d47b64bd0642fe89e3b4d4e7d79baa119bca8cdeb24fa7802b9c7f7831de95be86cb89d38e955a76317d075241230b3a4520b913
+  languageName: node
+  linkType: hard
+
 "@vultisig/core-config@npm:0.9.1":
   version: 0.9.1
   resolution: "@vultisig/core-config@npm:0.9.1"
@@ -6622,6 +6660,34 @@ __metadata:
     long: "npm:^5.3.2"
     viem: "npm:^2.53.1"
   checksum: 10c0/3e556f550eb71d8d3eb52d2abe925e90509c1326cb5272bd090ce3c7f56fb54dc39456b39e39d414d0fe2254246b3075c7de1d75c25cba873b05cfd892deeaa8
+  languageName: node
+  linkType: hard
+
+"@vultisig/core-mpc@npm:1.8.18":
+  version: 1.8.18
+  resolution: "@vultisig/core-mpc@npm:1.8.18"
+  dependencies:
+    7z-wasm: "npm:^1.2.0"
+    "@bufbuild/protobuf": "npm:^2.12.0"
+    "@cosmjs/encoding": "npm:^0.39.0"
+    "@mysten/sui": "npm:^2.20.1"
+    "@noble/hashes": "npm:^1.8.0"
+    "@solana/web3.js": "npm:^1.98.4"
+    "@trustwallet/wallet-core": "npm:^4.7.0"
+    "@vultisig/core-chain": "npm:2.23.1"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/lib-dkls": "npm:0.9.0"
+    "@vultisig/lib-mldsa": "npm:0.9.0"
+    "@vultisig/lib-schnorr": "npm:0.9.0"
+    "@vultisig/lib-utils": "npm:0.10.4"
+    "@vultisig/mpc-types": "npm:0.2.3"
+    bitcoinjs-lib: "npm:^7.0.1"
+    bs58: "npm:^6.0.0"
+    buffer: "npm:^6.0.3"
+    cosmjs-types: "npm:^0.11.0"
+    long: "npm:^5.3.2"
+    viem: "npm:^2.53.1"
+  checksum: 10c0/89e81ee2d954a796b7b3dce72613ee4739d97cc7a139bc0a63306fcb2915a1f262c9470b0bfc520a04d4637ae9eaa6c79c6fccf453bdee037c9212e4f5da38d2
   languageName: node
   linkType: hard
 
@@ -6670,9 +6736,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/sdk@npm:2.13.2":
-  version: 2.13.2
-  resolution: "@vultisig/sdk@npm:2.13.2"
+"@vultisig/sdk@npm:2.17.1":
+  version: 2.17.1
+  resolution: "@vultisig/sdk@npm:2.17.1"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@balancer-labs/balancer-maths": "npm:^0.0.40"
@@ -6746,7 +6812,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/4df46afd441feb29f0c95331ac911f3357c569e4b224b7ba563db4ba3cc1a6a9da73823f4203253ca6f7ce62d98a55bd3ece84ddba584e43e1ba45a7e1f9adb5
+  checksum: 10c0/c19e44ba3b93b9220116e47a51fbda9e1c67575232d41e9db915521904ea1777c72d52f30539efe6e45872ee55215e6a8f8fc49d0d4ceed115afea7668bf1903
   languageName: node
   linkType: hard
 
