@@ -7,9 +7,21 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { EIP1193Error } from '../../../background/handlers/errorHandler'
 
+const isBridgeTransportError = (error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error)
+  const unwrappedMessage = message.replace(
+    /^Failed to send message to background script after \d+ attempts:\s*/i,
+    ''
+  )
+
+  return /Receiving end does not exist|Could not establish connection|message port closed|Extension context invalidated/i.test(
+    unwrappedMessage
+  )
+}
+
 export const requestAccount = async (
   chain: Chain,
-  options?: { preselectFastVault?: boolean }
+  options?: { preselectFastVault?: boolean; chains?: readonly Chain[] }
 ) => {
   const { error, data } = await attempt(
     callBackground({
@@ -30,6 +42,7 @@ export const requestAccount = async (
         grantVaultAccess: {
           preselectFastVault: options?.preselectFastVault,
           chain,
+          ...(options?.chains ? { chains: options.chains } : {}),
         },
       })
     )
@@ -59,7 +72,11 @@ export const requestAccount = async (
   // Origin not authorized for the current vault, or vault is authorized but
   // has no account for this chain (e.g. Solana on an EVM-only import) →
   // prompt the user to pick a vault that supports this chain.
-  if (error === BackgroundError.Unauthorized || data !== undefined) {
+  if (
+    error === BackgroundError.Unauthorized ||
+    data !== undefined ||
+    isBridgeTransportError(error)
+  ) {
     return grantAccessAndGetAccount()
   }
 

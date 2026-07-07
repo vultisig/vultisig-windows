@@ -1612,18 +1612,26 @@ export const hr = {
     'Deaktiviranjem započinje hlađenje — vaš ulog ostaje zaključan ~ {{days}} dana prije nego što možete isplatiti novac.',
   solana_staking_withdrawable_amount: 'Iznos za isplatu',
   solana_staking_withdraw_ready_notice: 'Ohlađeno i spremno za povlačenje.',
-  solana_delegate: 'Ulog',
-  solana_move_stake: 'Potez',
-  solana_finish_move: 'Završi potez',
+  solana_move_stake: 'Premjesti',
+  solana_finish_move: 'Dovrši premještanje',
   solana_staking_move_notice:
-    'Premještanje uloga je višekoračno i obuhvaća epohe: ovo sada deaktivira račun; nakon ~ {{days}} dana hlađenja, završite premještanje na novi validator.',
+    'Premještanje uloga odvija se u više koraka i traje kroz više epoha: ovo sada deaktivira račun; nakon razdoblja hlađenja od oko {{days}} dana dovršite premještanje na novog validatora.',
   solana_staking_finish_move_notice:
-    'Ovim se ohlađeni ulog račun ponovno delegira novom validatoru i dovršava se preseljenje.',
+    'Ovo ponovno delegira ohlađeni račun uloga novom validatoru i dovršava premještanje.',
+  external_recipient_tooltip_content:
+    'Pošaljite zamijenjena sredstva na drugu adresu novčanika umjesto na svoju.',
+  blockaid_simulation_pending: 'Simuliranje transakcije…',
+  malicious_dapp_detected: 'Otkriven zlonamjerni dApp',
+  malicious_dapp_detected_description:
+    'Blockaid je označio {{dapp}} kao zlonamjeran. Uvijek provedite vlastito istraživanje prije nego što nastavite.',
+  solana_delegate: 'Ulog',
   solana_staking_total_staked: 'Ukupno uloženo {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegat novom validatoru',
   solana_staking_stake_accounts: 'Računi udjela',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Rezerva za najamninu',
+  solana_staking_min_delegation:
+    'Minimalna delegacija je {{amount}} {{ticker}}',
   solana_staking_state_active: 'Aktivan',
   solana_staking_state_activating: 'Aktiviranje',
   solana_staking_state_deactivating: 'Deaktiviranje',
@@ -1635,6 +1643,4 @@ export const hr = {
   solana_staking_inactive_notice:
     'Neaktivno — ohlađeno i spremno za povlačenje.',
   validator_commission_short: '{{value}} % provizije',
-  solana_staking_min_delegation:
-    'Minimalna delegacija je {{amount}} {{ticker}}',
 }

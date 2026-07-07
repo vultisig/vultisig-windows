@@ -21,6 +21,7 @@ import { CoinTicker } from './CoinTicker'
 const PriceBadge = styled.div`
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   padding: 3px 8px;
   border-radius: 8px;
   background: ${getColor('foregroundExtra')};

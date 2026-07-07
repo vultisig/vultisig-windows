@@ -1635,18 +1635,26 @@ export const es = {
   solana_staking_withdrawable_amount: 'Cantidad retirable',
   solana_staking_withdraw_ready_notice:
     'Ya se ha enfriado y está listo para retirarse.',
-  solana_delegate: 'Apostar',
   solana_move_stake: 'Mover',
   solana_finish_move: 'Finalizar movimiento',
   solana_staking_move_notice:
-    'El traslado de la participación es un proceso de varios pasos que abarca varias épocas: esto desactiva la cuenta ahora; después del período de espera de ~ {{days}} días, finalice el traslado al nuevo validador.',
+    'Mover el stake requiere varios pasos y abarca varias épocas: esto desactiva la cuenta ahora; después del periodo de enfriamiento de ~{{days}} días, finaliza el movimiento al nuevo validador.',
   solana_staking_finish_move_notice:
-    'Esto vuelve a delegar la cuenta de participación enfriada al nuevo validador y completa la transferencia.',
+    'Esto vuelve a delegar la cuenta de stake ya enfriada al nuevo validador y completa el movimiento.',
+  external_recipient_tooltip_content:
+    'Envía los fondos intercambiados a una dirección de billetera diferente a la tuya.',
+  blockaid_simulation_pending: 'Simulando transacción…',
+  malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
+  malicious_dapp_detected_description:
+    'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
+  solana_delegate: 'Apostar',
   solana_staking_total_staked: 'Total apostado {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegar al nuevo validador',
   solana_staking_stake_accounts: 'Cuentas de participación',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Reserva de alquiler',
+  solana_staking_min_delegation:
+    'La delegación mínima es {{amount}} {{ticker}}',
   solana_staking_state_active: 'Activo',
   solana_staking_state_activating: 'Activando',
   solana_staking_state_deactivating: 'Desactivando',
@@ -1657,6 +1665,4 @@ export const es = {
     'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
   solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
   validator_commission_short: '{{value}} % de comisión',
-  solana_staking_min_delegation:
-    'La delegación mínima es {{amount}} {{ticker}}',
 }

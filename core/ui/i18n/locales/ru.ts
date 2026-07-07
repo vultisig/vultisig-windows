@@ -1618,18 +1618,26 @@ export const ru = {
     'Деактивация запускает период ожидания — ваши средства остаются заблокированными примерно на {{days}} дней, прежде чем вы сможете их вывести.',
   solana_staking_withdrawable_amount: 'Сумма, доступная для снятия',
   solana_staking_withdraw_ready_notice: 'Остыл и готов к извлечению.',
-  solana_delegate: 'Ставка',
-  solana_move_stake: 'Двигаться',
-  solana_finish_move: 'Завершающий ход',
+  solana_move_stake: 'Переместить',
+  solana_finish_move: 'Завершить перемещение',
   solana_staking_move_notice:
-    'Перемещение стейка — это многоэтапный процесс, охватывающий несколько эпох: сейчас это деактивирует аккаунт; после истечения ~ {{days}} -дневного периода ожидания завершите перемещение стейка к новому валидатору.',
+    'Перемещение стейка выполняется в несколько шагов и занимает несколько эпох: сейчас аккаунт будет деактивирован; после периода ожидания около {{days}} дней завершите перемещение к новому валидатору.',
   solana_staking_finish_move_notice:
-    'Это переводит остывший стейкинговый счет новому валидатору и завершает перемещение.',
+    'Это повторно делегирует охлажденный стейк-аккаунт новому валидатору и завершит перемещение.',
+  external_recipient_tooltip_content:
+    'Отправьте переведенные средства на другой адрес кошелька, а не на свой собственный.',
+  blockaid_simulation_pending: 'Имитация транзакции…',
+  malicious_dapp_detected: 'Обнаружен вредоносный dApp',
+  malicious_dapp_detected_description:
+    '{{dapp}} помечен Blockaid как вредоносный. Всегда проводите собственное исследование, прежде чем продолжить.',
+  solana_delegate: 'Ставка',
   solana_staking_total_staked: 'Total Staked {{ticker}}',
   solana_staking_delegate_new_validator: 'Делегировать новому валидатору',
   solana_staking_stake_accounts: 'Счета ставок',
   solana_staking_apy: 'АПИ',
   solana_staking_rent_reserve: 'Резерв на арендную плату',
+  solana_staking_min_delegation:
+    'Минимальный объем делегированных полномочий: {{amount}} {{ticker}}',
   solana_staking_state_active: 'Активный',
   solana_staking_state_activating: 'Активация',
   solana_staking_state_deactivating: 'Деактивация',
@@ -1640,6 +1648,4 @@ export const ru = {
     'Деактивация — охлаждение перед извлечением.',
   solana_staking_inactive_notice: 'Неактивен — остыл и готов к изъятию.',
   validator_commission_short: '{{value}} % комиссия',
-  solana_staking_min_delegation:
-    'Минимальный объем делегированных полномочий: {{amount}} {{ticker}}',
 }

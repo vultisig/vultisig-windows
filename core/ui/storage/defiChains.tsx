@@ -9,6 +9,7 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { useMemo } from 'react'
 
 import { featureFlags } from '../featureFlags'
+import { currentProductBrand, ProductBrand } from '../product/brand'
 import { useCore } from '../state/core'
 import { getDefaultDefiPositionIds } from './defiPositions'
 import { StorageKey } from './StorageKey'
@@ -31,7 +32,22 @@ export const isSupportedDefiChain = (
 ): chain is SupportedDefiChain =>
   supportedDefiChains.includes(chain as SupportedDefiChain)
 
-export const initialDefiChains: Chain[] = []
+export const getInitialDefiChains = (productBrand: ProductBrand): Chain[] =>
+  productBrand === 'station' ? [Chain.Terra, Chain.TerraClassic] : []
+
+type ResolveDefiChainsInput = {
+  storedChains?: Chain[]
+  productBrand: ProductBrand
+}
+
+export const resolveDefiChains = ({
+  storedChains,
+  productBrand,
+}: ResolveDefiChainsInput): Chain[] =>
+  storedChains ?? getInitialDefiChains(productBrand)
+
+export const initialDefiChains: Chain[] =
+  getInitialDefiChains(currentProductBrand)
 
 type GetDefiChainsFunction = () => Promise<Chain[]>
 type SetDefiChainsFunction = (chains: Chain[]) => Promise<void>
@@ -55,7 +71,10 @@ export const useDefiChains = () => {
   const allowedDefiChains = useSupportedDefiChainsForVault()
   const { data } = useDefiChainsQuery()
 
-  const resolved = (data ?? initialDefiChains).filter(isSupportedDefiChain)
+  const resolved = resolveDefiChains({
+    storedChains: data,
+    productBrand: currentProductBrand,
+  }).filter(isSupportedDefiChain)
   return resolved.filter(chain => allowedDefiChains.includes(chain))
 }
 

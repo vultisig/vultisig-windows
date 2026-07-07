@@ -107,6 +107,7 @@ export const en = {
   blockaid_simulation_failed: 'Transaction Simulation Failed',
   blockaid_simulation_failed_description:
     'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
+  blockaid_simulation_pending: 'Simulating transaction…',
   transaction_scanned_by: 'Transaction scanned by {{provider}}',
   broadcast_error: 'The network rejected this transaction',
   broadcast_error_description:
@@ -358,6 +359,8 @@ export const en = {
   enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
+  external_recipient_tooltip_content:
+    'Send the swapped funds to a different wallet address instead of your own.',
   enter_amount: 'Enter Amount',
   enter_folder_name: 'Enter folder name',
   enter_memo: 'Enter Memo',
@@ -615,6 +618,9 @@ export const en = {
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
   make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
+  malicious_dapp_detected: 'Malicious dApp detected',
+  malicious_dapp_detected_description:
+    '{{dapp}} has been flagged as malicious by Blockaid. Always do your own research before proceeding.',
   manage_chains: 'Manage Chains',
   manage_notifications_in_settings:
     'You can manage notifications in system settings.',

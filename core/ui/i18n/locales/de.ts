@@ -1651,18 +1651,26 @@ export const de = {
     'Durch die Deaktivierung beginnt eine Wartezeit – Ihr Einsatz bleibt für ca. {{days}} Tage gesperrt, bevor Sie ihn abheben können.',
   solana_staking_withdrawable_amount: 'Abhebbarer Betrag',
   solana_staking_withdraw_ready_notice: 'Abgekühlt und bereit zum Rückzug.',
-  solana_delegate: 'Einsatz',
-  solana_move_stake: 'Bewegen',
-  solana_finish_move: 'Finish Move',
+  solana_move_stake: 'Verschieben',
+  solana_finish_move: 'Verschieben abschließen',
   solana_staking_move_notice:
-    'Der Transfer des Einsatzes erfolgt in mehreren Schritten und erstreckt sich über mehrere Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlphase von ~ {{days}} Tagen wird der Transfer zum neuen Validator abgeschlossen.',
+    'Das Verschieben von Stake erfolgt in mehreren Schritten und über mehrere Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlzeit von etwa {{days}} Tagen können Sie das Verschieben zum neuen Validator abschließen.',
   solana_staking_finish_move_notice:
-    'Dadurch wird das ruhende Stake-Konto an den neuen Validator delegiert und der Vorgang abgeschlossen.',
+    'Dadurch wird das abgekühlte Stake-Konto erneut an den neuen Validator delegiert und das Verschieben abgeschlossen.',
+  external_recipient_tooltip_content:
+    'Senden Sie die getauschten Gelder an eine andere Wallet-Adresse als Ihre eigene.',
+  blockaid_simulation_pending: 'Transaktion wird simuliert…',
+  malicious_dapp_detected: 'Bösartiges dApp erkannt',
+  malicious_dapp_detected_description:
+    '{{dapp}} wurde von Blockaid als schädlich eingestuft. Führen Sie immer eigene Recherchen durch, bevor Sie fortfahren.',
+  solana_delegate: 'Einsatz',
   solana_staking_total_staked: 'Insgesamt eingesetzt {{ticker}}',
   solana_staking_delegate_new_validator: 'An neuen Validator delegieren',
   solana_staking_stake_accounts: 'Stake-Konten',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Mietreserve',
+  solana_staking_min_delegation:
+    'Die minimale Delegation ist {{amount}} {{ticker}}',
   solana_staking_state_active: 'Aktiv',
   solana_staking_state_activating: 'Aktivierung',
   solana_staking_state_deactivating: 'Deaktivierung',
@@ -1674,6 +1682,4 @@ export const de = {
   solana_staking_inactive_notice:
     'Inaktiv – abgekühlt und bereit zur Auszahlung.',
   validator_commission_short: '{{value}} % Gebühr',
-  solana_staking_min_delegation:
-    'Die minimale Delegation ist {{amount}} {{ticker}}',
 }

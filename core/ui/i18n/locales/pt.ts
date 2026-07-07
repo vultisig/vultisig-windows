@@ -1638,18 +1638,25 @@ export const pt = {
     'A desativação inicia um período de espera — seu token permanece bloqueado por aproximadamente {{days}} dias antes que você possa sacar.',
   solana_staking_withdrawable_amount: 'Valor que pode ser levantado',
   solana_staking_withdraw_ready_notice: 'Resfriado e pronto para retirar.',
-  solana_delegate: 'Estaca',
   solana_move_stake: 'Mover',
-  solana_finish_move: 'Movimento final',
+  solana_finish_move: 'Finalizar movimentação',
   solana_staking_move_notice:
-    'A transferência de stake é um processo de várias etapas e abrange diferentes épocas: esta ação desativa a conta agora; após o período de espera de ~ {{days}} dias, conclua a transferência para o novo validador.',
+    'Mover o stake exige várias etapas e atravessa épocas: isso desativa a conta agora; após o período de espera de ~{{days}} dias, finalize a movimentação para o novo validador.',
   solana_staking_finish_move_notice:
-    'Isso redistribui a conta de stake em período de inatividade para o novo validador e conclui a movimentação.',
+    'Isso redelega a conta de stake já resfriada ao novo validador e conclui a movimentação.',
+  external_recipient_tooltip_content:
+    'Envie os fundos trocados para um endereço de carteira diferente do seu.',
+  blockaid_simulation_pending: 'Simulação de transação…',
+  malicious_dapp_detected: 'Token malicioso dApp detectado',
+  malicious_dapp_detected_description:
+    '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
+  solana_delegate: 'Estaca',
   solana_staking_total_staked: 'Total em staking {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegar ao novo validador',
   solana_staking_stake_accounts: 'Contas de participação',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Reserva de aluguel',
+  solana_staking_min_delegation: 'A delegação mínima é {{amount}} {{ticker}}',
   solana_staking_state_active: 'Ativo',
   solana_staking_state_activating: 'Ativando',
   solana_staking_state_deactivating: 'Desativando',
@@ -1661,5 +1668,4 @@ export const pt = {
   solana_staking_inactive_notice:
     'Inativo — resfriado e pronto para ser retirado.',
   validator_commission_short: '{{value}} % taxa',
-  solana_staking_min_delegation: 'A delegação mínima é {{amount}} {{ticker}}',
 }

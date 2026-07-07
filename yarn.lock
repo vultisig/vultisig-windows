@@ -4438,9 +4438,9 @@ __metadata:
     "@core/ui": "workspace:^"
     "@lib/ui": "workspace:^"
     "@tanstack/react-query": "npm:^5.101.0"
-    "@vultisig/core-chain": "npm:2.22.2"
+    "@vultisig/core-chain": "npm:2.23.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.16"
+    "@vultisig/core-mpc": "npm:1.8.17"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     styled-components: "npm:6.3.11"
@@ -6552,9 +6552,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-chain@npm:2.22.2":
-  version: 2.22.2
-  resolution: "@vultisig/core-chain@npm:2.22.2"
+"@vultisig/core-chain@npm:2.23.0":
+  version: 2.23.0
+  resolution: "@vultisig/core-chain@npm:2.23.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.12.0"
@@ -6586,7 +6586,7 @@ __metadata:
     tiny-secp256k1: "npm:^2.2.4"
     viem: "npm:^2.53.1"
     xrpl: "npm:^5.0.0"
-  checksum: 10c0/d1e32dffaed7cde160e14b853e80f808f30eb613ac24808227cb65e54341d18566eb8cec8cf97d99a881c78b6c910528d9d566fb26885e87781db1cd55571f2e
+  checksum: 10c0/d6c9efb64cf8285493b139c9e420ed7e12c9fde64b397875747fbc634fdbd9c0e8521e014cba1c0cc96a81ced7c23a805f9627bf325cd5130e5f9cd7e2e3ed2c
   languageName: node
   linkType: hard
 
@@ -6635,9 +6635,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-mpc@npm:1.8.16":
-  version: 1.8.16
-  resolution: "@vultisig/core-mpc@npm:1.8.16"
+"@vultisig/core-mpc@npm:1.8.17":
+  version: 1.8.17
+  resolution: "@vultisig/core-mpc@npm:1.8.17"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.12.0"
@@ -6646,7 +6646,7 @@ __metadata:
     "@noble/hashes": "npm:^1.8.0"
     "@solana/web3.js": "npm:^1.98.4"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.22.2"
+    "@vultisig/core-chain": "npm:2.23.0"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/lib-dkls": "npm:0.9.0"
     "@vultisig/lib-mldsa": "npm:0.9.0"
@@ -6659,7 +6659,7 @@ __metadata:
     cosmjs-types: "npm:^0.11.0"
     long: "npm:^5.3.2"
     viem: "npm:^2.53.1"
-  checksum: 10c0/3e556f550eb71d8d3eb52d2abe925e90509c1326cb5272bd090ce3c7f56fb54dc39456b39e39d414d0fe2254246b3075c7de1d75c25cba873b05cfd892deeaa8
+  checksum: 10c0/74b4edd07f45647e819ea42ea0af5d78fe2477c4a373d71c078999f3bab37e6caf8afd34ecbb07060b4c0c8c3e05bb4051afe4c5af7c649b492bf25ed08f8cdf
   languageName: node
   linkType: hard
 

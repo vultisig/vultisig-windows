@@ -17,7 +17,6 @@ import {
   getKeplrSuggestedChains,
 } from './keplrSuggestedChains'
 import { setAppChain } from './setAppChain'
-import { setVaultChain } from './setVaultChain'
 import { signOut } from './signOut'
 import { suiBuildTransaction } from './suiBuildTransaction'
 import { suiExecuteTransaction } from './suiExecuteTransaction'
@@ -30,7 +29,6 @@ export const backgroundResolvers: BackgroundResolvers = {
   getAppChainId,
   getAppChain,
   setAppChain,
-  setVaultChain,
   getAccount,
   signOut,
   hasAppSession,

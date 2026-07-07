@@ -1511,18 +1511,25 @@ export const zh = {
     '停用后会开始冷却期——您的质押将被锁定约{{days}}天，之后您才能提取。',
   solana_staking_withdrawable_amount: '可提取金额',
   solana_staking_withdraw_ready_notice: '冷静下来，准备撤退。',
-  solana_delegate: '赌注',
   solana_move_stake: '移动',
   solana_finish_move: '完成移动',
   solana_staking_move_notice:
-    '转移质押是多步骤的，并且跨越多个纪元：这会立即停用账户；在 ~ {{days}}天的冷却期后，完成将其转移到新的验证者。',
+    '移动质押需要多个步骤并跨越多个 epoch：这会立即停用该账户；约 {{days}} 天冷却期结束后，再完成到新验证器的移动。',
   solana_staking_finish_move_notice:
-    '这会将冷却后的质押账户重新委托给新的验证者，从而完成转移。',
+    '这会将已冷却的质押账户重新委托给新验证器，并完成移动。',
+  external_recipient_tooltip_content:
+    '将兑换后的资金发送到另一个钱包地址，而不是您自己的钱包地址。',
+  blockaid_simulation_pending: '模拟交易…',
+  malicious_dapp_detected: '检测到恶意dApp',
+  malicious_dapp_detected_description:
+    '{{dapp}}已被 Blockaid 标记为恶意程序。操作前请务必自行调查。',
+  solana_delegate: '赌注',
   solana_staking_total_staked: '总质押金额{{ticker}}',
   solana_staking_delegate_new_validator: '委托给新的验证者',
   solana_staking_stake_accounts: '权益账户',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: '租金储备',
+  solana_staking_min_delegation: '最小委托数量为{{amount}} {{ticker}}',
   solana_staking_state_active: '积极的',
   solana_staking_state_activating: '激活',
   solana_staking_state_deactivating: '停用',
@@ -1531,5 +1538,4 @@ export const zh = {
   solana_staking_deactivating_notice: '失活——冷却后才能取出。',
   solana_staking_inactive_notice: '处于非活跃状态——已冷却，准备撤退。',
   validator_commission_short: '{{value}} % 手续费',
-  solana_staking_min_delegation: '最小委托数量为{{amount}} {{ticker}}',
 }
