@@ -393,12 +393,13 @@ export class Station {
    * Account fetching is two-phase to avoid stacked grant popups:
    * 1. The network's primary chain (Terra for mainnet, Terra Classic for
    *    classic) goes through {@link requestAccount}, which surfaces the
-   *    grant-vault popup on first connect.
+   *    grant-vault popup on first connect and records the full requested
+   *    chain set.
    * 2. Every other chain is fetched silently via `getAccount` background
-   *    call. Once the dApp is authorized in step 1, normal multi-chain
-   *    vaults derive every chain from the shared seed, so no further popups
-   *    are needed. Chains the vault can't derive (key-import vaults missing
-   *    the chain) are skipped instead of re-prompting.
+   *    call. Normal multi-chain vaults derive every chain from the shared
+   *    seed, so no further popups are needed. Chains the vault can't derive
+   *    (key-import vaults missing the chain) are skipped instead of
+   *    re-prompting.
    *
    * `pubkey` is populated under both BIP44 coinTypes — `'118'` from the
    * first non-Terra account fetched, `'330'` from a Terra-family account.
@@ -417,7 +418,7 @@ export class Station {
     const chains = stationChainsByNetwork[this.currentNetwork]
     const primaryChain = getStationPrimaryChainForNetwork(this.currentNetwork)
 
-    const primaryAccount = await requestAccount(primaryChain)
+    const primaryAccount = await requestAccount(primaryChain, { chains })
 
     // Phase 2: fetch every other chain silently via the authorized
     // background call. Background `getAccount` returns an empty address
