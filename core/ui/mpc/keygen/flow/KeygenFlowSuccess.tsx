@@ -63,13 +63,14 @@ export const KeygenFlowSuccess = ({
     return () => clearTimeout(timeoutId)
   }, [navigate, onFinish, durationMs])
 
+  const isReshare = 'reshare' in keygenOperation
+
   return (
     <KeygenFlowSuccessContent
       title={title}
       securityType={securityType}
-      animationSource={
-        'reshare' in keygenOperation ? 'vault-created' : undefined
-      }
+      animationSource={isReshare ? 'vault-created' : undefined}
+      contained={isReshare}
     />
   )
 }

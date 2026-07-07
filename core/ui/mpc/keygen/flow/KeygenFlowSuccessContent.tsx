@@ -13,18 +13,43 @@ type KeygenFlowSuccessContentProps = {
   securityType: VaultSecurityType
   /** `.riv` filename (no extension) to override the default keygen animation. */
   animationSource?: string
+  /**
+   * Center the animation + title as a compact group instead of letting the
+   * animation fill the screen (used by reshare, where the checkmark is a small
+   * contained illustration rather than a full-bleed keygen animation).
+   */
+  contained?: boolean
 }
 
 export const KeygenFlowSuccessContent = ({
   title,
   securityType,
   animationSource,
+  contained,
 }: KeygenFlowSuccessContentProps) => {
   const { RiveComponent } = useRive({
     src: `/core/animations/${animationSource ?? `keygen-${securityType}`}.riv`,
     stateMachines: 'State Machine 1',
     autoplay: true,
   })
+
+  if (contained) {
+    return (
+      <Wrapper>
+        <VStack flexGrow justifyContent="center" alignItems="center" gap={24}>
+          <ContainedAnimation>
+            <RiveComponent style={{ width: '100%', height: '100%' }} />
+          </ContainedAnimation>
+          <VStack alignItems="center" gap={12}>
+            <Text centerHorizontally size={28}>
+              {title}
+            </Text>
+            <Spinner size="3em" />
+          </VStack>
+        </VStack>
+      </Wrapper>
+    )
+  }
 
   return (
     <Wrapper>
@@ -46,6 +71,12 @@ export const KeygenFlowSuccessContent = ({
     </Wrapper>
   )
 }
+
+const ContainedAnimation = styled.div`
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+`
 
 const RiveWrapper = styled(VStack)`
   position: relative;

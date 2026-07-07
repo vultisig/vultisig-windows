@@ -16,15 +16,22 @@ import { useTranslation } from 'react-i18next'
 import { InitiateSecureVaultBackup } from './InitiateSecureVaultBackup'
 import { ReviewVaultDevicesScreen } from './ReviewVaultDevicesScreen'
 
-const steps = [
+const stepsWithReview = [
   'reviewDevices',
   'backupOverview',
   'saveBackupToCloud',
   'vaultCreatedSuccess',
 ] as const
 
+// Reshare already shows the device tree on its own success screen, so it skips
+// the "Review your vault devices" step and goes straight to the backup guide.
+const reshareSteps = [
+  'backupOverview',
+  'saveBackupToCloud',
+  'vaultCreatedSuccess',
+] as const
+
 export const BackupSecureVault = () => {
-  const { step, toNextStep, toPreviousStep } = useStepNavigation({ steps })
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const vaults = useVaults()
@@ -33,6 +40,10 @@ export const BackupSecureVault = () => {
   const keygenOperation = useKeygenOperation()
   const userDeviceCount = vault.signers.filter(s => !isServer(s)).length
   const isReshare = 'reshare' in keygenOperation
+
+  const { step, toNextStep, toPreviousStep } = useStepNavigation({
+    steps: isReshare ? reshareSteps : stepsWithReview,
+  })
 
   const abandonVault = () => {
     const isLastVault = vaults.length <= 1
@@ -79,7 +90,7 @@ export const BackupSecureVault = () => {
         <BackupOverviewScreen
           userDeviceCount={userDeviceCount}
           onFinish={toNextStep}
-          onBack={toPreviousStep}
+          onBack={isReshare ? undefined : toPreviousStep}
           infoRows={secureInfoRows}
         />
       )}

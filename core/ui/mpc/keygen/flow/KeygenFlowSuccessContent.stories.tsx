@@ -26,6 +26,7 @@ type Story = StoryObj<typeof KeygenFlowSuccessContent>
 export const Reshare: Story = {
   args: {
     animationSource: 'vault-created',
+    contained: true,
     title: (
       <>
         Vault reshared <GradientText>successfully</GradientText>
