@@ -1672,4 +1672,5 @@ export const it = {
   reshare_backup_old_backups_wont_work: 'I vecchi backup non funzioneranno',
   reshare_backup_old_backups_wont_work_description:
     'I backup creati durante precedenti configurazioni del vault non possono essere utilizzati. Sono validi solo i backup creati durante questa configurazione.',
+  reshare_min_devices_required: 'Sono necessari almeno dispositivi {{count}}',
 }

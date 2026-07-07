@@ -1668,4 +1668,6 @@ export const pt = {
   reshare_backup_old_backups_wont_work: 'Os backups antigos não funcionarão.',
   reshare_backup_old_backups_wont_work_description:
     'Não é possível usar backups de configurações anteriores do cofre. Somente backups criados durante esta configuração são válidos.',
+  reshare_min_devices_required:
+    'São necessários pelo menos {{count}} dispositivos.',
 }

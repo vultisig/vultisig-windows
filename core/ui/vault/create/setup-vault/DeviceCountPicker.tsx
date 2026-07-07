@@ -49,6 +49,8 @@ type DeviceCountPickerProps = {
   /** Lowest slider index that may be submitted; below it the CTA is disabled. */
   minSelectableIndex?: number
   submitText?: ReactNode
+  /** CTA label shown (disabled) while the selection is below `minSelectableIndex`. */
+  belowMinSubmitText?: ReactNode
 }
 
 export const DeviceCountPicker = ({
@@ -57,11 +59,14 @@ export const DeviceCountPicker = ({
   initialIndex,
   minSelectableIndex = 0,
   submitText,
+  belowMinSubmitText,
 }: DeviceCountPickerProps) => {
   const { t } = useTranslation()
   const { RiveComponent, selectedDeviceCount } = useDeviceSelectionAnimation({
     initialIndex,
   })
+
+  const isBelowMin = selectedDeviceCount < minSelectableIndex
 
   return (
     <GradientWrapper>
@@ -73,10 +78,12 @@ export const DeviceCountPicker = ({
             <DeviceSelectionTip />
             <Button
               onClick={() => onSubmit(selectedDeviceCount)}
-              disabled={selectedDeviceCount < minSelectableIndex}
+              disabled={isBelowMin}
               style={{ width: '100%' }}
             >
-              {submitText ?? t('get_started')}
+              {isBelowMin && belowMinSubmitText
+                ? belowMinSubmitText
+                : (submitText ?? t('get_started'))}
             </Button>
           </VStack>
         }

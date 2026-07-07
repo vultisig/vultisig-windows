@@ -1680,4 +1680,5 @@ export const de = {
   reshare_backup_old_backups_wont_work: 'Alte Backups funktionieren nicht.',
   reshare_backup_old_backups_wont_work_description:
     'Backups aus früheren Vault-Konfigurationen können nicht verwendet werden. Nur Backups, die während dieser Konfiguration erstellt wurden, sind gültig.',
+  reshare_min_devices_required: 'Mindestens {{count}} -Geräte erforderlich',
 }
