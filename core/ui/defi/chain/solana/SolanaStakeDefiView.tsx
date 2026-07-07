@@ -25,7 +25,7 @@ import {
   SolanaValidator,
   validatorDisplayName,
 } from '@vultisig/core-chain/chains/solana/staking/models/validator'
-import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { coinKeyToString, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -80,9 +80,8 @@ export const SolanaStakeDefiView = () => {
     )
   }
 
-  const priceUsd = solCoin.priceProviderId
-    ? (pricesQuery.data?.[solCoin.priceProviderId] ?? 0)
-    : 0
+  const priceUsd =
+    pricesQuery.data?.[coinKeyToString(extractCoinKey(solCoin))] ?? 0
 
   const validators = validatorsQuery.data ?? []
   const validatorByVote = new Map<string, SolanaValidator>(

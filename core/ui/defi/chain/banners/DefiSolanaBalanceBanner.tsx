@@ -8,7 +8,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { solDecimals } from '@vultisig/core-chain/chains/solana/staking/config'
-import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { coinKeyToString, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 
 import {
   BalanceValue,
@@ -39,8 +39,8 @@ export const DefiSolanaBalanceBanner = () => {
     coins: solCoin ? [extractCoinKey(solCoin)] : [],
   })
 
-  const priceUsd = solCoin?.priceProviderId
-    ? (pricesQuery.data?.[solCoin.priceProviderId] ?? 0)
+  const priceUsd = solCoin
+    ? (pricesQuery.data?.[coinKeyToString(extractCoinKey(solCoin))] ?? 0)
     : 0
 
   const totalStaked = (stakeAccountsQuery.data ?? [])
