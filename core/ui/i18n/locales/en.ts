@@ -71,6 +71,9 @@ export const en = {
   available: 'Available',
   back: 'Back',
   before_you_start: 'Before you start...',
+  before_you_reshare: 'Before you reshare',
+  before_you_reshare_subtitle:
+    'Resharing regenerates your vault shares. There are a few things to know first.',
   backup: 'Backup',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
@@ -533,6 +536,7 @@ export const en = {
     'IBC Transaction Memo Not Supported',
   ibc_transfer: 'IBC Transfer',
   id: 'ID',
+  i_understand: 'I understand',
   i_understand_save_backup: 'I understand how to save this backup',
   import: 'Import',
   import_key: 'Import Key',
@@ -588,6 +592,8 @@ export const en = {
   foreground_notification_send: 'Send {{amount}}',
   foreground_notification_swap: 'Swap {{from}} → {{to}}',
   join_reshare: 'Join Reshare',
+  join_reshare_description:
+    'You received a reshare request from another device.',
   join_session: 'Join Session',
   joining_keygen: 'Joining Keygen',
   joining_keysign: 'Joining Keysign',
@@ -877,11 +883,15 @@ export const en = {
   resend_notification: 'Resend notification',
   resend_notification_in: 'Resend notification in {{time}}',
   reshare: 'Reshare',
-  reshare_disclaimer:
-    'For all Reshare actions the threshold of devices is always required.',
-  reshare_explanation:
-    'Reshare can be used to refresh, expand or reduce the amount of devices in a Vault.',
   reshare_vault_description: 'Reshare vault with a new committee',
+  reshare_vault_subtitle:
+    'Update your vault setup. Add or remove devices, or refresh shares.',
+  reshare_warning_cosigners_title: 'All co-signers must be online',
+  reshare_warning_cosigners_description:
+    'Every current device in your vault needs to participate in the reshare session.',
+  reshare_warning_old_backups_title: 'Old backups will stop working',
+  reshare_warning_old_backups_description:
+    "Any existing .vult files become invalid. You'll need to create fresh backups after resharing.",
   reshare_success_title: 'Vault reshared',
   reshare_success_title_highlight: 'successfully',
   reshare_your_vault: 'Reshare your vault',
@@ -1042,6 +1052,7 @@ export const en = {
   operator: 'Operator',
   contract: 'Contract',
   start_reshare: 'Start Reshare',
+  start_reshare_description: "You are changing this vault's device setup.",
   status: 'Status',
   sui_arguments: 'Arguments',
   sui_call_balance_destroy_zero: 'Destroy empty Balance',

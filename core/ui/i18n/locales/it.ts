@@ -761,10 +761,6 @@ export const it = {
   resend_notification: 'Reinvia la notifica',
   resend_notification_in: 'Reinvia la notifica tra {{time}}',
   reshare: 'Ricondividere',
-  reshare_disclaimer:
-    'Per tutte le azioni di condivisione è sempre richiesta la soglia dei dispositivi.',
-  reshare_explanation:
-    'La condivisione può essere utilizzata per aggiornare, espandere o ridurre il numero di dispositivi in un Vault.',
   reshare_vault_description: 'Ricondividi il vault con un nuovo comitato',
   reshare_your_vault: 'Condividi nuovamente il tuo vault',
   resource: 'Risorsa',
@@ -1654,6 +1650,23 @@ export const it = {
   malicious_dapp_detected: 'Rilevato token dannoso dApp',
   malicious_dapp_detected_description:
     '{{dapp}} è stato segnalato come dannoso da Blockaid. Effettua sempre le tue ricerche prima di procedere.',
+  before_you_reshare: 'Prima di ricondividere',
+  before_you_reshare_subtitle:
+    'La ricondivisione rigenera le condivisioni del vault. Prima di procedere, è necessario tenere presente alcune cose.',
+  i_understand: 'Capisco',
+  join_reshare_description:
+    'Hai ricevuto una richiesta di condivisione da un altro dispositivo.',
+  reshare_vault_subtitle:
+    'Aggiorna la configurazione del tuo vault. Aggiungi o rimuovi dispositivi oppure aggiorna le condivisioni.',
+  reshare_warning_cosigners_title: 'Tutti i garanti devono essere online',
+  reshare_warning_cosigners_description:
+    'Ogni dispositivo attualmente presente nel tuo vault deve partecipare alla sessione di ricondivisione.',
+  reshare_warning_old_backups_title:
+    'I vecchi backup smetteranno di funzionare',
+  reshare_warning_old_backups_description:
+    'Tutti i file .vult esistenti diventeranno non validi. Sarà necessario creare nuovi backup dopo la condivisione.',
+  start_reshare_description:
+    'Stai modificando la configurazione del dispositivo di questo vault.',
   reshare_success_title: 'Vault ricondiviso',
   reshare_success_title_highlight: 'con successo',
 }

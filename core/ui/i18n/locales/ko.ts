@@ -743,9 +743,6 @@ export const ko = {
   resend_notification: '알림 재전송',
   resend_notification_in: '{{time}} 후에 알림을 다시 보내주세요',
   reshare: '다시 공유하기',
-  reshare_disclaimer: '모든 재공유 작업에는 기기 임계값이 항상 필요합니다.',
-  reshare_explanation:
-    '리셰어(Reshare)를 사용하면 볼트에 있는 장치 수를 새로 고치거나, 확장하거나, 축소할 수 있습니다.',
   reshare_vault_description: '새로운 위원회와 함께 금고를 다시 공유하세요',
   reshare_your_vault: '보관함을 다시 공유하세요',
   resource: '리소스',
@@ -1616,6 +1613,21 @@ export const ko = {
   malicious_dapp_detected: '악성 dApp 가 감지되었습니다.',
   malicious_dapp_detected_description:
     'Blockaid에서 {{dapp}} 악성 토큰으로 표시했습니다. 진행하기 전에 항상 직접 조사하십시오.',
+  before_you_reshare: '다시 공유하기 전에',
+  before_you_reshare_subtitle:
+    '재공유를 통해 볼트 공유를 다시 생성할 수 있습니다. 먼저 알아야 할 몇 가지 사항이 있습니다.',
+  i_understand: '이해합니다',
+  join_reshare_description: '다른 기기에서 공유 재요청을 받았습니다.',
+  reshare_vault_subtitle:
+    '볼트 설정을 업데이트하세요. 장치를 추가하거나 제거하거나 공유를 새로 고칠 수 있습니다.',
+  reshare_warning_cosigners_title:
+    '모든 공동 서명자는 온라인에 접속해야 합니다.',
+  reshare_warning_cosigners_description:
+    '현재 보관함에 있는 모든 장치가 재공유 세션에 참여해야 합니다.',
+  reshare_warning_old_backups_title: '기존 백업은 더 이상 작동하지 않습니다.',
+  reshare_warning_old_backups_description:
+    '기존의 .vult 파일은 모두 무효화됩니다. 공유를 다시 수행한 후에는 새 백업 파일을 생성해야 합니다.',
+  start_reshare_description: '이 금고의 장치 설정을 변경하고 있습니다.',
   reshare_success_title: 'Vault 재공유',
   reshare_success_title_highlight: '성공적으로',
 }

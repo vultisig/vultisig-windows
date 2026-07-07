@@ -758,10 +758,6 @@ export const es = {
   resend_notification: 'Reenviar notificación',
   resend_notification_in: 'Reenviar notificación en {{time}}',
   reshare: 'Compartir',
-  reshare_disclaimer:
-    'Para todas las acciones de Reshare siempre se requiere el umbral de dispositivos.',
-  reshare_explanation:
-    'La función de compartir se puede utilizar para actualizar, expandir o reducir la cantidad de dispositivos en un Vault.',
   reshare_vault_description: 'Compartir la bóveda con un nuevo comité',
   reshare_your_vault: 'Comparte tu bóveda',
   resource: 'Recurso',
@@ -1647,6 +1643,24 @@ export const es = {
   malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
   malicious_dapp_detected_description:
     'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
+  before_you_reshare: 'Antes de volver a compartir',
+  before_you_reshare_subtitle:
+    'Al volver a compartir, se regeneran los recursos compartidos de tu bóveda. Hay algunas cosas que debes saber antes.',
+  i_understand: 'Entiendo',
+  join_reshare_description:
+    'Recibiste una solicitud para compartir contenido desde otro dispositivo.',
+  reshare_vault_subtitle:
+    'Actualiza la configuración de tu bóveda. Agrega o elimina dispositivos, o actualiza los recursos compartidos.',
+  reshare_warning_cosigners_title:
+    'Todos los cofirmantes deben estar en línea.',
+  reshare_warning_cosigners_description:
+    'Todos los dispositivos que tengas almacenados en tu bóveda deben participar en la sesión de compartición.',
+  reshare_warning_old_backups_title:
+    'Las copias de seguridad antiguas dejarán de funcionar.',
+  reshare_warning_old_backups_description:
+    'Los archivos .vult existentes dejarán de ser válidos. Deberá crear copias de seguridad nuevas después de volver a compartirlos.',
+  start_reshare_description:
+    'Estás cambiando la configuración del dispositivo de esta bóveda.',
   reshare_success_title: 'Bóveda compartida nuevamente',
   reshare_success_title_highlight: 'exitosamente',
 }

@@ -764,10 +764,6 @@ export const de = {
   resend_notification: 'Benachrichtigung erneut senden',
   resend_notification_in: 'Benachrichtigung in {{time}} erneut senden',
   reshare: 'Weiter teilen',
-  reshare_disclaimer:
-    'Für alle Reshare-Aktionen ist stets eine bestimmte Anzahl an Geräten erforderlich.',
-  reshare_explanation:
-    'Mit Reshare können Sie die Anzahl der Geräte in einem Tresor aktualisieren, erweitern oder verringern.',
   reshare_vault_description: 'Tresor mit einem neuen Komitee teilen',
   reshare_your_vault: 'Teile deinen Tresor erneut',
   resource: 'Ressource',
@@ -1663,6 +1659,22 @@ export const de = {
   malicious_dapp_detected: 'Bösartiges dApp erkannt',
   malicious_dapp_detected_description:
     '{{dapp}} wurde von Blockaid als schädlich eingestuft. Führen Sie immer eigene Recherchen durch, bevor Sie fortfahren.',
+  before_you_reshare: 'Bevor Sie es erneut teilen',
+  before_you_reshare_subtitle:
+    'Durch erneutes Teilen werden Ihre Tresorfreigaben neu erstellt. Es gibt jedoch ein paar Dinge, die Sie vorher wissen sollten.',
+  i_understand: 'Ich verstehe',
+  join_reshare_description:
+    'Sie haben eine Anfrage zur erneuten Freigabe von einem anderen Gerät erhalten.',
+  reshare_vault_subtitle:
+    'Aktualisieren Sie Ihre Tresorkonfiguration. Fügen Sie Geräte hinzu oder entfernen Sie sie, oder aktualisieren Sie Freigaben.',
+  reshare_warning_cosigners_title: 'Alle Bürgen müssen online sein.',
+  reshare_warning_cosigners_description:
+    'Alle aktuell in Ihrem Tresor befindlichen Geräte müssen an der Wiederfreigabesitzung teilnehmen.',
+  reshare_warning_old_backups_title: 'Alte Backups funktionieren nicht mehr.',
+  reshare_warning_old_backups_description:
+    'Alle vorhandenen .vult-Dateien werden ungültig. Sie müssen nach der erneuten Freigabe neue Sicherungskopien erstellen.',
+  start_reshare_description:
+    'Sie ändern die Gerätekonfiguration dieses Tresors.',
   reshare_success_title: 'Vault erneut geteilt',
   reshare_success_title_highlight: 'erfolgreich',
 }
