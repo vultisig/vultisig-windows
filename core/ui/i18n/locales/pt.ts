@@ -758,10 +758,6 @@ export const pt = {
   resend_notification: 'Reenviar notificação',
   resend_notification_in: 'Reenviar notificação em {{time}}',
   reshare: 'Compartilhar',
-  reshare_disclaimer:
-    'Para todas as ações de compartilhamento, o limite de dispositivos é sempre necessário.',
-  reshare_explanation:
-    'O recurso "Reshare" pode ser usado para atualizar, expandir ou reduzir a quantidade de dispositivos em um Vault.',
   reshare_vault_description: 'Recompartilhe o cofre com um novo comitê.',
   reshare_your_vault: 'Compartilhe novamente seu cofre',
   resource: 'Recurso',
@@ -1650,4 +1646,21 @@ export const pt = {
   malicious_dapp_detected: 'Token malicioso dApp detectado',
   malicious_dapp_detected_description:
     '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
+  before_you_reshare: 'Antes de compartilhar novamente',
+  before_you_reshare_subtitle:
+    'Ao compartilhar novamente, suas ações no cofre são regeneradas. Há algumas coisas que você precisa saber primeiro.',
+  i_understand: 'Eu entendo',
+  join_reshare_description:
+    'Você recebeu uma solicitação de compartilhamento de outro dispositivo.',
+  reshare_vault_subtitle:
+    'Atualize a configuração do seu cofre. Adicione ou remova dispositivos ou atualize os compartilhamentos.',
+  reshare_warning_cosigners_title: 'Todos os fiadores devem estar online.',
+  reshare_warning_cosigners_description:
+    'Todos os dispositivos atuais em seu cofre precisam participar da sessão de compartilhamento.',
+  reshare_warning_old_backups_title:
+    'Os backups antigos deixarão de funcionar.',
+  reshare_warning_old_backups_description:
+    'Todos os arquivos .vult existentes serão invalidados. Você precisará criar novos backups após o compartilhamento.',
+  start_reshare_description:
+    'Você está alterando a configuração do dispositivo deste cofre.',
 }

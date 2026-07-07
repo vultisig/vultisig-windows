@@ -750,10 +750,6 @@ export const nl = {
   resend_notification: 'Melding opnieuw verzenden',
   resend_notification_in: 'Melding opnieuw verzenden over {{time}}',
   reshare: 'Reshare',
-  reshare_disclaimer:
-    'Voor alle Reshare-acties is altijd de drempel van apparaten vereist.',
-  reshare_explanation:
-    'Reshare kan worden gebruikt om het aantal apparaten in een kluis te vernieuwen, uit te breiden of te verminderen.',
   reshare_vault_description: 'Reshare kluis met een nieuw comité',
   reshare_your_vault: 'Reshare je kluis',
   resource: 'Resource',
@@ -1632,4 +1628,21 @@ export const nl = {
   malicious_dapp_detected: 'Kwaadaardige dApp gedetecteerd',
   malicious_dapp_detected_description:
     '{{dapp}} is door Blockaid als schadelijk aangemerkt. Doe altijd zelf onderzoek voordat u verdergaat.',
+  before_you_reshare: 'Voordat je het opnieuw deelt',
+  before_you_reshare_subtitle:
+    'Door opnieuw te delen worden uw gedeelde mappen in de kluis opnieuw gegenereerd. Er zijn een paar dingen die u eerst moet weten.',
+  i_understand: 'Ik begrijp',
+  join_reshare_description:
+    'Je hebt een verzoek tot opnieuw delen ontvangen vanaf een ander apparaat.',
+  reshare_vault_subtitle:
+    'Werk uw kluisinstellingen bij. Voeg apparaten toe of verwijder ze, of vernieuw gedeelde mappen.',
+  reshare_warning_cosigners_title:
+    'Alle medeondertekenaars moeten online zijn.',
+  reshare_warning_cosigners_description:
+    'Alle apparaten die zich momenteel in uw kluis bevinden, moeten deelnemen aan de sessie voor het opnieuw delen.',
+  reshare_warning_old_backups_title: 'Oude back-ups werken niet meer.',
+  reshare_warning_old_backups_description:
+    'Alle bestaande .vult-bestanden worden ongeldig. U moet na het opnieuw delen nieuwe back-ups maken.',
+  start_reshare_description:
+    'U wijzigt de apparaatinstellingen van deze kluis.',
 }
