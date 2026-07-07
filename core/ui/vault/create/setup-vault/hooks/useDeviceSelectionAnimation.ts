@@ -16,7 +16,14 @@ const triggerHapticFeedback = () => {
   }
 }
 
-export const useDeviceSelectionAnimation = () => {
+type UseDeviceSelectionAnimationInput = {
+  /** Rive `Index` to seed the slider with once the animation loads. */
+  initialIndex?: number
+}
+
+export const useDeviceSelectionAnimation = ({
+  initialIndex,
+}: UseDeviceSelectionAnimationInput = {}) => {
   const { RiveComponent, rive } = useRive({
     src: `/core/animations/${deviceSelectionAnimationSource}.riv`,
     autoplay: true,
@@ -34,6 +41,21 @@ export const useDeviceSelectionAnimation = () => {
   })
 
   const indexProperty = useViewModelInstanceNumber('Index', viewModelInstance)
+
+  const didSeedRef = useRef(false)
+
+  useEffect(() => {
+    if (
+      initialIndex === undefined ||
+      didSeedRef.current ||
+      indexProperty.value === null
+    ) {
+      return
+    }
+
+    indexProperty.setValue(initialIndex)
+    didSeedRef.current = true
+  }, [initialIndex, indexProperty])
 
   const previousIndexRef = useRef<number | null>(null)
 
