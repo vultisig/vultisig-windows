@@ -1647,4 +1647,6 @@ export const es = {
   malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
   malicious_dapp_detected_description:
     'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
+  reshare_success_title: 'Bóveda compartida nuevamente',
+  reshare_success_title_highlight: 'exitosamente',
 }

@@ -1624,4 +1624,6 @@ export const hr = {
   malicious_dapp_detected: 'Otkriven zlonamjerni dApp',
   malicious_dapp_detected_description:
     'Blockaid je označio {{dapp}} kao zlonamjeran. Uvijek provedite vlastito istraživanje prije nego što nastavite.',
+  reshare_success_title: 'Trezor je ponovno podijeljen',
+  reshare_success_title_highlight: 'uspješno',
 }

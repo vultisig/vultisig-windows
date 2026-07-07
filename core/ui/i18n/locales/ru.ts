@@ -1630,4 +1630,6 @@ export const ru = {
   malicious_dapp_detected: 'Обнаружен вредоносный dApp',
   malicious_dapp_detected_description:
     '{{dapp}} помечен Blockaid как вредоносный. Всегда проводите собственное исследование, прежде чем продолжить.',
+  reshare_success_title: 'Хранилище повторно доступно',
+  reshare_success_title_highlight: 'успешно',
 }

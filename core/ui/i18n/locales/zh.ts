@@ -1523,4 +1523,6 @@ export const zh = {
   malicious_dapp_detected: '检测到恶意dApp',
   malicious_dapp_detected_description:
     '{{dapp}}已被 Blockaid 标记为恶意程序。操作前请务必自行调查。',
+  reshare_success_title: 'Vault 重新共享',
+  reshare_success_title_highlight: '成功地',
 }

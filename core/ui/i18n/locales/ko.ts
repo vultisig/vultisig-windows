@@ -1616,4 +1616,6 @@ export const ko = {
   malicious_dapp_detected: '악성 dApp 가 감지되었습니다.',
   malicious_dapp_detected_description:
     'Blockaid에서 {{dapp}} 악성 토큰으로 표시했습니다. 진행하기 전에 항상 직접 조사하십시오.',
+  reshare_success_title: 'Vault 재공유',
+  reshare_success_title_highlight: '성공적으로',
 }

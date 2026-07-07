@@ -1663,4 +1663,6 @@ export const de = {
   malicious_dapp_detected: 'Bösartiges dApp erkannt',
   malicious_dapp_detected_description:
     '{{dapp}} wurde von Blockaid als schädlich eingestuft. Führen Sie immer eigene Recherchen durch, bevor Sie fortfahren.',
+  reshare_success_title: 'Vault erneut geteilt',
+  reshare_success_title_highlight: 'erfolgreich',
 }

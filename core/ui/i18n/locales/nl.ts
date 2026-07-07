@@ -1632,4 +1632,6 @@ export const nl = {
   malicious_dapp_detected: 'Kwaadaardige dApp gedetecteerd',
   malicious_dapp_detected_description:
     '{{dapp}} is door Blockaid als schadelijk aangemerkt. Doe altijd zelf onderzoek voordat u verdergaat.',
+  reshare_success_title: 'Vault opnieuw gedeeld',
+  reshare_success_title_highlight: 'succesvol',
 }

@@ -1650,4 +1650,6 @@ export const pt = {
   malicious_dapp_detected: 'Token malicioso dApp detectado',
   malicious_dapp_detected_description:
     '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
+  reshare_success_title: 'Cofre compartilhado novamente',
+  reshare_success_title_highlight: 'com sucesso',
 }

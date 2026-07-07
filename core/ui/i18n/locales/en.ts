@@ -882,6 +882,8 @@ export const en = {
   reshare_explanation:
     'Reshare can be used to refresh, expand or reduce the amount of devices in a Vault.',
   reshare_vault_description: 'Reshare vault with a new committee',
+  reshare_success_title: 'Vault reshared',
+  reshare_success_title_highlight: 'successfully',
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',

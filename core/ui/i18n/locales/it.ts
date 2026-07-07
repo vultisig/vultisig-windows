@@ -1654,4 +1654,6 @@ export const it = {
   malicious_dapp_detected: 'Rilevato token dannoso dApp',
   malicious_dapp_detected_description:
     '{{dapp}} è stato segnalato come dannoso da Blockaid. Effettua sempre le tue ricerche prima di procedere.',
+  reshare_success_title: 'Vault ricondiviso',
+  reshare_success_title_highlight: 'con successo',
 }
