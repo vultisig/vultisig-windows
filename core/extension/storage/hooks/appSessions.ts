@@ -38,10 +38,10 @@ export const useSetExclusiveVaultAppSessionMutation = (
 
   return useMutation({
     mutationFn: async (session: VaultAppSession) => {
-      await setExclusiveVaultAppSession(session)
+      const appSession = await setExclusiveVaultAppSession(session)
       await refetch(queryKey)
 
-      return session
+      return appSession
     },
     ...options,
   })

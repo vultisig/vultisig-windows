@@ -37,10 +37,13 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
+import { usePopupContext } from '../../../state/context'
+import { isTrustedProductOrigin } from '../utils'
 
 export const Overview = () => {
   const { t } = useTranslation()
   const input = usePopupInput<'signMessage'>()
+  const { requestOrigin } = usePopupContext<'signMessage'>()
   const method = getRecordUnionKey(input)
   const { chain } = getRecordUnionValue(input)
   const [{ signature }] = useViewState<{ signature?: string }>()
@@ -108,12 +111,21 @@ export const Overview = () => {
       toDisplayMessageString(fromBase64(data)),
   })
 
-  const type = matchRecordUnion<SignMessageInput, SignMessageType>(input, {
-    eth_signTypedData_v4: () => 'default',
-    sign_message: () => 'default',
-    personal_sign: ({ type }) => type,
-    cosmos_sign_arbitrary: () => 'default',
-  })
+  const requestedType = matchRecordUnion<SignMessageInput, SignMessageType>(
+    input,
+    {
+      eth_signTypedData_v4: () => 'default',
+      sign_message: () => 'default',
+      personal_sign: ({ type }) => type,
+      cosmos_sign_arbitrary: () => 'default',
+    }
+  )
+
+  // The low-disclosure `connect`/`policy` screens are reserved for the
+  // first-party marketplace origin. Any other origin is forced onto the
+  // `default` overview, which always renders the message being signed, so a
+  // hostile dApp cannot use the branded screens to obscure what is signed.
+  const type = isTrustedProductOrigin(requestOrigin) ? requestedType : 'default'
 
   const typedData = matchRecordUnion<
     SignMessageInput,

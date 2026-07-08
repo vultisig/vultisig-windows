@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
 
-type TxActionLabelKey =
+export type TxActionLabelKey =
   | 'left_pool'
   | 'contract_execution'
   | 'deposited'
@@ -21,6 +21,7 @@ type TxActionLabelKey =
   | 'redelegate'
   | 'vote'
   | 'claim_rewards'
+  | 'signed_signature'
 
 type TxOverviewAmountProps = ValueProp<Coin> & {
   amount: number
@@ -29,6 +30,7 @@ type TxOverviewAmountProps = ValueProp<Coin> & {
   /** When set, render this string instead of `{amount} {ticker}` and hide fiat.
    *  Used for "Unlimited" approvals where the numeric value is meaningless. */
   amountOverride?: string
+  hideZeroAmount?: boolean
 }
 
 export const TxOverviewAmount = ({
@@ -37,6 +39,7 @@ export const TxOverviewAmount = ({
   actionLabel,
   resolvedLabel,
   amountOverride,
+  hideZeroAmount,
 }: TxOverviewAmountProps) => {
   const priceQuery = useCoinPriceQuery({ coin: value })
   const formatFiatAmount = useFormatFiatAmount()
@@ -51,7 +54,8 @@ export const TxOverviewAmount = ({
   // Hide the "0 ETH" line for contract calls where we couldn't resolve the
   // actual token being moved (e.g. Uniswap V4 execute, multicalls). The
   // function label alone is more informative than a misleading zero amount.
-  const showAmount = !!amountOverride || amount > 0 || !resolvedLabel
+  const showAmount =
+    !!amountOverride || amount > 0 || (!resolvedLabel && !hideZeroAmount)
   const showFiat = !amountOverride && amount > 0
 
   return (

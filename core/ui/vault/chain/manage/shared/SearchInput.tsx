@@ -17,7 +17,15 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
-export const SearchInput = ({ onChange, value }: InputProps<string>) => {
+type SearchInputProps = InputProps<string> & {
+  'data-testid'?: string
+}
+
+export const SearchInput = ({
+  onChange,
+  value,
+  ...props
+}: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
   const { iconStyle } = useTheme()
@@ -48,6 +56,7 @@ export const SearchInput = ({ onChange, value }: InputProps<string>) => {
             value={value}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            {...props}
             style={{
               paddingRight: actionSize.width + 8,
             }}

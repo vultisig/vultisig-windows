@@ -1,3 +1,4 @@
+import { isAppSessionAuthorizedForAccounts } from '@core/extension/storage/appSessionChainAuthorization'
 import { getAppSession } from '@core/inpage-provider/background/core/appSession'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 
@@ -14,5 +15,5 @@ export const hasAppSession: BackgroundResolver<'hasAppSession'> = async ({
   context: { requestOrigin },
 }) => {
   const appSession = await getAppSession(requestOrigin)
-  return !!appSession
+  return !!appSession && isAppSessionAuthorizedForAccounts(appSession)
 }

@@ -1,7 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -12,13 +10,8 @@ import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
 import { tronDefiCoins } from '../queries/tokens'
-import {
-  BalanceValue,
-  BannerContent,
-  ChainLogo,
-  ChainTitle,
-  FallbackLogo,
-} from './shared'
+import { DefiBannerBalance } from './DefiBannerBalance'
+import { BannerContent, ChainLogo, ChainTitle, FallbackLogo } from './shared'
 
 const tronAccent = 'rgba(235, 30, 50, 0.17)'
 const tronGradientStart = 'rgba(235, 30, 50, 0.09)'
@@ -51,7 +44,6 @@ const chain = Chain.Tron
 const logoSrc = getChainLogoSrc(chain)
 
 export const DefiTronBalanceBanner = () => {
-  const formatFiatAmount = useFormatFiatAmount()
   const resourcesQuery = useTronAccountResourcesQuery()
   const pricesQuery = useCoinPricesQuery({ coins: tronDefiCoins })
 
@@ -97,11 +89,7 @@ export const DefiTronBalanceBanner = () => {
         {isLoading ? (
           <Spinner size={20} />
         ) : (
-          <BalanceValue>
-            <BalanceVisibilityAware>
-              {formatFiatAmount(totalFiat)}
-            </BalanceVisibilityAware>
-          </BalanceValue>
+          <DefiBannerBalance chain={chain} value={totalFiat} />
         )}
       </BannerContent>
     </TronBannerContainer>
