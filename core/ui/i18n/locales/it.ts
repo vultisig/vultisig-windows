@@ -1676,7 +1676,7 @@ export const it = {
   reshare_more_devices_required: 'Sono necessari più dispositivi',
   reshare_threshold_not_met: 'Soglia non raggiunta',
   reshare_threshold_not_met_description:
-    'Stai cercando di ridurre il numero di dispositivi da {{from}} a {{to}} , ma questo vault richiede {{count}} firmatari attivi per rimanere sicuro.',
+    'Stai cercando di ridurre il numero di dispositivi da<w> {{from}} a {{to}}</w> ma questa volta<w> richiede firmatari attivi {{count}}</w> per rimanere al sicuro.',
   solana_delegate: 'Palo',
   solana_staking_total_staked: 'Totale in staking {{ticker}}',
   solana_staking_delegate_new_validator: 'Delega al nuovo validatore',
@@ -1698,4 +1698,5 @@ export const it = {
   reshare_failed: 'Errore durante la condivisione. Riprova.',
   reshare_failed_description:
     'La ricondivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
+  plugin_store_compatible: 'Compatibile con Plugin Store',
 }

@@ -1645,7 +1645,7 @@ export const hr = {
   reshare_more_devices_required: 'Potrebno je više uređaja',
   reshare_threshold_not_met: 'Prag nije dosegnut',
   reshare_threshold_not_met_description:
-    'Pokušavate smanjiti broj uređaja s {{from}} na {{to}} , ali ovaj trezor zahtijeva {{count}} aktivnih potpisnika kako bi ostao siguran.',
+    'Pokušavate smanjiti broj uređaja iz<w> {{from}} do {{to}}</w> , ali ovaj trezor<w> zahtijeva aktivne potpisnike {{count}}</w> ostati siguran.',
   solana_delegate: 'Ulog',
   solana_staking_total_staked: 'Ukupno uloženo {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegat novom validatoru',
@@ -1668,4 +1668,5 @@ export const hr = {
   reshare_failed: 'Pogreška pri ponovnom dijeljenju. Pokušajte ponovno.',
   reshare_failed_description:
     'Ponovno dijeljenje je usporeno zbog slabe veze. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
+  plugin_store_compatible: 'Kompatibilno s trgovinom dodataka',
 }

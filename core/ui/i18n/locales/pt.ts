@@ -1673,7 +1673,7 @@ export const pt = {
   reshare_more_devices_required: 'São necessários mais dispositivos.',
   reshare_threshold_not_met: 'Limiar não atingido',
   reshare_threshold_not_met_description:
-    'Você está tentando reduzir o número de dispositivos de {{from}} para {{to}} , mas este cofre requer {{count}} signatários ativos para permanecer seguro.',
+    'Você está tentando reduzir o número de dispositivos de<w> {{from}} para {{to}}</w> mas este cofre<w> requer signatários ativos {{count}}</w> Para se manter seguro.',
   solana_delegate: 'Estaca',
   solana_staking_total_staked: 'Total em staking {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegar ao novo validador',
@@ -1695,4 +1695,5 @@ export const pt = {
   reshare_failed: 'Erro ao compartilhar novamente. Tente outra vez.',
   reshare_failed_description:
     'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
+  plugin_store_compatible: 'Compatível com a Loja de Plugins',
 }
