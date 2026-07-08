@@ -274,8 +274,6 @@ export const ru = {
   post_quantum_keygen: 'Постквантовая генерация ключей',
   post_quantum_keygen_description:
     'Сгенерируйте постквантовый (MLDSA) ключ для этого хранилища.',
-  post_quantum_key_already_generated:
-    'В этом хранилище уже есть постквантовый ключ.',
   enable_token_instruction:
     'Включите минимум один токен, чтобы видеть балансы и управлять позициями.',
   encrypting_vault_keyshares: 'Шифрование keyshares хранилища...',

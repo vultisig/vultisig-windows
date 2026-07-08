@@ -354,8 +354,6 @@ export const en = {
   post_quantum_keygen: 'Post-Quantum Key Generation',
   post_quantum_keygen_description:
     'Generate a post-quantum (MLDSA) key for this vault',
-  post_quantum_key_already_generated:
-    'This vault already has a post-quantum key',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',

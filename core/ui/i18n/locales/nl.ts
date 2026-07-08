@@ -276,8 +276,6 @@ export const nl = {
   post_quantum_keygen: 'Post-kwantum sleutelgeneratie',
   post_quantum_keygen_description:
     'Genereer een post-quantum (MLDSA) sleutel voor deze kluis.',
-  post_quantum_key_already_generated:
-    'Deze kluis heeft al een post-kwantumsleutel.',
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
   encrypting_vault_keyshares: 'Kluis-keyshares versleutelen...',

@@ -278,8 +278,6 @@ export const pt = {
   post_quantum_keygen: 'Geração de chaves pós-quânticas',
   post_quantum_keygen_description:
     'Gere uma chave pós-quântica (MLDSA) para este cofre.',
-  post_quantum_key_already_generated:
-    'Este cofre já possui uma chave pós-quântica.',
   enable_token_instruction:
     'Habilite pelo menos um token para visualizar saldos e gerenciar posições.',
   encrypting_vault_keyshares:

@@ -279,8 +279,6 @@ export const de = {
   post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
   post_quantum_keygen_description:
     'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
-  post_quantum_key_already_generated:
-    'Dieser Tresor verfügt bereits über einen Post-Quanten-Schlüssel',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
   encrypting_vault_keyshares: 'Verschlüsselung der Tresor-Schlüsselanteile...',
