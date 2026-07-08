@@ -281,8 +281,6 @@ export const it = {
   post_quantum_keygen: 'Generazione di chiavi post-quantistiche',
   post_quantum_keygen_description:
     'Genera una chiave post-quantistica (MLDSA) per questo vault',
-  post_quantum_key_already_generated:
-    'Questa cassaforte ha già una chiave post-quantistica',
   enable_token_instruction:
     'Abilita almeno un token per visualizzare i saldi e gestire le posizioni.',
   encrypting_vault_keyshares:

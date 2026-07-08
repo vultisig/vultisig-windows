@@ -275,8 +275,6 @@ export const ko = {
   post_quantum_keygen: '양자 후 키 생성',
   post_quantum_keygen_description:
     '이 금고에 대한 양자 후 보안(MLDSA) 키를 생성하세요.',
-  post_quantum_key_already_generated:
-    '이 금고에는 이미 양자 후 보안 키가 있습니다.',
   enable_token_instruction:
     '잔액을 확인하고 포지션을 관리하려면 최소 하나 이상의 토큰을 활성화해야 합니다.',
   encrypting_vault_keyshares: '금고 키 공유를 암호화하는 중...',

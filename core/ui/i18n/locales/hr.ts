@@ -275,7 +275,6 @@ export const hr = {
   post_quantum_keygen: 'Postkvantno generiranje ključeva',
   post_quantum_keygen_description:
     'Generiraj postkvantni (MLDSA) ključ za ovaj trezor',
-  post_quantum_key_already_generated: 'Ovaj trezor već ima postkvantni ključ',
   enable_token_instruction:
     'Omogućite barem jedan token za pregled stanja i upravljanje pozicijama.',
   encrypting_vault_keyshares: 'Šifriranje dijeljenja ključeva trezora...',

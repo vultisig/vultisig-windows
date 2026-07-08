@@ -261,7 +261,6 @@ export const zh = {
   enable_tss_batching: '启用 TSS 批处理',
   post_quantum_keygen: '后量子密钥生成',
   post_quantum_keygen_description: '为该保险库生成后量子（MLDSA）密钥',
-  post_quantum_key_already_generated: '这个保险库已经拥有后量子时代的密钥。',
   enable_token_instruction: '至少启用一个代币才能查看余额和管理持仓。',
   encrypting_vault_keyshares: '加密保险库密钥共享...',
   enter: '进入',

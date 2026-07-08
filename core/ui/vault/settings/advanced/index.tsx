@@ -77,21 +77,6 @@ export const VaultSettingsAdvancedPage: FC = () => {
               showArrow
             />
           )}
-          {vault.publicKeyMldsa && (
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <ShieldIcon />
-                </ListItemIconWrapper>
-              }
-              description={
-                <DescriptionText>
-                  {t('post_quantum_key_already_generated')}
-                </DescriptionText>
-              }
-              title={t('post_quantum_keygen')}
-            />
-          )}
           <ListItem
             icon={
               <ListItemIconWrapper>
