@@ -1239,6 +1239,7 @@ export const en = {
   undelegate: 'Undelegate',
   redelegate: 'Redelegate',
   claim_rewards: 'Claim Rewards',
+  solana_delegate: 'Stake',
   solana_unstake: 'Unstake',
   solana_withdraw: 'Withdraw',
   solana_move_stake: 'Move',
@@ -1252,6 +1253,23 @@ export const en = {
     'Moving stake is multi-step and spans epochs: this deactivates the account now; after the ~{{days}}-day cooldown, finish moving it to the new validator.',
   solana_staking_finish_move_notice:
     'This re-delegates the cooled-down stake account to the new validator and completes the move.',
+  solana_staking_total_staked: 'Total Staked {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegate to New Validator',
+  solana_staking_stake_accounts: 'Stake Accounts',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Rent reserve',
+  solana_staking_min_delegation: 'Minimum delegation is {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Active',
+  solana_staking_state_activating: 'Activating',
+  solana_staking_state_deactivating: 'Deactivating',
+  solana_staking_state_inactive: 'Inactive',
+  solana_staking_activating_notice:
+    'Activating — earns rewards from the next epoch.',
+  solana_staking_deactivating_notice:
+    'Deactivating — cooling down before it can be withdrawn.',
+  solana_staking_inactive_notice:
+    'Inactive — cooled down and ready to withdraw.',
+  validator_commission_short: '{{value}}% fee',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',

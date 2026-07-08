@@ -1685,4 +1685,23 @@ export const de = {
   reshare_threshold_not_met: 'Schwellenwert nicht erreicht',
   reshare_threshold_not_met_description:
     'Sie versuchen, die Anzahl der Geräte von {{from}} auf {{to}} zu reduzieren, aber dieser Tresor benötigt {{count}} aktive Signierer, um sicher zu bleiben.',
+  solana_delegate: 'Einsatz',
+  solana_staking_total_staked: 'Insgesamt eingesetzt {{ticker}}',
+  solana_staking_delegate_new_validator: 'An neuen Validator delegieren',
+  solana_staking_stake_accounts: 'Stake-Konten',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Mietreserve',
+  solana_staking_min_delegation:
+    'Die minimale Delegation ist {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Aktiv',
+  solana_staking_state_activating: 'Aktivierung',
+  solana_staking_state_deactivating: 'Deaktivierung',
+  solana_staking_state_inactive: 'Inaktiv',
+  solana_staking_activating_notice:
+    'Aktivierung — bringt Belohnungen ab der nächsten Epoche ein.',
+  solana_staking_deactivating_notice:
+    'Deaktivierung – Abkühlphase, bevor das Gerät zurückgezogen werden kann.',
+  solana_staking_inactive_notice:
+    'Inaktiv – abgekühlt und bereit zur Auszahlung.',
+  validator_commission_short: '{{value}} % Gebühr',
 }

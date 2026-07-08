@@ -1,3 +1,4 @@
+import { useSolanaApyInputsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaApyInputsQuery'
 import { useSolanaValidatorsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaValidatorsQuery'
 import { Button } from '@lib/ui/buttons/Button'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
@@ -9,8 +10,10 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { resolveValidatorApy } from '@vultisig/core-chain/chains/solana/staking/apyResolver'
 import { solDecimals } from '@vultisig/core-chain/chains/solana/staking/config'
 import {
+  networkActivatedStake,
   SolanaValidator,
   validatorDisplayName,
   validatorLogoUrl,
@@ -50,6 +53,10 @@ export const SolanaValidatorPickerSheet = ({
   const [picked, setPicked] = useState<string | undefined>(selectedVotePubkey)
 
   const query = useSolanaValidatorsQuery()
+  const apyInputsQuery = useSolanaApyInputsQuery()
+  // Network-wide activated stake (full set, incl. delinquent) — the
+  // fractionStaked denominator for the APY fallback, not a per-validator value.
+  const totalActivatedStake = networkActivatedStake(query.data ?? [])
 
   const filter = (validators: SolanaValidator[]) => {
     const needle = search.trim().toLowerCase()
@@ -137,25 +144,45 @@ export const SolanaValidatorPickerSheet = ({
                           name={validatorDisplayName(v)}
                           logoUrl={validatorLogoUrl(v)}
                         />
-                        <VStack gap={2} flexGrow>
-                          <Text size={15} weight="500">
+                        <NameColumn gap={2} flexGrow>
+                          <Text size={15} weight="500" nowrap cropped>
                             {validatorDisplayName(v)}
                           </Text>
-                          <Text size={12} color="shy">
+                          <Text size={12} color="shy" nowrap cropped>
                             {formatAmount(
                               fromChainAmount(v.activatedStake, solDecimals),
                               { ticker }
                             )}
                           </Text>
-                        </VStack>
+                        </NameColumn>
                         {isSelected ? (
                           <SelectedCheck>
                             <CircleCheckIcon />
                           </SelectedCheck>
                         ) : null}
-                        <Text size={14} color="regular">
-                          {`${v.commission}%`}
-                        </Text>
+                        {(() => {
+                          const apy = resolveValidatorApy({
+                            validator: v,
+                            inflationRate: apyInputsQuery.data?.inflationRate,
+                            totalSupplyLamports:
+                              apyInputsQuery.data?.totalSupplyLamports,
+                            totalActivatedStake,
+                          })
+                          return (
+                            <RightColumn>
+                              <Text size={14} weight="500" color="success">
+                                {apy !== undefined
+                                  ? `${(apy * 100).toFixed(2)}%`
+                                  : '—'}
+                              </Text>
+                              <Text size={11} color="shy" nowrap>
+                                {t('validator_commission_short', {
+                                  value: v.commission,
+                                })}
+                              </Text>
+                            </RightColumn>
+                          )
+                        })()}
                       </ValidatorRow>
                     )
                   })}
@@ -233,9 +260,24 @@ const ValidatorRow = styled(HStack)<{ $selected: boolean }>`
   }
 `
 
+// `min-width: 0` lets this flex child shrink below its content width so the
+// name/stake lines truncate with an ellipsis instead of forcing the row wider
+// than the sheet (which made the whole list scroll horizontally).
+const NameColumn = styled(VStack)`
+  min-width: 0;
+`
+
 const SelectedCheck = styled.div`
   color: ${getColor('success')};
   display: flex;
   align-items: center;
   font-size: 18px;
+`
+
+// Right-aligned APY (green) over the commission — fixed width so a long
+// validator name truncates against it instead of pushing it off-screen.
+const RightColumn = styled(VStack)`
+  flex-shrink: 0;
+  align-items: flex-end;
+  gap: 2px;
 `

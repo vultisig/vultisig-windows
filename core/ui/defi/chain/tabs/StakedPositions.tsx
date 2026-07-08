@@ -25,6 +25,7 @@ import {
 } from '../config/stakeUiResolver'
 import { CosmosDelegationsView } from '../cosmos/CosmosDelegationsView'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
+import { SolanaStakeDefiView } from '../solana/SolanaStakeDefiView'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
@@ -72,6 +73,10 @@ export const StakedPositions = () => {
       return <DefiPositionEmptyState returnTab="staked" />
     }
     return <TonStakingView />
+  }
+
+  if (chain === Chain.Solana) {
+    return <SolanaStakeDefiView />
   }
 
   if (isCosmosNativeStakingChain(chain)) {

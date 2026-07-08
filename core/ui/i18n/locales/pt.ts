@@ -1674,4 +1674,22 @@ export const pt = {
   reshare_threshold_not_met: 'Limiar não atingido',
   reshare_threshold_not_met_description:
     'Você está tentando reduzir o número de dispositivos de {{from}} para {{to}} , mas este cofre requer {{count}} signatários ativos para permanecer seguro.',
+  solana_delegate: 'Estaca',
+  solana_staking_total_staked: 'Total em staking {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegar ao novo validador',
+  solana_staking_stake_accounts: 'Contas de participação',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Reserva de aluguel',
+  solana_staking_min_delegation: 'A delegação mínima é {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Ativo',
+  solana_staking_state_activating: 'Ativando',
+  solana_staking_state_deactivating: 'Desativando',
+  solana_staking_state_inactive: 'Inativo',
+  solana_staking_activating_notice:
+    'Ativar — garante recompensas a partir da próxima época.',
+  solana_staking_deactivating_notice:
+    'Desativação — resfriamento antes de poder ser retirado.',
+  solana_staking_inactive_notice:
+    'Inativo — resfriado e pronto para ser retirado.',
+  validator_commission_short: '{{value}} % taxa',
 }

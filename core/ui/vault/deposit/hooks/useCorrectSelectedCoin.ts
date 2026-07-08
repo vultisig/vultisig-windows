@@ -108,6 +108,7 @@ export const useCorrectSelectedCoin = () => {
         undelegate: () => currentDepositCoin,
         redelegate: () => currentDepositCoin,
         claim_rewards: () => currentDepositCoin,
+        solana_delegate: () => currentDepositCoin,
         solana_unstake: () => currentDepositCoin,
         solana_withdraw: () => currentDepositCoin,
         solana_move_stake: () => currentDepositCoin,

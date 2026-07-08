@@ -1646,4 +1646,23 @@ export const hr = {
   reshare_threshold_not_met: 'Prag nije dosegnut',
   reshare_threshold_not_met_description:
     'Pokušavate smanjiti broj uređaja s {{from}} na {{to}} , ali ovaj trezor zahtijeva {{count}} aktivnih potpisnika kako bi ostao siguran.',
+  solana_delegate: 'Ulog',
+  solana_staking_total_staked: 'Ukupno uloženo {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegat novom validatoru',
+  solana_staking_stake_accounts: 'Računi udjela',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Rezerva za najamninu',
+  solana_staking_min_delegation:
+    'Minimalna delegacija je {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Aktivan',
+  solana_staking_state_activating: 'Aktiviranje',
+  solana_staking_state_deactivating: 'Deaktiviranje',
+  solana_staking_state_inactive: 'Neaktivno',
+  solana_staking_activating_notice:
+    'Aktiviranje — zarađuje nagrade iz sljedeće epohe.',
+  solana_staking_deactivating_notice:
+    'Deaktiviranje — hlađenje prije nego što se može povući.',
+  solana_staking_inactive_notice:
+    'Neaktivno — ohlađeno i spremno za povlačenje.',
+  validator_commission_short: '{{value}} % provizije',
 }
