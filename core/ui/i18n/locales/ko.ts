@@ -741,9 +741,6 @@ export const ko = {
   resend_notification: '알림 재전송',
   resend_notification_in: '{{time}} 후에 알림을 다시 보내주세요',
   reshare: '다시 공유하기',
-  reshare_disclaimer: '모든 재공유 작업에는 기기 임계값이 항상 필요합니다.',
-  reshare_explanation:
-    '리셰어(Reshare)를 사용하면 볼트에 있는 장치 수를 새로 고치거나, 확장하거나, 축소할 수 있습니다.',
   reshare_vault_description: '새로운 위원회와 함께 금고를 다시 공유하세요',
   reshare_your_vault: '보관함을 다시 공유하세요',
   resource: '리소스',
@@ -1614,6 +1611,31 @@ export const ko = {
   malicious_dapp_detected: '악성 dApp 가 감지되었습니다.',
   malicious_dapp_detected_description:
     'Blockaid에서 {{dapp}} 악성 토큰으로 표시했습니다. 진행하기 전에 항상 직접 조사하십시오.',
+  before_you_reshare: '다시 공유하기 전에',
+  before_you_reshare_subtitle:
+    '재공유를 통해 볼트 공유를 다시 생성할 수 있습니다. 먼저 알아야 할 몇 가지 사항이 있습니다.',
+  i_understand: '이해합니다',
+  join_reshare_description: '다른 기기에서 공유 재요청을 받았습니다.',
+  reshare_vault_subtitle:
+    '볼트 설정을 업데이트하세요. 장치를 추가하거나 제거하거나 공유를 새로 고칠 수 있습니다.',
+  reshare_warning_cosigners_title:
+    '모든 공동 서명자는 온라인에 접속해야 합니다.',
+  reshare_warning_cosigners_description:
+    '현재 보관함에 있는 모든 장치가 재공유 세션에 참여해야 합니다.',
+  reshare_warning_old_backups_title: '기존 백업은 더 이상 작동하지 않습니다.',
+  reshare_warning_old_backups_description:
+    '기존의 .vult 파일은 모두 무효화됩니다. 공유를 다시 수행한 후에는 새 백업 파일을 생성해야 합니다.',
+  start_reshare_description: '이 금고의 장치 설정을 변경하고 있습니다.',
+  reshare_success_title: 'Vault 재공유',
+  reshare_success_title_highlight: '성공적으로',
+  reshare_backup_old_backups_wont_work: '기존 백업 파일은 작동하지 않습니다.',
+  reshare_backup_old_backups_wont_work_description:
+    '이전 볼트 설정에서 생성된 백업은 사용할 수 없습니다. 이번 설정 과정에서 생성된 백업만 유효합니다.',
+  reshare_min_devices_required: '최소 {{count}} 개의 장치가 필요합니다.',
+  reshare_more_devices_required: '더 많은 장치가 필요합니다',
+  reshare_threshold_not_met: '임계값 미충족',
+  reshare_threshold_not_met_description:
+    '기기 수를 줄이려고 하는군요.<w> {{from}} 에서 {{to}} 로</w> 하지만 이 금고는<w> {{count}} 활성 서명자가 필요합니다.</w> 안전을 유지하기 위해.',
   solana_delegate: '말뚝',
   solana_staking_total_staked: '총 스테이킹 금액 {{ticker}}',
   solana_staking_delegate_new_validator: '새로운 검증자에게 위임',
@@ -1633,4 +1655,8 @@ export const ko = {
   solana_staking_inactive_notice:
     '비활성 상태 — 냉각되어 철수 준비가 완료되었습니다.',
   validator_commission_short: '{{value}} % 수수료',
+  reshare_failed: '공유 오류가 발생했습니다. 다시 시도해 주세요.',
+  reshare_failed_description:
+    '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
+  plugin_store_compatible: '플러그인 스토어 호환 가능',
 }

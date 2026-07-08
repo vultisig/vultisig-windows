@@ -743,10 +743,6 @@ export const ru = {
   resend_notification: 'Повторная отправка уведомления',
   resend_notification_in: 'Повторно отправить уведомление через {{time}}',
   reshare: 'Reshare',
-  reshare_disclaimer:
-    'Для всех действий Reshare всегда требуется пороговое число устройств.',
-  reshare_explanation:
-    'Reshare можно использовать, чтобы обновить, увеличить или уменьшить количество устройств в хранилище.',
   reshare_vault_description: 'Reshare хранилища с новым комитетом',
   reshare_your_vault: 'Reshare вашего хранилища',
   resource: 'Ресурс',
@@ -1628,6 +1624,34 @@ export const ru = {
   malicious_dapp_detected: 'Обнаружен вредоносный dApp',
   malicious_dapp_detected_description:
     '{{dapp}} помечен Blockaid как вредоносный. Всегда проводите собственное исследование, прежде чем продолжить.',
+  before_you_reshare: 'Прежде чем поделиться записью,',
+  before_you_reshare_subtitle:
+    'Повторный доступ восстанавливает ваши общие ресурсы хранилища. Однако, прежде чем делиться ими, необходимо знать несколько важных моментов.',
+  i_understand: 'Я понимаю',
+  join_reshare_description:
+    'Вы получили запрос на повторную публикацию с другого устройства.',
+  reshare_vault_subtitle:
+    'Обновите настройки хранилища. Добавьте или удалите устройства, или обновите общие ресурсы.',
+  reshare_warning_cosigners_title: 'Все поручители должны быть онлайн.',
+  reshare_warning_cosigners_description:
+    'Каждое устройство, находящееся в вашем хранилище, должно участвовать в сеансе повторного доступа.',
+  reshare_warning_old_backups_title:
+    'Старые резервные копии перестанут работать.',
+  reshare_warning_old_backups_description:
+    'Все существующие файлы с расширением .vult становятся недействительными. После повторного предоставления доступа вам потребуется создать новые резервные копии.',
+  start_reshare_description:
+    'Вы изменяете настройки устройства этого хранилища.',
+  reshare_success_title: 'Хранилище повторно доступно',
+  reshare_success_title_highlight: 'успешно',
+  reshare_backup_old_backups_wont_work:
+    'Старые резервные копии работать не будут.',
+  reshare_backup_old_backups_wont_work_description:
+    'Резервные копии, созданные в ходе предыдущих настроек хранилища, использовать нельзя. Действительны только резервные копии, созданные в ходе данной настройки.',
+  reshare_min_devices_required: 'Требуется как минимум {{count}} устройств.',
+  reshare_more_devices_required: 'Требуется больше устройств',
+  reshare_threshold_not_met: 'Пороговое значение не достигнуто',
+  reshare_threshold_not_met_description:
+    'Вы пытаетесь уменьшить количество устройств из<w> {{from}} в {{to}}</w> но это хранилище<w> требуется активные подписанты {{count}}</w> для обеспечения безопасности.',
   solana_delegate: 'Ставка',
   solana_staking_total_staked: 'Всего в стейкинге {{ticker}}',
   solana_staking_delegate_new_validator: 'Делегировать новому валидатору',
@@ -1646,4 +1670,9 @@ export const ru = {
     'Деактивация — охлаждение перед извлечением.',
   solana_staking_inactive_notice: 'Неактивен — остыл и готов к изъятию.',
   validator_commission_short: '{{value}} % комиссия',
+  reshare_failed:
+    'Ошибка при повторной отправке. Пожалуйста, попробуйте еще раз.',
+  reshare_failed_description:
+    'Повторная публикация данных замедлилась из-за плохого соединения. Вы можете повторить попытку или дождаться восстановления соединения.',
+  plugin_store_compatible: 'Совместимость с магазином плагинов',
 }

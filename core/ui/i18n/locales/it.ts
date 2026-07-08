@@ -759,10 +759,6 @@ export const it = {
   resend_notification: 'Reinvia la notifica',
   resend_notification_in: 'Reinvia la notifica tra {{time}}',
   reshare: 'Ricondividere',
-  reshare_disclaimer:
-    'Per tutte le azioni di condivisione è sempre richiesta la soglia dei dispositivi.',
-  reshare_explanation:
-    'La condivisione può essere utilizzata per aggiornare, espandere o ridurre il numero di dispositivi in un Vault.',
   reshare_vault_description: 'Ricondividi il vault con un nuovo comitato',
   reshare_your_vault: 'Condividi nuovamente il tuo vault',
   resource: 'Risorsa',
@@ -1652,6 +1648,33 @@ export const it = {
   malicious_dapp_detected: 'Rilevato token dannoso dApp',
   malicious_dapp_detected_description:
     '{{dapp}} è stato segnalato come dannoso da Blockaid. Effettua sempre le tue ricerche prima di procedere.',
+  before_you_reshare: 'Prima di ricondividere',
+  before_you_reshare_subtitle:
+    'La ricondivisione rigenera le condivisioni del vault. Prima di procedere, è necessario tenere presente alcune cose.',
+  i_understand: 'Capisco',
+  join_reshare_description:
+    'Hai ricevuto una richiesta di condivisione da un altro dispositivo.',
+  reshare_vault_subtitle:
+    'Aggiorna la configurazione del tuo vault. Aggiungi o rimuovi dispositivi oppure aggiorna le condivisioni.',
+  reshare_warning_cosigners_title: 'Tutti i garanti devono essere online',
+  reshare_warning_cosigners_description:
+    'Ogni dispositivo attualmente presente nel tuo vault deve partecipare alla sessione di ricondivisione.',
+  reshare_warning_old_backups_title:
+    'I vecchi backup smetteranno di funzionare',
+  reshare_warning_old_backups_description:
+    'Tutti i file .vult esistenti diventeranno non validi. Sarà necessario creare nuovi backup dopo la condivisione.',
+  start_reshare_description:
+    'Stai modificando la configurazione del dispositivo di questo vault.',
+  reshare_success_title: 'Vault ricondiviso',
+  reshare_success_title_highlight: 'con successo',
+  reshare_backup_old_backups_wont_work: 'I vecchi backup non funzioneranno',
+  reshare_backup_old_backups_wont_work_description:
+    'I backup creati durante precedenti configurazioni del vault non possono essere utilizzati. Sono validi solo i backup creati durante questa configurazione.',
+  reshare_min_devices_required: 'Sono necessari almeno dispositivi {{count}}',
+  reshare_more_devices_required: 'Sono necessari più dispositivi',
+  reshare_threshold_not_met: 'Soglia non raggiunta',
+  reshare_threshold_not_met_description:
+    'Stai cercando di ridurre il numero di dispositivi da<w> {{from}} a {{to}}</w> ma questa volta<w> richiede firmatari attivi {{count}}</w> per rimanere al sicuro.',
   solana_delegate: 'Palo',
   solana_staking_total_staked: 'Totale in staking {{ticker}}',
   solana_staking_delegate_new_validator: 'Delega al nuovo validatore',
@@ -1670,4 +1693,8 @@ export const it = {
   solana_staking_inactive_notice:
     'Inattivo: raffreddato e pronto per il ritiro.',
   validator_commission_short: '{{value}} % commissione',
+  reshare_failed: 'Errore durante la condivisione. Riprova.',
+  reshare_failed_description:
+    'La ricondivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
+  plugin_store_compatible: 'Compatibile con Plugin Store',
 }

@@ -756,10 +756,6 @@ export const pt = {
   resend_notification: 'Reenviar notificação',
   resend_notification_in: 'Reenviar notificação em {{time}}',
   reshare: 'Compartilhar',
-  reshare_disclaimer:
-    'Para todas as ações de compartilhamento, o limite de dispositivos é sempre necessário.',
-  reshare_explanation:
-    'O recurso "Reshare" pode ser usado para atualizar, expandir ou reduzir a quantidade de dispositivos em um Vault.',
   reshare_vault_description: 'Recompartilhe o cofre com um novo comitê.',
   reshare_your_vault: 'Compartilhe novamente seu cofre',
   resource: 'Recurso',
@@ -1648,6 +1644,34 @@ export const pt = {
   malicious_dapp_detected: 'Token malicioso dApp detectado',
   malicious_dapp_detected_description:
     '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
+  before_you_reshare: 'Antes de compartilhar novamente',
+  before_you_reshare_subtitle:
+    'Ao compartilhar novamente, suas ações no cofre são regeneradas. Há algumas coisas que você precisa saber primeiro.',
+  i_understand: 'Eu entendo',
+  join_reshare_description:
+    'Você recebeu uma solicitação de compartilhamento de outro dispositivo.',
+  reshare_vault_subtitle:
+    'Atualize a configuração do seu cofre. Adicione ou remova dispositivos ou atualize os compartilhamentos.',
+  reshare_warning_cosigners_title: 'Todos os fiadores devem estar online.',
+  reshare_warning_cosigners_description:
+    'Todos os dispositivos atuais em seu cofre precisam participar da sessão de compartilhamento.',
+  reshare_warning_old_backups_title:
+    'Os backups antigos deixarão de funcionar.',
+  reshare_warning_old_backups_description:
+    'Todos os arquivos .vult existentes serão invalidados. Você precisará criar novos backups após o compartilhamento.',
+  start_reshare_description:
+    'Você está alterando a configuração do dispositivo deste cofre.',
+  reshare_success_title: 'Cofre compartilhado novamente',
+  reshare_success_title_highlight: 'com sucesso',
+  reshare_backup_old_backups_wont_work: 'Os backups antigos não funcionarão.',
+  reshare_backup_old_backups_wont_work_description:
+    'Não é possível usar backups de configurações anteriores do cofre. Somente backups criados durante esta configuração são válidos.',
+  reshare_min_devices_required:
+    'São necessários pelo menos {{count}} dispositivos.',
+  reshare_more_devices_required: 'São necessários mais dispositivos.',
+  reshare_threshold_not_met: 'Limiar não atingido',
+  reshare_threshold_not_met_description:
+    'Você está tentando reduzir o número de dispositivos de<w> {{from}} para {{to}}</w> mas este cofre<w> requer signatários ativos {{count}}</w> Para se manter seguro.',
   solana_delegate: 'Estaca',
   solana_staking_total_staked: 'Total em staking {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegar ao novo validador',
@@ -1666,4 +1690,8 @@ export const pt = {
   solana_staking_inactive_notice:
     'Inativo — resfriado e pronto para ser retirado.',
   validator_commission_short: '{{value}} % taxa',
+  reshare_failed: 'Erro ao compartilhar novamente. Tente outra vez.',
+  reshare_failed_description:
+    'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
+  plugin_store_compatible: 'Compatível com a Loja de Plugins',
 }
