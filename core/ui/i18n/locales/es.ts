@@ -1690,4 +1690,7 @@ export const es = {
     'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
   solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
   validator_commission_short: '{{value}} % de comisión',
+  reshare_failed: 'Error al compartir. Inténtalo de nuevo.',
+  reshare_failed_description:
+    'La reutilización de archivos se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
 }

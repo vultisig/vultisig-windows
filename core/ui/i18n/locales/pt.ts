@@ -1692,4 +1692,7 @@ export const pt = {
   solana_staking_inactive_notice:
     'Inativo — resfriado e pronto para ser retirado.',
   validator_commission_short: '{{value}} % taxa',
+  reshare_failed: 'Erro ao compartilhar novamente. Tente outra vez.',
+  reshare_failed_description:
+    'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
 }

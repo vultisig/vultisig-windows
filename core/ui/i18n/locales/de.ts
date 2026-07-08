@@ -1704,4 +1704,7 @@ export const de = {
   solana_staking_inactive_notice:
     'Inaktiv – abgekühlt und bereit zur Auszahlung.',
   validator_commission_short: '{{value}} % Gebühr',
+  reshare_failed: 'Fehler beim erneuten Teilen. Bitte versuchen Sie es erneut.',
+  reshare_failed_description:
+    'Die erneute Freigabe wurde aufgrund schlechter Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
 }

@@ -883,6 +883,9 @@ export const en = {
   resend_notification: 'Resend notification',
   resend_notification_in: 'Resend notification in {{time}}',
   reshare: 'Reshare',
+  reshare_failed: 'Reshare Error. Please try again.',
+  reshare_failed_description:
+    'Resharing slowed due to poor connectivity. You can retry or wait for reconnection.',
   reshare_more_devices_required: 'More devices required',
   reshare_threshold_not_met: 'Threshold not met',
   reshare_threshold_not_met_description:

@@ -1665,4 +1665,7 @@ export const hr = {
   solana_staking_inactive_notice:
     'Neaktivno — ohlađeno i spremno za povlačenje.',
   validator_commission_short: '{{value}} % provizije',
+  reshare_failed: 'Pogreška pri ponovnom dijeljenju. Pokušajte ponovno.',
+  reshare_failed_description:
+    'Ponovno dijeljenje je usporeno zbog slabe veze. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
 }
