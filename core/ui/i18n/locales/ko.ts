@@ -1616,4 +1616,23 @@ export const ko = {
   malicious_dapp_detected: '악성 dApp 가 감지되었습니다.',
   malicious_dapp_detected_description:
     'Blockaid에서 {{dapp}} 악성 토큰으로 표시했습니다. 진행하기 전에 항상 직접 조사하십시오.',
+  solana_delegate: '말뚝',
+  solana_staking_total_staked: '총 스테이킹 금액 {{ticker}}',
+  solana_staking_delegate_new_validator: '새로운 검증자에게 위임',
+  solana_staking_stake_accounts: '이해관계자 계정',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: '임대료 적립금',
+  solana_staking_min_delegation:
+    '최소 위임 크기는 {{amount}} {{ticker}} 입니다.',
+  solana_staking_state_active: '활동적인',
+  solana_staking_state_activating: '활성화 중',
+  solana_staking_state_deactivating: '비활성화',
+  solana_staking_state_inactive: '비활성화됨',
+  solana_staking_activating_notice:
+    '활성화하면 다음 에포크부터 보상을 획득할 수 있습니다.',
+  solana_staking_deactivating_notice:
+    '비활성화 — 제거하기 전에 식히는 과정입니다.',
+  solana_staking_inactive_notice:
+    '비활성 상태 — 냉각되어 철수 준비가 완료되었습니다.',
+  validator_commission_short: '{{value}} % 수수료',
 }

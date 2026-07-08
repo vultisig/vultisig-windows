@@ -71,6 +71,7 @@ export const useAvailableChainActions = (chain: Chain) => {
         undelegate: () => true,
         redelegate: () => true,
         claim_rewards: () => true,
+        solana_delegate: () => true,
         solana_unstake: () => true,
         solana_withdraw: () => true,
         solana_move_stake: () => true,

@@ -32,6 +32,7 @@ import {
   yieldContractsByBaseDenom,
 } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/config'
 import { solanaConfig } from '@vultisig/core-chain/chains/solana/solanaConfig'
+import { fetchSolanaRentReserve } from '@vultisig/core-chain/chains/solana/staking/rpc'
 import { buildUnsignedStakingTx } from '@vultisig/core-chain/chains/solana/staking/tx/buildUnsignedStakingTx'
 import { SolanaStakingPayload } from '@vultisig/core-chain/chains/solana/staking/tx/stakingPayload'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
@@ -739,7 +740,7 @@ type ApplySolanaStakingSignDataInput = {
  * co-signing device signs the byte-identical message through the raw-transaction
  * path — the MPC byte-parity guarantee. Mirrors iOS `SolanaStakingSignDataResolver`.
  */
-const applySolanaStakingSignData = ({
+const applySolanaStakingSignData = async ({
   action,
   coin,
   depositData,
@@ -763,6 +764,11 @@ const applySolanaStakingSignData = ({
   const stakeAccount = depositData['stakeAccount']
   const validatorAddress = depositData['validatorAddress']
   const amount = amountUnits ? BigInt(amountUnits) : 0n
+  // Delegate funds the new stake account with the entered amount PLUS the
+  // rent-exempt reserve, so the active stake equals the entered amount. Read
+  // live (cheap, rarely changes) only for the delegate path.
+  const rentReserve =
+    action === 'solana_delegate' ? await fetchSolanaRentReserve() : 0n
 
   const requireStakeAccount = (): string => {
     if (typeof stakeAccount !== 'string' || stakeAccount.length === 0) {
@@ -782,6 +788,20 @@ const applySolanaStakingSignData = ({
     SolanaStakingAction,
     { payload: SolanaStakingPayload; toAddress: string; toAmount: string }
   >(action, {
+    solana_delegate: () => {
+      const votePubkey = requireValidator()
+      // `lamports` is the stake-account FUNDING: the delegated amount plus the
+      // rent-exempt reserve, so the active stake equals the entered amount.
+      return {
+        payload: {
+          op: 'delegate',
+          votePubkey,
+          lamports: amount + rentReserve,
+        } as const,
+        toAddress: votePubkey,
+        toAmount: amount.toString(),
+      }
+    },
     solana_unstake: () => {
       const account = requireStakeAccount()
       return {

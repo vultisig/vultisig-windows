@@ -1630,4 +1630,22 @@ export const ru = {
   malicious_dapp_detected: 'Обнаружен вредоносный dApp',
   malicious_dapp_detected_description:
     '{{dapp}} помечен Blockaid как вредоносный. Всегда проводите собственное исследование, прежде чем продолжить.',
+  solana_delegate: 'Ставка',
+  solana_staking_total_staked: 'Всего в стейкинге {{ticker}}',
+  solana_staking_delegate_new_validator: 'Делегировать новому валидатору',
+  solana_staking_stake_accounts: 'Счета ставок',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Резерв на арендную плату',
+  solana_staking_min_delegation:
+    'Минимальный объем делегированных полномочий: {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Активный',
+  solana_staking_state_activating: 'Активация',
+  solana_staking_state_deactivating: 'Деактивация',
+  solana_staking_state_inactive: 'Неактивный',
+  solana_staking_activating_notice:
+    'Активация — приносит награды из следующей эпохи.',
+  solana_staking_deactivating_notice:
+    'Деактивация — охлаждение перед извлечением.',
+  solana_staking_inactive_notice: 'Неактивен — остыл и готов к изъятию.',
+  validator_commission_short: '{{value}} % комиссия',
 }

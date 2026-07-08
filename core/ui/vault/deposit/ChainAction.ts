@@ -14,12 +14,13 @@ export type CosmosStakingAction = (typeof cosmosStakingActions)[number]
 
 /**
  * Solana native staking ops. Distinct names (not the generic `stake`/`unstake`)
- * keep routing unambiguous against THORChain/TON. Deactivate begins the
- * ~1-epoch cooldown on a stake account; withdraw moves the cooled-down lamports
- * back to the wallet (no claim path — rewards auto-compound). Delegate and the
- * guided move-stake ops land in later phases.
+ * keep routing unambiguous against THORChain/TON. Delegate creates + delegates a
+ * new stake account; deactivate begins the ~1-epoch cooldown; withdraw moves the
+ * cooled-down lamports back to the wallet (no claim path — rewards auto-compound);
+ * move-stake is the guided cross-epoch redelegate (deactivate then finish-move).
  */
 export const solanaStakingActions = [
+  'solana_delegate',
   'solana_unstake',
   'solana_withdraw',
   'solana_move_stake',

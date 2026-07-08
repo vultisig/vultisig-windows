@@ -1647,4 +1647,22 @@ export const es = {
   malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
   malicious_dapp_detected_description:
     'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
+  solana_delegate: 'Apostar',
+  solana_staking_total_staked: 'Total apostado {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegar al nuevo validador',
+  solana_staking_stake_accounts: 'Cuentas de participación',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Reserva de alquiler',
+  solana_staking_min_delegation:
+    'La delegación mínima es {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Activo',
+  solana_staking_state_activating: 'Activando',
+  solana_staking_state_deactivating: 'Desactivando',
+  solana_staking_state_inactive: 'Inactivo',
+  solana_staking_activating_notice:
+    'Activar: obtiene recompensas de la siguiente época.',
+  solana_staking_deactivating_notice:
+    'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
+  solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
+  validator_commission_short: '{{value}} % de comisión',
 }

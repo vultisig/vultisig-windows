@@ -1632,4 +1632,22 @@ export const nl = {
   malicious_dapp_detected: 'Kwaadaardige dApp gedetecteerd',
   malicious_dapp_detected_description:
     '{{dapp}} is door Blockaid als schadelijk aangemerkt. Doe altijd zelf onderzoek voordat u verdergaat.',
+  solana_delegate: 'Inzet',
+  solana_staking_total_staked: 'Totaal ingezette {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegeer aan nieuwe validator',
+  solana_staking_stake_accounts: 'Inzetrekeningen',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Huurreserve',
+  solana_staking_min_delegation: 'Minimale delegatie is {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Actief',
+  solana_staking_state_activating: 'Activeren',
+  solana_staking_state_deactivating: 'Deactiveren',
+  solana_staking_state_inactive: 'Inactief',
+  solana_staking_activating_notice:
+    'Activeren levert beloningen op vanaf het volgende tijdperk.',
+  solana_staking_deactivating_notice:
+    'Deactiveren — afkoelen voordat het kan worden teruggetrokken.',
+  solana_staking_inactive_notice:
+    'Inactief — afgekoeld en klaar om te worden verwijderd.',
+  validator_commission_short: '{{value}} % fee',
 }
