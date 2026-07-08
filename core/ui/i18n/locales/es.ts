@@ -279,8 +279,6 @@ export const es = {
   post_quantum_keygen: 'Generación de claves post-cuántica',
   post_quantum_keygen_description:
     'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
-  post_quantum_key_already_generated:
-    'Esta bóveda ya tiene una llave post-cuántica.',
   enable_token_instruction:
     'Habilite al menos un token para ver saldos y administrar posiciones.',
   encrypting_vault_keyshares: 'Cifrado de claves compartidas de bóveda...',
