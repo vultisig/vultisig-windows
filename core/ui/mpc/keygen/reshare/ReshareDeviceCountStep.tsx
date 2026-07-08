@@ -50,7 +50,7 @@ export const ReshareDeviceCountStep = ({ onFinish }: OnFinishProp<number>) => {
       })}
       renderBelowMin={selectedIndex => (
         <ThresholdOverlay alignItems="center">
-          <Text color="shy" size={13} weight={500} centerHorizontally>
+          <Text color="contrast" size={12} weight={500} centerHorizontally>
             {t('reshare_more_devices_required')}
           </Text>
           <ReshareThresholdNotMetCard

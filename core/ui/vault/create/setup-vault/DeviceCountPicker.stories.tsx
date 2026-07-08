@@ -48,7 +48,7 @@ export const ReshareThresholdNotMet: Story = {
         gap={16}
         style={{ padding: '12px 16px 0', width: '100%' }}
       >
-        <Text color="shy" size={13} weight={500} centerHorizontally>
+        <Text color="contrast" size={12} weight={500} centerHorizontally>
           More devices required
         </Text>
         <ReshareThresholdNotMetCard
