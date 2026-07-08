@@ -1671,7 +1671,7 @@ export const es = {
   reshare_more_devices_required: 'Se necesitan más dispositivos',
   reshare_threshold_not_met: 'Umbral no alcanzado',
   reshare_threshold_not_met_description:
-    'Estás intentando reducir el número de dispositivos de {{from}} a {{to}} , pero esta bóveda requiere {{count}} firmantes activos para mantenerse segura.',
+    'Estás intentando reducir el número de dispositivos de<w> {{from}} a {{to}}</w> pero esta bóveda<w> Requiere firmantes activos {{count}}</w> para mantenerse seguro.',
   solana_delegate: 'Apostar',
   solana_staking_total_staked: 'Total apostado {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegar al nuevo validador',
@@ -1693,4 +1693,5 @@ export const es = {
   reshare_failed: 'Error al compartir. Inténtalo de nuevo.',
   reshare_failed_description:
     'La reutilización de archivos se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
+  plugin_store_compatible: 'Compatible con Plugin Store',
 }

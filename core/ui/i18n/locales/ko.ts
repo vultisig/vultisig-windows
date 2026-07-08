@@ -1637,7 +1637,7 @@ export const ko = {
   reshare_more_devices_required: '더 많은 장치가 필요합니다',
   reshare_threshold_not_met: '임계값 미충족',
   reshare_threshold_not_met_description:
-    '{{from}} 에서 {{to}} 로 장치 수를 줄이려고 하지만, 이 볼트의 보안을 유지하려면 {{count}} 명의 활성 서명자가 필요합니다.',
+    '기기 수를 줄이려고 하는군요.<w> {{from}} 에서 {{to}} 로</w> 하지만 이 금고는<w> {{count}} 활성 서명자가 필요합니다.</w> 안전을 유지하기 위해.',
   solana_delegate: '말뚝',
   solana_staking_total_staked: '총 스테이킹 금액 {{ticker}}',
   solana_staking_delegate_new_validator: '새로운 검증자에게 위임',
@@ -1660,4 +1660,5 @@ export const ko = {
   reshare_failed: '공유 오류가 발생했습니다. 다시 시도해 주세요.',
   reshare_failed_description:
     '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
+  plugin_store_compatible: '플러그인 스토어 호환 가능',
 }

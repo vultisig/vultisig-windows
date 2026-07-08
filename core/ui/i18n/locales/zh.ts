@@ -1542,7 +1542,7 @@ export const zh = {
   reshare_more_devices_required: '需要更多设备',
   reshare_threshold_not_met: '未达到阈值',
   reshare_threshold_not_met_description:
-    '您正在尝试将设备数量从{{from}}减少到{{to}} ，但此保险库需要{{count}}个活跃签名者才能保持安全。',
+    '您正在尝试减少设备数量<w>{{from}}到{{to}}</w>但这个保险库<w>需要{{count}}活动签名者</w>为了确保安全。',
   solana_delegate: '赌注',
   solana_staking_total_staked: '总质押金额{{ticker}}',
   solana_staking_delegate_new_validator: '委托给新的验证者',
@@ -1561,4 +1561,5 @@ export const zh = {
   reshare_failed: '重新分享时出错，请重试。',
   reshare_failed_description:
     '由于网络连接不佳，重新共享速度变慢。您可以重试或等待重新连接。',
+  plugin_store_compatible: '兼容插件商店',
 }

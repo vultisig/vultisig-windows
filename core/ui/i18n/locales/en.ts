@@ -889,7 +889,8 @@ export const en = {
   reshare_more_devices_required: 'More devices required',
   reshare_threshold_not_met: 'Threshold not met',
   reshare_threshold_not_met_description:
-    "You're trying to reduce the number of devices from {{from}} to {{to}}, but this vault requires {{count}} active signers to stay secure.",
+    "You're trying to reduce the number of devices from <w>{{from}} to {{to}}</w>, but this vault <w>requires {{count}} active signers</w> to stay secure.",
+  plugin_store_compatible: 'Plugin Store compatible',
   reshare_backup_old_backups_wont_work: "Old backups won't work",
   reshare_backup_old_backups_wont_work_description:
     "Backups from previous vault setups can't be used. Only backups created during this setup are valid.",

@@ -1684,7 +1684,7 @@ export const de = {
   reshare_more_devices_required: 'Weitere Geräte erforderlich',
   reshare_threshold_not_met: 'Schwellenwert nicht erreicht',
   reshare_threshold_not_met_description:
-    'Sie versuchen, die Anzahl der Geräte von {{from}} auf {{to}} zu reduzieren, aber dieser Tresor benötigt {{count}} aktive Signierer, um sicher zu bleiben.',
+    'Sie versuchen, die Anzahl der Geräte zu reduzieren von<w> {{from}} bis {{to}}</w> Aber dieses Gewölbe<w> Erfordert aktive Unterzeichner der {{count}}</w> um sicher zu bleiben.',
   solana_delegate: 'Einsatz',
   solana_staking_total_staked: 'Insgesamt eingesetzt {{ticker}}',
   solana_staking_delegate_new_validator: 'An neuen Validator delegieren',
@@ -1707,4 +1707,5 @@ export const de = {
   reshare_failed: 'Fehler beim erneuten Teilen. Bitte versuchen Sie es erneut.',
   reshare_failed_description:
     'Die erneute Freigabe wurde aufgrund schlechter Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
+  plugin_store_compatible: 'Plugin Store-kompatibel',
 }

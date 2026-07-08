@@ -1655,7 +1655,7 @@ export const nl = {
   reshare_more_devices_required: 'Meer apparaten nodig',
   reshare_threshold_not_met: 'Drempelwaarde niet bereikt',
   reshare_threshold_not_met_description:
-    'Je probeert het aantal apparaten te verminderen van {{from}} naar {{to}} , maar deze kluis vereist actieve ondertekenaars {{count}} om veilig te blijven.',
+    'Je probeert het aantal apparaten te verminderen van<w> {{from}} naar {{to}}</w> maar deze kluis<w> vereist {{count}} actieve ondertekenaars</w> om veilig te blijven.',
   solana_delegate: 'Inzet',
   solana_staking_total_staked: 'Totaal ingezette {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegeer aan nieuwe validator',
@@ -1677,4 +1677,5 @@ export const nl = {
   reshare_failed: 'Fout bij het opnieuw delen. Probeer het opnieuw.',
   reshare_failed_description:
     'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
+  plugin_store_compatible: 'Compatibel met de Plugin Store',
 }
