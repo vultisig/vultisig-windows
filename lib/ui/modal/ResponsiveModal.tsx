@@ -102,7 +102,7 @@ export const ResponsiveModal = ({
   modalProps,
   containerStyles,
   grabbable = false,
-  mobileFullWidth = false,
+  mobileFullWidth = true,
   mobilePresentation = 'drawer',
 }: ResponsiveModalProps) => {
   const isTabletAndUp = useIsTabletDeviceAndUp()
