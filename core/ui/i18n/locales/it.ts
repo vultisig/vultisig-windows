@@ -1695,4 +1695,7 @@ export const it = {
   solana_staking_inactive_notice:
     'Inattivo: raffreddato e pronto per il ritiro.',
   validator_commission_short: '{{value}} % commissione',
+  reshare_failed: 'Errore durante la condivisione. Riprova.',
+  reshare_failed_description:
+    'La ricondivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
 }

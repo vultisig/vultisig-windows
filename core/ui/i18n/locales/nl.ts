@@ -1674,4 +1674,7 @@ export const nl = {
   solana_staking_inactive_notice:
     'Inactief — afgekoeld en klaar om te worden verwijderd.',
   validator_commission_short: '{{value}} % fee',
+  reshare_failed: 'Fout bij het opnieuw delen. Probeer het opnieuw.',
+  reshare_failed_description:
+    'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
 }

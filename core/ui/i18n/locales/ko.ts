@@ -1657,4 +1657,7 @@ export const ko = {
   solana_staking_inactive_notice:
     '비활성 상태 — 냉각되어 철수 준비가 완료되었습니다.',
   validator_commission_short: '{{value}} % 수수료',
+  reshare_failed: '공유 오류가 발생했습니다. 다시 시도해 주세요.',
+  reshare_failed_description:
+    '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
 }

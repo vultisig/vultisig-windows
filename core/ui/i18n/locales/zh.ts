@@ -1558,4 +1558,7 @@ export const zh = {
   solana_staking_deactivating_notice: '失活——冷却后才能取出。',
   solana_staking_inactive_notice: '处于非活跃状态——已冷却，准备撤退。',
   validator_commission_short: '{{value}} % 手续费',
+  reshare_failed: '重新分享时出错，请重试。',
+  reshare_failed_description:
+    '由于网络连接不佳，重新共享速度变慢。您可以重试或等待重新连接。',
 }
