@@ -1,5 +1,10 @@
+import {
+  isAppSessionAuthorizedForAccounts,
+  isAppSessionAuthorizedForChain,
+} from '@core/extension/storage/appSessionChainAuthorization'
 import { getVault } from '@core/extension/storage/vaults'
 import { getWalletCore } from '@core/extension/tw'
+import { BackgroundError } from '@core/inpage-provider/background/error'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
@@ -12,6 +17,14 @@ export const getAccount: BackgroundResolver<'getAccount'> = async ({
   input: { chain },
 }) => {
   const appSession = assertField(context, 'appSession')
+  if (!isAppSessionAuthorizedForChain({ appSession, chain })) {
+    throw BackgroundError.Unauthorized
+  }
+
+  if (!isAppSessionAuthorizedForAccounts(appSession)) {
+    throw BackgroundError.Unauthorized
+  }
+
   const vault = await getVault(appSession.vaultId)
 
   if (isKeyImportVault(vault)) {

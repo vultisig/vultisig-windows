@@ -1,4 +1,5 @@
 import { callBackground } from '@core/inpage-provider/background'
+import { BackgroundError } from '@core/inpage-provider/background/error'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
@@ -74,17 +75,29 @@ const aminoHandler = (
   const { msgs, fee, memo } = signDoc
   const [message] = msgs
 
+  // The moved coin lives in a different field per amino message type:
+  // IBC `MsgTransfer` → `token` (a single coin), `MsgSend` → `amount[0]`,
+  // wasm `MsgExecuteContract` → `funds[0]`. Reading only `funds` reported a
+  // `0` amount for sends and IBC transfers, so the popup displayed `0` and any
+  // downstream native-value check (insufficient-funds gate) misread the amount.
+  const sentCoin =
+    message.value.token ?? message.value.amount?.[0] ?? message.value.funds?.[0]
+
   return {
     asset: {
       chain: chain,
-      ticker: message.value.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
+      ticker: sentCoin?.denom ?? chainFeeCoin[chain].ticker,
     },
     amount: {
-      amount: message.value.funds?.[0]?.amount ?? '0',
+      amount: sentCoin?.amount ?? '0',
       decimals: chainFeeCoin[chain].decimals,
     },
     from: message.value.sender ?? message.value.from_address ?? undefined,
-    to: message.value.contract ?? message.value.to_address ?? undefined,
+    to:
+      message.value.contract ??
+      message.value.to_address ??
+      message.value.receiver ??
+      undefined,
     data: memo,
     aminoPayload: {
       msgs: signDoc.msgs as CosmosMsg[],
@@ -644,14 +657,13 @@ export class XDEFIKeplrProvider extends Keplr {
     if (nativeChains.length === 0) return
 
     // Serialize the first chain through `requestAccount` so the
-    // grant-vault popup surfaces exactly once. Running every chain
-    // through `requestAccount` in parallel raced multiple popups against
-    // each other — only one would win, the others returned no
-    // `appSession` and the dApp got back `EIP1193Error('InternalError')`.
-    // Subsequent chains piggyback on the same dApp authorization via
-    // `getAccount`, which is silent (no popup) once the host is granted.
+    // grant-vault popup surfaces exactly once while recording the full
+    // requested chain set. Running every chain through `requestAccount` in
+    // parallel raced multiple popups against each other — only one would
+    // win, the others returned no `appSession` and the dApp got back
+    // `EIP1193Error('InternalError')`.
     const [primary, ...rest] = nativeChains
-    await requestAccount(primary)
+    await requestAccount(primary, { chains: nativeChains })
     await Promise.all(
       rest.map(chain => callBackground({ getAccount: { chain } }))
     )
@@ -1203,8 +1215,55 @@ export class XDEFIKeplrProvider extends Keplr {
    * per-entry `rejected` instead of failing the whole batch.
    */
   async getKeysSettled(chainIds: string[]): Promise<SettledResponses<Key>> {
+    const nativeChains = chainIds.reduce<Chain[]>((result, chainId) => {
+      const chain = getKeplrSupportedChainByChainId(chainId)
+      if (chain && !result.includes(chain)) {
+        result.push(chain)
+      }
+
+      return result
+    }, [])
+    const authorizationResults = await Promise.all(
+      nativeChains.map(async chain => {
+        const result = await attempt(() =>
+          callBackground({ getAccount: { chain } })
+        )
+
+        return { chain, result }
+      })
+    )
+    const chainsNeedingGrant = authorizationResults
+      .filter(({ result }) => 'error' in result)
+      .flatMap(({ chain, result }) =>
+        'error' in result && result.error === BackgroundError.Unauthorized
+          ? [chain]
+          : []
+      )
+    const grantResult =
+      chainsNeedingGrant.length > 0
+        ? await attempt(() =>
+            callPopup({
+              grantVaultAccess: {
+                chain: chainsNeedingGrant[0],
+                chains: nativeChains,
+              },
+            })
+          )
+        : undefined
+
     return Promise.all(
       chainIds.map(async chainId => {
+        if (grantResult && 'error' in grantResult) {
+          const nativeChain = getKeplrSupportedChainByChainId(chainId)
+          if (nativeChain && chainsNeedingGrant.includes(nativeChain)) {
+            const reason =
+              grantResult.error instanceof Error
+                ? grantResult.error
+                : new Error(String(grantResult.error))
+            return { status: 'rejected', reason } as const
+          }
+        }
+
         const result = await attempt(() => this.getKey(chainId))
         if ('error' in result) {
           const reason =

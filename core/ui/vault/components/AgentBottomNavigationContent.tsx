@@ -235,7 +235,7 @@ const NavSurface = styled.div`
   background: ${({ theme }) =>
     theme.iconStyle === 'station'
       ? theme.colors.foreground.withAlpha(0.5).toCssValue()
-      : 'rgba(19, 46, 86, 0.6)'};
+      : theme.colors.foreground.toCssValue()};
   backdrop-filter: blur(32px);
   border-top: 1px solid ${getColor('foregroundExtra')};
 `

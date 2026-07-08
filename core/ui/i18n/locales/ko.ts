@@ -1604,12 +1604,16 @@ export const ko = {
     '비활성화하면 쿨다운이 시작됩니다. 출금하기 전까지 약 {{days}} 일 동안 자금이 잠겨 있습니다.',
   solana_staking_withdrawable_amount: '인출 가능 금액',
   solana_staking_withdraw_ready_notice: '식어서 철수할 준비가 되었습니다.',
+  solana_move_stake: '이동',
+  solana_finish_move: '이동 완료',
+  solana_staking_move_notice:
+    '스테이크 이동은 여러 단계로 진행되며 여러 에포크에 걸칩니다. 지금 계정을 비활성화하고, 약 {{days}}일의 대기 기간이 지난 뒤 새 검증인으로 이동을 완료하세요.',
+  solana_staking_finish_move_notice:
+    '대기 기간이 끝난 스테이크 계정을 새 검증인에게 다시 위임하고 이동을 완료합니다.',
   external_recipient_tooltip_content:
     '교환된 자금을 본인의 지갑 주소가 아닌 다른 지갑 주소로 보내세요.',
-  solana_move_stake: '이동하다',
-  solana_finish_move: '동작 마무리',
-  solana_staking_move_notice:
-    '스테이킹 이전은 여러 단계를 거치며 여러 에포크에 걸쳐 진행됩니다. 현재 계정은 비활성화되며, 약 {{days}} 일의 쿨다운 기간이 지난 후 새로운 검증자로 이전이 완료됩니다.',
-  solana_staking_finish_move_notice:
-    '이로써 쿨링된 스테이킹 계정이 새로운 검증자에게 재위임되고 이전이 완료됩니다.',
+  blockaid_simulation_pending: '거래 시뮬레이션 중…',
+  malicious_dapp_detected: '악성 dApp 가 감지되었습니다.',
+  malicious_dapp_detected_description:
+    'Blockaid에서 {{dapp}} 악성 토큰으로 표시했습니다. 진행하기 전에 항상 직접 조사하십시오.',
 }

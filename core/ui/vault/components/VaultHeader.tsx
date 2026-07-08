@@ -19,7 +19,7 @@ export const VaultHeader = ({
     <PageHeader
       hasBorder
       primaryControls={primaryControls}
-      title={<VaultSelector value={vault} />}
+      title={<VaultSelector placement="pageHeader" value={vault} />}
       secondaryControls={secondaryControls}
     />
   )
