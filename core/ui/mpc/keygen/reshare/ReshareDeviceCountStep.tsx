@@ -60,7 +60,13 @@ export const ReshareDeviceCountStep = ({ onFinish }: OnFinishProp<number>) => {
           />
         </ThresholdOverlay>
       )}
-      onSubmit={selectedDeviceCount => onFinish(selectedDeviceCount + 1)}
+      onSubmit={selectedDeviceCount =>
+        // The slider caps at "4+" (index 3), so for vaults whose minimum
+        // exceeds 4 the raw selection would understate the target and let peer
+        // discovery proceed below the threshold — clamp the target up to the
+        // required minimum.
+        onFinish(Math.max(selectedDeviceCount + 1, minDeviceCount))
+      }
     />
   )
 }
