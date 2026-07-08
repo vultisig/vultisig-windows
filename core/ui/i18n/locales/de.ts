@@ -1682,4 +1682,13 @@ export const de = {
   solana_staking_inactive_notice:
     'Inaktiv – abgekühlt und bereit zur Auszahlung.',
   validator_commission_short: '{{value}} % Gebühr',
+  open_trust_line: 'Vertrauenslinie öffnen',
+  trust_line_limit: 'Vertrauensgrenze',
+  trust_line_issuer: 'Emittent',
+  trust_line_currency: 'Währung',
+  trust_line_custom_token: 'Benutzerdefiniertes Token',
+  trust_line_issuer_placeholder: 'Ausstelleradresse (r...)',
+  trust_line_currency_placeholder: 'Währungscode (z. B. RLUSD)',
+  trust_line_reserve_warning:
+    'Durch das Öffnen einer Vertrauenslinie werden {{amount}} {{ticker}} als Kontoinhaberreserve gesperrt, bis die Linie entfernt wird.',
 }

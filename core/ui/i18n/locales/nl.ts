@@ -1650,4 +1650,13 @@ export const nl = {
   solana_staking_inactive_notice:
     'Inactief — afgekoeld en klaar om te worden verwijderd.',
   validator_commission_short: '{{value}} % fee',
+  open_trust_line: 'Open vertrouwenslijn',
+  trust_line_limit: 'Vertrouwenslimiet',
+  trust_line_issuer: 'Uitgever',
+  trust_line_currency: 'Munteenheid',
+  trust_line_custom_token: 'Aangepast token',
+  trust_line_issuer_placeholder: 'Uitgevende instantie (r...)',
+  trust_line_currency_placeholder: 'Valutacode (bijv. RLUSD)',
+  trust_line_reserve_warning:
+    'Het openen van een vertrouwenslijn vergrendelt {{amount}} {{ticker}} als een reservering voor de rekeninghouder totdat de lijn wordt verwijderd.',
 }

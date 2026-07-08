@@ -1648,4 +1648,13 @@ export const ru = {
     'Деактивация — охлаждение перед извлечением.',
   solana_staking_inactive_notice: 'Неактивен — остыл и готов к изъятию.',
   validator_commission_short: '{{value}} % комиссия',
+  open_trust_line: 'Открытая линия доверия',
+  trust_line_limit: 'Лимит доверия',
+  trust_line_issuer: 'Эмитент',
+  trust_line_currency: 'Валюта',
+  trust_line_custom_token: 'Пользовательский токен',
+  trust_line_issuer_placeholder: 'Адрес эмитента (р...)',
+  trust_line_currency_placeholder: 'Код валюты (например, RLUSD)',
+  trust_line_reserve_warning:
+    'Открытие доверительной линии блокирует токены {{amount}} {{ticker}} в качестве резерва владельца учетной записи до тех пор, пока линия не будет удалена.',
 }

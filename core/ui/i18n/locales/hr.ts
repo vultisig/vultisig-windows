@@ -1643,4 +1643,13 @@ export const hr = {
   solana_staking_inactive_notice:
     'Neaktivno — ohlađeno i spremno za povlačenje.',
   validator_commission_short: '{{value}} % provizije',
+  open_trust_line: 'Otvorena linija povjerenja',
+  trust_line_limit: 'Ograničenje povjerenja',
+  trust_line_issuer: 'Izdavatelj',
+  trust_line_currency: 'Valuta',
+  trust_line_custom_token: 'Prilagođeni token',
+  trust_line_issuer_placeholder: 'Adresa izdavatelja (r...)',
+  trust_line_currency_placeholder: 'Kod valute (npr. RLUSD)',
+  trust_line_reserve_warning:
+    'Otvaranjem linije povjerenja {{amount}} {{ticker}} zaključava se kao rezerva vlasnika računa dok se linija ne ukloni.',
 }

@@ -1538,4 +1538,13 @@ export const zh = {
   solana_staking_deactivating_notice: '失活——冷却后才能取出。',
   solana_staking_inactive_notice: '处于非活跃状态——已冷却，准备撤退。',
   validator_commission_short: '{{value}} % 手续费',
+  open_trust_line: '开放信任线',
+  trust_line_limit: '信任限额',
+  trust_line_issuer: '发行人',
+  trust_line_currency: '货币',
+  trust_line_custom_token: '自定义令牌',
+  trust_line_issuer_placeholder: '发行人地址（r...）',
+  trust_line_currency_placeholder: '货币代码（例如 RLUSD）',
+  trust_line_reserve_warning:
+    '打开信任线会将{{amount}} {{ticker}}锁定为账户所有者预留，直到该线被移除。',
 }

@@ -1635,4 +1635,13 @@ export const ko = {
   solana_staking_inactive_notice:
     '비활성 상태 — 냉각되어 철수 준비가 완료되었습니다.',
   validator_commission_short: '{{value}} % 수수료',
+  open_trust_line: '오픈 트러스트 라인',
+  trust_line_limit: '신뢰 한도',
+  trust_line_issuer: '발행자',
+  trust_line_currency: '통화',
+  trust_line_custom_token: '사용자 지정 토큰',
+  trust_line_issuer_placeholder: '발급자 주소(r...)',
+  trust_line_currency_placeholder: '통화 코드 (예: RLUSD)',
+  trust_line_reserve_warning:
+    '신뢰 회선을 개설하면 해당 회선이 제거될 때까지 {{amount}} {{ticker}} 이 계정 소유자 예약으로 잠깁니다.',
 }

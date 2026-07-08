@@ -31,6 +31,10 @@ import {
   yieldBearingTokensIdToContractMap,
   yieldContractsByBaseDenom,
 } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/config'
+import {
+  rippleIssuedCurrencyDecimals,
+  rippleTokenId,
+} from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import { solanaConfig } from '@vultisig/core-chain/chains/solana/solanaConfig'
 import { fetchSolanaRentReserve } from '@vultisig/core-chain/chains/solana/staking/rpc'
 import { buildUnsignedStakingTx } from '@vultisig/core-chain/chains/solana/staking/tx/buildUnsignedStakingTx'
@@ -130,6 +134,49 @@ export const buildDepositKeysignPayload = async ({
     throw new Error(
       'buildDepositKeysignPayload requires publicKey or hexPublicKeyOverride'
     )
+  }
+
+  // Opening an XRPL trust line is a TrustSet keyed by the issued currency, not
+  // the native XRP fee coin the deposit flow selects. Build the issued-currency
+  // coin (composite `currency.issuer` id) so the Ripple signing input resolver
+  // emits an OperationTrustSet whose LimitAmount is the entered limit.
+  if (action === 'open_trust_line') {
+    const issuer = shouldBePresent(
+      depositData['issuer'] as string | undefined,
+      'Trust line issuer'
+    )
+    const currency = shouldBePresent(
+      depositData['currency'] as string | undefined,
+      'Trust line currency'
+    )
+    const limit = shouldBePresent(amount, 'Trust line limit')
+
+    const issuedCoin: AccountCoin = {
+      chain: Chain.Ripple,
+      id: rippleTokenId({ currency, issuer }),
+      ticker: currency,
+      decimals: rippleIssuedCurrencyDecimals,
+      address: coin.address,
+      logo: (depositData['logo'] as string | undefined) ?? coin.logo,
+    }
+
+    const trustLinePayload = create(KeysignPayloadSchema, {
+      coin: toCommCoin({ ...issuedCoin, hexPublicKey }),
+      toAddress: issuer,
+      toAmount: toChainAmount(limit, rippleIssuedCurrencyDecimals).toString(),
+      memo: '',
+      vaultLocalPartyId: localPartyId,
+      vaultPublicKeyEcdsa: vaultId,
+      libType,
+      utxoInfo: await getKeysignUtxoInfo(issuedCoin),
+    })
+
+    trustLinePayload.blockchainSpecific = await getChainSpecific({
+      keysignPayload: trustLinePayload,
+      walletCore,
+    })
+
+    return trustLinePayload
   }
 
   const isUnmerge = action === 'unmerge'

@@ -1665,4 +1665,13 @@ export const es = {
     'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
   solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
   validator_commission_short: '{{value}} % de comisión',
+  open_trust_line: 'Línea de confianza abierta',
+  trust_line_limit: 'Límite de confianza',
+  trust_line_issuer: 'Editor',
+  trust_line_currency: 'Divisa',
+  trust_line_custom_token: 'Token personalizado',
+  trust_line_issuer_placeholder: 'Dirección del emisor (r...)',
+  trust_line_currency_placeholder: 'Código de moneda (por ejemplo, RLUSD)',
+  trust_line_reserve_warning:
+    'Al abrir una línea de confianza {{amount}} {{ticker}} se bloquea como reserva del propietario de la cuenta hasta que se elimine la línea.',
 }

@@ -1672,4 +1672,13 @@ export const it = {
   solana_staking_inactive_notice:
     'Inattivo: raffreddato e pronto per il ritiro.',
   validator_commission_short: '{{value}} % commissione',
+  open_trust_line: 'Linea di fiducia aperta',
+  trust_line_limit: 'Limite di fiducia',
+  trust_line_issuer: 'Emittente',
+  trust_line_currency: 'Valuta',
+  trust_line_custom_token: 'Token personalizzato',
+  trust_line_issuer_placeholder: 'Indirizzo dell&#39;emittente (r...)',
+  trust_line_currency_placeholder: 'Codice valuta (es. RLUSD)',
+  trust_line_reserve_warning:
+    'L&#39;apertura di una linea di fiducia blocca {{amount}} {{ticker}} come riserva del proprietario dell&#39;account fino alla rimozione della linea.',
 }

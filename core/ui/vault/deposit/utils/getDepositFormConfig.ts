@@ -807,6 +807,35 @@ export const getDepositFormConfig = ({
         pairedAddress: z.string().optional(),
       }),
     }),
+    // The trust-line limit is a token-denominated cap, unrelated to the wallet's
+    // XRP balance, so it is NOT bounded by `totalAmountAvailable`. issuer +
+    // currency are set by the OpenTrustLineSpecific picker.
+    open_trust_line: () => ({
+      fields: [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('trust_line_limit'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        issuer: z
+          .string()
+          .trim()
+          .min(1, t('trust_line_issuer'))
+          .refine(
+            address =>
+              isValidAddress({ chain: Chain.Ripple, address, walletCore }),
+            { message: t('send_invalid_receiver_address') }
+          ),
+        currency: z.string().trim().min(1, t('trust_line_currency')),
+        amount: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('amount_must_be_positive'))
+        ),
+      }),
+    }),
     delegate: () => ({
       fields: [
         { name: 'amount', type: 'number', label: t('amount'), required: true },
