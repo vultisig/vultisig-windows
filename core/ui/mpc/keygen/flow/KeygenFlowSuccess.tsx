@@ -1,70 +1,76 @@
-import { VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
-import { GradientText, Text } from '@lib/ui/text'
-import { useRive } from '@rive-app/react-webgl2'
-import { useEffect } from 'react'
+import { GradientText } from '@lib/ui/text'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { ReactNode, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVaultSecurityType } from '../../../vault/state/currentVault'
+import { useKeygenOperation } from '../state/currentKeygenOperationType'
+import { KeygenFlowSuccessContent } from './KeygenFlowSuccessContent'
 
 const animationDuration = 6000
 
-export const KeygenFlowSuccess = () => {
+type KeygenFlowSuccessProps = {
+  /**
+   * Called instead of navigating home once the success animation has played —
+   * used when this screen is an intermediate step (e.g. before the reshare
+   * backup guide) rather than the terminal screen.
+   */
+  onFinish?: () => void
+  durationMs?: number
+}
+
+export const KeygenFlowSuccess = ({
+  onFinish,
+  durationMs = animationDuration,
+}: KeygenFlowSuccessProps = {}) => {
   const { t } = useTranslation()
   const securityType = useCurrentVaultSecurityType()
-
-  const { RiveComponent } = useRive({
-    src: `/core/animations/keygen-${securityType}.riv`,
-    stateMachines: 'State Machine 1',
-    autoplay: true,
-  })
-
+  const keygenOperation = useKeygenOperation()
   const navigate = useCoreNavigate()
+
+  const defaultTitle = (
+    <>
+      <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
+      {t('fastVaultSetup.backup.setNewStandard')}
+    </>
+  )
+
+  const title = matchRecordUnion<typeof keygenOperation, ReactNode>(
+    keygenOperation,
+    {
+      create: () => defaultTitle,
+      keyimport: () => defaultTitle,
+      singleKeygen: () => defaultTitle,
+      reshare: () => (
+        <>
+          {t('reshare_success_title')}{' '}
+          <GradientText>{t('reshare_success_title_highlight')}</GradientText>
+        </>
+      ),
+    }
+  )
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      navigate({ id: 'vault' })
-    }, animationDuration)
+      if (onFinish) {
+        onFinish()
+      } else {
+        navigate({ id: 'vault' })
+      }
+    }, durationMs)
 
     return () => clearTimeout(timeoutId)
-  }, [navigate])
+  }, [navigate, onFinish, durationMs])
+
+  const isReshare = 'reshare' in keygenOperation
 
   return (
-    <Wrapper>
-      <VStack justifyContent="space-between" flexGrow>
-        <RiveWrapper justifyContent="center">
-          <RiveComponent
-            style={{
-              flex: 1,
-            }}
-          />
-        </RiveWrapper>
-        <VStack alignItems="center" gap={12}>
-          <Text centerHorizontally size={32}>
-            <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
-            {t('fastVaultSetup.backup.setNewStandard')}
-          </Text>
-          <Spinner size="3em" />
-        </VStack>
-      </VStack>
-    </Wrapper>
+    <KeygenFlowSuccessContent
+      title={title}
+      securityType={securityType}
+      animationSource={isReshare ? 'vault-created' : undefined}
+      contained={isReshare}
+    />
   )
 }
-
-const RiveWrapper = styled(VStack)`
-  position: relative;
-  flex: 1;
-`
-
-const Wrapper = styled(PageContent)`
-  margin-inline: auto;
-  max-width: 800px;
-
-  @media (${mediaQuery.tabletDeviceAndUp}) {
-    margin-top: 48px;
-  }
-`

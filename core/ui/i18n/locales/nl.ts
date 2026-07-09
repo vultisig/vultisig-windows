@@ -748,10 +748,6 @@ export const nl = {
   resend_notification: 'Melding opnieuw verzenden',
   resend_notification_in: 'Melding opnieuw verzenden over {{time}}',
   reshare: 'Reshare',
-  reshare_disclaimer:
-    'Voor alle Reshare-acties is altijd de drempel van apparaten vereist.',
-  reshare_explanation:
-    'Reshare kan worden gebruikt om het aantal apparaten in een kluis te vernieuwen, uit te breiden of te verminderen.',
   reshare_vault_description: 'Reshare kluis met een nieuw comité',
   reshare_your_vault: 'Reshare je kluis',
   resource: 'Resource',
@@ -1630,6 +1626,34 @@ export const nl = {
   malicious_dapp_detected: 'Kwaadaardige dApp gedetecteerd',
   malicious_dapp_detected_description:
     '{{dapp}} is door Blockaid als schadelijk aangemerkt. Doe altijd zelf onderzoek voordat u verdergaat.',
+  before_you_reshare: 'Voordat je het opnieuw deelt',
+  before_you_reshare_subtitle:
+    'Door opnieuw te delen worden uw gedeelde mappen in de kluis opnieuw gegenereerd. Er zijn een paar dingen die u eerst moet weten.',
+  i_understand: 'Ik begrijp',
+  join_reshare_description:
+    'Je hebt een verzoek tot opnieuw delen ontvangen vanaf een ander apparaat.',
+  reshare_vault_subtitle:
+    'Werk uw kluisinstellingen bij. Voeg apparaten toe of verwijder ze, of vernieuw gedeelde mappen.',
+  reshare_warning_cosigners_title:
+    'Alle medeondertekenaars moeten online zijn.',
+  reshare_warning_cosigners_description:
+    'Alle apparaten die zich momenteel in uw kluis bevinden, moeten deelnemen aan de sessie voor het opnieuw delen.',
+  reshare_warning_old_backups_title: 'Oude back-ups werken niet meer.',
+  reshare_warning_old_backups_description:
+    'Alle bestaande .vult-bestanden worden ongeldig. U moet na het opnieuw delen nieuwe back-ups maken.',
+  start_reshare_description:
+    'U wijzigt de apparaatinstellingen van deze kluis.',
+  reshare_success_title: 'Vault opnieuw gedeeld',
+  reshare_success_title_highlight: 'succesvol',
+  reshare_backup_old_backups_wont_work: 'Oude back-ups werken niet.',
+  reshare_backup_old_backups_wont_work_description:
+    'Back-ups van eerdere kluisconfiguraties kunnen niet worden gebruikt. Alleen back-ups die tijdens deze configuratie zijn gemaakt, zijn geldig.',
+  reshare_min_devices_required:
+    'Er zijn minimaal {{count}} -apparaten vereist.',
+  reshare_more_devices_required: 'Meer apparaten nodig',
+  reshare_threshold_not_met: 'Drempelwaarde niet bereikt',
+  reshare_threshold_not_met_description:
+    'Je probeert het aantal apparaten te verminderen van<w> {{from}} naar {{to}}</w> maar deze kluis<w> vereist {{count}} actieve ondertekenaars</w> om veilig te blijven.',
   solana_delegate: 'Inzet',
   solana_staking_total_staked: 'Totaal ingezette {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegeer aan nieuwe validator',
@@ -1648,6 +1672,10 @@ export const nl = {
   solana_staking_inactive_notice:
     'Inactief — afgekoeld en klaar om te worden verwijderd.',
   validator_commission_short: '{{value}} % fee',
+  reshare_failed: 'Fout bij het opnieuw delen. Probeer het opnieuw.',
+  reshare_failed_description:
+    'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
+  plugin_store_compatible: 'Compatibel met de Plugin Store',
   open_trust_line: 'Open vertrouwenslijn',
   trust_line_limit: 'Vertrouwenslimiet',
   trust_line_issuer: 'Uitgever',

@@ -756,10 +756,6 @@ export const es = {
   resend_notification: 'Reenviar notificación',
   resend_notification_in: 'Reenviar notificación en {{time}}',
   reshare: 'Compartir',
-  reshare_disclaimer:
-    'Para todas las acciones de Reshare siempre se requiere el umbral de dispositivos.',
-  reshare_explanation:
-    'La función de compartir se puede utilizar para actualizar, expandir o reducir la cantidad de dispositivos en un Vault.',
   reshare_vault_description: 'Compartir la bóveda con un nuevo comité',
   reshare_your_vault: 'Comparte tu bóveda',
   resource: 'Recurso',
@@ -1645,6 +1641,35 @@ export const es = {
   malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
   malicious_dapp_detected_description:
     'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
+  before_you_reshare: 'Antes de volver a compartir',
+  before_you_reshare_subtitle:
+    'Al volver a compartir, se regeneran los recursos compartidos de tu bóveda. Hay algunas cosas que debes saber antes.',
+  i_understand: 'Entiendo',
+  join_reshare_description:
+    'Recibiste una solicitud para compartir contenido desde otro dispositivo.',
+  reshare_vault_subtitle:
+    'Actualiza la configuración de tu bóveda. Agrega o elimina dispositivos, o actualiza los recursos compartidos.',
+  reshare_warning_cosigners_title:
+    'Todos los cofirmantes deben estar en línea.',
+  reshare_warning_cosigners_description:
+    'Todos los dispositivos que tengas almacenados en tu bóveda deben participar en la sesión de compartición.',
+  reshare_warning_old_backups_title:
+    'Las copias de seguridad antiguas dejarán de funcionar.',
+  reshare_warning_old_backups_description:
+    'Los archivos .vult existentes dejarán de ser válidos. Deberá crear copias de seguridad nuevas después de volver a compartirlos.',
+  start_reshare_description:
+    'Estás cambiando la configuración del dispositivo de esta bóveda.',
+  reshare_success_title: 'Bóveda compartida nuevamente',
+  reshare_success_title_highlight: 'exitosamente',
+  reshare_backup_old_backups_wont_work:
+    'Las copias de seguridad antiguas no funcionarán.',
+  reshare_backup_old_backups_wont_work_description:
+    'No se pueden utilizar las copias de seguridad de configuraciones de bóveda anteriores. Solo son válidas las copias de seguridad creadas durante esta configuración.',
+  reshare_min_devices_required: 'Se requieren al menos dispositivos {{count}}',
+  reshare_more_devices_required: 'Se necesitan más dispositivos',
+  reshare_threshold_not_met: 'Umbral no alcanzado',
+  reshare_threshold_not_met_description:
+    'Estás intentando reducir el número de dispositivos de<w> {{from}} a {{to}}</w> pero esta bóveda<w> Requiere firmantes activos {{count}}</w> para mantenerse seguro.',
   solana_delegate: 'Apostar',
   solana_staking_total_staked: 'Total apostado {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegar al nuevo validador',
@@ -1663,6 +1688,10 @@ export const es = {
     'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
   solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
   validator_commission_short: '{{value}} % de comisión',
+  reshare_failed: 'Error al compartir. Inténtalo de nuevo.',
+  reshare_failed_description:
+    'La reutilización de archivos se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
+  plugin_store_compatible: 'Compatible con Plugin Store',
   open_trust_line: 'Línea de confianza abierta',
   trust_line_limit: 'Límite de confianza',
   trust_line_issuer: 'Editor',
