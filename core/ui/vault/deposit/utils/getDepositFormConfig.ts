@@ -1,5 +1,6 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { toXrplCurrencyCode } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import {
   solanaStakingConfig,
   solDecimals,
@@ -8,6 +9,7 @@ import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
@@ -829,7 +831,21 @@ export const getDepositFormConfig = ({
               isValidAddress({ chain: Chain.Ripple, address, walletCore }),
             { message: t('send_invalid_receiver_address') }
           ),
-        currency: z.string().trim().min(1, t('trust_line_currency')),
+        // Accepts a human ticker (e.g. `RLUSD`, normalised to the 160-bit hex),
+        // a 3-char standard code, or a 40-char hex code. Rejects `XRP` (the
+        // native asset can't be an issued-currency trust line) and anything
+        // `toXrplCurrencyCode` can't encode (>20 ASCII bytes), so invalid input
+        // is caught inline rather than throwing at build time.
+        currency: z
+          .string()
+          .trim()
+          .min(1, t('trust_line_currency'))
+          .refine(value => value.toUpperCase() !== 'XRP', {
+            message: t('trust_line_currency_reserved'),
+          })
+          .refine(value => 'data' in attempt(() => toXrplCurrencyCode(value)), {
+            message: t('trust_line_currency_invalid'),
+          }),
         amount: z.preprocess(
           toRequiredNumber,
           z.number().gt(0, t('amount_must_be_positive'))

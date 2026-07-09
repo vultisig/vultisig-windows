@@ -1684,4 +1684,7 @@ export const ru = {
   trust_line_currency_placeholder: 'Код валюты (например, RLUSD)',
   trust_line_reserve_warning:
     'Открытие доверительной линии блокирует токены {{amount}} {{ticker}} в качестве резерва владельца учетной записи до тех пор, пока линия не будет удалена.',
+  trust_line_currency_reserved:
+    'XRP нельзя использовать в качестве валюты, обеспечивающей доверие.',
+  trust_line_currency_invalid: 'Введите действительный код валюты',
 }

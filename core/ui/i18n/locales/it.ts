@@ -1706,4 +1706,7 @@ export const it = {
   trust_line_currency_placeholder: 'Codice valuta (es. RLUSD)',
   trust_line_reserve_warning:
     'L&#39;apertura di una linea di fiducia blocca {{amount}} {{ticker}} come riserva del proprietario dell&#39;account fino alla rimozione della linea.',
+  trust_line_currency_reserved:
+    'XRP non può essere utilizzato come valuta di riferimento per le linee di fiducia.',
+  trust_line_currency_invalid: 'Inserisci un codice valuta valido',
 }

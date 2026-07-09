@@ -109,6 +109,10 @@ export type BuildDepositKeysignPayloadInput = {
   walletCore: WalletCore
 }
 
+/** Narrows an untyped react-hook-form field value to a string, else undefined. */
+const asOptionalString = (value: unknown): string | undefined =>
+  typeof value === 'string' ? value : undefined
+
 export const buildDepositKeysignPayload = async ({
   coin,
   action,
@@ -142,11 +146,11 @@ export const buildDepositKeysignPayload = async ({
   // emits an OperationTrustSet whose LimitAmount is the entered limit.
   if (action === 'open_trust_line') {
     const issuer = shouldBePresent(
-      depositData['issuer'] as string | undefined,
+      asOptionalString(depositData['issuer']),
       'Trust line issuer'
     )
     const currency = shouldBePresent(
-      depositData['currency'] as string | undefined,
+      asOptionalString(depositData['currency']),
       'Trust line currency'
     )
     const limit = shouldBePresent(amount, 'Trust line limit')
@@ -157,7 +161,7 @@ export const buildDepositKeysignPayload = async ({
       ticker: currency,
       decimals: rippleIssuedCurrencyDecimals,
       address: coin.address,
-      logo: (depositData['logo'] as string | undefined) ?? coin.logo,
+      logo: asOptionalString(depositData['logo']) ?? coin.logo,
     }
 
     const trustLinePayload = create(KeysignPayloadSchema, {

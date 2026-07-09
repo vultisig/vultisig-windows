@@ -1677,4 +1677,7 @@ export const hr = {
   trust_line_currency_placeholder: 'Kod valute (npr. RLUSD)',
   trust_line_reserve_warning:
     'Otvaranjem linije povjerenja {{amount}} {{ticker}} zaključava se kao rezerva vlasnika računa dok se linija ne ukloni.',
+  trust_line_currency_reserved:
+    'XRP se ne može koristiti kao valuta povjerenja',
+  trust_line_currency_invalid: 'Unesite važeći kod valute',
 }

@@ -1409,6 +1409,8 @@ export const en = {
   trust_line_limit: 'Trust Limit',
   trust_line_issuer: 'Issuer',
   trust_line_currency: 'Currency',
+  trust_line_currency_reserved: 'XRP cannot be used as a trust-line currency',
+  trust_line_currency_invalid: 'Enter a valid currency code',
   trust_line_custom_token: 'Custom Token',
   trust_line_issuer_placeholder: 'Issuer address (r...)',
   trust_line_currency_placeholder: 'Currency code (e.g. RLUSD)',

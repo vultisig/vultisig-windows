@@ -1668,4 +1668,6 @@ export const ko = {
   trust_line_currency_placeholder: '통화 코드 (예: RLUSD)',
   trust_line_reserve_warning:
     '신뢰 회선을 개설하면 해당 회선이 제거될 때까지 {{amount}} {{ticker}} 이 계정 소유자 예약으로 잠깁니다.',
+  trust_line_currency_reserved: 'XRP는 신뢰선 통화로 사용할 수 없습니다.',
+  trust_line_currency_invalid: '유효한 통화 코드를 입력하세요',
 }

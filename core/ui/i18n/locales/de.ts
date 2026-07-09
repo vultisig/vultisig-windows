@@ -1715,4 +1715,7 @@ export const de = {
   trust_line_currency_placeholder: 'Währungscode (z. B. RLUSD)',
   trust_line_reserve_warning:
     'Durch das Öffnen einer Vertrauenslinie werden {{amount}} {{ticker}} als Kontoinhaberreserve gesperrt, bis die Linie entfernt wird.',
+  trust_line_currency_reserved:
+    'XRP kann nicht als Trustline-Währung verwendet werden.',
+  trust_line_currency_invalid: 'Geben Sie einen gültigen Währungscode ein',
 }

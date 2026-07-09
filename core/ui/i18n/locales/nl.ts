@@ -1685,4 +1685,7 @@ export const nl = {
   trust_line_currency_placeholder: 'Valutacode (bijv. RLUSD)',
   trust_line_reserve_warning:
     'Het openen van een vertrouwenslijn vergrendelt {{amount}} {{ticker}} als een reservering voor de rekeninghouder totdat de lijn wordt verwijderd.',
+  trust_line_currency_reserved:
+    'XRP kan niet worden gebruikt als een trust-line-valuta.',
+  trust_line_currency_invalid: 'Voer een geldige valutacode in',
 }

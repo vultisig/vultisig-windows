@@ -1570,4 +1570,6 @@ export const zh = {
   trust_line_currency_placeholder: '货币代码（例如 RLUSD）',
   trust_line_reserve_warning:
     '打开信任线会将{{amount}} {{ticker}}锁定为账户所有者预留，直到该线被移除。',
+  trust_line_currency_reserved: 'XRP不能用作信任线货币',
+  trust_line_currency_invalid: '请输入有效的货币代码',
 }
