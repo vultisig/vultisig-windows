@@ -602,10 +602,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@balancer-labs/balancer-maths@npm:0.0.40, @balancer-labs/balancer-maths@npm:^0.0.40":
+"@balancer-labs/balancer-maths@npm:0.0.40":
   version: 0.0.40
   resolution: "@balancer-labs/balancer-maths@npm:0.0.40"
   checksum: 10c0/93825190a2d071651570fb64af7a77c7117f8c741bac847fbac0cfbcd46ea489e68d423be674f3cd680a3304ccf0a3921a4ab01777f3de4f540811f365f2af44
+  languageName: node
+  linkType: hard
+
+"@balancer-labs/balancer-maths@npm:^0.0.41":
+  version: 0.0.41
+  resolution: "@balancer-labs/balancer-maths@npm:0.0.41"
+  checksum: 10c0/16047da9886aec33ab5f3998f82c9d82baa115dcc95d0a6a5163b1188d2e65655d020905630e6454d9521879109f2087542c194ad8c5304d92dd9edbb89e2946
   languageName: node
   linkType: hard
 
@@ -710,11 +717,11 @@ __metadata:
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
-    "@vultisig/core-chain": "npm:2.23.1"
+    "@vultisig/core-chain": "npm:2.24.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.18"
+    "@vultisig/core-mpc": "npm:1.9.0"
     "@vultisig/lib-utils": "npm:0.10.4"
-    "@vultisig/sdk": "npm:2.17.1"
+    "@vultisig/sdk": "npm:2.19.8"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -773,10 +780,10 @@ __metadata:
     "@types/react-dom": "npm:^19.2.3"
     "@types/web-push": "npm:^3"
     "@types/ws": "npm:^8"
-    "@vultisig/core-chain": "npm:2.23.1"
-    "@vultisig/core-mpc": "npm:1.8.18"
+    "@vultisig/core-chain": "npm:2.24.0"
+    "@vultisig/core-mpc": "npm:1.9.0"
     "@vultisig/lib-utils": "npm:0.10.4"
-    "@vultisig/sdk": "npm:2.17.1"
+    "@vultisig/sdk": "npm:2.19.8"
     "@wallet-standard/base": "npm:^1.1.1"
     "@wallet-standard/features": "npm:^1.1.1"
     bech32: "npm:^2.0.0"
@@ -872,9 +879,9 @@ __metadata:
     "@tanstack/react-query": "npm:^5.101.0"
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.23.1"
+    "@vultisig/core-chain": "npm:2.24.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.18"
+    "@vultisig/core-mpc": "npm:1.9.0"
     "@vultisig/lib-utils": "npm:0.10.4"
     react: "npm:19.2.4"
     react-i18next: "npm:^16.5.8"
@@ -896,9 +903,9 @@ __metadata:
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.23.1"
+    "@vultisig/core-chain": "npm:2.24.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.18"
+    "@vultisig/core-mpc": "npm:1.9.0"
     "@vultisig/lib-utils": "npm:0.10.4"
     bitcoinjs-lib: "npm:^7.0.1"
     cosmjs-types: "npm:^0.11.0"
@@ -946,11 +953,11 @@ __metadata:
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitejs/plugin-react": "npm:5.1.3"
-    "@vultisig/core-chain": "npm:2.23.1"
+    "@vultisig/core-chain": "npm:2.24.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.8.18"
+    "@vultisig/core-mpc": "npm:1.9.0"
     "@vultisig/lib-utils": "npm:0.10.4"
-    "@vultisig/sdk": "npm:2.17.1"
+    "@vultisig/sdk": "npm:2.19.8"
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
@@ -2662,10 +2669,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lifi/sdk@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@lifi/sdk@npm:4.1.0"
+  dependencies:
+    "@lifi/types": "npm:17.85.0"
+  checksum: 10c0/296a8ea414bf2748782d96a5a8f902ffd5397a04a2fd403c31aaf908377bc23bf2798c77e70d54865b1111b77b9df7ab704c29069f59e8c2e126e632c09b985d
+  languageName: node
+  linkType: hard
+
 "@lifi/types@npm:17.82.1":
   version: 17.82.1
   resolution: "@lifi/types@npm:17.82.1"
   checksum: 10c0/756489d8308849d1ed86dd441defa19567122fab1699a98df7a6952cde47697ce330bc15091882a6ec3010f1d8d42506cd2b1de5d67a48bb26bd96bb664df8fe
+  languageName: node
+  linkType: hard
+
+"@lifi/types@npm:17.85.0":
+  version: 17.85.0
+  resolution: "@lifi/types@npm:17.85.0"
+  checksum: 10c0/56259b44a55302acce4d1c01290dea0ce4c5078dbcb498d8e9767abad973b24a8d621d39f5bb0e089a4775ff958dd743f4635bdda55f23b0ebcb7479e216c930
   languageName: node
   linkType: hard
 
@@ -6590,9 +6613,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-chain@npm:2.23.1":
-  version: 2.23.1
-  resolution: "@vultisig/core-chain@npm:2.23.1"
+"@vultisig/core-chain@npm:2.24.0":
+  version: 2.24.0
+  resolution: "@vultisig/core-chain@npm:2.24.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.12.0"
@@ -6600,7 +6623,7 @@ __metadata:
     "@cosmjs/encoding": "npm:^0.39.0"
     "@cosmjs/proto-signing": "npm:^0.39.0"
     "@cosmjs/stargate": "npm:^0.39.0"
-    "@lifi/sdk": "npm:^4.0.0"
+    "@lifi/sdk": "npm:^4.1.0"
     "@mysten/sui": "npm:^2.20.1"
     "@noble/hashes": "npm:^1.8.0"
     "@polkadot/api": "npm:^16.5.6"
@@ -6624,7 +6647,7 @@ __metadata:
     tiny-secp256k1: "npm:^2.2.4"
     viem: "npm:^2.53.1"
     xrpl: "npm:^5.0.0"
-  checksum: 10c0/4c20efec0c7c2c6ce773ac58d47b64bd0642fe89e3b4d4e7d79baa119bca8cdeb24fa7802b9c7f7831de95be86cb89d38e955a76317d075241230b3a4520b913
+  checksum: 10c0/fa0b163b6ad65af2ddd91760f796f19b4a1d3182820ef839c312145ad31e7c5f8cd81bfa8b7fc10178756faba3c427cc6d02c5685bf2dbbdcb4d6c1db9400827
   languageName: node
   linkType: hard
 
@@ -6663,9 +6686,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-mpc@npm:1.8.18":
-  version: 1.8.18
-  resolution: "@vultisig/core-mpc@npm:1.8.18"
+"@vultisig/core-mpc@npm:1.9.0":
+  version: 1.9.0
+  resolution: "@vultisig/core-mpc@npm:1.9.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.12.0"
@@ -6674,7 +6697,7 @@ __metadata:
     "@noble/hashes": "npm:^1.8.0"
     "@solana/web3.js": "npm:^1.98.4"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.23.1"
+    "@vultisig/core-chain": "npm:2.24.0"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/lib-dkls": "npm:0.9.0"
     "@vultisig/lib-mldsa": "npm:0.9.0"
@@ -6687,7 +6710,7 @@ __metadata:
     cosmjs-types: "npm:^0.11.0"
     long: "npm:^5.3.2"
     viem: "npm:^2.53.1"
-  checksum: 10c0/89e81ee2d954a796b7b3dce72613ee4739d97cc7a139bc0a63306fcb2915a1f262c9470b0bfc520a04d4637ae9eaa6c79c6fccf453bdee037c9212e4f5da38d2
+  checksum: 10c0/bba4a0682b0a1cc2e563f261db85abadb5e44fde46ca121092a1e6cf72e1d33ae86d3170e1d4cb41ffcc192164005115d260de0aa7027337ab3b091844ab3602
   languageName: node
   linkType: hard
 
@@ -6736,12 +6759,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/sdk@npm:2.17.1":
-  version: 2.17.1
-  resolution: "@vultisig/sdk@npm:2.17.1"
+"@vultisig/sdk@npm:2.19.8":
+  version: 2.19.8
+  resolution: "@vultisig/sdk@npm:2.19.8"
   dependencies:
     7z-wasm: "npm:^1.2.0"
-    "@balancer-labs/balancer-maths": "npm:^0.0.40"
+    "@balancer-labs/balancer-maths": "npm:^0.0.41"
     "@balancer/sdk": "npm:6.1.1"
     "@bufbuild/protobuf": "npm:^2.12.0"
     "@coral-xyz/anchor": "npm:^0.32.1"
@@ -6751,7 +6774,7 @@ __metadata:
     "@formatjs/intl-locale": "npm:^5.3.9"
     "@formatjs/intl-numberformat": "npm:^9.3.11"
     "@formatjs/intl-pluralrules": "npm:^6.3.10"
-    "@lifi/sdk": "npm:^4.0.0"
+    "@lifi/sdk": "npm:^4.1.0"
     "@mysten/sui": "npm:^2.20.1"
     "@noble/hashes": "npm:^1.8.0"
     "@polkadot/api": "npm:^16.5.6"
@@ -6812,7 +6835,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/c19e44ba3b93b9220116e47a51fbda9e1c67575232d41e9db915521904ea1777c72d52f30539efe6e45872ee55215e6a8f8fc49d0d4ceed115afea7668bf1903
+  checksum: 10c0/2d7dbd754cdb45d95a9b9e04fc195b06475c2e6480d36154067c53e8c3be970377245b8b5075185a1f9d28ab82ad91130d39488a7b6930e1583a97ec6a2d75f8
   languageName: node
   linkType: hard
 
