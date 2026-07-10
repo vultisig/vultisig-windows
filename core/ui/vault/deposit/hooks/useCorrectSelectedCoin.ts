@@ -102,6 +102,9 @@ export const useCorrectSelectedCoin = () => {
           return shouldBePresent(potentialRUNECoin)
         },
         remove_thor_lp: () => shouldBePresent(potentialRUNECoin),
+        // The trust-line token (issuer/currency) is chosen in the action form
+        // and built at keysign time; keep the native XRP fee coin selected here.
+        open_trust_line: () => currentDepositCoin,
         freeze: () => currentDepositCoin,
         unfreeze: () => currentDepositCoin,
         delegate: () => currentDepositCoin,

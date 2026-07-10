@@ -1694,4 +1694,16 @@ export const pt = {
   reshare_failed_description:
     'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
   plugin_store_compatible: 'Compatível com a Loja de Plugins',
+  open_trust_line: 'Linha de Confiança Aberta',
+  trust_line_limit: 'Limite de confiança',
+  trust_line_issuer: 'Emissor',
+  trust_line_currency: 'Moeda',
+  trust_line_custom_token: 'Token personalizado',
+  trust_line_issuer_placeholder: 'Endereço do emissor (r...)',
+  trust_line_currency_placeholder: 'Código da moeda (ex: RLUSD)',
+  trust_line_reserve_warning:
+    'A abertura de uma linha de confiança bloqueia {{amount}} {{ticker}} como reserva do proprietário da conta até que a linha seja removida.',
+  trust_line_currency_reserved:
+    'XRP não pode ser usado como moeda de linha de confiança.',
+  trust_line_currency_invalid: 'Insira um código de moeda válido',
 }

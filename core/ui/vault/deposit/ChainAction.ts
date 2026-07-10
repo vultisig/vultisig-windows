@@ -49,6 +49,7 @@ export type ChainAction =
   | 'withdraw_ruji_rewards'
   | 'add_thor_lp'
   | 'remove_thor_lp'
+  | 'open_trust_line'
   | CacaoPoolAction
   | CosmosStakingAction
   | SolanaStakingAction
@@ -95,7 +96,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Dogecoin]: ['add_thor_lp'],
   [Chain.Ethereum]: ['add_thor_lp'],
   [Chain.Litecoin]: ['add_thor_lp'],
-  [Chain.Ripple]: ['add_thor_lp'],
+  [Chain.Ripple]: ['add_thor_lp', 'open_trust_line'],
   [Chain.Arbitrum]: ['add_thor_lp'],
   [Chain.Zcash]: ['add_thor_lp'],
 }

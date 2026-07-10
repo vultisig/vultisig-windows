@@ -1668,4 +1668,16 @@ export const hr = {
   reshare_failed_description:
     'Ponovno dijeljenje je usporeno zbog slabe veze. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
   plugin_store_compatible: 'Kompatibilno s trgovinom dodataka',
+  open_trust_line: 'Otvorena linija povjerenja',
+  trust_line_limit: 'Ograničenje povjerenja',
+  trust_line_issuer: 'Izdavatelj',
+  trust_line_currency: 'Valuta',
+  trust_line_custom_token: 'Prilagođeni token',
+  trust_line_issuer_placeholder: 'Adresa izdavatelja (r...)',
+  trust_line_currency_placeholder: 'Kod valute (npr. RLUSD)',
+  trust_line_reserve_warning:
+    'Otvaranjem linije povjerenja {{amount}} {{ticker}} zaključava se kao rezerva vlasnika računa dok se linija ne ukloni.',
+  trust_line_currency_reserved:
+    'XRP se ne može koristiti kao valuta povjerenja',
+  trust_line_currency_invalid: 'Unesite važeći kod valute',
 }

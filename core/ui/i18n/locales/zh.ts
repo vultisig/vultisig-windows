@@ -1561,4 +1561,15 @@ export const zh = {
   reshare_failed_description:
     '由于网络连接不佳，重新共享速度变慢。您可以重试或等待重新连接。',
   plugin_store_compatible: '兼容插件商店',
+  open_trust_line: '开放信任线',
+  trust_line_limit: '信任限额',
+  trust_line_issuer: '发行人',
+  trust_line_currency: '货币',
+  trust_line_custom_token: '自定义令牌',
+  trust_line_issuer_placeholder: '发行人地址（r...）',
+  trust_line_currency_placeholder: '货币代码（例如 RLUSD）',
+  trust_line_reserve_warning:
+    '打开信任线会将{{amount}} {{ticker}}锁定为账户所有者预留，直到该线被移除。',
+  trust_line_currency_reserved: 'XRP不能用作信任线货币',
+  trust_line_currency_invalid: '请输入有效的货币代码',
 }

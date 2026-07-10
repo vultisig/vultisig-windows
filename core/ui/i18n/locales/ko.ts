@@ -1632,8 +1632,8 @@ export const ko = {
   reshare_backup_old_backups_wont_work_description:
     '이전 볼트 설정에서 생성된 백업은 사용할 수 없습니다. 이번 설정 과정에서 생성된 백업만 유효합니다.',
   reshare_min_devices_required: '최소 {{count}} 개의 장치가 필요합니다.',
-  reshare_more_devices_required: '더 많은 장치가 필요합니다',
-  reshare_threshold_not_met: '임계값 미충족',
+  reshare_more_devices_required: '추가 장치가 필요합니다',
+  reshare_threshold_not_met: '임계값 미달',
   reshare_threshold_not_met_description:
     '기기 수를 줄이려고 하는군요.<w> {{from}} 에서 {{to}} 로</w> 하지만 이 금고는<w> {{count}} 활성 서명자가 필요합니다.</w> 안전을 유지하기 위해.',
   solana_delegate: '말뚝',
@@ -1659,4 +1659,15 @@ export const ko = {
   reshare_failed_description:
     '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
   plugin_store_compatible: '플러그인 스토어 호환 가능',
+  open_trust_line: '오픈 트러스트 라인',
+  trust_line_limit: '신뢰 한도',
+  trust_line_issuer: '발행자',
+  trust_line_currency: '통화',
+  trust_line_custom_token: '사용자 지정 토큰',
+  trust_line_issuer_placeholder: '발급자 주소(r...)',
+  trust_line_currency_placeholder: '통화 코드 (예: RLUSD)',
+  trust_line_reserve_warning:
+    '신뢰 회선을 개설하면 해당 회선이 제거될 때까지 {{amount}} {{ticker}} 이 계정 소유자 예약으로 잠깁니다.',
+  trust_line_currency_reserved: 'XRP는 신뢰선 통화로 사용할 수 없습니다.',
+  trust_line_currency_invalid: '유효한 통화 코드를 입력하세요',
 }

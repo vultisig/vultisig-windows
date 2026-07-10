@@ -1695,6 +1695,18 @@ export const it = {
   validator_commission_short: '{{value}} % commissione',
   reshare_failed: 'Errore durante la condivisione. Riprova.',
   reshare_failed_description:
-    'La ricondivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
+    'La condivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
   plugin_store_compatible: 'Compatibile con Plugin Store',
+  open_trust_line: 'Linea di fiducia aperta',
+  trust_line_limit: 'Limite di fiducia',
+  trust_line_issuer: 'Emittente',
+  trust_line_currency: 'Valuta',
+  trust_line_custom_token: 'Token personalizzato',
+  trust_line_issuer_placeholder: 'Indirizzo dell&#39;emittente (r...)',
+  trust_line_currency_placeholder: 'Codice valuta (es. RLUSD)',
+  trust_line_reserve_warning:
+    'L&#39;apertura di una linea di fiducia blocca {{amount}} {{ticker}} come riserva del proprietario dell&#39;account fino alla rimozione della linea.',
+  trust_line_currency_reserved:
+    'XRP non può essere utilizzato come valuta di riferimento per le linee di fiducia.',
+  trust_line_currency_invalid: 'Inserisci un codice valuta valido',
 }

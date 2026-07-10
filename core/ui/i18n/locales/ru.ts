@@ -1675,4 +1675,16 @@ export const ru = {
   reshare_failed_description:
     'Повторная публикация данных замедлилась из-за плохого соединения. Вы можете повторить попытку или дождаться восстановления соединения.',
   plugin_store_compatible: 'Совместимость с магазином плагинов',
+  open_trust_line: 'Открытая линия доверия',
+  trust_line_limit: 'Лимит доверия',
+  trust_line_issuer: 'Эмитент',
+  trust_line_currency: 'Валюта',
+  trust_line_custom_token: 'Пользовательский токен',
+  trust_line_issuer_placeholder: 'Адрес эмитента (р...)',
+  trust_line_currency_placeholder: 'Код валюты (например, RLUSD)',
+  trust_line_reserve_warning:
+    'Открытие доверительной линии блокирует токены {{amount}} {{ticker}} в качестве резерва владельца учетной записи до тех пор, пока линия не будет удалена.',
+  trust_line_currency_reserved:
+    'XRP нельзя использовать в качестве валюты, обеспечивающей доверие.',
+  trust_line_currency_invalid: 'Введите действительный код валюты',
 }

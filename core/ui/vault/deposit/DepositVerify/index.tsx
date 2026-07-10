@@ -14,6 +14,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { TrustLineReserveWarning } from '../DepositForm/ActionSpecific/OpenTrustLineSpecific/TrustLineReserveWarning'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
@@ -38,6 +39,13 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
   const sender = useSender()
   const { t } = useTranslation()
   const { fields: actionFields } = useDepositFormConfig()
+
+  const isOpenTrustLine = selectedChainAction === 'open_trust_line'
+  // The trust-line limit is denominated in the issued currency, not the native
+  // XRP fee coin the deposit flow keeps selected.
+  const amountTicker = isOpenTrustLine
+    ? String(depositData['currency'] ?? '')
+    : coin.ticker
 
   const shouldUseBondOverview =
     entryPoint === 'defi' &&
@@ -83,7 +91,7 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
 
             return field.type === 'number' || field.type === 'percentage' ? (
               <ListItem
-                description={`${String(formattedDepositFormData[field.name])}${field.name === 'amount' ? ` ${coin.ticker}` : ''}`}
+                description={`${String(formattedDepositFormData[field.name])}${field.name === 'amount' ? ` ${amountTicker}` : ''}`}
                 key={field.name}
                 title={field.label}
               />
@@ -104,6 +112,12 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
           {selectedChainAction === 'leave' && (
             <ListItem description={`0 ${coin.ticker}`} title={t('amount')} />
           )}
+          {isOpenTrustLine && (
+            <ListItem
+              description={String(depositData['issuer'] ?? '')}
+              title={t('trust_line_issuer')}
+            />
+          )}
           {Boolean(formattedDepositFormData['memo']) && (
             <ListItem
               description={String(formattedDepositFormData['memo'])}
@@ -112,6 +126,7 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
           )}
           <ListItem description={<DepositFee />} title={t('est_network_fee')} />
         </List>
+        {isOpenTrustLine ? <TrustLineReserveWarning /> : null}
       </PageContent>
       <PageFooter>
         <DepositConfirmButton />

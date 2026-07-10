@@ -1678,7 +1678,7 @@ export const de = {
   reshare_backup_old_backups_wont_work: 'Alte Backups funktionieren nicht.',
   reshare_backup_old_backups_wont_work_description:
     'Backups aus früheren Vault-Konfigurationen können nicht verwendet werden. Nur Backups, die während dieser Konfiguration erstellt wurden, sind gültig.',
-  reshare_min_devices_required: 'Mindestens {{count}} Geräte erforderlich',
+  reshare_min_devices_required: 'Mindestens {{count}} -Geräte erforderlich',
   reshare_more_devices_required: 'Weitere Geräte erforderlich',
   reshare_threshold_not_met: 'Schwellenwert nicht erreicht',
   reshare_threshold_not_met_description:
@@ -1702,8 +1702,20 @@ export const de = {
   solana_staking_inactive_notice:
     'Inaktiv – abgekühlt und bereit zur Auszahlung.',
   validator_commission_short: '{{value}} % Gebühr',
-  reshare_failed: 'Fehler beim erneuten Teilen. Bitte versuchen Sie es erneut.',
+  reshare_failed: 'Fehler beim Teilen. Bitte versuchen Sie es erneut.',
   reshare_failed_description:
     'Die erneute Freigabe wurde aufgrund schlechter Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
   plugin_store_compatible: 'Plugin Store-kompatibel',
+  open_trust_line: 'Vertrauenslinie öffnen',
+  trust_line_limit: 'Vertrauensgrenze',
+  trust_line_issuer: 'Emittent',
+  trust_line_currency: 'Währung',
+  trust_line_custom_token: 'Benutzerdefiniertes Token',
+  trust_line_issuer_placeholder: 'Ausstelleradresse (r...)',
+  trust_line_currency_placeholder: 'Währungscode (z. B. RLUSD)',
+  trust_line_reserve_warning:
+    'Durch das Öffnen einer Vertrauenslinie werden {{amount}} {{ticker}} als Kontoinhaberreserve gesperrt, bis die Linie entfernt wird.',
+  trust_line_currency_reserved:
+    'XRP kann nicht als Trustline-Währung verwendet werden.',
+  trust_line_currency_invalid: 'Geben Sie einen gültigen Währungscode ein',
 }

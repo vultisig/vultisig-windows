@@ -1676,4 +1676,16 @@ export const nl = {
   reshare_failed_description:
     'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
   plugin_store_compatible: 'Compatibel met de Plugin Store',
+  open_trust_line: 'Open vertrouwenslijn',
+  trust_line_limit: 'Vertrouwenslimiet',
+  trust_line_issuer: 'Uitgever',
+  trust_line_currency: 'Munteenheid',
+  trust_line_custom_token: 'Aangepast token',
+  trust_line_issuer_placeholder: 'Uitgevende instantie (r...)',
+  trust_line_currency_placeholder: 'Valutacode (bijv. RLUSD)',
+  trust_line_reserve_warning:
+    'Het openen van een vertrouwenslijn vergrendelt {{amount}} {{ticker}} als een reservering voor de rekeninghouder totdat de lijn wordt verwijderd.',
+  trust_line_currency_reserved:
+    'XRP kan niet worden gebruikt als een trust-line-valuta.',
+  trust_line_currency_invalid: 'Voer een geldige valutacode in',
 }
