@@ -31,6 +31,10 @@ export default meta
 
 type Story = StoryObj<typeof TransactionStatusAnimation>
 
+export const Broadcasted: Story = {
+  args: { status: 'broadcasted' },
+}
+
 export const Pending: Story = {
   args: { status: 'pending' },
 }
@@ -44,6 +48,32 @@ export const Error: Story = {
 }
 
 // Transition simulation stories
+export const BroadcastedToPendingToSuccess: Story = {
+  render: () => {
+    const [status, setStatus] = useState<'broadcasted' | 'pending' | 'success'>(
+      'broadcasted'
+    )
+
+    useEffect(() => {
+      const pendingTimer = setTimeout(() => setStatus('pending'), 1800)
+      const successTimer = setTimeout(() => setStatus('success'), 3600)
+      return () => {
+        clearTimeout(pendingTimer)
+        clearTimeout(successTimer)
+      }
+    }, [])
+
+    return (
+      <div>
+        <TransactionStatusAnimation status={status} />
+        <p style={{ textAlign: 'center', color: '#666', marginTop: 16 }}>
+          Status: {status}
+        </p>
+      </div>
+    )
+  },
+}
+
 export const PendingToSuccess: Story = {
   render: () => {
     const [status, setStatus] = useState<'pending' | 'success'>('pending')

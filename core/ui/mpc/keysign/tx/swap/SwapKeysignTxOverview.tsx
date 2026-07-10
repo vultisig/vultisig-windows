@@ -7,6 +7,7 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
@@ -247,17 +248,23 @@ export const SwapKeysignTxOverview = ({
             </TxFeeRow>
           )}
         </SwapInfoWrapper>
-        <HStack gap={8} fullWidth>
-          <Button
-            kind="secondary"
-            onClick={() => trackTransaction(getLastItem(txHashes))}
-          >
-            {t('track')}
-          </Button>
-          <Button data-testid="tx-success-done" onClick={goHome}>
-            {t('done')}
-          </Button>
-        </HStack>
+        <AnimatedVisibility
+          delay={180}
+          animationConfig="bottomToTop"
+          overlayStyles={{ width: '100%' }}
+        >
+          <HStack gap={8} fullWidth>
+            <Button
+              kind="secondary"
+              onClick={() => trackTransaction(getLastItem(txHashes))}
+            >
+              {t('track')}
+            </Button>
+            <Button data-testid="tx-success-done" onClick={goHome}>
+              {t('done')}
+            </Button>
+          </HStack>
+        </AnimatedVisibility>
       </VStack>
     </VStack>
   )

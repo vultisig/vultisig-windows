@@ -13,6 +13,7 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -90,32 +91,48 @@ export const KeysignSigningStep = ({
                   <TxHashProvider value={getLastItem(txs).hash}>
                     {isSwapTx ? (
                       <PageContent alignItems="center" scrollable>
-                        <SwapKeysignTxOverview
-                          txHashes={txs.map(tx => tx.hash)}
-                          value={payload}
-                        />
+                        <AnimatedVisibility
+                          animationConfig="bottomToTop"
+                          overlayStyles={{ width: '100%' }}
+                        >
+                          <SwapKeysignTxOverview
+                            txHashes={txs.map(tx => tx.hash)}
+                            value={payload}
+                          />
+                        </AnimatedVisibility>
                       </PageContent>
                     ) : (
                       <StepTransition
                         from={({ onFinish: onSeeTxDetails }) => (
                           <>
                             <PageContent alignItems="center" scrollable>
-                              <VStack gap={16} maxWidth={576} fullWidth>
-                                <TxSuccess
-                                  value={payload}
-                                  onSeeTxDetails={onSeeTxDetails}
-                                />
-                              </VStack>
+                              <AnimatedVisibility
+                                animationConfig="bottomToTop"
+                                overlayStyles={{ width: '100%' }}
+                              >
+                                <VStack gap={16} maxWidth={576} fullWidth>
+                                  <TxSuccess
+                                    value={payload}
+                                    onSeeTxDetails={onSeeTxDetails}
+                                  />
+                                </VStack>
+                              </AnimatedVisibility>
                             </PageContent>
                             <PageFooter alignItems="center">
-                              <VStack maxWidth={576} fullWidth>
-                                <Button
-                                  data-testid="tx-success-done"
-                                  onClick={goHome}
-                                >
-                                  {t('done')}
-                                </Button>
-                              </VStack>
+                              <AnimatedVisibility
+                                delay={180}
+                                animationConfig="bottomToTop"
+                                overlayStyles={{ width: '100%' }}
+                              >
+                                <VStack maxWidth={576} fullWidth>
+                                  <Button
+                                    data-testid="tx-success-done"
+                                    onClick={goHome}
+                                  >
+                                    {t('done')}
+                                  </Button>
+                                </VStack>
+                              </AnimatedVisibility>
                             </PageFooter>
                           </>
                         )}
