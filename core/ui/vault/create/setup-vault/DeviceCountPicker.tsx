@@ -91,14 +91,16 @@ export const DeviceCountPicker = ({
     useDeviceSelectionAnimation({ initialIndex })
   const isDraggingSliderRef = useRef(false)
 
-  const updateSliderSelection = (event: PointerEvent<HTMLCanvasElement>) => {
+  const isWithinSliderBand = (event: PointerEvent<HTMLCanvasElement>) => {
     const bounds = event.currentTarget.getBoundingClientRect()
     const pointerY = (event.clientY - bounds.top) / bounds.height
 
-    if (pointerY < sliderMinY || pointerY > sliderMaxY) return false
+    return pointerY >= sliderMinY && pointerY <= sliderMaxY
+  }
 
+  const updateSliderSelection = (event: PointerEvent<HTMLCanvasElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect()
     setSelectedDeviceCount(((event.clientX - bounds.left) / bounds.width) * 3)
-    return true
   }
 
   const isBelowMin = selectedDeviceCount < minSelectableIndex
@@ -128,7 +130,8 @@ export const DeviceCountPicker = ({
             <RiveComponent
               style={{ width: '100%', height: '100%' }}
               onPointerDown={event => {
-                if (updateSliderSelection(event)) {
+                if (isWithinSliderBand(event)) {
+                  updateSliderSelection(event)
                   const canvas = event.target
                   if (canvas instanceof HTMLCanvasElement) {
                     canvas.setPointerCapture(event.pointerId)

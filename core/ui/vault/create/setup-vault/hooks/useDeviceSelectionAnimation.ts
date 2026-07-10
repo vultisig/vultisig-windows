@@ -6,7 +6,7 @@ import {
   useViewModelInstance,
   useViewModelInstanceNumber,
 } from '@rive-app/react-webgl2'
-import { useCallback, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { deviceSelectionAnimationSource } from './deviceSelectionAnimationSource'
 
@@ -47,26 +47,23 @@ export const useDeviceSelectionAnimation = ({
 
   const indexProperty = useViewModelInstanceNumber('Index', viewModelInstance)
 
-  const setSelectedDeviceCount = useCallback(
-    (count: number) => {
-      if (indexProperty.value === null) return
+  const setSelectedDeviceCount = (count: number) => {
+    if (indexProperty.value === null) return
 
-      const selectedDeviceCount = Math.min(
-        Math.max(0, Math.round(count)),
-        maxDeviceSelectionIndex
-      )
+    const selectedDeviceCount = Math.min(
+      Math.max(0, Math.round(count)),
+      maxDeviceSelectionIndex
+    )
 
-      // `autoBind` owns the instance the state machine renders. Keep its
-      // property and the React observer in sync when the slider is dragged.
-      const boundIndexProperty = rive?.viewModelInstance?.number('Index')
-      if (boundIndexProperty) {
-        boundIndexProperty.value = selectedDeviceCount
-      }
+    // `autoBind` owns the instance the state machine renders. Keep its
+    // property and the React observer in sync when the slider is dragged.
+    const boundIndexProperty = rive?.viewModelInstance?.number('Index')
+    if (boundIndexProperty) {
+      boundIndexProperty.value = selectedDeviceCount
+    }
 
-      indexProperty.setValue(selectedDeviceCount)
-    },
-    [indexProperty, rive]
-  )
+    indexProperty.setValue(selectedDeviceCount)
+  }
 
   const didSeedRef = useRef(false)
 

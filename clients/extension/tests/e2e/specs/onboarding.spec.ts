@@ -149,7 +149,10 @@ test.describe('Onboarding Flow', () => {
     const sliderY = canvasBounds.y + canvasBounds.height * 0.39
     await page.mouse.move(canvasBounds.x + canvasBounds.width * 0.1, sliderY)
     await page.mouse.down()
-    await page.mouse.move(canvasBounds.x + canvasBounds.width * 0.9, sliderY)
+    await page.mouse.move(
+      canvasBounds.x + canvasBounds.width * 0.9,
+      canvasBounds.y + canvasBounds.height * 0.6
+    )
     await page.mouse.up()
 
     await page.getByRole('button', { name: /get.*started/i }).first().click()
