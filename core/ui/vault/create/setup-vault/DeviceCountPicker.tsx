@@ -4,11 +4,13 @@ import { Button } from '@lib/ui/buttons/Button'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
-import { ReactNode } from 'react'
+import { PointerEvent, ReactNode, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const animationMaxWidth = 400
+const sliderMinY = 0.35
+const sliderMaxY = 0.45
 
 const GradientWrapper = styled.div`
   position: relative;
@@ -85,9 +87,19 @@ export const DeviceCountPicker = ({
   renderBelowMin,
 }: DeviceCountPickerProps) => {
   const { t } = useTranslation()
-  const { RiveComponent, selectedDeviceCount } = useDeviceSelectionAnimation({
-    initialIndex,
-  })
+  const { RiveComponent, selectedDeviceCount, setSelectedDeviceCount } =
+    useDeviceSelectionAnimation({ initialIndex })
+  const isDraggingSliderRef = useRef(false)
+
+  const updateSliderSelection = (event: PointerEvent<HTMLCanvasElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const pointerY = (event.clientY - bounds.top) / bounds.height
+
+    if (pointerY < sliderMinY || pointerY > sliderMaxY) return false
+
+    setSelectedDeviceCount(((event.clientX - bounds.left) / bounds.width) * 3)
+    return true
+  }
 
   const isBelowMin = selectedDeviceCount < minSelectableIndex
 
@@ -113,7 +125,29 @@ export const DeviceCountPicker = ({
       >
         <VStack flexGrow alignItems="center" justifyContent="center">
           <AnimationContainer>
-            <RiveComponent style={{ width: '100%', height: '100%' }} />
+            <RiveComponent
+              style={{ width: '100%', height: '100%' }}
+              onPointerDown={event => {
+                if (updateSliderSelection(event)) {
+                  const canvas = event.target
+                  if (canvas instanceof HTMLCanvasElement) {
+                    canvas.setPointerCapture(event.pointerId)
+                  }
+                  isDraggingSliderRef.current = true
+                }
+              }}
+              onPointerMove={event => {
+                if (isDraggingSliderRef.current) {
+                  updateSliderSelection(event)
+                }
+              }}
+              onPointerUp={() => {
+                isDraggingSliderRef.current = false
+              }}
+              onPointerCancel={() => {
+                isDraggingSliderRef.current = false
+              }}
+            />
             {isBelowMin && renderBelowMin ? (
               <BelowMinOverlay>
                 {renderBelowMin(selectedDeviceCount)}
