@@ -96,4 +96,70 @@ test.describe('Onboarding Flow', () => {
 
     await page.close()
   })
+
+  test('Rive plus control selects a two-device vault', async ({ context, extensionId }) => {
+    const page = await context.newPage()
+    const onboardingPage = new OnboardingPage(page, extensionId)
+
+    await onboardingPage.goto()
+    await waitForExtensionReady(page)
+    await onboardingPage.completeOnboarding()
+    await onboardingPage.navigateToSetupVault()
+
+    const riveCanvas = page.locator('canvas').first()
+    const canvasBounds = await riveCanvas.boundingBox()
+    expect(canvasBounds).not.toBeNull()
+
+    if (!canvasBounds) {
+      throw new Error('Device-selection Rive canvas is unavailable')
+    }
+
+    const plusY = canvasBounds.y + canvasBounds.height * 0.29
+    // The Rive +/- controls remain the primary interaction.
+    await page.mouse.click(
+      canvasBounds.x + canvasBounds.width * 0.91,
+      plusY
+    )
+
+    await page.getByRole('button', { name: /get.*started/i }).first().click()
+    await expect(
+      page.locator('[data-testid="vault-setup-overview-content"]')
+    ).toContainText(/2-device vault/i)
+
+    await page.close()
+  })
+
+  test('Rive slider drag selects a four-device vault', async ({ context, extensionId }) => {
+    const page = await context.newPage()
+    const onboardingPage = new OnboardingPage(page, extensionId)
+
+    await onboardingPage.goto()
+    await waitForExtensionReady(page)
+    await onboardingPage.completeOnboarding()
+    await onboardingPage.navigateToSetupVault()
+
+    const riveCanvas = page.locator('canvas').first()
+    const canvasBounds = await riveCanvas.boundingBox()
+    expect(canvasBounds).not.toBeNull()
+
+    if (!canvasBounds) {
+      throw new Error('Device-selection Rive canvas is unavailable')
+    }
+
+    const sliderY = canvasBounds.y + canvasBounds.height * 0.39
+    await page.mouse.move(canvasBounds.x + canvasBounds.width * 0.1, sliderY)
+    await page.mouse.down()
+    await page.mouse.move(
+      canvasBounds.x + canvasBounds.width * 0.9,
+      canvasBounds.y + canvasBounds.height * 0.6
+    )
+    await page.mouse.up()
+
+    await page.getByRole('button', { name: /get.*started/i }).first().click()
+    await expect(
+      page.locator('[data-testid="vault-setup-overview-content"]')
+    ).toContainText(/4\+-device vault/i)
+
+    await page.close()
+  })
 })

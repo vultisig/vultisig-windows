@@ -16,6 +16,8 @@ const triggerHapticFeedback = () => {
   }
 }
 
+const maxDeviceSelectionIndex = 3
+
 type UseDeviceSelectionAnimationInput = {
   /** Rive `Index` to seed the slider with once the animation loads. */
   initialIndex?: number
@@ -27,6 +29,9 @@ export const useDeviceSelectionAnimation = ({
   const { RiveComponent, rive } = useRive({
     src: `/core/animations/${deviceSelectionAnimationSource}.riv`,
     autoplay: true,
+    // The state-machine handlers use the default view model. Bind it before
+    // Rive exposes the interactive canvas, rather than after React effects run.
+    autoBind: true,
     stateMachines: ['State Machine 1'],
     layout: new Layout({
       fit: Fit.Layout,
@@ -42,6 +47,24 @@ export const useDeviceSelectionAnimation = ({
 
   const indexProperty = useViewModelInstanceNumber('Index', viewModelInstance)
 
+  const setSelectedDeviceCount = (count: number) => {
+    if (indexProperty.value === null) return
+
+    const selectedDeviceCount = Math.min(
+      Math.max(0, Math.round(count)),
+      maxDeviceSelectionIndex
+    )
+
+    // `autoBind` owns the instance the state machine renders. Keep its
+    // property and the React observer in sync when the slider is dragged.
+    const boundIndexProperty = rive?.viewModelInstance?.number('Index')
+    if (boundIndexProperty) {
+      boundIndexProperty.value = selectedDeviceCount
+    }
+
+    indexProperty.setValue(selectedDeviceCount)
+  }
+
   const didSeedRef = useRef(false)
 
   useEffect(() => {
@@ -53,9 +76,16 @@ export const useDeviceSelectionAnimation = ({
       return
     }
 
+    // `autoBind` renders from Rive's bound default instance. Seed that
+    // instance too so revisiting this screen preserves the visible selection.
+    const boundIndexProperty = rive?.viewModelInstance?.number('Index')
+    if (boundIndexProperty) {
+      boundIndexProperty.value = initialIndex
+    }
+
     indexProperty.setValue(initialIndex)
     didSeedRef.current = true
-  }, [initialIndex, indexProperty])
+  }, [initialIndex, indexProperty, rive])
 
   const previousIndexRef = useRef<number | null>(null)
 
@@ -87,5 +117,6 @@ export const useDeviceSelectionAnimation = ({
   return {
     RiveComponent,
     selectedDeviceCount: indexProperty?.value ?? 0,
+    setSelectedDeviceCount,
   }
 }
