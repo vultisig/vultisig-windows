@@ -278,6 +278,8 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     setIsTssBatchingEnabled: noop,
     getCustomRpcOverrides: async () => ({}),
     setCustomRpcOverrides: noop,
+    getSolanaMoveStakeDestinations: async () => ({}),
+    setSolanaMoveStakeDestinations: noop,
     getTransactionRecords: async () => [],
     saveTransactionRecord: noop,
     updateTransactionRecord: noop,

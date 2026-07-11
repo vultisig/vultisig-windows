@@ -1648,7 +1648,7 @@ export const de = {
   solana_move_stake: 'Verschieben',
   solana_finish_move: 'Verschieben abschließen',
   solana_staking_move_notice:
-    'Das Verschieben von Stake erfolgt in mehreren Schritten und über mehrere Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlzeit von etwa {{days}} Tagen können Sie das Verschieben zum neuen Validator abschließen.',
+    'Der Transfer des Einsatzes erfolgt in mehreren Schritten und erstreckt sich über Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlphase von ~ {{days}} Tagen können Sie den Transfer zum ausgewählten Validator abschließen.',
   solana_staking_finish_move_notice:
     'Dadurch wird das abgekühlte Stake-Konto erneut an den neuen Validator delegiert und das Verschieben abgeschlossen.',
   external_recipient_tooltip_content:
@@ -1718,4 +1718,8 @@ export const de = {
   trust_line_currency_reserved:
     'XRP kann nicht als Trustline-Währung verwendet werden.',
   trust_line_currency_invalid: 'Geben Sie einen gültigen Währungscode ein',
+  solana_staking_current_validator: 'Aktueller Validator',
+  solana_staking_new_validator: 'Neuer Validator',
+  solana_staking_pending_move_notice:
+    'Wechsel zu {{validator}} — schließe den Wechsel ab, sobald die Abklingzeit abgelaufen ist.',
 }

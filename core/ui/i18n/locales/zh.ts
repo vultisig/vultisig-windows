@@ -1510,7 +1510,7 @@ export const zh = {
   solana_move_stake: '移动',
   solana_finish_move: '完成移动',
   solana_staking_move_notice:
-    '移动质押需要多个步骤并跨越多个 epoch：这会立即停用该账户；约 {{days}} 天冷却期结束后，再完成到新验证器的移动。',
+    '转移质押是多步骤的，并且跨越多个纪元：这会立即停用账户；在 ~ {{days}}天的冷却期后，完成将其转移到您选择的验证者。',
   solana_staking_finish_move_notice:
     '这会将已冷却的质押账户重新委托给新验证器，并完成移动。',
   external_recipient_tooltip_content:
@@ -1572,4 +1572,8 @@ export const zh = {
     '打开信任线会将{{amount}} {{ticker}}锁定为账户所有者预留，直到该线被移除。',
   trust_line_currency_reserved: 'XRP不能用作信任线货币',
   trust_line_currency_invalid: '请输入有效的货币代码',
+  solana_staking_current_validator: '当前验证器',
+  solana_staking_new_validator: '新验证器',
+  solana_staking_pending_move_notice:
+    '移动到{{validator}} — 冷却时间结束后完成移动。',
 }

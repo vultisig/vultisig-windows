@@ -1617,7 +1617,7 @@ export const nl = {
   solana_move_stake: 'Verplaatsen',
   solana_finish_move: 'Verplaatsing voltooien',
   solana_staking_move_notice:
-    'Stake verplaatsen gebeurt in meerdere stappen en verspreid over epochs: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen voltooit u de verplaatsing naar de nieuwe validator.',
+    'Het overzetten van de stake is een proces in meerdere stappen en strekt zich uit over verschillende periodes: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen kunt u de stake overzetten naar de validator die u hebt gekozen.',
   solana_staking_finish_move_notice:
     'Hiermee wordt het afgekoelde stake-account opnieuw gedelegeerd aan de nieuwe validator en wordt de verplaatsing voltooid.',
   external_recipient_tooltip_content:
@@ -1688,4 +1688,8 @@ export const nl = {
   trust_line_currency_reserved:
     'XRP kan niet worden gebruikt als een trust-line-valuta.',
   trust_line_currency_invalid: 'Voer een geldige valutacode in',
+  solana_staking_current_validator: 'Huidige validator',
+  solana_staking_new_validator: 'Nieuwe validator',
+  solana_staking_pending_move_notice:
+    'Verplaatsen naar {{validator}} — voltooi de verplaatsing zodra de afkoelperiode voorbij is.',
 }

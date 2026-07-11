@@ -434,11 +434,14 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
           <PageFooter>
             <CosmosStakingFooterButton action={selectedChainAction} />
           </PageFooter>
-        ) : selectedChainAction === 'solana_delegate' ? (
+        ) : selectedChainAction === 'solana_delegate' ||
+          selectedChainAction === 'solana_move_stake' ? (
           // Solana delegate uses the tri-state CTA (amount → validator →
-          // continue). The account-scoped solana ops keep the default Continue.
+          // continue); move-stake has no amount, so it gates on the destination
+          // validator alone. The ops that carry a prefilled destination keep the
+          // default Continue.
           <PageFooter>
-            <SolanaStakingFooterButton />
+            <SolanaStakingFooterButton action={selectedChainAction} />
           </PageFooter>
         ) : (
           <PageFooter>

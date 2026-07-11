@@ -10,6 +10,10 @@ import {
 import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+type SolanaStakingFooterButtonProps = {
+  action: 'solana_delegate' | 'solana_move_stake'
+}
+
 // Solana Stake program minimum active delegation, in whole SOL (1 SOL on
 // mainnet). A DelegateStake below it reverts on-chain with
 // StakeError.InsufficientDelegation, so the CTA gates on it up front.
@@ -17,19 +21,22 @@ const minDelegationSol =
   Number(solanaStakingConfig.minDelegationFloorLamports) / 10 ** solDecimals
 
 /**
- * Page-bottom CTA for the Solana delegate form. States, in order:
- *   1. Amount not set → "Enter Amount", disabled.
+ * Page-bottom CTA for the Solana forms that pick a validator. States, in order:
+ *   1. Amount not set → "Enter Amount", disabled. Delegate only — a move sends
+ *      the whole stake account, so it has no amount to enter.
  *   2. Amount below the 1 SOL program minimum → disabled minimum-delegation hint.
- *   3. Amount set, validator not picked → "Select Validator", opens the picker
- *      sheet (the same sheet the inline validator field opens; both keep
- *      `validatorAddress` in sync via react-hook-form).
- *   4. Amount + validator both set → "Continue" (`type=submit`).
+ *   3. Validator not picked → "Select Validator", opens the picker sheet (the
+ *      same sheet the inline validator field opens; both keep `validatorAddress`
+ *      in sync via react-hook-form).
+ *   4. Everything set → "Continue" (`type=submit`).
  *
  * Lives at the page footer so it stays pinned outside the scrollable form,
- * mirroring `CosmosStakingFooterButton`. The account-scoped ops (unstake /
- * withdraw) carry prefilled defaults, so they keep the default Continue.
+ * mirroring `CosmosStakingFooterButton`. The ops that carry a prefilled
+ * destination (unstake / withdraw / finish-move) keep the default Continue.
  */
-export const SolanaStakingFooterButton = () => {
+export const SolanaStakingFooterButton = ({
+  action,
+}: SolanaStakingFooterButtonProps) => {
   const { t } = useTranslation()
   const [{ control }] = useDepositFormHandlers()
   const [coin] = useDepositCoin()
@@ -41,13 +48,18 @@ export const SolanaStakingFooterButton = () => {
   const validatorAddress = useWatch({ control, name: 'validatorAddress' }) as
     | string
     | undefined
+  const srcValidatorAddress = useWatch({
+    control,
+    name: 'srcValidatorAddress',
+  }) as string | undefined
 
+  const requiresAmount = action === 'solana_delegate'
   const numericAmount = Number(amount ?? 0)
   const amountSet = Number.isFinite(numericAmount) && numericAmount > 0
   const belowMinimum = amountSet && numericAmount < minDelegationSol
   const validatorPicked = Boolean(validatorAddress)
 
-  if (!amountSet) {
+  if (requiresAmount && !amountSet) {
     return (
       <Button disabled type="button">
         {t('enter_amount')}
@@ -55,7 +67,7 @@ export const SolanaStakingFooterButton = () => {
     )
   }
 
-  if (belowMinimum) {
+  if (requiresAmount && belowMinimum) {
     return (
       <Button disabled type="button">
         {t('solana_staking_min_delegation', {
@@ -85,6 +97,9 @@ export const SolanaStakingFooterButton = () => {
             <SolanaValidatorPickerSheet
               ticker={coin.ticker}
               selectedVotePubkey={field.value as string | undefined}
+              excludeVotePubkey={
+                action === 'solana_move_stake' ? srcValidatorAddress : undefined
+              }
               onSelect={validator => {
                 field.onChange(validator.votePubkey)
                 onClose()

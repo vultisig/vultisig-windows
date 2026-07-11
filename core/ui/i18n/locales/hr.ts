@@ -1610,7 +1610,7 @@ export const hr = {
   solana_move_stake: 'Premjesti',
   solana_finish_move: 'Dovrši premještanje',
   solana_staking_move_notice:
-    'Premještanje uloga odvija se u više koraka i traje kroz više epoha: ovo sada deaktivira račun; nakon razdoblja hlađenja od oko {{days}} dana dovršite premještanje na novog validatora.',
+    'Premještanje uloga je višekoračno i obuhvaća epohe: ovo sada deaktivira račun; nakon ~ {{days}} dana hlađenja, završite s premještanjem do validatora kojeg ste odabrali.',
   solana_staking_finish_move_notice:
     'Ovo ponovno delegira ohlađeni račun uloga novom validatoru i dovršava premještanje.',
   external_recipient_tooltip_content:
@@ -1680,4 +1680,8 @@ export const hr = {
   trust_line_currency_reserved:
     'XRP se ne može koristiti kao valuta povjerenja',
   trust_line_currency_invalid: 'Unesite važeći kod valute',
+  solana_staking_current_validator: 'Trenutni validator',
+  solana_staking_new_validator: 'Novi validator',
+  solana_staking_pending_move_notice:
+    'Prelazak na {{validator}} — završite potez nakon što završi vrijeme hlađenja.',
 }

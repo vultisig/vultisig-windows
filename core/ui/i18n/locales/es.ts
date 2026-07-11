@@ -1632,7 +1632,7 @@ export const es = {
   solana_move_stake: 'Mover',
   solana_finish_move: 'Finalizar movimiento',
   solana_staking_move_notice:
-    'Mover el stake requiere varios pasos y abarca varias épocas: esto desactiva la cuenta ahora; después del periodo de enfriamiento de ~{{days}} días, finaliza el movimiento al nuevo validador.',
+    'Mover la participación es un proceso de varios pasos que abarca varias épocas: esto desactiva la cuenta ahora; después del período de espera de ~ {{days}} días, finalice la transferencia al validador que haya elegido.',
   solana_staking_finish_move_notice:
     'Esto vuelve a delegar la cuenta de stake ya enfriada al nuevo validador y completa el movimiento.',
   external_recipient_tooltip_content:
@@ -1704,4 +1704,8 @@ export const es = {
   trust_line_currency_reserved:
     'XRP no puede utilizarse como moneda de confianza.',
   trust_line_currency_invalid: 'Introduzca un código de moneda válido.',
+  solana_staking_current_validator: 'validador actual',
+  solana_staking_new_validator: 'Nuevo validador',
+  solana_staking_pending_move_notice:
+    'Pasar a {{validator}} : finalice el movimiento una vez que termine el tiempo de espera.',
 }
