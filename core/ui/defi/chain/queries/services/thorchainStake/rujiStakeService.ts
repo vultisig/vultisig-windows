@@ -1,5 +1,8 @@
+import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { rujiStakeApiUrl } from '../../constants'
@@ -48,6 +51,25 @@ const getRujiStake = (address: string) => {
   })
 }
 
+const rujiReceiptDenom = shouldBePresent(
+  thorchainTokens.sruji.id,
+  'sRUJI receipt denom'
+)
+
+// On-chain sRUJI receipt balance — the amount the vault actually holds (and can
+// send), read the same way sTCY reads its receipt. This is deliberately kept
+// independent of the staking API's `bonded` field, which can report 0 even when
+// receipt tokens are held.
+const fetchRujiReceiptBalance = async (address: string): Promise<bigint> => {
+  const result = await attempt(() =>
+    queryUrl<{ balance?: { amount?: string } }>(
+      `${cosmosRpcUrl.THORChain}/cosmos/bank/v1beta1/balances/${address}/by_denom?denom=${encodeURIComponent(rujiReceiptDenom)}`
+    )
+  )
+
+  return 'data' in result ? parseBigint(result.data?.balance?.amount) : 0n
+}
+
 type FetchRujiStakePositionInput = {
   address: string
   prices: Record<string, number>
@@ -58,16 +80,22 @@ export const fetchRujiStakePosition = async ({
   prices,
 }: FetchRujiStakePositionInput): Promise<ThorchainStakePosition | null> => {
   try {
-    const response = await getRujiStake(address)
+    const [response, heldAmount] = await Promise.all([
+      getRujiStake(address),
+      fetchRujiReceiptBalance(address),
+    ])
     const stake = response?.data?.node?.stakingV2?.[0]
     const bondedAmount = parseBigint(stake?.bonded?.amount)
+    // Prefer the held receipt balance; fall back to the API's `bonded` amount
+    // only when nothing is held (e.g. the balance request failed).
+    const amount = heldAmount > 0n ? heldAmount : bondedAmount
     const rewardsAmount =
       parseNumber(stake?.pendingRevenue?.amount) / rujiDecimalFactor
     const aprValue = parseNumber(stake?.pool?.summary?.apr?.value)
     const price = prices[coinKeyToString(thorchainTokens.ruji)] ?? 0
 
     const fiatValue = getCoinValue({
-      amount: bondedAmount,
+      amount,
       decimals: thorchainTokens.ruji.decimals,
       price,
     })
@@ -75,9 +103,9 @@ export const fetchRujiStakePosition = async ({
     return {
       id: 'thor-stake-ruji',
       ticker: thorchainTokens.ruji.ticker,
-      amount: bondedAmount,
+      amount,
       type: 'stake',
-      canUnstake: bondedAmount > 0n,
+      canUnstake: amount > 0n,
       fiatValue,
       apr: aprValue * 100,
       rewards: rewardsAmount,

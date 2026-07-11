@@ -22,6 +22,7 @@ import {
   resolveStakeActions,
   resolveStakeTitle,
   resolveStakeToken,
+  resolveTransferableStakeToken,
 } from '../config/stakeUiResolver'
 import { CosmosDelegationsView } from '../cosmos/CosmosDelegationsView'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
@@ -279,17 +280,21 @@ const ThorchainStakedPositions = () => {
           navigateTo(position.id, action, false)
         }
 
+        const transferToken = resolveTransferableStakeToken(chain, position.id)
+        const canTransfer = transferToken !== undefined && position.amount > 0n
+
         const handleTransfer = async () => {
-          if (position.id === 'thor-stake-stcy') {
-            const stcyCoin = resolveStakeToken(chain, position.id)
-            if (!hasRequiredCoin && supportsAutoEnable) {
-              await autoEnableCoinIfNeeded(position.id, stcyCoin)
-            }
-            navigate({
-              id: 'send',
-              state: { coin: extractCoinKey(stcyCoin) },
-            })
+          if (!transferToken) return
+          const hasTransferCoin = vaultCoins.some(current =>
+            areEqualCoins(current, transferToken)
+          )
+          if (!hasTransferCoin && supportsAutoEnable) {
+            await autoEnableCoinIfNeeded(position.id, transferToken)
           }
+          navigate({
+            id: 'send',
+            state: { coin: extractCoinKey(transferToken) },
+          })
         }
 
         return (
@@ -326,9 +331,7 @@ const ThorchainStakedPositions = () => {
             infoUrl={
               position.id === 'thor-stake-stcy' ? stcyInfoUrl : undefined
             }
-            onTransfer={
-              position.id === 'thor-stake-stcy' ? handleTransfer : undefined
-            }
+            onTransfer={canTransfer ? handleTransfer : undefined}
           />
         )
       })}
