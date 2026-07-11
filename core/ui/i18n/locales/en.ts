@@ -1252,13 +1252,13 @@ export const en = {
   solana_staking_withdrawable_amount: 'Withdrawable amount',
   solana_staking_withdraw_ready_notice: 'Cooled down and ready to withdraw.',
   solana_staking_move_notice:
-    'Moving stake is multi-step and spans epochs: this deactivates the account now; after the ~{{days}}-day cooldown, finish moving it to the validator you picked.',
+    'Moving stake takes several steps and spans epochs: this deactivates the account now, and it begins a cooldown of about {{days}} days. Once that ends, finish moving it to the validator you picked.',
   solana_staking_finish_move_notice:
     'This re-delegates the cooled-down stake account to the new validator and completes the move.',
   solana_staking_current_validator: 'Current validator',
   solana_staking_new_validator: 'New validator',
   solana_staking_pending_move_notice:
-    'Moving to {{validator}} — finish the move once the cooldown ends.',
+    'Moving to {{validator}} — you can finish the move once the cooldown period ends.',
   solana_staking_total_staked: 'Total Staked {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegate to New Validator',
   solana_staking_stake_accounts: 'Stake Accounts',

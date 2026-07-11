@@ -10,8 +10,18 @@ import {
 import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * The Solana staking actions whose destination validator is chosen on the form
+ * itself, so their CTA has to gate on the pick. The rest carry a prefilled
+ * destination and keep the default Continue.
+ */
+export const solanaValidatorPickerActions = [
+  'solana_delegate',
+  'solana_move_stake',
+] as const
+
 type SolanaStakingFooterButtonProps = {
-  action: 'solana_delegate' | 'solana_move_stake'
+  action: (typeof solanaValidatorPickerActions)[number]
 }
 
 // Solana Stake program minimum active delegation, in whole SOL (1 SOL on
@@ -41,17 +51,17 @@ export const SolanaStakingFooterButton = ({
   const [{ control }] = useDepositFormHandlers()
   const [coin] = useDepositCoin()
 
-  const amount = useWatch({ control, name: 'amount' }) as
-    | string
-    | number
-    | undefined
-  const validatorAddress = useWatch({ control, name: 'validatorAddress' }) as
-    | string
-    | undefined
-  const srcValidatorAddress = useWatch({
-    control,
-    name: 'srcValidatorAddress',
-  }) as string | undefined
+  // Form values are loosely typed (`Record<string, any>`), so narrow rather
+  // than assert: typing into the amount input emits a string while the
+  // percentage pills emit a number, and the validator fields are only ever set
+  // by the picker (or the DeFi prefill).
+  const amount = useWatch({ control, name: 'amount' })
+  const watchedValidator = useWatch({ control, name: 'validatorAddress' })
+  const validatorAddress =
+    typeof watchedValidator === 'string' ? watchedValidator : undefined
+  const watchedSrcValidator = useWatch({ control, name: 'srcValidatorAddress' })
+  const srcValidatorAddress =
+    typeof watchedSrcValidator === 'string' ? watchedSrcValidator : undefined
 
   const requiresAmount = action === 'solana_delegate'
   const numericAmount = Number(amount ?? 0)
@@ -96,7 +106,9 @@ export const SolanaStakingFooterButton = ({
           renderContent={({ onClose }) => (
             <SolanaValidatorPickerSheet
               ticker={coin.ticker}
-              selectedVotePubkey={field.value as string | undefined}
+              selectedVotePubkey={
+                typeof field.value === 'string' ? field.value : undefined
+              }
               excludeVotePubkey={
                 action === 'solana_move_stake' ? srcValidatorAddress : undefined
               }

@@ -39,6 +39,10 @@ type SetSolanaMoveStakeDestinationsFunction = (
   destinations: SolanaMoveStakeDestinations
 ) => Promise<void>
 
+/**
+ * Per-client persistence of the in-flight move destinations. Implemented by the
+ * desktop (`persistentStorage`) and extension (`chrome.storage`) storage layers.
+ */
 export type SolanaMoveStakeDestinationsStorage = {
   getSolanaMoveStakeDestinations: GetSolanaMoveStakeDestinationsFunction
   setSolanaMoveStakeDestinations: SetSolanaMoveStakeDestinationsFunction
@@ -71,6 +75,11 @@ type SetSolanaMoveStakeDestinationInput = SolanaMoveStakeDestination & {
   stakeAccount: string
 }
 
+/**
+ * Records where a stake account is being moved, so the destination survives the
+ * cooldown between the deactivate and the re-delegation. Re-recording the same
+ * account replaces its destination.
+ */
 export const useSetSolanaMoveStakeDestinationMutation = () => {
   const { getSolanaMoveStakeDestinations, setSolanaMoveStakeDestinations } =
     useCore()

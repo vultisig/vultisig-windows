@@ -59,6 +59,20 @@ const TotalStakedLogoFallback = styled.div`
 `
 
 /**
+ * Starts one of the staking actions that operate on an existing stake account,
+ * so the DeFi tab has to carry the account (and its prefills) into the deposit
+ * flow.
+ */
+type OnAccountActionInput = {
+  action:
+    | 'solana_unstake'
+    | 'solana_withdraw'
+    | 'solana_move_stake'
+    | 'solana_finish_move'
+  row: SolanaStakeRow
+}
+
+/**
  * Solana native staking on the DeFi tab. Lists the vault's stake accounts as
  * per-account rows (one stake account → one validator), each showing the
  * delegated amount, validator, APY, rent reserve, activation-state badge, and
@@ -226,10 +240,18 @@ export const SolanaStakeDefiView = () => {
                       })
                     : undefined
                 }
-                onUnstake={() => onAccountAction('solana_unstake', row)}
-                onWithdraw={() => onAccountAction('solana_withdraw', row)}
-                onMove={() => onAccountAction('solana_move_stake', row)}
-                onFinishMove={() => onAccountAction('solana_finish_move', row)}
+                onUnstake={() =>
+                  onAccountAction({ action: 'solana_unstake', row })
+                }
+                onWithdraw={() =>
+                  onAccountAction({ action: 'solana_withdraw', row })
+                }
+                onMove={() =>
+                  onAccountAction({ action: 'solana_move_stake', row })
+                }
+                onFinishMove={() =>
+                  onAccountAction({ action: 'solana_finish_move', row })
+                }
                 onStake={onDelegate}
               />
             )
@@ -239,14 +261,7 @@ export const SolanaStakeDefiView = () => {
     </VStack>
   )
 
-  function onAccountAction(
-    action:
-      | 'solana_unstake'
-      | 'solana_withdraw'
-      | 'solana_move_stake'
-      | 'solana_finish_move',
-    row: SolanaStakeRow
-  ) {
+  function onAccountAction({ action, row }: OnAccountActionInput) {
     if (!solCoin) {
       return
     }

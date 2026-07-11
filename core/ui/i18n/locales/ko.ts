@@ -1602,7 +1602,7 @@ export const ko = {
   solana_move_stake: '이동',
   solana_finish_move: '이동 완료',
   solana_staking_move_notice:
-    '스테이킹 이전은 여러 단계를 거치며 여러 에포크에 걸쳐 진행됩니다. 현재 계정은 비활성화되며, 약 {{days}} 일의 쿨다운 기간이 지난 후 선택한 검증자로 이전을 완료하십시오.',
+    '스테이킹을 이전하는 과정은 여러 단계를 거치며 몇 개의 에포크에 걸쳐 진행됩니다. 이 과정에서 계정이 일시적으로 비활성화되고 약 {{days}} 일의 쿨다운 기간이 시작됩니다. 쿨다운 기간이 끝나면 선택한 검증자로 스테이킹 이전을 완료하십시오.',
   solana_staking_finish_move_notice:
     '대기 기간이 끝난 스테이크 계정을 새 검증인에게 다시 위임하고 이동을 완료합니다.',
   external_recipient_tooltip_content:
@@ -1673,5 +1673,5 @@ export const ko = {
   solana_staking_current_validator: '현재 검증자',
   solana_staking_new_validator: '새로운 검증자',
   solana_staking_pending_move_notice:
-    '{{validator}} 로 이동합니다. 쿨다운이 끝나면 이동을 완료하세요.',
+    '{{validator}} 로 이동합니다. 쿨다운 기간이 끝나면 이동을 완료할 수 있습니다.',
 }

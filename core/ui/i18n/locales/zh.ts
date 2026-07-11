@@ -1510,7 +1510,7 @@ export const zh = {
   solana_move_stake: '移动',
   solana_finish_move: '完成移动',
   solana_staking_move_notice:
-    '转移质押是多步骤的，并且跨越多个纪元：这会立即停用账户；在 ~ {{days}}天的冷却期后，完成将其转移到您选择的验证者。',
+    '转移质押需要多个步骤，并且会跨越多个纪元：此操作会立即停用账户，并开始大约{{days}}天的冷却期。冷却期结束后，再将质押转移到您选择的验证者。',
   solana_staking_finish_move_notice:
     '这会将已冷却的质押账户重新委托给新验证器，并完成移动。',
   external_recipient_tooltip_content:
@@ -1575,5 +1575,5 @@ export const zh = {
   solana_staking_current_validator: '当前验证器',
   solana_staking_new_validator: '新验证器',
   solana_staking_pending_move_notice:
-    '移动到{{validator}} — 冷却时间结束后完成移动。',
+    '移动到{{validator}} — 冷却时间结束后即可完成移动。',
 }

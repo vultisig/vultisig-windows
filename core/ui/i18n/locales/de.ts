@@ -1648,7 +1648,7 @@ export const de = {
   solana_move_stake: 'Verschieben',
   solana_finish_move: 'Verschieben abschließen',
   solana_staking_move_notice:
-    'Der Transfer des Einsatzes erfolgt in mehreren Schritten und erstreckt sich über Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlphase von ~ {{days}} Tagen können Sie den Transfer zum ausgewählten Validator abschließen.',
+    'Das Übertragen des Einsatzes erfordert mehrere Schritte und kann mehrere Epochen dauern: Das Konto wird jetzt deaktiviert und eine Wartezeit von etwa {{days}} Tagen beginnt. Sobald diese abgelaufen ist, können Sie den Einsatz an den von Ihnen gewählten Validator übertragen.',
   solana_staking_finish_move_notice:
     'Dadurch wird das abgekühlte Stake-Konto erneut an den neuen Validator delegiert und das Verschieben abgeschlossen.',
   external_recipient_tooltip_content:
@@ -1721,5 +1721,5 @@ export const de = {
   solana_staking_current_validator: 'Aktueller Validator',
   solana_staking_new_validator: 'Neuer Validator',
   solana_staking_pending_move_notice:
-    'Wechsel zu {{validator}} — schließe den Wechsel ab, sobald die Abklingzeit abgelaufen ist.',
+    'Wechsel zu {{validator}} — Sie können den Wechsel abschließen, sobald die Abklingzeit abgelaufen ist.',
 }
