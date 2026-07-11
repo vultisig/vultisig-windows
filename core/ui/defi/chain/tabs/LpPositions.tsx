@@ -29,6 +29,7 @@ import { useMayaLpPositionsQuery } from '../queries/useMayaLpPositionsQuery'
 import { useThorchainLpPositionsQuery } from '../queries/useThorchainLpPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
+import { DefiPositionErrorState } from './DefiPositionErrorState'
 
 const Card = styled(Panel)`
   padding: 20px;
@@ -265,6 +266,10 @@ export const LpPositions = () => {
 
   if (selectedPositions.length === 0) {
     return <DefiPositionEmptyState returnTab="lps" />
+  }
+
+  if (lpQuery.error) {
+    return <DefiPositionErrorState onRetry={lpQuery.refetch} />
   }
 
   const lpDataMap = new Map((lpQuery.data ?? []).map(d => [d.position.id, d]))

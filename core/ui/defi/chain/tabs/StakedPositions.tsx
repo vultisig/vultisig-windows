@@ -4,14 +4,11 @@ import { useRemoveFromCoinFinderIgnoreMutation } from '@core/ui/storage/coinFind
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -28,6 +25,7 @@ import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuer
 import { SolanaStakeDefiView } from '../solana/SolanaStakeDefiView'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
+import { DefiPositionErrorState } from './DefiPositionErrorState'
 
 const stcyInfoUrl =
   'https://docs.rujira.network/ecosystem-products/tcy-autocompounder'
@@ -113,7 +111,7 @@ export const StakedPositions = () => {
 const ThorchainStakedPositions = () => {
   const chain = useCurrentDefiChain()
   const selectedPositions = useDefiPositions(chain)
-  const { data, isPending, error } = useDefiChainPositionsQuery(chain)
+  const { data, isPending, error, refetch } = useDefiChainPositionsQuery(chain)
   const navigate = useCoreNavigate()
   const vaultCoins = useCurrentVaultCoins()
   const createCoin = useCreateCoinMutation()
@@ -138,19 +136,11 @@ const ThorchainStakedPositions = () => {
   )
 
   if (error) {
-    return (
-      <CenterAbsolutely>
-        <Text color="danger">{extractErrorMsg(error)}</Text>
-      </CenterAbsolutely>
-    )
+    return <DefiPositionErrorState onRetry={refetch} />
   }
 
   if (!isPending && !data?.stake && selectedPositions.length > 0) {
-    return (
-      <CenterAbsolutely>
-        <Text color="danger">{t('failed_to_load')}</Text>
-      </CenterAbsolutely>
-    )
+    return <DefiPositionErrorState onRetry={refetch} />
   }
 
   if (selectedPositions.length === 0) {
