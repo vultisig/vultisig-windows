@@ -59,15 +59,18 @@ const rujiReceiptDenom = shouldBePresent(
 // On-chain sRUJI receipt balance — the amount the vault actually holds (and can
 // send), read the same way sTCY reads its receipt. This is deliberately kept
 // independent of the staking API's `bonded` field, which can report 0 even when
-// receipt tokens are held.
-const fetchRujiReceiptBalance = async (address: string): Promise<bigint> => {
+// receipt tokens are held. Returns `null` when the request fails, so a genuine
+// zero balance stays distinct from an unknown one.
+const fetchRujiReceiptBalance = async (
+  address: string
+): Promise<bigint | null> => {
   const result = await attempt(() =>
     queryUrl<{ balance?: { amount?: string } }>(
       `${cosmosRpcUrl.THORChain}/cosmos/bank/v1beta1/balances/${address}/by_denom?denom=${encodeURIComponent(rujiReceiptDenom)}`
     )
   )
 
-  return 'data' in result ? parseBigint(result.data?.balance?.amount) : 0n
+  return 'data' in result ? parseBigint(result.data?.balance?.amount) : null
 }
 
 type FetchRujiStakePositionInput = {
@@ -86,9 +89,10 @@ export const fetchRujiStakePosition = async ({
     ])
     const stake = response?.data?.node?.stakingV2?.[0]
     const bondedAmount = parseBigint(stake?.bonded?.amount)
-    // Prefer the held receipt balance; fall back to the API's `bonded` amount
-    // only when nothing is held (e.g. the balance request failed).
-    const amount = heldAmount > 0n ? heldAmount : bondedAmount
+    // Prefer the on-chain receipt balance (source of truth for what the vault
+    // holds and can send); a successful zero stays zero. Fall back to the API's
+    // `bonded` amount only when the balance request failed (heldAmount is null).
+    const amount = heldAmount ?? bondedAmount
     const rewardsAmount =
       parseNumber(stake?.pendingRevenue?.amount) / rujiDecimalFactor
     const aprValue = parseNumber(stake?.pool?.summary?.apr?.value)
