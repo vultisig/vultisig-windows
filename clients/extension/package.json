@@ -80,6 +80,7 @@
     "@core/ui": "workspace:^",
     "@fontsource/montserrat": "^5.2.8",
     "@fontsource/roboto-mono": "^5.2.9",
+    "@gemwallet/api": "^3.8.0",
     "@keplr-wallet/types": "^0.13.38",
     "@lib/ui": "workspace:^",
     "@playwright/test": "^1.60.0",
