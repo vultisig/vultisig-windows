@@ -4,7 +4,10 @@ import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
 import { CosmosStakingFooterButton } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/CosmosStakingSpecific/CosmosStakingFooterButton'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
-import { SolanaStakingFooterButton } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/SolanaStakingSpecific/SolanaStakingFooterButton'
+import {
+  SolanaStakingFooterButton,
+  solanaValidatorPickerActions,
+} from '@core/ui/vault/deposit/DepositForm/ActionSpecific/SolanaStakingSpecific/SolanaStakingFooterButton'
 import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
 import { UnbondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnbondSpecific/UnbondForm'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
@@ -434,11 +437,13 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
           <PageFooter>
             <CosmosStakingFooterButton action={selectedChainAction} />
           </PageFooter>
-        ) : selectedChainAction === 'solana_delegate' ? (
+        ) : isOneOf(selectedChainAction, solanaValidatorPickerActions) ? (
           // Solana delegate uses the tri-state CTA (amount → validator →
-          // continue). The account-scoped solana ops keep the default Continue.
+          // continue); move-stake has no amount, so it gates on the destination
+          // validator alone. The ops that carry a prefilled destination keep the
+          // default Continue.
           <PageFooter>
-            <SolanaStakingFooterButton />
+            <SolanaStakingFooterButton action={selectedChainAction} />
           </PageFooter>
         ) : (
           <PageFooter>

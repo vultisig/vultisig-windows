@@ -17,9 +17,12 @@ type SolanaDelegationCardProps = {
   ticker: string
   priceUsd: number
   logoUrl?: string
+  /** Display name of the destination of a move in flight, if there is one. */
+  moveDestinationName?: string
   onUnstake: () => void
   onWithdraw: () => void
   onMove: () => void
+  onFinishMove: () => void
   onStake: () => void
 }
 
@@ -58,14 +61,24 @@ export const SolanaDelegationCard = ({
   ticker,
   priceUsd,
   logoUrl,
+  moveDestinationName,
   onUnstake,
   onWithdraw,
   onMove,
+  onFinishMove,
   onStake,
 }: SolanaDelegationCardProps) => {
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
-  const notice = row.state !== 'active' ? stateNoticeKey[row.state] : undefined
+  const stateNotice =
+    row.state !== 'active' ? t(stateNoticeKey[row.state]) : undefined
+  // A move in flight explains the account's state better than the generic
+  // cooldown notice does — it names where the stake is headed.
+  const notice = moveDestinationName
+    ? t('solana_staking_pending_move_notice', {
+        validator: moveDestinationName,
+      })
+    : stateNotice
 
   return (
     <VStack
@@ -131,12 +144,31 @@ export const SolanaDelegationCard = ({
 
       {notice ? (
         <Text size={12} color="shy">
-          {t(notice)}
+          {notice}
         </Text>
       ) : null}
 
       <HStack gap={8}>
-        {row.canWithdraw ? (
+        {/*
+         * A cooled-down account can be re-delegated as well as withdrawn.
+         * Finishing an in-flight move is what the user already committed to, so
+         * it leads; with no move in flight, withdrawing does.
+         */}
+        {row.canFinishMove && row.moveDestination ? (
+          <>
+            <Button kind="secondary" onClick={onWithdraw}>
+              {t('solana_withdraw')}
+            </Button>
+            <Button onClick={onFinishMove}>{t('solana_finish_move')}</Button>
+          </>
+        ) : row.canFinishMove ? (
+          <>
+            <Button kind="secondary" onClick={onFinishMove}>
+              {t('solana_finish_move')}
+            </Button>
+            <Button onClick={onWithdraw}>{t('solana_withdraw')}</Button>
+          </>
+        ) : row.canWithdraw ? (
           <Button onClick={onWithdraw}>{t('solana_withdraw')}</Button>
         ) : (
           <>

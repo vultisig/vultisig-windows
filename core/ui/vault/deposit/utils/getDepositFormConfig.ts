@@ -1004,13 +1004,24 @@ export const getDepositFormConfig = ({
         ),
       }),
     }),
-    // Move-stake step 1 (deactivate): operates on a prefilled stake account,
-    // no amount and no destination yet (chosen at finish-move).
+    // Move-stake step 1 (deactivate): operates on a prefilled stake account and
+    // no amount (the whole account moves). The destination validator is picked
+    // here — deactivating starts an irreversible cooldown, so the user commits
+    // to a target up front — and is only spent at finish-move, days later.
     solana_move_stake: () => ({
       fields: [
         { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
       ],
-      schema: z.object({ stakeAccount: z.string().trim().min(1) }),
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+      }),
     }),
     // Move-stake step 2 (re-delegate): prefilled stake account + re-delegatable
     // amount (unrelated to liquid SOL, so require only > 0) + a destination

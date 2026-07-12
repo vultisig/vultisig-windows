@@ -6,6 +6,10 @@ import { useSolanaEpochInfoQuery } from '@core/ui/chain/solana/staking/queries/u
 import { useSolanaStakeAccountsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaStakeAccountsQuery'
 import { useSolanaValidatorsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaValidatorsQuery'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import {
+  useForgetSolanaMoveStakeDestinationsMutation,
+  useSolanaMoveStakeDestinations,
+} from '@core/ui/storage/solanaMoveStakeDestinations'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
 import { SafeImage } from '@lib/ui/images/SafeImage'
@@ -24,12 +28,14 @@ import {
 import {
   networkActivatedStake,
   SolanaValidator,
+  truncatedPubkey,
   validatorDisplayName,
   validatorLogoUrl,
 } from '@vultisig/core-chain/chains/solana/staking/models/validator'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { coinKeyToString, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -51,6 +57,20 @@ const TotalStakedLogoFallback = styled.div`
   background: rgba(255, 255, 255, 0.08);
   font-size: 20px;
 `
+
+/**
+ * Starts one of the staking actions that operate on an existing stake account,
+ * so the DeFi tab has to carry the account (and its prefills) into the deposit
+ * flow.
+ */
+type OnAccountActionInput = {
+  action:
+    | 'solana_unstake'
+    | 'solana_withdraw'
+    | 'solana_move_stake'
+    | 'solana_finish_move'
+  row: SolanaStakeRow
+}
 
 /**
  * Solana native staking on the DeFi tab. Lists the vault's stake accounts as
@@ -79,6 +99,34 @@ export const SolanaStakeDefiView = () => {
       : [],
   })
 
+  const moveDestinations = useSolanaMoveStakeDestinations()
+  const { mutate: forgetMoveDestinations } =
+    useForgetSolanaMoveStakeDestinationsMutation()
+
+  // A recorded move destination is only meaningful while the move is in flight.
+  // Once the account is gone (withdrawn) or already delegated to its
+  // destination (the move landed), drop it — otherwise it would keep offering
+  // "Finish Move" on an account that has nothing left to finish. Only this
+  // owner's records are judged: another vault's stake accounts are absent from
+  // this list for reasons that have nothing to do with their moves.
+  const stakeAccounts = stakeAccountsQuery.data
+  useEffect(() => {
+    if (!stakeAccounts) return
+
+    const settled = Object.entries(moveDestinations)
+      .filter(([pubkey, { owner: destinationOwner, votePubkey }]) => {
+        if (destinationOwner !== owner) return false
+
+        const account = stakeAccounts.find(a => a.pubkey === pubkey)
+        return !account || account.delegation?.votePubkey === votePubkey
+      })
+      .map(([pubkey]) => pubkey)
+
+    if (settled.length > 0) {
+      forgetMoveDestinations(settled)
+    }
+  }, [forgetMoveDestinations, moveDestinations, owner, stakeAccounts])
+
   if (!solCoin) {
     return (
       <Text color="shy">
@@ -101,7 +149,14 @@ export const SolanaStakeDefiView = () => {
 
   const rows = (stakeAccountsQuery.data ?? [])
     .filter(account => account.delegation !== undefined)
-    .map(account => buildRow({ account, validatorByVote, currentEpoch }))
+    .map(account =>
+      buildRow({
+        account,
+        validatorByVote,
+        currentEpoch,
+        moveDestination: moveDestinations[account.pubkey]?.votePubkey,
+      })
+    )
     .sort((a, b) => b.delegatedAmount - a.delegatedAmount)
 
   const totalStaked = rows.reduce((sum, r) => sum + r.delegatedAmount, 0)
@@ -177,9 +232,26 @@ export const SolanaStakeDefiView = () => {
                 ticker={solCoin.ticker}
                 priceUsd={priceUsd}
                 logoUrl={validator ? validatorLogoUrl(validator) : undefined}
-                onUnstake={() => onAccountAction('solana_unstake', row)}
-                onWithdraw={() => onAccountAction('solana_withdraw', row)}
-                onMove={() => onAccountAction('solana_move_stake', row)}
+                moveDestinationName={
+                  row.moveDestination
+                    ? validatorName({
+                        votePubkey: row.moveDestination,
+                        validatorByVote,
+                      })
+                    : undefined
+                }
+                onUnstake={() =>
+                  onAccountAction({ action: 'solana_unstake', row })
+                }
+                onWithdraw={() =>
+                  onAccountAction({ action: 'solana_withdraw', row })
+                }
+                onMove={() =>
+                  onAccountAction({ action: 'solana_move_stake', row })
+                }
+                onFinishMove={() =>
+                  onAccountAction({ action: 'solana_finish_move', row })
+                }
                 onStake={onDelegate}
               />
             )
@@ -189,10 +261,7 @@ export const SolanaStakeDefiView = () => {
     </VStack>
   )
 
-  function onAccountAction(
-    action: 'solana_unstake' | 'solana_withdraw' | 'solana_move_stake',
-    row: SolanaStakeRow
-  ) {
+  function onAccountAction({ action, row }: OnAccountActionInput) {
     if (!solCoin) {
       return
     }
@@ -201,6 +270,20 @@ export const SolanaStakeDefiView = () => {
     }
     if (action === 'solana_withdraw') {
       form.amount = fromChainAmount(row.withdrawableLamports, solDecimals)
+    }
+    if (action === 'solana_move_stake') {
+      // The current validator is the one destination the move cannot have, so
+      // the picker hides it.
+      form.srcValidatorAddress = row.votePubkey
+      form.validatorAddress = row.moveDestination
+    }
+    if (action === 'solana_finish_move') {
+      // Re-delegates the whole cooled-down account, so the amount is everything
+      // above the rent-exempt reserve — rewards accrued while it was active
+      // included. The destination was picked back on the Move step; without one
+      // (an account deactivated elsewhere) the finish-move screen still asks.
+      form.amount = fromChainAmount(row.withdrawableLamports, solDecimals)
+      form.validatorAddress = row.moveDestination
     }
     navigate({
       id: 'deposit',
@@ -214,6 +297,19 @@ export const SolanaStakeDefiView = () => {
   }
 }
 
+type ValidatorNameInput = {
+  votePubkey: string
+  validatorByVote: Map<string, SolanaValidator>
+}
+
+const validatorName = ({ votePubkey, validatorByVote }: ValidatorNameInput) => {
+  const validator = validatorByVote.get(votePubkey)
+
+  return validator
+    ? validatorDisplayName(validator)
+    : truncatedPubkey(votePubkey)
+}
+
 export type SolanaStakeRow = {
   stakeAccount: SolanaStakeAccount
   votePubkey: string
@@ -222,36 +318,44 @@ export type SolanaStakeRow = {
   delegatedAmount: number
   rentReserve: number
   withdrawableLamports: bigint
+  /** Destination vote pubkey of a move in flight, picked on the Move step. */
+  moveDestination?: string
   canUnstake: boolean
   canWithdraw: boolean
   canMove: boolean
+  canFinishMove: boolean
 }
 
 type BuildRowInput = {
   account: SolanaStakeAccount
   validatorByVote: Map<string, SolanaValidator>
   currentEpoch: bigint
+  moveDestination?: string
 }
 
 const buildRow = ({
   account,
   validatorByVote,
   currentEpoch,
+  moveDestination,
 }: BuildRowInput): SolanaStakeRow => {
   const votePubkey = account.delegation?.votePubkey ?? ''
-  const validator = validatorByVote.get(votePubkey)
   const state = stakeActivationState(account, currentEpoch)
   const cooldown = evaluateCooldown(account, currentEpoch)
   const withdrawableLamports =
     account.lamports > account.rentExemptReserve
       ? account.lamports - account.rentExemptReserve
       : 0n
+  // A fully cooled-down account can be re-delegated (finishing a move) just as
+  // well as withdrawn — the two share the same gate. Offering finish-move on
+  // any cooled-down account, not only one with a recorded destination, keeps
+  // accounts deactivated on another device (or before moves were tracked)
+  // completable rather than stranded.
+  const isCooledDown = state === 'inactive' && cooldown.status === 'available'
   return {
     stakeAccount: account,
     votePubkey,
-    validatorName: validator
-      ? validatorDisplayName(validator)
-      : votePubkey.slice(0, 4) + '…' + votePubkey.slice(-4),
+    validatorName: validatorName({ votePubkey, validatorByVote }),
     state,
     delegatedAmount: Number(
       fromChainAmount(account.delegation?.stake ?? 0n, solDecimals)
@@ -260,8 +364,10 @@ const buildRow = ({
       fromChainAmount(account.rentExemptReserve, solDecimals)
     ),
     withdrawableLamports,
+    moveDestination,
     canUnstake: state === 'active' || state === 'activating',
-    canWithdraw: state === 'inactive' && cooldown.status === 'available',
+    canWithdraw: isCooledDown,
     canMove: state === 'active',
+    canFinishMove: isCooledDown && withdrawableLamports > 0n,
   }
 }

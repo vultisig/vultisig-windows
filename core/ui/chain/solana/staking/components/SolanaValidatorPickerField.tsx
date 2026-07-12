@@ -20,6 +20,10 @@ type SolanaValidatorPickerFieldProps = {
   ticker: string
   /** Currently-selected vote pubkey, if any. */
   value?: string
+  /** Field caption. Defaults to "Validator". */
+  label?: string
+  /** Validator to hide from the list (e.g. the source of a move). */
+  excludeVotePubkey?: string
   onChange: (votePubkey: string) => void
 }
 
@@ -31,6 +35,8 @@ type SolanaValidatorPickerFieldProps = {
 export const SolanaValidatorPickerField = ({
   ticker,
   value,
+  label,
+  excludeVotePubkey,
   onChange,
 }: SolanaValidatorPickerFieldProps) => {
   const { t } = useTranslation()
@@ -44,7 +50,7 @@ export const SolanaValidatorPickerField = ({
       renderOpener={({ onOpen }) => (
         <FieldContainer onClick={onOpen}>
           <Text size={14} color="regular">
-            {t('validator')}
+            {label ?? t('validator')}
           </Text>
           {value ? (
             <HStack alignItems="center" gap={8}>
@@ -70,6 +76,7 @@ export const SolanaValidatorPickerField = ({
         <SolanaValidatorPickerSheet
           ticker={ticker}
           selectedVotePubkey={value}
+          excludeVotePubkey={excludeVotePubkey}
           onClose={onClose}
           onSelect={validator => {
             onChange(validator.votePubkey)

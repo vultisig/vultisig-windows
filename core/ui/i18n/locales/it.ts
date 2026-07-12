@@ -1639,7 +1639,7 @@ export const it = {
   solana_move_stake: 'Sposta',
   solana_finish_move: 'Completa spostamento',
   solana_staking_move_notice:
-    'Lo spostamento dello stake richiede più passaggi e attraversa più epoche: questo disattiva ora l’account; dopo il periodo di raffreddamento di circa {{days}} giorni, completa lo spostamento verso il nuovo validatore.',
+    'Il trasferimento della puntata richiede diversi passaggi e si estende su diverse epoche: questa operazione disattiva l&#39;account ora e avvia un periodo di cooldown di circa {{days}} giorni. Una volta terminato, completa il trasferimento al validatore che hai scelto.',
   solana_staking_finish_move_notice:
     'Questo ridelega l’account di stake raffreddato al nuovo validatore e completa lo spostamento.',
   external_recipient_tooltip_content:
@@ -1709,4 +1709,8 @@ export const it = {
   trust_line_currency_reserved:
     'XRP non può essere utilizzato come valuta di riferimento per le linee di fiducia.',
   trust_line_currency_invalid: 'Inserisci un codice valuta valido',
+  solana_staking_current_validator: 'Validatore attuale',
+  solana_staking_new_validator: 'Nuovo validatore',
+  solana_staking_pending_move_notice:
+    'Passaggio a {{validator}} : è possibile completare il passaggio una volta terminato il periodo di ricarica.',
 }
