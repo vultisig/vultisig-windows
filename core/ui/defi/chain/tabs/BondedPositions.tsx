@@ -7,7 +7,6 @@ import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Text } from '@lib/ui/text'
@@ -16,7 +15,6 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { sum } from '@vultisig/lib-utils/array/sum'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -27,6 +25,7 @@ import { BondNodeItem } from '../components/bond/BondNodeItem'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
+import { DefiPositionErrorState } from './DefiPositionErrorState'
 
 const collapsibleTransition = {
   duration: 0.35,
@@ -98,7 +97,7 @@ const Collapsible = ({ isOpen, children }: CollapsibleProps) => (
 export const BondedPositions = () => {
   const chain = useCurrentDefiChain()
   const selectedPositions = useDefiPositions(chain)
-  const { data, isPending, error } = useDefiChainPositionsQuery(chain)
+  const { data, isPending, error, refetch } = useDefiChainPositionsQuery(chain)
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
   const [activeNodesOpen, setActiveNodesOpen] = useState(true)
@@ -123,11 +122,7 @@ export const BondedPositions = () => {
   }
 
   if (error) {
-    return (
-      <CenterAbsolutely>
-        <Text color="danger">{extractErrorMsg(error)}</Text>
-      </CenterAbsolutely>
-    )
+    return <DefiPositionErrorState onRetry={refetch} />
   }
 
   if (
@@ -136,11 +131,7 @@ export const BondedPositions = () => {
     !data?.bond &&
     selectedPositions.length > 0
   ) {
-    return (
-      <CenterAbsolutely>
-        <Text color="danger">{t('failed_to_load')}</Text>
-      </CenterAbsolutely>
-    )
+    return <DefiPositionErrorState onRetry={refetch} />
   }
 
   if (selectedPositions.length === 0) {
