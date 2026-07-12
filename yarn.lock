@@ -757,6 +757,7 @@ __metadata:
     "@cosmjs/stargate": "npm:^0.39.0"
     "@fontsource/montserrat": "npm:^5.2.8"
     "@fontsource/roboto-mono": "npm:^5.2.9"
+    "@gemwallet/api": "npm:^3.8.0"
     "@hookform/resolvers": "npm:^5.4.0"
     "@keplr-wallet/provider": "npm:^0.13.38"
     "@keplr-wallet/types": "npm:^0.13.38"
@@ -2198,6 +2199,13 @@ __metadata:
   dependencies:
     "@formatjs/fast-memoize": "npm:3.1.6"
   checksum: 10c0/4c84b70c48ddd47c86087666b8dd7524f263cbbe8825341745db2416441907b6354509f3439a08f373f374442c8abc1e1d53662c2a6d8ef7a5e7385be10e1619
+  languageName: node
+  linkType: hard
+
+"@gemwallet/api@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "@gemwallet/api@npm:3.8.0"
+  checksum: 10c0/4aaceeb1cd7433283e21e617f424a36d802865e90ce734ce9f27a03855bc33d93d7b8041eb3716884164d9c3dab5390b9f56a690ef1fc2f8bba87d63508caff8
   languageName: node
   linkType: hard
 

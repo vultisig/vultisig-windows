@@ -20,6 +20,7 @@ interface Window {
   getOfflineSignerAuto: any
   station: any
   terra: any
+  gemWallet?: boolean
   isTerraExtensionAvailable?: boolean
   isStationExtensionAvailable?: boolean
   terraWallets?: Array<{ name: string; identifier: string; icon: string }>
