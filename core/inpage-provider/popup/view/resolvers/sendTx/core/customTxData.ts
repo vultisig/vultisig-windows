@@ -18,6 +18,10 @@ import type {
   IKeysignTransactionPayload,
   ITransactionPayload,
 } from '../interfaces'
+import {
+  RippleTransaction,
+  sanitizeRippleDappTx,
+} from './ripple/sanitizeRippleDappTx'
 import type { SolanaTxData } from './solana/types/types'
 import { restrictPsbtToInputs } from './utxo/restrictPsbt'
 
@@ -67,6 +71,17 @@ export type SuiDappTxData = {
   transactionBytes: string
 }
 
+/**
+ * XRPL dApp transaction data: the sanitized transaction object (allowlisted
+ * `TransactionType`, `Account` pinned to the vault). The mechanical envelope
+ * fields — `Fee`, `Sequence`, `LastLedgerSequence` — are filled from the
+ * wallet's network read while building the keysign payload, then the whole
+ * thing is signed verbatim via the `signRipple` payload.
+ */
+export type RippleDappTxData = {
+  transaction: RippleTransaction
+}
+
 export type CustomTxData =
   | {
       regular: RegularTxData
@@ -82,6 +97,9 @@ export type CustomTxData =
     }
   | {
       sui: SuiDappTxData
+    }
+  | {
+      ripple: RippleDappTxData
     }
 
 type GetCustomTxDataInput = {
@@ -194,6 +212,21 @@ export const getCustomTxData = ({
           publicKey,
           walletCore,
         })
+
+        // XRPL dApps ship a full transaction JSON (a swap `OfferCreate`, a
+        // `Payment`, …). Sanitize it against the allowlist and pin `Account`
+        // to this vault before it goes anywhere near the signer; the envelope
+        // fields are autofilled later from the wallet's network read.
+        if (chain === OtherChain.Ripple) {
+          return {
+            ripple: {
+              transaction: sanitizeRippleDappTx({
+                rawJson: data[0],
+                accountAddress: address,
+              }),
+            },
+          }
+        }
 
         if (chain === Chain.Bitcoin) {
           const dataBuffer = Buffer.from(data[0], 'base64')

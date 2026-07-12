@@ -20,14 +20,21 @@ import {
   getNetwork,
   getPublicKey,
   isInstalled,
+  signTransaction,
+  submitTransaction,
 } from '@gemwallet/api'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mockRequestAccount = vi.fn()
+const mockCallPopup = vi.fn()
 
 vi.mock('@clients/extension/src/inpage/providers/core/requestAccount', () => ({
   requestAccount: (...args: unknown[]) => mockRequestAccount(...args),
+}))
+
+vi.mock('@core/inpage-provider/popup', () => ({
+  callPopup: (...args: unknown[]) => mockCallPopup(...args),
 }))
 
 const address = 'rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH'
@@ -89,6 +96,7 @@ describe('GemWallet-compatible provider', () => {
   beforeEach(() => {
     mockRequestAccount.mockReset()
     mockRequestAccount.mockResolvedValue({ address, publicKey })
+    mockCallPopup.mockReset()
     window.gemWallet = true
   })
 
@@ -141,6 +149,72 @@ describe('GemWallet-compatible provider', () => {
     })
   })
 
+  describe('sign and submit', () => {
+    const payment = {
+      TransactionType: 'Payment',
+      Account: address,
+      Destination: 'rDestination000000000000000000000000',
+      Amount: '1000000',
+    } as const
+    // base64('vulti') — a stand-in for the signed tx blob the popup returns.
+    const encoded = Buffer.from('vulti').toString('base64')
+    const hash = 'ABCDEF0123456789'
+
+    beforeEach(() => {
+      mockCallPopup.mockResolvedValue([{ hash, data: { encoded } }])
+    })
+
+    it('submitTransaction signs, broadcasts, and returns the hash', async () => {
+      await expect(
+        submitTransaction({ transaction: payment })
+      ).resolves.toEqual({ type: 'response', result: { hash } })
+
+      const [, options] = mockCallPopup.mock.calls[0]
+      expect(options).toEqual({ account: address })
+    })
+
+    it('submitTransaction forwards the transaction on the broadcast path', async () => {
+      await submitTransaction({ transaction: payment })
+
+      const [call] = mockCallPopup.mock.calls[0]
+      expect(call.sendTx.serialized).toMatchObject({
+        chain: OtherChain.Ripple,
+        skipBroadcast: false,
+      })
+      expect(JSON.parse(call.sendTx.serialized.data[0])).toEqual(payment)
+    })
+
+    it('signTransaction returns the signed blob as uppercase hex and does not broadcast', async () => {
+      await expect(
+        signTransaction({ transaction: payment })
+      ).resolves.toEqual({
+        type: 'response',
+        result: {
+          signature: Buffer.from(encoded, 'base64')
+            .toString('hex')
+            .toUpperCase(),
+        },
+      })
+
+      const [call] = mockCallPopup.mock.calls[0]
+      expect(call.sendTx.serialized.skipBroadcast).toBe(true)
+    })
+
+    it('prompts for grant-access before signing', async () => {
+      await submitTransaction({ transaction: payment })
+
+      expect(mockRequestAccount).toHaveBeenCalledWith(OtherChain.Ripple)
+    })
+
+    it('surfaces a declined signing popup as a reject', async () => {
+      mockCallPopup.mockRejectedValue(new EIP1193Error('UserRejectedRequest'))
+
+      await expect(
+        submitTransaction({ transaction: payment })
+      ).resolves.toEqual({ type: 'reject', result: undefined })
+    })
+  })
+
   describe('failures', () => {
     it('reports a declined grant as a reject, not a throw', async () => {
       mockRequestAccount.mockRejectedValue(
@@ -160,7 +234,7 @@ describe('GemWallet-compatible provider', () => {
     })
 
     it('answers unsupported methods instead of hanging the dApp', async () => {
-      const response = await sendRawRequest('REQUEST_SIGN_TRANSACTION/V3')
+      const response = await sendRawRequest('REQUEST_SIGN_MESSAGE/V3')
 
       expect(response.error).toMatchObject({
         message: expect.stringContaining('not supported'),

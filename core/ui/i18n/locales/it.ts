@@ -1713,4 +1713,16 @@ export const it = {
   solana_staking_new_validator: 'Nuovo validatore',
   solana_staking_pending_move_notice:
     'Passaggio a {{validator}} : è possibile completare il passaggio una volta terminato il periodo di ricarica.',
+  ripple_transaction_summary: 'Riepilogo della transazione',
+  ripple_field_type: 'Tipo',
+  ripple_field_destination: 'Destinazione',
+  ripple_field_destination_tag: 'Etichetta di destinazione',
+  ripple_field_amount: 'Quantità',
+  ripple_field_send_max: 'Paga al massimo',
+  ripple_field_deliver_min: 'Ricevere almeno',
+  ripple_field_taker_gets: 'Vendita',
+  ripple_field_taker_pays: 'Acquisto',
+  ripple_field_trust_limit: 'limite di fiducia',
+  ripple_field_offer_sequence: 'Sequenza di offerta',
+  ripple_field_issuer: 'Emittente',
 }

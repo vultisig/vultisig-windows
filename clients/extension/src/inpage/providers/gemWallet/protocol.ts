@@ -17,23 +17,31 @@ export const gemWalletRequestSource = 'GEM_WALLET_MSG_REQUEST'
 export const gemWalletResponseSource = 'GEM_WALLET_MSG_RESPONSE'
 
 /**
- * Request types this bridge answers: detection and account reads only. Signing
- * is deliberately absent — see `resolveGemWalletRequest` for how the rest are
- * turned away.
+ * Request types this bridge answers: detection, account reads, and the XRPL
+ * transaction surface (sign / submit). Anything else — message signing, NFT
+ * operations, bulk submits — is refused in `resolveGemWalletRequest` rather
+ * than left to hang.
  */
 export const gemWalletRequestTypes = [
   'REQUEST_IS_INSTALLED/V3',
   'REQUEST_GET_ADDRESS/V3',
   'REQUEST_GET_PUBLIC_KEY/V3',
   'REQUEST_GET_NETWORK/V3',
+  'REQUEST_SIGN_TRANSACTION/V3',
+  'REQUEST_SUBMIT_TRANSACTION/V3',
 ] as const
 
 export type GemWalletRequestType = (typeof gemWalletRequestTypes)[number]
 
-/** A `GEM_WALLET_MSG_REQUEST` envelope, narrowed to the fields we act on. */
+/**
+ * A `GEM_WALLET_MSG_REQUEST` envelope, narrowed to the fields we act on.
+ * `payload` is opaque here — the sign / submit handlers validate it — and
+ * absent for the read methods.
+ */
 type GemWalletRequest = {
   messageId: number
   type: string
+  payload?: unknown
 }
 
 /** Error shape the SDK hands to `deserializeError` and rethrows to the dApp. */
@@ -53,6 +61,8 @@ export type GemWalletResponseBody =
   | { result: { address: string } }
   | { result: { address: string; publicKey: string } }
   | { result: { chain: string; network: string; websocket: string } }
+  | { result: { signature: string } }
+  | { result: { hash: string } }
   | { result: undefined }
   | { error: GemWalletSerializedError }
 
@@ -87,7 +97,9 @@ export const parseGemWalletRequest = (
   if (source !== gemWalletRequestSource || app !== gemWalletApp) return null
   if (typeof messageId !== 'number' || typeof type !== 'string') return null
 
-  return { messageId, type }
+  const payload = 'payload' in data ? data.payload : undefined
+
+  return { messageId, type, payload }
 }
 
 /**

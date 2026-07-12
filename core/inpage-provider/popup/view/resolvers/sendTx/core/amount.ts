@@ -20,4 +20,7 @@ export const getTxAmount = ({ coin, customTxData }: ParsedTx) =>
     polkadot: () => BigInt(0),
     // Pre-built PTB: the amount is encoded in the bytes, not surfaced here.
     sui: () => BigInt(0),
+    // Amounts live inside the raw XRPL transaction (and an offer has two of
+    // them); the decoded confirmation view renders them, not this scalar.
+    ripple: () => BigInt(0),
   })

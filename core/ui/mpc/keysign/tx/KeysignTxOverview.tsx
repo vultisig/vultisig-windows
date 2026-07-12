@@ -28,6 +28,8 @@ import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
+import { parseRippleTx } from './ripple/parseRippleTx'
+import { SignRippleDisplay } from './ripple/SignRippleDisplay'
 import { parseSuiTx } from './sui/parser'
 import { SignSuiDisplay } from './sui/SignSuiDisplay'
 
@@ -56,8 +58,12 @@ export const KeysignTxOverview = ({
   const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
 
   const showAmountOrAction =
-    formattedToAmount !== null ||
-    (txAction !== null && txAction.action !== 'send')
+    // A dApp XRPL transaction carries no single send amount (`toAmount` is 0,
+    // an offer is two-sided); SignRippleDisplay renders the real figures, so
+    // suppress the generic "0 XRP" header here.
+    keysignPayload.signData.case !== 'signRipple' &&
+    (formattedToAmount !== null ||
+      (txAction !== null && txAction.action !== 'send'))
 
   const toVaultName = useVaultNameForAddress({
     address: toAddress ?? '',
@@ -83,6 +89,11 @@ export const KeysignTxOverview = ({
       ? parseSuiTx(keysignPayload.signData.value.unsignedTxMsg)
       : null
 
+  const rippleTxData =
+    keysignPayload.signData.case === 'signRipple'
+      ? parseRippleTx(keysignPayload.signData.value.rawJson)
+      : null
+
   return (
     <>
       {showAmountOrAction && (
@@ -99,6 +110,7 @@ export const KeysignTxOverview = ({
         />
       )}
       {suiTxData && <SignSuiDisplay data={suiTxData} />}
+      {rippleTxData && <SignRippleDisplay data={rippleTxData} />}
       <Panel>
         <SeparatedByLine gap={16}>
           {!keysignPayload.skipBroadcast && (

@@ -1691,4 +1691,16 @@ export const ru = {
   solana_staking_new_validator: 'Новый валидатор',
   solana_staking_pending_move_notice:
     'Перемещение к {{validator}} — вы можете завершить перемещение после окончания периода ожидания.',
+  ripple_transaction_summary: 'Сводка по транзакции',
+  ripple_field_type: 'Тип',
+  ripple_field_destination: 'Место назначения',
+  ripple_field_destination_tag: 'Метка назначения',
+  ripple_field_amount: 'Количество',
+  ripple_field_send_max: 'Платить максимум',
+  ripple_field_deliver_min: 'Получить как минимум',
+  ripple_field_taker_gets: 'Продажа',
+  ripple_field_taker_pays: 'Покупка',
+  ripple_field_trust_limit: 'Лимит доверия',
+  ripple_field_offer_sequence: 'Последовательность предложений',
+  ripple_field_issuer: 'Эмитент',
 }

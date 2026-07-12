@@ -1576,4 +1576,16 @@ export const zh = {
   solana_staking_new_validator: '新验证器',
   solana_staking_pending_move_notice:
     '移动到{{validator}} — 冷却时间结束后即可完成移动。',
+  ripple_transaction_summary: '交易概要',
+  ripple_field_type: '类型',
+  ripple_field_destination: '目的地',
+  ripple_field_destination_tag: '目的地标签',
+  ripple_field_amount: '数量',
+  ripple_field_send_max: '支付最多',
+  ripple_field_deliver_min: '至少收到',
+  ripple_field_taker_gets: '销售',
+  ripple_field_taker_pays: '购买',
+  ripple_field_trust_limit: '信任限额',
+  ripple_field_offer_sequence: '报价顺序',
+  ripple_field_issuer: '发行人',
 }
