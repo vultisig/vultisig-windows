@@ -79,6 +79,33 @@ export const resolveStakeToken = (chain: Chain, positionId: string) => {
   return { ...chainFeeCoin[chain], chain }
 }
 
+/**
+ * DeFi staking positions whose on-chain receipt is a transferable bank denom,
+ * mapped to the coin that should actually be sent. This is intentionally the
+ * receipt token the vault holds (e.g. `sRUJI` / `x/staking-x/ruji`), not the
+ * liquid asset used for stake/unstake (`resolveStakeToken` returns the latter).
+ *
+ * Positions absent from this list are treated as non-transferable (e.g. bonded
+ * RUNE), so they get no Send button. Add an entry here — the single source of
+ * truth — to enable Send for a new receipt token.
+ */
+const transferableStakeTokenById: Partial<Record<Chain, Record<string, Coin>>> =
+  {
+    [Chain.THORChain]: {
+      'thor-stake-stcy': thorchainTokens.stcy,
+      'thor-stake-ruji': thorchainTokens.sruji,
+    },
+  }
+
+/**
+ * Returns the coin to send for a transferable stake position, or `undefined`
+ * when the position's receipt is not transferable.
+ */
+export const resolveTransferableStakeToken = (
+  chain: Chain,
+  positionId: string
+): Coin | undefined => transferableStakeTokenById[chain]?.[positionId]
+
 export const resolveStakeActions = ({
   chain,
   position,
