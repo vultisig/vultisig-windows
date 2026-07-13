@@ -69,7 +69,7 @@ const installBrowserFaithfulPostMessage = () => {
 }
 
 /** Posts a raw envelope the way the SDK does, for types it has no helper for. */
-const sendRawRequest = (type: string) =>
+const sendRawRequest = (type: string, payload?: unknown) =>
   new Promise<Record<string, unknown>>(resolve => {
     const messageId = Date.now() + Math.random()
 
@@ -82,7 +82,13 @@ const sendRawRequest = (type: string) =>
     })
 
     window.postMessage(
-      { source: gemWalletRequestSource, messageId, app: gemWalletApp, type },
+      {
+        source: gemWalletRequestSource,
+        messageId,
+        app: gemWalletApp,
+        type,
+        payload,
+      },
       window.location.origin
     )
   })
@@ -185,9 +191,7 @@ describe('GemWallet-compatible provider', () => {
     })
 
     it('signTransaction returns the signed blob as uppercase hex and does not broadcast', async () => {
-      await expect(
-        signTransaction({ transaction: payment })
-      ).resolves.toEqual({
+      await expect(signTransaction({ transaction: payment })).resolves.toEqual({
         type: 'response',
         result: {
           signature: Buffer.from(encoded, 'base64')
@@ -212,6 +216,17 @@ describe('GemWallet-compatible provider', () => {
       await expect(
         submitTransaction({ transaction: payment })
       ).resolves.toEqual({ type: 'reject', result: undefined })
+    })
+
+    it('rejects a request whose transaction is null instead of forwarding it', async () => {
+      const response = await sendRawRequest('REQUEST_SUBMIT_TRANSACTION/V3', {
+        transaction: null,
+      })
+
+      expect(response.error).toMatchObject({
+        message: expect.stringContaining('missing a transaction'),
+      })
+      expect(mockCallPopup).not.toHaveBeenCalled()
     })
   })
 

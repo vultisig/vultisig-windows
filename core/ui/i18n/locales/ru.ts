@@ -1703,4 +1703,6 @@ export const ru = {
   ripple_field_trust_limit: 'Лимит доверия',
   ripple_field_offer_sequence: 'Последовательность предложений',
   ripple_field_issuer: 'Эмитент',
+  ripple_undecoded_notice:
+    'Данная транзакция не может быть расшифрована. Перед подтверждением ознакомьтесь с приведенными ниже данными.',
 }

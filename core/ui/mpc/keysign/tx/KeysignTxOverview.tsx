@@ -28,7 +28,6 @@ import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
-import { parseRippleTx } from './ripple/parseRippleTx'
 import { SignRippleDisplay } from './ripple/SignRippleDisplay'
 import { parseSuiTx } from './sui/parser'
 import { SignSuiDisplay } from './sui/SignSuiDisplay'
@@ -89,9 +88,9 @@ export const KeysignTxOverview = ({
       ? parseSuiTx(keysignPayload.signData.value.unsignedTxMsg)
       : null
 
-  const rippleTxData =
+  const rippleRawJson =
     keysignPayload.signData.case === 'signRipple'
-      ? parseRippleTx(keysignPayload.signData.value.rawJson)
+      ? keysignPayload.signData.value.rawJson
       : null
 
   return (
@@ -110,7 +109,7 @@ export const KeysignTxOverview = ({
         />
       )}
       {suiTxData && <SignSuiDisplay data={suiTxData} />}
-      {rippleTxData && <SignRippleDisplay data={rippleTxData} />}
+      {rippleRawJson !== null && <SignRippleDisplay rawJson={rippleRawJson} />}
       <Panel>
         <SeparatedByLine gap={16}>
           {!keysignPayload.skipBroadcast && (

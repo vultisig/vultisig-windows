@@ -28,7 +28,6 @@ import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDi
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
-import { parseRippleTx } from '@core/ui/mpc/keysign/tx/ripple/parseRippleTx'
 import { SignRippleDisplay } from '@core/ui/mpc/keysign/tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '@core/ui/mpc/keysign/tx/sui/parser'
 import { SignSuiDisplay } from '@core/ui/mpc/keysign/tx/sui/SignSuiDisplay'
@@ -582,14 +581,9 @@ export const SendTxOverview = ({
                           title={t('network')}
                         />
                       </List>
-                      {(() => {
-                        const rippleTxData = parseRippleTx(
-                          keysignPayload.signData.value.rawJson
-                        )
-                        return rippleTxData ? (
-                          <SignRippleDisplay data={rippleTxData} />
-                        ) : null
-                      })()}
+                      <SignRippleDisplay
+                        rawJson={keysignPayload.signData.value.rawJson}
+                      />
                       <VStack bgColor="foreground" radius={16}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}

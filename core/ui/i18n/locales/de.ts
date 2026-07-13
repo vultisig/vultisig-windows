@@ -1734,4 +1734,6 @@ export const de = {
   ripple_field_trust_limit: 'Vertrauensgrenze',
   ripple_field_offer_sequence: 'Angebotssequenz',
   ripple_field_issuer: 'Emittent',
+  ripple_undecoded_notice:
+    'Diese Transaktion konnte nicht dekodiert werden. Bitte prüfen Sie die unten stehenden Rohdaten, bevor Sie die Transaktion genehmigen.',
 }

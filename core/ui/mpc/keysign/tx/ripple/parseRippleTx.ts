@@ -20,13 +20,13 @@ type RippleFieldLabelKey =
   | 'ripple_field_trust_limit'
   | 'ripple_field_offer_sequence'
 
-export type RippleTxField = {
+type RippleTxField = {
   labelKey: RippleFieldLabelKey
   amount?: RippleAmount
   text?: string
 }
 
-export type RippleTxData = {
+type RippleTxData = {
   transactionType: string
   fields: RippleTxField[]
 }
@@ -47,9 +47,15 @@ const decodeCurrency = (currency: string): string => {
 
 const parseAmount = (value: unknown): RippleAmount | undefined => {
   if (typeof value === 'string') {
+    // Amount is dApp-controlled and its format is not sanitized upstream, so a
+    // non-numeric drops string must not throw `BigInt` mid-render — drop the
+    // row instead, honoring this parser's "never throws" contract.
+    const drops = attempt(() => BigInt(value))
+    if ('error' in drops) return undefined
+
     return {
       kind: 'native',
-      xrp: fromChainAmount(BigInt(value), xrpDecimals).toString(),
+      xrp: fromChainAmount(drops.data, xrpDecimals).toString(),
     }
   }
 

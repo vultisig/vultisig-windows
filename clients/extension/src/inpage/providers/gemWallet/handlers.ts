@@ -26,7 +26,11 @@ const getRequestedTransaction = (payload: unknown): unknown => {
   if (
     typeof payload !== 'object' ||
     payload === null ||
-    !('transaction' in payload)
+    !('transaction' in payload) ||
+    // `'transaction' in payload` passes when the key is present but null /
+    // undefined; reject that too so a garbage `[undefined]` never reaches the
+    // popup instead of this clear error.
+    payload.transaction == null
   ) {
     throw new Error('GemWallet transaction request is missing a transaction')
   }

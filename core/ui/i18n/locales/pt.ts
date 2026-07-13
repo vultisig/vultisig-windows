@@ -1722,4 +1722,6 @@ export const pt = {
   ripple_field_trust_limit: 'Limite de confiança',
   ripple_field_offer_sequence: 'Sequência de ofertas',
   ripple_field_issuer: 'Emissor',
+  ripple_undecoded_notice:
+    'Esta transação não pôde ser decodificada. Revise os detalhes brutos abaixo antes de aprovar.',
 }

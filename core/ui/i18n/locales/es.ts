@@ -1720,4 +1720,6 @@ export const es = {
   ripple_field_trust_limit: 'Límite de confianza',
   ripple_field_offer_sequence: 'Secuencia de oferta',
   ripple_field_issuer: 'Editor',
+  ripple_undecoded_notice:
+    'Esta transacción no pudo ser decodificada. Revise los detalles a continuación antes de aprobar.',
 }

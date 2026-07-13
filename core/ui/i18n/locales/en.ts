@@ -908,6 +908,8 @@ export const en = {
   resource: 'Resource',
   retry: 'Retry',
   ripple_transaction_summary: 'Transaction summary',
+  ripple_undecoded_notice:
+    'This transaction could not be decoded. Review the raw details below before approving.',
   ripple_field_type: 'Type',
   ripple_field_destination: 'Destination',
   ripple_field_destination_tag: 'Destination tag',

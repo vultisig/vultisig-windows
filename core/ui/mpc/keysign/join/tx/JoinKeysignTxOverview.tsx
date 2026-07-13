@@ -30,7 +30,6 @@ import { useTranslation } from 'react-i18next'
 
 import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
-import { parseRippleTx } from '../../tx/ripple/parseRippleTx'
 import { SignRippleDisplay } from '../../tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '../../tx/sui/parser'
 import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
@@ -133,11 +132,10 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   // amount/recipient either — decode it so the co-signer approves the real
   // terms rather than an empty 0-XRP card.
   if (value.signData.case === 'signRipple') {
-    const rippleTxData = parseRippleTx(value.signData.value.rawJson)
     return (
       <>
         <BlockaidTxScan keysignPayloadQuery={keysignPayloadQuery} />
-        {rippleTxData ? <SignRippleDisplay data={rippleTxData} /> : null}
+        <SignRippleDisplay rawJson={value.signData.value.rawJson} />
       </>
     )
   }

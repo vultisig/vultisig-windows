@@ -93,4 +93,24 @@ describe('parseRippleTx', () => {
     expect(parseRippleTx('not json')).toBeNull()
     expect(parseRippleTx('{}')).toBeNull()
   })
+
+  it('omits a non-numeric Amount instead of throwing on BigInt', () => {
+    // Amount is dApp-controlled and its format is not sanitized upstream, so a
+    // bogus drops string must not crash the confirmation render.
+    let data
+    expect(() => {
+      data = parseRippleTx(
+        JSON.stringify({
+          TransactionType: 'Payment',
+          Account: 'rSender0000000000000000000000000000',
+          Amount: 'not-a-number',
+        })
+      )
+    }).not.toThrow()
+
+    expect(data?.transactionType).toBe('Payment')
+    expect(
+      data?.fields.some(field => field.labelKey === 'ripple_field_amount')
+    ).toBe(false)
+  })
 })

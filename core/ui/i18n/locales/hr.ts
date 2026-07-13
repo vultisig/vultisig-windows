@@ -1696,4 +1696,6 @@ export const hr = {
   ripple_field_trust_limit: 'Ograničenje povjerenja',
   ripple_field_offer_sequence: 'Slijed ponuda',
   ripple_field_issuer: 'Izdavatelj',
+  ripple_undecoded_notice:
+    'Ovu transakciju nije bilo moguće dekodirati. Prije odobrenja pregledajte neobrađene podatke u nastavku.',
 }

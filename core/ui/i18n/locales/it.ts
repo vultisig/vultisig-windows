@@ -1725,4 +1725,6 @@ export const it = {
   ripple_field_trust_limit: 'limite di fiducia',
   ripple_field_offer_sequence: 'Sequenza di offerta',
   ripple_field_issuer: 'Emittente',
+  ripple_undecoded_notice:
+    'Impossibile decodificare questa transazione. Si prega di rivedere i dettagli grezzi qui sotto prima di approvare.',
 }

@@ -1686,4 +1686,6 @@ export const ko = {
   ripple_field_trust_limit: '신뢰 한도',
   ripple_field_offer_sequence: '오퍼 시퀀스',
   ripple_field_issuer: '발행자',
+  ripple_undecoded_notice:
+    '이 거래를 해독할 수 없습니다. 승인하기 전에 아래의 원본 세부 정보를 검토하십시오.',
 }

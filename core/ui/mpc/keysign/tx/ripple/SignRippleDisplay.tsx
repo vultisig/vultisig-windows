@@ -5,14 +5,14 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { RippleAmount, RippleTxData } from './parseRippleTx'
+import { parseRippleTx, RippleAmount } from './parseRippleTx'
 
 const formatAmount = (amount: RippleAmount): string =>
   amount.kind === 'native'
     ? `${amount.xrp} XRP`
     : `${amount.value} ${amount.currency}`
 
-type SignRippleDisplayProps = { data: RippleTxData }
+type SignRippleDisplayProps = { rawJson: string }
 
 /**
  * Decoded view of a dApp-supplied XRPL transaction, rendered above the standard
@@ -20,9 +20,32 @@ type SignRippleDisplayProps = { data: RippleTxData }
  * transaction type and its value-bearing fields (destination, amounts, offer
  * sides, trust limit) so the user approves what the tx actually does rather
  * than opaque JSON. Issued-currency amounts also show their issuer.
+ *
+ * If the transaction can't be decoded, it falls back to the raw JSON with a
+ * caution notice — a signing-approval screen must never go blank, leaving the
+ * user to approve without seeing what is being signed.
  */
-export const SignRippleDisplay: FC<SignRippleDisplayProps> = ({ data }) => {
+export const SignRippleDisplay: FC<SignRippleDisplayProps> = ({ rawJson }) => {
   const { t } = useTranslation()
+  const data = parseRippleTx(rawJson)
+
+  if (!data) {
+    return (
+      <Panel>
+        <VStack gap={8}>
+          <Text size={14} weight={500} color="contrast">
+            {t('ripple_transaction_summary')}
+          </Text>
+          <Text size={12} color="danger">
+            {t('ripple_undecoded_notice')}
+          </Text>
+          <Text size={12} color="shy" family="mono">
+            {rawJson}
+          </Text>
+        </VStack>
+      </Panel>
+    )
+  }
 
   return (
     <Panel>

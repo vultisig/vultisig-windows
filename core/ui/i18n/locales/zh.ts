@@ -1588,4 +1588,5 @@ export const zh = {
   ripple_field_trust_limit: '信任限额',
   ripple_field_offer_sequence: '报价顺序',
   ripple_field_issuer: '发行人',
+  ripple_undecoded_notice: '此交易无法解码。请在批准前查看以下原始详细信息。',
 }
