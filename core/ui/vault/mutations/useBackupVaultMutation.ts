@@ -10,6 +10,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { encryptVaultBackupWithPassword } from '@vultisig/lib-utils/encryption/vaultBackup/encryptVaultBackupWithPassword'
 import { match } from '@vultisig/lib-utils/match'
+import { useRef } from 'react'
 
 import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
@@ -73,7 +74,13 @@ export const useBackupVaultMutation = ({
 
   const [passcode] = usePasscode()
 
-  return useMutation({
+  // Synchronous in-flight guard: `isPending` only disables the button after a
+  // re-render, so a fast double-click can fire two backups before that commits
+  // (each click = one saveFile download). A ref blocks the second call in the
+  // same tick, before any render happens.
+  const isBackingUpRef = useRef(false)
+
+  const mutation = useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
       const getVault = async (id: string) => {
         const vault = shouldBePresent(
@@ -160,5 +167,19 @@ export const useBackupVaultMutation = ({
       )
     },
     onSuccess,
+    onSettled: () => {
+      isBackingUpRef.current = false
+    },
   })
+
+  return {
+    ...mutation,
+    mutate: (variables: { password?: string } = {}) => {
+      if (isBackingUpRef.current) {
+        return
+      }
+      isBackingUpRef.current = true
+      mutation.mutate(variables)
+    },
+  }
 }

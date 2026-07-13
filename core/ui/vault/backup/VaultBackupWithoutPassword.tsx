@@ -79,7 +79,11 @@ export const VaultBackupWithoutPassword = ({
             </VStack>
           </VStack>
           <VStack gap={12}>
-            <Button loading={isPending} onClick={() => backupVault({})}>
+            <Button
+              disabled={isPending}
+              loading={isPending}
+              onClick={() => backupVault({})}
+            >
               {t('backup_without_password')}
             </Button>
             <Button
