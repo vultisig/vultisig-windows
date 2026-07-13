@@ -1,11 +1,13 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { FlowErrorCloseProvider } from '@core/ui/flow/FlowErrorCloseContext'
 import {
   KeysignMutationListener,
   KeysignMutationListenerProvider,
 } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { CoreView } from '@core/ui/navigation/CoreView'
+import { DappRequestProvider } from '@core/ui/state/dappRequest'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { Views } from '@lib/ui/navigation/Views'
@@ -26,6 +28,9 @@ const views: Views<SendTxView['id']> = {
 }
 
 export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
+  const { requestOrigin, requestName, requestFavicon } =
+    usePopupContext<'sendTx'>()
+
   const keysignMutationListener: KeysignMutationListener = useMemo(
     () => ({
       onSuccess: result => {
@@ -46,19 +51,27 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
   )
 
   return (
-    <NavigationProvider initialValue={{ history: [{ id: 'overview' }] }}>
-      <KeysignMutationListenerProvider value={keysignMutationListener}>
-        <FlowErrorCloseProvider
-          value={() =>
-            onFinish({
-              result: { error: new Error('Signing failed') },
-              shouldClosePopup: true,
-            })
-          }
-        >
-          <ActiveView views={views} />
-        </FlowErrorCloseProvider>
-      </KeysignMutationListenerProvider>
-    </NavigationProvider>
+    <DappRequestProvider
+      value={{
+        origin: requestOrigin,
+        name: requestName,
+        favicon: requestFavicon,
+      }}
+    >
+      <NavigationProvider initialValue={{ history: [{ id: 'overview' }] }}>
+        <KeysignMutationListenerProvider value={keysignMutationListener}>
+          <FlowErrorCloseProvider
+            value={() =>
+              onFinish({
+                result: { error: new Error('Signing failed') },
+                shouldClosePopup: true,
+              })
+            }
+          >
+            <ActiveView views={views} />
+          </FlowErrorCloseProvider>
+        </KeysignMutationListenerProvider>
+      </NavigationProvider>
+    </DappRequestProvider>
   )
 }
