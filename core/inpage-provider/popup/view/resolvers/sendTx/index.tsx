@@ -52,11 +52,15 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
 
   return (
     <DappRequestProvider
-      value={{
-        origin: requestOrigin,
-        name: requestName,
-        favicon: requestFavicon,
-      }}
+      value={
+        requestOrigin
+          ? {
+              origin: requestOrigin,
+              name: requestName,
+              favicon: requestFavicon,
+            }
+          : null
+      }
     >
       <NavigationProvider initialValue={{ history: [{ id: 'overview' }] }}>
         <KeysignMutationListenerProvider value={keysignMutationListener}>

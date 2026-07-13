@@ -22,7 +22,7 @@ const DappRequestContext = createContext<DappRequest | null>(null)
 export const DappRequestProvider = ({
   value,
   children,
-}: ChildrenProp & { value: DappRequest }) => (
+}: ChildrenProp & { value: DappRequest | null }) => (
   <DappRequestContext.Provider value={value}>
     {children}
   </DappRequestContext.Provider>
