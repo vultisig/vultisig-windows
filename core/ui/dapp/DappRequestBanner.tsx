@@ -1,9 +1,9 @@
-import { useDappRequest } from '@core/ui/state/dappRequest'
 import { BrowserExtensionIcon } from '@lib/ui/icons/BrowserExtensionIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { DAppMetadata } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -33,26 +33,30 @@ const FallbackIcon = styled(HStack)`
   width: 32px;
 `
 
-const getHostname = (origin: string) => {
-  const result = attempt(() => new URL(origin).hostname)
-  return 'data' in result ? result.data : origin
+const getHostname = (url: string) => {
+  const result = attempt(() => new URL(url).hostname)
+  return 'data' in result ? result.data : url
+}
+
+type DappRequestBannerProps = {
+  value?: DAppMetadata
 }
 
 /**
  * "Request from" banner identifying the dApp that initiated the transaction.
- * Renders nothing unless a {@link useDappRequest} value is present, so it is
- * safe to place on shared screens used by both dApp and in-wallet flows.
+ * Reads from the keysign payload's `dappMetadata`, so it is available on every
+ * cosigning device (initiator and joiner alike). Renders nothing for non-dApp
+ * transactions, where `dappMetadata` is absent.
  */
-export const DappRequestBanner = () => {
+export const DappRequestBanner = ({ value }: DappRequestBannerProps) => {
   const { t } = useTranslation()
-  const dappRequest = useDappRequest()
 
-  if (!dappRequest) {
+  if (!value || !value.url) {
     return null
   }
 
-  const { origin, name, favicon } = dappRequest
-  const hostname = getHostname(origin)
+  const { name, url, iconUrl } = value
+  const hostname = getHostname(url)
 
   return (
     <Panel>
@@ -61,7 +65,7 @@ export const DappRequestBanner = () => {
       </Text>
       <HStack alignItems="center" gap={12}>
         <SafeImage
-          src={favicon}
+          src={iconUrl || undefined}
           fallback={
             <FallbackIcon>
               <BrowserExtensionIcon />

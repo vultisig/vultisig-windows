@@ -102,7 +102,9 @@ export const KeysignSigningStep = ({
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
-                                <DappRequestBanner />
+                                <DappRequestBanner
+                                  value={payload.dappMetadata}
+                                />
                                 <TxSuccess
                                   value={payload}
                                   onSeeTxDetails={onSeeTxDetails}
@@ -125,7 +127,9 @@ export const KeysignSigningStep = ({
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
-                                <DappRequestBanner />
+                                <DappRequestBanner
+                                  value={payload.dappMetadata}
+                                />
                                 <KeysignTxOverview
                                   toAddressLabel={toAddressLabel}
                                 />
