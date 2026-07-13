@@ -94,23 +94,41 @@ describe('parseRippleTx', () => {
     expect(parseRippleTx('{}')).toBeNull()
   })
 
-  it('omits a non-numeric Amount instead of throwing on BigInt', () => {
-    // Amount is dApp-controlled and its format is not sanitized upstream, so a
-    // bogus drops string must not crash the confirmation render.
+  it('fails closed on a present-but-undecodable Amount (no throw, returns null)', () => {
+    // Amount is dApp-controlled and its format is not sanitized upstream. A
+    // bogus drops string must not throw `BigInt` mid-render — and it must not
+    // silently drop the amount either, which would render a "Payment" with its
+    // value hidden. Fail closed so the display shows the raw fallback instead.
     let data
     expect(() => {
       data = parseRippleTx(
         JSON.stringify({
           TransactionType: 'Payment',
           Account: 'rSender0000000000000000000000000000',
+          Destination: 'rDest0000000000000000000000000000000',
           Amount: 'not-a-number',
         })
       )
     }).not.toThrow()
 
-    expect(data?.transactionType).toBe('Payment')
+    expect(data).toBeNull()
+  })
+
+  it('fails closed on a malformed issued-currency SendMax', () => {
+    // Present value-bearing field, but the object is missing `value` — must not
+    // render a swap that hides what the user pays.
     expect(
-      data?.fields.some(field => field.labelKey === 'ripple_field_amount')
-    ).toBe(false)
+      parseRippleTx(
+        JSON.stringify({
+          TransactionType: 'Payment',
+          Account: 'rSender0000000000000000000000000000',
+          Amount: '1000000',
+          SendMax: {
+            currency: 'USD',
+            issuer: 'rIssuer0000000000000000000000000000',
+          },
+        })
+      )
+    ).toBeNull()
   })
 })

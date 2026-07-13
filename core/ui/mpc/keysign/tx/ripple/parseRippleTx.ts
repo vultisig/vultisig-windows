@@ -80,21 +80,30 @@ const parseAmount = (value: unknown): RippleAmount | undefined => {
   return undefined
 }
 
-const pushAmountField = (
-  fields: RippleTxField[],
-  labelKey: RippleFieldLabelKey,
-  value: unknown
-) => {
-  const amount = parseAmount(value)
-  if (amount) fields.push({ labelKey, amount })
-}
+// The value-bearing amount fields, in display order. A cross-currency Payment
+// (the common XRPL DEX swap: Destination = self) pairs `Amount` (what you
+// receive) with `SendMax` (what you pay), so both must be shown.
+const rippleAmountFields: Array<[key: string, labelKey: RippleFieldLabelKey]> =
+  [
+    ['Amount', 'ripple_field_amount'],
+    ['SendMax', 'ripple_field_send_max'],
+    ['DeliverMin', 'ripple_field_deliver_min'],
+    ['TakerGets', 'ripple_field_taker_gets'],
+    ['TakerPays', 'ripple_field_taker_pays'],
+    ['LimitAmount', 'ripple_field_trust_limit'],
+  ]
 
 /**
  * Extracts the human-relevant fields from a dApp XRPL transaction so the
  * confirmation screen renders decoded terms — destination, amounts, offer
- * sides — instead of raw JSON. Unknown or malformed input yields just the
- * transaction type (or `null`), never a throw: this feeds a display, and a
- * missing detail must not blank the whole approval screen.
+ * sides — instead of raw JSON. Never throws: this feeds a display.
+ *
+ * Returns `null` (which the display routes to its raw-JSON fallback) when the
+ * transaction can't be trusted as decoded — unparseable input, a missing
+ * `TransactionType`, or a **present but undecodable value-bearing field**.
+ * That last case fails closed on purpose: silently omitting a malformed
+ * `Amount` / `SendMax` would render a seemingly-complete transaction with its
+ * value hidden, letting the user approve without seeing what they pay.
  */
 export const parseRippleTx = (rawJson: string): RippleTxData | null => {
   const parsed = attempt(() => JSON.parse(rawJson) as unknown)
@@ -116,27 +125,16 @@ export const parseRippleTx = (rawJson: string): RippleTxData | null => {
       text: record.Destination,
     })
   }
-  if (record.Amount !== undefined) {
-    pushAmountField(fields, 'ripple_field_amount', record.Amount)
+
+  for (const [key, labelKey] of rippleAmountFields) {
+    if (record[key] === undefined) continue
+
+    const amount = parseAmount(record[key])
+    if (!amount) return null
+
+    fields.push({ labelKey, amount })
   }
-  // A cross-currency Payment (the common XRPL DEX swap: Destination = self,
-  // Amount = what you receive) caps the spend with SendMax — the amount the
-  // user is actually paying, so it must be shown.
-  if (record.SendMax !== undefined) {
-    pushAmountField(fields, 'ripple_field_send_max', record.SendMax)
-  }
-  if (record.DeliverMin !== undefined) {
-    pushAmountField(fields, 'ripple_field_deliver_min', record.DeliverMin)
-  }
-  if (record.TakerGets !== undefined) {
-    pushAmountField(fields, 'ripple_field_taker_gets', record.TakerGets)
-  }
-  if (record.TakerPays !== undefined) {
-    pushAmountField(fields, 'ripple_field_taker_pays', record.TakerPays)
-  }
-  if (record.LimitAmount !== undefined) {
-    pushAmountField(fields, 'ripple_field_trust_limit', record.LimitAmount)
-  }
+
   if (typeof record.DestinationTag === 'number') {
     fields.push({
       labelKey: 'ripple_field_destination_tag',
