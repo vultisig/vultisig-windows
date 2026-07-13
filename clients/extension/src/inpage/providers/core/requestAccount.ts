@@ -7,6 +7,50 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { EIP1193Error } from '../../../background/handlers/errorHandler'
 
+// All injected providers (EVM, Solana, Cosmos, UTXO) live in the same inpage
+// realm, so a multi-chain dApp fires several `requestAccount` calls roughly in
+// parallel and each would otherwise open its own `grantVaultAccess` popup — a
+// popup storm where only one grant wins the race and the rest come back as
+// `InternalError`. Coalesce concurrent grant requests from this page into a
+// single popup: the first caller opens it, the rest await the same result,
+// then each re-fetches its own account against the granted session.
+const openGrantVaultAccessPopup = (input: {
+  preselectFastVault?: boolean
+  chain: Chain
+  chains?: readonly Chain[]
+}) =>
+  callPopup({
+    grantVaultAccess: {
+      preselectFastVault: input.preselectFastVault,
+      chain: input.chain,
+      ...(input.chains ? { chains: input.chains } : {}),
+    },
+  })
+
+let pendingGrantVaultAccess: ReturnType<
+  typeof openGrantVaultAccessPopup
+> | null = null
+
+const grantVaultAccessOnce = (
+  input: Parameters<typeof openGrantVaultAccessPopup>[0]
+): ReturnType<typeof openGrantVaultAccessPopup> => {
+  if (pendingGrantVaultAccess) {
+    return pendingGrantVaultAccess
+  }
+
+  const started = openGrantVaultAccessPopup(input)
+  pendingGrantVaultAccess = started
+
+  const clear = () => {
+    if (pendingGrantVaultAccess === started) {
+      pendingGrantVaultAccess = null
+    }
+  }
+  started.then(clear, clear)
+
+  return started
+}
+
 const isBridgeTransportError = (error: unknown) => {
   const message = error instanceof Error ? error.message : String(error)
   const unwrappedMessage = message.replace(
@@ -38,12 +82,10 @@ export const requestAccount = async (
   // common no-vault / popup-dismissed paths (#3973).
   const grantAccessAndGetAccount = async () => {
     const result = await attempt(
-      callPopup({
-        grantVaultAccess: {
-          preselectFastVault: options?.preselectFastVault,
-          chain,
-          ...(options?.chains ? { chains: options.chains } : {}),
-        },
+      grantVaultAccessOnce({
+        preselectFastVault: options?.preselectFastVault,
+        chain,
+        chains: options?.chains,
       })
     )
     if (result.data?.appSession) {
