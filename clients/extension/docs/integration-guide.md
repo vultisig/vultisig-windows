@@ -1,7 +1,7 @@
 # Vultisig Extension Integration Guide
 
 {% hint style="info" %}
-**Extension vs SDK**: Use the Extension for web dApps where users connect their existing Vultisig wallet (like MetaMask integration). Use the [SDK](vultisig-sdk/) for building applications that create and manage vaults programmatically.
+**Extension vs SDK**: Use the Extension when users manage a Vultisig vault in the browser and connect it to web dApps (like a MetaMask integration). Use the [SDK](https://github.com/vultisig/vultisig-sdk) when your application needs to create and manage vaults programmatically.
 {% endhint %}
 
 ## Table of Contents
@@ -12,8 +12,8 @@
 4. [Provider Detection](#provider-detection)
 5. [Supported Methods](#supported-methods)
    - [Ethereum](#ethereum-windowvultisigethereum)
-   - [THORChain](#thorchain-windowvultisigthorchain-and-windowthorchain)
-   - [Solana](#solana-windowvultisigsolana-and-windowsolana)
+   - [THORChain](#thorchain-windowvultisigthorchain)
+   - [Solana](#solana-windowvultisigsolana)
    - [Cosmos-Based Chains](#cosmos-based-chains-dydx-gaiachain-kujira-osmosis)
    - [UTXO Chains](#utxo-chains-bitcoin-bitcoincash-dogecoin-litecoin-zcash)
    - [Tron](#tron-windowtronlink-and-windowtronweb)
@@ -23,6 +23,7 @@
    - [Dash](#dash-windowvultisigdash)
    - [QBTC](#qbtc-windowvultisigqbtc-and-windowkeplr)
    - [Plugin Provider](#plugin-provider-windowvultisigplugin)
+   - [Additional Provider Surfaces](#additional-provider-surfaces)
 6. [Wallet Compatibility Layers](#wallet-compatibility-layers)
 7. [Steps to Integrate](#steps-to-integrate-with-vultisig-extension)
 8. [Custom Message Signing](#custom-message-signing)
@@ -36,17 +37,27 @@
 
 ## Introduction
 
-Vultisig Extension is a Chrome extension for interacting with decentralized finance (DeFi) applications. It connects users to dApps without storing private keys in the browser -- transactions are converted to QR codes that users scan and sign using Vultisig peer devices.
+Vultisig Extension is a Chrome extension for managing Vultisig vaults and
+interacting with decentralized finance (DeFi) applications. It stores the
+extension's local vault data and key shares in extension storage; transaction
+authorization follows the selected vault's configured signing flow.
 
 The extension provides:
 
 - **`window.vultisig.ethereum`** for Ethereum and EVM chain integrations.
-- **`window.vultisig.thorchain`** and **`window.thorchain`** for THORChain support.
-- **`window.vultisig.solana`** and **`window.solana`** for Solana support via the Wallet Standard.
+- **`window.vultisig.thorchain`** for THORChain support.
+- **`window.vultisig.solana`** for Solana support and Wallet Standard registration.
 - **`window.vultisig.qbtc`** for QBTC (post-quantum ML-DSA-44) integration.
+- **`window.cardano.vultisig`** for Cardano CIP-30 discovery.
+- **`window.vultisig.sui`** and Sui Wallet Standard registration for Sui dApps.
+- **`window.vultisig.ton.tonconnect`** for TON Connect discovery.
+- **`window.vultisig.bittensor`** for Bittensor dApps.
+- **`window.vultisig.station`** for Terra and Station-compatible dApps.
+- **`window.gemWallet`** plus the GemWallet message bridge for XRPL dApps.
 - **`window.tronLink`** and **`window.tronWeb`** for Tron/TronLink compatibility.
 - **`window.keplr`** for Keplr-compatible Cosmos chain integration.
-- **`window.phantom`** for Phantom wallet compatibility (Bitcoin, Ethereum, Solana).
+- **`window.phantom`** for prioritized Phantom wallet compatibility (Bitcoin,
+  Ethereum, and vault-supported Solana or Sui).
 - A MetaMask-compatible interface (`window.ethereum`) for seamless integration with existing dApps.
 - [EIP-6963](https://eips.ethereum.org/EIPS/eip-6963) provider announcement (`rdns: me.vultisig`) for multi-wallet discovery.
 - Support for UTXO chains (Bitcoin, Litecoin, etc.), Cosmos chains, Polkadot, Ripple, and more.
@@ -57,6 +68,8 @@ The extension provides:
 | ----------- | --------------------- | ------------- |
 | Bitcoin     | `0x1f96`              | UTXO          |
 | BitcoinCash | `0x2710`              | UTXO          |
+| Bittensor   | N/A (genesis hash per request) | Custom |
+| Cardano     | `1` (CIP-30 network id) | CIP-30      |
 | Dash        | `Dash_dash`           | Custom        |
 | DogeCoin    | `0x7d0`               | UTXO          |
 | DyDx        | `dydx-1`              | Cosmos        |
@@ -69,19 +82,30 @@ The extension provides:
 | Polkadot    | `Polkadot_polkadot`   | Custom        |
 | QBTC        | `QBTC_qbtc`           | Custom (MLDSA)|
 | Ripple      | `Ripple_ripple`       | Custom        |
-| Solana      | `Solana_mainnet-beta` | Solana        |
+| Solana      | `solana:mainnet`      | Wallet Standard |
+| Sui         | `sui:mainnet`         | Wallet Standard |
+| Terra       | `phoenix-1`           | Station       |
+| Terra Classic | `columbus-5`        | Station       |
 | THORChain   | `Thorchain_thorchain` | Cosmos        |
+| TON         | `-239`                | TON Connect   |
 | Tron        | N/A                   | TronLink      |
 | Zcash       | `Zcash_zcash`         | UTXO          |
 
 ## How Vultisig Extension Works
 
-- **Private Key Security**: Vultisig Extension does not store private keys. Transactions are converted to QR codes that users scan and sign using Vultisig peer devices.
+- **Vault Custody**: The extension stores local vault data and key shares and
+  participates in signing. The required participants and authorization flow
+  depend on the selected vault's type and configuration.
 - **Compatibility**: The extension injects multiple provider interfaces to maximize dApp compatibility:
   - `window.ethereum` for MetaMask-compatible Ethereum integration
   - `window.vultisig.*` namespace for all chain providers
   - `window.keplr` for Cosmos ecosystem dApps
   - `window.phantom` for Phantom-compatible dApps
+  - `window.cardano.vultisig` for Cardano CIP-30 dApps
+  - Sui Wallet Standard registration for Sui dApps
+  - `window.tonkeeper.tonconnect` for TON Connect-compatible dApps
+  - `window.injectedWeb3.bittensor` for Bittensor dApps when Vultisig is prioritized
+  - Station-compatible globals for Terra dApps
   - `window.tronLink` / `window.tronWeb` for Tron dApps
   - `window.xfi` for XDEFI/Ctrl-compatible dApps
 
@@ -184,7 +208,7 @@ Also available via `window.ethereum` when Vultisig is the default provider.
 - `wallet_watchAsset` (EIP-747 token addition)
 - `wallet_getCapabilities`
 
-### THORChain (`window.vultisig.thorchain` and `window.thorchain`)
+### THORChain (`window.vultisig.thorchain`)
 
 **Account Management:**
 - `request_accounts`
@@ -196,7 +220,7 @@ Also available via `window.ethereum` when Vultisig is the default provider.
 - `deposit` (alternative deposit interface with `recipient` field)
 - `get_transaction_by_hash`
 
-### Solana (`window.vultisig.solana` and `window.solana`)
+### Solana (`window.vultisig.solana`)
 
 Vultisig implements the full [Solana Wallet Standard](https://github.com/wallet-standard/wallet-standard). The provider is also registered via `registerWallet()` for automatic discovery by Wallet Standard-compatible dApps.
 
@@ -371,20 +395,58 @@ For Vultisig Marketplace plugin developers:
 - `personal_sign([message, account, type?, pluginId?])` -- sign a message with optional policy type. When `type` is `"policy"`, `pluginId` is required.
 - `reshare_sign([{ id, dAppSessionId, encryptionKeyHex }])` -- initiate plugin reshare signing
 
+### Additional Provider Surfaces
+
+Vultisig also exposes ecosystem-specific discovery surfaces that supplement
+the generic provider contracts documented above:
+
+- **Cardano:** the generic provider is `window.vultisig.cardano`. CIP-30 dApps
+  can discover Vultisig at `window.cardano.vultisig`; when Vultisig is
+  prioritized, the extension also exposes the legacy `window.cardano.lace`
+  alias.
+- **Sui:** the provider is available directly at `window.vultisig.sui` and is
+  registered through Sui Wallet Standard when the current vault supports Sui.
+  When prioritized, it is also available at `window.phantom.sui`.
+- **TON:** TON Connect-compatible dApps can use
+  `window.vultisig.ton.tonconnect` or `window.tonkeeper.tonconnect`.
+- **Bittensor:** the direct provider is `window.vultisig.bittensor`. When
+  prioritized, Substrate-compatible dApps can also discover it at
+  `window.injectedWeb3.bittensor`.
+- **Terra / Station:** the direct provider is `window.vultisig.station`.
+  Compatibility injection also supplies guarded `window.station` and
+  `window.terra` globals, Station detection flags, and entries in the
+  `terraWallets` and `interchainWallets` discovery arrays.
+- **XRPL / GemWallet:** when `window.gemWallet` is unclaimed, the extension
+  installs the GemWallet-compatible presence marker and message bridge. The
+  bridge supports the GemWallet `isInstalled`, `getAddress`, `getPublicKey`,
+  and `getNetwork` request types; transaction requests use
+  `window.vultisig.ripple`.
+
+Guarded aliases defer to wallets that were injected earlier. Prioritized
+compatibility aliases can replace configurable globals; use the
+`window.vultisig.*` namespace when you want to select Vultisig explicitly.
+
 ## Wallet Compatibility Layers
 
-When Vultisig is set as the prioritized wallet, the extension injects compatibility layers for maximum dApp coverage:
+The extension exposes the compatibility layers below. The notes distinguish
+surfaces that are always available from aliases added only when Vultisig is
+the prioritized wallet:
 
 | Window Object | Compatibility | Notes |
 |--------------|---------------|-------|
-| `window.ethereum` | MetaMask | `isMetaMask = true`, `isVultiConnect = true` |
-| `window.keplr` | Keplr | Full Keplr API for Cosmos dApps |
-| `window.phantom` | Phantom | `{ bitcoin, ethereum, solana }` |
-| `window.tronLink` | TronLink | `isTronLink = true` |
-| `window.tronWeb` | TronWeb | Full TronWeb instance |
-| `window.xfi` | XDEFI/Ctrl | All providers |
-| `window.solana` | Phantom Solana | Via Wallet Standard registration |
-| `window.vultiConnectRouter` | Multi-wallet | Routes between Vultisig and other injected wallets |
+| `window.ethereum` | MetaMask | Guarded direct provider; prioritized routing when selected |
+| `window.keplr` | Keplr | Guarded full API; not priority-gated |
+| `window.phantom` | Phantom | Prioritized only; Solana and Sui require those chains in the current vault |
+| `window.cardano.vultisig` | Cardano CIP-30 | Direct Cardano discovery |
+| Sui Wallet Standard | Sui | Registered when the current vault supports Sui |
+| `window.tonkeeper.tonconnect` | TON Connect | Guarded TON wallet discovery |
+| `window.injectedWeb3.bittensor` | Substrate | Present when Vultisig is prioritized |
+| `window.station` / `window.terra` | Station | Guarded Terra compatibility globals; not priority-gated |
+| `window.gemWallet` | GemWallet / XRPL | Guarded presence marker and request bridge; not priority-gated |
+| `window.tronLink` | TronLink | Prioritized only; `isTronLink = true` |
+| `window.tronWeb` | TronWeb | Prioritized only; full TronWeb instance |
+| `window.xfi` | XDEFI/Ctrl | Prioritized only; all providers |
+| `window.vultiConnectRouter` | Multi-wallet | Prioritized only; routes injected EVM wallets |
 
 ### Multi-Wallet Router
 
@@ -1046,4 +1108,5 @@ Vultisig Extension provides secure multi-chain dApp integration with:
 - **Phantom** compatibility for multi-chain dApps
 - **PSBT signing** for advanced Bitcoin transactions
 
-All without storing private keys in the browser.
+Provider requests use the selected vault's configured custody and signing
+flow.
