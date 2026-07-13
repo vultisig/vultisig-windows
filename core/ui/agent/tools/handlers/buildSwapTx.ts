@@ -1,10 +1,10 @@
 import { toBinary } from '@bufbuild/protobuf'
-import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { buildSwapKeysignPayload } from '@vultisig/core-mpc/keysign/swap/build'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
+import { parseAgentChainAmount } from '../shared/parseAgentChainAmount'
 import { resolveAccountCoin } from '../shared/resolveAccountCoin'
 import { getWalletContext } from '../shared/walletContext'
 import type { ToolHandler } from '../types'
@@ -36,7 +36,10 @@ export const handleBuildSwapTx: ToolHandler = async (input, context) => {
     )
   }
 
-  const amount = toChainAmount(parseFloat(amountStr), fromCoin.decimals)
+  const amount = parseAgentChainAmount({
+    amount: amountStr,
+    decimals: fromCoin.decimals,
+  })
 
   const swapQuote = await findSwapQuote({ from: fromCoin, to: toCoin, amount })
 
@@ -61,7 +64,7 @@ export const handleBuildSwapTx: ToolHandler = async (input, context) => {
   const keysignPayload = await buildSwapKeysignPayload({
     fromCoin,
     toCoin,
-    amount: parseFloat(amountStr),
+    amount: amountStr,
     swapQuote,
     vaultId: vault.publicKeyEcdsa,
     localPartyId: vault.localPartyId,
