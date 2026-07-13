@@ -17,6 +17,7 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -90,6 +91,10 @@ export const KeysignTxOverview = ({
         pending: () => t('tx_status_signed'),
         not_found: () => t('tx_status_signed'),
       })
+  const statusColor =
+    !keysignPayload.skipBroadcast && txStatusQuery.data?.status === 'error'
+      ? 'danger'
+      : 'primary'
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain,
@@ -101,6 +106,14 @@ export const KeysignTxOverview = ({
     keysignPayload.signData.case === 'signSui'
       ? parseSuiTx(keysignPayload.signData.value.unsignedTxMsg)
       : null
+
+  // EVM contract-call memos are long hex blobs best shown via the decoding
+  // collapse; plain memos (e.g. THORChain) render inline beside the label.
+  const isEvmContractMemo =
+    isChainOfKind(chain, 'evm') &&
+    !!memo &&
+    memo.startsWith('0x') &&
+    memo !== '0x'
 
   return (
     <>
@@ -137,7 +150,9 @@ export const KeysignTxOverview = ({
             <Text color="shy" weight="500">
               {t('status')}
             </Text>
-            <Text>{statusLabel}</Text>
+            <Text color={statusColor} weight="500">
+              {statusLabel}
+            </Text>
           </HStack>
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
@@ -183,7 +198,43 @@ export const KeysignTxOverview = ({
               </HStack>
             </VStack>
           )}
-          {memo && <TxOverviewMemo value={memo} chain={chain} />}
+          {memo &&
+            (isEvmContractMemo ? (
+              <TxOverviewMemo value={memo} chain={chain} />
+            ) : (
+              <HStack
+                alignItems="flex-start"
+                gap={16}
+                justifyContent="space-between"
+                wrap="nowrap"
+              >
+                <Text color="shy" weight="500">
+                  {t('memo')}
+                </Text>
+                <Text
+                  color="primary"
+                  family="mono"
+                  size={14}
+                  weight="700"
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    textAlign: 'right',
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {memo}
+                </Text>
+              </HStack>
+            ))}
+          {formattedToAmount !== null && (
+            <HStack alignItems="center" gap={4} justifyContent="space-between">
+              <Text color="shy" weight="500">
+                {t('amount')}
+              </Text>
+              <Text weight="500">{`${formattedToAmount} ${coin.ticker}`}</Text>
+            </HStack>
+          )}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('network')}

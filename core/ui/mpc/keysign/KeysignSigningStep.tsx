@@ -97,7 +97,7 @@ export const KeysignSigningStep = ({
                     ) : (
                       <>
                         <PageContent alignItems="center" scrollable>
-                          <VStack gap={16} maxWidth={576} fullWidth>
+                          <VStack gap={8} maxWidth={576} fullWidth>
                             <TxSuccess value={payload} />
                             <KeysignTxOverview
                               toAddressLabel={toAddressLabel}
