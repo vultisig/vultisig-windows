@@ -6,7 +6,7 @@ import { createContext, useContext } from 'react'
  * dApp / deep-link initiated transactions; absent for in-wallet and desktop
  * flows.
  */
-export type DappRequest = {
+type DappRequest = {
   origin: string
   name?: string
   favicon?: string
