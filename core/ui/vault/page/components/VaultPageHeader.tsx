@@ -20,20 +20,19 @@ import { VaultSelector } from './VaultSelector'
 const HeaderContainer = styled.div`
   position: sticky;
   top: 0;
+  z-index: 1;
+  display: grid;
   background: ${getColor('background')};
 `
 
 const CollapsedContent = styled(HStack)<{ isVisible: boolean }>`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
+  grid-area: 1 / 1;
   min-height: 60px;
   border-bottom: 1px solid ${getColor('foregroundExtra')};
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   background: ${getColor('background')};
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
   pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
@@ -41,6 +40,7 @@ const CollapsedContent = styled(HStack)<{ isVisible: boolean }>`
 `
 
 const NormalContent = styled.div<{ isVisible: boolean }>`
+  grid-area: 1 / 1;
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
   pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
   transition: opacity 0.25s ease-in-out;
