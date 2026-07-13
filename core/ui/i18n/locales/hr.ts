@@ -1684,4 +1684,7 @@ export const hr = {
   solana_staking_new_validator: 'Novi validator',
   solana_staking_pending_move_notice:
     'Prelazak na {{validator}} — možete završiti potez nakon što završi razdoblje hlađenja.',
+  tx_status_signed: 'Potpisano',
+  tx_status_confirmed: 'Potvrđeno',
+  tx_status_failed: 'Neuspješno',
 }

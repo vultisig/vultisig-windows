@@ -1722,4 +1722,7 @@ export const de = {
   solana_staking_new_validator: 'Neuer Validator',
   solana_staking_pending_move_notice:
     'Wechsel zu {{validator}} — Sie können den Wechsel abschließen, sobald die Abklingzeit abgelaufen ist.',
+  tx_status_signed: 'Unterzeichnet',
+  tx_status_confirmed: 'Bestätigt',
+  tx_status_failed: 'Fehlgeschlagen',
 }

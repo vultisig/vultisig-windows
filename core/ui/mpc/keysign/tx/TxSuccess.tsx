@@ -44,12 +44,7 @@ import { getTxSuccessAmountPresentation } from './getTxSuccessAmountPresentation
 import { TransactionStatusAnimation } from './TransactionStatusAnimation'
 import { TxStatusTracker } from './TxStatusTracker'
 
-export const TxSuccess = ({
-  onSeeTxDetails,
-  value,
-}: ValueProp<KeysignPayload> & {
-  onSeeTxDetails: () => void
-}) => {
+export const TxSuccess = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
   const { coin: potentialCoin, toAmount, skipBroadcast } = value
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
@@ -261,8 +256,8 @@ export const TxSuccess = ({
             )}
           </List>
         )}
-        <List>
-          {!skipBroadcast && (
+        {!skipBroadcast && (
+          <List>
             <ListItem
               hoverable
               extra={
@@ -296,14 +291,8 @@ export const TxSuccess = ({
                 </Text>
               }
             />
-          )}
-          <ListItem
-            onClick={onSeeTxDetails}
-            title={<Text size={14}>{t('transaction_details')}</Text>}
-            hoverable
-            showArrow
-          />
-        </List>
+          </List>
+        )}
       </VStack>
     </VStack>
   )

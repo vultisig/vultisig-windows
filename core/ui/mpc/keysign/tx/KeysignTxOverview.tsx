@@ -20,6 +20,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { match } from '@vultisig/lib-utils/match'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
@@ -33,10 +34,16 @@ import { SignSuiDisplay } from './sui/SignSuiDisplay'
 
 type KeysignTxOverviewProps = {
   toAddressLabel?: string
+  // When rendered directly beneath the success hero (which already shows the
+  // amount and tx hash), hide those rows here to avoid duplication.
+  hideAmount?: boolean
+  hideTxHash?: boolean
 }
 
 export const KeysignTxOverview = ({
   toAddressLabel,
+  hideAmount = false,
+  hideTxHash = false,
 }: KeysignTxOverviewProps) => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
@@ -72,6 +79,18 @@ export const KeysignTxOverview = ({
   const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
   const receipt = txStatusQuery.data?.receipt
 
+  // Signing already succeeded by the time this overview renders, so the tx is
+  // at least "Signed". When it was broadcast, surface the on-chain outcome once
+  // it resolves (parity with Android's receipt Status row).
+  const statusLabel = keysignPayload.skipBroadcast
+    ? t('tx_status_signed')
+    : match(txStatusQuery.data?.status ?? 'pending', {
+        success: () => t('tx_status_confirmed'),
+        error: () => t('tx_status_failed'),
+        pending: () => t('tx_status_signed'),
+        not_found: () => t('tx_status_signed'),
+      })
+
   const blockExplorerUrl = getBlockExplorerUrl({
     chain,
     entity: 'tx',
@@ -85,7 +104,7 @@ export const KeysignTxOverview = ({
 
   return (
     <>
-      {showAmountOrAction && (
+      {showAmountOrAction && !hideAmount && (
         <TxOverviewAmount
           amount={
             txAction && 'amount' in txAction && txAction.amount !== undefined
@@ -101,7 +120,7 @@ export const KeysignTxOverview = ({
       {suiTxData && <SignSuiDisplay data={suiTxData} />}
       <Panel>
         <SeparatedByLine gap={16}>
-          {!keysignPayload.skipBroadcast && (
+          {!keysignPayload.skipBroadcast && !hideTxHash && (
             <HStack alignItems="center" gap={4} justifyContent="space-between">
               <Text color="shy" weight="500">
                 {t('tx_hash')}
@@ -114,6 +133,12 @@ export const KeysignTxOverview = ({
               </HStack>
             </HStack>
           )}
+          <HStack alignItems="center" gap={4} justifyContent="space-between">
+            <Text color="shy" weight="500">
+              {t('status')}
+            </Text>
+            <Text>{statusLabel}</Text>
+          </HStack>
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('from')}

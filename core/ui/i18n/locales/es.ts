@@ -1708,4 +1708,7 @@ export const es = {
   solana_staking_new_validator: 'Nuevo validador',
   solana_staking_pending_move_notice:
     'Al pasar a {{validator}} , podrá finalizar el movimiento una vez que termine el período de espera.',
+  tx_status_signed: 'Firmado',
+  tx_status_confirmed: 'Confirmado',
+  tx_status_failed: 'Fallido',
 }

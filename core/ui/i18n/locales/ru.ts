@@ -1691,4 +1691,7 @@ export const ru = {
   solana_staking_new_validator: 'Новый валидатор',
   solana_staking_pending_move_notice:
     'Перемещение к {{validator}} — вы можете завершить перемещение после окончания периода ожидания.',
+  tx_status_signed: 'Подпись',
+  tx_status_confirmed: 'Подтвержденный',
+  tx_status_failed: 'Неуспешный',
 }

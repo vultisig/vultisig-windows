@@ -9,7 +9,6 @@ import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
-import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
@@ -96,48 +95,28 @@ export const KeysignSigningStep = ({
                         />
                       </PageContent>
                     ) : (
-                      <StepTransition
-                        from={({ onFinish: onSeeTxDetails }) => (
-                          <>
-                            <PageContent alignItems="center" scrollable>
-                              <VStack gap={16} maxWidth={576} fullWidth>
-                                <TxSuccess
-                                  value={payload}
-                                  onSeeTxDetails={onSeeTxDetails}
-                                />
-                              </VStack>
-                            </PageContent>
-                            <PageFooter alignItems="center">
-                              <VStack maxWidth={576} fullWidth>
-                                <Button
-                                  data-testid="tx-success-done"
-                                  onClick={goHome}
-                                >
-                                  {t('done')}
-                                </Button>
-                              </VStack>
-                            </PageFooter>
-                          </>
-                        )}
-                        to={() => (
-                          <>
-                            <PageContent alignItems="center" scrollable>
-                              <VStack gap={16} maxWidth={576} fullWidth>
-                                <KeysignTxOverview
-                                  toAddressLabel={toAddressLabel}
-                                />
-                              </VStack>
-                            </PageContent>
-                            <PageFooter alignItems="center">
-                              <VStack maxWidth={576} fullWidth>
-                                <Button onClick={goHome}>
-                                  {t('complete')}
-                                </Button>
-                              </VStack>
-                            </PageFooter>
-                          </>
-                        )}
-                      />
+                      <>
+                        <PageContent alignItems="center" scrollable>
+                          <VStack gap={16} maxWidth={576} fullWidth>
+                            <TxSuccess value={payload} />
+                            <KeysignTxOverview
+                              toAddressLabel={toAddressLabel}
+                              hideAmount
+                              hideTxHash
+                            />
+                          </VStack>
+                        </PageContent>
+                        <PageFooter alignItems="center">
+                          <VStack maxWidth={576} fullWidth>
+                            <Button
+                              data-testid="tx-success-done"
+                              onClick={goHome}
+                            >
+                              {t('done')}
+                            </Button>
+                          </VStack>
+                        </PageFooter>
+                      </>
                     )}
                   </TxHashProvider>
                 )

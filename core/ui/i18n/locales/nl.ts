@@ -1692,4 +1692,7 @@ export const nl = {
   solana_staking_new_validator: 'Nieuwe validator',
   solana_staking_pending_move_notice:
     'Verplaatsen naar {{validator}} — u kunt de verplaatsing voltooien zodra de afkoelperiode voorbij is.',
+  tx_status_signed: 'Ondertekend',
+  tx_status_confirmed: 'Bevestigd',
+  tx_status_failed: 'Mislukt',
 }

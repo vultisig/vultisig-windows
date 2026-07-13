@@ -1576,4 +1576,7 @@ export const zh = {
   solana_staking_new_validator: '新验证器',
   solana_staking_pending_move_notice:
     '移动到{{validator}} — 冷却时间结束后即可完成移动。',
+  tx_status_signed: '签名',
+  tx_status_confirmed: '确认的',
+  tx_status_failed: '失败的',
 }

@@ -1674,4 +1674,7 @@ export const ko = {
   solana_staking_new_validator: '새로운 검증자',
   solana_staking_pending_move_notice:
     '{{validator}} 로 이동합니다. 쿨다운 기간이 끝나면 이동을 완료할 수 있습니다.',
+  tx_status_signed: '서명함',
+  tx_status_confirmed: '확인됨',
+  tx_status_failed: '실패한',
 }
