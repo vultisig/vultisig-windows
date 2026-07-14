@@ -19,8 +19,11 @@ const rujiDecimalFactor = toDecimalFactor(thorchainTokens.ruji.decimals)
 // status (NOT_APPLICABLE, SOON) means no APR to show.
 const rujiRateDecimalFactor = toDecimalFactor(12)
 
+// The Rujira staking API's `AprStatus` enum; only `AVAILABLE` yields an APR.
+type RujiAprStatus = 'AVAILABLE' | 'NOT_APPLICABLE' | 'SOON'
+
 const parseRujiApr = (
-  apr?: { value?: string | null; status?: string | null } | null
+  apr?: { value?: string | null; status?: RujiAprStatus | null } | null
 ): number | undefined => {
   if (!apr || (apr.status && apr.status !== 'AVAILABLE')) {
     return undefined
@@ -58,7 +61,10 @@ const getRujiStake = (address: string) => {
           } | null
           pool?: {
             summary?: {
-              apr?: { value?: string | null; status?: string | null } | null
+              apr?: {
+                value?: string | null
+                status?: RujiAprStatus | null
+              } | null
             } | null
           } | null
         } | null> | null
