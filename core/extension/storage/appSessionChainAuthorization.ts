@@ -39,21 +39,24 @@ export const getAppSessionFieldsForApprovedChains = ({
 
 export const isAppSessionAuthorizedForChain = ({
   appSession,
-  chain,
 }: {
   appSession: AppSession
   chain: Chain
-}): boolean => {
-  if (appSession.authorizedChains) {
-    return appSession.authorizedChains.includes(chain)
-  }
-
-  if (appSession.isAccountAccessGranted === false) {
-    return false
-  }
-
-  return true
-}
+}): boolean =>
+  // Reaching this check means `authorizeContext` already bound a stored
+  // session to the request origin — i.e. the origin is already connected to
+  // this vault. Once connected, authorize every chain and chain switch
+  // without a fresh `grantVaultAccess` popup, so a multi-chain dApp shows a
+  // single connect approval instead of one popup per chain. Unconnected
+  // origins never get here (`authorizeContext` throws `Unauthorized` first),
+  // so the #4214 fix — no silent chain switch from an unconnected page — is
+  // preserved for them. Account exposure stays gated separately by
+  // `isAppSessionAuthorizedForAccounts`.
+  //
+  // Tradeoff (temporary): a connected origin can now switch the active chain
+  // without an approval, partially re-opening #4214 for connected origins.
+  // Accepted until the CAIP-25 multichain approval flow lands.
+  appSession.isAccountAccessGranted !== false
 
 export const isAppSessionAuthorizedForAccounts = (
   appSession: AppSession
