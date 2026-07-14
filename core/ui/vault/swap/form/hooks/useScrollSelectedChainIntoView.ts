@@ -5,8 +5,6 @@ type Props = {
   onSelect?: (key: string) => void
 }
 
-const strokeAdditionalSpace = 12
-const minStrokeWidth = 44
 const idleTimeAfterScrollStop = 500
 const behavior: ScrollBehavior = 'smooth'
 
@@ -14,8 +12,11 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   const footerRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const prevChain = useRef<string | null>(null)
-  const strokeRef = useRef<HTMLDivElement>(null)
   const idleTimer = useRef<number | null>(null)
+  const prevScrollLeft = useRef(0)
+  const scrollTarget = useRef<string | null>(null)
+  const programmaticScroll = useRef(false)
+  const programmaticTimer = useRef<number | null>(null)
 
   const computeCenteredLeft = useCallback(
     (container: HTMLDivElement, el: HTMLDivElement) => {
@@ -37,31 +38,25 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       if (!container || !el) return
       const left = computeCenteredLeft(container, el)
       if (Math.abs(container.scrollLeft - left) > 1) {
+        programmaticScroll.current = true
+        if (programmaticTimer.current !== null) {
+          window.clearTimeout(programmaticTimer.current)
+        }
+        programmaticTimer.current = window.setTimeout(() => {
+          programmaticScroll.current = false
+        }, 450)
         container.scrollTo({ left, behavior: b ?? behavior })
       }
     },
     [computeCenteredLeft]
   )
 
-  const setStrokeToKey = useCallback(
+  const setCenteredKey = useCallback(
     (key?: string) => {
-      const container = footerRef.current
-      const stroke = strokeRef.current
-      const el = key
-        ? itemRefs.current[key]
-        : chain
-          ? itemRefs.current[chain]
-          : null
-
-      if (!container || !stroke || !el) return
-
-      const r = el.getBoundingClientRect()
-      const width = Math.max(
-        minStrokeWidth,
-        Math.ceil(r.width + strokeAdditionalSpace)
-      )
-
-      stroke.style.width = `${width}px`
+      const activeKey = key ?? chain
+      for (const [k, el] of Object.entries(itemRefs.current)) {
+        if (el) el.dataset.centered = String(k === activeKey)
+      }
     },
     [chain]
   )
@@ -69,9 +64,8 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   const selectNearest = useCallback(() => {
     const container = footerRef.current
     if (!container) return
-    const target = strokeRef.current ?? container
-    const tRect = target.getBoundingClientRect()
-    const centerX = tRect.left + tRect.width / 2
+    const cRect = container.getBoundingClientRect()
+    const centerX = cRect.left + cRect.width / 2
 
     let bestKey: string | null = null
     let bestDist = Infinity
@@ -87,20 +81,22 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       }
     }
 
+    scrollTarget.current = null
+
     if (bestKey && bestKey !== chain) onSelect?.(bestKey)
     if (bestKey) {
-      setStrokeToKey(bestKey)
+      setCenteredKey(bestKey)
       scrollToKey(bestKey)
     } else {
-      setStrokeToKey(chain)
+      setCenteredKey(chain)
       scrollToKey(chain)
     }
-  }, [chain, onSelect, scrollToKey, setStrokeToKey])
+  }, [chain, onSelect, scrollToKey, setCenteredKey])
 
   useLayoutEffect(() => {
     if (!chain) return
 
-    setStrokeToKey(chain)
+    setCenteredKey(chain)
 
     const b: ScrollBehavior =
       prevChain.current && prevChain.current !== chain ? behavior : 'auto'
@@ -109,18 +105,51 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     prevChain.current = chain
 
     const id = requestAnimationFrame(() => {
-      setStrokeToKey(chain)
+      setCenteredKey(chain)
       scrollToKey(chain, b)
     })
 
     return () => cancelAnimationFrame(id)
-  }, [chain, scrollToKey, setStrokeToKey])
+  }, [chain, scrollToKey, setCenteredKey])
 
   useEffect(() => {
     const el = footerRef.current
     if (!el) return
 
+    prevScrollLeft.current = el.scrollLeft
+
     const onScroll = () => {
+      const delta = el.scrollLeft - prevScrollLeft.current
+      prevScrollLeft.current = el.scrollLeft
+
+      if (!programmaticScroll.current && Math.abs(delta) > 0.5) {
+        const dir = delta > 0 ? 1 : -1
+        const keys = Object.keys(itemRefs.current)
+        const clampIdx = (i: number) =>
+          Math.min(keys.length - 1, Math.max(0, i))
+
+        if (scrollTarget.current === null) {
+          const idx = keys.indexOf(chain)
+          scrollTarget.current = keys[clampIdx(idx + dir)] ?? null
+        } else {
+          const targetEl = itemRefs.current[scrollTarget.current]
+          if (targetEl) {
+            const cRect = el.getBoundingClientRect()
+            const centerX = cRect.left + cRect.width / 2
+            const tRect = targetEl.getBoundingClientRect()
+            const targetCenter = tRect.left + tRect.width / 2
+            const passed =
+              dir > 0 ? targetCenter < centerX : targetCenter > centerX
+            if (passed) {
+              const idx = keys.indexOf(scrollTarget.current)
+              scrollTarget.current = keys[clampIdx(idx + dir)]
+            }
+          }
+        }
+
+        if (scrollTarget.current) setCenteredKey(scrollTarget.current)
+      }
+
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
       idleTimer.current = window.setTimeout(
         selectNearest,
@@ -141,14 +170,17 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       el.removeEventListener('scroll', onScroll)
       el.removeEventListener('wheel', onWheel)
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
+      if (programmaticTimer.current !== null) {
+        window.clearTimeout(programmaticTimer.current)
+      }
     }
-  }, [selectNearest])
+  }, [chain, selectNearest, setCenteredKey])
 
   useEffect(() => {
-    const onResize = () => setStrokeToKey()
+    const onResize = () => setCenteredKey()
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [setStrokeToKey])
+  }, [setCenteredKey])
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -164,11 +196,11 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       const next = keys[nextIdx]
       if (next && next !== chain) {
         onSelect?.(next)
-        setStrokeToKey(next)
+        setCenteredKey(next)
         scrollToKey(next)
       }
     },
-    [chain, onSelect, scrollToKey, setStrokeToKey]
+    [chain, onSelect, scrollToKey, setCenteredKey]
   )
 
   const setItemRef = useCallback((key: string, el: HTMLDivElement | null) => {
@@ -179,7 +211,7 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     footerRef,
     itemRefs,
     scrollToKey,
-    strokeRef,
+    setCenteredKey,
     onKeyDown,
     setItemRef,
   }
