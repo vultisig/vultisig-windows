@@ -50,7 +50,14 @@ export const SwapCoinsExplorer = ({
   // in a low-priority pass, so switching chains never blocks on the list.
   const deferredChain = useDeferredValue(currentChain)
 
-  const { data: whitelisted } = useWhitelistedCoinsQuery(deferredChain)
+  const { data: whitelisted, isPlaceholderData } =
+    useWhitelistedCoinsQuery(deferredChain)
+
+  // The list still reflects the previous chain during the deferred render pass
+  // (`currentChain !== deferredChain`) and while the new chain's whitelist is
+  // still fetching (`isPlaceholderData`). Show a loading overlay over it in the
+  // meantime so the switch reads as "chain switches now, tokens follow".
+  const isCoinListLoading = currentChain !== deferredChain || isPlaceholderData
 
   const sortedSwapCoins = useSortedByBalanceCoins(deferredChain)
   const options = useMemo(() => {
@@ -63,7 +70,9 @@ export const SwapCoinsExplorer = ({
           coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
         ),
         ...(whitelisted ?? []).filter(
-          coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
+          coin =>
+            coin.chain === deferredChain &&
+            !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
         ),
       ],
       areEqualCoins
@@ -115,6 +124,7 @@ export const SwapCoinsExplorer = ({
 
   return (
     <SelectItemModal
+      isLoading={isCoinListLoading}
       virtualizePageSize={20}
       filterFunction={filterByTicker}
       title={t('select_asset')}
@@ -206,18 +216,32 @@ const CarouselWrapper = styled.div`
 
 const FooterItem = styled.div<IsActiveProp>`
   ${hStack({ gap: 6, alignItems: 'center' })};
+  position: relative;
+  isolation: isolate;
   flex-shrink: 0;
   scroll-snap-stop: always;
   cursor: pointer;
   padding: 8px 12px 8px 8px;
   border-radius: 99px;
-  transition: background 0.2s ease;
   outline: none;
 
   scroll-snap-align: center;
   scroll-snap-stop: always;
 
-  &:hover {
+  /* Hover fill sits behind the content and extends 6px past each side so it
+     matches the current-chain ring width (pill width + strokeAdditionalSpace,
+     which is 12px total / 6px per side). */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 -6px;
+    border-radius: 99px;
+    z-index: -1;
+    background: transparent;
+    transition: background 0.2s ease;
+  }
+
+  &:hover::before {
     ${({ isActive, theme }) =>
       !isActive &&
       `
@@ -242,10 +266,11 @@ const CenterStroke = styled.div`
   border-radius: 99px;
   background: rgba(6, 27, 58, 0.02);
   box-shadow: 0 0 14px 0 rgba(33, 85, 223, 0.45);
-  transition:
-    width 200ms ease,
-    box-shadow 200ms ease;
-  will-change: width;
+  /* Width is written imperatively (setStrokeToKey) off the live chain, so snap
+     it instantly instead of animating width on the main thread: a width
+     transition gets janked by the deferred token-list render, which made the
+     ring appear to resize only after tokens loaded. Only the glow transitions. */
+  transition: box-shadow 200ms ease;
   width: 44px;
 `
 

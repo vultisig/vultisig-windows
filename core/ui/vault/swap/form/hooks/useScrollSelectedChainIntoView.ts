@@ -16,6 +16,17 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   const prevChain = useRef<string | null>(null)
   const strokeRef = useRef<HTMLDivElement>(null)
   const idleTimer = useRef<number | null>(null)
+  // True only while the user is actively scrolling (wheel/trackpad), so the
+  // live ring tracking never runs during the programmatic scrolls triggered by
+  // clicking a pill or by settling — those keep their existing resize behavior.
+  const userScrollActive = useRef(false)
+  // Pre-measured center (in scroll-content coordinates) and width of every pill,
+  // so during a scroll we can resize the ring to the pill entering the center
+  // without measuring the DOM on each scroll event.
+  const chainMetrics = useRef<
+    { chain: string; center: number; width: number }[]
+  >([])
+  const viewportWidth = useRef(0)
 
   const computeCenteredLeft = useCallback(
     (container: HTMLDivElement, el: HTMLDivElement) => {
@@ -66,7 +77,61 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     [chain]
   )
 
+  // Cache every pill's center + width once (scroll-invariant content coords), so
+  // the scroll handler can look them up instead of measuring the DOM mid-scroll.
+  const measureMetrics = useCallback(() => {
+    const container = footerRef.current
+    if (!container) return
+
+    const containerLeft = container.getBoundingClientRect().left
+    viewportWidth.current = container.clientWidth
+
+    const metrics: { chain: string; center: number; width: number }[] = []
+    for (const [key, el] of Object.entries(itemRefs.current)) {
+      if (!el) continue
+      const r = el.getBoundingClientRect()
+      metrics.push({
+        chain: key,
+        center: r.left - containerLeft + container.scrollLeft + r.width / 2,
+        width: r.width,
+      })
+    }
+    chainMetrics.current = metrics
+  }, [])
+
+  // Resize the ring to the pill nearest the viewport center, using cached widths
+  // and only the live scrollLeft — so the ring snaps to the next pill the instant
+  // it crosses the center while scrolling.
+  const setStrokeToNearestScrollPosition = useCallback(() => {
+    const container = footerRef.current
+    const stroke = strokeRef.current
+    if (!container || !stroke || chainMetrics.current.length === 0) return
+
+    const center = container.scrollLeft + viewportWidth.current / 2
+
+    let best: (typeof chainMetrics.current)[number] | null = null
+    let bestDist = Infinity
+    for (const metric of chainMetrics.current) {
+      const dist = Math.abs(metric.center - center)
+      if (dist < bestDist) {
+        bestDist = dist
+        best = metric
+      }
+    }
+    if (!best) return
+
+    const width = Math.max(
+      minStrokeWidth,
+      Math.ceil(best.width + strokeAdditionalSpace)
+    )
+    stroke.style.width = `${width}px`
+  }, [])
+
   const selectNearest = useCallback(() => {
+    // The scroll has settled: stop live tracking so the programmatic centering
+    // scroll below (and the chain-change layout effect) doesn't get tracked.
+    userScrollActive.current = false
+
     const container = footerRef.current
     if (!container) return
     const target = strokeRef.current ?? container
@@ -100,6 +165,7 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   useLayoutEffect(() => {
     if (!chain) return
 
+    measureMetrics()
     setStrokeToKey(chain)
 
     const b: ScrollBehavior =
@@ -109,18 +175,23 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     prevChain.current = chain
 
     const id = requestAnimationFrame(() => {
+      measureMetrics()
       setStrokeToKey(chain)
       scrollToKey(chain, b)
     })
 
     return () => cancelAnimationFrame(id)
-  }, [chain, scrollToKey, setStrokeToKey])
+  }, [chain, measureMetrics, scrollToKey, setStrokeToKey])
 
   useEffect(() => {
     const el = footerRef.current
     if (!el) return
 
     const onScroll = () => {
+      // Only while the user drives the scroll: resize the ring to the pill
+      // entering the center as it moves, in parallel with the token list.
+      if (userScrollActive.current) setStrokeToNearestScrollPosition()
+
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
       idleTimer.current = window.setTimeout(
         selectNearest,
@@ -129,6 +200,12 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     }
 
     const onWheel = (e: WheelEvent) => {
+      // Refresh the cached widths at the start of each gesture. The mount-time
+      // measurement can be stale (fonts/icons finalize after it), which made the
+      // ring size wrong for the next pill on the very first scroll — before the
+      // first chain change ever re-measured.
+      if (!userScrollActive.current) measureMetrics()
+      userScrollActive.current = true
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         el.scrollLeft += e.deltaY
       }
@@ -142,13 +219,16 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       el.removeEventListener('wheel', onWheel)
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
     }
-  }, [selectNearest])
+  }, [measureMetrics, selectNearest, setStrokeToNearestScrollPosition])
 
   useEffect(() => {
-    const onResize = () => setStrokeToKey()
+    const onResize = () => {
+      measureMetrics()
+      setStrokeToKey()
+    }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [setStrokeToKey])
+  }, [measureMetrics, setStrokeToKey])
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
