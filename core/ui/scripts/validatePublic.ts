@@ -99,6 +99,7 @@ const extraCoinAssets = [
   'dogs.svg',
   'hmstr.svg',
   'not.svg',
+  'rlusd.svg',
   'ston.svg',
   'tston.svg',
 ]
