@@ -18,6 +18,7 @@ import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
 import { PasscodeUnlockSessionStorage } from './passcodeUnlockSession'
 import { ReferralsStorage } from './referrals'
+import { SolanaMoveStakeDestinationsStorage } from './solanaMoveStakeDestinations'
 import { TransactionHistoryStorage } from './transactionHistory'
 import { TssBatchingEnabledStorage } from './tssBatchingEnabled'
 import { VaultFoldersStorage } from './vaultFolders'
@@ -46,4 +47,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   MLDSAEnabledStorage &
   TssBatchingEnabledStorage &
   CustomRpcOverridesStorage &
+  SolanaMoveStakeDestinationsStorage &
   TransactionHistoryStorage

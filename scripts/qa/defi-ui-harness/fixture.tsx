@@ -4,6 +4,7 @@ import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { getCircleAccountQueryKey } from '@core/ui/defi/protocols/circle/queries/circleAccount'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { CurrentVaultIdProvider } from '@core/ui/storage/currentVaultId'
+import { SolanaMoveStakeDestinations } from '@core/ui/storage/solanaMoveStakeDestinations'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { VaultsProvider } from '@core/ui/storage/vaults'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
@@ -207,6 +208,8 @@ export const seedCoinPrices = ({
   )
 }
 
+let qaSolanaMoveStakeDestinations: SolanaMoveStakeDestinations = {}
+
 const createQaCoreState = (vault: QaVault): CoreState => {
   const vaultId = getVaultId(vault)
 
@@ -278,6 +281,13 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     setIsTssBatchingEnabled: noop,
     getCustomRpcOverrides: async () => ({}),
     setCustomRpcOverrides: noop,
+    // Stateful, unlike the other stubs: the move flow writes a destination on
+    // one screen and reads it back on another, so a no-op setter would make the
+    // harness unable to exercise prefill or cleanup.
+    getSolanaMoveStakeDestinations: async () => qaSolanaMoveStakeDestinations,
+    setSolanaMoveStakeDestinations: async destinations => {
+      qaSolanaMoveStakeDestinations = destinations
+    },
     getTransactionRecords: async () => [],
     saveTransactionRecord: noop,
     updateTransactionRecord: noop,

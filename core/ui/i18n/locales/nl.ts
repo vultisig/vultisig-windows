@@ -276,8 +276,6 @@ export const nl = {
   post_quantum_keygen: 'Post-kwantum sleutelgeneratie',
   post_quantum_keygen_description:
     'Genereer een post-quantum (MLDSA) sleutel voor deze kluis.',
-  post_quantum_key_already_generated:
-    'Deze kluis heeft al een post-kwantumsleutel.',
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
   encrypting_vault_keyshares: 'Kluis-keyshares versleutelen...',
@@ -750,10 +748,6 @@ export const nl = {
   resend_notification: 'Melding opnieuw verzenden',
   resend_notification_in: 'Melding opnieuw verzenden over {{time}}',
   reshare: 'Reshare',
-  reshare_disclaimer:
-    'Voor alle Reshare-acties is altijd de drempel van apparaten vereist.',
-  reshare_explanation:
-    'Reshare kan worden gebruikt om het aantal apparaten in een kluis te vernieuwen, uit te breiden of te verminderen.',
   reshare_vault_description: 'Reshare kluis met een nieuw comité',
   reshare_your_vault: 'Reshare je kluis',
   resource: 'Resource',
@@ -1623,7 +1617,7 @@ export const nl = {
   solana_move_stake: 'Verplaatsen',
   solana_finish_move: 'Verplaatsing voltooien',
   solana_staking_move_notice:
-    'Stake verplaatsen gebeurt in meerdere stappen en verspreid over epochs: dit deactiveert het account nu; na de afkoelperiode van ongeveer {{days}} dagen voltooit u de verplaatsing naar de nieuwe validator.',
+    'Het overzetten van de stake vereist meerdere stappen en strekt zich uit over verschillende periodes: hiermee wordt het account nu gedeactiveerd en begint een afkoelperiode van ongeveer {{days}} dagen. Zodra die periode voorbij is, kunt u de stake overzetten naar de validator die u hebt gekozen.',
   solana_staking_finish_move_notice:
     'Hiermee wordt het afgekoelde stake-account opnieuw gedelegeerd aan de nieuwe validator en wordt de verplaatsing voltooid.',
   external_recipient_tooltip_content:
@@ -1632,4 +1626,70 @@ export const nl = {
   malicious_dapp_detected: 'Kwaadaardige dApp gedetecteerd',
   malicious_dapp_detected_description:
     '{{dapp}} is door Blockaid als schadelijk aangemerkt. Doe altijd zelf onderzoek voordat u verdergaat.',
+  before_you_reshare: 'Voordat je het opnieuw deelt',
+  before_you_reshare_subtitle:
+    'Door opnieuw te delen worden uw gedeelde mappen in de kluis opnieuw gegenereerd. Er zijn een paar dingen die u eerst moet weten.',
+  i_understand: 'Ik begrijp',
+  join_reshare_description:
+    'Je hebt een verzoek tot opnieuw delen ontvangen vanaf een ander apparaat.',
+  reshare_vault_subtitle:
+    'Werk uw kluisinstellingen bij. Voeg apparaten toe of verwijder ze, of vernieuw gedeelde mappen.',
+  reshare_warning_cosigners_title:
+    'Alle medeondertekenaars moeten online zijn.',
+  reshare_warning_cosigners_description:
+    'Alle apparaten die zich momenteel in uw kluis bevinden, moeten deelnemen aan de sessie voor het opnieuw delen.',
+  reshare_warning_old_backups_title: 'Oude back-ups werken niet meer.',
+  reshare_warning_old_backups_description:
+    'Alle bestaande .vult-bestanden worden ongeldig. U moet na het opnieuw delen nieuwe back-ups maken.',
+  start_reshare_description:
+    'U wijzigt de apparaatinstellingen van deze kluis.',
+  reshare_success_title: 'Vault opnieuw gedeeld',
+  reshare_success_title_highlight: 'succesvol',
+  reshare_backup_old_backups_wont_work: 'Oude back-ups werken niet.',
+  reshare_backup_old_backups_wont_work_description:
+    'Back-ups van eerdere kluisconfiguraties kunnen niet worden gebruikt. Alleen back-ups die tijdens deze configuratie zijn gemaakt, zijn geldig.',
+  reshare_min_devices_required:
+    'Er zijn minimaal {{count}} -apparaten vereist.',
+  reshare_more_devices_required: 'Meer apparaten nodig',
+  reshare_threshold_not_met: 'Drempelwaarde niet bereikt',
+  reshare_threshold_not_met_description:
+    'Je probeert het aantal apparaten te verminderen van<w> {{from}} naar {{to}}</w> maar deze kluis<w> vereist {{count}} actieve ondertekenaars</w> om veilig te blijven.',
+  solana_delegate: 'Inzet',
+  solana_staking_total_staked: 'Totaal ingezette {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegeer aan nieuwe validator',
+  solana_staking_stake_accounts: 'Inzetrekeningen',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Huurreserve',
+  solana_staking_min_delegation: 'Minimale delegatie is {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Actief',
+  solana_staking_state_activating: 'Activeren',
+  solana_staking_state_deactivating: 'Deactiveren',
+  solana_staking_state_inactive: 'Inactief',
+  solana_staking_activating_notice:
+    'Activeren levert beloningen op vanaf het volgende tijdperk.',
+  solana_staking_deactivating_notice:
+    'Deactiveren — afkoelen voordat het kan worden teruggetrokken.',
+  solana_staking_inactive_notice:
+    'Inactief — afgekoeld en klaar om te worden verwijderd.',
+  validator_commission_short: '{{value}} % fee',
+  reshare_failed: 'Fout bij het opnieuw delen. Probeer het opnieuw.',
+  reshare_failed_description:
+    'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
+  plugin_store_compatible: 'Compatibel met de Plugin Store',
+  open_trust_line: 'Open vertrouwenslijn',
+  trust_line_limit: 'Vertrouwenslimiet',
+  trust_line_issuer: 'Uitgever',
+  trust_line_currency: 'Munteenheid',
+  trust_line_custom_token: 'Aangepast token',
+  trust_line_issuer_placeholder: 'Uitgevende instantie (r...)',
+  trust_line_currency_placeholder: 'Valutacode (bijv. RLUSD)',
+  trust_line_reserve_warning:
+    'Het openen van een vertrouwenslijn vergrendelt {{amount}} {{ticker}} als een reservering voor de rekeninghouder totdat de lijn wordt verwijderd.',
+  trust_line_currency_reserved:
+    'XRP kan niet worden gebruikt als een trust-line-valuta.',
+  trust_line_currency_invalid: 'Voer een geldige valutacode in',
+  solana_staking_current_validator: 'Huidige validator',
+  solana_staking_new_validator: 'Nieuwe validator',
+  solana_staking_pending_move_notice:
+    'Verplaatsen naar {{validator}} — u kunt de verplaatsing voltooien zodra de afkoelperiode voorbij is.',
 }

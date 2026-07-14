@@ -1,3 +1,5 @@
+import '@core/ui/animations/configureRiveRuntime'
+
 import { Buffer } from 'buffer'
 import { createRoot } from 'react-dom/client'
 

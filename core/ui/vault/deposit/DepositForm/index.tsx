@@ -4,6 +4,10 @@ import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
 import { CosmosStakingFooterButton } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/CosmosStakingSpecific/CosmosStakingFooterButton'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
+import {
+  SolanaStakingFooterButton,
+  solanaValidatorPickerActions,
+} from '@core/ui/vault/deposit/DepositForm/ActionSpecific/SolanaStakingSpecific/SolanaStakingFooterButton'
 import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
 import { UnbondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnbondSpecific/UnbondForm'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
@@ -155,6 +159,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     undelegate: t('unstake'),
     redelegate: t('move'),
     claim_rewards: t('claim_rewards'),
+    solana_delegate: t('stake'),
     solana_unstake: t('unstake'),
     solana_withdraw: t('solana_withdraw'),
     solana_move_stake: t('solana_move_stake'),
@@ -431,6 +436,14 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
         selectedChainAction === 'redelegate' ? (
           <PageFooter>
             <CosmosStakingFooterButton action={selectedChainAction} />
+          </PageFooter>
+        ) : isOneOf(selectedChainAction, solanaValidatorPickerActions) ? (
+          // Solana delegate uses the tri-state CTA (amount → validator →
+          // continue); move-stake has no amount, so it gates on the destination
+          // validator alone. The ops that carry a prefilled destination keep the
+          // default Continue.
+          <PageFooter>
+            <SolanaStakingFooterButton action={selectedChainAction} />
           </PageFooter>
         ) : (
           <PageFooter>

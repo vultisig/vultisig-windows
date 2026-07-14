@@ -31,7 +31,12 @@ import {
   yieldBearingTokensIdToContractMap,
   yieldContractsByBaseDenom,
 } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/config'
+import {
+  rippleIssuedCurrencyDecimals,
+  rippleTokenId,
+} from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import { solanaConfig } from '@vultisig/core-chain/chains/solana/solanaConfig'
+import { fetchSolanaRentReserve } from '@vultisig/core-chain/chains/solana/staking/rpc'
 import { buildUnsignedStakingTx } from '@vultisig/core-chain/chains/solana/staking/tx/buildUnsignedStakingTx'
 import { SolanaStakingPayload } from '@vultisig/core-chain/chains/solana/staking/tx/stakingPayload'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
@@ -104,6 +109,10 @@ export type BuildDepositKeysignPayloadInput = {
   walletCore: WalletCore
 }
 
+/** Narrows an untyped react-hook-form field value to a string, else undefined. */
+const asOptionalString = (value: unknown): string | undefined =>
+  typeof value === 'string' ? value : undefined
+
 export const buildDepositKeysignPayload = async ({
   coin,
   action,
@@ -129,6 +138,49 @@ export const buildDepositKeysignPayload = async ({
     throw new Error(
       'buildDepositKeysignPayload requires publicKey or hexPublicKeyOverride'
     )
+  }
+
+  // Opening an XRPL trust line is a TrustSet keyed by the issued currency, not
+  // the native XRP fee coin the deposit flow selects. Build the issued-currency
+  // coin (composite `currency.issuer` id) so the Ripple signing input resolver
+  // emits an OperationTrustSet whose LimitAmount is the entered limit.
+  if (action === 'open_trust_line') {
+    const issuer = shouldBePresent(
+      asOptionalString(depositData['issuer']),
+      'Trust line issuer'
+    )
+    const currency = shouldBePresent(
+      asOptionalString(depositData['currency']),
+      'Trust line currency'
+    )
+    const limit = shouldBePresent(amount, 'Trust line limit')
+
+    const issuedCoin: AccountCoin = {
+      chain: Chain.Ripple,
+      id: rippleTokenId({ currency, issuer }),
+      ticker: currency,
+      decimals: rippleIssuedCurrencyDecimals,
+      address: coin.address,
+      logo: asOptionalString(depositData['logo']) ?? coin.logo,
+    }
+
+    const trustLinePayload = create(KeysignPayloadSchema, {
+      coin: toCommCoin({ ...issuedCoin, hexPublicKey }),
+      toAddress: issuer,
+      toAmount: toChainAmount(limit, rippleIssuedCurrencyDecimals).toString(),
+      memo: '',
+      vaultLocalPartyId: localPartyId,
+      vaultPublicKeyEcdsa: vaultId,
+      libType,
+      utxoInfo: await getKeysignUtxoInfo(issuedCoin),
+    })
+
+    trustLinePayload.blockchainSpecific = await getChainSpecific({
+      keysignPayload: trustLinePayload,
+      walletCore,
+    })
+
+    return trustLinePayload
   }
 
   const isUnmerge = action === 'unmerge'
@@ -739,7 +791,7 @@ type ApplySolanaStakingSignDataInput = {
  * co-signing device signs the byte-identical message through the raw-transaction
  * path — the MPC byte-parity guarantee. Mirrors iOS `SolanaStakingSignDataResolver`.
  */
-const applySolanaStakingSignData = ({
+const applySolanaStakingSignData = async ({
   action,
   coin,
   depositData,
@@ -763,6 +815,11 @@ const applySolanaStakingSignData = ({
   const stakeAccount = depositData['stakeAccount']
   const validatorAddress = depositData['validatorAddress']
   const amount = amountUnits ? BigInt(amountUnits) : 0n
+  // Delegate funds the new stake account with the entered amount PLUS the
+  // rent-exempt reserve, so the active stake equals the entered amount. Read
+  // live (cheap, rarely changes) only for the delegate path.
+  const rentReserve =
+    action === 'solana_delegate' ? await fetchSolanaRentReserve() : 0n
 
   const requireStakeAccount = (): string => {
     if (typeof stakeAccount !== 'string' || stakeAccount.length === 0) {
@@ -782,6 +839,20 @@ const applySolanaStakingSignData = ({
     SolanaStakingAction,
     { payload: SolanaStakingPayload; toAddress: string; toAmount: string }
   >(action, {
+    solana_delegate: () => {
+      const votePubkey = requireValidator()
+      // `lamports` is the stake-account FUNDING: the delegated amount plus the
+      // rent-exempt reserve, so the active stake equals the entered amount.
+      return {
+        payload: {
+          op: 'delegate',
+          votePubkey,
+          lamports: amount + rentReserve,
+        } as const,
+        toAddress: votePubkey,
+        toAmount: amount.toString(),
+      }
+    },
     solana_unstake: () => {
       const account = requireStakeAccount()
       return {

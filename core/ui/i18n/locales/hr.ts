@@ -275,7 +275,6 @@ export const hr = {
   post_quantum_keygen: 'Postkvantno generiranje ključeva',
   post_quantum_keygen_description:
     'Generiraj postkvantni (MLDSA) ključ za ovaj trezor',
-  post_quantum_key_already_generated: 'Ovaj trezor već ima postkvantni ključ',
   enable_token_instruction:
     'Omogućite barem jedan token za pregled stanja i upravljanje pozicijama.',
   encrypting_vault_keyshares: 'Šifriranje dijeljenja ključeva trezora...',
@@ -754,10 +753,6 @@ export const hr = {
   resend_notification: 'Ponovno pošalji obavijest',
   resend_notification_in: 'Ponovno pošalji obavijest za {{time}}',
   reshare: 'Ponovno podijeli',
-  reshare_disclaimer:
-    'Za sve radnje ponovnog dijeljenja prag uređaja je uvijek potreban.',
-  reshare_explanation:
-    'Ponovno dijeljenje može se koristiti za osvježavanje, proširenje ili smanjenje broja uređaja u trezoru.',
   reshare_vault_description: 'Ponovno podijeli trezor s novim odborom',
   reshare_your_vault: 'Ponovno podijelite svoj trezor',
   resource: 'Resurs',
@@ -1615,7 +1610,7 @@ export const hr = {
   solana_move_stake: 'Premjesti',
   solana_finish_move: 'Dovrši premještanje',
   solana_staking_move_notice:
-    'Premještanje uloga odvija se u više koraka i traje kroz više epoha: ovo sada deaktivira račun; nakon razdoblja hlađenja od oko {{days}} dana dovršite premještanje na novog validatora.',
+    'Premještanje uloga traje nekoliko koraka i obuhvaća epohe: ovo sada deaktivira račun i započinje hlađenje od otprilike {{days}} dana. Nakon što to završi, dovršite premještanje do validatora kojeg ste odabrali.',
   solana_staking_finish_move_notice:
     'Ovo ponovno delegira ohlađeni račun uloga novom validatoru i dovršava premještanje.',
   external_recipient_tooltip_content:
@@ -1624,4 +1619,69 @@ export const hr = {
   malicious_dapp_detected: 'Otkriven zlonamjerni dApp',
   malicious_dapp_detected_description:
     'Blockaid je označio {{dapp}} kao zlonamjeran. Uvijek provedite vlastito istraživanje prije nego što nastavite.',
+  before_you_reshare: 'Prije ponovnog dijeljenja',
+  before_you_reshare_subtitle:
+    'Ponovnim dijeljenjem se regeneriraju vaši trezorski udjeli. Prvo treba znati nekoliko stvari.',
+  i_understand: 'Razumijem',
+  join_reshare_description:
+    'Primili ste zahtjev za ponovno dijeljenje s drugog uređaja.',
+  reshare_vault_subtitle:
+    'Ažurirajte postavke trezora. Dodajte ili uklonite uređaje ili osvježite dijeljene datoteke.',
+  reshare_warning_cosigners_title: 'Svi supotpisnici moraju biti online',
+  reshare_warning_cosigners_description:
+    'Svaki trenutni uređaj u vašem trezoru mora sudjelovati u sesiji ponovnog dijeljenja.',
+  reshare_warning_old_backups_title:
+    'Stare sigurnosne kopije prestat će raditi',
+  reshare_warning_old_backups_description:
+    'Sve postojeće .vult datoteke postaju nevažeće. Nakon ponovnog dijeljenja morat ćete stvoriti nove sigurnosne kopije.',
+  start_reshare_description: 'Mijenjate postavke uređaja ovog trezora.',
+  reshare_success_title: 'Trezor je ponovno podijeljen',
+  reshare_success_title_highlight: 'uspješno',
+  reshare_backup_old_backups_wont_work: 'Stare sigurnosne kopije neće raditi',
+  reshare_backup_old_backups_wont_work_description:
+    'Sigurnosne kopije iz prethodnih postavki trezora ne mogu se koristiti. Valjane su samo sigurnosne kopije stvorene tijekom ove postavke.',
+  reshare_min_devices_required: 'Potrebno je najmanje {{count}} uređaja',
+  reshare_more_devices_required: 'Potrebno je više uređaja',
+  reshare_threshold_not_met: 'Prag nije dosegnut',
+  reshare_threshold_not_met_description:
+    'Pokušavate smanjiti broj uređaja iz<w> {{from}} do {{to}}</w> , ali ovaj trezor<w> zahtijeva aktivne potpisnike {{count}}</w> ostati siguran.',
+  solana_delegate: 'Ulog',
+  solana_staking_total_staked: 'Ukupno uloženo {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegat novom validatoru',
+  solana_staking_stake_accounts: 'Računi udjela',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Rezerva za najamninu',
+  solana_staking_min_delegation:
+    'Minimalna delegacija je {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Aktivan',
+  solana_staking_state_activating: 'Aktiviranje',
+  solana_staking_state_deactivating: 'Deaktiviranje',
+  solana_staking_state_inactive: 'Neaktivno',
+  solana_staking_activating_notice:
+    'Aktiviranje — zarađuje nagrade iz sljedeće epohe.',
+  solana_staking_deactivating_notice:
+    'Deaktiviranje — hlađenje prije nego što se može povući.',
+  solana_staking_inactive_notice:
+    'Neaktivno — ohlađeno i spremno za povlačenje.',
+  validator_commission_short: '{{value}} % provizije',
+  reshare_failed: 'Pogreška pri ponovnom dijeljenju. Pokušajte ponovno.',
+  reshare_failed_description:
+    'Ponovno dijeljenje je usporeno zbog slabe veze. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
+  plugin_store_compatible: 'Kompatibilno s trgovinom dodataka',
+  open_trust_line: 'Otvorena linija povjerenja',
+  trust_line_limit: 'Ograničenje povjerenja',
+  trust_line_issuer: 'Izdavatelj',
+  trust_line_currency: 'Valuta',
+  trust_line_custom_token: 'Prilagođeni token',
+  trust_line_issuer_placeholder: 'Adresa izdavatelja (r...)',
+  trust_line_currency_placeholder: 'Kod valute (npr. RLUSD)',
+  trust_line_reserve_warning:
+    'Otvaranjem linije povjerenja {{amount}} {{ticker}} zaključava se kao rezerva vlasnika računa dok se linija ne ukloni.',
+  trust_line_currency_reserved:
+    'XRP se ne može koristiti kao valuta povjerenja',
+  trust_line_currency_invalid: 'Unesite važeći kod valute',
+  solana_staking_current_validator: 'Trenutni validator',
+  solana_staking_new_validator: 'Novi validator',
+  solana_staking_pending_move_notice:
+    'Prelazak na {{validator}} — možete završiti potez nakon što završi razdoblje hlađenja.',
 }

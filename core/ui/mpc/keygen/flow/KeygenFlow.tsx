@@ -85,6 +85,7 @@ export const KeygenFlow = ({
   }, [keygenOperation])
 
   const isCreateOperation = 'create' in keygenOperation
+  const isReshare = 'reshare' in keygenOperation
 
   return (
     <MatchQuery
@@ -157,8 +158,12 @@ export const KeygenFlow = ({
           )}
           <FlowErrorPageContent
             variant="warning"
-            title={t('keygen_failed')}
-            description={t('keygen_failed_description')}
+            title={t(isReshare ? 'reshare_failed' : 'keygen_failed')}
+            description={t(
+              isReshare
+                ? 'reshare_failed_description'
+                : 'keygen_failed_description'
+            )}
             error={error}
           />
         </>

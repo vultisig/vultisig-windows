@@ -1,9 +1,15 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { toXrplCurrencyCode } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
+import {
+  solanaStakingConfig,
+  solDecimals,
+} from '@vultisig/core-chain/chains/solana/staking/config'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
@@ -16,6 +22,11 @@ import {
   toOptionalNumber,
   toRequiredNumber,
 } from './validationHelpers'
+
+// Solana Stake program minimum active delegation, in whole SOL (1 SOL on
+// mainnet). Derived from the SDK config so the floor tracks a single source.
+const solanaMinDelegationSol =
+  Number(solanaStakingConfig.minDelegationFloorLamports) / 10 ** solDecimals
 
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>
@@ -798,6 +809,49 @@ export const getDepositFormConfig = ({
         pairedAddress: z.string().optional(),
       }),
     }),
+    // The trust-line limit is a token-denominated cap, unrelated to the wallet's
+    // XRP balance, so it is NOT bounded by `totalAmountAvailable`. issuer +
+    // currency are set by the OpenTrustLineSpecific picker.
+    open_trust_line: () => ({
+      fields: [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('trust_line_limit'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        issuer: z
+          .string()
+          .trim()
+          .min(1, t('trust_line_issuer'))
+          .refine(
+            address =>
+              isValidAddress({ chain: Chain.Ripple, address, walletCore }),
+            { message: t('send_invalid_receiver_address') }
+          ),
+        // Accepts a human ticker (e.g. `RLUSD`, normalised to the 160-bit hex),
+        // a 3-char standard code, or a 40-char hex code. Rejects `XRP` (the
+        // native asset can't be an issued-currency trust line) and anything
+        // `toXrplCurrencyCode` can't encode (>20 ASCII bytes), so invalid input
+        // is caught inline rather than throwing at build time.
+        currency: z
+          .string()
+          .trim()
+          .min(1, t('trust_line_currency'))
+          .refine(value => value.toUpperCase() !== 'XRP', {
+            message: t('trust_line_currency_reserved'),
+          })
+          .refine(value => 'data' in attempt(() => toXrplCurrencyCode(value)), {
+            message: t('trust_line_currency_invalid'),
+          }),
+        amount: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('amount_must_be_positive'))
+        ),
+      }),
+    }),
     delegate: () => ({
       fields: [
         { name: 'amount', type: 'number', label: t('amount'), required: true },
@@ -892,6 +946,37 @@ export const getDepositFormConfig = ({
         pool: z.string().min(1),
       }),
     }),
+    // Solana delegate: stake an amount from the wallet's liquid SOL to a chosen
+    // validator (create + delegate a new stake account). The amount IS bounded
+    // by the liquid balance here, so the standard positive-amount schema fits.
+    solana_delegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        // Solana's Stake program enforces a 1 SOL minimum active delegation;
+        // a DelegateStake below it reverts on-chain with
+        // StakeError.InsufficientDelegation (custom error 0xc). The entered
+        // amount IS the active stake (funding = amount + rent), so gate the
+        // amount directly on the 1 SOL floor.
+        amount: positiveAmountSchema(totalAmountAvailable, t).refine(
+          value => Number(value) >= solanaMinDelegationSol,
+          {
+            message: t('solana_staking_min_delegation', {
+              amount: solanaMinDelegationSol,
+              ticker: chainFeeCoin[Chain.Solana].ticker,
+            }),
+          }
+        ),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+      }),
+    }),
     // Solana deactivate / withdraw operate on a stake account prefilled from
     // the DeFi tab, so their fields are hidden. Withdraw also carries the
     // (prefilled) withdrawable amount for the verify/Done display.
@@ -919,13 +1004,24 @@ export const getDepositFormConfig = ({
         ),
       }),
     }),
-    // Move-stake step 1 (deactivate): operates on a prefilled stake account,
-    // no amount and no destination yet (chosen at finish-move).
+    // Move-stake step 1 (deactivate): operates on a prefilled stake account and
+    // no amount (the whole account moves). The destination validator is picked
+    // here — deactivating starts an irreversible cooldown, so the user commits
+    // to a target up front — and is only spent at finish-move, days later.
     solana_move_stake: () => ({
       fields: [
         { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
       ],
-      schema: z.object({ stakeAccount: z.string().trim().min(1) }),
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+      }),
     }),
     // Move-stake step 2 (re-delegate): prefilled stake account + re-delegatable
     // amount (unrelated to liquid SOL, so require only > 0) + a destination

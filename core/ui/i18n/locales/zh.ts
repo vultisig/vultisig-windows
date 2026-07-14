@@ -261,7 +261,6 @@ export const zh = {
   enable_tss_batching: '启用 TSS 批处理',
   post_quantum_keygen: '后量子密钥生成',
   post_quantum_keygen_description: '为该保险库生成后量子（MLDSA）密钥',
-  post_quantum_key_already_generated: '这个保险库已经拥有后量子时代的密钥。',
   enable_token_instruction: '至少启用一个代币才能查看余额和管理持仓。',
   encrypting_vault_keyshares: '加密保险库密钥共享...',
   enter: '进入',
@@ -698,9 +697,6 @@ export const zh = {
   resend_notification: '重新发送通知',
   resend_notification_in: '稍后重新发送通知 {{time}}',
   reshare: '转发',
-  reshare_disclaimer: '所有重新共享操作都需要达到一定的设备数量阈值。',
-  reshare_explanation:
-    '重新共享功能可用于刷新、扩展或减少 Vault 中的设备数量。',
   reshare_vault_description: '与新委员会重新共享保险库',
   reshare_your_vault: '重新分享您的保险库',
   resource: '资源',
@@ -1514,7 +1510,7 @@ export const zh = {
   solana_move_stake: '移动',
   solana_finish_move: '完成移动',
   solana_staking_move_notice:
-    '移动质押需要多个步骤并跨越多个 epoch：这会立即停用该账户；约 {{days}} 天冷却期结束后，再完成到新验证器的移动。',
+    '转移质押需要多个步骤，并且会跨越多个纪元：此操作会立即停用账户，并开始大约{{days}}天的冷却期。冷却期结束后，再将质押转移到您选择的验证者。',
   solana_staking_finish_move_notice:
     '这会将已冷却的质押账户重新委托给新验证器，并完成移动。',
   external_recipient_tooltip_content:
@@ -1523,4 +1519,61 @@ export const zh = {
   malicious_dapp_detected: '检测到恶意dApp',
   malicious_dapp_detected_description:
     '{{dapp}}已被 Blockaid 标记为恶意程序。操作前请务必自行调查。',
+  before_you_reshare: '转发前请先阅读',
+  before_you_reshare_subtitle:
+    '重新共享会重新生成您的金库共享。但在此之前，您需要了解一些事项。',
+  i_understand: '我明白',
+  join_reshare_description: '您收到来自其他设备的转发请求。',
+  reshare_vault_subtitle: '更新您的保险库设置。添加或删除设备，或刷新共享。',
+  reshare_warning_cosigners_title: '所有共同签署人必须在线',
+  reshare_warning_cosigners_description:
+    '您保险库中的所有现有设备都需要参与重新共享会话。',
+  reshare_warning_old_backups_title: '旧备份将停止工作',
+  reshare_warning_old_backups_description:
+    '所有现有的 .vult 文件都将失效。重新共享后，您需要创建新的备份。',
+  start_reshare_description: '您正在更改此保险库的设备设置。',
+  reshare_success_title: 'Vault 重新共享',
+  reshare_success_title_highlight: '成功地',
+  reshare_backup_old_backups_wont_work: '旧的备份将无法使用。',
+  reshare_backup_old_backups_wont_work_description:
+    '之前库设置中的备份无法使用。只有本次设置过程中创建的备份才有效。',
+  reshare_min_devices_required: '至少需要{{count}}设备',
+  reshare_more_devices_required: '需要更多设备',
+  reshare_threshold_not_met: '未达到阈值',
+  reshare_threshold_not_met_description:
+    '您正在尝试减少设备数量<w>{{from}}到{{to}}</w>但这个保险库<w>需要{{count}}活动签名者</w>为了确保安全。',
+  solana_delegate: '赌注',
+  solana_staking_total_staked: '总质押金额{{ticker}}',
+  solana_staking_delegate_new_validator: '委托给新的验证者',
+  solana_staking_stake_accounts: '权益账户',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: '租金储备',
+  solana_staking_min_delegation: '最小委托数量为{{amount}} {{ticker}}',
+  solana_staking_state_active: '积极的',
+  solana_staking_state_activating: '激活',
+  solana_staking_state_deactivating: '停用',
+  solana_staking_state_inactive: '非活跃状态',
+  solana_staking_activating_notice: '激活——从下一个纪元开始获得奖励。',
+  solana_staking_deactivating_notice: '失活——冷却后才能取出。',
+  solana_staking_inactive_notice: '处于非活跃状态——已冷却，准备撤退。',
+  validator_commission_short: '{{value}} % 手续费',
+  reshare_failed: '重新分享时出错，请重试。',
+  reshare_failed_description:
+    '由于网络连接不佳，重新共享速度变慢。您可以重试或等待重新连接。',
+  plugin_store_compatible: '兼容插件商店',
+  open_trust_line: '开放信任线',
+  trust_line_limit: '信任限额',
+  trust_line_issuer: '发行人',
+  trust_line_currency: '货币',
+  trust_line_custom_token: '自定义令牌',
+  trust_line_issuer_placeholder: '发行人地址（r...）',
+  trust_line_currency_placeholder: '货币代码（例如 RLUSD）',
+  trust_line_reserve_warning:
+    '打开信任线会将{{amount}} {{ticker}}锁定为账户所有者预留，直到该线被移除。',
+  trust_line_currency_reserved: 'XRP不能用作信任线货币',
+  trust_line_currency_invalid: '请输入有效的货币代码',
+  solana_staking_current_validator: '当前验证器',
+  solana_staking_new_validator: '新验证器',
+  solana_staking_pending_move_notice:
+    '移动到{{validator}} — 冷却时间结束后即可完成移动。',
 }

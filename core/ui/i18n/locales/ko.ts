@@ -275,8 +275,6 @@ export const ko = {
   post_quantum_keygen: '양자 후 키 생성',
   post_quantum_keygen_description:
     '이 금고에 대한 양자 후 보안(MLDSA) 키를 생성하세요.',
-  post_quantum_key_already_generated:
-    '이 금고에는 이미 양자 후 보안 키가 있습니다.',
   enable_token_instruction:
     '잔액을 확인하고 포지션을 관리하려면 최소 하나 이상의 토큰을 활성화해야 합니다.',
   encrypting_vault_keyshares: '금고 키 공유를 암호화하는 중...',
@@ -743,9 +741,6 @@ export const ko = {
   resend_notification: '알림 재전송',
   resend_notification_in: '{{time}} 후에 알림을 다시 보내주세요',
   reshare: '다시 공유하기',
-  reshare_disclaimer: '모든 재공유 작업에는 기기 임계값이 항상 필요합니다.',
-  reshare_explanation:
-    '리셰어(Reshare)를 사용하면 볼트에 있는 장치 수를 새로 고치거나, 확장하거나, 축소할 수 있습니다.',
   reshare_vault_description: '새로운 위원회와 함께 금고를 다시 공유하세요',
   reshare_your_vault: '보관함을 다시 공유하세요',
   resource: '리소스',
@@ -1607,7 +1602,7 @@ export const ko = {
   solana_move_stake: '이동',
   solana_finish_move: '이동 완료',
   solana_staking_move_notice:
-    '스테이크 이동은 여러 단계로 진행되며 여러 에포크에 걸칩니다. 지금 계정을 비활성화하고, 약 {{days}}일의 대기 기간이 지난 뒤 새 검증인으로 이동을 완료하세요.',
+    '스테이킹을 이전하는 과정은 여러 단계를 거치며 몇 개의 에포크에 걸쳐 진행됩니다. 이 과정에서 계정이 일시적으로 비활성화되고 약 {{days}} 일의 쿨다운 기간이 시작됩니다. 쿨다운 기간이 끝나면 선택한 검증자로 스테이킹 이전을 완료하십시오.',
   solana_staking_finish_move_notice:
     '대기 기간이 끝난 스테이크 계정을 새 검증인에게 다시 위임하고 이동을 완료합니다.',
   external_recipient_tooltip_content:
@@ -1616,4 +1611,67 @@ export const ko = {
   malicious_dapp_detected: '악성 dApp 가 감지되었습니다.',
   malicious_dapp_detected_description:
     'Blockaid에서 {{dapp}} 악성 토큰으로 표시했습니다. 진행하기 전에 항상 직접 조사하십시오.',
+  before_you_reshare: '다시 공유하기 전에',
+  before_you_reshare_subtitle:
+    '재공유를 통해 볼트 공유를 다시 생성할 수 있습니다. 먼저 알아야 할 몇 가지 사항이 있습니다.',
+  i_understand: '이해합니다',
+  join_reshare_description: '다른 기기에서 공유 재요청을 받았습니다.',
+  reshare_vault_subtitle:
+    '볼트 설정을 업데이트하세요. 장치를 추가하거나 제거하거나 공유를 새로 고칠 수 있습니다.',
+  reshare_warning_cosigners_title:
+    '모든 공동 서명자는 온라인에 접속해야 합니다.',
+  reshare_warning_cosigners_description:
+    '현재 보관함에 있는 모든 장치가 재공유 세션에 참여해야 합니다.',
+  reshare_warning_old_backups_title: '기존 백업은 더 이상 작동하지 않습니다.',
+  reshare_warning_old_backups_description:
+    '기존의 .vult 파일은 모두 무효화됩니다. 공유를 다시 수행한 후에는 새 백업 파일을 생성해야 합니다.',
+  start_reshare_description: '이 금고의 장치 설정을 변경하고 있습니다.',
+  reshare_success_title: 'Vault 재공유',
+  reshare_success_title_highlight: '성공적으로',
+  reshare_backup_old_backups_wont_work: '기존 백업 파일은 작동하지 않습니다.',
+  reshare_backup_old_backups_wont_work_description:
+    '이전 볼트 설정에서 생성된 백업은 사용할 수 없습니다. 이번 설정 과정에서 생성된 백업만 유효합니다.',
+  reshare_min_devices_required: '최소 {{count}} 개의 장치가 필요합니다.',
+  reshare_more_devices_required: '추가 장치가 필요합니다',
+  reshare_threshold_not_met: '임계값 미달',
+  reshare_threshold_not_met_description:
+    '기기 수를 줄이려고 하는군요.<w> {{from}} 에서 {{to}} 로</w> 하지만 이 금고는<w> {{count}} 활성 서명자가 필요합니다.</w> 안전을 유지하기 위해.',
+  solana_delegate: '말뚝',
+  solana_staking_total_staked: '총 스테이킹 금액 {{ticker}}',
+  solana_staking_delegate_new_validator: '새로운 검증자에게 위임',
+  solana_staking_stake_accounts: '이해관계자 계정',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: '임대료 적립금',
+  solana_staking_min_delegation:
+    '최소 위임 크기는 {{amount}} {{ticker}} 입니다.',
+  solana_staking_state_active: '활동적인',
+  solana_staking_state_activating: '활성화 중',
+  solana_staking_state_deactivating: '비활성화',
+  solana_staking_state_inactive: '비활성화됨',
+  solana_staking_activating_notice:
+    '활성화하면 다음 에포크부터 보상을 획득할 수 있습니다.',
+  solana_staking_deactivating_notice:
+    '비활성화 — 제거하기 전에 식히는 과정입니다.',
+  solana_staking_inactive_notice:
+    '비활성 상태 — 냉각되어 철수 준비가 완료되었습니다.',
+  validator_commission_short: '{{value}} % 수수료',
+  reshare_failed: '공유 오류가 발생했습니다. 다시 시도해 주세요.',
+  reshare_failed_description:
+    '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
+  plugin_store_compatible: '플러그인 스토어 호환 가능',
+  open_trust_line: '오픈 트러스트 라인',
+  trust_line_limit: '신뢰 한도',
+  trust_line_issuer: '발행자',
+  trust_line_currency: '통화',
+  trust_line_custom_token: '사용자 지정 토큰',
+  trust_line_issuer_placeholder: '발급자 주소(r...)',
+  trust_line_currency_placeholder: '통화 코드 (예: RLUSD)',
+  trust_line_reserve_warning:
+    '신뢰 회선을 개설하면 해당 회선이 제거될 때까지 {{amount}} {{ticker}} 이 계정 소유자 예약으로 잠깁니다.',
+  trust_line_currency_reserved: 'XRP는 신뢰선 통화로 사용할 수 없습니다.',
+  trust_line_currency_invalid: '유효한 통화 코드를 입력하세요',
+  solana_staking_current_validator: '현재 검증자',
+  solana_staking_new_validator: '새로운 검증자',
+  solana_staking_pending_move_notice:
+    '{{validator}} 로 이동합니다. 쿨다운 기간이 끝나면 이동을 완료할 수 있습니다.',
 }

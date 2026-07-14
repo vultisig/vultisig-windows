@@ -9,6 +9,7 @@ const publicFolderPath = path.resolve(dirname, '../public')
 
 const wasmPaths = [
   '@trustwallet/wallet-core/dist/lib/wallet-core.wasm',
+  '@rive-app/webgl2/rive.wasm',
   '7z-wasm/7zz.wasm',
   'zxing-wasm/dist/reader/zxing_reader.wasm',
 ]

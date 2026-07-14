@@ -279,8 +279,6 @@ export const es = {
   post_quantum_keygen: 'Generación de claves post-cuántica',
   post_quantum_keygen_description:
     'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
-  post_quantum_key_already_generated:
-    'Esta bóveda ya tiene una llave post-cuántica.',
   enable_token_instruction:
     'Habilite al menos un token para ver saldos y administrar posiciones.',
   encrypting_vault_keyshares: 'Cifrado de claves compartidas de bóveda...',
@@ -758,10 +756,6 @@ export const es = {
   resend_notification: 'Reenviar notificación',
   resend_notification_in: 'Reenviar notificación en {{time}}',
   reshare: 'Compartir',
-  reshare_disclaimer:
-    'Para todas las acciones de Reshare siempre se requiere el umbral de dispositivos.',
-  reshare_explanation:
-    'La función de compartir se puede utilizar para actualizar, expandir o reducir la cantidad de dispositivos en un Vault.',
   reshare_vault_description: 'Compartir la bóveda con un nuevo comité',
   reshare_your_vault: 'Comparte tu bóveda',
   resource: 'Recurso',
@@ -1638,7 +1632,7 @@ export const es = {
   solana_move_stake: 'Mover',
   solana_finish_move: 'Finalizar movimiento',
   solana_staking_move_notice:
-    'Mover el stake requiere varios pasos y abarca varias épocas: esto desactiva la cuenta ahora; después del periodo de enfriamiento de ~{{days}} días, finaliza el movimiento al nuevo validador.',
+    'Mover la participación requiere varios pasos y abarca varias épocas: esto desactiva la cuenta ahora y comienza un período de espera de aproximadamente {{days}} días. Una vez que termine, finalice la transferencia al validador que seleccionó.',
   solana_staking_finish_move_notice:
     'Esto vuelve a delegar la cuenta de stake ya enfriada al nuevo validador y completa el movimiento.',
   external_recipient_tooltip_content:
@@ -1647,4 +1641,71 @@ export const es = {
   malicious_dapp_detected: 'Se ha detectado el token malicioso dApp',
   malicious_dapp_detected_description:
     'Blockaid ha marcado el token {{dapp}} como malicioso. Investigue siempre por su cuenta antes de continuar.',
+  before_you_reshare: 'Antes de volver a compartir',
+  before_you_reshare_subtitle:
+    'Al volver a compartir, se regeneran los recursos compartidos de tu bóveda. Hay algunas cosas que debes saber antes.',
+  i_understand: 'Entiendo',
+  join_reshare_description:
+    'Recibiste una solicitud para compartir contenido desde otro dispositivo.',
+  reshare_vault_subtitle:
+    'Actualiza la configuración de tu bóveda. Agrega o elimina dispositivos, o actualiza los recursos compartidos.',
+  reshare_warning_cosigners_title:
+    'Todos los cofirmantes deben estar en línea.',
+  reshare_warning_cosigners_description:
+    'Todos los dispositivos que tengas almacenados en tu bóveda deben participar en la sesión de compartición.',
+  reshare_warning_old_backups_title:
+    'Las copias de seguridad antiguas dejarán de funcionar.',
+  reshare_warning_old_backups_description:
+    'Los archivos .vult existentes dejarán de ser válidos. Deberá crear copias de seguridad nuevas después de volver a compartirlos.',
+  start_reshare_description:
+    'Estás cambiando la configuración del dispositivo de esta bóveda.',
+  reshare_success_title: 'Bóveda compartida nuevamente',
+  reshare_success_title_highlight: 'exitosamente',
+  reshare_backup_old_backups_wont_work:
+    'Las copias de seguridad antiguas no funcionarán.',
+  reshare_backup_old_backups_wont_work_description:
+    'No se pueden utilizar las copias de seguridad de configuraciones de bóveda anteriores. Solo son válidas las copias de seguridad creadas durante esta configuración.',
+  reshare_min_devices_required: 'Se requieren al menos dispositivos {{count}}',
+  reshare_more_devices_required: 'Se necesitan más dispositivos',
+  reshare_threshold_not_met: 'Umbral no alcanzado',
+  reshare_threshold_not_met_description:
+    'Estás intentando reducir el número de dispositivos de<w> {{from}} a {{to}}</w> pero esta bóveda<w> Requiere firmantes activos {{count}}</w> para mantenerse seguro.',
+  solana_delegate: 'Apostar',
+  solana_staking_total_staked: 'Total apostado {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegar al nuevo validador',
+  solana_staking_stake_accounts: 'Cuentas de participación',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Reserva de alquiler',
+  solana_staking_min_delegation:
+    'La delegación mínima es {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Activo',
+  solana_staking_state_activating: 'Activando',
+  solana_staking_state_deactivating: 'Desactivando',
+  solana_staking_state_inactive: 'Inactivo',
+  solana_staking_activating_notice:
+    'Activar: obtiene recompensas de la siguiente época.',
+  solana_staking_deactivating_notice:
+    'Desactivación: proceso de enfriamiento antes de poder ser retirado.',
+  solana_staking_inactive_notice: 'Inactivo: enfriado y listo para retirarse.',
+  validator_commission_short: '{{value}} % de comisión',
+  reshare_failed: 'Error al compartir. Inténtalo de nuevo.',
+  reshare_failed_description:
+    'La reutilización de archivos se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
+  plugin_store_compatible: 'Compatible con Plugin Store',
+  open_trust_line: 'Línea de confianza abierta',
+  trust_line_limit: 'Límite de confianza',
+  trust_line_issuer: 'Editor',
+  trust_line_currency: 'Divisa',
+  trust_line_custom_token: 'Token personalizado',
+  trust_line_issuer_placeholder: 'Dirección del emisor (r...)',
+  trust_line_currency_placeholder: 'Código de moneda (por ejemplo, RLUSD)',
+  trust_line_reserve_warning:
+    'Al abrir una línea de confianza {{amount}} {{ticker}} se bloquea como reserva del propietario de la cuenta hasta que se elimine la línea.',
+  trust_line_currency_reserved:
+    'XRP no puede utilizarse como moneda de confianza.',
+  trust_line_currency_invalid: 'Introduzca un código de moneda válido.',
+  solana_staking_current_validator: 'validador actual',
+  solana_staking_new_validator: 'Nuevo validador',
+  solana_staking_pending_move_notice:
+    'Al pasar a {{validator}} , podrá finalizar el movimiento una vez que termine el período de espera.',
 }

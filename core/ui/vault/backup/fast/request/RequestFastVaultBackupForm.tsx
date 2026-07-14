@@ -10,7 +10,7 @@ import { resendVaultShare } from '@vultisig/core-mpc/fast/api/resendVaultShare'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { isInError } from '@vultisig/lib-utils/error/isInError'
 import { TFunction } from 'i18next'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -33,6 +33,12 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
 
   const schema = useMemo(() => getSchema(t), [t])
 
+  // Synchronous in-flight guard: `isPending` only disables the submit button
+  // after a re-render, so a fast double-submit can fire two /resend requests
+  // (two backup emails) before that commits. A ref blocks the second submit in
+  // the same tick, before any render happens.
+  const isRequestingRef = useRef(false)
+
   const { mutate, isPending, error } = useMutation({
     mutationFn: ({ email, password }: Schema) =>
       resendVaultShare({
@@ -41,7 +47,18 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
         password,
       }),
     onSuccess: onFinish,
+    onSettled: () => {
+      isRequestingRef.current = false
+    },
   })
+
+  const requestBackup = (values: Schema) => {
+    if (isRequestingRef.current) {
+      return
+    }
+    isRequestingRef.current = true
+    mutate(values)
+  }
 
   const {
     register,
@@ -75,9 +92,7 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
       justifyContent="space-between"
       scrollable
       gap={40}
-      onSubmit={handleSubmit(({ email, password }) =>
-        mutate({ email, password })
-      )}
+      onSubmit={handleSubmit(requestBackup)}
     >
       <VStack gap={16}>
         {errorMessage && <ErrorBlock>{errorMessage}</ErrorBlock>}
@@ -94,7 +109,11 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
           error={errors.password?.message}
         />
       </VStack>
-      <Button disabled={!isValid} loading={isPending} type="submit">
+      <Button
+        disabled={!isValid || isPending}
+        loading={isPending}
+        type="submit"
+      >
         {t('get_started')}
       </Button>
     </ActionForm>

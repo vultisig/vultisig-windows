@@ -216,6 +216,9 @@ export const generateMemo = ({
       const basisPoints = Math.floor(pct * 100)
       return `-:${pool}:${basisPoints}`
     },
+    // A TrustSet carries no memo — the trust line is encoded as the signed
+    // OperationTrustSet, not a memo string.
+    open_trust_line: () => '',
     // Cosmos SDK native staking actions are encoded as typed proto messages,
     // not memos. The keysign payload builder routes these through the
     // `cosmos-msg` resolver kind, so this generator never needs to produce
@@ -226,6 +229,7 @@ export const generateMemo = ({
     claim_rewards: () => '',
     // Solana staking carries no memo — the op is encoded in the relayed
     // unsigned transaction (signSolana.rawTransactions), not a memo string.
+    solana_delegate: () => '',
     solana_unstake: () => '',
     solana_withdraw: () => '',
     solana_move_stake: () => '',

@@ -279,8 +279,6 @@ export const de = {
   post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
   post_quantum_keygen_description:
     'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
-  post_quantum_key_already_generated:
-    'Dieser Tresor verfügt bereits über einen Post-Quanten-Schlüssel',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
   encrypting_vault_keyshares: 'Verschlüsselung der Tresor-Schlüsselanteile...',
@@ -764,10 +762,6 @@ export const de = {
   resend_notification: 'Benachrichtigung erneut senden',
   resend_notification_in: 'Benachrichtigung in {{time}} erneut senden',
   reshare: 'Weiter teilen',
-  reshare_disclaimer:
-    'Für alle Reshare-Aktionen ist stets eine bestimmte Anzahl an Geräten erforderlich.',
-  reshare_explanation:
-    'Mit Reshare können Sie die Anzahl der Geräte in einem Tresor aktualisieren, erweitern oder verringern.',
   reshare_vault_description: 'Tresor mit einem neuen Komitee teilen',
   reshare_your_vault: 'Teile deinen Tresor erneut',
   resource: 'Ressource',
@@ -1654,7 +1648,7 @@ export const de = {
   solana_move_stake: 'Verschieben',
   solana_finish_move: 'Verschieben abschließen',
   solana_staking_move_notice:
-    'Das Verschieben von Stake erfolgt in mehreren Schritten und über mehrere Epochen: Dadurch wird das Konto jetzt deaktiviert; nach der Abkühlzeit von etwa {{days}} Tagen können Sie das Verschieben zum neuen Validator abschließen.',
+    'Das Übertragen des Einsatzes erfordert mehrere Schritte und kann mehrere Epochen dauern: Das Konto wird jetzt deaktiviert und eine Wartezeit von etwa {{days}} Tagen beginnt. Sobald diese abgelaufen ist, können Sie den Einsatz an den von Ihnen gewählten Validator übertragen.',
   solana_staking_finish_move_notice:
     'Dadurch wird das abgekühlte Stake-Konto erneut an den neuen Validator delegiert und das Verschieben abgeschlossen.',
   external_recipient_tooltip_content:
@@ -1663,4 +1657,69 @@ export const de = {
   malicious_dapp_detected: 'Bösartiges dApp erkannt',
   malicious_dapp_detected_description:
     '{{dapp}} wurde von Blockaid als schädlich eingestuft. Führen Sie immer eigene Recherchen durch, bevor Sie fortfahren.',
+  before_you_reshare: 'Bevor Sie es erneut teilen',
+  before_you_reshare_subtitle:
+    'Durch erneutes Teilen werden Ihre Tresorfreigaben neu erstellt. Es gibt jedoch ein paar Dinge, die Sie vorher wissen sollten.',
+  i_understand: 'Ich verstehe',
+  join_reshare_description:
+    'Sie haben eine Anfrage zur erneuten Freigabe von einem anderen Gerät erhalten.',
+  reshare_vault_subtitle:
+    'Aktualisieren Sie Ihre Tresorkonfiguration. Fügen Sie Geräte hinzu oder entfernen Sie sie, oder aktualisieren Sie Freigaben.',
+  reshare_warning_cosigners_title: 'Alle Bürgen müssen online sein.',
+  reshare_warning_cosigners_description:
+    'Alle aktuell in Ihrem Tresor befindlichen Geräte müssen an der Wiederfreigabesitzung teilnehmen.',
+  reshare_warning_old_backups_title: 'Alte Backups funktionieren nicht mehr.',
+  reshare_warning_old_backups_description:
+    'Alle vorhandenen .vult-Dateien werden ungültig. Sie müssen nach der erneuten Freigabe neue Sicherungskopien erstellen.',
+  start_reshare_description:
+    'Sie ändern die Gerätekonfiguration dieses Tresors.',
+  reshare_success_title: 'Vault erneut geteilt',
+  reshare_success_title_highlight: 'erfolgreich',
+  reshare_backup_old_backups_wont_work: 'Alte Backups funktionieren nicht.',
+  reshare_backup_old_backups_wont_work_description:
+    'Backups aus früheren Vault-Konfigurationen können nicht verwendet werden. Nur Backups, die während dieser Konfiguration erstellt wurden, sind gültig.',
+  reshare_min_devices_required: 'Mindestens {{count}} -Geräte erforderlich',
+  reshare_more_devices_required: 'Weitere Geräte erforderlich',
+  reshare_threshold_not_met: 'Schwellenwert nicht erreicht',
+  reshare_threshold_not_met_description:
+    'Sie versuchen, die Anzahl der Geräte zu reduzieren von<w> {{from}} bis {{to}}</w> Aber dieses Gewölbe<w> Erfordert aktive Unterzeichner der {{count}}</w> um sicher zu bleiben.',
+  solana_delegate: 'Einsatz',
+  solana_staking_total_staked: 'Insgesamt eingesetzt {{ticker}}',
+  solana_staking_delegate_new_validator: 'An neuen Validator delegieren',
+  solana_staking_stake_accounts: 'Stake-Konten',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Mietreserve',
+  solana_staking_min_delegation:
+    'Die minimale Delegation ist {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Aktiv',
+  solana_staking_state_activating: 'Aktivierung',
+  solana_staking_state_deactivating: 'Deaktivierung',
+  solana_staking_state_inactive: 'Inaktiv',
+  solana_staking_activating_notice:
+    'Aktivierung — bringt Belohnungen ab der nächsten Epoche ein.',
+  solana_staking_deactivating_notice:
+    'Deaktivierung – Abkühlphase, bevor das Gerät zurückgezogen werden kann.',
+  solana_staking_inactive_notice:
+    'Inaktiv – abgekühlt und bereit zur Auszahlung.',
+  validator_commission_short: '{{value}} % Gebühr',
+  reshare_failed: 'Fehler beim Teilen. Bitte versuchen Sie es erneut.',
+  reshare_failed_description:
+    'Die erneute Freigabe wurde aufgrund schlechter Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
+  plugin_store_compatible: 'Plugin Store-kompatibel',
+  open_trust_line: 'Vertrauenslinie öffnen',
+  trust_line_limit: 'Vertrauensgrenze',
+  trust_line_issuer: 'Emittent',
+  trust_line_currency: 'Währung',
+  trust_line_custom_token: 'Benutzerdefiniertes Token',
+  trust_line_issuer_placeholder: 'Ausstelleradresse (r...)',
+  trust_line_currency_placeholder: 'Währungscode (z. B. RLUSD)',
+  trust_line_reserve_warning:
+    'Durch das Öffnen einer Vertrauenslinie werden {{amount}} {{ticker}} als Kontoinhaberreserve gesperrt, bis die Linie entfernt wird.',
+  trust_line_currency_reserved:
+    'XRP kann nicht als Trustline-Währung verwendet werden.',
+  trust_line_currency_invalid: 'Geben Sie einen gültigen Währungscode ein',
+  solana_staking_current_validator: 'Aktueller Validator',
+  solana_staking_new_validator: 'Neuer Validator',
+  solana_staking_pending_move_notice:
+    'Wechsel zu {{validator}} — Sie können den Wechsel abschließen, sobald die Abklingzeit abgelaufen ist.',
 }

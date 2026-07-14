@@ -281,8 +281,6 @@ export const it = {
   post_quantum_keygen: 'Generazione di chiavi post-quantistiche',
   post_quantum_keygen_description:
     'Genera una chiave post-quantistica (MLDSA) per questo vault',
-  post_quantum_key_already_generated:
-    'Questa cassaforte ha già una chiave post-quantistica',
   enable_token_instruction:
     'Abilita almeno un token per visualizzare i saldi e gestire le posizioni.',
   encrypting_vault_keyshares:
@@ -761,10 +759,6 @@ export const it = {
   resend_notification: 'Reinvia la notifica',
   resend_notification_in: 'Reinvia la notifica tra {{time}}',
   reshare: 'Ricondividere',
-  reshare_disclaimer:
-    'Per tutte le azioni di condivisione è sempre richiesta la soglia dei dispositivi.',
-  reshare_explanation:
-    'La condivisione può essere utilizzata per aggiornare, espandere o ridurre il numero di dispositivi in un Vault.',
   reshare_vault_description: 'Ricondividi il vault con un nuovo comitato',
   reshare_your_vault: 'Condividi nuovamente il tuo vault',
   resource: 'Risorsa',
@@ -1645,7 +1639,7 @@ export const it = {
   solana_move_stake: 'Sposta',
   solana_finish_move: 'Completa spostamento',
   solana_staking_move_notice:
-    'Lo spostamento dello stake richiede più passaggi e attraversa più epoche: questo disattiva ora l’account; dopo il periodo di raffreddamento di circa {{days}} giorni, completa lo spostamento verso il nuovo validatore.',
+    'Il trasferimento della puntata richiede diversi passaggi e si estende su diverse epoche: questa operazione disattiva l&#39;account ora e avvia un periodo di cooldown di circa {{days}} giorni. Una volta terminato, completa il trasferimento al validatore che hai scelto.',
   solana_staking_finish_move_notice:
     'Questo ridelega l’account di stake raffreddato al nuovo validatore e completa lo spostamento.',
   external_recipient_tooltip_content:
@@ -1654,4 +1648,69 @@ export const it = {
   malicious_dapp_detected: 'Rilevato token dannoso dApp',
   malicious_dapp_detected_description:
     '{{dapp}} è stato segnalato come dannoso da Blockaid. Effettua sempre le tue ricerche prima di procedere.',
+  before_you_reshare: 'Prima di ricondividere',
+  before_you_reshare_subtitle:
+    'La ricondivisione rigenera le condivisioni del vault. Prima di procedere, è necessario tenere presente alcune cose.',
+  i_understand: 'Capisco',
+  join_reshare_description:
+    'Hai ricevuto una richiesta di condivisione da un altro dispositivo.',
+  reshare_vault_subtitle:
+    'Aggiorna la configurazione del tuo vault. Aggiungi o rimuovi dispositivi oppure aggiorna le condivisioni.',
+  reshare_warning_cosigners_title: 'Tutti i garanti devono essere online',
+  reshare_warning_cosigners_description:
+    'Ogni dispositivo attualmente presente nel tuo vault deve partecipare alla sessione di ricondivisione.',
+  reshare_warning_old_backups_title:
+    'I vecchi backup smetteranno di funzionare',
+  reshare_warning_old_backups_description:
+    'Tutti i file .vult esistenti diventeranno non validi. Sarà necessario creare nuovi backup dopo la condivisione.',
+  start_reshare_description:
+    'Stai modificando la configurazione del dispositivo di questo vault.',
+  reshare_success_title: 'Vault ricondiviso',
+  reshare_success_title_highlight: 'con successo',
+  reshare_backup_old_backups_wont_work: 'I vecchi backup non funzioneranno',
+  reshare_backup_old_backups_wont_work_description:
+    'I backup creati durante precedenti configurazioni del vault non possono essere utilizzati. Sono validi solo i backup creati durante questa configurazione.',
+  reshare_min_devices_required: 'Sono necessari almeno dispositivi {{count}}',
+  reshare_more_devices_required: 'Sono necessari più dispositivi',
+  reshare_threshold_not_met: 'Soglia non raggiunta',
+  reshare_threshold_not_met_description:
+    'Stai cercando di ridurre il numero di dispositivi da<w> {{from}} a {{to}}</w> ma questa volta<w> richiede firmatari attivi {{count}}</w> per rimanere al sicuro.',
+  solana_delegate: 'Palo',
+  solana_staking_total_staked: 'Totale in staking {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delega al nuovo validatore',
+  solana_staking_stake_accounts: 'Conti di stake',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Riserva di affitto',
+  solana_staking_min_delegation: 'La delega minima è {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Attivo',
+  solana_staking_state_activating: 'Attivazione',
+  solana_staking_state_deactivating: 'Disattivazione',
+  solana_staking_state_inactive: 'Inattivo',
+  solana_staking_activating_notice:
+    'Attivazione: otterrai ricompense a partire dalla prossima epoca.',
+  solana_staking_deactivating_notice:
+    'Disattivazione: raffreddamento prima di poter essere estratto.',
+  solana_staking_inactive_notice:
+    'Inattivo: raffreddato e pronto per il ritiro.',
+  validator_commission_short: '{{value}} % commissione',
+  reshare_failed: 'Errore durante la condivisione. Riprova.',
+  reshare_failed_description:
+    'La condivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
+  plugin_store_compatible: 'Compatibile con Plugin Store',
+  open_trust_line: 'Linea di fiducia aperta',
+  trust_line_limit: 'Limite di fiducia',
+  trust_line_issuer: 'Emittente',
+  trust_line_currency: 'Valuta',
+  trust_line_custom_token: 'Token personalizzato',
+  trust_line_issuer_placeholder: 'Indirizzo dell&#39;emittente (r...)',
+  trust_line_currency_placeholder: 'Codice valuta (es. RLUSD)',
+  trust_line_reserve_warning:
+    'L&#39;apertura di una linea di fiducia blocca {{amount}} {{ticker}} come riserva del proprietario dell&#39;account fino alla rimozione della linea.',
+  trust_line_currency_reserved:
+    'XRP non può essere utilizzato come valuta di riferimento per le linee di fiducia.',
+  trust_line_currency_invalid: 'Inserisci un codice valuta valido',
+  solana_staking_current_validator: 'Validatore attuale',
+  solana_staking_new_validator: 'Nuovo validatore',
+  solana_staking_pending_move_notice:
+    'Passaggio a {{validator}} : è possibile completare il passaggio una volta terminato il periodo di ricarica.',
 }

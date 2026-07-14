@@ -17,6 +17,8 @@ import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { MintSpecific } from './MintUnmintSpecific/MintSpecific/MintSpecific'
 import { RedeemSpecific } from './MintUnmintSpecific/RedeemSpecific/RedeemSpecific'
+import { OpenTrustLineSpecific } from './OpenTrustLineSpecific/OpenTrustLineSpecific'
+import { SolanaDelegateSpecific } from './SolanaStakingSpecific/SolanaDelegateSpecific'
 import { SolanaFinishMoveSpecific } from './SolanaStakingSpecific/SolanaFinishMoveSpecific'
 import { SolanaMoveStakeSpecific } from './SolanaStakingSpecific/SolanaMoveStakeSpecific'
 import { SolanaUnstakeSpecific } from './SolanaStakingSpecific/SolanaUnstakeSpecific'
@@ -62,10 +64,12 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
         unfreeze: () => <TronUnfreezeSpecific />,
         custom: () => <CustomSpecific />,
         add_thor_lp: () => <ThorLpSpecific />,
+        open_trust_line: () => <OpenTrustLineSpecific />,
         delegate: () => <DelegateSpecific />,
         undelegate: () => <UndelegateSpecific />,
         redelegate: () => <RedelegateSpecific />,
         claim_rewards: () => <ClaimRewardsSpecific />,
+        solana_delegate: () => <SolanaDelegateSpecific />,
         solana_unstake: () => <SolanaUnstakeSpecific />,
         solana_withdraw: () => <SolanaWithdrawSpecific />,
         solana_move_stake: () => <SolanaMoveStakeSpecific />,

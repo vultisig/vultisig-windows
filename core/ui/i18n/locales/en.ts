@@ -71,6 +71,9 @@ export const en = {
   available: 'Available',
   back: 'Back',
   before_you_start: 'Before you start...',
+  before_you_reshare: 'Before you reshare',
+  before_you_reshare_subtitle:
+    'Resharing regenerates your vault shares. There are a few things to know first.',
   backup: 'Backup',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
@@ -351,8 +354,6 @@ export const en = {
   post_quantum_keygen: 'Post-Quantum Key Generation',
   post_quantum_keygen_description:
     'Generate a post-quantum (MLDSA) key for this vault',
-  post_quantum_key_already_generated:
-    'This vault already has a post-quantum key',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
@@ -533,6 +534,7 @@ export const en = {
     'IBC Transaction Memo Not Supported',
   ibc_transfer: 'IBC Transfer',
   id: 'ID',
+  i_understand: 'I understand',
   i_understand_save_backup: 'I understand how to save this backup',
   import: 'Import',
   import_key: 'Import Key',
@@ -588,6 +590,8 @@ export const en = {
   foreground_notification_send: 'Send {{amount}}',
   foreground_notification_swap: 'Swap {{from}} → {{to}}',
   join_reshare: 'Join Reshare',
+  join_reshare_description:
+    'You received a reshare request from another device.',
   join_session: 'Join Session',
   joining_keygen: 'Joining Keygen',
   joining_keysign: 'Joining Keysign',
@@ -877,11 +881,29 @@ export const en = {
   resend_notification: 'Resend notification',
   resend_notification_in: 'Resend notification in {{time}}',
   reshare: 'Reshare',
-  reshare_disclaimer:
-    'For all Reshare actions the threshold of devices is always required.',
-  reshare_explanation:
-    'Reshare can be used to refresh, expand or reduce the amount of devices in a Vault.',
+  reshare_failed: 'Reshare Error. Please try again.',
+  reshare_failed_description:
+    'Resharing slowed due to poor connectivity. You can retry or wait for reconnection.',
+  reshare_more_devices_required: 'More devices required',
+  reshare_threshold_not_met: 'Threshold not met',
+  reshare_threshold_not_met_description:
+    "You're trying to reduce the number of devices from <w>{{from}} to {{to}}</w>, but this vault <w>requires {{count}} active signers</w> to stay secure.",
+  plugin_store_compatible: 'Plugin Store compatible',
+  reshare_backup_old_backups_wont_work: "Old backups won't work",
+  reshare_backup_old_backups_wont_work_description:
+    "Backups from previous vault setups can't be used. Only backups created during this setup are valid.",
+  reshare_min_devices_required: 'At least {{count}} devices required',
   reshare_vault_description: 'Reshare vault with a new committee',
+  reshare_vault_subtitle:
+    'Update your vault setup. Add or remove devices, or refresh shares.',
+  reshare_warning_cosigners_title: 'All co-signers must be online',
+  reshare_warning_cosigners_description:
+    'Every current device in your vault needs to participate in the reshare session.',
+  reshare_warning_old_backups_title: 'Old backups will stop working',
+  reshare_warning_old_backups_description:
+    "Any existing .vult files become invalid. You'll need to create fresh backups after resharing.",
+  reshare_success_title: 'Vault reshared',
+  reshare_success_title_highlight: 'successfully',
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',
@@ -1040,6 +1062,7 @@ export const en = {
   operator: 'Operator',
   contract: 'Contract',
   start_reshare: 'Start Reshare',
+  start_reshare_description: "You are changing this vault's device setup.",
   status: 'Status',
   sui_arguments: 'Arguments',
   sui_call_balance_destroy_zero: 'Destroy empty Balance',
@@ -1218,6 +1241,7 @@ export const en = {
   undelegate: 'Undelegate',
   redelegate: 'Redelegate',
   claim_rewards: 'Claim Rewards',
+  solana_delegate: 'Stake',
   solana_unstake: 'Unstake',
   solana_withdraw: 'Withdraw',
   solana_move_stake: 'Move',
@@ -1228,9 +1252,30 @@ export const en = {
   solana_staking_withdrawable_amount: 'Withdrawable amount',
   solana_staking_withdraw_ready_notice: 'Cooled down and ready to withdraw.',
   solana_staking_move_notice:
-    'Moving stake is multi-step and spans epochs: this deactivates the account now; after the ~{{days}}-day cooldown, finish moving it to the new validator.',
+    'Moving stake takes several steps and spans epochs: this deactivates the account now, and it begins a cooldown of about {{days}} days. Once that ends, finish moving it to the validator you picked.',
   solana_staking_finish_move_notice:
     'This re-delegates the cooled-down stake account to the new validator and completes the move.',
+  solana_staking_current_validator: 'Current validator',
+  solana_staking_new_validator: 'New validator',
+  solana_staking_pending_move_notice:
+    'Moving to {{validator}} — you can finish the move once the cooldown period ends.',
+  solana_staking_total_staked: 'Total Staked {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegate to New Validator',
+  solana_staking_stake_accounts: 'Stake Accounts',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Rent reserve',
+  solana_staking_min_delegation: 'Minimum delegation is {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Active',
+  solana_staking_state_activating: 'Activating',
+  solana_staking_state_deactivating: 'Deactivating',
+  solana_staking_state_inactive: 'Inactive',
+  solana_staking_activating_notice:
+    'Activating — earns rewards from the next epoch.',
+  solana_staking_deactivating_notice:
+    'Deactivating — cooling down before it can be withdrawn.',
+  solana_staking_inactive_notice:
+    'Inactive — cooled down and ready to withdraw.',
+  validator_commission_short: '{{value}}% fee',
   select_validator: 'Select Validator',
   delegate_to_new_validator: 'Delegate to New Validator',
   active_delegations: 'Active Delegations',
@@ -1364,6 +1409,17 @@ export const en = {
   remove_cacao_pool: 'Remove from CACAO Pool',
   add_thor_lp: 'Add THORChain LP',
   remove_thor_lp: 'Remove THORChain LP',
+  open_trust_line: 'Open Trust Line',
+  trust_line_limit: 'Trust Limit',
+  trust_line_issuer: 'Issuer',
+  trust_line_currency: 'Currency',
+  trust_line_currency_reserved: 'XRP cannot be used as a trust-line currency',
+  trust_line_currency_invalid: 'Enter a valid currency code',
+  trust_line_custom_token: 'Custom Token',
+  trust_line_issuer_placeholder: 'Issuer address (r...)',
+  trust_line_currency_placeholder: 'Currency code (e.g. RLUSD)',
+  trust_line_reserve_warning:
+    'Opening a trust line locks {{amount}} {{ticker}} as an account owner reserve until the line is removed.',
   pool: 'Pool',
   paired: 'Paired',
   paired_address: 'Paired Address',

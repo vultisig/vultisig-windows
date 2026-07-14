@@ -278,8 +278,6 @@ export const pt = {
   post_quantum_keygen: 'Geração de chaves pós-quânticas',
   post_quantum_keygen_description:
     'Gere uma chave pós-quântica (MLDSA) para este cofre.',
-  post_quantum_key_already_generated:
-    'Este cofre já possui uma chave pós-quântica.',
   enable_token_instruction:
     'Habilite pelo menos um token para visualizar saldos e gerenciar posições.',
   encrypting_vault_keyshares:
@@ -758,10 +756,6 @@ export const pt = {
   resend_notification: 'Reenviar notificação',
   resend_notification_in: 'Reenviar notificação em {{time}}',
   reshare: 'Compartilhar',
-  reshare_disclaimer:
-    'Para todas as ações de compartilhamento, o limite de dispositivos é sempre necessário.',
-  reshare_explanation:
-    'O recurso "Reshare" pode ser usado para atualizar, expandir ou reduzir a quantidade de dispositivos em um Vault.',
   reshare_vault_description: 'Recompartilhe o cofre com um novo comitê.',
   reshare_your_vault: 'Compartilhe novamente seu cofre',
   resource: 'Recurso',
@@ -1641,7 +1635,7 @@ export const pt = {
   solana_move_stake: 'Mover',
   solana_finish_move: 'Finalizar movimentação',
   solana_staking_move_notice:
-    'Mover o stake exige várias etapas e atravessa épocas: isso desativa a conta agora; após o período de espera de ~{{days}} dias, finalize a movimentação para o novo validador.',
+    'A transferência de stake envolve várias etapas e abrange diferentes épocas: isso desativa a conta agora e inicia um período de espera de aproximadamente {{days}} dias. Assim que esse período terminar, conclua a transferência para o validador escolhido.',
   solana_staking_finish_move_notice:
     'Isso redelega a conta de stake já resfriada ao novo validador e conclui a movimentação.',
   external_recipient_tooltip_content:
@@ -1650,4 +1644,70 @@ export const pt = {
   malicious_dapp_detected: 'Token malicioso dApp detectado',
   malicious_dapp_detected_description:
     '{{dapp}} foi sinalizado como malicioso pelo Blockaid. Sempre faça sua própria pesquisa antes de prosseguir.',
+  before_you_reshare: 'Antes de compartilhar novamente',
+  before_you_reshare_subtitle:
+    'Ao compartilhar novamente, suas ações no cofre são regeneradas. Há algumas coisas que você precisa saber primeiro.',
+  i_understand: 'Eu entendo',
+  join_reshare_description:
+    'Você recebeu uma solicitação de compartilhamento de outro dispositivo.',
+  reshare_vault_subtitle:
+    'Atualize a configuração do seu cofre. Adicione ou remova dispositivos ou atualize os compartilhamentos.',
+  reshare_warning_cosigners_title: 'Todos os fiadores devem estar online.',
+  reshare_warning_cosigners_description:
+    'Todos os dispositivos atuais em seu cofre precisam participar da sessão de compartilhamento.',
+  reshare_warning_old_backups_title:
+    'Os backups antigos deixarão de funcionar.',
+  reshare_warning_old_backups_description:
+    'Todos os arquivos .vult existentes serão invalidados. Você precisará criar novos backups após o compartilhamento.',
+  start_reshare_description:
+    'Você está alterando a configuração do dispositivo deste cofre.',
+  reshare_success_title: 'Cofre compartilhado novamente',
+  reshare_success_title_highlight: 'com sucesso',
+  reshare_backup_old_backups_wont_work: 'Os backups antigos não funcionarão.',
+  reshare_backup_old_backups_wont_work_description:
+    'Não é possível usar backups de configurações anteriores do cofre. Somente backups criados durante esta configuração são válidos.',
+  reshare_min_devices_required:
+    'São necessários pelo menos {{count}} dispositivos.',
+  reshare_more_devices_required: 'São necessários mais dispositivos.',
+  reshare_threshold_not_met: 'Limiar não atingido',
+  reshare_threshold_not_met_description:
+    'Você está tentando reduzir o número de dispositivos de<w> {{from}} para {{to}}</w> mas este cofre<w> requer signatários ativos {{count}}</w> Para se manter seguro.',
+  solana_delegate: 'Estaca',
+  solana_staking_total_staked: 'Total em staking {{ticker}}',
+  solana_staking_delegate_new_validator: 'Delegar ao novo validador',
+  solana_staking_stake_accounts: 'Contas de participação',
+  solana_staking_apy: 'APY',
+  solana_staking_rent_reserve: 'Reserva de aluguel',
+  solana_staking_min_delegation: 'A delegação mínima é {{amount}} {{ticker}}',
+  solana_staking_state_active: 'Ativo',
+  solana_staking_state_activating: 'Ativando',
+  solana_staking_state_deactivating: 'Desativando',
+  solana_staking_state_inactive: 'Inativo',
+  solana_staking_activating_notice:
+    'Ativar — garante recompensas a partir da próxima época.',
+  solana_staking_deactivating_notice:
+    'Desativação — resfriamento antes de poder ser retirado.',
+  solana_staking_inactive_notice:
+    'Inativo — resfriado e pronto para ser retirado.',
+  validator_commission_short: '{{value}} % taxa',
+  reshare_failed: 'Erro ao compartilhar novamente. Tente outra vez.',
+  reshare_failed_description:
+    'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
+  plugin_store_compatible: 'Compatível com a Loja de Plugins',
+  open_trust_line: 'Linha de Confiança Aberta',
+  trust_line_limit: 'Limite de confiança',
+  trust_line_issuer: 'Emissor',
+  trust_line_currency: 'Moeda',
+  trust_line_custom_token: 'Token personalizado',
+  trust_line_issuer_placeholder: 'Endereço do emissor (r...)',
+  trust_line_currency_placeholder: 'Código da moeda (ex: RLUSD)',
+  trust_line_reserve_warning:
+    'A abertura de uma linha de confiança bloqueia {{amount}} {{ticker}} como reserva do proprietário da conta até que a linha seja removida.',
+  trust_line_currency_reserved:
+    'XRP não pode ser usado como moeda de linha de confiança.',
+  trust_line_currency_invalid: 'Insira um código de moeda válido',
+  solana_staking_current_validator: 'Validador atual',
+  solana_staking_new_validator: 'Novo validador',
+  solana_staking_pending_move_notice:
+    'Movendo para {{validator}} — você pode concluir a movimentação assim que o período de espera terminar.',
 }

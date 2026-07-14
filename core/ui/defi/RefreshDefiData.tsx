@@ -88,6 +88,11 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     getPositionsQueryKey: address => ['tonStakePosition', address],
     poolQueryKeys: [['tonStakingPools']],
   },
+  [Chain.Solana]: {
+    priceCoins: [{ ...chainFeeCoin[Chain.Solana], chain: Chain.Solana }],
+    getPositionsQueryKey: address => ['solanaStakeAccounts', address],
+    poolQueryKeys: [['solanaValidators']],
+  },
 }
 
 export const RefreshDefiData = () => {
@@ -100,6 +105,7 @@ export const RefreshDefiData = () => {
   const terraClassicAddress = useCurrentVaultAddress(Chain.TerraClassic)
   const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
   const tonAddress = useCurrentVaultAddress(Chain.Ton)
+  const solanaAddress = useCurrentVaultAddress(Chain.Solana)
   const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
   const circleAccountQuery = useCircleAccountQuery()
   const isCircleVisible = useIsCircleVisible()
@@ -114,6 +120,7 @@ export const RefreshDefiData = () => {
         [Chain.TerraClassic]: terraClassicAddress,
         [Chain.QBTC]: qbtcAddress,
         [Chain.Ton]: tonAddress,
+        [Chain.Solana]: solanaAddress,
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {

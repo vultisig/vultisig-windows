@@ -20,6 +20,7 @@ import { passcodeAutoLockStorage } from './passcodeAutoLock'
 import { passcodeEncryptionStorage } from './passcodeEncryption'
 import { passcodeUnlockSessionStorage } from './passcodeUnlockSession'
 import { referralsStorage } from './referrals'
+import { solanaMoveStakeDestinationsStorage } from './solanaMoveStakeDestinations'
 import { transactionHistoryStorage } from './transactionHistory'
 import { tssBatchingEnabledStorage } from './tssBatchingEnabled'
 import { vaultFoldersStorage } from './vaultFolders'
@@ -49,5 +50,6 @@ export const storage: CoreStorage = {
   ...mldsaEnabledStorage,
   ...tssBatchingEnabledStorage,
   ...customRpcOverridesStorage,
+  ...solanaMoveStakeDestinationsStorage,
   ...transactionHistoryStorage,
 }

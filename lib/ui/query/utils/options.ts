@@ -19,8 +19,14 @@ export const noRefetchQueryOptions: UseQueryGenericOptions = {
   refetchOnReconnect: false,
 }
 
+export const persistQueryStaleTime = 30_000
+
 export const persistQueryOptions: UseQueryGenericOptions = {
   meta: { shouldPersist: true },
+  refetchOnMount: false,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  staleTime: persistQueryStaleTime,
 }
 
 export const pollingQueryOptions = (

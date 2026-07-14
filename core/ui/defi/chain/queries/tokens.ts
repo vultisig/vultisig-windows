@@ -27,6 +27,12 @@ export const thorchainTokens: Record<string, Coin> = {
     id: 'x/ruji',
     ticker: 'RUJI',
   },
+  sruji: {
+    ...knownCosmosTokens[Chain.THORChain]['x/staking-x/ruji'],
+    chain: Chain.THORChain,
+    id: 'x/staking-x/ruji',
+    ticker: 'sRUJI',
+  },
   yRune: {
     ...yieldBearingThorChainTokens[
       'x/nami-index-nav-thor1mlphkryw5g54yfkrp6xpqzlpv4f8wh6hyw27yyg4z2els8a9gxpqhfhekt-rcpt'
