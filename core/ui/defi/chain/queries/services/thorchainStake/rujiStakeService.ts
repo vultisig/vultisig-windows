@@ -40,6 +40,7 @@ const getRujiStake = (address: string) => {
         ... on Account {
           stakingV2 {
             bonded { amount asset { metadata { symbol } } }
+            liquidSize { amount }
             pendingRevenue { amount asset { metadata { symbol } } }
             pool { summary { apr { value status } } }
           }
@@ -55,6 +56,7 @@ const getRujiStake = (address: string) => {
             amount?: string
             asset?: { metadata?: { symbol?: string } | null } | null
           } | null
+          liquidSize?: { amount?: string } | null
           pendingRevenue?: {
             amount?: string
             asset?: { metadata?: { symbol?: string } | null } | null
@@ -102,6 +104,12 @@ type FetchRujiStakePositionInput = {
   prices: Record<string, number>
 }
 
+/**
+ * Fetches the vault's RUJI staking position, combining the Rujira staking API
+ * (APR, pending USDC rewards, bonded amount) with the on-chain sRUJI receipt
+ * balance. Returns the auto-compounding value in RUJI as a
+ * {@link ThorchainStakePosition}, or `null` if the lookup fails.
+ */
 export const fetchRujiStakePosition = async ({
   address,
   prices,
@@ -119,10 +127,13 @@ export const fetchRujiStakePosition = async ({
       entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
     )
     const bondedAmount = parseBigint(stake?.bonded?.amount)
-    // Prefer the on-chain receipt balance (source of truth for what the vault
-    // holds and can send); a successful zero stays zero. Fall back to the API's
-    // `bonded` amount only when the balance request failed (heldAmount is null).
-    const amount = heldAmount ?? bondedAmount
+    // Display the auto-compounding value: the sRUJI receipt converted to RUJI at
+    // the pool's current share price (the API's `liquidSize`), matching what the
+    // Rujira app shows. Fall back to the raw on-chain receipt balance if the API
+    // doesn't surface it, then to the API's `bonded` amount.
+    const liquidSizeAmount = parseBigint(stake?.liquidSize?.amount)
+    const amount =
+      liquidSizeAmount > 0n ? liquidSizeAmount : (heldAmount ?? bondedAmount)
     const rewardsAmount =
       parseNumber(stake?.pendingRevenue?.amount) / rujiDecimalFactor
     const apr = parseRujiApr(stake?.pool?.summary?.apr)
