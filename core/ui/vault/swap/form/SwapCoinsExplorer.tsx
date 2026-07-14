@@ -16,7 +16,7 @@ import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -45,16 +45,21 @@ export const SwapCoinsExplorer = ({
   const { mutateAsync: createCoin } = useCreateCoinMutation()
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
 
-  const { data: whitelisted } = useWhitelistedCoinsQuery(currentChain)
+  // The carousel/highlight tracks the live `currentChain` so the selection
+  // feels instant, while the heavy token list re-renders off `deferredChain`
+  // in a low-priority pass, so switching chains never blocks on the list.
+  const deferredChain = useDeferredValue(currentChain)
 
-  const sortedSwapCoins = useSortedByBalanceCoins(currentChain)
+  const { data: whitelisted } = useWhitelistedCoinsQuery(deferredChain)
+
+  const sortedSwapCoins = useSortedByBalanceCoins(deferredChain)
   const options = useMemo(() => {
-    const vaultCoinsForChain = coins.filter(c => c.chain === currentChain)
+    const vaultCoinsForChain = coins.filter(c => c.chain === deferredChain)
 
     const allOptions = withoutDuplicates(
       [
         ...sortedSwapCoins,
-        ...(knownTokens[currentChain] ?? []).filter(
+        ...(knownTokens[deferredChain] ?? []).filter(
           coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
         ),
         ...(whitelisted ?? []).filter(
@@ -64,7 +69,7 @@ export const SwapCoinsExplorer = ({
       areEqualCoins
     )
 
-    if (currentChain === Chain.Solana) {
+    if (deferredChain === Chain.Solana) {
       const hasNativeSol = allOptions.some(
         coin => coin.chain === Chain.Solana && !coin.id && isFeeCoin(coin)
       )
@@ -81,7 +86,7 @@ export const SwapCoinsExplorer = ({
     }
 
     return allOptions
-  }, [currentChain, sortedSwapCoins, whitelisted, coins])
+  }, [deferredChain, sortedSwapCoins, whitelisted, coins])
 
   const { t } = useTranslation()
 
