@@ -33,7 +33,11 @@ describe('app session chain authorization', () => {
     })
   })
 
-  it('rejects an unapproved EVM chain when explicit chain permissions exist', () => {
+  it('authorizes any chain for a connected origin regardless of recorded chain permissions', () => {
+    // A stored session only exists for an already-connected origin, so we no
+    // longer gate on `authorizedChains` — a multi-chain dApp attaches extra
+    // chains to the same session without a fresh popup. Unconnected origins
+    // are rejected upstream by `authorizeContext`, preserving #4214.
     expect(
       isAppSessionAuthorizedForChain({
         appSession: {
@@ -44,7 +48,7 @@ describe('app session chain authorization', () => {
         },
         chain: Chain.Polygon,
       })
-    ).toBe(false)
+    ).toBe(true)
   })
 
   it('accepts the selected EVM chain for legacy sessions without explicit permissions', () => {

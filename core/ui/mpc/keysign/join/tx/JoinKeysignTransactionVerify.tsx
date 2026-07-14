@@ -1,3 +1,4 @@
+import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -62,6 +63,7 @@ export const JoinKeysignTransactionVerify = ({
   return (
     <>
       <PageContent gap={12} scrollable>
+        {isSwap ? null : <DappRequestBanner value={value.dappMetadata} />}
         {content}
         {terms.length > 0 && (
           <VStack>
