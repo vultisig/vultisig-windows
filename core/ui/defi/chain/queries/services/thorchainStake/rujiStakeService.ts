@@ -80,6 +80,12 @@ type FetchRujiStakePositionInput = {
   prices: Record<string, number>
 }
 
+/**
+ * Fetches the vault's RUJI staking position, combining the Rujira staking API
+ * (APR, pending USDC rewards, bonded amount) with the on-chain sRUJI receipt
+ * balance. Returns the auto-compounding value in RUJI as a
+ * {@link ThorchainStakePosition}, or `null` if the lookup fails.
+ */
 export const fetchRujiStakePosition = async ({
   address,
   prices,
