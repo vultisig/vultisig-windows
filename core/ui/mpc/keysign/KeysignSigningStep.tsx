@@ -1,3 +1,4 @@
+import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
@@ -101,6 +102,9 @@ export const KeysignSigningStep = ({
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
+                                <DappRequestBanner
+                                  value={payload.dappMetadata}
+                                />
                                 <TxSuccess
                                   value={payload}
                                   onSeeTxDetails={onSeeTxDetails}
@@ -123,6 +127,9 @@ export const KeysignSigningStep = ({
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
+                                <DappRequestBanner
+                                  value={payload.dappMetadata}
+                                />
                                 <KeysignTxOverview
                                   toAddressLabel={toAddressLabel}
                                 />
