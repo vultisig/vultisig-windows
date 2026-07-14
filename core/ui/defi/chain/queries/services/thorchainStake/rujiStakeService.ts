@@ -13,6 +13,22 @@ import { encodeBase64, parseBigint, parseNumber } from '../../utils/parsers'
 
 const rujiDecimalFactor = toDecimalFactor(thorchainTokens.ruji.decimals)
 
+// The Rujira staking API returns APR as a Bigint fixed-point rate scaled to 12
+// decimal places: divide by 10^12 for the fractional rate (e.g. 37176753737 =>
+// 0.0372 => 3.72%). `status` is only meaningful when 'AVAILABLE'; any other
+// status (NOT_APPLICABLE, SOON) means no APR to show.
+const rujiRateDecimalFactor = toDecimalFactor(12)
+
+const parseRujiApr = (
+  apr?: { value?: string | null; status?: string | null } | null
+): number | undefined => {
+  if (!apr || (apr.status && apr.status !== 'AVAILABLE')) {
+    return undefined
+  }
+
+  return (parseNumber(apr.value) / rujiRateDecimalFactor) * 100
+}
+
 const getRujiStake = (address: string) => {
   const variables = { id: encodeBase64(`Account:${address}`) }
   const query = `
@@ -22,7 +38,7 @@ const getRujiStake = (address: string) => {
           stakingV2 {
             bonded { amount asset { metadata { symbol } } }
             pendingRevenue { amount asset { metadata { symbol } } }
-            pool { summary { apr { value } } }
+            pool { summary { apr { value status } } }
           }
         }
       }
@@ -41,7 +57,9 @@ const getRujiStake = (address: string) => {
             asset?: { metadata?: { symbol?: string } | null } | null
           } | null
           pool?: {
-            summary?: { apr?: { value?: string | null } | null } | null
+            summary?: {
+              apr?: { value?: string | null; status?: string | null } | null
+            } | null
           } | null
         } | null> | null
       } | null
@@ -87,7 +105,13 @@ export const fetchRujiStakePosition = async ({
       getRujiStake(address),
       fetchRujiReceiptBalance(address),
     ])
-    const stake = response?.data?.node?.stakingV2?.[0]
+    // `stakingV2` can contain entries for multiple pools; the first entry is not
+    // guaranteed to be RUJI. Match iOS and select the RUJI pool by its bond asset
+    // symbol so the APR, rewards and bonded amount come from the right pool
+    // (blindly taking [0] can surface a different pool's APR entirely).
+    const stake = response?.data?.node?.stakingV2?.find(
+      entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
+    )
     const bondedAmount = parseBigint(stake?.bonded?.amount)
     // Prefer the on-chain receipt balance (source of truth for what the vault
     // holds and can send); a successful zero stays zero. Fall back to the API's
@@ -95,7 +119,7 @@ export const fetchRujiStakePosition = async ({
     const amount = heldAmount ?? bondedAmount
     const rewardsAmount =
       parseNumber(stake?.pendingRevenue?.amount) / rujiDecimalFactor
-    const aprValue = parseNumber(stake?.pool?.summary?.apr?.value)
+    const apr = parseRujiApr(stake?.pool?.summary?.apr)
     const price = prices[coinKeyToString(thorchainTokens.ruji)] ?? 0
 
     const fiatValue = getCoinValue({
@@ -111,7 +135,7 @@ export const fetchRujiStakePosition = async ({
       type: 'stake',
       canUnstake: amount > 0n,
       fiatValue,
-      apr: aprValue * 100,
+      apr,
       rewards: rewardsAmount,
       rewardTicker: 'USDC',
     }
