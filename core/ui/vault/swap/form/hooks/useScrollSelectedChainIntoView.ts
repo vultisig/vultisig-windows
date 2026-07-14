@@ -177,10 +177,13 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   }, [chain, selectNearest, setCenteredKey])
 
   useEffect(() => {
-    const onResize = () => setCenteredKey()
+    const onResize = () => {
+      setCenteredKey()
+      scrollToKey(chain, 'auto')
+    }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [setCenteredKey])
+  }, [chain, scrollToKey, setCenteredKey])
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
