@@ -249,6 +249,9 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
       if (wheelIdleTimer.current !== null) {
         window.clearTimeout(wheelIdleTimer.current)
+        // Null it so a re-created effect doesn't mistake this cancelled timer
+        // for an active debounce and skip the gesture-start measureMetrics().
+        wheelIdleTimer.current = null
       }
     }
   }, [measureMetrics, selectNearest, setStrokeToNearestScrollPosition])
