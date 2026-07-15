@@ -7,9 +7,9 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 import { useMemo } from 'react'
 
+import { useUnstakableRujiQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableRujiQuery'
 import { useUnstakableStcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableSTcyQuery'
 import { useUnstakableTcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableTcyQuery'
-import { useRujiraStakeQuery } from '../hooks/useRujiraStakeQuery'
 import { useTonUnstakableQuery } from '../hooks/useTonUnstakableQuery'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
@@ -59,7 +59,14 @@ export const useStakeBalance = (): StakeBalanceResult => {
     },
   })
 
-  const { data: rujiData, isLoading: isLoadingRuji } = useRujiraStakeQuery()
+  const { data: rujiData, isLoading: isLoadingRuji } = useUnstakableRujiQuery({
+    address: thorchainVaultAddress,
+    options: {
+      enabled: Boolean(
+        thorchainVaultAddress && isUnstake && stakeId === 'ruji'
+      ),
+    },
+  })
 
   const { data: tonBalance, isLoading: isLoadingTon } = useTonUnstakableQuery({
     address: tonVaultAddress,
@@ -100,7 +107,7 @@ export const useStakeBalance = (): StakeBalanceResult => {
         stakeId,
       }),
       ruji: () => ({
-        balance: rujiData?.bonded ?? 0,
+        balance: rujiData?.humanReadableBalance ?? 0,
         isLoading: isLoadingRuji,
         stakeId,
       }),
@@ -113,7 +120,7 @@ export const useStakeBalance = (): StakeBalanceResult => {
     isLoadingNativeTcy,
     stcyData?.humanReadableBalance,
     isLoadingStcy,
-    rujiData?.bonded,
+    rujiData?.humanReadableBalance,
     isLoadingRuji,
     tonBalance?.humanReadableBalance,
     isLoadingTon,
