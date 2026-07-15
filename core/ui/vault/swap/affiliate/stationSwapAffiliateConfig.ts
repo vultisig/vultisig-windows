@@ -16,6 +16,9 @@ export const stationKyberSwapSource =
     ? __VULTISIG_STATION_KYBER_SOURCE__
     : stationKyberSwapFallbackSource
 
+export const stationJupiterFeeOwner =
+  '5QXePTiaWgmqSCHh9YDWAiVvEeKWaM5cUN62K4SXwUSB'
+
 export const stationSwapAffiliateConfig = {
   native: {
     affiliateFeeAddress: stationNativeSwapAffiliateName,
@@ -28,5 +31,8 @@ export const stationSwapAffiliateConfig = {
   kyber: {
     source: stationKyberSwapSource,
     referral: stationSwapAffiliateFeeReceiver,
+  },
+  jupiter: {
+    feeOwner: stationJupiterFeeOwner,
   },
 } satisfies SwapAffiliateConfig

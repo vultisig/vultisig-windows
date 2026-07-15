@@ -3,6 +3,7 @@ import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { describe, expect, it } from 'vitest'
 
 import {
+  stationJupiterFeeOwner,
   stationKyberSwapFallbackSource,
   stationKyberSwapSource,
   stationNativeSwapAffiliateName,
@@ -54,6 +55,9 @@ describe('buildSwapQuoteInput', () => {
     )
     expect(input.affiliateConfig?.kyber?.source).toBe(stationKyberSwapSource)
     expect(stationKyberSwapSource).toBe(stationKyberSwapFallbackSource)
+    expect(input.affiliateConfig?.jupiter?.feeOwner).toBe(
+      stationJupiterFeeOwner
+    )
   })
 
   it('preserves Vultisig quote input behavior', () => {
