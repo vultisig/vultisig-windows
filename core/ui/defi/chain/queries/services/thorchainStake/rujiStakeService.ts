@@ -160,3 +160,33 @@ export const fetchRujiStakePosition = async ({
     return null
   }
 }
+
+type RujiLiquidUnbondInputs = {
+  /** On-chain sRUJI receipt balance (base units) — the shares to redeem. */
+  liquidShares: bigint
+  /** RUJI-denominated value of the auto-compounding position (base units). */
+  liquidSize: bigint
+}
+
+/**
+ * Fetches the base-unit inputs needed to build a RUJI `liquid.unbond`
+ * transaction. Unstaking the auto-compounding position redeems the sRUJI
+ * receipt, so the entered underlying (RUJI) amount must be converted to receipt
+ * shares via `liquidShares / liquidSize` — this returns both raw values.
+ */
+export const fetchRujiLiquidUnbondInputs = async (
+  address: string
+): Promise<RujiLiquidUnbondInputs> => {
+  const [response, heldAmount] = await Promise.all([
+    getRujiStake(address),
+    fetchRujiReceiptBalance(address),
+  ])
+  const stake = response?.data?.node?.stakingV2?.find(
+    entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
+  )
+
+  return {
+    liquidShares: heldAmount ?? 0n,
+    liquidSize: parseBigint(stake?.liquidSize?.amount),
+  }
+}
