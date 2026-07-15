@@ -8,6 +8,7 @@ type Props = {
 const strokeAdditionalSpace = 12
 const minStrokeWidth = 44
 const idleTimeAfterScrollStop = 500
+const wheelIdleTime = 200
 const behavior: ScrollBehavior = 'smooth'
 
 export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
@@ -16,10 +17,12 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   const prevChain = useRef<string | null>(null)
   const strokeRef = useRef<HTMLDivElement>(null)
   const idleTimer = useRef<number | null>(null)
-  // True only while the user is actively scrolling (wheel/trackpad), so the
-  // live ring tracking never runs during the programmatic scrolls triggered by
-  // clicking a pill or by settling — those keep their existing resize behavior.
-  const userScrollActive = useRef(false)
+  // Target scrollLeft of an in-flight programmatic scroll (click / settle /
+  // chain-change centering). While set, live ring tracking is suppressed, so
+  // only genuine user scrolls (wheel, touch, scrollbar) drive the live resize.
+  // Cleared once the target is reached, or on any direct user input.
+  const programmaticTarget = useRef<number | null>(null)
+  const wheelIdleTimer = useRef<number | null>(null)
   // Pre-measured center (in scroll-content coordinates) and width of every pill,
   // so during a scroll we can resize the ring to the pill entering the center
   // without measuring the DOM on each scroll event.
@@ -48,6 +51,9 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       if (!container || !el) return
       const left = computeCenteredLeft(container, el)
       if (Math.abs(container.scrollLeft - left) > 1) {
+        // Mark this as programmatic so the live ring tracking ignores the scroll
+        // events it produces (cleared in onScroll once it lands).
+        programmaticTarget.current = left
         container.scrollTo({ left, behavior: b ?? behavior })
       }
     },
@@ -128,10 +134,6 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   }, [])
 
   const selectNearest = useCallback(() => {
-    // The scroll has settled: stop live tracking so the programmatic centering
-    // scroll below (and the chain-change layout effect) doesn't get tracked.
-    userScrollActive.current = false
-
     const container = footerRef.current
     if (!container) return
     const target = strokeRef.current ?? container
@@ -188,9 +190,17 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     if (!el) return
 
     const onScroll = () => {
-      // Only while the user drives the scroll: resize the ring to the pill
-      // entering the center as it moves, in parallel with the token list.
-      if (userScrollActive.current) setStrokeToNearestScrollPosition()
+      if (programmaticTarget.current !== null) {
+        // A click/settle/chain-change scroll is in flight: don't track, and drop
+        // the marker once it lands so user scrolls resume driving the ring.
+        if (Math.abs(el.scrollLeft - programmaticTarget.current) <= 1) {
+          programmaticTarget.current = null
+        }
+      } else {
+        // Any user-driven scroll (wheel, touch, or scrollbar): resize the ring
+        // to the pill entering the center as it moves, in parallel with the list.
+        setStrokeToNearestScrollPosition()
+      }
 
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
       idleTimer.current = window.setTimeout(
@@ -200,24 +210,46 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     }
 
     const onWheel = (e: WheelEvent) => {
-      // Refresh the cached widths at the start of each gesture. The mount-time
+      // Direct user input cancels an in-flight programmatic classification (e.g.
+      // interrupting a smooth scroll) so tracking resumes immediately — and a
+      // boundary wheel that produces no scroll event can't leave anything stuck.
+      programmaticTarget.current = null
+      // Refresh the cached widths at the start of a wheel gesture: the mount-time
       // measurement can be stale (fonts/icons finalize after it), which made the
-      // ring size wrong for the next pill on the very first scroll — before the
-      // first chain change ever re-measured.
-      if (!userScrollActive.current) measureMetrics()
-      userScrollActive.current = true
+      // ring size wrong for the next pill on the very first scroll.
+      if (wheelIdleTimer.current === null) {
+        measureMetrics()
+      } else {
+        window.clearTimeout(wheelIdleTimer.current)
+      }
+      wheelIdleTimer.current = window.setTimeout(() => {
+        wheelIdleTimer.current = null
+      }, wheelIdleTime)
+
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         el.scrollLeft += e.deltaY
       }
     }
 
+    const onPointerDown = () => {
+      // Touch/pointer gesture start: cancel any programmatic marker and refresh
+      // widths so touch swipes and scrollbar drags also track the ring live.
+      programmaticTarget.current = null
+      measureMetrics()
+    }
+
     el.addEventListener('scroll', onScroll, { passive: true })
     el.addEventListener('wheel', onWheel, { passive: true })
+    el.addEventListener('pointerdown', onPointerDown, { passive: true })
 
     return () => {
       el.removeEventListener('scroll', onScroll)
       el.removeEventListener('wheel', onWheel)
+      el.removeEventListener('pointerdown', onPointerDown)
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
+      if (wheelIdleTimer.current !== null) {
+        window.clearTimeout(wheelIdleTimer.current)
+      }
     }
   }, [measureMetrics, selectNearest, setStrokeToNearestScrollPosition])
 
