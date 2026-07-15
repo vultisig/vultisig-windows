@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 
 type Props = {
   chain: string
@@ -18,7 +24,18 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
   // stay measured against a stale/absent pill until the next chain change.
   const itemsKey = items.join('|')
 
-  const footerRef = useRef<HTMLDivElement>(null)
+  const footerElRef = useRef<HTMLDivElement | null>(null)
+  // Callback ref that also tracks the node in state. The modal mounts through
+  // BodyPortal, whose useBody defers rendering by one commit (body starts null),
+  // so on a warm remount the footer isn't attached yet when the effects first
+  // run — they'd bind listeners / measure against null and, with otherwise
+  // stable deps, never re-run (breaking scroll + ring until a click). Depending
+  // on `footerNode` re-runs those effects the moment the carousel mounts.
+  const [footerNode, setFooterNode] = useState<HTMLDivElement | null>(null)
+  const footerRef = useCallback((node: HTMLDivElement | null) => {
+    footerElRef.current = node
+    setFooterNode(node)
+  }, [])
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const prevChain = useRef<string | null>(null)
   const strokeRef = useRef<HTMLDivElement>(null)
@@ -55,7 +72,7 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
 
   const scrollToKey = useCallback(
     (key: string, b?: ScrollBehavior) => {
-      const container = footerRef.current
+      const container = footerElRef.current
       const el = itemRefs.current[key]
       if (!container || !el) return
       const left = computeCenteredLeft(container, el)
@@ -71,7 +88,7 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
 
   const setStrokeToKey = useCallback(
     (key?: string) => {
-      const container = footerRef.current
+      const container = footerElRef.current
       const stroke = strokeRef.current
       const el = key
         ? itemRefs.current[key]
@@ -95,7 +112,7 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
   // Cache every pill's center + width once (scroll-invariant content coords), so
   // the scroll handler can look them up instead of measuring the DOM mid-scroll.
   const measureMetrics = useCallback(() => {
-    const container = footerRef.current
+    const container = footerElRef.current
     if (!container) return
 
     const containerLeft = container.getBoundingClientRect().left
@@ -118,7 +135,7 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
   // and only the live scrollLeft — so the ring snaps to the next pill the instant
   // it crosses the center while scrolling.
   const setStrokeToNearestScrollPosition = useCallback(() => {
-    const container = footerRef.current
+    const container = footerElRef.current
     const stroke = strokeRef.current
     if (!container || !stroke || chainMetrics.current.length === 0) return
 
@@ -147,7 +164,7 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
     // suppression so the next genuine user scroll drives the ring again.
     programmaticScroll.current = false
 
-    const container = footerRef.current
+    const container = footerElRef.current
     if (!container) return
     const target = strokeRef.current ?? container
     const tRect = target.getBoundingClientRect()
@@ -196,10 +213,10 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
     })
 
     return () => cancelAnimationFrame(id)
-  }, [chain, itemsKey, measureMetrics, scrollToKey, setStrokeToKey])
+  }, [chain, footerNode, itemsKey, measureMetrics, scrollToKey, setStrokeToKey])
 
   useEffect(() => {
-    const el = footerRef.current
+    const el = footerNode
     if (!el) return
 
     const onScroll = () => {
@@ -260,7 +277,12 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
         wheelIdleTimer.current = null
       }
     }
-  }, [measureMetrics, selectNearest, setStrokeToNearestScrollPosition])
+  }, [
+    footerNode,
+    measureMetrics,
+    selectNearest,
+    setStrokeToNearestScrollPosition,
+  ])
 
   useEffect(() => {
     const onResize = () => {
@@ -307,7 +329,7 @@ export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
       delayed.forEach(id => window.clearTimeout(id))
       observer?.disconnect()
     }
-  }, [chain, itemsKey, measureMetrics, scrollToKey, setStrokeToKey])
+  }, [chain, footerNode, itemsKey, measureMetrics, scrollToKey, setStrokeToKey])
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
