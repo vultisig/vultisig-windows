@@ -3,6 +3,7 @@ import { yieldBearingThorChainTokens } from '@vultisig/core-chain/chains/cosmos/
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
+import { thorchainNativeTokensMetadata } from '@vultisig/core-chain/coin/knownTokens/thorchain'
 
 export const runeCoin: Coin = {
   ...chainFeeCoin[Chain.THORChain],
@@ -28,7 +29,10 @@ export const thorchainTokens: Record<string, Coin> = {
     ticker: 'RUJI',
   },
   sruji: {
-    ...knownCosmosTokens[Chain.THORChain]['x/staking-x/ruji'],
+    // sRUJI lives in `thorchainNativeTokensMetadata`, not `knownCosmosTokens`
+    // (indexing the latter yields `undefined` at runtime, leaving the coin with
+    // no `decimals` and rendering a `NaN` balance in the send flow).
+    ...thorchainNativeTokensMetadata['x/staking-x/ruji'],
     chain: Chain.THORChain,
     id: 'x/staking-x/ruji',
     ticker: 'sRUJI',

@@ -1,3 +1,4 @@
+import { withThorchainNativeCoinMetadata } from '@core/ui/chain/coin/thorchain/withThorchainNativeCoinMetadata'
 import { useCore } from '@core/ui/state/core'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
@@ -56,7 +57,9 @@ const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
 
     return {
       ...vault,
-      coins: vaultCoins.filter(coin => vaultChains.includes(coin.chain)),
+      coins: vaultCoins
+        .filter(coin => vaultChains.includes(coin.chain))
+        .map(withThorchainNativeCoinMetadata),
     }
   })
 }
