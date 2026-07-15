@@ -75,54 +75,40 @@ export const useStakeBalance = (): StakeBalanceResult => {
     },
   })
 
-  return useMemo((): StakeBalanceResult => {
-    if (!isUnstake) {
-      return { balance: 0, isLoading: false, stakeId }
-    }
+  if (!isUnstake) {
+    return { balance: 0, isLoading: false, stakeId }
+  }
 
-    if (isTonChain) {
-      return {
-        balance: tonBalance?.humanReadableBalance ?? 0,
-        isLoading: isLoadingTon,
-        stakeId: null,
-      }
+  if (isTonChain) {
+    return {
+      balance: tonBalance?.humanReadableBalance ?? 0,
+      isLoading: isLoadingTon,
+      stakeId: null,
     }
+  }
 
-    if (!stakeId) {
-      return { balance: 0, isLoading: false, stakeId }
-    }
+  if (!stakeId) {
+    return { balance: 0, isLoading: false, stakeId }
+  }
 
-    return match(stakeId, {
-      'native-tcy': () => ({
-        balance: fromChainAmount(
-          nativeTcyBalance,
-          knownCosmosTokens.THORChain.tcy.decimals
-        ),
-        isLoading: isLoadingNativeTcy,
-        stakeId,
-      }),
-      stcy: () => ({
-        balance: stcyData?.humanReadableBalance ?? 0,
-        isLoading: isLoadingStcy,
-        stakeId,
-      }),
-      ruji: () => ({
-        balance: rujiData?.humanReadableBalance ?? 0,
-        isLoading: isLoadingRuji,
-        stakeId,
-      }),
-    })
-  }, [
-    isUnstake,
-    isTonChain,
-    stakeId,
-    nativeTcyBalance,
-    isLoadingNativeTcy,
-    stcyData?.humanReadableBalance,
-    isLoadingStcy,
-    rujiData?.humanReadableBalance,
-    isLoadingRuji,
-    tonBalance?.humanReadableBalance,
-    isLoadingTon,
-  ])
+  return match(stakeId, {
+    'native-tcy': () => ({
+      balance: fromChainAmount(
+        nativeTcyBalance,
+        knownCosmosTokens.THORChain.tcy.decimals
+      ),
+      isLoading: isLoadingNativeTcy,
+      stakeId,
+    }),
+    stcy: () => ({
+      balance: stcyData?.humanReadableBalance ?? 0,
+      isLoading: isLoadingStcy,
+      stakeId,
+    }),
+    ruji: () => ({
+      balance: rujiData?.humanReadableBalance ?? 0,
+      isLoading: isLoadingRuji,
+      stakeId,
+    }),
+  })
 }

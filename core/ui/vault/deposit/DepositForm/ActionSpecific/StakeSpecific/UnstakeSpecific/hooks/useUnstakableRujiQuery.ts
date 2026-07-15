@@ -17,7 +17,10 @@ export const useUnstakableRujiQuery = ({
   options,
 }: {
   address?: string | null
-  options?: Partial<UseQueryOptions<ThorchainStakePosition | null>>
+  options?: Omit<
+    Partial<UseQueryOptions<ThorchainStakePosition | null>>,
+    'queryKey' | 'queryFn' | 'select'
+  >
 }) =>
   useQuery({
     queryKey: ['unstakable-ruji', address],
