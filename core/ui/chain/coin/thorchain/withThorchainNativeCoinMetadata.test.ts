@@ -4,46 +4,44 @@ import { describe, expect, it } from 'vitest'
 
 import { withThorchainNativeCoinMetadata } from './withThorchainNativeCoinMetadata'
 
-const srujiKey = {
+// A coin persisted before the fix has no `decimals` at runtime. `NaN` is a
+// type-safe stand-in that hits the same `Number.isFinite` guard — `undefined`
+// can't be assigned to the required `decimals: number` without an `as` cast.
+const srujiStored: AccountCoin = {
   chain: Chain.THORChain,
   id: 'x/staking-x/ruji',
   address: 'thor1test',
+  ticker: 'sRUJI',
+  decimals: NaN,
 }
 
 describe('withThorchainNativeCoinMetadata', () => {
   it('backfills decimals and logo for a stored sRUJI coin missing them', () => {
-    // Reproduces the persisted-coin bug: decimals is undefined at runtime even
-    // though the type says `number`, so the send flow renders a NaN balance.
-    const stored = { ...srujiKey, ticker: 'sRUJI' } as unknown as AccountCoin
-
-    const result = withThorchainNativeCoinMetadata(stored)
+    const result = withThorchainNativeCoinMetadata(srujiStored)
 
     expect(result.decimals).toBe(8)
     expect(result.logo).toBe('ruji')
   })
 
   it('leaves a coin that already has decimals unchanged', () => {
-    const complete: AccountCoin = {
-      ...srujiKey,
-      ticker: 'sRUJI',
-      decimals: 8,
-      logo: 'ruji',
-    }
+    const complete: AccountCoin = { ...srujiStored, decimals: 8, logo: 'ruji' }
 
     expect(withThorchainNativeCoinMetadata(complete)).toBe(complete)
   })
 
-  it('passes through a coin that is not a known THORChain native token', () => {
-    const unknown = {
-      chain: Chain.THORChain,
+  it('passes through a THORChain coin that is not a known native token', () => {
+    const unknown: AccountCoin = {
+      ...srujiStored,
       id: 'x/not-a-real-denom',
-      address: 'thor1test',
       ticker: 'FOO',
-    } as unknown as AccountCoin
+    }
 
-    const result = withThorchainNativeCoinMetadata(unknown)
+    expect(withThorchainNativeCoinMetadata(unknown)).toBe(unknown)
+  })
 
-    expect(result).toBe(unknown)
-    expect(result.decimals).toBeUndefined()
+  it('does not backfill a non-THORChain coin even when its id is a known THORChain denom', () => {
+    const cosmosCoin: AccountCoin = { ...srujiStored, chain: Chain.Cosmos }
+
+    expect(withThorchainNativeCoinMetadata(cosmosCoin)).toBe(cosmosCoin)
   })
 })

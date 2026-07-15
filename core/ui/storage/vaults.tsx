@@ -1,4 +1,3 @@
-import { withThorchainNativeCoinMetadata } from '@core/ui/chain/coin/thorchain/withThorchainNativeCoinMetadata'
 import { useCore } from '@core/ui/state/core'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
@@ -16,6 +15,7 @@ import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
 import { useMemo } from 'react'
 
+import { withThorchainNativeCoinMetadata } from '../chain/coin/thorchain/withThorchainNativeCoinMetadata'
 import { StorageKey } from './StorageKey'
 
 export type UpdateVaultInput = {

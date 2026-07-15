@@ -1,3 +1,4 @@
+import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { thorchainNativeTokensMetadata } from '@vultisig/core-chain/coin/knownTokens/thorchain'
 
@@ -12,7 +13,11 @@ import { thorchainNativeTokensMetadata } from '@vultisig/core-chain/coin/knownTo
 export const withThorchainNativeCoinMetadata = (
   coin: AccountCoin
 ): AccountCoin => {
-  if (!coin.id || Number.isFinite(coin.decimals)) {
+  if (
+    coin.chain !== Chain.THORChain ||
+    !coin.id ||
+    Number.isFinite(coin.decimals)
+  ) {
     return coin
   }
 
