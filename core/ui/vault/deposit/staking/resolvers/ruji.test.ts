@@ -47,6 +47,21 @@ describe('getRujiSpecific unstake', () => {
     })
   })
 
+  it('rejects a dust amount that floors to zero receipt shares', () => {
+    expect(() =>
+      getRujiSpecific({
+        coin: rujiCoin,
+        // 1 base unit / share price 2.0 floors to 0 sRUJI shares
+        input: {
+          kind: 'unstake',
+          amount: 0.00000001,
+          liquidShares,
+          liquidSize,
+        },
+      })
+    ).toThrow()
+  })
+
   it('withdraws the bonded position when there is no liquid position', () => {
     const result = getRujiSpecific({
       coin: rujiCoin,

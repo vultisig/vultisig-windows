@@ -48,6 +48,12 @@ export function getRujiSpecific({ coin, input }: RujiPayload): StakeSpecific {
             ? input.liquidShares
             : (input.liquidShares * enteredUnits) / input.liquidSize
 
+        // A tiny amount can floor to zero shares; redeeming 0 is a no-op that
+        // would fail on-chain, so reject it rather than build an empty unbond.
+        if (shares <= 0n) {
+          throw new Error('Amount too small to unstake')
+        }
+
         return {
           kind: 'wasm',
           contract: rujiraStakingConfig.contract,

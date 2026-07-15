@@ -77,6 +77,14 @@ const getRujiStake = (address: string) => {
   })
 }
 
+// `stakingV2` can contain entries for multiple pools; the first entry is not
+// guaranteed to be RUJI. Select the RUJI pool by its bond asset symbol (matches
+// iOS) so the display and unstake-transaction paths never diverge.
+const findRujiStake = (response: Awaited<ReturnType<typeof getRujiStake>>) =>
+  response?.data?.node?.stakingV2?.find(
+    entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
+  )
+
 const rujiReceiptDenom = shouldBePresent(
   thorchainTokens.sruji.id,
   'sRUJI receipt denom'
@@ -119,13 +127,7 @@ export const fetchRujiStakePosition = async ({
       getRujiStake(address),
       fetchRujiReceiptBalance(address),
     ])
-    // `stakingV2` can contain entries for multiple pools; the first entry is not
-    // guaranteed to be RUJI. Match iOS and select the RUJI pool by its bond asset
-    // symbol so the APR, rewards and bonded amount come from the right pool
-    // (blindly taking [0] can surface a different pool's APR entirely).
-    const stake = response?.data?.node?.stakingV2?.find(
-      entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
-    )
+    const stake = findRujiStake(response)
     const bondedAmount = parseBigint(stake?.bonded?.amount)
     // Display the auto-compounding value: the sRUJI receipt converted to RUJI at
     // the pool's current share price (the API's `liquidSize`), matching what the
@@ -181,12 +183,19 @@ export const fetchRujiLiquidUnbondInputs = async (
     getRujiStake(address),
     fetchRujiReceiptBalance(address),
   ])
-  const stake = response?.data?.node?.stakingV2?.find(
-    entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
-  )
+  const liquidSize = parseBigint(findRujiStake(response)?.liquidSize?.amount)
+
+  // `heldAmount` is `null` only when the on-chain receipt lookup failed (a
+  // genuine zero is `0n`). Redeeming a liquid position needs the real share
+  // balance, so surface the failure instead of building an unbond that redeems
+  // `0` shares. When there's no liquid position (`liquidSize === 0`) the caller
+  // uses the bonded withdraw path, which doesn't need shares.
+  if (heldAmount === null && liquidSize > 0n) {
+    throw new Error('Unable to read sRUJI receipt balance for unstake')
+  }
 
   return {
     liquidShares: heldAmount ?? 0n,
-    liquidSize: parseBigint(stake?.liquidSize?.amount),
+    liquidSize,
   }
 }
