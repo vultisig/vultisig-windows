@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 
 type Props = {
   chain: string
+  items: string[]
   onSelect?: (key: string) => void
 }
 
@@ -11,17 +12,25 @@ const idleTimeAfterScrollStop = 500
 const wheelIdleTime = 200
 const behavior: ScrollBehavior = 'smooth'
 
-export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
+export const useCenteredSnapCarousel = ({ chain, items, onSelect }: Props) => {
+  // Stable key of the pill set, so the measurement effects re-run when chains
+  // are added/removed (or the list populates async) — otherwise the ring would
+  // stay measured against a stale/absent pill until the next chain change.
+  const itemsKey = items.join('|')
+
   const footerRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const prevChain = useRef<string | null>(null)
   const strokeRef = useRef<HTMLDivElement>(null)
   const idleTimer = useRef<number | null>(null)
-  // Target scrollLeft of an in-flight programmatic scroll (click / settle /
-  // chain-change centering). While set, live ring tracking is suppressed, so
-  // only genuine user scrolls (wheel, touch, scrollbar) drive the live resize.
-  // Cleared once the target is reached, or on any direct user input.
-  const programmaticTarget = useRef<number | null>(null)
+  // True while a programmatic scroll (click / settle / chain-change centering)
+  // AND the scroll-snap tail it triggers are in flight. Live ring tracking is
+  // suppressed while true, so it can't override the authoritative setStrokeToKey
+  // width with a nearest-pill guess. Set in scrollToKey; cleared only when the
+  // scroll fully settles (selectNearest) or as soon as the user takes over
+  // (wheel / pointerdown) — NOT the instant the target scrollLeft is reached,
+  // because scroll-snap keeps firing scroll events after that.
+  const programmaticScroll = useRef(false)
   const wheelIdleTimer = useRef<number | null>(null)
   // Pre-measured center (in scroll-content coordinates) and width of every pill,
   // so during a scroll we can resize the ring to the pill entering the center
@@ -51,9 +60,9 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       if (!container || !el) return
       const left = computeCenteredLeft(container, el)
       if (Math.abs(container.scrollLeft - left) > 1) {
-        // Mark this as programmatic so the live ring tracking ignores the scroll
-        // events it produces (cleared in onScroll once it lands).
-        programmaticTarget.current = left
+        // Suppress live tracking for this scroll and its scroll-snap tail, so it
+        // can't override the ring; cleared on settle (selectNearest) / user input.
+        programmaticScroll.current = true
         container.scrollTo({ left, behavior: b ?? behavior })
       }
     },
@@ -134,6 +143,10 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
   }, [])
 
   const selectNearest = useCallback(() => {
+    // The scroll has fully settled (incl. scroll-snap): end the programmatic
+    // suppression so the next genuine user scroll drives the ring again.
+    programmaticScroll.current = false
+
     const container = footerRef.current
     if (!container) return
     const target = strokeRef.current ?? container
@@ -183,24 +196,17 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     })
 
     return () => cancelAnimationFrame(id)
-  }, [chain, measureMetrics, scrollToKey, setStrokeToKey])
+  }, [chain, itemsKey, measureMetrics, scrollToKey, setStrokeToKey])
 
   useEffect(() => {
     const el = footerRef.current
     if (!el) return
 
     const onScroll = () => {
-      if (programmaticTarget.current !== null) {
-        // A click/settle/chain-change scroll is in flight: don't track, and drop
-        // the marker once it lands so user scrolls resume driving the ring.
-        if (Math.abs(el.scrollLeft - programmaticTarget.current) <= 1) {
-          programmaticTarget.current = null
-        }
-      } else {
-        // Any user-driven scroll (wheel, touch, or scrollbar): resize the ring
-        // to the pill entering the center as it moves, in parallel with the list.
-        setStrokeToNearestScrollPosition()
-      }
+      // Only a genuine user scroll (wheel, touch, or scrollbar) drives the live
+      // resize. Programmatic scrolls and their scroll-snap tail stay suppressed
+      // until they settle, so they never override the ring on entry.
+      if (!programmaticScroll.current) setStrokeToNearestScrollPosition()
 
       if (idleTimer.current !== null) window.clearTimeout(idleTimer.current)
       idleTimer.current = window.setTimeout(
@@ -210,10 +216,10 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     }
 
     const onWheel = (e: WheelEvent) => {
-      // Direct user input cancels an in-flight programmatic classification (e.g.
-      // interrupting a smooth scroll) so tracking resumes immediately — and a
-      // boundary wheel that produces no scroll event can't leave anything stuck.
-      programmaticTarget.current = null
+      // The user is taking over: end programmatic suppression so this gesture
+      // (and its momentum/snap) drives the ring. A boundary wheel that produces
+      // no scroll event just leaves this false — nothing gets stuck.
+      programmaticScroll.current = false
       // Refresh the cached widths at the start of a wheel gesture: the mount-time
       // measurement can be stale (fonts/icons finalize after it), which made the
       // ring size wrong for the next pill on the very first scroll.
@@ -232,9 +238,9 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     }
 
     const onPointerDown = () => {
-      // Touch/pointer gesture start: cancel any programmatic marker and refresh
+      // Touch/pointer gesture start: end programmatic suppression and refresh
       // widths so touch swipes and scrollbar drags also track the ring live.
-      programmaticTarget.current = null
+      programmaticScroll.current = false
       measureMetrics()
     }
 
@@ -264,6 +270,44 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [measureMetrics, setStrokeToKey])
+
+  useEffect(() => {
+    if (!chain) return
+
+    // Clicking a pill corrects the ring because it re-measures after the layout
+    // has settled. Do the same on entry / chain / list change: re-measure the
+    // current pill once fonts are ready, and on a couple of delayed ticks, plus
+    // whenever it resizes — so the ring is right without needing a click even if
+    // the pill reaches its final size a bit after mount.
+    let cancelled = false
+    const remeasure = () => {
+      if (cancelled) return
+      measureMetrics()
+      setStrokeToKey(chain)
+      scrollToKey(chain, 'auto')
+    }
+
+    const raf = requestAnimationFrame(remeasure)
+    const delayed = [
+      window.setTimeout(remeasure, 100),
+      window.setTimeout(remeasure, 300),
+    ]
+    void document.fonts.ready.then(remeasure)
+
+    const el = itemRefs.current[chain]
+    const observer =
+      el && typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(remeasure)
+        : null
+    if (el && observer) observer.observe(el)
+
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+      delayed.forEach(id => window.clearTimeout(id))
+      observer?.disconnect()
+    }
+  }, [chain, itemsKey, measureMetrics, scrollToKey, setStrokeToKey])
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {

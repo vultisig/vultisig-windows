@@ -115,6 +115,7 @@ export const SwapCoinsExplorer = ({
   const { footerRef, scrollToKey, strokeRef, onKeyDown, setItemRef } =
     useCenteredSnapCarousel({
       chain: currentChain,
+      items: coinOptions.map(c => c.chain),
       onSelect: chain => {
         const coin = coinOptions.find(o => o.chain === chain)
         if (coin) onChange(coin)
