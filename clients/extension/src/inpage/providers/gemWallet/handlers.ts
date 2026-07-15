@@ -2,6 +2,7 @@ import { OtherChain } from '@vultisig/core-chain/Chain'
 
 import { requestAccount } from '../core/requestAccount'
 import { GemWalletRequestType, GemWalletResponseBody } from './protocol'
+import { signRippleTransaction } from './signRippleTransaction'
 
 /**
  * We only ever derive XRPL mainnet accounts, so the network answer is constant.
@@ -17,16 +18,39 @@ const xrplMainnet = {
 const getRippleAccount = () => requestAccount(OtherChain.Ripple)
 
 /**
- * Resolvers for the GemWallet request types this bridge implements.
+ * The sign / submit request payload the SDK sends: `{ transaction: <XRPL tx> }`.
+ * The transaction stays opaque here — the keysign popup sanitizes it — so this
+ * only reaches in far enough to find it.
+ */
+const getRequestedTransaction = (payload: unknown): unknown => {
+  if (
+    typeof payload !== 'object' ||
+    payload === null ||
+    !('transaction' in payload) ||
+    // `'transaction' in payload` passes when the key is present but null /
+    // undefined; reject that too so a garbage `[undefined]` never reaches the
+    // popup instead of this clear error.
+    payload.transaction == null
+  ) {
+    throw new Error('GemWallet transaction request is missing a transaction')
+  }
+
+  return payload.transaction
+}
+
+/**
+ * Resolvers for the GemWallet request types this bridge implements, keyed by
+ * request type and handed the request payload (`undefined` for the reads).
  *
- * `getAddress` and `getPublicKey` go through `requestAccount`, so an
- * unauthorized origin gets the standard grant-access popup and no address
- * leaves the wallet until the user approves. `isInstalled` and `getNetwork`
- * expose nothing vault-specific and answer without a prompt.
+ * Every vault-touching method routes through `requestAccount` /
+ * `signRippleTransaction`, so an unauthorized origin gets the standard
+ * grant-access popup and nothing is read or signed until the user approves.
+ * `isInstalled` and `getNetwork` expose nothing vault-specific and answer
+ * without a prompt.
  */
 export const gemWalletHandlers: Record<
   GemWalletRequestType,
-  () => Promise<GemWalletResponseBody>
+  (payload: unknown) => Promise<GemWalletResponseBody>
 > = {
   'REQUEST_IS_INSTALLED/V3': async () => ({
     // The shipped SDK reads a flat `isInstalled`, while its published types
@@ -47,4 +71,20 @@ export const gemWalletHandlers: Record<
     return { result: { address, publicKey: publicKey.toUpperCase() } }
   },
   'REQUEST_GET_NETWORK/V3': async () => ({ result: xrplMainnet }),
+  'REQUEST_SIGN_TRANSACTION/V3': async payload => {
+    const { signature } = await signRippleTransaction({
+      transaction: getRequestedTransaction(payload),
+      broadcast: false,
+    })
+
+    return { result: { signature } }
+  },
+  'REQUEST_SUBMIT_TRANSACTION/V3': async payload => {
+    const { hash } = await signRippleTransaction({
+      transaction: getRequestedTransaction(payload),
+      broadcast: true,
+    })
+
+    return { result: { hash } }
+  },
 }

@@ -1710,4 +1710,18 @@ export const pt = {
   solana_staking_new_validator: 'Novo validador',
   solana_staking_pending_move_notice:
     'Movendo para {{validator}} — você pode concluir a movimentação assim que o período de espera terminar.',
+  ripple_transaction_summary: 'Resumo da transação',
+  ripple_field_type: 'Tipo',
+  ripple_field_destination: 'Destino',
+  ripple_field_destination_tag: 'Etiqueta de destino',
+  ripple_field_amount: 'Quantia',
+  ripple_field_send_max: 'Pague no máximo',
+  ripple_field_deliver_min: 'Receba pelo menos',
+  ripple_field_taker_gets: 'Vendendo',
+  ripple_field_taker_pays: 'Comprando',
+  ripple_field_trust_limit: 'Limite de confiança',
+  ripple_field_offer_sequence: 'Sequência de ofertas',
+  ripple_field_issuer: 'Emissor',
+  ripple_undecoded_notice:
+    'Esta transação não pôde ser decodificada. Revise os detalhes brutos abaixo antes de aprovar.',
 }

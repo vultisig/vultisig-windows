@@ -28,6 +28,7 @@ import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDi
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
+import { SignRippleDisplay } from '@core/ui/mpc/keysign/tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '@core/ui/mpc/keysign/tx/sui/parser'
 import { SignSuiDisplay } from '@core/ui/mpc/keysign/tx/sui/SignSuiDisplay'
 import { useCore } from '@core/ui/state/core'
@@ -569,6 +570,29 @@ export const SendTxOverview = ({
                         <SuiTxIntentDisplay intent={suiIntentQuery.data} />
                       ) : null}
                       {suiTxData ? <SignSuiDisplay data={suiTxData} /> : null}
+                    </>
+                  ) : chain === OtherChain.Ripple &&
+                    keysignPayload.signData.case === 'signRipple' ? (
+                    <>
+                      <List>
+                        <ListItem description={address} title={t('from')} />
+                        <ListItem
+                          description={getKeysignChain(keysignPayload)}
+                          title={t('network')}
+                        />
+                      </List>
+                      <SignRippleDisplay
+                        rawJson={keysignPayload.signData.value.rawJson}
+                      />
+                      <VStack bgColor="foreground" radius={16}>
+                        <NetworkFeeSection
+                          keysignPayload={keysignPayload}
+                          transactionPayload={transactionPayload}
+                          chain={chain}
+                          feeSettings={feeSettings}
+                          setFeeSettings={setFeeSettings}
+                        />
+                      </VStack>
                     </>
                   ) : (
                     <>

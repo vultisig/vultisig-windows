@@ -1674,4 +1674,18 @@ export const ko = {
   solana_staking_new_validator: '새로운 검증자',
   solana_staking_pending_move_notice:
     '{{validator}} 로 이동합니다. 쿨다운 기간이 끝나면 이동을 완료할 수 있습니다.',
+  ripple_transaction_summary: '거래 요약',
+  ripple_field_type: '유형',
+  ripple_field_destination: '목적지',
+  ripple_field_destination_tag: '목적지 태그',
+  ripple_field_amount: '양',
+  ripple_field_send_max: '최대 지불',
+  ripple_field_deliver_min: '최소한 받으세요',
+  ripple_field_taker_gets: '판매',
+  ripple_field_taker_pays: '구매',
+  ripple_field_trust_limit: '신뢰 한도',
+  ripple_field_offer_sequence: '오퍼 시퀀스',
+  ripple_field_issuer: '발행자',
+  ripple_undecoded_notice:
+    '이 거래를 해독할 수 없습니다. 승인하기 전에 아래의 원본 세부 정보를 검토하십시오.',
 }

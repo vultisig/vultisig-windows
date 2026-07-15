@@ -1692,4 +1692,18 @@ export const nl = {
   solana_staking_new_validator: 'Nieuwe validator',
   solana_staking_pending_move_notice:
     'Verplaatsen naar {{validator}} — u kunt de verplaatsing voltooien zodra de afkoelperiode voorbij is.',
+  ripple_transaction_summary: 'Transactieoverzicht',
+  ripple_field_type: 'Type',
+  ripple_field_destination: 'Bestemming',
+  ripple_field_destination_tag: 'Bestemmingslabel',
+  ripple_field_amount: 'Hoeveelheid',
+  ripple_field_send_max: 'Betaal maximaal',
+  ripple_field_deliver_min: 'Ontvang ten minste',
+  ripple_field_taker_gets: 'Verkopen',
+  ripple_field_taker_pays: 'Kopen',
+  ripple_field_trust_limit: 'Vertrouwenslimiet',
+  ripple_field_offer_sequence: 'Aanbiedingsvolgorde',
+  ripple_field_issuer: 'Uitgever',
+  ripple_undecoded_notice:
+    'Deze transactie kon niet worden gedecodeerd. Controleer de onderstaande gegevens voordat u goedkeurt.',
 }
