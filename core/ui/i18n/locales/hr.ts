@@ -1684,4 +1684,18 @@ export const hr = {
   solana_staking_new_validator: 'Novi validator',
   solana_staking_pending_move_notice:
     'Prelazak na {{validator}} — možete završiti potez nakon što završi razdoblje hlađenja.',
+  ripple_transaction_summary: 'Sažetak transakcije',
+  ripple_field_type: 'Tip',
+  ripple_field_destination: 'Odredište',
+  ripple_field_destination_tag: 'Oznaka odredišta',
+  ripple_field_amount: 'Iznositi',
+  ripple_field_send_max: 'Plati najviše',
+  ripple_field_deliver_min: 'Primite barem',
+  ripple_field_taker_gets: 'Prodaja',
+  ripple_field_taker_pays: 'Kupnja',
+  ripple_field_trust_limit: 'Ograničenje povjerenja',
+  ripple_field_offer_sequence: 'Slijed ponuda',
+  ripple_field_issuer: 'Izdavatelj',
+  ripple_undecoded_notice:
+    'Ovu transakciju nije bilo moguće dekodirati. Prije odobrenja pregledajte neobrađene podatke u nastavku.',
 }

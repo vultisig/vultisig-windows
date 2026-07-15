@@ -28,7 +28,8 @@ const toErrorBody = (error: unknown): GemWalletResponseBody => {
 }
 
 const resolveGemWalletRequest = async (
-  type: string
+  type: string,
+  payload: unknown
 ): Promise<GemWalletResponseBody> => {
   if (!isGemWalletRequestType(type)) {
     // Answer rather than stay silent. Only `isInstalled` has a timeout on the
@@ -42,7 +43,7 @@ const resolveGemWalletRequest = async (
     )
   }
 
-  const result = await attempt(gemWalletHandlers[type]())
+  const result = await attempt(gemWalletHandlers[type](payload))
   if ('error' in result) return toErrorBody(result.error)
 
   return result.data
@@ -73,7 +74,7 @@ export const installGemWalletBridge = () => {
     const request = parseGemWalletRequest(event.data)
     if (!request) return
 
-    const body = await resolveGemWalletRequest(request.type)
+    const body = await resolveGemWalletRequest(request.type, request.payload)
 
     window.postMessage(
       buildGemWalletResponse(request.messageId, body),

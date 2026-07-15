@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next'
 
 import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
+import { SignRippleDisplay } from '../../tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '../../tx/sui/parser'
 import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
 
@@ -123,6 +124,18 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
       <>
         <BlockaidTxScan keysignPayloadQuery={keysignPayloadQuery} />
         {suiTxData ? <SignSuiDisplay data={suiTxData} /> : null}
+      </>
+    )
+  }
+
+  // A dApp XRPL transaction (offer, payment, trust line) has no single
+  // amount/recipient either — decode it so the co-signer approves the real
+  // terms rather than an empty 0-XRP card.
+  if (value.signData.case === 'signRipple') {
+    return (
+      <>
+        <BlockaidTxScan keysignPayloadQuery={keysignPayloadQuery} />
+        <SignRippleDisplay rawJson={value.signData.value.rawJson} />
       </>
     )
   }
