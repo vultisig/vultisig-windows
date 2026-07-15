@@ -23,6 +23,7 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     renderFooter?: () => ReactNode
     virtualizePageSize?: number
     getKey?: (option: T, index: number) => string
+    loadingLabel?: string
   }
 
 const modalOptionsListHeight = 400
@@ -65,6 +66,7 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
     virtualizePageSize,
     getKey,
     isLoading,
+    loadingLabel,
   } = props
 
   const [searchQuery, setSearchQuery] = useState('')
@@ -85,8 +87,11 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         {renderListHeader?.() || <div />}
 
-        <ListArea>
-          <ListWrapper>
+        <ListArea aria-busy={isLoading}>
+          {/* While loading, the list still shows the previous chain's items.
+              Make it inert so keyboard/assistive tech can't focus or activate a
+              stale option and close the modal, and guard onFinish as a backstop. */}
+          <ListWrapper inert={isLoading}>
             {useVirtual ? (
               <Virtuoso
                 style={{ flex: 1 }}
@@ -99,7 +104,9 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
                 itemContent={(index, item) => (
                   <OptionComponent
                     value={item}
-                    onClick={() => onFinishRef.current(item)}
+                    onClick={() => {
+                      if (!isLoading) onFinishRef.current(item)
+                    }}
                   />
                 )}
                 components={{
@@ -112,14 +119,20 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
                   <OptionComponent
                     key={getKey?.(option, index) || option?.id || index}
                     value={option}
-                    onClick={() => onFinishRef.current(option)}
+                    onClick={() => {
+                      if (!isLoading) onFinishRef.current(option)
+                    }}
                   />
                 ))}
               </NonVirtualList>
             )}
           </ListWrapper>
           {isLoading ? (
-            <CenterAbsolutely>
+            <CenterAbsolutely
+              role="status"
+              aria-live="polite"
+              aria-label={loadingLabel}
+            >
               <Spinner size="2.5em" />
             </CenterAbsolutely>
           ) : null}

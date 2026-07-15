@@ -50,14 +50,19 @@ export const SwapCoinsExplorer = ({
   // in a low-priority pass, so switching chains never blocks on the list.
   const deferredChain = useDeferredValue(currentChain)
 
-  const { data: whitelisted, isPlaceholderData } =
-    useWhitelistedCoinsQuery(deferredChain)
+  const {
+    data: whitelisted,
+    isPlaceholderData,
+    isPending,
+  } = useWhitelistedCoinsQuery(deferredChain)
 
-  // The list still reflects the previous chain during the deferred render pass
-  // (`currentChain !== deferredChain`) and while the new chain's whitelist is
-  // still fetching (`isPlaceholderData`). Show a loading overlay over it in the
-  // meantime so the switch reads as "chain switches now, tokens follow".
-  const isCoinListLoading = currentChain !== deferredChain || isPlaceholderData
+  // Keep the loading overlay up while the list doesn't yet reflect the selected
+  // chain: during the deferred render pass (`currentChain !== deferredChain`),
+  // while a warm switch serves the previous chain's data (`isPlaceholderData`),
+  // and on a cold switch where the new query has no data yet (`isPending`) so an
+  // incomplete list can't flash before the whitelist arrives.
+  const isCoinListLoading =
+    currentChain !== deferredChain || isPlaceholderData || isPending
 
   const sortedSwapCoins = useSortedByBalanceCoins(deferredChain)
   const options = useMemo(() => {
@@ -125,6 +130,7 @@ export const SwapCoinsExplorer = ({
   return (
     <SelectItemModal
       isLoading={isCoinListLoading}
+      loadingLabel={t('loading')}
       virtualizePageSize={20}
       filterFunction={filterByTicker}
       title={t('select_asset')}
