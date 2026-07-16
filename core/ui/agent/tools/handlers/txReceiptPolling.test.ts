@@ -1,7 +1,16 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { getSolanaClient } from '@vultisig/core-chain/chains/solana/client'
 import { describe, expect, it, vi } from 'vitest'
 
 import { pollTxReceipt } from './txReceiptPolling'
+
+const { getSignatureStatuses } = vi.hoisted(() => ({
+  getSignatureStatuses: vi.fn(),
+}))
+
+vi.mock('@vultisig/core-chain/chains/solana/client', () => ({
+  getSolanaClient: vi.fn(() => ({ getSignatureStatuses })),
+}))
 
 const schedule = {
   cosmos: { pollInterval: 0, maxAttempts: 2 },
@@ -9,6 +18,9 @@ const schedule = {
   utxo: { pollInterval: 0, maxAttempts: 2 },
   solana: { pollInterval: 0, maxAttempts: 2 },
 }
+
+const evmTxHash =
+  '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 
 const createDependencies = () => ({
   sleep: vi.fn().mockResolvedValue(undefined),
@@ -27,17 +39,15 @@ describe('pollTxReceipt', () => {
     const dependencies = createDependencies()
     dependencies.waitForEvmReceipt.mockRejectedValue(new Error('timeout'))
 
-    await pollTxReceipt(
-      {
-        chain: Chain.Ethereum,
-        txHash: '0xabc',
-        conversationId: 'conversation',
-        label: 'transfer',
-        emitEvent,
-      },
+    await pollTxReceipt({
+      chain: Chain.Ethereum,
+      txHash: evmTxHash,
+      conversationId: 'conversation',
+      label: 'transfer',
+      emitEvent,
       dependencies,
-      schedule
-    )
+      schedule,
+    })
 
     expect(getStatuses(emitEvent)).toEqual(['pending'])
   })
@@ -52,17 +62,15 @@ describe('pollTxReceipt', () => {
       const emitEvent = vi.fn()
       const dependencies = createDependencies()
 
-      await pollTxReceipt(
-        {
-          chain,
-          txHash: 'tx-hash',
-          conversationId: 'conversation',
-          label: 'transfer',
-          emitEvent,
-        },
+      await pollTxReceipt({
+        chain,
+        txHash: 'tx-hash',
+        conversationId: 'conversation',
+        label: 'transfer',
+        emitEvent,
         dependencies,
-        schedule
-      )
+        schedule,
+      })
 
       expect(getStatuses(emitEvent)).toEqual(['pending'])
       expect(dependencies[observerName]).toHaveBeenCalledTimes(2)
@@ -80,17 +88,15 @@ describe('pollTxReceipt', () => {
       const dependencies = createDependencies()
       dependencies[observerName].mockRejectedValue(new Error('transport'))
 
-      await pollTxReceipt(
-        {
-          chain,
-          txHash: 'tx-hash',
-          conversationId: 'conversation',
-          label: 'transfer',
-          emitEvent,
-        },
+      await pollTxReceipt({
+        chain,
+        txHash: 'tx-hash',
+        conversationId: 'conversation',
+        label: 'transfer',
+        emitEvent,
         dependencies,
-        schedule
-      )
+        schedule,
+      })
 
       expect(getStatuses(emitEvent)).toEqual(['pending'])
     }
@@ -107,18 +113,17 @@ describe('pollTxReceipt', () => {
       const emitEvent = vi.fn()
       const dependencies = createDependencies()
       dependencies[observerName].mockResolvedValue('failed')
+      const txHash = chain === Chain.Ethereum ? evmTxHash : 'tx-hash'
 
-      await pollTxReceipt(
-        {
-          chain,
-          txHash: 'tx-hash',
-          conversationId: 'conversation',
-          label: 'transfer',
-          emitEvent,
-        },
+      await pollTxReceipt({
+        chain,
+        txHash,
+        conversationId: 'conversation',
+        label: 'transfer',
+        emitEvent,
         dependencies,
-        schedule
-      )
+        schedule,
+      })
 
       expect(getStatuses(emitEvent)).toEqual(['pending', 'failed'])
     }
@@ -128,24 +133,59 @@ describe('pollTxReceipt', () => {
     const emitEvent = vi.fn()
     const dependencies = createDependencies()
 
-    await pollTxReceipt(
-      {
-        chain: Chain.Ethereum,
-        txHash: '0xabc',
-        conversationId: 'conversation',
-        label: 'swap',
-        emitEvent,
-      },
+    await pollTxReceipt({
+      chain: Chain.Ethereum,
+      txHash: evmTxHash,
+      conversationId: 'conversation',
+      label: 'swap',
+      emitEvent,
       dependencies,
-      schedule
-    )
+      schedule,
+    })
 
     expect(emitEvent).toHaveBeenLastCalledWith('tx_status', {
       conversationId: 'conversation',
-      txHash: '0xabc',
+      txHash: evmTxHash,
       chain: Chain.Ethereum,
       status: 'confirmed',
       label: 'swap',
     })
+  })
+
+  it('does not query an EVM receipt for an invalid hash', async () => {
+    const emitEvent = vi.fn()
+    const dependencies = createDependencies()
+
+    await pollTxReceipt({
+      chain: Chain.Ethereum,
+      txHash: '0xabc',
+      conversationId: 'conversation',
+      label: 'transfer',
+      emitEvent,
+      dependencies,
+      schedule,
+    })
+
+    expect(dependencies.waitForEvmReceipt).not.toHaveBeenCalled()
+    expect(getStatuses(emitEvent)).toEqual(['pending'])
+  })
+
+  it('keeps a processed Solana transaction pending', async () => {
+    const emitEvent = vi.fn()
+    getSignatureStatuses.mockResolvedValue({
+      value: [{ err: null, confirmationStatus: 'processed' }],
+    })
+
+    await pollTxReceipt({
+      chain: Chain.Solana,
+      txHash: 'signature',
+      conversationId: 'conversation',
+      label: 'transfer',
+      emitEvent,
+      schedule,
+    })
+
+    expect(getSolanaClient).toHaveBeenCalled()
+    expect(getStatuses(emitEvent)).toEqual(['pending'])
   })
 })

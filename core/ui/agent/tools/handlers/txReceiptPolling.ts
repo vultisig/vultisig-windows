@@ -10,26 +10,45 @@ import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
 import { getSolanaClient } from '@vultisig/core-chain/chains/solana/client'
 import { getBlockchairBaseUrl } from '@vultisig/core-chain/chains/utxo/client/getBlockchairBaseUrl'
+import { type Hash, isHash } from 'viem'
 
 type TxStatus = 'pending' | 'confirmed' | 'failed'
 type TerminalTxStatus = Exclude<TxStatus, 'pending'>
 type EmitFn = (event: string, data: Record<string, unknown>) => void
 
+type WaitForEvmReceiptInput = {
+  chain: EvmChain
+  txHash: Hash
+}
+
+type GetCosmosReceiptStatusInput = {
+  chain: CosmosChain
+  txHash: string
+}
+
+type GetUtxoReceiptStatusInput = {
+  chain: UtxoBasedChain
+  txHash: string
+}
+
+type GetSolanaReceiptStatusInput = {
+  txHash: string
+}
+
 type ReceiptPollingDependencies = {
   sleep: (duration: number) => Promise<void>
   waitForEvmReceipt: (
-    chain: EvmChain,
-    txHash: string
+    input: WaitForEvmReceiptInput
   ) => Promise<TerminalTxStatus>
   getCosmosReceiptStatus: (
-    chain: CosmosChain,
-    txHash: string
+    input: GetCosmosReceiptStatusInput
   ) => Promise<TerminalTxStatus | null>
   getUtxoReceiptStatus: (
-    chain: UtxoBasedChain,
-    txHash: string
+    input: GetUtxoReceiptStatusInput
   ) => Promise<TerminalTxStatus | null>
-  getSolanaReceiptStatus: (txHash: string) => Promise<TerminalTxStatus | null>
+  getSolanaReceiptStatus: (
+    input: GetSolanaReceiptStatusInput
+  ) => Promise<TerminalTxStatus | null>
 }
 
 type ReceiptPollingSchedule = {
@@ -51,17 +70,16 @@ const sleep = (duration: number) =>
 
 const defaultDependencies: ReceiptPollingDependencies = {
   sleep,
-  waitForEvmReceipt: async (chain, txHash) => {
+  waitForEvmReceipt: async ({ chain, txHash }) => {
     const client = getEvmClient(chain)
-    const hash = txHash as `0x${string}`
     const receipt = await client.waitForTransactionReceipt({
-      hash,
+      hash: txHash,
       timeout: 180_000,
     })
 
     return receipt.status === 'success' ? 'confirmed' : 'failed'
   },
-  getCosmosReceiptStatus: async (chain, txHash) => {
+  getCosmosReceiptStatus: async ({ chain, txHash }) => {
     const isThorMaya = chain === Chain.THORChain || chain === Chain.MayaChain
     if (isThorMaya) {
       const prefix = chain === Chain.THORChain ? 'thorchain' : 'mayachain'
@@ -78,7 +96,7 @@ const defaultDependencies: ReceiptPollingDependencies = {
 
     return tx.code === 0 ? 'confirmed' : 'failed'
   },
-  getUtxoReceiptStatus: async (chain, txHash) => {
+  getUtxoReceiptStatus: async ({ chain, txHash }) => {
     const url = `${getBlockchairBaseUrl(chain)}/dashboards/transaction/${txHash}`
     const response = await fetch(url)
     if (!response.ok) return null
@@ -87,14 +105,19 @@ const defaultDependencies: ReceiptPollingDependencies = {
 
     return body?.data?.[txHash] ? 'confirmed' : null
   },
-  getSolanaReceiptStatus: async txHash => {
+  getSolanaReceiptStatus: async ({ txHash }) => {
     const client = getSolanaClient()
     const result = await client.getSignatureStatuses([txHash])
     const signatureStatus = result?.value?.[0]
 
     if (!signatureStatus) return null
 
-    return signatureStatus.err ? 'failed' : 'confirmed'
+    if (signatureStatus.err) return 'failed'
+
+    return signatureStatus.confirmationStatus === 'confirmed' ||
+      signatureStatus.confirmationStatus === 'finalized'
+      ? 'confirmed'
+      : null
   },
 }
 
@@ -131,18 +154,29 @@ const pollRepeatedly = async (params: {
   return null
 }
 
-export const pollTxReceipt = async (
-  params: {
-    chain: Chain
-    txHash: string
-    conversationId: string
-    label: string
-    emitEvent: EmitFn
-  },
-  dependencies: ReceiptPollingDependencies = defaultDependencies,
-  schedule: ReceiptPollingSchedule = defaultSchedule
-) => {
-  const { chain, txHash, conversationId, label, emitEvent } = params
+type PollTxReceiptInput = {
+  chain: Chain
+  txHash: string
+  conversationId: string
+  label: string
+  emitEvent: EmitFn
+  dependencies?: ReceiptPollingDependencies
+  schedule?: ReceiptPollingSchedule
+}
+
+/**
+ * Emits pending immediately and a terminal status only on positive chain evidence.
+ * @param input Transaction context, event sink, and optional polling controls.
+ */
+export const pollTxReceipt = async ({
+  chain,
+  txHash,
+  conversationId,
+  label,
+  emitEvent,
+  dependencies = defaultDependencies,
+  schedule = defaultSchedule,
+}: PollTxReceiptInput) => {
   const emitTerminalStatus = (status: TerminalTxStatus) =>
     emitTxStatus({
       emitEvent,
@@ -163,8 +197,12 @@ export const pollTxReceipt = async (
   })
 
   if (isChainOfKind(chain, 'evm')) {
+    if (!isHash(txHash)) return
+
     try {
-      emitTerminalStatus(await dependencies.waitForEvmReceipt(chain, txHash))
+      emitTerminalStatus(
+        await dependencies.waitForEvmReceipt({ chain, txHash })
+      )
     } catch {
       // Timeout or transport failure leaves the last truthful status pending.
     }
@@ -179,19 +217,19 @@ export const pollTxReceipt = async (
         ? schedule.thorMaya
         : schedule.cosmos
     status = await pollRepeatedly({
-      observe: () => dependencies.getCosmosReceiptStatus(chain, txHash),
+      observe: () => dependencies.getCosmosReceiptStatus({ chain, txHash }),
       sleep: dependencies.sleep,
       ...pollingSchedule,
     })
   } else if (isChainOfKind(chain, 'utxo')) {
     status = await pollRepeatedly({
-      observe: () => dependencies.getUtxoReceiptStatus(chain, txHash),
+      observe: () => dependencies.getUtxoReceiptStatus({ chain, txHash }),
       sleep: dependencies.sleep,
       ...schedule.utxo,
     })
   } else if (isChainOfKind(chain, 'solana')) {
     status = await pollRepeatedly({
-      observe: () => dependencies.getSolanaReceiptStatus(txHash),
+      observe: () => dependencies.getSolanaReceiptStatus({ txHash }),
       sleep: dependencies.sleep,
       ...schedule.solana,
     })
