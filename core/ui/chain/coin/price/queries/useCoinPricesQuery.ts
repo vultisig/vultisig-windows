@@ -26,6 +26,10 @@ import {
   MayaPoolPricedTokenId,
   mayaPoolPricedTokens,
 } from '../maya/mayaPoolPricedTokens'
+import {
+  getThorchainSecuredAssetPrices,
+  isThorchainSecuredAssetDenom,
+} from '../thor/getThorchainSecuredAssetPrices'
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[]
@@ -66,6 +70,7 @@ export function useCoinPricesQuery(
   const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
   const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
   const yieldBearingTokens: Token<CoinKey<CosmosChain>>[] = []
+  const thorSecuredTokens: Token<CoinKey<CosmosChain>>[] = []
   const mayaPoolTokens: (Token<CoinKey> & {
     poolTokenId: MayaPoolPricedTokenId
   })[] = []
@@ -89,6 +94,12 @@ export function useCoinPricesQuery(
       isChainOfKind(chain, 'cosmos')
     ) {
       yieldBearingTokens.push({ id, chain })
+    } else if (
+      chain === Chain.THORChain &&
+      id &&
+      isThorchainSecuredAssetDenom(id)
+    ) {
+      thorSecuredTokens.push({ id, chain })
     } else if (isChainOfKind(chain, 'evm') && id) {
       erc20sWithoutPriceProviderId.push({ id, chain })
     } else if (!eager) {
@@ -199,6 +210,28 @@ export function useCoinPricesQuery(
             result[coinKeyToString(coin)] = nav
           }
         }
+        return result
+      },
+      ...persistQueryOptions,
+    })
+  }
+
+  if (!isEmpty(thorSecuredTokens)) {
+    const denoms = thorSecuredTokens.map(coin => shouldBePresent(coin.id))
+
+    queries.push({
+      queryKey: ['thorchainSecuredAssetPrices', denoms],
+      queryFn: async () => {
+        const prices = await getThorchainSecuredAssetPrices(denoms)
+
+        const result: Record<string, number> = {}
+        for (const coin of thorSecuredTokens) {
+          const price = prices[shouldBePresent(coin.id)]
+          if (price != null) {
+            result[coinKeyToString(coin)] = price
+          }
+        }
+
         return result
       },
       ...persistQueryOptions,
