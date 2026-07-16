@@ -10,6 +10,7 @@ import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { validateSendForm } from '../form/validateSendForm'
 import { useSendAmount } from '../state/amount'
+import { useSendDestinationTagInput } from '../state/destinationTag'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendFeeEstimateQuery } from './useSendFeeEstimateQuery'
@@ -19,6 +20,7 @@ export const useSendValidationQuery = () => {
 
   const coin = useCurrentSendCoin()
   const [amount] = useSendAmount()
+  const [destinationTag] = useSendDestinationTagInput()
   const [address] = useSendReceiver()
   const walletCore = useAssertWalletCore()
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
@@ -39,6 +41,7 @@ export const useSendValidationQuery = () => {
           {
             coin,
             amount,
+            destinationTag,
             receiverAddress: address,
             senderAddress: coin.address,
           },
@@ -56,6 +59,7 @@ export const useSendValidationQuery = () => {
         address,
         amount,
         coin,
+        destinationTag,
         feeEstimateQuery.data,
         nativeBalanceQuery.data,
         t,

@@ -1695,6 +1695,10 @@ export const ru = {
   ripple_field_type: 'Тип',
   ripple_field_destination: 'Место назначения',
   ripple_field_destination_tag: 'Метка назначения',
+  ripple_destination_tag_invalid: 'Введите целое число от 0 до 4 294 967 295.',
+  ripple_destination_tag_optional: 'Необязательная метка назначения',
+  ripple_destination_tag_required:
+    'Для этого счёта XRP требуется метка назначения.',
   ripple_field_amount: 'Количество',
   ripple_field_send_max: 'Платить максимум',
   ripple_field_deliver_min: 'Получить как минимум',

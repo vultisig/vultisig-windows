@@ -6,6 +6,7 @@ import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBoo
 import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
 import { useSendKeysignPayloadQuery } from '@core/ui/vault/send/keysignPayload/query'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
+import { useSendDestinationTag } from '@core/ui/vault/send/state/destinationTag'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useSendReceiverLabel } from '@core/ui/vault/send/state/receiverLabel'
@@ -35,6 +36,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [receiver] = useSendReceiver()
   const [receiverLabel] = useSendReceiverLabel()
   const [memo] = useSendMemo()
+  const { destinationTag } = useSendDestinationTag()
   const coin = useCurrentSendCoin()
   const sender = useSender()
   const receiverVaultName = useVaultNameForAddress({
@@ -119,6 +121,12 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           {memo && (
             <ListItem
               title={<TxOverviewMemo value={memo} chain={coin.chain} />}
+            />
+          )}
+          {destinationTag !== undefined && (
+            <ListItem
+              description={destinationTag.toString()}
+              title={t('ripple_field_destination_tag')}
             />
           )}
         </VerifyTransactionOverview>

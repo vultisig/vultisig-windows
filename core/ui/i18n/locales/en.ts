@@ -913,6 +913,11 @@ export const en = {
   ripple_field_type: 'Type',
   ripple_field_destination: 'Destination',
   ripple_field_destination_tag: 'Destination tag',
+  ripple_destination_tag_invalid:
+    'Enter a whole number between 0 and 4,294,967,295.',
+  ripple_destination_tag_optional: 'Optional destination tag',
+  ripple_destination_tag_required:
+    'This XRP account requires a destination tag.',
   ripple_field_amount: 'Amount',
   ripple_field_send_max: 'Pay at most',
   ripple_field_deliver_min: 'Receive at least',

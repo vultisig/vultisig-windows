@@ -124,6 +124,10 @@ export const VerifyKeysignStart = ({
         return {
           disabledMessage: match(keysignPayloadQuery.error.type, {
             'not-enough-funds': () => t('not_enough_funds'),
+            'ripple-destination-tag-invalid': () =>
+              t('ripple_destination_tag_invalid'),
+            'ripple-destination-tag-required': () =>
+              t('ripple_destination_tag_required'),
           }),
         }
       }

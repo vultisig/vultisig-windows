@@ -29,6 +29,7 @@ export const ManageSendCoinCollapsedInputField = () => {
 
   return (
     <CollapsedCoinInputContainer
+      data-testid="send-coin-field"
       onClick={() => {
         setFocusedSendField(state => ({
           ...state,

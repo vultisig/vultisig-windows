@@ -88,6 +88,7 @@ export type CoreView =
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {
         address?: string
         amount?: bigint
+        destinationTag?: string
         memo?: string
         skipToVerify?: boolean
       }

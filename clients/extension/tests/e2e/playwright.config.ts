@@ -119,6 +119,7 @@ export default defineConfig({
         '**/push-notifications.spec.ts',
         '**/push-notifications-integration.spec.ts',
         '**/station-migration.spec.ts',
+        '**/xrp-destination-tag.spec.ts',
       ],
       use: {
         launchOptions: {

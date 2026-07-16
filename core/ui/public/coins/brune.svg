@@ -1,0 +1,12 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="16" cy="16" r="16" fill="#101820"/>
+  <path d="M7 23.75L19.55 18.46L15.58 14.43L7 23.75ZM11.61 10.4L15.59 14.43L22.69 5.75L11.61 10.4Z" fill="url(#brune-gradient)"/>
+  <circle cx="24" cy="24" r="7" fill="#F4F6F8" stroke="#101820" stroke-width="2"/>
+  <text x="24" y="27" fill="#101820" font-family="Arial, sans-serif" font-size="9" font-weight="700" text-anchor="middle">b</text>
+  <defs>
+    <linearGradient id="brune-gradient" x1="7" y1="14.75" x2="22.69" y2="14.75" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00CCFF"/>
+      <stop offset="1" stop-color="#33FF99"/>
+    </linearGradient>
+  </defs>
+</svg>

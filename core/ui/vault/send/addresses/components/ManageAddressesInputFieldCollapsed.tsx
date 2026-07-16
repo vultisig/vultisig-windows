@@ -29,6 +29,7 @@ export const ManageAddressesInputFieldCollapsed = () => {
 
   return (
     <CollapsedCoinInputContainer
+      data-testid="send-address-field"
       onClick={() => {
         setFocusedSendField(state => ({
           ...state,
