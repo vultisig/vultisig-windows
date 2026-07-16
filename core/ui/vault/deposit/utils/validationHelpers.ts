@@ -22,7 +22,10 @@ export const positiveAmountSchema = (
   z.preprocess(
     toRequiredNumber,
     z
-      .number()
+      // An empty/undefined amount becomes NaN via toRequiredNumber; without a
+      // custom message Zod emits its raw invalid_type error instead of the
+      // translated "amount must be positive" one.
+      .number({ error: t('amount_must_be_positive') })
       .gt(0, t('amount_must_be_positive'))
       .max(
         maxValue > 0 ? maxValue : Number.POSITIVE_INFINITY,
