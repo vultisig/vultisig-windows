@@ -83,10 +83,11 @@ export const UnbondForm = ({
     enabled: shouldShowFeePreview,
   })
 
+  // Schema messages are already translated (see getDepositFormConfig), so we
+  // render them directly. Re-running them through t() would find no matching
+  // key and collapse every error to the generic default_validation fallback.
   const formatError = (message?: string) =>
-    message
-      ? t(message, { defaultValue: t('chainFunctions.default_validation') })
-      : undefined
+    message || t('chainFunctions.default_validation')
 
   const parsedAmount =
     typeof amountValue === 'number'
