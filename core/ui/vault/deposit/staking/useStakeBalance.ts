@@ -7,9 +7,9 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 import { useMemo } from 'react'
 
+import { useUnstakableRujiQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableRujiQuery'
 import { useUnstakableStcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableSTcyQuery'
 import { useUnstakableTcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableTcyQuery'
-import { useRujiraStakeQuery } from '../hooks/useRujiraStakeQuery'
 import { useTonUnstakableQuery } from '../hooks/useTonUnstakableQuery'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
@@ -59,7 +59,14 @@ export const useStakeBalance = (): StakeBalanceResult => {
     },
   })
 
-  const { data: rujiData, isLoading: isLoadingRuji } = useRujiraStakeQuery()
+  const { data: rujiData, isLoading: isLoadingRuji } = useUnstakableRujiQuery({
+    address: thorchainVaultAddress,
+    options: {
+      enabled: Boolean(
+        thorchainVaultAddress && isUnstake && stakeId === 'ruji'
+      ),
+    },
+  })
 
   const { data: tonBalance, isLoading: isLoadingTon } = useTonUnstakableQuery({
     address: tonVaultAddress,
@@ -68,54 +75,40 @@ export const useStakeBalance = (): StakeBalanceResult => {
     },
   })
 
-  return useMemo((): StakeBalanceResult => {
-    if (!isUnstake) {
-      return { balance: 0, isLoading: false, stakeId }
-    }
+  if (!isUnstake) {
+    return { balance: 0, isLoading: false, stakeId }
+  }
 
-    if (isTonChain) {
-      return {
-        balance: tonBalance?.humanReadableBalance ?? 0,
-        isLoading: isLoadingTon,
-        stakeId: null,
-      }
+  if (isTonChain) {
+    return {
+      balance: tonBalance?.humanReadableBalance ?? 0,
+      isLoading: isLoadingTon,
+      stakeId: null,
     }
+  }
 
-    if (!stakeId) {
-      return { balance: 0, isLoading: false, stakeId }
-    }
+  if (!stakeId) {
+    return { balance: 0, isLoading: false, stakeId }
+  }
 
-    return match(stakeId, {
-      'native-tcy': () => ({
-        balance: fromChainAmount(
-          nativeTcyBalance,
-          knownCosmosTokens.THORChain.tcy.decimals
-        ),
-        isLoading: isLoadingNativeTcy,
-        stakeId,
-      }),
-      stcy: () => ({
-        balance: stcyData?.humanReadableBalance ?? 0,
-        isLoading: isLoadingStcy,
-        stakeId,
-      }),
-      ruji: () => ({
-        balance: rujiData?.bonded ?? 0,
-        isLoading: isLoadingRuji,
-        stakeId,
-      }),
-    })
-  }, [
-    isUnstake,
-    isTonChain,
-    stakeId,
-    nativeTcyBalance,
-    isLoadingNativeTcy,
-    stcyData?.humanReadableBalance,
-    isLoadingStcy,
-    rujiData?.bonded,
-    isLoadingRuji,
-    tonBalance?.humanReadableBalance,
-    isLoadingTon,
-  ])
+  return match(stakeId, {
+    'native-tcy': () => ({
+      balance: fromChainAmount(
+        nativeTcyBalance,
+        knownCosmosTokens.THORChain.tcy.decimals
+      ),
+      isLoading: isLoadingNativeTcy,
+      stakeId,
+    }),
+    stcy: () => ({
+      balance: stcyData?.humanReadableBalance ?? 0,
+      isLoading: isLoadingStcy,
+      stakeId,
+    }),
+    ruji: () => ({
+      balance: rujiData?.humanReadableBalance ?? 0,
+      isLoading: isLoadingRuji,
+      stakeId,
+    }),
+  })
 }
