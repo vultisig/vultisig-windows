@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { fetchRujiLiquidUnbondInputs } from '@core/ui/defi/chain/queries/services/thorchainStake/rujiStakeService'
 import { buildQBTCDirectPayload } from '@core/ui/qbtc/dapp/buildQBTCDirectPayload'
 import { QbtcDappMessage } from '@core/ui/qbtc/dapp/encodeAnyMessage'
 import {
@@ -285,6 +286,15 @@ export const buildDepositKeysignPayload = async ({
 
     let input: RujiInput | NativeTcyInput | StcyInput | null = null
 
+    // Unstaking the RUJI auto-compounding position redeems the sRUJI receipt via
+    // `liquid.unbond`, so the resolver needs the receipt shares + position value
+    // to convert the entered amount. Fetch them here (the match callbacks below
+    // are synchronous).
+    const rujiUnbondInputs =
+      stakeId === 'ruji' && actionAsStakeAction === 'unstake'
+        ? await fetchRujiLiquidUnbondInputs(coin.address)
+        : undefined
+
     match(actionAsStakeAction, {
       stake: () => {
         input = { kind: 'stake', amount: shouldBePresent(amount) }
@@ -306,6 +316,7 @@ export const buildDepositKeysignPayload = async ({
           input = {
             kind: 'unstake',
             amount: shouldBePresent(amount),
+            ...shouldBePresent(rujiUnbondInputs),
           }
         }
       },
