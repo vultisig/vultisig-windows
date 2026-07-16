@@ -15,6 +15,7 @@ import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
 import { useMemo } from 'react'
 
+import { withThorchainNativeCoinMetadata } from '../chain/coin/thorchain/withThorchainNativeCoinMetadata'
 import { StorageKey } from './StorageKey'
 
 export type UpdateVaultInput = {
@@ -56,7 +57,9 @@ const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
 
     return {
       ...vault,
-      coins: vaultCoins.filter(coin => vaultChains.includes(coin.chain)),
+      coins: vaultCoins
+        .filter(coin => vaultChains.includes(coin.chain))
+        .map(withThorchainNativeCoinMetadata),
     }
   })
 }
