@@ -96,10 +96,11 @@ export const StakeForm = ({
 
   const formattedBalance = formatAmount(balance, { ticker: coin.ticker })
 
+  // Schema messages are already translated (see getDepositFormConfig), so we
+  // render them directly. Re-running them through t() would find no matching
+  // key and collapse every error to the generic default_validation fallback.
   const formatError = (message?: string) =>
-    message
-      ? t(message, { defaultValue: t('chainFunctions.default_validation') })
-      : undefined
+    message || t('chainFunctions.default_validation')
 
   return (
     <VStack flexGrow gap={16}>
