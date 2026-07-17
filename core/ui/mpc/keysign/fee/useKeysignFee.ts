@@ -7,6 +7,7 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultNullablePublicKey } from '../../../vault/state/currentVault'
+import { normalizeKeysignFee } from './normalizeKeysignFee'
 
 export const useKeysignFee = (keysignPayload: KeysignPayload) => {
   const chain = getKeysignChain(keysignPayload)
@@ -15,13 +16,15 @@ export const useKeysignFee = (keysignPayload: KeysignPayload) => {
 
   return useQuery({
     queryKey: ['keysignFee', keysignPayload, publicKey, walletCore],
-    queryFn: () => {
+    queryFn: async () => {
       if (publicKey !== null) {
-        return getFeeAmount({
+        const feeAmount = await getFeeAmount({
           keysignPayload,
           walletCore,
           publicKey,
         })
+
+        return normalizeKeysignFee({ chain, feeAmount })
       }
 
       if (getChainKind(chain) !== 'qbtc') {
