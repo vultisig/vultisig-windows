@@ -15,7 +15,12 @@ export type StakeSpecific =
 
 export type RujiInput =
   | { kind: 'stake'; amount: number }
-  | { kind: 'unstake'; amount: number }
+  | {
+      kind: 'unstake'
+      amount: number
+      liquidShares: bigint
+      liquidSize: bigint
+    }
   | { kind: 'claim' }
 
 export type NativeTcyInput =
