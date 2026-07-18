@@ -26,6 +26,41 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 })
 
+const unicodeDashPattern = /\S[\u2011\u2013\u2014]\S/u
+const noUnicodeDashLiterals = {
+  rules: {
+    'no-unicode-dash-literals': {
+      meta: {
+        type: 'problem',
+        schema: [],
+        messages: {
+          forbidden:
+            'Use an ASCII hyphen inside identifier-like source text; Unicode dashes can break identity matching.',
+        },
+      },
+      create(context) {
+        const reportIfNeeded = (node, value) => {
+          if (unicodeDashPattern.test(value)) {
+            context.report({ node, messageId: 'forbidden' })
+          }
+        }
+
+        return {
+          Literal(node) {
+            if (typeof node.value === 'string') reportIfNeeded(node, node.value)
+          },
+          TemplateElement(node) {
+            reportIfNeeded(node, node.value.raw)
+          },
+          JSXText(node) {
+            reportIfNeeded(node, node.value)
+          },
+        }
+      },
+    },
+  },
+}
+
 export default [
   {
     ignores: [
@@ -58,6 +93,7 @@ export default [
       'unused-imports': fixupPluginRules(unusedImportsPlugin),
       storybook,
       'react-compiler': reactCompiler,
+      local: noUnicodeDashLiterals,
     },
 
     languageOptions: {
@@ -120,8 +156,15 @@ export default [
         },
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      'local/no-unicode-dash-literals': 'error',
     },
   }, // Override for declaration files where interfaces are required for module augmentation
+  {
+    files: ['core/ui/i18n/locales/**/*.{ts,tsx}'],
+    rules: {
+      'local/no-unicode-dash-literals': 'off',
+    },
+  },
   {
     files: ['**/*.d.ts'],
     rules: {

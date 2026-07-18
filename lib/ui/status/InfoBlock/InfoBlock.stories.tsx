@@ -24,7 +24,7 @@ export const Default: Story = {}
 export const WithTooltip: Story = {
   name: 'With tooltip on icon',
   args: {
-    iconTooltipContent: 'Auto‑save runs every 30 seconds as well.',
+    iconTooltipContent: 'Auto-save runs every 30 seconds as well.',
   },
 }
 
