@@ -1736,4 +1736,5 @@ export const de = {
   ripple_field_issuer: 'Emittent',
   ripple_undecoded_notice:
     'Diese Transaktion konnte nicht dekodiert werden. Bitte prüfen Sie die unten stehenden Rohdaten, bevor Sie die Transaktion genehmigen.',
+  swap_expected_payout: 'erwartete Auszahlung',
 }

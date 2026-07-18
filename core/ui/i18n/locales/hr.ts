@@ -1698,4 +1698,5 @@ export const hr = {
   ripple_field_issuer: 'Izdavatelj',
   ripple_undecoded_notice:
     'Ovu transakciju nije bilo moguće dekodirati. Prije odobrenja pregledajte neobrađene podatke u nastavku.',
+  swap_expected_payout: 'očekivana isplata',
 }

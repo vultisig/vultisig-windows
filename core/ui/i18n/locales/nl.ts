@@ -1706,4 +1706,5 @@ export const nl = {
   ripple_field_issuer: 'Uitgever',
   ripple_undecoded_notice:
     'Deze transactie kon niet worden gedecodeerd. Controleer de onderstaande gegevens voordat u goedkeurt.',
+  swap_expected_payout: 'verwachte uitbetaling',
 }

@@ -1722,4 +1722,5 @@ export const es = {
   ripple_field_issuer: 'Editor',
   ripple_undecoded_notice:
     'Esta transacción no pudo ser decodificada. Revise los detalles a continuación antes de aprobar.',
+  swap_expected_payout: 'pago esperado',
 }
