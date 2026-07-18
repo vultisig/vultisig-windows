@@ -291,6 +291,13 @@ describe('XRPL adapter (GemWallet-compatible)', () => {
       })
       expect(mockCallPopup).not.toHaveBeenCalled()
     })
+
+    it('rejects malformed hex before opening any signing flow', async () => {
+      await expect(signMessage('xyz', true)).rejects.toThrow(/malformed/i)
+
+      expect(mockRequestAccount).not.toHaveBeenCalled()
+      expect(mockCallPopup).not.toHaveBeenCalled()
+    })
   })
 
   describe('failures', () => {
@@ -441,5 +448,12 @@ describe('window.vultisig.xrpl object API', () => {
     )
 
     await expect(xrpl.getAddress()).rejects.toThrow()
+  })
+
+  it('rejects malformed hex without opening any signing flow', async () => {
+    await expect(xrpl.signMessage('xyz', true)).rejects.toThrow(/malformed/i)
+
+    expect(mockRequestAccount).not.toHaveBeenCalled()
+    expect(mockCallPopup).not.toHaveBeenCalled()
   })
 })

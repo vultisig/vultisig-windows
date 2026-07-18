@@ -52,7 +52,11 @@ const getRippleMessageBytes = ({
   isHex?: boolean
 }): Uint8Array =>
   isHex
-    ? getBytes(message.startsWith('0x') ? message : `0x${message}`)
+    ? getBytes(
+        message.startsWith('0x') || message.startsWith('0X')
+          ? message
+          : `0x${message}`
+      )
     : toUtf8Bytes(message)
 
 export const Overview = () => {

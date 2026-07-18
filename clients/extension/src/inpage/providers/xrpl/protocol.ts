@@ -34,6 +34,7 @@ export const xrplRequestTypes = [
   'REQUEST_SUBMIT_TRANSACTION/V3',
 ] as const
 
+/** A request `type` string this adapter implements (see `xrplRequestTypes`). */
 export type XrplRequestType = (typeof xrplRequestTypes)[number]
 
 /**

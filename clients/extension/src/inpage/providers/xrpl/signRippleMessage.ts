@@ -22,6 +22,16 @@ export const signRippleMessage = async ({
   message,
   isHex,
 }: SignRippleMessageInput): Promise<string> => {
+  // A hex message is decoded to raw bytes verbatim (matching `ripple-keypairs`),
+  // so reject anything that isn't clean, prefix-less, even-length hex before any
+  // popup opens — otherwise a malformed request would open the grant/keysign
+  // flow and then fail unverifiably instead of returning a clean error.
+  if (isHex && !/^(?:[0-9a-fA-F]{2})+$/.test(message)) {
+    throw new Error(
+      'XRPL sign-message request contains malformed hexadecimal data'
+    )
+  }
+
   const { address } = await requestAccount(OtherChain.Ripple)
 
   const signature = await callPopup(
