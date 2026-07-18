@@ -50,7 +50,8 @@ export function enrichPolicyFields(
         policy.to_address = String(r.toAddress)
       }
       if (r.amount != null) {
-        policy.amount = formatHumanAmount(String(r.amount), chain, token)
+        const amount = formatHumanAmount(String(r.amount), chain, token)
+        if (amount !== null) policy.amount = amount
       }
     }
   } else {
@@ -69,11 +70,12 @@ export function enrichPolicyFields(
     }
 
     if (config.fromAmount != null) {
-      policy.amount = formatHumanAmount(
+      const amount = formatHumanAmount(
         String(config.fromAmount),
         from.chain,
         from.token
       )
+      if (amount !== null) policy.amount = amount
     }
   }
 
