@@ -13,6 +13,11 @@ export type StakeSpecific =
       funds: Array<{ denom: string; amount: string }>
     }
 
+/**
+ * Input for a RUJI staking op: `stake` (bond), position-specific `unstake`
+ * (auto-compounding `liquid` via `liquid.unbond` vs `bonded` via
+ * `account.withdraw`), or a rewards `claim`.
+ */
 export type RujiInput =
   | { kind: 'stake'; amount: number }
   | {

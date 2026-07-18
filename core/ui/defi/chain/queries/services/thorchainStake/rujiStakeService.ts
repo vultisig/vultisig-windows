@@ -90,11 +90,10 @@ const rujiReceiptDenom = shouldBePresent(
   'sRUJI receipt denom'
 )
 
-// On-chain sRUJI receipt balance — the amount the vault actually holds (and can
-// send), read the same way sTCY reads its receipt. This is deliberately kept
-// independent of the staking API's `bonded` field, which can report 0 even when
-// receipt tokens are held. Returns `null` when the request fails, so a genuine
-// zero balance stays distinct from an unknown one.
+// On-chain sRUJI receipt balance — the exact share count the vault holds, used
+// to size the `liquid.unbond` redemption (the funds it sends are receipt
+// shares, not RUJI). Read the same way sTCY reads its receipt. Returns `null`
+// when the request fails, so a genuine zero stays distinct from an unknown one.
 const fetchRujiReceiptBalance = async (
   address: string
 ): Promise<bigint | null> => {
@@ -123,7 +122,7 @@ export const rujiAutoCompoundStakePositionId = 'thor-stake-ruji'
 export const rujiBondedStakePositionId = 'thor-stake-ruji-bonded'
 
 type RujiStakeSnapshot = {
-  /** Auto-compounding (sRUJI receipt) value in RUJI base units. */
+  /** Auto-compounding position valued in RUJI base units (the API `liquidSize`). */
   autoCompoundAmount: bigint
   /** Bonded (yielding) position in RUJI base units. */
   bondedAmount: bigint
@@ -132,24 +131,20 @@ type RujiStakeSnapshot = {
   apr?: number
 }
 
-// Reads the Rujira staking API (APR, pending USDC revenue, bonded amount) and
-// the on-chain sRUJI receipt balance in one shot, deriving the two independent
-// RUJI positions. The auto-compounding value prefers the API's `liquidSize`
-// (sRUJI receipt priced in RUJI) with the raw on-chain receipt as a fallback;
-// it deliberately does NOT fall back to `bonded`, which is surfaced separately.
+// Reads the Rujira staking API (APR, pending USDC revenue, bonded + liquid
+// amounts) and derives the two independent RUJI positions. The auto-compounding
+// amount is the API's `liquidSize` — the sRUJI receipt priced in RUJI, i.e. what
+// the Rujira app shows. The raw on-chain receipt is in share units (not RUJI, so
+// not a valid display value once the share price drifts) and is read separately
+// only when building the `liquid.unbond` tx. `liquidSize` also does NOT fall
+// back to `bonded`, which is surfaced as its own position.
 const fetchRujiStakeSnapshot = async (
   address: string
 ): Promise<RujiStakeSnapshot> => {
-  const [response, heldAmount] = await Promise.all([
-    getRujiStake(address),
-    fetchRujiReceiptBalance(address),
-  ])
-  const stake = findRujiStake(response)
-  const liquidSizeAmount = parseBigint(stake?.liquidSize?.amount)
+  const stake = findRujiStake(await getRujiStake(address))
 
   return {
-    autoCompoundAmount:
-      liquidSizeAmount > 0n ? liquidSizeAmount : (heldAmount ?? 0n),
+    autoCompoundAmount: parseBigint(stake?.liquidSize?.amount),
     bondedAmount: parseBigint(stake?.bonded?.amount),
     rewardsAmount:
       parseNumber(stake?.pendingRevenue?.amount) / rujiDecimalFactor,
@@ -160,6 +155,12 @@ const fetchRujiStakeSnapshot = async (
 type FetchRujiStakePositionsInput = {
   address: string
   prices: Record<string, number>
+}
+
+type BuildPositionInput = {
+  id: string
+  amount: bigint
+  extras?: Partial<ThorchainStakePosition>
 }
 
 /**
@@ -187,11 +188,11 @@ export const fetchRujiStakePositions = async ({
   const { autoCompoundAmount, bondedAmount, rewardsAmount, apr } = snapshot.data
   const price = prices[coinKeyToString(thorchainTokens.ruji)] ?? 0
 
-  const buildPosition = (
-    id: string,
-    amount: bigint,
-    extras: Partial<ThorchainStakePosition> = {}
-  ): ThorchainStakePosition => ({
+  const buildPosition = ({
+    id,
+    amount,
+    extras = {},
+  }: BuildPositionInput): ThorchainStakePosition => ({
     id,
     ticker: thorchainTokens.ruji.ticker,
     amount,
@@ -206,20 +207,19 @@ export const fetchRujiStakePositions = async ({
   })
 
   // APR + pending USDC revenue ride on the bonded position (see the doc above).
-  const bondedPosition = buildPosition(
-    rujiBondedStakePositionId,
-    bondedAmount,
-    {
-      apr,
-      rewards: rewardsAmount,
-      rewardTicker: 'USDC',
-    }
-  )
+  const bondedPosition = buildPosition({
+    id: rujiBondedStakePositionId,
+    amount: bondedAmount,
+    extras: { apr, rewards: rewardsAmount, rewardTicker: 'USDC' },
+  })
 
   const positions: ThorchainStakePosition[] = []
   if (autoCompoundAmount > 0n) {
     positions.push(
-      buildPosition(rujiAutoCompoundStakePositionId, autoCompoundAmount)
+      buildPosition({
+        id: rujiAutoCompoundStakePositionId,
+        amount: autoCompoundAmount,
+      })
     )
   }
   // Keep the bonded card visible while its USDC revenue is claimable, so those
