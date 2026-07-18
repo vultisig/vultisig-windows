@@ -1688,4 +1688,5 @@ export const ko = {
   ripple_field_issuer: '발행자',
   ripple_undecoded_notice:
     '이 거래를 해독할 수 없습니다. 승인하기 전에 아래의 원본 세부 정보를 검토하십시오.',
+  swap_expected_payout: '예상 지급액',
 }

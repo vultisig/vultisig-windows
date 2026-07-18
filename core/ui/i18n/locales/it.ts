@@ -1727,4 +1727,5 @@ export const it = {
   ripple_field_issuer: 'Emittente',
   ripple_undecoded_notice:
     'Impossibile decodificare questa transazione. Si prega di rivedere i dettagli grezzi qui sotto prima di approvare.',
+  swap_expected_payout: 'pagamento previsto',
 }

@@ -1705,4 +1705,5 @@ export const ru = {
   ripple_field_issuer: 'Эмитент',
   ripple_undecoded_notice:
     'Данная транзакция не может быть расшифрована. Перед подтверждением ознакомьтесь с приведенными ниже данными.',
+  swap_expected_payout: 'ожидаемая выплата',
 }

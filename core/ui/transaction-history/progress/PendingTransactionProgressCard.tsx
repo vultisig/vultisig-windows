@@ -5,6 +5,7 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -129,6 +130,10 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
     fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
   )
   const toAmount = parseFloat(data.toAmount)
+  const toAmountLimit = toNativeSwapLimitAmount({
+    rawLimit: data.toAmountLimit,
+    toCoin: { chain: data.toChain, id: data.toTokenId },
+  })
   const fromFiat = useFiatValue(
     { chain: data.fromChain, id: data.fromTokenId },
     fromAmount
@@ -189,7 +194,7 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
           )}
           <VStack gap={2}>
             <Text size={11} color="shy">
-              {t('to_min_payout')}
+              {t('swap_expected_payout')}
             </Text>
             <Text size={16} weight={600}>
               {formatAmount(toAmount, { precision: 'high' })} {data.toToken}
@@ -197,6 +202,13 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
             {toFiat && (
               <Text size={12} color="supporting">
                 {toFiat}
+              </Text>
+            )}
+            {toAmountLimit !== null && (
+              <Text size={12} color="shy">
+                {`${t('to_min_payout')}: ${formatAmount(toAmountLimit, {
+                  precision: 'high',
+                })} ${data.toToken}`}
               </Text>
             )}
           </VStack>

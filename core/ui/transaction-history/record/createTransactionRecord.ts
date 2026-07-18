@@ -82,6 +82,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         fromDecimals: from.decimals,
         toToken: to.token,
         toAmount: native.toAmountDecimal,
+        toAmountLimit: native.toAmountLimit,
         toChain: to.chain,
         toTokenLogo: to.tokenLogo,
         toTokenId: to.tokenId,

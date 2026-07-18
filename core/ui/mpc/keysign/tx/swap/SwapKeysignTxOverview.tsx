@@ -2,6 +2,7 @@ import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
+import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -30,6 +31,7 @@ import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { truncateId } from '@vultisig/lib-utils/string/truncate'
@@ -106,6 +108,10 @@ export const SwapKeysignTxOverview = ({
   const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
   const { chain: sourceChain } = shouldBePresent(fromCoin)
 
+  const toAmountLimit = toCoin
+    ? getSwapToAmountLimit({ swapPayload, toCoin })
+    : null
+
   // Prefer the swap fee carried in the keysign payload (works for both
   // initiator and cosigner). Fall back to the SwapQuote provider for older
   // payloads built before the SDK populated the swap-fee fields — only the
@@ -169,6 +175,14 @@ export const SwapKeysignTxOverview = ({
               <SwapCoinItem
                 coin={toCoin}
                 tokenAmount={parseFloat(toAmountDecimal)}
+                caption={
+                  toAmountLimit !== null
+                    ? `${t('to_min_payout')}: ${formatAmount(
+                        toAmountLimit,
+                        toCoin
+                      )}`
+                    : undefined
+                }
               />
             )}
             <IconWrapper alignItems="center" justifyContent="center">

@@ -1131,6 +1131,7 @@ export const en = {
   swap: 'Swap',
   swaps: 'Swaps',
   swap_discount: 'Swap Discount',
+  swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
   swap_invalid_external_recipient:
