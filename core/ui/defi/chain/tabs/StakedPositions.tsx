@@ -22,6 +22,10 @@ import {
   resolveTransferableStakeToken,
 } from '../config/stakeUiResolver'
 import { CosmosDelegationsView } from '../cosmos/CosmosDelegationsView'
+import {
+  rujiAutoCompoundStakePositionId,
+  rujiBondedStakePositionId,
+} from '../queries/services/thorchainStake/rujiStakeService'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { SolanaStakeDefiView } from '../solana/SolanaStakeDefiView'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
@@ -39,6 +43,14 @@ type StakeActionType =
   | 'withdraw_ruji_rewards'
   | 'add_cacao_pool'
   | 'remove_cacao_pool'
+
+// The bonded RUJI card has no manage tile of its own — it is shown whenever the
+// single "RUJI" (`thor-stake-ruji`) tile is selected. Map its position id to
+// that selection id so the selected-positions filter keeps it visible.
+const selectionIdForStakePosition = (positionId: string): string =>
+  positionId === rujiBondedStakePositionId
+    ? rujiAutoCompoundStakePositionId
+    : positionId
 
 const cosmosNativeStakingChains: readonly StakingChain[] = [
   Chain.Terra,
@@ -150,7 +162,9 @@ const ThorchainStakedPositions = () => {
 
   const selected = new Set(selectedPositions)
   const positions =
-    data?.stake?.positions.filter(position => selected.has(position.id)) ?? []
+    data?.stake?.positions.filter(position =>
+      selected.has(selectionIdForStakePosition(position.id))
+    ) ?? []
 
   if (!isPending && positions.length === 0) {
     return <DefiPositionEmptyState returnTab="staked" />
@@ -189,13 +203,23 @@ const ThorchainStakedPositions = () => {
           ? resolveStakeToken(chain, 'thor-stake-tcy')
           : token
 
+    // Both RUJI cards use the same RUJI coin; `autoCompound` selects the
+    // unstake route (auto-compounding → `liquid.unbond`, bonded →
+    // `account.withdraw`) and the balance shown, mirroring how sTCY threads it.
+    const form =
+      isStcyPosition || id === rujiAutoCompoundStakePositionId
+        ? { autoCompound: true }
+        : id === rujiBondedStakePositionId
+          ? { autoCompound: false }
+          : undefined
+
     navigate({
       id: 'deposit',
       state: {
         coin: extractCoinKey(coinForAction),
         action,
         entryPoint: 'defi',
-        form: isStcyPosition ? { autoCompound: true } : undefined,
+        form,
       },
     })
   }
@@ -260,7 +284,10 @@ const ThorchainStakedPositions = () => {
         const hideStats =
           position.id === 'thor-stake-stcy' ||
           position.id === 'thor-stake-yrune' ||
-          position.id === 'thor-stake-ytcy'
+          position.id === 'thor-stake-ytcy' ||
+          // The compounded RUJI card reinvests its revenue (like sTCY), so it
+          // has no APR/USDC claim to show — those live on the bonded card.
+          position.id === rujiAutoCompoundStakePositionId
 
         const handleNavigate = async (action: StakeActionType) => {
           if (cardActionsDisabled) return

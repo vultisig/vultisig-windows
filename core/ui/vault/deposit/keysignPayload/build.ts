@@ -286,12 +286,14 @@ export const buildDepositKeysignPayload = async ({
 
     let input: RujiInput | NativeTcyInput | StcyInput | null = null
 
-    // Unstaking the RUJI auto-compounding position redeems the sRUJI receipt via
-    // `liquid.unbond`, so the resolver needs the receipt shares + position value
-    // to convert the entered amount. Fetch them here (the match callbacks below
-    // are synchronous).
+    // RUJI has two independent positions unstaked via different routes: the
+    // bonded position via `account.withdraw` and the auto-compounding position
+    // via `liquid.unbond`. The card the user unstaked from sets `autocompound`
+    // (true → auto-compounding). Only the auto-compounding route needs the sRUJI
+    // receipt shares + position value to convert the entered amount, so fetch
+    // them here (the match callbacks below are synchronous).
     const rujiUnbondInputs =
-      stakeId === 'ruji' && actionAsStakeAction === 'unstake'
+      stakeId === 'ruji' && actionAsStakeAction === 'unstake' && autocompound
         ? await fetchRujiLiquidUnbondInputs(coin.address)
         : undefined
 
@@ -312,11 +314,18 @@ export const buildDepositKeysignPayload = async ({
           input = pctValid
             ? { kind: 'unstake', percentage: pct }
             : { kind: 'unstake', amount: shouldBePresent(amount) }
+        } else if (autocompound) {
+          input = {
+            kind: 'unstake',
+            position: 'liquid',
+            amount: shouldBePresent(amount),
+            ...shouldBePresent(rujiUnbondInputs),
+          }
         } else {
           input = {
             kind: 'unstake',
+            position: 'bonded',
             amount: shouldBePresent(amount),
-            ...shouldBePresent(rujiUnbondInputs),
           }
         }
       },

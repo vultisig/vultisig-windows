@@ -1,16 +1,18 @@
-import { fetchRujiStakePosition } from '@core/ui/defi/chain/queries/services/thorchainStake/rujiStakeService'
-import { ThorchainStakePosition } from '@core/ui/defi/chain/queries/types'
+import {
+  fetchRujiUnstakeBalances,
+  RujiUnstakeBalances,
+} from '@core/ui/defi/chain/queries/services/thorchainStake/rujiStakeService'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { rujiraStakingConfig } from '@vultisig/core-chain/chains/cosmos/thor/rujira/config'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 /**
- * Amount of staked RUJI available to unstake. Reuses the DeFi staking service so
- * the unstake ceiling equals the amount shown on the Staked RUJI card (the
- * auto-compounding `liquidSize` value, with the on-chain receipt / `bonded` as
- * fallbacks) rather than the API's `bonded` field, which is `0` for
- * auto-compounding stakers.
+ * Amounts of staked RUJI available to unstake, per position. Reuses the DeFi
+ * staking service so each unstake ceiling equals the amount shown on its Staked
+ * RUJI card — the auto-compounding (`liquidSize`) value with the on-chain
+ * receipt as a fallback, and the bonded (`bonded`) value. The caller picks the
+ * balance matching the position being unstaked.
  */
 export const useUnstakableRujiQuery = ({
   address,
@@ -18,20 +20,19 @@ export const useUnstakableRujiQuery = ({
 }: {
   address?: string | null
   options?: Omit<
-    Partial<UseQueryOptions<ThorchainStakePosition | null>>,
+    Partial<UseQueryOptions<RujiUnstakeBalances>>,
     'queryKey' | 'queryFn' | 'select'
   >
 }) =>
   useQuery({
     queryKey: ['unstakable-ruji', address],
-    // `prices` only feeds the position's fiat value, which the unstake amount
-    // doesn't use, so an empty price map is fine here.
-    queryFn: () =>
-      fetchRujiStakePosition({ address: shouldBePresent(address), prices: {} }),
+    queryFn: () => fetchRujiUnstakeBalances(shouldBePresent(address)),
     ...options,
-    select: position => ({
-      humanReadableBalance: position
-        ? fromChainAmount(position.amount, rujiraStakingConfig.bondDecimals)
-        : 0,
+    select: ({ autoCompound, bonded }) => ({
+      autoCompound: fromChainAmount(
+        autoCompound,
+        rujiraStakingConfig.bondDecimals
+      ),
+      bonded: fromChainAmount(bonded, rujiraStakingConfig.bondDecimals),
     }),
   })

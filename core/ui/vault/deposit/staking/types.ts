@@ -13,13 +13,27 @@ export type StakeSpecific =
       funds: Array<{ denom: string; amount: string }>
     }
 
+/**
+ * Input for a RUJI staking op: `stake` (bond), position-specific `unstake`
+ * (auto-compounding `liquid` via `liquid.unbond` vs `bonded` via
+ * `account.withdraw`), or a rewards `claim`.
+ */
 export type RujiInput =
   | { kind: 'stake'; amount: number }
   | {
+      // Auto-compounding (sRUJI) position — redeemed via `liquid.unbond`, so the
+      // entered underlying amount is converted to receipt shares.
       kind: 'unstake'
+      position: 'liquid'
       amount: number
       liquidShares: bigint
       liquidSize: bigint
+    }
+  | {
+      // Bonded (yielding) position — withdrawn via `account.withdraw`.
+      kind: 'unstake'
+      position: 'bonded'
+      amount: number
     }
   | { kind: 'claim' }
 
