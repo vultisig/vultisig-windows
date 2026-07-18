@@ -1,14 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { mockQueryUrl } = vi.hoisted(() => ({
+const { mockQueryUrl, mockGetCoinPrices } = vi.hoisted(() => ({
   mockQueryUrl: vi.fn(),
+  mockGetCoinPrices: vi.fn(),
 }))
 
 vi.mock('@vultisig/lib-utils/query/queryUrl', () => ({
   queryUrl: mockQueryUrl,
 }))
 
+vi.mock('@vultisig/core-chain/coin/price/getCoinPrices', () => ({
+  getCoinPrices: mockGetCoinPrices,
+}))
+
 import {
+  getThorchainSecuredAssetFiatPrices,
   getThorchainSecuredAssetPrices,
   isThorchainSecuredAssetDenom,
   securedAssetDenomToPoolAsset,
@@ -99,6 +105,55 @@ describe('getThorchainSecuredAssetPrices', () => {
     mockQueryUrl.mockRejectedValue(new Error('network'))
 
     const prices = await getThorchainSecuredAssetPrices(['btc-btc'])
+
+    expect(prices).toEqual({})
+  })
+})
+
+describe('getThorchainSecuredAssetFiatPrices', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('returns USD pool prices unchanged for USD without fetching an anchor', async () => {
+    mockQueryUrl.mockResolvedValue([
+      { asset: 'BTC.BTC', asset_tor_price: '6417195738200' },
+    ])
+
+    const prices = await getThorchainSecuredAssetFiatPrices({
+      denoms: ['btc-btc'],
+      fiatCurrency: 'usd',
+    })
+
+    expect(prices['btc-btc']).toBeCloseTo(64171.957382, 4)
+    expect(mockGetCoinPrices).not.toHaveBeenCalled()
+  })
+
+  it('converts USD pool prices to the selected fiat via the usd-coin anchor', async () => {
+    mockQueryUrl.mockResolvedValue([
+      { asset: 'BTC.BTC', asset_tor_price: '6417195738200' },
+    ])
+    mockGetCoinPrices.mockResolvedValue({ 'usd-coin': 0.9 })
+
+    const prices = await getThorchainSecuredAssetFiatPrices({
+      denoms: ['btc-btc'],
+      fiatCurrency: 'eur',
+    })
+
+    expect(prices['btc-btc']).toBeCloseTo(64171.957382 * 0.9, 2)
+  })
+
+  it('returns no prices when the usd anchor is missing for a non-USD currency', async () => {
+    mockQueryUrl.mockResolvedValue([
+      { asset: 'BTC.BTC', asset_tor_price: '6417195738200' },
+    ])
+    // Successful response that does not include the usd-coin anchor.
+    mockGetCoinPrices.mockResolvedValue({})
+
+    const prices = await getThorchainSecuredAssetFiatPrices({
+      denoms: ['btc-btc'],
+      fiatCurrency: 'eur',
+    })
 
     expect(prices).toEqual({})
   })

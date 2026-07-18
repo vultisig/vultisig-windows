@@ -1,9 +1,16 @@
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
+import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 // THORChain reports pool prices in TOR, a USD-pegged unit scaled by 10^8.
 const torPriceDecimals = 8
+
+// USD stablecoin anchor: its price in a given fiat currency is the USD -> fiat
+// rate used to convert USD-denominated pool prices.
+const usdAnchorPriceProviderId = 'usd-coin'
+const usdFiatCurrency: FiatCurrency = 'usd'
 
 type ThorchainPool = {
   asset: string
@@ -54,6 +61,48 @@ export const getThorchainSecuredAssetPrices = async (
     if (price != null) {
       prices[denom] = price
     }
+  }
+
+  return prices
+}
+
+type GetThorchainSecuredAssetFiatPricesInput = {
+  denoms: string[]
+  fiatCurrency: FiatCurrency
+}
+
+/**
+ * THORChain pool prices are USD-denominated (`asset_tor_price`). Converts them
+ * to `fiatCurrency` using a USD stablecoin anchor (its price in that currency
+ * is the USD -> fiat rate). Returns prices keyed by denom.
+ *
+ * When the anchor quote is unavailable for a non-USD currency, returns no
+ * prices rather than mislabeling raw USD values as the selected fiat.
+ */
+export const getThorchainSecuredAssetFiatPrices = async ({
+  denoms,
+  fiatCurrency,
+}: GetThorchainSecuredAssetFiatPricesInput): Promise<
+  Record<string, number>
+> => {
+  let usdToFiatRate = 1
+  if (fiatCurrency !== usdFiatCurrency) {
+    const anchorPrices = await getCoinPrices({
+      ids: [usdAnchorPriceProviderId],
+      fiatCurrency,
+    })
+    const anchorRate = anchorPrices[usdAnchorPriceProviderId]
+    if (anchorRate == null) {
+      return {}
+    }
+    usdToFiatRate = anchorRate
+  }
+
+  const usdPrices = await getThorchainSecuredAssetPrices(denoms)
+
+  const prices: Record<string, number> = {}
+  for (const [denom, usdPrice] of Object.entries(usdPrices)) {
+    prices[denom] = usdPrice * usdToFiatRate
   }
 
   return prices

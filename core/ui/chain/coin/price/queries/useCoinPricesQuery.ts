@@ -27,15 +27,9 @@ import {
   mayaPoolPricedTokens,
 } from '../maya/mayaPoolPricedTokens'
 import {
-  getThorchainSecuredAssetPrices,
+  getThorchainSecuredAssetFiatPrices,
   isThorchainSecuredAssetDenom,
 } from '../thor/getThorchainSecuredAssetPrices'
-
-// USD stablecoin used to convert USD-denominated prices (e.g. THORChain pool
-// `asset_tor_price`) into the selected fiat: its price in `fiatCurrency` is the
-// USD -> fiat rate.
-const usdAnchorPriceProviderId = 'usd-coin'
-const usdFiatCurrency: FiatCurrency = 'usd'
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[]
@@ -228,23 +222,16 @@ export function useCoinPricesQuery(
     queries.push({
       queryKey: ['thorchainSecuredAssetPrices', denoms, fiatCurrency],
       queryFn: async () => {
-        const usdPrices = await getThorchainSecuredAssetPrices(denoms)
-
-        // Pool prices are USD-denominated; convert to the selected fiat.
-        let usdToFiatRate = 1
-        if (fiatCurrency !== usdFiatCurrency) {
-          const anchorPrices = await getCoinPrices({
-            ids: [usdAnchorPriceProviderId],
-            fiatCurrency,
-          })
-          usdToFiatRate = anchorPrices[usdAnchorPriceProviderId] ?? 1
-        }
+        const prices = await getThorchainSecuredAssetFiatPrices({
+          denoms,
+          fiatCurrency,
+        })
 
         const result: Record<string, number> = {}
         for (const coin of thorSecuredTokens) {
-          const usdPrice = usdPrices[shouldBePresent(coin.id)]
-          if (usdPrice != null) {
-            result[coinKeyToString(coin)] = usdPrice * usdToFiatRate
+          const price = prices[shouldBePresent(coin.id)]
+          if (price != null) {
+            result[coinKeyToString(coin)] = price
           }
         }
 
