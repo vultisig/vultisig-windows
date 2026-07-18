@@ -24,14 +24,16 @@ describe('isBondedRuneReceiptCoin', () => {
     ).toBe(true)
   })
 
-  it('returns true when ticker is ybRUNE even if id is missing', () => {
-    expect(
-      isBondedRuneReceiptCoin({
-        chain: Chain.THORChain,
-        id: undefined,
-        ticker: 'ybRUNE',
-      })
-    ).toBe(true)
+  it('matches the ybRUNE ticker case-insensitively when id is missing', () => {
+    for (const ticker of ['ybRUNE', 'ybrune', 'YBRUNE']) {
+      expect(
+        isBondedRuneReceiptCoin({
+          chain: Chain.THORChain,
+          id: undefined,
+          ticker,
+        })
+      ).toBe(true)
+    }
   })
 
   it('returns false for liquid bRUNE and other chains', () => {

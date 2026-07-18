@@ -39,10 +39,10 @@ export const isBondedRuneReceiptCoin = (
  * receipt row).
  */
 export const withoutBondedRuneReceiptCoins = <T extends BondedRuneReceiptInput>(
-  coins: readonly T[]
+  coins: T[]
 ): T[] => {
   if (!coins.some(isBondedRuneReceiptCoin)) {
-    return coins as T[]
+    return coins
   }
 
   return coins.filter(coin => !isBondedRuneReceiptCoin(coin))
