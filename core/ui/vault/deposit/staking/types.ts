@@ -16,10 +16,19 @@ export type StakeSpecific =
 export type RujiInput =
   | { kind: 'stake'; amount: number }
   | {
+      // Auto-compounding (sRUJI) position — redeemed via `liquid.unbond`, so the
+      // entered underlying amount is converted to receipt shares.
       kind: 'unstake'
+      position: 'liquid'
       amount: number
       liquidShares: bigint
       liquidSize: bigint
+    }
+  | {
+      // Bonded (yielding) position — withdrawn via `account.withdraw`.
+      kind: 'unstake'
+      position: 'bonded'
+      amount: number
     }
   | { kind: 'claim' }
 

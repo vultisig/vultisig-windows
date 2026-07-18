@@ -106,7 +106,9 @@ export const useStakeBalance = (): StakeBalanceResult => {
       stakeId,
     }),
     ruji: () => ({
-      balance: rujiData?.humanReadableBalance ?? 0,
+      // RUJI surfaces two positions unstaked via different routes; the card the
+      // user came from sets `autocompound` (true → auto-compounding / sRUJI).
+      balance: (autocompound ? rujiData?.autoCompound : rujiData?.bonded) ?? 0,
       isLoading: isLoadingRuji,
       stakeId,
     }),

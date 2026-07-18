@@ -21,7 +21,13 @@ describe('getRujiSpecific unstake', () => {
   it('redeems the full sRUJI receipt via liquid.unbond on a max unstake', () => {
     const result = getRujiSpecific({
       coin: rujiCoin,
-      input: { kind: 'unstake', amount: 1, liquidShares, liquidSize },
+      input: {
+        kind: 'unstake',
+        position: 'liquid',
+        amount: 1,
+        liquidShares,
+        liquidSize,
+      },
     })
 
     expect(result).toEqual({
@@ -35,7 +41,13 @@ describe('getRujiSpecific unstake', () => {
   it('converts a partial underlying amount to proportional receipt shares', () => {
     const result = getRujiSpecific({
       coin: rujiCoin,
-      input: { kind: 'unstake', amount: 0.5, liquidShares, liquidSize },
+      input: {
+        kind: 'unstake',
+        position: 'liquid',
+        amount: 0.5,
+        liquidShares,
+        liquidSize,
+      },
     })
 
     expect(result).toEqual({
@@ -54,6 +66,7 @@ describe('getRujiSpecific unstake', () => {
         // 1 base unit / share price 2.0 floors to 0 sRUJI shares
         input: {
           kind: 'unstake',
+          position: 'liquid',
           amount: 0.00000001,
           liquidShares,
           liquidSize,
@@ -62,14 +75,13 @@ describe('getRujiSpecific unstake', () => {
     ).toThrow()
   })
 
-  it('withdraws the bonded position when there is no liquid position', () => {
+  it('withdraws the bonded position via account.withdraw', () => {
     const result = getRujiSpecific({
       coin: rujiCoin,
       input: {
         kind: 'unstake',
+        position: 'bonded',
         amount: 0.0787,
-        liquidShares: 0n,
-        liquidSize: 0n,
       },
     })
 
