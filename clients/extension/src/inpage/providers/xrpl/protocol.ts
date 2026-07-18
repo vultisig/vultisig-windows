@@ -1,51 +1,54 @@
 /**
  * Wire format spoken by the `@gemwallet/api` SDK.
  *
- * XRPL dApps reach GemWallet through that SDK, which talks to the wallet over a
- * bespoke `window.postMessage` protocol rather than an injected object API. The
- * envelopes below are therefore a hard contract: they are reproduced from the
- * shipped SDK, and anything that drifts from them makes us undetectable.
+ * The XRPL adapter is detectable as GemWallet: XRPL dApps reach it through that
+ * SDK, which talks over a bespoke `window.postMessage` protocol rather than an
+ * injected object API. The envelopes below are therefore a hard contract —
+ * reproduced from the shipped SDK, and anything that drifts from them makes us
+ * undetectable — so the `GEM_WALLET_*` string values must never change even
+ * though the surrounding identifiers are named for the adapter.
  */
 
 /** `app` tag the SDK stamps on every request it emits. */
-export const gemWalletApp = 'gem-wallet'
+export const xrplAppTag = 'gem-wallet'
 
 /** `source` tag on dApp → wallet messages. */
-export const gemWalletRequestSource = 'GEM_WALLET_MSG_REQUEST'
+export const xrplRequestSource = 'GEM_WALLET_MSG_REQUEST'
 
 /** `source` tag on wallet → dApp messages. */
-export const gemWalletResponseSource = 'GEM_WALLET_MSG_RESPONSE'
+export const xrplResponseSource = 'GEM_WALLET_MSG_RESPONSE'
 
 /**
- * Request types this bridge answers: detection, account reads, and the XRPL
- * transaction surface (sign / submit). Anything else — message signing, NFT
- * operations, bulk submits — is refused in `resolveGemWalletRequest` rather
- * than left to hang.
+ * Request types this adapter answers: detection, account reads, message
+ * signing, and the XRPL transaction surface (sign / submit). Anything else —
+ * NFT operations, trustlines, bulk submits — is refused in `resolveXrplRequest`
+ * rather than left to hang.
  */
-export const gemWalletRequestTypes = [
+export const xrplRequestTypes = [
   'REQUEST_IS_INSTALLED/V3',
   'REQUEST_GET_ADDRESS/V3',
   'REQUEST_GET_PUBLIC_KEY/V3',
   'REQUEST_GET_NETWORK/V3',
+  'REQUEST_SIGN_MESSAGE/V3',
   'REQUEST_SIGN_TRANSACTION/V3',
   'REQUEST_SUBMIT_TRANSACTION/V3',
 ] as const
 
-export type GemWalletRequestType = (typeof gemWalletRequestTypes)[number]
+export type XrplRequestType = (typeof xrplRequestTypes)[number]
 
 /**
  * A `GEM_WALLET_MSG_REQUEST` envelope, narrowed to the fields we act on.
- * `payload` is opaque here — the sign / submit handlers validate it — and
- * absent for the read methods.
+ * `payload` is opaque here — the sign / submit / message handlers validate it —
+ * and absent for the read methods.
  */
-type GemWalletRequest = {
+type XrplRequest = {
   messageId: number
   type: string
   payload?: unknown
 }
 
 /** Error shape the SDK hands to `deserializeError` and rethrows to the dApp. */
-export type GemWalletSerializedError = {
+export type XrplSerializedError = {
   name: string
   message: string
   stack?: string
@@ -56,31 +59,29 @@ export type GemWalletSerializedError = {
  * the SDK maps a result-less response to `{ type: 'reject' }`, which is the
  * branch dApps take when the user declines.
  */
-export type GemWalletResponseBody =
+export type XrplResponseBody =
   | { isInstalled: true; result: { isInstalled: true } }
   | { result: { address: string } }
   | { result: { address: string; publicKey: string } }
   | { result: { chain: string; network: string; websocket: string } }
+  | { result: { signedMessage: string } }
   | { result: { signature: string } }
   | { result: { hash: string } }
   | { result: undefined }
-  | { error: GemWalletSerializedError }
+  | { error: XrplSerializedError }
 
-const supportedRequestTypes: readonly string[] = gemWalletRequestTypes
+const supportedRequestTypes: readonly string[] = xrplRequestTypes
 
-/** Narrows a raw `type` string to a request type this bridge implements. */
-export const isGemWalletRequestType = (
-  type: string
-): type is GemWalletRequestType => supportedRequestTypes.includes(type)
+/** Narrows a raw `type` string to a request type this adapter implements. */
+export const isXrplRequestType = (type: string): type is XrplRequestType =>
+  supportedRequestTypes.includes(type)
 
 /**
- * Validates an inbound `message` payload as a GemWallet request, returning
+ * Validates an inbound `message` payload as an adapter request, returning
  * `null` for anything else on the page — including our own responses, which
  * land back on this same listener.
  */
-export const parseGemWalletRequest = (
-  data: unknown
-): GemWalletRequest | null => {
+export const parseXrplRequest = (data: unknown): XrplRequest | null => {
   if (typeof data !== 'object' || data === null) return null
   if (
     !(
@@ -94,7 +95,7 @@ export const parseGemWalletRequest = (
 
   const { source, app, messageId, type } = data
 
-  if (source !== gemWalletRequestSource || app !== gemWalletApp) return null
+  if (source !== xrplRequestSource || app !== xrplAppTag) return null
   if (typeof messageId !== 'number' || typeof type !== 'string') return null
 
   const payload = 'payload' in data ? data.payload : undefined
@@ -109,11 +110,11 @@ export const parseGemWalletRequest = (
  * SDK's own wire format (it posts `messageId` and filters replies on
  * `messagedId`), so spelling it correctly here would strand every request.
  */
-export const buildGemWalletResponse = (
+export const buildXrplResponse = (
   messageId: number,
-  body: GemWalletResponseBody
+  body: XrplResponseBody
 ) => ({
-  source: gemWalletResponseSource,
+  source: xrplResponseSource,
   messagedId: messageId,
   ...body,
 })

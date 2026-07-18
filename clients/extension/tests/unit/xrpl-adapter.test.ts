@@ -1,25 +1,29 @@
 // @vitest-environment happy-dom
 
 /**
- * Protocol contract for the GemWallet-compatible bridge.
+ * Protocol contract for the XRPL adapter's GemWallet-compatible bridge.
  *
  * These tests drive the real `@gemwallet/api` SDK — the same package XRPL dApps
- * import — against our injected bridge, so any drift in the wire format (the
+ * import — against our injected adapter, so any drift in the wire format (the
  * `messagedId` correlation key, the response envelope, the reject shape) fails
  * here rather than silently making us undetectable.
  */
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
-import { installGemWalletBridge } from '@clients/extension/src/inpage/providers/gemWallet'
 import {
-  gemWalletApp,
-  gemWalletRequestSource,
-  gemWalletResponseSource,
-} from '@clients/extension/src/inpage/providers/gemWallet/protocol'
+  createXrplProvider,
+  installXrplAdapter,
+} from '@clients/extension/src/inpage/providers/xrpl'
+import {
+  xrplAppTag,
+  xrplRequestSource,
+  xrplResponseSource,
+} from '@clients/extension/src/inpage/providers/xrpl/protocol'
 import {
   getAddress,
   getNetwork,
   getPublicKey,
   isInstalled,
+  signMessage,
   signTransaction,
   submitTransaction,
 } from '@gemwallet/api'
@@ -74,7 +78,7 @@ const sendRawRequest = (type: string, payload?: unknown) =>
     const messageId = Date.now() + Math.random()
 
     window.addEventListener('message', function listener(event: MessageEvent) {
-      if (event.data?.source !== gemWalletResponseSource) return
+      if (event.data?.source !== xrplResponseSource) return
       if (event.data?.messagedId !== messageId) return
 
       window.removeEventListener('message', listener)
@@ -83,9 +87,9 @@ const sendRawRequest = (type: string, payload?: unknown) =>
 
     window.postMessage(
       {
-        source: gemWalletRequestSource,
+        source: xrplRequestSource,
         messageId,
-        app: gemWalletApp,
+        app: xrplAppTag,
         type,
         payload,
       },
@@ -93,10 +97,10 @@ const sendRawRequest = (type: string, payload?: unknown) =>
     )
   })
 
-describe('GemWallet-compatible provider', () => {
+describe('XRPL adapter (GemWallet-compatible)', () => {
   beforeAll(() => {
     installBrowserFaithfulPostMessage()
-    installGemWalletBridge()
+    installXrplAdapter()
   })
 
   beforeEach(() => {
@@ -230,6 +234,65 @@ describe('GemWallet-compatible provider', () => {
     })
   })
 
+  describe('sign message', () => {
+    // Lowercase-hex signature the keysign popup returns; the bridge uppercases
+    // it to match every XRPL verifier's DER encoding.
+    const signature = 'abcdef1234567890'
+
+    beforeEach(() => {
+      mockCallPopup.mockResolvedValue(signature)
+    })
+
+    it('signMessage returns the uppercase signedMessage after authorization', async () => {
+      await expect(signMessage('gm from a dApp')).resolves.toEqual({
+        type: 'response',
+        result: { signedMessage: signature.toUpperCase() },
+      })
+
+      expect(mockRequestAccount).toHaveBeenCalledWith(OtherChain.Ripple)
+    })
+
+    it('forwards the message to the signMessage popup scoped to the vault', async () => {
+      await signMessage('gm from a dApp')
+
+      const [call, options] = mockCallPopup.mock.calls[0]
+      expect(call.signMessage.sign_message).toEqual({
+        chain: OtherChain.Ripple,
+        message: 'gm from a dApp',
+        isHex: false,
+      })
+      expect(options).toEqual({ account: address })
+    })
+
+    it('passes the hex flag through when the dApp sets it', async () => {
+      await signMessage('deadbeef', true)
+
+      const [call] = mockCallPopup.mock.calls[0]
+      expect(call.signMessage.sign_message).toMatchObject({
+        message: 'deadbeef',
+        isHex: true,
+      })
+    })
+
+    it('surfaces a declined signing popup as a reject', async () => {
+      mockCallPopup.mockRejectedValue(new EIP1193Error('UserRejectedRequest'))
+
+      await expect(signMessage('gm from a dApp')).resolves.toEqual({
+        type: 'reject',
+        result: undefined,
+      })
+    })
+
+    it('rejects a request with no message instead of forwarding it', async () => {
+      const response = await sendRawRequest('REQUEST_SIGN_MESSAGE/V3', {})
+
+      expect(response.error).toMatchObject({
+        message: expect.stringContaining('missing a message'),
+      })
+      expect(mockCallPopup).not.toHaveBeenCalled()
+    })
+  })
+
   describe('failures', () => {
     it('reports a declined grant as a reject, not a throw', async () => {
       mockRequestAccount.mockRejectedValue(
@@ -249,17 +312,17 @@ describe('GemWallet-compatible provider', () => {
     })
 
     it('answers unsupported methods instead of hanging the dApp', async () => {
-      const response = await sendRawRequest('REQUEST_SIGN_MESSAGE/V3')
+      const response = await sendRawRequest('REQUEST_SET_TRUSTLINE/V3')
 
       expect(response.error).toMatchObject({
         message: expect.stringContaining('not supported'),
       })
     })
 
-    it('ignores messages that are not GemWallet requests', async () => {
+    it('ignores messages that are not adapter requests', async () => {
       const responses: unknown[] = []
       window.addEventListener('message', (event: MessageEvent) => {
-        if (event.data?.source === gemWalletResponseSource)
+        if (event.data?.source === xrplResponseSource)
           responses.push(event.data)
       })
 
@@ -288,5 +351,95 @@ describe('GemWallet-compatible provider', () => {
 
     expect(addressResponse.result).toEqual({ address })
     expect(networkResponse.result).toMatchObject({ chain: 'XRPL' })
+  })
+})
+
+/**
+ * The Vultisig-native object API exposed at `window.vultisig.xrpl`. It shares
+ * the adapter's operations with the GemWallet postMessage bridge but hands the
+ * `result` payloads back directly and rejects (rather than returning a
+ * result-less "reject" shape) when the user declines.
+ */
+describe('window.vultisig.xrpl object API', () => {
+  const xrpl = createXrplProvider()
+
+  beforeEach(() => {
+    mockRequestAccount.mockReset()
+    mockRequestAccount.mockResolvedValue({ address, publicKey })
+    mockCallPopup.mockReset()
+  })
+
+  it('reports installed and the mainnet descriptor without prompting', async () => {
+    await expect(xrpl.isInstalled()).resolves.toBe(true)
+    await expect(xrpl.getNetwork()).resolves.toEqual({
+      chain: 'XRPL',
+      network: 'Mainnet',
+      websocket: 'wss://xrplcluster.com',
+    })
+
+    expect(mockRequestAccount).not.toHaveBeenCalled()
+  })
+
+  it('getAddress returns the vault XRP address after authorization', async () => {
+    await expect(xrpl.getAddress()).resolves.toEqual({ address })
+
+    expect(mockRequestAccount).toHaveBeenCalledWith(OtherChain.Ripple)
+  })
+
+  it('getPublicKey returns the address and uppercase public key', async () => {
+    await expect(xrpl.getPublicKey()).resolves.toEqual({
+      address,
+      publicKey: publicKey.toUpperCase(),
+    })
+  })
+
+  it('signMessage returns the uppercase signedMessage', async () => {
+    mockCallPopup.mockResolvedValue('abcdef')
+
+    await expect(xrpl.signMessage('gm from a dApp')).resolves.toEqual({
+      signedMessage: 'ABCDEF',
+    })
+
+    const [call, options] = mockCallPopup.mock.calls[0]
+    expect(call.signMessage.sign_message).toEqual({
+      chain: OtherChain.Ripple,
+      message: 'gm from a dApp',
+      isHex: false,
+    })
+    expect(options).toEqual({ account: address })
+  })
+
+  it('submitTransaction signs, broadcasts, and returns the hash', async () => {
+    const encoded = Buffer.from('vulti').toString('base64')
+    mockCallPopup.mockResolvedValue([{ hash: 'HASH', data: { encoded } }])
+
+    await expect(
+      xrpl.submitTransaction({ transaction: { TransactionType: 'Payment' } })
+    ).resolves.toEqual({ hash: 'HASH' })
+
+    const [call] = mockCallPopup.mock.calls[0]
+    expect(call.sendTx.serialized.skipBroadcast).toBe(false)
+  })
+
+  it('signTransaction returns the uppercase blob without broadcasting', async () => {
+    const encoded = Buffer.from('vulti').toString('base64')
+    mockCallPopup.mockResolvedValue([{ hash: 'HASH', data: { encoded } }])
+
+    await expect(
+      xrpl.signTransaction({ transaction: { TransactionType: 'Payment' } })
+    ).resolves.toEqual({
+      signature: Buffer.from(encoded, 'base64').toString('hex').toUpperCase(),
+    })
+
+    const [call] = mockCallPopup.mock.calls[0]
+    expect(call.sendTx.serialized.skipBroadcast).toBe(true)
+  })
+
+  it('propagates a declined prompt as a rejection', async () => {
+    mockRequestAccount.mockRejectedValue(
+      new EIP1193Error('UserRejectedRequest')
+    )
+
+    await expect(xrpl.getAddress()).rejects.toThrow()
   })
 })
