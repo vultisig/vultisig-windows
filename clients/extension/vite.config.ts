@@ -3,12 +3,14 @@ import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
-import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
-import { getCommonPlugins } from '../../core/ui/vite/plugins'
+import {
+  getCommonPlugins,
+  topLevelAwaitPlugins,
+} from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 import { getExtensionArtifactDirectoryName } from './src/brand/extensionArtifact'
 import {
@@ -118,7 +120,7 @@ export default defineConfig(async ({ mode }) => {
         plugins = [
           extensionNodePolyfills(isFirefoxBuild),
           wasm(),
-          topLevelAwait(),
+          ...topLevelAwaitPlugins(),
         ]
         break
       case 'inpage':
@@ -158,7 +160,6 @@ export default defineConfig(async ({ mode }) => {
         emptyOutDir: false,
         outDir: extensionOutDir,
         manifest: false,
-        minify: 'esbuild' as const,
         ...devBuildOptions,
         rollupOptions: {
           input: {
@@ -206,7 +207,6 @@ export default defineConfig(async ({ mode }) => {
         emptyOutDir: false,
         outDir: extensionOutDir,
         manifest: false,
-        minify: 'esbuild' as const,
         ...devBuildOptions,
         rollupOptions: {
           input: {
