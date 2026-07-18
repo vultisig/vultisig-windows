@@ -1,9 +1,9 @@
 import { toBinary } from '@bufbuild/protobuf'
-import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { buildSendKeysignPayload } from '@vultisig/core-mpc/keysign/send/build'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
+import { parseAgentChainAmount } from '../shared/parseAgentChainAmount'
 import { resolveAccountCoin } from '../shared/resolveAccountCoin'
 import { getWalletContext } from '../shared/walletContext'
 import type { ToolHandler } from '../types'
@@ -26,11 +26,10 @@ export const handleBuildSendTx: ToolHandler = async (input, context) => {
     )
   }
 
-  const parsedAmount = parseFloat(amountStr)
-  if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
-    throw new Error(`Invalid amount: ${amountStr}`)
-  }
-  const amount = toChainAmount(parsedAmount, coin.decimals)
+  const amount = parseAgentChainAmount({
+    amount: amountStr,
+    decimals: coin.decimals,
+  })
 
   const { walletCore, vault } = getWalletContext()
 

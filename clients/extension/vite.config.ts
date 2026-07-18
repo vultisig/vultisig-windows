@@ -145,6 +145,7 @@ export default defineConfig(async ({ mode }) => {
         copyPublicDir: false,
         emptyOutDir: false,
         manifest: false,
+        minify: 'esbuild' as const,
         ...devBuildOptions,
         rollupOptions: {
           input: {
@@ -190,6 +191,7 @@ export default defineConfig(async ({ mode }) => {
         target: 'esnext',
         emptyOutDir: false,
         manifest: false,
+        minify: 'esbuild' as const,
         ...devBuildOptions,
         rollupOptions: {
           input: {
