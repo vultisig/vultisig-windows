@@ -1,5 +1,4 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCore } from '@core/ui/state/core'
 import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
 import { useVaultBackupOverride } from '@core/ui/vault/import/state/vaultBackupOverride'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
@@ -17,7 +16,6 @@ export const SaveImportedVaultStep = ({
   onFinish,
 }: ValueProp<Vault> & { onFinish?: () => void }) => {
   const { t } = useTranslation()
-  const { client } = useCore()
   const navigate = useCoreNavigate()
   const override = useVaultBackupOverride()
 
@@ -43,10 +41,7 @@ export const SaveImportedVaultStep = ({
         name: existingVault.name || finalValue.name,
       })
     }
-    if (client === 'extension' && value.libType === 'GG20') {
-      return t('extension_vault_import_restriction')
-    }
-  }, [client, finalValue, t, value.libType, initialVaults])
+  }, [finalValue, t, initialVaults])
 
   if (error) {
     return (
