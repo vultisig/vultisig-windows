@@ -1,3 +1,4 @@
+import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { withoutThorchainLpCoins } from '@core/ui/chain/coin/thorchain/isThorchainLpCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -24,16 +25,18 @@ export const useCurrentVaultCoins = () => {
 }
 
 /**
- * {@link useCurrentVaultCoins} minus DeFi-only THORChain entries: the RUJI
- * staking receipt (sRUJI) and Rujira LP tokens (`LP-…`). Use for portfolio UX:
- * balances, fiat totals, swap/send pickers, refresh. LP positions are surfaced
- * under `DeFi → LPs` instead. Keep {@link useCurrentVaultCoins} for
+ * {@link useCurrentVaultCoins} minus DeFi-only THORChain entries: the staking
+ * receipts sRUJI and ybRUNE, and Rujira LP tokens (`LP-…`). Use for portfolio
+ * UX: balances, fiat totals, swap/send pickers, refresh. LP positions are
+ * surfaced under `DeFi → LPs` instead. Keep {@link useCurrentVaultCoins} for
  * storage-accurate flows (manage tokens, CoinFinder dedupe, resolving a send
  * `coin` key that may still reference a legacy receipt/LP row).
  */
 export const usePortfolioVaultCoins = () =>
   withoutThorchainLpCoins(
-    withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+    withoutBondedRuneReceiptCoins(
+      withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+    )
   )
 
 export const usePortfolioVaultChainCoins = (chain: string) =>
