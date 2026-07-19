@@ -10,6 +10,10 @@ const chainsWithChainLogo = [
   // The Open Network keeps its TON chain logo even though its native token
   // rebranded TON -> GRAM, so the chain icon is decoupled from the fee-coin logo.
   Chain.Ton,
+  // Terra and Terra Classic keep their own chain logos so the corrected LUNA/LUNC
+  // fee-coin logos don't override the chain icons.
+  Chain.Terra,
+  Chain.TerraClassic,
 ] as const
 
 export const getChainLogoSrc = (chain: Chain) => {
