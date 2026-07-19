@@ -79,8 +79,9 @@ export default defineConfig(async ({ mode }) => {
       },
     },
     build: {
-      // The SDK's WASM graph now includes top-level-await wrapper code that
-      // vite-plugin-top-level-await cannot downlevel to Vite's old default target.
+      // The SDK's WASM graph contains native top-level await. `esnext` stops
+      // esbuild from downleveling (and erroring on) it; the module <script> in
+      // the webview evaluates it natively at runtime.
       target: 'esnext',
       outDir: 'dist',
       assetsDir: 'assets',

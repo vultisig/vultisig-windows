@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react'
 import vultisigSdk from '@vultisig/sdk/vite'
 import { PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
 type GetCommonPluginsInput = {
@@ -25,6 +24,8 @@ export const getCommonPlugins = ({
     },
   }),
   nodePolyfillsPlugin,
+  // The SDK/WASM graph uses native top-level await. Every consumer builds with
+  // `target: 'esnext'` and ships ES modules (module service worker / module
+  // <script>), so the runtime evaluates TLA natively — no downlevel plugin needed.
   wasm(),
-  topLevelAwait(),
 ]
