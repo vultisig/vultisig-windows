@@ -23,7 +23,7 @@ import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
-import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
+import { Chain, EvmChain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
@@ -40,6 +40,25 @@ import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
 import { usePopupContext } from '../../../state/context'
 import { isTrustedProductOrigin } from '../utils'
 
+/**
+ * Raw message bytes for an XRPL `signMessage`, mirroring GemWallet: a hex
+ * string is decoded verbatim, otherwise the text is UTF-8 encoded.
+ */
+const getRippleMessageBytes = ({
+  message,
+  isHex,
+}: {
+  message: string
+  isHex?: boolean
+}): Uint8Array =>
+  isHex
+    ? getBytes(
+        message.startsWith('0x') || message.startsWith('0X')
+          ? message
+          : `0x${message}`
+      )
+    : toUtf8Bytes(message)
+
 export const Overview = () => {
   const { t } = useTranslation()
   const input = usePopupInput<'signMessage'>()
@@ -51,7 +70,7 @@ export const Overview = () => {
   const vault = useCurrentVault()
   const message = matchRecordUnion<SignMessageInput, string>(input, {
     eth_signTypedData_v4: ({ message }) => JSON.stringify(message),
-    sign_message: ({ message, chain, useTronHeader, isV2 }) => {
+    sign_message: ({ message, chain, useTronHeader, isV2, isHex }) => {
       if (chain === Chain.Tron) {
         if (isV2) {
           const msgBytes = toUtf8Bytes(message)
@@ -66,6 +85,11 @@ export const Overview = () => {
           ...hexStr2byteArray(message),
         ]
         return hexlify(new Uint8Array(messageBytes))
+      }
+      // XRPL signs SHA-512-half of the raw message bytes (done in
+      // `getCustomMessageHex`); carry those exact bytes through as hex.
+      if (chain === OtherChain.Ripple) {
+        return hexlify(getRippleMessageBytes({ message, isHex }))
       }
       return message
     },
@@ -96,7 +120,12 @@ export const Overview = () => {
         ? message
         : JSON.stringify(message, null, 2)
     },
-    sign_message: ({ message: rawMessage, isV2 }) => {
+    sign_message: ({ message: rawMessage, isV2, chain, isHex }) => {
+      if (chain === OtherChain.Ripple) {
+        return toDisplayMessageString(
+          getRippleMessageBytes({ message: rawMessage, isHex })
+        )
+      }
       if (isV2) return rawMessage
       return message
     },
