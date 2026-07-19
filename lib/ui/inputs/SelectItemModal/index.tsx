@@ -1,6 +1,13 @@
+import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
-import { OnFinishProp, OptionsProp, TitleProp } from '@lib/ui/props'
+import {
+  IsLoadingProp,
+  OnFinishProp,
+  OptionsProp,
+  TitleProp,
+} from '@lib/ui/props'
 import { SearchField } from '@lib/ui/search/SearchField'
 import { FC, ReactNode, useMemo, useRef, useState } from 'react'
 import { Virtuoso } from 'react-virtuoso'
@@ -8,13 +15,15 @@ import styled from 'styled-components'
 
 type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
   OptionsProp<T> &
-  TitleProp & {
+  TitleProp &
+  IsLoadingProp & {
     optionComponent: FC<{ value: T; onClick: () => void }>
     filterFunction: (option: T, query: string) => boolean
     renderListHeader?: () => ReactNode
     renderFooter?: () => ReactNode
     virtualizePageSize?: number
     getKey?: (option: T, index: number) => string
+    loadingLabel?: string
   }
 
 const modalOptionsListHeight = 400
@@ -27,11 +36,19 @@ const Content = styled(VStack)`
   min-height: 0;
 `
 
-const ListWrapper = styled.div`
+const ListArea = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 320px;
+`
+
+const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 `
 
@@ -48,6 +65,8 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
     renderListHeader,
     virtualizePageSize,
     getKey,
+    isLoading,
+    loadingLabel,
   } = props
 
   const [searchQuery, setSearchQuery] = useState('')
@@ -68,37 +87,56 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         {renderListHeader?.() || <div />}
 
-        <ListWrapper>
-          {useVirtual ? (
-            <Virtuoso
-              style={{ flex: 1 }}
-              totalCount={filtered.length}
-              data={filtered}
-              increaseViewportBy={
-                virtualizePageSize ?? defaultIncreaseViewportForVirtualizedList
-              }
-              itemContent={(index, item) => (
-                <OptionComponent
-                  value={item}
-                  onClick={() => onFinishRef.current(item)}
-                />
-              )}
-              components={{
-                List: StyledList,
-              }}
-            />
-          ) : (
-            <NonVirtualList>
-              {filtered.map((option, index) => (
-                <OptionComponent
-                  key={getKey?.(option, index) || option?.id || index}
-                  value={option}
-                  onClick={() => onFinishRef.current(option)}
-                />
-              ))}
-            </NonVirtualList>
-          )}
-        </ListWrapper>
+        <ListArea aria-busy={isLoading}>
+          {/* While loading, the list still shows the previous chain's items.
+              Make it inert so keyboard/assistive tech can't focus or activate a
+              stale option and close the modal, and guard onFinish as a backstop. */}
+          <ListWrapper inert={isLoading}>
+            {useVirtual ? (
+              <Virtuoso
+                style={{ flex: 1 }}
+                totalCount={filtered.length}
+                data={filtered}
+                increaseViewportBy={
+                  virtualizePageSize ??
+                  defaultIncreaseViewportForVirtualizedList
+                }
+                itemContent={(index, item) => (
+                  <OptionComponent
+                    value={item}
+                    onClick={() => {
+                      if (!isLoading) onFinishRef.current(item)
+                    }}
+                  />
+                )}
+                components={{
+                  List: StyledList,
+                }}
+              />
+            ) : (
+              <NonVirtualList>
+                {filtered.map((option, index) => (
+                  <OptionComponent
+                    key={getKey?.(option, index) || option?.id || index}
+                    value={option}
+                    onClick={() => {
+                      if (!isLoading) onFinishRef.current(option)
+                    }}
+                  />
+                ))}
+              </NonVirtualList>
+            )}
+          </ListWrapper>
+          {isLoading ? (
+            <CenterAbsolutely
+              role="status"
+              aria-live="polite"
+              aria-label={loadingLabel}
+            >
+              <Spinner size="2.5em" />
+            </CenterAbsolutely>
+          ) : null}
+        </ListArea>
 
         {renderFooter?.()}
       </Content>

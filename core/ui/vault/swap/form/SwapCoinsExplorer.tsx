@@ -16,7 +16,7 @@ import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -45,26 +45,45 @@ export const SwapCoinsExplorer = ({
   const { mutateAsync: createCoin } = useCreateCoinMutation()
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
 
-  const { data: whitelisted } = useWhitelistedCoinsQuery(currentChain)
+  // The carousel/highlight tracks the live `currentChain` so the selection
+  // feels instant, while the heavy token list re-renders off `deferredChain`
+  // in a low-priority pass, so switching chains never blocks on the list.
+  const deferredChain = useDeferredValue(currentChain)
 
-  const sortedSwapCoins = useSortedByBalanceCoins(currentChain)
+  const {
+    data: whitelisted,
+    isPlaceholderData,
+    isPending,
+  } = useWhitelistedCoinsQuery(deferredChain)
+
+  // Keep the loading overlay up while the list doesn't yet reflect the selected
+  // chain: during the deferred render pass (`currentChain !== deferredChain`),
+  // while a warm switch serves the previous chain's data (`isPlaceholderData`),
+  // and on a cold switch where the new query has no data yet (`isPending`) so an
+  // incomplete list can't flash before the whitelist arrives.
+  const isCoinListLoading =
+    currentChain !== deferredChain || isPlaceholderData || isPending
+
+  const sortedSwapCoins = useSortedByBalanceCoins(deferredChain)
   const options = useMemo(() => {
-    const vaultCoinsForChain = coins.filter(c => c.chain === currentChain)
+    const vaultCoinsForChain = coins.filter(c => c.chain === deferredChain)
 
     const allOptions = withoutDuplicates(
       [
         ...sortedSwapCoins,
-        ...(knownTokens[currentChain] ?? []).filter(
+        ...(knownTokens[deferredChain] ?? []).filter(
           coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
         ),
         ...(whitelisted ?? []).filter(
-          coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
+          coin =>
+            coin.chain === deferredChain &&
+            !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
         ),
       ],
       areEqualCoins
     )
 
-    if (currentChain === Chain.Solana) {
+    if (deferredChain === Chain.Solana) {
       const hasNativeSol = allOptions.some(
         coin => coin.chain === Chain.Solana && !coin.id && isFeeCoin(coin)
       )
@@ -81,7 +100,7 @@ export const SwapCoinsExplorer = ({
     }
 
     return allOptions
-  }, [currentChain, sortedSwapCoins, whitelisted, coins])
+  }, [deferredChain, sortedSwapCoins, whitelisted, coins])
 
   const { t } = useTranslation()
 
@@ -96,6 +115,7 @@ export const SwapCoinsExplorer = ({
   const { footerRef, scrollToKey, strokeRef, onKeyDown, setItemRef } =
     useCenteredSnapCarousel({
       chain: currentChain,
+      items: coinOptions.map(c => c.chain),
       onSelect: chain => {
         const coin = coinOptions.find(o => o.chain === chain)
         if (coin) onChange(coin)
@@ -110,6 +130,8 @@ export const SwapCoinsExplorer = ({
 
   return (
     <SelectItemModal
+      isLoading={isCoinListLoading}
+      loadingLabel={t('loading')}
       virtualizePageSize={20}
       filterFunction={filterByTicker}
       title={t('select_asset')}
@@ -201,18 +223,32 @@ const CarouselWrapper = styled.div`
 
 const FooterItem = styled.div<IsActiveProp>`
   ${hStack({ gap: 6, alignItems: 'center' })};
+  position: relative;
+  isolation: isolate;
   flex-shrink: 0;
   scroll-snap-stop: always;
   cursor: pointer;
   padding: 8px 12px 8px 8px;
   border-radius: 99px;
-  transition: background 0.2s ease;
   outline: none;
 
   scroll-snap-align: center;
   scroll-snap-stop: always;
 
-  &:hover {
+  /* Hover fill sits behind the content and extends 6px past each side so it
+     matches the current-chain ring width (pill width + strokeAdditionalSpace,
+     which is 12px total / 6px per side). */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 -6px;
+    border-radius: 99px;
+    z-index: -1;
+    background: transparent;
+    transition: background 0.2s ease;
+  }
+
+  &:hover::before {
     ${({ isActive, theme }) =>
       !isActive &&
       `
@@ -237,10 +273,11 @@ const CenterStroke = styled.div`
   border-radius: 99px;
   background: rgba(6, 27, 58, 0.02);
   box-shadow: 0 0 14px 0 rgba(33, 85, 223, 0.45);
-  transition:
-    width 200ms ease,
-    box-shadow 200ms ease;
-  will-change: width;
+  /* Width is written imperatively (setStrokeToKey) off the live chain, so snap
+     it instantly instead of animating width on the main thread: a width
+     transition gets janked by the deferred token-list render, which made the
+     ring appear to resize only after tokens loaded. Only the glow transitions. */
+  transition: box-shadow 200ms ease;
   width: 44px;
 `
 
