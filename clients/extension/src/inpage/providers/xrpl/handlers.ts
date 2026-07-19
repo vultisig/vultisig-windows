@@ -1,19 +1,10 @@
 import { OtherChain } from '@vultisig/core-chain/Chain'
 
 import { requestAccount } from '../core/requestAccount'
-import { GemWalletRequestType, GemWalletResponseBody } from './protocol'
+import { xrplMainnet } from './network'
+import { XrplRequestType, XrplResponseBody } from './protocol'
+import { signRippleMessage } from './signRippleMessage'
 import { signRippleTransaction } from './signRippleTransaction'
-
-/**
- * We only ever derive XRPL mainnet accounts, so the network answer is constant.
- * `websocket` is the public mainnet cluster the SDK's own constants point at —
- * dApps read it back to open their own `xrpl.js` client.
- */
-const xrplMainnet = {
-  chain: 'XRPL',
-  network: 'Mainnet',
-  websocket: 'wss://xrplcluster.com',
-}
 
 const getRippleAccount = () => requestAccount(OtherChain.Ripple)
 
@@ -32,25 +23,47 @@ const getRequestedTransaction = (payload: unknown): unknown => {
     // popup instead of this clear error.
     payload.transaction == null
   ) {
-    throw new Error('GemWallet transaction request is missing a transaction')
+    throw new Error('XRPL transaction request is missing a transaction')
   }
 
   return payload.transaction
 }
 
 /**
- * Resolvers for the GemWallet request types this bridge implements, keyed by
- * request type and handed the request payload (`undefined` for the reads).
+ * The sign-message request payload the SDK sends: `{ message, isHex, ... }`.
+ * `message` is required; `isHex` is optional and only `true` opts into hex.
+ */
+const getRequestedMessage = (
+  payload: unknown
+): { message: string; isHex: boolean } => {
+  if (
+    typeof payload !== 'object' ||
+    payload === null ||
+    !('message' in payload) ||
+    typeof payload.message !== 'string'
+  ) {
+    throw new Error('XRPL sign-message request is missing a message')
+  }
+
+  return {
+    message: payload.message,
+    isHex: 'isHex' in payload && payload.isHex === true,
+  }
+}
+
+/**
+ * Resolvers for the XRPL request types this adapter implements, keyed by request
+ * type and handed the request payload (`undefined` for the reads).
  *
  * Every vault-touching method routes through `requestAccount` /
- * `signRippleTransaction`, so an unauthorized origin gets the standard
- * grant-access popup and nothing is read or signed until the user approves.
- * `isInstalled` and `getNetwork` expose nothing vault-specific and answer
- * without a prompt.
+ * `signRippleTransaction` / `signRippleMessage`, so an unauthorized origin gets
+ * the standard grant-access popup and nothing is read or signed until the user
+ * approves. `isInstalled` and `getNetwork` expose nothing vault-specific and
+ * answer without a prompt.
  */
-export const gemWalletHandlers: Record<
-  GemWalletRequestType,
-  (payload: unknown) => Promise<GemWalletResponseBody>
+export const xrplRequestHandlers: Record<
+  XrplRequestType,
+  (payload: unknown) => Promise<XrplResponseBody>
 > = {
   'REQUEST_IS_INSTALLED/V3': async () => ({
     // The shipped SDK reads a flat `isInstalled`, while its published types
@@ -71,6 +84,13 @@ export const gemWalletHandlers: Record<
     return { result: { address, publicKey: publicKey.toUpperCase() } }
   },
   'REQUEST_GET_NETWORK/V3': async () => ({ result: xrplMainnet }),
+  'REQUEST_SIGN_MESSAGE/V3': async payload => {
+    const { message, isHex } = getRequestedMessage(payload)
+
+    const signedMessage = await signRippleMessage({ message, isHex })
+
+    return { result: { signedMessage } }
+  },
   'REQUEST_SIGN_TRANSACTION/V3': async payload => {
     const { signature } = await signRippleTransaction({
       transaction: getRequestedTransaction(payload),
