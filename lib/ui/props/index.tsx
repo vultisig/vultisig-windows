@@ -76,6 +76,10 @@ export type IsDisabledProp = {
   isDisabled?: boolean | string
 }
 
+export type IsLoadingProp = {
+  isLoading?: boolean
+}
+
 export type OnRemoveProp = {
   onRemove: () => void
 }

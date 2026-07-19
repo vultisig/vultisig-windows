@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 
 import { fetchWhitelistedCoins } from './fetchWhitelistedCoins'
@@ -8,5 +8,6 @@ export const useWhitelistedCoinsQuery = (chain: Chain, enabled?: boolean) => {
     queryKey: ['whitelistedCoins', chain],
     enabled,
     queryFn: () => fetchWhitelistedCoins(chain),
+    placeholderData: keepPreviousData,
   })
 }
