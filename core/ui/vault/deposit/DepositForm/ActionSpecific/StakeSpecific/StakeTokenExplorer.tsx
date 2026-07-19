@@ -1,7 +1,4 @@
-import {
-  stakeableAssetsTickers,
-  StakeableAssetTicker,
-} from '@core/ui/vault/deposit/config'
+import { isStakeableCoin } from '@core/ui/vault/deposit/config'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -26,9 +23,7 @@ export const StakeTokenExplorer: FC<Props> = ({
 }) => {
   const [depositCoin] = useDepositCoin()
   const coins = useCurrentVaultChainCoins(depositCoin.chain).filter(coin =>
-    stakeableAssetsTickers.includes(
-      coin.ticker.toUpperCase() as StakeableAssetTicker
-    )
+    isStakeableCoin(coin.ticker)
   )
   const { t } = useTranslation()
 

@@ -31,11 +31,15 @@ export const selectStakeId = (
 
   const denom = getDenom(coin as CoinKey<CosmosChain>)
 
+  const bruneByTicker =
+    coin.ticker?.toUpperCase() ===
+    knownCosmosTokens['THORChain']['x/brune'].ticker.toUpperCase()
+
   const bruneByDenom =
     denom === bruneBondConfig.depositDenom ||
     coin.id === bruneBondConfig.depositDenom
 
-  if (bruneByDenom) return 'brune'
+  if (bruneByTicker || bruneByDenom) return 'brune'
 
   const rujiByTicker =
     coin.ticker?.toUpperCase() ===

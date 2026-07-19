@@ -59,8 +59,16 @@ describe('selectStakeId for bRUNE', () => {
     expect(selectStakeId(bruneCoin)).toBe('brune')
   })
 
-  it('routes regardless of the coin ticker casing (bRUNE vs BRUNE)', () => {
-    expect(selectStakeId({ ...bruneCoin, ticker: 'bRUNE' })).toBe('brune')
+  it('routes by the bRUNE ticker when id/denom do not match depositDenom', () => {
+    // id + resolved denom differ from depositDenom, so only the ticker path
+    // can succeed here.
+    expect(
+      selectStakeId({
+        ...bruneCoin,
+        id: 'x/not-the-brune-denom',
+        ticker: 'bRUNE',
+      })
+    ).toBe('brune')
   })
 })
 
