@@ -63,10 +63,11 @@ export const UnstakeSpecific = () => {
         THORChain={() => (
           <>
             <Match
-              value={selectedCoinTicker as StakeableAssetTicker}
+              value={selectedCoinTicker.toUpperCase() as StakeableAssetTicker}
               TCY={() => <UnstakeTCYSpecific />}
               RUJI={() => null}
               GRAM={() => null}
+              BRUNE={() => null}
             />
           </>
         )}

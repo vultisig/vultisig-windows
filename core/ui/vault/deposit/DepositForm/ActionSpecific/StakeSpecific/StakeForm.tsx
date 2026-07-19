@@ -63,7 +63,11 @@ export const StakeForm = ({
   useEffect(() => {
     if (stakeId === 'stcy') {
       setValue('autoCompound', true, { shouldValidate: false })
-    } else if (stakeId === 'native-tcy' || stakeId === 'ruji') {
+    } else if (
+      stakeId === 'native-tcy' ||
+      stakeId === 'ruji' ||
+      stakeId === 'brune'
+    ) {
       setValue('autoCompound', false, { shouldValidate: false })
     }
   }, [stakeId, setValue])

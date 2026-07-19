@@ -26,7 +26,9 @@ export const StakeTokenExplorer: FC<Props> = ({
 }) => {
   const [depositCoin] = useDepositCoin()
   const coins = useCurrentVaultChainCoins(depositCoin.chain).filter(coin =>
-    stakeableAssetsTickers.includes(coin.ticker as StakeableAssetTicker)
+    stakeableAssetsTickers.includes(
+      coin.ticker.toUpperCase() as StakeableAssetTicker
+    )
   )
   const { t } = useTranslation()
 

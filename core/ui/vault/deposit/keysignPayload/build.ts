@@ -73,6 +73,7 @@ import {
 } from '../ChainAction'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
+  BruneInput,
   NativeTcyInput,
   RujiInput,
   StakeKind,
@@ -284,7 +285,7 @@ export const buildDepositKeysignPayload = async ({
 
     const stakeSpecific = resolvers[stakeId]
 
-    let input: RujiInput | NativeTcyInput | StcyInput | null = null
+    let input: RujiInput | NativeTcyInput | StcyInput | BruneInput | null = null
 
     // RUJI has two independent positions unstaked via different routes: the
     // bonded position via `account.withdraw` and the auto-compounding position
@@ -302,7 +303,7 @@ export const buildDepositKeysignPayload = async ({
         input = { kind: 'stake', amount: shouldBePresent(amount) }
       },
       unstake: () => {
-        if (stakeId === 'stcy') {
+        if (stakeId === 'stcy' || stakeId === 'brune') {
           input = { kind: 'unstake', amount: shouldBePresent(amount) }
         } else if (stakeId === 'native-tcy') {
           const raw = depositData['percentage']
@@ -344,9 +345,14 @@ export const buildDepositKeysignPayload = async ({
     })
 
     if (intent.kind === 'wasm') {
+      // Surface the amount + destination on the verify/joiner screens, which
+      // read `toAmount`/`toAddress` and do NOT decode the wasm contract
+      // payload. The Cosmos signer builds a GENERIC_CONTRACT tx purely from
+      // `contractPayload` and ignores these two fields, so they are
+      // display-only and never change what gets signed.
       keysignPayload.memo = ''
-      keysignPayload.toAddress = ''
-      keysignPayload.toAmount = '0'
+      keysignPayload.toAddress = intent.contract
+      keysignPayload.toAmount = amountUnits ?? '0'
       keysignPayload.contractPayload = {
         case: 'wasmExecuteContractPayload',
         value: create(WasmExecuteContractPayloadSchema, {
