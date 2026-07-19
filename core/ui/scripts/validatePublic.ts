@@ -124,6 +124,8 @@ const main = async () => {
       ...Object.values(EthereumL2Chain),
       Chain.MayaChain,
       Chain.Ton,
+      Chain.Terra,
+      Chain.TerraClassic,
     ]
       .map(getChainLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
