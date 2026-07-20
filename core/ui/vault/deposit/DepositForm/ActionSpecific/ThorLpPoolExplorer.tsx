@@ -23,7 +23,7 @@ export const ThorLpPoolExplorer: FC<Props> = ({
 
   return (
     <Modal onClose={onClose} title={t('select_pool')}>
-      <VStack gap={8}>
+      <VStack gap={8} flexGrow scrollable>
         {pools.length > 0 ? (
           pools.map(pool => (
             <DepositActionOption
