@@ -49,6 +49,12 @@ type VerifyTransactionOverviewProps = {
   receiverAddressLabel?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>
+  /**
+   * Overrides how the signed amount is read from the payload. Wasm contract
+   * executes leave `toAmount` empty and carry the amount in `contractPayload`,
+   * so the caller supplies a reader that derives it from the signed payload.
+   */
+  getPayloadAmount?: (payload: KeysignPayload) => bigint | number | string
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
   children?: ReactNode
 }
@@ -64,6 +70,7 @@ export const VerifyTransactionOverview = ({
   receiverAddressLabel,
   chain,
   keysignPayloadQuery,
+  getPayloadAmount,
   renderFeeExtra,
   children,
 }: VerifyTransactionOverviewProps) => {
@@ -99,6 +106,7 @@ export const VerifyTransactionOverview = ({
         coin={coin}
         fallbackAmount={formattedAmount}
         keysignPayloadQuery={keysignPayloadQuery}
+        getPayloadAmount={getPayloadAmount}
       />
       <TransactionOverviewItem
         label={t('from')}
