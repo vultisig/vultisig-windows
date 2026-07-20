@@ -30,10 +30,10 @@ import { useTranslation } from 'react-i18next'
 
 import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
+import { getWasmExecuteTxDisplay } from '../../tx/getWasmExecuteTxDisplay'
 import { SignRippleDisplay } from '../../tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '../../tx/sui/parser'
 import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
-import { useWasmExecuteTxDisplay } from '../../tx/useWasmExecuteTxDisplay'
 
 /**
  * Joiner verify view for a regular transfer. Renders the same card-based
@@ -56,9 +56,11 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   // A wasm contract execute (e.g. stake/unstake) is signed purely from
   // `contractPayload`, so derive the amount / asset / destination the co-signer
   // verifies from it rather than the (empty, spoofable) toAmount/toAddress.
-  const wasmDisplay = useWasmExecuteTxDisplay(value)
+  const wasmDisplay = getWasmExecuteTxDisplay(value)
   const displayCoin = wasmDisplay?.coin ?? coin
-  const displayAmount = wasmDisplay?.amount ?? BigInt(value.toAmount)
+  const displayAmount = wasmDisplay
+    ? BigInt(wasmDisplay.fundAmount)
+    : BigInt(value.toAmount)
   const displayReceiver = wasmDisplay?.receiver ?? toAddress
 
   const receiverVaultName = useVaultNameForAddress({
@@ -162,6 +164,9 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         receiverAddressBookName={receiverAddressBookName ?? undefined}
         chain={coin.chain}
         keysignPayloadQuery={keysignPayloadQuery}
+        getPayloadAmount={
+          wasmDisplay ? () => wasmDisplay.fundAmount : undefined
+        }
         renderFeeExtra={
           showFeeIcon
             ? () => (

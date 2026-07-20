@@ -28,10 +28,10 @@ import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
+import { getWasmExecuteTxDisplay } from './getWasmExecuteTxDisplay'
 import { SignRippleDisplay } from './ripple/SignRippleDisplay'
 import { parseSuiTx } from './sui/parser'
 import { SignSuiDisplay } from './sui/SignSuiDisplay'
-import { useWasmExecuteTxDisplay } from './useWasmExecuteTxDisplay'
 
 type KeysignTxOverviewProps = {
   toAddressLabel?: string
@@ -54,12 +54,12 @@ export const KeysignTxOverview = ({
   // A wasm contract execute (e.g. stake/unstake) is signed purely from
   // `contractPayload`; derive its amount / asset / destination from that same
   // payload so display can't diverge from what is signed.
-  const wasmDisplay = useWasmExecuteTxDisplay(keysignPayload)
+  const wasmDisplay = getWasmExecuteTxDisplay(keysignPayload)
   const displayCoin = wasmDisplay?.coin ?? coin
   const displayToAddress = wasmDisplay?.receiver ?? toAddress ?? ''
 
   const formattedToAmount = wasmDisplay
-    ? fromChainAmount(wasmDisplay.amount, displayCoin.decimals)
+    ? fromChainAmount(BigInt(wasmDisplay.fundAmount), displayCoin.decimals)
     : toAmount
       ? fromChainAmount(BigInt(toAmount), displayCoin.decimals)
       : null
