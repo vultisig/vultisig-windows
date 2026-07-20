@@ -66,6 +66,12 @@ jobs:
       - name: Run typecheck
         run: yarn typecheck
 
+      - name: Check i18n integrity
+        run: yarn workspace @core/ui i18n:check
+
+      - name: Review translation quality
+        run: yarn i18n:review-quality --strict
+
       - name: Run code health detectors
         run: yarn quality:health
 
