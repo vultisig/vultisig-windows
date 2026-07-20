@@ -26,6 +26,7 @@ type CommonRequest = {
   networkID?: number
 }
 
+/** GemWallet `sendPayment` payload, mapped to an XRPL `Payment`. */
 export type SendPaymentRequest = CommonRequest & {
   amount: XrplAmount
   destination: string
@@ -37,6 +38,7 @@ export type SendPaymentRequest = CommonRequest & {
   flags?: number | Record<string, boolean>
 }
 
+/** GemWallet `setTrustline` payload, mapped to an XRPL `TrustSet`. */
 export type SetTrustlineRequest = CommonRequest & {
   limitAmount: { currency: string; issuer: string; value: string }
   qualityIn?: number
@@ -44,6 +46,7 @@ export type SetTrustlineRequest = CommonRequest & {
   flags?: number | Record<string, boolean>
 }
 
+/** GemWallet `createOffer` payload, mapped to an XRPL `OfferCreate`. */
 export type CreateOfferRequest = CommonRequest & {
   takerGets: XrplAmount
   takerPays: XrplAmount
@@ -52,6 +55,7 @@ export type CreateOfferRequest = CommonRequest & {
   flags?: number | Record<string, boolean>
 }
 
+/** GemWallet `cancelOffer` payload, mapped to an XRPL `OfferCancel`. */
 export type CancelOfferRequest = CommonRequest & {
   offerSequence: number
 }
@@ -80,18 +84,17 @@ const normalizeAmount = (amount: XrplAmount): XrplAmount =>
 
 // ---- payload validation (unknown wire input -> typed value) ----
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
 const asRecord = (
   payload: unknown,
   method: string
 ): Record<string, unknown> => {
-  if (
-    typeof payload !== 'object' ||
-    payload === null ||
-    Array.isArray(payload)
-  ) {
+  if (!isRecord(payload)) {
     throw new Error(`XRPL ${method} payload must be an object`)
   }
-  return payload as Record<string, unknown>
+  return payload
 }
 
 const requireString = (
@@ -124,12 +127,8 @@ const requireAmount = (
   { tokenOnly = false }: { tokenOnly?: boolean } = {}
 ): XrplAmount => {
   if (!tokenOnly && typeof value === 'string' && value !== '') return value
-  if (typeof value === 'object' && value !== null) {
-    const {
-      currency,
-      issuer,
-      value: tokenValue,
-    } = value as Record<string, unknown>
+  if (isRecord(value)) {
+    const { currency, issuer, value: tokenValue } = value
     if (
       typeof currency === 'string' &&
       typeof issuer === 'string' &&
@@ -159,7 +158,7 @@ const applyMemos = (
   const { memos } = record
   if (!Array.isArray(memos)) return
   tx.Memos = memos.map(entry => {
-    const memo = (entry as { memo?: Record<string, unknown> })?.memo ?? {}
+    const memo = isRecord(entry) && isRecord(entry.memo) ? entry.memo : {}
     return {
       Memo: {
         ...(typeof memo.memoType === 'string'
@@ -194,6 +193,7 @@ const applyCommonFields = (
 
 // ---- builders (unknown wire payload -> XRPL transaction JSON) ----
 
+/** Builds an XRPL `Payment` from a GemWallet `sendPayment` payload. */
 export const buildPaymentTx = (payload: unknown): Record<string, unknown> => {
   const record = asRecord(payload, 'sendPayment')
   const tx: Record<string, unknown> = {
@@ -217,6 +217,7 @@ export const buildPaymentTx = (payload: unknown): Record<string, unknown> => {
   return tx
 }
 
+/** Builds an XRPL `TrustSet` from a GemWallet `setTrustline` payload. */
 export const buildTrustSetTx = (payload: unknown): Record<string, unknown> => {
   const record = asRecord(payload, 'setTrustline')
   const tx: Record<string, unknown> = {
@@ -232,6 +233,7 @@ export const buildTrustSetTx = (payload: unknown): Record<string, unknown> => {
   return tx
 }
 
+/** Builds an XRPL `OfferCreate` from a GemWallet `createOffer` payload. */
 export const buildOfferCreateTx = (
   payload: unknown
 ): Record<string, unknown> => {
@@ -248,6 +250,7 @@ export const buildOfferCreateTx = (
   return tx
 }
 
+/** Builds an XRPL `OfferCancel` from a GemWallet `cancelOffer` payload. */
 export const buildOfferCancelTx = (
   payload: unknown
 ): Record<string, unknown> => {
