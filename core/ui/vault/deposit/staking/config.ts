@@ -4,4 +4,5 @@ export const stakeModeById: { [K in StakeId]: StakeContract } = {
   ruji: 'wasm',
   'native-tcy': 'memo',
   stcy: 'wasm',
+  brune: 'wasm',
 }
