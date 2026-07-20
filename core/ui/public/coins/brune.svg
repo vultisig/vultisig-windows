@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <title>bRUNE vector reconstruction</title>
+  <defs>
+    <linearGradient id="bruneGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dd26b9"/>
+      <stop offset="1" stop-color="#e12abc"/>
+    </linearGradient>
+  </defs>
+  <circle cx="150" cy="150" r="150" fill="url(#bruneGradient)"/>
+  <path fill="#ffffff" d="M236 53 112 104 157 149Z"/>
+  <path fill="#ffffff" d="M157 149 202 194 65 251Z"/>
+</svg>

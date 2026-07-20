@@ -1722,4 +1722,19 @@ export const de = {
   solana_staking_new_validator: 'Neuer Validator',
   solana_staking_pending_move_notice:
     'Wechsel zu {{validator}} — Sie können den Wechsel abschließen, sobald die Abklingzeit abgelaufen ist.',
+  ripple_transaction_summary: 'Transaktionsübersicht',
+  ripple_field_type: 'Typ',
+  ripple_field_destination: 'Ziel',
+  ripple_field_destination_tag: 'Ziel-Tag',
+  ripple_field_amount: 'Menge',
+  ripple_field_send_max: 'Zahlen Sie höchstens',
+  ripple_field_deliver_min: 'Erhalten Sie mindestens',
+  ripple_field_taker_gets: 'Verkauf',
+  ripple_field_taker_pays: 'Kauf',
+  ripple_field_trust_limit: 'Vertrauensgrenze',
+  ripple_field_offer_sequence: 'Angebotssequenz',
+  ripple_field_issuer: 'Emittent',
+  ripple_undecoded_notice:
+    'Diese Transaktion konnte nicht dekodiert werden. Bitte prüfen Sie die unten stehenden Rohdaten, bevor Sie die Transaktion genehmigen.',
+  swap_expected_payout: 'erwartete Auszahlung',
 }

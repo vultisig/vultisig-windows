@@ -3,7 +3,6 @@ import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
-import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -104,11 +103,7 @@ export default defineConfig(async ({ mode }) => {
 
     switch (chunk) {
       case 'background':
-        plugins = [
-          extensionNodePolyfills(isFirefoxBuild),
-          wasm(),
-          topLevelAwait(),
-        ]
+        plugins = [extensionNodePolyfills(isFirefoxBuild), wasm()]
         break
       case 'inpage':
         format = isFirefoxBuild ? undefined : 'iife'
@@ -139,12 +134,14 @@ export default defineConfig(async ({ mode }) => {
         ...plugins,
       ],
       build: {
-        // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
-        // downlevel pass cannot transform the current dependency graph.
+        // The SDK/WASM graph contains native top-level await. `esnext` stops
+        // esbuild from downleveling (and erroring on) it; the module service
+        // worker and module scripts evaluate it natively at runtime.
         target: 'esnext',
         copyPublicDir: false,
         emptyOutDir: false,
         manifest: false,
+        minify: 'esbuild' as const,
         ...devBuildOptions,
         rollupOptions: {
           input: {
@@ -185,11 +182,13 @@ export default defineConfig(async ({ mode }) => {
         }),
       ],
       build: {
-        // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
-        // downlevel pass cannot transform the current dependency graph.
+        // The SDK/WASM graph contains native top-level await. `esnext` stops
+        // esbuild from downleveling (and erroring on) it; the module service
+        // worker and module scripts evaluate it natively at runtime.
         target: 'esnext',
         emptyOutDir: false,
         manifest: false,
+        minify: 'esbuild' as const,
         ...devBuildOptions,
         rollupOptions: {
           input: {

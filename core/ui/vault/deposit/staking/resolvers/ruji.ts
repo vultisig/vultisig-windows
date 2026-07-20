@@ -7,6 +7,10 @@ import { match } from '@vultisig/lib-utils/match'
 
 import { RujiPayload, StakeSpecific } from '../types'
 
+// Rujira mints the auto-compounding receipt as `x/staking-${bondDenom}`, e.g.
+// `x/staking-x/ruji` (sRUJI). It's redeemed as funds by `liquid.unbond`.
+const rujiShareDenom = `x/staking-${rujiraStakingConfig.bondDenom}`
+
 export function getRujiSpecific({ coin, input }: RujiPayload): StakeSpecific {
   const denom =
     getDenom(coin as CoinKey<CosmosChain>) ?? rujiraStakingConfig.bondDenom
@@ -26,16 +30,46 @@ export function getRujiSpecific({ coin, input }: RujiPayload): StakeSpecific {
       }
     },
     unstake: () => {
-      if (!('amount' in input)) {
+      if (input.kind !== 'unstake') {
         throw new Error('Invalid amount')
       }
 
-      const amountUnits = toChainAmount(input.amount, coin.decimals).toString()
+      const enteredUnits = toChainAmount(input.amount, coin.decimals)
+
+      // Bonded (yielding) position: withdraw the RUJI amount directly.
+      if (input.position === 'bonded') {
+        return {
+          kind: 'wasm',
+          contract: rujiraStakingConfig.contract,
+          executeMsg: {
+            account: { withdraw: { amount: enteredUnits.toString() } },
+          },
+          funds: [],
+        }
+      }
+
+      // Auto-compounding (liquid) position: redeem the sRUJI receipt via
+      // `liquid.unbond`, converting the entered underlying RUJI amount into
+      // receipt shares. At/above the full position value redeem the exact
+      // receipt balance (avoids rounding dust and can't exceed what's held, even
+      // if the share price moved since the amount was entered); below it convert
+      // proportionally. The message carries no amount — the funds do.
+      const shares =
+        enteredUnits >= input.liquidSize
+          ? input.liquidShares
+          : (input.liquidShares * enteredUnits) / input.liquidSize
+
+      // A tiny amount can floor to zero shares; redeeming 0 is a no-op that
+      // would fail on-chain, so reject it rather than build an empty unbond.
+      if (shares <= 0n) {
+        throw new Error('Amount too small to unstake')
+      }
+
       return {
         kind: 'wasm',
         contract: rujiraStakingConfig.contract,
-        executeMsg: { account: { withdraw: { amount: amountUnits } } },
-        funds: [],
+        executeMsg: { liquid: { unbond: {} } },
+        funds: [{ denom: rujiShareDenom, amount: shares.toString() }],
       }
     },
     claim: () => ({

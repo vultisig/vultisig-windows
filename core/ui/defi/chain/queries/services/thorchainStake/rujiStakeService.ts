@@ -77,16 +77,23 @@ const getRujiStake = (address: string) => {
   })
 }
 
+// `stakingV2` can contain entries for multiple pools; the first entry is not
+// guaranteed to be RUJI. Select the RUJI pool by its bond asset symbol (matches
+// iOS) so the display and unstake-transaction paths never diverge.
+const findRujiStake = (response: Awaited<ReturnType<typeof getRujiStake>>) =>
+  response?.data?.node?.stakingV2?.find(
+    entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
+  )
+
 const rujiReceiptDenom = shouldBePresent(
   thorchainTokens.sruji.id,
   'sRUJI receipt denom'
 )
 
-// On-chain sRUJI receipt balance — the amount the vault actually holds (and can
-// send), read the same way sTCY reads its receipt. This is deliberately kept
-// independent of the staking API's `bonded` field, which can report 0 even when
-// receipt tokens are held. Returns `null` when the request fails, so a genuine
-// zero balance stays distinct from an unknown one.
+// On-chain sRUJI receipt balance — the exact share count the vault holds, used
+// to size the `liquid.unbond` redemption (the funds it sends are receipt
+// shares, not RUJI). Read the same way sTCY reads its receipt. Returns `null`
+// when the request fails, so a genuine zero stays distinct from an unknown one.
 const fetchRujiReceiptBalance = async (
   address: string
 ): Promise<bigint | null> => {
@@ -99,64 +106,190 @@ const fetchRujiReceiptBalance = async (
   return 'data' in result ? parseBigint(result.data?.balance?.amount) : null
 }
 
-type FetchRujiStakePositionInput = {
+/**
+ * DeFi position id for the auto-compounding (sRUJI receipt / `liquid.unbond`)
+ * RUJI position. Kept as the original `thor-stake-ruji` id so previously stored
+ * selections keep resolving, and so a single "RUJI" manage tile gates both
+ * positions (see {@link rujiBondedStakePositionId}).
+ */
+export const rujiAutoCompoundStakePositionId = 'thor-stake-ruji'
+
+/**
+ * DeFi position id for the bonded (yielding / `account.withdraw`) RUJI position.
+ * Rendered alongside the auto-compounding card in the Staked tab; it has no
+ * manage tile of its own and is gated by the `thor-stake-ruji` selection.
+ */
+export const rujiBondedStakePositionId = 'thor-stake-ruji-bonded'
+
+type RujiStakeSnapshot = {
+  /** Auto-compounding position valued in RUJI base units (the API `liquidSize`). */
+  autoCompoundAmount: bigint
+  /** Bonded (yielding) position in RUJI base units. */
+  bondedAmount: bigint
+  /** Pending USDC revenue, human-readable. */
+  rewardsAmount: number
+  apr?: number
+}
+
+// Reads the Rujira staking API (APR, pending USDC revenue, bonded + liquid
+// amounts) and derives the two independent RUJI positions. The auto-compounding
+// amount is the API's `liquidSize` — the sRUJI receipt priced in RUJI, i.e. what
+// the Rujira app shows. The raw on-chain receipt is in share units (not RUJI, so
+// not a valid display value once the share price drifts) and is read separately
+// only when building the `liquid.unbond` tx. `liquidSize` also does NOT fall
+// back to `bonded`, which is surfaced as its own position.
+const fetchRujiStakeSnapshot = async (
+  address: string
+): Promise<RujiStakeSnapshot> => {
+  const stake = findRujiStake(await getRujiStake(address))
+
+  return {
+    autoCompoundAmount: parseBigint(stake?.liquidSize?.amount),
+    bondedAmount: parseBigint(stake?.bonded?.amount),
+    rewardsAmount:
+      parseNumber(stake?.pendingRevenue?.amount) / rujiDecimalFactor,
+    apr: parseRujiApr(stake?.pool?.summary?.apr),
+  }
+}
+
+type FetchRujiStakePositionsInput = {
   address: string
   prices: Record<string, number>
 }
 
+type BuildPositionInput = {
+  id: string
+  amount: bigint
+  extras?: Partial<ThorchainStakePosition>
+}
+
 /**
- * Fetches the vault's RUJI staking position, combining the Rujira staking API
- * (APR, pending USDC rewards, bonded amount) with the on-chain sRUJI receipt
- * balance. Returns the auto-compounding value in RUJI as a
- * {@link ThorchainStakePosition}, or `null` if the lookup fails.
+ * Fetches the vault's RUJI staking positions as separate
+ * {@link ThorchainStakePosition}s: an auto-compounding (sRUJI) position and a
+ * bonded position. Each is emitted only when it holds value, so a bonded-only
+ * vault shows its bonded balance and an auto-compounding vault shows only the
+ * compounded card; when neither holds value the bonded card is emitted with a
+ * zero balance as an anchor to stake into. Returns `[]` if the lookup fails.
+ *
+ * The Rujira staking API's APR and pending USDC revenue belong to the bonded
+ * position: the auto-compounding position reinvests its revenue into
+ * `liquidSize` and has no separately-claimable USDC (like sTCY). So they ride on
+ * the bonded card, and the compounded card stays stat-free.
  */
-export const fetchRujiStakePosition = async ({
+export const fetchRujiStakePositions = async ({
   address,
   prices,
-}: FetchRujiStakePositionInput): Promise<ThorchainStakePosition | null> => {
-  try {
-    const [response, heldAmount] = await Promise.all([
-      getRujiStake(address),
-      fetchRujiReceiptBalance(address),
-    ])
-    // `stakingV2` can contain entries for multiple pools; the first entry is not
-    // guaranteed to be RUJI. Match iOS and select the RUJI pool by its bond asset
-    // symbol so the APR, rewards and bonded amount come from the right pool
-    // (blindly taking [0] can surface a different pool's APR entirely).
-    const stake = response?.data?.node?.stakingV2?.find(
-      entry => entry?.bonded?.asset?.metadata?.symbol?.toUpperCase() === 'RUJI'
-    )
-    const bondedAmount = parseBigint(stake?.bonded?.amount)
-    // Display the auto-compounding value: the sRUJI receipt converted to RUJI at
-    // the pool's current share price (the API's `liquidSize`), matching what the
-    // Rujira app shows. Fall back to the raw on-chain receipt balance if the API
-    // doesn't surface it, then to the API's `bonded` amount.
-    const liquidSizeAmount = parseBigint(stake?.liquidSize?.amount)
-    const amount =
-      liquidSizeAmount > 0n ? liquidSizeAmount : (heldAmount ?? bondedAmount)
-    const rewardsAmount =
-      parseNumber(stake?.pendingRevenue?.amount) / rujiDecimalFactor
-    const apr = parseRujiApr(stake?.pool?.summary?.apr)
-    const price = prices[coinKeyToString(thorchainTokens.ruji)] ?? 0
+}: FetchRujiStakePositionsInput): Promise<ThorchainStakePosition[]> => {
+  const snapshot = await attempt(() => fetchRujiStakeSnapshot(address))
+  if ('error' in snapshot) {
+    return []
+  }
 
-    const fiatValue = getCoinValue({
+  const { autoCompoundAmount, bondedAmount, rewardsAmount, apr } = snapshot.data
+  const price = prices[coinKeyToString(thorchainTokens.ruji)] ?? 0
+
+  const buildPosition = ({
+    id,
+    amount,
+    extras = {},
+  }: BuildPositionInput): ThorchainStakePosition => ({
+    id,
+    ticker: thorchainTokens.ruji.ticker,
+    amount,
+    type: 'stake',
+    canUnstake: amount > 0n,
+    fiatValue: getCoinValue({
       amount,
       decimals: thorchainTokens.ruji.decimals,
       price,
-    })
+    }),
+    ...extras,
+  })
 
-    return {
-      id: 'thor-stake-ruji',
-      ticker: thorchainTokens.ruji.ticker,
-      amount,
-      type: 'stake',
-      canUnstake: amount > 0n,
-      fiatValue,
-      apr,
-      rewards: rewardsAmount,
-      rewardTicker: 'USDC',
-    }
-  } catch {
-    return null
+  // APR + pending USDC revenue ride on the bonded position (see the doc above).
+  const bondedPosition = buildPosition({
+    id: rujiBondedStakePositionId,
+    amount: bondedAmount,
+    extras: { apr, rewards: rewardsAmount, rewardTicker: 'USDC' },
+  })
+
+  const positions: ThorchainStakePosition[] = []
+  if (autoCompoundAmount > 0n) {
+    positions.push(
+      buildPosition({
+        id: rujiAutoCompoundStakePositionId,
+        amount: autoCompoundAmount,
+      })
+    )
+  }
+  // Keep the bonded card visible while its USDC revenue is claimable, so those
+  // rewards never get stranded even when the bonded RUJI balance is 0.
+  if (bondedAmount > 0n || rewardsAmount > 0) {
+    positions.push(bondedPosition)
+  }
+  if (positions.length === 0) {
+    // Nothing staked: anchor with the bonded card, since "Stake" bonds
+    // (`account.bond`) into exactly this position.
+    positions.push(bondedPosition)
+  }
+
+  return positions
+}
+
+/** Base-unit RUJI balances available to unstake, per position. */
+export type RujiUnstakeBalances = {
+  /** Auto-compounding (sRUJI receipt) value in RUJI base units. */
+  autoCompound: bigint
+  /** Bonded (yielding) position in RUJI base units. */
+  bonded: bigint
+}
+
+/**
+ * Resolves the unstakable RUJI balances for both positions from the same source
+ * as the Staked cards, so each unstake form's ceiling matches its card.
+ */
+export const fetchRujiUnstakeBalances = async (
+  address: string
+): Promise<RujiUnstakeBalances> => {
+  const { autoCompoundAmount, bondedAmount } =
+    await fetchRujiStakeSnapshot(address)
+
+  return { autoCompound: autoCompoundAmount, bonded: bondedAmount }
+}
+
+type RujiLiquidUnbondInputs = {
+  /** On-chain sRUJI receipt balance (base units) — the shares to redeem. */
+  liquidShares: bigint
+  /** RUJI-denominated value of the auto-compounding position (base units). */
+  liquidSize: bigint
+}
+
+/**
+ * Fetches the base-unit inputs needed to build a RUJI `liquid.unbond`
+ * transaction. Unstaking the auto-compounding position redeems the sRUJI
+ * receipt, so the entered underlying (RUJI) amount must be converted to receipt
+ * shares via `liquidShares / liquidSize` — this returns both raw values.
+ */
+export const fetchRujiLiquidUnbondInputs = async (
+  address: string
+): Promise<RujiLiquidUnbondInputs> => {
+  const [response, heldAmount] = await Promise.all([
+    getRujiStake(address),
+    fetchRujiReceiptBalance(address),
+  ])
+  const liquidSize = parseBigint(findRujiStake(response)?.liquidSize?.amount)
+
+  // `heldAmount` is `null` only when the on-chain receipt lookup failed (a
+  // genuine zero is `0n`). Redeeming a liquid position needs the real share
+  // balance, so surface the failure instead of building an unbond that redeems
+  // `0` shares. When there's no liquid position (`liquidSize === 0`) the caller
+  // uses the bonded withdraw path, which doesn't need shares.
+  if (heldAmount === null && liquidSize > 0n) {
+    throw new Error('Unable to read sRUJI receipt balance for unstake')
+  }
+
+  return {
+    liquidShares: heldAmount ?? 0n,
+    liquidSize,
   }
 }

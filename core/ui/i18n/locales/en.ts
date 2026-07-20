@@ -907,6 +907,20 @@ export const en = {
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',
+  ripple_transaction_summary: 'Transaction summary',
+  ripple_undecoded_notice:
+    'This transaction could not be decoded. Review the raw details below before approving.',
+  ripple_field_type: 'Type',
+  ripple_field_destination: 'Destination',
+  ripple_field_destination_tag: 'Destination tag',
+  ripple_field_amount: 'Amount',
+  ripple_field_send_max: 'Pay at most',
+  ripple_field_deliver_min: 'Receive at least',
+  ripple_field_taker_gets: 'Selling',
+  ripple_field_taker_pays: 'Buying',
+  ripple_field_trust_limit: 'Trust limit',
+  ripple_field_offer_sequence: 'Offer sequence',
+  ripple_field_issuer: 'Issuer',
   review_vault_devices_subtitle:
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',
@@ -1117,6 +1131,7 @@ export const en = {
   swap: 'Swap',
   swaps: 'Swaps',
   swap_discount: 'Swap Discount',
+  swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
   swap_invalid_external_recipient:

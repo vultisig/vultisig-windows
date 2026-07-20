@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { fetchRujiLiquidUnbondInputs } from '@core/ui/defi/chain/queries/services/thorchainStake/rujiStakeService'
 import { buildQBTCDirectPayload } from '@core/ui/qbtc/dapp/buildQBTCDirectPayload'
 import { QbtcDappMessage } from '@core/ui/qbtc/dapp/encodeAnyMessage'
 import {
@@ -285,6 +286,17 @@ export const buildDepositKeysignPayload = async ({
 
     let input: RujiInput | NativeTcyInput | StcyInput | null = null
 
+    // RUJI has two independent positions unstaked via different routes: the
+    // bonded position via `account.withdraw` and the auto-compounding position
+    // via `liquid.unbond`. The card the user unstaked from sets `autocompound`
+    // (true → auto-compounding). Only the auto-compounding route needs the sRUJI
+    // receipt shares + position value to convert the entered amount, so fetch
+    // them here (the match callbacks below are synchronous).
+    const rujiUnbondInputs =
+      stakeId === 'ruji' && actionAsStakeAction === 'unstake' && autocompound
+        ? await fetchRujiLiquidUnbondInputs(coin.address)
+        : undefined
+
     match(actionAsStakeAction, {
       stake: () => {
         input = { kind: 'stake', amount: shouldBePresent(amount) }
@@ -302,9 +314,17 @@ export const buildDepositKeysignPayload = async ({
           input = pctValid
             ? { kind: 'unstake', percentage: pct }
             : { kind: 'unstake', amount: shouldBePresent(amount) }
+        } else if (autocompound) {
+          input = {
+            kind: 'unstake',
+            position: 'liquid',
+            amount: shouldBePresent(amount),
+            ...shouldBePresent(rujiUnbondInputs),
+          }
         } else {
           input = {
             kind: 'unstake',
+            position: 'bonded',
             amount: shouldBePresent(amount),
           }
         }
