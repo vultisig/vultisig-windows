@@ -2,7 +2,7 @@ import type { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import type { Resolver } from '@vultisig/lib-utils/types/Resolver'
 
 export type StakeKind = 'stake' | 'unstake' | 'claim'
-export type StakeId = 'ruji' | 'native-tcy' | 'stcy'
+export type StakeId = 'ruji' | 'native-tcy' | 'stcy' | 'brune'
 
 export type StakeSpecific =
   | { kind: 'memo'; memo: string; toAddress?: string; toAmount?: string }
@@ -46,14 +46,25 @@ export type StcyInput =
   | { kind: 'stake'; amount: number }
   | { kind: 'unstake'; amount: number }
 
+/**
+ * Input for a bRUNE staking op via Rujira liquid bonding: `stake` bonds bRUNE
+ * (`liquid.bond`) to receive the auto-compounding ybRUNE receipt; `unstake`
+ * redeems ybRUNE shares (`liquid.unbond`) back to bRUNE. Amount-based, like STCY.
+ */
+export type BruneInput =
+  | { kind: 'stake'; amount: number }
+  | { kind: 'unstake'; amount: number }
+
 export type RujiPayload = { coin: AccountCoin; input: RujiInput }
 export type NativeTcyPayload = { coin: AccountCoin; input: NativeTcyInput }
 export type StcyPayload = { input: StcyInput }
+export type BrunePayload = { input: BruneInput }
 
 type StakePayloadById = {
   ruji: RujiPayload
   'native-tcy': NativeTcyPayload
   stcy: StcyPayload
+  brune: BrunePayload
 }
 
 export type StakeResolverMap = {

@@ -608,7 +608,7 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || coin.ticker === 'bRUNE'
                 ? z.object({
                     amount: positiveAmountSchema(totalAmountAvailable, t),
                   })
@@ -657,7 +657,7 @@ export const getDepositFormConfig = ({
               },
             ],
             [Chain.THORChain]: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || coin.ticker === 'bRUNE'
                 ? [
                     {
                       name: 'amount',
@@ -683,7 +683,7 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || coin.ticker === 'bRUNE'
                 ? z.object({
                     amount: positiveAmountSchema(totalAmountAvailable, t),
                   })

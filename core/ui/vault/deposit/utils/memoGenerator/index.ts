@@ -78,6 +78,14 @@ export const generateMemo = ({
             return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
           }
 
+          // bRUNE bonds via a wasm MsgExecuteContract, not a memo. The keysign
+          // build sets contractPayload + an empty memo directly, but this
+          // generator still runs on every form render (useDepositMemo); return
+          // an empty memo so it doesn't throw before the wasm build takes over.
+          if (coin.ticker === 'bRUNE') {
+            return ''
+          }
+
           throw new Error(
             `Unsupported chain and token for staking memo: ${chain}`
           )
@@ -108,6 +116,13 @@ export const generateMemo = ({
             }
             const chainAmount = toChainAmount(amtNum, coin.decimals).toString()
             return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+          }
+
+          // ybRUNE unbonds via a wasm MsgExecuteContract, not a memo. See the
+          // stake path above — return an empty memo so this generator doesn't
+          // throw before the wasm keysign build runs.
+          if (coin.ticker === 'bRUNE') {
+            return ''
           }
 
           throw new Error(

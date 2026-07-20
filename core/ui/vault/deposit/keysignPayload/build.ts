@@ -73,6 +73,7 @@ import {
 } from '../ChainAction'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
+  BruneInput,
   NativeTcyInput,
   RujiInput,
   StakeKind,
@@ -284,7 +285,7 @@ export const buildDepositKeysignPayload = async ({
 
     const stakeSpecific = resolvers[stakeId]
 
-    let input: RujiInput | NativeTcyInput | StcyInput | null = null
+    let input: RujiInput | NativeTcyInput | StcyInput | BruneInput | null = null
 
     // RUJI has two independent positions unstaked via different routes: the
     // bonded position via `account.withdraw` and the auto-compounding position
@@ -302,7 +303,7 @@ export const buildDepositKeysignPayload = async ({
         input = { kind: 'stake', amount: shouldBePresent(amount) }
       },
       unstake: () => {
-        if (stakeId === 'stcy') {
+        if (stakeId === 'stcy' || stakeId === 'brune') {
           input = { kind: 'unstake', amount: shouldBePresent(amount) }
         } else if (stakeId === 'native-tcy') {
           const raw = depositData['percentage']

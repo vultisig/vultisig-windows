@@ -67,6 +67,7 @@ export const UnstakeSpecific = () => {
               TCY={() => <UnstakeTCYSpecific />}
               RUJI={() => null}
               GRAM={() => null}
+              bRUNE={() => null}
             />
           </>
         )}
