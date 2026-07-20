@@ -4,8 +4,24 @@ import { requestAccount } from '../core/requestAccount'
 import { xrplMainnet } from './network'
 import { signRippleMessage } from './signRippleMessage'
 import { signRippleTransaction } from './signRippleTransaction'
+import {
+  buildOfferCancelTx,
+  buildOfferCreateTx,
+  buildPaymentTx,
+  buildTrustSetTx,
+  CancelOfferRequest,
+  CreateOfferRequest,
+  SendPaymentRequest,
+  SetTrustlineRequest,
+} from './transactions'
 
 const getRippleAccount = () => requestAccount(OtherChain.Ripple)
+
+const submitBuiltTransaction = async (transaction: Record<string, unknown>) => {
+  const { hash } = await signRippleTransaction({ transaction, broadcast: true })
+
+  return { hash }
+}
 
 /**
  * Vultisig-native XRPL provider exposed at `window.vultisig.xrpl`.
@@ -55,4 +71,12 @@ export const createXrplProvider = () => ({
 
     return { hash }
   },
+  sendPayment: async (payment: SendPaymentRequest) =>
+    submitBuiltTransaction(buildPaymentTx(payment)),
+  setTrustline: async (trustline: SetTrustlineRequest) =>
+    submitBuiltTransaction(buildTrustSetTx(trustline)),
+  createOffer: async (offer: CreateOfferRequest) =>
+    submitBuiltTransaction(buildOfferCreateTx(offer)),
+  cancelOffer: async (offer: CancelOfferRequest) =>
+    submitBuiltTransaction(buildOfferCancelTx(offer)),
 })
