@@ -15,7 +15,7 @@ import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
 import { ChainAction } from '../ChainAction'
-import { isStakeableChain, StakeableChain } from '../config'
+import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
 import {
   maxOrInfinity,
   positiveAmountSchema,
@@ -608,7 +608,7 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI' || coin.ticker.toUpperCase() === 'BRUNE'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
                     amount: positiveAmountSchema(totalAmountAvailable, t),
                   })
@@ -657,7 +657,7 @@ export const getDepositFormConfig = ({
               },
             ],
             [Chain.THORChain]: () =>
-              coin.ticker === 'RUJI' || coin.ticker.toUpperCase() === 'BRUNE'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? [
                     {
                       name: 'amount',
@@ -683,7 +683,7 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI' || coin.ticker.toUpperCase() === 'BRUNE'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
                     amount: positiveAmountSchema(totalAmountAvailable, t),
                   })

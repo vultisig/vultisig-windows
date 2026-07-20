@@ -1,4 +1,7 @@
-import { isStakeableCoin } from '@core/ui/vault/deposit/config'
+import {
+  isBruneStakeCoin,
+  isStakeableCoin,
+} from '@core/ui/vault/deposit/config'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -22,8 +25,8 @@ export const StakeTokenExplorer: FC<Props> = ({
   activeOption,
 }) => {
   const [depositCoin] = useDepositCoin()
-  const coins = useCurrentVaultChainCoins(depositCoin.chain).filter(coin =>
-    isStakeableCoin(coin.ticker)
+  const coins = useCurrentVaultChainCoins(depositCoin.chain).filter(
+    coin => isStakeableCoin(coin.ticker) || isBruneStakeCoin(coin)
   )
   const { t } = useTranslation()
 

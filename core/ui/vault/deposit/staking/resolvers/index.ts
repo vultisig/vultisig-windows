@@ -1,11 +1,11 @@
 import { CosmosChain } from '@vultisig/core-chain/Chain'
-import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-bond/config'
 import { rujiraStakingConfig } from '@vultisig/core-chain/chains/cosmos/thor/rujira/config'
 import type { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
 import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
 
+import { isBruneStakeCoin } from '../../config'
 import type { StakeId, StakeResolverMap } from '../types'
 import { getBruneSpecific } from './brune'
 import { getRujiSpecific } from './ruji'
@@ -31,15 +31,9 @@ export const selectStakeId = (
 
   const denom = getDenom(coin as CoinKey<CosmosChain>)
 
-  const bruneByTicker =
-    coin.ticker?.toUpperCase() ===
-    knownCosmosTokens['THORChain']['x/brune'].ticker.toUpperCase()
-
-  const bruneByDenom =
-    denom === bruneBondConfig.depositDenom ||
-    coin.id === bruneBondConfig.depositDenom
-
-  if (bruneByTicker || bruneByDenom) return 'brune'
+  // bRUNE is matched by canonical denom/chain only — never by ticker — so a
+  // look-alike `bRUNE`-tickered token can't be routed into bRUNE staking.
+  if (isBruneStakeCoin(coin)) return 'brune'
 
   const rujiByTicker =
     coin.ticker?.toUpperCase() ===

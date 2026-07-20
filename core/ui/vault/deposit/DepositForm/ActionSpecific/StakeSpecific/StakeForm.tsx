@@ -11,6 +11,7 @@ import { Slider } from '@lib/ui/inputs/Slider'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-bond/config'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useEffect, useMemo } from 'react'
 import { Controller, ControllerRenderProps, FieldErrors } from 'react-hook-form'
@@ -98,7 +99,12 @@ export const StakeForm = ({
     }
   }
 
-  const formattedBalance = formatAmount(balance, { ticker: coin.ticker })
+  // Unstaking bRUNE redeems the ybRUNE receipt: the balance/amount are ybRUNE
+  // shares, not bRUNE (NAV is not 1:1), so label them explicitly as ybRUNE.
+  const displayTicker =
+    isUnstake && stakeId === 'brune' ? bruneBondConfig.shareTicker : coin.ticker
+
+  const formattedBalance = formatAmount(balance, { ticker: displayTicker })
 
   // Schema messages are already translated (see getDepositFormConfig), so we
   // render them directly. Re-running them through t() would find no matching
@@ -121,7 +127,7 @@ export const StakeForm = ({
               render={({ field }) => (
                 <StakeAmountInput
                   field={field}
-                  ticker={coin.ticker}
+                  ticker={displayTicker}
                   decimals={coin.decimals}
                   showPercentage
                   percentage={currentPercentage}

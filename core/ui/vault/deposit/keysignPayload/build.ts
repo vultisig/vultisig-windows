@@ -345,14 +345,14 @@ export const buildDepositKeysignPayload = async ({
     })
 
     if (intent.kind === 'wasm') {
-      // Surface the amount + destination on the verify/joiner screens, which
-      // read `toAmount`/`toAddress` and do NOT decode the wasm contract
-      // payload. The Cosmos signer builds a GENERIC_CONTRACT tx purely from
-      // `contractPayload` and ignores these two fields, so they are
-      // display-only and never change what gets signed.
+      // Leave toAddress/toAmount empty. A GENERIC_CONTRACT tx is signed purely
+      // from `contractPayload`, so the verify/joiner screens must derive what
+      // they show from that same payload — populating separate display fields
+      // here would let a compromised initiator show one thing while signing
+      // another.
       keysignPayload.memo = ''
-      keysignPayload.toAddress = intent.contract
-      keysignPayload.toAmount = amountUnits ?? '0'
+      keysignPayload.toAddress = ''
+      keysignPayload.toAmount = '0'
       keysignPayload.contractPayload = {
         case: 'wasmExecuteContractPayload',
         value: create(WasmExecuteContractPayloadSchema, {

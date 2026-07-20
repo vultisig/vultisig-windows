@@ -33,6 +33,7 @@ import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
 import { SignRippleDisplay } from '../../tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '../../tx/sui/parser'
 import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
+import { useWasmExecuteTxDisplay } from '../../tx/useWasmExecuteTxDisplay'
 
 /**
  * Joiner verify view for a regular transfer. Renders the same card-based
@@ -52,12 +53,20 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
 
   const { name } = useCurrentVault()
 
+  // A wasm contract execute (e.g. stake/unstake) is signed purely from
+  // `contractPayload`, so derive the amount / asset / destination the co-signer
+  // verifies from it rather than the (empty, spoofable) toAmount/toAddress.
+  const wasmDisplay = useWasmExecuteTxDisplay(value)
+  const displayCoin = wasmDisplay?.coin ?? coin
+  const displayAmount = wasmDisplay?.amount ?? BigInt(value.toAmount)
+  const displayReceiver = wasmDisplay?.receiver ?? toAddress
+
   const receiverVaultName = useVaultNameForAddress({
-    address: toAddress,
+    address: displayReceiver,
     chain: coin.chain,
   })
   const receiverAddressBookName = useAddressBookNameForAddress({
-    address: toAddress,
+    address: displayReceiver,
     chain: coin.chain,
   })
 
@@ -144,11 +153,11 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     <>
       <BlockaidTxScan keysignPayloadQuery={keysignPayloadQuery} />
       <VerifyTransactionOverview
-        coin={coin}
-        amount={BigInt(value.toAmount)}
+        coin={displayCoin}
+        amount={displayAmount}
         senderName={name}
         senderAddress={coin.address}
-        receiver={toAddress}
+        receiver={displayReceiver}
         receiverVaultName={receiverVaultName ?? undefined}
         receiverAddressBookName={receiverAddressBookName ?? undefined}
         chain={coin.chain}

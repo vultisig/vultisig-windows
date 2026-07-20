@@ -64,9 +64,7 @@ export const UnstakeSpecific = () => {
           // Only TCY needs a bespoke unstake control (percentage-based). Every
           // other stakeable ticker (RUJI, bRUNE, …) drives its amount through
           // the shared deposit form fields, so it renders nothing extra here.
-          selectedCoinTicker.toUpperCase() === 'TCY' ? (
-            <UnstakeTCYSpecific />
-          ) : null
+          selectedCoinTicker === 'TCY' ? <UnstakeTCYSpecific /> : null
         }
         Ton={() => null}
       />

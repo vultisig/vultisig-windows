@@ -31,6 +31,7 @@ import { KeysignFeeAmount } from './FeeAmount'
 import { SignRippleDisplay } from './ripple/SignRippleDisplay'
 import { parseSuiTx } from './sui/parser'
 import { SignSuiDisplay } from './sui/SignSuiDisplay'
+import { useWasmExecuteTxDisplay } from './useWasmExecuteTxDisplay'
 
 type KeysignTxOverviewProps = {
   toAddressLabel?: string
@@ -48,11 +49,20 @@ export const KeysignTxOverview = ({
   )
   const { toAddress, memo, toAmount, coin: potentialCoin } = keysignPayload
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { address, chain, decimals } = shouldBePresent(coin)
+  const { address, chain } = shouldBePresent(coin)
 
-  const formattedToAmount = toAmount
-    ? fromChainAmount(BigInt(toAmount), decimals)
-    : null
+  // A wasm contract execute (e.g. stake/unstake) is signed purely from
+  // `contractPayload`; derive its amount / asset / destination from that same
+  // payload so display can't diverge from what is signed.
+  const wasmDisplay = useWasmExecuteTxDisplay(keysignPayload)
+  const displayCoin = wasmDisplay?.coin ?? coin
+  const displayToAddress = wasmDisplay?.receiver ?? toAddress ?? ''
+
+  const formattedToAmount = wasmDisplay
+    ? fromChainAmount(wasmDisplay.amount, displayCoin.decimals)
+    : toAmount
+      ? fromChainAmount(BigInt(toAmount), displayCoin.decimals)
+      : null
 
   const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
 
@@ -65,11 +75,11 @@ export const KeysignTxOverview = ({
       (txAction !== null && txAction.action !== 'send'))
 
   const toVaultName = useVaultNameForAddress({
-    address: toAddress ?? '',
+    address: displayToAddress,
     chain,
   })
   const toAddressBookName = useAddressBookNameForAddress({
-    address: toAddress ?? '',
+    address: displayToAddress,
     chain,
   })
   const toLabel = toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
@@ -102,7 +112,7 @@ export const KeysignTxOverview = ({
               ? txAction.amount
               : (formattedToAmount ?? 0)
           }
-          value={coin}
+          value={displayCoin}
           actionLabel={
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
           }
@@ -139,7 +149,7 @@ export const KeysignTxOverview = ({
               />
             </HStack>
           </HStack>
-          {toAddress && (
+          {displayToAddress && (
             <VStack gap={8}>
               <HStack
                 alignItems="center"
@@ -155,17 +165,24 @@ export const KeysignTxOverview = ({
                     <Text>{toLabel}</Text>
                     <MiddleTruncate
                       color="textShy"
-                      text={`(${toAddress})`}
+                      text={`(${displayToAddress})`}
                       weight={500}
                       width={80}
                     />
                   </HStack>
                 ) : (
-                  <MiddleTruncate text={toAddress} weight={500} width={160} />
+                  <MiddleTruncate
+                    text={displayToAddress}
+                    weight={500}
+                    width={160}
+                  />
                 )}
               </HStack>
               <HStack justifyContent="flex-end">
-                <AddToAddressBookButton address={toAddress} chain={chain} />
+                <AddToAddressBookButton
+                  address={displayToAddress}
+                  chain={chain}
+                />
               </HStack>
             </VStack>
           )}

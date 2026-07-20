@@ -4,7 +4,7 @@ import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-b
 import type { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { describe, expect, it } from 'vitest'
 
-import { isStakeableCoin } from '../../config'
+import { isBruneStakeCoin, isStakeableCoin } from '../../config'
 import { getBruneSpecific } from './brune'
 import { selectStakeId } from './index'
 
@@ -49,34 +49,40 @@ describe('selectStakeId for bRUNE', () => {
   const bruneCoin: AccountCoin = {
     chain: Chain.THORChain,
     id: bruneBondConfig.depositDenom,
-    ticker: 'BRUNE',
+    ticker: 'bRUNE',
     decimals: bruneBondConfig.depositDecimals,
     address: 'thor1address',
     logo: 'brune',
   }
 
-  it('routes the bRUNE deposit denom to the brune provider', () => {
+  it('routes the canonical bRUNE denom to the brune provider', () => {
     expect(selectStakeId(bruneCoin)).toBe('brune')
   })
 
-  it('routes by the bRUNE ticker when id/denom do not match depositDenom', () => {
-    // id + resolved denom differ from depositDenom, so only the ticker path
-    // can succeed here.
-    expect(
-      selectStakeId({
-        ...bruneCoin,
-        id: 'x/not-the-brune-denom',
-        ticker: 'bRUNE',
-      })
-    ).toBe('brune')
+  it('does NOT route a look-alike bRUNE ticker with a different denom', () => {
+    // A token that merely shares the `bRUNE` ticker but has a different denom
+    // must not be routed into bRUNE staking (which always spends `x/brune`).
+    expect(() =>
+      selectStakeId({ ...bruneCoin, id: 'x/impostor', ticker: 'bRUNE' })
+    ).toThrow()
+  })
+})
+
+describe('isBruneStakeCoin', () => {
+  it('matches only the canonical bRUNE denom on THORChain', () => {
+    const base = { chain: Chain.THORChain, id: bruneBondConfig.depositDenom }
+    expect(isBruneStakeCoin(base)).toBe(true)
+    expect(isBruneStakeCoin({ ...base, id: 'x/impostor' })).toBe(false)
+    expect(isBruneStakeCoin({ ...base, chain: Chain.Ethereum })).toBe(false)
   })
 })
 
 describe('isStakeableCoin', () => {
-  it('accepts the bRUNE brand ticker case-insensitively', () => {
-    expect(isStakeableCoin('bRUNE')).toBe(true)
-    expect(isStakeableCoin('BRUNE')).toBe(true)
+  it('matches the ticker-identified assets exactly (bRUNE is denom-based)', () => {
+    expect(isStakeableCoin('TCY')).toBe(true)
     expect(isStakeableCoin('RUJI')).toBe(true)
+    expect(isStakeableCoin('tcy')).toBe(false)
+    expect(isStakeableCoin('bRUNE')).toBe(false)
     expect(isStakeableCoin('NOPE')).toBe(false)
   })
 })
