@@ -2,7 +2,11 @@ import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { rujiStakeApiUrl } from '../../constants'
-import { fetchRujiStakePosition } from './rujiStakeService'
+import {
+  fetchRujiStakePositions,
+  rujiAutoCompoundStakePositionId,
+  rujiBondedStakePositionId,
+} from './rujiStakeService'
 
 vi.mock('@vultisig/lib-utils/query/queryUrl', () => ({
   queryUrl: vi.fn(),
@@ -68,10 +72,10 @@ const mockQueries = ({
   })
 }
 
-const fetchPosition = () =>
-  fetchRujiStakePosition({ address: 'thor1test', prices: {} })
+const fetchPositions = () =>
+  fetchRujiStakePositions({ address: 'thor1test', prices: {} })
 
-describe('fetchRujiStakePosition', () => {
+describe('fetchRujiStakePositions', () => {
   beforeEach(() => {
     vi.mocked(queryUrl).mockReset()
   })
@@ -79,9 +83,12 @@ describe('fetchRujiStakePosition', () => {
   it('parses APR only when the API marks it available', async () => {
     mockQueries()
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const bondedPosition = positions.find(
+      ({ id }) => id === rujiBondedStakePositionId
+    )
 
-    expect(position?.apr).toBeCloseTo(3.7176753737)
+    expect(bondedPosition?.apr).toBeCloseTo(3.7176753737)
   })
 
   it.each([
@@ -92,9 +99,12 @@ describe('fetchRujiStakePosition', () => {
   ] as const)('does not surface APR for %s', async (_label, apr) => {
     mockQueries({ entries: [rujiStake({ apr })] })
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const bondedPosition = positions.find(
+      ({ id }) => id === rujiBondedStakePositionId
+    )
 
-    expect(position?.apr).toBeUndefined()
+    expect(bondedPosition?.apr).toBeUndefined()
   })
 
   it.each([
@@ -103,9 +113,12 @@ describe('fetchRujiStakePosition', () => {
   ] as const)('does not surface APR for %s', async (_label, apr) => {
     mockQueries({ entries: [rujiStake({ apr })] })
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const bondedPosition = positions.find(
+      ({ id }) => id === rujiBondedStakePositionId
+    )
 
-    expect(position?.apr).toBeUndefined()
+    expect(bondedPosition?.apr).toBeUndefined()
   })
 
   it('preserves an explicitly available zero APR', async () => {
@@ -113,9 +126,12 @@ describe('fetchRujiStakePosition', () => {
       entries: [rujiStake({ apr: { value: '0', status: 'AVAILABLE' } })],
     })
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const bondedPosition = positions.find(
+      ({ id }) => id === rujiBondedStakePositionId
+    )
 
-    expect(position?.apr).toBe(0)
+    expect(bondedPosition?.apr).toBe(0)
   })
 
   it('selects the RUJI pool instead of the first staking entry', async () => {
@@ -129,9 +145,12 @@ describe('fetchRujiStakePosition', () => {
       ],
     })
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const bondedPosition = positions.find(
+      ({ id }) => id === rujiBondedStakePositionId
+    )
 
-    expect(position?.apr).toBeCloseTo(3.7176753737)
+    expect(bondedPosition?.apr).toBeCloseTo(3.7176753737)
   })
 
   it('prefers the API liquid size over receipt and bonded amounts', async () => {
@@ -140,30 +159,43 @@ describe('fetchRujiStakePosition', () => {
       receiptAmount: '200',
     })
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const autoCompoundPosition = positions.find(
+      ({ id }) => id === rujiAutoCompoundStakePositionId
+    )
 
-    expect(position?.amount).toBe(300n)
+    expect(autoCompoundPosition?.amount).toBe(300n)
   })
 
-  it('uses the receipt balance when the API has no liquid size', async () => {
+  it('does not substitute receipt shares for a missing liquid size', async () => {
     mockQueries({
       entries: [rujiStake({ bondedAmount: '100', liquidSizeAmount: '0' })],
       receiptAmount: '200',
     })
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const autoCompoundPosition = positions.find(
+      ({ id }) => id === rujiAutoCompoundStakePositionId
+    )
+    const bondedPosition = positions.find(
+      ({ id }) => id === rujiBondedStakePositionId
+    )
 
-    expect(position?.amount).toBe(200n)
+    expect(autoCompoundPosition).toBeUndefined()
+    expect(bondedPosition?.amount).toBe(100n)
   })
 
-  it('falls back to the bonded amount when the receipt lookup fails', async () => {
+  it('keeps the bonded amount available without a receipt lookup', async () => {
     mockQueries({
       entries: [rujiStake({ bondedAmount: '100', liquidSizeAmount: '0' })],
       receiptFailure: true,
     })
 
-    const position = await fetchPosition()
+    const positions = await fetchPositions()
+    const bondedPosition = positions.find(
+      ({ id }) => id === rujiBondedStakePositionId
+    )
 
-    expect(position?.amount).toBe(100n)
+    expect(bondedPosition?.amount).toBe(100n)
   })
 })
