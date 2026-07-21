@@ -2,7 +2,7 @@ import type { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import type { Resolver } from '@vultisig/lib-utils/types/Resolver'
 
 export type StakeKind = 'stake' | 'unstake' | 'claim'
-export type StakeId = 'ruji' | 'native-tcy' | 'stcy'
+export type StakeId = 'ruji' | 'native-tcy' | 'stcy' | 'brune'
 
 export type StakeSpecific =
   | { kind: 'memo'; memo: string; toAddress?: string; toAmount?: string }
@@ -46,14 +46,24 @@ export type StcyInput =
   | { kind: 'stake'; amount: number }
   | { kind: 'unstake'; amount: number }
 
+/**
+ * Input for a bRUNE liquid-bond op — amount-based auto-compounding stake
+ * (`liquid.bond`) or unstake (`liquid.unbond`), same shape as {@link StcyInput}.
+ */
+export type BruneInput =
+  | { kind: 'stake'; amount: number }
+  | { kind: 'unstake'; amount: number }
+
 export type RujiPayload = { coin: AccountCoin; input: RujiInput }
 export type NativeTcyPayload = { coin: AccountCoin; input: NativeTcyInput }
 export type StcyPayload = { input: StcyInput }
+export type BrunePayload = { input: BruneInput }
 
 type StakePayloadById = {
   ruji: RujiPayload
   'native-tcy': NativeTcyPayload
   stcy: StcyPayload
+  brune: BrunePayload
 }
 
 export type StakeResolverMap = {

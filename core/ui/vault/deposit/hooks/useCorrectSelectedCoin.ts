@@ -7,7 +7,7 @@ import { match } from '@vultisig/lib-utils/match'
 import { useCallback } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
-import { isStakeableCoin } from '../config'
+import { isBruneStakeCoin, isStakeableCoin } from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useMergeOptions } from './useMergeOptions'
@@ -24,10 +24,11 @@ export const useCorrectSelectedCoin = () => {
 
   return useCallback(
     (currentDepositCoin: AccountCoin) => {
+      const isStakeable = (coin: AccountCoin) =>
+        isStakeableCoin(coin.ticker) || isBruneStakeCoin(coin)
+
       const fallbackStakeableCoin = coins.find(
-        coin =>
-          coin.chain === currentDepositCoin.chain &&
-          isStakeableCoin(coin.ticker)
+        coin => coin.chain === currentDepositCoin.chain && isStakeable(coin)
       )
 
       const selectStakeableCoin = () => {
@@ -35,7 +36,7 @@ export const useCorrectSelectedCoin = () => {
           throw new Error('No stakeable coin found')
         }
 
-        return isStakeableCoin(currentDepositCoin.ticker)
+        return isStakeable(currentDepositCoin)
           ? currentDepositCoin
           : fallbackStakeableCoin
       }
@@ -81,7 +82,11 @@ export const useCorrectSelectedCoin = () => {
           return shouldBePresent(currentCoin || unmergeOptions[0])
         },
         stake: selectStakeableCoin,
-        withdraw_ruji_rewards: () => currentDepositCoin,
+        // Claiming RUJI rewards is a RUJI-only action; force the RUJI coin so a
+        // different selected coin (e.g. bRUNE) can't reach a claim path its
+        // resolver doesn't support.
+        withdraw_ruji_rewards: () =>
+          shouldBePresent(findByTicker({ coins, ticker: 'RUJI' })),
         unstake: selectStakeableCoin,
         unbond: () => shouldBePresent(findByTicker({ coins, ticker: 'RUNE' })),
         leave: () =>

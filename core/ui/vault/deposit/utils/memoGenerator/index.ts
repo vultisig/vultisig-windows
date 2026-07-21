@@ -78,6 +78,13 @@ export const generateMemo = ({
             return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
           }
 
+          // bRUNE stakes via a wasm `liquid.bond` execute, not a memo — the
+          // keysign builder discards this value, so return the canonical
+          // no-memo string instead of throwing.
+          if (coin.ticker.toUpperCase() === 'BRUNE') {
+            return ''
+          }
+
           throw new Error(
             `Unsupported chain and token for staking memo: ${chain}`
           )
@@ -108,6 +115,11 @@ export const generateMemo = ({
             }
             const chainAmount = toChainAmount(amtNum, coin.decimals).toString()
             return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+          }
+
+          // bRUNE unstakes via a wasm `liquid.unbond` execute, not a memo.
+          if (coin.ticker.toUpperCase() === 'BRUNE') {
+            return ''
           }
 
           throw new Error(
