@@ -37,9 +37,10 @@ export const validateSendReceiver = ({
   }
 
   if (!isValidAddress({ address: receiverAddress, chain, walletCore })) {
-    return `${t('send_invalid_receiver_address')}. ${getReceiverAddressFormatHint(
-      { chain, senderAddress, t }
-    )}`
+    return t('send_invalid_receiver_address_with_hint', {
+      error: t('send_invalid_receiver_address'),
+      hint: getReceiverAddressFormatHint({ chain, senderAddress, t }),
+    })
   }
 }
 

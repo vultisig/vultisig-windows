@@ -19,7 +19,17 @@ vi.mock(
   })
 )
 
-const t = ((key: string) => key) as TFunction
+// Minimal interpolating stub so the composed error+hint message is exercised.
+const t = ((key: string, options?: Record<string, unknown>) => {
+  const template =
+    key === 'send_invalid_receiver_address_with_hint'
+      ? '{{error}}. {{hint}}'
+      : key
+  if (!options) return template
+  return template.replace(/{{(\w+)}}/g, (_, name) =>
+    String(options[name] ?? `{{${name}}}`)
+  )
+}) as TFunction
 const walletCore = {} as WalletCore
 
 const nativeCoin = (chain: Chain): Coin =>
@@ -206,10 +216,18 @@ describe('validateSendReceiver', () => {
   it('surfaces the sender bech32 prefix in the Cosmos hint', () => {
     vi.mocked(isValidAddress).mockReturnValue(false)
 
-    const cosmosT = ((key: string, options?: { prefix?: string }) =>
-      key === 'send_receiver_format_hint_cosmos'
-        ? `starts with ${options?.prefix}`
-        : key) as TFunction
+    const cosmosT = ((
+      key: string,
+      options?: { prefix?: string; error?: string; hint?: string }
+    ) => {
+      if (key === 'send_invalid_receiver_address_with_hint') {
+        return `${options?.error}. ${options?.hint}`
+      }
+      if (key === 'send_receiver_format_hint_cosmos') {
+        return `starts with ${options?.prefix}`
+      }
+      return key
+    }) as TFunction
 
     expect(
       validateSendReceiver({

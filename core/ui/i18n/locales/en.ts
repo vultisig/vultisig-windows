@@ -1009,6 +1009,7 @@ export const en = {
   sends: 'Sends',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   send_invalid_receiver_address: 'Wrong address for selected chain',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_overview: 'Send Overview',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',

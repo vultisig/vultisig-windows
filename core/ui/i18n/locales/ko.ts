@@ -1696,8 +1696,7 @@ export const ko = {
   send_receiver_format_hint_evm:
     '0x로 시작하고 40자의 16진수로 구성된 EVM 주소를 입력하십시오.',
   send_receiver_format_hint_qbtc: 'qbtc로 시작하는 QBTC 주소를 입력하십시오.',
-  send_receiver_format_hint_ripple:
-    '문자 r로 시작하는 XRP 주소를 입력하세요.',
+  send_receiver_format_hint_ripple: '문자 r로 시작하는 XRP 주소를 입력하세요.',
   send_receiver_format_hint_solana:
     'Base58로 인코딩된 Solana 주소를 입력하십시오. 일반적으로 32~44자입니다.',
   send_receiver_format_hint_ss58:
@@ -1708,4 +1707,5 @@ export const ko = {
   send_receiver_format_hint_tron: '문자 T로 시작하는 TRON 주소를 입력하십시오.',
   send_receiver_format_hint_utxo:
     '이 네트워크에 사용할 유효한 주소를 입력하십시오(bech32 또는 기존 형식).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

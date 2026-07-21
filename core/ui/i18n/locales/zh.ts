@@ -1605,4 +1605,5 @@ export const zh = {
   send_receiver_format_hint_tron: '输入以字母 T 开头的TRON地址。',
   send_receiver_format_hint_utxo:
     '请输入此网络的有效地址（bech32 或传统格式）。',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

@@ -1713,8 +1713,7 @@ export const nl = {
     'Voer een Bech32-adres in dat begint met het voorvoegsel {{prefix}}.',
   send_receiver_format_hint_evm:
     'Voer een EVM-adres in dat begint met 0x en 40 hexadecimale tekens bevat.',
-  send_receiver_format_hint_qbtc:
-    'Voer een QBTC-adres in dat begint met qbtc.',
+  send_receiver_format_hint_qbtc: 'Voer een QBTC-adres in dat begint met qbtc.',
   send_receiver_format_hint_ripple:
     'Voer een XRP-adres in dat begint met de letter r.',
   send_receiver_format_hint_solana:
@@ -1728,4 +1727,5 @@ export const nl = {
     'Voer een TRON-adres in dat begint met de letter T.',
   send_receiver_format_hint_utxo:
     'Voer een geldig adres in voor dit netwerk (bech32- of legacy-formaat).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

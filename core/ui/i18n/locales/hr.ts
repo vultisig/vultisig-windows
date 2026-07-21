@@ -1716,4 +1716,5 @@ export const hr = {
   send_receiver_format_hint_tron: 'Unesite adresu TRON koja počinje slovom T.',
   send_receiver_format_hint_utxo:
     'Unesite valjanu adresu za ovu mrežu (bech32 ili stariji format).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

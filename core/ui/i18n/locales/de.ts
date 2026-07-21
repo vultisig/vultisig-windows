@@ -1758,4 +1758,5 @@ export const de = {
     'Geben Sie eine TRON-Adresse ein, die mit dem Buchstaben T beginnt.',
   send_receiver_format_hint_utxo:
     'Geben Sie eine gültige Adresse für dieses Netzwerk ein (Bech32- oder Legacy-Format).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

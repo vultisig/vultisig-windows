@@ -8,12 +8,15 @@ type GetReceiverAddressFormatHintInput = {
   t: TFunction
 }
 
-// Bech32 addresses are `<hrp>1<data>`; the human-readable prefix never contains
-// the `1` separator, so the first segment is the expected chain prefix. The
-// sender is always a valid address on the same chain, making it a reliable
-// source for the receiver's expected prefix.
-const getBech32Prefix = (address: string): string =>
-  address.trim().split('1')[0]
+// Bech32 addresses are `<hrp>1<data>`. The data part excludes `1`, so the last
+// `1` is always the separator — even when the human-readable prefix itself
+// contains a `1` (BIP-173). The sender is always a valid address on the same
+// chain, making it a reliable source for the receiver's expected prefix.
+const getBech32Prefix = (address: string): string => {
+  const trimmed = address.trim()
+  const separatorIndex = trimmed.lastIndexOf('1')
+  return separatorIndex === -1 ? trimmed : trimmed.slice(0, separatorIndex)
+}
 
 /**
  * Returns a human-readable hint describing the recipient address format expected

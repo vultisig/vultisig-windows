@@ -1746,4 +1746,5 @@ export const pt = {
     'Insira um endereço TRON que comece com a letra T.',
   send_receiver_format_hint_utxo:
     'Insira um endereço válido para esta rede (formato bech32 ou legado).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

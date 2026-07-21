@@ -1721,8 +1721,8 @@ export const ru = {
   send_receiver_format_hint_sui:
     'Введите адрес Sui, начинающийся с 0x и содержащий 64 шестнадцатеричных символа.',
   send_receiver_format_hint_ton: 'Введите действительный адрес TON.',
-  send_receiver_format_hint_tron:
-    'Введите адрес TRON, начинающийся с буквы T.',
+  send_receiver_format_hint_tron: 'Введите адрес TRON, начинающийся с буквы T.',
   send_receiver_format_hint_utxo:
     'Введите действительный адрес для этой сети (формат bech32 или устаревший).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

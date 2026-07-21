@@ -1749,4 +1749,5 @@ export const it = {
     'Inserisci un indirizzo TRON che inizia con la lettera T.',
   send_receiver_format_hint_utxo:
     'Inserisci un indirizzo valido per questa rete (formato bech32 o legacy).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }
