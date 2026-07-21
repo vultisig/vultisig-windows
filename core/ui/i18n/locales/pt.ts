@@ -1725,4 +1725,26 @@ export const pt = {
   ripple_undecoded_notice:
     'Esta transação não pôde ser decodificada. Revise os detalhes brutos abaixo antes de aprovar.',
   swap_expected_payout: 'pagamento esperado',
+  send_receiver_format_hint_cardano:
+    'Insira um endereço Cardano que comece com addr1.',
+  send_receiver_format_hint_cosmos:
+    'Insira um endereço Bech32 que comece com o prefixo {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Insira um endereço EVM que comece com 0x e tenha 40 caracteres hexadecimais.',
+  send_receiver_format_hint_qbtc:
+    'Insira um endereço QBTC que comece com qbtc.',
+  send_receiver_format_hint_ripple:
+    'Insira um endereço XRP que comece com a letra r.',
+  send_receiver_format_hint_solana:
+    'Insira um endereço Solana codificado em Base58, geralmente com 32 a 44 caracteres.',
+  send_receiver_format_hint_ss58:
+    'Insira um endereço codificado em SS58 para esta rede.',
+  send_receiver_format_hint_sui:
+    'Insira um endereço Sui que comece com 0x e tenha 64 caracteres hexadecimais.',
+  send_receiver_format_hint_ton: 'Insira um endereço TON válido.',
+  send_receiver_format_hint_tron:
+    'Insira um endereço TRON que comece com a letra T.',
+  send_receiver_format_hint_utxo:
+    'Insira um endereço válido para esta rede (formato bech32 ou legado).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

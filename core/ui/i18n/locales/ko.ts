@@ -1689,4 +1689,23 @@ export const ko = {
   ripple_undecoded_notice:
     '이 거래를 해독할 수 없습니다. 승인하기 전에 아래의 원본 세부 정보를 검토하십시오.',
   swap_expected_payout: '예상 지급액',
+  send_receiver_format_hint_cardano:
+    'addr1로 시작하는 카르다노 주소를 입력하세요.',
+  send_receiver_format_hint_cosmos:
+    '{{prefix}} 접두사로 시작하는 Bech32 주소를 입력하십시오.',
+  send_receiver_format_hint_evm:
+    '0x로 시작하고 40자의 16진수로 구성된 EVM 주소를 입력하십시오.',
+  send_receiver_format_hint_qbtc: 'qbtc로 시작하는 QBTC 주소를 입력하십시오.',
+  send_receiver_format_hint_ripple: '문자 r로 시작하는 XRP 주소를 입력하세요.',
+  send_receiver_format_hint_solana:
+    'Base58로 인코딩된 Solana 주소를 입력하십시오. 일반적으로 32~44자입니다.',
+  send_receiver_format_hint_ss58:
+    '이 네트워크에 대한 SS58로 인코딩된 주소를 입력하십시오.',
+  send_receiver_format_hint_sui:
+    '0x로 시작하고 64자리의 16진수로 구성된 Sui 주소를 입력하십시오.',
+  send_receiver_format_hint_ton: '유효한 TON 주소를 입력하십시오.',
+  send_receiver_format_hint_tron: '문자 T로 시작하는 TRON 주소를 입력하십시오.',
+  send_receiver_format_hint_utxo:
+    '이 네트워크에 사용할 유효한 주소를 입력하십시오(bech32 또는 기존 형식).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

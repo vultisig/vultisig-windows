@@ -1009,9 +1009,30 @@ export const en = {
   sends: 'Sends',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   send_invalid_receiver_address: 'Wrong address for selected chain',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_overview: 'Send Overview',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
+  send_receiver_format_hint_cardano:
+    'Enter a Cardano address that starts with addr1.',
+  send_receiver_format_hint_cosmos:
+    'Enter a Bech32 address that starts with the {{prefix}} prefix.',
+  send_receiver_format_hint_evm:
+    'Enter an EVM address that starts with 0x and has 40 hexadecimal characters.',
+  send_receiver_format_hint_qbtc: 'Enter a QBTC address that starts with qbtc.',
+  send_receiver_format_hint_ripple:
+    'Enter an XRP address that starts with the letter r.',
+  send_receiver_format_hint_solana:
+    'Enter a Base58-encoded Solana address, usually 32 to 44 characters.',
+  send_receiver_format_hint_ss58:
+    'Enter an SS58-encoded address for this network.',
+  send_receiver_format_hint_sui:
+    'Enter a Sui address that starts with 0x and has 64 hexadecimal characters.',
+  send_receiver_format_hint_ton: 'Enter a valid TON address.',
+  send_receiver_format_hint_tron:
+    'Enter a TRON address that starts with the letter T.',
+  send_receiver_format_hint_utxo:
+    'Enter a valid address for this network (bech32 or legacy format).',
   send_terms_0: "I'm sending to the right address",
   send_terms_1: 'The amount is correct',
   send_to: 'Send to',

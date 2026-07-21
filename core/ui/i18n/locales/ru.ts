@@ -1706,4 +1706,23 @@ export const ru = {
   ripple_undecoded_notice:
     'Данная транзакция не может быть расшифрована. Перед подтверждением ознакомьтесь с приведенными ниже данными.',
   swap_expected_payout: 'ожидаемая выплата',
+  send_receiver_format_hint_cardano:
+    'Введите адрес Cardano, начинающийся с addr1.',
+  send_receiver_format_hint_cosmos:
+    'Введите адрес Bech32, начинающийся с префикса {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Введите адрес EVM, начинающийся с 0x и содержащий 40 шестнадцатеричных символов.',
+  send_receiver_format_hint_qbtc: 'Введите адрес QBTC, начинающийся с qbtc.',
+  send_receiver_format_hint_ripple:
+    'Введите XRP-адрес, начинающийся с буквы «r».',
+  send_receiver_format_hint_solana:
+    'Введите адрес Solana, закодированный в Base58, обычно от 32 до 44 символов.',
+  send_receiver_format_hint_ss58: 'Введите адрес в формате SS58 для этой сети.',
+  send_receiver_format_hint_sui:
+    'Введите адрес Sui, начинающийся с 0x и содержащий 64 шестнадцатеричных символа.',
+  send_receiver_format_hint_ton: 'Введите действительный адрес TON.',
+  send_receiver_format_hint_tron: 'Введите адрес TRON, начинающийся с буквы T.',
+  send_receiver_format_hint_utxo:
+    'Введите действительный адрес для этой сети (формат bech32 или устаревший).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }
