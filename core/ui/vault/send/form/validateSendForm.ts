@@ -8,6 +8,7 @@ import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
 
 import { SendFormShape, ValidationResult } from './formShape'
+import { getReceiverAddressFormatHint } from './getReceiverAddressFormatHint'
 
 type ValidateSendReceiverInput = {
   receiverAddress: string
@@ -36,7 +37,9 @@ export const validateSendReceiver = ({
   }
 
   if (!isValidAddress({ address: receiverAddress, chain, walletCore })) {
-    return t('send_invalid_receiver_address')
+    return `${t('send_invalid_receiver_address')}. ${getReceiverAddressFormatHint(
+      { chain, senderAddress, t }
+    )}`
   }
 }
 
