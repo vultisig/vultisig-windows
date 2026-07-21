@@ -3,6 +3,7 @@ import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -103,7 +104,18 @@ export default defineConfig(async ({ mode }) => {
 
     switch (chunk) {
       case 'background':
-        plugins = [extensionNodePolyfills(isFirefoxBuild), wasm()]
+        // Required, NOT redundant: `wasm()` emits top-level `await` for WASM
+        // instantiation, and without `topLevelAwait()` the background service
+        // worker fails to finish evaluating at runtime — the SW never boots, so
+        // every `callBackground` from inpage/content hangs forever (dApp connect,
+        // getAccount, keysign — all dead) while inpage-local logic still works.
+        // `type: "module"` + `target: esnext` is not sufficient on its own; keep
+        // this plugin. See the regression from dropping it (#4400).
+        plugins = [
+          extensionNodePolyfills(isFirefoxBuild),
+          wasm(),
+          topLevelAwait(),
+        ]
         break
       case 'inpage':
         format = isFirefoxBuild ? undefined : 'iife'
@@ -134,9 +146,8 @@ export default defineConfig(async ({ mode }) => {
         ...plugins,
       ],
       build: {
-        // The SDK/WASM graph contains native top-level await. `esnext` stops
-        // esbuild from downleveling (and erroring on) it; the module service
-        // worker and module scripts evaluate it natively at runtime.
+        // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
+        // downlevel pass cannot transform the current dependency graph.
         target: 'esnext',
         copyPublicDir: false,
         emptyOutDir: false,
@@ -182,9 +193,8 @@ export default defineConfig(async ({ mode }) => {
         }),
       ],
       build: {
-        // The SDK/WASM graph contains native top-level await. `esnext` stops
-        // esbuild from downleveling (and erroring on) it; the module service
-        // worker and module scripts evaluate it natively at runtime.
+        // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's
+        // downlevel pass cannot transform the current dependency graph.
         target: 'esnext',
         emptyOutDir: false,
         manifest: false,

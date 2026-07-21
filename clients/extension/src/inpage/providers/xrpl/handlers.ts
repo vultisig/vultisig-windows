@@ -5,8 +5,27 @@ import { xrplMainnet } from './network'
 import { XrplRequestType, XrplResponseBody } from './protocol'
 import { signRippleMessage } from './signRippleMessage'
 import { signRippleTransaction } from './signRippleTransaction'
+import {
+  buildOfferCancelTx,
+  buildOfferCreateTx,
+  buildPaymentTx,
+  buildTrustSetTx,
+} from './transactions'
 
 const getRippleAccount = () => requestAccount(OtherChain.Ripple)
+
+/**
+ * Signs and broadcasts a built XRPL transaction through the shared submit path
+ * (grant-access + keysign popup + sanitizer), returning GemWallet's `{ hash }`.
+ * The convenience methods below differ only in how they build the transaction.
+ */
+const submitBuiltTransaction = async (
+  transaction: Record<string, unknown>
+): Promise<XrplResponseBody> => {
+  const { hash } = await signRippleTransaction({ transaction, broadcast: true })
+
+  return { result: { hash } }
+}
 
 /**
  * The sign / submit request payload the SDK sends: `{ transaction: <XRPL tx> }`.
@@ -107,4 +126,12 @@ export const xrplRequestHandlers: Record<
 
     return { result: { hash } }
   },
+  'REQUEST_SEND_PAYMENT/V3': async payload =>
+    submitBuiltTransaction(buildPaymentTx(payload)),
+  'REQUEST_SET_TRUSTLINE/V3': async payload =>
+    submitBuiltTransaction(buildTrustSetTx(payload)),
+  'REQUEST_CREATE_OFFER/V3': async payload =>
+    submitBuiltTransaction(buildOfferCreateTx(payload)),
+  'REQUEST_CANCEL_OFFER/V3': async payload =>
+    submitBuiltTransaction(buildOfferCancelTx(payload)),
 }
