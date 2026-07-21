@@ -53,6 +53,9 @@ const tokenById: Partial<Record<Chain, Record<string, Coin>>> = {
     'thor-stake-stcy': thorchainTokens.stcy,
     [rujiAutoCompoundStakePositionId]: thorchainTokens.ruji,
     [rujiBondedStakePositionId]: thorchainTokens.ruji,
+    // Stake/Unstake route into the #4395 deposit flow with the bRUNE coin
+    // (`selectStakeId` maps `x/brune` → the `brune` wasm resolver).
+    'thor-stake-brune': thorchainTokens.brune,
     'thor-stake-yrune': thorchainTokens.yRune,
     'thor-stake-ytcy': thorchainTokens.yTcy,
   },
@@ -99,6 +102,8 @@ const transferableStakeTokenById: Partial<Record<Chain, Record<string, Coin>>> =
     [Chain.THORChain]: {
       'thor-stake-stcy': thorchainTokens.stcy,
       'thor-stake-ruji': thorchainTokens.sruji,
+      // Send moves the held receipt token (ybRUNE), not the liquid bRUNE.
+      'thor-stake-brune': thorchainTokens.ybrune,
     },
   }
 
@@ -162,6 +167,10 @@ export const resolveStakeTitle = ({
   if (position.type === 'index') return coin.ticker
   if (position.id === 'thor-stake-stcy') {
     return translate('compounded_token', { ticker: 'TCY' })
+  }
+  // ybRUNE auto-compounds bonded bRUNE (like sTCY compounds TCY).
+  if (position.id === 'thor-stake-brune') {
+    return translate('compounded_token', { ticker: 'bRUNE' })
   }
   // Distinguish the two RUJI cards: the auto-compounding (sRUJI) position reads
   // "Compounded RUJI"; the bonded position falls through to "Staked RUJI".

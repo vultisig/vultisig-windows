@@ -28,6 +28,20 @@ export const thorchainTokens: Record<string, Coin> = {
     id: 'x/ruji',
     ticker: 'RUJI',
   },
+  brune: {
+    ...knownCosmosTokens[Chain.THORChain]['x/brune'],
+    chain: Chain.THORChain,
+    id: 'x/brune',
+    ticker: 'bRUNE',
+  },
+  ybrune: {
+    // ybRUNE lives in `thorchainNativeTokensMetadata`, not `knownCosmosTokens`
+    // (see `sruji` above — the same receipt-token pattern).
+    ...thorchainNativeTokensMetadata['x/staking-x/brune'],
+    chain: Chain.THORChain,
+    id: 'x/staking-x/brune',
+    ticker: 'ybRUNE',
+  },
   sruji: {
     // sRUJI lives in `thorchainNativeTokensMetadata`, not `knownCosmosTokens`
     // (indexing the latter yields `undefined` at runtime, leaving the coin with
@@ -58,6 +72,8 @@ export const thorchainDefiCoins: Coin[] = [
   thorchainTokens.tcy,
   thorchainTokens.stcy,
   thorchainTokens.ruji,
+  // bRUNE spot price backs the ybRUNE position's NAV-based fiat value.
+  thorchainTokens.brune,
   thorchainTokens.yRune,
   thorchainTokens.yTcy,
 ]
