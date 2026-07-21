@@ -1726,7 +1726,7 @@ export const es = {
   send_receiver_format_hint_cardano:
     'Introduce una dirección de Cardano que empiece por addr1.',
   send_receiver_format_hint_cosmos:
-    'Introduzca una dirección Bech32 que comience con el prefijo {{prefix}} .',
+    'Introduzca una dirección Bech32 que comience con el prefijo {{prefix}}.',
   send_receiver_format_hint_evm:
     'Introduzca una dirección EVM que comience con 0x y tenga 40 caracteres hexadecimales.',
   send_receiver_format_hint_qbtc:

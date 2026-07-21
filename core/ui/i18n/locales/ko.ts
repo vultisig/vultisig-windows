@@ -1697,7 +1697,7 @@ export const ko = {
     '0x로 시작하고 40자의 16진수로 구성된 EVM 주소를 입력하십시오.',
   send_receiver_format_hint_qbtc: 'qbtc로 시작하는 QBTC 주소를 입력하십시오.',
   send_receiver_format_hint_ripple:
-    '문자 &#39;r&#39;로 시작하는 XRP 주소를 입력하세요.',
+    '문자 r로 시작하는 XRP 주소를 입력하세요.',
   send_receiver_format_hint_solana:
     'Base58로 인코딩된 Solana 주소를 입력하십시오. 일반적으로 32~44자입니다.',
   send_receiver_format_hint_ss58:

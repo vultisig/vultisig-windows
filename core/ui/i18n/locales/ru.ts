@@ -1709,10 +1709,10 @@ export const ru = {
   send_receiver_format_hint_cardano:
     'Введите адрес Cardano, начинающийся с addr1.',
   send_receiver_format_hint_cosmos:
-    'Введите адрес Bech32, начинающийся с префикса {{prefix}} .',
+    'Введите адрес Bech32, начинающийся с префикса {{prefix}}.',
   send_receiver_format_hint_evm:
     'Введите адрес EVM, начинающийся с 0x и содержащий 40 шестнадцатеричных символов.',
-  send_receiver_format_hint_qbtc: 'Введите адрес QBTC , начинающийся с qbtc.',
+  send_receiver_format_hint_qbtc: 'Введите адрес QBTC, начинающийся с qbtc.',
   send_receiver_format_hint_ripple:
     'Введите XRP-адрес, начинающийся с буквы «r».',
   send_receiver_format_hint_solana:
@@ -1720,9 +1720,9 @@ export const ru = {
   send_receiver_format_hint_ss58: 'Введите адрес в формате SS58 для этой сети.',
   send_receiver_format_hint_sui:
     'Введите адрес Sui, начинающийся с 0x и содержащий 64 шестнадцатеричных символа.',
-  send_receiver_format_hint_ton: 'Введите действительный адрес TON .',
+  send_receiver_format_hint_ton: 'Введите действительный адрес TON.',
   send_receiver_format_hint_tron:
-    'Введите адрес TRON , начинающийся с буквы T.',
+    'Введите адрес TRON, начинающийся с буквы T.',
   send_receiver_format_hint_utxo:
     'Введите действительный адрес для этой сети (формат bech32 или устаревший).',
 }

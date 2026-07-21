@@ -1702,7 +1702,7 @@ export const hr = {
   send_receiver_format_hint_cardano:
     'Unesite Cardano adresu koja počinje s addr1.',
   send_receiver_format_hint_cosmos:
-    'Unesite Bech32 adresu koja počinje s prefiksom {{prefix}} .',
+    'Unesite Bech32 adresu koja počinje s prefiksom {{prefix}}.',
   send_receiver_format_hint_evm:
     'Unesite EVM adresu koja počinje s 0x i ima 40 heksadecimalnih znakova.',
   send_receiver_format_hint_qbtc: 'Unesite adresu QBTC koja počinje s qbtc.',
@@ -1712,7 +1712,7 @@ export const hr = {
   send_receiver_format_hint_ss58: 'Unesite adresu kodiranu SS58 za ovu mrežu.',
   send_receiver_format_hint_sui:
     'Unesite Sui adresu koja počinje s 0x i ima 64 heksadecimalna znaka.',
-  send_receiver_format_hint_ton: 'Unesite valjanu adresu TON .',
+  send_receiver_format_hint_ton: 'Unesite valjanu adresu TON.',
   send_receiver_format_hint_tron: 'Unesite adresu TRON koja počinje slovom T.',
   send_receiver_format_hint_utxo:
     'Unesite valjanu adresu za ovu mrežu (bech32 ili stariji format).',

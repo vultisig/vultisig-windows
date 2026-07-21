@@ -1744,7 +1744,7 @@ export const de = {
   send_receiver_format_hint_evm:
     'Geben Sie eine EVM-Adresse ein, die mit 0x beginnt und 40 Hexadezimalzeichen hat.',
   send_receiver_format_hint_qbtc:
-    'Geben Sie eine QBTC -Adresse ein, die mit qbtc beginnt.',
+    'Geben Sie eine QBTC-Adresse ein, die mit qbtc beginnt.',
   send_receiver_format_hint_ripple:
     'Geben Sie eine XRP-Adresse ein, die mit dem Buchstaben r beginnt.',
   send_receiver_format_hint_solana:
@@ -1753,9 +1753,9 @@ export const de = {
     'Geben Sie eine SS58-codierte Adresse für dieses Netzwerk ein.',
   send_receiver_format_hint_sui:
     'Geben Sie eine Sui-Adresse ein, die mit 0x beginnt und 64 Hexadezimalzeichen enthält.',
-  send_receiver_format_hint_ton: 'Geben Sie eine gültige TON -Adresse ein.',
+  send_receiver_format_hint_ton: 'Geben Sie eine gültige TON-Adresse ein.',
   send_receiver_format_hint_tron:
-    'Geben Sie eine TRON -Adresse ein, die mit dem Buchstaben T beginnt.',
+    'Geben Sie eine TRON-Adresse ein, die mit dem Buchstaben T beginnt.',
   send_receiver_format_hint_utxo:
     'Geben Sie eine gültige Adresse für dieses Netzwerk ein (Bech32- oder Legacy-Format).',
 }
