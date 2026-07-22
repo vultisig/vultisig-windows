@@ -50,7 +50,7 @@ const noUnicodeDashLiterals = {
             if (typeof node.value === 'string') reportIfNeeded(node, node.value)
           },
           TemplateElement(node) {
-            reportIfNeeded(node, node.value.raw)
+            reportIfNeeded(node, node.value.cooked ?? node.value.raw)
           },
           JSXText(node) {
             reportIfNeeded(node, node.value)

@@ -15,12 +15,23 @@ describe('enrichPolicyFields amount precision', () => {
     expect(policy.amount).toBe('1.23456789')
   })
 
-  it('omits an amount when asset precision cannot be resolved', () => {
-    const policy: Record<string, unknown> = {}
+  it('clears a stale recipient amount when precision cannot be resolved', () => {
+    const policy: Record<string, unknown> = { amount: 'stale' }
 
     enrichPolicyFields(policy, {
       asset: { chain: 'NotAChain', token: '' },
       recipients: [{ amount: '1000000000000000000' }],
+    })
+
+    expect(policy).not.toHaveProperty('amount')
+  })
+
+  it('clears a stale transfer amount when precision cannot be resolved', () => {
+    const policy: Record<string, unknown> = { amount: 'stale' }
+
+    enrichPolicyFields(policy, {
+      from: { chain: 'NotAChain', token: '' },
+      fromAmount: '1000000000000000000',
     })
 
     expect(policy).not.toHaveProperty('amount')

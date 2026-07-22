@@ -51,7 +51,11 @@ export function enrichPolicyFields(
       }
       if (r.amount != null) {
         const amount = formatHumanAmount(String(r.amount), chain, token)
-        if (amount !== null) policy.amount = amount
+        if (amount !== null) {
+          policy.amount = amount
+        } else {
+          delete policy.amount
+        }
       }
     }
   } else {
@@ -75,7 +79,11 @@ export function enrichPolicyFields(
         from.chain,
         from.token
       )
-      if (amount !== null) policy.amount = amount
+      if (amount !== null) {
+        policy.amount = amount
+      } else {
+        delete policy.amount
+      }
     }
   }
 
