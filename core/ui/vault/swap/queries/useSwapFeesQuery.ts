@@ -1,14 +1,9 @@
 import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQueryData'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
-import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/getNativeSwapDecimals'
-import {
-  SwapQuote,
-  SwapQuoteResult,
-} from '@vultisig/core-chain/swap/quote/SwapQuote'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { SwapFees } from '@vultisig/core-chain/swap/SwapFee'
 import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
-import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { useCallback, useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
@@ -17,6 +12,7 @@ import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { useSwapKeysignPayloadQuery } from '../keysignPayload/query'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
+import { resolveSwapFees } from './resolveSwapFees'
 
 export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()
@@ -47,53 +43,11 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
           decimals: fromFeeCoin.decimals,
         }
 
-        return matchRecordUnion<SwapQuoteResult, SwapFees>(swapQuote.quote, {
-          native: ({ fees }) => {
-            const swapAmount = BigInt(fees.total)
-
-            return {
-              swap: {
-                ...toCoinKey,
-                amount: swapAmount,
-                decimals: getNativeSwapDecimals(toCoinKey),
-              },
-              network,
-            }
-          },
-          general: ({ tx }) => {
-            return matchRecordUnion(tx, {
-              evm: ({ affiliateFee }) => ({
-                network,
-                ...(affiliateFee ? { swap: affiliateFee } : {}),
-              }),
-              solana: ({ networkFee, swapFee }) => ({
-                network: {
-                  chain: chain,
-                  amount: BigInt(networkFee),
-                  decimals: fromFeeCoin.decimals,
-                },
-                swap: swapFee,
-              }),
-              transfer: () => ({ network }),
-              cowswap_order: ({ feeAmount }) => {
-                const swapAmount = BigInt(feeAmount)
-
-                return {
-                  network,
-                  ...(swapAmount > 0n && fromCoin
-                    ? {
-                        swap: {
-                          chain: fromCoin.chain,
-                          id: fromCoin.id,
-                          amount: swapAmount,
-                          decimals: fromCoin.decimals,
-                        },
-                      }
-                    : {}),
-                }
-              },
-            })
-          },
+        return resolveSwapFees({
+          quote: swapQuote.quote,
+          network,
+          toCoinKey,
+          fromCoin,
         })
       },
       [fromCoin, fromCoinKey, publicKey, swapQuote.quote, toCoinKey, walletCore]
