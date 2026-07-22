@@ -3,8 +3,11 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { useAdvancedSwapQueueEnabledQuery } from '../limit/queries/useAdvancedSwapQueueEnabledQuery'
+
 export const LimitSwapForm = () => {
   const { t } = useTranslation()
+  const { data: isQueueEnabled } = useAdvancedSwapQueueEnabledQuery()
 
   return (
     <PageContent alignItems="center" justifyContent="center" flexGrow>
@@ -13,7 +16,9 @@ export const LimitSwapForm = () => {
           {t('swap_limit_orders')}
         </Text>
         <Text size={14} color="supporting">
-          {t('coming_soon')}
+          {isQueueEnabled === false
+            ? t('swap_limit_unavailable')
+            : t('coming_soon')}
         </Text>
       </VStack>
     </PageContent>

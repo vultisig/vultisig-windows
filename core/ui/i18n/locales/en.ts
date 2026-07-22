@@ -1158,6 +1158,8 @@ export const en = {
   swap_invalid_external_recipient:
     'Recipient address is not valid for {{chain}}',
   swap_limit_orders: 'Limit orders',
+  swap_limit_unavailable:
+    'Limit orders are temporarily unavailable on THORChain',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Market',
   swap_overview: 'Swap overview',

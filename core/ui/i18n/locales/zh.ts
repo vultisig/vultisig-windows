@@ -1606,4 +1606,5 @@ export const zh = {
   send_receiver_format_hint_utxo:
     '请输入此网络的有效地址（bech32 或传统格式）。',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable: 'THORChain的限价单功能暂时不可用。',
 }
