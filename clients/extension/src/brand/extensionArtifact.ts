@@ -9,6 +9,7 @@ const extensionArtifactDirectoryByBrand: Record<ExtensionProductBrand, string> =
     station: 'dist-station',
   }
 
+/** Returns the dedicated unpacked-build directory for an extension brand. */
 export const getExtensionArtifactDirectoryName = (
   brand: ExtensionProductBrand
 ) => extensionArtifactDirectoryByBrand[brand]

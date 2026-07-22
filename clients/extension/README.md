@@ -1,16 +1,23 @@
-# VultiConnect
+# Vultisig Browser Extension
 
-## What is VultiConnect
-VultiConnect is a Chrome extension similar to MetaMask but much safer. It does not store any critical information such as private keys or passwords. Instead, it allows you to connect your Vultisig app to DeFi applications, enabling you to interact with them and sign transactions on your devices.
+## What is the Vultisig Browser Extension?
 
-## How Safe is VultiConnect
-You only need to import public keys and vault information into VultiConnect. Unlike MetaMask, if someone hacks your Chrome or the extension, they cannot execute transactions without your approval on your Vultisig devices, as they only have access to public information.
+The browser extension connects web applications to Vultisig vaults without
+storing private keys or passwords. It is built in Vultisig and Station flavors,
+which share the same functionality with separate branding and build artifacts.
+
+## How safe is it?
+
+You only import public keys and vault information into the extension. Signing
+still requires approval on your Vultisig devices because the extension only has
+access to public information.
 
 ## Requirements
-Before building VultiConnect, ensure you have the following installed:
-- `Node.js` (version 18.10.0 or later)
-- `pnpm` (for managing packages)
-- `npm` (if you need it for specific tasks)
+
+Before building either flavor, install:
+
+- `Node.js` 18.10.0 or later
+- Yarn 4.16.0 (the repository-pinned version, available through Corepack)
 
 ## How to Build the Extension
 
@@ -34,7 +41,7 @@ building one flavor does not replace the other.
 
 ## Integration Guide
 
-For details on integrating VultiConnect with your project, see the [Integration Guide](docs/integration-guide.md).
+For details on integrating the extension with your project, see the [Integration Guide](docs/integration-guide.md).
 
 ## Linting
 

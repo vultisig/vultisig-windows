@@ -1,7 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
 
 const artifactConfig = {
   dist: {
@@ -18,18 +18,22 @@ const artifactConfig = {
 
 const requestedArtifact = process.env.VULTISIG_EXTENSION_ARTIFACT ?? 'dist'
 
-if (!(requestedArtifact in artifactConfig)) {
+const isExtensionArtifactDirectory = (
+  value: string
+): value is keyof typeof artifactConfig =>
+  Object.prototype.hasOwnProperty.call(artifactConfig, value)
+
+if (!isExtensionArtifactDirectory(requestedArtifact)) {
   throw new Error(
     `Unsupported VULTISIG_EXTENSION_ARTIFACT "${requestedArtifact}". Expected "dist" or "dist-station".`
   )
 }
 
-export const extensionArtifactDirectory =
-  requestedArtifact as keyof typeof artifactConfig
+export const extensionArtifactDirectory = requestedArtifact
 export const expectedExtensionArtifact =
   artifactConfig[extensionArtifactDirectory]
 export const extensionPath = path.resolve(
-  __dirname,
+  currentDirectory,
   '../..',
   extensionArtifactDirectory
 )

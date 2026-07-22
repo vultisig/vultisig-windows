@@ -47,6 +47,7 @@ const copyStationIcons = async (extensionDir: string, distDir: string) => {
   )
 }
 
+/** Applies brand metadata and writes a provenance receipt to the built artifact. */
 export const extensionBrandVitePlugin = ({
   config,
   distDir,

@@ -14,12 +14,13 @@ import { fileURLToPath } from 'url'
 
 import {
   expectedExtensionArtifact,
+  extensionArtifactDirectory,
   extensionPath,
 } from './extension-path'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
 
-async function globalSetup(config: FullConfig): Promise<void> {
+async function globalSetup(_config: FullConfig): Promise<void> {
   console.log('\n🚀 Global Setup: Preparing E2E test environment...\n')
 
   // 1. Verify extension build exists
@@ -42,12 +43,12 @@ async function globalSetup(config: FullConfig): Promise<void> {
   }
 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-  const artifactReceipt = JSON.parse(
-    readFileSync(artifactReceiptPath, 'utf8')
-  )
+  const artifactReceipt = JSON.parse(readFileSync(artifactReceiptPath, 'utf8'))
 
   if (
+    artifactReceipt.schemaVersion !== 1 ||
     artifactReceipt.brand !== expectedExtensionArtifact.brand ||
+    artifactReceipt.artifactDirectory !== extensionArtifactDirectory ||
     artifactReceipt.manifestName !== expectedExtensionArtifact.manifestName ||
     manifest.name !== expectedExtensionArtifact.manifestName
   ) {
@@ -81,7 +82,7 @@ async function globalSetup(config: FullConfig): Promise<void> {
   }
 
   // 4. Create test-results directory if needed
-  const testResultsDir = path.resolve(__dirname, 'test-results')
+  const testResultsDir = path.resolve(currentDirectory, 'test-results')
   if (!existsSync(testResultsDir)) {
     mkdirSync(testResultsDir, { recursive: true })
   }
@@ -104,7 +105,10 @@ async function globalSetup(config: FullConfig): Promise<void> {
   console.log('✅ Environment info written to test-results/env-info.json')
 
   // 6. Initialize chain rotation state if needed (for fund-dependent tests)
-  const chainRotationStatePath = path.resolve(__dirname, '.chain-rotation-state.json')
+  const chainRotationStatePath = path.resolve(
+    currentDirectory,
+    '.chain-rotation-state.json'
+  )
   if (!existsSync(chainRotationStatePath)) {
     const initialState = {
       lastRun: null,
