@@ -3,6 +3,7 @@ import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/ge
 import { SwapQuoteResult } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { SwapFee, SwapFees } from '@vultisig/core-chain/swap/SwapFee'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { maxBigInt } from '@vultisig/lib-utils/math/maxBigInt'
 
 /** Input for {@link resolveSwapFees}. */
 type ResolveSwapFeesInput = {
@@ -16,10 +17,11 @@ type ResolveSwapFeesInput = {
  * Maps a swap quote to its network + swap fee breakdown.
  *
  * Every branch keeps the caller-computed `network` fee. In particular the
- * `solana` branch must not fall back to the provider's `networkFee`, which is
+ * `solana` branch must not blindly trust the provider's `networkFee`, which is
  * `0n` whenever the quote carries no network-fee entry (e.g. SwapKit
- * CHAINFLIP_STREAMING) — the computed value from the keysign payload is the
- * real on-chain cost. See vultisig-windows#4381.
+ * CHAINFLIP_STREAMING); it takes the larger of the computed keysign-payload fee
+ * and the provider's value, so the displayed fee is never below the real
+ * on-chain cost. See vultisig-windows#4381.
  */
 export const resolveSwapFees = ({
   quote,
@@ -42,8 +44,11 @@ export const resolveSwapFees = ({
           network,
           ...(affiliateFee ? { swap: affiliateFee } : {}),
         }),
-        solana: ({ swapFee }) => ({
-          network,
+        solana: ({ networkFee, swapFee }) => ({
+          network: {
+            ...network,
+            amount: maxBigInt(network.amount, networkFee),
+          },
           swap: swapFee,
         }),
         transfer: () => ({ network }),

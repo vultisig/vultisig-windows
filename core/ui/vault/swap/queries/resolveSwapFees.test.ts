@@ -46,9 +46,36 @@ describe('resolveSwapFees', () => {
     })
 
     // Regression: the solana branch used to override this with the provider's 0n.
-    expect(result.network).toBe(computedNetworkFee)
     expect(result.network.amount).toBe(5000n)
+    expect(result.network.chain).toBe(Chain.Solana)
     expect(result.swap).toBe(providerSwapFee)
+  })
+
+  it('uses the provider network fee for a Solana swap when it exceeds the computed one', () => {
+    const quote: SwapQuoteResult = {
+      general: {
+        dstAmount: '1000000',
+        provider: 'swapkit',
+        tx: {
+          solana: {
+            data: '',
+            // Provider reports a higher fee than we computed.
+            networkFee: 8000n,
+            swapFee: providerSwapFee,
+          },
+        },
+      },
+    }
+
+    const result = resolveSwapFees({
+      quote,
+      network: computedNetworkFee,
+      toCoinKey,
+      fromCoin: undefined,
+    })
+
+    expect(result.network.amount).toBe(8000n)
+    expect(result.network.decimals).toBe(computedNetworkFee.decimals)
   })
 
   it('threads the computed network fee through the transfer branch', () => {
