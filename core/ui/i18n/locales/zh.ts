@@ -1590,4 +1590,20 @@ export const zh = {
   ripple_field_issuer: '发行人',
   ripple_undecoded_notice: '此交易无法解码。请在批准前查看以下原始详细信息。',
   swap_expected_payout: '预期收益',
+  send_receiver_format_hint_cardano: '输入以addr1开头的Cardano地址。',
+  send_receiver_format_hint_cosmos: '输入以{{prefix}}为前缀的 Bech32 地址。',
+  send_receiver_format_hint_evm:
+    '输入一个以 0x 开头且长度为 40 个十六进制字符的 EVM 地址。',
+  send_receiver_format_hint_qbtc: '输入以 qbtc 开头的QBTC地址。',
+  send_receiver_format_hint_ripple: '输入一个以字母 r 开头的 XRP 地址。',
+  send_receiver_format_hint_solana:
+    '输入一个 Base58 编码的 Solana 地址，通常为 32 到 44 个字符。',
+  send_receiver_format_hint_ss58: '请输入此网络的 SS58 编码地址。',
+  send_receiver_format_hint_sui:
+    '输入一个以 0x 开头且长度为 64 个十六进制字符的 Sui 地址。',
+  send_receiver_format_hint_ton: '请输入有效的TON地址。',
+  send_receiver_format_hint_tron: '输入以字母 T 开头的TRON地址。',
+  send_receiver_format_hint_utxo:
+    '请输入此网络的有效地址（bech32 或传统格式）。',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }

@@ -19,7 +19,17 @@ vi.mock(
   })
 )
 
-const t = ((key: string) => key) as TFunction
+// Minimal interpolating stub so the composed error+hint message is exercised.
+const t = ((key: string, options?: Record<string, unknown>) => {
+  const template =
+    key === 'send_invalid_receiver_address_with_hint'
+      ? '{{error}}. {{hint}}'
+      : key
+  if (!options) return template
+  return template.replace(/{{(\w+)}}/g, (_, name) =>
+    String(options[name] ?? `{{${name}}}`)
+  )
+}) as TFunction
 const walletCore = {} as WalletCore
 
 const nativeCoin = (chain: Chain): Coin =>
@@ -173,5 +183,84 @@ describe('validateSendReceiver', () => {
       })
     ).toBe('send_receiver_address_same_as_sender')
     expect(isValidAddress).not.toHaveBeenCalled()
+  })
+
+  it('requires a recipient before format validation', () => {
+    expect(
+      validateSendReceiver({
+        receiverAddress: '',
+        senderAddress: '0xsender',
+        chain: Chain.Ethereum,
+        walletCore,
+        t,
+      })
+    ).toBe('enter_address')
+    expect(isValidAddress).not.toHaveBeenCalled()
+  })
+
+  it('appends the chain-specific format hint when the address is invalid', () => {
+    vi.mocked(isValidAddress).mockReturnValue(false)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress:
+          '0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b',
+        senderAddress: '0xsender',
+        chain: Chain.Ethereum,
+        walletCore,
+        t,
+      })
+    ).toBe('send_invalid_receiver_address. send_receiver_format_hint_evm')
+  })
+
+  it('surfaces the sender bech32 prefix in the Cosmos hint', () => {
+    vi.mocked(isValidAddress).mockReturnValue(false)
+
+    const cosmosT = ((
+      key: string,
+      options?: { prefix?: string; error?: string; hint?: string }
+    ) => {
+      if (key === 'send_invalid_receiver_address_with_hint') {
+        return `${options?.error}. ${options?.hint}`
+      }
+      if (key === 'send_receiver_format_hint_cosmos') {
+        return `starts with ${options?.prefix}`
+      }
+      return key
+    }) as TFunction
+
+    expect(
+      validateSendReceiver({
+        receiverAddress: 'not-an-address',
+        senderAddress: 'thor1abcdefg',
+        chain: Chain.THORChain,
+        walletCore,
+        t: cosmosT,
+      })
+    ).toBe('send_invalid_receiver_address. starts with thor')
+  })
+
+  it('resolves a format hint for every acceptance-criteria chain family', () => {
+    vi.mocked(isValidAddress).mockReturnValue(false)
+
+    const chains = [
+      Chain.Ethereum,
+      Chain.Cosmos,
+      Chain.Bitcoin,
+      Chain.Solana,
+      Chain.Ripple,
+    ]
+
+    for (const chain of chains) {
+      const error = validateSendReceiver({
+        receiverAddress: 'invalid',
+        senderAddress: 'sender1xyz',
+        chain,
+        walletCore,
+        t,
+      })
+      expect(error).toContain('send_invalid_receiver_address')
+      expect(error).toContain('send_receiver_format_hint_')
+    }
   })
 })

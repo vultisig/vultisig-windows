@@ -1707,4 +1707,25 @@ export const nl = {
   ripple_undecoded_notice:
     'Deze transactie kon niet worden gedecodeerd. Controleer de onderstaande gegevens voordat u goedkeurt.',
   swap_expected_payout: 'verwachte uitbetaling',
+  send_receiver_format_hint_cardano:
+    'Voer een Cardano-adres in dat begint met addr1.',
+  send_receiver_format_hint_cosmos:
+    'Voer een Bech32-adres in dat begint met het voorvoegsel {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Voer een EVM-adres in dat begint met 0x en 40 hexadecimale tekens bevat.',
+  send_receiver_format_hint_qbtc: 'Voer een QBTC-adres in dat begint met qbtc.',
+  send_receiver_format_hint_ripple:
+    'Voer een XRP-adres in dat begint met de letter r.',
+  send_receiver_format_hint_solana:
+    'Voer een Base58-gecodeerd Solana-adres in, meestal 32 tot 44 tekens lang.',
+  send_receiver_format_hint_ss58:
+    'Voer een SS58-gecodeerd adres in voor dit netwerk.',
+  send_receiver_format_hint_sui:
+    'Voer een SUI-adres in dat begint met 0x en 64 hexadecimale tekens bevat.',
+  send_receiver_format_hint_ton: 'Voer een geldig TON-adres in.',
+  send_receiver_format_hint_tron:
+    'Voer een TRON-adres in dat begint met de letter T.',
+  send_receiver_format_hint_utxo:
+    'Voer een geldig adres in voor dit netwerk (bech32- of legacy-formaat).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
 }
