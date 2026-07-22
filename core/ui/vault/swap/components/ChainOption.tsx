@@ -1,5 +1,6 @@
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
@@ -34,7 +35,10 @@ export const ChainOption = ({
     >
       <HStack alignItems="center" justifyContent="space-between">
         <HStack fullWidth alignItems="center" gap={12}>
-          <CoinIcon coin={value} style={{ fontSize: 32 }} />
+          <ChainEntityIcon
+            value={getChainLogoSrc(chain)}
+            style={{ fontSize: 32 }}
+          />
           <VStack alignItems="start">
             <Text color="contrast" size={14} weight="500">
               {chain}
