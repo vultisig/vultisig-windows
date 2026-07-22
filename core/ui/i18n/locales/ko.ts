@@ -1709,5 +1709,5 @@ export const ko = {
     '이 네트워크에 사용할 유효한 주소를 입력하십시오(bech32 또는 기존 형식).',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable:
-    'THORChain 에 대한 지정가 주문은 일시적으로 이용할 수 없습니다.',
+    'THORChain에 대한 지정가 주문은 일시적으로 이용할 수 없습니다.',
 }

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import { toThorchainFixedPoint } from './amount'
 import {
   fetchLimitSwapMarketPrice,
   getLimitSwapMarketPrice,
@@ -78,6 +79,25 @@ describe('getMarketProbeAmount', () => {
     expect(
       getMarketProbeAmount({ price: 10 ** 12, decimals: 2 })
     ).toBeGreaterThan(0n)
+  })
+
+  // A nonzero native amount is not enough past 8 decimals: 1 wei of an
+  // 18-decimal asset converts to 0 in THORChain's 1e8 scale, and quoting
+  // `amount=0` returns no usable price.
+  it.each([9, 18])(
+    'clamps a %s-decimal probe so it survives conversion to 1e8',
+    decimals => {
+      const amount = getMarketProbeAmount({ price: 10 ** 12, decimals })
+
+      expect(toThorchainFixedPoint({ amount, decimals })).toBeGreaterThan(0n)
+    }
+  )
+
+  it('leaves a realistic probe untouched by the minimum clamp', () => {
+    // $3k ETH -> ~0.0333 ETH, comfortably above the 1e10 wei floor.
+    expect(getMarketProbeAmount({ price: 3_000, decimals: 18 })).toBe(
+      33_333_333_333_333_332n
+    )
   })
 })
 

@@ -2,7 +2,7 @@
  * THORChain expresses quote amounts and memo LIM values in 1e8 fixed point,
  * regardless of the asset's own decimals.
  */
-const thorchainFixedPointDecimals = 8
+export const thorchainFixedPointDecimals = 8
 
 const thorchainScale = 10n ** BigInt(thorchainFixedPointDecimals)
 

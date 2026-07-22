@@ -1,7 +1,11 @@
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { thornodeBaseUrl } from '../../../defi/chain/queries/constants'
-import { fromThorchainFixedPoint, toThorchainFixedPoint } from './amount'
+import {
+  fromThorchainFixedPoint,
+  thorchainFixedPointDecimals,
+  toThorchainFixedPoint,
+} from './amount'
 
 /**
  * Notional value the reference-price probe aims for.
@@ -19,14 +23,29 @@ type GetMarketProbeAmountInput = {
   decimals: number
 }
 
+/**
+ * Smallest native amount that still survives conversion to THORChain's 1e8
+ * scale.
+ *
+ * A single native unit is not enough past 8 decimals: 1 wei of an 18-decimal
+ * asset converts to 0, and quoting `amount=0` returns no usable price. Assets at
+ * or under 8 decimals scale up, so one unit is always safe there.
+ */
+const getMinimumProbeAmount = (decimals: number): bigint =>
+  decimals > thorchainFixedPointDecimals
+    ? 10n ** BigInt(decimals - thorchainFixedPointDecimals)
+    : 1n
+
 /** Source amount, in native smallest units, to quote for a reference price. */
 export const getMarketProbeAmount = ({
   price,
   decimals,
 }: GetMarketProbeAmountInput): bigint => {
   const units = price > 0 ? marketProbeFiatValue / price : 1
+  const amount = BigInt(Math.max(1, Math.round(units * 10 ** decimals)))
+  const minimum = getMinimumProbeAmount(decimals)
 
-  return BigInt(Math.max(1, Math.round(units * 10 ** decimals)))
+  return amount > minimum ? amount : minimum
 }
 
 type GetLimitSwapMarketPriceInput = {

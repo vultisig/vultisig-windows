@@ -5,6 +5,11 @@ import { useTranslation } from 'react-i18next'
 
 import { useAdvancedSwapQueueEnabledQuery } from '../limit/queries/useAdvancedSwapQueueEnabledQuery'
 
+/**
+ * Limit-swap tab content. Surfaces THORChain's live advanced-swap-queue gate so
+ * an unavailable network reads as such rather than as "coming soon"; the order
+ * form itself lands with the rest of the limit-swap UI.
+ */
 export const LimitSwapForm = () => {
   const { t } = useTranslation()
   const { data: isQueueEnabled } = useAdvancedSwapQueueEnabledQuery()
