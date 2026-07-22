@@ -92,7 +92,7 @@ const args = [
 
 if (process.argv.includes('--print')) {
   console.log(`yarn ${args.join(' ')}`)
-  process.exit(0)
+} else {
+  const yarn = process.platform === 'win32' ? 'yarn.cmd' : 'yarn'
+  execFileSync(yarn, args, { stdio: 'inherit' })
 }
-
-execFileSync('yarn', args, { stdio: 'inherit' })
