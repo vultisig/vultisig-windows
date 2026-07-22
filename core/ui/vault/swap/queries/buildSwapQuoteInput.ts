@@ -4,6 +4,7 @@ import { FindSwapQuoteInput } from '@vultisig/core-chain/swap/quote/findSwapQuot
 
 import { ProductBrand } from '../../../product/brand'
 import { stationSwapAffiliateConfig } from '../affiliate/stationSwapAffiliateConfig'
+import { clientSwapQuoteProviderExclusions } from '../clientSwapQuoteConfig'
 
 type BuildSwapQuoteInput = {
   from: AccountCoin
@@ -33,6 +34,7 @@ export const buildSwapQuoteInput = ({
     referral: referral ?? undefined,
     slippageTolerance,
     recipient,
+    excludeProviders: clientSwapQuoteProviderExclusions,
   }
 
   if (productBrand === 'station') {

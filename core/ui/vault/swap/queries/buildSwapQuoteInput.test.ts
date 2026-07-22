@@ -45,6 +45,7 @@ describe('buildSwapQuoteInput', () => {
       referral: 'friend',
       vultDiscountTier: null,
       affiliateConfig: stationSwapAffiliateConfig,
+      excludeProviders: ['CowSwap'],
     })
     expect(input.affiliateConfig?.native?.affiliateFeeAddress).toBe('stvs')
     expect(input.affiliateConfig?.oneInch?.referrer).toBe(
@@ -76,6 +77,7 @@ describe('buildSwapQuoteInput', () => {
       amount: 1n,
       referral: undefined,
       vultDiscountTier: 'gold',
+      excludeProviders: ['CowSwap'],
     })
     expect(input).not.toHaveProperty('affiliateConfig')
   })
