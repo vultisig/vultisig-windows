@@ -71,18 +71,34 @@ yarn dev:extension
 
 ### Building
 
-To build the extension:
+To build the regular Vultisig extension:
 
 ```bash
 yarn build:extension
 ```
 
+The Vultisig artifact is written to `clients/extension/dist`.
+
+To build the Station extension:
+
+```bash
+yarn build:extension:station
+```
+
+The Station artifact is written independently to
+`clients/extension/dist-station`. Building one flavor does not replace the
+other.
+
 ### Installing in Chrome
 
 1. Open Chrome and navigate to `chrome://extensions`
 2. Enable "Developer mode" (top-right corner)
-3. Click "Load unpacked" and select the `dist` folder from the extension
-4. The extension should now be installed and ready to use
+3. Click "Load unpacked" and select `clients/extension/dist` for Vultisig or
+   `clients/extension/dist-station` for Station.
+4. Verify the extension card says `Vultisig Extension` or `Station Wallet`,
+   note its extension ID, and reload the exact directory selected above before
+   reviewing UI.
+5. The extension should now be installed and ready to use.
 
 ## Vultisig Extension Integration Guide
 

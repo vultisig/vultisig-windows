@@ -63,6 +63,11 @@ const expectedIconPaths = {
   128: 'icon128.png',
 }
 
+const expectedArtifactDirectoryByBrand = {
+  vultisig: 'dist',
+  station: 'dist-station',
+}
+
 const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const extensionDir = path.resolve(currentDir, '..')
 const rootDir = path.resolve(extensionDir, '../..')
@@ -252,6 +257,9 @@ const readInpageSources = async distDir => {
 const assertStaticBrand = async ({ brand, distDir, expected }) => {
   const manifestPath = path.resolve(distDir, 'manifest.json')
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
+  const artifactReceipt = JSON.parse(
+    await readFile(path.resolve(distDir, 'extension-artifact.json'), 'utf8')
+  )
   const inpageSource = await readInpageSources(distDir)
   const iconSourceDir = getIconSourceDir(brand)
 
@@ -269,6 +277,18 @@ const assertStaticBrand = async ({ brand, distDir, expected }) => {
     manifest.description,
     expected.manifestDescription,
     'manifest.description'
+  )
+  assertEqual(artifactReceipt.schemaVersion, 1, 'artifact.schemaVersion')
+  assertEqual(artifactReceipt.brand, brand, 'artifact.brand')
+  assertEqual(
+    artifactReceipt.artifactDirectory,
+    expectedArtifactDirectoryByBrand[brand],
+    'artifact.artifactDirectory'
+  )
+  assertEqual(
+    artifactReceipt.manifestName,
+    expected.manifestName,
+    'artifact.manifestName'
   )
   assertManifestAuthor(manifest.author, expected)
 
@@ -1087,6 +1107,6 @@ if (!options.skipBrowser) {
 }
 
 console.log(
-  `Extension brand QA passed for ${options.brand}` +
+  `Extension brand QA passed for ${options.brand} at ${getRootRelativePath(options.distDir)}` +
     (options.skipBrowser ? ' (static only).' : '.')
 )

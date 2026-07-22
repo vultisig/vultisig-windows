@@ -1,37 +1,47 @@
-# VultiConnect
+# Vultisig Browser Extension
 
-## What is VultiConnect
-VultiConnect is a Chrome extension similar to MetaMask but much safer. It does not store any critical information such as private keys or passwords. Instead, it allows you to connect your Vultisig app to DeFi applications, enabling you to interact with them and sign transactions on your devices.
+## What is the Vultisig Browser Extension?
 
-## How Safe is VultiConnect
-You only need to import public keys and vault information into VultiConnect. Unlike MetaMask, if someone hacks your Chrome or the extension, they cannot execute transactions without your approval on your Vultisig devices, as they only have access to public information.
+The browser extension connects web applications to Vultisig vaults without
+storing private keys or passwords. It is built in Vultisig and Station flavors,
+which share the same functionality with separate branding and build artifacts.
+
+## How safe is it?
+
+You only import public keys and vault information into the extension. Signing
+still requires approval on your Vultisig devices because the extension only has
+access to public information.
 
 ## Requirements
-Before building VultiConnect, ensure you have the following installed:
-- `Node.js` (version 18.10.0 or later)
-- `pnpm` (for managing packages)
-- `npm` (if you need it for specific tasks)
 
-## How to Build the VultiConnect Extension
-To build the VultiConnect extension, follow these steps:
-1. Clone the repository:
-   `git clone https://github.com/vultisig/vulticonnect.git`
-2. Navigate to the project directory:
-   `cd vulticonnect`
-3. Install the necessary dependencies using pnpm:
-   `pnpm install`
-4. Build the project for production:
-   `pnpm run build`
+Before building either flavor, install:
+
+- `Node.js` 18.10.0 or later
+- Yarn 4.16.0 (the repository-pinned version, available through Corepack)
+
+## How to Build the Extension
+
+From the repository root, build the regular Vultisig flavor with
+`yarn build:extension`. Its unpacked artifact is
+`clients/extension/dist`.
+
+Build the Station flavor with `yarn build:extension:station`. Its unpacked
+artifact is `clients/extension/dist-station`. The two paths are independent so
+building one flavor does not replace the other.
 
 ## How to Install it in Chrome
 1. Open Chrome and go to `chrome://extensions`.
 2. Enable `Developer mode` by toggling the switch in the top right corner.
-3. Click on `Load unpacked` and select the *dist* folder from the VultiConnect project directory.
-4. Your extension should now be installed and ready to use.
+3. Click `Load unpacked` and select `dist` for Vultisig or `dist-station` for
+   Station.
+4. Verify the extension card says `Vultisig Extension` or `Station Wallet`,
+   note its extension ID, and reload the exact `dist` or `dist-station`
+   directory before reviewing UI.
+5. Your extension should now be installed and ready to use.
 
 ## Integration Guide
 
-For details on integrating VultiConnect with your project, see the [Integration Guide](docs/integration-guide.md).
+For details on integrating the extension with your project, see the [Integration Guide](docs/integration-guide.md).
 
 ## Linting
 
