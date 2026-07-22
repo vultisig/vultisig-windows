@@ -8,9 +8,14 @@
  */
 
 import { FullConfig } from '@playwright/test'
-import { existsSync, mkdirSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+
+import {
+  expectedExtensionArtifact,
+  extensionPath,
+} from './extension-path'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -18,8 +23,11 @@ async function globalSetup(config: FullConfig): Promise<void> {
   console.log('\n🚀 Global Setup: Preparing E2E test environment...\n')
 
   // 1. Verify extension build exists
-  const extensionPath = path.resolve(__dirname, '../../dist')
   const manifestPath = path.join(extensionPath, 'manifest.json')
+  const artifactReceiptPath = path.join(
+    extensionPath,
+    'extension-artifact.json'
+  )
 
   if (!existsSync(manifestPath)) {
     console.error('❌ Extension not built!')
@@ -27,7 +35,28 @@ async function globalSetup(config: FullConfig): Promise<void> {
     console.error('   Run: yarn build:extension')
     throw new Error('Extension must be built before running E2E tests')
   }
+  if (!existsSync(artifactReceiptPath)) {
+    throw new Error(
+      `Extension artifact receipt missing at ${artifactReceiptPath}. Rebuild the selected flavor before E2E QA.`
+    )
+  }
+
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+  const artifactReceipt = JSON.parse(
+    readFileSync(artifactReceiptPath, 'utf8')
+  )
+
+  if (
+    artifactReceipt.brand !== expectedExtensionArtifact.brand ||
+    artifactReceipt.manifestName !== expectedExtensionArtifact.manifestName ||
+    manifest.name !== expectedExtensionArtifact.manifestName
+  ) {
+    throw new Error(
+      `Extension artifact brand mismatch at ${extensionPath}. Expected ${expectedExtensionArtifact.brand} / ${expectedExtensionArtifact.manifestName}, received ${artifactReceipt.brand} / ${manifest.name}.`
+    )
+  }
   console.log('✅ Extension build found at:', extensionPath)
+  console.log('✅ Extension brand verified:', artifactReceipt.brand)
 
   // 2. Check test vault configuration
   const testVaultPath = process.env.TEST_VAULT_PATH
@@ -61,6 +90,7 @@ async function globalSetup(config: FullConfig): Promise<void> {
   const envInfo = {
     timestamp: new Date().toISOString(),
     extensionPath,
+    extensionBrand: artifactReceipt.brand,
     testVaultConfigured: !!testVaultPath && existsSync(testVaultPath),
     secureVaultConfigured: !!secureVaultShares,
     signingTestsEnabled: process.env.ENABLE_TX_SIGNING_TESTS === 'true',

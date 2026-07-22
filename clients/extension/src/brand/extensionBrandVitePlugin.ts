@@ -3,6 +3,7 @@ import path from 'node:path'
 
 import { Plugin } from 'vite'
 
+import { getExtensionArtifactReceipt } from './extensionArtifact'
 import { ExtensionBrandConfig } from './extensionBrandConfig'
 import {
   applyExtensionBrandToHtml,
@@ -20,6 +21,7 @@ const iconNames = [
 
 type ExtensionBrandVitePluginInput = {
   config: ExtensionBrandConfig
+  distDir: string
   extensionDir: string
 }
 
@@ -47,6 +49,7 @@ const copyStationIcons = async (extensionDir: string, distDir: string) => {
 
 export const extensionBrandVitePlugin = ({
   config,
+  distDir,
   extensionDir,
 }: ExtensionBrandVitePluginInput): Plugin => ({
   name: 'extension-brand',
@@ -61,7 +64,6 @@ export const extensionBrandVitePlugin = ({
       ),
   },
   closeBundle: async () => {
-    const distDir = path.resolve(extensionDir, 'dist')
     const manifestPath = path.resolve(distDir, 'manifest.json')
 
     if (!(await pathExists(manifestPath))) {
@@ -75,6 +77,16 @@ export const extensionBrandVitePlugin = ({
     await writeFile(
       manifestPath,
       `${JSON.stringify(brandedManifest, null, 2)}\n`
+    )
+
+    const artifactDirectory = path.relative(extensionDir, distDir)
+    const artifactReceipt = getExtensionArtifactReceipt({
+      config,
+      artifactDirectory,
+    })
+    await writeFile(
+      path.resolve(distDir, 'extension-artifact.json'),
+      `${JSON.stringify(artifactReceipt, null, 2)}\n`
     )
 
     if (config.brand === 'station') {

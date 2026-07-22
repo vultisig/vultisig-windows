@@ -12,22 +12,25 @@ Before building VultiConnect, ensure you have the following installed:
 - `pnpm` (for managing packages)
 - `npm` (if you need it for specific tasks)
 
-## How to Build the VultiConnect Extension
-To build the VultiConnect extension, follow these steps:
-1. Clone the repository:
-   `git clone https://github.com/vultisig/vulticonnect.git`
-2. Navigate to the project directory:
-   `cd vulticonnect`
-3. Install the necessary dependencies using pnpm:
-   `pnpm install`
-4. Build the project for production:
-   `pnpm run build`
+## How to Build the Extension
+
+From the repository root, build the regular Vultisig flavor with
+`yarn build:extension`. Its unpacked artifact is
+`clients/extension/dist`.
+
+Build the Station flavor with `yarn build:extension:station`. Its unpacked
+artifact is `clients/extension/dist-station`. The two paths are independent so
+building one flavor does not replace the other.
 
 ## How to Install it in Chrome
 1. Open Chrome and go to `chrome://extensions`.
 2. Enable `Developer mode` by toggling the switch in the top right corner.
-3. Click on `Load unpacked` and select the *dist* folder from the VultiConnect project directory.
-4. Your extension should now be installed and ready to use.
+3. Click `Load unpacked` and select `dist` for Vultisig or `dist-station` for
+   Station.
+4. Verify the extension card says `Vultisig Extension` or `Station Wallet`,
+   note its extension ID, and reload the exact `dist` or `dist-station`
+   directory before reviewing UI.
+5. Your extension should now be installed and ready to use.
 
 ## Integration Guide
 
