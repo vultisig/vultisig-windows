@@ -10,6 +10,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
+import { getExtensionArtifactDirectoryName } from './src/brand/extensionArtifact'
 import {
   getExtensionBrandConfig,
   resolveExtensionProductBrand,
@@ -87,6 +88,9 @@ export default defineConfig(async ({ mode }) => {
     process.env.VULTISIG_EXTENSION_BRAND
   )
   const extensionBrandConfig = getExtensionBrandConfig(productBrand)
+  const extensionArtifactDirectory =
+    getExtensionArtifactDirectoryName(productBrand)
+  const extensionOutDir = path.resolve(__dirname, extensionArtifactDirectory)
   const defines = {
     ...featureFlagDefines,
     ...envDefines,
@@ -141,6 +145,7 @@ export default defineConfig(async ({ mode }) => {
         tsconfigPaths({ root: rootDir }),
         extensionBrandVitePlugin({
           config: extensionBrandConfig,
+          distDir: extensionOutDir,
           extensionDir: __dirname,
         }),
         ...plugins,
@@ -151,6 +156,7 @@ export default defineConfig(async ({ mode }) => {
         target: 'esnext',
         copyPublicDir: false,
         emptyOutDir: false,
+        outDir: extensionOutDir,
         manifest: false,
         minify: 'esbuild' as const,
         ...devBuildOptions,
@@ -186,6 +192,7 @@ export default defineConfig(async ({ mode }) => {
         }),
         extensionBrandVitePlugin({
           config: extensionBrandConfig,
+          distDir: extensionOutDir,
           extensionDir: __dirname,
         }),
         viteStaticCopy({
@@ -197,6 +204,7 @@ export default defineConfig(async ({ mode }) => {
         // downlevel pass cannot transform the current dependency graph.
         target: 'esnext',
         emptyOutDir: false,
+        outDir: extensionOutDir,
         manifest: false,
         minify: 'esbuild' as const,
         ...devBuildOptions,

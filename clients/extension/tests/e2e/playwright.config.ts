@@ -3,6 +3,8 @@ import { config } from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import { extensionPath } from './extension-path'
+
 // Load .env from e2e directory for test vault configuration
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -18,7 +20,8 @@ config({ path: path.resolve(__dirname, '.env') })
  *
  * Prerequisites:
  *   1. Build the extension: `yarn build:extension`
- *   2. The built extension must be at `clients/extension/dist/`
+ *   2. Select `dist` (default) or `dist-station` with
+ *      `VULTISIG_EXTENSION_ARTIFACT`
  *
  * Usage:
  *   npx playwright test --config clients/extension/tests/e2e/playwright.config.ts
@@ -28,8 +31,6 @@ config({ path: path.resolve(__dirname, '.env') })
  *
  * NOTE: Chrome extension testing requires headed mode (not headless).
  */
-
-const extensionPath = path.resolve(__dirname, '../../dist')
 
 // Common launch args for extension loading
 // PLAYWRIGHT_OFFSCREEN=1 pushes Chrome windows off-screen so local runs don't
@@ -83,6 +84,15 @@ export default defineConfig({
   },
 
   projects: [
+    {
+      name: 'artifact-brand',
+      testMatch: ['**/artifact-brand.spec.ts'],
+      use: {
+        launchOptions: {
+          args: extensionLaunchArgs,
+        },
+      },
+    },
     {
       name: 'ui-isolated',
       testMatch: [
