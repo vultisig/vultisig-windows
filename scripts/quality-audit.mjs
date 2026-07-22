@@ -31,11 +31,11 @@ import { execFileSync } from 'node:child_process'
 const suppressions = [
   {
     id: 1103747,
-    advisory: 'unknown',
-    package: 'unknown',
-    path: 'unknown',
+    advisory: 'GHSA-3gc7-fjrx-p6mg',
+    package: 'bigint-buffer',
+    path: '@solana/buffer-layout-utils > bigint-buffer',
     reason:
-      'Inherited suppression from #4352 (ci: enforce check-all parity, refs #4281); advisory details were not recorded at introduction. Retained unchanged by this PR — owner to confirm the mapping or remediate.',
+      'Buffer overflow via toBigIntLE() in bigint-buffer (<=1.1.5), a transitive dep pulled in through the Solana SDK (@solana/buffer-layout-utils). The package is unmaintained and 1.1.5 is its latest release, so there is no fixed version to upgrade to. Inherited from #4352; suppression retained until a maintained replacement is available upstream.',
     owner: 'vultisig/windows',
     reviewBy: '2026-10-01',
   },
