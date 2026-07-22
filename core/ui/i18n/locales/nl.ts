@@ -1728,4 +1728,6 @@ export const nl = {
   send_receiver_format_hint_utxo:
     'Voer een geldig adres in voor dit netwerk (bech32- of legacy-formaat).',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Limietorders zijn tijdelijk niet beschikbaar voor THORChain',
 }

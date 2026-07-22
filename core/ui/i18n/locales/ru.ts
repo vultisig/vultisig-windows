@@ -1725,4 +1725,5 @@ export const ru = {
   send_receiver_format_hint_utxo:
     'Введите действительный адрес для этой сети (формат bech32 или устаревший).',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable: 'Лимитные ордера временно недоступны для THORChain',
 }

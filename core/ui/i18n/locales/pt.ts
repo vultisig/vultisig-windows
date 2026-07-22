@@ -1747,4 +1747,6 @@ export const pt = {
   send_receiver_format_hint_utxo:
     'Insira um endereço válido para esta rede (formato bech32 ou legado).',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'As ordens limitadas estão temporariamente indisponíveis em THORChain',
 }

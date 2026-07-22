@@ -1750,4 +1750,6 @@ export const it = {
   send_receiver_format_hint_utxo:
     'Inserisci un indirizzo valido per questa rete (formato bech32 o legacy).',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Gli ordini limite non sono temporaneamente disponibili su THORChain',
 }
