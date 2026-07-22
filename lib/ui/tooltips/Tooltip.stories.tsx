@@ -39,10 +39,10 @@ export const RichContent: Story = {
 }
 
 export const LongText: Story = {
-  name: 'Long text auto‑wrap',
+  name: 'Long text auto-wrap',
   render: () => (
     <Tooltip
-      content="This tooltip has a lot of text to demonstrate how it wraps within the max‑width constraint. The quick brown fox jumps over the lazy dog."
+      content="This tooltip has a lot of text to demonstrate how it wraps within the max-width constraint. The quick brown fox jumps over the lazy dog."
       renderOpener={props => <button {...props}>Hover me</button>}
     />
   ),

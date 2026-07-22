@@ -27,7 +27,7 @@
     "quality:audit": "node scripts/quality-audit.mjs",
     "quality:complexity": "eslint --config .config/eslint-health.config.mjs 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'clients/desktop/vite.config.mts' 'clients/extension/vite.config.ts' 'core/**/*.{js,jsx,ts,tsx}' 'lib/**/*.{js,jsx,ts,tsx}'",
     "quality:docs": "yarn quality:docs:markdown && yarn quality:docs:links",
-    "quality:docs:links": "git ls-files -z '*.md' ':!.agents/**' ':!.claude/**' ':!.cursor/**' ':!.codex/**' ':!tasks/**' ':!clients/extension/tests/e2e/playwright-report/**' | xargs -0 -n 1 sh -c 'if test -f \"$1\"; then markdown-link-check -q -c .config/markdown-link-check.json \"$1\"; else case \"$1\" in AGENTS.md|CLAUDE.md) ;; *) echo \"missing tracked Markdown: $1\" >&2; exit 1 ;; esac; fi' _",
+    "quality:docs:links": "git ls-files -z '*.md' ':!.agents/**' ':!.claude/**' ':!.cursor/**' ':!.codex/**' ':!tasks/**' ':!clients/extension/tests/e2e/playwright-report/**' | xargs -0 -n 1 sh -c 'if test \"$#\" -eq 0; then exit 0; fi; if test -f \"$1\"; then markdown-link-check -q -c .config/markdown-link-check.json \"$1\"; else case \"$1\" in AGENTS.md|CLAUDE.md) ;; *) echo \"missing tracked Markdown: $1\" >&2; exit 1 ;; esac; fi' _",
     "quality:docs:markdown": "markdownlint-cli2 --config .config/markdownlint-cli2.jsonc",
     "quality:duplication": "jscpd --config .config/jscpd.json clients core lib scripts app.go main.go install_marker.go notification_darwin.go notification_linux.go notification_windows.go mediator relay storage tss utils",
     "quality:go": "go test ./mediator ./relay ./storage ./tss ./utils",
