@@ -1,3 +1,6 @@
+import { chainToThornameAlias } from '@core/ui/chain/nameService/chainToThornameAlias'
+import { detectNameServiceSuffix } from '@core/ui/chain/nameService/NameServiceName'
+import { resolveNameService } from '@core/ui/chain/nameService/resolveNameService'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
@@ -38,6 +41,8 @@ import styled from 'styled-components'
 import { getAddress } from 'viem'
 import { getEnsAddress, normalize } from 'viem/ens'
 
+const isEnsName = (value: string) => /^.+\.eth$/i.test(value.trim())
+
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
 export const ManageReceiverAddressInputField = () => {
@@ -47,7 +52,7 @@ export const ManageReceiverAddressInputField = () => {
   const { getClipboardText } = useCore()
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
-  const [, setReceiverLabel] = useSendReceiverLabel()
+  const [receiverLabel, setReceiverLabel] = useSendReceiverLabel()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const [qrView, setQrView] = useState<'scan' | 'upload'>('scan')
   const [touched, setTouched] = useState(false)
@@ -64,8 +69,8 @@ export const ManageReceiverAddressInputField = () => {
       setTouched(true)
       setValue(value)
       // Clear the receiver label whenever the user provides a raw address directly
-      // (label is set asynchronously by the name resolution effect below when applicable)
-      if (!/^.+\.eth$/i.test(value.trim())) {
+      // (label is set asynchronously by the name resolution effects below when applicable)
+      if (!isEnsName(value) && !detectNameServiceSuffix(value)) {
         setReceiverLabel('')
       }
       const receiverError = validateSendReceiver({
@@ -109,6 +114,11 @@ export const ManageReceiverAddressInputField = () => {
     latestValueRef.current = value
   }, [value])
 
+  const [nameServiceStatus, setNameServiceStatus] = useState<
+    'idle' | 'resolving' | 'error'
+  >('idle')
+  const [nameServiceError, setNameServiceError] = useState('')
+
   useEffect(() => {
     // Only attempt ENS resolution on Ethereum mainnet — two known limitations:
     // 1. Root .eth names only; ENSIP-11 multi-chain coin types not yet supported.
@@ -116,11 +126,7 @@ export const ManageReceiverAddressInputField = () => {
     //    offchain resolvers (CCIP-Read / EIP-3668) and non-.eth TLDs.
     // Loop prevention: after resolution the receiver is set to a raw address
     // which won't match the .eth regex, so this effect is skipped on the re-fire.
-    if (
-      coin.chain !== EvmChain.Ethereum ||
-      !/^.+\.eth$/i.test(debouncedValue.trim())
-    )
-      return
+    if (coin.chain !== EvmChain.Ethereum || !isEnsName(debouncedValue)) return
 
     // Clear stale label before attempting new resolution so a failed lookup
     // never leaves a ghost label from a previous successful one
@@ -166,6 +172,78 @@ export const ManageReceiverAddressInputField = () => {
     setValue,
     setReceiverLabel,
     setFocusedSendField,
+  ])
+
+  useEffect(() => {
+    const suffix = detectNameServiceSuffix(debouncedValue)
+    if (!suffix) {
+      setNameServiceStatus('idle')
+      setNameServiceError('')
+      return
+    }
+
+    const requestedName = debouncedValue.trim()
+
+    if (!chainToThornameAlias[coin.chain]) {
+      setNameServiceStatus('error')
+      setNameServiceError(
+        t('name_service_unsupported_chain', {
+          chain: coin.chain,
+          suffix,
+        })
+      )
+      return
+    }
+
+    setNameServiceStatus('resolving')
+    setNameServiceError('')
+    setReceiverLabel('')
+
+    let cancelled = false
+
+    attempt(async () =>
+      resolveNameService({
+        name: requestedName,
+        suffix,
+        chain: coin.chain,
+      })
+    ).then(result => {
+      if (cancelled) return
+      if (latestValueRef.current.trim() !== requestedName) return
+
+      if (!('error' in result) && result.data) {
+        setNameServiceStatus('idle')
+        setReceiverLabel(requestedName)
+        setValue(result.data)
+        setFocusedSendField(state => ({ ...state, field: 'amount' }))
+      } else if ('error' in result) {
+        setNameServiceStatus('error')
+        const errorMessage = String(
+          result.error instanceof Error ? result.error.message : result.error
+        )
+        const isNotFound =
+          errorMessage.includes('404') || errorMessage.includes('not found')
+        setNameServiceError(
+          isNotFound
+            ? t('name_service_not_found', { name: requestedName })
+            : t('name_service_no_address_for_chain', {
+                name: requestedName,
+                chain: coin.chain,
+              })
+        )
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [
+    coin.chain,
+    debouncedValue,
+    setValue,
+    setReceiverLabel,
+    setFocusedSendField,
+    t,
   ])
 
   return (
@@ -238,7 +316,11 @@ export const ManageReceiverAddressInputField = () => {
             <VStack gap={8}>
               <VStack gap={4}>
                 <Input
-                  validation={error ? 'warning' : undefined}
+                  validation={
+                    error || nameServiceStatus === 'error'
+                      ? 'warning'
+                      : undefined
+                  }
                   placeholder={t('enter_address_here')}
                   value={value}
                   onValueChange={newValue =>
@@ -247,6 +329,19 @@ export const ManageReceiverAddressInputField = () => {
                   onBlur={() => setTouched(true)}
                   data-testid="send-address-input"
                 />
+                {receiverLabel && nameServiceStatus === 'idle' ? (
+                  <ResolvedLabel size={12} color="primary">
+                    {receiverLabel}
+                  </ResolvedLabel>
+                ) : null}
+                {nameServiceStatus === 'resolving' ? (
+                  <Text size={12} color="shy">
+                    {t('name_service_resolving', { name: value.trim() })}
+                  </Text>
+                ) : null}
+                {nameServiceStatus === 'error' && nameServiceError ? (
+                  <AnimatedSendFormInputError error={nameServiceError} />
+                ) : null}
                 {error && <AnimatedSendFormInputError error={error} />}
               </VStack>
 
@@ -314,4 +409,8 @@ const QrModalOverlay = styled(VStack).attrs({
 const QrModalBody = styled(VStack)`
   flex: 1;
   min-height: 0;
+`
+
+const ResolvedLabel = styled(Text)`
+  padding: 0 4px;
 `
