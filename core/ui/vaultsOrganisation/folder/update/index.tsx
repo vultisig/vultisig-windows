@@ -38,6 +38,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
 import { getNewOrder } from '@vultisig/lib-utils/order/getNewOrder'
@@ -182,6 +183,7 @@ const ManageFolderVaults = ({
   const { mutate: remove } = useRemoveVaultFromFolderMutation()
   const { mutate: updateVault } = useUpdateVaultMutation()
   const formatFiatAmount = useFormatFiatAmount()
+  const { addToast } = useToast()
 
   useEffect(() => setItems(vaults), [vaults])
 
@@ -228,7 +230,14 @@ const ManageFolderVaults = ({
         const { tone, icon } = getVaultSecurityTone(item)
         const value = totals?.[vaultId]
 
-        const handleRemove = () => remove({ vaultId })
+        const handleRemove = () => {
+          if (items.length <= 1) {
+            addToast({ message: t('folder_at_least_one_vault_required') })
+            return
+          }
+
+          remove({ vaultId })
+        }
 
         return (
           <DnDItemContainer key={vaultId} {...draggableProps} status={status}>
