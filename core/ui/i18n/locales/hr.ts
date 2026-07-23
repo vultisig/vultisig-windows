@@ -618,8 +618,7 @@ export const hr = {
   normal: 'Normalan',
   not_enough_funds: 'Nema dovoljno sredstava',
   nothing_to_add: 'Nema što dodati',
-  nothing_to_add_hint:
-    'Svi vaši trezori su već sortirani. Izradite novi trezor da biste ga dodali ovdje.',
+  nothing_to_add_hint: 'Svi vaši trezori su već sortirani.',
   of: 'od',
   off: 'Isključeno',
   on: 'Na',
@@ -1719,4 +1718,6 @@ export const hr = {
     'Limitirani nalozi privremeno nisu dostupni na THORChain',
   active_vaults: 'Aktivni trezori',
   edit_folder: 'Uredi mapu',
+  nothing_to_add_hint_secondary:
+    'Izradite novi trezor da biste ga dodali ovdje.',
 }

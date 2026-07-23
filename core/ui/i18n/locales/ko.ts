@@ -618,8 +618,7 @@ export const ko = {
   normal: '정상',
   not_enough_funds: '자금이 부족합니다',
   nothing_to_add: '더 이상 추가할 내용이 없습니다.',
-  nothing_to_add_hint:
-    '모든 금고가 이미 정렬되어 있습니다. 여기에 추가하려면 새 금고를 생성하세요.',
+  nothing_to_add_hint: '모든 금고가 이미 정리되었습니다.',
   of: '~의',
   off: '끄다',
   on: '~에',
@@ -1711,4 +1710,5 @@ export const ko = {
     'THORChain에 대한 지정가 주문은 일시적으로 이용할 수 없습니다.',
   active_vaults: '액티브 볼트',
   edit_folder: '폴더 편집',
+  nothing_to_add_hint_secondary: '여기에 추가하려면 새 볼트를 생성하세요.',
 }

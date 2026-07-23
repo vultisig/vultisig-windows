@@ -621,8 +621,7 @@ export const nl = {
   normal: 'Normaal',
   not_enough_funds: 'Onvoldoende funds',
   nothing_to_add: 'Niets toe te voegen',
-  nothing_to_add_hint:
-    'Al je kluizen zijn al gesorteerd. Maak een nieuwe kluis om hem hier toe te voegen.',
+  nothing_to_add_hint: 'Al uw kluizen zijn al gesorteerd.',
   of: 'van',
   off: 'Uit',
   on: 'Aan',
@@ -1730,4 +1729,6 @@ export const nl = {
     'Limietorders zijn tijdelijk niet beschikbaar voor THORChain',
   active_vaults: 'Actieve kluizen',
   edit_folder: 'Map bewerken',
+  nothing_to_add_hint_secondary:
+    'Maak een nieuwe kluis aan om deze hier toe te voegen.',
 }

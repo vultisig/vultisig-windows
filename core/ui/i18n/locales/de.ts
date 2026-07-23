@@ -634,8 +634,7 @@ export const de = {
   normal: 'Normal',
   not_enough_funds: 'Nicht genügend Mittel',
   nothing_to_add: 'Nichts hinzuzufügen',
-  nothing_to_add_hint:
-    'Alle Ihre Tresore sind bereits sortiert. Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
+  nothing_to_add_hint: 'Alle Ihre Tresore sind bereits sortiert.',
   of: 'von',
   off: 'Aus',
   on: 'An',
@@ -1762,4 +1761,6 @@ export const de = {
     'Limit-Orders sind für THORChain vorübergehend nicht verfügbar.',
   active_vaults: 'Aktive Tresore',
   edit_folder: 'Ordner bearbeiten',
+  nothing_to_add_hint_secondary:
+    'Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
 }

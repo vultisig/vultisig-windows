@@ -715,8 +715,8 @@ export const en = {
   normal: 'Normal',
   not_enough_funds: 'Not enough funds',
   nothing_to_add: 'Nothing to add',
-  nothing_to_add_hint:
-    'All your vaults are already sorted. Create a new vault to add it here.',
+  nothing_to_add_hint: 'All your vaults are already sorted.',
+  nothing_to_add_hint_secondary: 'Create a new vault to add it here.',
   of: 'of',
   off: 'Off',
   on: 'On',
