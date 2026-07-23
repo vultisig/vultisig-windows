@@ -239,6 +239,12 @@ const ManageFolderVaults = ({
             return
           }
 
+          // Reserve the row locally before the async removal resolves so a
+          // second rapid toggle sees the reduced count and can't drain the
+          // folder to empty via a stale items.length.
+          setItems(prevItems =>
+            prevItems.filter(prevItem => getVaultId(prevItem) !== vaultId)
+          )
           remove({ vaultId })
         }
 
