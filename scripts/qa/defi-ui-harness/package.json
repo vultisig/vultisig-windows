@@ -15,7 +15,7 @@
     "@vultisig/core-mpc": "1.12.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "styled-components": "6.3.11"
+    "styled-components": "6.4.4"
   },
   "devDependencies": {
     "vite": "7.3.1",
