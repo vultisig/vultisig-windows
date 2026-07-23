@@ -577,8 +577,7 @@ export const zh = {
   normal: '普通的',
   not_enough_funds: '资金不足',
   nothing_to_add: '没什么要补充的。',
-  nothing_to_add_hint:
-    '您的所有保险库都已整理完毕。要添加新的保险库，请在此处创建一个。',
+  nothing_to_add_hint: '您的所有保险库都已整理完毕。',
   of: '的',
   off: '离开',
   on: '在',
@@ -1607,4 +1606,5 @@ export const zh = {
   swap_limit_unavailable: 'THORChain的限价单功能暂时不可用。',
   active_vaults: '活跃金库',
   edit_folder: '编辑文件夹',
+  nothing_to_add_hint_secondary: '创建一个新的保险库，将其添加到这里。',
 }

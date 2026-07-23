@@ -109,15 +109,18 @@ const AddVaultsToFolder = ({ totals, isTotalsPending }: AddVaultsProps) => {
   if (!vaults.length) {
     return (
       <EmptyStateCard gap={12} alignItems="center">
-        <IconWrapper size={28} color="textShy">
+        <IconWrapper size={28} color="buttonPrimary">
           <FolderLockIcon />
         </IconWrapper>
         <VStack gap={4}>
-          <Text size={16} weight={600} centerHorizontally>
+          <Text size={16} weight={600} color="contrast" centerHorizontally>
             {t('nothing_to_add')}
           </Text>
           <Text size={13} color="shy" centerHorizontally>
             {t('nothing_to_add_hint')}
+          </Text>
+          <Text size={13} color="shy" centerHorizontally>
+            {t('nothing_to_add_hint_secondary')}
           </Text>
         </VStack>
       </EmptyStateCard>

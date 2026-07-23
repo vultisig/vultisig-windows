@@ -161,6 +161,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
             <>
               {totalVaultsCount > 1 && (
                 <IconButton
+                  kind="secondary"
                   size="lg"
                   onClick={handleManage}
                   aria-label={t('edit_vaults')}

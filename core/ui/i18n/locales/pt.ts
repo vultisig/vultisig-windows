@@ -628,8 +628,7 @@ export const pt = {
   normal: 'Normal',
   not_enough_funds: 'Fundos insuficientes',
   nothing_to_add: 'Nada a acrescentar',
-  nothing_to_add_hint:
-    'Todos os seus cofres já estão classificados. Crie um novo cofre para adicioná-lo aqui.',
+  nothing_to_add_hint: 'Todos os seus cofres já estão organizados.',
   of: 'de',
   off: 'Desligado',
   on: 'Ligado',
@@ -1749,4 +1748,5 @@ export const pt = {
     'As ordens limitadas estão temporariamente indisponíveis em THORChain',
   active_vaults: 'Cofres ativos',
   edit_folder: 'Pasta de edição',
+  nothing_to_add_hint_secondary: 'Crie um novo cofre para adicioná-lo aqui.',
 }

@@ -631,8 +631,7 @@ export const it = {
   normal: 'Normale',
   not_enough_funds: 'Fondi insufficienti',
   nothing_to_add: 'Niente da aggiungere',
-  nothing_to_add_hint:
-    'Tutti i tuoi vault sono già ordinati. Crea un nuovo vault per aggiungerlo qui.',
+  nothing_to_add_hint: 'Tutti i tuoi caveau sono già stati sistemati.',
   of: 'Di',
   off: 'Spento',
   on: 'Acceso',
@@ -1753,4 +1752,5 @@ export const it = {
     'Gli ordini limite non sono temporaneamente disponibili su THORChain',
   active_vaults: 'Vault attivi',
   edit_folder: 'Modifica cartella',
+  nothing_to_add_hint_secondary: 'Crea un nuovo vault per aggiungerlo qui.',
 }

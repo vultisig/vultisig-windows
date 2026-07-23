@@ -626,8 +626,7 @@ export const es = {
   normal: 'Normal',
   not_enough_funds: 'No hay fondos suficientes',
   nothing_to_add: 'Nada que añadir',
-  nothing_to_add_hint:
-    'Todas tus bóvedas ya están ordenadas. Crea una nueva bóveda para añadirla aquí.',
+  nothing_to_add_hint: 'Todas tus bóvedas ya están ordenadas.',
   of: 'de',
   off: 'Apagado',
   on: 'En',
@@ -1747,4 +1746,5 @@ export const es = {
     'Las órdenes límite no están disponibles temporalmente en THORChain',
   active_vaults: 'Bóvedas activas',
   edit_folder: 'Editar carpeta',
+  nothing_to_add_hint_secondary: 'Crea una nueva bóveda para agregarlo aquí.',
 }

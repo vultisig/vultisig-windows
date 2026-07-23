@@ -618,8 +618,7 @@ export const ru = {
   normal: 'Обычный',
   not_enough_funds: 'Недостаточно средств',
   nothing_to_add: 'Нечего добавлять',
-  nothing_to_add_hint:
-    'Все ваши хранилища уже отсортированы. Создайте новое хранилище, чтобы добавить его сюда.',
+  nothing_to_add_hint: 'Все ваши хранилища уже рассортированы.',
   of: 'из',
   off: 'Выкл',
   on: 'Вкл',
@@ -1727,4 +1726,6 @@ export const ru = {
   swap_limit_unavailable: 'Лимитные ордера временно недоступны для THORChain',
   active_vaults: 'Активные хранилища',
   edit_folder: 'Редактировать папку',
+  nothing_to_add_hint_secondary:
+    'Создайте новое хранилище, чтобы добавить его сюда.',
 }

@@ -18,7 +18,6 @@ import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVau
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -81,24 +80,16 @@ export const VaultFolderPage = () => {
           title={name}
           subtitle={summarySubtitle}
           actions={
-            <>
-              <IconButton
-                size="md"
-                onClick={() =>
-                  navigate({ id: 'updateVaultFolder', state: { id } })
-                }
-                aria-label={t('edit_vaults')}
-              >
-                <SquarePenIcon />
-              </IconButton>
-              <IconButton
-                size="md"
-                onClick={() => navigate({ id: 'newVault' })}
-                aria-label={t('add_new_vault')}
-              >
-                <PlusIcon />
-              </IconButton>
-            </>
+            <IconButton
+              kind="secondary"
+              size="lg"
+              onClick={() =>
+                navigate({ id: 'updateVaultFolder', state: { id } })
+              }
+              aria-label={t('edit_folder')}
+            >
+              <SquarePenIcon />
+            </IconButton>
           }
         />
         <VStack gap={16}>
