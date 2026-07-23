@@ -90,13 +90,16 @@ export const CreateVaultFolderPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={goBack} />}
         secondaryControls={<DoneButton onClick={goBack} />}
-        title={t('create_folder')}
+        title={t('add_folder')}
       />
       <PageContent gap={28} scrollable flexGrow>
         <VStack gap={8}>
           <StyledTextInput
             label={t('folder_name')}
-            onValueChange={setName}
+            onValueChange={value => {
+              setTouched(true)
+              setName(value)
+            }}
             placeholder={t('enter_folder_name')}
             value={name}
             validation={touched && validationMessage ? 'invalid' : undefined}

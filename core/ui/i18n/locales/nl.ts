@@ -200,7 +200,6 @@ export const nl = {
   continue_in_new_window: 'Doorgaan in het geopende venster',
   contract_execution: 'Contractuitvoering',
   copy_address: 'Adres kopiëren',
-  create_folder: 'Map aanmaken',
   create_new_vault: 'Nieuwe kluis aanmaken',
   create_vault: 'Maak een kluis aan',
   create_referral_form: 'Referral aanmaken',
@@ -215,7 +214,6 @@ export const nl = {
   currency: 'Valuta',
   current_expiry: 'Huidige vervaldatum',
   current_passcode: 'Huidige pincode',
-  current_vaults: 'Huidige kluizen',
   custom: 'Aangepaste actie',
   custom_token: 'Aangepaste token',
   customize_chains: 'Chains aanpassen',
@@ -407,7 +405,7 @@ export const nl = {
   fill_the_form: 'Vul het formulier in',
   find_custom_token: 'Aangepaste token zoeken',
   folder_name: 'Mapnaam',
-  folder_name_already_exists: 'Mapnaam moet uniek zijn',
+  folder_name_already_exists: 'Die mapnaam bestaat al. Probeer een andere.',
   folder_name_required: 'Mapnaam is verplicht',
   folder_at_least_one_vault_required: 'Minimaal één kluis is vereist',
   folders: 'Mappen',
@@ -1730,4 +1728,6 @@ export const nl = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable:
     'Limietorders zijn tijdelijk niet beschikbaar voor THORChain',
+  active_vaults: 'Actieve kluizen',
+  edit_folder: 'Map bewerken',
 }
