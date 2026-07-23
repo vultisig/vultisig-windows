@@ -1,3 +1,4 @@
+import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import styled from 'styled-components'
 
 import { KeygenLoadingAnimation } from './KeygenLoadingAnimation'
@@ -14,8 +15,12 @@ const Container = styled.div`
  * Full-screen Rive animation in the Connecting state (`isConnected=false`).
  * Uses the keygen animation which includes a dedicated Connecting visual.
  */
-export const KeygenConnectingAnimation = () => (
+export const KeygenConnectingAnimation = ({
+  securityType,
+}: {
+  securityType?: VaultSecurityType
+}) => (
   <Container>
-    <KeygenLoadingAnimation isConnected={false} />
+    <KeygenLoadingAnimation isConnected={false} securityType={securityType} />
   </Container>
 )

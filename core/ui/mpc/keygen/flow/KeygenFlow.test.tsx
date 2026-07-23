@@ -70,7 +70,9 @@ describe('KeygenFlow save ordering before backup', () => {
       error: null,
     } as unknown as ReturnType<typeof useKeygenMutation>)
 
-    const html = renderToStaticMarkup(<KeygenFlow onBack={() => {}} />)
+    const html = renderToStaticMarkup(
+      <KeygenFlow onBack={() => {}} securityType="fast" />
+    )
 
     expect(html).toContain('data-testid="keygen-flow-ending"')
     expect(html).not.toContain('data-testid="save-vault-step"')
@@ -92,7 +94,9 @@ describe('KeygenFlow save ordering before backup', () => {
       error: null,
     } as unknown as ReturnType<typeof useKeygenMutation>)
 
-    const html = renderToStaticMarkup(<KeygenFlow onBack={() => {}} />)
+    const html = renderToStaticMarkup(
+      <KeygenFlow onBack={() => {}} securityType="secure" />
+    )
 
     expect(html).toContain('data-testid="save-vault-step"')
     expect(html).not.toContain('data-testid="keygen-flow-ending"')
@@ -114,7 +118,9 @@ describe('KeygenFlow save ordering before backup', () => {
       error: null,
     } as unknown as ReturnType<typeof useKeygenMutation>)
 
-    const html = renderToStaticMarkup(<KeygenFlow onBack={() => {}} />)
+    const html = renderToStaticMarkup(
+      <KeygenFlow onBack={() => {}} securityType="secure" />
+    )
 
     expect(html).toContain('data-testid="save-vault-step"')
   })
@@ -144,7 +150,9 @@ describe('KeygenFlow save ordering before backup', () => {
         error: null,
       } as unknown as ReturnType<typeof useKeygenMutation>)
 
-      const html = renderToStaticMarkup(<KeygenFlow onBack={() => {}} />)
+      const html = renderToStaticMarkup(
+        <KeygenFlow onBack={() => {}} securityType="secure" />
+      )
 
       expect(html).toContain('data-testid="save-vault-step"')
       expect(html).not.toContain('data-testid="keygen-flow-ending"')
@@ -170,7 +178,7 @@ describe('KeygenFlow save ordering before backup', () => {
     } as unknown as ReturnType<typeof useKeygenMutation>)
 
     const html = renderToStaticMarkup(
-      <KeygenFlow onBack={() => {}} onFinish={onFinish} />
+      <KeygenFlow onBack={() => {}} onFinish={onFinish} securityType="fast" />
     )
 
     expect(onFinish).toHaveBeenCalledOnce()

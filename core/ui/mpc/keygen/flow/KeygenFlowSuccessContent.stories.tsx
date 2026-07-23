@@ -45,3 +45,16 @@ export const Create: Story = {
     ),
   },
 }
+
+export const StationFast: Story = {
+  args: {
+    animationSource: 'station-keygen-fast',
+    securityType: 'fast',
+    title: (
+      <>
+        <GradientText>Well done</GradientText> You&apos;re ready to use a new
+        wallet standard.
+      </>
+    ),
+  },
+}

@@ -6,6 +6,7 @@ import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingSt
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -35,6 +36,7 @@ type KeygenFlowProps = OnBackProp &
     onChangeEmailAndRestart?: () => void
     onVaultSaveError?: (error: Error) => void | Promise<void>
     onVaultSaved?: (vault: Vault) => void | Promise<void>
+    securityType?: VaultSecurityType
   }
 
 export const KeygenFlow = ({
@@ -45,6 +47,7 @@ export const KeygenFlow = ({
   onChangeEmailAndRestart,
   onVaultSaveError,
   onVaultSaved,
+  securityType,
 }: KeygenFlowProps) => {
   const {
     step,
@@ -177,7 +180,9 @@ export const KeygenFlow = ({
               primaryControls={<PageHeaderBackButton />}
             />
           )}
-          {!isPluginReshare && <KeygenPendingState value={step} />}
+          {!isPluginReshare && (
+            <KeygenPendingState value={step} securityType={securityType} />
+          )}
         </PendingWrapper>
       )}
     />

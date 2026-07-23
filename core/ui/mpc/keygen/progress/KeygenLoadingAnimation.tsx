@@ -1,3 +1,4 @@
+import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -13,14 +14,16 @@ const AnimationContainer = styled.div`
 type KeygenLoadingAnimationProps = {
   isConnected: boolean
   progress?: number
+  securityType?: VaultSecurityType
 }
 
 export const KeygenLoadingAnimation = ({
   isConnected,
   progress = 0,
+  securityType,
 }: KeygenLoadingAnimationProps) => {
   const { RiveComponent, containerRef, setConnected, setProgress } =
-    useKeygenLoadingAnimation()
+    useKeygenLoadingAnimation(securityType)
 
   useEffect(() => {
     setConnected(isConnected)
