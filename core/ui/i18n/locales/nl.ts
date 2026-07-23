@@ -1731,4 +1731,5 @@ export const nl = {
   edit_folder: 'Map bewerken',
   nothing_to_add_hint_secondary:
     'Maak een nieuwe kluis aan om deze hier toe te voegen.',
+  no_results_found: 'Geen resultaten gevonden',
 }

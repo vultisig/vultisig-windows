@@ -1728,4 +1728,5 @@ export const ru = {
   edit_folder: 'Редактировать папку',
   nothing_to_add_hint_secondary:
     'Создайте новое хранилище, чтобы добавить его сюда.',
+  no_results_found: 'Результаты не найдены',
 }

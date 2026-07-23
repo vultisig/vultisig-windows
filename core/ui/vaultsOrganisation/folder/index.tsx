@@ -12,12 +12,14 @@ import {
   LeadingIconBadge,
   SectionHeader,
   VaultListRow,
+  VaultSearchField,
 } from '@core/ui/vaultsOrganisation/components'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -25,7 +27,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getVaultSecurityTone } from '../utils/getVaultSecurityTone'
@@ -39,6 +41,8 @@ export const VaultFolderPage = () => {
   const { id, name } = useCurrentVaultFolder()
   const vaults = useFolderVaults(id)
   const currentVaultId = useCurrentVaultId()
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const { totals: vaultTotals, isPending: isTotalsPending } =
     useVaultsTotalBalances({ vaults })
@@ -68,6 +72,18 @@ export const VaultFolderPage = () => {
       onSuccess: () => navigate({ id: 'vault' }),
     })
 
+  const openSearch = () => setIsSearchOpen(true)
+  const closeSearch = () => {
+    setIsSearchOpen(false)
+    setSearchQuery('')
+  }
+
+  const normalizedQuery = searchQuery.trim().toLowerCase()
+  const isSearching = normalizedQuery.length > 0
+  const displayedVaults = isSearching
+    ? vaults.filter(vault => vault.name.toLowerCase().includes(normalizedQuery))
+    : vaults
+
   return (
     <VStack fullHeight>
       <PageHeader
@@ -80,54 +96,79 @@ export const VaultFolderPage = () => {
           title={name}
           subtitle={summarySubtitle}
           actions={
-            <IconButton
-              kind="secondary"
-              size="lg"
-              onClick={() =>
-                navigate({ id: 'updateVaultFolder', state: { id } })
-              }
-              aria-label={t('edit_folder')}
-            >
-              <SquarePenIcon />
-            </IconButton>
+            <>
+              <IconButton
+                kind="secondary"
+                size="lg"
+                onClick={openSearch}
+                aria-label={t('search_field_placeholder')}
+              >
+                <SearchIcon />
+              </IconButton>
+              <IconButton
+                kind="secondary"
+                size="lg"
+                onClick={() =>
+                  navigate({ id: 'updateVaultFolder', state: { id } })
+                }
+                aria-label={t('edit_folder')}
+              >
+                <SquarePenIcon />
+              </IconButton>
+            </>
           }
         />
-        <VStack gap={16}>
-          <Text size={13} weight={600} color="shy">
-            {t('vaults')}
-          </Text>
-          <VStack gap={12}>
-            {vaults.map(vault => {
-              const vaultId = getVaultId(vault)
-              const { tone, icon } = getVaultSecurityTone(vault)
-              const value = vaultTotals?.[vaultId]
-
-              return (
-                <VaultListRow
-                  key={vaultId}
-                  leading={
-                    <LeadingIconBadge tone={tone}>{icon}</LeadingIconBadge>
-                  }
-                  title={vault.name}
-                  subtitle={
-                    !isTotalsPending && value !== undefined
-                      ? formatFiatAmount(value)
-                      : undefined
-                  }
-                  meta={<VaultSigners vault={vault} />}
-                  trailing={
-                    vaultId === currentVaultId ? (
-                      <IconWrapper size={20} color="success">
-                        <CheckIcon />
-                      </IconWrapper>
-                    ) : null
-                  }
-                  onClick={() => handleSelectVault(vaultId)}
-                />
-              )
-            })}
+        {isSearchOpen && (
+          <VaultSearchField
+            value={searchQuery}
+            onChange={setSearchQuery}
+            onClose={closeSearch}
+          />
+        )}
+        {isSearching && displayedVaults.length === 0 ? (
+          <VStack gap={12} alignItems="center" justifyContent="center">
+            <Text size={16} weight={500} centerHorizontally>
+              {t('no_results_found')}
+            </Text>
           </VStack>
-        </VStack>
+        ) : (
+          <VStack gap={16}>
+            <Text size={13} weight={600} color="shy">
+              {t('vaults')}
+            </Text>
+            <VStack gap={12}>
+              {displayedVaults.map(vault => {
+                const vaultId = getVaultId(vault)
+                const { tone, icon } = getVaultSecurityTone(vault)
+                const value = vaultTotals?.[vaultId]
+
+                return (
+                  <VaultListRow
+                    key={vaultId}
+                    leading={
+                      <LeadingIconBadge tone={tone}>{icon}</LeadingIconBadge>
+                    }
+                    title={vault.name}
+                    subtitle={
+                      !isTotalsPending && value !== undefined
+                        ? formatFiatAmount(value)
+                        : undefined
+                    }
+                    meta={<VaultSigners vault={vault} />}
+                    trailing={
+                      vaultId === currentVaultId ? (
+                        <IconWrapper size={20} color="success">
+                          <CheckIcon />
+                        </IconWrapper>
+                      ) : null
+                    }
+                    onClick={() => handleSelectVault(vaultId)}
+                  />
+                )
+              })}
+            </VStack>
+          </VStack>
+        )}
       </PageContent>
     </VStack>
   )

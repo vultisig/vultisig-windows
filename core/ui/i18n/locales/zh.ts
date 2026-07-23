@@ -1607,4 +1607,5 @@ export const zh = {
   active_vaults: '活跃金库',
   edit_folder: '编辑文件夹',
   nothing_to_add_hint_secondary: '创建一个新的保险库，将其添加到这里。',
+  no_results_found: '未找到结果',
 }
