@@ -70,7 +70,7 @@
     "react-dom": "19.2.4",
     "react-hook-form": "^7.78.0",
     "react-i18next": "^16.5.8",
-    "styled-components": "6.3.11",
+    "styled-components": "6.4.4",
     "tronweb": "^6.3.0",
     "uuid": "^13.0.0",
     "viem": "^2.47.4",

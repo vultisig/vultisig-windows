@@ -733,7 +733,7 @@ __metadata:
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     react-i18next: "npm:^16.5.8"
-    styled-components: "npm:6.3.11"
+    styled-components: "npm:6.4.4"
     typescript: "npm:^5.9.3"
     vite: "npm:7.3.1"
     vite-plugin-circular-dependency: "npm:^0.6.0"
@@ -805,7 +805,7 @@ __metadata:
     react-dom: "npm:19.2.4"
     react-hook-form: "npm:^7.78.0"
     react-i18next: "npm:^16.5.8"
-    styled-components: "npm:6.3.11"
+    styled-components: "npm:6.4.4"
     tronweb: "npm:^6.3.0"
     typescript: "npm:^5.9.3"
     uuid: "npm:^13.0.0"
@@ -916,7 +916,7 @@ __metadata:
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     react-i18next: "npm:^16.5.8"
-    styled-components: "npm:6.3.11"
+    styled-components: "npm:6.4.4"
     viem: "npm:^2.47.4"
   languageName: unknown
   linkType: soft
@@ -975,7 +975,7 @@ __metadata:
     react-qr-code: "npm:^2.2.0"
     react-use: "npm:^17.6.0"
     storybook: "npm:10.2.19"
-    styled-components: "npm:6.3.11"
+    styled-components: "npm:6.4.4"
     uuid: "npm:^13.0.0"
     viem: "npm:^2.47.4"
     vite: "npm:7.3.1"
@@ -1365,13 +1365,6 @@ __metadata:
   version: 0.9.0
   resolution: "@emotion/memoize@npm:0.9.0"
   checksum: 10c0/13f474a9201c7f88b543e6ea42f55c04fb2fdc05e6c5a3108aced2f7e7aa7eda7794c56bba02985a46d8aaa914fcdde238727a98341a96e2aec750d372dadd15
-  languageName: node
-  linkType: hard
-
-"@emotion/unitless@npm:0.10.0":
-  version: 0.10.0
-  resolution: "@emotion/unitless@npm:0.10.0"
-  checksum: 10c0/150943192727b7650eb9a6851a98034ddb58a8b6958b37546080f794696141c3760966ac695ab9af97efe10178690987aee4791f9f0ad1ff76783cdca83c1d49
   languageName: node
   linkType: hard
 
@@ -2641,7 +2634,7 @@ __metadata:
     react-use: "npm:^17.6.0"
     react-virtuoso: "npm:^4.18.7"
     storybook: "npm:10.2.19"
-    styled-components: "npm:6.3.11"
+    styled-components: "npm:6.4.4"
     vite: "npm:7.3.1"
     vitest: "npm:4.1.0"
   languageName: unknown
@@ -4229,7 +4222,7 @@ __metadata:
     "@vultisig/core-mpc": "npm:1.12.1"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
-    styled-components: "npm:6.3.11"
+    styled-components: "npm:6.4.4"
     vite: "npm:7.3.1"
     vite-plugin-static-copy: "npm:3.3.0"
     vite-tsconfig-paths: "npm:^6.1.1"
@@ -5760,13 +5753,6 @@ __metadata:
     "@types/http-errors": "npm:*"
     "@types/node": "npm:*"
   checksum: 10c0/a3c6126bdbf9685e6c7dc03ad34639666eff32754e912adeed9643bf3dd3aa0ff043002a7f69039306e310d233eb8e160c59308f95b0a619f32366bbc48ee094
-  languageName: node
-  linkType: hard
-
-"@types/stylis@npm:4.2.7":
-  version: 4.2.7
-  resolution: "@types/stylis@npm:4.2.7"
-  checksum: 10c0/01a9679addb3f63951a9c09729564e2205581f2db40875a28b25cc461efc52ba17a711cc50cdb5e7d3a67c5f2cd60580e078c8a69b8df7b67699d89060d2a977
   languageName: node
   linkType: hard
 
@@ -13282,7 +13268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.12, nanoid@npm:^3.3.7":
+"nanoid@npm:^3.3.12":
   version: 3.3.12
   resolution: "nanoid@npm:3.3.12"
   bin:
@@ -14172,17 +14158,6 @@ __metadata:
   version: 4.2.0
   resolution: "postcss-value-parser@npm:4.2.0"
   checksum: 10c0/f4142a4f56565f77c1831168e04e3effd9ffcc5aebaf0f538eee4b2d465adfd4b85a44257bb48418202a63806a7da7fe9f56c330aebb3cac898e46b4cbf49161
-  languageName: node
-  linkType: hard
-
-"postcss@npm:8.4.49":
-  version: 8.4.49
-  resolution: "postcss@npm:8.4.49"
-  dependencies:
-    nanoid: "npm:^3.3.7"
-    picocolors: "npm:^1.1.1"
-    source-map-js: "npm:^1.2.1"
-  checksum: 10c0/f1b3f17aaf36d136f59ec373459f18129908235e65dbdc3aee5eef8eba0756106f52de5ec4682e29a2eab53eb25170e7e871b3e4b52a8f1de3d344a514306be3
   languageName: node
   linkType: hard
 
@@ -15695,13 +15670,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shallowequal@npm:1.1.0":
-  version: 1.1.0
-  resolution: "shallowequal@npm:1.1.0"
-  checksum: 10c0/b926efb51cd0f47aa9bc061add788a4a650550bbe50647962113a4579b60af2abe7b62f9b02314acc6f97151d4cf87033a2b15fc20852fae306d1a095215396c
-  languageName: node
-  linkType: hard
-
 "shebang-command@npm:^2.0.0":
   version: 2.0.0
   resolution: "shebang-command@npm:2.0.0"
@@ -16346,26 +16314,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:6.3.11":
-  version: 6.3.11
-  resolution: "styled-components@npm:6.3.11"
+"styled-components@npm:6.4.4":
+  version: 6.4.4
+  resolution: "styled-components@npm:6.4.4"
   dependencies:
     "@emotion/is-prop-valid": "npm:1.4.0"
-    "@emotion/unitless": "npm:0.10.0"
-    "@types/stylis": "npm:4.2.7"
     css-to-react-native: "npm:3.2.0"
     csstype: "npm:3.2.3"
-    postcss: "npm:8.4.49"
-    shallowequal: "npm:1.1.0"
     stylis: "npm:4.3.6"
-    tslib: "npm:2.8.1"
   peerDependencies:
+    css-to-react-native: ">= 3.2.0"
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
+    react-native: ">= 0.68.0"
   peerDependenciesMeta:
+    css-to-react-native:
+      optional: true
     react-dom:
       optional: true
-  checksum: 10c0/26e9e6205b9cebb3db56cd1ffcd43d8b7cb0d2801cdd6cea7d361b11ac32a8de24a88279e6138816c6d922099dccd6a08a0a6aeacf08f2281095151169640595
+    react-native:
+      optional: true
+  checksum: 10c0/ed574b053a85adab543958bde7eb80ea9bf6075dc0c54f8763b2d7251c4ce940a5151513fbc7af8c5be5100c387a55d0b175c0270a829ff37ec6f88b72ac4bca
   languageName: node
   linkType: hard
 
@@ -16832,7 +16801,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.7.0, tslib@npm:^2.8.0, tslib@npm:^2.8.1":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.7.0, tslib@npm:^2.8.0, tslib@npm:^2.8.1":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10c0/9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62
