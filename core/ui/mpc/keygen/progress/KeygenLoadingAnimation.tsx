@@ -17,6 +17,7 @@ type KeygenLoadingAnimationProps = {
   securityType?: VaultSecurityType
 }
 
+/** Drives the keygen Rive canvas with connection and progress inputs. */
 export const KeygenLoadingAnimation = ({
   isConnected,
   progress = 0,

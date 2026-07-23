@@ -25,6 +25,7 @@ const getProgress = (step: KeygenStep | null): number => {
   return progressValues[step] ?? 0
 }
 
+/** Maps the current keygen step to the pending animation inputs. */
 export const KeygenPendingState = ({
   value,
   securityType,

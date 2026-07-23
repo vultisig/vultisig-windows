@@ -23,6 +23,7 @@ type KeygenFlowSuccessContentProps = {
   contained?: boolean
 }
 
+/** Renders the completion animation selected for the current vault type. */
 export const KeygenFlowSuccessContent = ({
   title,
   securityType,
