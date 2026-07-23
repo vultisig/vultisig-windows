@@ -58,7 +58,7 @@
     "react-i18next": "^16.5.8",
     "react-qr-code": "^2.2.0",
     "react-use": "^17.6.0",
-    "styled-components": "6.3.11",
+    "styled-components": "6.4.4",
     "uuid": "^13.0.0",
     "viem": "^2.47.4",
     "zod": "^4.4.3",
