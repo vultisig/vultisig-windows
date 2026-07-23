@@ -1747,4 +1747,5 @@ export const es = {
   active_vaults: 'Bóvedas activas',
   edit_folder: 'Editar carpeta',
   nothing_to_add_hint_secondary: 'Crea una nueva bóveda para agregarlo aquí.',
+  no_results_found: 'No se encontraron resultados',
 }

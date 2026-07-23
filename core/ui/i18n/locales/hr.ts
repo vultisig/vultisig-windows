@@ -1720,4 +1720,5 @@ export const hr = {
   edit_folder: 'Uredi mapu',
   nothing_to_add_hint_secondary:
     'Izradite novi trezor da biste ga dodali ovdje.',
+  no_results_found: 'Nisu pronađeni rezultati',
 }

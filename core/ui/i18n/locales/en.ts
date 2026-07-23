@@ -714,6 +714,7 @@ export const en = {
   node_address: 'Node Address',
   normal: 'Normal',
   not_enough_funds: 'Not enough funds',
+  no_results_found: 'No results found',
   nothing_to_add: 'Nothing to add',
   nothing_to_add_hint: 'All your vaults are already sorted.',
   nothing_to_add_hint_secondary: 'Create a new vault to add it here.',
