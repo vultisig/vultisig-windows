@@ -1,4 +1,5 @@
 import { KeygenLoadingAnimation } from '@core/ui/mpc/keygen/progress/KeygenLoadingAnimation'
+import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { ValueProp } from '@lib/ui/props'
 import { KeygenStep } from '@vultisig/core-mpc/keygen/KeygenStep'
 import styled from 'styled-components'
@@ -24,7 +25,13 @@ const getProgress = (step: KeygenStep | null): number => {
   return progressValues[step] ?? 0
 }
 
-export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
+/** Maps the current keygen step to the pending animation inputs. */
+export const KeygenPendingState = ({
+  value,
+  securityType,
+}: ValueProp<KeygenStep | null> & {
+  securityType?: VaultSecurityType
+}) => {
   const progress = getProgress(value)
 
   return (
@@ -32,6 +39,7 @@ export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
       <KeygenLoadingAnimation
         isConnected={value !== null}
         progress={progress}
+        securityType={securityType}
       />
     </Container>
   )

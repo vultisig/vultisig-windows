@@ -27,12 +27,14 @@ const SecureVaultKeygenFlowContent = ({
       to={({ onBack: toFirst }) => (
         <StartMpcSessionFlow
           value="keygen"
+          securityType="secure"
           render={() => (
             <KeygenFlow
               onBack={toFirst}
               onKeygenError={onKeygenError}
               onVaultSaveError={onVaultSaveError}
               onVaultSaved={onVaultSaved}
+              securityType="secure"
             />
           )}
         />

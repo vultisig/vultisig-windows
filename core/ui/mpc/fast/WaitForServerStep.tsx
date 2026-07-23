@@ -26,7 +26,7 @@ export const WaitForServerStep: FC<OnFinishProp<string[]>> = ({ onFinish }) => {
             error={error}
           />
         )}
-        pending={() => <KeygenConnectingAnimation />}
+        pending={() => <KeygenConnectingAnimation securityType="fast" />}
       />
     </>
   )

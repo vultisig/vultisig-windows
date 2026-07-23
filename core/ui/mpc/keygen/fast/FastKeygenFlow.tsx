@@ -68,6 +68,7 @@ export const FastKeygenFlow = ({
           to={({ value }) => (
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
+                securityType="fast"
                 render={() => (
                   <KeygenFlow
                     onBack={onBack}
@@ -76,6 +77,7 @@ export const FastKeygenFlow = ({
                     onChangeEmailAndRestart={onChangeEmailAndRestart}
                     onVaultSaveError={onVaultSaveError}
                     onVaultSaved={onVaultSaved}
+                    securityType="fast"
                   />
                 )}
                 value="keygen"
