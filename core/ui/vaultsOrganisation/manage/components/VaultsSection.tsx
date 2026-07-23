@@ -1,10 +1,8 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import {
   LeadingIconBadge,
-  SelectionIndicator,
   VaultListRow,
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
@@ -29,7 +27,6 @@ export const VaultsSection = () => {
   const { t } = useTranslation()
   const { mutate } = useUpdateVaultMutation()
   const vaults = useFolderlessVaults()
-  const currentVaultId = useCurrentVaultId()
   const [items, setItems] = useState<Vault[]>(vaults)
   const { totals: vaultTotals, isPending: isTotalsPending } =
     useVaultsTotalBalances({ vaults })
@@ -91,9 +88,6 @@ export const VaultsSection = () => {
                 !isTotalsPending && value !== undefined
                   ? formatFiatAmount(value)
                   : undefined
-              }
-              trailing={
-                vaultId === currentVaultId ? <SelectionIndicator /> : null
               }
             />
             {status === 'overlay' && <DnDItemHighlight />}

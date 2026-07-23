@@ -200,7 +200,6 @@ export const hr = {
   continue_in_new_window: 'Nastavite u otvorenom prozoru',
   contract_execution: 'Izvršenje ugovora',
   copy_address: 'Kopiraj adresu',
-  create_folder: 'Izradi mapu',
   create_new_vault: 'Izradi novi trezor',
   create_vault: 'Izradi trezor',
   create_referral_form: 'Izradi preporuku',
@@ -215,7 +214,6 @@ export const hr = {
   currency: 'Valuta',
   current_expiry: 'Trenutni istek',
   current_passcode: 'Trenutna lozinka',
-  current_vaults: 'Trenutni trezori',
   custom: 'Prilagođena radnja',
   custom_token: 'Prilagođeni token',
   customize_chains: 'Prilagodi lance',
@@ -406,7 +404,7 @@ export const hr = {
   fill_the_form: 'Ispunite obrazac',
   find_custom_token: 'Pronađite prilagođeni token',
   folder_name: 'Naziv mape',
-  folder_name_already_exists: 'Naziv mape mora biti jedinstven',
+  folder_name_already_exists: 'Taj naziv mape već postoji. Pokušajte s novim.',
   folder_name_required: 'Naziv mape je obavezan',
   folder_at_least_one_vault_required: 'Potreban je barem jedan trezor',
   folders: 'Mape',
@@ -620,8 +618,7 @@ export const hr = {
   normal: 'Normalan',
   not_enough_funds: 'Nema dovoljno sredstava',
   nothing_to_add: 'Nema što dodati',
-  nothing_to_add_hint:
-    'Svi vaši trezori su već sortirani. Izradite novi trezor da biste ga dodali ovdje.',
+  nothing_to_add_hint: 'Svi vaši trezori su već sortirani.',
   of: 'od',
   off: 'Isključeno',
   on: 'Na',
@@ -1719,4 +1716,9 @@ export const hr = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable:
     'Limitirani nalozi privremeno nisu dostupni na THORChain',
+  active_vaults: 'Aktivni trezori',
+  edit_folder: 'Uredi mapu',
+  nothing_to_add_hint_secondary:
+    'Izradite novi trezor da biste ga dodali ovdje.',
+  no_results_found: 'Nisu pronađeni rezultati',
 }

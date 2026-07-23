@@ -1,4 +1,3 @@
-import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -168,34 +167,10 @@ const IconBadge = styled.div.withConfig({
     const base = match(tone ?? 'neutral', {
       primary: () => theme.colors.success,
       warning: () => theme.colors.idle,
-      info: () => theme.colors.foregroundExtra,
+      info: () => theme.colors.info,
       neutral: () => theme.colors.foregroundExtra,
     })
 
     return base.withAlpha(tone === 'neutral' ? 0.18 : 0.16).toCssValue()
   }};
-`
-
-export const SelectionIndicator = () => {
-  return (
-    <SelectionBadge>
-      <CheckmarkIcon />
-    </SelectionBadge>
-  )
-}
-
-const SelectionBadge = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.colors.primary.withAlpha(0.4).toCssValue()} 0%,
-    ${({ theme }) => theme.colors.primary.toCssValue()} 100%
-  );
-  color: ${getColor('contrast')};
-  font-size: 18px;
 `
