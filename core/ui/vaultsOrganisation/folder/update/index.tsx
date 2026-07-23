@@ -218,7 +218,7 @@ const ManageFolderVaults = ({
             color="shy"
             style={{ textTransform: 'uppercase' }}
           >
-            {t('current_vaults')}
+            {t('active_vaults')}
           </Text>
           <VStack gap={12}>{children}</VStack>
         </VStack>
@@ -310,7 +310,7 @@ export const UpdateVaultFolderPage = () => {
             <DoneButton onClick={goBack} />
           </HeaderActions>
         }
-        title={currentName}
+        title={t('edit_folder')}
       />
       <PageContent gap={28} scrollable flexGrow>
         <VStack gap={8}>

@@ -199,7 +199,6 @@ export const ko = {
   continue_in_new_window: '열린 창에서 계속하세요',
   contract_execution: '계약 실행',
   copy_address: '주소 복사',
-  create_folder: '폴더 생성',
   create_new_vault: '새 볼트 생성',
   create_vault: '금고 생성',
   create_referral_form: '추천 생성',
@@ -214,7 +213,6 @@ export const ko = {
   currency: '통화',
   current_expiry: '현재 만료일',
   current_passcode: '현재 암호',
-  current_vaults: '현재 금고',
   custom: '사용자 정의 액션',
   custom_token: '사용자 지정 토큰',
   customize_chains: '체인을 맞춤 제작하세요',
@@ -405,7 +403,8 @@ export const ko = {
   fill_the_form: '양식을 작성하세요',
   find_custom_token: '사용자 지정 토큰 찾기',
   folder_name: '폴더 이름',
-  folder_name_already_exists: '폴더 이름은 고유해야 합니다.',
+  folder_name_already_exists:
+    '해당 폴더 이름은 이미 존재합니다. 새로운 이름을 사용해 보세요.',
   folder_name_required: '폴더 이름은 필수 입력 사항입니다.',
   folder_at_least_one_vault_required: '최소 하나의 금고가 필요합니다.',
   folders: '폴더',
@@ -1710,4 +1709,6 @@ export const ko = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable:
     'THORChain에 대한 지정가 주문은 일시적으로 이용할 수 없습니다.',
+  active_vaults: '액티브 볼트',
+  edit_folder: '폴더 편집',
 }

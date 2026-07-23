@@ -202,7 +202,6 @@ export const pt = {
   continue_in_new_window: 'Continue na janela aberta.',
   contract_execution: 'Execução de Contrato',
   copy_address: 'Copiar endereço',
-  create_folder: 'Criar pasta',
   create_new_vault: 'Criar novo cofre',
   create_vault: 'Criar cofre',
   create_referral_form: 'Criar referência',
@@ -217,7 +216,6 @@ export const pt = {
   currency: 'Moeda',
   current_expiry: 'Validade atual',
   current_passcode: 'Senha atual',
-  current_vaults: 'Cofres atuais',
   custom: 'Ação personalizada',
   custom_token: 'Token personalizado',
   customize_chains: 'Personalize correntes',
@@ -412,7 +410,7 @@ export const pt = {
   fill_the_form: 'Preencha o formulário',
   find_custom_token: 'Encontrar token personalizado',
   folder_name: 'Nome da pasta',
-  folder_name_already_exists: 'O nome da pasta deve ser único.',
+  folder_name_already_exists: 'Essa pasta já existe. Tente um novo nome.',
   folder_name_required: 'É necessário nomear a pasta.',
   folder_at_least_one_vault_required: 'Pelo menos um cofre é necessário',
   folders: 'Pastas',
@@ -1749,4 +1747,6 @@ export const pt = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable:
     'As ordens limitadas estão temporariamente indisponíveis em THORChain',
+  active_vaults: 'Cofres ativos',
+  edit_folder: 'Pasta de edição',
 }

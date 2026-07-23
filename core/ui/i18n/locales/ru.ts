@@ -199,7 +199,6 @@ export const ru = {
   continue_in_new_window: 'Продолжить в открытом окне',
   contract_execution: 'Исполнение контракта',
   copy_address: 'Копировать адрес',
-  create_folder: 'Создать папку',
   create_new_vault: 'Создать новое хранилище',
   create_vault: 'Создать хранилище',
   create_referral_form: 'Создать referral',
@@ -214,7 +213,6 @@ export const ru = {
   currency: 'Валюта',
   current_expiry: 'Текущий срок',
   current_passcode: 'Текущий пин-код',
-  current_vaults: 'Текущие хранилища',
   custom: 'Пользовательское действие',
   custom_token: 'Пользовательский токен',
   customize_chains: 'Настроить сети',
@@ -404,7 +402,8 @@ export const ru = {
   fill_the_form: 'Заполните форму',
   find_custom_token: 'Найти пользовательский токен',
   folder_name: 'Имя папки',
-  folder_name_already_exists: 'Имя папки должно быть уникальным',
+  folder_name_already_exists:
+    'Папка с таким именем уже существует. Попробуйте создать новую.',
   folder_name_required: 'Имя папки обязательно',
   folder_at_least_one_vault_required: 'Требуется как минимум одно хранилище',
   folders: 'Папки',
@@ -1726,4 +1725,6 @@ export const ru = {
     'Введите действительный адрес для этой сети (формат bech32 или устаревший).',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable: 'Лимитные ордера временно недоступны для THORChain',
+  active_vaults: 'Активные хранилища',
+  edit_folder: 'Редактировать папку',
 }

@@ -201,7 +201,6 @@ export const es = {
   continue_in_new_window: 'Continuar en la ventana abierta',
   contract_execution: 'Ejecución del contrato',
   copy_address: 'Copiar dirección',
-  create_folder: 'Crear carpeta',
   create_new_vault: 'Crear nueva bóveda',
   create_vault: 'Crear bóveda',
   create_referral_form: 'Crear referencia',
@@ -216,7 +215,6 @@ export const es = {
   currency: 'Divisa',
   current_expiry: 'Vencimiento actual',
   current_passcode: 'Código de acceso actual',
-  current_vaults: 'Bóvedas actuales',
   custom: 'Acción personalizada',
   custom_token: 'Token personalizado',
   customize_chains: 'Personalizar cadenas',
@@ -411,7 +409,7 @@ export const es = {
   fill_the_form: 'Rellene el formulario',
   find_custom_token: 'Encuentra un token personalizado',
   folder_name: 'Nombre de la carpeta',
-  folder_name_already_exists: 'El nombre de la carpeta debe ser único',
+  folder_name_already_exists: 'Esa carpeta ya existe. Prueba con una nueva.',
   folder_name_required: 'El nombre de la carpeta es obligatorio',
   folder_at_least_one_vault_required: 'Se requiere al menos una bóveda',
   folders: 'Carpetas',
@@ -1747,4 +1745,6 @@ export const es = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable:
     'Las órdenes límite no están disponibles temporalmente en THORChain',
+  active_vaults: 'Bóvedas activas',
+  edit_folder: 'Editar carpeta',
 }

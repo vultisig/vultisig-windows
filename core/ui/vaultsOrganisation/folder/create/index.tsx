@@ -90,7 +90,7 @@ export const CreateVaultFolderPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={goBack} />}
         secondaryControls={<DoneButton onClick={goBack} />}
-        title={t('create_folder')}
+        title={t('add_folder')}
       />
       <PageContent gap={28} scrollable flexGrow>
         <VStack gap={8}>
