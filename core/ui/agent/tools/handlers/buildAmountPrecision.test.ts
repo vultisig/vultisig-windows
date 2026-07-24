@@ -1,5 +1,6 @@
 import { create, fromBinary } from '@bufbuild/protobuf'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { buildSendKeysignPayload } from '@vultisig/core-mpc/keysign/send/build'
 import { buildSwapKeysignPayload } from '@vultisig/core-mpc/keysign/swap/build'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -145,6 +146,9 @@ describe('agent transaction amount precision', () => {
       exactChainAmount.toString()
     )
     expect(result.data.amount).toBe(exactAmount)
+    expect(findSwapQuote).toHaveBeenCalledWith(
+      expect.objectContaining({ excludeProviders: ['CowSwap'] })
+    )
     expect(buildSwapKeysignPayload).toHaveBeenCalledWith(
       expect.objectContaining({ amount: exactAmount })
     )
