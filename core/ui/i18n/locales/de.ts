@@ -1495,7 +1495,6 @@ export const de = {
   advanced_settings: 'Erweiterte Einstellungen',
   advanced_swap: 'Erweiterter Tausch',
   auto: 'Auto',
-  coming_soon: 'Demnächst verfügbar',
   custom_rpc: 'Benutzerdefinierte RPCs',
   custom_rpc_chip_custom: 'Benutzerdefiniert',
   custom_rpc_description: 'Verwenden Sie Ihre eigenen Knoten pro Kette',
@@ -1521,7 +1520,6 @@ export const de = {
   slippage_helper:
     'Legt fest, wie stark sich der Preis ändern darf, bevor die Ausführung abgebrochen wird.',
   slippage_tolerance: 'Schlupftoleranz',
-  swap_limit_orders: 'Limit-Orders',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externen Empfänger verwenden',
@@ -1764,4 +1762,36 @@ export const de = {
   nothing_to_add_hint_secondary:
     'Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
   no_results_found: 'Keine Ergebnisse gefunden',
+  swap_limit_asset: 'Vermögenswert',
+  swap_limit_buy: 'Kaufen',
+  swap_limit_execute_when: 'Ausführen, wenn',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Verkaufen',
+  swap_limit_blocker_chain_unavailable:
+    'Diese Kette wurde vorübergehend auf THORChain angehalten.',
+  swap_limit_blocker_insufficient_balance:
+    'Der Betrag übersteigt Ihr Guthaben.',
+  swap_limit_blocker_memo_invalid:
+    'Dieser Auftrag kann in der eingegebenen Form nicht ausgeführt werden.',
+  swap_limit_blocker_no_amount: 'Geben Sie den zu verkaufenden Betrag ein.',
+  swap_limit_blocker_no_market_price:
+    'Für dieses Paar ist noch kein Marktpreis verfügbar.',
+  swap_limit_blocker_no_price: 'Geben Sie einen Zielpreis ein',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain kann keine Limit-Order zwischen diesen Assets weiterleiten.',
+  swap_limit_blocker_no_destination:
+    'Für die Zielkette ist keine Auszahlungsadresse verfügbar.',
+  swap_limit_blocker_same_asset: 'Wählen Sie zwei verschiedene Vermögenswerte.',
+  swap_limit_expiry_label: 'Ablauf',
+  swap_limit_place_order: 'Bestellung aufgeben',
+  swap_limit_place_pending_signing:
+    'Die Unterstützung für Ihre Unterschrift ist unterwegs – überprüfen Sie Ihre Bestellung unten.',
+  swap_limit_review_heading: 'Sie erteilen eine Limit-Order.',
+  swap_limit_review_target_price: 'Kursziel',
+  swap_limit_review_title: 'Bestellung prüfen',
+  swap_limit_price_market: 'Markt',
+  swap_limit_warning_at_or_below_market:
+    'Dieser Preis entspricht dem Marktpreis oder liegt darunter, daher kann die Order sofort ausgeführt werden.',
+  swap_limit_warning_far_above_market:
+    'Dieser Preis liegt weit über dem Marktpreis und es besteht die Möglichkeit, dass die Transaktion ungenutzt verfällt.',
 }

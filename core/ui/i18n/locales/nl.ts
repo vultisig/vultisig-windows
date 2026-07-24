@@ -1466,7 +1466,6 @@ export const nl = {
   advanced_settings: 'Geavanceerde instellingen',
   advanced_swap: 'Geavanceerde omruiling',
   auto: 'Auto',
-  coming_soon: 'Binnenkort beschikbaar',
   custom_rpc: 'Aangepaste RPC&#39;s',
   custom_rpc_chip_custom: 'Aangepast',
   custom_rpc_description: 'Gebruik je eigen knooppunten per keten.',
@@ -1492,7 +1491,6 @@ export const nl = {
   slippage_helper:
     'Beperkt hoeveel de prijs kan veranderen voordat de transactie wordt geannuleerd.',
   slippage_tolerance: 'Slippage tolerantie',
-  swap_limit_orders: 'Limiet bestellingen',
   swap_mode_limit: 'Limiet',
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externe ontvanger gebruiken',
@@ -1732,4 +1730,35 @@ export const nl = {
   nothing_to_add_hint_secondary:
     'Maak een nieuwe kluis aan om deze hier toe te voegen.',
   no_results_found: 'Geen resultaten gevonden',
+  swap_limit_asset: 'Bezit',
+  swap_limit_buy: 'Kopen',
+  swap_limit_execute_when: 'Uitvoeren wanneer',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Verkopen',
+  swap_limit_blocker_chain_unavailable:
+    'Deze keten is tijdelijk gestopt op THORChain',
+  swap_limit_blocker_insufficient_balance: 'Het bedrag overschrijdt uw saldo.',
+  swap_limit_blocker_memo_invalid:
+    'Deze bestelling kan niet worden geplaatst zoals ingevoerd.',
+  swap_limit_blocker_no_amount: 'Voer een verkoopbedrag in',
+  swap_limit_blocker_no_market_price:
+    'Er is nog geen marktprijs bekend voor dit paar.',
+  swap_limit_blocker_no_price: 'Voer een streefprijs in',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain kan geen limietorder tussen deze activa routeren.',
+  swap_limit_blocker_no_destination:
+    'Er is geen uitbetalingsadres beschikbaar voor de doelketen.',
+  swap_limit_blocker_same_asset: 'Kies twee verschillende activa.',
+  swap_limit_expiry_label: 'Vervaldatum',
+  swap_limit_place_order: 'Bestelling plaatsen',
+  swap_limit_place_pending_signing:
+    'Ondersteuning voor ondertekening is onderweg — controleer uw bestelling hieronder.',
+  swap_limit_review_heading: 'U plaatst een limietorder.',
+  swap_limit_review_target_price: 'Richtprijs',
+  swap_limit_review_title: 'Beoordelingsvolgorde',
+  swap_limit_price_market: 'Markt',
+  swap_limit_warning_at_or_below_market:
+    'Deze prijs ligt op of onder de marktprijs, waardoor de bestelling mogelijk direct wordt uitgevoerd.',
+  swap_limit_warning_far_above_market:
+    'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
 }

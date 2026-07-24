@@ -8,10 +8,10 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ManageFromCoin } from '../form/ManageFromCoin'
-import { ManageToCoin } from '../form/ManageToCoin'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
+import { LimitManageFromCoin } from './LimitManageFromCoin'
+import { LimitManageToCoin } from './LimitManageToCoin'
 
 /**
  * Pair and amount selection.
@@ -35,7 +35,7 @@ export const LimitAssetStep = () => {
         <Divider />
       </VStack>
       <VStack gap={8}>
-        <ManageFromCoin />
+        <LimitManageFromCoin />
         {/* Sits on the seam between the two cards, as in the design — anchoring
             it to the middle of the whole stack drops it onto the sell card's
             amount-suggestion row. */}
@@ -53,7 +53,7 @@ export const LimitAssetStep = () => {
             </ReverseButton>
           </ReverseWrapper>
         </Seam>
-        <ManageToCoin />
+        <LimitManageToCoin />
       </VStack>
     </Card>
   )

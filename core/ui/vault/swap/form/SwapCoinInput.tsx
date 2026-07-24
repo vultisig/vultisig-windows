@@ -6,6 +6,7 @@ import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
@@ -24,7 +25,16 @@ import { useSwapEnabledChainsForVault } from '../state/useSwapEnabledChainsForVa
 import { useChainSummaries } from './hooks/useChainSummaries'
 import { SwapCoinsExplorer } from './SwapCoinsExplorer'
 
-export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
+type SwapCoinInputProps = InputProps<CoinKey> & {
+  /** Extra chain restriction for both selectors; allows all when omitted. */
+  chainFilter?: (chain: Chain) => boolean
+}
+
+export const SwapCoinInput: FC<SwapCoinInputProps> = ({
+  value,
+  onChange,
+  chainFilter,
+}) => {
   const [opened, setOpened] = useState<null | 'coin' | 'chain'>(null)
 
   const { t } = useTranslation()
@@ -39,9 +49,12 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const coinOptions = useMemo(
     () =>
       coins.filter(
-        c => isOneOf(c.chain, swapEnabledChainsForVault) && isFeeCoin(c)
+        c =>
+          isOneOf(c.chain, swapEnabledChainsForVault) &&
+          isFeeCoin(c) &&
+          (chainFilter?.(c.chain) ?? true)
       ),
-    [coins, swapEnabledChainsForVault]
+    [coins, swapEnabledChainsForVault, chainFilter]
   )
 
   return (
@@ -55,6 +68,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
         <SwapCoinsExplorer
           onClose={() => setOpened(null)}
           onChange={onChange}
+          chainFilter={chainFilter}
         />
       )}
 

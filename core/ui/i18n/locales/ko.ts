@@ -1454,7 +1454,6 @@ export const ko = {
   advanced_settings: '고급 설정',
   advanced_swap: '고급 스왑',
   auto: '자동',
-  coming_soon: '곧 출시 예정',
   custom_rpc: '사용자 정의 RPC',
   custom_rpc_chip_custom: '사용자 지정',
   custom_rpc_description: '체인별로 자체 노드를 사용하십시오.',
@@ -1480,7 +1479,6 @@ export const ko = {
   slippage_helper:
     '주문이 취소되기 전에 가격이 변동할 수 있는 최대 범위를 제한합니다.',
   slippage_tolerance: '미끄러짐 허용 오차',
-  swap_limit_orders: '지정가 주문',
   swap_mode_limit: '한계',
   swap_mode_market: '시장',
   use_external_recipient: '외부 수신자 사용',
@@ -1712,4 +1710,35 @@ export const ko = {
   edit_folder: '폴더 편집',
   nothing_to_add_hint_secondary: '여기에 추가하려면 새 볼트를 생성하세요.',
   no_results_found: '검색 결과가 없습니다.',
+  swap_limit_asset: '유산',
+  swap_limit_buy: '구입하다',
+  swap_limit_execute_when: '실행 시점',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: '팔다',
+  swap_limit_blocker_chain_unavailable:
+    '이 체인은 THORChain 에서 일시적으로 중단되었습니다.',
+  swap_limit_blocker_insufficient_balance: '금액이 잔액을 초과했습니다.',
+  swap_limit_blocker_memo_invalid:
+    '입력하신 내용으로는 주문을 처리할 수 없습니다.',
+  swap_limit_blocker_no_amount: '판매할 금액을 입력하세요',
+  swap_limit_blocker_no_market_price:
+    '이 제품에 대한 시장 가격은 아직 확인되지 않았습니다.',
+  swap_limit_blocker_no_price: '목표 가격을 입력하세요',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain 이 자산들 간에 지정가 주문을 라우팅할 수 없습니다.',
+  swap_limit_blocker_no_destination:
+    '대상 체인에 대한 지급 주소를 사용할 수 없습니다.',
+  swap_limit_blocker_same_asset: '서로 다른 두 가지 자산을 선택하세요',
+  swap_limit_expiry_label: '만료',
+  swap_limit_place_order: '주문하기',
+  swap_limit_place_pending_signing:
+    '서명 지원이 곧 제공될 예정입니다. 아래에서 주문 내역을 확인하세요.',
+  swap_limit_review_heading: '지정가 주문을 하십니다.',
+  swap_limit_review_target_price: '목표 가격',
+  swap_limit_review_title: '주문 검토',
+  swap_limit_price_market: '시장',
+  swap_limit_warning_at_or_below_market:
+    '이 가격은 시장 가격과 같거나 그 이하이므로 주문이 즉시 체결될 수 있습니다.',
+  swap_limit_warning_far_above_market:
+    '이 가격은 시장가보다 훨씬 높으며, 거래가 성사되지 않고 만료될 가능성이 있습니다.',
 }

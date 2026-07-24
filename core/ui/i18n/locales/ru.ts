@@ -1464,7 +1464,6 @@ export const ru = {
   advanced_settings: 'Расширенные настройки',
   advanced_swap: 'Расширенный своп',
   auto: 'Авто',
-  coming_soon: 'Вскоре',
   custom_rpc: 'Пользовательские RPC',
   custom_rpc_chip_custom: 'Пользовательский',
   custom_rpc_description: 'Используйте собственные узлы для каждой цепочки.',
@@ -1490,7 +1489,6 @@ export const ru = {
   slippage_helper:
     'Ограничивает диапазон изменения цены до отмены исполнения ордера.',
   slippage_tolerance: 'Допустимое проскальзывание',
-  swap_limit_orders: 'Лимитные ордера',
   swap_mode_limit: 'Лимит',
   swap_mode_market: 'Рынок',
   use_external_recipient: 'Использовать внешнего получателя',
@@ -1729,4 +1727,35 @@ export const ru = {
   nothing_to_add_hint_secondary:
     'Создайте новое хранилище, чтобы добавить его сюда.',
   no_results_found: 'Результаты не найдены',
+  swap_limit_asset: 'Объект',
+  swap_limit_buy: 'Купить',
+  swap_limit_execute_when: 'Выполнить при',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Продавать',
+  swap_limit_blocker_chain_unavailable:
+    'Данная цепочка временно остановлена ​​на THORChain',
+  swap_limit_blocker_insufficient_balance: 'Сумма превышает ваш баланс.',
+  swap_limit_blocker_memo_invalid:
+    'Этот заказ не может быть оформлен в том виде, в котором он был введен.',
+  swap_limit_blocker_no_amount: 'Введите сумму для продажи',
+  swap_limit_blocker_no_market_price:
+    'Рыночная цена этой пары пока недоступна.',
+  swap_limit_blocker_no_price: 'Введите целевую цену',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain не может направить лимитный ордер между этими активами.',
+  swap_limit_blocker_no_destination:
+    'Адрес для выплат в целевой цепочке недоступен.',
+  swap_limit_blocker_same_asset: 'Выберите два разных актива',
+  swap_limit_expiry_label: 'Срок годности',
+  swap_limit_place_order: 'Оформить заказ',
+  swap_limit_place_pending_signing:
+    'Поддержка подписи уже в пути — проверьте свой заказ ниже.',
+  swap_limit_review_heading: 'Вы размещаете лимитный ордер.',
+  swap_limit_review_target_price: 'Целевая цена',
+  swap_limit_review_title: 'Проверить заказ',
+  swap_limit_price_market: 'Рынок',
+  swap_limit_warning_at_or_below_market:
+    'Эта цена соответствует рыночной или ниже, поэтому заказ может быть исполнен немедленно.',
+  swap_limit_warning_far_above_market:
+    'Эта цена значительно выше рыночной и может остаться нереализованной.',
 }
