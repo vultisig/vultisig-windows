@@ -42,8 +42,9 @@ export const initExtensionBackground = () => {
   }
 
   if (import.meta.env.VITE_DEV_RELOAD) {
+    const reloadPort = import.meta.env.VITE_EXTENSION_RELOAD_PORT || '18732'
     const connect = () => {
-      const ws = new WebSocket('ws://localhost:18732')
+      const ws = new WebSocket(`ws://127.0.0.1:${reloadPort}`)
       ws.onmessage = () => chrome.runtime.reload()
       ws.onclose = () => setTimeout(connect, 1000)
     }

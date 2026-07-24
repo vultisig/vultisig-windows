@@ -3,6 +3,7 @@ package mediator
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -12,25 +13,48 @@ import (
 	"github.com/vultisig/vultisig-relay/storage"
 )
 
-const (
-	MediatorPort = 18080
-)
+const DefaultMediatorPort = 18080
+const localSuffix = ".local"
 
 // Server  is a struct that represents a relay server.
 type Server struct {
 	localServer *server.Server
 	mdns        *m.Server
+	port        int
 }
 
 func NewRelayServer() (*Server, error) {
+	port, err := resolveMediatorPort(os.Getenv("VULTISIG_MEDIATOR_PORT"))
+	if err != nil {
+		return nil, err
+	}
 	store, err := storage.NewInMemoryStorage()
 	if err != nil {
 		return nil, err
 	}
-	s := server.NewServer(MediatorPort, store)
+	s := server.NewServer(int64(port), store)
 	return &Server{
 		localServer: s,
+		port:        port,
 	}, nil
+}
+
+func resolveMediatorPort(value string) (int, error) {
+	if value == "" {
+		return DefaultMediatorPort, nil
+	}
+	port, err := strconv.Atoi(value)
+	if err != nil || port < 1 || port > 65535 {
+		return 0, fmt.Errorf("VULTISIG_MEDIATOR_PORT must be an integer between 1 and 65535")
+	}
+	return port, nil
+}
+
+func normalizeMDNSHostname(hostName string) string {
+	for strings.HasSuffix(strings.ToLower(hostName), localSuffix) {
+		hostName = hostName[:len(hostName)-len(localSuffix)]
+	}
+	return fmt.Sprintf("%s%s.", hostName, localSuffix)
 }
 
 func (r *Server) StartServer() error {
@@ -46,16 +70,9 @@ func (r *Server) AdvertiseMediator(name string) error {
 	if err != nil {
 		return fmt.Errorf("could not determine host: %v", err)
 	}
-	
-	const localSuffix = ".local"
-	
-	// Remove .local if it already exists to avoid duplicate
-	if strings.HasSuffix(hostName, localSuffix) {
-		hostName = strings.TrimSuffix(hostName, localSuffix)
-	}
-	
-	hostName = fmt.Sprintf("%s%s.", hostName, localSuffix)
-	mdns, err := m.NewMDNSService(name, "_http._tcp", "", hostName, MediatorPort, nil, []string{
+
+	hostName = normalizeMDNSHostname(hostName)
+	mdns, err := m.NewMDNSService(name, "_http._tcp", "", hostName, r.port, nil, []string{
 		name,
 	})
 	if err != nil {
@@ -68,7 +85,7 @@ func (r *Server) AdvertiseMediator(name string) error {
 		return fmt.Errorf("fail to start mdns server,err:%w", err)
 	}
 	r.mdns = s
-	fmt.Printf("Successfully advertising mediator '%s' on %s:%d\n", name, hostName, MediatorPort)
+	fmt.Printf("Successfully advertising mediator '%s' on %s:%d\n", name, hostName, r.port)
 	return nil
 }
 
@@ -92,7 +109,7 @@ func (r *Server) DiscoveryService(name string) (string, error) {
 		defer wg.Done()
 		for {
 			select {
-			case <-time.After(5 * time.Second): 
+			case <-time.After(5 * time.Second):
 				err = fmt.Errorf("fail to find service, timeout")
 				return
 			case entry := <-entriesCh:
@@ -108,7 +125,7 @@ func (r *Server) DiscoveryService(name string) (string, error) {
 
 	param := &m.QueryParam{
 		Service:     "_http._tcp",
-		Timeout:     5 * time.Second, 
+		Timeout:     5 * time.Second,
 		Entries:     entriesCh,
 		DisableIPv6: true,
 	}
