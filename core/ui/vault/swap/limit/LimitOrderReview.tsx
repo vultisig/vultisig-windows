@@ -13,11 +13,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const expiryLabel: Record<LimitSwapExpiryHours, string> = {
-  12: '12h',
-  24: '24h',
-  72: '3d',
-}
+import { useLimitExpiryLabels } from './useLimitExpiryLabels'
 
 const formatNumber = (value: number) =>
   value.toLocaleString(undefined, { maximumFractionDigits: 8 })
@@ -54,6 +50,7 @@ export const LimitOrderReview: FC<LimitOrderReviewProps> = ({
   onBack,
 }) => {
   const { t } = useTranslation()
+  const expiryLabel = useLimitExpiryLabels()
 
   return (
     <>

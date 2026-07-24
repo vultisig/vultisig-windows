@@ -1758,4 +1758,7 @@ export const ru = {
     'Эта цена соответствует рыночной или ниже, поэтому заказ может быть исполнен немедленно.',
   swap_limit_warning_far_above_market:
     'Эта цена значительно выше рыночной и может остаться нереализованной.',
+  swap_limit_expiry_12h: '12 ч',
+  swap_limit_expiry_24h: '24 ч',
+  swap_limit_expiry_3d: '3d',
 }

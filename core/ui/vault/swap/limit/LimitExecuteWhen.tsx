@@ -17,13 +17,7 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { LimitPricePreset, limitPricePresets } from './price'
-
-/** `72` reads as "3d" rather than "72h", matching the design. */
-const expiryLabel: Record<LimitSwapExpiryHours, string> = {
-  12: '12h',
-  24: '24h',
-  72: '3d',
-}
+import { useLimitExpiryLabels } from './useLimitExpiryLabels'
 
 export const limitPriceUnits = ['asset', 'fiat'] as const
 
@@ -75,6 +69,7 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
   onExpiryChange,
 }) => {
   const { t } = useTranslation()
+  const expiryLabel = useLimitExpiryLabels()
 
   return (
     <Card gap={20}>

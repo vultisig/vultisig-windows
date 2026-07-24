@@ -108,7 +108,10 @@ export const LimitSwapForm = () => {
     const next = toInputValue(nextRate, forUnit)
 
     if (next !== null) {
-      setPriceInput(String(Number(next.toFixed(8))))
+      // toFixed keeps plain decimal notation (a Number round-trip would emit
+      // "1e-8" for tiny values, which parseLimitPrice then rejects); strip the
+      // trailing zeros it pads.
+      setPriceInput(next.toFixed(8).replace(/\.?0+$/, ''))
     }
   }
 
@@ -220,6 +223,17 @@ export const LimitSwapForm = () => {
     return fiat !== null ? `$${formatNumber(fiat, 2)}` : undefined
   })()
 
+  // Fiat price of one buy unit, only when the (ungated, independently-loaded)
+  // fiat query has actually resolved — a `?? 0` here would show "$0.00" as the
+  // target price instead of falling back to the asset ratio.
+  const targetFiatPrice =
+    rate !== null
+      ? rateToFiatUnitPrice({ rate, sellCoinFiatPrice: fromCoinFiatPrice })
+      : null
+  // Always the asset ratio (sell units per buy unit), never `$`-prefixed, so it
+  // is a correct fallback regardless of the live unit toggle.
+  const targetAssetPrice = rate !== null ? rateToUnitPrice({ rate }) : null
+
   if (step === 'review') {
     return (
       <LimitOrderReview
@@ -228,13 +242,13 @@ export const LimitSwapForm = () => {
         sellAmount={sellAmount ?? 0}
         receiveAmount={receiveAmount ?? 0}
         unitPrice={
-          marketUnitPrice !== null && rate !== null
-            ? formatUnitPrice(rateToUnitPrice({ rate }) ?? 0)
+          targetAssetPrice !== null
+            ? `${formatNumber(targetAssetPrice)} ${fromCoin.ticker}`
             : undefined
         }
         targetPriceLabel={
-          rate !== null
-            ? `$${formatNumber(rateToFiatUnitPrice({ rate, sellCoinFiatPrice: fromCoinFiatPrice }) ?? 0, 2)}`
+          targetFiatPrice !== null
+            ? `$${formatNumber(targetFiatPrice, 2)}`
             : undefined
         }
         expiryHours={expiryHours}

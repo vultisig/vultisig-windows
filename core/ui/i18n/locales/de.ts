@@ -1794,4 +1794,7 @@ export const de = {
     'Dieser Preis entspricht dem Marktpreis oder liegt darunter, daher kann die Order sofort ausgeführt werden.',
   swap_limit_warning_far_above_market:
     'Dieser Preis liegt weit über dem Marktpreis und es besteht die Möglichkeit, dass die Transaktion ungenutzt verfällt.',
+  swap_limit_expiry_12h: '12 Uhr',
+  swap_limit_expiry_24h: '24 Stunden',
+  swap_limit_expiry_3d: '3D',
 }

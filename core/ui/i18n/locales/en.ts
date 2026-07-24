@@ -1175,6 +1175,9 @@ export const en = {
   swap_limit_blocker_no_destination:
     'No payout address available for the target chain',
   swap_limit_blocker_same_asset: 'Choose two different assets',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Expiry',
   swap_limit_place_order: 'Place order',
   swap_limit_place_pending_signing:

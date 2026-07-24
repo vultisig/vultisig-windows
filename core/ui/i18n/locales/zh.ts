@@ -1615,7 +1615,7 @@ export const zh = {
   swap_limit_blocker_insufficient_balance: '金额超过您的余额',
   swap_limit_blocker_memo_invalid: '此订单无法按原样提交。',
   swap_limit_blocker_no_amount: '输入要出售的数量',
-  swap_limit_blocker_no_market_price: '目前尚无该款鞋子的市场价格信息。',
+  swap_limit_blocker_no_market_price: '暂无该交易对的市场价格信息',
   swap_limit_blocker_no_price: '输入目标价格',
   swap_limit_blocker_pair_not_routable: 'THORChain无法在这些资产之间路由限价单',
   swap_limit_blocker_no_destination: '目标链没有可用的支付地址',
@@ -1631,4 +1631,7 @@ export const zh = {
     '这个价格等于或低于市场价，所以订单可能立即成交。',
   swap_limit_warning_far_above_market:
     '这个价格远高于市场价，而且可能最终无法成交。',
+  swap_limit_expiry_12h: '12小时',
+  swap_limit_expiry_24h: '24小时',
+  swap_limit_expiry_3d: '3D',
 }
