@@ -1783,7 +1783,7 @@ export const it = {
     'Questo prezzo è pari o inferiore al prezzo di mercato, quindi l&#39;ordine potrebbe essere evaso immediatamente.',
   swap_limit_warning_far_above_market:
     'Questo prezzo è di gran lunga superiore a quello di mercato e l&#39;offerta potrebbe scadere senza che l&#39;ordine venga evaso.',
-  swap_limit_expiry_12h: '12 ore',
-  swap_limit_expiry_24h: '24 ore',
-  swap_limit_expiry_3d: '3D',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
 }

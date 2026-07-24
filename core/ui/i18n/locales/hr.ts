@@ -1750,7 +1750,7 @@ export const hr = {
     'Ova cijena je na ili ispod tržišne, tako da se narudžba može odmah ispuniti',
   swap_limit_warning_far_above_market:
     'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
-  swap_limit_expiry_12h: '12 sati',
-  swap_limit_expiry_24h: '24 sata',
-  swap_limit_expiry_3d: '3D',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
 }

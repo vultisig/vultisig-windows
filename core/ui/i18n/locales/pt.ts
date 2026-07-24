@@ -1781,6 +1781,6 @@ export const pt = {
   swap_limit_warning_far_above_market:
     'Este preço está muito acima do mercado e pode expirar sem ser atendido.',
   swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24 horas',
-  swap_limit_expiry_3d: '3D',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
 }

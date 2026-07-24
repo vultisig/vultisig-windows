@@ -1631,7 +1631,7 @@ export const zh = {
     '这个价格等于或低于市场价，所以订单可能立即成交。',
   swap_limit_warning_far_above_market:
     '这个价格远高于市场价，而且可能最终无法成交。',
-  swap_limit_expiry_12h: '12小时',
-  swap_limit_expiry_24h: '24小时',
-  swap_limit_expiry_3d: '3D',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
 }

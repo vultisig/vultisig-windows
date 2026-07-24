@@ -1761,7 +1761,7 @@ export const nl = {
     'Deze prijs ligt op of onder de marktprijs, waardoor de bestelling mogelijk direct wordt uitgevoerd.',
   swap_limit_warning_far_above_market:
     'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
-  swap_limit_expiry_12h: '12 uur',
-  swap_limit_expiry_24h: '24 uur',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
 }
