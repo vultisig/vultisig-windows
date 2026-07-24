@@ -11,6 +11,7 @@ export type LimitOrderBlocker =
   | 'insufficientBalance'
   | 'noPrice'
   | 'noMarketPrice'
+  | 'noDestination'
   | 'memoInvalid'
 
 type GetLimitOrderBlockerInput = {
@@ -27,6 +28,8 @@ type GetLimitOrderBlockerInput = {
   supportedChains: Chain[] | undefined
   /** A successful market-price probe doubles as proof the pair has a pool. */
   marketPrice: number | undefined
+  /** The user's address on the target chain, where a filled order pays out. */
+  destinationAddress: string | undefined
   /** Error thrown while building the memo, if any. */
   memoError: string | undefined
 }
@@ -52,6 +55,7 @@ export const getLimitOrderBlocker = ({
   isQueueEnabled,
   supportedChains,
   marketPrice,
+  destinationAddress,
   memoError,
 }: GetLimitOrderBlockerInput): LimitOrderBlocker | undefined => {
   if (!isQueueEnabled) {
@@ -90,6 +94,12 @@ export const getLimitOrderBlocker = ({
   // presets have nothing to anchor to and the pair may simply be unroutable.
   if (!marketPrice) {
     return 'noMarketPrice'
+  }
+
+  // The filled order pays out to the user's own address on the target chain; it
+  // is encoded in the memo, so a missing one cannot be signed.
+  if (!destinationAddress?.trim()) {
+    return 'noDestination'
   }
 
   return memoError ? 'memoInvalid' : undefined

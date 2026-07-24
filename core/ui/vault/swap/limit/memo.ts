@@ -1,11 +1,12 @@
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import {
   buildLimitSwapMemo,
+  getLimitSwapLimitAmount,
   LimitSwapExpiryHours,
 } from '@vultisig/core-chain/swap/native/limitSwapMemo'
 import { getThorchainMemoAsset } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 
-import { toThorchainFixedPoint } from './amount'
+import { fromThorchainFixedPoint, toThorchainFixedPoint } from './amount'
 
 type BuildLimitSwapMemoForCoinsInput = {
   fromCoin: Coin
@@ -52,3 +53,37 @@ export const buildLimitSwapMemoForCoins = ({
     target_price: targetPrice,
     expiry_hours: expiryHours,
   })
+
+type GetLimitSwapReceiveAmountInput = {
+  fromCoin: Coin
+  /** Source amount in the coin's native smallest units. */
+  amount: bigint
+  /** Target asset units per source unit, as the user entered it. */
+  targetPrice: number | string
+}
+
+/**
+ * The order's guaranteed-minimum output, in the target's natural units, for
+ * display.
+ *
+ * Derived from the SDK's `getLimitSwapLimitAmount` — the exact truncated LIM the
+ * memo encodes — rather than recomputing `amount × price` as a float. The two can
+ * differ by the truncation, and showing a "you receive" figure the signed order
+ * would not honor is the mismatch the issue calls out. Throws on the same
+ * conditions as the memo (a LIM flooring to zero), so callers guard it the same
+ * way they guard the memo.
+ */
+export const getLimitSwapReceiveAmount = ({
+  fromCoin,
+  amount,
+  targetPrice,
+}: GetLimitSwapReceiveAmountInput): number =>
+  fromThorchainFixedPoint(
+    getLimitSwapLimitAmount({
+      source_amount: toThorchainFixedPoint({
+        amount,
+        decimals: fromCoin.decimals,
+      }),
+      target_price: targetPrice,
+    })
+  )

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { featureFlags } from '../../../../featureFlags'
 import { fetchLimitSwapSupportedChains } from '../supportedChains'
 
 const limitSwapSupportedChainsQueryKey = ['limitSwapSupportedChains']
@@ -16,6 +15,5 @@ export const useLimitSwapSupportedChainsQuery = () =>
   useQuery({
     queryKey: limitSwapSupportedChainsQueryKey,
     queryFn: fetchLimitSwapSupportedChains,
-    enabled: featureFlags.limitSwap,
     staleTime: 60_000,
   })

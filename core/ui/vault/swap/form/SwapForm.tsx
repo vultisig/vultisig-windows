@@ -10,6 +10,7 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { featureFlags } from '../../../featureFlags'
 import { RefreshSwap } from '../components/RefreshSwap'
 import { AdvancedSwapSettings } from './advanced/AdvancedSwapSettings'
 import { LimitSwapForm } from './LimitSwapForm'
@@ -28,11 +29,18 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
       label: t('swap_mode_market'),
       renderContent: () => <MarketSwapForm onFinish={onFinish} />,
     },
-    {
-      value: 'limit',
-      label: t('swap_mode_limit'),
-      renderContent: LimitSwapForm,
-    },
+    // Gating the tab on the flag (rather than the queries inside the form) keeps
+    // "flag off ⇒ no limit-swap calls" true while letting the form's queries fire
+    // unconditionally once it is actually mounted.
+    ...(featureFlags.limitSwap
+      ? [
+          {
+            value: 'limit' as const,
+            label: t('swap_mode_limit'),
+            renderContent: LimitSwapForm,
+          },
+        ]
+      : []),
   ]
 
   return (

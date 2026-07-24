@@ -6,7 +6,6 @@ import {
   isThorchainRoutable,
 } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 
-import { featureFlags } from '../../../../featureFlags'
 import { fetchLimitSwapMarketPrice, getMarketProbeAmount } from '../marketPrice'
 
 const limitMarketPriceQueryKeyPrefix = 'limitMarketPrice'
@@ -52,7 +51,7 @@ export const useLimitMarketPriceQuery = ({
         }),
         sourceDecimals: fromCoin.decimals,
       }),
-    enabled: featureFlags.limitSwap && isRoutablePair,
+    enabled: isRoutablePair,
     staleTime: 30_000,
     retry: false,
   })

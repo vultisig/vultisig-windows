@@ -3,7 +3,6 @@ import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
@@ -11,7 +10,7 @@ import {
   LimitSwapExpiryHours,
   limitSwapExpiryHours,
 } from '@vultisig/core-chain/swap/native/limitSwapMemo'
-import { attempt } from '@vultisig/lib-utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,8 +20,12 @@ import { LimitAssetStep } from '../limit/LimitAssetStep'
 import { LimitAssetSummary } from '../limit/LimitAssetSummary'
 import { LimitExecuteWhen, LimitPriceUnit } from '../limit/LimitExecuteWhen'
 import { LimitExecuteWhenCollapsed } from '../limit/LimitExecuteWhenCollapsed'
+import { LimitOrderReview } from '../limit/LimitOrderReview'
 import { LimitSwapNotice } from '../limit/LimitSwapNotice'
-import { buildLimitSwapMemoForCoins } from '../limit/memo'
+import {
+  buildLimitSwapMemoForCoins,
+  getLimitSwapReceiveAmount,
+} from '../limit/memo'
 import { getLimitOrderBlocker, LimitOrderBlocker } from '../limit/placement'
 import {
   getLimitPriceWarning,
@@ -35,7 +38,6 @@ import { useLimitMarketPriceQuery } from '../limit/queries/useLimitMarketPriceQu
 import { useLimitSwapSupportedChainsQuery } from '../limit/queries/useLimitSwapSupportedChainsQuery'
 import {
   fiatUnitPriceToRate,
-  getReceiveAmount,
   rateToFiatUnitPrice,
   rateToUnitPrice,
   unitPriceToRate,
@@ -58,7 +60,7 @@ export const LimitSwapForm = () => {
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const [amount] = useFromAmount()
 
-  const [step, setStep] = useState<'asset' | 'execute'>('asset')
+  const [step, setStep] = useState<'asset' | 'execute' | 'review'>('asset')
   const [priceInput, setPriceInput] = useState('')
   const [unit, setUnit] = useState<LimitPriceUnit>('fiat')
   const [expiryHours, setExpiryHours] =
@@ -147,6 +149,7 @@ export const LimitSwapForm = () => {
     insufficientBalance: t('swap_limit_blocker_insufficient_balance'),
     noPrice: t('swap_limit_blocker_no_price'),
     noMarketPrice: t('swap_limit_blocker_no_market_price'),
+    noDestination: t('swap_limit_blocker_no_destination'),
     memoInvalid: t('swap_limit_blocker_memo_invalid'),
   }
 
@@ -165,6 +168,7 @@ export const LimitSwapForm = () => {
     isQueueEnabled,
     supportedChains,
     marketPrice: marketRate,
+    destinationAddress: toCoin.address,
     memoError,
   })
 
@@ -187,9 +191,18 @@ export const LimitSwapForm = () => {
       : rateToUnitPrice({ rate: marketRate })
     : null
 
+  // The receive amount is the memo's truncated LIM, not amount x rate: showing a
+  // "you receive" figure the signed order would not honor is the mismatch the
+  // issue calls out. `getLimitSwapReceiveAmount` throws on the same conditions as
+  // the memo (a LIM flooring to zero), so it is guarded the same way.
   const receiveAmount =
-    rate !== null && sellAmount !== null
-      ? getReceiveAmount({ sellAmount, rate })
+    rate !== null && amount !== null && amount > 0n
+      ? withFallback(
+          attempt(() =>
+            getLimitSwapReceiveAmount({ fromCoin, amount, targetPrice: rate })
+          ),
+          null
+        )
       : null
 
   const secondaryLabel = (() => {
@@ -206,6 +219,29 @@ export const LimitSwapForm = () => {
 
     return fiat !== null ? `$${formatNumber(fiat, 2)}` : undefined
   })()
+
+  if (step === 'review') {
+    return (
+      <LimitOrderReview
+        fromCoin={fromCoin}
+        toCoin={toCoin}
+        sellAmount={sellAmount ?? 0}
+        receiveAmount={receiveAmount ?? 0}
+        unitPrice={
+          marketUnitPrice !== null && rate !== null
+            ? formatUnitPrice(rateToUnitPrice({ rate }) ?? 0)
+            : undefined
+        }
+        targetPriceLabel={
+          rate !== null
+            ? `$${formatNumber(rateToFiatUnitPrice({ rate, sellCoinFiatPrice: fromCoinFiatPrice }) ?? 0, 2)}`
+            : undefined
+        }
+        expiryHours={expiryHours}
+        onBack={() => setStep('execute')}
+      />
+    )
+  }
 
   return (
     <PageContent gap={12} justifyContent="space-between" scrollable>
@@ -267,16 +303,13 @@ export const LimitSwapForm = () => {
         )}
       </VStack>
 
-      <VStack gap={12}>
-        {/* Signing needs the SDK's limit keysign payload builder, which is not in
-            a published release yet. Everything up to the signed memo is live. */}
-        <Text size={12} color="shy">
-          {t('swap_limit_place_pending_signing')}
-        </Text>
-        <Button disabled data-testid="limit-place-order">
-          {t('swap_limit_place_order')}
-        </Button>
-      </VStack>
+      <Button
+        onClick={() => setStep('review')}
+        disabled={Boolean(blocker)}
+        data-testid="limit-place-order"
+      >
+        {t('swap_limit_place_order')}
+      </Button>
     </PageContent>
   )
 }

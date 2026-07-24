@@ -13,6 +13,7 @@ const placeable = {
   isQueueEnabled: true,
   supportedChains: [Chain.Bitcoin, Chain.Ethereum, Chain.THORChain],
   marketPrice: 15,
+  destinationAddress: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
   memoError: undefined,
 }
 
@@ -89,6 +90,15 @@ describe('getLimitOrderBlocker', () => {
       'noMarketPrice'
     )
   })
+
+  it.each([undefined, '', '   '])(
+    'blocks a missing destination address (%j)',
+    destinationAddress => {
+      expect(getLimitOrderBlocker({ ...placeable, destinationAddress })).toBe(
+        'noDestination'
+      )
+    }
+  )
 
   it('blocks when the memo could not be built', () => {
     expect(

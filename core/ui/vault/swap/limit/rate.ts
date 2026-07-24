@@ -72,18 +72,3 @@ export const rateToFiatUnitPrice = ({
     ? unitPrice * sellCoinFiatPrice
     : null
 }
-
-type GetReceiveAmountInput = {
-  /** Sell amount in the sell coin's natural units. */
-  sellAmount: number
-  rate: number
-}
-
-/**
- * Buy-asset units the order would pay out if it fills at exactly this rate —
- * the LIM floor expressed for display.
- */
-export const getReceiveAmount = ({
-  sellAmount,
-  rate,
-}: GetReceiveAmountInput): number => sellAmount * rate

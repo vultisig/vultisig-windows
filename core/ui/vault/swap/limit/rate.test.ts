@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 
 import {
   fiatUnitPriceToRate,
-  getReceiveAmount,
   rateToFiatUnitPrice,
   rateToUnitPrice,
   unitPriceToRate,
@@ -78,19 +77,5 @@ describe('rateToFiatUnitPrice', () => {
     expect(
       rateToFiatUnitPrice({ rate: btcPerUsdt, sellCoinFiatPrice: undefined })
     ).toBeNull()
-  })
-})
-
-describe('getReceiveAmount', () => {
-  it('matches the Figma receive amount', () => {
-    // 5,200 USDT at 1 BTC = $65,800.13 -> 0.0790271 BTC (Figma renders 0.0790275
-    // from a slightly different sell amount).
-    expect(
-      getReceiveAmount({ sellAmount: 5_200, rate: btcPerUsdt })
-    ).toBeCloseTo(0.0790271, 6)
-  })
-
-  it('is zero for a zero sell amount', () => {
-    expect(getReceiveAmount({ sellAmount: 0, rate: btcPerUsdt })).toBe(0)
   })
 })

@@ -1172,11 +1172,16 @@ export const en = {
   swap_limit_blocker_no_price: 'Enter a target price',
   swap_limit_blocker_pair_not_routable:
     'THORChain cannot route a limit order between these assets',
+  swap_limit_blocker_no_destination:
+    'No payout address available for the target chain',
   swap_limit_blocker_same_asset: 'Choose two different assets',
   swap_limit_expiry_label: 'Expiry',
   swap_limit_place_order: 'Place order',
   swap_limit_place_pending_signing:
-    'Placing an order is not available yet — signing support is on the way.',
+    'Signing support is on the way — review your order below.',
+  swap_limit_review_heading: "You're placing a limit order",
+  swap_limit_review_target_price: 'Target price',
+  swap_limit_review_title: 'Review order',
   swap_limit_price_market: 'Market',
   swap_limit_unavailable:
     'Limit orders are temporarily unavailable on THORChain',
