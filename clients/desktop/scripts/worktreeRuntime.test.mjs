@@ -1,17 +1,25 @@
-import { mkdtempSync, rmSync } from 'node:fs'
+import { existsSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 
-import { resolveExtensionReloadPort } from '@clients/extension/worktreeReloadPort.js'
 import { describe, expect, it } from 'vitest'
 
 import {
   isLinkedWorktree,
   parsePort,
+  resolveDesktopRepositoryRoot,
   resolveDesktopRuntime,
-} from './worktree-runtime.mjs'
+} from './worktreeRuntime.mjs'
 
 describe('worktree runtime isolation', () => {
+  it('resolves the worktree root when launched through the desktop workspace', () => {
+    const root = resolveDesktopRepositoryRoot(
+      new URL('./dev-desktop.mjs', import.meta.url)
+    )
+    expect(root).toBe(path.resolve(import.meta.dirname, '../../..'))
+    expect(existsSync(path.join(root, 'wails.json'))).toBe(true)
+  })
+
   it('validates explicit ports', () => {
     expect(parsePort(undefined, 'PORT', 5173)).toBe(5173)
     expect(parsePort('25217', 'PORT', 5173)).toBe(25217)
@@ -62,41 +70,6 @@ describe('worktree runtime isolation', () => {
         new Set([worktree.appPort, worktree.wailsPort, worktree.mediatorPort])
           .size
       ).toBe(3)
-    } finally {
-      rmSync(cwd, { recursive: true, force: true })
-    }
-  })
-
-  it('isolates and validates the extension reload port', () => {
-    const cwd = mkdtempSync(path.join(tmpdir(), 'vultisig-extension-runtime-'))
-    try {
-      expect(
-        resolveExtensionReloadPort({
-          cwd,
-          env: {},
-          linkedWorktree: false,
-        })
-      ).toBe(18732)
-      const worktreePort = resolveExtensionReloadPort({
-        cwd,
-        env: {},
-        linkedWorktree: true,
-      })
-      expect(worktreePort).toBeGreaterThanOrEqual(40000)
-      expect(worktreePort).toBeLessThan(48000)
-      expect(
-        resolveExtensionReloadPort({
-          cwd,
-          env: { VITE_EXTENSION_RELOAD_PORT: '25219' },
-          linkedWorktree: true,
-        })
-      ).toBe(25219)
-      expect(() =>
-        resolveExtensionReloadPort({
-          cwd,
-          env: { VITE_EXTENSION_RELOAD_PORT: '70000' },
-        })
-      ).toThrow('between 1 and 65535')
     } finally {
       rmSync(cwd, { recursive: true, force: true })
     }

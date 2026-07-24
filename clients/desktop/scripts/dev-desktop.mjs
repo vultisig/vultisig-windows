@@ -1,8 +1,11 @@
 import { spawn } from 'child_process'
 
-import { resolveDesktopRuntime } from './worktree-runtime.mjs'
+import {
+  resolveDesktopRepositoryRoot,
+  resolveDesktopRuntime,
+} from './worktreeRuntime.mjs'
 
-const cwd = process.cwd()
+const cwd = resolveDesktopRepositoryRoot(import.meta.url)
 const forwardedArgs = process.argv.slice(2)
 const fullIndex = forwardedArgs.indexOf('--full')
 const full = fullIndex >= 0

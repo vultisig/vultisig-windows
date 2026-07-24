@@ -1,6 +1,10 @@
 import { execFileSync } from 'child_process'
 import { realpathSync } from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+export const resolveDesktopRepositoryRoot = scriptUrl =>
+  path.resolve(path.dirname(fileURLToPath(scriptUrl)), '../../..')
 
 export const parsePort = (value, name, fallback) => {
   if (!value) return fallback
