@@ -1,5 +1,6 @@
 import { execFileSync } from 'child_process'
 import { realpathSync } from 'fs'
+import { createServer } from 'net'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -84,4 +85,46 @@ export const resolveDesktopRuntime = ({
       : undefined)
 
   return { appPort, dbPath, linkedWorktree, mediatorPort, wailsPort }
+}
+
+const canListenOnPort = port =>
+  new Promise(resolve => {
+    const server = createServer()
+    server.unref()
+    server.once('error', () => resolve(false))
+    server.listen({ host: '127.0.0.1', port }, () => {
+      server.close(() => resolve(true))
+    })
+  })
+
+export const assertDesktopRuntimePortsAvailable = async (
+  runtime,
+  isPortAvailable = canListenOnPort
+) => {
+  const ports = [
+    ['APP_PORT', runtime.appPort],
+    ['WAILS_DEV_PORT', runtime.wailsPort],
+    ['VULTISIG_MEDIATOR_PORT', runtime.mediatorPort],
+  ]
+  const availability = await Promise.all(
+    ports.map(async ([name, port]) => ({
+      available: await isPortAvailable(port),
+      name,
+      port,
+    }))
+  )
+  const collisions = availability.filter(({ available }) => !available)
+  if (collisions.length === 0) return
+
+  const occupied = collisions
+    .map(({ name, port }) => `${name}=${port}`)
+    .join(', ')
+  const worktreeHint = runtime.linkedWorktree
+    ? ' Another linked worktree may share this deterministic port slot.'
+    : ''
+  throw new Error(
+    `Desktop runtime port collision: ${occupied}.${worktreeHint} ` +
+      'Stop the conflicting runtime or set APP_PORT, WAILS_DEV_PORT, and ' +
+      'VULTISIG_MEDIATOR_PORT to unused values.'
+  )
 }

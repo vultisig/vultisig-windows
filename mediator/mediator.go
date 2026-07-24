@@ -14,6 +14,7 @@ import (
 )
 
 const DefaultMediatorPort = 18080
+const localSuffix = ".local"
 
 // Server  is a struct that represents a relay server.
 type Server struct {
@@ -49,6 +50,13 @@ func resolveMediatorPort(value string) (int, error) {
 	return port, nil
 }
 
+func normalizeMDNSHostname(hostName string) string {
+	for strings.HasSuffix(strings.ToLower(hostName), localSuffix) {
+		hostName = hostName[:len(hostName)-len(localSuffix)]
+	}
+	return fmt.Sprintf("%s%s.", hostName, localSuffix)
+}
+
 func (r *Server) StartServer() error {
 	return r.localServer.StartServer()
 }
@@ -63,14 +71,7 @@ func (r *Server) AdvertiseMediator(name string) error {
 		return fmt.Errorf("could not determine host: %v", err)
 	}
 
-	const localSuffix = ".local"
-
-	// Remove .local if it already exists to avoid duplicate
-	if strings.HasSuffix(hostName, localSuffix) {
-		hostName = strings.TrimSuffix(hostName, localSuffix)
-	}
-
-	hostName = fmt.Sprintf("%s%s.", hostName, localSuffix)
+	hostName = normalizeMDNSHostname(hostName)
 	mdns, err := m.NewMDNSService(name, "_http._tcp", "", hostName, r.port, nil, []string{
 		name,
 	})

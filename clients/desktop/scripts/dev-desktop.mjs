@@ -1,6 +1,7 @@
 import { spawn } from 'child_process'
 
 import {
+  assertDesktopRuntimePortsAvailable,
   resolveDesktopRepositoryRoot,
   resolveDesktopRuntime,
 } from './worktreeRuntime.mjs'
@@ -12,6 +13,7 @@ const full = fullIndex >= 0
 if (full) forwardedArgs.splice(fullIndex, 1)
 
 const runtime = resolveDesktopRuntime({ cwd })
+await assertDesktopRuntimePortsAvailable(runtime)
 const wailsArgs = [
   'dev',
   ...(full ? [] : ['-s', '-skipbindings', '-m', '-nosyncgomod']),
@@ -22,6 +24,7 @@ const wailsArgs = [
 const env = {
   ...process.env,
   APP_PORT: String(runtime.appPort),
+  WAILS_DEV_PORT: String(runtime.wailsPort),
   VULTISIG_MEDIATOR_PORT: String(runtime.mediatorPort),
   ...(runtime.dbPath ? { VULTISIG_DB_PATH: runtime.dbPath } : {}),
 }

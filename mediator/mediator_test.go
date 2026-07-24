@@ -31,3 +31,21 @@ func TestResolveMediatorPort(t *testing.T) {
 		})
 	}
 }
+
+func TestNormalizeMDNSHostname(t *testing.T) {
+	tests := map[string]string{
+		"vika":                   "vika.local.",
+		"vika.local":             "vika.local.",
+		"vika.LOCAL":             "vika.local.",
+		"vika.local.local":       "vika.local.",
+		"vika.LOCAL.local.LOCAL": "vika.local.",
+	}
+
+	for input, expected := range tests {
+		t.Run(input, func(t *testing.T) {
+			if actual := normalizeMDNSHostname(input); actual != expected {
+				t.Fatalf("normalizeMDNSHostname(%q) = %q, want %q", input, actual, expected)
+			}
+		})
+	}
+}

@@ -5,6 +5,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import {
+  assertDesktopRuntimePortsAvailable,
   isLinkedWorktree,
   parsePort,
   resolveDesktopRepositoryRoot,
@@ -73,5 +74,37 @@ describe('worktree runtime isolation', () => {
     } finally {
       rmSync(cwd, { recursive: true, force: true })
     }
+  })
+
+  it('fails clearly when a deterministic linked-worktree port is occupied', async () => {
+    const runtime = {
+      appPort: 21000,
+      linkedWorktree: true,
+      mediatorPort: 49000,
+      wailsPort: 31000,
+    }
+
+    await expect(
+      assertDesktopRuntimePortsAvailable(
+        runtime,
+        async port => port !== runtime.wailsPort
+      )
+    ).rejects.toThrow(
+      'WAILS_DEV_PORT=31000. Another linked worktree may share this deterministic port slot.'
+    )
+  })
+
+  it('accepts a runtime when every derived port is available', async () => {
+    await expect(
+      assertDesktopRuntimePortsAvailable(
+        {
+          appPort: 21000,
+          linkedWorktree: true,
+          mediatorPort: 49000,
+          wailsPort: 31000,
+        },
+        async () => true
+      )
+    ).resolves.toBeUndefined()
   })
 })
