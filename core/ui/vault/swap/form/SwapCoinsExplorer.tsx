@@ -33,10 +33,17 @@ import { useSwapToCoin } from '../state/toCoin'
 import { useSwapEnabledChainsForVault } from '../state/useSwapEnabledChainsForVault'
 import { useCenteredSnapCarousel } from './hooks/useScrollSelectedChainIntoView'
 
+type SwapCoinsExplorerProps = OnCloseProp &
+  Pick<InputProps<CoinKey>, 'onChange'> & {
+    /** Extra chain restriction on top of the vault's swap-enabled set; allows all when omitted. */
+    chainFilter?: (chain: Chain) => boolean
+  }
+
 export const SwapCoinsExplorer = ({
   onChange,
   onClose,
-}: OnCloseProp & Pick<InputProps<CoinKey>, 'onChange'>) => {
+  chainFilter,
+}: SwapCoinsExplorerProps) => {
   const [fromCoinKey] = useSwapFromCoin()
   const [currentToCoin] = useSwapToCoin()
   const side = useTransferDirection()
@@ -107,9 +114,12 @@ export const SwapCoinsExplorer = ({
   const coinOptions = useMemo(
     () =>
       coins.filter(
-        c => isOneOf(c.chain, swapEnabledChainsForVault) && isFeeCoin(c)
+        c =>
+          isOneOf(c.chain, swapEnabledChainsForVault) &&
+          isFeeCoin(c) &&
+          (chainFilter?.(c.chain) ?? true)
       ),
-    [coins, swapEnabledChainsForVault]
+    [coins, swapEnabledChainsForVault, chainFilter]
   )
 
   const { footerRef, scrollToKey, strokeRef, onKeyDown, setItemRef } =

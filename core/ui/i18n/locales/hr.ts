@@ -1468,7 +1468,6 @@ export const hr = {
   advanced_settings: 'Napredne postavke',
   advanced_swap: 'Napredna zamjena',
   auto: 'Auto',
-  coming_soon: 'Uskoro',
   custom_rpc: 'Prilagođeni RPC-ovi',
   custom_rpc_chip_custom: 'Prilagođeno',
   custom_rpc_description: 'Koristite vlastite čvorove po lancu',
@@ -1494,7 +1493,6 @@ export const hr = {
   slippage_helper:
     'Ograničava koliko se cijena može promijeniti prije nego što se izvršenje otkaže.',
   slippage_tolerance: 'Tolerancija klizanja',
-  swap_limit_orders: 'Ograničene narudžbe',
   swap_mode_limit: 'Ograničiti',
   swap_mode_market: 'Tržište',
   use_external_recipient: 'Koristi vanjskog primatelja',
@@ -1721,4 +1719,38 @@ export const hr = {
   nothing_to_add_hint_secondary:
     'Izradite novi trezor da biste ga dodali ovdje.',
   no_results_found: 'Nisu pronađeni rezultati',
+  swap_limit_asset: 'Imovina',
+  swap_limit_buy: 'Kupiti',
+  swap_limit_execute_when: 'Izvrši kada',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Prodavati',
+  swap_limit_blocker_chain_unavailable:
+    'Ovaj lanac je privremeno zaustavljen na THORChain',
+  swap_limit_blocker_insufficient_balance: 'Iznos premašuje vaš saldo',
+  swap_limit_blocker_memo_invalid:
+    'Ova narudžba ne može biti izvršena kako je unesena',
+  swap_limit_blocker_no_amount: 'Unesite iznos za prodaju',
+  swap_limit_blocker_no_market_price:
+    'Za ovaj par još nema dostupne tržišne cijene',
+  swap_limit_blocker_no_price: 'Unesite ciljanu cijenu',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain ne može usmjeriti limitirani nalog između ove imovine',
+  swap_limit_blocker_no_destination:
+    'Nema dostupne adrese za isplatu za ciljani lanac',
+  swap_limit_blocker_same_asset: 'Odaberite dva različita elementa',
+  swap_limit_expiry_label: 'Istek',
+  swap_limit_place_order: 'Naruči',
+  swap_limit_place_pending_signing:
+    'Podrška za potpisivanje je na putu - pregledajte svoju narudžbu u nastavku.',
+  swap_limit_review_heading: 'Postavljate limitirani nalog',
+  swap_limit_review_target_price: 'Ciljana cijena',
+  swap_limit_review_title: 'Pregled narudžbe',
+  swap_limit_price_market: 'Tržište',
+  swap_limit_warning_at_or_below_market:
+    'Ova cijena je na ili ispod tržišne, tako da se narudžba može odmah ispuniti',
+  swap_limit_warning_far_above_market:
+    'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
 }

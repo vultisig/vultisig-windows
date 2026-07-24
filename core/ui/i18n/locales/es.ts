@@ -1480,7 +1480,6 @@ export const es = {
   advanced_settings: 'Configuración avanzada',
   advanced_swap: 'Intercambio avanzado',
   auto: 'Auto',
-  coming_soon: 'Muy pronto',
   custom_rpc: 'RPC personalizados',
   custom_rpc_chip_custom: 'Personalizado',
   custom_rpc_description: 'Utilice sus propios nodos por cadena.',
@@ -1505,7 +1504,6 @@ export const es = {
   slippage_helper:
     'Limita cuánto puede variar el precio antes de que se cancele la ejecución.',
   slippage_tolerance: 'Tolerancia de deslizamiento',
-  swap_limit_orders: 'órdenes limitadas',
   swap_mode_limit: 'Límite',
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Utilizar destinatario externo',
@@ -1748,4 +1746,38 @@ export const es = {
   edit_folder: 'Editar carpeta',
   nothing_to_add_hint_secondary: 'Crea una nueva bóveda para agregarlo aquí.',
   no_results_found: 'No se encontraron resultados',
+  swap_limit_asset: 'Activo',
+  swap_limit_buy: 'Comprar',
+  swap_limit_execute_when: 'Ejecutar cuando',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Vender',
+  swap_limit_blocker_chain_unavailable:
+    'Esta cadena se ha detenido temporalmente en THORChain',
+  swap_limit_blocker_insufficient_balance: 'El importe excede su saldo',
+  swap_limit_blocker_memo_invalid:
+    'Este pedido no se puede realizar tal como se ingresó.',
+  swap_limit_blocker_no_amount: 'Ingrese una cantidad para vender',
+  swap_limit_blocker_no_market_price:
+    'Aún no hay precio de mercado disponible para este par.',
+  swap_limit_blocker_no_price: 'Introduzca un precio objetivo',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain no puede enrutar una orden limitada entre estos activos.',
+  swap_limit_blocker_no_destination:
+    'No hay dirección de pago disponible para la cadena de destino.',
+  swap_limit_blocker_same_asset: 'Elige dos activos diferentes',
+  swap_limit_expiry_label: 'Expiración',
+  swap_limit_place_order: 'Realizar pedido',
+  swap_limit_place_pending_signing:
+    'El soporte para la firma está en camino; revise su pedido a continuación.',
+  swap_limit_review_heading: 'Estás realizando una orden limitada',
+  swap_limit_review_target_price: 'Precio objetivo',
+  swap_limit_review_title: 'Revisar el pedido',
+  swap_limit_price_market: 'Mercado',
+  swap_limit_warning_at_or_below_market:
+    'Este precio está en o por debajo del precio de mercado, por lo que la orden podría ejecutarse inmediatamente.',
+  swap_limit_warning_far_above_market:
+    'Este precio está muy por encima del precio de mercado y podría expirar sin que se complete la transacción.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
 }

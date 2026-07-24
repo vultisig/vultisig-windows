@@ -1484,7 +1484,6 @@ export const pt = {
   advanced_settings: 'Configurações avançadas',
   advanced_swap: 'Troca avançada',
   auto: 'Auto',
-  coming_soon: 'Em breve',
   custom_rpc: 'RPCs personalizados',
   custom_rpc_chip_custom: 'Personalizado',
   custom_rpc_description: 'Use seus próprios nós por cadeia',
@@ -1510,7 +1509,6 @@ export const pt = {
   slippage_helper:
     'Limita a variação máxima de preço antes que a execução seja cancelada.',
   slippage_tolerance: 'Tolerância de deslizamento',
-  swap_limit_orders: 'Ordens limite',
   swap_mode_limit: 'Limite',
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Usar destinatário externo',
@@ -1750,4 +1748,39 @@ export const pt = {
   edit_folder: 'Pasta de edição',
   nothing_to_add_hint_secondary: 'Crie um novo cofre para adicioná-lo aqui.',
   no_results_found: 'Nenhum resultado encontrado',
+  swap_limit_asset: 'Ativo',
+  swap_limit_buy: 'Comprar',
+  swap_limit_execute_when: 'Executar quando',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Vender',
+  swap_limit_blocker_chain_unavailable:
+    'Esta cadeia está temporariamente interrompida em THORChain',
+  swap_limit_blocker_insufficient_balance: 'O valor excede seu saldo.',
+  swap_limit_blocker_memo_invalid:
+    'Este pedido não pode ser processado conforme inserido.',
+  swap_limit_blocker_no_amount: 'Insira a quantidade que deseja vender.',
+  swap_limit_blocker_no_market_price:
+    'Ainda não há preço de mercado disponível para este par.',
+  swap_limit_blocker_no_price: 'Insira um preço-alvo',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain não pode rotear uma ordem limite entre esses ativos.',
+  swap_limit_blocker_no_destination:
+    'Não há endereço de pagamento disponível para a cadeia de destino.',
+  swap_limit_blocker_same_asset: 'Escolha dois ativos diferentes.',
+  swap_limit_expiry_label: 'Termo',
+  swap_limit_place_order: 'Fazer pedido',
+  swap_limit_place_pending_signing:
+    'O suporte para assinatura está a caminho — revise seu pedido abaixo.',
+  swap_limit_review_heading:
+    'Você está fazendo um pedido com limite de compra.',
+  swap_limit_review_target_price: 'Preço alvo',
+  swap_limit_review_title: 'Revisar pedido',
+  swap_limit_price_market: 'Mercado',
+  swap_limit_warning_at_or_below_market:
+    'Este preço está igual ou abaixo do preço de mercado, portanto a ordem pode ser executada imediatamente.',
+  swap_limit_warning_far_above_market:
+    'Este preço está muito acima do mercado e pode expirar sem ser atendido.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
 }

@@ -194,7 +194,6 @@ export const en = {
     '{{action, select, add {Add liquidity} remove {Remove liquidity} other {Manage liquidity}}}',
   manage_tokens: 'Manage tokens',
   collected_rewards: 'Collected rewards',
-  coming_soon: 'Coming soon',
   complete: 'Complete',
   congrats: 'Congrats!',
   confirm: 'Confirm',
@@ -1158,9 +1157,41 @@ export const en = {
   swap_fee: 'Swap Fee',
   swap_invalid_external_recipient:
     'Recipient address is not valid for {{chain}}',
-  swap_limit_orders: 'Limit orders',
+  swap_limit_asset: 'Asset',
+  swap_limit_buy: 'Buy',
+  swap_limit_execute_when: 'Execute when',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Sell',
+  swap_limit_blocker_chain_unavailable:
+    'This chain is temporarily halted on THORChain',
+  swap_limit_blocker_insufficient_balance: 'Amount exceeds your balance',
+  swap_limit_blocker_memo_invalid: 'This order cannot be placed as entered',
+  swap_limit_blocker_no_amount: 'Enter an amount to sell',
+  swap_limit_blocker_no_market_price:
+    'No market price available for this pair yet',
+  swap_limit_blocker_no_price: 'Enter a target price',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain cannot route a limit order between these assets',
+  swap_limit_blocker_no_destination:
+    'No payout address available for the target chain',
+  swap_limit_blocker_same_asset: 'Choose two different assets',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
+  swap_limit_expiry_label: 'Expiry',
+  swap_limit_place_order: 'Place order',
+  swap_limit_place_pending_signing:
+    'Signing support is on the way — review your order below.',
+  swap_limit_review_heading: "You're placing a limit order",
+  swap_limit_review_target_price: 'Target price',
+  swap_limit_review_title: 'Review order',
+  swap_limit_price_market: 'Market',
   swap_limit_unavailable:
     'Limit orders are temporarily unavailable on THORChain',
+  swap_limit_warning_at_or_below_market:
+    'This price is at or below market, so the order may fill immediately',
+  swap_limit_warning_far_above_market:
+    'This price is far above market and may expire unfilled',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Market',
   swap_overview: 'Swap overview',
