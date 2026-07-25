@@ -28,8 +28,11 @@ To run the desktop application in development mode:
 yarn dev:desktop
 ```
 
-**Important Note:** This will expose two dev servers: one on 34115 (the Wails development server) and a Vite development server on port 5173.
-Always use the former, as the Vite development server won't have the requited Wails-injected scripts.
+The startup receipt prints separate Wails, Vite, and local mediator URLs. Open
+the Wails URL; the Vite server does not have the required Wails-injected
+scripts. The primary checkout defaults to ports 34115, 5173, and 18080. Linked
+worktrees receive stable, isolated ports and a worktree-local development
+database automatically.
 
 ### Building
 
