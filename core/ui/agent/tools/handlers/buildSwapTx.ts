@@ -1,4 +1,5 @@
 import { toBinary } from '@bufbuild/protobuf'
+import { clientSwapQuoteProviderExclusions } from '@core/ui/vault/swap/clientSwapQuoteConfig'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { buildSwapKeysignPayload } from '@vultisig/core-mpc/keysign/swap/build'
@@ -41,7 +42,12 @@ export const handleBuildSwapTx: ToolHandler = async (input, context) => {
     decimals: fromCoin.decimals,
   })
 
-  const swapQuote = await findSwapQuote({ from: fromCoin, to: toCoin, amount })
+  const swapQuote = await findSwapQuote({
+    from: fromCoin,
+    to: toCoin,
+    amount,
+    excludeProviders: clientSwapQuoteProviderExclusions,
+  })
 
   const { walletCore, vault } = getWalletContext()
 
