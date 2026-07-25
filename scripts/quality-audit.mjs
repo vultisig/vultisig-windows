@@ -69,6 +69,16 @@ const suppressions = [
     owner: 'vultisig/windows',
     reviewBy: '2026-10-01',
   },
+  {
+    id: 1124334,
+    advisory: 'GHSA-mh99-v99m-4gvg',
+    package: 'brace-expansion',
+    path: 'minimatch@3.1.5 > brace-expansion',
+    reason:
+      'False positive: the advisory range ("<=5.0.7") is written against the current 5.x line, but npm audit compares it numerically against our tree version 1.1.16, which belongs to the separately maintained legacy v1 line (npm dist-tag maintenance-v1). 1.1.16 was published 2026-07-23, the day before this advisory, as the v1-line maintenance fix. No newer 1.x release exists to upgrade to.',
+    owner: 'vultisig/windows',
+    reviewBy: '2026-10-01',
+  },
 ]
 
 const today = new Date().toISOString().slice(0, 10)
