@@ -17,6 +17,7 @@ import {
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -29,9 +30,11 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useCore } from '../state/core'
 
@@ -227,9 +230,16 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
         {displayedFolders.length > 0 && (
           <VStack gap={12}>
             {displayedFolders.map(folder => {
-              const subtitle = folder.activeVaultName
-                ? `✓ '${folder.activeVaultName}' ${t('active')}`
-                : t('vault_count', { count: folder.vaultCount })
+              const subtitle = folder.activeVaultName ? (
+                <ActiveVaultSubtitle>
+                  <IconWrapper size={14}>
+                    <CheckIcon />
+                  </IconWrapper>
+                  {t('folder_active_vault', { name: folder.activeVaultName })}
+                </ActiveVaultSubtitle>
+              ) : (
+                t('vault_count', { count: folder.vaultCount })
+              )
 
               return (
                 <VaultListRow
@@ -241,16 +251,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                     </LeadingIconBadge>
                   }
                   title={folder.name}
-                  subtitle={
-                    <Text
-                      size={13}
-                      weight={500}
-                      color={folder.activeVaultName ? 'info' : 'shy'}
-                      cropped
-                    >
-                      {subtitle}
-                    </Text>
-                  }
+                  subtitle={subtitle}
                   trailing={
                     <IconWrapper size={18} color="textShy">
                       <ChevronRightIcon />
@@ -318,3 +319,10 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
     </VStack>
   )
 }
+
+const ActiveVaultSubtitle = styled.span`
+  align-items: center;
+  color: ${getColor('info')};
+  display: inline-flex;
+  gap: 4px;
+`

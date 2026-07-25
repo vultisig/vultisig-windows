@@ -1608,4 +1608,5 @@ export const zh = {
   edit_folder: '编辑文件夹',
   nothing_to_add_hint_secondary: '创建一个新的保险库，将其添加到这里。',
   no_results_found: '未找到结果',
+  folder_active_vault: '“{{name}}”已激活',
 }

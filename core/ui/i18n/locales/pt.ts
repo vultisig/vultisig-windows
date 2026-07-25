@@ -1750,4 +1750,5 @@ export const pt = {
   edit_folder: 'Pasta de edição',
   nothing_to_add_hint_secondary: 'Crie um novo cofre para adicioná-lo aqui.',
   no_results_found: 'Nenhum resultado encontrado',
+  folder_active_vault: '“{{name}}” Ativo',
 }

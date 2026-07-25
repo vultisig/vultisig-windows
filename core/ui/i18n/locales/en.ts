@@ -483,6 +483,7 @@ export const en = {
   fast_sign: 'Fast Sign',
   fill_the_form: 'Fill the form',
   find_custom_token: 'Find custom token',
+  folder_active_vault: '‘{{name}}’ Active',
   folder_name: 'Folder name',
   folder_name_already_exists: 'That folder name already exists. Try a new one.',
   folder_name_required: 'Folder name is required',

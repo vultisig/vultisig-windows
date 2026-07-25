@@ -1754,4 +1754,5 @@ export const it = {
   edit_folder: 'Modifica cartella',
   nothing_to_add_hint_secondary: 'Crea un nuovo vault per aggiungerlo qui.',
   no_results_found: 'Nessun risultato trovato',
+  folder_active_vault: '«{{name}}» Attivo',
 }

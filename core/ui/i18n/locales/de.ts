@@ -1764,4 +1764,5 @@ export const de = {
   nothing_to_add_hint_secondary:
     'Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
   no_results_found: 'Keine Ergebnisse gefunden',
+  folder_active_vault: '„{{name}}“ Aktiv',
 }
