@@ -13,6 +13,7 @@ import {
   SectionHeader,
   VaultListItem,
   VaultListRow,
+  VaultSearchField,
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -20,6 +21,7 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
+import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -28,7 +30,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../state/core'
@@ -61,6 +63,8 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const folders = useVaultFolders()
   const vaults = useVaults()
   const folderlessVaults = useFolderlessVaults()
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const folderEntries = useMemo<FolderEntry[]>(() => {
     return folders.map(folder => {
@@ -144,6 +148,27 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
       onSuccess: onFinish ?? goHome,
     })
 
+  const openSearch = () => setIsSearchOpen(true)
+  const closeSearch = () => {
+    setIsSearchOpen(false)
+    setSearchQuery('')
+  }
+
+  const normalizedQuery = searchQuery.trim().toLowerCase()
+  const isSearching = normalizedQuery.length > 0
+
+  const displayedFolders = isSearching
+    ? folderEntries.filter(folder =>
+        folder.name.toLowerCase().includes(normalizedQuery)
+      )
+    : folderEntries
+  const displayedVaults = isSearching
+    ? vaults.filter(vault => vault.name.toLowerCase().includes(normalizedQuery))
+    : folderlessVaults
+
+  const hasNoSearchResults =
+    isSearching && displayedFolders.length === 0 && displayedVaults.length === 0
+
   return (
     <VStack fullHeight>
       <PageHeader
@@ -161,6 +186,17 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
             <>
               {totalVaultsCount > 1 && (
                 <IconButton
+                  kind="secondary"
+                  size="lg"
+                  onClick={openSearch}
+                  aria-label={t('search_field_placeholder')}
+                >
+                  <SearchIcon />
+                </IconButton>
+              )}
+              {totalVaultsCount > 1 && (
+                <IconButton
+                  kind="secondary"
                   size="lg"
                   onClick={handleManage}
                   aria-label={t('edit_vaults')}
@@ -180,9 +216,17 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
           }
         />
 
-        {folderEntries.length > 0 && (
+        {isSearchOpen && (
+          <VaultSearchField
+            value={searchQuery}
+            onChange={setSearchQuery}
+            onClose={closeSearch}
+          />
+        )}
+
+        {displayedFolders.length > 0 && (
           <VStack gap={12}>
-            {folderEntries.map(folder => {
+            {displayedFolders.map(folder => {
               const subtitle = folder.activeVaultName
                 ? `✓ '${folder.activeVaultName}' ${t('active')}`
                 : t('vault_count', { count: folder.vaultCount })
@@ -221,13 +265,13 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
           </VStack>
         )}
 
-        {folderlessVaults.length > 0 && (
+        {displayedVaults.length > 0 && (
           <VStack gap={16}>
             <Text size={13} weight={600} color="shy">
               {t('vaults')}
             </Text>
             <VStack gap={12}>
-              {folderlessVaults.map(vault => {
+              {displayedVaults.map(vault => {
                 const vaultId = getVaultId(vault)
                 const value =
                   !skipBalanceFetch &&
@@ -250,13 +294,23 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
           </VStack>
         )}
 
-        {folderEntries.length === 0 && folderlessVaults.length === 0 && (
+        {!isSearching &&
+          folderEntries.length === 0 &&
+          folderlessVaults.length === 0 && (
+            <VStack gap={12} alignItems="center" justifyContent="center">
+              <Text size={16} weight={500}>
+                {t('no_vaults')}
+              </Text>
+              <Text size={13} color="shy" centerHorizontally>
+                {t('create_new_vault')}
+              </Text>
+            </VStack>
+          )}
+
+        {hasNoSearchResults && (
           <VStack gap={12} alignItems="center" justifyContent="center">
-            <Text size={16} weight={500}>
-              {t('no_vaults')}
-            </Text>
-            <Text size={13} color="shy" centerHorizontally>
-              {t('create_new_vault')}
+            <Text size={16} weight={500} centerHorizontally>
+              {t('no_results_found')}
             </Text>
           </VStack>
         )}

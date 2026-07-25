@@ -203,7 +203,6 @@ export const it = {
   continue_in_new_window: 'Continua nella finestra aperta',
   contract_execution: 'Esecuzione del contratto',
   copy_address: 'Copia indirizzo',
-  create_folder: 'Crea cartella',
   create_new_vault: 'Crea nuovo vault',
   create_vault: 'Crea un caveau',
   create_referral_form: 'Crea referral',
@@ -218,7 +217,6 @@ export const it = {
   currency: 'Valuta',
   current_expiry: 'Scadenza corrente',
   current_passcode: 'Codice di accesso attuale',
-  current_vaults: 'Caveau attuali',
   custom: 'Azione personalizzata',
   custom_token: 'Token personalizzato',
   customize_chains: 'Personalizza le catene',
@@ -417,7 +415,8 @@ export const it = {
   fill_the_form: 'Compila il modulo',
   find_custom_token: 'Trova token personalizzato',
   folder_name: 'Nome della cartella',
-  folder_name_already_exists: 'Il nome della cartella deve essere univoco',
+  folder_name_already_exists:
+    'Il nome della cartella esiste già. Prova con un nome nuovo.',
   folder_name_required: 'Il nome della cartella è obbligatorio',
   folder_at_least_one_vault_required: 'È richiesto almeno un vault',
   folders: 'Cartelle',
@@ -632,8 +631,7 @@ export const it = {
   normal: 'Normale',
   not_enough_funds: 'Fondi insufficienti',
   nothing_to_add: 'Niente da aggiungere',
-  nothing_to_add_hint:
-    'Tutti i tuoi vault sono già ordinati. Crea un nuovo vault per aggiungerlo qui.',
+  nothing_to_add_hint: 'Tutti i tuoi caveau sono già stati sistemati.',
   of: 'Di',
   off: 'Spento',
   on: 'Acceso',
@@ -1752,4 +1750,8 @@ export const it = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   swap_limit_unavailable:
     'Gli ordini limite non sono temporaneamente disponibili su THORChain',
+  active_vaults: 'Vault attivi',
+  edit_folder: 'Modifica cartella',
+  nothing_to_add_hint_secondary: 'Crea un nuovo vault per aggiungerlo qui.',
+  no_results_found: 'Nessun risultato trovato',
 }

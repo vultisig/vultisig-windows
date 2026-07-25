@@ -38,6 +38,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
 import { getNewOrder } from '@vultisig/lib-utils/order/getNewOrder'
@@ -108,15 +109,18 @@ const AddVaultsToFolder = ({ totals, isTotalsPending }: AddVaultsProps) => {
   if (!vaults.length) {
     return (
       <EmptyStateCard gap={12} alignItems="center">
-        <IconWrapper size={28} color="textShy">
+        <IconWrapper size={28} color="buttonPrimary">
           <FolderLockIcon />
         </IconWrapper>
         <VStack gap={4}>
-          <Text size={16} weight={600} centerHorizontally>
+          <Text size={16} weight={600} color="contrast" centerHorizontally>
             {t('nothing_to_add')}
           </Text>
           <Text size={13} color="shy" centerHorizontally>
             {t('nothing_to_add_hint')}
+          </Text>
+          <Text size={13} color="shy" centerHorizontally>
+            {t('nothing_to_add_hint_secondary')}
           </Text>
         </VStack>
       </EmptyStateCard>
@@ -182,6 +186,7 @@ const ManageFolderVaults = ({
   const { mutate: remove } = useRemoveVaultFromFolderMutation()
   const { mutate: updateVault } = useUpdateVaultMutation()
   const formatFiatAmount = useFormatFiatAmount()
+  const { addToast } = useToast()
 
   useEffect(() => setItems(vaults), [vaults])
 
@@ -218,7 +223,7 @@ const ManageFolderVaults = ({
             color="shy"
             style={{ textTransform: 'uppercase' }}
           >
-            {t('current_vaults')}
+            {t('active_vaults')}
           </Text>
           <VStack gap={12}>{children}</VStack>
         </VStack>
@@ -228,7 +233,20 @@ const ManageFolderVaults = ({
         const { tone, icon } = getVaultSecurityTone(item)
         const value = totals?.[vaultId]
 
-        const handleRemove = () => remove({ vaultId })
+        const handleRemove = () => {
+          if (items.length <= 1) {
+            addToast({ message: t('folder_at_least_one_vault_required') })
+            return
+          }
+
+          // Reserve the row locally before the async removal resolves so a
+          // second rapid toggle sees the reduced count and can't drain the
+          // folder to empty via a stale items.length.
+          setItems(prevItems =>
+            prevItems.filter(prevItem => getVaultId(prevItem) !== vaultId)
+          )
+          remove({ vaultId })
+        }
 
         return (
           <DnDItemContainer key={vaultId} {...draggableProps} status={status}>
@@ -310,7 +328,7 @@ export const UpdateVaultFolderPage = () => {
             <DoneButton onClick={goBack} />
           </HeaderActions>
         }
-        title={currentName}
+        title={t('edit_folder')}
       />
       <PageContent gap={28} scrollable flexGrow>
         <VStack gap={8}>
