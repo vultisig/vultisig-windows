@@ -73,6 +73,14 @@ export const SwapCoinsExplorer = ({
 
   const sortedSwapCoins = useSortedByBalanceCoins(deferredChain)
   const options = useMemo(() => {
+    // The whole token list is scoped to `deferredChain`, so a chain the filter
+    // rejects has nothing selectable — otherwise a user already sitting on a
+    // non-routable chain (shared with the market tab) could still pick its
+    // tokens, which the footer chain filter alone doesn't prevent.
+    if (chainFilter && !chainFilter(deferredChain)) {
+      return []
+    }
+
     const vaultCoinsForChain = coins.filter(c => c.chain === deferredChain)
 
     const allOptions = withoutDuplicates(
@@ -107,7 +115,7 @@ export const SwapCoinsExplorer = ({
     }
 
     return allOptions
-  }, [deferredChain, sortedSwapCoins, whitelisted, coins])
+  }, [deferredChain, sortedSwapCoins, whitelisted, coins, chainFilter])
 
   const { t } = useTranslation()
 

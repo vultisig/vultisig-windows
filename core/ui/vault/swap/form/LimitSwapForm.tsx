@@ -3,16 +3,17 @@ import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { OnFinishProp } from '@lib/ui/props'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
-import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import { areEqualCoins, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import {
   LimitSwapExpiryHours,
   limitSwapExpiryHours,
 } from '@vultisig/core-chain/swap/native/limitSwapMemo'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
-import { useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
@@ -20,7 +21,7 @@ import { LimitAssetStep } from '../limit/LimitAssetStep'
 import { LimitAssetSummary } from '../limit/LimitAssetSummary'
 import { LimitExecuteWhen, LimitPriceUnit } from '../limit/LimitExecuteWhen'
 import { LimitExecuteWhenCollapsed } from '../limit/LimitExecuteWhenCollapsed'
-import { LimitOrderReview } from '../limit/LimitOrderReview'
+import { LimitOrderReviewData } from '../limit/LimitOrderReview'
 import { LimitSwapNotice } from '../limit/LimitSwapNotice'
 import {
   buildLimitSwapMemoForCoins,
@@ -51,7 +52,9 @@ const defaultExpiryHours: LimitSwapExpiryHours = limitSwapExpiryHours[1]
 const formatNumber = (value: number, maximumFractionDigits = 8) =>
   value.toLocaleString(undefined, { maximumFractionDigits })
 
-export const LimitSwapForm = () => {
+export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
+  onFinish,
+}) => {
   const { t } = useTranslation()
 
   const [fromCoinKey] = useSwapFromCoin()
@@ -60,11 +63,21 @@ export const LimitSwapForm = () => {
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const [amount] = useFromAmount()
 
-  const [step, setStep] = useState<'asset' | 'execute' | 'review'>('asset')
+  const [step, setStep] = useState<'asset' | 'execute'>('asset')
   const [priceInput, setPriceInput] = useState('')
   const [unit, setUnit] = useState<LimitPriceUnit>('fiat')
   const [expiryHours, setExpiryHours] =
     useState<LimitSwapExpiryHours>(defaultExpiryHours)
+
+  // The entered price is meaningless without the exact pair it was typed
+  // against (fiat mode divides by the sell coin's price; asset mode is
+  // sell-per-buy for this pair), so clear it whenever the pair changes —
+  // including via the reverse button — rather than carrying a stale value into
+  // the new pair.
+  const pairKey = `${coinKeyToString(fromCoinKey)}>${coinKeyToString(toCoinKey)}`
+  useEffect(() => {
+    setPriceInput('')
+  }, [pairKey])
 
   const { data: isQueueEnabled } = useAdvancedSwapQueueEnabledQuery()
   const { data: supportedChains } = useLimitSwapSupportedChainsQuery()
@@ -234,28 +247,25 @@ export const LimitSwapForm = () => {
   // is a correct fallback regardless of the live unit toggle.
   const targetAssetPrice = rate !== null ? rateToUnitPrice({ rate }) : null
 
-  if (step === 'review') {
-    return (
-      <LimitOrderReview
-        fromCoin={fromCoin}
-        toCoin={toCoin}
-        sellAmount={sellAmount ?? 0}
-        receiveAmount={receiveAmount ?? 0}
-        unitPrice={
-          targetAssetPrice !== null
-            ? `${formatNumber(targetAssetPrice)} ${fromCoin.ticker}`
-            : undefined
-        }
-        targetPriceLabel={
-          targetFiatPrice !== null
-            ? `$${formatNumber(targetFiatPrice, 2)}`
-            : undefined
-        }
-        expiryHours={expiryHours}
-        onBack={() => setStep('execute')}
-      />
-    )
-  }
+  // Hand off through the page-level flow (like the market form) so the review
+  // screen replaces the whole form — header and Market/Limit tabs included —
+  // rather than nesting a second header under them.
+  const placeOrder = () =>
+    onFinish({
+      fromCoin,
+      toCoin,
+      sellAmount: sellAmount ?? 0,
+      receiveAmount: receiveAmount ?? 0,
+      unitPrice:
+        targetAssetPrice !== null
+          ? `${formatNumber(targetAssetPrice)} ${fromCoin.ticker}`
+          : undefined,
+      targetPriceLabel:
+        targetFiatPrice !== null
+          ? `$${formatNumber(targetFiatPrice, 2)}`
+          : undefined,
+      expiryHours,
+    })
 
   return (
     <PageContent gap={12} justifyContent="space-between" scrollable>
@@ -318,7 +328,7 @@ export const LimitSwapForm = () => {
       </VStack>
 
       <Button
-        onClick={() => setStep('review')}
+        onClick={placeOrder}
         disabled={Boolean(blocker)}
         data-testid="limit-place-order"
       >

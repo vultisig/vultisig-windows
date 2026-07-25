@@ -5,7 +5,6 @@ import { hStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ChildrenProp, IsActiveProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
@@ -15,10 +14,11 @@ import { RefreshSwap } from '../components/RefreshSwap'
 import { AdvancedSwapSettings } from './advanced/AdvancedSwapSettings'
 import { LimitSwapForm } from './LimitSwapForm'
 import { MarketSwapForm } from './MarketSwapForm'
+import { SwapFlowResult } from './swapFlowResult'
 
 type SwapMode = 'market' | 'limit'
 
-export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
+export const SwapForm: FC<OnFinishProp<SwapFlowResult>> = ({ onFinish }) => {
   const { t } = useTranslation()
   const [swapMode, setSwapMode] = useState<SwapMode>('market')
   const showAdvancedSettings = swapMode === 'market'
@@ -27,7 +27,11 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
     {
       value: 'market',
       label: t('swap_mode_market'),
-      renderContent: () => <MarketSwapForm onFinish={onFinish} />,
+      renderContent: () => (
+        <MarketSwapForm
+          onFinish={quote => onFinish({ kind: 'market', quote })}
+        />
+      ),
     },
     // Gating the tab on the flag (rather than the queries inside the form) keeps
     // "flag off ⇒ no limit-swap calls" true while letting the form's queries fire
@@ -37,7 +41,11 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
           {
             value: 'limit' as const,
             label: t('swap_mode_limit'),
-            renderContent: LimitSwapForm,
+            renderContent: () => (
+              <LimitSwapForm
+                onFinish={order => onFinish({ kind: 'limit', order })}
+              />
+            ),
           },
         ]
       : []),

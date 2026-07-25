@@ -18,7 +18,7 @@ import { useLimitExpiryLabels } from './useLimitExpiryLabels'
 const formatNumber = (value: number) =>
   value.toLocaleString(undefined, { maximumFractionDigits: 8 })
 
-type LimitOrderReviewProps = {
+export type LimitOrderReviewData = {
   fromCoin: Coin
   toCoin: Coin
   /** Sell amount in the sell coin's natural units. */
@@ -30,7 +30,9 @@ type LimitOrderReviewProps = {
   /** Target price of one buy unit, in fiat. */
   targetPriceLabel: string | undefined
   expiryHours: LimitSwapExpiryHours
-} & OnBackProp
+}
+
+type LimitOrderReviewProps = LimitOrderReviewData & OnBackProp
 
 /**
  * The composed order, ready to place.
