@@ -23,22 +23,6 @@ export const getPresetPrice = ({
   preset,
 }: GetPresetPriceInput): number => marketPrice * (1 + preset / 100)
 
-type GetPercentFromMarketInput = {
-  price: number
-  marketPrice: number
-}
-
-/**
- * How far a price sits above (positive) or below (negative) market, as a
- * percentage. Returns `null` when there is no market price to compare against —
- * a zero market would otherwise divide to Infinity.
- */
-export const getPercentFromMarket = ({
-  price,
-  marketPrice,
-}: GetPercentFromMarketInput): number | null =>
-  marketPrice > 0 ? ((price - marketPrice) / marketPrice) * 100 : null
-
 export type LimitPriceWarning = 'atOrBelowMarket' | 'farAboveMarket'
 
 type GetLimitPriceWarningInput = {
@@ -73,12 +57,15 @@ export const getLimitPriceWarning = ({
 /**
  * Parse a user-entered price.
  *
- * Accepts a comma as the decimal separator so a locale that types `0,04` is not
- * silently read as `0` or `4`. Returns `null` for anything that is not a single
- * positive finite number — the caller blocks placement rather than guessing.
+ * Only `.` is accepted as the decimal separator. A comma is deliberately
+ * rejected rather than coerced: it is ambiguous between a decimal (`0,04`) and a
+ * thousands separator (`65,800`), and silently reading the latter as `65.8`
+ * would put a price 1000x off into the signed memo. Fail closed and let the user
+ * retype with a dot. Returns `null` for anything that is not a single positive
+ * finite number — the caller blocks placement rather than guessing.
  */
 export const parseLimitPrice = (input: string): number | null => {
-  const normalized = input.trim().replace(',', '.')
+  const normalized = input.trim()
 
   if (!/^\d*\.?\d+$/.test(normalized)) {
     return null

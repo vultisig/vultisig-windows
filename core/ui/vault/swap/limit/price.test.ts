@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  getLimitPriceWarning,
-  getPercentFromMarket,
-  getPresetPrice,
-  parseLimitPrice,
-} from './price'
+import { getLimitPriceWarning, getPresetPrice, parseLimitPrice } from './price'
 
 describe('getPresetPrice', () => {
   it.each([
@@ -19,23 +14,6 @@ describe('getPresetPrice', () => {
 
   it('scales a fractional market price', () => {
     expect(getPresetPrice({ marketPrice: 0.04, preset: 5 })).toBeCloseTo(0.042)
-  })
-})
-
-describe('getPercentFromMarket', () => {
-  it.each([
-    [110, 10],
-    [100, 0],
-    [90, -10],
-  ])('reports %s as %s%% from market', (price, expected) => {
-    expect(getPercentFromMarket({ price, marketPrice: 100 })).toBeCloseTo(
-      expected
-    )
-  })
-
-  // Dividing by a zero market would yield Infinity and render as garbage.
-  it.each([0, -1])('returns null for a %s market price', marketPrice => {
-    expect(getPercentFromMarket({ price: 100, marketPrice })).toBeNull()
   })
 })
 
@@ -88,13 +66,17 @@ describe('parseLimitPrice', () => {
     expect(parseLimitPrice(input)).toBe(expected)
   })
 
-  // A locale that types `0,04` must not be read as 0 or 4 -- that is a 100x
-  // pricing error in a value that ends up in a signed memo.
-  it('accepts a comma decimal separator', () => {
-    expect(parseLimitPrice('0,04')).toBe(0.04)
-  })
+  // A comma is ambiguous between a decimal (`0,04`) and a thousands separator
+  // (`65,800` -> would silently parse to 65.8, a 1000x error in the signed
+  // memo), so reject any comma and let the user retype with a dot.
+  it.each(['0,04', '65,800', '1,000', '65,800.13', '1,000.5'])(
+    'rejects the comma input %j rather than guessing',
+    input => {
+      expect(parseLimitPrice(input)).toBeNull()
+    }
+  )
 
-  it.each(['', '  ', 'abc', '1.2.3', '-5', '0', '1e5', '1,000.5'])(
+  it.each(['', '  ', 'abc', '1.2.3', '-5', '0', '1e5'])(
     'rejects %j rather than guessing',
     input => {
       expect(parseLimitPrice(input)).toBeNull()
