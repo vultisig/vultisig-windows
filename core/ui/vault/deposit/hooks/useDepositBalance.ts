@@ -1,4 +1,5 @@
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { useMemo } from 'react'
 
@@ -6,6 +7,7 @@ import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useStakeBalance } from '../staking/useStakeBalance'
 import { useDepositCoinBalance } from './useDepositCoinBalance'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
+import { useSolanaStakeableBalance } from './useSolanaStakeableBalance'
 import { useTronFrozenBalance } from './useTronFrozenBalance'
 import { useUnbondableBalanceQuery } from './useUnbondableBalanceQuery'
 
@@ -36,9 +38,19 @@ export const useDepositBalance = ({
     resourceType: tronResourceType ?? 'BANDWIDTH',
   })
 
+  const { stakeable: solanaStakeable } = useSolanaStakeableBalance()
+
   const totalTokenAmount = useMemo(() => {
     if (selectedChainAction === 'unstake') {
       return stakeBalance
+    }
+
+    // A Solana delegate spends the entered amount PLUS the stake account's
+    // rent-exempt reserve PLUS the fee, so the form's ceiling is the stakeable
+    // balance — bounding on the raw balance would let a max stake through and
+    // the ceremony would sign a tx the network rejects at simulation.
+    if (selectedChainAction === 'solana_delegate') {
+      return fromChainAmount(solanaStakeable, selectedCoin.decimals)
     }
 
     if (selectedChainAction === 'unbond') {
@@ -56,7 +68,9 @@ export const useDepositBalance = ({
     return selectedCoinBalance
   }, [
     selectedChainAction,
+    selectedCoin.decimals,
     selectedCoinBalance,
+    solanaStakeable,
     stakeBalance,
     tronFrozenBalance,
     unbondableBalance?.humanReadableBalance,

@@ -41,6 +41,23 @@ export const useCorrectSelectedCoin = () => {
           : fallbackStakeableCoin
       }
 
+      // Solana native staking funds the stake account from — and pays its fee
+      // in — native SOL. Entering the deposit flow from an SPL token's screen
+      // would otherwise carry that token in and have the delegate form bound
+      // its amount to the token's balance and decimals.
+      const selectNativeCoin = () => {
+        if (isFeeCoin(currentDepositCoin)) {
+          return currentDepositCoin
+        }
+
+        return shouldBePresent(
+          coins.find(
+            coin => coin.chain === currentDepositCoin.chain && isFeeCoin(coin)
+          ),
+          `native ${currentDepositCoin.chain} coin`
+        )
+      }
+
       const ticker = currentDepositCoin.ticker
       const potentialRUNECoin = findByTicker({ coins, ticker: 'RUNE' })
       const potentialCACAOCoin = findByTicker({ coins, ticker: 'CACAO' })
@@ -116,11 +133,11 @@ export const useCorrectSelectedCoin = () => {
         undelegate: () => currentDepositCoin,
         redelegate: () => currentDepositCoin,
         claim_rewards: () => currentDepositCoin,
-        solana_delegate: () => currentDepositCoin,
-        solana_unstake: () => currentDepositCoin,
-        solana_withdraw: () => currentDepositCoin,
-        solana_move_stake: () => currentDepositCoin,
-        solana_finish_move: () => currentDepositCoin,
+        solana_delegate: selectNativeCoin,
+        solana_unstake: selectNativeCoin,
+        solana_withdraw: selectNativeCoin,
+        solana_move_stake: selectNativeCoin,
+        solana_finish_move: selectNativeCoin,
       })
     },
     [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]
