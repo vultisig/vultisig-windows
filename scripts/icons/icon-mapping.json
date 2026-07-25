@@ -1,0 +1,38 @@
+{
+  "$comment": "Source-of-truth mapping from a desktop icon component (lib/ui/icons/<name>.tsx) to its Icons V3 source icon (the component/instance name in the Figma section defined in figma-icons.config.json). SEED ONLY — this is intentionally incomplete. Later phases extend it, verifying each entry against rendered art before shipping. Chevrons are excluded on purpose (they stay on the legacy pack per design).",
+  "decision": "converge-on-v3",
+  "status": {
+    "verified": "V3 source confirmed against rendered art",
+    "proposed": "likely match from name/iOS precedent — must be eyeballed before use",
+    "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn"
+  },
+  "sourceLegend": {
+    "station": "already shipped in StationFigmaIcons.tsx (drawn in V3 style)",
+    "ios": "matches an icon rebuilt on V3 in vultisig-ios#4834",
+    "manual": "decided here"
+  },
+  "excludedChevrons": [
+    "ChevronLeftIcon",
+    "ChevronRightIcon",
+    "ChevronDownIcon",
+    "ChevronUpIcon",
+    "CaretDownIcon"
+  ],
+  "icons": [
+    { "desktop": "WalletIcon", "v3": "wallet-filled", "status": "proposed", "source": "station" },
+    { "desktop": "MagnifyingGlassIcon", "v3": "magnifier", "status": "proposed", "source": "station" },
+    { "desktop": "SearchIcon", "v3": "magnifier", "status": "proposed", "source": "station" },
+    { "desktop": "InfoCircleIcon", "v3": "circle-info", "status": "proposed", "source": "ios" },
+    { "desktop": "CircleCheckIcon", "v3": "badge-check", "status": "proposed", "source": "ios" },
+    { "desktop": "CreditCardIcon", "v3": "credit-card", "status": "proposed", "source": "station" },
+    { "desktop": "CoinsIcon", "v3": "credit-card", "status": "proposed", "source": "manual" },
+    { "desktop": "CopyIcon", "v3": "copies-3-filled", "status": "proposed", "source": "station" },
+    { "desktop": "BellIcon", "v3": "bell", "status": "proposed", "source": "ios" },
+    { "desktop": "BookIcon", "v3": "book", "status": "proposed", "source": "ios" },
+    { "desktop": "PercentIcon", "v3": "circle-percentage", "status": "proposed", "source": "ios" },
+    { "desktop": "TrashIcon", "v3": "trash-2", "status": "proposed", "source": "manual" },
+    { "desktop": "AgentIcon", "v3": null, "status": "bespoke", "source": "manual" },
+    { "desktop": "SeedphraseIcon", "v3": null, "status": "bespoke", "source": "manual" },
+    { "desktop": "TronEnergyIcon", "v3": null, "status": "bespoke", "source": "manual" }
+  ]
+}
