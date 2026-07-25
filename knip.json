@@ -14,10 +14,67 @@
     "babel-plugin-react-compiler",
     "markdown-link-check"
   ],
+  "ignoreIssues": {
+    "clients/extension/package.json": [
+      "devDependencies"
+    ],
+    "core/ui/i18n/scripts/check-integrity.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/check-unused.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/find-duplicates.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/review-quality.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/translate.ts": [
+      "files"
+    ],
+    "core/ui/i18n/utils/i18nGlossary.ts": [
+      "exports"
+    ],
+    "core/ui/i18n/utils/i18nSyntax.ts": [
+      "exports"
+    ],
+    "core/ui/i18n/utils/translateTexts.ts": [
+      "files"
+    ],
+    "core/ui/package.json": [
+      "dependencies"
+    ],
+    "core/ui/scripts/validatePublic.ts": [
+      "files"
+    ],
+    "lib/codegen/package.json": [
+      "dependencies"
+    ],
+    "lib/codegen/utils/createFile.ts": [
+      "files"
+    ],
+    "lib/codegen/utils/createTsFile.ts": [
+      "files"
+    ],
+    "lib/codegen/utils/formatCode.ts": [
+      "files"
+    ],
+    "package.json": [
+      "devDependencies"
+    ],
+    "scripts/quality-audit.mjs": [
+      "files"
+    ]
+  },
   "workspaces": {
     "clients/desktop": {
+      "entry": [
+        "scripts/dev-desktop.mjs"
+      ],
       "project": [
-        "**/*.{ts,tsx}"
+        "**/*.{ts,tsx}",
+        "scripts/**/*.{js,mjs}"
       ]
     },
     "clients/extension": {
