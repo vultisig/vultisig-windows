@@ -11,7 +11,7 @@ import { getDepositFormConfig } from './getDepositFormConfig'
  * load in Vitest/Node ESM. Mock until the SDK fixes that internal re-export.
  */
 vi.mock('@vultisig/core-chain/coin/chainFeeCoin', () => ({
-  chainFeeCoin: {},
+  chainFeeCoin: { Solana: { ticker: 'SOL' } },
 }))
 
 vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
@@ -150,5 +150,82 @@ describe('TON stake/unstake validation', () => {
       console.error(valid.error.format())
     }
     expect(valid.success).toBe(true)
+  })
+})
+
+/**
+ * `totalAmountAvailable` for a delegate is the STAKEABLE balance (liquid SOL
+ * minus the stake account's rent-exempt reserve and the fee) — see
+ * `useSolanaStakeableBalance`. The schema is what the footer CTA gates on, so an
+ * amount above that ceiling has to fail here or the ceremony signs a transaction
+ * the network rejects at simulation.
+ */
+describe('Solana delegate validation', () => {
+  const solCoin = {
+    chain: Chain.Solana,
+    id: 'SOL',
+    ticker: 'SOL',
+    decimals: 9,
+    address: 'sender',
+  }
+
+  const parseDelegate = ({
+    stakeable,
+    amount,
+  }: {
+    stakeable: number
+    amount: number
+  }) => {
+    const { schema } = getDepositFormConfig({
+      t,
+      coin: solCoin as any,
+      walletCore: {} as any,
+      totalAmountAvailable: stakeable,
+      selectedChainAction: 'solana_delegate',
+    })
+
+    return schema.safeParse({ amount, validatorAddress: 'vote-pubkey' })
+  }
+
+  it('rejects an amount above the stakeable balance', () => {
+    const result = parseDelegate({ stakeable: 1.571, amount: 267 })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0]?.message).toBe(
+      'chainFunctions.amountExceeded'
+    )
+  })
+
+  it('rejects a stake of the full balance once rent + fee are reserved', () => {
+    const result = parseDelegate({ stakeable: 9.997, amount: 10 })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0]?.message).toBe(
+      'chainFunctions.amountExceeded'
+    )
+  })
+
+  it('rejects an amount below the 1 SOL program minimum', () => {
+    const result = parseDelegate({ stakeable: 10, amount: 0.5 })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0]?.message).toBe(
+      'solana_staking_min_delegation'
+    )
+  })
+
+  it('accepts a stake of the whole stakeable balance', () => {
+    expect(parseDelegate({ stakeable: 9.997, amount: 9.997 }).success).toBe(
+      true
+    )
+  })
+
+  it('reports insufficient balance when nothing is stakeable', () => {
+    const result = parseDelegate({ stakeable: 0, amount: 1 })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues.map(issue => issue.message)).toContain(
+      'insufficient_balance'
+    )
   })
 })
