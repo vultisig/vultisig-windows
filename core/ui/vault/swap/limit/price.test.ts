@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { getLimitPriceWarning, getPresetPrice, parseLimitPrice } from './price'
+import {
+  getLimitPriceWarning,
+  getPresetPrice,
+  parseLimitPrice,
+  quantizeTargetPrice,
+} from './price'
 
 describe('getPresetPrice', () => {
   it.each([
@@ -82,4 +87,31 @@ describe('parseLimitPrice', () => {
       expect(parseLimitPrice(input)).toBeNull()
     }
   )
+})
+
+describe('quantizeTargetPrice', () => {
+  // The memo encodes at most 8 fractional digits; a rate from a division has
+  // more, and the SDK builder rejects the excess.
+  it('rounds a many-digit rate to 8 fractional digits', () => {
+    const rate = 1 / 0.42727971 // 2.340387284011216
+    const quantized = quantizeTargetPrice(rate)
+
+    expect(quantized).toBe(2.34038728)
+    expect(
+      (quantized.toString().split('.')[1] ?? '').length
+    ).toBeLessThanOrEqual(8)
+  })
+
+  it('keeps a small rate within 8 fractional digits', () => {
+    const quantized = quantizeTargetPrice(1 / 66000)
+
+    expect(quantized).toBe(0.00001515)
+    expect(
+      (quantized.toString().split('.')[1] ?? '').length
+    ).toBeLessThanOrEqual(8)
+  })
+
+  it('leaves an already-short rate unchanged', () => {
+    expect(quantizeTargetPrice(2.5)).toBe(2.5)
+  })
 })

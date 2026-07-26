@@ -33,6 +33,7 @@ import {
   getPresetPrice,
   LimitPriceWarning,
   parseLimitPrice,
+  quantizeTargetPrice,
 } from '../limit/price'
 import { useAdvancedSwapQueueEnabledQuery } from '../limit/queries/useAdvancedSwapQueueEnabledQuery'
 import { useLimitMarketPriceQuery } from '../limit/queries/useLimitMarketPriceQuery'
@@ -92,7 +93,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     amount !== null ? fromChainAmount(amount, fromCoin.decimals) : null
 
   const entered = parseLimitPrice(priceInput)
-  const rate = (() => {
+  const rawRate = (() => {
     if (entered === null) {
       return null
     }
@@ -108,6 +109,12 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
     return unitPriceToRate({ unitPrice: entered })
   })()
+
+  // Quantize to the memo's representable precision: a rate from a division has
+  // more fractional digits than the 8 the memo can encode, and the SDK builder
+  // rejects the excess. Doing it here keeps the displayed price, receive amount,
+  // and signed LIM all agreeing on the value the memo will hold.
+  const rate = rawRate === null ? null : quantizeTargetPrice(rawRate)
 
   const toInputValue = (forRate: number, forUnit: LimitPriceUnit) =>
     forUnit === 'fiat'

@@ -23,6 +23,24 @@ export const getPresetPrice = ({
   preset,
 }: GetPresetPriceInput): number => marketPrice * (1 + preset / 100)
 
+/**
+ * The most fractional digits a THORChain limit memo can encode for the target
+ * price: the SDK scales it by 1e8 into a bigint and rejects anything finer.
+ */
+export const limitPriceMaxFractionDigits = 8
+
+/**
+ * Round a rate to the memo's representable precision.
+ *
+ * A rate derived from a division (fiat entry, or the sell-per-buy inverse)
+ * routinely carries more fractional digits than the memo can hold, which the SDK
+ * builder rejects outright. Quantize it once — at the form's authoritative rate
+ * — so the displayed price, the receive amount, and the signed LIM all agree on
+ * the same value the memo will encode.
+ */
+export const quantizeTargetPrice = (rate: number): number =>
+  Number(rate.toFixed(limitPriceMaxFractionDigits))
+
 export type LimitPriceWarning = 'atOrBelowMarket' | 'farAboveMarket'
 
 type GetLimitPriceWarningInput = {
