@@ -27,7 +27,7 @@ export const getPresetPrice = ({
  * The most fractional digits a THORChain limit memo can encode for the target
  * price: the SDK scales it by 1e8 into a bigint and rejects anything finer.
  */
-export const limitPriceMaxFractionDigits = 8
+const limitPriceMaxFractionDigits = 8
 
 /**
  * Round a rate to the memo's representable precision.
