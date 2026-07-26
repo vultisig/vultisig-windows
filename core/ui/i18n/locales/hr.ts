@@ -1721,4 +1721,5 @@ export const hr = {
   nothing_to_add_hint_secondary:
     'Izradite novi trezor da biste ga dodali ovdje.',
   no_results_found: 'Nisu pronađeni rezultati',
+  folder_active_vault: '„{{name}}“ Aktivno',
 }

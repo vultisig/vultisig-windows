@@ -1748,4 +1748,5 @@ export const es = {
   edit_folder: 'Editar carpeta',
   nothing_to_add_hint_secondary: 'Crea una nueva bóveda para agregarlo aquí.',
   no_results_found: 'No se encontraron resultados',
+  folder_active_vault: '«{{name}}» Activo',
 }

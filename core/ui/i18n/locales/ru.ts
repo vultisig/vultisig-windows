@@ -1729,4 +1729,5 @@ export const ru = {
   nothing_to_add_hint_secondary:
     'Создайте новое хранилище, чтобы добавить его сюда.',
   no_results_found: 'Результаты не найдены',
+  folder_active_vault: '«{{name}}» Активен',
 }

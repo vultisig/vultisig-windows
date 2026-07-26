@@ -1712,4 +1712,5 @@ export const ko = {
   edit_folder: '폴더 편집',
   nothing_to_add_hint_secondary: '여기에 추가하려면 새 볼트를 생성하세요.',
   no_results_found: '검색 결과가 없습니다.',
+  folder_active_vault: '‘{{name}}’ 활성',
 }
