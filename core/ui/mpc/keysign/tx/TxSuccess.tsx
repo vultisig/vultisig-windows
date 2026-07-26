@@ -41,6 +41,7 @@ import styled from 'styled-components'
 import { useTxHash } from '../../../chain/state/txHash'
 import { useCore } from '../../../state/core'
 import { getTxSuccessAmountPresentation } from './getTxSuccessAmountPresentation'
+import { getWasmExecuteTxDisplay } from './getWasmExecuteTxDisplay'
 import { TransactionStatusAnimation } from './TransactionStatusAnimation'
 import { TxStatusTracker } from './TxStatusTracker'
 
@@ -58,11 +59,17 @@ export const TxSuccess = ({
   const [, copyToClipboard] = useCopyToClipboard()
   const { openUrl } = useCore()
 
-  const formattedToAmount = useMemo(() => {
-    if (!toAmount) return 0
+  // A wasm contract execute (stake/unstake) is signed entirely from
+  // `contractPayload`; its `toAmount` is empty, so derive the amount + asset
+  // from that same payload (mirrors KeysignTxOverview / the details screen)
+  // instead of showing `0`.
+  const wasmDisplay = getWasmExecuteTxDisplay(value)
 
-    return fromChainAmount(BigInt(toAmount), coin.decimals)
-  }, [toAmount, coin.decimals])
+  const formattedToAmount = wasmDisplay
+    ? fromChainAmount(BigInt(wasmDisplay.fundAmount), wasmDisplay.coin.decimals)
+    : toAmount
+      ? fromChainAmount(BigInt(toAmount), coin.decimals)
+      : 0
 
   const txAction = useMemo(
     () => getSignDataTxAction(value, formattedToAmount),
@@ -170,7 +177,8 @@ export const TxSuccess = ({
     return { coin: sendChange.coin, amount: sendChange.amount }
   }, [blockaidSimulationQuery.data])
 
-  const displayCoin = simulationSend?.coin ?? resolvedToken?.coin ?? coin
+  const displayCoin =
+    simulationSend?.coin ?? resolvedToken?.coin ?? wasmDisplay?.coin ?? coin
   const displayAmount = simulationSend
     ? Number(formatUnits(simulationSend.amount, simulationSend.coin.decimals))
     : (resolvedToken?.amount ??

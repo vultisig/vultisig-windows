@@ -1,13 +1,27 @@
 import react from '@vitejs/plugin-react'
 import vultisigSdk from '@vultisig/sdk/vite'
-import { PluginOption } from 'vite'
+import type { Plugin, PluginOption, UserConfig } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
 type GetCommonPluginsInput = {
   nodePolyfills?: PluginOption
   vultisigSdk?: PluginOption
 }
+
+const defaultBuildMinify = (): Plugin => ({
+  name: 'vultisig:default-build-minify',
+  config: (config: UserConfig) =>
+    config.build?.minify === undefined
+      ? { build: { minify: 'esbuild' as const } }
+      : undefined,
+})
+
+export const topLevelAwaitPlugins = (): PluginOption[] => [
+  defaultBuildMinify(),
+  topLevelAwait(),
+]
 
 export const getCommonPlugins = ({
   nodePolyfills: nodePolyfillsPlugin = nodePolyfills({ exclude: ['fs'] }),
@@ -24,8 +38,12 @@ export const getCommonPlugins = ({
     },
   }),
   nodePolyfillsPlugin,
-  // The SDK/WASM graph uses native top-level await. Every consumer builds with
-  // `target: 'esnext'` and ships ES modules (module service worker / module
-  // <script>), so the runtime evaluates TLA natively — no downlevel plugin needed.
   wasm(),
+  // Required, NOT redundant: `wasm()` emits top-level `await` for WASM
+  // instantiation. Without `topLevelAwait()` the module worker / webview that
+  // loads this bundle can fail to finish evaluating at runtime and never boot —
+  // in the extension's background service worker that manifested as every
+  // `callBackground` hanging forever. `type: "module"` + `esnext` is not
+  // sufficient on its own; keep this. See the regression from dropping it (#4400).
+  ...topLevelAwaitPlugins(),
 ]

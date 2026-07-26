@@ -199,7 +199,6 @@ export const ru = {
   continue_in_new_window: 'Продолжить в открытом окне',
   contract_execution: 'Исполнение контракта',
   copy_address: 'Копировать адрес',
-  create_folder: 'Создать папку',
   create_new_vault: 'Создать новое хранилище',
   create_vault: 'Создать хранилище',
   create_referral_form: 'Создать referral',
@@ -214,7 +213,6 @@ export const ru = {
   currency: 'Валюта',
   current_expiry: 'Текущий срок',
   current_passcode: 'Текущий пин-код',
-  current_vaults: 'Текущие хранилища',
   custom: 'Пользовательское действие',
   custom_token: 'Пользовательский токен',
   customize_chains: 'Настроить сети',
@@ -404,7 +402,8 @@ export const ru = {
   fill_the_form: 'Заполните форму',
   find_custom_token: 'Найти пользовательский токен',
   folder_name: 'Имя папки',
-  folder_name_already_exists: 'Имя папки должно быть уникальным',
+  folder_name_already_exists:
+    'Папка с таким именем уже существует. Попробуйте создать новую.',
   folder_name_required: 'Имя папки обязательно',
   folder_at_least_one_vault_required: 'Требуется как минимум одно хранилище',
   folders: 'Папки',
@@ -619,8 +618,7 @@ export const ru = {
   normal: 'Обычный',
   not_enough_funds: 'Недостаточно средств',
   nothing_to_add: 'Нечего добавлять',
-  nothing_to_add_hint:
-    'Все ваши хранилища уже отсортированы. Создайте новое хранилище, чтобы добавить его сюда.',
+  nothing_to_add_hint: 'Все ваши хранилища уже рассортированы.',
   of: 'из',
   off: 'Выкл',
   on: 'Вкл',
@@ -1706,4 +1704,30 @@ export const ru = {
   ripple_undecoded_notice:
     'Данная транзакция не может быть расшифрована. Перед подтверждением ознакомьтесь с приведенными ниже данными.',
   swap_expected_payout: 'ожидаемая выплата',
+  send_receiver_format_hint_cardano:
+    'Введите адрес Cardano, начинающийся с addr1.',
+  send_receiver_format_hint_cosmos:
+    'Введите адрес Bech32, начинающийся с префикса {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Введите адрес EVM, начинающийся с 0x и содержащий 40 шестнадцатеричных символов.',
+  send_receiver_format_hint_qbtc: 'Введите адрес QBTC, начинающийся с qbtc.',
+  send_receiver_format_hint_ripple:
+    'Введите XRP-адрес, начинающийся с буквы «r».',
+  send_receiver_format_hint_solana:
+    'Введите адрес Solana, закодированный в Base58, обычно от 32 до 44 символов.',
+  send_receiver_format_hint_ss58: 'Введите адрес в формате SS58 для этой сети.',
+  send_receiver_format_hint_sui:
+    'Введите адрес Sui, начинающийся с 0x и содержащий 64 шестнадцатеричных символа.',
+  send_receiver_format_hint_ton: 'Введите действительный адрес TON.',
+  send_receiver_format_hint_tron: 'Введите адрес TRON, начинающийся с буквы T.',
+  send_receiver_format_hint_utxo:
+    'Введите действительный адрес для этой сети (формат bech32 или устаревший).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable: 'Лимитные ордера временно недоступны для THORChain',
+  active_vaults: 'Активные хранилища',
+  edit_folder: 'Редактировать папку',
+  nothing_to_add_hint_secondary:
+    'Создайте новое хранилище, чтобы добавить его сюда.',
+  no_results_found: 'Результаты не найдены',
+  folder_active_vault: '«{{name}}» Активен',
 }

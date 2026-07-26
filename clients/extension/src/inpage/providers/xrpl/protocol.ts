@@ -20,9 +20,10 @@ export const xrplResponseSource = 'GEM_WALLET_MSG_RESPONSE'
 
 /**
  * Request types this adapter answers: detection, account reads, message
- * signing, and the XRPL transaction surface (sign / submit). Anything else —
- * NFT operations, trustlines, bulk submits — is refused in `resolveXrplRequest`
- * rather than left to hang.
+ * signing, the raw sign / submit surface, and the payment / trustline / offer
+ * convenience methods. Anything else — NFT operations, bulk submits, and
+ * account/key changes (`AccountSet`, `SetRegularKey`, hooks) — is refused in
+ * `resolveXrplRequest` rather than left to hang.
  */
 export const xrplRequestTypes = [
   'REQUEST_IS_INSTALLED/V3',
@@ -32,6 +33,10 @@ export const xrplRequestTypes = [
   'REQUEST_SIGN_MESSAGE/V3',
   'REQUEST_SIGN_TRANSACTION/V3',
   'REQUEST_SUBMIT_TRANSACTION/V3',
+  'REQUEST_SEND_PAYMENT/V3',
+  'REQUEST_SET_TRUSTLINE/V3',
+  'REQUEST_CREATE_OFFER/V3',
+  'REQUEST_CANCEL_OFFER/V3',
 ] as const
 
 /** A request `type` string this adapter implements (see `xrplRequestTypes`). */

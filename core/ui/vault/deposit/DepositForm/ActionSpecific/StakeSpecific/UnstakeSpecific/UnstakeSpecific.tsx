@@ -6,7 +6,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { StakeableAssetTicker, StakeableChain } from '../../../../config'
+import { StakeableChain } from '../../../../config'
 import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
 import { AssetRequiredLabel, Container } from '../../../DepositForm.styled'
@@ -60,16 +60,12 @@ export const UnstakeSpecific = () => {
       />
       <Match
         value={chain as StakeableChain}
-        THORChain={() => (
-          <>
-            <Match
-              value={selectedCoinTicker as StakeableAssetTicker}
-              TCY={() => <UnstakeTCYSpecific />}
-              RUJI={() => null}
-              GRAM={() => null}
-            />
-          </>
-        )}
+        THORChain={() =>
+          // Only TCY needs a bespoke unstake control (percentage-based). Every
+          // other stakeable ticker (RUJI, bRUNE, …) drives its amount through
+          // the shared deposit form fields, so it renders nothing extra here.
+          selectedCoinTicker === 'TCY' ? <UnstakeTCYSpecific /> : null
+        }
         Ton={() => null}
       />
     </>

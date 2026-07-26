@@ -12,6 +12,7 @@ const thorPositionCoinByTicker: Record<string, Coin> = {
   TCY: thorchainTokens.tcy,
   STCY: thorchainTokens.stcy,
   RUJI: thorchainTokens.ruji,
+  BRUNE: thorchainTokens.brune,
   YRUNE: thorchainTokens.yRune,
   YTCY: thorchainTokens.yTcy,
 }

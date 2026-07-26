@@ -53,7 +53,7 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
     isNative = Boolean(input.is_native)
   }
 
-  let decimals = 18
+  let decimals: number | undefined
   let logo: string | undefined
   let priceProviderId: string | undefined
 
@@ -74,13 +74,31 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
   }
 
   if (input.decimals !== undefined) {
-    decimals = Number(input.decimals)
+    const suppliedDecimals =
+      typeof input.decimals === 'number' ||
+      (typeof input.decimals === 'string' && input.decimals.trim() !== '')
+        ? Number(input.decimals)
+        : Number.NaN
+    if (
+      !Number.isInteger(suppliedDecimals) ||
+      suppliedDecimals < 0 ||
+      suppliedDecimals > 255
+    ) {
+      throw new Error('decimals must be an integer between 0 and 255')
+    }
+    decimals = suppliedDecimals
   }
   if (input.logo) {
     logo = String(input.logo)
   }
   if (input.price_provider_id) {
     priceProviderId = String(input.price_provider_id)
+  }
+
+  if (decimals === undefined) {
+    throw new Error(
+      `decimals is required for unknown token ${ticker} on ${chain}`
+    )
   }
 
   let existingAddress = ''

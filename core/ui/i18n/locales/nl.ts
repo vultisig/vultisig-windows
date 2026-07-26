@@ -200,7 +200,6 @@ export const nl = {
   continue_in_new_window: 'Doorgaan in het geopende venster',
   contract_execution: 'Contractuitvoering',
   copy_address: 'Adres kopiëren',
-  create_folder: 'Map aanmaken',
   create_new_vault: 'Nieuwe kluis aanmaken',
   create_vault: 'Maak een kluis aan',
   create_referral_form: 'Referral aanmaken',
@@ -215,7 +214,6 @@ export const nl = {
   currency: 'Valuta',
   current_expiry: 'Huidige vervaldatum',
   current_passcode: 'Huidige pincode',
-  current_vaults: 'Huidige kluizen',
   custom: 'Aangepaste actie',
   custom_token: 'Aangepaste token',
   customize_chains: 'Chains aanpassen',
@@ -407,7 +405,7 @@ export const nl = {
   fill_the_form: 'Vul het formulier in',
   find_custom_token: 'Aangepaste token zoeken',
   folder_name: 'Mapnaam',
-  folder_name_already_exists: 'Mapnaam moet uniek zijn',
+  folder_name_already_exists: 'Die mapnaam bestaat al. Probeer een andere.',
   folder_name_required: 'Mapnaam is verplicht',
   folder_at_least_one_vault_required: 'Minimaal één kluis is vereist',
   folders: 'Mappen',
@@ -623,8 +621,7 @@ export const nl = {
   normal: 'Normaal',
   not_enough_funds: 'Onvoldoende funds',
   nothing_to_add: 'Niets toe te voegen',
-  nothing_to_add_hint:
-    'Al je kluizen zijn al gesorteerd. Maak een nieuwe kluis om hem hier toe te voegen.',
+  nothing_to_add_hint: 'Al uw kluizen zijn al gesorteerd.',
   of: 'van',
   off: 'Uit',
   on: 'Aan',
@@ -1707,4 +1704,33 @@ export const nl = {
   ripple_undecoded_notice:
     'Deze transactie kon niet worden gedecodeerd. Controleer de onderstaande gegevens voordat u goedkeurt.',
   swap_expected_payout: 'verwachte uitbetaling',
+  send_receiver_format_hint_cardano:
+    'Voer een Cardano-adres in dat begint met addr1.',
+  send_receiver_format_hint_cosmos:
+    'Voer een Bech32-adres in dat begint met het voorvoegsel {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Voer een EVM-adres in dat begint met 0x en 40 hexadecimale tekens bevat.',
+  send_receiver_format_hint_qbtc: 'Voer een QBTC-adres in dat begint met qbtc.',
+  send_receiver_format_hint_ripple:
+    'Voer een XRP-adres in dat begint met de letter r.',
+  send_receiver_format_hint_solana:
+    'Voer een Base58-gecodeerd Solana-adres in, meestal 32 tot 44 tekens lang.',
+  send_receiver_format_hint_ss58:
+    'Voer een SS58-gecodeerd adres in voor dit netwerk.',
+  send_receiver_format_hint_sui:
+    'Voer een SUI-adres in dat begint met 0x en 64 hexadecimale tekens bevat.',
+  send_receiver_format_hint_ton: 'Voer een geldig TON-adres in.',
+  send_receiver_format_hint_tron:
+    'Voer een TRON-adres in dat begint met de letter T.',
+  send_receiver_format_hint_utxo:
+    'Voer een geldig adres in voor dit netwerk (bech32- of legacy-formaat).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Limietorders zijn tijdelijk niet beschikbaar voor THORChain',
+  active_vaults: 'Actieve kluizen',
+  edit_folder: 'Map bewerken',
+  nothing_to_add_hint_secondary:
+    'Maak een nieuwe kluis aan om deze hier toe te voegen.',
+  no_results_found: 'Geen resultaten gevonden',
+  folder_active_vault: '‘{{name}}’ Actief',
 }

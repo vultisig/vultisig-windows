@@ -203,7 +203,6 @@ export const de = {
   continue_in_new_window: 'Im geöffneten Fenster fortfahren',
   contract_execution: 'Vertragsabwicklung',
   copy_address: 'Adresse kopieren',
-  create_folder: 'Ordner erstellen',
   create_new_vault: 'Neuen Tresor erstellen',
   create_vault: 'Tresor erstellen',
   create_referral_form: 'Empfehlung erstellen',
@@ -218,7 +217,6 @@ export const de = {
   currency: 'Währung',
   current_expiry: 'Aktuelles Ablaufdatum',
   current_passcode: 'Aktueller Passcode',
-  current_vaults: 'Aktuelle Tresore',
   custom: 'Benutzerdefinierte Aktion',
   custom_token: 'Benutzerdefiniertes Token',
   customize_chains: 'Ketten individuell gestalten',
@@ -416,7 +414,8 @@ export const de = {
   fill_the_form: 'Füllen Sie das Formular aus.',
   find_custom_token: 'Benutzerdefiniertes Token finden',
   folder_name: 'Ordnername',
-  folder_name_already_exists: 'Der Ordnername muss eindeutig sein.',
+  folder_name_already_exists:
+    'Dieser Ordnername existiert bereits. Bitte versuchen Sie es mit einem neuen.',
   folder_name_required: 'Ein Ordnername ist erforderlich.',
   folder_at_least_one_vault_required: 'Mindestens ein Vault ist erforderlich',
   folders: 'Ordner',
@@ -635,8 +634,7 @@ export const de = {
   normal: 'Normal',
   not_enough_funds: 'Nicht genügend Mittel',
   nothing_to_add: 'Nichts hinzuzufügen',
-  nothing_to_add_hint:
-    'Alle Ihre Tresore sind bereits sortiert. Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
+  nothing_to_add_hint: 'Alle Ihre Tresore sind bereits sortiert.',
   of: 'von',
   off: 'Aus',
   on: 'An',
@@ -1737,4 +1735,34 @@ export const de = {
   ripple_undecoded_notice:
     'Diese Transaktion konnte nicht dekodiert werden. Bitte prüfen Sie die unten stehenden Rohdaten, bevor Sie die Transaktion genehmigen.',
   swap_expected_payout: 'erwartete Auszahlung',
+  send_receiver_format_hint_cardano:
+    'Geben Sie eine Cardano-Adresse ein, die mit addr1 beginnt.',
+  send_receiver_format_hint_cosmos:
+    'Geben Sie eine Bech32-Adresse ein, die mit dem Präfix {{prefix}} beginnt.',
+  send_receiver_format_hint_evm:
+    'Geben Sie eine EVM-Adresse ein, die mit 0x beginnt und 40 Hexadezimalzeichen hat.',
+  send_receiver_format_hint_qbtc:
+    'Geben Sie eine QBTC-Adresse ein, die mit qbtc beginnt.',
+  send_receiver_format_hint_ripple:
+    'Geben Sie eine XRP-Adresse ein, die mit dem Buchstaben r beginnt.',
+  send_receiver_format_hint_solana:
+    'Geben Sie eine Base58-kodierte Solana-Adresse ein, üblicherweise 32 bis 44 Zeichen lang.',
+  send_receiver_format_hint_ss58:
+    'Geben Sie eine SS58-codierte Adresse für dieses Netzwerk ein.',
+  send_receiver_format_hint_sui:
+    'Geben Sie eine Sui-Adresse ein, die mit 0x beginnt und 64 Hexadezimalzeichen enthält.',
+  send_receiver_format_hint_ton: 'Geben Sie eine gültige TON-Adresse ein.',
+  send_receiver_format_hint_tron:
+    'Geben Sie eine TRON-Adresse ein, die mit dem Buchstaben T beginnt.',
+  send_receiver_format_hint_utxo:
+    'Geben Sie eine gültige Adresse für dieses Netzwerk ein (Bech32- oder Legacy-Format).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Limit-Orders sind für THORChain vorübergehend nicht verfügbar.',
+  active_vaults: 'Aktive Tresore',
+  edit_folder: 'Ordner bearbeiten',
+  nothing_to_add_hint_secondary:
+    'Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
+  no_results_found: 'Keine Ergebnisse gefunden',
+  folder_active_vault: '„{{name}}“ Aktiv',
 }

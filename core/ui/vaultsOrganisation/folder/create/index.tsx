@@ -90,13 +90,16 @@ export const CreateVaultFolderPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={goBack} />}
         secondaryControls={<DoneButton onClick={goBack} />}
-        title={t('create_folder')}
+        title={t('add_folder')}
       />
       <PageContent gap={28} scrollable flexGrow>
         <VStack gap={8}>
           <StyledTextInput
             label={t('folder_name')}
-            onValueChange={setName}
+            onValueChange={value => {
+              setTouched(true)
+              setName(value)
+            }}
             placeholder={t('enter_folder_name')}
             value={name}
             validation={touched && validationMessage ? 'invalid' : undefined}
@@ -160,6 +163,7 @@ export const CreateVaultFolderPage = () => {
                       </SwitchWrapper>
                     }
                     selected={checked}
+                    dimmed={!checked}
                     onClick={() => toggleVault(vaultId)}
                   />
                 )
@@ -167,15 +171,23 @@ export const CreateVaultFolderPage = () => {
             </StyledList>
           ) : (
             <EmptyStateCard gap={12} alignItems="center">
-              <IconWrapper size={28} color="textShy">
+              <IconWrapper size={28} color="buttonPrimary">
                 <FolderLockIcon />
               </IconWrapper>
               <VStack gap={4}>
-                <Text size={16} weight={600} centerHorizontally>
+                <Text
+                  size={16}
+                  weight={600}
+                  color="contrast"
+                  centerHorizontally
+                >
                   {t('nothing_to_add')}
                 </Text>
                 <Text size={13} color="shy" centerHorizontally>
                   {t('nothing_to_add_hint')}
+                </Text>
+                <Text size={13} color="shy" centerHorizontally>
+                  {t('nothing_to_add_hint_secondary')}
                 </Text>
               </VStack>
             </EmptyStateCard>

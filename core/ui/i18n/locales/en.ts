@@ -2,6 +2,7 @@ export const en = {
   accept_continue: 'Accept & continue',
   action: 'Action',
   active: 'Active',
+  active_vaults: 'Active Vaults',
   agent: 'Agent',
   agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
   agent_nav_tip_title: 'New!',
@@ -215,7 +216,6 @@ export const en = {
   copied: 'Copied',
   copy: 'Copy',
   copy_address: 'Copy Address',
-  create_folder: 'Create Folder',
   create_new_vault: 'Create New Vault',
   create_vault: 'Create vault',
   create_referral_form: 'Create referral',
@@ -230,7 +230,6 @@ export const en = {
   currency: 'Currency',
   current_expiry: 'Current expiry',
   current_passcode: 'Current Passcode',
-  current_vaults: 'Current Vaults',
   custom: 'Custom Action',
   custom_rpc: 'Custom RPCs',
   custom_rpc_chip_custom: 'Custom',
@@ -342,6 +341,7 @@ export const en = {
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
   remove_friends_referral: 'Remove Referral',
+  edit_folder: 'Edit Folder',
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_placeholder: 'Enter your email address',
@@ -483,8 +483,9 @@ export const en = {
   fast_sign: 'Fast Sign',
   fill_the_form: 'Fill the form',
   find_custom_token: 'Find custom token',
+  folder_active_vault: '‘{{name}}’ Active',
   folder_name: 'Folder name',
-  folder_name_already_exists: 'Folder name must be unique',
+  folder_name_already_exists: 'That folder name already exists. Try a new one.',
   folder_name_required: 'Folder name is required',
   folder_at_least_one_vault_required: 'At least one vault is required',
   folders: 'Folders',
@@ -714,9 +715,10 @@ export const en = {
   node_address: 'Node Address',
   normal: 'Normal',
   not_enough_funds: 'Not enough funds',
+  no_results_found: 'No results found',
   nothing_to_add: 'Nothing to add',
-  nothing_to_add_hint:
-    'All your vaults are already sorted. Create a new vault to add it here.',
+  nothing_to_add_hint: 'All your vaults are already sorted.',
+  nothing_to_add_hint_secondary: 'Create a new vault to add it here.',
   of: 'of',
   off: 'Off',
   on: 'On',
@@ -1009,9 +1011,30 @@ export const en = {
   sends: 'Sends',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   send_invalid_receiver_address: 'Wrong address for selected chain',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_overview: 'Send Overview',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
+  send_receiver_format_hint_cardano:
+    'Enter a Cardano address that starts with addr1.',
+  send_receiver_format_hint_cosmos:
+    'Enter a Bech32 address that starts with the {{prefix}} prefix.',
+  send_receiver_format_hint_evm:
+    'Enter an EVM address that starts with 0x and has 40 hexadecimal characters.',
+  send_receiver_format_hint_qbtc: 'Enter a QBTC address that starts with qbtc.',
+  send_receiver_format_hint_ripple:
+    'Enter an XRP address that starts with the letter r.',
+  send_receiver_format_hint_solana:
+    'Enter a Base58-encoded Solana address, usually 32 to 44 characters.',
+  send_receiver_format_hint_ss58:
+    'Enter an SS58-encoded address for this network.',
+  send_receiver_format_hint_sui:
+    'Enter a Sui address that starts with 0x and has 64 hexadecimal characters.',
+  send_receiver_format_hint_ton: 'Enter a valid TON address.',
+  send_receiver_format_hint_tron:
+    'Enter a TRON address that starts with the letter T.',
+  send_receiver_format_hint_utxo:
+    'Enter a valid address for this network (bech32 or legacy format).',
   send_terms_0: "I'm sending to the right address",
   send_terms_1: 'The amount is correct',
   send_to: 'Send to',
@@ -1137,6 +1160,8 @@ export const en = {
   swap_invalid_external_recipient:
     'Recipient address is not valid for {{chain}}',
   swap_limit_orders: 'Limit orders',
+  swap_limit_unavailable:
+    'Limit orders are temporarily unavailable on THORChain',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Market',
   swap_overview: 'Swap overview',

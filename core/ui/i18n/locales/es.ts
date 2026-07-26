@@ -201,7 +201,6 @@ export const es = {
   continue_in_new_window: 'Continuar en la ventana abierta',
   contract_execution: 'Ejecución del contrato',
   copy_address: 'Copiar dirección',
-  create_folder: 'Crear carpeta',
   create_new_vault: 'Crear nueva bóveda',
   create_vault: 'Crear bóveda',
   create_referral_form: 'Crear referencia',
@@ -216,7 +215,6 @@ export const es = {
   currency: 'Divisa',
   current_expiry: 'Vencimiento actual',
   current_passcode: 'Código de acceso actual',
-  current_vaults: 'Bóvedas actuales',
   custom: 'Acción personalizada',
   custom_token: 'Token personalizado',
   customize_chains: 'Personalizar cadenas',
@@ -411,7 +409,7 @@ export const es = {
   fill_the_form: 'Rellene el formulario',
   find_custom_token: 'Encuentra un token personalizado',
   folder_name: 'Nombre de la carpeta',
-  folder_name_already_exists: 'El nombre de la carpeta debe ser único',
+  folder_name_already_exists: 'Esa carpeta ya existe. Prueba con una nueva.',
   folder_name_required: 'El nombre de la carpeta es obligatorio',
   folder_at_least_one_vault_required: 'Se requiere al menos una bóveda',
   folders: 'Carpetas',
@@ -628,8 +626,7 @@ export const es = {
   normal: 'Normal',
   not_enough_funds: 'No hay fondos suficientes',
   nothing_to_add: 'Nada que añadir',
-  nothing_to_add_hint:
-    'Todas tus bóvedas ya están ordenadas. Crea una nueva bóveda para añadirla aquí.',
+  nothing_to_add_hint: 'Todas tus bóvedas ya están ordenadas.',
   of: 'de',
   off: 'Apagado',
   on: 'En',
@@ -1723,4 +1720,33 @@ export const es = {
   ripple_undecoded_notice:
     'Esta transacción no pudo ser decodificada. Revise los detalles a continuación antes de aprobar.',
   swap_expected_payout: 'pago esperado',
+  send_receiver_format_hint_cardano:
+    'Introduce una dirección de Cardano que empiece por addr1.',
+  send_receiver_format_hint_cosmos:
+    'Introduzca una dirección Bech32 que comience con el prefijo {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Introduzca una dirección EVM que comience con 0x y tenga 40 caracteres hexadecimales.',
+  send_receiver_format_hint_qbtc:
+    'Introduzca una dirección QBTC que comience con qbtc.',
+  send_receiver_format_hint_ripple:
+    'Introduce una dirección XRP que empiece por la letra r.',
+  send_receiver_format_hint_solana:
+    'Introduzca una dirección Solana codificada en Base58, normalmente de entre 32 y 44 caracteres.',
+  send_receiver_format_hint_ss58:
+    'Introduzca una dirección codificada en SS58 para esta red.',
+  send_receiver_format_hint_sui:
+    'Introduzca una dirección Sui que comience con 0x y tenga 64 caracteres hexadecimales.',
+  send_receiver_format_hint_ton: 'Introduzca una dirección TON válida.',
+  send_receiver_format_hint_tron:
+    'Introduzca una dirección TRON que comience con la letra T.',
+  send_receiver_format_hint_utxo:
+    'Introduzca una dirección válida para esta red (formato bech32 o heredado).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Las órdenes límite no están disponibles temporalmente en THORChain',
+  active_vaults: 'Bóvedas activas',
+  edit_folder: 'Editar carpeta',
+  nothing_to_add_hint_secondary: 'Crea una nueva bóveda para agregarlo aquí.',
+  no_results_found: 'No se encontraron resultados',
+  folder_active_vault: '«{{name}}» Activo',
 }

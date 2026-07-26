@@ -3,6 +3,7 @@ import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { DepositActionOption } from '../DepositActionOption'
 
@@ -23,7 +24,7 @@ export const ThorLpPoolExplorer: FC<Props> = ({
 
   return (
     <Modal onClose={onClose} title={t('select_pool')}>
-      <VStack gap={8}>
+      <ScrollableList gap={8}>
         {pools.length > 0 ? (
           pools.map(pool => (
             <DepositActionOption
@@ -38,7 +39,17 @@ export const ThorLpPoolExplorer: FC<Props> = ({
             {t('loading')}
           </Text>
         )}
-      </VStack>
+      </ScrollableList>
     </Modal>
   )
 }
+
+const ScrollableList = styled(VStack)`
+  max-height: min(calc(100vh - 220px), 720px);
+  min-height: 0;
+  overflow-y: auto;
+
+  > * {
+    flex-shrink: 0;
+  }
+`

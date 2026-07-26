@@ -19,10 +19,20 @@ import {
   xrplResponseSource,
 } from '@clients/extension/src/inpage/providers/xrpl/protocol'
 import {
+  buildOfferCancelTx,
+  buildOfferCreateTx,
+  buildPaymentTx,
+  buildTrustSetTx,
+} from '@clients/extension/src/inpage/providers/xrpl/transactions'
+import {
+  cancelOffer,
+  createOffer,
   getAddress,
   getNetwork,
   getPublicKey,
   isInstalled,
+  sendPayment,
+  setTrustline,
   signMessage,
   signTransaction,
   submitTransaction,
@@ -300,6 +310,95 @@ describe('XRPL adapter (GemWallet-compatible)', () => {
     })
   })
 
+  describe('convenience methods', () => {
+    const encoded = Buffer.from('vulti').toString('base64')
+    const hash = 'DEADBEEF0123456789'
+    const issuer = 'rIssuer00000000000000000000000000000'
+
+    beforeEach(() => {
+      mockCallPopup.mockResolvedValue([{ hash, data: { encoded } }])
+    })
+
+    const builtTx = () =>
+      JSON.parse(mockCallPopup.mock.calls[0][0].sendTx.serialized.data[0])
+
+    it('sendPayment builds a Payment, broadcasts, and returns the hash', async () => {
+      await expect(
+        sendPayment({
+          amount: '1000000',
+          destination: 'rDestination000000000000000000000000',
+          destinationTag: 42,
+        })
+      ).resolves.toEqual({ type: 'response', result: { hash } })
+
+      expect(mockRequestAccount).toHaveBeenCalledWith(OtherChain.Ripple)
+      expect(builtTx()).toMatchObject({
+        TransactionType: 'Payment',
+        Destination: 'rDestination000000000000000000000000',
+        Amount: '1000000',
+        DestinationTag: 42,
+      })
+      expect(
+        mockCallPopup.mock.calls[0][0].sendTx.serialized.skipBroadcast
+      ).toBe(false)
+    })
+
+    it('setTrustline builds a TrustSet with a hex-encoded currency', async () => {
+      await expect(
+        setTrustline({
+          limitAmount: { currency: 'SOLO', issuer, value: '100' },
+        })
+      ).resolves.toEqual({ type: 'response', result: { hash } })
+
+      expect(builtTx()).toMatchObject({
+        TransactionType: 'TrustSet',
+        LimitAmount: {
+          currency: '534F4C4F00000000000000000000000000000000',
+          issuer,
+          value: '100',
+        },
+      })
+    })
+
+    it('createOffer builds an OfferCreate with both legs', async () => {
+      await expect(
+        createOffer({
+          takerGets: '1000000',
+          takerPays: { currency: 'USD', issuer, value: '1' },
+        })
+      ).resolves.toEqual({ type: 'response', result: { hash } })
+
+      expect(builtTx()).toMatchObject({
+        TransactionType: 'OfferCreate',
+        TakerGets: '1000000',
+        TakerPays: { currency: 'USD', issuer, value: '1' },
+      })
+    })
+
+    it('cancelOffer builds an OfferCancel', async () => {
+      await expect(cancelOffer({ offerSequence: 7 })).resolves.toEqual({
+        type: 'response',
+        result: { hash },
+      })
+
+      expect(builtTx()).toMatchObject({
+        TransactionType: 'OfferCancel',
+        OfferSequence: 7,
+      })
+    })
+
+    it('rejects a malformed payload before opening any signing flow', async () => {
+      const response = await sendRawRequest('REQUEST_SEND_PAYMENT/V3', {
+        amount: '1000000',
+      })
+
+      expect(response.error).toMatchObject({
+        message: expect.stringContaining('destination'),
+      })
+      expect(mockCallPopup).not.toHaveBeenCalled()
+    })
+  })
+
   describe('failures', () => {
     it('reports a declined grant as a reject, not a throw', async () => {
       mockRequestAccount.mockRejectedValue(
@@ -319,7 +418,7 @@ describe('XRPL adapter (GemWallet-compatible)', () => {
     })
 
     it('answers unsupported methods instead of hanging the dApp', async () => {
-      const response = await sendRawRequest('REQUEST_SET_TRUSTLINE/V3')
+      const response = await sendRawRequest('REQUEST_MINT_NFT/V3')
 
       expect(response.error).toMatchObject({
         message: expect.stringContaining('not supported'),
@@ -455,5 +554,108 @@ describe('window.vultisig.xrpl object API', () => {
 
     expect(mockRequestAccount).not.toHaveBeenCalled()
     expect(mockCallPopup).not.toHaveBeenCalled()
+  })
+
+  it('sendPayment builds a Payment and returns the hash', async () => {
+    const encoded = Buffer.from('vulti').toString('base64')
+    mockCallPopup.mockResolvedValue([{ hash: 'HASH', data: { encoded } }])
+
+    await expect(
+      xrpl.sendPayment({
+        amount: '1000000',
+        destination: 'rDestination000000000000000000000000',
+      })
+    ).resolves.toEqual({ hash: 'HASH' })
+
+    const tx = JSON.parse(
+      mockCallPopup.mock.calls[0][0].sendTx.serialized.data[0]
+    )
+    expect(tx).toMatchObject({ TransactionType: 'Payment', Amount: '1000000' })
+  })
+})
+
+/**
+ * Pure mapping from the GemWallet convenience-method payloads to XRPL
+ * transaction JSON. These need no wallet — the popup fills Account/Fee/Sequence.
+ */
+describe('XRPL transaction builders', () => {
+  const issuer = 'rIssuer00000000000000000000000000000'
+
+  it('buildPaymentTx maps an XRP payment with a destination tag', () => {
+    expect(
+      buildPaymentTx({
+        amount: '1000000',
+        destination: 'rDest',
+        destinationTag: 42,
+      })
+    ).toEqual({
+      TransactionType: 'Payment',
+      Destination: 'rDest',
+      Amount: '1000000',
+      DestinationTag: 42,
+    })
+  })
+
+  it('buildPaymentTx hex-encodes a non-standard token currency and maps memos', () => {
+    const tx = buildPaymentTx({
+      amount: { currency: 'SOLO', issuer, value: '1.5' },
+      destination: 'rDest',
+      flags: 131072,
+      memos: [{ memo: { memoType: 'CD', memoData: 'AB' } }],
+    })
+
+    expect(tx.Amount).toEqual({
+      currency: '534F4C4F00000000000000000000000000000000',
+      issuer,
+      value: '1.5',
+    })
+    expect(tx.Flags).toBe(131072)
+    expect(tx.Memos).toEqual([{ Memo: { MemoType: 'CD', MemoData: 'AB' } }])
+  })
+
+  it('buildPaymentTx leaves a standard 3-char currency untouched', () => {
+    const tx = buildPaymentTx({
+      amount: { currency: 'USD', issuer, value: '1' },
+      destination: 'rDest',
+    })
+
+    expect(tx.Amount).toEqual({ currency: 'USD', issuer, value: '1' })
+  })
+
+  it('buildPaymentTx rejects a missing destination', () => {
+    expect(() => buildPaymentTx({ amount: '1000000' })).toThrow(/destination/)
+  })
+
+  it('buildTrustSetTx requires an issued-currency limit', () => {
+    expect(
+      buildTrustSetTx({
+        limitAmount: { currency: 'USD', issuer, value: '100' },
+      })
+    ).toEqual({
+      TransactionType: 'TrustSet',
+      LimitAmount: { currency: 'USD', issuer, value: '100' },
+    })
+    expect(() => buildTrustSetTx({ limitAmount: '100' })).toThrow(/malformed/i)
+  })
+
+  it('buildOfferCreateTx maps both legs', () => {
+    expect(
+      buildOfferCreateTx({
+        takerGets: '1000000',
+        takerPays: { currency: 'USD', issuer, value: '1' },
+      })
+    ).toEqual({
+      TransactionType: 'OfferCreate',
+      TakerGets: '1000000',
+      TakerPays: { currency: 'USD', issuer, value: '1' },
+    })
+  })
+
+  it('buildOfferCancelTx maps the offer sequence and rejects a missing one', () => {
+    expect(buildOfferCancelTx({ offerSequence: 7 })).toEqual({
+      TransactionType: 'OfferCancel',
+      OfferSequence: 7,
+    })
+    expect(() => buildOfferCancelTx({})).toThrow(/offerSequence/)
   })
 })

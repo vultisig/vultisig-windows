@@ -26,7 +26,7 @@ export const LongMessage: Story = {
   name: 'Long text message',
   args: {
     children:
-      'Your settings have been synced across all logged‑in devices. You can safely close this window.',
+      'Your settings have been synced across all logged-in devices. You can safely close this window.',
   },
 }
 
