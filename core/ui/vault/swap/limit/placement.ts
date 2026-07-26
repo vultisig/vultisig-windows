@@ -20,6 +20,7 @@ type GetLimitOrderBlockerInput = {
   /** Whether the two sides are the same asset. */
   isSameAsset: boolean
   amount: bigint | null
+  /** Spendable balance; `undefined` while still loading. */
   balance: bigint | undefined
   price: number | null
   /** Live `EnableAdvSwapQueue` state; `undefined` while still loading. */
@@ -82,7 +83,10 @@ export const getLimitOrderBlocker = ({
     return 'noAmount'
   }
 
-  if (balance !== undefined && amount > balance) {
+  // Fails closed like the gates above: while the balance query is loading,
+  // affordability is unknown, so placement stays blocked rather than letting an
+  // unaffordable order through to signing.
+  if (balance === undefined || amount > balance) {
     return 'insufficientBalance'
   }
 

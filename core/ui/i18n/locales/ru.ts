@@ -1727,7 +1727,7 @@ export const ru = {
   nothing_to_add_hint_secondary:
     'Создайте новое хранилище, чтобы добавить его сюда.',
   no_results_found: 'Результаты не найдены',
-  folder_active_vault: '&#39; {{name}} &#39; Активен',
+  folder_active_vault: '«{{name}}» Активен',
   swap_limit_asset: 'Объект',
   swap_limit_buy: 'Купить',
   swap_limit_execute_when: 'Выполнить при',

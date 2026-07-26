@@ -31,6 +31,8 @@ import { getLimitOrderBlocker, LimitOrderBlocker } from '../limit/placement'
 import {
   getLimitPriceWarning,
   getPresetPrice,
+  LimitPricePreset,
+  limitPricePresets,
   LimitPriceWarning,
   parseLimitPrice,
   quantizeTargetPrice,
@@ -195,6 +197,19 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     memoError,
   })
 
+  // Which preset (if any) the current rate corresponds to, so its pill reads as
+  // selected. Compared after quantizing both sides, since that is the precision
+  // a preset click actually writes.
+  const activePreset: LimitPricePreset | undefined =
+    rate !== null && marketRate
+      ? limitPricePresets.find(
+          preset =>
+            quantizeTargetPrice(
+              getPresetPrice({ marketPrice: marketRate, preset })
+            ) === rate
+        )
+      : undefined
+
   const priceWarning =
     rate !== null
       ? getLimitPriceWarning({ price: rate, marketPrice: marketRate })
@@ -304,6 +319,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
                   : undefined
               }
               hasMarketPrice={Boolean(marketRate)}
+              activePreset={activePreset}
               onPresetSelect={preset => {
                 if (marketRate) {
                   setPriceFromRate(

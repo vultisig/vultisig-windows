@@ -1730,7 +1730,7 @@ export const nl = {
   nothing_to_add_hint_secondary:
     'Maak een nieuwe kluis aan om deze hier toe te voegen.',
   no_results_found: 'Geen resultaten gevonden',
-  folder_active_vault: '&#39; {{name}} &#39; Actief',
+  folder_active_vault: '‘{{name}}’ Actief',
   swap_limit_asset: 'Bezit',
   swap_limit_buy: 'Kopen',
   swap_limit_execute_when: 'Uitvoeren wanneer',

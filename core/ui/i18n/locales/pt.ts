@@ -1748,7 +1748,7 @@ export const pt = {
   edit_folder: 'Pasta de edição',
   nothing_to_add_hint_secondary: 'Crie um novo cofre para adicioná-lo aqui.',
   no_results_found: 'Nenhum resultado encontrado',
-  folder_active_vault: '&#39; {{name}} &#39; Ativo',
+  folder_active_vault: '“{{name}}” Ativo',
   swap_limit_asset: 'Ativo',
   swap_limit_buy: 'Comprar',
   swap_limit_execute_when: 'Executar quando',

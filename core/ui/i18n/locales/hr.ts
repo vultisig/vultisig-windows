@@ -1719,7 +1719,7 @@ export const hr = {
   nothing_to_add_hint_secondary:
     'Izradite novi trezor da biste ga dodali ovdje.',
   no_results_found: 'Nisu pronađeni rezultati',
-  folder_active_vault: '&#39; {{name}} &#39; Aktivno',
+  folder_active_vault: '„{{name}}“ Aktivno',
   swap_limit_asset: 'Imovina',
   swap_limit_buy: 'Kupiti',
   swap_limit_execute_when: 'Izvrši kada',

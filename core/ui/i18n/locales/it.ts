@@ -1752,7 +1752,7 @@ export const it = {
   edit_folder: 'Modifica cartella',
   nothing_to_add_hint_secondary: 'Crea un nuovo vault per aggiungerlo qui.',
   no_results_found: 'Nessun risultato trovato',
-  folder_active_vault: '&#39; {{name}} &#39; Attivo',
+  folder_active_vault: '«{{name}}» Attivo',
   swap_limit_asset: 'Risorsa',
   swap_limit_buy: 'Acquistare',
   swap_limit_execute_when: 'Eseguire quando',
@@ -1760,7 +1760,7 @@ export const it = {
   swap_limit_sell: 'Vendere',
   swap_limit_blocker_chain_unavailable:
     'Questa catena è temporaneamente interrotta su THORChain',
-  swap_limit_blocker_insufficient_balance: 'L&#39;importo supera il tuo saldo',
+  swap_limit_blocker_insufficient_balance: "L'importo supera il tuo saldo",
   swap_limit_blocker_memo_invalid:
     'Questo ordine non può essere effettuato come inserito',
   swap_limit_blocker_no_amount: 'Inserisci la quantità da vendere',
@@ -1776,7 +1776,7 @@ export const it = {
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Scadenza',
-  swap_limit_place_order: 'Effettua l&#39;ordine',
+  swap_limit_place_order: "Effettua l'ordine",
   swap_limit_place_pending_signing:
     'Il supporto per la firma è in arrivo: controlla il tuo ordine qui sotto.',
   swap_limit_review_heading: 'Stai effettuando un ordine limite',
@@ -1784,7 +1784,7 @@ export const it = {
   swap_limit_review_title: 'Ordine di revisione',
   swap_limit_price_market: 'Mercato',
   swap_limit_warning_at_or_below_market:
-    'Questo prezzo è pari o inferiore al prezzo di mercato, quindi l&#39;ordine potrebbe essere evaso immediatamente.',
+    "Questo prezzo è pari o inferiore al prezzo di mercato, quindi l'ordine potrebbe essere evaso immediatamente.",
   swap_limit_warning_far_above_market:
-    'Questo prezzo è di gran lunga superiore a quello di mercato e l&#39;offerta potrebbe scadere senza che l&#39;ordine venga evaso.',
+    "Questo prezzo è di gran lunga superiore a quello di mercato e l'offerta potrebbe scadere senza che l'ordine venga evaso.",
 }

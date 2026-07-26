@@ -1746,7 +1746,7 @@ export const es = {
   edit_folder: 'Editar carpeta',
   nothing_to_add_hint_secondary: 'Crea una nueva bóveda para agregarlo aquí.',
   no_results_found: 'No se encontraron resultados',
-  folder_active_vault: '&#39; {{name}} &#39; Activo',
+  folder_active_vault: '«{{name}}» Activo',
   swap_limit_asset: 'Activo',
   swap_limit_buy: 'Comprar',
   swap_limit_execute_when: 'Ejecutar cuando',

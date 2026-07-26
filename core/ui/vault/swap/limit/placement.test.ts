@@ -79,6 +79,14 @@ describe('getLimitOrderBlocker', () => {
     ).toBeUndefined()
   })
 
+  // Consistent with the other live gates: affordability is unknown while the
+  // balance query loads, so placement stays blocked.
+  it('blocks while the balance is still loading', () => {
+    expect(getLimitOrderBlocker({ ...placeable, balance: undefined })).toBe(
+      'insufficientBalance'
+    )
+  })
+
   it.each([null, 0])('blocks a %s price', price => {
     expect(getLimitOrderBlocker({ ...placeable, price })).toBe('noPrice')
   })

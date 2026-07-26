@@ -38,6 +38,8 @@ type LimitExecuteWhenProps = {
   secondaryLabel: string | undefined
   /** Presets can only be applied once a market price exists to anchor them. */
   hasMarketPrice: boolean
+  /** The preset whose price matches the current rate, if any, so its pill highlights. */
+  activePreset: LimitPricePreset | undefined
   /** Current market price, already formatted in the active unit. */
   marketLabel: string | undefined
   onPresetSelect: (preset: LimitPricePreset) => void
@@ -63,6 +65,7 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
   valueSuffix,
   secondaryLabel,
   hasMarketPrice,
+  activePreset,
   marketLabel,
   onPresetSelect,
   expiryHours,
@@ -137,11 +140,16 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
           <Pill
             key={preset}
             type="button"
-            isActive={false}
+            isActive={preset === activePreset}
             disabled={!hasMarketPrice}
             onClick={() => onPresetSelect(preset)}
           >
-            <Text size={12} weight={500} as="span" color="supporting">
+            <Text
+              size={12}
+              weight={500}
+              as="span"
+              color={preset === activePreset ? 'contrast' : 'supporting'}
+            >
               {preset === 0 ? t('swap_limit_price_market') : `+${preset}%`}
             </Text>
           </Pill>
