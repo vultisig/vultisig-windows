@@ -1,13 +1,38 @@
-import { centerContent } from '@lib/ui/css/centerContent'
-import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
-import { round } from '@lib/ui/css/round'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
-import { ChildrenProp } from '@lib/ui/props'
+import { ChildrenProp, ValueProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { keyframes } from 'styled-components'
 
-import { hStack } from '../layout/Stack'
+import { hStack, vStack } from '../layout/Stack'
+import { ToastStatus } from './ToastStatus'
+import { ToastStatusIcon } from './ToastStatusIcon'
+
+type ToastItemProps = ChildrenProp &
+  ValueProp<ToastStatus> & {
+    duration: number
+  }
+
+/**
+ * Bottom-anchored toast card. Its status ring fills over `duration`, so the
+ * ring completing shows the user the toast is about to dismiss.
+ */
+export const ToastItem = ({ value, duration, children }: ToastItemProps) => {
+  return (
+    <BodyPortal>
+      <Position>
+        <Card aria-atomic="true" aria-live="polite" role="status">
+          <ToastStatusIcon duration={duration} value={value} />
+          <Text color="contrast" size={13}>
+            {children}
+          </Text>
+        </Card>
+      </Position>
+    </BodyPortal>
+  )
+}
 
 const appearFromBottom = keyframes`
   from {
@@ -38,24 +63,22 @@ const Position = styled.div`
   })};
 `
 
-const Container = styled.div`
-  ${round};
-  padding: 8px 12px;
-  ${horizontalPadding(20)};
+const Card = styled.div`
+  ${vStack({
+    gap: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  })};
+
+  width: 100%;
+  padding: 16px;
+  border-radius: 24px;
+  border: 1px solid ${getColor('foregroundSuper')};
   background: ${getColor('foregroundExtra')};
-  ${centerContent};
-  font-weight: 600;
-  color: ${getColor('contrast')};
+  text-align: center;
+  overflow-wrap: anywhere;
 
-  overflow-x: auto;
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: 340px;
+  }
 `
-
-export const ToastItem = ({ children }: ChildrenProp) => {
-  return (
-    <BodyPortal>
-      <Position>
-        <Container>{children}</Container>
-      </Position>
-    </BodyPortal>
-  )
-}

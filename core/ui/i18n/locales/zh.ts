@@ -1635,4 +1635,5 @@ export const zh = {
     '这个价格等于或低于市场价，所以订单可能立即成交。',
   swap_limit_warning_far_above_market:
     '这个价格远高于市场价，而且可能最终无法成交。',
+  chain_address_copied: '{{chain}}地址已复制',
 }

@@ -7,8 +7,6 @@ import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { KeysignNotificationSentToast } from './KeysignNotificationSentToast'
-
 /**
  * Ensures at most one successful auto-notify per keysign session (survives Strict Mode remounts).
  * Manual resend is unaffected.
@@ -80,9 +78,6 @@ export const useKeysignDiscoveryNotify = ({
         message: t('notification_sent_successfully'),
         // iOS uses ~1.5s; slightly longer so the toast stays visible after network latency.
         duration: 2000,
-        renderContent: message => (
-          <KeysignNotificationSentToast message={message} />
-        ),
       })
       setCooldownSec(30)
       return true

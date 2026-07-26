@@ -1787,4 +1787,5 @@ export const it = {
     "Questo prezzo è pari o inferiore al prezzo di mercato, quindi l'ordine potrebbe essere evaso immediatamente.",
   swap_limit_warning_far_above_market:
     "Questo prezzo è di gran lunga superiore a quello di mercato e l'offerta potrebbe scadere senza che l'ordine venga evaso.",
+  chain_address_copied: 'Indirizzo {{chain}} copiato',
 }

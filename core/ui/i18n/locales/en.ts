@@ -153,6 +153,7 @@ export const en = {
       },
     },
   },
+  chain_address_copied: '{{chain}} address copied',
   chain_message_deposit: '{{chain}} message deposit',
   chains: 'Chains',
   change: 'Change',

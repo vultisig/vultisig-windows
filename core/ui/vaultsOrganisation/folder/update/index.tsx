@@ -235,7 +235,10 @@ const ManageFolderVaults = ({
 
         const handleRemove = () => {
           if (items.length <= 1) {
-            addToast({ message: t('folder_at_least_one_vault_required') })
+            addToast({
+              message: t('folder_at_least_one_vault_required'),
+              status: 'warning',
+            })
             return
           }
 

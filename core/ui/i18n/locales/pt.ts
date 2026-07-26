@@ -1784,4 +1784,5 @@ export const pt = {
     'Este preço está igual ou abaixo do preço de mercado, portanto a ordem pode ser executada imediatamente.',
   swap_limit_warning_far_above_market:
     'Este preço está muito acima do mercado e pode expirar sem ser atendido.',
+  chain_address_copied: 'Endereço {{chain}} copiado',
 }

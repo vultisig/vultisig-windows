@@ -27,6 +27,7 @@ export const DepositPrompt = (state: CoreViewState<'deposit'>) => {
             addToast({
               message: `${t('function_unavailble')} ${chainActionsRecord[state.coin.chain as DepositEnabledChain]}`,
               duration: toastDuration,
+              status: 'warning',
             })
 
             return
