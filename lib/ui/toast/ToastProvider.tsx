@@ -7,7 +7,6 @@ import { ToastStatus } from './ToastStatus'
 
 type Toast = {
   id: number
-  createdAt: number
   message: string
   duration: number
   status: ToastStatus
@@ -28,15 +27,16 @@ export const ToastProvider = ({ children }: ChildrenProp) => {
   const [toast, setToast] = useState<Toast | null>(null)
   const nextToastId = useRef(0)
 
+  // Runs once the keyed ToastItem has committed, which is also when its ring
+  // animation starts — so both dismissal paths share one start signal. Timing
+  // from `addToast` instead would subtract the handler-to-commit gap and cut
+  // the ring off short.
   useEffect(() => {
     if (!toast) return
 
-    const timeout = setTimeout(
-      () => {
-        setToast(null)
-      },
-      toast.createdAt + toast.duration - Date.now()
-    )
+    const timeout = setTimeout(() => {
+      setToast(null)
+    }, toast.duration)
 
     return () => {
       clearTimeout(timeout)
@@ -47,7 +47,6 @@ export const ToastProvider = ({ children }: ChildrenProp) => {
     ({ message, duration = toastDefaultDuration, status = 'success' }) => {
       setToast({
         id: nextToastId.current++,
-        createdAt: Date.now(),
         message,
         duration,
         status,
