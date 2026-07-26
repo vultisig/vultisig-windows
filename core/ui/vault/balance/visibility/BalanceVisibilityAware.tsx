@@ -1,4 +1,3 @@
-import { AsteriskIcon } from '@lib/ui/icons/AsteriskIcon'
 import { ChildrenProp } from '@lib/ui/props'
 import { range } from '@vultisig/lib-utils/array/range'
 import styled from 'styled-components'
@@ -17,10 +16,19 @@ const hiddenContentLength: Record<BalanceSize, number> = {
   xxxl: 34,
 }
 
-const Icon = styled(AsteriskIcon)`
-  &:not(:first-child) {
-    margin-left: -0.32em;
-  }
+const HiddenBalance = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24em;
+  vertical-align: middle;
+`
+
+const Dot = styled.span`
+  flex-shrink: 0;
+  width: 0.28em;
+  height: 0.28em;
+  border-radius: 50%;
+  background-color: currentColor;
 `
 
 export const BalanceVisibilityAware = ({
@@ -34,10 +42,10 @@ export const BalanceVisibilityAware = ({
   }
 
   return (
-    <>
+    <HiddenBalance>
       {range(hiddenContentLength[size]).map(key => (
-        <Icon key={key} />
+        <Dot key={key} />
       ))}
-    </>
+    </HiddenBalance>
   )
 }
