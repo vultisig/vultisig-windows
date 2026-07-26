@@ -3,7 +3,6 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useHandleVaultChainItemPress } from '@core/ui/vault/page/components/useHandleVaultChainItemPress'
-import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -52,18 +51,20 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
     e.stopPropagation()
     e.preventDefault()
 
-    try {
-      await attempt(() => navigator.clipboard.writeText(address))
+    const result = await attempt(() => navigator.clipboard.writeText(address))
 
-      addToast({
-        message: '',
-        renderContent: () => <VaultAddressCopyToast value={chain} />,
-      })
-    } catch {
+    if ('error' in result) {
       addToast({
         message: t('failed_to_copy_address'),
+        status: 'error',
       })
+
+      return
     }
+
+    addToast({
+      message: t('chain_address_copied', { chain }),
+    })
   }
 
   const formatFiatAmount = useFormatFiatAmount()

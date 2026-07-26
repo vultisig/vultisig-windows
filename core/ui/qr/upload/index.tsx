@@ -45,7 +45,7 @@ export const UploadQrPage = () => {
         if (coin) {
           navigate({ id: 'send', state: { coin, address: value } })
         } else {
-          addToast({ message: t('failed_to_read_qr_code') })
+          addToast({ message: t('failed_to_read_qr_code'), status: 'error' })
         }
       } else {
         navigate({ id: 'deeplink', state: { url: value } })

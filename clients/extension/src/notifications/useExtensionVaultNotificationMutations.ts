@@ -89,6 +89,7 @@ export const useExtensionToggleVaultNotificationMutation = () => {
         message: enabled
           ? t('desktop_push_notification_enable_failed')
           : t('desktop_push_notification_disable_failed'),
+        status: 'error',
       })
     },
   })
@@ -146,6 +147,7 @@ export const useExtensionToggleAllVaultsNotificationMutation = () => {
         message: enabled
           ? t('desktop_push_notification_enable_failed')
           : t('desktop_push_notification_disable_failed'),
+        status: 'error',
       })
     },
   })

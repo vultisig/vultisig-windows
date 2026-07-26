@@ -19,6 +19,7 @@ export const ReferralsGuard = ({ children }: ChildrenProp) => {
     if (notEligibleForReferrals) {
       addToast({
         message: t('thorchain_address_required_for_referrals'),
+        status: 'warning',
       })
 
       navigate({

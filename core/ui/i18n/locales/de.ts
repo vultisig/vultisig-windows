@@ -1798,4 +1798,5 @@ export const de = {
     'Dieser Preis entspricht dem Marktpreis oder liegt darunter, daher kann die Order sofort ausgeführt werden.',
   swap_limit_warning_far_above_market:
     'Dieser Preis liegt weit über dem Marktpreis und es besteht die Möglichkeit, dass die Transaktion ungenutzt verfällt.',
+  chain_address_copied: 'Adresse {{chain}} kopiert',
 }
