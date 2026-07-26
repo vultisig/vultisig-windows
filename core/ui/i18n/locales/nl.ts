@@ -1730,6 +1730,7 @@ export const nl = {
   nothing_to_add_hint_secondary:
     'Maak een nieuwe kluis aan om deze hier toe te voegen.',
   no_results_found: 'Geen resultaten gevonden',
+  folder_active_vault: '&#39; {{name}} &#39; Actief',
   swap_limit_asset: 'Bezit',
   swap_limit_buy: 'Kopen',
   swap_limit_execute_when: 'Uitvoeren wanneer',
@@ -1749,19 +1750,19 @@ export const nl = {
   swap_limit_blocker_no_destination:
     'Er is geen uitbetalingsadres beschikbaar voor de doelketen.',
   swap_limit_blocker_same_asset: 'Kies twee verschillende activa.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Vervaldatum',
   swap_limit_place_order: 'Bestelling plaatsen',
   swap_limit_place_pending_signing:
     'Ondersteuning voor ondertekening is onderweg — controleer uw bestelling hieronder.',
   swap_limit_review_heading: 'U plaatst een limietorder.',
-  swap_limit_review_target_price: 'Richtprijs',
-  swap_limit_review_title: 'Beoordelingsvolgorde',
+  swap_limit_review_target_price: 'Doelprijs',
+  swap_limit_review_title: 'Beoordelingsbestelling',
   swap_limit_price_market: 'Markt',
   swap_limit_warning_at_or_below_market:
     'Deze prijs ligt op of onder de marktprijs, waardoor de bestelling mogelijk direct wordt uitgevoerd.',
   swap_limit_warning_far_above_market:
     'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

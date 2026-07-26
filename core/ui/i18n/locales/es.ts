@@ -1746,6 +1746,7 @@ export const es = {
   edit_folder: 'Editar carpeta',
   nothing_to_add_hint_secondary: 'Crea una nueva bóveda para agregarlo aquí.',
   no_results_found: 'No se encontraron resultados',
+  folder_active_vault: '&#39; {{name}} &#39; Activo',
   swap_limit_asset: 'Activo',
   swap_limit_buy: 'Comprar',
   swap_limit_execute_when: 'Ejecutar cuando',
@@ -1765,6 +1766,9 @@ export const es = {
   swap_limit_blocker_no_destination:
     'No hay dirección de pago disponible para la cadena de destino.',
   swap_limit_blocker_same_asset: 'Elige dos activos diferentes',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Expiración',
   swap_limit_place_order: 'Realizar pedido',
   swap_limit_place_pending_signing:
@@ -1777,7 +1781,4 @@ export const es = {
     'Este precio está en o por debajo del precio de mercado, por lo que la orden podría ejecutarse inmediatamente.',
   swap_limit_warning_far_above_market:
     'Este precio está muy por encima del precio de mercado y podría expirar sin que se complete la transacción.',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

@@ -1727,6 +1727,7 @@ export const ru = {
   nothing_to_add_hint_secondary:
     'Создайте новое хранилище, чтобы добавить его сюда.',
   no_results_found: 'Результаты не найдены',
+  folder_active_vault: '&#39; {{name}} &#39; Активен',
   swap_limit_asset: 'Объект',
   swap_limit_buy: 'Купить',
   swap_limit_execute_when: 'Выполнить при',
@@ -1746,6 +1747,9 @@ export const ru = {
   swap_limit_blocker_no_destination:
     'Адрес для выплат в целевой цепочке недоступен.',
   swap_limit_blocker_same_asset: 'Выберите два разных актива',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Срок годности',
   swap_limit_place_order: 'Оформить заказ',
   swap_limit_place_pending_signing:
@@ -1758,7 +1762,4 @@ export const ru = {
     'Эта цена соответствует рыночной или ниже, поэтому заказ может быть исполнен немедленно.',
   swap_limit_warning_far_above_market:
     'Эта цена значительно выше рыночной и может остаться нереализованной.',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

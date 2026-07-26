@@ -1710,6 +1710,7 @@ export const ko = {
   edit_folder: '폴더 편집',
   nothing_to_add_hint_secondary: '여기에 추가하려면 새 볼트를 생성하세요.',
   no_results_found: '검색 결과가 없습니다.',
+  folder_active_vault: '&#39; {{name}} &#39; 활성',
   swap_limit_asset: '유산',
   swap_limit_buy: '구입하다',
   swap_limit_execute_when: '실행 시점',
@@ -1729,6 +1730,9 @@ export const ko = {
   swap_limit_blocker_no_destination:
     '대상 체인에 대한 지급 주소를 사용할 수 없습니다.',
   swap_limit_blocker_same_asset: '서로 다른 두 가지 자산을 선택하세요',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: '만료',
   swap_limit_place_order: '주문하기',
   swap_limit_place_pending_signing:
@@ -1741,7 +1745,4 @@ export const ko = {
     '이 가격은 시장 가격과 같거나 그 이하이므로 주문이 즉시 체결될 수 있습니다.',
   swap_limit_warning_far_above_market:
     '이 가격은 시장가보다 훨씬 높으며, 거래가 성사되지 않고 만료될 가능성이 있습니다.',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

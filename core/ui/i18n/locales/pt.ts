@@ -1748,6 +1748,7 @@ export const pt = {
   edit_folder: 'Pasta de edição',
   nothing_to_add_hint_secondary: 'Crie um novo cofre para adicioná-lo aqui.',
   no_results_found: 'Nenhum resultado encontrado',
+  folder_active_vault: '&#39; {{name}} &#39; Ativo',
   swap_limit_asset: 'Ativo',
   swap_limit_buy: 'Comprar',
   swap_limit_execute_when: 'Executar quando',
@@ -1767,6 +1768,9 @@ export const pt = {
   swap_limit_blocker_no_destination:
     'Não há endereço de pagamento disponível para a cadeia de destino.',
   swap_limit_blocker_same_asset: 'Escolha dois ativos diferentes.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Termo',
   swap_limit_place_order: 'Fazer pedido',
   swap_limit_place_pending_signing:
@@ -1780,7 +1784,4 @@ export const pt = {
     'Este preço está igual ou abaixo do preço de mercado, portanto a ordem pode ser executada imediatamente.',
   swap_limit_warning_far_above_market:
     'Este preço está muito acima do mercado e pode expirar sem ser atendido.',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

@@ -1762,6 +1762,7 @@ export const de = {
   nothing_to_add_hint_secondary:
     'Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
   no_results_found: 'Keine Ergebnisse gefunden',
+  folder_active_vault: '&#39; {{name}} &#39; Aktiv',
   swap_limit_asset: 'Vermögenswert',
   swap_limit_buy: 'Kaufen',
   swap_limit_execute_when: 'Ausführen, wenn',
@@ -1782,6 +1783,9 @@ export const de = {
   swap_limit_blocker_no_destination:
     'Für die Zielkette ist keine Auszahlungsadresse verfügbar.',
   swap_limit_blocker_same_asset: 'Wählen Sie zwei verschiedene Vermögenswerte.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Ablauf',
   swap_limit_place_order: 'Bestellung aufgeben',
   swap_limit_place_pending_signing:
@@ -1794,7 +1798,4 @@ export const de = {
     'Dieser Preis entspricht dem Marktpreis oder liegt darunter, daher kann die Order sofort ausgeführt werden.',
   swap_limit_warning_far_above_market:
     'Dieser Preis liegt weit über dem Marktpreis und es besteht die Möglichkeit, dass die Transaktion ungenutzt verfällt.',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

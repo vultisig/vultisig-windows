@@ -1719,6 +1719,7 @@ export const hr = {
   nothing_to_add_hint_secondary:
     'Izradite novi trezor da biste ga dodali ovdje.',
   no_results_found: 'Nisu pronađeni rezultati',
+  folder_active_vault: '&#39; {{name}} &#39; Aktivno',
   swap_limit_asset: 'Imovina',
   swap_limit_buy: 'Kupiti',
   swap_limit_execute_when: 'Izvrši kada',
@@ -1738,6 +1739,9 @@ export const hr = {
   swap_limit_blocker_no_destination:
     'Nema dostupne adrese za isplatu za ciljani lanac',
   swap_limit_blocker_same_asset: 'Odaberite dva različita elementa',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Istek',
   swap_limit_place_order: 'Naruči',
   swap_limit_place_pending_signing:
@@ -1750,7 +1754,4 @@ export const hr = {
     'Ova cijena je na ili ispod tržišne, tako da se narudžba može odmah ispuniti',
   swap_limit_warning_far_above_market:
     'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

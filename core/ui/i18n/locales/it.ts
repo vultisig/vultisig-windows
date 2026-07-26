@@ -1752,6 +1752,7 @@ export const it = {
   edit_folder: 'Modifica cartella',
   nothing_to_add_hint_secondary: 'Crea un nuovo vault per aggiungerlo qui.',
   no_results_found: 'Nessun risultato trovato',
+  folder_active_vault: '&#39; {{name}} &#39; Attivo',
   swap_limit_asset: 'Risorsa',
   swap_limit_buy: 'Acquistare',
   swap_limit_execute_when: 'Eseguire quando',
@@ -1771,6 +1772,9 @@ export const it = {
   swap_limit_blocker_no_destination:
     'Non è disponibile alcun indirizzo di pagamento per la blockchain di destinazione.',
   swap_limit_blocker_same_asset: 'Scegli due risorse diverse',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Scadenza',
   swap_limit_place_order: 'Effettua l&#39;ordine',
   swap_limit_place_pending_signing:
@@ -1783,7 +1787,4 @@ export const it = {
     'Questo prezzo è pari o inferiore al prezzo di mercato, quindi l&#39;ordine potrebbe essere evaso immediatamente.',
   swap_limit_warning_far_above_market:
     'Questo prezzo è di gran lunga superiore a quello di mercato e l&#39;offerta potrebbe scadere senza che l&#39;ordine venga evaso.',
-  swap_limit_expiry_12h: '12h',
-  swap_limit_expiry_24h: '24h',
-  swap_limit_expiry_3d: '3d',
 }

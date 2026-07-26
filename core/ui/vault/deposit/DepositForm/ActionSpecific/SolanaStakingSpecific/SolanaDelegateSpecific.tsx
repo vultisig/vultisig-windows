@@ -1,18 +1,16 @@
-import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { SolanaValidatorPickerField } from '@core/ui/chain/solana/staking/components/SolanaValidatorPickerField'
-import { useSolanaRentReserveQuery } from '@core/ui/chain/solana/staking/queries/useSolanaRentReserveQuery'
+import { useSolanaStakeableBalance } from '@core/ui/vault/deposit/hooks/useSolanaStakeableBalance'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
+import { getFieldErrorMessage } from '@core/ui/vault/deposit/utils/getFieldErrorMessage'
 import { PercentageSelector } from '@lib/ui/inputs/PercentageSelector'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { solanaConfig } from '@vultisig/core-chain/chains/solana/solanaConfig'
-import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
-import { Controller } from 'react-hook-form'
+import { Controller, useFormState } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -31,15 +29,12 @@ export const SolanaDelegateSpecific = () => {
   const { t } = useTranslation()
   const [{ control, setValue }] = useDepositFormHandlers()
   const [coin] = useDepositCoin()
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
-  const rentReserveQuery = useSolanaRentReserveQuery()
+  const { errors } = useFormState({ control })
+  const { rentReserve, stakeable: stakeableUnits } = useSolanaStakeableBalance()
 
-  const balanceUnits = balanceQuery.data ?? 0n
-  const rentReserve = rentReserveQuery.data ?? 0n
-  const reserved = rentReserve + BigInt(solanaConfig.baseFee)
-  const stakeableUnits = balanceUnits > reserved ? balanceUnits - reserved : 0n
   const stakeableUi = fromChainAmount(stakeableUnits, coin.decimals)
   const rentReserveUi = fromChainAmount(rentReserve, coin.decimals)
+  const amountError = getFieldErrorMessage(errors, 'amount')
 
   return (
     <Layout>
@@ -60,6 +55,11 @@ export const SolanaDelegateSpecific = () => {
             )}
           />
         </CenteredAmount>
+        {amountError ? (
+          <Text size={13} color="danger" centerHorizontally>
+            {amountError}
+          </Text>
+        ) : null}
         <Controller
           control={control}
           name="amount"
