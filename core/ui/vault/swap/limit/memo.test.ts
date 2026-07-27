@@ -158,4 +158,29 @@ describe('getLimitSwapReceiveChainAmount', () => {
       })
     ).toThrow()
   })
+
+  // 100 sats at 0.5 USDC/BTC is a LIM of 50 in THORChain's 1e8 fixed point --
+  // nonzero, so the memo builds -- but USDC's 6 decimals rescale it to 0. Passing
+  // that through as `expectedToAmount` would show a co-signer they receive
+  // nothing while the memo they sign still carries a real floor.
+  it('throws when a nonzero LIM underflows the target decimals', () => {
+    const order = {
+      fromCoin: btcCoin,
+      toCoin: usdcCoin,
+      amount: 100n,
+      targetPrice: 0.5,
+    } as const
+
+    expect(
+      buildLimitSwapMemoForCoins({
+        ...order,
+        expiryHours: 24,
+        destinationAddress: evmAddress,
+      })
+    ).toContain(':50/14400/0')
+
+    expect(() => getLimitSwapReceiveChainAmount(order)).toThrow(
+      /rounds to zero USDC/
+    )
+  })
 })

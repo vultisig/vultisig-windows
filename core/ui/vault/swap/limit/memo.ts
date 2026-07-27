@@ -102,19 +102,35 @@ type GetLimitSwapReceiveChainAmountInput = GetLimitSwapReceiveAmountInput & {
  * The SDK's LIM is in THORChain's 1e8 fixed point; rescale it to the target
  * coin's decimals with bigint math so no precision is lost passing it to signing
  * (where a `Number` round-trip could emit scientific notation on a co-signer).
+ *
+ * Throws when a nonzero LIM rescales to zero — possible for targets with fewer
+ * than 8 decimals, where a dust minimum-received rounds away entirely. Forwarding
+ * `0` there would tell a co-signer they receive nothing while the signed memo
+ * still carries a real floor, so this fails loud like the memo builder does on
+ * its own zero-LIM case.
  */
 export const getLimitSwapReceiveChainAmount = ({
   fromCoin,
   toCoin,
   amount,
   targetPrice,
-}: GetLimitSwapReceiveChainAmountInput): bigint =>
-  (getLimitSwapLimitAmount({
+}: GetLimitSwapReceiveChainAmountInput): bigint => {
+  const limit = getLimitSwapLimitAmount({
     source_amount: toThorchainFixedPoint({
       amount,
       decimals: fromCoin.decimals,
     }),
     target_price: targetPrice,
-  }) *
-    10n ** BigInt(toCoin.decimals)) /
-  thorchainFixedPointScale
+  })
+
+  const receiveChainAmount =
+    (limit * 10n ** BigInt(toCoin.decimals)) / thorchainFixedPointScale
+
+  if (receiveChainAmount === 0n) {
+    throw new Error(
+      `This order's minimum received rounds to zero ${toCoin.ticker}. Increase the amount or the target price.`
+    )
+  }
+
+  return receiveChainAmount
+}

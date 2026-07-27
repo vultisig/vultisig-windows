@@ -185,6 +185,35 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     farAboveMarket: t('swap_limit_warning_far_above_market'),
   }
 
+  // The same LIM in the buy coin's smallest units, for the co-signer display on
+  // the keysign payload — kept as a bigint so no precision is lost into signing.
+  const receiveChainAmountResult =
+    rate !== null && amount !== null && amount > 0n
+      ? attempt(() =>
+          getLimitSwapReceiveChainAmount({
+            fromCoin,
+            toCoin,
+            amount,
+            targetPrice: rate,
+          })
+        )
+      : undefined
+
+  // `Result`'s failure variant types `data` as `never?`, so `'data' in result`
+  // does not narrow — coerce explicitly rather than trusting the check.
+  const receiveChainAmount: bigint | null =
+    receiveChainAmountResult && 'data' in receiveChainAmountResult
+      ? (receiveChainAmountResult.data ?? null)
+      : null
+
+  // Same class of failure as the memo not building — the order can't be
+  // expressed — so it blocks placement through the same reason rather than
+  // leaving the CTA enabled over a `placeOrder` that would return silently.
+  const receiveChainAmountError =
+    receiveChainAmountResult && 'error' in receiveChainAmountResult
+      ? extractErrorMsg(receiveChainAmountResult.error)
+      : undefined
+
   const blocker = getLimitOrderBlocker({
     fromChain: fromCoin.chain,
     toChain: toCoin.chain,
@@ -196,7 +225,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     supportedChains,
     marketPrice: marketRate,
     destinationAddress: toCoin.address,
-    memoError,
+    memoError: memoError ?? receiveChainAmountError,
   })
 
   // Which preset (if any) the current rate corresponds to, so its pill reads as
@@ -240,23 +269,6 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       ? withFallback(
           attempt(() =>
             getLimitSwapReceiveAmount({ fromCoin, amount, targetPrice: rate })
-          ),
-          null
-        )
-      : null
-
-  // The same LIM in the buy coin's smallest units, for the co-signer display on
-  // the keysign payload — kept as a bigint so no precision is lost into signing.
-  const receiveChainAmount =
-    rate !== null && amount !== null && amount > 0n
-      ? withFallback(
-          attempt(() =>
-            getLimitSwapReceiveChainAmount({
-              fromCoin,
-              toCoin,
-              amount,
-              targetPrice: rate,
-            })
           ),
           null
         )
