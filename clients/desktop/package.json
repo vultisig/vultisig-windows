@@ -8,6 +8,7 @@
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'",
     "format:wails": "prettier --write 'wailsjs/**/*.{ts,js}'",
     "dev": "vite",
+    "dev:worktree": "node scripts/dev-desktop.mjs",
     "build": "node --max-old-space-size=8192 ../../node_modules/typescript/bin/tsc && node --max-old-space-size=8192 ../../node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "test": "vitest --config vitest.config.mts",
@@ -38,15 +39,15 @@
     "@lib/ui": "workspace:^",
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-query-persist-client": "^5.101.0",
-    "@vultisig/core-chain": "2.26.0",
+    "@vultisig/core-chain": "2.28.0",
     "@vultisig/core-config": "0.9.1",
-    "@vultisig/core-mpc": "1.12.0",
+    "@vultisig/core-mpc": "1.13.0",
     "@vultisig/lib-utils": "0.10.4",
-    "@vultisig/sdk": "2.20.0",
+    "@vultisig/sdk": "2.21.1",
     "@wailsapp/runtime": "workspace:^",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-i18next": "^16.5.8",
-    "styled-components": "6.3.11"
+    "styled-components": "6.4.4"
   }
 }

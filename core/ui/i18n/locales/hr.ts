@@ -200,7 +200,6 @@ export const hr = {
   continue_in_new_window: 'Nastavite u otvorenom prozoru',
   contract_execution: 'Izvršenje ugovora',
   copy_address: 'Kopiraj adresu',
-  create_folder: 'Izradi mapu',
   create_new_vault: 'Izradi novi trezor',
   create_vault: 'Izradi trezor',
   create_referral_form: 'Izradi preporuku',
@@ -215,7 +214,6 @@ export const hr = {
   currency: 'Valuta',
   current_expiry: 'Trenutni istek',
   current_passcode: 'Trenutna lozinka',
-  current_vaults: 'Trenutni trezori',
   custom: 'Prilagođena radnja',
   custom_token: 'Prilagođeni token',
   customize_chains: 'Prilagodi lance',
@@ -406,7 +404,7 @@ export const hr = {
   fill_the_form: 'Ispunite obrazac',
   find_custom_token: 'Pronađite prilagođeni token',
   folder_name: 'Naziv mape',
-  folder_name_already_exists: 'Naziv mape mora biti jedinstven',
+  folder_name_already_exists: 'Taj naziv mape već postoji. Pokušajte s novim.',
   folder_name_required: 'Naziv mape je obavezan',
   folder_at_least_one_vault_required: 'Potreban je barem jedan trezor',
   folders: 'Mape',
@@ -620,8 +618,7 @@ export const hr = {
   normal: 'Normalan',
   not_enough_funds: 'Nema dovoljno sredstava',
   nothing_to_add: 'Nema što dodati',
-  nothing_to_add_hint:
-    'Svi vaši trezori su već sortirani. Izradite novi trezor da biste ga dodali ovdje.',
+  nothing_to_add_hint: 'Svi vaši trezori su već sortirani.',
   of: 'od',
   off: 'Isključeno',
   on: 'Na',
@@ -1471,7 +1468,6 @@ export const hr = {
   advanced_settings: 'Napredne postavke',
   advanced_swap: 'Napredna zamjena',
   auto: 'Auto',
-  coming_soon: 'Uskoro',
   custom_rpc: 'Prilagođeni RPC-ovi',
   custom_rpc_chip_custom: 'Prilagođeno',
   custom_rpc_description: 'Koristite vlastite čvorove po lancu',
@@ -1497,7 +1493,6 @@ export const hr = {
   slippage_helper:
     'Ograničava koliko se cijena može promijeniti prije nego što se izvršenje otkaže.',
   slippage_tolerance: 'Tolerancija klizanja',
-  swap_limit_orders: 'Ograničene narudžbe',
   swap_mode_limit: 'Ograničiti',
   swap_mode_market: 'Tržište',
   use_external_recipient: 'Koristi vanjskog primatelja',
@@ -1699,4 +1694,65 @@ export const hr = {
   ripple_undecoded_notice:
     'Ovu transakciju nije bilo moguće dekodirati. Prije odobrenja pregledajte neobrađene podatke u nastavku.',
   swap_expected_payout: 'očekivana isplata',
+  send_receiver_format_hint_cardano:
+    'Unesite Cardano adresu koja počinje s addr1.',
+  send_receiver_format_hint_cosmos:
+    'Unesite Bech32 adresu koja počinje s prefiksom {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Unesite EVM adresu koja počinje s 0x i ima 40 heksadecimalnih znakova.',
+  send_receiver_format_hint_qbtc: 'Unesite adresu QBTC koja počinje s qbtc.',
+  send_receiver_format_hint_ripple: 'Unesite XRP adresu koja počinje slovom r.',
+  send_receiver_format_hint_solana:
+    'Unesite Solana adresu kodiranu Base58, obično od 32 do 44 znaka.',
+  send_receiver_format_hint_ss58: 'Unesite adresu kodiranu SS58 za ovu mrežu.',
+  send_receiver_format_hint_sui:
+    'Unesite Sui adresu koja počinje s 0x i ima 64 heksadecimalna znaka.',
+  send_receiver_format_hint_ton: 'Unesite valjanu adresu TON.',
+  send_receiver_format_hint_tron: 'Unesite adresu TRON koja počinje slovom T.',
+  send_receiver_format_hint_utxo:
+    'Unesite valjanu adresu za ovu mrežu (bech32 ili stariji format).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Limitirani nalozi privremeno nisu dostupni na THORChain',
+  active_vaults: 'Aktivni trezori',
+  edit_folder: 'Uredi mapu',
+  nothing_to_add_hint_secondary:
+    'Izradite novi trezor da biste ga dodali ovdje.',
+  no_results_found: 'Nisu pronađeni rezultati',
+  folder_active_vault: '„{{name}}“ Aktivno',
+  swap_limit_asset: 'Imovina',
+  swap_limit_buy: 'Kupiti',
+  swap_limit_execute_when: 'Izvrši kada',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Prodavati',
+  swap_limit_blocker_chain_unavailable:
+    'Ovaj lanac je privremeno zaustavljen na THORChain',
+  swap_limit_blocker_insufficient_balance: 'Iznos premašuje vaš saldo',
+  swap_limit_blocker_memo_invalid:
+    'Ova narudžba ne može biti izvršena kako je unesena',
+  swap_limit_blocker_no_amount: 'Unesite iznos za prodaju',
+  swap_limit_blocker_no_market_price:
+    'Za ovaj par još nema dostupne tržišne cijene',
+  swap_limit_blocker_no_price: 'Unesite ciljanu cijenu',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain ne može usmjeriti limitirani nalog između ove imovine',
+  swap_limit_blocker_no_destination:
+    'Nema dostupne adrese za isplatu za ciljani lanac',
+  swap_limit_blocker_same_asset: 'Odaberite dva različita elementa',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
+  swap_limit_expiry_label: 'Istek',
+  swap_limit_place_order: 'Naruči',
+  swap_limit_place_pending_signing:
+    'Podrška za potpisivanje je na putu - pregledajte svoju narudžbu u nastavku.',
+  swap_limit_review_heading: 'Postavljate limitirani nalog',
+  swap_limit_review_target_price: 'Ciljana cijena',
+  swap_limit_review_title: 'Pregled narudžbe',
+  swap_limit_price_market: 'Tržište',
+  swap_limit_warning_at_or_below_market:
+    'Ova cijena je na ili ispod tržišne, tako da se narudžba može odmah ispuniti',
+  swap_limit_warning_far_above_market:
+    'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
+  chain_address_copied: 'Adresa {{chain}} kopirana',
 }

@@ -2,8 +2,6 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -35,11 +33,6 @@ export const ManageVaultsPage = () => {
         <AddFolderButton
           kind="secondary"
           onClick={() => navigate({ id: 'createVaultFolder' })}
-          icon={
-            <IconWrapper size={18}>
-              <PlusIcon />
-            </IconWrapper>
-          }
         >
           {t('add_folder')}
         </AddFolderButton>
@@ -50,12 +43,11 @@ export const ManageVaultsPage = () => {
 
 const AddFolderButton = styled(Button)`
   border-radius: 40px;
-  border: 1px solid ${getColor('buttonPrimary')};
-  background: transparent;
+  border: none;
+  background: ${getColor('foreground')};
+  color: ${getColor('text')};
 
   &:hover {
-    border-color: ${({ theme }) =>
-      theme.colors.buttonPrimary.withAlpha(0.7).toCssValue()};
-    background: transparent;
+    background: ${getColor('foregroundExtra')};
   }
 `

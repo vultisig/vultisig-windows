@@ -199,7 +199,6 @@ export const ko = {
   continue_in_new_window: '열린 창에서 계속하세요',
   contract_execution: '계약 실행',
   copy_address: '주소 복사',
-  create_folder: '폴더 생성',
   create_new_vault: '새 볼트 생성',
   create_vault: '금고 생성',
   create_referral_form: '추천 생성',
@@ -214,7 +213,6 @@ export const ko = {
   currency: '통화',
   current_expiry: '현재 만료일',
   current_passcode: '현재 암호',
-  current_vaults: '현재 금고',
   custom: '사용자 정의 액션',
   custom_token: '사용자 지정 토큰',
   customize_chains: '체인을 맞춤 제작하세요',
@@ -405,7 +403,8 @@ export const ko = {
   fill_the_form: '양식을 작성하세요',
   find_custom_token: '사용자 지정 토큰 찾기',
   folder_name: '폴더 이름',
-  folder_name_already_exists: '폴더 이름은 고유해야 합니다.',
+  folder_name_already_exists:
+    '해당 폴더 이름은 이미 존재합니다. 새로운 이름을 사용해 보세요.',
   folder_name_required: '폴더 이름은 필수 입력 사항입니다.',
   folder_at_least_one_vault_required: '최소 하나의 금고가 필요합니다.',
   folders: '폴더',
@@ -619,8 +618,7 @@ export const ko = {
   normal: '정상',
   not_enough_funds: '자금이 부족합니다',
   nothing_to_add: '더 이상 추가할 내용이 없습니다.',
-  nothing_to_add_hint:
-    '모든 금고가 이미 정렬되어 있습니다. 여기에 추가하려면 새 금고를 생성하세요.',
+  nothing_to_add_hint: '모든 금고가 이미 정리되었습니다.',
   of: '~의',
   off: '끄다',
   on: '~에',
@@ -1456,7 +1454,6 @@ export const ko = {
   advanced_settings: '고급 설정',
   advanced_swap: '고급 스왑',
   auto: '자동',
-  coming_soon: '곧 출시 예정',
   custom_rpc: '사용자 정의 RPC',
   custom_rpc_chip_custom: '사용자 지정',
   custom_rpc_description: '체인별로 자체 노드를 사용하십시오.',
@@ -1482,7 +1479,6 @@ export const ko = {
   slippage_helper:
     '주문이 취소되기 전에 가격이 변동할 수 있는 최대 범위를 제한합니다.',
   slippage_tolerance: '미끄러짐 허용 오차',
-  swap_limit_orders: '지정가 주문',
   swap_mode_limit: '한계',
   swap_mode_market: '시장',
   use_external_recipient: '외부 수신자 사용',
@@ -1689,4 +1685,65 @@ export const ko = {
   ripple_undecoded_notice:
     '이 거래를 해독할 수 없습니다. 승인하기 전에 아래의 원본 세부 정보를 검토하십시오.',
   swap_expected_payout: '예상 지급액',
+  send_receiver_format_hint_cardano:
+    'addr1로 시작하는 카르다노 주소를 입력하세요.',
+  send_receiver_format_hint_cosmos:
+    '{{prefix}} 접두사로 시작하는 Bech32 주소를 입력하십시오.',
+  send_receiver_format_hint_evm:
+    '0x로 시작하고 40자의 16진수로 구성된 EVM 주소를 입력하십시오.',
+  send_receiver_format_hint_qbtc: 'qbtc로 시작하는 QBTC 주소를 입력하십시오.',
+  send_receiver_format_hint_ripple: '문자 r로 시작하는 XRP 주소를 입력하세요.',
+  send_receiver_format_hint_solana:
+    'Base58로 인코딩된 Solana 주소를 입력하십시오. 일반적으로 32~44자입니다.',
+  send_receiver_format_hint_ss58:
+    '이 네트워크에 대한 SS58로 인코딩된 주소를 입력하십시오.',
+  send_receiver_format_hint_sui:
+    '0x로 시작하고 64자리의 16진수로 구성된 Sui 주소를 입력하십시오.',
+  send_receiver_format_hint_ton: '유효한 TON 주소를 입력하십시오.',
+  send_receiver_format_hint_tron: '문자 T로 시작하는 TRON 주소를 입력하십시오.',
+  send_receiver_format_hint_utxo:
+    '이 네트워크에 사용할 유효한 주소를 입력하십시오(bech32 또는 기존 형식).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'THORChain에 대한 지정가 주문은 일시적으로 이용할 수 없습니다.',
+  active_vaults: '액티브 볼트',
+  edit_folder: '폴더 편집',
+  nothing_to_add_hint_secondary: '여기에 추가하려면 새 볼트를 생성하세요.',
+  no_results_found: '검색 결과가 없습니다.',
+  folder_active_vault: '‘{{name}}’ 활성',
+  swap_limit_asset: '유산',
+  swap_limit_buy: '구입하다',
+  swap_limit_execute_when: '실행 시점',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: '팔다',
+  swap_limit_blocker_chain_unavailable:
+    '이 체인은 THORChain 에서 일시적으로 중단되었습니다.',
+  swap_limit_blocker_insufficient_balance: '금액이 잔액을 초과했습니다.',
+  swap_limit_blocker_memo_invalid:
+    '입력하신 내용으로는 주문을 처리할 수 없습니다.',
+  swap_limit_blocker_no_amount: '판매할 금액을 입력하세요',
+  swap_limit_blocker_no_market_price:
+    '이 제품에 대한 시장 가격은 아직 확인되지 않았습니다.',
+  swap_limit_blocker_no_price: '목표 가격을 입력하세요',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain 이 자산들 간에 지정가 주문을 라우팅할 수 없습니다.',
+  swap_limit_blocker_no_destination:
+    '대상 체인에 대한 지급 주소를 사용할 수 없습니다.',
+  swap_limit_blocker_same_asset: '서로 다른 두 가지 자산을 선택하세요',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
+  swap_limit_expiry_label: '만료',
+  swap_limit_place_order: '주문하기',
+  swap_limit_place_pending_signing:
+    '서명 지원이 곧 제공될 예정입니다. 아래에서 주문 내역을 확인하세요.',
+  swap_limit_review_heading: '지정가 주문을 하십니다.',
+  swap_limit_review_target_price: '목표 가격',
+  swap_limit_review_title: '주문 검토',
+  swap_limit_price_market: '시장',
+  swap_limit_warning_at_or_below_market:
+    '이 가격은 시장 가격과 같거나 그 이하이므로 주문이 즉시 체결될 수 있습니다.',
+  swap_limit_warning_far_above_market:
+    '이 가격은 시장가보다 훨씬 높으며, 거래가 성사되지 않고 만료될 가능성이 있습니다.',
+  chain_address_copied: '{{chain}} 주소가 복사되었습니다.',
 }

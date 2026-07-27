@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next'
 
 import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
+import { getWasmExecuteTxDisplay } from '../../tx/getWasmExecuteTxDisplay'
 import { SignRippleDisplay } from '../../tx/ripple/SignRippleDisplay'
 import { parseSuiTx } from '../../tx/sui/parser'
 import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
@@ -52,12 +53,22 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
 
   const { name } = useCurrentVault()
 
+  // A wasm contract execute (e.g. stake/unstake) is signed purely from
+  // `contractPayload`, so derive the amount / asset / destination the co-signer
+  // verifies from it rather than the (empty, spoofable) toAmount/toAddress.
+  const wasmDisplay = getWasmExecuteTxDisplay(value)
+  const displayCoin = wasmDisplay?.coin ?? coin
+  const displayAmount = wasmDisplay
+    ? BigInt(wasmDisplay.fundAmount)
+    : BigInt(value.toAmount)
+  const displayReceiver = wasmDisplay?.receiver ?? toAddress
+
   const receiverVaultName = useVaultNameForAddress({
-    address: toAddress,
+    address: displayReceiver,
     chain: coin.chain,
   })
   const receiverAddressBookName = useAddressBookNameForAddress({
-    address: toAddress,
+    address: displayReceiver,
     chain: coin.chain,
   })
 
@@ -144,15 +155,18 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     <>
       <BlockaidTxScan keysignPayloadQuery={keysignPayloadQuery} />
       <VerifyTransactionOverview
-        coin={coin}
-        amount={BigInt(value.toAmount)}
+        coin={displayCoin}
+        amount={displayAmount}
         senderName={name}
         senderAddress={coin.address}
-        receiver={toAddress}
+        receiver={displayReceiver}
         receiverVaultName={receiverVaultName ?? undefined}
         receiverAddressBookName={receiverAddressBookName ?? undefined}
         chain={coin.chain}
         keysignPayloadQuery={keysignPayloadQuery}
+        getPayloadAmount={
+          wasmDisplay ? () => wasmDisplay.fundAmount : undefined
+        }
         renderFeeExtra={
           showFeeIcon
             ? () => (

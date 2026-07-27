@@ -2,6 +2,7 @@ export const en = {
   accept_continue: 'Accept & continue',
   action: 'Action',
   active: 'Active',
+  active_vaults: 'Active Vaults',
   agent: 'Agent',
   agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
   agent_nav_tip_title: 'New!',
@@ -152,6 +153,7 @@ export const en = {
       },
     },
   },
+  chain_address_copied: '{{chain}} address copied',
   chain_message_deposit: '{{chain}} message deposit',
   chains: 'Chains',
   change: 'Change',
@@ -193,7 +195,6 @@ export const en = {
     '{{action, select, add {Add liquidity} remove {Remove liquidity} other {Manage liquidity}}}',
   manage_tokens: 'Manage tokens',
   collected_rewards: 'Collected rewards',
-  coming_soon: 'Coming soon',
   complete: 'Complete',
   congrats: 'Congrats!',
   confirm: 'Confirm',
@@ -215,7 +216,6 @@ export const en = {
   copied: 'Copied',
   copy: 'Copy',
   copy_address: 'Copy Address',
-  create_folder: 'Create Folder',
   create_new_vault: 'Create New Vault',
   create_vault: 'Create vault',
   create_referral_form: 'Create referral',
@@ -230,7 +230,6 @@ export const en = {
   currency: 'Currency',
   current_expiry: 'Current expiry',
   current_passcode: 'Current Passcode',
-  current_vaults: 'Current Vaults',
   custom: 'Custom Action',
   custom_rpc: 'Custom RPCs',
   custom_rpc_chip_custom: 'Custom',
@@ -342,6 +341,7 @@ export const en = {
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
   remove_friends_referral: 'Remove Referral',
+  edit_folder: 'Edit Folder',
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_placeholder: 'Enter your email address',
@@ -483,8 +483,9 @@ export const en = {
   fast_sign: 'Fast Sign',
   fill_the_form: 'Fill the form',
   find_custom_token: 'Find custom token',
+  folder_active_vault: '‘{{name}}’ Active',
   folder_name: 'Folder name',
-  folder_name_already_exists: 'Folder name must be unique',
+  folder_name_already_exists: 'That folder name already exists. Try a new one.',
   folder_name_required: 'Folder name is required',
   folder_at_least_one_vault_required: 'At least one vault is required',
   folders: 'Folders',
@@ -714,9 +715,10 @@ export const en = {
   node_address: 'Node Address',
   normal: 'Normal',
   not_enough_funds: 'Not enough funds',
+  no_results_found: 'No results found',
   nothing_to_add: 'Nothing to add',
-  nothing_to_add_hint:
-    'All your vaults are already sorted. Create a new vault to add it here.',
+  nothing_to_add_hint: 'All your vaults are already sorted.',
+  nothing_to_add_hint_secondary: 'Create a new vault to add it here.',
   of: 'of',
   off: 'Off',
   on: 'On',
@@ -1009,9 +1011,30 @@ export const en = {
   sends: 'Sends',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   send_invalid_receiver_address: 'Wrong address for selected chain',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_overview: 'Send Overview',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
+  send_receiver_format_hint_cardano:
+    'Enter a Cardano address that starts with addr1.',
+  send_receiver_format_hint_cosmos:
+    'Enter a Bech32 address that starts with the {{prefix}} prefix.',
+  send_receiver_format_hint_evm:
+    'Enter an EVM address that starts with 0x and has 40 hexadecimal characters.',
+  send_receiver_format_hint_qbtc: 'Enter a QBTC address that starts with qbtc.',
+  send_receiver_format_hint_ripple:
+    'Enter an XRP address that starts with the letter r.',
+  send_receiver_format_hint_solana:
+    'Enter a Base58-encoded Solana address, usually 32 to 44 characters.',
+  send_receiver_format_hint_ss58:
+    'Enter an SS58-encoded address for this network.',
+  send_receiver_format_hint_sui:
+    'Enter a Sui address that starts with 0x and has 64 hexadecimal characters.',
+  send_receiver_format_hint_ton: 'Enter a valid TON address.',
+  send_receiver_format_hint_tron:
+    'Enter a TRON address that starts with the letter T.',
+  send_receiver_format_hint_utxo:
+    'Enter a valid address for this network (bech32 or legacy format).',
   send_terms_0: "I'm sending to the right address",
   send_terms_1: 'The amount is correct',
   send_to: 'Send to',
@@ -1136,7 +1159,41 @@ export const en = {
   swap_fee: 'Swap Fee',
   swap_invalid_external_recipient:
     'Recipient address is not valid for {{chain}}',
-  swap_limit_orders: 'Limit orders',
+  swap_limit_asset: 'Asset',
+  swap_limit_buy: 'Buy',
+  swap_limit_execute_when: 'Execute when',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Sell',
+  swap_limit_blocker_chain_unavailable:
+    'This chain is temporarily halted on THORChain',
+  swap_limit_blocker_insufficient_balance: 'Amount exceeds your balance',
+  swap_limit_blocker_memo_invalid: 'This order cannot be placed as entered',
+  swap_limit_blocker_no_amount: 'Enter an amount to sell',
+  swap_limit_blocker_no_market_price:
+    'No market price available for this pair yet',
+  swap_limit_blocker_no_price: 'Enter a target price',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain cannot route a limit order between these assets',
+  swap_limit_blocker_no_destination:
+    'No payout address available for the target chain',
+  swap_limit_blocker_same_asset: 'Choose two different assets',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
+  swap_limit_expiry_label: 'Expiry',
+  swap_limit_place_order: 'Place order',
+  swap_limit_place_pending_signing:
+    'Signing support is on the way — review your order below.',
+  swap_limit_review_heading: "You're placing a limit order",
+  swap_limit_review_target_price: 'Target price',
+  swap_limit_review_title: 'Review order',
+  swap_limit_price_market: 'Market',
+  swap_limit_unavailable:
+    'Limit orders are temporarily unavailable on THORChain',
+  swap_limit_warning_at_or_below_market:
+    'This price is at or below market, so the order may fill immediately',
+  swap_limit_warning_far_above_market:
+    'This price is far above market and may expire unfilled',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Market',
   swap_overview: 'Swap overview',

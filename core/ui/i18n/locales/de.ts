@@ -203,7 +203,6 @@ export const de = {
   continue_in_new_window: 'Im geöffneten Fenster fortfahren',
   contract_execution: 'Vertragsabwicklung',
   copy_address: 'Adresse kopieren',
-  create_folder: 'Ordner erstellen',
   create_new_vault: 'Neuen Tresor erstellen',
   create_vault: 'Tresor erstellen',
   create_referral_form: 'Empfehlung erstellen',
@@ -218,7 +217,6 @@ export const de = {
   currency: 'Währung',
   current_expiry: 'Aktuelles Ablaufdatum',
   current_passcode: 'Aktueller Passcode',
-  current_vaults: 'Aktuelle Tresore',
   custom: 'Benutzerdefinierte Aktion',
   custom_token: 'Benutzerdefiniertes Token',
   customize_chains: 'Ketten individuell gestalten',
@@ -416,7 +414,8 @@ export const de = {
   fill_the_form: 'Füllen Sie das Formular aus.',
   find_custom_token: 'Benutzerdefiniertes Token finden',
   folder_name: 'Ordnername',
-  folder_name_already_exists: 'Der Ordnername muss eindeutig sein.',
+  folder_name_already_exists:
+    'Dieser Ordnername existiert bereits. Bitte versuchen Sie es mit einem neuen.',
   folder_name_required: 'Ein Ordnername ist erforderlich.',
   folder_at_least_one_vault_required: 'Mindestens ein Vault ist erforderlich',
   folders: 'Ordner',
@@ -635,8 +634,7 @@ export const de = {
   normal: 'Normal',
   not_enough_funds: 'Nicht genügend Mittel',
   nothing_to_add: 'Nichts hinzuzufügen',
-  nothing_to_add_hint:
-    'Alle Ihre Tresore sind bereits sortiert. Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
+  nothing_to_add_hint: 'Alle Ihre Tresore sind bereits sortiert.',
   of: 'von',
   off: 'Aus',
   on: 'An',
@@ -1497,7 +1495,6 @@ export const de = {
   advanced_settings: 'Erweiterte Einstellungen',
   advanced_swap: 'Erweiterter Tausch',
   auto: 'Auto',
-  coming_soon: 'Demnächst verfügbar',
   custom_rpc: 'Benutzerdefinierte RPCs',
   custom_rpc_chip_custom: 'Benutzerdefiniert',
   custom_rpc_description: 'Verwenden Sie Ihre eigenen Knoten pro Kette',
@@ -1523,7 +1520,6 @@ export const de = {
   slippage_helper:
     'Legt fest, wie stark sich der Preis ändern darf, bevor die Ausführung abgebrochen wird.',
   slippage_tolerance: 'Schlupftoleranz',
-  swap_limit_orders: 'Limit-Orders',
   swap_mode_limit: 'Limit',
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externen Empfänger verwenden',
@@ -1737,4 +1733,70 @@ export const de = {
   ripple_undecoded_notice:
     'Diese Transaktion konnte nicht dekodiert werden. Bitte prüfen Sie die unten stehenden Rohdaten, bevor Sie die Transaktion genehmigen.',
   swap_expected_payout: 'erwartete Auszahlung',
+  send_receiver_format_hint_cardano:
+    'Geben Sie eine Cardano-Adresse ein, die mit addr1 beginnt.',
+  send_receiver_format_hint_cosmos:
+    'Geben Sie eine Bech32-Adresse ein, die mit dem Präfix {{prefix}} beginnt.',
+  send_receiver_format_hint_evm:
+    'Geben Sie eine EVM-Adresse ein, die mit 0x beginnt und 40 Hexadezimalzeichen hat.',
+  send_receiver_format_hint_qbtc:
+    'Geben Sie eine QBTC-Adresse ein, die mit qbtc beginnt.',
+  send_receiver_format_hint_ripple:
+    'Geben Sie eine XRP-Adresse ein, die mit dem Buchstaben r beginnt.',
+  send_receiver_format_hint_solana:
+    'Geben Sie eine Base58-kodierte Solana-Adresse ein, üblicherweise 32 bis 44 Zeichen lang.',
+  send_receiver_format_hint_ss58:
+    'Geben Sie eine SS58-codierte Adresse für dieses Netzwerk ein.',
+  send_receiver_format_hint_sui:
+    'Geben Sie eine Sui-Adresse ein, die mit 0x beginnt und 64 Hexadezimalzeichen enthält.',
+  send_receiver_format_hint_ton: 'Geben Sie eine gültige TON-Adresse ein.',
+  send_receiver_format_hint_tron:
+    'Geben Sie eine TRON-Adresse ein, die mit dem Buchstaben T beginnt.',
+  send_receiver_format_hint_utxo:
+    'Geben Sie eine gültige Adresse für dieses Netzwerk ein (Bech32- oder Legacy-Format).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Limit-Orders sind für THORChain vorübergehend nicht verfügbar.',
+  active_vaults: 'Aktive Tresore',
+  edit_folder: 'Ordner bearbeiten',
+  nothing_to_add_hint_secondary:
+    'Erstellen Sie einen neuen Tresor, um ihn hier hinzuzufügen.',
+  no_results_found: 'Keine Ergebnisse gefunden',
+  folder_active_vault: '„{{name}}“ Aktiv',
+  swap_limit_asset: 'Vermögenswert',
+  swap_limit_buy: 'Kaufen',
+  swap_limit_execute_when: 'Ausführen, wenn',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Verkaufen',
+  swap_limit_blocker_chain_unavailable:
+    'Diese Kette wurde vorübergehend auf THORChain angehalten.',
+  swap_limit_blocker_insufficient_balance:
+    'Der Betrag übersteigt Ihr Guthaben.',
+  swap_limit_blocker_memo_invalid:
+    'Dieser Auftrag kann in der eingegebenen Form nicht ausgeführt werden.',
+  swap_limit_blocker_no_amount: 'Geben Sie den zu verkaufenden Betrag ein.',
+  swap_limit_blocker_no_market_price:
+    'Für dieses Paar ist noch kein Marktpreis verfügbar.',
+  swap_limit_blocker_no_price: 'Geben Sie einen Zielpreis ein',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain kann keine Limit-Order zwischen diesen Assets weiterleiten.',
+  swap_limit_blocker_no_destination:
+    'Für die Zielkette ist keine Auszahlungsadresse verfügbar.',
+  swap_limit_blocker_same_asset: 'Wählen Sie zwei verschiedene Vermögenswerte.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
+  swap_limit_expiry_label: 'Ablauf',
+  swap_limit_place_order: 'Bestellung aufgeben',
+  swap_limit_place_pending_signing:
+    'Die Unterstützung für Ihre Unterschrift ist unterwegs – überprüfen Sie Ihre Bestellung unten.',
+  swap_limit_review_heading: 'Sie erteilen eine Limit-Order.',
+  swap_limit_review_target_price: 'Kursziel',
+  swap_limit_review_title: 'Bestellung prüfen',
+  swap_limit_price_market: 'Markt',
+  swap_limit_warning_at_or_below_market:
+    'Dieser Preis entspricht dem Marktpreis oder liegt darunter, daher kann die Order sofort ausgeführt werden.',
+  swap_limit_warning_far_above_market:
+    'Dieser Preis liegt weit über dem Marktpreis und es besteht die Möglichkeit, dass die Transaktion ungenutzt verfällt.',
+  chain_address_copied: 'Adresse {{chain}} kopiert',
 }

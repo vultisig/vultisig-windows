@@ -352,6 +352,10 @@ bridge:
 - `signMessage(message, isHex?)`
 - `signTransaction({ transaction })` -- sign without broadcasting
 - `submitTransaction({ transaction })` -- sign and broadcast
+- `sendPayment(payment)` -- build, sign, and broadcast a payment
+- `setTrustline(trustline)` -- build, sign, and broadcast a trustline update
+- `createOffer(offer)` -- build, sign, and broadcast an offer
+- `cancelOffer(offer)` -- build, sign, and broadcast an offer cancellation
 
 Account reads and signing methods use the same access and keysign popups as the
 generic provider. `isInstalled()` and `getNetwork()` expose no vault-specific
@@ -440,6 +444,8 @@ the generic provider contracts documented above:
   also installs the GemWallet-compatible presence marker and message bridge.
   That bridge supports `isInstalled`, `getAddress`, `getPublicKey`,
   `getNetwork`, `signMessage`, `signTransaction`, and `submitTransaction`.
+  It also supports the `sendPayment`, `setTrustline`, `createOffer`, and
+  `cancelOffer` convenience requests.
 
 Guarded aliases defer to wallets that were injected earlier. Prioritized
 compatibility aliases can replace configurable globals; use the

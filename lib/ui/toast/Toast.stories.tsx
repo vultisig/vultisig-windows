@@ -1,8 +1,8 @@
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useState } from 'react'
 
 import { ToastItem } from './ToastItem'
+import { toastStatuses } from './ToastStatus'
 
 const meta: Meta<typeof ToastItem> = {
   title: 'Foundation/Feedback/ToastItem',
@@ -11,9 +11,13 @@ const meta: Meta<typeof ToastItem> = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     children: { table: { disable: true } },
+    value: { control: 'inline-radio', options: toastStatuses },
+    duration: { control: { type: 'range', min: 1000, max: 10000, step: 500 } },
   },
   args: {
     children: 'Saved successfully!',
+    value: 'success',
+    duration: 3000,
   },
 }
 export default meta
@@ -22,58 +26,55 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
 
+export const Warning: Story = {
+  args: {
+    children: 'At least one vault is required',
+    value: 'warning',
+  },
+}
+
+export const Error: Story = {
+  args: {
+    children: 'Failed to copy address',
+    value: 'error',
+  },
+}
+
 export const LongMessage: Story = {
   name: 'Long text message',
   args: {
     children:
-      'Your settings have been synced across all logged‑in devices. You can safely close this window.',
+      'Your settings have been synced across all logged-in devices. You can safely close this window.',
   },
 }
 
-export const WithIcon: Story = {
-  name: 'With inline icon',
+export const SlowRing: Story = {
+  name: 'Slow ring fill',
   args: {
-    children: (
-      <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <TriangleAlertIcon />
-        Something went wrong. Try again.
-      </span>
-    ),
+    duration: 10000,
   },
-}
-
-export const MultipleToasts: Story = {
-  name: 'Stacked toasts',
-  render: args => (
-    <>
-      <ToastItem {...args}>First toast</ToastItem>
-      <ToastItem {...args}>Second toast</ToastItem>
-    </>
-  ),
 }
 
 export const Interactive: Story = {
   name: 'Interactive show / hide',
   render: args => {
-    const [visible, setVisible] = useState(false)
+    const [shownAt, setShownAt] = useState<number | null>(null)
 
     useEffect(() => {
-      let id: NodeJS.Timeout | undefined
-      if (visible) {
-        id = setTimeout(() => setVisible(false), 3000)
-      }
+      if (shownAt === null) return
+      const id = setTimeout(() => setShownAt(null), args.duration)
       return () => clearTimeout(id)
-    }, [visible])
+    }, [shownAt, args.duration])
 
     return (
       <>
         <button
-          onClick={() => setVisible(true)}
+          onClick={() => setShownAt(Date.now())}
           style={{ position: 'fixed', top: 40, left: 40 }}
         >
           Show toast
         </button>
-        {visible && <ToastItem {...args} />}
+        {shownAt === null ? null : <ToastItem {...args} key={shownAt} />}
       </>
     )
   },

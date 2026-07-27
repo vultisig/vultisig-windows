@@ -171,9 +171,9 @@ export function resolveTickerByChainAndToken(
 function resolveDecimalsByChainAndToken(
   chain: string,
   tokenAddress: string
-): number {
+): number | null {
   const resolved = getChainFromString(chain)
-  if (!resolved) return 18
+  if (!resolved) return null
 
   if (!tokenAddress) {
     return chainFeeCoin[resolved].decimals
@@ -185,15 +185,16 @@ function resolveDecimalsByChainAndToken(
     if (token) return token.decimals
   }
 
-  return 18
+  return null
 }
 
 export function formatHumanAmount(
   smallestUnit: string,
   chain: string,
   tokenAddress: string
-): string {
+): string | null {
   const decimals = resolveDecimalsByChainAndToken(chain, tokenAddress)
+  if (decimals === null) return null
   if (decimals === 0) return smallestUnit
 
   const sanitized = smallestUnit.trim()

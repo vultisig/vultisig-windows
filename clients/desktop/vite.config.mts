@@ -15,8 +15,25 @@ const rootDir = path.resolve(
   '../..'
 )
 
+const getPort = (value: string | undefined, name: string, fallback: number) => {
+  if (!value) return fallback
+
+  if (!/^\d+$/.test(value)) {
+    throw new Error(`${name} must be an integer between 1 and 65535`)
+  }
+
+  const port = Number(value)
+  if (!Number.isSafeInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`${name} must be an integer between 1 and 65535`)
+  }
+
+  return port
+}
+
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, rootDir, '')
+  const appPort = getPort(env.APP_PORT, 'APP_PORT', 5173)
+
   return {
     // Crawl the desktop navigation barrel during the *first* dep-optimization pass so
     // `@vultisig/*` deep imports are known before the dev server serves modules. Without
@@ -62,7 +79,7 @@ export default defineConfig(async ({ mode }) => {
       }),
     ],
     server: {
-      port: 5173,
+      port: appPort,
       strictPort: true,
       // Pre-transform the full desktop navigation graph up front. Otherwise Vite can
       // discover hundreds of `@vultisig/*` deep imports on first navigation, run a new
@@ -79,9 +96,8 @@ export default defineConfig(async ({ mode }) => {
       },
     },
     build: {
-      // The SDK's WASM graph contains native top-level await. `esnext` stops
-      // esbuild from downleveling (and erroring on) it; the module <script> in
-      // the webview evaluates it natively at runtime.
+      // The SDK's WASM graph now includes top-level-await wrapper code that
+      // vite-plugin-top-level-await cannot downlevel to Vite's old default target.
       target: 'esnext',
       outDir: 'dist',
       assetsDir: 'assets',

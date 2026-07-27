@@ -7,6 +7,7 @@ import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { thorchainTokens } from '../../tokens'
 import { ThorchainStakePosition } from '../../types'
 import { parseBigint } from '../../utils/parsers'
+import { fetchBruneStakePosition } from './bruneStakeService'
 import { fetchRujiStakePositions } from './rujiStakeService'
 import { fetchStcyStakePosition } from './stcyStakeService'
 import { fetchTcyStakePosition } from './tcyStakeService'
@@ -62,10 +63,11 @@ export const fetchStakePositions = async ({
   address,
   prices,
 }: FetchStakePositionsInput) => {
-  const [tcy, stcy, rujiPositions, yRune, yTcy] = await Promise.all([
+  const [tcy, stcy, rujiPositions, brune, yRune, yTcy] = await Promise.all([
     fetchTcyStakePosition({ address, prices }),
     fetchStcyStakePosition({ address, prices }),
     fetchRujiStakePositions({ address, prices }),
+    fetchBruneStakePosition({ address, prices }),
     fetchYieldStakePosition({
       address,
       prices,
@@ -80,7 +82,7 @@ export const fetchStakePositions = async ({
     }),
   ])
 
-  const positions = [tcy, stcy, ...rujiPositions, yRune, yTcy].filter(
+  const positions = [tcy, stcy, ...rujiPositions, brune, yRune, yTcy].filter(
     (p): p is ThorchainStakePosition => p !== null
   )
   return { positions }

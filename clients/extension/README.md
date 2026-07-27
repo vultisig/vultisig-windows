@@ -1,11 +1,17 @@
-# Vultisig Extension
+# Vultisig Browser Extension
 
-## What is Vultisig Extension
+## What is the Vultisig Browser Extension?
 
-Vultisig Extension is a browser wallet and dApp provider. Users can create,
-import, and manage Vultisig vaults in the extension, then connect those vaults
-to supported dApps. The extension stores its local vault data and key shares
-in extension storage and participates in the vault's configured signing flow.
+The browser extension is a wallet and dApp provider. Users can create, import,
+and manage Vultisig vaults in the extension, then connect those vaults to
+supported dApps. It is built in Vultisig and Station flavors, which share the
+same functionality with separate branding and build artifacts.
+
+## How safe is it?
+
+The extension stores its local vault data and key shares in extension storage
+and participates in the selected vault's configured signing flow. The required
+participants and authorization flow depend on the vault type and configuration.
 
 ## Requirements
 
@@ -25,14 +31,19 @@ yarn install --immutable
 yarn build:extension
 ```
 
-The unpacked Chromium build is written to `clients/extension/dist`.
+The regular Vultisig build is written to `clients/extension/dist`. To build the
+Station flavor instead, run `yarn build:extension:station`; its independent
+unpacked artifact is written to `clients/extension/dist-station`.
 
 ## Install the unpacked build in Chrome
 
-1. Open `chrome://extensions`.
+1. Open Chrome and go to `chrome://extensions`.
 2. Enable **Developer mode**.
-3. Select **Load unpacked**.
-4. Choose `clients/extension/dist` from this repository.
+3. Select **Load unpacked**, then choose `clients/extension/dist` for Vultisig
+   or `clients/extension/dist-station` for Station.
+4. Verify the extension card says `Vultisig Extension` or `Station Wallet`,
+   note its extension ID, and reload the exact `dist` or `dist-station`
+   directory before reviewing UI.
 
 ## Integration Guide
 

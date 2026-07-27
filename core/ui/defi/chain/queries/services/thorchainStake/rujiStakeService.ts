@@ -25,7 +25,7 @@ type RujiAprStatus = 'AVAILABLE' | 'NOT_APPLICABLE' | 'SOON'
 const parseRujiApr = (
   apr?: { value?: string | null; status?: RujiAprStatus | null } | null
 ): number | undefined => {
-  if (!apr || (apr.status && apr.status !== 'AVAILABLE')) {
+  if (apr?.status !== 'AVAILABLE' || apr.value == null) {
     return undefined
   }
 

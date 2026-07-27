@@ -58,6 +58,7 @@ clients/desktop/dist/
 clients/desktop/node_modules/
 clients/desktop/package.json.md5
 clients/extension/dist/
+clients/extension/dist-station/
 clients/extension/node_modules/
 clients/extension/package.json.md5
 *.package.json.md5

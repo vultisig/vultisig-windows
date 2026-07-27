@@ -46,6 +46,7 @@ export const DeleteVaultFolder = () => {
                     console.error(error)
                     addToast({
                       message: t('failed_to_delete_folder'),
+                      status: 'error',
                     })
                   },
                 })

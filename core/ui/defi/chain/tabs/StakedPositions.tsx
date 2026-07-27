@@ -285,6 +285,8 @@ const ThorchainStakedPositions = () => {
           position.id === 'thor-stake-stcy' ||
           position.id === 'thor-stake-yrune' ||
           position.id === 'thor-stake-ytcy' ||
+          // ybRUNE auto-compounds with no separate APR/rewards (like sTCY).
+          position.id === 'thor-stake-brune' ||
           // The compounded RUJI card reinvests its revenue (like sTCY), so it
           // has no APR/USDC claim to show — those live on the bonded card.
           position.id === rujiAutoCompoundStakePositionId

@@ -42,10 +42,17 @@ yarn workspace @clients/extension qa:brand
 yarn workspace @clients/extension build:station
 yarn workspace @clients/extension qa:brand:station
 
+# Run E2E against the retained Station artifact
+VULTISIG_EXTENSION_ARTIFACT=dist-station yarn workspace @clients/extension test:e2e --project=artifact-brand
+
 # Firefox dist static bundle/manifest check
 yarn workspace @clients/extension build:firefox
 yarn workspace @clients/extension qa:brand --skip-browser
 ```
+
+Vultisig and Station builds are retained independently under `dist` and
+`dist-station`. The E2E global setup reads `extension-artifact.json` and fails
+before capture if the selected path does not contain the expected brand.
 
 The QA command validates manifest name, description, author, icon paths, the
 primary EIP-6963 announcement filtered by expected `rdns`, and

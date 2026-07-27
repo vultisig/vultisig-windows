@@ -7,6 +7,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 import { useMemo } from 'react'
 
+import { useUnstakableBruneQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableBruneQuery'
 import { useUnstakableRujiQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableRujiQuery'
 import { useUnstakableStcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableSTcyQuery'
 import { useUnstakableTcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableTcyQuery'
@@ -68,6 +69,16 @@ export const useStakeBalance = (): StakeBalanceResult => {
     },
   })
 
+  const { data: bruneData, isLoading: isLoadingBrune } =
+    useUnstakableBruneQuery({
+      address: thorchainVaultAddress,
+      options: {
+        enabled: Boolean(
+          thorchainVaultAddress && isUnstake && stakeId === 'brune'
+        ),
+      },
+    })
+
   const { data: tonBalance, isLoading: isLoadingTon } = useTonUnstakableQuery({
     address: tonVaultAddress,
     options: {
@@ -110,6 +121,11 @@ export const useStakeBalance = (): StakeBalanceResult => {
       // user came from sets `autocompound` (true → auto-compounding / sRUJI).
       balance: (autocompound ? rujiData?.autoCompound : rujiData?.bonded) ?? 0,
       isLoading: isLoadingRuji,
+      stakeId,
+    }),
+    brune: () => ({
+      balance: bruneData?.humanReadableBalance ?? 0,
+      isLoading: isLoadingBrune,
       stakeId,
     }),
   })
