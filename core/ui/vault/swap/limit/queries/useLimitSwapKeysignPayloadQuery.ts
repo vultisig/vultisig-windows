@@ -7,8 +7,9 @@ import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { buildLimitSwapKeysignPayload } from '@vultisig/core-mpc/keysign/swap/buildLimitSwapKeysignPayload'
-import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+
+import { getLimitSwapKeysignPayloadInput } from '../keysignPayloadInput'
 
 type UseLimitSwapKeysignPayloadQueryInput = {
   fromCoin: AccountCoin
@@ -56,19 +57,19 @@ export const useLimitSwapKeysignPayloadQuery = ({
       },
     ],
     queryFn: () =>
-      buildLimitSwapKeysignPayload({
-        fromCoin,
-        toCoin,
-        amount,
-        memo,
-        expectedToAmount,
-        vaultId: getVaultId(vault),
-        localPartyId: vault.localPartyId,
-        fromPublicKey,
-        toPublicKey,
-        libType: toKeysignLibType(vault),
-        walletCore,
-      }),
+      buildLimitSwapKeysignPayload(
+        getLimitSwapKeysignPayloadInput({
+          fromCoin,
+          toCoin,
+          amount,
+          memo,
+          expectedToAmount,
+          vault,
+          fromPublicKey,
+          toPublicKey,
+          walletCore,
+        })
+      ),
     ...noRefetchQueryOptions,
   })
 }

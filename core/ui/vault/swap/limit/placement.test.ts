@@ -126,3 +126,41 @@ describe('getLimitOrderBlocker', () => {
     ).toBe('queueUnavailable')
   })
 })
+
+// The CTA is enabled exactly when there is no blocker, and `placeOrder` then
+// guards again on the fields the hand-off needs. These assert the two agree: an
+// enabled button must never hit that guard and silently do nothing.
+describe('confirm gating contract', () => {
+  it('implies a positive amount when placeable', () => {
+    expect(getLimitOrderBlocker(placeable)).toBeUndefined()
+    expect(placeable.amount).not.toBeNull()
+    expect(placeable.amount > 0n).toBe(true)
+  })
+
+  it('implies the memo built, so the hand-off has one to sign', () => {
+    expect(getLimitOrderBlocker(placeable)).toBeUndefined()
+    expect(placeable.memoError).toBeUndefined()
+  })
+
+  it('implies a usable price and market anchor for the receive amount', () => {
+    expect(getLimitOrderBlocker(placeable)).toBeUndefined()
+    expect(placeable.price).not.toBeNull()
+    expect(placeable.marketPrice).toBeTruthy()
+  })
+
+  // Each blocker must disable the CTA — none may resolve to "placeable".
+  it.each([
+    ['queueUnavailable', { isQueueEnabled: false }],
+    ['pairNotRoutable', { toChain: Chain.Sui }],
+    ['chainUnavailable', { supportedChains: undefined }],
+    ['sameAsset', { isSameAsset: true }],
+    ['noAmount', { amount: null }],
+    ['insufficientBalance', { balance: undefined }],
+    ['noPrice', { price: null }],
+    ['noMarketPrice', { marketPrice: undefined }],
+    ['noDestination', { destinationAddress: undefined }],
+    ['memoInvalid', { memoError: 'exceeds utxo limit 80' }],
+  ] as const)('keeps the CTA disabled for %s', (_, override) => {
+    expect(getLimitOrderBlocker({ ...placeable, ...override })).toBeDefined()
+  })
+})
