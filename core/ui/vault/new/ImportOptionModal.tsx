@@ -14,7 +14,11 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
   const navigate = useCoreNavigate()
 
   return (
-    <Modal onClose={onClose} title={t('recover_vault_or_convert_seedphrase')}>
+    <Modal
+      onClose={onClose}
+      title={t('recover_vault_or_convert_seedphrase')}
+      titleAlign="center"
+    >
       <VStack gap={14}>
         <ImportOption
           badge={<NewBadge />}
