@@ -213,11 +213,10 @@ export class OnboardingPage extends BasePage {
     const options: string[] = []
 
     // From NewVaultPage
-    const nextButton = this.page.getByRole('button', { name: /next/i }).first()
     const importButton = this.page.getByRole('button', { name: /import/i }).first()
     const scanQrButton = this.page.getByRole('button', { name: /scan.*qr/i }).first()
 
-    if (await nextButton.isVisible()) options.push('create')
+    if (await this.newVaultGetStartedButton.isVisible()) options.push('create')
     if (await importButton.isVisible()) options.push('import')
     if (await scanQrButton.isVisible()) options.push('scan')
 

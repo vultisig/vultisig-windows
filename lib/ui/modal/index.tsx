@@ -1,4 +1,3 @@
-import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -6,6 +5,7 @@ import { AsProp, TitleProp } from '@lib/ui/props'
 import { ComponentProps, CSSProperties, ReactNode } from 'react'
 import styled from 'styled-components'
 
+import { sameDimensions } from '../css/sameDimensions'
 import { Backdrop } from './Backdrop'
 import { modalConfig } from './config'
 import { ModalCloseButton } from './ModalCloseButton'
