@@ -1626,14 +1626,13 @@ export const zh = {
   swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: '到期日',
   swap_limit_place_order: '下单',
-  swap_limit_place_pending_signing: '签名支持正在路上——请查看下面的订单。',
   swap_limit_review_heading: '您正在下限价单',
   swap_limit_review_target_price: '目标价格',
-  swap_limit_review_title: '审查订单',
   swap_limit_price_market: '市场',
   swap_limit_warning_at_or_below_market:
     '这个价格等于或低于市场价，所以订单可能立即成交。',
   swap_limit_warning_far_above_market:
     '这个价格远高于市场价，而且可能最终无法成交。',
   chain_address_copied: '{{chain}}地址已复制',
+  swap_limit_confirm: '订单详情正确',
 }

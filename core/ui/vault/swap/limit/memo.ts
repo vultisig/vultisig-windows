@@ -87,3 +87,34 @@ export const getLimitSwapReceiveAmount = ({
       target_price: targetPrice,
     })
   )
+
+const thorchainFixedPointScale = 10n ** 8n
+
+type GetLimitSwapReceiveChainAmountInput = GetLimitSwapReceiveAmountInput & {
+  toCoin: Coin
+}
+
+/**
+ * The order's guaranteed-minimum output as a chain amount in the *target's*
+ * smallest units — the shape `buildLimitSwapKeysignPayload`'s `expectedToAmount`
+ * expects.
+ *
+ * The SDK's LIM is in THORChain's 1e8 fixed point; rescale it to the target
+ * coin's decimals with bigint math so no precision is lost passing it to signing
+ * (where a `Number` round-trip could emit scientific notation on a co-signer).
+ */
+export const getLimitSwapReceiveChainAmount = ({
+  fromCoin,
+  toCoin,
+  amount,
+  targetPrice,
+}: GetLimitSwapReceiveChainAmountInput): bigint =>
+  (getLimitSwapLimitAmount({
+    source_amount: toThorchainFixedPoint({
+      amount,
+      decimals: fromCoin.decimals,
+    }),
+    target_price: targetPrice,
+  }) *
+    10n ** BigInt(toCoin.decimals)) /
+  thorchainFixedPointScale

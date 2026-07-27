@@ -1777,15 +1777,13 @@ export const it = {
   swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Scadenza',
   swap_limit_place_order: "Effettua l'ordine",
-  swap_limit_place_pending_signing:
-    'Il supporto per la firma è in arrivo: controlla il tuo ordine qui sotto.',
   swap_limit_review_heading: 'Stai effettuando un ordine limite',
   swap_limit_review_target_price: 'Prezzo obiettivo',
-  swap_limit_review_title: 'Ordine di revisione',
   swap_limit_price_market: 'Mercato',
   swap_limit_warning_at_or_below_market:
     "Questo prezzo è pari o inferiore al prezzo di mercato, quindi l'ordine potrebbe essere evaso immediatamente.",
   swap_limit_warning_far_above_market:
     "Questo prezzo è di gran lunga superiore a quello di mercato e l'offerta potrebbe scadere senza che l'ordine venga evaso.",
   chain_address_copied: 'Indirizzo {{chain}} copiato',
+  swap_limit_confirm: "I dettagli dell'ordine sono corretti",
 }

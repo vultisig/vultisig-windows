@@ -1744,15 +1744,13 @@ export const hr = {
   swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Istek',
   swap_limit_place_order: 'Naruči',
-  swap_limit_place_pending_signing:
-    'Podrška za potpisivanje je na putu - pregledajte svoju narudžbu u nastavku.',
   swap_limit_review_heading: 'Postavljate limitirani nalog',
   swap_limit_review_target_price: 'Ciljana cijena',
-  swap_limit_review_title: 'Pregled narudžbe',
   swap_limit_price_market: 'Tržište',
   swap_limit_warning_at_or_below_market:
     'Ova cijena je na ili ispod tržišne, tako da se narudžba može odmah ispuniti',
   swap_limit_warning_far_above_market:
     'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
   chain_address_copied: 'Adresa {{chain}} kopirana',
+  swap_limit_confirm: 'Podaci narudžbe su točni',
 }

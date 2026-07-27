@@ -1735,15 +1735,13 @@ export const ko = {
   swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: '만료',
   swap_limit_place_order: '주문하기',
-  swap_limit_place_pending_signing:
-    '서명 지원이 곧 제공될 예정입니다. 아래에서 주문 내역을 확인하세요.',
   swap_limit_review_heading: '지정가 주문을 하십니다.',
   swap_limit_review_target_price: '목표 가격',
-  swap_limit_review_title: '주문 검토',
   swap_limit_price_market: '시장',
   swap_limit_warning_at_or_below_market:
     '이 가격은 시장 가격과 같거나 그 이하이므로 주문이 즉시 체결될 수 있습니다.',
   swap_limit_warning_far_above_market:
     '이 가격은 시장가보다 훨씬 높으며, 거래가 성사되지 않고 만료될 가능성이 있습니다.',
   chain_address_copied: '{{chain}} 주소가 복사되었습니다.',
+  swap_limit_confirm: '주문 내역이 정확합니다.',
 }

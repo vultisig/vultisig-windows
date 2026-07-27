@@ -1755,15 +1755,13 @@ export const nl = {
   swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Vervaldatum',
   swap_limit_place_order: 'Bestelling plaatsen',
-  swap_limit_place_pending_signing:
-    'Ondersteuning voor ondertekening is onderweg — controleer uw bestelling hieronder.',
   swap_limit_review_heading: 'U plaatst een limietorder.',
   swap_limit_review_target_price: 'Doelprijs',
-  swap_limit_review_title: 'Beoordelingsbestelling',
   swap_limit_price_market: 'Markt',
   swap_limit_warning_at_or_below_market:
     'Deze prijs ligt op of onder de marktprijs, waardoor de bestelling mogelijk direct wordt uitgevoerd.',
   swap_limit_warning_far_above_market:
     'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
   chain_address_copied: '{{chain}} adres gekopieerd',
+  swap_limit_confirm: 'De bestelgegevens zijn correct.',
 }

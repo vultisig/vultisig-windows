@@ -1,30 +1,38 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { Button } from '@lib/ui/buttons/Button'
+import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
+import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { LimitSwapExpiryHours } from '@vultisig/core-chain/swap/native/limitSwapMemo'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useLimitSwapKeysignPayloadQuery } from './queries/useLimitSwapKeysignPayloadQuery'
 import { useLimitExpiryLabels } from './useLimitExpiryLabels'
 
 const formatNumber = (value: number) =>
   value.toLocaleString(undefined, { maximumFractionDigits: 8 })
 
 export type LimitOrderReviewData = {
-  fromCoin: Coin
-  toCoin: Coin
-  /** Sell amount in the sell coin's natural units. */
+  fromCoin: AccountCoin
+  toCoin: AccountCoin
+  /** Sell amount in the sell coin's natural units, for display. */
   sellAmount: number
-  /** Guaranteed-minimum output, derived from the memo's LIM. */
+  /** Source amount in the sell coin's smallest units, for signing. */
+  sellChainAmount: bigint
+  /** Guaranteed-minimum output in the buy coin's natural units, for display. */
   receiveAmount: number
+  /** The same LIM in the buy coin's smallest units, for the co-signer display. */
+  receiveChainAmount: bigint
+  /** The `=<` memo to sign. */
+  memo: string
   /** Target price of one buy unit, in sell-asset units. */
   unitPrice: string | undefined
   /** Target price of one buy unit, in fiat. */
@@ -35,17 +43,21 @@ export type LimitOrderReviewData = {
 type LimitOrderReviewProps = LimitOrderReviewData & OnBackProp
 
 /**
- * The composed order, ready to place.
+ * Verify + sign a placed limit order.
  *
- * This is the hand-off from the compose form. Signing itself — fees, the
- * security scan, and the keysign ceremony — is the follow-up that consumes
- * `buildLimitSwapKeysignPayload`, so the confirm button stays disabled here.
+ * Reuses the market swap's keysign pipeline (`VerifyKeysignStart`) — the terms
+ * checkbox, the Blockaid scan row, and the Paired / Fast Sign ceremony — feeding
+ * it a limit-order payload instead of a market one. No `swapQuote` is passed: a
+ * limit order has none, and the deposit signs like any other keysign.
  */
 export const LimitOrderReview: FC<LimitOrderReviewProps> = ({
   fromCoin,
   toCoin,
   sellAmount,
+  sellChainAmount,
   receiveAmount,
+  receiveChainAmount,
+  memo,
   unitPrice,
   targetPriceLabel,
   expiryHours,
@@ -54,14 +66,25 @@ export const LimitOrderReview: FC<LimitOrderReviewProps> = ({
   const { t } = useTranslation()
   const expiryLabel = useLimitExpiryLabels()
 
+  const keysignPayloadQuery = useLimitSwapKeysignPayloadQuery({
+    fromCoin,
+    toCoin,
+    amount: sellChainAmount,
+    memo,
+    expectedToAmount: receiveChainAmount,
+  })
+
   return (
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={t('swap_limit_review_title')}
+        title={t('swap_overview')}
         hasBorder
       />
-      <PageContent gap={16} justifyContent="space-between" scrollable>
+      <VerifyKeysignStart
+        keysignPayloadQuery={keysignPayloadQuery}
+        terms={[t('swap_limit_confirm')]}
+      >
         <Card gap={16}>
           <Text size={16} weight={500} color="contrast">
             {t('swap_limit_review_heading')}
@@ -88,25 +111,27 @@ export const LimitOrderReview: FC<LimitOrderReviewProps> = ({
             label={t('swap_limit_expiry_label')}
             value={expiryLabel[expiryHours]}
           />
+          <Row
+            label={t('network_fee')}
+            value={
+              <MatchQuery
+                value={keysignPayloadQuery}
+                pending={() => t('loading')}
+                error={() => t('failed_to_load')}
+                success={keysignPayload => (
+                  <KeysignFeeAmount keysignPayload={keysignPayload} />
+                )}
+              />
+            }
+          />
         </Card>
-
-        <VStack gap={12}>
-          {/* Signing consumes buildLimitSwapKeysignPayload (core-mpc 1.13.0); the
-              fee + security-scan + keysign screen is the follow-up. */}
-          <Text size={12} color="shy" centerHorizontally>
-            {t('swap_limit_place_pending_signing')}
-          </Text>
-          <Button disabled data-testid="limit-confirm-order">
-            {t('swap_limit_place_order')}
-          </Button>
-        </VStack>
-      </PageContent>
+      </VerifyKeysignStart>
     </>
   )
 }
 
 type LegProps = {
-  coin: Coin
+  coin: AccountCoin
   amount: number
   label: string
 }
@@ -127,7 +152,7 @@ const Leg: FC<LegProps> = ({ coin, amount, label }) => (
 
 type RowProps = {
   label: string
-  value: string
+  value: React.ReactNode
 }
 
 const Row: FC<RowProps> = ({ label, value }) => (

@@ -1752,15 +1752,13 @@ export const ru = {
   swap_limit_expiry_3d: '3d',
   swap_limit_expiry_label: 'Срок годности',
   swap_limit_place_order: 'Оформить заказ',
-  swap_limit_place_pending_signing:
-    'Поддержка подписи уже в пути — проверьте свой заказ ниже.',
   swap_limit_review_heading: 'Вы размещаете лимитный ордер.',
   swap_limit_review_target_price: 'Целевая цена',
-  swap_limit_review_title: 'Проверить заказ',
   swap_limit_price_market: 'Рынок',
   swap_limit_warning_at_or_below_market:
     'Эта цена соответствует рыночной или ниже, поэтому заказ может быть исполнен немедленно.',
   swap_limit_warning_far_above_market:
     'Эта цена значительно выше рыночной и может остаться нереализованной.',
   chain_address_copied: 'Адрес {{chain}} скопирован',
+  swap_limit_confirm: 'Данные заказа верны.',
 }

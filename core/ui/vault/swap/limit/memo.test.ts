@@ -2,7 +2,10 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { describe, expect, it } from 'vitest'
 
-import { buildLimitSwapMemoForCoins } from './memo'
+import {
+  buildLimitSwapMemoForCoins,
+  getLimitSwapReceiveChainAmount,
+} from './memo'
 
 const ethCoin: Coin = { chain: Chain.Ethereum, ticker: 'ETH', decimals: 18 }
 const btcCoin: Coin = { chain: Chain.Bitcoin, ticker: 'BTC', decimals: 8 }
@@ -115,6 +118,43 @@ describe('buildLimitSwapMemoForCoins', () => {
         targetPrice: 0.04,
         expiryHours: 24,
         destinationAddress: evmAddress,
+      })
+    ).toThrow()
+  })
+})
+
+describe('getLimitSwapReceiveChainAmount', () => {
+  it('rescales the LIM to the target coin decimals', () => {
+    // 1 BTC at 16 ETH/BTC -> 16 ETH. ETH has 18 decimals, so 16e18.
+    expect(
+      getLimitSwapReceiveChainAmount({
+        fromCoin: btcCoin,
+        toCoin: ethCoin,
+        amount: 100_000_000n,
+        targetPrice: 16,
+      })
+    ).toBe(16n * 10n ** 18n)
+  })
+
+  it('matches the memo LIM for a 6-decimal target', () => {
+    // 1 BTC at 60000 USDC/BTC -> 60000 USDC. USDC has 6 decimals.
+    expect(
+      getLimitSwapReceiveChainAmount({
+        fromCoin: btcCoin,
+        toCoin: usdcCoin,
+        amount: 100_000_000n,
+        targetPrice: 60_000,
+      })
+    ).toBe(60_000n * 10n ** 6n)
+  })
+
+  it('throws on a LIM that floors to zero, like the memo', () => {
+    expect(() =>
+      getLimitSwapReceiveChainAmount({
+        fromCoin: ethCoin,
+        toCoin: btcCoin,
+        amount: 1n,
+        targetPrice: 0.04,
       })
     ).toThrow()
   })
