@@ -93,8 +93,11 @@ export const NewVaultPage = () => {
             </Button>
             <ImportVaultButton />
           </UniformColumnGrid>
-          <Button onClick={() => navigate({ id: 'setupVault', state: {} })}>
-            {t('next')}
+          <Button
+            data-testid="new-vault-get-started"
+            onClick={() => navigate({ id: 'setupVault', state: {} })}
+          >
+            {t('get_started')}
           </Button>
         </VStack>
       </PageFooter>
