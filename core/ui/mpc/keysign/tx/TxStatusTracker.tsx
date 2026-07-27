@@ -9,7 +9,7 @@ type TxStatusTrackerProps = {
 }
 
 export const TxStatusTracker = ({ chain, hash }: TxStatusTrackerProps) => {
-  const { data } = useTxStatusQuery({ chain, hash })
+  const { data, isPending } = useTxStatusQuery({ chain, hash })
 
   const status = data?.status ?? 'pending'
 
@@ -17,7 +17,9 @@ export const TxStatusTracker = ({ chain, hash }: TxStatusTrackerProps) => {
     <TransactionStatusAnimation
       // `not_found` means the node has not seen the hash yet (broadcast still
       // propagating); keep showing the pending animation until it resolves.
-      status={status === 'not_found' ? 'pending' : status}
+      status={
+        isPending ? 'broadcasted' : status === 'not_found' ? 'pending' : status
+      }
     />
   )
 }
