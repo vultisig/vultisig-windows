@@ -214,6 +214,11 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       ? extractErrorMsg(receiveChainAmountResult.error)
       : undefined
 
+  // Both mean "this order can't be expressed", so they share the blocker and
+  // the notice — the notice needs the specific text, since the generic
+  // memo-invalid string wouldn't tell the user what to change.
+  const orderExpressionError = memoError ?? receiveChainAmountError
+
   const blocker = getLimitOrderBlocker({
     fromChain: fromCoin.chain,
     toChain: toCoin.chain,
@@ -225,7 +230,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     supportedChains,
     marketPrice: marketRate,
     destinationAddress: toCoin.address,
-    memoError: memoError ?? receiveChainAmountError,
+    memoError: orderExpressionError,
   })
 
   // Which preset (if any) the current rate corresponds to, so its pill reads as
@@ -380,8 +385,8 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               <LimitSwapNotice
                 kind="blocker"
                 message={
-                  blocker === 'memoInvalid' && memoError
-                    ? memoError
+                  blocker === 'memoInvalid' && orderExpressionError
+                    ? orderExpressionError
                     : blockerMessage[blocker]
                 }
               />
