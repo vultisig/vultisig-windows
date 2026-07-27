@@ -1766,4 +1766,5 @@ export const nl = {
   swap_limit_warning_far_above_market:
     'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
   chain_address_copied: '{{chain}} adres gekopieerd',
+  native: 'Native',
 }
