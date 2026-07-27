@@ -36,21 +36,20 @@ export const SearchInput = ({
         <InputWrapper hasBorder={!!value}>
           <StyledTextInput
             inputOverlay={
-              !isFocused &&
-              !value && (
-                <InputOverlayWr gap={8} alignItems="center">
-                  <IconWrapper size={16}>
-                    {iconStyle === 'station' ? (
-                      <StationMagnifierIcon />
-                    ) : (
-                      <MagnifyingGlassIcon />
-                    )}
-                  </IconWrapper>
+              <InputOverlayWr gap={8} alignItems="center" aria-hidden>
+                <IconWrapper size={16}>
+                  {iconStyle === 'station' ? (
+                    <StationMagnifierIcon />
+                  ) : (
+                    <MagnifyingGlassIcon />
+                  )}
+                </IconWrapper>
+                {!isFocused && !value && (
                   <Text size={13} color="shy">
                     {t('search_field_placeholder')}
                   </Text>
-                </InputOverlayWr>
-              )
+                )}
+              </InputOverlayWr>
             }
             onValueChange={onChange}
             value={value}
@@ -99,7 +98,9 @@ const InputWrapper = styled.div<{ hasBorder?: boolean }>`
       return `1px solid ${theme.colors.foregroundExtra.toCssValue()}`
     }
 
-    return hasBorder ? `1.5px solid ${getColor('primary')({ theme })}` : 'none'
+    return hasBorder
+      ? `1.5px solid ${getColor('primary')({ theme })}`
+      : '1.5px solid transparent'
   }};
 `
 
@@ -108,6 +109,7 @@ const StyledTextInput = styled(TextInput)`
   background: ${getColor('foreground')};
   box-shadow: 0 0 8px 0 rgba(240, 244, 252, 0.03) inset;
   height: 44px;
+  padding-left: 36px;
 
   ${({ theme }) =>
     theme.iconStyle === 'station' &&
@@ -124,6 +126,7 @@ const StyledTextInput = styled(TextInput)`
 const InputOverlayWr = styled(HStack)`
   position: absolute;
   left: 12px;
+  pointer-events: none;
   top: 50%;
   transform: translateY(-50%);
 `
