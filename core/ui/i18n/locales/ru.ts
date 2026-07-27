@@ -1763,4 +1763,5 @@ export const ru = {
   swap_limit_warning_far_above_market:
     'Эта цена значительно выше рыночной и может остаться нереализованной.',
   chain_address_copied: 'Адрес {{chain}} скопирован',
+  native: 'Нативный',
 }

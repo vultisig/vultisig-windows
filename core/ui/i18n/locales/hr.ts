@@ -1755,4 +1755,5 @@ export const hr = {
   swap_limit_warning_far_above_market:
     'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
   chain_address_copied: 'Adresa {{chain}} kopirana',
+  native: 'Izvorni',
 }

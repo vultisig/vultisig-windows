@@ -5,10 +5,11 @@ import { ManageFromAmount } from '@core/ui/vault/swap/form/amount/ManageFromAmou
 import { ToAmount } from '@core/ui/vault/swap/form/amount/ToAmount'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 
@@ -77,10 +78,17 @@ export const SwapCoinInputField = ({
           data-testid={`swap-${side}-coin-selector`}
         >
           <CoinIcon coin={value} style={{ fontSize: 32 }} />
-          <HStack gap={4}>
-            <Text weight="500" size={16} color="contrast">
-              {value.ticker}
-            </Text>
+          <HStack gap={4} alignItems="center">
+            <VStack gap={2}>
+              <Text weight="500" size={16} color="contrast">
+                {value.ticker}
+              </Text>
+              {isFeeCoin(value) ? (
+                <Text weight="500" size={12} color="shy">
+                  {t('native')}
+                </Text>
+              ) : null}
+            </VStack>
             <ChevronRightIcon />
           </HStack>
         </CoinWrapper>
