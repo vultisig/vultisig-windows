@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -29,14 +30,7 @@ export const CoinPillButton = ({
   const { t } = useTranslation()
 
   return (
-    <Container
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      alignItems="center"
-      gap={8}
-      data-testid={testId}
-    >
+    <Container onClick={onClick} data-testid={testId}>
       <CoinIcon coin={value} style={{ fontSize: 32 }} />
       <HStack gap={4} alignItems="center">
         <VStack gap={2}>
@@ -55,8 +49,11 @@ export const CoinPillButton = ({
   )
 }
 
-const Container = styled(HStack)`
-  cursor: pointer;
+const Container = styled(UnstyledButton)`
+  ${hStack({
+    alignItems: 'center',
+    gap: 8,
+  })}
   padding: 6px;
   border-radius: 99px;
   background-color: ${getColor('foregroundExtra')};
