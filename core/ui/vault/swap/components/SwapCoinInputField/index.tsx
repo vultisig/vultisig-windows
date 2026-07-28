@@ -1,21 +1,19 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { CoinPillButton } from '@core/ui/chain/coin/inputs/CoinPillButton'
 import { useTransferDirection } from '@core/ui/state/transferDirection'
 import { ManageFromAmount } from '@core/ui/vault/swap/form/amount/ManageFromAmount'
 import { ToAmount } from '@core/ui/vault/swap/form/amount/ToAmount'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { CoinBalance } from '../CoinBalance'
-import { CoinWrapper, Container } from './SwapCoinInputField.styled'
+import { Container } from './SwapCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
   Pick<Coin, 'id' | 'chain' | 'logo' | 'ticker'>
@@ -69,29 +67,11 @@ export const SwapCoinInputField = ({
         <CoinBalance value={value} />
       </HStack>
       <HStack flexGrow justifyContent="space-between" alignItems="flex-start">
-        <CoinWrapper
-          role="button"
-          tabIndex={0}
+        <CoinPillButton
+          value={value}
           onClick={onCoinClick}
-          alignItems="center"
-          gap={8}
-          data-testid={`swap-${side}-coin-selector`}
-        >
-          <CoinIcon coin={value} style={{ fontSize: 32 }} />
-          <HStack gap={4} alignItems="center">
-            <VStack gap={2}>
-              <Text weight="500" size={16} color="contrast">
-                {value.ticker}
-              </Text>
-              {isFeeCoin(value) ? (
-                <Text weight="500" size={12} color="shy">
-                  {t('native')}
-                </Text>
-              ) : null}
-            </VStack>
-            <ChevronRightIcon />
-          </HStack>
-        </CoinWrapper>
+          testId={`swap-${side}-coin-selector`}
+        />
         {match(side, {
           to: () => <ToAmount />,
           from: () => <ManageFromAmount />,
