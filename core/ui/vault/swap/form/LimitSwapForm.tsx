@@ -33,7 +33,6 @@ import {
   getLimitPriceWarning,
   getPresetPrice,
   LimitPricePreset,
-  limitPricePresets,
   LimitPriceWarning,
   parseLimitPrice,
   quantizeTargetPrice,
@@ -69,6 +68,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
   const [step, setStep] = useState<'asset' | 'execute'>('asset')
   const [priceInput, setPriceInput] = useState('')
+  const [activePreset, setActivePreset] = useState<LimitPricePreset>()
   const [unit, setUnit] = useState<LimitPriceUnit>('fiat')
   const [expiryHours, setExpiryHours] =
     useState<LimitSwapExpiryHours>(defaultExpiryHours)
@@ -81,6 +81,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   const pairKey = `${coinKeyToString(fromCoinKey)}>${coinKeyToString(toCoinKey)}`
   useEffect(() => {
     setPriceInput('')
+    setActivePreset(undefined)
   }, [pairKey])
 
   const { data: isQueueEnabled } = useAdvancedSwapQueueEnabledQuery()
@@ -232,19 +233,6 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     memoError: orderExpressionError,
   })
 
-  // Which preset (if any) the current rate corresponds to, so its pill reads as
-  // selected. Compared after quantizing both sides, since that is the precision
-  // a preset click actually writes.
-  const activePreset: LimitPricePreset | undefined =
-    rate !== null && marketRate
-      ? limitPricePresets.find(
-          preset =>
-            quantizeTargetPrice(
-              getPresetPrice({ marketPrice: marketRate, preset })
-            ) === rate
-        )
-      : undefined
-
   const priceWarning =
     rate !== null
       ? getLimitPriceWarning({ price: rate, marketPrice: marketRate })
@@ -356,7 +344,10 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
             <LimitExecuteWhen
               toCoin={toCoin}
               priceInput={priceInput}
-              onPriceInputChange={setPriceInput}
+              onPriceInputChange={value => {
+                setPriceInput(value)
+                setActivePreset(undefined)
+              }}
               unit={unit}
               onUnitChange={handleUnitChange}
               valueSuffix={unit === 'fiat' ? undefined : fromCoin.ticker}
@@ -375,6 +366,11 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
                     getPresetPrice({ marketPrice: marketRate, preset }),
                     unit
                   )
+                  // Remembered rather than re-derived from the live market: the
+                  // market moves between the click and the next render, so
+                  // comparing the stored rate against a freshly computed preset
+                  // price deselected the pill on the next tick.
+                  setActivePreset(preset)
                 }
               }}
               expiryHours={expiryHours}
