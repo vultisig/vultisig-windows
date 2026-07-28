@@ -1183,6 +1183,7 @@ export const en = {
   swap_limit_expiry_3d: '3d',
   swap_limit_confirm: 'The order details are correct',
   swap_limit_expiry_label: 'Expiry',
+  swap_limit_payout_to: 'Payout to',
   swap_limit_place_order: 'Place order',
   swap_limit_review_heading: "You're placing a limit order",
   swap_limit_review_target_price: 'Target price',
