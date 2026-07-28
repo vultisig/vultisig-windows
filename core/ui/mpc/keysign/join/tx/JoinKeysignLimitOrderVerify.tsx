@@ -29,6 +29,7 @@ import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useTranslation } from 'react-i18next'
 
+import { isOwnLimitOrderDestination } from './isOwnLimitOrderDestination'
 import { JoinSwapFiatAmount } from './JoinSwapFiatAmount'
 import { getLimitOrderBuyCoin } from './limitOrderBuyCoin'
 import { getLimitOrderUnitPriceLabel } from './limitOrderUnitPrice'
@@ -146,12 +147,14 @@ export const JoinKeysignLimitOrderVerify = ({ value, order }: Props) => {
 
   // Mirrors iOS's external-recipient rule: a payout to one of this vault's own
   // addresses is the normal case and stays quiet; anything else is a different
-  // destination and must be shown before signing. An address the vault doesn't
-  // have (buy chain not enabled here) fails visible rather than silent.
-  const isOwnDestination = coins.some(
-    coin =>
-      coin.address.toLowerCase() === order.destinationAddress.toLowerCase()
-  )
+  // destination and must be shown before signing. An address the vault can't
+  // confirm (buy chain not enabled here, or an unresolved asset prefix) fails
+  // visible rather than silent.
+  const isOwnDestination = isOwnLimitOrderDestination({
+    destinationAddress: order.destinationAddress,
+    targetChain: order.targetChain,
+    coins,
+  })
 
   return (
     <ContainerWrapper radius={16}>

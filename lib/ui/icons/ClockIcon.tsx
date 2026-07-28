@@ -1,6 +1,7 @@
 import { SvgProps } from '@lib/ui/props'
 import { FC } from 'react'
 
+/** Circular clock face, lucide-style; sized via `font-size` at the usage site. */
 export const ClockIcon: FC<SvgProps> = props => (
   <svg
     fill="none"
