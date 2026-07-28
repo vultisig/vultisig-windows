@@ -66,9 +66,11 @@ test('vault search keeps the lens stable through focus, typing, and blur', async
   for (let iteration = 0; iteration < 3; iteration += 1) {
     await input.focus()
     await expect(lens).toBeVisible()
+    expect(await getLensOffset()).toEqual(initialLensOffset)
     await page.waitForTimeout(350)
     await input.evaluate(element => element.blur())
     await expect(lens).toBeVisible()
+    expect(await getLensOffset()).toEqual(initialLensOffset)
     await page.waitForTimeout(350)
   }
 

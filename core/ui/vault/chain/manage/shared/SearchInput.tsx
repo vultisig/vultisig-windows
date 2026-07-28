@@ -35,6 +35,7 @@ export const SearchInput = ({
       render={({ actionSize }) => (
         <InputWrapper hasBorder={!!value}>
           <StyledTextInput
+            aria-label={t('search_field_placeholder')}
             inputOverlay={
               <InputOverlayWr gap={8} alignItems="center" aria-hidden>
                 <IconWrapper size={16}>
