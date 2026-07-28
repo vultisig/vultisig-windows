@@ -89,7 +89,7 @@ const Wrapper = styled(HStack)`
 `
 
 const SearchIconWrapper = styled(VStack)`
-  color: ${getColor('textShy')};
+  color: ${getColor('text')};
   font-size: 20px;
   left: 8px;
   pointer-events: none;
