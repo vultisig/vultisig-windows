@@ -1,10 +1,11 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { describe, expect, it } from 'vitest'
 
 import {
   buildLimitSwapMemoForCoins,
-  getLimitSwapReceiveChainAmount,
+  getLimitSwapExpectedToAmount,
 } from './memo'
 
 const ethCoin: Coin = { chain: Chain.Ethereum, ticker: 'ETH', decimals: 18 }
@@ -123,64 +124,52 @@ describe('buildLimitSwapMemoForCoins', () => {
   })
 })
 
-describe('getLimitSwapReceiveChainAmount', () => {
-  it('rescales the LIM to the target coin decimals', () => {
-    // 1 BTC at 16 ETH/BTC -> 16 ETH. ETH has 18 decimals, so 16e18.
-    expect(
-      getLimitSwapReceiveChainAmount({
-        fromCoin: btcCoin,
-        toCoin: ethCoin,
-        amount: 100_000_000n,
-        targetPrice: 16,
-      })
-    ).toBe(16n * 10n ** 18n)
+describe('getLimitSwapExpectedToAmount', () => {
+  // The SDK formats this field with getNativeSwapDecimals(toCoin) -- 8 for every
+  // THORChain limit-swap target -- so it must be the memo's LIM in 1e8, not the
+  // target coin's own units. Scaling to toCoin.decimals leaves the signed memo
+  // right but shows the co-signer 100x low for USDC and 1e10x high for ETH.
+  it.each([
+    ['a 6-decimal target', usdcCoin],
+    ['an 18-decimal target', ethCoin],
+  ])('equals the LIM the memo encodes for %s', (_label, toCoin) => {
+    const order = {
+      fromCoin: btcCoin,
+      amount: 100_000_000n,
+      targetPrice: 0.5,
+    } as const
+
+    const memo = buildLimitSwapMemoForCoins({
+      ...order,
+      toCoin,
+      expiryHours: 24,
+      destinationAddress: evmAddress,
+    })
+
+    const [encodedLim] = shouldBePresent(memo.split(':')[3]).split('/')
+
+    expect(getLimitSwapExpectedToAmount(order).toString()).toBe(encodedLim)
   })
 
-  it('matches the memo LIM for a 6-decimal target', () => {
-    // 1 BTC at 60000 USDC/BTC -> 60000 USDC. USDC has 6 decimals.
+  it('stays in 1e8 regardless of the source coin decimals', () => {
+    // 1 ETH at 0.04 BTC/ETH -> 0.04 BTC, which is 4000000 in 1e8.
     expect(
-      getLimitSwapReceiveChainAmount({
-        fromCoin: btcCoin,
-        toCoin: usdcCoin,
-        amount: 100_000_000n,
-        targetPrice: 60_000,
-      })
-    ).toBe(60_000n * 10n ** 6n)
-  })
-
-  it('throws on a LIM that floors to zero, like the memo', () => {
-    expect(() =>
-      getLimitSwapReceiveChainAmount({
+      getLimitSwapExpectedToAmount({
         fromCoin: ethCoin,
-        toCoin: btcCoin,
+        amount: 10n ** 18n,
+        targetPrice: 0.04,
+      })
+    ).toBe(4_000_000n)
+  })
+
+  // A zero LIM is how THORChain spells "unprotected market order".
+  it('throws when the LIM floors to zero', () => {
+    expect(() =>
+      getLimitSwapExpectedToAmount({
+        fromCoin: ethCoin,
         amount: 1n,
         targetPrice: 0.04,
       })
     ).toThrow()
-  })
-
-  // 100 sats at 0.5 USDC/BTC is a LIM of 50 in THORChain's 1e8 fixed point --
-  // nonzero, so the memo builds -- but USDC's 6 decimals rescale it to 0. Passing
-  // that through as `expectedToAmount` would show a co-signer they receive
-  // nothing while the memo they sign still carries a real floor.
-  it('throws when a nonzero LIM underflows the target decimals', () => {
-    const order = {
-      fromCoin: btcCoin,
-      toCoin: usdcCoin,
-      amount: 100n,
-      targetPrice: 0.5,
-    } as const
-
-    expect(
-      buildLimitSwapMemoForCoins({
-        ...order,
-        expiryHours: 24,
-        destinationAddress: evmAddress,
-      })
-    ).toContain(':50/14400/0')
-
-    expect(() => getLimitSwapReceiveChainAmount(order)).toThrow(
-      /rounds to zero USDC/
-    )
   })
 })

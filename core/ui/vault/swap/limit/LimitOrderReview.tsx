@@ -29,8 +29,8 @@ export type LimitOrderReviewData = {
   sellChainAmount: bigint
   /** Guaranteed-minimum output in the buy coin's natural units, for display. */
   receiveAmount: number
-  /** The same LIM in the buy coin's smallest units, for the co-signer display. */
-  receiveChainAmount: bigint
+  /** The memo's LIM in THORChain's 1e8 fixed point, for the co-signer display. */
+  expectedToAmount: bigint
   /** The `=<` memo to sign. */
   memo: string
   /** Target price of one buy unit, in sell-asset units. */
@@ -56,7 +56,7 @@ export const LimitOrderReview: FC<LimitOrderReviewProps> = ({
   sellAmount,
   sellChainAmount,
   receiveAmount,
-  receiveChainAmount,
+  expectedToAmount,
   memo,
   unitPrice,
   targetPriceLabel,
@@ -71,7 +71,7 @@ export const LimitOrderReview: FC<LimitOrderReviewProps> = ({
     toCoin,
     amount: sellChainAmount,
     memo,
-    expectedToAmount: receiveChainAmount,
+    expectedToAmount,
   })
 
   return (

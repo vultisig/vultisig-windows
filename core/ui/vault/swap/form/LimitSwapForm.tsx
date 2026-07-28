@@ -25,8 +25,8 @@ import { LimitOrderReviewData } from '../limit/LimitOrderReview'
 import { LimitSwapNotice } from '../limit/LimitSwapNotice'
 import {
   buildLimitSwapMemoForCoins,
+  getLimitSwapExpectedToAmount,
   getLimitSwapReceiveAmount,
-  getLimitSwapReceiveChainAmount,
 } from '../limit/memo'
 import { getLimitOrderBlocker, LimitOrderBlocker } from '../limit/placement'
 import {
@@ -185,14 +185,13 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     farAboveMarket: t('swap_limit_warning_far_above_market'),
   }
 
-  // The same LIM in the buy coin's smallest units, for the co-signer display on
+  // The memo's LIM in THORChain's 1e8 fixed point, for the co-signer display on
   // the keysign payload — kept as a bigint so no precision is lost into signing.
-  const receiveChainAmountResult =
+  const expectedToAmountResult =
     rate !== null && amount !== null && amount > 0n
       ? attempt(() =>
-          getLimitSwapReceiveChainAmount({
+          getLimitSwapExpectedToAmount({
             fromCoin,
-            toCoin,
             amount,
             targetPrice: rate,
           })
@@ -201,23 +200,23 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
   // `Result`'s failure variant types `data` as `never?`, so `'data' in result`
   // does not narrow — coerce explicitly rather than trusting the check.
-  const receiveChainAmount: bigint | null =
-    receiveChainAmountResult && 'data' in receiveChainAmountResult
-      ? (receiveChainAmountResult.data ?? null)
+  const expectedToAmount: bigint | null =
+    expectedToAmountResult && 'data' in expectedToAmountResult
+      ? (expectedToAmountResult.data ?? null)
       : null
 
   // Same class of failure as the memo not building — the order can't be
   // expressed — so it blocks placement through the same reason rather than
   // leaving the CTA enabled over a `placeOrder` that would return silently.
-  const receiveChainAmountError =
-    receiveChainAmountResult && 'error' in receiveChainAmountResult
-      ? extractErrorMsg(receiveChainAmountResult.error)
+  const expectedToAmountError =
+    expectedToAmountResult && 'error' in expectedToAmountResult
+      ? extractErrorMsg(expectedToAmountResult.error)
       : undefined
 
   // Both mean "this order can't be expressed", so they share the blocker and
   // the notice — the notice needs the specific text, since the generic
   // memo-invalid string wouldn't tell the user what to change.
-  const orderExpressionError = memoError ?? receiveChainAmountError
+  const orderExpressionError = memoError ?? expectedToAmountError
 
   const blocker = getLimitOrderBlocker({
     fromChain: fromCoin.chain,
@@ -314,7 +313,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     if (
       amount === null ||
       memoValue === undefined ||
-      receiveChainAmount === null
+      expectedToAmount === null
     ) {
       return
     }
@@ -325,7 +324,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       sellAmount: sellAmount ?? 0,
       sellChainAmount: amount,
       receiveAmount: receiveAmount ?? 0,
-      receiveChainAmount,
+      expectedToAmount,
       memo: memoValue,
       unitPrice:
         targetAssetPrice !== null

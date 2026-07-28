@@ -63,59 +63,27 @@ type GetLimitSwapReceiveAmountInput = {
 }
 
 /**
- * The order's guaranteed-minimum output, in the target's natural units, for
- * display.
+ * The order's guaranteed-minimum output as `buildLimitSwapKeysignPayload`'s
+ * `expectedToAmount` — the memo's LIM, in THORChain's 1e8 fixed point.
  *
- * Derived from the SDK's `getLimitSwapLimitAmount` — the exact truncated LIM the
- * memo encodes — rather than recomputing `amount × price` as a float. The two can
- * differ by the truncation, and showing a "you receive" figure the signed order
- * would not honor is the mismatch the issue calls out. Throws on the same
- * conditions as the memo (a LIM flooring to zero), so callers guard it the same
- * way they guard the memo.
+ * Deliberately *not* the target coin's own decimals. The SDK formats this field
+ * with `getNativeSwapDecimals(toCoin)`, which is THORChain's 8 for every
+ * limit-swap target — MayaChain, the only chain that reports otherwise, is not
+ * THORChain-routable — mirroring how the market path feeds the same field a 1e8
+ * `expected_amount_out`. Rescaling to `toCoin.decimals` would leave the signed
+ * memo correct while showing the co-signer a receive amount 100x low for a
+ * 6-decimal USDC target and 1e10x high for an 18-decimal ETH one.
+ *
+ * Throws when the LIM floors to zero, which THORChain reads as an unprotected
+ * market order — the same condition the memo builder rejects, so callers guard
+ * it the same way they guard the memo.
  */
-export const getLimitSwapReceiveAmount = ({
+export const getLimitSwapExpectedToAmount = ({
   fromCoin,
   amount,
   targetPrice,
-}: GetLimitSwapReceiveAmountInput): number =>
-  fromThorchainFixedPoint(
-    getLimitSwapLimitAmount({
-      source_amount: toThorchainFixedPoint({
-        amount,
-        decimals: fromCoin.decimals,
-      }),
-      target_price: targetPrice,
-    })
-  )
-
-const thorchainFixedPointScale = 10n ** 8n
-
-type GetLimitSwapReceiveChainAmountInput = GetLimitSwapReceiveAmountInput & {
-  toCoin: Coin
-}
-
-/**
- * The order's guaranteed-minimum output as a chain amount in the *target's*
- * smallest units — the shape `buildLimitSwapKeysignPayload`'s `expectedToAmount`
- * expects.
- *
- * The SDK's LIM is in THORChain's 1e8 fixed point; rescale it to the target
- * coin's decimals with bigint math so no precision is lost passing it to signing
- * (where a `Number` round-trip could emit scientific notation on a co-signer).
- *
- * Throws when a nonzero LIM rescales to zero — possible for targets with fewer
- * than 8 decimals, where a dust minimum-received rounds away entirely. Forwarding
- * `0` there would tell a co-signer they receive nothing while the signed memo
- * still carries a real floor, so this fails loud like the memo builder does on
- * its own zero-LIM case.
- */
-export const getLimitSwapReceiveChainAmount = ({
-  fromCoin,
-  toCoin,
-  amount,
-  targetPrice,
-}: GetLimitSwapReceiveChainAmountInput): bigint => {
-  const limit = getLimitSwapLimitAmount({
+}: GetLimitSwapReceiveAmountInput): bigint =>
+  getLimitSwapLimitAmount({
     source_amount: toThorchainFixedPoint({
       amount,
       decimals: fromCoin.decimals,
@@ -123,14 +91,13 @@ export const getLimitSwapReceiveChainAmount = ({
     target_price: targetPrice,
   })
 
-  const receiveChainAmount =
-    (limit * 10n ** BigInt(toCoin.decimals)) / thorchainFixedPointScale
-
-  if (receiveChainAmount === 0n) {
-    throw new Error(
-      `This order's minimum received rounds to zero ${toCoin.ticker}. Increase the amount or the target price.`
-    )
-  }
-
-  return receiveChainAmount
-}
+/**
+ * The same guaranteed minimum in the target's natural units, for display.
+ *
+ * Derived from the exact value handed to signing rather than recomputing
+ * `amount × price` as a float, so the reviewed figure and the signed memo cannot
+ * disagree by the LIM's truncation.
+ */
+export const getLimitSwapReceiveAmount = (
+  input: GetLimitSwapReceiveAmountInput
+): number => fromThorchainFixedPoint(getLimitSwapExpectedToAmount(input))
