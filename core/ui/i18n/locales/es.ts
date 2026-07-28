@@ -1769,6 +1769,7 @@ export const es = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'Los detalles del pedido son correctos.',
   swap_limit_expiry_label: 'Expiración',
   swap_limit_place_order: 'Realizar pedido',
   swap_limit_review_heading: 'Estás realizando una orden limitada',
@@ -1779,5 +1780,5 @@ export const es = {
   swap_limit_warning_far_above_market:
     'Este precio está muy por encima del precio de mercado y podría expirar sin que se complete la transacción.',
   chain_address_copied: 'Dirección {{chain}} copiada',
-  swap_limit_confirm: 'Los detalles del pedido son correctos.',
+  native: 'Nativo',
 }

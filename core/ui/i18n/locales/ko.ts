@@ -1733,6 +1733,7 @@ export const ko = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: '주문 내역이 정확합니다.',
   swap_limit_expiry_label: '만료',
   swap_limit_place_order: '주문하기',
   swap_limit_review_heading: '지정가 주문을 하십니다.',
@@ -1743,5 +1744,5 @@ export const ko = {
   swap_limit_warning_far_above_market:
     '이 가격은 시장가보다 훨씬 높으며, 거래가 성사되지 않고 만료될 가능성이 있습니다.',
   chain_address_copied: '{{chain}} 주소가 복사되었습니다.',
-  swap_limit_confirm: '주문 내역이 정확합니다.',
+  native: '네이티브',
 }

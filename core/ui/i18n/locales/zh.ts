@@ -1624,6 +1624,7 @@ export const zh = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: '订单详情正确',
   swap_limit_expiry_label: '到期日',
   swap_limit_place_order: '下单',
   swap_limit_review_heading: '您正在下限价单',
@@ -1634,5 +1635,5 @@ export const zh = {
   swap_limit_warning_far_above_market:
     '这个价格远高于市场价，而且可能最终无法成交。',
   chain_address_copied: '{{chain}}地址已复制',
-  swap_limit_confirm: '订单详情正确',
+  native: '原生',
 }

@@ -1753,6 +1753,7 @@ export const nl = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'De bestelgegevens zijn correct.',
   swap_limit_expiry_label: 'Vervaldatum',
   swap_limit_place_order: 'Bestelling plaatsen',
   swap_limit_review_heading: 'U plaatst een limietorder.',
@@ -1763,5 +1764,5 @@ export const nl = {
   swap_limit_warning_far_above_market:
     'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
   chain_address_copied: '{{chain}} adres gekopieerd',
-  swap_limit_confirm: 'De bestelgegevens zijn correct.',
+  native: 'Native',
 }

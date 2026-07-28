@@ -1750,6 +1750,7 @@ export const ru = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'Данные заказа верны.',
   swap_limit_expiry_label: 'Срок годности',
   swap_limit_place_order: 'Оформить заказ',
   swap_limit_review_heading: 'Вы размещаете лимитный ордер.',
@@ -1760,5 +1761,5 @@ export const ru = {
   swap_limit_warning_far_above_market:
     'Эта цена значительно выше рыночной и может остаться нереализованной.',
   chain_address_copied: 'Адрес {{chain}} скопирован',
-  swap_limit_confirm: 'Данные заказа верны.',
+  native: 'Нативный',
 }

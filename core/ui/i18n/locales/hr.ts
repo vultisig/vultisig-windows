@@ -1742,6 +1742,7 @@ export const hr = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'Podaci narudžbe su točni',
   swap_limit_expiry_label: 'Istek',
   swap_limit_place_order: 'Naruči',
   swap_limit_review_heading: 'Postavljate limitirani nalog',
@@ -1752,5 +1753,5 @@ export const hr = {
   swap_limit_warning_far_above_market:
     'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
   chain_address_copied: 'Adresa {{chain}} kopirana',
-  swap_limit_confirm: 'Podaci narudžbe su točni',
+  native: 'Izvorni',
 }

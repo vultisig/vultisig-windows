@@ -652,6 +652,7 @@ export const en = {
   more_coming_soon: 'More coming soon',
   name: 'Name',
   name_your_vault: 'Name your vault',
+  native: 'Native',
   network: 'Network',
   network_fee: 'Network Fee',
   network_rate: 'Network rate',
