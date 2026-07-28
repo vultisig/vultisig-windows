@@ -7,7 +7,7 @@ import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { buildLimitSwapKeysignPayload } from '@vultisig/core-mpc/keysign/swap/buildLimitSwapKeysignPayload'
-import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { getLimitSwapKeysignPayloadInput } from '../keysignPayloadInput'
 
@@ -44,32 +44,40 @@ export const useLimitSwapKeysignPayloadQuery = ({
   const fromPublicKey = useCurrentVaultPublicKey(fromCoin.chain)
   const toPublicKey = useCurrentVaultPublicKey(toCoin.chain)
 
+  const input = getLimitSwapKeysignPayloadInput({
+    fromCoin,
+    toCoin,
+    amount,
+    memo,
+    expectedToAmount,
+    vault,
+    fromPublicKey,
+    toPublicKey,
+    walletCore,
+  })
+
   return useQuery({
+    // Keyed off the whole signing identity, not just the vault id: a reshare
+    // keeps the ECDSA key (and so the id) while changing `localPartyId` and
+    // `libType`, and refetch-on-mount is off — so a vault-id-only key could
+    // serve a payload built for the previous participant set. Mirrors the
+    // market-swap query, omitting the same unserializable WalletCore handles.
     queryKey: [
       'limitSwapKeysignPayload',
       {
-        fromCoin,
-        toCoin,
+        ...omit(
+          input,
+          'walletCore',
+          'fromPublicKey',
+          'toPublicKey',
+          'amount',
+          'expectedToAmount'
+        ),
         amount: amount.toString(),
-        memo,
         expectedToAmount: expectedToAmount.toString(),
-        vaultId: getVaultId(vault),
       },
     ],
-    queryFn: () =>
-      buildLimitSwapKeysignPayload(
-        getLimitSwapKeysignPayloadInput({
-          fromCoin,
-          toCoin,
-          amount,
-          memo,
-          expectedToAmount,
-          vault,
-          fromPublicKey,
-          toPublicKey,
-          walletCore,
-        })
-      ),
+    queryFn: () => buildLimitSwapKeysignPayload(input),
     ...noRefetchQueryOptions,
   })
 }
