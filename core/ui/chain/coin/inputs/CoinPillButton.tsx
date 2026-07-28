@@ -54,6 +54,7 @@ const Container = styled(UnstyledButton)`
     alignItems: 'center',
     gap: 8,
   })}
+  text-align: left;
   padding: 6px;
   border-radius: 99px;
   background-color: ${getColor('foregroundExtra')};
