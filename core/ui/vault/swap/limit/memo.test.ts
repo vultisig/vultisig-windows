@@ -1,8 +1,12 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { describe, expect, it } from 'vitest'
 
-import { buildLimitSwapMemoForCoins } from './memo'
+import {
+  buildLimitSwapMemoForCoins,
+  getLimitSwapExpectedToAmount,
+} from './memo'
 
 const ethCoin: Coin = { chain: Chain.Ethereum, ticker: 'ETH', decimals: 18 }
 const btcCoin: Coin = { chain: Chain.Bitcoin, ticker: 'BTC', decimals: 8 }
@@ -115,6 +119,56 @@ describe('buildLimitSwapMemoForCoins', () => {
         targetPrice: 0.04,
         expiryHours: 24,
         destinationAddress: evmAddress,
+      })
+    ).toThrow()
+  })
+})
+
+describe('getLimitSwapExpectedToAmount', () => {
+  // The SDK formats this field with getNativeSwapDecimals(toCoin) -- 8 for every
+  // THORChain limit-swap target -- so it must be the memo's LIM in 1e8, not the
+  // target coin's own units. Scaling to toCoin.decimals leaves the signed memo
+  // right but shows the co-signer 100x low for USDC and 1e10x high for ETH.
+  it.each([
+    ['a 6-decimal target', usdcCoin],
+    ['an 18-decimal target', ethCoin],
+  ])('equals the LIM the memo encodes for %s', (_label, toCoin) => {
+    const order = {
+      fromCoin: btcCoin,
+      amount: 100_000_000n,
+      targetPrice: 0.5,
+    } as const
+
+    const memo = buildLimitSwapMemoForCoins({
+      ...order,
+      toCoin,
+      expiryHours: 24,
+      destinationAddress: evmAddress,
+    })
+
+    const [encodedLim] = shouldBePresent(memo.split(':')[3]).split('/')
+
+    expect(getLimitSwapExpectedToAmount(order).toString()).toBe(encodedLim)
+  })
+
+  it('stays in 1e8 regardless of the source coin decimals', () => {
+    // 1 ETH at 0.04 BTC/ETH -> 0.04 BTC, which is 4000000 in 1e8.
+    expect(
+      getLimitSwapExpectedToAmount({
+        fromCoin: ethCoin,
+        amount: 10n ** 18n,
+        targetPrice: 0.04,
+      })
+    ).toBe(4_000_000n)
+  })
+
+  // A zero LIM is how THORChain spells "unprotected market order".
+  it('throws when the LIM floors to zero', () => {
+    expect(() =>
+      getLimitSwapExpectedToAmount({
+        fromCoin: ethCoin,
+        amount: 1n,
+        targetPrice: 0.04,
       })
     ).toThrow()
   })

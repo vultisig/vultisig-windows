@@ -1786,13 +1786,11 @@ export const de = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'Die Bestelldetails sind korrekt.',
   swap_limit_expiry_label: 'Ablauf',
   swap_limit_place_order: 'Bestellung aufgeben',
-  swap_limit_place_pending_signing:
-    'Die Unterstützung für Ihre Unterschrift ist unterwegs – überprüfen Sie Ihre Bestellung unten.',
   swap_limit_review_heading: 'Sie erteilen eine Limit-Order.',
   swap_limit_review_target_price: 'Kursziel',
-  swap_limit_review_title: 'Bestellung prüfen',
   swap_limit_price_market: 'Markt',
   swap_limit_warning_at_or_below_market:
     'Dieser Preis entspricht dem Marktpreis oder liegt darunter, daher kann die Order sofort ausgeführt werden.',

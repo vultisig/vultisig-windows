@@ -25,6 +25,7 @@ import { LimitOrderReviewData } from '../limit/LimitOrderReview'
 import { LimitSwapNotice } from '../limit/LimitSwapNotice'
 import {
   buildLimitSwapMemoForCoins,
+  getLimitSwapExpectedToAmount,
   getLimitSwapReceiveAmount,
 } from '../limit/memo'
 import { getLimitOrderBlocker, LimitOrderBlocker } from '../limit/placement'
@@ -164,6 +165,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
   const memoError =
     memo && 'error' in memo ? extractErrorMsg(memo.error) : undefined
+  const memoValue = memo && 'data' in memo ? memo.data : undefined
 
   const blockerMessage: Record<LimitOrderBlocker, string> = {
     queueUnavailable: t('swap_limit_unavailable'),
@@ -183,6 +185,39 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     farAboveMarket: t('swap_limit_warning_far_above_market'),
   }
 
+  // The memo's LIM in THORChain's 1e8 fixed point, for the co-signer display on
+  // the keysign payload — kept as a bigint so no precision is lost into signing.
+  const expectedToAmountResult =
+    rate !== null && amount !== null && amount > 0n
+      ? attempt(() =>
+          getLimitSwapExpectedToAmount({
+            fromCoin,
+            amount,
+            targetPrice: rate,
+          })
+        )
+      : undefined
+
+  // `Result`'s failure variant types `data` as `never?`, so `'data' in result`
+  // does not narrow — coerce explicitly rather than trusting the check.
+  const expectedToAmount: bigint | null =
+    expectedToAmountResult && 'data' in expectedToAmountResult
+      ? (expectedToAmountResult.data ?? null)
+      : null
+
+  // Same class of failure as the memo not building — the order can't be
+  // expressed — so it blocks placement through the same reason rather than
+  // leaving the CTA enabled over a `placeOrder` that would return silently.
+  const expectedToAmountError =
+    expectedToAmountResult && 'error' in expectedToAmountResult
+      ? extractErrorMsg(expectedToAmountResult.error)
+      : undefined
+
+  // Both mean "this order can't be expressed", so they share the blocker and
+  // the notice — the notice needs the specific text, since the generic
+  // memo-invalid string wouldn't tell the user what to change.
+  const orderExpressionError = memoError ?? expectedToAmountError
+
   const blocker = getLimitOrderBlocker({
     fromChain: fromCoin.chain,
     toChain: toCoin.chain,
@@ -194,7 +229,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     supportedChains,
     marketPrice: marketRate,
     destinationAddress: toCoin.address,
-    memoError,
+    memoError: orderExpressionError,
   })
 
   // Which preset (if any) the current rate corresponds to, so its pill reads as
@@ -271,13 +306,26 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
   // Hand off through the page-level flow (like the market form) so the review
   // screen replaces the whole form — header and Market/Limit tabs included —
-  // rather than nesting a second header under them.
-  const placeOrder = () =>
+  // rather than nesting a second header under them. The button is only enabled
+  // when there is no blocker, which guarantees these are present; the guard
+  // narrows the types.
+  const placeOrder = () => {
+    if (
+      amount === null ||
+      memoValue === undefined ||
+      expectedToAmount === null
+    ) {
+      return
+    }
+
     onFinish({
       fromCoin,
       toCoin,
       sellAmount: sellAmount ?? 0,
+      sellChainAmount: amount,
       receiveAmount: receiveAmount ?? 0,
+      expectedToAmount,
+      memo: memoValue,
       unitPrice:
         targetAssetPrice !== null
           ? `${formatNumber(targetAssetPrice)} ${fromCoin.ticker}`
@@ -288,6 +336,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
           : undefined,
       expiryHours,
     })
+  }
 
   return (
     <PageContent gap={12} justifyContent="space-between" scrollable>
@@ -335,8 +384,8 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               <LimitSwapNotice
                 kind="blocker"
                 message={
-                  blocker === 'memoInvalid' && memoError
-                    ? memoError
+                  blocker === 'memoInvalid' && orderExpressionError
+                    ? orderExpressionError
                     : blockerMessage[blocker]
                 }
               />

@@ -1181,13 +1181,11 @@ export const en = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'The order details are correct',
   swap_limit_expiry_label: 'Expiry',
   swap_limit_place_order: 'Place order',
-  swap_limit_place_pending_signing:
-    'Signing support is on the way — review your order below.',
   swap_limit_review_heading: "You're placing a limit order",
   swap_limit_review_target_price: 'Target price',
-  swap_limit_review_title: 'Review order',
   swap_limit_price_market: 'Market',
   swap_limit_unavailable:
     'Limit orders are temporarily unavailable on THORChain',

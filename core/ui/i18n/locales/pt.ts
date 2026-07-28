@@ -1771,14 +1771,12 @@ export const pt = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'Os detalhes do pedido estão corretos.',
   swap_limit_expiry_label: 'Termo',
   swap_limit_place_order: 'Fazer pedido',
-  swap_limit_place_pending_signing:
-    'O suporte para assinatura está a caminho — revise seu pedido abaixo.',
   swap_limit_review_heading:
     'Você está fazendo um pedido com limite de compra.',
   swap_limit_review_target_price: 'Preço alvo',
-  swap_limit_review_title: 'Revisar pedido',
   swap_limit_price_market: 'Mercado',
   swap_limit_warning_at_or_below_market:
     'Este preço está igual ou abaixo do preço de mercado, portanto a ordem pode ser executada imediatamente.',

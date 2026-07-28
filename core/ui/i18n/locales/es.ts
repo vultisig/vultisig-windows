@@ -1769,13 +1769,11 @@ export const es = {
   swap_limit_expiry_12h: '12h',
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'Los detalles del pedido son correctos.',
   swap_limit_expiry_label: 'Expiración',
   swap_limit_place_order: 'Realizar pedido',
-  swap_limit_place_pending_signing:
-    'El soporte para la firma está en camino; revise su pedido a continuación.',
   swap_limit_review_heading: 'Estás realizando una orden limitada',
   swap_limit_review_target_price: 'Precio objetivo',
-  swap_limit_review_title: 'Revisar el pedido',
   swap_limit_price_market: 'Mercado',
   swap_limit_warning_at_or_below_market:
     'Este precio está en o por debajo del precio de mercado, por lo que la orden podría ejecutarse inmediatamente.',
