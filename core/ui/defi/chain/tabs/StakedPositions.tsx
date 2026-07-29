@@ -87,6 +87,9 @@ export const StakedPositions = () => {
   }
 
   if (chain === Chain.Solana) {
+    if (selectedPositions.length === 0) {
+      return <DefiPositionEmptyState returnTab="staked" />
+    }
     return <SolanaStakeDefiView />
   }
 
