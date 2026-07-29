@@ -1765,4 +1765,7 @@ export const nl = {
     'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
   chain_address_copied: '{{chain}} adres gekopieerd',
   native: 'Native',
+  activate: 'Activeren',
+  trust_line_insufficient_xrp:
+    'Er zijn onvoldoende {{ticker}} . Voor het openen van deze trustlijn zijn {{amount}} {{ticker}} nodig voor de accountreservering en de bijbehorende kosten.',
 }

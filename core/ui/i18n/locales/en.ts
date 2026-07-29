@@ -1481,6 +1481,7 @@ export const en = {
   add_thor_lp: 'Add THORChain LP',
   remove_thor_lp: 'Remove THORChain LP',
   open_trust_line: 'Open Trust Line',
+  activate: 'Activate',
   trust_line_limit: 'Trust Limit',
   trust_line_issuer: 'Issuer',
   trust_line_currency: 'Currency',
@@ -1489,6 +1490,8 @@ export const en = {
   trust_line_custom_token: 'Custom Token',
   trust_line_issuer_placeholder: 'Issuer address (r...)',
   trust_line_currency_placeholder: 'Currency code (e.g. RLUSD)',
+  trust_line_insufficient_xrp:
+    'Not enough {{ticker}}. Opening this trust line needs {{amount}} {{ticker}} for the account reserve and fee.',
   trust_line_reserve_warning:
     'Opening a trust line locks {{amount}} {{ticker}} as an account owner reserve until the line is removed.',
   pool: 'Pool',

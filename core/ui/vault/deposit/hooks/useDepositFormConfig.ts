@@ -6,6 +6,7 @@ import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { getDepositFormConfig } from '../utils/getDepositFormConfig'
 import { useDepositBalance } from './useDepositBalance'
+import { useRippleTrustLineCostXrp } from './useRippleTrustLineCostXrp'
 
 export const useDepositFormConfig = (tronResourceType?: TronResourceType) => {
   const [selectedChainAction] = useDepositAction()
@@ -18,11 +19,16 @@ export const useDepositFormConfig = (tronResourceType?: TronResourceType) => {
     tronResourceType,
   })
 
+  const trustLineCostXrp = useRippleTrustLineCostXrp(
+    selectedChainAction === 'open_trust_line'
+  )
+
   return getDepositFormConfig({
     coin,
     selectedChainAction,
     t,
     walletCore,
     totalAmountAvailable: balance,
+    trustLineCostXrp,
   })
 }

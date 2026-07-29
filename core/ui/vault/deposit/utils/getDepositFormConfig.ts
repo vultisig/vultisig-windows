@@ -96,6 +96,12 @@ type GetChainActionConfigParams = {
   walletCore: WalletCore
   totalAmountAvailable: number
   selectedChainAction: ChainAction
+  /**
+   * XRP an Open Trust Line costs (owner reserve + fee). `undefined` while it is
+   * still unknown, which leaves the form unblocked rather than gated on a figure
+   * that has not arrived.
+   */
+  trustLineCostXrp?: number
 }
 
 type ChainActionConfig = {
@@ -115,6 +121,7 @@ export const getDepositFormConfig = ({
   walletCore,
   totalAmountAvailable,
   selectedChainAction,
+  trustLineCostXrp,
 }: GetChainActionConfigParams) => {
   const chain = coin.chain
 
@@ -821,36 +828,59 @@ export const getDepositFormConfig = ({
           required: true,
         },
       ],
-      schema: z.object({
-        issuer: z
-          .string()
-          .trim()
-          .min(1, t('trust_line_issuer'))
-          .refine(
-            address =>
-              isValidAddress({ chain: Chain.Ripple, address, walletCore }),
-            { message: t('send_invalid_receiver_address') }
+      schema: z
+        .object({
+          issuer: z
+            .string()
+            .trim()
+            .min(1, t('trust_line_issuer'))
+            .refine(
+              address =>
+                isValidAddress({ chain: Chain.Ripple, address, walletCore }),
+              { message: t('send_invalid_receiver_address') }
+            ),
+          // Accepts a human ticker (e.g. `RLUSD`, normalised to the 160-bit hex),
+          // a 3-char standard code, or a 40-char hex code. Rejects `XRP` (the
+          // native asset can't be an issued-currency trust line) and anything
+          // `toXrplCurrencyCode` can't encode (>20 ASCII bytes), so invalid input
+          // is caught inline rather than throwing at build time.
+          currency: z
+            .string()
+            .trim()
+            .min(1, t('trust_line_currency'))
+            .refine(value => value.toUpperCase() !== 'XRP', {
+              message: t('trust_line_currency_reserved'),
+            })
+            .refine(
+              value => 'data' in attempt(() => toXrplCurrencyCode(value)),
+              {
+                message: t('trust_line_currency_invalid'),
+              }
+            ),
+          amount: z.preprocess(
+            toRequiredNumber,
+            z.number().gt(0, t('amount_must_be_positive'))
           ),
-        // Accepts a human ticker (e.g. `RLUSD`, normalised to the 160-bit hex),
-        // a 3-char standard code, or a 40-char hex code. Rejects `XRP` (the
-        // native asset can't be an issued-currency trust line) and anything
-        // `toXrplCurrencyCode` can't encode (>20 ASCII bytes), so invalid input
-        // is caught inline rather than throwing at build time.
-        currency: z
-          .string()
-          .trim()
-          .min(1, t('trust_line_currency'))
-          .refine(value => value.toUpperCase() !== 'XRP', {
-            message: t('trust_line_currency_reserved'),
-          })
-          .refine(value => 'data' in attempt(() => toXrplCurrencyCode(value)), {
-            message: t('trust_line_currency_invalid'),
-          }),
-        amount: z.preprocess(
-          toRequiredNumber,
-          z.number().gt(0, t('amount_must_be_positive'))
-        ),
-      }),
+        })
+        // The limit itself is token-denominated, but the line still costs XRP: one
+        // owner-reserve increment locked up plus the fee. Below that the TrustSet
+        // fails on-ledger with `tecINSUFFICIENT_RESERVE` after the ceremony, fee
+        // already burned, so block before signing rather than after.
+        .superRefine((_val, ctx) => {
+          if (
+            trustLineCostXrp !== undefined &&
+            totalAmountAvailable < trustLineCostXrp
+          ) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t('trust_line_insufficient_xrp', {
+                amount: trustLineCostXrp,
+                ticker: chainFeeCoin[Chain.Ripple].ticker,
+              }),
+              path: ['_form'],
+            })
+          }
+        }),
     }),
     delegate: () => ({
       fields: [

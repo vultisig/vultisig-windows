@@ -1781,4 +1781,7 @@ export const es = {
     'Este precio está muy por encima del precio de mercado y podría expirar sin que se complete la transacción.',
   chain_address_copied: 'Dirección {{chain}} copiada',
   native: 'Nativo',
+  activate: 'Activar',
+  trust_line_insufficient_xrp:
+    'No hay suficientes {{ticker}} . Para abrir esta línea de confianza se necesitan {{amount}} {{ticker}} para la reserva de la cuenta y la comisión.',
 }
