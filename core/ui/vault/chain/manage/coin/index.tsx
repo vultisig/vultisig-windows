@@ -114,10 +114,10 @@ export const ManageVaultChainCoinsPage = () => {
       return [...selected, ...unselected]
     }
 
-    // Default view: all selected coins + top tokens up to the cap
-    const selected = currentCoins.filter(c =>
-      allCoins.some(ac => areEqualCoins(ac, c))
-    )
+    // Default view: all selected coins + top tokens up to the cap. Both halves
+    // come from `allCoins` so a held token renders with the curated metadata
+    // (logo, price provider) rather than whatever was stored when it was added.
+    const selected = allCoins.filter(isSelected)
     const unselected = allCoins
       .filter(coin => !isSelected(coin))
       .slice(0, maxInitialTokens)

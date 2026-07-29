@@ -65,10 +65,12 @@ describe('getManageableCoins', () => {
   })
 
   it('does not duplicate a token present in several sources', () => {
+    // Distinct objects, so this proves coins are matched structurally rather
+    // than by reference identity.
     const result = getManageableCoins({
-      known: [rlusd],
-      whitelisted: [rlusd],
-      current: [rlusd],
+      known: [{ ...rlusd }],
+      whitelisted: [{ ...rlusd }],
+      current: [{ ...rlusd }],
     })
 
     expect(result).toHaveLength(1)
