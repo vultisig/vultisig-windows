@@ -1,9 +1,11 @@
-import { SuiMoveNormalizedFunction } from '@mysten/sui/client'
 import { useQuery } from '@tanstack/react-query'
 import { getSuiClient } from '@vultisig/core-chain/chains/sui/client'
 
-import { MoveCallKey, moveCallKey } from './abi'
+import { MoveCallKey, moveCallKey, MoveParameter } from './abi'
 import { SuiTxData } from './types'
+
+/** The slice of a Move function ABI the PTB display consumes. */
+type MoveFunctionAbi = { parameters: MoveParameter[] }
 
 export type SuiObjectInfo = {
   /** Type tag of the on-chain object (e.g. `0x2::coin::Coin<0x2::sui::SUI>`). */
@@ -11,7 +13,7 @@ export type SuiObjectInfo = {
 }
 
 type SuiPtbMetadata = {
-  abis: Map<MoveCallKey, SuiMoveNormalizedFunction>
+  abis: Map<MoveCallKey, MoveFunctionAbi>
   objects: Map<string, SuiObjectInfo>
 }
 
@@ -37,24 +39,26 @@ const collectObjectIds = (data: SuiTxData): string[] => {
 
 const fetchAbis = async (
   keys: Set<MoveCallKey>
-): Promise<Map<MoveCallKey, SuiMoveNormalizedFunction>> => {
+): Promise<Map<MoveCallKey, MoveFunctionAbi>> => {
   const client = getSuiClient()
   const entries = await Promise.all(
     Array.from(keys, async key => {
       const [pkg, module, fn] = key.split('::')
       try {
-        const abi = await client.getNormalizedMoveFunction({
-          package: pkg,
-          module,
-          function: fn,
+        const {
+          function: { parameters },
+        } = await client.core.getMoveFunction({
+          packageId: pkg,
+          moduleName: module,
+          name: fn,
         })
-        return [key, abi] as const
+        return [key, { parameters }] as const
       } catch {
         return null
       }
     })
   )
-  const map = new Map<MoveCallKey, SuiMoveNormalizedFunction>()
+  const map = new Map<MoveCallKey, MoveFunctionAbi>()
   for (const entry of entries) {
     if (entry) map.set(entry[0], entry[1])
   }
@@ -67,14 +71,12 @@ const fetchObjects = async (
   const map = new Map<string, SuiObjectInfo>()
   if (ids.length === 0) return map
   const client = getSuiClient()
-  const responses = await client.multiGetObjects({
-    ids,
-    options: { showType: true },
-  })
-  responses.forEach((res, idx) => {
+  // Responses align with the requested ids; a per-object failure comes back as
+  // an Error in that slot rather than failing the batch.
+  const { objects } = await client.core.getObjects({ objectIds: ids })
+  objects.forEach((res, idx) => {
     const id = ids[idx]
-    const type = res.data?.type ?? null
-    map.set(id, { type })
+    map.set(id, { type: res instanceof Error ? null : res.type })
   })
   return map
 }
