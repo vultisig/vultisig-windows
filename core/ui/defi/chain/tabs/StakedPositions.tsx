@@ -116,9 +116,17 @@ export const StakedPositions = () => {
     )
   }
 
+  // The merged RUJI balance belongs to the RUJI position, so it follows the
+  // same selection id as the auto-compounding and bonded RUJI cards.
+  const isRujiSelected = selectedPositions.includes(
+    rujiAutoCompoundStakePositionId
+  )
+
   return (
     <VStack gap={12}>
-      {chain === Chain.THORChain ? <RujiMergedPositionCard /> : null}
+      {chain === Chain.THORChain && isRujiSelected ? (
+        <RujiMergedPositionCard />
+      ) : null}
       <ThorchainStakedPositions />
     </VStack>
   )
