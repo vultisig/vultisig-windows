@@ -2,46 +2,53 @@
 
 ## What is the Vultisig Browser Extension?
 
-The browser extension connects web applications to Vultisig vaults without
-storing private keys or passwords. It is built in Vultisig and Station flavors,
-which share the same functionality with separate branding and build artifacts.
+The browser extension is a wallet and dApp provider. Users can create, import,
+and manage Vultisig vaults in the extension, then connect those vaults to
+supported dApps. It is built in Vultisig and Station flavors, which share the
+same functionality with separate branding and build artifacts.
 
 ## How safe is it?
 
-You only import public keys and vault information into the extension. Signing
-still requires approval on your Vultisig devices because the extension only has
-access to public information.
+The extension stores its local vault data and key shares in extension storage
+and participates in the selected vault's configured signing flow. The required
+participants and authorization flow depend on the vault type and configuration.
 
 ## Requirements
 
-Before building either flavor, install:
+- The current Node.js LTS release (the repository `.nvmrc` uses `lts/*`)
+- Corepack, which installs the repository-pinned Yarn release
+- Chrome or another Chromium browser for loading the unpacked build
 
-- `Node.js` 18.10.0 or later
-- Yarn 4.16.0 (the repository-pinned version, available through Corepack)
+## Build from source
 
-## How to Build the Extension
+The extension is part of the `vultisig-windows` monorepo:
 
-From the repository root, build the regular Vultisig flavor with
-`yarn build:extension`. Its unpacked artifact is
-`clients/extension/dist`.
+```bash
+git clone https://github.com/vultisig/vultisig-windows.git
+cd vultisig-windows
+corepack enable
+yarn install --immutable
+yarn build:extension
+```
 
-Build the Station flavor with `yarn build:extension:station`. Its unpacked
-artifact is `clients/extension/dist-station`. The two paths are independent so
-building one flavor does not replace the other.
+The regular Vultisig build is written to `clients/extension/dist`. To build the
+Station flavor instead, run `yarn build:extension:station`; its independent
+unpacked artifact is written to `clients/extension/dist-station`.
 
-## How to Install it in Chrome
+## Install the unpacked build in Chrome
+
 1. Open Chrome and go to `chrome://extensions`.
-2. Enable `Developer mode` by toggling the switch in the top right corner.
-3. Click `Load unpacked` and select `dist` for Vultisig or `dist-station` for
-   Station.
+2. Enable **Developer mode**.
+3. Select **Load unpacked**, then choose `clients/extension/dist` for Vultisig
+   or `clients/extension/dist-station` for Station.
 4. Verify the extension card says `Vultisig Extension` or `Station Wallet`,
    note its extension ID, and reload the exact `dist` or `dist-station`
    directory before reviewing UI.
-5. Your extension should now be installed and ready to use.
 
 ## Integration Guide
 
-For details on integrating the extension with your project, see the [Integration Guide](docs/integration-guide.md).
+For provider discovery, supported chains, and method contracts, see the
+[Integration Guide](docs/integration-guide.md).
 
 ## Linting
 

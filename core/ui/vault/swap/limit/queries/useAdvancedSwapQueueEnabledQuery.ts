@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { featureFlags } from '../../../../featureFlags'
 import { fetchAdvancedSwapQueueEnabled } from '../availability'
 
 const advancedSwapQueueQueryKey = ['advancedSwapQueueEnabled']
@@ -16,7 +15,6 @@ export const useAdvancedSwapQueueEnabledQuery = () =>
   useQuery({
     queryKey: advancedSwapQueueQueryKey,
     queryFn: fetchAdvancedSwapQueueEnabled,
-    enabled: featureFlags.limitSwap,
     refetchInterval: 60_000,
     staleTime: 60_000,
   })

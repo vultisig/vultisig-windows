@@ -1,5 +1,5 @@
 import { textInputBackground } from '@lib/ui/css/textInput'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { TransferDirection } from '@vultisig/lib-utils/TransferDirection'
@@ -19,11 +19,4 @@ export const Container = styled(VStack)<{
   border-radius: ${({ side }) =>
     side === 'to' ? '12px 12px 24px 24px' : '24px 24px 12px 12px'};
   border: 1px solid ${getColor('foregroundExtra')};
-`
-
-export const CoinWrapper = styled(HStack)`
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 99px;
-  background-color: ${getColor('foregroundExtra')};
 `

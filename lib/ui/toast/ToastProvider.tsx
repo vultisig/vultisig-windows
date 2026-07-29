@@ -1,18 +1,19 @@
 import { ChildrenProp } from '@lib/ui/props'
 import { createContextHook } from '@lib/ui/state/createContextHook'
-import { createContext, useCallback, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useRef, useState } from 'react'
 
 import { ToastItem } from './ToastItem'
+import { ToastStatus } from './ToastStatus'
 
 type Toast = {
-  createdAt: number
+  id: number
   message: string
   duration: number
-  renderContent?: (message: string) => React.ReactNode
+  status: ToastStatus
 }
 
 type AddToastParams = Pick<Toast, 'message'> &
-  Partial<Pick<Toast, 'duration' | 'renderContent'>>
+  Partial<Pick<Toast, 'duration' | 'status'>>
 
 type ToastContextState = {
   addToast: (params: AddToastParams) => void
@@ -24,16 +25,18 @@ const ToastContext = createContext<ToastContextState | undefined>(undefined)
 
 export const ToastProvider = ({ children }: ChildrenProp) => {
   const [toast, setToast] = useState<Toast | null>(null)
+  const nextToastId = useRef(0)
 
+  // Runs once the keyed ToastItem has committed, which is also when its ring
+  // animation starts — so both dismissal paths share one start signal. Timing
+  // from `addToast` instead would subtract the handler-to-commit gap and cut
+  // the ring off short.
   useEffect(() => {
     if (!toast) return
 
-    const timeout = setTimeout(
-      () => {
-        setToast(null)
-      },
-      toast.createdAt + toast.duration - Date.now()
-    )
+    const timeout = setTimeout(() => {
+      setToast(null)
+    }, toast.duration)
 
     return () => {
       clearTimeout(timeout)
@@ -41,12 +44,12 @@ export const ToastProvider = ({ children }: ChildrenProp) => {
   }, [toast])
 
   const addToast: ToastContextState['addToast'] = useCallback(
-    ({ message, duration = toastDefaultDuration, renderContent }) => {
+    ({ message, duration = toastDefaultDuration, status = 'success' }) => {
       setToast({
-        createdAt: Date.now(),
+        id: nextToastId.current++,
         message,
         duration,
-        renderContent,
+        status,
       })
     },
     []
@@ -55,12 +58,17 @@ export const ToastProvider = ({ children }: ChildrenProp) => {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      {toast &&
-        (toast.renderContent ? (
-          toast.renderContent(toast.message)
-        ) : (
-          <ToastItem>{toast.message}</ToastItem>
-        ))}
+      {toast ? (
+        // Keyed by id so a toast raised while another is still on screen
+        // remounts and restarts its ring instead of inheriting the old one.
+        <ToastItem
+          key={toast.id}
+          duration={toast.duration}
+          value={toast.status}
+        >
+          {toast.message}
+        </ToastItem>
+      ) : null}
     </ToastContext.Provider>
   )
 }

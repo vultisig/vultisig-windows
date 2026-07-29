@@ -1,8 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCore } from '@core/ui/state/core'
-import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -105,15 +104,7 @@ const ButtonsRow = styled(HStack)`
 const ShareButton = styled(Button)`
   flex: 1;
   border-radius: 40px;
-  border: 2px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
-  background: transparent;
-  color: ${getColor('contrast')};
   font-size: 14px;
-
-  &:hover {
-    background: ${({ theme }) =>
-      theme.colors.buttonPrimary.withAlpha(0.1).toCssValue()};
-  }
 `
 
 const CopyButton = styled(Button)`
@@ -147,12 +138,11 @@ export const AddressQRCard = ({
     if (address) {
       await navigator.clipboard.writeText(address)
       addToast({
-        message: '',
-        renderContent: () => <VaultAddressCopyToast value={chain} />,
+        message: t('chain_address_copied', { chain }),
       })
       onClose?.()
     }
-  }, [address, addToast, chain, onClose])
+  }, [address, addToast, chain, onClose, t])
 
   const handleShare = useCallback(async () => {
     if (onShare) {
@@ -219,11 +209,11 @@ export const AddressQRCard = ({
             level="H"
           />
           <ChainIconOverlay>
-            {coin?.logo ? (
-              <CoinIcon coin={coin} />
-            ) : (
-              <ChainEntityIcon value={getChainLogoSrc(chain)} />
-            )}
+            <ChainEntityIcon
+              value={
+                coin?.logo ? getCoinLogoSrc(coin.logo) : getChainLogoSrc(chain)
+              }
+            />
           </ChainIconOverlay>
         </QRWrapper>
         <ReceiveLabel>
@@ -238,7 +228,9 @@ export const AddressQRCard = ({
       </AddressText>
 
       <ButtonsRow>
-        <ShareButton onClick={handleShare}>{t('share')}</ShareButton>
+        <ShareButton kind="secondary" onClick={handleShare}>
+          {t('share')}
+        </ShareButton>
         <CopyButton onClick={handleCopy}>{t('copy_address')}</CopyButton>
       </ButtonsRow>
     </Container>

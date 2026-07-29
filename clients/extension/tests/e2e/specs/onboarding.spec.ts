@@ -7,7 +7,7 @@
  * 1. Loading/splash screen (shows just logo)
  * 2. OnboardingPage - Shows "vultisig" logo/text, onboarding slides, Next/Skip buttons
  *    OR
- * 2. NewVaultPage - Shows "vultisig" logo, Scan QR, Import, Next buttons (if onboarding completed)
+ * 2. NewVaultPage - Shows "vultisig" logo, Scan QR, Import, Get started buttons (if onboarding completed)
  * 3. SetupVaultPage - Shows device selection animation, Get Started button
  */
 
@@ -87,7 +87,7 @@ test.describe('Onboarding Flow', () => {
     // Now should be on NewVaultPage with these options:
     // - "Scan QR" button
     // - "Import" button  
-    // - "Next" button (to create new vault)
+    // - "Get started" button (to create new vault)
     
     const options = await onboardingPage.getVaultTypeOptions()
     
