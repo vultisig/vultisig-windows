@@ -103,6 +103,7 @@ export default defineConfig({
         '**/address-book.spec.ts',
         '**/visual-regression.spec.ts',
         '**/station-migration.spec.ts',
+        '**/search-field.spec.ts',
       ],
       use: {
         launchOptions: {
