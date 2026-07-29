@@ -8,7 +8,7 @@ import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 const minProtocolFee = 15n
 const baseFeeMultiplier = 2n
 
-export type RippleTrustLineCost = {
+type RippleTrustLineCost = {
   /** XRP this line locks up for as long as it exists — immobilised, not spent. */
   ownerReserveDrops: bigint
   /** Fee burned by the TrustSet itself. */
