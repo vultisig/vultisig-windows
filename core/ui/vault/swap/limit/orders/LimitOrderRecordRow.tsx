@@ -50,9 +50,9 @@ export const LimitOrderRecordRow = ({
   )
 
   // Fill progress from the queue's own accounting, shown ONLY for a partial
-  // fill — matching iOS: a 0% order has nothing to report beyond its status,
-  // and a fully filled one is just "Filled". No fractional digits either; a
-  // streaming fill still in motion doesn't have that precision.
+  // fill: a 0% order has nothing to report beyond its status, and a fully
+  // filled one is just "Filled". No fractional digits either — a streaming
+  // fill still in motion doesn't have that precision.
   const fillPct = (() => {
     if (!data.deposit || !data.amountIn || data.deposit === '0') return null
     const pct = Number((BigInt(data.amountIn) * 100n) / BigInt(data.deposit))

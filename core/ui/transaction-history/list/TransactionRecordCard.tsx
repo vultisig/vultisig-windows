@@ -38,18 +38,14 @@ const limitOrderCardStatus: Record<
   LimitOrderTrackedStatus,
   TransactionHistoryCardStatus
 > = {
-  // Live orders read as green "In progress" per the design — `successful` is
-  // the card's green variant, not a claim the order has done anything.
-  pending: 'successful',
-  resting: 'successful',
+  pending: 'pending',
+  resting: 'pending',
   filled: 'successful',
   refunded: 'pending',
   expired: 'pending',
   cancelled: 'pending',
   rejected: 'error',
 }
-
-const liveLimitOrderStatuses: LimitOrderTrackedStatus[] = ['pending', 'resting']
 
 const statusToCardStatus: Record<
   TransactionRecordStatus,
@@ -238,8 +234,8 @@ export const TransactionRecordCard = ({
         })
 
   // A limit order's card state is the ORDER's, not the deposit's: the deposit
-  // confirms in seconds while the order rests for hours. Mirrors iOS, which
-  // routes limit rows through the order's effective status.
+  // confirms in seconds while the order rests for hours, so chain status says
+  // nothing about what the order did.
   const cardStatus =
     record.type === 'limitSwap'
       ? limitOrderCardStatus[record.data.orderStatus]
@@ -247,9 +243,7 @@ export const TransactionRecordCard = ({
 
   const statusLabelOverride =
     record.type === 'limitSwap'
-      ? liveLimitOrderStatuses.includes(record.data.orderStatus)
-        ? t('swap_limit_status_in_progress')
-        : limitStatusLabel[record.data.orderStatus]
+      ? limitStatusLabel[record.data.orderStatus]
       : undefined
 
   const handleClick = () =>

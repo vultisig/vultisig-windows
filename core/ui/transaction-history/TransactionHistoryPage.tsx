@@ -21,7 +21,6 @@ import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
-// Order matches iOS: limit orders sit between swaps and sends.
 const transactionHistoryTabs = [
   'overview',
   'swaps',
@@ -56,15 +55,8 @@ const FilteredTransactionList = ({
 }) => {
   const filterFn = tabFilter[tab]
   const tabFiltered = filterFn ? records.filter(filterFn) : records
-  // Limit orders never take the progress-card treatment: per the design they
-  // render as standard cards ("In progress") even while live — an order resting
-  // for hours is not a transaction about to land.
-  const pending = tabFiltered.filter(
-    r => pendingStatuses.includes(r.status) && r.type !== 'limitSwap'
-  )
-  const completed = tabFiltered.filter(
-    r => !pendingStatuses.includes(r.status) || r.type === 'limitSwap'
-  )
+  const pending = tabFiltered.filter(r => pendingStatuses.includes(r.status))
+  const completed = tabFiltered.filter(r => !pendingStatuses.includes(r.status))
 
   return (
     <VStack gap={16}>
