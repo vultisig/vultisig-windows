@@ -43,7 +43,10 @@ export const Tokens = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const chainCoins = useCurrentVaultChainCoins(chain)
-  const tokensNeedingTrustLine = useTokensNeedingTrustLine(chain, chainCoins)
+  const tokensNeedingTrustLine = useTokensNeedingTrustLine({
+    chain,
+    coins: chainCoins,
+  })
   const [searchQuery] = useSearchChainToken()
   const deferredQuery = useDeferredValue(searchQuery)
 

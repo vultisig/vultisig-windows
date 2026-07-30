@@ -7,6 +7,11 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { useRippleTrustLinesQuery } from './queries/useRippleTrustLinesQuery'
 import { needsRippleTrustLine } from './trustLine'
 
+type UseTokensNeedingTrustLineInput = {
+  chain: Chain
+  coins: CoinKey[]
+}
+
 /**
  * Token ids on `chain` that the vault holds in its asset list but has no trust
  * line for, so the balance cannot move until one is opened.
@@ -16,10 +21,10 @@ import { needsRippleTrustLine } from './trustLine'
  * lookup is not evidence that a line is missing, and offering to open one the
  * user already has is worse than showing nothing.
  */
-export const useTokensNeedingTrustLine = (
-  chain: Chain,
-  coins: CoinKey[]
-): Set<string> => {
+export const useTokensNeedingTrustLine = ({
+  chain,
+  coins,
+}: UseTokensNeedingTrustLineInput): Set<string> => {
   const isRipple = chain === Chain.Ripple
   const address = useCurrentVaultAddress(chain)
 

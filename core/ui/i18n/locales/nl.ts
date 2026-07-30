@@ -1767,5 +1767,5 @@ export const nl = {
   native: 'Native',
   activate: 'Activeren',
   trust_line_insufficient_xrp:
-    'Er zijn onvoldoende {{ticker}} . Voor het openen van deze trustlijn zijn {{amount}} {{ticker}} nodig voor de accountreservering en de bijbehorende kosten.',
+    'Er zijn onvoldoende {{ticker}}. Voor het openen van deze trustlijn zijn {{amount}} {{ticker}} nodig voor de accountreservering en de bijbehorende kosten.',
 }

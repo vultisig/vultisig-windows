@@ -1800,5 +1800,5 @@ export const de = {
   native: 'Nativ',
   activate: 'Aktivieren',
   trust_line_insufficient_xrp:
-    'Nicht genügend {{ticker}} . Zum Öffnen dieser Vertrauenslinie werden {{amount}} {{ticker}} für die Kontoreserve und die Gebühr benötigt.',
+    'Nicht genügend {{ticker}}. Zum Öffnen dieser Vertrauenslinie werden {{amount}} {{ticker}} für die Kontoreserve und die Gebühr benötigt.',
 }

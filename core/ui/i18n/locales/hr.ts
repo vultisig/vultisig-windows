@@ -1756,5 +1756,5 @@ export const hr = {
   native: 'Izvorni',
   activate: 'Aktivirati',
   trust_line_insufficient_xrp:
-    'Nema dovoljno {{ticker}} . Za otvaranje ove linije povjerenja potrebno je {{amount}} {{ticker}} za rezervu računa i naknadu.',
+    'Nema dovoljno {{ticker}}. Za otvaranje ove linije povjerenja potrebno je {{amount}} {{ticker}} za rezervu računa i naknadu.',
 }

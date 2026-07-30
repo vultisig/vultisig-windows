@@ -44,6 +44,11 @@ type VaultChainCoinItemProps = ValueProp<
   onActivate?: () => void
 }
 
+/**
+ * A single coin row in the vault's asset list: icon, ticker, price badge, and
+ * either the fiat/native balance or — when `onActivate` is set — an Activate
+ * button in its place.
+ */
 export const VaultChainCoinItem = ({
   value,
   onActivate,

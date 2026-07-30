@@ -1783,5 +1783,5 @@ export const es = {
   native: 'Nativo',
   activate: 'Activar',
   trust_line_insufficient_xrp:
-    'No hay suficientes {{ticker}} . Para abrir esta línea de confianza se necesitan {{amount}} {{ticker}} para la reserva de la cuenta y la comisión.',
+    'No hay suficientes {{ticker}}. Para abrir esta línea de confianza se necesitan {{amount}} {{ticker}} para la reserva de la cuenta y la comisión.',
 }
