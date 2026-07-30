@@ -5,8 +5,10 @@ import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKey
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
+import { LimitOrdersDoneHint } from '@core/ui/mpc/keysign/tx/LimitOrdersDoneHint'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
@@ -24,6 +26,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
@@ -43,6 +46,7 @@ export const KeysignSigningStep = ({
   toAddressLabel,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
+  const navigate = useCoreNavigate()
   const { version, goHome } = useCore()
   const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
@@ -109,10 +113,23 @@ export const KeysignSigningStep = ({
                                   value={payload}
                                   onSeeTxDetails={onSeeTxDetails}
                                 />
+                                {getKeysignLimitSwapOrder(payload) ? (
+                                  <LimitOrdersDoneHint />
+                                ) : null}
                               </VStack>
                             </PageContent>
                             <PageFooter alignItems="center">
-                              <VStack maxWidth={576} fullWidth>
+                              <VStack maxWidth={576} fullWidth gap={8}>
+                                {getKeysignLimitSwapOrder(payload) ? (
+                                  <Button
+                                    kind="secondary"
+                                    onClick={() =>
+                                      navigate({ id: 'limitOrders' })
+                                    }
+                                  >
+                                    {t('track')}
+                                  </Button>
+                                ) : null}
                                 <Button
                                   data-testid="tx-success-done"
                                   onClick={goHome}

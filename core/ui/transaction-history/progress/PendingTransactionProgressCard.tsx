@@ -6,6 +6,7 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
+import { useLimitOrderStatusLabels } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -24,6 +25,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import {
+  LimitSwapTransactionRecord,
   SendTransactionRecord,
   SwapTransactionRecord,
   TransactionRecord,
@@ -123,6 +125,42 @@ const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
 }
 
 /** Renders a swap transaction progress card with from → to vertical stepper. */
+const LimitSwapProgressContent = ({
+  record,
+}: {
+  record: LimitSwapTransactionRecord
+}) => {
+  const { t } = useTranslation()
+  const statusLabel = useLimitOrderStatusLabels()
+  const { data } = record
+  const fromAmount = Number(
+    fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
+  )
+
+  return (
+    <VStack gap={8}>
+      <HStack alignItems="center" gap={8}>
+        {data.fromTokenLogo && (
+          <CoinIcon
+            coin={{
+              chain: data.fromChain,
+              id: data.fromTokenId,
+              logo: data.fromTokenLogo,
+            }}
+            style={{ fontSize: 24 }}
+          />
+        )}
+        <Text size={14} weight={500}>
+          {`${formatAmount(fromAmount, { precision: 'high' })} ${data.fromToken} → ${data.minimumReceived} ${data.buyTicker}`}
+        </Text>
+      </HStack>
+      <Text size={12} color="shy">
+        {`${t('swap_limit_order_status')}: ${statusLabel[data.orderStatus]}`}
+      </Text>
+    </VStack>
+  )
+}
+
 const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
   const { t } = useTranslation()
   const { data } = record
@@ -271,7 +309,10 @@ export const PendingTransactionProgressCard = ({
       }}
     >
       <TopRow>
-        <TransactionHistoryTag type={record.type} />
+        <TransactionHistoryTag
+          type={record.type === 'limitSwap' ? 'swap' : record.type}
+          label={record.type === 'limitSwap' ? t('swap_mode_limit') : undefined}
+        />
         <InProgressBadge>
           <Text variant="caption" color="shy">
             {t('in_progress')}
@@ -281,6 +322,8 @@ export const PendingTransactionProgressCard = ({
 
       {record.type === 'send' ? (
         <SendProgressContent record={record} />
+      ) : record.type === 'limitSwap' ? (
+        <LimitSwapProgressContent record={record} />
       ) : (
         <SwapProgressContent record={record} />
       )}

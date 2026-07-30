@@ -1758,4 +1758,19 @@ export const hr = {
   trust_line_insufficient_xrp:
     'Nema dovoljno {{ticker}}. Za otvaranje ove linije povjerenja potrebno je {{amount}} {{ticker}} za rezervu računa i naknadu.',
   swap_limit_payout_to: 'Isplata na',
+  swap_limit_filled_so_far: 'Do sada popunjeno',
+  swap_limit_minimum_received: 'Minimalno primljeno',
+  swap_limit_no_orders: 'Još nema ograničenih narudžbi',
+  swap_limit_order_status: 'Status narudžbe',
+  swap_limit_orders_title: 'Ograničene narudžbe',
+  swap_limit_status_cancelled: 'Otkazano',
+  swap_limit_status_expired: 'Istekao',
+  swap_limit_status_filled: 'Ispunjeno',
+  swap_limit_status_pending: 'Postavljanje',
+  swap_limit_status_refunded: 'Povrat novca',
+  swap_limit_status_rejected: 'Odbijeno',
+  swap_limit_status_resting: 'Otvoreno',
+  swap_limit_done_hint:
+    'Pratite ih u Povijesti transakcija pod karticom Ograničene narudžbe.',
+  swap_limit_progress_filled: '{{percent}}% ispunjeno',
 }

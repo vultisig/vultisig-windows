@@ -1769,4 +1769,19 @@ export const nl = {
   trust_line_insufficient_xrp:
     'Er zijn onvoldoende {{ticker}}. Voor het openen van deze trustlijn zijn {{amount}} {{ticker}} nodig voor de accountreservering en de bijbehorende kosten.',
   swap_limit_payout_to: 'Uitbetaling aan',
+  swap_limit_filled_so_far: 'Tot nu toe uitgevoerd',
+  swap_limit_minimum_received: 'Minimaal ontvangen',
+  swap_limit_no_orders: 'Nog geen limietorders',
+  swap_limit_order_status: 'Bestelstatus',
+  swap_limit_orders_title: 'Limietorders',
+  swap_limit_status_cancelled: 'Geannuleerd',
+  swap_limit_status_expired: 'Verlopen',
+  swap_limit_status_filled: 'Uitgevoerd',
+  swap_limit_status_pending: 'Wordt geplaatst',
+  swap_limit_status_refunded: 'Terugbetaald',
+  swap_limit_status_rejected: 'Afgewezen',
+  swap_limit_status_resting: 'Open',
+  swap_limit_done_hint:
+    'U kunt ze volgen in de transactiegeschiedenis onder het tabblad Limietorders.',
+  swap_limit_progress_filled: '{{percent}}% uitgevoerd',
 }

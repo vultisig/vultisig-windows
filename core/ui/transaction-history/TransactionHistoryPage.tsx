@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { useLimitOrderTracking } from '../vault/swap/limit/tracking/useLimitOrderTracking'
 import { TransactionRecord, TransactionRecordStatus } from './core'
 import { TransactionHistoryList } from './list/TransactionHistoryList'
 import { PendingTransactionProgressCard } from './progress/PendingTransactionProgressCard'
@@ -20,7 +21,13 @@ import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
-const transactionHistoryTabs = ['overview', 'swaps', 'sends'] as const
+// Order matches iOS: limit orders sit between swaps and sends.
+const transactionHistoryTabs = [
+  'overview',
+  'swaps',
+  'limitOrders',
+  'sends',
+] as const
 type TransactionHistoryTab = (typeof transactionHistoryTabs)[number]
 
 const tabFilter: Record<
@@ -30,7 +37,15 @@ const tabFilter: Record<
   overview: undefined,
   swaps: record => record.type === 'swap',
   sends: record => record.type === 'send',
+  limitOrders: record => record.type === 'limitSwap',
 }
+
+const tabLabelKey = {
+  overview: 'overview',
+  swaps: 'swaps',
+  sends: 'sends',
+  limitOrders: 'swap_limit_orders_title',
+} as const satisfies Record<TransactionHistoryTab, string>
 
 const FilteredTransactionList = ({
   records,
@@ -64,6 +79,9 @@ const TransactionHistoryContent = ({
   const [search, setSearch] = useState('')
 
   useRefreshPendingTransactions(records)
+  // Keeps limit-order records in step with THORChain's queue while the page
+  // is open — the same page-mounted pattern as the pending-tx refresher above.
+  useLimitOrderTracking()
 
   const searchFiltered = filterTransactionsBySearch({
     records,
@@ -73,7 +91,7 @@ const TransactionHistoryContent = ({
   const tabs: Tab<TransactionHistoryTab>[] = transactionHistoryTabs.map(
     value => ({
       value,
-      label: t(value),
+      label: t(tabLabelKey[value]),
       renderContent: () => (
         <FilteredTransactionList records={searchFiltered} tab={value} />
       ),

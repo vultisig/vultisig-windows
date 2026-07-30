@@ -1791,4 +1791,19 @@ export const it = {
   trust_line_insufficient_xrp:
     '{{ticker}} non è sufficiente. Per aprire questa linea di fiducia sono necessari {{amount}} {{ticker}} per la riserva del conto e la commissione.',
   swap_limit_payout_to: 'Pagamento a',
+  swap_limit_filled_so_far: 'Eseguito finora',
+  swap_limit_minimum_received: 'Minimo ricevuto',
+  swap_limit_no_orders: 'Nessun ordine limite ancora disponibile',
+  swap_limit_order_status: "Stato dell'ordine",
+  swap_limit_orders_title: 'Ordini limite',
+  swap_limit_status_cancelled: 'Annullato',
+  swap_limit_status_expired: 'Scaduto',
+  swap_limit_status_filled: 'Eseguito',
+  swap_limit_status_pending: 'In corso',
+  swap_limit_status_refunded: 'Rimborso effettuato',
+  swap_limit_status_rejected: 'Respinto',
+  swap_limit_status_resting: 'Aperto',
+  swap_limit_done_hint:
+    'È possibile visualizzarli nella Cronologia transazioni, nella scheda Ordini limite.',
+  swap_limit_progress_filled: '{{percent}}% eseguito',
 }

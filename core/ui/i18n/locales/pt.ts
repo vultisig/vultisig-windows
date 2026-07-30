@@ -1788,4 +1788,19 @@ export const pt = {
   trust_line_insufficient_xrp:
     'Não há {{ticker}} suficientes. Para abrir esta linha de confiança, são necessários {{amount}} {{ticker}} para a reserva e taxa da conta.',
   swap_limit_payout_to: 'Pagamento para',
+  swap_limit_filled_so_far: 'Executado até agora',
+  swap_limit_minimum_received: 'Mínimo recebido',
+  swap_limit_no_orders: 'Ainda não há ordens limite',
+  swap_limit_order_status: 'Status do pedido',
+  swap_limit_orders_title: 'Ordens limite',
+  swap_limit_status_cancelled: 'Cancelado',
+  swap_limit_status_expired: 'Expirado',
+  swap_limit_status_filled: 'Executado',
+  swap_limit_status_pending: 'Colocando',
+  swap_limit_status_refunded: 'Reembolsado',
+  swap_limit_status_rejected: 'Rejeitado',
+  swap_limit_status_resting: 'Aberto',
+  swap_limit_done_hint:
+    'Acompanhe-as no Histórico de Transações, na aba Ordens limite.',
+  swap_limit_progress_filled: '{{percent}}% executado',
 }

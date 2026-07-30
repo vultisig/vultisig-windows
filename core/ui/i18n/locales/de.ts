@@ -1802,4 +1802,19 @@ export const de = {
   trust_line_insufficient_xrp:
     'Nicht genügend {{ticker}}. Zum Öffnen dieser Vertrauenslinie werden {{amount}} {{ticker}} für die Kontoreserve und die Gebühr benötigt.',
   swap_limit_payout_to: 'Auszahlung an',
+  swap_limit_filled_so_far: 'Bisher gefüllt',
+  swap_limit_minimum_received: 'Mindestbetrag erhalten',
+  swap_limit_no_orders: 'Bisher keine Limit-Orders',
+  swap_limit_order_status: 'Bestellstatus',
+  swap_limit_orders_title: 'Limit-Orders',
+  swap_limit_status_cancelled: 'Abgesagt',
+  swap_limit_status_expired: 'Abgelaufen',
+  swap_limit_status_filled: 'Gefüllt',
+  swap_limit_status_pending: 'Wird platziert',
+  swap_limit_status_refunded: 'Rückerstattung',
+  swap_limit_status_rejected: 'Abgelehnt',
+  swap_limit_status_resting: 'Offen',
+  swap_limit_done_hint:
+    'Verfolgen Sie sie im Transaktionsverlauf unter dem Reiter „Limit-Orders“.',
+  swap_limit_progress_filled: '{{percent}}% ausgeführt',
 }

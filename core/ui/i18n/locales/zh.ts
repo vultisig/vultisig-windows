@@ -1640,4 +1640,18 @@ export const zh = {
   trust_line_insufficient_xrp:
     '{{ticker}}不足。开通此信任线需要{{amount}} {{ticker}}作为账户储备金和手续费。',
   swap_limit_payout_to: '支付至',
+  swap_limit_filled_so_far: '目前已成交',
+  swap_limit_minimum_received: '最少收到',
+  swap_limit_no_orders: '目前尚无限价单',
+  swap_limit_order_status: '订单状态',
+  swap_limit_orders_title: '限价单',
+  swap_limit_status_cancelled: '取消',
+  swap_limit_status_expired: '已到期',
+  swap_limit_status_filled: '已成交',
+  swap_limit_status_pending: '下单中',
+  swap_limit_status_refunded: '已退款',
+  swap_limit_status_rejected: '已拒绝',
+  swap_limit_status_resting: '挂单中',
+  swap_limit_done_hint: '可在交易历史记录的“限价单”标签页中跟踪它们。',
+  swap_limit_progress_filled: '已成交 {{percent}}%',
 }

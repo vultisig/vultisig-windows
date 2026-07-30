@@ -1749,4 +1749,18 @@ export const ko = {
   trust_line_insufficient_xrp:
     '{{ticker}} 부족합니다. 이 신뢰 라인을 개설하려면 계좌 준비금 및 수수료로 {{amount}} {{ticker}} 필요합니다.',
   swap_limit_payout_to: '지급 대상',
+  swap_limit_filled_so_far: '현재까지 체결량',
+  swap_limit_minimum_received: '최소 수령액',
+  swap_limit_no_orders: '아직 제한 주문은 없습니다.',
+  swap_limit_order_status: '주문 상태',
+  swap_limit_orders_title: '지정가 주문',
+  swap_limit_status_cancelled: '취소',
+  swap_limit_status_expired: '만료됨',
+  swap_limit_status_filled: '체결됨',
+  swap_limit_status_pending: '주문 중',
+  swap_limit_status_refunded: '환불됨',
+  swap_limit_status_rejected: '거절됨',
+  swap_limit_status_resting: '미체결',
+  swap_limit_done_hint: '거래 내역의 지정가 주문 탭에서 확인할 수 있습니다.',
+  swap_limit_progress_filled: '{{percent}}% 체결',
 }

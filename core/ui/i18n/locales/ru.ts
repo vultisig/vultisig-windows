@@ -1766,4 +1766,19 @@ export const ru = {
   trust_line_insufficient_xrp:
     'Недостаточно {{ticker}}. Для открытия этой доверительной линии требуется {{amount}} {{ticker}} для резервирования счета и комиссии.',
   swap_limit_payout_to: 'Выплата на',
+  swap_limit_filled_so_far: 'Исполнено на данный момент',
+  swap_limit_minimum_received: 'Минимум к получению',
+  swap_limit_no_orders: 'Лимитных ордеров пока нет.',
+  swap_limit_order_status: 'Статус заказа',
+  swap_limit_orders_title: 'Лимитные ордера',
+  swap_limit_status_cancelled: 'Отменено',
+  swap_limit_status_expired: 'Истекший',
+  swap_limit_status_filled: 'Исполнен',
+  swap_limit_status_pending: 'Размещается',
+  swap_limit_status_refunded: 'Возврат средств',
+  swap_limit_status_rejected: 'Отклоненный',
+  swap_limit_status_resting: 'Открыт',
+  swap_limit_done_hint:
+    'Отслеживайте их в разделе «История транзакций» на вкладке «Лимитные ордера».',
+  swap_limit_progress_filled: 'Исполнено {{percent}}%',
 }
