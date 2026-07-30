@@ -26,12 +26,10 @@ export class SeedphraseWizard extends BasePage {
   }
 
   get seedphraseInput(): Locator {
-    return (
-      this.page.locator('[data-testid="seedphrase-input"]') ||
-      this.page.locator('textarea[placeholder*="seed"]') ||
-      this.page.locator('textarea[placeholder*="mnemonic"]') ||
-      this.page.getByPlaceholder(/seed|mnemonic|recovery|phrase/i)
-    )
+    return this.page
+      .locator('[data-testid="seedphrase-input"]')
+      .or(this.page.getByPlaceholder(/seed|mnemonic|recovery|phrase/i))
+      .first()
   }
 
   get wordInputs(): Locator {
@@ -39,27 +37,31 @@ export class SeedphraseWizard extends BasePage {
   }
 
   get continueButton(): Locator {
-    return (
-      this.page.locator('[data-testid="seedphrase-continue"]') ||
-      this.page.getByRole('button', { name: /continue|import|next/i })
-    )
+    return this.page
+      .locator('[data-testid="seedphrase-continue"]')
+      .or(this.page.getByRole('button', { name: /continue|import|next/i }))
+      .first()
   }
 
   get validationError(): Locator {
-    return (
-      this.page.locator('[data-testid="seedphrase-error"]') ||
-      this.page.locator('[role="alert"]') ||
-      this.page.locator('.error-message') ||
-      this.page.locator('text=/invalid.*mnemonic|invalid.*phrase|incorrect.*words/i')
-    )
+    return this.page
+      .locator('[data-testid="seedphrase-error"]')
+      .or(this.page.locator('[role="alert"]'))
+      .or(this.page.locator('.error-message'))
+      .or(
+        this.page.getByText(
+          /seed phrase must be 12 or 24|seed phrase is not correct/i
+        )
+      )
+      .first()
   }
 
   get scanProgress(): Locator {
-    return (
-      this.page.locator('[data-testid="scan-progress"]') ||
-      this.page.locator('[role="progressbar"]') ||
-      this.page.locator('text=/scanning|discovering|loading/i')
-    )
+    return this.page
+      .locator('[data-testid="scan-progress"]')
+      .or(this.page.locator('[role="progressbar"]'))
+      .or(this.page.getByText(/scanning|discovering|loading/i))
+      .first()
   }
 
   get chainList(): Locator {
@@ -71,17 +73,17 @@ export class SeedphraseWizard extends BasePage {
   }
 
   get selectAllButton(): Locator {
-    return (
-      this.page.locator('[data-testid="select-all-chains"]') ||
-      this.page.getByRole('button', { name: /select all/i })
-    )
+    return this.page
+      .locator('[data-testid="select-all-chains"]')
+      .or(this.page.getByRole('button', { name: /select all/i }))
+      .first()
   }
 
   get confirmButton(): Locator {
-    return (
-      this.page.locator('[data-testid="confirm-import"]') ||
-      this.page.getByRole('button', { name: /confirm|create|finish|import/i })
-    )
+    return this.page
+      .locator('[data-testid="confirm-import"]')
+      .or(this.page.getByRole('button', { name: /confirm|create|finish|import/i }))
+      .first()
   }
 
   get addressDisplay(): Locator {

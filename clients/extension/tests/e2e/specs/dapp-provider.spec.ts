@@ -7,7 +7,7 @@
  * - personal_sign - popup shows message - approve - signature returned
  * - wallet_switchEthereumChain - chainChanged event fires
  * - reject connection returns UserRejectedRequest error
- * - window.vultisig and window.phantom.solana also injected
+ * - window.vultisig and its Solana provider are injected
  */
 
 import { test, expect } from '../fixtures/extension-loader'
@@ -222,14 +222,18 @@ test.describe('DApp Provider', () => {
     const hasRequestMethod = await page.evaluate(() => typeof window.ethereum?.request === 'function')
     expect(hasRequestMethod).toBe(true)
 
-    // Check isVultisig flag
-    const isVultisig = await page.evaluate(() => window.ethereum?.isVultisig === true)
-    // May or may not be true depending on implementation
+    await expect
+      .poll(() => page.evaluate(() => window.ethereum?.isVultiConnect === true))
+      .toBe(true)
 
     await page.close()
   })
 
   test('eth_requestAccounts - popup opens - approve - address returned', async ({ context, extensionId }) => {
+    test.skip(
+      !getVaultConfigFromEnv(),
+      'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
+    )
     await ensureDappProviderVault({ context, extensionId })
 
     const page = await context.newPage()
@@ -246,6 +250,10 @@ test.describe('DApp Provider', () => {
   })
 
   test('personal_sign - popup shows message - approve - signature returned', async ({ context, extensionId }) => {
+    test.skip(
+      !getVaultConfigFromEnv(),
+      'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
+    )
     const config = await ensureDappProviderVault({ context, extensionId })
 
     const page = await context.newPage()
@@ -286,149 +294,96 @@ test.describe('DApp Provider', () => {
   })
 
   test('wallet_switchEthereumChain - chainChanged event fires', async ({ context, extensionId }) => {
+    test.skip(
+      !getVaultConfigFromEnv(),
+      'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
+    )
+    await ensureDappProviderVault({ context, extensionId })
+
     const page = await context.newPage()
 
-    await page.goto(dappUrl)
-    await page.waitForLoadState('domcontentloaded')
-    await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
+    try {
+      await page.goto(dappUrl)
+      await page.waitForLoadState('domcontentloaded')
+      await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
+      await connectDappWallet({ page, context, extensionId })
 
-    // Connect first
-    const connectButton = page.locator('[data-testid="connect-wallet"]')
-    await connectButton.click()
-
-    let popup = await waitForApprovalPopup(context, extensionId)
-    if (popup && !popup.isClosed()) {
-      const approval = new DAppApproval(popup, extensionId)
-      try {
-        await approval.waitForView(5000)
-        await approval.approve()
-      } catch {
-        // Already connected
-      }
-    }
-
-    await page.waitForTimeout(1000)
-
-    // Try switching chain
-    const switchButton = page.locator('[data-testid="switch-chain"]')
-    if (await switchButton.isEnabled({ timeout: 5000 }).catch(() => false)) {
-      // Select a different chain
+      const switchButton = page.locator('[data-testid="switch-chain"]')
+      await expect(switchButton).toBeEnabled()
       const chainSelect = page.locator('#chain-select')
-      await chainSelect.selectOption('0x89') // Polygon
-
+      await chainSelect.selectOption('0x89')
       await switchButton.click()
 
-      // May need approval for switch
-      popup = await waitForApprovalPopup(context, extensionId)
+      const popup = await waitForApprovalPopup({ context, extensionId })
       if (popup && !popup.isClosed()) {
         const approval = new DAppApproval(popup, extensionId)
-        try {
-          await approval.waitForView(5000)
-          await approval.approve()
-        } catch {
-          // Switch might not need approval
-        }
+        await approval.waitForView(5000)
+        await approval.approve()
       }
 
-      // Check result
-      await page.waitForTimeout(2000)
       const switchResult = page.locator('[data-testid="switch-result"]')
-      const resultText = await switchResult.textContent()
-
-      console.log('Switch result:', resultText)
-
-      // Check events log for chainChanged
+      await expect(switchResult).toContainText(/0x89/i)
       const eventsLog = page.locator('[data-testid="events-log"]')
-      const logText = await eventsLog.textContent()
-
-      if (logText?.includes('chainChanged')) {
-        expect(logText).toContain('chainChanged')
-      }
-    } else {
-      console.log('Switch button not enabled')
+      await expect(eventsLog).toContainText('chainChanged')
+    } finally {
+      await page.close()
     }
-
-    await page.close()
   })
 
   test('reject connection returns UserRejectedRequest error', async ({ context, extensionId }) => {
+    test.skip(
+      !getVaultConfigFromEnv(),
+      'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
+    )
+    await ensureDappProviderVault({ context, extensionId })
+
     const page = await context.newPage()
 
-    await page.goto(dappUrl)
-    await page.waitForLoadState('domcontentloaded')
-    await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
+    try {
+      await page.goto(dappUrl)
+      await page.waitForLoadState('domcontentloaded')
+      await page.waitForFunction(() => !!window.ethereum, null, { timeout: 10000 })
 
-    // Click connect
-    const connectButton = page.locator('[data-testid="connect-wallet"]')
-    await connectButton.click()
+      const connectButton = page.locator('[data-testid="connect-wallet"]')
+      await connectButton.click()
 
-    // Wait for popup and reject
-    const popup = await waitForApprovalPopup(context, extensionId)
-
-    if (popup && !popup.isClosed()) {
-      const approval = new DAppApproval(popup, extensionId)
-
-      try {
-        await approval.waitForView(10_000)
-        await approval.reject()
-        await approval.waitForClose()
-
-        // Check DApp received rejection error
-        await page.waitForTimeout(2000)
-        const connectResult = page.locator('[data-testid="connect-result"]')
-        const resultText = await connectResult.textContent()
-
-        console.log('Rejection result:', resultText)
-
-        // Should contain error code 4001 (UserRejectedRequest) or rejection message
-        if (resultText) {
-          const hasRejection =
-            resultText.includes('4001') ||
-            resultText.toLowerCase().includes('reject') ||
-            resultText.toLowerCase().includes('denied') ||
-            resultText.toLowerCase().includes('cancel')
-
-          expect(hasRejection).toBe(true)
-        }
-      } catch (error) {
-        console.log('Rejection test error:', error)
+      const popup = await waitForApprovalPopup({ context, extensionId })
+      if (!popup || popup.isClosed()) {
+        throw new Error('eth_requestAccounts rejection did not open an approval popup')
       }
-    }
 
-    await page.close()
+      const approval = new DAppApproval(popup, extensionId)
+      await approval.waitForView(10_000)
+      await approval.reject()
+      await approval.waitForClose()
+
+      const connectResult = page.locator('[data-testid="connect-result"]')
+      await expect(connectResult).toContainText(/4001|reject|denied|cancel/i)
+    } finally {
+      await page.close()
+    }
   })
 
-  test('window.vultisig and window.phantom.solana also injected', async ({ context }) => {
+  test('window.vultisig and its Solana provider are injected', async ({ context }) => {
     const page = await context.newPage()
 
     await page.goto(dappUrl)
     await page.waitForLoadState('domcontentloaded')
     await page.waitForTimeout(2000)
 
-    // Check for window.vultisig
-    const hasVultisig = await page.evaluate(() => !!window.vultisig)
-    console.log('window.vultisig:', hasVultisig)
-
-    // Check for window.phantom.solana
-    const hasSolana = await page.evaluate(() => !!window.phantom?.solana)
-    console.log('window.phantom.solana:', hasSolana)
-
-    // At least ethereum should be present
-    const hasEthereum = await page.evaluate(() => !!window.ethereum)
-    expect(hasEthereum).toBe(true)
-
-    // Log detected providers
     const providers = await page.evaluate(() => {
-      const detected: string[] = []
-      if (window.ethereum) detected.push('ethereum')
-      if (window.vultisig) detected.push('vultisig')
-      if (window.phantom?.solana) detected.push('phantom.solana')
-      if (window.phantom?.ethereum) detected.push('phantom.ethereum')
-      return detected
+      return {
+        ethereum: !!window.ethereum,
+        vultisig: !!window.vultisig,
+        vultisigSolana: !!window.vultisig?.solana,
+      }
     })
 
-    console.log('Detected providers:', providers)
-    expect(providers.length).toBeGreaterThan(0)
+    expect(providers).toEqual({
+      ethereum: true,
+      vultisig: true,
+      vultisigSolana: true,
+    })
 
     await page.close()
   })
