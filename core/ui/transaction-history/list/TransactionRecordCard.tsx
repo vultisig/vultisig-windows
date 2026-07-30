@@ -38,14 +38,18 @@ const limitOrderCardStatus: Record<
   LimitOrderTrackedStatus,
   TransactionHistoryCardStatus
 > = {
-  pending: 'pending',
-  resting: 'pending',
+  // Live orders read as green "In progress" per the design — `successful` is
+  // the card's green variant, not a claim the order has done anything.
+  pending: 'successful',
+  resting: 'successful',
   filled: 'successful',
   refunded: 'pending',
   expired: 'pending',
   cancelled: 'pending',
   rejected: 'error',
 }
+
+const liveLimitOrderStatuses: LimitOrderTrackedStatus[] = ['pending', 'resting']
 
 const statusToCardStatus: Record<
   TransactionRecordStatus,
@@ -243,7 +247,9 @@ export const TransactionRecordCard = ({
 
   const statusLabelOverride =
     record.type === 'limitSwap'
-      ? limitStatusLabel[record.data.orderStatus]
+      ? liveLimitOrderStatuses.includes(record.data.orderStatus)
+        ? t('in_progress')
+        : limitStatusLabel[record.data.orderStatus]
       : undefined
 
   const handleClick = () =>
