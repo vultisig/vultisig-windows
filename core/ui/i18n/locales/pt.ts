@@ -1796,6 +1796,7 @@ export const pt = {
   swap_limit_status_cancelled: 'Cancelado',
   swap_limit_status_expired: 'Expirado',
   swap_limit_status_filled: 'Executado',
+  swap_limit_status_in_progress: 'Em andamento',
   swap_limit_status_pending: 'Colocando',
   swap_limit_status_refunded: 'Reembolsado',
   swap_limit_status_rejected: 'Rejeitado',

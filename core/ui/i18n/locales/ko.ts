@@ -1757,6 +1757,7 @@ export const ko = {
   swap_limit_status_cancelled: '취소',
   swap_limit_status_expired: '만료됨',
   swap_limit_status_filled: '체결됨',
+  swap_limit_status_in_progress: '진행 중',
   swap_limit_status_pending: '주문 중',
   swap_limit_status_refunded: '환불됨',
   swap_limit_status_rejected: '거절됨',

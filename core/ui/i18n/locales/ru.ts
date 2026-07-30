@@ -1774,6 +1774,7 @@ export const ru = {
   swap_limit_status_cancelled: 'Отменено',
   swap_limit_status_expired: 'Истекший',
   swap_limit_status_filled: 'Исполнен',
+  swap_limit_status_in_progress: 'В ходе выполнения',
   swap_limit_status_pending: 'Размещается',
   swap_limit_status_refunded: 'Возврат средств',
   swap_limit_status_rejected: 'Отклоненный',

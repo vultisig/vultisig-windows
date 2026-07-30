@@ -1810,6 +1810,7 @@ export const de = {
   swap_limit_status_cancelled: 'Abgesagt',
   swap_limit_status_expired: 'Abgelaufen',
   swap_limit_status_filled: 'Gefüllt',
+  swap_limit_status_in_progress: 'Im Gange',
   swap_limit_status_pending: 'Wird platziert',
   swap_limit_status_refunded: 'Rückerstattung',
   swap_limit_status_rejected: 'Abgelehnt',

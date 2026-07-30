@@ -1777,6 +1777,7 @@ export const nl = {
   swap_limit_status_cancelled: 'Geannuleerd',
   swap_limit_status_expired: 'Verlopen',
   swap_limit_status_filled: 'Uitgevoerd',
+  swap_limit_status_in_progress: 'Bezig',
   swap_limit_status_pending: 'Wordt geplaatst',
   swap_limit_status_refunded: 'Terugbetaald',
   swap_limit_status_rejected: 'Afgewezen',

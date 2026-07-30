@@ -1194,6 +1194,7 @@ export const en = {
   swap_limit_status_cancelled: 'Cancelled',
   swap_limit_status_expired: 'Expired',
   swap_limit_status_filled: 'Filled',
+  swap_limit_status_in_progress: 'In progress',
   swap_limit_status_pending: 'Placing',
   swap_limit_status_refunded: 'Refunded',
   swap_limit_status_rejected: 'Rejected',

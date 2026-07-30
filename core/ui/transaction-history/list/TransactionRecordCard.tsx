@@ -248,7 +248,7 @@ export const TransactionRecordCard = ({
   const statusLabelOverride =
     record.type === 'limitSwap'
       ? liveLimitOrderStatuses.includes(record.data.orderStatus)
-        ? t('in_progress')
+        ? t('swap_limit_status_in_progress')
         : limitStatusLabel[record.data.orderStatus]
       : undefined
 

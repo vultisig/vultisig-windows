@@ -1799,6 +1799,7 @@ export const it = {
   swap_limit_status_cancelled: 'Annullato',
   swap_limit_status_expired: 'Scaduto',
   swap_limit_status_filled: 'Eseguito',
+  swap_limit_status_in_progress: 'In corso',
   swap_limit_status_pending: 'In corso',
   swap_limit_status_refunded: 'Rimborso effettuato',
   swap_limit_status_rejected: 'Respinto',

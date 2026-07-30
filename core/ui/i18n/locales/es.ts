@@ -1793,6 +1793,7 @@ export const es = {
   swap_limit_status_cancelled: 'Cancelado',
   swap_limit_status_expired: 'Venció',
   swap_limit_status_filled: 'Ejecutada',
+  swap_limit_status_in_progress: 'En curso',
   swap_limit_status_pending: 'Colocando',
   swap_limit_status_refunded: 'Reintegrado',
   swap_limit_status_rejected: 'Rechazado',

@@ -1648,6 +1648,7 @@ export const zh = {
   swap_limit_status_cancelled: '取消',
   swap_limit_status_expired: '已到期',
   swap_limit_status_filled: '已成交',
+  swap_limit_status_in_progress: '进行中',
   swap_limit_status_pending: '下单中',
   swap_limit_status_refunded: '已退款',
   swap_limit_status_rejected: '已拒绝',

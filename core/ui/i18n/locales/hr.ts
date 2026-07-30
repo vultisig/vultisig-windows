@@ -1766,6 +1766,7 @@ export const hr = {
   swap_limit_status_cancelled: 'Otkazano',
   swap_limit_status_expired: 'Istekao',
   swap_limit_status_filled: 'Ispunjeno',
+  swap_limit_status_in_progress: 'U tijeku',
   swap_limit_status_pending: 'Postavljanje',
   swap_limit_status_refunded: 'Povrat novca',
   swap_limit_status_rejected: 'Odbijeno',
