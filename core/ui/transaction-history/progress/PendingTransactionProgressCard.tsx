@@ -187,7 +187,9 @@ const LimitSwapProgressContent = ({
 
         <HStack alignItems="center" gap={8} fullWidth>
           <StepperIcon>
-            <PendingRing />
+            <PendingRing viewBox="0 0 28 28" aria-hidden>
+              <circle cx="14" cy="14" r="13" pathLength="100" />
+            </PendingRing>
             <ArrowDownIcon />
           </StepperIcon>
           <Text size={13} color="shy">
@@ -432,25 +434,64 @@ const StepperLine = styled.div`
   background: ${getColor('foregroundExtra')};
 `
 
+const ringSpin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`
+
 /**
- * Indeterminate arc circling the connector's arrow while an order rests, so
- * the card reads as ongoing work rather than a static row. Only two of the
- * four borders are tinted, which is what makes the spin legible as an arc.
+ * The arc's head runs ahead of its tail and then the tail catches up, so the
+ * stroke grows to roughly four-fifths of the circle and shrinks back each
+ * cycle. `pathLength="100"` normalises the circumference, so these are plain
+ * percentages rather than radius-derived magic numbers.
  */
-const PendingRing = styled.span`
+const ringDash = keyframes`
+  0% {
+    stroke-dasharray: 1 100;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 80 100;
+    stroke-dashoffset: -20;
+  }
+  100% {
+    stroke-dasharray: 1 100;
+    stroke-dashoffset: -100;
+  }
+`
+
+/**
+ * Indeterminate arc circling the connector's arrow while an order rests, so the
+ * card reads as ongoing work rather than a static row.
+ *
+ * Two animations at deliberately different periods: the sweep grows and shrinks
+ * on one clock while the whole ring rotates on a slower one, so the arc
+ * precesses instead of retracing the same path every cycle — a single rotation
+ * would read as a fixed notch spinning.
+ */
+const PendingRing = styled.svg`
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  border: 1.5px solid transparent;
-  border-top-color: ${getColor('primary')};
-  border-right-color: ${getColor('primary')};
-  animation: ${keyframes`
-    to { transform: rotate(360deg); }
-  `} 1.332s linear infinite;
+  width: 100%;
+  height: 100%;
+  animation: ${ringSpin} 1.677s linear infinite;
+
+  circle {
+    fill: none;
+    stroke: ${getColor('primaryAccentFour')};
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    animation: ${ringDash} 1.332s ease-in-out infinite;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
-    border-right-color: transparent;
+
+    circle {
+      animation: none;
+      stroke-dasharray: 25 100;
+    }
   }
 `
 
