@@ -6,7 +6,6 @@ import {
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import {
   buildSwapKeysignPayload,
@@ -15,6 +14,7 @@ import {
 import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
 import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { useAdvancedSwapSettings } from '../state/advancedSettings'
@@ -39,7 +39,7 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const input: BuildSwapKeysignPayloadInput = {
     fromCoin,
     toCoin,
-    amount: fromChainAmount(
+    amount: bigIntToDecimalString(
       shouldBePresent(fromAmount, 'fromAmount'),
       fromCoin.decimals
     ),
