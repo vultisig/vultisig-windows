@@ -49,25 +49,13 @@ test.describe('Visual Regression - Key Screens', () => {
     // Wait for extension to fully load
     await waitForExtensionReady(page)
 
-    // Try to skip or click next
-    const skipButton = page.getByRole('button', { name: /skip/i })
-    const nextButton = page.getByRole('button', { name: /next/i })
-    
-    if (await skipButton.isVisible().catch(() => false)) {
-      await skipButton.click()
-      await page.waitForTimeout(500)
-      await waitForExtensionReady(page)
-    } else if (await nextButton.isVisible().catch(() => false)) {
-      // Click next a few times
-      for (let i = 0; i < 4; i++) {
-        if (await nextButton.isVisible().catch(() => false)) {
-          await nextButton.click()
-          await page.waitForTimeout(200)
-        } else {
-          break
-        }
-      }
-    }
+    await onboardingPage.completeOnboarding()
+    await expect(onboardingPage.newVaultGetStartedButton).toBeVisible()
+    await onboardingPage.navigateToSetupVault()
+    await expect(page.locator('canvas').first()).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: /get started/i }).first()
+    ).toBeVisible()
 
     await page.waitForTimeout(500)
 
@@ -93,12 +81,12 @@ test.describe('Visual Regression - Key Screens', () => {
     await page.waitForTimeout(500)
     await waitForExtensionReady(page)
 
-    // Click "Next" from NewVaultPage to go to SetupVaultPage
-    const nextButton = page.getByRole('button', { name: /next/i }).first()
-    if (await nextButton.isVisible().catch(() => false)) {
-      await nextButton.click()
-      await page.waitForTimeout(1000)
-    }
+    await expect(onboardingPage.newVaultGetStartedButton).toBeVisible()
+    await onboardingPage.navigateToSetupVault()
+    await expect(page.locator('canvas').first()).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: /get started/i }).first()
+    ).toBeVisible()
 
     await expect(page).toHaveScreenshot('03-setup-vault.png', {
       maxDiffPixels: 500,
