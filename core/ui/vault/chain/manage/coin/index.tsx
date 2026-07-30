@@ -26,7 +26,6 @@ import {
 import { getSolanaCoingeckoId } from '@vultisig/core-chain/coin/coingecko/getCoingeckoId'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@vultisig/core-chain/coin/utils/sortCoinsAlphabetically'
-import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -35,6 +34,7 @@ import { ItemGrid } from '../shared/ItemGrid'
 import { SearchInput } from '../shared/SearchInput'
 import { TokenItem } from '../shared/TokenItem'
 import { AddCustomTokenPrompt } from './AddCustomTokenPrompt'
+import { getManageableCoins } from './manageableCoins'
 
 const strip0xPrefix = (value: string) =>
   value.startsWith('0x') ? value.slice(2) : value
@@ -86,11 +86,15 @@ export const ManageVaultChainCoinsPage = () => {
     addToCoinFinderIgnore.isPending ||
     removeFromCoinFinderIgnore.isPending
 
-  const allCoins = useMemo(() => {
-    const known = sortCoinsAlphabetically(knownTokens[currentchain])
-    const whitelisted = whitelistedQuery.data || []
-    return withoutDuplicates([...known, ...whitelisted], areEqualCoins)
-  }, [currentchain, whitelistedQuery.data])
+  const allCoins = useMemo(
+    () =>
+      getManageableCoins({
+        known: sortCoinsAlphabetically(knownTokens[currentchain]),
+        whitelisted: whitelistedQuery.data || [],
+        current: currentCoins,
+      }),
+    [currentchain, whitelistedQuery.data, currentCoins]
+  )
 
   const maxInitialTokens = 200
 
@@ -110,10 +114,10 @@ export const ManageVaultChainCoinsPage = () => {
       return [...selected, ...unselected]
     }
 
-    // Default view: all selected coins + top tokens up to the cap
-    const selected = currentCoins.filter(c =>
-      allCoins.some(ac => areEqualCoins(ac, c))
-    )
+    // Default view: all selected coins + top tokens up to the cap. Both halves
+    // come from `allCoins` so a held token renders with the curated metadata
+    // (logo, price provider) rather than whatever was stored when it was added.
+    const selected = allCoins.filter(isSelected)
     const unselected = allCoins
       .filter(coin => !isSelected(coin))
       .slice(0, maxInitialTokens)

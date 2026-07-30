@@ -11,7 +11,10 @@ import { getDepositFormConfig } from './getDepositFormConfig'
  * load in Vitest/Node ESM. Mock until the SDK fixes that internal re-export.
  */
 vi.mock('@vultisig/core-chain/coin/chainFeeCoin', () => ({
-  chainFeeCoin: { Solana: { ticker: 'SOL' } },
+  chainFeeCoin: {
+    Solana: { ticker: 'SOL' },
+    Ripple: { ticker: 'XRP', decimals: 6 },
+  },
 }))
 
 vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
@@ -227,5 +230,59 @@ describe('Solana delegate validation', () => {
     expect(result.error?.issues.map(issue => issue.message)).toContain(
       'insufficient_balance'
     )
+  })
+})
+
+describe('Ripple open trust line affordability', () => {
+  const rippleCoin = {
+    chain: Chain.Ripple,
+    ticker: 'XRP',
+    decimals: 6,
+    address: 'rSender',
+  }
+
+  const parseTrustLine = ({
+    spendableXrp,
+    trustLineCostXrp,
+  }: {
+    spendableXrp: number
+    trustLineCostXrp?: number
+  }) => {
+    vi.mocked(isValidAddress).mockReturnValue(true)
+
+    const { schema } = getDepositFormConfig({
+      t,
+      coin: rippleCoin as any,
+      walletCore: {} as any,
+      totalAmountAvailable: spendableXrp,
+      selectedChainAction: 'open_trust_line',
+      trustLineCostXrp,
+    })
+
+    return schema.safeParse({
+      issuer: 'rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De',
+      currency: 'SOLO',
+      amount: 1e15,
+    })
+  }
+
+  it('blocks when spendable XRP will not cover the reserve and fee', () => {
+    const result = parseTrustLine({ spendableXrp: 0.1, trustLineCostXrp: 0.2 })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues.map(issue => issue.message)).toContain(
+      'trust_line_insufficient_xrp'
+    )
+  })
+
+  it('allows an activation the balance exactly covers', () => {
+    expect(
+      parseTrustLine({ spendableXrp: 0.2, trustLineCostXrp: 0.2 }).success
+    ).toBe(true)
+  })
+
+  it('does not block while the cost is still unknown', () => {
+    // A pending quote must not gate the form on a figure it does not have.
+    expect(parseTrustLine({ spendableXrp: 0 }).success).toBe(true)
   })
 })

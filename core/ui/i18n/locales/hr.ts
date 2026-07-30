@@ -1754,5 +1754,8 @@ export const hr = {
     'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
   chain_address_copied: 'Adresa {{chain}} kopirana',
   native: 'Izvorni',
+  activate: 'Aktivirati',
+  trust_line_insufficient_xrp:
+    'Nema dovoljno {{ticker}}. Za otvaranje ove linije povjerenja potrebno je {{amount}} {{ticker}} za rezervu računa i naknadu.',
   swap_limit_payout_to: 'Isplata na',
 }

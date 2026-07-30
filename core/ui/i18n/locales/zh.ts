@@ -1636,5 +1636,8 @@ export const zh = {
     '这个价格远高于市场价，而且可能最终无法成交。',
   chain_address_copied: '{{chain}}地址已复制',
   native: '原生',
+  activate: '激活',
+  trust_line_insufficient_xrp:
+    '{{ticker}}不足。开通此信任线需要{{amount}} {{ticker}}作为账户储备金和手续费。',
   swap_limit_payout_to: '支付至',
 }
