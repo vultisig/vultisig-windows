@@ -22,6 +22,22 @@ import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
 
+type GetSwapKeysignAmountInput = {
+  fromAmount: bigint
+  decimals: number
+}
+
+/**
+ * Renders the exact chain amount as a lossless decimal string for
+ * `buildSwapKeysignPayload`. Must never go through float64 — amounts with
+ * more than ~15 significant digits would be silently perturbed (#4391).
+ */
+export const getSwapKeysignAmount = ({
+  fromAmount,
+  decimals,
+}: GetSwapKeysignAmountInput): string =>
+  bigIntToDecimalString(fromAmount, decimals)
+
 export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
@@ -39,10 +55,10 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const input: BuildSwapKeysignPayloadInput = {
     fromCoin,
     toCoin,
-    amount: bigIntToDecimalString(
-      shouldBePresent(fromAmount, 'fromAmount'),
-      fromCoin.decimals
-    ),
+    amount: getSwapKeysignAmount({
+      fromAmount: shouldBePresent(fromAmount, 'fromAmount'),
+      decimals: fromCoin.decimals,
+    }),
     swapQuote,
     vaultId: getVaultId(vault),
     localPartyId: vault.localPartyId,
