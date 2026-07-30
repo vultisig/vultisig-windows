@@ -1790,4 +1790,5 @@ export const it = {
   activate: 'Attivare',
   trust_line_insufficient_xrp:
     '{{ticker}} non è sufficiente. Per aprire questa linea di fiducia sono necessari {{amount}} {{ticker}} per la riserva del conto e la commissione.',
+  swap_limit_payout_to: 'Pagamento a',
 }

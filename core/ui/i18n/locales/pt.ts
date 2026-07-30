@@ -1787,4 +1787,5 @@ export const pt = {
   activate: 'Ativar',
   trust_line_insufficient_xrp:
     'Não há {{ticker}} suficientes. Para abrir esta linha de confiança, são necessários {{amount}} {{ticker}} para a reserva e taxa da conta.',
+  swap_limit_payout_to: 'Pagamento para',
 }

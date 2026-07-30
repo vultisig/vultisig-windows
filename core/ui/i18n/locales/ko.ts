@@ -1748,4 +1748,5 @@ export const ko = {
   activate: '활성화',
   trust_line_insufficient_xrp:
     '{{ticker}} 부족합니다. 이 신뢰 라인을 개설하려면 계좌 준비금 및 수수료로 {{amount}} {{ticker}} 필요합니다.',
+  swap_limit_payout_to: '지급 대상',
 }

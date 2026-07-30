@@ -1765,4 +1765,5 @@ export const ru = {
   activate: 'Активировать',
   trust_line_insufficient_xrp:
     'Недостаточно {{ticker}}. Для открытия этой доверительной линии требуется {{amount}} {{ticker}} для резервирования счета и комиссии.',
+  swap_limit_payout_to: 'Выплата на',
 }

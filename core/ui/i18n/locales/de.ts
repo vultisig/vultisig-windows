@@ -1801,4 +1801,5 @@ export const de = {
   activate: 'Aktivieren',
   trust_line_insufficient_xrp:
     'Nicht genügend {{ticker}}. Zum Öffnen dieser Vertrauenslinie werden {{amount}} {{ticker}} für die Kontoreserve und die Gebühr benötigt.',
+  swap_limit_payout_to: 'Auszahlung an',
 }

@@ -52,8 +52,18 @@ export const test = base.extend<{
   testDappUrl: string
 }>({
   context: async ({}, use) => {
+    const videoDir = process.env.EXTENSION_QA_VIDEO_DIR
     const context = await chromium.launchPersistentContext('', {
       headless: false,
+      ...(videoDir
+        ? {
+            viewport: { width: 1280, height: 720 },
+            recordVideo: {
+              dir: videoDir,
+              size: { width: 1280, height: 720 },
+            },
+          }
+        : {}),
       args: [
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,

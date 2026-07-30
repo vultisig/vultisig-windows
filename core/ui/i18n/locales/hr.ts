@@ -1757,4 +1757,5 @@ export const hr = {
   activate: 'Aktivirati',
   trust_line_insufficient_xrp:
     'Nema dovoljno {{ticker}}. Za otvaranje ove linije povjerenja potrebno je {{amount}} {{ticker}} za rezervu računa i naknadu.',
+  swap_limit_payout_to: 'Isplata na',
 }
