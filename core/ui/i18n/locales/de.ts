@@ -1798,4 +1798,5 @@ export const de = {
     'Dieser Preis liegt weit über dem Marktpreis und es besteht die Möglichkeit, dass die Transaktion ungenutzt verfällt.',
   chain_address_copied: 'Adresse {{chain}} kopiert',
   native: 'Nativ',
+  swap_limit_payout_to: 'Auszahlung an',
 }

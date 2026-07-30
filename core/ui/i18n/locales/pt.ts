@@ -1784,4 +1784,5 @@ export const pt = {
     'Este preço está muito acima do mercado e pode expirar sem ser atendido.',
   chain_address_copied: 'Endereço {{chain}} copiado',
   native: 'Nativo',
+  swap_limit_payout_to: 'Pagamento para',
 }

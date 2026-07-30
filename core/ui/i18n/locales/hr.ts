@@ -1754,4 +1754,5 @@ export const hr = {
     'Ova cijena je daleko iznad tržišne i mogla bi isteći ako se ne iskoristi',
   chain_address_copied: 'Adresa {{chain}} kopirana',
   native: 'Izvorni',
+  swap_limit_payout_to: 'Isplata na',
 }

@@ -1765,4 +1765,5 @@ export const nl = {
     'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
   chain_address_copied: '{{chain}} adres gekopieerd',
   native: 'Native',
+  swap_limit_payout_to: 'Uitbetaling aan',
 }

@@ -1787,4 +1787,5 @@ export const it = {
     "Questo prezzo è di gran lunga superiore a quello di mercato e l'offerta potrebbe scadere senza che l'ordine venga evaso.",
   chain_address_copied: 'Indirizzo {{chain}} copiato',
   native: 'Nativo',
+  swap_limit_payout_to: 'Pagamento a',
 }

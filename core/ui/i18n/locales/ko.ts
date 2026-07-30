@@ -1745,4 +1745,5 @@ export const ko = {
     '이 가격은 시장가보다 훨씬 높으며, 거래가 성사되지 않고 만료될 가능성이 있습니다.',
   chain_address_copied: '{{chain}} 주소가 복사되었습니다.',
   native: '네이티브',
+  swap_limit_payout_to: '지급 대상',
 }
