@@ -29,6 +29,33 @@ const parseAmountInputValue = (value: string, decimals: number) => {
   }
 }
 
+type GetSuggestionDisplayValueInput = {
+  amount: bigint
+  decimals: number
+  chain: Chain
+}
+
+/**
+ * Renders a suggestion amount for display, cropped to a few fraction digits.
+ * Display only — the stored swap amount must stay the exact bigint, or Max
+ * would silently swap less than the full balance (#4390).
+ */
+export const getSuggestionDisplayValue = ({
+  amount,
+  decimals,
+  chain,
+}: GetSuggestionDisplayValueInput) => {
+  const decimalString = bigIntToDecimalString(amount, decimals)
+  const maxDisplayDecimals = chain === Chain.Bitcoin ? 8 : 4
+  const [integerPart, decimalPart] = decimalString.split('.')
+  const croppedDecimal = decimalPart
+    ? `.${decimalPart.slice(0, maxDisplayDecimals)}`
+    : ''
+  const cropped = `${integerPart}${croppedDecimal}`
+
+  return cropped.includes('.') ? cropped.replace(/\.?0+$/, '') : cropped
+}
+
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
@@ -124,21 +151,16 @@ export const ManageFromAmount = () => {
               <AmountSuggestion
                 onClick={() => {
                   const suggestionAmount = multiplyBigInt(amount, suggestion)
-                  const decimalString = bigIntToDecimalString(
-                    suggestionAmount,
-                    decimals
+
+                  setInputValue(
+                    getSuggestionDisplayValue({
+                      amount: suggestionAmount,
+                      decimals,
+                      chain: fromCoinKey.chain,
+                    })
                   )
-                  const maxDisplayDecimals =
-                    fromCoinKey.chain === Chain.Bitcoin ? 8 : 4
-                  const [integerPart, decimalPart] = decimalString.split('.')
-                  const croppedDecimal = decimalPart
-                    ? `.${decimalPart.slice(0, maxDisplayDecimals)}`
-                    : ''
-                  const cropped = `${integerPart}${croppedDecimal}`
-                  const trimmed = cropped.includes('.')
-                    ? cropped.replace(/\.?0+$/, '')
-                    : cropped
-                  handleInputValueChange(trimmed)
+                  previousValueRef.current = suggestionAmount
+                  setValue?.(suggestionAmount)
                 }}
                 key={suggestion}
                 value={suggestion}
