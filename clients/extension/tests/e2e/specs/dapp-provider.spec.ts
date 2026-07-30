@@ -369,21 +369,20 @@ test.describe('DApp Provider', () => {
 
     await page.goto(dappUrl)
     await page.waitForLoadState('domcontentloaded')
-    await page.waitForTimeout(2000)
 
-    const providers = await page.evaluate(() => {
-      return {
-        ethereum: !!window.ethereum,
-        vultisig: !!window.vultisig,
-        vultisigSolana: !!window.vultisig?.solana,
-      }
-    })
-
-    expect(providers).toEqual({
-      ethereum: true,
-      vultisig: true,
-      vultisigSolana: true,
-    })
+    await expect
+      .poll(() =>
+        page.evaluate(() => ({
+          ethereum: !!window.ethereum,
+          vultisig: !!window.vultisig,
+          vultisigSolana: !!window.vultisig?.solana,
+        }))
+      )
+      .toEqual({
+        ethereum: true,
+        vultisig: true,
+        vultisigSolana: true,
+      })
 
     await page.close()
   })

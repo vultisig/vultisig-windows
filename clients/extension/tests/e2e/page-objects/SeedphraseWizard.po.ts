@@ -37,10 +37,7 @@ export class SeedphraseWizard extends BasePage {
   }
 
   get continueButton(): Locator {
-    return this.page
-      .locator('[data-testid="seedphrase-continue"]')
-      .or(this.page.getByRole('button', { name: /continue|import|next/i }))
-      .first()
+    return this.page.getByRole('button', { name: 'Import', exact: true })
   }
 
   get validationError(): Locator {
@@ -80,10 +77,7 @@ export class SeedphraseWizard extends BasePage {
   }
 
   get confirmButton(): Locator {
-    return this.page
-      .locator('[data-testid="confirm-import"]')
-      .or(this.page.getByRole('button', { name: /confirm|create|finish|import/i }))
-      .first()
+    return this.page.getByRole('button', { name: 'Next', exact: true })
   }
 
   get addressDisplay(): Locator {
