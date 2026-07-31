@@ -13,4 +13,4 @@ type GetDeeplinkSendAmountInput = {
 export const getDeeplinkSendAmount = ({
   amount,
   decimals,
-}: GetDeeplinkSendAmountInput) => toChainAmount(Number(amount), decimals)
+}: GetDeeplinkSendAmountInput) => toChainAmount(amount, decimals)
