@@ -28,6 +28,20 @@ describe('getBruneSpecific', () => {
     })
   })
 
+  it('keeps every digit of an amount beyond float64 precision', () => {
+    // 10 integer digits + 8 fraction digits — 18 significant digits, well past
+    // what a Number() round-trip could preserve (#4494)
+    const amount = '9007199254.74099301'
+    const expectedUnits = 900719925474099301n
+
+    const result = getBruneSpecific({ input: { kind: 'stake', amount } })
+
+    expect(result.kind).toBe('wasm')
+    if (result.kind === 'wasm') {
+      expect(result.funds[0].amount).toBe(expectedUnits.toString())
+    }
+  })
+
   it('builds a liquid.unbond wasm execute funded with ybRUNE for unstake', () => {
     expect(
       getBruneSpecific({ input: { kind: 'unstake', amount: '2' } })
