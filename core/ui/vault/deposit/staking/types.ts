@@ -19,13 +19,13 @@ export type StakeSpecific =
  * `account.withdraw`), or a rewards `claim`.
  */
 export type RujiInput =
-  | { kind: 'stake'; amount: number }
+  | { kind: 'stake'; amount: string }
   | {
       // Auto-compounding (sRUJI) position — redeemed via `liquid.unbond`, so the
       // entered underlying amount is converted to receipt shares.
       kind: 'unstake'
       position: 'liquid'
-      amount: number
+      amount: string
       liquidShares: bigint
       liquidSize: bigint
     }
@@ -33,26 +33,26 @@ export type RujiInput =
       // Bonded (yielding) position — withdrawn via `account.withdraw`.
       kind: 'unstake'
       position: 'bonded'
-      amount: number
+      amount: string
     }
   | { kind: 'claim' }
 
 export type NativeTcyInput =
-  | { kind: 'stake'; amount: number }
+  | { kind: 'stake'; amount: string }
   | { kind: 'unstake'; percentage: number }
   | { kind: 'claim' }
 
 export type StcyInput =
-  | { kind: 'stake'; amount: number }
-  | { kind: 'unstake'; amount: number }
+  | { kind: 'stake'; amount: string }
+  | { kind: 'unstake'; amount: string }
 
 /**
  * Input for a bRUNE liquid-bond op — amount-based auto-compounding stake
  * (`liquid.bond`) or unstake (`liquid.unbond`), same shape as {@link StcyInput}.
  */
 export type BruneInput =
-  | { kind: 'stake'; amount: number }
-  | { kind: 'unstake'; amount: number }
+  | { kind: 'stake'; amount: string }
+  | { kind: 'unstake'; amount: string }
 
 export type RujiPayload = { coin: AccountCoin; input: RujiInput }
 export type NativeTcyPayload = { coin: AccountCoin; input: NativeTcyInput }

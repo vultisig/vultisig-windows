@@ -12,6 +12,7 @@ import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { toExactAmountString } from '../../../utils/exactAmountString'
 import { StakingAmountInput } from './StakingAmountInput'
 import { ValidatorPickerField } from './ValidatorPickerField'
 
@@ -68,7 +69,7 @@ export const RedelegateSpecific = () => {
   const handleSliderChange = (percentage: number) => {
     if (stakedUnits === 0n) return
     const units = (stakedUnits * BigInt(Math.round(percentage * 100))) / 10_000n
-    setValue('amount', fromChainAmount(units, coin.decimals), {
+    setValue('amount', toExactAmountString(units, coin.decimals), {
       shouldValidate: true,
     })
   }

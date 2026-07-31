@@ -18,6 +18,7 @@ import { Controller, ControllerRenderProps, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { trimTrailingZeros } from '../../../utils/exactAmountString'
 import { FormData } from '../../types'
 
 type StakeFormProps = {
@@ -88,7 +89,9 @@ export const StakeForm = ({
   }, [parsedAmount, balance])
 
   const handleSliderChange = (percentage: number) => {
-    const amount = Number(((percentage / 100) * balance).toFixed(coin.decimals))
+    const amount = trimTrailingZeros(
+      ((percentage / 100) * balance).toFixed(coin.decimals)
+    )
     setValue('amount', amount, { shouldValidate: true, shouldDirty: true })
 
     if (isUnstake && stakeId === 'native-tcy') {

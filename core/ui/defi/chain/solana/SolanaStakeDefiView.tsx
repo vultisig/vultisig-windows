@@ -39,6 +39,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { toExactAmountString } from '../../../vault/deposit/utils/exactAmountString'
 import { SolanaDelegationCard } from './SolanaDelegationCard'
 
 const TotalStakedLogo = styled.img`
@@ -269,7 +270,7 @@ export const SolanaStakeDefiView = () => {
       stakeAccount: row.stakeAccount.pubkey,
     }
     if (action === 'solana_withdraw') {
-      form.amount = fromChainAmount(row.withdrawableLamports, solDecimals)
+      form.amount = toExactAmountString(row.withdrawableLamports, solDecimals)
     }
     if (action === 'solana_move_stake') {
       // The current validator is the one destination the move cannot have, so
@@ -282,7 +283,7 @@ export const SolanaStakeDefiView = () => {
       // above the rent-exempt reserve — rewards accrued while it was active
       // included. The destination was picked back on the Move step; without one
       // (an account deactivated elsewhere) the finish-move screen still asks.
-      form.amount = fromChainAmount(row.withdrawableLamports, solDecimals)
+      form.amount = toExactAmountString(row.withdrawableLamports, solDecimals)
       form.validatorAddress = row.moveDestination
     }
     navigate({
