@@ -12,7 +12,7 @@ export const toRequiredNumber = (value: unknown) => {
   return Number.isFinite(parsed) ? parsed : NaN
 }
 
-export const maxOrInfinity = (value: number) => (value > 0 ? value : 0)
+const maxOrInfinity = (value: number) => (value > 0 ? value : 0)
 
 /**
  * Normalizes an amount field to its decimal-string representation without
