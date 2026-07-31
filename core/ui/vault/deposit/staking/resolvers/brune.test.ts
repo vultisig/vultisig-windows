@@ -10,38 +10,38 @@ import { selectStakeId } from './index'
 
 describe('getBruneSpecific', () => {
   it('builds a liquid.bond wasm execute funded with bRUNE for stake', () => {
-    expect(getBruneSpecific({ input: { kind: 'stake', amount: 1.5 } })).toEqual(
-      {
-        kind: 'wasm',
-        contract: bruneBondConfig.contract,
-        executeMsg: { liquid: { bond: {} } },
-        funds: [
-          {
-            denom: bruneBondConfig.depositDenom,
-            amount: toChainAmount(
-              1.5,
-              bruneBondConfig.depositDecimals
-            ).toString(),
-          },
-        ],
-      }
-    )
+    expect(
+      getBruneSpecific({ input: { kind: 'stake', amount: '1.5' } })
+    ).toEqual({
+      kind: 'wasm',
+      contract: bruneBondConfig.contract,
+      executeMsg: { liquid: { bond: {} } },
+      funds: [
+        {
+          denom: bruneBondConfig.depositDenom,
+          amount: toChainAmount(
+            1.5,
+            bruneBondConfig.depositDecimals
+          ).toString(),
+        },
+      ],
+    })
   })
 
   it('builds a liquid.unbond wasm execute funded with ybRUNE for unstake', () => {
-    expect(getBruneSpecific({ input: { kind: 'unstake', amount: 2 } })).toEqual(
-      {
-        kind: 'wasm',
-        contract: bruneBondConfig.contract,
-        executeMsg: { liquid: { unbond: {} } },
-        funds: [
-          {
-            denom: bruneBondConfig.shareDenom,
-            amount: toChainAmount(2, bruneBondConfig.shareDecimals).toString(),
-          },
-        ],
-      }
-    )
+    expect(
+      getBruneSpecific({ input: { kind: 'unstake', amount: '2' } })
+    ).toEqual({
+      kind: 'wasm',
+      contract: bruneBondConfig.contract,
+      executeMsg: { liquid: { unbond: {} } },
+      funds: [
+        {
+          denom: bruneBondConfig.shareDenom,
+          amount: toChainAmount(2, bruneBondConfig.shareDecimals).toString(),
+        },
+      ],
+    })
   })
 })
 

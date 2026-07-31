@@ -40,6 +40,7 @@ import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
 } from '../../../../components/action-form/ActionFormIconsWrapper'
+import { trimTrailingZeros } from '../../../utils/exactAmountString'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
@@ -141,7 +142,7 @@ export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
     }
   }, [providerValue])
 
-  const handleSetAmount = (value: number) => {
+  const handleSetAmount = (value: string) => {
     setValue('amount', value, { shouldValidate: true, shouldDirty: true })
   }
 
@@ -286,13 +287,13 @@ export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
                   gap={4}
                 >
                   {amountSuggestions.map(suggestion => {
-                    const suggestedAmount = Number(
+                    const suggestedAmount = trimTrailingZeros(
                       (balance * suggestion).toFixed(coin.decimals)
                     )
                     const isActive =
                       parsedAmount !== null &&
                       Number(parsedAmount?.toFixed(coin.decimals)) ===
-                        suggestedAmount
+                        Number(suggestedAmount)
 
                     return (
                       <SuggestionOption

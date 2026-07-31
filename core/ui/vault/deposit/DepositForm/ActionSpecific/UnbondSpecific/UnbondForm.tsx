@@ -28,6 +28,7 @@ import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
 } from '../../../../components/action-form/ActionFormIconsWrapper'
+import { trimTrailingZeros } from '../../../utils/exactAmountString'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
@@ -114,7 +115,9 @@ export const UnbondForm = ({
   }, [parsedAmount, balance])
 
   const handleSliderChange = (percentage: number) => {
-    const amount = Number(((percentage / 100) * balance).toFixed(coin.decimals))
+    const amount = trimTrailingZeros(
+      ((percentage / 100) * balance).toFixed(coin.decimals)
+    )
     setValue('amount', amount, { shouldValidate: true, shouldDirty: true })
   }
 

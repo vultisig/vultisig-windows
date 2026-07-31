@@ -72,7 +72,7 @@ export const generateMemo = ({
 
           if (coin.ticker === 'RUJI') {
             const chainAmount = toChainAmount(
-              shouldBePresent(Number(amount)),
+              shouldBePresent(amount),
               coin.decimals
             ).toString()
             return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
@@ -109,11 +109,10 @@ export const generateMemo = ({
 
           if (coin.ticker === 'RUJI') {
             const amt = shouldBePresent(amount, 'Amount')
-            const amtNum = typeof amt === 'string' ? Number(amt) : amt
-            if (!Number.isFinite(amtNum) || amtNum <= 0) {
+            if (!Number.isFinite(Number(amt)) || Number(amt) <= 0) {
               throw new Error('Amount is required for RUJI unstake')
             }
-            const chainAmount = toChainAmount(amtNum, coin.decimals).toString()
+            const chainAmount = toChainAmount(amt, coin.decimals).toString()
             return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
           }
 
@@ -150,7 +149,7 @@ export const generateMemo = ({
     unbond: () => {
       const runeDecimals = chainFeeCoin[Chain.THORChain].decimals
       const amountInUnits = amount
-        ? Math.round(amount * Math.pow(10, runeDecimals))
+        ? toChainAmount(amount, runeDecimals).toString()
         : 0
       return provider
         ? `UNBOND:${nodeAddress}:${amountInUnits}:${provider}`
@@ -252,7 +251,7 @@ export const generateMemo = ({
 function extractFormValues(formData: FieldValues) {
   return {
     nodeAddress: formData.nodeAddress as string | null,
-    amount: formData.amount as number | null,
+    amount: formData.amount as string | null,
     lpUnits: formData.lpUnits as number | null,
     customMemo: formData.customMemo as string | undefined,
     percentage: formData.percentage as number | null,

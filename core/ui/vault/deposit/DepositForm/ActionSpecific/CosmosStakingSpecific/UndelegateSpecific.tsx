@@ -12,6 +12,7 @@ import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { toExactAmountString } from '../../../utils/exactAmountString'
 import { StakingAmountInput } from './StakingAmountInput'
 
 /**
@@ -76,7 +77,7 @@ export const UndelegateSpecific = () => {
     if (stakedUnits === 0n) return
     // Floor to base units, then re-stringify with the right decimal count.
     const num = (stakedUnits * BigInt(Math.round(percentage * 100))) / 10_000n
-    setValue('amount', fromChainAmount(num, coin.decimals), {
+    setValue('amount', toExactAmountString(num, coin.decimals), {
       shouldValidate: true,
     })
   }

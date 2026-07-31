@@ -97,7 +97,8 @@ export type BuildDepositKeysignPayloadInput = {
   action: ChainAction
   depositData: FieldValues
   receiver?: string
-  amount?: number
+  /** Human amount as an exact decimal string — never a float64 (#4494). */
+  amount?: string
   memo?: string
   validatorAddress?: string
   slippage?: number
@@ -195,7 +196,8 @@ export const buildDepositKeysignPayload = async ({
   const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
   const isTonFunction = coin.chain === Chain.Ton
 
-  const hasAmount = amount !== undefined && Number.isFinite(amount)
+  const hasAmount =
+    amount !== undefined && amount !== '' && Number.isFinite(Number(amount))
   const amountUnits = hasAmount
     ? toChainAmount(shouldBePresent(amount), coin.decimals).toString()
     : undefined

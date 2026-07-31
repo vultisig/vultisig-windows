@@ -17,8 +17,10 @@ import { z } from 'zod'
 import { ChainAction } from '../ChainAction'
 import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
 import {
-  maxOrInfinity,
+  optionalNonNegativeAmountSchema,
+  optionalPositiveAmountSchema,
   positiveAmountSchema,
+  requiredAmountSchema,
   toOptionalNumber,
   toRequiredNumber,
 } from './validationHelpers'
@@ -384,17 +386,7 @@ export const getDepositFormConfig = ({
           z.number().gt(0, t('lp_units'))
           // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
         ),
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .gt(0, t('amount_must_be_positive'))
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .optional()
-        ),
+        amount: optionalPositiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     unbond: () => ({
@@ -486,17 +478,7 @@ export const getDepositFormConfig = ({
           // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
         ),
         bondableAsset: z.string().min(1, t('asset')),
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .gt(0, t('amount_must_be_positive'))
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .optional()
-        ),
+        amount: optionalPositiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     leave: () => ({
@@ -544,19 +526,7 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .refine(val => val >= 0, {
-              message: t('amount_must_be_non_negative'),
-            })
-            .optional()
-        ),
+        amount: optionalNonNegativeAmountSchema(totalAmountAvailable, t),
         customMemo: z
           .string()
           .min(1, t('chainFunctions.custom.validations.customMemo')),
@@ -857,10 +827,7 @@ export const getDepositFormConfig = ({
                 message: t('trust_line_currency_invalid'),
               }
             ),
-          amount: z.preprocess(
-            toRequiredNumber,
-            z.number().gt(0, t('amount_must_be_positive'))
-          ),
+          amount: requiredAmountSchema(t),
         })
         // The limit itself is token-denominated, but the line still costs XRP: one
         // owner-reserve increment locked up plus the fee. Below that the TrustSet
@@ -1028,10 +995,7 @@ export const getDepositFormConfig = ({
         // SOL balance and routinely exceeds it (you're withdrawing FROM the
         // stake account). Require only a positive value; capping at the liquid
         // `totalAmountAvailable` would wrongly disable Continue.
-        amount: z.preprocess(
-          toRequiredNumber,
-          z.number().gt(0, t('amount_must_be_positive'))
-        ),
+        amount: requiredAmountSchema(t),
       }),
     }),
     // Move-stake step 1 (deactivate): operates on a prefilled stake account and
@@ -1070,10 +1034,7 @@ export const getDepositFormConfig = ({
       schema: z.object({
         stakeAccount: z.string().trim().min(1),
         validatorAddress: z.string().trim().min(1, t('validator_address')),
-        amount: z.preprocess(
-          toRequiredNumber,
-          z.number().gt(0, t('amount_must_be_positive'))
-        ),
+        amount: requiredAmountSchema(t),
       }),
     }),
   })
