@@ -5,7 +5,8 @@
     "migrated": "already swapped to V3 art in lib/ui/icons",
     "verified": "V3 source confirmed against rendered art",
     "proposed": "likely match from name/iOS precedent — must be eyeballed before use",
-    "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn"
+    "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn",
+    "legacy": "shared icon with no faithful V3 counterpart yet — stays on the legacy glyph pending design"
   },
   "sourceLegend": {
     "station": "already shipped in StationFigmaIcons.tsx (drawn in V3 style)",
@@ -325,6 +326,46 @@
       "v3": "file-content",
       "status": "migrated",
       "source": "manual"
+    },
+    {
+      "desktop": "ShareIcon",
+      "v3": "upload",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "PenciIcon",
+      "v3": "pen-writing",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "ShieldCheckIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has shield/shield-filled but no shield-check"
+    },
+    {
+      "desktop": "ShieldCheckFilledIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "no shield-check in V3"
+    },
+    {
+      "desktop": "FileUpIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has file-download but no file-upload"
+    },
+    {
+      "desktop": "TransactionReceiveIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "Vultisig send/receive/swap set — decide together with design"
     },
     {
       "desktop": "AgentIcon",

@@ -81,7 +81,7 @@ final PR to `main`.)
 | Phase | Scope | Content |
 |-------|-------|---------|
 | **0 — Foundation** ✅ | tooling | Decision record, codegen (`scripts/icons/`), seed mapping table, Storybook gallery. **No icon art changes.** |
-| **1 — Shared icons** | cross-screen | Every icon used on more than one screen (nav, back, close, search, wallet, copy…). One PR, ripples across all screens by design. Excludes chevrons. |
+| **1 — Shared icons** ✅ | cross-screen | Every icon used on more than one screen. **Done: 53 migrated** across 7 batches (44 from iOS/Station V3 art, 9 from the Figma V3 library), each verified against rendered geometry. PRs #4502 + the batch-7 PR. Excludes chevrons. |
 | **2 — Main View** | screen | Portfolio / vault home — its remaining screen-unique icons. |
 | **3 — Send flow** | screen | |
 | **4 — Swap flow** | screen | |
@@ -101,6 +101,19 @@ screen split only changes *how the work is batched into PRs*.
 
 **Chevrons stay on the legacy pack on purpose** (design-confirmed) and are excluded from
 the migration entirely.
+
+### Phase 1 outcome — shared icons that stay legacy (for now)
+
+These shared icons have **no faithful V3 counterpart**, so they keep their current glyph
+until design provides one (tracked as `status: "legacy"` / `"bespoke"` in the mapping):
+
+- `ShieldCheckIcon`, `ShieldCheckFilledIcon` — V3 has `shield`/`shield-filled` but no shield-with-check.
+- `FileUpIcon` — V3 has `file-download` but no file-upload.
+- `TransactionReceiveIcon` — part of the Vultisig send/receive/swap set; decide together with design.
+- `BrowserExtensionIcon`, `CryptoIcon`, `CryptoWalletPenIcon` — Vultisig-specific/bespoke.
+
+Note: the V3 library's `pencil-2` renders a non-pencil glyph (name ≠ geometry); `PencilIcon`
+was migrated from `pen-writing` instead. Always verify V3 geometry, not just the name.
 
 ## Constraints that shape the work
 
