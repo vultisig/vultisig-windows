@@ -1,5 +1,5 @@
-import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '@core/ui/mpc/keysign/prompt/StartKeysignPromptProps'
+import { StartKeysignPromptWithRefresh } from '@core/ui/mpc/keysign/start/StartKeysignPromptWithRefresh'
 import { QbtcVoteSelection } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/proposal'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
@@ -22,11 +22,12 @@ export const GovernanceVoteConfirmButton = ({
   selection,
 }: GovernanceVoteConfirmButtonProps) => {
   const { t } = useTranslation()
-  const { data, error, isPending } = useQbtcVoteKeysignPayloadQuery({
+  const keysignPayloadQuery = useQbtcVoteKeysignPayloadQuery({
     voterAddress,
     proposalId,
     selection,
   })
+  const { data, error, isPending } = keysignPayloadQuery
 
   const promptProps: StartKeysignPromptProps = isPending
     ? { disabledMessage: t('loading') }
@@ -36,5 +37,11 @@ export const GovernanceVoteConfirmButton = ({
         ? { keysignPayload: data }
         : { disabledMessage: t('loading') }
 
-  return <StartKeysignPrompt {...promptProps} />
+  return (
+    <StartKeysignPromptWithRefresh
+      keysignPayloadQuery={keysignPayloadQuery}
+      toKeysignPayload={payload => payload}
+      promptProps={promptProps}
+    />
+  )
 }

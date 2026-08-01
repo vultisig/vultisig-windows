@@ -12,8 +12,11 @@ export const SecureVaultStartKeysignPrompt = (
   const navigate = useCoreNavigate()
 
   const buttonProps = useMemo(() => {
+    const { onBeforeStart, ...navigationProps } = props
     const keysignPayload =
-      'keysignPayload' in props ? props.keysignPayload : undefined
+      'keysignPayload' in navigationProps
+        ? navigationProps.keysignPayload
+        : undefined
 
     if (!keysignPayload) {
       return {
@@ -22,13 +25,20 @@ export const SecureVaultStartKeysignPrompt = (
     }
 
     return {
-      onClick: () => {
+      onClick: async () => {
+        // Sign what the network accepts now, not what it accepted when this
+        // screen mounted. A failed rebuild abandons the ceremony.
+        const payload = onBeforeStart ? await onBeforeStart() : keysignPayload
+        if (!payload) {
+          return
+        }
+
         navigate({
           id: 'keysign',
           state: {
             securityType: 'secure',
-            ...props,
-            keysignPayload,
+            ...navigationProps,
+            keysignPayload: payload,
           },
         })
       },
