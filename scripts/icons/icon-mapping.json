@@ -368,6 +368,31 @@
       "note": "Vultisig send/receive/swap set — decide together with design"
     },
     {
+      "desktop": "SquareBehindSquare6Icon",
+      "v3": "clone",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "EyeClosedIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has no eye-off/eye-slash; pairs with the migrated EyeIcon in the balance show/hide toggle — needs a V3 eye-off from design"
+    },
+    {
+      "desktop": "CryptoIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "CryptoWalletPenIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
       "desktop": "AgentIcon",
       "v3": null,
       "status": "bespoke",
