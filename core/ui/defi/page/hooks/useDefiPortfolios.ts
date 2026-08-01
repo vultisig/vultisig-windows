@@ -351,9 +351,15 @@ export const useDefiPortfolioBalance = () => {
 
   const resolvedCount = resolvedChains.length + (isCircleResolved ? 1 : 0)
   const isUpdating = portfolios.isPending || isCirclePending
+  // With no enabled chains and Circle excluded there is nothing to resolve —
+  // the total is a settled zero, not an absent value waiting on queries.
+  const hasTrackedSources = portfolios.data.length > 0 || isCircleIncluded
 
   return {
-    data: resolvedCount > 0 ? chainTotal + circleTotal : undefined,
+    data:
+      resolvedCount > 0 || !hasTrackedSources
+        ? chainTotal + circleTotal
+        : undefined,
     isPending: resolvedCount === 0 && isUpdating,
     isUpdating,
     error:
