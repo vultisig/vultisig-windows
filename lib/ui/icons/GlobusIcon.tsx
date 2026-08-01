@@ -1,4 +1,4 @@
-import { SvgProps } from '../props'
+import { SvgProps } from '@lib/ui/props'
 
 export const GlobusIcon = (props: SvgProps) => (
   <svg
@@ -10,10 +10,25 @@ export const GlobusIcon = (props: SvgProps) => (
     {...props}
   >
     <path
-      d="M12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75M12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75M12 21.25C9.65279 21.25 7.75 17.1086 7.75 12C7.75 6.89137 9.65279 2.75 12 2.75M12 21.25C14.3472 21.25 16.25 17.1086 16.25 12C16.25 6.89137 14.3472 2.75 12 2.75M21 12H3"
+      d="M11.9996 15C16.6388 15 20.3996 13.6569 20.3996 12C20.3996 10.3431 16.6388 9 11.9996 9C7.36042 9 3.59961 10.3431 3.59961 12C3.59961 13.6569 7.36042 15 11.9996 15Z"
       stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="square"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 20.3996C13.6569 20.3996 15 16.6388 15 11.9996C15 7.36042 13.6569 3.59961 12 3.59961C10.3431 3.59961 9 7.36042 9 11.9996C9 16.6388 10.3431 20.3996 12 20.3996Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M11.9996 20.3996C16.6388 20.3996 20.3996 16.6388 20.3996 11.9996C20.3996 7.36042 16.6388 3.59961 11.9996 3.59961C7.36042 3.59961 3.59961 7.36042 3.59961 11.9996C3.59961 16.6388 7.36042 20.3996 11.9996 20.3996Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

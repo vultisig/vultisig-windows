@@ -1,18 +1,52 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const MegaphoneIcon: FC<SvgProps> = props => (
+export const MegaphoneIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <path d="M18.2461 13.9999C19.9029 13.9999 21.2461 12.6568 21.2461 10.9999C21.2461 9.34307 19.9029 7.99993 18.2461 7.99993M12.5754 18.2499C12.1636 19.4151 11.0523 20.2499 9.74609 20.2499C8.08924 20.2499 6.74609 18.9068 6.74609 17.2499V15.7499M6.74829 6.24993V15.7499M18.2461 5.4606V16.5393C18.2461 17.8857 16.9426 18.8475 15.6561 18.4502L4.15607 14.8995C3.31782 14.6407 2.74609 13.8659 2.74609 12.9886V9.01129C2.74609 8.134 3.31782 7.35912 4.15607 7.1003L15.6561 3.54961C16.9426 3.1524 18.2461 4.11418 18.2461 5.4606Z" />
+    <path
+      d="M6 13.8546V17.738C6 18.2792 6.36216 18.7534 6.88428 18.8958L10.4843 19.8776C11.2476 20.0858 12 19.5112 12 18.7199V15.491"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M19.8008 13.7394C21.1701 13.4614 22.2008 12.2513 22.2008 10.7999C22.2008 9.34847 21.1701 8.13839 19.8008 7.86035V13.7394Z"
+      fill="currentColor"
+    />
+    <path
+      d="M16.8008 3.59961V17.9996"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.59961 14.4002V7.2002"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.59961 8.3998L16.7996 4.7998"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.59961 13.2002L16.7996 16.8002"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

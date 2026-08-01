@@ -1,20 +1,19 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const CalendarClockIcon: FC<SvgProps> = props => (
+export const CalendarClockIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 16 16"
+    fill="none"
     {...props}
   >
-    <path d="M7.75 4.75V2.75M16.25 4.75V2.75M8.75 20.25H5.75C4.64543 20.25 3.75 19.3546 3.75 18.25V6.75C3.75 5.64543 4.64543 4.75 5.75 4.75H18.25C19.3546 4.75 20.25 5.64543 20.25 6.75V8.75" />
-    <path d="M17 22.25C19.8995 22.25 22.25 19.8995 22.25 17C22.25 14.1005 19.8995 11.75 17 11.75C14.1005 11.75 11.75 14.1005 11.75 17C11.75 19.8995 14.1005 22.25 17 22.25Z" />
-    <path d="M17 14.75V16.9996L18.75 18.75" />
+    <path
+      d="M1.64003 6.63752L2.39251 10.905C2.52038 11.6302 3.21193 12.1145 3.93711 11.9866L6.74273 11.4919M1.64003 6.63752L1.4085 5.32445C1.28063 4.59925 1.76485 3.90771 2.49005 3.77984L8.72713 2.68007C9.45233 2.55219 10.1439 3.03642 10.2718 3.76161L10.5033 5.07469L1.64003 6.63752ZM10.6665 7.83333V9.33333L11.9999 10.6667M14.8332 9.33333C14.8332 11.6345 12.9677 13.5 10.6665 13.5C8.36533 13.5 6.49989 11.6345 6.49989 9.33333C6.49989 7.03213 8.36533 5.16665 10.6665 5.16665C12.9677 5.16665 14.8332 7.03213 14.8332 9.33333Z"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

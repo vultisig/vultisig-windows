@@ -2,13 +2,14 @@
   "$comment": "Source-of-truth mapping from a desktop icon component (lib/ui/icons/<name>.tsx) to its Icons V3 source icon (the component/instance name in the Figma section defined in figma-icons.config.json). SEED ONLY — this is intentionally incomplete. Later phases extend it, verifying each entry against rendered art before shipping. Chevrons are excluded on purpose (they stay on the legacy pack per design).",
   "decision": "converge-on-v3",
   "status": {
+    "migrated": "already swapped to V3 art in lib/ui/icons",
     "verified": "V3 source confirmed against rendered art",
     "proposed": "likely match from name/iOS precedent — must be eyeballed before use",
     "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn"
   },
   "sourceLegend": {
     "station": "already shipped in StationFigmaIcons.tsx (drawn in V3 style)",
-    "ios": "matches an icon rebuilt on V3 in vultisig-ios#4834",
+    "ios": "rebuilt on V3 in vultisig-ios#4834; SVG art read directly from the iOS repo",
     "manual": "decided here"
   },
   "excludedChevrons": [
@@ -19,20 +20,329 @@
     "CaretDownIcon"
   ],
   "icons": [
-    { "desktop": "WalletIcon", "v3": "wallet-filled", "status": "proposed", "source": "station" },
-    { "desktop": "MagnifyingGlassIcon", "v3": "magnifier", "status": "proposed", "source": "station" },
-    { "desktop": "SearchIcon", "v3": "magnifier", "status": "proposed", "source": "station" },
-    { "desktop": "InfoCircleIcon", "v3": "circle-info", "status": "proposed", "source": "ios" },
-    { "desktop": "CircleCheckIcon", "v3": "badge-check", "status": "proposed", "source": "ios" },
-    { "desktop": "CreditCardIcon", "v3": "credit-card", "status": "proposed", "source": "station" },
-    { "desktop": "CoinsIcon", "v3": "credit-card", "status": "proposed", "source": "manual" },
-    { "desktop": "CopyIcon", "v3": "copies-3-filled", "status": "proposed", "source": "station" },
-    { "desktop": "BellIcon", "v3": "bell", "status": "proposed", "source": "ios" },
-    { "desktop": "BookIcon", "v3": "book", "status": "proposed", "source": "ios" },
-    { "desktop": "PercentIcon", "v3": "circle-percentage", "status": "proposed", "source": "ios" },
-    { "desktop": "TrashIcon", "v3": "trash-2", "status": "proposed", "source": "manual" },
-    { "desktop": "AgentIcon", "v3": null, "status": "bespoke", "source": "manual" },
-    { "desktop": "SeedphraseIcon", "v3": null, "status": "bespoke", "source": "manual" },
-    { "desktop": "TronEnergyIcon", "v3": null, "status": "bespoke", "source": "manual" }
+    {
+      "desktop": "WalletIcon",
+      "v3": "wallet-filled",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "MagnifyingGlassIcon",
+      "v3": "magnifier",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "SearchIcon",
+      "v3": "magnifier",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "CheckmarkIcon",
+      "v3": "checkmark-small",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "CopyIcon",
+      "v3": "copies-3-filled",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "BookIcon",
+      "v3": "book",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CalendarClockIcon",
+      "v3": "calendar-clock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CameraIcon",
+      "v3": "camera",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CheckIcon",
+      "v3": "check",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleInfoIcon",
+      "v3": "circle-info",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleMinusIcon",
+      "v3": "circle-minus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CirclePlusIcon",
+      "v3": "circle-plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloseIcon",
+      "v3": "xmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloudUploadIcon",
+      "v3": "cloud-upload",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CoinsIcon",
+      "v3": "coins",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CrossIcon",
+      "v3": "xmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "EyeIcon",
+      "v3": "eye",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FolderLockIcon",
+      "v3": "folder-lock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "MegaphoneIcon",
+      "v3": "megaphone",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PlusIcon",
+      "v3": "plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "SettingsIcon",
+      "v3": "gear",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ShieldIcon",
+      "v3": "shield",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TrashIcon",
+      "v3": "trash",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowWallDownIcon",
+      "v3": "arrow-down-from-line",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ChainLinkIcon3",
+      "v3": "chain-link-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleAlertIcon",
+      "v3": "circle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleCrossFilledIcon",
+      "v3": "circle-xmark-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleDollarSignIcon",
+      "v3": "circle-dollar",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FuelIcon",
+      "v3": "gas-pump",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "GlobusIcon",
+      "v3": "globe",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "IconFileEdit",
+      "v3": "file-pen",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "InfoIcon",
+      "v3": "circle-info",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LightningIcon",
+      "v3": "bolt",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LockKeyholeIcon",
+      "v3": "lock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "NavigationXIcon",
+      "v3": "xmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "RefreshCwIcon",
+      "v3": "refresh",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TriangleAlertIcon",
+      "v3": "triangle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TrophyIcon",
+      "v3": "trophy",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ZapIcon",
+      "v3": "bolt",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowUpRightIcon",
+      "v3": "arrow-to-corner-top-right",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PasteIcon",
+      "v3": "copies-3-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ClipboardCopyIcon",
+      "v3": "copies-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ShareAndroidIcon",
+      "v3": "connected-dots-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DeviceIcon",
+      "v3": "mobile",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowDownIcon",
+      "v3": "arrow-down",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleCheckIcon",
+      "v3": "circle-check",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleCrossIcon",
+      "v3": "circle-xmark",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleICloseIcon",
+      "v3": "circle-xmark",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "SquareArrowOutUpRightIcon",
+      "v3": "external-link",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "SquareArrowTopRightIcon",
+      "v3": "square-arrow-up-right",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "FileTextIcon",
+      "v3": "file-content",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "AgentIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "SeedphraseIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "TronEnergyIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    }
   ]
 }
