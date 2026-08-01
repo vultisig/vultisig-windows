@@ -11,7 +11,6 @@ import { ArrowUndoIcon } from './ArrowUndoIcon'
 import { ArrowUpDownIcon } from './ArrowUpDownIcon'
 import { ArrowUpRightIcon } from './ArrowUpRightIcon'
 import { ArrowWallDownIcon } from './ArrowWallDownIcon'
-import { AsteriskIcon } from './AsteriskIcon'
 import { BadgeCheckIcon } from './BadgeCheckIcon'
 import { BellIcon } from './BellIcon'
 import { BookIcon } from './BookIcon'
@@ -189,7 +188,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   ArrowUpDownIcon,
   ArrowUpRightIcon,
   ArrowWallDownIcon,
-  AsteriskIcon,
   BadgeCheckIcon,
   BellIcon,
   BookIcon,
