@@ -44,7 +44,13 @@ export const useDepositKeysignPayloadQuery = (
   const memo = useDepositMemo()
 
   const hasAmount = 'amount' in depositData
-  const amount = hasAmount ? Number(depositData['amount']) : undefined
+  // Keep the amount as its exact decimal string — Number() would corrupt
+  // amounts with more than ~15 significant digits (#4494)
+  const rawAmount = hasAmount ? depositData['amount'] : undefined
+  const amount =
+    rawAmount === undefined || rawAmount === null || rawAmount === ''
+      ? undefined
+      : String(rawAmount)
   const slippage = Number(depositData['slippage'] ?? 0)
   const validatorAddress = depositData['validatorAddress'] as string | undefined
   const autocompound = Boolean(depositData['autoCompound'])
@@ -55,8 +61,7 @@ export const useDepositKeysignPayloadQuery = (
       action,
       depositData,
       receiver,
-      amount:
-        amount !== undefined && Number.isFinite(amount) ? amount : undefined,
+      amount,
       memo,
       validatorAddress,
       slippage,

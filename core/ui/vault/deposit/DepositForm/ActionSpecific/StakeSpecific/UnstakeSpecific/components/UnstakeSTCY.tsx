@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { AmountSuggestion } from '../../../../../../send/amount/AmountSuggestion'
 import { useCurrentVaultAddress } from '../../../../../../state/currentVaultCoins'
 import { useDepositFormHandlers } from '../../../../../providers/DepositFormHandlersProvider'
+import { trimTrailingZeros } from '../../../../../utils/exactAmountString'
 import {
   clampPercentage,
   toNumericValue,
@@ -47,7 +48,7 @@ export const UnstakeSTCY = () => {
       }
 
       const clamped = clampPercentage(percentage)
-      const amount = Number(
+      const amount = trimTrailingZeros(
         ((clamped / 100) * humanReadableBalance).toFixed(decimals)
       )
 

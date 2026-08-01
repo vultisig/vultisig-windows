@@ -5,6 +5,10 @@ import {
   resolveExtensionProductBrand,
 } from '@clients/extension/src/brand/extensionBrandConfig'
 import {
+  getExtensionArtifactDirectoryName,
+  getExtensionArtifactReceipt,
+} from '@clients/extension/src/brand/extensionArtifact'
+import {
   applyExtensionBrandToHtml,
   applyExtensionBrandToManifest,
   ExtensionManifest,
@@ -32,6 +36,25 @@ describe('extension brand config', () => {
 
   it('accepts the Station extension brand selector', () => {
     expect(resolveExtensionProductBrand('station')).toBe('station')
+  })
+
+  it('keeps brand artifacts in independent directories', () => {
+    expect(getExtensionArtifactDirectoryName('vultisig')).toBe('dist')
+    expect(getExtensionArtifactDirectoryName('station')).toBe('dist-station')
+  })
+
+  it('creates a machine-readable artifact receipt', () => {
+    expect(
+      getExtensionArtifactReceipt({
+        config: extensionBrandConfigs.station,
+        artifactDirectory: 'dist-station',
+      })
+    ).toEqual({
+      schemaVersion: 1,
+      brand: 'station',
+      artifactDirectory: 'dist-station',
+      manifestName: 'Station Wallet',
+    })
   })
 
   it('rejects unsupported extension brand selectors', () => {

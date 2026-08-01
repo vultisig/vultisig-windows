@@ -1,3 +1,5 @@
+import { getKeygenFlowSuccessAnimationSource } from '@core/ui/mpc/keygen/flow/getKeygenFlowSuccessAnimationSource'
+import { currentProductBrand } from '@core/ui/product/brand'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -21,14 +23,22 @@ type KeygenFlowSuccessContentProps = {
   contained?: boolean
 }
 
+/** Renders the completion animation selected for the current vault type. */
 export const KeygenFlowSuccessContent = ({
   title,
   securityType,
   animationSource,
   contained,
 }: KeygenFlowSuccessContentProps) => {
+  const resolvedAnimationSource =
+    animationSource ??
+    getKeygenFlowSuccessAnimationSource({
+      productBrand: currentProductBrand,
+      securityType,
+    })
+
   const { RiveComponent } = useRive({
-    src: `/core/animations/${animationSource ?? `keygen-${securityType}`}.riv`,
+    src: `/core/animations/${resolvedAnimationSource}.riv`,
     stateMachines: 'State Machine 1',
     autoplay: true,
   })

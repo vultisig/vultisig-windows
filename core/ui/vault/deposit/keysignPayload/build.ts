@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { getSolanaStakingFee } from '@core/ui/chain/solana/staking/getSolanaStakingFee'
 import { fetchRujiLiquidUnbondInputs } from '@core/ui/defi/chain/queries/services/thorchainStake/rujiStakeService'
 import { buildQBTCDirectPayload } from '@core/ui/qbtc/dapp/buildQBTCDirectPayload'
 import { QbtcDappMessage } from '@core/ui/qbtc/dapp/encodeAnyMessage'
@@ -10,6 +11,7 @@ import {
 import { toBase64 } from '@cosmjs/encoding'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import {
   Chain,
@@ -40,7 +42,11 @@ import { solanaConfig } from '@vultisig/core-chain/chains/solana/solanaConfig'
 import { fetchSolanaRentReserve } from '@vultisig/core-chain/chains/solana/staking/rpc'
 import { buildUnsignedStakingTx } from '@vultisig/core-chain/chains/solana/staking/tx/buildUnsignedStakingTx'
 import { SolanaStakingPayload } from '@vultisig/core-chain/chains/solana/staking/tx/stakingPayload'
-import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  AccountCoin,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { getCoinBalance } from '@vultisig/core-chain/coin/balance'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
@@ -73,6 +79,7 @@ import {
 } from '../ChainAction'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
+  BruneInput,
   NativeTcyInput,
   RujiInput,
   StakeKind,
@@ -90,7 +97,8 @@ export type BuildDepositKeysignPayloadInput = {
   action: ChainAction
   depositData: FieldValues
   receiver?: string
-  amount?: number
+  /** Human amount as an exact decimal string — never a float64 (#4494). */
+  amount?: string
   memo?: string
   validatorAddress?: string
   slippage?: number
@@ -188,7 +196,8 @@ export const buildDepositKeysignPayload = async ({
   const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
   const isTonFunction = coin.chain === Chain.Ton
 
-  const hasAmount = amount !== undefined && Number.isFinite(amount)
+  const hasAmount =
+    amount !== undefined && amount !== '' && Number.isFinite(Number(amount))
   const amountUnits = hasAmount
     ? toChainAmount(shouldBePresent(amount), coin.decimals).toString()
     : undefined
@@ -284,14 +293,16 @@ export const buildDepositKeysignPayload = async ({
 
     const stakeSpecific = resolvers[stakeId]
 
-    let input: RujiInput | NativeTcyInput | StcyInput | null = null
+    let input: RujiInput | NativeTcyInput | StcyInput | BruneInput | null = null
 
-    // Unstaking the RUJI auto-compounding position redeems the sRUJI receipt via
-    // `liquid.unbond`, so the resolver needs the receipt shares + position value
-    // to convert the entered amount. Fetch them here (the match callbacks below
-    // are synchronous).
+    // RUJI has two independent positions unstaked via different routes: the
+    // bonded position via `account.withdraw` and the auto-compounding position
+    // via `liquid.unbond`. The card the user unstaked from sets `autocompound`
+    // (true → auto-compounding). Only the auto-compounding route needs the sRUJI
+    // receipt shares + position value to convert the entered amount, so fetch
+    // them here (the match callbacks below are synchronous).
     const rujiUnbondInputs =
-      stakeId === 'ruji' && actionAsStakeAction === 'unstake'
+      stakeId === 'ruji' && actionAsStakeAction === 'unstake' && autocompound
         ? await fetchRujiLiquidUnbondInputs(coin.address)
         : undefined
 
@@ -300,7 +311,7 @@ export const buildDepositKeysignPayload = async ({
         input = { kind: 'stake', amount: shouldBePresent(amount) }
       },
       unstake: () => {
-        if (stakeId === 'stcy') {
+        if (stakeId === 'stcy' || stakeId === 'brune') {
           input = { kind: 'unstake', amount: shouldBePresent(amount) }
         } else if (stakeId === 'native-tcy') {
           const raw = depositData['percentage']
@@ -312,11 +323,18 @@ export const buildDepositKeysignPayload = async ({
           input = pctValid
             ? { kind: 'unstake', percentage: pct }
             : { kind: 'unstake', amount: shouldBePresent(amount) }
+        } else if (autocompound) {
+          input = {
+            kind: 'unstake',
+            position: 'liquid',
+            amount: shouldBePresent(amount),
+            ...shouldBePresent(rujiUnbondInputs),
+          }
         } else {
           input = {
             kind: 'unstake',
+            position: 'bonded',
             amount: shouldBePresent(amount),
-            ...shouldBePresent(rujiUnbondInputs),
           }
         }
       },
@@ -335,6 +353,11 @@ export const buildDepositKeysignPayload = async ({
     })
 
     if (intent.kind === 'wasm') {
+      // Leave toAddress/toAmount empty. A GENERIC_CONTRACT tx is signed purely
+      // from `contractPayload`, so the verify/joiner screens must derive what
+      // they show from that same payload — populating separate display fields
+      // here would let a compromised initiator show one thing while signing
+      // another.
       keysignPayload.memo = ''
       keysignPayload.toAddress = ''
       keysignPayload.toAmount = '0'
@@ -832,6 +855,22 @@ const applySolanaStakingSignData = async ({
   const rentReserve =
     action === 'solana_delegate' ? await fetchSolanaRentReserve() : 0n
 
+  // Floor at the config minimum so co-signers all encode the same
+  // `setComputeUnitPrice` instruction when the wire value is missing.
+  const priorityFeePrice = maxBigInt(
+    priorityFee ? BigInt(priorityFee) : 0n,
+    BigInt(solanaConfig.priorityFeePrice)
+  )
+  const priorityFeeLimit = computeLimit
+    ? Number(computeLimit)
+    : solanaConfig.priorityFeeLimit
+  // Budget against the fee this exact transaction encodes, not the form's
+  // floor-price estimate — the live priority price is only known here.
+  const feeLamports = getSolanaStakingFee({
+    priorityFeePrice,
+    priorityFeeLimit,
+  })
+
   const requireStakeAccount = (): string => {
     if (typeof stakeAccount !== 'string' || stakeAccount.length === 0) {
       throw new Error(`Solana staking '${action}' requires 'stakeAccount'`)
@@ -846,22 +885,33 @@ const applySolanaStakingSignData = async ({
     return validatorAddress
   }
 
-  const { payload, toAddress, toAmount } = match<
+  // `requiredLamports` is what this op costs the WALLET. Only a fresh delegate
+  // moves value out of it (the new stake account's funding); every other op acts
+  // on lamports that already sit on-chain in the stake account, so the wallet
+  // just pays the fee.
+  const { payload, toAddress, toAmount, requiredLamports } = match<
     SolanaStakingAction,
-    { payload: SolanaStakingPayload; toAddress: string; toAmount: string }
+    {
+      payload: SolanaStakingPayload
+      toAddress: string
+      toAmount: string
+      requiredLamports: bigint
+    }
   >(action, {
     solana_delegate: () => {
       const votePubkey = requireValidator()
       // `lamports` is the stake-account FUNDING: the delegated amount plus the
       // rent-exempt reserve, so the active stake equals the entered amount.
+      const funding = amount + rentReserve
       return {
         payload: {
           op: 'delegate',
           votePubkey,
-          lamports: amount + rentReserve,
+          lamports: funding,
         } as const,
         toAddress: votePubkey,
         toAmount: amount.toString(),
+        requiredLamports: funding + feeLamports,
       }
     },
     solana_unstake: () => {
@@ -870,6 +920,7 @@ const applySolanaStakingSignData = async ({
         payload: { op: 'unstake', stakeAccount: account } as const,
         toAddress: account,
         toAmount: '0',
+        requiredLamports: feeLamports,
       }
     },
     solana_withdraw: () => {
@@ -882,6 +933,7 @@ const applySolanaStakingSignData = async ({
         } as const,
         toAddress: account,
         toAmount: amount.toString(),
+        requiredLamports: feeLamports,
       }
     },
     // Move-stake step 1: deactivate the account (byte-identical to a plain
@@ -892,6 +944,7 @@ const applySolanaStakingSignData = async ({
         payload: { op: 'moveStakeDeactivate', stakeAccount: account } as const,
         toAddress: account,
         toAmount: '0',
+        requiredLamports: feeLamports,
       }
     },
     // Move-stake step 2: re-delegate the cooled-down account to validator B. The
@@ -909,9 +962,28 @@ const applySolanaStakingSignData = async ({
         } as const,
         toAddress: votePubkey,
         toAmount: amount.toString(),
+        requiredLamports: feeLamports,
       }
     },
   })
+
+  // Last line of defence before the ceremony. The form bounds the amount, but a
+  // prefilled or stale value can still outrun the live balance, and the priority
+  // price is only pinned here. Without this the devices sign a transaction the
+  // network rejects at simulation ("insufficient lamports"). Mirrors Android
+  // `SolanaStakingSignDataResolver`.
+  const balanceLamports = await getCoinBalance(extractAccountCoinKey(coin))
+  if (requiredLamports > balanceLamports) {
+    throw new Error(
+      `Solana staking '${action}' requires ${fromChainAmount(
+        requiredLamports,
+        coin.decimals
+      )} ${coin.ticker} but the wallet holds ${fromChainAmount(
+        balanceLamports,
+        coin.decimals
+      )} ${coin.ticker}`
+    )
+  }
 
   const rawTransaction = buildUnsignedStakingTx({
     walletCore,
@@ -919,15 +991,8 @@ const applySolanaStakingSignData = async ({
     sender: coin.address,
     hexPublicKey,
     recentBlockHash,
-    // Floor at the config minimum so co-signers all encode the same
-    // `setComputeUnitPrice` instruction when the wire value is missing.
-    priorityFeePrice: maxBigInt(
-      priorityFee ? BigInt(priorityFee) : 0n,
-      BigInt(solanaConfig.priorityFeePrice)
-    ),
-    priorityFeeLimit: computeLimit
-      ? Number(computeLimit)
-      : solanaConfig.priorityFeeLimit,
+    priorityFeePrice,
+    priorityFeeLimit,
   })
 
   return create(KeysignPayloadSchema, {

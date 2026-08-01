@@ -1,5 +1,6 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryOptions } from '@core/ui/chain/coin/queries/useBalancesQuery'
+import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { useVaults } from '@core/ui/storage/vaults'
 import { balanceStaleTimeMs } from '@core/ui/vaultsOrganisation/hooks/balanceStaleTimeMs'
@@ -43,7 +44,9 @@ export const useVaultsTotalBalances = ({
 
     return vaults.map(vault => ({
       vaultId: getVaultId(vault),
-      coins: withoutRujiStakingReceiptCoins(vault.coins ?? []),
+      coins: withoutBondedRuneReceiptCoins(
+        withoutRujiStakingReceiptCoins(vault.coins ?? [])
+      ),
     }))
   }, [enabled, vaults])
 

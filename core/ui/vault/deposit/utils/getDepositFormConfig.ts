@@ -15,10 +15,12 @@ import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
 import { ChainAction } from '../ChainAction'
-import { isStakeableChain, StakeableChain } from '../config'
+import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
 import {
-  maxOrInfinity,
+  optionalNonNegativeAmountSchema,
+  optionalPositiveAmountSchema,
   positiveAmountSchema,
+  requiredAmountSchema,
   toOptionalNumber,
   toRequiredNumber,
 } from './validationHelpers'
@@ -96,6 +98,12 @@ type GetChainActionConfigParams = {
   walletCore: WalletCore
   totalAmountAvailable: number
   selectedChainAction: ChainAction
+  /**
+   * XRP an Open Trust Line costs (owner reserve + fee). `undefined` while it is
+   * still unknown, which leaves the form unblocked rather than gated on a figure
+   * that has not arrived.
+   */
+  trustLineCostXrp?: number
 }
 
 type ChainActionConfig = {
@@ -115,6 +123,7 @@ export const getDepositFormConfig = ({
   walletCore,
   totalAmountAvailable,
   selectedChainAction,
+  trustLineCostXrp,
 }: GetChainActionConfigParams) => {
   const chain = coin.chain
 
@@ -377,17 +386,7 @@ export const getDepositFormConfig = ({
           z.number().gt(0, t('lp_units'))
           // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
         ),
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .gt(0, t('amount_must_be_positive'))
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .optional()
-        ),
+        amount: optionalPositiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     unbond: () => ({
@@ -479,17 +478,7 @@ export const getDepositFormConfig = ({
           // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
         ),
         bondableAsset: z.string().min(1, t('asset')),
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .gt(0, t('amount_must_be_positive'))
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .optional()
-        ),
+        amount: optionalPositiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     leave: () => ({
@@ -537,19 +526,7 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .refine(val => val >= 0, {
-              message: t('amount_must_be_non_negative'),
-            })
-            .optional()
-        ),
+        amount: optionalNonNegativeAmountSchema(totalAmountAvailable, t),
         customMemo: z
           .string()
           .min(1, t('chainFunctions.custom.validations.customMemo')),
@@ -608,7 +585,7 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
                     amount: positiveAmountSchema(totalAmountAvailable, t),
                   })
@@ -657,7 +634,7 @@ export const getDepositFormConfig = ({
               },
             ],
             [Chain.THORChain]: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? [
                     {
                       name: 'amount',
@@ -683,7 +660,7 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
                     amount: positiveAmountSchema(totalAmountAvailable, t),
                   })
@@ -821,36 +798,56 @@ export const getDepositFormConfig = ({
           required: true,
         },
       ],
-      schema: z.object({
-        issuer: z
-          .string()
-          .trim()
-          .min(1, t('trust_line_issuer'))
-          .refine(
-            address =>
-              isValidAddress({ chain: Chain.Ripple, address, walletCore }),
-            { message: t('send_invalid_receiver_address') }
-          ),
-        // Accepts a human ticker (e.g. `RLUSD`, normalised to the 160-bit hex),
-        // a 3-char standard code, or a 40-char hex code. Rejects `XRP` (the
-        // native asset can't be an issued-currency trust line) and anything
-        // `toXrplCurrencyCode` can't encode (>20 ASCII bytes), so invalid input
-        // is caught inline rather than throwing at build time.
-        currency: z
-          .string()
-          .trim()
-          .min(1, t('trust_line_currency'))
-          .refine(value => value.toUpperCase() !== 'XRP', {
-            message: t('trust_line_currency_reserved'),
-          })
-          .refine(value => 'data' in attempt(() => toXrplCurrencyCode(value)), {
-            message: t('trust_line_currency_invalid'),
-          }),
-        amount: z.preprocess(
-          toRequiredNumber,
-          z.number().gt(0, t('amount_must_be_positive'))
-        ),
-      }),
+      schema: z
+        .object({
+          issuer: z
+            .string()
+            .trim()
+            .min(1, t('trust_line_issuer'))
+            .refine(
+              address =>
+                isValidAddress({ chain: Chain.Ripple, address, walletCore }),
+              { message: t('send_invalid_receiver_address') }
+            ),
+          // Accepts a human ticker (e.g. `RLUSD`, normalised to the 160-bit hex),
+          // a 3-char standard code, or a 40-char hex code. Rejects `XRP` (the
+          // native asset can't be an issued-currency trust line) and anything
+          // `toXrplCurrencyCode` can't encode (>20 ASCII bytes), so invalid input
+          // is caught inline rather than throwing at build time.
+          currency: z
+            .string()
+            .trim()
+            .min(1, t('trust_line_currency'))
+            .refine(value => value.toUpperCase() !== 'XRP', {
+              message: t('trust_line_currency_reserved'),
+            })
+            .refine(
+              value => 'data' in attempt(() => toXrplCurrencyCode(value)),
+              {
+                message: t('trust_line_currency_invalid'),
+              }
+            ),
+          amount: requiredAmountSchema(t),
+        })
+        // The limit itself is token-denominated, but the line still costs XRP: one
+        // owner-reserve increment locked up plus the fee. Below that the TrustSet
+        // fails on-ledger with `tecINSUFFICIENT_RESERVE` after the ceremony, fee
+        // already burned, so block before signing rather than after.
+        .superRefine((_val, ctx) => {
+          if (
+            trustLineCostXrp !== undefined &&
+            totalAmountAvailable < trustLineCostXrp
+          ) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t('trust_line_insufficient_xrp', {
+                amount: trustLineCostXrp,
+                ticker: chainFeeCoin[Chain.Ripple].ticker,
+              }),
+              path: ['_form'],
+            })
+          }
+        }),
     }),
     delegate: () => ({
       fields: [
@@ -998,10 +995,7 @@ export const getDepositFormConfig = ({
         // SOL balance and routinely exceeds it (you're withdrawing FROM the
         // stake account). Require only a positive value; capping at the liquid
         // `totalAmountAvailable` would wrongly disable Continue.
-        amount: z.preprocess(
-          toRequiredNumber,
-          z.number().gt(0, t('amount_must_be_positive'))
-        ),
+        amount: requiredAmountSchema(t),
       }),
     }),
     // Move-stake step 1 (deactivate): operates on a prefilled stake account and
@@ -1040,10 +1034,7 @@ export const getDepositFormConfig = ({
       schema: z.object({
         stakeAccount: z.string().trim().min(1),
         validatorAddress: z.string().trim().min(1, t('validator_address')),
-        amount: z.preprocess(
-          toRequiredNumber,
-          z.number().gt(0, t('amount_must_be_positive'))
-        ),
+        amount: requiredAmountSchema(t),
       }),
     }),
   })

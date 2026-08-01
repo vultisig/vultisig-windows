@@ -202,7 +202,6 @@ export const pt = {
   continue_in_new_window: 'Continue na janela aberta.',
   contract_execution: 'Execução de Contrato',
   copy_address: 'Copiar endereço',
-  create_folder: 'Criar pasta',
   create_new_vault: 'Criar novo cofre',
   create_vault: 'Criar cofre',
   create_referral_form: 'Criar referência',
@@ -217,7 +216,6 @@ export const pt = {
   currency: 'Moeda',
   current_expiry: 'Validade atual',
   current_passcode: 'Senha atual',
-  current_vaults: 'Cofres atuais',
   custom: 'Ação personalizada',
   custom_token: 'Token personalizado',
   customize_chains: 'Personalize correntes',
@@ -412,7 +410,7 @@ export const pt = {
   fill_the_form: 'Preencha o formulário',
   find_custom_token: 'Encontrar token personalizado',
   folder_name: 'Nome da pasta',
-  folder_name_already_exists: 'O nome da pasta deve ser único.',
+  folder_name_already_exists: 'Essa pasta já existe. Tente um novo nome.',
   folder_name_required: 'É necessário nomear a pasta.',
   folder_at_least_one_vault_required: 'Pelo menos um cofre é necessário',
   folders: 'Pastas',
@@ -630,8 +628,7 @@ export const pt = {
   normal: 'Normal',
   not_enough_funds: 'Fundos insuficientes',
   nothing_to_add: 'Nada a acrescentar',
-  nothing_to_add_hint:
-    'Todos os seus cofres já estão classificados. Crie um novo cofre para adicioná-lo aqui.',
+  nothing_to_add_hint: 'Todos os seus cofres já estão organizados.',
   of: 'de',
   off: 'Desligado',
   on: 'Ligado',
@@ -1487,7 +1484,6 @@ export const pt = {
   advanced_settings: 'Configurações avançadas',
   advanced_swap: 'Troca avançada',
   auto: 'Auto',
-  coming_soon: 'Em breve',
   custom_rpc: 'RPCs personalizados',
   custom_rpc_chip_custom: 'Personalizado',
   custom_rpc_description: 'Use seus próprios nós por cadeia',
@@ -1513,7 +1509,6 @@ export const pt = {
   slippage_helper:
     'Limita a variação máxima de preço antes que a execução seja cancelada.',
   slippage_tolerance: 'Tolerância de deslizamento',
-  swap_limit_orders: 'Ordens limite',
   swap_mode_limit: 'Limite',
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Usar destinatário externo',
@@ -1729,4 +1724,73 @@ export const pt = {
   ripple_field_issuer: 'Emissor',
   ripple_undecoded_notice:
     'Esta transação não pôde ser decodificada. Revise os detalhes brutos abaixo antes de aprovar.',
+  swap_expected_payout: 'pagamento esperado',
+  send_receiver_format_hint_cardano:
+    'Insira um endereço Cardano que comece com addr1.',
+  send_receiver_format_hint_cosmos:
+    'Insira um endereço Bech32 que comece com o prefixo {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Insira um endereço EVM que comece com 0x e tenha 40 caracteres hexadecimais.',
+  send_receiver_format_hint_qbtc:
+    'Insira um endereço QBTC que comece com qbtc.',
+  send_receiver_format_hint_ripple:
+    'Insira um endereço XRP que comece com a letra r.',
+  send_receiver_format_hint_solana:
+    'Insira um endereço Solana codificado em Base58, geralmente com 32 a 44 caracteres.',
+  send_receiver_format_hint_ss58:
+    'Insira um endereço codificado em SS58 para esta rede.',
+  send_receiver_format_hint_sui:
+    'Insira um endereço Sui que comece com 0x e tenha 64 caracteres hexadecimais.',
+  send_receiver_format_hint_ton: 'Insira um endereço TON válido.',
+  send_receiver_format_hint_tron:
+    'Insira um endereço TRON que comece com a letra T.',
+  send_receiver_format_hint_utxo:
+    'Insira um endereço válido para esta rede (formato bech32 ou legado).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'As ordens limitadas estão temporariamente indisponíveis em THORChain',
+  active_vaults: 'Cofres ativos',
+  edit_folder: 'Pasta de edição',
+  nothing_to_add_hint_secondary: 'Crie um novo cofre para adicioná-lo aqui.',
+  no_results_found: 'Nenhum resultado encontrado',
+  folder_active_vault: '“{{name}}” Ativo',
+  swap_limit_asset: 'Ativo',
+  swap_limit_buy: 'Comprar',
+  swap_limit_execute_when: 'Executar quando',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Vender',
+  swap_limit_blocker_chain_unavailable:
+    'Esta cadeia está temporariamente interrompida em THORChain',
+  swap_limit_blocker_insufficient_balance: 'O valor excede seu saldo.',
+  swap_limit_blocker_memo_invalid:
+    'Este pedido não pode ser processado conforme inserido.',
+  swap_limit_blocker_no_amount: 'Insira a quantidade que deseja vender.',
+  swap_limit_blocker_no_market_price:
+    'Ainda não há preço de mercado disponível para este par.',
+  swap_limit_blocker_no_price: 'Insira um preço-alvo',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain não pode rotear uma ordem limite entre esses ativos.',
+  swap_limit_blocker_no_destination:
+    'Não há endereço de pagamento disponível para a cadeia de destino.',
+  swap_limit_blocker_same_asset: 'Escolha dois ativos diferentes.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'Os detalhes do pedido estão corretos.',
+  swap_limit_expiry_label: 'Termo',
+  swap_limit_place_order: 'Fazer pedido',
+  swap_limit_review_heading:
+    'Você está fazendo um pedido com limite de compra.',
+  swap_limit_review_target_price: 'Preço alvo',
+  swap_limit_price_market: 'Mercado',
+  swap_limit_warning_at_or_below_market:
+    'Este preço está igual ou abaixo do preço de mercado, portanto a ordem pode ser executada imediatamente.',
+  swap_limit_warning_far_above_market:
+    'Este preço está muito acima do mercado e pode expirar sem ser atendido.',
+  chain_address_copied: 'Endereço {{chain}} copiado',
+  native: 'Nativo',
+  activate: 'Ativar',
+  trust_line_insufficient_xrp:
+    'Não há {{ticker}} suficientes. Para abrir esta linha de confiança, são necessários {{amount}} {{ticker}} para a reserva e taxa da conta.',
+  swap_limit_payout_to: 'Pagamento para',
 }

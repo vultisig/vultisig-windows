@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction, chainActionsRecord } from '../ChainAction'
-import { isStakeableChain, isStakeableCoin } from '../config'
+import { isBruneStakeCoin, isStakeableChain, isStakeableCoin } from '../config'
 import { DepositEnabledChain } from '../DepositEnabledChain'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useMergeOptions } from './useMergeOptions'
@@ -23,7 +23,7 @@ export const useAvailableChainActions = (chain: Chain) => {
     () =>
       coins
         .filter(({ chain: currentCoinChain }) => currentCoinChain === chain)
-        .some(coin => isStakeableCoin(coin.ticker)),
+        .some(coin => isStakeableCoin(coin.ticker) || isBruneStakeCoin(coin)),
     [chain, coins]
   )
 

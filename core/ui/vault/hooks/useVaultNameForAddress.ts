@@ -1,6 +1,11 @@
-import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
+import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
+
+import { getVaultNameForAddress } from './getVaultNameForAddress'
 
 type UseVaultNameForAddressInput = {
   address: string
@@ -8,7 +13,8 @@ type UseVaultNameForAddressInput = {
 }
 
 /**
- * Returns the vault name if the given address belongs to any vault coin on the given chain, otherwise null.
+ * Returns the vault name if the given address belongs to a stored or derivable
+ * vault address on the given chain, otherwise null.
  *
  * Generic hook — not send-specific. Used across send, keysign, and address book contexts
  * anywhere the UI needs to identify whether an address is a known user vault.
@@ -21,16 +27,30 @@ export const useVaultNameForAddress = ({
   chain,
 }: UseVaultNameForAddressInput): string | null => {
   const vaults = useVaults()
+  const walletCore = useAssertWalletCore()
 
-  const index = new Map(
-    vaults.flatMap(vault =>
-      vault.coins.map(coin => [
-        `${isEvmChain(coin.chain) ? 'evm' : coin.chain}:${isEvmChain(coin.chain) ? coin.address.toLowerCase() : coin.address}`,
-        vault.name,
-      ])
-    )
-  )
+  return getVaultNameForAddress({
+    address,
+    chain,
+    vaults,
+    deriveAddress: vault => {
+      if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[chain])
+        return null
+      if (getSignatureAlgorithm(chain) === 'mldsa' && !vault.publicKeyMldsa)
+        return null
 
-  const key = `${isEvmChain(chain) ? 'evm' : chain}:${isEvmChain(chain) ? address.toLowerCase() : address}`
-  return index.get(key) ?? null
+      try {
+        return getChainAddress({
+          chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+          publicKeyMldsa: vault.publicKeyMldsa,
+          chainPublicKeys: vault.chainPublicKeys,
+        })
+      } catch {
+        return null
+      }
+    },
+  })
 }

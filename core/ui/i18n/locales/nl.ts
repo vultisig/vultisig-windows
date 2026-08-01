@@ -200,7 +200,6 @@ export const nl = {
   continue_in_new_window: 'Doorgaan in het geopende venster',
   contract_execution: 'Contractuitvoering',
   copy_address: 'Adres kopiëren',
-  create_folder: 'Map aanmaken',
   create_new_vault: 'Nieuwe kluis aanmaken',
   create_vault: 'Maak een kluis aan',
   create_referral_form: 'Referral aanmaken',
@@ -215,7 +214,6 @@ export const nl = {
   currency: 'Valuta',
   current_expiry: 'Huidige vervaldatum',
   current_passcode: 'Huidige pincode',
-  current_vaults: 'Huidige kluizen',
   custom: 'Aangepaste actie',
   custom_token: 'Aangepaste token',
   customize_chains: 'Chains aanpassen',
@@ -407,7 +405,7 @@ export const nl = {
   fill_the_form: 'Vul het formulier in',
   find_custom_token: 'Aangepaste token zoeken',
   folder_name: 'Mapnaam',
-  folder_name_already_exists: 'Mapnaam moet uniek zijn',
+  folder_name_already_exists: 'Die mapnaam bestaat al. Probeer een andere.',
   folder_name_required: 'Mapnaam is verplicht',
   folder_at_least_one_vault_required: 'Minimaal één kluis is vereist',
   folders: 'Mappen',
@@ -623,8 +621,7 @@ export const nl = {
   normal: 'Normaal',
   not_enough_funds: 'Onvoldoende funds',
   nothing_to_add: 'Niets toe te voegen',
-  nothing_to_add_hint:
-    'Al je kluizen zijn al gesorteerd. Maak een nieuwe kluis om hem hier toe te voegen.',
+  nothing_to_add_hint: 'Al uw kluizen zijn al gesorteerd.',
   of: 'van',
   off: 'Uit',
   on: 'Aan',
@@ -1469,7 +1466,6 @@ export const nl = {
   advanced_settings: 'Geavanceerde instellingen',
   advanced_swap: 'Geavanceerde omruiling',
   auto: 'Auto',
-  coming_soon: 'Binnenkort beschikbaar',
   custom_rpc: 'Aangepaste RPC&#39;s',
   custom_rpc_chip_custom: 'Aangepast',
   custom_rpc_description: 'Gebruik je eigen knooppunten per keten.',
@@ -1495,7 +1491,6 @@ export const nl = {
   slippage_helper:
     'Beperkt hoeveel de prijs kan veranderen voordat de transactie wordt geannuleerd.',
   slippage_tolerance: 'Slippage tolerantie',
-  swap_limit_orders: 'Limiet bestellingen',
   swap_mode_limit: 'Limiet',
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externe ontvanger gebruiken',
@@ -1711,4 +1706,72 @@ export const nl = {
   ripple_field_issuer: 'Uitgever',
   ripple_undecoded_notice:
     'Deze transactie kon niet worden gedecodeerd. Controleer de onderstaande gegevens voordat u goedkeurt.',
+  swap_expected_payout: 'verwachte uitbetaling',
+  send_receiver_format_hint_cardano:
+    'Voer een Cardano-adres in dat begint met addr1.',
+  send_receiver_format_hint_cosmos:
+    'Voer een Bech32-adres in dat begint met het voorvoegsel {{prefix}}.',
+  send_receiver_format_hint_evm:
+    'Voer een EVM-adres in dat begint met 0x en 40 hexadecimale tekens bevat.',
+  send_receiver_format_hint_qbtc: 'Voer een QBTC-adres in dat begint met qbtc.',
+  send_receiver_format_hint_ripple:
+    'Voer een XRP-adres in dat begint met de letter r.',
+  send_receiver_format_hint_solana:
+    'Voer een Base58-gecodeerd Solana-adres in, meestal 32 tot 44 tekens lang.',
+  send_receiver_format_hint_ss58:
+    'Voer een SS58-gecodeerd adres in voor dit netwerk.',
+  send_receiver_format_hint_sui:
+    'Voer een SUI-adres in dat begint met 0x en 64 hexadecimale tekens bevat.',
+  send_receiver_format_hint_ton: 'Voer een geldig TON-adres in.',
+  send_receiver_format_hint_tron:
+    'Voer een TRON-adres in dat begint met de letter T.',
+  send_receiver_format_hint_utxo:
+    'Voer een geldig adres in voor dit netwerk (bech32- of legacy-formaat).',
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  swap_limit_unavailable:
+    'Limietorders zijn tijdelijk niet beschikbaar voor THORChain',
+  active_vaults: 'Actieve kluizen',
+  edit_folder: 'Map bewerken',
+  nothing_to_add_hint_secondary:
+    'Maak een nieuwe kluis aan om deze hier toe te voegen.',
+  no_results_found: 'Geen resultaten gevonden',
+  folder_active_vault: '‘{{name}}’ Actief',
+  swap_limit_asset: 'Bezit',
+  swap_limit_buy: 'Kopen',
+  swap_limit_execute_when: 'Uitvoeren wanneer',
+  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_sell: 'Verkopen',
+  swap_limit_blocker_chain_unavailable:
+    'Deze keten is tijdelijk gestopt op THORChain',
+  swap_limit_blocker_insufficient_balance: 'Het bedrag overschrijdt uw saldo.',
+  swap_limit_blocker_memo_invalid:
+    'Deze bestelling kan niet worden geplaatst zoals ingevoerd.',
+  swap_limit_blocker_no_amount: 'Voer een verkoopbedrag in',
+  swap_limit_blocker_no_market_price:
+    'Er is nog geen marktprijs bekend voor dit paar.',
+  swap_limit_blocker_no_price: 'Voer een streefprijs in',
+  swap_limit_blocker_pair_not_routable:
+    'THORChain kan geen limietorder tussen deze activa routeren.',
+  swap_limit_blocker_no_destination:
+    'Er is geen uitbetalingsadres beschikbaar voor de doelketen.',
+  swap_limit_blocker_same_asset: 'Kies twee verschillende activa.',
+  swap_limit_expiry_12h: '12h',
+  swap_limit_expiry_24h: '24h',
+  swap_limit_expiry_3d: '3d',
+  swap_limit_confirm: 'De bestelgegevens zijn correct.',
+  swap_limit_expiry_label: 'Vervaldatum',
+  swap_limit_place_order: 'Bestelling plaatsen',
+  swap_limit_review_heading: 'U plaatst een limietorder.',
+  swap_limit_review_target_price: 'Doelprijs',
+  swap_limit_price_market: 'Markt',
+  swap_limit_warning_at_or_below_market:
+    'Deze prijs ligt op of onder de marktprijs, waardoor de bestelling mogelijk direct wordt uitgevoerd.',
+  swap_limit_warning_far_above_market:
+    'Deze prijs ligt ver boven de marktwaarde en de transactie kan onvervuld blijven.',
+  chain_address_copied: '{{chain}} adres gekopieerd',
+  native: 'Native',
+  activate: 'Activeren',
+  trust_line_insufficient_xrp:
+    'Er zijn onvoldoende {{ticker}}. Voor het openen van deze trustlijn zijn {{amount}} {{ticker}} nodig voor de accountreservering en de bijbehorende kosten.',
+  swap_limit_payout_to: 'Uitbetaling aan',
 }

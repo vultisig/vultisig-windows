@@ -8,12 +8,10 @@ describe('getDefaultVaultChains', () => {
     expect(getDefaultVaultChains('vultisig')).toEqual(defaultChains)
   })
 
-  it('adds Terra and Terra Classic for Station vaults', () => {
-    const chains = getDefaultVaultChains('station')
-
-    expect(chains).toEqual(
-      expect.arrayContaining([Chain.Terra, Chain.TerraClassic])
-    )
-    expect(chains).toEqual([...new Set(chains)])
+  it('enables only Terra and Terra Classic for new Station vaults', () => {
+    expect(getDefaultVaultChains('station')).toEqual([
+      Chain.Terra,
+      Chain.TerraClassic,
+    ])
   })
 })

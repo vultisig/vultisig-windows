@@ -37,8 +37,12 @@ export class OnboardingPage extends BasePage {
   }
 
   get getStartedButton(): Locator {
-    // This is actually "Next" in the UI, but some screens have "Get Started"
+    // Some onboarding screens label the primary button "Next" instead
     return this.page.getByRole('button', { name: /get.*started|next/i }).first()
+  }
+
+  get newVaultGetStartedButton(): Locator {
+    return this.page.getByTestId('new-vault-get-started')
   }
 
   get importVaultButton(): Locator {
@@ -53,11 +57,13 @@ export class OnboardingPage extends BasePage {
    * Wait for the onboarding view to be visible
    */
   async waitForView(timeout = 10_000): Promise<void> {
-    // Wait for either vultisig text, next button, or skip button
+    // The current flow can open directly on NewVaultPage, while older
+    // onboarding variants still expose Next/Skip.
     await Promise.race([
       this.welcomeText.waitFor({ state: 'visible', timeout }),
       this.nextButton.waitFor({ state: 'visible', timeout }),
       this.skipButton.waitFor({ state: 'visible', timeout }),
+      this.newVaultGetStartedButton.waitFor({ state: 'visible', timeout }),
     ])
   }
 
@@ -70,7 +76,8 @@ export class OnboardingPage extends BasePage {
       const hasVultisig = await this.welcomeText.isVisible()
       const hasNext = await this.nextButton.isVisible()
       const hasSkip = await this.skipButton.isVisible()
-      return hasVultisig || (hasNext && hasSkip)
+      const hasNewVaultActions = await this.newVaultGetStartedButton.isVisible()
+      return hasVultisig || hasNewVaultActions || (hasNext && hasSkip)
     } catch {
       return false
     }
@@ -80,9 +87,7 @@ export class OnboardingPage extends BasePage {
    * Click "Next" to proceed from onboarding
    */
   async getStarted(): Promise<void> {
-    if (await this.nextButton.isVisible()) {
-      await this.nextButton.click()
-    } else if (await this.getStartedButton.isVisible()) {
+    if (await this.getStartedButton.isVisible()) {
       await this.getStartedButton.click()
     }
     await this.page.waitForTimeout(300)
@@ -132,36 +137,35 @@ export class OnboardingPage extends BasePage {
 
   /**
    * Check if vault type selection is visible (after onboarding)
-   * The NewVaultPage shows: "vultisig", "Scan QR", "Import", "Next" buttons
+   * The NewVaultPage shows: "vultisig", "Scan QR", "Import", "Get started" buttons
    */
   async isVaultTypeSelectionVisible(): Promise<boolean> {
     // After onboarding, user sees NewVaultPage with these options
-    const hasNext = await this.page.getByRole('button', { name: /next/i }).isVisible()
+    const hasGetStarted = await this.newVaultGetStartedButton.isVisible()
     const hasImport = await this.page.getByRole('button', { name: /import/i }).isVisible()
     const hasScanQr = await this.page.getByRole('button', { name: /scan.*qr/i }).isVisible()
 
-    return hasNext || hasImport || hasScanQr
+    return hasGetStarted || hasImport || hasScanQr
   }
 
   /**
-   * Check if we're on the SetupVaultPage (after clicking Next from NewVaultPage)
+   * Check if we're on the SetupVaultPage (after leaving NewVaultPage)
    * SetupVaultPage shows device selection animation and "Get Started" button
    */
   async isSetupVaultVisible(): Promise<boolean> {
     const hasGetStarted = await this.page.getByRole('button', { name: /get.*started/i }).isVisible()
-    return hasGetStarted
+    const hasDeviceAnimation = await this.page.locator('canvas').first().isVisible()
+    return hasGetStarted && hasDeviceAnimation
   }
 
   /**
    * Navigate through NewVaultPage to SetupVaultPage
    */
   async navigateToSetupVault(): Promise<void> {
-    // From NewVaultPage, click Next to go to SetupVaultPage
-    const nextButton = this.page.getByRole('button', { name: /next/i }).first()
-    if (await nextButton.isVisible()) {
-      await nextButton.click()
-      await this.page.waitForTimeout(500)
-    }
+    // Both NewVaultPage and SetupVaultPage label their primary button
+    // "Get started", so target the NewVaultPage one by test id.
+    await this.newVaultGetStartedButton.click()
+    await this.page.waitForTimeout(500)
   }
 
   /**
@@ -208,11 +212,10 @@ export class OnboardingPage extends BasePage {
     const options: string[] = []
 
     // From NewVaultPage
-    const nextButton = this.page.getByRole('button', { name: /next/i }).first()
     const importButton = this.page.getByRole('button', { name: /import/i }).first()
     const scanQrButton = this.page.getByRole('button', { name: /scan.*qr/i }).first()
 
-    if (await nextButton.isVisible()) options.push('create')
+    if (await this.newVaultGetStartedButton.isVisible()) options.push('create')
     if (await importButton.isVisible()) options.push('import')
     if (await scanQrButton.isVisible()) options.push('scan')
 

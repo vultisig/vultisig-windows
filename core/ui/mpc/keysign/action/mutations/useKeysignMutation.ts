@@ -361,10 +361,16 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               chain,
             })
 
+            // A standalone XRPL signature (GemWallet `signMessage`) is
+            // DER-encoded, unlike the raw r+s+recoveryId form WalletCore
+            // consumes when compiling a Ripple transaction.
+            const signatureFormat =
+              chainKind === 'ripple' ? 'der' : signatureFormats[chainKind]
+
             const result = generateSignature({
               walletCore,
               signature,
-              signatureFormat: signatureFormats[chainKind],
+              signatureFormat,
             })
 
             return {

@@ -2,6 +2,10 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 
+import {
+  rujiAutoCompoundStakePositionId,
+  rujiBondedStakePositionId,
+} from '../queries/services/thorchainStake/rujiStakeService'
 import { mayaCoin, runeCoin, thorchainTokens } from '../queries/tokens'
 import { ThorchainStakePosition } from '../queries/types'
 
@@ -47,7 +51,11 @@ const tokenById: Partial<Record<Chain, Record<string, Coin>>> = {
     'thor-stake-rune': runeCoin,
     'thor-stake-tcy': thorchainTokens.tcy,
     'thor-stake-stcy': thorchainTokens.stcy,
-    'thor-stake-ruji': thorchainTokens.ruji,
+    [rujiAutoCompoundStakePositionId]: thorchainTokens.ruji,
+    [rujiBondedStakePositionId]: thorchainTokens.ruji,
+    // Stake/Unstake route into the #4395 deposit flow with the bRUNE coin
+    // (`selectStakeId` maps `x/brune` → the `brune` wasm resolver).
+    'thor-stake-brune': thorchainTokens.brune,
     'thor-stake-yrune': thorchainTokens.yRune,
     'thor-stake-ytcy': thorchainTokens.yTcy,
   },
@@ -94,6 +102,8 @@ const transferableStakeTokenById: Partial<Record<Chain, Record<string, Coin>>> =
     [Chain.THORChain]: {
       'thor-stake-stcy': thorchainTokens.stcy,
       'thor-stake-ruji': thorchainTokens.sruji,
+      // Send moves the held receipt token (ybRUNE), not the liquid bRUNE.
+      'thor-stake-brune': thorchainTokens.ybrune,
     },
   }
 
@@ -157,6 +167,15 @@ export const resolveStakeTitle = ({
   if (position.type === 'index') return coin.ticker
   if (position.id === 'thor-stake-stcy') {
     return translate('compounded_token', { ticker: 'TCY' })
+  }
+  // ybRUNE auto-compounds bonded bRUNE (like sTCY compounds TCY).
+  if (position.id === 'thor-stake-brune') {
+    return translate('compounded_token', { ticker: 'bRUNE' })
+  }
+  // Distinguish the two RUJI cards: the auto-compounding (sRUJI) position reads
+  // "Compounded RUJI"; the bonded position falls through to "Staked RUJI".
+  if (position.id === rujiAutoCompoundStakePositionId) {
+    return translate('compounded_token', { ticker: coin.ticker })
   }
   return `${translate('staked')} ${coin.ticker}`
 }

@@ -45,15 +45,13 @@ export const SearchField: React.FC<SearchFieldProps> = ({
       alignItems="center"
       gap={8}
     >
-      {(!isFocused || showPlaceholderWhenFocused) && (
-        <SearchIconWrapper>
-          {iconStyle === 'station' ? (
-            <StationMagnifierIcon />
-          ) : (
-            <SearchIcon strokeWidth={2.5} />
-          )}
-        </SearchIconWrapper>
-      )}
+      <SearchIconWrapper aria-hidden>
+        {iconStyle === 'station' ? (
+          <StationMagnifierIcon />
+        ) : (
+          <SearchIcon strokeWidth={2.5} />
+        )}
+      </SearchIconWrapper>
       <StyledInput
         autoFocus={autoFocus}
         onFocus={() => setIsFocused(true)}
@@ -91,9 +89,10 @@ const Wrapper = styled(HStack)`
 `
 
 const SearchIconWrapper = styled(VStack)`
-  color: ${getColor('textShy')};
+  color: ${getColor('text')};
   font-size: 20px;
   left: 8px;
+  pointer-events: none;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

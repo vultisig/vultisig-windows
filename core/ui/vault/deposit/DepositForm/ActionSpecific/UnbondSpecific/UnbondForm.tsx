@@ -28,6 +28,7 @@ import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
 } from '../../../../components/action-form/ActionFormIconsWrapper'
+import { trimTrailingZeros } from '../../../utils/exactAmountString'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
@@ -83,10 +84,11 @@ export const UnbondForm = ({
     enabled: shouldShowFeePreview,
   })
 
+  // Schema messages are already translated (see getDepositFormConfig), so we
+  // render them directly. Re-running them through t() would find no matching
+  // key and collapse every error to the generic default_validation fallback.
   const formatError = (message?: string) =>
-    message
-      ? t(message, { defaultValue: t('chainFunctions.default_validation') })
-      : undefined
+    message || t('chainFunctions.default_validation')
 
   const parsedAmount =
     typeof amountValue === 'number'
@@ -113,7 +115,9 @@ export const UnbondForm = ({
   }, [parsedAmount, balance])
 
   const handleSliderChange = (percentage: number) => {
-    const amount = Number(((percentage / 100) * balance).toFixed(coin.decimals))
+    const amount = trimTrailingZeros(
+      ((percentage / 100) * balance).toFixed(coin.decimals)
+    )
     setValue('amount', amount, { shouldValidate: true, shouldDirty: true })
   }
 

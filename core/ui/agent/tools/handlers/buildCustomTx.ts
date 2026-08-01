@@ -1,5 +1,4 @@
 import { create, toBinary } from '@bufbuild/protobuf'
-import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { toEvmTwAmount } from '@vultisig/core-chain/chains/evm/tx/tw/toEvmTwAmount'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
@@ -16,6 +15,7 @@ import {
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 
 import { getChainFromString } from '../../utils/getChainFromString'
+import { parseAgentChainAmount } from '../shared/parseAgentChainAmount'
 import { resolveAccountCoin } from '../shared/resolveAccountCoin'
 import { getWalletContext } from '../shared/walletContext'
 import type { CoinInfo, ToolHandler } from '../types'
@@ -56,11 +56,6 @@ const buildDeposit: ToolHandler = async (input, context) => {
     throw new Error('chain, symbol, amount, and memo are required for deposit')
   }
 
-  const parsedAmount = parseFloat(amountStr)
-  if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
-    throw new Error(`Invalid amount: ${amountStr}`)
-  }
-
   const coin = resolveAccountCoin(context.coins, chainStr, symbol)
   if (!coin) {
     throw new Error(
@@ -68,7 +63,10 @@ const buildDeposit: ToolHandler = async (input, context) => {
     )
   }
 
-  const chainAmount = toChainAmount(parsedAmount, coin.decimals)
+  const chainAmount = parseAgentChainAmount({
+    amount: amountStr,
+    decimals: coin.decimals,
+  })
 
   const { walletCore, vault } = getWalletContext()
 
@@ -152,6 +150,12 @@ const buildEvmContract: ToolHandler = async (input, context) => {
     throw new Error(`No native fee coin found for ${chainStr} in vault`)
   }
 
+  const toAmount = parseAgentChainAmount({
+    amount: valueStr,
+    decimals: nativeCoin.decimals,
+    allowZero: true,
+  }).toString()
+
   const { walletCore, vault } = getWalletContext()
 
   const publicKey = getPublicKey({
@@ -195,11 +199,6 @@ const buildEvmContract: ToolHandler = async (input, context) => {
 
   const encoded = walletCore.EthereumAbi.encode(abiFunc)
   const calldata = `0x${Buffer.from(encoded).toString('hex')}`
-
-  const toAmount =
-    valueStr !== '0'
-      ? toChainAmount(parseFloat(valueStr), nativeCoin.decimals).toString()
-      : '0'
 
   const keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({

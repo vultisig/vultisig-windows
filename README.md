@@ -28,8 +28,11 @@ To run the desktop application in development mode:
 yarn dev:desktop
 ```
 
-**Important Note:** This will expose two dev servers: one on 34115 (the Wails development server) and a Vite development server on port 5173.
-Always use the former, as the Vite development server won't have the requited Wails-injected scripts.
+The startup receipt prints separate Wails, Vite, and local mediator URLs. Open
+the Wails URL; the Vite server does not have the required Wails-injected
+scripts. The primary checkout defaults to ports 34115, 5173, and 18080. Linked
+worktrees receive stable, isolated ports and a worktree-local development
+database automatically.
 
 ### Building
 
@@ -71,18 +74,34 @@ yarn dev:extension
 
 ### Building
 
-To build the extension:
+To build the regular Vultisig extension:
 
 ```bash
 yarn build:extension
 ```
 
+The Vultisig artifact is written to `clients/extension/dist`.
+
+To build the Station extension:
+
+```bash
+yarn build:extension:station
+```
+
+The Station artifact is written independently to
+`clients/extension/dist-station`. Building one flavor does not replace the
+other.
+
 ### Installing in Chrome
 
 1. Open Chrome and navigate to `chrome://extensions`
 2. Enable "Developer mode" (top-right corner)
-3. Click "Load unpacked" and select the `dist` folder from the extension
-4. The extension should now be installed and ready to use
+3. Click "Load unpacked" and select `clients/extension/dist` for Vultisig or
+   `clients/extension/dist-station` for Station.
+4. Verify the extension card says `Vultisig Extension` or `Station Wallet`,
+   note its extension ID, and reload the exact directory selected above before
+   reviewing UI.
+5. The extension should now be installed and ready to use.
 
 ## Vultisig Extension Integration Guide
 

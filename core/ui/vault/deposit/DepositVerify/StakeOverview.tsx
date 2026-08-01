@@ -7,6 +7,7 @@ import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { TransactionOverviewAmount } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewAmount'
 import { TransactionOverviewItem } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewItem'
 import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
+import { isBruneStakeCoin } from '@core/ui/vault/deposit/config'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
 import { useDepositKeysignPayloadQuery } from '@core/ui/vault/deposit/keysignPayload/query'
@@ -29,6 +30,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
+import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-bond/config'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
@@ -66,6 +68,13 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
 
   const actionLabel = actionLabels[action] ?? t('you_are_staking')
 
+  // Unstaking bRUNE redeems the ybRUNE receipt shares (NAV is not 1:1), so
+  // label the amount as ybRUNE rather than bRUNE.
+  const displayCoin =
+    action === 'unstake' && isBruneStakeCoin(coin)
+      ? { ...coin, ticker: bruneBondConfig.shareTicker }
+      : coin
+
   // Cosmos native staking actions have no on-chain memo (the typed
   // MsgDelegate / MsgUndelegate / etc. carry the data) and they target a
   // validator instead of a recipient address, so the overview swaps the
@@ -101,6 +110,15 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
   const amountValue =
     typeof rawAmount === 'number' ? rawAmount : Number(rawAmount ?? 0)
   const fallbackAmount = Number.isFinite(amountValue) ? amountValue : 0
+  // Exact decimal string for chain-unit conversion — the float fallbackAmount
+  // is only for display and zero-checks (#4494)
+  const exactAmount =
+    rawAmount !== undefined &&
+    rawAmount !== null &&
+    rawAmount !== '' &&
+    Number.isFinite(Number(rawAmount))
+      ? String(rawAmount)
+      : '0'
 
   // For native TCY unstaking, the payload.toAmount is '0' because the amount is
   // encoded in the memo as a percentage. We need to use the form amount instead.
@@ -109,11 +127,11 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
       const payloadAmount = payload.toAmount
       // If payload amount is 0 or empty, use the form amount (converted to chain units)
       if (!payloadAmount || payloadAmount === '0') {
-        return toChainAmount(fallbackAmount, coin.decimals).toString()
+        return toChainAmount(exactAmount, coin.decimals).toString()
       }
       return payloadAmount
     },
-    [fallbackAmount, coin.decimals]
+    [exactAmount, coin.decimals]
   )
 
   return (
@@ -144,7 +162,7 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
           {!(isNativeTcyUnstake && fallbackAmount === 0) && (
             <TransactionOverviewAmount
               label={actionLabel}
-              coin={coin}
+              coin={displayCoin}
               fallbackAmount={fallbackAmount}
               keysignPayloadQuery={keysignPayloadQuery}
               getPayloadAmount={getPayloadAmount}

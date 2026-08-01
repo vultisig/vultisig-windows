@@ -11,12 +11,14 @@ import { Slider } from '@lib/ui/inputs/Slider'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-bond/config'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useEffect, useMemo } from 'react'
 import { Controller, ControllerRenderProps, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { trimTrailingZeros } from '../../../utils/exactAmountString'
 import { FormData } from '../../types'
 
 type StakeFormProps = {
@@ -63,7 +65,11 @@ export const StakeForm = ({
   useEffect(() => {
     if (stakeId === 'stcy') {
       setValue('autoCompound', true, { shouldValidate: false })
-    } else if (stakeId === 'native-tcy' || stakeId === 'ruji') {
+    } else if (
+      stakeId === 'native-tcy' ||
+      stakeId === 'ruji' ||
+      stakeId === 'brune'
+    ) {
       setValue('autoCompound', false, { shouldValidate: false })
     }
   }, [stakeId, setValue])
@@ -83,7 +89,9 @@ export const StakeForm = ({
   }, [parsedAmount, balance])
 
   const handleSliderChange = (percentage: number) => {
-    const amount = Number(((percentage / 100) * balance).toFixed(coin.decimals))
+    const amount = trimTrailingZeros(
+      ((percentage / 100) * balance).toFixed(coin.decimals)
+    )
     setValue('amount', amount, { shouldValidate: true, shouldDirty: true })
 
     if (isUnstake && stakeId === 'native-tcy') {
@@ -94,12 +102,18 @@ export const StakeForm = ({
     }
   }
 
-  const formattedBalance = formatAmount(balance, { ticker: coin.ticker })
+  // Unstaking bRUNE redeems the ybRUNE receipt: the balance/amount are ybRUNE
+  // shares, not bRUNE (NAV is not 1:1), so label them explicitly as ybRUNE.
+  const displayTicker =
+    isUnstake && stakeId === 'brune' ? bruneBondConfig.shareTicker : coin.ticker
 
+  const formattedBalance = formatAmount(balance, { ticker: displayTicker })
+
+  // Schema messages are already translated (see getDepositFormConfig), so we
+  // render them directly. Re-running them through t() would find no matching
+  // key and collapse every error to the generic default_validation fallback.
   const formatError = (message?: string) =>
-    message
-      ? t(message, { defaultValue: t('chainFunctions.default_validation') })
-      : undefined
+    message || t('chainFunctions.default_validation')
 
   return (
     <VStack flexGrow gap={16}>
@@ -116,7 +130,7 @@ export const StakeForm = ({
               render={({ field }) => (
                 <StakeAmountInput
                   field={field}
-                  ticker={coin.ticker}
+                  ticker={displayTicker}
                   decimals={coin.decimals}
                   showPercentage
                   percentage={currentPercentage}

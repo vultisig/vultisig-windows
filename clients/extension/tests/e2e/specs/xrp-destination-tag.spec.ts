@@ -1,6 +1,14 @@
 import { join } from 'node:path'
 
+import { create } from '@bufbuild/protobuf'
 import type { Page } from '@playwright/test'
+import { getJoinKeysignUrl } from '@vultisig/core-mpc/keysign/utils/getJoinKeysignUrl'
+import { RippleSpecificSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
+import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import QRCode from 'react-qr-code'
 
 import { expect, test } from '../fixtures/extension-loader'
 import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
@@ -175,5 +183,91 @@ test.describe('XRP destination tag', () => {
     await expect(sendFlow.destinationTagInput).toBeDisabled()
     await sendFlow.destinationTagInput.scrollIntoViewIfNeeded()
     await captureProof(page, 'xrp-destination-tag-x-address.png')
+  })
+
+  test('shows the signed tag separately from the memo to a co-signer', async ({
+    context,
+    extensionId,
+  }) => {
+    const destinationTag = 12345
+    const memo = 'invoice-4300'
+    const payload = create(KeysignPayloadSchema, {
+      coin: create(CoinSchema, {
+        address: classicAddress,
+        chain: 'Ripple',
+        decimals: 6,
+        hexPublicKey: fixturePublicKey,
+        isNativeToken: true,
+        logo: 'xrp',
+        priceProviderId: 'ripple',
+        ticker: 'XRP',
+      }),
+      toAddress: classicAddress,
+      toAmount: '1',
+      memo,
+      blockchainSpecific: {
+        case: 'rippleSpecific',
+        value: create(RippleSpecificSchema, { destinationTag }),
+      },
+    })
+    const joinUrl = await getJoinKeysignUrl({
+      serverType: 'relay',
+      serviceName: 'xrp-destination-tag-qa',
+      sessionId: 'xrp-destination-tag-qa',
+      hexEncryptionKey: '0'.repeat(64),
+      payload: { keysign: payload },
+      vaultId: fixturePublicKey,
+    })
+
+    const qrPage = await context.newPage()
+    await qrPage.setContent(
+      renderToStaticMarkup(
+        createElement(QRCode, { level: 'L', size: 900, value: joinUrl })
+      )
+    )
+    const qrPath = join(proofDir, 'xrp-destination-tag-join-qr.png')
+    await qrPage.locator('svg').screenshot({ path: qrPath })
+    await qrPage.close()
+
+    const page = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
+    await vaultPage.goto()
+    await vaultPage.waitForView(15_000)
+    await page.locator('button').evaluateAll(buttons => {
+      const candidate = buttons.find(button => {
+        const rect = button.getBoundingClientRect()
+        return (
+          rect.width >= 50 &&
+          rect.width <= 60 &&
+          rect.height >= 50 &&
+          rect.height <= 60 &&
+          Math.abs(rect.left + rect.width / 2 - window.innerWidth / 2) < 20 &&
+          rect.bottom > window.innerHeight - 100
+        )
+      })
+
+      if (!(candidate instanceof HTMLButtonElement)) {
+        throw new Error('Could not find the QR scanner button')
+      }
+      candidate.click()
+    })
+
+    await page.getByRole('button', { name: 'Upload QR Code' }).click()
+    await page.locator('input[type="file"]').setInputFiles(qrPath)
+    await page.getByRole('button', { name: 'Continue' }).click()
+
+    await expect(page.getByText('Verify', { exact: true })).toBeVisible()
+    const destinationTagLabel = page.getByText('Destination tag', {
+      exact: true,
+    })
+    await expect(destinationTagLabel).toBeVisible()
+    await expect(
+      page.getByText(destinationTag.toString(), { exact: true })
+    ).toBeVisible()
+    await expect(page.getByText(memo, { exact: true })).toBeVisible()
+    await destinationTagLabel.evaluate(element =>
+      element.scrollIntoView({ block: 'center' })
+    )
+    await captureProof(page, 'xrp-destination-tag-cosigner-overview.png')
   })
 })

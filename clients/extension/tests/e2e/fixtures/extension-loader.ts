@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url'
 import http from 'http'
 import fs from 'fs'
 
+import { extensionPath } from '../extension-path'
+
 /**
  * Playwright fixture that launches Chromium with the VultiConnect extension loaded
  * and serves the test DApp over HTTP (extensions only inject on http/https pages).
@@ -13,13 +15,12 @@ import fs from 'fs'
  *   test('my test', async ({ context, testDappUrl }) => { ... })
  *
  * Prerequisites:
- *   The extension must be built to `clients/extension/dist/`.
+ *   Select the built artifact with `VULTISIG_EXTENSION_ARTIFACT`.
  */
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const extensionPath = path.resolve(__dirname, '../../../dist')
 const testDappPath = path.resolve(__dirname, 'test-dapp.html')
 
 /**
@@ -51,8 +52,18 @@ export const test = base.extend<{
   testDappUrl: string
 }>({
   context: async ({}, use) => {
+    const videoDir = process.env.EXTENSION_QA_VIDEO_DIR
     const context = await chromium.launchPersistentContext('', {
       headless: false,
+      ...(videoDir
+        ? {
+            viewport: { width: 1280, height: 720 },
+            recordVideo: {
+              dir: videoDir,
+              size: { width: 1280, height: 720 },
+            },
+          }
+        : {}),
       args: [
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,

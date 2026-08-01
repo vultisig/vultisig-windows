@@ -29,8 +29,10 @@ if (!expected) {
 }
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url))
-const distDir = path.resolve(currentDir, '../dist')
+const artifactDirectory = brand === 'station' ? 'dist-station' : 'dist'
+const distDir = path.resolve(currentDir, '..', artifactDirectory)
 const manifestPath = path.resolve(distDir, 'manifest.json')
+const artifactReceiptPath = path.resolve(distDir, 'extension-artifact.json')
 const inpagePath = path.resolve(distDir, 'inpage.js')
 const assetsDir = path.resolve(distDir, 'assets')
 
@@ -60,6 +62,7 @@ const readInpageAssetChunks = async () => {
 }
 
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
+const artifactReceipt = JSON.parse(await readFile(artifactReceiptPath, 'utf8'))
 const inpage = [
   await readFile(inpagePath, 'utf8'),
   await readInpageAssetChunks(),
@@ -94,5 +97,17 @@ assertIncludes(
   expected.walletIdentifier,
   'Station-compatible wallet identifier'
 )
+assertEqual(artifactReceipt.schemaVersion, 1, 'artifact.schemaVersion')
+assertEqual(artifactReceipt.brand, brand, 'artifact.brand')
+assertEqual(
+  artifactReceipt.artifactDirectory,
+  artifactDirectory,
+  'artifact.artifactDirectory'
+)
+assertEqual(
+  artifactReceipt.manifestName,
+  expected.manifestName,
+  'artifact.manifestName'
+)
 
-console.log(`Extension brand assertion passed for ${brand}.`)
+console.log(`Extension brand assertion passed for ${brand} at ${distDir}.`)

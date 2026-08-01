@@ -5,6 +5,7 @@ import { AsProp, TitleProp } from '@lib/ui/props'
 import { ComponentProps, CSSProperties, ReactNode } from 'react'
 import styled from 'styled-components'
 
+import { sameDimensions } from '../css/sameDimensions'
 import { Backdrop } from './Backdrop'
 import { modalConfig } from './config'
 import { ModalCloseButton } from './ModalCloseButton'
@@ -28,6 +29,14 @@ export type ModalProps = AsProp &
   }
 
 const contentVerticalPadding = 8
+
+const closeButtonSize = 24
+
+// Balances the close button so a centered title sits on the modal's true center
+const CloseButtonBalancer = styled.div`
+  ${sameDimensions(closeButtonSize)};
+  flex-shrink: 0;
+`
 
 const Container = styled(ModalContainer)`
   > * {
@@ -66,6 +75,9 @@ export const Modal = ({
                 justifyContent="space-between"
                 gap={16}
               >
+                {titleAlign === 'center' && onClose ? (
+                  <CloseButtonBalancer />
+                ) : null}
                 <ModalTitleText align={titleAlign}>{title}</ModalTitleText>
                 {onClose && (
                   <ModalCloseButton

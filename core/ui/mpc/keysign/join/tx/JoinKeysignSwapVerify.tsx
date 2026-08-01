@@ -2,6 +2,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
+import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import {
   ContainerWrapper,
   HorizontalLine,
@@ -49,6 +50,9 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
     fromCoin.decimals
   )
   const toAmount = Number(toAmountDecimal)
+  const toAmountLimit = toCoin
+    ? getSwapToAmountLimit({ swapPayload, toCoin })
+    : null
 
   const provider = getKeysignSwapProviderName(swapPayload)
   const swapFee = getSwapFeeFromPayload(value)
@@ -77,7 +81,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
               <IconWrapper>
                 <ArrowDownIcon />
               </IconWrapper>
-              {t('to_min_payout')}
+              {t('swap_expected_payout')}
               <HorizontalLine />
             </HStack>
             {toCoin && (
@@ -88,6 +92,14 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
                     {formatAmount(toAmount, toCoin)}
                   </Text>
                   <JoinSwapFiatAmount coin={toCoin} amount={toAmount} />
+                  {toAmountLimit !== null && (
+                    <Text size={13} color="shy">
+                      {`${t('to_min_payout')}: ${formatAmount(
+                        toAmountLimit,
+                        toCoin
+                      )}`}
+                    </Text>
+                  )}
                 </VStack>
               </HStack>
             )}

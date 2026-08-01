@@ -81,6 +81,13 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       type: 'stake',
       chain: Chain.THORChain,
     },
+    {
+      id: 'thor-stake-brune',
+      name: 'bRUNE',
+      ticker: 'bRUNE',
+      type: 'stake',
+      chain: Chain.THORChain,
+    },
   ],
   [Chain.MayaChain]: [
     {

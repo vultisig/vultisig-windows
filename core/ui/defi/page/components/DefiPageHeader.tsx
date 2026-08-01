@@ -1,5 +1,8 @@
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { useDefiPortfolioBalance } from '@core/ui/defi/page/hooks/useDefiPortfolios'
 import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { VaultSelector } from '@core/ui/vault/page/components/VaultSelector'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
@@ -63,6 +66,10 @@ export const DefiPageHeader = ({
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
 
+  const { data: totalBalance = 0 } = useDefiPortfolioBalance()
+  const formatFiatAmount = useFormatFiatAmount()
+  const formattedBalance = formatFiatAmount(totalBalance)
+
   const headerControls = (
     <HStack gap={4} alignItems="center">
       <RefreshDefiData />
@@ -78,14 +85,14 @@ export const DefiPageHeader = ({
     <HeaderContainer>
       <CollapsedContent isVisible={isCollapsed}>
         <VaultSelector value={vault} />
-        <HStack alignItems="center" gap={12} style={{ flexShrink: 0 }}>
-          <VStack alignItems="flex-end" gap={2}>
-            <Text size={12} color="shy">
-              {t('defi')}
-            </Text>
-          </VStack>
-          {headerControls}
-        </HStack>
+        <VStack alignItems="flex-end" gap={2} style={{ flexShrink: 0 }}>
+          <Text size={12} color="shy">
+            {t('defi')}
+          </Text>
+          <Text size={14}>
+            <BalanceVisibilityAware>{formattedBalance}</BalanceVisibilityAware>
+          </Text>
+        </VStack>
       </CollapsedContent>
 
       <NormalContent isVisible={!isCollapsed}>

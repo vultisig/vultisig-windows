@@ -9,11 +9,11 @@ import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
 import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
-import { installGemWalletBridge } from '../providers/gemWallet'
 import { installKeplrProxyBridge } from '../providers/keplrProxyBridge'
 import { Solana } from '../providers/solana'
 import { registerWallet } from '../providers/solana/register'
 import { UTXO } from '../providers/utxo'
+import { createXrplProvider, installXrplAdapter } from '../providers/xrpl'
 
 // Wallet-picker descriptor pushed to `window.terraWallets` /
 // `window.interchainWallets`. Mirrors the `STATION_INFO` shape the official
@@ -40,6 +40,9 @@ export const injectToWindow = () => {
 
   const vultisigProvider = {
     ...providers,
+    // Vultisig-native XRPL object API, alongside the GemWallet-detectable
+    // postMessage adapter installed below.
+    xrpl: createXrplProvider(),
     getVault: async () => callBackground({ exportVault: {} }),
     getVaults: async () => callPopup({ exportVaults: {} }),
   }
@@ -198,13 +201,13 @@ export const injectToWindow = () => {
   attempt(() => pushToWalletArray('terraWallets'))
   attempt(() => pushToWalletArray('interchainWallets'))
 
-  // GemWallet is the injectable API XRPL dApps integrate against. Like Keplr
-  // above, it must be synchronous: dApps snapshot the installed wallets on
-  // first render, so deferring behind the async background round-trip below
-  // would hide us from the picker. The guard defers to a real GemWallet that
-  // already claimed the page.
+  // The XRPL adapter is detectable as GemWallet — the injectable API XRPL dApps
+  // integrate against. Like Keplr above, it must be synchronous: dApps snapshot
+  // the installed wallets on first render, so deferring behind the async
+  // background round-trip below would hide us from the picker. The guard defers
+  // to a real GemWallet that already claimed the page.
   if (!window.gemWallet) {
-    attempt(() => installGemWalletBridge())
+    attempt(() => installXrplAdapter())
   }
 
   setupContentScriptMessenger(providers)

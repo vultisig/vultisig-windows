@@ -1,6 +1,16 @@
-import { SuiMoveNormalizedType } from '@mysten/sui/client'
+import { Experimental_SuiClientTypes } from '@mysten/sui/experimental'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 import { SuiCommand } from './types'
+
+/**
+ * A Move function parameter as the gRPC client reports it. Borrows live in the
+ * separate `reference` field rather than wrapping the type, so type-hint logic
+ * reads `body` directly — a `&Coin<T>` and a `Coin<T>` behave the same here.
+ */
+export type MoveParameter = Experimental_SuiClientTypes.OpenSignature
+
+type MoveTypeBody = Experimental_SuiClientTypes.OpenSignatureBody
 
 export type MoveCallKey = `${string}::${string}::${string}`
 
@@ -10,16 +20,27 @@ export const moveCallKey = (
   fn: string
 ): MoveCallKey => `${pkg}::${module}::${fn}` as MoveCallKey
 
-/**
- * Strip wrapping `&` / `&mut` borrows — for type-hint purposes a `&Coin<T>`
- * and a `Coin<T>` behave the same.
- */
-const unwrapRefs = (type: SuiMoveNormalizedType): SuiMoveNormalizedType => {
-  if (typeof type === 'object') {
-    if ('Reference' in type) return unwrapRefs(type.Reference)
-    if ('MutableReference' in type) return unwrapRefs(type.MutableReference)
+const renderMoveTypeBody = (body: MoveTypeBody): string => {
+  switch (body.$kind) {
+    case 'vector':
+      return `vector<${renderMoveTypeBody(body.vector)}>`
+    case 'typeParameter':
+      return `T${body.index}`
+    case 'datatype': {
+      const { typeName, typeParameters } = body.datatype
+      // Drop the package address (the surrounding context already shows it):
+      // `0x2::coin::Coin` renders as `coin::Coin`.
+      const parts = typeName.split('::')
+      const name = parts.length === 3 ? `${parts[1]}::${parts[2]}` : typeName
+      const generics = typeParameters.length
+        ? `<${typeParameters.map(renderMoveTypeBody).join(', ')}>`
+        : ''
+      return `${name}${generics}`
+    }
+    default:
+      // Primitives and `unknown` carry their reading directly in `$kind`.
+      return body.$kind
   }
-  return type
 }
 
 /**
@@ -27,25 +48,13 @@ const unwrapRefs = (type: SuiMoveNormalizedType): SuiMoveNormalizedType => {
  * addresses (since the surrounding context already shows them) and renders
  * generics with the same treatment recursively.
  */
-export const renderMoveType = (type: SuiMoveNormalizedType): string => {
-  const t = unwrapRefs(type)
-  if (typeof t === 'string') return t.toLowerCase()
-  if ('Vector' in t) return `vector<${renderMoveType(t.Vector)}>`
-  if ('TypeParameter' in t) return `T${t.TypeParameter}`
-  if ('Struct' in t) {
-    const { module, name, typeArguments } = t.Struct
-    const generics = typeArguments.length
-      ? `<${typeArguments.map(renderMoveType).join(', ')}>`
-      : ''
-    return `${module}::${name}${generics}`
-  }
-  return 'unknown'
-}
+export const renderMoveType = (type: MoveParameter): string =>
+  renderMoveTypeBody(type.body)
 
 /**
  * Primitive class assignable to a Pure input. We only decode primitives —
- * Struct / Vector / Address types either come from objects or are too rich
- * to summarise as a single value.
+ * datatype / vector / type-parameter types either come from objects or are
+ * too rich to summarise as a single value.
  */
 export type PurePrimitiveHint =
   | 'bool'
@@ -57,32 +66,19 @@ export type PurePrimitiveHint =
   | 'u256'
   | 'address'
 
-const primitiveHintFor = (
-  type: SuiMoveNormalizedType
-): PurePrimitiveHint | null => {
-  const t = unwrapRefs(type)
-  if (typeof t === 'string') {
-    switch (t) {
-      case 'Bool':
-        return 'bool'
-      case 'U8':
-        return 'u8'
-      case 'U16':
-        return 'u16'
-      case 'U32':
-        return 'u32'
-      case 'U64':
-        return 'u64'
-      case 'U128':
-        return 'u128'
-      case 'U256':
-        return 'u256'
-      case 'Address':
-        return 'address'
-    }
-  }
-  return null
-}
+const purePrimitiveHints: readonly PurePrimitiveHint[] = [
+  'bool',
+  'u8',
+  'u16',
+  'u32',
+  'u64',
+  'u128',
+  'u256',
+  'address',
+]
+
+const primitiveHintFor = (type: MoveParameter): PurePrimitiveHint | null =>
+  isOneOf(type.body.$kind, purePrimitiveHints) ? type.body.$kind : null
 
 /**
  * Walk every MoveCall argument list and build a per-input type hint. When
@@ -90,7 +86,7 @@ const primitiveHintFor = (
  * later ones (in practice they always agree).
  */
 export type InputHint = {
-  type: SuiMoveNormalizedType
+  type: MoveParameter
   primitive: PurePrimitiveHint | null
   // `(callIndex, argIndex)` of the first MoveCall that referenced this input.
   via: { callIndex: number; argIndex: number }
@@ -98,7 +94,7 @@ export type InputHint = {
 
 export const collectInputHints = (
   commands: SuiCommand[],
-  abis: Map<MoveCallKey, { parameters: SuiMoveNormalizedType[] }>
+  abis: Map<MoveCallKey, { parameters: MoveParameter[] }>
 ): Map<number, InputHint> => {
   const hints = new Map<number, InputHint>()
   commands.forEach((cmd, callIndex) => {

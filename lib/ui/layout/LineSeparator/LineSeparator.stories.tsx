@@ -20,7 +20,7 @@ const DemoBlock = styled.div<{ width?: number }>`
 `
 
 export const FullWidth: Story = {
-  name: 'Full‑width separator',
+  name: 'Full-width separator',
   render: () => (
     <DemoBlock>
       <LineSeparator />
@@ -29,7 +29,7 @@ export const FullWidth: Story = {
 }
 
 export const InNarrowContainer: Story = {
-  name: 'Inside 240‑px container',
+  name: 'Inside 240-px container',
   render: () => (
     <DemoBlock width={240}>
       <LineSeparator />

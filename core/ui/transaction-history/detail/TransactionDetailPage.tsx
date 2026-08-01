@@ -14,6 +14,7 @@ import {
 import { useTransactionStatusPolling } from '@core/ui/transaction-history/status/useTransactionStatusPolling'
 import { TransactionHistoryTag } from '@core/ui/transaction-history/TransactionHistoryTag'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -208,11 +209,16 @@ const SendDetailPanel = ({ record }: { record: SendTransactionRecord }) => {
 }
 
 const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
+  const { t } = useTranslation()
   const { data } = record
   const fromCryptoAmount = Number(
     fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
   )
   const toCryptoAmount = parseFloat(data.toAmount)
+  const toAmountLimit = toNativeSwapLimitAmount({
+    rawLimit: data.toAmountLimit,
+    toCoin: { chain: data.toChain, id: data.toTokenId },
+  })
   const fromFiat = useFiatFromPrice({
     coin: { chain: data.fromChain, id: data.fromTokenId },
     fiatValue: record.fiatValue,
@@ -277,6 +283,13 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           {toFiat && (
             <Text size={12} color="supporting" centerHorizontally>
               {toFiat}
+            </Text>
+          )}
+          {toAmountLimit !== null && (
+            <Text size={12} color="shy" centerHorizontally>
+              {`${t('to_min_payout')}: ${formatAmount(toAmountLimit, {
+                precision: 'high',
+              })} ${data.toToken}`}
             </Text>
           )}
         </VStack>

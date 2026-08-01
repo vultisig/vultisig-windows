@@ -3,13 +3,16 @@ import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
-import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
-import { getCommonPlugins } from '../../core/ui/vite/plugins'
+import {
+  getCommonPlugins,
+  topLevelAwaitPlugins,
+} from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
+import { getExtensionArtifactDirectoryName } from './src/brand/extensionArtifact'
 import {
   getExtensionBrandConfig,
   resolveExtensionProductBrand,
@@ -87,6 +90,9 @@ export default defineConfig(async ({ mode }) => {
     process.env.VULTISIG_EXTENSION_BRAND
   )
   const extensionBrandConfig = getExtensionBrandConfig(productBrand)
+  const extensionArtifactDirectory =
+    getExtensionArtifactDirectoryName(productBrand)
+  const extensionOutDir = path.resolve(__dirname, extensionArtifactDirectory)
   const defines = {
     ...featureFlagDefines,
     ...envDefines,
@@ -104,10 +110,17 @@ export default defineConfig(async ({ mode }) => {
 
     switch (chunk) {
       case 'background':
+        // Required, NOT redundant: `wasm()` emits top-level `await` for WASM
+        // instantiation, and without `topLevelAwait()` the background service
+        // worker fails to finish evaluating at runtime — the SW never boots, so
+        // every `callBackground` from inpage/content hangs forever (dApp connect,
+        // getAccount, keysign — all dead) while inpage-local logic still works.
+        // `type: "module"` + `target: esnext` is not sufficient on its own; keep
+        // this plugin. See the regression from dropping it (#4400).
         plugins = [
           extensionNodePolyfills(isFirefoxBuild),
           wasm(),
-          topLevelAwait(),
+          ...topLevelAwaitPlugins(),
         ]
         break
       case 'inpage':
@@ -134,6 +147,7 @@ export default defineConfig(async ({ mode }) => {
         tsconfigPaths({ root: rootDir }),
         extensionBrandVitePlugin({
           config: extensionBrandConfig,
+          distDir: extensionOutDir,
           extensionDir: __dirname,
         }),
         ...plugins,
@@ -144,6 +158,7 @@ export default defineConfig(async ({ mode }) => {
         target: 'esnext',
         copyPublicDir: false,
         emptyOutDir: false,
+        outDir: extensionOutDir,
         manifest: false,
         ...devBuildOptions,
         rollupOptions: {
@@ -178,6 +193,7 @@ export default defineConfig(async ({ mode }) => {
         }),
         extensionBrandVitePlugin({
           config: extensionBrandConfig,
+          distDir: extensionOutDir,
           extensionDir: __dirname,
         }),
         viteStaticCopy({
@@ -189,6 +205,7 @@ export default defineConfig(async ({ mode }) => {
         // downlevel pass cannot transform the current dependency graph.
         target: 'esnext',
         emptyOutDir: false,
+        outDir: extensionOutDir,
         manifest: false,
         ...devBuildOptions,
         rollupOptions: {

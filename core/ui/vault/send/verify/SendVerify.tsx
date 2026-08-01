@@ -1,3 +1,4 @@
+import { getRippleDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
@@ -15,6 +16,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ListItem } from '@lib/ui/list/item'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
+import { Chain } from '@vultisig/core-chain/Chain'
 import {
   FeeSettings,
   FeeSettingsChain,
@@ -38,6 +40,10 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [memo] = useSendMemo()
   const { destinationTag } = useSendDestinationTag()
   const coin = useCurrentSendCoin()
+  const { destinationTag: displayDestinationTag, memo: displayMemo } =
+    coin.chain === Chain.Ripple
+      ? getRippleDisplay({ destinationTag, memo })
+      : { destinationTag: undefined, memo: memo || undefined }
   const sender = useSender()
   const receiverVaultName = useVaultNameForAddress({
     address: receiver,
@@ -118,14 +124,14 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
               : undefined
           }
         >
-          {memo && (
+          {displayMemo && (
             <ListItem
-              title={<TxOverviewMemo value={memo} chain={coin.chain} />}
+              title={<TxOverviewMemo value={displayMemo} chain={coin.chain} />}
             />
           )}
-          {destinationTag !== undefined && (
+          {displayDestinationTag !== undefined && (
             <ListItem
-              description={destinationTag.toString()}
+              description={displayDestinationTag.toString()}
               title={t('ripple_field_destination_tag')}
             />
           )}

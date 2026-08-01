@@ -1,3 +1,4 @@
+import { sha512 } from '@noble/hashes/sha2.js'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { getSuiPersonalMessageDigest } from '@vultisig/core-chain/chains/sui/sign'
 import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
@@ -52,5 +53,8 @@ export const getCustomMessageHex = ({
     tron: () => stripHexPrefix(keccak256(bytes)),
     polkadot: () => Buffer.from(bytes).toString('hex'),
     cardano: () => Buffer.from(bytes).toString('hex'),
+    // XRPL (GemWallet signMessage / ripple-keypairs): the signed digest is
+    // SHA-512-half — the first 32 bytes of SHA-512 — of the message bytes.
+    ripple: () => Buffer.from(sha512(bytes).slice(0, 32)).toString('hex'),
   })
 }

@@ -73,8 +73,12 @@ export type SignMessageInput =
           | OtherChain.Polkadot
           | OtherChain.Bittensor
           | OtherChain.Cardano
+          | OtherChain.Ripple
         useTronHeader?: boolean
         isV2?: boolean
+        // XRPL (GemWallet `signMessage`): when true `message` is raw hex,
+        // otherwise it is UTF-8 text. Ignored by the other chains.
+        isHex?: boolean
         message: string
       }
     }

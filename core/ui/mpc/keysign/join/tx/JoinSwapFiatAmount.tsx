@@ -3,11 +3,11 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '@lib/ui/text'
-import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
 type JoinSwapFiatAmountProps = {
-  coin: AccountCoin
+  coin: Coin
   amount: number
 }
 

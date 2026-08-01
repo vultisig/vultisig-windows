@@ -32,6 +32,10 @@ describe('resolveTransferableStakeToken', () => {
     expect(
       resolveTransferableStakeToken(Chain.THORChain, 'thor-stake-rune')
     ).toBeUndefined()
+    // Bonded RUJI has no bank receipt to send (only the auto-compounding sRUJI).
+    expect(
+      resolveTransferableStakeToken(Chain.THORChain, 'thor-stake-ruji-bonded')
+    ).toBeUndefined()
   })
 
   it('returns undefined for chains with no transferable stake tokens', () => {

@@ -52,6 +52,10 @@ export type SwapTransactionData = {
   fromDecimals: number
   toToken: string
   toAmount: string
+  /** Guaranteed on-chain minimum output ("min. payout"). Present only for
+   * native (THORChain/MayaChain) swaps, whose signed payload carries a real
+   * `to_amount_limit`. General aggregator swaps expose no separate floor. */
+  toAmountLimit?: string
   toChain: Chain
   toTokenLogo: string
   toTokenId?: string

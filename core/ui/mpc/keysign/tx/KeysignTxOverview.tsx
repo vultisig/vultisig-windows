@@ -1,6 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTxHash } from '@core/ui/chain/state/txHash'
+import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
@@ -28,6 +29,7 @@ import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
+import { getWasmExecuteTxDisplay } from './getWasmExecuteTxDisplay'
 import { SignRippleDisplay } from './ripple/SignRippleDisplay'
 import { parseSuiTx } from './sui/parser'
 import { SignSuiDisplay } from './sui/SignSuiDisplay'
@@ -46,13 +48,23 @@ export const KeysignTxOverview = ({
     useKeysignMessagePayload(),
     'keysign'
   )
-  const { toAddress, memo, toAmount, coin: potentialCoin } = keysignPayload
+  const { toAddress, toAmount, coin: potentialCoin } = keysignPayload
+  const { destinationTag, memo } = getRippleKeysignDisplay(keysignPayload)
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { address, chain, decimals } = shouldBePresent(coin)
+  const { address, chain } = shouldBePresent(coin)
 
-  const formattedToAmount = toAmount
-    ? fromChainAmount(BigInt(toAmount), decimals)
-    : null
+  // A wasm contract execute (e.g. stake/unstake) is signed purely from
+  // `contractPayload`; derive its amount / asset / destination from that same
+  // payload so display can't diverge from what is signed.
+  const wasmDisplay = getWasmExecuteTxDisplay(keysignPayload)
+  const displayCoin = wasmDisplay?.coin ?? coin
+  const displayToAddress = wasmDisplay?.receiver ?? toAddress ?? ''
+
+  const formattedToAmount = wasmDisplay
+    ? fromChainAmount(BigInt(wasmDisplay.fundAmount), displayCoin.decimals)
+    : toAmount
+      ? fromChainAmount(BigInt(toAmount), displayCoin.decimals)
+      : null
 
   const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
 
@@ -65,11 +77,11 @@ export const KeysignTxOverview = ({
       (txAction !== null && txAction.action !== 'send'))
 
   const toVaultName = useVaultNameForAddress({
-    address: toAddress ?? '',
+    address: displayToAddress,
     chain,
   })
   const toAddressBookName = useAddressBookNameForAddress({
-    address: toAddress ?? '',
+    address: displayToAddress,
     chain,
   })
   const toLabel = toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
@@ -102,7 +114,7 @@ export const KeysignTxOverview = ({
               ? txAction.amount
               : (formattedToAmount ?? 0)
           }
-          value={coin}
+          value={displayCoin}
           actionLabel={
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
           }
@@ -139,7 +151,7 @@ export const KeysignTxOverview = ({
               />
             </HStack>
           </HStack>
-          {toAddress && (
+          {displayToAddress && (
             <VStack gap={8}>
               <HStack
                 alignItems="center"
@@ -155,21 +167,36 @@ export const KeysignTxOverview = ({
                     <Text>{toLabel}</Text>
                     <MiddleTruncate
                       color="textShy"
-                      text={`(${toAddress})`}
+                      text={`(${displayToAddress})`}
                       weight={500}
                       width={80}
                     />
                   </HStack>
                 ) : (
-                  <MiddleTruncate text={toAddress} weight={500} width={160} />
+                  <MiddleTruncate
+                    text={displayToAddress}
+                    weight={500}
+                    width={160}
+                  />
                 )}
               </HStack>
               <HStack justifyContent="flex-end">
-                <AddToAddressBookButton address={toAddress} chain={chain} />
+                <AddToAddressBookButton
+                  address={displayToAddress}
+                  chain={chain}
+                />
               </HStack>
             </VStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
+          {destinationTag !== undefined && (
+            <HStack justifyContent="space-between">
+              <Text color="shy" weight="500">
+                {t('ripple_field_destination_tag')}
+              </Text>
+              <Text>{destinationTag}</Text>
+            </HStack>
+          )}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('network')}
