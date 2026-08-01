@@ -29,4 +29,16 @@ describe('positiveAmountSchema', () => {
     expect(schema.safeParse('11').success).toBe(false)
     expect(schema.safeParse('9.99').success).toBe(true)
   })
+
+  it('compares the max in exact base units when chainAmountMax is provided', () => {
+    // Balance of 2^53 + 1 base units — beyond float64, where a float compare
+    // cannot tell the true balance and balance + 1 unit apart
+    const schema = positiveAmountSchema(90071992.54740992, t, undefined, {
+      units: 9007199254740993n,
+      decimals: 8,
+    })
+
+    expect(schema.safeParse('90071992.54740993').success).toBe(true)
+    expect(schema.safeParse('90071992.54740994').success).toBe(false)
+  })
 })

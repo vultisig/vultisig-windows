@@ -35,6 +35,7 @@ import { FormData } from '../../types'
 
 type UnbondFormProps = {
   balance: number
+  balanceUnits: bigint | null
   errors: FieldErrors<FormData>
   isValid: boolean
   formValues: FormData
@@ -67,6 +68,7 @@ const measureAmountTextWidth = (text: string) => {
 
 export const UnbondForm = ({
   balance,
+  balanceUnits,
   errors,
   isValid,
   formValues,
@@ -117,7 +119,7 @@ export const UnbondForm = ({
 
   const handleSliderChange = (percentage: number) => {
     const amount = getPercentageShareAmount({
-      balanceUnits: toChainAmount(balance, coin.decimals),
+      balanceUnits: balanceUnits ?? toChainAmount(balance, coin.decimals),
       percentage,
       decimals: coin.decimals,
     })

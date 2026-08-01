@@ -1,3 +1,4 @@
+import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
@@ -78,10 +79,17 @@ export const optionalNonNegativeAmountSchema = (
       .optional()
   )
 
+/** Exact balance cap in chain base units, for float-free max validation. */
+type ChainAmountMax = {
+  units: bigint
+  decimals: number
+}
+
 export const positiveAmountSchema = (
   maxValue: number,
   t: TFunction,
-  maxMessage?: string
+  maxMessage?: string,
+  chainAmountMax?: ChainAmountMax
 ) =>
   z.preprocess(
     toAmountString,
@@ -92,8 +100,26 @@ export const positiveAmountSchema = (
         return Number.isFinite(parsed) && parsed > 0
       }, t('amount_must_be_positive'))
       .refine(
-        value =>
-          Number(value) <= (maxValue > 0 ? maxValue : Number.POSITIVE_INFINITY),
+        value => {
+          // Compare in base units when the exact balance is known — a float
+          // compare can accept an amount a few base units above the true
+          // balance when both round to the same float64 (#4496)
+          if (chainAmountMax && chainAmountMax.units > 0n) {
+            try {
+              return (
+                decimalStringToBigInt(value, chainAmountMax.decimals) <=
+                chainAmountMax.units
+              )
+            } catch {
+              // more fraction digits than the coin supports — fall through to
+              // the float check, matching previous behavior for such input
+            }
+          }
+          return (
+            Number(value) <=
+            (maxValue > 0 ? maxValue : Number.POSITIVE_INFINITY)
+          )
+        },
         maxMessage ?? t('chainFunctions.amountExceeded')
       )
       .superRefine((_val, ctx) => {

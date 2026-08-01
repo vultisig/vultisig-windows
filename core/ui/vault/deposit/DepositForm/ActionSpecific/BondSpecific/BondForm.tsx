@@ -47,6 +47,7 @@ import { FormData } from '../../types'
 
 type BondFormProps = {
   balance: number
+  balanceUnits: bigint | null
   errors: FieldErrors<FormData>
   formValues: FormData
 }
@@ -76,7 +77,12 @@ const measureAmountTextWidth = (text: string) => {
   return baseWidth + spacingAdjustment
 }
 
-export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
+export const BondForm = ({
+  balance,
+  balanceUnits,
+  errors,
+  formValues,
+}: BondFormProps) => {
   const { t } = useTranslation()
   const [{ register, control, setValue }] = useDepositFormHandlers()
   const [coin] = useDepositCoin()
@@ -289,7 +295,8 @@ export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
                 >
                   {amountSuggestions.map(suggestion => {
                     const suggestedAmount = getPercentageShareAmount({
-                      balanceUnits: toChainAmount(balance, coin.decimals),
+                      balanceUnits:
+                        balanceUnits ?? toChainAmount(balance, coin.decimals),
                       percentage: suggestion * 100,
                       decimals: coin.decimals,
                     })

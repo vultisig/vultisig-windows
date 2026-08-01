@@ -4,7 +4,6 @@ import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { tcyAutoCompounderConfig } from '@vultisig/core-chain/chains/cosmos/thor/tcy-autocompound/config'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
@@ -27,10 +26,11 @@ export const UnstakeSTCY = () => {
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
 
-  const { data: { humanReadableBalance = 0 } = {} } = useUnstakableStcyQuery({
-    address,
-    options: { enabled: !!address },
-  })
+  const { data: { humanReadableBalance = 0, chainBalance = 0n } = {} } =
+    useUnstakableStcyQuery({
+      address,
+      options: { enabled: !!address },
+    })
 
   const percentageValue = useWatch({ control, name: 'percentage' })
   const amountValue = useWatch({ control, name: 'amount' })
@@ -50,7 +50,7 @@ export const UnstakeSTCY = () => {
 
       const clamped = clampPercentage(percentage)
       const amount = getPercentageShareAmount({
-        balanceUnits: toChainAmount(humanReadableBalance, decimals),
+        balanceUnits: chainBalance,
         percentage: clamped,
         decimals,
       })
@@ -60,25 +60,26 @@ export const UnstakeSTCY = () => {
         shouldValidate,
       })
     },
-    [decimals, humanReadableBalance, setValue]
+    [chainBalance, decimals, setValue]
   )
 
   useEffect(() => {
     if (numericPercentage === null) return
 
     const expectedAmount = Number(
-      (
-        (clampPercentage(numericPercentage) / 100) *
-        humanReadableBalance
-      ).toFixed(decimals)
+      getPercentageShareAmount({
+        balanceUnits: chainBalance,
+        percentage: clampPercentage(numericPercentage),
+        decimals,
+      })
     )
 
     if (numericAmount !== expectedAmount) {
       syncAmountFromPercentage(numericPercentage)
     }
   }, [
+    chainBalance,
     decimals,
-    humanReadableBalance,
     numericAmount,
     numericPercentage,
     syncAmountFromPercentage,

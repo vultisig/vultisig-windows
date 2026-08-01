@@ -72,7 +72,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   // no other way to undo an invalid keystroke without re-rendering the form.
   const lastValidNumberInputs = useRef<Record<string, string>>({})
 
-  const { balance } = useDepositBalance({
+  const { balance, balanceUnits } = useDepositBalance({
     selectedChainAction,
     tronResourceType,
   })
@@ -214,6 +214,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
               <DepositDataProvider value={formValues}>
                 <BondForm
                   balance={balance}
+                  balanceUnits={balanceUnits}
                   errors={errors}
                   formValues={formValues}
                 />
@@ -222,6 +223,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
               <DepositDataProvider value={formValues}>
                 <UnbondForm
                   balance={balance}
+                  balanceUnits={balanceUnits}
                   errors={errors}
                   isValid={isValid}
                   formValues={formValues}
@@ -236,6 +238,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
               <DepositDataProvider value={formValues}>
                 <StakeForm
                   balance={balance}
+                  balanceUnits={balanceUnits}
                   errors={errors}
                   formValues={formValues}
                   isUnstake={isUnstakeAction || isRedeemAction}

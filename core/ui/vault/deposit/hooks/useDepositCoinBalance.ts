@@ -29,16 +29,31 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
   const { data: { balances = [] } = {} } = useMergeableTokenBalancesQuery()
 
   return useMemo(() => {
-    if (!selectedCoin) return 0
+    if (!selectedCoin) return { balance: 0, balanceUnits: 0n }
 
     if (action === 'unmerge') {
-      return balances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
+      // Merge shares only exist as a float in the merge API response
+      return {
+        balance:
+          balances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0,
+        balanceUnits: null,
+      }
     }
 
     if (!vaultEntry) {
-      return fromChainAmount(yTokenRawBalance, selectedCoin.decimals)
+      return {
+        balance: fromChainAmount(yTokenRawBalance, selectedCoin.decimals),
+        balanceUnits: yTokenRawBalance,
+      }
     }
 
-    return fromChainAmount(vaultEntry.amount, vaultEntry.decimals)
+    return {
+      balance: fromChainAmount(vaultEntry.amount, vaultEntry.decimals),
+      // Units are only meaningful when they share the form coin's scale
+      balanceUnits:
+        vaultEntry.decimals === selectedCoin.decimals
+          ? BigInt(vaultEntry.amount)
+          : null,
+    }
   }, [action, balances, selectedCoin, vaultEntry, yTokenRawBalance])
 }

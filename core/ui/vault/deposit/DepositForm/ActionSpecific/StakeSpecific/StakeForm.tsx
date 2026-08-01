@@ -24,6 +24,7 @@ import { FormData } from '../../types'
 
 type StakeFormProps = {
   balance: number
+  balanceUnits: bigint | null
   errors: FieldErrors<FormData>
   formValues: FormData
   isUnstake?: boolean
@@ -54,6 +55,7 @@ const measureAmountTextWidth = (text: string) => {
 
 export const StakeForm = ({
   balance,
+  balanceUnits,
   errors,
   formValues,
   isUnstake = false,
@@ -91,7 +93,7 @@ export const StakeForm = ({
 
   const handleSliderChange = (percentage: number) => {
     const amount = getPercentageShareAmount({
-      balanceUnits: toChainAmount(balance, coin.decimals),
+      balanceUnits: balanceUnits ?? toChainAmount(balance, coin.decimals),
       percentage,
       decimals: coin.decimals,
     })
