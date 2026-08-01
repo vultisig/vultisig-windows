@@ -1617,6 +1617,24 @@ export const pt = {
     'Esta implementação pool não é suportada para desinvestimento.',
   ton_withdrawal_pending: 'Saque pendente — desbloqueia {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum:
+    'O depósito mínimo da Tonstakers é {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Faça staking a partir de 1 TON e receba tsTON líquido enquanto acumula recompensas.',
+  tonstakers_empty_title: 'Staking líquido com Tonstakers',
+  tonstakers_insufficient_balance:
+    'Saldo insuficiente após reservar TON para taxas.',
+  tonstakers_liquid_staking: 'Staking líquido Tonstakers',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Fazer staking de TON com Tonstakers',
+  tonstakers_stake_note:
+    'Mínimo de {{minimum}} TON. Cerca de 1 TON permanece no vault para taxas do pool e da rede.',
+  tonstakers_stake_title: 'Fazer staking de TON com Tonstakers',
+  tonstakers_unstake_insufficient_ton:
+    'Mantenha pelo menos 1,01 TON disponível para enviar o pedido de unstaking.',
+  tonstakers_unstake_title: 'Retirar tsTON do staking',
+  tonstakers_withdrawal_note:
+    'O TON é devolvido imediatamente quando há liquidez; caso contrário, a Tonstakers emite um NFT de saque liquidado em cerca de 18 horas.',
   broadcast_error: 'A rede rejeitou esta transação.',
   broadcast_error_description:
     'Seus dispositivos assinaram a transação, mas a rede a rejeitou. Confira o motivo na blockchain abaixo e tente novamente.',

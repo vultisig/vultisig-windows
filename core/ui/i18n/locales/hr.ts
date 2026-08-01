@@ -1592,6 +1592,24 @@ export const hr = {
     'Ova implementacija pool nije podržana za uklanjanje udjela.',
   ton_withdrawal_pending: 'Isplata na čekanju — otključava {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum:
+    'Minimalni Tonstakers polog iznosi {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Uložite od 1 TON i primite likvidni tsTON dok se nagrade povećavaju.',
+  tonstakers_empty_title: 'Likvidno ulaganje uz Tonstakers',
+  tonstakers_insufficient_balance:
+    'Nedovoljan saldo nakon rezerviranja TON-a za naknade.',
+  tonstakers_liquid_staking: 'Tonstakers likvidno ulaganje',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Uložite TON uz Tonstakers',
+  tonstakers_stake_note:
+    'Najmanje {{minimum}} TON. Oko 1 TON ostaje u vaultu za pool i mrežne naknade.',
+  tonstakers_stake_title: 'Uložite TON uz Tonstakers',
+  tonstakers_unstake_insufficient_ton:
+    'Ostavite najmanje 1,01 TON za slanje zahtjeva za povlačenje uloga.',
+  tonstakers_unstake_title: 'Povuci tsTON',
+  tonstakers_withdrawal_note:
+    'TON se vraća odmah kada ima likvidnosti; inače Tonstakers izdaje NFT za isplatu za otprilike 18 sati.',
   broadcast_error: 'Mreža je odbila ovu transakciju',
   broadcast_error_description:
     'Vaši su uređaji potpisali transakciju, ali ju je mreža odbila. Pregledajte razlog na lancu u nastavku, a zatim se ponovno prijavite za ponovni pokušaj.',

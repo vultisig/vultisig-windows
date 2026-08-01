@@ -1,7 +1,11 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { describe, expect, it } from 'vitest'
 
-import { getInitialDefiPositions, resolveDefiPositions } from './defiPositions'
+import {
+  getDefaultDefiPositionIds,
+  getInitialDefiPositions,
+  resolveDefiPositions,
+} from './defiPositions'
 
 describe('getInitialDefiPositions', () => {
   it('keeps Vultisig first-run DeFi positions empty', () => {
@@ -13,6 +17,15 @@ describe('getInitialDefiPositions', () => {
       [Chain.Terra]: ['terra-stake-luna'],
       [Chain.TerraClassic]: ['terraclassic-stake-lunc'],
     })
+  })
+})
+
+describe('getDefaultDefiPositionIds', () => {
+  it('keeps the TON nominator position and adds Tonstakers liquid staking', () => {
+    expect(getDefaultDefiPositionIds(Chain.Ton)).toEqual([
+      'ton-stake-ton',
+      'ton-liquid-stake-tston',
+    ])
   })
 })
 

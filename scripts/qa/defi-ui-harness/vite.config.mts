@@ -35,6 +35,10 @@ export default defineConfig(({ mode }) => {
         targets: getStaticCopyTargets(),
       }),
     ],
+    build: {
+      // vite-plugin-top-level-await cannot downlevel to Vite's default target.
+      target: 'esnext',
+    },
     server: {
       host: '127.0.0.1',
       port: 5177,

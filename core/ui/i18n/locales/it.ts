@@ -1622,6 +1622,23 @@ export const it = {
     'Questa implementazione pool non è supportata per lo sblocco in staking.',
   ton_withdrawal_pending: 'Prelievo in sospeso — sblocca {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum: 'Il deposito minimo Tonstakers è {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Metti in staking almeno 1 TON e ricevi tsTON liquidi mentre maturano i premi.',
+  tonstakers_empty_title: 'Liquid staking con Tonstakers',
+  tonstakers_insufficient_balance:
+    'Saldo insufficiente dopo aver riservato TON per le commissioni.',
+  tonstakers_liquid_staking: 'Liquid staking Tonstakers',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Metti TON in staking con Tonstakers',
+  tonstakers_stake_note:
+    'Minimo {{minimum}} TON. Circa 1 TON resta nel vault per le commissioni del pool e di rete.',
+  tonstakers_stake_title: 'Metti TON in staking con Tonstakers',
+  tonstakers_unstake_insufficient_ton:
+    'Mantieni almeno 1,01 TON disponibili per inviare la richiesta di unstaking.',
+  tonstakers_unstake_title: 'Rimuovi tsTON dallo staking',
+  tonstakers_withdrawal_note:
+    'I TON vengono restituiti subito se è disponibile liquidità; altrimenti Tonstakers emette un NFT di prelievo regolato in circa 18 ore.',
   broadcast_error: 'La rete ha rifiutato questa transazione',
   broadcast_error_description:
     'I tuoi dispositivi hanno firmato la transazione, ma la rete l&#39;ha rifiutata. Esamina il motivo registrato sulla blockchain riportato di seguito, quindi firma nuovamente per riprovare.',

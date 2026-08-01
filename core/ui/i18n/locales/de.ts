@@ -1631,6 +1631,23 @@ export const de = {
     'Diese pool -Implementierung wird für das Unstaking nicht unterstützt.',
   ton_withdrawal_pending: 'Auszahlung ausstehend — schaltet {{date}} frei',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum: 'Die Mindesteinzahlung beträgt {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Staken Sie ab 1 TON und erhalten Sie liquide tsTON, während Ihre Prämien wachsen.',
+  tonstakers_empty_title: 'Liquid Staking mit Tonstakers',
+  tonstakers_insufficient_balance:
+    'Unzureichendes Guthaben nach Rückstellung der TON-Gebühren.',
+  tonstakers_liquid_staking: 'Tonstakers Liquid Staking',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'TON mit Tonstakers staken',
+  tonstakers_stake_note:
+    'Mindestens {{minimum}} TON. Etwa 1 TON verbleibt für Pool- und Netzwerkgebühren im Vault.',
+  tonstakers_stake_title: 'TON mit Tonstakers staken',
+  tonstakers_unstake_insufficient_ton:
+    'Halten Sie mindestens 1,01 TON für die Unstaking-Anfrage bereit.',
+  tonstakers_unstake_title: 'tsTON unstaken',
+  tonstakers_withdrawal_note:
+    'Bei ausreichender Liquidität wird TON sofort zurückgegeben; andernfalls stellt Tonstakers ein Auszahlungs-NFT für die Abwicklung in etwa 18 Stunden aus.',
   broadcast_error: 'Das Netzwerk hat diese Transaktion abgelehnt.',
   broadcast_error_description:
     'Ihre Geräte haben die Transaktion signiert, aber das Netzwerk hat sie abgelehnt. Überprüfen Sie den unten stehenden Grund in der Blockchain und signieren Sie die Transaktion erneut, um es noch einmal zu versuchen.',

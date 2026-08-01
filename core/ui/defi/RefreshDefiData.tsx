@@ -30,67 +30,62 @@ import {
 
 type DefiRefreshConfig = {
   priceCoins: Coin[]
-  getPositionsQueryKey: (address: string) => QueryKey
+  getPositionsQueryKeys: (address: string) => QueryKey[]
   poolQueryKeys: QueryKey[]
 }
 
 const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
   [Chain.THORChain]: {
     priceCoins: thorchainDefiCoins,
-    getPositionsQueryKey: address => [
-      'defi',
-      'thorchain',
-      'positions',
-      address,
+    getPositionsQueryKeys: address => [
+      ['defi', 'thorchain', 'positions', address],
     ],
     poolQueryKeys: [['defi', Chain.THORChain, 'lp', 'pools']],
   },
   [Chain.MayaChain]: {
     priceCoins: mayaDefiCoins,
-    getPositionsQueryKey: address => [
-      'defi',
-      'mayachain',
-      'positions',
-      address,
+    getPositionsQueryKeys: address => [
+      ['defi', 'mayachain', 'positions', address],
     ],
     poolQueryKeys: [['defi', Chain.MayaChain, 'lp', 'pools']],
   },
   [Chain.Tron]: {
     priceCoins: tronDefiCoins,
-    getPositionsQueryKey: address => ['tronAccountResources', address],
+    getPositionsQueryKeys: address => [['tronAccountResources', address]],
     poolQueryKeys: [],
   },
   [Chain.Terra]: {
     priceCoins: [],
-    getPositionsQueryKey: address => [
-      'cosmosDelegations',
-      Chain.Terra,
-      address,
+    getPositionsQueryKeys: address => [
+      ['cosmosDelegations', Chain.Terra, address],
     ],
     poolQueryKeys: [],
   },
   [Chain.TerraClassic]: {
     priceCoins: [],
-    getPositionsQueryKey: address => [
-      'cosmosDelegations',
-      Chain.TerraClassic,
-      address,
+    getPositionsQueryKeys: address => [
+      ['cosmosDelegations', Chain.TerraClassic, address],
     ],
     poolQueryKeys: [],
   },
   [Chain.QBTC]: {
     priceCoins: [],
-    getPositionsQueryKey: address => ['cosmosDelegations', Chain.QBTC, address],
+    getPositionsQueryKeys: address => [
+      ['cosmosDelegations', Chain.QBTC, address],
+    ],
     poolQueryKeys: [],
   },
   [Chain.Ton]: {
     priceCoins: [{ ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }],
-    getPositionsQueryKey: address => ['tonStakePosition', address],
-    poolQueryKeys: [['tonStakingPools']],
+    getPositionsQueryKeys: address => [
+      ['tonStakePosition', address],
+      ['tonstakersPosition', address],
+    ],
+    poolQueryKeys: [['tonStakingPools'], ['tonstakersProtocolInfo']],
   },
   [Chain.Solana]: {
     priceCoins: [{ ...chainFeeCoin[Chain.Solana], chain: Chain.Solana }],
-    getPositionsQueryKey: address => ['solanaStakeAccounts', address],
+    getPositionsQueryKeys: address => [['solanaStakeAccounts', address]],
     poolQueryKeys: [['solanaValidators']],
   },
 }
@@ -124,7 +119,7 @@ export const RefreshDefiData = () => {
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {
-        const { priceCoins, getPositionsQueryKey, poolQueryKeys } =
+        const { priceCoins, getPositionsQueryKeys, poolQueryKeys } =
           defiRefreshConfig[chain]
 
         return [
@@ -132,7 +127,7 @@ export const RefreshDefiData = () => {
             coins: priceCoins,
             fiatCurrency,
           }),
-          getPositionsQueryKey(addresses[chain]),
+          ...getPositionsQueryKeys(addresses[chain]),
           ...poolQueryKeys,
         ]
       }) as QueryKey[]

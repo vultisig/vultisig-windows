@@ -1386,6 +1386,24 @@ export const en = {
   ton_unstake_unsupported_pool:
     'This pool implementation is not supported for unstaking.',
   ton_withdrawal_pending: 'Withdrawal pending — unlocks {{date}}',
+  tonstakers_below_minimum:
+    'The minimum Tonstakers deposit is {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Stake from 1 TON and receive liquid tsTON while your rewards accrue.',
+  tonstakers_empty_title: 'Liquid staking with Tonstakers',
+  tonstakers_insufficient_balance:
+    'Insufficient balance after reserving TON for fees.',
+  tonstakers_liquid_staking: 'Tonstakers liquid staking',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Stake TON with Tonstakers',
+  tonstakers_stake_note:
+    'Minimum {{minimum}} TON. About 1 TON remains in your vault for pool and network fees.',
+  tonstakers_stake_title: 'Stake TON with Tonstakers',
+  tonstakers_unstake_insufficient_ton:
+    'Keep at least 1.01 TON available to submit the unstake request.',
+  tonstakers_unstake_title: 'Unstake tsTON',
+  tonstakers_withdrawal_note:
+    'TON is returned instantly when liquidity is available; otherwise Tonstakers issues a withdrawal NFT for settlement in about 18 hours.',
   value: 'Value',
   vault: 'Vault',
   vaultCheckUpdatePage: {

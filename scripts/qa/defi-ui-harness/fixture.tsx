@@ -1,7 +1,14 @@
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
+import { getTonstakersPositionQueryKey } from '@core/ui/chain/ton/tonstakers/queries/useTonstakersPositionQuery'
+import { getTonstakersProtocolInfoQueryKey } from '@core/ui/chain/ton/tonstakers/queries/useTonstakersProtocolInfoQuery'
+import {
+  TonstakersPosition,
+  TonstakersProtocolInfo,
+} from '@core/ui/chain/ton/tonstakers/service'
 import { getCircleAccountQueryKey } from '@core/ui/defi/protocols/circle/queries/circleAccount'
+import { CoreView } from '@core/ui/navigation/CoreView'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { CurrentVaultIdProvider } from '@core/ui/storage/currentVaultId'
 import { SolanaMoveStakeDestinations } from '@core/ui/storage/solanaMoveStakeDestinations'
@@ -66,6 +73,7 @@ type SeedCoinPricesInput = {
 type DefiQaProvidersProps = ChildrenProp & {
   queryClient: QueryClient
   vault: QaVault
+  initialView?: CoreView
 }
 
 const noop = async () => {}
@@ -141,6 +149,7 @@ export const seedStoredSettings = ({
   queryClient.setQueryData([StorageKey.fiatCurrency], fiatCurrency)
   queryClient.setQueryData([StorageKey.language], language)
   queryClient.setQueryData([StorageKey.isBalanceVisible], isBalanceVisible)
+  queryClient.setQueryData([StorageKey.isBlockaidEnabled], false)
 }
 
 /**
@@ -206,6 +215,31 @@ export const seedCoinPrices = ({
     }),
     data
   )
+}
+
+export const seedTonstakersPosition = ({
+  queryClient,
+  ownerAddress,
+  position,
+}: {
+  queryClient: QueryClient
+  ownerAddress: string
+  position: TonstakersPosition | null
+}) => {
+  queryClient.setQueryData(
+    getTonstakersPositionQueryKey(ownerAddress),
+    position
+  )
+}
+
+export const seedTonstakersProtocolInfo = ({
+  queryClient,
+  protocol,
+}: {
+  queryClient: QueryClient
+  protocol: TonstakersProtocolInfo
+}) => {
+  queryClient.setQueryData(getTonstakersProtocolInfoQueryKey(), protocol)
 }
 
 let qaSolanaMoveStakeDestinations: SolanaMoveStakeDestinations = {}
@@ -308,6 +342,7 @@ export const DefiQaProviders = ({
   queryClient,
   vault,
   children,
+  initialView = { id: 'defi', state: { protocol: 'circle' } },
 }: DefiQaProvidersProps) => {
   const vaultId = getVaultId(vault)
 
@@ -322,7 +357,7 @@ export const DefiQaProviders = ({
                 <CurrentVaultProvider value={vault}>
                   <NavigationProvider
                     initialValue={{
-                      history: [{ id: 'defi', state: { protocol: 'circle' } }],
+                      history: [initialView],
                     }}
                   >
                     {children}

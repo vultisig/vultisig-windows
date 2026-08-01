@@ -1492,6 +1492,22 @@ export const zh = {
   ton_unstake_unsupported_pool: '此pool实现不支持取消质押。',
   ton_withdrawal_pending: '提现待处理——解锁{{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum: 'Tonstakers 最低存入 {{minimum}} TON。',
+  tonstakers_empty_description:
+    '从 1 TON 起参与质押，在奖励累积期间获得流动性 tsTON。',
+  tonstakers_empty_title: 'Tonstakers 流动性质押',
+  tonstakers_insufficient_balance: '预留 TON 手续费后余额不足。',
+  tonstakers_liquid_staking: 'Tonstakers 流动性质押',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: '使用 Tonstakers 质押 TON',
+  tonstakers_stake_note:
+    '最低 {{minimum}} TON。vault 中会保留约 1 TON 用于 pool 和网络手续费。',
+  tonstakers_stake_title: '使用 Tonstakers 质押 TON',
+  tonstakers_unstake_insufficient_ton:
+    '请至少保留 1.01 TON 以提交解除质押请求。',
+  tonstakers_unstake_title: '解除 tsTON 质押',
+  tonstakers_withdrawal_note:
+    '流动性充足时会立即返还 TON；否则 Tonstakers 会发行提款 NFT，约 18 小时后结算。',
   broadcast_error: '网络拒绝了这笔交易',
   broadcast_error_description:
     '您的设备已签署交易，但网络拒绝了该交易。请查看下方链上原因，然后重新签署以重试。',

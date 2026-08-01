@@ -15,6 +15,13 @@ states:
    deposit action.
 2. Withdraw path: click **Withdraw** and capture the withdraw form.
 
+Tonstakers scenarios are available through the `scenario` query parameter:
+
+- `tonstakers-position` renders a funded tsTON position with rate and APY.
+- `tonstakers-empty` renders the liquid-staking empty state.
+- `tonstakers-stake` renders the TON deposit amount form.
+- `tonstakers-unstake` renders the tsTON withdrawal amount form.
+
 The fixture helpers in `fixture.tsx` seed React Query through production query
 key helpers:
 

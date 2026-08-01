@@ -6,6 +6,7 @@ import { AgentPage } from '@core/ui/agent/components/AgentPage'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { TonStakePage } from '@core/ui/chain/ton/staking/TonStakePage'
+import { TonstakersPage } from '@core/ui/chain/ton/tonstakers/TonstakersPage'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
@@ -84,6 +85,7 @@ export type SharedViewId = Extract<
   | 'manageDefiChains'
   | 'manageDefiPositions'
   | 'tonStake'
+  | 'tonstakers'
   | 'lpPositionForm'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
@@ -157,6 +159,7 @@ export const sharedViews: Views<SharedViewId> = {
   manageDefiChains: ManageDefiChainsPage,
   manageDefiPositions: ManageDefiPositionsPage,
   tonStake: TonStakePage,
+  tonstakers: TonstakersPage,
   lpPositionForm: LpPositionFormPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,

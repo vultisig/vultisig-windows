@@ -1,4 +1,9 @@
 import { TonStakingView } from '@core/ui/chain/ton/staking/components/TonStakingView'
+import { TonstakersView } from '@core/ui/chain/ton/tonstakers/components/TonstakersView'
+import {
+  tonNominatorPositionId,
+  tonstakersPositionId,
+} from '@core/ui/chain/ton/tonstakers/core'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useRemoveFromCoinFinderIgnoreMutation } from '@core/ui/storage/coinFinderIgnore'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
@@ -83,7 +88,16 @@ export const StakedPositions = () => {
     if (selectedPositions.length === 0) {
       return <DefiPositionEmptyState returnTab="staked" />
     }
-    return <TonStakingView />
+    return (
+      <VStack gap={12} style={{ marginBottom: 100 }}>
+        {selectedPositions.includes(tonNominatorPositionId) ? (
+          <TonStakingView />
+        ) : null}
+        {selectedPositions.includes(tonstakersPositionId) ? (
+          <TonstakersView />
+        ) : null}
+      </VStack>
+    )
   }
 
   if (chain === Chain.Solana) {

@@ -1613,6 +1613,23 @@ export const es = {
     'Esta implementación pool no es compatible con el retiro de staking.',
   ton_withdrawal_pending: 'Retiro pendiente: desbloquea {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum: 'El depósito mínimo es de {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Haz staking desde 1 TON y recibe tsTON líquido mientras acumulas recompensas.',
+  tonstakers_empty_title: 'Staking líquido con Tonstakers',
+  tonstakers_insufficient_balance:
+    'Saldo insuficiente después de reservar TON para comisiones.',
+  tonstakers_liquid_staking: 'Staking líquido de Tonstakers',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Hacer staking de TON con Tonstakers',
+  tonstakers_stake_note:
+    'Mínimo {{minimum}} TON. Aproximadamente 1 TON permanece en tu vault para comisiones del pool y de red.',
+  tonstakers_stake_title: 'Hacer staking de TON con Tonstakers',
+  tonstakers_unstake_insufficient_ton:
+    'Mantén al menos 1,01 TON disponible para solicitar el unstaking.',
+  tonstakers_unstake_title: 'Retirar tsTON del staking',
+  tonstakers_withdrawal_note:
+    'TON se devuelve al instante cuando hay liquidez; de lo contrario, Tonstakers emite un NFT de retiro que se liquida en unas 18 horas.',
   broadcast_error: 'La red rechazó esta transacción.',
   broadcast_error_description:
     'Tus dispositivos firmaron la transacción, pero la red la rechazó. Revisa el motivo en la cadena de bloques a continuación y vuelve a firmar para intentarlo de nuevo.',

@@ -1585,6 +1585,22 @@ export const ko = {
     '이 pool 구현은 언스테이킹을 지원하지 않습니다.',
   ton_withdrawal_pending: '출금 대기 중 — {{date}} 잠금 해제',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum: 'Tonstakers 최소 예치액은 {{minimum}} TON입니다.',
+  tonstakers_empty_description:
+    '1 TON부터 스테이킹하고 보상이 누적되는 동안 유동성 tsTON을 받으세요.',
+  tonstakers_empty_title: 'Tonstakers 유동성 스테이킹',
+  tonstakers_insufficient_balance: '수수료용 TON을 남기면 잔액이 부족합니다.',
+  tonstakers_liquid_staking: 'Tonstakers 유동성 스테이킹',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Tonstakers에 TON 스테이킹',
+  tonstakers_stake_note:
+    '최소 {{minimum}} TON. pool 및 네트워크 수수료로 약 1 TON을 vault에 남깁니다.',
+  tonstakers_stake_title: 'Tonstakers에 TON 스테이킹',
+  tonstakers_unstake_insufficient_ton:
+    '언스테이킹 요청을 보내려면 최소 1.01 TON을 남겨 두세요.',
+  tonstakers_unstake_title: 'tsTON 언스테이킹',
+  tonstakers_withdrawal_note:
+    '유동성이 있으면 TON이 즉시 반환됩니다. 그렇지 않으면 약 18시간 후 정산되는 출금 NFT가 발행됩니다.',
   broadcast_error: '네트워크에서 이 거래를 거부했습니다.',
   broadcast_error_description:
     '귀하의 기기에서 거래에 서명했지만 네트워크에서 거부되었습니다. 아래의 온체인 거부 사유를 확인하신 후 다시 서명하여 시도해 주세요.',

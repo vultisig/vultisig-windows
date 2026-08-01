@@ -137,6 +137,10 @@ export type CoreView =
       }
     }
   | {
+      id: 'tonstakers'
+      state: { action: 'stake' | 'unstake' }
+    }
+  | {
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }

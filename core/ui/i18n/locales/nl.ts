@@ -1598,6 +1598,23 @@ export const nl = {
     'Deze pool implementatie wordt niet ondersteund voor het ontstaken van de token.',
   ton_withdrawal_pending: 'Opname in behandeling — ontgrendelt {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum: 'De minimale Tonstakers-inleg is {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Stake vanaf 1 TON en ontvang liquide tsTON terwijl je beloningen oplopen.',
+  tonstakers_empty_title: 'Liquid staking met Tonstakers',
+  tonstakers_insufficient_balance:
+    'Onvoldoende saldo nadat TON voor kosten is gereserveerd.',
+  tonstakers_liquid_staking: 'Tonstakers liquid staking',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Stake TON met Tonstakers',
+  tonstakers_stake_note:
+    'Minimaal {{minimum}} TON. Ongeveer 1 TON blijft in je vault voor pool- en netwerkkosten.',
+  tonstakers_stake_title: 'Stake TON met Tonstakers',
+  tonstakers_unstake_insufficient_ton:
+    'Houd minimaal 1,01 TON beschikbaar om de unstake-aanvraag te versturen.',
+  tonstakers_unstake_title: 'tsTON unstaken',
+  tonstakers_withdrawal_note:
+    'TON wordt direct teruggestuurd als er liquiditeit is; anders geeft Tonstakers een opname-NFT uit die binnen ongeveer 18 uur wordt afgewikkeld.',
   broadcast_error: 'Het netwerk heeft deze transactie geweigerd.',
   broadcast_error_description:
     'Uw apparaten hebben de transactie ondertekend, maar het netwerk heeft deze afgewezen. Bekijk de on-chain reden hieronder en onderteken de transactie opnieuw om het nogmaals te proberen.',

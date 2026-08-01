@@ -1,5 +1,12 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
+import {
+  tonNominatorPositionId,
+  tonstakersPositionId,
+  tonstakersReceiptCoin,
+} from '@core/ui/chain/ton/tonstakers/core'
+import { useTonstakersPositionQuery } from '@core/ui/chain/ton/tonstakers/queries/useTonstakersPositionQuery'
+import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Image } from '@lib/ui/image/Image'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -47,7 +54,13 @@ const TonLogoWrapper = styled.div`
  */
 export const DefiTonBalanceBanner = () => {
   const tonAddress = useCurrentVaultAddress(Chain.Ton)
-  const positionQuery = useTonStakePositionQuery(tonAddress)
+  const selectedPositions = useDefiPositions(Chain.Ton)
+  const nominatorPositionQuery = useTonStakePositionQuery(
+    selectedPositions.includes(tonNominatorPositionId) ? tonAddress : undefined
+  )
+  const tonstakersPositionQuery = useTonstakersPositionQuery(
+    selectedPositions.includes(tonstakersPositionId) ? tonAddress : undefined
+  )
   const priceCoin = { ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }
   const priceQuery = useCoinPricesQuery({ coins: [priceCoin] })
   const price = priceQuery.data?.[coinKeyToString({ chain: Chain.Ton })]
@@ -56,17 +69,34 @@ export const DefiTonBalanceBanner = () => {
   // the spinner on the address being present — otherwise the banner would spin
   // indefinitely when TON isn't derived.
   const isLoading =
-    !!tonAddress && (positionQuery.isPending || priceQuery.isPending)
+    !!tonAddress &&
+    ((selectedPositions.includes(tonNominatorPositionId) &&
+      nominatorPositionQuery.isPending) ||
+      (selectedPositions.includes(tonstakersPositionId) &&
+        tonstakersPositionQuery.isPending) ||
+      (selectedPositions.length > 0 && priceQuery.isPending))
 
-  const stakedUi = positionQuery.data
-    ? Number(
-        fromChainAmount(
-          positionQuery.data.stakedAmount,
-          chainFeeCoin[Chain.Ton].decimals
+  const nominatorTon =
+    selectedPositions.includes(tonNominatorPositionId) &&
+    nominatorPositionQuery.data
+      ? Number(
+          fromChainAmount(
+            nominatorPositionQuery.data.stakedAmount,
+            chainFeeCoin[Chain.Ton].decimals
+          )
         )
-      )
-    : 0
-  const totalFiat = price !== undefined ? stakedUi * price : 0
+      : 0
+  const liquidTon =
+    selectedPositions.includes(tonstakersPositionId) &&
+    tonstakersPositionQuery.data
+      ? Number(
+          fromChainAmount(
+            tonstakersPositionQuery.data.jettonBalance,
+            tonstakersReceiptCoin.decimals
+          )
+        ) * tonstakersPositionQuery.data.tonPerTsTon
+      : 0
+  const totalFiat = price !== undefined ? (nominatorTon + liquidTon) * price : 0
 
   return (
     <TonBannerContainer>

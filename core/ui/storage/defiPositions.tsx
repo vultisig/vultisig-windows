@@ -17,6 +17,11 @@ import { findByTicker } from '@vultisig/core-chain/coin/utils/findByTicker'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useMemo } from 'react'
 
+import {
+  tonNominatorPositionId,
+  tonstakersPositionId,
+  tonstakersReceiptCoin,
+} from '../chain/ton/tonstakers/core'
 import { currentProductBrand, ProductBrand } from '../product/brand'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
@@ -134,11 +139,19 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
   ],
   [Chain.Ton]: [
     {
-      id: 'ton-stake-ton',
+      id: tonNominatorPositionId,
       name: 'GRAM',
       ticker: 'GRAM',
       type: 'stake',
       chain: Chain.Ton,
+    },
+    {
+      id: tonstakersPositionId,
+      name: 'Tonstakers',
+      ticker: tonstakersReceiptCoin.ticker,
+      type: 'stake',
+      chain: Chain.Ton,
+      coin: tonstakersReceiptCoin,
     },
   ],
   [Chain.Solana]: [

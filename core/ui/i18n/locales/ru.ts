@@ -1598,6 +1598,23 @@ export const ru = {
     'Данная реализация pool не поддерживается для вывода средств из стейкинга.',
   ton_withdrawal_pending: 'Ожидается вывод средств — разблокирует {{date}}',
   ton_stake_pool_picker_header: 'Pool',
+  tonstakers_below_minimum: 'Минимальный депозит Tonstakers — {{minimum}} TON.',
+  tonstakers_empty_description:
+    'Внесите от 1 TON и получите ликвидные tsTON, пока начисляются награды.',
+  tonstakers_empty_title: 'Ликвидный стейкинг с Tonstakers',
+  tonstakers_insufficient_balance:
+    'Недостаточно средств после резервирования TON на комиссии.',
+  tonstakers_liquid_staking: 'Ликвидный стейкинг Tonstakers',
+  tonstakers_position_rate: '1 tsTON = {{rate}} TON',
+  tonstakers_stake_cta: 'Внести TON в Tonstakers',
+  tonstakers_stake_note:
+    'Минимум {{minimum}} TON. Около 1 TON останется в vault для комиссий pool и сети.',
+  tonstakers_stake_title: 'Внести TON в Tonstakers',
+  tonstakers_unstake_insufficient_ton:
+    'Оставьте не менее 1,01 TON для отправки запроса на вывод.',
+  tonstakers_unstake_title: 'Вывести tsTON из стейкинга',
+  tonstakers_withdrawal_note:
+    'При наличии ликвидности TON возвращается сразу; иначе Tonstakers выпускает NFT на вывод со сроком расчёта около 18 часов.',
   broadcast_error: 'Сеть отклонила эту транзакцию.',
   broadcast_error_description:
     'Ваши устройства подписали транзакцию, но сеть её отклонила. Ознакомьтесь с причиной отклонения в блокчейне ниже, затем подпишите транзакцию ещё раз, чтобы повторить попытку.',

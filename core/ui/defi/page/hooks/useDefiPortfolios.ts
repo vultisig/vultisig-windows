@@ -3,6 +3,12 @@ import { cosmosStakedFiat } from '@core/ui/chain/cosmos/staking/cosmosStakedFiat
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useSolanaStakeAccountsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaStakeAccountsQuery'
 import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
+import {
+  tonNominatorPositionId,
+  tonstakersPositionId,
+  tonstakersReceiptCoin,
+} from '@core/ui/chain/ton/tonstakers/core'
+import { useTonstakersPositionQuery } from '@core/ui/chain/ton/tonstakers/queries/useTonstakersPositionQuery'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
@@ -80,7 +86,14 @@ export const useDefiChainPortfolios = () => {
   // the DeFi total. Opt-in like the other chains: the rollup below is gated on
   // `tonSelectedPositions` so a disabled position contributes nothing.
   const tonAddress = useCurrentVaultAddress(Chain.Ton)
-  const tonStakePositionQuery = useTonStakePositionQuery(tonAddress)
+  const tonStakePositionQuery = useTonStakePositionQuery(
+    tonSelectedPositions.includes(tonNominatorPositionId)
+      ? tonAddress
+      : undefined
+  )
+  const tonstakersPositionQuery = useTonstakersPositionQuery(
+    tonSelectedPositions.includes(tonstakersPositionId) ? tonAddress : undefined
+  )
   const tonPricesQuery = useCoinPricesQuery({
     coins: [{ ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }],
   })
@@ -206,27 +219,46 @@ export const useDefiChainPortfolios = () => {
     }
 
     if (enabledChains.includes(Chain.Ton)) {
-      // Respect the position opt-in: a disabled `ton-stake-ton` hides the
-      // balance and count, matching the "No positions selected" empty state.
-      const isSelected = tonSelectedPositions.length > 0
-      const position = isSelected ? tonStakePositionQuery.data : undefined
+      const isNominatorSelected = tonSelectedPositions.includes(
+        tonNominatorPositionId
+      )
+      const isTonstakersSelected =
+        tonSelectedPositions.includes(tonstakersPositionId)
+      const nominatorPosition = isNominatorSelected
+        ? tonStakePositionQuery.data
+        : undefined
+      const tonstakersPosition = isTonstakersSelected
+        ? tonstakersPositionQuery.data
+        : undefined
       const price = tonPricesQuery.data?.[coinKeyToString({ chain: Chain.Ton })]
-      const stakedUi = position
+      const nominatorTon = nominatorPosition
         ? Number(
             fromChainAmount(
-              position.stakedAmount,
+              nominatorPosition.stakedAmount,
               chainFeeCoin[Chain.Ton].decimals
             )
           )
         : 0
+      const liquidTon = tonstakersPosition
+        ? Number(
+            fromChainAmount(
+              tonstakersPosition.jettonBalance,
+              tonstakersReceiptCoin.decimals
+            )
+          ) * tonstakersPosition.tonPerTsTon
+        : 0
+      const positionsWithBalanceCount =
+        (nominatorPosition ? 1 : 0) + (tonstakersPosition ? 1 : 0)
 
       portfolios.push({
         chain: Chain.Ton,
-        totalFiat: price !== undefined ? stakedUi * price : 0,
-        positionsWithBalanceCount: position ? 1 : 0,
+        totalFiat: price !== undefined ? (nominatorTon + liquidTon) * price : 0,
+        positionsWithBalanceCount,
         isLoading:
-          isSelected &&
-          (tonStakePositionQuery.isPending || tonPricesQuery.isPending),
+          (isNominatorSelected && tonStakePositionQuery.isPending) ||
+          (isTonstakersSelected && tonstakersPositionQuery.isPending) ||
+          ((isNominatorSelected || isTonstakersSelected) &&
+            tonPricesQuery.isPending),
       })
     }
 
@@ -281,6 +313,8 @@ export const useDefiChainPortfolios = () => {
     tonSelectedPositions,
     tonStakePositionQuery.data,
     tonStakePositionQuery.isPending,
+    tonstakersPositionQuery.data,
+    tonstakersPositionQuery.isPending,
     tonPricesQuery.data,
     tonPricesQuery.isPending,
     solanaStakeAccountsQuery.data,
@@ -302,8 +336,11 @@ export const useDefiChainPortfolios = () => {
     (enabledChains.includes(Chain.QBTC) &&
       (qbtcDelegationsQuery.isPending || qbtcPricesQuery.isPending)) ||
     (enabledChains.includes(Chain.Ton) &&
-      tonSelectedPositions.length > 0 &&
-      (tonStakePositionQuery.isPending || tonPricesQuery.isPending)) ||
+      ((tonSelectedPositions.includes(tonNominatorPositionId) &&
+        tonStakePositionQuery.isPending) ||
+        (tonSelectedPositions.includes(tonstakersPositionId) &&
+          tonstakersPositionQuery.isPending) ||
+        (tonSelectedPositions.length > 0 && tonPricesQuery.isPending))) ||
     (enabledChains.includes(Chain.Solana) &&
       (solanaStakeAccountsQuery.isPending || solanaPricesQuery.isPending))
 
@@ -314,6 +351,15 @@ export const useDefiChainPortfolios = () => {
     mayaQuery.error ??
     (isTronEnabled
       ? (tronResourcesQuery.error ?? tronPricesQuery.errors[0])
+      : null) ??
+    (enabledChains.includes(Chain.Ton) && tonSelectedPositions.length > 0
+      ? ((tonSelectedPositions.includes(tonNominatorPositionId)
+          ? tonStakePositionQuery.error
+          : null) ??
+        (tonSelectedPositions.includes(tonstakersPositionId)
+          ? tonstakersPositionQuery.error
+          : null) ??
+        tonPricesQuery.errors[0])
       : null) ??
     null
 
