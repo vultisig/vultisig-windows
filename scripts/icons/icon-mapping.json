@@ -255,6 +255,24 @@
       "source": "ios"
     },
     {
+      "desktop": "ArrowUpRightIcon",
+      "v3": "arrow-to-corner-top-right",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PasteIcon",
+      "v3": "copies-3-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ClipboardCopyIcon",
+      "v3": "copies-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
       "desktop": "AgentIcon",
       "v3": null,
       "status": "bespoke",
