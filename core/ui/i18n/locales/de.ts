@@ -1722,6 +1722,10 @@ export const de = {
   ripple_field_type: 'Typ',
   ripple_field_destination: 'Ziel',
   ripple_field_destination_tag: 'Ziel-Tag',
+  ripple_destination_tag_invalid:
+    'Gib eine ganze Zahl zwischen 0 und 4.294.967.295 ein.',
+  ripple_destination_tag_optional: 'Optionaler Ziel-Tag',
+  ripple_destination_tag_required: 'Dieses XRP-Konto erfordert einen Ziel-Tag.',
   ripple_field_amount: 'Menge',
   ripple_field_send_max: 'Zahlen Sie höchstens',
   ripple_field_deliver_min: 'Erhalten Sie mindestens',

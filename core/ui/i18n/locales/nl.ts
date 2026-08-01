@@ -1691,6 +1691,11 @@ export const nl = {
   ripple_field_type: 'Type',
   ripple_field_destination: 'Bestemming',
   ripple_field_destination_tag: 'Bestemmingslabel',
+  ripple_destination_tag_invalid:
+    'Voer een geheel getal tussen 0 en 4.294.967.295 in.',
+  ripple_destination_tag_optional: 'Optioneel bestemmingslabel',
+  ripple_destination_tag_required:
+    'Voor deze XRP-rekening is een bestemmingslabel vereist.',
   ripple_field_amount: 'Hoeveelheid',
   ripple_field_send_max: 'Betaal maximaal',
   ripple_field_deliver_min: 'Ontvang ten minste',

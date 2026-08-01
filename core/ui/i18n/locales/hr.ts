@@ -1683,6 +1683,10 @@ export const hr = {
   ripple_field_type: 'Tip',
   ripple_field_destination: 'Odredište',
   ripple_field_destination_tag: 'Oznaka odredišta',
+  ripple_destination_tag_invalid:
+    'Unesite cijeli broj između 0 i 4.294.967.295.',
+  ripple_destination_tag_optional: 'Neobavezna oznaka odredišta',
+  ripple_destination_tag_required: 'Ovaj XRP račun zahtijeva oznaku odredišta.',
   ripple_field_amount: 'Iznositi',
   ripple_field_send_max: 'Plati najviše',
   ripple_field_deliver_min: 'Primite barem',

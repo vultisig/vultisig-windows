@@ -1674,6 +1674,10 @@ export const ko = {
   ripple_field_type: '유형',
   ripple_field_destination: '목적지',
   ripple_field_destination_tag: '목적지 태그',
+  ripple_destination_tag_invalid:
+    '0에서 4,294,967,295 사이의 정수를 입력하세요.',
+  ripple_destination_tag_optional: '선택적 목적지 태그',
+  ripple_destination_tag_required: '이 XRP 계정에는 목적지 태그가 필요합니다.',
   ripple_field_amount: '양',
   ripple_field_send_max: '최대 지불',
   ripple_field_deliver_min: '최소한 받으세요',

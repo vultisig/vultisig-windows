@@ -1,6 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTxHash } from '@core/ui/chain/state/txHash'
+import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
@@ -47,7 +48,8 @@ export const KeysignTxOverview = ({
     useKeysignMessagePayload(),
     'keysign'
   )
-  const { toAddress, memo, toAmount, coin: potentialCoin } = keysignPayload
+  const { toAddress, toAmount, coin: potentialCoin } = keysignPayload
+  const { destinationTag, memo } = getRippleKeysignDisplay(keysignPayload)
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const { address, chain } = shouldBePresent(coin)
 
@@ -187,6 +189,14 @@ export const KeysignTxOverview = ({
             </VStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
+          {destinationTag !== undefined && (
+            <HStack justifyContent="space-between">
+              <Text color="shy" weight="500">
+                {t('ripple_field_destination_tag')}
+              </Text>
+              <Text>{destinationTag}</Text>
+            </HStack>
+          )}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('network')}

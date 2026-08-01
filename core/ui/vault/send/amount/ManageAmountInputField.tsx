@@ -8,6 +8,7 @@ import { FiatSendAmountInput } from '@core/ui/vault/send/amount/FiatSendAmountIn
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
@@ -239,6 +240,7 @@ export const ManageAmountInputField = () => {
         </HStack>
       </VStack>
       <ManageMemo />
+      <ManageDestinationTag />
     </SendInputContainer>
   )
 }

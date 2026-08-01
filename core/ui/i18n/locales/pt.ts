@@ -1709,6 +1709,11 @@ export const pt = {
   ripple_field_type: 'Tipo',
   ripple_field_destination: 'Destino',
   ripple_field_destination_tag: 'Etiqueta de destino',
+  ripple_destination_tag_invalid:
+    'Insira um número inteiro entre 0 e 4.294.967.295.',
+  ripple_destination_tag_optional: 'Etiqueta de destino opcional',
+  ripple_destination_tag_required:
+    'Esta conta XRP requer uma etiqueta de destino.',
   ripple_field_amount: 'Quantia',
   ripple_field_send_max: 'Pague no máximo',
   ripple_field_deliver_min: 'Receba pelo menos',

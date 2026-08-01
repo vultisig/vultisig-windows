@@ -78,7 +78,10 @@ export const BottomNavigation = ({
             {t('wallet')}
           </Text>
         </TabButtonOld>
-        <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
+        <CameraButton
+          aria-label={t('scan_qr')}
+          onClick={() => navigate({ id: 'uploadQr', state: {} })}
+        >
           <CameraIcon />
         </CameraButton>
         <TabButtonOld

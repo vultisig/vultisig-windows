@@ -84,10 +84,13 @@
         "src/content/index.ts",
         "src/inpage/index.ts",
         "src/pages/popup.tsx",
+        "scripts/*.{js,mjs,cjs,ts}",
+        "watch.js",
         "tests/unit/**/*.{ts,tsx}"
       ],
       "project": [
         "src/**/*.{ts,tsx}",
+        "scripts/*.{js,mjs,cjs,ts}",
         "tests/unit/**/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
@@ -118,6 +121,8 @@
     },
     "core/ui": {
       "entry": [
+        "i18n/scripts/*.ts",
+        "scripts/validatePublic.ts",
         "vite/plugins.ts",
         "vite/staticCopy.ts"
       ],
@@ -131,6 +136,11 @@
     "lib/ui": {
       "project": [
         "**/*.{ts,tsx}"
+      ]
+    },
+    "lib/codegen": {
+      "project": [
+        "**/*.ts"
       ]
     }
   }

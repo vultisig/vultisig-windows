@@ -127,7 +127,7 @@ export const VerifyKeysignStart = ({
             'ripple-destination-tag-invalid': () =>
               extractErrorMsg(keysignPayloadQuery.error),
             'ripple-destination-tag-required': () =>
-              extractErrorMsg(keysignPayloadQuery.error),
+              t('ripple_destination_tag_required'),
           }),
         }
       }

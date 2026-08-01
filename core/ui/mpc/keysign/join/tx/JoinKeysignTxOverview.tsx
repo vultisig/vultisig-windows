@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { BlockaidTxScan } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScan'
+import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
@@ -48,6 +49,7 @@ import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
 export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
   const { toAddress, memo } = value
+  const { destinationTag, memo: displayMemo } = getRippleKeysignDisplay(value)
 
   const coin = shouldBePresent(fromCommCoin(assertField(value, 'coin')))
 
@@ -203,9 +205,15 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
             }
           />
         )}
-        {memo && (
+        {displayMemo && (
           <ListItem
-            title={<TxOverviewMemo value={memo} chain={coin.chain} />}
+            title={<TxOverviewMemo value={displayMemo} chain={coin.chain} />}
+          />
+        )}
+        {destinationTag !== undefined && (
+          <ListItem
+            description={destinationTag.toString()}
+            title={t('ripple_field_destination_tag')}
           />
         )}
       </VerifyTransactionOverview>
