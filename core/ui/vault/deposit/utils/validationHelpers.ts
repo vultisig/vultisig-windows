@@ -1,3 +1,4 @@
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
@@ -85,12 +86,25 @@ type ChainAmountMax = {
   decimals: number
 }
 
-export const positiveAmountSchema = (
-  maxValue: number,
-  t: TFunction,
-  maxMessage?: string,
+type PositiveAmountSchemaInput = {
+  maxValue: number
+  t: TFunction
+  maxMessage?: string
   chainAmountMax?: ChainAmountMax
-) =>
+}
+
+/**
+ * Required positive amount capped at the available balance. The submitted
+ * value stays an exact decimal string; when `chainAmountMax` is provided the
+ * cap is compared in chain base units, so float64 cannot blur the boundary
+ * between the true balance and balance-plus-dust (#4496).
+ */
+export const positiveAmountSchema = ({
+  maxValue,
+  t,
+  maxMessage,
+  chainAmountMax,
+}: PositiveAmountSchemaInput) =>
   z.preprocess(
     toAmountString,
     z
@@ -105,15 +119,14 @@ export const positiveAmountSchema = (
           // compare can accept an amount a few base units above the true
           // balance when both round to the same float64 (#4496)
           if (chainAmountMax && chainAmountMax.units > 0n) {
-            try {
-              return (
-                decimalStringToBigInt(value, chainAmountMax.decimals) <=
-                chainAmountMax.units
-              )
-            } catch {
-              // more fraction digits than the coin supports — fall through to
-              // the float check, matching previous behavior for such input
+            const result = attempt(() =>
+              decimalStringToBigInt(value, chainAmountMax.decimals)
+            )
+            if (result.data !== undefined) {
+              return result.data <= chainAmountMax.units
             }
+            // more fraction digits than the coin supports — fall through to
+            // the float check, matching previous behavior for such input
           }
           return (
             Number(value) <=

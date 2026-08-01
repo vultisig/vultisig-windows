@@ -104,7 +104,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   // a stale "valid" amount that exceeds the new balance.
   useEffect(() => {
     trigger()
-  }, [coin.id, balance, trigger])
+  }, [coin.id, balance, balanceUnits, trigger])
 
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data)

@@ -152,12 +152,11 @@ export const getDepositFormConfig = ({
         { name: 'amount', type: 'number', label: t('amount'), required: true },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     redeem: () => ({
@@ -172,12 +171,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
         slippage: z.preprocess(toRequiredNumber, z.number().min(0.1).max(7.5)),
       }),
     }),
@@ -191,12 +189,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     merge: () => ({
@@ -229,12 +226,11 @@ export const getDepositFormConfig = ({
               message: t('invalid_node_address'),
             }
           ),
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     switch: () => ({
@@ -247,12 +243,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
         nodeAddress: z
           .string()
           .min(1, 'Required')
@@ -299,12 +294,12 @@ export const getDepositFormConfig = ({
             { message: 'Destination Chain is required' }
           ),
           nodeAddress: z.string().min(1, 'Destination Address is required'),
-          amount: positiveAmountSchema(
-            totalAmountAvailable,
+          amount: positiveAmountSchema({
+            maxValue: totalAmountAvailable,
             t,
-            t('chainFunctions.amountExceeded'),
-            amountMax
-          ),
+            maxMessage: t('chainFunctions.amountExceeded'),
+            chainAmountMax: amountMax,
+          }),
         })
         .superRefine((data, ctx) => {
           const { destinationChain, nodeAddress } = data
@@ -370,12 +365,11 @@ export const getDepositFormConfig = ({
           ),
         provider: z.string().optional(),
         operatorFee: z.preprocess(toOptionalNumber, z.number().optional()),
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     bond_with_lp: () => ({
@@ -466,12 +460,11 @@ export const getDepositFormConfig = ({
               message: t('invalid_node_address'),
             }
           ),
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
         provider: z.string().optional(),
       }),
     }),
@@ -630,32 +623,29 @@ export const getDepositFormConfig = ({
             THORChain: () =>
               coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
-                    amount: positiveAmountSchema(
-                      totalAmountAvailable,
+                    amount: positiveAmountSchema({
+                      maxValue: totalAmountAvailable,
                       t,
-                      undefined,
-                      amountMax
-                    ),
+                      chainAmountMax: amountMax,
+                    }),
                   })
                 : coin.ticker === 'TCY'
                   ? z.object({
-                      amount: positiveAmountSchema(
-                        totalAmountAvailable,
+                      amount: positiveAmountSchema({
+                        maxValue: totalAmountAvailable,
                         t,
-                        undefined,
-                        amountMax
-                      ),
+                        chainAmountMax: amountMax,
+                      }),
                       autoCompound: z.boolean().optional(),
                     })
                   : z.never(),
             Ton: () =>
               z.object({
-                amount: positiveAmountSchema(
-                  totalAmountAvailable,
+                amount: positiveAmountSchema({
+                  maxValue: totalAmountAvailable,
                   t,
-                  undefined,
-                  amountMax
-                ),
+                  chainAmountMax: amountMax,
+                }),
                 validatorAddress: z
                   .string()
                   .trim()
@@ -720,23 +710,21 @@ export const getDepositFormConfig = ({
             THORChain: () =>
               coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
-                    amount: positiveAmountSchema(
-                      totalAmountAvailable,
+                    amount: positiveAmountSchema({
+                      maxValue: totalAmountAvailable,
                       t,
-                      undefined,
-                      amountMax
-                    ),
+                      chainAmountMax: amountMax,
+                    }),
                   })
                 : coin.ticker === 'TCY'
                   ? z.discriminatedUnion('autoCompound', [
                       z.object({
                         autoCompound: z.literal(true),
-                        amount: positiveAmountSchema(
-                          totalAmountAvailable,
+                        amount: positiveAmountSchema({
+                          maxValue: totalAmountAvailable,
                           t,
-                          undefined,
-                          amountMax
-                        ),
+                          chainAmountMax: amountMax,
+                        }),
                         percentage: z.preprocess(
                           toOptionalNumber,
                           z
@@ -775,12 +763,11 @@ export const getDepositFormConfig = ({
                       message: t('send_invalid_receiver_address'),
                     }
                   ),
-                amount: positiveAmountSchema(
-                  totalAmountAvailable,
+                amount: positiveAmountSchema({
+                  maxValue: totalAmountAvailable,
                   t,
-                  undefined,
-                  amountMax
-                ),
+                  chainAmountMax: amountMax,
+                }),
               }) as any,
           }),
     }),
@@ -795,12 +782,11 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         resourceType: z.enum(['BANDWIDTH', 'ENERGY']),
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     unfreeze: () => ({
@@ -814,12 +800,11 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         resourceType: z.enum(['BANDWIDTH', 'ENERGY']),
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     add_cacao_pool: () => ({
@@ -832,12 +817,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     remove_cacao_pool: () => ({
@@ -869,12 +853,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
         pool: z.string().min(1),
         pairedAddress: z.string().optional(),
       }),
@@ -953,12 +936,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
         validatorAddress: validatorAddressSchema(t, chain),
       }),
     }),
@@ -973,12 +955,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ),
+          chainAmountMax: amountMax,
+        }),
         validatorAddress: validatorAddressSchema(t, chain),
       }),
     }),
@@ -1000,12 +981,11 @@ export const getDepositFormConfig = ({
       ],
       schema: z
         .object({
-          amount: positiveAmountSchema(
-            totalAmountAvailable,
+          amount: positiveAmountSchema({
+            maxValue: totalAmountAvailable,
             t,
-            undefined,
-            amountMax
-          ),
+            chainAmountMax: amountMax,
+          }),
           srcValidatorAddress: validatorAddressSchema(t, chain),
           validatorAddress: validatorAddressSchema(t, chain),
         })
@@ -1070,12 +1050,11 @@ export const getDepositFormConfig = ({
         // StakeError.InsufficientDelegation (custom error 0xc). The entered
         // amount IS the active stake (funding = amount + rent), so gate the
         // amount directly on the 1 SOL floor.
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
           t,
-          undefined,
-          amountMax
-        ).refine(value => Number(value) >= solanaMinDelegationSol, {
+          chainAmountMax: amountMax,
+        }).refine(value => Number(value) >= solanaMinDelegationSol, {
           message: t('solana_staking_min_delegation', {
             amount: solanaMinDelegationSol,
             ticker: chainFeeCoin[Chain.Solana].ticker,

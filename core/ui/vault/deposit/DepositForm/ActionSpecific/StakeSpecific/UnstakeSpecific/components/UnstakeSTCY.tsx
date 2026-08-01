@@ -66,21 +66,21 @@ export const UnstakeSTCY = () => {
   useEffect(() => {
     if (numericPercentage === null) return
 
-    const expectedAmount = Number(
-      getPercentageShareAmount({
-        balanceUnits: chainBalance,
-        percentage: clampPercentage(numericPercentage),
-        decimals,
-      })
-    )
+    // Compare as exact strings — Number() collapses distinct base-unit
+    // amounts for large balances, which would leave a stale amount in place
+    const expectedAmount = getPercentageShareAmount({
+      balanceUnits: chainBalance,
+      percentage: clampPercentage(numericPercentage),
+      decimals,
+    })
 
-    if (numericAmount !== expectedAmount) {
+    if (amountValue !== expectedAmount) {
       syncAmountFromPercentage(numericPercentage)
     }
   }, [
+    amountValue,
     chainBalance,
     decimals,
-    numericAmount,
     numericPercentage,
     syncAmountFromPercentage,
   ])
