@@ -126,7 +126,7 @@ export const AgentBottomNavigationContent = ({
   return (
     <>
       {isCoachmarkOpen && <ContentOverlay />}
-      <FloatingCamera onClick={onCameraPress}>
+      <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
         <CameraFilledIcon />
       </FloatingCamera>
       <NavContainer>

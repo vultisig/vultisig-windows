@@ -233,24 +233,7 @@ test.describe('XRP destination tag', () => {
     const vaultPage = new VaultPage(page, extensionId)
     await vaultPage.goto()
     await vaultPage.waitForView(15_000)
-    await page.locator('button').evaluateAll(buttons => {
-      const candidate = buttons.find(button => {
-        const rect = button.getBoundingClientRect()
-        return (
-          rect.width >= 50 &&
-          rect.width <= 60 &&
-          rect.height >= 50 &&
-          rect.height <= 60 &&
-          Math.abs(rect.left + rect.width / 2 - window.innerWidth / 2) < 20 &&
-          rect.bottom > window.innerHeight - 100
-        )
-      })
-
-      if (!(candidate instanceof HTMLButtonElement)) {
-        throw new Error('Could not find the QR scanner button')
-      }
-      candidate.click()
-    })
+    await page.getByRole('button', { name: 'Scan QR' }).click()
 
     await page.getByRole('button', { name: 'Upload QR Code' }).click()
     await page.locator('input[type="file"]').setInputFiles(qrPath)
