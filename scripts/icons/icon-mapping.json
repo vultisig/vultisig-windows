@@ -273,6 +273,18 @@
       "source": "ios"
     },
     {
+      "desktop": "ShareAndroidIcon",
+      "v3": "connected-dots-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DeviceIcon",
+      "v3": "mobile",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
       "desktop": "AgentIcon",
       "v3": null,
       "status": "bespoke",
