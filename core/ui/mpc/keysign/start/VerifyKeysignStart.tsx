@@ -1,5 +1,4 @@
 import { getBlockaidTxValidationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxValidation'
-import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '@core/ui/mpc/keysign/prompt/StartKeysignPromptProps'
 import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
@@ -24,10 +23,18 @@ import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { BlockaidTxScanStatus } from '../../../chain/security/blockaid/tx/BlockaidTxScanStatus'
+import { RefetchableKeysignPayloadQuery } from './refreshKeysignPayload'
+import { StartKeysignPromptWithRefresh } from './StartKeysignPromptWithRefresh'
 
 type VerifyKeysignStartInput = {
   children: ReactNode
-  keysignPayloadQuery: Query<KeysignPayload>
+  /**
+   * Must be refetchable: the payload is rebuilt when signing starts so the
+   * builder's fail-closed gates run at sign time. See
+   * {@link refreshKeysignPayload}.
+   */
+  keysignPayloadQuery: Query<KeysignPayload> &
+    RefetchableKeysignPayloadQuery<KeysignPayload>
   terms?: string[]
   toAddressLabel?: string
   extraPendingMessage?: string
@@ -193,7 +200,13 @@ export const VerifyKeysignStart = ({
         )}
       </PageContent>
       <PageFooter>
-        {footer ?? <StartKeysignPrompt {...startKeysignPromptProps} />}
+        {footer ?? (
+          <StartKeysignPromptWithRefresh
+            keysignPayloadQuery={keysignPayloadQuery}
+            toKeysignPayload={keysign => ({ keysign })}
+            promptProps={startKeysignPromptProps}
+          />
+        )}
       </PageFooter>
     </>
   )
