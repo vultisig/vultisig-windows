@@ -1,12 +1,13 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { StartKeysignPrompt } from '../prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '../prompt/StartKeysignPromptProps'
 import { getKeysignPayloadToSign } from './getKeysignPayloadToSign'
 import { RefetchableKeysignPayloadQuery } from './refreshKeysignPayload'
+import { singleFlight } from './singleFlight'
 
 type StartKeysignPromptWithRefreshProps<T> = {
   /** The query that built `promptProps.keysignPayload`, rebuilt on start. */
@@ -33,13 +34,23 @@ export const StartKeysignPromptWithRefresh = <T,>({
 }: StartKeysignPromptWithRefreshProps<T>) => {
   const [refreshError, setRefreshError] = useState<string | null>(null)
 
+  // A rebuild is a network round-trip and this button gives no feedback while
+  // it runs, so a second click is likely. Without this the two rebuilds race
+  // and both start a ceremony, the later one interrupting the session the
+  // earlier one already opened.
+  const isRebuilding = useRef(false)
+
   const onBeforeStart = async () => {
     setRefreshError(null)
 
-    return getKeysignPayloadToSign({
-      query: keysignPayloadQuery,
-      toKeysignPayload,
-      onError: setRefreshError,
+    return singleFlight({
+      gate: isRebuilding,
+      run: () =>
+        getKeysignPayloadToSign({
+          query: keysignPayloadQuery,
+          toKeysignPayload,
+          onError: setRefreshError,
+        }),
     })
   }
 
