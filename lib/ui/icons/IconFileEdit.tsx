@@ -1,29 +1,38 @@
-export const IconFileEdit = () => (
+import { SvgProps } from '@lib/ui/props'
+
+export const IconFileEdit = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
-    height="1.05em"
-    viewBox="0 0 20 21"
+    height="1em"
+    viewBox="0 0 24 24"
     fill="none"
+    {...props}
   >
+    <g>
+      <path
+        d="M4.80078 8.39961H8.40078C9.06318 8.39961 9.60078 7.86201 9.60078 7.19961V3.59961"
+        fill="currentColor"
+      />
+      <path
+        d="M4.80078 8.39961H8.40078C9.06318 8.39961 9.60078 7.86201 9.60078 7.19961V3.59961"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </g>
     <path
-      d="M3.95831 7.79102V4.45768C3.95831 3.53721 4.7045 2.79102 5.62498 2.79102H9.93465C10.3766 2.79102 10.8006 2.96661 11.1131 3.27917L15.5535 7.71952C15.8661 8.03209 16.0416 8.45601 16.0416 8.89802V16.541C16.0416 17.4615 15.2955 18.2077 14.375 18.2077H8.12498"
+      d="M19.1564 6.76281C18.9392 4.98321 17.4392 3.59961 15.6008 3.59961H10.0976C9.77958 3.59961 9.47358 3.72561 9.24918 3.95121L5.15238 8.04801C4.92678 8.27361 4.80078 8.57841 4.80078 8.89641V16.7996C4.80078 18.1484 5.55078 19.3088 6.64758 19.9256"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M10.625 3.20898V6.54232C10.625 7.46279 11.3712 8.20898 12.2917 8.20898H15.625"
+      d="M10.8008 20.3905L11.4008 16.7905L17.0492 11.1517C17.5184 10.6825 18.278 10.6825 18.746 11.1517L20.0492 12.4549C20.5184 12.9241 20.5184 13.6837 20.0492 14.1517L14.4008 19.7905L10.8008 20.3905Z"
       stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M4.37012 18.208L3.12012 16.958V11.5469C3.12012 10.8565 3.67976 10.2969 4.37012 10.2969C5.06048 10.2969 5.62012 10.8565 5.62012 11.5469V16.958L4.37012 18.208Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="square"
+      strokeWidth="2"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
   </svg>

@@ -159,6 +159,102 @@
       "source": "ios"
     },
     {
+      "desktop": "ArrowWallDownIcon",
+      "v3": "arrow-down-from-line",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ChainLinkIcon3",
+      "v3": "chain-link-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleAlertIcon",
+      "v3": "circle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleCrossFilledIcon",
+      "v3": "circle-xmark-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleDollarSignIcon",
+      "v3": "circle-dollar",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FuelIcon",
+      "v3": "gas-pump",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "GlobusIcon",
+      "v3": "globe",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "IconFileEdit",
+      "v3": "file-pen",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "InfoIcon",
+      "v3": "circle-info",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LightningIcon",
+      "v3": "bolt",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LockKeyholeIcon",
+      "v3": "lock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "NavigationXIcon",
+      "v3": "xmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "RefreshCwIcon",
+      "v3": "refresh",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TriangleAlertIcon",
+      "v3": "triangle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TrophyIcon",
+      "v3": "trophy",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ZapIcon",
+      "v3": "bolt",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
       "desktop": "AgentIcon",
       "v3": null,
       "status": "bespoke",
