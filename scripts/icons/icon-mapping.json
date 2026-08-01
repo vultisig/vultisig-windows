@@ -2,6 +2,7 @@
   "$comment": "Source-of-truth mapping from a desktop icon component (lib/ui/icons/<name>.tsx) to its Icons V3 source icon (the component/instance name in the Figma section defined in figma-icons.config.json). SEED ONLY — this is intentionally incomplete. Later phases extend it, verifying each entry against rendered art before shipping. Chevrons are excluded on purpose (they stay on the legacy pack per design).",
   "decision": "converge-on-v3",
   "status": {
+    "migrated": "already swapped to V3 art in lib/ui/icons",
     "verified": "V3 source confirmed against rendered art",
     "proposed": "likely match from name/iOS precedent — must be eyeballed before use",
     "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn"
@@ -19,14 +20,14 @@
     "CaretDownIcon"
   ],
   "icons": [
-    { "desktop": "WalletIcon", "v3": "wallet-filled", "status": "proposed", "source": "station" },
-    { "desktop": "MagnifyingGlassIcon", "v3": "magnifier", "status": "proposed", "source": "station" },
-    { "desktop": "SearchIcon", "v3": "magnifier", "status": "proposed", "source": "station" },
+    { "desktop": "WalletIcon", "v3": "wallet-filled", "status": "migrated", "source": "station" },
+    { "desktop": "MagnifyingGlassIcon", "v3": "magnifier", "status": "migrated", "source": "station" },
+    { "desktop": "SearchIcon", "v3": "magnifier", "status": "migrated", "source": "station" },
+    { "desktop": "CheckmarkIcon", "v3": "checkmark-small", "status": "migrated", "source": "station" },
+    { "desktop": "CopyIcon", "v3": "copies-3-filled", "status": "migrated", "source": "station" },
     { "desktop": "InfoCircleIcon", "v3": "circle-info", "status": "proposed", "source": "ios" },
     { "desktop": "CircleCheckIcon", "v3": "badge-check", "status": "proposed", "source": "ios" },
     { "desktop": "CreditCardIcon", "v3": "credit-card", "status": "proposed", "source": "station" },
-    { "desktop": "CoinsIcon", "v3": "credit-card", "status": "proposed", "source": "manual" },
-    { "desktop": "CopyIcon", "v3": "copies-3-filled", "status": "proposed", "source": "station" },
     { "desktop": "BellIcon", "v3": "bell", "status": "proposed", "source": "ios" },
     { "desktop": "BookIcon", "v3": "book", "status": "proposed", "source": "ios" },
     { "desktop": "PercentIcon", "v3": "circle-percentage", "status": "proposed", "source": "ios" },
