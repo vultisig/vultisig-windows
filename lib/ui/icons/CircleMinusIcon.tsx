@@ -1,27 +1,27 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const CircleMinusIcon: FC<SvgProps> = props => (
+export const CircleMinusIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    viewBox="0 0 12 12"
+    viewBox="0 0 24 24"
     fill="none"
     {...props}
   >
-    <g clipPath="url(#clip0_66400_19434)">
-      <path
-        d="M8.1213 6.00025H3.87868M10.625 6C10.625 8.5543 8.5543 10.625 6 10.625C3.44568 10.625 1.375 8.5543 1.375 6C1.375 3.44568 3.44568 1.375 6 1.375C8.5543 1.375 10.625 3.44568 10.625 6Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_66400_19434">
-        <rect width="12" height="12" fill="white" />
-      </clipPath>
-    </defs>
+    <path
+      d="M11.9996 20.3996C16.6388 20.3996 20.3996 16.6388 20.3996 11.9996C20.3996 7.36042 16.6388 3.59961 11.9996 3.59961C7.36042 3.59961 3.59961 7.36042 3.59961 11.9996C3.59961 16.6388 7.36042 20.3996 11.9996 20.3996Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8.40039 12H15.6004"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )
