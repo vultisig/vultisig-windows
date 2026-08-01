@@ -60,19 +60,44 @@ it. If the answer is *separate*, switch to option (b) and this plan changes.
 
 ## Phased delivery
 
-All work lands on the long-lived integration branch `feature/icons-v3-adoption` (off
-`main`, no direct PRs). Each phase is its own PR **targeting that branch**, not `main`.
+Each phase is a **sub-issue** of #4383 with its own PR **targeting the long-lived
+integration branch** `feature/icons-v3-adoption` (off `main`, no direct PRs to `main`).
+When every phase has merged into the integration branch, a **final PR** promotes it to
+`main` with a summary of which PR did what.
 
-| Phase | Branch | Content |
-|-------|--------|---------|
-| **0 — Foundation** (this PR) | `feature/icons-v3-phase-0-foundation` | Decision record, codegen tooling (`scripts/icons/`), seed mapping table, Storybook gallery. **No icon art changes.** |
-| 1–4 — iOS-precedent batch | per phase | ~102 icons with an iOS V3 precedent, grouped by V3 category (~25/PR). |
-| 5 — Brand/social glyphs | | Facebook / Twitter / LinkedIn / Reddit / WhatsApp … (iOS ships these separately). |
-| 6 — V3, no iOS precedent | | ~35 icons we choose + verify ourselves (mostly trivial). |
-| 7 — Ambiguous | | ~24 icons resolved by hand against rendered art, with design sign-off. |
-| separate track | | ~23 Vultisig-specific/bespoke glyphs (`Agent*`, `Tron*`, tier badges …) — a design conversation, likely stay bespoke. |
-| separate track | | `iconStyle` ternary removal + relocating non-icon Station styling to a brand flag. |
-| follow-up | | Barrel (`index.ts`) + expand the gallery — tracked separately (#4383 note). |
+### Split axis — by screen, not by icon
+
+The unit of work is a **screen**, not an icon category. A screen is migrated
+**all-at-once** — it never ships half V3 / half legacy. This is stricter than the issue's
+"all-or-nothing per icon" rule and avoids visually mixed screens.
+
+Because icons are shared across screens, one screen's icons can also appear on another.
+Migrating a shared icon ripples to every screen that uses it. To keep each per-screen phase
+self-contained, **shared icons are migrated first, in one phase**; after that, each screen
+phase only touches icons unique to that screen, so it can't leave another screen mixed.
+(Intermediate mixing on the integration branch is fine — nothing reaches users until the
+final PR to `main`.)
+
+| Phase | Scope | Content |
+|-------|-------|---------|
+| **0 — Foundation** ✅ | tooling | Decision record, codegen (`scripts/icons/`), seed mapping table, Storybook gallery. **No icon art changes.** |
+| **1 — Shared icons** | cross-screen | Every icon used on more than one screen (nav, back, close, search, wallet, copy…). One PR, ripples across all screens by design. Excludes chevrons. |
+| **2 — Main View** | screen | Portfolio / vault home — its remaining screen-unique icons. |
+| **3 — Send flow** | screen | |
+| **4 — Swap flow** | screen | |
+| **5 — DeFi / Earn** | screen | |
+| **6 — Settings** | screen | |
+| **7 — Transaction History** | screen | |
+| **8 — Vault lifecycle** | screens | Onboarding, Vault Setup, Reshare, Upgrade Vault (share most icons — grouped). |
+| **9 — Notifications** | screen | |
+| **10 — Extension surfaces** | screens | No Figma reference — migrate to desktop parity. |
+| separate track | brand | ~23 Vultisig-specific/bespoke glyphs (`Agent*`, `Tron*`, tier badges…) — design call, likely stay bespoke. |
+| separate track | cleanup | `iconStyle` ternary removal + relocating non-icon Station styling to a brand flag. |
+| follow-up | infra | Barrel (`index.ts`) + expand the gallery — tracked separately (#4383 note). |
+
+Screen list and the mapping source (iOS precedent, V3 library, ambiguous) still drive
+*which* V3 icon each legacy icon becomes — see `scripts/icons/icon-mapping.json`. The
+screen split only changes *how the work is batched into PRs*.
 
 **Chevrons stay on the legacy pack on purpose** (design-confirmed) and are excluded from
 the migration entirely.
