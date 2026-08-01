@@ -1,0 +1,7 @@
+{
+  "$comment": "Non-secret Figma coordinates for the Icons V3 library. The API token is NOT stored here — pass it via the FIGMA_TOKEN environment variable when running scripts/icons/generate-icons.mjs.",
+  "fileKey": "LTsF1zYLuwQ4TePTwbRqMw",
+  "sectionNodeId": "374:68371",
+  "sectionName": "Icons V3 UPDATED",
+  "outputDir": "lib/ui/icons"
+}
