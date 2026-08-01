@@ -36,7 +36,19 @@ FIGMA_TOKEN=figd_xxx node scripts/icons/generate-icons.mjs --icon WalletIcon
 
 # Generate every mapped, non-bespoke icon
 FIGMA_TOKEN=figd_xxx node scripts/icons/generate-icons.mjs --all
+
+# Figma-free: generate from the sibling iOS repo's already-shipped V3 assets
+# (vultisig-ios#4834). No token, no rate limits — the `v3` names match the iOS
+# asset folder names. Preferred when the icon exists in iOS.
+node scripts/icons/generate-icons.mjs --all \
+  --from-ios ../vultisig-ios/VultisigApp/VultisigApp/Assets.xcassets/Icons
 ```
+
+Notes:
+
+- The ~9MB Figma section response is **cached** to the OS temp dir after the first fetch;
+  pass `--refresh` to re-fetch. `--from-ios` skips Figma entirely.
+- `--all` skips icons already `migrated` or `bespoke`; use `--icon <Name>` to force one.
 
 After generating, always:
 
