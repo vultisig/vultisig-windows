@@ -27,6 +27,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -40,7 +41,7 @@ import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
 } from '../../../../components/action-form/ActionFormIconsWrapper'
-import { trimTrailingZeros } from '../../../utils/exactAmountString'
+import { getPercentageShareAmount } from '../../../utils/percentageShare'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
@@ -287,9 +288,11 @@ export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
                   gap={4}
                 >
                   {amountSuggestions.map(suggestion => {
-                    const suggestedAmount = trimTrailingZeros(
-                      (balance * suggestion).toFixed(coin.decimals)
-                    )
+                    const suggestedAmount = getPercentageShareAmount({
+                      balanceUnits: toChainAmount(balance, coin.decimals),
+                      percentage: suggestion * 100,
+                      decimals: coin.decimals,
+                    })
                     const isActive =
                       parsedAmount !== null &&
                       Number(parsedAmount?.toFixed(coin.decimals)) ===

@@ -11,6 +11,7 @@ import { Slider } from '@lib/ui/inputs/Slider'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-bond/config'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useEffect, useMemo } from 'react'
@@ -18,7 +19,7 @@ import { Controller, ControllerRenderProps, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-import { trimTrailingZeros } from '../../../utils/exactAmountString'
+import { getPercentageShareAmount } from '../../../utils/percentageShare'
 import { FormData } from '../../types'
 
 type StakeFormProps = {
@@ -89,9 +90,11 @@ export const StakeForm = ({
   }, [parsedAmount, balance])
 
   const handleSliderChange = (percentage: number) => {
-    const amount = trimTrailingZeros(
-      ((percentage / 100) * balance).toFixed(coin.decimals)
-    )
+    const amount = getPercentageShareAmount({
+      balanceUnits: toChainAmount(balance, coin.decimals),
+      percentage,
+      decimals: coin.decimals,
+    })
     setValue('amount', amount, { shouldValidate: true, shouldDirty: true })
 
     if (isUnstake && stakeId === 'native-tcy') {

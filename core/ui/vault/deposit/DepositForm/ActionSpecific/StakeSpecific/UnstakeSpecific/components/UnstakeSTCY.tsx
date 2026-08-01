@@ -4,6 +4,7 @@ import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { tcyAutoCompounderConfig } from '@vultisig/core-chain/chains/cosmos/thor/tcy-autocompound/config'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
@@ -14,11 +15,11 @@ import { useTranslation } from 'react-i18next'
 import { AmountSuggestion } from '../../../../../../send/amount/AmountSuggestion'
 import { useCurrentVaultAddress } from '../../../../../../state/currentVaultCoins'
 import { useDepositFormHandlers } from '../../../../../providers/DepositFormHandlersProvider'
-import { trimTrailingZeros } from '../../../../../utils/exactAmountString'
 import {
   clampPercentage,
   toNumericValue,
 } from '../../../../../utils/percentage'
+import { getPercentageShareAmount } from '../../../../../utils/percentageShare'
 import { useUnstakableStcyQuery } from '../hooks/useUnstakableSTcyQuery'
 
 export const UnstakeSTCY = () => {
@@ -48,9 +49,11 @@ export const UnstakeSTCY = () => {
       }
 
       const clamped = clampPercentage(percentage)
-      const amount = trimTrailingZeros(
-        ((clamped / 100) * humanReadableBalance).toFixed(decimals)
-      )
+      const amount = getPercentageShareAmount({
+        balanceUnits: toChainAmount(humanReadableBalance, decimals),
+        percentage: clamped,
+        decimals,
+      })
 
       setValue('amount', amount, {
         shouldDirty: true,
