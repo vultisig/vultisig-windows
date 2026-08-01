@@ -81,6 +81,26 @@ describe('getKeysignPayloadToSign', () => {
     expect(onError).toHaveBeenCalled()
   })
 
+  it('refuses to sign when the conversion throws', async () => {
+    // Callers await this in a click handler, so a rejection here would be
+    // unhandled: the button would do nothing, silently.
+    const onError = vi.fn()
+
+    await expect(
+      getKeysignPayloadToSign({
+        query: query({ data: payload('ok') }),
+        toKeysignPayload: () => {
+          throw new Error('cannot convert payload')
+        },
+        onError,
+      })
+    ).resolves.toBeNull()
+
+    expect(onError).toHaveBeenCalledWith(
+      expect.stringContaining('cannot convert payload')
+    )
+  })
+
   it('does not report an error on success', async () => {
     const onError = vi.fn()
 

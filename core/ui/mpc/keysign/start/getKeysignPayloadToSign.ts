@@ -23,6 +23,10 @@ type GetKeysignPayloadToSignInput<T> = {
  * the whole point: that payload was built at mount, and a builder gate now
  * rejecting it (advanced-swap queue disabled, chain halted, router expiry
  * lapsed) is precisely the case where signing it anyway would be wrong.
+ *
+ * No failure escapes as a rejection, conversion included. The callers `await`
+ * this inside a click handler, where a rejection is unhandled: the button would
+ * do nothing at all, with no ceremony and nothing on screen to explain it.
  */
 export const getKeysignPayloadToSign = async <T>({
   query,
@@ -36,5 +40,12 @@ export const getKeysignPayloadToSign = async <T>({
     return null
   }
 
-  return toKeysignPayload(result.data)
+  const payload = attempt(() => toKeysignPayload(result.data))
+
+  if ('error' in payload) {
+    onError(extractErrorMsg(payload.error))
+    return null
+  }
+
+  return payload.data
 }
