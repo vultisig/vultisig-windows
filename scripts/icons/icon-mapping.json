@@ -285,6 +285,48 @@
       "source": "ios"
     },
     {
+      "desktop": "ArrowDownIcon",
+      "v3": "arrow-down",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleCheckIcon",
+      "v3": "circle-check",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleCrossIcon",
+      "v3": "circle-xmark",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleICloseIcon",
+      "v3": "circle-xmark",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "SquareArrowOutUpRightIcon",
+      "v3": "external-link",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "SquareArrowTopRightIcon",
+      "v3": "square-arrow-up-right",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "FileTextIcon",
+      "v3": "file-content",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
       "desktop": "AgentIcon",
       "v3": null,
       "status": "bespoke",
