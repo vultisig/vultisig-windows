@@ -11,7 +11,6 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { sunToTrx } from '@vultisig/core-chain/chains/tron/resources'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { sum } from '@vultisig/lib-utils/array/sum'
 import { useMemo } from 'react'
 
 import { useDefiChains } from '../../../storage/defiChains'
@@ -21,6 +20,7 @@ import { useMayaDefiPositionsQuery } from '../../chain/queries/useMayaDefiPositi
 import { useThorchainDefiPositionsQuery } from '../../chain/queries/useThorchainDefiPositionsQuery'
 import { aggregateDefiPositions } from '../../chain/services/defiPositionAggregator'
 import { useCircleAccountUsdcFiatBalanceQuery } from '../../protocols/circle/queries/useCircleAccountUsdcFiatBalanceQuery'
+import { getDefiPortfolioBalance } from '../utils/getDefiPortfolioBalance'
 
 export type DefiChainPortfolio = {
   chain: Chain
@@ -325,37 +325,24 @@ export const useDefiChainPortfolios = () => {
 }
 
 /**
- * DeFi portfolio total, resolved progressively. `data` sums the chains (and the
- * Circle USDC balance) that have already landed, so the header shows a running
- * total instead of blocking on the slowest chain. `isUpdating` stays true while
- * any chain or the Circle balance is still pending so the UI can render an
- * "updating" affordance alongside the partial number.
+ * DeFi portfolio total, resolved progressively — see
+ * `getDefiPortfolioBalance` for the resolution rules. `isUpdating` stays true
+ * while any chain or the Circle balance is still pending so the UI can render
+ * an "updating" affordance alongside the partial number.
  */
 export const useDefiPortfolioBalance = () => {
   const portfolios = useDefiChainPortfolios()
   const isCircleIncluded = useIsCircleIncluded()
   const circleFiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
 
-  const resolvedChains = portfolios.data.filter(
-    portfolio => !portfolio.isLoading
-  )
-  const chainTotal = sum(resolvedChains.map(portfolio => portfolio.totalFiat))
-
-  const isCirclePending = isCircleIncluded && circleFiatBalanceQuery.isPending
-  // Count Circle only on success — a failed query is no longer pending but its
-  // data is undefined, so treating "not pending" as resolved would silently
-  // mask the failure as a zero contribution.
-  const isCircleResolved =
-    isCircleIncluded && circleFiatBalanceQuery.data !== undefined
-  const circleTotal = isCircleResolved ? (circleFiatBalanceQuery.data ?? 0) : 0
-
-  const resolvedCount = resolvedChains.length + (isCircleResolved ? 1 : 0)
-  const isUpdating = portfolios.isPending || isCirclePending
-
   return {
-    data: resolvedCount > 0 ? chainTotal + circleTotal : undefined,
-    isPending: resolvedCount === 0 && isUpdating,
-    isUpdating,
+    ...getDefiPortfolioBalance({
+      portfolios: portfolios.data,
+      arePortfoliosPending: portfolios.isPending,
+      isCircleIncluded,
+      circleFiatBalance: circleFiatBalanceQuery.data,
+      isCirclePending: circleFiatBalanceQuery.isPending,
+    }),
     error:
       portfolios.error ??
       (isCircleIncluded ? circleFiatBalanceQuery.error : null),
