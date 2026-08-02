@@ -7,7 +7,8 @@
     "proposed": "likely match from name/iOS precedent — must be eyeballed before use",
     "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn",
     "legacy": "shared icon with no faithful V3 counterpart yet — stays on the legacy glyph pending design",
-    "pending": "verified-name V3 target, generation deferred (Figma rate-limited) — fetch when access returns"
+    "pending": "verified-name V3 target, generation deferred (Figma rate-limited) — fetch when access returns",
+    "special": "not a monochrome currentColor glyph (e.g. gradient/brand art) — out of V3 scope"
   },
   "sourceLegend": {
     "station": "already shipped in StationFigmaIcons.tsx (drawn in V3 style)",
@@ -413,6 +414,33 @@
       "status": "pending",
       "source": "manual",
       "note": "spinner arc; verify vs V3 loader when Figma access returns"
+    },
+    {
+      "desktop": "CalendarIcon",
+      "v3": "calendar-days",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PercentIcon",
+      "v3": "percentage",
+      "status": "pending",
+      "source": "manual",
+      "note": "plain percent; V3 percentage — fetch in corrections batch"
+    },
+    {
+      "desktop": "BrokenChainLink3Icon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "snapped chain with spark marks; V3 has no broken-chain (only link-slash, different glyph)"
+    },
+    {
+      "desktop": "CircleIcon",
+      "v3": null,
+      "status": "special",
+      "source": "manual",
+      "note": "gradient-filled 83x83 badge circle, not a monochrome glyph"
     },
     {
       "desktop": "CryptoIcon",
