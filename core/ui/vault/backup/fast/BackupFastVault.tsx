@@ -1,6 +1,7 @@
 import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { BackupOverviewScreen } from '@core/ui/vault/backup/BackupOverviewScreen'
 import { EmailConfirmation } from '@core/ui/vault/backup/fast'
+import { InitiateVaultShareBackup } from '@core/ui/vault/backup/InitiateVaultShareBackup'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
@@ -29,6 +30,11 @@ type BackupFastVaultProps = OnFinishProp &
     onVaultSaved?: (vault: Vault) => void | Promise<void>
   }
 
+/**
+ * Post-keygen backup flow for a vault that has the server as a co-signer. The
+ * share is encrypted with the vault password when this device knows it,
+ * otherwise the user is asked to choose a backup password.
+ */
 export const BackupFastVault = ({
   onBack,
   password,
@@ -76,13 +82,22 @@ export const BackupFastVault = ({
           onChangeEmailAndRestart={onChangeEmailAndRestart}
         />
       )}
-      backupPage={() => (
-        <InitiateFastVaultBackup
-          password={password}
-          onFinish={toNextStep}
-          onBack={() => setStep('backupOverview')}
-        />
-      )}
+      backupPage={() =>
+        password ? (
+          <InitiateFastVaultBackup
+            password={password}
+            onFinish={toNextStep}
+            onBack={() => setStep('backupOverview')}
+          />
+        ) : (
+          // This device joined someone else's keygen, so it never saw the vault
+          // password and cannot encrypt the share with it — let the user pick.
+          <InitiateVaultShareBackup
+            onFinish={toNextStep}
+            onBack={() => setStep('backupOverview')}
+          />
+        )
+      }
       backupSuccessfulSlideshow={() => <VaultCreatedSuccessScreen />}
     />
   )

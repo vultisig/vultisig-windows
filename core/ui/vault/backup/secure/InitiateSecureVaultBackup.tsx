@@ -1,14 +1,17 @@
-import { SaveBackupToCloudScreen } from '@core/ui/vault/backup/fast/SaveBackupToCloudScreen'
-import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
+import { InitiateVaultShareBackup } from '@core/ui/vault/backup/InitiateVaultShareBackup'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { isServer } from '@vultisig/core-mpc/devices/localPartyId'
-import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useTranslation } from 'react-i18next'
 
 type InitiateSecureVaultBackupProps = OnFinishProp & Partial<OnBackProp>
 
+/**
+ * Secure-vault backup step of the post-keygen flow. A secure vault has no
+ * server password to fall back on, so the user is always offered the password
+ * options before the share is saved.
+ */
 export const InitiateSecureVaultBackup = ({
   onFinish,
   onBack,
@@ -17,16 +20,10 @@ export const InitiateSecureVaultBackup = ({
   const vault = useCurrentVault()
   const userDeviceCount = vault.signers.filter(s => !isServer(s)).length
 
-  const { mutate: backupVault, isPending } = useBackupVaultMutation({
-    onSuccess: onFinish,
-    vaultIds: [getVaultId(vault)],
-  })
-
   return (
-    <SaveBackupToCloudScreen
+    <InitiateVaultShareBackup
+      onFinish={onFinish}
       onBack={onBack}
-      ctaLoading={isPending}
-      onContinue={() => backupVault({})}
       title={t('save_backup_n_of_n_to_cloud', {
         current: 1,
         total: userDeviceCount,
