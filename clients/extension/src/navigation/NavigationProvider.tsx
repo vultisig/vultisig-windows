@@ -1,4 +1,4 @@
-import { initialCoreView } from '@core/ui/navigation/CoreView'
+import { vaultsStorage } from '@core/extension/storage/vaults'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { NavigationProvider as CoreNavigationProvider } from '@lib/ui/navigation/state'
@@ -12,28 +12,33 @@ import { useEffect } from 'react'
 import { getInitialView, removeInitialView } from '../storage/initialView'
 import { getPersistedHistory } from '../storage/persistedView'
 import { PersistNavigationState } from './PersistNavigationState'
+import { resolveInitialHistory } from './resolveInitialHistory'
 
-const resolveInitialHistory = async (): Promise<View[]> => {
-  const initialView = await getInitialView()
+const getInitialHistory = async (): Promise<View[]> => {
+  const [initialView, persistedHistory, vaults] = await Promise.all([
+    getInitialView(),
+    getPersistedHistory(),
+    vaultsStorage.getVaults(),
+  ])
+
   if (initialView !== null) {
     await removeInitialView()
-    if (initialView.id === initialCoreView.id) {
-      return [initialView]
-    }
-    return [initialCoreView, initialView]
   }
 
-  const persistedHistory = await getPersistedHistory()
-  if (persistedHistory !== null && persistedHistory.length > 0) {
-    return persistedHistory
-  }
-
-  return [initialCoreView]
+  return resolveInitialHistory({
+    initialView,
+    persistedHistory,
+    hasVaults: vaults.length > 0,
+  })
 }
 
+/**
+ * Provides navigation state to the extension app, resolving the initial
+ * history from stored state and the vault list before rendering children.
+ */
 export const NavigationProvider = ({ children }: ChildrenProp) => {
   const { mutate, ...mutationState } = useMutation({
-    mutationFn: resolveInitialHistory,
+    mutationFn: getInitialHistory,
   })
 
   useEffect(() => {
