@@ -6,7 +6,6 @@ import {
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import {
   buildSwapKeysignPayload,
@@ -15,12 +14,29 @@ import {
 import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
 import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { useAdvancedSwapSettings } from '../state/advancedSettings'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
+
+type GetSwapKeysignAmountInput = {
+  fromAmount: bigint
+  decimals: number
+}
+
+/**
+ * Renders the exact chain amount as a lossless decimal string for
+ * `buildSwapKeysignPayload`. Must never go through float64 — amounts with
+ * more than ~15 significant digits would be silently perturbed (#4391).
+ */
+export const getSwapKeysignAmount = ({
+  fromAmount,
+  decimals,
+}: GetSwapKeysignAmountInput): string =>
+  bigIntToDecimalString(fromAmount, decimals)
 
 export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()
@@ -39,10 +55,10 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const input: BuildSwapKeysignPayloadInput = {
     fromCoin,
     toCoin,
-    amount: fromChainAmount(
-      shouldBePresent(fromAmount, 'fromAmount'),
-      fromCoin.decimals
-    ),
+    amount: getSwapKeysignAmount({
+      fromAmount: shouldBePresent(fromAmount, 'fromAmount'),
+      decimals: fromCoin.decimals,
+    }),
     swapQuote,
     vaultId: getVaultId(vault),
     localPartyId: vault.localPartyId,

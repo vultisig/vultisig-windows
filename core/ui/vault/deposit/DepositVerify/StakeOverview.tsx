@@ -110,6 +110,15 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
   const amountValue =
     typeof rawAmount === 'number' ? rawAmount : Number(rawAmount ?? 0)
   const fallbackAmount = Number.isFinite(amountValue) ? amountValue : 0
+  // Exact decimal string for chain-unit conversion — the float fallbackAmount
+  // is only for display and zero-checks (#4494)
+  const exactAmount =
+    rawAmount !== undefined &&
+    rawAmount !== null &&
+    rawAmount !== '' &&
+    Number.isFinite(Number(rawAmount))
+      ? String(rawAmount)
+      : '0'
 
   // For native TCY unstaking, the payload.toAmount is '0' because the amount is
   // encoded in the memo as a percentage. We need to use the form amount instead.
@@ -118,11 +127,11 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
       const payloadAmount = payload.toAmount
       // If payload amount is 0 or empty, use the form amount (converted to chain units)
       if (!payloadAmount || payloadAmount === '0') {
-        return toChainAmount(fallbackAmount, coin.decimals).toString()
+        return toChainAmount(exactAmount, coin.decimals).toString()
       }
       return payloadAmount
     },
-    [fallbackAmount, coin.decimals]
+    [exactAmount, coin.decimals]
   )
 
   return (

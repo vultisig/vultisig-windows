@@ -28,31 +28,53 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   const navigate = useCoreNavigate()
   const [showModal, setShowModal] = useState(false)
 
+  const { onBeforeStart, ...navigationProps } = props
   const keysignPayload =
-    'keysignPayload' in props ? props.keysignPayload : undefined
+    'keysignPayload' in navigationProps
+      ? navigationProps.keysignPayload
+      : undefined
 
-  const executeNavigation = (securityType: VaultSecurityType) => {
+  // Sign what the network accepts now, not what it accepted when this screen
+  // mounted. `null` means the rebuild failed and the ceremony is abandoned.
+  const resolvePayload = async () =>
+    onBeforeStart ? onBeforeStart() : shouldBePresent(keysignPayload)
+
+  const executeNavigation = async (securityType: VaultSecurityType) => {
     if (securityType === 'fast') {
       setShowModal(true)
+      return
+    }
+
+    const payload = await resolvePayload()
+    if (!payload) {
       return
     }
 
     navigate({
       id: 'keysign',
       state: {
-        ...props,
-        keysignPayload: shouldBePresent(keysignPayload),
+        ...navigationProps,
+        keysignPayload: payload,
         securityType,
       },
     })
   }
 
-  const onGetPassword = ({ password }: FastVaultPasswordModalResult) => {
+  const onGetPassword = async ({ password }: FastVaultPasswordModalResult) => {
+    // Rebuilt after the password prompt, not before it: entering a password is
+    // exactly the kind of pause that lets a payload go stale.
+    const payload = await resolvePayload()
+    if (!payload) {
+      // Drop back to the verify screen, which is where the failure is shown.
+      setShowModal(false)
+      return
+    }
+
     navigate({
       id: 'keysign',
       state: {
-        ...props,
-        keysignPayload: shouldBePresent(keysignPayload),
+        ...navigationProps,
+        keysignPayload: payload,
         securityType: 'fast',
         password,
       },

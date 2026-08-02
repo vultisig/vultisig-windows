@@ -916,6 +916,11 @@ export const en = {
   ripple_field_type: 'Type',
   ripple_field_destination: 'Destination',
   ripple_field_destination_tag: 'Destination tag',
+  ripple_destination_tag_invalid:
+    'Enter a whole number between 0 and 4,294,967,295.',
+  ripple_destination_tag_optional: 'Optional destination tag',
+  ripple_destination_tag_required:
+    'This XRP account requires a destination tag.',
   ripple_field_amount: 'Amount',
   ripple_field_send_max: 'Pay at most',
   ripple_field_deliver_min: 'Receive at least',
@@ -1265,10 +1270,12 @@ export const en = {
   tron_energy: 'Energy',
   tron_freeze_button: 'Freeze',
   tron_freeze_title: 'TRON Freeze',
+  tron_freeze_verify_title: 'Freeze TRON',
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Ready to claim',
   tron_unfreeze_button: 'Unfreeze',
+  tron_unfreeze_verify_title: 'Unfreeze TRON',
   tron_bandwidth_and_energy: 'Bandwidth & Energy',
   tron_bandwidth_description:
     'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',

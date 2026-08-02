@@ -17,6 +17,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useMemo, useState } from 'react'
 import { Controller, ControllerRenderProps, FieldErrors } from 'react-hook-form'
@@ -28,11 +29,13 @@ import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
 } from '../../../../components/action-form/ActionFormIconsWrapper'
+import { getPercentageShareAmount } from '../../../utils/percentageShare'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
 type UnbondFormProps = {
   balance: number
+  balanceUnits: bigint | null
   errors: FieldErrors<FormData>
   isValid: boolean
   formValues: FormData
@@ -65,6 +68,7 @@ const measureAmountTextWidth = (text: string) => {
 
 export const UnbondForm = ({
   balance,
+  balanceUnits,
   errors,
   isValid,
   formValues,
@@ -114,7 +118,11 @@ export const UnbondForm = ({
   }, [parsedAmount, balance])
 
   const handleSliderChange = (percentage: number) => {
-    const amount = Number(((percentage / 100) * balance).toFixed(coin.decimals))
+    const amount = getPercentageShareAmount({
+      balanceUnits: balanceUnits ?? toChainAmount(balance, coin.decimals),
+      percentage,
+      decimals: coin.decimals,
+    })
     setValue('amount', amount, { shouldValidate: true, shouldDirty: true })
   }
 

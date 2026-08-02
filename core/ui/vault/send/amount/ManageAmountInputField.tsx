@@ -3,10 +3,12 @@ import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
+import { BaseSendAmountInput } from '@core/ui/vault/send/amount/BaseSendAmountInput'
 import { FiatSendAmountInput } from '@core/ui/vault/send/amount/FiatSendAmountInput'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
@@ -15,10 +17,7 @@ import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import {
-  AmountTextInput,
-  AmountTextInputProps,
-} from '@lib/ui/inputs/AmountTextInput'
+import { AmountTextInputProps } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -27,7 +26,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getMaxValue } from '@vultisig/core-chain/amount/getMaxValue'
-import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -146,21 +144,13 @@ export const ManageAmountInputField = () => {
                           />
                         )}
                         base={() => (
-                          <AmountTextInput
-                            {...sharedInputProps}
-                            value={
-                              value === null
-                                ? value
-                                : fromChainAmount(value, coin.decimals)
-                            }
-                            onValueChange={newValue =>
-                              setValue(
-                                newValue === null
-                                  ? newValue
-                                  : toChainAmount(newValue, coin.decimals)
-                              )
-                            }
-                            data-testid="send-amount-input"
+                          <BaseSendAmountInput
+                            validation={sharedInputProps.validation}
+                            placeholder={sharedInputProps.placeholder}
+                            disabled={sharedInputProps.disabled}
+                            value={value}
+                            onChange={setValue}
+                            decimals={coin.decimals}
                           />
                         )}
                       />
@@ -250,6 +240,7 @@ export const ManageAmountInputField = () => {
         </HStack>
       </VStack>
       <ManageMemo />
+      <ManageDestinationTag />
     </SendInputContainer>
   )
 }

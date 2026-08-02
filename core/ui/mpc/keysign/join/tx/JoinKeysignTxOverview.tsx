@@ -1,6 +1,11 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { BlockaidTxScan } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScan'
+import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
+import {
+  getTronStakingDisplay,
+  tronStakingTitleKey,
+} from '@core/ui/chain/tx/getTronStakingDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
@@ -48,6 +53,7 @@ import { SignSuiDisplay } from '../../tx/sui/SignSuiDisplay'
 export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
   const { toAddress, memo } = value
+  const { destinationTag, memo: displayMemo } = getRippleKeysignDisplay(value)
 
   const coin = shouldBePresent(fromCommCoin(assertField(value, 'coin')))
 
@@ -123,6 +129,15 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         })()
       : null
 
+  // A TRON freeze/unfreeze is signed as a staking contract, not a transfer, and
+  // carries its operation as an internal memo marker. Name the operation and
+  // show only the resource being staked, matching what the initiator displays.
+  const tronStaking = getTronStakingDisplay({ chain: coin.chain, memo })
+  const amountLabel = tronStaking
+    ? t(tronStakingTitleKey[tronStaking.operation])
+    : undefined
+  const memoValue = tronStaking ? tronStaking.resource : displayMemo
+
   const keysignPayloadQuery = getResolvedQuery(value)
 
   // Sui dApp signing carries a pre-built PTB with no transfer amount/recipient,
@@ -163,6 +178,7 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         receiverVaultName={receiverVaultName ?? undefined}
         receiverAddressBookName={receiverAddressBookName ?? undefined}
         chain={coin.chain}
+        amountLabel={amountLabel}
         keysignPayloadQuery={keysignPayloadQuery}
         getPayloadAmount={
           wasmDisplay ? () => wasmDisplay.fundAmount : undefined
@@ -203,9 +219,15 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
             }
           />
         )}
-        {memo && (
+        {memoValue && (
           <ListItem
-            title={<TxOverviewMemo value={memo} chain={coin.chain} />}
+            title={<TxOverviewMemo value={memoValue} chain={coin.chain} />}
+          />
+        )}
+        {destinationTag !== undefined && (
+          <ListItem
+            description={destinationTag.toString()}
+            title={t('ripple_field_destination_tag')}
           />
         )}
       </VerifyTransactionOverview>

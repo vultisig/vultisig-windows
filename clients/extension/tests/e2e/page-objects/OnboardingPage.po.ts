@@ -57,11 +57,13 @@ export class OnboardingPage extends BasePage {
    * Wait for the onboarding view to be visible
    */
   async waitForView(timeout = 10_000): Promise<void> {
-    // Wait for either vultisig text, next button, or skip button
+    // The current flow can open directly on NewVaultPage, while older
+    // onboarding variants still expose Next/Skip.
     await Promise.race([
       this.welcomeText.waitFor({ state: 'visible', timeout }),
       this.nextButton.waitFor({ state: 'visible', timeout }),
       this.skipButton.waitFor({ state: 'visible', timeout }),
+      this.newVaultGetStartedButton.waitFor({ state: 'visible', timeout }),
     ])
   }
 
@@ -74,7 +76,8 @@ export class OnboardingPage extends BasePage {
       const hasVultisig = await this.welcomeText.isVisible()
       const hasNext = await this.nextButton.isVisible()
       const hasSkip = await this.skipButton.isVisible()
-      return hasVultisig || (hasNext && hasSkip)
+      const hasNewVaultActions = await this.newVaultGetStartedButton.isVisible()
+      return hasVultisig || hasNewVaultActions || (hasNext && hasSkip)
     } catch {
       return false
     }
@@ -84,9 +87,7 @@ export class OnboardingPage extends BasePage {
    * Click "Next" to proceed from onboarding
    */
   async getStarted(): Promise<void> {
-    if (await this.nextButton.isVisible()) {
-      await this.nextButton.click()
-    } else if (await this.getStartedButton.isVisible()) {
+    if (await this.getStartedButton.isVisible()) {
       await this.getStartedButton.click()
     }
     await this.page.waitForTimeout(300)
@@ -163,10 +164,8 @@ export class OnboardingPage extends BasePage {
   async navigateToSetupVault(): Promise<void> {
     // Both NewVaultPage and SetupVaultPage label their primary button
     // "Get started", so target the NewVaultPage one by test id.
-    if (await this.newVaultGetStartedButton.isVisible()) {
-      await this.newVaultGetStartedButton.click()
-      await this.page.waitForTimeout(500)
-    }
+    await this.newVaultGetStartedButton.click()
+    await this.page.waitForTimeout(500)
   }
 
   /**

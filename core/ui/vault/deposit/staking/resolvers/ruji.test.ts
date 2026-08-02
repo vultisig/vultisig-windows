@@ -24,7 +24,7 @@ describe('getRujiSpecific unstake', () => {
       input: {
         kind: 'unstake',
         position: 'liquid',
-        amount: 1,
+        amount: '1',
         liquidShares,
         liquidSize,
       },
@@ -44,7 +44,7 @@ describe('getRujiSpecific unstake', () => {
       input: {
         kind: 'unstake',
         position: 'liquid',
-        amount: 0.5,
+        amount: '0.5',
         liquidShares,
         liquidSize,
       },
@@ -67,7 +67,7 @@ describe('getRujiSpecific unstake', () => {
         input: {
           kind: 'unstake',
           position: 'liquid',
-          amount: 0.00000001,
+          amount: '0.00000001',
           liquidShares,
           liquidSize,
         },
@@ -81,7 +81,7 @@ describe('getRujiSpecific unstake', () => {
       input: {
         kind: 'unstake',
         position: 'bonded',
-        amount: 0.0787,
+        amount: '0.0787',
       },
     })
 
