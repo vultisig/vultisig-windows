@@ -644,6 +644,44 @@
       "source": "ios"
     },
     {
+      "desktop": "BellIcon",
+      "v3": "bell",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "BadgeCheckIcon",
+      "v3": "badge-check",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LinkTwoOffIcon",
+      "v3": "link-slash",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ExpandIcon",
+      "v3": "expand-3",
+      "status": "pending",
+      "source": "manual",
+      "note": "not in iOS; V3 target — verify in batch"
+    },
+    {
+      "desktop": "PanelRightIcon",
+      "v3": "sidebar-right",
+      "status": "pending",
+      "source": "manual",
+      "note": "not in iOS; V3 target — verify in batch"
+    },
+    {
+      "desktop": "DAppsIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
       "desktop": "LogoBoxIcon",
       "v3": null,
       "status": "bespoke",
