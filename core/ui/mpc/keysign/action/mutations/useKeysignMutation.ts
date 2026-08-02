@@ -47,6 +47,7 @@ import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
 
 import { getClaimMessageHashHex } from '../../../../qbtc/claim/utils/getClaimMessageHashHex'
+import { assertReadyToBroadcast } from '../../assertReadyToBroadcast'
 import { broadcastKeysignTx } from '../../broadcastKeysignTx'
 import {
   getCowSwapKeysignData,
@@ -330,6 +331,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             )
 
             if (!payload.skipBroadcast) {
+              // Defense in depth behind the sign-time payload rebuild: the
+              // ceremony itself takes time, so re-check the swap's freshness
+              // now that it is about to go out.
+              await assertReadyToBroadcast({ chain, keysignPayload: payload })
+
               await chainPromises(
                 txs.map(
                   ({ data }) =>

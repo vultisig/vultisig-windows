@@ -14,7 +14,7 @@ export const useDepositFormConfig = (tronResourceType?: TronResourceType) => {
   const [coin] = useDepositCoin()
   const { t } = useTranslation()
 
-  const { balance } = useDepositBalance({
+  const { balance, balanceUnits } = useDepositBalance({
     selectedChainAction,
     tronResourceType,
   })
@@ -29,6 +29,7 @@ export const useDepositFormConfig = (tronResourceType?: TronResourceType) => {
     t,
     walletCore,
     totalAmountAvailable: balance,
+    totalAmountAvailableUnits: balanceUnits,
     trustLineCostXrp,
   })
 }

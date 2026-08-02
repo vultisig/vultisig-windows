@@ -23,7 +23,8 @@ export const useDepositBalance = ({
   const [selectedCoin] = useDepositCoin()
   const chain = selectedCoin.chain
 
-  const { balance: stakeBalance } = useStakeBalance()
+  const { balance: stakeBalance, balanceUnits: stakeBalanceUnits } =
+    useStakeBalance()
   const { data: stakeAndRewards } = useRujiraStakeQuery()
   const { data: unbondableBalance } = useUnbondableBalanceQuery({
     enabled: selectedChainAction === 'unbond',
@@ -42,7 +43,7 @@ export const useDepositBalance = ({
 
   const totalTokenAmount = useMemo(() => {
     if (selectedChainAction === 'unstake') {
-      return stakeBalance
+      return { balance: stakeBalance, balanceUnits: stakeBalanceUnits }
     }
 
     // A Solana delegate spends the entered amount PLUS the stake account's
@@ -50,19 +51,26 @@ export const useDepositBalance = ({
     // balance — bounding on the raw balance would let a max stake through and
     // the ceremony would sign a tx the network rejects at simulation.
     if (selectedChainAction === 'solana_delegate') {
-      return fromChainAmount(solanaStakeable, selectedCoin.decimals)
+      return {
+        balance: fromChainAmount(solanaStakeable, selectedCoin.decimals),
+        balanceUnits: solanaStakeable,
+      }
     }
 
     if (selectedChainAction === 'unbond') {
-      return unbondableBalance?.humanReadableBalance ?? 0
+      return {
+        balance: unbondableBalance?.humanReadableBalance ?? 0,
+        balanceUnits: unbondableBalance?.totalBonded ?? null,
+      }
     }
 
+    // Rewards and TRON frozen balances only exist as floats upstream
     if (selectedChainAction === 'withdraw_ruji_rewards') {
-      return stakeAndRewards?.rewardsUSDC ?? 0
+      return { balance: stakeAndRewards?.rewardsUSDC ?? 0, balanceUnits: null }
     }
 
     if (selectedChainAction === 'unfreeze') {
-      return tronFrozenBalance
+      return { balance: tronFrozenBalance, balanceUnits: null }
     }
 
     return selectedCoinBalance
@@ -72,12 +80,16 @@ export const useDepositBalance = ({
     selectedCoinBalance,
     solanaStakeable,
     stakeBalance,
+    stakeBalanceUnits,
     tronFrozenBalance,
     unbondableBalance?.humanReadableBalance,
+    unbondableBalance?.totalBonded,
     stakeAndRewards?.rewardsUSDC,
   ])
 
   return {
-    balance: totalTokenAmount,
+    balance: totalTokenAmount.balance,
+    /** Balance in chain base units when the source is exact, else null (#4496). */
+    balanceUnits: totalTokenAmount.balanceUnits,
   }
 }

@@ -48,6 +48,12 @@ type VerifyTransactionOverviewProps = {
    */
   receiverAddressLabel?: string
   chain: Chain
+  /**
+   * Heading above the amount. Defaults to "You're sending"; operations that are
+   * not a plain transfer (e.g. a TRON freeze) name themselves instead, so both
+   * devices in a keysign session frame the transaction the same way.
+   */
+  amountLabel?: ReactNode
   keysignPayloadQuery: Query<KeysignPayload>
   /**
    * Overrides how the signed amount is read from the payload. Wasm contract
@@ -69,6 +75,7 @@ export const VerifyTransactionOverview = ({
   receiverAddressBookName,
   receiverAddressLabel,
   chain,
+  amountLabel,
   keysignPayloadQuery,
   getPayloadAmount,
   renderFeeExtra,
@@ -102,7 +109,7 @@ export const VerifyTransactionOverview = ({
   return (
     <List border="gradient" radius={16}>
       <TransactionOverviewAmount
-        label={t('you_are_sending')}
+        label={amountLabel ?? t('you_are_sending')}
         coin={coin}
         fallbackAmount={formattedAmount}
         keysignPayloadQuery={keysignPayloadQuery}

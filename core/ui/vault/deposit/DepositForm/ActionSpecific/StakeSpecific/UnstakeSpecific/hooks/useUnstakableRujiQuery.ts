@@ -33,6 +33,8 @@ export const useUnstakableRujiQuery = ({
         autoCompound,
         rujiraStakingConfig.bondDecimals
       ),
+      autoCompoundUnits: autoCompound,
       bonded: fromChainAmount(bonded, rujiraStakingConfig.bondDecimals),
+      bondedUnits: bonded,
     }),
   })

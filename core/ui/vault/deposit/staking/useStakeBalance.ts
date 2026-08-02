@@ -19,6 +19,8 @@ import { StakeId } from './types'
 
 type StakeBalanceResult = {
   balance: number
+  /** Balance in chain base units — exact source for percentage shares (#4496). */
+  balanceUnits: bigint
   isLoading: boolean
   stakeId: StakeId | null
 }
@@ -87,19 +89,20 @@ export const useStakeBalance = (): StakeBalanceResult => {
   })
 
   if (!isUnstake) {
-    return { balance: 0, isLoading: false, stakeId }
+    return { balance: 0, balanceUnits: 0n, isLoading: false, stakeId }
   }
 
   if (isTonChain) {
     return {
       balance: tonBalance?.humanReadableBalance ?? 0,
+      balanceUnits: tonBalance?.chainBalance ?? 0n,
       isLoading: isLoadingTon,
       stakeId: null,
     }
   }
 
   if (!stakeId) {
-    return { balance: 0, isLoading: false, stakeId }
+    return { balance: 0, balanceUnits: 0n, isLoading: false, stakeId }
   }
 
   return match(stakeId, {
@@ -108,11 +111,13 @@ export const useStakeBalance = (): StakeBalanceResult => {
         nativeTcyBalance,
         knownCosmosTokens.THORChain.tcy.decimals
       ),
+      balanceUnits: nativeTcyBalance,
       isLoading: isLoadingNativeTcy,
       stakeId,
     }),
     stcy: () => ({
       balance: stcyData?.humanReadableBalance ?? 0,
+      balanceUnits: stcyData?.chainBalance ?? 0n,
       isLoading: isLoadingStcy,
       stakeId,
     }),
@@ -120,11 +125,15 @@ export const useStakeBalance = (): StakeBalanceResult => {
       // RUJI surfaces two positions unstaked via different routes; the card the
       // user came from sets `autocompound` (true → auto-compounding / sRUJI).
       balance: (autocompound ? rujiData?.autoCompound : rujiData?.bonded) ?? 0,
+      balanceUnits:
+        (autocompound ? rujiData?.autoCompoundUnits : rujiData?.bondedUnits) ??
+        0n,
       isLoading: isLoadingRuji,
       stakeId,
     }),
     brune: () => ({
       balance: bruneData?.humanReadableBalance ?? 0,
+      balanceUnits: bruneData?.chainBalance ?? 0n,
       isLoading: isLoadingBrune,
       stakeId,
     }),

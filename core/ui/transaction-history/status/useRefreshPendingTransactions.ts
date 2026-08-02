@@ -19,8 +19,12 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
   const isRefreshingRef = useRef(false)
 
   useEffect(() => {
-    const pendingRecords = records.filter(r =>
-      pendingStatuses.includes(r.status)
+    // Limit orders are queue-driven: their inbound deposit confirms in seconds
+    // while the order rests for hours, so chain status would mark the record
+    // `confirmed` and contradict the order's own state. useLimitOrderTracking
+    // owns their lifecycle.
+    const pendingRecords = records.filter(
+      r => pendingStatuses.includes(r.status) && r.type !== 'limitSwap'
     )
 
     if (pendingRecords.length === 0 || isRefreshingRef.current) return
