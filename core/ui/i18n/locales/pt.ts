@@ -1811,4 +1811,10 @@ export const pt = {
   swap_limit_payout_to: 'Pagamento para',
   tron_freeze_verify_title: 'Congelar TRON',
   tron_unfreeze_verify_title: 'Descongelar TRON',
+  swap_limit_expiry_days: '{{days}}d',
+  swap_limit_expiry_days_hours: '{{days}}d {{hours}}h',
+  swap_limit_expiry_hours: '{{hours}}h',
+  swap_limit_expiry_hours_minutes: '{{hours}}h {{minutes}}m',
+  swap_limit_expiry_minutes: '{{minutes}}m',
+  swap_limit_expiry_under_minute: '<1m',
 }

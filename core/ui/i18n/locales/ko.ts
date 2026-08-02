@@ -1770,4 +1770,10 @@ export const ko = {
   swap_limit_payout_to: '지급 대상',
   tron_freeze_verify_title: 'TRON 동결합니다',
   tron_unfreeze_verify_title: 'TRON 동결 해제하세요',
+  swap_limit_expiry_days: '{{days}}일',
+  swap_limit_expiry_days_hours: '{{days}}일 {{hours}}시간',
+  swap_limit_expiry_hours: '{{hours}}시간',
+  swap_limit_expiry_hours_minutes: '{{hours}}시간 {{minutes}}분',
+  swap_limit_expiry_minutes: '{{minutes}}분',
+  swap_limit_expiry_under_minute: '<1분',
 }

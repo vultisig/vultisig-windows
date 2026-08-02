@@ -1,8 +1,8 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
-  formatLimitOrderExpiry,
   limitOrderStatusColor,
+  useFormatLimitOrderExpiry,
   useLimitOrderStatusLabels,
 } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -30,6 +30,13 @@ const Row = styled.button`
   &:hover {
     border-color: ${getColor('mist')};
   }
+
+  /* all:unset drops the UA focus ring, which is the only cue a keyboard user
+     has for which row is selected. */
+  &:focus-visible {
+    outline: 2px solid ${getColor('contrast')};
+    outline-offset: 2px;
+  }
 `
 
 /**
@@ -43,6 +50,7 @@ export const LimitOrderRecordRow = ({
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const statusLabel = useLimitOrderStatusLabels()
+  const formatExpiry = useFormatLimitOrderExpiry()
   const { data } = value
 
   const fromAmount = Number(
@@ -98,7 +106,7 @@ export const LimitOrderRecordRow = ({
           {data.orderStatus === 'resting' &&
           data.timeToExpiryBlocks !== undefined ? (
             <Text size={12} color="shy">
-              {`${t('swap_limit_expiry_label')}: ${formatLimitOrderExpiry(data.timeToExpiryBlocks)}`}
+              {`${t('swap_limit_expiry_label')}: ${formatExpiry(data.timeToExpiryBlocks)}`}
             </Text>
           ) : null}
         </HStack>

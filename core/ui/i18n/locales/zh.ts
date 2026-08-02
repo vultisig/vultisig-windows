@@ -1660,4 +1660,10 @@ export const zh = {
   swap_limit_payout_to: '支付至',
   tron_freeze_verify_title: '冻结TRON',
   tron_unfreeze_verify_title: '解冻TRON',
+  swap_limit_expiry_days: '{{days}}天',
+  swap_limit_expiry_days_hours: '{{days}}天{{hours}}小时',
+  swap_limit_expiry_hours: '{{hours}}小时',
+  swap_limit_expiry_hours_minutes: '{{hours}}小时{{minutes}}分',
+  swap_limit_expiry_minutes: '{{minutes}}分',
+  swap_limit_expiry_under_minute: '<1分',
 }

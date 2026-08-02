@@ -88,12 +88,12 @@ export const useLimitOrderTracking = () => {
         })
       )
 
-      for (const record of liveOrders) {
+      const reconcile = async (record: LimitSwapTransactionRecord) => {
         const queue = queueBySender.get(record.data.fromAddress) ?? null
 
         if (queue === null) {
           // No information — leave the order and its absence streak untouched.
-          continue
+          return
         }
 
         const entry = findLimitOrderQueueEntry({
@@ -107,7 +107,7 @@ export const useLimitOrderTracking = () => {
           if (updated) {
             await updateRecord(updated)
           }
-          continue
+          return
         }
 
         const streak = Math.min(
@@ -116,7 +116,7 @@ export const useLimitOrderTracking = () => {
         )
         absentPollsRef.current.set(record.id, streak)
         if (streak < absencePollsBeforeClosing) {
-          continue
+          return
         }
 
         const outcome = await resolveLimitSwapOutcome(record.txHash)
@@ -124,7 +124,7 @@ export const useLimitOrderTracking = () => {
         if (closed) {
           absentPollsRef.current.delete(record.id)
           await updateRecord(closed)
-          continue
+          return
         }
 
         if (record.data.orderStatus === 'pending') {
@@ -137,6 +137,14 @@ export const useLimitOrderTracking = () => {
             await updateRecord(rejection)
           }
         }
+      }
+
+      for (const record of liveOrders) {
+        // Each order is reconciled in isolation. The SDK's resolvers already
+        // degrade to "no information" rather than throwing, but the storage
+        // write can fail — and an exception escaping here would abandon every
+        // remaining order for the rest of the poll, not just this one.
+        await attempt(() => reconcile(record))
       }
 
       return liveOrders.length

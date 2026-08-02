@@ -19,8 +19,8 @@ import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { fromThorchainFixedPoint } from '@core/ui/vault/swap/limit/amount'
 import {
-  formatLimitOrderExpiry,
   limitOrderStatusColor,
+  useFormatLimitOrderExpiry,
   useLimitOrderStatusLabels,
 } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { useLimitOrderTracking } from '@core/ui/vault/swap/limit/tracking/useLimitOrderTracking'
@@ -403,6 +403,7 @@ const LimitSwapDetailPanel = ({
 }) => {
   const { t } = useTranslation()
   const statusLabel = useLimitOrderStatusLabels()
+  const formatExpiry = useFormatLimitOrderExpiry()
   const { data } = record
 
   // The queue's own accounting of what has been paid out so far — kept even
@@ -428,7 +429,7 @@ const LimitSwapDetailPanel = ({
         {data.orderStatus === 'resting' &&
           data.timeToExpiryBlocks !== undefined && (
             <DetailRow label={t('swap_limit_expiry_label')}>
-              <Text>{formatLimitOrderExpiry(data.timeToExpiryBlocks)}</Text>
+              <Text>{formatExpiry(data.timeToExpiryBlocks)}</Text>
             </DetailRow>
           )}
         <DetailRow label={t('swap_limit_payout_to')}>

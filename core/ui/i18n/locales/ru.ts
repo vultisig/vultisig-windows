@@ -1788,4 +1788,10 @@ export const ru = {
   swap_limit_payout_to: 'Выплата на',
   tron_freeze_verify_title: 'Заморозить TRON',
   tron_unfreeze_verify_title: 'Разморозить TRON',
+  swap_limit_expiry_days: '{{days}}д',
+  swap_limit_expiry_days_hours: '{{days}}д {{hours}}ч',
+  swap_limit_expiry_hours: '{{hours}}ч',
+  swap_limit_expiry_hours_minutes: '{{hours}}ч {{minutes}}мин',
+  swap_limit_expiry_minutes: '{{minutes}}мин',
+  swap_limit_expiry_under_minute: '<1мин',
 }

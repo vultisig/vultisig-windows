@@ -8,24 +8,36 @@ const secondsPerBlock = 6
 
 /**
  * The queue's block countdown as a coarse human duration ("2d 3h", "45m").
+ *
  * Coarse on purpose: it is refreshed once per poll, so minute precision is the
- * most it can honestly claim.
+ * most it can honestly claim. The unit abbreviations come from translations —
+ * they are short, but they are still words, and `d`/`h`/`m` are English ones.
  */
-export const formatLimitOrderExpiry = (timeToExpiryBlocks: number): string => {
-  const totalMinutes = Math.floor((timeToExpiryBlocks * secondsPerBlock) / 60)
-  if (totalMinutes < 1) {
-    return '<1m'
+export const useFormatLimitOrderExpiry = () => {
+  const { t } = useTranslation()
+
+  return (timeToExpiryBlocks: number): string => {
+    const totalMinutes = Math.floor((timeToExpiryBlocks * secondsPerBlock) / 60)
+    if (totalMinutes < 1) {
+      return t('swap_limit_expiry_under_minute')
+    }
+
+    const days = Math.floor(totalMinutes / (24 * 60))
+    const hours = Math.floor((totalMinutes % (24 * 60)) / 60)
+    const minutes = totalMinutes % 60
+
+    if (days > 0) {
+      return hours > 0
+        ? t('swap_limit_expiry_days_hours', { days, hours })
+        : t('swap_limit_expiry_days', { days })
+    }
+    if (hours > 0) {
+      return minutes > 0
+        ? t('swap_limit_expiry_hours_minutes', { hours, minutes })
+        : t('swap_limit_expiry_hours', { hours })
+    }
+    return t('swap_limit_expiry_minutes', { minutes })
   }
-  const days = Math.floor(totalMinutes / (24 * 60))
-  const hours = Math.floor((totalMinutes % (24 * 60)) / 60)
-  const minutes = totalMinutes % 60
-  if (days > 0) {
-    return hours > 0 ? `${days}d ${hours}h` : `${days}d`
-  }
-  if (hours > 0) {
-    return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`
-  }
-  return `${minutes}m`
 }
 
 export const limitOrderStatusColor: Record<LimitOrderTrackedStatus, TextColor> =
