@@ -43,24 +43,35 @@ const mapping = readJson(join(scriptDir, 'icon-mapping.json'))
 
 const figmaApiBase = 'https://api.figma.com/v1'
 
-const token = process.env.FIGMA_TOKEN
+// Support multiple tokens (FIGMA_TOKEN, FIGMA_TOKEN_2, FIGMA_TOKEN_3): on a
+// rate-limit the request rotates to the next token before backing off, so a
+// per-token limit doesn't stall the whole batch.
+const tokens = [
+  process.env.FIGMA_TOKEN,
+  process.env.FIGMA_TOKEN_2,
+  process.env.FIGMA_TOKEN_3,
+].filter(Boolean)
 
 const sleep = ms => new Promise(done => setTimeout(done, ms))
 
-/** GET a Figma endpoint, retrying on 429/5xx with exponential backoff. */
-const figma = async (path, attempt = 0) => {
-  if (!token) {
+/** GET a Figma endpoint, rotating tokens then backing off on 429/5xx. */
+const figma = async (path, attempt = 0, tokenIdx = 0) => {
+  if (!tokens.length) {
     throw new Error(
       'FIGMA_TOKEN is not set. Set it for Figma access, or pass --from-ios <path> to generate from local iOS assets instead.'
     )
   }
   const res = await fetch(`${figmaApiBase}${path}`, {
-    headers: { 'X-Figma-Token': token },
+    headers: { 'X-Figma-Token': tokens[tokenIdx] },
   })
   if (res.status === 429 || res.status >= 500) {
+    // Try the next token first (cheap); only back off once all have been tried.
+    if (tokenIdx < tokens.length - 1) {
+      return figma(path, attempt, tokenIdx + 1)
+    }
     if (attempt >= 5) {
       throw new Error(
-        `Figma API ${res.status} for ${path} after ${attempt} retries`
+        `Figma API ${res.status} for ${path} after ${attempt} retries across ${tokens.length} token(s)`
       )
     }
     // Cap the wait: Figma's Retry-After can be a large reset window; never sleep
@@ -74,10 +85,10 @@ const figma = async (path, attempt = 0) => {
       60_000
     )
     console.warn(
-      `Figma API ${res.status} — retrying in ${Math.round(wait / 1000)}s (attempt ${attempt + 1}/5)`
+      `Figma API ${res.status} on all ${tokens.length} token(s) — retrying in ${Math.round(wait / 1000)}s (attempt ${attempt + 1}/5)`
     )
     await sleep(wait)
-    return figma(path, attempt + 1)
+    return figma(path, attempt + 1, 0)
   }
   if (!res.ok) {
     throw new Error(`Figma API ${res.status} for ${path}: ${await res.text()}`)

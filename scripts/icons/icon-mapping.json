@@ -365,7 +365,7 @@
     {
       "desktop": "TransactionReceiveIcon",
       "v3": "circle-open-arrow-down",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
     },
@@ -391,7 +391,7 @@
     {
       "desktop": "DollarIcon",
       "v3": "currency-dollar",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "V3 currency-dollar; fetch + verify when Figma access returns"
     },
@@ -404,14 +404,14 @@
     {
       "desktop": "ArrowUpDownIcon",
       "v3": "swap",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "candidate swap — verify geometry (two vertical arrows) when Figma access returns"
     },
     {
       "desktop": "SwapLoadingIcon",
       "v3": "loader",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "spinner arc; verify vs V3 loader when Figma access returns"
     },
@@ -424,7 +424,7 @@
     {
       "desktop": "PercentIcon",
       "v3": "percentage",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "plain percent; V3 percentage — fetch in corrections batch"
     },
@@ -493,105 +493,105 @@
     {
       "desktop": "FacebookIcon",
       "v3": "IconFacebook",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "LinkedinIcon",
       "v3": "IconLinkedin",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "RedditIcon",
       "v3": "IconReddit",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "WhatsAppIcon",
       "v3": "IconWhatsapp",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "BubbleQuestionIcon",
       "v3": "circle-question",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "KeyboardUpIcon",
       "v3": null,
-      "status": "pending",
+      "status": "legacy",
       "source": "manual",
-      "note": "iOS keyboard-3 loses the up-arrow; needs a V3 keyboard-up (resolve in batch)"
+      "note": "V3 keyboards lack an up-arrow variant"
     },
     {
       "desktop": "ImageAvatarSparkleIcon",
       "v3": "image-sparkle",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "RadioTowerIcon",
       "v3": "radio",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "ArrowUndoIcon",
       "v3": "arrow-rotate-anticlockwise",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "FileQuestionIcon",
       "v3": null,
-      "status": "pending",
+      "status": "legacy",
       "source": "manual",
-      "note": "candidate \"file-question\" not confirmed in V3 list — resolve in batch"
+      "note": "V3 has file-search, no file-question"
     },
     {
       "desktop": "FolderUploadIcon",
       "v3": null,
-      "status": "pending",
+      "status": "legacy",
       "source": "manual",
-      "note": "candidate \"folder-upload\" not confirmed in V3 list — resolve in batch"
+      "note": "V3 has folder-download, no folder-upload"
     },
     {
       "desktop": "GroupOneIcon",
       "v3": "users",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "verify geometry in corrections batch"
     },
     {
       "desktop": "TransactionApproveIcon",
       "v3": "circle-check",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
     },
     {
       "desktop": "TransactionSwapIcon",
       "v3": "circle-sort-arrows",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
     },
     {
       "desktop": "TransactionSendIcon",
       "v3": "circle-arrow-up",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
     },
@@ -664,14 +664,14 @@
     {
       "desktop": "ExpandIcon",
       "v3": "expand-3",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "not in iOS; V3 target — verify in batch"
     },
     {
       "desktop": "PanelRightIcon",
       "v3": "sidebar-right",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "not in iOS; V3 target — verify in batch"
     },
@@ -721,56 +721,56 @@
     },
     {
       "desktop": "LeafIcon",
-      "v3": null,
-      "status": "pending",
+      "v3": "20px_leaf 1",
+      "status": "migrated",
       "source": "manual",
-      "note": "V3 leaf name is odd (20px_leaf 1) — resolve in batch"
+      "note": "odd V3 name; verify geometry in batch"
     },
     {
       "desktop": "CubeWithCornersIcon",
       "v3": null,
-      "status": "pending",
+      "status": "bespoke",
       "source": "manual",
-      "note": "scan/AR cube with corner brackets; plain V3 cube loses corners — resolve in batch"
+      "note": "scan/AR cube with corner brackets; no clean V3"
     },
     {
       "desktop": "ArrowSplitIcon",
       "v3": "three-way-arrow-split",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "only split in V3 is three-way; verify vs current 2-way"
     },
     {
       "desktop": "PageCheckIcon",
       "v3": "file-check",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "not in iOS; V3 file-check"
     },
     {
       "desktop": "UserLockIcon",
       "v3": "user-lock",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual"
     },
     {
       "desktop": "CircleHelpIcon",
       "v3": "circle-question",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "iOS square-question differs; V3 circle-question"
     },
     {
       "desktop": "FrameIcon",
       "v3": "frame",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "iOS window differs; V3 frame — verify in batch"
     },
     {
       "desktop": "EmailIcon",
       "v3": "envelope",
-      "status": "pending",
+      "status": "migrated",
       "source": "manual",
       "note": "iOS only has envelope-filled; V3 envelope (outline) — verify in batch"
     },

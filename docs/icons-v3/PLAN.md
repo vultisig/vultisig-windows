@@ -115,6 +115,34 @@ until design provides one (tracked as `status: "legacy"` / `"bespoke"` in the ma
 Note: the V3 library's `pencil-2` renders a non-pencil glyph (name ≠ geometry); `PencilIcon`
 was migrated from `pen-writing` instead. Always verify V3 geometry, not just the name.
 
+## Corrections batch ✅ — Figma pending resolved
+
+The per-screen phases deferred every icon that wasn't in the iOS asset set to a single
+Figma batch. That batch is done: **26 icons fetched in one run** (the codegen rotates
+across `FIGMA_TOKEN` / `_2` / `_3` on a 429, and caches the section tree), each verified
+against its rendered geometry. Includes the transaction-direction set
+(`circle-arrow-up`/`circle-open-arrow-down`/`circle-sort-arrows`/`circle-check`), the social
+brands (`IconFacebook`/`Linkedin`/`Reddit`/`Whatsapp`), and `envelope`, `currency-dollar`,
+`percentage`, `swap`, `loader`, `frame`, `user-lock`, `file-check`, `expand-3`,
+`sidebar-right`, `circle-question`, …
+
+### Final icon state
+
+- **migrated: 102** — on Icons V3.
+- **legacy: 10** — no faithful V3 counterpart (e.g. `EyeClosed` [no eye-off], `LockKeyholeOpen`
+  [no lock-open], `ShieldCheck(+Filled)`/`ShieldVerified` [no shield-with-check], `FileUp`,
+  `FileQuestion`, `FolderUpload`, `KeyboardUp`, `BrokenChainLink3`). Await a V3 glyph from design.
+- **bespoke: 11** — Vultisig-specific (`Agent*`, `Tron*`, `Crypto*`, `DApps`, `CoSign`,
+  `LogoBox`, `Seedphrase*`, `CubeWithCorners`).
+- **special: 1** — `CircleIcon` (gradient badge, not a monochrome glyph).
+
+### Remaining work (not icon-art)
+
+1. `iconStyle` fork removal — collapse the `station`/default ternaries (now identical) and
+   move the non-icon Station styling to a proper brand flag.
+2. Bespoke + legacy design decisions (incl. a V3 `eye-off` so the balance toggle matches).
+3. Final PR from `feature/icons-v3-adoption` → `main`.
+
 ## Constraints that shape the work
 
 - **`knip` runs in `check:all`.** With no barrel, orphaned icons surface as unused exports —
