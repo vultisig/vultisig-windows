@@ -596,6 +596,147 @@
       "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
     },
     {
+      "desktop": "EmailNotificationIcon",
+      "v3": "envelope-notification",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FileWarningIcon",
+      "v3": "file-alert",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LaptopIcon",
+      "v3": "laptop",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LightbulbIcon",
+      "v3": "lightbulb",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PadlockIcon",
+      "v3": "lock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "QrCodeIcon",
+      "v3": "qrcode",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "SmartphoneIcon",
+      "v3": "mobile",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "SparkledPenIcon",
+      "v3": "pen-sparkle",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LogoBoxIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "DownloadSeedphraseIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "CoSignIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "BrowserExtensionIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "ShieldVerifiedIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has no shield-check/verified"
+    },
+    {
+      "desktop": "LockKeyholeOpenIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has lock but no lock-open/unlock"
+    },
+    {
+      "desktop": "LeafIcon",
+      "v3": null,
+      "status": "pending",
+      "source": "manual",
+      "note": "V3 leaf name is odd (20px_leaf 1) — resolve in batch"
+    },
+    {
+      "desktop": "CubeWithCornersIcon",
+      "v3": null,
+      "status": "pending",
+      "source": "manual",
+      "note": "scan/AR cube with corner brackets; plain V3 cube loses corners — resolve in batch"
+    },
+    {
+      "desktop": "ArrowSplitIcon",
+      "v3": "three-way-arrow-split",
+      "status": "pending",
+      "source": "manual",
+      "note": "only split in V3 is three-way; verify vs current 2-way"
+    },
+    {
+      "desktop": "PageCheckIcon",
+      "v3": "file-check",
+      "status": "pending",
+      "source": "manual",
+      "note": "not in iOS; V3 file-check"
+    },
+    {
+      "desktop": "UserLockIcon",
+      "v3": "user-lock",
+      "status": "pending",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleHelpIcon",
+      "v3": "circle-question",
+      "status": "pending",
+      "source": "manual",
+      "note": "iOS square-question differs; V3 circle-question"
+    },
+    {
+      "desktop": "FrameIcon",
+      "v3": "frame",
+      "status": "pending",
+      "source": "manual",
+      "note": "iOS window differs; V3 frame — verify in batch"
+    },
+    {
+      "desktop": "EmailIcon",
+      "v3": "envelope",
+      "status": "pending",
+      "source": "manual",
+      "note": "iOS only has envelope-filled; V3 envelope (outline) — verify in batch"
+    },
+    {
       "desktop": "CryptoIcon",
       "v3": null,
       "status": "bespoke",
