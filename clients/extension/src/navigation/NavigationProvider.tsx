@@ -32,6 +32,10 @@ const getInitialHistory = async (): Promise<View[]> => {
   })
 }
 
+/**
+ * Provides navigation state to the extension app, resolving the initial
+ * history from stored state and the vault list before rendering children.
+ */
 export const NavigationProvider = ({ children }: ChildrenProp) => {
   const { mutate, ...mutationState } = useMutation({
     mutationFn: getInitialHistory,
