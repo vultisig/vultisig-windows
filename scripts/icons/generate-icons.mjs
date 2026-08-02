@@ -168,6 +168,9 @@ const svgToComponent = (name, svg) => {
   // Inner markup: everything between the opening <svg ...> and closing </svg>.
   let inner = svg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '')
 
+  // Strip XML/HTML comments — `<!-- -->` is invalid inside JSX.
+  inner = inner.replace(/<!--[\s\S]*?-->/g, '')
+
   // Drop id attributes (iOS assets carry id="Vector"; not needed, and duplicate
   // ids across icons on one page are invalid).
   inner = inner.replace(/\s*id="[^"]*"/g, '')

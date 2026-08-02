@@ -10,42 +10,28 @@ export const ArrowSplitIcon = (props: SvgProps) => (
     {...props}
   >
     <path
-      d="M12 20.3996V3.59961"
+      d="M4.80078 4.7998L9.00078 8.9998"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M3.59961 9.59961L11.9996 17.9996"
+      d="M3.59961 9.59961V3.59961H9.59961"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M20.4 9.59961L12 17.9996"
+      d="M12 20.4V12L19.2 4.8"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M15 6.59961L12 3.59961L9 6.59961"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M7.84281 9.59961H3.59961V13.8428"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M16.1562 9.59961H20.3995V13.8428"
+      d="M20.4004 9.59961V3.59961H14.4004"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"

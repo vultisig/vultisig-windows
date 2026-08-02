@@ -5,7 +5,6 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
@@ -73,11 +72,7 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
               </Text>
             </VStack>
             <IconWrapper>
-              {iconStyle === 'station' ? (
-                <StationChevronRightSmallIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
+              <ChevronRightIcon />
             </IconWrapper>
           </HStack>
         </HStack>

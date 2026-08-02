@@ -1,6 +1,6 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { GroupOneIcon } from '@lib/ui/icons/GroupOneIcon'
-import { KeyboardUpIcon } from '@lib/ui/icons/KeyboardUpIcon'
+import { Keyboard3Icon } from '@lib/ui/icons/Keyboard3Icon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
@@ -20,7 +20,7 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
     {
       title: t('referrals_summary.item_1.title'),
       description: t('referrals_summary.item_1.description'),
-      icon: KeyboardUpIcon,
+      icon: Keyboard3Icon,
     },
     {
       title: t('referrals_summary.item_2.title'),

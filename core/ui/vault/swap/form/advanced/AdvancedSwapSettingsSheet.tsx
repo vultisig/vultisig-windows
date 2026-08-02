@@ -1,5 +1,8 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { Clone2Icon } from '@lib/ui/icons/Clone2Icon'
+import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -13,9 +16,6 @@ import { useSwapFromCoin } from '../../state/fromCoin'
 import { AdvancedSheet } from './AdvancedSheet'
 import { ExternalRecipientSheet } from './ExternalRecipientSheet'
 import { GasLimitSheet } from './GasLimitSheet'
-import { ExternalRecipientIcon } from './icons/ExternalRecipientIcon'
-import { GasLimitIcon } from './icons/GasLimitIcon'
-import { SlippageIcon } from './icons/SlippageIcon'
 import { formatSlippage, SlippageValue } from './slippage'
 import { SlippageSheet } from './SlippageSheet'
 
@@ -62,7 +62,7 @@ export const AdvancedSwapSettingsSheet = ({
   const rows: SettingRow[] = [
     {
       key: 'slippage',
-      icon: <SlippageIcon />,
+      icon: <LightningIcon />,
       title: t('slippage_tolerance'),
       value: formatSlippage(slippage, t('auto')),
       onClick: () => setOpenSheet('slippage'),
@@ -71,7 +71,7 @@ export const AdvancedSwapSettingsSheet = ({
       ? [
           {
             key: 'gasLimit',
-            icon: <GasLimitIcon />,
+            icon: <FuelIcon />,
             title: t('gas_limit'),
             value: gasLimit || t('auto'),
             onClick: () => setOpenSheet('gasLimit'),
@@ -80,7 +80,7 @@ export const AdvancedSwapSettingsSheet = ({
       : []),
     {
       key: 'externalRecipient',
-      icon: <ExternalRecipientIcon />,
+      icon: <Clone2Icon />,
       title: t('use_external_recipient'),
       value: externalRecipient ? shortenAddress(externalRecipient) : t('off'),
       onClick: () => setOpenSheet('externalRecipient'),

@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
@@ -68,7 +68,7 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
                 }}
                 size="lg"
               >
-                <CryptoWalletPenIcon />
+                <HousePenIcon />
               </IconButton>
             </ManageButtonMotion>
           )}

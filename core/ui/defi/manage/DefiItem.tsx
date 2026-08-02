@@ -1,13 +1,12 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { StationCheckmarkSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { vStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
-import styled, { css, useTheme } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 type DefiItemProps = {
   icon: ReactNode
@@ -28,8 +27,6 @@ export const DefiItem = ({
   isDisabled = false,
   onClick,
 }: DefiItemProps) => {
-  const { iconStyle } = useTheme()
-
   return (
     <Container onClick={onClick} isLoading={isPending} isDisabled={isDisabled}>
       <IconContainer isActive={isSelected} isDisabled={isDisabled}>
@@ -38,11 +35,7 @@ export const DefiItem = ({
         </IconWrapper>
         {isSelected && (
           <CheckBadge color="primary" size={12}>
-            {iconStyle === 'station' ? (
-              <StationCheckmarkSmallIcon />
-            ) : (
-              <CheckmarkIcon />
-            )}
+            <CheckmarkIcon />
           </CheckBadge>
         )}
       </IconContainer>

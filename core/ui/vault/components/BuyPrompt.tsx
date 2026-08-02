@@ -1,8 +1,7 @@
 import { useCore } from '@core/ui/state/core'
 import { SecondaryActionWrapper } from '@core/ui/vault/components/PrimaryActions.styled'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { DollarIcon } from '@lib/ui/icons/DollarIcon'
-import { StationCirclePlusFilledIcon } from '@lib/ui/icons/StationFigmaIcons'
+import { CirclePlusFilledIcon } from '@lib/ui/icons/CirclePlusFilledIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import {
@@ -12,7 +11,6 @@ import {
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'styled-components'
 
 type BuyPromptProps = {
   coin: CoinKey
@@ -22,7 +20,6 @@ export const BuyPrompt = ({ coin }: BuyPromptProps) => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
   const { ticker, address } = useCurrentVaultCoin(coin)
-  const { iconStyle } = useTheme()
 
   const { chain } = coin
 
@@ -38,11 +35,7 @@ export const BuyPrompt = ({ coin }: BuyPromptProps) => {
         data-testid="vault-action-buy"
         onClick={() => openUrl(url)}
       >
-        {iconStyle === 'station' ? (
-          <StationCirclePlusFilledIcon />
-        ) : (
-          <DollarIcon />
-        )}
+        <CirclePlusFilledIcon />
       </SecondaryActionWrapper>
       <Text color="shyExtra" size={12}>
         {t('buy')}

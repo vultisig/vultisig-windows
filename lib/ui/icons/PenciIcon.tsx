@@ -5,21 +5,14 @@ export const PencilIcon = (props: SvgProps) => (
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 20"
     fill="none"
     {...props}
   >
     <path
-      d="M20.4004 20.4004H14.4004"
+      d="M11.0417 5.20873L13.4049 2.84558C14.0557 2.1947 15.111 2.1947 15.7619 2.84558L17.1549 4.23855C17.8057 4.88943 17.8057 5.9447 17.1549 6.59558L14.7917 8.95873M11.0417 5.20873L2.77985 13.4706C2.46728 13.7831 2.29169 14.2071 2.29169 14.6491V17.7087H5.35133C5.79336 17.7087 6.21728 17.5331 6.52985 17.2206L14.7917 8.95873M11.0417 5.20873L14.7917 8.95873"
       stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M3.59961 20.3993L4.79961 14.3993L14.8964 4.30251C15.8336 3.36531 17.3528 3.36531 18.29 4.30251L19.6964 5.70891C20.6336 6.64611 20.6336 8.16531 19.6964 9.10251L9.59961 19.1993L3.59961 20.3993Z"
-      stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />

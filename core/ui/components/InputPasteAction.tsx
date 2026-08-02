@@ -1,9 +1,7 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
-import { StationCopies3FilledIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { UiProps } from '@lib/ui/props'
 import { attempt } from '@vultisig/lib-utils/attempt'
-import { useTheme } from 'styled-components'
 
 import { useCore } from '../state/core'
 
@@ -16,7 +14,6 @@ export const InputPasteAction = ({
   ...rest
 }: InputPasteActionProps & UiProps) => {
   const { getClipboardText } = useCore()
-  const { iconStyle } = useTheme()
 
   return (
     <IconButton
@@ -30,7 +27,7 @@ export const InputPasteAction = ({
       }}
       {...rest}
     >
-      {iconStyle === 'station' ? <StationCopies3FilledIcon /> : <PasteIcon />}
+      <PasteIcon />
     </IconButton>
   )
 }

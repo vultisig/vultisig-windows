@@ -3,9 +3,9 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { AtomShieldIcon } from '@lib/ui/icons/AtomShieldIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
-import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
-import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
+import { Upload4Icon } from '@lib/ui/icons/Upload4Icon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -45,7 +45,7 @@ export const VaultSettingsAdvancedPage: FC = () => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <ShareAndroidIcon />
+                  <Upload4Icon />
                 </ListItemIconWrapper>
               }
               description={
@@ -63,7 +63,7 @@ export const VaultSettingsAdvancedPage: FC = () => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <ShieldIcon />
+                  <AtomShieldIcon />
                 </ListItemIconWrapper>
               }
               description={

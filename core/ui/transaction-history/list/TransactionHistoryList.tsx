@@ -1,4 +1,4 @@
-import { CalendarClockIcon } from '@lib/ui/icons/CalendarClockIcon'
+import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { EmptyState } from '@lib/ui/status/EmptyState/EmptyState'
@@ -25,7 +25,7 @@ export const TransactionHistoryList = ({
         <EmptyState
           icon={
             <IconWrapper size={24} color="buttonHover">
-              <CalendarClockIcon />
+              <CalendarIcon />
             </IconWrapper>
           }
           title={t('no_transactions_yet')}

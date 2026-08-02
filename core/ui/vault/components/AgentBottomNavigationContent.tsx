@@ -9,20 +9,15 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { AgentIcon } from '@lib/ui/icons/AgentIcon'
-import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
-import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
-import {
-  StationCreditCardIcon,
-  StationLayers2FilledIcon,
-  StationWalletFilledIcon,
-} from '@lib/ui/icons/StationFigmaIcons'
+import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
+import { NodesIcon } from '@lib/ui/icons/NodesIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css, useTheme } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const navHeight = 66
 const cameraButtonSize = 56
@@ -42,7 +37,6 @@ export const AgentBottomNavigationContent = ({
   onCameraPress,
 }: AgentBottomNavigationContentProps) => {
   const { t } = useTranslation()
-  const { iconStyle } = useTheme()
   const dismissBanner = useDismissBanner()
   const { hasLoaded, isBannerDismissed } = useDismissedBanners()
   const [isCoachmarkOpen, setIsCoachmarkOpen] = useState(false)
@@ -127,7 +121,7 @@ export const AgentBottomNavigationContent = ({
     <>
       {isCoachmarkOpen && <ContentOverlay />}
       <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
-        <CameraFilledIcon />
+        <Camera2Icon />
       </FloatingCamera>
       <NavContainer>
         <NavSurface />
@@ -136,11 +130,7 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'wallet'}
             onClick={() => onTabChange('wallet')}
           >
-            {iconStyle === 'station' ? (
-              <StationWalletFilledIcon />
-            ) : (
-              <WalletIcon />
-            )}
+            <WalletIcon />
             <Text as="span" size={10}>
               {t('wallet')}
             </Text>
@@ -149,11 +139,7 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'defi'}
             onClick={() => onTabChange('defi')}
           >
-            {iconStyle === 'station' ? (
-              <StationLayers2FilledIcon />
-            ) : (
-              <CoinsAddIcon />
-            )}
+            <NodesIcon />
             <Text as="span" size={10}>
               {t('defi')}
             </Text>
@@ -169,11 +155,7 @@ export const AgentBottomNavigationContent = ({
               onTabChange('agent')
             }}
           >
-            {iconStyle === 'station' ? (
-              <StationCreditCardIcon />
-            ) : (
-              <AgentIcon />
-            )}
+            <AgentIcon />
             <Text as="span" size={10}>
               {t('agent')}
             </Text>

@@ -13,7 +13,7 @@ import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { takeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
-import { CameraIcon } from '@lib/ui/icons/CameraIcon'
+import { ImageSparkle2Icon } from '@lib/ui/icons/ImageSparkle2Icon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -175,7 +175,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
               action={
                 <HStack>
                   <IconButton size="sm" onClick={() => setQrView('scan')}>
-                    <CameraIcon />
+                    <ImageSparkle2Icon />
                   </IconButton>
                   <InputPasteAction
                     onPaste={value =>

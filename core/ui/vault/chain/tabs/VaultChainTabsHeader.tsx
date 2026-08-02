@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
@@ -74,7 +74,7 @@ export const VaultChainTabsHeader = ({ children }: ChildrenProp) => {
                 }}
                 size="lg"
               >
-                <CryptoWalletPenIcon />
+                <HousePenIcon />
               </IconButton>
             </ManageButtonMotion>
           )}

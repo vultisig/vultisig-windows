@@ -8,7 +8,6 @@ import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
-import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
@@ -149,11 +148,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 </Text>
               </VStack>
               <IconWrapper>
-                {iconStyle === 'station' ? (
-                  <StationChevronRightSmallIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
+                <ChevronRightIcon />
               </IconWrapper>
             </HStack>
           </HStack>

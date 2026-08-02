@@ -377,10 +377,9 @@
     },
     {
       "desktop": "EyeClosedIcon",
-      "v3": null,
-      "status": "legacy",
-      "source": "manual",
-      "note": "V3 has no eye-off/eye-slash; pairs with the migrated EyeIcon in the balance show/hide toggle — needs a V3 eye-off from design"
+      "v3": "eye-filled",
+      "status": "migrated",
+      "source": "ios"
     },
     {
       "desktop": "SquareBehindSquare4Icon",
@@ -676,6 +675,150 @@
       "note": "not in iOS; V3 target — verify in batch"
     },
     {
+      "desktop": "ArrowsRotateCenterIcon",
+      "v3": "arrows-rotate-center",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CirclePlusFilledIcon",
+      "v3": "circle-plus-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "NodesIcon",
+      "v3": "nodes",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "HousePenIcon",
+      "v3": "house-pen",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Camera2Icon",
+      "v3": "camera-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ClockRotateClockwiseIcon",
+      "v3": "clock-rotate-clockwise",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "GridPlusIcon",
+      "v3": "grid-plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CameraFilledIcon",
+      "v3": "camera-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleDashed2Icon",
+      "v3": "circle-dashed-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "BookmarksIcon",
+      "v3": "bookmarks",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Clone2Icon",
+      "v3": "clone-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "BranchOutIcon",
+      "v3": "branch-out",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleDashedIcon",
+      "v3": "circle-dashed",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "MobileSignalIcon",
+      "v3": "mobile-signal",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "AtomShieldIcon",
+      "v3": "atom-shield",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Upload4Icon",
+      "v3": "upload-4",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FolderKeyIcon",
+      "v3": "folder-key",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloudDownloadIcon",
+      "v3": "cloud-download",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FileBookmarkIcon",
+      "v3": "file-bookmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ImageSparkle2Icon",
+      "v3": "image-sparkle-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LockFilledIcon",
+      "v3": "lock-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Split3Icon",
+      "v3": "split-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PenWritingFilledIcon",
+      "v3": "pen-writing-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FolderPlusIcon",
+      "v3": "folder-plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
       "desktop": "DAppsIcon",
       "v3": null,
       "status": "bespoke",
@@ -735,7 +878,7 @@
     },
     {
       "desktop": "ArrowSplitIcon",
-      "v3": "three-way-arrow-split",
+      "v3": "split-3",
       "status": "migrated",
       "source": "manual",
       "note": "only split in V3 is three-way; verify vs current 2-way"

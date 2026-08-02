@@ -1,7 +1,7 @@
 import { CurrencyInputMode } from '@core/ui/vault/send/amount/ManageAmountInputField'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
+import { CircleDashedIcon } from '@lib/ui/icons/CircleDashedIcon'
 import { DollarIcon } from '@lib/ui/icons/DollarIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
@@ -15,7 +15,7 @@ type Props = {
 }
 
 const currencyModeIcon: Record<CurrencyInputMode, ReactNode> = {
-  base: <CoinsIcon />,
+  base: <CircleDashedIcon />,
   fiat: <DollarIcon />,
 }
 
