@@ -6,7 +6,8 @@
     "verified": "V3 source confirmed against rendered art",
     "proposed": "likely match from name/iOS precedent — must be eyeballed before use",
     "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn",
-    "legacy": "shared icon with no faithful V3 counterpart yet — stays on the legacy glyph pending design"
+    "legacy": "shared icon with no faithful V3 counterpart yet — stays on the legacy glyph pending design",
+    "pending": "verified-name V3 target, generation deferred (Figma rate-limited) — fetch when access returns"
   },
   "sourceLegend": {
     "station": "already shipped in StationFigmaIcons.tsx (drawn in V3 style)",
@@ -379,6 +380,19 @@
       "status": "legacy",
       "source": "manual",
       "note": "V3 has no eye-off/eye-slash; pairs with the migrated EyeIcon in the balance show/hide toggle — needs a V3 eye-off from design"
+    },
+    {
+      "desktop": "SquareBehindSquare4Icon",
+      "v3": "clone",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DollarIcon",
+      "v3": "currency-dollar",
+      "status": "pending",
+      "source": "manual",
+      "note": "V3 currency-dollar; fetch + verify when Figma access returns"
     },
     {
       "desktop": "CryptoIcon",
