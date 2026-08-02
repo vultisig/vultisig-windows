@@ -18,7 +18,12 @@ const pollingInterval = 3000
 /** Polls chain status for a single pending transaction and updates its record when finalized. */
 export const useTransactionStatusPolling = (record: TransactionRecord) => {
   const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
-  const isPending = pendingStatuses.includes(record.status)
+  // Limit orders are queue-driven, not chain-status-driven: the inbound tx
+  // confirms long before the order settles, and letting this poller flip the
+  // record to `confirmed` would end tracking on an order that is still resting.
+  // useLimitOrderTracking owns their lifecycle.
+  const isPending =
+    pendingStatuses.includes(record.status) && record.type !== 'limitSwap'
   const recordRef = useRef(record)
   recordRef.current = record
 

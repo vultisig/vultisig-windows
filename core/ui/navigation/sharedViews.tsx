@@ -36,6 +36,7 @@ import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
+import { LimitOrdersPage } from '@core/ui/vault/swap/limit/orders/LimitOrdersPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation'
 import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder'
 import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/create'
@@ -84,6 +85,7 @@ export type SharedViewId = Extract<
   | 'manageDefiChains'
   | 'manageDefiPositions'
   | 'tonStake'
+  | 'limitOrders'
   | 'lpPositionForm'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
@@ -196,6 +198,7 @@ export const sharedViews: Views<SharedViewId> = {
   requestFastVaultBackup: RequestFastVaultBackup,
   transactionDetail: TransactionDetailPage,
   transactionHistory: TransactionHistoryPage,
+  limitOrders: LimitOrdersPage,
   faq: FaqVaultPage,
   vultDiscount:
     currentProductBrand === 'station' ? VaultPage : VultDiscountPage,
