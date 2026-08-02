@@ -364,10 +364,10 @@
     },
     {
       "desktop": "TransactionReceiveIcon",
-      "v3": null,
-      "status": "legacy",
+      "v3": "circle-open-arrow-down",
+      "status": "pending",
       "source": "manual",
-      "note": "Vultisig send/receive/swap set — decide together with design"
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
     },
     {
       "desktop": "SquareBehindSquare6Icon",
@@ -573,6 +573,27 @@
       "status": "pending",
       "source": "manual",
       "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "TransactionApproveIcon",
+      "v3": "circle-check",
+      "status": "pending",
+      "source": "manual",
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
+    },
+    {
+      "desktop": "TransactionSwapIcon",
+      "v3": "circle-sort-arrows",
+      "status": "pending",
+      "source": "manual",
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
+    },
+    {
+      "desktop": "TransactionSendIcon",
+      "v3": "circle-arrow-up",
+      "status": "pending",
+      "source": "manual",
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
     },
     {
       "desktop": "CryptoIcon",
