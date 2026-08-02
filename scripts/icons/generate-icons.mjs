@@ -168,8 +168,14 @@ const svgToComponent = (name, svg) => {
   // Inner markup: everything between the opening <svg ...> and closing </svg>.
   let inner = svg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '')
 
-  // Strip XML/HTML comments — `<!-- -->` is invalid inside JSX.
-  inner = inner.replace(/<!--[\s\S]*?-->/g, '')
+  // Strip XML/HTML comments — `<!-- -->` is invalid inside JSX. Loop until the
+  // markup stops changing: a single pass can let comment delimiters re-emerge
+  // (e.g. `<!-<!-- -->- -->` leaves a fresh `<!--`), so keep going until stable.
+  let previousInner
+  do {
+    previousInner = inner
+    inner = inner.replace(/<!--[\s\S]*?-->/g, '')
+  } while (inner !== previousInner)
 
   // Drop id attributes (iOS assets carry id="Vector"; not needed, and duplicate
   // ids across icons on one page are invalid).
