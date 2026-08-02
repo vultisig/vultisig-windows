@@ -1806,4 +1806,6 @@ export const de = {
   trust_line_insufficient_xrp:
     'Nicht genügend {{ticker}}. Zum Öffnen dieser Vertrauenslinie werden {{amount}} {{ticker}} für die Kontoreserve und die Gebühr benötigt.',
   swap_limit_payout_to: 'Auszahlung an',
+  tron_freeze_verify_title: 'Freeze TRON',
+  tron_unfreeze_verify_title: 'TRON freigeben',
 }

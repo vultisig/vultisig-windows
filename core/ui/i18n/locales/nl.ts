@@ -1774,4 +1774,6 @@ export const nl = {
   trust_line_insufficient_xrp:
     'Er zijn onvoldoende {{ticker}}. Voor het openen van deze trustlijn zijn {{amount}} {{ticker}} nodig voor de accountreservering en de bijbehorende kosten.',
   swap_limit_payout_to: 'Uitbetaling aan',
+  tron_freeze_verify_title: 'Freeze TRON',
+  tron_unfreeze_verify_title: 'Deblokkeer TRON',
 }

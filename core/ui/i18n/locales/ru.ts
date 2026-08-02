@@ -1770,4 +1770,6 @@ export const ru = {
   trust_line_insufficient_xrp:
     'Недостаточно {{ticker}}. Для открытия этой доверительной линии требуется {{amount}} {{ticker}} для резервирования счета и комиссии.',
   swap_limit_payout_to: 'Выплата на',
+  tron_freeze_verify_title: 'Freeze TRON',
+  tron_unfreeze_verify_title: 'Разморозить TRON',
 }

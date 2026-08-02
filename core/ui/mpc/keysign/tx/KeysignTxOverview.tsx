@@ -2,6 +2,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTxHash } from '@core/ui/chain/state/txHash'
 import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
+import { getTronStakingDisplay } from '@core/ui/chain/tx/getTronStakingDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
@@ -65,6 +66,12 @@ export const KeysignTxOverview = ({
     : toAmount
       ? fromChainAmount(BigInt(toAmount), displayCoin.decimals)
       : null
+
+  // A TRON freeze/unfreeze carries its operation as an internal memo marker
+  // that the signer turns into a staking contract, so surface the staked
+  // resource instead of the raw marker — the memo never reaches the chain.
+  const tronStaking = getTronStakingDisplay({ chain, memo })
+  const memoValue = tronStaking ? tronStaking.resource : memo
 
   const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
 
@@ -188,7 +195,7 @@ export const KeysignTxOverview = ({
               </HStack>
             </VStack>
           )}
-          {memo && <TxOverviewMemo value={memo} chain={chain} />}
+          {memoValue && <TxOverviewMemo value={memoValue} chain={chain} />}
           {destinationTag !== undefined && (
             <HStack justifyContent="space-between">
               <Text color="shy" weight="500">

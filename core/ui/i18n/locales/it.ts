@@ -1796,4 +1796,6 @@ export const it = {
   trust_line_insufficient_xrp:
     '{{ticker}} non è sufficiente. Per aprire questa linea di fiducia sono necessari {{amount}} {{ticker}} per la riserva del conto e la commissione.',
   swap_limit_payout_to: 'Pagamento a',
+  tron_freeze_verify_title: 'Congela TRON',
+  tron_unfreeze_verify_title: 'Sblocca TRON',
 }
