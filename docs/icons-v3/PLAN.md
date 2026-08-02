@@ -87,7 +87,7 @@ final PR to `main`.)
 | **4 — Swap flow** 🔄 | screen | 12 of 18 icons already done in Phase 1. Migrated `WarningIcon → circle-warning` (iOS). **Pending** (Figma-only, rate-limited): `ArrowUpDownIcon → swap`, `SwapLoadingIcon → loader` — fetch + verify in the corrections batch. |
 | **5 — DeFi / Earn** 🔄 | screen | 14 of 24 icons already done in Phase 1. Migrated `CalendarIcon → calendar-days` (iOS). Pending: `PercentIcon → percentage` (Figma). Legacy: `BrokenChainLink3Icon` (no broken-chain in V3). Special (out of scope): `CircleIcon` (gradient badge, not a glyph). |
 | **6 — Settings** 🔄 | screen | Largest screen: 46 icons, 22 already done in Phase 1. Migrated 8 from iOS: `Books, Cloud, Discord, Github, Languages, TabletSmartphone, TrashCan, Twitter(→IconX)`. **12 pending** for the Figma batch: social brands (`Facebook, Linkedin, Reddit, WhatsApp`), and `ArrowUndo, BubbleQuestion, FileQuestion, FolderUpload, GroupOne, ImageAvatarSparkle, KeyboardUp, RadioTower` (iOS candidates weren't faithful — e.g. RadioTower ≠ mobile-signal, KeyboardUp loses its up-arrow). |
-| **7 — Transaction History** | screen | |
+| **7 — Transaction History** 🔄 | screen | 4 of 10 icons already done in Phase 1. The remaining 4 are the **transaction-direction set** (`TransactionSend/Receive/Swap/Approve`, 12×12 circle badges) → `circle-arrow-up` / `circle-open-arrow-down` / `circle-sort-arrows` / `circle-check`. Scoped as one Figma-batch unit so the 4 stay visually cohesive; migrated together in the corrections pass. |
 | **8 — Vault lifecycle** | screens | Onboarding, Vault Setup, Reshare, Upgrade Vault (share most icons — grouped). |
 | **9 — Notifications** | screen | |
 | **10 — Extension surfaces** | screens | No Figma reference — migrate to desktop parity. |
