@@ -1,6 +1,10 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { hasBlockaidEvmChangesForSummary } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationNormalize'
 import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
+import {
+  getTronStakingDisplay,
+  tronStakingTitleKey,
+} from '@core/ui/chain/tx/getTronStakingDisplay'
 import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractApprovalCounterparty'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
@@ -103,11 +107,17 @@ export const TxSuccess = ({
     staleTime: Infinity,
   })
 
+  // A TRON freeze/unfreeze is signed as a staking contract, so name the
+  // operation rather than reporting the staked amount as sent.
+  const tronStaking = getTronStakingDisplay({ chain: coin.chain, memo })
+
   const rawFunctionName =
     functionQuery.data?.functionSignature?.split('(')[0] ?? undefined
-  const resolvedLabel = rawFunctionName
-    ? capitalizeFirstLetter(rawFunctionName)
-    : undefined
+  const resolvedLabel = tronStaking
+    ? t(tronStakingTitleKey[tronStaking.operation])
+    : rawFunctionName
+      ? capitalizeFirstLetter(rawFunctionName)
+      : undefined
 
   const resolvedToken = useMemo(() => {
     if (!functionQuery.data) return null

@@ -8,6 +8,12 @@ type TronStakingDisplay = {
   resource: TronResourceType
 }
 
+/** Amount heading each staking operation replaces "You're sending" / "Sent" with. */
+export const tronStakingTitleKey = {
+  freeze: 'tron_freeze_verify_title',
+  unfreeze: 'tron_unfreeze_verify_title',
+} as const satisfies Record<TronStakingOperation, string>
+
 const operationByMemoPrefix: Record<string, TronStakingOperation> = {
   FREEZE: 'freeze',
   UNFREEZE: 'unfreeze',
