@@ -1793,4 +1793,6 @@ export const pt = {
   trust_line_insufficient_xrp:
     'Não há {{ticker}} suficientes. Para abrir esta linha de confiança, são necessários {{amount}} {{ticker}} para a reserva e taxa da conta.',
   swap_limit_payout_to: 'Pagamento para',
+  tron_freeze_verify_title: 'Congelar TRON',
+  tron_unfreeze_verify_title: 'Descongelar TRON',
 }

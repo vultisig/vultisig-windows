@@ -1,3 +1,4 @@
+import { getTronStakingDisplay } from '@core/ui/chain/tx/getTronStakingDisplay'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
@@ -35,6 +36,14 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
     selectedChainAction,
     coin
   )
+
+  // A TRON freeze/unfreeze memo is an internal marker for the staking contract
+  // and never reaches the chain, so show the staked resource the way the other
+  // signing device does instead of the raw `FREEZE:<resource>` marker.
+  const tronStaking = getTronStakingDisplay({ chain: coin.chain, memo })
+  const displayMemo = tronStaking
+    ? tronStaking.resource
+    : formattedDepositFormData['memo']
 
   const sender = useSender()
   const { t } = useTranslation()
@@ -118,11 +127,8 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
               title={t('trust_line_issuer')}
             />
           )}
-          {Boolean(formattedDepositFormData['memo']) && (
-            <ListItem
-              description={String(formattedDepositFormData['memo'])}
-              title={t('memo')}
-            />
+          {Boolean(displayMemo) && (
+            <ListItem description={String(displayMemo)} title={t('memo')} />
           )}
           <ListItem description={<DepositFee />} title={t('est_network_fee')} />
         </List>

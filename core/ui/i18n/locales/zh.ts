@@ -1643,4 +1643,6 @@ export const zh = {
   trust_line_insufficient_xrp:
     '{{ticker}}不足。开通此信任线需要{{amount}} {{ticker}}作为账户储备金和手续费。',
   swap_limit_payout_to: '支付至',
+  tron_freeze_verify_title: '冻结TRON',
+  tron_unfreeze_verify_title: '解冻TRON',
 }

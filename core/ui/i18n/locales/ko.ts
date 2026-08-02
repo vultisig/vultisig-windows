@@ -1753,4 +1753,6 @@ export const ko = {
   trust_line_insufficient_xrp:
     '{{ticker}} 부족합니다. 이 신뢰 라인을 개설하려면 계좌 준비금 및 수수료로 {{amount}} {{ticker}} 필요합니다.',
   swap_limit_payout_to: '지급 대상',
+  tron_freeze_verify_title: 'TRON 동결합니다',
+  tron_unfreeze_verify_title: 'TRON 동결 해제하세요',
 }

@@ -1762,4 +1762,6 @@ export const hr = {
   trust_line_insufficient_xrp:
     'Nema dovoljno {{ticker}}. Za otvaranje ove linije povjerenja potrebno je {{amount}} {{ticker}} za rezervu računa i naknadu.',
   swap_limit_payout_to: 'Isplata na',
+  tron_freeze_verify_title: 'Zamrzni TRON',
+  tron_unfreeze_verify_title: 'Odmrzni TRON',
 }
