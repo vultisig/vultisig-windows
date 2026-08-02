@@ -1776,5 +1776,5 @@ export const ko = {
   swap_limit_expiry_hours_minutes: '{{hours}}시간 {{minutes}}분',
   swap_limit_expiry_minutes: '{{minutes}}분',
   swap_limit_expiry_under_minute: '<1분',
-  transaction_broadcasted: '거래 내역이 방송되었습니다',
+  transaction_broadcasted: '해당 거래가 네트워크에 전송되었습니다.',
 }

@@ -1817,5 +1817,5 @@ export const pt = {
   swap_limit_expiry_hours_minutes: '{{hours}}h {{minutes}}m',
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
-  transaction_broadcasted: 'Transação transmitida',
+  transaction_broadcasted: 'A transação foi transmitida à rede.',
 }

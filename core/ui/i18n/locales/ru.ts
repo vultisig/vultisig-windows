@@ -1794,5 +1794,5 @@ export const ru = {
   swap_limit_expiry_hours_minutes: '{{hours}}ч {{minutes}}мин',
   swap_limit_expiry_minutes: '{{minutes}}мин',
   swap_limit_expiry_under_minute: '<1мин',
-  transaction_broadcasted: 'Транзакция передана в эфир',
+  transaction_broadcasted: 'Информация о транзакции была передана в сеть.',
 }

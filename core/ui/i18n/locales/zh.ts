@@ -1666,5 +1666,5 @@ export const zh = {
   swap_limit_expiry_hours_minutes: '{{hours}}小时{{minutes}}分',
   swap_limit_expiry_minutes: '{{minutes}}分',
   swap_limit_expiry_under_minute: '<1分',
-  transaction_broadcasted: '交易广播',
+  transaction_broadcasted: '该交易已广播到网络。',
 }
