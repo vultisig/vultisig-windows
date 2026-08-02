@@ -443,6 +443,138 @@
       "note": "gradient-filled 83x83 badge circle, not a monochrome glyph"
     },
     {
+      "desktop": "BooksIcon",
+      "v3": "books",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloudIcon",
+      "v3": "cloud",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DiscordIcon",
+      "v3": "IconDiscord",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "GithubIcon",
+      "v3": "IconGithub",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LanguagesIcon",
+      "v3": "language",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TabletSmartphoneIcon",
+      "v3": "tablet-mobile",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TrashCanIcon",
+      "v3": "trash",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TwitterIcon",
+      "v3": "IconX",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FacebookIcon",
+      "v3": "IconFacebook",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "LinkedinIcon",
+      "v3": "IconLinkedin",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "RedditIcon",
+      "v3": "IconReddit",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "WhatsAppIcon",
+      "v3": "IconWhatsapp",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "BubbleQuestionIcon",
+      "v3": "circle-question",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "KeyboardUpIcon",
+      "v3": null,
+      "status": "pending",
+      "source": "manual",
+      "note": "iOS keyboard-3 loses the up-arrow; needs a V3 keyboard-up (resolve in batch)"
+    },
+    {
+      "desktop": "ImageAvatarSparkleIcon",
+      "v3": "image-sparkle",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "RadioTowerIcon",
+      "v3": "radio",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "ArrowUndoIcon",
+      "v3": "arrow-rotate-anticlockwise",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "FileQuestionIcon",
+      "v3": null,
+      "status": "pending",
+      "source": "manual",
+      "note": "candidate \"file-question\" not confirmed in V3 list — resolve in batch"
+    },
+    {
+      "desktop": "FolderUploadIcon",
+      "v3": null,
+      "status": "pending",
+      "source": "manual",
+      "note": "candidate \"folder-upload\" not confirmed in V3 list — resolve in batch"
+    },
+    {
+      "desktop": "GroupOneIcon",
+      "v3": "users",
+      "status": "pending",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
       "desktop": "CryptoIcon",
       "v3": null,
       "status": "bespoke",
