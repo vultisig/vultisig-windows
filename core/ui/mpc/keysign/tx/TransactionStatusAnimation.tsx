@@ -70,8 +70,7 @@ export const TransactionStatusAnimation = ({
         >
           <StatusText color="contrast">
             {match<TransactionStatus, React.ReactNode>(status, {
-              broadcasted: () =>
-                `${t('transaction')} ${t('broadcasted').toLowerCase()}`,
+              broadcasted: () => t('transaction_broadcasted'),
               pending: () => t('transaction_pending'),
               success: () => (
                 <Trans

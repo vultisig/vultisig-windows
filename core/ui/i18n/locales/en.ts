@@ -1262,6 +1262,7 @@ export const en = {
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   transaction_failed: 'Transaction <error>failed</error>',
+  transaction_broadcasted: 'Transaction broadcasted',
   transaction_pending: 'Transaction pending...',
   transaction_successful: 'Transaction <g>successful</g>',
   raw_transaction_data: 'Raw Transaction Data',
