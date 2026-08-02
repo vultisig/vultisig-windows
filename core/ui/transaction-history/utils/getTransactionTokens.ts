@@ -9,5 +9,12 @@ export const getTransactionTokens = (record: TransactionRecord): string[] => {
     ]
   }
 
+  if (record.type === 'limitSwap') {
+    return [
+      record.data.fromToken.toLowerCase(),
+      record.data.buyTicker.toLowerCase(),
+    ]
+  }
+
   return [record.data.token.toLowerCase()]
 }

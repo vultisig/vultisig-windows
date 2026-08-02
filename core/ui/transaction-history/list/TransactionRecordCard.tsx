@@ -4,6 +4,7 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { useLimitOrderStatusLabels } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import {
@@ -15,7 +16,11 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
-import { TransactionRecord, TransactionRecordStatus } from '../core'
+import {
+  LimitOrderTrackedStatus,
+  TransactionRecord,
+  TransactionRecordStatus,
+} from '../core'
 import { getTransactionTagLabel } from '../cosmosMessageLabel'
 import {
   TransactionHistoryCard,
@@ -23,6 +28,24 @@ import {
   TransactionHistoryCardStatus,
 } from '../TransactionHistoryCard'
 import { TransactionHistoryTagType } from '../TransactionHistoryTag'
+
+/**
+ * Card state per ORDER state. `resting` is pending, not successful: an open
+ * order has not done anything yet. Non-fill closures read as neutral rather
+ * than green — the funds came back, which is not a failure but is not a fill.
+ */
+const limitOrderCardStatus: Record<
+  LimitOrderTrackedStatus,
+  TransactionHistoryCardStatus
+> = {
+  pending: 'pending',
+  resting: 'pending',
+  filled: 'successful',
+  refunded: 'pending',
+  expired: 'pending',
+  cancelled: 'pending',
+  rejected: 'error',
+}
 
 const statusToCardStatus: Record<
   TransactionRecordStatus,
@@ -104,6 +127,30 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
     }
   }
 
+  if (record.type === 'limitSwap') {
+    const rawAmount = Number(
+      fromChainAmount(BigInt(record.data.fromAmount), record.data.fromDecimals)
+    )
+
+    return {
+      tagType: 'swap',
+      amountCrypto: formatCryptoAmount(rawAmount),
+      cryptoAmount: rawAmount,
+      symbol: record.data.fromToken,
+      pill: getProviderPill({
+        provider: Chain.THORChain,
+        fromChain: record.data.fromChain,
+      }),
+      coin: record.data.fromTokenLogo
+        ? {
+            chain: record.data.fromChain,
+            id: record.data.fromTokenId,
+            logo: record.data.fromTokenLogo,
+          }
+        : undefined,
+    }
+  }
+
   const rawAmount = Number(
     fromChainAmount(BigInt(record.data.amount), record.data.decimals)
   )
@@ -126,7 +173,7 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
 }
 
 const getCoinKey = (record: TransactionRecord): CoinKey => {
-  if (record.type === 'swap') {
+  if (record.type === 'swap' || record.type === 'limitSwap') {
     return { chain: record.data.fromChain, id: record.data.fromTokenId }
   }
   return { chain: record.chain, id: record.data.tokenId }
@@ -174,13 +221,30 @@ export const TransactionRecordCard = ({
   record,
 }: TransactionRecordCardProps) => {
   const { t } = useTranslation()
+  const limitStatusLabel = useLimitOrderStatusLabels()
   const navigate = useCoreNavigate()
   const display = getDisplayData(record)
   const amountUsd = useFiatDisplay(record, display.cryptoAmount)
-  const tagLabel = getTransactionTagLabel({
-    messageTypeUrl: display.messageTypeUrl,
-    t,
-  })
+  const tagLabel =
+    record.type === 'limitSwap'
+      ? t('swap_mode_limit')
+      : getTransactionTagLabel({
+          messageTypeUrl: display.messageTypeUrl,
+          t,
+        })
+
+  // A limit order's card state is the ORDER's, not the deposit's: the deposit
+  // confirms in seconds while the order rests for hours, so chain status says
+  // nothing about what the order did.
+  const cardStatus =
+    record.type === 'limitSwap'
+      ? limitOrderCardStatus[record.data.orderStatus]
+      : statusToCardStatus[record.status]
+
+  const statusLabelOverride =
+    record.type === 'limitSwap'
+      ? limitStatusLabel[record.data.orderStatus]
+      : undefined
 
   const handleClick = () =>
     navigate({ id: 'transactionDetail', state: { id: record.id } })
@@ -201,7 +265,8 @@ export const TransactionRecordCard = ({
       <TransactionHistoryCard
         tagType={display.tagType}
         tagLabel={tagLabel}
-        status={statusToCardStatus[record.status]}
+        status={cardStatus}
+        statusLabel={statusLabelOverride}
         amountUsd={amountUsd}
         amountCrypto={display.amountCrypto}
         symbol={display.symbol}
