@@ -84,7 +84,7 @@ final PR to `main`.)
 | **1 — Shared icons** ✅ | cross-screen | Every icon used on more than one screen. **Done: 53 migrated** across 7 batches (44 from iOS/Station V3 art, 9 from the Figma V3 library), each verified against rendered geometry. PRs #4502 + the batch-7 PR. Excludes chevrons. |
 | **2 — Main View** ✅ | screen | Portfolio / vault home. 9 of its 17 icons already done in Phase 1 (shared) — validating the shared-first order. Migrated the 1 remaining screen-unique glyph: `SquareBehindSquare6Icon → clone`. Legacy: `EyeClosedIcon` (V3 has no eye-off — mismatches the migrated `EyeIcon` in the balance toggle; needs design). Bespoke: `CryptoIcon`, `CryptoWalletPenIcon`. |
 | **3 — Send flow** 🔄 | screen | 8 of 13 icons already done in Phase 1. Migrated `SquareBehindSquare4Icon → clone` (iOS). `DollarIcon → currency-dollar` is **pending** — a verified V3 target, but generation is blocked by a persistent Figma rate-limit; fetch when access returns. |
-| **4 — Swap flow** | screen | |
+| **4 — Swap flow** 🔄 | screen | 12 of 18 icons already done in Phase 1. Migrated `WarningIcon → circle-warning` (iOS). **Pending** (Figma-only, rate-limited): `ArrowUpDownIcon → swap`, `SwapLoadingIcon → loader` — fetch + verify in the corrections batch. |
 | **5 — DeFi / Earn** | screen | |
 | **6 — Settings** | screen | |
 | **7 — Transaction History** | screen | |

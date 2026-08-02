@@ -395,6 +395,26 @@
       "note": "V3 currency-dollar; fetch + verify when Figma access returns"
     },
     {
+      "desktop": "WarningIcon",
+      "v3": "circle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowUpDownIcon",
+      "v3": "swap",
+      "status": "pending",
+      "source": "manual",
+      "note": "candidate swap — verify geometry (two vertical arrows) when Figma access returns"
+    },
+    {
+      "desktop": "SwapLoadingIcon",
+      "v3": "loader",
+      "status": "pending",
+      "source": "manual",
+      "note": "spinner arc; verify vs V3 loader when Figma access returns"
+    },
+    {
       "desktop": "CryptoIcon",
       "v3": null,
       "status": "bespoke",
