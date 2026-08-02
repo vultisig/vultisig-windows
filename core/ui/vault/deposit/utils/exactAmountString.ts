@@ -1,7 +1,7 @@
 import { fromChainAmountExact } from '@vultisig/core-chain/amount/fromChainAmountExact'
 
 /** Trims trailing fraction zeros (and a dangling dot) from a decimal string. */
-export const trimTrailingZeros = (value: string) =>
+const trimTrailingZeros = (value: string) =>
   value.includes('.') ? value.replace(/\.?0+$/, '') : value
 
 /**

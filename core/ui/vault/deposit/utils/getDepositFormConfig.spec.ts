@@ -47,6 +47,7 @@ describe('TON stake/unstake validation', () => {
       coin: tonCoin as any,
       walletCore: {} as any,
       totalAmountAvailable: 5,
+      totalAmountAvailableUnits: null,
       selectedChainAction: 'stake',
     })
 
@@ -69,6 +70,7 @@ describe('TON stake/unstake validation', () => {
       coin: tonCoin as any,
       walletCore: {} as any,
       totalAmountAvailable: 10,
+      totalAmountAvailableUnits: null,
       selectedChainAction: 'stake',
     })
 
@@ -91,6 +93,7 @@ describe('TON stake/unstake validation', () => {
       coin: tonCoin as any,
       walletCore: {} as any,
       totalAmountAvailable: 3,
+      totalAmountAvailableUnits: null,
       selectedChainAction: 'unstake',
     })
 
@@ -112,6 +115,7 @@ describe('TON stake/unstake validation', () => {
       coin: { ...tonCoin, chain: Chain.THORChain } as any,
       walletCore: {} as any,
       totalAmountAvailable: 2,
+      totalAmountAvailableUnits: null,
       selectedChainAction: 'merge',
     })
 
@@ -133,6 +137,7 @@ describe('TON stake/unstake validation', () => {
       coin: { ...tonCoin, chain: Chain.Cosmos } as any,
       walletCore: {} as any,
       totalAmountAvailable: 10,
+      totalAmountAvailableUnits: null,
       selectedChainAction: 'ibc_transfer',
     })
 
@@ -184,6 +189,7 @@ describe('Solana delegate validation', () => {
       coin: solCoin as any,
       walletCore: {} as any,
       totalAmountAvailable: stakeable,
+      totalAmountAvailableUnits: null,
       selectedChainAction: 'solana_delegate',
     })
 
@@ -255,6 +261,7 @@ describe('Ripple open trust line affordability', () => {
       coin: rippleCoin as any,
       walletCore: {} as any,
       totalAmountAvailable: spendableXrp,
+      totalAmountAvailableUnits: null,
       selectedChainAction: 'open_trust_line',
       trustLineCostXrp,
     })
