@@ -25,7 +25,7 @@ export const SelectVaultsBackupPage = () => {
 
   useEffect(() => {
     if (!hasMultipleVaults) {
-      navigate({ id: 'vaultBackup' })
+      navigate({ id: 'vaultBackup' }, { replace: true })
     }
   }, [hasMultipleVaults, navigate])
 
