@@ -264,18 +264,15 @@ const main = async () => {
     return
   }
 
+  // --icon forces any entry that has a v3 name (even migrated — to regenerate).
+  // --all only picks up entries actively being worked: `proposed`/`verified`.
+  // `pending` (deferred to the Figma corrections batch), `legacy`, `bespoke`,
+  // `special`, and `migrated` are skipped.
+  const active = new Set(['proposed', 'verified'])
   const targets = mapping.icons.filter(entry => {
-    if (
-      entry.status === 'bespoke' ||
-      entry.status === 'migrated' ||
-      !entry.v3
-    ) {
-      // --icon can still force a regenerate of an already-migrated icon
-      if (!(flags.icon && entry.desktop === flags.icon && entry.v3))
-        return false
-    }
+    if (!entry.v3) return false
     if (flags.icon) return entry.desktop === flags.icon
-    return flags.all
+    return flags.all && active.has(entry.status)
   })
 
   if (!targets.length) {
