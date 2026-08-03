@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
-import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
+import { CircleDashedIcon } from '@lib/ui/icons/CircleDashedIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -26,7 +26,7 @@ export const DefiPositionEmptyState = ({
     <EmptyWrapper>
       <VStack gap={12} alignItems="center">
         <IconWrapper size={24} color="primaryAccentFour">
-          <CryptoIcon />
+          <CircleDashedIcon />
         </IconWrapper>
         <VStack gap={8}>
           <Text centerHorizontally size={17} weight="600">

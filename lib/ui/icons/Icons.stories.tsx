@@ -85,7 +85,6 @@ import { GlobusIcon } from './GlobusIcon'
 import { GripVerticalIcon } from './GripVerticalIcon'
 import { GroupOneIcon } from './GroupOneIcon'
 import { IconFileEdit } from './IconFileEdit'
-import { ImageAvatarSparkleIcon } from './ImageAvatarSparkleIcon'
 import { InfoCircleIcon } from './InfoCircleIcon'
 import { InfoIcon } from './InfoIcon'
 import { KeyboardUpIcon } from './KeyboardUpIcon'
@@ -166,6 +165,7 @@ import { TronEnergyIcon } from './TronEnergyIcon'
 import { TrophyIcon } from './TrophyIcon'
 import { TwitterIcon } from './TwitterIcon'
 import { UserLockIcon } from './UserLockIcon'
+import { UserSparkleIcon } from './UserSparkleIcon'
 import { WalletIcon } from './WalletIcon'
 import { WandSparklesIcon } from './WandSparklesIcon'
 import { WarningIcon } from './WarningIcon'
@@ -261,7 +261,7 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   GripVerticalIcon,
   GroupOneIcon,
   IconFileEdit,
-  ImageAvatarSparkleIcon,
+  UserSparkleIcon,
   InfoCircleIcon,
   InfoIcon,
   KeyboardUpIcon,

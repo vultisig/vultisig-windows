@@ -4,7 +4,7 @@ import { useFriendReferralQuery } from '@core/ui/storage/referrals'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { ImageAvatarSparkleIcon } from '@lib/ui/icons/ImageAvatarSparkleIcon'
+import { UserSparkleIcon } from '@lib/ui/icons/UserSparkleIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -96,7 +96,7 @@ export const ManageReferrals = ({
                     <VStack gap={12}>
                       <HStack alignItems="center" gap={8} wrap="wrap">
                         <Text
-                          as={ImageAvatarSparkleIcon}
+                          as={UserSparkleIcon}
                           color="info"
                           size={24}
                         />
