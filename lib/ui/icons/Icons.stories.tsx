@@ -150,7 +150,6 @@ import {
   StationWalletFilledIcon,
 } from './StationFigmaIcons'
 import { StopCircleIcon } from './StopCircleIcon'
-import { SwapLoadingIcon } from './SwapLoadingIcon'
 import { TabletSmartphoneIcon } from './TabletSmartphoneIcon'
 import { TransactionApproveIcon } from './TransactionApproveIcon'
 import { TransactionReceiveIcon } from './TransactionReceiveIcon'
@@ -312,7 +311,6 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   SquareBehindSquare6Icon,
   SquarePenIcon,
   StopCircleIcon,
-  SwapLoadingIcon,
   TabletSmartphoneIcon,
   TransactionApproveIcon,
   TransactionReceiveIcon,
