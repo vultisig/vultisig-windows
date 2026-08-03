@@ -1,13 +1,11 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
+import { SlidersVerticalIcon } from '@lib/ui/icons/SlidersVerticalIcon'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { FeatureTierGate } from '../../../../vult/discount/featureGate/FeatureTierGate'
-import { TierBadge } from '../../../../vult/discount/featureGate/TierBadge'
 import { useTierBadge } from '../../../../vult/discount/featureGate/useTierBadge'
 import { useAdvancedSwapSettings } from '../../state/advancedSettings'
 import { AdvancedSwapSettingsSheet } from './AdvancedSwapSettingsSheet'
@@ -18,22 +16,19 @@ const requiredTier = 'silver'
  * Advanced swap settings trigger. Slippage, gas limit and external recipient
  * overrides are a Silver-tier perk, evaluated across ALL vaults: if any one
  * vault qualifies the user opens the settings sheet, otherwise they are routed
- * to the discount tiers upsell. The badge shows the user's highest tier.
+ * to the discount tiers upsell, which explains the tier requirement.
  */
 export const AdvancedSwapSettings = () => {
   const { t } = useTranslation()
   const [isOpen, { set: open, unset: close }] = useBoolean(false)
   const [isGateOpen, setIsGateOpen] = useState(false)
   const [settings, setSettings] = useAdvancedSwapSettings()
-  const { isEligible, isPending, badge } = useTierBadge({ requiredTier })
-  const triggerLabel = badge
-    ? `${t('advanced_settings')}: ${badge.label}`
-    : t('advanced_settings')
+  const { isEligible, isPending } = useTierBadge({ requiredTier })
 
   return (
     <>
-      <Trigger
-        aria-label={triggerLabel}
+      <IconButton
+        aria-label={t('advanced_settings')}
         data-testid="advanced-swap-settings"
         kind="secondary"
         onClick={() => {
@@ -48,10 +43,9 @@ export const AdvancedSwapSettings = () => {
         title={t('advanced_settings')}
       >
         <IconWrapper size={20}>
-          <SettingsIcon />
+          <SlidersVerticalIcon />
         </IconWrapper>
-        <TierBadge badge={badge} />
-      </Trigger>
+      </IconButton>
       {isOpen && (
         <AdvancedSwapSettingsSheet
           onClose={close}
@@ -73,7 +67,7 @@ export const AdvancedSwapSettings = () => {
         <FeatureTierGate
           isOpen={isGateOpen}
           onClose={() => setIsGateOpen(false)}
-          icon={<SettingsIcon />}
+          icon={<SlidersVerticalIcon />}
           title={t('advanced_settings')}
           description={t('advanced_swap_settings_gate_description')}
           requiredTier={requiredTier}
@@ -82,8 +76,3 @@ export const AdvancedSwapSettings = () => {
     </>
   )
 }
-
-const Trigger = styled(IconButton)`
-  gap: 6px;
-  padding: 0 10px;
-`
