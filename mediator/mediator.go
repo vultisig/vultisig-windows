@@ -232,9 +232,14 @@ func (r *Server) DiscoveryService(name string) (string, error) {
 			// The mediator is reached over IPv4, so an entry that only resolved to
 			// IPv6 is not usable — keep waiting instead of returning a host that
 			// cannot be dialled.
-			if entry.AddrV4 == nil || !matchesMediatorService(entry, name) {
+			matched := matchesMediatorService(entry, name)
+			if entry.AddrV4 == nil || !matched {
 				if len(seen) < 16 {
-					seen[fmt.Sprintf("%s@%s:%d", entry.Name, entry.AddrV4, entry.Port)] = struct{}{}
+					label := fmt.Sprintf("%s@%s:%d", entry.Name, entry.AddrV4, entry.Port)
+					if matched {
+						label += " (matched, but only advertised IPv6)"
+					}
+					seen[label] = struct{}{}
 				}
 				continue
 			}

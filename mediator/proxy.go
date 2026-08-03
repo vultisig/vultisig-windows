@@ -1,12 +1,14 @@
 package mediator
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"sync"
+	"time"
 )
 
 // discoveryProxy is a loopback reverse proxy in front of a remotely discovered
@@ -81,13 +83,20 @@ func (p *discoveryProxy) handler() http.Handler {
 
 // start listens on an ephemeral loopback port and serves until process exit.
 func (p *discoveryProxy) start() error {
-	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	listenConfig := &net.ListenConfig{}
+	listener, err := listenConfig.Listen(context.Background(), "tcp4", "127.0.0.1:0")
 	if err != nil {
 		return fmt.Errorf("fail to listen for discovery proxy: %w", err)
 	}
 
 	p.port = listener.Addr().(*net.TCPAddr).Port
-	p.server = &http.Server{Handler: p.handler()}
+	// Read/write timeouts are deliberately absent: MPC keysign traffic flows
+	// through this proxy and slow rounds must not be severed mid-request.
+	p.server = &http.Server{
+		Handler:           p.handler(),
+		ReadHeaderTimeout: 10 * time.Second,
+		IdleTimeout:       time.Minute,
+	}
 
 	go func() {
 		if err := p.server.Serve(listener); err != nil && err != http.ErrServerClosed {
