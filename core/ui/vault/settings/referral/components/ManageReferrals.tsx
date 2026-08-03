@@ -4,8 +4,8 @@ import { useFriendReferralQuery } from '@core/ui/storage/referrals'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { UserSparkleIcon } from '@lib/ui/icons/UserSparkleIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
+import { UserSparkleIcon } from '@lib/ui/icons/UserSparkleIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -95,11 +95,7 @@ export const ManageReferrals = ({
                   <ActionItem onClick={() => setView('createReferral')}>
                     <VStack gap={12}>
                       <HStack alignItems="center" gap={8} wrap="wrap">
-                        <Text
-                          as={UserSparkleIcon}
-                          color="info"
-                          size={24}
-                        />
+                        <Text as={UserSparkleIcon} color="info" size={24} />
                         <ActionTitle as="span">
                           {t('create_referral')}
                         </ActionTitle>
