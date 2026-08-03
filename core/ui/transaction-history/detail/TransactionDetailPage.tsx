@@ -51,6 +51,8 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { LimitOrderCancelActions } from '../../vault/swap/limit/cancel/LimitOrderCancelActions'
+
 const safeBigInt = (value: string): bigint => {
   try {
     return BigInt(value)
@@ -543,6 +545,10 @@ export const TransactionDetailPage = () => {
         >
           {t('view_on_explorer')}
         </Button>
+
+        {record.type === 'limitSwap' ? (
+          <LimitOrderCancelActions record={record} />
+        ) : null}
       </VStack>
     </ScreenLayout>
   )

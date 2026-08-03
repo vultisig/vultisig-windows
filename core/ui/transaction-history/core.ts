@@ -125,6 +125,46 @@ export type LimitSwapTransactionData = {
   amountOut?: string
   /** Blocks until expiry at the last poll (~6s per THORChain block). */
   timeToExpiryBlocks?: number
+  /**
+   * The order's identity as it was SIGNED, captured at placement: assets in the
+   * unabbreviated spelling a cancel memo requires, amounts in THORChain's 1e8.
+   *
+   * Separate from the display fields above because a cancel addresses an order
+   * by `(assets, source amount, trade target)` and nothing else — no tx hash —
+   * so these four have to be exact rather than presentable. `targetAsset` above
+   * is the placement memo's spelling, which abbreviates an L1 contract and
+   * therefore cannot address the order's bucket.
+   *
+   * Optional because orders placed before cancelling existed carry none. That
+   * is what `missingSignedData` means, and why those orders can only be
+   * cancelled once the queue has reported their identity back.
+   */
+  signedSourceAsset?: string
+  signedTargetAsset?: string
+  signedSourceAmount?: string
+  signedTradeTarget?: string
+  /**
+   * The same identity as THORChain itself reports it, copied off the queue on
+   * every poll. Authoritative by construction — this is the string THORChain
+   * built the order's index entry from, after `fuzzyAssetMatch` expanded
+   * whatever the placement memo abbreviated — and the only source for an order
+   * that predates the signed fields.
+   *
+   * Kept alongside rather than overwriting them: a cancel is only safe when the
+   * two AGREE, and a single merged field could not express the disagreement.
+   */
+  observedSourceAsset?: string
+  observedTargetAsset?: string
+  observedTradeTarget?: string
+  /**
+   * The cancel transaction broadcast against this order, once one has been.
+   *
+   * A cancel gets no history row of its own — it is a step in this order's
+   * life, not a separate transfer — so this is the only place its hash
+   * surfaces, and the only thing distinguishing "cancel sent" from "never
+   * cancelled" while the order is still resting.
+   */
+  cancelTxHash?: string
 }
 
 export type LimitSwapTransactionRecord = TransactionRecordBase & {

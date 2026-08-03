@@ -3,7 +3,11 @@ import {
   KeysignMutationListenerProvider,
   useKeysignMutationListener,
 } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
-import { useSaveTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
+import {
+  useSaveTransactionRecordMutation,
+  useTransactionRecords,
+  useUpdateTransactionRecordMutation,
+} from '@core/ui/storage/transactionHistory'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useQueryClient } from '@tanstack/react-query'
@@ -13,6 +17,7 @@ import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { useKeysignMessagePayload } from '../../mpc/keysign/state/keysignMessagePayload'
+import { applyLimitOrderCancel } from './applyLimitOrderCancel'
 import { createTransactionRecord } from './createTransactionRecord'
 
 export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
@@ -21,6 +26,8 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
   const vault = useCurrentVault()
   const vaultId = getVaultId(vault)
   const { mutate: saveRecord } = useSaveTransactionRecordMutation()
+  const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
+  const records = useTransactionRecords()
   const queryClient = useQueryClient()
 
   return (
@@ -42,13 +49,25 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
           )
           const txHash = lastTx.hash
 
-          const record = createTransactionRecord({
+          // A cancellation belongs to the order it closes, not to a row of its
+          // own — see `applyLimitOrderCancel`.
+          const cancelledOrder = applyLimitOrderCancel({
+            records,
             payload: keysignPayload,
             txHash,
-            vaultId,
           })
 
-          saveRecord(record)
+          if (cancelledOrder) {
+            updateRecord(cancelledOrder)
+          } else {
+            saveRecord(
+              createTransactionRecord({
+                payload: keysignPayload,
+                txHash,
+                vaultId,
+              })
+            )
+          }
 
           if (!keysignPayload.coin) return
 

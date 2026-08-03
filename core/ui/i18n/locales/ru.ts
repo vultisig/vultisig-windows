@@ -1795,4 +1795,30 @@ export const ru = {
   swap_limit_expiry_minutes: '{{minutes}}мин',
   swap_limit_expiry_under_minute: '<1мин',
   transaction_broadcasted: 'Информация о транзакции была передана в сеть.',
+  swap_limit_cancel_title: 'Отменить ордер',
+  swap_limit_cancel_verify_title: 'Вы отменяете лимитный ордер',
+  swap_limit_cancel_order_label: 'Ордер',
+  swap_limit_cancel_explanation:
+    'Отмена закрывает этот ордер и возвращает ту часть, которая ещё не исполнена. Уже исполненная часть остаётся исполненной и не возвращается. Это стоит одной сетевой комиссии THORChain.',
+  swap_limit_cancel_donated_dust_row: 'Удерживается THORChain',
+  swap_limit_cancel_duplicate_warning:
+    'У вас есть ещё один открытый ордер с той же парой и ценой. THORChain отменяет сначала самое старое совпадение, поэтому может закрыться тот ордер, а не этот.',
+  swap_limit_cancel_order_changed:
+    'Этот ордер изменился, пока вы его просматривали. Вернитесь назад и проверьте его текущий статус.',
+  swap_limit_cancel_already_requested:
+    'Отмена для этого ордера уже отправлена и ожидает подтверждения.',
+  swap_limit_cancel_unavailable_legacy_order:
+    'Этот ордер был размещён до появления отмены в приложении, поэтому его данные невозможно проверить.',
+  swap_limit_cancel_unavailable_mismatch:
+    'Данные этого ордера не совпадают с тем, что сообщает THORChain, поэтому его нельзя безопасно отменить.',
+  swap_limit_cancel_unavailable_memo_too_long:
+    'Этот ордер нельзя отменить из его исходной сети — сообщение об отмене слишком длинное для этой сети. Средства вернутся автоматически по истечении срока.',
+  swap_limit_cancel_unavailable_chain:
+    'Отмена не поддерживается из сети, в которой был профинансирован этот ордер. Средства вернутся автоматически по истечении срока.',
+  swap_limit_cancel_unavailable_no_signing_asset:
+    'Добавьте {{ticker}} в это хранилище, чтобы отменить этот ордер — отмена отправляется из сети {{chain}}.',
+  swap_limit_cancel_view_transaction: 'Посмотреть транзакцию отмены',
+  swap_limit_cancel_sent: 'Отмена отправлена',
+  swap_limit_cancel_sent_detail:
+    'Ваш ордер остаётся открытым, пока THORChain не подтвердит его закрытие.',
 }

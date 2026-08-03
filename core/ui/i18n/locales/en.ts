@@ -1187,6 +1187,32 @@ export const en = {
   swap_limit_expiry_24h: '24h',
   swap_limit_expiry_3d: '3d',
   swap_limit_confirm: 'The order details are correct',
+  swap_limit_cancel_title: 'Cancel Order',
+  swap_limit_cancel_verify_title: "You're cancelling a limit order",
+  swap_limit_cancel_order_label: 'Order',
+  swap_limit_cancel_explanation:
+    'Cancelling closes this order and refunds the part that has not filled yet. Anything already filled stays filled and is not returned. This costs one THORChain network fee.',
+  swap_limit_cancel_donated_dust_row: 'Kept by THORChain',
+  swap_limit_cancel_duplicate_warning:
+    'You have another resting order with the same pair and price. THORChain cancels the oldest match first, so this may close that order instead of this one.',
+  swap_limit_cancel_order_changed:
+    'This order changed while you were reviewing it. Go back and check its current status.',
+  swap_limit_cancel_already_requested:
+    'A cancellation for this order has already been sent and is waiting to be confirmed.',
+  swap_limit_cancel_unavailable_legacy_order:
+    'This order was placed before in-app cancelling was available, so its details cannot be verified.',
+  swap_limit_cancel_unavailable_mismatch:
+    "This order's details do not match what THORChain reports, so it cannot be cancelled safely.",
+  swap_limit_cancel_unavailable_memo_too_long:
+    'This order cannot be cancelled from its source chain — the cancellation message is too long for that network. It will refund automatically when it expires.',
+  swap_limit_cancel_unavailable_chain:
+    'Cancelling is not supported from the chain this order was funded on. It will refund automatically when it expires.',
+  swap_limit_cancel_unavailable_no_signing_asset:
+    'Add {{ticker}} to this vault to cancel this order — the cancellation is sent from {{chain}}.',
+  swap_limit_cancel_view_transaction: 'View cancel transaction',
+  swap_limit_cancel_sent: 'Cancellation sent',
+  swap_limit_cancel_sent_detail:
+    'Your order stays open until THORChain confirms it closed.',
   swap_limit_expiry_days: '{{days}}d',
   swap_limit_expiry_days_hours: '{{days}}d {{hours}}h',
   swap_limit_expiry_hours: '{{hours}}h',

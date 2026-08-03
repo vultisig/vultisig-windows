@@ -85,6 +85,12 @@ type GetLimitOrderRestingUpdateInput = {
  * The order is in the queue: it is resting, and the queue's fill split and
  * expiry countdown are the freshest observation there is. Returns `null` when
  * nothing changed, so a quiet order doesn't rewrite storage every poll.
+ *
+ * The queue's own spelling of the order's identity is copied across too. That
+ * is what makes an order cancellable: a cancel addresses its target by
+ * `(assets, deposit, trade target)` and this is the only place those can be
+ * read back as THORChain holds them — the placement memo abbreviates an L1
+ * contract, and cancel memos skip the fuzzy matching that would expand it.
  */
 export const getLimitOrderRestingUpdate = ({
   record,
@@ -98,6 +104,10 @@ export const getLimitOrderRestingUpdate = ({
     amountOut: entry.amountOut?.toString() ?? record.data.amountOut,
     timeToExpiryBlocks:
       entry.timeToExpiryBlocks ?? record.data.timeToExpiryBlocks,
+    observedSourceAsset: entry.sourceAsset ?? record.data.observedSourceAsset,
+    observedTargetAsset: entry.targetAsset ?? record.data.observedTargetAsset,
+    observedTradeTarget:
+      entry.tradeTarget?.toString() ?? record.data.observedTradeTarget,
   }
 
   const unchanged =
@@ -106,7 +116,10 @@ export const getLimitOrderRestingUpdate = ({
     record.data.deposit === updated.data.deposit &&
     record.data.amountIn === updated.data.amountIn &&
     record.data.amountOut === updated.data.amountOut &&
-    record.data.timeToExpiryBlocks === updated.data.timeToExpiryBlocks
+    record.data.timeToExpiryBlocks === updated.data.timeToExpiryBlocks &&
+    record.data.observedSourceAsset === updated.data.observedSourceAsset &&
+    record.data.observedTargetAsset === updated.data.observedTargetAsset &&
+    record.data.observedTradeTarget === updated.data.observedTradeTarget
 
   return unchanged ? null : updated
 }

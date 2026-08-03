@@ -1818,4 +1818,30 @@ export const pt = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'A transação foi transmitida à rede.',
+  swap_limit_cancel_title: 'Cancelar ordem',
+  swap_limit_cancel_verify_title: 'Estás a cancelar uma ordem limite',
+  swap_limit_cancel_order_label: 'Ordem',
+  swap_limit_cancel_explanation:
+    'Cancelar encerra esta ordem e reembolsa a parte que ainda não foi executada. O que já foi executado permanece executado e não é devolvido. Isto custa uma taxa de rede da THORChain.',
+  swap_limit_cancel_donated_dust_row: 'Retido pela THORChain',
+  swap_limit_cancel_duplicate_warning:
+    'Tem outra ordem ativa com o mesmo par e preço. A THORChain cancela primeiro a correspondência mais antiga, pelo que isto pode encerrar essa ordem em vez desta.',
+  swap_limit_cancel_order_changed:
+    'Esta ordem mudou enquanto a analisava. Feche este ecrã e verifique o estado atual.',
+  swap_limit_cancel_already_requested:
+    'Já foi enviado um cancelamento para esta ordem e aguarda confirmação.',
+  swap_limit_cancel_unavailable_legacy_order:
+    'Esta ordem foi criada antes de o cancelamento na aplicação estar disponível, pelo que os seus detalhes não podem ser verificados.',
+  swap_limit_cancel_unavailable_mismatch:
+    'Os detalhes desta ordem não correspondem ao que a THORChain reporta, pelo que não pode ser cancelada com segurança.',
+  swap_limit_cancel_unavailable_memo_too_long:
+    'Esta ordem não pode ser cancelada a partir da sua cadeia de origem — a mensagem de cancelamento é demasiado longa para essa rede. Será reembolsada automaticamente ao expirar.',
+  swap_limit_cancel_unavailable_chain:
+    'O cancelamento a partir da cadeia com que esta ordem foi financiada não é suportado. Será reembolsada automaticamente ao expirar.',
+  swap_limit_cancel_unavailable_no_signing_asset:
+    'Adicione {{ticker}} a este cofre para cancelar esta ordem — o cancelamento é enviado a partir de {{chain}}.',
+  swap_limit_cancel_view_transaction: 'Ver transação de cancelamento',
+  swap_limit_cancel_sent: 'Cancelamento enviado',
+  swap_limit_cancel_sent_detail:
+    'A tua ordem permanece aberta até a THORChain confirmar o fecho.',
 }

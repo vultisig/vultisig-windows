@@ -1831,4 +1831,30 @@ export const de = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'Die Transaktion wurde im Netzwerk übertragen.',
+  swap_limit_cancel_title: 'Order stornieren',
+  swap_limit_cancel_verify_title: 'Sie stornieren eine Limit-Order',
+  swap_limit_cancel_order_label: 'Order',
+  swap_limit_cancel_explanation:
+    'Durch das Stornieren wird diese Order geschlossen und der noch nicht ausgeführte Teil erstattet. Bereits ausgeführte Anteile bleiben bestehen und werden nicht zurückerstattet. Dafür fällt eine THORChain-Netzwerkgebühr an.',
+  swap_limit_cancel_donated_dust_row: 'Von THORChain einbehalten',
+  swap_limit_cancel_duplicate_warning:
+    'Sie haben eine weitere offene Order mit demselben Paar und Preis. THORChain storniert zuerst die älteste Übereinstimmung, daher wird möglicherweise jene Order statt dieser geschlossen.',
+  swap_limit_cancel_order_changed:
+    'Diese Order hat sich während der Prüfung geändert. Schließen Sie diesen Bildschirm und prüfen Sie den aktuellen Status.',
+  swap_limit_cancel_already_requested:
+    'Für diese Order wurde bereits eine Stornierung gesendet und wartet auf Bestätigung.',
+  swap_limit_cancel_unavailable_legacy_order:
+    'Diese Order wurde erstellt, bevor das Stornieren in der App verfügbar war, daher können ihre Details nicht überprüft werden.',
+  swap_limit_cancel_unavailable_mismatch:
+    'Die Details dieser Order stimmen nicht mit den Angaben von THORChain überein, daher kann sie nicht sicher storniert werden.',
+  swap_limit_cancel_unavailable_memo_too_long:
+    'Diese Order kann nicht über ihre Quell-Chain storniert werden — die Stornierungsnachricht ist für dieses Netzwerk zu lang. Sie wird bei Ablauf automatisch erstattet.',
+  swap_limit_cancel_unavailable_chain:
+    'Das Stornieren über die Chain, mit der diese Order finanziert wurde, wird nicht unterstützt. Sie wird bei Ablauf automatisch erstattet.',
+  swap_limit_cancel_unavailable_no_signing_asset:
+    'Fügen Sie {{ticker}} zu diesem Vault hinzu, um diese Order zu stornieren — die Stornierung wird über {{chain}} gesendet.',
+  swap_limit_cancel_view_transaction: 'Stornierungstransaktion anzeigen',
+  swap_limit_cancel_sent: 'Stornierung gesendet',
+  swap_limit_cancel_sent_detail:
+    'Ihre Order bleibt offen, bis THORChain die Schließung bestätigt.',
 }
