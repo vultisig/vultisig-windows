@@ -231,7 +231,7 @@ const openStationMigrationWithFixture = async ({
   }
 
   const expandedPagePromise = context.waitForEvent('page')
-  await page.getByTestId('new-vault-get-started').click()
+  await page.getByTestId('new-vault-create').click()
   const expandedPage = await expandedPagePromise
   await expandedPage.waitForLoadState('domcontentloaded')
   await expect(expandedPage.locator('body')).toContainText(
@@ -254,7 +254,7 @@ const openSetupFromPopup = async ({
   }
 
   const expandedPagePromise = context.waitForEvent('page')
-  await page.getByTestId('new-vault-get-started').click()
+  await page.getByTestId('new-vault-create').click()
   const expandedPage = await expandedPagePromise
   await expandedPage.waitForLoadState('domcontentloaded')
 
