@@ -107,6 +107,15 @@ func (p *discoveryProxy) start() error {
 	return nil
 }
 
+// stop closes the proxy's listener and connections. Only meant for app
+// shutdown, so in-flight requests are dropped rather than drained.
+func (p *discoveryProxy) stop() error {
+	if p.server == nil {
+		return nil
+	}
+	return p.server.Close()
+}
+
 // proxyDiscoveredMediator points the loopback proxy at a discovered mediator
 // and returns the proxy's base URL for the frontend to use.
 func (r *Server) proxyDiscoveredMediator(upstream string) (string, error) {

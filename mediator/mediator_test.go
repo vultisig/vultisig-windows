@@ -228,4 +228,20 @@ func TestDiscoveryProxy(t *testing.T) {
 			t.Fatalf("expected second upstream body, got %q", body)
 		}
 	})
+
+	// Must run last: it tears down the proxy shared by the subtests above.
+	t.Run("stops accepting connections after shutdown", func(t *testing.T) {
+		if err := server.stopDiscoveryProxy(); err != nil {
+			t.Fatal(err)
+		}
+
+		if _, err := http.Get(proxyUrl + "/session-id"); err == nil {
+			t.Fatal("expected request to a stopped proxy to fail")
+		}
+
+		// A second stop is a no-op rather than an error.
+		if err := server.stopDiscoveryProxy(); err != nil {
+			t.Fatal(err)
+		}
+	})
 }

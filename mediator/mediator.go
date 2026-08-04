@@ -68,7 +68,22 @@ func (r *Server) StartServer() error {
 }
 
 func (r *Server) StopServer() error {
+	if err := r.stopDiscoveryProxy(); err != nil {
+		fmt.Printf("fail to stop discovery proxy: %v\n", err)
+	}
 	return r.localServer.StopServer()
+}
+
+// stopDiscoveryProxy closes the loopback discovery proxy if one was started.
+func (r *Server) stopDiscoveryProxy() error {
+	r.proxyMu.Lock()
+	defer r.proxyMu.Unlock()
+	if r.proxy == nil {
+		return nil
+	}
+	err := r.proxy.stop()
+	r.proxy = nil
+	return err
 }
 
 func (r *Server) AdvertiseMediator(name string) error {
