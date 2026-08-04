@@ -1,3 +1,4 @@
+import { userRejectedPopupResult } from '@core/inpage-provider/popup/error'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -41,7 +42,7 @@ export const WatchAsset: PopupResolver<'watchAsset'> = ({
 
   const handleReject = () => {
     onFinish({
-      result: { error: new Error('User rejected the request') },
+      result: userRejectedPopupResult,
       shouldClosePopup: true,
     })
   }

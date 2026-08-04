@@ -1,5 +1,6 @@
 import { getAppSessionFieldsForApprovedChains } from '@core/extension/storage/appSessionChainAuthorization'
 import { useSetExclusiveVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
+import { userRejectedPopupResult } from '@core/inpage-provider/popup/error'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
 import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
@@ -201,7 +202,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
 
   const handleReject = () => {
     onFinish({
-      result: { error: new Error('User rejected the request') },
+      result: userRejectedPopupResult,
       shouldClosePopup: true,
     })
   }
