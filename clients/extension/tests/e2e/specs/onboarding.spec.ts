@@ -2,37 +2,49 @@
  * Onboarding E2E Tests
  *
  * Tests for the initial onboarding experience on a fresh extension.
- * 
+ *
  * Actual UI flow:
  * 1. Loading/splash screen (shows just logo)
  * 2. OnboardingPage - Shows "vultisig" logo/text, onboarding slides, Next/Skip buttons
  *    OR
- * 2. NewVaultPage - Shows "vultisig" logo, Scan QR, Import, Get started buttons (if onboarding completed)
+ * 2. NewVaultPage - Shows "vultisig" logo, Scan QR, Import, Create new Vault buttons (if onboarding completed)
  * 3. SetupVaultPage - Shows device selection animation, Get Started button
  */
 
-import { test, expect } from '../fixtures/extension-loader'
+import { expect, test } from '../fixtures/extension-loader'
 import { OnboardingPage } from '../page-objects/OnboardingPage.po'
 
 // Helper to wait for extension UI to fully load (past splash screen)
-async function waitForExtensionReady(page: import('@playwright/test').Page, timeout = 15_000): Promise<void> {
+async function waitForExtensionReady(
+  page: import('@playwright/test').Page,
+  timeout = 15_000
+): Promise<void> {
   // Wait for either:
   // - A button to appear (Next, Skip, Import, Scan QR)
   // - Text content like "Vultisig" with buttons
-  await page.waitForFunction(() => {
-    const buttons = document.querySelectorAll('button')
-    // Extension is ready when we have at least one button visible
-    return buttons.length > 0 && Array.from(buttons).some(b => b.offsetParent !== null)
-  }, { timeout })
+  await page.waitForFunction(
+    () => {
+      const buttons = document.querySelectorAll('button')
+      // Extension is ready when we have at least one button visible
+      return (
+        buttons.length > 0 &&
+        Array.from(buttons).some(b => b.offsetParent !== null)
+      )
+    },
+    { timeout }
+  )
 }
 
 test.describe('Onboarding Flow', () => {
-  test('fresh extension shows onboarding or new vault page', async ({ context, extensionId }) => {
+  test('fresh extension shows onboarding or new vault page', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
     await onboardingPage.goto()
-    
+
     // Wait for extension to fully load past splash screen
     await waitForExtensionReady(page)
 
@@ -43,12 +55,15 @@ test.describe('Onboarding Flow', () => {
     await page.close()
   })
 
-  test('can navigate through onboarding with Next or Skip', async ({ context, extensionId }) => {
+  test('can navigate through onboarding with Next or Skip', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
     await onboardingPage.goto()
-    
+
     // Wait for extension to fully load
     await waitForExtensionReady(page)
 
@@ -67,12 +82,15 @@ test.describe('Onboarding Flow', () => {
     await page.close()
   })
 
-  test('NewVaultPage shows vault creation options', async ({ context, extensionId }) => {
+  test('NewVaultPage shows vault creation options', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
     await onboardingPage.goto()
-    
+
     // Wait for extension to fully load
     await waitForExtensionReady(page)
 
@@ -86,18 +104,21 @@ test.describe('Onboarding Flow', () => {
 
     // Now should be on NewVaultPage with these options:
     // - "Scan QR" button
-    // - "Import" button  
-    // - "Get started" button (to create new vault)
-    
+    // - "Import" button
+    // - "Create new Vault" button
+
     const options = await onboardingPage.getVaultTypeOptions()
-    
+
     // Should have at least one option available
     expect(options.length).toBeGreaterThanOrEqual(1)
 
     await page.close()
   })
 
-  test('Rive plus control selects a two-device vault', async ({ context, extensionId }) => {
+  test('Rive plus control selects a two-device vault', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
@@ -116,12 +137,12 @@ test.describe('Onboarding Flow', () => {
 
     const plusY = canvasBounds.y + canvasBounds.height * 0.29
     // The Rive +/- controls remain the primary interaction.
-    await page.mouse.click(
-      canvasBounds.x + canvasBounds.width * 0.91,
-      plusY
-    )
+    await page.mouse.click(canvasBounds.x + canvasBounds.width * 0.91, plusY)
 
-    await page.getByRole('button', { name: /get.*started/i }).first().click()
+    await page
+      .getByRole('button', { name: /get.*started/i })
+      .first()
+      .click()
     await expect(
       page.locator('[data-testid="vault-setup-overview-content"]')
     ).toContainText(/2-device vault/i)
@@ -129,7 +150,10 @@ test.describe('Onboarding Flow', () => {
     await page.close()
   })
 
-  test('Rive slider drag selects a four-device vault', async ({ context, extensionId }) => {
+  test('Rive slider drag selects a four-device vault', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
@@ -155,7 +179,10 @@ test.describe('Onboarding Flow', () => {
     )
     await page.mouse.up()
 
-    await page.getByRole('button', { name: /get.*started/i }).first().click()
+    await page
+      .getByRole('button', { name: /get.*started/i })
+      .first()
+      .click()
     await expect(
       page.locator('[data-testid="vault-setup-overview-content"]')
     ).toContainText(/4\+-device vault/i)
