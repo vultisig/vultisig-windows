@@ -6,7 +6,8 @@
  * - isVisible() - Check if onboarding screen is visible
  */
 
-import { type Page, type Locator } from '@playwright/test'
+import { type Locator, type Page } from '@playwright/test'
+
 import { BasePage } from './BasePage.po'
 
 export class OnboardingPage extends BasePage {
@@ -41,8 +42,8 @@ export class OnboardingPage extends BasePage {
     return this.page.getByRole('button', { name: /get.*started|next/i }).first()
   }
 
-  get newVaultGetStartedButton(): Locator {
-    return this.page.getByTestId('new-vault-get-started')
+  get newVaultCreateButton(): Locator {
+    return this.page.getByTestId('new-vault-create')
   }
 
   get importVaultButton(): Locator {
@@ -63,7 +64,7 @@ export class OnboardingPage extends BasePage {
       this.welcomeText.waitFor({ state: 'visible', timeout }),
       this.nextButton.waitFor({ state: 'visible', timeout }),
       this.skipButton.waitFor({ state: 'visible', timeout }),
-      this.newVaultGetStartedButton.waitFor({ state: 'visible', timeout }),
+      this.newVaultCreateButton.waitFor({ state: 'visible', timeout }),
     ])
   }
 
@@ -76,7 +77,7 @@ export class OnboardingPage extends BasePage {
       const hasVultisig = await this.welcomeText.isVisible()
       const hasNext = await this.nextButton.isVisible()
       const hasSkip = await this.skipButton.isVisible()
-      const hasNewVaultActions = await this.newVaultGetStartedButton.isVisible()
+      const hasNewVaultActions = await this.newVaultCreateButton.isVisible()
       return hasVultisig || hasNewVaultActions || (hasNext && hasSkip)
     } catch {
       return false
@@ -137,15 +138,19 @@ export class OnboardingPage extends BasePage {
 
   /**
    * Check if vault type selection is visible (after onboarding)
-   * The NewVaultPage shows: "vultisig", "Scan QR", "Import", "Get started" buttons
+   * The NewVaultPage shows: "vultisig", "Scan QR", "Import", "Create new Vault" buttons
    */
   async isVaultTypeSelectionVisible(): Promise<boolean> {
     // After onboarding, user sees NewVaultPage with these options
-    const hasGetStarted = await this.newVaultGetStartedButton.isVisible()
-    const hasImport = await this.page.getByRole('button', { name: /import/i }).isVisible()
-    const hasScanQr = await this.page.getByRole('button', { name: /scan.*qr/i }).isVisible()
+    const hasCreate = await this.newVaultCreateButton.isVisible()
+    const hasImport = await this.page
+      .getByRole('button', { name: /import/i })
+      .isVisible()
+    const hasScanQr = await this.page
+      .getByRole('button', { name: /scan.*qr/i })
+      .isVisible()
 
-    return hasGetStarted || hasImport || hasScanQr
+    return hasCreate || hasImport || hasScanQr
   }
 
   /**
@@ -153,8 +158,13 @@ export class OnboardingPage extends BasePage {
    * SetupVaultPage shows device selection animation and "Get Started" button
    */
   async isSetupVaultVisible(): Promise<boolean> {
-    const hasGetStarted = await this.page.getByRole('button', { name: /get.*started/i }).isVisible()
-    const hasDeviceAnimation = await this.page.locator('canvas').first().isVisible()
+    const hasGetStarted = await this.page
+      .getByRole('button', { name: /get.*started/i })
+      .isVisible()
+    const hasDeviceAnimation = await this.page
+      .locator('canvas')
+      .first()
+      .isVisible()
     return hasGetStarted && hasDeviceAnimation
   }
 
@@ -162,9 +172,9 @@ export class OnboardingPage extends BasePage {
    * Navigate through NewVaultPage to SetupVaultPage
    */
   async navigateToSetupVault(): Promise<void> {
-    // Both NewVaultPage and SetupVaultPage label their primary button
-    // "Get started", so target the NewVaultPage one by test id.
-    await this.newVaultGetStartedButton.click()
+    // NewVaultPage labels its primary button "Create new Vault";
+    // target it by test id to avoid matching SetupVaultPage's "Get started".
+    await this.newVaultCreateButton.click()
     await this.page.waitForTimeout(500)
   }
 
@@ -173,7 +183,9 @@ export class OnboardingPage extends BasePage {
    */
   async selectFastVault(): Promise<void> {
     // On SetupVaultPage, click "Get Started" with 0 devices selected = Fast Vault
-    const getStartedButton = this.page.getByRole('button', { name: /get.*started/i }).first()
+    const getStartedButton = this.page
+      .getByRole('button', { name: /get.*started/i })
+      .first()
     if (await getStartedButton.isVisible()) {
       await getStartedButton.click()
       await this.page.waitForTimeout(300)
@@ -186,7 +198,9 @@ export class OnboardingPage extends BasePage {
   async selectSecureVault(): Promise<void> {
     // This requires interacting with the Rive animation to select devices
     // For now, just click get started (defaults to fast vault if no devices selected)
-    const getStartedButton = this.page.getByRole('button', { name: /get.*started/i }).first()
+    const getStartedButton = this.page
+      .getByRole('button', { name: /get.*started/i })
+      .first()
     if (await getStartedButton.isVisible()) {
       await getStartedButton.click()
       await this.page.waitForTimeout(300)
@@ -198,7 +212,9 @@ export class OnboardingPage extends BasePage {
    */
   async selectImportSeedphrase(): Promise<void> {
     // From NewVaultPage, click Import button
-    const importButton = this.page.getByRole('button', { name: /import/i }).first()
+    const importButton = this.page
+      .getByRole('button', { name: /import/i })
+      .first()
     if (await importButton.isVisible()) {
       await importButton.click()
       await this.page.waitForTimeout(300)
@@ -212,10 +228,14 @@ export class OnboardingPage extends BasePage {
     const options: string[] = []
 
     // From NewVaultPage
-    const importButton = this.page.getByRole('button', { name: /import/i }).first()
-    const scanQrButton = this.page.getByRole('button', { name: /scan.*qr/i }).first()
+    const importButton = this.page
+      .getByRole('button', { name: /import/i })
+      .first()
+    const scanQrButton = this.page
+      .getByRole('button', { name: /scan.*qr/i })
+      .first()
 
-    if (await this.newVaultGetStartedButton.isVisible()) options.push('create')
+    if (await this.newVaultCreateButton.isVisible()) options.push('create')
     if (await importButton.isVisible()) options.push('import')
     if (await scanQrButton.isVisible()) options.push('scan')
 

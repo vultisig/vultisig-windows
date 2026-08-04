@@ -7,6 +7,7 @@ import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { MpcPendingMessage } from '@core/ui/mpc/status/MpcPendingMessage'
+import { Button } from '@lib/ui/buttons/Button'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ChildrenProp } from '@lib/ui/props'
@@ -23,7 +24,9 @@ export const JoinMpcServerUrlProvider = ({
 }: JoinMpcServerUrlProviderInput) => {
   const { t } = useTranslation()
   const [serverType] = useMpcServerType()
-  const [serviceName] = useMpcServiceName()
+  // useMpcServiceName is a value provider returning the string itself — array
+  // destructuring here would iterate the string and yield its first character.
+  const serviceName = useMpcServiceName()
 
   const query = useMpcServerUrlQuery({
     serverType,
@@ -43,6 +46,9 @@ export const JoinMpcServerUrlProvider = ({
         <FullPageFlowErrorState
           title={t('failed_to_discover_mediator')}
           error={error}
+          action={
+            <Button onClick={() => query.refetch()}>{t('try_again')}</Button>
+          }
         />
       )}
       pending={() => (
