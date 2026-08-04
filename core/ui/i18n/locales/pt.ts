@@ -1868,4 +1868,14 @@ export const pt = {
     'Valor ajustado para {{amount}} para cobrir a taxa de rede.',
   swap_limit_cancel_records_unavailable:
     'Não foi possível carregar seu histórico de transações. Tente novamente em breve — seu pedido não foi afetado.',
+  swap_all_providers_failed:
+    'Os provedores de swap estão temporariamente indisponíveis. Tente novamente em instantes.',
+  swap_amount_below_minimum:
+    'Aumente o valor para atingir o mínimo do provedor.',
+  swap_amount_too_small:
+    'Insira um valor maior para obter uma cotação de swap.',
+  swap_invalid_config:
+    'Revise os detalhes da troca, o destinatário e as configurações avançadas e tente novamente.',
+  swap_no_routes_found:
+    'Não há uma rota de swap disponível para este par de ativos.',
 }
