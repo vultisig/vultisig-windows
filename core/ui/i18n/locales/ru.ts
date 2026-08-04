@@ -1795,4 +1795,13 @@ export const ru = {
   swap_limit_expiry_minutes: '{{minutes}}мин',
   swap_limit_expiry_under_minute: '<1мин',
   transaction_broadcasted: 'Информация о транзакции была передана в сеть.',
+  swap_all_providers_failed:
+    'Провайдеры обмена временно недоступны. Повторите попытку через несколько секунд.',
+  swap_amount_below_minimum:
+    'Увеличьте сумму до минимального значения провайдера.',
+  swap_amount_too_small:
+    'Введите большую сумму, чтобы получить котировку обмена.',
+  swap_invalid_config:
+    'Проверьте детали обмена, получателя и расширенные настройки, затем попробуйте снова.',
+  swap_no_routes_found: 'Для этой пары активов нет доступного маршрута обмена.',
 }

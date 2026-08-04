@@ -1831,4 +1831,13 @@ export const de = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'Die Transaktion wurde im Netzwerk übertragen.',
+  swap_all_providers_failed:
+    'Die Swap-Anbieter sind vorübergehend nicht erreichbar. Bitte versuche es gleich noch einmal.',
+  swap_amount_below_minimum:
+    'Erhöhe den Betrag, um den Mindesttauschbetrag des Anbieters zu erreichen.',
+  swap_amount_too_small:
+    'Gib einen größeren Betrag ein, um ein Tauschangebot zu erhalten.',
+  swap_invalid_config:
+    'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
+  swap_no_routes_found: 'Für dieses Asset-Paar ist keine Swap-Route verfügbar.',
 }

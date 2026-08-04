@@ -1815,4 +1815,14 @@ export const es = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'La transacción ha sido transmitida a la red.',
+  swap_all_providers_failed:
+    'Los proveedores de intercambio no están disponibles temporalmente. Vuelve a intentarlo en un momento.',
+  swap_amount_below_minimum:
+    'Aumenta el importe para alcanzar el mínimo del proveedor.',
+  swap_amount_too_small:
+    'Introduce un importe mayor para obtener una cotización.',
+  swap_invalid_config:
+    'Revisa los detalles del intercambio, el destinatario y la configuración avanzada, y vuelve a intentarlo.',
+  swap_no_routes_found:
+    'No hay ninguna ruta de intercambio disponible para este par de activos.',
 }

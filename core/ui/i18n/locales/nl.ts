@@ -1799,4 +1799,13 @@ export const nl = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'De transactie is naar het netwerk uitgezonden.',
+  swap_all_providers_failed:
+    'Swapaanbieders zijn tijdelijk niet beschikbaar. Probeer het zo opnieuw.',
+  swap_amount_below_minimum:
+    'Verhoog het bedrag tot het minimale swapbedrag van de aanbieder.',
+  swap_amount_too_small:
+    'Voer een hoger bedrag in om een swapofferte te krijgen.',
+  swap_invalid_config:
+    'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
+  swap_no_routes_found: 'Er is geen swaproute beschikbaar voor dit activapaar.',
 }

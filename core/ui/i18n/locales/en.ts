@@ -1225,6 +1225,14 @@ export const en = {
   swap_mode_market: 'Market',
   swap_overview: 'Swap overview',
   swap_same_asset: 'Cannot swap between the same asset',
+  swap_all_providers_failed:
+    'Swap providers are temporarily unavailable. Please try again in a moment.',
+  swap_amount_below_minimum:
+    "Increase the amount to meet the provider's minimum swap amount.",
+  swap_amount_too_small: 'Enter a larger amount to get a swap quote.',
+  swap_invalid_config:
+    'Review the swap details, recipient, and advanced settings, then try again.',
+  swap_no_routes_found: 'No swap route is available for this asset pair.',
   swap_trading_halted:
     'Trading for this asset is temporarily halted. Please try again later.',
   swap_terms: {

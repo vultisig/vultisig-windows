@@ -1787,4 +1787,12 @@ export const hr = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'Transakcija je emitirana na mrežu',
+  swap_all_providers_failed:
+    'Pružatelji zamjene privremeno nisu dostupni. Pokušajte ponovno za trenutak.',
+  swap_amount_below_minimum:
+    'Povećajte iznos kako biste dosegli minimalni iznos pružatelja.',
+  swap_amount_too_small: 'Unesite veći iznos kako biste dobili ponudu.',
+  swap_invalid_config:
+    'Pregledajte detalje zamjene, primatelja i napredne postavke, a zatim pokušajte ponovno.',
+  swap_no_routes_found: 'Za ovaj par imovine nije dostupna ruta zamjene.',
 }

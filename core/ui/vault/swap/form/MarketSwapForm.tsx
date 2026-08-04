@@ -8,9 +8,7 @@ import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { SwapError, SwapErrorCode } from '@vultisig/core-chain/swap/SwapError'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { FC, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -18,6 +16,7 @@ import styled from 'styled-components'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
+import { resolveMarketSwapErrorMessage } from './resolveMarketSwapErrorMessage'
 
 export const MarketSwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
   const {
@@ -31,12 +30,11 @@ export const MarketSwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
 
   const { t } = useTranslation()
 
-  // The SDK classifies a provider trading halt as a typed error, so key off the
-  // code rather than string-matching the (English) message.
-  const resolveErrorMessage = (err: unknown) =>
-    err instanceof SwapError && err.code === SwapErrorCode.TradingHalted
-      ? t('swap_trading_halted')
-      : extractErrorMsg(err)
+  const resolveErrorMessage = (error: unknown) =>
+    resolveMarketSwapErrorMessage({
+      error,
+      translate: key => t(key),
+    })
 
   const errorMessage = (() => {
     if (isPending) {

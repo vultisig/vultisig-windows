@@ -1667,4 +1667,9 @@ export const zh = {
   swap_limit_expiry_minutes: '{{minutes}}分',
   swap_limit_expiry_under_minute: '<1分',
   transaction_broadcasted: '该交易已广播到网络。',
+  swap_all_providers_failed: '兑换服务商暂时不可用，请稍后重试。',
+  swap_amount_below_minimum: '请增加金额以达到服务商的最低兑换金额。',
+  swap_amount_too_small: '请输入更大的金额以获取兑换报价。',
+  swap_invalid_config: '请检查交换详情、收件人和高级设置，然后重试。',
+  swap_no_routes_found: '此资产对没有可用的兑换路线。',
 }

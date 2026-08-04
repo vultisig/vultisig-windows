@@ -1777,4 +1777,12 @@ export const ko = {
   swap_limit_expiry_minutes: '{{minutes}}분',
   swap_limit_expiry_under_minute: '<1분',
   transaction_broadcasted: '해당 거래가 네트워크에 전송되었습니다.',
+  swap_all_providers_failed:
+    '스왑 제공자를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도하세요.',
+  swap_amount_below_minimum:
+    '제공자의 최소 스왑 금액을 충족하도록 금액을 늘리세요.',
+  swap_amount_too_small: '견적을 받으려면 더 큰 금액을 입력하세요.',
+  swap_invalid_config:
+    '교환 세부 정보, 수신자 및 고급 설정을 검토한 후 다시 시도하십시오.',
+  swap_no_routes_found: '이 자산 쌍에 사용할 수 있는 스왑 경로가 없습니다.',
 }
