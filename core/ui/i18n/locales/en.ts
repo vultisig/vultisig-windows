@@ -216,7 +216,7 @@ export const en = {
   copied: 'Copied',
   copy: 'Copy',
   copy_address: 'Copy Address',
-  create_new_vault: 'Create New Vault',
+  create_new_vault: 'Create new Vault',
   create_vault: 'Create vault',
   create_referral_form: 'Create referral',
   create_referral_title: 'Create Referral',
