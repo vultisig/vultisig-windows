@@ -127,3 +127,4 @@ google-credentials.json
 
 # Vultisig ops local AI config
 .claude/
+scripts/release.sh
