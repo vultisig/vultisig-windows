@@ -12,6 +12,8 @@ vi.mock('./inNewWindow', () => ({
   inNewWindow: (...args: unknown[]) => mockInNewWindow(...args),
 }))
 
+import { PopupError, userRejectedPopupResult } from '../../error'
+import { getPopupMessageSourceId } from '../../resolver'
 import { callPopupFromBackground } from '.'
 
 describe('callPopupFromBackground', () => {
@@ -97,5 +99,56 @@ describe('callPopupFromBackground', () => {
     ])
 
     expect(mockInNewWindow).toHaveBeenCalledTimes(2)
+  })
+
+  it('rejects with the RejectedByUser sentinel when the popup view declines', async () => {
+    const listeners = new Set<(message: unknown) => void>()
+    vi.stubGlobal('chrome', {
+      runtime: {
+        getURL: (path: string) => `chrome-extension://id/${path}`,
+        onMessage: {
+          addListener: (listener: (message: unknown) => void) =>
+            listeners.add(listener),
+          removeListener: (listener: (message: unknown) => void) =>
+            listeners.delete(listener),
+        },
+      },
+    })
+    type ExecuteWindow = {
+      execute: (input: {
+        abortSignal: AbortSignal
+        close: () => void
+      }) => Promise<unknown>
+    }
+    mockInNewWindow.mockImplementation(({ execute }: ExecuteWindow) =>
+      execute({
+        abortSignal: new AbortController().signal,
+        close: () => undefined,
+      })
+    )
+
+    const call = callPopupFromBackground({
+      call: { grantVaultAccess: { chain: Chain.Ethereum } },
+      options: {},
+      context: { requestOrigin: 'https://reject.example.com' },
+    })
+
+    await vi.waitFor(() => {
+      expect(listeners.size).toBe(1)
+    })
+
+    // chrome.runtime messaging serializes the response, so anything the view
+    // sends has to survive the trip — an `Error` instance would not.
+    const response = JSON.parse(
+      JSON.stringify({
+        sourceId: getPopupMessageSourceId('popup'),
+        callId: 'call-1',
+        result: userRejectedPopupResult,
+        shouldClosePopup: true,
+      })
+    )
+    listeners.forEach(listener => listener(response))
+
+    await expect(call).rejects.toBe(PopupError.RejectedByUser)
   })
 })
