@@ -1,9 +1,12 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCore } from '@core/ui/state/core'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
+import { CoinMarketStatsSection } from '@core/ui/vault/chain/coin/market/CoinMarketStatsSection'
+import { CoinPriceChart } from '@core/ui/vault/chain/coin/market/CoinPriceChart'
+import { CoinPriceExtremesSection } from '@core/ui/vault/chain/coin/market/CoinPriceExtremesSection'
+import { CoinTokenInfoSection } from '@core/ui/vault/chain/coin/market/CoinTokenInfoSection'
 import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
@@ -22,7 +25,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type CoinDetailModalProps = OnCloseProp & {
@@ -30,7 +32,6 @@ type CoinDetailModalProps = OnCloseProp & {
 }
 
 export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
-  const { t } = useTranslation()
   const { openUrl } = useCore()
   const formatFiatAmount = useFormatFiatAmount()
   const balance = fromChainAmount(coin.amount, coin.decimals)
@@ -51,88 +52,84 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
         withDefaultStructure: false,
       }}
     >
-      <ContentContainer>
-        <VStack alignItems="center" fullWidth style={{ zIndex: 2 }}>
-          <HStack justifyContent="space-between" fullWidth gap={8}>
-            <ModalCloseButton
-              style={{ color: 'hsl(215, 40%, 85%)', fontSize: 16 }}
-              onClick={onClose}
-            />
-            <IconButton onClick={() => openUrl(blockExplorerUrl)}>
-              <IconWrapper size={20}>
-                <ArCubeIcon />
-              </IconWrapper>
-            </IconButton>
-          </HStack>
-          <HStack alignItems="center" gap={8}>
-            <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-            <CoinTicker
-              ticker={coin.ticker}
-              size={20}
-              weight={600}
-              maxWidth={240}
-            />
-          </HStack>
-        </VStack>
-        <VStack alignItems="center" gap={8}>
-          <Text size={28} weight={500} color="contrast">
-            <BalanceVisibilityAware>
-              {formatFiatAmount(fiatValue)}
-            </BalanceVisibilityAware>
-          </Text>
-          <Text
-            size={15}
-            weight={500}
-            color="shy"
-            cropped
-            style={{ maxWidth: 240 }}
-          >
-            <BalanceVisibilityAware>
-              {formatAmount(balance, { precision: 'high' })} {coin.ticker}
-            </BalanceVisibilityAware>
-          </Text>
-        </VStack>
-
-        <Opener
-          renderOpener={({ onOpen }) => (
-            <VaultPrimaryActions coin={coin} onReceive={onOpen} />
-          )}
-          renderContent={({ onClose: onCloseQR }) => (
-            <AddressQRModal
-              chain={coin.chain}
-              coin={coin}
-              onClose={onCloseQR}
-            />
-          )}
-        />
-
-        <InfoSection>
-          <InfoRow>
-            <Text size={14} weight={500}>
-              {t('price')}
+      <ScrollContainer>
+        <ContentContainer>
+          <VStack alignItems="center" fullWidth style={{ zIndex: 2 }}>
+            <HStack justifyContent="space-between" fullWidth gap={8}>
+              <ModalCloseButton
+                style={{ color: 'hsl(215, 40%, 85%)', fontSize: 16 }}
+                onClick={onClose}
+              />
+              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+                <IconWrapper size={20}>
+                  <ArCubeIcon />
+                </IconWrapper>
+              </IconButton>
+            </HStack>
+            <HStack alignItems="center" gap={8}>
+              <CoinIcon coin={coin} style={{ fontSize: 24 }} />
+              <CoinTicker
+                ticker={coin.ticker}
+                size={20}
+                weight={600}
+                maxWidth={240}
+              />
+            </HStack>
+          </VStack>
+          <VStack alignItems="center" gap={8}>
+            <Text size={28} weight={500} color="contrast">
+              <BalanceVisibilityAware>
+                {formatFiatAmount(fiatValue)}
+              </BalanceVisibilityAware>
             </Text>
-            <NetworkBadge>
-              <Text size={13} color="shyExtra">
-                <FiatAmountText value={coin.price || 0} />
-              </Text>
-            </NetworkBadge>
-          </InfoRow>
-
-          <InfoRow>
-            <Text size={14} weight={500}>
-              {t('network')}
+            <Text
+              size={15}
+              weight={500}
+              color="shy"
+              cropped
+              style={{ maxWidth: 240 }}
+            >
+              <BalanceVisibilityAware>
+                {formatAmount(balance, { precision: 'high' })} {coin.ticker}
+              </BalanceVisibilityAware>
             </Text>
-            <NetworkBadge>
-              <Text size={13} color="shyExtra">
-                {coin.chain}
-              </Text>
-            </NetworkBadge>
-          </InfoRow>
-        </InfoSection>
-      </ContentContainer>
+          </VStack>
+
+          <Opener
+            renderOpener={({ onOpen }) => (
+              <VaultPrimaryActions coin={coin} onReceive={onOpen} />
+            )}
+            renderContent={({ onClose: onCloseQR }) => (
+              <AddressQRModal
+                chain={coin.chain}
+                coin={coin}
+                onClose={onCloseQR}
+              />
+            )}
+          />
+
+          <SectionsContainer>
+            <CoinPriceChart coin={coin} />
+            <CoinMarketStatsSection coin={coin} />
+            <CoinPriceExtremesSection coin={coin} />
+            <CoinTokenInfoSection coin={coin} />
+          </SectionsContainer>
+        </ContentContainer>
+      </ScrollContainer>
     </ResponsiveModal>
   )
 }
+
+const ScrollContainer = styled.div`
+  width: 100%;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    max-height: 82vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+  }
+`
 
 const ContentContainer = styled(VStack)`
   position: relative;
@@ -194,24 +191,9 @@ const ContentContainer = styled(VStack)`
   }
 `
 
-const InfoSection = styled(VStack)`
+const SectionsContainer = styled(VStack)`
   gap: 16px;
   width: 100%;
   max-width: 400px;
   margin-top: 8px;
-`
-
-const InfoRow = styled(HStack)`
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 16px;
-  border-radius: 12px;
-  background: ${getColor('background')};
-`
-
-const NetworkBadge = styled.div`
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: ${getColor('foreground')};
 `
