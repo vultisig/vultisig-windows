@@ -1,10 +1,11 @@
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import { StationMagnifierIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type SearchFieldProps = UiProps & {
   autoFocus?: boolean
@@ -24,6 +25,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
   const [uncontrolledValue, setUncontrolledValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextValue = event.target.value
@@ -44,7 +46,11 @@ export const SearchField: React.FC<SearchFieldProps> = ({
       gap={8}
     >
       <SearchIconWrapper aria-hidden>
-        <SearchIcon strokeWidth={2.5} />
+        {iconStyle === 'station' ? (
+          <StationMagnifierIcon />
+        ) : (
+          <SearchIcon strokeWidth={2.5} />
+        )}
       </SearchIconWrapper>
       <StyledInput
         autoFocus={autoFocus}

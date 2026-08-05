@@ -5,6 +5,10 @@ import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CircleCrossFilledIcon } from '@lib/ui/icons/CircleCrossFilledIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import {
+  StationCircleXmarkFilledIcon,
+  StationMagnifierIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { SearchField } from '@lib/ui/search/SearchField'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -83,7 +87,11 @@ export const SearchChain = ({
                   onSearch={nextValue => setInputValue(nextValue)}
                 />
                 <CloseButton onClick={isStation ? handleClear : handleClose}>
-                  <CircleCrossFilledIcon />
+                  {isStation ? (
+                    <StationCircleXmarkFilledIcon />
+                  ) : (
+                    <CircleCrossFilledIcon />
+                  )}
                 </CloseButton>
               </SearchFieldWrapper>
               {isStation && (
@@ -106,7 +114,11 @@ export const SearchChain = ({
             onClick={handleOpen}
             size="lg"
           >
-            <SearchIcon />
+            {iconStyle === 'station' ? (
+              <StationMagnifierIcon />
+            ) : (
+              <SearchIcon />
+            )}
           </IconButton>
         </motion.div>
       )}

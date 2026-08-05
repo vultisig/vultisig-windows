@@ -4,6 +4,10 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { MagnifyingGlassIcon } from '@lib/ui/icons/MagnifyingGlassIcon'
+import {
+  StationCircleXmarkFilledIcon,
+  StationMagnifierIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
@@ -11,7 +15,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type SearchInputProps = InputProps<string> & {
   'data-testid'?: string
@@ -24,6 +28,7 @@ export const SearchInput = ({
 }: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
 
   return (
     <ActionInsideInteractiveElement
@@ -34,7 +39,11 @@ export const SearchInput = ({
             inputOverlay={
               <InputOverlayWr gap={8} alignItems="center" aria-hidden>
                 <IconWrapper size={16}>
-                  <MagnifyingGlassIcon />
+                  {iconStyle === 'station' ? (
+                    <StationMagnifierIcon />
+                  ) : (
+                    <MagnifyingGlassIcon />
+                  )}
                 </IconWrapper>
                 {!isFocused && !value && (
                   <Text size={13} color="shy">
@@ -57,7 +66,11 @@ export const SearchInput = ({
       action={
         value ? (
           <StyledIconButton size="sm" onClick={() => onChange('')}>
-            <CloseIcon />
+            {iconStyle === 'station' ? (
+              <StationCircleXmarkFilledIcon />
+            ) : (
+              <CloseIcon />
+            )}
           </StyledIconButton>
         ) : (
           <StyledInputPasteAction

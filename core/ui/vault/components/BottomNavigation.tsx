@@ -6,6 +6,10 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
 import { NodesIcon } from '@lib/ui/icons/NodesIcon'
+import {
+  StationLayers2FilledIcon,
+  StationWalletFilledIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
@@ -13,7 +17,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 import { AgentBottomNavigationContent } from './AgentBottomNavigationContent'
 
@@ -31,6 +35,7 @@ export const BottomNavigation = ({
 }: BottomNavigationProps) => {
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -64,7 +69,11 @@ export const BottomNavigation = ({
           isActive={activeTab === 'wallet'}
           onClick={() => handleTabChangeOld('wallet')}
         >
-          <WalletIcon />
+          {iconStyle === 'station' ? (
+            <StationWalletFilledIcon />
+          ) : (
+            <WalletIcon />
+          )}
           <Text as="span" size={10}>
             {t('wallet')}
           </Text>
@@ -79,7 +88,11 @@ export const BottomNavigation = ({
           isActive={activeTab === 'defi'}
           onClick={() => handleTabChangeOld('defi')}
         >
-          <NodesIcon />
+          {iconStyle === 'station' ? (
+            <StationLayers2FilledIcon />
+          ) : (
+            <NodesIcon />
+          )}
           <Text as="span" size={10}>
             {t('defi')}
           </Text>

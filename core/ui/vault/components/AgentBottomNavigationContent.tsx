@@ -11,13 +11,18 @@ import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { AgentIcon } from '@lib/ui/icons/AgentIcon'
 import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
 import { NodesIcon } from '@lib/ui/icons/NodesIcon'
+import {
+  StationCreditCardIcon,
+  StationLayers2FilledIcon,
+  StationWalletFilledIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 const navHeight = 66
 const cameraButtonSize = 56
@@ -37,6 +42,7 @@ export const AgentBottomNavigationContent = ({
   onCameraPress,
 }: AgentBottomNavigationContentProps) => {
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
   const dismissBanner = useDismissBanner()
   const { hasLoaded, isBannerDismissed } = useDismissedBanners()
   const [isCoachmarkOpen, setIsCoachmarkOpen] = useState(false)
@@ -130,7 +136,11 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'wallet'}
             onClick={() => onTabChange('wallet')}
           >
-            <WalletIcon />
+            {iconStyle === 'station' ? (
+              <StationWalletFilledIcon />
+            ) : (
+              <WalletIcon />
+            )}
             <Text as="span" size={10}>
               {t('wallet')}
             </Text>
@@ -139,7 +149,11 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'defi'}
             onClick={() => onTabChange('defi')}
           >
-            <NodesIcon />
+            {iconStyle === 'station' ? (
+              <StationLayers2FilledIcon />
+            ) : (
+              <NodesIcon />
+            )}
             <Text as="span" size={10}>
               {t('defi')}
             </Text>
@@ -155,7 +169,11 @@ export const AgentBottomNavigationContent = ({
               onTabChange('agent')
             }}
           >
-            <AgentIcon />
+            {iconStyle === 'station' ? (
+              <StationCreditCardIcon />
+            ) : (
+              <AgentIcon />
+            )}
             <Text as="span" size={10}>
               {t('agent')}
             </Text>

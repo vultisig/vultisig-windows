@@ -8,6 +8,7 @@ import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoi
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { StationCheckmarkSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { vStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -15,7 +16,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { useMemo } from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type ChainItemProps = ValueProp<Coin> & {
   isSelected?: boolean
@@ -30,6 +31,7 @@ export const ChainItem = ({
   const currentCoins = useCurrentVaultNativeCoins()
   const createCoin = useCreateCoinMutation()
   const deleteCoin = useDeleteCoinMutation()
+  const { iconStyle } = useTheme()
 
   const currentCoin = useMemo(() => {
     return currentCoins.find(c => areEqualCoins(c, coin))
@@ -69,7 +71,11 @@ export const ChainItem = ({
         />
         {isSelected && (
           <CheckBadge color="primary" size={12}>
-            <CheckmarkIcon />
+            {iconStyle === 'station' ? (
+              <StationCheckmarkSmallIcon />
+            ) : (
+              <CheckmarkIcon />
+            )}
           </CheckBadge>
         )}
       </ChainIconWrapper>

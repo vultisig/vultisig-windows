@@ -5,6 +5,7 @@ import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
 import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
+import { StationChevronLeftIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ModalContainer } from '@lib/ui/modal/ModalContainer'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
@@ -20,7 +21,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import { orderReceiveChainsForProduct } from '../utils/orderReceiveChainsForProduct'
 
@@ -164,6 +165,8 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
   const [selectedChain, setSelectedChain] = useState<Chain | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
+  const isStation = iconStyle === 'station'
   const isTabletAndUp = useIsTabletDeviceAndUp()
 
   const orderedChains = useMemo(
@@ -196,7 +199,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
     <ModalBody>
       <Header>
         <HeaderBackButton onClick={onClose} aria-label={t('back')}>
-          <ChevronLeftIcon />
+          {isStation ? <StationChevronLeftIcon /> : <ChevronLeftIcon />}
         </HeaderBackButton>
         <Text size={14} weight="500" color="contrast">
           {t('select_chain')}
