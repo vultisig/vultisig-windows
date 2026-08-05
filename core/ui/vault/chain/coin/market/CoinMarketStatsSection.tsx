@@ -66,16 +66,19 @@ export const CoinMarketStatsSection = ({
         value: formatFiatAmount(stats.fullyDilutedValuation),
       })
     }
+    const formatSupply = (value: number) =>
+      `${formatAmount(value, { precision: 'medium' })} ${coin.ticker}`
+
     if (stats.circulatingSupply !== null) {
       rows.push({
         label: t('circulating_supply'),
-        value: formatAmount(stats.circulatingSupply, { ticker: coin.ticker }),
+        value: formatSupply(stats.circulatingSupply),
       })
     }
     if (stats.maxSupply !== null) {
       rows.push({
         label: t('max_supply'),
-        value: formatAmount(stats.maxSupply, { ticker: coin.ticker }),
+        value: formatSupply(stats.maxSupply),
       })
     }
 

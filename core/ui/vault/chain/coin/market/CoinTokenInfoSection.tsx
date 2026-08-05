@@ -2,9 +2,12 @@ import { resolveMarketDataSource } from '@core/ui/chain/coin/price/market/Market
 import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
 import { useCore } from '@core/ui/state/core'
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import {
+  useCurrentVaultAddress,
+  useCurrentVaultCoin,
+} from '@core/ui/vault/state/currentVaultCoins'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { ArCubeIcon } from '@lib/ui/icons/ArCubeIcon'
+import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
 import { Text } from '@lib/ui/text'
@@ -24,15 +27,18 @@ type CoinTokenInfoSectionProps = {
 }
 
 /**
- * Static coin facts: network, contract address with copy, decimals, and an
- * explorer link for tokens. Coins without a price chart (pool-priced
- * tokens) also get their spot price row here so it stays visible.
+ * Static coin facts: network, contract address with copy, decimals, and a
+ * block explorer link — the token's contract page when the chain's explorer
+ * can render one, the vault's address page otherwise. Coins without a price
+ * chart (pool-priced tokens) also get their spot price row here so it stays
+ * visible.
  */
 export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
   const { t } = useTranslation()
   const { addToast } = useToast()
   const { openUrl } = useCore()
   const { priceProviderId } = useCurrentVaultCoin(coin)
+  const address = useCurrentVaultAddress(coin.chain)
   const { id } = coin
 
   const source = resolveMarketDataSource({
@@ -41,14 +47,11 @@ export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
     priceProviderId,
   })
 
-  const contractExplorerUrl =
-    id && isChainOfKind(coin.chain, 'evm')
-      ? getBlockExplorerUrl({
-          chain: coin.chain,
-          entity: 'address',
-          value: id,
-        })
-      : null
+  const explorerUrl = getBlockExplorerUrl({
+    chain: coin.chain,
+    entity: 'address',
+    value: id && isChainOfKind(coin.chain, 'evm') ? id : address,
+  })
 
   const handleCopyContract = (contract: string) => {
     navigator.clipboard.writeText(contract)
@@ -80,18 +83,16 @@ export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
         />
       ) : null}
       <CoinMarketStatRow label={t('decimals')} value={String(coin.decimals)} />
-      {contractExplorerUrl ? (
-        <CoinMarketStatRow
-          label={t('view_on_explorer')}
-          value={
-            <ExplorerButton onClick={() => openUrl(contractExplorerUrl)}>
-              <IconWrapper size={16}>
-                <ArCubeIcon />
-              </IconWrapper>
-            </ExplorerButton>
-          }
-        />
-      ) : null}
+      <CoinMarketStatRow
+        label={t('view_on_explorer')}
+        value={
+          <ExplorerButton onClick={() => openUrl(explorerUrl)}>
+            <IconWrapper size={16}>
+              <ArrowUpRightIcon />
+            </IconWrapper>
+          </ExplorerButton>
+        }
+      />
     </CoinDetailSection>
   )
 }
