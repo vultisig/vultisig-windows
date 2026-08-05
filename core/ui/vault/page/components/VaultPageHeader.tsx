@@ -3,7 +3,6 @@ import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/Balanc
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
-import { useScroll } from '@lib/ui/hooks/useScroll'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -14,6 +13,10 @@ import { ReactNode, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import {
+  getCollapsedHeaderOpacity,
+  useVaultHeaderCollapseProgress,
+} from './vaultHeaderCollapse'
 import { VaultPageHeaderControls } from './VaultPageHeaderControls'
 import { VaultSelector } from './VaultSelector'
 
@@ -25,7 +28,7 @@ const HeaderContainer = styled.div`
   background: ${getColor('background')};
 `
 
-const CollapsedContent = styled(HStack)<{ isVisible: boolean }>`
+const CollapsedContent = styled(HStack)`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
   grid-area: 1 / 1;
@@ -34,16 +37,10 @@ const CollapsedContent = styled(HStack)<{ isVisible: boolean }>`
   justify-content: space-between;
   align-items: center;
   background: ${getColor('background')};
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
-  transition: opacity 0.25s ease-in-out;
 `
 
-const NormalContent = styled.div<{ isVisible: boolean }>`
+const NormalContent = styled.div`
   grid-area: 1 / 1;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
-  transition: opacity 0.25s ease-in-out;
 `
 
 type VaultPageHeaderProps = {
@@ -52,15 +49,14 @@ type VaultPageHeaderProps = {
   primaryControls?: ReactNode
 }
 
-const collapseThreshold = 1
-
 export const VaultPageHeader = ({
   vault,
   scrollContainerRef,
   primaryControls,
 }: VaultPageHeaderProps) => {
-  const scroll = useScroll(scrollContainerRef)
-  const isCollapsed = scroll.y > collapseThreshold
+  const progress = useVaultHeaderCollapseProgress(scrollContainerRef)
+  const collapsedOpacity = getCollapsedHeaderOpacity(progress)
+  const isCollapsed = collapsedOpacity > 0.5
   const { t } = useTranslation()
 
   const { data: totalBalance = 0 } = useVaultTotalBalanceQuery()
@@ -69,7 +65,12 @@ export const VaultPageHeader = ({
 
   return (
     <HeaderContainer>
-      <CollapsedContent isVisible={isCollapsed}>
+      <CollapsedContent
+        style={{
+          opacity: collapsedOpacity,
+          pointerEvents: isCollapsed ? 'auto' : 'none',
+        }}
+      >
         <VaultSelector value={vault} />
         <VStack alignItems="flex-end" gap={2} style={{ flexShrink: 0 }}>
           <Text size={12} color="shy">
@@ -81,7 +82,12 @@ export const VaultPageHeader = ({
         </VStack>
       </CollapsedContent>
 
-      <NormalContent isVisible={!isCollapsed}>
+      <NormalContent
+        style={{
+          opacity: 1 - collapsedOpacity,
+          pointerEvents: isCollapsed ? 'none' : 'auto',
+        }}
+      >
         <PageHeader
           hasBorder
           primaryControls={primaryControls}
