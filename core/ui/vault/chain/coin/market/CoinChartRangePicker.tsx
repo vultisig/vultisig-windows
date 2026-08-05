@@ -35,7 +35,7 @@ export const CoinChartRangePicker = ({
   }
 
   return (
-    <Track fullWidth gap={2}>
+    <HStack fullWidth gap={4}>
       {marketChartRanges.map(range => (
         <Segment
           key={range}
@@ -43,7 +43,7 @@ export const CoinChartRangePicker = ({
           onClick={() => onChange(range)}
         >
           <Text
-            size={12}
+            size={13}
             weight={500}
             color={range === value ? 'contrast' : 'shy'}
           >
@@ -51,19 +51,13 @@ export const CoinChartRangePicker = ({
           </Text>
         </Segment>
       ))}
-    </Track>
+    </HStack>
   )
 }
 
-const Track = styled(HStack)`
-  padding: 3px;
-  border-radius: 999px;
-  background: ${getColor('background')};
-`
-
 const Segment = styled(UnstyledButton)<IsActiveProp>`
   flex: 1;
-  padding: 7px 0;
+  padding: 10px 0;
   border-radius: 999px;
   text-align: center;
   cursor: pointer;

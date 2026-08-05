@@ -54,9 +54,32 @@ describe('resolveMarketDataSource', () => {
     ).toBeNull()
   })
 
-  it('returns null for THORChain secured assets', () => {
+  it('charts THORChain secured native assets as their underlying coin', () => {
     expect(
       resolveMarketDataSource({ chain: Chain.THORChain, id: 'btc-btc' })
+    ).toEqual({ id: 'bitcoin' })
+    expect(
+      resolveMarketDataSource({ chain: Chain.THORChain, id: 'gaia-atom' })
+    ).toEqual({ id: 'cosmos' })
+  })
+
+  it('charts THORChain secured tokens via their underlying contract', () => {
+    expect(
+      resolveMarketDataSource({
+        chain: Chain.THORChain,
+        id: 'eth-usdc-0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      })
+    ).toEqual({
+      contract: {
+        platform: 'ethereum',
+        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      },
+    })
+  })
+
+  it('returns null for secured assets with no underlying CoinGecko identity', () => {
+    expect(
+      resolveMarketDataSource({ chain: Chain.THORChain, id: 'foo-bar' })
     ).toBeNull()
   })
 

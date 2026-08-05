@@ -85,12 +85,11 @@ export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
       <CoinMarketStatRow label={t('decimals')} value={String(coin.decimals)} />
       <CoinMarketStatRow
         label={t('view_on_explorer')}
+        onClick={() => openUrl(explorerUrl)}
         value={
-          <ExplorerButton onClick={() => openUrl(explorerUrl)}>
-            <IconWrapper size={16}>
-              <ArrowUpRightIcon />
-            </IconWrapper>
-          </ExplorerButton>
+          <IconWrapper size={16}>
+            <ArrowUpRightIcon />
+          </IconWrapper>
         }
       />
     </CoinDetailSection>
@@ -101,17 +100,6 @@ const ContractButton = styled(UnstyledButton)`
   display: flex;
   align-items: center;
   gap: 6px;
-  cursor: pointer;
-  color: ${getColor('textShy')};
-
-  &:hover {
-    color: ${getColor('contrast')};
-  }
-`
-
-const ExplorerButton = styled(UnstyledButton)`
-  display: flex;
-  align-items: center;
   cursor: pointer;
   color: ${getColor('textShy')};
 
