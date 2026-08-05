@@ -26,6 +26,7 @@ const HeaderContainer = styled.div`
   z-index: 1;
   display: grid;
   background: ${getColor('background')};
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
 `
 
 const CollapsedContent = styled(HStack)`
@@ -33,13 +34,13 @@ const CollapsedContent = styled(HStack)`
   ${verticalPadding(pageConfig.verticalPadding)};
   grid-area: 1 / 1;
   min-height: 60px;
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
   justify-content: space-between;
   align-items: center;
   background: ${getColor('background')};
 `
 
 const NormalContent = styled.div`
+  display: grid;
   grid-area: 1 / 1;
 `
 
@@ -89,7 +90,6 @@ export const VaultPageHeader = ({
         }}
       >
         <PageHeader
-          hasBorder
           primaryControls={primaryControls}
           secondaryControls={<VaultPageHeaderControls />}
           title={<VaultSelector placement="pageHeader" value={vault} />}
