@@ -11,6 +11,7 @@ import {
   buildCancelLimitSwapMemo,
   LimitSwapCancelInputs,
 } from '@vultisig/core-chain/swap/native/limitSwapCancelMemo'
+import { getThorchainMemoAssetSourceChain } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 import {
@@ -92,15 +93,25 @@ export const useLimitOrderCancel = ({
     return { blocked: 'missingSignedData' }
   }
 
-  const feeCoin = chainFeeCoin[record.data.fromChain]
+  // Derived from the RESOLVED source asset, not from the record's own
+  // `fromChain`. Those normally agree, but the resolved asset is what the memo
+  // will carry and therefore what THORChain checks the sender against
+  // (`From.IsChain(Source.Asset.GetChain())`) — so it is the only authority that
+  // cannot disagree with the transaction being signed. `GetChain()` semantics
+  // also put a secured-asset order on THORChain, where it is custodied, rather
+  // than on the chain it originates from.
+  const sourceChain = getThorchainMemoAssetSourceChain(inputs.sourceAsset)
+
+  if (!sourceChain) {
+    return { blocked: 'unroutableSourceChain' }
+  }
+
+  const feeCoin = chainFeeCoin[sourceChain]
   const signingCoin = vaultCoins.find(coin => areEqualCoins(coin, feeCoin))
 
   if (!signingCoin) {
     return {
-      missingSigningCoin: {
-        ticker: feeCoin.ticker,
-        chain: record.data.fromChain,
-      },
+      missingSigningCoin: { ticker: feeCoin.ticker, chain: sourceChain },
     }
   }
 
