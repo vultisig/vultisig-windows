@@ -45,6 +45,8 @@ export const en = {
   advanced_swap_settings_gate_description:
     'Fine-tune your swaps with custom slippage, gas limit, and an external recipient address.',
   advanced_swap: 'Advanced swap',
+  all_time_high: 'All-Time High',
+  all_time_low: 'All-Time Low',
   all_vaults: 'All Vaults',
   amount: 'Amount',
   amount_must_be_non_negative: 'Amount must be non-negative',
@@ -163,11 +165,17 @@ export const en = {
   choose_a_password: 'Choose a password',
   choose_a_password_description:
     'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b> <info />',
+  chart_range_all: 'ALL',
+  chart_range_day: '1D',
+  chart_range_month: '1M',
+  chart_range_week: '1W',
+  chart_range_year: '1Y',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
   choose_chains: 'Choose Chains',
   choose_tokens: 'Choose Tokens',
   choose_vaults: 'Choose vaults',
+  circulating_supply: 'Circulating Supply',
   deposited: 'Deposited',
   circle: {
     banner_text:
@@ -212,6 +220,7 @@ export const en = {
   continue: 'Continue',
   continue_anyway: 'Continue Anyway',
   continue_in_new_window: 'Continue in the opened window',
+  contract_address_copied: 'Contract address copied',
   contract_execution: 'Contract Execution',
   copied: 'Copied',
   copy: 'Copy',
@@ -255,6 +264,7 @@ export const en = {
   date: 'Date',
   deadline: 'Deadline',
   domain: 'Domain',
+  decimals: 'Decimals',
   decrypting_vault_keyshares: 'Decrypting vault keyshares...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
@@ -502,6 +512,7 @@ export const en = {
   function_signature: 'Function Signature',
   function_unavailble:
     'Feature unavailable for existing chain coins. Please add coins that can be used with FUNCTION:',
+  fully_diluted_valuation: 'Fully Diluted Valuation',
   gas: 'Gas',
   gas_limit: 'Gas limit',
   gas_limit_tooltip_content:
@@ -526,6 +537,7 @@ export const en = {
   having_trouble_scanning_tip_2:
     'Make sure the screen is well lit and free of glare',
   having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
+  high_24h: '24h High',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
   how_it_works: 'How it works',
@@ -620,6 +632,7 @@ export const en = {
   looking_for_server: 'Looking for FastVaultServer...',
   looks_good: 'Looks good',
   low: 'Low',
+  low_24h: '24h Low',
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
   make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
@@ -627,10 +640,14 @@ export const en = {
   malicious_dapp_detected_description:
     '{{dapp}} has been flagged as malicious by Blockaid. Always do your own research before proceeding.',
   manage_chains: 'Manage Chains',
+  market_cap: 'Market Cap',
+  market_cap_rank: 'Rank',
+  market_stats: 'Market Stats',
   manage_notifications_in_settings:
     'You can manage notifications in system settings.',
   max: 'Max',
   max_4_characters: 'Max 4 characters',
+  max_supply: 'Max Supply',
   max_total_fees: 'Max. Total Fee',
   memo: 'Memo',
   merge: 'Merge',
@@ -771,6 +788,7 @@ export const en = {
   powered_by: 'Powered by <provider></provider>',
   price: 'Price',
   price_impact_average: 'Average',
+  price_range: 'Price Range',
   price_impact_good: 'Good',
   price_impact_high: 'High Impact',
   primary_type: 'Primary type',
@@ -1252,6 +1270,7 @@ export const en = {
   today: 'Today',
   token: 'Token',
   token_approval: 'Token Approval',
+  token_info: 'Token Info',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
   token_not_found_invalid: 'Invalid contract address',
@@ -1494,6 +1513,7 @@ export const en = {
   version: 'Version',
   via: 'via',
   view_on_explorer: 'View on Explorer',
+  volume_24h: '24h Volume',
   vote: 'Vote',
   vultisig_community: '{{productName}} Community',
   vultisig_education: '{{productName}} Education',
