@@ -7,13 +7,16 @@ import { nativeSwapChains } from '@vultisig/core-chain/swap/native/NativeSwapCha
 
 import { getChainLogoSrc } from './getChainLogoSrc'
 
+// Brand assets shared with the iOS app (`Assets.xcassets/Crypto`). LI.FI only
+// ships a raster there, so the file extension is part of the mapping. CowSwap
+// has no iOS asset and keeps its own.
 const generalSwapProviderLogo: Record<GeneralSwapProvider, string> = {
-  '1inch': '1inch',
-  'li.fi': 'lifi',
-  kyber: 'kyber',
-  swapkit: 'swapkit',
-  cowswap: 'cowswap',
-  jupiter: 'jupiter',
+  '1inch': '1inch.svg',
+  'li.fi': 'lifi.png',
+  kyber: 'kyber.svg',
+  swapkit: 'swapkit.svg',
+  cowswap: 'cowswap.svg',
+  jupiter: 'jupiter.svg',
 }
 
 const logoSrcByProviderName = new Map<string, string>([
@@ -23,7 +26,7 @@ const logoSrcByProviderName = new Map<string, string>([
   ]),
   ...generalSwapProviders.map((provider): [string, string] => [
     generalSwapProviderName[provider],
-    `/core/swap-providers/${generalSwapProviderLogo[provider]}.svg`,
+    `/core/swap-providers/${generalSwapProviderLogo[provider]}`,
   ]),
 ])
 

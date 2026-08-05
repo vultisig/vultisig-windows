@@ -19,7 +19,7 @@ describe('getSwapProviderLogoSrc', () => {
   it('resolves a logo for every general swap provider', () => {
     generalSwapProviders.forEach(provider => {
       expect(getSwapProviderLogoSrc(generalSwapProviderName[provider])).toMatch(
-        /^\/core\/swap-providers\/.+\.svg$/
+        /^\/core\/swap-providers\/.+\.(svg|png)$/
       )
     })
   })
