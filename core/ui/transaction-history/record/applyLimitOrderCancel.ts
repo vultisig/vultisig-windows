@@ -48,6 +48,9 @@ export const applyLimitOrderCancel = ({
 
   const { address } = getKeysignCoin(payload)
 
+  // Sorted before the bucket check, then `find`: oldest-first is what THORChain
+  // will pick, so the first match is the answer and the remaining candidates
+  // never need their eligibility resolved.
   const target = records
     .filter(
       (record): record is LimitSwapTransactionRecord =>
@@ -55,7 +58,8 @@ export const applyLimitOrderCancel = ({
     )
     .filter(record => record.data.fromAddress === address)
     .filter(record => !record.data.cancelTxHash)
-    .filter(record => {
+    .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+    .find(record => {
       const eligibility = getLimitSwapCancelEligibility(
         toLimitSwapCancelCandidate(record.data)
       )
@@ -67,8 +71,6 @@ export const applyLimitOrderCancel = ({
         )
       )
     })
-    .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
-    .at(0)
 
   if (!target) {
     return null
