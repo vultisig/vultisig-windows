@@ -7,8 +7,7 @@ import { motion } from 'framer-motion'
 import { useId } from 'react'
 import styled from 'styled-components'
 
-const viewBoxSize = 100
-const chartHeight = 168
+import { chartHeight, chartViewBoxSize as viewBoxSize } from './config'
 
 type CoinPriceChartGraphProps = {
   points: MarketChartPoint[]
@@ -78,9 +77,14 @@ export const CoinPriceChartGraph = ({
     <Container
       onPointerDown={event => {
         event.stopPropagation()
+        event.currentTarget.setPointerCapture(event.pointerId)
         handlePointer(event)
       }}
       onPointerMove={handlePointer}
+      onPointerUp={event => {
+        event.currentTarget.releasePointerCapture(event.pointerId)
+        onScrubChange(null)
+      }}
       onPointerLeave={() => onScrubChange(null)}
       onPointerCancel={() => onScrubChange(null)}
     >

@@ -120,7 +120,11 @@ export const CoinPriceChart = ({ coin }: CoinPriceChartProps) => {
               color={isPositive ? 'success' : 'danger'}
             >
               {t('percentage_value', {
-                value: `${isPositive ? '+' : ''}${(changeFraction * 100).toFixed(2)}`,
+                value: new Intl.NumberFormat(i18n.language, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                  signDisplay: 'exceptZero',
+                }).format(changeFraction * 100),
               })}
             </Text>
           </ChangeChip>

@@ -39,6 +39,8 @@ export const CoinChartRangePicker = ({
       {marketChartRanges.map(range => (
         <Segment
           key={range}
+          type="button"
+          aria-pressed={range === value}
           isActive={range === value}
           onClick={() => onChange(range)}
         >

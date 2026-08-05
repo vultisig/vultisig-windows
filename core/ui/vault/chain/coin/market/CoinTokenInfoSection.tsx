@@ -15,6 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -53,9 +54,14 @@ export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
     value: id && isChainOfKind(coin.chain, 'evm') ? id : address,
   })
 
-  const handleCopyContract = (contract: string) => {
-    navigator.clipboard.writeText(contract)
-    addToast({ message: t('contract_address_copied') })
+  const handleCopyContract = async (contract: string) => {
+    const result = await attempt(() => navigator.clipboard.writeText(contract))
+
+    if ('data' in result) {
+      addToast({ message: t('contract_address_copied') })
+    } else {
+      addToast({ message: t('failed_to_copy_address'), status: 'error' })
+    }
   }
 
   return (

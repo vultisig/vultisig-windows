@@ -44,10 +44,15 @@ export const CoinPriceExtremesSection = ({
       day: 'numeric',
     }).format(new Date(timestamp))
 
-  const formatExtremeCaption = (
-    changePercentage: number | null,
+  type FormatExtremeCaptionInput = {
+    changePercentage: number | null
     date: number | null
-  ) => {
+  }
+
+  const formatExtremeCaption = ({
+    changePercentage,
+    date,
+  }: FormatExtremeCaptionInput) => {
     const parts: string[] = []
 
     if (changePercentage !== null) {
@@ -90,20 +95,20 @@ export const CoinPriceExtremesSection = ({
           <CoinMarketStatRow
             label={t('all_time_high')}
             value={<FiatAmountText value={stats.ath} />}
-            subValue={formatExtremeCaption(
-              stats.athChangePercentage,
-              stats.athDate
-            )}
+            subValue={formatExtremeCaption({
+              changePercentage: stats.athChangePercentage,
+              date: stats.athDate,
+            })}
           />
         ) : null}
         {stats.atl !== null ? (
           <CoinMarketStatRow
             label={t('all_time_low')}
             value={<FiatAmountText value={stats.atl} />}
-            subValue={formatExtremeCaption(
-              stats.atlChangePercentage,
-              stats.atlDate
-            )}
+            subValue={formatExtremeCaption({
+              changePercentage: stats.atlChangePercentage,
+              date: stats.atlDate,
+            })}
           />
         ) : null}
       </CoinDetailSection>

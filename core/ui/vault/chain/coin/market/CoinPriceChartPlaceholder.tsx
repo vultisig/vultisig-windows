@@ -1,8 +1,7 @@
 import { useId } from 'react'
 import styled, { keyframes, useTheme } from 'styled-components'
 
-const viewBoxSize = 100
-const chartHeight = 168
+import { chartHeight, chartViewBoxSize as viewBoxSize } from './config'
 
 // Fixed shape drawn while the first series loads, so the card reserves its
 // final size instead of collapsing to a spinner.

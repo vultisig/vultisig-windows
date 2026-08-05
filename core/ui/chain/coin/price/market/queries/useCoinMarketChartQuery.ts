@@ -1,9 +1,9 @@
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
-import { useFiatCurrency } from '../../../../../storage/fiatCurrency'
 import { getCoinMarketChart } from '../getCoinMarketChart'
 import {
   marketChartPointCount,

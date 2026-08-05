@@ -1817,7 +1817,7 @@ export const es = {
   transaction_broadcasted: 'La transacción ha sido transmitida a la red.',
   all_time_high: 'Máximo histórico',
   all_time_low: 'Mínimo histórico',
-  chart_range_all: 'TODO',
+  chart_range_all: 'Todo',
   chart_range_day: '1D',
   chart_range_month: '1M',
   chart_range_week: '1W',

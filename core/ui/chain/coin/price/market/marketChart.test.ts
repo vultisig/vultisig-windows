@@ -151,10 +151,15 @@ describe('getMarketChartPriceDomain', () => {
     expect(max).toBeCloseTo(105)
   })
 
-  it('falls back to a unit pad when the flat price is zero-adjacent', () => {
-    const [min, max] = getMarketChartPriceDomain([])
+  it('returns a unit domain for an empty series', () => {
+    expect(getMarketChartPriceDomain([])).toEqual([0, 1])
+  })
 
-    expect(max).toBeGreaterThan(min)
+  it('falls back to a unit pad when the flat price is zero', () => {
+    const [min, max] = getMarketChartPriceDomain(makeSeries([0, 0]))
+
+    expect(min).toBeCloseTo(-1)
+    expect(max).toBeCloseTo(1)
   })
 })
 
