@@ -1215,6 +1215,8 @@ export const en = {
   swap_limit_cancel_donated_dust_row: 'Kept by THORChain',
   swap_limit_cancel_duplicate_warning:
     'You have another resting order with the same pair and price. THORChain cancels the oldest match first, so this may close that order instead of this one.',
+  swap_limit_cancel_records_unavailable:
+    'Could not load your transaction history. Try again shortly — your order is unaffected.',
   swap_limit_cancel_order_changed:
     'This order changed while you were reviewing it. Go back and check its current status.',
   swap_limit_cancel_already_requested:

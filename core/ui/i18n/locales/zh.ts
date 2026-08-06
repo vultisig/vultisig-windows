@@ -1713,4 +1713,6 @@ export const zh = {
   token_info: '代币信息',
   volume_24h: '24小时交易量',
   send_amount_adjusted_for_fee: '金额已调整为 {{amount}}，以支付网络费用',
+  swap_limit_cancel_records_unavailable:
+    '无法加载您的交易记录。请稍后再试——您的订单不受影响。',
 }

@@ -64,9 +64,14 @@ export const CancelLimitOrderPage = () => {
           <MatchQuery
             value={recordsQuery}
             pending={() => <Text color="shy">{t('loading')}</Text>}
+            // Two different situations, and they are not interchangeable. A
+            // failed read means we do not know the order's state; saying it
+            // "changed while you were reviewing it" would assert something we
+            // cannot see, and send the user looking for a change that may not
+            // have happened.
             error={() => (
               <WarningBlock>
-                {t('swap_limit_cancel_order_changed')}
+                {t('swap_limit_cancel_records_unavailable')}
               </WarningBlock>
             )}
             success={() => (

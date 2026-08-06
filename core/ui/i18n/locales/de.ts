@@ -1879,4 +1879,6 @@ export const de = {
   volume_24h: '24h-Volumen',
   send_amount_adjusted_for_fee:
     'Der Betrag wurde auf {{amount}} angepasst, um die Netzwerkgebühr zu decken.',
+  swap_limit_cancel_records_unavailable:
+    'Ihre Transaktionshistorie konnte nicht geladen werden. Bitte versuchen Sie es später erneut – Ihre Bestellung ist davon nicht betroffen.',
 }

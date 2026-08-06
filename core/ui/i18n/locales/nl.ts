@@ -1847,4 +1847,6 @@ export const nl = {
   volume_24h: '24u volume',
   send_amount_adjusted_for_fee:
     'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
+  swap_limit_cancel_records_unavailable:
+    'Uw transactiegeschiedenis kon niet worden geladen. Probeer het over een tijdje opnieuw. Uw bestelling blijft ongewijzigd.',
 }

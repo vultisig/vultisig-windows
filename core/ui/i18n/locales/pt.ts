@@ -1866,4 +1866,6 @@ export const pt = {
   volume_24h: 'Volume 24h',
   send_amount_adjusted_for_fee:
     'Valor ajustado para {{amount}} para cobrir a taxa de rede.',
+  swap_limit_cancel_records_unavailable:
+    'Não foi possível carregar seu histórico de transações. Tente novamente em breve — seu pedido não foi afetado.',
 }

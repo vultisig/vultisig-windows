@@ -1843,4 +1843,6 @@ export const ru = {
   volume_24h: 'Объём за 24 ч',
   send_amount_adjusted_for_fee:
     'Сумма изменена на {{amount}}, чтобы покрыть комиссию сети',
+  swap_limit_cancel_records_unavailable:
+    'Не удалось загрузить историю ваших транзакций. Попробуйте еще раз чуть позже — ваш заказ не затронут.',
 }

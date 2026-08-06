@@ -1863,4 +1863,6 @@ export const es = {
   volume_24h: 'Volumen 24h',
   send_amount_adjusted_for_fee:
     'Importe ajustado a {{amount}} para cubrir la comisión de red.',
+  swap_limit_cancel_records_unavailable:
+    'No se pudo cargar el historial de transacciones. Inténtelo de nuevo en breve; su pedido no se ha visto afectado.',
 }

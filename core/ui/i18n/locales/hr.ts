@@ -1835,4 +1835,6 @@ export const hr = {
   volume_24h: '24h volumen',
   send_amount_adjusted_for_fee:
     'Iznos prilagođen na {{amount}} za pokrivanje mrežne naknade',
+  swap_limit_cancel_records_unavailable:
+    'Nije moguće učitati vašu povijest transakcija. Pokušajte ponovno uskoro — vaša narudžba ostaje nepromijenjena.',
 }

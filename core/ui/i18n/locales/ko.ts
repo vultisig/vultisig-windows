@@ -1825,4 +1825,6 @@ export const ko = {
   volume_24h: '24시간 거래량',
   send_amount_adjusted_for_fee:
     '네트워크 수수료를 충당하기 위해 금액이 {{amount}}(으)로 조정되었습니다',
+  swap_limit_cancel_records_unavailable:
+    '거래 내역을 불러올 수 없습니다. 잠시 후 다시 시도해 주세요. 주문에는 문제가 없습니다.',
 }
