@@ -33,6 +33,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { minBigInt } from '@vultisig/lib-utils/math/minBigInt'
+import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -103,10 +104,15 @@ export const ManageAmountInputField = () => {
 
   // Announced while the field still holds the typed amount — the write itself
   // happens on submit — so the user learns what will be sent before committing
-  // to it rather than being surprised on Verify.
+  // to it rather than being surprised on Verify. Held back until the whole form
+  // is clean, not just the amount: the fee this number is derived from is
+  // estimated for the current receiver, so an invalid address leaves a stale
+  // one behind. Pending validation still shows it, or it would flicker on every
+  // keystroke.
   const spendableAmount = useSpendableSendAmount()
+  const isFormClean = data === undefined || isRecordEmpty(data)
   const adjustedAmount =
-    spendableAmount !== null && spendableAmount !== value
+    isFormClean && spendableAmount !== null && spendableAmount !== value
       ? formatAmount(fromChainAmount(spendableAmount, coin.decimals), coin)
       : null
 
@@ -231,7 +237,7 @@ export const ManageAmountInputField = () => {
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
-            {!error && adjustedAmount !== null ? (
+            {adjustedAmount !== null ? (
               <Text size={12} color="shy">
                 {t('send_amount_adjusted_for_fee', { amount: adjustedAmount })}
               </Text>
