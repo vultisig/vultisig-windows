@@ -1,18 +1,27 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const SquareBehindSquare6Icon: FC<SvgProps> = props => (
+export const SquareBehindSquare6Icon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <path d="M7.75 7.75V5.75C7.75 4.64543 8.64543 3.75 9.75 3.75H18.25C19.3546 3.75 20.25 4.64543 20.25 5.75V14.26C20.25 15.3646 19.3546 16.26 18.25 16.26H16.25M3.75 9.75V18.25C3.75 19.3546 4.64543 20.25 5.75 20.25H14.25C15.3546 20.25 16.25 19.3546 16.25 18.25V9.75C16.25 8.64543 15.3546 7.75 14.25 7.75H5.75C4.64543 7.75 3.75 8.64543 3.75 9.75Z" />
+    <path
+      d="M15.6004 8.40039H18.0004C19.3264 8.40039 20.4004 9.47439 20.4004 10.8004V18.0004C20.4004 19.3264 19.3264 20.4004 18.0004 20.4004H10.8004C9.47439 20.4004 8.40039 19.3264 8.40039 18.0004V15.6004"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M13.1996 3.59961H5.99961C4.67413 3.59961 3.59961 4.67413 3.59961 5.99961V13.1996C3.59961 14.5251 4.67413 15.5996 5.99961 15.5996H13.1996C14.5251 15.5996 15.5996 14.5251 15.5996 13.1996V5.99961C15.5996 4.67413 14.5251 3.59961 13.1996 3.59961Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

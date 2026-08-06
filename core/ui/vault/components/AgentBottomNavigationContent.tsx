@@ -9,8 +9,8 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { AgentIcon } from '@lib/ui/icons/AgentIcon'
-import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
-import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
+import { NodesIcon } from '@lib/ui/icons/NodesIcon'
 import {
   StationCreditCardIcon,
   StationLayers2FilledIcon,
@@ -127,7 +127,7 @@ export const AgentBottomNavigationContent = ({
     <>
       {isCoachmarkOpen && <ContentOverlay />}
       <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
-        <CameraFilledIcon />
+        <Camera2Icon />
       </FloatingCamera>
       <NavContainer>
         <NavSurface />
@@ -152,7 +152,7 @@ export const AgentBottomNavigationContent = ({
             {iconStyle === 'station' ? (
               <StationLayers2FilledIcon />
             ) : (
-              <CoinsAddIcon />
+              <NodesIcon />
             )}
             <Text as="span" size={10}>
               {t('defi')}

@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { ArrowLeftRightIcon } from '@lib/ui/icons/ArrowLeftRightIcon'
+import { ArrowsRotateCenterIcon } from '@lib/ui/icons/ArrowsRotateCenterIcon'
 import { StationArrowsRotateCenterIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -23,7 +23,7 @@ export const SwapPrompt = (state: CoreViewState<'swap'>) => {
         {iconStyle === 'station' ? (
           <StationArrowsRotateCenterIcon />
         ) : (
-          <ArrowLeftRightIcon />
+          <ArrowsRotateCenterIcon />
         )}
       </PrimaryActionWrapper>
       <Text color="shyExtra" size={12}>

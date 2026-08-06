@@ -2,7 +2,7 @@ import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { ArrowUpDownIcon } from '@lib/ui/icons/ArrowUpDownIcon'
+import { ArrowsRotateCenterIcon } from '@lib/ui/icons/ArrowsRotateCenterIcon'
 import { WarningIcon } from '@lib/ui/icons/WarningIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { CircularProgressIndicator } from '@lib/ui/loaders/CircularProgressIndicator'
@@ -52,7 +52,7 @@ export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
       ) : hasError ? (
         <WarningIcon />
       ) : (
-        <ArrowUpDownIcon />
+        <ArrowsRotateCenterIcon />
       )}
     </Button>
   )

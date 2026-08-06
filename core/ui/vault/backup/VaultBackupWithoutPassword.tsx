@@ -5,7 +5,7 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { FileWarningIcon } from '@lib/ui/icons/FileWarningIcon'
 import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
-import { LockKeyholeOpenIcon } from '@lib/ui/icons/LockKeyholeOpenIcon'
+import { LockFilledIcon } from '@lib/ui/icons/LockFilledIcon'
 import { UserLockIcon } from '@lib/ui/icons/UserLockIcon'
 import { InfoItem } from '@lib/ui/info/InfoItem'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -32,7 +32,7 @@ type VaultBackupWithoutPasswordProps = OnFinishProp & {
 
 const infoItems = [
   {
-    icon: <LockKeyholeOpenIcon />,
+    icon: <LockFilledIcon />,
     i18nKey: 'backup_password_info_secure_without_password',
   },
   {

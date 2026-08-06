@@ -1,18 +1,28 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const CopyIcon: FC<SvgProps> = props => (
+export const CopyIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 20 20"
+    fill="none"
     {...props}
   >
-    <path d="M4 16C2.9 16 2 15.1 2 14V4C2 2.9 2.9 2 4 2H14C15.1 2 16 2.9 16 4M10 8H20C21.1046 8 22 8.89543 22 10V20C22 21.1046 21.1046 22 20 22H10C8.89543 22 8 21.1046 8 20V10C8 8.89543 8.89543 8 10 8Z" />
+    <path
+      d="M16.9997 7.99967V14.9997C16.9997 16.1047 16.1047 16.9997 14.9997 16.9997H7.99967"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.9997 2.99967H4.99967C3.89511 2.99967 2.99967 3.89511 2.99967 4.99967V10.9997C2.99967 12.1042 3.89511 12.9997 4.99967 12.9997H10.9997C12.1042 12.9997 12.9997 12.1042 12.9997 10.9997V4.99967C12.9997 3.89511 12.1042 2.99967 10.9997 2.99967Z"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

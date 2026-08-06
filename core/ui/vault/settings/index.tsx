@@ -1,8 +1,8 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
-import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
-import { PencilIcon } from '@lib/ui/icons/PenciIcon'
+import { FolderKeyIcon } from '@lib/ui/icons/FolderKeyIcon'
+import { PenWritingFilledIcon } from '@lib/ui/icons/PenWritingFilledIcon'
 import { TrashCanIcon } from '@lib/ui/icons/TrashCanIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -56,7 +56,7 @@ export const VaultSettingsPage: FC = () => {
             }
             icon={
               <ListItemIconWrapper>
-                <PencilIcon />
+                <PenWritingFilledIcon />
               </ListItemIconWrapper>
             }
             onClick={() => navigate({ id: 'renameVault' })}
@@ -74,7 +74,7 @@ export const VaultSettingsPage: FC = () => {
           <ListItem
             icon={
               <ListItemIconWrapper>
-                <LockKeyholeIcon />
+                <FolderKeyIcon />
               </ListItemIconWrapper>
             }
             description={

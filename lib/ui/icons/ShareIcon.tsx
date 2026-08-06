@@ -1,18 +1,34 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const ShareIcon: FC<SvgProps> = props => (
+export const ShareIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <path d="M4 12V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V12M16 6L12 2M12 2L8 6M12 2V15" />
+    <path
+      d="M8.69922 6.89961L11.9992 3.59961L15.2992 6.89961"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 15.5996V3.59961"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7.2001 10.8848C5.7409 11.2064 4.5985 12.4172 4.4065 13.9532L4.1065 16.3532C3.8377 18.5024 5.5129 20.3996 7.6789 20.3996H16.3225C18.4873 20.3996 20.1637 18.5012 19.8949 16.3532L19.5949 13.9532C19.4029 12.416 18.2593 11.2064 16.8013 10.8848"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { ShapesPlusXSquareCircleIcon } from '@lib/ui/icons/ShapesPlusXSquareCircleIcon'
+import { GridPlusIcon } from '@lib/ui/icons/GridPlusIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useToast } from '@lib/ui/toast/ToastProvider'
@@ -36,7 +36,7 @@ export const DepositPrompt = (state: CoreViewState<'deposit'>) => {
           navigate({ id: 'deposit', state })
         }}
       >
-        <ShapesPlusXSquareCircleIcon />
+        <GridPlusIcon />
       </SecondaryActionWrapper>
       <Text color="shyExtra" size={12}>
         {t('deposit')}

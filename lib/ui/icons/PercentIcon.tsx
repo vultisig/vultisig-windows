@@ -1,31 +1,32 @@
-export const PercentIcon = () => (
+import { SvgProps } from '@lib/ui/props'
+
+export const PercentIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
     fill="none"
+    {...props}
   >
     <path
-      d="M10.6666 5.33398L5.33325 10.6673M14.1666 8.00065C14.1666 11.4064 11.4057 14.1673 7.99992 14.1673C4.59417 14.1673 1.83325 11.4064 1.83325 8.00065C1.83325 4.5949 4.59417 1.83398 7.99992 1.83398C11.4057 1.83398 14.1666 4.5949 14.1666 8.00065Z"
+      d="M6.89922 9.59922C8.39039 9.59922 9.59922 8.39039 9.59922 6.89922C9.59922 5.40805 8.39039 4.19922 6.89922 4.19922C5.40805 4.19922 4.19922 5.40805 4.19922 6.89922C4.19922 8.39039 5.40805 9.59922 6.89922 9.59922Z"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M5.5 6C5.5 6.27614 5.72386 6.5 6 6.5C6.27614 6.5 6.5 6.27614 6.5 6C6.5 5.72386 6.27614 5.5 6 5.5C5.72386 5.5 5.5 5.72386 5.5 6Z"
-      fill="currentColor"
+      d="M17.1004 19.8004C18.5916 19.8004 19.8004 18.5916 19.8004 17.1004C19.8004 15.6092 18.5916 14.4004 17.1004 14.4004C15.6092 14.4004 14.4004 15.6092 14.4004 17.1004C14.4004 18.5916 15.6092 19.8004 17.1004 19.8004Z"
       stroke="currentColor"
-      strokeWidth="0.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M9.5 10C9.5 10.2761 9.72387 10.5 10 10.5C10.2761 10.5 10.5 10.2761 10.5 10C10.5 9.72387 10.2761 9.5 10 9.5C9.72387 9.5 9.5 9.72387 9.5 10Z"
-      fill="currentColor"
+      d="M5.40039 19.7992L18.6004 4.19922"
       stroke="currentColor"
-      strokeWidth="0.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />

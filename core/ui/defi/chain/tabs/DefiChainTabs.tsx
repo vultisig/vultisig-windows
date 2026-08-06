@@ -2,7 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Tabs } from '@lib/ui/base/Tabs'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -85,7 +85,7 @@ export const DefiChainTabs = () => {
             }}
             size="lg"
           >
-            <CryptoWalletPenIcon />
+            <HousePenIcon />
           </IconButton>
         </TabsHeader>
       )}

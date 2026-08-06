@@ -4,8 +4,8 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
+import { NodesIcon } from '@lib/ui/icons/NodesIcon'
 import {
   StationLayers2FilledIcon,
   StationWalletFilledIcon,
@@ -82,7 +82,7 @@ export const BottomNavigation = ({
           aria-label={t('scan_qr')}
           onClick={() => navigate({ id: 'uploadQr', state: {} })}
         >
-          <CameraIcon />
+          <Camera2Icon />
         </CameraButton>
         <TabButtonOld
           isActive={activeTab === 'defi'}
@@ -91,7 +91,7 @@ export const BottomNavigation = ({
           {iconStyle === 'station' ? (
             <StationLayers2FilledIcon />
           ) : (
-            <CoinsAddIcon />
+            <NodesIcon />
           )}
           <Text as="span" size={10}>
             {t('defi')}

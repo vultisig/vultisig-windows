@@ -1,7 +1,7 @@
 import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CalendarClockIcon } from '@lib/ui/icons/CalendarClockIcon'
+import { ClockRotateClockwiseIcon } from '@lib/ui/icons/ClockRotateClockwiseIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -20,7 +20,7 @@ export const VaultPageHeaderControls = () => {
           data-testid="transaction-history-button"
         >
           <IconWrapper size={24}>
-            <CalendarClockIcon />
+            <ClockRotateClockwiseIcon />
           </IconWrapper>
         </IconButton>
       )}

@@ -1,18 +1,34 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const PadlockIcon: FC<SvgProps> = props => (
+export const PadlockIcon = (props: SvgProps) => (
   <svg
-    fill="currentColor"
-    height="1em"
-    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
     <path
-      clipRule="evenodd"
-      d="M10.0007 1.875C7.69947 1.875 5.83398 3.74048 5.83398 6.04167V7.5H5.62565C4.36 7.5 3.33398 8.526 3.33398 9.79167V16.0417C3.33398 17.3073 4.36 18.3333 5.62565 18.3333H14.3757C15.6413 18.3333 16.6673 17.3073 16.6673 16.0417V9.79167C16.6673 8.526 15.6413 7.5 14.3757 7.5H14.1673V6.04167C14.1673 3.74048 12.3018 1.875 10.0007 1.875ZM12.9173 7.5V6.04167C12.9173 4.43083 11.6115 3.125 10.0007 3.125C8.38982 3.125 7.08398 4.43083 7.08398 6.04167V7.5H12.9173ZM10.0007 11.0417C10.3458 11.0417 10.6257 11.3215 10.6257 11.6667V14.1667C10.6257 14.5118 10.3458 14.7917 10.0007 14.7917C9.65548 14.7917 9.37565 14.5118 9.37565 14.1667V11.6667C9.37565 11.3215 9.65548 11.0417 10.0007 11.0417Z"
-      fillRule="evenodd"
+      d="M7.80078 10.7996V7.79961C7.80078 5.48001 9.68118 3.59961 12.0008 3.59961C14.3204 3.59961 16.2008 5.48001 16.2008 7.79961V10.7996"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 15V16.2"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.8008 10.7998H7.20078C5.8753 10.7998 4.80078 11.8743 4.80078 13.1998V17.9998C4.80078 19.3253 5.8753 20.3998 7.20078 20.3998H16.8008C18.1263 20.3998 19.2008 19.3253 19.2008 17.9998V13.1998C19.2008 11.8743 18.1263 10.7998 16.8008 10.7998Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

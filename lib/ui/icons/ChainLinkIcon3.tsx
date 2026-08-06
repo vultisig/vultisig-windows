@@ -1,28 +1,34 @@
-import { FC } from 'react'
+import { SvgProps } from '@lib/ui/props'
 
-import { SvgProps } from '../props'
-
-export const ChainLinkIcon3: FC<SvgProps> = props => (
+export const ChainLinkIcon3 = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    viewBox="0 0 12 12"
+    viewBox="0 0 24 24"
     fill="none"
     {...props}
   >
-    <g clipPath="url(#clip0_62892_17817)">
-      <path
-        d="M4.87513 2.76186L5.3584 2.27861C6.5632 1.0738 8.5166 1.0738 9.7214 2.27861C10.9262 3.48342 10.9262 5.4368 9.7214 6.6416L9.2371 7.12595M2.76443 4.87257L2.27861 5.3584C1.07379 6.5632 1.0738 8.5166 2.27861 9.7214C3.48342 10.9262 5.4368 10.9262 6.6416 9.7214L7.1239 9.2391M4.75 7.25L7.25 4.75"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_62892_17817">
-        <rect width="12" height="12" fill="white" />
-      </clipPath>
-    </defs>
+    <path
+      d="M13.1996 7.19964L10.8422 4.84224C9.1854 3.1854 6.49908 3.1854 4.84224 4.84224C3.1854 6.49908 3.1854 9.1854 4.84224 10.8422L7.19964 13.1996"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.8008 16.7998L13.1582 19.1572C14.815 20.814 17.5013 20.814 19.1582 19.1572C20.815 17.5004 20.815 14.814 19.1582 13.1572L16.8008 10.7998"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.3996 14.3996L9.59961 9.59961"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

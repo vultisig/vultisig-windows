@@ -3,7 +3,7 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
-import { CircleICloseIcon } from '@lib/ui/icons/CircleICloseIcon'
+import { CircleCrossFilledIcon } from '@lib/ui/icons/CircleCrossFilledIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import {
   StationCircleXmarkFilledIcon,
@@ -90,7 +90,7 @@ export const SearchChain = ({
                   {isStation ? (
                     <StationCircleXmarkFilledIcon />
                   ) : (
-                    <CircleICloseIcon />
+                    <CircleCrossFilledIcon />
                   )}
                 </CloseButton>
               </SearchFieldWrapper>

@@ -1,0 +1,951 @@
+{
+  "$comment": "Source-of-truth mapping from a desktop icon component (lib/ui/icons/<name>.tsx) to its Icons V3 source icon (the component/instance name in the Figma section defined in figma-icons.config.json). SEED ONLY — this is intentionally incomplete. Later phases extend it, verifying each entry against rendered art before shipping. Chevrons are excluded on purpose (they stay on the legacy pack per design).",
+  "decision": "converge-on-v3",
+  "status": {
+    "migrated": "already swapped to V3 art in lib/ui/icons",
+    "verified": "V3 source confirmed against rendered art",
+    "proposed": "likely match from name/iOS precedent — must be eyeballed before use",
+    "bespoke": "Vultisig-specific glyph with no V3 counterpart — stays hand-drawn",
+    "legacy": "shared icon with no faithful V3 counterpart yet — stays on the legacy glyph pending design",
+    "pending": "verified-name V3 target, generation deferred (Figma rate-limited) — fetch when access returns",
+    "special": "not a monochrome currentColor glyph (e.g. gradient/brand art) — out of V3 scope"
+  },
+  "sourceLegend": {
+    "station": "already shipped in StationFigmaIcons.tsx (drawn in V3 style)",
+    "ios": "rebuilt on V3 in vultisig-ios#4834; SVG art read directly from the iOS repo",
+    "manual": "decided here"
+  },
+  "excludedChevrons": [
+    "ChevronLeftIcon",
+    "ChevronRightIcon",
+    "ChevronDownIcon",
+    "ChevronUpIcon",
+    "CaretDownIcon"
+  ],
+  "icons": [
+    {
+      "desktop": "WalletIcon",
+      "v3": "wallet-filled",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "MagnifyingGlassIcon",
+      "v3": "magnifier",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "SearchIcon",
+      "v3": "magnifier",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "CheckmarkIcon",
+      "v3": "checkmark-small",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "CopyIcon",
+      "v3": "copies-3-filled",
+      "status": "migrated",
+      "source": "station"
+    },
+    {
+      "desktop": "BookIcon",
+      "v3": "book",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CalendarClockIcon",
+      "v3": "calendar-clock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CameraIcon",
+      "v3": "camera",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CheckIcon",
+      "v3": "check",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleInfoIcon",
+      "v3": "circle-info",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleMinusIcon",
+      "v3": "circle-minus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CirclePlusIcon",
+      "v3": "circle-plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloseIcon",
+      "v3": "xmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloudUploadIcon",
+      "v3": "cloud-upload",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CoinsIcon",
+      "v3": "coins",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CrossIcon",
+      "v3": "xmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "EyeIcon",
+      "v3": "eye",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FolderLockIcon",
+      "v3": "folder-lock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "MegaphoneIcon",
+      "v3": "megaphone",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PlusIcon",
+      "v3": "plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "SettingsIcon",
+      "v3": "gear",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ShieldIcon",
+      "v3": "shield",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TrashIcon",
+      "v3": "trash",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowWallDownIcon",
+      "v3": "arrow-down-from-line",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ChainLinkIcon3",
+      "v3": "chain-link-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleAlertIcon",
+      "v3": "circle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleCrossFilledIcon",
+      "v3": "circle-xmark-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleDollarSignIcon",
+      "v3": "circle-dollar",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FuelIcon",
+      "v3": "gas-pump",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "GlobusIcon",
+      "v3": "globe",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "IconFileEdit",
+      "v3": "file-pen",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "InfoIcon",
+      "v3": "circle-info",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LightningIcon",
+      "v3": "bolt",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LockKeyholeIcon",
+      "v3": "lock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "NavigationXIcon",
+      "v3": "xmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "RefreshCwIcon",
+      "v3": "refresh",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TriangleAlertIcon",
+      "v3": "triangle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TrophyIcon",
+      "v3": "trophy",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ZapIcon",
+      "v3": "bolt",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowUpRightIcon",
+      "v3": "arrow-to-corner-top-right",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PasteIcon",
+      "v3": "copies-3-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ClipboardCopyIcon",
+      "v3": "copies-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ShareAndroidIcon",
+      "v3": "connected-dots-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DeviceIcon",
+      "v3": "mobile",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowDownIcon",
+      "v3": "arrow-down",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleCheckIcon",
+      "v3": "circle-check",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleCrossIcon",
+      "v3": "circle-xmark",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleICloseIcon",
+      "v3": "circle-xmark",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "SquareArrowOutUpRightIcon",
+      "v3": "external-link",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "SquareArrowTopRightIcon",
+      "v3": "square-arrow-up-right",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "FileTextIcon",
+      "v3": "file-content",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "ShareIcon",
+      "v3": "upload",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "PenciIcon",
+      "v3": "pen-writing",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "ShieldCheckIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has shield/shield-filled but no shield-check"
+    },
+    {
+      "desktop": "ShieldCheckFilledIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "no shield-check in V3"
+    },
+    {
+      "desktop": "FileUpIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has file-download but no file-upload"
+    },
+    {
+      "desktop": "TransactionReceiveIcon",
+      "v3": "circle-open-arrow-down",
+      "status": "migrated",
+      "source": "manual",
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
+    },
+    {
+      "desktop": "SquareBehindSquare6Icon",
+      "v3": "clone",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "EyeClosedIcon",
+      "v3": "eye-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "SquareBehindSquare4Icon",
+      "v3": "clone",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DollarIcon",
+      "v3": "currency-dollar",
+      "status": "migrated",
+      "source": "manual",
+      "note": "V3 currency-dollar; fetch + verify when Figma access returns"
+    },
+    {
+      "desktop": "WarningIcon",
+      "v3": "circle-warning",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ArrowUpDownIcon",
+      "v3": "swap",
+      "status": "migrated",
+      "source": "manual",
+      "note": "candidate swap — verify geometry (two vertical arrows) when Figma access returns"
+    },
+    {
+      "desktop": "SwapLoadingIcon",
+      "v3": "loader",
+      "status": "migrated",
+      "source": "manual",
+      "note": "spinner arc; verify vs V3 loader when Figma access returns"
+    },
+    {
+      "desktop": "CalendarIcon",
+      "v3": "calendar-days",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PercentIcon",
+      "v3": "percentage",
+      "status": "migrated",
+      "source": "manual",
+      "note": "plain percent; V3 percentage — fetch in corrections batch"
+    },
+    {
+      "desktop": "BrokenChainLink3Icon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "snapped chain with spark marks; V3 has no broken-chain (only link-slash, different glyph)"
+    },
+    {
+      "desktop": "CircleIcon",
+      "v3": null,
+      "status": "special",
+      "source": "manual",
+      "note": "gradient-filled 83x83 badge circle, not a monochrome glyph"
+    },
+    {
+      "desktop": "BooksIcon",
+      "v3": "books",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloudIcon",
+      "v3": "cloud",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DiscordIcon",
+      "v3": "IconDiscord",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "GithubIcon",
+      "v3": "IconGithub",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LanguagesIcon",
+      "v3": "language",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TabletSmartphoneIcon",
+      "v3": "tablet-mobile",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TrashCanIcon",
+      "v3": "trash",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "TwitterIcon",
+      "v3": "IconX",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FacebookIcon",
+      "v3": "IconFacebook",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "LinkedinIcon",
+      "v3": "IconLinkedin",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "RedditIcon",
+      "v3": "IconReddit",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "WhatsAppIcon",
+      "v3": "IconWhatsapp",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "BubbleQuestionIcon",
+      "v3": "circle-question",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "KeyboardUpIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 keyboards lack an up-arrow variant"
+    },
+    {
+      "desktop": "ImageAvatarSparkleIcon",
+      "v3": "image-sparkle",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "RadioTowerIcon",
+      "v3": "radio",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "ArrowUndoIcon",
+      "v3": "arrow-rotate-anticlockwise",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "FileQuestionIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has file-search, no file-question"
+    },
+    {
+      "desktop": "FolderUploadIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has folder-download, no folder-upload"
+    },
+    {
+      "desktop": "GroupOneIcon",
+      "v3": "users",
+      "status": "migrated",
+      "source": "manual",
+      "note": "verify geometry in corrections batch"
+    },
+    {
+      "desktop": "TransactionApproveIcon",
+      "v3": "circle-check",
+      "status": "migrated",
+      "source": "manual",
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
+    },
+    {
+      "desktop": "TransactionSwapIcon",
+      "v3": "circle-sort-arrows",
+      "status": "migrated",
+      "source": "manual",
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
+    },
+    {
+      "desktop": "TransactionSendIcon",
+      "v3": "circle-arrow-up",
+      "status": "migrated",
+      "source": "manual",
+      "note": "transaction-direction set (send/receive/swap/approve) — migrate together in the Figma batch and verify the 4 look cohesive"
+    },
+    {
+      "desktop": "EmailNotificationIcon",
+      "v3": "envelope-notification",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FileWarningIcon",
+      "v3": "file-alert",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LaptopIcon",
+      "v3": "laptop",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LightbulbIcon",
+      "v3": "lightbulb",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PadlockIcon",
+      "v3": "lock",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "QrCodeIcon",
+      "v3": "qrcode",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "SmartphoneIcon",
+      "v3": "mobile",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "SparkledPenIcon",
+      "v3": "pen-sparkle",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "BellIcon",
+      "v3": "bell",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "BadgeCheckIcon",
+      "v3": "badge-check",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LinkTwoOffIcon",
+      "v3": "link-slash",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ExpandIcon",
+      "v3": "expand-3",
+      "status": "migrated",
+      "source": "manual",
+      "note": "not in iOS; V3 target — verify in batch"
+    },
+    {
+      "desktop": "PanelRightIcon",
+      "v3": "sidebar-right",
+      "status": "migrated",
+      "source": "manual",
+      "note": "not in iOS; V3 target — verify in batch"
+    },
+    {
+      "desktop": "ArrowsRotateCenterIcon",
+      "v3": "arrows-rotate-center",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CirclePlusFilledIcon",
+      "v3": "circle-plus-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "NodesIcon",
+      "v3": "nodes",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "HousePenIcon",
+      "v3": "house-pen",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Camera2Icon",
+      "v3": "camera-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ClockRotateClockwiseIcon",
+      "v3": "clock-rotate-clockwise",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "GridPlusIcon",
+      "v3": "grid-plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CameraFilledIcon",
+      "v3": "camera-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleDashed2Icon",
+      "v3": "circle-dashed-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "BookmarksIcon",
+      "v3": "bookmarks",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Clone2Icon",
+      "v3": "clone-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "BranchOutIcon",
+      "v3": "branch-out",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CircleDashedIcon",
+      "v3": "circle-dashed",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "MobileSignalIcon",
+      "v3": "mobile-signal",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "AtomShieldIcon",
+      "v3": "atom-shield",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Upload4Icon",
+      "v3": "upload-4",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FolderKeyIcon",
+      "v3": "folder-key",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "CloudDownloadIcon",
+      "v3": "cloud-download",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FileBookmarkIcon",
+      "v3": "file-bookmark",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "ImageSparkle2Icon",
+      "v3": "image-sparkle-2",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "LockFilledIcon",
+      "v3": "lock-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "Split3Icon",
+      "v3": "split-3",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "PenWritingFilledIcon",
+      "v3": "pen-writing-filled",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "FolderPlusIcon",
+      "v3": "folder-plus",
+      "status": "migrated",
+      "source": "ios"
+    },
+    {
+      "desktop": "DAppsIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "LogoBoxIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "DownloadSeedphraseIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "CoSignIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "BrowserExtensionIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "ShieldVerifiedIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has no shield-check/verified"
+    },
+    {
+      "desktop": "LockKeyholeOpenIcon",
+      "v3": null,
+      "status": "legacy",
+      "source": "manual",
+      "note": "V3 has lock but no lock-open/unlock"
+    },
+    {
+      "desktop": "LeafIcon",
+      "v3": "20px_leaf 1",
+      "status": "migrated",
+      "source": "manual",
+      "note": "odd V3 name; verify geometry in batch"
+    },
+    {
+      "desktop": "CubeWithCornersIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual",
+      "note": "scan/AR cube with corner brackets; no clean V3"
+    },
+    {
+      "desktop": "ArrowSplitIcon",
+      "v3": "split-3",
+      "status": "migrated",
+      "source": "manual",
+      "note": "only split in V3 is three-way; verify vs current 2-way"
+    },
+    {
+      "desktop": "PageCheckIcon",
+      "v3": "file-check",
+      "status": "migrated",
+      "source": "manual",
+      "note": "not in iOS; V3 file-check"
+    },
+    {
+      "desktop": "UserLockIcon",
+      "v3": "user-lock",
+      "status": "migrated",
+      "source": "manual"
+    },
+    {
+      "desktop": "CircleHelpIcon",
+      "v3": "circle-question",
+      "status": "migrated",
+      "source": "manual",
+      "note": "iOS square-question differs; V3 circle-question"
+    },
+    {
+      "desktop": "FrameIcon",
+      "v3": "frame",
+      "status": "migrated",
+      "source": "manual",
+      "note": "iOS window differs; V3 frame — verify in batch"
+    },
+    {
+      "desktop": "EmailIcon",
+      "v3": "envelope",
+      "status": "migrated",
+      "source": "manual",
+      "note": "iOS only has envelope-filled; V3 envelope (outline) — verify in batch"
+    },
+    {
+      "desktop": "CryptoIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "CryptoWalletPenIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "AgentIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "SeedphraseIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    },
+    {
+      "desktop": "TronEnergyIcon",
+      "v3": null,
+      "status": "bespoke",
+      "source": "manual"
+    }
+  ]
+}
