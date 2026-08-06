@@ -36,6 +36,7 @@ const coinGeckoPlatform: Record<EvmChain, string> = {
   [EvmChain.Mantle]: 'mantle',
   [EvmChain.Hyperliquid]: 'hyperliquid',
   [EvmChain.Sei]: 'sei-network',
+  [EvmChain.Robinhood]: 'robinhood',
 }
 
 /**
