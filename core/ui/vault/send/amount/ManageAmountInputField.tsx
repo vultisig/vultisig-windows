@@ -5,6 +5,7 @@ import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
 import { BaseSendAmountInput } from '@core/ui/vault/send/amount/BaseSendAmountInput'
 import { FiatSendAmountInput } from '@core/ui/vault/send/amount/FiatSendAmountInput'
+import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
@@ -30,7 +31,9 @@ import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { minBigInt } from '@vultisig/lib-utils/math/minBigInt'
+import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -98,6 +101,20 @@ export const ManageAmountInputField = () => {
   const error = !!amountError && value ? amountError : undefined
   const isWaitingForFee =
     pendingSuggestion != null && isNative && feeEstimateQuery.isPending
+
+  // Announced while the field still holds the typed amount — the write itself
+  // happens on submit — so the user learns what will be sent before committing
+  // to it rather than being surprised on Verify. Held back until the whole form
+  // is clean, not just the amount: the fee this number is derived from is
+  // estimated for the current receiver, so an invalid address leaves a stale
+  // one behind. Pending validation still shows it, or it would flicker on every
+  // keystroke.
+  const spendableAmount = useSpendableSendAmount()
+  const isFormClean = data === undefined || isRecordEmpty(data)
+  const adjustedAmount =
+    isFormClean && spendableAmount !== null && spendableAmount !== value
+      ? formatAmount(fromChainAmount(spendableAmount, coin.decimals), coin)
+      : null
 
   const sharedInputProps: Pick<
     AmountTextInputProps,
@@ -220,6 +237,11 @@ export const ManageAmountInputField = () => {
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
+            {adjustedAmount !== null ? (
+              <Text size={12} color="shy">
+                {t('send_amount_adjusted_for_fee', { amount: adjustedAmount })}
+              </Text>
+            ) : null}
             <MatchQuery
               value={balanceQuery}
               success={amount => (

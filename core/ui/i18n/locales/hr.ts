@@ -1833,4 +1833,6 @@ export const hr = {
   price_range: 'Raspon cijena',
   token_info: 'Informacije o tokenu',
   volume_24h: '24h volumen',
+  send_amount_adjusted_for_fee:
+    'Iznos prilagođen na {{amount}} za pokrivanje mrežne naknade',
 }

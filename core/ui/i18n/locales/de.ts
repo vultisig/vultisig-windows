@@ -1877,4 +1877,6 @@ export const de = {
   price_range: 'Preisspanne',
   token_info: 'Token-Info',
   volume_24h: '24h-Volumen',
+  send_amount_adjusted_for_fee:
+    'Der Betrag wurde auf {{amount}} angepasst, um die Netzwerkgebühr zu decken.',
 }

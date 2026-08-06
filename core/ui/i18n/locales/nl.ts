@@ -1845,4 +1845,6 @@ export const nl = {
   price_range: 'Prijsbereik',
   token_info: 'Tokeninformatie',
   volume_24h: '24u volume',
+  send_amount_adjusted_for_fee:
+    'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
 }

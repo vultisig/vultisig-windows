@@ -1712,4 +1712,5 @@ export const zh = {
   price_range: '价格区间',
   token_info: '代币信息',
   volume_24h: '24小时交易量',
+  send_amount_adjusted_for_fee: '金额已调整为 {{amount}}，以支付网络费用',
 }

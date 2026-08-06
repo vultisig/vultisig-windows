@@ -1841,4 +1841,6 @@ export const ru = {
   price_range: 'Ценовой диапазон',
   token_info: 'Информация о токене',
   volume_24h: 'Объём за 24 ч',
+  send_amount_adjusted_for_fee:
+    'Сумма изменена на {{amount}}, чтобы покрыть комиссию сети',
 }

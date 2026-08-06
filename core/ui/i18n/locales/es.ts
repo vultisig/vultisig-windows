@@ -1861,4 +1861,6 @@ export const es = {
   price_range: 'Rango de precios',
   token_info: 'Información del token',
   volume_24h: 'Volumen 24h',
+  send_amount_adjusted_for_fee:
+    'Importe ajustado a {{amount}} para cubrir la comisión de red.',
 }
