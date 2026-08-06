@@ -124,6 +124,7 @@ describe('fetchLimitSwapMarketPrice', () => {
         targetAsset: 'ETH.ETH',
         sourceAmount: 100_000_000n,
         sourceDecimals: 8,
+        destinationAddress: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
       })
     ).resolves.toBe(16)
 
@@ -142,12 +143,17 @@ describe('fetchLimitSwapMarketPrice', () => {
       targetAsset: 'BTC.BTC',
       sourceAmount: 10n ** 18n,
       sourceDecimals: 18,
+      destinationAddress: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
     })
 
     expect(String(fetchMock.mock.calls[0][0])).toContain('amount=100000000')
   })
 
-  it('includes a destination when one is known', async () => {
+  // Not optional: THORChain validates `destination` against the target asset's
+  // chain, so a SECURED target without one fails with "swap destination address
+  // is not the same chain as the target asset" — no price, dead presets, and an
+  // order that cannot be priced. Layer-1 targets quote identically either way.
+  it('always sends the payout destination', async () => {
     const fetchMock = stubQuote('1600000000')
 
     await fetchLimitSwapMarketPrice({

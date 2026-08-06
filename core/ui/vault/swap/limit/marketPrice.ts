@@ -95,7 +95,14 @@ type FetchLimitSwapMarketPriceInput = {
   /** Probe amount in the source coin's native smallest units. */
   sourceAmount: bigint
   sourceDecimals: number
-  destinationAddress?: string
+  /**
+   * Where the payout would go. REQUIRED even though this quote is only reference
+   * data: THORChain validates it against the target asset's chain, and a SECURED
+   * target without one fails with "swap destination address is not the same
+   * chain as the target asset". Optional here once, it was simply never passed,
+   * and every secured pair silently had no price.
+   */
+  destinationAddress: string
 }
 
 /**
@@ -122,11 +129,8 @@ export const fetchLimitSwapMarketPrice = async ({
     streaming_interval: '1',
     streaming_quantity: '0',
     liquidity_tolerance_bps: '0',
+    destination: destinationAddress,
   })
-
-  if (destinationAddress) {
-    params.set('destination', destinationAddress)
-  }
 
   const { expected_amount_out } = await queryUrl<ThorchainQuoteResponse>(
     `${thornodeBaseUrl}/quote/swap?${params.toString()}`,
