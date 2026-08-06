@@ -2,7 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useTransactionRecords } from '@core/ui/storage/transactionHistory'
+import { useTransactionRecordsQuery } from '@core/ui/storage/transactionHistory'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -10,13 +10,15 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { LimitSwapTransactionRecord } from '../../../../transaction-history/core'
+import {
+  LimitSwapTransactionRecord,
+  TransactionRecord,
+} from '../../../../transaction-history/core'
 import {
   LimitOrderCancelState,
   useLimitOrderCancel,
@@ -35,17 +37,18 @@ export const CancelLimitOrderPage = () => {
   const { t } = useTranslation()
   const goBack = useNavigateBack()
   const [{ id }] = useCoreViewState<'cancelLimitOrder'>()
-  const records = useTransactionRecords()
+  // The QUERY, never `useTransactionRecords()`: that helper asserts its data is
+  // present, which throws during render on any frame before the storage read
+  // resolves. This screen is reached from history so the cache is normally warm,
+  // but "normally" is exactly the assumption that took down every signing flow
+  // once already.
+  const recordsQuery = useTransactionRecordsQuery()
+  const records = recordsQuery.data
 
-  const record = shouldBePresent(
-    records.find(
-      (candidate): candidate is LimitSwapTransactionRecord =>
-        candidate.id === id && candidate.type === 'limitSwap'
-    ),
-    'limit order record for cancellation'
+  const record = records?.find(
+    (candidate): candidate is LimitSwapTransactionRecord =>
+      candidate.id === id && candidate.type === 'limitSwap'
   )
-
-  const cancel = useLimitOrderCancel({ record, records })
 
   return (
     <>
@@ -54,9 +57,46 @@ export const CancelLimitOrderPage = () => {
         title={t('swap_limit_cancel_title')}
         hasBorder
       />
-      <CancelLimitOrderBody cancel={cancel} record={record} />
+      {record && records ? (
+        <CancelLimitOrderResolved record={record} records={records} />
+      ) : (
+        <Body>
+          <MatchQuery
+            value={recordsQuery}
+            pending={() => <Text color="shy">{t('loading')}</Text>}
+            error={() => (
+              <WarningBlock>
+                {t('swap_limit_cancel_order_changed')}
+              </WarningBlock>
+            )}
+            success={() => (
+              <WarningBlock>
+                {t('swap_limit_cancel_order_changed')}
+              </WarningBlock>
+            )}
+          />
+        </Body>
+      )}
     </>
   )
+}
+
+type CancelLimitOrderResolvedProps = {
+  record: LimitSwapTransactionRecord
+  records: TransactionRecord[]
+}
+
+/**
+ * Split out so `useLimitOrderCancel` only runs once the record exists — a hook
+ * cannot be called conditionally, and eligibility is meaningless without one.
+ */
+const CancelLimitOrderResolved: FC<CancelLimitOrderResolvedProps> = ({
+  record,
+  records,
+}) => {
+  const cancel = useLimitOrderCancel({ record, records })
+
+  return <CancelLimitOrderBody cancel={cancel} record={record} />
 }
 
 type CancelLimitOrderBodyProps = {

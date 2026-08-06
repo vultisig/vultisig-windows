@@ -131,16 +131,18 @@ export type LimitSwapTransactionData = {
    *
    * Separate from the display fields above because a cancel addresses an order
    * by `(assets, source amount, trade target)` and nothing else — no tx hash —
-   * so these four have to be exact rather than presentable. `targetAsset` above
-   * is the placement memo's spelling, which abbreviates an L1 contract and
-   * therefore cannot address the order's bucket.
+   * so these have to be exact rather than presentable.
+   *
+   * There is deliberately no signed TARGET asset: the placement memo carries the
+   * target only in its abbreviated spelling, and the coin it came from is not on
+   * the payload for every source branch. The target's full form is resolved from
+   * the queue's own report instead — see the observed fields below.
    *
    * Optional because orders placed before cancelling existed carry none. That
    * is what `missingSignedData` means, and why those orders can only be
    * cancelled once the queue has reported their identity back.
    */
   signedSourceAsset?: string
-  signedTargetAsset?: string
   signedSourceAmount?: string
   signedTradeTarget?: string
   /**

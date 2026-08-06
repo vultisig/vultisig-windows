@@ -53,6 +53,23 @@ describe('toLimitSwapCancelCandidate', () => {
     expect(candidate.signedTradeTarget).toBe(43_079_145n)
   })
 
+  // `BigInt('')` is `0n`, not a throw. A blank stored amount that read as a real
+  // zero would short-circuit the fallback to the derived value and block an
+  // otherwise cancellable order.
+  it.each(['', '   '])(
+    'treats the blank stored amount %j as unknown',
+    blank => {
+      const candidate = toLimitSwapCancelCandidate({
+        ...runeToUsdc,
+        signedSourceAmount: blank,
+        signedTradeTarget: blank,
+      })
+
+      expect(candidate.signedSourceAmount).toBe(100_000_000n)
+      expect(candidate.signedTradeTarget).toBe(43_079_145n)
+    }
+  )
+
   it('prefers the amounts recorded at signing over the derived ones', () => {
     const candidate = toLimitSwapCancelCandidate({
       ...runeToUsdc,

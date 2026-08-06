@@ -17,13 +17,21 @@ import { isLiveLimitOrderStatus } from '../tracking/reconcile'
  * "this value proves nothing", and eligibility already treats an absent field as
  * not-yet-known rather than as agreement.
  */
-const toOptionalBigint = (value: string | undefined): bigint | undefined =>
-  value === undefined
-    ? undefined
-    : withFallback(
-        attempt(() => BigInt(value)),
-        undefined
-      )
+const toOptionalBigint = (value: string | undefined): bigint | undefined => {
+  // `BigInt('')` is `0n`, not a throw — so an empty stored amount would sail
+  // past this as a real zero, short-circuit the `??` that falls back to the
+  // derived value, and block an otherwise cancellable order as
+  // `missingSignedData`. Blank has to mean unknown.
+  const trimmed = value?.trim()
+  if (!trimmed) {
+    return undefined
+  }
+
+  return withFallback(
+    attempt(() => BigInt(trimmed)),
+    undefined
+  )
+}
 
 /**
  * Everything the SDK needs to decide whether a stored limit order can be

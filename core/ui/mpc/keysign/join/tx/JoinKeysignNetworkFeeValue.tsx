@@ -11,6 +11,7 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { useTranslation } from 'react-i18next'
 
 /**
  * The source chain's network fee as the joiner verify cards render it: the coin
@@ -20,6 +21,7 @@ import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 export const JoinKeysignNetworkFeeValue = ({
   value,
 }: ValueProp<KeysignPayload>) => {
+  const { t } = useTranslation()
   const chain = getKeysignChain(value)
   const feeCoin = chainFeeCoin[chain]
   const feeQuery = useKeysignFee(value)
@@ -30,6 +32,14 @@ export const JoinKeysignNetworkFeeValue = ({
     <MatchQuery
       value={feeQuery}
       pending={() => <Spinner />}
+      // Without this the row renders blank when the fee cannot be loaded — on a
+      // screen whose whole job is to show a co-signer what they are approving,
+      // an empty fee reads as "no fee" rather than "unknown".
+      error={() => (
+        <Text size={14} color="shy">
+          {t('failed_to_load')}
+        </Text>
+      )}
       success={feeAmount => {
         const fee = fromChainAmount(feeAmount, feeCoin.decimals)
 
