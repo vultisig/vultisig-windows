@@ -1,4 +1,6 @@
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
@@ -55,6 +57,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
     : null
 
   const provider = getKeysignSwapProviderName(swapPayload)
+  const providerLogoSrc = getSwapProviderLogoSrc(provider)
   const swapFee = getSwapFeeFromPayload(value)
 
   return (
@@ -111,7 +114,17 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
           <ListItem
             hoverable={false}
             title={t('provider')}
-            extra={<Text color="shy">{provider}</Text>}
+            extra={
+              <HStack alignItems="center" gap={6}>
+                {providerLogoSrc ? (
+                  <ChainEntityIcon
+                    value={providerLogoSrc}
+                    style={{ fontSize: 16 }}
+                  />
+                ) : null}
+                <Text color="shy">{provider}</Text>
+              </HStack>
+            }
           />
           <ListItem
             hoverable={false}
