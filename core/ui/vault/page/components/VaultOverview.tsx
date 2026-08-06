@@ -1,3 +1,4 @@
+import { CollapsingBalance } from '@core/ui/page/CollapsingBalance'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -76,7 +77,9 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <BlurEffect />
         <BalanceWrapper data-testid="vault-overview-balance-wrapper">
-          <VaultTotalBalance />
+          <CollapsingBalance scrollContainerRef={scrollContainerRef}>
+            <VaultTotalBalance />
+          </CollapsingBalance>
           <VaultOverviewPrimaryActions />
         </BalanceWrapper>
         <Wrap wrap={PromptsWrapper}>

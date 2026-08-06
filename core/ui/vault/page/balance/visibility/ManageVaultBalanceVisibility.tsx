@@ -29,7 +29,7 @@ export const ManageVaultBalanceVisibility = ({
       onClick={() => setIsBalanceVisible(!value)}
     >
       <IconWrapper color="primaryAlt" size={16}>
-        {value ? <EyeClosedIcon /> : <EyeIcon />}
+        {value ? <EyeIcon /> : <EyeClosedIcon />}
       </IconWrapper>
       <Text size={12} color="primaryAlt">
         {value

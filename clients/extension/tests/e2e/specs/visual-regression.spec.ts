@@ -2,32 +2,44 @@
  * Visual Regression E2E Tests
  *
  * Captures screenshots for visual regression testing.
- * 
+ *
  * Note: These tests generate baselines on first run.
  * Run with --update-snapshots to regenerate baselines.
  */
 
-import { test, expect } from '../fixtures/extension-loader'
+import { expect, test } from '../fixtures/extension-loader'
 import { OnboardingPage } from '../page-objects/OnboardingPage.po'
 
 // Helper to wait for extension UI to fully load (past splash screen)
-async function waitForExtensionReady(page: import('@playwright/test').Page, timeout = 15_000): Promise<void> {
-  await page.waitForFunction(() => {
-    const buttons = document.querySelectorAll('button')
-    return buttons.length > 0 && Array.from(buttons).some(b => b.offsetParent !== null)
-  }, { timeout })
+async function waitForExtensionReady(
+  page: import('@playwright/test').Page,
+  timeout = 15_000
+): Promise<void> {
+  await page.waitForFunction(
+    () => {
+      const buttons = document.querySelectorAll('button')
+      return (
+        buttons.length > 0 &&
+        Array.from(buttons).some(b => b.offsetParent !== null)
+      )
+    },
+    { timeout }
+  )
 }
 
 test.describe('Visual Regression - Key Screens', () => {
-  test('1. Initial load - Shows vultisig branding', async ({ context, extensionId }) => {
+  test('1. Initial load - Shows vultisig branding', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
     await onboardingPage.goto()
-    
+
     // Wait for extension to fully load past splash screen
     await waitForExtensionReady(page)
-    
+
     // Wait for content to stabilize
     await page.waitForTimeout(500)
 
@@ -40,17 +52,20 @@ test.describe('Visual Regression - Key Screens', () => {
     await page.close()
   })
 
-  test('2. After skip/next - Shows navigation options', async ({ context, extensionId }) => {
+  test('2. After skip/next - Shows navigation options', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
     await onboardingPage.goto()
-    
+
     // Wait for extension to fully load
     await waitForExtensionReady(page)
 
     await onboardingPage.completeOnboarding()
-    await expect(onboardingPage.newVaultGetStartedButton).toBeVisible()
+    await expect(onboardingPage.newVaultCreateButton).toBeVisible()
     await onboardingPage.navigateToSetupVault()
     await expect(page.locator('canvas').first()).toBeVisible()
     await expect(
@@ -67,12 +82,15 @@ test.describe('Visual Regression - Key Screens', () => {
     await page.close()
   })
 
-  test('3. Setup vault page - Device selection', async ({ context, extensionId }) => {
+  test('3. Setup vault page - Device selection', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const onboardingPage = new OnboardingPage(page, extensionId)
 
     await onboardingPage.goto()
-    
+
     // Wait for extension to fully load
     await waitForExtensionReady(page)
 
@@ -81,7 +99,7 @@ test.describe('Visual Regression - Key Screens', () => {
     await page.waitForTimeout(500)
     await waitForExtensionReady(page)
 
-    await expect(onboardingPage.newVaultGetStartedButton).toBeVisible()
+    await expect(onboardingPage.newVaultCreateButton).toBeVisible()
     await onboardingPage.navigateToSetupVault()
     await expect(page.locator('canvas').first()).toBeVisible()
     await expect(
@@ -107,7 +125,7 @@ test.describe('Visual Regression - Key Screens', () => {
     })
 
     test.skip('6. Chain detail page', async () => {
-      // Requires pre-seeded vault  
+      // Requires pre-seeded vault
     })
 
     test.skip('7. Send form - Empty', async () => {

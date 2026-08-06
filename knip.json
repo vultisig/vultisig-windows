@@ -63,6 +63,9 @@
     "package.json": [
       "devDependencies"
     ],
+    "scripts/icons/generate-icons.mjs": [
+      "files"
+    ],
     "scripts/quality-audit.mjs": [
       "files"
     ]

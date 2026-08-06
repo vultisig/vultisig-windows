@@ -1,18 +1,34 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const CircleICloseIcon: FC<SvgProps> = props => (
+export const CircleICloseIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <path d="M15 9L9 15M15 15L9 9M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12Z" />
+    <path
+      d="M9 15L15 9"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M9 9L15 15"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M11.9996 20.3996C16.6388 20.3996 20.3996 16.6388 20.3996 11.9996C20.3996 7.36042 16.6388 3.59961 11.9996 3.59961C7.36042 3.59961 3.59961 7.36042 3.59961 11.9996C3.59961 16.6388 7.36042 20.3996 11.9996 20.3996Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

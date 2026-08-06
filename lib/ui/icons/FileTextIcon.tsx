@@ -1,18 +1,42 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const FileTextIcon: FC<SvgProps> = () => (
+export const FileTextIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    viewBox="0 0 20 20"
+    viewBox="0 0 24 24"
     fill="none"
+    {...props}
   >
     <path
-      d="M2.70831 10.0007H4.37498M8.12498 10.0007H10.2083M8.12498 6.87565H11.875M2.70831 6.87565H4.37498M2.70831 13.1257H4.37498M5.20831 17.2923H14.7916C15.7121 17.2923 16.4583 16.5462 16.4583 15.6257V4.37565C16.4583 3.45518 15.7121 2.70898 14.7916 2.70898H5.20831C4.28784 2.70898 3.54165 3.45518 3.54165 4.37565V15.6257C3.54165 16.5462 4.28784 17.2923 5.20831 17.2923Z"
+      d="M4.80078 8.39961H8.40078C9.06318 8.39961 9.60078 7.86201 9.60078 7.19961V3.59961"
+      fill="currentColor"
+    />
+    <path
+      d="M4.80078 8.39961H8.40078C9.06318 8.39961 9.60078 7.86201 9.60078 7.19961V3.59961"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15 10.8008H12"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15 15.5996H9"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M19.2008 16.7996V7.19961C19.2008 5.21121 17.5892 3.59961 15.6008 3.59961H10.0976C9.77958 3.59961 9.47358 3.72561 9.24918 3.95121L5.15238 8.04801C4.92678 8.27361 4.80078 8.57841 4.80078 8.89641V16.7996C4.80078 18.788 6.41238 20.3996 8.40078 20.3996H15.6008C17.5892 20.3996 19.2008 18.788 19.2008 16.7996Z"
+      stroke="currentColor"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />

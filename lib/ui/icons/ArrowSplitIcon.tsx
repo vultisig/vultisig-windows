@@ -6,9 +6,36 @@ export const ArrowSplitIcon = (props: SvgProps) => (
     width="1em"
     height="1em"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill="none"
     {...props}
   >
-    <path d="M14 4l2.29 2.29-2.88 2.88 1.42 1.42 2.88-2.88L20 10V4h-6zm-4 0H4v6l2.29-2.29 4.71 4.7V20h2v-8.41l-5.29-5.3L10 4z" />
+    <path
+      d="M4.80078 4.7998L9.00078 8.9998"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.59961 9.59961V3.59961H9.59961"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 20.4V12L19.2 4.8"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M20.4004 9.59961V3.59961H14.4004"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

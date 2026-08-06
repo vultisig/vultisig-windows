@@ -3,6 +3,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
@@ -329,11 +330,24 @@ const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
         )}
         {data.provider && (
           <DetailRow label={t('provider')}>
-            <Text>{data.provider}</Text>
+            <SwapProviderValue provider={data.provider} />
           </DetailRow>
         )}
       </SeparatedByLine>
     </Panel>
+  )
+}
+
+const SwapProviderValue = ({ provider }: { provider: string }) => {
+  const logoSrc = getSwapProviderLogoSrc(provider)
+
+  return (
+    <HStack alignItems="center" gap={6}>
+      {logoSrc ? (
+        <ChainEntityIcon value={logoSrc} style={{ fontSize: 16 }} />
+      ) : null}
+      <Text>{provider}</Text>
+    </HStack>
   )
 }
 

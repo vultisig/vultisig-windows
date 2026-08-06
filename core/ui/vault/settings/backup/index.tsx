@@ -1,5 +1,5 @@
 import { Opener } from '@lib/ui/base/Opener'
-import { FolderUploadIcon } from '@lib/ui/icons/FolderUploadIcon'
+import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
 import { ListItem } from '@lib/ui/list/item'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +24,7 @@ export const VaultSettingsBackup = () => {
         <ListItem
           icon={
             <ListItemIconWrapper>
-              <FolderUploadIcon />
+              <CloudDownloadIcon />
             </ListItemIconWrapper>
           }
           description={

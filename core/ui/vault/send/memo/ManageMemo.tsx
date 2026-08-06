@@ -2,9 +2,11 @@ import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { interactive } from '@lib/ui/css/interactive'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { Clone2Icon } from '@lib/ui/icons/Clone2Icon'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
+import { HStack } from '@lib/ui/layout/Stack'
 import { Text, text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { motion } from 'framer-motion'
@@ -29,9 +31,12 @@ export const ManageMemo = () => {
   return (
     <InputContainer>
       <Label onClick={toggle}>
-        <Text as="span" color="shy" size={12}>
-          {t('add_memo')}
-        </Text>
+        <HStack alignItems="center" gap={8}>
+          <Clone2Icon />
+          <Text as="span" color="shy" size={12}>
+            {t('add_memo')}
+          </Text>
+        </HStack>
         <CollapsableStateIndicator isOpen={isOpen} />
       </Label>
       <AnimatePresence mode="wait">

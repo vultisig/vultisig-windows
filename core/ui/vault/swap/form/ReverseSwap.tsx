@@ -2,12 +2,11 @@ import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { ArrowUpDownIcon } from '@lib/ui/icons/ArrowUpDownIcon'
-import { SwapLoadingIcon } from '@lib/ui/icons/SwapLoadingIcon'
+import { ArrowsRotateCenterIcon } from '@lib/ui/icons/ArrowsRotateCenterIcon'
 import { WarningIcon } from '@lib/ui/icons/WarningIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { CircularProgressIndicator } from '@lib/ui/loaders/CircularProgressIndicator'
 import { getColor } from '@lib/ui/theme/getters'
-import { motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -23,7 +22,6 @@ export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
   const [fromCoinKey, setFromCoinKey] = useSwapFromCoin()
   const [toCoin, setToCoin] = useSwapToCoin()
   const { isPending } = useSwapQuoteQuery()
-  const prefersReducedMotion = useReducedMotion()
   const [isTooltipDismissed, setIsTooltipDismissed] = useState(false)
 
   const hasError = !!errorMessage
@@ -50,29 +48,11 @@ export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
       }
     >
       {isPending ? (
-        <motion.span
-          key="spinner"
-          role="img"
-          aria-label="loading"
-          style={{
-            display: 'inline-flex',
-            willChange: 'transform',
-            fontSize: 12,
-          }}
-          initial={{ rotate: 0 }}
-          animate={prefersReducedMotion ? { rotate: 0 } : { rotate: 360 }}
-          transition={
-            prefersReducedMotion
-              ? { duration: 0 }
-              : { repeat: Infinity, ease: 'linear', duration: 0.8 }
-          }
-        >
-          <SwapLoadingIcon />
-        </motion.span>
+        <CircularProgressIndicator style={{ fontSize: 20 }} />
       ) : hasError ? (
         <WarningIcon />
       ) : (
-        <ArrowUpDownIcon />
+        <ArrowsRotateCenterIcon />
       )}
     </Button>
   )

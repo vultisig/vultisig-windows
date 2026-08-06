@@ -1,5 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { RadioTowerIcon } from '@lib/ui/icons/RadioTowerIcon'
+import { MobileSignalIcon } from '@lib/ui/icons/MobileSignalIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
@@ -33,7 +33,7 @@ export const CustomRpcSettingsRow = () => {
       <ListItem
         icon={
           <ListItemIconWrapper>
-            <RadioTowerIcon />
+            <MobileSignalIcon />
           </ListItemIconWrapper>
         }
         description={
@@ -60,7 +60,7 @@ export const CustomRpcSettingsRow = () => {
         <FeatureTierGate
           isOpen={isGateOpen}
           onClose={() => setIsGateOpen(false)}
-          icon={<RadioTowerIcon />}
+          icon={<MobileSignalIcon />}
           title={t('custom_rpc')}
           description={t('custom_rpc_gate_description')}
           requiredTier={requiredTier}

@@ -1,7 +1,7 @@
 import { useCore } from '@core/ui/state/core'
 import { SecondaryActionWrapper } from '@core/ui/vault/components/PrimaryActions.styled'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { DollarIcon } from '@lib/ui/icons/DollarIcon'
+import { CirclePlusFilledIcon } from '@lib/ui/icons/CirclePlusFilledIcon'
 import { StationCirclePlusFilledIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -41,7 +41,7 @@ export const BuyPrompt = ({ coin }: BuyPromptProps) => {
         {iconStyle === 'station' ? (
           <StationCirclePlusFilledIcon />
         ) : (
-          <DollarIcon />
+          <CirclePlusFilledIcon />
         )}
       </SecondaryActionWrapper>
       <Text color="shyExtra" size={12}>
