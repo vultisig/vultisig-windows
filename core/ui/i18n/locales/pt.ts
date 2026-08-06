@@ -1838,4 +1838,6 @@ export const pt = {
   price_range: 'Faixa de preço',
   token_info: 'Informações do token',
   volume_24h: 'Volume 24h',
+  send_amount_adjusted_for_fee:
+    'Valor ajustado para {{amount}} para cobrir a taxa de rede.',
 }
