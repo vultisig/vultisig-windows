@@ -1,4 +1,10 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import {
+  getCollapsedHeaderOpacity,
+  getNormalHeaderOpacity,
+  isHeaderCollapsed,
+  useHeaderCollapseProgress,
+} from '@core/ui/page/headerCollapse'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
@@ -13,10 +19,6 @@ import { ReactNode, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import {
-  getCollapsedHeaderOpacity,
-  useVaultHeaderCollapseProgress,
-} from './vaultHeaderCollapse'
 import { VaultPageHeaderControls } from './VaultPageHeaderControls'
 import { VaultSelector } from './VaultSelector'
 
@@ -26,6 +28,7 @@ const HeaderContainer = styled.div`
   z-index: 1;
   display: grid;
   background: ${getColor('background')};
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
 `
 
 const CollapsedContent = styled(HStack)`
@@ -33,13 +36,13 @@ const CollapsedContent = styled(HStack)`
   ${verticalPadding(pageConfig.verticalPadding)};
   grid-area: 1 / 1;
   min-height: 60px;
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
   justify-content: space-between;
   align-items: center;
   background: ${getColor('background')};
 `
 
 const NormalContent = styled.div`
+  display: grid;
   grid-area: 1 / 1;
 `
 
@@ -54,9 +57,8 @@ export const VaultPageHeader = ({
   scrollContainerRef,
   primaryControls,
 }: VaultPageHeaderProps) => {
-  const progress = useVaultHeaderCollapseProgress(scrollContainerRef)
-  const collapsedOpacity = getCollapsedHeaderOpacity(progress)
-  const isCollapsed = collapsedOpacity > 0.5
+  const progress = useHeaderCollapseProgress(scrollContainerRef)
+  const isCollapsed = isHeaderCollapsed(progress)
   const { t } = useTranslation()
 
   const { data: totalBalance = 0 } = useVaultTotalBalanceQuery()
@@ -67,7 +69,7 @@ export const VaultPageHeader = ({
     <HeaderContainer>
       <CollapsedContent
         style={{
-          opacity: collapsedOpacity,
+          opacity: getCollapsedHeaderOpacity(progress),
           pointerEvents: isCollapsed ? 'auto' : 'none',
         }}
       >
@@ -84,12 +86,11 @@ export const VaultPageHeader = ({
 
       <NormalContent
         style={{
-          opacity: 1 - collapsedOpacity,
+          opacity: getNormalHeaderOpacity(progress),
           pointerEvents: isCollapsed ? 'none' : 'auto',
         }}
       >
         <PageHeader
-          hasBorder
           primaryControls={primaryControls}
           secondaryControls={<VaultPageHeaderControls />}
           title={<VaultSelector placement="pageHeader" value={vault} />}

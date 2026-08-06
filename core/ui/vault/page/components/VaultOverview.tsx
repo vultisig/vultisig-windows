@@ -1,3 +1,4 @@
+import { CollapsingBalance } from '@core/ui/page/CollapsingBalance'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -11,11 +12,11 @@ import { RefObject } from 'react'
 import styled, { css } from 'styled-components'
 
 import { currentProductBrand } from '../../../product/brand'
+import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
 import { BuyVultPromoBanner } from '../banners/BuyVultPromoBanner/BuyVultPromoBanner'
 import { FollowOnXBanner } from '../banners/FollowOnXBanner/FollowOnXBanner'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
-import { CollapsingVaultBalance } from './CollapsingVaultBalance'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 import { VaultTabs } from './VaultTabs/VaultTabs'
 
@@ -76,7 +77,9 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <BlurEffect />
         <BalanceWrapper data-testid="vault-overview-balance-wrapper">
-          <CollapsingVaultBalance scrollContainerRef={scrollContainerRef} />
+          <CollapsingBalance scrollContainerRef={scrollContainerRef}>
+            <VaultTotalBalance />
+          </CollapsingBalance>
           <VaultOverviewPrimaryActions />
         </BalanceWrapper>
         <Wrap wrap={PromptsWrapper}>

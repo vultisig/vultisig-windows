@@ -1,3 +1,5 @@
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -113,6 +115,9 @@ export const SwapKeysignTxOverview = ({
     ? getSwapToAmountLimit({ swapPayload, toCoin })
     : null
 
+  const provider = getKeysignSwapProviderName(swapPayload)
+  const providerLogoSrc = getSwapProviderLogoSrc(provider)
+
   // Prefer the swap fee carried in the keysign payload (works for both
   // initiator and cosigner). Fall back to the SwapQuote provider for older
   // payloads built before the SDK populated the swap-fee fields — only the
@@ -213,9 +218,17 @@ export const SwapKeysignTxOverview = ({
               {t('provider')}
             </Text>
 
-            <Text weight={500} size={14} color="contrast" cropped>
-              {getKeysignSwapProviderName(swapPayload)}
-            </Text>
+            <HStack alignItems="center" gap={6}>
+              {providerLogoSrc ? (
+                <ChainEntityIcon
+                  value={providerLogoSrc}
+                  style={{ fontSize: 16 }}
+                />
+              ) : null}
+              <Text weight={500} size={14} color="contrast" cropped>
+                {provider}
+              </Text>
+            </HStack>
           </HStack>
           <HStack fullWidth justifyContent="space-between" alignItems="center">
             <Text weight="500" size={14} color="shy">

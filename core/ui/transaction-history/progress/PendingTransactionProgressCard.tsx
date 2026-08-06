@@ -2,7 +2,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -20,7 +20,6 @@ import {
   coinKeyToString,
 } from '@vultisig/core-chain/coin/Coin'
 import { thorchainAssetPrefixToChain } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
-import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled, { keyframes } from 'styled-components'
@@ -40,8 +39,6 @@ const safeBigInt = (value: string): bigint => {
     return BigInt(0)
   }
 }
-
-const chainValues = Object.values(Chain)
 
 const useFiatValue = (coin: CoinKey, cryptoAmount: number) => {
   const formatFiatAmount = useFormatFiatAmount()
@@ -317,18 +314,15 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
 
 const SwapProviderPill = ({ provider }: { provider: string }) => {
   const { t } = useTranslation()
-  const logoChain = isOneOf(provider, chainValues) ? provider : null
+  const logoSrc = getSwapProviderLogoSrc(provider)
 
   return (
     <ProviderPill>
-      {logoChain && (
+      {logoSrc ? (
         <ProviderIconSlot>
-          <ChainEntityIcon
-            value={getChainLogoSrc(logoChain)}
-            style={{ fontSize: 16 }}
-          />
+          <ChainEntityIcon value={logoSrc} style={{ fontSize: 16 }} />
         </ProviderIconSlot>
-      )}
+      ) : null}
       <Text variant="caption" color="shy">
         {t('via')}
       </Text>
