@@ -64,13 +64,19 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
         updateRecord(cancelledOrder)
         return
       }
-    } else if (isCancelLimitSwapMemo(keysignPayload.memo)) {
-      // The read failed, so we cannot tell which order this cancels — and an
-      // unreadable history is NOT an empty one. Falling through would file a
-      // cancellation as an ordinary send: a dust transfer to an inbound vault,
-      // presented as a payment the user did not make, while the order it closes
-      // shows no sign of it. Recording nothing is the lesser wrong; the tracker
-      // still closes the order when the queue drops it.
+    }
+
+    // No order to attach this cancellation to — either the history could not be
+    // read, or it was read and holds no matching order. The second is ordinary
+    // on a CO-SIGNER, whose own history never saw the placement it is helping
+    // close.
+    //
+    // Either way, falling through would file the cancellation as a send:
+    // `createTransactionRecord` has no cancel branch, so a dust transfer to an
+    // inbound vault would appear as a payment the user never made, while the
+    // order it closes shows no sign of it. Recording nothing is the lesser
+    // wrong; the tracker still closes the order when the queue drops it.
+    if (isCancelLimitSwapMemo(keysignPayload.memo)) {
       return
     }
 
