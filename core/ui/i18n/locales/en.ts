@@ -1535,6 +1535,7 @@ export const en = {
   remove_thor_lp: 'Remove THORChain LP',
   open_trust_line: 'Open Trust Line',
   activate: 'Activate',
+  trust_line: 'Trust Line',
   trust_line_limit: 'Trust Limit',
   trust_line_issuer: 'Issuer',
   trust_line_currency: 'Currency',

@@ -1843,4 +1843,5 @@ export const it = {
   volume_24h: 'Volume 24h',
   send_amount_adjusted_for_fee:
     'Importo modificato in {{amount}} per coprire la commissione di rete',
+  trust_line: 'Linea di fiducia',
 }

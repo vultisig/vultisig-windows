@@ -1840,4 +1840,5 @@ export const pt = {
   volume_24h: 'Volume 24h',
   send_amount_adjusted_for_fee:
     'Valor ajustado para {{amount}} para cobrir a taxa de rede.',
+  trust_line: 'Linha de Confiança',
 }

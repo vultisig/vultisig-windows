@@ -1821,4 +1821,5 @@ export const nl = {
   volume_24h: '24u volume',
   send_amount_adjusted_for_fee:
     'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
+  trust_line: 'Vertrouwenslijn',
 }

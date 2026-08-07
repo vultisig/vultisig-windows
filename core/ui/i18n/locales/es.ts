@@ -1837,4 +1837,5 @@ export const es = {
   volume_24h: 'Volumen 24h',
   send_amount_adjusted_for_fee:
     'Importe ajustado a {{amount}} para cubrir la comisión de red.',
+  trust_line: 'Línea de confianza',
 }

@@ -1817,4 +1817,5 @@ export const ru = {
   volume_24h: 'Объём за 24 ч',
   send_amount_adjusted_for_fee:
     'Сумма изменена на {{amount}}, чтобы покрыть комиссию сети',
+  trust_line: 'Линия доверия',
 }

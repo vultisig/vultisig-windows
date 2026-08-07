@@ -1799,4 +1799,5 @@ export const ko = {
   volume_24h: '24시간 거래량',
   send_amount_adjusted_for_fee:
     '네트워크 수수료를 충당하기 위해 금액이 {{amount}}(으)로 조정되었습니다',
+  trust_line: '트러스트 라인',
 }

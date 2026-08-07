@@ -1853,4 +1853,5 @@ export const de = {
   volume_24h: '24h-Volumen',
   send_amount_adjusted_for_fee:
     'Der Betrag wurde auf {{amount}} angepasst, um die Netzwerkgebühr zu decken.',
+  trust_line: 'Vertrauenslinie',
 }

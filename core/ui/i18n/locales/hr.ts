@@ -1809,4 +1809,5 @@ export const hr = {
   volume_24h: '24h volumen',
   send_amount_adjusted_for_fee:
     'Iznos prilagođen na {{amount}} za pokrivanje mrežne naknade',
+  trust_line: 'Linija povjerenja',
 }
