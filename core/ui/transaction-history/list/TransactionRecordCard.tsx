@@ -202,7 +202,10 @@ type TransactionRecordCardProps = {
   record: TransactionRecord
 }
 
-const useFiatDisplay = (record: TransactionRecord, cryptoAmount: number) => {
+const useFiatDisplay = (
+  record: TransactionRecord,
+  cryptoAmount: number
+): string | undefined => {
   const formatFiatAmount = useFormatFiatAmount()
   const coinKey = getCoinKey(record)
   const vaultCoins = useCurrentVaultCoins()
@@ -217,6 +220,13 @@ const useFiatDisplay = (record: TransactionRecord, cryptoAmount: number) => {
     ],
     eager: false,
   })
+
+  // A TrustSet moves no value, so there is nothing to price. Formatting its
+  // zero amount would print "$0.00" and read as a transfer that was worth
+  // nothing rather than one that never happened.
+  if (record.type === 'trustLine') {
+    return undefined
+  }
 
   if (record.fiatValue) {
     const parsed = Number(record.fiatValue)
