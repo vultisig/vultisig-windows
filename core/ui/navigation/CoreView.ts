@@ -143,6 +143,7 @@ export type CoreView =
   | { id: 'transactionDetail'; state: { id: string } }
   | { id: 'transactionHistory' }
   | { id: 'limitOrders' }
+  | { id: 'cancelLimitOrder'; state: { id: string } }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }

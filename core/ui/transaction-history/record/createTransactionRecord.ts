@@ -1,5 +1,6 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { decodeCowSwapKeysignData } from '@vultisig/core-chain/swap/general/cowswap/keysign/cowSwapKeysignData'
+import { getThorchainCancelMemoAsset } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import {
   getKeysignLimitSwapOrder,
@@ -14,9 +15,11 @@ import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackin
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import { getThorchainAssetTicker } from '../../mpc/keysign/join/tx/thorchainAssetTicker'
+import { toThorchainFixedPoint } from '../../vault/swap/limit/amount'
 import {
   LimitSwapTransactionData,
   LimitSwapTransactionRecord,
@@ -62,6 +65,48 @@ const createLimitSwapData = ({
     expiryHours: order.expiryHours,
     memo: shouldBePresent(payload.memo, 'limit order memo'),
     orderStatus: 'pending',
+    ...createSignedLimitOrderIdentity({ payload, order }),
+  }
+}
+
+/**
+ * The order's identity in the exact form a future cancel needs, captured now
+ * because now is when it is known exactly.
+ *
+ * A cancel addresses an order by `(assets, deposit, trade target)` — never by tx
+ * hash — so approximations do not degrade gracefully: a value one unit out lands
+ * in a different bucket and the cancel closes nothing. The source amount is
+ * rescaled into THORChain's 1e8 here, matching what the queue will report back,
+ * so eligibility's cross-check compares like with like.
+ *
+ * Recorded on a best-effort basis. A source asset this SDK cannot spell is not a
+ * reason to fail a placement that already broadcast — the order still rests, and
+ * the queue reports its identity back on the first poll, which is the same path
+ * an order placed before cancelling existed takes.
+ */
+const createSignedLimitOrderIdentity = ({
+  payload,
+  order,
+}: CreateLimitSwapDataInput): Partial<LimitSwapTransactionData> => {
+  const coin = getKeysignCoin(payload)
+
+  const signedSourceAsset = attempt(() =>
+    getThorchainCancelMemoAsset({
+      chain: coin.chain,
+      id: coin.id,
+      ticker: coin.ticker,
+    })
+  )
+
+  return {
+    ...('data' in signedSourceAsset
+      ? { signedSourceAsset: signedSourceAsset.data }
+      : {}),
+    signedSourceAmount: toThorchainFixedPoint({
+      amount: BigInt(payload.toAmount),
+      decimals: coin.decimals,
+    }).toString(),
+    signedTradeTarget: order.limit.toString(),
   }
 }
 

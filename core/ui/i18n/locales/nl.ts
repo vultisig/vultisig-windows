@@ -1799,6 +1799,32 @@ export const nl = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'De transactie is naar het netwerk uitgezonden.',
+  swap_limit_cancel_title: 'Order annuleren',
+  swap_limit_cancel_verify_title: 'Je annuleert een limietorder',
+  swap_limit_cancel_order_label: 'Order',
+  swap_limit_cancel_explanation:
+    'Annuleren sluit deze order en betaalt het deel terug dat nog niet is uitgevoerd. Wat al is uitgevoerd blijft uitgevoerd en wordt niet teruggegeven. Dit kost één THORChain-netwerkvergoeding.',
+  swap_limit_cancel_donated_dust_row: 'Ingehouden door THORChain',
+  swap_limit_cancel_duplicate_warning:
+    'Je hebt nog een openstaande order met hetzelfde paar en dezelfde prijs. THORChain annuleert eerst de oudste overeenkomst, dus mogelijk wordt die order gesloten in plaats van deze.',
+  swap_limit_cancel_order_changed:
+    'Deze order is gewijzigd terwijl je hem bekeek. Ga terug en controleer de huidige status.',
+  swap_limit_cancel_already_requested:
+    'Er is al een annulering voor deze order verzonden die op bevestiging wacht.',
+  swap_limit_cancel_unavailable_legacy_order:
+    'Deze order is geplaatst voordat annuleren in de app mogelijk was, dus de details ervan kunnen niet worden geverifieerd.',
+  swap_limit_cancel_unavailable_mismatch:
+    'De gegevens van deze order komen niet overeen met wat THORChain rapporteert, dus hij kan niet veilig worden geannuleerd.',
+  swap_limit_cancel_unavailable_memo_too_long:
+    'Deze order kan niet worden geannuleerd vanaf zijn bronketen — het annuleringsbericht is te lang voor dat netwerk. Het bedrag wordt automatisch teruggestort wanneer de order verloopt.',
+  swap_limit_cancel_unavailable_chain:
+    'Annuleren wordt niet ondersteund vanaf de keten waarop deze order is gefinancierd. Het bedrag wordt automatisch teruggestort wanneer de order verloopt.',
+  swap_limit_cancel_unavailable_no_signing_asset:
+    'Voeg {{ticker}} toe aan deze kluis om deze order te annuleren — de annulering wordt verzonden vanaf {{chain}}.',
+  swap_limit_cancel_view_transaction: 'Annuleringstransactie bekijken',
+  swap_limit_cancel_sent: 'Annulering verzonden',
+  swap_limit_cancel_sent_detail:
+    'Je order blijft open totdat THORChain bevestigt dat hij is gesloten.',
   all_time_high: 'Hoogste punt ooit',
   all_time_low: 'Laagste punt ooit',
   chart_range_all: 'ALLE',
@@ -1821,4 +1847,6 @@ export const nl = {
   volume_24h: '24u volume',
   send_amount_adjusted_for_fee:
     'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
+  swap_limit_cancel_records_unavailable:
+    'Uw transactiegeschiedenis kon niet worden geladen. Probeer het over een tijdje opnieuw. Uw bestelling blijft ongewijzigd.',
 }

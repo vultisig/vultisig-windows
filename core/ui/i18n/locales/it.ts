@@ -1821,6 +1821,32 @@ export const it = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'La transazione è stata trasmessa alla rete',
+  swap_limit_cancel_title: 'Annulla ordine',
+  swap_limit_cancel_verify_title: 'Stai annullando un ordine limite',
+  swap_limit_cancel_order_label: 'Ordine',
+  swap_limit_cancel_explanation:
+    "L'annullamento chiude questo ordine e rimborsa la parte non ancora eseguita. Quanto già eseguito resta eseguito e non viene restituito. Questa operazione comporta una commissione di rete THORChain.",
+  swap_limit_cancel_donated_dust_row: 'Trattenuto da THORChain',
+  swap_limit_cancel_duplicate_warning:
+    "Hai un altro ordine attivo con la stessa coppia e lo stesso prezzo. THORChain annulla prima la corrispondenza più vecchia, quindi questa operazione potrebbe chiudere quell'ordine invece di questo.",
+  swap_limit_cancel_order_changed:
+    'Questo ordine è cambiato mentre lo stavi esaminando. Chiudi questa schermata e controlla lo stato attuale.',
+  swap_limit_cancel_already_requested:
+    'Un annullamento per questo ordine è già stato inviato ed è in attesa di conferma.',
+  swap_limit_cancel_unavailable_legacy_order:
+    "Questo ordine è stato creato prima che l'annullamento nell'app fosse disponibile, quindi i suoi dettagli non possono essere verificati.",
+  swap_limit_cancel_unavailable_mismatch:
+    'I dettagli di questo ordine non corrispondono a quanto riportato da THORChain, quindi non può essere annullato in sicurezza.',
+  swap_limit_cancel_unavailable_memo_too_long:
+    'Questo ordine non può essere annullato dalla sua chain di origine: il messaggio di annullamento è troppo lungo per quella rete. Verrà rimborsato automaticamente alla scadenza.',
+  swap_limit_cancel_unavailable_chain:
+    "L'annullamento dalla chain con cui è stato finanziato questo ordine non è supportato. Verrà rimborsato automaticamente alla scadenza.",
+  swap_limit_cancel_unavailable_no_signing_asset:
+    'Aggiungi {{ticker}} a questo vault per cancellare questo ordine: la cancellazione viene inviata da {{chain}}.',
+  swap_limit_cancel_view_transaction: 'Visualizza transazione di annullamento',
+  swap_limit_cancel_sent: 'Annullamento inviato',
+  swap_limit_cancel_sent_detail:
+    'Il tuo ordine resta aperto finché THORChain non conferma la chiusura.',
   all_time_high: 'Massimo storico',
   all_time_low: 'Minimo storico',
   chart_range_all: 'TUTTO',
@@ -1843,4 +1869,6 @@ export const it = {
   volume_24h: 'Volume 24h',
   send_amount_adjusted_for_fee:
     'Importo modificato in {{amount}} per coprire la commissione di rete',
+  swap_limit_cancel_records_unavailable:
+    'Impossibile caricare la cronologia delle transazioni. Riprova tra poco: il tuo ordine non è stato modificato.',
 }
