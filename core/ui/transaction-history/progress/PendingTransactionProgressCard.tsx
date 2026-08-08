@@ -21,6 +21,7 @@ import {
 } from '@vultisig/core-chain/coin/Coin'
 import { thorchainAssetPrefixToChain } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 import styled, { keyframes } from 'styled-components'
 
@@ -30,6 +31,7 @@ import {
   SwapTransactionRecord,
   TransactionRecord,
 } from '../core'
+import { getRecordTagType } from '../recordTagType'
 import { TransactionHistoryTag } from '../TransactionHistoryTag'
 
 const safeBigInt = (value: string): bigint => {
@@ -361,8 +363,13 @@ export const PendingTransactionProgressCard = ({
     >
       <TopRow>
         <TransactionHistoryTag
-          type={record.type === 'limitSwap' ? 'swap' : record.type}
-          label={record.type === 'limitSwap' ? t('swap_mode_limit') : undefined}
+          type={getRecordTagType(record.type)}
+          label={match(record.type, {
+            send: () => undefined,
+            swap: () => undefined,
+            limitSwap: () => t('swap_mode_limit'),
+            trustLine: () => t('trust_line'),
+          })}
         />
         <InProgressBadge>
           <Text variant="caption" color="shy">
@@ -377,7 +384,7 @@ export const PendingTransactionProgressCard = ({
         <SendProgressContent record={record} />
       ) : record.type === 'limitSwap' ? (
         <LimitSwapProgressContent record={record} />
-      ) : (
+      ) : record.type === 'trustLine' ? null : ( // above already says everything this card can. // A TrustSet confirms in seconds and has no amount to track, so the tag
         <SwapProgressContent record={record} />
       )}
     </ProgressCard>

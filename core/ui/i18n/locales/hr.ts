@@ -1680,6 +1680,7 @@ export const hr = {
     'Ponovno dijeljenje je usporeno zbog slabe veze. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
   plugin_store_compatible: 'Kompatibilno s trgovinom dodataka',
   open_trust_line: 'Otvorena linija povjerenja',
+  trust_line: 'Linija povjerenja',
   trust_line_limit: 'Ograničenje povjerenja',
   trust_line_issuer: 'Izdavatelj',
   trust_line_currency: 'Valuta',

@@ -151,6 +151,25 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
     }
   }
 
+  if (record.type === 'trustLine') {
+    // No amount: a TrustSet moves nothing. The limit is a ceiling, and showing
+    // it here would read as an outgoing payment of that size.
+    return {
+      tagType: 'approve',
+      amountCrypto: '',
+      cryptoAmount: 0,
+      symbol: record.data.token,
+      pill: { direction: 'to', address: record.data.issuer },
+      coin: record.data.tokenLogo
+        ? {
+            chain: record.chain,
+            id: record.data.tokenId,
+            logo: record.data.tokenLogo,
+          }
+        : undefined,
+    }
+  }
+
   const rawAmount = Number(
     fromChainAmount(BigInt(record.data.amount), record.data.decimals)
   )
@@ -183,7 +202,10 @@ type TransactionRecordCardProps = {
   record: TransactionRecord
 }
 
-const useFiatDisplay = (record: TransactionRecord, cryptoAmount: number) => {
+const useFiatDisplay = (
+  record: TransactionRecord,
+  cryptoAmount: number
+): string | undefined => {
   const formatFiatAmount = useFormatFiatAmount()
   const coinKey = getCoinKey(record)
   const vaultCoins = useCurrentVaultCoins()
@@ -198,6 +220,13 @@ const useFiatDisplay = (record: TransactionRecord, cryptoAmount: number) => {
     ],
     eager: false,
   })
+
+  // A TrustSet moves no value, so there is nothing to price. Formatting its
+  // zero amount would print "$0.00" and read as a transfer that was worth
+  // nothing rather than one that never happened.
+  if (record.type === 'trustLine') {
+    return undefined
+  }
 
   if (record.fiatValue) {
     const parsed = Number(record.fiatValue)
@@ -228,10 +257,12 @@ export const TransactionRecordCard = ({
   const tagLabel =
     record.type === 'limitSwap'
       ? t('swap_mode_limit')
-      : getTransactionTagLabel({
-          messageTypeUrl: display.messageTypeUrl,
-          t,
-        })
+      : record.type === 'trustLine'
+        ? t('trust_line')
+        : getTransactionTagLabel({
+            messageTypeUrl: display.messageTypeUrl,
+            t,
+          })
 
   // A limit order's card state is the ORDER's, not the deposit's: the deposit
   // confirms in seconds while the order rests for hours, so chain status says

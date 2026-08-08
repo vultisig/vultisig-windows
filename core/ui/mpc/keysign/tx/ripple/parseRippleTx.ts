@@ -1,3 +1,4 @@
+import { toIssuedCurrencyTicker } from '@core/ui/chain/coin/ripple/toIssuedCurrencyTicker'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
@@ -31,20 +32,6 @@ type RippleTxData = {
   fields: RippleTxField[]
 }
 
-/**
- * A non-standard XRPL currency is a 40-char hex code (the ASCII right-padded to
- * 20 bytes). Decode it back to a readable ticker; standard 3-char codes and
- * anything unexpected pass through untouched.
- */
-const decodeCurrency = (currency: string): string => {
-  if (!/^[0-9a-fA-F]{40}$/.test(currency)) return currency
-
-  const bytes = Buffer.from(currency, 'hex')
-  const ascii = bytes.toString('ascii').replace(/\0+$/, '')
-
-  return /^[\x20-\x7e]+$/.test(ascii) ? ascii : currency
-}
-
 const parseAmount = (value: unknown): RippleAmount | undefined => {
   if (typeof value === 'string') {
     // Amount is dApp-controlled and its format is not sanitized upstream, so a
@@ -72,7 +59,7 @@ const parseAmount = (value: unknown): RippleAmount | undefined => {
     return {
       kind: 'issued',
       value: value.value,
-      currency: decodeCurrency(value.currency),
+      currency: toIssuedCurrencyTicker(value.currency),
       issuer: value.issuer,
     }
   }

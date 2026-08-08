@@ -1704,6 +1704,7 @@ export const es = {
     'La reutilización de archivos se ha ralentizado debido a una mala conexión. Puede volver a intentarlo o esperar a que se restablezca la conexión.',
   plugin_store_compatible: 'Compatible con Plugin Store',
   open_trust_line: 'Línea de confianza abierta',
+  trust_line: 'Línea de confianza',
   trust_line_limit: 'Límite de confianza',
   trust_line_issuer: 'Editor',
   trust_line_currency: 'Divisa',

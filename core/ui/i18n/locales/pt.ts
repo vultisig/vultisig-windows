@@ -1706,6 +1706,7 @@ export const pt = {
     'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
   plugin_store_compatible: 'Compatível com a Loja de Plugins',
   open_trust_line: 'Linha de Confiança Aberta',
+  trust_line: 'Linha de Confiança',
   trust_line_limit: 'Limite de confiança',
   trust_line_issuer: 'Emissor',
   trust_line_currency: 'Moeda',

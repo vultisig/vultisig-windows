@@ -28,6 +28,8 @@ import {
   SwapTransactionData,
   SwapTransactionRecord,
   TransactionRecord,
+  TrustLineTransactionData,
+  TrustLineTransactionRecord,
 } from '../core'
 import { getPrimaryCosmosMessageTypeUrl } from './getPrimaryCosmosMessageTypeUrl'
 
@@ -123,6 +125,45 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
     decimals: coin.decimals,
     memo: payload.memo || undefined,
     messageTypeUrl: getPrimaryCosmosMessageTypeUrl(payload),
+  }
+}
+
+/**
+ * Whether this payload opens or modifies an XRPL trust line.
+ *
+ * Mirrors how the signer decides: an issued-currency coin on a Ripple payload
+ * builds a TrustSet, while a verbatim dApp transaction (`signRipple`) is signed
+ * as supplied and never rebuilt from the coin. Once every platform sets
+ * `RippleSpecific.transaction_type`, this can prefer that field instead of
+ * inferring it — the shapes agree either way for anything we originate.
+ */
+const isRippleTrustSetPayload = (payload: KeysignPayload): boolean => {
+  const { coin } = payload
+
+  return (
+    payload.signData.case !== 'signRipple' &&
+    !!coin &&
+    coin.chain === Chain.Ripple &&
+    !coin.isNativeToken &&
+    !!coin.contractAddress
+  )
+}
+
+const createTrustLineData = (
+  payload: KeysignPayload
+): TrustLineTransactionData => {
+  const coin = getKeysignCoin(payload)
+
+  return {
+    fromAddress: coin.address,
+    // The TrustSet names the issuer, which the payload carries as `toAddress`
+    // only because a keysign payload has nowhere else to put it.
+    issuer: payload.toAddress,
+    token: coin.ticker,
+    tokenLogo: coin.logo ?? emptyLogoFallback,
+    tokenId: shouldBePresent(coin.id, 'trust line token id'),
+    limit: payload.toAmount,
+    decimals: coin.decimals,
   }
 }
 
@@ -283,6 +324,17 @@ export const createTransactionRecord = ({
       type: 'swap',
       data: createSwapData(payload),
     } satisfies SwapTransactionRecord
+  }
+
+  // Before the send fallback: a TrustSet transfers nothing, and its amount is
+  // the line's LIMIT. Recording it as a send renders that ceiling as an
+  // enormous outgoing payment to the issuer of a token that never moved.
+  if (isRippleTrustSetPayload(payload)) {
+    return {
+      ...base,
+      type: 'trustLine',
+      data: createTrustLineData(payload),
+    } satisfies TrustLineTransactionRecord
   }
 
   return {
