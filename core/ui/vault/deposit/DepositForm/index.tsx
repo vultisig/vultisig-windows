@@ -48,6 +48,7 @@ import {
   shouldShowBalance,
   shouldShowTicker,
 } from '../utils/chainActionConfig'
+import { revalidateAmountOnBalanceChange } from '../utils/revalidateAmountOnBalanceChange'
 import { stepFromDecimals } from '../utils/stepFromDecimals'
 import { FormData } from './types'
 
@@ -98,13 +99,13 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     },
   })
 
-  // Re-validate when the selected coin or its balance changes — the resolver
-  // schema rebuilds with the new max, but react-hook-form only re-runs
-  // validation on field changes, so switching coins would otherwise leave
-  // a stale "valid" amount that exceeds the new balance.
+  // The resolver schema rebuilds with the new max when the coin or its balance
+  // changes, but react-hook-form only re-runs validation on field changes — so
+  // switching coins would otherwise leave a stale "valid" amount that exceeds
+  // the new balance.
   useEffect(() => {
-    trigger()
-  }, [coin.id, balance, balanceUnits, trigger])
+    revalidateAmountOnBalanceChange({ getValues, trigger })
+  }, [coin.id, balance, balanceUnits, trigger, getValues])
 
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data)
