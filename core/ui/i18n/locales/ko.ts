@@ -1671,6 +1671,7 @@ export const ko = {
     '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
   plugin_store_compatible: '플러그인 스토어 호환 가능',
   open_trust_line: '오픈 트러스트 라인',
+  trust_line: '트러스트 라인',
   trust_line_limit: '신뢰 한도',
   trust_line_issuer: '발행자',
   trust_line_currency: '통화',
@@ -1777,6 +1778,32 @@ export const ko = {
   swap_limit_expiry_minutes: '{{minutes}}분',
   swap_limit_expiry_under_minute: '<1분',
   transaction_broadcasted: '해당 거래가 네트워크에 전송되었습니다.',
+  swap_limit_cancel_title: '주문 취소',
+  swap_limit_cancel_verify_title: '리밋 주문을 취소합니다',
+  swap_limit_cancel_order_label: '주문',
+  swap_limit_cancel_explanation:
+    '취소하면 이 주문이 종료되고 아직 체결되지 않은 부분이 환불됩니다. 이미 체결된 부분은 그대로 유지되며 반환되지 않습니다. THORChain 네트워크 수수료가 한 번 부과됩니다.',
+  swap_limit_cancel_donated_dust_row: 'THORChain 보유분',
+  swap_limit_cancel_duplicate_warning:
+    '같은 페어와 가격의 대기 중인 주문이 하나 더 있습니다. THORChain은 가장 오래된 일치 항목을 먼저 취소하므로, 이 주문 대신 해당 주문이 종료될 수 있습니다.',
+  swap_limit_cancel_order_changed:
+    '검토하는 동안 이 주문이 변경되었습니다. 이 화면을 닫고 현재 상태를 확인하세요.',
+  swap_limit_cancel_already_requested:
+    '이 주문에 대한 취소가 이미 전송되었으며 확인을 기다리고 있습니다.',
+  swap_limit_cancel_unavailable_legacy_order:
+    '이 주문은 앱 내 취소 기능이 제공되기 전에 생성되어 세부 정보를 확인할 수 없습니다.',
+  swap_limit_cancel_unavailable_mismatch:
+    '이 주문의 세부 정보가 THORChain에서 보고한 내용과 일치하지 않아 안전하게 취소할 수 없습니다.',
+  swap_limit_cancel_unavailable_memo_too_long:
+    '이 주문은 원본 체인에서 취소할 수 없습니다. 취소 메시지가 해당 네트워크에 비해 너무 깁니다. 만료 시 자동으로 환불됩니다.',
+  swap_limit_cancel_unavailable_chain:
+    '이 주문에 자금을 공급한 체인에서는 취소가 지원되지 않습니다. 만료 시 자동으로 환불됩니다.',
+  swap_limit_cancel_unavailable_no_signing_asset:
+    '이 주문을 취소하려면 이 볼트에 {{ticker}}을(를) 추가하세요. 취소는 {{chain}}에서 전송됩니다.',
+  swap_limit_cancel_view_transaction: '취소 트랜잭션 보기',
+  swap_limit_cancel_sent: '취소 전송됨',
+  swap_limit_cancel_sent_detail:
+    'THORChain이 종료를 확인할 때까지 주문은 계속 열려 있습니다.',
   all_time_high: '사상 최고가',
   all_time_low: '사상 최저가',
   chart_range_all: '전체',
@@ -1799,5 +1826,6 @@ export const ko = {
   volume_24h: '24시간 거래량',
   send_amount_adjusted_for_fee:
     '네트워크 수수료를 충당하기 위해 금액이 {{amount}}(으)로 조정되었습니다',
-  trust_line: '트러스트 라인',
+  swap_limit_cancel_records_unavailable:
+    '거래 내역을 불러올 수 없습니다. 잠시 후 다시 시도해 주세요. 주문에는 문제가 없습니다.',
 }

@@ -1,7 +1,4 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { useKeysignFee } from '@core/ui/mpc/keysign/fee/useKeysignFee'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useLimitExpiryLabels } from '@core/ui/vault/swap/limit/useLimitExpiryLabels'
@@ -13,15 +10,11 @@ import {
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { ClockIcon } from '@lib/ui/icons/ClockIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ValueProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { KeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
-import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
@@ -30,6 +23,7 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useTranslation } from 'react-i18next'
 
 import { isOwnLimitOrderDestination } from './isOwnLimitOrderDestination'
+import { JoinKeysignNetworkFeeValue } from './JoinKeysignNetworkFeeValue'
 import { JoinSwapFiatAmount } from './JoinSwapFiatAmount'
 import { getLimitOrderBuyCoin } from './limitOrderBuyCoin'
 import { getLimitOrderUnitPriceLabel } from './limitOrderUnitPrice'
@@ -64,45 +58,6 @@ const Leg = ({ coin, amount, ticker }: LegProps) => (
     </VStack>
   </HStack>
 )
-
-/**
- * The source chain's network fee as the Figma renders it: the coin amount with
- * its fiat value stacked underneath, right-aligned. `KeysignFeeAmount` shows
- * the same two values inline, which the design doesn't use here.
- */
-const NetworkFeeValue = ({ value }: ValueProp<KeysignPayload>) => {
-  const chain = getKeysignChain(value)
-  const feeCoin = chainFeeCoin[chain]
-  const feeQuery = useKeysignFee(value)
-  const priceQuery = useCoinPriceQuery({ coin: feeCoin })
-  const formatFiatAmount = useFormatFiatAmount()
-
-  return (
-    <MatchQuery
-      value={feeQuery}
-      pending={() => <Spinner />}
-      success={feeAmount => {
-        const fee = fromChainAmount(feeAmount, feeCoin.decimals)
-
-        return (
-          <VStack gap={2} alignItems="end">
-            <Text size={14} color="contrast">
-              {formatAmount(fee, { ticker: feeCoin.ticker })}
-            </Text>
-            <Text size={13} color="shy">
-              <MatchQuery
-                value={priceQuery}
-                error={() => null}
-                pending={() => <Spinner />}
-                success={price => formatFiatAmount(fee * price)}
-              />
-            </Text>
-          </VStack>
-        )
-      }}
-    />
-  )
-}
 
 /**
  * Joiner verify view for a THORChain limit order.
@@ -216,7 +171,7 @@ export const JoinKeysignLimitOrderVerify = ({ value, order }: Props) => {
           <Text size={14} color="shy">
             {t('network_fee')}
           </Text>
-          <NetworkFeeValue value={value} />
+          <JoinKeysignNetworkFeeValue value={value} />
         </HStack>
         {!isOwnDestination && (
           <>

@@ -27,6 +27,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { getKeysignLimitSwapCancel } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapCancel'
 import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
@@ -39,6 +40,7 @@ import { useCopyToClipboard } from 'react-use'
 import { TxHashProvider } from '../../chain/state/txHash'
 import { BroadcastError } from './broadcastKeysignTx'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
+import { LimitOrderCancelDoneHint } from './tx/LimitOrderCancelDoneHint'
 
 type KeysignSigningStepProps = Partial<OnBackProp> & { toAddressLabel?: string }
 
@@ -133,6 +135,9 @@ export const KeysignSigningStep = ({
                                   />
                                   {getKeysignLimitSwapOrder(payload) ? (
                                     <LimitOrdersDoneHint />
+                                  ) : null}
+                                  {getKeysignLimitSwapCancel(payload) ? (
+                                    <LimitOrderCancelDoneHint />
                                   ) : null}
                                 </VStack>
                               </AnimatedVisibility>
