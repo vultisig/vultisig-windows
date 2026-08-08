@@ -4,7 +4,7 @@ import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 type EmptyStateProps = {
   icon?: ReactNode
@@ -45,4 +45,13 @@ const EmptyWrapper = styled.div`
   padding: 32px 40px;
   border-radius: 16px;
   background: ${getColor('foreground')};
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      align-self: stretch;
+      border: 1px solid ${theme.colors.foregroundSuper.toCssValue()};
+      border-radius: 20px;
+      padding: 28px 20px;
+    `}
 `

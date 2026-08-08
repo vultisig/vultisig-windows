@@ -26,8 +26,8 @@ const AnimationContainer = styled.div`
 
   & > * {
     width: 80% !important;
-    max-width: 280px !important;
-    max-height: 240px !important;
+    max-width: 220px !important;
+    max-height: 160px !important;
     aspect-ratio: 263 / 186;
   }
 `
@@ -37,7 +37,7 @@ const ContentArea = styled(VStack)`
   width: 100%;
   max-width: 576px;
   align-self: center;
-  padding-top: 32px;
+  padding-top: 16px;
 `
 
 const springConfig = { tension: 120, friction: 20 }
@@ -109,7 +109,7 @@ export const ImportSeedphraseIntroStep = () => {
             flexGrow: 1,
           }}
         >
-          <ContentArea justifyContent="space-between" gap={40}>
+          <ContentArea justifyContent="space-between" gap={24}>
             <ImportSeedphraseIntroRequirements />
             <Button onClick={() => setStep('input')}>{t('get_started')}</Button>
           </ContentArea>

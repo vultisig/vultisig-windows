@@ -1,5 +1,4 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -10,6 +9,8 @@ const Container = styled(UnstyledButton)<IsActiveProp>`
   ${panel()};
 
   position: relative;
+  width: 100%;
+  text-align: left;
 
   border: 2px solid
     ${matchColor('isActive', { true: 'primary', false: 'transparent' })};
@@ -19,6 +20,10 @@ const Container = styled(UnstyledButton)<IsActiveProp>`
   }
 `
 
+const Value = styled(Text)`
+  overflow-wrap: anywhere;
+`
+
 export const DepositActionOption = ({
   value,
   onClick,
@@ -26,13 +31,9 @@ export const DepositActionOption = ({
 }: ValueProp<string> & OnClickProp & IsActiveProp) => {
   return (
     <Container isActive={isActive} onClick={onClick}>
-      <HStack fullWidth alignItems="center" gap={12}>
-        <VStack alignItems="start">
-          <Text color="contrast" size={16} weight="500">
-            {value}
-          </Text>
-        </VStack>
-      </HStack>
+      <Value color="contrast" size={16} weight="500">
+        {value}
+      </Value>
     </Container>
   )
 }

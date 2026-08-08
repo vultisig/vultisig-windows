@@ -1,7 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -15,7 +15,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
-import { useCallback } from 'react'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { toPng } from 'html-to-image'
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'react-qr-code'
 import styled from 'styled-components'
@@ -102,15 +104,7 @@ const ButtonsRow = styled(HStack)`
 const ShareButton = styled(Button)`
   flex: 1;
   border-radius: 40px;
-  border: 2px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
-  background: transparent;
-  color: ${getColor('contrast')};
   font-size: 14px;
-
-  &:hover {
-    background: ${({ theme }) =>
-      theme.colors.buttonPrimary.withAlpha(0.1).toCssValue()};
-  }
 `
 
 const CopyButton = styled(Button)`
@@ -133,8 +127,10 @@ export const AddressQRCard = ({
   onClose,
 }: AddressQRCardProps) => {
   const { t } = useTranslation()
+  const { saveFile } = useCore()
   const address = useCurrentVaultAddress(chain)
   const { addToast } = useToast()
+  const qrNodeRef = useRef<HTMLDivElement | null>(null)
 
   const displayName = coin?.ticker || chain
 
@@ -142,34 +138,63 @@ export const AddressQRCard = ({
     if (address) {
       await navigator.clipboard.writeText(address)
       addToast({
-        message: '',
-        renderContent: () => <VaultAddressCopyToast value={chain} />,
+        message: t('chain_address_copied', { chain }),
       })
       onClose?.()
     }
-  }, [address, addToast, chain, onClose])
+  }, [address, addToast, chain, onClose, t])
 
-  const handleShare = useCallback(() => {
+  const handleShare = useCallback(async () => {
     if (onShare) {
       onShare()
       return
     }
 
-    if (!navigator.share || !address) return
+    if (!address) return
+
+    const node = qrNodeRef.current
+
+    if (node) {
+      const fileName = `${displayName}.png`
+      const imageResult = await attempt(async () => {
+        const dataUrl = await toPng(node)
+        const blob = await (await fetch(dataUrl)).blob()
+        return { blob, file: new File([blob], fileName, { type: 'image/png' }) }
+      })
+
+      if (imageResult.data) {
+        const { blob, file } = imageResult.data
+
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] }).catch(() => undefined)
+          return
+        }
+
+        // Web Share with files is unsupported (e.g. Chrome on Linux);
+        // fall back to downloading the QR image.
+        await saveFile({ name: fileName, blob })
+        return
+      }
+
+      // Image generation failed — log before falling back to text-only share.
+      console.error('Error sharing image:', imageResult.error)
+    }
+
+    if (!navigator.share) return
 
     void navigator
       .share({
-        title: `Receive ${chain}`,
+        title: `${t('receive')} ${displayName}`,
         text: address,
       })
       .catch(() => undefined)
-  }, [address, chain, onShare])
+  }, [address, displayName, onShare, saveFile, t])
 
   if (!address) return null
 
   return (
     <Container>
-      <QRContainer>
+      <QRContainer ref={qrNodeRef}>
         <QRWrapper>
           <QRCode
             value={address}
@@ -184,11 +209,11 @@ export const AddressQRCard = ({
             level="H"
           />
           <ChainIconOverlay>
-            {coin?.logo ? (
-              <CoinIcon coin={coin} />
-            ) : (
-              <ChainEntityIcon value={getChainLogoSrc(chain)} />
-            )}
+            <ChainEntityIcon
+              value={
+                coin?.logo ? getCoinLogoSrc(coin.logo) : getChainLogoSrc(chain)
+              }
+            />
           </ChainIconOverlay>
         </QRWrapper>
         <ReceiveLabel>
@@ -203,7 +228,9 @@ export const AddressQRCard = ({
       </AddressText>
 
       <ButtonsRow>
-        <ShareButton onClick={handleShare}>{t('share')}</ShareButton>
+        <ShareButton kind="secondary" onClick={handleShare}>
+          {t('share')}
+        </ShareButton>
         <CopyButton onClick={handleCopy}>{t('copy_address')}</CopyButton>
       </ButtonsRow>
     </Container>

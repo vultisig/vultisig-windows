@@ -41,7 +41,7 @@ export interface StoredVaultData {
  */
 export function parseVultFile(filePath: string, password?: string): VaultData | null {
   if (!existsSync(filePath)) {
-    console.warn(`Vault file not found: ${filePath}`)
+    console.warn('Vault file not found at configured path')
     return null
   }
 
@@ -67,8 +67,8 @@ export function parseVultFile(filePath: string, password?: string): VaultData | 
     }
 
     return null
-  } catch (error) {
-    console.error(`Failed to parse vault file ${filePath}:`, error)
+  } catch {
+    console.error('Failed to parse configured vault file')
     return null
   }
 }

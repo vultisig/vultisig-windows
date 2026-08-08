@@ -1,10 +1,18 @@
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { useDefiPortfolioBalance } from '@core/ui/defi/page/hooks/useDefiPortfolios'
 import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import {
+  getCollapsedHeaderOpacity,
+  getNormalHeaderOpacity,
+  isHeaderCollapsed,
+  useHeaderCollapseProgress,
+} from '@core/ui/page/headerCollapse'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { VaultSelector } from '@core/ui/vault/page/components/VaultSelector'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
-import { useScroll } from '@lib/ui/hooks/useScroll'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -20,31 +28,25 @@ import styled from 'styled-components'
 const HeaderContainer = styled.div`
   position: sticky;
   top: 0;
-  background: ${getColor('background')};
   z-index: 10;
+  display: grid;
+  background: ${getColor('background')};
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
 `
 
-const CollapsedContent = styled(HStack)<{ isVisible: boolean }>`
+const CollapsedContent = styled(HStack)`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
+  grid-area: 1 / 1;
   min-height: 60px;
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   background: ${getColor('background')};
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
-  transition: opacity 0.25s ease-in-out;
 `
 
-const NormalContent = styled.div<{ isVisible: boolean }>`
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  pointer-events: ${({ isVisible }) => (isVisible ? 'auto' : 'none')};
-  transition: opacity 0.25s ease-in-out;
+const NormalContent = styled.div`
+  display: grid;
+  grid-area: 1 / 1;
 `
 
 type DefiPageHeaderProps = {
@@ -52,16 +54,18 @@ type DefiPageHeaderProps = {
   scrollContainerRef: RefObject<HTMLElement>
 }
 
-const collapseThreshold = 1
-
 export const DefiPageHeader = ({
   vault,
   scrollContainerRef,
 }: DefiPageHeaderProps) => {
-  const scroll = useScroll(scrollContainerRef)
-  const isCollapsed = scroll.y > collapseThreshold
+  const progress = useHeaderCollapseProgress(scrollContainerRef)
+  const isCollapsed = isHeaderCollapsed(progress)
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+
+  const { data: totalBalance = 0 } = useDefiPortfolioBalance()
+  const formatFiatAmount = useFormatFiatAmount()
+  const formattedBalance = formatFiatAmount(totalBalance)
 
   const headerControls = (
     <HStack gap={4} alignItems="center">
@@ -76,23 +80,32 @@ export const DefiPageHeader = ({
 
   return (
     <HeaderContainer>
-      <CollapsedContent isVisible={isCollapsed}>
+      <CollapsedContent
+        style={{
+          opacity: getCollapsedHeaderOpacity(progress),
+          pointerEvents: isCollapsed ? 'auto' : 'none',
+        }}
+      >
         <VaultSelector value={vault} />
-        <HStack alignItems="center" gap={12} style={{ flexShrink: 0 }}>
-          <VStack alignItems="flex-end" gap={2}>
-            <Text size={12} color="shy">
-              {t('defi')}
-            </Text>
-          </VStack>
-          {headerControls}
-        </HStack>
+        <VStack alignItems="flex-end" gap={2} style={{ flexShrink: 0 }}>
+          <Text size={12} color="shy">
+            {t('defi')}
+          </Text>
+          <Text size={14}>
+            <BalanceVisibilityAware>{formattedBalance}</BalanceVisibilityAware>
+          </Text>
+        </VStack>
       </CollapsedContent>
 
-      <NormalContent isVisible={!isCollapsed}>
+      <NormalContent
+        style={{
+          opacity: getNormalHeaderOpacity(progress),
+          pointerEvents: isCollapsed ? 'none' : 'auto',
+        }}
+      >
         <PageHeader
-          hasBorder
           secondaryControls={headerControls}
-          title={<VaultSelector value={vault} />}
+          title={<VaultSelector placement="pageHeader" value={vault} />}
         />
       </NormalContent>
     </HeaderContainer>

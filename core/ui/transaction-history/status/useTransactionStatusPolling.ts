@@ -4,23 +4,26 @@ import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { useRef } from 'react'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'
+import {
+  getCowSwapOrderApiBase,
+  getCowSwapOrderRecordUpdate,
+} from './getCowSwapOrderRecordUpdate'
+import { shouldFailStaleTransaction } from './staleTransaction'
 import { toRecordStatus } from './toRecordStatus'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
 const pollingInterval = 3000
 
-const stalePendingThresholdMs = 5 * 60 * 1000
-
-const isStaleTransaction = (record: TransactionRecord): boolean => {
-  const elapsed = Date.now() - new Date(record.timestamp).getTime()
-  return elapsed > stalePendingThresholdMs
-}
-
 /** Polls chain status for a single pending transaction and updates its record when finalized. */
 export const useTransactionStatusPolling = (record: TransactionRecord) => {
   const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
-  const isPending = pendingStatuses.includes(record.status)
+  // Limit orders are queue-driven, not chain-status-driven: the inbound tx
+  // confirms long before the order settles, and letting this poller flip the
+  // record to `confirmed` would end tracking on an order that is still resting.
+  // useLimitOrderTracking owns their lifecycle.
+  const isPending =
+    pendingStatuses.includes(record.status) && record.type !== 'limitSwap'
   const recordRef = useRef(record)
   recordRef.current = record
 
@@ -29,7 +32,24 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
     queryFn: async () => {
       const current = recordRef.current
 
-      if (isStaleTransaction(current)) {
+      // CowSwap orders settle off-chain. Poll the orderbook by UID instead of a
+      // chain hash, and skip the generic stale-timeout: a CowSwap order can stay
+      // open up to its 15-min validity window, and the orderbook's authoritative
+      // `expired` status is what fails it — not an arbitrary client-side cutoff.
+      const cowSwapOrder = getCowSwapOrderApiBase(current)
+      if (cowSwapOrder) {
+        const { status, record: updatedRecord } =
+          await getCowSwapOrderRecordUpdate({
+            record: cowSwapOrder.record,
+            apiBase: cowSwapOrder.apiBase,
+          })
+        if (updatedRecord) {
+          updateRecord(updatedRecord)
+        }
+        return { status }
+      }
+
+      if (shouldFailStaleTransaction(current)) {
         updateRecord({ ...current, status: 'failed' })
         return { status: 'error' as const }
       }

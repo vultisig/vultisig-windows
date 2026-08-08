@@ -2,17 +2,26 @@ import { SvgProps } from '@lib/ui/props'
 
 export const SmartphoneIcon = (props: SvgProps) => (
   <svg
-    fill="currentColor"
-    height="1em"
-    viewBox="0 0 10 15"
-    width="1em"
     xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
     <path
-      clipRule="evenodd"
-      d="M1.83333 14.6667C0.820813 14.6667 0 13.8459 0 12.8333V1.83333C0 0.820813 0.820813 0 1.83333 0H7.5C8.51253 0 9.33333 0.820813 9.33333 1.83333V12.8333C9.33333 13.8459 8.51253 14.6667 7.5 14.6667H1.83333ZM3.83333 1.66C3.5572 1.66 3.33333 1.88386 3.33333 2.16C3.33333 2.43614 3.5572 2.66 3.83333 2.66H5.5C5.77613 2.66 6 2.43614 6 2.16C6 1.88386 5.77613 1.66 5.5 1.66H3.83333Z"
-      fillRule="evenodd"
+      d="M14.3996 3.59961H9.59961V4.79961H14.3996V3.59961Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15.6008 3.59961H8.40078C6.41256 3.59961 4.80078 5.21138 4.80078 7.19961V16.7996C4.80078 18.7878 6.41256 20.3996 8.40078 20.3996H15.6008C17.589 20.3996 19.2008 18.7878 19.2008 16.7996V7.19961C19.2008 5.21138 17.589 3.59961 15.6008 3.59961Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

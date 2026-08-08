@@ -25,9 +25,51 @@ import { getVaultAddresses, getAddressForChain } from '../helpers/vault-addresse
 // Skip if fund-dependent tests not enabled
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 
+function isChainId(value: string): value is ChainId {
+  return Object.hasOwn(SUPPORTED_CHAINS, value)
+}
+
+function getConfiguredSendChains(): ChainId[] | null {
+  const raw = process.env.VULTISIG_E2E_SEND_CHAINS
+  if (!raw) {
+    return null
+  }
+
+  const chains: ChainId[] = []
+  for (const value of raw.split(',')) {
+    const chain = value.trim().toLowerCase()
+    if (!chain) {
+      continue
+    }
+    if (!isChainId(chain)) {
+      throw new Error(
+        `Unsupported VULTISIG_E2E_SEND_CHAINS value: ${chain}. ` +
+        `Supported chains: ${Object.keys(SUPPORTED_CHAINS).join(', ')}`
+      )
+    }
+    chains.push(chain)
+  }
+
+  return chains.length > 0 ? chains : null
+}
+
+function getSendAmount(chain: ChainId): string {
+  const configuredAmount = process.env.VULTISIG_E2E_SEND_AMOUNT?.trim()
+  if (!configuredAmount) {
+    return SUPPORTED_CHAINS[chain].minSend
+  }
+
+  if (!/^\d+(\.\d+)?$/.test(configuredAmount) || Number(configuredAmount) <= 0) {
+    throw new Error(
+      `Invalid VULTISIG_E2E_SEND_AMOUNT: "${configuredAmount}". Expected a positive decimal amount.`
+    )
+  }
+
+  return configuredAmount
+}
+
 // Get chains to test this run (outside test context for sharing)
-const { sendChains } = selectChainsForRun(2, 0)
-const selectedChains = sendChains
+const selectedChains = getConfiguredSendChains() ?? selectChainsForRun(2, 0).sendChains
 
 test.describe('Send Flow', () => {
   test.beforeAll(async () => {
@@ -70,7 +112,8 @@ test.describe('Send Flow', () => {
       test.skip()
       return
     }
-    console.log(`Self-send on ${chain}: ${ownAddress} (amount: ${chainInfo.minSend} ${chainInfo.symbol})`)
+    const sendAmount = getSendAmount(chain)
+    console.log(`Self-send on ${chain}: ${ownAddress} (amount: ${sendAmount} ${chainInfo.symbol})`)
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
@@ -88,7 +131,7 @@ test.describe('Send Flow', () => {
       // Fill send form (SELF-SEND: sending to own address)
       await sendFlow.selectCoin(chainInfo.symbol)
       await sendFlow.fillAddress(ownAddress)
-      await sendFlow.fillAmount(chainInfo.minSend)
+      await sendFlow.fillAmount(sendAmount)
 
       // Wait for fee estimation and balance to load
       await page.waitForTimeout(3000)
@@ -176,7 +219,8 @@ test.describe('Send Flow', () => {
       test.skip()
       return
     }
-    console.log(`Self-send on ${chain}: ${ownAddress} (amount: ${chainInfo.minSend} ${chainInfo.symbol})`)
+    const sendAmount = getSendAmount(chain)
+    console.log(`Self-send on ${chain}: ${ownAddress} (amount: ${sendAmount} ${chainInfo.symbol})`)
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
@@ -192,7 +236,7 @@ test.describe('Send Flow', () => {
 
       await sendFlow.selectCoin(chainInfo.symbol)
       await sendFlow.fillAddress(ownAddress)
-      await sendFlow.fillAmount(chainInfo.minSend)
+      await sendFlow.fillAmount(sendAmount)
 
       await page.waitForTimeout(2000)
 

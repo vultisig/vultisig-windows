@@ -7,7 +7,7 @@ export const BondCard = styled(Panel)`
   padding: 16px;
   border-radius: 16px;
   background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
 `
 
 export const BondSectionHeader = styled(HStack)`

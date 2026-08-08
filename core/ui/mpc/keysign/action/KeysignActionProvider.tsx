@@ -8,6 +8,7 @@ import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '../../../vault/state/currentVault'
+import { getStationKeyImportRootChains } from '../../keygen/keyimport/utils/keyImportServerChains'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '../../state/isInitiatingDevice'
 import { useMpcPeers } from '../../state/mpcPeers'
@@ -35,25 +36,37 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     coinType,
     chain,
   }) => {
+    const stationRootChains = getStationKeyImportRootChains(vault)
+    const isStationRootChain =
+      isKeyImportVault(vault) &&
+      signatureAlgorithm === 'ecdsa' &&
+      stationRootChains?.includes(chain)
+
     const keyShare = shouldBePresent(
-      isKeyImportVault(vault)
-        ? vault.chainKeyShares?.[chain]
-        : match(signatureAlgorithm, {
-            ecdsa: () => vault.keyShares.ecdsa,
-            eddsa: () => vault.keyShares.eddsa,
-            mldsa: () => vault.keyShareMldsa,
-          }),
+      isStationRootChain
+        ? vault.keyShares.ecdsa
+        : isKeyImportVault(vault)
+          ? vault.chainKeyShares?.[chain]
+          : match(signatureAlgorithm, {
+              ecdsa: () => vault.keyShares.ecdsa,
+              eddsa: () => vault.keyShares.eddsa,
+              mldsa: () => vault.keyShareMldsa,
+            }),
       'Keyshare'
     )
 
-    const chainPath = isKeyImportVault(vault)
-      ? eddsaPlaceholderChainPath
-      : match(signatureAlgorithm, {
-          ecdsa: () =>
-            walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", ''),
-          eddsa: () => eddsaPlaceholderChainPath,
-          mldsa: () => eddsaPlaceholderChainPath,
-        })
+    const chainPath =
+      isKeyImportVault(vault) || isStationRootChain
+        ? eddsaPlaceholderChainPath
+        : match(signatureAlgorithm, {
+            ecdsa: () =>
+              walletCore.CoinTypeExt.derivationPath(coinType).replaceAll(
+                "'",
+                ''
+              ),
+            eddsa: () => eddsaPlaceholderChainPath,
+            mldsa: () => eddsaPlaceholderChainPath,
+          })
 
     if (signatureAlgorithm === 'mldsa') {
       const mldsaKeysign = new MldsaKeysign({

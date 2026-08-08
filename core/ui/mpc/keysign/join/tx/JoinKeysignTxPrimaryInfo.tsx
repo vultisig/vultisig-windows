@@ -26,7 +26,6 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { assertField } from '@vultisig/lib-utils/record/assertField'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
@@ -51,13 +50,7 @@ export const JoinKeysignTxPrimaryInfo = ({
 
   const formatFiatAmount = useFormatFiatAmount()
 
-  const fee = useKeysignFee(value)
-
-  const networkFeesFormatted = useMemo(() => {
-    const { decimals, ticker } = chainFeeCoin[coin.chain]
-
-    return formatAmount(fromChainAmount(fee, decimals), { ticker })
-  }, [coin.chain, fee])
+  const feeQuery = useKeysignFee(value)
 
   // Decode the EVM calldata so the joiner sees the same `[icon] Approve / amount TICKER`
   // (and the unlimited-approval warning) the initiator shows on its pre-sign popup.
@@ -156,12 +149,23 @@ export const JoinKeysignTxPrimaryInfo = ({
         error={() => null}
         pending={() => null}
       />
-      {networkFeesFormatted && (
-        <TxOverviewRow>
-          <span>{t('network_fee')}</span>
-          <span>{networkFeesFormatted}</span>
-        </TxOverviewRow>
-      )}
+      <MatchQuery
+        value={feeQuery}
+        pending={() => null}
+        error={() => null}
+        success={fee => {
+          const { decimals, ticker } = chainFeeCoin[coin.chain]
+
+          return (
+            <TxOverviewRow>
+              <span>{t('network_fee')}</span>
+              <span>
+                {formatAmount(fromChainAmount(fee, decimals), { ticker })}
+              </span>
+            </TxOverviewRow>
+          )
+        }}
+      />
       {value.signData.case === 'signAmino' && (
         <SignAminoDisplay signAmino={value.signData.value} />
       )}

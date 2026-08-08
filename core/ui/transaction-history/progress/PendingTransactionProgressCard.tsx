@@ -2,9 +2,11 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
+import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -17,12 +19,13 @@ import {
   CoinKey,
   coinKeyToString,
 } from '@vultisig/core-chain/coin/Coin'
-import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { thorchainAssetPrefixToChain } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import {
+  LimitSwapTransactionRecord,
   SendTransactionRecord,
   SwapTransactionRecord,
   TransactionRecord,
@@ -36,8 +39,6 @@ const safeBigInt = (value: string): bigint => {
     return BigInt(0)
   }
 }
-
-const chainValues = Object.values(Chain)
 
 const useFiatValue = (coin: CoinKey, cryptoAmount: number) => {
   const formatFiatAmount = useFormatFiatAmount()
@@ -122,6 +123,98 @@ const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
 }
 
 /** Renders a swap transaction progress card with from → to vertical stepper. */
+/**
+ * A resting limit order: the sell side, the connector with an indeterminate
+ * ring circling its arrow, then the order's guaranteed minimum on the buy
+ * side.
+ *
+ * The "min. payout" label is reused verbatim from the swap path because it is
+ * exactly right here — a limit order's LIM *is* a guaranteed minimum output,
+ * not an estimate. The buy asset is resolved from the memo's THORChain notation
+ * for its icon; an unresolvable one renders as text rather than borrowing
+ * another coin's logo.
+ */
+const LimitSwapProgressContent = ({
+  record,
+}: {
+  record: LimitSwapTransactionRecord
+}) => {
+  const { t } = useTranslation()
+  const { data } = record
+  const fromAmount = Number(
+    fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
+  )
+  const fromFiat = useFiatValue(
+    { chain: data.fromChain, id: data.fromTokenId },
+    fromAmount
+  )
+  const buyCoin = getLimitOrderBuyCoin({
+    targetAsset: data.targetAsset,
+    targetChain:
+      thorchainAssetPrefixToChain[data.targetAsset.split('.')[0].toUpperCase()],
+  })
+
+  return (
+    <StepperContainer>
+      <StepperLine />
+
+      <VStack gap={16} style={{ position: 'relative' }}>
+        <HStack alignItems="center" gap={8}>
+          {data.fromTokenLogo && (
+            <CoinIcon
+              coin={{
+                chain: data.fromChain,
+                id: data.fromTokenId,
+                logo: data.fromTokenLogo,
+              }}
+              style={{ fontSize: 28 }}
+            />
+          )}
+          <VStack gap={2}>
+            <Text size={16} weight={600}>
+              {formatAmount(fromAmount, { precision: 'high' })} {data.fromToken}
+            </Text>
+            {fromFiat && (
+              <Text size={12} color="supporting">
+                {fromFiat}
+              </Text>
+            )}
+          </VStack>
+        </HStack>
+
+        <HStack alignItems="center" gap={8} fullWidth>
+          <StepperIcon>
+            <PendingRing viewBox="0 0 28 28" aria-hidden>
+              <circle cx="14" cy="14" r="13" pathLength="100" />
+            </PendingRing>
+            <ArrowDownIcon />
+          </StepperIcon>
+          <Text size={13} color="shy">
+            {t('to')}
+          </Text>
+          <StepperDivider />
+        </HStack>
+
+        <HStack alignItems="center" gap={8}>
+          {buyCoin ? (
+            <CoinIcon coin={buyCoin} style={{ fontSize: 28 }} />
+          ) : null}
+          <VStack gap={2}>
+            <Text size={11} color="shy">
+              {t('to_min_payout')}
+            </Text>
+            <Text size={16} weight={600}>
+              {data.minimumReceived} {data.buyTicker}
+            </Text>
+          </VStack>
+        </HStack>
+      </VStack>
+
+      <SwapProviderPill provider={Chain.THORChain} />
+    </StepperContainer>
+  )
+}
+
 const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
   const { t } = useTranslation()
   const { data } = record
@@ -129,6 +222,10 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
     fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
   )
   const toAmount = parseFloat(data.toAmount)
+  const toAmountLimit = toNativeSwapLimitAmount({
+    rawLimit: data.toAmountLimit,
+    toCoin: { chain: data.toChain, id: data.toTokenId },
+  })
   const fromFiat = useFiatValue(
     { chain: data.fromChain, id: data.fromTokenId },
     fromAmount
@@ -189,7 +286,7 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
           )}
           <VStack gap={2}>
             <Text size={11} color="shy">
-              {t('to_min_payout')}
+              {t('swap_expected_payout')}
             </Text>
             <Text size={16} weight={600}>
               {formatAmount(toAmount, { precision: 'high' })} {data.toToken}
@@ -197,6 +294,13 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
             {toFiat && (
               <Text size={12} color="supporting">
                 {toFiat}
+              </Text>
+            )}
+            {toAmountLimit !== null && (
+              <Text size={12} color="shy">
+                {`${t('to_min_payout')}: ${formatAmount(toAmountLimit, {
+                  precision: 'high',
+                })} ${data.toToken}`}
               </Text>
             )}
           </VStack>
@@ -210,18 +314,15 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
 
 const SwapProviderPill = ({ provider }: { provider: string }) => {
   const { t } = useTranslation()
-  const logoChain = isOneOf(provider, chainValues) ? provider : null
+  const logoSrc = getSwapProviderLogoSrc(provider)
 
   return (
     <ProviderPill>
-      {logoChain && (
+      {logoSrc ? (
         <ProviderIconSlot>
-          <ChainEntityIcon
-            value={getChainLogoSrc(logoChain)}
-            style={{ fontSize: 16 }}
-          />
+          <ChainEntityIcon value={logoSrc} style={{ fontSize: 16 }} />
         </ProviderIconSlot>
-      )}
+      ) : null}
       <Text variant="caption" color="shy">
         {t('via')}
       </Text>
@@ -259,16 +360,23 @@ export const PendingTransactionProgressCard = ({
       }}
     >
       <TopRow>
-        <TransactionHistoryTag type={record.type} />
+        <TransactionHistoryTag
+          type={record.type === 'limitSwap' ? 'swap' : record.type}
+          label={record.type === 'limitSwap' ? t('swap_mode_limit') : undefined}
+        />
         <InProgressBadge>
           <Text variant="caption" color="shy">
-            {t('in_progress')}
+            {record.type === 'limitSwap'
+              ? t('swap_limit_status_in_progress')
+              : t('in_progress')}
           </Text>
         </InProgressBadge>
       </TopRow>
 
       {record.type === 'send' ? (
         <SendProgressContent record={record} />
+      ) : record.type === 'limitSwap' ? (
+        <LimitSwapProgressContent record={record} />
       ) : (
         <SwapProgressContent record={record} />
       )}
@@ -320,7 +428,69 @@ const StepperLine = styled.div`
   background: ${getColor('foregroundExtra')};
 `
 
+const ringSpin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`
+
+/**
+ * The arc's head runs ahead of its tail and then the tail catches up, so the
+ * stroke grows to roughly four-fifths of the circle and shrinks back each
+ * cycle. `pathLength="100"` normalises the circumference, so these are plain
+ * percentages rather than radius-derived magic numbers.
+ */
+const ringDash = keyframes`
+  0% {
+    stroke-dasharray: 1 100;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 80 100;
+    stroke-dashoffset: -20;
+  }
+  100% {
+    stroke-dasharray: 1 100;
+    stroke-dashoffset: -100;
+  }
+`
+
+/**
+ * Indeterminate arc circling the connector's arrow while an order rests, so the
+ * card reads as ongoing work rather than a static row.
+ *
+ * Two animations at deliberately different periods: the sweep grows and shrinks
+ * on one clock while the whole ring rotates on a slower one, so the arc
+ * precesses instead of retracing the same path every cycle — a single rotation
+ * would read as a fixed notch spinning.
+ */
+const PendingRing = styled.svg`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: ${ringSpin} 1.677s linear infinite;
+
+  circle {
+    fill: none;
+    stroke: ${getColor('primaryAccentFour')};
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    animation: ${ringDash} 1.332s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+
+    circle {
+      animation: none;
+      stroke-dasharray: 25 100;
+    }
+  }
+`
+
 const StepperIcon = styled.div`
+  position: relative;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -340,8 +510,8 @@ const ProviderPill = styled(HStack).attrs({
   padding: 8px 12px;
   border-radius: 12px 0 16px 0;
   background: ${getColor('buttonSecondary')};
-  border-top: 1px solid ${getColor('foregroundSuper')};
-  border-left: 1px solid ${getColor('foregroundSuper')};
+  border-top: 1px solid ${getColor('foregroundExtra')};
+  border-left: 1px solid ${getColor('foregroundExtra')};
   position: absolute;
   right: -16px;
   bottom: -16px;

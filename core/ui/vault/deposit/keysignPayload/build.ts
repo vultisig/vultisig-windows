@@ -1,9 +1,27 @@
 import { create } from '@bufbuild/protobuf'
+import { getSolanaStakingFee } from '@core/ui/chain/solana/staking/getSolanaStakingFee'
+import { fetchRujiLiquidUnbondInputs } from '@core/ui/defi/chain/queries/services/thorchainStake/rujiStakeService'
+import { buildQBTCDirectPayload } from '@core/ui/qbtc/dapp/buildQBTCDirectPayload'
+import { QbtcDappMessage } from '@core/ui/qbtc/dapp/encodeAnyMessage'
+import {
+  qbtcChainId,
+  qbtcDefaultFeeAmount,
+  qbtcFeeDenom,
+} from '@core/ui/qbtc/dapp/qbtcDirectConstants'
+import { toBase64 } from '@cosmjs/encoding'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
-import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
+import {
+  Chain,
+  CosmosChain,
+  IbcEnabledCosmosChain,
+} from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
+import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
+import { getCosmosStakingGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
 import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
@@ -16,10 +34,23 @@ import {
   yieldBearingTokensIdToContractMap,
   yieldContractsByBaseDenom,
 } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/config'
-import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  rippleIssuedCurrencyDecimals,
+  rippleTokenId,
+} from '@vultisig/core-chain/chains/ripple/issuedCurrency'
+import { solanaConfig } from '@vultisig/core-chain/chains/solana/solanaConfig'
+import { fetchSolanaRentReserve } from '@vultisig/core-chain/chains/solana/staking/rpc'
+import { buildUnsignedStakingTx } from '@vultisig/core-chain/chains/solana/staking/tx/buildUnsignedStakingTx'
+import { SolanaStakingPayload } from '@vultisig/core-chain/chains/solana/staking/tx/stakingPayload'
+import {
+  AccountCoin,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { getCoinBalance } from '@vultisig/core-chain/coin/balance'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
+import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
 import { KeysignLibType } from '@vultisig/core-mpc/mpcLib'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -27,30 +58,47 @@ import { TransactionType } from '@vultisig/core-mpc/types/vultisig/keysign/v1/bl
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   CosmosCoinSchema,
+  SignDirectSchema,
+  SignSolanaSchema,
   WasmExecuteContractPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
+import { maxBigInt } from '@vultisig/lib-utils/math/maxBigInt'
 import { mirrorRecord } from '@vultisig/lib-utils/record/mirrorRecord'
 import { FieldValues } from 'react-hook-form'
 
-import { ChainAction } from '../ChainAction'
+import {
+  ChainAction,
+  CosmosStakingAction,
+  cosmosStakingActions,
+  SolanaStakingAction,
+  solanaStakingActions,
+} from '../ChainAction'
 import { resolvers, selectStakeId } from '../staking/resolvers'
 import {
+  BruneInput,
   NativeTcyInput,
   RujiInput,
   StakeKind,
   StcyInput,
 } from '../staking/types'
+import {
+  buildStakingSignDirectBytes,
+  type CosmosStakingInput,
+  toEncodeObjects,
+} from './cosmosStaking/encodeStakingMsgs'
+import { scaleCosmosStakingFee } from './cosmosStaking/scaleCosmosStakingFee'
 
 export type BuildDepositKeysignPayloadInput = {
   coin: AccountCoin
   action: ChainAction
   depositData: FieldValues
   receiver?: string
-  amount?: number
+  /** Human amount as an exact decimal string — never a float64 (#4494). */
+  amount?: string
   memo?: string
   validatorAddress?: string
   slippage?: number
@@ -58,10 +106,21 @@ export type BuildDepositKeysignPayloadInput = {
   transactionType?: TransactionType
   vaultId: string
   localPartyId: string
-  publicKey: PublicKey
+  /**
+   * WalletCore public key for ECDSA/EdDSA chains. `null` for MLDSA chains
+   * (e.g. QBTC), which have no WalletCore key type — those pass the hex key
+   * via {@link BuildDepositKeysignPayloadInput.hexPublicKeyOverride} instead.
+   */
+  publicKey: PublicKey | null
+  /** Hex MLDSA public key (`vault.publicKeyMldsa`) for MLDSA chains. */
+  hexPublicKeyOverride?: string
   libType: KeysignLibType
   walletCore: WalletCore
 }
+
+/** Narrows an untyped react-hook-form field value to a string, else undefined. */
+const asOptionalString = (value: unknown): string | undefined =>
+  typeof value === 'string' ? value : undefined
 
 export const buildDepositKeysignPayload = async ({
   coin,
@@ -78,13 +137,67 @@ export const buildDepositKeysignPayload = async ({
   vaultId,
   localPartyId,
   publicKey,
+  hexPublicKeyOverride,
   libType,
 }: BuildDepositKeysignPayloadInput) => {
+  const hexPublicKey =
+    hexPublicKeyOverride ??
+    (publicKey ? Buffer.from(publicKey.data()).toString('hex') : undefined)
+  if (!hexPublicKey) {
+    throw new Error(
+      'buildDepositKeysignPayload requires publicKey or hexPublicKeyOverride'
+    )
+  }
+
+  // Opening an XRPL trust line is a TrustSet keyed by the issued currency, not
+  // the native XRP fee coin the deposit flow selects. Build the issued-currency
+  // coin (composite `currency.issuer` id) so the Ripple signing input resolver
+  // emits an OperationTrustSet whose LimitAmount is the entered limit.
+  if (action === 'open_trust_line') {
+    const issuer = shouldBePresent(
+      asOptionalString(depositData['issuer']),
+      'Trust line issuer'
+    )
+    const currency = shouldBePresent(
+      asOptionalString(depositData['currency']),
+      'Trust line currency'
+    )
+    const limit = shouldBePresent(amount, 'Trust line limit')
+
+    const issuedCoin: AccountCoin = {
+      chain: Chain.Ripple,
+      id: rippleTokenId({ currency, issuer }),
+      ticker: currency,
+      decimals: rippleIssuedCurrencyDecimals,
+      address: coin.address,
+      logo: asOptionalString(depositData['logo']) ?? coin.logo,
+    }
+
+    const trustLinePayload = create(KeysignPayloadSchema, {
+      coin: toCommCoin({ ...issuedCoin, hexPublicKey }),
+      toAddress: issuer,
+      toAmount: toChainAmount(limit, rippleIssuedCurrencyDecimals).toString(),
+      memo: '',
+      vaultLocalPartyId: localPartyId,
+      vaultPublicKeyEcdsa: vaultId,
+      libType,
+      utxoInfo: await getKeysignUtxoInfo(issuedCoin),
+    })
+
+    trustLinePayload.blockchainSpecific = await getChainSpecific({
+      keysignPayload: trustLinePayload,
+      walletCore,
+    })
+
+    return trustLinePayload
+  }
+
   const isUnmerge = action === 'unmerge'
   const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
   const isTonFunction = coin.chain === Chain.Ton
 
-  const hasAmount = amount !== undefined && Number.isFinite(amount)
+  const hasAmount =
+    amount !== undefined && amount !== '' && Number.isFinite(Number(amount))
   const amountUnits = hasAmount
     ? toChainAmount(shouldBePresent(amount), coin.decimals).toString()
     : undefined
@@ -96,7 +209,7 @@ export const buildDepositKeysignPayload = async ({
     coin: toCommCoin({
       ...coin,
       address: coin.address,
-      hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
+      hexPublicKey,
     }),
     memo,
     vaultLocalPartyId: localPartyId,
@@ -143,6 +256,30 @@ export const buildDepositKeysignPayload = async ({
     transactionType,
   })
 
+  if (isOneOf(action, cosmosStakingActions)) {
+    return applyCosmosStakingSignData({
+      action: action as CosmosStakingAction,
+      coin,
+      depositData,
+      amountUnits,
+      publicKey,
+      hexPublicKey,
+      keysignPayload,
+    })
+  }
+
+  if (isOneOf(action, solanaStakingActions)) {
+    return applySolanaStakingSignData({
+      action: action as SolanaStakingAction,
+      coin,
+      depositData,
+      amountUnits,
+      hexPublicKey,
+      walletCore,
+      keysignPayload,
+    })
+  }
+
   const stakeId = isStake
     ? withFallback(
         attempt(() => selectStakeId(coin, { autocompound })),
@@ -156,14 +293,25 @@ export const buildDepositKeysignPayload = async ({
 
     const stakeSpecific = resolvers[stakeId]
 
-    let input: RujiInput | NativeTcyInput | StcyInput | null = null
+    let input: RujiInput | NativeTcyInput | StcyInput | BruneInput | null = null
+
+    // RUJI has two independent positions unstaked via different routes: the
+    // bonded position via `account.withdraw` and the auto-compounding position
+    // via `liquid.unbond`. The card the user unstaked from sets `autocompound`
+    // (true → auto-compounding). Only the auto-compounding route needs the sRUJI
+    // receipt shares + position value to convert the entered amount, so fetch
+    // them here (the match callbacks below are synchronous).
+    const rujiUnbondInputs =
+      stakeId === 'ruji' && actionAsStakeAction === 'unstake' && autocompound
+        ? await fetchRujiLiquidUnbondInputs(coin.address)
+        : undefined
 
     match(actionAsStakeAction, {
       stake: () => {
         input = { kind: 'stake', amount: shouldBePresent(amount) }
       },
       unstake: () => {
-        if (stakeId === 'stcy') {
+        if (stakeId === 'stcy' || stakeId === 'brune') {
           input = { kind: 'unstake', amount: shouldBePresent(amount) }
         } else if (stakeId === 'native-tcy') {
           const raw = depositData['percentage']
@@ -175,9 +323,17 @@ export const buildDepositKeysignPayload = async ({
           input = pctValid
             ? { kind: 'unstake', percentage: pct }
             : { kind: 'unstake', amount: shouldBePresent(amount) }
+        } else if (autocompound) {
+          input = {
+            kind: 'unstake',
+            position: 'liquid',
+            amount: shouldBePresent(amount),
+            ...shouldBePresent(rujiUnbondInputs),
+          }
         } else {
           input = {
             kind: 'unstake',
+            position: 'bonded',
             amount: shouldBePresent(amount),
           }
         }
@@ -197,6 +353,11 @@ export const buildDepositKeysignPayload = async ({
     })
 
     if (intent.kind === 'wasm') {
+      // Leave toAddress/toAmount empty. A GENERIC_CONTRACT tx is signed purely
+      // from `contractPayload`, so the verify/joiner screens must derive what
+      // they show from that same payload — populating separate display fields
+      // here would let a compromised initiator show one thing while signing
+      // another.
       keysignPayload.memo = ''
       keysignPayload.toAddress = ''
       keysignPayload.toAmount = '0'
@@ -411,4 +572,438 @@ export const buildDepositKeysignPayload = async ({
   }
 
   return keysignPayload
+}
+
+const cosmosStakingChains: readonly IbcEnabledCosmosChain[] = [
+  Chain.Terra,
+  Chain.TerraClassic,
+]
+
+const isCosmosStakingChain = (chain: Chain): chain is IbcEnabledCosmosChain =>
+  (cosmosStakingChains as readonly Chain[]).includes(chain)
+
+// QBTC signs Cosmos staking txs with ML-DSA (~2.4 KB signature) rather than
+// secp256k1. `MsgBeginRedelegate` — the heaviest single-msg staking path —
+// out-of-gasses against the Terra-family floor, so QBTC requests 800k. The fee
+// is unchanged: qbtc-testnet has no minimum gas price and enforces a flat
+// `min_tx_fee`, and `block.max_gas = -1`, so the larger budget is free.
+const qbtcStakingBaseGasLimit = 800_000n
+
+const getQbtcStakingGasLimit = (msgCount: number): bigint => {
+  const n = BigInt(Math.max(1, msgCount))
+  // Mirror the Terra helper's msg-count scaling: each extra msg (bulk
+  // `claim_rewards`) adds roughly a quarter of the base cost.
+  return qbtcStakingBaseGasLimit + ((n - 1n) * qbtcStakingBaseGasLimit) / 4n
+}
+
+type ApplyCosmosStakingSignDataInput = {
+  action: CosmosStakingAction
+  coin: AccountCoin
+  depositData: FieldValues
+  amountUnits: string | undefined
+  /** WalletCore key for Terra-family chains; `null` for QBTC (ML-DSA). */
+  publicKey: PublicKey | null
+  /** Hex public key (compressed secp256k1 or ML-DSA) for the signer info. */
+  hexPublicKey: string
+  keysignPayload: ReturnType<typeof create<typeof KeysignPayloadSchema>>
+}
+
+const buildCosmosStakingInput = ({
+  action,
+  depositData,
+  amountUnits,
+}: {
+  action: CosmosStakingAction
+  depositData: FieldValues
+  amountUnits: string | undefined
+}): CosmosStakingInput => {
+  if (action === 'delegate') {
+    return {
+      action: 'delegate',
+      validatorAddress: shouldBePresent(
+        depositData.validatorAddress as string | undefined,
+        'validatorAddress'
+      ),
+      amount: shouldBePresent(amountUnits, 'amount'),
+    }
+  }
+  if (action === 'undelegate') {
+    return {
+      action: 'undelegate',
+      validatorAddress: shouldBePresent(
+        depositData.validatorAddress as string | undefined,
+        'validatorAddress'
+      ),
+      amount: shouldBePresent(amountUnits, 'amount'),
+    }
+  }
+  if (action === 'redelegate') {
+    return {
+      action: 'redelegate',
+      srcValidatorAddress: shouldBePresent(
+        depositData.srcValidatorAddress as string | undefined,
+        'srcValidatorAddress'
+      ),
+      dstValidatorAddress: shouldBePresent(
+        depositData.validatorAddress as string | undefined,
+        'validatorAddress'
+      ),
+      amount: shouldBePresent(amountUnits, 'amount'),
+    }
+  }
+  // claim_rewards
+  const validatorAddresses = depositData.validatorAddresses as
+    | string[]
+    | undefined
+  if (!validatorAddresses || validatorAddresses.length === 0) {
+    throw new Error(
+      'claim_rewards requires validatorAddresses (single-validator or bulk-claim list)'
+    )
+  }
+  return { action: 'claim_rewards', validatorAddresses }
+}
+
+const applyCosmosStakingSignData = ({
+  action,
+  coin,
+  depositData,
+  amountUnits,
+  publicKey,
+  hexPublicKey,
+  keysignPayload,
+}: ApplyCosmosStakingSignDataInput) => {
+  const isQbtc = coin.chain === Chain.QBTC
+  if (!isQbtc && !isCosmosStakingChain(coin.chain)) {
+    throw new Error(
+      `Cosmos staking action '${action}' is only supported on Terra-family chains and QBTC, got ${coin.chain}`
+    )
+  }
+
+  const blockchainSpecific = keysignPayload.blockchainSpecific
+  if (blockchainSpecific.case !== 'cosmosSpecific') {
+    throw new Error(
+      `Cosmos staking requires cosmosSpecific blockchainSpecific, got ${blockchainSpecific.case}`
+    )
+  }
+  const { sequence, gas, accountNumber } = blockchainSpecific.value
+
+  const input = buildCosmosStakingInput({ action, depositData, amountUnits })
+  // Bulk `claim_rewards` packs one `MsgWithdrawDelegatorReward` per
+  // validator; every other action is a single-msg tx. The gas-limit helper
+  // scales its base limit by msg count.
+  const msgCount =
+    input.action === 'claim_rewards' ? input.validatorAddresses.length : 1
+
+  // Each branch produces the proto-direct `bodyBytes` / `authInfoBytes` pair
+  // as base64 strings ready for `SignDirect`. QBTC builds them via its manual
+  // ML-DSA protobuf path (no WalletCore key); Terra-family chains use the
+  // shared secp256k1 encoder.
+  const { bodyBytes, authInfoBytes, chainId } = isQbtc
+    ? (() => {
+        const gasLimit = getQbtcStakingGasLimit(msgCount)
+        // `toEncodeObjects` returns cosmjs `EncodeObject[]` ({ typeUrl, value });
+        // map to the QBTC dApp message shape so the proto encoder consumes the
+        // staking msgs (the typeUrls are registered in `messageRegistry`).
+        const messages: QbtcDappMessage[] = toEncodeObjects({
+          input,
+          delegatorAddress: coin.address,
+          denom: qbtcFeeDenom,
+        }).map(({ typeUrl, value }) => ({ typeUrl, value }))
+        const { bodyBytes, authInfoBytes } = buildQBTCDirectPayload({
+          messages,
+          hexPublicKey,
+          sequence,
+          fee: {
+            // qbtc-testnet enforces a flat `min_tx_fee`; keep the fee at that
+            // minimum regardless of msg count (no minimum gas price).
+            amount: [{ denom: qbtcFeeDenom, amount: qbtcDefaultFeeAmount }],
+            gas: gasLimit.toString(),
+          },
+        })
+        return { bodyBytes, authInfoBytes, chainId: qbtcChainId }
+      })()
+    : (() => {
+        // `isCosmosStakingChain` narrowed `coin.chain`, but `coin` itself is
+        // still typed as AccountCoin (chain: Chain). Re-form the CoinKey
+        // explicitly so the SDK helpers that demand `CoinKey<CosmosChain>`
+        // accept it.
+        const stakingChain = coin.chain as IbcEnabledCosmosChain
+        const cosmosCoin = { ...coin, chain: stakingChain }
+        const feeDenom = cosmosFeeCoinDenom[stakingChain]
+        const stakingDenom = getDenom(cosmosCoin as CoinKey<CosmosChain>)
+        const gasLimit = getCosmosStakingGasLimit({
+          chain: stakingChain,
+          msgCount,
+        })
+        // `gas` from chainSpecific is the fee for a single-msg tx. For bulk
+        // `claim_rewards` we scale the fee by the same `msgCount`-aware ratio
+        // the gas-limit helper uses, so the gas-price the chain sees doesn't
+        // drop below the per-byte minimum when N is large. Single-msg actions
+        // keep the chainSpecific fee unchanged.
+        const singleMsgGasLimit = getCosmosStakingGasLimit({
+          chain: stakingChain,
+        })
+        const feeScale = scaleCosmosStakingFee({
+          gas,
+          gasLimit,
+          singleMsgGasLimit,
+        })
+        const feeAmount = { denom: feeDenom, amount: feeScale.toString() }
+        const built = buildStakingSignDirectBytes({
+          input,
+          delegatorAddress: coin.address,
+          denom: stakingDenom,
+          publicKey: shouldBePresent(publicKey, 'publicKey').data(),
+          sequence,
+          feeAmount,
+          gasLimit,
+        })
+        return {
+          bodyBytes: toBase64(built.bodyBytes),
+          authInfoBytes: toBase64(built.authInfoBytes),
+          chainId: getCosmosChainId(stakingChain),
+        }
+      })()
+
+  // `toAmount` drives the "Sent X" amount on the verify + Done screens. Set it
+  // to the user-input amount in base units for the actions that move tokens.
+  // `claim_rewards` carries no amount, so it stays at 0.
+  const toAmount = input.action === 'claim_rewards' ? '0' : (amountUnits ?? '0')
+  // `toAddress` likewise drives "To" in the verify screen — show the
+  // validator (or destination validator for redelegate) instead of an empty
+  // string so consumers that don't know about cosmos staking specifics
+  // still display something useful.
+  const toAddress =
+    input.action === 'delegate' || input.action === 'undelegate'
+      ? input.validatorAddress
+      : input.action === 'redelegate'
+        ? input.dstValidatorAddress
+        : ''
+
+  return create(KeysignPayloadSchema, {
+    ...keysignPayload,
+    contractPayload: { case: undefined },
+    memo: '',
+    toAddress,
+    toAmount,
+    signData: {
+      case: 'signDirect',
+      // The cosmos signing resolver derives chainId itself via
+      // `getTwChainId({ walletCore, chain })`, so this field is decorative
+      // for the in-app path — but we still set it correctly so any
+      // downstream consumer (logging, debugging, dApp re-broadcast) sees
+      // the right domain on the payload instead of an empty string.
+      value: create(SignDirectSchema, {
+        chainId,
+        bodyBytes,
+        authInfoBytes,
+        // Required by the QBTC ML-DSA keysign path, which derives the SignDoc
+        // from these bytes + accountNumber. Decorative for the Terra-family
+        // WalletCore path (it reads accountNumber from cosmosSpecific), but
+        // set it for both so the payload is self-describing.
+        accountNumber: accountNumber.toString(),
+      }),
+    },
+  })
+}
+
+type ApplySolanaStakingSignDataInput = {
+  action: SolanaStakingAction
+  coin: AccountCoin
+  depositData: FieldValues
+  amountUnits?: string
+  hexPublicKey: string
+  walletCore: WalletCore
+  keysignPayload: ReturnType<typeof create<typeof KeysignPayloadSchema>>
+}
+
+/**
+ * Resolves the `signSolana` artefact for a Solana deactivate / withdraw op. The
+ * stake account + amount live on the local-only deposit form, so the initiating
+ * device builds the unsigned transaction ONCE here (pinning the recent
+ * blockhash) and relays the raw bytes via `SignSolana.rawTransactions`. Every
+ * co-signing device signs the byte-identical message through the raw-transaction
+ * path — the MPC byte-parity guarantee. Mirrors iOS `SolanaStakingSignDataResolver`.
+ */
+const applySolanaStakingSignData = async ({
+  action,
+  coin,
+  depositData,
+  amountUnits,
+  hexPublicKey,
+  walletCore,
+  keysignPayload,
+}: ApplySolanaStakingSignDataInput) => {
+  if (coin.chain !== Chain.Solana) {
+    throw new Error(
+      `Solana staking action '${action}' is only supported on Solana, got ${coin.chain}`
+    )
+  }
+
+  const { recentBlockHash, priorityFee, computeLimit } =
+    getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'solanaSpecific'
+    )
+
+  const stakeAccount = depositData['stakeAccount']
+  const validatorAddress = depositData['validatorAddress']
+  const amount = amountUnits ? BigInt(amountUnits) : 0n
+  // Delegate funds the new stake account with the entered amount PLUS the
+  // rent-exempt reserve, so the active stake equals the entered amount. Read
+  // live (cheap, rarely changes) only for the delegate path.
+  const rentReserve =
+    action === 'solana_delegate' ? await fetchSolanaRentReserve() : 0n
+
+  // Floor at the config minimum so co-signers all encode the same
+  // `setComputeUnitPrice` instruction when the wire value is missing.
+  const priorityFeePrice = maxBigInt(
+    priorityFee ? BigInt(priorityFee) : 0n,
+    BigInt(solanaConfig.priorityFeePrice)
+  )
+  const priorityFeeLimit = computeLimit
+    ? Number(computeLimit)
+    : solanaConfig.priorityFeeLimit
+  // Budget against the fee this exact transaction encodes, not the form's
+  // floor-price estimate — the live priority price is only known here.
+  const feeLamports = getSolanaStakingFee({
+    priorityFeePrice,
+    priorityFeeLimit,
+  })
+
+  const requireStakeAccount = (): string => {
+    if (typeof stakeAccount !== 'string' || stakeAccount.length === 0) {
+      throw new Error(`Solana staking '${action}' requires 'stakeAccount'`)
+    }
+    return stakeAccount
+  }
+
+  const requireValidator = (): string => {
+    if (typeof validatorAddress !== 'string' || validatorAddress.length === 0) {
+      throw new Error(`Solana staking '${action}' requires 'validatorAddress'`)
+    }
+    return validatorAddress
+  }
+
+  // `requiredLamports` is what this op costs the WALLET. Only a fresh delegate
+  // moves value out of it (the new stake account's funding); every other op acts
+  // on lamports that already sit on-chain in the stake account, so the wallet
+  // just pays the fee.
+  const { payload, toAddress, toAmount, requiredLamports } = match<
+    SolanaStakingAction,
+    {
+      payload: SolanaStakingPayload
+      toAddress: string
+      toAmount: string
+      requiredLamports: bigint
+    }
+  >(action, {
+    solana_delegate: () => {
+      const votePubkey = requireValidator()
+      // `lamports` is the stake-account FUNDING: the delegated amount plus the
+      // rent-exempt reserve, so the active stake equals the entered amount.
+      const funding = amount + rentReserve
+      return {
+        payload: {
+          op: 'delegate',
+          votePubkey,
+          lamports: funding,
+        } as const,
+        toAddress: votePubkey,
+        toAmount: amount.toString(),
+        requiredLamports: funding + feeLamports,
+      }
+    },
+    solana_unstake: () => {
+      const account = requireStakeAccount()
+      return {
+        payload: { op: 'unstake', stakeAccount: account } as const,
+        toAddress: account,
+        toAmount: '0',
+        requiredLamports: feeLamports,
+      }
+    },
+    solana_withdraw: () => {
+      const account = requireStakeAccount()
+      return {
+        payload: {
+          op: 'withdraw',
+          stakeAccount: account,
+          lamports: amount,
+        } as const,
+        toAddress: account,
+        toAmount: amount.toString(),
+        requiredLamports: feeLamports,
+      }
+    },
+    // Move-stake step 1: deactivate the account (byte-identical to a plain
+    // deactivate). No amount; the whole account cools down before re-delegation.
+    solana_move_stake: () => {
+      const account = requireStakeAccount()
+      return {
+        payload: { op: 'moveStakeDeactivate', stakeAccount: account } as const,
+        toAddress: account,
+        toAmount: '0',
+        requiredLamports: feeLamports,
+      }
+    },
+    // Move-stake step 2: re-delegate the cooled-down account to validator B. The
+    // existing account is set explicitly so wallet-core re-delegates it rather
+    // than deriving a fresh one.
+    solana_finish_move: () => {
+      const account = requireStakeAccount()
+      const votePubkey = requireValidator()
+      return {
+        payload: {
+          op: 'moveStakeRedelegate',
+          stakeAccount: account,
+          votePubkey,
+          lamports: amount,
+        } as const,
+        toAddress: votePubkey,
+        toAmount: amount.toString(),
+        requiredLamports: feeLamports,
+      }
+    },
+  })
+
+  // Last line of defence before the ceremony. The form bounds the amount, but a
+  // prefilled or stale value can still outrun the live balance, and the priority
+  // price is only pinned here. Without this the devices sign a transaction the
+  // network rejects at simulation ("insufficient lamports"). Mirrors Android
+  // `SolanaStakingSignDataResolver`.
+  const balanceLamports = await getCoinBalance(extractAccountCoinKey(coin))
+  if (requiredLamports > balanceLamports) {
+    throw new Error(
+      `Solana staking '${action}' requires ${fromChainAmount(
+        requiredLamports,
+        coin.decimals
+      )} ${coin.ticker} but the wallet holds ${fromChainAmount(
+        balanceLamports,
+        coin.decimals
+      )} ${coin.ticker}`
+    )
+  }
+
+  const rawTransaction = buildUnsignedStakingTx({
+    walletCore,
+    payload,
+    sender: coin.address,
+    hexPublicKey,
+    recentBlockHash,
+    priorityFeePrice,
+    priorityFeeLimit,
+  })
+
+  return create(KeysignPayloadSchema, {
+    ...keysignPayload,
+    contractPayload: { case: undefined },
+    memo: '',
+    toAddress,
+    toAmount,
+    signData: {
+      case: 'signSolana',
+      value: create(SignSolanaSchema, { rawTransactions: [rawTransaction] }),
+    },
+  })
 }

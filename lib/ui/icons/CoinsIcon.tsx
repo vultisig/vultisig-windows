@@ -1,30 +1,41 @@
-import { useId } from 'react'
+import { SvgProps } from '@lib/ui/props'
 
-export const CoinsIcon = () => {
-  const id = useId()
-
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 16 16"
-      fill="none"
-    >
-      <g clipPath={`url(#${id})`}>
-        <path
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M12.06 6.913A4 4 0 1 1 6.894 12M4.667 4h.667v2.666m5.806 2.587.467.473-1.88 1.88m-.393-6.273a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
-        />
-      </g>
-      <defs>
-        <clipPath id={id}>
-          <path fill="currentColor" d="M0 0h16v16H0z" />
-        </clipPath>
-      </defs>
-    </svg>
-  )
-}
+export const CoinsIcon = (props: SvgProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M3.59961 15V17.4C3.59961 19.0568 6.55449 20.4 10.1996 20.4C13.8447 20.4 16.7996 19.0568 16.7996 17.4V15.3"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M13.7992 9.59961C17.4443 9.59961 20.3992 8.25646 20.3992 6.59961C20.3992 4.94276 17.4443 3.59961 13.7992 3.59961C10.1541 3.59961 7.19922 4.94276 7.19922 6.59961C7.19922 8.25646 10.1541 9.59961 13.7992 9.59961Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5.40705 12.9414C4.28937 13.4788 3.59961 14.202 3.59961 15C3.59961 16.6568 6.55461 18 10.1996 18C13.5781 18 16.3591 16.8454 16.7485 15.3575"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7.19922 6.59961V8.99961C7.19922 10.6564 10.1541 11.9996 13.7992 11.9996C17.4443 11.9996 20.3992 10.6564 20.3992 8.99961V6.59961"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)

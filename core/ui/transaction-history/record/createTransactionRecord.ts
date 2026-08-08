@@ -1,5 +1,10 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { decodeCowSwapKeysignData } from '@vultisig/core-chain/swap/general/cowswap/keysign/cowSwapKeysignData'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import {
+  getKeysignLimitSwapOrder,
+  KeysignLimitSwapOrder,
+} from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
@@ -11,13 +16,17 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
+import { getThorchainAssetTicker } from '../../mpc/keysign/join/tx/thorchainAssetTicker'
 import {
+  LimitSwapTransactionData,
+  LimitSwapTransactionRecord,
   SendTransactionData,
   SendTransactionRecord,
   SwapTransactionData,
   SwapTransactionRecord,
   TransactionRecord,
 } from '../core'
+import { getPrimaryCosmosMessageTypeUrl } from './getPrimaryCosmosMessageTypeUrl'
 
 type CreateTransactionRecordInput = {
   payload: KeysignPayload
@@ -26,6 +35,35 @@ type CreateTransactionRecordInput = {
 }
 
 const emptyLogoFallback = ''
+
+type CreateLimitSwapDataInput = {
+  payload: KeysignPayload
+  order: KeysignLimitSwapOrder
+}
+
+const createLimitSwapData = ({
+  payload,
+  order,
+}: CreateLimitSwapDataInput): LimitSwapTransactionData => {
+  const coin = getKeysignCoin(payload)
+
+  return {
+    fromAddress: coin.address,
+    fromToken: coin.ticker,
+    fromTokenLogo: coin.logo ?? emptyLogoFallback,
+    fromTokenId: coin.id,
+    fromChain: coin.chain,
+    fromDecimals: coin.decimals,
+    fromAmount: payload.toAmount,
+    buyTicker: getThorchainAssetTicker(order.targetAsset),
+    targetAsset: order.targetAsset,
+    minimumReceived: order.minimumReceivedDecimal,
+    destinationAddress: order.destinationAddress,
+    expiryHours: order.expiryHours,
+    memo: shouldBePresent(payload.memo, 'limit order memo'),
+    orderStatus: 'pending',
+  }
+}
 
 const createSendData = (payload: KeysignPayload): SendTransactionData => {
   const coin = getKeysignCoin(payload)
@@ -39,6 +77,7 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
     tokenId: coin.id,
     decimals: coin.decimals,
     memo: payload.memo || undefined,
+    messageTypeUrl: getPrimaryCosmosMessageTypeUrl(payload),
   }
 }
 
@@ -79,6 +118,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         fromDecimals: from.decimals,
         toToken: to.token,
         toAmount: native.toAmountDecimal,
+        toAmountLimit: native.toAmountLimit,
         toChain: to.chain,
         toTokenLogo: to.tokenLogo,
         toTokenId: to.tokenId,
@@ -95,6 +135,14 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         shouldBePresent(general.toCoin, 'general swap toCoin')
       )
 
+      // CowSwap orders carry their orderbook API base in the (otherwise unused
+      // for off-chain orders) tx.data field — surface it so the status poller
+      // can poll the order by UID.
+      const cowSwapData =
+        general.provider === 'cowswap'
+          ? decodeCowSwapKeysignData(general.quote?.tx?.data ?? '')
+          : null
+
       return {
         fromToken: from.token,
         fromAmount: general.fromAmount,
@@ -110,6 +158,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         toDecimals: to.decimals,
         provider,
         route: `${from.token} → ${to.token}`,
+        ...(cowSwapData ? { cowSwapOrderApiBase: cowSwapData.apiBase } : {}),
       }
     },
   })
@@ -163,6 +212,24 @@ export const createTransactionRecord = ({
     explorerUrl,
     fiatValue: '',
     status: 'broadcasted' as const,
+  }
+
+  // Checked before the swap-payload branch: only ERC20-sourced limit orders
+  // carry a swap payload, so branching on it would record a RUNE or native-gas
+  // order as a plain send. The memo identifies the order on every source branch.
+  const limitOrder = getKeysignLimitSwapOrder(payload)
+  if (limitOrder) {
+    return {
+      ...base,
+      chain: sourceChain,
+      explorerUrl: getBlockExplorerUrl({
+        chain: sourceChain,
+        entity: 'tx',
+        value: txHash,
+      }),
+      type: 'limitSwap',
+      data: createLimitSwapData({ payload, order: limitOrder }),
+    } satisfies LimitSwapTransactionRecord
   }
 
   if (isSwapTx) {

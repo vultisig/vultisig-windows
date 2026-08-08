@@ -8,7 +8,10 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { EmptyState } from '@lib/ui/status/EmptyState'
-import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
+import {
+  isValidTokenId,
+  normalizeTokenId,
+} from '@vultisig/core-chain/utils/isValidTokenId'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -18,10 +21,15 @@ export const AddCustomTokenPage = () => {
   const [{ chain }] = useCoreViewState<'addCustomToken'>()
   const walletCore = useAssertWalletCore()
 
-  const isValid = value
-    ? isValidAddress({
+  // XRPL tokens can be pasted by their human ticker (`SOLO.rsoLo…`, as shown on
+  // explorers) or on-ledger currency code; canonicalise so validation, lookup,
+  // and storage all use the same id auto-discovery produces for a held token.
+  const id = value ? normalizeTokenId({ chain, id: value }) : ''
+
+  const isValid = id
+    ? isValidTokenId({
         chain,
-        address: value,
+        id,
         walletCore,
       })
     : false
@@ -37,7 +45,7 @@ export const AddCustomTokenPage = () => {
         <SearchInput value={value} onChange={setValue} />
         {value ? (
           isValid ? (
-            <CustomTokenResult id={value} />
+            <CustomTokenResult id={id} />
           ) : (
             <EmptyState
               icon={

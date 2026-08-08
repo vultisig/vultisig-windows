@@ -2,7 +2,7 @@ import { normalizeBlockaidEvmParsed } from '@core/ui/chain/security/blockaid/tx/
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { getBlockaidTxSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxSimulation'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { UseQueryOptions } from '@tanstack/react-query'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { BlockaidSimulationSupportedChain } from '@vultisig/core-chain/security/blockaid/simulationChains'
@@ -18,7 +18,6 @@ import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChai
 import { getBlockaidTxSimulationInput } from '@vultisig/core-mpc/security/blockaid/tx/simulation/input'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import base58 from 'bs58'
-import { useMemo } from 'react'
 
 export const getBlockaidSimulationQueryWithParsing = (
   input: BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>
@@ -63,7 +62,7 @@ export const getBlockaidSimulationQueryWithParsing = (
   }
 }
 
-export const getBlockaidPayloadSimulationInput = ({
+export const getBlockaidPayloadSimulationInput = async ({
   payload,
   walletCore,
 }: {
@@ -104,21 +103,27 @@ export const useBlockaidPayloadSimulationQuery = ({
   keysignPayload: KeysignPayload
   walletCore: WalletCore
 }) => {
-  const blockaidTxSimulationInput = useMemo(
-    () =>
+  const blockaidTxSimulationInput = useQuery({
+    queryKey: ['blockaidPayloadSimulationInput', keysignPayload, walletCore],
+    queryFn: () =>
       getBlockaidPayloadSimulationInput({
         payload: keysignPayload,
         walletCore,
       }),
-    [keysignPayload, walletCore]
-  )
+  })
 
-  return usePotentialQuery<
+  const simulationQuery = usePotentialQuery<
     BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>,
     BlockaidEvmSimulationView | BlockaidSolanaSimulationInfo | null,
     Error
   >(
-    blockaidTxSimulationInput || undefined,
+    blockaidTxSimulationInput.data || undefined,
     getBlockaidSimulationQueryWithParsing
   )
+
+  return {
+    ...simulationQuery,
+    error: blockaidTxSimulationInput.error ?? simulationQuery.error,
+    isPending: blockaidTxSimulationInput.isPending || simulationQuery.isPending,
+  }
 }

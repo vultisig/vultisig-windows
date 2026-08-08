@@ -85,6 +85,6 @@ const StepControl = styled(UnstyledButton)`
 
 const Input = styled(TextInput)`
   border-radius: 12px;
-  border: 1px solid ${getColor('foregroundSuper')};
+  border: 1px solid ${getColor('foregroundExtra')};
   text-align: center;
 `

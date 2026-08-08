@@ -14,19 +14,18 @@ import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoin
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { EmptyState } from '@lib/ui/status/EmptyState'
 import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   areEqualCoins,
   Coin,
+  coinKeyToString,
   extractCoinKey,
 } from '@vultisig/core-chain/coin/Coin'
 import { getSolanaCoingeckoId } from '@vultisig/core-chain/coin/coingecko/getCoingeckoId'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@vultisig/core-chain/coin/utils/sortCoinsAlphabetically'
-import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -35,6 +34,7 @@ import { ItemGrid } from '../shared/ItemGrid'
 import { SearchInput } from '../shared/SearchInput'
 import { TokenItem } from '../shared/TokenItem'
 import { AddCustomTokenPrompt } from './AddCustomTokenPrompt'
+import { getManageableCoins } from './manageableCoins'
 
 const strip0xPrefix = (value: string) =>
   value.startsWith('0x') ? value.slice(2) : value
@@ -86,11 +86,15 @@ export const ManageVaultChainCoinsPage = () => {
     addToCoinFinderIgnore.isPending ||
     removeFromCoinFinderIgnore.isPending
 
-  const allCoins = useMemo(() => {
-    const known = sortCoinsAlphabetically(knownTokens[currentchain])
-    const whitelisted = whitelistedQuery.data || []
-    return withoutDuplicates([...known, ...whitelisted], areEqualCoins)
-  }, [currentchain, whitelistedQuery.data])
+  const allCoins = useMemo(
+    () =>
+      getManageableCoins({
+        known: sortCoinsAlphabetically(knownTokens[currentchain]),
+        whitelisted: whitelistedQuery.data || [],
+        current: currentCoins,
+      }),
+    [currentchain, whitelistedQuery.data, currentCoins]
+  )
 
   const maxInitialTokens = 200
 
@@ -110,10 +114,10 @@ export const ManageVaultChainCoinsPage = () => {
       return [...selected, ...unselected]
     }
 
-    // Default view: all selected coins + top tokens up to the cap
-    const selected = currentCoins.filter(c =>
-      allCoins.some(ac => areEqualCoins(ac, c))
-    )
+    // Default view: all selected coins + top tokens up to the cap. Both halves
+    // come from `allCoins` so a held token renders with the curated metadata
+    // (logo, price provider) rather than whatever was stored when it was added.
+    const selected = allCoins.filter(isSelected)
     const unselected = allCoins
       .filter(coin => !isSelected(coin))
       .slice(0, maxInitialTokens)
@@ -158,27 +162,18 @@ export const ManageVaultChainCoinsPage = () => {
           </Text>
           <SearchInput value={search} onChange={setSearch} />
         </VStack>
-        {filteredCoins.length > 0 || !search.trim() ? (
-          <ItemGrid>
-            <AddCustomTokenPrompt />
-            {filteredCoins.map((coin, index) => (
-              <TokenItem
-                key={index}
-                value={coin}
-                currentCoins={currentCoins}
-                onToggle={handleToggle}
-                isLoading={isLoading}
-              />
-            ))}
-          </ItemGrid>
-        ) : (
-          <VStack gap={24} alignItems="center">
-            <EmptyState title={t('no_tokens_found')} />
-            <ItemGrid>
-              <AddCustomTokenPrompt />
-            </ItemGrid>
-          </VStack>
-        )}
+        <ItemGrid>
+          <AddCustomTokenPrompt />
+          {filteredCoins.map(coin => (
+            <TokenItem
+              key={coinKeyToString(coin)}
+              value={coin}
+              currentCoins={currentCoins}
+              onToggle={handleToggle}
+              isLoading={isLoading}
+            />
+          ))}
+        </ItemGrid>
       </PageContent>
     </VStack>
   )

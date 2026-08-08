@@ -18,6 +18,7 @@ import {
   clampPercentage,
   toNumericValue,
 } from '../../../../../utils/percentage'
+import { getPercentageShareAmount } from '../../../../../utils/percentageShare'
 import { useUnstakableStcyQuery } from '../hooks/useUnstakableSTcyQuery'
 
 export const UnstakeSTCY = () => {
@@ -25,10 +26,11 @@ export const UnstakeSTCY = () => {
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
 
-  const { data: { humanReadableBalance = 0 } = {} } = useUnstakableStcyQuery({
-    address,
-    options: { enabled: !!address },
-  })
+  const { data: { humanReadableBalance = 0, chainBalance = 0n } = {} } =
+    useUnstakableStcyQuery({
+      address,
+      options: { enabled: !!address },
+    })
 
   const percentageValue = useWatch({ control, name: 'percentage' })
   const amountValue = useWatch({ control, name: 'amount' })
@@ -47,35 +49,38 @@ export const UnstakeSTCY = () => {
       }
 
       const clamped = clampPercentage(percentage)
-      const amount = Number(
-        ((clamped / 100) * humanReadableBalance).toFixed(decimals)
-      )
+      const amount = getPercentageShareAmount({
+        balanceUnits: chainBalance,
+        percentage: clamped,
+        decimals,
+      })
 
       setValue('amount', amount, {
         shouldDirty: true,
         shouldValidate,
       })
     },
-    [decimals, humanReadableBalance, setValue]
+    [chainBalance, decimals, setValue]
   )
 
   useEffect(() => {
     if (numericPercentage === null) return
 
-    const expectedAmount = Number(
-      (
-        (clampPercentage(numericPercentage) / 100) *
-        humanReadableBalance
-      ).toFixed(decimals)
-    )
+    // Compare as exact strings — Number() collapses distinct base-unit
+    // amounts for large balances, which would leave a stale amount in place
+    const expectedAmount = getPercentageShareAmount({
+      balanceUnits: chainBalance,
+      percentage: clampPercentage(numericPercentage),
+      decimals,
+    })
 
-    if (numericAmount !== expectedAmount) {
+    if (amountValue !== expectedAmount) {
       syncAmountFromPercentage(numericPercentage)
     }
   }, [
+    amountValue,
+    chainBalance,
     decimals,
-    humanReadableBalance,
-    numericAmount,
     numericPercentage,
     syncAmountFromPercentage,
   ])

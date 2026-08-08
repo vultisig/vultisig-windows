@@ -1,5 +1,7 @@
+import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 import { Animation } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Animation'
 import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
+import { Eip712PermitDisplay } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Eip712PermitDisplay'
 import { Request } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Request'
 import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Sender'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
@@ -11,6 +13,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { EvmChain } from '@vultisig/core-chain/Chain'
 import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +24,7 @@ export type SignMessageOverview = {
   message: string
   method: string
   signature?: string
+  typedData?: { chain: EvmChain; payload: Eip712V4Payload }
 }
 
 export const DefaultOverview: FC<SignMessageOverview> = ({
@@ -29,6 +33,7 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
   message,
   method,
   signature,
+  typedData,
 }) => {
   const { t } = useTranslation()
   const { goHome } = useCore()
@@ -55,6 +60,12 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
         {isFinished && <Animation />}
         <Sender favicon={requestFavicon} origin={requestOrigin} />
         <Request address={address} method={method} />
+        {!isFinished && typedData && (
+          <Eip712PermitDisplay
+            chain={typedData.chain}
+            payload={typedData.payload}
+          />
+        )}
         {isFinished ? (
           <Collapse title={t('signed_signature')}>
             <Text as="span" color="info" size={14} weight={500}>
@@ -62,7 +73,7 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
             </Text>
           </Collapse>
         ) : (
-          <Collapse title={t(`message`)}>
+          <Collapse title={t(typedData ? 'raw_message' : 'message')}>
             {formattedMessage ? (
               <Text color="info" family="mono" size={14} weight={500}>
                 <pre style={{ width: '100%' }}>

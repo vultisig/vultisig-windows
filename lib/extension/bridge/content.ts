@@ -9,6 +9,11 @@ import {
 const sendMaxAttempts = 3
 const sendInitialDelay = 75
 
+export const isTransientRuntimeMessageError = (error: string) =>
+  /Receiving end does not exist|Could not establish connection|message port closed|Extension context invalidated/i.test(
+    error
+  )
+
 export const runBridgeContentAgent = () => {
   window.addEventListener('message', ({ source, data }) => {
     if (source !== window) return
@@ -22,7 +27,7 @@ export const runBridgeContentAgent = () => {
         const error = chrome.runtime.lastError?.message
 
         if (error) {
-          if (attemptsLeft > 0 && /Receiving end does not exist/i.test(error)) {
+          if (attemptsLeft > 0 && isTransientRuntimeMessageError(error)) {
             setTimeout(() => send(attemptsLeft - 1, delayMs * 2), delayMs)
             return
           }

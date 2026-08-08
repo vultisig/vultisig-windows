@@ -18,7 +18,6 @@ permissions:
 env:
   NODE_OPTIONS: '--max-old-space-size=8192'
   NODE_VERSION: '23.7.0'
-  YARN_VERSION: '4.6.0'
 
 jobs:
   lint:
@@ -35,16 +34,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Prepare vultisig-sdk from main (patch package.json)
-        uses: ./.github/actions/prepare-vultisig-sdk-from-main
-        with:
-          yarn-version: ${{ env.YARN_VERSION }}
-
       - name: Setup and install
         uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
-          immutable-install: 'false'
 
       - name: Cache ESLint
         uses: actions/cache@v4
@@ -53,7 +46,7 @@ jobs:
           key: ${{ runner.os }}-eslint-${{ hashFiles('**/yarn.lock', 'eslint.config.mjs', 'clients/desktop/eslint.config.mjs') }}
 
       - name: Validate public files
-        run: yarn workspace @core/ui validate-public
+        run: yarn validate-public
 
       - name: Check for unused code
         run: yarn knip
@@ -73,6 +66,15 @@ jobs:
       - name: Run typecheck
         run: yarn typecheck
 
+      - name: Check i18n integrity
+        run: yarn workspace @core/ui i18n:check
+
+      - name: Review translation quality
+        run: yarn i18n:review-quality --strict
+
+      - name: Run code health detectors
+        run: yarn quality:health
+
   extension:
     needs: lint
     runs-on: ubuntu-22.04
@@ -88,16 +90,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Prepare vultisig-sdk from main (patch package.json)
-        uses: ./.github/actions/prepare-vultisig-sdk-from-main
-        with:
-          yarn-version: ${{ env.YARN_VERSION }}
-
       - name: Setup and install
         uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
-          immutable-install: 'false'
 
       - name: Build extension
         run: yarn workspace @clients/extension build
@@ -123,16 +119,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Prepare vultisig-sdk from main (patch package.json)
-        uses: ./.github/actions/prepare-vultisig-sdk-from-main
-        with:
-          yarn-version: ${{ env.YARN_VERSION }}
-
       - name: Setup and install
         uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
-          immutable-install: 'false'
 
       - name: Build extension (Firefox)
         run: yarn workspace @clients/extension build:firefox
@@ -169,16 +159,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Prepare vultisig-sdk from main (patch package.json)
-        uses: ./.github/actions/prepare-vultisig-sdk-from-main
-        with:
-          yarn-version: ${{ env.YARN_VERSION }}
-
       - name: Setup and install
         uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
-          immutable-install: 'false'
 
       - name: Build wails
         uses: dAppServer/wails-build-action@main
@@ -187,3 +171,6 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           package: false
+
+      - name: Run Go storage tests
+        run: go test ./storage

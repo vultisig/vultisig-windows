@@ -1,12 +1,10 @@
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Chain } from '@vultisig/core-chain/Chain'
 
+import { DefiBannerBalance } from './DefiBannerBalance'
 import {
-  BalanceValue,
   BannerContainer,
   BannerContent,
   ChainLogo,
@@ -25,8 +23,6 @@ const totalFiat = 0
 export const DefiChainBalanceBannerFallback = ({
   chain,
 }: DefiChainBalanceBannerFallbackProps) => {
-  const formatFiatAmount = useFormatFiatAmount()
-
   return (
     <BannerContainer>
       <BannerContent gap={10}>
@@ -40,11 +36,7 @@ export const DefiChainBalanceBannerFallback = ({
             <ChainTitle>{chain}</ChainTitle>
           </VStack>
         </HStack>
-        <BalanceValue>
-          <BalanceVisibilityAware>
-            {formatFiatAmount(totalFiat)}
-          </BalanceVisibilityAware>
-        </BalanceValue>
+        <DefiBannerBalance chain={chain} value={totalFiat} />
       </BannerContent>
       <Ring />
       <GradientBackground />

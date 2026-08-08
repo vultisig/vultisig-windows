@@ -2,9 +2,11 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
+import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
+import { useSendAmount } from '@core/ui/vault/send/state/amount'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -17,6 +19,20 @@ import { useTranslation } from 'react-i18next'
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const { data, error, isPending } = useSendValidationQuery()
+  const [amount, setAmount] = useSendAmount()
+  const spendableAmount = useSpendableSendAmount()
+
+  // Commit a fee-driven adjustment only here, never while the field is being
+  // typed into: rewriting the amount on every keystroke would fight the user
+  // for the field. Verify reads the same state, so it shows — and signs — the
+  // adjusted amount rather than the one that no longer fits.
+  const handleSubmit = () => {
+    if (spendableAmount !== null && spendableAmount !== amount) {
+      setAmount(spendableAmount)
+    }
+
+    onFinish()
+  }
 
   const isDisabled = (() => {
     if (data && !isRecordEmpty(data)) {
@@ -45,7 +61,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         gap={40}
         data-testid="send-form"
         {...getFormProps({
-          onSubmit: onFinish,
+          onSubmit: handleSubmit,
           isDisabled,
         })}
       >

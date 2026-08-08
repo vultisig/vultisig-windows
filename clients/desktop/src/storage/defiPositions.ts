@@ -1,4 +1,7 @@
-import { DefiPositionsStorage } from '@core/ui/storage/defiPositions'
+import {
+  DefiPositionsStorage,
+  initialDefiPositions,
+} from '@core/ui/storage/defiPositions'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 
 import { persistentStorage } from '../state/persistentState'
@@ -10,7 +13,7 @@ export const defiPositionsStorage: DefiPositionsStorage = {
     )
 
     if (value === undefined) {
-      return {}
+      return initialDefiPositions
     }
 
     return value

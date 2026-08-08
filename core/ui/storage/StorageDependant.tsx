@@ -19,6 +19,7 @@ import {
   CurrentVaultIdProvider,
   useCurrentVaultIdQuery,
 } from './currentVaultId'
+import { useCustomRpcOverridesQuery } from './customRpcOverrides'
 import { useFiatCurrencyQuery } from './fiatCurrency'
 import { useLanguageQuery } from './language'
 import { useIsMLDSAEnabledQuery } from './mldsaEnabled'
@@ -44,6 +45,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
   const isMLDSAEnabled = useIsMLDSAEnabledQuery()
   const isTssBatchingEnabled = useIsTssBatchingEnabledQuery()
+  const customRpcOverrides = useCustomRpcOverridesQuery()
 
   const { processError, targetVaultId } = useCore()
   const { hasCompletedStartupSplash } = useStartupSplash()
@@ -63,6 +65,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     isBlockaidEnabled,
     isMLDSAEnabled,
     isTssBatchingEnabled,
+    customRpcOverrides,
   })
 
   return (

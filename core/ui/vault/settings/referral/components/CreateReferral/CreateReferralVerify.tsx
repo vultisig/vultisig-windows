@@ -22,7 +22,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { StartKeysignPromptWithRefresh } from '../../../../../mpc/keysign/start/StartKeysignPromptWithRefresh'
 import { KeysignFeeAmount } from '../../../../../mpc/keysign/tx/FeeAmount'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useReferralSender } from '../../hooks/useReferralSender'
@@ -156,7 +156,11 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
           }}
           gap={20}
         >
-          <StartKeysignPrompt {...startKeysignPromptProps} />
+          <StartKeysignPromptWithRefresh
+            keysignPayloadQuery={keysignPayloadQuery}
+            toKeysignPayload={keysign => ({ keysign })}
+            promptProps={startKeysignPromptProps}
+          />
         </VStack>
       </ReferralPageWrapper>
     </>

@@ -5,7 +5,9 @@ import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
 import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
 
+import { isBruneStakeCoin } from '../../config'
 import type { StakeId, StakeResolverMap } from '../types'
+import { getBruneSpecific } from './brune'
 import { getRujiSpecific } from './ruji'
 import { getStcySpecific } from './stcy-auto'
 import { getNativeTcySpecific } from './tcy-native'
@@ -14,6 +16,7 @@ export const resolvers = {
   ruji: getRujiSpecific,
   'native-tcy': getNativeTcySpecific,
   stcy: getStcySpecific,
+  brune: getBruneSpecific,
 } as const satisfies StakeResolverMap
 
 export const selectStakeId = (
@@ -27,6 +30,10 @@ export const selectStakeId = (
     return 'native-tcy'
 
   const denom = getDenom(coin as CoinKey<CosmosChain>)
+
+  // bRUNE is matched by canonical denom/chain only — never by ticker — so a
+  // look-alike `bRUNE`-tickered token can't be routed into bRUNE staking.
+  if (isBruneStakeCoin(coin)) return 'brune'
 
   const rujiByTicker =
     coin.ticker?.toUpperCase() ===

@@ -1,5 +1,4 @@
 import { getBlockaidTxValidationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxValidation'
-import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '@core/ui/mpc/keysign/prompt/StartKeysignPromptProps'
 import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
@@ -7,11 +6,11 @@ import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { getBlockaidTxValidationInput } from '@vultisig/core-mpc/security/blockaid/tx/validation/input'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -23,18 +22,30 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
-import { BlockaidNoScanStatus } from '../../../chain/security/blockaid/scan/BlockaidNoScanStatus'
-import { BlockaidScanning } from '../../../chain/security/blockaid/scan/BlockaidScanning'
-import { BlockaidScanStatusContainer } from '../../../chain/security/blockaid/scan/BlockaidScanStatusContainer'
-import { BlockaidTxValidationResult } from '../../../chain/security/blockaid/tx/BlockaidTxValidationResult'
+import { BlockaidTxScanStatus } from '../../../chain/security/blockaid/tx/BlockaidTxScanStatus'
+import { RefetchableKeysignPayloadQuery } from './refreshKeysignPayload'
+import { StartKeysignPromptWithRefresh } from './StartKeysignPromptWithRefresh'
 
 type VerifyKeysignStartInput = {
   children: ReactNode
-  keysignPayloadQuery: Query<KeysignPayload>
+  /**
+   * Must be refetchable: the payload is rebuilt when signing starts so the
+   * builder's fail-closed gates run at sign time. See
+   * {@link refreshKeysignPayload}.
+   */
+  keysignPayloadQuery: Query<KeysignPayload> &
+    RefetchableKeysignPayloadQuery<KeysignPayload>
   terms?: string[]
   toAddressLabel?: string
   extraPendingMessage?: string
+  /**
+   * Blocks the start-keysign button with this message even when the payload is
+   * ready. Use for pre-keysign gates such as an insufficient-funds check that
+   * would otherwise waste an MPC ceremony on a transaction that can't broadcast.
+   */
+  disabledMessage?: string
   footer?: ReactNode
+  swapQuote?: SwapQuote
 }
 
 const TermItem = styled(Checkbox)`
@@ -49,7 +60,9 @@ export const VerifyKeysignStart = ({
   terms = [],
   toAddressLabel,
   extraPendingMessage,
+  disabledMessage,
   footer,
+  swapQuote,
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -60,10 +73,10 @@ export const VerifyKeysignStart = ({
 
   const walletCore = useAssertWalletCore()
 
-  const txScanInput = useTransformQueryData(
+  const txScanInput = useTransformQueryDataAsync(
     keysignPayloadQuery,
     useCallback(
-      payload => {
+      async payload => {
         if (!isBlockaidEnabled) {
           return null
         }
@@ -74,13 +87,19 @@ export const VerifyKeysignStart = ({
         })
       },
       [isBlockaidEnabled, walletCore]
-    )
+    ),
+    ['keysignStartBlockaidTxValidationInput', isBlockaidEnabled]
   )
 
-  const txScanQuery = usePotentialQuery(
+  const txScanQueryBase = usePotentialQuery(
     txScanInput.data || undefined,
     getBlockaidTxValidationQuery
   )
+  const txScanQuery = {
+    ...txScanQueryBase,
+    error: txScanInput.error ?? txScanQueryBase.error,
+    isPending: txScanInput.isPending || txScanQueryBase.isPending,
+  }
 
   const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
     if (termsAccepted.some(term => !term)) {
@@ -112,6 +131,10 @@ export const VerifyKeysignStart = ({
         return {
           disabledMessage: match(keysignPayloadQuery.error.type, {
             'not-enough-funds': () => t('not_enough_funds'),
+            'ripple-destination-tag-invalid': () =>
+              extractErrorMsg(keysignPayloadQuery.error),
+            'ripple-destination-tag-required': () =>
+              t('ripple_destination_tag_required'),
           }),
         }
       }
@@ -131,15 +154,22 @@ export const VerifyKeysignStart = ({
       return {}
     }
 
+    if (disabledMessage) {
+      return { disabledMessage }
+    }
+
     return {
       keysignPayload: { keysign },
       ...(toAddressLabel ? { toAddressLabel } : {}),
+      ...(swapQuote ? { swapQuote } : {}),
     }
   }, [
+    disabledMessage,
     extraPendingMessage,
     keysignPayloadQuery.data,
     keysignPayloadQuery.error,
     keysignPayloadQuery.isPending,
+    swapQuote,
     t,
     termsAccepted,
     toAddressLabel,
@@ -149,15 +179,7 @@ export const VerifyKeysignStart = ({
   return (
     <>
       <PageContent gap={12} scrollable>
-        {isBlockaidEnabled && (
-          <MatchQuery
-            value={txScanQuery}
-            success={value => <BlockaidTxValidationResult value={value} />}
-            pending={() => <BlockaidScanning />}
-            error={() => <BlockaidNoScanStatus entity="tx" />}
-            inactive={() => <BlockaidScanStatusContainer />}
-          />
-        )}
+        {isBlockaidEnabled && <BlockaidTxScanStatus value={txScanQuery} />}
 
         {children}
 
@@ -178,7 +200,13 @@ export const VerifyKeysignStart = ({
         )}
       </PageContent>
       <PageFooter>
-        {footer ?? <StartKeysignPrompt {...startKeysignPromptProps} />}
+        {footer ?? (
+          <StartKeysignPromptWithRefresh
+            keysignPayloadQuery={keysignPayloadQuery}
+            toKeysignPayload={keysign => ({ keysign })}
+            promptProps={startKeysignPromptProps}
+          />
+        )}
       </PageFooter>
     </>
   )

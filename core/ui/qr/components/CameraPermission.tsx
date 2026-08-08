@@ -1,6 +1,8 @@
+import { reportBugUrl } from '@core/ui/errors/constants'
 import { cameraPermissionQueryKey } from '@core/ui/qr/hooks/useCameraPermissionQuery'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
+import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigation } from '@lib/ui/navigation/state'
@@ -10,7 +12,6 @@ import { useMutation } from '@tanstack/react-query'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -104,28 +105,42 @@ export const CameraPermission = () => {
     openUrl(chrome.runtime.getURL('index.html'))
   }, [currentView, openUrl])
 
+  const grantButton = (
+    <Button
+      loading={!isPopup && isPending}
+      onClick={() => {
+        if (isPopup) {
+          void openExpandedView()
+          return
+        }
+
+        mutate()
+      }}
+    >
+      {error ? t('try_again') : t('grant_camera_permission')}
+    </Button>
+  )
+
+  if (error) {
+    return (
+      <VStack flexGrow gap={24}>
+        <ErrorFallbackContent
+          variant="warning"
+          title={t('camera_permission_required')}
+          description={t('camera_permission_required_description')}
+          error={error}
+          onReportBug={() => openUrl(reportBugUrl)}
+        />
+        {grantButton}
+      </VStack>
+    )
+  }
+
   return (
     <Center>
       <VStack alignItems="center" gap={12}>
         <Text centerHorizontally>{t('provide_camera_permission')}</Text>
-        <Button
-          loading={!isPopup && isPending}
-          onClick={() => {
-            if (isPopup) {
-              void openExpandedView()
-              return
-            }
-
-            mutate()
-          }}
-        >
-          {error ? t('try_again') : t('grant_camera_permission')}
-        </Button>
-        {error && (
-          <Text color="danger" centerHorizontally>
-            {extractErrorMsg(error)}
-          </Text>
-        )}
+        {grantButton}
       </VStack>
     </Center>
   )

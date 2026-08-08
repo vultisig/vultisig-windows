@@ -9,11 +9,13 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
+import { SwapQuoteProvider } from '../state/swapQuote'
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
-  const [{ keysignPayload, toAddressLabel }] = useCoreViewState<'keysign'>()
+  const [{ keysignPayload, toAddressLabel, swapQuote }] =
+    useCoreViewState<'keysign'>()
 
   return (
     <ValueTransfer<string[]>
@@ -32,12 +34,14 @@ export const StartSecureKeysignFlow = ({
             render={() => (
               <KeysignActionProvider>
                 <KeysignMessagePayloadProvider value={keysignPayload}>
-                  <TransactionRecorderProvider>
-                    <KeysignSigningStep
-                      onBack={onBack}
-                      toAddressLabel={toAddressLabel}
-                    />
-                  </TransactionRecorderProvider>
+                  <SwapQuoteProvider value={swapQuote}>
+                    <TransactionRecorderProvider>
+                      <KeysignSigningStep
+                        onBack={onBack}
+                        toAddressLabel={toAddressLabel}
+                      />
+                    </TransactionRecorderProvider>
+                  </SwapQuoteProvider>
                 </KeysignMessagePayloadProvider>
               </KeysignActionProvider>
             )}

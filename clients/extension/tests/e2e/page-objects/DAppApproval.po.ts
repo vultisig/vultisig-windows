@@ -103,7 +103,11 @@ export class DAppApproval extends BasePage {
   async approve(): Promise<void> {
     await expect(this.approveButton).toBeVisible()
     await this.approveButton.click()
-    await this.page.waitForTimeout(500)
+    await this.page.waitForTimeout(500).catch((error) => {
+      if (!this.page.isClosed()) {
+        throw error
+      }
+    })
   }
 
   /**
@@ -112,7 +116,11 @@ export class DAppApproval extends BasePage {
   async reject(): Promise<void> {
     await expect(this.rejectButton).toBeVisible()
     await this.rejectButton.click()
-    await this.page.waitForTimeout(500)
+    await this.page.waitForTimeout(500).catch((error) => {
+      if (!this.page.isClosed()) {
+        throw error
+      }
+    })
   }
 
   /**

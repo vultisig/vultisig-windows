@@ -1,8 +1,6 @@
-import { FC } from 'react'
+import { SvgProps } from '@lib/ui/props'
 
-import { SvgProps } from '../props'
-
-export const LeafIcon: FC<SvgProps> = props => (
+export const LeafIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -12,10 +10,18 @@ export const LeafIcon: FC<SvgProps> = props => (
     {...props}
   >
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M19.4324 2.73845C19.9368 3.27778 20.1599 4.06457 19.8747 4.87143C19.2694 6.58361 18.0774 7.9952 17.0782 8.95837C16.6963 9.32647 16.3352 9.63608 16.0333 9.87922L16.1696 9.97937C17.1001 10.663 17.586 11.9544 16.9272 13.0971C15.7056 15.2164 12.5711 18.9 5.73462 18.9C5.68309 18.9 5.63277 18.8948 5.58416 18.8849C5.52739 19.6671 5.5 20.4573 5.5 21.25C5.5 21.6642 5.16421 22 4.75 22C4.33579 22 4 21.6642 4 21.25C4 16.8193 4.82101 12.3197 6.90854 8.76516C9.01508 5.17831 12.3988 2.58337 17.401 2.01628C18.1892 1.92692 18.9389 2.21078 19.4324 2.73845Z"
-      fill="currentColor"
+      d="M14.7509 18.7028C19.2926 16.6296 20.2022 9.01017 17.2313 3.59961C15.2512 7.73709 10.6828 7.11489 8.12688 10.2663C7.3692 11.2002 6.78516 12.4688 6.78516 13.8372C6.78516 15.6643 7.68768 17.2806 9.06996 18.2585"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5.04883 20.4002C5.04883 20.4002 10.3761 18.9345 13.7385 12.8691"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

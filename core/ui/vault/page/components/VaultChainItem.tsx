@@ -3,12 +3,12 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useHandleVaultChainItemPress } from '@core/ui/vault/page/components/useHandleVaultChainItemPress'
-import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
+import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
@@ -22,7 +22,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 type VaultChainItemProps = {
   balance: VaultChainBalance
@@ -43,6 +43,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
 
   const { t } = useTranslation()
   const { addToast } = useToast()
+  const { iconStyle } = useTheme()
 
   const handleCopyAddress = async (
     e: React.MouseEvent | React.KeyboardEvent
@@ -50,18 +51,20 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
     e.stopPropagation()
     e.preventDefault()
 
-    try {
-      await attempt(() => navigator.clipboard.writeText(address))
+    const result = await attempt(() => navigator.clipboard.writeText(address))
 
-      addToast({
-        message: '',
-        renderContent: () => <VaultAddressCopyToast value={chain} />,
-      })
-    } catch {
+    if ('error' in result) {
       addToast({
         message: t('failed_to_copy_address'),
+        status: 'error',
       })
+
+      return
     }
+
+    addToast({
+      message: t('chain_address_copied', { chain }),
+    })
   }
 
   const formatFiatAmount = useFormatFiatAmount()
@@ -83,7 +86,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
       <HStack fullWidth alignItems="center" gap={12}>
         <ChainEntityIcon
           value={getChainLogoSrc(chain)}
-          style={{ fontSize: 32 }}
+          style={{ fontSize: iconStyle === 'station' ? 36 : 32 }}
         />
 
         <VStack fullWidth alignItems="start" gap={12}>
@@ -146,7 +149,11 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 </Text>
               </VStack>
               <IconWrapper>
-                <ChevronRightIcon />
+                {iconStyle === 'station' ? (
+                  <StationChevronRightSmallIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
               </IconWrapper>
             </HStack>
           </HStack>
@@ -164,6 +171,18 @@ const StyledPanel = styled(Panel)`
   &:hover {
     background-color: ${getColor('foregroundExtra')};
   }
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      border-radius: 0;
+      background: ${theme.colors.foreground.toCssValue()};
+      padding: 12px;
+
+      &:hover {
+        background: ${theme.colors.foregroundDark.toCssValue()};
+      }
+    `}
 `
 
 const AddressRow = styled(HStack)`

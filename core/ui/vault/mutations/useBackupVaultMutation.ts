@@ -1,7 +1,6 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useMutation } from '@tanstack/react-query'
-import { productName } from '@vultisig/core-config'
 import { getSevenZip } from '@vultisig/core-mpc/compression/getSevenZip'
 import { toCommVault } from '@vultisig/core-mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_container_pb'
@@ -11,9 +10,11 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { encryptVaultBackupWithPassword } from '@vultisig/lib-utils/encryption/vaultBackup/encryptVaultBackupWithPassword'
 import { match } from '@vultisig/lib-utils/match'
+import { useRef } from 'react'
 
 import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { currentProductBrandConfig } from '../../product/brand'
 import { useCore } from '../../state/core'
 import { useVaults } from '../../storage/vaults'
 
@@ -73,9 +74,15 @@ export const useBackupVaultMutation = ({
 
   const [passcode] = usePasscode()
 
-  return useMutation({
+  // Synchronous in-flight guard: `isPending` only disables the button after a
+  // re-render, so a fast double-click can fire two backups before that commits
+  // (each click = one saveFile download). A ref blocks the second call in the
+  // same tick, before any render happens.
+  const isBackingUpRef = useRef(false)
+
+  const mutation = useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
-      const getVault = (id: string) => {
+      const getVault = async (id: string) => {
         const vault = shouldBePresent(
           vaults.find(vault => getVaultId(vault) === id),
           `Vault with id ${id}`
@@ -85,7 +92,7 @@ export const useBackupVaultMutation = ({
           return vault
         }
 
-        const decrypted = decryptVaultAllKeyShares({
+        const decrypted = await decryptVaultAllKeyShares({
           keyShares: vault.keyShares,
           chainKeyShares: vault.chainKeyShares,
           keyShareMldsa: vault.keyShareMldsa,
@@ -101,7 +108,7 @@ export const useBackupVaultMutation = ({
       const getFile = async () => {
         if (vaultIds.length === 1) {
           const [vaultId] = vaultIds
-          const vault = getVault(vaultId)
+          const vault = await getVault(vaultId)
           const base64Data = createBackup(vault, password)
 
           const blob = new Blob([base64Data], {
@@ -117,19 +124,19 @@ export const useBackupVaultMutation = ({
         const sevenZip = await getSevenZip()
         const fileNames: string[] = []
         const archiveName = `${[
-          productName.toLowerCase(),
+          currentProductBrandConfig.name.toLowerCase(),
           'backups',
           Math.floor(Date.now() / 1000),
         ].join('_')}.zip`
 
         try {
-          vaultIds.forEach(vaultId => {
-            const vault = getVault(vaultId)
+          for (const vaultId of vaultIds) {
+            const vault = await getVault(vaultId)
             const base64 = createBackup(vault, password)
             const name = getExportName(vault)
             sevenZip.FS.writeFile(name, base64)
             fileNames.push(name)
-          })
+          }
 
           sevenZip.callMain(['a', archiveName, ...fileNames])
           const archiveBytes = sevenZip.FS.readFile(archiveName)
@@ -160,5 +167,19 @@ export const useBackupVaultMutation = ({
       )
     },
     onSuccess,
+    onSettled: () => {
+      isBackingUpRef.current = false
+    },
   })
+
+  return {
+    ...mutation,
+    mutate: (variables: { password?: string } = {}) => {
+      if (isBackingUpRef.current) {
+        return
+      }
+      isBackingUpRef.current = true
+      mutation.mutate(variables)
+    },
+  }
 }

@@ -6,7 +6,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 type ChainsEmptyStateProps = {
   icon: ReactNode
@@ -60,4 +60,13 @@ const Wrapper = styled.div`
   padding: 32px 40px;
   border-radius: 16px;
   background: ${getColor('foreground')};
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      align-self: stretch;
+      border: 1px solid ${theme.colors.foregroundSuper.toCssValue()};
+      border-radius: 20px;
+      padding: 28px 20px;
+    `}
 `

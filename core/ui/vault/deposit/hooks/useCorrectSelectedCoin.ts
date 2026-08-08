@@ -7,7 +7,7 @@ import { match } from '@vultisig/lib-utils/match'
 import { useCallback } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
-import { isStakeableCoin } from '../config'
+import { isBruneStakeCoin, isStakeableCoin } from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useMergeOptions } from './useMergeOptions'
@@ -24,10 +24,11 @@ export const useCorrectSelectedCoin = () => {
 
   return useCallback(
     (currentDepositCoin: AccountCoin) => {
+      const isStakeable = (coin: AccountCoin) =>
+        isStakeableCoin(coin.ticker) || isBruneStakeCoin(coin)
+
       const fallbackStakeableCoin = coins.find(
-        coin =>
-          coin.chain === currentDepositCoin.chain &&
-          isStakeableCoin(coin.ticker)
+        coin => coin.chain === currentDepositCoin.chain && isStakeable(coin)
       )
 
       const selectStakeableCoin = () => {
@@ -35,9 +36,26 @@ export const useCorrectSelectedCoin = () => {
           throw new Error('No stakeable coin found')
         }
 
-        return isStakeableCoin(currentDepositCoin.ticker)
+        return isStakeable(currentDepositCoin)
           ? currentDepositCoin
           : fallbackStakeableCoin
+      }
+
+      // Solana native staking funds the stake account from — and pays its fee
+      // in — native SOL. Entering the deposit flow from an SPL token's screen
+      // would otherwise carry that token in and have the delegate form bound
+      // its amount to the token's balance and decimals.
+      const selectNativeCoin = () => {
+        if (isFeeCoin(currentDepositCoin)) {
+          return currentDepositCoin
+        }
+
+        return shouldBePresent(
+          coins.find(
+            coin => coin.chain === currentDepositCoin.chain && isFeeCoin(coin)
+          ),
+          `native ${currentDepositCoin.chain} coin`
+        )
       }
 
       const ticker = currentDepositCoin.ticker
@@ -81,7 +99,11 @@ export const useCorrectSelectedCoin = () => {
           return shouldBePresent(currentCoin || unmergeOptions[0])
         },
         stake: selectStakeableCoin,
-        withdraw_ruji_rewards: () => currentDepositCoin,
+        // Claiming RUJI rewards is a RUJI-only action; force the RUJI coin so a
+        // different selected coin (e.g. bRUNE) can't reach a claim path its
+        // resolver doesn't support.
+        withdraw_ruji_rewards: () =>
+          shouldBePresent(findByTicker({ coins, ticker: 'RUJI' })),
         unstake: selectStakeableCoin,
         unbond: () => shouldBePresent(findByTicker({ coins, ticker: 'RUNE' })),
         leave: () =>
@@ -102,8 +124,20 @@ export const useCorrectSelectedCoin = () => {
           return shouldBePresent(potentialRUNECoin)
         },
         remove_thor_lp: () => shouldBePresent(potentialRUNECoin),
+        // The trust-line token (issuer/currency) is chosen in the action form
+        // and built at keysign time; keep the native XRP fee coin selected here.
+        open_trust_line: () => currentDepositCoin,
         freeze: () => currentDepositCoin,
         unfreeze: () => currentDepositCoin,
+        delegate: () => currentDepositCoin,
+        undelegate: () => currentDepositCoin,
+        redelegate: () => currentDepositCoin,
+        claim_rewards: () => currentDepositCoin,
+        solana_delegate: selectNativeCoin,
+        solana_unstake: selectNativeCoin,
+        solana_withdraw: selectNativeCoin,
+        solana_move_stake: selectNativeCoin,
+        solana_finish_move: selectNativeCoin,
       })
     },
     [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]

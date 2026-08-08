@@ -1,11 +1,14 @@
+import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
+import { LimitOrdersDoneHint } from '@core/ui/mpc/keysign/tx/LimitOrdersDoneHint'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
@@ -13,6 +16,7 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -23,6 +27,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
@@ -32,6 +37,7 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { BroadcastError } from './broadcastKeysignTx'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
 type KeysignSigningStepProps = Partial<OnBackProp> & { toAddressLabel?: string }
@@ -41,6 +47,7 @@ export const KeysignSigningStep = ({
   toAddressLabel,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
+  const navigate = useCoreNavigate()
   const { version, goHome } = useCore()
   const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
@@ -59,6 +66,28 @@ export const KeysignSigningStep = ({
             value={payload}
             handlers={{
               keysign: payload => {
+                // A QBTC claim co-sign produces a raw signature, not a tx —
+                // the initiating device broadcasts. Show a simple confirmation
+                // instead of the tx-overview path (which expects `txs`).
+                if (payload.isQbtcClaim) {
+                  return (
+                    <>
+                      <PageContent alignItems="center" scrollable>
+                        <VStack gap={16} maxWidth={576} fullWidth>
+                          <Panel>
+                            <Text>{t('qbtc_claim_cosign_success')}</Text>
+                          </Panel>
+                        </VStack>
+                      </PageContent>
+                      <PageFooter alignItems="center">
+                        <VStack maxWidth={576} fullWidth>
+                          <Button onClick={goHome}>{t('complete')}</Button>
+                        </VStack>
+                      </PageFooter>
+                    </>
+                  )
+                }
+
                 const { swapPayload } = payload
                 const isSwapTx = swapPayload && swapPayload.value
                 const txs = getRecordUnionValue(result, 'txs')
@@ -67,32 +96,76 @@ export const KeysignSigningStep = ({
                   <TxHashProvider value={getLastItem(txs).hash}>
                     {isSwapTx ? (
                       <PageContent alignItems="center" scrollable>
-                        <SwapKeysignTxOverview
-                          txHashes={txs.map(tx => tx.hash)}
-                          value={payload}
-                        />
+                        <AnimatedVisibility
+                          animationConfig="bottomToTop"
+                          overlayStyles={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
+                          }}
+                        >
+                          <SwapKeysignTxOverview
+                            txHashes={txs.map(tx => tx.hash)}
+                            value={payload}
+                          />
+                        </AnimatedVisibility>
                       </PageContent>
                     ) : (
                       <StepTransition
                         from={({ onFinish: onSeeTxDetails }) => (
                           <>
                             <PageContent alignItems="center" scrollable>
-                              <VStack gap={16} maxWidth={576} fullWidth>
-                                <TxSuccess
-                                  value={payload}
-                                  onSeeTxDetails={onSeeTxDetails}
-                                />
-                              </VStack>
+                              <AnimatedVisibility
+                                animationConfig="bottomToTop"
+                                overlayStyles={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  width: '100%',
+                                }}
+                              >
+                                <VStack gap={16} maxWidth={576} fullWidth>
+                                  <DappRequestBanner
+                                    value={payload.dappMetadata}
+                                  />
+                                  <TxSuccess
+                                    value={payload}
+                                    onSeeTxDetails={onSeeTxDetails}
+                                  />
+                                  {getKeysignLimitSwapOrder(payload) ? (
+                                    <LimitOrdersDoneHint />
+                                  ) : null}
+                                </VStack>
+                              </AnimatedVisibility>
                             </PageContent>
                             <PageFooter alignItems="center">
-                              <VStack maxWidth={576} fullWidth>
-                                <Button
-                                  data-testid="tx-success-done"
-                                  onClick={goHome}
-                                >
-                                  {t('done')}
-                                </Button>
-                              </VStack>
+                              <AnimatedVisibility
+                                delay={180}
+                                animationConfig="bottomToTop"
+                                overlayStyles={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  width: '100%',
+                                }}
+                              >
+                                <VStack maxWidth={576} fullWidth gap={8}>
+                                  {getKeysignLimitSwapOrder(payload) ? (
+                                    <Button
+                                      kind="secondary"
+                                      onClick={() =>
+                                        navigate({ id: 'limitOrders' })
+                                      }
+                                    >
+                                      {t('track')}
+                                    </Button>
+                                  ) : null}
+                                  <Button
+                                    data-testid="tx-success-done"
+                                    onClick={goHome}
+                                  >
+                                    {t('done')}
+                                  </Button>
+                                </VStack>
+                              </AnimatedVisibility>
                             </PageFooter>
                           </>
                         )}
@@ -100,6 +173,9 @@ export const KeysignSigningStep = ({
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
+                                <DappRequestBanner
+                                  value={payload.dappMetadata}
+                                />
                                 <KeysignTxOverview
                                   toAddressLabel={toAddressLabel}
                                 />
@@ -170,14 +246,34 @@ export const KeysignSigningStep = ({
         if (isSessionConflict) {
           return (
             <FullPageFlowErrorState
+              variant="warning"
               title={t('fast_vault_session_conflict')}
-              error={new Error(t('fast_vault_session_conflict_description'))}
+              description={t('fast_vault_session_conflict_description')}
+            />
+          )
+        }
+
+        // Signing succeeded but the network rejected the broadcast — headline it
+        // as an on-chain failure, not a device/connection timeout. The raw RPC
+        // reason stays available under "Show exact error".
+        if (error instanceof BroadcastError) {
+          return (
+            <FullPageFlowErrorState
+              variant="error"
+              error={error}
+              title={t('broadcast_error')}
+              description={t('broadcast_error_description')}
             />
           )
         }
 
         return (
-          <FullPageFlowErrorState error={error} title={t('signing_error')} />
+          <FullPageFlowErrorState
+            variant="error"
+            error={error}
+            title={t('signing_error')}
+            description={t('signing_error_description')}
+          />
         )
       }}
       pending={() => (

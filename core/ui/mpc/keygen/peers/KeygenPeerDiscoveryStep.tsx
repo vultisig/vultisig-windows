@@ -19,6 +19,10 @@ import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndic
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import {
+  currentProductBrand,
+  currentProductBrandConfig,
+} from '@core/ui/product/brand'
 import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -48,13 +52,19 @@ import { SecureVaultPeerDiscoveryScreen } from './SecureVaultPeerDiscoveryScreen
 
 type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
 
+const createVaultEducationUrl =
+  currentProductBrand === 'station'
+    ? currentProductBrandConfig.websiteUrl
+    : 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
+
 const educationUrl: Record<KeygenType, string> = {
-  create: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
+  create: createVaultEducationUrl,
   reshare:
-    'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
-  keyimport: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
-  singleKeygen:
-    'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
+    currentProductBrand === 'station'
+      ? currentProductBrandConfig.websiteUrl
+      : 'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
+  keyimport: createVaultEducationUrl,
+  singleKeygen: createVaultEducationUrl,
 }
 
 export const KeygenPeerDiscoveryStep = ({

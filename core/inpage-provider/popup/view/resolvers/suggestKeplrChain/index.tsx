@@ -1,3 +1,4 @@
+import { userRejectedPopupResult } from '@core/inpage-provider/popup/error'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Button } from '@lib/ui/buttons/Button'
@@ -25,7 +26,7 @@ export const SuggestKeplrChain: PopupResolver<'suggestKeplrChain'> = ({
 
   const handleReject = () => {
     onFinish({
-      result: { error: new Error('User rejected the request') },
+      result: userRejectedPopupResult,
       shouldClosePopup: true,
     })
   }

@@ -1,10 +1,12 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
+import { chainsWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -16,7 +18,9 @@ export const VaultChainTabsHeader = ({ children }: ChildrenProp) => {
   const navigate = useCoreNavigate()
   const chain = useCurrentVaultChain()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
-  const hasMultipleCoinsSupport = knownTokens[chain].length > 0
+  const hasMultipleCoinsSupport =
+    knownTokens[chain].length > 0 ||
+    isOneOf(chain, chainsWithTokenMetadataDiscovery)
 
   return (
     <Wrapper>
@@ -70,7 +74,7 @@ export const VaultChainTabsHeader = ({ children }: ChildrenProp) => {
                 }}
                 size="lg"
               >
-                <CryptoWalletPenIcon />
+                <HousePenIcon />
               </IconButton>
             </ManageButtonMotion>
           )}

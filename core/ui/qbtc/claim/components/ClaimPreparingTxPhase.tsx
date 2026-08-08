@@ -1,4 +1,5 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -6,22 +7,19 @@ import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { buildClaimTxBody } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/buildClaimTx'
 import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
-import {
-  type ClaimProofResult,
-  generateClaimProof,
-} from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
+import { type ClaimProofResult } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { qbtcChainId } from '../../dapp/qbtcDirectConstants'
 import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
+import { generateClaimProofForClaim } from '../utils/generateClaimProofForClaim'
 import {
   getQbtcAccountExists,
   getQbtcAccountInfoForClaim,
 } from '../utils/getQbtcAccountInfoForClaim'
 
-const qbtcChainId = 'qbtc-testnet'
 const proofServiceRBytes = 24
 const proofServiceSBytes = 32
 const proofServiceBaseUrl = 'https://api.vultisig.com/qbtc-proof'
@@ -88,6 +86,7 @@ export const ClaimPreparingTxPhase = ({
   onError,
 }: ClaimPreparingTxPhaseProps) => {
   const { t } = useTranslation()
+  const securityType = useCurrentVaultSecurityType()
 
   const { mutate, ...state } = useMutation({
     mutationFn: async (): Promise<ClaimPreparingTxMutationResult> => {
@@ -95,7 +94,7 @@ export const ClaimPreparingTxPhase = ({
         address: qbtcAddress,
       })
 
-      const proof = await generateClaimProof({
+      const proofResult = await generateClaimProofForClaim({
         signatureR: padSigHex(btcSig.r, proofServiceRBytes),
         signatureS: padSigHex(btcSig.s, proofServiceSBytes),
         publicKey: compressedPubkeyHex,
@@ -103,18 +102,20 @@ export const ClaimPreparingTxPhase = ({
         claimerAddress: qbtcAddress,
         chainId: qbtcChainId,
         baseUrl: proofServiceBaseUrl,
-        broadcast: !accountExists,
+        // Secure vaults have no client-side MLDSA round — the proof service
+        // signs and broadcasts MsgClaimWithProof for them (matches Android).
+        // Fast vaults sign the SignDoc locally unless the account is new.
+        broadcast: securityType === 'secure' ? true : !accountExists,
       })
 
-      if (!accountExists) {
+      if (proofResult.kind === 'server') {
         return {
           kind: 'server',
-          txHash: shouldBePresent(
-            proof.tx_hash,
-            'proof.tx_hash on broadcast=true response'
-          ),
+          txHash: proofResult.txHash,
         }
       }
+
+      const { proof } = proofResult
 
       const accountInfo = await getQbtcAccountInfoForClaim({
         address: qbtcAddress,

@@ -7,22 +7,19 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  display: flex;
-  padding: 8px 10px;
+  display: inline-flex;
+  padding: 8px 16px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  border-radius: 16px;
-  border: 1px solid #1b3f73;
-  background: #11284a;
+  border-radius: 99px;
+  border: 1px solid rgba(72, 121, 253, 0.32);
 
   color: #f0f4fc;
   font-family: Brockmann;
-  font-size: 13px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0.06px;
+  line-height: 20px;
 `
 
 export const DiscountTierBps = ({ value }: ValueProp<VultDiscountTier>) => {
@@ -30,13 +27,9 @@ export const DiscountTierBps = ({ value }: ValueProp<VultDiscountTier>) => {
 
   return (
     <Container>
-      {value === 'ultimate' ? (
-        t('complete_fee_waive')
-      ) : (
-        <>
-          {t('discount')}: {vultDiscountTierBps[value]}bps
-        </>
-      )}
+      {value === 'ultimate'
+        ? t('complete_fee_waive')
+        : `${t('swap_discount')}: ${vultDiscountTierBps[value]}bps`}
     </Container>
   )
 }

@@ -27,6 +27,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -40,11 +41,13 @@ import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
 } from '../../../../components/action-form/ActionFormIconsWrapper'
+import { getPercentageShareAmount } from '../../../utils/percentageShare'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
 type BondFormProps = {
   balance: number
+  balanceUnits: bigint | null
   errors: FieldErrors<FormData>
   formValues: FormData
 }
@@ -74,7 +77,12 @@ const measureAmountTextWidth = (text: string) => {
   return baseWidth + spacingAdjustment
 }
 
-export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
+export const BondForm = ({
+  balance,
+  balanceUnits,
+  errors,
+  formValues,
+}: BondFormProps) => {
   const { t } = useTranslation()
   const [{ register, control, setValue }] = useDepositFormHandlers()
   const [coin] = useDepositCoin()
@@ -98,10 +106,11 @@ export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
     enabled: shouldShowFeePreview,
   })
 
+  // Schema messages are already translated (see getDepositFormConfig), so we
+  // render them directly. Re-running them through t() would find no matching
+  // key and collapse every error to the generic default_validation fallback.
   const formatError = (message?: string) =>
-    message
-      ? t(message, { defaultValue: t('chainFunctions.default_validation') })
-      : undefined
+    message || t('chainFunctions.default_validation')
 
   const parsedAmount =
     typeof amountValue === 'number'
@@ -140,7 +149,7 @@ export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
     }
   }, [providerValue])
 
-  const handleSetAmount = (value: number) => {
+  const handleSetAmount = (value: string) => {
     setValue('amount', value, { shouldValidate: true, shouldDirty: true })
   }
 
@@ -285,13 +294,16 @@ export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
                   gap={4}
                 >
                   {amountSuggestions.map(suggestion => {
-                    const suggestedAmount = Number(
-                      (balance * suggestion).toFixed(coin.decimals)
-                    )
+                    const suggestedAmount = getPercentageShareAmount({
+                      balanceUnits:
+                        balanceUnits ?? toChainAmount(balance, coin.decimals),
+                      percentage: suggestion * 100,
+                      decimals: coin.decimals,
+                    })
                     const isActive =
                       parsedAmount !== null &&
                       Number(parsedAmount?.toFixed(coin.decimals)) ===
-                        suggestedAmount
+                        Number(suggestedAmount)
 
                     return (
                       <SuggestionOption

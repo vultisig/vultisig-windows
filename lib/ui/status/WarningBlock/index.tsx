@@ -19,6 +19,13 @@ const Container = styled(HStack)`
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('idle')};
   font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+`
+
+const Content = styled(Text)`
+  flex: 1;
+  min-width: 0;
 `
 
 type WarningBlockProps = {
@@ -34,15 +41,10 @@ export const WarningBlock = ({
   ...rest
 }: WarningBlockProps) => {
   return (
-    <Container
-      alignItems="center"
-      justifyContent="space-between"
-      {...rest}
-      fullWidth
-    >
-      <Text color="idle" size={14} weight="400">
+    <Container alignItems="flex-start" gap={12} {...rest} fullWidth>
+      <Content color="idle" size={14} weight="400">
         {children}
-      </Text>
+      </Content>
       {iconTooltipContent ? (
         <Tooltip
           content={iconTooltipContent}

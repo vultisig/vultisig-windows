@@ -1,5 +1,5 @@
+import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { ListItem } from '@lib/ui/list/item'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,7 @@ export const ManageBlockaid = () => {
     <ListItem
       icon={
         <IconWrapper size={20} color="primaryAlt">
-          <ShieldCheckIcon />
+          <FolderLockIcon />
         </IconWrapper>
       }
       title={t('blockaid_security_scan')}

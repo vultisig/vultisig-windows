@@ -53,6 +53,19 @@ export const GlobalStyle = createGlobalStyle`
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('/core/fonts/Montserrat-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('/core/fonts/Montserrat-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+  }
 
   *, *::before, *::after {
     box-sizing: border-box;
@@ -68,7 +81,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Brockmann', sans-serif;
+    font-family: ${({ theme }) => theme.fontFamily};
     -webkit-font-smoothing: antialiased;
   }
   

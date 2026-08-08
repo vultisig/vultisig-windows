@@ -14,10 +14,11 @@ import http from 'http'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import { extensionPath } from '../extension-path'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const extensionPath = path.resolve(__dirname, '../../../../dist')
 const testDappPath = path.resolve(__dirname, 'test-dapp.html')
 
 /**

@@ -69,6 +69,8 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
         },
         psbt: () => chainFeeCoin[Chain.Bitcoin],
         polkadot: ({ chain }) => chainFeeCoin[chain],
+        sui: () => chainFeeCoin[Chain.Sui],
+        ripple: () => chainFeeCoin[Chain.Ripple],
       })
 
       const { chain } = coin

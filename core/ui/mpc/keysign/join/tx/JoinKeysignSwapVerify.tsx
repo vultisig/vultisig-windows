@@ -1,10 +1,16 @@
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
+import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
+import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
+import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import {
   ContainerWrapper,
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -46,8 +52,13 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
     fromCoin.decimals
   )
   const toAmount = Number(toAmountDecimal)
+  const toAmountLimit = toCoin
+    ? getSwapToAmountLimit({ swapPayload, toCoin })
+    : null
 
   const provider = getKeysignSwapProviderName(swapPayload)
+  const providerLogoSrc = getSwapProviderLogoSrc(provider)
+  const swapFee = getSwapFeeFromPayload(value)
 
   return (
     <>
@@ -73,7 +84,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
               <IconWrapper>
                 <ArrowDownIcon />
               </IconWrapper>
-              {t('to_min_payout')}
+              {t('swap_expected_payout')}
               <HorizontalLine />
             </HStack>
             {toCoin && (
@@ -84,6 +95,14 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
                     {formatAmount(toAmount, toCoin)}
                   </Text>
                   <JoinSwapFiatAmount coin={toCoin} amount={toAmount} />
+                  {toAmountLimit !== null && (
+                    <Text size={13} color="shy">
+                      {`${t('to_min_payout')}: ${formatAmount(
+                        toAmountLimit,
+                        toCoin
+                      )}`}
+                    </Text>
+                  )}
                 </VStack>
               </HStack>
             )}
@@ -95,15 +114,37 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
           <ListItem
             hoverable={false}
             title={t('provider')}
-            extra={<Text color="shy">{provider}</Text>}
+            extra={
+              <HStack alignItems="center" gap={6}>
+                {providerLogoSrc ? (
+                  <ChainEntityIcon
+                    value={providerLogoSrc}
+                    style={{ fontSize: 16 }}
+                  />
+                ) : null}
+                <Text color="shy">{provider}</Text>
+              </HStack>
+            }
           />
           <ListItem
             hoverable={false}
             title={t('network_fee')}
             extra={<KeysignFeeAmount keysignPayload={value} />}
           />
+          {swapFee && (
+            <ListItem
+              hoverable={false}
+              title={t('swap_fee')}
+              extra={
+                <Text color="shy">
+                  <SwapFeeFiatValue value={[swapFee]} />
+                </Text>
+              }
+            />
+          )}
         </List>
       </VStack>
+      <SwapVerifyRecipient keysignPayload={value} />
     </>
   )
 }

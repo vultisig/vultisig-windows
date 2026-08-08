@@ -10,4 +10,7 @@ export const toRecordStatus: Record<
   pending: 'pending',
   success: 'confirmed',
   error: 'failed',
+  // The node has not seen the hash yet (e.g. broadcast-propagation race); treat
+  // it as still-awaiting rather than a distinct record state.
+  not_found: 'pending',
 }

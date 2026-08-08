@@ -1,9 +1,13 @@
 import { callBackground } from '@core/inpage-provider/background'
+import { BackgroundError } from '@core/inpage-provider/background/error'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
 import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { serializeAdr36SignDoc } from '@core/ui/mpc/keysign/customMessage/adr36'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
+import { ripemd160, sha256 } from '@cosmjs/crypto'
+import { fromBase64 } from '@cosmjs/encoding'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -12,6 +16,7 @@ import {
 import {
   AccountData,
   AminoSignResponse,
+  BroadcastMode,
   ChainInfo,
   ChainInfoWithoutEndpoints,
   DirectSignResponse,
@@ -25,6 +30,7 @@ import {
   StdSignDoc,
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
+import { secp256k1 } from '@noble/curves/secp256k1'
 import { TW } from '@trustwallet/wallet-core'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getCosmosChainByChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
@@ -36,7 +42,7 @@ import {
   CosmosMsg,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { attempt } from '@vultisig/lib-utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { match } from '@vultisig/lib-utils/match'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
@@ -49,10 +55,13 @@ import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+import { injectKeplrFeeIfMissing } from './cosmos/injectKeplrFeeIfMissing'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
+import { normalizeKeplrBytes } from './cosmos/normalizeKeplrBytes'
 import {
   getKeplrCosmosChainInfos,
   getKeplrSupportedChainByChainId,
@@ -66,17 +75,29 @@ const aminoHandler = (
   const { msgs, fee, memo } = signDoc
   const [message] = msgs
 
+  // The moved coin lives in a different field per amino message type:
+  // IBC `MsgTransfer` → `token` (a single coin), `MsgSend` → `amount[0]`,
+  // wasm `MsgExecuteContract` → `funds[0]`. Reading only `funds` reported a
+  // `0` amount for sends and IBC transfers, so the popup displayed `0` and any
+  // downstream native-value check (insufficient-funds gate) misread the amount.
+  const sentCoin =
+    message.value.token ?? message.value.amount?.[0] ?? message.value.funds?.[0]
+
   return {
     asset: {
       chain: chain,
-      ticker: message.value.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
+      ticker: sentCoin?.denom ?? chainFeeCoin[chain].ticker,
     },
     amount: {
-      amount: message.value.funds?.[0]?.amount ?? '0',
+      amount: sentCoin?.amount ?? '0',
       decimals: chainFeeCoin[chain].decimals,
     },
     from: message.value.sender ?? message.value.from_address ?? undefined,
-    to: message.value.contract ?? message.value.to_address ?? undefined,
+    to:
+      message.value.contract ??
+      message.value.to_address ??
+      message.value.receiver ??
+      undefined,
     data: memo,
     aminoPayload: {
       msgs: signDoc.msgs as CosmosMsg[],
@@ -86,16 +107,56 @@ const aminoHandler = (
   } as TransactionDetails
 }
 
-const directHandler = (
-  signDoc: {
-    bodyBytes: string // base64 encoded
-    authInfoBytes: string // base64 encoded
-    chainId: string
-    accountNumber: string
-  },
+type DirectHandlerSignDoc = {
+  bodyBytes: string // base64 encoded
+  authInfoBytes: string // base64 encoded
+  chainId: string
+  accountNumber: string
+}
+
+type DirectHandlerInput = {
+  signDoc: DirectHandlerSignDoc
   chain: Chain
-): TransactionDetails => {
-  const txBody = TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
+  signer: string
+}
+
+// Fallback display payload when the dApp's bodyBytes can't be decoded as a
+// standard TxBody (e.g. chain-specific extension fields cosmjs-types doesn't
+// know about, or a non-standard envelope). Signing still proceeds because the
+// raw bytes are forwarded to the popup via `directPayload`.
+const genericDirectTransactionDetails = ({
+  signDoc,
+  chain,
+  signer,
+}: DirectHandlerInput): TransactionDetails => ({
+  asset: { ticker: chainFeeCoin[chain].ticker },
+  amount: { amount: '0', decimals: chainFeeCoin[chain].decimals },
+  from: signer,
+  directPayload: {
+    bodyBytes: signDoc.bodyBytes,
+    authInfoBytes: signDoc.authInfoBytes,
+    chainId: signDoc.chainId,
+    accountNumber: signDoc.accountNumber,
+  },
+  skipBroadcast: true,
+})
+
+const directHandler = ({
+  signDoc,
+  chain,
+  signer,
+}: DirectHandlerInput): TransactionDetails => {
+  // Body decoding is best-effort — used only to enrich the popup's display
+  // info. If the dApp's TxBody has fields cosmjs-types can't parse (newer
+  // SDK additions, Osmosis/Injective extensions, etc.) fall back to a
+  // generic display and let the raw bytes flow through to keysign untouched.
+  const decoded = attempt(() =>
+    TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
+  )
+  if ('error' in decoded) {
+    return genericDirectTransactionDetails({ signDoc, chain, signer })
+  }
+  const txBody = decoded.data
   const [message] = txBody.messages
   const memo = txBody.memo
 
@@ -307,8 +368,7 @@ const assertNativeChainForSigning = (chainId: string): void => {
   }
 }
 
-const mldsaRequiredKeplrMessage =
-  'QBTC requires an MLDSA-enabled vault. Enable MLDSA in Vultisig Developer Options and create a new vault.'
+const mldsaRequiredKeplrMessage = `QBTC requires an MLDSA-enabled vault. Enable MLDSA in ${currentExtensionBrandConfig.provider.walletPickerName} Developer Options and create a new vault.`
 
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
   const nativeChain = getKeplrSupportedChainByChainId(chainId)
@@ -452,16 +512,31 @@ const stripEndpoints = ({
 // actually exercises (`getKeysSettled`, `getKey`, `enable`, ...) we
 // override on `XDEFIKeplrProvider`, so this requester is reached only by
 // truly unhandled paths.
+// Keplr's `SimpleMessage` exposes its route via a `type()` method (symbol-
+// backed field), not a `type` property — naive property access would
+// stringify the function source into the error message.
+const readMessageType = (msg: unknown): string | undefined => {
+  if (!msg || typeof msg !== 'object') return undefined
+  const candidate = msg as { type?: unknown; method?: unknown }
+  if (typeof candidate.type === 'function') {
+    const result = (candidate.type as () => unknown).call(msg)
+    return typeof result === 'string' ? result : undefined
+  }
+  if (typeof candidate.type === 'string') return candidate.type
+  if (typeof candidate.method === 'string') return candidate.method
+  return undefined
+}
+
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
   }
   public async sendMessage(message: any, params: any): Promise<void> {
     const method =
-      (params && (params.type ?? params.method)) ??
-      (message && (message.type ?? message.method)) ??
-      'unknown'
-    throw new Error(`Keplr method '${method}' is not supported by Vultisig`)
+      readMessageType(params) ?? readMessageType(message) ?? 'unknown'
+    throw new Error(
+      `Keplr method '${method}' is not supported by ${currentExtensionBrandConfig.provider.walletPickerName}`
+    )
   }
 }
 
@@ -582,14 +657,13 @@ export class XDEFIKeplrProvider extends Keplr {
     if (nativeChains.length === 0) return
 
     // Serialize the first chain through `requestAccount` so the
-    // grant-vault popup surfaces exactly once. Running every chain
-    // through `requestAccount` in parallel raced multiple popups against
-    // each other — only one would win, the others returned no
-    // `appSession` and the dApp got back `EIP1193Error('InternalError')`.
-    // Subsequent chains piggyback on the same dApp authorization via
-    // `getAccount`, which is silent (no popup) once the host is granted.
+    // grant-vault popup surfaces exactly once while recording the full
+    // requested chain set. Running every chain through `requestAccount` in
+    // parallel raced multiple popups against each other — only one would
+    // win, the others returned no `appSession` and the dApp got back
+    // `EIP1193Error('InternalError')`.
     const [primary, ...rest] = nativeChains
-    await requestAccount(primary)
+    await requestAccount(primary, { chains: nativeChains })
     await Promise.all(
       rest.map(chain => callBackground({ getAccount: { chain } }))
     )
@@ -609,6 +683,21 @@ export class XDEFIKeplrProvider extends Keplr {
   async disable(_chainIds?: string | string[]): Promise<void> {
     await callBackground({ signOut: {} })
     this.emitAccountsChanged()
+  }
+
+  /**
+   * Reports whether the host has an active vault grant. cosmos-kit / graz
+   * adapters call this on hydration to decide between auto-reconnect and
+   * showing the connect button; the inherited base routes through our
+   * requester and throws, which surfaces an unhandled rejection in the
+   * dApp console and confuses some adapters.
+   *
+   * Vultisig's `appSession` is host-keyed (not host+chain-keyed), so the
+   * `chainIds` argument is accepted for API compatibility but ignored:
+   * either the host holds a grant for everything it can query, or nothing.
+   */
+  async isEnabled(_chainIds: string | string[]): Promise<boolean> {
+    return callBackground({ hasAppSession: {} })
   }
 
   /**
@@ -682,14 +771,40 @@ export class XDEFIKeplrProvider extends Keplr {
     return this.getOfflineSigner(chainId, signOptions)
   }
 
-  async sendTx(): Promise<Uint8Array> {
-    // Keplr's `sendTx` broadcasts a fully signed transaction via Keplr's
-    // background relay. Vultisig has no equivalent relay — dApps that
-    // need to broadcast should do so via their own RPC client after
-    // `signAmino` / `signDirect`. Throwing here (instead of resolving
-    // `undefined` from the inherited base requester) gives the dApp a
-    // deterministic signal to fall back to its own broadcast.
-    throw new Error('Keplr.sendTx is not supported by Vultisig')
+  // Liveness probe used by cosmos-kit-based dApps (osmosis.zone, etc.)
+  // during their `Initializing Wallet Client` step. The base implementation
+  // calls `requester.sendMessage` directly via the free `sendSimpleMessage`
+  // helper — bypassing our instance-level `sendSimpleMessage` override — so
+  // without this method the requester throws and the dApp can't connect.
+  async ping(): Promise<void> {
+    return
+  }
+
+  async sendTx(
+    chainId: string,
+    tx: Uint8Array,
+    _mode: BroadcastMode
+  ): Promise<Uint8Array> {
+    // cosmos-kit dApps sign with `signDirect` / `signAmino` (which Vultisig
+    // handles with `skipBroadcast`) and then call `sendTx` with the encoded
+    // `TxRaw` bytes to publish the transaction. Broadcasting runs in the
+    // background service worker — like real Keplr — so it isn't blocked by the
+    // dApp page's CSP via the SDK's shared broadcast path. Returns the tx-hash
+    // bytes the dApp uses to track inclusion. `_mode` is ignored — the SDK
+    // broadcast resolver picks the broadcast semantics.
+    const chain = getKeplrSupportedChainByChainId(chainId)
+    if (!chain) {
+      throw new Error(`Keplr.sendTx is not supported for chain ${chainId}`)
+    }
+
+    const { txHash } = await callBackground({
+      broadcastTx: {
+        chain,
+        txBytes: Buffer.from(tx).toString('base64'),
+      },
+    })
+
+    return hexToBytes(txHash)
   }
   async sendMessage() {}
 
@@ -785,28 +900,57 @@ export class XDEFIKeplrProvider extends Keplr {
         throw new Error('Signer does not match current account address')
       }
 
+      // The function argument `chainId` drives chain-config lookups (fee
+      // denom, gas price, popup display); the `signDoc.chainId` field is the
+      // value the signature commits to. If those diverge the dApp would
+      // either trick us into picking the wrong fee/denom or end up with a
+      // signature whose committed chainId doesn't match the chain it asked us
+      // to switch to. Reject early — real Keplr does the same check.
+      if (signDoc.chainId !== chainId) {
+        throw new Error(
+          `signDoc.chainId (${signDoc.chainId}) does not match requested chainId (${chainId})`
+        )
+      }
+
       const chain = shouldBePresent(getKeplrSupportedChainByChainId(chainId))
+
+      const rawBodyBytes = normalizeKeplrBytes(signDoc.bodyBytes)
+      const rawAuthInfoBytes = normalizeKeplrBytes(signDoc.authInfoBytes)
+
+      // Several cosmos-kit dApps (Osmosis Zone's staking page being the
+      // canonical example) pass an empty `fee.amount` and rely on the wallet
+      // to fill it in — real Keplr injects a fee from gasLimit * gas price
+      // whenever `signOptions.preferNoSetFee` is falsy (the default). Match
+      // that behavior here, otherwise the chain rejects the broadcast with
+      // "Expected 1 fee denom attached, got 0: insufficient fee".
+      const withInjectedFee =
+        chain === OtherChain.QBTC || _signOptions?.preferNoSetFee
+          ? rawAuthInfoBytes
+          : injectKeplrFeeIfMissing({
+              authInfoBytes: rawAuthInfoBytes,
+              chain,
+            })
 
       // `normalizeCosmosAuthInfoFee` swaps fee ticker → canonical denom for
       // CosmosChain entries. QBTC's fee denom is already canonical (`qbtc`,
       // matching the chain config base denom), so the normalization is a
       // no-op and the helper isn't keyed for QBTC anyway.
-      const rawAuthInfoBytes = new Uint8Array(signDoc.authInfoBytes)
       const normalizedAuthInfoBytes =
         chain === OtherChain.QBTC
-          ? rawAuthInfoBytes
-          : normalizeCosmosAuthInfoFee(rawAuthInfoBytes, chain)
-      const transactionDetails: TransactionDetails = directHandler(
-        {
-          bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
+          ? withInjectedFee
+          : normalizeCosmosAuthInfoFee(withInjectedFee, chain)
+      const transactionDetails: TransactionDetails = directHandler({
+        signDoc: {
+          bodyBytes: Buffer.from(rawBodyBytes).toString('base64'),
           authInfoBytes: Buffer.from(normalizedAuthInfoBytes).toString(
             'base64'
           ),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
         },
-        chain
-      )
+        chain,
+        signer,
+      })
 
       const [{ data }] = await callPopup(
         {
@@ -855,37 +999,95 @@ export class XDEFIKeplrProvider extends Keplr {
    * ADR-36 arbitrary-message signing — used by Leap-style "sign-in-with-
    * cosmos" auth flows and several governance dApps.
    *
-   * Not yet implemented: ADR-36 signs the canonical JSON of a
-   * `StdSignDoc{MsgSignData}` directly, which doesn't fit Vultisig's
-   * existing keysign pipeline (TW.Cosmos signs transaction sign-docs,
-   * not raw amino bytes). Wiring this requires a new MPC primitive that
-   * signs raw bytes with the Cosmos-Hub secp256k1 key.
-   *
-   * Throwing here (instead of resolving `undefined` from the inherited
-   * base requester) gives dApps a deterministic signal to fall back to
-   * alternative auth methods.
+   * ADR-36 wraps the data in a fixed `StdSignDoc{MsgSignData}` envelope and
+   * signs `sha256(serialized signDoc)` with the chain's secp256k1 key. That
+   * digest is signed through the same custom-message keysign path EVM
+   * `personal_sign` uses, so no transaction-compiler involvement is needed.
+   * The popup returns the `r‖s‖recovery` bytes; we drop the recovery byte and
+   * base64-encode `r‖s` into a Keplr `StdSignature`.
    */
   async signArbitrary(
-    _chainId: string,
-    _signer: string,
-    _data: string | Uint8Array
+    chainId: string,
+    signer: string,
+    data: string | Uint8Array
   ): Promise<StdSignature> {
-    throw new Error('Keplr.signArbitrary is not supported by Vultisig')
+    assertNativeChainForSigning(chainId)
+    return this.runWithChain(chainId, async () => {
+      const chain = getCosmosChainByChainId(chainId)
+      if (!chain) {
+        throw new Error(
+          `Keplr.signArbitrary is not supported for chain ${chainId}`
+        )
+      }
+
+      const [account] = await getAccounts(chainId)
+      if (!areLowerCaseEqual(signer, account.address)) {
+        throw new Error('Signer does not match current account address')
+      }
+
+      const dataBytes =
+        typeof data === 'string' ? new TextEncoder().encode(data) : data
+      const dataBase64 = Buffer.from(dataBytes).toString('base64')
+
+      const signatureHex = await callPopup(
+        {
+          signMessage: {
+            cosmos_sign_arbitrary: { chain, data: dataBase64 },
+          },
+        },
+        { account: account.address }
+      )
+
+      // rawWithRecoveryId format: r(32) || s(32) || recovery(1).
+      const rs = Buffer.from(signatureHex, 'hex').subarray(0, 64)
+
+      return {
+        pub_key: {
+          type: 'tendermint/PubKeySecp256k1',
+          value: Buffer.from(account.pubkey).toString('base64'),
+        },
+        signature: Buffer.from(rs).toString('base64'),
+      }
+    })
   }
 
   /**
-   * Paired with `signArbitrary`. Pure signature verification could be
-   * implemented standalone (it's just secp256k1 against the ADR-36
-   * canonical sign-doc), but verifying a signature we can't produce has
-   * limited utility — defer until `signArbitrary` lands.
+   * Paired with `signArbitrary`. Pure secp256k1 verification — reconstructs
+   * the ADR-36 sign-doc from `(signer, data)`, confirms the supplied pubkey
+   * actually derives to `signer`, then checks the signature over the digest.
+   *
+   * Inputs come from the dApp, so malformed base64/bech32/signature must
+   * resolve to `false` (the contract Keplr consumers expect) rather than
+   * rejecting the promise — hence the `attempt` + `false` fallback.
    */
   async verifyArbitrary(
     _chainId: string,
-    _signer: string,
-    _data: string | Uint8Array,
-    _signature: StdSignature
+    signer: string,
+    data: string | Uint8Array,
+    signature: StdSignature
   ): Promise<boolean> {
-    throw new Error('Keplr.verifyArbitrary is not supported by Vultisig')
+    return withFallback(
+      attempt(() => {
+        const dataBytes =
+          typeof data === 'string' ? new TextEncoder().encode(data) : data
+        const dataBase64 = Buffer.from(dataBytes).toString('base64')
+
+        const digest = sha256(serializeAdr36SignDoc({ signer, dataBase64 }))
+
+        const pubkey = fromBase64(signature.pub_key.value)
+        const sigBytes = fromBase64(signature.signature)
+        if (sigBytes.length !== 64) return false
+
+        const derivedAddress = bech32.encode(
+          bech32.decode(signer).prefix,
+          bech32.toWords(ripemd160(sha256(pubkey)))
+        )
+        if (!areLowerCaseEqual(derivedAddress, signer)) return false
+
+        return secp256k1.verify(sigBytes, digest, pubkey)
+      }),
+      false
+    )
   }
 
   /**
@@ -912,7 +1114,7 @@ export class XDEFIKeplrProvider extends Keplr {
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
     throw new Error(
-      'Keplr.experimentalSignEIP712CosmosTx_v0 is not supported by Vultisig'
+      `Keplr.experimentalSignEIP712CosmosTx_v0 is not supported by ${currentExtensionBrandConfig.provider.walletPickerName}`
     )
   }
 
@@ -1013,8 +1215,55 @@ export class XDEFIKeplrProvider extends Keplr {
    * per-entry `rejected` instead of failing the whole batch.
    */
   async getKeysSettled(chainIds: string[]): Promise<SettledResponses<Key>> {
+    const nativeChains = chainIds.reduce<Chain[]>((result, chainId) => {
+      const chain = getKeplrSupportedChainByChainId(chainId)
+      if (chain && !result.includes(chain)) {
+        result.push(chain)
+      }
+
+      return result
+    }, [])
+    const authorizationResults = await Promise.all(
+      nativeChains.map(async chain => {
+        const result = await attempt(() =>
+          callBackground({ getAccount: { chain } })
+        )
+
+        return { chain, result }
+      })
+    )
+    const chainsNeedingGrant = authorizationResults
+      .filter(({ result }) => 'error' in result)
+      .flatMap(({ chain, result }) =>
+        'error' in result && result.error === BackgroundError.Unauthorized
+          ? [chain]
+          : []
+      )
+    const grantResult =
+      chainsNeedingGrant.length > 0
+        ? await attempt(() =>
+            callPopup({
+              grantVaultAccess: {
+                chain: chainsNeedingGrant[0],
+                chains: nativeChains,
+              },
+            })
+          )
+        : undefined
+
     return Promise.all(
       chainIds.map(async chainId => {
+        if (grantResult && 'error' in grantResult) {
+          const nativeChain = getKeplrSupportedChainByChainId(chainId)
+          if (nativeChain && chainsNeedingGrant.includes(nativeChain)) {
+            const reason =
+              grantResult.error instanceof Error
+                ? grantResult.error
+                : new Error(String(grantResult.error))
+            return { status: 'rejected', reason } as const
+          }
+        }
+
         const result = await attempt(() => this.getKey(chainId))
         if ('error' in result) {
           const reason =

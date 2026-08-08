@@ -1,7 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import {
   PrintableQrCode,
   PrintableQrCodeRow,
@@ -10,19 +9,23 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { useTranslation } from 'react-i18next'
 
+import { currentProductBrandConfig } from '../../product/brand'
 import { getVaultExportUid } from '../../vault/export/core/uid'
 
-export const DownloadKeysignQrCode = () => {
-  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
+export const DownloadKeysignQrCode = ({
+  value: keysignPayload,
+}: ValueProp<KeysignMessagePayload>) => {
   const joinKeysignUrlQuery = useJoinKeysignUrlQuery(keysignPayload)
   const { t } = useTranslation()
   const vault = useCurrentVault()
@@ -76,7 +79,7 @@ export const DownloadKeysignQrCode = () => {
             <PrintableQrCode
               value={data}
               title={t('join_keysign')}
-              brandLabel={t('vultisig')}
+              brandLabel={currentProductBrandConfig.name}
               rows={rows}
             />
           }

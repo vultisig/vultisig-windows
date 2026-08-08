@@ -1,159 +1,189 @@
-/**
- * Dynamic Swap Selection
- * 
- * Dynamically selects swap pairs based on actual vault balances.
- * - Source: chain with sufficient balance (> minSwapUsd)
- * - Destination: chain with lowest balance (self-balancing)
- * - Amount: actual USD value, not percentage
- */
-
 import { Page } from '@playwright/test'
 
-export interface ChainBalance {
+/** Chain balance entry parsed from the vault portfolio UI. */
+export type ChainBalance = {
   chainId: string
   symbol: string
-  balance: number      // Token amount
-  balanceUsd: number   // USD value
+  balance: number
+  balanceUsd: number
 }
 
-export interface SwapConfig {
+/** Resolved swap configuration (source + destination + amount). */
+export type SwapConfig = {
   fromChain: string
   toChain: string
   fromSymbol: string
   toSymbol: string
-  amount: string       // Actual token amount to swap
-  amountUsd: number    // USD value for logging
+  amount: string
+  amountUsd: number
 }
 
-// Minimum USD value required for a swap source
-const MIN_SWAP_USD = 2.00
+const readUsdEnv = (name: string, fallback: number): number => {
+  const raw = process.env[name]
+  if (!raw) return fallback
+  const value = Number(raw)
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error(`Invalid ${name}: ${raw}`)
+  }
+  return value
+}
 
-// Target swap amount in USD
-const TARGET_SWAP_USD = 2.00
+// TC native-inbound min is ~$5-10, so default $15 keeps swaps above floor.
+const MIN_SWAP_USD = readUsdEnv('SWAP_MIN_USD', 15)
+const TARGET_SWAP_USD = readUsdEnv('SWAP_TARGET_USD', 15)
 
-// Chain symbols (extension uses these in UI)
-const CHAIN_SYMBOLS: Record<string, string> = {
+// Chain symbols. Covers all SwapKit-enabled chains (SDK 0.26+) plus the
+// legacy native-swap chains. Used to parse vault balance text and map to
+// the native token symbol shown in the swap UI.
+export const CHAIN_SYMBOLS: Record<string, string> = {
+  // SwapKit source chains
   ethereum: 'ETH',
-  bitcoin: 'BTC',
-  thorchain: 'RUNE',
-  solana: 'SOL',
-  bsc: 'BNB',
-  polygon: 'MATIC',
   arbitrum: 'ETH',
   optimism: 'ETH',
-  avalanche: 'AVAX',
   base: 'ETH',
-  litecoin: 'LTC',
-  dogecoin: 'DOGE',
+  bsc: 'BNB',
+  polygon: 'MATIC',
+  avalanche: 'AVAX',
+  solana: 'SOL',
+  // SwapKit destination-only chains
+  bitcoin: 'BTC',
+  bitcoincash: 'BCH',
+  cardano: 'ADA',
   cosmos: 'ATOM',
+  dash: 'DASH',
+  dogecoin: 'DOGE',
+  kujira: 'KUJI',
+  litecoin: 'LTC',
+  mayachain: 'CACAO',
+  ripple: 'XRP',
+  sui: 'SUI',
+  thorchain: 'RUNE',
+  ton: 'TON',
+  tron: 'TRX',
+  zcash: 'ZEC',
 }
 
-// Chains available for swaps in extension UI (only BTC ↔ ETH)
-const SWAPPABLE_CHAINS = ['bitcoin', 'ethereum']
+// Chains available for swaps. Comma-separated env override drives both the
+// dynamic-pair selector and the route-matrix test. Default = full SwapKit
+// surface. Set SWAPPABLE_CHAINS=bitcoin,ethereum for the legacy smoke run.
+const SWAPPABLE_CHAINS = (
+  process.env.SWAPPABLE_CHAINS || Object.keys(CHAIN_SYMBOLS).join(',')
+)
+  .split(',')
+  .map(s => s.trim().toLowerCase())
+  .filter(Boolean)
 
-/**
- * Parse balances from the vault page.
- * Reads the portfolio display to get current balances.
- */
+// Display names used in vault portfolio text. Falls back to titlecased chainId
+// for the common single-word chains. Anything multi-word or non-standard goes here.
+const CHAIN_DISPLAY_NAMES: Record<string, string> = {
+  bitcoincash: 'Bitcoin[ -]?Cash',
+  mayachain: 'MayaChain',
+}
+
+// Per-symbol fallback swap amounts (token units) when balance can't be parsed.
+// Sized to ~$15 at mid-2026 prices; conservative but above TC inbound floor.
+export const SYMBOL_FALLBACK_AMOUNTS: Record<string, string> = {
+  ETH: '0.005',
+  BTC: '0.00025',
+  BNB: '0.025',
+  MATIC: '20',
+  AVAX: '0.4',
+  SOL: '0.1',
+  RUNE: '4',
+  CACAO: '4',
+  ATOM: '2',
+  LTC: '0.15',
+  DOGE: '60',
+  BCH: '0.03',
+  DASH: '0.6',
+  ZEC: '0.6',
+  KUJI: '20',
+  ADA: '20',
+  SUI: '5',
+  TON: '3',
+  TRX: '50',
+  XRP: '7',
+}
+
+// Vault portfolio UI format: "Ethereum0x1a2...f334$40.2212 assets" or "Bitcoin bc1qj...rfea$0.000 BTC"
 export async function getVaultBalances(page: Page): Promise<ChainBalance[]> {
   const balances: ChainBalance[] = []
-  
-  // Wait for balances to load
+
   await page.waitForTimeout(2000)
-  
-  // Get the full page text to parse balances
-  const pageText = await page.locator('body').textContent() || ''
-  
-  // Parse each chain's balance from the vault display
-  // Format in UI: "Ethereum0x1a2...f334$40.2212 assets" or "Bitcoin bc1qj...rfea$0.000 BTC"
-  
+  const pageText = (await page.locator('body').textContent()) || ''
+
   for (const [chainId, symbol] of Object.entries(CHAIN_SYMBOLS)) {
-    // Only consider swappable chains
     if (!SWAPPABLE_CHAINS.includes(chainId)) continue
-    
-    // Look for balance pattern: $XX.XX or $X,XXX.XX
-    const chainNamePattern = chainId.charAt(0).toUpperCase() + chainId.slice(1)
-    const balanceMatch = pageText.match(new RegExp(`${chainNamePattern}[^$]*\\$(\\d+[,.]?\\d*\\.?\\d*)`, 'i'))
-    
-    if (balanceMatch) {
-      const usdValue = parseFloat(balanceMatch[1].replace(',', ''))
-      
-      // Try to extract token balance
-      const tokenMatch = pageText.match(new RegExp(`(\\d+\\.\\d+)\\s*${symbol}`, 'i'))
-      const tokenBalance = tokenMatch ? parseFloat(tokenMatch[1]) : 0
-      
-      balances.push({
-        chainId,
-        symbol,
-        balance: tokenBalance,
-        balanceUsd: usdValue,
-      })
-      
-      console.log(`  ${chainId}: $${usdValue.toFixed(2)} (${tokenBalance} ${symbol})`)
-    }
+
+    // Multi-word chains (Bitcoin-Cash, MayaChain) need an explicit display-name override.
+    const chainNamePattern =
+      CHAIN_DISPLAY_NAMES[chainId] ||
+      chainId.charAt(0).toUpperCase() + chainId.slice(1)
+    const balanceMatch = pageText.match(
+      new RegExp(`${chainNamePattern}[^$]*\\$(\\d+[,.]?\\d*\\.?\\d*)`, 'i')
+    )
+    if (!balanceMatch) continue
+
+    const usdValue = parseFloat(balanceMatch[1].replace(',', ''))
+    // Search within the matched chain row only to avoid cross-chain symbol collisions
+    // (ethereum/arbitrum/optimism/base all share 'ETH'; searching pageText would reuse the first match).
+    const tokenMatch = balanceMatch[0].match(
+      new RegExp(`(\\d+\\.\\d+)\\s*${symbol}`, 'i')
+    )
+    const tokenBalance = tokenMatch ? parseFloat(tokenMatch[1]) : 0
+
+    balances.push({
+      chainId,
+      symbol,
+      balance: tokenBalance,
+      balanceUsd: usdValue,
+    })
+    console.log(
+      `  ${chainId}: $${usdValue.toFixed(2)} (${tokenBalance} ${symbol})`
+    )
   }
-  
+
   return balances
 }
 
-/**
- * Select the best swap pair based on current balances.
- * 
- * Strategy:
- * - Source: chain with highest balance above MIN_SWAP_USD
- * - Destination: chain with lowest balance (self-balancing)
- * - Amount: TARGET_SWAP_USD worth of source token
- * 
- * Returns null if no valid swap pair can be formed.
- */
+// Source = highest-balance chain above MIN_SWAP_USD; dest = lowest (self-balancing).
 export function selectSwapPair(balances: ChainBalance[]): SwapConfig | null {
-  // Filter to chains with enough balance to be a source
   const validSources = balances
     .filter(b => b.balanceUsd >= MIN_SWAP_USD)
-    .sort((a, b) => b.balanceUsd - a.balanceUsd) // Highest first
-  
+    .sort((a, b) => b.balanceUsd - a.balanceUsd)
+
   if (validSources.length === 0) {
     console.log('❌ No chains have sufficient balance for swap')
     return null
   }
-  
-  // Find destination: lowest balance chain (different from source)
+
   const source = validSources[0]
   const destinations = balances
     .filter(b => b.chainId !== source.chainId)
-    .sort((a, b) => a.balanceUsd - b.balanceUsd) // Lowest first
-  
+    .sort((a, b) => a.balanceUsd - b.balanceUsd)
+
   if (destinations.length === 0) {
     console.log('❌ No destination chain available')
     return null
   }
-  
+
   const dest = destinations[0]
-  
-  // Calculate amount: TARGET_SWAP_USD worth of source token
-  // If we don't have token balance, use a reasonable default
+
   let amount: string
   if (source.balance > 0 && source.balanceUsd > 0) {
     const pricePerToken = source.balanceUsd / source.balance
     const tokensNeeded = TARGET_SWAP_USD / pricePerToken
-    // Round to reasonable precision
     amount = tokensNeeded.toFixed(source.symbol === 'BTC' ? 8 : 6)
   } else {
-    // Fallback: use small fixed amounts
-    const fallbacks: Record<string, string> = {
-      ETH: '0.0008',
-      BTC: '0.00003',
-      RUNE: '0.5',
-      SOL: '0.02',
-    }
-    amount = fallbacks[source.symbol] || '0.001'
+    // Per-symbol fallback sized to ~TARGET_SWAP_USD; '0.001' covers unknown symbols.
+    amount = SYMBOL_FALLBACK_AMOUNTS[source.symbol] || '0.001'
   }
-  
+
   console.log(`\n📊 Selected swap pair:`)
   console.log(`  Source: ${source.chainId} ($${source.balanceUsd.toFixed(2)})`)
   console.log(`  Dest:   ${dest.chainId} ($${dest.balanceUsd.toFixed(2)})`)
   console.log(`  Amount: ${amount} ${source.symbol} (~$${TARGET_SWAP_USD})`)
-  
+
   return {
     fromChain: source.chainId,
     toChain: dest.chainId,
@@ -164,9 +194,6 @@ export function selectSwapPair(balances: ChainBalance[]): SwapConfig | null {
   }
 }
 
-/**
- * Check if a swap is possible with current balances.
- */
 export function canSwap(balances: ChainBalance[]): boolean {
   const validSources = balances.filter(b => b.balanceUsd >= MIN_SWAP_USD)
   return validSources.length > 0 && balances.length >= 2

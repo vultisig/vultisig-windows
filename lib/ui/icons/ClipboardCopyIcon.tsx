@@ -1,16 +1,27 @@
-export const ClipboardCopyIcon = () => (
+import { SvgProps } from '@lib/ui/props'
+
+export const ClipboardCopyIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    viewBox="0 0 16 16"
+    viewBox="0 0 24 24"
     fill="none"
+    {...props}
   >
     <path
+      d="M20.3996 9.59961V17.9996C20.3996 19.3256 19.3256 20.3996 17.9996 20.3996H9.59961"
       stroke="currentColor"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      d="M5.334 2.666H4A1.333 1.333 0 0 0 2.667 4v9.333A1.333 1.333 0 0 0 4 14.666h8a1.333 1.333 0 0 0 1.334-1.333V12m-2.667-9.334H12A1.333 1.333 0 0 1 13.334 4v2.666M14 9.333H7.334m0 0L10 6.666M7.334 9.333 10 12M6 1.333h4c.368 0 .667.298.667.667v1.333A.667.667 0 0 1 10 4H6a.667.667 0 0 1-.666-.667V2c0-.369.298-.667.666-.667Z"
+    />
+    <path
+      d="M13.1996 3.59961H5.99961C4.67413 3.59961 3.59961 4.67413 3.59961 5.99961V13.1996C3.59961 14.5251 4.67413 15.5996 5.99961 15.5996H13.1996C14.5251 15.5996 15.5996 14.5251 15.5996 13.1996V5.99961C15.5996 4.67413 14.5251 3.59961 13.1996 3.59961Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

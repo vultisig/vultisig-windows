@@ -1,10 +1,13 @@
+import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
+import { withoutThorchainLpCoins } from '@core/ui/chain/coin/thorchain/isThorchainLpCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
+import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
@@ -22,14 +25,19 @@ export const useCurrentVaultCoins = () => {
 }
 
 /**
- * {@link useCurrentVaultCoins} minus THORChain RUJI staking receipt (sRUJI).
- * Use for portfolio UX: balances, fiat totals, swap/send pickers, refresh.
- * Keep {@link useCurrentVaultCoins} for storage-accurate flows (manage tokens,
- * CoinFinder dedupe, resolving a send `coin` key that may still reference a
- * legacy receipt row).
+ * {@link useCurrentVaultCoins} minus DeFi-only THORChain entries: the staking
+ * receipts sRUJI and ybRUNE, and Rujira LP tokens (`LP-…`). Use for portfolio
+ * UX: balances, fiat totals, swap/send pickers, refresh. LP positions are
+ * surfaced under `DeFi → LPs` instead. Keep {@link useCurrentVaultCoins} for
+ * storage-accurate flows (manage tokens, CoinFinder dedupe, resolving a send
+ * `coin` key that may still reference a legacy receipt/LP row).
  */
 export const usePortfolioVaultCoins = () =>
-  withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+  withoutThorchainLpCoins(
+    withoutBondedRuneReceiptCoins(
+      withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+    )
+  )
 
 export const usePortfolioVaultChainCoins = (chain: string) =>
   usePortfolioVaultCoins().filter(coin => coin.chain === chain)
@@ -66,6 +74,14 @@ export const useCurrentVaultAddress = (chain: Chain) => {
     if (existing) return existing
 
     if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[chain]) {
+      return ''
+    }
+
+    // MLDSA chains (e.g. QBTC) can only derive an address from the vault's
+    // post-quantum key. Vaults created before MLDSA keygen don't have one, so
+    // they simply have no address on these chains — return empty rather than
+    // throwing (callers treat '' as "not derivable / disabled").
+    if (getSignatureAlgorithm(chain) === 'mldsa' && !vault.publicKeyMldsa) {
       return ''
     }
 

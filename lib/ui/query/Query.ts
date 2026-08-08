@@ -2,6 +2,7 @@ export type Query<T, E = unknown> = {
   data: T | undefined
   isPending: boolean
   error: E | null
+  isPlaceholderData?: boolean
 }
 
 export type EagerQuery<T, E = unknown> = {

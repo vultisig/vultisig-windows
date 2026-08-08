@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -63,6 +63,7 @@ export const DefiPortfolioHeader = () => {
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               <IconButton
+                data-testid="manage-defi-chains-button"
                 kind="secondary"
                 onClick={() => navigate({ id: 'manageDefiChains' })}
                 style={{
@@ -70,7 +71,7 @@ export const DefiPortfolioHeader = () => {
                 }}
                 size="lg"
               >
-                <CryptoWalletPenIcon />
+                <HousePenIcon />
               </IconButton>
             </ManageButtonMotion>
           )}

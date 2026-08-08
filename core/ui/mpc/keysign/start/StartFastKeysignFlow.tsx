@@ -13,6 +13,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
+import { SwapQuoteProvider } from '../state/swapQuote'
 
 const keysignSteps = ['server', 'keysign'] as const
 
@@ -20,7 +21,7 @@ export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
   const { goBack } = useCore()
-  const [{ keysignPayload, password, toAddressLabel }] =
+  const [{ keysignPayload, password, toAddressLabel, swapQuote }] =
     useCoreViewState<'keysign'>()
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -46,9 +47,11 @@ export const StartFastKeysignFlow = ({
                 render={() => (
                   <KeysignActionProvider>
                     <KeysignMessagePayloadProvider value={keysignPayload}>
-                      <TransactionRecorderProvider>
-                        <KeysignSigningStep toAddressLabel={toAddressLabel} />
-                      </TransactionRecorderProvider>
+                      <SwapQuoteProvider value={swapQuote}>
+                        <TransactionRecorderProvider>
+                          <KeysignSigningStep toAddressLabel={toAddressLabel} />
+                        </TransactionRecorderProvider>
+                      </SwapQuoteProvider>
                     </KeysignMessagePayloadProvider>
                   </KeysignActionProvider>
                 )}

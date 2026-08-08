@@ -1,4 +1,3 @@
-import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { createCardanoCip30InitialApi } from '@clients/extension/src/inpage/providers/cardanoCip30'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
@@ -9,27 +8,29 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { installKeplrProxyBridge } from '../providers/keplrProxyBridge'
 import { Solana } from '../providers/solana'
 import { registerWallet } from '../providers/solana/register'
 import { UTXO } from '../providers/utxo'
+import { createXrplProvider, installXrplAdapter } from '../providers/xrpl'
 
 // Wallet-picker descriptor pushed to `window.terraWallets` /
 // `window.interchainWallets`. Mirrors the `STATION_INFO` shape the official
 // Station extension uses — Terra dApps iterate these arrays to discover
 // installed Station-compatible wallets.
-const vultisigStationInfo = {
-  name: 'Vultisig',
-  identifier: 'vultisig',
-  icon: `data:image/svg+xml;utf8,${encodeURIComponent(VULTI_ICON_RAW_SVG)}`,
+const stationWalletInfo = {
+  name: currentExtensionBrandConfig.provider.walletPickerName,
+  identifier: currentExtensionBrandConfig.provider.walletPickerIdentifier,
+  icon: currentExtensionBrandConfig.provider.icon,
 }
 
 const pushToWalletArray = (key: 'terraWallets' | 'interchainWallets') => {
   const existing = window[key]
   if (Array.isArray(existing)) {
-    existing.push(vultisigStationInfo)
+    existing.push(stationWalletInfo)
   } else {
-    window[key] = [vultisigStationInfo]
+    window[key] = [stationWalletInfo]
   }
 }
 
@@ -39,6 +40,9 @@ export const injectToWindow = () => {
 
   const vultisigProvider = {
     ...providers,
+    // Vultisig-native XRPL object API, alongside the GemWallet-detectable
+    // postMessage adapter installed below.
+    xrpl: createXrplProvider(),
     getVault: async () => callBackground({ exportVault: {} }),
     getVaults: async () => callPopup({ exportVaults: {} }),
   }
@@ -61,9 +65,9 @@ export const injectToWindow = () => {
 
   announceProvider({
     info: {
-      icon: VULTI_ICON_RAW_SVG,
-      name: 'Vultisig',
-      rdns: 'me.vultisig',
+      icon: currentExtensionBrandConfig.provider.icon,
+      name: currentExtensionBrandConfig.provider.eip6963Name,
+      rdns: currentExtensionBrandConfig.provider.eip6963Rdns,
       uuid: uuidv4(),
     },
     provider: ethereumProvider as unknown as EIP1193Provider,
@@ -139,6 +143,73 @@ export const injectToWindow = () => {
     installKeplrProxyBridge(providers.keplr)
   }
 
+  // Terra/Station injection mirrors the Keplr treatment above: synchronous
+  // and ungated. Cosmos/Terra discovery must not depend on EVM precedence
+  // (the "Prioritize Vultisig" setting) — that flag only exists to win the
+  // `window.ethereum` fight with other EVM wallets. dApps that snapshot
+  // installed wallets on page load can also miss a late injection deferred
+  // behind the async `setupContentScriptMessenger` background round-trip.
+  // The `!window.station` / `!window.terra` guards defer to the official
+  // Station extension when it injected first; the `terraWallets` /
+  // `interchainWallets` arrays still advertise this build as its own picker
+  // row so the two extensions co-exist instead of silently clobbering each
+  // other. Each global is set behind its own existence check so a
+  // preexisting non-configurable one can't block the others.
+  if (!window.station) {
+    attempt(() =>
+      Object.defineProperty(window, 'station', {
+        value: providers.station,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  if (!window.terra) {
+    attempt(() =>
+      Object.defineProperty(window, 'terra', {
+        value: providers.station,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  // Detection flags Terra dApps probe before showing Station in the wallet
+  // picker — both legacy (`isTerraExtensionAvailable`) and the newer
+  // interchain alias (`isStationExtensionAvailable`).
+  if (!window.isTerraExtensionAvailable) {
+    attempt(() =>
+      Object.defineProperty(window, 'isTerraExtensionAvailable', {
+        value: true,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  if (!window.isStationExtensionAvailable) {
+    attempt(() =>
+      Object.defineProperty(window, 'isStationExtensionAvailable', {
+        value: true,
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+  // Register this build in the Station-style wallet-picker arrays. dApps
+  // iterate these to enumerate installed Station-compatible wallets, so
+  // missing this entry hides the provider from the picker even when
+  // `window.station` is present.
+  attempt(() => pushToWalletArray('terraWallets'))
+  attempt(() => pushToWalletArray('interchainWallets'))
+
+  // The XRPL adapter is detectable as GemWallet — the injectable API XRPL dApps
+  // integrate against. Like Keplr above, it must be synchronous: dApps snapshot
+  // the installed wallets on first render, so deferring behind the async
+  // background round-trip below would hide us from the picker. The guard defers
+  // to a real GemWallet that already claimed the page.
+  if (!window.gemWallet) {
+    attempt(() => installXrplAdapter())
+  }
+
   setupContentScriptMessenger(providers)
 }
 
@@ -147,20 +218,28 @@ async function setupContentScriptMessenger(
 ) {
   const ethereumProvider = providers.ethereum
 
-  const [vultisigDefaultProvider, hasSolanaResult] = await Promise.all([
-    callBackground({ getIsWalletPrioritized: {} }),
-    attempt(callBackground({ hasChainInVault: { chain: Chain.Solana } })),
-  ])
+  const [vultisigDefaultProvider, hasSolanaResult, hasSuiResult] =
+    await Promise.all([
+      callBackground({ getIsWalletPrioritized: {} }),
+      attempt(callBackground({ hasChainInVault: { chain: Chain.Solana } })),
+      attempt(callBackground({ hasChainInVault: { chain: Chain.Sui } })),
+    ])
   const hasSolana = hasSolanaResult.data ?? false
+  const hasSui = hasSuiResult.data ?? false
 
   const phantomProvider = {
     bitcoin: new UTXO(UtxoChain.Bitcoin, 'phantom-override'),
     ethereum: ethereumProvider,
     ...(hasSolana && { solana: providers.solana }),
+    ...(hasSui && { sui: providers.sui }),
   }
 
   if (hasSolana) {
     registerWallet(providers.solana)
+  }
+
+  if (hasSui) {
+    registerWallet(providers.sui)
   }
 
   if (vultisigDefaultProvider) {
@@ -187,8 +266,8 @@ async function setupContentScriptMessenger(
 
     announceProvider({
       info: {
-        icon: VULTI_ICON_RAW_SVG,
-        name: 'Vultisig',
+        icon: currentExtensionBrandConfig.provider.icon,
+        name: currentExtensionBrandConfig.provider.eip6963Name,
         rdns: 'app.phantom',
         uuid: uuidv4(),
       },
@@ -243,29 +322,6 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
-        station: {
-          value: providers.station,
-          configurable: false,
-          writable: false,
-        },
-        terra: {
-          value: providers.station,
-          configurable: false,
-          writable: false,
-        },
-        // Detection flags Terra dApps probe before showing Station in the
-        // wallet picker — both legacy (`isTerraExtensionAvailable`) and the
-        // newer interchain alias (`isStationExtensionAvailable`).
-        isTerraExtensionAvailable: {
-          value: true,
-          configurable: false,
-          writable: false,
-        },
-        isStationExtensionAvailable: {
-          value: true,
-          configurable: false,
-          writable: false,
-        },
         injectedWeb3: {
           value: {
             ...(window.injectedWeb3 || {}),
@@ -283,12 +339,5 @@ async function setupContentScriptMessenger(
         },
       })
     )
-
-    // Register Vultisig in the Station-style wallet-picker arrays. dApps
-    // iterate these to enumerate installed Station-compatible wallets, so
-    // missing this entry hides Vultisig from the picker even when
-    // `window.station` is present.
-    attempt(() => pushToWalletArray('terraWallets'))
-    attempt(() => pushToWalletArray('interchainWallets'))
   }
 }

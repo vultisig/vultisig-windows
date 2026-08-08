@@ -2,6 +2,10 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 
+import {
+  rujiAutoCompoundStakePositionId,
+  rujiBondedStakePositionId,
+} from '../queries/services/thorchainStake/rujiStakeService'
 import { mayaCoin, runeCoin, thorchainTokens } from '../queries/tokens'
 import { ThorchainStakePosition } from '../queries/types'
 
@@ -22,10 +26,24 @@ type StakeActionConfig = {
   actionsDisabled?: boolean
 }
 
+/**
+ * Translation keys that the stake UI resolver can request from its caller.
+ */
+export type StakeUiTranslationKey =
+  | 'compounded_token'
+  | 'defi_add'
+  | 'defi_remove'
+  | 'mint'
+  | 'redeem'
+  | 'staked'
+
 type ResolverInput = {
   chain: Chain
   position: ThorchainStakePosition
-  translate: (key: string, params?: Record<string, unknown>) => string
+  translate: (
+    key: StakeUiTranslationKey,
+    params?: Record<string, unknown>
+  ) => string
 }
 
 const tokenById: Partial<Record<Chain, Record<string, Coin>>> = {
@@ -33,7 +51,11 @@ const tokenById: Partial<Record<Chain, Record<string, Coin>>> = {
     'thor-stake-rune': runeCoin,
     'thor-stake-tcy': thorchainTokens.tcy,
     'thor-stake-stcy': thorchainTokens.stcy,
-    'thor-stake-ruji': thorchainTokens.ruji,
+    [rujiAutoCompoundStakePositionId]: thorchainTokens.ruji,
+    [rujiBondedStakePositionId]: thorchainTokens.ruji,
+    // Stake/Unstake route into the #4395 deposit flow with the bRUNE coin
+    // (`selectStakeId` maps `x/brune` → the `brune` wasm resolver).
+    'thor-stake-brune': thorchainTokens.brune,
     'thor-stake-yrune': thorchainTokens.yRune,
     'thor-stake-ytcy': thorchainTokens.yTcy,
   },
@@ -64,6 +86,35 @@ export const resolveStakeToken = (chain: Chain, positionId: string) => {
 
   return { ...chainFeeCoin[chain], chain }
 }
+
+/**
+ * DeFi staking positions whose on-chain receipt is a transferable bank denom,
+ * mapped to the coin that should actually be sent. This is intentionally the
+ * receipt token the vault holds (e.g. `sRUJI` / `x/staking-x/ruji`), not the
+ * liquid asset used for stake/unstake (`resolveStakeToken` returns the latter).
+ *
+ * Positions absent from this list are treated as non-transferable (e.g. bonded
+ * RUNE), so they get no Send button. Add an entry here — the single source of
+ * truth — to enable Send for a new receipt token.
+ */
+const transferableStakeTokenById: Partial<Record<Chain, Record<string, Coin>>> =
+  {
+    [Chain.THORChain]: {
+      'thor-stake-stcy': thorchainTokens.stcy,
+      'thor-stake-ruji': thorchainTokens.sruji,
+      // Send moves the held receipt token (ybRUNE), not the liquid bRUNE.
+      'thor-stake-brune': thorchainTokens.ybrune,
+    },
+  }
+
+/**
+ * Returns the coin to send for a transferable stake position, or `undefined`
+ * when the position's receipt is not transferable.
+ */
+export const resolveTransferableStakeToken = (
+  chain: Chain,
+  positionId: string
+): Coin | undefined => transferableStakeTokenById[chain]?.[positionId]
 
 export const resolveStakeActions = ({
   chain,
@@ -102,7 +153,10 @@ export const resolveStakeActions = ({
 type TitleResolverInput = {
   position: ThorchainStakePosition
   coin: Coin
-  translate: (key: string, params?: Record<string, unknown>) => string
+  translate: (
+    key: StakeUiTranslationKey,
+    params?: Record<string, unknown>
+  ) => string
 }
 
 export const resolveStakeTitle = ({
@@ -113,6 +167,15 @@ export const resolveStakeTitle = ({
   if (position.type === 'index') return coin.ticker
   if (position.id === 'thor-stake-stcy') {
     return translate('compounded_token', { ticker: 'TCY' })
+  }
+  // ybRUNE auto-compounds bonded bRUNE (like sTCY compounds TCY).
+  if (position.id === 'thor-stake-brune') {
+    return translate('compounded_token', { ticker: 'bRUNE' })
+  }
+  // Distinguish the two RUJI cards: the auto-compounding (sRUJI) position reads
+  // "Compounded RUJI"; the bonded position falls through to "Staked RUJI".
+  if (position.id === rujiAutoCompoundStakePositionId) {
+    return translate('compounded_token', { ticker: coin.ticker })
   }
   return `${translate('staked')} ${coin.ticker}`
 }

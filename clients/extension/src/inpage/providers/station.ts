@@ -18,6 +18,7 @@ import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedErr
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { requestAccount } from './core/requestAccount'
 import { stationFeeToAmino, stationMsgToAmino } from './stationProtoAmino'
 import {
@@ -257,11 +258,21 @@ const buildStationInfoForNetwork = (
 // once). Subsequent chains in the same network are fetched silently via
 // `callBackground({ getAccount })` — they piggyback on the same dApp
 // authorization, no extra popups even for normal multi-chain vaults.
+//
+// Mainnet starts with Terra, not Cosmos Hub, so Station-migrated key-import
+// vaults that only contain Terra-family keys remain eligible in the grant
+// popup. Normal multi-chain vaults still report Cosmos Hub and other 118
+// chains through the silent secondary fetch.
 const networkPrimaryChain: Record<SupportedNetworkName, SupportedStationChain> =
   {
-    mainnet: Chain.Cosmos,
+    mainnet: Chain.Terra,
     classic: Chain.TerraClassic,
   }
+
+/** Returns the Station primary chain for a supported Station network. */
+export const getStationPrimaryChainForNetwork = (
+  network: SupportedNetworkName
+): SupportedStationChain => networkPrimaryChain[network]
 
 // Builds the `pubkey` field for ConnectResponse — base64-encoded pubkeys
 // keyed by the chain's BIP44 coinType. cosmos-kit's
@@ -380,14 +391,15 @@ export class Station {
    * silently mark the wallet as not-connected.
    *
    * Account fetching is two-phase to avoid stacked grant popups:
-   * 1. The network's primary chain (Cosmos Hub for mainnet, Terra Classic
-   *    for classic) goes through {@link requestAccount}, which surfaces the
-   *    grant-vault popup on first connect.
+   * 1. The network's primary chain (Terra for mainnet, Terra Classic for
+   *    classic) goes through {@link requestAccount}, which surfaces the
+   *    grant-vault popup on first connect and records the full requested
+   *    chain set.
    * 2. Every other chain is fetched silently via `getAccount` background
-   *    call. Once the dApp is authorized in step 1, normal multi-chain
-   *    vaults derive every chain from the shared seed, so no further popups
-   *    are needed. Chains the vault can't derive (key-import vaults missing
-   *    the chain) are skipped instead of re-prompting.
+   *    call. Normal multi-chain vaults derive every chain from the shared
+   *    seed, so no further popups are needed. Chains the vault can't derive
+   *    (key-import vaults missing the chain) are skipped instead of
+   *    re-prompting.
    *
    * `pubkey` is populated under both BIP44 coinTypes — `'118'` from the
    * first non-Terra account fetched, `'330'` from a Terra-family account.
@@ -404,9 +416,9 @@ export class Station {
    */
   async connect(): Promise<ConnectResponse> {
     const chains = stationChainsByNetwork[this.currentNetwork]
-    const primaryChain = networkPrimaryChain[this.currentNetwork]
+    const primaryChain = getStationPrimaryChainForNetwork(this.currentNetwork)
 
-    const primaryAccount = await requestAccount(primaryChain)
+    const primaryAccount = await requestAccount(primaryChain, { chains })
 
     // Phase 2: fetch every other chain silently via the authorized
     // background call. Background `getAccount` returns an empty address
@@ -658,7 +670,7 @@ export class Station {
   ): Promise<{ success: true; network: NetworkName }> {
     if (!isSupportedNetwork(network)) {
       throw new Error(
-        `Station switchNetwork: unsupported network '${network}' — Vultisig only exposes 'mainnet' and 'classic'.`
+        `Station switchNetwork: unsupported network '${network}' — ${currentExtensionBrandConfig.provider.walletPickerName} only exposes 'mainnet' and 'classic'.`
       )
     }
 

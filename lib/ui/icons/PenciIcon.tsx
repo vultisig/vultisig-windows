@@ -1,7 +1,6 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const PencilIcon: FC<SvgProps> = props => (
+export const PencilIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"

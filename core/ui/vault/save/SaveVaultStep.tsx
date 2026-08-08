@@ -13,15 +13,25 @@ import { useTranslation } from 'react-i18next'
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 
 export const SaveVaultStep: React.FC<
-  ValueProp<Vault> & OnFinishProp & TitleProp & OnBackProp
-> = ({ value, onFinish, title, onBack }) => {
+  ValueProp<Vault> &
+    OnFinishProp &
+    TitleProp &
+    OnBackProp & {
+      onVaultSaveError?: (error: Error) => void | Promise<void>
+      onVaultSaved?: (vault: Vault) => void | Promise<void>
+    }
+> = ({ value, onFinish, title, onBack, onVaultSaveError, onVaultSaved }) => {
   const { t } = useTranslation()
 
   const input = useVaultCreationInput()
   const referral = input ? getRecordUnionValue(input).referral : undefined
 
   const { mutate, ...mutationState } = useCreateVaultWithReferralMutation({
-    onSuccess: onFinish,
+    onError: onVaultSaveError,
+    onSuccess: async vault => {
+      await onVaultSaved?.(vault)
+      onFinish()
+    },
   })
 
   useEffect(() => {

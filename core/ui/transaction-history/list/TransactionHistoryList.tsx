@@ -1,4 +1,4 @@
-import { CalendarClockIcon } from '@lib/ui/icons/CalendarClockIcon'
+import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { EmptyState } from '@lib/ui/status/EmptyState/EmptyState'
@@ -6,9 +6,12 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { TransactionRecord } from '../core'
+import { TransactionRecord, TransactionRecordStatus } from '../core'
+import { PendingTransactionProgressCard } from '../progress/PendingTransactionProgressCard'
 import { groupByDate } from './groupByDate'
 import { TransactionRecordCard } from './TransactionRecordCard'
+
+const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
 type TransactionHistoryListProps = {
   records: TransactionRecord[]
@@ -25,7 +28,7 @@ export const TransactionHistoryList = ({
         <EmptyState
           icon={
             <IconWrapper size={24} color="buttonHover">
-              <CalendarClockIcon />
+              <CalendarIcon />
             </IconWrapper>
           }
           title={t('no_transactions_yet')}
@@ -52,9 +55,20 @@ export const TransactionHistoryList = ({
             {group.label}
           </Text>
           <VStack gap={8}>
-            {group.items.map(record => (
-              <TransactionRecordCard key={record.id} record={record} />
-            ))}
+            {group.items.map(record =>
+              // In-flight records keep their expanded treatment, but stay in
+              // the date stream rather than being pinned above it: a limit
+              // order rests for up to three days, so "pending" says nothing
+              // about how recent it is.
+              pendingStatuses.includes(record.status) ? (
+                <PendingTransactionProgressCard
+                  key={record.id}
+                  record={record}
+                />
+              ) : (
+                <TransactionRecordCard key={record.id} record={record} />
+              )
+            )}
           </VStack>
         </VStack>
       ))}

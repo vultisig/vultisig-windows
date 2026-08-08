@@ -1,19 +1,52 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const BooksIcon: FC<SvgProps> = props => (
+export const BooksIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="square"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 20 20"
-    width="1em"
     xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <path d="M5.6263 16.0417V5.625C5.6263 5.16477 5.2532 4.79167 4.79297 4.79167H3.1263C2.66607 4.79167 2.29297 5.16477 2.29297 5.625V16.0417C2.29297 16.5019 2.66607 16.875 3.1263 16.875H4.79297C5.2532 16.875 5.6263 16.5019 5.6263 16.0417ZM5.6263 16.0417V3.95833C5.6263 3.4981 5.9994 3.125 6.45964 3.125H10.2096C10.6699 3.125 11.043 3.4981 11.043 3.95833V16.0417C11.043 16.5019 10.6699 16.875 10.2096 16.875H6.45964C5.9994 16.875 5.6263 16.5019 5.6263 16.0417ZM5.6263 6.5625H11.043M5.6263 13.4375H11.043M15.3846 16.901L17.397 16.3617C17.8416 16.2427 18.1053 15.7858 17.9862 15.3412L15.5059 6.08437C15.3867 5.63981 14.9298 5.37599 14.4852 5.49511L12.4729 6.03432C12.0284 6.15343 11.7646 6.61038 11.8836 7.05494L14.364 16.3118C14.4831 16.7563 14.9401 17.0201 15.3846 16.901Z" />
+    <path
+      d="M3.59961 4.7998H16.1996C17.8564 4.7998 19.1996 6.14296 19.1996 7.7998C19.1996 9.45664 17.8564 10.7998 16.1996 10.7998H3.59961"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M13.8008 16.7998H7.80078C6.14394 16.7998 4.80078 15.4566 4.80078 13.7998C4.80078 12.143 6.14394 10.7998 7.80078 10.7998H20.4008"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M20.3992 16.7998H19.1992"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.6996 13.7998H10.4996C10.0027 13.7998 9.59961 14.2029 9.59961 14.6998V20.6998C9.59961 21.0842 9.84333 21.4264 10.2078 21.5506C10.5722 21.6736 10.9742 21.5553 11.2098 21.253L12.5996 19.4658L13.9894 21.253C14.1628 21.4756 14.4277 21.5999 14.6996 21.5999C14.7969 21.5999 14.8953 21.5835 14.9914 21.5507C15.3559 21.4265 15.5996 21.0843 15.5996 20.6999V14.6999C15.5996 14.203 15.1965 13.7998 14.6996 13.7998Z"
+      fill="currentColor"
+    />
+    <path
+      d="M4.80078 4.7998C6.40074 6.79984 6.40074 8.79976 4.80078 10.7998"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M19.2 16.8C17.6 14.8 17.6 12.8 19.2 10.8"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

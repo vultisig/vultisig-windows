@@ -10,18 +10,20 @@ import {
   FastVaultPasswordModalResult,
 } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { currentProductBrandConfig } from '@core/ui/product/brand'
+import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
-import { SafeImage } from '@lib/ui/images/SafeImage'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { attempt } from '@vultisig/lib-utils/attempt'
-import { FC, useMemo, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { isTrustedProductOrigin } from '../utils'
 
 export const ConnectOverview: FC<SignMessageOverview> = ({
   address,
@@ -34,14 +36,6 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const navigate = useCoreNavigate()
   const [showPasswordModal, setShowPasswordModal] = useState(false)
-
-  const displayMessage = useMemo(() => {
-    const { data, error } = attempt(() => JSON.parse(message))
-
-    if (error) return ''
-
-    return data.message as string
-  }, [message])
 
   const onGetPassword = ({ password }: FastVaultPasswordModalResult) => {
     navigate({
@@ -59,8 +53,12 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
       />
       <PageContent gap={16} scrollable>
         <Animation />
-        <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
-        <Request address={address} message={displayMessage} />
+        <Sender
+          favicon={requestFavicon}
+          origin={requestOrigin}
+          isValidated={isTrustedProductOrigin(requestOrigin)}
+        />
+        <Request address={address} message={message} />
         <Collapse title={t('signed_signature')}>
           <Text as="span" color="info" size={14} weight={500}>
             {signature}
@@ -79,19 +77,32 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
         justifyContent="flex-end"
         scrollable
       >
-        <SafeImage
-          src="/assets/install-app-logo.png"
-          render={props => (
-            <VStack as="img" height={60} width={60} {...props} />
-          )}
-        />
+        <ProductLogo style={{ fontSize: 60 }} />
         <Text size={22} weight={500} centerHorizontally>
-          Welcome to the Vultisig Plugin Marketplace
+          {t('plugin_marketplace_welcome', {
+            productName: currentProductBrandConfig.name,
+          })}
         </Text>
         <Text color="shy" size={12} weight={500} centerHorizontally>
-          Sign in with your Vultisig Vault to access Apps to automate your
-          digital Assets
+          {t('plugin_marketplace_signin_description', {
+            productName: currentProductBrandConfig.name,
+          })}
         </Text>
+        {!!message && (
+          <VStack fullWidth>
+            <Collapse title={t('message')}>
+              <Text
+                as="span"
+                color="info"
+                size={14}
+                weight={500}
+                style={{ overflowWrap: 'anywhere' }}
+              >
+                {message}
+              </Text>
+            </Collapse>
+          </VStack>
+        )}
       </StyledPageContent>
       <PageFooter>
         <Button onClick={() => setShowPasswordModal(true)}>

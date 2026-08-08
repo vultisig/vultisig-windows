@@ -15,7 +15,6 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js'
 import { SignSolana } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
 
@@ -35,11 +34,17 @@ const StyledTitle = styled.span<Styles>`
 `
 
 type InstructionSummary = {
+  transactionIndex: number
   index: number
   programId: string
   instructionType: string | null
   accountsCount: number
   dataLength: number
+}
+
+type ParseSolanaTransactionInstructionsInput = {
+  rawMessageBase64: string
+  transactionIndex: number
 }
 
 const systemProgramId = SystemProgram.programId.toBase58()
@@ -89,9 +94,10 @@ const getInstructionType = (
   return null
 }
 
-const parseSolanaTransactionInstructions = (
-  rawMessageBase64: string
-): InstructionSummary[] => {
+const parseSolanaTransactionInstructions = ({
+  rawMessageBase64,
+  transactionIndex,
+}: ParseSolanaTransactionInstructionsInput): InstructionSummary[] => {
   try {
     const buffer = Buffer.from(rawMessageBase64, 'base64')
     const txInputDataArray = Object.values(buffer)
@@ -111,6 +117,7 @@ const parseSolanaTransactionInstructions = (
         const instructionType = getInstructionType(programId, instructionData)
 
         return {
+          transactionIndex,
           index: index + 1,
           programId,
           instructionType,
@@ -129,6 +136,7 @@ const parseSolanaTransactionInstructions = (
         )
 
         return {
+          transactionIndex,
           index: index + 1,
           programId: ix.programId.toBase58(),
           instructionType,
@@ -148,14 +156,19 @@ export const SignSolanaDisplay = ({
   signSolana: SignSolana
 }) => {
   const { t } = useTranslation()
-  const instructionsSummary = useMemo(() => {
-    const allInstructions: InstructionSummary[] = []
-    signSolana.rawTransactions.forEach(tx => {
-      const instructions = parseSolanaTransactionInstructions(tx)
-      allInstructions.push(...instructions)
+  const instructionsSummary = signSolana.rawTransactions.flatMap((tx, index) =>
+    parseSolanaTransactionInstructions({
+      rawMessageBase64: tx,
+      transactionIndex: index + 1,
     })
-    return allInstructions
-  }, [signSolana.rawTransactions])
+  )
+  const transactionCount = signSolana.rawTransactions.length
+  const rawTransactionData =
+    transactionCount <= 1
+      ? signSolana.rawTransactions.join('\n')
+      : signSolana.rawTransactions
+          .map((transaction, index) => `#${index + 1}\n${transaction}`)
+          .join('\n\n')
 
   return (
     <VStack gap={16}>
@@ -167,9 +180,9 @@ export const SignSolanaDisplay = ({
             </StyledTitle>
             <VStack gap={8}>
               {instructionsSummary.map(ix => (
-                <VStack key={ix.index} gap={4}>
+                <VStack key={`${ix.transactionIndex}-${ix.index}`} gap={4}>
                   <Text size={13} weight={500} color="contrast">
-                    {t('instruction')} {ix.index}
+                    {t('instruction')} {ix.transactionIndex}.{ix.index}
                     {ix.instructionType && `: ${ix.instructionType}`}
                   </Text>
                   <Text size={12} color="shy">
@@ -188,7 +201,7 @@ export const SignSolanaDisplay = ({
       <Panel>
         <VStack gap={12} scrollable={true}>
           <StyledTitle color={'text'} fontSize={14}>
-            {t('raw_transaction_data')}
+            {t('raw_transaction_data')} ({transactionCount})
           </StyledTitle>
           <Text color="info" family="mono" size={14} weight={500}>
             <pre
@@ -208,7 +221,7 @@ export const SignSolanaDisplay = ({
                   overflowWrap: 'break-word',
                 }}
               >
-                {signSolana.rawTransactions.join('\n')}
+                {rawTransactionData}
               </code>
             </pre>
           </Text>

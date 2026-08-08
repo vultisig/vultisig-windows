@@ -1,25 +1,28 @@
-import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
-import { WalletCore } from '@trustwallet/wallet-core'
+import type { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import type { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getEvmContractCallHexSignature } from '@vultisig/core-chain/chains/evm/contract/call/hexSignature'
 import { getEvmContractCallSignatures } from '@vultisig/core-chain/chains/evm/contract/call/signatures'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
-import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
-import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
-import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import type { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
+import type { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { Psbt } from 'bitcoinjs-lib'
 
-import { IKeysignTransactionPayload, ITransactionPayload } from '../interfaces'
-import { parseSolanaTx } from './solana/parser'
-import { SolanaTxData } from './solana/types/types'
+import type {
+  IKeysignTransactionPayload,
+  ITransactionPayload,
+} from '../interfaces'
+import {
+  RippleTransaction,
+  sanitizeRippleDappTx,
+} from './ripple/sanitizeRippleDappTx'
+import type { SolanaTxData } from './solana/types/types'
 import { restrictPsbtToInputs } from './utxo/restrictPsbt'
 
 type RegularTxData = IKeysignTransactionPayload & {
@@ -27,9 +30,56 @@ type RegularTxData = IKeysignTransactionPayload & {
   coin: Coin
 }
 
+type SubstrateChain = OtherChain.Polkadot | OtherChain.Bittensor
+
+const bittensorGenesisHash =
+  '0x2f0555cc76fc2840a25a6ea3b9637146806f1f44b090c175ffde2a7e5ab36c03'
+const polkadotGenesisHash =
+  '0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3'
+
+const substrateChainByGenesisHash: Record<string, SubstrateChain> = {
+  [bittensorGenesisHash]: OtherChain.Bittensor,
+  [polkadotGenesisHash]: OtherChain.Polkadot,
+}
+
+const getSubstrateChain = (genesisHash: unknown): SubstrateChain => {
+  if (typeof genesisHash !== 'string') {
+    throw new Error('Missing Substrate genesis hash')
+  }
+
+  const chain = substrateChainByGenesisHash[genesisHash.toLowerCase()]
+
+  if (!chain) {
+    throw new Error('Unsupported Substrate genesis hash')
+  }
+
+  return chain
+}
+
+/** Substrate dApp transaction data whose chain is derived from its genesis hash. */
 export type PolkadotDappTxData = {
-  chain: OtherChain.Polkadot | OtherChain.Bittensor
+  chain: SubstrateChain
   signerPayload: PolkadotSignerPayloadJSON
+}
+
+/**
+ * Sui Wallet Standard dApp transaction data: the already-built PTB (BCS bytes,
+ * base64). It is signed verbatim via the `signSui` keysign payload — coins,
+ * gas and recipients are baked into the bytes, so nothing is reconstructed.
+ */
+export type SuiDappTxData = {
+  transactionBytes: string
+}
+
+/**
+ * XRPL dApp transaction data: the sanitized transaction object (allowlisted
+ * `TransactionType`, `Account` pinned to the vault). The mechanical envelope
+ * fields — `Fee`, `Sequence`, `LastLedgerSequence` — are filled from the
+ * wallet's network read while building the keysign payload, then the whole
+ * thing is signed verbatim via the `signRipple` payload.
+ */
+export type RippleDappTxData = {
+  transaction: RippleTransaction
 }
 
 export type CustomTxData =
@@ -44,6 +94,12 @@ export type CustomTxData =
     }
   | {
       polkadot: PolkadotDappTxData
+    }
+  | {
+      sui: SuiDappTxData
+    }
+  | {
+      ripple: RippleDappTxData
     }
 
 type GetCustomTxDataInput = {
@@ -124,8 +180,25 @@ export const getCustomTxData = ({
       serialized: async ({ data, chain, params }) => {
         if (chain === OtherChain.Polkadot || chain === OtherChain.Bittensor) {
           const signerPayload = JSON.parse(data[0]) as PolkadotSignerPayloadJSON
-          return { polkadot: { chain, signerPayload } }
+          return {
+            polkadot: {
+              chain: getSubstrateChain(signerPayload.genesisHash),
+              signerPayload,
+            },
+          }
         }
+
+        // Sui dApps ship a single already-built PTB (base64 BCS bytes). We
+        // forward it verbatim to the `signSui` keysign payload — there is no
+        // per-account input restriction or coin selection to apply here.
+        if (chain === OtherChain.Sui) {
+          return { sui: { transactionBytes: data[0] } }
+        }
+
+        const [{ getPublicKey }, { deriveAddress }] = await Promise.all([
+          import('@vultisig/core-chain/publicKey/getPublicKey'),
+          import('@vultisig/core-chain/publicKey/address/deriveAddress'),
+        ])
 
         const publicKey = getPublicKey({
           chain,
@@ -139,6 +212,21 @@ export const getCustomTxData = ({
           publicKey,
           walletCore,
         })
+
+        // XRPL dApps ship a full transaction JSON (a swap `OfferCreate`, a
+        // `Payment`, …). Sanitize it against the allowlist and pin `Account`
+        // to this vault before it goes anywhere near the signer; the envelope
+        // fields are autofilled later from the wallet's network read.
+        if (chain === OtherChain.Ripple) {
+          return {
+            ripple: {
+              transaction: sanitizeRippleDappTx({
+                rawJson: data[0],
+                accountAddress: address,
+              }),
+            },
+          }
+        }
 
         if (chain === Chain.Bitcoin) {
           const dataBuffer = Buffer.from(data[0], 'base64')
@@ -161,6 +249,11 @@ export const getCustomTxData = ({
           }
           return { psbt }
         }
+
+        const [{ toCommCoin }, { parseSolanaTx }] = await Promise.all([
+          import('@vultisig/core-mpc/types/utils/commCoin'),
+          import('./solana/parser'),
+        ])
 
         return {
           solana: await parseSolanaTx({

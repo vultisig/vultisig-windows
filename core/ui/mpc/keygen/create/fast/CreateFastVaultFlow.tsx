@@ -2,6 +2,7 @@ import { FastKeygenFlow } from '@core/ui/mpc/keygen/fast/FastKeygenFlow'
 import { useCore } from '@core/ui/state/core'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { ChildrenProp } from '@lib/ui/props'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { ComponentType } from 'react'
 
 import { KeygenActionWrapper } from '../KeygenActionWrapper'
@@ -12,11 +13,17 @@ import { FastVaultSetupFlow } from './FastVaultSetupFlow'
 
 type CreateFastVaultFlowProps = Partial<ChildrenProp> & {
   CreateActionProvider?: ComponentType<ChildrenProp>
+  onKeygenError?: (error: Error) => void | Promise<void>
+  onVaultSaveError?: (error: Error) => void | Promise<void>
+  onVaultSaved?: (vault: Vault) => void | Promise<void>
 }
 
 export const CreateFastVaultFlow = ({
   children,
   CreateActionProvider,
+  onKeygenError,
+  onVaultSaveError,
+  onVaultSaved,
 }: CreateFastVaultFlowProps) => {
   const { goBack } = useCore()
 
@@ -34,6 +41,9 @@ export const CreateFastVaultFlow = ({
                 onBack={onBack}
                 password={value.password}
                 onChangeEmailAndRestart={onBack}
+                onKeygenError={onKeygenError}
+                onVaultSaveError={onVaultSaveError}
+                onVaultSaved={onVaultSaved}
               />
             </KeygenActionWrapper>
           </KeygenSessionProviders>

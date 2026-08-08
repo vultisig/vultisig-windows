@@ -1,4 +1,4 @@
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
 import { useDefiPortfolioBalance } from '@core/ui/defi/page/hooks/useDefiPortfolios'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ManageVaultBalanceVisibility } from '@core/ui/vault/page/balance/visibility/ManageVaultBalanceVisibility'
@@ -12,7 +12,6 @@ import styled from 'styled-components'
 
 export const DefiPortfolioBalance = () => {
   const query = useDefiPortfolioBalance()
-  const formatFiatAmount = useFormatFiatAmount()
   const { t } = useTranslation()
 
   return (
@@ -34,11 +33,16 @@ export const DefiPortfolioBalance = () => {
             </HStack>
           )}
           success={value => (
-            <Text size={34}>
-              <BalanceVisibilityAware size="l">
-                {formatFiatAmount(value)}
-              </BalanceVisibilityAware>
-            </Text>
+            <HStack gap={8} alignItems="center">
+              <Text size={34}>
+                <BalanceVisibilityAware size="l">
+                  <AnimatedFiatAmount value={value} cacheKey="defi-total" />
+                </BalanceVisibilityAware>
+              </Text>
+              {query.isUpdating ? (
+                <Spinner size="0.9em" style={{ opacity: 0.5 }} />
+              ) : null}
+            </HStack>
           )}
         />
         <ManageVaultBalanceVisibility

@@ -1,9 +1,15 @@
+import {
+  currentProductBrand,
+  currentProductBrandConfig,
+} from '@core/ui/product/brand'
 import { useCore } from '@core/ui/state/core'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
 
 const resourceUrl =
-  'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
+  currentProductBrand === 'station'
+    ? currentProductBrandConfig.websiteUrl
+    : 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
 
 export const KeygenEducationPrompt = () => {
   const { openUrl } = useCore()

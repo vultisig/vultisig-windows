@@ -17,6 +17,7 @@ import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { UtxoChain } from '@vultisig/core-chain/Chain'
 
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { TronLink } from './tronLink'
 
 const createTonProvider = () => {
@@ -28,7 +29,9 @@ const createTonProvider = () => {
 
 export const createProviders = () => {
   const cosmosProvider = Cosmos.getInstance()
-  const vultisigSolanaProvider = new Solana('Vultisig')
+  const vultisigSolanaProvider = new Solana(
+    currentExtensionBrandConfig.provider.solanaName
+  )
   const keplrProvider = XDEFIKeplrProvider.getInstance(cosmosProvider)
 
   return {

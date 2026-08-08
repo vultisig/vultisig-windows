@@ -15,17 +15,12 @@ const switchToSidePanel = async () => {
   const currentWindow = await chrome.windows.getCurrent()
   if (currentWindow.id == null) return false
 
+  // A non-throwing open() is our success signal: real failures (missing user
+  // gesture, unsupported API) reject and are caught by the attempt() wrapper in
+  // handleToggle. We intentionally do not gate on chrome.runtime.getContexts —
+  // Chromium forks like Vivaldi open the panel but never report the SIDE_PANEL
+  // context, which previously reverted the toggle despite a successful open.
   await chrome.sidePanel.open({ windowId: currentWindow.id })
-
-  await new Promise(resolve => setTimeout(resolve, 500))
-
-  if (!chrome.runtime.getContexts) return false
-
-  const contexts = await chrome.runtime.getContexts({
-    contextTypes: [chrome.runtime.ContextType.SIDE_PANEL],
-  })
-
-  if (contexts.length === 0) return false
 
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
 

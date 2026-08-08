@@ -2,7 +2,6 @@ import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { NotificationBubbleIcon } from '@core/ui/notifications/NotificationBubbleIcon'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -10,13 +9,13 @@ import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { BookIcon } from '@lib/ui/icons/BookIcon'
+import { BellIcon } from '@lib/ui/icons/BellIcon'
 import { BooksIcon } from '@lib/ui/icons/BooksIcon'
 import { BubbleQuestionIcon } from '@lib/ui/icons/BubbleQuestionIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
+import { FileBookmarkIcon } from '@lib/ui/icons/FileBookmarkIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
 import { GlobusIcon } from '@lib/ui/icons/GlobusIcon'
@@ -24,10 +23,9 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
-import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
-import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
+import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -37,14 +35,16 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { vult } from '@vultisig/core-chain/coin/knownTokens'
-import { productWebsiteUrl } from '@vultisig/core-config'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { currentProductBrand } from '../product/brand'
 import {
+  currentProductEducationUrl,
+  currentProductWebsiteUrl,
   discordReferralUrl,
-  vultisigEducationUrl,
+  shouldShowVultisigCommunity,
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
   vultisigTwitterUrl,
@@ -57,6 +57,7 @@ type Props = {
   insiderOptions?: ReactNode
   prioritize?: ReactNode
   sidePanel?: ReactNode
+  stationMigration?: ReactNode
   checkUpdate?: ReactNode
 }
 
@@ -70,6 +71,7 @@ export const SettingsPage: FC<Props> = props => {
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const addresses = useCurrentVaultAddresses()
   const areReferralEnabled = Boolean(addresses[Chain.THORChain])
+  const shouldShowVultDiscounts = currentProductBrand === 'vultisig'
 
   return (
     <>
@@ -83,11 +85,6 @@ export const SettingsPage: FC<Props> = props => {
                 })
               }
             />
-          }
-          secondaryControls={
-            <IconButton onClick={() => navigate({ id: 'shareVault' })}>
-              <QrCodeIcon />
-            </IconButton>
           }
           title={t('settings')}
           hasBorder
@@ -105,16 +102,19 @@ export const SettingsPage: FC<Props> = props => {
               title={t('vault_settings')}
               showArrow
             />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <CoinsIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => navigate({ id: 'vultDiscount' })}
-              title={`$${vult.ticker} ${t('discount_tiers')}`}
-              showArrow
-            />
+            {shouldShowVultDiscounts && (
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <CoinsIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => navigate({ id: 'vultDiscount' })}
+                title={`$${vult.ticker} ${t('discount_tiers')}`}
+                showArrow
+              />
+            )}
+            {client === 'extension' && props.stationMigration}
           </SettingsSection>
 
           <SettingsSection title={t('general')}>
@@ -122,7 +122,7 @@ export const SettingsPage: FC<Props> = props => {
               data-testid="notifications-settings-link"
               icon={
                 <ListItemIconWrapper>
-                  <NotificationBubbleIcon />
+                  <BellIcon />
                 </ListItemIconWrapper>
               }
               onClick={() => navigate({ id: 'notificationSettings' })}
@@ -166,7 +166,7 @@ export const SettingsPage: FC<Props> = props => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <BookIcon />
+                  <FileBookmarkIcon />
                 </ListItemIconWrapper>
               }
               onClick={() => navigate({ id: 'addressBook' })}
@@ -181,7 +181,7 @@ export const SettingsPage: FC<Props> = props => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <ShieldCheckIcon />
+                  <ShieldIcon />
                 </ListItemIconWrapper>
               }
               onClick={() => navigate({ id: 'managePasscodeEncryption' })}
@@ -220,7 +220,7 @@ export const SettingsPage: FC<Props> = props => {
                   <BooksIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl(vultisigEducationUrl)}
+              onClick={() => openUrl(currentProductEducationUrl)}
               title={t('vultisig_education')}
               showArrow
             />
@@ -242,53 +242,55 @@ export const SettingsPage: FC<Props> = props => {
               )}
             />
           </SettingsSection>
-          <SettingsSection title={t('vultisig_community')}>
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <TwitterIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(vultisigTwitterUrl)}
-              title={t('twitter')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <DiscordIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(discordReferralUrl)}
-              title={t('discord')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <GithubIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(vultisigWindowsGithubUrl)}
-              title={t('github')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <GlobusIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(productWebsiteUrl)}
-              title={t('vultisig_website')}
-              showArrow
-            />
-          </SettingsSection>
+          {shouldShowVultisigCommunity && (
+            <SettingsSection title={t('vultisig_community')}>
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <TwitterIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(vultisigTwitterUrl)}
+                title={t('twitter')}
+                showArrow
+              />
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <DiscordIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(discordReferralUrl)}
+                title={t('discord')}
+                showArrow
+              />
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <GithubIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(vultisigWindowsGithubUrl)}
+                title={t('github')}
+                showArrow
+              />
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <GlobusIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => openUrl(currentProductWebsiteUrl)}
+                title={t('vultisig_website')}
+                showArrow
+              />
+            </SettingsSection>
+          )}
           <SettingsSection title={t('legal')}>
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <ShieldCheckIcon />
+                  <ShieldIcon />
                 </ListItemIconWrapper>
               }
               onClick={() => openUrl(vultisigPrivacyPolicyUrl)}

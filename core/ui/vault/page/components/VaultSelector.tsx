@@ -8,13 +8,18 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+type VaultSelectorPlacement = 'inline' | 'pageHeader'
 
 const Indicator = styled(CollapsableStateIndicator)`
   font-size: 12px;
 `
 
-export const VaultSelector = ({ value }: ValueProp<Vault>) => {
+export const VaultSelector = ({
+  value,
+  placement = 'inline',
+}: ValueProp<Vault> & { placement?: VaultSelectorPlacement }) => {
   const navigate = useCoreNavigate()
   const isFastVault = hasServer(value.signers)
 
@@ -23,6 +28,7 @@ export const VaultSelector = ({ value }: ValueProp<Vault>) => {
       onClick={() => {
         navigate({ id: 'vaults' })
       }}
+      placement={placement}
       role="button"
       tabIndex={0}
     >
@@ -39,7 +45,7 @@ export const VaultSelector = ({ value }: ValueProp<Vault>) => {
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ placement: VaultSelectorPlacement }>`
   ${hStack({
     alignItems: 'center',
     gap: 8,
@@ -48,4 +54,13 @@ const Wrapper = styled.div`
   cursor: pointer;
   max-width: 60%;
   min-width: 0;
+
+  ${({ placement, theme }) =>
+    theme.iconStyle === 'station' &&
+    placement === 'pageHeader' &&
+    css`
+      max-width: 156px;
+      transform: translateX(-18px);
+      width: 156px;
+    `}
 `

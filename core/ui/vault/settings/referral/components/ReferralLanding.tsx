@@ -61,6 +61,7 @@ const Overlay = styled.div`
     0px -1px 4px 0px rgba(255, 255, 255, 0.2) inset,
     -2px 0px 5px -3px rgba(255, 255, 255, 0.4) inset;
   inset: 0;
+  pointer-events: none;
   position: fixed;
   z-index: 0;
 `

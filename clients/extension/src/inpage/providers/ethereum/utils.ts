@@ -1,6 +1,8 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { callBackground } from '@core/inpage-provider/background'
 import { BackgroundError } from '@core/inpage-provider/background/error'
+import { callPopup } from '@core/inpage-provider/popup'
+import { PopupError } from '@core/inpage-provider/popup/error'
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import { getEvmChainByChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -41,7 +43,23 @@ export const switchChainHandler = async ([{ chainId }]: [
   )
   if (error) {
     if (error === BackgroundError.Unauthorized) {
-      await callBackground({ setVaultChain: { evm: chain } })
+      const result = await attempt(
+        callPopup({
+          grantVaultAccess: {
+            chain,
+            shouldGrantAccountAccess: false,
+          },
+        })
+      )
+
+      if (!result.data?.appSession) {
+        if (result.error === PopupError.RejectedByUser || !result.error) {
+          throw new EIP1193Error('UserRejectedRequest')
+        }
+        throw new EIP1193Error('InternalError')
+      }
+
+      await callBackground({ setAppChain: { evm: chain } })
     } else {
       throw error
     }

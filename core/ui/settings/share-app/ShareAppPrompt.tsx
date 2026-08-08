@@ -23,7 +23,9 @@ export const ShareAppPrompt = () => {
     navigator.clipboard
       .writeText(shareURL)
       .then(() => addToast({ message: t('link_copied') }))
-      .catch(() => addToast({ message: t('failed_to_copy_link') }))
+      .catch(() =>
+        addToast({ message: t('failed_to_copy_link'), status: 'error' })
+      )
   }
 
   return (

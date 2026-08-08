@@ -1,3 +1,4 @@
+import { CollapsingBalance } from '@core/ui/page/CollapsingBalance'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -8,8 +9,9 @@ import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { RefObject } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
+import { currentProductBrand } from '../../../product/brand'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
 import { BuyVultPromoBanner } from '../banners/BuyVultPromoBanner/BuyVultPromoBanner'
@@ -48,18 +50,26 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
           },
         ]
       : []),
-    {
-      id: 'buyVultPromo' as const,
-      component: (props: { onDismiss: () => void }) => (
-        <BuyVultPromoBanner onDismiss={props.onDismiss} />
-      ),
-    },
-    {
-      id: 'followOnX' as const,
-      component: (props: { onDismiss: () => void }) => (
-        <FollowOnXBanner onDismiss={props.onDismiss} />
-      ),
-    },
+    ...(currentProductBrand === 'vultisig'
+      ? [
+          {
+            id: 'buyVultPromo' as const,
+            component: (props: { onDismiss: () => void }) => (
+              <BuyVultPromoBanner onDismiss={props.onDismiss} />
+            ),
+          },
+        ]
+      : []),
+    ...(currentProductBrand === 'vultisig'
+      ? [
+          {
+            id: 'followOnX' as const,
+            component: (props: { onDismiss: () => void }) => (
+              <FollowOnXBanner onDismiss={props.onDismiss} />
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (
@@ -67,7 +77,9 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <BlurEffect />
         <BalanceWrapper data-testid="vault-overview-balance-wrapper">
-          <VaultTotalBalance />
+          <CollapsingBalance scrollContainerRef={scrollContainerRef}>
+            <VaultTotalBalance />
+          </CollapsingBalance>
           <VaultOverviewPrimaryActions />
         </BalanceWrapper>
         <Wrap wrap={PromptsWrapper}>
@@ -87,11 +99,24 @@ const Container = styled(VStack)`
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};
   position: relative;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      gap: 20px;
+      padding-top: 24px;
+    `}
 `
 
 const BalanceWrapper = styled.div`
   ${vStack({ alignItems: 'center', gap: 24 })};
   position: relative;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      gap: 20px;
+    `}
 `
 
 const BlurEffect = styled.div`
@@ -116,10 +141,22 @@ const BlurEffect = styled.div`
     width: 600px;
     top: -25px;
   }
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      display: none;
+    `}
 `
 
 const Divider = styled.div`
   height: 1px;
   align-self: stretch;
   background: ${getColor('foregroundExtra')};
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      background: ${theme.colors.foregroundSuper.toCssValue()};
+    `}
 `

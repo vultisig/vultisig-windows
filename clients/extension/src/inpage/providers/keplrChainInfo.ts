@@ -7,13 +7,19 @@ import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
-type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
+export type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
 
-// Terra Classic (columbus-5) deliberately omitted: it shares the `terra`
-// bech32 prefix with Terra v2 (phoenix-1), and cosmos-kit / wallet-kit
-// reject duplicate prefixes within a single chain set — including both
-// makes dApps see Terra as "not in wallet". Terra Classic is still
-// reachable through the Station provider's `switchNetwork('classic')`.
+// Terra Classic (columbus-5) is resolvable and signable by chainID, but is
+// kept out of the *advertised* chain list (see `advertisedKeplrChains`): it
+// shares the `terra` bech32 prefix with Terra v2 (phoenix-1), and some
+// cosmos-kit / wallet-kit dApps build a prefix→chain map from the enumerated
+// `getChainInfosWithoutEndpoints()` list, where a duplicate `terra` prefix
+// makes them resolve Terra to the wrong chain and show it as "not in wallet".
+// Terra Classic dApps connect through their own Station extension
+// connector, which probes `window.station.keplr.getKey('columbus-5')`
+// — a chainID-keyed call routed here that is unaffected by enumeration, so it
+// must resolve. (Terra Classic also remains reachable through the Station
+// provider's `switchNetwork('classic')`.)
 //
 // QBTC is included here so Keplr-shaped dApps can connect via the
 // standard `window.keplr` API in addition to the dedicated
@@ -26,6 +32,7 @@ const supportedKeplrChains = [
   CosmosChain.Dydx,
   CosmosChain.Kujira,
   CosmosChain.Terra,
+  CosmosChain.TerraClassic,
   CosmosChain.Noble,
   CosmosChain.Akash,
   CosmosChain.THORChain,
@@ -33,8 +40,18 @@ const supportedKeplrChains = [
   OtherChain.QBTC,
 ] as const
 
+// Chains advertised in the enumerated `getChainInfosWithoutEndpoints()`
+// response. Excludes Terra Classic so dApps that register chains by bech32
+// prefix don't collide Terra v2 (`phoenix-1`) and Terra Classic
+// (`columbus-5`), which share the `terra` prefix. Per-chainID lookups
+// (`getKey`, `enable`, signing) still resolve Terra Classic via
+// `supportedKeplrChains`.
+const advertisedKeplrChains = supportedKeplrChains.filter(
+  chain => chain !== CosmosChain.TerraClassic
+)
+
 /** QBTC chain ID. Mirrors the constant used throughout the SDK (QBTCHelper, ClaimRunner) so dApps that query the live block header see the same chain ID Vultisig signs for. */
-const qbtcChainId = 'qbtc-testnet'
+const qbtcChainId = 'qbtc'
 
 /**
  * QBTC isn't a `CosmosChain` in the SDK (it's `OtherChain.QBTC` because it
@@ -51,6 +68,7 @@ const bech32Prefix: Record<SupportedKeplrChain, string> = {
   Dydx: 'dydx',
   Kujira: 'kujira',
   Terra: 'terra',
+  TerraClassic: 'terra',
   Noble: 'noble',
   Akash: 'akash',
   THORChain: 'thor',
@@ -66,6 +84,7 @@ const bip44CoinType: Record<SupportedKeplrChain, number> = {
   Noble: 118,
   Akash: 118,
   Terra: 330,
+  TerraClassic: 330,
   THORChain: 931,
   MayaChain: 931,
   QBTC: 118,
@@ -77,6 +96,7 @@ const chainName: Record<SupportedKeplrChain, string> = {
   Dydx: 'dYdX',
   Kujira: 'Kujira',
   Terra: 'Terra',
+  TerraClassic: 'Terra Classic',
   Noble: 'Noble',
   Akash: 'Akash',
   THORChain: 'THORChain',
@@ -89,18 +109,40 @@ const chainName: Record<SupportedKeplrChain, string> = {
 // so 0 is the canonical "ignore gas price" value. QBTC has a flat
 // `min_tx_fee` of 800 uqbtc — pick a non-zero step so cosmos-kit fee
 // calculators don't underpay.
-const averageGasPrice: Record<SupportedKeplrChain, number> = {
+//
+// Osmosis runs an EIP-1559-style base-fee market where the network min has
+// floated above the historical 0.025 average. Use 0.04 (Keplr's chain-registry
+// "high" tier) so wallet-injected fees clear the current floor without an
+// extra RPC round-trip per signDirect.
+export const keplrAverageGasPrice: Record<SupportedKeplrChain, number> = {
   Cosmos: 0.025,
-  Osmosis: 0.025,
+  Osmosis: 0.04,
   Dydx: 12500000000,
   Kujira: 0.0034,
   Terra: 0.015,
+  // Terra Classic's on-chain minimum gas price for uluna is far higher than
+  // Terra v2's; mirror the Station provider's `classic` gas price so injected
+  // fees clear the network floor.
+  TerraClassic: 28.325,
   Noble: 0.025,
   Akash: 0.025,
   THORChain: 0,
   MayaChain: 0,
   QBTC: 0.004,
 }
+
+// Lower bound (in the chain's fee denom base units) for a wallet-injected
+// fee. `gasLimit * gasPrice` can land below what the chain's validators
+// actually accept — Akash's chain-registry gas price (0.025 uakt/gas)
+// yields only 7500 uakt (0.0075 AKT) on a ~300k-gas delegation, which the
+// network's mempool rejects. Floor the injected amount to the minimum the
+// chain expects. Only chains that need a floor above their computed fee are
+// listed; everything else relies on `gasLimit * gasPrice` alone.
+export const keplrMinInjectedFee: Partial<Record<SupportedKeplrChain, bigint>> =
+  {
+    // 0.025 AKT — the minimum fee Akash validators accept for staking txs.
+    Akash: 25_000n,
+  }
 
 const buildBech32Config = (prefix: string) => ({
   bech32PrefixAccAddr: prefix,
@@ -122,7 +164,7 @@ const buildKeplrChainInfo = (chain: SupportedKeplrChain): ChainInfo => {
   const prefix = bech32Prefix[chain]
   const denom = getKeplrFeeDenom(chain)
   const { ticker, decimals } = chainFeeCoin[chain]
-  const average = averageGasPrice[chain]
+  const average = keplrAverageGasPrice[chain]
   const rpc = getKeplrRpcUrl(chain)
 
   const currency = {
@@ -185,7 +227,7 @@ export const isNativeKeplrChainId = (chainId: string): boolean =>
  */
 export const getKeplrCosmosChainInfos = async (): Promise<ChainInfo[]> => {
   const suggested = await callBackground({ getKeplrSuggestedChains: {} })
-  const native = supportedKeplrChains.map(buildKeplrChainInfo)
+  const native = advertisedKeplrChains.map(buildKeplrChainInfo)
   const additions = Object.values(suggested).filter(
     info => !nativeChainIds.has(info.chainId)
   )

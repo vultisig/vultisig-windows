@@ -21,6 +21,11 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import { parseProgramCall } from './parseProgramCall'
+import {
+  getSerializedSolanaTxBuffer,
+  getSolanaMultiTxRawFallback,
+  getSolanaRawTxFallback,
+} from './rawTxFallback'
 import { AddressTableLookup, SolanaTxData } from './types/types'
 import { mergedKeys, resolveAddressTableKeys } from './utils'
 
@@ -39,11 +44,13 @@ export const parseSolanaTx = async ({
   getCoin,
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
+  const multiTxRawFallback = getSolanaMultiTxRawFallback(data)
+  if (multiTxRawFallback) {
+    return multiTxRawFallback
+  }
+
+  const buffer = getSerializedSolanaTxBuffer(data)
   const connection = new Connection(solanaRpcUrl)
-  const inputTx = Uint8Array.from(Buffer.from(data[0], 'base64'))
-  const txInputDataArray = Object.values(inputTx)
-  const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
-  const buffer = Buffer.from(txInputDataBuffer)
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
     buffer
@@ -97,7 +104,7 @@ export const parseSolanaTx = async ({
       walletCore,
     })
 
-    const blockaidTxSimulationInput = getBlockaidTxSimulationInput({
+    const blockaidTxSimulationInput = await getBlockaidTxSimulationInput({
       payload: keysignPayload,
       walletCore,
     })
@@ -192,14 +199,5 @@ export const parseSolanaTx = async ({
     }
   }
 
-  const solanaFeeCoin = await getCoin({ chain: Chain.Solana })
-  return {
-    transfer: {
-      authority: fromCoin.address,
-      inputCoin: solanaFeeCoin,
-      inAmount: '0',
-      receiverAddress: '',
-      rawTransactions: data,
-    },
-  }
+  return getSolanaRawTxFallback(data)
 }

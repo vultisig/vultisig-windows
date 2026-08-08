@@ -11,8 +11,27 @@ import { toLibType } from '@vultisig/core-mpc/types/utils/libType'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
-import { useKeyImportInput } from '../state/keyImportInput'
+import {
+  isStationTerraRootKeyImportInput,
+  KeyImportInput,
+  useKeyImportInput,
+} from '../state/keyImportInput'
 import { getKeyImportDerivationGroups } from '../utils/getKeyImportDerivationGroups'
+
+export const getKeyImportServerRepresentativeChains = (
+  keyImportInput: KeyImportInput
+) => {
+  if (isStationTerraRootKeyImportInput(keyImportInput)) return []
+
+  return getKeyImportDerivationGroups(keyImportInput.chains).map(
+    group => group.representativeChain
+  )
+}
+
+export const getKeyImportServerProtocols = (keyImportInput: KeyImportInput) =>
+  isStationTerraRootKeyImportInput(keyImportInput)
+    ? (['ecdsa'] as const)
+    : (['ecdsa', 'eddsa'] as const)
 
 export const KeyImportFastKeygenServerActionProvider = ({
   children,
@@ -23,16 +42,16 @@ export const KeyImportFastKeygenServerActionProvider = ({
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const { chains } = useKeyImportInput()
+  const keyImportInput = useKeyImportInput()
   const isTssBatchingEnabled = useIsTssBatching()
+  const isStationTerraRoot = isStationTerraRootKeyImportInput(keyImportInput)
 
   const action = async () => {
-    const derivationGroups = getKeyImportDerivationGroups(chains)
-    const representativeChains = derivationGroups.map(
-      group => group.representativeChain
-    )
+    const representativeChains =
+      getKeyImportServerRepresentativeChains(keyImportInput)
+    const protocols = [...getKeyImportServerProtocols(keyImportInput)]
 
-    if (isTssBatchingEnabled) {
+    if (isTssBatchingEnabled || isStationTerraRoot) {
       await keyImportWithServer({
         name,
         encryption_password: password,
@@ -41,7 +60,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
         email,
         hex_encryption_key: hexEncryptionKey,
         lib_type: toLibType('KeyImport'),
-        protocols: ['ecdsa', 'eddsa'],
+        protocols,
         chains: representativeChains,
       })
     } else {

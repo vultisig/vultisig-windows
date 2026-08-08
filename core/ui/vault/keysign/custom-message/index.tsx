@@ -1,12 +1,12 @@
 import { create } from '@bufbuild/protobuf'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { CustomMessageVerifyContent } from '@core/ui/mpc/keysign/custom/CustomMessageVerifyContent'
 import { Button } from '@lib/ui/buttons/Button'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { TextInput } from '@lib/ui/inputs/TextInput'
-import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
@@ -72,41 +72,22 @@ export const SignCustomMessagePage = () => {
         title={isFillingForm ? t('sign_message') : t('verify')}
       />
       <PageContent gap={24} flexGrow scrollable>
-        <VStack gap={16}>
-          {isFillingForm ? (
-            <>
-              <StyledTextInput
-                value={method}
-                onValueChange={setMethod}
-                placeholder={t('signing_method')}
-              />
-              <StyledTextInput
-                value={message}
-                onValueChange={setMessage}
-                placeholder={t('message_to_sign')}
-              />
-            </>
-          ) : (
-            <>
-              <ReviewItem>
-                <Text size={12} color="shy" weight={500}>
-                  {t('signing_method')}
-                </Text>
-                <Text size={14} weight={500}>
-                  {method}
-                </Text>
-              </ReviewItem>
-              <ReviewItem>
-                <Text size={12} color="shy" weight={500}>
-                  {t('message_to_sign')}
-                </Text>
-                <Text size={14} weight={500}>
-                  {message}
-                </Text>
-              </ReviewItem>
-            </>
-          )}
-        </VStack>
+        {isFillingForm ? (
+          <VStack gap={16}>
+            <StyledTextInput
+              value={method}
+              onValueChange={setMethod}
+              placeholder={t('signing_method')}
+            />
+            <StyledTextInput
+              value={message}
+              onValueChange={setMessage}
+              placeholder={t('message_to_sign')}
+            />
+          </VStack>
+        ) : (
+          <CustomMessageVerifyContent method={method} message={message} />
+        )}
       </PageContent>
       <PageFooter>
         {isFillingForm ? (
@@ -130,16 +111,4 @@ const StyledTextInput = styled(TextInput)`
     font-weight: 500;
     font-size: 16px;
   }
-`
-
-const ReviewItem = styled.div`
-  ${vStack({
-    gap: 12,
-  })};
-
-  padding: 16px 20px;
-  border-radius: 12px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: rgba(11, 26, 58, 0.5);
-  min-width: 0;
 `

@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction, chainActionsRecord } from '../ChainAction'
-import { isStakeableChain, isStakeableCoin } from '../config'
+import { isBruneStakeCoin, isStakeableChain, isStakeableCoin } from '../config'
 import { DepositEnabledChain } from '../DepositEnabledChain'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useMergeOptions } from './useMergeOptions'
@@ -23,7 +23,7 @@ export const useAvailableChainActions = (chain: Chain) => {
     () =>
       coins
         .filter(({ chain: currentCoinChain }) => currentCoinChain === chain)
-        .some(coin => isStakeableCoin(coin.ticker)),
+        .some(coin => isStakeableCoin(coin.ticker) || isBruneStakeCoin(coin)),
     [chain, coins]
   )
 
@@ -67,6 +67,16 @@ export const useAvailableChainActions = (chain: Chain) => {
         add_thor_lp: () =>
           chain === Chain.THORChain ? true : hasThorchainAddress,
         remove_thor_lp: () => true,
+        open_trust_line: () => true,
+        delegate: () => true,
+        undelegate: () => true,
+        redelegate: () => true,
+        claim_rewards: () => true,
+        solana_delegate: () => true,
+        solana_unstake: () => true,
+        solana_withdraw: () => true,
+        solana_move_stake: () => true,
+        solana_finish_move: () => true,
       })
     )
   }, [

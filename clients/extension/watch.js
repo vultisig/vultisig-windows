@@ -1,14 +1,23 @@
-import { execSync, spawn } from 'child_process'
+import { spawn } from 'child_process'
 import { rm } from 'fs/promises'
 import { WebSocketServer } from 'ws'
 
-const WS_PORT = 18732
+import { resolveExtensionReloadPort } from './worktreeReloadPort.js'
 
-try {
-  execSync(`lsof -ti:${WS_PORT} | xargs kill -9`, { stdio: 'ignore' })
-} catch {}
+const reloadPortEnvName = 'VITE_EXTENSION_RELOAD_PORT'
+const reloadHost = '127.0.0.1'
+const wsPort = resolveExtensionReloadPort({ cwd: process.cwd() })
 
-const wss = new WebSocketServer({ port: WS_PORT })
+const wss = await new Promise((resolve, reject) => {
+  const server = new WebSocketServer({ host: reloadHost, port: wsPort })
+  server.once('listening', () => resolve(server))
+  server.once('error', reject)
+}).catch(error => {
+  console.error(
+    `\x1b[31mUnable to start the extension reload server on port ${wsPort}: ${error.message}\x1b[0m`
+  )
+  process.exit(1)
+})
 
 let reloadTimeout
 const scheduleReload = () => {
@@ -41,6 +50,7 @@ for (const { label, env } of chunks) {
       ...process.env,
       ...env,
       VITE_DEV_RELOAD: 'true',
+      [reloadPortEnvName]: String(wsPort),
       NODE_OPTIONS: nodeOptions,
     },
     stdio: 'pipe',
@@ -75,6 +85,6 @@ process.on('SIGINT', cleanup)
 process.on('SIGTERM', cleanup)
 
 console.log(
-  `\x1b[36mWebSocket reload server on ws://localhost:${WS_PORT}\x1b[0m`
+  `\x1b[36mWebSocket reload server on ws://${reloadHost}:${wsPort}\x1b[0m`
 )
 console.log('\x1b[36mWatching for changes...\x1b[0m')

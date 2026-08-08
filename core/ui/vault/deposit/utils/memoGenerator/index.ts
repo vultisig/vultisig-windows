@@ -72,10 +72,17 @@ export const generateMemo = ({
 
           if (coin.ticker === 'RUJI') {
             const chainAmount = toChainAmount(
-              shouldBePresent(Number(amount)),
+              shouldBePresent(amount),
               coin.decimals
             ).toString()
             return `bond:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+          }
+
+          // bRUNE stakes via a wasm `liquid.bond` execute, not a memo — the
+          // keysign builder discards this value, so return the canonical
+          // no-memo string instead of throwing.
+          if (coin.ticker.toUpperCase() === 'BRUNE') {
+            return ''
           }
 
           throw new Error(
@@ -92,7 +99,7 @@ export const generateMemo = ({
 
             const raw = (depositFormData as any).percentage
 
-            const pct = typeof raw === 'string' ? Number(raw) : Number(raw)
+            const pct = Number(raw)
             if (!Number.isFinite(pct) || pct <= 0 || pct > 100) {
               throw new Error('Percentage must be 0-100')
             }
@@ -102,12 +109,16 @@ export const generateMemo = ({
 
           if (coin.ticker === 'RUJI') {
             const amt = shouldBePresent(amount, 'Amount')
-            const amtNum = typeof amt === 'string' ? Number(amt) : amt
-            if (!Number.isFinite(amtNum) || amtNum <= 0) {
+            if (!Number.isFinite(Number(amt)) || Number(amt) <= 0) {
               throw new Error('Amount is required for RUJI unstake')
             }
-            const chainAmount = toChainAmount(amtNum, coin.decimals).toString()
+            const chainAmount = toChainAmount(amt, coin.decimals).toString()
             return `withdraw:${rujiraStakingConfig.bondDenom}:${chainAmount}`
+          }
+
+          // bRUNE unstakes via a wasm `liquid.unbond` execute, not a memo.
+          if (coin.ticker.toUpperCase() === 'BRUNE') {
+            return ''
           }
 
           throw new Error(
@@ -138,7 +149,7 @@ export const generateMemo = ({
     unbond: () => {
       const runeDecimals = chainFeeCoin[Chain.THORChain].decimals
       const amountInUnits = amount
-        ? Math.round(amount * Math.pow(10, runeDecimals))
+        ? toChainAmount(amount, runeDecimals).toString()
         : 0
       return provider
         ? `UNBOND:${nodeAddress}:${amountInUnits}:${provider}`
@@ -216,13 +227,31 @@ export const generateMemo = ({
       const basisPoints = Math.floor(pct * 100)
       return `-:${pool}:${basisPoints}`
     },
+    // A TrustSet carries no memo — the trust line is encoded as the signed
+    // OperationTrustSet, not a memo string.
+    open_trust_line: () => '',
+    // Cosmos SDK native staking actions are encoded as typed proto messages,
+    // not memos. The keysign payload builder routes these through the
+    // `cosmos-msg` resolver kind, so this generator never needs to produce
+    // anything for them — empty string is the canonical "no memo" value.
+    delegate: () => '',
+    undelegate: () => '',
+    redelegate: () => '',
+    claim_rewards: () => '',
+    // Solana staking carries no memo — the op is encoded in the relayed
+    // unsigned transaction (signSolana.rawTransactions), not a memo string.
+    solana_delegate: () => '',
+    solana_unstake: () => '',
+    solana_withdraw: () => '',
+    solana_move_stake: () => '',
+    solana_finish_move: () => '',
   })
 }
 
 function extractFormValues(formData: FieldValues) {
   return {
     nodeAddress: formData.nodeAddress as string | null,
-    amount: formData.amount as number | null,
+    amount: formData.amount as string | null,
     lpUnits: formData.lpUnits as number | null,
     customMemo: formData.customMemo as string | undefined,
     percentage: formData.percentage as number | null,

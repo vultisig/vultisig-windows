@@ -4,8 +4,12 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
+import { NodesIcon } from '@lib/ui/icons/NodesIcon'
+import {
+  StationLayers2FilledIcon,
+  StationWalletFilledIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
@@ -13,7 +17,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 import { AgentBottomNavigationContent } from './AgentBottomNavigationContent'
 
@@ -31,6 +35,7 @@ export const BottomNavigation = ({
 }: BottomNavigationProps) => {
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -64,19 +69,30 @@ export const BottomNavigation = ({
           isActive={activeTab === 'wallet'}
           onClick={() => handleTabChangeOld('wallet')}
         >
-          <WalletIcon />
+          {iconStyle === 'station' ? (
+            <StationWalletFilledIcon />
+          ) : (
+            <WalletIcon />
+          )}
           <Text as="span" size={10}>
             {t('wallet')}
           </Text>
         </TabButtonOld>
-        <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
-          <CameraIcon />
+        <CameraButton
+          aria-label={t('scan_qr')}
+          onClick={() => navigate({ id: 'uploadQr', state: {} })}
+        >
+          <Camera2Icon />
         </CameraButton>
         <TabButtonOld
           isActive={activeTab === 'defi'}
           onClick={() => handleTabChangeOld('defi')}
         >
-          <CoinsAddIcon />
+          {iconStyle === 'station' ? (
+            <StationLayers2FilledIcon />
+          ) : (
+            <NodesIcon />
+          )}
           <Text as="span" size={10}>
             {t('defi')}
           </Text>
@@ -112,15 +128,19 @@ const ContainerOld = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 1000;
   height: ${bottomNavigationHeight}px;
   ${hStack({
     justifyContent: 'center',
     alignItems: 'flex-end',
   })};
-  background: rgba(19, 46, 86, 0.6);
+  background: ${({ theme }) =>
+    theme.iconStyle === 'station'
+      ? theme.colors.foreground.withAlpha(0.5).toCssValue()
+      : theme.colors.foreground.toCssValue()};
   backdrop-filter: blur(32px);
   padding: 8px 12px 10px 12px;
-  border-top: 1px solid #1b3f73;
+  border-top: 1px solid ${getColor('foregroundExtra')};
 
   @supports (padding-bottom: calc(0px + env(safe-area-inset-bottom))) {
     height: calc(${bottomNavigationHeight}px + env(safe-area-inset-bottom));
@@ -130,7 +150,10 @@ const ContainerOld = styled.div`
 
 const CameraButton = styled(UnstyledButton)`
   ${round};
-  background: #4879fd;
+  background: ${({ theme }) =>
+    theme.iconStyle === 'station'
+      ? theme.colors.buttonPrimary.toCssValue()
+      : '#4879fd'};
   ${centerContent};
   ${sameDimensions(centerButtonSize)};
   font-size: 24px;
@@ -140,7 +163,10 @@ const CameraButton = styled(UnstyledButton)`
   margin-bottom: 12px;
 
   &:hover {
-    background: #5a8aff;
+    background: ${({ theme }) =>
+      theme.iconStyle === 'station'
+        ? theme.colors.buttonHover.toCssValue()
+        : '#5a8aff'};
   }
 `
 

@@ -6,15 +6,17 @@ import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingSt
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { match } from '@vultisig/lib-utils/match'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -29,22 +31,42 @@ const PendingWrapper = styled.div`
 
 type KeygenFlowProps = OnBackProp &
   Partial<OnFinishProp> & {
+    onKeygenError?: (error: Error) => void | Promise<void>
     password?: string
     onChangeEmailAndRestart?: () => void
+    onVaultSaveError?: (error: Error) => void | Promise<void>
+    onVaultSaved?: (vault: Vault) => void | Promise<void>
+    securityType?: VaultSecurityType
   }
 
 export const KeygenFlow = ({
   onBack,
   onFinish,
+  onKeygenError,
   password,
   onChangeEmailAndRestart,
+  onVaultSaveError,
+  onVaultSaved,
+  securityType,
 }: KeygenFlowProps) => {
   const {
     step,
     mutate: startKeygen,
     ...keygenMutationState
   } = useKeygenMutation()
+  const hasReportedKeygenError = useRef(false)
   useEffect(startKeygen, [startKeygen])
+  useEffect(() => {
+    if (!keygenMutationState.isError) {
+      hasReportedKeygenError.current = false
+      return
+    }
+
+    if (hasReportedKeygenError.current) return
+
+    hasReportedKeygenError.current = true
+    onKeygenError?.(keygenMutationState.error)
+  }, [keygenMutationState.error, keygenMutationState.isError, onKeygenError])
   const { t } = useTranslation()
 
   const keygenOperation = useKeygenOperation()
@@ -66,6 +88,7 @@ export const KeygenFlow = ({
   }, [keygenOperation])
 
   const isCreateOperation = 'create' in keygenOperation
+  const isReshare = 'reshare' in keygenOperation
 
   return (
     <MatchQuery
@@ -82,6 +105,8 @@ export const KeygenFlow = ({
                 onBack={onBack}
                 password={password}
                 onChangeEmailAndRestart={onChangeEmailAndRestart}
+                onVaultSaveError={onVaultSaveError}
+                onVaultSaved={onVaultSaved}
               />
             )
           }
@@ -94,6 +119,8 @@ export const KeygenFlow = ({
                   value={vault}
                   onFinish={onFinish}
                   onBack={onBack}
+                  onVaultSaveError={onVaultSaveError}
+                  onVaultSaved={onVaultSaved}
                 />
               )}
               to={() => (
@@ -101,6 +128,8 @@ export const KeygenFlow = ({
                   onBack={onBack}
                   password={password}
                   onChangeEmailAndRestart={onChangeEmailAndRestart}
+                  onVaultSaveError={onVaultSaveError}
+                  onVaultSaved={onVaultSaved}
                 />
               )}
             />
@@ -130,7 +159,16 @@ export const KeygenFlow = ({
               primaryControls={<PageHeaderBackButton />}
             />
           )}
-          <FlowErrorPageContent title={t('keygen_failed')} error={error} />
+          <FlowErrorPageContent
+            variant="warning"
+            title={t(isReshare ? 'reshare_failed' : 'keygen_failed')}
+            description={t(
+              isReshare
+                ? 'reshare_failed_description'
+                : 'keygen_failed_description'
+            )}
+            error={error}
+          />
         </>
       )}
       pending={() => (
@@ -142,7 +180,9 @@ export const KeygenFlow = ({
               primaryControls={<PageHeaderBackButton />}
             />
           )}
-          {!isPluginReshare && <KeygenPendingState value={step} />}
+          {!isPluginReshare && (
+            <KeygenPendingState value={step} securityType={securityType} />
+          )}
         </PendingWrapper>
       )}
     />

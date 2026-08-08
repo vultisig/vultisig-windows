@@ -1,22 +1,27 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const EmailIcon: FC<SvgProps> = props => (
+export const EmailIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    viewBox="0 0 20 20"
+    viewBox="0 0 24 24"
     fill="none"
     {...props}
   >
     <path
-      d="M3.95768 3.33594C2.69203 3.33594 1.66602 4.36195 1.66602 5.6276V5.66042L9.5311 9.61794C9.82568 9.76619 10.173 9.76619 10.4675 9.61794L18.3327 5.66042V5.6276C18.3327 4.36195 17.3067 3.33594 16.041 3.33594H3.95768Z"
-      fill="currentColor"
+      d="M3.59961 8.40039L11.4044 12.8596C11.7728 13.0708 12.2264 13.0708 12.5948 12.8596L20.3996 8.40039"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
-      d="M18.3327 7.05469L11.0294 10.7296C10.3814 11.0556 9.61727 11.0556 8.96927 10.7296L1.66602 7.05469V14.3726C1.66602 15.6382 2.69203 16.6642 3.95768 16.6642H16.041C17.3067 16.6642 18.3327 15.6382 18.3327 14.3726V7.05469Z"
-      fill="currentColor"
+      d="M16.7996 4.79883H7.19961C5.21138 4.79883 3.59961 6.4106 3.59961 8.39883V15.5988C3.59961 17.5871 5.21138 19.1988 7.19961 19.1988H16.7996C18.7878 19.1988 20.3996 17.5871 20.3996 15.5988V8.39883C20.3996 6.4106 18.7878 4.79883 16.7996 4.79883Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

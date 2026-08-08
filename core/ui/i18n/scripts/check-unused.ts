@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { dirname } from 'node:path'
@@ -6,308 +6,462 @@ import { fileURLToPath } from 'node:url'
 
 import ts from 'typescript'
 
-const currentDirname = dirname(fileURLToPath(import.meta.url))
-const workspaceRoot = path.resolve(currentDirname, '../../../..')
+import { Language, languages, primaryLanguage } from '../Language'
+import { translations } from '../translations'
+import { flattenTranslationRecord } from '../utils/translationRecords'
 
 type Locale = {
   [key: string]: string | Locale
 }
 
-const flattenKeys = (obj: Locale, prefix = ''): string[] => {
-  return Object.entries(obj).flatMap(([key, value]) => {
-    const fullKey = prefix ? `${prefix}.${key}` : key
-    return typeof value === 'object' && value !== null
-      ? flattenKeys(value, fullKey)
-      : [fullKey]
-  })
+type DynamicKeyPattern = {
+  prefix: string
+  suffix: string
 }
+
+type TranslationUsage = {
+  usedKeys: Set<string>
+  dynamicPatterns: DynamicKeyPattern[]
+  warnings: string[]
+}
+
+const currentDirname = dirname(fileURLToPath(import.meta.url))
+const workspaceRoot = path.resolve(currentDirname, '../../../..')
+const localeDirectory = path.resolve(currentDirname, '../locales')
+
+const ignoredDirectoryNames = new Set([
+  'node_modules',
+  'dist',
+  '.git',
+  'generated',
+])
 
 const getKeyPath = (key: string): string[] => key.split('.')
 
 const removeKeyFromObject = (obj: Locale, keyPath: string[]): boolean => {
-  if (keyPath.length === 0) return false
-
   const [first, ...rest] = keyPath
+
+  if (!first) {
+    return false
+  }
 
   if (rest.length === 0) {
     if (first in obj) {
       delete obj[first]
       return true
     }
+
     return false
   }
 
   const nested = obj[first]
-  if (typeof nested === 'object' && nested !== null) {
-    const removed = removeKeyFromObject(nested, rest)
-    if (removed && Object.keys(nested).length === 0) {
-      delete obj[first]
-    }
-    return removed
+
+  if (typeof nested !== 'object' || nested === null) {
+    return false
   }
 
-  return false
+  const removed = removeKeyFromObject(nested, rest)
+
+  if (removed && Object.keys(nested).length === 0) {
+    delete obj[first]
+  }
+
+  return removed
+}
+
+const cloneLocale = (locale: Locale): Locale => {
+  const result: Locale = {}
+
+  Object.entries(locale).forEach(([key, value]) => {
+    result[key] = typeof value === 'string' ? value : cloneLocale(value)
+  })
+
+  return result
 }
 
 const findSourceFiles = (dir: string): string[] => {
   const results: string[] = []
-
   const entries = fs.readdirSync(dir, { withFileTypes: true })
 
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name)
 
     if (entry.isDirectory()) {
-      if (
-        entry.name === 'node_modules' ||
-        entry.name === 'dist' ||
-        entry.name === '.git' ||
-        entry.name === 'generated'
-      ) {
+      if (ignoredDirectoryNames.has(entry.name)) {
         continue
       }
+
       results.push(...findSourceFiles(fullPath))
-    } else if (entry.isFile()) {
-      if (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx')) {
-        if (!entry.name.endsWith('.d.ts')) {
-          results.push(fullPath)
-        }
-      }
+      continue
+    }
+
+    if (!entry.isFile()) {
+      continue
+    }
+
+    if (
+      (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx')) &&
+      !entry.name.endsWith('.d.ts')
+    ) {
+      results.push(fullPath)
     }
   }
 
   return results
 }
 
-const isTFunctionCall = (node: ts.Node): node is ts.CallExpression => {
-  if (!ts.isCallExpression(node)) return false
-
-  const expression = node.expression
-
-  if (ts.isIdentifier(expression) && expression.text === 't') {
-    return true
+const isTranslationFunctionCall = (
+  node: ts.Node
+): node is ts.CallExpression => {
+  if (!ts.isCallExpression(node)) {
+    return false
   }
 
-  return false
+  const { expression } = node
+
+  return (
+    ts.isIdentifier(expression) &&
+    (expression.text === 't' || expression.text === 'translate')
+  )
 }
 
-const analyzeTranslationUsage = (
-  sourceFiles: string[]
-): {
-  usedKeys: Set<string>
-  usedPrefixes: Set<string>
-  usedSuffixes: Set<string>
-  warnings: string[]
-} => {
-  const usedKeys = new Set<string>()
-  const usedPrefixes = new Set<string>()
-  const usedSuffixes = new Set<string>()
-  const warnings: string[] = []
+const getLocation = (sourceFile: ts.SourceFile, node: ts.Node): string => {
+  const position = sourceFile.getLineAndCharacterOfPosition(
+    node.getStart(sourceFile)
+  )
+  const filePath = path.relative(workspaceRoot, sourceFile.fileName)
 
+  return `${filePath}:${position.line + 1}:${position.character + 1}`
+}
+
+const getStringLiteralValues = (type: ts.Type): string[] | undefined => {
+  if (type.isStringLiteral()) {
+    return [type.value]
+  }
+
+  if (!type.isUnion()) {
+    return undefined
+  }
+
+  const values: string[] = []
+
+  for (const unionType of type.types) {
+    if (unionType.isStringLiteral()) {
+      values.push(unionType.value)
+      continue
+    }
+
+    if (
+      (unionType.flags & ts.TypeFlags.Undefined) !== 0 ||
+      (unionType.flags & ts.TypeFlags.Null) !== 0
+    ) {
+      continue
+    }
+
+    return undefined
+  }
+
+  return values.length > 0 ? values : undefined
+}
+
+const addKeyWithPlurals = ({
+  usedKeys,
+  key,
+  hasCount,
+}: {
+  usedKeys: Set<string>
+  key: string
+  hasCount: boolean
+}) => {
+  usedKeys.add(key)
+
+  if (hasCount) {
+    usedKeys.add(`${key}_one`)
+    usedKeys.add(`${key}_other`)
+  }
+}
+
+const hasCountOption = (node: ts.Expression | undefined): boolean => {
+  if (!node || !ts.isObjectLiteralExpression(node)) {
+    return false
+  }
+
+  return node.properties.some(
+    property =>
+      ts.isPropertyAssignment(property) &&
+      ts.isIdentifier(property.name) &&
+      property.name.text === 'count'
+  )
+}
+
+const hasDefaultValueOption = (node: ts.Expression | undefined): boolean => {
+  if (!node || !ts.isObjectLiteralExpression(node)) {
+    return false
+  }
+
+  return node.properties.some(
+    property =>
+      ts.isPropertyAssignment(property) &&
+      ts.isIdentifier(property.name) &&
+      property.name.text === 'defaultValue'
+  )
+}
+
+const getTemplatePattern = (
+  node: ts.TemplateExpression
+): DynamicKeyPattern | undefined => {
+  const prefix = node.head.text
+  const lastSpan = node.templateSpans[node.templateSpans.length - 1]
+  const suffix = lastSpan?.literal.text ?? ''
+
+  if (!prefix && !suffix) {
+    return undefined
+  }
+
+  return { prefix, suffix }
+}
+
+const getPatternLabel = ({ prefix, suffix }: DynamicKeyPattern): string =>
+  `${prefix}*${suffix}`
+
+const addDynamicPattern = ({
+  dynamicPatterns,
+  pattern,
+}: {
+  dynamicPatterns: DynamicKeyPattern[]
+  pattern: DynamicKeyPattern
+}) => {
+  const label = getPatternLabel(pattern)
+
+  if (
+    !dynamicPatterns.some(
+      existingPattern => getPatternLabel(existingPattern) === label
+    )
+  ) {
+    dynamicPatterns.push(pattern)
+  }
+}
+
+const addExpressionKeys = ({
+  expression,
+  checker,
+  sourceFile,
+  usedKeys,
+  dynamicPatterns,
+  warnings,
+  hasCount,
+  warnOnUnresolved,
+}: {
+  expression: ts.Expression
+  checker: ts.TypeChecker
+  sourceFile: ts.SourceFile
+  usedKeys: Set<string>
+  dynamicPatterns: DynamicKeyPattern[]
+  warnings: string[]
+  hasCount: boolean
+  warnOnUnresolved: boolean
+}) => {
+  if (
+    ts.isStringLiteral(expression) ||
+    ts.isNoSubstitutionTemplateLiteral(expression)
+  ) {
+    addKeyWithPlurals({ usedKeys, key: expression.text, hasCount })
+    return
+  }
+
+  if (ts.isTemplateExpression(expression)) {
+    const values = getStringLiteralValues(checker.getTypeAtLocation(expression))
+
+    if (values) {
+      values.forEach(key => addKeyWithPlurals({ usedKeys, key, hasCount }))
+      return
+    }
+
+    const pattern = getTemplatePattern(expression)
+
+    if (pattern) {
+      addDynamicPattern({ dynamicPatterns, pattern })
+      return
+    }
+  }
+
+  if (ts.isConditionalExpression(expression)) {
+    addExpressionKeys({
+      expression: expression.whenTrue,
+      checker,
+      sourceFile,
+      usedKeys,
+      dynamicPatterns,
+      warnings,
+      hasCount,
+      warnOnUnresolved,
+    })
+    addExpressionKeys({
+      expression: expression.whenFalse,
+      checker,
+      sourceFile,
+      usedKeys,
+      dynamicPatterns,
+      warnings,
+      hasCount,
+      warnOnUnresolved,
+    })
+    return
+  }
+
+  if (
+    ts.isParenthesizedExpression(expression) ||
+    ts.isNonNullExpression(expression)
+  ) {
+    addExpressionKeys({
+      expression: expression.expression,
+      checker,
+      sourceFile,
+      usedKeys,
+      dynamicPatterns,
+      warnings,
+      hasCount,
+      warnOnUnresolved,
+    })
+    return
+  }
+
+  if (ts.isAsExpression(expression) || ts.isSatisfiesExpression(expression)) {
+    addExpressionKeys({
+      expression: expression.expression,
+      checker,
+      sourceFile,
+      usedKeys,
+      dynamicPatterns,
+      warnings,
+      hasCount,
+      warnOnUnresolved,
+    })
+    return
+  }
+
+  const type = checker.getTypeAtLocation(expression)
+  const values = getStringLiteralValues(type)
+
+  if (values) {
+    values.forEach(key => addKeyWithPlurals({ usedKeys, key, hasCount }))
+    return
+  }
+
+  if (warnOnUnresolved) {
+    warnings.push(
+      `${getLocation(sourceFile, expression)} - Dynamic translation key could not be resolved statically (type: ${checker.typeToString(type)})`
+    )
+  }
+}
+
+const readTransI18nKey = (node: ts.JsxOpeningLikeElement): ts.Expression[] => {
+  const expressions: ts.Expression[] = []
+
+  for (const attr of node.attributes.properties) {
+    if (
+      !ts.isJsxAttribute(attr) ||
+      !ts.isIdentifier(attr.name) ||
+      attr.name.text !== 'i18nKey'
+    ) {
+      continue
+    }
+
+    const { initializer } = attr
+
+    if (!initializer) {
+      continue
+    }
+
+    if (ts.isStringLiteral(initializer)) {
+      expressions.push(initializer)
+      continue
+    }
+
+    if (ts.isJsxExpression(initializer) && initializer.expression) {
+      expressions.push(initializer.expression)
+    }
+  }
+
+  return expressions
+}
+
+const analyzeTranslationUsage = (sourceFiles: string[]): TranslationUsage => {
+  const usedKeys = new Set<string>()
+  const dynamicPatterns: DynamicKeyPattern[] = []
+  const warnings: string[] = []
   const configPath = path.join(workspaceRoot, 'tsconfig.json')
   const configFile = ts.readConfigFile(configPath, ts.sys.readFile)
+
+  if (configFile.error) {
+    throw new Error(
+      ts.flattenDiagnosticMessageText(configFile.error.messageText, '\n')
+    )
+  }
 
   const parsedConfig = ts.parseJsonConfigFileContent(
     configFile.config,
     ts.sys,
     workspaceRoot
   )
-
   const program = ts.createProgram(sourceFiles, {
     ...parsedConfig.options,
     noEmit: true,
   })
-
   const checker = program.getTypeChecker()
-
-  const addKeyWithPlurals = (key: string, hasCount: boolean) => {
-    usedKeys.add(key)
-    if (hasCount) {
-      usedKeys.add(`${key}_one`)
-      usedKeys.add(`${key}_other`)
-    }
-  }
-
-  const handleStringLiteral = (
-    node: ts.Node,
-    text: string,
-    hasCount: boolean
-  ) => {
-    addKeyWithPlurals(text, hasCount)
-  }
-
-  const handleTemplateExpression = (node: ts.TemplateExpression) => {
-    const prefix = node.head.text
-    if (prefix) {
-      usedPrefixes.add(prefix)
-    }
-    const lastSpan = node.templateSpans[node.templateSpans.length - 1]
-    if (lastSpan) {
-      const suffix = lastSpan.literal.text
-      if (suffix) {
-        usedSuffixes.add(suffix)
-      }
-    }
-  }
+  const sourceFileNames = new Set(sourceFiles.map(file => path.resolve(file)))
 
   const visitNode = (node: ts.Node, sourceFile: ts.SourceFile) => {
-    if (ts.isStringLiteral(node)) {
-      usedKeys.add(node.text)
-    } else if (ts.isNoSubstitutionTemplateLiteral(node)) {
-      usedKeys.add(node.text)
-    }
+    if (isTranslationFunctionCall(node)) {
+      const firstArg = node.arguments[0]
 
-    if (isTFunctionCall(node)) {
-      const args = node.arguments
-      if (args.length > 0) {
-        const firstArg = args[0]
-        const secondArg = args[1]
-        let hasCount = false
+      if (firstArg) {
+        const options = node.arguments[1]
 
-        if (secondArg && ts.isObjectLiteralExpression(secondArg)) {
-          hasCount = secondArg.properties.some(
-            p =>
-              ts.isPropertyAssignment(p) &&
-              ts.isIdentifier(p.name) &&
-              p.name.text === 'count'
-          )
-        }
-
-        if (ts.isStringLiteral(firstArg)) {
-          handleStringLiteral(firstArg, firstArg.text, hasCount)
-        } else if (ts.isNoSubstitutionTemplateLiteral(firstArg)) {
-          handleStringLiteral(firstArg, firstArg.text, hasCount)
-        } else if (ts.isTemplateExpression(firstArg)) {
-          handleTemplateExpression(firstArg)
-        } else if (ts.isConditionalExpression(firstArg)) {
-          if (ts.isStringLiteral(firstArg.whenTrue)) {
-            handleStringLiteral(
-              firstArg.whenTrue,
-              firstArg.whenTrue.text,
-              false
-            )
-          }
-          if (ts.isStringLiteral(firstArg.whenFalse)) {
-            handleStringLiteral(
-              firstArg.whenFalse,
-              firstArg.whenFalse.text,
-              false
-            )
-          }
-        } else if (ts.isIdentifier(firstArg)) {
-          const type = checker.getTypeAtLocation(firstArg)
-
-          if (type.isUnion()) {
-            let allLiterals = true
-            for (const t of type.types) {
-              if (t.isStringLiteral()) {
-                addKeyWithPlurals(t.value, hasCount)
-              } else {
-                allLiterals = false
-              }
-            }
-            if (!allLiterals) {
-              const pos = sourceFile.getLineAndCharacterOfPosition(
-                firstArg.getStart()
-              )
-              warnings.push(
-                `${sourceFile.fileName}:${pos.line + 1}:${pos.character + 1} - Variable '${firstArg.text}' has non-literal string types`
-              )
-            }
-          } else if (type.isStringLiteral()) {
-            addKeyWithPlurals(type.value, hasCount)
-          } else {
-            const typeString = checker.typeToString(type)
-            if (typeString !== 'string') {
-              const pos = sourceFile.getLineAndCharacterOfPosition(
-                firstArg.getStart()
-              )
-              warnings.push(
-                `${sourceFile.fileName}:${pos.line + 1}:${pos.character + 1} - Variable '${firstArg.text}' has type '${typeString}' which cannot be statically analyzed`
-              )
-            }
-          }
-        } else if (ts.isPropertyAccessExpression(firstArg)) {
-          const type = checker.getTypeAtLocation(firstArg)
-
-          if (type.isStringLiteral()) {
-            addKeyWithPlurals(type.value, hasCount)
-          } else if (type.isUnion()) {
-            for (const t of type.types) {
-              if (t.isStringLiteral()) {
-                addKeyWithPlurals(t.value, hasCount)
-              }
-            }
-          }
-        } else if (ts.isElementAccessExpression(firstArg)) {
-          const type = checker.getTypeAtLocation(firstArg)
-
-          if (type.isStringLiteral()) {
-            addKeyWithPlurals(type.value, hasCount)
-          } else if (type.isUnion()) {
-            for (const t of type.types) {
-              if (t.isStringLiteral()) {
-                addKeyWithPlurals(t.value, hasCount)
-              }
-            }
-          }
-        }
+        addExpressionKeys({
+          expression: firstArg,
+          checker,
+          sourceFile,
+          usedKeys,
+          dynamicPatterns,
+          warnings,
+          hasCount: hasCountOption(options),
+          warnOnUnresolved: !hasDefaultValueOption(options),
+        })
       }
     }
 
     if (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) {
-      const tagName = node.tagName
+      const { tagName } = node
+
       if (ts.isIdentifier(tagName) && tagName.text === 'Trans') {
-        for (const attr of node.attributes.properties) {
-          if (
-            ts.isJsxAttribute(attr) &&
-            ts.isIdentifier(attr.name) &&
-            attr.name.text === 'i18nKey'
-          ) {
-            const initializer = attr.initializer
-            if (initializer && ts.isJsxExpression(initializer)) {
-              const expr = initializer.expression
-              if (expr) {
-                if (ts.isStringLiteral(expr)) {
-                  usedKeys.add(expr.text)
-                } else if (ts.isTemplateExpression(expr)) {
-                  handleTemplateExpression(expr)
-                } else if (ts.isConditionalExpression(expr)) {
-                  if (ts.isStringLiteral(expr.whenTrue)) {
-                    usedKeys.add(expr.whenTrue.text)
-                  }
-                  if (ts.isStringLiteral(expr.whenFalse)) {
-                    usedKeys.add(expr.whenFalse.text)
-                  }
-                }
-              }
-            } else if (initializer && ts.isStringLiteral(initializer)) {
-              usedKeys.add(initializer.text)
-            }
-          }
-        }
+        readTransI18nKey(node).forEach(expression => {
+          addExpressionKeys({
+            expression,
+            checker,
+            sourceFile,
+            usedKeys,
+            dynamicPatterns,
+            warnings,
+            hasCount: false,
+            warnOnUnresolved: true,
+          })
+        })
       }
     }
 
     ts.forEachChild(node, child => visitNode(child, sourceFile))
   }
 
-  for (const sourceFile of program.getSourceFiles()) {
-    if (
-      !sourceFile.isDeclarationFile &&
-      !sourceFile.fileName.includes('node_modules')
-    ) {
-      visitNode(sourceFile, sourceFile)
+  program.getSourceFiles().forEach(sourceFile => {
+    if (!sourceFileNames.has(path.resolve(sourceFile.fileName))) {
+      return
     }
-  }
 
-  return { usedKeys, usedPrefixes, usedSuffixes, warnings }
-}
+    visitNode(sourceFile, sourceFile)
+  })
 
-const loadEnglishLocale = async (): Promise<Locale> => {
-  const enPath = path.resolve(currentDirname, '../locales/en.ts')
-  const module = await import(enPath)
-  return module.en
+  return { usedKeys, dynamicPatterns, warnings }
 }
 
 const serializeLocale = (locale: Locale, indent = 0): string => {
@@ -323,20 +477,22 @@ const serializeLocale = (locale: Locale, indent = 0): string => {
   entries.forEach(([key, value], index) => {
     const isLast = index === entries.length - 1
     const comma = isLast ? '' : ','
-
-    const needsQuotes = !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key)
-    const keyStr = needsQuotes ? `'${key}'` : key
+    const keyString = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `'${key}'`
 
     if (typeof value === 'string') {
       const escapedValue = value
         .replace(/\\/g, '\\\\')
         .replace(/'/g, "\\'")
+        .replace(/\r/g, '\\r')
         .replace(/\n/g, '\\n')
-      lines.push(`${spaces}  ${keyStr}: '${escapedValue}'${comma}`)
-    } else {
-      const nestedStr = serializeLocale(value, indent + 1)
-      lines.push(`${spaces}  ${keyStr}: ${nestedStr}${comma}`)
+
+      lines.push(`${spaces}  ${keyString}: '${escapedValue}'${comma}`)
+      return
     }
+
+    lines.push(
+      `${spaces}  ${keyString}: ${serializeLocale(value, indent + 1)}${comma}`
+    )
   })
 
   lines.push(`${spaces}}`)
@@ -344,92 +500,129 @@ const serializeLocale = (locale: Locale, indent = 0): string => {
   return lines.join('\n')
 }
 
-const writeEnglishLocale = (locale: Locale) => {
-  const enPath = path.resolve(currentDirname, '../locales/en.ts')
-  const content = `export const en = ${serializeLocale(locale)}\n`
-  fs.writeFileSync(enPath, content)
-  execSync(`npx prettier --write "${enPath}"`, { stdio: 'inherit' })
+const writeLocale = ({
+  language,
+  locale,
+}: {
+  language: Language
+  locale: Locale
+}) => {
+  const filePath = path.join(localeDirectory, `${language}.ts`)
+  const content = `export const ${language} = ${serializeLocale(locale)}\n`
+
+  fs.writeFileSync(filePath, content)
+  execFileSync('npx', ['prettier', '--write', filePath], {
+    cwd: workspaceRoot,
+    stdio: 'inherit',
+  })
 }
 
-const main = async () => {
-  const args = process.argv.slice(2)
-  const shouldFix = args.includes('--fix')
-
-  console.log('Analyzing translation usage...\n')
-
+const getSourceFiles = (): string[] => {
   const clientsDesktopDir = path.join(workspaceRoot, 'clients/desktop/src')
   const clientsExtensionDir = path.join(workspaceRoot, 'clients/extension/src')
   const coreDir = path.join(workspaceRoot, 'core')
   const libDir = path.join(workspaceRoot, 'lib')
 
-  const sourceFiles = [
+  return [
     ...(fs.existsSync(clientsDesktopDir)
       ? findSourceFiles(clientsDesktopDir)
       : []),
-    ...findSourceFiles(clientsExtensionDir),
+    ...(fs.existsSync(clientsExtensionDir)
+      ? findSourceFiles(clientsExtensionDir)
+      : []),
     ...findSourceFiles(coreDir),
     ...findSourceFiles(libDir),
   ].filter(
-    f =>
-      !f.includes('/i18n/scripts/') &&
-      !f.includes('/locales/') &&
-      !f.endsWith('.d.ts')
+    filePath =>
+      !filePath.includes('/i18n/scripts/') &&
+      !filePath.includes('/i18n/locales/') &&
+      !filePath.endsWith('.d.ts')
   )
+}
 
-  const { usedKeys, usedPrefixes, usedSuffixes, warnings } =
-    analyzeTranslationUsage(sourceFiles)
+const isUsedByDynamicPattern = ({
+  key,
+  dynamicPatterns,
+}: {
+  key: string
+  dynamicPatterns: DynamicKeyPattern[]
+}): boolean =>
+  dynamicPatterns.some(({ prefix, suffix }) => {
+    if (!prefix && !suffix) {
+      return false
+    }
 
-  console.log(`✓ Found ${usedKeys.size} literal key usages`)
+    return key.startsWith(prefix) && key.endsWith(suffix)
+  })
+
+const fixUnusedKeys = (unusedKeys: string[]) => {
+  languages.forEach(language => {
+    const locale = cloneLocale(translations[language])
+    let removedCount = 0
+
+    unusedKeys.forEach(key => {
+      if (removeKeyFromObject(locale, getKeyPath(key))) {
+        removedCount += 1
+      }
+    })
+
+    if (removedCount > 0) {
+      writeLocale({ language, locale })
+      console.log(`Removed ${removedCount} unused key(s) from ${language}.ts`)
+    }
+  })
+}
+
+const main = () => {
+  const args = process.argv.slice(2)
+  const shouldFix = args.includes('--fix')
+
+  console.log('Analyzing translation usage...\n')
+
+  const { usedKeys, dynamicPatterns, warnings } =
+    analyzeTranslationUsage(getSourceFiles())
+  const sourceTranslations = flattenTranslationRecord({
+    record: translations[primaryLanguage],
+  })
+  const dynamicPatternLabels = dynamicPatterns.map(getPatternLabel)
+
+  console.log(`Found ${usedKeys.size} statically resolved key usage(s)`)
   console.log(
-    `✓ Found ${usedPrefixes.size} template prefixes: ${[...usedPrefixes].join(', ') || 'none'}`
-  )
-  console.log(
-    `✓ Found ${usedSuffixes.size} template suffixes: ${[...usedSuffixes].join(', ') || 'none'}`
+    `Found ${dynamicPatternLabels.length} dynamic key pattern(s): ${dynamicPatternLabels.join(', ') || 'none'}`
   )
 
   if (warnings.length > 0) {
-    console.log(`\n⚠ ${warnings.length} warning(s):`)
-    warnings.forEach(w => console.log(`  ${w}`))
+    console.log(`\nFound ${warnings.length} unresolved dynamic key usage(s):`)
+    warnings.forEach(warning => console.log(`  - ${warning}`))
   }
 
-  const en = await loadEnglishLocale()
-  const allKeys = flattenKeys(en)
+  const unusedKeys = Array.from(sourceTranslations.keys()).filter(key => {
+    if (usedKeys.has(key)) {
+      return false
+    }
 
-  const unusedKeys = allKeys.filter(key => {
-    if (usedKeys.has(key)) return false
-    for (const prefix of usedPrefixes) {
-      if (key.startsWith(prefix)) return false
-    }
-    for (const suffix of usedSuffixes) {
-      if (key.endsWith(suffix)) return false
-    }
-    return true
+    return !isUsedByDynamicPattern({ key, dynamicPatterns })
   })
 
-  console.log(`\nTotal keys in en.ts: ${allKeys.length}`)
+  console.log(
+    `\nTotal keys in ${primaryLanguage}.ts: ${sourceTranslations.size}`
+  )
 
   if (unusedKeys.length === 0) {
-    console.log('\n✓ No unused translation keys found!')
-    process.exit(0)
+    console.log('\nNo unused translation keys found.')
+    return
   }
 
   console.log(`\nFound ${unusedKeys.length} unused translation key(s):`)
   unusedKeys.forEach(key => console.log(`  - ${key}`))
 
-  if (shouldFix) {
-    const localeCopy = JSON.parse(JSON.stringify(en)) as Locale
-
-    for (const key of unusedKeys) {
-      const keyPath = getKeyPath(key)
-      removeKeyFromObject(localeCopy, keyPath)
-    }
-
-    writeEnglishLocale(localeCopy)
-    console.log(`\n✓ Removed ${unusedKeys.length} unused keys from en.ts`)
-  } else {
-    console.log('\nRun with --fix to remove them.')
-    process.exit(1)
+  if (!shouldFix) {
+    console.log('\nRun with --fix to remove them from every locale.')
+    process.exitCode = 1
+    return
   }
+
+  fixUnusedKeys(unusedKeys)
 }
 
 main()

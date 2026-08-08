@@ -1,21 +1,58 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const CalendarIcon: FC<SvgProps> = props => (
+export const CalendarIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-    <line x1="16" x2="16" y1="2" y2="6" />
-    <line x1="8" x2="8" y1="2" y2="6" />
-    <line x1="3" x2="21" y1="10" y2="10" />
+    <path
+      d="M16.7996 4.7998H7.19961C5.21138 4.7998 3.59961 6.41158 3.59961 8.3998V15.5998C3.59961 17.588 5.21138 19.1998 7.19961 19.1998H16.7996C18.7878 19.1998 20.3996 17.588 20.3996 15.5998V8.3998C20.3996 6.41158 18.7878 4.7998 16.7996 4.7998Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M20.3996 8.3998C20.3996 6.41152 18.7879 4.7998 16.7996 4.7998H7.19961C5.21133 4.7998 3.59961 6.41152 3.59961 8.3998H20.3996Z"
+      fill="currentColor"
+    />
+    <path
+      d="M7.19922 4.80039V2.40039"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.8008 4.80039V2.40039"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7.5 12.5996C8.32843 12.5996 9 11.928 9 11.0996C9 10.2712 8.32843 9.59961 7.5 9.59961C6.67157 9.59961 6 10.2712 6 11.0996C6 11.928 6.67157 12.5996 7.5 12.5996Z"
+      fill="currentColor"
+    />
+    <path
+      d="M16.5 12.5996C17.3284 12.5996 18 11.928 18 11.0996C18 10.2712 17.3284 9.59961 16.5 9.59961C15.6716 9.59961 15 10.2712 15 11.0996C15 11.928 15.6716 12.5996 16.5 12.5996Z"
+      fill="currentColor"
+    />
+    <path
+      d="M12 12.5996C12.8284 12.5996 13.5 11.928 13.5 11.0996C13.5 10.2712 12.8284 9.59961 12 9.59961C11.1716 9.59961 10.5 10.2712 10.5 11.0996C10.5 11.928 11.1716 12.5996 12 12.5996Z"
+      fill="currentColor"
+    />
+    <path
+      d="M7.5 16.8C8.32843 16.8 9 16.1284 9 15.3C9 14.4716 8.32843 13.8 7.5 13.8C6.67157 13.8 6 14.4716 6 15.3C6 16.1284 6.67157 16.8 7.5 16.8Z"
+      fill="currentColor"
+    />
+    <path
+      d="M12 16.8C12.8284 16.8 13.5 16.1284 13.5 15.3C13.5 14.4716 12.8284 13.8 12 13.8C11.1716 13.8 10.5 14.4716 10.5 15.3C10.5 16.1284 11.1716 16.8 12 16.8Z"
+      fill="currentColor"
+    />
   </svg>
 )

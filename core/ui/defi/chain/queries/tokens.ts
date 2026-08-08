@@ -3,6 +3,7 @@ import { yieldBearingThorChainTokens } from '@vultisig/core-chain/chains/cosmos/
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
+import { thorchainNativeTokensMetadata } from '@vultisig/core-chain/coin/knownTokens/thorchain'
 
 export const runeCoin: Coin = {
   ...chainFeeCoin[Chain.THORChain],
@@ -27,6 +28,29 @@ export const thorchainTokens: Record<string, Coin> = {
     id: 'x/ruji',
     ticker: 'RUJI',
   },
+  brune: {
+    ...knownCosmosTokens[Chain.THORChain]['x/brune'],
+    chain: Chain.THORChain,
+    id: 'x/brune',
+    ticker: 'bRUNE',
+  },
+  ybrune: {
+    // ybRUNE lives in `thorchainNativeTokensMetadata`, not `knownCosmosTokens`
+    // (see `sruji` above — the same receipt-token pattern).
+    ...thorchainNativeTokensMetadata['x/staking-x/brune'],
+    chain: Chain.THORChain,
+    id: 'x/staking-x/brune',
+    ticker: 'ybRUNE',
+  },
+  sruji: {
+    // sRUJI lives in `thorchainNativeTokensMetadata`, not `knownCosmosTokens`
+    // (indexing the latter yields `undefined` at runtime, leaving the coin with
+    // no `decimals` and rendering a `NaN` balance in the send flow).
+    ...thorchainNativeTokensMetadata['x/staking-x/ruji'],
+    chain: Chain.THORChain,
+    id: 'x/staking-x/ruji',
+    ticker: 'sRUJI',
+  },
   yRune: {
     ...yieldBearingThorChainTokens[
       'x/nami-index-nav-thor1mlphkryw5g54yfkrp6xpqzlpv4f8wh6hyw27yyg4z2els8a9gxpqhfhekt-rcpt'
@@ -48,6 +72,8 @@ export const thorchainDefiCoins: Coin[] = [
   thorchainTokens.tcy,
   thorchainTokens.stcy,
   thorchainTokens.ruji,
+  // bRUNE spot price backs the ybRUNE position's NAV-based fiat value.
+  thorchainTokens.brune,
   thorchainTokens.yRune,
   thorchainTokens.yTcy,
 ]

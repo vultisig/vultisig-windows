@@ -6,6 +6,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { List } from '@lib/ui/list'
 import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useSearchChain } from '../../state/searchChainProvider'
@@ -19,6 +20,7 @@ export const Portfolio = () => {
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const { iconStyle } = useTheme()
 
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
@@ -80,7 +82,10 @@ export const Portfolio = () => {
         />
       )}
       list={() => (
-        <List>
+        <List
+          border={iconStyle === 'station' ? 'solid' : undefined}
+          radius={iconStyle === 'station' ? 24 : undefined}
+        >
           {filteredBalances.map(balance => (
             <VaultChainItem key={balance.chain} balance={balance} />
           ))}

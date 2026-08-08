@@ -7,7 +7,6 @@ import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListI
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ValueProp } from '@lib/ui/props'
-import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -15,6 +14,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SendDeeplinkData } from '../core'
+import { getDeeplinkSendAmount } from '../getDeeplinkSendAmount'
 
 export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
   const { t } = useTranslation()
@@ -36,7 +36,7 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
         <FlowPageHeader title={t('send')} />
         <FlowErrorPageContent
           title={t('no_vaults')}
-          error={t('create_new_vault')}
+          description={t('create_new_vault')}
         />
       </>
     )
@@ -48,7 +48,7 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
         <FlowPageHeader title={t('send')} />
         <FlowErrorPageContent
           title={t('coin_not_found_in_current_vault')}
-          error={t('coin_not_found_in_any_vault', {
+          description={t('coin_not_found_in_any_vault', {
             ticker: value.ticker,
             chain: value.chain,
           })}
@@ -85,7 +85,10 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
                           coin: extractCoinKey(coin),
                           address: value.toAddress,
                           amount: value.amount
-                            ? toChainAmount(Number(value.amount), coin.decimals)
+                            ? getDeeplinkSendAmount({
+                                amount: value.amount,
+                                decimals: coin.decimals,
+                              })
                             : undefined,
                           memo: value.memo,
                         },

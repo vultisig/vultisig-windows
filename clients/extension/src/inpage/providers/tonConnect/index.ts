@@ -157,7 +157,12 @@ export class TonConnectBridge {
         : undefined
 
     const { data, error } = await attempt(
-      callPopup({ grantVaultAccess: { preselectFastVault: true } })
+      callPopup({
+        grantVaultAccess: {
+          chain: Chain.Ton,
+          preselectFastVault: true,
+        },
+      })
     )
 
     if (error === PopupError.RejectedByUser) {

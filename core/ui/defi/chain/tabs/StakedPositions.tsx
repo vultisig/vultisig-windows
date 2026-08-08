@@ -1,27 +1,36 @@
+import { TonStakingView } from '@core/ui/chain/ton/staking/components/TonStakingView'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useRemoveFromCoinFinderIgnoreMutation } from '@core/ui/storage/coinFinderIgnore'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { RujiMergedPositionCard } from '../components/stake/RujiMergedPositionCard'
 import { StakeCard } from '../components/stake/StakeCard'
+import type { StakeUiTranslationKey } from '../config/stakeUiResolver'
 import {
   resolveStakeActions,
   resolveStakeTitle,
   resolveStakeToken,
+  resolveTransferableStakeToken,
 } from '../config/stakeUiResolver'
+import { CosmosDelegationsView } from '../cosmos/CosmosDelegationsView'
+import {
+  rujiAutoCompoundStakePositionId,
+  rujiBondedStakePositionId,
+} from '../queries/services/thorchainStake/rujiStakeService'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
+import { SolanaStakeDefiView } from '../solana/SolanaStakeDefiView'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
+import { DefiPositionErrorState } from './DefiPositionErrorState'
 
 const stcyInfoUrl =
   'https://docs.rujira.network/ecosystem-products/tcy-autocompounder'
@@ -35,10 +44,98 @@ type StakeActionType =
   | 'add_cacao_pool'
   | 'remove_cacao_pool'
 
+// The bonded RUJI card has no manage tile of its own — it is shown whenever the
+// single "RUJI" (`thor-stake-ruji`) tile is selected. Map its position id to
+// that selection id so the selected-positions filter keeps it visible.
+const selectionIdForStakePosition = (positionId: string): string =>
+  positionId === rujiBondedStakePositionId
+    ? rujiAutoCompoundStakePositionId
+    : positionId
+
+const cosmosNativeStakingChains: readonly StakingChain[] = [
+  Chain.Terra,
+  Chain.TerraClassic,
+  Chain.QBTC,
+]
+const isCosmosNativeStakingChain = (chain: Chain): chain is StakingChain =>
+  (cosmosNativeStakingChains as readonly Chain[]).includes(chain)
+
+const tickerByCosmosStakingChain: Record<StakingChain, string> = {
+  [Chain.Terra]: 'LUNA',
+  [Chain.TerraClassic]: 'LUNC',
+  [Chain.QBTC]: 'QBTC',
+  // Other IBC chains don't surface native staking on this view yet — set to
+  // their fee ticker so the Map type is exhaustive without unsafe casts.
+  [Chain.Cosmos]: 'ATOM',
+  [Chain.Osmosis]: 'OSMO',
+  [Chain.Kujira]: 'KUJI',
+  [Chain.Dydx]: 'DYDX',
+  [Chain.Noble]: 'USDC',
+  [Chain.Akash]: 'AKT',
+}
+
 export const StakedPositions = () => {
   const chain = useCurrentDefiChain()
   const selectedPositions = useDefiPositions(chain)
-  const { data, isPending, error } = useDefiChainPositionsQuery(chain)
+  const vaultCoins = useCurrentVaultCoins()
+
+  if (chain === Chain.Ton) {
+    if (selectedPositions.length === 0) {
+      return <DefiPositionEmptyState returnTab="staked" />
+    }
+    return <TonStakingView />
+  }
+
+  if (chain === Chain.Solana) {
+    if (selectedPositions.length === 0) {
+      return <DefiPositionEmptyState returnTab="staked" />
+    }
+    return <SolanaStakeDefiView />
+  }
+
+  if (isCosmosNativeStakingChain(chain)) {
+    const ticker = tickerByCosmosStakingChain[chain]
+    const stakingCoin = vaultCoins.find(
+      c => c.chain === chain && c.ticker === ticker
+    )
+    if (!stakingCoin) {
+      // Vault hasn't yet derived this chain. Fall through to the existing
+      // empty surface; the user can enable Terra in chain selection.
+      return <DefiPositionEmptyState returnTab="staked" />
+    }
+    if (selectedPositions.length === 0) {
+      return <DefiPositionEmptyState returnTab="staked" />
+    }
+    return (
+      <CosmosDelegationsView
+        chain={chain}
+        delegatorAddress={stakingCoin.address}
+        ticker={ticker}
+        decimals={stakingCoin.decimals}
+      />
+    )
+  }
+
+  // The merged RUJI balance belongs to the RUJI position, so it follows the
+  // same selection id as the auto-compounding and bonded RUJI cards.
+  const isRujiSelected = selectedPositions.includes(
+    rujiAutoCompoundStakePositionId
+  )
+
+  return (
+    <VStack gap={12}>
+      {chain === Chain.THORChain && isRujiSelected ? (
+        <RujiMergedPositionCard />
+      ) : null}
+      <ThorchainStakedPositions />
+    </VStack>
+  )
+}
+
+const ThorchainStakedPositions = () => {
+  const chain = useCurrentDefiChain()
+  const selectedPositions = useDefiPositions(chain)
+  const { data, isPending, error, refetch } = useDefiChainPositionsQuery(chain)
   const navigate = useCoreNavigate()
   const vaultCoins = useCurrentVaultCoins()
   const createCoin = useCreateCoinMutation()
@@ -47,8 +144,10 @@ export const StakedPositions = () => {
   const [pendingEnableById, setPendingEnableById] = useState<
     Record<string, boolean>
   >({})
-  const translate = (key: string, params?: Record<string, unknown>) =>
-    t(key as any, params as any) as string
+  const translate = (
+    key: StakeUiTranslationKey,
+    params?: Record<string, unknown>
+  ) => t(key, params)
 
   const actionsDisabled = chain !== Chain.THORChain && chain !== Chain.MayaChain
 
@@ -61,31 +160,25 @@ export const StakedPositions = () => {
   )
 
   if (error) {
-    return (
-      <CenterAbsolutely>
-        <Text color="danger">{extractErrorMsg(error)}</Text>
-      </CenterAbsolutely>
-    )
+    return <DefiPositionErrorState onRetry={refetch} />
   }
 
   if (!isPending && !data?.stake && selectedPositions.length > 0) {
-    return (
-      <CenterAbsolutely>
-        <Text color="danger">{t('failed_to_load')}</Text>
-      </CenterAbsolutely>
-    )
+    return <DefiPositionErrorState onRetry={refetch} />
   }
 
   if (selectedPositions.length === 0) {
-    return <DefiPositionEmptyState />
+    return <DefiPositionEmptyState returnTab="staked" />
   }
 
   const selected = new Set(selectedPositions)
   const positions =
-    data?.stake?.positions.filter(position => selected.has(position.id)) ?? []
+    data?.stake?.positions.filter(position =>
+      selected.has(selectionIdForStakePosition(position.id))
+    ) ?? []
 
   if (!isPending && positions.length === 0) {
-    return <DefiPositionEmptyState />
+    return <DefiPositionEmptyState returnTab="staked" />
   }
 
   const autoEnableCoinIfNeeded = async (coinId: string, token: any) => {
@@ -121,13 +214,23 @@ export const StakedPositions = () => {
           ? resolveStakeToken(chain, 'thor-stake-tcy')
           : token
 
+    // Both RUJI cards use the same RUJI coin; `autoCompound` selects the
+    // unstake route (auto-compounding → `liquid.unbond`, bonded →
+    // `account.withdraw`) and the balance shown, mirroring how sTCY threads it.
+    const form =
+      isStcyPosition || id === rujiAutoCompoundStakePositionId
+        ? { autoCompound: true }
+        : id === rujiBondedStakePositionId
+          ? { autoCompound: false }
+          : undefined
+
     navigate({
       id: 'deposit',
       state: {
         coin: extractCoinKey(coinForAction),
         action,
         entryPoint: 'defi',
-        form: isStcyPosition ? { autoCompound: true } : undefined,
+        form,
       },
     })
   }
@@ -185,14 +288,19 @@ export const StakedPositions = () => {
         } = resolveStakeActions({
           chain,
           position,
-          translate: key => t(key as any),
+          translate: key => t(key),
         })
         const cardActionsDisabled =
           actionsDisabled || resolverDisabled || missingCoinAndBlocked
         const hideStats =
           position.id === 'thor-stake-stcy' ||
           position.id === 'thor-stake-yrune' ||
-          position.id === 'thor-stake-ytcy'
+          position.id === 'thor-stake-ytcy' ||
+          // ybRUNE auto-compounds with no separate APR/rewards (like sTCY).
+          position.id === 'thor-stake-brune' ||
+          // The compounded RUJI card reinvests its revenue (like sTCY), so it
+          // has no APR/USDC claim to show — those live on the bonded card.
+          position.id === rujiAutoCompoundStakePositionId
 
         const handleNavigate = async (action: StakeActionType) => {
           if (cardActionsDisabled) return
@@ -202,17 +310,21 @@ export const StakedPositions = () => {
           navigateTo(position.id, action, false)
         }
 
+        const transferToken = resolveTransferableStakeToken(chain, position.id)
+        const canTransfer = transferToken !== undefined && position.amount > 0n
+
         const handleTransfer = async () => {
-          if (position.id === 'thor-stake-stcy') {
-            const stcyCoin = resolveStakeToken(chain, position.id)
-            if (!hasRequiredCoin && supportsAutoEnable) {
-              await autoEnableCoinIfNeeded(position.id, stcyCoin)
-            }
-            navigate({
-              id: 'send',
-              state: { coin: extractCoinKey(stcyCoin) },
-            })
+          if (!transferToken) return
+          const hasTransferCoin = vaultCoins.some(current =>
+            areEqualCoins(current, transferToken)
+          )
+          if (!hasTransferCoin && supportsAutoEnable) {
+            await autoEnableCoinIfNeeded(position.id, transferToken)
           }
+          navigate({
+            id: 'send',
+            state: { coin: extractCoinKey(transferToken) },
+          })
         }
 
         return (
@@ -249,9 +361,7 @@ export const StakedPositions = () => {
             infoUrl={
               position.id === 'thor-stake-stcy' ? stcyInfoUrl : undefined
             }
-            onTransfer={
-              position.id === 'thor-stake-stcy' ? handleTransfer : undefined
-            }
+            onTransfer={canTransfer ? handleTransfer : undefined}
           />
         )
       })}

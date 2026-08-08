@@ -1,53 +1,11 @@
-import { fromBase64 } from '@cosmjs/encoding'
 import { CosmosChain } from '@vultisig/core-chain/Chain'
-import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { sumFeeAmountForCosmosChainFeeDenom } from '@vultisig/core-chain/chains/cosmos/sumFeeAmountForCosmosChainFeeDenom'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { attempt } from '@vultisig/lib-utils/attempt'
-import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 
-type FeeAmount = { denom: string; amount: string }
-
-const getDappFeeAmounts = (
-  signData: KeysignPayload['signData']
-): readonly FeeAmount[] | undefined => {
-  if (signData.case === 'signAmino') {
-    return signData.value.fee?.amount
-  }
-  if (signData.case === 'signDirect') {
-    const result = attempt(() =>
-      AuthInfo.decode(fromBase64(signData.value.authInfoBytes))
-    )
-    if ('error' in result) return undefined
-    return result.data.fee?.amount
-  }
-  return undefined
-}
-
-const executeContractMsgTypes: ReadonlySet<string> = new Set([
-  CosmosMsgType.MSG_EXECUTE_CONTRACT,
-  CosmosMsgType.MSG_EXECUTE_CONTRACT_URL,
-])
-
-const isExecuteContractSignData = (
-  signData: KeysignPayload['signData']
-): boolean => {
-  if (signData.case === 'signAmino') {
-    return signData.value.msgs.some(msg =>
-      executeContractMsgTypes.has(msg.type)
-    )
-  }
-  if (signData.case === 'signDirect') {
-    const result = attempt(() =>
-      TxBody.decode(fromBase64(signData.value.bodyBytes))
-    )
-    if ('error' in result) return false
-    return result.data.messages.some(msg =>
-      executeContractMsgTypes.has(msg.typeUrl)
-    )
-  }
-  return false
-}
+import {
+  getDappCosmosFeeAmounts,
+  isExecuteContractSignData,
+} from './dappCosmosFee'
 
 type ApplyCosmosFeeFromSignDataInput = {
   keysignPayload: KeysignPayload
@@ -73,8 +31,8 @@ type ApplyCosmosFeeFromSignDataInput = {
  * No-op when:
  *   - the chain isn't cosmos-routed (caller guards on `isChainOfKind('cosmos')`)
  *   - no dapp signData is present (e.g., native sends Vultisig built itself)
- *   - the dapp paid in a non-native fee denom (we can't collapse a multi-denom
- *     fee into the proto's single `uint64`; leaves the estimate in place)
+ *   - the dapp paid only in non-native fee denoms. This function can't collapse
+ *     those into the proto's single `uint64`; the display layer shows them raw.
  *   - `blockchainSpecific.case` is `mayachainSpecific` (no `fee` field on that
  *     schema — safe to skip; MAYA uses a hardcoded fallback elsewhere)
  */
@@ -82,7 +40,7 @@ export const applyCosmosFeeFromSignData = ({
   keysignPayload,
   chain,
 }: ApplyCosmosFeeFromSignDataInput): void => {
-  const feeAmounts = getDappFeeAmounts(keysignPayload.signData)
+  const feeAmounts = getDappCosmosFeeAmounts(keysignPayload.signData)
   if (!feeAmounts) return
 
   const signedFee = sumFeeAmountForCosmosChainFeeDenom({

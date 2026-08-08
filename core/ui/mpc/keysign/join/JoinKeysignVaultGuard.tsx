@@ -27,7 +27,10 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   const error = useMemo(() => {
     if (!vault) {
-      return t('wrong_vault_try_again')
+      return {
+        title: t('vault_is_not_loaded'),
+        description: t('vault_is_not_loaded_description'),
+      }
     }
 
     if (!payload) {
@@ -37,18 +40,23 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
     const { vaultLocalPartyId, libType } = payload
 
     if (vaultLocalPartyId === vault.localPartyId) {
-      return t('same_vault_share')
+      return {
+        title: t('same_vault_share'),
+        description: t('same_vault_share_description'),
+      }
     }
 
     if (libType && !areLowerCaseEqual(libType, toKeysignLibType(vault))) {
-      return t('vault_type_does_not_match')
+      return { title: t('vault_type_does_not_match') }
     }
   }, [payload, t, vault])
 
   if (error) {
     return (
       <FullPageFlowErrorState
-        title={error}
+        variant="warning"
+        title={error.title}
+        description={error.description}
         action={
           <Button onClick={() => navigate({ id: 'vault' })}>{t('back')}</Button>
         }

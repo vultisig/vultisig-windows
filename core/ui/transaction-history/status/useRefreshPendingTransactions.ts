@@ -4,16 +4,14 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'
+import {
+  getCowSwapOrderApiBase,
+  getCowSwapOrderRecordUpdate,
+} from './getCowSwapOrderRecordUpdate'
+import { shouldFailStaleTransaction } from './staleTransaction'
 import { toRecordStatus } from './toRecordStatus'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
-
-const stalePendingThresholdMs = 5 * 60 * 1000
-
-const isStaleTransaction = (record: TransactionRecord): boolean => {
-  const elapsed = Date.now() - new Date(record.timestamp).getTime()
-  return elapsed > stalePendingThresholdMs
-}
 
 /** Checks chain status for pending/broadcasted transactions and updates their status in storage. */
 export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
@@ -21,8 +19,12 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
   const isRefreshingRef = useRef(false)
 
   useEffect(() => {
-    const pendingRecords = records.filter(r =>
-      pendingStatuses.includes(r.status)
+    // Limit orders are queue-driven: their inbound deposit confirms in seconds
+    // while the order rests for hours, so chain status would mark the record
+    // `confirmed` and contradict the order's own state. useLimitOrderTracking
+    // owns their lifecycle.
+    const pendingRecords = records.filter(
+      r => pendingStatuses.includes(r.status) && r.type !== 'limitSwap'
     )
 
     if (pendingRecords.length === 0 || isRefreshingRef.current) return
@@ -33,12 +35,29 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
       try {
         await Promise.all(
           pendingRecords.map(async record => {
+            // CowSwap orders settle off-chain: `txHash` is the orderbook UID,
+            // not a chain hash. Poll the orderbook and skip the chain stale
+            // path, which would otherwise fail a still-valid order at the
+            // 5-min cutoff (orders stay open up to their orderbook expiry).
+            const cowSwapOrder = getCowSwapOrderApiBase(record)
+            if (cowSwapOrder) {
+              const { record: updatedRecord } =
+                await getCowSwapOrderRecordUpdate({
+                  record: cowSwapOrder.record,
+                  apiBase: cowSwapOrder.apiBase,
+                })
+              if (updatedRecord) {
+                updateRecord(updatedRecord)
+              }
+              return
+            }
+
             const result = await attempt(() =>
               getTxStatus({ chain: record.chain, hash: record.txHash })
             )
 
             if ('error' in result) {
-              if (isStaleTransaction(record)) {
+              if (shouldFailStaleTransaction(record)) {
                 updateRecord({ ...record, status: 'failed' })
               }
               return
@@ -46,7 +65,7 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
 
             const newStatus = toRecordStatus[result.data.status]
 
-            if (newStatus === 'pending' && isStaleTransaction(record)) {
+            if (newStatus === 'pending' && shouldFailStaleTransaction(record)) {
               updateRecord({ ...record, status: 'failed' })
               return
             }

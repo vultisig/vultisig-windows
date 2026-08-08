@@ -1,7 +1,21 @@
 import { JsonObject, JsonValue } from '@bufbuild/protobuf'
+import { currentProductBrandConfig } from '@core/ui/product/brand'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
+
+const trustedProductBaseDomain = getUrlBaseDomain(
+  currentProductBrandConfig.websiteUrl
+)
+
+/**
+ * Whether a dApp request originates from the official product domain (e.g.
+ * `vultisig.com` and its subdomains). Used to gate the "verified" badge so
+ * only first-party origins are presented as trusted.
+ */
+export const isTrustedProductOrigin = (origin: string): boolean =>
+  getUrlBaseDomain(origin) === trustedProductBaseDomain
 
 export type ParsedConfigurationRow = {
   key: string

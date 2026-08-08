@@ -23,18 +23,30 @@ export const KeysignFeeAmount = ({ keysignPayload }: KeysignFeeAmountProps) => {
 
   const feeCoinPriceQuery = useCoinPriceQuery({ coin: chainFeeCoin[chain] })
 
-  const fee = fromChainAmount(useKeysignFee(keysignPayload), decimals)
+  const feeQuery = useKeysignFee(keysignPayload)
 
   return (
     <Text size={14} centerVertically={{ gap: 8 }}>
-      <span>{formatAmount(fee, { ticker })}</span>
-      <Text as="span" color="shy">
-        <MatchQuery
-          value={feeCoinPriceQuery}
-          pending={() => <Spinner />}
-          success={price => formatFiatAmount(fee * price)}
-        />
-      </Text>
+      <MatchQuery
+        value={feeQuery}
+        pending={() => <Spinner />}
+        success={feeAmount => {
+          const fee = fromChainAmount(feeAmount, decimals)
+
+          return (
+            <>
+              <span>{formatAmount(fee, { ticker })}</span>
+              <Text as="span" color="shy">
+                <MatchQuery
+                  value={feeCoinPriceQuery}
+                  pending={() => <Spinner />}
+                  success={price => formatFiatAmount(fee * price)}
+                />
+              </Text>
+            </>
+          )
+        }}
+      />
     </Text>
   )
 }

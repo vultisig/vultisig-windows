@@ -1,3 +1,4 @@
+import { reportBugUrl } from '@core/ui/errors/constants'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import {
@@ -17,16 +18,19 @@ export const FlowErrorPageContent = ({
   action,
   ...props
 }: FlowErrorPageContentProps) => {
-  const { goBack, version } = useCore()
+  const { goBack, version, openUrl } = useCore()
   const { t } = useTranslation()
 
   return (
     <>
       <PageContent>
-        <ErrorFallbackContent {...props} />
+        <ErrorFallbackContent
+          onReportBug={() => openUrl(reportBugUrl)}
+          {...props}
+        />
       </PageContent>
       <PageFooter alignItems="center" gap={12}>
-        {action ? action : <Button onClick={goBack}>{t('back')}</Button>}
+        {action ? action : <Button onClick={goBack}>{t('try_again')}</Button>}
         <Text color="shy" size={12}>
           {t('version')} {version}
         </Text>

@@ -52,11 +52,7 @@ export const CustomTokenResult = ({ id }: { id: string }) => {
             title={t('no_token_found')}
             description={t('token_not_found_description')}
           />
-          <Button
-            kind="primary"
-            onClick={() => query.refetch()}
-            style={{ marginTop: 8 }}
-          >
+          <Button kind="primary" onClick={() => query.refetch()}>
             {t('retry')}
           </Button>
         </ErrorStateWrapper>
@@ -142,9 +138,15 @@ const ErrorStateWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 20px;
+  padding: 24px 20px;
   max-width: 450px;
   margin-inline: auto;
+  border-radius: 16px;
+  background: ${getColor('foreground')};
+
+  & > button {
+    width: 100%;
+  }
 `
 
 const LoadingWrapper = styled.div`

@@ -344,7 +344,7 @@ const BlockaidEvmSimulationContent = ({
         return fallback
       }}
       error={() => fallback}
-      pending={() => null}
+      pending={() => fallback}
       inactive={() => null}
     />
   )

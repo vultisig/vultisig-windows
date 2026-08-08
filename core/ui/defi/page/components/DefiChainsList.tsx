@@ -1,5 +1,7 @@
 import { ChainsEmptyState } from '@core/ui/chain/components/ChainsEmptyState'
+import { orderChainItemsForProduct } from '@core/ui/chain/utils/orderChainItemsForProduct'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { currentProductBrand } from '@core/ui/product/brand'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import {
   isSupportedDefiChain,
@@ -12,8 +14,10 @@ import { List } from '@lib/ui/list'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from 'styled-components'
 
 import { CircleDefiItem } from '../../protocols/circle/CircleDefiItem'
+import { circleName } from '../../protocols/circle/core/config'
 import { useDefiChainPortfolios } from '../hooks/useDefiPortfolios'
 import { DefiChainItem } from './DefiChainItem'
 import { useSearchChain } from './state/searchChainProvider'
@@ -26,6 +30,8 @@ export const DefiChainsList = () => {
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const { iconStyle } = useTheme()
+  const isStation = currentProductBrand === 'station'
 
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
@@ -37,21 +43,34 @@ export const DefiChainsList = () => {
 
   const filteredBalances = useMemo(() => {
     if (!normalizedQuery) {
-      return defiChainBalances
+      return orderChainItemsForProduct({
+        items: defiChainBalances,
+        getChain: item => item.chain,
+        productBrand: currentProductBrand,
+      })
     }
 
-    return defiChainBalances.filter(({ chain }) => {
+    const filtered = defiChainBalances.filter(({ chain }) => {
       const normalizedChain = String(chain).toLowerCase()
       if (normalizedChain.includes(normalizedQuery)) {
         return true
       }
       return false
     })
+
+    return orderChainItemsForProduct({
+      items: filtered,
+      getChain: item => item.chain,
+      productBrand: currentProductBrand,
+    })
   }, [normalizedQuery, defiChainBalances])
 
   const handleCustomize = () => navigate({ id: 'manageDefiChains' })
+  const showCircle =
+    isCircleVisible &&
+    (!normalizedQuery || circleName.toLowerCase().includes(normalizedQuery))
 
-  if (defiChainBalances.length === 0 && !isCircleVisible) {
+  if (defiChainBalances.length === 0 && !showCircle) {
     if (isPending) {
       return (
         <Center>
@@ -74,7 +93,7 @@ export const DefiChainsList = () => {
     )
   }
 
-  if (filteredBalances.length === 0 && normalizedQuery && !isCircleVisible) {
+  if (filteredBalances.length === 0 && normalizedQuery && !showCircle) {
     return (
       <ChainsEmptyState
         icon={
@@ -90,11 +109,15 @@ export const DefiChainsList = () => {
   }
 
   return (
-    <List>
-      {isCircleVisible && <CircleDefiItem />}
+    <List
+      border={iconStyle === 'station' ? 'solid' : undefined}
+      radius={iconStyle === 'station' ? 24 : undefined}
+    >
+      {showCircle && !isStation && <CircleDefiItem />}
       {filteredBalances.map(balance => (
         <DefiChainItem key={balance.chain} balance={balance} />
       ))}
+      {showCircle && isStation && <CircleDefiItem />}
     </List>
   )
 }

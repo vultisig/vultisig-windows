@@ -6,7 +6,6 @@
  *
  * @see https://cips.cardano.org/cip/CIP-30
  */
-import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
@@ -30,6 +29,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { requestAccount } from './core/requestAccount'
 
 // ========================= CIP-30 error factories =========================
@@ -107,8 +107,8 @@ const supportedCip30Extensions: CardanoCip30Extension[] = []
 
 /** CIP-30 initial API injected at `window.cardano.vultisig`. */
 export const createCardanoCip30InitialApi = () => ({
-  name: 'Vultisig',
-  icon: VULTI_ICON_RAW_SVG,
+  name: currentExtensionBrandConfig.provider.walletPickerName,
+  icon: currentExtensionBrandConfig.provider.icon,
   apiVersion: '1.0.0',
   supportedExtensions: supportedCip30Extensions,
 

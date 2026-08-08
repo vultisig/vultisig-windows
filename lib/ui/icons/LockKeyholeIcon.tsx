@@ -1,18 +1,34 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const LockKeyholeIcon: FC<SvgProps> = props => (
+export const LockKeyholeIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <path d="M7 10V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V10M13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16C11 15.4477 11.4477 15 12 15C12.5523 15 13 15.4477 13 16ZM5 10H19C20.1046 10 21 10.8954 21 12V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V12C3 10.8954 3.89543 10 5 10Z" />
+    <path
+      d="M7.80078 10.7996V7.79961C7.80078 5.48001 9.68118 3.59961 12.0008 3.59961C14.3204 3.59961 16.2008 5.48001 16.2008 7.79961V10.7996"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 15V16.2"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.8008 10.7998H7.20078C5.8753 10.7998 4.80078 11.8743 4.80078 13.1998V17.9998C4.80078 19.3253 5.8753 20.3998 7.20078 20.3998H16.8008C18.1263 20.3998 19.2008 19.3253 19.2008 17.9998V13.1998C19.2008 11.8743 18.1263 10.7998 16.8008 10.7998Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

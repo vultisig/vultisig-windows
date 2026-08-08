@@ -1,7 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { CoinPillButton } from '@core/ui/chain/coin/inputs/CoinPillButton'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -10,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { CoinBalance } from '../CoinBalance'
-import { CoinWrapper } from './SendCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
   Pick<Coin, 'id' | 'chain' | 'logo' | 'ticker'>
@@ -56,22 +54,11 @@ export const SendCoinInputField = ({
         </HStack>
       </HStack>
       <HStack flexGrow justifyContent="space-between" alignItems="center">
-        <CoinWrapper
-          role="button"
-          tabIndex={0}
+        <CoinPillButton
+          value={value}
           onClick={onCoinClick}
-          alignItems="center"
-          gap={8}
-          data-testid="coin-selector-trigger"
-        >
-          <CoinIcon coin={value} style={{ fontSize: 32 }} />
-          <HStack gap={4}>
-            <Text weight="500" size={16} color="contrast">
-              {value.ticker}
-            </Text>
-            <ChevronRightIcon />
-          </HStack>
-        </CoinWrapper>
+          testId="coin-selector-trigger"
+        />
         <CoinBalance value={value} />
       </HStack>
     </VStack>

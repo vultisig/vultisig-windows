@@ -1,19 +1,35 @@
-import { decryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/decryptWithAesGcm'
-import { encryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/encryptWithAesGcm'
 import {
   encryptedEncoding,
   plainTextEncoding,
 } from '@vultisig/lib-utils/encryption/config'
 import { Entry } from '@vultisig/lib-utils/entities/Entry'
 
-export const encryptSample = ({ key, value }: Entry<string, string>) =>
-  encryptWithAesGcm({
-    key: Buffer.from(key, plainTextEncoding),
-    value: Buffer.from(value, plainTextEncoding),
-  }).toString(encryptedEncoding)
+import { decryptWithPasscode, encryptWithPasscode } from './passcodeCipher'
 
-export const decryptSample = ({ key, value }: Entry<string, string>) =>
-  decryptWithAesGcm({
-    key: Buffer.from(key, plainTextEncoding),
-    value: Buffer.from(value, encryptedEncoding),
-  }).toString(plainTextEncoding)
+/**
+ * The passcode sample is a known value encrypted under the passcode; decrypting
+ * it confirms a passcode guess. It uses the same PBKDF2 cipher as the key shares
+ * so it can't serve as a cheap offline brute-force oracle. Decryption falls back
+ * to the legacy `SHA-256(passcode)` KDF for samples written by older builds.
+ */
+export const encryptSample = async ({
+  key,
+  value,
+}: Entry<string, string>): Promise<string> => {
+  const [blob] = await encryptWithPasscode({
+    passcode: key,
+    values: [Buffer.from(value, plainTextEncoding)],
+  })
+  return blob.toString(encryptedEncoding)
+}
+
+export const decryptSample = async ({
+  key,
+  value,
+}: Entry<string, string>): Promise<string> => {
+  const [plaintext] = await decryptWithPasscode({
+    passcode: key,
+    values: [Buffer.from(value, encryptedEncoding)],
+  })
+  return plaintext.toString(plainTextEncoding)
+}

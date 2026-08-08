@@ -1,81 +1,55 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { SwapInfo } from '@core/ui/vault/swap/form/info/SwapInfo'
-import { ManageFromCoin } from '@core/ui/vault/swap/form/ManageFromCoin'
-import { ManageToCoin } from '@core/ui/vault/swap/form/ManageToCoin'
-import { ReverseSwap } from '@core/ui/vault/swap/form/ReverseSwap'
-import { Button } from '@lib/ui/buttons/Button'
-import { getFormProps } from '@lib/ui/form/utils/getFormProps'
-import { VStack, vStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
+import { Tab, Tabs } from '@lib/ui/base/Tabs'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { hStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { OnFinishProp } from '@lib/ui/props'
-import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
-import { FC, useEffect, useMemo, useRef } from 'react'
+import { ChildrenProp, IsActiveProp, OnFinishProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { featureFlags } from '../../../featureFlags'
 import { RefreshSwap } from '../components/RefreshSwap'
-import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
-import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
+import { AdvancedSwapSettings } from './advanced/AdvancedSwapSettings'
+import { LimitSwapForm } from './LimitSwapForm'
+import { MarketSwapForm } from './MarketSwapForm'
+import { SwapFlowResult } from './swapFlowResult'
 
-export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
-  const {
-    error,
-    data: validationErrorMessage,
-    isPending,
-  } = useSwapValidationQuery()
-  const swapQuoteQuery = useSwapQuoteQuery()
-  const [{ autoSubmit }, setViewState] = useCoreViewState<'swap'>()
-  const autoSubmittedRef = useRef(false)
+type SwapMode = 'market' | 'limit'
 
+export const SwapForm: FC<OnFinishProp<SwapFlowResult>> = ({ onFinish }) => {
   const { t } = useTranslation()
+  const [swapMode, setSwapMode] = useState<SwapMode>('market')
+  const showAdvancedSettings = swapMode === 'market'
 
-  const errorMessage = useMemo(() => {
-    if (isPending) {
-      return t('loading')
-    }
-
-    if (error) {
-      return extractErrorMsg(error)
-    }
-
-    if (validationErrorMessage === undefined) {
-      return t('fill_the_form')
-    }
-
-    return validationErrorMessage
-  }, [validationErrorMessage, error, isPending, t])
-
-  useEffect(() => {
-    if (
-      autoSubmit &&
-      !autoSubmittedRef.current &&
-      !errorMessage &&
-      swapQuoteQuery.data
-    ) {
-      autoSubmittedRef.current = true
-      setViewState(prev => ({ ...prev, autoSubmit: undefined }))
-      onFinish(swapQuoteQuery.data)
-    }
-  }, [autoSubmit, errorMessage, swapQuoteQuery.data, onFinish, setViewState])
-
-  // Display error for ReverseSwap button (excludes non-error states like loading/fill_the_form)
-  const displayErrorMessage = useMemo(() => {
-    if (isPending) return null
-    if (error) return extractErrorMsg(error)
-    if (validationErrorMessage === undefined) return null
-    return validationErrorMessage
-  }, [validationErrorMessage, error, isPending])
-
-  const handleSubmit = () => {
-    if (!errorMessage) {
-      const swapQuote = shouldBePresent(swapQuoteQuery.data, 'swap quote')
-      onFinish(swapQuote)
-    }
-  }
+  const tabs: Tab<SwapMode>[] = [
+    {
+      value: 'market',
+      label: t('swap_mode_market'),
+      renderContent: () => (
+        <MarketSwapForm
+          onFinish={quote => onFinish({ kind: 'market', quote })}
+        />
+      ),
+    },
+    // Gating the tab on the flag (rather than the queries inside the form) keeps
+    // "flag off ⇒ no limit-swap calls" true while letting the form's queries fire
+    // unconditionally once it is actually mounted.
+    ...(featureFlags.limitSwap
+      ? [
+          {
+            value: 'limit' as const,
+            label: t('swap_mode_limit'),
+            renderContent: () => (
+              <LimitSwapForm
+                onFinish={order => onFinish({ kind: 'limit', order })}
+              />
+            ),
+          },
+        ]
+      : []),
+  ]
 
   return (
     <>
@@ -85,42 +59,62 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
         title={t('swap')}
         hasBorder
       />
-      <PageContent
-        as="form"
-        gap={40}
-        data-testid="swap-form"
-        {...getFormProps({
-          onSubmit: handleSubmit,
-          isDisabled: !!errorMessage,
-        })}
-        justifyContent="space-between"
-        scrollable
-      >
-        <VStack gap={16}>
-          <VStack gap={8}>
-            <ManageFromCoin />
-            <ReverseSwapWrapper>
-              <ReverseSwap errorMessage={displayErrorMessage} />
-            </ReverseSwapWrapper>
-            <ManageToCoin />
-          </VStack>
-          <VStack gap={10}>
-            <SwapInfo />
-          </VStack>
-        </VStack>
-        <Button
-          disabled={!!errorMessage}
-          type="submit"
-          data-testid="swap-continue"
-        >
-          {t('continue')}
-        </Button>
-      </PageContent>
+      <Tabs
+        tabs={tabs}
+        value={swapMode}
+        onValueChange={setSwapMode}
+        triggersContainer={({ children }) => (
+          <SwapModeTabsHeader showAdvancedSettings={showAdvancedSettings}>
+            {children}
+          </SwapModeTabsHeader>
+        )}
+        triggerSlot={({ tab: { label }, isActive, ...triggerProps }) => (
+          <TriggerItem {...triggerProps} isActive={isActive}>
+            <Text
+              size={14}
+              as="span"
+              color={isActive ? 'contrast' : 'supporting'}
+            >
+              {label}
+            </Text>
+          </TriggerItem>
+        )}
+      />
     </>
   )
 }
 
-const ReverseSwapWrapper = styled.div`
-  ${vStack({ gap: 8 })}
-  position: relative;
+type SwapModeTabsHeaderProps = ChildrenProp & {
+  showAdvancedSettings: boolean
+}
+
+const SwapModeTabsHeader = ({
+  children,
+  showAdvancedSettings,
+}: SwapModeTabsHeaderProps) => (
+  <Header>
+    <TabsHeader>{children}</TabsHeader>
+    {showAdvancedSettings ? <AdvancedSwapSettings /> : null}
+  </Header>
+)
+
+const Header = styled.div`
+  ${hStack({ justifyContent: 'space-between', alignItems: 'center', gap: 16 })};
+  padding: 16px 16px 0;
+`
+
+const TabsHeader = styled.div`
+  ${hStack({ gap: 24, alignItems: 'center' })};
+`
+
+const TriggerItem = styled(UnstyledButton)<IsActiveProp>`
+  width: fit-content;
+  padding-bottom: 6px;
+  cursor: pointer;
+
+  ${({ isActive, theme }) =>
+    isActive &&
+    css`
+      border-bottom: 1.5px solid ${theme.colors.buttonPrimary.toCssValue()};
+    `};
 `

@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@vultisig/lib-utils": "0.10.1",
-    "prettier": "^3.8.1"
+    "@vultisig/lib-utils": "0.10.4",
+    "prettier": "^3.8.4"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

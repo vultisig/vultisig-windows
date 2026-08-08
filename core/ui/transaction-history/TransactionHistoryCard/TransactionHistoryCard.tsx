@@ -51,8 +51,16 @@ export type TransactionHistoryCardPill =
 export type TransactionHistoryCardProps = {
   /** Transaction type shown in the tag (send, receive, swap, approve). */
   tagType: TransactionHistoryTagType
+  /** Optional pre-resolved tag label override (e.g. "Delegate" for staking). */
+  tagLabel?: string
   /** Card state: successful (green), pending (neutral), or error (red). */
   status: TransactionHistoryCardStatus
+  /**
+   * Pre-resolved status text, replacing the default `status`-derived label
+   * (the colour still follows `status`). Lets a limit order read its own
+   * lifecycle — "Open", "Expired" — instead of the generic tx wording.
+   */
+  statusLabel?: string
   /** USD amount, e.g. "$1,000.54". */
   amountUsd: string
   /** Crypto amount without symbol, e.g. "1,000.12". */
@@ -74,7 +82,9 @@ export type TransactionHistoryCardProps = {
 
 export const TransactionHistoryCard = ({
   tagType,
+  tagLabel,
   status,
+  statusLabel,
   amountUsd,
   amountCrypto,
   symbol,
@@ -90,7 +100,7 @@ export const TransactionHistoryCard = ({
     pending: t('pending'),
     error: t('failed'),
   }
-  const statusLabel = statusLabelKey[status]
+  const resolvedStatusLabel = statusLabel ?? statusLabelKey[status]
   const assetIcon =
     coin != null ? <CoinIcon coin={coin} style={{ fontSize: 24 }} /> : icon
 
@@ -99,8 +109,8 @@ export const TransactionHistoryCard = ({
   return (
     <Card>
       <TopRow>
-        <TransactionHistoryTag type={tagType} />
-        <StatusLabel $status={status}>{statusLabel}</StatusLabel>
+        <TransactionHistoryTag type={tagType} label={tagLabel} />
+        <StatusLabel $status={status}>{resolvedStatusLabel}</StatusLabel>
       </TopRow>
 
       <DetailsRow>

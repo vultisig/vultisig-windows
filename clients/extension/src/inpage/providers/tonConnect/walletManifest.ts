@@ -1,5 +1,6 @@
-import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import type { DeviceInfo, Feature } from '@tonconnect/protocol'
+
+import { currentExtensionBrandConfig } from '../../../brand/extensionBrandConfig'
 
 type WalletInfo = {
   name: string
@@ -23,14 +24,14 @@ const getTonConnectFeatures = (): Feature[] => [
 
 export const getTonConnectDeviceInfo = (): DeviceInfo => ({
   platform: 'browser',
-  appName: 'Vultisig',
+  appName: currentExtensionBrandConfig.provider.walletPickerName,
   appVersion: '0.2.1',
   maxProtocolVersion: 2,
   features: getTonConnectFeatures(),
 })
 
 export const getTonConnectWalletInfo = (): WalletInfo => ({
-  name: 'Vultisig',
-  image: VULTI_ICON_RAW_SVG,
-  about_url: 'https://vultisig.com',
+  name: currentExtensionBrandConfig.provider.walletPickerName,
+  image: currentExtensionBrandConfig.provider.icon,
+  about_url: currentExtensionBrandConfig.websiteUrl,
 })

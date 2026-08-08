@@ -62,7 +62,7 @@ export class SendFlow extends BasePage {
    * Located in the "From" row of the coin input field.
    */
   get chainSelectorButton(): Locator {
-    return this.sendForm.locator('role=button >> text=/Bitcoin|Ethereum|THORChain|Solana|BSC/i').first()
+    return this.sendForm.locator('role=button >> text=/Bitcoin|Ethereum|THORChain|Solana|BSC|Ripple/i').first()
   }
 
   get addressInput(): Locator {
@@ -71,6 +71,10 @@ export class SendFlow extends BasePage {
 
   get amountInput(): Locator {
     return this.page.locator('[data-testid="send-amount-input"]')
+  }
+
+  get destinationTagInput(): Locator {
+    return this.page.locator('[data-testid="send-destination-tag-input"]')
   }
 
   get continueButton(): Locator {
@@ -129,6 +133,7 @@ export class SendFlow extends BasePage {
     AVAX: 'Avalanche',
     LTC: 'Litecoin',
     DOGE: 'Dogecoin',
+    XRP: 'Ripple',
   }
 
   /**
@@ -225,7 +230,7 @@ export class SendFlow extends BasePage {
       for (const btn of buttons) {
         if (btn.querySelector('svg') && btn.textContent) {
           const text = btn.textContent.trim()
-          if (/^(Bitcoin|Ethereum|THORChain|Solana|BSC|Litecoin|Dogecoin|Polygon|Avalanche|Cosmos|Arbitrum|Optimism|Base)$/i.test(text.replace(/\s/g, ''))) {
+          if (/^(Bitcoin|Ethereum|THORChain|Solana|BSC|Litecoin|Dogecoin|Polygon|Avalanche|Cosmos|Arbitrum|Optimism|Base|Ripple)$/i.test(text.replace(/\s/g, ''))) {
             ;(btn as HTMLElement).click()
             return text
           }
@@ -311,11 +316,11 @@ export class SendFlow extends BasePage {
     // Wait for any loading/animations to complete
     await waitForLoadingComplete(this.page)
     await this.page.waitForTimeout(300)
-    
+
     // Primary strategy: Use data-testid terms checkboxes
     const termsCheckboxes = this.termsCheckboxes
     const termsCount = await termsCheckboxes.count()
-    
+
     if (termsCount > 0) {
       for (let i = 0; i < termsCount; i++) {
         await robustClick(termsCheckboxes.nth(i))

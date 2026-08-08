@@ -15,7 +15,11 @@ import { SelectChainsStep } from './SelectChainsStep'
 import { useMnemonic } from './state/mnemonic'
 import { ImportSeedphraseStep, useImportSeedphraseStep } from './state/step'
 
-const stepTitles: Partial<Record<ImportSeedphraseStep, string>> = {
+type ImportSeedphraseTitleKey = 'import_seedphrase' | 'select_chains'
+
+const stepTitles: Partial<
+  Record<ImportSeedphraseStep, ImportSeedphraseTitleKey>
+> = {
   scan: 'import_seedphrase',
   chains: 'select_chains',
 }
@@ -69,7 +73,7 @@ export const ImportSeedphraseActiveStep = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={handleBack} />}
-        title={titleKey ? t(titleKey as any) : undefined}
+        title={titleKey ? t(titleKey) : undefined}
       />
       <Container>
         <StepComponent />

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/kucherenko/jscpd/master/schemas/jscpd-schema.json",
+  "format": ["typescript", "tsx", "javascript", "go"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/storybook-static/**",
+    "**/wailsjs/**",
+    "**/*_pb.ts",
+    "**/*.d.ts",
+    "**/*.snap",
+    "**/tasks/**",
+    "**/CHANGELOG.md",
+    "lib/dkls/**",
+    "lib/schnorr/**",
+    "lib/mldsa/**",
+    "clients/extension/tests/e2e/playwright-report/**",
+    "clients/extension/tests/e2e/test-results/**"
+  ],
+  "minLines": 45,
+  "minTokens": 120,
+  "mode": "strict",
+  "reporters": ["console"],
+  "threshold": 0.35
+}

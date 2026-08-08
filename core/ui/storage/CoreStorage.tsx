@@ -5,6 +5,7 @@ import { CircleVisibilityStorage } from './circleVisibility'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
+import { CustomRpcOverridesStorage } from './customRpcOverrides'
 import { DefiChainsStorage } from './defiChains'
 import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
@@ -17,6 +18,7 @@ import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
 import { PasscodeUnlockSessionStorage } from './passcodeUnlockSession'
 import { ReferralsStorage } from './referrals'
+import { SolanaMoveStakeDestinationsStorage } from './solanaMoveStakeDestinations'
 import { TransactionHistoryStorage } from './transactionHistory'
 import { TssBatchingEnabledStorage } from './tssBatchingEnabled'
 import { VaultFoldersStorage } from './vaultFolders'
@@ -44,4 +46,6 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   DismissedBannersStorage &
   MLDSAEnabledStorage &
   TssBatchingEnabledStorage &
+  CustomRpcOverridesStorage &
+  SolanaMoveStakeDestinationsStorage &
   TransactionHistoryStorage

@@ -17,6 +17,7 @@ import { findByTicker } from '@vultisig/core-chain/coin/utils/findByTicker'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useMemo } from 'react'
 
+import { currentProductBrand, ProductBrand } from '../product/brand'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
@@ -80,6 +81,13 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       type: 'stake',
       chain: Chain.THORChain,
     },
+    {
+      id: 'thor-stake-brune',
+      name: 'bRUNE',
+      ticker: 'bRUNE',
+      type: 'stake',
+      chain: Chain.THORChain,
+    },
   ],
   [Chain.MayaChain]: [
     {
@@ -97,6 +105,51 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       chain: Chain.MayaChain,
     },
   ],
+  [Chain.Terra]: [
+    {
+      id: 'terra-stake-luna',
+      name: 'LUNA',
+      ticker: 'LUNA',
+      type: 'stake',
+      chain: Chain.Terra,
+    },
+  ],
+  [Chain.TerraClassic]: [
+    {
+      id: 'terraclassic-stake-lunc',
+      name: 'LUNC',
+      ticker: 'LUNC',
+      type: 'stake',
+      chain: Chain.TerraClassic,
+    },
+  ],
+  [Chain.QBTC]: [
+    {
+      id: 'qbtc-stake-qbtc',
+      name: 'QBTC',
+      ticker: 'QBTC',
+      type: 'stake',
+      chain: Chain.QBTC,
+    },
+  ],
+  [Chain.Ton]: [
+    {
+      id: 'ton-stake-ton',
+      name: 'GRAM',
+      ticker: 'GRAM',
+      type: 'stake',
+      chain: Chain.Ton,
+    },
+  ],
+  [Chain.Solana]: [
+    {
+      id: 'solana-stake-sol',
+      name: 'SOL',
+      ticker: 'SOL',
+      type: 'stake',
+      chain: Chain.Solana,
+    },
+  ],
 }
 
 const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
@@ -106,6 +159,31 @@ const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
 /** Returns the IDs of all static positions for a chain, used to auto-enable positions when a chain is first toggled on. */
 export const getDefaultDefiPositionIds = (chain: Chain): string[] =>
   getAvailablePositionsForChain(chain).map(p => p.id)
+
+type DefiPositionsRecord = Record<string, string[]> // chain -> position ids
+
+export const getInitialDefiPositions = (
+  productBrand: ProductBrand
+): DefiPositionsRecord =>
+  productBrand === 'station'
+    ? {
+        [Chain.Terra]: getDefaultDefiPositionIds(Chain.Terra),
+        [Chain.TerraClassic]: getDefaultDefiPositionIds(Chain.TerraClassic),
+      }
+    : {}
+
+type ResolveDefiPositionsInput = {
+  storedPositions?: DefiPositionsRecord
+  productBrand: ProductBrand
+}
+
+export const resolveDefiPositions = ({
+  storedPositions,
+  productBrand,
+}: ResolveDefiPositionsInput): DefiPositionsRecord =>
+  storedPositions ?? getInitialDefiPositions(productBrand)
+
+export const initialDefiPositions = getInitialDefiPositions(currentProductBrand)
 
 const lpBaseTicker: Record<LpSupportedChain, string> = {
   [Chain.THORChain]: runeCoin.ticker,
@@ -336,8 +414,6 @@ export const isDefiPositionSelected = ({
   selectedPositionIds.includes(position.id) ||
   position.legacyIds?.some(id => selectedPositionIds.includes(id)) === true
 
-type DefiPositionsRecord = Record<string, string[]> // chain -> position ids
-
 type GetDefiPositionsFunction = () => Promise<DefiPositionsRecord>
 type SetDefiPositionsFunction = (
   positions: DefiPositionsRecord
@@ -360,14 +436,21 @@ const useDefiPositionsQuery = () => {
 
 export const useDefiPositions = (chain: Chain): string[] => {
   const { data } = useDefiPositionsQuery()
+  const positions = resolveDefiPositions({
+    storedPositions: data,
+    productBrand: currentProductBrand,
+  })
 
-  return data?.[chain] ?? []
+  return positions[chain] ?? []
 }
 
 const useAllDefiPositions = (): DefiPositionsRecord => {
   const { data } = useDefiPositionsQuery()
 
-  return data ?? {}
+  return resolveDefiPositions({
+    storedPositions: data,
+    productBrand: currentProductBrand,
+  })
 }
 
 const useSetDefiPositionsMutation = () => {

@@ -9,6 +9,8 @@ import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import EventEmitter from 'events'
 
+import { toEip1193Error } from './eip1193Translate'
+
 export { processSignature }
 
 export class Ethereum extends EventEmitter<EthereumProviderEvents> {
@@ -16,6 +18,7 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   public connected: boolean
   public isCtrl: boolean
   public isMetaMask: boolean
+  public isTronLink: boolean
   public isVultiConnect: boolean
   public isXDEFI: boolean
   public networkVersion: string
@@ -29,6 +32,12 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     this.connected = false
     this.isCtrl = true
     this.isMetaMask = true
+    // The real TronLink extension serves Ethereum + BNB Smart Chain through
+    // plain `window.ethereum` tagged with `isTronLink`. dApps that detect
+    // TronLink read this flag and then route their `eth_*` / `wallet_*`
+    // requests to `window.ethereum`, so exposing it lets Vultisig serve the
+    // EVM half of TronLink-aware multichain flows.
+    this.isTronLink = true
     this.isVultiConnect = true
     this.isXDEFI = true
     this.networkVersion = '1'
@@ -73,9 +82,13 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
 
   async request(data: RequestInput) {
     if (data.method in ethereumHandlers) {
-      return ethereumHandlers[data.method as keyof typeof ethereumHandlers](
-        data.params as never
-      )
+      try {
+        return await ethereumHandlers[
+          data.method as keyof typeof ethereumHandlers
+        ](data.params as never)
+      } catch (error) {
+        throw toEip1193Error(error)
+      }
     }
 
     throw new EIP1193Error('UnsupportedMethod')

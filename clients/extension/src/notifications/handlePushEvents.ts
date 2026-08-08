@@ -6,6 +6,7 @@ import {
 } from '@core/ui/notifications/pushNotificationApi'
 import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
+import { currentProductBrandConfig } from '@core/ui/product/brand'
 
 import {
   openKeysignFromPushNotificationType,
@@ -115,7 +116,7 @@ const createPushSubscribeError = ({
   const message = [
     `Push subscription failed after ${attempt} attempt(s):`,
     `${getErrorName(error)}: ${getErrorMessage(error)}.`,
-    'This happened inside Chrome/FCM before Vultisig server registration.',
+    `This happened inside Chrome/FCM before ${currentProductBrandConfig.name} server registration.`,
     'Check chrome://gcm-internals, notification permission, VPN/proxy, and Chrome profile registration limits.',
   ].join(' ')
   const result = new Error(message)
@@ -141,21 +142,21 @@ const subscribeToPushManager = async ({
         const existing = await self.registration.pushManager.getSubscription()
         if (existing) {
           console.log(
-            '[Vultisig Push] Push subscription appeared after retry wait; using it'
+            '[Extension Push] Push subscription appeared after retry wait; using it'
           )
           return existing
         }
       }
 
       console.log(
-        `[Vultisig Push] Subscribing to push manager (attempt ${attempt}/${maxAttempts})...`
+        `[Extension Push] Subscribing to push manager (attempt ${attempt}/${maxAttempts})...`
       )
       return await self.registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey,
       })
     } catch (error) {
-      console.error('[Vultisig Push] pushManager.subscribe failed:', {
+      console.error('[Extension Push] pushManager.subscribe failed:', {
         attempt,
         maxAttempts,
         errorName: getErrorName(error),
@@ -173,7 +174,7 @@ const subscribeToPushManager = async ({
       }
 
       console.warn(
-        `[Vultisig Push] Retrying push subscribe in ${retryDelayMs}ms...`
+        `[Extension Push] Retrying push subscribe in ${retryDelayMs}ms...`
       )
       await wait(retryDelayMs)
     }
@@ -185,25 +186,25 @@ const subscribeToPushManager = async ({
 const resolvePushSubscription = async (
   serverUrl: string
 ): Promise<PushSubscription> => {
-  console.log('[Vultisig Push] Checking existing push subscription...')
+  console.log('[Extension Push] Checking existing push subscription...')
   const existing = await self.registration.pushManager.getSubscription()
   if (existing) {
-    console.log('[Vultisig Push] Using existing push subscription')
+    console.log('[Extension Push] Using existing push subscription')
     return existing
   }
 
   console.log(
-    `[Vultisig Push] No existing subscription. Fetching VAPID key from ${serverUrl}...`
+    `[Extension Push] No existing subscription. Fetching VAPID key from ${serverUrl}...`
   )
   const vapidPublicKey = await fetchVapidPublicKey({ serverUrl })
   console.log(
-    `[Vultisig Push] Got VAPID key: ${vapidPublicKey.slice(0, 20)}...`
+    `[Extension Push] Got VAPID key: ${vapidPublicKey.slice(0, 20)}...`
   )
   const applicationServerKey = toTightArrayBuffer(
     urlBase64ToUint8Array(vapidPublicKey)
   )
 
-  console.log('[Vultisig Push] Prepared VAPID application server key:', {
+  console.log('[Extension Push] Prepared VAPID application server key:', {
     vapidPublicKeyLength: vapidPublicKey.length,
     applicationServerKeyBytes: applicationServerKey.byteLength,
   })
@@ -212,7 +213,7 @@ const resolvePushSubscription = async (
     vapidPublicKey,
     applicationServerKey,
   })
-  console.log('[Vultisig Push] Push subscription created successfully')
+  console.log('[Extension Push] Push subscription created successfully')
   return subscription
 }
 
@@ -224,7 +225,7 @@ const getOrCreatePushSubscription = async (
   const pendingPushSubscription = pendingPushSubscriptions.get(serverUrl)
   if (pendingPushSubscription) {
     console.log(
-      '[Vultisig Push] Waiting for in-flight push subscription request'
+      '[Extension Push] Waiting for in-flight push subscription request'
     )
     return pendingPushSubscription
   }
@@ -244,13 +245,13 @@ const forceRegisterVault = async (
 ): Promise<void> => {
   const serverUrl = await getServerUrl()
   console.log(
-    `[Vultisig Push] Force-registering vault ${vault.vaultId.slice(0, 12)}... with server ${serverUrl}`
+    `[Extension Push] Force-registering vault ${vault.vaultId.slice(0, 12)}... with server ${serverUrl}`
   )
 
   const subscription = await getOrCreatePushSubscription(serverUrl)
 
   console.log(
-    `[Vultisig Push] Calling POST ${serverUrl}/register for vault ${vault.vaultId.slice(0, 12)}...`
+    `[Extension Push] Calling POST ${serverUrl}/register for vault ${vault.vaultId.slice(0, 12)}...`
   )
   await registerDeviceForPushNotifications({
     serverUrl,
@@ -264,7 +265,7 @@ const forceRegisterVault = async (
     partyName: vault.localPartyId,
   })
   console.log(
-    `[Vultisig Push] Successfully registered vault ${vault.vaultId.slice(0, 12)}...`
+    `[Extension Push] Successfully registered vault ${vault.vaultId.slice(0, 12)}...`
   )
 }
 
@@ -278,12 +279,12 @@ const registerVaults = async (
   const unregistered = vaults.filter(v => !(v.vaultId in registrations))
 
   if (unregistered.length === 0) {
-    console.log('[Vultisig Push] All vaults already registered locally')
+    console.log('[Extension Push] All vaults already registered locally')
     return
   }
 
   console.log(
-    `[Vultisig Push] Registering ${unregistered.length} vault(s) for push`
+    `[Extension Push] Registering ${unregistered.length} vault(s) for push`
   )
 
   const subscription = await getOrCreatePushSubscription(serverUrl)
@@ -291,7 +292,7 @@ const registerVaults = async (
   for (const vault of unregistered) {
     try {
       console.log(
-        `[Vultisig Push] Calling POST ${serverUrl}/register for vault ${vault.vaultId.slice(0, 12)}...`
+        `[Extension Push] Calling POST ${serverUrl}/register for vault ${vault.vaultId.slice(0, 12)}...`
       )
       await registerDeviceForPushNotifications({
         serverUrl,
@@ -304,11 +305,11 @@ const registerVaults = async (
         partyName: vault.localPartyId,
       })
       console.log(
-        `[Vultisig Push] Registered vault ${vault.vaultId.slice(0, 12)}...`
+        `[Extension Push] Registered vault ${vault.vaultId.slice(0, 12)}...`
       )
     } catch (error) {
       console.error(
-        `[Vultisig Push] Failed to register vault ${vault.vaultId.slice(0, 12)}...:`,
+        `[Extension Push] Failed to register vault ${vault.vaultId.slice(0, 12)}...:`,
         error
       )
     }
@@ -331,7 +332,7 @@ const mapStoredVaultsToRegistrationInfos = async (
   const eligible = vaults.filter(v => {
     if (!v.hexChainCode) {
       console.warn(
-        '[Vultisig Push] Vault missing hexChainCode; skipping push registration for party',
+        '[Extension Push] Vault missing hexChainCode; skipping push registration for party',
         v.localPartyId
       )
       return false
@@ -354,7 +355,7 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   if (await getPushVaultIdMigrationCompleted()) return
 
   console.log(
-    '[Vultisig Push] One-time migration: re-registering push with SHA256(ecdsa+chainCode) vault IDs'
+    '[Extension Push] One-time migration: re-registering push with SHA256(ecdsa+chainCode) vault IDs'
   )
 
   const serverUrl = await getServerUrl()
@@ -379,7 +380,7 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
 
   if (legacyUnregisterFailed) {
     console.warn(
-      '[Vultisig Push] Vault ID migration: legacy unregister failed for one or more vaults; will retry on next startup'
+      '[Extension Push] Vault ID migration: legacy unregister failed for one or more vaults; will retry on next startup'
     )
     return
   }
@@ -395,7 +396,7 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
       const missing = vaultInfos.filter(v => !(v.vaultId in registrations))
       if (missing.length > 0) {
         console.error(
-          '[Vultisig Push] Migration incomplete: push registration failed for',
+          '[Extension Push] Migration incomplete: push registration failed for',
           missing.length,
           'vault(s); will retry on next startup'
         )
@@ -416,7 +417,7 @@ const runOptInMigrationIfNeeded = async (): Promise<boolean> => {
   if (await getOptInMigrationCompleted()) return true
 
   console.log(
-    '[Vultisig Push] One-time migration: clearing pre-opt-in auto-registrations'
+    '[Extension Push] One-time migration: clearing pre-opt-in auto-registrations'
   )
 
   const serverUrl = await getServerUrl()
@@ -438,14 +439,14 @@ const runOptInMigrationIfNeeded = async (): Promise<boolean> => {
 
   if (unregisterFailed) {
     console.warn(
-      '[Vultisig Push] Opt-in migration: unregister failed for one or more vaults; keeping local registrations for retry'
+      '[Extension Push] Opt-in migration: unregister failed for one or more vaults; keeping local registrations for retry'
     )
     return false
   }
 
   await clearAllPushNotificationRegistrations()
   await setOptInMigrationCompleted()
-  console.log('[Vultisig Push] Opt-in migration completed')
+  console.log('[Extension Push] Opt-in migration completed')
   return true
 }
 
@@ -457,12 +458,12 @@ const reRegisterOptedInVaults = async (): Promise<void> => {
   }))
 
   if (vaultInfos.length === 0) {
-    console.log('[Vultisig Push] No opted-in vaults, skipping re-registration')
+    console.log('[Extension Push] No opted-in vaults, skipping re-registration')
     return
   }
 
   console.log(
-    `[Vultisig Push] Re-registering ${vaultInfos.length} opted-in vault(s) for push`
+    `[Extension Push] Re-registering ${vaultInfos.length} opted-in vault(s) for push`
   )
 
   for (const vault of vaultInfos) {
@@ -470,7 +471,7 @@ const reRegisterOptedInVaults = async (): Promise<void> => {
       await forceRegisterVault(vault)
     } catch (error) {
       console.error(
-        `[Vultisig Push] Failed to re-register vault ${vault.vaultId.slice(0, 12)}...:`,
+        `[Extension Push] Failed to re-register vault ${vault.vaultId.slice(0, 12)}...:`,
         error
       )
     }
@@ -568,7 +569,7 @@ const openExtensionFromPushNotificationClick = async (input: {
         return
       }
     } catch (error) {
-      console.warn('[Vultisig Push] client.focus/navigate failed:', error)
+      console.warn('[Extension Push] client.focus/navigate failed:', error)
     }
   }
 
@@ -593,14 +594,14 @@ export const handlePushEvent = async (event: any): Promise<void> => {
     } catch {
       raw = '<unreadable>'
     }
-    console.error('[Vultisig Push] Failed to parse push payload, raw:', raw)
+    console.error('[Extension Push] Failed to parse push payload, raw:', raw)
   }
 
-  const title = data?.title ?? 'Vultisig'
+  const title = data?.title ?? currentProductBrandConfig.name
   const body = data?.body ?? ''
   const subtitle = data?.subtitle ?? ''
 
-  console.log('[Vultisig Push] Showing notification:', title, subtitle)
+  console.log('[Extension Push] Showing notification:', title, subtitle)
 
   // macOS + Chrome often does not fire service worker `notificationclick` for
   // `registration.showNotification` (especially expanded banners). Use
@@ -629,7 +630,7 @@ export const handlePushEvent = async (event: any): Promise<void> => {
     } catch (error) {
       await chrome.storage.session.remove(payloadKey)
       console.error(
-        '[Vultisig Push] chrome.notifications.create failed:',
+        '[Extension Push] chrome.notifications.create failed:',
         error
       )
       await self.registration.showNotification(title, {
@@ -664,7 +665,7 @@ export const handleNotificationClickEvent = async (
     const qrCodeData: string | undefined = event.notification.data?.qrCodeData
     await openExtensionFromPushNotificationClick({ qrCodeData })
   } catch (error) {
-    console.error('[Vultisig Push] notificationclick failed:', error)
+    console.error('[Extension Push] notificationclick failed:', error)
   }
 }
 
@@ -673,7 +674,7 @@ export const handlePushSubscriptionChangeEvent = async (
   _event: any
 ): Promise<void> => {
   console.warn(
-    '[Vultisig Push] Push subscription changed, re-registering vaults...'
+    '[Extension Push] Push subscription changed, re-registering vaults...'
   )
   await pushStartupWork
   if (await getOptInMigrationCompleted()) {
@@ -699,7 +700,10 @@ const handlePushChromeNotificationClicked = (notificationId: string) => {
     try {
       await openExtensionFromPushNotificationClick({ qrCodeData })
     } catch (error) {
-      console.error('[Vultisig Push] chrome.notifications click failed:', error)
+      console.error(
+        '[Extension Push] chrome.notifications click failed:',
+        error
+      )
     }
   })
 }
@@ -719,7 +723,7 @@ const handlePushChromeNotificationClosed = (notificationId: string) => {
  * and must load before this runs.
  */
 export const initPushExtensionRuntime = () => {
-  console.log('[Vultisig Push] Service worker push handler initialized')
+  console.log('[Extension Push] Service worker push handler initialized')
 
   if (typeof chrome !== 'undefined' && chrome.notifications) {
     chrome.notifications.onClicked.addListener(
@@ -739,7 +743,7 @@ export const initPushExtensionRuntime = () => {
       }
     } catch (error) {
       console.error(
-        '[Vultisig Push] Startup push re-registration failed:',
+        '[Extension Push] Startup push re-registration failed:',
         error
       )
     }
@@ -752,7 +756,7 @@ export const initPushExtensionRuntime = () => {
         .then(() => registerVaults(msg.vaults))
         .then(() => sendResponse({ success: true }))
         .catch(error => {
-          console.error('[Vultisig Push] Register vaults failed:', error)
+          console.error('[Extension Push] Register vaults failed:', error)
           sendResponse({ success: false, error: String(error) })
         })
       return true
@@ -764,7 +768,7 @@ export const initPushExtensionRuntime = () => {
         .then(() => forceRegisterVault(msg.vault))
         .then(() => sendResponse({ success: true }))
         .catch(error => {
-          console.error('[Vultisig Push] Force register failed:', error)
+          console.error('[Extension Push] Force register failed:', error)
           sendResponse({ success: false, error: String(error) })
         })
       return true
@@ -788,7 +792,7 @@ export const initPushExtensionRuntime = () => {
         })
         .then(() => sendResponse({ success: true }))
         .catch(error => {
-          console.error('[Vultisig Push] Unregister failed:', error)
+          console.error('[Extension Push] Unregister failed:', error)
           sendResponse({ success: false, error: String(error) })
         })
       return true

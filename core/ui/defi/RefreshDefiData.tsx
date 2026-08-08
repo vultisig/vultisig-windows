@@ -14,6 +14,7 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { QueryKey, useMutation } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 
@@ -59,6 +60,39 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     getPositionsQueryKey: address => ['tronAccountResources', address],
     poolQueryKeys: [],
   },
+  [Chain.Terra]: {
+    priceCoins: [],
+    getPositionsQueryKey: address => [
+      'cosmosDelegations',
+      Chain.Terra,
+      address,
+    ],
+    poolQueryKeys: [],
+  },
+  [Chain.TerraClassic]: {
+    priceCoins: [],
+    getPositionsQueryKey: address => [
+      'cosmosDelegations',
+      Chain.TerraClassic,
+      address,
+    ],
+    poolQueryKeys: [],
+  },
+  [Chain.QBTC]: {
+    priceCoins: [],
+    getPositionsQueryKey: address => ['cosmosDelegations', Chain.QBTC, address],
+    poolQueryKeys: [],
+  },
+  [Chain.Ton]: {
+    priceCoins: [{ ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }],
+    getPositionsQueryKey: address => ['tonStakePosition', address],
+    poolQueryKeys: [['tonStakingPools']],
+  },
+  [Chain.Solana]: {
+    priceCoins: [{ ...chainFeeCoin[Chain.Solana], chain: Chain.Solana }],
+    getPositionsQueryKey: address => ['solanaStakeAccounts', address],
+    poolQueryKeys: [['solanaValidators']],
+  },
 }
 
 export const RefreshDefiData = () => {
@@ -67,6 +101,11 @@ export const RefreshDefiData = () => {
   const thorchainAddress = useCurrentVaultAddress(Chain.THORChain)
   const mayachainAddress = useCurrentVaultAddress(Chain.MayaChain)
   const tronAddress = useCurrentVaultAddress(Chain.Tron)
+  const terraAddress = useCurrentVaultAddress(Chain.Terra)
+  const terraClassicAddress = useCurrentVaultAddress(Chain.TerraClassic)
+  const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
+  const tonAddress = useCurrentVaultAddress(Chain.Ton)
+  const solanaAddress = useCurrentVaultAddress(Chain.Solana)
   const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
   const circleAccountQuery = useCircleAccountQuery()
   const isCircleVisible = useIsCircleVisible()
@@ -77,6 +116,11 @@ export const RefreshDefiData = () => {
         [Chain.THORChain]: thorchainAddress,
         [Chain.MayaChain]: mayachainAddress,
         [Chain.Tron]: tronAddress,
+        [Chain.Terra]: terraAddress,
+        [Chain.TerraClassic]: terraClassicAddress,
+        [Chain.QBTC]: qbtcAddress,
+        [Chain.Ton]: tonAddress,
+        [Chain.Solana]: solanaAddress,
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {

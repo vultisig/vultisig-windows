@@ -1,14 +1,12 @@
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
-import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { Image } from '@lib/ui/image/Image'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Chain } from '@vultisig/core-chain/Chain'
 
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { aggregateDefiPositions } from '../services/defiPositionAggregator'
+import { DefiBannerBalance } from './DefiBannerBalance'
 import {
-  BalanceValue,
   BannerContent,
   ChainTitle,
   MayachainBannerContainer,
@@ -18,7 +16,6 @@ import {
 export const DefiMayachainBalanceBanner = () => {
   const chain = Chain.MayaChain
   const selectedPositions = useDefiPositions(chain)
-  const formatFiatAmount = useFormatFiatAmount()
   const positionsQuery = useDefiChainPositionsQuery(chain)
 
   let totalFiat = 0
@@ -44,11 +41,7 @@ export const DefiMayachainBalanceBanner = () => {
         {isLoading ? (
           <Spinner size={20} />
         ) : (
-          <BalanceValue>
-            <BalanceVisibilityAware>
-              {formatFiatAmount(totalFiat)}
-            </BalanceVisibilityAware>
-          </BalanceValue>
+          <DefiBannerBalance chain={chain} value={totalFiat} />
         )}
       </BannerContent>
     </MayachainBannerContainer>

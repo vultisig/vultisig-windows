@@ -47,7 +47,7 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
           error={() => <Text color="danger">{t('failed_to_load')}</Text>}
           success={value => (
             <HStack alignItems="center" gap={4}>
-              <Text color="shy">
+              <Text color="supporting">
                 <SwapFeeFiatValue value={Object.values(value)} />
               </Text>
               <UnstyledButton onClick={toggle}>
@@ -91,19 +91,23 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                     <>
                       <RowComponent>
                         <span>{t('network_fee')}</span>
-                        <Text color="shy">
-                          {formatAmount(
-                            fromChainAmount(network.amount, decimals),
-                            { ticker }
-                          )}{' '}
-                          (~
-                          <SwapFeeFiatValue value={[network]} />)
+                        <Text>
+                          <Text as="span" color="regular" weight="500">
+                            {formatAmount(
+                              fromChainAmount(network.amount, decimals),
+                              { ticker }
+                            )}
+                          </Text>{' '}
+                          <Text as="span" color="shy">
+                            (~
+                            <SwapFeeFiatValue value={[network]} />)
+                          </Text>
                         </Text>
                       </RowComponent>
                       {swap && (
                         <RowComponent>
                           <Text>{t('swap_fee')}</Text>
-                          <Text color="shy">
+                          <Text color="supporting">
                             <SwapFeeFiatValue value={[swap]} />
                           </Text>
                         </RowComponent>

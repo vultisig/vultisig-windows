@@ -35,7 +35,11 @@ import { FC, Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
-import { parseConfiguration, ParsedConfigurationRow } from '../utils'
+import {
+  isTrustedProductOrigin,
+  parseConfiguration,
+  ParsedConfigurationRow,
+} from '../utils'
 
 type ParsedPolicy = Omit<
   ReturnType<typeof fromBinary<typeof PolicySchema>>,
@@ -110,7 +114,7 @@ export const PolicyOverview: FC<
             <Sender
               favicon={requestFavicon}
               origin={requestOrigin}
-              isValidated
+              isValidated={isTrustedProductOrigin(requestOrigin)}
             />
             <Request
               address={address}

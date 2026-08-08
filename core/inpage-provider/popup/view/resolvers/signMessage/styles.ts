@@ -3,7 +3,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const Description = styled(VStack)`
-  border: 1px dashed ${getColor('foregroundSuper')};
+  border: 1px dashed ${getColor('foregroundExtra')};
   border-radius: 16px;
   gap: 8px;
   padding: 12px;

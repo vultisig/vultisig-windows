@@ -7,7 +7,9 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
 
+import { getSendDestinationTag } from '../state/destinationTag'
 import { SendFormShape, ValidationResult } from './formShape'
+import { getReceiverAddressFormatHint } from './getReceiverAddressFormatHint'
 
 type ValidateSendReceiverInput = {
   receiverAddress: string
@@ -36,7 +38,10 @@ export const validateSendReceiver = ({
   }
 
   if (!isValidAddress({ address: receiverAddress, chain, walletCore })) {
-    return t('send_invalid_receiver_address')
+    return t('send_invalid_receiver_address_with_hint', {
+      error: t('send_invalid_receiver_address'),
+      hint: getReceiverAddressFormatHint({ chain, senderAddress, t }),
+    })
   }
 }
 
@@ -50,7 +55,13 @@ export const validateSendForm = (
     nativeBalance?: bigint
   }
 ): ValidationResult<SendFormShape> => {
-  const { coin, amount, senderAddress, receiverAddress } = values
+  const {
+    coin,
+    amount,
+    destinationTag = '',
+    senderAddress,
+    receiverAddress,
+  } = values
   const { balance, walletCore, t, fee, nativeBalance } = helpers
   const { chain } = coin
   const errors: ValidationResult<SendFormShape> = {}
@@ -103,6 +114,16 @@ export const validateSendForm = (
 
   if (receiverError) {
     errors.receiverAddress = receiverError
+  }
+
+  if (
+    getSendDestinationTag({
+      chain,
+      receiver: receiverAddress,
+      value: destinationTag,
+    }).error
+  ) {
+    errors.destinationTag = t('ripple_destination_tag_invalid')
   }
 
   return errors

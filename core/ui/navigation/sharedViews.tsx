@@ -5,6 +5,7 @@ import { AgentChatPage } from '@core/ui/agent/components/AgentChatPage'
 import { AgentPage } from '@core/ui/agent/components/AgentPage'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
+import { TonStakePage } from '@core/ui/chain/ton/staking/TonStakePage'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
@@ -28,10 +29,14 @@ import { NewVaultPage } from '@core/ui/vault/new'
 import { VaultPage } from '@core/ui/vault/page'
 import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultSettingsPage } from '@core/ui/vault/settings'
+import { VaultSettingsAdvancedPage } from '@core/ui/vault/settings/advanced'
+import { CustomRpcPage } from '@core/ui/vault/settings/advanced/customRpc'
+import { CustomRpcDetailPage } from '@core/ui/vault/settings/advanced/customRpc/CustomRpcDetailPage'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
+import { LimitOrdersPage } from '@core/ui/vault/swap/limit/orders/LimitOrdersPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation'
 import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder'
 import { CreateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/create'
@@ -47,14 +52,17 @@ import { ManageDefiChainsPage } from '../defi/manage/ManageDefiChainsPage'
 import { DefiPage } from '../defi/page/DefiPage'
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+import { currentProductBrand } from '../product/brand'
 import { QbtcClaimPage } from '../qbtc/claim/components/QbtcClaimPage'
+import { QbtcGovernanceProposalPage } from '../qbtc/governance/components/QbtcGovernanceProposalPage'
+import { QbtcGovernanceVotePage } from '../qbtc/governance/components/QbtcGovernanceVotePage'
+import { QuantumSecurityOnboardingPage } from '../qbtc/onboarding/QuantumSecurityOnboardingPage'
 import { RequestFastVaultBackup } from '../vault/backup/fast/request'
 import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
 import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvider'
 import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
-import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
@@ -76,6 +84,8 @@ export type SharedViewId = Extract<
   | 'languageSettings'
   | 'manageDefiChains'
   | 'manageDefiPositions'
+  | 'tonStake'
+  | 'limitOrders'
   | 'lpPositionForm'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
@@ -99,6 +109,9 @@ export type SharedViewId = Extract<
   | 'vaultDetails'
   | 'vaultFolder'
   | 'vaultSettings'
+  | 'vaultSettingsAdvanced'
+  | 'customRpc'
+  | 'customRpcDetail'
   | 'vaults'
   | 'managePasscodeEncryption'
   | 'passcodeAutoLock'
@@ -107,9 +120,11 @@ export type SharedViewId = Extract<
   | 'transactionDetail'
   | 'transactionHistory'
   | 'faq'
-  | 'shareVault'
   | 'vultDiscount'
   | 'qbtcClaim'
+  | 'qbtcQuantumSecurityOnboarding'
+  | 'qbtcGovernanceProposal'
+  | 'qbtcGovernanceVote'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -143,6 +158,7 @@ export const sharedViews: Views<SharedViewId> = {
   languageSettings: LanguagePage,
   manageDefiChains: ManageDefiChainsPage,
   manageDefiPositions: ManageDefiPositionsPage,
+  tonStake: TonStakePage,
   lpPositionForm: LpPositionFormPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
@@ -173,14 +189,21 @@ export const sharedViews: Views<SharedViewId> = {
     </CurrentVaultFolderPageProvider>
   ),
   vaultSettings: VaultSettingsPage,
+  vaultSettingsAdvanced: VaultSettingsAdvancedPage,
+  customRpc: CustomRpcPage,
+  customRpcDetail: CustomRpcDetailPage,
   vaults: VaultsPage,
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
   requestFastVaultBackup: RequestFastVaultBackup,
   transactionDetail: TransactionDetailPage,
   transactionHistory: TransactionHistoryPage,
+  limitOrders: LimitOrdersPage,
   faq: FaqVaultPage,
-  shareVault: ShareVaultPage,
-  vultDiscount: VultDiscountPage,
+  vultDiscount:
+    currentProductBrand === 'station' ? VaultPage : VultDiscountPage,
   qbtcClaim: QbtcClaimPage,
+  qbtcQuantumSecurityOnboarding: QuantumSecurityOnboardingPage,
+  qbtcGovernanceProposal: QbtcGovernanceProposalPage,
+  qbtcGovernanceVote: QbtcGovernanceVotePage,
 }

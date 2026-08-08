@@ -14,6 +14,7 @@ import { OnCloseProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
@@ -32,11 +33,28 @@ type Props = {
   onSelect: (address: string) => void
 } & OnCloseProp
 
+type ContentProps = Props & { coin: CoinKey }
+
 type AddressBookOption = 'saved' | 'all'
 
 export const AddressBookModal = ({ onSelect, onClose }: Props) => {
-  const { t } = useTranslation()
   const coin = useCurrentSendCoin()
+
+  return (
+    <AddressBookModalContent
+      coin={coin}
+      onSelect={onSelect}
+      onClose={onClose}
+    />
+  )
+}
+
+export const AddressBookModalContent = ({
+  coin,
+  onSelect,
+  onClose,
+}: ContentProps) => {
+  const { t } = useTranslation()
   const addressBookItems = useAddressBookItems()
   const vaults = useVaults()
   const walletCore = useAssertWalletCore()

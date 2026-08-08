@@ -1,6 +1,7 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { BackupFileDropzone } from '@core/ui/vault/import/components/BackupFileDropzone'
 import { UploadedBackupFile } from '@core/ui/vault/import/components/UploadedBackupFile'
+import { isUnsupportedVaultBackupFileError } from '@core/ui/vault/import/utils/UnsupportedVaultBackupFileError'
 import { vaultBackupResultFromFile } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
 import { Button } from '@lib/ui/buttons/Button'
@@ -8,7 +9,6 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
@@ -28,7 +28,13 @@ export const UploadBackupFileStep = ({
     onError: setError,
   })
 
-  const isDisabled = !file
+  const errorMessage = error
+    ? isUnsupportedVaultBackupFileError(error)
+      ? t('unsupported_vault_backup_file')
+      : extractErrorMsg(error)
+    : null
+
+  const isDisabled = !file || !!error
 
   return (
     <>
@@ -44,7 +50,17 @@ export const UploadBackupFileStep = ({
         })}
       >
         <VStack gap={20} flexGrow>
-          {file ? (
+          {file && errorMessage ? (
+            <BackupFileDropzone
+              fileName={file.name}
+              error={errorMessage}
+              onFinish={file => {
+                setFile(file)
+                setError(null)
+              }}
+              onError={setError}
+            />
+          ) : file ? (
             <UploadedBackupFile value={file} />
           ) : (
             <BackupFileDropzone
@@ -54,11 +70,6 @@ export const UploadBackupFileStep = ({
               }}
               onError={setError}
             />
-          )}
-          {error && (
-            <Text centerHorizontally color="danger">
-              {extractErrorMsg(error)}
-            </Text>
           )}
         </VStack>
         <Button

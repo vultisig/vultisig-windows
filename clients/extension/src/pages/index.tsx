@@ -1,4 +1,5 @@
 import '../polyfills/installFirefoxProcessGlobal'
+import '@core/ui/animations/configureRiveRuntime'
 
 import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import { views } from '@clients/extension/src/navigation/views'

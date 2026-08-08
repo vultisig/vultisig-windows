@@ -5,17 +5,79 @@
     "lib/ui/form/FormCheckBadge.tsx"
   ],
   "ignoreBinaries": [
+    "go",
     "wails"
   ],
   "ignoreDependencies": [
+    "@secretlint/secretlint-rule-preset-recommend",
+    "@vitest/coverage-v8",
     "babel-plugin-react-compiler",
-    "@vultisig/mpc-types",
-    "@vultisig/mpc-wasm"
+    "markdown-link-check"
   ],
+  "ignoreIssues": {
+    "clients/extension/package.json": [
+      "devDependencies"
+    ],
+    "core/ui/i18n/scripts/check-integrity.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/check-unused.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/find-duplicates.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/review-quality.ts": [
+      "files"
+    ],
+    "core/ui/i18n/scripts/translate.ts": [
+      "files"
+    ],
+    "core/ui/i18n/utils/i18nGlossary.ts": [
+      "exports"
+    ],
+    "core/ui/i18n/utils/i18nSyntax.ts": [
+      "exports"
+    ],
+    "core/ui/i18n/utils/translateTexts.ts": [
+      "files"
+    ],
+    "core/ui/package.json": [
+      "dependencies"
+    ],
+    "core/ui/scripts/validatePublic.ts": [
+      "files"
+    ],
+    "lib/codegen/package.json": [
+      "dependencies"
+    ],
+    "lib/codegen/utils/createFile.ts": [
+      "files"
+    ],
+    "lib/codegen/utils/createTsFile.ts": [
+      "files"
+    ],
+    "lib/codegen/utils/formatCode.ts": [
+      "files"
+    ],
+    "package.json": [
+      "devDependencies"
+    ],
+    "scripts/icons/generate-icons.mjs": [
+      "files"
+    ],
+    "scripts/quality-audit.mjs": [
+      "files"
+    ]
+  },
   "workspaces": {
     "clients/desktop": {
+      "entry": [
+        "scripts/dev-desktop.mjs"
+      ],
       "project": [
-        "**/*.{ts,tsx}"
+        "**/*.{ts,tsx}",
+        "scripts/**/*.{js,mjs}"
       ]
     },
     "clients/extension": {
@@ -25,10 +87,13 @@
         "src/content/index.ts",
         "src/inpage/index.ts",
         "src/pages/popup.tsx",
+        "scripts/*.{js,mjs,cjs,ts}",
+        "watch.js",
         "tests/unit/**/*.{ts,tsx}"
       ],
       "project": [
         "src/**/*.{ts,tsx}",
+        "scripts/*.{js,mjs,cjs,ts}",
         "tests/unit/**/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
@@ -36,7 +101,6 @@
         "@fontsource/montserrat",
         "@fontsource/roboto-mono",
         "@testing-library/jest-dom",
-        "@testing-library/react",
         "@types/express",
         "@types/web-push",
         "express",
@@ -60,6 +124,8 @@
     },
     "core/ui": {
       "entry": [
+        "i18n/scripts/*.ts",
+        "scripts/validatePublic.ts",
         "vite/plugins.ts",
         "vite/staticCopy.ts"
       ],
@@ -73,6 +139,11 @@
     "lib/ui": {
       "project": [
         "**/*.{ts,tsx}"
+      ]
+    },
+    "lib/codegen": {
+      "project": [
+        "**/*.ts"
       ]
     }
   }

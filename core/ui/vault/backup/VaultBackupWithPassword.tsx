@@ -90,7 +90,11 @@ export const VaultBackupWithPassword = ({
       </PageContent>
       <PageFooter gap={16}>
         <InfoBlock>{t('vault_backup_page_password_info')}</InfoBlock>
-        <Button disabled={!isValid} loading={isPending} type="submit">
+        <Button
+          disabled={!isValid || isPending}
+          loading={isPending}
+          type="submit"
+        >
           {isPending
             ? t('vault_backup_page_submit_loading_button_text')
             : t('save')}

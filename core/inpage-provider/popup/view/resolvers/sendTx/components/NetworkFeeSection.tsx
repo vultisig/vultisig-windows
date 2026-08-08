@@ -1,11 +1,11 @@
+import { getNonNativeDappCosmosFeeDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/dappCosmosFee'
 import { ManageEvmFee } from '@core/inpage-provider/popup/view/resolvers/sendTx/ManageEvmFee'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
+import { useKeysignFee } from '@core/ui/mpc/keysign/fee/useKeysignFee'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -13,10 +13,18 @@ import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+const DappCosmosFeeDescription = styled.span`
+  color: ${getColor('textShy')};
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  overflow-wrap: anywhere;
+`
 
 export type NetworkFeeSectionProps = {
   keysignPayload: KeysignPayload
@@ -24,8 +32,6 @@ export type NetworkFeeSectionProps = {
   chain: Chain
   feeSettings: FeeSettings<'evm'> | null
   setFeeSettings: (settings: FeeSettings<'evm'> | null) => void
-  walletCore: ReturnType<typeof useAssertWalletCore>
-  publicKey: ReturnType<typeof useCurrentVaultNullablePublicKey>
 }
 
 export const NetworkFeeSection = ({
@@ -34,24 +40,21 @@ export const NetworkFeeSection = ({
   chain,
   feeSettings,
   setFeeSettings,
-  walletCore,
-  publicKey,
 }: NetworkFeeSectionProps) => {
   const { t } = useTranslation()
+  const feeAmountQuery = useKeysignFee(keysignPayload)
 
   return (
     <MatchRecordUnion
       value={transactionPayload}
       handlers={{
         keysign: transactionPayload => {
-          // MLDSA chains (QBTC) have no WalletCore `PublicKey`. Their fee
-          // resolver doesn't read this field — `getQbtcFeeAmount` returns
-          // `cosmosSpecific.gas` directly — so the cast is safe at runtime.
-          const feeAmount = getFeeAmount({
-            keysignPayload,
-            walletCore,
-            publicKey: publicKey as PublicKey,
-          })
+          const nonNativeDappCosmosFeeDisplay = isChainOfKind(chain, 'cosmos')
+            ? getNonNativeDappCosmosFeeDisplay({
+                keysignPayload,
+                chain,
+              })
+            : null
 
           const getEvmValues = () => {
             if (!isChainOfKind(chain, 'evm')) {
@@ -81,10 +84,21 @@ export const NetworkFeeSection = ({
           return (
             <List>
               <ListItem
-                description={formatAmount(
-                  fromChainAmount(feeAmount, chainFeeCoin[chain].decimals),
-                  chainFeeCoin[chain]
-                )}
+                description={
+                  nonNativeDappCosmosFeeDisplay ? (
+                    <DappCosmosFeeDescription>
+                      {nonNativeDappCosmosFeeDisplay}
+                    </DappCosmosFeeDescription>
+                  ) : feeAmountQuery.data === undefined ? null : (
+                    formatAmount(
+                      fromChainAmount(
+                        feeAmountQuery.data,
+                        chainFeeCoin[chain].decimals
+                      ),
+                      chainFeeCoin[chain]
+                    )
+                  )
+                }
                 extra={
                   isChainOfKind(chain, 'evm') && evmValues ? (
                     <ManageEvmFee
@@ -95,7 +109,11 @@ export const NetworkFeeSection = ({
                     />
                   ) : null
                 }
-                title={t('est_network_fee')}
+                title={t(
+                  nonNativeDappCosmosFeeDisplay
+                    ? 'network_fee'
+                    : 'est_network_fee'
+                )}
                 hoverable={false}
               />
               {transactionPayload.transactionDetails.msgPayload?.case ===

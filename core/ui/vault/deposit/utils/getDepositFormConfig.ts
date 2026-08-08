@@ -1,20 +1,34 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { toXrplCurrencyCode } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
+import {
+  solanaStakingConfig,
+  solDecimals,
+} from '@vultisig/core-chain/chains/solana/staking/config'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
 import { ChainAction } from '../ChainAction'
-import { isStakeableChain, StakeableChain } from '../config'
+import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
 import {
-  maxOrInfinity,
+  optionalNonNegativeAmountSchema,
+  optionalPositiveAmountSchema,
   positiveAmountSchema,
+  requiredAmountSchema,
   toOptionalNumber,
   toRequiredNumber,
 } from './validationHelpers'
+
+// Solana Stake program minimum active delegation, in whole SOL (1 SOL on
+// mainnet). Derived from the SDK config so the floor tracks a single source.
+const solanaMinDelegationSol =
+  Number(solanaStakingConfig.minDelegationFloorLamports) / 10 ** solDecimals
 
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>
@@ -51,12 +65,47 @@ export const getIbcDropdownOptions = (srcChain: Chain) => {
   })
 }
 
+// Cosmos validator (operator) addresses use the chain's account prefix
+// suffixed with `valoper` (e.g. `terravaloper1...`). We lock the regex to the
+// chain's own HRP — pasting a Cosmos Hub `cosmosvaloper1...` into a LUNA
+// delegate form would be silently accepted by a chain-agnostic pattern and
+// surface as a late tx failure on broadcast. Both Terra v2 and TerraClassic
+// share the `terra` account prefix; QBTC uses `qbtc`.
+const validatorHrpByChain: Partial<Record<Chain, string>> = {
+  [Chain.Terra]: 'terra',
+  [Chain.TerraClassic]: 'terra',
+  [Chain.QBTC]: 'qbtc',
+}
+
+const validatorAddressPattern = (chain: Chain): RegExp => {
+  const hrp = shouldBePresent(
+    validatorHrpByChain[chain],
+    `validator HRP for ${chain}`
+  )
+  return new RegExp(`^${hrp}valoper1[02-9ac-hj-np-z]{38,71}$`)
+}
+
+const validatorAddressSchema = (t: TFunction, chain: Chain) =>
+  z
+    .string()
+    .trim()
+    .min(1, t('validator_address'))
+    .regex(validatorAddressPattern(chain), t('invalid_validator_address'))
+
 type GetChainActionConfigParams = {
   t: TFunction
   coin: AccountCoin
   walletCore: WalletCore
   totalAmountAvailable: number
+  /** Exact balance in base units when the source is bigint-native (#4496). */
+  totalAmountAvailableUnits: bigint | null
   selectedChainAction: ChainAction
+  /**
+   * XRP an Open Trust Line costs (owner reserve + fee). `undefined` while it is
+   * still unknown, which leaves the form unblocked rather than gated on a figure
+   * that has not arrived.
+   */
+  trustLineCostXrp?: number
 }
 
 type ChainActionConfig = {
@@ -75,9 +124,15 @@ export const getDepositFormConfig = ({
   coin,
   walletCore,
   totalAmountAvailable,
+  totalAmountAvailableUnits,
   selectedChainAction,
+  trustLineCostXrp,
 }: GetChainActionConfigParams) => {
   const chain = coin.chain
+  const amountMax =
+    totalAmountAvailableUnits !== null
+      ? { units: totalAmountAvailableUnits, decimals: coin.decimals }
+      : undefined
 
   return match<ChainAction, ChainActionConfig>(selectedChainAction, {
     withdraw_ruji_rewards: () => ({
@@ -97,7 +152,11 @@ export const getDepositFormConfig = ({
         { name: 'amount', type: 'number', label: t('amount'), required: true },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     redeem: () => ({
@@ -112,7 +171,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
         slippage: z.preprocess(toRequiredNumber, z.number().min(0.1).max(7.5)),
       }),
     }),
@@ -126,7 +189,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     merge: () => ({
@@ -159,7 +226,11 @@ export const getDepositFormConfig = ({
               message: t('invalid_node_address'),
             }
           ),
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     switch: () => ({
@@ -172,7 +243,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
         nodeAddress: z
           .string()
           .min(1, 'Required')
@@ -219,11 +294,12 @@ export const getDepositFormConfig = ({
             { message: 'Destination Chain is required' }
           ),
           nodeAddress: z.string().min(1, 'Destination Address is required'),
-          amount: positiveAmountSchema(
-            totalAmountAvailable,
+          amount: positiveAmountSchema({
+            maxValue: totalAmountAvailable,
             t,
-            t('chainFunctions.amountExceeded')
-          ),
+            maxMessage: t('chainFunctions.amountExceeded'),
+            chainAmountMax: amountMax,
+          }),
         })
         .superRefine((data, ctx) => {
           const { destinationChain, nodeAddress } = data
@@ -289,7 +365,11 @@ export const getDepositFormConfig = ({
           ),
         provider: z.string().optional(),
         operatorFee: z.preprocess(toOptionalNumber, z.number().optional()),
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     bond_with_lp: () => ({
@@ -338,17 +418,7 @@ export const getDepositFormConfig = ({
           z.number().gt(0, t('lp_units'))
           // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
         ),
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .gt(0, t('amount_must_be_positive'))
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .optional()
-        ),
+        amount: optionalPositiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     unbond: () => ({
@@ -390,7 +460,11 @@ export const getDepositFormConfig = ({
               message: t('invalid_node_address'),
             }
           ),
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
         provider: z.string().optional(),
       }),
     }),
@@ -440,17 +514,7 @@ export const getDepositFormConfig = ({
           // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
         ),
         bondableAsset: z.string().min(1, t('asset')),
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .gt(0, t('amount_must_be_positive'))
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .optional()
-        ),
+        amount: optionalPositiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     leave: () => ({
@@ -498,19 +562,7 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z.preprocess(
-          toOptionalNumber,
-          z
-            .number()
-            .max(
-              maxOrInfinity(totalAmountAvailable),
-              t('chainFunctions.amountExceeded')
-            )
-            .refine(val => val >= 0, {
-              message: t('amount_must_be_non_negative'),
-            })
-            .optional()
-        ),
+        amount: optionalNonNegativeAmountSchema(totalAmountAvailable, t),
         customMemo: z
           .string()
           .min(1, t('chainFunctions.custom.validations.customMemo')),
@@ -521,13 +573,13 @@ export const getDepositFormConfig = ({
         {
           name: 'proposalId',
           type: 'text',
-          label: 'chainFunctions.vote.labels.proposalId',
+          label: t('chainFunctions.vote.labels.proposalId'),
           required: true,
         },
         {
           name: 'support',
           type: 'boolean',
-          label: 'chainFunctions.vote.labels.support',
+          label: t('chainFunctions.vote.labels.support'),
           required: true,
         },
       ],
@@ -569,19 +621,31 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
-                    amount: positiveAmountSchema(totalAmountAvailable, t),
+                    amount: positiveAmountSchema({
+                      maxValue: totalAmountAvailable,
+                      t,
+                      chainAmountMax: amountMax,
+                    }),
                   })
                 : coin.ticker === 'TCY'
                   ? z.object({
-                      amount: positiveAmountSchema(totalAmountAvailable, t),
+                      amount: positiveAmountSchema({
+                        maxValue: totalAmountAvailable,
+                        t,
+                        chainAmountMax: amountMax,
+                      }),
                       autoCompound: z.boolean().optional(),
                     })
                   : z.never(),
             Ton: () =>
               z.object({
-                amount: positiveAmountSchema(totalAmountAvailable, t),
+                amount: positiveAmountSchema({
+                  maxValue: totalAmountAvailable,
+                  t,
+                  chainAmountMax: amountMax,
+                }),
                 validatorAddress: z
                   .string()
                   .trim()
@@ -618,7 +682,7 @@ export const getDepositFormConfig = ({
               },
             ],
             [Chain.THORChain]: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? [
                     {
                       name: 'amount',
@@ -644,15 +708,23 @@ export const getDepositFormConfig = ({
         ? z.never()
         : match(chain, {
             THORChain: () =>
-              coin.ticker === 'RUJI'
+              coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? z.object({
-                    amount: positiveAmountSchema(totalAmountAvailable, t),
+                    amount: positiveAmountSchema({
+                      maxValue: totalAmountAvailable,
+                      t,
+                      chainAmountMax: amountMax,
+                    }),
                   })
                 : coin.ticker === 'TCY'
                   ? z.discriminatedUnion('autoCompound', [
                       z.object({
                         autoCompound: z.literal(true),
-                        amount: positiveAmountSchema(totalAmountAvailable, t),
+                        amount: positiveAmountSchema({
+                          maxValue: totalAmountAvailable,
+                          t,
+                          chainAmountMax: amountMax,
+                        }),
                         percentage: z.preprocess(
                           toOptionalNumber,
                           z
@@ -691,7 +763,11 @@ export const getDepositFormConfig = ({
                       message: t('send_invalid_receiver_address'),
                     }
                   ),
-                amount: positiveAmountSchema(totalAmountAvailable, t),
+                amount: positiveAmountSchema({
+                  maxValue: totalAmountAvailable,
+                  t,
+                  chainAmountMax: amountMax,
+                }),
               }) as any,
           }),
     }),
@@ -706,7 +782,11 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         resourceType: z.enum(['BANDWIDTH', 'ENERGY']),
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     unfreeze: () => ({
@@ -720,7 +800,11 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         resourceType: z.enum(['BANDWIDTH', 'ENERGY']),
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     add_cacao_pool: () => ({
@@ -733,7 +817,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
       }),
     }),
     remove_cacao_pool: () => ({
@@ -765,9 +853,162 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
         pool: z.string().min(1),
         pairedAddress: z.string().optional(),
+      }),
+    }),
+    // The trust-line limit is a token-denominated cap, unrelated to the wallet's
+    // XRP balance, so it is NOT bounded by `totalAmountAvailable`. issuer +
+    // currency are set by the OpenTrustLineSpecific picker.
+    open_trust_line: () => ({
+      fields: [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('trust_line_limit'),
+          required: true,
+        },
+      ],
+      schema: z
+        .object({
+          issuer: z
+            .string()
+            .trim()
+            .min(1, t('trust_line_issuer'))
+            .refine(
+              address =>
+                isValidAddress({ chain: Chain.Ripple, address, walletCore }),
+              { message: t('send_invalid_receiver_address') }
+            ),
+          // Accepts a human ticker (e.g. `RLUSD`, normalised to the 160-bit hex),
+          // a 3-char standard code, or a 40-char hex code. Rejects `XRP` (the
+          // native asset can't be an issued-currency trust line) and anything
+          // `toXrplCurrencyCode` can't encode (>20 ASCII bytes), so invalid input
+          // is caught inline rather than throwing at build time.
+          currency: z
+            .string()
+            .trim()
+            .min(1, t('trust_line_currency'))
+            .refine(value => value.toUpperCase() !== 'XRP', {
+              message: t('trust_line_currency_reserved'),
+            })
+            .refine(
+              value => 'data' in attempt(() => toXrplCurrencyCode(value)),
+              {
+                message: t('trust_line_currency_invalid'),
+              }
+            ),
+          amount: requiredAmountSchema(t),
+        })
+        // The limit itself is token-denominated, but the line still costs XRP: one
+        // owner-reserve increment locked up plus the fee. Below that the TrustSet
+        // fails on-ledger with `tecINSUFFICIENT_RESERVE` after the ceremony, fee
+        // already burned, so block before signing rather than after.
+        .superRefine((_val, ctx) => {
+          if (
+            trustLineCostXrp !== undefined &&
+            totalAmountAvailable < trustLineCostXrp
+          ) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t('trust_line_insufficient_xrp', {
+                amount: trustLineCostXrp,
+                ticker: chainFeeCoin[Chain.Ripple].ticker,
+              }),
+              path: ['_form'],
+            })
+          }
+        }),
+    }),
+    delegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator_address'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
+        validatorAddress: validatorAddressSchema(t, chain),
+      }),
+    }),
+    undelegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator_address'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }),
+        validatorAddress: validatorAddressSchema(t, chain),
+      }),
+    }),
+    redelegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'srcValidatorAddress',
+          type: 'text',
+          label: t('source_validator'),
+          required: true,
+        },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('destination_validator'),
+          required: true,
+        },
+      ],
+      schema: z
+        .object({
+          amount: positiveAmountSchema({
+            maxValue: totalAmountAvailable,
+            t,
+            chainAmountMax: amountMax,
+          }),
+          srcValidatorAddress: validatorAddressSchema(t, chain),
+          validatorAddress: validatorAddressSchema(t, chain),
+        })
+        .superRefine((data, ctx) => {
+          if (data.srcValidatorAddress === data.validatorAddress) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t('redelegate_same_validator'),
+              path: ['validatorAddress'],
+            })
+          }
+        }),
+    }),
+    claim_rewards: () => ({
+      // Array shape covers both per-validator claim (one entry) and bulk claim
+      // (multiple MsgWithdrawDelegatorReward in one multi-msg tx). The UI
+      // populates this from active delegations; users don't type validator
+      // addresses for claim, they pick from the existing list.
+      fields: [],
+      schema: z.object({
+        validatorAddresses: z
+          .array(validatorAddressSchema(t, chain))
+          .min(1, t('validator_address')),
       }),
     }),
     remove_thor_lp: () => ({
@@ -788,6 +1029,101 @@ export const getDepositFormConfig = ({
             .max(100, t('percentage_limit'))
         ),
         pool: z.string().min(1),
+      }),
+    }),
+    // Solana delegate: stake an amount from the wallet's liquid SOL to a chosen
+    // validator (create + delegate a new stake account). The amount IS bounded
+    // by the liquid balance here, so the standard positive-amount schema fits.
+    solana_delegate: () => ({
+      fields: [
+        { name: 'amount', type: 'number', label: t('amount'), required: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        // Solana's Stake program enforces a 1 SOL minimum active delegation;
+        // a DelegateStake below it reverts on-chain with
+        // StakeError.InsufficientDelegation (custom error 0xc). The entered
+        // amount IS the active stake (funding = amount + rent), so gate the
+        // amount directly on the 1 SOL floor.
+        amount: positiveAmountSchema({
+          maxValue: totalAmountAvailable,
+          t,
+          chainAmountMax: amountMax,
+        }).refine(value => Number(value) >= solanaMinDelegationSol, {
+          message: t('solana_staking_min_delegation', {
+            amount: solanaMinDelegationSol,
+            ticker: chainFeeCoin[Chain.Solana].ticker,
+          }),
+        }),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+      }),
+    }),
+    // Solana deactivate / withdraw operate on a stake account prefilled from
+    // the DeFi tab, so their fields are hidden. Withdraw also carries the
+    // (prefilled) withdrawable amount for the verify/Done display.
+    solana_unstake: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+      ],
+      schema: z.object({ stakeAccount: z.string().trim().min(1) }),
+    }),
+    solana_withdraw: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        { name: 'amount', type: 'number', label: t('amount'), hidden: true },
+      ],
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        // The withdraw amount is the stake account's withdrawable lamports
+        // (prefilled, not editable) — it is unrelated to the wallet's liquid
+        // SOL balance and routinely exceeds it (you're withdrawing FROM the
+        // stake account). Require only a positive value; capping at the liquid
+        // `totalAmountAvailable` would wrongly disable Continue.
+        amount: requiredAmountSchema(t),
+      }),
+    }),
+    // Move-stake step 1 (deactivate): operates on a prefilled stake account and
+    // no amount (the whole account moves). The destination validator is picked
+    // here — deactivating starts an irreversible cooldown, so the user commits
+    // to a target up front — and is only spent at finish-move, days later.
+    solana_move_stake: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+      }),
+    }),
+    // Move-stake step 2 (re-delegate): prefilled stake account + re-delegatable
+    // amount (unrelated to liquid SOL, so require only > 0) + a destination
+    // validator picked inline on the screen.
+    solana_finish_move: () => ({
+      fields: [
+        { name: 'stakeAccount', type: 'text', label: t('stake'), hidden: true },
+        {
+          name: 'validatorAddress',
+          type: 'text',
+          label: t('validator'),
+          required: true,
+        },
+        { name: 'amount', type: 'number', label: t('amount'), hidden: true },
+      ],
+      schema: z.object({
+        stakeAccount: z.string().trim().min(1),
+        validatorAddress: z.string().trim().min(1, t('validator_address')),
+        amount: requiredAmountSchema(t),
       }),
     }),
   })

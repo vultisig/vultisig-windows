@@ -5,7 +5,7 @@ import {
   useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { getSendFeeEstimate } from '@vultisig/core-mpc/keysign/send/getSendFeeEstimate'
@@ -14,6 +14,7 @@ import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
+import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -22,6 +23,7 @@ export const useSendFeeEstimateQuery = () => {
   const coin = useCurrentSendCoin()
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
+  const { destinationTag } = useSendDestinationTag()
 
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
@@ -37,6 +39,7 @@ export const useSendFeeEstimateQuery = () => {
       coin,
       receiver,
       amount: balance,
+      destinationTag,
       memo,
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
@@ -45,7 +48,16 @@ export const useSendFeeEstimateQuery = () => {
       walletCore,
       hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     }
-  }, [balance, coin, memo, publicKey, receiver, vault, walletCore])
+  }, [
+    balance,
+    coin,
+    destinationTag,
+    memo,
+    publicKey,
+    receiver,
+    vault,
+    walletCore,
+  ])
 
   return useQuery({
     queryKey: [
@@ -54,6 +66,7 @@ export const useSendFeeEstimateQuery = () => {
     ],
     queryFn: () => getSendFeeEstimate(input!),
     enabled: !!receiver && balance != null && input != null,
+    placeholderData: keepPreviousData,
     ...noRefetchQueryOptions,
     retry: (failureCount, error) => {
       if (error instanceof BuildKeysignPayloadError) {

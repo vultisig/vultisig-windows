@@ -27,7 +27,7 @@ import { ClaimUtxoSelection } from './ClaimUtxoSelection'
 
 type ClaimStep =
   | { select: null }
-  | { claiming: { utxos: ClaimableUtxo[]; password: string } }
+  | { claiming: { utxos: ClaimableUtxo[]; password?: string } }
   | { result: { data: QbtcClaimResultData } }
 
 /** Page that drives the QBTC claim flow end-to-end. */
@@ -50,11 +50,16 @@ export const QbtcClaimPage = () => {
   // Fail closed — keep the CTA off until the kill-switch query resolves.
   const claimGateClosed =
     disabledQuery.isPending || disabledQuery.isError || claimExplicitlyDisabled
-  const isFastVault = securityType === 'fast'
 
   const handleConfirm = (utxos: ClaimableUtxo[]) => {
     setError(null)
-    setPendingUtxos(utxos)
+    // Fast vaults co-sign with the server and need the password up front.
+    // Secure vaults co-sign with a second device, so go straight to signing.
+    if (securityType === 'fast') {
+      setPendingUtxos(utxos)
+    } else {
+      setStep({ claiming: { utxos } })
+    }
   }
 
   const handlePasswordFinish = ({ password }: { password: string }) => {
@@ -96,9 +101,6 @@ export const QbtcClaimPage = () => {
               {claimExplicitlyDisabled && (
                 <WarningBlock>{t('qbtc_claim_disabled_notice')}</WarningBlock>
               )}
-              {!isFastVault && (
-                <WarningBlock>{t('qbtc_claim_fast_vault_only')}</WarningBlock>
-              )}
               {error && (
                 <WarningBlock>
                   {error.message || t('qbtc_claim_failed')}
@@ -116,7 +118,7 @@ export const QbtcClaimPage = () => {
                     utxos={utxos}
                     selected={selected}
                     onSelectedChange={setSelected}
-                    disabled={claimGateClosed || !isFastVault}
+                    disabled={claimGateClosed}
                     onConfirm={handleConfirm}
                   />
                 )}

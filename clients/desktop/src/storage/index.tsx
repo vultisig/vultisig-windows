@@ -7,6 +7,7 @@ import { circleVisibilityStorage } from './circleVisibility'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
+import { customRpcOverridesStorage } from './customRpcOverrides'
 import { defiChainsStorage } from './defiChains'
 import { defiPositionsStorage } from './defiPositions'
 import { dismissedBannersStorage } from './dismissedBanners'
@@ -19,6 +20,7 @@ import { passcodeAutoLockStorage } from './passcodeAutoLock'
 import { passcodeEncryptionStorage } from './passcodeEncryption'
 import { passcodeUnlockSessionStorage } from './passcodeUnlockSession'
 import { referralsStorage } from './referrals'
+import { solanaMoveStakeDestinationsStorage } from './solanaMoveStakeDestinations'
 import { transactionHistoryStorage } from './transactionHistory'
 import { tssBatchingEnabledStorage } from './tssBatchingEnabled'
 import { vaultFoldersStorage } from './vaultFolders'
@@ -47,5 +49,7 @@ export const storage: CoreStorage = {
   ...circleVisibilityStorage,
   ...mldsaEnabledStorage,
   ...tssBatchingEnabledStorage,
+  ...customRpcOverridesStorage,
+  ...solanaMoveStakeDestinationsStorage,
   ...transactionHistoryStorage,
 }

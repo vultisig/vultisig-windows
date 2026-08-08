@@ -18,6 +18,7 @@ import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
 import { useSendAmount } from '../state/amount'
+import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -33,6 +34,7 @@ export const useSendKeysignPayloadQuery = ({
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
   const [amount] = useSendAmount()
+  const { destinationTag } = useSendDestinationTag()
 
   const vault = useCurrentVault()
 
@@ -44,6 +46,7 @@ export const useSendKeysignPayloadQuery = ({
       coin,
       receiver,
       amount: shouldBePresent(amount),
+      destinationTag,
       memo,
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
@@ -53,7 +56,17 @@ export const useSendKeysignPayloadQuery = ({
       feeSettings,
       hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     }),
-    [amount, coin, feeSettings, memo, publicKey, receiver, vault, walletCore]
+    [
+      amount,
+      coin,
+      destinationTag,
+      feeSettings,
+      memo,
+      publicKey,
+      receiver,
+      vault,
+      walletCore,
+    ]
   )
 
   return useQuery({

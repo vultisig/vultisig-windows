@@ -98,7 +98,6 @@ const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-height: 42px;
   position: relative;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 

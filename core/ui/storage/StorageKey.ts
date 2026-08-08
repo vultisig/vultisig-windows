@@ -26,4 +26,6 @@ export enum StorageKey {
   transactionHistory = 'transactionHistory',
   hasSeenNotificationPrompt = 'hasSeenNotificationPrompt',
   keplrSuggestedChains = 'keplrSuggestedChains',
+  customRpcOverrides = 'customRpcOverrides',
+  solanaMoveStakeDestinations = 'solanaMoveStakeDestinations',
 }

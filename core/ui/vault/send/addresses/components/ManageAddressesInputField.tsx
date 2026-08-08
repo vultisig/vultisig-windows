@@ -19,9 +19,9 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
-import { BookIcon } from '@lib/ui/icons/BookIcon'
-import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { SquareBehindSquare4Icon } from '@lib/ui/icons/SquareBehindSquare4Icon'
+import { BookmarksIcon } from '@lib/ui/icons/BookmarksIcon'
+import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
+import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -260,7 +260,7 @@ export const ManageReceiverAddressInputField = () => {
                     }
                   }}
                 >
-                  <SquareBehindSquare4Icon />
+                  <CopyIcon />
                 </ActionIconButton>
                 <ActionIconButton
                   onClick={() => {
@@ -268,10 +268,10 @@ export const ManageReceiverAddressInputField = () => {
                     setViewState('scanner')
                   }}
                 >
-                  <CameraIcon />
+                  <CameraFilledIcon />
                 </ActionIconButton>
                 <ActionIconButton onClick={() => setViewState('addressBook')}>
-                  <BookIcon />
+                  <BookmarksIcon />
                 </ActionIconButton>
               </HStack>
             </VStack>

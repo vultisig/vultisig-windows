@@ -1,3 +1,4 @@
+import { getTronStakingDisplay } from '@core/ui/chain/tx/getTronStakingDisplay'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
@@ -14,6 +15,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { TrustLineReserveWarning } from '../DepositForm/ActionSpecific/OpenTrustLineSpecific/TrustLineReserveWarning'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
@@ -35,9 +37,24 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
     coin
   )
 
+  // A TRON freeze/unfreeze memo is an internal marker for the staking contract
+  // and never reaches the chain, so show the staked resource the way the other
+  // signing device does instead of the raw `FREEZE:<resource>` marker.
+  const tronStaking = getTronStakingDisplay({ chain: coin.chain, memo })
+  const displayMemo = tronStaking
+    ? tronStaking.resource
+    : formattedDepositFormData['memo']
+
   const sender = useSender()
   const { t } = useTranslation()
   const { fields: actionFields } = useDepositFormConfig()
+
+  const isOpenTrustLine = selectedChainAction === 'open_trust_line'
+  // The trust-line limit is denominated in the issued currency, not the native
+  // XRP fee coin the deposit flow keeps selected.
+  const amountTicker = isOpenTrustLine
+    ? String(depositData['currency'] ?? '')
+    : coin.ticker
 
   const shouldUseBondOverview =
     entryPoint === 'defi' &&
@@ -47,7 +64,11 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
     (selectedChainAction === 'stake' ||
       selectedChainAction === 'unstake' ||
       selectedChainAction === 'mint' ||
-      selectedChainAction === 'redeem')
+      selectedChainAction === 'redeem' ||
+      selectedChainAction === 'delegate' ||
+      selectedChainAction === 'undelegate' ||
+      selectedChainAction === 'redelegate' ||
+      selectedChainAction === 'claim_rewards')
 
   if (shouldUseBondOverview) {
     return <BondOverview onBack={onBack} />
@@ -79,7 +100,7 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
 
             return field.type === 'number' || field.type === 'percentage' ? (
               <ListItem
-                description={`${String(formattedDepositFormData[field.name])}${field.name === 'amount' ? ` ${coin.ticker}` : ''}`}
+                description={`${String(formattedDepositFormData[field.name])}${field.name === 'amount' ? ` ${amountTicker}` : ''}`}
                 key={field.name}
                 title={field.label}
               />
@@ -100,14 +121,18 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
           {selectedChainAction === 'leave' && (
             <ListItem description={`0 ${coin.ticker}`} title={t('amount')} />
           )}
-          {Boolean(formattedDepositFormData['memo']) && (
+          {isOpenTrustLine && (
             <ListItem
-              description={String(formattedDepositFormData['memo'])}
-              title={t('memo')}
+              description={String(depositData['issuer'] ?? '')}
+              title={t('trust_line_issuer')}
             />
+          )}
+          {Boolean(displayMemo) && (
+            <ListItem description={String(displayMemo)} title={t('memo')} />
           )}
           <ListItem description={<DepositFee />} title={t('est_network_fee')} />
         </List>
+        {isOpenTrustLine ? <TrustLineReserveWarning /> : null}
       </PageContent>
       <PageFooter>
         <DepositConfirmButton />

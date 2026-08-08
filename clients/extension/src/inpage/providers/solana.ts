@@ -51,6 +51,7 @@ import {
 } from '@wallet-standard/features'
 import bs58 from 'bs58'
 
+import { currentExtensionBrandConfig } from '../../brand/extensionBrandConfig'
 import { bytesEqual, isVersionedTransaction } from '../../utils/functions'
 import { Callback } from '../constants'
 import icon from '../icon'
@@ -62,6 +63,27 @@ import { prepareTransactionForBroadcast } from './solana/prepareTransactionForBr
 import { createSolanaSignInMessage } from './solana/signIn'
 
 const frozenChains = Object.freeze([...SolanaChains] as const)
+
+const getTransactionSignature = (
+  transaction: Transaction | VersionedTransaction
+): Uint8Array => {
+  const assertSignature = (signature?: Uint8Array | null): Uint8Array => {
+    if (!signature || signature.every(byte => byte === 0)) {
+      throw new Error('Transaction has no signatures')
+    }
+
+    return signature
+  }
+
+  if (isVersionedTransaction(transaction)) {
+    const [signature] = transaction.signatures
+    return assertSignature(signature)
+  }
+
+  const signature = transaction.signatures[0]?.signature
+  return assertSignature(signature)
+}
+
 export class Solana implements Wallet {
   private _publicKey: PublicKey | null = null
   private _connecting = false
@@ -151,7 +173,7 @@ export class Solana implements Wallet {
       this.account = new VultisigSolanaWalletAccount({
         address,
         publicKey: publicKeyBytes,
-        label: 'Vultisig Extension',
+        label: currentExtensionBrandConfig.manifest.name,
         icon: this.icon,
       })
 
@@ -202,7 +224,7 @@ export class Solana implements Wallet {
       this.account = new VultisigSolanaWalletAccount({
         address,
         publicKey: publicKeyBytes,
-        label: 'Vultisig Extension',
+        label: currentExtensionBrandConfig.manifest.name,
         icon: this.icon,
       })
 
@@ -461,10 +483,21 @@ export class Solana implements Wallet {
   signAndSendAllTransactions = async <
     T extends Transaction | VersionedTransaction,
   >(
-    _transactions: T[],
+    transactions: T[],
     _options?: SendOptions
   ): Promise<{ signature: TransactionSignature }[]> => {
-    throw new NotImplementedError('signAndSendAllTransactions')
+    if (!transactions.length) {
+      return Promise.reject({
+        code: -32000,
+        message: 'Missing or invalid parameters.',
+      })
+    }
+
+    const signedTransactions = await this.signTransactions(transactions, false)
+
+    return signedTransactions.map(transaction => ({
+      signature: bs58.encode(getTransactionSignature(transaction)),
+    }))
   }
 
   signAndSendTransaction = async <T extends Transaction | VersionedTransaction>(
@@ -474,13 +507,8 @@ export class Solana implements Wallet {
     const result = await this.signTransaction(transaction, false)
     if (!result) throw new Error('failed to signAndSendTransaction')
 
-    const firstSignature = result.signatures[0]
-    if (!firstSignature) {
-      throw new Error('Transaction has no signatures')
-    }
-
     return {
-      signature: bs58.encode(firstSignature as any),
+      signature: bs58.encode(getTransactionSignature(result)),
     }
   }
 
@@ -614,7 +642,7 @@ export class Solana implements Wallet {
   async handleNotification() {
     return Promise.reject({
       code: -32603,
-      message: 'This function is not supported by Vultisig',
+      message: `This function is not supported by ${currentExtensionBrandConfig.provider.walletPickerName}`,
     })
   }
 }

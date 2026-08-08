@@ -15,6 +15,7 @@ import {
   FeeSettings,
   FeeSettingsChainKind,
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
+import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
 import { validateTonComment } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ton/native'
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
@@ -41,8 +42,11 @@ import {
   SignBitcoin,
   SignDirect,
   SignDirectSchema,
+  SignRippleSchema,
   SignSolana,
   SignSolanaSchema,
+  SignSui,
+  SignSuiSchema,
   SignTonSchema,
   TonMessageSchema,
   WasmExecuteContractPayloadSchema,
@@ -58,8 +62,10 @@ import { hexToString } from 'viem'
 import { getTxAmount } from '../core/amount'
 import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
+import { autofillRippleTxFields } from '../core/ripple/autofillRippleTxFields'
 import { TronMsgType } from '../interfaces'
 import { applyCosmosFeeFromSignData } from './applyCosmosFeeFromSignData'
+import { enforceMinNetworkFee } from './minNetworkFee'
 
 export type BuildSendTxKeysignPayloadInput = {
   parsedTx: ParsedTx
@@ -169,6 +175,13 @@ export const buildSendTxKeysignPayload = async ({
       psbt: psbt =>
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
+      // A Payment's Destination doubles as the reserve-check target; an offer
+      // has none, and the empty toAddress skips that Payment-specific check.
+      ripple: ({ transaction }) =>
+        typeof transaction.Destination === 'string'
+          ? transaction.Destination
+          : undefined,
     }
   )
 
@@ -220,6 +233,9 @@ export const buildSendTxKeysignPayload = async ({
         return undefined
       },
       polkadot: ({ signerPayload }) => JSON.stringify(signerPayload),
+      sui: () => undefined,
+      // The XRPL Memos field, if any, rides inside the raw transaction JSON.
+      ripple: () => undefined,
     }
   )
 
@@ -309,6 +325,8 @@ export const buildSendTxKeysignPayload = async ({
     solana: () => ({ case: undefined }),
     psbt: () => ({ case: undefined }),
     polkadot: () => ({ case: undefined }),
+    sui: () => ({ case: undefined }),
+    ripple: () => ({ case: undefined }),
   })
 
   const swapPayload = matchRecordUnion<
@@ -356,6 +374,8 @@ export const buildSendTxKeysignPayload = async ({
       }),
     psbt: () => ({ case: undefined }),
     polkadot: () => ({ case: undefined }),
+    sui: () => ({ case: undefined }),
+    ripple: () => ({ case: undefined }),
   })
 
   const aminoPayload = matchRecordUnion<CustomTxData, SignAmino | undefined>(
@@ -383,6 +403,8 @@ export const buildSendTxKeysignPayload = async ({
       solana: () => undefined,
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
+      ripple: () => undefined,
     }
   )
 
@@ -408,6 +430,8 @@ export const buildSendTxKeysignPayload = async ({
       solana: () => undefined,
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
+      ripple: () => undefined,
     }
   )
 
@@ -434,6 +458,8 @@ export const buildSendTxKeysignPayload = async ({
       },
       psbt: () => undefined,
       polkadot: () => undefined,
+      sui: () => undefined,
+      ripple: () => undefined,
     }
   )
 
@@ -467,6 +493,8 @@ export const buildSendTxKeysignPayload = async ({
     solana: () => undefined,
     psbt: () => undefined,
     polkadot: () => undefined,
+    sui: () => undefined,
+    ripple: () => undefined,
   })
 
   const bitcoinPayload = matchRecordUnion<
@@ -481,7 +509,22 @@ export const buildSendTxKeysignPayload = async ({
         senderAddress: coin.address,
       }),
     polkadot: () => undefined,
+    sui: () => undefined,
+    ripple: () => undefined,
   })
+
+  const suiPayload = matchRecordUnion<CustomTxData, SignSui | undefined>(
+    customTxData,
+    {
+      regular: () => undefined,
+      solana: () => undefined,
+      psbt: () => undefined,
+      polkadot: () => undefined,
+      sui: ({ transactionBytes }) =>
+        create(SignSuiSchema, { unsignedTxMsg: transactionBytes }),
+      ripple: () => undefined,
+    }
+  )
 
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
@@ -499,7 +542,9 @@ export const buildSendTxKeysignPayload = async ({
               }
             : bitcoinPayload !== undefined
               ? { case: 'signBitcoin', value: bitcoinPayload }
-              : { case: undefined, value: undefined }
+              : suiPayload !== undefined
+                ? { case: 'signSui', value: suiPayload }
+                : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
     validateTonComment(memo)
@@ -554,6 +599,8 @@ export const buildSendTxKeysignPayload = async ({
         solana: () => false,
         psbt: () => false,
         polkadot: () => false,
+        sui: () => false,
+        ripple: () => false,
       }),
       transactionType: getTransactionType(),
       timeoutTimestamp: getTimeoutTimestamp(),
@@ -566,13 +613,41 @@ export const buildSendTxKeysignPayload = async ({
     applyCosmosFeeFromSignData({ keysignPayload, chain })
   }
 
+  // A dApp-supplied XRPL transaction becomes signable only once the wallet's
+  // network read (`rippleSpecific`) is available, so the envelope fields are
+  // filled here — after `getChainSpecific` — rather than in the `signData`
+  // chain above. The signer receives a complete, ready-to-serialize JSON.
+  if ('ripple' in customTxData) {
+    const { gas, sequence, lastLedgerSequence } = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'rippleSpecific'
+    )
+
+    const transaction = autofillRippleTxFields({
+      transaction: customTxData.ripple.transaction,
+      fee: gas,
+      sequence,
+      lastLedgerSequence,
+    })
+
+    keysignPayload.signData = {
+      case: 'signRipple',
+      value: create(SignRippleSchema, { rawJson: JSON.stringify(transaction) }),
+    }
+  }
+
   if (needsUtxoInfo) {
-    keysignPayload = refineKeysignUtxo({
+    keysignPayload = await refineKeysignUtxo({
       keysignPayload,
       walletCore,
       publicKey: shouldBePresent(publicKey, 'publicKey'),
     })
   }
 
-  return keysignPayload
+  return enforceMinNetworkFee({
+    keysignPayload,
+    customTxData,
+    walletCore,
+    publicKey,
+  })
 }

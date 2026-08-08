@@ -13,6 +13,7 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { OnBackProp } from '@lib/ui/props'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { match } from '@vultisig/lib-utils/match'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { ComponentType } from 'react'
@@ -20,14 +21,20 @@ import { ComponentType } from 'react'
 import { KeyImportFastKeygenServerActionProvider } from '../keyimport/fast/KeyImportFastKeygenServerActionProvider'
 
 type FastKeygenFlowProps = OnBackProp & {
+  onKeygenError?: (error: Error) => void | Promise<void>
   password?: string
   onChangeEmailAndRestart?: () => void
+  onVaultSaveError?: (error: Error) => void | Promise<void>
+  onVaultSaved?: (vault: Vault) => void | Promise<void>
 }
 
 export const FastKeygenFlow = ({
   onBack,
+  onKeygenError,
   password,
   onChangeEmailAndRestart,
+  onVaultSaveError,
+  onVaultSaved,
 }: FastKeygenFlowProps) => {
   const keygenOperation = useKeygenOperation()
   const ServerActionProvider = matchRecordUnion<
@@ -61,11 +68,16 @@ export const FastKeygenFlow = ({
           to={({ value }) => (
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
+                securityType="fast"
                 render={() => (
                   <KeygenFlow
                     onBack={onBack}
+                    onKeygenError={onKeygenError}
                     password={password}
                     onChangeEmailAndRestart={onChangeEmailAndRestart}
+                    onVaultSaveError={onVaultSaveError}
+                    onVaultSaved={onVaultSaved}
+                    securityType="fast"
                   />
                 )}
                 value="keygen"

@@ -3,10 +3,13 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
+import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import { useTransactionRecords } from '@core/ui/storage/transactionHistory'
 import {
+  LimitSwapTransactionRecord,
   SendTransactionRecord,
   SwapTransactionRecord,
   TransactionRecordStatus,
@@ -14,6 +17,14 @@ import {
 import { useTransactionStatusPolling } from '@core/ui/transaction-history/status/useTransactionStatusPolling'
 import { TransactionHistoryTag } from '@core/ui/transaction-history/TransactionHistoryTag'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
+import { fromThorchainFixedPoint } from '@core/ui/vault/swap/limit/amount'
+import {
+  limitOrderStatusColor,
+  useFormatLimitOrderExpiry,
+  useLimitOrderStatusLabels,
+} from '@core/ui/vault/swap/limit/tracking/presentation'
+import { useLimitOrderTracking } from '@core/ui/vault/swap/limit/tracking/useLimitOrderTracking'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -33,6 +44,7 @@ import {
   CoinKey,
   coinKeyToString,
 } from '@vultisig/core-chain/coin/Coin'
+import { thorchainAssetPrefixToChain } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
@@ -208,11 +220,16 @@ const SendDetailPanel = ({ record }: { record: SendTransactionRecord }) => {
 }
 
 const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
+  const { t } = useTranslation()
   const { data } = record
   const fromCryptoAmount = Number(
     fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
   )
   const toCryptoAmount = parseFloat(data.toAmount)
+  const toAmountLimit = toNativeSwapLimitAmount({
+    rawLimit: data.toAmountLimit,
+    toCoin: { chain: data.toChain, id: data.toTokenId },
+  })
   const fromFiat = useFiatFromPrice({
     coin: { chain: data.fromChain, id: data.fromTokenId },
     fiatValue: record.fiatValue,
@@ -279,6 +296,13 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
               {toFiat}
             </Text>
           )}
+          {toAmountLimit !== null && (
+            <Text size={12} color="shy" centerHorizontally>
+              {`${t('to_min_payout')}: ${formatAmount(toAmountLimit, {
+                precision: 'high',
+              })} ${data.toToken}`}
+            </Text>
+          )}
         </VStack>
       </SwapCoinCard>
     </HStack>
@@ -304,9 +328,132 @@ const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
         )}
         {data.provider && (
           <DetailRow label={t('provider')}>
-            <Text>{data.provider}</Text>
+            <SwapProviderValue provider={data.provider} />
           </DetailRow>
         )}
+      </SeparatedByLine>
+    </Panel>
+  )
+}
+
+const SwapProviderValue = ({ provider }: { provider: string }) => {
+  const logoSrc = getSwapProviderLogoSrc(provider)
+
+  return (
+    <HStack alignItems="center" gap={6}>
+      {logoSrc ? (
+        <ChainEntityIcon value={logoSrc} style={{ fontSize: 16 }} />
+      ) : null}
+      <Text>{provider}</Text>
+    </HStack>
+  )
+}
+
+const LimitSwapAmountDisplay = ({
+  record,
+}: {
+  record: LimitSwapTransactionRecord
+}) => {
+  const { t } = useTranslation()
+  const { data } = record
+  // The memo only names the buy asset in THORChain notation; resolve it back to
+  // a real coin for its logo. Unresolvable assets render as text, never as
+  // another coin's icon.
+  const buyCoin = getLimitOrderBuyCoin({
+    targetAsset: data.targetAsset,
+    targetChain:
+      thorchainAssetPrefixToChain[data.targetAsset.split('.')[0].toUpperCase()],
+  })
+
+  return (
+    <HStack gap={8} style={{ position: 'relative' }}>
+      <SwapCoinCard gap={12} alignItems="center">
+        {data.fromTokenLogo && (
+          <CoinIcon
+            coin={{
+              chain: data.fromChain,
+              id: data.fromTokenId,
+              logo: data.fromTokenLogo,
+            }}
+            style={{ fontSize: 36 }}
+          />
+        )}
+        <VStack alignItems="center" gap={2}>
+          <Text size={14} weight={500} centerHorizontally>
+            {formatCryptoDisplay(
+              safeBigInt(data.fromAmount),
+              data.fromDecimals
+            )}{' '}
+            {data.fromToken}
+          </Text>
+        </VStack>
+      </SwapCoinCard>
+
+      <SwapChevronWrapper alignItems="center" justifyContent="center">
+        <SwapChevronCircle>
+          <ChevronRightIcon />
+        </SwapChevronCircle>
+      </SwapChevronWrapper>
+
+      <SwapCoinCard gap={12} alignItems="center">
+        {buyCoin ? <CoinIcon coin={buyCoin} style={{ fontSize: 36 }} /> : null}
+        <VStack alignItems="center" gap={2}>
+          <Text size={14} weight={500} centerHorizontally>
+            {`${data.minimumReceived} ${data.buyTicker}`}
+          </Text>
+          <Text size={12} color="shy" centerHorizontally>
+            {t('swap_limit_minimum_received')}
+          </Text>
+        </VStack>
+      </SwapCoinCard>
+    </HStack>
+  )
+}
+
+const LimitSwapDetailPanel = ({
+  record,
+}: {
+  record: LimitSwapTransactionRecord
+}) => {
+  const { t } = useTranslation()
+  const statusLabel = useLimitOrderStatusLabels()
+  const formatExpiry = useFormatLimitOrderExpiry()
+  const { data } = record
+
+  // The queue's own accounting of what has been paid out so far — kept even
+  // after the order closes, since an expiry settle can follow a partial fill.
+  const filledSoFar =
+    data.amountOut && data.amountOut !== '0'
+      ? `${fromThorchainFixedPoint(data.amountOut)} ${data.buyTicker}`
+      : null
+
+  return (
+    <Panel>
+      <SeparatedByLine gap={12}>
+        <DetailRow label={t('swap_limit_order_status')}>
+          <Text color={limitOrderStatusColor[data.orderStatus]}>
+            {statusLabel[data.orderStatus]}
+          </Text>
+        </DetailRow>
+        {filledSoFar && (
+          <DetailRow label={t('swap_limit_filled_so_far')}>
+            <Text>{filledSoFar}</Text>
+          </DetailRow>
+        )}
+        {data.orderStatus === 'resting' &&
+          data.timeToExpiryBlocks !== undefined && (
+            <DetailRow label={t('swap_limit_expiry_label')}>
+              <Text>{formatExpiry(data.timeToExpiryBlocks)}</Text>
+            </DetailRow>
+          )}
+        <DetailRow label={t('swap_limit_payout_to')}>
+          <MiddleTruncate text={data.destinationAddress} width={200} />
+        </DetailRow>
+        <DetailRow label={t('memo')}>
+          <Text style={{ wordBreak: 'break-all', textAlign: 'right' }}>
+            {data.memo}
+          </Text>
+        </DetailRow>
       </SeparatedByLine>
     </Panel>
   )
@@ -326,6 +473,9 @@ export const TransactionDetailPage = () => {
   )
 
   useTransactionStatusPolling(record)
+  // Keeps a limit order's own state fresh while its detail is on screen; the
+  // generic poller above deliberately ignores limit records.
+  useLimitOrderTracking()
 
   const explorerUrl =
     record.explorerUrl ||
@@ -339,7 +489,12 @@ export const TransactionDetailPage = () => {
     <ScreenLayout title={t('transaction_details')} onBack={goBack}>
       <VStack gap={20} alignItems="stretch">
         <VStack alignItems="center">
-          <TransactionHistoryTag type={record.type} />
+          <TransactionHistoryTag
+            type={record.type === 'limitSwap' ? 'swap' : record.type}
+            label={
+              record.type === 'limitSwap' ? t('swap_mode_limit') : undefined
+            }
+          />
         </VStack>
 
         {record.type === 'send' && (
@@ -356,13 +511,22 @@ export const TransactionDetailPage = () => {
           </>
         )}
 
+        {record.type === 'limitSwap' && (
+          <>
+            <LimitSwapAmountDisplay record={record} />
+            <LimitSwapDetailPanel record={record} />
+          </>
+        )}
+
         <Panel>
           <SeparatedByLine gap={12}>
-            <DetailRow label={t('status')}>
-              <Text color={statusColor[record.status]}>
-                {t(statusLabelKey[record.status])}
-              </Text>
-            </DetailRow>
+            {record.type === 'limitSwap' ? null : (
+              <DetailRow label={t('status')}>
+                <Text color={statusColor[record.status]}>
+                  {t(statusLabelKey[record.status])}
+                </Text>
+              </DetailRow>
+            )}
             <DetailRow label={t('date')}>
               <Text>
                 {formatTimestamp({

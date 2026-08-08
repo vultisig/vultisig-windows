@@ -11,9 +11,11 @@ import styled from 'styled-components'
 export const SwapCoinItem = ({
   coin,
   tokenAmount,
+  caption,
 }: {
   coin: AccountCoin
   tokenAmount: number | null
+  caption?: string
 }) => {
   const formatFiatAmount = useFormatFiatAmount()
   const coinPriceQuery = useCoinPriceQuery({
@@ -37,6 +39,11 @@ export const SwapCoinItem = ({
             </Text>
           )}
         />
+        {caption ? (
+          <Text centerHorizontally color="shy" size={12}>
+            {caption}
+          </Text>
+        ) : null}
       </div>
     </SwapVStackItem>
   )

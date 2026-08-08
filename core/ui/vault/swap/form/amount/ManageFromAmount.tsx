@@ -8,7 +8,7 @@ import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { useFromAmount } from '../../state/fromAmount'
@@ -16,6 +16,45 @@ import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
+
+const parseAmountInputValue = (value: string, decimals: number) => {
+  if (value === '') {
+    return null
+  }
+
+  try {
+    return decimalStringToBigInt(value, decimals)
+  } catch {
+    return undefined
+  }
+}
+
+type GetSuggestionDisplayValueInput = {
+  amount: bigint
+  decimals: number
+  chain: Chain
+}
+
+/**
+ * Renders a suggestion amount for display, cropped to a few fraction digits.
+ * Display only — the stored swap amount must stay the exact bigint, or Max
+ * would silently swap less than the full balance (#4390).
+ */
+export const getSuggestionDisplayValue = ({
+  amount,
+  decimals,
+  chain,
+}: GetSuggestionDisplayValueInput) => {
+  const decimalString = bigIntToDecimalString(amount, decimals)
+  const maxDisplayDecimals = chain === Chain.Bitcoin ? 8 : 4
+  const [integerPart, decimalPart] = decimalString.split('.')
+  const croppedDecimal = decimalPart
+    ? `.${decimalPart.slice(0, maxDisplayDecimals)}`
+    : ''
+  const cropped = `${integerPart}${croppedDecimal}`
+
+  return cropped.includes('.') ? cropped.replace(/\.?0+$/, '') : cropped
+}
 
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
@@ -36,8 +75,7 @@ export const ManageFromAmount = () => {
     // Only update input if the value changed externally (not from user typing)
     // We detect this by checking if the value changed but the input doesn't match
     if (value !== previousValueRef.current) {
-      const currentInputAsBigInt =
-        inputValue === '' ? null : decimalStringToBigInt(inputValue, decimals)
+      const currentInputAsBigInt = parseAmountInputValue(inputValue, decimals)
       if (currentInputAsBigInt !== value) {
         // Remove trailing zeros from the decimal string for display
         setInputValue(trimmedDecimalString)
@@ -46,25 +84,33 @@ export const ManageFromAmount = () => {
     }
   }, [value, trimmedDecimalString, inputValue, decimals])
 
-  const handleInputValueChange = useCallback(
-    (value: string) => {
-      value = value.replace(/-/g, '')
-      if (value === '') {
-        setInputValue('')
-        setValue?.(null)
-        return
-      }
+  const handleInputValueChange = (value: string) => {
+    value = value.replace(/-/g, '')
 
-      try {
-        const chainAmount = decimalStringToBigInt(value, decimals)
-        setInputValue(value)
-        setValue?.(chainAmount)
-      } catch {
-        return
-      }
-    },
-    [decimals, setValue]
-  )
+    if (value.startsWith('.')) {
+      value = `0${value}`
+    }
+
+    if (value === '') {
+      setInputValue('')
+      previousValueRef.current = null
+      setValue?.(null)
+      return
+    }
+
+    if (!/^\d*\.?\d*$/.test(value)) {
+      return
+    }
+
+    const chainAmount = parseAmountInputValue(value, decimals)
+    if (chainAmount === undefined) {
+      return
+    }
+
+    setInputValue(value)
+    previousValueRef.current = chainAmount
+    setValue?.(chainAmount)
+  }
 
   const suggestions = isFeeCoinSelected
     ? [0.25, 0.5, 0.75]
@@ -80,6 +126,10 @@ export const ManageFromAmount = () => {
           onWheel={event => event.currentTarget.blur()}
           value={inputValue}
           onValueChange={handleInputValueChange}
+          onPaste={event => {
+            event.preventDefault()
+            handleInputValueChange(event.clipboardData.getData('text'))
+          }}
           data-testid="swap-from-amount-input"
         />
         {value !== null && (
@@ -101,21 +151,16 @@ export const ManageFromAmount = () => {
               <AmountSuggestion
                 onClick={() => {
                   const suggestionAmount = multiplyBigInt(amount, suggestion)
-                  const decimalString = bigIntToDecimalString(
-                    suggestionAmount,
-                    decimals
+
+                  setInputValue(
+                    getSuggestionDisplayValue({
+                      amount: suggestionAmount,
+                      decimals,
+                      chain: fromCoinKey.chain,
+                    })
                   )
-                  const maxDisplayDecimals =
-                    fromCoinKey.chain === Chain.Bitcoin ? 8 : 4
-                  const [integerPart, decimalPart] = decimalString.split('.')
-                  const croppedDecimal = decimalPart
-                    ? `.${decimalPart.slice(0, maxDisplayDecimals)}`
-                    : ''
-                  const cropped = `${integerPart}${croppedDecimal}`
-                  const trimmed = cropped.includes('.')
-                    ? cropped.replace(/\.?0+$/, '')
-                    : cropped
-                  handleInputValueChange(trimmed)
+                  previousValueRef.current = suggestionAmount
+                  setValue?.(suggestionAmount)
                 }}
                 key={suggestion}
                 value={suggestion}

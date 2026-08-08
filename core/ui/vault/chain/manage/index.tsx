@@ -1,5 +1,7 @@
+import { orderChainItemsForProduct } from '@core/ui/chain/utils/orderChainItemsForProduct'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { currentProductBrand } from '@core/ui/product/brand'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -63,7 +65,11 @@ export const ManageVaultChainsPage = () => {
       )
     }
 
-    return coins.sort((a, b) => a.chain.localeCompare(b.chain))
+    return orderChainItemsForProduct({
+      items: coins,
+      getChain: coin => coin.chain,
+      productBrand: currentProductBrand,
+    })
   }, [nativeCoins, search])
 
   const toggleDraft = (chain: Chain) => {

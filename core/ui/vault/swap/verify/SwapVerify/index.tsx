@@ -5,6 +5,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { SwapFiatAmount } from '@core/ui/vault/swap/form/amount/SwapFiatAmount'
 import { VerifySwapFees } from '@core/ui/vault/swap/form/info/VerifySwapFees'
+import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { useSwapKeysignPayloadQuery } from '@core/ui/vault/swap/keysignPayload/query'
 import { useFromAmount } from '@core/ui/vault/swap/state/fromAmount'
 import { useSwapFromCoin } from '@core/ui/vault/swap/state/fromCoin'
@@ -14,6 +15,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -56,6 +58,7 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
       <VerifyKeysignStart
         keysignPayloadQuery={keysignPayloadQuery}
         terms={translatedTerms}
+        swapQuote={swapQuote}
       >
         <ContainerWrapper radius={16}>
           <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
@@ -95,7 +98,7 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                 <IconWrapper>
                   <ArrowDownIcon />
                 </IconWrapper>
-                {t('to_min_payout')}
+                {t('swap_expected_payout')}
                 <HorizontalLine />
               </HStack>
               <HStack gap={12} alignItems="center">
@@ -110,6 +113,10 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                       'swap payload'
                     )
                     const { toAmountDecimal } = getRecordUnionValue(swapPayload)
+                    const toAmountLimit = getSwapToAmountLimit({
+                      swapPayload,
+                      toCoin,
+                    })
 
                     return (
                       <VStack gap={2}>
@@ -122,6 +129,14 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                             amount: parseFloat(toAmountDecimal),
                           }}
                         />
+                        {toAmountLimit !== null && (
+                          <Text size={13} color="shy">
+                            {`${t('to_min_payout')}: ${formatAmount(
+                              toAmountLimit,
+                              toCoin
+                            )}`}
+                          </Text>
+                        )}
                       </VStack>
                     )
                   }}
@@ -133,6 +148,12 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
         <VStack bgColor="foreground" gap={24} padding={12} radius={16}>
           <VerifySwapFees swapQuote={swapQuote} />
         </VStack>
+        <MatchQuery
+          value={keysignPayloadQuery}
+          success={keysignPayload => (
+            <SwapVerifyRecipient keysignPayload={keysignPayload} />
+          )}
+        />
       </VerifyKeysignStart>
     </>
   )

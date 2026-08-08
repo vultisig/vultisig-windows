@@ -1,4 +1,6 @@
+import { getAppSessionFieldsForApprovedChains } from '@core/extension/storage/appSessionChainAuthorization'
 import { useSetExclusiveVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
+import { userRejectedPopupResult } from '@core/inpage-provider/popup/error'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
 import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
@@ -24,6 +26,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMutation } from '@tanstack/react-query'
@@ -128,6 +131,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   context: { requestOrigin, requestFavicon },
 }) => {
   const { t } = useTranslation()
+  const shouldGrantAccountAccess = input.shouldGrantAccountAccess ?? true
   const allVaults = useVaults()
   const currentVaultId = useCurrentVaultId()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -135,6 +139,9 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const displayDomain = hostKey
 
   const chainFilter = input.chain
+  const approvedChains = Array.from(
+    new Set([...(input.chain ? [input.chain] : []), ...(input.chains ?? [])])
+  )
   const eligibleVaults = chainFilter
     ? allVaults.filter(
         vault =>
@@ -152,6 +159,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
     string | undefined
   >(undefined)
   const [view, setView] = useState<ConnectView>('connect')
+  const [hasAcknowledgedSiteRisk, setHasAcknowledgedSiteRisk] = useState(false)
 
   const userSelectionStillEligible =
     userSelectedVaultId !== undefined &&
@@ -172,6 +180,11 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           host: hostKey,
           url: requestOrigin,
           icon: requestFavicon,
+          isAccountAccessGranted: shouldGrantAccountAccess,
+          ...getAppSessionFieldsForApprovedChains({
+            chains: approvedChains,
+            selectedChain: input.chain,
+          }),
         }),
         setCurrentVaultId(vaultId),
       ])
@@ -189,7 +202,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
 
   const handleReject = () => {
     onFinish({
-      result: { error: new Error('User rejected the request') },
+      result: userRejectedPopupResult,
       shouldClosePopup: true,
     })
   }
@@ -198,9 +211,18 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
     ? eligibleVaults.find(vault => getVaultId(vault) === selectedVaultId)
     : undefined
 
+  // A site Blockaid flags as malicious blocks connecting until the user
+  // explicitly acknowledges the risk — gating both the Connect button and the
+  // vault-picker so neither path can silently connect past the warning.
+  const isMaliciousSite = siteScanQuery.data === 'malicious'
+  const isSiteBlocked = isMaliciousSite && !hasAcknowledgedSiteRisk
+
   const canConnect =
-    !isPending && !siteScanQuery.isPending && selectedVaultId !== undefined
-  const pickerLocked = isPending || siteScanQuery.isPending
+    !isPending &&
+    !siteScanQuery.isPending &&
+    selectedVaultId !== undefined &&
+    !isSiteBlocked
+  const pickerLocked = isPending || siteScanQuery.isPending || isSiteBlocked
 
   const header = (
     <PageHeader
@@ -225,6 +247,9 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
       <VStack fullHeight>
         {header}
         <PageContent gap={12} flexGrow scrollable>
+          {isMaliciousSite && (
+            <WarningBlock>{t('risky_site_detected')}</WarningBlock>
+          )}
           <Text color="supporting" size={12} weight={500}>
             {t('select_vault')}
           </Text>
@@ -273,7 +298,14 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           {isBlockaidEnabled && (
             <MatchQuery
               value={siteScanQuery}
-              success={value => <BlockaidSiteScanResult value={value} />}
+              success={value => (
+                <BlockaidSiteScanResult
+                  value={value}
+                  domain={displayDomain}
+                  isRiskAcknowledged={hasAcknowledgedSiteRisk}
+                  onAcknowledgeRisk={() => setHasAcknowledgedSiteRisk(true)}
+                />
+              )}
               pending={() => <BlockaidScanning />}
               error={() => <BlockaidNoScanStatus entity="site" />}
               inactive={() => <BlockaidScanStatusContainer />}

@@ -1,18 +1,42 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const FuelIcon: FC<SvgProps> = props => (
+export const FuelIcon = (props: SvgProps) => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
     {...props}
   >
-    <path d="M3 22H15M4 9H14M14 22V4C14 3.46957 13.7893 2.96086 13.4142 2.58579C13.0391 2.21071 12.5304 2 12 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V22M14 13H16C16.5304 13 17.0391 13.2107 17.4142 13.5858C17.7893 13.9609 18 14.4696 18 15V17C18 17.5304 18.2107 18.0391 18.5858 18.4142C18.9609 18.7893 19.4696 19 20 19C20.5304 19 21.0391 18.7893 21.4142 18.4142C21.7893 18.0391 22 17.5304 22 17V9.83C22.0002 9.56609 21.9482 9.30474 21.8469 9.06103C21.7457 8.81732 21.5972 8.59606 21.41 8.41L18 5" />
+    <path
+      d="M14.4004 9.5998V11.3998C14.4004 13.0566 15.7436 14.3998 17.4004 14.3998C19.0572 14.3998 20.4004 13.0566 20.4004 11.3998V8.3998L18.0004 4.7998"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.2 20.4004H3"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M4.80078 20.3996V5.99961C4.80078 4.67409 5.87526 3.59961 7.20078 3.59961H12.0008C13.3263 3.59961 14.4008 4.67409 14.4008 5.99961V20.3996"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M20.4 10.8004H19.8C18.8059 10.8004 18 9.99449 18 9.00041V7.20041C18 6.71525 18.2918 6.27761 18.7406 6.09185C19.1906 5.90729 19.7051 6.00869 20.0484 6.35201L21.2486 7.55225C21.4736 7.77725 21.6 8.08229 21.6 8.40041V9.60041C21.6 10.2632 21.0628 10.8004 20.4 10.8004Z"
+      fill="currentColor"
+    />
+    <path
+      d="M14.4008 9.59961H4.80078V20.3996H14.4008V9.59961Z"
+      fill="currentColor"
+    />
   </svg>
 )

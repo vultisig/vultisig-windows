@@ -4,6 +4,7 @@ import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { TitleProp } from '@lib/ui/props'
+import { PromptSheet } from '@lib/ui/sheet/PromptSheet'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { RiskLevel } from '@vultisig/core-chain/security/blockaid/core/riskLevel'
@@ -24,6 +25,45 @@ const DismissButton = styled(UnstyledButton)`
   &:hover {
     color: ${getColor('danger')};
   }
+`
+
+const SheetAttribution = styled.div`
+  ${text({
+    color: 'supporting',
+    variant: 'caption',
+    centerVertically: { gap: 4 },
+  })}
+  margin: 0;
+  justify-content: center;
+`
+
+const SheetTitle = styled.p<{ $color: string }>`
+  ${text({
+    size: 22,
+    weight: 500,
+    height: 24 / 22,
+    centerHorizontally: true,
+  })}
+  color: ${({ $color }) => $color};
+  margin: 0;
+`
+
+const SheetDescription = styled.p`
+  ${text({
+    color: 'supporting',
+    size: 14,
+    weight: 500,
+    height: 20 / 14,
+    centerHorizontally: true,
+  })}
+  margin: 0;
+`
+
+const SheetActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 `
 
 type BlockaidOverlayProps = TitleProp & {
@@ -49,6 +89,38 @@ export const BlockaidOverlay = ({
   const { goBack } = useCore()
 
   if (isDismissed) return null
+
+  if (riskLevel === 'medium') {
+    return (
+      <PromptSheet
+        eyebrow={
+          <SheetAttribution>
+            <Trans
+              i18nKey="powered_by"
+              components={{ provider: <BlockaidLogo /> }}
+            />
+          </SheetAttribution>
+        }
+        icon={<Icon fontSize={24} style={{ color }} />}
+        title={<SheetTitle $color={color}>{title}</SheetTitle>}
+        description={
+          description ? (
+            <SheetDescription>{description}</SheetDescription>
+          ) : null
+        }
+        actions={
+          <SheetActions>
+            <Button onClick={goBack}>{t('go_back')}</Button>
+            <DismissButton onClick={dismiss}>
+              {t('continue_anyway')}
+            </DismissButton>
+          </SheetActions>
+        }
+        isDismissable={false}
+        onClose={dismiss}
+      />
+    )
+  }
 
   return (
     <Modal

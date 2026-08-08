@@ -22,7 +22,7 @@ const meta: Meta<typeof Hoverable> = {
   },
 }
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj
 
 export const Playground: Story = {
   render: args => (

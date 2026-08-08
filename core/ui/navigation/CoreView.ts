@@ -3,8 +3,10 @@ import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInp
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { QbtcVoteSelection } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/proposal'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@vultisig/core-mpc/types/vultisig/keygen/v1/keygen_message_pb'
@@ -47,7 +49,6 @@ export type CoreView =
     }
   | { id: 'referral' }
   | { id: 'importVault' }
-  | { id: 'shareVault' }
   | {
       id: 'joinKeygen'
       state: {
@@ -66,6 +67,7 @@ export type CoreView =
         keysignPayload: KeysignMessagePayload
         password?: string
         toAddressLabel?: string
+        swapQuote?: SwapQuote
       }
     }
   | { id: 'languageSettings' }
@@ -86,6 +88,7 @@ export type CoreView =
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {
         address?: string
         amount?: bigint
+        destinationTag?: string
         memo?: string
         skipToVerify?: boolean
       }
@@ -98,7 +101,11 @@ export type CoreView =
     }
   | {
       id: 'setupVault'
-      state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
+      state: {
+        type?: VaultSecurityType
+        keyImportInput?: KeyImportInput
+        skipStationMigration?: boolean
+      }
     }
   | {
       id: 'setupVaultOverview'
@@ -123,11 +130,19 @@ export type CoreView =
   | { id: 'manageDefiChains' }
   | { id: 'manageDefiPositions'; state: { chain: Chain; returnTab?: string } }
   | {
+      id: 'tonStake'
+      state: {
+        existingPoolAddress?: string
+        existingPoolImplementation?: string
+      }
+    }
+  | {
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }
   | { id: 'transactionDetail'; state: { id: string } }
   | { id: 'transactionHistory' }
+  | { id: 'limitOrders' }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }
@@ -137,12 +152,21 @@ export type CoreView =
   | { id: 'vaults' }
   | { id: 'renameVault' }
   | { id: 'vaultSettings' }
+  | { id: 'vaultSettingsAdvanced' }
+  | { id: 'customRpc' }
+  | { id: 'customRpcDetail'; state: { chain: Chain } }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
   | { id: 'passcodeAutoLock' }
   | { id: 'requestFastVaultBackup' }
   | { id: 'vultDiscount' }
   | { id: 'qbtcClaim' }
+  | { id: 'qbtcQuantumSecurityOnboarding' }
+  | { id: 'qbtcGovernanceProposal'; state: { proposalId: string } }
+  | {
+      id: 'qbtcGovernanceVote'
+      state: { proposalId: string; vote: QbtcVoteSelection }
+    }
 
 export type CoreViewId = CoreView['id']
 

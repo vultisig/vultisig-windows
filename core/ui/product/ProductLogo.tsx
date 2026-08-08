@@ -1,6 +1,9 @@
 import { SVGProps } from 'react'
 
-export const ProductLogo = (props: SVGProps<SVGSVGElement>) => (
+import { currentProductBrand } from './brand'
+import { StationProductLogo } from './StationProductLogo'
+
+const VultisigProductLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width="1em"
     height="1em"
@@ -103,3 +106,10 @@ export const ProductLogo = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 )
+
+export const ProductLogo = (props: SVGProps<SVGSVGElement>) =>
+  currentProductBrand === 'station' ? (
+    <StationProductLogo {...props} />
+  ) : (
+    <VultisigProductLogo {...props} />
+  )

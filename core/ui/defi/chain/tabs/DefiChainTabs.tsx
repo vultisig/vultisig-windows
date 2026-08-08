@@ -2,7 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Tabs } from '@lib/ui/base/Tabs'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -18,6 +18,11 @@ export const DefiChainTabs = () => {
   const { t } = useTranslation()
   const chain = useCurrentDefiChain()
   const includeBonding = chain === Chain.THORChain || chain === Chain.MayaChain
+  // LP positions are only modeled for THORChain / MayaChain — the LpPositions
+  // tab queries their LP services and would render empty for other chains.
+  const includeLps = chain === Chain.THORChain || chain === Chain.MayaChain
+  // QBTC is the only chain exposing the in-app governance segment.
+  const includeGovernance = chain === Chain.QBTC
 
   const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
@@ -26,8 +31,13 @@ export const DefiChainTabs = () => {
   const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const tabs = useMemo(
-    () => getDefiChainTabs(t, { includeBonded: includeBonding }),
-    [t, includeBonding]
+    () =>
+      getDefiChainTabs(t, {
+        includeBonded: includeBonding,
+        includeLps,
+        includeGovernance,
+      }),
+    [t, includeBonding, includeLps, includeGovernance]
   )
 
   useEffect(() => {
@@ -75,7 +85,7 @@ export const DefiChainTabs = () => {
             }}
             size="lg"
           >
-            <CryptoWalletPenIcon />
+            <HousePenIcon />
           </IconButton>
         </TabsHeader>
       )}

@@ -1,13 +1,13 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 import { SearchChain } from './controls/SearchChain'
 
@@ -60,6 +60,7 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               <IconButton
+                data-testid="manage-chains-button"
                 kind="secondary"
                 onClick={() => navigate({ id: 'manageVaultChains' })}
                 style={{
@@ -67,7 +68,7 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
                 }}
                 size="lg"
               >
-                <CryptoWalletPenIcon />
+                <HousePenIcon />
               </IconButton>
             </ManageButtonMotion>
           )}
@@ -85,6 +86,12 @@ const Wrapper = styled.div`
   })};
 
   margin-bottom: 16px;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      margin-bottom: 12px;
+    `}
 `
 
 const TabsHeaderContainer = styled.div`
@@ -102,6 +109,12 @@ const TrailingGroup = styled(motion.div)`
   align-items: center;
   justify-content: flex-end;
   min-width: 0;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      gap: 12px;
+    `}
 `
 
 const SearchArea = styled(motion.div)`
@@ -109,6 +122,12 @@ const SearchArea = styled(motion.div)`
   justify-content: flex-end;
   min-width: 0;
   overflow: hidden;
+
+  ${({ theme }) =>
+    theme.iconStyle === 'station' &&
+    css`
+      align-items: center;
+    `}
 `
 
 const ManageButtonMotion = styled(motion.div)`
