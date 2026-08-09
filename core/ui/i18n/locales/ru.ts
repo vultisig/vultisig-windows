@@ -56,7 +56,6 @@ export const ru = {
   approval_tx: 'Tx подтверждения',
   approve: 'Подтвердить',
   reject: 'Отклонить',
-  applied_discounts: 'Примененные скидки:',
   asset: 'Актив',
   assets: 'активы',
   at_least_one_device: 'Минимум одно устройство',
@@ -558,7 +557,6 @@ export const ru = {
     'Управлять уведомлениями можно в системных настройках.',
   max: 'Макс',
   max_4_characters: 'Макс 4 символа',
-  max_total_fees: 'Макс. общая комиссия',
   memo: 'Memo',
   merge: 'Объединить',
   merged: 'Объединено',
@@ -941,7 +939,7 @@ export const ru = {
   token_not_found_description:
     'Возможные причины: неверный контракт, неподдерживаемая сеть или токен удалён из реестров.',
   token_not_found_invalid: 'Неверный адрес договора',
-  total_fee: 'Итого комиссий',
+  total_fee: 'Общая сумма комиссии',
   track: 'Отслеживать',
   transaction: 'Транзакция',
   transaction_details: 'Детали транзакции',
@@ -1845,4 +1843,9 @@ export const ru = {
     'Сумма изменена на {{amount}}, чтобы покрыть комиссию сети',
   swap_limit_cancel_records_unavailable:
     'Не удалось загрузить историю ваших транзакций. Попробуйте еще раз чуть позже — ваш заказ не затронут.',
+  price_impact: 'Влияние цены',
+  swap_fee_included_in_rate: 'Включено в указанную стоимость',
+  swap_protocol_fee: 'Протокольный сбор',
+  swap_referral_fee: 'Комиссионное вознаграждение за привлечение клиентов',
+  swap_affiliate_fee_noun: 'Платеж',
 }

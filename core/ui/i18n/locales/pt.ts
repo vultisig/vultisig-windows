@@ -58,7 +58,6 @@ export const pt = {
   approval_tx: 'Aprovação Tx',
   approve: 'Aprovar',
   reject: 'Rejeitar',
-  applied_discounts: 'Descontos aplicados:',
   asset: 'Ativo',
   assets: 'Ativos',
   at_least_one_device: 'Pelo menos um dispositivo',
@@ -568,7 +567,6 @@ export const pt = {
     'Você pode gerenciar as notificações nas configurações do sistema.',
   max: 'Máximo',
   max_4_characters: 'Máximo de 4 caracteres',
-  max_total_fees: 'Taxa máxima total',
   memo: 'Memorando',
   merge: 'Fusão',
   merged: 'Fundido',
@@ -955,7 +953,7 @@ export const pt = {
   token_not_found_description:
     'Possíveis motivos: contrato incorreto, blockchain não suportada ou token removido dos registros.',
   token_not_found_invalid: 'Endereço de contrato inválido',
-  total_fee: 'Taxas totais',
+  total_fee: 'Taxa total',
   track: 'Acompanhar',
   transaction: 'Transação',
   transaction_details: 'Detalhes da transação',
@@ -1868,4 +1866,9 @@ export const pt = {
     'Valor ajustado para {{amount}} para cobrir a taxa de rede.',
   swap_limit_cancel_records_unavailable:
     'Não foi possível carregar seu histórico de transações. Tente novamente em breve — seu pedido não foi afetado.',
+  price_impact: 'Impacto no preço',
+  swap_fee_included_in_rate: 'Incluído no preço cotado',
+  swap_protocol_fee: 'Taxa de protocolo',
+  swap_referral_fee: 'Taxa de encaminhamento',
+  swap_affiliate_fee_noun: 'Taxa',
 }

@@ -56,7 +56,6 @@ export const hr = {
   approval_tx: 'Odobrenje slanja',
   approve: 'Odobriti',
   reject: 'Odbiti',
-  applied_discounts: 'Primijenjeni popusti:',
   asset: 'Imovina',
   assets: 'Imovina',
   at_least_one_device: 'Barem jedan uređaj',
@@ -558,7 +557,6 @@ export const hr = {
     'Obavijestima možete upravljati u postavkama sustava.',
   max: 'Maks.',
   max_4_characters: 'Maks. 4 znaka',
-  max_total_fees: 'Maks. ukupna naknada',
   memo: 'Dopis',
   merge: 'Spojiti',
   merged: 'Spojeno',
@@ -948,7 +946,7 @@ export const hr = {
   token_not_found_description:
     'Mogući razlozi: pogrešan ugovor, nepodržani lanac ili token uklonjen iz registara.',
   token_not_found_invalid: 'Nevažeća adresa ugovora',
-  total_fee: 'Ukupne naknade',
+  total_fee: 'Ukupna naknada',
   track: 'Staza',
   transaction: 'Transakcija',
   transaction_details: 'Detalji transakcije',
@@ -1837,4 +1835,9 @@ export const hr = {
     'Iznos prilagođen na {{amount}} za pokrivanje mrežne naknade',
   swap_limit_cancel_records_unavailable:
     'Nije moguće učitati vašu povijest transakcija. Pokušajte ponovno uskoro — vaša narudžba ostaje nepromijenjena.',
+  price_impact: 'Utjecaj na cijenu',
+  swap_fee_included_in_rate: 'Uključeno u navedenu cijenu',
+  swap_protocol_fee: 'Naknada za protokol',
+  swap_referral_fee: 'Naknada za preporuku',
+  swap_affiliate_fee_noun: 'Pristojba',
 }

@@ -58,7 +58,6 @@ export const it = {
   approval_tx: 'Approvazione Tx',
   approve: 'Approvare',
   reject: 'Rifiutare',
-  applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
   assets: 'Attività',
   at_least_one_device: 'Almeno un dispositivo',
@@ -571,7 +570,6 @@ export const it = {
     'È possibile gestire le notifiche nelle impostazioni di sistema.',
   max: 'Massimo',
   max_4_characters: 'Massimo 4 caratteri',
-  max_total_fees: 'Commissione totale massima',
   memo: 'Promemoria',
   merge: 'Unisci',
   merged: 'Unito',
@@ -959,7 +957,7 @@ export const it = {
   token_not_found_description:
     'Possibili motivi: contratto errato, catena non supportata o token rimosso dai registri.',
   token_not_found_invalid: 'Indirizzo contrattuale non valido',
-  total_fee: 'Totale commissioni',
+  total_fee: 'Costo totale',
   track: 'Traccia',
   transaction: 'Transazione',
   transaction_details: 'Dettagli della transazione',
@@ -1871,4 +1869,9 @@ export const it = {
     'Importo modificato in {{amount}} per coprire la commissione di rete',
   swap_limit_cancel_records_unavailable:
     'Impossibile caricare la cronologia delle transazioni. Riprova tra poco: il tuo ordine non è stato modificato.',
+  price_impact: 'Impatto sul prezzo',
+  swap_fee_included_in_rate: 'Incluso nel prezzo indicato',
+  swap_protocol_fee: 'Tariffa del protocollo',
+  swap_referral_fee: 'Commissione di segnalazione',
+  swap_affiliate_fee_noun: 'Tassa',
 }

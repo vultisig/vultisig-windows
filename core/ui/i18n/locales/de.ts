@@ -58,7 +58,6 @@ export const de = {
   approval_tx: 'Genehmigung Tx',
   approve: 'Genehmigen',
   reject: 'Ablehnen',
-  applied_discounts: 'Angewandte Rabatte:',
   asset: 'Vermögenswert',
   assets: 'Vermögenswerte',
   at_least_one_device: 'Mindestens ein Gerät',
@@ -572,7 +571,6 @@ export const de = {
     'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
   max: 'Max',
   max_4_characters: 'Maximal 4 Zeichen',
-  max_total_fees: 'Maximale Gesamtgebühr',
   memo: 'Memo',
   merge: 'Verschmelzen',
   merged: 'Zusammengeführt',
@@ -964,7 +962,7 @@ export const de = {
   token_not_found_description:
     'Mögliche Gründe: falscher Vertrag, nicht unterstützte Blockchain oder Token aus den Registern entfernt.',
   token_not_found_invalid: 'Ungültige Vertragsadresse',
-  total_fee: 'Gesamtgebühren',
+  total_fee: 'Gesamtgebühr',
   track: 'Schiene',
   transaction: 'Transaktion',
   transaction_details: 'Transaktionsdetails',
@@ -1881,4 +1879,9 @@ export const de = {
     'Der Betrag wurde auf {{amount}} angepasst, um die Netzwerkgebühr zu decken.',
   swap_limit_cancel_records_unavailable:
     'Ihre Transaktionshistorie konnte nicht geladen werden. Bitte versuchen Sie es später erneut – Ihre Bestellung ist davon nicht betroffen.',
+  price_impact: 'Preisauswirkung',
+  swap_fee_included_in_rate: 'Im angegebenen Preis enthalten',
+  swap_protocol_fee: 'Protokollgebühr',
+  swap_referral_fee: 'Vermittlungsgebühr',
+  swap_affiliate_fee_noun: 'Gebühr',
 }

@@ -56,7 +56,6 @@ export const es = {
   approval_tx: 'Aprobación Tx',
   approve: 'Aprobar',
   reject: 'Rechazar',
-  applied_discounts: 'Descuentos aplicados:',
   asset: 'Activo',
   assets: 'Activos',
   at_least_one_device: 'Al menos un dispositivo',
@@ -566,7 +565,6 @@ export const es = {
     'Puedes gestionar las notificaciones en la configuración del sistema.',
   max: 'Máximo',
   max_4_characters: 'Máximo 4 caracteres',
-  max_total_fees: 'Tarifa total máxima',
   memo: 'Memorándum',
   merge: 'Unir',
   merged: 'Fusionado',
@@ -957,7 +955,7 @@ export const es = {
   token_not_found_description:
     'Posibles razones: contrato incorrecto, cadena no compatible o token eliminado de los registros.',
   token_not_found_invalid: 'Dirección de contrato no válida',
-  total_fee: 'Tarifas totales',
+  total_fee: 'Tarifa total',
   track: 'Pista',
   transaction: 'Transacción',
   transaction_details: 'Detalles de la transacción',
@@ -1865,4 +1863,9 @@ export const es = {
     'Importe ajustado a {{amount}} para cubrir la comisión de red.',
   swap_limit_cancel_records_unavailable:
     'No se pudo cargar el historial de transacciones. Inténtelo de nuevo en breve; su pedido no se ha visto afectado.',
+  price_impact: 'Impacto en los precios',
+  swap_fee_included_in_rate: 'Incluido en la tarifa cotizada',
+  swap_protocol_fee: 'Tarifa de protocolo',
+  swap_referral_fee: 'Comisión por recomendación',
+  swap_affiliate_fee_noun: 'Tarifa',
 }

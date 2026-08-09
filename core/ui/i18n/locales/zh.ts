@@ -54,7 +54,6 @@ export const zh = {
   approval_tx: '批准 Tx',
   approve: '批准',
   reject: '拒绝',
-  applied_discounts: '已应用折扣：',
   asset: '资产',
   assets: '资产',
   at_least_one_device: '至少一台设备',
@@ -519,7 +518,6 @@ export const zh = {
   manage_notifications_in_settings: '您可以在系统设置中管理通知。',
   max: '最大限度',
   max_4_characters: '最多 4 个字符',
-  max_total_fees: '最高总费用',
   memo: '备忘录',
   merge: '合并',
   merged: '合并',
@@ -1715,4 +1713,9 @@ export const zh = {
   send_amount_adjusted_for_fee: '金额已调整为 {{amount}}，以支付网络费用',
   swap_limit_cancel_records_unavailable:
     '无法加载您的交易记录。请稍后再试——您的订单不受影响。',
+  price_impact: '价格影响',
+  swap_fee_included_in_rate: '包含在报价中',
+  swap_protocol_fee: '协议费',
+  swap_referral_fee: '推荐费',
+  swap_affiliate_fee_noun: '费用',
 }

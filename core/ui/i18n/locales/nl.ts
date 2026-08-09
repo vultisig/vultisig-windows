@@ -57,7 +57,6 @@ export const nl = {
   approval_tx: 'Goedkeurings-tx',
   approve: 'Goedkeuren',
   reject: 'Weigeren',
-  applied_discounts: 'Toegepaste kortingen:',
   asset: 'Asset',
   assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
@@ -561,7 +560,6 @@ export const nl = {
     'Je kunt meldingen beheren in de systeeminstellingen.',
   max: 'Max',
   max_4_characters: 'Max 4 tekens',
-  max_total_fees: 'Max. totale fee',
   memo: 'Memo',
   merge: 'Samenvoegen',
   merged: 'Samengevoegd',
@@ -944,7 +942,7 @@ export const nl = {
   token_not_found_description:
     'Mogelijke redenen: verkeerd contract, niet-ondersteunde chain, of token verwijderd uit registries.',
   token_not_found_invalid: 'Ongeldig contractadres',
-  total_fee: 'Totale fees',
+  total_fee: 'Totale kosten',
   track: 'Volgen',
   transaction: 'Transactie',
   transaction_details: 'Transactiedetails',
@@ -1849,4 +1847,9 @@ export const nl = {
     'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
   swap_limit_cancel_records_unavailable:
     'Uw transactiegeschiedenis kon niet worden geladen. Probeer het over een tijdje opnieuw. Uw bestelling blijft ongewijzigd.',
+  price_impact: 'Prijsimpact',
+  swap_fee_included_in_rate: 'Inbegrepen in de vermelde prijs',
+  swap_protocol_fee: 'Protocolkosten',
+  swap_referral_fee: 'Verwijzingsvergoeding',
+  swap_affiliate_fee_noun: 'Tarief',
 }
