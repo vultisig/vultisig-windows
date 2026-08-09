@@ -1849,4 +1849,13 @@ export const nl = {
     'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
   swap_limit_cancel_records_unavailable:
     'Uw transactiegeschiedenis kon niet worden geladen. Probeer het over een tijdje opnieuw. Uw bestelling blijft ongewijzigd.',
+  swap_all_providers_failed:
+    'Swapaanbieders zijn tijdelijk niet beschikbaar. Probeer het zo opnieuw.',
+  swap_amount_below_minimum:
+    'Verhoog het bedrag tot het minimale swapbedrag van de aanbieder.',
+  swap_amount_too_small:
+    'Voer een hoger bedrag in om een swapofferte te krijgen.',
+  swap_invalid_config:
+    'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
+  swap_no_routes_found: 'Er is geen swaproute beschikbaar voor dit activapaar.',
 }

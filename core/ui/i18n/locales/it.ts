@@ -1871,4 +1871,14 @@ export const it = {
     'Importo modificato in {{amount}} per coprire la commissione di rete',
   swap_limit_cancel_records_unavailable:
     'Impossibile caricare la cronologia delle transazioni. Riprova tra poco: il tuo ordine non è stato modificato.',
+  swap_all_providers_failed:
+    'I provider di swap non sono temporaneamente disponibili. Riprova tra poco.',
+  swap_amount_below_minimum:
+    "Aumenta l'importo per raggiungere il minimo del provider.",
+  swap_amount_too_small:
+    'Inserisci un importo maggiore per ottenere un preventivo.',
+  swap_invalid_config:
+    'Rivedi i dettagli dello scambio, il destinatario e le impostazioni avanzate, quindi riprova.',
+  swap_no_routes_found:
+    'Non è disponibile alcuna rotta di swap per questa coppia di asset.',
 }

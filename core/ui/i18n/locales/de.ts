@@ -1881,4 +1881,13 @@ export const de = {
     'Der Betrag wurde auf {{amount}} angepasst, um die Netzwerkgebühr zu decken.',
   swap_limit_cancel_records_unavailable:
     'Ihre Transaktionshistorie konnte nicht geladen werden. Bitte versuchen Sie es später erneut – Ihre Bestellung ist davon nicht betroffen.',
+  swap_all_providers_failed:
+    'Die Swap-Anbieter sind vorübergehend nicht erreichbar. Bitte versuche es gleich noch einmal.',
+  swap_amount_below_minimum:
+    'Erhöhe den Betrag, um den Mindesttauschbetrag des Anbieters zu erreichen.',
+  swap_amount_too_small:
+    'Gib einen größeren Betrag ein, um ein Tauschangebot zu erhalten.',
+  swap_invalid_config:
+    'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
+  swap_no_routes_found: 'Für dieses Asset-Paar ist keine Swap-Route verfügbar.',
 }
