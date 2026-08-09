@@ -1671,6 +1671,7 @@ export const ko = {
     '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
   plugin_store_compatible: '플러그인 스토어 호환 가능',
   open_trust_line: '오픈 트러스트 라인',
+  trust_line: '트러스트 라인',
   trust_line_limit: '신뢰 한도',
   trust_line_issuer: '발행자',
   trust_line_currency: '통화',

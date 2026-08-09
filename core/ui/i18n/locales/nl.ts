@@ -1688,6 +1688,7 @@ export const nl = {
     'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
   plugin_store_compatible: 'Compatibel met de Plugin Store',
   open_trust_line: 'Open vertrouwenslijn',
+  trust_line: 'Vertrouwenslijn',
   trust_line_limit: 'Vertrouwenslimiet',
   trust_line_issuer: 'Uitgever',
   trust_line_currency: 'Munteenheid',

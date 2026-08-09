@@ -1,4 +1,5 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { parseRippleTokenId } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import { decodeCowSwapKeysignData } from '@vultisig/core-chain/swap/general/cowswap/keysign/cowSwapKeysignData'
 import { getThorchainCancelMemoAsset } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
@@ -28,6 +29,8 @@ import {
   SwapTransactionData,
   SwapTransactionRecord,
   TransactionRecord,
+  TrustLineTransactionData,
+  TrustLineTransactionRecord,
 } from '../core'
 import { getPrimaryCosmosMessageTypeUrl } from './getPrimaryCosmosMessageTypeUrl'
 
@@ -123,6 +126,61 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
     decimals: coin.decimals,
     memo: payload.memo || undefined,
     messageTypeUrl: getPrimaryCosmosMessageTypeUrl(payload),
+  }
+}
+
+/**
+ * Whether this payload opens or modifies an XRPL trust line.
+ *
+ * The coin's shape alone does not answer this. `toCommCoin` gives every
+ * non-fee coin a `contractAddress` and `isNativeToken: false`, so a plain send
+ * of an issued token the vault already holds is shaped exactly like a TrustSet
+ * — and classifying that as a trust line would hide a real payment behind a
+ * record that shows no amount at all.
+ *
+ * What separates them is who the payload is addressed to: a TrustSet names the
+ * *issuer*, the party being trusted, while a send names a recipient. A verbatim
+ * dApp transaction (`signRipple`) is excluded outright — it is signed as
+ * supplied and may be an offer rather than a TrustSet.
+ *
+ * This is inference, and one case still escapes it: sending a token back to its
+ * own issuer to redeem it. `RippleSpecific.transaction_type` states the
+ * operation outright and settles it for good; prefer that field here once every
+ * platform sets it.
+ */
+const isRippleTrustSetPayload = (payload: KeysignPayload): boolean => {
+  const { coin } = payload
+
+  if (
+    payload.signData.case === 'signRipple' ||
+    !coin ||
+    coin.chain !== Chain.Ripple ||
+    coin.isNativeToken ||
+    !coin.contractAddress
+  ) {
+    return false
+  }
+
+  const issuer = attempt(() => parseRippleTokenId(coin.contractAddress).issuer)
+
+  return 'data' in issuer && issuer.data === payload.toAddress
+}
+
+const createTrustLineData = (
+  payload: KeysignPayload
+): TrustLineTransactionData => {
+  const coin = getKeysignCoin(payload)
+
+  return {
+    fromAddress: coin.address,
+    // The TrustSet names the issuer, which the payload carries as `toAddress`
+    // only because a keysign payload has nowhere else to put it.
+    issuer: payload.toAddress,
+    token: coin.ticker,
+    tokenLogo: coin.logo ?? emptyLogoFallback,
+    tokenId: shouldBePresent(coin.id, 'trust line token id'),
+    limit: payload.toAmount,
+    decimals: coin.decimals,
   }
 }
 
@@ -283,6 +341,17 @@ export const createTransactionRecord = ({
       type: 'swap',
       data: createSwapData(payload),
     } satisfies SwapTransactionRecord
+  }
+
+  // Before the send fallback: a TrustSet transfers nothing, and its amount is
+  // the line's LIMIT. Recording it as a send renders that ceiling as an
+  // enormous outgoing payment to the issuer of a token that never moved.
+  if (isRippleTrustSetPayload(payload)) {
+    return {
+      ...base,
+      type: 'trustLine',
+      data: createTrustLineData(payload),
+    } satisfies TrustLineTransactionRecord
   }
 
   return {

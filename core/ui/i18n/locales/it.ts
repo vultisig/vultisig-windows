@@ -1710,6 +1710,7 @@ export const it = {
     'La condivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
   plugin_store_compatible: 'Compatibile con Plugin Store',
   open_trust_line: 'Linea di fiducia aperta',
+  trust_line: 'Linea di fiducia',
   trust_line_limit: 'Limite di fiducia',
   trust_line_issuer: 'Emittente',
   trust_line_currency: 'Valuta',

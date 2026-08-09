@@ -13,7 +13,9 @@ import {
   SendTransactionRecord,
   SwapTransactionRecord,
   TransactionRecordStatus,
+  TrustLineTransactionRecord,
 } from '@core/ui/transaction-history/core'
+import { getRecordTagType } from '@core/ui/transaction-history/recordTagType'
 import { useTransactionStatusPolling } from '@core/ui/transaction-history/status/useTransactionStatusPolling'
 import { TransactionHistoryTag } from '@core/ui/transaction-history/TransactionHistoryTag'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -48,6 +50,7 @@ import { thorchainAssetPrefixToChain } from '@vultisig/core-chain/swap/native/th
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { match } from '@vultisig/lib-utils/match'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -218,6 +221,56 @@ const SendDetailPanel = ({ record }: { record: SendTransactionRecord }) => {
         )}
       </SeparatedByLine>
     </Panel>
+  )
+}
+
+/**
+ * A trust line has no amount — it authorises an issuer rather than moving
+ * anything — so this shows what was actually agreed: the issuer, and the
+ * ceiling the account will hold.
+ */
+const TrustLineDetailPanel = ({
+  record,
+}: {
+  record: TrustLineTransactionRecord
+}) => {
+  const { t } = useTranslation()
+  const { data } = record
+
+  return (
+    <>
+      <AmountCard gap={12} alignItems="center">
+        {data.tokenLogo && (
+          <CoinIcon
+            coin={{
+              chain: record.chain,
+              id: data.tokenId,
+              logo: data.tokenLogo,
+            }}
+            style={{ fontSize: 48 }}
+          />
+        )}
+        <Text size={18} weight={500} centerHorizontally>
+          {data.token}
+        </Text>
+      </AmountCard>
+      <Panel>
+        <SeparatedByLine gap={12}>
+          <DetailRow label={t('from')}>
+            <MiddleTruncate text={data.fromAddress} width={160} />
+          </DetailRow>
+          <DetailRow label={t('trust_line_issuer')}>
+            <MiddleTruncate text={data.issuer} width={160} />
+          </DetailRow>
+          <DetailRow label={t('trust_line_limit')}>
+            <Text>
+              {formatCryptoDisplay(safeBigInt(data.limit), data.decimals)}{' '}
+              {data.token}
+            </Text>
+          </DetailRow>
+        </SeparatedByLine>
+      </Panel>
+    </>
   )
 }
 
@@ -492,10 +545,13 @@ export const TransactionDetailPage = () => {
       <VStack gap={20} alignItems="stretch">
         <VStack alignItems="center">
           <TransactionHistoryTag
-            type={record.type === 'limitSwap' ? 'swap' : record.type}
-            label={
-              record.type === 'limitSwap' ? t('swap_mode_limit') : undefined
-            }
+            type={getRecordTagType(record.type)}
+            label={match(record.type, {
+              send: () => undefined,
+              swap: () => undefined,
+              limitSwap: () => t('swap_mode_limit'),
+              trustLine: () => t('trust_line'),
+            })}
           />
         </VStack>
 
@@ -511,6 +567,10 @@ export const TransactionDetailPage = () => {
             <SwapAmountDisplay record={record} />
             <SwapDetailPanel record={record} />
           </>
+        )}
+
+        {record.type === 'trustLine' && (
+          <TrustLineDetailPanel record={record} />
         )}
 
         {record.type === 'limitSwap' && (

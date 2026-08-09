@@ -61,8 +61,11 @@ export type TransactionHistoryCardProps = {
    * lifecycle — "Open", "Expired" — instead of the generic tx wording.
    */
   statusLabel?: string
-  /** USD amount, e.g. "$1,000.54". */
-  amountUsd: string
+  /**
+   * USD amount, e.g. "$1,000.54". Omit for records that move no value — the
+   * line is dropped entirely rather than rendered blank.
+   */
+  amountUsd?: string
   /** Crypto amount without symbol, e.g. "1,000.12". */
   amountCrypto: string
   /** Symbol, e.g. "RUNE", "SOL", "ETH". */
@@ -123,9 +126,11 @@ export const TransactionHistoryCard = ({
                 {symbol}
               </Text>
             </Text>
-            <Text variant="footnote" color="shy">
-              {amountUsd}
-            </Text>
+            {amountUsd ? (
+              <Text variant="footnote" color="shy">
+                {amountUsd}
+              </Text>
+            ) : null}
           </AmountTextStack>
         </AmountBlock>
         {'direction' in pill && (

@@ -1719,6 +1719,7 @@ export const de = {
     'Die erneute Freigabe wurde aufgrund schlechter Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
   plugin_store_compatible: 'Plugin Store-kompatibel',
   open_trust_line: 'Vertrauenslinie öffnen',
+  trust_line: 'Vertrauenslinie',
   trust_line_limit: 'Vertrauensgrenze',
   trust_line_issuer: 'Emittent',
   trust_line_currency: 'Währung',

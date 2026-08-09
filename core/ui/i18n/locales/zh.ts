@@ -1572,6 +1572,7 @@ export const zh = {
     '由于网络连接不佳，重新共享速度变慢。您可以重试或等待重新连接。',
   plugin_store_compatible: '兼容插件商店',
   open_trust_line: '开放信任线',
+  trust_line: '信任线',
   trust_line_limit: '信任限额',
   trust_line_issuer: '发行人',
   trust_line_currency: '货币',
