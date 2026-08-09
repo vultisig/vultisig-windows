@@ -380,11 +380,16 @@ export const PendingTransactionProgressCard = ({
         </InProgressBadge>
       </TopRow>
 
+      {/*
+       * `trustLine` renders nothing: a TrustSet confirms in seconds and has no
+       * amount to track, so the tag above already says everything this card
+       * could.
+       */}
       {record.type === 'send' ? (
         <SendProgressContent record={record} />
       ) : record.type === 'limitSwap' ? (
         <LimitSwapProgressContent record={record} />
-      ) : record.type === 'trustLine' ? null : ( // above already says everything this card can. // A TrustSet confirms in seconds and has no amount to track, so the tag
+      ) : record.type === 'trustLine' ? null : (
         <SwapProgressContent record={record} />
       )}
     </ProgressCard>

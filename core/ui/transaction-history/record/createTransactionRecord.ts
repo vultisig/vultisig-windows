@@ -1,4 +1,5 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { parseRippleTokenId } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import { decodeCowSwapKeysignData } from '@vultisig/core-chain/swap/general/cowswap/keysign/cowSwapKeysignData'
 import { getThorchainCancelMemoAsset } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
@@ -131,22 +132,38 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
 /**
  * Whether this payload opens or modifies an XRPL trust line.
  *
- * Mirrors how the signer decides: an issued-currency coin on a Ripple payload
- * builds a TrustSet, while a verbatim dApp transaction (`signRipple`) is signed
- * as supplied and never rebuilt from the coin. Once every platform sets
- * `RippleSpecific.transaction_type`, this can prefer that field instead of
- * inferring it — the shapes agree either way for anything we originate.
+ * The coin's shape alone does not answer this. `toCommCoin` gives every
+ * non-fee coin a `contractAddress` and `isNativeToken: false`, so a plain send
+ * of an issued token the vault already holds is shaped exactly like a TrustSet
+ * — and classifying that as a trust line would hide a real payment behind a
+ * record that shows no amount at all.
+ *
+ * What separates them is who the payload is addressed to: a TrustSet names the
+ * *issuer*, the party being trusted, while a send names a recipient. A verbatim
+ * dApp transaction (`signRipple`) is excluded outright — it is signed as
+ * supplied and may be an offer rather than a TrustSet.
+ *
+ * This is inference, and one case still escapes it: sending a token back to its
+ * own issuer to redeem it. `RippleSpecific.transaction_type` states the
+ * operation outright and settles it for good; prefer that field here once every
+ * platform sets it.
  */
 const isRippleTrustSetPayload = (payload: KeysignPayload): boolean => {
   const { coin } = payload
 
-  return (
-    payload.signData.case !== 'signRipple' &&
-    !!coin &&
-    coin.chain === Chain.Ripple &&
-    !coin.isNativeToken &&
-    !!coin.contractAddress
-  )
+  if (
+    payload.signData.case === 'signRipple' ||
+    !coin ||
+    coin.chain !== Chain.Ripple ||
+    coin.isNativeToken ||
+    !coin.contractAddress
+  ) {
+    return false
+  }
+
+  const issuer = attempt(() => parseRippleTokenId(coin.contractAddress).issuer)
+
+  return 'data' in issuer && issuer.data === payload.toAddress
 }
 
 const createTrustLineData = (

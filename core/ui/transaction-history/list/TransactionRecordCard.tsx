@@ -14,6 +14,7 @@ import {
 } from '@vultisig/core-chain/coin/Coin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -254,15 +255,16 @@ export const TransactionRecordCard = ({
   const navigate = useCoreNavigate()
   const display = getDisplayData(record)
   const amountUsd = useFiatDisplay(record, display.cryptoAmount)
-  const tagLabel =
-    record.type === 'limitSwap'
-      ? t('swap_mode_limit')
-      : record.type === 'trustLine'
-        ? t('trust_line')
-        : getTransactionTagLabel({
-            messageTypeUrl: display.messageTypeUrl,
-            t,
-          })
+  // `send` and `swap` defer to the Cosmos message label, which turns an
+  // otherwise-generic send into "Delegate"/"Vote" when the payload says so.
+  const tagLabel = match(record.type, {
+    limitSwap: () => t('swap_mode_limit'),
+    trustLine: () => t('trust_line'),
+    send: () =>
+      getTransactionTagLabel({ messageTypeUrl: display.messageTypeUrl, t }),
+    swap: () =>
+      getTransactionTagLabel({ messageTypeUrl: display.messageTypeUrl, t }),
+  })
 
   // A limit order's card state is the ORDER's, not the deposit's: the deposit
   // confirms in seconds while the order rests for hours, so chain status says
