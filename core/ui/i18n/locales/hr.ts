@@ -1787,6 +1787,32 @@ export const hr = {
   swap_limit_expiry_minutes: '{{minutes}}m',
   swap_limit_expiry_under_minute: '<1m',
   transaction_broadcasted: 'Transakcija je emitirana na mrežu',
+  swap_limit_cancel_title: 'Otkaži nalog',
+  swap_limit_cancel_verify_title: 'Otkazuješ limit nalog',
+  swap_limit_cancel_order_label: 'Nalog',
+  swap_limit_cancel_explanation:
+    'Otkazivanje zatvara ovaj nalog i vraća dio koji još nije izvršen. Ono što je već izvršeno ostaje izvršeno i ne vraća se. Ovo košta jednu THORChain mrežnu naknadu.',
+  swap_limit_cancel_donated_dust_row: 'Zadržava THORChain',
+  swap_limit_cancel_duplicate_warning:
+    'Imate još jedan aktivan nalog s istim parom i cijenom. THORChain prvo otkazuje najstariji podudarni nalog, pa bi ovo moglo zatvoriti taj nalog umjesto ovoga.',
+  swap_limit_cancel_order_changed:
+    'Ovaj se nalog promijenio dok ste ga pregledavali. Zatvorite ovaj zaslon i provjerite trenutačni status.',
+  swap_limit_cancel_already_requested:
+    'Za ovaj je nalog otkazivanje već poslano i čeka potvrdu.',
+  swap_limit_cancel_unavailable_legacy_order:
+    'Ovaj je nalog kreiran prije nego što je otkazivanje u aplikaciji bilo dostupno, pa se njegovi podaci ne mogu provjeriti.',
+  swap_limit_cancel_unavailable_mismatch:
+    'Podaci ovog naloga ne odgovaraju onome što prijavljuje THORChain, pa se ne može sigurno otkazati.',
+  swap_limit_cancel_unavailable_memo_too_long:
+    'Ovaj se nalog ne može otkazati s izvorne mreže — poruka za otkazivanje predugačka je za tu mrežu. Sredstva će se automatski vratiti po isteku.',
+  swap_limit_cancel_unavailable_chain:
+    'Otkazivanje s mreže kojom je ovaj nalog financiran nije podržano. Sredstva će se automatski vratiti po isteku.',
+  swap_limit_cancel_unavailable_no_signing_asset:
+    'Dodajte {{ticker}} u ovaj sef kako biste otkazali ovaj nalog — otkazivanje se šalje s mreže {{chain}}.',
+  swap_limit_cancel_view_transaction: 'Prikaži transakciju otkazivanja',
+  swap_limit_cancel_sent: 'Otkazivanje poslano',
+  swap_limit_cancel_sent_detail:
+    'Tvoj nalog ostaje otvoren dok THORChain ne potvrdi da je zatvoren.',
   all_time_high: 'Najviša vrijednost svih vremena',
   all_time_low: 'Najniža vrijednost svih vremena',
   chart_range_all: 'SVE',
@@ -1809,4 +1835,6 @@ export const hr = {
   volume_24h: '24h volumen',
   send_amount_adjusted_for_fee:
     'Iznos prilagođen na {{amount}} za pokrivanje mrežne naknade',
+  swap_limit_cancel_records_unavailable:
+    'Nije moguće učitati vašu povijest transakcija. Pokušajte ponovno uskoro — vaša narudžba ostaje nepromijenjena.',
 }

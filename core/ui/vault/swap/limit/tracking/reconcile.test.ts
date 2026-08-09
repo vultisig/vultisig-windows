@@ -94,6 +94,39 @@ describe('getLimitOrderRestingUpdate', () => {
 
     expect(updated).toBeNull()
   })
+
+  // The queue is the only place an order's identity can be read back as
+  // THORChain holds it — the placement memo abbreviates an L1 contract, and a
+  // cancel memo skips the fuzzy matching that would expand it. Without these
+  // stored, a token order can never be cancelled.
+  it("copies across the queue's own spelling of the order identity", () => {
+    const observed: LimitSwapQueueEntry = {
+      ...entry,
+      sourceAsset: 'THOR.RUNE',
+      targetAsset: 'ETH.USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48',
+      tradeTarget: 43_079_145n,
+    }
+
+    const updated = getLimitOrderRestingUpdate({ record, entry: observed })
+
+    expect(updated?.data).toMatchObject({
+      observedSourceAsset: 'THOR.RUNE',
+      observedTargetAsset:
+        'ETH.USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48',
+      observedTradeTarget: '43079145',
+    })
+  })
+
+  it('rewrites storage when only the observed identity arrives', () => {
+    const seen = getLimitOrderRestingUpdate({ record, entry })!
+
+    const updated = getLimitOrderRestingUpdate({
+      record: seen,
+      entry: { ...entry, targetAsset: 'ETH.USDC-0XA0B8' },
+    })
+
+    expect(updated?.data.observedTargetAsset).toBe('ETH.USDC-0XA0B8')
+  })
 })
 
 describe('getLimitOrderCloseUpdate', () => {

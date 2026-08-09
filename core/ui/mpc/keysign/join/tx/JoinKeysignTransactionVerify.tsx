@@ -6,6 +6,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { getKeysignLimitSwapCancel } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapCancel'
 import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
@@ -14,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { JoinKeysignButton } from './JoinKeysignButton'
+import { JoinKeysignLimitOrderCancelVerify } from './JoinKeysignLimitOrderCancelVerify'
 import { JoinKeysignLimitOrderVerify } from './JoinKeysignLimitOrderVerify'
 import { JoinKeysignLpVerify } from './JoinKeysignLpVerify'
 import { JoinKeysignSwapVerify } from './JoinKeysignSwapVerify'
@@ -50,11 +52,17 @@ export const JoinKeysignTransactionVerify = ({
   // swap payload, so keying off the payload alone would route RUNE and
   // native-gas orders to the generic transfer view.
   const limitOrder = lp ? undefined : getKeysignLimitSwapOrder(value)
-  const isSwap = !lp && !limitOrder && !!value.swapPayload?.value
+  // A cancel carries no swap payload on ANY branch, so without this it always
+  // renders as a dust send to an opaque address — the amount reads as harmless
+  // while the transaction closes a position.
+  const limitOrderCancel =
+    lp || limitOrder ? undefined : getKeysignLimitSwapCancel(value)
+  const isSwap =
+    !lp && !limitOrder && !limitOrderCancel && !!value.swapPayload?.value
 
   const terms = limitOrder
     ? [t('swap_limit_confirm')]
-    : lp || isSwap
+    : lp || isSwap || limitOrderCancel
       ? []
       : sendTerms.map(term => t(term))
   const [termsAccepted, setTermsAccepted] = useState<boolean[]>(
@@ -65,6 +73,11 @@ export const JoinKeysignTransactionVerify = ({
     <JoinKeysignLpVerify value={value} lp={lp} />
   ) : limitOrder ? (
     <JoinKeysignLimitOrderVerify value={value} order={limitOrder} />
+  ) : limitOrderCancel ? (
+    <JoinKeysignLimitOrderCancelVerify
+      value={value}
+      cancel={limitOrderCancel}
+    />
   ) : isSwap ? (
     <JoinKeysignSwapVerify value={value} />
   ) : (
