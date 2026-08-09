@@ -126,6 +126,7 @@ const AnimationWrapper = styled.div`
 const AnimationContainer = styled.div`
   width: 100%;
   max-width: 500px;
+  max-height: 100%;
   aspect-ratio: 500 / 350;
   position: relative;
   overflow: hidden;
