@@ -100,9 +100,13 @@ func TestSaveVaultsKeySharesRollsBackFailedChainKeyShareWrite(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	// Distinct payload, so a committed transaction would be visible in the
+	// keyshares table and a rolled-back one would not.
 	err := store.SaveVaultsKeyShares(map[string]VaultAllKeyShares{
 		vault.PublicKeyECDSA: {
-			KeyShares:      vault.KeyShares,
+			KeyShares: []KeyShare{
+				{PublicKey: "replacement-public-key", KeyShare: "replacement-share"},
+			},
 			ChainKeyShares: map[string]string{"Bitcoin": "chain-share"},
 		},
 	})
@@ -117,6 +121,30 @@ func TestSaveVaultsKeySharesRollsBackFailedChainKeyShareWrite(t *testing.T) {
 	defer cancel()
 	if _, err := store.db.ExecContext(ctx, "SELECT 1"); err != nil {
 		t.Fatalf("transaction was not released, subsequent write failed: %v", err)
+	}
+
+	// Releasing the connection is not enough: the DELETE and INSERT that ran
+	// before the failure must also have been undone.
+	keyShares, err := store.getKeyShares(vault.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(keyShares) != len(vault.KeyShares) {
+		t.Fatalf("expected the original %d keyshares to survive rollback, got %d: %#v",
+			len(vault.KeyShares), len(keyShares), keyShares)
+	}
+	for _, keyShare := range keyShares {
+		if keyShare.PublicKey == "replacement-public-key" {
+			t.Fatalf("uncommitted keyshare survived the failed transaction: %#v", keyShare)
+		}
+	}
+
+	saved, err := store.GetVault(vault.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(saved.ChainKeyShares) != 0 {
+		t.Fatalf("expected no chain key shares after rollback, got %#v", saved.ChainKeyShares)
 	}
 }
 
