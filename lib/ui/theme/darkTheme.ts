@@ -42,16 +42,18 @@ export const darkTheme: DefaultTheme = {
     mist: new HSLA(0, 0, 100, 0.06),
     mistExtra: new HSLA(0, 0, 100, 0.13),
 
-    buttonBackgroundDisabled: new HSLA(217, 57, 14),
+    // Button tokens are the exact values of the design system button set
+    buttonBackgroundDisabled: new HSLA(220.85, 68.12, 13.53), // #0b1a3a
     buttonLinkHover: new HSLA(0, 0, 100, 0.04),
     // Primary/Accent 3
-    buttonPrimary: new HSLA(224, 100, 52),
-    buttonHover: new HSLA(215, 75, 47),
-    buttonSecondary: new HSLA(216, 63, 18),
-    buttonSecondaryHover: new HSLA(215, 53, 24),
-    buttonNeutral: new HSLA(224, 75, 50),
-    buttonNeutralHover: new HSLA(215, 75, 47),
-    buttonTextDisabled: new HSLA(216, 15, 52),
+    buttonPrimary: new HSLA(223.52, 100, 52.16), // #0b4eff
+    buttonHover: new HSLA(214.53, 74.9, 46.86), // #1e6ad1
+    buttonSecondary: new HSLA(215.79, 62.64, 17.84), // #11284a
+    buttonSecondaryHover: new HSLA(215.08, 52.85, 24.12), // #1d385e
+    buttonNeutral: new HSLA(223.58, 74.8, 50.2), // #2155df
+    buttonNeutralHover: new HSLA(214.53, 74.9, 46.86), // #1e6ad1
+    buttonSuccessHover: new HSLA(165, 85.44, 40.39), // #0fbf93
+    buttonTextDisabled: new HSLA(215.68, 14.98, 51.57), // #718096
     primaryAccentTwo: new HSLA(224, 96, 40),
     primaryAccentFour: new HSLA(224, 96, 64),
 

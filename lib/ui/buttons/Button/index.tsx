@@ -30,24 +30,35 @@ const hairlineBorder = css`
   border: 1px solid rgba(255, 255, 255, 0.03);
 `
 
-const pillMetrics = (size: ButtonSize) =>
+const pillHeight = (value: number) => css`
+  height: ${value}px;
+  min-height: ${value}px;
+  min-width: ${value}px;
+`
+
+// The design system gives the neutral and success hierarchies 12px of vertical
+// padding against the default hierarchy's 14px, so they sit 4px shorter at md.
+const mediumHeight: Record<PrimaryButtonStatus, number> = {
+  default: 46,
+  danger: 46,
+  neutral: 42,
+  success: 42,
+}
+
+const pillMetrics = (size: ButtonSize, status: PrimaryButtonStatus) =>
   match(size, {
     sm: () => css`
       font-size: 12px;
       gap: 4px;
-      height: 36px;
       line-height: 16px;
-      min-height: 36px;
-      min-width: 36px;
+      ${pillHeight(36)}
       ${horizontalPadding(16)}
     `,
     md: () => css`
       font-size: 14px;
       gap: 8px;
-      height: 46px;
       line-height: 18px;
-      min-height: 46px;
-      min-width: 46px;
+      ${pillHeight(mediumHeight[status])}
       ${horizontalPadding(24)}
     `,
   })
@@ -102,7 +113,7 @@ const StyledButton = styled(UnstyledButton)<{
             `}
       `,
       primary: () => css`
-        ${pillMetrics($size)}
+        ${pillMetrics($size, $status)}
 
         ${$disabled || $loading
           ? css`
@@ -112,8 +123,10 @@ const StyledButton = styled(UnstyledButton)<{
               cursor: default;
             `
           : css`
-              ${hairlineBorder}
               ${raisedInset}
+
+              /* Only the md pill carries a hairline, and success never does */
+              ${$size === 'md' && $status !== 'success' ? hairlineBorder : ''}
 
               ${match($status, {
                 default: () => css`
@@ -148,14 +161,14 @@ const StyledButton = styled(UnstyledButton)<{
                     background-color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    background-color: ${getColor('primary')};
+                    background-color: ${getColor('buttonSuccessHover')};
                   `,
                 })}
               }
             `}
       `,
       outlined: () => css`
-        ${pillMetrics($size)}
+        ${pillMetrics($size, $status)}
 
         ${$disabled || $loading
           ? css`
@@ -175,7 +188,7 @@ const StyledButton = styled(UnstyledButton)<{
             `}
       `,
       secondary: () => css`
-        ${pillMetrics($size)}
+        ${pillMetrics($size, $status)}
         ${flatInset}
 
         ${$disabled || $loading
