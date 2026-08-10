@@ -3,6 +3,7 @@ import {
   formatDateShort,
   formatStatusLabel,
 } from '@core/ui/defi/shared/formatters'
+import { Button } from '@lib/ui/buttons/Button'
 import { BrokenChainLink3Icon } from '@lib/ui/icons/BrokenChainLink3Icon'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { ChainLinkIcon3 } from '@lib/ui/icons/ChainLinkIcon3'
@@ -15,9 +16,9 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
-import { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 type Props = {
   coin: Coin
@@ -57,68 +58,6 @@ const InfoIcon = styled.div`
 const ButtonRow = styled(HStack)`
   gap: 12px;
   flex-wrap: wrap;
-`
-
-const ActionButton = styled.button.attrs({ type: 'button' })<
-  ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant: 'primary' | 'secondary'
-  }
->`
-  position: relative;
-  display: flex;
-  font-size: 14px;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border-radius: 999px;
-  height: 48px;
-  padding: 0 26px;
-  font-weight: 600;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-  color: ${getColor('contrast')};
-
-  ${({ variant }) =>
-    variant === 'primary'
-      ? css`
-          background: ${getColor('buttonPrimary')};
-          box-shadow: 0px 8px 24px rgba(31, 39, 61, 0.35);
-        `
-      : css`
-          background: rgba(11, 19, 38, 0.95);
-          border-color: ${getColor('buttonPrimary')};
-        `}
-
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      opacity: 0.4;
-      cursor: default;
-    `}
-`
-
-const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-left: -12px;
-  color: ${getColor('contrast')};
-  ${({ variant }) =>
-    variant === 'primary'
-      ? css`
-          background: rgba(255, 255, 255, 0.2);
-        `
-      : css`
-          background: rgba(255, 255, 255, 0.12);
-        `}
 `
 
 export const BondNodeItem = ({
@@ -253,31 +192,26 @@ export const BondNodeItem = ({
       {/* Action Buttons */}
       <ButtonRow>
         {renderAction(
-          <ActionButton
-            variant="secondary"
+          <Button
+            kind="secondary"
             onClick={onUnbond}
             disabled={unbondDisabled}
             style={{ flex: 1 }}
+            icon={<BrokenChainLink3Icon />}
           >
-            <ActionIcon variant="secondary">
-              <BrokenChainLink3Icon />
-            </ActionIcon>
             {t('unbond')}
-          </ActionButton>,
+          </Button>,
           { flex: 1 }
         )}
         {renderAction(
-          <ActionButton
-            variant="primary"
+          <Button
             onClick={onBond}
             disabled={bondDisabled}
             style={{ flex: 1 }}
+            icon={<ChainLinkIcon3 />}
           >
-            <ActionIcon variant="primary">
-              <ChainLinkIcon3 />
-            </ActionIcon>
             {t('bond')}
-          </ActionButton>,
+          </Button>,
           { flex: 1 }
         )}
       </ButtonRow>
