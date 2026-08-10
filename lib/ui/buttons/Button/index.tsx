@@ -10,10 +10,12 @@ import styled, { css } from 'styled-components'
 import { Size } from '../../core/Size'
 import { ButtonProps, PrimaryButtonStatus } from '../ButtonProps'
 
-type ButtonSize = Extract<Size, 'sm' | 'md'>
+// `xs` is the design system's "Mini" size.
+type ButtonSize = Extract<Size, 'xs' | 'sm' | 'md'>
 
-// A resting primary button sits proud; every other filled state (primary
-// hover/disabled, secondary) drops to the flatter inset pair.
+// Only a resting default-hierarchy primary sits proud. Every other filled
+// state — the other hierarchies, hover, disabled, and all of secondary —
+// drops to the flatter inset pair.
 const raisedInset = css`
   box-shadow:
     inset 0 1px 1.9px 0 rgba(255, 255, 255, 0.24),
@@ -25,6 +27,13 @@ const flatInset = css`
     inset 0 1px 1px 0 rgba(255, 255, 255, 0.1),
     inset 0 -1px 0.5px 0 rgba(15, 28, 62, 1);
 `
+
+const restingInset: Record<PrimaryButtonStatus, typeof flatInset> = {
+  default: raisedInset,
+  danger: raisedInset,
+  neutral: flatInset,
+  success: flatInset,
+}
 
 const hairlineBorder = css`
   border: 1px solid rgba(255, 255, 255, 0.03);
@@ -38,6 +47,7 @@ const pillHeight = (value: number) => css`
 
 // The design system gives the neutral and success hierarchies 12px of vertical
 // padding against the default hierarchy's 14px, so they sit 4px shorter at md.
+// xs and sm are one height for every hierarchy.
 const mediumHeight: Record<PrimaryButtonStatus, number> = {
   default: 46,
   danger: 46,
@@ -47,6 +57,15 @@ const mediumHeight: Record<PrimaryButtonStatus, number> = {
 
 const pillMetrics = (size: ButtonSize, status: PrimaryButtonStatus) =>
   match(size, {
+    xs: () => css`
+      border-radius: 30px;
+      font-size: 12px;
+      gap: 4px;
+      line-height: 16px;
+      width: fit-content;
+      ${pillHeight(32)}
+      ${horizontalPadding(16)}
+    `,
     sm: () => css`
       font-size: 12px;
       gap: 4px;
@@ -123,7 +142,7 @@ const StyledButton = styled(UnstyledButton)<{
               cursor: default;
             `
           : css`
-              ${raisedInset}
+              ${restingInset[$status]}
 
               /* Only the md pill carries a hairline, and success never does */
               ${$size === 'md' && $status !== 'success' ? hairlineBorder : ''}
@@ -259,11 +278,13 @@ export const Button: FC<
 }
 
 export const buttonSize: Record<ButtonSize, number> = {
+  xs: 26,
   sm: 26,
   md: 26,
 }
 
 export const buttonHeight: Record<ButtonSize, number> = {
+  xs: 32,
   sm: 36,
   md: 46,
 }
