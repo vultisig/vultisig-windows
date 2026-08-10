@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"path/filepath"
 	"testing"
 	"time"
@@ -77,6 +78,45 @@ func TestSaveVaultUpdatePreservesChildRows(t *testing.T) {
 	}
 	if len(records) != 1 || records[0].ID != record.ID {
 		t.Fatalf("expected transaction record %q to survive vault update, got %#v", record.ID, records)
+	}
+}
+
+func TestSaveVaultsKeySharesRollsBackFailedChainKeyShareWrite(t *testing.T) {
+	store := newTestStore(t)
+
+	vault := testVault()
+	if err := store.SaveVault(vault); err != nil {
+		t.Fatal(err)
+	}
+
+	// Pin the pool to a single connection so a leaked transaction starves
+	// every later write instead of silently grabbing a fresh connection.
+	store.db.SetMaxOpenConns(1)
+
+	// Fail only the chain-keyshare UPDATE, so the preceding DELETE and INSERT
+	// still succeed and the transaction is open when the error surfaces.
+	if _, err := store.db.Exec(`CREATE TRIGGER fail_vault_update BEFORE UPDATE ON vaults
+		BEGIN SELECT RAISE(ABORT, 'forced update failure'); END;`); err != nil {
+		t.Fatal(err)
+	}
+
+	err := store.SaveVaultsKeyShares(map[string]VaultAllKeyShares{
+		vault.PublicKeyECDSA: {
+			KeyShares:      vault.KeyShares,
+			ChainKeyShares: map[string]string{"Bitcoin": "chain-share"},
+		},
+	})
+	if err == nil {
+		t.Fatal("expected chain key share update to fail")
+	}
+
+	// The deferred rollback must have released the transaction. If err was
+	// shadowed the rollback never ran, and this write blocks on the pinned
+	// connection until the context deadline.
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if _, err := store.db.ExecContext(ctx, "SELECT 1"); err != nil {
+		t.Fatalf("transaction was not released, subsequent write failed: %v", err)
 	}
 }
 

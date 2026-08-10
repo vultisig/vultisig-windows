@@ -957,7 +957,7 @@ export const it = {
   token_not_found_description:
     'Possibili motivi: contratto errato, catena non supportata o token rimosso dai registri.',
   token_not_found_invalid: 'Indirizzo contrattuale non valido',
-  total_fee: 'Costo totale',
+  total_fee: 'Totale commissioni',
   track: 'Traccia',
   transaction: 'Transazione',
   transaction_details: 'Dettagli della transazione',
@@ -1708,6 +1708,7 @@ export const it = {
     'La condivisione è rallentata a causa di una connessione instabile. Puoi riprovare o attendere la riconnessione.',
   plugin_store_compatible: 'Compatibile con Plugin Store',
   open_trust_line: 'Linea di fiducia aperta',
+  trust_line: 'Linea di fiducia',
   trust_line_limit: 'Limite di fiducia',
   trust_line_issuer: 'Emittente',
   trust_line_currency: 'Valuta',
@@ -1869,9 +1870,19 @@ export const it = {
     'Importo modificato in {{amount}} per coprire la commissione di rete',
   swap_limit_cancel_records_unavailable:
     'Impossibile caricare la cronologia delle transazioni. Riprova tra poco: il tuo ordine non è stato modificato.',
+  swap_all_providers_failed:
+    'I provider di scambio non sono temporaneamente disponibili. Riprova tra un attimo.',
+  swap_amount_below_minimum:
+    'Aumenta l&#39;importo per raggiungere l&#39;importo minimo di swap richiesto dal fornitore.',
+  swap_amount_too_small:
+    'Inserisci un importo maggiore per ottenere un preventivo di swap.',
+  swap_invalid_config:
+    'Rivedi i dettagli dello scambio, il destinatario e le impostazioni avanzate, quindi riprova.',
+  swap_no_routes_found:
+    'Per questa coppia di asset non è disponibile alcuna opzione di swap.',
   price_impact: 'Impatto sul prezzo',
+  swap_affiliate_fee_noun: 'Tassa',
   swap_fee_included_in_rate: 'Incluso nel prezzo indicato',
   swap_protocol_fee: 'Tariffa del protocollo',
   swap_referral_fee: 'Commissione di segnalazione',
-  swap_affiliate_fee_noun: 'Tassa',
 }

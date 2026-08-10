@@ -393,12 +393,17 @@ func decrypt(cipherText, hexKey string) (string, error) {
 	}
 
 	if len(cipherByte) < aes.BlockSize {
-		fmt.Printf("ciphertext too short")
-		return "", err
+		return "", errors.New("decrypt: ciphertext shorter than one AES block")
 	}
 
 	iv := cipherByte[:aes.BlockSize]
 	cipherByte = cipherByte[aes.BlockSize:]
+
+	// CryptBlocks panics on a partial trailing block, and this runs in the
+	// message-download goroutine where a panic would take down the process.
+	if len(cipherByte)%aes.BlockSize != 0 {
+		return "", errors.New("decrypt: ciphertext is not a multiple of the block size")
+	}
 
 	cbc := cipher.NewCBCDecrypter(block, iv)
 	plaintext := make([]byte, len(cipherByte))

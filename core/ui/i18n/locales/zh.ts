@@ -1570,6 +1570,7 @@ export const zh = {
     '由于网络连接不佳，重新共享速度变慢。您可以重试或等待重新连接。',
   plugin_store_compatible: '兼容插件商店',
   open_trust_line: '开放信任线',
+  trust_line: '信任线',
   trust_line_limit: '信任限额',
   trust_line_issuer: '发行人',
   trust_line_currency: '货币',
@@ -1713,9 +1714,14 @@ export const zh = {
   send_amount_adjusted_for_fee: '金额已调整为 {{amount}}，以支付网络费用',
   swap_limit_cancel_records_unavailable:
     '无法加载您的交易记录。请稍后再试——您的订单不受影响。',
+  swap_all_providers_failed: '互换提供商暂时无法使用。请稍后再试。',
+  swap_amount_below_minimum: '增加金额以达到提供商的最低互换金额要求。',
+  swap_amount_too_small: '输入更大的金额以获取互换报价。',
+  swap_invalid_config: '请检查交换详情、收件人和高级设置，然后重试。',
+  swap_no_routes_found: '该资产对没有可互换的途径。',
   price_impact: '价格影响',
+  swap_affiliate_fee_noun: '费用',
   swap_fee_included_in_rate: '包含在报价中',
   swap_protocol_fee: '协议费',
   swap_referral_fee: '推荐费',
-  swap_affiliate_fee_noun: '费用',
 }

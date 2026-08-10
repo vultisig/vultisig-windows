@@ -942,7 +942,7 @@ export const nl = {
   token_not_found_description:
     'Mogelijke redenen: verkeerd contract, niet-ondersteunde chain, of token verwijderd uit registries.',
   token_not_found_invalid: 'Ongeldig contractadres',
-  total_fee: 'Totale kosten',
+  total_fee: 'Totale fees',
   track: 'Volgen',
   transaction: 'Transactie',
   transaction_details: 'Transactiedetails',
@@ -1686,6 +1686,7 @@ export const nl = {
     'Het delen is vertraagd door een slechte internetverbinding. U kunt het opnieuw proberen of wachten tot de verbinding is hersteld.',
   plugin_store_compatible: 'Compatibel met de Plugin Store',
   open_trust_line: 'Open vertrouwenslijn',
+  trust_line: 'Vertrouwenslijn',
   trust_line_limit: 'Vertrouwenslimiet',
   trust_line_issuer: 'Uitgever',
   trust_line_currency: 'Munteenheid',
@@ -1847,9 +1848,19 @@ export const nl = {
     'Het bedrag is aangepast naar {{amount}} om de netwerkkosten te dekken.',
   swap_limit_cancel_records_unavailable:
     'Uw transactiegeschiedenis kon niet worden geladen. Probeer het over een tijdje opnieuw. Uw bestelling blijft ongewijzigd.',
+  swap_all_providers_failed:
+    'De swapaanbieders zijn tijdelijk niet beschikbaar. Probeer het over een moment opnieuw.',
+  swap_amount_below_minimum:
+    'Verhoog het bedrag tot het minimale swapbedrag van de aanbieder.',
+  swap_amount_too_small:
+    'Voer een hoger bedrag in om een ​​ruilofferte te ontvangen.',
+  swap_invalid_config:
+    'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
+  swap_no_routes_found:
+    'Er is geen swapmogelijkheid beschikbaar voor dit activapaar.',
   price_impact: 'Prijsimpact',
+  swap_affiliate_fee_noun: 'Tarief',
   swap_fee_included_in_rate: 'Inbegrepen in de vermelde prijs',
   swap_protocol_fee: 'Protocolkosten',
   swap_referral_fee: 'Verwijzingsvergoeding',
-  swap_affiliate_fee_noun: 'Tarief',
 }

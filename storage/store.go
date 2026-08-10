@@ -763,7 +763,8 @@ func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string]VaultAllKeyShares)
 		// Update chain_key_shares in vaults table ONLY if provided (imported vaults only)
 		// Regular vaults will have nil/empty ChainKeyShares - we skip the update for them
 		if len(allKeyShares.ChainKeyShares) > 0 {
-			chainKeySharesJSON, err := json.Marshal(allKeyShares.ChainKeyShares)
+			var chainKeySharesJSON []byte
+			chainKeySharesJSON, err = json.Marshal(allKeyShares.ChainKeyShares)
 			if err != nil {
 				return fmt.Errorf("could not marshal chain key shares: %w", err)
 			}

@@ -179,3 +179,163 @@ describe('createTransactionRecord', () => {
     expect(record.chain).toBe(Chain.Ethereum)
   })
 })
+
+describe('createTransactionRecord — XRPL trust-line activation', () => {
+  const ISSUER = 'rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De'
+  const HOLDER = 'rHolderAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+  const tokenId = `534F4C4F00000000000000000000000000000000.${ISSUER}`
+
+  // The default limit the activation flow signs: 1e15 at 15 decimals.
+  const trustLimit = '1000000000000000000000000000000'
+
+  const trustSetPayload = (): KeysignPayload =>
+    create(KeysignPayloadSchema, {
+      coin: create(CoinSchema, {
+        chain: Chain.Ripple,
+        ticker: 'SOLO',
+        address: HOLDER,
+        contractAddress: tokenId,
+        decimals: 15,
+        isNativeToken: false,
+      }),
+      toAddress: ISSUER,
+      toAmount: trustLimit,
+    })
+
+  const record = () =>
+    createTransactionRecord({
+      payload: trustSetPayload(),
+      txHash: '0xtrustline',
+      vaultId: 'vault-1',
+    })
+
+  it('is not recorded as a send', () => {
+    // Regression: the send fallback rendered the trust LIMIT as an outgoing
+    // payment — 1,000,000,000,000,000 SOLO to the issuer, for a transaction
+    // that moves nothing.
+    expect(record().type).toBe('trustLine')
+  })
+
+  it('keeps the limit as a limit, not an amount', () => {
+    const result = record()
+
+    expect(result.type).toBe('trustLine')
+    if (result.type !== 'trustLine') return
+
+    expect(result.data.limit).toBe(trustLimit)
+    expect(result.data).not.toHaveProperty('amount')
+  })
+
+  it('records the issuer as an issuer, not a payment recipient', () => {
+    const result = record()
+
+    expect(result.type).toBe('trustLine')
+    if (result.type !== 'trustLine') return
+
+    expect(result.data.issuer).toBe(ISSUER)
+    expect(result.data).not.toHaveProperty('toAddress')
+    expect(result.data.fromAddress).toBe(HOLDER)
+  })
+
+  it('carries the token so it stays searchable', () => {
+    const result = record()
+
+    expect(result.type).toBe('trustLine')
+    if (result.type !== 'trustLine') return
+
+    expect(result.data.token).toBe('SOLO')
+    expect(result.data.tokenId).toBe(tokenId)
+  })
+
+  it('still records a native XRP payment as a send', () => {
+    const payload = create(KeysignPayloadSchema, {
+      coin: create(CoinSchema, {
+        chain: Chain.Ripple,
+        ticker: 'XRP',
+        address: HOLDER,
+        contractAddress: '',
+        decimals: 6,
+        isNativeToken: true,
+      }),
+      toAddress: 'rRecipientBBBBBBBBBBBBBBBBBBBBBBBBB',
+      toAmount: '1000000',
+    })
+
+    expect(
+      createTransactionRecord({ payload, txHash: '0xsend', vaultId: 'vault-1' })
+        .type
+    ).toBe('send')
+  })
+
+  it('does not claim a verbatim dApp transaction is a trust line', () => {
+    // `signRipple` is signed as supplied; it may be an offer, not a TrustSet.
+    const payload = trustSetPayload()
+    payload.signData = {
+      case: 'signRipple',
+      value: { rawJson: JSON.stringify({ TransactionType: 'OfferCreate' }) },
+    } as never
+
+    expect(
+      createTransactionRecord({ payload, txHash: '0xdapp', vaultId: 'vault-1' })
+        .type
+    ).toBe('send')
+  })
+})
+
+describe('createTransactionRecord — a send of an already-held XRPL token', () => {
+  const issuer = 'rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De'
+  const holder = 'rHolderAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+  const recipient = 'rFriendBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
+  const soloTokenId = `534F4C4F00000000000000000000000000000000.${issuer}`
+
+  const issuedTokenSend = (toAddress: string): KeysignPayload =>
+    create(KeysignPayloadSchema, {
+      coin: create(CoinSchema, {
+        chain: Chain.Ripple,
+        ticker: 'SOLO',
+        address: holder,
+        contractAddress: soloTokenId,
+        decimals: 15,
+        isNativeToken: false,
+      }),
+      toAddress,
+      toAmount: '5000000000000000',
+    })
+
+  it('records a token send as a send, not a trust line', () => {
+    // `toCommCoin` gives every non-fee coin a contractAddress, so this payload
+    // is shaped exactly like a TrustSet. Classifying it as one would hide a
+    // real payment behind a record that shows no amount at all.
+    const result = createTransactionRecord({
+      payload: issuedTokenSend(recipient),
+      txHash: '0xtokensend',
+      vaultId: 'vault-1',
+    })
+
+    expect(result.type).toBe('send')
+  })
+
+  it('keeps the recipient and amount of a token send', () => {
+    const result = createTransactionRecord({
+      payload: issuedTokenSend(recipient),
+      txHash: '0xtokensend',
+      vaultId: 'vault-1',
+    })
+
+    expect(result.type).toBe('send')
+    if (result.type !== 'send') return
+
+    expect(result.data.toAddress).toBe(recipient)
+    expect(result.data.amount).toBe('5000000000000000')
+  })
+
+  it('still recognises the trust line addressed to the issuer', () => {
+    expect(
+      createTransactionRecord({
+        payload: issuedTokenSend(issuer),
+        txHash: '0xtrustline',
+        vaultId: 'vault-1',
+      }).type
+    ).toBe('trustLine')
+  })
+})

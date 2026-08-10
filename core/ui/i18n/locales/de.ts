@@ -962,7 +962,7 @@ export const de = {
   token_not_found_description:
     'Mögliche Gründe: falscher Vertrag, nicht unterstützte Blockchain oder Token aus den Registern entfernt.',
   token_not_found_invalid: 'Ungültige Vertragsadresse',
-  total_fee: 'Gesamtgebühr',
+  total_fee: 'Gesamtgebühren',
   track: 'Schiene',
   transaction: 'Transaktion',
   transaction_details: 'Transaktionsdetails',
@@ -1717,6 +1717,7 @@ export const de = {
     'Die erneute Freigabe wurde aufgrund schlechter Verbindung verlangsamt. Sie können es erneut versuchen oder auf die Wiederherstellung der Verbindung warten.',
   plugin_store_compatible: 'Plugin Store-kompatibel',
   open_trust_line: 'Vertrauenslinie öffnen',
+  trust_line: 'Vertrauenslinie',
   trust_line_limit: 'Vertrauensgrenze',
   trust_line_issuer: 'Emittent',
   trust_line_currency: 'Währung',
@@ -1879,9 +1880,18 @@ export const de = {
     'Der Betrag wurde auf {{amount}} angepasst, um die Netzwerkgebühr zu decken.',
   swap_limit_cancel_records_unavailable:
     'Ihre Transaktionshistorie konnte nicht geladen werden. Bitte versuchen Sie es später erneut – Ihre Bestellung ist davon nicht betroffen.',
+  swap_all_providers_failed:
+    'Die Tauschanbieter sind vorübergehend nicht verfügbar. Bitte versuchen Sie es in Kürze erneut.',
+  swap_amount_below_minimum:
+    'Erhöhen Sie den Betrag, um den vom Anbieter geforderten Mindesttauschbetrag zu erreichen.',
+  swap_amount_too_small:
+    'Geben Sie einen höheren Betrag ein, um ein Tauschangebot zu erhalten.',
+  swap_invalid_config:
+    'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
+  swap_no_routes_found: 'Für dieses Assetpaar ist keine Tauschroute verfügbar.',
   price_impact: 'Preisauswirkung',
+  swap_affiliate_fee_noun: 'Gebühr',
   swap_fee_included_in_rate: 'Im angegebenen Preis enthalten',
   swap_protocol_fee: 'Protokollgebühr',
   swap_referral_fee: 'Vermittlungsgebühr',
-  swap_affiliate_fee_noun: 'Gebühr',
 }

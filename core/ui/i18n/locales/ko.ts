@@ -1669,6 +1669,7 @@ export const ko = {
     '연결 상태가 좋지 않아 재공유 속도가 느려졌습니다. 다시 시도하거나 연결이 복구될 때까지 기다리세요.',
   plugin_store_compatible: '플러그인 스토어 호환 가능',
   open_trust_line: '오픈 트러스트 라인',
+  trust_line: '트러스트 라인',
   trust_line_limit: '신뢰 한도',
   trust_line_issuer: '발행자',
   trust_line_currency: '통화',
@@ -1825,9 +1826,18 @@ export const ko = {
     '네트워크 수수료를 충당하기 위해 금액이 {{amount}}(으)로 조정되었습니다',
   swap_limit_cancel_records_unavailable:
     '거래 내역을 불러올 수 없습니다. 잠시 후 다시 시도해 주세요. 주문에는 문제가 없습니다.',
+  swap_all_providers_failed:
+    '스왑 제공업체를 일시적으로 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+  swap_amount_below_minimum:
+    '제공업체의 최소 교환 금액을 충족하도록 금액을 늘리십시오.',
+  swap_amount_too_small:
+    '더 큰 금액을 입력하시면 환전 견적을 받아보실 수 있습니다.',
+  swap_invalid_config:
+    '교환 세부 정보, 수신자 및 고급 설정을 검토한 후 다시 시도하십시오.',
+  swap_no_routes_found: '이 자산 쌍에 대해서는 스왑 경로가 제공되지 않습니다.',
   price_impact: '가격 영향',
+  swap_affiliate_fee_noun: '요금',
   swap_fee_included_in_rate: '견적 가격에 포함되어 있습니다.',
   swap_protocol_fee: '프로토콜 수수료',
   swap_referral_fee: '소개 수수료',
-  swap_affiliate_fee_noun: '요금',
 }

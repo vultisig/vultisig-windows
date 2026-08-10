@@ -1,7 +1,12 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { limitSwapOrderStatuses } from '@vultisig/core-chain/swap/native/limitSwapOrderStatus'
 
-export const transactionRecordTypes = ['send', 'swap', 'limitSwap'] as const
+export const transactionRecordTypes = [
+  'send',
+  'swap',
+  'limitSwap',
+  'trustLine',
+] as const
 export type TransactionRecordType = (typeof transactionRecordTypes)[number]
 
 export const transactionRecordStatuses = [
@@ -174,10 +179,37 @@ export type LimitSwapTransactionRecord = TransactionRecordBase & {
   data: LimitSwapTransactionData
 }
 
+/**
+ * An XRPL trust-line activation (TrustSet).
+ *
+ * Deliberately not a send: a TrustSet moves nothing. Its keysign amount is the
+ * line's LIMIT — the ceiling the account agrees to hold — so recording it as a
+ * transfer reads as an enormous outgoing payment of a token the user never
+ * sent, to the issuer.
+ */
+export type TrustLineTransactionData = {
+  fromAddress: string
+  /** The issuer the line is opened with; not a payment recipient. */
+  issuer: string
+  token: string
+  tokenLogo: string
+  /** Composite `<currencyCode>.<issuer>` id of the issued currency. */
+  tokenId: string
+  /** The trust-line limit, in the token's smallest units. */
+  limit: string
+  decimals: number
+}
+
+export type TrustLineTransactionRecord = TransactionRecordBase & {
+  type: 'trustLine'
+  data: TrustLineTransactionData
+}
+
 export type TransactionRecord =
   | SendTransactionRecord
   | SwapTransactionRecord
   | LimitSwapTransactionRecord
+  | TrustLineTransactionRecord
 
 export type SerializedTransactionRecord = Omit<
   TransactionRecordBase,

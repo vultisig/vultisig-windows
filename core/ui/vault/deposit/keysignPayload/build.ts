@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { toIssuedCurrencyTicker } from '@core/ui/chain/coin/ripple/toIssuedCurrencyTicker'
 import { getSolanaStakingFee } from '@core/ui/chain/solana/staking/getSolanaStakingFee'
 import { fetchRujiLiquidUnbondInputs } from '@core/ui/defi/chain/queries/services/thorchainStake/rujiStakeService'
 import { buildQBTCDirectPayload } from '@core/ui/qbtc/dapp/buildQBTCDirectPayload'
@@ -167,7 +168,11 @@ export const buildDepositKeysignPayload = async ({
     const issuedCoin: AccountCoin = {
       chain: Chain.Ripple,
       id: rippleTokenId({ currency, issuer }),
-      ticker: currency,
+      // The id keeps the on-ledger code; the ticker is what people read. A
+      // non-standard currency arrives here as its 40-char hex form — typed that
+      // way, or handed over already normalised — and carrying that through
+      // labels the review screen and the history record `534F4C4F00…`.
+      ticker: toIssuedCurrencyTicker(currency),
       decimals: rippleIssuedCurrencyDecimals,
       address: coin.address,
       logo: asOptionalString(depositData['logo']) ?? coin.logo,

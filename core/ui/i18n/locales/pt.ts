@@ -953,7 +953,7 @@ export const pt = {
   token_not_found_description:
     'Possíveis motivos: contrato incorreto, blockchain não suportada ou token removido dos registros.',
   token_not_found_invalid: 'Endereço de contrato inválido',
-  total_fee: 'Taxa total',
+  total_fee: 'Taxas totais',
   track: 'Acompanhar',
   transaction: 'Transação',
   transaction_details: 'Detalhes da transação',
@@ -1704,6 +1704,7 @@ export const pt = {
     'O compartilhamento foi interrompido devido à má conexão. Você pode tentar novamente ou aguardar o restabelecimento da conexão.',
   plugin_store_compatible: 'Compatível com a Loja de Plugins',
   open_trust_line: 'Linha de Confiança Aberta',
+  trust_line: 'Linha de Confiança',
   trust_line_limit: 'Limite de confiança',
   trust_line_issuer: 'Emissor',
   trust_line_currency: 'Moeda',
@@ -1866,9 +1867,19 @@ export const pt = {
     'Valor ajustado para {{amount}} para cobrir a taxa de rede.',
   swap_limit_cancel_records_unavailable:
     'Não foi possível carregar seu histórico de transações. Tente novamente em breve — seu pedido não foi afetado.',
+  swap_all_providers_failed:
+    'Os provedores de swap estão temporariamente indisponíveis. Tente novamente em instantes.',
+  swap_amount_below_minimum:
+    'Aumente o valor para atingir o valor mínimo de swap exigido pelo provedor.',
+  swap_amount_too_small:
+    'Insira um valor maior para obter uma cotação de swap.',
+  swap_invalid_config:
+    'Revise os detalhes da troca, o destinatário e as configurações avançadas e tente novamente.',
+  swap_no_routes_found:
+    'Não há opção de swap disponível para este par de ativos.',
   price_impact: 'Impacto no preço',
+  swap_affiliate_fee_noun: 'Taxa',
   swap_fee_included_in_rate: 'Incluído no preço cotado',
   swap_protocol_fee: 'Taxa de protocolo',
   swap_referral_fee: 'Taxa de encaminhamento',
-  swap_affiliate_fee_noun: 'Taxa',
 }

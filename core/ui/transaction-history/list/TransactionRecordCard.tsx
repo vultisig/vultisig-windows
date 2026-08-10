@@ -14,6 +14,7 @@ import {
 } from '@vultisig/core-chain/coin/Coin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -151,6 +152,25 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
     }
   }
 
+  if (record.type === 'trustLine') {
+    // No amount: a TrustSet moves nothing. The limit is a ceiling, and showing
+    // it here would read as an outgoing payment of that size.
+    return {
+      tagType: 'approve',
+      amountCrypto: '',
+      cryptoAmount: 0,
+      symbol: record.data.token,
+      pill: { direction: 'to', address: record.data.issuer },
+      coin: record.data.tokenLogo
+        ? {
+            chain: record.chain,
+            id: record.data.tokenId,
+            logo: record.data.tokenLogo,
+          }
+        : undefined,
+    }
+  }
+
   const rawAmount = Number(
     fromChainAmount(BigInt(record.data.amount), record.data.decimals)
   )
@@ -183,7 +203,10 @@ type TransactionRecordCardProps = {
   record: TransactionRecord
 }
 
-const useFiatDisplay = (record: TransactionRecord, cryptoAmount: number) => {
+const useFiatDisplay = (
+  record: TransactionRecord,
+  cryptoAmount: number
+): string | undefined => {
   const formatFiatAmount = useFormatFiatAmount()
   const coinKey = getCoinKey(record)
   const vaultCoins = useCurrentVaultCoins()
@@ -198,6 +221,13 @@ const useFiatDisplay = (record: TransactionRecord, cryptoAmount: number) => {
     ],
     eager: false,
   })
+
+  // A TrustSet moves no value, so there is nothing to price. Formatting its
+  // zero amount would print "$0.00" and read as a transfer that was worth
+  // nothing rather than one that never happened.
+  if (record.type === 'trustLine') {
+    return undefined
+  }
 
   if (record.fiatValue) {
     const parsed = Number(record.fiatValue)
@@ -225,13 +255,16 @@ export const TransactionRecordCard = ({
   const navigate = useCoreNavigate()
   const display = getDisplayData(record)
   const amountUsd = useFiatDisplay(record, display.cryptoAmount)
-  const tagLabel =
-    record.type === 'limitSwap'
-      ? t('swap_mode_limit')
-      : getTransactionTagLabel({
-          messageTypeUrl: display.messageTypeUrl,
-          t,
-        })
+  // `send` and `swap` defer to the Cosmos message label, which turns an
+  // otherwise-generic send into "Delegate"/"Vote" when the payload says so.
+  const tagLabel = match(record.type, {
+    limitSwap: () => t('swap_mode_limit'),
+    trustLine: () => t('trust_line'),
+    send: () =>
+      getTransactionTagLabel({ messageTypeUrl: display.messageTypeUrl, t }),
+    swap: () =>
+      getTransactionTagLabel({ messageTypeUrl: display.messageTypeUrl, t }),
+  })
 
   // A limit order's card state is the ORDER's, not the deposit's: the deposit
   // confirms in seconds while the order rests for hours, so chain status says

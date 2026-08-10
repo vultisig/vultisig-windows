@@ -946,7 +946,7 @@ export const hr = {
   token_not_found_description:
     'Mogući razlozi: pogrešan ugovor, nepodržani lanac ili token uklonjen iz registara.',
   token_not_found_invalid: 'Nevažeća adresa ugovora',
-  total_fee: 'Ukupna naknada',
+  total_fee: 'Ukupne naknade',
   track: 'Staza',
   transaction: 'Transakcija',
   transaction_details: 'Detalji transakcije',
@@ -1678,6 +1678,7 @@ export const hr = {
     'Ponovno dijeljenje je usporeno zbog slabe veze. Možete pokušati ponovno ili pričekati ponovno povezivanje.',
   plugin_store_compatible: 'Kompatibilno s trgovinom dodataka',
   open_trust_line: 'Otvorena linija povjerenja',
+  trust_line: 'Linija povjerenja',
   trust_line_limit: 'Ograničenje povjerenja',
   trust_line_issuer: 'Izdavatelj',
   trust_line_currency: 'Valuta',
@@ -1835,9 +1836,18 @@ export const hr = {
     'Iznos prilagođen na {{amount}} za pokrivanje mrežne naknade',
   swap_limit_cancel_records_unavailable:
     'Nije moguće učitati vašu povijest transakcija. Pokušajte ponovno uskoro — vaša narudžba ostaje nepromijenjena.',
+  swap_all_providers_failed:
+    'Pružatelji usluga zamjene trenutno nisu dostupni. Pokušajte ponovno za trenutak.',
+  swap_amount_below_minimum:
+    'Povećajte iznos kako biste ispunili minimalni iznos zamjene koji je odredio pružatelj usluga.',
+  swap_amount_too_small:
+    'Unesite veći iznos kako biste dobili ponudu za zamjenu.',
+  swap_invalid_config:
+    'Pregledajte detalje zamjene, primatelja i napredne postavke, a zatim pokušajte ponovno.',
+  swap_no_routes_found: 'Za ovaj par imovine nije dostupna ruta zamjene.',
   price_impact: 'Utjecaj na cijenu',
+  swap_affiliate_fee_noun: 'Pristojba',
   swap_fee_included_in_rate: 'Uključeno u navedenu cijenu',
   swap_protocol_fee: 'Naknada za protokol',
   swap_referral_fee: 'Naknada za preporuku',
-  swap_affiliate_fee_noun: 'Pristojba',
 }
