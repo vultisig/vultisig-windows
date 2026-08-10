@@ -83,6 +83,29 @@ describe('primary', () => {
     expect(styleOf(<Button>x</Button>)).toContain(flatInset)
   })
 
+  test('only the default hierarchy rests on the raised inset', () => {
+    expect(styleOf(<Button>x</Button>)).toContain(raisedInset)
+    expect(styleOf(<Button status="neutral">x</Button>)).not.toContain(
+      raisedInset
+    )
+    expect(styleOf(<Button status="success">x</Button>)).not.toContain(
+      raisedInset
+    )
+  })
+
+  test('xs is the 32px mini pill', () => {
+    const css = styleOf(<Button size="xs">x</Button>)
+
+    expect(css).toContain('height:32px')
+    expect(css).toContain('border-radius:30px')
+    expect(css).toContain('padding-left:16px')
+    expect(css).toContain('font-size:12px')
+    expect(css).toContain('line-height:16px')
+    expect(css).toContain('gap:4px')
+    expect(css).toContain('width:fit-content')
+    expect(css).not.toContain(hairline)
+  })
+
   test('disabled is the flat inset with no hairline', () => {
     const css = styleOf(<Button disabled>x</Button>)
 
