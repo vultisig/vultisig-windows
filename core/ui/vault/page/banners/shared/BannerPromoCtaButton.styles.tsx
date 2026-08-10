@@ -6,8 +6,8 @@ import styled from 'styled-components'
  * home promo banners. Banners lay these out inline, so the label never wraps.
  */
 export const BannerPromoCtaButton = styled(Button).attrs({
-  size: 'xs' as const,
-  status: 'success' as const,
+  size: 'xs',
+  status: 'success',
 })`
   white-space: nowrap;
 `
