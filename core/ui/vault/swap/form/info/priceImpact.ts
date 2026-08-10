@@ -31,7 +31,7 @@ export const getSwapPriceImpact = (
   matchRecordUnion<SwapQuoteResult, number | undefined>(quote, {
     native: ({ slippage_bps: slippageBps }) =>
       slippageBps === undefined ? undefined : slippageBps / bpsPerUnit,
-    general: ({ priceImpact }) => priceImpact,
+    general: ({ priceImpactFraction }) => priceImpactFraction,
   })
 
 /**

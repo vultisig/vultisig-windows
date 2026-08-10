@@ -28,11 +28,13 @@ const nativeQuote = (slippageBps: number | undefined): SwapQuoteResult => ({
   },
 })
 
-const generalQuote = (priceImpact: number | undefined): SwapQuoteResult => ({
+const generalQuote = (
+  priceImpactFraction: number | undefined
+): SwapQuoteResult => ({
   general: {
     dstAmount: '1000000',
     provider: 'swapkit',
-    ...(priceImpact === undefined ? {} : { priceImpact }),
+    ...(priceImpactFraction === undefined ? {} : { priceImpactFraction }),
     tx: { transfer: { to: 'deposit-address', amount: 1000n } },
   },
 })
