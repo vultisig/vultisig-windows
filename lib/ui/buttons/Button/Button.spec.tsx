@@ -21,7 +21,9 @@ const styleOf = (ui: ReactElement) => {
   }
 }
 
-const hairline = 'border:1pxsolidrgba(255,255,255,0.03)'
+// The hairline is an inside stroke in the design system, so it ships as an
+// inset ring sharing a box with the shadows rather than as a CSS border.
+const hairline = 'inset0001pxrgba(255,255,255,0.03)'
 const raisedInset = 'inset01px1.9px0rgba(255,255,255,0.24)'
 const flatInset = 'inset01px1px0rgba(255,255,255,0.1)'
 

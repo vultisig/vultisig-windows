@@ -16,27 +16,30 @@ type ButtonSize = Extract<Size, 'xs' | 'sm' | 'md'>
 // Only a resting default-hierarchy primary sits proud. Every other filled
 // state — the other hierarchies, hover, disabled, and all of secondary —
 // drops to the flatter inset pair.
-const raisedInset = css`
-  box-shadow:
-    inset 0 1px 1.9px 0 rgba(255, 255, 255, 0.24),
-    inset 0 -1px 1.6px 0 rgba(15, 28, 62, 0.48);
-`
+const raisedInset = [
+  'inset 0 1px 1.9px 0 rgba(255, 255, 255, 0.24)',
+  'inset 0 -1px 1.6px 0 rgba(15, 28, 62, 0.48)',
+]
 
-const flatInset = css`
-  box-shadow:
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0.5px 0 rgba(15, 28, 62, 1);
-`
+const flatInset = [
+  'inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)',
+  'inset 0 -1px 0.5px 0 rgba(15, 28, 62, 1)',
+]
 
-const restingInset: Record<PrimaryButtonStatus, typeof flatInset> = {
+const restingInset: Record<PrimaryButtonStatus, string[]> = {
   default: raisedInset,
   danger: raisedInset,
   neutral: flatInset,
   success: flatInset,
 }
 
-const hairlineBorder = css`
-  border: 1px solid rgba(255, 255, 255, 0.03);
+// The design system draws the hairline as an inside stroke, so it shares a box
+// with the inner shadows. A CSS border would sit outside them and leave a
+// bright 1px rim showing under the bottom shadow.
+const hairlineRing = 'inset 0 0 0 1px rgba(255, 255, 255, 0.03)'
+
+const insetLayers = (layers: string[]) => css`
+  box-shadow: ${layers.join(', ')};
 `
 
 const pillHeight = (value: number) => css`
@@ -136,16 +139,18 @@ const StyledButton = styled(UnstyledButton)<{
 
         ${$disabled || $loading
           ? css`
-              ${flatInset}
+              ${insetLayers(flatInset)}
               background-color: ${getColor('buttonBackgroundDisabled')};
               color: ${getColor('buttonTextDisabled')};
               cursor: default;
             `
           : css`
-              ${restingInset[$status]}
-
               /* Only the md pill carries a hairline, and success never does */
-              ${$size === 'md' && $status !== 'success' ? hairlineBorder : ''}
+              ${insetLayers(
+                $size === 'md' && $status !== 'success'
+                  ? [...restingInset[$status], hairlineRing]
+                  : restingInset[$status]
+              )}
 
               ${match($status, {
                 default: () => css`
@@ -167,7 +172,11 @@ const StyledButton = styled(UnstyledButton)<{
               })}
 
               &:hover {
-                ${flatInset}
+                ${insetLayers(
+                  $size === 'md' && $status !== 'success'
+                    ? [...flatInset, hairlineRing]
+                    : flatInset
+                )}
 
                 ${match($status, {
                   default: () => css`
@@ -208,20 +217,21 @@ const StyledButton = styled(UnstyledButton)<{
       `,
       secondary: () => css`
         ${pillMetrics($size, $status)}
-        ${flatInset}
 
         ${$disabled || $loading
           ? css`
-              background-color: transparent;
-              border: 1px solid
-                ${theme.colors.buttonNeutral
+              ${insetLayers([
+                ...flatInset,
+                `inset 0 0 0 1px ${theme.colors.buttonNeutral
                   .getVariant({ a: () => 0.6 })
-                  .toCssValue()};
+                  .toCssValue()}`,
+              ])}
+              background-color: transparent;
               color: ${getColor('buttonTextDisabled')};
               cursor: default;
             `
           : css`
-              ${hairlineBorder}
+              ${insetLayers([...flatInset, hairlineRing])}
               background-color: ${getColor('buttonSecondary')};
               color: ${getColor('text')};
 
