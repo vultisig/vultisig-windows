@@ -182,7 +182,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
             />
           )}
 
-          <ConfirmButton
+          <Button
             data-testid="fast-vault-submit"
             disabled={mutationIsPending || !isValid}
             loading={mutationIsPending}
@@ -190,7 +190,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
             kind="primary"
           >
             {t('confirm')}
-          </ConfirmButton>
+          </Button>
         </VStack>
       </ModalWrapper>
     </Backdrop>
@@ -222,12 +222,4 @@ const ModalWrapper = styled(VStack)`
   border-radius: 24px;
   border: 1px solid #11284a;
   background: #02122b;
-`
-
-const ConfirmButton = styled(Button)`
-  width: 100%;
-  height: 48px;
-  border-radius: 24px;
-  font-size: 14px;
-  font-weight: 600;
 `
