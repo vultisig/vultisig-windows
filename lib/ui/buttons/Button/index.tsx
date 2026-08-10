@@ -12,14 +12,67 @@ import { ButtonProps, PrimaryButtonStatus } from '../ButtonProps'
 
 type ButtonSize = Extract<Size, 'sm' | 'md'>
 
-const ButtonShadow = styled.div`
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
+// A resting primary button sits proud; every other filled state (primary
+// hover/disabled, secondary) drops to the flatter inset pair.
+const raisedInset = css`
   box-shadow:
-    inset 0px -1px 0.5px 0px #0f1c3e,
-    inset 0px 1px 1px 0px rgba(255, 255, 255, 0.1);
+    inset 0 1px 1.9px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 1.6px 0 rgba(15, 28, 62, 0.48);
+`
+
+const flatInset = css`
+  box-shadow:
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0.5px 0 rgba(15, 28, 62, 1);
+`
+
+const hairlineBorder = css`
+  border: 1px solid rgba(255, 255, 255, 0.03);
+`
+
+const pillHeight = (value: number) => css`
+  height: ${value}px;
+  min-height: ${value}px;
+  min-width: ${value}px;
+`
+
+// The design system gives the neutral and success hierarchies 12px of vertical
+// padding against the default hierarchy's 14px, so they sit 4px shorter at md.
+const mediumHeight: Record<PrimaryButtonStatus, number> = {
+  default: 46,
+  danger: 46,
+  neutral: 42,
+  success: 42,
+}
+
+const pillMetrics = (size: ButtonSize, status: PrimaryButtonStatus) =>
+  match(size, {
+    sm: () => css`
+      font-size: 12px;
+      gap: 4px;
+      line-height: 16px;
+      ${pillHeight(36)}
+      ${horizontalPadding(16)}
+    `,
+    md: () => css`
+      font-size: 14px;
+      gap: 8px;
+      line-height: 18px;
+      ${pillHeight(mediumHeight[status])}
+      ${horizontalPadding(24)}
+    `,
+  })
+
+// The link kind is one size in the design system — both `sm` and `md` render
+// the same 26px pill.
+const linkMetrics = css`
+  font-size: 14px;
+  gap: 8px;
+  height: 26px;
+  line-height: 18px;
+  min-height: 26px;
+  min-width: 26px;
+  ${horizontalPadding(4)}
 `
 
 const StyledButton = styled(UnstyledButton)<{
@@ -29,39 +82,21 @@ const StyledButton = styled(UnstyledButton)<{
   $size: ButtonSize
   $status: PrimaryButtonStatus
 }>`
-  ${({ $disabled, $kind, $loading, $size, $status }) => css`
+  ${({ $disabled, $kind, $loading, $size, $status, theme }) => css`
     align-items: center;
     border: none;
+    border-radius: 99px;
     cursor: pointer;
     display: flex;
-    gap: 8px;
+    font-weight: 500;
     justify-content: center;
+    position: relative;
     transition: all 0.2s;
     width: 100%;
-    position: relative;
 
     ${match($kind, {
       link: () => css`
-        ${match($size, {
-          sm: () => css`
-            border-radius: 26px;
-            font-size: 12px;
-            font-weight: 500;
-            height: 26px;
-            min-height: 26px;
-            min-width: 26px;
-            ${horizontalPadding(4)}
-          `,
-          md: () => css`
-            border-radius: 28px;
-            font-size: 14px;
-            font-weight: 500;
-            height: 28px;
-            min-height: 28px;
-            min-width: 28px;
-            ${horizontalPadding(4)}
-          `,
-        })}
+        ${linkMetrics}
 
         ${$disabled || $loading
           ? css`
@@ -73,39 +108,26 @@ const StyledButton = styled(UnstyledButton)<{
               color: ${getColor('text')};
 
               &:hover {
-                color: ${getColor('buttonHover')};
+                background-color: ${getColor('buttonLinkHover')};
               }
             `}
       `,
       primary: () => css`
-        ${match($size, {
-          sm: () => css`
-            border-radius: 36px;
-            font-size: 12px;
-            font-weight: 500;
-            height: 36px;
-            min-height: 36px;
-            min-width: 36px;
-            ${horizontalPadding(16)}
-          `,
-          md: () => css`
-            border-radius: 46px;
-            font-size: 14px;
-            font-weight: 500;
-            height: 46px;
-            min-height: 46px;
-            min-width: 46px;
-            ${horizontalPadding(24)}
-          `,
-        })}
+        ${pillMetrics($size, $status)}
 
         ${$disabled || $loading
           ? css`
+              ${flatInset}
               background-color: ${getColor('buttonBackgroundDisabled')};
               color: ${getColor('buttonTextDisabled')};
               cursor: default;
             `
           : css`
+              ${raisedInset}
+
+              /* Only the md pill carries a hairline, and success never does */
+              ${$size === 'md' && $status !== 'success' ? hairlineBorder : ''}
+
               ${match($status, {
                 default: () => css`
                   color: ${getColor('text')};
@@ -126,6 +148,8 @@ const StyledButton = styled(UnstyledButton)<{
               })}
 
               &:hover {
+                ${flatInset}
+
                 ${match($status, {
                   default: () => css`
                     background-color: ${getColor('buttonHover')};
@@ -137,33 +161,14 @@ const StyledButton = styled(UnstyledButton)<{
                     background-color: ${getColor('danger')};
                   `,
                   success: () => css`
-                    background-color: ${getColor('primary')};
+                    background-color: ${getColor('buttonSuccessHover')};
                   `,
                 })}
               }
             `}
       `,
       outlined: () => css`
-        ${match($size, {
-          sm: () => css`
-            border-radius: 36px;
-            font-size: 12px;
-            font-weight: 500;
-            height: 36px;
-            min-height: 36px;
-            min-width: 36px;
-            ${horizontalPadding(16)}
-          `,
-          md: () => css`
-            border-radius: 46px;
-            font-size: 14px;
-            font-weight: 500;
-            height: 46px;
-            min-height: 46px;
-            min-width: 46px;
-            ${horizontalPadding(24)}
-          `,
-        })}
+        ${pillMetrics($size, $status)}
 
         ${$disabled || $loading
           ? css`
@@ -183,36 +188,22 @@ const StyledButton = styled(UnstyledButton)<{
             `}
       `,
       secondary: () => css`
-        ${match($size, {
-          sm: () => css`
-            border-radius: 36px;
-            font-size: 12px;
-            font-weight: 500;
-            height: 36px;
-            min-height: 36px;
-            min-width: 36px;
-            ${horizontalPadding(16)}
-          `,
-          md: () => css`
-            border-radius: 46px;
-            font-size: 14px;
-            font-weight: 500;
-            height: 46px;
-            min-height: 46px;
-            min-width: 46px;
-            ${horizontalPadding(24)}
-          `,
-        })}
+        ${pillMetrics($size, $status)}
+        ${flatInset}
 
         ${$disabled || $loading
           ? css`
-              background-color: ${getColor('buttonBackgroundDisabled')};
+              background-color: transparent;
+              border: 1px solid
+                ${theme.colors.buttonNeutral
+                  .getVariant({ a: () => 0.6 })
+                  .toCssValue()};
               color: ${getColor('buttonTextDisabled')};
               cursor: default;
             `
           : css`
+              ${hairlineBorder}
               background-color: ${getColor('buttonSecondary')};
-              border: 1px solid rgba(255, 255, 255, 0.03);
               color: ${getColor('text')};
 
               &:hover {
@@ -249,8 +240,6 @@ export const Button: FC<
     ...rest,
   }
 
-  const showShadow = kind === 'primary' && !disabled && !loading
-
   return typeof disabled === 'string' ? (
     <Tooltip
       content={disabled}
@@ -258,7 +247,6 @@ export const Button: FC<
         <StyledButton {...options} {...htmlProps} {...styledProps}>
           {loading ? <Spinner /> : icon}
           {children}
-          {showShadow && <ButtonShadow />}
         </StyledButton>
       )}
     />
@@ -266,14 +254,13 @@ export const Button: FC<
     <StyledButton {...htmlProps} {...styledProps}>
       {loading ? <Spinner /> : icon}
       {children}
-      {showShadow && <ButtonShadow />}
     </StyledButton>
   )
 }
 
 export const buttonSize: Record<ButtonSize, number> = {
   sm: 26,
-  md: 28,
+  md: 26,
 }
 
 export const buttonHeight: Record<ButtonSize, number> = {

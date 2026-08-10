@@ -105,6 +105,11 @@ export const Gallery: Story = {
               Get started
             </Button>
           ))}
+          {SIZES.map(size => (
+            <Button key={size} kind="secondary" size={size} disabled>
+              Disabled
+            </Button>
+          ))}
         </div>
       </section>
 
@@ -129,6 +134,11 @@ export const Gallery: Story = {
           {SIZES.map(size => (
             <Button key={size} kind="link" size={size}>
               Get started
+            </Button>
+          ))}
+          {SIZES.map(size => (
+            <Button key={size} kind="link" size={size} disabled>
+              Disabled
             </Button>
           ))}
         </div>
