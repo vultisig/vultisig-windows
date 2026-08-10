@@ -275,6 +275,11 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 		}
 		keyShares = append(keyShares, keyShare)
 	}
+
+	if err = keySharesRows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
 	return keyShares, nil
 }
 
@@ -341,6 +346,11 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 
 		vaults = append(vaults, &vault)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
 	return vaults, nil
 }
 
@@ -449,6 +459,10 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
 		}
 		addressBookItems = append(addressBookItems, addressBookItem)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
 	}
 
 	return addressBookItems, nil
@@ -660,6 +674,11 @@ func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
 		}
 		folders = append(folders, &folder)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
 	return folders, nil
 }
 
