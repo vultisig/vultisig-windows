@@ -2,6 +2,7 @@ import {
   hasPartialPaymentFlag,
   parseRippleTxFlags,
 } from '@core/ui/mpc/keysign/tx/ripple/rippleTxFlags'
+import { parseIssuedCurrencyValue } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 /**
@@ -34,6 +35,39 @@ export type RippleTransaction = Record<string, unknown> & {
  */
 const strippedFields = ['SigningPubKey', 'TxnSignature', 'Signers']
 
+/**
+ * Whether a value is a well-formed, strictly positive XRPL amount — a drops
+ * string or an issued-currency object. A `DeliverMin` only floors a delivery if
+ * it is one: `null`, `{}` and zero all satisfy "the field is present" while
+ * bounding nothing, so presence alone cannot stand in for a floor.
+ */
+const isPositiveRippleAmount = (value: unknown): boolean => {
+  if (typeof value === 'string') {
+    const drops = attempt(() => BigInt(value))
+    return 'error' in drops ? false : drops.data > 0n
+  }
+
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+
+  const {
+    currency,
+    issuer,
+    value: issuedValue,
+  } = value as Record<string, unknown>
+  if (
+    typeof currency !== 'string' ||
+    typeof issuer !== 'string' ||
+    typeof issuedValue !== 'string'
+  ) {
+    return false
+  }
+
+  const parsed = attempt(() => parseIssuedCurrencyValue(issuedValue))
+  return 'error' in parsed ? false : parsed.data > 0n
+}
+
 type SanitizeInput = {
   rawJson: string
   accountAddress: string
@@ -48,8 +82,9 @@ type SanitizeInput = {
  * sender" (GemWallet's model), a match is fine, and a *different* address is
  * refused — signing it as our vault would change who the transaction is from
  * out from under the user. `Flags` must decode as a uint32, and a `Payment`
- * carrying `tfPartialPayment` without a `DeliverMin` is refused: its `Amount`
- * is a ceiling, so no confirmation screen could state what the user receives.
+ * carrying `tfPartialPayment` without a positive `DeliverMin` is refused: its
+ * `Amount` is a ceiling, so no confirmation screen could state what the user
+ * receives.
  *
  * `Paths` is left intact — it is legitimate on a cross-currency payment — and
  * is instead surfaced to the user by the confirmation display. The result is
@@ -106,18 +141,19 @@ export const sanitizeRippleDappTx = ({
     throw new Error('Ripple transaction Flags must be a uint32 bitmask')
   }
 
-  // tfPartialPayment turns `Amount` from a delivery into a ceiling. With no
-  // `DeliverMin` floor nothing bounds what actually arrives — the delivered
-  // figure exists only in post-execution metadata — so the confirmation screen
-  // has no honest number to show while the user can still be charged the full
-  // `SendMax`. Refuse rather than render an amount that may not be delivered.
+  // tfPartialPayment turns `Amount` from a delivery into a ceiling. Without a
+  // usable `DeliverMin` floor nothing bounds what actually arrives — the
+  // delivered figure exists only in post-execution metadata — so the
+  // confirmation screen has no honest number to show while the user can still
+  // be charged the full `SendMax`. Refuse rather than render an amount that may
+  // not be delivered.
   if (
     transactionType === 'Payment' &&
     hasPartialPaymentFlag(flags) &&
-    record.DeliverMin === undefined
+    !isPositiveRippleAmount(record.DeliverMin)
   ) {
     throw new Error(
-      'Ripple partial payment must specify DeliverMin: without it the delivered amount is unbounded'
+      'Ripple partial payment must specify a positive DeliverMin: without it the delivered amount is unbounded'
     )
   }
 

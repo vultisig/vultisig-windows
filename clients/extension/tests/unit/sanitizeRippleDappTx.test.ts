@@ -125,6 +125,64 @@ describe('sanitizeRippleDappTx', () => {
     expect(result.DeliverMin).toBe('950000')
   })
 
+  it.each([
+    ['null', null],
+    ['an empty object', {}],
+    [
+      'an issued-currency object missing its value',
+      { currency: 'USD', issuer: 'rIssuer00000000000000000000000000000' },
+    ],
+    ['a non-numeric drops string', 'not-a-number'],
+    ['zero drops', '0'],
+    [
+      'a zero issued-currency value',
+      {
+        currency: 'USD',
+        issuer: 'rIssuer00000000000000000000000000000',
+        value: '0',
+      },
+    ],
+  ])(
+    'rejects a partial payment whose DeliverMin is %s',
+    (_label, DeliverMin) => {
+      // Each of these satisfies "the field is present" while flooring nothing,
+      // so presence alone cannot stand in for a delivery floor.
+      expect(() =>
+        sanitize({
+          TransactionType: 'Payment',
+          Destination: vaultAddress,
+          Amount: '1000000',
+          SendMax: '1200000',
+          DeliverMin,
+          Flags: 131072,
+        })
+      ).toThrow(/DeliverMin/)
+    }
+  )
+
+  it('accepts a partial payment floored by an issued-currency DeliverMin', () => {
+    const deliverMin = {
+      currency: '524C555344000000000000000000000000000000',
+      issuer: 'rIssuer00000000000000000000000000000',
+      value: '1.5',
+    }
+
+    const result = sanitize({
+      TransactionType: 'Payment',
+      Destination: vaultAddress,
+      Amount: {
+        currency: '524C555344000000000000000000000000000000',
+        issuer: 'rIssuer00000000000000000000000000000',
+        value: '2',
+      },
+      SendMax: '1200000',
+      DeliverMin: deliverMin,
+      Flags: 131072,
+    })
+
+    expect(result.DeliverMin).toEqual(deliverMin)
+  })
+
   it('leaves tfPartialPayment alone on a non-Payment transaction', () => {
     // 0x00020000 is tfPartialPayment only on a Payment; on an OfferCreate the
     // same bit is tfImmediateOrCancel and says nothing about delivery.
