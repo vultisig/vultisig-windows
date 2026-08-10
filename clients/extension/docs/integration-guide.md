@@ -361,6 +361,18 @@ Account reads and signing methods use the same access and keysign popups as the
 generic provider. `isInstalled()` and `getNetwork()` expose no vault-specific
 data and do not require a prompt.
 
+**Transaction constraints:** a dApp-supplied transaction is signed verbatim, so
+the fields it may carry are bounded before it reaches the confirmation screen.
+`TransactionType` must be `Payment`, `OfferCreate`, `OfferCancel`, or
+`TrustSet`; `Account` must be absent or equal to the connected address;
+`SigningPubKey`, `TxnSignature`, and `Signers` are dropped; and `Fee`,
+`Sequence`, and `LastLedgerSequence` are overwritten from the wallet's own
+network read. `Flags` must be a uint32 bitmask -- the `{ tfPartialPayment: true }`
+object form is rejected -- and a `Payment` that sets `tfPartialPayment`
+(`0x00020000`) must also carry a `DeliverMin`, since without one its `Amount` is
+a ceiling the confirmation screen cannot state honestly. `Paths` is passed
+through and shown to the user as a routing notice.
+
 ### MayaChain (`window.vultisig.mayachain`)
 
 **Account Management:**

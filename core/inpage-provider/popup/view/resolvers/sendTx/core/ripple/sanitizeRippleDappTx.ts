@@ -1,3 +1,7 @@
+import {
+  hasPartialPaymentFlag,
+  parseRippleTxFlags,
+} from '@core/ui/mpc/keysign/tx/ripple/rippleTxFlags'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 /**
@@ -43,9 +47,15 @@ type SanitizeInput = {
  * validated rather than silently rewritten: absent means "wallet fills the
  * sender" (GemWallet's model), a match is fine, and a *different* address is
  * refused — signing it as our vault would change who the transaction is from
- * out from under the user. The result is signed verbatim, so this is the only
- * gate between the page and the signer; it fails loudly rather than coercing a
- * malformed request into something signable.
+ * out from under the user. `Flags` must decode as a uint32, and a `Payment`
+ * carrying `tfPartialPayment` without a `DeliverMin` is refused: its `Amount`
+ * is a ceiling, so no confirmation screen could state what the user receives.
+ *
+ * `Paths` is left intact — it is legitimate on a cross-currency payment — and
+ * is instead surfaced to the user by the confirmation display. The result is
+ * signed verbatim, so this is the only gate between the page and the signer; it
+ * fails loudly rather than coercing a malformed request into something
+ * signable.
  */
 export const sanitizeRippleDappTx = ({
   rawJson,
@@ -84,6 +94,30 @@ export const sanitizeRippleDappTx = ({
   if (record.Account !== undefined && record.Account !== accountAddress) {
     throw new Error(
       'Ripple transaction Account does not match the connected account'
+    )
+  }
+
+  // `Flags` rides through verbatim like every other field, but unlike the rest
+  // it changes what the other fields *mean*. A value the XRPL codec cannot
+  // encode as a uint32 leaves us unable to tell which flags are set, so it
+  // cannot be passed on as if it were harmless.
+  const flags = parseRippleTxFlags(record.Flags)
+  if (flags === null) {
+    throw new Error('Ripple transaction Flags must be a uint32 bitmask')
+  }
+
+  // tfPartialPayment turns `Amount` from a delivery into a ceiling. With no
+  // `DeliverMin` floor nothing bounds what actually arrives — the delivered
+  // figure exists only in post-execution metadata — so the confirmation screen
+  // has no honest number to show while the user can still be charged the full
+  // `SendMax`. Refuse rather than render an amount that may not be delivered.
+  if (
+    transactionType === 'Payment' &&
+    hasPartialPaymentFlag(flags) &&
+    record.DeliverMin === undefined
+  ) {
+    throw new Error(
+      'Ripple partial payment must specify DeliverMin: without it the delivered amount is unbounded'
     )
   }
 

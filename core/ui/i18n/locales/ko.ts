@@ -1836,4 +1836,8 @@ export const ko = {
   swap_invalid_config:
     '교환 세부 정보, 수신자 및 고급 설정을 검토한 후 다시 시도하십시오.',
   swap_no_routes_found: '이 자산 쌍에 사용할 수 있는 스왑 경로가 없습니다.',
+  ripple_warning_partial_payment:
+    '이 거래는 부분 결제입니다. 표시된 금액은 최대 금액이며, 보장된 금액이 아닙니다. 수취인은 표시된 최대 금액보다 적은 금액을 받을 수 있지만, 송금인은 표시된 최대 금액을 지불하게 됩니다.',
+  ripple_warning_custom_paths:
+    '해당 사이트는 결제가 네트워크를 통해 이루어지는 경로를 선택했습니다.',
 }

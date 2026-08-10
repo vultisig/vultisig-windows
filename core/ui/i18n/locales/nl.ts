@@ -1859,4 +1859,8 @@ export const nl = {
   swap_invalid_config:
     'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
   swap_no_routes_found: 'Er is geen swaproute beschikbaar voor dit activapaar.',
+  ripple_warning_partial_payment:
+    'Deze transactie betreft een gedeeltelijke betaling: het weergegeven bedrag is een maximum, geen gegarandeerd bedrag. De ontvanger kan een lager bedrag ontvangen, terwijl u wel het weergegeven maximum betaalt.',
+  ripple_warning_custom_paths:
+    'De website heeft de route bepaald die deze betaling via het netwerk aflegt.',
 }

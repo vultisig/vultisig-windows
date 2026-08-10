@@ -91,6 +91,106 @@ describe('sanitizeRippleDappTx', () => {
     ).toThrow(/not valid JSON/)
   })
 
+  it('rejects a partial payment that sets no delivery floor', () => {
+    // tfPartialPayment makes Amount a ceiling: the ledger delivers whatever the
+    // path can source and records it only in metadata. With no DeliverMin the
+    // user can be charged SendMax and receive dust, and the confirmation screen
+    // has no honest figure to show — so this never reaches the signer.
+    expect(() =>
+      sanitize({
+        TransactionType: 'Payment',
+        Destination: vaultAddress,
+        Amount: {
+          currency: '524C555344000000000000000000000000000000',
+          issuer: 'rIssuer00000000000000000000000000000',
+          value: '500',
+        },
+        SendMax: '200000000',
+        Flags: 131072,
+      })
+    ).toThrow(/DeliverMin/)
+  })
+
+  it('accepts a partial payment that bounds delivery with DeliverMin', () => {
+    const result = sanitize({
+      TransactionType: 'Payment',
+      Destination: vaultAddress,
+      Amount: '1000000',
+      SendMax: '1200000',
+      DeliverMin: '950000',
+      Flags: 131072,
+    })
+
+    expect(result.Flags).toBe(131072)
+    expect(result.DeliverMin).toBe('950000')
+  })
+
+  it('leaves tfPartialPayment alone on a non-Payment transaction', () => {
+    // 0x00020000 is tfPartialPayment only on a Payment; on an OfferCreate the
+    // same bit is tfImmediateOrCancel and says nothing about delivery.
+    expect(
+      sanitize({ TransactionType: 'OfferCreate', Flags: 131072 }).Flags
+    ).toBe(131072)
+  })
+
+  it('passes through flags that do not touch delivery', () => {
+    // tfFullyCanonicalSig — set by most clients, and above INT32_MAX, so the
+    // uint32 bound must not clip it.
+    expect(
+      sanitize({
+        TransactionType: 'Payment',
+        Amount: '1000000',
+        Flags: 2147483648,
+      }).Flags
+    ).toBe(2147483648)
+  })
+
+  it('rejects Flags the XRPL codec cannot encode as a uint32', () => {
+    // Some client libraries accept `{ tfPartialPayment: true }` sugar. Passing
+    // an undecodable Flags on would mean signing flags we never evaluated.
+    expect(() =>
+      sanitize({
+        TransactionType: 'Payment',
+        Amount: '1000000',
+        Flags: { tfPartialPayment: true },
+      })
+    ).toThrow(/uint32/)
+
+    expect(() =>
+      sanitize({
+        TransactionType: 'Payment',
+        Amount: '1000000',
+        Flags: '131072',
+      })
+    ).toThrow(/uint32/)
+
+    expect(() =>
+      sanitize({
+        TransactionType: 'Payment',
+        Amount: '1000000',
+        Flags: -1,
+      })
+    ).toThrow(/uint32/)
+  })
+
+  it('preserves dApp-supplied Paths so the confirmation screen can surface them', () => {
+    // Paths are legitimate on a cross-currency payment, so they are shown
+    // rather than refused — but they must survive verbatim to be shown at all.
+    const paths = [
+      [{ currency: 'USD', issuer: 'rIssuer00000000000000000000000000000' }],
+    ]
+
+    const result = sanitize({
+      TransactionType: 'Payment',
+      Destination: vaultAddress,
+      Amount: '1000000',
+      SendMax: '1200000',
+      Paths: paths,
+    })
+
+    expect(result.Paths).toEqual(paths)
+  })
+
   it('preserves the value-bearing fields of an OfferCreate', () => {
     const takerGets = '10000000'
     const takerPays = {

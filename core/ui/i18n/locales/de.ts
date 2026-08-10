@@ -1891,4 +1891,8 @@ export const de = {
   swap_invalid_config:
     'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
   swap_no_routes_found: 'Für dieses Asset-Paar ist keine Swap-Route verfügbar.',
+  ripple_warning_partial_payment:
+    'Diese Transaktion ist eine Teilzahlung: Der angezeigte Betrag ist ein Höchstbetrag, keine Garantie. Der Empfänger kann einen geringeren Betrag erhalten, während Sie dennoch den angezeigten Höchstbetrag zahlen.',
+  ripple_warning_custom_paths:
+    'Die Website hat den Weg gewählt, den diese Zahlung durch das Netzwerk nimmt.',
 }

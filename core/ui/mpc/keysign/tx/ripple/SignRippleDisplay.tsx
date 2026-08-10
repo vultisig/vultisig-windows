@@ -1,3 +1,4 @@
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
@@ -20,6 +21,11 @@ type SignRippleDisplayProps = { rawJson: string }
  * transaction type and its value-bearing fields (destination, amounts, offer
  * sides, trust limit) so the user approves what the tx actually does rather
  * than opaque JSON. Issued-currency amounts also show their issuer.
+ *
+ * Caveats that redefine those rows lead the panel: a `tfPartialPayment` payment
+ * whose amount is only a ceiling, and a site-supplied payment path. Both are
+ * signed verbatim, so a screen showing the rows without them would state better
+ * terms than the ones being approved.
  *
  * If the transaction can't be decoded, it falls back to the raw JSON with a
  * caution notice — a signing-approval screen must never go blank, leaving the
@@ -53,6 +59,19 @@ export const SignRippleDisplay: FC<SignRippleDisplayProps> = ({ rawJson }) => {
         <Text size={14} weight={500} color="contrast">
           {t('ripple_transaction_summary')}
         </Text>
+        {data.warnings.map(warningKey => (
+          <HStack key={warningKey} alignItems="flex-start" gap={6}>
+            <Text
+              as={TriangleAlertIcon}
+              color="warning"
+              size={16}
+              style={{ flexShrink: 0 }}
+            />
+            <Text size={12} color="warning">
+              {t(warningKey)}
+            </Text>
+          </HStack>
+        ))}
         <HStack alignItems="center" justifyContent="space-between" gap={8}>
           <Text size={13} color="shy">
             {t('ripple_field_type')}

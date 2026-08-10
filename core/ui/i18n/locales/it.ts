@@ -1882,4 +1882,8 @@ export const it = {
     'Rivedi i dettagli dello scambio, il destinatario e le impostazioni avanzate, quindi riprova.',
   swap_no_routes_found:
     'Non è disponibile alcuna rotta di swap per questa coppia di asset.',
+  ripple_warning_partial_payment:
+    "Questa transazione è un pagamento parziale: l'importo mostrato è un importo massimo, non garantito. Il destinatario può ricevere un importo inferiore, mentre tu verserai comunque l'importo massimo indicato.",
+  ripple_warning_custom_paths:
+    'Il sito ha scelto il percorso che questo pagamento seguirà attraverso la rete.',
 }

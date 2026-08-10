@@ -947,6 +947,10 @@ export const en = {
   ripple_field_trust_limit: 'Trust limit',
   ripple_field_offer_sequence: 'Offer sequence',
   ripple_field_issuer: 'Issuer',
+  ripple_warning_partial_payment:
+    'This transaction is a partial payment: the amount shown is a maximum, not a guaranteed amount. The recipient can receive a smaller amount while you still pay the maximum shown.',
+  ripple_warning_custom_paths:
+    'The site chose the route this payment takes through the network.',
   review_vault_devices_subtitle:
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',
