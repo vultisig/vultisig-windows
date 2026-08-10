@@ -1,4 +1,5 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
+import { signingFailedPopupResult } from '@core/inpage-provider/popup/error'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { FlowErrorCloseProvider } from '@core/ui/flow/FlowErrorCloseContext'
 import {
@@ -51,7 +52,7 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
         <FlowErrorCloseProvider
           value={() =>
             onFinish({
-              result: { error: new Error('Signing failed') },
+              result: signingFailedPopupResult,
               shouldClosePopup: true,
             })
           }
