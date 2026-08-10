@@ -275,6 +275,11 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 		}
 		keyShares = append(keyShares, keyShare)
 	}
+
+	if err = keySharesRows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
 	return keyShares, nil
 }
 
@@ -341,6 +346,11 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 
 		vaults = append(vaults, &vault)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
 	return vaults, nil
 }
 
@@ -449,6 +459,10 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
 		}
 		addressBookItems = append(addressBookItems, addressBookItem)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
 	}
 
 	return addressBookItems, nil
@@ -660,6 +674,11 @@ func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
 		}
 		folders = append(folders, &folder)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
 	return folders, nil
 }
 
@@ -763,7 +782,8 @@ func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string]VaultAllKeyShares)
 		// Update chain_key_shares in vaults table ONLY if provided (imported vaults only)
 		// Regular vaults will have nil/empty ChainKeyShares - we skip the update for them
 		if len(allKeyShares.ChainKeyShares) > 0 {
-			chainKeySharesJSON, err := json.Marshal(allKeyShares.ChainKeyShares)
+			var chainKeySharesJSON []byte
+			chainKeySharesJSON, err = json.Marshal(allKeyShares.ChainKeyShares)
 			if err != nil {
 				return fmt.Errorf("could not marshal chain key shares: %w", err)
 			}
