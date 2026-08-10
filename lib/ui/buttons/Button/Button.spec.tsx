@@ -21,7 +21,9 @@ const styleOf = (ui: ReactElement) => {
   }
 }
 
-const hairline = 'border:1pxsolidrgba(255,255,255,0.03)'
+// The hairline is an inside stroke in the design system, so it ships as an
+// inset ring sharing a box with the shadows rather than as a CSS border.
+const hairline = 'inset0001pxrgba(255,255,255,0.03)'
 const raisedInset = 'inset01px1.9px0rgba(255,255,255,0.24)'
 const flatInset = 'inset01px1px0rgba(255,255,255,0.1)'
 
@@ -81,6 +83,16 @@ describe('primary', () => {
 
   test('hover drops to the flat inset', () => {
     expect(styleOf(<Button>x</Button>)).toContain(flatInset)
+  })
+
+  // Deliberate deviation from the design system, which draws this edge fully
+  // opaque. On our background that erases the button's last row and reads as
+  // the button shrinking by a pixel on hover.
+  test('the bottom edge never goes fully opaque', () => {
+    const css = styleOf(<Button>x</Button>)
+
+    expect(css).toContain('inset0-1px0.5px0rgba(15,28,62,0.48)')
+    expect(css).not.toContain('rgba(15,28,62,1)')
   })
 
   test('only the default hierarchy rests on the raised inset', () => {
