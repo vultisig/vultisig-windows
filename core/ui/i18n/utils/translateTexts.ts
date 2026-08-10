@@ -10,6 +10,41 @@ import {
 
 const batchSize = 600
 
+const namedHtmlEntities: Record<string, string> = {
+  amp: '&',
+  apos: "'",
+  gt: '>',
+  lt: '<',
+  nbsp: ' ',
+  quot: '"',
+}
+
+const htmlEntityPattern = /&(#[0-9]+|#[xX][0-9a-fA-F]+|[a-zA-Z]+);/g
+
+/**
+ * Undoes the entity escaping the translation API applies because we request
+ * `text/html` — a mime type we need so the `<tag>` markup of `Trans` strings
+ * survives the round trip. Left encoded, an apostrophe comes back as the
+ * literal `&#39;` and reaches users that way, which is how Romance-language
+ * copy in this repo ended up full of them.
+ */
+const decodeHtmlEntities = (value: string): string =>
+  value.replace(htmlEntityPattern, (match, entity: string) => {
+    if (!entity.startsWith('#')) {
+      return namedHtmlEntities[entity.toLowerCase()] ?? match
+    }
+
+    const isHex = entity[1] === 'x' || entity[1] === 'X'
+    const codePoint = Number.parseInt(
+      isHex ? entity.slice(2) : entity.slice(1),
+      isHex ? 16 : 10
+    )
+
+    return Number.isSafeInteger(codePoint) && codePoint > 0
+      ? String.fromCodePoint(codePoint)
+      : match
+  })
+
 type TranslateTextsParams = {
   texts: string[]
   from: Language
@@ -59,7 +94,9 @@ export const translateTexts = async ({
           throw new Error('No translatedText')
         }
 
-        translatedText = protectedContents[index].restore(translatedText)
+        translatedText = decodeHtmlEntities(
+          protectedContents[index].restore(translatedText)
+        )
 
         const syntaxIssues = findI18nSyntaxIssues({
           key: `batch item ${index + 1}`,
