@@ -20,12 +20,10 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useFriendReferralValidation } from './EditFriendReferralForm/hooks/useFriendReferralValidation'
@@ -127,16 +125,15 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
             </VStack>
           </VStack>
           <VStack gap={8}>
-            <SaveReferralButton
+            <Button
+              kind="secondary"
               disabled={disabled}
               onClick={() => (friendReferral ? onFinish() : handleSave())}
             >
-              <Text as="span" color="contrast">
-                {friendReferral
-                  ? t('edit_friends_referral')
-                  : t('add_referral_code')}
-              </Text>
-            </SaveReferralButton>
+              {friendReferral
+                ? t('edit_friends_referral')
+                : t('add_referral_code')}
+            </Button>
             {friendReferral && (
               <Button
                 kind="secondary"
@@ -152,13 +149,3 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
     </>
   )
 }
-
-const SaveReferralButton = styled(Button)`
-  background-color: rgba(17, 40, 74, 1);
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${getColor('buttonHover')};
-  }
-`

@@ -101,23 +101,8 @@ const ButtonsRow = styled(HStack)`
   margin-top: 8px;
 `
 
-const ShareButton = styled(Button)`
+const RowButton = styled(Button)`
   flex: 1;
-  border-radius: 40px;
-  font-size: 14px;
-`
-
-const CopyButton = styled(Button)`
-  flex: 1;
-  border-radius: 40px;
-  background: ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
-  color: ${getColor('contrast')};
-  font-size: 14px;
-
-  &:hover {
-    background: ${({ theme }) =>
-      theme.colors.buttonPrimary.withAlpha(0.8).toCssValue()};
-  }
 `
 
 export const AddressQRCard = ({
@@ -228,10 +213,10 @@ export const AddressQRCard = ({
       </AddressText>
 
       <ButtonsRow>
-        <ShareButton kind="secondary" onClick={handleShare}>
+        <RowButton kind="secondary" onClick={handleShare}>
           {t('share')}
-        </ShareButton>
-        <CopyButton onClick={handleCopy}>{t('copy_address')}</CopyButton>
+        </RowButton>
+        <RowButton onClick={handleCopy}>{t('copy_address')}</RowButton>
       </ButtonsRow>
     </Container>
   )
