@@ -1,4 +1,6 @@
 import { darkTheme } from '@lib/ui/theme/darkTheme'
+import { stationTheme } from '@lib/ui/theme/stationTheme'
+import { ThemeColor } from '@lib/ui/theme/ThemeColors'
 import { ReactElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ServerStyleSheet, ThemeProvider } from 'styled-components'
@@ -27,19 +29,28 @@ const hairline = 'inset0001pxrgba(255,255,255,0.03)'
 const raisedInset = 'inset01px1.9px0rgba(255,255,255,0.24)'
 const flatInset = 'inset01px1px0rgba(255,255,255,0.1)'
 
+const colourCases: [ThemeColor, string][] = [
+  ['buttonPrimary', '#0b4eff'],
+  ['buttonHover', '#1e6ad1'],
+  ['buttonSecondary', '#11284a'],
+  ['buttonSecondaryHover', '#1d385e'],
+  ['buttonNeutral', '#2155df'],
+  ['buttonNeutralHover', '#1e6ad1'],
+  ['buttonSuccessHover', '#0fbf93'],
+  ['buttonBackgroundDisabled', '#0b1a3a'],
+  ['buttonTextDisabled', '#718096'],
+]
+
 describe('design system colours', () => {
-  test.each([
-    ['buttonPrimary', '#0b4eff'],
-    ['buttonHover', '#1e6ad1'],
-    ['buttonSecondary', '#11284a'],
-    ['buttonSecondaryHover', '#1d385e'],
-    ['buttonNeutral', '#2155df'],
-    ['buttonNeutralHover', '#1e6ad1'],
-    ['buttonSuccessHover', '#0fbf93'],
-    ['buttonBackgroundDisabled', '#0b1a3a'],
-    ['buttonTextDisabled', '#718096'],
-  ] as const)('%s is %s', (token, hex) => {
+  test.each(colourCases)('%s is %s', (token, hex) => {
     expect(darkTheme.colors[token].toHex()).toBe(hex)
+  })
+
+  // Station has no design system entry for this one. It follows that theme's
+  // own convention, where hover is lighter and more saturated than the base.
+  test('station success hover is lighter than its base', () => {
+    expect(stationTheme.colors.buttonSuccessHover.toHex()).toBe('#47f0cb')
+    expect(stationTheme.colors.primary.toHex()).toBe('#33e6bf')
   })
 })
 

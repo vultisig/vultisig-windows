@@ -126,7 +126,7 @@ export const BannerTextStack = styled.div`
 /**
  * The design system's mini primary pill, centred above the banner artwork.
  */
-export const BannerCta = styled(Button).attrs({ size: 'xs' as const })`
+export const BannerCta = styled(Button).attrs({ size: 'xs' })`
   align-self: center;
   white-space: nowrap;
   z-index: 2;
