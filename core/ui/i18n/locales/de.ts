@@ -1881,17 +1881,16 @@ export const de = {
   swap_limit_cancel_records_unavailable:
     'Ihre Transaktionshistorie konnte nicht geladen werden. Bitte versuchen Sie es später erneut – Ihre Bestellung ist davon nicht betroffen.',
   swap_all_providers_failed:
-    'Die Tauschanbieter sind vorübergehend nicht verfügbar. Bitte versuchen Sie es in Kürze erneut.',
+    'Die Swap-Anbieter sind vorübergehend nicht erreichbar. Bitte versuche es gleich noch einmal.',
   swap_amount_below_minimum:
-    'Erhöhen Sie den Betrag, um den vom Anbieter geforderten Mindesttauschbetrag zu erreichen.',
+    'Erhöhe den Betrag, um den Mindesttauschbetrag des Anbieters zu erreichen.',
   swap_amount_too_small:
-    'Geben Sie einen höheren Betrag ein, um ein Tauschangebot zu erhalten.',
+    'Gib einen größeren Betrag ein, um ein Tauschangebot zu erhalten.',
   swap_invalid_config:
     'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
-  swap_no_routes_found: 'Für dieses Assetpaar ist keine Tauschroute verfügbar.',
+  swap_no_routes_found: 'Für dieses Asset-Paar ist keine Swap-Route verfügbar.',
   price_impact: 'Preisauswirkung',
-  swap_affiliate_fee_noun: 'Gebühr',
-  swap_fee_included_in_rate: 'Im angegebenen Preis enthalten',
+  swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
   swap_protocol_fee: 'Protokollgebühr',
   swap_referral_fee: 'Vermittlungsgebühr',
 }

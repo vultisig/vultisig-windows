@@ -1870,16 +1870,15 @@ export const pt = {
   swap_all_providers_failed:
     'Os provedores de swap estão temporariamente indisponíveis. Tente novamente em instantes.',
   swap_amount_below_minimum:
-    'Aumente o valor para atingir o valor mínimo de swap exigido pelo provedor.',
+    'Aumente o valor para atingir o mínimo do provedor.',
   swap_amount_too_small:
     'Insira um valor maior para obter uma cotação de swap.',
   swap_invalid_config:
     'Revise os detalhes da troca, o destinatário e as configurações avançadas e tente novamente.',
   swap_no_routes_found:
-    'Não há opção de swap disponível para este par de ativos.',
+    'Não há uma rota de swap disponível para este par de ativos.',
   price_impact: 'Impacto no preço',
-  swap_affiliate_fee_noun: 'Taxa',
-  swap_fee_included_in_rate: 'Incluído no preço cotado',
+  swap_fee_included_in_rate: 'Incluído na taxa de câmbio cotada',
   swap_protocol_fee: 'Taxa de protocolo',
   swap_referral_fee: 'Taxa de encaminhamento',
 }

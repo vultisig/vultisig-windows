@@ -17,8 +17,13 @@ const priceImpactColors: Record<PriceImpactLevel, TextColor> = {
   high: 'danger',
 }
 
+type GetPriceImpactLabelInput = {
+  level: PriceImpactLevel
+  t: TFunction
+}
+
 // Keys stay literal so the i18n integrity check can resolve them statically.
-const getPriceImpactLabel = (level: PriceImpactLevel, t: TFunction) =>
+const getPriceImpactLabel = ({ level, t }: GetPriceImpactLabelInput) =>
   match(level, {
     good: () => t('price_impact_good'),
     average: () => t('price_impact_average'),
@@ -49,7 +54,8 @@ export const SwapPriceImpactRow = ({
         label: t('price_impact'),
         value: (
           <Text as="span" color={priceImpactColors[priceImpact.level]}>
-            {priceImpact.percent} ({getPriceImpactLabel(priceImpact.level, t)})
+            {priceImpact.percent} (
+            {getPriceImpactLabel({ level: priceImpact.level, t })})
           </Text>
         ),
       })}

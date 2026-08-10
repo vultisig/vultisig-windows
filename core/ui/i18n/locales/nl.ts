@@ -1849,18 +1849,16 @@ export const nl = {
   swap_limit_cancel_records_unavailable:
     'Uw transactiegeschiedenis kon niet worden geladen. Probeer het over een tijdje opnieuw. Uw bestelling blijft ongewijzigd.',
   swap_all_providers_failed:
-    'De swapaanbieders zijn tijdelijk niet beschikbaar. Probeer het over een moment opnieuw.',
+    'Swapaanbieders zijn tijdelijk niet beschikbaar. Probeer het zo opnieuw.',
   swap_amount_below_minimum:
     'Verhoog het bedrag tot het minimale swapbedrag van de aanbieder.',
   swap_amount_too_small:
-    'Voer een hoger bedrag in om een ​​ruilofferte te ontvangen.',
+    'Voer een hoger bedrag in om een swapofferte te krijgen.',
   swap_invalid_config:
     'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
-  swap_no_routes_found:
-    'Er is geen swapmogelijkheid beschikbaar voor dit activapaar.',
+  swap_no_routes_found: 'Er is geen swaproute beschikbaar voor dit activapaar.',
   price_impact: 'Prijsimpact',
-  swap_affiliate_fee_noun: 'Tarief',
-  swap_fee_included_in_rate: 'Inbegrepen in de vermelde prijs',
+  swap_fee_included_in_rate: 'Inbegrepen in de vermelde wisselkoers',
   swap_protocol_fee: 'Protocolkosten',
   swap_referral_fee: 'Verwijzingsvergoeding',
 }

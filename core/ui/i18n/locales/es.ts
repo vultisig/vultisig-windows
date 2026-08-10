@@ -1865,18 +1865,17 @@ export const es = {
   swap_limit_cancel_records_unavailable:
     'No se pudo cargar el historial de transacciones. Inténtelo de nuevo en breve; su pedido no se ha visto afectado.',
   swap_all_providers_failed:
-    'Los proveedores de intercambio no están disponibles temporalmente. Inténtelo de nuevo en un momento.',
+    'Los proveedores de intercambio no están disponibles temporalmente. Vuelve a intentarlo en un momento.',
   swap_amount_below_minimum:
-    'Aumente la cantidad para alcanzar el importe mínimo de intercambio del proveedor.',
+    'Aumenta el importe para alcanzar el mínimo del proveedor.',
   swap_amount_too_small:
-    'Introduzca una cantidad mayor para obtener una cotización de intercambio.',
+    'Introduce un importe mayor para obtener una cotización.',
   swap_invalid_config:
     'Revisa los detalles del intercambio, el destinatario y la configuración avanzada, y vuelve a intentarlo.',
   swap_no_routes_found:
-    'No existe ninguna ruta de intercambio disponible para este par de activos.',
+    'No hay ninguna ruta de intercambio disponible para este par de activos.',
   price_impact: 'Impacto en los precios',
-  swap_affiliate_fee_noun: 'Tarifa',
-  swap_fee_included_in_rate: 'Incluido en la tarifa cotizada',
+  swap_fee_included_in_rate: 'Incluido en el tipo de cambio cotizado',
   swap_protocol_fee: 'Tarifa de protocolo',
   swap_referral_fee: 'Comisión por recomendación',
 }

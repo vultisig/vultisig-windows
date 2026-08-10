@@ -56,12 +56,16 @@ export const SwapProviderFeeRows = ({
     <>
       {renderRow({
         // Named after the product, as iOS is: this row is the one claim the
-        // user can hold us to, so it carries our name and only our money. The
-        // brand is composed here rather than interpolated into the label —
-        // machine translation collapses "{{brand}} Fee" to the bare brand in
-        // some locales, while a standalone noun survives intact.
+        // user can hold us to, so it carries our name and only our money.
+        //
+        // The brand is composed here rather than interpolated into the label,
+        // because machine translation collapses "{{brand}} Fee" to the bare
+        // brand in some locales. It reuses the existing `swap_fee` noun rather
+        // than a bespoke one for the same reason: translated in isolation, a
+        // bare "Fee" came back as "Payment" in Russian, leaving the row that
+        // carries our name unable to say what it charges.
         label: formatFeeRateLabel({
-          name: `${currentProductBrandConfig.name} ${t('swap_affiliate_fee_noun')}`,
+          name: `${currentProductBrandConfig.name} ${t('swap_fee')}`,
           bps: product,
         }),
         value: <SwapAffiliateFeeValue fee={affiliate} bps={product} />,

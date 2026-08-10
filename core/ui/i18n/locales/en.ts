@@ -1178,12 +1178,11 @@ export const en = {
   support: 'Support',
   swap: 'Swap',
   swaps: 'Swaps',
-  swap_affiliate_fee_noun: 'Fee',
   swap_discount: 'Swap Discount',
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
-  swap_fee_included_in_rate: 'Included in quoted rate',
+  swap_fee_included_in_rate: 'Included in the quoted exchange rate',
   swap_protocol_fee: 'Protocol Fee',
   swap_referral_fee: 'Referral Fee',
   swap_invalid_external_recipient:

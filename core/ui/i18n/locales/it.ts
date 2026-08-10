@@ -1871,18 +1871,17 @@ export const it = {
   swap_limit_cancel_records_unavailable:
     'Impossibile caricare la cronologia delle transazioni. Riprova tra poco: il tuo ordine non è stato modificato.',
   swap_all_providers_failed:
-    'I provider di scambio non sono temporaneamente disponibili. Riprova tra un attimo.',
+    'I provider di swap non sono temporaneamente disponibili. Riprova tra poco.',
   swap_amount_below_minimum:
-    'Aumenta l&#39;importo per raggiungere l&#39;importo minimo di swap richiesto dal fornitore.',
+    "Aumenta l'importo per raggiungere il minimo del provider.",
   swap_amount_too_small:
-    'Inserisci un importo maggiore per ottenere un preventivo di swap.',
+    'Inserisci un importo maggiore per ottenere un preventivo.',
   swap_invalid_config:
     'Rivedi i dettagli dello scambio, il destinatario e le impostazioni avanzate, quindi riprova.',
   swap_no_routes_found:
-    'Per questa coppia di asset non è disponibile alcuna opzione di swap.',
+    'Non è disponibile alcuna rotta di swap per questa coppia di asset.',
   price_impact: 'Impatto sul prezzo',
-  swap_affiliate_fee_noun: 'Tassa',
-  swap_fee_included_in_rate: 'Incluso nel prezzo indicato',
+  swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
   swap_protocol_fee: 'Tariffa del protocollo',
   swap_referral_fee: 'Commissione di segnalazione',
 }

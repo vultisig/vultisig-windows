@@ -1827,17 +1827,15 @@ export const ko = {
   swap_limit_cancel_records_unavailable:
     '거래 내역을 불러올 수 없습니다. 잠시 후 다시 시도해 주세요. 주문에는 문제가 없습니다.',
   swap_all_providers_failed:
-    '스왑 제공업체를 일시적으로 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+    '스왑 제공자를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도하세요.',
   swap_amount_below_minimum:
-    '제공업체의 최소 교환 금액을 충족하도록 금액을 늘리십시오.',
-  swap_amount_too_small:
-    '더 큰 금액을 입력하시면 환전 견적을 받아보실 수 있습니다.',
+    '제공자의 최소 스왑 금액을 충족하도록 금액을 늘리세요.',
+  swap_amount_too_small: '견적을 받으려면 더 큰 금액을 입력하세요.',
   swap_invalid_config:
     '교환 세부 정보, 수신자 및 고급 설정을 검토한 후 다시 시도하십시오.',
-  swap_no_routes_found: '이 자산 쌍에 대해서는 스왑 경로가 제공되지 않습니다.',
+  swap_no_routes_found: '이 자산 쌍에 사용할 수 있는 스왑 경로가 없습니다.',
   price_impact: '가격 영향',
-  swap_affiliate_fee_noun: '요금',
-  swap_fee_included_in_rate: '견적 가격에 포함되어 있습니다.',
+  swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
   swap_protocol_fee: '프로토콜 수수료',
   swap_referral_fee: '소개 수수료',
 }

@@ -1837,17 +1837,15 @@ export const hr = {
   swap_limit_cancel_records_unavailable:
     'Nije moguće učitati vašu povijest transakcija. Pokušajte ponovno uskoro — vaša narudžba ostaje nepromijenjena.',
   swap_all_providers_failed:
-    'Pružatelji usluga zamjene trenutno nisu dostupni. Pokušajte ponovno za trenutak.',
+    'Pružatelji zamjene privremeno nisu dostupni. Pokušajte ponovno za trenutak.',
   swap_amount_below_minimum:
-    'Povećajte iznos kako biste ispunili minimalni iznos zamjene koji je odredio pružatelj usluga.',
-  swap_amount_too_small:
-    'Unesite veći iznos kako biste dobili ponudu za zamjenu.',
+    'Povećajte iznos kako biste dosegli minimalni iznos pružatelja.',
+  swap_amount_too_small: 'Unesite veći iznos kako biste dobili ponudu.',
   swap_invalid_config:
     'Pregledajte detalje zamjene, primatelja i napredne postavke, a zatim pokušajte ponovno.',
   swap_no_routes_found: 'Za ovaj par imovine nije dostupna ruta zamjene.',
   price_impact: 'Utjecaj na cijenu',
-  swap_affiliate_fee_noun: 'Pristojba',
-  swap_fee_included_in_rate: 'Uključeno u navedenu cijenu',
+  swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
   swap_protocol_fee: 'Naknada za protokol',
   swap_referral_fee: 'Naknada za preporuku',
 }
