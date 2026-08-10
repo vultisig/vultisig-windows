@@ -85,6 +85,16 @@ describe('primary', () => {
     expect(styleOf(<Button>x</Button>)).toContain(flatInset)
   })
 
+  // Deliberate deviation from the design system, which draws this edge fully
+  // opaque. On our background that erases the button's last row and reads as
+  // the button shrinking by a pixel on hover.
+  test('the bottom edge never goes fully opaque', () => {
+    const css = styleOf(<Button>x</Button>)
+
+    expect(css).toContain('inset0-1px0.5px0rgba(15,28,62,0.48)')
+    expect(css).not.toContain('rgba(15,28,62,1)')
+  })
+
   test('only the default hierarchy rests on the raised inset', () => {
     expect(styleOf(<Button>x</Button>)).toContain(raisedInset)
     expect(styleOf(<Button status="neutral">x</Button>)).not.toContain(

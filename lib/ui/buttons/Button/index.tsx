@@ -21,9 +21,14 @@ const raisedInset = [
   'inset 0 -1px 1.6px 0 rgba(15, 28, 62, 0.48)',
 ]
 
+// The design system draws this bottom edge fully opaque. On our near-navy
+// background an opaque #0f1c3e line is all but indistinguishable from the page,
+// so the button's last row disappears and it reads as losing a pixel on hover.
+// Holding it at the resting alpha keeps the silhouette while staying crisper
+// than the resting edge, which is what the tighter blur is there for.
 const flatInset = [
   'inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)',
-  'inset 0 -1px 0.5px 0 rgba(15, 28, 62, 1)',
+  'inset 0 -1px 0.5px 0 rgba(15, 28, 62, 0.48)',
 ]
 
 const restingInset: Record<PrimaryButtonStatus, string[]> = {
