@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -19,7 +20,7 @@ export const IconWrapper = styled.div`
   height: 24px;
   font-size: 14px;
   background-color: ${getColor('foregroundExtra')};
-  border-radius: 99px;
+  ${borderRadius.pill};
   position: relative;
 
   &:before {

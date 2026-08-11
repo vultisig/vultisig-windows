@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
@@ -61,7 +62,7 @@ export const LimitAssetStep = () => {
 
 const Card = styled(VStack)`
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 12px;
+  ${borderRadius.md};
   padding: 16px;
 `
 
@@ -82,7 +83,7 @@ const Seam = styled.div`
 const ReverseWrapper = styled.div`
   ${centerContent};
   background-color: ${getColor('background')};
-  border-radius: 25.5px;
+  ${borderRadius.pill};
   padding: 7px;
   position: absolute;
   top: 50%;
@@ -95,7 +96,7 @@ const ReverseWrapper = styled.div`
     width: 54px;
     top: 0;
     height: 19px;
-    border-radius: 50px;
+    ${borderRadius.pill};
     border: 1px solid ${getColor('foregroundExtra')};
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -108,7 +109,7 @@ const ReverseWrapper = styled.div`
     width: 54px;
     bottom: 0;
     height: 19px;
-    border-radius: 50px;
+    ${borderRadius.pill};
     border: 1px solid ${getColor('foregroundExtra')};
     border-top-right-radius: 0;
     border-top-left-radius: 0;
@@ -119,7 +120,7 @@ const ReverseWrapper = styled.div`
 const ReverseButton = styled(UnstyledButton)`
   ${sameDimensions(40)};
   ${centerContent};
-  border-radius: 1000px;
+  ${borderRadius.pill};
   border: 2px solid ${getColor('background')};
   background: ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
   color: ${({ theme }) => theme.colors.contrast.toCssValue()};

@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -44,7 +45,7 @@ export const SolanaStakingInfoCard = ({
 const Card = styled(VStack).attrs({ gap: 12 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const Row = styled.div`
@@ -56,6 +57,6 @@ const Row = styled.div`
 
 const Notice = styled.div`
   padding: 12px 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
 `

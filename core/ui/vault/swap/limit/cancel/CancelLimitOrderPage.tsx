@@ -3,6 +3,7 @@ import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStar
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useTransactionRecordsQuery } from '@core/ui/storage/transactionHistory'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -251,7 +252,7 @@ const Body = styled(VStack)`
 
 const Card = styled(VStack)`
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 12px;
+  ${borderRadius.md};
   padding: 16px;
 `
 

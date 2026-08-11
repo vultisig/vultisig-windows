@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
@@ -28,6 +29,6 @@ export const LimitSwapNotice: FC<LimitSwapNoticeProps> = ({
 
 const Notice = styled(HStack)`
   padding: 10px 12px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
 `

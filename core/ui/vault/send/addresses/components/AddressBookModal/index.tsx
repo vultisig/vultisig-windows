@@ -225,7 +225,7 @@ const ModalWrapper = styled(VStack)`
   height: 500px;
   width: 100%;
   background: ${getColor('foreground')};
-  ${borderRadius.m};
+  ${borderRadius.md};
   padding: 24px 20px;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
@@ -235,7 +235,7 @@ const ModalWrapper = styled(VStack)`
 
 const OptionsContainer = styled(HStack)`
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 100%;
+  ${borderRadius.pill};
 `
 
 const StyledList = styled(List)`
