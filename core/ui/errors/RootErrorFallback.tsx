@@ -20,7 +20,7 @@ const StackTrace = styled.pre`
     size: 12,
     weight: '400',
   })}
-  ${borderRadius.m};
+  ${borderRadius.md};
   background: ${getColor('foreground')};
   padding: 20px;
   max-height: 240px;

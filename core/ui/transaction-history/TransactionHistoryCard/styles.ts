@@ -1,3 +1,4 @@
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor, matchColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -11,7 +12,7 @@ export const Card = styled(VStack).attrs({
   gap: 12,
 })`
   padding: 16px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   width: 100%;
@@ -72,7 +73,7 @@ export const IconSlot = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 /** USD + crypto stack. Minimal gap (Figma ~0 between lines in some frames). */
@@ -89,7 +90,7 @@ export const AddressPill = styled(HStack).attrs({
   gap: 4,
 })`
   padding: 8px 16px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: ${getColor('buttonSecondary')};
   border: 1px solid ${getColor('foregroundExtra')};
   flex-shrink: 0;
@@ -111,7 +112,7 @@ export const ProviderPill = styled(HStack).attrs({
   gap: 6,
 })`
   padding: 8px 12px;
-  border-radius: 12px 0 16px 0;
+  border-radius: ${borderRadiusPx.md}px 0 ${borderRadiusPx.lg}px 0;
   background: ${getColor('buttonSecondary')};
   border-top: 1px solid ${getColor('foregroundExtra')};
   border-left: 1px solid ${getColor('foregroundExtra')};

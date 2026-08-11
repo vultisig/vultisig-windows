@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import styled from 'styled-components'
 
 import { TierBadgeContent } from './useTierBadge'
@@ -16,7 +17,7 @@ export const TierBadge = ({ badge }: TierBadgeProps) =>
 
 const Pill = styled.span<{ $color: string }>`
   border: 1px solid ${({ $color }) => $color};
-  border-radius: 99px;
+  ${borderRadius.pill};
   color: ${({ $color }) => $color};
   font-size: 10px;
   font-weight: 600;

@@ -1,4 +1,5 @@
 import { ProductLogo } from '@core/ui/product/ProductLogo'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -49,14 +50,14 @@ const QrCardFrame = styled.div`
   height: ${qrCardHeight}px;
   padding: 18px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 24px;
+  ${borderRadius.xl};
 `
 
 const InfoCard = styled(VStack)`
   width: ${cardInnerWidth}px;
   padding: 20px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 24px;
+  ${borderRadius.xl};
   gap: 16px;
 `
 
@@ -82,7 +83,7 @@ const BrandLogoSquare = styled.div`
   justify-content: center;
   width: 33px;
   height: 33px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: linear-gradient(180deg, #4879fd 0%, #0d39b1 100%);
   box-shadow: inset 0 0.82px 0.82px 0 rgba(255, 255, 255, 0.35);
   color: ${getColor('white')};
