@@ -3,6 +3,7 @@ import {
   marketChartRanges,
 } from '@core/ui/chain/coin/price/market/MarketChartRange'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -60,7 +61,7 @@ export const CoinChartRangePicker = ({
 const Segment = styled(UnstyledButton)<IsActiveProp>`
   flex: 1;
   padding: 10px 0;
-  border-radius: 999px;
+  ${borderRadius.pill};
   text-align: center;
   cursor: pointer;
 

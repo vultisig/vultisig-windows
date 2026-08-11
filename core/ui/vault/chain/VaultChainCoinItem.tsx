@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -25,7 +26,7 @@ const PriceBadge = styled.div`
   align-items: center;
   align-self: flex-start;
   padding: 3px 8px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: ${getColor('foregroundExtra')};
 `
 

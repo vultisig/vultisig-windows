@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp, TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -22,7 +23,7 @@ export const CoinDetailSection = ({
 
 const Card = styled(VStack)`
   width: 100%;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('background')};
   padding: 4px 0;
 `

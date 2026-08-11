@@ -2,6 +2,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TronBandwidthIcon } from '@lib/ui/icons/TronBandwidthIcon'
@@ -180,7 +181,7 @@ const ContentContainer = styled(VStack)`
   @media ${mediaQuery.tabletDeviceAndUp} {
     padding: 24px;
     background: ${getColor('background')};
-    border-radius: 12px;
+    ${borderRadius.md};
     border: 1px solid ${getColor('mistExtra')};
     max-width: 480px;
     width: 100%;
@@ -192,7 +193,7 @@ const BandwidthIconCircle = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: rgba(19, 200, 157, 0.1);
   flex-shrink: 0;
 `
@@ -202,7 +203,7 @@ const EnergyIconCircle = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: #1b2430;
   flex-shrink: 0;
 `
@@ -221,7 +222,7 @@ const RowWrapper = styled.div`
 `
 
 const AccordionWrapper = styled.div`
-  border-radius: 12px;
+  ${borderRadius.md};
   background-color: ${getColor('foreground')};
 
   & > ${RowWrapper}:first-of-type {
