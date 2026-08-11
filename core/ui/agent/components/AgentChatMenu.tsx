@@ -13,6 +13,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
@@ -146,7 +147,7 @@ const MenuTrigger = styled(UnstyledButton)`
   flex-shrink: 0;
   font-size: 24px;
   color: ${getColor('contrast')};
-  border-radius: 4px;
+  ${borderRadius.xs};
 
   &:hover {
     opacity: 0.7;
@@ -158,7 +159,7 @@ const MenuContainer = styled.div``
 const MenuPanel = styled(VStack)`
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   padding: 4px 0;
   min-width: 220px;
 `
@@ -171,7 +172,7 @@ const MenuItem = styled.button<{ $danger?: boolean }>`
   cursor: pointer;
   color: ${({ $danger }) =>
     $danger ? getColor('danger') : getColor('contrast')};
-  border-radius: 12px;
+  ${borderRadius.md};
 
   &:hover {
     background: ${getColor('foregroundExtra')};

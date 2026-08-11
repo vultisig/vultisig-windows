@@ -1,4 +1,5 @@
 import { deriveCosmosMessageLabel } from '@core/ui/transaction-history/cosmosMessageLabel'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -43,6 +44,6 @@ export const MessagesSection = ({
 const Card = styled(VStack).attrs({ gap: 12 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
 `

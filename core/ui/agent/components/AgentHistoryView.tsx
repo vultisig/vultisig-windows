@@ -1,5 +1,6 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
@@ -49,7 +50,7 @@ export const AgentHistoryView: FC<AgentHistoryViewProps> = ({
               key={index}
               height="51px"
               width="100%"
-              borderRadius="14px"
+              borderRadius={`${borderRadiusPx.md}px`}
             />
           ))}
         </VStack>
@@ -143,7 +144,7 @@ const StatusCard = styled(VStack)`
   width: min(100%, 360px);
   padding: 28px 24px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 20px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
 `
 
@@ -153,7 +154,7 @@ const StatusIcon = styled.div<{ $tone: 'accent' | 'danger' }>`
   justify-content: center;
   width: 52px;
   height: 52px;
-  border-radius: 18px;
+  ${borderRadius.lg};
   color: ${({ $tone }) =>
     $tone === 'danger' ? getColor('danger') : getColor('primary')};
   background: ${({ $tone }) =>
@@ -165,7 +166,7 @@ const StatusIcon = styled.div<{ $tone: 'accent' | 'danger' }>`
 const ConversationItem = styled(UnstyledButton)`
   width: 100%;
   padding: 14px;
-  border-radius: 14px;
+  ${borderRadius.md};
   text-align: left;
   cursor: pointer;
 

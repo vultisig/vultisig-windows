@@ -2,6 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -227,7 +228,7 @@ const VoteOptionButton = ({
 const Card = styled(VStack).attrs({ gap: 12 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
 `
 
@@ -244,7 +245,7 @@ const OptionButton = styled.button`
   gap: 10px;
   width: 100%;
   padding: 14px 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   cursor: pointer;
@@ -253,6 +254,6 @@ const OptionButton = styled.button`
 const Dot = styled.span<{ $token: GovColorToken }>`
   width: 10px;
   height: 10px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background: ${({ $token }) => getColor($token)};
 `
