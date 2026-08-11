@@ -298,11 +298,11 @@ const StyledInputWrapper = styled(motion.div)`
 const TotalBalanceWrapper = styled(HStack)`
   background-color: ${getColor('foreground')};
   padding: 16px;
-  ${borderRadius.m}
+  ${borderRadius.md}
 `
 
 const SuggestionOption = styled(AmountSuggestion)`
   flex: 1;
   padding: 6px 18px;
-  border-radius: 99px;
+  ${borderRadius.pill};
 `

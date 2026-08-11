@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, memo } from 'react'
@@ -158,7 +159,7 @@ const UserRow = styled.div`
 
 const UserBubble = styled.div`
   padding: 10px 14px;
-  border-radius: 66px;
+  ${borderRadius.pill};
   background: ${getColor('foregroundExtra')};
   color: ${getColor('text')};
   max-width: min(

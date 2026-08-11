@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
@@ -54,7 +55,7 @@ export const ConfirmationPrompt: FC<Props> = ({
 const DetailsBox = styled.div`
   padding: 12px;
   background: ${getColor('foreground')};
-  border-radius: 8px;
+  ${borderRadius.sm};
   max-height: 200px;
   overflow-y: auto;
 `

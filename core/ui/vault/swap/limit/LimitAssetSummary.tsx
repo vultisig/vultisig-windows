@@ -1,5 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -65,7 +66,7 @@ export const LimitAssetSummary: FC<LimitAssetSummaryProps> = ({
 
 const Card = styled(HStack)`
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 12px;
+  ${borderRadius.md};
   padding: 14px 16px;
 `
 

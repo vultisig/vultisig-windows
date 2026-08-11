@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -62,6 +63,6 @@ const WindowRow = ({ label, value }: { label: string; value: string }) => (
 const Card = styled(VStack).attrs({ gap: 12 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
 `

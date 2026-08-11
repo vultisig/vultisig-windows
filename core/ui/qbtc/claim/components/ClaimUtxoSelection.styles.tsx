@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -12,7 +13,7 @@ export const HeaderCard = styled.div`
   min-height: 118px;
   box-sizing: border-box;
   padding: 16px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: linear-gradient(
     180deg,
     rgba(95, 191, 255, 0.18) 0%,

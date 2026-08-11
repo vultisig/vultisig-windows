@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
@@ -247,7 +248,7 @@ const FooterItem = styled.div<IsActiveProp>`
   scroll-snap-stop: always;
   cursor: pointer;
   padding: 8px 12px 8px 8px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   outline: none;
 
   scroll-snap-align: center;
@@ -260,7 +261,7 @@ const FooterItem = styled.div<IsActiveProp>`
     content: '';
     position: absolute;
     inset: 0 -6px;
-    border-radius: 99px;
+    ${borderRadius.pill};
     z-index: -1;
     background: transparent;
     transition: background 0.2s ease;
@@ -288,7 +289,7 @@ const CenterStroke = styled.div`
   translate: -50%;
   pointer-events: none;
   border: 1px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: rgba(6, 27, 58, 0.02);
   box-shadow: 0 0 14px 0 rgba(33, 85, 223, 0.45);
   /* Width is written imperatively (setStrokeToKey) off the live chain, so snap

@@ -1,5 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
@@ -186,7 +187,7 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
 
 const Card = styled(VStack)`
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 12px;
+  ${borderRadius.md};
   padding: 16px;
 `
 
@@ -238,14 +239,14 @@ const UnitToggleGroup = styled.div`
   flex-direction: column;
   gap: 2px;
   padding: 3px;
-  border-radius: 20px;
+  ${borderRadius.pill};
   background: ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
 `
 
 const UnitToggle = styled(UnstyledButton)<IsActiveProp>`
   ${sameDimensions(32)};
   ${centerContent};
-  border-radius: 18px;
+  ${borderRadius.pill};
   cursor: pointer;
   color: ${({ theme }) => theme.colors.textShy.toCssValue()};
 
@@ -259,7 +260,7 @@ const UnitToggle = styled(UnstyledButton)<IsActiveProp>`
 
 const Pill = styled(UnstyledButton)<IsActiveProp>`
   padding: 8px 16px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
   cursor: pointer;
 
@@ -277,6 +278,6 @@ const Pill = styled(UnstyledButton)<IsActiveProp>`
 
 const ExpiryCard = styled(HStack)`
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 12px;
+  ${borderRadius.md};
   padding: 12px 16px;
 `

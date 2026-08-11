@@ -44,7 +44,7 @@ export const VaultAddressBookItem = ({
 const AddressBookListItem = styled(ListItem)`
   background-color: transparent;
   border: 1px solid ${getColor('foregroundExtra')};
-  ${borderRadius.m};
+  ${borderRadius.md};
   padding: 16px 20px;
   max-height: 68px;
 `

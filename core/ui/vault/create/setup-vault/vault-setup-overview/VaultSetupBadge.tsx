@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -31,7 +32,7 @@ export const VaultSetupBadge = ({
 const Container = styled(HStack)`
   background: #061b3a;
   border: 1px solid ${getColor('foreground')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   padding: 8px 20px 8px 8px;
   align-self: flex-start;
 `
@@ -40,7 +41,7 @@ const IconWrapper = styled.div`
   flex-shrink: 0;
   width: 33px;
   height: 33px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   display: flex;
   align-items: center;
   justify-content: center;

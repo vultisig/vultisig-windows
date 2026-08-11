@@ -6,6 +6,7 @@ import { useCoinMarketStatsQuery } from '@core/ui/chain/coin/price/market/querie
 import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -149,7 +150,7 @@ export const CoinPriceChart = ({ coin }: CoinPriceChartProps) => {
 
 const Card = styled(VStack)`
   width: 100%;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('background')};
   padding: 16px;
 `
@@ -160,7 +161,7 @@ const ScrubDateCaption = styled.div`
 
 const ChangeChip = styled.div`
   padding: 4px 10px;
-  border-radius: 999px;
+  ${borderRadius.pill};
 `
 
 const GraphContainer = styled.div`

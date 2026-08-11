@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { InfoCircleIcon } from '@lib/ui/icons/InfoCircleIcon'
 import { TronBandwidthIcon } from '@lib/ui/icons/TronBandwidthIcon'
 import { TronEnergyIcon } from '@lib/ui/icons/TronEnergyIcon'
@@ -25,7 +26,7 @@ const energyAccent = '#FFC25C'
 const Card = styled(VStack)`
   flex: 1;
   padding: 12px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('background')};
   gap: 16px;
@@ -36,7 +37,7 @@ const BandwidthIconBox = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: rgba(19, 200, 157, 0.1);
   flex-shrink: 0;
 `
@@ -46,7 +47,7 @@ const EnergyIconBox = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: #1b2430;
   flex-shrink: 0;
 `

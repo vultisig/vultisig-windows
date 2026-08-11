@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Image } from '@lib/ui/image/Image'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -49,7 +50,7 @@ const FriendsReferralPromptWrapper = styled(VStack)`
 
   cursor: pointer;
 
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `

@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import {
@@ -35,7 +36,7 @@ export const TallyBar = ({ tally }: { tally: QbtcGovTally }) => {
 const Track = styled(HStack)`
   width: 100%;
   height: 6px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   overflow: hidden;
   background: ${getColor('foregroundExtra')};
 `

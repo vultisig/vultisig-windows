@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -66,7 +67,7 @@ const CustomIconWrapper = styled.div`
   padding: 17px;
   font-size: 27.5px;
   color: ${getColor('buttonPrimary')};
-  border-radius: 24px;
+  ${borderRadius.xl};
   border: 1.5px dashed ${getColor('foregroundExtra')};
   opacity: 0.6;
   background: ${getColor('foreground')};

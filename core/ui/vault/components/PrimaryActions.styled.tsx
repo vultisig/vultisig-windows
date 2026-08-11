@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -21,7 +22,7 @@ const ActionWrapper = styled(UnstyledButton)`
   justify-content: center;
   align-items: center;
   gap: 6px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   line-height: 0;
   font-size: 20px;
   transition: background 0.3s ease;
@@ -38,7 +39,7 @@ export const PrimaryActionWrapper = styled(ActionWrapper)`
 `
 
 export const SecondaryActionWrapper = styled(ActionWrapper)`
-  border-radius: 16px;
+  ${borderRadius.lg};
   border: 1px solid rgba(255, 255, 255, 0.03);
   background: ${getColor('foregroundExtra')};
 

@@ -1,6 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { FileQuestionIcon } from '@lib/ui/icons/FileQuestionIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -132,7 +133,7 @@ const Wrapper = styled(VStack)`
 
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 14px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: rgba(2, 18, 43, 0.5);
 `
 
@@ -144,7 +145,7 @@ const NoReferralDescriptionWrapper = styled(VStack)`
 
   padding: 36px 12px 24px 12px;
   gap: 20px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: rgba(2, 18, 43, 0.5);
 `

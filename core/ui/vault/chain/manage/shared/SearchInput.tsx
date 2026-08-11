@@ -1,6 +1,7 @@
 import { InputPasteAction } from '@core/ui/components/InputPasteAction'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { MagnifyingGlassIcon } from '@lib/ui/icons/MagnifyingGlassIcon'
@@ -90,7 +91,7 @@ export const SearchInput = ({
 }
 
 const InputWrapper = styled.div<{ hasBorder?: boolean }>`
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: ${getColor('foreground')};
   background-clip: padding-box;
   overflow: hidden;
@@ -106,7 +107,7 @@ const InputWrapper = styled.div<{ hasBorder?: boolean }>`
 `
 
 const StyledTextInput = styled(TextInput)`
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: ${getColor('foreground')};
   box-shadow: 0 0 8px 0 rgba(240, 244, 252, 0.03) inset;
   height: 44px;

@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -14,7 +15,7 @@ export const BannerRoot = styled.div`
   margin-bottom: 32px;
   box-sizing: border-box;
   padding: 24px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foregroundExtra')};
   border: 1px solid ${getColor('foregroundExtra')};
   overflow: hidden;
@@ -27,7 +28,7 @@ export const BannerEllipseOuter = styled.div`
   width: 418px;
   height: 418px;
   margin-left: -209px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: rgba(255, 255, 255, 0.02);
   opacity: 0.7;
   pointer-events: none;
@@ -41,7 +42,7 @@ export const BannerEllipseGlass = styled.div`
   width: 294px;
   height: 294px;
   margin-left: -147px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: ${getColor('background')};
   border: 2px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(94px);
@@ -57,7 +58,7 @@ export const BannerEllipseGlow = styled.div`
   width: 350px;
   height: 350px;
   margin-left: -175px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: radial-gradient(
     circle at 50% 50%,
     rgba(4, 57, 199, 1) 0%,

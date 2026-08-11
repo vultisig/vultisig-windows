@@ -56,7 +56,7 @@ export const ChainOption = ({
 const Container = styled('div')<{ isSelected?: boolean }>`
   ${panel()};
   padding: 12px 20px;
-  border-radius: 0px;
+  border-radius: 0;
   position: relative;
   cursor: pointer;
   background: ${({ isSelected }) =>

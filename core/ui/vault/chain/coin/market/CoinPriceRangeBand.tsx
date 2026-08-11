@@ -1,4 +1,5 @@
 import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -57,7 +58,7 @@ const Track = styled.div`
   position: relative;
   width: 100%;
   height: 4px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background: ${getColor('foregroundExtra')};
 `
 
@@ -66,7 +67,7 @@ const Dot = styled.div`
   top: 50%;
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   transform: translateY(-50%);
   background: ${getColor('primary')};
 `

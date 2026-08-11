@@ -9,7 +9,7 @@ import { VaultItem } from './VaultItem'
 
 const Container = styled(StackSeparatedBy)`
   background: ${getColor('foregroundExtra')};
-  ${borderRadius.m};
+  ${borderRadius.md};
   overflow: hidden;
   width: 100%;
 `

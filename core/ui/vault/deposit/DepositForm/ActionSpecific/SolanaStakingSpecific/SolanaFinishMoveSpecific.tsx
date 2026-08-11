@@ -1,6 +1,7 @@
 import { SolanaValidatorPickerField } from '@core/ui/chain/solana/staking/components/SolanaValidatorPickerField'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -62,7 +63,7 @@ const Layout = styled(VStack).attrs({ gap: 16 })``
 const Card = styled(VStack).attrs({ gap: 12 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const Row = styled.div`
@@ -74,6 +75,6 @@ const Row = styled.div`
 
 const Notice = styled.div`
   padding: 12px 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
 `

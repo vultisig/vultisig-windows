@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnCloseProp } from '@lib/ui/props'
@@ -73,7 +74,7 @@ const GasInput = styled.input`
   width: 100%;
   height: 52px;
   padding: 0 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
   border: 1px solid rgba(255, 255, 255, 0.03);
   color: ${getColor('text')};

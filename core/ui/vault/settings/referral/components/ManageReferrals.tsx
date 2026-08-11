@@ -3,6 +3,7 @@ import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useFriendReferralQuery } from '@core/ui/storage/referrals'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { UserSparkleIcon } from '@lib/ui/icons/UserSparkleIcon'
@@ -199,7 +200,7 @@ const ActionDescription = styled(Text)`
 const ActionItem = styled(HStack)`
   align-items: center;
   background-color: ${getColor('foreground')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   cursor: pointer;
   gap: 24px;
   justify-content: space-between;

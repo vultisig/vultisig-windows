@@ -9,6 +9,6 @@ export const ActionInputContainer = styled(VStack)`
   gap: 16px;
   padding: 12px;
   flex: 1;
-  ${borderRadius.m};
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
 `
