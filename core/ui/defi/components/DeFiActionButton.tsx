@@ -1,7 +1,7 @@
 import { Button, buttonHeight } from '@lib/ui/buttons/Button'
 import { ButtonProps } from '@lib/ui/buttons/ButtonProps'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { getColor } from '@lib/ui/theme/getters'
@@ -22,7 +22,7 @@ const IconContainer = styled.div`
   top: 50%;
   transform: translateY(-50%);
   ${sameDimensions(iconContainerSize)}
-  ${round}
+  ${borderRadius.pill};
   background: rgba(255, 255, 255, 0.12);
   ${centerContent};
   color: ${getColor('text')};

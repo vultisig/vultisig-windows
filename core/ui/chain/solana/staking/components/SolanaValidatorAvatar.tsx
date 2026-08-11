@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -40,7 +41,7 @@ export const SolanaValidatorAvatar = ({
 const Image = styled.img<{ $size: number }>`
   width: ${({ $size }) => $size}px;
   height: ${({ $size }) => $size}px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   object-fit: cover;
   flex-shrink: 0;
 `
@@ -48,7 +49,7 @@ const Image = styled.img<{ $size: number }>`
 const Monogram = styled.div<{ $size: number }>`
   width: ${({ $size }) => $size}px;
   height: ${({ $size }) => $size}px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   flex-shrink: 0;
   display: flex;
   align-items: center;

@@ -102,7 +102,7 @@ export const ShowExactErrorModal = ({
 const Wrapper = styled(VStack)`
   width: 100%;
   background: ${getColor('background')};
-  ${borderRadius.m};
+  ${borderRadius.md};
   padding: 20px;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
@@ -111,7 +111,7 @@ const Wrapper = styled(VStack)`
 `
 
 const ErrorBox = styled.div`
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 20px;

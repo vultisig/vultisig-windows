@@ -2,6 +2,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@vultisig/lib-utils/match'
 import styled from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
+
 export type ErrorStatusVariant = 'error' | 'warning'
 
 type ErrorStatusIconProps = {
@@ -63,7 +65,7 @@ const Ring = styled.div<{ size: number }>`
   height: ${({ size }) => size}px;
   transform: translate(-50%, -50%);
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   opacity: 0.5;
 `
 

@@ -6,6 +6,7 @@ import {
   useDeleteCoinMutation,
 } from '@core/ui/storage/coins'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -141,7 +142,7 @@ const ErrorStateWrapper = styled.div`
   padding: 24px 20px;
   max-width: 450px;
   margin-inline: auto;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
 
   & > button {
@@ -159,7 +160,7 @@ const LoadingWrapper = styled.div`
 const TokenResultCard = styled.div`
   position: relative;
   padding: 20px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
 `
 
@@ -175,5 +176,5 @@ const LoadingOverlay = styled.div`
   justify-content: center;
   align-items: center;
   background: ${getColor('foreground')};
-  border-radius: 16px;
+  ${borderRadius.lg};
 `

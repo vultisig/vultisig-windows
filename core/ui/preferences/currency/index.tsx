@@ -3,6 +3,7 @@ import {
   useFiatCurrency,
   useSetFiatCurrencyMutation,
 } from '@core/ui/storage/fiatCurrency'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -49,7 +50,7 @@ export const CurrencyPage = () => {
 
 const CircleCheckIcon = styled(CheckIcon)`
   background-color: ${getColor('buttonPrimary')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   font-size: 16px;
   padding: 2px;
 `

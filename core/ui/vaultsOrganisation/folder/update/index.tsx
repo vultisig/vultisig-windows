@@ -20,6 +20,7 @@ import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVau
 import { getVaultSecurityTone } from '@core/ui/vaultsOrganisation/utils/getVaultSecurityTone'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { CloseIcon } from '@lib/ui/icons/CloseIcon'
@@ -86,7 +87,7 @@ const InputOverlay = styled.div`
 `
 
 const EmptyStateCard = styled(VStack)`
-  border-radius: 20px;
+  ${borderRadius.xl};
   padding: 24px;
   background: ${({ theme }) =>
     theme.colors.foreground.withAlpha(0.35).toCssValue()};

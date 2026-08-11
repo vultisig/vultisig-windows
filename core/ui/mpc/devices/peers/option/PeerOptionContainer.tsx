@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
@@ -6,7 +7,7 @@ import styled, { css } from 'styled-components'
 
 export const peerOption = css`
   padding: 16px;
-  border-radius: 16px;
+  ${borderRadius.lg};
 
   border: 1px dashed ${getColor('foregroundExtra')};
 
@@ -20,7 +21,7 @@ export const peerOptionActive = css`
 
 export const PeerOptionContainer = styled(UnstyledButton)<IsActiveProp>`
   padding: 16px;
-  border-radius: 16px;
+  ${borderRadius.lg};
 
   border: 1px dashed ${getColor('foregroundExtra')};
 

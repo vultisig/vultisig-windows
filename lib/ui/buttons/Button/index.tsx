@@ -292,12 +292,6 @@ export const Button: FC<
   )
 }
 
-export const buttonSize: Record<ButtonSize, number> = {
-  xs: 26,
-  sm: 26,
-  md: 26,
-}
-
 export const buttonHeight: Record<ButtonSize, number> = {
   xs: 32,
   sm: 36,

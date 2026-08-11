@@ -1,3 +1,4 @@
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Backdrop } from '@lib/ui/modal/Backdrop'
@@ -48,7 +49,7 @@ const Wrapper = styled.div`
   })};
 
   padding: 20px;
-  border-radius: 16px 16px 0 0;
+  border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0;
   background: ${getColor('background')};
 `
 

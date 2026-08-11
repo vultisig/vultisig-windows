@@ -7,7 +7,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { round } from '@lib/ui/css/round'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
@@ -26,7 +26,7 @@ import styled from 'styled-components'
 
 const Icon = styled(ContainImage)`
   ${sameDimensions('2.7em')};
-  ${round};
+  ${borderRadius.pill};
   border: 1px solid rgba(255, 255, 255, 0.1);
 `
 export const ConnectedDappsPage = () => {

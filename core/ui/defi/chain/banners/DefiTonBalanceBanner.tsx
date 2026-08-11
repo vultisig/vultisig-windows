@@ -1,6 +1,7 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Image } from '@lib/ui/image/Image'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -18,7 +19,7 @@ const TonBannerContainer = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 122px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   border: 1px solid rgba(0, 152, 234, 0.17);
   background: linear-gradient(
     180deg,

@@ -14,7 +14,7 @@ const Container = styled.div`
   padding: 12px;
   color: ${getColor('primaryAlt')};
   border: 1px solid;
-  ${borderRadius.m};
+  ${borderRadius.md};
 `
 
 export const MpcLocalServerIndicator = () => {

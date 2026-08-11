@@ -12,6 +12,7 @@ import {
 } from '@core/ui/storage/solanaMoveStakeDestinations'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -45,13 +46,13 @@ import { SolanaDelegationCard } from './SolanaDelegationCard'
 const TotalStakedLogo = styled.img`
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  ${borderRadius.pill};
 `
 
 const TotalStakedLogoFallback = styled.div`
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,7 +180,7 @@ export const SolanaStakeDefiView = () => {
         gap={12}
         style={{
           padding: 16,
-          borderRadius: 16,
+          borderRadius: borderRadiusPx.lg,
           background: 'rgba(255,255,255,0.04)',
         }}
       >

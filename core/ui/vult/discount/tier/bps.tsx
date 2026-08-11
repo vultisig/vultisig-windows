@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ValueProp } from '@lib/ui/props'
 import {
   VultDiscountTier,
@@ -11,7 +12,7 @@ const Container = styled.div`
   padding: 8px 16px;
   justify-content: center;
   align-items: center;
-  border-radius: 99px;
+  ${borderRadius.pill};
   border: 1px solid rgba(72, 121, 253, 0.32);
 
   color: #f0f4fc;

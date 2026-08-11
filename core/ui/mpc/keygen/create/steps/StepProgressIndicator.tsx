@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { SvgProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
@@ -93,7 +94,7 @@ const stepStateStyles: Record<StepState, ReturnType<typeof css>> = {
 const StepCircle = styled.div<{ $state: StepState }>`
   width: ${stepCircleSize}px;
   height: ${stepCircleSize}px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,7 +108,7 @@ const StepCircle = styled.div<{ $state: StepState }>`
 const Dash = styled.div<{ $active: boolean }>`
   width: 24px;
   height: 2px;
-  border-radius: 1px;
+  ${borderRadius.pill};
   background: rgba(255, 255, 255, 0.15);
   margin-left: 12px;
 `

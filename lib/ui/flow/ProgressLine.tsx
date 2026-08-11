@@ -5,11 +5,11 @@ import { toPercents } from '@vultisig/lib-utils/toPercents'
 import { FC } from 'react'
 import styled from 'styled-components'
 
-import { round } from '../css/round'
+import { borderRadius } from '../css/borderRadius'
 
 const Container = styled.div`
   width: 100%;
-  ${round};
+  ${borderRadius.pill};
   background: ${getColor('foreground')};
   height: 10px;
   overflow: hidden;

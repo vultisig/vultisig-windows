@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -84,7 +85,7 @@ export const ValidatorAvatar = ({
 const Circle = styled(HStack)<{ $size: number; $bg: string }>`
   width: ${({ $size }) => $size}px;
   height: ${({ $size }) => $size}px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: ${({ $bg }) => $bg};
   align-items: center;
   justify-content: center;

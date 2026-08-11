@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { HeroAmountInput } from '@lib/ui/inputs/HeroAmountInput'
 import { PercentageSelector } from '@lib/ui/inputs/PercentageSelector'
@@ -105,7 +106,7 @@ const Form = styled.form`
 const AmountContainer = styled.div`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   ${vStack({ gap: 12 })}
   flex-grow: 1;
   display: flex;

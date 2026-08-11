@@ -27,7 +27,7 @@ const Card = styled(VStack)`
   width: 100%;
   max-width: 400px;
   padding: 24px;
-  ${borderRadius.m};
+  ${borderRadius.md};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `

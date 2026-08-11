@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -163,7 +164,7 @@ const DialogFrame = styled.div`
     height: auto;
     max-height: calc(100vh - 80px);
     border: 1px solid ${getColor('mistExtra')};
-    border-radius: 38px;
+    ${borderRadius.xl};
     box-shadow: 0 15px 75px rgba(0, 0, 0, 0.18);
   }
 `
@@ -174,7 +175,7 @@ const IconBadge = styled.div`
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: #03132c;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 18px rgba(12, 78, 255, 0.18);
@@ -200,7 +201,7 @@ const RequirementCard = styled(VStack)`
   align-self: stretch;
   gap: 12px;
   padding: 24px 20px 16px;
-  border-radius: 24px 24px 20px 20px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `
@@ -211,7 +212,7 @@ const BalanceRow = styled(HStack)`
   margin-top: 10px;
   gap: 12px;
   padding: 16px;
-  border-radius: 14px;
+  ${borderRadius.lg};
   background: #0d2240;
   border: 1px solid ${getColor('foregroundExtra')};
 
@@ -229,7 +230,7 @@ const GetVultButton = styled(UnstyledButton)<{ $gradient: string }>`
   align-self: stretch;
   margin-top: -22px;
   padding: 32px 32px 14px;
-  border-radius: 0 0 24px 24px;
+  border-radius: 0 0 ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px;
   background: ${({ $gradient }) => $gradient};
   color: #f0f4fc;
   font-size: 14px;

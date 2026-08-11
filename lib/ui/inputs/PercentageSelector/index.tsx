@@ -7,6 +7,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import styled from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
+
 type PercentageSelectorProps = InputProps<bigint | null> & {
   max: bigint
   maxLabel?: string
@@ -48,7 +50,7 @@ export const PercentageSelector = ({
 const PercentageButton = styled(UnstyledButton)<{ $isActive: boolean }>`
   flex: 1;
   padding: 4px 16px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   border: 1px solid ${getColor('foregroundExtra')};
   background-color: ${({ $isActive, theme }) =>
     $isActive

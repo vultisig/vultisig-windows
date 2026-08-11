@@ -7,6 +7,7 @@ import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuy
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -398,7 +399,7 @@ export const PendingTransactionProgressCard = ({
 
 const ProgressCard = styled.div`
   padding: 16px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   cursor: pointer;
@@ -418,7 +419,7 @@ const TopRow = styled(HStack).attrs({
 
 const InProgressBadge = styled.div`
   padding: 6px 12px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: ${({ theme }) =>
     theme.colors.foregroundExtra.withAlpha(0.5).toCssValue()};
   border: 1px solid ${getColor('foregroundExtra')};
@@ -505,7 +506,7 @@ const StepperIcon = styled.div`
   position: relative;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: ${getColor('foregroundExtra')};
   display: flex;
   align-items: center;
@@ -520,7 +521,7 @@ const ProviderPill = styled(HStack).attrs({
   gap: 6,
 })`
   padding: 8px 12px;
-  border-radius: 12px 0 16px 0;
+  border-radius: ${borderRadiusPx.md}px 0 ${borderRadiusPx.lg}px 0;
   background: ${getColor('buttonSecondary')};
   border-top: 1px solid ${getColor('foregroundExtra')};
   border-left: 1px solid ${getColor('foregroundExtra')};
@@ -547,7 +548,7 @@ const StepperDivider = styled.div`
 const DestinationWalletIcon = styled.div`
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: ${getColor('foregroundExtra')};
   display: flex;
   align-items: center;

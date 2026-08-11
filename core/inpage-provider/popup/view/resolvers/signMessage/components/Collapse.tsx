@@ -1,4 +1,5 @@
 import { Section } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -16,7 +17,7 @@ type CollapseProps = {
 
 const OutlineSection = styled(VStack)`
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
 `
 
 export const Collapse: FC<CollapseProps> = ({

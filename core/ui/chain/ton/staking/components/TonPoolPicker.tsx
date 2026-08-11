@@ -1,6 +1,7 @@
 import { ValidatorAvatar } from '@core/ui/chain/cosmos/staking/components/ValidatorAvatar'
 import { useTonStakingPoolsQuery } from '@core/ui/chain/ton/staking/queries/useTonStakingPoolsQuery'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ShieldCheckFilledIcon } from '@lib/ui/icons/ShieldCheckFilledIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -31,7 +32,7 @@ const Row = styled.button.attrs({ type: 'button' })<{ isSelected: boolean }>`
   gap: 12px;
   width: 100%;
   padding: 12px 14px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   cursor: pointer;
   background: ${getColor('foreground')};
   border: 1px solid
