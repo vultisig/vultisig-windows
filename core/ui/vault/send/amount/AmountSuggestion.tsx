@@ -14,7 +14,7 @@ const Container = styled(UnstyledButton)<{
 }>`
   width: 56px;
   height: 30px;
-  ${borderRadius.s};
+  ${borderRadius.sm};
   ${centerContent};
   background-color: ${({ isActive }) =>
     isActive ? getColor('buttonPrimary') : getColor('foreground')};

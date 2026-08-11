@@ -1,5 +1,6 @@
 import 'react-circular-progressbar/dist/styles.css'
 
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -37,7 +38,7 @@ export const RefreshSwap = () => {
 const Wrapper = styled(HStack)`
   padding: 8px;
   background-color: ${getColor('foreground')};
-  border-radius: 99px;
+  ${borderRadius.pill};
 `
 
 const Progress = styled(CircularProgressbar)`

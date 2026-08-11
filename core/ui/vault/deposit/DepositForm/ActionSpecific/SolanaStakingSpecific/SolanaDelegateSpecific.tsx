@@ -3,6 +3,7 @@ import { useSolanaStakeableBalance } from '@core/ui/vault/deposit/hooks/useSolan
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { getFieldErrorMessage } from '@core/ui/vault/deposit/utils/getFieldErrorMessage'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { PercentageSelector } from '@lib/ui/inputs/PercentageSelector'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -124,7 +125,7 @@ const Layout = styled(VStack).attrs({ flexGrow: true, gap: 16 })``
 const Card = styled(VStack).attrs({ gap: 12, flexGrow: true })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const CenteredAmount = styled.div`

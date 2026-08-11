@@ -1,5 +1,6 @@
 import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ArrowsRotateCenterIcon } from '@lib/ui/icons/ArrowsRotateCenterIcon'
@@ -75,7 +76,7 @@ export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
 
 const Wrapper = styled(HStack)`
   background-color: ${getColor('background')};
-  border-radius: 25.5px;
+  ${borderRadius.pill};
   padding: 7px;
   position: absolute;
   top: 50%;
@@ -88,7 +89,7 @@ const Wrapper = styled(HStack)`
     width: 54px;
     top: 0;
     height: 19px;
-    border-radius: 50px;
+    ${borderRadius.pill};
     border: 1px solid ${getColor('foregroundExtra')};
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -101,7 +102,7 @@ const Wrapper = styled(HStack)`
     width: 54px;
     bottom: 0px;
     height: 19px;
-    border-radius: 50px;
+    ${borderRadius.pill};
     border: 1px solid ${getColor('foregroundExtra')};
     border-top-right-radius: 0;
     border-top-left-radius: 0;
@@ -113,7 +114,7 @@ const Button = styled(UnstyledButton)<{ $hasError: boolean }>`
   ${sameDimensions(40)};
   background: ${({ $hasError }) =>
     $hasError ? getColor('danger') : getColor('buttonPrimary')};
-  border-radius: ${({ $hasError }) => ($hasError ? '18px' : '1000px')};
+  ${({ $hasError }) => ($hasError ? borderRadius.lg : borderRadius.pill)};
   border: 2px solid ${getColor('background')};
   ${centerContent};
   font-size: ${({ $hasError }) => ($hasError ? '20px' : '16px')};

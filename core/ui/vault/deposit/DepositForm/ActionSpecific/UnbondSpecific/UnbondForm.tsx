@@ -7,6 +7,7 @@ import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProv
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { stepFromDecimals } from '@core/ui/vault/deposit/utils/stepFromDecimals'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
@@ -293,7 +294,7 @@ const PencilIconWrapper = styled.div`
 
 const AddressDisplay = styled.div`
   padding: 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid #11284a;
   background: #061b3a;
   font-size: 16px;
