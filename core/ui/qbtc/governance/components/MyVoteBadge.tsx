@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { QbtcGovVote } from '@vultisig/core-chain/chains/cosmos/qbtc/governance/proposal'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +27,7 @@ export const MyVoteBadge = ({ vote }: { vote: QbtcGovVote }) => {
 const Badge = styled.span`
   align-self: flex-start;
   padding: 2px 8px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   font-size: 11px;
   font-weight: 600;
   line-height: 16px;

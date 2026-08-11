@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -61,7 +62,7 @@ const Card = styled(UnstyledButton)`
   padding: 16px;
   text-align: left;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
   cursor: pointer;
 `

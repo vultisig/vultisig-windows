@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { SendIcon } from '@lib/ui/icons/SendIcon'
 import { StopCircleIcon } from '@lib/ui/icons/StopCircleIcon'
 import { getColor } from '@lib/ui/theme/getters'
@@ -18,7 +19,7 @@ type AgentChatInputProps = {
   inputType?: 'text' | 'password'
   /** Override the default container height (52px). */
   containerHeight?: number
-  /** Override the default container border-radius (40px). */
+  /** Override the container corner radius. Defaults to a capsule. */
   containerBorderRadius?: number
   /** Custom icon for the action button — replaces the default send/stop icons. */
   actionIcon?: ReactNode
@@ -36,7 +37,7 @@ export const AgentChatInput: FC<AgentChatInputProps> = ({
   isLoading = false,
   inputType = 'text',
   containerHeight = 52,
-  containerBorderRadius = 40,
+  containerBorderRadius = borderRadiusPx.pill,
   actionIcon,
   actionAriaLabel,
 }) => {
@@ -146,7 +147,7 @@ const ActionButton = styled(UnstyledButton)<{ $active: boolean }>`
   width: 36px;
   height: 36px;
   padding: 0;
-  border-radius: 77px;
+  ${borderRadius.pill};
   flex-shrink: 0;
   transition: background-color 0.2s;
 
