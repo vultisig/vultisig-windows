@@ -1,5 +1,6 @@
 import { useSolanaValidatorsQuery } from '@core/ui/chain/solana/staking/queries/useSolanaValidatorsQuery'
 import { Opener } from '@lib/ui/base/Opener'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -94,7 +95,7 @@ const FieldContainer = styled.button.attrs({ type: 'button' as const })`
   justify-content: space-between;
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   cursor: pointer;
   background: transparent;
   color: inherit;

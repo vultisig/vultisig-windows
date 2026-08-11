@@ -12,6 +12,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { Collapse } from '@lib/ui/layout/Collapse'
@@ -50,7 +51,7 @@ const StyledTitle = styled.span<Styles>`
 `
 
 const RoundedCoinIconWrapper = styled.div`
-  border-radius: 99px;
+  ${borderRadius.pill};
   display: inline-flex;
   overflow: hidden;
 `

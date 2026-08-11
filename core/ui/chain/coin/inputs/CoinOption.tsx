@@ -4,6 +4,7 @@ import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { panel } from '@lib/ui/panel/Panel'
@@ -123,7 +124,7 @@ const VaultCoinBalance = ({ value }: ValueProp<Coin>) => {
 const Container = styled(HStack)`
   ${panel()};
   padding: 12px 20px;
-  border-radius: 0px;
+  border-radius: 0;
   position: relative;
   background-color: ${getColor('foreground')};
   cursor: pointer;
@@ -149,6 +150,6 @@ const PillWrapper = styled.div`
   display: grid;
   place-items: center;
   padding: 8px 12px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   border: 1px solid ${getColor('foregroundExtra')};
 `

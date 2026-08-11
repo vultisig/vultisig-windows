@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
@@ -52,7 +53,7 @@ export const SwapCoinItem = ({
 const SwapVStackItem = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   flex: 1;
   min-width: 169px;
   padding: 24px 16px;

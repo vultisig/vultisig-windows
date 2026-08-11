@@ -12,8 +12,8 @@ import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiat
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { getSwapProviderFees } from '@core/ui/vault/swap/queries/resolveSwapFees'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
@@ -316,14 +316,14 @@ const AddressWrapper = styled(Text)`
 `
 
 const SwapInfoWrapper = styled(SeparatedByLine)`
-  border-radius: 16px;
+  ${borderRadius.lg};
   border: 1px solid ${getColor('foregroundExtra')};
   background-color: ${getColor('foreground')};
   padding: 24px;
 `
 
 const IconWrapper = styled(HStack)`
-  border-radius: 25.5px;
+  ${borderRadius.pill};
   padding: 7px;
   position: absolute;
   background-color: ${getColor('background')};
@@ -344,7 +344,7 @@ const IconWrapper = styled(HStack)`
 `
 
 const IconInternalWrapper = styled.div`
-  ${round};
+  ${borderRadius.pill};
   ${sameDimensions(24)};
   background: ${getColor('foregroundExtra')};
   ${centerContent};

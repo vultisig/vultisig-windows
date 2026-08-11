@@ -1,5 +1,5 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { PictureIcon } from '@lib/ui/icons/PictureIcon'
 import { ContainImage } from '@lib/ui/images/ContainImage'
@@ -13,7 +13,7 @@ const Icon = styled(ContainImage)`
 `
 
 const Fallback = styled.div`
-  ${round};
+  ${borderRadius.pill};
   ${sameDimensions('1em')};
   background: ${getColor('mist')};
   ${centerContent};

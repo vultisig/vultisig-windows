@@ -5,6 +5,7 @@ import {
 } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { Plugin } from '@core/ui/plugins/core/get'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { LogoBoxIcon } from '@lib/ui/icons/LogoBoxIcon'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
@@ -190,7 +191,7 @@ const StyledPageContent = styled(PageContent)`
 const Plus = styled(PlusIcon)`
   background-color: ${getColor('success')};
   border: 6px solid ${getColor('background')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   color: ${getColor('background')};
   bottom: -12px;
   font-size: 44px;

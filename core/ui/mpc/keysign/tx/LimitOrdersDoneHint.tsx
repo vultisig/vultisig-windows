@@ -1,4 +1,5 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { InfoCircleIcon } from '@lib/ui/icons/InfoCircleIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -10,7 +11,7 @@ import styled from 'styled-components'
 
 const Container = styled(HStack)`
   background: ${getColor('foreground')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   padding: 16px;
 `
 
