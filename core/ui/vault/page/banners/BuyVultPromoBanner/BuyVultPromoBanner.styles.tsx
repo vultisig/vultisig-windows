@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
@@ -23,7 +24,7 @@ export const IllustrationGlow = styled.div`
   right: -58px;
   width: 228px;
   height: 228px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: radial-gradient(
     50% 50% at 50% 50%,
     ${getColor('primaryAlt')} 0%,

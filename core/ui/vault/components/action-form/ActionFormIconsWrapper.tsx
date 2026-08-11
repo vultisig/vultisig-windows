@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -9,7 +10,7 @@ export const ActionFormIconsWrapper = styled(HStack)`
 export const ActionFormCheckBadge = styled.div`
   width: 16px;
   height: 16px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   border: 0.6667px solid ${getColor('success')};
   background: ${getColor('foreground')};
   color: ${getColor('success')};

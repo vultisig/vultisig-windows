@@ -1,6 +1,7 @@
 import { DeviceSelectionTip } from '@core/ui/vault/create/setup-vault/DeviceSelectionTip'
 import { useDeviceSelectionAnimation } from '@core/ui/vault/create/setup-vault/hooks/useDeviceSelectionAnimation'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
@@ -26,7 +27,7 @@ const TopGradient = styled.div`
   transform: translateX(-50%);
   width: 600px;
   height: 500px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: radial-gradient(
     50% 50% at 50% 50%,
     rgba(72, 121, 253, 0.5) 0%,

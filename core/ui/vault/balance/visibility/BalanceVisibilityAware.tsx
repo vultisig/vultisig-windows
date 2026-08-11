@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChildrenProp } from '@lib/ui/props'
 import { range } from '@vultisig/lib-utils/array/range'
 import styled from 'styled-components'
@@ -31,7 +32,7 @@ const Dot = styled.span`
   flex-shrink: 0;
   width: ${dotRatio}em;
   height: ${dotRatio}em;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background-color: currentColor;
 `
 
