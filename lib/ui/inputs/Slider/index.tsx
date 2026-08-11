@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { InputProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { useRef } from 'react'
@@ -128,7 +129,7 @@ const Track = styled.div`
   width: 100%;
   height: 4px;
   background-color: ${getColor('foregroundSuper')};
-  border-radius: 2px;
+  ${borderRadius.pill};
 `
 
 const TrackFill = styled.div`
@@ -137,7 +138,7 @@ const TrackFill = styled.div`
   left: 0;
   height: 100%;
   background-color: ${getColor('buttonPrimary')};
-  border-radius: 2px;
+  ${borderRadius.pill};
   pointer-events: none;
 `
 
@@ -158,7 +159,7 @@ const Thumb = styled.div`
   transform: translateY(-50%);
   width: ${thumbWidth}px;
   height: 24px;
-  border-radius: 100px;
+  ${borderRadius.pill};
   background: ${getColor('contrast')};
   box-shadow:
     0 0.5px 4px 0 rgba(0, 0, 0, 0.12),
@@ -179,7 +180,7 @@ const Dot = styled.div<{ $active: boolean }>`
   position: absolute;
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background-color: ${({ $active, theme }) =>
     $active
       ? theme.colors.buttonPrimary.toCssValue()

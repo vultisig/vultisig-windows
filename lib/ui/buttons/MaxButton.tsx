@@ -13,7 +13,7 @@ const maxButtonHeight = textInputHeight - maxButtonOffset * 2
 
 export const MaxButton = styled(UnstyledButton)`
   ${horizontalPadding(8)};
-  ${borderRadius.s};
+  ${borderRadius.sm};
   ${centerContent};
   height: ${toSizeUnit(maxButtonHeight)};
 

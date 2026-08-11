@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
@@ -77,14 +78,14 @@ const StepControl = styled(UnstyledButton)`
   })};
 
   padding: 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   width: 97px;
 `
 
 const Input = styled(TextInput)`
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   text-align: center;
 `

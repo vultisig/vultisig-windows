@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper as BaseIconWrapper } from '@lib/ui/icons/IconWrapper'
 import { vStack } from '@lib/ui/layout/Stack'
@@ -15,7 +16,7 @@ const IconWrapper = styled.div<IsActiveProp>`
   })};
   position: relative;
   align-self: stretch;
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: rgba(11, 26, 58, 0.5);
   height: 74px;
   padding: 17px;
@@ -36,6 +37,8 @@ const CheckBadge = styled(BaseIconWrapper)`
   right: 0;
   height: 24px;
   padding: 8px;
+  /* A notched badge shape, not a surface radius: both values exceed half
+     the element and clamp, fully rounding two opposite corners. */
   border-radius: 40px 0 25px 0;
   background: ${getColor('foregroundSuper')};
   font-weight: 600;

@@ -20,7 +20,7 @@ export type AmountTextInputProps = Omit<
 }
 
 const UnitContainer = styled.div`
-  ${borderRadius.s};
+  ${borderRadius.sm};
 
   position: absolute;
   left: 12px;

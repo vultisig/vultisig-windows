@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@vultisig/lib-utils/match'
 import styled from 'styled-components'
@@ -63,7 +64,7 @@ const Ring = styled.div<{ size: number }>`
   height: ${({ size }) => size}px;
   transform: translate(-50%, -50%);
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   opacity: 0.5;
 `
 

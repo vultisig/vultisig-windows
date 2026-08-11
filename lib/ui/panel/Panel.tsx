@@ -18,7 +18,7 @@ const panelBackground = css`
 `
 
 export const panel = ({ withSections }: PanelProps = {}) => css`
-  ${borderRadius.m};
+  ${borderRadius.md};
 
   ${withSections
     ? css`

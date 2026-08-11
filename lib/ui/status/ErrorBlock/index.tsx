@@ -7,7 +7,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 const Container = styled(HStack)`
-  ${borderRadius.m};
+  ${borderRadius.md};
   background: ${getColor('dangerBackground')};
   border: 1px solid
     ${({ theme: { colors } }) =>

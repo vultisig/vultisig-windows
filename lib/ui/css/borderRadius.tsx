@@ -3,31 +3,28 @@ import { css } from 'styled-components'
 /**
  * `pill` is a bound, not a size. CSS clamps a corner radius to half the
  * smaller dimension, and that clamp is what produces the capsule, so the
- * number only has to out-run any surface the app can render. Kept private so
- * no call site writes one of the "fully round" magic numbers itself.
+ * number only has to out-run any surface the app can render.
  */
 const pillPx = 100000
 
-const scale = {
-  xs: css`
-    border-radius: 4px;
-  `,
-  sm: css`
-    border-radius: 8px;
-  `,
-  md: css`
-    border-radius: 12px;
-  `,
-  lg: css`
-    border-radius: 16px;
-  `,
-  xl: css`
-    border-radius: 24px;
-  `,
-  pill: css`
-    border-radius: ${pillPx}px;
-  `,
-}
+/**
+ * The scale as raw numbers, for surfaces that round their corners
+ * individually - a bottom sheet rounding only its top two, for instance.
+ * Prefer `borderRadius`, which rounds all four and is what almost every
+ * surface wants.
+ */
+export const borderRadiusPx = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  pill: pillPx,
+} as const
+
+const radius = (px: number) => css`
+  border-radius: ${px}px;
+`
 
 /**
  * The app's corner-radius scale.
@@ -53,17 +50,20 @@ const scale = {
  * surface is square before reaching for it.
  */
 export const borderRadius = {
-  ...scale,
+  xs: radius(borderRadiusPx.xs),
+  sm: radius(borderRadiusPx.sm),
+  md: radius(borderRadiusPx.md),
+  lg: radius(borderRadiusPx.lg),
+  xl: radius(borderRadiusPx.xl),
+  pill: radius(borderRadiusPx.pill),
   /** @deprecated 8 - use `sm`. */
-  s: scale.sm,
+  s: radius(borderRadiusPx.sm),
   /** @deprecated 12 - use `md`. */
-  m: scale.md,
+  m: radius(borderRadiusPx.md),
   /**
    * @deprecated 20 - off the scale entirely. Pick `lg` (16) or `xl` (24) by
    * looking at the surface: there is no mechanical answer, and renaming this
    * to `lg` would silently shrink every call site by 4px.
    */
-  l: css`
-    border-radius: 20px;
-  `,
+  l: radius(20),
 }

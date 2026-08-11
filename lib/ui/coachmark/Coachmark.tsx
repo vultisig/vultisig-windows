@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -107,7 +108,7 @@ const CloseButton = styled(UnstyledButton)`
   &:focus-visible {
     outline: 2px solid ${getColor('foregroundSuper')};
     outline-offset: 4px;
-    border-radius: 4px;
+    ${borderRadius.xs};
   }
 `
 

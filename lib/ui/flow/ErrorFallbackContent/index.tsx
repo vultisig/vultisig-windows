@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { TitleProp } from '@lib/ui/props'
@@ -101,7 +102,7 @@ export const ErrorFallbackContent = ({
 
 const ShowExactErrorCard = styled(HStack)`
   width: 100%;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 20px;

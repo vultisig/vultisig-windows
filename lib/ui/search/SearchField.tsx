@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { StationMagnifierIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -72,8 +73,8 @@ export const SearchField: React.FC<SearchFieldProps> = ({
 const Wrapper = styled(HStack)`
   position: relative;
   background-color: ${getColor('foreground')};
-  border-radius: ${({ theme }) =>
-    theme.iconStyle === 'station' ? '99px' : '10px'};
+  ${({ theme }) =>
+    theme.iconStyle === 'station' ? borderRadius.pill : borderRadius.md};
   height: 48px;
   flex: none;
 
@@ -103,7 +104,7 @@ const StyledInput = styled.input.attrs({ autoComplete: 'off' })`
   padding-left: 32px;
   line-height: ${({ theme }) => (theme.iconStyle === 'station' ? 18 : 20)}px;
   font-size: ${({ theme }) => (theme.iconStyle === 'station' ? 13 : 16)}px;
-  border-radius: 4px;
+  ${borderRadius.xs};
   outline: none;
   transition: border-color 0.2s;
   background-color: transparent;

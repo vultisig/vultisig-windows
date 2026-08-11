@@ -1,3 +1,4 @@
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { VStack } from '@lib/ui/layout/Stack'
 import {
@@ -38,7 +39,8 @@ const MobileDrawer = styled(VStack)<{
   height: ${({ $fullScreen }) => ($fullScreen ? '100dvh' : 'auto')};
   max-height: ${({ $fullScreen }) => ($fullScreen ? 'none' : '90vh')};
   overflow: hidden;
-  border-radius: ${({ $fullScreen }) => ($fullScreen ? 0 : '24px 24px 0 0')};
+  border-radius: ${({ $fullScreen }) =>
+    $fullScreen ? 0 : `${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0`};
   overscroll-behavior: contain;
   z-index: 1000;
 
@@ -52,7 +54,7 @@ const MobileDrawerHeader = styled.div`
   justify-content: center;
   padding: 12px 0;
   background: ${getColor('background')};
-  border-radius: 24px 24px 0 0;
+  border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0;
   touch-action: none;
   cursor: grab;
 `
@@ -60,7 +62,7 @@ const MobileDrawerHeader = styled.div`
 const MobileDrawerGrabber = styled.div`
   width: 44px;
   height: 4px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background: ${getColor('foregroundSuper')};
 `
 

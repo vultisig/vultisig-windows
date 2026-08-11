@@ -13,7 +13,7 @@ type HighlightProps = {
 
 const Highlight = styled.div<HighlightProps>`
   position: absolute;
-  ${borderRadius.s};
+  ${borderRadius.sm};
   ${props => absoluteOutline(props.horizontalOffset, props.verticalOffset)}
 `
 

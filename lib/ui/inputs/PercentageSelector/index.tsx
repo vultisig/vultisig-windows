@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
@@ -48,7 +49,7 @@ export const PercentageSelector = ({
 const PercentageButton = styled(UnstyledButton)<{ $isActive: boolean }>`
   flex: 1;
   padding: 4px 16px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   border: 1px solid ${getColor('foregroundExtra')};
   background-color: ${({ $isActive, theme }) =>
     $isActive
