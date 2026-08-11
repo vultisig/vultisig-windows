@@ -8,6 +8,7 @@ import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActio
 import { useVaultChainTotalBalanceQuery } from '@core/ui/vault/queries/useVaultChainTotalBalanceQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -22,7 +23,7 @@ import { AddressQRModal } from './address/AddressQRModal'
 
 const AddressPill = styled(HStack)`
   padding: 4px 6px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: rgba(81, 128, 252, 0.12);
 
   & * {

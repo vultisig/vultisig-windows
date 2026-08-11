@@ -13,6 +13,7 @@ import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ArCubeIcon } from '@lib/ui/icons/ArCubeIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -127,7 +128,7 @@ const ScrollContainer = styled.div`
     max-height: 82vh;
     overflow-y: auto;
     overflow-x: hidden;
-    border-radius: 12px;
+    ${borderRadius.md};
   }
 `
 
@@ -152,7 +153,7 @@ const ContentContainer = styled(VStack)`
       rgba(6, 27, 58, 0.5) 97%,
       rgba(6, 27, 58, 0) 100%
     );
-    border-radius: 12px;
+    ${borderRadius.md};
   }
 
   > * {
