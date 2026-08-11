@@ -102,6 +102,7 @@ func TestNewStoreCanSaveVaultAtUserWritableLocationForCurrentOS(t *testing.T) {
 	}
 	defer store.db.Close()
 
+	//nolint:govet // pre-existing shadow, benign: t.Fatal stops the test immediately (#4606)
 	if err := store.Migrate(); err != nil {
 		t.Fatal(err)
 	}
@@ -116,10 +117,12 @@ func TestNewStoreCanSaveVaultAtUserWritableLocationForCurrentOS(t *testing.T) {
 		LocalPartyID:   "test-party",
 		LibType:        "DKLS",
 	}
+	//nolint:govet // pre-existing shadow, benign: t.Fatal stops the test immediately (#4606)
 	if err := store.SaveVault(vault); err != nil {
 		t.Fatal(err)
 	}
 
+	//nolint:govet // pre-existing shadow, benign: t.Fatal stops the test immediately (#4606)
 	if _, err := os.Stat(expectedPath); err != nil {
 		t.Fatal(err)
 	}

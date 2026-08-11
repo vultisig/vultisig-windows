@@ -82,6 +82,7 @@ func (t *TssService) Reshare(vault storage.Vault,
 	close(endCh)
 	wg.Wait()
 
+	//nolint:govet // pre-existing shadow, benign: logged within this block only (#4606)
 	if err := client.CompleteSession(sessionID, localPartyID); err != nil {
 		t.Logger.WithFields(logrus.Fields{
 			"session": sessionID,
@@ -89,6 +90,7 @@ func (t *TssService) Reshare(vault storage.Vault,
 		}).Error("Failed to complete session")
 	}
 
+	//nolint:govet // pre-existing shadow, benign: logged within this block only (#4606)
 	if isCompleted, err := client.CheckCompletedParties(sessionID, partiesJoined); err != nil || !isCompleted {
 		t.Logger.WithFields(logrus.Fields{
 			"session":     sessionID,

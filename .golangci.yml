@@ -1,0 +1,24 @@
+version: "2"
+
+# Go static analysis. Scoped deliberately narrow: govet's shadow analyzer only.
+#
+# Motivation: a shadowed `err` inside an `if` block (`:=` instead of `=`) left a
+# transaction neither committed nor rolled back, leaking the *sql.Tx and pinning
+# its connection for the process lifetime. Plain `go vet` does not catch this --
+# shadow is not in its default analyzer set. See #4605 / #4606.
+#
+# Known limitation: shadow is a heuristic. It reports only when the outer
+# variable is read after the inner scope ends, so a shadowed `err` read solely
+# inside a deferred rollback closure stays undetected. This closes the common
+# case, not the whole class.
+#
+# Broader rulesets (errcheck, staticcheck, rowserrcheck, ...) are deliberately
+# out of scope here and tracked as follow-up work.
+linters:
+  default: none
+  enable:
+    - govet
+  settings:
+    govet:
+      enable:
+        - shadow

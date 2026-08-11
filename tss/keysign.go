@@ -138,6 +138,7 @@ func (t *TssService) keysignWithRetry(
 			resp, err = tssServerImp.KeysignECDSA(req)
 		}
 		if err == nil {
+			//nolint:govet // pre-existing shadow, benign: logged within this block only (#4606)
 			if err := client.MarkKeysignComplete(sessionID, messageID, *resp); err != nil {
 				t.Logger.WithFields(logrus.Fields{
 					"error": err,

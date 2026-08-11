@@ -97,6 +97,7 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 		return nil, err
 	}
 
+	//nolint:govet // pre-existing shadow, benign: logged within this block only (#4606)
 	if err := client.CompleteSession(sessionID, localPartyID); err != nil {
 		t.Logger.WithFields(logrus.Fields{
 			"session": sessionID,
@@ -104,6 +105,7 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 		}).Error("Failed to complete session")
 	}
 
+	//nolint:govet // pre-existing shadow, benign: logged within this block only (#4606)
 	if isCompleted, err := client.CheckCompletedParties(sessionID, partiesJoined); err != nil || !isCompleted {
 		t.Logger.WithFields(logrus.Fields{
 			"session":     sessionID,
@@ -277,6 +279,7 @@ func (t *TssService) downloadMessages(server,
 					continue
 				}
 				t.Logger.Infof("Got message from: %s to: %s key: %s", message.From, message.To, message.Hash)
+				//nolint:govet // pre-existing shadow, benign: logged within this block only (#4606)
 				if err := tssServerImp.ApplyData(decryptedBody); err != nil {
 					t.Logger.WithFields(logrus.Fields{
 						"session":      session,

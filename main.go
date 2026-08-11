@@ -43,11 +43,13 @@ func main() {
 		panic(err)
 	}
 	go func() {
+		//nolint:govet // pre-existing shadow, benign: outer err is already handled above (#4606)
 		if err := mediator.StartServer(); err != nil {
 			log.Err(err).Msg("relay server exit")
 		}
 	}()
 	// Migrate db, ensure db is in correct state
+	//nolint:govet // pre-existing shadow, benign: outer err is already handled above (#4606)
 	if err := store.Migrate(); err != nil {
 		panic(err)
 	}
@@ -58,6 +60,7 @@ func main() {
 	// Optionally handle fresh install logic in Go on startup
 	if installMarkerService.IsFreshInstall() {
 		log.Info().Msg("Fresh install detected. Creating install marker.")
+		//nolint:govet // pre-existing shadow, benign: outer err is already handled above (#4606)
 		if err := installMarkerService.CreateInstallMarker(); err != nil {
 			log.Err(err).Msg("Failed to create install marker")
 		}
@@ -79,6 +82,7 @@ func main() {
 			tssIns.Startup(ctx)
 		},
 		OnShutdown: func(ctx context.Context) {
+			//nolint:govet // pre-existing shadow, benign: outer err is already handled above (#4606)
 			if err := mediator.StopServer(); err != nil {
 				log.Err(err).Msg("fail to stop mediator")
 			}

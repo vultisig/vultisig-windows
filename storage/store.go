@@ -120,6 +120,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 
 	var chainPublicKeys interface{}
 	if vault.ChainPublicKeys != nil {
+		//nolint:govet // pre-existing shadow, benign: buf and err are consumed within this block (#4606)
 		buf, err := json.Marshal(vault.ChainPublicKeys)
 		if err != nil {
 			return fmt.Errorf("could not marshal chain public keys, err: %w", err)
@@ -129,6 +130,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 
 	var chainKeyShares interface{}
 	if vault.ChainKeyShares != nil {
+		//nolint:govet // pre-existing shadow, benign: buf and err are consumed within this block (#4606)
 		buf, err := json.Marshal(vault.ChainKeyShares)
 		if err != nil {
 			return fmt.Errorf("could not marshal chain key shares, err: %w", err)
@@ -209,15 +211,18 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	} else {
 		vault.FolderID = nil
 	}
+	//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 	if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
 		return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
 	}
 	if chainPublicKeys.Valid {
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := json.Unmarshal([]byte(chainPublicKeys.String), &vault.ChainPublicKeys); err != nil {
 			return nil, fmt.Errorf("could not unmarshal chain public keys, err: %w", err)
 		}
 	}
 	if chainKeyShares.Valid {
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := json.Unmarshal([]byte(chainKeyShares.String), &vault.ChainKeyShares); err != nil {
 			return nil, fmt.Errorf("could not unmarshal chain key shares, err: %w", err)
 		}
@@ -270,6 +275,7 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 	var keyShares []KeyShare
 	for keySharesRows.Next() {
 		var keyShare KeyShare
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := keySharesRows.Scan(&keyShare.PublicKey, &keyShare.KeyShare); err != nil {
 			return nil, fmt.Errorf("could not scan keyshare, err: %w", err)
 		}
@@ -300,6 +306,7 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 		var chainPublicKeys sql.NullString
 		var chainKeyShares sql.NullString
 		var folderID sql.NullString
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		err := rows.Scan(&vault.Name,
 			&vault.PublicKeyECDSA,
 			&vault.PublicKeyEdDSA,
@@ -325,15 +332,18 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 		} else {
 			vault.FolderID = nil
 		}
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
 			return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
 		}
 		if chainPublicKeys.Valid {
+			//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 			if err := json.Unmarshal([]byte(chainPublicKeys.String), &vault.ChainPublicKeys); err != nil {
 				return nil, fmt.Errorf("could not unmarshal chain public keys, err: %w", err)
 			}
 		}
 		if chainKeyShares.Valid {
+			//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 			if err := json.Unmarshal([]byte(chainKeyShares.String), &vault.ChainKeyShares); err != nil {
 				return nil, fmt.Errorf("could not unmarshal chain key shares, err: %w", err)
 			}
@@ -378,6 +388,7 @@ func (s *Store) GetCoins() (map[string][]Coin, error) {
 	for rows.Next() {
 		var coin Coin
 		var publicKeyECDSA string
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := rows.Scan(&coin.ID,
 			&coin.Chain,
 			&coin.Address,
@@ -455,6 +466,7 @@ func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
 	var addressBookItems []AddressBookItem
 	for rows.Next() {
 		var addressBookItem AddressBookItem
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
 			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
 		}
@@ -513,6 +525,7 @@ func (s *Store) GetVaultCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 	var coins []Coin
 	for rows.Next() {
 		var coin Coin
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		err := rows.Scan(
 			&coin.ID,
 			&coin.Chain,
@@ -669,6 +682,7 @@ func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
 	var folders []*VaultFolder
 	for rows.Next() {
 		var folder VaultFolder
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := rows.Scan(&folder.ID, &folder.Name, &folder.Order); err != nil {
 			return nil, fmt.Errorf("could not scan vault folder, err: %w", err)
 		}
@@ -853,6 +867,7 @@ func (s *Store) GetTransactionRecords(vaultID string) ([]TransactionRecord, erro
 	records := make([]TransactionRecord, 0)
 	for rows.Next() {
 		var record TransactionRecord
+		//nolint:govet // pre-existing shadow, benign: returns immediately on error (#4606)
 		if err := rows.Scan(
 			&record.ID,
 			&record.VaultID,
