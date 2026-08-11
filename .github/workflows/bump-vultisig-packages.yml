@@ -24,8 +24,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.repository.default_branch }}
           submodules: recursive
           fetch-depth: 1
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -50,14 +52,22 @@ jobs:
             } >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Require CI-capable token
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          BUMP_PR_TOKEN: ${{ secrets.BUMP_PR_TOKEN }}
+        run: |
+          if [ -z "$BUMP_PR_TOKEN" ]; then
+            echo "::error::BUMP_PR_TOKEN secret is missing. A PR created with GITHUB_TOKEN gets no CI (build.yml is the merge gate), so refusing to open a checkless bump PR. Add a fine-grained PAT with contents + pull-requests write."
+            exit 1
+          fi
+
       - name: Create or update bump PR
         if: steps.bump.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
-          # BUMP_PR_TOKEN: fine-grained PAT (contents + pull-requests write).
-          # Falls back to GITHUB_TOKEN, which creates the PR but does NOT
-          # trigger build.yml on it — set the secret to get CI on bump PRs.
-          token: ${{ secrets.BUMP_PR_TOKEN || github.token }}
+          token: ${{ secrets.BUMP_PR_TOKEN }}
+          base: ${{ github.event.repository.default_branch }}
           branch: chore/bump-vultisig-packages
           delete-branch: true
           commit-message: 'chore(deps): bump @vultisig/* packages to latest'
