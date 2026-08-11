@@ -369,9 +369,11 @@ the fields it may carry are bounded before it reaches the confirmation screen.
 `Sequence`, and `LastLedgerSequence` are overwritten from the wallet's own
 network read. `Flags` must be a uint32 bitmask -- the `{ tfPartialPayment: true }`
 object form is rejected -- and a `Payment` that sets `tfPartialPayment`
-(`0x00020000`) must also carry a `DeliverMin`, since without one its `Amount` is
-a ceiling the confirmation screen cannot state honestly. `Paths` is passed
-through and shown to the user as a routing notice.
+(`0x00020000`) must also carry a `DeliverMin` that is a valid, strictly positive
+XRPL amount (a drops string or an issued-currency object). Zero, `null`, and
+malformed values are rejected along with an absent one: none of them floors
+delivery, so `Amount` stays a ceiling the confirmation screen cannot state
+honestly. `Paths` is passed through and shown to the user as a routing notice.
 
 ### MayaChain (`window.vultisig.mayachain`)
 

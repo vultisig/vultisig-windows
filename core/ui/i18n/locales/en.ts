@@ -947,9 +947,9 @@ export const en = {
   ripple_field_offer_sequence: 'Offer sequence',
   ripple_field_issuer: 'Issuer',
   ripple_warning_partial_payment:
-    'This transaction is a partial payment: the amount shown is a maximum, not a guaranteed amount. The recipient can receive a smaller amount while you still pay the maximum shown.',
+    'This transaction is a partial payment: the amount shown is the most that can be delivered, not a guaranteed amount. The recipient can receive less than it. The amount you spend is limited separately by the send maximum, and the network fee is charged on top of that.',
   ripple_warning_custom_paths:
-    'The site chose the route this payment takes through the network.',
+    'The site supplied candidate routes for this payment. The network decides which of them to use, and can also use the direct route.',
   review_vault_devices_subtitle:
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',

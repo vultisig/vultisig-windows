@@ -1878,9 +1878,9 @@ export const pt = {
   swap_no_routes_found:
     'Não há uma rota de swap disponível para este par de ativos.',
   ripple_warning_partial_payment:
-    'Esta transação é um pagamento parcial: o valor apresentado é um valor máximo, não um valor garantido. O destinatário pode receber um valor menor, mesmo que você pague o valor máximo exibido.',
+    'Esta transação é um pagamento parcial: o valor exibido é o máximo que pode ser entregue, não um valor garantido. O destinatário pode receber um valor inferior. O valor gasto é limitado pelo limite máximo de envio, e a taxa de rede é cobrada adicionalmente.',
   ripple_warning_custom_paths:
-    'O site escolheu o caminho que esse pagamento percorrerá na rede.',
+    'O site forneceu rotas candidatas para este pagamento. A rede decide qual delas usar, podendo também utilizar a rota direta.',
   price_impact: 'Impacto no preço',
   swap_fee_included_in_rate: 'Incluído na taxa de câmbio cotada',
   swap_protocol_fee: 'Taxa de protocolo',
