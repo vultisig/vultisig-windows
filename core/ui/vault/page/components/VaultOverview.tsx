@@ -1,6 +1,7 @@
 import { CollapsingBalance } from '@core/ui/page/CollapsingBalance'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -123,7 +124,7 @@ const BlurEffect = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  border-radius: 16px;
+  ${borderRadius.lg};
   border-radius: 350px;
   height: 200px;
   top: -25px;

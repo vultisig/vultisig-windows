@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { DownloadSeedphraseIcon } from '@lib/ui/icons/DownloadSeedphraseIcon'
@@ -9,7 +10,7 @@ import styled from 'styled-components'
 
 const IconContainer = styled.div`
   ${sameDimensions(48)}
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: ${getColor('foreground')};
   ${centerContent};
   font-size: 20px;

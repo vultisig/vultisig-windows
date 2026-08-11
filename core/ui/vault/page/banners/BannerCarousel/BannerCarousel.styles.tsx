@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
@@ -18,7 +19,7 @@ export const CarouselContainer = styled.div`
 export const CarouselViewport = styled.div`
   width: 100%;
   overflow: hidden;
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 export const CarouselTrack = styled(motion.div)`
@@ -57,7 +58,7 @@ export const PaginationDot = styled(UnstyledButton)<{ $isActive: boolean }>`
     display: block;
     width: ${({ $isActive }) => ($isActive ? 20 : 4)}px;
     height: 4px;
-    border-radius: 99px;
+    ${borderRadius.pill};
     background: ${({ $isActive, theme }) =>
       $isActive
         ? theme.colors.textShyExtra.toCssValue()
