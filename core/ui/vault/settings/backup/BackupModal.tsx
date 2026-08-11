@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { CloudIcon } from '@lib/ui/icons/CloudIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -89,7 +90,7 @@ const Wrapper = styled.div`
   })};
 
   padding: 20px;
-  border-radius: 16px 16px 0 0;
+  border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0;
   background: ${getColor('background')};
 `
 
@@ -100,7 +101,7 @@ const DesktopModalWrapper = styled.div`
 const ActionButton = styled(UnstyledButton)`
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  ${borderRadius.pill};
 `
 
 const CancelButton = styled(ActionButton)`

@@ -1,5 +1,6 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { BrowserExtensionIcon } from '@lib/ui/icons/BrowserExtensionIcon'
 import { DeviceIcon } from '@lib/ui/icons/DeviceIcon'
 import { LaptopIcon } from '@lib/ui/icons/LaptopIcon'
@@ -175,7 +176,7 @@ const DeviceCard = styled(HStack)`
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `
@@ -183,7 +184,7 @@ const DeviceCard = styled(HStack)`
 const DeviceIconCircle = styled.div`
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: #03132c;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25) inset;

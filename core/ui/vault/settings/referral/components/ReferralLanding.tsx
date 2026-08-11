@@ -37,7 +37,7 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
 
 const Wrapper = styled(VStack)`
   background-color: ${getColor('foregroundExtra')};
-  ${borderRadius.m}
+  ${borderRadius.md}
   bottom: 0;
   height: 500px;
   left: 0;
@@ -67,11 +67,11 @@ const Overlay = styled.div`
 `
 
 const PositionedImage = styled.img`
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const ImageWrapper = styled(VStack)`
-  border-radius: 34px;
+  ${borderRadius.xl};
   box-shadow:
     0px -1px 4px 0px rgba(255, 255, 255, 0.2) inset,
     -2px 0px 5px -3px rgba(255, 255, 255, 0.4) inset;
@@ -85,7 +85,7 @@ const ImageWrapper = styled(VStack)`
 
   &::before {
     background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 34px;
+    ${borderRadius.xl};
     content: '';
     height: 100%;
     left: 0;
