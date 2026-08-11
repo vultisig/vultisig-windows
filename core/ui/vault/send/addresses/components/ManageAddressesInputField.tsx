@@ -286,7 +286,7 @@ const AddressFieldWrapper = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 16px;
-  ${borderRadius.m}
+  ${borderRadius.md}
 `
 
 const Input = styled(TextInput)<{

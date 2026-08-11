@@ -46,7 +46,7 @@ export const SwapExternalRecipientWarning = ({
 type KindProp = { kind: SwapExternalRecipientWarningKind }
 
 const Container = styled(HStack)<KindProp>`
-  ${borderRadius.m};
+  ${borderRadius.md};
   padding: 16px;
   background: ${({ kind, theme: { colors } }) =>
     (kind === 'danger'

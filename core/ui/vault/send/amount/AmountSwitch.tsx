@@ -45,7 +45,7 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
 }
 
 const AnimatedIconButton = motion(styled(IconButton)<{ isActive: boolean }>`
-  border-radius: 50%;
+  ${borderRadius.pill};
   scale: ${({ isActive }) => (isActive ? 1.1 : 1)};
   opacity: ${({ isActive }) => (isActive ? 1 : 0.6)};
   transition:
@@ -58,9 +58,9 @@ const Wrapper = styled(VStack)`
   font-size: 16px;
   color: ${getColor('contrast')};
   background-color: ${getColor('foreground')};
-  ${borderRadius.l};
+  ${borderRadius.pill};
 
   > button {
-    border-radius: 50%;
+    ${borderRadius.pill};
   }
 `

@@ -1,3 +1,4 @@
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { textInputBackground } from '@lib/ui/css/textInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { text } from '@lib/ui/text'
@@ -17,6 +18,8 @@ export const Container = styled(VStack)<{
   })}
   padding: clamp(12px, 3.33vw, 16px);
   border-radius: ${({ side }) =>
-    side === 'to' ? '12px 12px 24px 24px' : '24px 24px 12px 12px'};
+    side === 'to'
+      ? `${borderRadiusPx.md}px ${borderRadiusPx.md}px ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px`
+      : `${borderRadiusPx.xl}px ${borderRadiusPx.xl}px ${borderRadiusPx.md}px ${borderRadiusPx.md}px`};
   border: 1px solid ${getColor('foregroundExtra')};
 `
