@@ -1,3 +1,4 @@
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { useKeyDown } from '@lib/ui/hooks/useKeyDown'
 import { OnCloseProp } from '@lib/ui/props'
@@ -40,7 +41,7 @@ const Card = styled.div`
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-bottom: 0;
-  border-radius: 34px 34px 0 0;
+  border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0;
   box-shadow: 0px 15px 75px rgba(0, 0, 0, 0.18);
   overflow: hidden;
   width: 100%;
@@ -48,7 +49,7 @@ const Card = styled.div`
 
   @media ${mediaQuery.tabletDeviceAndUp} {
     border-bottom: 1px solid ${getColor('foregroundExtra')};
-    border-radius: 34px;
+    ${borderRadius.xl};
     max-width: 380px;
     max-height: calc(100dvh - 32px);
   }
@@ -75,7 +76,7 @@ const Grabber = styled.div`
   transform: translateX(-50%);
   width: 36px;
   height: 5px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background: ${getColor('foregroundSuper')};
 
   @media ${mediaQuery.tabletDeviceAndUp} {
@@ -96,7 +97,7 @@ export const PromptSheetIcon = styled.div`
   position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   overflow: hidden;
   background: ${getColor('background')};
   border: 1px solid ${getColor('foregroundSuperContrast')};

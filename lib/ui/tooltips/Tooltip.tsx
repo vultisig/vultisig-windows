@@ -15,6 +15,7 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -30,7 +31,7 @@ type TooltipProps = {
 }
 
 const Container = styled.div`
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: ${getColor('contrast')};
   color: ${getColor('background')};
   padding: 12px;

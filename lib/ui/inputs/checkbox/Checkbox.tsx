@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -22,7 +23,7 @@ const Box = styled.div<{ isChecked: boolean }>`
   ${sameDimensions(20)}
   ${centerContent};
   box-sizing: border-box;
-  border-radius: 100%;
+  ${borderRadius.pill};
   color: ${getColor('primary')};
   background: ${getColor('foregroundExtra')};
   font-size: 16px;

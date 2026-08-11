@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, isValidElement, KeyboardEvent, ReactNode } from 'react'
@@ -15,7 +16,7 @@ const StyledSpinner = styled(Spinner)`
 
 const StyledSlider = styled.span<{ checked?: boolean }>`
   background-color: ${getColor('mistExtra')};
-  border-radius: 24px;
+  ${borderRadius.pill};
   height: 24px;
   position: relative;
   transition: 0.2s;
@@ -23,7 +24,7 @@ const StyledSlider = styled.span<{ checked?: boolean }>`
 
   &:before {
     background-color: ${getColor('white')};
-    border-radius: 50%;
+    ${borderRadius.pill};
     content: '';
     height: 20px;
     left: 2px;
@@ -56,7 +57,7 @@ const StyledSwitch = styled.div<{
   hoverable?: boolean
 }>`
   align-items: center;
-  border-radius: 24px;
+  ${borderRadius.pill};
   display: flex;
   gap: 8px;
   position: relative;

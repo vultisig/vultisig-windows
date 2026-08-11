@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
@@ -5,11 +6,9 @@ import { toPercents } from '@vultisig/lib-utils/toPercents'
 import { FC } from 'react'
 import styled from 'styled-components'
 
-import { round } from '../css/round'
-
 const Container = styled.div`
   width: 100%;
-  ${round};
+  ${borderRadius.pill};
   background: ${getColor('foreground')};
   height: 10px;
   overflow: hidden;

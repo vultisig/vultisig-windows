@@ -1,5 +1,5 @@
-import { Button, buttonSize } from '@lib/ui/buttons/Button'
-import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, StackProps } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentType, ReactNode } from 'react'
@@ -84,7 +84,7 @@ export const ToggleSwitch = <T extends string | number>({
 
 const DefaultContainer = styled(HStack)`
   background-color: ${getColor('foregroundExtra')};
-  border-radius: ${toSizeUnit(buttonSize.md)};
+  ${borderRadius.xl};
   padding: 8px;
 `
 

@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
@@ -72,7 +73,7 @@ const Card = styled.div`
 
   width: 100%;
   padding: 16px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   border: 1px solid ${getColor('foregroundSuper')};
   background: ${getColor('foregroundExtra')};
   text-align: center;

@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
@@ -124,7 +125,7 @@ const DigitInput = styled.input.attrs({
   font-size: 18px;
   border: 2px solid transparent;
   background: ${getColor('foreground')};
-  border-radius: 24px;
+  ${borderRadius.xl};
   outline: none;
   color: ${getColor('text')};
 
@@ -163,6 +164,6 @@ const DigitInput = styled.input.attrs({
 
 const PasteButton = styled(Button)`
   width: fit-content;
-  border-radius: 24px;
+  ${borderRadius.xl};
   min-width: 72px;
 `

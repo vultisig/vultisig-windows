@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -8,7 +9,7 @@ import styled from 'styled-components'
 
 const CollapseWrapper = styled(VStack)`
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
 `
 
 const CollapseHeader = styled(HStack)`

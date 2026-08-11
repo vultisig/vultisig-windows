@@ -1,4 +1,5 @@
 import { Animation } from '@lib/ui/animations/Animation'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ComponentProps, FC } from 'react'
 import styled, { keyframes } from 'styled-components'
@@ -29,7 +30,7 @@ const SecondarySpinner = styled.span`
   display: inline-block;
 
   border: 0.08em solid;
-  border-radius: 100%;
+  ${borderRadius.pill};
   border-top-color: transparent;
 
   animation: ${animationForRotation} 1s infinite linear;

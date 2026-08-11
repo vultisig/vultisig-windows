@@ -8,7 +8,7 @@ import { toSizeUnit } from './toSizeUnit'
 
 export const textInputHorizontalPadding = 12
 export const textInputHeight = 56
-export const textInputBorderRadius = borderRadius.s
+export const textInputBorderRadius = borderRadius.sm
 
 export const textInputFrame = css`
   height: ${toSizeUnit(textInputHeight)};

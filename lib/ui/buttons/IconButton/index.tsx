@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
@@ -22,7 +23,7 @@ const StyledIconButton = styled(UnstyledButton)<{
   ${({ $disabled, $kind, $loading, $size, $status }) => css`
     align-items: center;
     border: none;
-    border-radius: ${iconButtonSize[$size]}px;
+    ${borderRadius.pill};
     cursor: pointer;
     display: flex;
     height: ${iconButtonSize[$size]}px;

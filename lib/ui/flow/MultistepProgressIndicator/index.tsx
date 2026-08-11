@@ -1,4 +1,4 @@
-import { round } from '@lib/ui/css/round'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { HStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
@@ -21,7 +21,7 @@ const Step = styled.div<
     variant === 'dots'
       ? css`
           ${sameDimensions(8)};
-          ${round};
+          ${borderRadius.pill};
         `
       : css`
           flex: 1;
