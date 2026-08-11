@@ -17,19 +17,15 @@ export const ReferralHeaderButton = ({
   const { t } = useTranslation()
 
   return (
-    <StyledButton size="sm" kind="secondary" onClick={onClick}>
+    <Button size="sm" kind="secondary" onClick={onClick}>
       <HStack alignItems="center" gap={4}>
         {hasReferral && <CheckIcon />}
 
         {hasReferral ? t('fastVaultSetup.referralAdded') : t('add_referral')}
       </HStack>
-    </StyledButton>
+    </Button>
   )
 }
-
-const StyledButton = styled(Button)`
-  cursor: pointer;
-`
 
 const CheckIcon = styled(CircleCheckIcon)`
   font-size: 14px;

@@ -1,6 +1,5 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/buttons/Button'
 import { vStack } from '@lib/ui/layout/Stack'
-import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
@@ -124,37 +123,11 @@ export const BannerTextStack = styled.div`
   text-align: center;
 `
 
-export const BannerCta = styled(UnstyledButton)`
-  ${text({
-    size: 12,
-    weight: 500,
-    height: 16 / 12,
-  })};
-
-  position: relative;
-  z-index: 2;
+/**
+ * The design system's mini primary pill, centred above the banner artwork.
+ */
+export const BannerCta = styled(Button).attrs({ size: 'xs' })`
   align-self: center;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border-radius: 30px;
-  background: ${getColor('buttonPrimary')};
-  color: ${getColor('text')};
   white-space: nowrap;
-  box-shadow:
-    inset 0 -1px 0.5px 0 #0f1c3e,
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-
-  &:hover {
-    transform: scale(1.02);
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
+  z-index: 2;
 `

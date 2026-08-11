@@ -35,7 +35,7 @@ export const MigrateVaultPrompt = ({
           </Text>
           <Text size={14}>{t('upgrade_now_prompt')}</Text>
         </VStack>
-        <MigrateButton kind="secondary">{t('upgrade_now')}</MigrateButton>
+        <Button status="success">{t('upgrade_now')}</Button>
       </VStack>
 
       <LightingBackground />
@@ -74,16 +74,6 @@ const Container = styled(UnstyledButton)`
 
   @media ${mediaQuery.tabletDeviceAndUp} {
     width: 450px;
-  }
-`
-
-const MigrateButton = styled(Button)`
-  background-color: ${getColor('primary')};
-  color: ${getColor('background')};
-
-  &:hover {
-    background-color: ${({ theme }) =>
-      theme.colors.primary.withAlpha(0.7).toCssValue()};
   }
 `
 
