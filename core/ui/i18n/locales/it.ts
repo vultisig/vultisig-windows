@@ -1785,7 +1785,7 @@ export const it = {
     'Questo ordine non può essere effettuato come inserito',
   swap_limit_blocker_no_amount: 'Inserisci la quantità da vendere',
   swap_limit_blocker_no_market_price:
-    'Al momento non è possibile negoziare questa coppia di token su THORChain . Scegli un altro asset.',
+    'Al momento non è possibile negoziare questa coppia di token su THORChain. Scegli un altro asset.',
   swap_limit_blocker_no_price: 'Inserisci un prezzo obiettivo',
   swap_limit_blocker_pair_not_routable:
     'THORChain non può instradare un ordine limite tra questi asset',

@@ -1763,7 +1763,7 @@ export const nl = {
     'Deze bestelling kan niet worden geplaatst zoals ingevoerd.',
   swap_limit_blocker_no_amount: 'Voer een verkoopbedrag in',
   swap_limit_blocker_no_market_price:
-    'Dit valutapaar kan momenteel niet worden verhandeld op THORChain . Kies een ander actief.',
+    'Dit valutapaar kan momenteel niet worden verhandeld op THORChain. Kies een ander actief.',
   swap_limit_blocker_no_price: 'Voer een streefprijs in',
   swap_limit_blocker_pair_not_routable:
     'THORChain kan geen limietorder tussen deze activa routeren.',
