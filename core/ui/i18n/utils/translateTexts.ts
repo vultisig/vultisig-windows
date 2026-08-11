@@ -15,11 +15,31 @@ const namedHtmlEntities: Record<string, string> = {
   apos: "'",
   gt: '>',
   lt: '<',
-  nbsp: ' ',
+  // Escaped, not a literal: this is U+00A0, which is invisible in source and
+  // reads as a plain space. Decoding recovers the character the entity names,
+  // and languages that space their punctuation rely on it not breaking lines.
+  nbsp: '\u00a0',
   quot: '"',
 }
 
 const htmlEntityPattern = /&(#[0-9]+|#[xX][0-9a-fA-F]+|[a-zA-Z]+);/g
+
+const maxCodePoint = 0x10ffff
+const firstSurrogate = 0xd800
+const lastSurrogate = 0xdfff
+
+/**
+ * Whether a numeric entity names a character `String.fromCodePoint` will accept
+ * and that is worth putting in a locale file. Anything above the Unicode range
+ * makes it throw, which would abort a whole translation batch over one
+ * malformed entity; lone surrogates are legal there but decode to an unpaired
+ * half that has no business in shipped copy.
+ */
+const isDecodableCodePoint = (codePoint: number): boolean =>
+  Number.isInteger(codePoint) &&
+  codePoint > 0 &&
+  codePoint <= maxCodePoint &&
+  !(codePoint >= firstSurrogate && codePoint <= lastSurrogate)
 
 /**
  * Undoes the entity escaping the translation API applies because we request
@@ -40,7 +60,7 @@ const decodeHtmlEntities = (value: string): string =>
       isHex ? 16 : 10
     )
 
-    return Number.isSafeInteger(codePoint) && codePoint > 0
+    return isDecodableCodePoint(codePoint)
       ? String.fromCodePoint(codePoint)
       : match
   })
