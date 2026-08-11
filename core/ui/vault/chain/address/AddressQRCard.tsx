@@ -4,8 +4,8 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -39,13 +39,13 @@ const QRContainer = styled.div`
   width: 100%;
   max-width: 232px;
   aspect-ratio: 232 / 272;
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  border-radius: 32px 32px 24px 24px;
+  ${borderRadius.xl};
   background: linear-gradient(180deg, #4879fd 0%, #0d39b1 100%);
   box-shadow:
     0 -3px 1px 0 rgba(0, 0, 0, 0.25) inset,
@@ -56,7 +56,7 @@ const QRContainer = styled.div`
 const QRWrapper = styled.div`
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 32px 32px 24px 24px;
+  ${borderRadius.xl};
 
   overflow: hidden;
   background: white;
@@ -70,7 +70,7 @@ const ChainIconOverlay = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   ${sameDimensions(toSizeUnit(76))};
-  ${round};
+  ${borderRadius.pill};
   ${centerContent};
   background: ${getColor('background')};
   border: 4px solid white;
@@ -84,7 +84,7 @@ const ReceiveLabel = styled.div`
   left: 0;
   right: 0;
   padding: 12px;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px;
   text-align: center;
 `
 

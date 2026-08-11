@@ -2,6 +2,7 @@ import {
   getMarketChartPriceDomain,
   MarketChartPoint,
 } from '@core/ui/chain/coin/price/market/marketChart'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
 import { useId } from 'react'
@@ -161,7 +162,7 @@ const ScrubDot = styled.div`
   position: absolute;
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   transform: translate(-50%, -50%);
   pointer-events: none;
 `
