@@ -28,8 +28,8 @@ import {
 } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { useLimitOrderTracking } from '@core/ui/vault/swap/limit/tracking/useLimitOrderTracking'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
@@ -631,7 +631,7 @@ export const TransactionDetailPage = () => {
 const AmountCard = styled(VStack)`
   background-color: ${({ theme }) => theme.colors.foreground.toCssValue()};
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 16px;
+  ${borderRadius.lg};
   padding: 24px 16px;
   width: 100%;
 `
@@ -639,7 +639,7 @@ const AmountCard = styled(VStack)`
 const SwapCoinCard = styled(VStack)`
   background-color: ${({ theme }) => theme.colors.foreground.toCssValue()};
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 16px;
+  ${borderRadius.lg};
   flex: 1;
   padding: 24px 16px;
 `
@@ -650,13 +650,13 @@ const SwapChevronWrapper = styled(HStack)`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-  border-radius: 50%;
+  ${borderRadius.pill};
   padding: 7px;
   background-color: ${({ theme }) => theme.colors.background.toCssValue()};
 `
 
 const SwapChevronCircle = styled.div`
-  ${round};
+  ${borderRadius.pill};
   ${sameDimensions(24)};
   ${centerContent};
   background: ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};

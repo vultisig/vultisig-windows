@@ -1,5 +1,6 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
@@ -103,7 +104,7 @@ export const WeightedVoteSheet = ({
 const Dot = styled.span<{ $token: GovColorToken }>`
   width: 10px;
   height: 10px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background: ${({ $token }) => getColor($token)};
 `
 
@@ -118,7 +119,7 @@ const PercentValue = styled.span`
 const StepperButton = styled(UnstyledButton)`
   width: 28px;
   height: 28px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   font-size: 18px;
   line-height: 1;
   display: flex;

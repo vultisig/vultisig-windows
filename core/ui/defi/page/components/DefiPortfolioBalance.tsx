@@ -2,6 +2,7 @@ import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount
 import { useDefiPortfolioBalance } from '@core/ui/defi/page/hooks/useDefiPortfolios'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ManageVaultBalanceVisibility } from '@core/ui/vault/page/balance/visibility/ManageVaultBalanceVisibility'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -61,7 +62,7 @@ const Container = styled.div`
   align-items: center;
   gap: 16px;
   padding: 24px 20px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   margin: 0 20px;
   height: 136px;
 
@@ -72,7 +73,7 @@ const Container = styled.div`
 
 const BlurEffect = styled.div`
   position: absolute;
-  border-radius: 16px;
+  ${borderRadius.lg};
   border-radius: 350px;
   top: -30px;
   height: 200px;

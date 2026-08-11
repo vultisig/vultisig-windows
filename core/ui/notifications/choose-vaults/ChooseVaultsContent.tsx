@@ -1,4 +1,5 @@
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { Switch } from '@lib/ui/inputs/switch'
@@ -83,7 +84,7 @@ export const ChooseVaultsContent: FC<BodyProps> = ({
 
 const VaultListCard = styled(VStack)`
   background-color: ${getColor('foreground')};
-  border-radius: 24px;
+  ${borderRadius.xl};
   overflow: hidden;
 `
 
@@ -118,7 +119,7 @@ const VaultTypeIconFrame = styled.div`
   align-items: center;
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   display: flex;
   flex-shrink: 0;
   justify-content: center;

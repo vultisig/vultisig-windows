@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
@@ -18,7 +19,7 @@ export const AddressBookItemAvatar = ({ name, address }: VaultAvatarProps) => {
 const Circle = styled.div`
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   color: ${getColor('text')};
   flex-shrink: 0;
   display: flex;

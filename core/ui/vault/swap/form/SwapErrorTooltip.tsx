@@ -14,6 +14,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { NavigationXIcon } from '@lib/ui/icons/NavigationXIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -32,7 +33,7 @@ type SwapErrorTooltipProps = {
 }
 
 const Container = styled.div`
-  border-radius: 12px;
+  ${borderRadius.md};
   background: #ffffff;
   padding: 12px;
   min-width: 200px;

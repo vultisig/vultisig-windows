@@ -1,3 +1,4 @@
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { Text } from '@lib/ui/text'
@@ -15,7 +16,6 @@ import styled from 'styled-components'
 const autoDismissMs = 30_000
 /** Figma 70608:121371 — total frame height (padding included via border-box). */
 export const bannerHeightPx = 198
-const bottomCornerRadiusPx = 24
 const swipeDismissThresholdPx = 50
 
 export const transitionDuration = '0.35s'
@@ -56,7 +56,7 @@ const BannerRoot = styled.div<{
     ${getColor('primaryAccentTwo')} 20.77%,
     ${getColor('primaryAccentFour')} 109.97%
   );
-  border-radius: 0 0 ${bottomCornerRadiusPx}px ${bottomCornerRadiusPx}px;
+  border-radius: 0 0 ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px;
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
@@ -121,7 +121,7 @@ const VaultPill = styled.div`
   align-items: center;
   background: ${({ theme }) =>
     theme.colors.background.getVariant({ a: () => 0.5 }).toCssValue()};
-  border-radius: 999px;
+  ${borderRadius.pill};
   display: inline-flex;
   flex-shrink: 0;
   gap: 4px;

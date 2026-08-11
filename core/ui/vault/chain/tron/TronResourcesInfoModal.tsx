@@ -1,6 +1,8 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCore } from '@core/ui/state/core'
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TronBandwidthIcon } from '@lib/ui/icons/TronBandwidthIcon'
@@ -164,11 +166,9 @@ export const TronResourcesInfoModal = ({
           </RowWrapper>
         </AccordionWrapper>
 
-        <LearnMoreButton onClick={() => openUrl(tronDocsUrl)}>
-          <Text size={14} weight="600" color="contrast">
-            {t('learnMore')}
-          </Text>
-        </LearnMoreButton>
+        <Button kind="secondary" onClick={() => openUrl(tronDocsUrl)}>
+          {t('learnMore')}
+        </Button>
       </ContentContainer>
     </ResponsiveModal>
   )
@@ -181,7 +181,7 @@ const ContentContainer = styled(VStack)`
   @media ${mediaQuery.tabletDeviceAndUp} {
     padding: 24px;
     background: ${getColor('background')};
-    border-radius: 12px;
+    ${borderRadius.md};
     border: 1px solid ${getColor('mistExtra')};
     max-width: 480px;
     width: 100%;
@@ -193,7 +193,7 @@ const BandwidthIconCircle = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: rgba(19, 200, 157, 0.1);
   flex-shrink: 0;
 `
@@ -203,7 +203,7 @@ const EnergyIconCircle = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: #1b2430;
   flex-shrink: 0;
 `
@@ -222,7 +222,7 @@ const RowWrapper = styled.div`
 `
 
 const AccordionWrapper = styled.div`
-  border-radius: 12px;
+  ${borderRadius.md};
   background-color: ${getColor('foreground')};
 
   & > ${RowWrapper}:first-of-type {
@@ -240,23 +240,4 @@ const Divider = styled.div`
   height: 1px;
   width: 100%;
   background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
-`
-
-const LearnMoreButton = styled.button`
-  display: flex;
-  width: 100%;
-  padding: 14px 32px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 99px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: ${getColor('foreground')};
-  box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.1) inset;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-  }
 `

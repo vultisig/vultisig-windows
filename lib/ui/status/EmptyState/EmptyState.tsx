@@ -6,6 +6,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
+
 type EmptyStateProps = {
   icon?: ReactNode
   title: string
@@ -43,7 +45,7 @@ const EmptyWrapper = styled.div`
     alignItems: 'center',
   })};
   padding: 32px 40px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
 
   ${({ theme }) =>
@@ -51,7 +53,6 @@ const EmptyWrapper = styled.div`
     css`
       align-self: stretch;
       border: 1px solid ${theme.colors.foregroundSuper.toCssValue()};
-      border-radius: 20px;
       padding: 28px 20px;
     `}
 `

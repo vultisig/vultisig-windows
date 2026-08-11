@@ -58,7 +58,6 @@ export const de = {
   approval_tx: 'Genehmigung Tx',
   approve: 'Genehmigen',
   reject: 'Ablehnen',
-  applied_discounts: 'Angewandte Rabatte:',
   asset: 'Vermögenswert',
   assets: 'Vermögenswerte',
   at_least_one_device: 'Mindestens ein Gerät',
@@ -572,7 +571,6 @@ export const de = {
     'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
   max: 'Max',
   max_4_characters: 'Maximal 4 Zeichen',
-  max_total_fees: 'Maximale Gesamtgebühr',
   memo: 'Memo',
   merge: 'Verschmelzen',
   merged: 'Zusammengeführt',
@@ -1895,4 +1893,8 @@ export const de = {
     'Diese Transaktion ist eine Teilzahlung: Der angezeigte Betrag ist ein Höchstbetrag, keine Garantie. Der Empfänger kann einen geringeren Betrag erhalten, während Sie dennoch den angezeigten Höchstbetrag zahlen.',
   ripple_warning_custom_paths:
     'Die Website hat den Weg gewählt, den diese Zahlung durch das Netzwerk nimmt.',
+  price_impact: 'Preisauswirkung',
+  swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
+  swap_protocol_fee: 'Protokollgebühr',
+  swap_referral_fee: 'Vermittlungsgebühr',
 }

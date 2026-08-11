@@ -2,6 +2,7 @@ import {
   useIsBalanceVisible,
   useSetIsBalanceVisibleMutation,
 } from '@core/ui/storage/balanceVisibility'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { EyeClosedIcon } from '@lib/ui/icons/EyeClosedIcon'
 import { EyeIcon } from '@lib/ui/icons/EyeIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -46,7 +47,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: rgba(81, 128, 252, 0.12);
   cursor: pointer;
 `

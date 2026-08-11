@@ -54,7 +54,7 @@ export const VaultExistsOnServerWarning = ({
 }
 
 const WarningCard = styled(HStack)`
-  ${borderRadius.m};
+  ${borderRadius.md};
   background-color: ${getColor('idleDark')};
   border: 1px solid ${getColor('idle')};
   padding: 16px;

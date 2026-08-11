@@ -2,17 +2,17 @@ import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQuer
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { SwapFees } from '@vultisig/core-chain/swap/SwapFee'
 import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { useCallback, useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
+import { getSwapQuoteAffiliateBps } from '../affiliate/affiliateBps'
 import { useSwapKeysignPayloadQuery } from '../keysignPayload/query'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
-import { resolveSwapFees } from './resolveSwapFees'
+import { resolveSwapFees, SwapFeesBreakdown } from './resolveSwapFees'
 
 export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()
@@ -22,14 +22,19 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
     () => vaultCoins.find(coin => areEqualCoins(coin, fromCoinKey)),
     [fromCoinKey, vaultCoins]
   )
+  const toCoin = useMemo(
+    () => vaultCoins.find(coin => areEqualCoins(coin, toCoinKey)),
+    [toCoinKey, vaultCoins]
+  )
   const keysignPayloadQuery = useSwapKeysignPayloadQuery(swapQuote)
   const publicKey = useCurrentVaultPublicKey(fromCoinKey.chain)
   const walletCore = useAssertWalletCore()
+  const affiliateBps = getSwapQuoteAffiliateBps(swapQuote.discounts)
 
   return useTransformQueryDataAsync(
     keysignPayloadQuery,
     useCallback(
-      async (keysignPayload): Promise<SwapFees> => {
+      async (keysignPayload): Promise<SwapFeesBreakdown> => {
         const { chain } = fromCoinKey
         const fromFeeCoin = chainFeeCoin[chain]
 
@@ -47,11 +52,30 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
           quote: swapQuote.quote,
           network,
           toCoinKey,
+          toCoin,
           fromCoin,
+          affiliateBps,
         })
       },
-      [fromCoin, fromCoinKey, publicKey, swapQuote.quote, toCoinKey, walletCore]
+      [
+        affiliateBps,
+        fromCoin,
+        fromCoinKey,
+        publicKey,
+        swapQuote.quote,
+        toCoin,
+        toCoinKey,
+        walletCore,
+      ]
     ),
-    ['swapFees', fromCoinKey, toCoinKey, fromCoin, swapQuote.quote]
+    [
+      'swapFees',
+      fromCoinKey,
+      toCoinKey,
+      fromCoin,
+      toCoin,
+      swapQuote.quote,
+      affiliateBps,
+    ]
   )
 }

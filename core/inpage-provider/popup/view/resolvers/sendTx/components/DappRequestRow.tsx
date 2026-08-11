@@ -1,4 +1,5 @@
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { BrowserExtensionIcon } from '@lib/ui/icons/BrowserExtensionIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -8,7 +9,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import styled from 'styled-components'
 
 const Image = styled.img`
-  border-radius: 50%;
+  ${borderRadius.pill};
   height: 32px;
   width: 32px;
 `
@@ -16,7 +17,7 @@ const Image = styled.img`
 const FallbackIcon = styled(HStack)`
   align-items: center;
   background-color: ${getColor('foregroundExtra')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   color: ${getColor('text')};
   font-size: 18px;
   height: 32px;

@@ -2,6 +2,7 @@ import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../buttons/UnstyledButton'
+import { borderRadius } from '../css/borderRadius'
 import { CircleMinusIcon } from '../icons/CircleMinusIcon'
 import { CirclePlusIcon } from '../icons/CirclePlusIcon'
 import { HStack, VStack, vStack } from '../layout/Stack'
@@ -77,14 +78,14 @@ const StepControl = styled(UnstyledButton)`
   })};
 
   padding: 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   width: 97px;
 `
 
 const Input = styled(TextInput)`
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   text-align: center;
 `

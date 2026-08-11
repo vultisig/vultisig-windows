@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ValueProp } from '@lib/ui/props'
 import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import styled from 'styled-components'
@@ -27,7 +28,7 @@ export const DiscountTierContainer = styled.div<{ $clickable?: boolean }>`
   align-self: stretch;
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: #061b3a;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
 `
@@ -39,7 +40,7 @@ export const DiscountTierDarkSection = styled.div`
   position: relative;
   z-index: 1;
   overflow: hidden;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: #061b3a;
 `
 

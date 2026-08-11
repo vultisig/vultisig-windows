@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -18,7 +19,7 @@ export const HeroFrame = styled.div`
   max-width: 350px;
   aspect-ratio: 350 / 240;
   align-self: center;
-  border-radius: 8px;
+  ${borderRadius.sm};
   border: 1px dashed ${getColor('foregroundExtra')};
   background-image: url('${heroImageUrl}');
   background-repeat: no-repeat;

@@ -1,5 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -110,7 +111,7 @@ const ActiveIndicator = styled.div`
   right: 0;
   height: 1.5px;
   background: ${getColor('primaryAccentFour')};
-  border-radius: 1px;
+  ${borderRadius.pill};
 `
 
 const TrailingGroup = styled(motion.div)`

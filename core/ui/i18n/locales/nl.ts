@@ -57,7 +57,6 @@ export const nl = {
   approval_tx: 'Goedkeurings-tx',
   approve: 'Goedkeuren',
   reject: 'Weigeren',
-  applied_discounts: 'Toegepaste kortingen:',
   asset: 'Asset',
   assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
@@ -561,7 +560,6 @@ export const nl = {
     'Je kunt meldingen beheren in de systeeminstellingen.',
   max: 'Max',
   max_4_characters: 'Max 4 tekens',
-  max_total_fees: 'Max. totale fee',
   memo: 'Memo',
   merge: 'Samenvoegen',
   merged: 'Samengevoegd',
@@ -1863,4 +1861,8 @@ export const nl = {
     'Deze transactie betreft een gedeeltelijke betaling: het weergegeven bedrag is een maximum, geen gegarandeerd bedrag. De ontvanger kan een lager bedrag ontvangen, terwijl u wel het weergegeven maximum betaalt.',
   ripple_warning_custom_paths:
     'De website heeft de route bepaald die deze betaling via het netwerk aflegt.',
+  price_impact: 'Prijsimpact',
+  swap_fee_included_in_rate: 'Inbegrepen in de vermelde wisselkoers',
+  swap_protocol_fee: 'Protocolkosten',
+  swap_referral_fee: 'Verwijzingsvergoeding',
 }

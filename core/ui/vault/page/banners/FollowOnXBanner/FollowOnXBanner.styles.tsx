@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import styled from 'styled-components'
 
 import { BannerPromoCtaButton } from '../shared/BannerPromoCtaButton.styles'
@@ -33,7 +34,7 @@ export const ButtonsRow = styled.div`
 `
 
 export const FollowButton = styled(BannerPromoCtaButton)`
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
   color: #0f172a;
   font-weight: 600;

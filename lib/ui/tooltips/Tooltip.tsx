@@ -19,6 +19,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { borderRadius } from '../css/borderRadius'
+
 type RenderOpenerProps = {
   ref: (node: ReferenceType | null) => void
 } & Record<string, unknown>
@@ -30,7 +32,7 @@ type TooltipProps = {
 }
 
 const Container = styled.div`
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: ${getColor('contrast')};
   color: ${getColor('background')};
   padding: 12px;

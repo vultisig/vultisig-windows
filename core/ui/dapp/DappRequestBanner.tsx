@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { BrowserExtensionIcon } from '@lib/ui/icons/BrowserExtensionIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -11,13 +12,13 @@ import styled from 'styled-components'
 const Panel = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   gap: 16px;
   padding: 20px;
 `
 
 const Image = styled.img`
-  border-radius: 50%;
+  ${borderRadius.pill};
   height: 32px;
   width: 32px;
 `
@@ -25,7 +26,7 @@ const Image = styled.img`
 const FallbackIcon = styled(HStack)`
   align-items: center;
   background-color: ${getColor('foregroundExtra')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   color: ${getColor('text')};
   font-size: 18px;
   height: 32px;

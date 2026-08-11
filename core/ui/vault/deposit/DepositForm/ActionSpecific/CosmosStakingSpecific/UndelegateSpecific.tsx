@@ -2,6 +2,7 @@ import { ActiveDelegationPicker } from '@core/ui/chain/cosmos/staking/components
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Slider } from '@lib/ui/inputs/Slider'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -148,7 +149,7 @@ export const UndelegateSpecific = () => {
 const Card = styled(VStack).attrs({ gap: 12 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const CenteredAmount = styled.div`

@@ -6,6 +6,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { keyframes } from 'styled-components'
 
+import { borderRadius } from '../css/borderRadius'
 import { hStack, vStack } from '../layout/Stack'
 import { ToastStatus } from './ToastStatus'
 import { ToastStatusIcon } from './ToastStatusIcon'
@@ -72,7 +73,7 @@ const Card = styled.div`
 
   width: 100%;
   padding: 16px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   border: 1px solid ${getColor('foregroundSuper')};
   background: ${getColor('foregroundExtra')};
   text-align: center;

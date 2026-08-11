@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { hStack } from '@lib/ui/layout/Stack'
@@ -50,7 +51,7 @@ const Wrapper = styled.div`
     alignItems: 'center',
   })};
 
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `

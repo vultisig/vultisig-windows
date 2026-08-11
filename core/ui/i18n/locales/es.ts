@@ -56,7 +56,6 @@ export const es = {
   approval_tx: 'Aprobación Tx',
   approve: 'Aprobar',
   reject: 'Rechazar',
-  applied_discounts: 'Descuentos aplicados:',
   asset: 'Activo',
   assets: 'Activos',
   at_least_one_device: 'Al menos un dispositivo',
@@ -566,7 +565,6 @@ export const es = {
     'Puedes gestionar las notificaciones en la configuración del sistema.',
   max: 'Máximo',
   max_4_characters: 'Máximo 4 caracteres',
-  max_total_fees: 'Tarifa total máxima',
   memo: 'Memorándum',
   merge: 'Unir',
   merged: 'Fusionado',
@@ -1880,4 +1878,8 @@ export const es = {
     'Esta transacción es un pago parcial: el importe mostrado es un máximo, no una cantidad garantizada. El destinatario puede recibir una cantidad menor mientras usted paga el máximo indicado.',
   ripple_warning_custom_paths:
     'El sitio web eligió la ruta que sigue este pago a través de la red.',
+  price_impact: 'Impacto en los precios',
+  swap_fee_included_in_rate: 'Incluido en el tipo de cambio cotizado',
+  swap_protocol_fee: 'Tarifa de protocolo',
+  swap_referral_fee: 'Comisión por recomendación',
 }

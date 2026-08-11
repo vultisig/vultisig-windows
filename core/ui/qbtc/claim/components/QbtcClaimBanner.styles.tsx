@@ -1,6 +1,6 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
-import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
@@ -15,7 +15,7 @@ export const BannerRoot = styled.div`
   margin-bottom: 32px;
   box-sizing: border-box;
   padding: 24px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foregroundExtra')};
   border: 1px solid ${getColor('foregroundExtra')};
   overflow: hidden;
@@ -28,7 +28,7 @@ export const BannerEllipseOuter = styled.div`
   width: 418px;
   height: 418px;
   margin-left: -209px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: rgba(255, 255, 255, 0.02);
   opacity: 0.7;
   pointer-events: none;
@@ -42,7 +42,7 @@ export const BannerEllipseGlass = styled.div`
   width: 294px;
   height: 294px;
   margin-left: -147px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: ${getColor('background')};
   border: 2px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(94px);
@@ -58,7 +58,7 @@ export const BannerEllipseGlow = styled.div`
   width: 350px;
   height: 350px;
   margin-left: -175px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: radial-gradient(
     circle at 50% 50%,
     rgba(4, 57, 199, 1) 0%,
@@ -124,37 +124,11 @@ export const BannerTextStack = styled.div`
   text-align: center;
 `
 
-export const BannerCta = styled(UnstyledButton)`
-  ${text({
-    size: 12,
-    weight: 500,
-    height: 16 / 12,
-  })};
-
-  position: relative;
-  z-index: 2;
+/**
+ * The design system's mini primary pill, centred above the banner artwork.
+ */
+export const BannerCta = styled(Button).attrs({ size: 'xs' })`
   align-self: center;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border-radius: 30px;
-  background: ${getColor('buttonPrimary')};
-  color: ${getColor('text')};
   white-space: nowrap;
-  box-shadow:
-    inset 0 -1px 0.5px 0 #0f1c3e,
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-
-  &:hover {
-    transform: scale(1.02);
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
+  z-index: 2;
 `

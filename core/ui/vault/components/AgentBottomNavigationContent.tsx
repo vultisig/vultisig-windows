@@ -5,8 +5,8 @@ import {
 import { autoUpdate, offset, shift, useFloating } from '@floating-ui/react'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { Coachmark } from '@lib/ui/coachmark/Coachmark'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { AgentIcon } from '@lib/ui/icons/AgentIcon'
 import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
@@ -253,7 +253,7 @@ const FloatingCamera = styled(UnstyledButton)`
   right: 28px;
   bottom: 80px;
   z-index: 16;
-  ${round};
+  ${borderRadius.pill};
   ${centerContent};
   ${sameDimensions(cameraButtonSize)};
   background: ${({ theme }) =>
@@ -291,7 +291,7 @@ const TabButton = styled(UnstyledButton)<TabButtonProps>`
   height: 48px;
   padding: 3px 20px;
   font-size: 24px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   transition: all 0.2s ease-in-out;
   background: transparent;
 

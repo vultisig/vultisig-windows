@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -26,7 +27,7 @@ export const ChainList = styled.div`
   flex-direction: column;
   margin-top: 8px;
   background-color: #061b3a;
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 export const ChainItem = styled(HStack)`

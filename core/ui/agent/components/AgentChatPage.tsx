@@ -1,5 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -602,7 +603,7 @@ const MessagesContainer = styled(PageContent)`
 const ErrorMessage = styled.div`
   padding: 12px 16px;
   background: ${getColor('danger')}20;
-  border-radius: 8px;
+  ${borderRadius.sm};
   cursor: pointer;
 `
 

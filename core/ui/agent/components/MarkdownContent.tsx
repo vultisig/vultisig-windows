@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import Markdown from 'react-markdown'
@@ -44,14 +45,14 @@ const Container = styled.div`
     font-size: 12px;
     padding: 2px 6px;
     background: ${getColor('background')};
-    border-radius: 4px;
+    ${borderRadius.xs};
   }
 
   pre {
     margin: 8px 0;
     padding: 12px;
     background: ${getColor('background')};
-    border-radius: 6px;
+    ${borderRadius.sm};
     overflow-x: auto;
 
     code {

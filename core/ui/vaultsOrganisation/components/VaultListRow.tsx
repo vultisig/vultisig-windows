@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -83,7 +84,7 @@ const Row = styled.div.withConfig({
   align-items: center;
   background: ${({ theme, selected }) =>
     selected && theme.colors.foregroundDark.withAlpha(0.65).toCssValue()};
-  border-radius: 18px;
+  ${borderRadius.lg};
   border: 1px solid
     ${({ theme }) => theme.colors.foregroundExtra.withAlpha(0.7).toCssValue()};
   display: flex;
@@ -150,7 +151,7 @@ const IconBadge = styled.div.withConfig({
   shouldForwardProp: prop => prop !== 'tone',
 })<{ tone: LeadingIconProps['tone'] }>`
   align-items: center;
-  border-radius: 99px;
+  ${borderRadius.pill};
   display: flex;
   font-size: 16px;
   height: 40px;

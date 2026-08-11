@@ -5,6 +5,7 @@ import {
   useFormatLimitOrderExpiry,
   useLimitOrderStatusLabels,
 } from '@core/ui/vault/swap/limit/tracking/presentation'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -20,7 +21,7 @@ const Row = styled.button`
   all: unset;
   cursor: pointer;
   padding: 16px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   display: flex;

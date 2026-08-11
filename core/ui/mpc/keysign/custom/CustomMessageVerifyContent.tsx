@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -53,7 +54,7 @@ const ReviewItem = styled.div`
   })};
 
   padding: 16px 20px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: rgba(11, 26, 58, 0.5);
   min-width: 0;

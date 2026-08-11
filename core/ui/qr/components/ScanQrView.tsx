@@ -3,6 +3,7 @@ import { QrScanner } from '@core/ui/qr/components/QrScanner'
 import { useCameraPermissionQuery } from '@core/ui/qr/hooks/useCameraPermissionQuery'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -27,7 +28,7 @@ const ScannerGlobalStyle = createGlobalStyle`
 const GlassContainer = styled(VStack)`
   flex-grow: 1;
   border: 1px solid ${getColor('primaryAccentTwo')};
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${({ theme }) => theme.colors.background.toRgba(0.3)};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   overflow: hidden;

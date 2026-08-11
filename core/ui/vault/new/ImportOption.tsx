@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import {
   DescriptionProp,
@@ -15,7 +16,7 @@ const Container = styled(UnstyledButton)`
   ${vStack({
     gap: 12,
   })}
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   padding: 24px;
   width: 100%;

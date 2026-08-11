@@ -4,6 +4,7 @@ import { ComponentProps, FC } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import { Match } from '../base/Match'
+import { borderRadius } from '../css/borderRadius'
 
 type SpinnerKind = 'primary' | 'secondary'
 
@@ -29,7 +30,7 @@ const SecondarySpinner = styled.span`
   display: inline-block;
 
   border: 0.08em solid;
-  border-radius: 100%;
+  ${borderRadius.pill};
   border-top-color: transparent;
 
   animation: ${animationForRotation} 1s infinite linear;

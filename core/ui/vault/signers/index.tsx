@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ZapIcon } from '@lib/ui/icons/ZapIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { hasServer, isServer } from '@vultisig/core-mpc/devices/localPartyId'
@@ -20,7 +21,7 @@ const StyledText = styled.span`
 
 const StyledVaultSigners = styled.div`
   align-items: center;
-  border-radius: 20px;
+  ${borderRadius.pill};
   background: ${({ theme }) =>
     theme.colors.foreground.withAlpha(0.35).toCssValue()};
   border: 1px solid ${getColor('foregroundExtra')};

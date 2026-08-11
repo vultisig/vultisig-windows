@@ -1,6 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName, languageRegion, languages } from '@core/ui/i18n/Language'
 import { useLanguage, useSetLanguageMutation } from '@core/ui/storage/language'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -43,7 +44,7 @@ export const LanguagePage = () => {
 
 const CircleCheckIcon = styled(CheckIcon)`
   background-color: ${getColor('buttonPrimary')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   font-size: 16px;
   padding: 2px;
 `

@@ -88,7 +88,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
 const StyledListItem = styled(ListItem)`
   background-color: transparent;
   border: 1px solid ${getColor('foregroundExtra')};
-  ${borderRadius.m};
+  ${borderRadius.md};
   padding: 16px 20px;
   max-height: 68px;
 `

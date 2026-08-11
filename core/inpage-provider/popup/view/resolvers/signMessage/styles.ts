@@ -1,10 +1,11 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const Description = styled(VStack)`
   border: 1px dashed ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   gap: 8px;
   padding: 12px;
 `
@@ -27,13 +28,13 @@ export const Image = styled.img`
 export const Section = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
 `
 
 export const Verify = styled(HStack)`
   background-color: ${getColor('background')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   height: 28px;
   padding-left: 6px;
   padding-right: 8px;

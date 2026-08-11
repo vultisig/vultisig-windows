@@ -2,6 +2,7 @@ import { ValidatorAvatar } from '@core/ui/chain/cosmos/staking/components/Valida
 import { ValidatorPickerSheet } from '@core/ui/chain/cosmos/staking/components/ValidatorPickerSheet'
 import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
 import { Opener } from '@lib/ui/base/Opener'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -102,7 +103,7 @@ const FieldContainer = styled.button.attrs({ type: 'button' as const })`
   justify-content: space-between;
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   cursor: pointer;
   background: transparent;
   color: inherit;

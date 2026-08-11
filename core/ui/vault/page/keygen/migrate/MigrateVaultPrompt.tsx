@@ -2,6 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -35,7 +36,7 @@ export const MigrateVaultPrompt = ({
           </Text>
           <Text size={14}>{t('upgrade_now_prompt')}</Text>
         </VStack>
-        <MigrateButton kind="secondary">{t('upgrade_now')}</MigrateButton>
+        <Button status="success">{t('upgrade_now')}</Button>
       </VStack>
 
       <LightingBackground />
@@ -61,7 +62,7 @@ export const MigrateVaultPrompt = ({
 
 const Container = styled(UnstyledButton)`
   padding: 24px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   width: 350px;
@@ -74,16 +75,6 @@ const Container = styled(UnstyledButton)`
 
   @media ${mediaQuery.tabletDeviceAndUp} {
     width: 450px;
-  }
-`
-
-const MigrateButton = styled(Button)`
-  background-color: ${getColor('primary')};
-  color: ${getColor('background')};
-
-  &:hover {
-    background-color: ${({ theme }) =>
-      theme.colors.primary.withAlpha(0.7).toCssValue()};
   }
 `
 

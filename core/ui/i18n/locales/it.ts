@@ -58,7 +58,6 @@ export const it = {
   approval_tx: 'Approvazione Tx',
   approve: 'Approvare',
   reject: 'Rifiutare',
-  applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
   assets: 'Attività',
   at_least_one_device: 'Almeno un dispositivo',
@@ -571,7 +570,6 @@ export const it = {
     'È possibile gestire le notifiche nelle impostazioni di sistema.',
   max: 'Massimo',
   max_4_characters: 'Massimo 4 caratteri',
-  max_total_fees: 'Commissione totale massima',
   memo: 'Promemoria',
   merge: 'Unisci',
   merged: 'Unito',
@@ -1886,4 +1884,8 @@ export const it = {
     "Questa transazione è un pagamento parziale: l'importo mostrato è un importo massimo, non garantito. Il destinatario può ricevere un importo inferiore, mentre tu verserai comunque l'importo massimo indicato.",
   ripple_warning_custom_paths:
     'Il sito ha scelto il percorso che questo pagamento seguirà attraverso la rete.',
+  price_impact: 'Impatto sul prezzo',
+  swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
+  swap_protocol_fee: 'Tariffa del protocollo',
+  swap_referral_fee: 'Commissione di segnalazione',
 }

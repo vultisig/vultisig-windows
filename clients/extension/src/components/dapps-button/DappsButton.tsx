@@ -1,6 +1,6 @@
 import { useCurrentVaultAppSessionsQuery } from '@core/extension/storage/hooks/appSessions'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { round } from '@lib/ui/css/round'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { ContainImage } from '@lib/ui/images/ContainImage'
@@ -13,7 +13,7 @@ import styled from 'styled-components'
 
 const Icon = styled(ContainImage)`
   ${sameDimensions('36px')};
-  ${round};
+  ${borderRadius.pill};
   border: 1px solid rgba(255, 255, 255, 0.1);
 `
 
@@ -28,7 +28,7 @@ const Badge = styled.div<{ isConnected: boolean }>`
   right: -0.1em;
   width: 1em;
   height: 1em;
-  ${round};
+  ${borderRadius.pill};
   background-color: ${({ isConnected }) =>
     isConnected ? getColor('success') : getColor('idle')};
   border: 4px solid ${getColor('foregroundExtra')};

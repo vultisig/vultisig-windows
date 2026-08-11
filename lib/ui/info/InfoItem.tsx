@@ -8,7 +8,7 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const Container = styled(HStack)`
-  ${borderRadius.l};
+  ${borderRadius.xl};
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 16px;

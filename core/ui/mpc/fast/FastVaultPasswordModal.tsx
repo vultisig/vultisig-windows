@@ -2,6 +2,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { FocusLockIcon } from '@lib/ui/icons/FocusLockIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -182,7 +183,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
             />
           )}
 
-          <ConfirmButton
+          <Button
             data-testid="fast-vault-submit"
             disabled={mutationIsPending || !isValid}
             loading={mutationIsPending}
@@ -190,7 +191,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
             kind="primary"
           >
             {t('confirm')}
-          </ConfirmButton>
+          </Button>
         </VStack>
       </ModalWrapper>
     </Backdrop>
@@ -206,7 +207,7 @@ const CloseButton = styled(IconButton)`
   position: absolute;
   right: 12px;
   top: 12px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: ${getColor('foregroundExtra')};
 `
 
@@ -219,15 +220,7 @@ const ModalWrapper = styled(VStack)`
   justify-content: center;
   align-items: center;
   gap: 24px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   border: 1px solid #11284a;
   background: #02122b;
-`
-
-const ConfirmButton = styled(Button)`
-  width: 100%;
-  height: 48px;
-  border-radius: 24px;
-  font-size: 14px;
-  font-weight: 600;
 `

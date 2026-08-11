@@ -1,6 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
@@ -20,7 +20,7 @@ const Position = styled.div`
   bottom: -0.32em;
   right: -0.32em;
   font-size: 0.52em;
-  ${round};
+  ${borderRadius.pill};
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foreground')};
   ${centerContent};

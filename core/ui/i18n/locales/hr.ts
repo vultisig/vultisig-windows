@@ -56,7 +56,6 @@ export const hr = {
   approval_tx: 'Odobrenje slanja',
   approve: 'Odobriti',
   reject: 'Odbiti',
-  applied_discounts: 'Primijenjeni popusti:',
   asset: 'Imovina',
   assets: 'Imovina',
   at_least_one_device: 'Barem jedan uređaj',
@@ -558,7 +557,6 @@ export const hr = {
     'Obavijestima možete upravljati u postavkama sustava.',
   max: 'Maks.',
   max_4_characters: 'Maks. 4 znaka',
-  max_total_fees: 'Maks. ukupna naknada',
   memo: 'Dopis',
   merge: 'Spojiti',
   merged: 'Spojeno',
@@ -1850,4 +1848,8 @@ export const hr = {
     'Ova transakcija je djelomično plaćanje: prikazani iznos je maksimalni, a ne zajamčeni iznos. Primatelj može primiti manji iznos dok vi i dalje plaćate prikazani maksimalni iznos.',
   ripple_warning_custom_paths:
     'Stranica je odabrala rutu kojom se ovo plaćanje odvija kroz mrežu.',
+  price_impact: 'Utjecaj na cijenu',
+  swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
+  swap_protocol_fee: 'Naknada za protokol',
+  swap_referral_fee: 'Naknada za preporuku',
 }

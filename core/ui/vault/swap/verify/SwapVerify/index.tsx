@@ -1,7 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { SwapFiatAmount } from '@core/ui/vault/swap/form/amount/SwapFiatAmount'
 import { VerifySwapFees } from '@core/ui/vault/swap/form/info/VerifySwapFees'
@@ -38,7 +37,6 @@ type SwapVerifyProps = {
 
 export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
   const { t } = useTranslation()
-  const vault = useCurrentVault()
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
@@ -62,14 +60,9 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
       >
         <ContainerWrapper radius={16}>
           <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
-            <VStack gap={4}>
-              <Text color="supporting" size={15}>
-                {t('youre_swapping')}
-              </Text>
-              <Text color="shy" size={13}>
-                {vault.name}
-              </Text>
-            </VStack>
+            <Text color="supporting" size={15}>
+              {t('youre_swapping')}
+            </Text>
             <VStack gap={16}>
               <HStack gap={12} alignItems="center">
                 <CoinIcon coin={fromCoin} style={{ fontSize: 32 }} />

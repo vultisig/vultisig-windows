@@ -8,6 +8,7 @@ import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Size } from '../../core/Size'
+import { borderRadius } from '../../css/borderRadius'
 import { ButtonProps, PrimaryButtonStatus } from '../ButtonProps'
 
 type ButtonSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
@@ -22,7 +23,7 @@ const StyledIconButton = styled(UnstyledButton)<{
   ${({ $disabled, $kind, $loading, $size, $status }) => css`
     align-items: center;
     border: none;
-    border-radius: ${iconButtonSize[$size]}px;
+    ${borderRadius.pill};
     cursor: pointer;
     display: flex;
     height: ${iconButtonSize[$size]}px;

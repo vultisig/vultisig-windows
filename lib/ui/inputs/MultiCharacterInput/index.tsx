@@ -6,6 +6,7 @@ import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
 import { Spinner } from '../../loaders/Spinner'
 import { InputProps, UiProps } from '../../props'
 import { Text } from '../../text'
@@ -124,7 +125,7 @@ const DigitInput = styled.input.attrs({
   font-size: 18px;
   border: 2px solid transparent;
   background: ${getColor('foreground')};
-  border-radius: 24px;
+  ${borderRadius.xl};
   outline: none;
   color: ${getColor('text')};
 
@@ -163,6 +164,6 @@ const DigitInput = styled.input.attrs({
 
 const PasteButton = styled(Button)`
   width: fit-content;
-  border-radius: 24px;
+  ${borderRadius.xl};
   min-width: 72px;
 `

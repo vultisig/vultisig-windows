@@ -1,5 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleDashedIcon } from '@lib/ui/icons/CircleDashedIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -60,7 +61,7 @@ const EmptyWrapper = styled.div`
   gap: 20px;
   padding: 40px 20px;
   background-color: ${getColor('foreground')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const CtaWrapper = styled.div`

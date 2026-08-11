@@ -1,5 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
@@ -56,6 +57,6 @@ const Container = styled(UnstyledButton)`
   })}
   text-align: left;
   padding: 6px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   background-color: ${getColor('foregroundExtra')};
 `

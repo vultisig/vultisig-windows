@@ -57,7 +57,6 @@ export const ko = {
   approval_tx: '승인 거래',
   approve: '승인하다',
   reject: '거부하다',
-  applied_discounts: '적용된 할인:',
   asset: '자산',
   assets: '자산',
   at_least_one_device: '최소 한 개의 기기',
@@ -557,7 +556,6 @@ export const ko = {
     '시스템 설정에서 알림을 관리할 수 있습니다.',
   max: '맥스',
   max_4_characters: '최대 4자',
-  max_total_fees: '최대 총 수수료',
   memo: '메모',
   merge: '병합',
   merged: '병합됨',
@@ -1840,4 +1838,8 @@ export const ko = {
     '이 거래는 부분 결제입니다. 표시된 금액은 최대 금액이며, 보장된 금액이 아닙니다. 수취인은 표시된 최대 금액보다 적은 금액을 받을 수 있지만, 송금인은 표시된 최대 금액을 지불하게 됩니다.',
   ripple_warning_custom_paths:
     '해당 사이트는 결제가 네트워크를 통해 이루어지는 경로를 선택했습니다.',
+  price_impact: '가격 영향',
+  swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
+  swap_protocol_fee: '프로토콜 수수료',
+  swap_referral_fee: '소개 수수료',
 }

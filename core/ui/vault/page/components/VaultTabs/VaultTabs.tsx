@@ -1,4 +1,5 @@
 import { Tabs } from '@lib/ui/base/Tabs'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -77,6 +78,6 @@ const ComingSoonWrapper = styled.div`
     justifyContent: 'center',
   })};
 
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: rgba(81, 128, 252, 0.12);
 `
