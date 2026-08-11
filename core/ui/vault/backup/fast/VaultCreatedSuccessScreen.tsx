@@ -80,7 +80,9 @@ const IconShadow = styled.div`
   opacity: 0.5;
   background: ${getColor('success')};
   filter: blur(9px);
-  ${borderRadius.pill};
+  /* A blurred glow, not a surface: 16x8 means 50% is an ellipse and the
+     pill token would clamp it to a stadium. */
+  border-radius: 50%;
   pointer-events: none;
 `
 

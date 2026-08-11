@@ -29,7 +29,9 @@ const TopGradient = styled.div`
   transform: translateX(-50%);
   width: 600px;
   height: 500px;
-  ${borderRadius.pill};
+  /* A decorative radial glow, not a surface: 600x500 means 50% is an
+     ellipse and the pill token would clamp it to a stadium. */
+  border-radius: 50%;
   background: radial-gradient(
     50% 50% at 50% 50%,
     rgba(72, 121, 253, 0.5) 0%,
