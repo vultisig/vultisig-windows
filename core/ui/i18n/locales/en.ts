@@ -1198,7 +1198,7 @@ export const en = {
   swap_limit_blocker_memo_invalid: 'This order cannot be placed as entered',
   swap_limit_blocker_no_amount: 'Enter an amount to sell',
   swap_limit_blocker_no_market_price:
-    'No market price available for this pair yet',
+    "This pair can't be traded on THORChain right now. Pick a different asset.",
   swap_limit_blocker_no_price: 'Enter a target price',
   swap_limit_blocker_pair_not_routable:
     'THORChain cannot route a limit order between these assets',

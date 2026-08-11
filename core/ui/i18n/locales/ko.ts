@@ -1741,7 +1741,7 @@ export const ko = {
     '입력하신 내용으로는 주문을 처리할 수 없습니다.',
   swap_limit_blocker_no_amount: '판매할 금액을 입력하세요',
   swap_limit_blocker_no_market_price:
-    '이 제품에 대한 시장 가격은 아직 확인되지 않았습니다.',
+    '이 쌍은 현재 THORChain 에서 거래할 수 없습니다. 다른 자산을 선택하세요.',
   swap_limit_blocker_no_price: '목표 가격을 입력하세요',
   swap_limit_blocker_pair_not_routable:
     'THORChain 이 자산들 간에 지정가 주문을 라우팅할 수 없습니다.',

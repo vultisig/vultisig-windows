@@ -1779,7 +1779,7 @@ export const es = {
     'Este pedido no se puede realizar tal como se ingresó.',
   swap_limit_blocker_no_amount: 'Ingrese una cantidad para vender',
   swap_limit_blocker_no_market_price:
-    'Aún no hay precio de mercado disponible para este par.',
+    'Este par no se puede negociar en THORChain en este momento. Elija otro activo.',
   swap_limit_blocker_no_price: 'Introduzca un precio objetivo',
   swap_limit_blocker_pair_not_routable:
     'THORChain no puede enrutar una orden limitada entre estos activos.',
