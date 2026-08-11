@@ -1,10 +1,11 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { HStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
 import { matchColor } from '@lib/ui/theme/getters'
 import { range } from '@vultisig/lib-utils/array/range'
 import styled, { css } from 'styled-components'
+
+import { borderRadius } from '../../css/borderRadius'
 
 type MultistepProgressIndicatorProps = ValueProp<number> & {
   steps: number

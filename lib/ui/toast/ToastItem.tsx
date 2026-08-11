@@ -1,4 +1,3 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
@@ -7,6 +6,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { keyframes } from 'styled-components'
 
+import { borderRadius } from '../css/borderRadius'
 import { hStack, vStack } from '../layout/Stack'
 import { ToastStatus } from './ToastStatus'
 import { ToastStatusIcon } from './ToastStatusIcon'

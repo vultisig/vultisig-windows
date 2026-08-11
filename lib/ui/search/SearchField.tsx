@@ -1,4 +1,3 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { StationMagnifierIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -7,6 +6,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
+
+import { borderRadius } from '../css/borderRadius'
 
 type SearchFieldProps = UiProps & {
   autoFocus?: boolean

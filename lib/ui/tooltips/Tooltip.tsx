@@ -15,10 +15,11 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useRef, useState } from 'react'
 import styled from 'styled-components'
+
+import { borderRadius } from '../css/borderRadius'
 
 type RenderOpenerProps = {
   ref: (node: ReferenceType | null) => void

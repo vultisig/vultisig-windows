@@ -1,5 +1,4 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
@@ -9,6 +8,7 @@ import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Size } from '../../core/Size'
+import { borderRadius } from '../../css/borderRadius'
 import { ButtonProps, PrimaryButtonStatus } from '../ButtonProps'
 
 type ButtonSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>

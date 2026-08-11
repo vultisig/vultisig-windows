@@ -1,8 +1,8 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../buttons/UnstyledButton'
+import { borderRadius } from '../css/borderRadius'
 import { CircleMinusIcon } from '../icons/CircleMinusIcon'
 import { CirclePlusIcon } from '../icons/CirclePlusIcon'
 import { HStack, VStack, vStack } from '../layout/Stack'

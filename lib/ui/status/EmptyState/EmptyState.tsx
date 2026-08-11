@@ -1,4 +1,3 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
@@ -6,6 +5,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
+
+import { borderRadius } from '../../css/borderRadius'
 
 type EmptyStateProps = {
   icon?: ReactNode

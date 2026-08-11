@@ -1,5 +1,4 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
@@ -7,6 +6,7 @@ import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
 import { Spinner } from '../../loaders/Spinner'
 import { InputProps, UiProps } from '../../props'
 import { Text } from '../../text'

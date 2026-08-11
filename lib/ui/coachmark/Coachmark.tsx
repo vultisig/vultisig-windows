@@ -1,11 +1,12 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { borderRadius } from '../css/borderRadius'
 
 type CoachmarkProps = {
   title: string

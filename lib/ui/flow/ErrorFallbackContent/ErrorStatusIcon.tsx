@@ -1,7 +1,8 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@vultisig/lib-utils/match'
 import styled from 'styled-components'
+
+import { borderRadius } from '../../css/borderRadius'
 
 export type ErrorStatusVariant = 'error' | 'warning'
 

@@ -1,7 +1,8 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
+
+import { borderRadius } from '../css/borderRadius'
 
 export const FormCheckBadge = () => {
   return (

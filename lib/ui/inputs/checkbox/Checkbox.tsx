@@ -1,4 +1,3 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -9,6 +8,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
 import {
   InvisibleHTMLCheckbox,
   InvisibleHTMLCheckboxProps,

@@ -1,9 +1,9 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { InputProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
 import { Text } from '../../text'
 
 const thumbWidth = 38

@@ -1,4 +1,3 @@
-import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { VStack } from '@lib/ui/layout/Stack'
 import {
@@ -10,6 +9,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { ReactNode, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { borderRadius, borderRadiusPx } from '../css/borderRadius'
 import { Modal, ModalProps } from './index'
 
 type ResponsiveModalProps = {

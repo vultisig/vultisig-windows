@@ -1,10 +1,10 @@
 import { Animation } from '@lib/ui/animations/Animation'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ComponentProps, FC } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import { Match } from '../base/Match'
+import { borderRadius } from '../css/borderRadius'
 
 type SpinnerKind = 'primary' | 'secondary'
 

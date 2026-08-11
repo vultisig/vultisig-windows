@@ -1,4 +1,3 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -6,6 +5,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, ReactNode, useState } from 'react'
 import styled from 'styled-components'
+
+import { borderRadius } from '../../css/borderRadius'
 
 const CollapseWrapper = styled(VStack)`
   border: 1px solid ${getColor('foregroundExtra')};

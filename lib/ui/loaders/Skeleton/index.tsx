@@ -1,8 +1,9 @@
-import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColors } from '@lib/ui/theme/ThemeColors'
 import { keyframes } from 'styled-components'
 import styled from 'styled-components'
+
+import { borderRadiusPx } from '../../css/borderRadius'
 
 const skeletonAnimation = keyframes`
   0% {

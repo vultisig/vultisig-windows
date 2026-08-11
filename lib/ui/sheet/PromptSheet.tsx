@@ -1,4 +1,3 @@
-import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { useKeyDown } from '@lib/ui/hooks/useKeyDown'
 import { OnCloseProp } from '@lib/ui/props'
@@ -6,6 +5,8 @@ import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useId, useRef } from 'react'
 import styled from 'styled-components'
+
+import { borderRadius, borderRadiusPx } from '../css/borderRadius'
 
 type PromptSheetProps = OnCloseProp & {
   eyebrow?: ReactNode

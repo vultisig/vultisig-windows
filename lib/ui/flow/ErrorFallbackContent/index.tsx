@@ -1,4 +1,3 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { TitleProp } from '@lib/ui/props'
@@ -9,6 +8,7 @@ import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
 import { ErrorStatusIcon, ErrorStatusVariant } from './ErrorStatusIcon'
 import { ShowExactErrorModal } from './ShowExactErrorModal'
 

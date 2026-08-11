@@ -1,5 +1,4 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper as BaseIconWrapper } from '@lib/ui/icons/IconWrapper'
 import { vStack } from '@lib/ui/layout/Stack'
@@ -8,6 +7,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
+
+import { borderRadius } from '../css/borderRadius'
 
 const IconWrapper = styled.div<IsActiveProp>`
   ${vStack({

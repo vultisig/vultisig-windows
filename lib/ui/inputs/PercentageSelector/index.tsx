@@ -1,5 +1,4 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
@@ -7,6 +6,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import styled from 'styled-components'
+
+import { borderRadius } from '../../css/borderRadius'
 
 type PercentageSelectorProps = InputProps<bigint | null> & {
   max: bigint

@@ -1,8 +1,9 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, isValidElement, KeyboardEvent, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
+
+import { borderRadius } from '../../css/borderRadius'
 
 const StyledLabel = styled.span`
   opacity: 1;
