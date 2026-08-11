@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { GroupOneIcon } from '@lib/ui/icons/GroupOneIcon'
 import { Keyboard3Icon } from '@lib/ui/icons/Keyboard3Icon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
@@ -90,7 +91,7 @@ const Item = styled(HStack)`
   align-items: center;
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   gap: 12px;
   padding: 16px;
   position: relative;
@@ -123,7 +124,7 @@ const Label = styled(HStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-left: none;
-  border-radius: 0 16px 16px 0;
+  border-radius: 0 ${borderRadiusPx.lg}px ${borderRadiusPx.lg}px 0;
   color: ${getColor('textShy')};
   font-size: 12px;
   gap: 8px;

@@ -24,7 +24,7 @@ const Container = styled(UnstyledButton)`
     gap: 12,
     alignItems: 'center',
   })}
-  ${borderRadius.l};
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 16px;

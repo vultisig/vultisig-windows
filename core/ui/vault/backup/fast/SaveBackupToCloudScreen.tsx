@@ -1,6 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { backupSplashAnimationSource } from '@core/ui/vault/backup/getBackupAnimationSource'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -98,7 +99,7 @@ const IconWrapper = styled.div`
   position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: #03132c;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 2.051px 2.051px 0 rgba(0, 0, 0, 0.25) inset;
@@ -117,7 +118,7 @@ const IconWrapper = styled.div`
     width: 24px;
     height: 8px;
     background: #0c4eff;
-    border-radius: 50%;
+    ${borderRadius.pill};
     pointer-events: none;
     filter: blur(8px);
     opacity: 0.6;
