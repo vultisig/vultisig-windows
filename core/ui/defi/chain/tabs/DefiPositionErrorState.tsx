@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -58,7 +59,7 @@ const ErrorWrapper = styled.div`
   gap: 20px;
   padding: 40px 20px;
   background-color: ${getColor('foreground')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const CtaWrapper = styled.div`

@@ -13,6 +13,7 @@ import {
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
 import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -34,7 +35,7 @@ import { DefiPositionErrorState } from './DefiPositionErrorState'
 
 const Card = styled(Panel)`
   padding: 20px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `

@@ -11,6 +11,7 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
@@ -239,7 +240,7 @@ export const CosmosDelegationsView = ({
 const SummaryCard = styled(VStack).attrs({ gap: 16 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
 `
 

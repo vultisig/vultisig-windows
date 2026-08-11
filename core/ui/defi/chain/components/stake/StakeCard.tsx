@@ -2,6 +2,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { formatDateShort } from '@core/ui/defi/shared/formatters'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -24,7 +25,7 @@ import styled from 'styled-components'
 
 const Card = styled(Panel)`
   padding: 20px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `
@@ -289,8 +290,16 @@ export const StakeCard = ({
         <ActionsRow>
           {isSkeleton ? (
             <>
-              <Skeleton width="48%" height="42px" borderRadius="10px" />
-              <Skeleton width="48%" height="42px" borderRadius="10px" />
+              <Skeleton
+                width="48%"
+                height="42px"
+                borderRadius={`${borderRadiusPx.md}px`}
+              />
+              <Skeleton
+                width="48%"
+                height="42px"
+                borderRadius={`${borderRadiusPx.md}px`}
+              />
             </>
           ) : (
             <>
