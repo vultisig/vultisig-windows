@@ -83,6 +83,7 @@ const OverlayWrapper = styled(VStack)`
   background-color: rgba(0, 0, 0, 0.55);
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- drawn phone hardware, not an app surface
 const PhonePreview = styled(VStack)`
   height: 320px;
   /* Drawn phone hardware, not an app surface: off the scale on purpose. */
@@ -102,6 +103,7 @@ const PhonePreview = styled(VStack)`
   }
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- drawn phone hardware, not an app surface
 const PhoneMock = styled(VStack)`
   position: relative;
   width: min(100%, 430px);

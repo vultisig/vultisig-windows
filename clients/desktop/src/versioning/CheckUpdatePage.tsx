@@ -105,6 +105,7 @@ const FixedWrapper = styled.div`
   gap: 34px;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const Overlay = styled(VStack)`
   position: fixed;
   inset: 0;

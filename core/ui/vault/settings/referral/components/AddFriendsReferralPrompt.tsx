@@ -55,6 +55,7 @@ const FriendsReferralPromptWrapper = styled(VStack)`
   background: ${getColor('foreground')};
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const FriendsReferralPromptOverlay = styled.div`
   position: absolute;
   width: 350px;

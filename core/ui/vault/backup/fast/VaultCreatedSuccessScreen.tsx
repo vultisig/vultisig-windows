@@ -70,6 +70,7 @@ const IconWrapper = styled.div`
   color: ${getColor('success')};
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a non-square decorative element: 50% is an ellipse, the pill token would clamp it to a stadium
 const IconShadow = styled.div`
   position: absolute;
   bottom: -6px;

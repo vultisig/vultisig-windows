@@ -113,6 +113,7 @@ const IconContainer = styled.div<IconContainerProps>`
     `}
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a notched badge outline, not a surface radius
 const CheckBadge = styled(IconWrapper)`
   position: absolute;
   bottom: 0;

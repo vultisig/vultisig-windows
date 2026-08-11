@@ -61,6 +61,110 @@ const noUnicodeDashLiterals = {
   },
 }
 
+// A corner radius binds to a surface in more shapes than a `border-radius`
+// declaration, and the #4550 migration found all four of them in the tree:
+// the plain literal, a named constant one hop from use, a radius spelled as a
+// dimension, and a radius handed to a component as a prop. A regex over
+// `border-radius:` alone would have missed three.
+//
+// What this rule cannot do is check that the *right* step was picked. Whether a
+// surface takes `xl` or something smaller depends on whether it is a container,
+// sits inside one, or is not a surface at all - only ever visible at the call
+// site. It stops new literals; it does not stop drift. See vultisig/
+// vultisig-windows#4639.
+const radiusValuePattern = /border-radius\s*:\s*([^;}]*)/g
+const hardcodedLengthPattern = /(?<![\w.$])\d*\.?\d+\s*(px|%|r?em|pt|vh|vw)/i
+const radiusConstantPattern = /(border)?radius(px)?$/i
+// Exact names only: `tipRadius` on floating-ui's Arrow is an arrowhead, not a
+// surface corner, and has no business on the scale.
+const radiusPropNames = new Set(['radius', 'borderRadius'])
+
+const noHardcodedBorderRadius = {
+  meta: {
+    type: 'problem',
+    schema: [],
+    messages: {
+      literal:
+        'Hardcoded corner radius `{{value}}`. Use a step from `borderRadius` in @lib/ui/css/borderRadius, or `borderRadiusPx` when a surface rounds its corners individually. If this is deliberately off the scale, disable the rule on the line above with a reason.',
+      constant:
+        'Corner radius `{{value}}` held in a constant. Read it from `borderRadiusPx` instead, so the scale stays the single source.',
+      prop: 'Corner radius `{{value}}` passed as a value. Use `borderRadiusPx` so the call site names a step rather than a number.',
+    },
+  },
+  create(context) {
+    // Report against the enclosing statement: a disable comment cannot live
+    // inside a template literal, so it has to attach above the declaration.
+    const enclosingStatement = node => {
+      let current = node
+      while (
+        current.parent &&
+        !/Statement|Declaration/.test(current.parent.type)
+      ) {
+        current = current.parent
+      }
+      return current.parent ?? node
+    }
+
+    return {
+      TemplateElement(node) {
+        const text = node.value.cooked ?? node.value.raw
+        for (const match of text.matchAll(radiusValuePattern)) {
+          const value = match[1].trim()
+          if (!value || !hardcodedLengthPattern.test(value)) continue
+          context.report({
+            node: enclosingStatement(node),
+            messageId: 'literal',
+            data: { value },
+          })
+        }
+      },
+      VariableDeclarator(node) {
+        if (
+          node.id.type !== 'Identifier' ||
+          !radiusConstantPattern.test(node.id.name) ||
+          node.init?.type !== 'Literal' ||
+          typeof node.init.value !== 'number'
+        ) {
+          return
+        }
+        context.report({
+          node,
+          messageId: 'constant',
+          data: { value: String(node.init.value) },
+        })
+      },
+      'Property, JSXAttribute'(node) {
+        const name =
+          node.type === 'JSXAttribute'
+            ? node.name.name
+            : node.key.type === 'Identifier'
+              ? node.key.name
+              : node.key.value
+        if (typeof name !== 'string' || !radiusPropNames.has(name)) return
+        const value =
+          node.type === 'JSXAttribute'
+            ? node.value?.type === 'Literal'
+              ? node.value.value
+              : node.value?.expression?.value
+            : node.value?.value
+        if (value === undefined || value === null) return
+        if (
+          typeof value === 'number'
+            ? value === 0
+            : !hardcodedLengthPattern.test(String(value))
+        ) {
+          return
+        }
+        context.report({
+          node,
+          messageId: 'prop',
+          data: { value: String(value) },
+        })
+      },
+    }
+  },
+}
+
 export default [
   {
     ignores: [
@@ -93,7 +197,12 @@ export default [
       'unused-imports': fixupPluginRules(unusedImportsPlugin),
       storybook,
       'react-compiler': reactCompiler,
-      local: noUnicodeDashLiterals,
+      local: {
+        rules: {
+          ...noUnicodeDashLiterals.rules,
+          'no-hardcoded-border-radius': noHardcodedBorderRadius,
+        },
+      },
     },
 
     languageOptions: {
@@ -157,12 +266,34 @@ export default [
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       'local/no-unicode-dash-literals': 'error',
+      'local/no-hardcoded-border-radius': 'error',
     },
   }, // Override for declaration files where interfaces are required for module augmentation
   {
     files: ['core/ui/i18n/locales/**/*.{ts,tsx}'],
     rules: {
       'local/no-unicode-dash-literals': 'off',
+    },
+  },
+  // The token module defines the scale, so it is the one place a raw radius
+  // belongs. `round` is the deprecated spelling it replaces.
+  {
+    files: ['lib/ui/css/borderRadius.tsx', 'lib/ui/css/round.tsx'],
+    rules: {
+      'local/no-hardcoded-border-radius': 'off',
+    },
+  },
+  // Stories and specs illustrate or assert values rather than ship surfaces,
+  // and the e2e fixture builds a mock third-party dapp page whose radii are not
+  // ours to standardise.
+  {
+    files: [
+      '**/*.stories.{ts,tsx}',
+      '**/*.spec.{ts,tsx}',
+      'clients/extension/tests/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'local/no-hardcoded-border-radius': 'off',
     },
   },
   {

@@ -38,6 +38,7 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -408,7 +409,7 @@ export const SendTxOverview = ({
                     bgColor="foreground"
                     gap={16}
                     padding={24}
-                    radius={16}
+                    radius={borderRadiusPx.lg}
                   >
                     <DappRequestRow />
                     <DappRequestDivider />
@@ -546,7 +547,7 @@ export const SendTxOverview = ({
                         keysignPayload={keysignPayload}
                         signTon={keysignPayload.signData.value}
                       />
-                      <VStack bgColor="foreground" radius={16}>
+                      <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}
                           transactionPayload={transactionPayload}
@@ -584,7 +585,7 @@ export const SendTxOverview = ({
                       <SignRippleDisplay
                         rawJson={keysignPayload.signData.value.rawJson}
                       />
-                      <VStack bgColor="foreground" radius={16}>
+                      <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}
                           transactionPayload={transactionPayload}
@@ -620,7 +621,7 @@ export const SendTxOverview = ({
                         />
                       </List>
                       <MemoSection memo={keysignPayload.memo} chain={chain} />
-                      <VStack bgColor="foreground" radius={16}>
+                      <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}
                           transactionPayload={transactionPayload}

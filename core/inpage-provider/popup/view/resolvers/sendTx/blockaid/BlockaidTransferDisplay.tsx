@@ -4,6 +4,7 @@ import {
   NetworkFeeSectionProps,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
@@ -43,7 +44,12 @@ export const BlockaidTransferDisplay = ({
 
   return (
     <>
-      <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
+      <VStack
+        bgColor="foreground"
+        gap={24}
+        padding={24}
+        radius={borderRadiusPx.lg}
+      >
         <Text color="supporting" size={15}>
           {t('you_are_sending')}
         </Text>
