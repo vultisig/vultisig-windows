@@ -1,5 +1,5 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CubeWithCornersIcon } from '@lib/ui/icons/CubeWithCornersIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -15,7 +15,7 @@ type ScanResultHeaderProps = TitleProp &
   KindProp<ScanResultHeaderKind>
 
 const StyledIconWrapper = styled.div<KindProp<ScanResultHeaderKind>>`
-  ${round};
+  ${borderRadius.pill};
   color: ${matchColor('kind', {
     positive: 'primary',
     negative: 'danger',

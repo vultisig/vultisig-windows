@@ -1,8 +1,8 @@
 import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
 import { NodesIcon } from '@lib/ui/icons/NodesIcon'
@@ -149,7 +149,7 @@ const ContainerOld = styled.div`
 `
 
 const CameraButton = styled(UnstyledButton)`
-  ${round};
+  ${borderRadius.pill};
   background: ${({ theme }) =>
     theme.iconStyle === 'station'
       ? theme.colors.buttonPrimary.toCssValue()
@@ -180,7 +180,7 @@ const TabButtonOld = styled(UnstyledButton)<TabButtonOldProps>`
   height: 48px;
   padding: 3px 20px;
   font-size: 24px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   transition: all 0.2s ease-in-out;
   background: transparent;
 
