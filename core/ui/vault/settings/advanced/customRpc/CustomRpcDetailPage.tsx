@@ -8,6 +8,7 @@ import {
   useSetCustomRpcOverrideMutation,
 } from '@core/ui/storage/customRpcOverrides'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent as BasePageContent } from '@lib/ui/page/PageContent'
 import { PageFooter as BasePageFooter } from '@lib/ui/page/PageFooter'
@@ -226,7 +227,7 @@ const RpcTextAreaWrapper = styled.div<{ $invalid: boolean }>`
   border: 1px solid
     ${({ $invalid }) =>
       $invalid ? getColor('danger') : getColor('foregroundSuper')};
-  border-radius: 12px;
+  ${borderRadius.md};
   display: flex;
   gap: 4px;
   min-height: 120px;
@@ -259,7 +260,7 @@ const PasteAction = styled(InputPasteAction)`
 const DefaultEndpointCard = styled(VStack)`
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundSuper')};
-  border-radius: 12px;
+  ${borderRadius.md};
   gap: 20px;
   padding: 16px;
 `

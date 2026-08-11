@@ -1,5 +1,6 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { DeviceIcon } from '@lib/ui/icons/DeviceIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -19,7 +20,7 @@ const Item = styled.div`
     gap: 12,
   })};
 
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `

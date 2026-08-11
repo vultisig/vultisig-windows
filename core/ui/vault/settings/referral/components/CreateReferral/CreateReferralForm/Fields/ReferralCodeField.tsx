@@ -1,5 +1,6 @@
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -144,7 +145,7 @@ const StatusPill = styled.div`
   padding: 8px 12px;
   align-items: center;
   gap: 4px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   border: 1.5px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `

@@ -2,6 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ArrowUndoIcon } from '@lib/ui/icons/ArrowUndoIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -232,7 +233,7 @@ const Wrapper = styled(VStack)`
 
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 14px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: rgba(2, 18, 43, 0.5);
 `
 
@@ -241,7 +242,7 @@ const RewardsCollectedWrapper = styled(VStack)`
   overflow: hidden;
 
   &::before {
-    border-radius: 12px;
+    ${borderRadius.md};
     content: '';
     position: absolute;
     inset: 0;
@@ -268,7 +269,7 @@ const FieldIconWrapper = styled(IconWrapper)`
 const FriendsReferralCode = styled(VStack)`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const ReferralsThorchainLogoWrapper = styled.div`

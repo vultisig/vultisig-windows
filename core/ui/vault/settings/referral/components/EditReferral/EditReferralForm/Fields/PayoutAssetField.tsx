@@ -118,5 +118,5 @@ const PayoutAssetTrigger = styled(HStack)`
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   cursor: pointer;
-  ${borderRadius.m};
+  ${borderRadius.md};
 `

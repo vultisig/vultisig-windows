@@ -1,6 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { EmailNotificationIcon } from '@lib/ui/icons/EmailNotificationIcon'
 import {
   MultiCharacterInput,
@@ -128,7 +129,7 @@ const IconWrapper = styled.div`
   position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: #03132c;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
@@ -149,7 +150,7 @@ const IconWrapper = styled.div`
       rgba(37, 97, 255, 0.4) 0%,
       transparent 70%
     );
-    border-radius: 50%;
+    ${borderRadius.pill};
     pointer-events: none;
   }
 `

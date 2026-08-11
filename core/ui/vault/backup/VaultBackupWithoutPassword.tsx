@@ -1,6 +1,7 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { FileWarningIcon } from '@lib/ui/icons/FileWarningIcon'
@@ -21,7 +22,7 @@ const IconContainer = styled.div`
   ${sameDimensions(64)};
   ${centerContent};
   font-size: 32px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   align-self: center;
   background: ${getColor('foregroundExtra')};
 `
