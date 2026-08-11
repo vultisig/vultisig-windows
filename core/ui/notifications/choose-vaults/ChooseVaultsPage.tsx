@@ -3,6 +3,7 @@ import {
   ChooseVaultsContent,
   VaultNotificationItem,
 } from '@core/ui/notifications/choose-vaults/ChooseVaultsContent'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -52,7 +53,7 @@ export const ChooseVaultsPage: FC<ChooseVaultsPageProps> = ({
 const DoneButton = styled.button`
   background-color: ${getColor('foreground')};
   border: none;
-  border-radius: 99px;
+  ${borderRadius.pill};
   cursor: pointer;
   padding: 6px 12px;
 `

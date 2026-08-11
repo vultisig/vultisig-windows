@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { hasServer, isServer } from '@vultisig/core-mpc/devices/localPartyId'
@@ -13,7 +14,7 @@ const PillContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
 `

@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { Switch } from '@lib/ui/inputs/switch'
@@ -35,7 +36,7 @@ type NotificationSettingsContentProps = {
 const VaultTypeIcon = styled.div<{ $isFast: boolean }>`
   width: 40px;
   height: 40px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: ${getColor('foregroundDark')};
   border: 1px solid ${getColor('foregroundExtra')};
   display: flex;
@@ -72,7 +73,7 @@ const VaultSection = styled.div`
 
 const VaultListCard = styled.div`
   background: ${getColor('foreground')};
-  border-radius: 12px;
+  ${borderRadius.md};
   overflow: hidden;
   width: 100%;
 `
