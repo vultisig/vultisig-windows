@@ -4,6 +4,7 @@ import { Animation } from '@lib/ui/animations/Animation'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -335,7 +336,7 @@ const QrScaleContainer = styled.div`
 `
 
 const QrFrame = styled.div<{ $isLocalMode: boolean }>`
-  border-radius: 33px;
+  ${borderRadius.xl};
   max-width: 297px;
   padding: 8px;
   transition: background-color 0.2s ease;
@@ -354,7 +355,7 @@ const QrFrame = styled.div<{ $isLocalMode: boolean }>`
 const QrFrameInner = styled.div`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 24px;
+  ${borderRadius.xl};
   padding: 16px;
 `
 
@@ -362,7 +363,7 @@ const QrCodeContainer = styled.div`
   ${centerContent};
   aspect-ratio: 1;
   background-color: ${getColor('contrast')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   overflow: hidden;
   width: 100%;
   padding: 11px;
@@ -405,7 +406,7 @@ const PeersList = styled.div`
 
 const PeerCard = styled.div<{ $status: 'connected' | 'pending' }>`
   align-items: center;
-  border-radius: 24px;
+  ${borderRadius.xl};
   display: flex;
   gap: 12px;
   min-height: 68px;
@@ -425,7 +426,7 @@ const PeerCard = styled.div<{ $status: 'connected' | 'pending' }>`
 
 const StatusIcon = styled.div<{ $status: 'connected' | 'pending' }>`
   ${centerContent};
-  border-radius: 50%;
+  ${borderRadius.pill};
   flex-shrink: 0;
   font-size: 16px;
   height: 32px;
@@ -458,7 +459,7 @@ const PeerInfo = styled.div`
 const OrderBadge = styled.div`
   ${centerContent};
   background-color: ${getColor('foregroundExtra')};
-  border-radius: 99px;
+  ${borderRadius.pill};
   color: ${getColor('textShyExtra')};
   flex-shrink: 0;
   font-size: 13px;
@@ -496,7 +497,7 @@ const ModePromptText = styled(Text)`
 const ModeToggleButton = styled(Button)`
   width: 100%;
   max-width: fit-content;
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const BottomFade = styled.div`

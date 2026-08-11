@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { InfoCircleIcon } from '@lib/ui/icons/InfoCircleIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -7,7 +8,7 @@ import styled from 'styled-components'
 
 const Container = styled(HStack)`
   background: ${getColor('foreground')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   padding: 16px;
 `
 

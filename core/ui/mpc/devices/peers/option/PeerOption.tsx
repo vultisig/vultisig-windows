@@ -1,6 +1,6 @@
 import { useMpcPeersSelectionRecord } from '@core/ui/mpc/state/mpcSelectedPeers'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import { PeerOptionContainer } from './PeerOptionContainer'
 
 const IconContainer = styled.div`
-  ${round};
+  ${borderRadius.pill};
   ${sameDimensions(24)};
   ${centerContent};
   background-color: ${getColor('primary')};

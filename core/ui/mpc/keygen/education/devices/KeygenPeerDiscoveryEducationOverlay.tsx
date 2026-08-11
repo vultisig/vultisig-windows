@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ArrowWallDownIcon } from '@lib/ui/icons/ArrowWallDownIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -62,7 +63,7 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
 const OverlayContent = styled(VStack)`
   width: min(92vw, 760px);
   height: 426px;
-  border-radius: 44px;
+  ${borderRadius.xl};
   overflow: hidden;
   background-color: ${getColor('foreground')};
 `
@@ -84,6 +85,7 @@ const OverlayWrapper = styled(VStack)`
 
 const PhonePreview = styled(VStack)`
   height: 320px;
+  /* Drawn phone hardware, not an app surface: off the scale on purpose. */
   border-radius: 36px;
   background: linear-gradient(180deg, #082956 0%, #041b3d 100%);
   box-shadow:
@@ -105,6 +107,7 @@ const PhoneMock = styled(VStack)`
   width: min(100%, 430px);
   height: 100%;
   align-self: center;
+  /* Drawn phone hardware, not an app surface: off the scale on purpose. */
   border-radius: 34px;
   background-color: #00183d;
   border: 4px solid rgba(73, 113, 177, 0.62);
@@ -123,14 +126,14 @@ const PhoneNotch = styled.div`
   top: 14px;
   width: 64px;
   height: 10px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background-color: rgba(146, 160, 188, 0.5);
 `
 
 const PhoneAvatar = styled.div`
   width: 18px;
   height: 18px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background-color: rgba(155, 170, 196, 0.85);
 `
 
@@ -143,7 +146,7 @@ const PhoneActionsRow = styled.div`
 
 const PhoneActionButton = styled.div<{ $isPrimary?: boolean }>`
   height: 44px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   display: grid;
   align-items: center;
   justify-content: center;
@@ -170,7 +173,7 @@ const PhoneActionButton = styled.div<{ $isPrimary?: boolean }>`
 const ImportIconBadge = styled.span`
   width: 12px;
   height: 12px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,7 +189,7 @@ const ImportIconBadge = styled.span`
 const PhoneMainButton = styled.div`
   width: 100%;
   height: 52px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background-color: #1f44ad;
   color: rgba(198, 214, 255, 0.38);
   display: flex;

@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ResendNotificationBellIcon } from '@lib/ui/icons/ResendNotificationBellIcon'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -19,7 +20,7 @@ const BadgeButton = styled(UnstyledButton)<{ $interactive: boolean }>`
   box-sizing: border-box;
   min-height: 32px;
   padding: 8px 12px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid
     ${({ theme }) => theme.colors.white.withAlpha(0.03).toCssValue()};
   background: ${resendBadgeBackground};

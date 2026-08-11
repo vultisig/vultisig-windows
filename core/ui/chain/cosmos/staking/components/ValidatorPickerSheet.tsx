@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -181,7 +182,7 @@ const formatCommission = (rateDec: string): string => {
 const SearchWrapper = styled.div`
   position: relative;
   background: ${getColor('foreground')};
-  border-radius: 999px;
+  ${borderRadius.pill};
   height: 48px;
   display: flex;
   align-items: center;
@@ -234,7 +235,7 @@ const ValidatorRow = styled(HStack)<{ $selected: boolean }>`
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${({ $selected }) =>
     $selected ? getColor('foregroundExtra') : getColor('foreground')};
   cursor: pointer;

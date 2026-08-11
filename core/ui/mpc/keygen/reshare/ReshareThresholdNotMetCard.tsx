@@ -1,3 +1,4 @@
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -23,7 +24,7 @@ const Card = styled.div`
   z-index: 1;
   background: ${getColor('background')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 24px 24px 20px 20px;
+  ${borderRadius.xl};
   padding: 24px 20px;
 `
 
@@ -38,14 +39,14 @@ const PluginStoreStrip = styled(HStack)`
   margin-top: -22px;
   padding: 32px 32px 14px;
   background: ${getColor('foreground')};
-  border-radius: 0 0 24px 24px;
+  border-radius: 0 0 ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px;
 `
 
 const IconBadge = styled.div`
   align-items: center;
   background: ${getColor('background')};
   border: 1px solid ${getColor('mistExtra')};
-  border-radius: 50%;
+  ${borderRadius.pill};
   color: ${getColor('idle')};
   display: flex;
   flex-shrink: 0;

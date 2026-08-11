@@ -3,6 +3,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -23,7 +24,7 @@ const StyledButton = styled.button`
   transition: all 0.2s;
   white-space: nowrap;
 
-  border-radius: 20px;
+  ${borderRadius.pill};
   border: 0.5px solid ${getColor('success')};
   background: #042436;
 

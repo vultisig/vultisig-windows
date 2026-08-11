@@ -1,5 +1,6 @@
 import { useCosmosDelegationsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosDelegationsQuery'
 import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -144,7 +145,7 @@ const Row = styled.button.attrs({ type: 'button' as const })`
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
   border: 1px solid transparent;
   color: inherit;
@@ -168,5 +169,5 @@ const EmptyState = styled(VStack)`
   align-items: center;
   justify-content: center;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `

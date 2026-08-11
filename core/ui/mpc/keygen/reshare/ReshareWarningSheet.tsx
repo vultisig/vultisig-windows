@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { useKeyDown } from '@lib/ui/hooks/useKeyDown'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -33,21 +34,21 @@ const Sheet = styled(VStack)`
   background: ${getColor('background')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-bottom: none;
-  border-radius: 24px 24px 0 0;
+  border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0;
   max-width: 500px;
   padding: 8px 16px 32px;
   width: 100%;
 
   @media ${mediaQuery.mobileDeviceAndUp} {
     border-bottom: 1px solid ${getColor('foregroundExtra')};
-    border-radius: 24px;
+    ${borderRadius.xl};
     margin-bottom: 16px;
   }
 `
 
 const Grabber = styled.div`
   background: ${getColor('foregroundExtra')};
-  border-radius: 999px;
+  ${borderRadius.pill};
   height: 5px;
   margin: 0 auto 16px;
   width: 36px;
@@ -60,7 +61,7 @@ const Header = styled(VStack)`
 const WarningCard = styled.div`
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 20px;
+  ${borderRadius.xl};
   padding: 20px;
 `
 
