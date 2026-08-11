@@ -58,7 +58,6 @@ export const pt = {
   approval_tx: 'Aprovação Tx',
   approve: 'Aprovar',
   reject: 'Rejeitar',
-  applied_discounts: 'Descontos aplicados:',
   asset: 'Ativo',
   assets: 'Ativos',
   at_least_one_device: 'Pelo menos um dispositivo',
@@ -568,7 +567,6 @@ export const pt = {
     'Você pode gerenciar as notificações nas configurações do sistema.',
   max: 'Máximo',
   max_4_characters: 'Máximo de 4 caracteres',
-  max_total_fees: 'Taxa máxima total',
   memo: 'Memorando',
   merge: 'Fusão',
   merged: 'Fundido',
@@ -1879,4 +1877,8 @@ export const pt = {
     'Revise os detalhes da troca, o destinatário e as configurações avançadas e tente novamente.',
   swap_no_routes_found:
     'Não há uma rota de swap disponível para este par de ativos.',
+  price_impact: 'Impacto no preço',
+  swap_fee_included_in_rate: 'Incluído na taxa de câmbio cotada',
+  swap_protocol_fee: 'Taxa de protocolo',
+  swap_referral_fee: 'Taxa de encaminhamento',
 }

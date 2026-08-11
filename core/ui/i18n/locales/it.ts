@@ -58,7 +58,6 @@ export const it = {
   approval_tx: 'Approvazione Tx',
   approve: 'Approvare',
   reject: 'Rifiutare',
-  applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
   assets: 'Attività',
   at_least_one_device: 'Almeno un dispositivo',
@@ -571,7 +570,6 @@ export const it = {
     'È possibile gestire le notifiche nelle impostazioni di sistema.',
   max: 'Massimo',
   max_4_characters: 'Massimo 4 caratteri',
-  max_total_fees: 'Commissione totale massima',
   memo: 'Promemoria',
   merge: 'Unisci',
   merged: 'Unito',
@@ -1882,4 +1880,8 @@ export const it = {
     'Rivedi i dettagli dello scambio, il destinatario e le impostazioni avanzate, quindi riprova.',
   swap_no_routes_found:
     'Non è disponibile alcuna rotta di swap per questa coppia di asset.',
+  price_impact: 'Impatto sul prezzo',
+  swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
+  swap_protocol_fee: 'Tariffa del protocollo',
+  swap_referral_fee: 'Commissione di segnalazione',
 }

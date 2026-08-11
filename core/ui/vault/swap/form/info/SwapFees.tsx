@@ -4,22 +4,22 @@ import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndica
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { Text, TextColor } from '@lib/ui/text'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { TFunction } from 'i18next'
 import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { getSwapQuoteAffiliateBps } from '../../affiliate/affiliateBps'
+import { getSwapFeeEntries } from '../../queries/resolveSwapFees'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
-import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
-import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapDiscountInfo } from './SwapDiscountInfo'
+import { SwapFeeRowRenderer } from './swapFeeRow'
+import { SwapNetworkFeeRow } from './SwapNetworkFeeRow'
+import { SwapPriceImpactRow } from './SwapPriceImpactRow'
+import { SwapProviderFeeRows } from './SwapProviderFeeRows'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
 type SwapFeesProps = {
@@ -33,9 +33,14 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
 
   const { t } = useTranslation()
   const query = useSwapFeesQuery(swapQuote)
-  const swapQuoteQuery = useSwapQuoteQuery()
+  const affiliateBps = getSwapQuoteAffiliateBps(swapQuote.discounts)
 
-  const [fromCoinKey] = useSwapFromCoin()
+  const renderRow: SwapFeeRowRenderer = ({ label, value }) => (
+    <RowComponent>
+      <span>{label}</span>
+      <Text color="supporting">{value}</Text>
+    </RowComponent>
+  )
 
   return (
     <>
@@ -48,7 +53,7 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
           success={value => (
             <HStack alignItems="center" gap={4}>
               <Text color="supporting">
-                <SwapFeeFiatValue value={Object.values(value)} />
+                <SwapFeeFiatValue value={getSwapFeeEntries(value)} />
               </Text>
               <UnstyledButton onClick={toggle}>
                 <CollapsableStateIndicator isOpen={showFeesBreakdown} />
@@ -75,75 +80,45 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                 value={query}
                 pending={() => (
                   <RowComponent>
-                    <Text>{t('swap_fee')}</Text>
+                    <Text>{t('network_fee')}</Text>
                     <Skeleton width="48px" height="12px" />
                   </RowComponent>
                 )}
                 error={() => (
                   <RowComponent>
-                    <Text>{t('swap_fee')}</Text>
+                    <Text>{t('network_fee')}</Text>
                     <Text color="danger">{t('failed_to_load')}</Text>
                   </RowComponent>
                 )}
-                success={({ network, swap }) => {
-                  const { ticker, decimals } = chainFeeCoin[fromCoinKey.chain]
-                  return (
-                    <>
-                      <RowComponent>
-                        <span>{t('network_fee')}</span>
-                        <Text>
-                          <Text as="span" color="regular" weight="500">
-                            {formatAmount(
-                              fromChainAmount(network.amount, decimals),
-                              { ticker }
-                            )}
-                          </Text>{' '}
-                          <Text as="span" color="shy">
-                            (~
-                            <SwapFeeFiatValue value={[network]} />)
-                          </Text>
-                        </Text>
-                      </RowComponent>
-                      {swap && (
-                        <RowComponent>
-                          <Text>{t('swap_fee')}</Text>
-                          <Text color="supporting">
-                            <SwapFeeFiatValue value={[swap]} />
-                          </Text>
-                        </RowComponent>
-                      )}
-                      <SwapDiscountInfo discounts={swapQuote.discounts} />
-                    </>
-                  )
-                }}
+                success={fees => (
+                  <>
+                    <SwapNetworkFeeRow
+                      renderRow={renderRow}
+                      fee={fees.network}
+                    />
+                    <SwapProviderFeeRows
+                      renderRow={renderRow}
+                      fees={fees}
+                      affiliateBps={affiliateBps}
+                    />
+                    <SwapDiscountInfo
+                      renderRow={renderRow}
+                      discounts={swapQuote.discounts}
+                      affiliate={fees.affiliate}
+                      notional={fees.affiliateNotional}
+                      affiliateBps={affiliateBps}
+                    />
+                    <SwapPriceImpactRow
+                      renderRow={renderRow}
+                      quote={swapQuote.quote}
+                    />
+                  </>
+                )}
               />
             </FeesWrapper>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <MatchQuery
-        value={swapQuoteQuery}
-        pending={() => <Skeleton width="48px" height="12px" />}
-        error={() => <Text color="danger">{t('failed_to_load')}</Text>}
-        success={data => {
-          const totalBps =
-            'native' in data.quote ? data.quote.native.fees.total_bps : 0
-          if (!totalBps) return null
-
-          const toalBpsPercentage = totalBps / 100
-          const { color, label } = getPriceImpactVariant(toalBpsPercentage, t)
-
-          return (
-            <RowComponent>
-              <span>Price Impact</span>
-              <Text color={color}>
-                {toalBpsPercentage}% ({label})
-              </Text>
-            </RowComponent>
-          )
-        }}
-      />
     </>
   )
 }
@@ -163,25 +138,3 @@ const FeesWrapper = styled(VStack)`
     position: absolute;
   }
 `
-
-const getPriceImpactVariant = (
-  toalBpsPercentage: number,
-  t: TFunction
-): {
-  color: TextColor
-  label: string
-} =>
-  toalBpsPercentage < 2.5
-    ? {
-        color: 'primary',
-        label: t('price_impact_good'),
-      }
-    : toalBpsPercentage < 5
-      ? {
-          color: 'idle',
-          label: t('price_impact_average'),
-        }
-      : {
-          color: 'danger',
-          label: t('price_impact_high'),
-        }

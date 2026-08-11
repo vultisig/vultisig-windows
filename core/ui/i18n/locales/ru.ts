@@ -56,7 +56,6 @@ export const ru = {
   approval_tx: 'Tx подтверждения',
   approve: 'Подтвердить',
   reject: 'Отклонить',
-  applied_discounts: 'Примененные скидки:',
   asset: 'Актив',
   assets: 'активы',
   at_least_one_device: 'Минимум одно устройство',
@@ -558,7 +557,6 @@ export const ru = {
     'Управлять уведомлениями можно в системных настройках.',
   max: 'Макс',
   max_4_characters: 'Макс 4 символа',
-  max_total_fees: 'Макс. общая комиссия',
   memo: 'Memo',
   merge: 'Объединить',
   merged: 'Объединено',
@@ -1855,4 +1853,8 @@ export const ru = {
   swap_invalid_config:
     'Проверьте детали обмена, получателя и расширенные настройки, затем попробуйте снова.',
   swap_no_routes_found: 'Для этой пары активов нет доступного маршрута обмена.',
+  price_impact: 'Влияние цены',
+  swap_fee_included_in_rate: 'Включено в указанный обменный курс',
+  swap_protocol_fee: 'Протокольный сбор',
+  swap_referral_fee: 'Комиссионное вознаграждение за привлечение клиентов',
 }

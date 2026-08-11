@@ -56,7 +56,6 @@ export const hr = {
   approval_tx: 'Odobrenje slanja',
   approve: 'Odobriti',
   reject: 'Odbiti',
-  applied_discounts: 'Primijenjeni popusti:',
   asset: 'Imovina',
   assets: 'Imovina',
   at_least_one_device: 'Barem jedan uređaj',
@@ -558,7 +557,6 @@ export const hr = {
     'Obavijestima možete upravljati u postavkama sustava.',
   max: 'Maks.',
   max_4_characters: 'Maks. 4 znaka',
-  max_total_fees: 'Maks. ukupna naknada',
   memo: 'Dopis',
   merge: 'Spojiti',
   merged: 'Spojeno',
@@ -1846,4 +1844,8 @@ export const hr = {
   swap_invalid_config:
     'Pregledajte detalje zamjene, primatelja i napredne postavke, a zatim pokušajte ponovno.',
   swap_no_routes_found: 'Za ovaj par imovine nije dostupna ruta zamjene.',
+  price_impact: 'Utjecaj na cijenu',
+  swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
+  swap_protocol_fee: 'Naknada za protokol',
+  swap_referral_fee: 'Naknada za preporuku',
 }

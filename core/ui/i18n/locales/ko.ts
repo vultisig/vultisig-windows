@@ -57,7 +57,6 @@ export const ko = {
   approval_tx: '승인 거래',
   approve: '승인하다',
   reject: '거부하다',
-  applied_discounts: '적용된 할인:',
   asset: '자산',
   assets: '자산',
   at_least_one_device: '최소 한 개의 기기',
@@ -557,7 +556,6 @@ export const ko = {
     '시스템 설정에서 알림을 관리할 수 있습니다.',
   max: '맥스',
   max_4_characters: '최대 4자',
-  max_total_fees: '최대 총 수수료',
   memo: '메모',
   merge: '병합',
   merged: '병합됨',
@@ -1836,4 +1834,8 @@ export const ko = {
   swap_invalid_config:
     '교환 세부 정보, 수신자 및 고급 설정을 검토한 후 다시 시도하십시오.',
   swap_no_routes_found: '이 자산 쌍에 사용할 수 있는 스왑 경로가 없습니다.',
+  price_impact: '가격 영향',
+  swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
+  swap_protocol_fee: '프로토콜 수수료',
+  swap_referral_fee: '소개 수수료',
 }

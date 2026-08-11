@@ -3,8 +3,14 @@ import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderL
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getSwapQuoteAffiliateBps } from '@core/ui/vault/swap/affiliate/affiliateBps'
+import { SwapDiscountInfo } from '@core/ui/vault/swap/form/info/SwapDiscountInfo'
+import { SwapFeeRowRenderer } from '@core/ui/vault/swap/form/info/swapFeeRow'
+import { SwapPriceImpactRow } from '@core/ui/vault/swap/form/info/SwapPriceImpactRow'
+import { SwapProviderFeeRows } from '@core/ui/vault/swap/form/info/SwapProviderFeeRows'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
+import { getSwapProviderFees } from '@core/ui/vault/swap/queries/resolveSwapFees'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -18,14 +24,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { CoinKey } from '@vultisig/core-chain/coin/Coin'
-import { GeneralSwapTx } from '@vultisig/core-chain/swap/general/GeneralSwapQuote'
-import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/getNativeSwapDecimals'
-import {
-  SwapQuote,
-  SwapQuoteResult,
-} from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
@@ -51,45 +51,43 @@ import { TxStatusTracker } from '../TxStatusTracker'
 import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
-type GetSwapFeeFromQuoteInput = {
-  swapQuote: SwapQuote
-  fromCoin: CoinKey & { decimals: number }
-  toCoinKey: CoinKey
+const renderFeeRow: SwapFeeRowRenderer = ({ label, value }) => (
+  <TxFeeRow label={label}>
+    <Text size={14} color="shy">
+      {value}
+    </Text>
+  </TxFeeRow>
+)
+
+type GetKeysignQuoteFeesInput = {
+  swapQuote: SwapQuote | undefined
+  toCoin: Coin | null
+  fromCoin: Coin
 }
 
-const getSwapFeeFromQuote = ({
+/** Itemized fees and discount context, available only while the quote is. */
+const getKeysignQuoteFees = ({
   swapQuote,
+  toCoin,
   fromCoin,
-  toCoinKey,
-}: GetSwapFeeFromQuoteInput): SwapFee | undefined =>
-  matchRecordUnion<SwapQuoteResult, SwapFee | undefined>(swapQuote.quote, {
-    native: ({ fees }) => ({
-      ...toCoinKey,
-      amount: BigInt(fees.total),
-      decimals: getNativeSwapDecimals(toCoinKey),
-    }),
-    general: ({ tx }) =>
-      matchRecordUnion<GeneralSwapTx, SwapFee | undefined>(tx, {
-        evm: ({ affiliateFee }) => affiliateFee,
-        solana: ({ swapFee }) => swapFee,
-        // Deposit-channel transfers (Chainflip etc.) carry no affiliate-fee
-        // metadata on the SwapQuote; the displayed swap fee for these falls
-        // back to the keysign payload's `swap_fee` when present.
-        transfer: () => undefined,
-        cowswap_order: ({ feeAmount }) => {
-          const amount = BigInt(feeAmount)
+}: GetKeysignQuoteFeesInput) => {
+  if (!swapQuote || !toCoin) return undefined
 
-          return amount > 0n
-            ? {
-                chain: fromCoin.chain,
-                id: fromCoin.id,
-                amount,
-                decimals: fromCoin.decimals,
-              }
-            : undefined
-        },
-      }),
-  })
+  const affiliateBps = getSwapQuoteAffiliateBps(swapQuote.discounts)
+
+  return {
+    affiliateBps,
+    discounts: swapQuote.discounts,
+    quote: swapQuote.quote,
+    fees: getSwapProviderFees({
+      quote: swapQuote.quote,
+      toCoinKey: { chain: toCoin.chain, id: toCoin.id },
+      toCoin,
+      fromCoin,
+      affiliateBps,
+    }),
+  }
+}
 
 export const SwapKeysignTxOverview = ({
   value,
@@ -118,21 +116,17 @@ export const SwapKeysignTxOverview = ({
   const provider = getKeysignSwapProviderName(swapPayload)
   const providerLogoSrc = getSwapProviderLogoSrc(provider)
 
-  // Prefer the swap fee carried in the keysign payload (works for both
-  // initiator and cosigner). Fall back to the SwapQuote provider for older
-  // payloads built before the SDK populated the swap-fee fields — only the
-  // initiator has the quote in scope.
+  // The initiator still holds the quote the payload was built from, so its fees
+  // can be itemized exactly as the form and verify screens itemize them.
+  //
+  // A co-signer has only the signed payload, whose swap fee is the provider's
+  // composite and carries no trace of the initiator's discount tier. Neither
+  // the product's share nor its rate is recoverable there, so that path keeps
+  // the neutral "Swap Fee" label instead of attributing the whole amount — or a
+  // guessed percentage — to the product.
   const swapQuote = useOptionalSwapQuote()
-  const swapFeeFromPayload = getSwapFeeFromPayload(value)
-  const swapFee =
-    swapFeeFromPayload ??
-    (swapQuote && toCoin
-      ? getSwapFeeFromQuote({
-          swapQuote,
-          fromCoin,
-          toCoinKey: { chain: toCoin.chain, id: toCoin.id },
-        })
-      : undefined)
+  const quoteFees = getKeysignQuoteFees({ swapQuote, toCoin, fromCoin })
+  const payloadSwapFee = getSwapFeeFromPayload(value)
 
   const formattedFromAmount = useMemo(() => {
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
@@ -267,13 +261,32 @@ export const SwapKeysignTxOverview = ({
               <KeysignFeeAmount keysignPayload={value} />
             )}
           </TxFeeRow>
-          {swapFee && (
+          {quoteFees ? (
+            <>
+              <SwapProviderFeeRows
+                renderRow={renderFeeRow}
+                fees={quoteFees.fees}
+                affiliateBps={quoteFees.affiliateBps}
+              />
+              <SwapDiscountInfo
+                renderRow={renderFeeRow}
+                discounts={quoteFees.discounts}
+                affiliate={quoteFees.fees.affiliate}
+                notional={quoteFees.fees.affiliateNotional}
+                affiliateBps={quoteFees.affiliateBps}
+              />
+              <SwapPriceImpactRow
+                renderRow={renderFeeRow}
+                quote={quoteFees.quote}
+              />
+            </>
+          ) : payloadSwapFee ? (
             <TxFeeRow label={t('swap_fee')}>
               <Text size={14} color="shy">
-                <SwapFeeFiatValue value={[swapFee]} />
+                <SwapFeeFiatValue value={[payloadSwapFee]} />
               </Text>
             </TxFeeRow>
-          )}
+          ) : null}
         </SwapInfoWrapper>
         <AnimatedVisibility
           delay={180}

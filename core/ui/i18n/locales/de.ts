@@ -58,7 +58,6 @@ export const de = {
   approval_tx: 'Genehmigung Tx',
   approve: 'Genehmigen',
   reject: 'Ablehnen',
-  applied_discounts: 'Angewandte Rabatte:',
   asset: 'Vermögenswert',
   assets: 'Vermögenswerte',
   at_least_one_device: 'Mindestens ein Gerät',
@@ -572,7 +571,6 @@ export const de = {
     'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
   max: 'Max',
   max_4_characters: 'Maximal 4 Zeichen',
-  max_total_fees: 'Maximale Gesamtgebühr',
   memo: 'Memo',
   merge: 'Verschmelzen',
   merged: 'Zusammengeführt',
@@ -1891,4 +1889,8 @@ export const de = {
   swap_invalid_config:
     'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
   swap_no_routes_found: 'Für dieses Asset-Paar ist keine Swap-Route verfügbar.',
+  price_impact: 'Preisauswirkung',
+  swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
+  swap_protocol_fee: 'Protokollgebühr',
+  swap_referral_fee: 'Vermittlungsgebühr',
 }
