@@ -167,6 +167,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install WebKitGTK 4.1 build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libwebkit2gtk-4.1-dev
+
       - name: Build wails
         uses: dAppServer/wails-build-action@main
         id: build
