@@ -5,6 +5,7 @@ import {
   TransactionOverviewAmount,
   TransactionOverviewItem,
 } from '@core/ui/mpc/keysign/verify/components'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -107,7 +108,7 @@ export const VerifyTransactionOverview = ({
   })()
 
   return (
-    <List border="gradient" radius={16}>
+    <List border="gradient" radius={borderRadiusPx.lg}>
       <TransactionOverviewAmount
         label={amountLabel ?? t('you_are_sending')}
         coin={coin}

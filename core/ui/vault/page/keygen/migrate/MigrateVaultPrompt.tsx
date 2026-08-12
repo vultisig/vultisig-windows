@@ -78,6 +78,7 @@ const Container = styled(UnstyledButton)`
   }
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const CloseButton = styled(IconButton)`
   display: flex;
   width: 44px;
@@ -107,6 +108,7 @@ const AnimationWrapper = styled.div`
   mix-blend-mode: screen;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const LightingBackground = styled.div`
   width: 350px;
   height: 350px;

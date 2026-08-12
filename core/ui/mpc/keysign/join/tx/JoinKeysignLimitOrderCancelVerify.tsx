@@ -3,6 +3,7 @@ import {
   ContainerWrapper,
   HorizontalLine,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -51,8 +52,13 @@ export const JoinKeysignLimitOrderCancelVerify = ({ value, cancel }: Props) => {
   )
 
   return (
-    <ContainerWrapper radius={16}>
-      <VStack bgColor="foreground" gap={20} padding={24} radius={16}>
+    <ContainerWrapper radius={borderRadiusPx.lg}>
+      <VStack
+        bgColor="foreground"
+        gap={20}
+        padding={24}
+        radius={borderRadiusPx.lg}
+      >
         <VStack gap={4}>
           <Text color="contrast" size={17} weight="500">
             {t('swap_limit_cancel_verify_title')}

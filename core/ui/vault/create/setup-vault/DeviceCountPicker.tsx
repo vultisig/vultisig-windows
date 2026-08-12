@@ -18,6 +18,7 @@ const GradientWrapper = styled.div`
   overflow: hidden;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a non-square decorative element: 50% is an ellipse, the pill token would clamp it to a stadium
 const TopGradient = styled.div`
   position: absolute;
   z-index: 0;

@@ -63,6 +63,7 @@ const mediumHeight: Record<PrimaryButtonStatus, number> = {
   success: 42,
 }
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- the shared button's own design language, owned by #4548
 const pillMetrics = (size: ButtonSize, status: PrimaryButtonStatus) =>
   match(size, {
     xs: () => css`
@@ -102,6 +103,7 @@ const linkMetrics = css`
   ${horizontalPadding(4)}
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- the shared button's own design language, owned by #4548
 const StyledButton = styled(UnstyledButton)<{
   $disabled: boolean
   $kind: NonNullable<ButtonProps['kind']>

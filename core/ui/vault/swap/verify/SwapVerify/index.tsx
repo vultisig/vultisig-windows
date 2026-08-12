@@ -15,6 +15,7 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -58,8 +59,13 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
         terms={translatedTerms}
         swapQuote={swapQuote}
       >
-        <ContainerWrapper radius={16}>
-          <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
+        <ContainerWrapper radius={borderRadiusPx.lg}>
+          <VStack
+            bgColor="foreground"
+            gap={24}
+            padding={24}
+            radius={borderRadiusPx.lg}
+          >
             <Text color="supporting" size={15}>
               {t('youre_swapping')}
             </Text>
@@ -138,7 +144,12 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
             </VStack>
           </VStack>
         </ContainerWrapper>
-        <VStack bgColor="foreground" gap={24} padding={12} radius={16}>
+        <VStack
+          bgColor="foreground"
+          gap={24}
+          padding={12}
+          radius={borderRadiusPx.lg}
+        >
           <VerifySwapFees swapQuote={swapQuote} />
         </VStack>
         <MatchQuery

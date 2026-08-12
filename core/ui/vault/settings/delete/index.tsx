@@ -182,6 +182,7 @@ const VItem = styled(Item)`
   flex: 1;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const GradientBackground = styled.div`
   position: absolute;
   top: 50%;

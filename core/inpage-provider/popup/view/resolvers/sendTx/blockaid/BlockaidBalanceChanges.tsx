@@ -5,6 +5,7 @@ import {
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import type { BlockaidEvmBalanceChange } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { TransactionReceiveIcon } from '@lib/ui/icons/TransactionReceiveIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -32,7 +33,12 @@ export const BlockaidBalanceChanges = ({
 
   return (
     <>
-      <VStack bgColor="foreground" gap={16} padding={24} radius={16}>
+      <VStack
+        bgColor="foreground"
+        gap={16}
+        padding={24}
+        radius={borderRadiusPx.lg}
+      >
         <Text color="supporting" size={15}>
           {t('balance_changes')}
         </Text>

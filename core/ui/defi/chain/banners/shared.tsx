@@ -42,6 +42,7 @@ export const FallbackLogo = styled.div`
   font-weight: 600;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 export const GradientBackground = styled.div`
   width: 260px;
   height: 260px;

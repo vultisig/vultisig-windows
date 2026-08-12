@@ -11,6 +11,7 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -62,8 +63,13 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
 
   return (
     <>
-      <ContainerWrapper radius={16}>
-        <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
+      <ContainerWrapper radius={borderRadiusPx.lg}>
+        <VStack
+          bgColor="foreground"
+          gap={24}
+          padding={24}
+          radius={borderRadiusPx.lg}
+        >
           <Text color="supporting" size={15}>
             {t('youre_swapping')}
           </Text>
@@ -109,7 +115,12 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
           </VStack>
         </VStack>
       </ContainerWrapper>
-      <VStack bgColor="foreground" gap={12} padding={12} radius={16}>
+      <VStack
+        bgColor="foreground"
+        gap={12}
+        padding={12}
+        radius={borderRadiusPx.lg}
+      >
         <List>
           <ListItem
             hoverable={false}

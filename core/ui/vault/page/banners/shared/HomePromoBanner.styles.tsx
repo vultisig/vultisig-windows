@@ -29,6 +29,7 @@ export const HomePromoBannerTextStack = styled.div`
   max-width: 214px;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 export const HomePromoBannerCloseButton = styled(IconButton)`
   position: absolute;
   z-index: 3;

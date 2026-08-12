@@ -15,7 +15,7 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { getVaultSecurityTone } from '@core/ui/vaultsOrganisation/utils/getVaultSecurityTone'
 import { Button } from '@lib/ui/buttons/Button'
-import { borderRadius } from '@lib/ui/css/borderRadius'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
@@ -313,7 +313,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           )}
         </VStack>
         {selectedVault && (
-          <List radius={12}>
+          <List radius={borderRadiusPx.md}>
             <ListItem
               icon={<VaultRowIcon vault={selectedVault} />}
               title={selectedVault.name}

@@ -5,7 +5,7 @@ import {
 } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { Plugin } from '@core/ui/plugins/core/get'
 import { Button } from '@lib/ui/buttons/Button'
-import { borderRadius } from '@lib/ui/css/borderRadius'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { LogoBoxIcon } from '@lib/ui/icons/LogoBoxIcon'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
@@ -131,7 +131,7 @@ export const PreviewInfo: FC<
                         height={100}
                         width={100}
                         {...props}
-                        style={{ borderRadius: 24 }}
+                        style={{ borderRadius: borderRadiusPx.xl }}
                       />
                     )}
                   />
