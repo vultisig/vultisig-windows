@@ -28,7 +28,12 @@ import {
   getLimitSwapExpectedToAmount,
   getLimitSwapReceiveAmount,
 } from '../limit/memo'
-import { getLimitOrderBlocker, LimitOrderBlocker } from '../limit/placement'
+import {
+  getLimitBlockerNotice,
+  getLimitOrderBlocker,
+  getLimitPairBlocker,
+  LimitOrderBlocker,
+} from '../limit/placement'
 import {
   getLimitPriceWarning,
   getPresetPrice,
@@ -86,7 +91,8 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
   const { data: isQueueEnabled } = useAdvancedSwapQueueEnabledQuery()
   const { data: supportedChains } = useLimitSwapSupportedChainsQuery()
-  const { data: marketRate } = useLimitMarketPriceQuery({ fromCoin, toCoin })
+  const { data: marketRate, isFetching: isMarketPriceLoading } =
+    useLimitMarketPriceQuery({ fromCoin, toCoin })
   const { data: balance } = useBalanceQuery(extractAccountCoinKey(fromCoin))
   const { data: fromCoinFiatPrice } = useCoinPriceQuery({ coin: fromCoinKey })
 
@@ -219,19 +225,40 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   // memo-invalid string wouldn't tell the user what to change.
   const orderExpressionError = memoError ?? expectedToAmountError
 
-  const blocker = getLimitOrderBlocker({
+  const pairInput = {
     fromChain: fromCoin.chain,
     toChain: toCoin.chain,
     isSameAsset: areEqualCoins(fromCoinKey, toCoinKey),
-    amount,
-    balance,
-    price: rate,
     isQueueEnabled,
     supportedChains,
     marketPrice: marketRate,
     destinationAddress: toCoin.address,
+  }
+
+  const blocker = getLimitOrderBlocker({
+    ...pairInput,
+    amount,
+    balance,
+    price: rate,
     memoError: orderExpressionError,
   })
+
+  // The asset step answers only what the pair itself decides, so it can say
+  // "this pair cannot be traded" the moment the pair is picked rather than
+  // asking for an amount and a price first — the whole point of showing it
+  // here. Both steps route their message through the same notice filter, so a
+  // gate that has not answered yet never speaks for one.
+  const noticeInput = {
+    isQueueEnabled,
+    supportedChains,
+    balance,
+    isMarketPriceLoading,
+  }
+  const pairNotice = getLimitBlockerNotice({
+    ...noticeInput,
+    blocker: getLimitPairBlocker(pairInput),
+  })
+  const orderNotice = getLimitBlockerNotice({ ...noticeInput, blocker })
 
   const priceWarning =
     rate !== null
@@ -333,6 +360,12 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
           <>
             <LimitAssetStep />
             <LimitExecuteWhenCollapsed onExpand={() => setStep('execute')} />
+            {pairNotice ? (
+              <LimitSwapNotice
+                kind="blocker"
+                message={blockerMessage[pairNotice]}
+              />
+            ) : null}
           </>
         ) : (
           <>
@@ -376,16 +409,20 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               expiryHours={expiryHours}
               onExpiryChange={setExpiryHours}
             />
-            {blocker ? (
+            {orderNotice ? (
               <LimitSwapNotice
                 kind="blocker"
                 message={
-                  blocker === 'memoInvalid' && orderExpressionError
+                  orderNotice === 'memoInvalid' && orderExpressionError
                     ? orderExpressionError
-                    : blockerMessage[blocker]
+                    : blockerMessage[orderNotice]
                 }
               />
-            ) : priceWarning ? (
+            ) : !blocker && priceWarning ? (
+              // Guarded on the blocker rather than on the notice: a blocker
+              // withheld only because its gate is still resolving must not let
+              // a price advisory take the row, or the form would comment on a
+              // price for an order it is about to refuse.
               <LimitSwapNotice
                 kind="warning"
                 message={warningMessage[priceWarning]}

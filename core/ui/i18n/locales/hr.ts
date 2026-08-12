@@ -1751,7 +1751,7 @@ export const hr = {
     'Ova narudžba ne može biti izvršena kako je unesena',
   swap_limit_blocker_no_amount: 'Unesite iznos za prodaju',
   swap_limit_blocker_no_market_price:
-    'Za ovaj par još nema dostupne tržišne cijene',
+    'Ovaj par se trenutno ne može trgovati na THORChain. Odaberite drugu imovinu.',
   swap_limit_blocker_no_price: 'Unesite ciljanu cijenu',
   swap_limit_blocker_pair_not_routable:
     'THORChain ne može usmjeriti limitirani nalog između ove imovine',
