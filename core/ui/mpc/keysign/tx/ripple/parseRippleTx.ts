@@ -2,6 +2,8 @@ import { toIssuedCurrencyTicker } from '@core/ui/chain/coin/ripple/toIssuedCurre
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
+import { hasPartialPaymentFlag, parseRippleTxFlags } from './rippleTxFlags'
+
 const xrpDecimals = 6
 
 /** An XRPL amount: a drops string (native XRP) or an issued-currency object. */
@@ -21,6 +23,15 @@ type RippleFieldLabelKey =
   | 'ripple_field_trust_limit'
   | 'ripple_field_offer_sequence'
 
+/**
+ * i18n keys for the routing-control caveats. These are not rows: they change
+ * what the decoded rows *mean*, so the display renders them as warnings rather
+ * than as more values to skim past.
+ */
+type RippleTxWarningKey =
+  | 'ripple_warning_partial_payment'
+  | 'ripple_warning_custom_paths'
+
 type RippleTxField = {
   labelKey: RippleFieldLabelKey
   amount?: RippleAmount
@@ -30,6 +41,7 @@ type RippleTxField = {
 type RippleTxData = {
   transactionType: string
   fields: RippleTxField[]
+  warnings: RippleTxWarningKey[]
 }
 
 const parseAmount = (value: unknown): RippleAmount | undefined => {
@@ -85,12 +97,19 @@ const rippleAmountFields: Array<[key: string, labelKey: RippleFieldLabelKey]> =
  * confirmation screen renders decoded terms — destination, amounts, offer
  * sides — instead of raw JSON. Never throws: this feeds a display.
  *
+ * Alongside the rows it reports the caveats that redefine them: a
+ * `tfPartialPayment` `Payment` whose `Amount` is a ceiling rather than a
+ * delivery, and a dApp-chosen `Paths` steering how the payment is routed. Both
+ * are signed either way, so leaving them out of the display would show terms
+ * strictly better than the ones being approved.
+ *
  * Returns `null` (which the display routes to its raw-JSON fallback) when the
  * transaction can't be trusted as decoded — unparseable input, a missing
- * `TransactionType`, or a **present but undecodable value-bearing field**.
- * That last case fails closed on purpose: silently omitting a malformed
- * `Amount` / `SendMax` would render a seemingly-complete transaction with its
- * value hidden, letting the user approve without seeing what they pay.
+ * `TransactionType`, an undecodable `Flags`, or a **present but undecodable
+ * value-bearing field**. Those cases fail closed on purpose: silently omitting
+ * a malformed `Amount` / `SendMax`, or reading flags we cannot decode as unset,
+ * would render a seemingly-complete transaction with its value hidden, letting
+ * the user approve without seeing what they pay.
  */
 export const parseRippleTx = (rawJson: string): RippleTxData | null => {
   const parsed = attempt(() => JSON.parse(rawJson) as unknown)
@@ -103,6 +122,17 @@ export const parseRippleTx = (rawJson: string): RippleTxData | null => {
   const transactionType =
     typeof record.TransactionType === 'string' ? record.TransactionType : null
   if (!transactionType) return null
+
+  const flags = parseRippleTxFlags(record.Flags)
+  if (flags === null) return null
+
+  const warnings: RippleTxWarningKey[] = []
+  if (transactionType === 'Payment' && hasPartialPaymentFlag(flags)) {
+    warnings.push('ripple_warning_partial_payment')
+  }
+  if (record.Paths !== undefined) {
+    warnings.push('ripple_warning_custom_paths')
+  }
 
   const fields: RippleTxField[] = []
 
@@ -135,5 +165,5 @@ export const parseRippleTx = (rawJson: string): RippleTxData | null => {
     })
   }
 
-  return { transactionType, fields }
+  return { transactionType, fields, warnings }
 }

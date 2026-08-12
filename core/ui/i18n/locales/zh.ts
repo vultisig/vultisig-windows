@@ -1719,6 +1719,10 @@ export const zh = {
   swap_amount_too_small: '请输入更大的金额以获取兑换报价。',
   swap_invalid_config: '请检查交换详情、收件人和高级设置，然后重试。',
   swap_no_routes_found: '此资产对没有可用的兑换路线。',
+  ripple_warning_partial_payment:
+    '此交易为部分付款：显示金额为可交付的最大金额，并非保证金额。收款人实际收到的金额可能少于显示金额。您的消费金额受发送限额的限制，此外还需支付网络费用。',
+  ripple_warning_custom_paths:
+    '该网站提供了用于此次支付的候选路径。网络会决定使用哪条路径，也可以使用直接路径。',
   price_impact: '价格影响',
   swap_fee_included_in_rate: '已包含在报价汇率中',
   swap_protocol_fee: '协议费',

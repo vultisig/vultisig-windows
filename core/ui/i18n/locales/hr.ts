@@ -1844,6 +1844,10 @@ export const hr = {
   swap_invalid_config:
     'Pregledajte detalje zamjene, primatelja i napredne postavke, a zatim pokušajte ponovno.',
   swap_no_routes_found: 'Za ovaj par imovine nije dostupna ruta zamjene.',
+  ripple_warning_partial_payment:
+    'Ova transakcija je djelomično plaćanje: prikazani iznos je najveći iznos koji se može isporučiti, a ne zajamčeni iznos. Primatelj može primiti manje od toga. Iznos koji potrošite zasebno je ograničen maksimalnim iznosom za slanje, a povrh toga se naplaćuje i mrežna naknada.',
+  ripple_warning_custom_paths:
+    'Stranica je ponudila kandidatske rute za ovo plaćanje. Mreža odlučuje koju će od njih koristiti, a može koristiti i izravnu rutu.',
   price_impact: 'Utjecaj na cijenu',
   swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
   swap_protocol_fee: 'Naknada za protokol',
