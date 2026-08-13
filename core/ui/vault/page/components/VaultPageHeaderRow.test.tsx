@@ -57,6 +57,16 @@ describe('VaultPageHeaderRow', () => {
     expect(css).not.toContain('position:absolute')
   })
 
+  // Only the title column may collapse. A zero minimum on a control column
+  // lets its buttons overflow the track, which the centred title then covers.
+  it('keeps the control columns at their intrinsic width', () => {
+    const { css } = renderHeader()
+    const controlRules = css.match(/\{[^}]*justify-self:(start|end)[^}]*\}/g)
+
+    expect(controlRules).toHaveLength(2)
+    controlRules?.forEach(rule => expect(rule).not.toContain('min-width'))
+  })
+
   it('ellipsizes a long vault name', () => {
     const { css, html } = renderHeader()
 

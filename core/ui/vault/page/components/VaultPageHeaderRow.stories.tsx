@@ -42,6 +42,22 @@ const controls = (
   </>
 )
 
+const dappsButton = (
+  <IconButton>
+    <IconWrapper>
+      <span
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          border: '1px solid rgba(255,255,255,0.3)',
+          display: 'block',
+        }}
+      />
+    </IconWrapper>
+  </IconButton>
+)
+
 const meta: Meta<typeof VaultPageHeaderRow> = {
   title: 'Vault/VaultPageHeaderRow',
   component: VaultPageHeaderRow,
@@ -62,6 +78,19 @@ export const ShortName: Story = {
   args: {
     secondaryControls: controls,
     title: <VaultSelector placement="pageHeader" value={vault('Main')} />,
+  },
+}
+
+export const LongNameWithPrimaryControls: Story = {
+  args: {
+    primaryControls: dappsButton,
+    secondaryControls: controls,
+    title: (
+      <VaultSelector
+        placement="pageHeader"
+        value={vault('android swap testing123334343434')}
+      />
+    ),
   },
 }
 

@@ -18,7 +18,6 @@ const Container = styled.div`
 
 const PrimarySlot = styled(HStack)`
   justify-self: start;
-  min-width: 0;
 `
 
 const TitleSlot = styled.div`
