@@ -13,7 +13,12 @@ import styled, { css } from 'styled-components'
 type VaultSelectorPlacement = 'inline' | 'pageHeader'
 
 const Indicator = styled(CollapsableStateIndicator)`
+  flex-shrink: 0;
   font-size: 12px;
+`
+
+const Name = styled(Text)`
+  min-width: 0;
 `
 
 export const VaultSelector = ({
@@ -36,9 +41,9 @@ export const VaultSelector = ({
         <IconWrapper color={isFastVault ? 'idle' : 'primary'} size={16}>
           {isFastVault ? <LightningIcon /> : <ShieldIcon />}
         </IconWrapper>
-        <Text size={14} cropped>
+        <Name size={14} cropped>
           {value.name}
-        </Text>
+        </Name>
       </HStack>
       <Indicator />
     </Wrapper>
@@ -52,14 +57,15 @@ const Wrapper = styled.div<{ placement: VaultSelectorPlacement }>`
   })};
 
   cursor: pointer;
-  max-width: 60%;
+  max-width: ${({ placement }) =>
+    placement === 'pageHeader' ? '100%' : '60%'};
   min-width: 0;
 
   ${({ placement, theme }) =>
     theme.iconStyle === 'station' &&
     placement === 'pageHeader' &&
     css`
-      max-width: 156px;
+      max-width: min(156px, 100%);
       transform: translateX(-18px);
       width: 156px;
     `}
