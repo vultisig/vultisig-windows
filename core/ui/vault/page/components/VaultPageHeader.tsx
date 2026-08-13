@@ -11,7 +11,6 @@ import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
@@ -20,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { VaultPageHeaderControls } from './VaultPageHeaderControls'
+import { VaultPageHeaderRow } from './VaultPageHeaderRow'
 import { VaultSelector } from './VaultSelector'
 
 const HeaderContainer = styled.div`
@@ -90,7 +90,7 @@ export const VaultPageHeader = ({
           pointerEvents: isCollapsed ? 'none' : 'auto',
         }}
       >
-        <PageHeader
+        <VaultPageHeaderRow
           primaryControls={primaryControls}
           secondaryControls={<VaultPageHeaderControls />}
           title={<VaultSelector placement="pageHeader" value={vault} />}
