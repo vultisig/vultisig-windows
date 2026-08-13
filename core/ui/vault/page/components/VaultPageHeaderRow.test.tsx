@@ -53,6 +53,7 @@ describe('VaultPageHeaderRow', () => {
     const { css } = renderHeader()
 
     expect(css).toContain('grid-template-columns:1frminmax(0,auto)1fr')
+    expect(css).toContain('column-gap:12px')
     expect(css).not.toContain('position:absolute')
   })
 

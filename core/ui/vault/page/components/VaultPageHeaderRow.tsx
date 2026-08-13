@@ -9,6 +9,7 @@ const Container = styled.div`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
   align-items: center;
+  column-gap: 12px;
   display: grid;
   grid-template-columns: 1fr minmax(0, auto) 1fr;
   min-height: 60px;
