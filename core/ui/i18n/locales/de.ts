@@ -1795,7 +1795,7 @@ export const de = {
     'Dieser Auftrag kann in der eingegebenen Form nicht ausgeführt werden.',
   swap_limit_blocker_no_amount: 'Geben Sie den zu verkaufenden Betrag ein.',
   swap_limit_blocker_no_market_price:
-    'Für dieses Paar ist noch kein Marktpreis verfügbar.',
+    'Dieses Währungspaar kann derzeit nicht auf THORChain gehandelt werden. Wählen Sie einen anderen Vermögenswert.',
   swap_limit_blocker_no_price: 'Geben Sie einen Zielpreis ein',
   swap_limit_blocker_pair_not_routable:
     'THORChain kann keine Limit-Order zwischen diesen Assets weiterleiten.',
@@ -1889,6 +1889,10 @@ export const de = {
   swap_invalid_config:
     'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
   swap_no_routes_found: 'Für dieses Asset-Paar ist keine Swap-Route verfügbar.',
+  ripple_warning_partial_payment:
+    'Diese Transaktion ist eine Teilzahlung: Der angezeigte Betrag ist der maximal mögliche Auszahlungsbetrag, keine Garantie. Der Empfänger kann weniger erhalten. Ihr Ausgabenbetrag ist separat durch das Sendelimit begrenzt, und die Netzwerkgebühr wird zusätzlich erhoben.',
+  ripple_warning_custom_paths:
+    'Die Website lieferte mögliche Zahlungswege. Das Netzwerk entscheidet, welcher davon genutzt wird, und kann auch den direkten Weg verwenden.',
   price_impact: 'Preisauswirkung',
   swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
   swap_protocol_fee: 'Protokollgebühr',

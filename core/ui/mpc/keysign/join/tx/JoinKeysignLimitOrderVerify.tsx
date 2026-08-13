@@ -7,6 +7,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { ClockIcon } from '@lib/ui/icons/ClockIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -112,8 +113,13 @@ export const JoinKeysignLimitOrderVerify = ({ value, order }: Props) => {
   })
 
   return (
-    <ContainerWrapper radius={16}>
-      <VStack bgColor="foreground" gap={20} padding={24} radius={16}>
+    <ContainerWrapper radius={borderRadiusPx.lg}>
+      <VStack
+        bgColor="foreground"
+        gap={20}
+        padding={24}
+        radius={borderRadiusPx.lg}
+      >
         <Text color="contrast" size={17} weight="500">
           {t('swap_limit_review_heading')}
         </Text>

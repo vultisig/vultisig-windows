@@ -9,6 +9,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -51,8 +52,13 @@ export const BlockaidSwapDisplay = ({
 
   return (
     <>
-      <ContainerWrapper radius={16}>
-        <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
+      <ContainerWrapper radius={borderRadiusPx.lg}>
+        <VStack
+          bgColor="foreground"
+          gap={24}
+          padding={24}
+          radius={borderRadiusPx.lg}
+        >
           <Text color="supporting" size={15}>
             {t('youre_swapping')}
           </Text>

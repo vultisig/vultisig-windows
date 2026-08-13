@@ -1763,7 +1763,7 @@ export const nl = {
     'Deze bestelling kan niet worden geplaatst zoals ingevoerd.',
   swap_limit_blocker_no_amount: 'Voer een verkoopbedrag in',
   swap_limit_blocker_no_market_price:
-    'Er is nog geen marktprijs bekend voor dit paar.',
+    'Dit valutapaar kan momenteel niet worden verhandeld op THORChain. Kies een ander actief.',
   swap_limit_blocker_no_price: 'Voer een streefprijs in',
   swap_limit_blocker_pair_not_routable:
     'THORChain kan geen limietorder tussen deze activa routeren.',
@@ -1857,6 +1857,10 @@ export const nl = {
   swap_invalid_config:
     'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
   swap_no_routes_found: 'Er is geen swaproute beschikbaar voor dit activapaar.',
+  ripple_warning_partial_payment:
+    'Deze transactie betreft een gedeeltelijke betaling: het weergegeven bedrag is het maximale bedrag dat kan worden verzonden, geen gegarandeerd bedrag. De ontvanger kan minder ontvangen. Het bedrag dat u kunt uitgeven, is beperkt door het maximale verzendbedrag, en daar bovenop komen de netwerkkosten.',
+  ripple_warning_custom_paths:
+    'De website leverde kandidaatroutes aan voor deze betaling. Het netwerk beslist welke route wordt gebruikt en kan ook de directe route kiezen.',
   price_impact: 'Prijsimpact',
   swap_fee_included_in_rate: 'Inbegrepen in de vermelde wisselkoers',
   swap_protocol_fee: 'Protocolkosten',

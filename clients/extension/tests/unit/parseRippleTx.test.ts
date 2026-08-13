@@ -89,6 +89,89 @@ describe('parseRippleTx', () => {
     })
   })
 
+  it('warns that a tfPartialPayment amount is a ceiling, not a delivery', () => {
+    // The self-swap the parser documents: Destination is the user's own
+    // address, Amount is the attractive receive figure, SendMax is what they
+    // pay. With Flags 131072 and no DeliverMin the receive figure is a maximum.
+    const data = parseRippleTx(
+      JSON.stringify({
+        TransactionType: 'Payment',
+        Account: 'rSelf00000000000000000000000000000',
+        Destination: 'rSelf00000000000000000000000000000',
+        Amount: {
+          currency: '524C555344000000000000000000000000000000',
+          issuer: 'rIssuer00000000000000000000000000000',
+          value: '500',
+        },
+        SendMax: '200000000',
+        Flags: 131072,
+      })
+    )
+
+    expect(data?.warnings).toContain('ripple_warning_partial_payment')
+  })
+
+  it('warns when the site steers routing with its own Paths', () => {
+    const data = parseRippleTx(
+      JSON.stringify({
+        TransactionType: 'Payment',
+        Account: 'rSelf00000000000000000000000000000',
+        Destination: 'rSelf00000000000000000000000000000',
+        Amount: '1000000',
+        SendMax: '1200000',
+        Paths: [
+          [{ currency: 'USD', issuer: 'rIssuer00000000000000000000000000000' }],
+        ],
+      })
+    )
+
+    expect(data?.warnings).toEqual(['ripple_warning_custom_paths'])
+  })
+
+  it('leaves a plain payment unqualified', () => {
+    const data = parseRippleTx(
+      JSON.stringify({
+        TransactionType: 'Payment',
+        Account: 'rSender0000000000000000000000000000',
+        Destination: 'rDest0000000000000000000000000000000',
+        Amount: '1000000',
+        Flags: 2147483648,
+      })
+    )
+
+    expect(data?.warnings).toEqual([])
+  })
+
+  it('does not read tfPartialPayment into a non-Payment transaction', () => {
+    // On an OfferCreate the same bit is tfImmediateOrCancel, which says nothing
+    // about how much is delivered.
+    const data = parseRippleTx(
+      JSON.stringify({
+        TransactionType: 'OfferCreate',
+        TakerGets: '10000000',
+        Flags: 131072,
+      })
+    )
+
+    expect(data?.warnings).toEqual([])
+  })
+
+  it('fails closed on Flags it cannot decode', () => {
+    // Reading an undecodable Flags as "nothing set" would render a partial
+    // payment as an exact one, so fall back to the raw JSON instead.
+    expect(
+      parseRippleTx(
+        JSON.stringify({
+          TransactionType: 'Payment',
+          Account: 'rSender0000000000000000000000000000',
+          Destination: 'rDest0000000000000000000000000000000',
+          Amount: '1000000',
+          Flags: { tfPartialPayment: true },
+        })
+      )
+    ).toBeNull()
+  })
+
   it('returns null for malformed input rather than throwing', () => {
     expect(parseRippleTx('not json')).toBeNull()
     expect(parseRippleTx('{}')).toBeNull()

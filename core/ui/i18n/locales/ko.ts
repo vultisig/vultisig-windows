@@ -1741,7 +1741,7 @@ export const ko = {
     '입력하신 내용으로는 주문을 처리할 수 없습니다.',
   swap_limit_blocker_no_amount: '판매할 금액을 입력하세요',
   swap_limit_blocker_no_market_price:
-    '이 제품에 대한 시장 가격은 아직 확인되지 않았습니다.',
+    '이 쌍은 현재 THORChain에서 거래할 수 없습니다. 다른 자산을 선택하세요.',
   swap_limit_blocker_no_price: '목표 가격을 입력하세요',
   swap_limit_blocker_pair_not_routable:
     'THORChain 이 자산들 간에 지정가 주문을 라우팅할 수 없습니다.',
@@ -1834,6 +1834,10 @@ export const ko = {
   swap_invalid_config:
     '교환 세부 정보, 수신자 및 고급 설정을 검토한 후 다시 시도하십시오.',
   swap_no_routes_found: '이 자산 쌍에 사용할 수 있는 스왑 경로가 없습니다.',
+  ripple_warning_partial_payment:
+    '이 거래는 부분 결제입니다. 표시된 금액은 최대 송금 가능 금액이며, 보장된 금액은 아닙니다. 수취인은 표시된 금액보다 적은 금액을 받을 수 있습니다. 송금액은 송금 최대 한도에 따라 별도로 제한되며, 네트워크 수수료가 추가로 부과됩니다.',
+  ripple_warning_custom_paths:
+    '해당 사이트는 이 결제를 위한 후보 경로를 제공했습니다. 네트워크는 이 경로들 중 어떤 것을 사용할지 결정하며, 직접 경로를 사용할 수도 있습니다.',
   price_impact: '가격 영향',
   swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
   swap_protocol_fee: '프로토콜 수수료',

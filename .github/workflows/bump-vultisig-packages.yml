@@ -1,0 +1,82 @@
+name: Bump Vultisig packages
+
+on:
+  schedule:
+    - cron: '30 6,12,18 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: bump-vultisig-packages
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  NODE_OPTIONS: '--max-old-space-size=8192'
+  NODE_VERSION: '23.7.0'
+
+jobs:
+  bump:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          submodules: recursive
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Bump @vultisig/* packages to latest
+        id: bump
+        run: |
+          yarn up -E '@vultisig/core-chain' '@vultisig/core-config' '@vultisig/core-mpc' '@vultisig/lib-utils' '@vultisig/sdk'
+          if git diff --quiet -- '**/package.json' yarn.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            {
+              echo 'versions<<EOF'
+              git diff -- '**/package.json' | grep '^+.*"@vultisig/' | sed 's/^+ *//' | sort -u
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Require CI-capable token
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          BUMP_PR_TOKEN: ${{ secrets.BUMP_PR_TOKEN }}
+        run: |
+          if [ -z "$BUMP_PR_TOKEN" ]; then
+            echo "::error::BUMP_PR_TOKEN secret is missing. A PR created with GITHUB_TOKEN gets no CI (build.yml is the merge gate), so refusing to open a checkless bump PR. Add a fine-grained PAT with contents + pull-requests write."
+            exit 1
+          fi
+
+      - name: Create or update bump PR
+        if: steps.bump.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.BUMP_PR_TOKEN }}
+          base: ${{ github.event.repository.default_branch }}
+          branch: chore/bump-vultisig-packages
+          delete-branch: true
+          commit-message: 'chore(deps): bump @vultisig/* packages to latest'
+          title: 'chore(deps): bump @vultisig/* packages to latest'
+          body: |
+            Automated bump of first-party `@vultisig/*` packages to the latest npm release.
+
+            ```
+            ${{ steps.bump.outputs.versions }}
+            ```
+
+            Opened by the `bump-vultisig-packages` workflow (runs 06:30/12:30/18:30 UTC; re-runs update this PR in place). CI on this PR is the merge gate.

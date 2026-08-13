@@ -1785,7 +1785,7 @@ export const it = {
     'Questo ordine non può essere effettuato come inserito',
   swap_limit_blocker_no_amount: 'Inserisci la quantità da vendere',
   swap_limit_blocker_no_market_price:
-    'Non è ancora disponibile un prezzo di mercato per questo paio.',
+    'Al momento non è possibile negoziare questa coppia di token su THORChain. Scegli un altro asset.',
   swap_limit_blocker_no_price: 'Inserisci un prezzo obiettivo',
   swap_limit_blocker_pair_not_routable:
     'THORChain non può instradare un ordine limite tra questi asset',
@@ -1880,6 +1880,10 @@ export const it = {
     'Rivedi i dettagli dello scambio, il destinatario e le impostazioni avanzate, quindi riprova.',
   swap_no_routes_found:
     'Non è disponibile alcuna rotta di swap per questa coppia di asset.',
+  ripple_warning_partial_payment:
+    "Questa transazione è un pagamento parziale: l'importo mostrato è l'importo massimo che può essere inviato, non un importo garantito. Il destinatario potrebbe ricevere un importo inferiore. L'importo che puoi inviare è limitato separatamente dal limite massimo di invio, a cui si aggiungono le commissioni di rete.",
+  ripple_warning_custom_paths:
+    'Il sito ha fornito percorsi candidati per questo pagamento. La rete decide quale utilizzare, e può anche utilizzare il percorso diretto.',
   price_impact: 'Impatto sul prezzo',
   swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
   swap_protocol_fee: 'Tariffa del protocollo',

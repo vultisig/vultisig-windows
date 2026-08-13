@@ -48,6 +48,7 @@ export const FixedWrapper = styled(CenterAbsolutely)`
   background-color: ${getColor('background')};
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 export const Overlay = styled.div`
   position: absolute;
   width: 374px;

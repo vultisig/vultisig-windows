@@ -946,6 +946,10 @@ export const en = {
   ripple_field_trust_limit: 'Trust limit',
   ripple_field_offer_sequence: 'Offer sequence',
   ripple_field_issuer: 'Issuer',
+  ripple_warning_partial_payment:
+    'This transaction is a partial payment: the amount shown is the most that can be delivered, not a guaranteed amount. The recipient can receive less than it. The amount you spend is limited separately by the send maximum, and the network fee is charged on top of that.',
+  ripple_warning_custom_paths:
+    'The site supplied candidate routes for this payment. The network decides which of them to use, and can also use the direct route.',
   review_vault_devices_subtitle:
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',
@@ -1198,7 +1202,7 @@ export const en = {
   swap_limit_blocker_memo_invalid: 'This order cannot be placed as entered',
   swap_limit_blocker_no_amount: 'Enter an amount to sell',
   swap_limit_blocker_no_market_price:
-    'No market price available for this pair yet',
+    "This pair can't be traded on THORChain right now. Pick a different asset.",
   swap_limit_blocker_no_price: 'Enter a target price',
   swap_limit_blocker_pair_not_routable:
     'THORChain cannot route a limit order between these assets',

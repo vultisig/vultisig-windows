@@ -1633,7 +1633,8 @@ export const zh = {
   swap_limit_blocker_insufficient_balance: '金额超过您的余额',
   swap_limit_blocker_memo_invalid: '此订单无法按原样提交。',
   swap_limit_blocker_no_amount: '输入要出售的数量',
-  swap_limit_blocker_no_market_price: '暂无该交易对的市场价格信息',
+  swap_limit_blocker_no_market_price:
+    '目前该货币对无法在THORChain上交易。请选择其他资产。',
   swap_limit_blocker_no_price: '输入目标价格',
   swap_limit_blocker_pair_not_routable: 'THORChain无法在这些资产之间路由限价单',
   swap_limit_blocker_no_destination: '目标链没有可用的支付地址',
@@ -1719,6 +1720,10 @@ export const zh = {
   swap_amount_too_small: '请输入更大的金额以获取兑换报价。',
   swap_invalid_config: '请检查交换详情、收件人和高级设置，然后重试。',
   swap_no_routes_found: '此资产对没有可用的兑换路线。',
+  ripple_warning_partial_payment:
+    '此交易为部分付款：显示金额为可交付的最大金额，并非保证金额。收款人实际收到的金额可能少于显示金额。您的消费金额受发送限额的限制，此外还需支付网络费用。',
+  ripple_warning_custom_paths:
+    '该网站提供了用于此次支付的候选路径。网络会决定使用哪条路径，也可以使用直接路径。',
   price_impact: '价格影响',
   swap_fee_included_in_rate: '已包含在报价汇率中',
   swap_protocol_fee: '协议费',
