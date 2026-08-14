@@ -49,15 +49,15 @@ test.describe('Viewport fit', () => {
         horizontal: 0,
       })
 
-      const skipButton = page.getByRole('button', { name: /skip/i })
-      if (await skipButton.isVisible().catch(() => false)) {
-        await skipButton.click()
-        await page.waitForTimeout(500)
-        expect(await getPageOverflow(page)).toEqual({
-          vertical: 0,
-          horizontal: 0,
-        })
-      }
+      const createVaultButton = page.getByRole('button', {
+        name: /create new vault/i,
+      })
+      await expect(createVaultButton).toBeVisible()
+      await createVaultButton.click()
+      await expect(createVaultButton).toBeHidden()
+      await expect
+        .poll(() => getPageOverflow(page))
+        .toEqual({ vertical: 0, horizontal: 0 })
 
       await page.close()
     })
