@@ -1,7 +1,7 @@
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
-import { attempt } from '@vultisig/lib-utils/attempt'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 // THORChain reports pool prices in TOR, a USD-pegged unit scaled by 10^8.
@@ -37,18 +37,22 @@ export const securedAssetDenomToPoolAsset = (denom: string): string =>
 /**
  * Prices THORChain secured assets from THORChain's own pool oracle
  * (`asset_tor_price`). Returns USD prices keyed by the input denom; denoms
- * without an available pool price are omitted.
+ * without an available pool price are omitted (and logged, so a data-source
+ * gap is diagnosable from the console).
+ *
+ * A failed pools request throws instead of resolving empty: price queries
+ * cache successes with refetching disabled, so a swallowed failure would pin
+ * every secured asset at 0 until the cache expires.
  */
 export const getThorchainSecuredAssetPrices = async (
   denoms: string[]
 ): Promise<Record<string, number>> => {
-  const result = await attempt(() =>
-    queryUrl<ThorchainPool[]>(`${cosmosRpcUrl.THORChain}/thorchain/pools`)
+  const pools = await queryUrl<ThorchainPool[]>(
+    `${cosmosRpcUrl.THORChain}/thorchain/pools`
   )
-  if ('error' in result) return {}
 
   const priceByPoolAsset: Record<string, number> = {}
-  for (const pool of result.data) {
+  for (const pool of pools) {
     const torPrice = Number(pool.asset_tor_price)
     if (Number.isFinite(torPrice) && torPrice > 0) {
       priceByPoolAsset[pool.asset] = torPrice / 10 ** torPriceDecimals
@@ -56,11 +60,20 @@ export const getThorchainSecuredAssetPrices = async (
   }
 
   const prices: Record<string, number> = {}
+  const unpricedDenoms: string[] = []
   for (const denom of denoms) {
     const price = priceByPoolAsset[securedAssetDenomToPoolAsset(denom)]
     if (price != null) {
       prices[denom] = price
+    } else {
+      unpricedDenoms.push(denom)
     }
+  }
+
+  if (!isEmpty(unpricedDenoms)) {
+    console.error(
+      `No THORChain pool price for secured asset denoms: ${unpricedDenoms.join(', ')}`
+    )
   }
 
   return prices
@@ -76,8 +89,9 @@ type GetThorchainSecuredAssetFiatPricesInput = {
  * to `fiatCurrency` using a USD stablecoin anchor (its price in that currency
  * is the USD -> fiat rate). Returns prices keyed by denom.
  *
- * When the anchor quote is unavailable for a non-USD currency, returns no
- * prices rather than mislabeling raw USD values as the selected fiat.
+ * When the anchor quote is unavailable for a non-USD currency, throws rather
+ * than mislabeling raw USD values as the selected fiat or caching an empty
+ * success — the query layer retries and refetches on the next mount.
  */
 export const getThorchainSecuredAssetFiatPrices = async ({
   denoms,
@@ -93,7 +107,9 @@ export const getThorchainSecuredAssetFiatPrices = async ({
     })
     const anchorRate = anchorPrices[usdAnchorPriceProviderId]
     if (anchorRate == null) {
-      return {}
+      throw new Error(
+        `Missing ${usdAnchorPriceProviderId} anchor price for ${fiatCurrency}: cannot convert THORChain pool prices`
+      )
     }
     usdToFiatRate = anchorRate
   }
