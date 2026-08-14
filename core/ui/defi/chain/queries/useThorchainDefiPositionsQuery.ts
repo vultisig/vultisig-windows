@@ -25,7 +25,15 @@ export const useThorchainDefiPositionsQuery = (
   const address = useCurrentVaultAddress(Chain.THORChain)
   const priceQuery = useCoinPricesQuery({ coins: thorchainDefiCoins })
 
-  const isEnabled = enabled && Boolean(address) && Boolean(priceQuery.data)
+  // The eager price query exposes partial data (missing coins zero-filled) as
+  // soon as one of its sub-queries resolves. Positions snapshot prices into a
+  // cache keyed only by address, so firing on partial data would pin e.g. the
+  // staked RUJI card at $0 — wait until every price sub-query settles.
+  const isEnabled =
+    enabled &&
+    Boolean(address) &&
+    !priceQuery.isPending &&
+    Boolean(priceQuery.data)
 
   return useQuery<DefiChainPositions>({
     queryKey: ['defi', 'thorchain', 'positions', address],

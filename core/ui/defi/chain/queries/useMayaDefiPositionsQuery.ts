@@ -24,7 +24,13 @@ export const useMayaDefiPositionsQuery = (
   const address = useCurrentVaultAddress(Chain.MayaChain)
   const priceQuery = useCoinPricesQuery({ coins: mayaDefiCoins })
 
-  const isEnabled = enabled && Boolean(address) && Boolean(priceQuery.data)
+  // Same guard as useThorchainDefiPositionsQuery: don't snapshot the eager
+  // price query's partial (zero-filled) data into the positions cache.
+  const isEnabled =
+    enabled &&
+    Boolean(address) &&
+    !priceQuery.isPending &&
+    Boolean(priceQuery.data)
 
   return useQuery<DefiChainPositions>({
     queryKey: ['defi', 'mayachain', 'positions', address],
