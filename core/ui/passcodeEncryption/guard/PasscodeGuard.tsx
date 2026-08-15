@@ -1,5 +1,5 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
-import { TakeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
+import { BlockingOverlay } from '@lib/ui/overlay/BlockingOverlay'
 
 import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
@@ -27,16 +27,14 @@ export const PasscodeGuard = () => {
     <>
       {passcodeAutoLock && <PasscodeAutoLock />}
       {pendingPasscodeUnlockRestore && (
-        <TakeWholeSpaceAbsolutely>
+        <BlockingOverlay>
           <ProductLogoBlock />
-        </TakeWholeSpaceAbsolutely>
+        </BlockingOverlay>
       )}
       {isLocked && !pendingPasscodeUnlockRestore && (
-        <>
-          <TakeWholeSpaceAbsolutely>
-            <EnterPasscode />
-          </TakeWholeSpaceAbsolutely>
-        </>
+        <BlockingOverlay>
+          <EnterPasscode />
+        </BlockingOverlay>
       )}
       {hasPasscodeEnabled && !isLocked && !pendingPasscodeUnlockRestore && (
         <PasscodeEncryptionUpgrade />
