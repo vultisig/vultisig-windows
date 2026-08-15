@@ -102,6 +102,7 @@ export default defineConfig({
         '**/vault-import-export.spec.ts',
         '**/transaction-history.spec.ts',
         '**/address-book.spec.ts',
+        '**/passcode-lock-layering.spec.ts',
         '**/visual-regression.spec.ts',
         '**/station-migration.spec.ts',
         '**/search-field.spec.ts',
