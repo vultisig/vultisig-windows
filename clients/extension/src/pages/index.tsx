@@ -40,7 +40,9 @@ const ExtensionGlobalStyle = createGlobalStyle`
   }
 
   body {
-    min-height: ${isPopup ? `${popupHeight}px` : '600px'};
+    min-height: ${
+      isPopup ? `${popupHeight}px` : `min(${popupHeight}px, 100dvh)`
+    };
     min-width: ${isPopup ? `${popupWidth}px` : 'min(480px, 100vw)'};
     overflow: hidden;
 
