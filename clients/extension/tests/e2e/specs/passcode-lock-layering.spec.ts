@@ -140,7 +140,16 @@ const setAutoLock = async (page: Page) => {
 const lockByInactivity = async (page: Page) => {
   await page.clock.install()
   await page.mouse.move(5, 5)
-  await page.clock.fastForward(`0${autoLockMinutes}:00`)
+
+  // The reschedule lands in a React effect, a tick after the event. Jumping the
+  // clock before it commits would schedule the timeout past the jump, where it
+  // never fires. `waitForTimeout` runs driver-side, so the faked page clock does
+  // not govern it.
+  await page.waitForTimeout(250)
+
+  // Overshoot rather than landing on the interval exactly, so the test does not
+  // depend on the lock staying a `setTimeout` rather than a deadline check.
+  await page.clock.fastForward(`0${autoLockMinutes}:10`)
 }
 
 test.describe('Passcode lock layering', () => {
@@ -152,12 +161,16 @@ test.describe('Passcode lock layering', () => {
       return
     }
 
-    await ensureVaultExists(
+    // It reports failure by returning false rather than throwing, so without
+    // this the run dies later at a locator timeout that hides the real cause.
+    const imported = await ensureVaultExists(
       context,
       extensionId,
       config.vaultPath,
       config.password
     )
+
+    expect(imported, 'test vault could not be imported').toBe(true)
   })
 
   test('the gate covers an open modal, takes the keyboard, and leaves it open', async ({
