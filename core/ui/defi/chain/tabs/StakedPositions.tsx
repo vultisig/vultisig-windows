@@ -12,7 +12,6 @@ import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { RujiMergedPositionCard } from '../components/stake/RujiMergedPositionCard'
 import { StakeCard } from '../components/stake/StakeCard'
 import type { StakeUiTranslationKey } from '../config/stakeUiResolver'
 import {
@@ -116,20 +115,7 @@ export const StakedPositions = () => {
     )
   }
 
-  // The merged RUJI balance belongs to the RUJI position, so it follows the
-  // same selection id as the auto-compounding and bonded RUJI cards.
-  const isRujiSelected = selectedPositions.includes(
-    rujiAutoCompoundStakePositionId
-  )
-
-  return (
-    <VStack gap={12}>
-      {chain === Chain.THORChain && isRujiSelected ? (
-        <RujiMergedPositionCard />
-      ) : null}
-      <ThorchainStakedPositions />
-    </VStack>
-  )
+  return <ThorchainStakedPositions />
 }
 
 const ThorchainStakedPositions = () => {

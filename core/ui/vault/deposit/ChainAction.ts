@@ -41,9 +41,6 @@ export type ChainAction =
   | 'freeze'
   | 'unfreeze'
   | 'ibc_transfer'
-  | 'merge'
-  | 'switch'
-  | 'unmerge'
   | 'mint'
   | 'redeem'
   | 'withdraw_ruji_rewards'
@@ -60,10 +57,8 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'unbond',
     'leave',
     'custom',
-    'merge',
     'stake',
     'unstake',
-    'unmerge',
     'mint',
     'redeem',
     'withdraw_ruji_rewards',
@@ -82,7 +77,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Solana]: [...solanaStakingActions],
   [Chain.Kujira]: ['ibc_transfer', 'add_thor_lp'],
   [Chain.Osmosis]: ['ibc_transfer'],
-  [Chain.Cosmos]: ['ibc_transfer', 'switch', 'add_thor_lp'],
+  [Chain.Cosmos]: ['ibc_transfer', 'add_thor_lp'],
   [Chain.Terra]: ['ibc_transfer', ...cosmosStakingActions],
   [Chain.TerraClassic]: ['ibc_transfer', ...cosmosStakingActions],
   [Chain.QBTC]: [...cosmosStakingActions],

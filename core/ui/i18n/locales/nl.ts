@@ -561,8 +561,6 @@ export const nl = {
   max: 'Max',
   max_4_characters: 'Max 4 tekens',
   memo: 'Memo',
-  merge: 'Samenvoegen',
-  merged: 'Samengevoegd',
   message: 'Bericht',
   message_required: 'Bericht is verplicht',
   message_to_sign: 'Te ondertekenen bericht',
@@ -574,7 +572,6 @@ export const nl = {
   missing_destination_address: 'Bestemmingsadres ontbreekt',
   missing_devices_for_migration:
     'Doe mee met de volgende apparaten om je kluis te migreren',
-  missing_thorchain_address: 'THORChain-adres ontbreekt',
   more: 'meer',
   moreInfo: 'Meer info',
   more_coming_soon: 'Binnenkort meer',
@@ -601,7 +598,6 @@ export const nl = {
   no_connected_dapps: 'Geen verbonden dApps',
   no_connected_dapps_desc:
     'dApps verschijnen hier wanneer je ermee interageert',
-  no_mergeable_tokens_found: 'Geen samenvoegbare tokens gevonden',
   no_referral_yet: 'Nog geen referral.',
   no_token_found: 'Token niet gevonden',
   no_transactions_yet: 'Nog geen transacties',
@@ -920,7 +916,6 @@ export const nl = {
     input: 'Het swap-bedrag klopt',
     output: 'Ik ga akkoord met het min. bedrag dat ik ontvang',
   },
-  switch: 'Wisselen',
   switchToInternet: 'Terugschakelen naar internetmodus',
   switchToLocal: 'Overschakelen naar lokale modus',
   target: 'Doel',
@@ -929,7 +924,6 @@ export const nl = {
   this_device: 'Dit apparaat',
   this_device_suffix: '(dit apparaat)',
   this_vault_only: 'Alleen deze kluis',
-  thorchain_address: 'THORChain-adres',
   thorchain_address_required_for_referrals:
     'Je hebt een THORChain-adres nodig om het referralprogramma te gebruiken',
   tns_alnum_only: 'Referralcode mag alleen alfanumerieke tekens bevatten',
@@ -988,7 +982,6 @@ export const nl = {
   unlock_discount_tier_description_ultimate:
     'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>volledige kwijtschelding van Vultisig-fee</b> op alle swaps.',
   unlock_tier: 'Niveau ontgrendelen',
-  unmerge: 'Ontsamenvoegen',
   unfreeze: 'Unfreeze',
   unknown: 'Onbekend',
   unlimited: 'Onbeperkt',

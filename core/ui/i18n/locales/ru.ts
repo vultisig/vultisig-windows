@@ -558,8 +558,6 @@ export const ru = {
   max: 'Макс',
   max_4_characters: 'Макс 4 символа',
   memo: 'Memo',
-  merge: 'Объединить',
-  merged: 'Объединено',
   message: 'Сообщение',
   message_required: 'Сообщение обязательно',
   message_to_sign: 'Сообщение для подписи',
@@ -571,7 +569,6 @@ export const ru = {
   missing_destination_address: 'Отсутствует адрес получателя',
   missing_devices_for_migration:
     'Подключите следующие устройства, чтобы мигрировать хранилище',
-  missing_thorchain_address: 'Отсутствует THORChain-адрес',
   more: 'ещё',
   moreInfo: 'Подробнее',
   more_coming_soon: 'Скоро ещё',
@@ -598,7 +595,6 @@ export const ru = {
   no_connected_dapps: 'Нет подключённых dApps',
   no_connected_dapps_desc:
     'dApps появятся здесь, когда вы будете с ними взаимодействовать',
-  no_mergeable_tokens_found: 'Токены для объединения не найдены',
   no_referral_yet: 'Пока нет referral.',
   no_token_found: 'Токен не найден',
   no_transactions_yet: 'Пока нет транзакций.',
@@ -917,7 +913,6 @@ export const ru = {
     input: 'Сумма свопа указана верно',
     output: 'Я согласен(на) с мин. суммой, которую получу',
   },
-  switch: 'Переключить',
   switchToInternet: 'Вернуться в интернет-режим',
   switchToLocal: 'Переключиться в локальный режим',
   target: 'Цель',
@@ -926,7 +921,6 @@ export const ru = {
   this_device: 'Это устройство',
   this_device_suffix: '(это устройство)',
   this_vault_only: 'Только это хранилище',
-  thorchain_address: 'THORChain-адрес',
   thorchain_address_required_for_referrals:
     'Чтобы использовать реферальную программу, нужен THORChain-адрес',
   tns_alnum_only: 'Referral-код должен содержать только буквы и цифры',
@@ -985,7 +979,6 @@ export const ru = {
   unlock_discount_tier_description_ultimate:
     'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>полную отмену комиссии Vultisig</b> для всех свопов.',
   unlock_tier: 'Разблокировать уровень',
-  unmerge: 'Разъединить',
   unfreeze: 'Unfreeze',
   unknown: 'Неизвестно',
   unlimited: 'Без ограничений',

@@ -566,8 +566,6 @@ export const es = {
   max: 'Máximo',
   max_4_characters: 'Máximo 4 caracteres',
   memo: 'Memorándum',
-  merge: 'Unir',
-  merged: 'Fusionado',
   message: 'Mensaje',
   message_required: 'El mensaje es obligatorio',
   message_to_sign: 'Mensaje para firmar',
@@ -579,7 +577,6 @@ export const es = {
   missing_destination_address: 'Dirección de destino faltante',
   missing_devices_for_migration:
     'Únase a los siguientes dispositivos para migrar su bóveda',
-  missing_thorchain_address: 'Falta la dirección de THORChain',
   more: 'más',
   moreInfo: 'Más información',
   more_coming_soon: 'Próximamente más',
@@ -606,7 +603,6 @@ export const es = {
   no_connected_dapps: 'No hay dApps conectadas',
   no_connected_dapps_desc:
     'Las dApps aparecerán aquí cada vez que interactúes con ellas',
-  no_mergeable_tokens_found: 'No se encontraron tokens fusionables',
   no_referral_yet: 'Aún no hay referencias',
   no_token_found: 'Token no encontrado',
   no_transactions_yet: 'Aún no se han realizado transacciones.',
@@ -931,7 +927,6 @@ export const es = {
     input: 'El monto del intercambio es correcto',
     output: 'Estoy de acuerdo con el monto mínimo que recibiré',
   },
-  switch: 'Cambiar',
   switchToInternet: 'Volver al modo Internet',
   switchToLocal: 'Cambiar al modo local',
   target: 'Objetivo',
@@ -940,7 +935,6 @@ export const es = {
   this_device: 'Este dispositivo',
   this_device_suffix: '(este dispositivo)',
   this_vault_only: 'Sólo esta bóveda',
-  thorchain_address: 'Dirección de THORChain',
   thorchain_address_required_for_referrals:
     'Necesita tener una dirección THORChain para utilizar el programa de referencia',
   tns_alnum_only:
@@ -1001,7 +995,6 @@ export const es = {
   unlock_discount_tier_description_ultimate:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
   unlock_tier: 'Desbloquear nivel',
-  unmerge: 'Separar',
   unfreeze: 'Unfreeze',
   unknown: 'Desconocido',
   unlimited: 'Ilimitado',

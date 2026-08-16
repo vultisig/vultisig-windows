@@ -571,8 +571,6 @@ export const it = {
   max: 'Massimo',
   max_4_characters: 'Massimo 4 caratteri',
   memo: 'Promemoria',
-  merge: 'Unisci',
-  merged: 'Unito',
   message: 'Messaggio',
   message_required: 'Il messaggio è obbligatorio',
   message_to_sign: 'Messaggio da firmare',
@@ -584,7 +582,6 @@ export const it = {
   missing_destination_address: 'Indirizzo di destinazione mancante',
   missing_devices_for_migration:
     'Unisciti ai seguenti dispositivi per migrare il tuo vault',
-  missing_thorchain_address: 'Indirizzo THORChain mancante',
   more: 'Di più',
   moreInfo: 'Maggiori informazioni',
   more_coming_soon: 'Altro in arrivo',
@@ -611,7 +608,6 @@ export const it = {
   no_connected_dapps: 'Nessuna dApp connessa',
   no_connected_dapps_desc:
     'Le dApp appariranno qui ogni volta che interagisci con esse',
-  no_mergeable_tokens_found: 'Nessun token unificabile trovato',
   no_referral_yet: 'Nessun riferimento ancora.',
   no_token_found: 'Token non trovato',
   no_transactions_yet: 'Nessuna transazione ancora',
@@ -932,7 +928,6 @@ export const it = {
     input: "L'importo dello swap è corretto",
     output: "Accetto l'importo minimo che riceverò",
   },
-  switch: 'Interruttore',
   switchToInternet: 'Torna alla modalità Internet',
   switchToLocal: 'Passa alla modalità locale',
   target: 'Bersaglio',
@@ -941,7 +936,6 @@ export const it = {
   this_device: 'Questo dispositivo',
   this_device_suffix: '(questo dispositivo)',
   this_vault_only: 'Solo questo Vault',
-  thorchain_address: 'Indirizzo THORChain',
   thorchain_address_required_for_referrals:
     'Devi avere un indirizzo THORChain per utilizzare il programma di referral',
   tns_alnum_only:
@@ -1004,7 +998,6 @@ export const it = {
   unlock_discount_tier_description_ultimate:
     "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
   unlock_tier: 'Sblocca livello',
-  unmerge: 'Separare',
   unfreeze: 'Unfreeze',
   unknown: 'Sconosciuto',
   unlimited: 'Illimitato',
