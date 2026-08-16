@@ -56,6 +56,11 @@ const earliestExpiryAt = (cache: CacheData): number | null => {
   return expiries.length > 0 ? Math.min(...expiries) : null
 }
 
+// Every mutation is a read-modify-write across an await, so a lock landing
+// mid-write would otherwise be undone by the pending writer. Clearing bumps this
+// synchronously; a writer that sees a different value drops its write.
+let clearGeneration = 0
+
 let expiryTimeout: ReturnType<typeof setTimeout> | null = null
 
 const scheduleExpiry = (cache: CacheData): void => {
@@ -93,8 +98,13 @@ const scheduleExpiry = (cache: CacheData): void => {
  * unused password does not sit in session storage for the whole browser session.
  */
 export const pruneExpiredVaultPasswords = async (): Promise<void> => {
+  const generation = clearGeneration
   const cache = await getCache()
   const remaining = withoutExpiredEntries(cache)
+
+  if (generation !== clearGeneration) {
+    return
+  }
 
   if (Object.keys(remaining).length !== Object.keys(cache).length) {
     await setCache(remaining)
@@ -109,6 +119,8 @@ export const pruneExpiredVaultPasswords = async (): Promise<void> => {
  * that would otherwise outlive the lock.
  */
 export const clearVaultPasswordCache = async (): Promise<void> => {
+  clearGeneration += 1
+
   await setCache({})
   scheduleExpiry({})
 }
@@ -119,17 +131,24 @@ type CacheVaultPasswordInput = {
 }
 
 /**
- * Caches a fast-vault password for its TTL and arms the expiry timer.
+ * Caches a fast-vault password for its TTL and arms the expiry timer. A lock
+ * that lands while this is in flight wins: the write is dropped rather than
+ * restoring the password behind the gate.
  */
 export const cacheVaultPassword = async ({
   vaultId,
   password,
 }: CacheVaultPasswordInput) => {
+  const generation = clearGeneration
   const cache = withoutExpiredEntries(await getCache())
 
   cache[vaultId] = {
     password,
     expiresAt: Date.now() + cacheDurationMs,
+  }
+
+  if (generation !== clearGeneration) {
+    return
   }
 
   await setCache(cache)

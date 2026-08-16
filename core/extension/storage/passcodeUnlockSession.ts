@@ -119,8 +119,15 @@ export const passcodeUnlockSessionStorage: PasscodeUnlockSessionStorage = {
         [passcodeUnlockSessionChromeStorageKey]: payload,
       })
     } catch {
-      // ignore — session persistence is best-effort, and a sealing failure must
-      // never fall back to writing the passcode in the clear
+      // Session persistence is best-effort, and a sealing failure must never
+      // fall back to writing the passcode in the clear. Drop any earlier record
+      // too — it still opens to an earlier passcode under the same key, and
+      // leaving it would hand that stale passcode back on the next read.
+      try {
+        await area.remove(passcodeUnlockSessionChromeStorageKey)
+      } catch {
+        // ignore
+      }
     }
   },
   clearPasscodeUnlockSession: async () => {

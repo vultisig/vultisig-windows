@@ -29,24 +29,27 @@ beforeEach(() => {
   alarms.clear.mockClear()
   vi.useFakeTimers()
   vi.setSystemTime(new Date('2026-01-01T00:00:00Z'))
-  ;(globalThis as any).chrome = {
-    storage: {
-      session: {
-        get: async (key: string) => ({ [key]: sessionStore.get(key) }),
-        set: async (items: Record<string, unknown>) => {
-          for (const [key, value] of Object.entries(items)) {
-            sessionStore.set(key, value)
-          }
+
+  Object.assign(globalThis, {
+    chrome: {
+      storage: {
+        session: {
+          get: async (key: string) => ({ [key]: sessionStore.get(key) }),
+          set: async (items: Record<string, unknown>) => {
+            for (const [key, value] of Object.entries(items)) {
+              sessionStore.set(key, value)
+            }
+          },
         },
       },
+      alarms,
     },
-    alarms,
-  }
+  })
 })
 
 afterEach(() => {
   vi.useRealTimers()
-  delete (globalThis as any).chrome
+  Reflect.deleteProperty(globalThis, 'chrome')
 })
 
 describe('fast vault password cache', () => {
@@ -81,6 +84,38 @@ describe('fast vault password cache', () => {
     await vi.advanceTimersByTimeAsync(ttlMs - 1_000)
 
     expect(readStoredCache()).toHaveProperty('vault-a')
+  })
+
+  it('drops an in-flight write when a lock clears the cache mid-write', async () => {
+    const { cacheVaultPassword, clearVaultPasswordCache } =
+      await loadPasswordCache()
+
+    const pendingWrite = cacheVaultPassword({
+      vaultId: 'vault-a',
+      password: 'secret-a',
+    })
+
+    await clearVaultPasswordCache()
+    await pendingWrite
+
+    expect(readStoredCache()).toEqual({})
+  })
+
+  it('drops an in-flight prune when a lock clears the cache mid-prune', async () => {
+    const { clearVaultPasswordCache, pruneExpiredVaultPasswords } =
+      await loadPasswordCache()
+
+    sessionStore.set(storageKey, {
+      'vault-a': { password: 'secret-a', expiresAt: Date.now() - 1 },
+      'vault-b': { password: 'secret-b', expiresAt: Date.now() + ttlMs },
+    })
+
+    const pendingPrune = pruneExpiredVaultPasswords()
+
+    await clearVaultPasswordCache()
+    await pendingPrune
+
+    expect(readStoredCache()).toEqual({})
   })
 
   it('refuses a stale entry even when the timer never ran', async () => {
