@@ -14,7 +14,6 @@ import { CustomSpecific } from './CustomSpecific'
 import { FreezeSpecific } from './FreezeSpecific/FreezeSpecific'
 import { TronUnfreezeSpecific } from './FreezeSpecific/TronUnfreezeSpecific'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
-import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { MintSpecific } from './MintUnmintSpecific/MintSpecific/MintSpecific'
 import { RedeemSpecific } from './MintUnmintSpecific/RedeemSpecific/RedeemSpecific'
 import { OpenTrustLineSpecific } from './OpenTrustLineSpecific/OpenTrustLineSpecific'
@@ -25,9 +24,7 @@ import { SolanaUnstakeSpecific } from './SolanaStakingSpecific/SolanaUnstakeSpec
 import { SolanaWithdrawSpecific } from './SolanaStakingSpecific/SolanaWithdrawSpecific'
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
-import { SwitchSpecific } from './SwitchSpecific'
 import { ThorLpSpecific } from './ThorLpSpecific'
-import { UnmergeSpecific } from './UnmergeSpecific/UnmergeSpecific'
 import { WithdrawRujiRewardsSpecific } from './WithdrawRujiRewardsSpecific'
 
 export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
@@ -52,11 +49,8 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
           />
         ),
         ibc_transfer: () => <IBCTransferSpecific />,
-        merge: () => <MergeSpecific />,
-        switch: () => <SwitchSpecific />,
         unstake: () => <UnstakeSpecific />,
         stake: () => <StakeSpecific />,
-        unmerge: () => <UnmergeSpecific />,
         mint: () => <MintSpecific />,
         redeem: () => <RedeemSpecific />,
         withdraw_ruji_rewards: () => <WithdrawRujiRewardsSpecific />,

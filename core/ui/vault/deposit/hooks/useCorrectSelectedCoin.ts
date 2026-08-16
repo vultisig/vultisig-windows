@@ -8,17 +8,13 @@ import { useCallback } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { isBruneStakeCoin, isStakeableCoin } from '../config'
-import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useDepositAction } from '../providers/DepositActionProvider'
-import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
 export const useCorrectSelectedCoin = () => {
   const [action] = useDepositAction()
   const coins = useCurrentVaultCoins()
-  const unmergeOptions = useUnmergeOptions()
-  const mergeOptions = useMergeOptions()
   const redeemOptions = useRedeemOptions()
   const mintOptions = useMintOptions()
 
@@ -64,7 +60,6 @@ export const useCorrectSelectedCoin = () => {
 
       return match(action, {
         ibc_transfer: () => currentDepositCoin,
-        switch: () => currentDepositCoin,
         bond_with_lp: () => shouldBePresent(potentialCACAOCoin),
         unbond_with_lp: () => shouldBePresent(potentialCACAOCoin),
         vote: () => shouldBePresent(potentialRUNECoin),
@@ -84,20 +79,6 @@ export const useCorrectSelectedCoin = () => {
           return shouldBePresent(currentCoin || redeemOptions[0])
         },
         bond: () => shouldBePresent(potentialRUNECoin),
-        merge: () => {
-          const currentCoin = findByTicker({
-            coins: mergeOptions,
-            ticker,
-          })
-          return shouldBePresent(currentCoin || mergeOptions[0])
-        },
-        unmerge: () => {
-          const currentCoin = findByTicker({
-            coins: unmergeOptions,
-            ticker,
-          })
-          return shouldBePresent(currentCoin || unmergeOptions[0])
-        },
         stake: selectStakeableCoin,
         // Claiming RUJI rewards is a RUJI-only action; force the RUJI coin so a
         // different selected coin (e.g. bRUNE) can't reach a claim path its
@@ -140,6 +121,6 @@ export const useCorrectSelectedCoin = () => {
         solana_finish_move: selectNativeCoin,
       })
     },
-    [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]
+    [action, coins, mintOptions, redeemOptions]
   )
 }

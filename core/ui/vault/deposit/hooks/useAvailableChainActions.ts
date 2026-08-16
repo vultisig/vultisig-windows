@@ -7,8 +7,6 @@ import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction, chainActionsRecord } from '../ChainAction'
 import { isBruneStakeCoin, isStakeableChain, isStakeableCoin } from '../config'
 import { DepositEnabledChain } from '../DepositEnabledChain'
-import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
-import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
@@ -16,8 +14,6 @@ export const useAvailableChainActions = (chain: Chain) => {
   const coins = useCurrentVaultCoins()
   const mintOptions = useMintOptions()
   const redeemOptions = useRedeemOptions()
-  const mergeOptions = useMergeOptions()
-  const unmergeOptions = useUnmergeOptions()
 
   const hasStakeableCoins = useMemo(
     () =>
@@ -56,9 +52,6 @@ export const useAvailableChainActions = (chain: Chain) => {
         freeze: () => true,
         unfreeze: () => true,
         ibc_transfer: () => true,
-        merge: () => mergeOptions.length > 0,
-        switch: () => true,
-        unmerge: () => unmergeOptions.length > 0,
         mint: () => mintOptions.length > 0,
         redeem: () => redeemOptions.length > 0,
         withdraw_ruji_rewards: () => !!findByTicker({ coins, ticker: 'RUJI' }),
@@ -85,9 +78,7 @@ export const useAvailableChainActions = (chain: Chain) => {
     chain,
     coins,
     hasThorchainAddress,
-    mergeOptions.length,
     mintOptions.length,
     redeemOptions.length,
-    unmergeOptions.length,
   ])
 }

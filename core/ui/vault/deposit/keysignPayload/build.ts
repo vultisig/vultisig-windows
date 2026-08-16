@@ -24,10 +24,6 @@ import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosStakingGasLimit } from '@vultisig/core-chain/chains/cosmos/cosmosGasLimitRecord'
 import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
-import {
-  kujiraCoinMigratedToThorChainDestinationId,
-  kujiraCoinThorChainMergeContracts,
-} from '@vultisig/core-chain/chains/cosmos/thor/kujira-merge'
 import { thorchainLpChainCode } from '@vultisig/core-chain/chains/cosmos/thor/thorchainLp'
 import {
   yieldBearingAssetsAffiliateAddress,
@@ -68,7 +64,6 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 import { maxBigInt } from '@vultisig/lib-utils/math/maxBigInt'
-import { mirrorRecord } from '@vultisig/lib-utils/record/mirrorRecord'
 import { FieldValues } from 'react-hook-form'
 
 import {
@@ -197,7 +192,6 @@ export const buildDepositKeysignPayload = async ({
     return trustLinePayload
   }
 
-  const isUnmerge = action === 'unmerge'
   const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
   const isTonFunction = coin.chain === Chain.Ton
 
@@ -510,16 +504,7 @@ export const buildDepositKeysignPayload = async ({
     return keysignPayload
   }
 
-  if (
-    isOneOf(action, [
-      'leave',
-      'unbond',
-      'bond',
-      'ibc_transfer',
-      'switch',
-      'merge',
-    ])
-  ) {
+  if (isOneOf(action, ['leave', 'unbond', 'bond', 'ibc_transfer'])) {
     // THORChain UNBOND requires zero coin amount - the unbond amount is only in the memo
     const toAmountForAction =
       action === 'unbond'
@@ -535,27 +520,6 @@ export const buildDepositKeysignPayload = async ({
         ? shouldBePresent(validatorAddress)
         : (receiver ?? keysignPayload.toAddress),
       toAmount: toAmountForAction,
-    })
-  } else if (isUnmerge) {
-    let contractAddress: string
-
-    const reverseLookup = mirrorRecord(
-      kujiraCoinMigratedToThorChainDestinationId
-    )
-    const tokenKey = reverseLookup[shouldBePresent(coin.id)]
-    if (tokenKey) {
-      contractAddress = kujiraCoinThorChainMergeContracts[tokenKey]
-    } else {
-      throw new Error(`Unknown unmerge contract for token: ${coin.ticker}`)
-    }
-
-    keysignPayload = create(KeysignPayloadSchema, {
-      ...keysignPayload,
-      toAddress: contractAddress,
-      toAmount: toChainAmount(
-        shouldBePresent(amount),
-        coin.decimals
-      ).toString(),
     })
   } else if (!isOneOf(action, ['vote'])) {
     if (hasAmount && amountUnits) {

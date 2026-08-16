@@ -568,8 +568,6 @@ export const pt = {
   max: 'Máximo',
   max_4_characters: 'Máximo de 4 caracteres',
   memo: 'Memorando',
-  merge: 'Fusão',
-  merged: 'Fundido',
   message: 'Mensagem',
   message_required: 'É necessário enviar uma mensagem.',
   message_to_sign: 'Mensagem para assinar',
@@ -581,7 +579,6 @@ export const pt = {
   missing_destination_address: 'Endereço de destino ausente',
   missing_devices_for_migration:
     'Conecte-se aos seguintes dispositivos para migrar seu cofre.',
-  missing_thorchain_address: 'Endereço THORChain ausente',
   more: 'mais',
   moreInfo: 'Mais informações',
   more_coming_soon: 'Em breve mais',
@@ -608,7 +605,6 @@ export const pt = {
   no_connected_dapps: 'Nenhum dApp conectado',
   no_connected_dapps_desc:
     'Os dApps aparecerão aqui sempre que você interagir com eles.',
-  no_mergeable_tokens_found: 'Nenhum token mesclável encontrado',
   no_referral_yet: 'Ainda não há indicação.',
   no_token_found: 'Token não encontrado',
   no_transactions_yet: 'Ainda não há transações.',
@@ -929,7 +925,6 @@ export const pt = {
     input: 'O valor da troca está correto.',
     output: 'Concordo com o valor mínimo que receberei.',
   },
-  switch: 'Trocar',
   switchToInternet: 'Volte para o modo de internet.',
   switchToLocal: 'Alternar para o modo local',
   target: 'Alvo',
@@ -938,7 +933,6 @@ export const pt = {
   this_device: 'Este dispositivo',
   this_device_suffix: '(este dispositivo)',
   this_vault_only: 'Somente este cofre',
-  thorchain_address: 'Endereço THORChain',
   thorchain_address_required_for_referrals:
     'Você precisa ter um endereço THORChain para usar o programa de indicação.',
   tns_alnum_only:
@@ -999,7 +993,6 @@ export const pt = {
   unlock_discount_tier_description_ultimate:
     'Ao possuir o token {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa Vultisig</b> em todas as trocas.',
   unlock_tier: 'Desbloquear nível',
-  unmerge: 'Desfazer fusão',
   unfreeze: 'Unfreeze',
   unknown: 'Desconhecido',
   unlimited: 'Ilimitado',

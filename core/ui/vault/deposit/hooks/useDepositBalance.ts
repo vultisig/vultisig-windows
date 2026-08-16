@@ -30,10 +30,7 @@ export const useDepositBalance = ({
     enabled: selectedChainAction === 'unbond',
   })
 
-  const selectedCoinBalance = useDepositCoinBalance({
-    action: selectedChainAction,
-    chain,
-  })
+  const selectedCoinBalance = useDepositCoinBalance({ chain })
 
   const tronFrozenBalance = useTronFrozenBalance({
     resourceType: tronResourceType ?? 'BANDWIDTH',

@@ -648,8 +648,6 @@ export const en = {
   max_4_characters: 'Max 4 characters',
   max_supply: 'Max Supply',
   memo: 'Memo',
-  merge: 'Merge',
-  merged: 'Merged',
   message: 'Message',
   message_required: 'Message is required',
   message_to_sign: 'Message to sign',
@@ -661,7 +659,6 @@ export const en = {
   missing_destination_address: 'Missing Destination Address',
   missing_devices_for_migration:
     'Join with the following devices to migrate your vault',
-  missing_thorchain_address: 'Missing THORChain Address',
   more: 'more',
   moreInfo: 'More Info',
   more_coming_soon: 'More coming soon',
@@ -690,7 +687,6 @@ export const en = {
   no_connected_dapps: 'No connected dApps',
   no_connected_dapps_desc:
     'dApps will appear here whenever you interact with them',
-  no_mergeable_tokens_found: 'No mergeable tokens found',
   no_referral_yet: 'No referral yet.',
   no_token_found: 'Token not found',
   no_transactions_yet: 'No transactions yet',
@@ -1293,7 +1289,6 @@ export const en = {
     input: 'The swap amount is correct',
     output: "I agree with the min. amount I'll receive",
   },
-  switch: 'Switch',
   switchToInternet: 'Switch back to internet mode',
   switchToLocal: 'Switch to local mode',
   target: 'Target',
@@ -1302,7 +1297,6 @@ export const en = {
   this_device: 'This Device',
   this_device_suffix: '(this device)',
   this_vault_only: 'This Vault Only',
-  thorchain_address: 'THORChain Address',
   thorchain_address_required_for_referrals:
     'You need to have a THORChain address to use the referral program',
   tns_alnum_only: 'Referral code must contain only alphanumeric characters',
@@ -1367,7 +1361,6 @@ export const en = {
   unlock_discount_tier_description_ultimate:
     "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>complete Vultisig fee waiver</b> on all swaps.",
   unlock_tier: 'Unlock Tier',
-  unmerge: 'Unmerge',
   unfreeze: 'Unfreeze',
   unknown: 'Unknown',
   unlimited: 'Unlimited',

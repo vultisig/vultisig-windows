@@ -12,7 +12,6 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   bond: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   stake: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   unstake: { showBalance: true, balanceLabel: 'balance', showTicker: true },
-  switch: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   mint: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   redeem: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   withdraw_ruji_rewards: {
@@ -25,8 +24,6 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
     balanceLabel: 'balance',
     showTicker: false,
   },
-  merge: { showBalance: true, balanceLabel: 'balance', showTicker: false },
-  unmerge: { showBalance: true, balanceLabel: 'shares', showTicker: false },
   unbond: { showBalance: false, showTicker: false },
   leave: { showBalance: false, showTicker: false },
   custom: { showBalance: true, balanceLabel: 'balance', showTicker: true },
