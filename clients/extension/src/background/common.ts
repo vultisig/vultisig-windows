@@ -2,9 +2,11 @@ import { runBackgroundEventsAgent } from '@core/inpage-provider/background/event
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 
 import { getIsSidePanelEnabled } from '../storage/isSidePanelEnabled'
+import { registerFastVaultPasswordCacheExpiry } from './registerFastVaultPasswordCacheExpiry'
 import { registerFreshInstallStorageClear } from './registerFreshInstallStorageClear'
 
 registerFreshInstallStorageClear()
+registerFastVaultPasswordCacheExpiry()
 
 /**
  * Bootstraps the extension background: locks down built-in prototypes (non-Firefox),

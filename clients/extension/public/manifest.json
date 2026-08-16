@@ -51,7 +51,7 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["activeTab", "clipboardRead", "clipboardWrite", "notifications", "sidePanel", "storage", "windows", "tabs"],
+  "permissions": ["activeTab", "alarms", "clipboardRead", "clipboardWrite", "notifications", "sidePanel", "storage", "windows", "tabs"],
   "side_panel": {
     "default_path": "index.html"
   },
