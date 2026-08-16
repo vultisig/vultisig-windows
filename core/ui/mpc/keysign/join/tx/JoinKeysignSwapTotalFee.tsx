@@ -20,9 +20,9 @@ type JoinKeysignSwapTotalFeeProps = {
  * uses so both devices arrive at one figure.
  *
  * Callers must only render this where the payload actually carries a swap fee.
- * A total summed over gas alone would understate the cost by the larger of the
- * two amounts, on the one screen whose job is to show a co-signer what they are
- * about to approve.
+ * A total summed over gas alone drops that fee entirely, understating the cost
+ * by its full amount on the one screen whose job is to show a co-signer what it
+ * is about to approve.
  */
 export const JoinKeysignSwapTotalFee = ({
   keysignPayload,
