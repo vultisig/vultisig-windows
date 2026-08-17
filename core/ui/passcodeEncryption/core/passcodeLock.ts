@@ -29,18 +29,23 @@ export const isPasscodeRequired = ({
   encryptedSample !== null || vaults.some(vaultKeySharesArePasscodeEncrypted)
 
 /**
- * Whether the stored state is missing a passcode sample the active passcode
- * should fill in — either none is stored beside sealed shares, or the stored
- * one still uses the legacy KDF. Answers `false` when no passcode is in play,
- * so it can never turn the lock on for someone who has not set one.
+ * Synchronous gate for the post-unlock reconcile: whether the stored state
+ * could need its passcode sample rewritten.
+ *
+ * A sample can also be *stale* — current-format but sealed under a passcode the
+ * shares no longer answer to — and that only shows up under decryption. So this
+ * answers `true` whenever sealed shares exist to contradict the sample and
+ * leaves the real decision to {@link needsPasscodeSampleRewrite}. Answers
+ * `false` when no passcode is in play, so it can never turn the lock on for
+ * someone who has not set one.
  */
-export const needsPasscodeSample = ({
+export const mayNeedPasscodeSampleRewrite = ({
   vaults,
   encryptedSample,
 }: PasscodeLockState): boolean =>
-  encryptedSample === null
-    ? vaults.some(vaultKeySharesArePasscodeEncrypted)
-    : isLegacyEncryptedPasscodeBlob(encryptedSample)
+  (encryptedSample !== null &&
+    isLegacyEncryptedPasscodeBlob(encryptedSample)) ||
+  vaults.some(vaultKeySharesArePasscodeEncrypted)
 
 type VerifyPasscodeInput = PasscodeLockState & {
   passcode: string
@@ -87,4 +92,46 @@ export const verifyPasscode = async ({
   )
 
   return 'data' in result
+}
+
+type NeedsPasscodeSampleRewriteInput = PasscodeLockState & {
+  passcode: string
+}
+
+/**
+ * Whether the stored passcode sample has to be rewritten for the passcode the
+ * app is unlocked with.
+ *
+ * Three states qualify: no sample beside sealed shares, a sample still on the
+ * legacy KDF, and — the one only decryption can see — a current-format sample
+ * sealed under a passcode the shares no longer answer to, which is what a
+ * change-passcode interrupted between its two writes leaves behind.
+ *
+ * A healthy unlock costs one key derivation, spent opening the sample. The
+ * repair path spends a second one re-proving the passcode against the sealed
+ * shares: a sample is never replaced on the word of a passcode that cannot open
+ * the vault, and with nothing sealed to prove it against, nothing is written.
+ */
+export const needsPasscodeSampleRewrite = async ({
+  vaults,
+  encryptedSample,
+  passcode,
+}: NeedsPasscodeSampleRewriteInput): Promise<boolean> => {
+  if (encryptedSample === null) {
+    return vaults.some(vaultKeySharesArePasscodeEncrypted)
+  }
+
+  if (isLegacyEncryptedPasscodeBlob(encryptedSample)) {
+    return true
+  }
+
+  const opened = await attempt(() =>
+    decryptSample({ key: passcode, value: encryptedSample })
+  )
+
+  if ('data' in opened) {
+    return false
+  }
+
+  return verifyPasscode({ vaults, encryptedSample, passcode })
 }

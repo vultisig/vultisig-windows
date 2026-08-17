@@ -20,7 +20,10 @@ import {
   isPasscodeRequired,
   verifyPasscode,
 } from '@core/ui/passcodeEncryption/core/passcodeLock'
-import { encryptSample } from '@core/ui/passcodeEncryption/core/sample'
+import {
+  decryptSample,
+  encryptSample,
+} from '@core/ui/passcodeEncryption/core/sample'
 import { decryptVaultAllKeyShares } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
 import { useChangePasscodeMutation } from '@core/ui/passcodeEncryption/manage/change/mutations/changePasscode'
 import { useDisablePasscodeMutation } from '@core/ui/passcodeEncryption/mutations/useDisablePasscodeMutation'
@@ -266,6 +269,34 @@ const seedLegacyEncryptedVault = async () => {
 
 const healthyVault = { ecdsaShare, servedCiphertext: false }
 
+/** Which passcodes the stored proof answers to, in isolation from the shares. */
+const proofOpensWith = async (candidates: string[]) => {
+  const proof = await passcodeEncryptionStorage.getPasscodeEncryption()
+
+  if (proof === null) {
+    return null
+  }
+
+  const opens = await Promise.all(
+    candidates.map(candidate =>
+      decryptSample({ key: candidate, value: proof.encryptedSample }).then(
+        () => true,
+        () => false
+      )
+    )
+  )
+
+  return candidates.filter((_, index) => opens[index])
+}
+
+/** Runs the post-unlock reconcile the way `PasscodeEncryptionUpgrade` does. */
+const reconcileAfterUnlock = (passcodeInMemory: string) =>
+  runMutation({
+    useMutationHook: useUpgradePasscodeEncryptionMutation,
+    input: undefined,
+    passcodeInMemory,
+  })
+
 let restorePopup = () => {}
 
 /**
@@ -402,5 +433,92 @@ describe('passcode set/change survives a popup teardown', () => {
     await changePasscodeOverLegacyVault({ interleaveUpgrade: true })
 
     expect(await openVaultOnNextLaunch([newPasscode])).toEqual(healthyVault)
+  })
+
+  describe('the reconcile repairs a proof left disagreeing with the shares', () => {
+    // An interrupted change-passcode leaves a proof that is present and on the
+    // current format, but sealed under the old passcode. Unlock survives it —
+    // the shares are the authority — but the disagreement itself has to go, or
+    // it outlives every later unlock and strands the vault the moment no sealed
+    // share is left to outvote the proof.
+    const interruptChangePasscode = async () => {
+      await runMutation({
+        useMutationHook: useSetPasscodeMutation,
+        input: passcode,
+        passcodeInMemory: null,
+      })
+
+      restorePopup = killPopupAfterWrite(1)
+
+      await runMutation({
+        useMutationHook: useChangePasscodeMutation,
+        input: newPasscode,
+        passcodeInMemory: passcode,
+      })
+
+      restorePopup()
+      restorePopup = () => {}
+    }
+
+    it('rewrites the stale proof under the passcode the shares answer to', async () => {
+      await interruptChangePasscode()
+
+      expect(await proofOpensWith([passcode, newPasscode])).toEqual([passcode])
+
+      await reconcileAfterUnlock(newPasscode)
+
+      expect(await proofOpensWith([passcode, newPasscode])).toEqual([
+        newPasscode,
+      ])
+    })
+
+    it('leaves the lock accepting the new passcode once no sealed share is left', async () => {
+      await interruptChangePasscode()
+      await reconcileAfterUnlock(newPasscode)
+
+      // Deleting the vault removes the shares the lock screen was leaning on,
+      // so the proof alone decides. Before the repair this accepted only the
+      // old passcode.
+      await chrome.storage.local.set({ [StorageKey.vaults]: [] })
+
+      const encryptedSample = shouldBePresent(
+        await passcodeEncryptionStorage.getPasscodeEncryption()
+      ).encryptedSample
+
+      expect({
+        old: await verifyPasscode({
+          vaults: [],
+          encryptedSample,
+          passcode,
+        }),
+        new: await verifyPasscode({
+          vaults: [],
+          encryptedSample,
+          passcode: newPasscode,
+        }),
+      }).toEqual({ old: false, new: true })
+    })
+
+    it('writes nothing when the stored state already agrees', async () => {
+      await runMutation({
+        useMutationHook: useSetPasscodeMutation,
+        input: passcode,
+        passcodeInMemory: null,
+      })
+
+      const writesBefore = vi.mocked(chrome.storage.local.set).mock.calls.length
+
+      await reconcileAfterUnlock(passcode)
+
+      expect(
+        vi.mocked(chrome.storage.local.set).mock.calls.length - writesBefore
+      ).toBe(0)
+    })
+
+    it('never writes a proof when no passcode is in play', async () => {
+      await reconcileAfterUnlock(passcode)
+
+      expect(await passcodeEncryptionStorage.getPasscodeEncryption()).toBeNull()
+    })
   })
 })

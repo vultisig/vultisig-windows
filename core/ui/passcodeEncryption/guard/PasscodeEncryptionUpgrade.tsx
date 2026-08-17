@@ -2,7 +2,10 @@ import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useEffect, useRef } from 'react'
 
-import { isPasscodeRequired, needsPasscodeSample } from '../core/passcodeLock'
+import {
+  isPasscodeRequired,
+  mayNeedPasscodeSampleRewrite,
+} from '../core/passcodeLock'
 import { vaultKeySharesNeedPasscodeUpgrade } from '../core/vaultKeyShares'
 import { useUpgradePasscodeEncryptionMutation } from '../mutations/useUpgradePasscodeEncryptionMutation'
 import { usePasscode } from '../state/passcode'
@@ -33,7 +36,7 @@ export const PasscodeEncryptionUpgrade = () => {
     !!passcode &&
     isPasscodeRequired(lockState) &&
     (vaults.some(vaultKeySharesNeedPasscodeUpgrade) ||
-      needsPasscodeSample(lockState))
+      mayNeedPasscodeSampleRewrite(lockState))
 
   useEffect(() => {
     if (!shouldUpgrade) {

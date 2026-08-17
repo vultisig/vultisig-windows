@@ -1,5 +1,4 @@
 import { useCore } from '@core/ui/state/core'
-import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
@@ -9,7 +8,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { needsPasscodeSample } from '../core/passcodeLock'
+import { needsPasscodeSampleRewrite } from '../core/passcodeLock'
 import { encryptSample } from '../core/sample'
 import {
   decryptVaultAllKeyShares,
@@ -35,7 +34,6 @@ export const useUpgradePasscodeEncryptionMutation = () => {
   } = useCore()
   const refetchQueries = useRefetchQueries()
   const [passcode] = usePasscode()
-  const passcodeEncryption = usePasscodeEncryption()
   const vaults = useVaults()
 
   // Latest active passcode, so a concurrent change/disable (which captures and
@@ -43,6 +41,19 @@ export const useUpgradePasscodeEncryptionMutation = () => {
   // it overwrites records with stale-key blobs.
   const livePasscodeRef = useRef(passcode)
   livePasscodeRef.current = passcode
+
+  const readSampleRewriteNeed = async (key: string) => {
+    const [storedPasscodeEncryption, storedVaults] = await Promise.all([
+      getPasscodeEncryption(),
+      getVaults(),
+    ])
+
+    return needsPasscodeSampleRewrite({
+      vaults: storedVaults,
+      encryptedSample: storedPasscodeEncryption?.encryptedSample ?? null,
+      passcode: key,
+    })
+  }
 
   return useMutation({
     mutationFn: async () => {
@@ -90,29 +101,20 @@ export const useUpgradePasscodeEncryptionMutation = () => {
         }
       }
 
-      const wantsSample = needsPasscodeSample({
-        vaults,
-        encryptedSample: passcodeEncryption?.encryptedSample ?? null,
-      })
+      // Whether the sample is stale needs a decryption attempt, so unlike the
+      // re-wrap above this decides off stored state from the start rather than
+      // off the snapshot this render captured.
+      const wantsSample = await readSampleRewriteNeed(key)
 
       if (wantsSample) {
         const encrypted = await encryptSample({ key, value: uuidv4() })
 
         if (isPasscodeStale()) return
 
-        // Same reasoning as the vault re-write above: decide off what is stored
-        // now, not off the snapshot this render captured.
-        const [storedPasscodeEncryption, storedVaults] = await Promise.all([
-          getPasscodeEncryption(),
-          getVaults(),
-        ])
-
-        const stillWantsSample = needsPasscodeSample({
-          vaults: storedVaults,
-          encryptedSample: storedPasscodeEncryption?.encryptedSample ?? null,
-        })
-
-        if (!stillWantsSample) return
+        // Re-read for the same reason as the vault re-write: a concurrent
+        // change-passcode may have written its own sample while this one was
+        // being derived.
+        if (!(await readSampleRewriteNeed(key))) return
 
         await setPasscodeEncryption({ encryptedSample: encrypted })
         await refetchQueries([StorageKey.passcodeEncryption])
