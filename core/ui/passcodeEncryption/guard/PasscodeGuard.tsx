@@ -8,6 +8,7 @@ import { usePasscodeUnlockSession } from '../autoLock/usePasscodeUnlockSession'
 import { usePasscode } from '../state/passcode'
 import { EnterPasscode } from './EnterPasscode'
 import { PasscodeEncryptionUpgrade } from './PasscodeEncryptionUpgrade'
+import { useClearSigningCredentialsOnLock } from './useClearSigningCredentialsOnLock'
 
 export const PasscodeGuard = () => {
   const [passcode] = usePasscode()
@@ -22,6 +23,8 @@ export const PasscodeGuard = () => {
   })
 
   const isLocked = hasPasscodeEnabled && !passcode
+
+  useClearSigningCredentialsOnLock(isLocked)
 
   return (
     <>
