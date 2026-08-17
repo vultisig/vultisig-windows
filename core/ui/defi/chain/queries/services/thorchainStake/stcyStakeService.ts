@@ -1,11 +1,11 @@
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { tcyAutoCompounderConfig } from '@vultisig/core-chain/chains/cosmos/thor/tcy-autocompound/config'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { thorchainTokens } from '../../tokens'
-import { ThorchainStakePosition } from '../../types'
+import { RawThorchainStakePosition } from '../../types'
 import { parseBigint } from '../../utils/parsers'
 
 const bankApiBase = `${cosmosRpcUrl.THORChain}/cosmos/bank/v1beta1`
@@ -42,15 +42,14 @@ const getUnderlyingTcyAmount = ({
   return (shares * vaultBalance) / shareSupply
 }
 
-type FetchStcyStakePositionInput = {
+/**
+ * Fetches the sTCY stake position as price-free raw data. The fiat basis is
+ * the underlying TCY amount (shares × live redemption rate), valued with the
+ * TCY price at render.
+ */
+export const fetchStcyStakePosition = async (
   address: string
-  prices: Record<string, number>
-}
-
-export const fetchStcyStakePosition = async ({
-  address,
-  prices,
-}: FetchStcyStakePositionInput): Promise<ThorchainStakePosition | null> => {
+): Promise<RawThorchainStakePosition | null> => {
   try {
     const balance = await getBalanceByDenom(
       address,
@@ -80,20 +79,19 @@ export const fetchStcyStakePosition = async ({
       }
     }
 
-    const price = prices[coinKeyToString(thorchainTokens.tcy)] ?? 0
-    const fiatValue = getCoinValue({
-      amount: underlyingTcyAmount,
-      decimals: tcyAutoCompounderConfig.depositDecimals,
-      price,
-    })
-
     return {
       id: 'thor-stake-stcy',
       ticker: thorchainTokens.stcy.ticker,
       amount,
       type: 'stake',
       canUnstake: amount > 0n,
-      fiatValue,
+      fiatBasis: {
+        coinKey: coinKeyToString(thorchainTokens.tcy),
+        amount: fromChainAmount(
+          underlyingTcyAmount,
+          tcyAutoCompounderConfig.depositDecimals
+        ),
+      },
       estimatedReward: 0,
     }
   } catch {

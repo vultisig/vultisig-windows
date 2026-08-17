@@ -227,7 +227,7 @@ const queryNetworkInfo = async () => {
 }
 
 const queryStakePositions = async (address: string) => {
-  const result = await fetchStakePositions({ address, prices: {} })
+  const result = await fetchStakePositions(address)
   return result.positions.map(p => ({
     ticker: p.ticker,
     amount: fromChainAmount(p.amount, runeDecimals).toString(),

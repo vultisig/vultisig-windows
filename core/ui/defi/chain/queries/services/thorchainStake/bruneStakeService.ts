@@ -6,13 +6,8 @@ import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { thorchainTokens } from '../../tokens'
-import { ThorchainStakePosition } from '../../types'
+import { RawThorchainStakePosition } from '../../types'
 import { parseBigint } from '../../utils/parsers'
-
-type FetchBruneStakePositionInput = {
-  address: string
-  prices: Record<string, number>
-}
 
 /**
  * bRUNE staked position (the ybRUNE receipt from Rujira liquid bonding). Reads
@@ -20,15 +15,15 @@ type FetchBruneStakePositionInput = {
  * receipt.
  *
  * Unlike sTCY, ybRUNE has no direct price feed, so it is valued against bRUNE
- * via the receipt's NAV: `fiat = receiptShares × nav_per_share × bRUNE price`.
- * `nav_per_share` (~1.03) comes from the staking contract's `{"status":{}}`
- * smart query (`fetchNavPerShare`); it falls back to 1 when unavailable, so the
- * position still shows an approximate spot value rather than disappearing.
+ * via the receipt's NAV: the fiat basis is `receiptShares × nav_per_share` in
+ * bRUNE units, multiplied by the live bRUNE price at render. `nav_per_share`
+ * (~1.03) comes from the staking contract's `{"status":{}}` smart query
+ * (`fetchNavPerShare`); it falls back to 1 when unavailable, so the position
+ * still shows an approximate spot value rather than disappearing.
  */
-export const fetchBruneStakePosition = async ({
-  address,
-  prices,
-}: FetchBruneStakePositionInput): Promise<ThorchainStakePosition | null> => {
+export const fetchBruneStakePosition = async (
+  address: string
+): Promise<RawThorchainStakePosition | null> => {
   try {
     const denom = encodeURIComponent(bruneBondConfig.shareDenom)
     const balance = await queryUrl<{ balance?: { amount?: string } }>(
@@ -36,12 +31,7 @@ export const fetchBruneStakePosition = async ({
     )
     const amount = parseBigint(balance?.balance?.amount)
 
-    const brunePrice = prices[coinKeyToString(thorchainTokens.brune)] ?? 0
     const navPerShare = (await fetchNavPerShare(bruneBondConfig.contract)) ?? 1
-    const fiatValue =
-      fromChainAmount(amount, bruneBondConfig.shareDecimals) *
-      navPerShare *
-      brunePrice
 
     return {
       id: 'thor-stake-brune',
@@ -49,7 +39,11 @@ export const fetchBruneStakePosition = async ({
       amount,
       type: 'stake',
       canUnstake: amount > 0n,
-      fiatValue,
+      fiatBasis: {
+        coinKey: coinKeyToString(thorchainTokens.brune),
+        amount:
+          fromChainAmount(amount, bruneBondConfig.shareDecimals) * navPerShare,
+      },
       estimatedReward: 0,
     }
   } catch {

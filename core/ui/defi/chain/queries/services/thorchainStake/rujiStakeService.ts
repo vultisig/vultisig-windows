@@ -1,13 +1,13 @@
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { rujiStakeApiUrl } from '../../constants'
 import { thorchainTokens } from '../../tokens'
-import { ThorchainStakePosition } from '../../types'
+import { RawThorchainStakePosition } from '../../types'
 import { toDecimalFactor } from '../../utils/decimals'
 import { encodeBase64, parseBigint, parseNumber } from '../../utils/parsers'
 
@@ -152,21 +152,16 @@ const fetchRujiStakeSnapshot = async (
   }
 }
 
-type FetchRujiStakePositionsInput = {
-  address: string
-  prices: Record<string, number>
-}
-
 type BuildPositionInput = {
   id: string
   amount: bigint
-  extras?: Partial<ThorchainStakePosition>
+  extras?: Partial<RawThorchainStakePosition>
 }
 
 /**
  * Fetches the vault's RUJI staking positions as separate
- * {@link ThorchainStakePosition}s: an auto-compounding (sRUJI) position and a
- * bonded position. Each is emitted only when it holds value, so a bonded-only
+ * {@link RawThorchainStakePosition}s: an auto-compounding (sRUJI) position and
+ * a bonded position. Each is emitted only when it holds value, so a bonded-only
  * vault shows its bonded balance and an auto-compounding vault shows only the
  * compounded card; when neither holds value the bonded card is emitted with a
  * zero balance as an anchor to stake into. Returns `[]` if the lookup fails.
@@ -176,33 +171,30 @@ type BuildPositionInput = {
  * `liquidSize` and has no separately-claimable USDC (like sTCY). So they ride on
  * the bonded card, and the compounded card stays stat-free.
  */
-export const fetchRujiStakePositions = async ({
-  address,
-  prices,
-}: FetchRujiStakePositionsInput): Promise<ThorchainStakePosition[]> => {
+export const fetchRujiStakePositions = async (
+  address: string
+): Promise<RawThorchainStakePosition[]> => {
   const snapshot = await attempt(() => fetchRujiStakeSnapshot(address))
   if ('error' in snapshot) {
     return []
   }
 
   const { autoCompoundAmount, bondedAmount, rewardsAmount, apr } = snapshot.data
-  const price = prices[coinKeyToString(thorchainTokens.ruji)] ?? 0
 
   const buildPosition = ({
     id,
     amount,
     extras = {},
-  }: BuildPositionInput): ThorchainStakePosition => ({
+  }: BuildPositionInput): RawThorchainStakePosition => ({
     id,
     ticker: thorchainTokens.ruji.ticker,
     amount,
     type: 'stake',
     canUnstake: amount > 0n,
-    fiatValue: getCoinValue({
-      amount,
-      decimals: thorchainTokens.ruji.decimals,
-      price,
-    }),
+    fiatBasis: {
+      coinKey: coinKeyToString(thorchainTokens.ruji),
+      amount: fromChainAmount(amount, thorchainTokens.ruji.decimals),
+    },
     ...extras,
   })
 
@@ -213,7 +205,7 @@ export const fetchRujiStakePositions = async ({
     extras: { apr, rewards: rewardsAmount, rewardTicker: 'USDC' },
   })
 
-  const positions: ThorchainStakePosition[] = []
+  const positions: RawThorchainStakePosition[] = []
   if (autoCompoundAmount > 0n) {
     positions.push(
       buildPosition({
