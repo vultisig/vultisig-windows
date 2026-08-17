@@ -10,6 +10,10 @@ import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 
+/**
+ * Refresh button for a chain page: refetches the chain's coin balances and
+ * invalidates all price queries by category.
+ */
 export const RefreshVaultChainBalance = () => {
   const refetchQueries = useRefetchQueries()
   const refetchQueriesByCategory = useRefetchQueriesByCategory()

@@ -78,6 +78,10 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
   },
 }
 
+/**
+ * Refresh button for the DeFi tab: refetches every enabled chain's positions
+ * and pool data and invalidates all price queries by category.
+ */
 export const RefreshDefiData = () => {
   const refetchQueries = useRefetchQueries()
   const refetchQueriesByCategory = useRefetchQueriesByCategory()

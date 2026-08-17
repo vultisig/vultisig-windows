@@ -8,6 +8,10 @@ import { useRefetchQueriesByCategory } from '@lib/ui/query/hooks/useRefetchQueri
 import { useMutation } from '@tanstack/react-query'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 
+/**
+ * Refresh button for the vault page: refetches every portfolio coin's balance
+ * and invalidates all price queries by category.
+ */
 export const RefreshVaultBalance = () => {
   const refetchQueries = useRefetchQueries()
   const refetchQueriesByCategory = useRefetchQueriesByCategory()

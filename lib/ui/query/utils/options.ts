@@ -14,12 +14,15 @@ type UseQueryGenericOptions = Partial<
   >
 >
 
+/** Every query category that can be targeted by `useRefetchQueriesByCategory`. */
+export const queryCategories = ['price'] as const
+
 /**
  * Classes of queries that can be invalidated together by tagging them with
  * `meta.category`, regardless of their key shape (see
  * `useRefetchQueriesByCategory`).
  */
-export type QueryCategory = 'price'
+export type QueryCategory = (typeof queryCategories)[number]
 
 export const noRefetchQueryOptions: UseQueryGenericOptions = {
   refetchOnMount: false,

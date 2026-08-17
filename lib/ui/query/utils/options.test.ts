@@ -6,6 +6,7 @@ import {
   pricePersistQueryOptions,
   priceQueryRefetchInterval,
   priceQueryStaleTime,
+  queryCategories,
 } from './options'
 
 describe('persistQueryOptions', () => {
@@ -25,6 +26,7 @@ describe('pricePersistQueryOptions', () => {
   it('persists price data but respects staleness so stale or poisoned caches self-heal', () => {
     expect(priceQueryStaleTime).toBe(60_000)
     expect(priceQueryRefetchInterval).toBe(300_000)
+    expect(queryCategories).toContain(pricePersistQueryOptions.meta?.category)
     expect(pricePersistQueryOptions).toMatchObject({
       meta: { shouldPersist: true, category: 'price' },
       refetchOnMount: true,
