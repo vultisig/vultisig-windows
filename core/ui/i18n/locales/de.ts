@@ -572,8 +572,6 @@ export const de = {
   max: 'Max',
   max_4_characters: 'Maximal 4 Zeichen',
   memo: 'Memo',
-  merge: 'Verschmelzen',
-  merged: 'Zusammengeführt',
   message: 'Nachricht',
   message_required: 'Eine Nachricht ist erforderlich.',
   message_to_sign: 'Nachricht zum Unterschreiben',
@@ -585,7 +583,6 @@ export const de = {
   missing_destination_address: 'Fehlende Zieladresse',
   missing_devices_for_migration:
     'Verbinden Sie sich mit den folgenden Geräten, um Ihren Tresor zu migrieren.',
-  missing_thorchain_address: 'Fehlende THORChain-Adresse',
   more: 'mehr',
   moreInfo: 'Mehr Infos',
   more_coming_soon: 'Mehr in Kürze',
@@ -613,8 +610,6 @@ export const de = {
   no_connected_dapps: 'Keine verbundenen dApps',
   no_connected_dapps_desc:
     'dApps werden hier immer dann angezeigt, wenn Sie mit ihnen interagieren.',
-  no_mergeable_tokens_found:
-    'Es wurden keine zusammenführbaren Token gefunden.',
   no_referral_yet: 'Noch keine Weiterleitung.',
   no_token_found: 'Token nicht gefunden',
   no_transactions_yet: 'Bisher keine Transaktionen',
@@ -938,7 +933,6 @@ export const de = {
     input: 'Der Tauschbetrag ist korrekt.',
     output: 'Ich stimme dem Mindestbetrag zu, den ich erhalten werde.',
   },
-  switch: 'Schalten',
   switchToInternet: 'Zurück in den Internetmodus wechseln',
   switchToLocal: 'In den lokalen Modus wechseln',
   target: 'Ziel',
@@ -947,7 +941,6 @@ export const de = {
   this_device: 'Dieses Gerät',
   this_device_suffix: '(dieses Gerät)',
   this_vault_only: 'Nur dieser Tresor',
-  thorchain_address: 'THORChain-Adresse',
   thorchain_address_required_for_referrals:
     'Sie benötigen eine THORChain-Adresse, um am Empfehlungsprogramm teilnehmen zu können.',
   tns_alnum_only:
@@ -1009,7 +1002,6 @@ export const de = {
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   unlock_tier: 'Stufe freischalten',
-  unmerge: 'Aufheben',
   unfreeze: 'Unfreeze',
   unknown: 'Unbekannt',
   unlimited: 'Unbegrenzt',

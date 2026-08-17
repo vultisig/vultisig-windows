@@ -1,5 +1,5 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
-import { TakeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
+import { BlockingOverlay } from '@lib/ui/overlay/BlockingOverlay'
 
 import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
@@ -8,6 +8,7 @@ import { usePasscodeUnlockSession } from '../autoLock/usePasscodeUnlockSession'
 import { usePasscode } from '../state/passcode'
 import { EnterPasscode } from './EnterPasscode'
 import { PasscodeEncryptionUpgrade } from './PasscodeEncryptionUpgrade'
+import { useClearSigningCredentialsOnLock } from './useClearSigningCredentialsOnLock'
 
 export const PasscodeGuard = () => {
   const [passcode] = usePasscode()
@@ -23,20 +24,20 @@ export const PasscodeGuard = () => {
 
   const isLocked = hasPasscodeEnabled && !passcode
 
+  useClearSigningCredentialsOnLock(isLocked)
+
   return (
     <>
       {passcodeAutoLock && <PasscodeAutoLock />}
       {pendingPasscodeUnlockRestore && (
-        <TakeWholeSpaceAbsolutely>
+        <BlockingOverlay>
           <ProductLogoBlock />
-        </TakeWholeSpaceAbsolutely>
+        </BlockingOverlay>
       )}
       {isLocked && !pendingPasscodeUnlockRestore && (
-        <>
-          <TakeWholeSpaceAbsolutely>
-            <EnterPasscode />
-          </TakeWholeSpaceAbsolutely>
-        </>
+        <BlockingOverlay>
+          <EnterPasscode />
+        </BlockingOverlay>
       )}
       {hasPasscodeEnabled && !isLocked && !pendingPasscodeUnlockRestore && (
         <PasscodeEncryptionUpgrade />

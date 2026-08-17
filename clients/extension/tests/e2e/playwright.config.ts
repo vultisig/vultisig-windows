@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig } from '@playwright/test'
 import { config } from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -36,9 +36,10 @@ config({ path: path.resolve(__dirname, '.env') })
 // PLAYWRIGHT_OFFSCREEN=1 pushes Chrome windows off-screen so local runs don't
 // steal focus while you work. Extension tests can't run headless, so this is
 // the closest equivalent. CI keeps default positioning.
-const offscreenArgs = process.env.PLAYWRIGHT_OFFSCREEN === '1'
-  ? ['--window-position=-3000,-3000', '--window-size=480,600']
-  : []
+const offscreenArgs =
+  process.env.PLAYWRIGHT_OFFSCREEN === '1'
+    ? ['--window-position=-3000,-3000', '--window-size=480,600']
+    : []
 
 const extensionLaunchArgs = [
   `--disable-extensions-except=${extensionPath}`,
@@ -101,9 +102,11 @@ export default defineConfig({
         '**/vault-import-export.spec.ts',
         '**/transaction-history.spec.ts',
         '**/address-book.spec.ts',
+        '**/passcode-lock-layering.spec.ts',
         '**/visual-regression.spec.ts',
         '**/station-migration.spec.ts',
         '**/search-field.spec.ts',
+        '**/viewport-fit.spec.ts',
       ],
       use: {
         launchOptions: {
@@ -168,7 +171,16 @@ export default defineConfig({
   // Reporter for CI
   reporter: [
     ['list'],
-    ['html', { open: 'never', outputFolder: path.resolve(__dirname, 'playwright-report') }],
-    ['json', { outputFile: path.resolve(__dirname, 'test-results/results.json') }],
+    [
+      'html',
+      {
+        open: 'never',
+        outputFolder: path.resolve(__dirname, 'playwright-report'),
+      },
+    ],
+    [
+      'json',
+      { outputFile: path.resolve(__dirname, 'test-results/results.json') },
+    ],
   ],
 })

@@ -1,10 +1,9 @@
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
-import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { rujiraStakingConfig } from '@vultisig/core-chain/chains/cosmos/thor/rujira/config'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
-import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { match } from '@vultisig/lib-utils/match'
 import { FieldValues } from 'react-hook-form'
@@ -37,7 +36,6 @@ export const generateMemo = ({
     provider,
     operatorFee,
     destinationChain,
-    thorchainAddress,
   } = extractFormValues(depositFormData)
 
   return match(selectedChainAction, {
@@ -174,33 +172,6 @@ export const generateMemo = ({
 
       return `${destinationChain}:${sourceChannel}:${nodeAddress}`
     },
-    merge: () => {
-      const token = shouldBePresent(coin, 'Token to merge')
-      const denom =
-        token.chain === Chain.THORChain
-          ? token.ticker.toLowerCase()
-          : getDenom(token as CoinKey<CosmosChain>)
-
-      return `merge:THOR.${denom}`
-    },
-    switch: () => {
-      return `switch:${thorchainAddress}`
-    },
-    unmerge: () => {
-      if (!amount) {
-        throw new Error('Amount is required for unmerge')
-      }
-      if (!coin) {
-        throw new Error('Token is required for unmerge')
-      }
-
-      const sharesRaw = toChainAmount(amount, coin.decimals)
-      // For unmerge, use the full coin ID (e.g., "thor.kuji")
-      const denom = shouldBePresent(coin.id)
-      const memo = `unmerge:${denom.toLowerCase()}:${sharesRaw}`
-
-      return memo
-    },
     freeze: () =>
       `FREEZE:${shouldBePresent(depositFormData.resourceType, 'Resource type')}`,
     unfreeze: () =>
@@ -261,7 +232,6 @@ function extractFormValues(formData: FieldValues) {
     destinationChain: formData.destinationChain as string | null,
     destinationChannel: formData.destinationChannel as string | null,
     coin: formData.coin as Coin | null,
-    thorchainAddress: formData.thorchainAddress as string | null,
     autoCompound: Boolean(formData.autoCompound),
   }
 }

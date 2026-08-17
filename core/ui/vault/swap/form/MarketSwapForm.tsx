@@ -91,7 +91,7 @@ export const MarketSwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
   return (
     <PageContent
       as="form"
-      gap={40}
+      gap={12}
       data-testid="swap-form"
       {...getFormProps({
         onSubmit: handleSubmit,

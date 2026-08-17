@@ -3,6 +3,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import {
@@ -25,13 +26,26 @@ import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
+import { JoinKeysignSwapTotalFee } from './JoinKeysignSwapTotalFee'
 import { JoinSwapFiatAmount } from './JoinSwapFiatAmount'
 
+/**
+ * Joiner verify view for a swap. Carries the same cost breakdown and signing
+ * vault the initiator shows, so a co-signer approves the swap knowing what it
+ * pays and which vault pays it.
+ *
+ * The swap fee and the total that includes it render only when the payload
+ * carries a fee. An initiator that predates that field leaves it empty, and a
+ * co-signer holds no quote to recover it from — showing a total over gas alone
+ * would misstate the cost rather than admit it is unknown.
+ */
 export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
+  const vault = useCurrentVault()
 
   const swapPayload = shouldBePresent(
     getKeysignSwapPayload(value),
@@ -143,16 +157,42 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
             extra={<KeysignFeeAmount keysignPayload={value} />}
           />
           {swapFee && (
-            <ListItem
-              hoverable={false}
-              title={t('swap_fee')}
-              extra={
-                <Text color="shy">
-                  <SwapFeeFiatValue value={[swapFee]} />
-                </Text>
-              }
-            />
+            <>
+              <ListItem
+                hoverable={false}
+                title={t('swap_fee')}
+                extra={
+                  <Text color="shy">
+                    <SwapFeeFiatValue value={[swapFee]} />
+                  </Text>
+                }
+              />
+              <ListItem
+                hoverable={false}
+                title={t('total_fee')}
+                extra={
+                  <Text color="supporting">
+                    <JoinKeysignSwapTotalFee
+                      keysignPayload={value}
+                      swapFee={swapFee}
+                    />
+                  </Text>
+                }
+              />
+            </>
           )}
+          <ListItem
+            hoverable={false}
+            title={t('vault')}
+            extra={
+              <Text color="contrast">
+                {vault.name}{' '}
+                <Text as="span" color="shy">
+                  ({formatWalletAddress(fromCoin.address)})
+                </Text>
+              </Text>
+            }
+          />
         </List>
       </VStack>
       <SwapVerifyRecipient keysignPayload={value} />

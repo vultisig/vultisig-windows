@@ -558,8 +558,6 @@ export const hr = {
   max: 'Maks.',
   max_4_characters: 'Maks. 4 znaka',
   memo: 'Dopis',
-  merge: 'Spojiti',
-  merged: 'Spojeno',
   message: 'Poruka',
   message_required: 'Poruka je obavezna',
   message_to_sign: 'Poruka za potpis',
@@ -571,7 +569,6 @@ export const hr = {
   missing_destination_address: 'Nedostaje odredišna adresa',
   missing_devices_for_migration:
     'Pridružite se sljedećim uređajima za migraciju svog trezora',
-  missing_thorchain_address: 'Nedostaje THORChain adresa',
   more: 'više',
   moreInfo: 'Više informacija',
   more_coming_soon: 'Uskoro više',
@@ -598,7 +595,6 @@ export const hr = {
   no_connected_dapps: 'Nema povezanih dApp-ova',
   no_connected_dapps_desc:
     'dApps će se ovdje pojaviti kad god s njima komunicirate',
-  no_mergeable_tokens_found: 'Nisu pronađeni tokeni koji se mogu spojiti',
   no_referral_yet: 'Još nema preporuke.',
   no_token_found: 'Token nije pronađen',
   no_transactions_yet: 'Još nema transakcija',
@@ -924,7 +920,6 @@ export const hr = {
     input: 'Iznos zamjene je ispravan',
     output: 'Slažem se s minimalnim iznosom koji ću primiti',
   },
-  switch: 'Prekidač',
   switchToInternet: 'Vratite se u internetski način rada',
   switchToLocal: 'Prebaci se na lokalni način rada',
   target: 'Cilj',
@@ -933,7 +928,6 @@ export const hr = {
   this_device: 'Ovaj uređaj',
   this_device_suffix: '(ovaj uređaj)',
   this_vault_only: 'Samo ovaj trezor',
-  thorchain_address: 'THORChain adresa',
   thorchain_address_required_for_referrals:
     'Za korištenje programa preporuka potrebna vam je THORChain adresa',
   tns_alnum_only: 'Referral kod mora sadržavati samo alfanumeričke znakove',
@@ -992,7 +986,6 @@ export const hr = {
   unlock_discount_tier_description_ultimate:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
   unlock_tier: 'Otključaj razinu',
-  unmerge: 'Razdvoji',
   unfreeze: 'Unfreeze',
   unknown: 'Nepoznato',
   unlimited: 'Neograničen',
