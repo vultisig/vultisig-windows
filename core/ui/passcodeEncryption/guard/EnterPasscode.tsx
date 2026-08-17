@@ -1,14 +1,14 @@
 import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
-import { decryptSample } from '@core/ui/passcodeEncryption/core/sample'
+import { verifyPasscode } from '@core/ui/passcodeEncryption/core/passcodeLock'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
 import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
+import { useVaults } from '@core/ui/storage/vaults'
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -49,6 +49,7 @@ export const EnterPasscode = () => {
   const { t } = useTranslation()
 
   const passcodeEncryption = usePasscodeEncryption()
+  const vaults = useVaults()
 
   const [inputValue, setInputValue] = useState<string | null>(null)
   const [, setPasscode] = usePasscode()
@@ -59,34 +60,35 @@ export const EnterPasscode = () => {
     inputValue.length === passcodeEncryptionConfig.passcodeLength
 
   // Validate only once the full passcode is entered, and asynchronously:
-  // decryptSample runs the PBKDF2 key derivation, so validating synchronously on
-  // every keystroke would block the UI. On success the passcode unlocks the app.
+  // verifyPasscode runs the PBKDF2 key derivation, so validating synchronously
+  // on every keystroke would block the UI. On success the passcode unlocks the
+  // app.
   useEffect(() => {
     if (!isComplete) {
       setIsInvalid(false)
       return
     }
 
-    const { encryptedSample } = shouldBePresent(passcodeEncryption)
     let cancelled = false
 
-    decryptSample({ key: inputValue, value: encryptedSample })
-      .then(() => {
-        if (!cancelled) {
-          setIsInvalid(false)
-          setPasscode(inputValue)
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setIsInvalid(true)
-        }
-      })
+    verifyPasscode({
+      vaults,
+      encryptedSample: passcodeEncryption?.encryptedSample ?? null,
+      passcode: inputValue,
+    }).then(isValid => {
+      if (cancelled) return
+
+      setIsInvalid(!isValid)
+
+      if (isValid) {
+        setPasscode(inputValue)
+      }
+    })
 
     return () => {
       cancelled = true
     }
-  }, [isComplete, inputValue, passcodeEncryption, setPasscode])
+  }, [isComplete, inputValue, passcodeEncryption, vaults, setPasscode])
 
   return (
     <Wrapper>

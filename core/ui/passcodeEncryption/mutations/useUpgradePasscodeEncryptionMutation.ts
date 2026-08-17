@@ -4,28 +4,35 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
+import { needsPasscodeSample } from '../core/passcodeLock'
 import { encryptSample } from '../core/sample'
 import {
   decryptVaultAllKeyShares,
   encryptVaultAllKeyShares,
-  isLegacyEncryptedPasscodeBlob,
   mapVaultsKeyShares,
   vaultKeySharesNeedPasscodeUpgrade,
 } from '../core/vaultKeyShares'
 import { usePasscode } from '../state/passcode'
 
 /**
- * Re-encrypts passcode-protected data still using the legacy `SHA-256(passcode)`
- * KDF (key shares and the passcode sample) with the strong PBKDF2 cipher. Runs
- * once after unlock; vaults/sample already on the new format are skipped, so it
- * is a no-op once everything is upgraded.
+ * Reconciles passcode-protected data with the passcode currently in hand:
+ * re-encrypts anything still using the legacy `SHA-256(passcode)` KDF with the
+ * strong PBKDF2 cipher, and writes a passcode sample when none is stored beside
+ * sealed shares. Runs once after unlock; records already in order are skipped,
+ * so it is a no-op when there is nothing to reconcile.
  */
 export const useUpgradePasscodeEncryptionMutation = () => {
-  const { updateVaultsKeyShares, setPasscodeEncryption } = useCore()
+  const {
+    updateVaultsKeyShares,
+    setPasscodeEncryption,
+    getPasscodeEncryption,
+    getVaults,
+  } = useCore()
   const refetchQueries = useRefetchQueries()
   const [passcode] = usePasscode()
   const passcodeEncryption = usePasscodeEncryption()
@@ -40,7 +47,6 @@ export const useUpgradePasscodeEncryptionMutation = () => {
   return useMutation({
     mutationFn: async () => {
       const key = shouldBePresent(passcode, 'passcode')
-      const { encryptedSample } = shouldBePresent(passcodeEncryption)
 
       const isPasscodeStale = () => livePasscodeRef.current !== key
 
@@ -62,14 +68,51 @@ export const useUpgradePasscodeEncryptionMutation = () => {
 
         if (isPasscodeStale()) return
 
-        await updateVaultsKeyShares(vaultsKeyShares)
-        await refetchQueries([StorageKey.vaults])
+        // The ref above only moves once a concurrent change-passcode reaches
+        // its own `setPasscode`, which is after it has already rewritten every
+        // vault — so it is not enough on its own. Re-read what is stored and
+        // keep only the records that still want this re-wrap; anything another
+        // flow has since rewritten is left alone.
+        const storedVaults = await getVaults()
+        const stillLegacy = Object.fromEntries(
+          Object.entries(vaultsKeyShares).filter(([vaultId]) => {
+            const stored = storedVaults.find(v => getVaultId(v) === vaultId)
+
+            return (
+              stored !== undefined && vaultKeySharesNeedPasscodeUpgrade(stored)
+            )
+          })
+        )
+
+        if (Object.keys(stillLegacy).length > 0) {
+          await updateVaultsKeyShares(stillLegacy)
+          await refetchQueries([StorageKey.vaults])
+        }
       }
 
-      if (isLegacyEncryptedPasscodeBlob(encryptedSample)) {
+      const wantsSample = needsPasscodeSample({
+        vaults,
+        encryptedSample: passcodeEncryption?.encryptedSample ?? null,
+      })
+
+      if (wantsSample) {
         const encrypted = await encryptSample({ key, value: uuidv4() })
 
         if (isPasscodeStale()) return
+
+        // Same reasoning as the vault re-write above: decide off what is stored
+        // now, not off the snapshot this render captured.
+        const [storedPasscodeEncryption, storedVaults] = await Promise.all([
+          getPasscodeEncryption(),
+          getVaults(),
+        ])
+
+        const stillWantsSample = needsPasscodeSample({
+          vaults: storedVaults,
+          encryptedSample: storedPasscodeEncryption?.encryptedSample ?? null,
+        })
+
+        if (!stillWantsSample) return
 
         await setPasscodeEncryption({ encryptedSample: encrypted })
         await refetchQueries([StorageKey.passcodeEncryption])

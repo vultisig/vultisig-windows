@@ -14,10 +14,10 @@ import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { encryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPasscodeRequired'
 import { currentProductBrand } from '../../product/brand'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
-import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { StorageKey } from '../../storage/StorageKey'
 import { getDefaultVaultChains } from '../chains/defaultVaultChains'
 
@@ -25,7 +25,7 @@ export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
 ) => {
   const refetchQueries = useRefetchQueries()
-  const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const hasPasscodeEncryption = useIsPasscodeRequired()
   const [passcode] = usePasscode()
 
   const { createVault } = useCore()
