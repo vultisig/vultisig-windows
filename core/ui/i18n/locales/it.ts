@@ -1881,4 +1881,8 @@ export const it = {
   swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
   swap_protocol_fee: 'Tariffa del protocollo',
   swap_referral_fee: 'Commissione di segnalazione',
+  select_route: 'Seleziona il percorso',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
 }

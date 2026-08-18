@@ -1858,4 +1858,8 @@ export const nl = {
   swap_fee_included_in_rate: 'Inbegrepen in de vermelde wisselkoers',
   swap_protocol_fee: 'Protocolkosten',
   swap_referral_fee: 'Verwijzingsvergoeding',
+  select_route: 'Route selecteren',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
 }
