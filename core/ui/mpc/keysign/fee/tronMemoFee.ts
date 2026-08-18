@@ -5,8 +5,10 @@ import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { getSendFeeEstimate } from '@vultisig/core-mpc/keysign/send/getSendFeeEstimate'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 const defaultTronMemoFee = 1_000_000n
+const tronMemoFeeRequestTimeoutMs = 10_000
 
 type TronChainParameter = {
   key?: unknown
@@ -34,25 +36,41 @@ const parseMemoFee = (value: unknown): bigint | undefined => {
 export const fetchTronMemoFee = async (
   fetcher: typeof fetch = fetch
 ): Promise<bigint> => {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    tronMemoFeeRequestTimeoutMs
+  )
+
   try {
-    const response = await fetcher(`${tronRpcUrl}/wallet/getchainparameters`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: '{}',
+    const result = await attempt(async () => {
+      const response = await fetcher(
+        `${tronRpcUrl}/wallet/getchainparameters`,
+        {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: '{}',
+          signal: controller.signal,
+        }
+      )
+
+      if (!response.ok) return undefined
+
+      const data = (await response.json()) as TronChainParametersResponse
+      if (!Array.isArray(data.chainParameter)) return undefined
+
+      const memoParameter = (data.chainParameter as TronChainParameter[]).find(
+        parameter => parameter.key === 'getMemoFee'
+      )
+
+      return parseMemoFee(memoParameter?.value)
     })
 
-    if (!response.ok) return defaultTronMemoFee
-
-    const data = (await response.json()) as TronChainParametersResponse
-    if (!Array.isArray(data.chainParameter)) return defaultTronMemoFee
-
-    const memoParameter = (data.chainParameter as TronChainParameter[]).find(
-      parameter => parameter.key === 'getMemoFee'
-    )
-
-    return parseMemoFee(memoParameter?.value) ?? defaultTronMemoFee
-  } catch {
-    return defaultTronMemoFee
+    return 'error' in result
+      ? defaultTronMemoFee
+      : (result.data ?? defaultTronMemoFee)
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
 

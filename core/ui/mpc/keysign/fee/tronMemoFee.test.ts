@@ -55,6 +55,33 @@ describe('fetchTronMemoFee', () => {
   ])('falls back to 1 TRX for %s', async (_, fetcher) => {
     await expect(fetchTronMemoFee(fetcher)).resolves.toBe(1_000_000n)
   })
+
+  it('aborts a stalled request and falls back to 1 TRX', async () => {
+    vi.useFakeTimers()
+
+    try {
+      let requestSignal: AbortSignal | undefined
+      const fetcher = vi.fn<typeof fetch>().mockImplementation((_, init) => {
+        requestSignal = init?.signal ?? undefined
+
+        return new Promise<Response>((_, reject) => {
+          requestSignal?.addEventListener(
+            'abort',
+            () => reject(new DOMException('Aborted', 'AbortError')),
+            { once: true }
+          )
+        })
+      })
+
+      const result = fetchTronMemoFee(fetcher)
+      await vi.advanceTimersByTimeAsync(10_000)
+
+      await expect(result).resolves.toBe(1_000_000n)
+      expect(requestSignal?.aborted).toBe(true)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })
 
 describe('paysTronMemoFee', () => {
