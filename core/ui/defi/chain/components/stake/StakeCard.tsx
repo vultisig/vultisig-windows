@@ -90,6 +90,13 @@ type Props = {
   isPendingAction?: boolean
   infoUrl?: string
   onTransfer?: () => void
+  /**
+   * Coin the transfer actually moves. For receipt-backed positions this is the
+   * receipt token (e.g. sRUJI), not the coin shown in the card header.
+   */
+  transferCoin?: Coin
+  /** Base-unit balance of {@link Props.transferCoin}, once resolved. */
+  transferAmount?: bigint
 }
 
 export const StakeCard = ({
@@ -116,12 +123,21 @@ export const StakeCard = ({
   isPendingAction = false,
   infoUrl,
   onTransfer,
+  transferCoin,
+  transferAmount,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const unstakeAllowed = canUnstake ?? true
   const unstakeDisabled = actionsDisabled || !unstakeAllowed || isPendingAction
   const stakeDisabled = actionsDisabled || isPendingAction
+  const transferLabel =
+    transferCoin && transferAmount !== undefined
+      ? `${t('transfer')} ${formatAmount(
+          fromChainAmount(transferAmount, transferCoin.decimals),
+          { ticker: transferCoin.ticker }
+        )}`
+      : t('transfer')
   const unstakeMessage =
     !unstakeAllowed && unstakeAvailableDate
       ? t('unstake_available_on', {
@@ -272,21 +288,6 @@ export const StakeCard = ({
             : null}
         </StatRow>
 
-        {onTransfer && (
-          <ActionsRow>
-            {renderAction(
-              <Button
-                onClick={onTransfer}
-                disabled={actionsDisabled || isPendingAction}
-                icon={<ArrowUpRightIcon />}
-              >
-                {t('transfer')}
-              </Button>,
-              { width: '100%' }
-            )}
-          </ActionsRow>
-        )}
-
         <ActionsRow>
           {isSkeleton ? (
             <>
@@ -329,6 +330,22 @@ export const StakeCard = ({
             </>
           )}
         </ActionsRow>
+
+        {onTransfer && (
+          <ActionsRow>
+            {renderAction(
+              <Button
+                kind="secondary"
+                onClick={onTransfer}
+                disabled={actionsDisabled || isPendingAction}
+                icon={<ArrowUpRightIcon />}
+              >
+                {transferLabel}
+              </Button>,
+              { width: '100%' }
+            )}
+          </ActionsRow>
+        )}
         {isPendingAction ? (
           <Text size={12} color="primary">
             {t('adding_coin_to_vault')}
