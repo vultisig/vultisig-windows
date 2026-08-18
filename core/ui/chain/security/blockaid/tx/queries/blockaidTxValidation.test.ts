@@ -34,7 +34,11 @@ describe('getBlockaidTxValidationQuery', () => {
 
   it.each([
     { result_type: 'Error' },
+    { result_type: 'error' },
+    { result_type: 'eRrOr' },
     { result_type: 'Benign', status: 'Error' },
+    { result_type: 'Benign', status: 'error' },
+    { result_type: 'Benign', status: 'eRrOr' },
   ])('rejects a provider-side scan error: %o', async validation => {
     vi.mocked(getTxBlockaidValidation).mockResolvedValue(validation)
 
