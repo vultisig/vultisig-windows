@@ -1546,6 +1546,9 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" already exists',
+  vault_cannot_be_opened: 'This Vault cannot be opened',
+  vault_cannot_be_opened_description:
+    'The key shares on this device cannot be decrypted. Restore the Vault from a .vult backup.',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_backup_page_password_protection:

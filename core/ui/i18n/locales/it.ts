@@ -1043,6 +1043,9 @@ export const it = {
     version: 'Versione {{latestVersion}}',
   },
   vault_already_exists: 'Il caveau "{{name}}" esiste già',
+  vault_cannot_be_opened: 'Impossibile aprire questo Vault',
+  vault_cannot_be_opened_description:
+    'Le condivisioni della chiave su questo dispositivo non possono essere decrittografate. Ripristina il Vault da un backup .vult.',
   vault_backup_page_password_info:
     'Non archiviare mai le condivisioni Vault di dispositivi diversi nella stessa posizione',
   vault_backup_page_password_protection:

@@ -54,7 +54,11 @@ export const VaultBackupWithoutPassword = ({
 }: VaultBackupWithoutPasswordProps &
   Partial<OnBackProp> & { vaultIds: string[] }) => {
   const { t } = useTranslation()
-  const { mutate: backupVault, isPending } = useBackupVaultMutation({
+  const {
+    mutate: backupVault,
+    isPending,
+    error,
+  } = useBackupVaultMutation({
     onSuccess: onFinish,
     vaultIds,
   })
@@ -94,6 +98,11 @@ export const VaultBackupWithoutPassword = ({
             >
               {t('backup_with_password')}
             </Button>
+            {error?.message && (
+              <Text color="danger" size={12}>
+                {error.message}
+              </Text>
+            )}
           </VStack>
         </VStack>
       </FitPageContent>

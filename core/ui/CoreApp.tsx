@@ -13,6 +13,7 @@ import { TransactionStatusWatcher } from '@core/ui/transaction-history/status/Tr
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
 import { CoinsMetadataManager } from '@core/ui/vault/chain/coin/metadata/CoinsMetadataManager'
+import { useUnreadableVaultRecoveryId } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { vStack } from '@lib/ui/layout/Stack'
@@ -40,9 +41,10 @@ const Container = styled.div`
 
 const VaultDependentContent = () => {
   const vaults = useVaults()
+  const recoveryVaultId = useUnreadableVaultRecoveryId()
   const hasVaults = vaults.length > 0
 
-  if (!hasVaults) {
+  if (!hasVaults || recoveryVaultId) {
     return null
   }
 

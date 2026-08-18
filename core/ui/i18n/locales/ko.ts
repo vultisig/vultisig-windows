@@ -1049,6 +1049,9 @@ export const ko = {
     version: '버전 {{latestVersion}}',
   },
   vault_already_exists: 'Vault &quot;{{name}}&quot;이 이미 존재합니다.',
+  vault_cannot_be_opened: '이 Vault를 열 수 없습니다',
+  vault_cannot_be_opened_description:
+    '이 기기의 키 공유를 복호화할 수 없습니다. .vult 백업에서 Vault를 복원하세요.',
   vault_backup_page_password_info:
     '서로 다른 기기의 Vault 공유 파일을 같은 위치에 저장하지 마십시오.',
   vault_backup_page_password_protection:

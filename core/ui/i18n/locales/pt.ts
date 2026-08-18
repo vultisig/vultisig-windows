@@ -1040,6 +1040,9 @@ export const pt = {
     version: 'Versão {{latestVersion}}',
   },
   vault_already_exists: 'O Vault "{{name}}" já existe.',
+  vault_cannot_be_opened: 'Não é possível abrir este Vault',
+  vault_cannot_be_opened_description:
+    'Os compartilhamentos de chave neste dispositivo não podem ser descriptografados. Restaure o Vault a partir de um backup .vult.',
   vault_backup_page_password_info:
     'Nunca armazene compartilhamentos do Vault de dispositivos diferentes no mesmo local.',
   vault_backup_page_password_protection:

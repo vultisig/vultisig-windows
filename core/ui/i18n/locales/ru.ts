@@ -1023,6 +1023,9 @@ export const ru = {
     version: 'Версия {{latestVersion}}',
   },
   vault_already_exists: 'Хранилище "{{name}}" уже существует',
+  vault_cannot_be_opened: 'Этот Vault невозможно открыть',
+  vault_cannot_be_opened_description:
+    'Доли ключа на этом устройстве невозможно расшифровать. Восстановите Vault из резервной копии .vult.',
   vault_backup_page_password_info:
     'Никогда не храните доли хранилища разных устройств в одном месте',
   vault_backup_page_password_protection:

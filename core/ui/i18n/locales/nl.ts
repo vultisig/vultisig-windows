@@ -1027,6 +1027,9 @@ export const nl = {
     version: 'Versie {{latestVersion}}',
   },
   vault_already_exists: 'Kluis "{{name}}" bestaat al',
+  vault_cannot_be_opened: 'Deze Vault kan niet worden geopend',
+  vault_cannot_be_opened_description:
+    'De sleutelshares op dit apparaat kunnen niet worden ontsleuteld. Herstel de Vault vanuit een .vult-back-up.',
   vault_backup_page_password_info:
     'Sla kluis-shares van verschillende apparaten nooit op dezelfde locatie op',
   vault_backup_page_password_protection:
