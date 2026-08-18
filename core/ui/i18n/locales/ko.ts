@@ -1835,4 +1835,8 @@ export const ko = {
   swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
   swap_protocol_fee: '프로토콜 수수료',
   swap_referral_fee: '소개 수수료',
+  select_route: '경로를 선택하세요',
+  swap_route_eta_hours: '~{{hours}}시간',
+  swap_route_eta_hours_minutes: '~{{hours}}시간 {{minutes}}분',
+  swap_route_eta_minutes: '~{{minutes}}분',
 }

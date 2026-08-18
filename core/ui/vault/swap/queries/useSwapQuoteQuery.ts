@@ -2,10 +2,11 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useVultDiscountTierQuery } from '@core/ui/vult/discount/queries/tier'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { pendingQuery } from '@lib/ui/query/Query'
 import { keepPreviousData } from '@tanstack/react-query'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
-import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
+import { findSwapQuotes } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { currentProductBrand } from '../../../product/brand'
@@ -15,7 +16,9 @@ import { slippageToPercent } from '../form/advanced/slippage'
 import { useAdvancedSwapSettings } from '../state/advancedSettings'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
+import { useSwapRouteOverride } from '../state/routeOverride'
 import { useSwapToCoin } from '../state/toCoin'
+import { resolveActiveSwapQuote } from './activeSwapRoute'
 import { buildSwapQuoteInput } from './buildSwapQuoteInput'
 
 export const swapQuoteQueryKeyPrefix = 'swapQuote'
@@ -60,7 +63,12 @@ export const getDebouncedSwapQuoteAmount = ({
   return fromAmount
 }
 
-export const useSwapQuoteQuery = () => {
+/**
+ * Every route the SDK could quote for the current pair and amount, together
+ * with the auto-selected winner. Use {@link useSwapQuoteQuery} unless you
+ * specifically need the alternatives.
+ */
+export const useSwapQuotesQuery = () => {
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
   const [fromAmount] = useFromAmount()
@@ -111,7 +119,7 @@ export const useSwapQuoteQuery = () => {
 
       return {
         queryKey: [swapQuoteQueryKeyPrefix, input],
-        queryFn: async () => findSwapQuote(input),
+        queryFn: async () => findSwapQuotes(input),
         placeholderData: keepPreviousData,
         retry: false,
       }
@@ -121,4 +129,18 @@ export const useSwapQuoteQuery = () => {
   return shouldShowAmountPending
     ? { ...pendingQuery, isPlaceholderData: false }
     : query
+}
+
+/**
+ * The quote the swap actually goes through: the manually picked route while one
+ * is in effect for this quote cycle, otherwise the auto-selected winner. Every
+ * consumer — form display, fees, verify screen, keysign payload — reads the
+ * swap quote from here, so a manual pick reaches the signed transaction.
+ */
+export const useSwapQuoteQuery = () => {
+  const [override] = useSwapRouteOverride()
+
+  return useTransformQueryData(useSwapQuotesQuery(), quotes =>
+    resolveActiveSwapQuote({ quotes, override })
+  )
 }

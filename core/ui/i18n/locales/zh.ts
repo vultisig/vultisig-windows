@@ -1721,4 +1721,8 @@ export const zh = {
   swap_fee_included_in_rate: '已包含在报价汇率中',
   swap_protocol_fee: '协议费',
   swap_referral_fee: '推荐费',
+  select_route: '选择路线',
+  swap_route_eta_hours: '~{{hours}}小时',
+  swap_route_eta_hours_minutes: '~{{hours}}小时{{minutes}}分',
+  swap_route_eta_minutes: '~{{minutes}}分',
 }

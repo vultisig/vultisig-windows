@@ -1018,6 +1018,7 @@ export const en = {
   select_chains: 'Select chains',
   select_chains_manually: 'Select chains manually',
   select_positions: 'Select positions',
+  select_route: 'Select route',
   select_positions_description:
     'Enable at least one position to view balances and manage positions.',
   compounded_token: 'Compounded {{ticker}}',
@@ -1185,6 +1186,9 @@ export const en = {
   swap_fee_included_in_rate: 'Included in the quoted exchange rate',
   swap_protocol_fee: 'Protocol Fee',
   swap_referral_fee: 'Referral Fee',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
   swap_invalid_external_recipient:
     'Recipient address is not valid for {{chain}}',
   swap_limit_asset: 'Asset',

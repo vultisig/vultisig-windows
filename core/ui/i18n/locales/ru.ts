@@ -1854,4 +1854,8 @@ export const ru = {
   swap_fee_included_in_rate: 'Включено в указанный обменный курс',
   swap_protocol_fee: 'Протокольный сбор',
   swap_referral_fee: 'Комиссионное вознаграждение за привлечение клиентов',
+  select_route: 'Выберите маршрут',
+  swap_route_eta_hours: '~{{hours}}ч',
+  swap_route_eta_hours_minutes: '~{{hours}}ч {{minutes}}мин',
+  swap_route_eta_minutes: '~{{minutes}}мин',
 }

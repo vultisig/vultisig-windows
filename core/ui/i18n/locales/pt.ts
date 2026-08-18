@@ -1878,4 +1878,8 @@ export const pt = {
   swap_fee_included_in_rate: 'Incluído na taxa de câmbio cotada',
   swap_protocol_fee: 'Taxa de protocolo',
   swap_referral_fee: 'Taxa de encaminhamento',
+  select_route: 'Selecione a rota',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
 }

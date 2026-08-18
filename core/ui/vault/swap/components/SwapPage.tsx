@@ -6,6 +6,7 @@ import { SwapForm } from '../form/SwapForm'
 import { LimitOrderReview } from '../limit/LimitOrderReview'
 import { AdvancedSwapSettingsProvider } from '../state/advancedSettings'
 import { FromAmountProvider } from '../state/fromAmount'
+import { SwapRouteOverrideProvider } from '../state/routeOverride'
 import { SwapVerify } from '../verify/SwapVerify'
 
 export const SwapPage = () => {
@@ -14,16 +15,18 @@ export const SwapPage = () => {
   return (
     <FromAmountProvider initialValue={fromAmount ?? null}>
       <AdvancedSwapSettingsProvider>
-        <ValueTransfer<SwapFlowResult>
-          from={({ onFinish }) => <SwapForm onFinish={onFinish} />}
-          to={({ value, onBack }) =>
-            value.kind === 'market' ? (
-              <SwapVerify swapQuote={value.quote} onBack={onBack} />
-            ) : (
-              <LimitOrderReview {...value.order} onBack={onBack} />
-            )
-          }
-        />
+        <SwapRouteOverrideProvider initialValue={null}>
+          <ValueTransfer<SwapFlowResult>
+            from={({ onFinish }) => <SwapForm onFinish={onFinish} />}
+            to={({ value, onBack }) =>
+              value.kind === 'market' ? (
+                <SwapVerify swapQuote={value.quote} onBack={onBack} />
+              ) : (
+                <LimitOrderReview {...value.order} onBack={onBack} />
+              )
+            }
+          />
+        </SwapRouteOverrideProvider>
       </AdvancedSwapSettingsProvider>
     </FromAmountProvider>
   )

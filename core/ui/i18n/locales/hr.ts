@@ -1845,4 +1845,8 @@ export const hr = {
   swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
   swap_protocol_fee: 'Naknada za protokol',
   swap_referral_fee: 'Naknada za preporuku',
+  select_route: 'Odaberite rutu',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
 }
