@@ -126,7 +126,7 @@ const FloatingCamera = styled(UnstyledButton)`
 `
 
 type TabButtonProps = {
-  isActive?: boolean
+  $isActive?: boolean
 }
 
 const TabButton = styled(UnstyledButton)<TabButtonProps>`
@@ -145,8 +145,8 @@ const TabButton = styled(UnstyledButton)<TabButtonProps>`
     alignItems: 'center',
   })};
 
-  ${({ isActive }) =>
-    isActive
+  ${({ $isActive }) =>
+    $isActive
       ? css`
           color: ${getColor('contrast')};
         `
