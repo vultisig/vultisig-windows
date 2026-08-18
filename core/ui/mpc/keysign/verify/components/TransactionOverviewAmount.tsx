@@ -23,7 +23,11 @@ type HeroAmountProps = {
 
 const HeroAmount = ({ coin, amount, highPrecision }: HeroAmountProps) => (
   <VStack gap={2}>
-    <HStack alignItems="center" gap={4}>
+    <HStack
+      alignItems="center"
+      gap={4}
+      data-testid="transaction-overview-amount"
+    >
       <Text as="span" size={17}>
         {formatAmount(
           amount,

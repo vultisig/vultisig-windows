@@ -1,4 +1,3 @@
-import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
@@ -18,6 +17,7 @@ import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
+import { useSendBalanceQuery } from './useSendBalanceQuery'
 
 export const useSendFeeEstimateQuery = () => {
   const coin = useCurrentSendCoin()
@@ -25,7 +25,7 @@ export const useSendFeeEstimateQuery = () => {
   const [memo] = useSendMemo()
   const { destinationTag } = useSendDestinationTag()
 
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
 
   const vault = useCurrentVault()
