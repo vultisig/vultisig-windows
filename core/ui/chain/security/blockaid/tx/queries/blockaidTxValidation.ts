@@ -12,16 +12,12 @@ export type BlockaidTxScanResult = {
   description?: string
 } | null
 
-type BlockaidValidationWithStatus = BlockaidValidation & {
-  status?: unknown
-}
-
 const isBlockaidErrorValue = (value: unknown) =>
   typeof value === 'string' && value.toLowerCase() === 'error'
 
 const isBlockaidValidationError = (validation: BlockaidValidation) =>
   isBlockaidErrorValue(validation.result_type) ||
-  isBlockaidErrorValue((validation as BlockaidValidationWithStatus).status)
+  ('status' in validation && isBlockaidErrorValue(validation.status))
 
 const getValidationDescription = ({
   description,
