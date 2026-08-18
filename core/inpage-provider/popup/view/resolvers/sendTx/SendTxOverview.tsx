@@ -23,6 +23,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
+import { getKeysignFeeAmount } from '@core/ui/mpc/keysign/fee/tronMemoFee'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
@@ -68,7 +69,6 @@ import { parseBlockaidSuiSimulation } from '@vultisig/core-chain/security/blocka
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -135,7 +135,7 @@ export const SendTxOverview = ({
       walletCore,
     ],
     queryFn: () =>
-      getFeeAmount({
+      getKeysignFeeAmount({
         keysignPayload: shouldBePresent(keysignPayloadQuery.data),
         walletCore,
         publicKey: shouldBePresent(publicKey),
