@@ -89,7 +89,11 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   const { data: marketRate, isFetching: isMarketPriceLoading } =
     useLimitMarketPriceQuery({ fromCoin, toCoin })
   const { data: balance } = useBalanceQuery(extractAccountCoinKey(fromCoin))
-  const { data: toCoinFiatPrice } = useCoinPriceQuery({ coin: toCoinKey })
+  // The full vault coin, not the bare view-state key: the price query resolves
+  // a fiat price through the coin's priceProviderId, which the key lacks — with
+  // the key alone the query errors and fiat mode (entry, presets, market label)
+  // silently dies.
+  const { data: toCoinFiatPrice } = useCoinPriceQuery({ coin: toCoin })
 
   // The rate (buy units per sell unit) is authoritative -- it is what the memo's
   // LIM encodes. Fiat entry converts into it once, here, rather than being
@@ -140,15 +144,21 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     forUnit: LimitPriceUnit
   }
 
+  // Returns whether the input was actually populated, so callers don't mark
+  // state (like an active preset) for a price that never made it into the field
+  // — fiat conversion can fail while the fiat price is still loading.
   const setPriceFromRate = ({ nextRate, forUnit }: SetPriceFromRateInput) => {
     const next = toInputValue({ forRate: nextRate, forUnit })
 
-    if (next !== null) {
-      // toFixed keeps plain decimal notation (a Number round-trip would emit
-      // "1e-8" for tiny values, which parseLimitPrice then rejects); strip the
-      // trailing zeros it pads.
-      setPriceInput(next.toFixed(8).replace(/\.?0+$/, ''))
+    if (next === null) {
+      return false
     }
+
+    // toFixed keeps plain decimal notation (a Number round-trip would emit
+    // "1e-8" for tiny values, which parseLimitPrice then rejects); strip the
+    // trailing zeros it pads.
+    setPriceInput(next.toFixed(8).replace(/\.?0+$/, ''))
+    return true
   }
 
   // Switching units re-expresses the same rate rather than clearing it, so the
@@ -398,18 +408,23 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               activePreset={activePreset}
               onPresetSelect={preset => {
                 if (marketRate) {
-                  setPriceFromRate({
+                  const applied = setPriceFromRate({
                     nextRate: getPresetPrice({
                       marketPrice: marketRate,
                       preset,
                     }),
                     forUnit: unit,
                   })
+
                   // Remembered rather than re-derived from the live market: the
                   // market moves between the click and the next render, so
                   // comparing the stored rate against a freshly computed preset
-                  // price deselected the pill on the next tick.
-                  setActivePreset(preset)
+                  // price deselected the pill on the next tick. Only remembered
+                  // when the price landed in the field — a highlighted pill
+                  // over an empty input would claim a choice that wasn't made.
+                  if (applied) {
+                    setActivePreset(preset)
+                  }
                 }
               }}
               expiryHours={expiryHours}

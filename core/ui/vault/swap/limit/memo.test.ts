@@ -131,6 +131,15 @@ describe('buildLimitSwapMemoForCoins', () => {
   it('builds the same memo from an asset-mode and a fiat-mode entry', () => {
     const rate = 0.0295
     const btcFiatPrice = 64_260
+    // Fixed independently of the conversion helpers (0.0295 x 64,260), so a
+    // shared orientation bug in the fiat round trip cannot cancel itself out.
+    const fiatValue = 1_895.67
+
+    expect(
+      shouldBePresent(
+        rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: btcFiatPrice })
+      )
+    ).toBeCloseTo(fiatValue, 2)
 
     const build = (targetPrice: number) =>
       buildLimitSwapMemoForCoins({
@@ -145,12 +154,7 @@ describe('buildLimitSwapMemoForCoins', () => {
     const assetEntry = quantizeTargetPrice(rate)
     const fiatEntry = quantizeTargetPrice(
       shouldBePresent(
-        sellUnitFiatValueToRate({
-          fiatValue: shouldBePresent(
-            rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: btcFiatPrice })
-          ),
-          buyCoinFiatPrice: btcFiatPrice,
-        })
+        sellUnitFiatValueToRate({ fiatValue, buyCoinFiatPrice: btcFiatPrice })
       )
     )
 
