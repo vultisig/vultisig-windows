@@ -122,7 +122,12 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   // and signed LIM all agreeing on the value the memo will hold.
   const rate = rawRate === null ? null : quantizeTargetPrice(rawRate)
 
-  const toInputValue = (forRate: number, forUnit: LimitPriceUnit) =>
+  type ToInputValueInput = {
+    forRate: number
+    forUnit: LimitPriceUnit
+  }
+
+  const toInputValue = ({ forRate, forUnit }: ToInputValueInput) =>
     forUnit === 'fiat'
       ? rateToSellUnitFiatValue({
           rate: forRate,
@@ -130,8 +135,13 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
         })
       : forRate
 
-  const setPriceFromRate = (nextRate: number, forUnit: LimitPriceUnit) => {
-    const next = toInputValue(nextRate, forUnit)
+  type SetPriceFromRateInput = {
+    nextRate: number
+    forUnit: LimitPriceUnit
+  }
+
+  const setPriceFromRate = ({ nextRate, forUnit }: SetPriceFromRateInput) => {
+    const next = toInputValue({ forRate: nextRate, forUnit })
 
     if (next !== null) {
       // toFixed keeps plain decimal notation (a Number round-trip would emit
@@ -146,7 +156,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   const handleUnitChange = (nextUnit: LimitPriceUnit) => {
     if (nextUnit !== unit) {
       if (rate !== null) {
-        setPriceFromRate(rate, nextUnit)
+        setPriceFromRate({ nextRate: rate, forUnit: nextUnit })
       }
       setUnit(nextUnit)
     }
@@ -388,10 +398,13 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               activePreset={activePreset}
               onPresetSelect={preset => {
                 if (marketRate) {
-                  setPriceFromRate(
-                    getPresetPrice({ marketPrice: marketRate, preset }),
-                    unit
-                  )
+                  setPriceFromRate({
+                    nextRate: getPresetPrice({
+                      marketPrice: marketRate,
+                      preset,
+                    }),
+                    forUnit: unit,
+                  })
                   // Remembered rather than re-derived from the live market: the
                   // market moves between the click and the next render, so
                   // comparing the stored rate against a freshly computed preset
