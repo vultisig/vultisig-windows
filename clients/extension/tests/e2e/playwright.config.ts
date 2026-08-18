@@ -105,6 +105,7 @@ export default defineConfig({
         '**/passcode-lock-layering.spec.ts',
         '**/visual-regression.spec.ts',
         '**/station-migration.spec.ts',
+        '**/storage-preservation.spec.ts',
         '**/search-field.spec.ts',
         '**/viewport-fit.spec.ts',
       ],

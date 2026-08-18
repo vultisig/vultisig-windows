@@ -3,9 +3,7 @@ import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/br
 
 import { getIsSidePanelEnabled } from '../storage/isSidePanelEnabled'
 import { registerFastVaultPasswordCacheExpiry } from './registerFastVaultPasswordCacheExpiry'
-import { registerFreshInstallStorageClear } from './registerFreshInstallStorageClear'
 
-registerFreshInstallStorageClear()
 registerFastVaultPasswordCacheExpiry()
 
 /**
