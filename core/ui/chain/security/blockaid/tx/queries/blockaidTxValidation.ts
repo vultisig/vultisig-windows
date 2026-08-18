@@ -12,6 +12,13 @@ export type BlockaidTxScanResult = {
   description?: string
 } | null
 
+const isBlockaidErrorValue = (value: unknown) =>
+  typeof value === 'string' && value.toLowerCase() === 'error'
+
+const isBlockaidValidationError = (validation: BlockaidValidation) =>
+  isBlockaidErrorValue(validation.result_type) ||
+  ('status' in validation && isBlockaidErrorValue(validation.status))
+
 const getValidationDescription = ({
   description,
   features,
@@ -35,6 +42,11 @@ export const getBlockaidTxValidationQuery = (
   queryKey: ['blockaidTxValidation', input],
   queryFn: async (): Promise<BlockaidTxScanResult> => {
     const validation = await getTxBlockaidValidation(input)
+
+    if (isBlockaidValidationError(validation)) {
+      throw new Error('Blockaid could not complete the transaction scan')
+    }
+
     const result = parseBlockaidValidation(validation)
 
     if (!result) {
