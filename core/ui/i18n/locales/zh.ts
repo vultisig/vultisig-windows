@@ -965,6 +965,9 @@ export const zh = {
     version: '版本 {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" 已存在',
+  vault_cannot_be_opened: '无法打开此 Vault',
+  vault_cannot_be_opened_description:
+    '无法解密此设备上的密钥分片。请从 .vult 备份恢复 Vault。',
   vault_backup_page_password_info:
     '切勿将来自不同设备的 Vault 共享文件存储在同一位置',
   vault_backup_page_password_protection: '您可以选择为您的保险库设置密码保护。',

@@ -12,7 +12,10 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
-import { encryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import {
+  assertVaultKeySharesReadable,
+  encryptVaultAllKeyShares,
+} from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPasscodeRequired'
 import { currentProductBrand } from '../../product/brand'
@@ -28,7 +31,7 @@ export const useCreateVaultMutation = (
   const hasPasscodeEncryption = useIsPasscodeRequired()
   const [passcode] = usePasscode()
 
-  const { createVault } = useCore()
+  const { createVault, validateLegacyVaultKeyShares } = useCore()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const { mutateAsync: createCoins } = useCreateCoinsMutation()
@@ -37,6 +40,11 @@ export const useCreateVaultMutation = (
 
   return useMutation({
     mutationFn: async (input: Vault) => {
+      await assertVaultKeySharesReadable({
+        ...input,
+        validateLegacyVaultKeyShares,
+      })
+
       const vaultToCreate = hasPasscodeEncryption
         ? {
             ...input,

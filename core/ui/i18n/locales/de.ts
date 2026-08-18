@@ -1049,6 +1049,9 @@ export const de = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" existiert bereits',
+  vault_cannot_be_opened: 'Dieser Vault kann nicht geöffnet werden',
+  vault_cannot_be_opened_description:
+    'Die Schlüsselanteile auf diesem Gerät können nicht entschlüsselt werden. Stellen Sie den Vault aus einer .vult-Sicherung wieder her.',
   vault_backup_page_password_info:
     'Speichern Sie Vault-Freigaben von verschiedenen Geräten niemals am selben Ort.',
   vault_backup_page_password_protection:

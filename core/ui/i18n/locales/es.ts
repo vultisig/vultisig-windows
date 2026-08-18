@@ -1040,6 +1040,9 @@ export const es = {
     version: 'Versión {{latestVersion}}',
   },
   vault_already_exists: 'La bóveda "{{name}}" ya existe',
+  vault_cannot_be_opened: 'No se puede abrir este Vault',
+  vault_cannot_be_opened_description:
+    'Las claves compartidas de este dispositivo no se pueden descifrar. Restaura el Vault desde una copia de seguridad .vult.',
   vault_backup_page_password_info:
     'Nunca almacene recursos compartidos de Vault de diferentes dispositivos en la misma ubicación',
   vault_backup_page_password_protection:

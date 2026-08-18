@@ -1032,6 +1032,9 @@ export const hr = {
     version: 'Verzija {{latestVersion}}',
   },
   vault_already_exists: 'Trezor "{{name}}" već postoji',
+  vault_cannot_be_opened: 'Ovaj Vault nije moguće otvoriti',
+  vault_cannot_be_opened_description:
+    'Dijelove ključa na ovom uređaju nije moguće dešifrirati. Vratite Vault iz .vult sigurnosne kopije.',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijeljene datoteke Vaulta s različitih uređaja na istu lokaciju',
   vault_backup_page_password_protection:

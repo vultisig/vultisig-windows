@@ -12,10 +12,11 @@ import { encryptVaultBackupWithPassword } from '@vultisig/lib-utils/encryption/v
 import { match } from '@vultisig/lib-utils/match'
 import { useRef } from 'react'
 
-import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import { readVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { currentProductBrandConfig } from '../../product/brand'
 import { useCore } from '../../state/core'
+import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { useVaults } from '../../storage/vaults'
 
 const getExportName = (vault: Vault) => {
@@ -59,6 +60,40 @@ const createBackup = (vault: Vault, password?: string) => {
   return Buffer.from(vaultContainerData).toString('base64')
 }
 
+type GetReadableVaultForBackupInput = {
+  vault: Vault
+  hasPasscodeEncryption: boolean
+  passcode: string | null
+  validateLegacyVaultKeyShares?: ReturnType<
+    typeof useCore
+  >['validateLegacyVaultKeyShares']
+}
+
+export const getReadableVaultForBackup = async ({
+  vault,
+  hasPasscodeEncryption,
+  passcode,
+  validateLegacyVaultKeyShares,
+}: GetReadableVaultForBackupInput): Promise<Vault> => {
+  const shares = await readVaultAllKeyShares({
+    keyShares: vault.keyShares,
+    chainKeyShares: vault.chainKeyShares,
+    keyShareMldsa: vault.keyShareMldsa,
+    libType: vault.libType,
+    publicKeys: vault.publicKeys,
+    chainPublicKeys: vault.chainPublicKeys,
+    publicKeyMldsa: vault.publicKeyMldsa,
+    validateLegacyVaultKeyShares,
+    hasPasscodeEncryption,
+    key: passcode,
+  })
+
+  return {
+    ...vault,
+    ...shares,
+  }
+}
+
 export const useBackupVaultMutation = ({
   onSuccess,
   vaultIds,
@@ -68,11 +103,12 @@ export const useBackupVaultMutation = ({
 }) => {
   const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
-  const { saveFile } = useCore()
+  const { saveFile, validateLegacyVaultKeyShares } = useCore()
 
   const vaults = useVaults()
 
   const [passcode] = usePasscode()
+  const hasPasscodeEncryption = useHasPasscodeEncryption()
 
   // Synchronous in-flight guard: `isPending` only disables the button after a
   // re-render, so a fast double-click can fire two backups before that commits
@@ -88,21 +124,12 @@ export const useBackupVaultMutation = ({
           `Vault with id ${id}`
         )
 
-        if (!passcode) {
-          return vault
-        }
-
-        const decrypted = await decryptVaultAllKeyShares({
-          keyShares: vault.keyShares,
-          chainKeyShares: vault.chainKeyShares,
-          keyShareMldsa: vault.keyShareMldsa,
-          key: passcode,
+        return getReadableVaultForBackup({
+          vault,
+          hasPasscodeEncryption,
+          passcode,
+          validateLegacyVaultKeyShares,
         })
-
-        return {
-          ...vault,
-          ...decrypted,
-        }
       }
 
       const getFile = async () => {
