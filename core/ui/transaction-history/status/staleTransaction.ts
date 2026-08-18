@@ -2,16 +2,19 @@ import { TransactionRecord } from '../core'
 
 const stalePendingThresholdMs = 5 * 60 * 1000
 
-const isStaleTransaction = (record: TransactionRecord): boolean => {
-  const elapsed = Date.now() - new Date(record.timestamp).getTime()
-  return elapsed > stalePendingThresholdMs
-}
+const freshPollingIntervalMs = 3 * 1000
+
+const stalePollingIntervalMs = 30 * 1000
 
 /**
- * Decides whether a pending record should be marked failed by the client-side
- * stale timeout. Swap records stay pending until an authoritative provider
- * status resolves them.
+ * Polling cadence for a pending record: every few seconds at first, backed off
+ * once the record is older than the stale threshold. Age only slows polling —
+ * it is never a chain verdict, so it must not decide status: a BTC send can
+ * sit in the mempool for an hour and still confirm.
  */
-export const shouldFailStaleTransaction = (
-  record: TransactionRecord
-): boolean => record.type === 'send' && isStaleTransaction(record)
+export const getStatusPollingInterval = (record: TransactionRecord): number => {
+  const elapsed = Date.now() - new Date(record.timestamp).getTime()
+  return elapsed > stalePendingThresholdMs
+    ? stalePollingIntervalMs
+    : freshPollingIntervalMs
+}

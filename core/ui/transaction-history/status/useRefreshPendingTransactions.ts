@@ -8,10 +8,21 @@ import {
   getCowSwapOrderApiBase,
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
-import { shouldFailStaleTransaction } from './staleTransaction'
-import { toRecordStatus } from './toRecordStatus'
+import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
+
+const healWindowMs = 30 * 24 * 60 * 60 * 1000
+
+// Older builds failed pending sends from a client-side 5-minute timeout
+// without asking the chain, so slow-but-successful sends (e.g. BTC taking an
+// hour to confirm) were stored as `failed` forever. Re-check recent failed
+// sends so the chain's verdict can heal them; the window bounds how many
+// genuinely dead records get re-polled on every history open.
+const isHealCandidate = (record: TransactionRecord): boolean =>
+  record.type === 'send' &&
+  record.status === 'failed' &&
+  Date.now() - new Date(record.timestamp).getTime() < healWindowMs
 
 /** Checks chain status for pending/broadcasted transactions and updates their status in storage. */
 export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
@@ -23,22 +34,23 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
     // while the order rests for hours, so chain status would mark the record
     // `confirmed` and contradict the order's own state. useLimitOrderTracking
     // owns their lifecycle.
-    const pendingRecords = records.filter(
-      r => pendingStatuses.includes(r.status) && r.type !== 'limitSwap'
+    const refreshableRecords = records.filter(
+      r =>
+        (pendingStatuses.includes(r.status) && r.type !== 'limitSwap') ||
+        isHealCandidate(r)
     )
 
-    if (pendingRecords.length === 0 || isRefreshingRef.current) return
+    if (refreshableRecords.length === 0 || isRefreshingRef.current) return
 
     const refresh = async () => {
       isRefreshingRef.current = true
 
       try {
         await Promise.all(
-          pendingRecords.map(async record => {
+          refreshableRecords.map(async record => {
             // CowSwap orders settle off-chain: `txHash` is the orderbook UID,
-            // not a chain hash. Poll the orderbook and skip the chain stale
-            // path, which would otherwise fail a still-valid order at the
-            // 5-min cutoff (orders stay open up to their orderbook expiry).
+            // not a chain hash. Poll the orderbook instead — only its
+            // authoritative `expired`/`cancelled` status fails an order.
             const cowSwapOrder = getCowSwapOrderApiBase(record)
             if (cowSwapOrder) {
               const { record: updatedRecord } =
@@ -56,23 +68,17 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
               getTxStatus({ chain: record.chain, hash: record.txHash })
             )
 
-            if ('error' in result) {
-              if (shouldFailStaleTransaction(record)) {
-                updateRecord({ ...record, status: 'failed' })
-              }
-              return
+            // A failed status lookup says nothing about the tx itself — leave
+            // the record alone and let the next refresh try again.
+            if ('error' in result) return
+
+            const update = getTxStatusRecordUpdate({
+              record,
+              result: result.data,
+            })
+            if (update) {
+              updateRecord(update)
             }
-
-            const newStatus = toRecordStatus[result.data.status]
-
-            if (newStatus === 'pending' && shouldFailStaleTransaction(record)) {
-              updateRecord({ ...record, status: 'failed' })
-              return
-            }
-
-            if (newStatus === record.status) return
-
-            updateRecord({ ...record, status: newStatus })
           })
         )
       } finally {
