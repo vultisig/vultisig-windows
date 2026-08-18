@@ -45,12 +45,7 @@ import {
 import { useAdvancedSwapQueueEnabledQuery } from '../limit/queries/useAdvancedSwapQueueEnabledQuery'
 import { useLimitMarketPriceQuery } from '../limit/queries/useLimitMarketPriceQuery'
 import { useLimitSwapSupportedChainsQuery } from '../limit/queries/useLimitSwapSupportedChainsQuery'
-import {
-  fiatUnitPriceToRate,
-  rateToFiatUnitPrice,
-  rateToUnitPrice,
-  unitPriceToRate,
-} from '../limit/rate'
+import { rateToSellUnitFiatValue, sellUnitFiatValueToRate } from '../limit/rate'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
@@ -79,8 +74,8 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     useState<LimitSwapExpiryHours>(defaultExpiryHours)
 
   // The entered price is meaningless without the exact pair it was typed
-  // against (fiat mode divides by the sell coin's price; asset mode is
-  // sell-per-buy for this pair), so clear it whenever the pair changes —
+  // against (fiat mode anchors on the buy coin's price; asset mode is the
+  // buy-per-sell rate for this pair), so clear it whenever the pair changes —
   // including via the reverse button — rather than carrying a stale value into
   // the new pair.
   const pairKey = `${coinKeyToString(fromCoinKey)}>${coinKeyToString(toCoinKey)}`
@@ -94,7 +89,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   const { data: marketRate, isFetching: isMarketPriceLoading } =
     useLimitMarketPriceQuery({ fromCoin, toCoin })
   const { data: balance } = useBalanceQuery(extractAccountCoinKey(fromCoin))
-  const { data: fromCoinFiatPrice } = useCoinPriceQuery({ coin: fromCoinKey })
+  const { data: toCoinFiatPrice } = useCoinPriceQuery({ coin: toCoinKey })
 
   // The rate (buy units per sell unit) is authoritative -- it is what the memo's
   // LIM encodes. Fiat entry converts into it once, here, rather than being
@@ -108,16 +103,17 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       return null
     }
 
-    // Both modes express the price of ONE buy unit -- in fiat, or in sell-asset
-    // units ("1 ETH = 0.02 BTC"). Only the unit differs, never the meaning.
+    // Both modes express what ONE sell unit is worth -- in buy-asset units
+    // ("When 1 ETH is worth 0.02 BTC", the rate itself) or in fiat. Only the
+    // unit differs, never the meaning.
     if (unit === 'fiat') {
-      return fiatUnitPriceToRate({
-        fiatUnitPrice: entered,
-        sellCoinFiatPrice: fromCoinFiatPrice,
+      return sellUnitFiatValueToRate({
+        fiatValue: entered,
+        buyCoinFiatPrice: toCoinFiatPrice,
       })
     }
 
-    return unitPriceToRate({ unitPrice: entered })
+    return entered
   })()
 
   // Quantize to the memo's representable precision: a rate from a division has
@@ -128,11 +124,11 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
 
   const toInputValue = (forRate: number, forUnit: LimitPriceUnit) =>
     forUnit === 'fiat'
-      ? rateToFiatUnitPrice({
+      ? rateToSellUnitFiatValue({
           rate: forRate,
-          sellCoinFiatPrice: fromCoinFiatPrice,
+          buyCoinFiatPrice: toCoinFiatPrice,
         })
-      : rateToUnitPrice({ rate: forRate })
+      : forRate
 
   const setPriceFromRate = (nextRate: number, forUnit: LimitPriceUnit) => {
     const next = toInputValue(nextRate, forUnit)
@@ -265,18 +261,18 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       ? getLimitPriceWarning({ price: rate, marketPrice: marketRate })
       : undefined
 
-  const formatUnitPrice = (value: number) =>
+  const formatDisplayPrice = (value: number) =>
     unit === 'fiat'
       ? `$${formatNumber(value, 2)}`
-      : `${formatNumber(value)} ${fromCoin.ticker}`
+      : `${formatNumber(value)} ${toCoin.ticker}`
 
-  const marketUnitPrice = marketRate
+  const marketDisplayPrice = marketRate
     ? unit === 'fiat'
-      ? rateToFiatUnitPrice({
+      ? rateToSellUnitFiatValue({
           rate: marketRate,
-          sellCoinFiatPrice: fromCoinFiatPrice,
+          buyCoinFiatPrice: toCoinFiatPrice,
         })
-      : rateToUnitPrice({ rate: marketRate })
+      : marketRate
     : null
 
   // The receive amount is the memo's truncated LIM, not amount x rate: showing a
@@ -293,31 +289,30 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
         )
       : null
 
+  // The secondary line mirrors the same unit price in the other unit, so both
+  // readings of the order's trigger stay visible at once.
   const secondaryLabel = (() => {
     if (unit === 'fiat') {
-      return receiveAmount !== null
-        ? `${formatNumber(receiveAmount)} ${toCoin.ticker}`
+      return rate !== null
+        ? `${formatNumber(rate)} ${toCoin.ticker}`
         : undefined
     }
 
     const fiat =
       rate !== null
-        ? rateToFiatUnitPrice({ rate, sellCoinFiatPrice: fromCoinFiatPrice })
+        ? rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: toCoinFiatPrice })
         : null
 
     return fiat !== null ? `$${formatNumber(fiat, 2)}` : undefined
   })()
 
-  // Fiat price of one buy unit, only when the (ungated, independently-loaded)
+  // Fiat value of one sell unit, only when the (ungated, independently-loaded)
   // fiat query has actually resolved — a `?? 0` here would show "$0.00" as the
-  // target price instead of falling back to the asset ratio.
+  // target price instead of falling back to the asset rate.
   const targetFiatPrice =
     rate !== null
-      ? rateToFiatUnitPrice({ rate, sellCoinFiatPrice: fromCoinFiatPrice })
+      ? rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: toCoinFiatPrice })
       : null
-  // Always the asset ratio (sell units per buy unit), never `$`-prefixed, so it
-  // is a correct fallback regardless of the live unit toggle.
-  const targetAssetPrice = rate !== null ? rateToUnitPrice({ rate }) : null
 
   // Hand off through the page-level flow (like the market form) so the review
   // screen replaces the whole form — header and Market/Limit tabs included —
@@ -342,9 +337,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       expectedToAmount,
       memo: memoValue,
       unitPrice:
-        targetAssetPrice !== null
-          ? `${formatNumber(targetAssetPrice)} ${fromCoin.ticker}`
-          : undefined,
+        rate !== null ? `${formatNumber(rate)} ${toCoin.ticker}` : undefined,
       targetPriceLabel:
         targetFiatPrice !== null
           ? `$${formatNumber(targetFiatPrice, 2)}`
@@ -375,7 +368,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               onEdit={() => setStep('asset')}
             />
             <LimitExecuteWhen
-              toCoin={toCoin}
+              fromCoin={fromCoin}
               priceInput={priceInput}
               onPriceInputChange={value => {
                 setPriceInput(value)
@@ -383,12 +376,12 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               }}
               unit={unit}
               onUnitChange={handleUnitChange}
-              valueSuffix={unit === 'fiat' ? undefined : fromCoin.ticker}
+              valueSuffix={unit === 'fiat' ? undefined : toCoin.ticker}
               valuePrefix={unit === 'fiat' ? '$' : undefined}
               secondaryLabel={secondaryLabel}
               marketLabel={
-                marketUnitPrice !== null
-                  ? formatUnitPrice(marketUnitPrice)
+                marketDisplayPrice !== null
+                  ? formatDisplayPrice(marketDisplayPrice)
                   : undefined
               }
               hasMarketPrice={Boolean(marketRate)}

@@ -2,73 +2,53 @@
  * Price conversions for the limit form.
  *
  * The authoritative value is always the **rate**: buy-asset units per sell-asset
- * unit, which is exactly what the memo's LIM encodes. Fiat is a display and
- * entry convenience that converts to a rate once, at input.
+ * unit, which is exactly what the memo's LIM encodes. It is also what asset mode
+ * displays and edits directly ("When 1 ETH is worth 0.0295 BTC"), so asset entry
+ * needs no conversion. Fiat is a display and entry convenience that converts to
+ * a rate once, at input.
  *
- * Keeping the rate authoritative is a fund-safety decision, matching iOS: if the
- * fiat figure were the source of truth, a drifting or bad price feed between
- * entry and signing would silently change the order the user actually commits
- * to.
+ * Keeping the rate authoritative is a fund-safety decision: if the fiat figure
+ * were the source of truth, a drifting or bad price feed between entry and
+ * signing would silently change the order the user actually commits to.
  */
 
-type RateToUnitPriceInput = {
+type RateToSellUnitFiatValueInput = {
   /** Buy-asset units per sell-asset unit. */
   rate: number
+  /** Fiat price of one buy-asset unit. */
+  buyCoinFiatPrice: number | undefined
 }
 
 /**
- * Sell-asset units needed to buy one unit of the buy asset — the inverse of the
- * rate, and the orientation the form displays ("1 BTC is worth …").
- */
-export const rateToUnitPrice = ({
-  rate,
-}: RateToUnitPriceInput): number | null => (rate > 0 ? 1 / rate : null)
-
-type UnitPriceToRateInput = {
-  /** Sell-asset units per one buy-asset unit. */
-  unitPrice: number
-}
-
-/** Inverse of {@link rateToUnitPrice}. */
-export const unitPriceToRate = ({
-  unitPrice,
-}: UnitPriceToRateInput): number | null =>
-  unitPrice > 0 ? 1 / unitPrice : null
-
-type FiatUnitPriceToRateInput = {
-  /** Fiat price of one buy-asset unit, as entered. */
-  fiatUnitPrice: number
-  /** Fiat price of one sell-asset unit. */
-  sellCoinFiatPrice: number | undefined
-}
-
-/**
- * Convert a fiat price per buy-asset unit into a rate.
+ * Fiat value of one sell-asset unit at the target rate — the figure fiat mode
+ * shows under "When 1 ETH is worth".
  *
- * Returns `null` without a sell-asset fiat price rather than guessing — a
+ * Returns `null` without a buy-asset fiat price rather than guessing.
+ */
+export const rateToSellUnitFiatValue = ({
+  rate,
+  buyCoinFiatPrice,
+}: RateToSellUnitFiatValueInput): number | null =>
+  rate > 0 && buyCoinFiatPrice && buyCoinFiatPrice > 0
+    ? rate * buyCoinFiatPrice
+    : null
+
+type SellUnitFiatValueToRateInput = {
+  /** Fiat value of one sell-asset unit, as entered. */
+  fiatValue: number
+  buyCoinFiatPrice: number | undefined
+}
+
+/**
+ * Convert an entered fiat value of one sell-asset unit into a rate.
+ *
+ * Returns `null` without a buy-asset fiat price rather than guessing — a
  * fabricated rate here would become the signed LIM.
  */
-export const fiatUnitPriceToRate = ({
-  fiatUnitPrice,
-  sellCoinFiatPrice,
-}: FiatUnitPriceToRateInput): number | null =>
-  fiatUnitPrice > 0 && sellCoinFiatPrice && sellCoinFiatPrice > 0
-    ? sellCoinFiatPrice / fiatUnitPrice
+export const sellUnitFiatValueToRate = ({
+  fiatValue,
+  buyCoinFiatPrice,
+}: SellUnitFiatValueToRateInput): number | null =>
+  fiatValue > 0 && buyCoinFiatPrice && buyCoinFiatPrice > 0
+    ? fiatValue / buyCoinFiatPrice
     : null
-
-type RateToFiatUnitPriceInput = {
-  rate: number
-  sellCoinFiatPrice: number | undefined
-}
-
-/** Fiat price of one buy-asset unit implied by a rate. */
-export const rateToFiatUnitPrice = ({
-  rate,
-  sellCoinFiatPrice,
-}: RateToFiatUnitPriceInput): number | null => {
-  const unitPrice = rateToUnitPrice({ rate })
-
-  return unitPrice !== null && sellCoinFiatPrice && sellCoinFiatPrice > 0
-    ? unitPrice * sellCoinFiatPrice
-    : null
-}

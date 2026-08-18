@@ -1194,8 +1194,9 @@ export const en = {
   swap_limit_asset: 'Asset',
   swap_limit_buy: 'Buy',
   swap_limit_execute_when: 'Execute when',
-  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_is_worth: 'is worth',
   swap_limit_sell: 'Sell',
+  swap_limit_when_one: 'When 1',
   swap_limit_blocker_chain_unavailable:
     'This chain is temporarily halted on THORChain',
   swap_limit_blocker_insufficient_balance: 'Amount exceeds your balance',

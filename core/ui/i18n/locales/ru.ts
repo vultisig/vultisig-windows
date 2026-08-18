@@ -1743,7 +1743,6 @@ export const ru = {
   swap_limit_asset: 'Объект',
   swap_limit_buy: 'Купить',
   swap_limit_execute_when: 'Выполнить при',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Продавать',
   swap_limit_blocker_chain_unavailable:
     'Данная цепочка временно остановлена ​​на THORChain',
@@ -1858,4 +1857,6 @@ export const ru = {
   swap_route_eta_hours: '~{{hours}}ч',
   swap_route_eta_hours_minutes: '~{{hours}}ч {{minutes}}мин',
   swap_route_eta_minutes: '~{{minutes}}мин',
+  swap_limit_is_worth: 'стоит',
+  swap_limit_when_one: 'Когда 1',
 }
