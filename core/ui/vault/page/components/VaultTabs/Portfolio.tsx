@@ -4,6 +4,8 @@ import { Match } from '@lib/ui/base/Match'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { List } from '@lib/ui/list'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Text } from '@lib/ui/text'
 import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
@@ -15,7 +17,15 @@ import { VaultChainItem } from '../VaultChainItem'
 type PortfolioViewState = 'noChains' | 'noSearchResults' | 'list'
 
 export const Portfolio = () => {
-  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
+  const {
+    data: vaultChainBalancesData,
+    errors,
+    isPending,
+  } = useVaultChainsBalancesQuery()
+  const vaultChainBalances = useMemo(
+    () => vaultChainBalancesData ?? [],
+    [vaultChainBalancesData]
+  )
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
@@ -53,6 +63,16 @@ export const Portfolio = () => {
   }, [vaultChainBalances.length, filteredBalances.length, normalizedQuery])
 
   const handleCustomize = () => navigate({ id: 'manageVaultChains' })
+
+  if (!vaultChainBalancesData) {
+    if (errors.length > 0) {
+      return <Text centerHorizontally>{t('failed_to_load')}</Text>
+    }
+
+    if (isPending) {
+      return <Spinner />
+    }
+  }
 
   return (
     <Match

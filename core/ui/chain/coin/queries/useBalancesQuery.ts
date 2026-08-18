@@ -48,8 +48,15 @@ const resolveEvmBalanceBatch = async (requests: EvmBalanceRequest[]) => {
     ])
   )
 
-  requests.forEach(({ input, resolve }) => {
-    resolve(normalizedBalances[getNormalizedBalanceKey(input)] ?? 0n)
+  requests.forEach(({ input, resolve, reject }) => {
+    const balance = normalizedBalances[getNormalizedBalanceKey(input)]
+
+    if (balance === undefined) {
+      reject(new Error(`Failed to resolve ${input.chain} balance`))
+      return
+    }
+
+    resolve(balance)
   })
 }
 
