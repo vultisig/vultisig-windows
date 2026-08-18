@@ -4,6 +4,7 @@ import { transformError } from '@vultisig/lib-utils/error/transformError'
 import { storageMigrationKeys, storageMigrations } from '.'
 import { getLatestMigration, setLatestMigration } from './latestMigration'
 
+/** Runs pending storage migrations and checkpoints each successful migration. */
 export const runStorageMigrations = async () => {
   const latestMigration = await getLatestMigration()
 
