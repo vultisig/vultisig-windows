@@ -71,8 +71,8 @@ vi.mock('@core/ui/state/core', () => ({
 
 coreHolder.value = { ...vaultsStorage, ...passcodeEncryptionStorage }
 
-const passcode = '123456'
-const newPasscode = '654321'
+const passcode = '135790'
+const newPasscode = '246801'
 
 const ecdsaShare = 'ecdsa-key-share-plaintext'
 const eddsaShare = 'eddsa-key-share-plaintext'
