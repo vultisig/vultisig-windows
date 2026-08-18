@@ -9,6 +9,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { SwapQuoteCandidate } from '@vultisig/core-chain/swap/quote/findSwapQuote'
 import { getSwapQuoteProviderName } from '@vultisig/core-chain/swap/quote/getSwapQuoteProviderName'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import styled from 'styled-components'
 
 import { getSwapQuoteOutput } from '../../queries/swapQuoteOutput'
 import { useSwapToCoin } from '../../state/toCoin'
@@ -64,9 +65,20 @@ export const SwapRouteOption = ({
             </Text>
             <SwapFiatAmount value={{ amount: outputAmount, ...toCoinKey }} />
           </VStack>
-          <Checkbox value={isActive} onChange={onSelect} />
+          <SelectionIndicator>
+            <Checkbox value={isActive} onChange={onSelect} />
+          </SelectionIndicator>
         </HStack>
       }
     />
   )
 }
+
+// The row is the control; the checkbox only mirrors its state. Letting the
+// label swallow pointer events would run `onSelect` twice — once through
+// `onChange`, once through the click bubbling up to the row — so clicks pass
+// straight through. Keyboard operation still goes through the checkbox, which
+// is the only focusable way to pick a route.
+const SelectionIndicator = styled.span`
+  pointer-events: none;
+`
