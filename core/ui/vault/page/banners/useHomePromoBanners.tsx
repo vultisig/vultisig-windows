@@ -144,7 +144,7 @@ export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
             'kamino',
             t('kamino_banner_subtitle'),
             t('kamino_banner_title'),
-            // Destination pending the Solana Kamino integration - see #4681.
+            // Destination pending the Solana Kamino integration - see #4685.
             () => {}
           ),
         ]
