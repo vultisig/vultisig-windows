@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { persistQueryOptions, persistQueryStaleTime } from './options'
+import {
+  persistQueryOptions,
+  persistQueryStaleTime,
+  pricePersistQueryOptions,
+  priceQueryRefetchInterval,
+  priceQueryStaleTime,
+  queryCategories,
+} from './options'
 
 describe('persistQueryOptions', () => {
   it('keeps persisted queries fresh briefly without focus or remount refetches', () => {
@@ -11,6 +18,23 @@ describe('persistQueryOptions', () => {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       staleTime: persistQueryStaleTime,
+    })
+  })
+})
+
+describe('pricePersistQueryOptions', () => {
+  it('persists price data but respects staleness so stale or poisoned caches self-heal', () => {
+    expect(priceQueryStaleTime).toBe(60_000)
+    expect(priceQueryRefetchInterval).toBe(300_000)
+    expect(queryCategories).toContain(pricePersistQueryOptions.meta?.category)
+    expect(pricePersistQueryOptions).toMatchObject({
+      meta: { shouldPersist: true, category: 'price' },
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      staleTime: priceQueryStaleTime,
+      refetchInterval: priceQueryRefetchInterval,
+      refetchIntervalInBackground: false,
     })
   })
 })
