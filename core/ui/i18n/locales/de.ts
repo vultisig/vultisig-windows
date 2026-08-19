@@ -987,6 +987,7 @@ export const de = {
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Bereit zum Beanspruchen',
+  withdraw_expire_unfreeze: 'Beanspruchen',
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Bandbreite & Energie',
   tron_bandwidth_description:

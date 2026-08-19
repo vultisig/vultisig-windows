@@ -10,6 +10,10 @@ import { FieldValues } from 'react-hook-form'
 
 import { ChainAction } from '../../ChainAction'
 import { StakeableChain } from '../../config'
+import {
+  tronWithdrawExpireUnfreezeAction,
+  tronWithdrawExpireUnfreezeMemo,
+} from '../../tron/withdrawExpireUnfreeze'
 import { MayaChainPool } from '../../types/mayaChain'
 import { sourceChannelByChain } from '../getDepositFormConfig'
 
@@ -176,6 +180,7 @@ export const generateMemo = ({
       `FREEZE:${shouldBePresent(depositFormData.resourceType, 'Resource type')}`,
     unfreeze: () =>
       `UNFREEZE:${shouldBePresent(depositFormData.resourceType, 'Resource type')}`,
+    [tronWithdrawExpireUnfreezeAction]: () => tronWithdrawExpireUnfreezeMemo,
     add_cacao_pool: () => 'pool+',
     remove_cacao_pool: () => {
       const { percentage } = extractFormValues(depositFormData)

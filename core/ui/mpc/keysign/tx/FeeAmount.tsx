@@ -26,7 +26,9 @@ export const KeysignFeeAmount = ({ keysignPayload }: KeysignFeeAmountProps) => {
   const feeQuery = useKeysignFee(keysignPayload)
 
   return (
-    <Text size={14} centerVertically={{ gap: 8 }}>
+    // Fee loading renders a block-level spinner. Use a div container so the
+    // pending state never produces invalid <p><div /></p> markup.
+    <Text as="div" size={14} centerVertically={{ gap: 8 }}>
       <MatchQuery
         value={feeQuery}
         pending={() => <Spinner />}

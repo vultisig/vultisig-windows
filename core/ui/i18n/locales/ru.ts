@@ -964,6 +964,7 @@ export const ru = {
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Готово к получению',
+  withdraw_expire_unfreeze: 'Получить',
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Пропускная способность и энергия',
   tron_bandwidth_description:

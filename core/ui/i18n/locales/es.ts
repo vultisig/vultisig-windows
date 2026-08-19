@@ -980,6 +980,7 @@ export const es = {
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Listo para reclamar',
+  withdraw_expire_unfreeze: 'Reclamar',
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Ancho de banda y energía',
   tron_bandwidth_description:

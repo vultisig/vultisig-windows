@@ -959,6 +959,7 @@ export const ko = {
   tron_frozen_label: '동결됨',
   tron_pending_withdrawals: '보류 중인 출금',
   tron_ready_to_claim: '수령 준비 완료',
+  withdraw_expire_unfreeze: '수령',
   tron_unfreeze_button: '동결 해제',
   tron_bandwidth_and_energy: '대역폭 및 에너지',
   tron_bandwidth_description:

@@ -43,6 +43,7 @@ import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { DepositDataProvider } from '../state/data'
+import { tronWithdrawExpireUnfreezeAction } from '../tron/withdrawExpireUnfreeze'
 import {
   getBalanceDisplayConfig,
   shouldShowBalance,
@@ -117,6 +118,8 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const isUnstakeAction = selectedChainAction === 'unstake'
   const isMintAction = selectedChainAction === 'mint'
   const isRedeemAction = selectedChainAction === 'redeem'
+  const isTronClaimAction =
+    selectedChainAction === tronWithdrawExpireUnfreezeAction
   const isCosmosStakingAction = isOneOf(
     selectedChainAction,
     cosmosStakingActions
@@ -156,6 +159,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     unstake: t('unstake'),
     mint: t('mint'),
     redeem: t('redeem'),
+    [tronWithdrawExpireUnfreezeAction]: t(tronWithdrawExpireUnfreezeAction),
     delegate: t('stake'),
     undelegate: t('unstake'),
     redelegate: t('move'),
@@ -250,38 +254,48 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
         ) : (
           <PageContent flexGrow scrollable>
             <WithProgressIndicator value={0.2}>
-              <InputContainer>
-                <InputFieldWrapper>
-                  {t('chain_message_deposit', {
-                    chain: coin.chain,
-                  })}
-                </InputFieldWrapper>
-              </InputContainer>
-              <Opener
-                renderOpener={({ onOpen }) => (
-                  <Container onClick={onOpen}>
-                    <HStack alignItems="center" gap={8}>
-                      <Text weight="400" family="mono" size={16}>
-                        {t(selectedChainAction)}
-                      </Text>
-                    </HStack>
-                    <IconWrapper style={{ fontSize: 20 }}>
-                      <ChevronRightIcon />
-                    </IconWrapper>
-                  </Container>
-                )}
-                renderContent={({ onClose }) => (
-                  <DepositActionItemExplorer
-                    onClose={onClose}
-                    activeOption={selectedChainAction}
-                    options={availableActions}
-                    onOptionClick={option => {
-                      onClose()
-                      setSelectedChainAction(option)
-                    }}
+              {isTronClaimAction ? (
+                <InputContainer>
+                  <InputFieldWrapper>
+                    {t('tron_ready_to_claim')}
+                  </InputFieldWrapper>
+                </InputContainer>
+              ) : (
+                <>
+                  <InputContainer>
+                    <InputFieldWrapper>
+                      {t('chain_message_deposit', {
+                        chain: coin.chain,
+                      })}
+                    </InputFieldWrapper>
+                  </InputContainer>
+                  <Opener
+                    renderOpener={({ onOpen }) => (
+                      <Container onClick={onOpen}>
+                        <HStack alignItems="center" gap={8}>
+                          <Text weight="400" family="mono" size={16}>
+                            {t(selectedChainAction)}
+                          </Text>
+                        </HStack>
+                        <IconWrapper style={{ fontSize: 20 }}>
+                          <ChevronRightIcon />
+                        </IconWrapper>
+                      </Container>
+                    )}
+                    renderContent={({ onClose }) => (
+                      <DepositActionItemExplorer
+                        onClose={onClose}
+                        activeOption={selectedChainAction}
+                        options={availableActions}
+                        onOptionClick={option => {
+                          onClose()
+                          setSelectedChainAction(option)
+                        }}
+                      />
+                    )}
                   />
-                )}
-              />
+                </>
+              )}
 
               <DepositActionSpecific value={selectedChainAction} />
 

@@ -82,6 +82,10 @@ import {
   StcyInput,
 } from '../staking/types'
 import {
+  tronWithdrawExpireUnfreezeAction,
+  tronWithdrawExpireUnfreezeMemo,
+} from '../tron/withdrawExpireUnfreeze'
+import {
   buildStakingSignDirectBytes,
   type CosmosStakingInput,
   toEncodeObjects,
@@ -489,6 +493,22 @@ export const buildDepositKeysignPayload = async ({
       toAddress: '',
       toAmount: dustAmount,
     })
+    return keysignPayload
+  }
+
+  // Claiming matured TRON Stake 2.0 unfreezes is a native owner-only system
+  // contract. The shared signer consumes this marker and never serializes it as
+  // an on-chain memo. The native contract has no amount field, but the
+  // claimable sum remains in toAmount for cross-device display parity.
+  if (action === tronWithdrawExpireUnfreezeAction) {
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      contractPayload: { case: undefined },
+      memo: tronWithdrawExpireUnfreezeMemo,
+      toAddress: coin.address,
+      toAmount: shouldBePresent(amountUnits, 'Claimable TRON amount'),
+    })
+
     return keysignPayload
   }
 

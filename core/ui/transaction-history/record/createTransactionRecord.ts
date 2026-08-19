@@ -20,6 +20,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import { getThorchainAssetTicker } from '../../mpc/keysign/join/tx/thorchainAssetTicker'
+import { isTronWithdrawExpireUnfreezePayload } from '../../vault/deposit/tron/withdrawExpireUnfreeze'
 import { toThorchainFixedPoint } from '../../vault/swap/limit/amount'
 import {
   LimitSwapTransactionData,
@@ -115,6 +116,10 @@ const createSignedLimitOrderIdentity = ({
 
 const createSendData = (payload: KeysignPayload): SendTransactionData => {
   const coin = getKeysignCoin(payload)
+  const isTronClaim = isTronWithdrawExpireUnfreezePayload({
+    chain: coin.chain,
+    memo: payload.memo,
+  })
 
   return {
     fromAddress: coin.address,
@@ -124,8 +129,10 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
     tokenLogo: coin.logo ?? emptyLogoFallback,
     tokenId: coin.id,
     decimals: coin.decimals,
-    memo: payload.memo || undefined,
+    // The claim marker is routing metadata, never an on-chain memo.
+    memo: isTronClaim ? undefined : payload.memo || undefined,
     messageTypeUrl: getPrimaryCosmosMessageTypeUrl(payload),
+    operation: isTronClaim ? 'tronWithdrawExpireUnfreeze' : undefined,
   }
 }
 

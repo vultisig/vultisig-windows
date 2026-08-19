@@ -1,6 +1,7 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 
 import { ChainAction } from '../ChainAction'
+import { tronWithdrawExpireUnfreezeAction } from '../tron/withdrawExpireUnfreeze'
 
 type BalanceDisplayConfig = {
   showBalance: boolean
@@ -41,6 +42,10 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   open_trust_line: { showBalance: false, showTicker: false },
   freeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   unfreeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
+  [tronWithdrawExpireUnfreezeAction]: {
+    showBalance: false,
+    showTicker: false,
+  },
   delegate: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   undelegate: { showBalance: false, showTicker: true },
   redelegate: { showBalance: false, showTicker: true },

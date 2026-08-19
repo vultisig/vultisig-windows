@@ -110,6 +110,7 @@ export const useCorrectSelectedCoin = () => {
         open_trust_line: () => currentDepositCoin,
         freeze: () => currentDepositCoin,
         unfreeze: () => currentDepositCoin,
+        withdraw_expire_unfreeze: selectNativeCoin,
         delegate: () => currentDepositCoin,
         undelegate: () => currentDepositCoin,
         redelegate: () => currentDepositCoin,

@@ -5,6 +5,7 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { getTronClaimChainAmountDisplay } from '@core/ui/vault/deposit/tron/withdrawExpireUnfreeze'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
@@ -73,6 +74,13 @@ const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
     cryptoAmount
   )
   const truncatedAddress = `${data.toAddress.slice(0, 8)}...${data.toAddress.slice(-6)}`
+  const isTronClaim = data.operation === 'tronWithdrawExpireUnfreeze'
+  const amountDisplay = isTronClaim
+    ? getTronClaimChainAmountDisplay({
+        amount: data.amount,
+        decimals: data.decimals,
+      })
+    : formatAmount(cryptoAmount, { precision: 'high' })
 
   return (
     <StepperContainer>
@@ -92,7 +100,7 @@ const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
           )}
           <VStack gap={2}>
             <Text size={16} weight={600}>
-              {formatAmount(cryptoAmount, { precision: 'high' })} {data.token}
+              {amountDisplay} {data.token}
             </Text>
             {fiat && (
               <Text size={12} color="supporting">
@@ -107,7 +115,7 @@ const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
             <ArrowDownIcon />
           </StepperIcon>
           <Text size={13} color="shy">
-            {t('to')}
+            {isTronClaim ? t('withdraw_expire_unfreeze') : t('to')}
           </Text>
           <StepperDivider />
         </HStack>
@@ -346,6 +354,9 @@ export const PendingTransactionProgressCard = ({
 }: PendingTransactionProgressCardProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const isTronClaim =
+    record.type === 'send' &&
+    record.data.operation === 'tronWithdrawExpireUnfreeze'
 
   const handleClick = () =>
     navigate({ id: 'transactionDetail', state: { id: record.id } })
@@ -364,9 +375,10 @@ export const PendingTransactionProgressCard = ({
     >
       <TopRow>
         <TransactionHistoryTag
-          type={getRecordTagType(record.type)}
+          type={isTronClaim ? 'receive' : getRecordTagType(record.type)}
           label={match(record.type, {
-            send: () => undefined,
+            send: () =>
+              isTronClaim ? t('withdraw_expire_unfreeze') : undefined,
             swap: () => undefined,
             limitSwap: () => t('swap_mode_limit'),
             trustLine: () => t('trust_line'),

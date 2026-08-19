@@ -2,6 +2,10 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { describe, expect, it } from 'vitest'
 
+import {
+  tronWithdrawExpireUnfreezeAction,
+  tronWithdrawExpireUnfreezeMemo,
+} from '../../tron/withdrawExpireUnfreeze'
 import { generateMemo } from './index'
 
 const runeCoin = {
@@ -38,5 +42,22 @@ describe('generateMemo', () => {
     })
 
     expect(memo).toBe('UNBOND:thor1node:150000000')
+  })
+
+  it('encodes the TRON matured-unfreeze claim marker without an amount', () => {
+    const memo = generateMemo({
+      selectedChainAction: tronWithdrawExpireUnfreezeAction,
+      depositFormData: {},
+      bondableAsset: 'THOR.RUNE',
+      chain: Chain.Tron,
+      coin: {
+        chain: Chain.Tron,
+        ticker: 'TRX',
+        decimals: 6,
+        address: 'TClaimOwner',
+      } as AccountCoin,
+    })
+
+    expect(memo).toBe(tronWithdrawExpireUnfreezeMemo)
   })
 })

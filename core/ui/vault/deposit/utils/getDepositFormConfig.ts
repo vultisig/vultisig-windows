@@ -16,6 +16,7 @@ import { z } from 'zod'
 
 import { ChainAction } from '../ChainAction'
 import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
+import { tronWithdrawExpireUnfreezeAction } from '../tron/withdrawExpireUnfreeze'
 import {
   optionalNonNegativeAmountSchema,
   optionalPositiveAmountSchema,
@@ -135,6 +136,14 @@ export const getDepositFormConfig = ({
       : undefined
 
   return match<ChainAction, ChainActionConfig>(selectedChainAction, {
+    [tronWithdrawExpireUnfreezeAction]: () => ({
+      fields: [],
+      // Supplied by the claimable dashboard row and intentionally hidden: the
+      // amount is display-only because the native contract sweeps all matured
+      // entries. Requiring it prevents a private action route from fabricating
+      // a zero-value claim presentation.
+      schema: z.object({ amount: z.string() }),
+    }),
     withdraw_ruji_rewards: () => ({
       fields: [],
       schema: z.object({}).superRefine((_val, ctx) => {
