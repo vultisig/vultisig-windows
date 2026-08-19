@@ -2,10 +2,10 @@ import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQuer
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { useCallback, useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
+import { getKeysignFeeAmount } from '../../../mpc/keysign/fee/tronMemoFee'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { getSwapQuoteAffiliateBps } from '../affiliate/affiliateBps'
@@ -40,7 +40,7 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
 
         const network = {
           ...fromFeeCoin,
-          amount: await getFeeAmount({
+          amount: await getKeysignFeeAmount({
             keysignPayload,
             walletCore,
             publicKey,
