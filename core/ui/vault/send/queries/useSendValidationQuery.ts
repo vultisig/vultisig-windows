@@ -6,13 +6,13 @@ import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useSpendableSendAmount } from '../amount/useSpendableSendAmount'
 import { validateSendForm } from '../form/validateSendForm'
 import { useSendDestinationTagInput } from '../state/destinationTag'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
+import { useSendBalanceQuery } from './useSendBalanceQuery'
 import { useSendFeeEstimateQuery } from './useSendFeeEstimateQuery'
 
 export const useSendValidationQuery = () => {
@@ -27,10 +27,10 @@ export const useSendValidationQuery = () => {
   const [destinationTag] = useSendDestinationTagInput()
   const [address] = useSendReceiver()
   const walletCore = useAssertWalletCore()
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const feeEstimateQuery = useSendFeeEstimateQuery()
 
-  const nativeBalanceQuery = useBalanceQuery(
+  const nativeBalanceQuery = useSendBalanceQuery(
     extractAccountCoinKey({
       ...chainFeeCoin[coin.chain],
       address: coin.address,
