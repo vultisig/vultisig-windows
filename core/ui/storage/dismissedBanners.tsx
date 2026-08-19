@@ -6,15 +6,18 @@ import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export type BannerId =
-  | 'followOnX'
-  | 'migrate'
-  | 'agentNavigationCoachmark'
-  | 'buyVultPromo'
-  | 'rujiraStaking'
-  | 'vaultBackup'
-  | 'referralCode'
-  | 'kamino'
+export const bannerIds = [
+  'followOnX',
+  'migrate',
+  'agentNavigationCoachmark',
+  'buyVultPromo',
+  'rujiraStaking',
+  'vaultBackup',
+  'referralCode',
+  'kamino',
+] as const
+
+export type BannerId = (typeof bannerIds)[number]
 
 export type BannerDismissal = {
   dismissedAt: number

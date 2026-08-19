@@ -33,6 +33,11 @@ type VaultOverviewProps = {
   scrollContainerRef: RefObject<HTMLDivElement>
 }
 
+/**
+ * The vault home screen: total balance, primary actions, the promo carousel
+ * and the asset tabs. The scroll container is owned here but shared with
+ * `CollapsingBalance`, which collapses the balance as that container scrolls.
+ */
 export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   const banners = useHomePromoBanners()
 

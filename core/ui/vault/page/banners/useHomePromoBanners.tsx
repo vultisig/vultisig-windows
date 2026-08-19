@@ -21,6 +21,15 @@ type HomePromoBannerEntry = {
   component: (props: { onDismiss: () => void }) => ReactNode
 }
 
+type BannerInput = {
+  id: Exclude<BannerId, 'agentNavigationCoachmark'>
+  /** The small line above the title. */
+  caption: string
+  /** The emphasised line the banner leads with. */
+  title: string
+  onClick: () => void
+}
+
 /**
  * Builds the home carousel's banner list. Each entry is gated on the state it
  * advertises - a vault already backed up has nothing to back up - so the
@@ -54,12 +63,12 @@ export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
     })
   }
 
-  const banner = (
-    id: Exclude<BannerId, 'agentNavigationCoachmark'>,
-    caption: string,
-    title: string,
-    onClick: () => void
-  ): HomePromoBannerEntry => {
+  const banner = ({
+    id,
+    caption,
+    title,
+    onClick,
+  }: BannerInput): HomePromoBannerEntry => {
     const visuals = homePromoBannerVisuals[id]
 
     return {
@@ -82,71 +91,74 @@ export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
   return [
     ...(vault.libType !== 'DKLS'
       ? [
-          banner('migrate', t('sign_faster'), t('upgrade_now_prompt'), () =>
-            navigate({ id: 'migrateVault' })
-          ),
+          banner({
+            id: 'migrate',
+            caption: t('sign_faster'),
+            title: t('upgrade_now_prompt'),
+            onClick: () => navigate({ id: 'migrateVault' }),
+          }),
         ]
       : []),
     ...(isVultisigBrand
       ? [
-          banner(
-            'rujiraStaking',
-            t('rujira_banner_subtitle'),
-            t('rujira_banner_title'),
-            () => navigate({ id: 'defi', state: {} })
-          ),
+          banner({
+            id: 'rujiraStaking',
+            caption: t('rujira_banner_caption'),
+            title: t('rujira_banner_title'),
+            onClick: () => navigate({ id: 'defi', state: {} }),
+          }),
         ]
       : []),
     ...(isVultisigBrand
       ? [
-          banner(
-            'followOnX',
-            t('follow_banner_subtitle'),
-            t('follow_banner_title'),
-            () =>
-              window.open(vultisigTwitterUrl, '_blank', 'noopener,noreferrer')
-          ),
+          banner({
+            id: 'followOnX',
+            caption: t('follow_banner_caption'),
+            title: t('follow_banner_title'),
+            onClick: () =>
+              window.open(vultisigTwitterUrl, '_blank', 'noopener,noreferrer'),
+          }),
         ]
       : []),
     ...(vault.isBackedUp
       ? []
       : [
-          banner(
-            'vaultBackup',
-            t('vault_backup_banner_subtitle'),
-            t('vault_backup_banner_title'),
-            () => navigate({ id: 'vaultBackup' })
-          ),
+          banner({
+            id: 'vaultBackup',
+            caption: t('vault_backup_banner_caption'),
+            title: t('vault_backup_banner_title'),
+            onClick: () => navigate({ id: 'vaultBackup' }),
+          }),
         ]),
     ...(isVultisigBrand && !friendReferral
       ? [
-          banner(
-            'referralCode',
-            t('referral_banner_subtitle'),
-            t('referral_banner_title'),
-            () => navigate({ id: 'referral' })
-          ),
+          banner({
+            id: 'referralCode',
+            caption: t('referral_banner_caption'),
+            title: t('referral_banner_title'),
+            onClick: () => navigate({ id: 'referral' }),
+          }),
         ]
       : []),
     ...(isVultisigBrand
       ? [
-          banner(
-            'buyVultPromo',
-            t('buy_vult_banner_title'),
-            t('buy_vult_banner_subtitle'),
-            openSwapToVult
-          ),
+          banner({
+            id: 'buyVultPromo',
+            caption: t('buy_vult_banner_caption'),
+            title: t('buy_vult_banner_title'),
+            onClick: openSwapToVult,
+          }),
         ]
       : []),
     ...(isVultisigBrand
       ? [
-          banner(
-            'kamino',
-            t('kamino_banner_subtitle'),
-            t('kamino_banner_title'),
+          banner({
+            id: 'kamino',
+            caption: t('kamino_banner_caption'),
+            title: t('kamino_banner_title'),
             // Destination pending the Solana Kamino integration - see #4685.
-            () => {}
-          ),
+            onClick: () => {},
+          }),
         ]
       : []),
   ]

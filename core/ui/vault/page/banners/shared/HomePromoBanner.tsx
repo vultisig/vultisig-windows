@@ -49,6 +49,12 @@ export const HomePromoBanner = ({
       tabIndex={0}
       onClick={onClick}
       onKeyDown={event => {
+        // The dismiss button sits inside the banner, so its own Enter/Space
+        // would otherwise bubble up here and open the campaign as well.
+        if (event.target !== event.currentTarget) {
+          return
+        }
+
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
           onClick()
