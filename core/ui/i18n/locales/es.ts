@@ -1763,7 +1763,6 @@ export const es = {
   swap_limit_asset: 'Activo',
   swap_limit_buy: 'Comprar',
   swap_limit_execute_when: 'Ejecutar cuando',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Vender',
   swap_limit_blocker_chain_unavailable:
     'Esta cadena se ha detenido temporalmente en THORChain',
@@ -1879,4 +1878,6 @@ export const es = {
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
   swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'valga',
+  swap_limit_when_one: 'Cuando 1',
 }

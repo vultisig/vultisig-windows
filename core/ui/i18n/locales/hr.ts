@@ -1735,7 +1735,6 @@ export const hr = {
   swap_limit_asset: 'Imovina',
   swap_limit_buy: 'Kupiti',
   swap_limit_execute_when: 'Izvrši kada',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Prodavati',
   swap_limit_blocker_chain_unavailable:
     'Ovaj lanac je privremeno zaustavljen na THORChain',
@@ -1849,4 +1848,6 @@ export const hr = {
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
   swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'vrijedi',
+  swap_limit_when_one: 'Kada 1',
 }

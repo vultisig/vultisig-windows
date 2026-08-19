@@ -1725,7 +1725,6 @@ export const ko = {
   swap_limit_asset: '유산',
   swap_limit_buy: '구입하다',
   swap_limit_execute_when: '실행 시점',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: '팔다',
   swap_limit_blocker_chain_unavailable:
     '이 체인은 THORChain 에서 일시적으로 중단되었습니다.',
@@ -1839,4 +1838,6 @@ export const ko = {
   swap_route_eta_hours: '~{{hours}}시간',
   swap_route_eta_hours_minutes: '~{{hours}}시간 {{minutes}}분',
   swap_route_eta_minutes: '~{{minutes}}분',
+  swap_limit_is_worth: '의 가치가',
+  swap_limit_when_one: '1',
 }

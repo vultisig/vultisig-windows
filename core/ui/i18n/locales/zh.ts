@@ -1620,7 +1620,6 @@ export const zh = {
   swap_limit_asset: '资产',
   swap_limit_buy: '买',
   swap_limit_execute_when: '执行时机',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: '卖',
   swap_limit_blocker_chain_unavailable: '此链暂时在THORChain处停止。',
   swap_limit_blocker_insufficient_balance: '金额超过您的余额',
@@ -1725,4 +1724,6 @@ export const zh = {
   swap_route_eta_hours: '~{{hours}}小时',
   swap_route_eta_hours_minutes: '~{{hours}}小时{{minutes}}分',
   swap_route_eta_minutes: '~{{minutes}}分',
+  swap_limit_is_worth: '价值达到',
+  swap_limit_when_one: '当 1',
 }

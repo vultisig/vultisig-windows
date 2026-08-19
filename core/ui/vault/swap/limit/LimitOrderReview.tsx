@@ -34,9 +34,9 @@ export type LimitOrderReviewData = {
   expectedToAmount: bigint
   /** The `=<` memo to sign. */
   memo: string
-  /** Target price of one buy unit, in sell-asset units. */
+  /** Target worth of one sell unit, in buy-asset units. */
   unitPrice: string | undefined
-  /** Target price of one buy unit, in fiat. */
+  /** Target worth of one sell unit, in fiat. */
   targetPriceLabel: string | undefined
   expiryHours: LimitSwapExpiryHours
 }
