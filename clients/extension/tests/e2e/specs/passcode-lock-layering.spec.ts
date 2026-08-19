@@ -32,7 +32,7 @@ import {
 } from '../helpers/vault-import'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
-const passcode = '13579'
+const passcode = '135790'
 const autoLockMinutes = 1
 // Exact `en.ts` strings. `getByText` matches case-insensitively, but
 // `topLayerTextAt` compares raw textContent, so the casing has to be right.
@@ -97,14 +97,14 @@ const enablePasscode = async (page: Page) => {
 
   await page.getByText('OFF', { exact: true }).first().click()
 
-  // Two PasscodeInputs, each a row of five single-character boxes that advance
-  // focus on input — so typing five characters fills one row.
+  // Two PasscodeInputs, each a row of six single-character boxes that advance
+  // focus on input — so typing six characters fills one row.
   const digitBoxes = page.locator('input[type="password"]')
-  await expect(digitBoxes).toHaveCount(10)
+  await expect(digitBoxes).toHaveCount(12)
 
   await digitBoxes.first().click()
   await page.keyboard.type(passcode)
-  await digitBoxes.nth(5).click()
+  await digitBoxes.nth(6).click()
   await page.keyboard.type(passcode)
 
   await page.getByRole('button', { name: /set passcode/i }).click()

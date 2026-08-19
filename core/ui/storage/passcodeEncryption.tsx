@@ -2,11 +2,14 @@ import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
 
+import type { PasscodeAttemptState } from '../passcodeEncryption/core/passcodeAttemptThrottle'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
 type PasscodeEncryption = {
   encryptedSample: string
+  passcodeLength?: number
+  attemptState?: PasscodeAttemptState
 }
 
 export type PasscodeEncryptionValue = PasscodeEncryption | null
