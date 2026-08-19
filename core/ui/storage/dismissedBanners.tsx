@@ -11,6 +11,10 @@ export type BannerId =
   | 'migrate'
   | 'agentNavigationCoachmark'
   | 'buyVultPromo'
+  | 'rujiraStaking'
+  | 'vaultBackup'
+  | 'referralCode'
+  | 'kamino'
 
 export type BannerDismissal = {
   dismissedAt: number
@@ -37,6 +41,10 @@ export const bannerDismissalTtl: Record<BannerId, number> = {
   followOnX: convertDuration(15, 'd', 'ms'),
   migrate: convertDuration(15, 'd', 'ms'),
   agentNavigationCoachmark: convertDuration(15, 'd', 'ms'),
+  rujiraStaking: convertDuration(7, 'd', 'ms'),
+  vaultBackup: convertDuration(7, 'd', 'ms'),
+  referralCode: convertDuration(7, 'd', 'ms'),
+  kamino: convertDuration(7, 'd', 'ms'),
 }
 
 /**
