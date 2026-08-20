@@ -2,12 +2,19 @@
 
 set -euo pipefail
 
-binary_path="$1"
-dependencies=$(readelf --dynamic "$binary_path")
+WEBKIT_SONAME='libwebkit2gtk-4.1.so.0'
 
-if grep --fixed-strings --quiet 'libwebkit2gtk-4.1.so.0' <<<"$dependencies"; then
+if [[ $# -lt 1 || -z "${1:-}" ]]; then
+  echo "usage: $0 <linux-elf>" >&2
+  exit 2
+fi
+
+binary_path="$1"
+needed=$(readelf --dynamic "$binary_path" | grep -E '\(NEEDED\)' || true)
+
+if grep -E --quiet "Shared library:[[:space:]]*\[${WEBKIT_SONAME}\]" <<<"$needed"; then
   exit 0
 fi
 
-echo 'Linux build must use WebKitGTK 4.1. Check build:tags in wails.json.' >&2
+echo "Linux build must link ${WEBKIT_SONAME}. Pass -tags webkit2_41 on Ubuntu 24.04 / Debian 13." >&2
 exit 1

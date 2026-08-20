@@ -13,13 +13,16 @@ This project uses Wails. Please refer to https://wails.io/docs/gettingstarted/in
 
 ### For Linux Users
 
-Vultisig under Linux requires the WebKitGTK 4.1 runtime. On Debian 12+ and
-Ubuntu 22.04+, install it with:
+Released Linux builds link WebKitGTK 4.1. On Debian 13 and Ubuntu 24.04:
 
 ```bash
 sudo apt update
 sudo apt install libwebkit2gtk-4.1-0
 ```
+
+Ubuntu 22.04 local development still uses WebKitGTK 4.0 (`libwebkit2gtk-4.0-dev`).
+Do not add `webkit2_41` to `wails.json` — Wails v2.11 applies those tags on every
+`wails build` / `wails dev`, which fails on 22.04.
 
 ### Development
 
@@ -37,11 +40,22 @@ database automatically.
 
 ### Building
 
-Install the Linux build dependencies and build against the WebKitGTK 4.1 ABI:
+To build the desktop frontend:
 
 ```bash
-sudo apt install libgtk-3-dev libwebkit2gtk-4.1-dev
+yarn build:desktop
+```
+
+To build the native desktop binary:
+
+```bash
+# Ubuntu 22.04 (WebKitGTK 4.0)
+sudo apt install libgtk-3-dev libwebkit2gtk-4.0-dev
 wails build
+
+# Ubuntu 24.04 / Debian 13 (WebKitGTK 4.1)
+sudo apt install libgtk-3-dev libwebkit2gtk-4.1-dev
+wails build -tags webkit2_41
 ```
 
 ## Vultisig Extension Extension

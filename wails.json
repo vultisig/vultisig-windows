@@ -2,7 +2,6 @@
   "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "Vultisig",
   "outputfilename": "vultisig",
-  "build:tags": "webkit2_41",
   "packageManager": "yarn@4.9.4",
   "workspaces": ["clients/desktop"],
   "devServer": "localhost:34115",
@@ -11,9 +10,6 @@
   "frontend:build": "yarn build",
   "frontend:dev:watcher": "yarn dev",
   "frontend:dev:serverUrl": "auto",
-  "postBuildHooks": {
-    "linux/*": "bash ../../scripts/verify-linux-webkit.sh \"${bin}\""
-  },
   "description": "Vultisig for Windows",
   "info": {
     "companyName": "Vultisig",
