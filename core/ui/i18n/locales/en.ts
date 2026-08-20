@@ -1430,6 +1430,19 @@ export const en = {
   kamino_earn_deposit: 'Deposit into vault',
   kamino_earn_deposit_to: 'Deposit to',
   kamino_earn_minimum_deposit: 'Minimum deposit',
+  kamino_earn_amount_unavailable:
+    'This amount cannot be converted right now. Try again in a moment.',
+  kamino_earn_available_to_withdraw: 'Available to withdraw',
+  kamino_earn_delayed_liquidity:
+    'This is more than the vault currently holds liquid, so it may take longer to settle.',
+  kamino_earn_receive_estimate:
+    'The final amount is set when the withdrawal settles and may differ slightly.',
+  kamino_earn_releases_from_farm:
+    'Part of this position is staked, so the withdrawal releases it first.',
+  kamino_earn_shares_burned: 'Shares burned',
+  kamino_earn_withdraw: 'Withdraw',
+  kamino_earn_withdraw_from: 'Withdraw from',
+  kamino_earn_you_receive: 'You receive',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_curated_by: 'Curated by {{curator}}',
   kamino_earn_no_position: 'You have nothing in this vault yet',

@@ -144,16 +144,51 @@ export const KaminoVaultCard = ({
         </HStack>
       )}
 
-      <Button
-        onClick={() =>
-          navigate({
-            id: 'kaminoDeposit',
-            state: { vaultAddress: info.descriptor.address },
-          })
-        }
-      >
-        {t('kamino_earn_deposit')}
-      </Button>
+      <HStack gap={8}>
+        {/*
+         * Withdraw appears once the vault is known to hold something, and
+         * while that is still unknown: a position must never be made
+         * unreachable by a read that failed. Deposit takes the whole width
+         * when it is alone, because a half-width button beside empty space
+         * reads as a control that is missing rather than one that is absent.
+         */}
+        {position.status === 'settled' && !hasPosition ? (
+          <Button
+            onClick={() =>
+              navigate({
+                id: 'kaminoDeposit',
+                state: { vaultAddress: info.descriptor.address },
+              })
+            }
+          >
+            {t('kamino_earn_deposit')}
+          </Button>
+        ) : (
+          <>
+            <Button
+              kind="secondary"
+              onClick={() =>
+                navigate({
+                  id: 'kaminoWithdraw',
+                  state: { vaultAddress: info.descriptor.address },
+                })
+              }
+            >
+              {t('kamino_earn_withdraw')}
+            </Button>
+            <Button
+              onClick={() =>
+                navigate({
+                  id: 'kaminoDeposit',
+                  state: { vaultAddress: info.descriptor.address },
+                })
+              }
+            >
+              {t('kamino_earn_deposit')}
+            </Button>
+          </>
+        )}
+      </HStack>
     </Container>
   )
 }

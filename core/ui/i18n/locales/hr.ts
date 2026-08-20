@@ -1864,4 +1864,17 @@ export const hr = {
   kamino_earn_deposit: 'Polog u trezor',
   kamino_earn_deposit_to: 'Uplata na',
   kamino_earn_minimum_deposit: 'Minimalni depozit',
+  kamino_earn_amount_unavailable:
+    'Ovaj iznos trenutno nije moguće pretvoriti. Pokušajte ponovno za trenutak.',
+  kamino_earn_available_to_withdraw: 'Dostupno za isplatu',
+  kamino_earn_delayed_liquidity:
+    'To je više nego što trezor trenutno sadrži tekućinu, pa bi moglo trebati dulje da se slegne.',
+  kamino_earn_receive_estimate:
+    'Konačni iznos se utvrđuje prilikom isplate i može se neznatno razlikovati.',
+  kamino_earn_releases_from_farm:
+    'Dio ove pozicije je uložen, pa se povlačenjem prvo oslobađa.',
+  kamino_earn_shares_burned: 'Spaljene dionice',
+  kamino_earn_withdraw: 'Povući',
+  kamino_earn_withdraw_from: 'Povuci se iz',
+  kamino_earn_you_receive: 'Primate',
 }

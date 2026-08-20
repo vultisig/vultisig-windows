@@ -1873,4 +1873,17 @@ export const ru = {
   kamino_earn_deposit: 'Внести в хранилище',
   kamino_earn_deposit_to: 'Внести депозит',
   kamino_earn_minimum_deposit: 'Минимальный депозит',
+  kamino_earn_amount_unavailable:
+    'В данный момент конвертация этой суммы невозможна. Попробуйте позже.',
+  kamino_earn_available_to_withdraw: 'Доступно для вывода средств',
+  kamino_earn_delayed_liquidity:
+    'Это больше, чем вмещает хранилище в данный момент жидкости, поэтому для оседания может потребоваться больше времени.',
+  kamino_earn_receive_estimate:
+    'Окончательная сумма устанавливается при расчете вывода средств и может незначительно отличаться.',
+  kamino_earn_releases_from_farm:
+    'Часть этой позиции заблокирована, поэтому при выводе средств сначала освобождается именно она.',
+  kamino_earn_shares_burned: 'Сгорели акции',
+  kamino_earn_withdraw: 'Отзывать',
+  kamino_earn_withdraw_from: 'Выйти из',
+  kamino_earn_you_receive: 'Вы получаете',
 }

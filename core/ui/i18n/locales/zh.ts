@@ -1739,4 +1739,15 @@ export const zh = {
   kamino_earn_deposit: '存入金库',
   kamino_earn_deposit_to: '存款',
   kamino_earn_minimum_deposit: '最低存款',
+  kamino_earn_amount_unavailable: '此金额目前无法转换，请稍后再试。',
+  kamino_earn_available_to_withdraw: '可提取',
+  kamino_earn_delayed_liquidity:
+    '这比金库目前容纳的液体量还要多，因此可能需要更长时间才能稳定下来。',
+  kamino_earn_receive_estimate: '最终金额在提款结算时确定，可能会略有不同。',
+  kamino_earn_releases_from_farm:
+    '这部分仓位已进行质押，因此提款会首先释放这部分质押仓位。',
+  kamino_earn_shares_burned: '股票被烧毁',
+  kamino_earn_withdraw: '提取',
+  kamino_earn_withdraw_from: '退出',
+  kamino_earn_you_receive: '您收到',
 }

@@ -1894,4 +1894,17 @@ export const es = {
   kamino_earn_deposit: 'Depositar en la bóveda',
   kamino_earn_deposit_to: 'Depositar en',
   kamino_earn_minimum_deposit: 'Depósito mínimo',
+  kamino_earn_amount_unavailable:
+    'Este importe no se puede convertir en este momento. Inténtelo de nuevo en un instante.',
+  kamino_earn_available_to_withdraw: 'Disponible para retirar',
+  kamino_earn_delayed_liquidity:
+    'Esta cantidad supera la capacidad actual de la bóveda en cuanto a líquido, por lo que podría tardar más tiempo en estabilizarse.',
+  kamino_earn_receive_estimate:
+    'El importe final se fija cuando se procesa el retiro y puede variar ligeramente.',
+  kamino_earn_releases_from_farm:
+    'Parte de esta posición está en staking, por lo que el retiro la libera primero.',
+  kamino_earn_shares_burned: 'Acciones quemadas',
+  kamino_earn_withdraw: 'Retirar',
+  kamino_earn_withdraw_from: 'Retirarse de',
+  kamino_earn_you_receive: 'Usted recibe',
 }
