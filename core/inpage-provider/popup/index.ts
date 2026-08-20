@@ -2,7 +2,7 @@ import {
   PopupInterface,
   PopupMethod,
 } from '@core/inpage-provider/popup/interface'
-import { PopupCall } from '@core/inpage-provider/popup/resolver'
+import { PopupCall, PopupOptions } from '@core/inpage-provider/popup/resolver'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { callInpageProviderBridgeBackgroundAgent } from '../bridge'
@@ -18,7 +18,7 @@ import { toPopupCallError } from './error'
  */
 export const callPopup = async <M extends PopupMethod>(
   call: PopupCall<M>,
-  options: { account?: string; shouldClosePopup?: boolean } = {}
+  options: PopupOptions = {}
 ): Promise<PopupInterface[M]['output']> => {
   const result = await attempt(() =>
     callInpageProviderBridgeBackgroundAgent({
