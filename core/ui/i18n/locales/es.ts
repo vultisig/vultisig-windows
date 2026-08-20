@@ -1889,4 +1889,9 @@ export const es = {
     'No se pudieron cargar los saldos. Las bóvedas mostradas están actualizadas.',
   kamino_earn_risk_conservative: 'Conservador',
   kamino_earn_risk_private_credit: 'Crédito privado',
+  kamino_earn_below_minimum:
+    'Esta bóveda acepta depósitos de {{amount}} o más.',
+  kamino_earn_deposit: 'Depósito',
+  kamino_earn_deposit_to: 'Depositar en',
+  kamino_earn_minimum_deposit: 'Depósito mínimo',
 }

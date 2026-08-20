@@ -1,5 +1,7 @@
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -70,6 +72,7 @@ export const KaminoVaultCard = ({
 }: KaminoVaultCardProps) => {
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
+  const navigate = useCoreNavigate()
   const { riskTier, curator } = info.descriptor
   const hasPosition = position.status === 'settled' && position.tokenAmount > 0
 
@@ -140,6 +143,17 @@ export const KaminoVaultCard = ({
           </Text>
         </HStack>
       )}
+
+      <Button
+        onClick={() =>
+          navigate({
+            id: 'kaminoDeposit',
+            state: { vaultAddress: info.descriptor.address },
+          })
+        }
+      >
+        {t('kamino_earn_deposit')}
+      </Button>
     </Container>
   )
 }

@@ -22,6 +22,10 @@ type KaminoOwnedPosition = {
   pnlToken?: number
 }
 
+/** The query key for one owner's Kamino positions, shared with the refresh. */
+export const getKaminoPositionsQueryKey = (owner: string) =>
+  ['kaminoPositions', owner] as const
+
 /**
  * The owner's positions across the curated vaults, keyed by vault address.
  *
@@ -31,7 +35,7 @@ type KaminoOwnedPosition = {
  */
 export const useKaminoPositionsQuery = (owner: string) =>
   useQuery({
-    queryKey: ['kaminoPositions', owner] as const,
+    queryKey: getKaminoPositionsQueryKey(owner),
     enabled: owner.length > 0,
     staleTime: 0,
     gcTime: 0,

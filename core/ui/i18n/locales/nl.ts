@@ -1872,4 +1872,9 @@ export const nl = {
     "Saldo's konden niet worden geladen. De weergegeven kluizen zijn actueel.",
   kamino_earn_risk_conservative: 'Conservatief',
   kamino_earn_risk_private_credit: 'Particuliere kredietverlening',
+  kamino_earn_below_minimum:
+    'Deze kluis accepteert stortingen van {{amount}} of meer.',
+  kamino_earn_deposit: 'Borg',
+  kamino_earn_deposit_to: 'Storten aan',
+  kamino_earn_minimum_deposit: 'Minimale storting',
 }

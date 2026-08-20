@@ -12,9 +12,12 @@ import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
  * disagrees with the registry's pinned identity — so a dropped entry is one
  * that could not be trusted, not one we chose not to show.
  */
+/** The vault-hydration query key, shared with the DeFi refresh. */
+export const kaminoVaultsQueryKey = ['kaminoVaults'] as const
+
 export const useKaminoVaultsQuery = () =>
   useQuery({
-    queryKey: ['kaminoVaults'] as const,
+    queryKey: kaminoVaultsQueryKey,
     queryFn: async (): Promise<KaminoVaultInfo[]> => {
       const results = await Promise.allSettled(
         kaminoVaultRegistry.map(({ address }) => fetchKaminoVaultInfo(address))
