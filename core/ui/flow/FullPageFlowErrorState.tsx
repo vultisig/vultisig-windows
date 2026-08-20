@@ -11,6 +11,11 @@ import {
   FlowErrorPageContentProps,
 } from './FlowErrorPageContent'
 
+/**
+ * Full-page error screen with a close control. The close control defers to
+ * {@link useFlowErrorClose} when a flow provides one, handing it the error on
+ * screen so the flow can report the reason; otherwise it returns to the vault.
+ */
 export const FullPageFlowErrorState = (props: FlowErrorPageContentProps) => {
   const navigate = useCoreNavigate()
   const onClose = useFlowErrorClose()
@@ -20,7 +25,11 @@ export const FullPageFlowErrorState = (props: FlowErrorPageContentProps) => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
-          <CloseButton onClick={onClose ?? (() => navigate({ id: 'vault' }))}>
+          <CloseButton
+            onClick={() =>
+              onClose ? onClose(props.error) : navigate({ id: 'vault' })
+            }
+          >
             <CrossIcon />
           </CloseButton>
         }

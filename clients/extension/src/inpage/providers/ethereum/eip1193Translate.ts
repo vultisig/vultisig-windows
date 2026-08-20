@@ -1,4 +1,7 @@
-import { PopupError } from '@core/inpage-provider/popup/error'
+import {
+  getPopupErrorMessage,
+  PopupError,
+} from '@core/inpage-provider/popup/error'
 
 import { EIP1193Error } from '../../../background/handlers/errorHandler'
 
@@ -31,6 +34,9 @@ const internalErrorCode = -32603
  *
  * - `EIP1193Error` passes through by reference.
  * - `PopupError.RejectedByUser` → `EIP1193Error('UserRejectedRequest')` (code 4001).
+ * - Other `PopupError` sentinels → `InternalError` (-32603) carrying the
+ *   readable wording from `getPopupErrorMessage`, so a failed sign reports
+ *   what went wrong rather than a bare `"Internal error"`.
  * - `{ code: number, message: string, data? }` → preserved on a new
  *   `EIP1193Error`, keeping `data` for things like revert reasons.
  * - Any `Error` instance → `InternalError` (-32603) with its original
@@ -46,6 +52,14 @@ export const toEip1193Error = (error: unknown): EIP1193Error => {
 
   if (error === PopupError.RejectedByUser) {
     return new EIP1193Error('UserRejectedRequest')
+  }
+
+  const popupMessage = getPopupErrorMessage(error)
+  if (popupMessage) {
+    return new EIP1193Error({
+      code: internalErrorCode,
+      message: popupMessage,
+    })
   }
 
   if (isProviderRpcErrorLike(error)) {

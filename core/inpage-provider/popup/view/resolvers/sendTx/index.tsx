@@ -1,10 +1,15 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
+import {
+  broadcastFailedPopupResult,
+  signingFailedPopupResult,
+} from '@core/inpage-provider/popup/error'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { FlowErrorCloseProvider } from '@core/ui/flow/FlowErrorCloseContext'
 import {
   KeysignMutationListener,
   KeysignMutationListenerProvider,
 } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
+import { BroadcastError } from '@core/ui/mpc/keysign/broadcastKeysignTx'
 import { CoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { NavigationProvider } from '@lib/ui/navigation/state'
@@ -49,9 +54,15 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
     <NavigationProvider initialValue={{ history: [{ id: 'overview' }] }}>
       <KeysignMutationListenerProvider value={keysignMutationListener}>
         <FlowErrorCloseProvider
-          value={() =>
+          value={error =>
             onFinish({
-              result: { error: new Error('Signing failed') },
+              // A broadcast failure means the transaction was signed and only
+              // the network rejected it, so the dApp must not be told signing
+              // never happened.
+              result:
+                error instanceof BroadcastError
+                  ? broadcastFailedPopupResult
+                  : signingFailedPopupResult,
               shouldClosePopup: true,
             })
           }

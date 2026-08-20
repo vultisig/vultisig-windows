@@ -1,4 +1,5 @@
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
+import { callNotFoundPopupResult } from '@core/inpage-provider/popup/error'
 import { PopupMethod } from '@core/inpage-provider/popup/interface'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -30,8 +31,11 @@ export const PopupApp = () => {
 
       return entry
     },
-    onError: error => {
-      resolvePopupCall({ result: { error }, shouldClosePopup: true })
+    onError: () => {
+      resolvePopupCall({
+        result: callNotFoundPopupResult,
+        shouldClosePopup: true,
+      })
     },
   })
 
