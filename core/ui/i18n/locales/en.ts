@@ -270,6 +270,7 @@ export const en = {
   defiChainTabs: {
     bonded: 'Bonded',
     staked: 'Staked',
+    earn: 'Earn',
     lps: 'LPs',
     governance: 'Governance',
   },
@@ -1425,6 +1426,15 @@ export const en = {
   solana_staking_total_staked: 'Total Staked {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegate to New Validator',
   solana_staking_stake_accounts: 'Stake Accounts',
+  kamino_earn_apy_30d: 'APY (30d)',
+  kamino_earn_balance: 'Balance',
+  kamino_earn_curated_by: 'Curated by {{curator}}',
+  kamino_earn_no_position: 'No deposit yet',
+  kamino_earn_pnl: 'Profit / loss',
+  kamino_earn_positions_unavailable:
+    'Balances could not be loaded. The vaults shown are up to date.',
+  kamino_earn_risk_conservative: 'Conservative',
+  kamino_earn_risk_private_credit: 'Private credit',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Rent reserve',
   solana_staking_min_delegation: 'Minimum delegation is {{amount}} {{ticker}}',

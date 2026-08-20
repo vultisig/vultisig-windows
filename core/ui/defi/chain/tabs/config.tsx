@@ -4,10 +4,16 @@ import { TFunction } from 'i18next'
 
 import { featureFlags } from '../../../featureFlags'
 import { BondedPositions } from './BondedPositions'
+import { EarnPositions } from './EarnPositions'
 import { LpPositions } from './LpPositions'
 import { StakedPositions } from './StakedPositions'
 
-export type DefiChainPageTab = 'bonded' | 'staked' | 'lps' | 'governance'
+export type DefiChainPageTab =
+  | 'bonded'
+  | 'staked'
+  | 'earn'
+  | 'lps'
+  | 'governance'
 
 type DefiChainTabsOptions = {
   includeBonded?: boolean
@@ -19,6 +25,11 @@ type DefiChainTabsOptions = {
   includeLps?: boolean
   /** QBTC-only governance segment (proposal browsing + on-chain voting). */
   includeGovernance?: boolean
+  /**
+   * Solana-only Earn segment (Kamino Earn vaults). Other chains have no
+   * curated earn vaults, so the tab would render empty for them.
+   */
+  includeEarn?: boolean
 }
 
 export const getDefiChainTabs = (
@@ -27,6 +38,7 @@ export const getDefiChainTabs = (
     includeBonded = true,
     includeLps = true,
     includeGovernance = false,
+    includeEarn = false,
   }: DefiChainTabsOptions = {}
 ): Tab<DefiChainPageTab>[] => [
   ...(includeBonded
@@ -43,6 +55,15 @@ export const getDefiChainTabs = (
     label: t('defiChainTabs.staked'),
     renderContent: StakedPositions,
   },
+  ...(includeEarn
+    ? [
+        {
+          value: 'earn' as const,
+          label: t('defiChainTabs.earn'),
+          renderContent: EarnPositions,
+        },
+      ]
+    : []),
   ...(featureFlags.defiLpsTab && includeLps
     ? [
         {

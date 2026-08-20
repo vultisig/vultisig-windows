@@ -1,3 +1,4 @@
+import { withoutKaminoShareCoins } from '@core/ui/chain/coin/solana/isKaminoShareCoin'
 import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { withoutThorchainLpCoins } from '@core/ui/chain/coin/thorchain/isThorchainLpCoin'
@@ -25,17 +26,21 @@ export const useCurrentVaultCoins = () => {
 }
 
 /**
- * {@link useCurrentVaultCoins} minus DeFi-only THORChain entries: the staking
- * receipts sRUJI and ybRUNE, and Rujira LP tokens (`LP-…`). Use for portfolio
- * UX: balances, fiat totals, swap/send pickers, refresh. LP positions are
- * surfaced under `DeFi → LPs` instead. Keep {@link useCurrentVaultCoins} for
- * storage-accurate flows (manage tokens, CoinFinder dedupe, resolving a send
- * `coin` key that may still reference a legacy receipt/LP row).
+ * {@link useCurrentVaultCoins} minus DeFi-only entries: the THORChain staking
+ * receipts sRUJI and ybRUNE, Rujira LP tokens (`LP-…`), and Kamino Earn share
+ * mints. Use for portfolio UX: balances, fiat totals, swap/send pickers,
+ * refresh. Those positions are surfaced under their own `DeFi` tabs instead,
+ * where they are valued correctly — a share mint has no price feed of its own.
+ * Keep {@link useCurrentVaultCoins} for storage-accurate flows (manage tokens,
+ * CoinFinder dedupe, resolving a send `coin` key that may still reference a
+ * legacy receipt/LP row).
  */
 export const usePortfolioVaultCoins = () =>
-  withoutThorchainLpCoins(
-    withoutBondedRuneReceiptCoins(
-      withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+  withoutKaminoShareCoins(
+    withoutThorchainLpCoins(
+      withoutBondedRuneReceiptCoins(
+        withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+      )
     )
   )
 

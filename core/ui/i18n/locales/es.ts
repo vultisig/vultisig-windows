@@ -242,6 +242,7 @@ export const es = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Gobernancia',
+    earn: 'Ganar',
   },
   vaultTabs: {
     portfolio: 'Portafolio',
@@ -1880,4 +1881,13 @@ export const es = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valga',
   swap_limit_when_one: 'Cuando 1',
+  kamino_earn_apy_30d: 'APY (30 días)',
+  kamino_earn_balance: 'Balance',
+  kamino_earn_curated_by: 'Seleccionado por {{curator}}',
+  kamino_earn_no_position: 'Aún no se ha realizado ningún depósito.',
+  kamino_earn_pnl: 'Ganancia/pérdida',
+  kamino_earn_positions_unavailable:
+    'No se pudieron cargar los saldos. Las bóvedas mostradas están actualizadas.',
+  kamino_earn_risk_conservative: 'Conservador',
+  kamino_earn_risk_private_credit: 'Crédito privado',
 }
