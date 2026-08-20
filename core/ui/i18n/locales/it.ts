@@ -1910,7 +1910,7 @@ export const it = {
   kamino_earn_releases_from_farm:
     'Una parte di questa posizione è bloccata, quindi il prelievo la sblocca per prima.',
   kamino_earn_shares_burned: 'azioni bruciate',
-  kamino_earn_withdraw: 'Ritirare',
+  kamino_earn_withdraw: 'Prelevare dal caveau',
   kamino_earn_withdraw_from: 'Ritirarsi da',
   kamino_earn_you_receive: 'Tu ricevi',
 }

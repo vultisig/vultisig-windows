@@ -1864,7 +1864,7 @@ export const ko = {
   kamino_earn_releases_from_farm:
     '이 포지션의 일부는 스테이킹되어 있으므로, 출금 시 스테이킹된 부분이 먼저 해제됩니다.',
   kamino_earn_shares_burned: '주식이 불탔다',
-  kamino_earn_withdraw: '철회하다',
+  kamino_earn_withdraw: '금고에서 인출',
   kamino_earn_withdraw_from: '인출하다',
   kamino_earn_you_receive: '당신은 받습니다',
 }

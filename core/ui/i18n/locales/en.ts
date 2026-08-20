@@ -1440,7 +1440,7 @@ export const en = {
   kamino_earn_releases_from_farm:
     'Part of this position is staked, so the withdrawal releases it first.',
   kamino_earn_shares_burned: 'Shares burned',
-  kamino_earn_withdraw: 'Withdraw',
+  kamino_earn_withdraw: 'Withdraw from vault',
   kamino_earn_withdraw_from: 'Withdraw from',
   kamino_earn_you_receive: 'You receive',
   kamino_earn_apy_30d: 'APY (30d)',

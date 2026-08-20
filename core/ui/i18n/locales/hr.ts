@@ -1874,7 +1874,7 @@ export const hr = {
   kamino_earn_releases_from_farm:
     'Dio ove pozicije je uložen, pa se povlačenjem prvo oslobađa.',
   kamino_earn_shares_burned: 'Spaljene dionice',
-  kamino_earn_withdraw: 'Povući',
+  kamino_earn_withdraw: 'Isplata iz trezora',
   kamino_earn_withdraw_from: 'Povuci se iz',
   kamino_earn_you_receive: 'Primate',
 }

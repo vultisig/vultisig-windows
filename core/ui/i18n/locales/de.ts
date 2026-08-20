@@ -1918,7 +1918,7 @@ export const de = {
   kamino_earn_releases_from_farm:
     'Ein Teil dieser Position ist gestakt, daher wird er bei der Auszahlung zuerst freigegeben.',
   kamino_earn_shares_burned: 'Aktien verbrannt',
-  kamino_earn_withdraw: 'Zurückziehen',
+  kamino_earn_withdraw: 'Aus dem Tresor abheben',
   kamino_earn_withdraw_from: 'Zurückziehen von',
   kamino_earn_you_receive: 'Sie erhalten',
 }

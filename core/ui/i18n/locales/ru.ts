@@ -1883,7 +1883,7 @@ export const ru = {
   kamino_earn_releases_from_farm:
     'Часть этой позиции заблокирована, поэтому при выводе средств сначала освобождается именно она.',
   kamino_earn_shares_burned: 'Сгорели акции',
-  kamino_earn_withdraw: 'Отзывать',
+  kamino_earn_withdraw: 'Извлечь из хранилища',
   kamino_earn_withdraw_from: 'Выйти из',
   kamino_earn_you_receive: 'Вы получаете',
 }

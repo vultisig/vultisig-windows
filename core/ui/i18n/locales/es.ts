@@ -1904,7 +1904,7 @@ export const es = {
   kamino_earn_releases_from_farm:
     'Parte de esta posición está en staking, por lo que el retiro la libera primero.',
   kamino_earn_shares_burned: 'Acciones quemadas',
-  kamino_earn_withdraw: 'Retirar',
+  kamino_earn_withdraw: 'Retirar de la bóveda',
   kamino_earn_withdraw_from: 'Retirarse de',
   kamino_earn_you_receive: 'Usted recibe',
 }

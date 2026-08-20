@@ -1747,7 +1747,7 @@ export const zh = {
   kamino_earn_releases_from_farm:
     '这部分仓位已进行质押，因此提款会首先释放这部分质押仓位。',
   kamino_earn_shares_burned: '股票被烧毁',
-  kamino_earn_withdraw: '提取',
+  kamino_earn_withdraw: '从金库提取',
   kamino_earn_withdraw_from: '退出',
   kamino_earn_you_receive: '您收到',
 }

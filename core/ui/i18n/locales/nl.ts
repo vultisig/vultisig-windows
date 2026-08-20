@@ -1887,7 +1887,7 @@ export const nl = {
   kamino_earn_releases_from_farm:
     'Een deel van deze positie is gestaked, dus bij een opname wordt dat deel eerst vrijgegeven.',
   kamino_earn_shares_burned: 'Aandelen verbrand',
-  kamino_earn_withdraw: 'Terugtrekken',
+  kamino_earn_withdraw: 'Opname uit de kluis',
   kamino_earn_withdraw_from: 'Terugtrekken uit',
   kamino_earn_you_receive: 'U ontvangt',
 }
