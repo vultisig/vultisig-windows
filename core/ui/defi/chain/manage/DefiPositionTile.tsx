@@ -84,10 +84,14 @@ export const DefiPositionTile = ({
   const icon = resolveDefiPositionIcon(position)
   const coin = resolveDefiPositionCoin(position)
 
-  const label =
-    position.type === 'lp'
-      ? position.name || position.ticker
-      : (coin.ticker ?? position.name)
+  // An LP or earn position is identified by the position, not by the token it
+  // is denominated in: two Kamino vaults can share USDC, and a tile labelled
+  // "USDC" twice names neither of them. Everything else is one token, where
+  // the ticker is the shorter, more familiar label.
+  const identifiedByName = position.type === 'lp' || position.type === 'earn'
+  const label = identifiedByName
+    ? position.name || position.ticker
+    : (coin.ticker ?? position.name)
 
   const handleClick = () => {
     if (isLoading) return

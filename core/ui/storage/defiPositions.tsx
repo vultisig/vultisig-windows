@@ -7,7 +7,6 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { kaminoConfig } from '@vultisig/core-chain/chains/solana/kamino/config'
 import { kaminoVaultRegistry } from '@vultisig/core-chain/chains/solana/kamino/registry'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
@@ -20,6 +19,7 @@ import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useMemo } from 'react'
 
 import { kaminoEarnPositionId } from '../defi/chain/solana/kamino/positionId'
+import { kaminoUnderlyingCoin } from '../defi/chain/solana/kamino/underlyingCoin'
 import { currentProductBrand, ProductBrand } from '../product/brand'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
@@ -44,22 +44,17 @@ type LpSupportedChain = typeof Chain.THORChain | typeof Chain.MayaChain
  * The curated Kamino Earn vaults as selectable DeFi positions.
  *
  * Built from the registry rather than listed here, so adding a vault upstream
- * surfaces it without a second edit. The coin is the vault's UNDERLYING token
- * — what a balance is denominated and priced in — resolved by mint; the SOL
- * vault's underlying is wrapped SOL, which the token store does not carry, and
- * wrapping is a 1:1 escrow sharing a price, so it resolves to native SOL.
+ * surfaces it without a second edit. The coin comes from the shared resolver
+ * the Earn cards use, so a tile and its card can never show different tokens.
  */
 const kaminoEarnPositions = (): DefiPosition[] =>
-  kaminoVaultRegistry.map(({ address, fallbackName, tokenMint }) => {
-    const coin =
-      tokenMint === kaminoConfig.wrappedSolMint
-        ? chainFeeCoin[Chain.Solana]
-        : knownTokensIndex[Chain.Solana]?.[tokenMint]
+  kaminoVaultRegistry.map(descriptor => {
+    const coin = kaminoUnderlyingCoin(descriptor)
 
     return {
-      id: kaminoEarnPositionId(address),
-      name: fallbackName,
-      ticker: coin?.ticker ?? fallbackName,
+      id: kaminoEarnPositionId(descriptor.address),
+      name: descriptor.fallbackName,
+      ticker: coin.ticker,
       type: 'earn' as const,
       chain: Chain.Solana,
       coin,

@@ -10,11 +10,7 @@ import {
   kaminoShareToTokenValue,
   KaminoTokenAmount,
 } from '@vultisig/core-chain/chains/solana/kamino/amount'
-import { kaminoConfig } from '@vultisig/core-chain/chains/solana/kamino/config'
-import { KaminoVaultInfo } from '@vultisig/core-chain/chains/solana/kamino/models'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { Coin, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 
 import { DefiPositionEmptyState } from '../../tabs/DefiPositionEmptyState'
@@ -24,17 +20,7 @@ import { KaminoVaultCard } from './KaminoVaultCard'
 import { kaminoEarnPositionId } from './positionId'
 import { useKaminoPositionsQuery } from './queries/useKaminoPositionsQuery'
 import { useKaminoVaultsQuery } from './queries/useKaminoVaultsQuery'
-
-/**
- * The underlying coin a vault's balance is denominated and priced in. The SOL
- * vault's underlying is wrapped SOL, which the token store does not carry —
- * wrapping is a 1:1 escrow of the native coin and the two share a price, so it
- * resolves to native SOL.
- */
-const underlyingCoin = (info: KaminoVaultInfo): Coin | undefined =>
-  info.descriptor.tokenMint === kaminoConfig.wrappedSolMint
-    ? chainFeeCoin[Chain.Solana]
-    : knownTokensIndex[Chain.Solana]?.[info.descriptor.tokenMint]
+import { kaminoUnderlyingCoin } from './underlyingCoin'
 
 /**
  * Kamino Earn on the Solana DeFi tab: the curated vaults the user has enabled,
@@ -54,10 +40,9 @@ export const KaminoEarnView = () => {
   const vaultsQuery = useKaminoVaultsQuery()
   const positionsQuery = useKaminoPositionsQuery(owner)
   const pricesQuery = useCoinPricesQuery({
-    coins: (vaultsQuery.data ?? []).flatMap(info => {
-      const coin = underlyingCoin(info)
-      return coin ? [coin] : []
-    }),
+    coins: (vaultsQuery.data ?? []).map(info =>
+      kaminoUnderlyingCoin(info.descriptor)
+    ),
   })
 
   const selected = new Set(selectedPositions)
@@ -79,9 +64,7 @@ export const KaminoEarnView = () => {
         return (
           <VStack gap={12} style={{ marginBottom: 100 }}>
             {enabled.map(info => {
-              const coin = underlyingCoin(info)
-              if (!coin) return null
-
+              const coin = kaminoUnderlyingCoin(info.descriptor)
               const position = positionsQuery.data?.[info.descriptor.address]
               const tokenValue: KaminoTokenAmount | undefined = position
                 ? kaminoShareToTokenValue({
