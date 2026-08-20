@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
@@ -31,7 +32,7 @@ const StyledButton = styled(UnstyledButton)`
   align-items: center;
   gap: 6px;
 
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: ${getColor('foreground')};
 
   transition: background 0.3s ease;

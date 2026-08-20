@@ -58,7 +58,6 @@ export const pt = {
   approval_tx: 'Aprovação Tx',
   approve: 'Aprovar',
   reject: 'Rejeitar',
-  applied_discounts: 'Descontos aplicados:',
   asset: 'Ativo',
   assets: 'Ativos',
   at_least_one_device: 'Pelo menos um dispositivo',
@@ -568,10 +567,7 @@ export const pt = {
     'Você pode gerenciar as notificações nas configurações do sistema.',
   max: 'Máximo',
   max_4_characters: 'Máximo de 4 caracteres',
-  max_total_fees: 'Taxa máxima total',
   memo: 'Memorando',
-  merge: 'Fusão',
-  merged: 'Fundido',
   message: 'Mensagem',
   message_required: 'É necessário enviar uma mensagem.',
   message_to_sign: 'Mensagem para assinar',
@@ -583,7 +579,6 @@ export const pt = {
   missing_destination_address: 'Endereço de destino ausente',
   missing_devices_for_migration:
     'Conecte-se aos seguintes dispositivos para migrar seu cofre.',
-  missing_thorchain_address: 'Endereço THORChain ausente',
   more: 'mais',
   moreInfo: 'Mais informações',
   more_coming_soon: 'Em breve mais',
@@ -610,7 +605,6 @@ export const pt = {
   no_connected_dapps: 'Nenhum dApp conectado',
   no_connected_dapps_desc:
     'Os dApps aparecerão aqui sempre que você interagir com eles.',
-  no_mergeable_tokens_found: 'Nenhum token mesclável encontrado',
   no_referral_yet: 'Ainda não há indicação.',
   no_token_found: 'Token não encontrado',
   no_transactions_yet: 'Ainda não há transações.',
@@ -931,7 +925,6 @@ export const pt = {
     input: 'O valor da troca está correto.',
     output: 'Concordo com o valor mínimo que receberei.',
   },
-  switch: 'Trocar',
   switchToInternet: 'Volte para o modo de internet.',
   switchToLocal: 'Alternar para o modo local',
   target: 'Alvo',
@@ -940,7 +933,6 @@ export const pt = {
   this_device: 'Este dispositivo',
   this_device_suffix: '(este dispositivo)',
   this_vault_only: 'Somente este cofre',
-  thorchain_address: 'Endereço THORChain',
   thorchain_address_required_for_referrals:
     'Você precisa ter um endereço THORChain para usar o programa de indicação.',
   tns_alnum_only:
@@ -1001,7 +993,6 @@ export const pt = {
   unlock_discount_tier_description_ultimate:
     'Ao possuir o token {{minBalance}}, você desbloqueará o nível {{tier}} e receberá <b>isenção total da taxa Vultisig</b> em todas as trocas.',
   unlock_tier: 'Desbloquear nível',
-  unmerge: 'Desfazer fusão',
   unfreeze: 'Unfreeze',
   unknown: 'Desconhecido',
   unlimited: 'Ilimitado',
@@ -1774,7 +1765,6 @@ export const pt = {
   swap_limit_asset: 'Ativo',
   swap_limit_buy: 'Comprar',
   swap_limit_execute_when: 'Executar quando',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Vender',
   swap_limit_blocker_chain_unavailable:
     'Esta cadeia está temporariamente interrompida em THORChain',
@@ -1783,7 +1773,7 @@ export const pt = {
     'Este pedido não pode ser processado conforme inserido.',
   swap_limit_blocker_no_amount: 'Insira a quantidade que deseja vender.',
   swap_limit_blocker_no_market_price:
-    'Ainda não há preço de mercado disponível para este par.',
+    'Este par não pode ser negociado em THORChain neste momento. Escolha um ativo diferente.',
   swap_limit_blocker_no_price: 'Insira um preço-alvo',
   swap_limit_blocker_pair_not_routable:
     'THORChain não pode rotear uma ordem limite entre esses ativos.',
@@ -1879,4 +1869,18 @@ export const pt = {
     'Revise os detalhes da troca, o destinatário e as configurações avançadas e tente novamente.',
   swap_no_routes_found:
     'Não há uma rota de swap disponível para este par de ativos.',
+  ripple_warning_partial_payment:
+    'Esta transação é um pagamento parcial: o valor exibido é o máximo que pode ser entregue, não um valor garantido. O destinatário pode receber um valor inferior. O valor gasto é limitado pelo limite máximo de envio, e a taxa de rede é cobrada adicionalmente.',
+  ripple_warning_custom_paths:
+    'O site forneceu rotas candidatas para este pagamento. A rede decide qual delas usar, podendo também utilizar a rota direta.',
+  price_impact: 'Impacto no preço',
+  swap_fee_included_in_rate: 'Incluído na taxa de câmbio cotada',
+  swap_protocol_fee: 'Taxa de protocolo',
+  swap_referral_fee: 'Taxa de encaminhamento',
+  select_route: 'Selecione a rota',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'valer',
+  swap_limit_when_one: 'Quando 1',
 }

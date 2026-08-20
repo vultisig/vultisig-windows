@@ -1,6 +1,7 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { SolanaValidatorAvatar } from '@core/ui/chain/solana/staking/components/SolanaValidatorAvatar'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -85,7 +86,7 @@ export const SolanaDelegationCard = ({
       gap={12}
       style={{
         padding: 16,
-        borderRadius: 16,
+        borderRadius: borderRadiusPx.lg,
         background: 'rgba(255,255,255,0.04)',
       }}
     >

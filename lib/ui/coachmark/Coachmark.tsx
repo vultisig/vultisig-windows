@@ -6,6 +6,8 @@ import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { borderRadius } from '../css/borderRadius'
+
 type CoachmarkProps = {
   title: string
   description: string
@@ -107,7 +109,7 @@ const CloseButton = styled(UnstyledButton)`
   &:focus-visible {
     outline: 2px solid ${getColor('foregroundSuper')};
     outline-offset: 4px;
-    border-radius: 4px;
+    ${borderRadius.xs};
   }
 `
 

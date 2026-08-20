@@ -5,6 +5,7 @@ import { useCore } from '@core/ui/state/core'
 import { StakingAmountInput } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/CosmosStakingSpecific/StakingAmountInput'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { PercentageSelector } from '@lib/ui/inputs/PercentageSelector'
@@ -278,7 +279,7 @@ const TonStakePageContent = ({ coin }: { coin: AccountCoin }) => {
 const Card = styled(VStack).attrs({ gap: 12, flexGrow: true })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 const CenteredAmount = styled.div`
@@ -295,7 +296,7 @@ const PoolField = styled.button.attrs({ type: 'button' })`
   justify-content: space-between;
   width: 100%;
   padding: 16px;
-  border-radius: 12px;
+  ${borderRadius.md};
   cursor: pointer;
   background: transparent;
   border: 1px solid ${getColor('foregroundExtra')};

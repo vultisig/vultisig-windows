@@ -8,7 +8,7 @@ import styled, { css } from 'styled-components'
 
 export const DnDItemHighlight = styled.div`
   position: absolute;
-  ${borderRadius.m};
+  ${borderRadius.md};
   ${absoluteOutline(0, 0)}
 
   border: 2px solid ${getColor('primary')};

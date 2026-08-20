@@ -84,7 +84,8 @@ describe('getThorchainSecuredAssetPrices', () => {
     ).toBeCloseTo(0.00069927, 8)
   })
 
-  it('omits denoms without an available pool and zero-priced pools', async () => {
+  it('omits and logs denoms without an available pool and zero-priced pools', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
     mockQueryUrl.mockResolvedValue([
       { asset: 'BTC.BTC', asset_tor_price: '6417195738200' },
       { asset: 'ETH.ETH', asset_tor_price: '0' },
@@ -99,14 +100,18 @@ describe('getThorchainSecuredAssetPrices', () => {
     expect(prices['btc-btc']).toBeGreaterThan(0)
     expect('eth-eth' in prices).toBe(false)
     expect('ltc-ltc' in prices).toBe(false)
+    expect(consoleError).toHaveBeenCalledWith(
+      expect.stringContaining('eth-eth, ltc-ltc')
+    )
+    consoleError.mockRestore()
   })
 
-  it('returns an empty map when the pools request fails', async () => {
+  it('propagates a pools request failure instead of resolving empty', async () => {
     mockQueryUrl.mockRejectedValue(new Error('network'))
 
-    const prices = await getThorchainSecuredAssetPrices(['btc-btc'])
-
-    expect(prices).toEqual({})
+    await expect(getThorchainSecuredAssetPrices(['btc-btc'])).rejects.toThrow(
+      'network'
+    )
   })
 })
 
@@ -143,18 +148,18 @@ describe('getThorchainSecuredAssetFiatPrices', () => {
     expect(prices['btc-btc']).toBeCloseTo(64171.957382 * 0.9, 2)
   })
 
-  it('returns no prices when the usd anchor is missing for a non-USD currency', async () => {
+  it('throws when the usd anchor is missing for a non-USD currency', async () => {
     mockQueryUrl.mockResolvedValue([
       { asset: 'BTC.BTC', asset_tor_price: '6417195738200' },
     ])
     // Successful response that does not include the usd-coin anchor.
     mockGetCoinPrices.mockResolvedValue({})
 
-    const prices = await getThorchainSecuredAssetFiatPrices({
-      denoms: ['btc-btc'],
-      fiatCurrency: 'eur',
-    })
-
-    expect(prices).toEqual({})
+    await expect(
+      getThorchainSecuredAssetFiatPrices({
+        denoms: ['btc-btc'],
+        fiatCurrency: 'eur',
+      })
+    ).rejects.toThrow('usd-coin')
   })
 })

@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { VStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -10,7 +11,7 @@ export const BannerContainer = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 122px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   border: 1px solid rgba(52, 230, 191, 0.17);
   background: linear-gradient(
     180deg,
@@ -26,13 +27,13 @@ export const BannerContent = styled(VStack)`
 
 export const ChainLogo = styled.img`
   ${sameDimensions(32)};
-  border-radius: 50%;
+  ${borderRadius.pill};
 `
 
 export const FallbackLogo = styled.div`
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: ${getColor('foregroundExtra')};
   display: flex;
   align-items: center;
@@ -41,6 +42,7 @@ export const FallbackLogo = styled.div`
   font-weight: 600;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 export const GradientBackground = styled.div`
   width: 260px;
   height: 260px;
@@ -62,7 +64,7 @@ export const Ring = styled.div`
   position: absolute;
   width: 210px;
   height: 210px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   border: 1.5px solid rgba(0, 255, 200, 0.35);
   right: -30px;
   top: -30px;
@@ -91,7 +93,7 @@ export const TerraBannerContainer = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 122px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   border: 1px solid rgba(63, 168, 116, 0.17);
   background: linear-gradient(
     180deg,
@@ -120,7 +122,7 @@ export const MayachainBannerContainer = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 122px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   border: 1px solid rgba(28, 157, 125, 0.17);
   background: linear-gradient(
     180deg,
@@ -165,7 +167,7 @@ export const BannerLogoGlow = styled.div`
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 50%;
+    ${borderRadius.pill};
     background: radial-gradient(
       50% 50% at 50% 50%,
       rgba(51, 204, 204, 0.35) 0%,
@@ -178,7 +180,7 @@ export const BannerLogoGlow = styled.div`
     content: '';
     position: absolute;
     inset: 24px;
-    border-radius: 50%;
+    ${borderRadius.pill};
     border: 1.5px solid rgba(0, 255, 200, 0.35);
     box-shadow: 0 0 40px rgba(0, 255, 200, 0.25);
   }
@@ -187,7 +189,7 @@ export const BannerLogoGlow = styled.div`
 export const BannerLogoImage = styled.img`
   ${sameDimensions(80)};
   position: relative;
-  border-radius: 50%;
+  ${borderRadius.pill};
 `
 
 export const ChainTitle = styled(Text)`

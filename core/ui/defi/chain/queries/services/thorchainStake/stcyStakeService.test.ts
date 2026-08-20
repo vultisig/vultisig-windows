@@ -17,7 +17,7 @@ const userBalanceUrl = `${bankApiBase}/balances/${address}/by_denom?denom=${enco
 const vaultBalanceUrl = `${bankApiBase}/balances/${tcyAutoCompounderConfig.contract}/by_denom?denom=${encodeURIComponent(tcyAutoCompounderConfig.depositDenom)}`
 const supplyUrl = `${bankApiBase}/supply/by_denom?denom=${encodeURIComponent(tcyAutoCompounderConfig.shareDenom)}`
 const tcyPriceKey = coinKeyToString(thorchainTokens.tcy)
-const stcyPriceKey = coinKeyToString(thorchainTokens.stcy)
+const tcyPrice = 0.13977412
 
 const mockBalances = ({
   shares = '116484502',
@@ -43,38 +43,35 @@ const mockBalances = ({
   })
 }
 
-const fetchPosition = () =>
-  fetchStcyStakePosition({
-    address,
-    prices: {
-      [tcyPriceKey]: 0.13977412,
-      [stcyPriceKey]: 999,
-    },
-  })
+const fetchPosition = () => fetchStcyStakePosition(address)
 
 describe('fetchStcyStakePosition', () => {
   beforeEach(() => {
     vi.mocked(queryUrl).mockReset()
   })
 
-  it('values sTCY shares by their live underlying TCY without changing the share amount', async () => {
+  it('bases the fiat value on the live underlying TCY without changing the share amount', async () => {
     mockBalances()
 
     const position = await fetchPosition()
 
     expect(position?.amount).toBe(116484502n)
-    expect(position?.fiatValue).toBeCloseTo(0.183362591, 9)
+    expect(position?.fiatBasis.coinKey).toBe(tcyPriceKey)
+    expect((position?.fiatBasis.amount ?? 0) * tcyPrice).toBeCloseTo(
+      0.183362591,
+      9
+    )
     expect(queryUrl).toHaveBeenCalledWith(vaultBalanceUrl)
     expect(queryUrl).toHaveBeenCalledWith(supplyUrl)
   })
 
-  it('returns zero fiat for a zero supply instead of dividing by zero or valuing shares 1:1', async () => {
+  it('returns a zero fiat basis for a zero supply instead of dividing by zero or valuing shares 1:1', async () => {
     mockBalances({ shareSupply: '0' })
 
     const position = await fetchPosition()
 
     expect(position?.amount).toBe(116484502n)
-    expect(position?.fiatValue).toBe(0)
+    expect(position?.fiatBasis.amount).toBe(0)
   })
 
   it('keeps the share position visible when a redemption-rate query fails', async () => {
@@ -90,7 +87,7 @@ describe('fetchStcyStakePosition', () => {
     const position = await fetchPosition()
 
     expect(position?.amount).toBe(116484502n)
-    expect(position?.fiatValue).toBe(0)
+    expect(position?.fiatBasis.amount).toBe(0)
   })
 
   it('skips redemption-rate queries for an empty share balance', async () => {
@@ -99,7 +96,7 @@ describe('fetchStcyStakePosition', () => {
     const position = await fetchPosition()
 
     expect(position?.amount).toBe(0n)
-    expect(position?.fiatValue).toBe(0)
+    expect(position?.fiatBasis.amount).toBe(0)
     expect(queryUrl).toHaveBeenCalledTimes(1)
   })
 

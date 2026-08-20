@@ -8,6 +8,7 @@
  * - wallet_switchEthereumChain - chainChanged event fires
  * - reject connection returns UserRejectedRequest error
  * - window.vultisig and its Solana provider are injected
+ * - window.vultisig delegates the EIP-1193 surface without losing cross-chain keys
  */
 
 import { test, expect } from '../fixtures/extension-loader'
@@ -385,5 +386,48 @@ test.describe('DApp Provider', () => {
       })
 
     await page.close()
+  })
+
+  test('window.vultisig delegates the EIP-1193 surface without losing cross-chain keys', async ({ context }) => {
+    const page = await context.newPage()
+
+    try {
+      await page.goto(dappUrl)
+      await page.waitForLoadState('domcontentloaded')
+      await page.waitForFunction(() => !!window.vultisig, null, { timeout: 10000 })
+
+      const delegatedMethods = ['request', 'on', 'removeListener', 'isConnected']
+
+      const result = await page.evaluate(async (delegated) => {
+        const keys = Object.keys(window.vultisig)
+        return {
+          delegateTypes: delegated.map(
+            (method) => typeof Reflect.get(window.vultisig, method)
+          ),
+          // Legacy path and canonical provider must answer identically
+          chainIdViaContainer: await window.vultisig.request({ method: 'eth_chainId' }),
+          chainIdViaProvider: await window.vultisig.ethereum.request({ method: 'eth_chainId' }),
+          isConnectedMatchesProvider:
+            window.vultisig.isConnected() === window.vultisig.ethereum.isConnected(),
+          enumerableDelegates: keys.filter((key) => delegated.includes(key)),
+          crossChainKeysIntact: [
+            'ethereum',
+            'solana',
+            'thorchain',
+            'xrpl',
+            'getVault',
+            'getVaults',
+          ].every((key) => keys.includes(key)),
+        }
+      }, delegatedMethods)
+
+      expect(result.delegateTypes).toEqual(['function', 'function', 'function', 'function'])
+      expect(result.chainIdViaContainer).toBe(result.chainIdViaProvider)
+      expect(result.isConnectedMatchesProvider).toBe(true)
+      expect(result.enumerableDelegates).toEqual([])
+      expect(result.crossChainKeysIntact).toBe(true)
+    } finally {
+      await page.close()
+    }
   })
 })

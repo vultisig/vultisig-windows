@@ -12,6 +12,7 @@ type PasscodeInputProps = InputProps<string | null> &
     Pick<MultiCharacterInputProps, 'validation' | 'validationMessages'>
   > & {
     autoFocus?: boolean
+    length?: number
   }
 
 export const PasscodeInput = ({
@@ -21,6 +22,7 @@ export const PasscodeInput = ({
   label,
   validation,
   validationMessages,
+  length = passcodeEncryptionConfig.passcodeLength,
 }: PasscodeInputProps) => {
   return (
     <>
@@ -28,7 +30,7 @@ export const PasscodeInput = ({
       <MultiCharacterInput
         autoFocusFirst={autoFocus}
         includePasteButton={false}
-        length={passcodeEncryptionConfig.passcodeLength}
+        length={length}
         onChange={newValue => onChange(newValue)}
         validation={validation}
         validationMessages={validationMessages}

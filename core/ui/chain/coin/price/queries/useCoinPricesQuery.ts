@@ -1,6 +1,6 @@
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { EagerQuery, Query } from '@lib/ui/query/Query'
-import { persistQueryOptions } from '@lib/ui/query/utils/options'
+import { pricePersistQueryOptions } from '@lib/ui/query/utils/options'
 import { useQueries } from '@tanstack/react-query'
 import { Chain, CosmosChain, EvmChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -146,7 +146,7 @@ export function useCoinPricesQuery(
 
           return result
         },
-        ...persistQueryOptions,
+        ...pricePersistQueryOptions,
       })
     })
   }
@@ -182,7 +182,7 @@ export function useCoinPricesQuery(
 
         return result
       },
-      ...persistQueryOptions,
+      ...pricePersistQueryOptions,
     })
   }
 
@@ -212,7 +212,7 @@ export function useCoinPricesQuery(
         }
         return result
       },
-      ...persistQueryOptions,
+      ...pricePersistQueryOptions,
     })
   }
 
@@ -237,7 +237,7 @@ export function useCoinPricesQuery(
 
         return result
       },
-      ...persistQueryOptions,
+      ...pricePersistQueryOptions,
     })
   }
 
@@ -282,7 +282,7 @@ export function useCoinPricesQuery(
 
         return result
       },
-      ...persistQueryOptions,
+      ...pricePersistQueryOptions,
     })
   }
 

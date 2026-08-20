@@ -12,6 +12,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { Collapse } from '@lib/ui/layout/Collapse'
@@ -50,7 +51,7 @@ const StyledTitle = styled.span<Styles>`
 `
 
 const RoundedCoinIconWrapper = styled.div`
-  border-radius: 99px;
+  ${borderRadius.pill};
   display: inline-flex;
   overflow: hidden;
 `
@@ -157,8 +158,13 @@ const TonSwapItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
     swapIntent.offerAsset === 'ton' ? chainFeeCoin[Chain.Ton] : jettonCoin
 
   return (
-    <ContainerWrapper radius={16}>
-      <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
+    <ContainerWrapper radius={borderRadiusPx.lg}>
+      <VStack
+        bgColor="foreground"
+        gap={24}
+        padding={24}
+        radius={borderRadiusPx.lg}
+      >
         <Text color="supporting" size={15}>
           {t('youre_swapping')}
         </Text>
@@ -188,8 +194,13 @@ const TonSimulationSwapItem = ({
   const { t } = useTranslation()
 
   return (
-    <ContainerWrapper radius={16}>
-      <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
+    <ContainerWrapper radius={borderRadiusPx.lg}>
+      <VStack
+        bgColor="foreground"
+        gap={24}
+        padding={24}
+        radius={borderRadiusPx.lg}
+      >
         <Text color="supporting" size={15}>
           {t('youre_swapping')}
         </Text>

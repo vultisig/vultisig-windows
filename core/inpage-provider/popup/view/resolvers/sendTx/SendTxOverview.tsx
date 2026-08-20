@@ -23,6 +23,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
+import { getKeysignFeeAmount } from '@core/ui/mpc/keysign/fee/tronMemoFee'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
@@ -38,6 +39,7 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -67,7 +69,6 @@ import { parseBlockaidSuiSimulation } from '@vultisig/core-chain/security/blocka
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -134,7 +135,7 @@ export const SendTxOverview = ({
       walletCore,
     ],
     queryFn: () =>
-      getFeeAmount({
+      getKeysignFeeAmount({
         keysignPayload: shouldBePresent(keysignPayloadQuery.data),
         walletCore,
         publicKey: shouldBePresent(publicKey),
@@ -408,7 +409,7 @@ export const SendTxOverview = ({
                     bgColor="foreground"
                     gap={16}
                     padding={24}
-                    radius={16}
+                    radius={borderRadiusPx.lg}
                   >
                     <DappRequestRow />
                     <DappRequestDivider />
@@ -546,7 +547,7 @@ export const SendTxOverview = ({
                         keysignPayload={keysignPayload}
                         signTon={keysignPayload.signData.value}
                       />
-                      <VStack bgColor="foreground" radius={16}>
+                      <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}
                           transactionPayload={transactionPayload}
@@ -584,7 +585,7 @@ export const SendTxOverview = ({
                       <SignRippleDisplay
                         rawJson={keysignPayload.signData.value.rawJson}
                       />
-                      <VStack bgColor="foreground" radius={16}>
+                      <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}
                           transactionPayload={transactionPayload}
@@ -620,7 +621,7 @@ export const SendTxOverview = ({
                         />
                       </List>
                       <MemoSection memo={keysignPayload.memo} chain={chain} />
-                      <VStack bgColor="foreground" radius={16}>
+                      <VStack bgColor="foreground" radius={borderRadiusPx.lg}>
                         <NetworkFeeSection
                           keysignPayload={keysignPayload}
                           transactionPayload={transactionPayload}

@@ -8,6 +8,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
 import {
   InvisibleHTMLCheckbox,
   InvisibleHTMLCheckboxProps,
@@ -22,7 +23,7 @@ const Box = styled.div<{ isChecked: boolean }>`
   ${sameDimensions(20)}
   ${centerContent};
   box-sizing: border-box;
-  border-radius: 100%;
+  ${borderRadius.pill};
   color: ${getColor('primary')};
   background: ${getColor('foregroundExtra')};
   font-size: 16px;

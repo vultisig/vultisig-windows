@@ -1,7 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { SwapFiatAmount } from '@core/ui/vault/swap/form/amount/SwapFiatAmount'
 import { VerifySwapFees } from '@core/ui/vault/swap/form/info/VerifySwapFees'
@@ -16,6 +15,7 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -38,7 +38,6 @@ type SwapVerifyProps = {
 
 export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
   const { t } = useTranslation()
-  const vault = useCurrentVault()
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
@@ -60,16 +59,16 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
         terms={translatedTerms}
         swapQuote={swapQuote}
       >
-        <ContainerWrapper radius={16}>
-          <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
-            <VStack gap={4}>
-              <Text color="supporting" size={15}>
-                {t('youre_swapping')}
-              </Text>
-              <Text color="shy" size={13}>
-                {vault.name}
-              </Text>
-            </VStack>
+        <ContainerWrapper radius={borderRadiusPx.lg}>
+          <VStack
+            bgColor="foreground"
+            gap={24}
+            padding={24}
+            radius={borderRadiusPx.lg}
+          >
+            <Text color="supporting" size={15}>
+              {t('youre_swapping')}
+            </Text>
             <VStack gap={16}>
               <HStack gap={12} alignItems="center">
                 <CoinIcon coin={fromCoin} style={{ fontSize: 32 }} />
@@ -145,7 +144,12 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
             </VStack>
           </VStack>
         </ContainerWrapper>
-        <VStack bgColor="foreground" gap={24} padding={12} radius={16}>
+        <VStack
+          bgColor="foreground"
+          gap={24}
+          padding={12}
+          radius={borderRadiusPx.lg}
+        >
           <VerifySwapFees swapQuote={swapQuote} />
         </VStack>
         <MatchQuery

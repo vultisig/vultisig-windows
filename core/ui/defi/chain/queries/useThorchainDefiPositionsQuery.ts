@@ -1,8 +1,10 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 
+import { joinDefiPositionsWithPrices } from './joinDefiPositionsWithPrices'
 import {
   fetchBondPositions,
   fetchChurns,
@@ -12,12 +14,18 @@ import {
 } from './services/thorchainBondService'
 import { fetchStakePositions } from './services/thorchainStake'
 import { thorchainDefiCoins } from './tokens'
-import { DefiChainPositions } from './types'
+import { RawDefiChainPositions } from './types'
 
 type UseThorchainDefiPositionsQueryOptions = {
   enabled?: boolean
 }
 
+/**
+ * THORChain bond and stake positions with fiat values. The address-keyed
+ * cache holds price-free raw data; fiat is joined from the live price query
+ * at render, so a transient price failure or partial price data can never be
+ * snapshotted into the cache — values self-correct as soon as prices resolve.
+ */
 export const useThorchainDefiPositionsQuery = (
   options: UseThorchainDefiPositionsQueryOptions = {}
 ) => {
@@ -25,14 +33,10 @@ export const useThorchainDefiPositionsQuery = (
   const address = useCurrentVaultAddress(Chain.THORChain)
   const priceQuery = useCoinPricesQuery({ coins: thorchainDefiCoins })
 
-  const isEnabled = enabled && Boolean(address) && Boolean(priceQuery.data)
-
-  return useQuery<DefiChainPositions>({
+  const positionsQuery = useQuery<RawDefiChainPositions>({
     queryKey: ['defi', 'thorchain', 'positions', address],
-    enabled: isEnabled,
+    enabled: enabled && Boolean(address),
     queryFn: async () => {
-      const prices = priceQuery.data ?? {}
-
       const [churns, networkInfo, health, network] = await Promise.all([
         fetchChurns(),
         fetchNetworkInfo(),
@@ -42,20 +46,22 @@ export const useThorchainDefiPositionsQuery = (
 
       const bond = await fetchBondPositions(
         address,
-        prices,
         churns ?? [],
         networkInfo ?? {},
         health ?? {},
         !network?.vaults_migrating
       )
 
-      const stake = await fetchStakePositions({ address, prices })
+      const stake = await fetchStakePositions(address)
 
-      return {
-        bond,
-        stake,
-        prices,
-      }
+      return { bond, stake }
     },
   })
+
+  return useTransformQueryData(positionsQuery, positions =>
+    joinDefiPositionsWithPrices({
+      positions,
+      prices: priceQuery.data ?? {},
+    })
+  )
 }

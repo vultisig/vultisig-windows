@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
@@ -22,7 +23,7 @@ const ChainSelector = styled(HStack)`
   ${panel()};
   cursor: pointer;
   padding: 12px 16px;
-  border-radius: 8px;
+  ${borderRadius.sm};
   align-items: center;
   gap: 12px;
   height: 56px;

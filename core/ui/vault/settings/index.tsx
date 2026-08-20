@@ -1,5 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { FolderKeyIcon } from '@lib/ui/icons/FolderKeyIcon'
 import { PenWritingFilledIcon } from '@lib/ui/icons/PenWritingFilledIcon'
@@ -113,7 +114,7 @@ const DeleteButtonIconWrapper = styled(ListItemIconWrapper)`
 `
 
 const DeleteItem = styled(ListItem)`
-  border-radius: 12px;
+  ${borderRadius.md};
 `
 
 export { ListItemIconWrapper } from './vaultSettingsListStyles'

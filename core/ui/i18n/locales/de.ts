@@ -58,7 +58,6 @@ export const de = {
   approval_tx: 'Genehmigung Tx',
   approve: 'Genehmigen',
   reject: 'Ablehnen',
-  applied_discounts: 'Angewandte Rabatte:',
   asset: 'Vermögenswert',
   assets: 'Vermögenswerte',
   at_least_one_device: 'Mindestens ein Gerät',
@@ -572,10 +571,7 @@ export const de = {
     'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
   max: 'Max',
   max_4_characters: 'Maximal 4 Zeichen',
-  max_total_fees: 'Maximale Gesamtgebühr',
   memo: 'Memo',
-  merge: 'Verschmelzen',
-  merged: 'Zusammengeführt',
   message: 'Nachricht',
   message_required: 'Eine Nachricht ist erforderlich.',
   message_to_sign: 'Nachricht zum Unterschreiben',
@@ -587,7 +583,6 @@ export const de = {
   missing_destination_address: 'Fehlende Zieladresse',
   missing_devices_for_migration:
     'Verbinden Sie sich mit den folgenden Geräten, um Ihren Tresor zu migrieren.',
-  missing_thorchain_address: 'Fehlende THORChain-Adresse',
   more: 'mehr',
   moreInfo: 'Mehr Infos',
   more_coming_soon: 'Mehr in Kürze',
@@ -615,8 +610,6 @@ export const de = {
   no_connected_dapps: 'Keine verbundenen dApps',
   no_connected_dapps_desc:
     'dApps werden hier immer dann angezeigt, wenn Sie mit ihnen interagieren.',
-  no_mergeable_tokens_found:
-    'Es wurden keine zusammenführbaren Token gefunden.',
   no_referral_yet: 'Noch keine Weiterleitung.',
   no_token_found: 'Token nicht gefunden',
   no_transactions_yet: 'Bisher keine Transaktionen',
@@ -940,7 +933,6 @@ export const de = {
     input: 'Der Tauschbetrag ist korrekt.',
     output: 'Ich stimme dem Mindestbetrag zu, den ich erhalten werde.',
   },
-  switch: 'Schalten',
   switchToInternet: 'Zurück in den Internetmodus wechseln',
   switchToLocal: 'In den lokalen Modus wechseln',
   target: 'Ziel',
@@ -949,7 +941,6 @@ export const de = {
   this_device: 'Dieses Gerät',
   this_device_suffix: '(dieses Gerät)',
   this_vault_only: 'Nur dieser Tresor',
-  thorchain_address: 'THORChain-Adresse',
   thorchain_address_required_for_referrals:
     'Sie benötigen eine THORChain-Adresse, um am Empfehlungsprogramm teilnehmen zu können.',
   tns_alnum_only:
@@ -1011,7 +1002,6 @@ export const de = {
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   unlock_tier: 'Stufe freischalten',
-  unmerge: 'Aufheben',
   unfreeze: 'Unfreeze',
   unknown: 'Unbekannt',
   unlimited: 'Unbegrenzt',
@@ -1787,7 +1777,6 @@ export const de = {
   swap_limit_asset: 'Vermögenswert',
   swap_limit_buy: 'Kaufen',
   swap_limit_execute_when: 'Ausführen, wenn',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Verkaufen',
   swap_limit_blocker_chain_unavailable:
     'Diese Kette wurde vorübergehend auf THORChain angehalten.',
@@ -1797,7 +1786,7 @@ export const de = {
     'Dieser Auftrag kann in der eingegebenen Form nicht ausgeführt werden.',
   swap_limit_blocker_no_amount: 'Geben Sie den zu verkaufenden Betrag ein.',
   swap_limit_blocker_no_market_price:
-    'Für dieses Paar ist noch kein Marktpreis verfügbar.',
+    'Dieses Währungspaar kann derzeit nicht auf THORChain gehandelt werden. Wählen Sie einen anderen Vermögenswert.',
   swap_limit_blocker_no_price: 'Geben Sie einen Zielpreis ein',
   swap_limit_blocker_pair_not_routable:
     'THORChain kann keine Limit-Order zwischen diesen Assets weiterleiten.',
@@ -1891,4 +1880,18 @@ export const de = {
   swap_invalid_config:
     'Überprüfen Sie die Tauschdetails, den Empfänger und die erweiterten Einstellungen und versuchen Sie es dann erneut.',
   swap_no_routes_found: 'Für dieses Asset-Paar ist keine Swap-Route verfügbar.',
+  ripple_warning_partial_payment:
+    'Diese Transaktion ist eine Teilzahlung: Der angezeigte Betrag ist der maximal mögliche Auszahlungsbetrag, keine Garantie. Der Empfänger kann weniger erhalten. Ihr Ausgabenbetrag ist separat durch das Sendelimit begrenzt, und die Netzwerkgebühr wird zusätzlich erhoben.',
+  ripple_warning_custom_paths:
+    'Die Website lieferte mögliche Zahlungswege. Das Netzwerk entscheidet, welcher davon genutzt wird, und kann auch den direkten Weg verwenden.',
+  price_impact: 'Preisauswirkung',
+  swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
+  swap_protocol_fee: 'Protokollgebühr',
+  swap_referral_fee: 'Vermittlungsgebühr',
+  select_route: 'Route auswählen',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'wert ist',
+  swap_limit_when_one: 'Wenn 1',
 }

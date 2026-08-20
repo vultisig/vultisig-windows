@@ -1,3 +1,4 @@
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -22,7 +23,7 @@ export const VoteOverview = ({
   const { t } = useTranslation()
 
   return (
-    <List border="gradient" radius={16}>
+    <List border="gradient" radius={borderRadiusPx.lg}>
       <ListItem
         title={t('qbtc_gov.proposal_number', { id: proposalId })}
         description={proposalTitle || t('qbtc_gov.untitled_proposal')}

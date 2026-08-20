@@ -7,7 +7,6 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageSlice } from '@lib/ui/page/PageSlice'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { desktopDownloadUrl } from '@vultisig/core-config'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
@@ -106,6 +105,7 @@ const FixedWrapper = styled.div`
   gap: 34px;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const Overlay = styled(VStack)`
   position: fixed;
   inset: 0;
@@ -143,10 +143,5 @@ const CenteredText = styled(Text)`
 `
 
 const DownloadButton = styled(Button)`
-  padding: 14px 32px;
-  border-radius: 99px;
-  background-color: ${getColor('buttonPrimary')};
-  font-weight: 600;
-  font-size: 14px;
   max-width: 148px;
 `

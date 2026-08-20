@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -89,7 +90,7 @@ export const CircleDepositedPanel = () => {
 const Container = styled.div`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   ${vStack({
     gap: 16,
   })}

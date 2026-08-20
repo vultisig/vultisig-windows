@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +33,7 @@ const Card = styled(UnstyledButton)`
   width: 100%;
   text-align: left;
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 12px;
+  ${borderRadius.md};
   padding: 16px;
   cursor: pointer;
 `

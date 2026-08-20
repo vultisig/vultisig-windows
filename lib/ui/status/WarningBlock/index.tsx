@@ -10,7 +10,7 @@ import { ElementType, ReactNode } from 'react'
 import styled from 'styled-components'
 
 const Container = styled(HStack)`
-  ${borderRadius.m};
+  ${borderRadius.md};
   background-color: ${getColor('idleDark')};
   border: 1px solid ${getColor('idle')};
   padding: 16px;

@@ -1,3 +1,5 @@
+import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
+import { isWeakPasscode } from '@core/ui/passcodeEncryption/core/passcodePolicy'
 import { EnablePasscodeInput } from '@core/ui/passcodeEncryption/manage/EnablePasscodeInput'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { useSetPasscodeMutation } from '@core/ui/passcodeEncryption/mutations/useSetPasscodeMutation'
@@ -29,6 +31,13 @@ export const SetPasscode = () => {
 
     if (!confirmPasscode) {
       return t('confirm_passcode')
+    }
+
+    if (
+      passcode.length === passcodeEncryptionConfig.passcodeLength &&
+      isWeakPasscode(passcode)
+    ) {
+      return t('invalid_passcode')
     }
 
     if (passcode !== confirmPasscode) {
@@ -65,6 +74,13 @@ export const SetPasscode = () => {
               label={t('enter_passcode')}
               onChange={setPasscode}
               value={passcode}
+              validation={
+                passcode?.length === passcodeEncryptionConfig.passcodeLength &&
+                isWeakPasscode(passcode)
+                  ? 'invalid'
+                  : undefined
+              }
+              validationMessages={{ invalid: t('invalid_passcode') }}
               autoFocus
             />
             <PasscodeInput

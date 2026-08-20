@@ -1,4 +1,5 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
@@ -9,7 +10,7 @@ export const HomePromoBannerRoot = styled.div`
   height: 134px;
   box-sizing: border-box;
   padding: 24px;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   overflow: hidden;
@@ -28,6 +29,7 @@ export const HomePromoBannerTextStack = styled.div`
   max-width: 214px;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 export const HomePromoBannerCloseButton = styled(IconButton)`
   position: absolute;
   z-index: 3;

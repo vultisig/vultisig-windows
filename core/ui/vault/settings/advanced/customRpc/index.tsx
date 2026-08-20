@@ -3,6 +3,7 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCustomRpcOverrides } from '@core/ui/storage/customRpcOverrides'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -142,7 +143,7 @@ const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => (
 const SearchWrapper = styled.div`
   align-items: center;
   background: ${getColor('foreground')};
-  border-radius: 99px;
+  ${borderRadius.pill};
   box-shadow: inset 0 0 8px rgba(240, 244, 252, 0.03);
   color: ${getColor('textShy')};
   display: flex;
@@ -203,7 +204,7 @@ const ChainIconFrame = styled.div<{ $isCustom: boolean }>`
   border: 1.5px solid
     ${({ $isCustom }) =>
       $isCustom ? getColor('foregroundExtra') : 'transparent'};
-  border-radius: 24px;
+  ${borderRadius.xl};
   display: flex;
   height: 74px;
   justify-content: center;

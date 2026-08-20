@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -47,6 +48,7 @@ export const FixedWrapper = styled(CenterAbsolutely)`
   background-color: ${getColor('background')};
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 export const Overlay = styled.div`
   position: absolute;
   width: 374px;
@@ -66,7 +68,7 @@ export const Overlay = styled.div`
 `
 
 export const fieldWrapperStyles = css`
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 14px;
 `
@@ -82,7 +84,7 @@ export const HorizontalFieldWrapper = styled(HStack)`
 `
 
 export const VaultFieldWrapper = styled(HorizontalFieldWrapper)`
-  border-radius: 99px;
+  ${borderRadius.pill};
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 

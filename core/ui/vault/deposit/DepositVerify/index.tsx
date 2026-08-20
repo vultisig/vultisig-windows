@@ -112,12 +112,6 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
               />
             )
           })}
-          {selectedChainAction === 'merge' && (
-            <ListItem
-              description={String(formattedDepositFormData.nodeAddress)}
-              title={t('to')}
-            />
-          )}
           {selectedChainAction === 'leave' && (
             <ListItem description={`0 ${coin.ticker}`} title={t('amount')} />
           )}

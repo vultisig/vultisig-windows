@@ -12,6 +12,8 @@ import {
 } from '@core/ui/storage/defiPositions'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
 import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -22,7 +24,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { resolveDefiPositionIcon } from '../config/defiPositionResolver'
 import { useMayaLpPositionsQuery } from '../queries/useMayaLpPositionsQuery'
@@ -33,7 +35,7 @@ import { DefiPositionErrorState } from './DefiPositionErrorState'
 
 const Card = styled(Panel)`
   padding: 20px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `
@@ -79,69 +81,6 @@ const ActionsRow = styled(HStack)`
     min-width: 0;
     display: flex;
   }
-`
-
-const ActionButton = styled.button.attrs({ type: 'button' })<{
-  variant: 'primary' | 'secondary'
-}>`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border-radius: 999px;
-  height: 48px;
-  padding: 0 26px;
-  font-size: 16px;
-  font-weight: 600;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-  color: ${getColor('contrast')};
-  flex: 1;
-  min-width: 140px;
-
-  ${({ variant }) =>
-    variant === 'primary'
-      ? css`
-          background: ${getColor('buttonPrimary')};
-          box-shadow: 0px 8px 24px rgba(31, 39, 61, 0.35);
-        `
-      : css`
-          background: rgba(11, 19, 38, 0.95);
-          border-color: ${getColor('buttonPrimary')};
-        `}
-
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      opacity: 0.4;
-      cursor: default;
-      pointer-events: none;
-    `}
-`
-
-const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-left: -12px;
-  color: ${getColor('contrast')};
-  ${({ variant }) =>
-    variant === 'primary'
-      ? css`
-          background: rgba(255, 255, 255, 0.2);
-        `
-      : css`
-          background: rgba(255, 255, 255, 0.12);
-        `}
 `
 
 const formatCryptoAmount = (value: number, decimals = 4) =>
@@ -338,26 +277,21 @@ export const LpPositions = () => {
               </VStack>
 
               <ActionsRow>
-                <ActionButton
-                  variant="secondary"
+                <Button
+                  kind="secondary"
                   disabled={!hasPosition}
                   onClick={() => handleRemove(position, positionData)}
+                  icon={<CircleMinusIcon />}
                 >
-                  <ActionIcon variant="secondary">
-                    <CircleMinusIcon />
-                  </ActionIcon>
                   {t('defi_remove')}
-                </ActionButton>
+                </Button>
 
-                <ActionButton
-                  variant="primary"
+                <Button
                   onClick={() => handleAdd(position)}
+                  icon={<CirclePlusIcon />}
                 >
-                  <ActionIcon variant="primary">
-                    <CirclePlusIcon />
-                  </ActionIcon>
                   {t('defi_add')}
-                </ActionButton>
+                </Button>
               </ActionsRow>
             </VStack>
           </Card>

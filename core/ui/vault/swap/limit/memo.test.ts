@@ -7,6 +7,8 @@ import {
   buildLimitSwapMemoForCoins,
   getLimitSwapExpectedToAmount,
 } from './memo'
+import { quantizeTargetPrice } from './price'
+import { rateToSellUnitFiatValue, sellUnitFiatValueToRate } from './rate'
 
 const ethCoin: Coin = { chain: Chain.Ethereum, ticker: 'ETH', decimals: 18 }
 const btcCoin: Coin = { chain: Chain.Bitcoin, ticker: 'BTC', decimals: 8 }
@@ -121,6 +123,45 @@ describe('buildLimitSwapMemoForCoins', () => {
         destinationAddress: evmAddress,
       })
     ).toThrow()
+  })
+
+  // The form's display orientation must never leak into the signed order: the
+  // same target entered in asset mode (the rate itself) or through its fiat
+  // mirror has to land on a byte-identical memo.
+  it('builds the same memo from an asset-mode and a fiat-mode entry', () => {
+    const rate = 0.0295
+    const btcFiatPrice = 64_260
+    // Fixed independently of the conversion helpers (0.0295 x 64,260), so a
+    // shared orientation bug in the fiat round trip cannot cancel itself out.
+    const fiatValue = 1_895.67
+
+    expect(
+      shouldBePresent(
+        rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: btcFiatPrice })
+      )
+    ).toBeCloseTo(fiatValue, 2)
+
+    const build = (targetPrice: number) =>
+      buildLimitSwapMemoForCoins({
+        fromCoin: ethCoin,
+        toCoin: btcCoin,
+        amount: 10n ** 18n,
+        targetPrice,
+        expiryHours: 12,
+        destinationAddress: btcAddress,
+      })
+
+    const assetEntry = quantizeTargetPrice(rate)
+    const fiatEntry = quantizeTargetPrice(
+      shouldBePresent(
+        sellUnitFiatValueToRate({ fiatValue, buyCoinFiatPrice: btcFiatPrice })
+      )
+    )
+
+    expect(build(fiatEntry)).toBe(build(assetEntry))
+    expect(build(assetEntry)).toBe(
+      `=<:BTC.BTC:${btcAddress}:2950000/7200/0:v0:50`
+    )
   })
 })
 

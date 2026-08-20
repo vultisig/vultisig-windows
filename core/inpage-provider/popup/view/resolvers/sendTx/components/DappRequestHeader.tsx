@@ -1,4 +1,5 @@
 import { DappRequestRow } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/DappRequestRow'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -8,7 +9,7 @@ import styled from 'styled-components'
 const Panel = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
   gap: 16px;
   padding: 20px;
 `

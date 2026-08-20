@@ -1,42 +1,32 @@
-import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useIsCircleVisible } from '@core/ui/storage/circleVisibility'
 import {
   SupportedDefiChain,
   supportedDefiChains,
 } from '@core/ui/storage/defiChains'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
+import { useRefetchQueriesByCategory } from '@lib/ui/query/hooks/useRefetchQueriesByCategory'
 import { QueryKey, useMutation } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 
-import {
-  mayaDefiCoins,
-  thorchainDefiCoins,
-  tronDefiCoins,
-} from './chain/queries/tokens'
 import {
   getCircleAccountQueryKey,
   useCircleAccountQuery,
 } from './protocols/circle/queries/circleAccount'
 
 type DefiRefreshConfig = {
-  priceCoins: Coin[]
   getPositionsQueryKey: (address: string) => QueryKey
   poolQueryKeys: QueryKey[]
 }
 
 const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
   [Chain.THORChain]: {
-    priceCoins: thorchainDefiCoins,
     getPositionsQueryKey: address => [
       'defi',
       'thorchain',
@@ -46,7 +36,6 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     poolQueryKeys: [['defi', Chain.THORChain, 'lp', 'pools']],
   },
   [Chain.MayaChain]: {
-    priceCoins: mayaDefiCoins,
     getPositionsQueryKey: address => [
       'defi',
       'mayachain',
@@ -56,12 +45,10 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     poolQueryKeys: [['defi', Chain.MayaChain, 'lp', 'pools']],
   },
   [Chain.Tron]: {
-    priceCoins: tronDefiCoins,
     getPositionsQueryKey: address => ['tronAccountResources', address],
     poolQueryKeys: [],
   },
   [Chain.Terra]: {
-    priceCoins: [],
     getPositionsQueryKey: address => [
       'cosmosDelegations',
       Chain.Terra,
@@ -70,7 +57,6 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     poolQueryKeys: [],
   },
   [Chain.TerraClassic]: {
-    priceCoins: [],
     getPositionsQueryKey: address => [
       'cosmosDelegations',
       Chain.TerraClassic,
@@ -79,25 +65,26 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     poolQueryKeys: [],
   },
   [Chain.QBTC]: {
-    priceCoins: [],
     getPositionsQueryKey: address => ['cosmosDelegations', Chain.QBTC, address],
     poolQueryKeys: [],
   },
   [Chain.Ton]: {
-    priceCoins: [{ ...chainFeeCoin[Chain.Ton], chain: Chain.Ton }],
     getPositionsQueryKey: address => ['tonStakePosition', address],
     poolQueryKeys: [['tonStakingPools']],
   },
   [Chain.Solana]: {
-    priceCoins: [{ ...chainFeeCoin[Chain.Solana], chain: Chain.Solana }],
     getPositionsQueryKey: address => ['solanaStakeAccounts', address],
     poolQueryKeys: [['solanaValidators']],
   },
 }
 
+/**
+ * Refresh button for the DeFi tab: refetches every enabled chain's positions
+ * and pool data and invalidates all price queries by category.
+ */
 export const RefreshDefiData = () => {
   const refetchQueries = useRefetchQueries()
-  const fiatCurrency = useFiatCurrency()
+  const refetchQueriesByCategory = useRefetchQueriesByCategory()
   const thorchainAddress = useCurrentVaultAddress(Chain.THORChain)
   const mayachainAddress = useCurrentVaultAddress(Chain.MayaChain)
   const tronAddress = useCurrentVaultAddress(Chain.Tron)
@@ -124,22 +111,13 @@ export const RefreshDefiData = () => {
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {
-        const { priceCoins, getPositionsQueryKey, poolQueryKeys } =
-          defiRefreshConfig[chain]
+        const { getPositionsQueryKey, poolQueryKeys } = defiRefreshConfig[chain]
 
-        return [
-          getCoinPricesQueryKeys({
-            coins: priceCoins,
-            fiatCurrency,
-          }),
-          getPositionsQueryKey(addresses[chain]),
-          ...poolQueryKeys,
-        ]
+        return [getPositionsQueryKey(addresses[chain]), ...poolQueryKeys]
       }) as QueryKey[]
 
       if (isCircleVisible) {
         queryKeys.push(
-          getCoinPricesQueryKeys({ coins: [usdc], fiatCurrency }),
           getCircleAccountQueryKey({ ownerAddress: ethereumAddress })
         )
 
@@ -154,7 +132,12 @@ export const RefreshDefiData = () => {
         }
       }
 
-      await refetchQueries(...queryKeys)
+      // Every price source (CoinGecko, pools, NAV, ...) is tagged with the
+      // `price` category, so one invalidation covers all DeFi price coins.
+      await Promise.all([
+        refetchQueriesByCategory('price'),
+        refetchQueries(...queryKeys),
+      ])
     },
   })
 

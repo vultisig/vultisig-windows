@@ -12,8 +12,8 @@ import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { RujiMergedPositionCard } from '../components/stake/RujiMergedPositionCard'
 import { StakeCard } from '../components/stake/StakeCard'
+import { TransferableStakeCard } from '../components/stake/TransferableStakeCard'
 import type { StakeUiTranslationKey } from '../config/stakeUiResolver'
 import {
   resolveStakeActions,
@@ -116,20 +116,7 @@ export const StakedPositions = () => {
     )
   }
 
-  // The merged RUJI balance belongs to the RUJI position, so it follows the
-  // same selection id as the auto-compounding and bonded RUJI cards.
-  const isRujiSelected = selectedPositions.includes(
-    rujiAutoCompoundStakePositionId
-  )
-
-  return (
-    <VStack gap={12}>
-      {chain === Chain.THORChain && isRujiSelected ? (
-        <RujiMergedPositionCard />
-      ) : null}
-      <ThorchainStakedPositions />
-    </VStack>
-  )
+  return <ThorchainStakedPositions />
 }
 
 const ThorchainStakedPositions = () => {
@@ -327,42 +314,48 @@ const ThorchainStakedPositions = () => {
           })
         }
 
-        return (
-          <StakeCard
+        const cardProps = {
+          coin: token,
+          title: resolveStakeTitle({
+            position,
+            coin: token,
+            translate,
+          }),
+          amount: position.amount,
+          fiat: position.fiatValue,
+          apr: position.apr,
+          estimatedReward: position.estimatedReward,
+          rewards: position.rewards,
+          rewardTicker: position.rewardTicker,
+          nextPayout: position.nextPayout,
+          actionsDisabled: cardActionsDisabled,
+          actionsDisabledReason,
+          canUnstake: position.canUnstake,
+          unstakeAvailableDate: position.unstakeAvailableDate,
+          stakeLabel,
+          unstakeLabel,
+          hideStats,
+          isPendingAction: pendingEnableById[position.id],
+          onStake: () => handleNavigate(stakeAction),
+          onUnstake: () => handleNavigate(unstakeAction),
+          onWithdrawRewards:
+            position.rewards && position.rewards > 0
+              ? () => handleNavigate('withdraw_ruji_rewards')
+              : undefined,
+          infoUrl: position.id === 'thor-stake-stcy' ? stcyInfoUrl : undefined,
+        }
+
+        // The transferable variant reads the receipt token's own balance, so
+        // the Transfer label matches what the send flow will move.
+        return canTransfer && transferToken ? (
+          <TransferableStakeCard
             key={position.id}
-            coin={token}
-            title={resolveStakeTitle({
-              position,
-              coin: token,
-              translate,
-            })}
-            amount={position.amount}
-            fiat={position.fiatValue}
-            apr={position.apr}
-            estimatedReward={position.estimatedReward}
-            rewards={position.rewards}
-            rewardTicker={position.rewardTicker}
-            nextPayout={position.nextPayout}
-            actionsDisabled={cardActionsDisabled}
-            actionsDisabledReason={actionsDisabledReason}
-            canUnstake={position.canUnstake}
-            unstakeAvailableDate={position.unstakeAvailableDate}
-            stakeLabel={stakeLabel}
-            unstakeLabel={unstakeLabel}
-            hideStats={hideStats}
-            isPendingAction={pendingEnableById[position.id]}
-            onStake={() => handleNavigate(stakeAction)}
-            onUnstake={() => handleNavigate(unstakeAction)}
-            onWithdrawRewards={
-              position.rewards && position.rewards > 0
-                ? () => handleNavigate('withdraw_ruji_rewards')
-                : undefined
-            }
-            infoUrl={
-              position.id === 'thor-stake-stcy' ? stcyInfoUrl : undefined
-            }
-            onTransfer={canTransfer ? handleTransfer : undefined}
+            {...cardProps}
+            onTransfer={handleTransfer}
+            transferCoin={transferToken}
           />
+        ) : (
+          <StakeCard key={position.id} {...cardProps} />
         )
       })}
     </VStack>

@@ -56,7 +56,6 @@ export const hr = {
   approval_tx: 'Odobrenje slanja',
   approve: 'Odobriti',
   reject: 'Odbiti',
-  applied_discounts: 'Primijenjeni popusti:',
   asset: 'Imovina',
   assets: 'Imovina',
   at_least_one_device: 'Barem jedan uređaj',
@@ -558,10 +557,7 @@ export const hr = {
     'Obavijestima možete upravljati u postavkama sustava.',
   max: 'Maks.',
   max_4_characters: 'Maks. 4 znaka',
-  max_total_fees: 'Maks. ukupna naknada',
   memo: 'Dopis',
-  merge: 'Spojiti',
-  merged: 'Spojeno',
   message: 'Poruka',
   message_required: 'Poruka je obavezna',
   message_to_sign: 'Poruka za potpis',
@@ -573,7 +569,6 @@ export const hr = {
   missing_destination_address: 'Nedostaje odredišna adresa',
   missing_devices_for_migration:
     'Pridružite se sljedećim uređajima za migraciju svog trezora',
-  missing_thorchain_address: 'Nedostaje THORChain adresa',
   more: 'više',
   moreInfo: 'Više informacija',
   more_coming_soon: 'Uskoro više',
@@ -600,7 +595,6 @@ export const hr = {
   no_connected_dapps: 'Nema povezanih dApp-ova',
   no_connected_dapps_desc:
     'dApps će se ovdje pojaviti kad god s njima komunicirate',
-  no_mergeable_tokens_found: 'Nisu pronađeni tokeni koji se mogu spojiti',
   no_referral_yet: 'Još nema preporuke.',
   no_token_found: 'Token nije pronađen',
   no_transactions_yet: 'Još nema transakcija',
@@ -926,7 +920,6 @@ export const hr = {
     input: 'Iznos zamjene je ispravan',
     output: 'Slažem se s minimalnim iznosom koji ću primiti',
   },
-  switch: 'Prekidač',
   switchToInternet: 'Vratite se u internetski način rada',
   switchToLocal: 'Prebaci se na lokalni način rada',
   target: 'Cilj',
@@ -935,7 +928,6 @@ export const hr = {
   this_device: 'Ovaj uređaj',
   this_device_suffix: '(ovaj uređaj)',
   this_vault_only: 'Samo ovaj trezor',
-  thorchain_address: 'THORChain adresa',
   thorchain_address_required_for_referrals:
     'Za korištenje programa preporuka potrebna vam je THORChain adresa',
   tns_alnum_only: 'Referral kod mora sadržavati samo alfanumeričke znakove',
@@ -994,7 +986,6 @@ export const hr = {
   unlock_discount_tier_description_ultimate:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
   unlock_tier: 'Otključaj razinu',
-  unmerge: 'Razdvoji',
   unfreeze: 'Unfreeze',
   unknown: 'Nepoznato',
   unlimited: 'Neograničen',
@@ -1744,7 +1735,6 @@ export const hr = {
   swap_limit_asset: 'Imovina',
   swap_limit_buy: 'Kupiti',
   swap_limit_execute_when: 'Izvrši kada',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Prodavati',
   swap_limit_blocker_chain_unavailable:
     'Ovaj lanac je privremeno zaustavljen na THORChain',
@@ -1753,7 +1743,7 @@ export const hr = {
     'Ova narudžba ne može biti izvršena kako je unesena',
   swap_limit_blocker_no_amount: 'Unesite iznos za prodaju',
   swap_limit_blocker_no_market_price:
-    'Za ovaj par još nema dostupne tržišne cijene',
+    'Ovaj par se trenutno ne može trgovati na THORChain. Odaberite drugu imovinu.',
   swap_limit_blocker_no_price: 'Unesite ciljanu cijenu',
   swap_limit_blocker_pair_not_routable:
     'THORChain ne može usmjeriti limitirani nalog između ove imovine',
@@ -1846,4 +1836,18 @@ export const hr = {
   swap_invalid_config:
     'Pregledajte detalje zamjene, primatelja i napredne postavke, a zatim pokušajte ponovno.',
   swap_no_routes_found: 'Za ovaj par imovine nije dostupna ruta zamjene.',
+  ripple_warning_partial_payment:
+    'Ova transakcija je djelomično plaćanje: prikazani iznos je najveći iznos koji se može isporučiti, a ne zajamčeni iznos. Primatelj može primiti manje od toga. Iznos koji potrošite zasebno je ograničen maksimalnim iznosom za slanje, a povrh toga se naplaćuje i mrežna naknada.',
+  ripple_warning_custom_paths:
+    'Stranica je ponudila kandidatske rute za ovo plaćanje. Mreža odlučuje koju će od njih koristiti, a može koristiti i izravnu rutu.',
+  price_impact: 'Utjecaj na cijenu',
+  swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
+  swap_protocol_fee: 'Naknada za protokol',
+  swap_referral_fee: 'Naknada za preporuku',
+  select_route: 'Odaberite rutu',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'vrijedi',
+  swap_limit_when_one: 'Kada 1',
 }

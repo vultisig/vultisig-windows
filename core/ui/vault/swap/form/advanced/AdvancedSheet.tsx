@@ -76,7 +76,7 @@ export const AdvancedSheet = ({
 const Wrapper = styled(VStack)`
   width: 100%;
   background: ${getColor('background')};
-  ${borderRadius.m};
+  ${borderRadius.md};
   padding: 20px;
 
   @media ${mediaQuery.tabletDeviceAndUp} {

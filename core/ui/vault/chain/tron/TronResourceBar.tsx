@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { toPercents } from '@vultisig/lib-utils/toPercents'
 import styled from 'styled-components'
 
@@ -9,14 +10,14 @@ type TronResourceBarProps = {
 const Track = styled.div`
   width: 100%;
   height: 8px;
-  border-radius: 12px;
+  ${borderRadius.pill};
   background: #11284a;
   overflow: hidden;
 `
 
 const Fill = styled.div<TronResourceBarProps>`
   height: 100%;
-  border-radius: 12px;
+  ${borderRadius.pill};
   background: ${({ $color }) => $color};
   width: ${({ $percentage }) =>
     toPercents(Math.max(Math.min($percentage, 1), 0))};

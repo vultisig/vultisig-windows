@@ -4,6 +4,7 @@ import { currentProductBrand } from '@core/ui/product/brand'
 import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
 import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { StationChevronLeftIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -67,7 +68,7 @@ const HeaderBackButton = styled(UnstyledButton)`
 const SearchFieldHalo = styled.div`
   width: 100%;
   padding: 0;
-  border-radius: 99px;
+  ${borderRadius.pill};
   background: transparent;
   box-shadow: none;
 `
@@ -75,7 +76,7 @@ const SearchFieldHalo = styled.div`
 const ReceiveSearchField = styled(SearchField)`
   color: ${getColor('contrast')};
 
-  border-radius: 99px;
+  ${borderRadius.pill};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${({ theme }) =>
     theme.iconStyle === 'station'
@@ -93,7 +94,7 @@ const ReceiveSearchField = styled(SearchField)`
 `
 
 const ChainItemsWrapper = styled.div`
-  border-radius: 24px;
+  ${borderRadius.xl};
   border: none;
   overflow: hidden;
   box-shadow: none;
@@ -144,8 +145,7 @@ const ChainBadge = styled(Text)`
   display: inline-flex;
   align-items: center;
   padding: 8px 12px;
-  border-radius: 999px;
-  border-radius: 99px;
+  ${borderRadius.pill};
   border: 1.5px solid ${getColor('foregroundSuper')};
   background: ${getColor('foreground')};
 `

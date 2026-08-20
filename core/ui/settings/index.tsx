@@ -2,11 +2,11 @@ import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useIsPasscodeRequired } from '@core/ui/passcodeEncryption/state/useIsPasscodeRequired'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
-import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { BellIcon } from '@lib/ui/icons/BellIcon'
@@ -68,7 +68,7 @@ export const SettingsPage: FC<Props> = props => {
   const currency = useFiatCurrency()
   const language = useLanguage()
 
-  const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const hasPasscodeEncryption = useIsPasscodeRequired()
   const addresses = useCurrentVaultAddresses()
   const areReferralEnabled = Boolean(addresses[Chain.THORChain])
   const shouldShowVultDiscounts = currentProductBrand === 'vultisig'

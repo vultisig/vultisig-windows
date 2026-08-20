@@ -1,11 +1,11 @@
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { thorchainTokens } from '../../tokens'
-import { ThorchainStakePosition } from '../../types'
+import { RawThorchainStakePosition } from '../../types'
 import { parseBigint } from '../../utils/parsers'
 import { fetchBruneStakePosition } from './bruneStakeService'
 import { fetchRujiStakePositions } from './rujiStakeService'
@@ -19,33 +19,28 @@ const getBalanceByDenom = (address: string, denom: string) =>
 
 type FetchYieldStakePositionInput = {
   address: string
-  prices: Record<string, number>
   id: string
   coin: Coin
 }
 
 const fetchYieldStakePosition = async ({
   address,
-  prices,
   id,
   coin,
-}: FetchYieldStakePositionInput): Promise<ThorchainStakePosition | null> => {
+}: FetchYieldStakePositionInput): Promise<RawThorchainStakePosition | null> => {
   try {
     const denom = coin.id ?? coin.ticker
     const balance = await getBalanceByDenom(address, denom)
     const amount = parseBigint(balance?.balance?.amount)
-    const price = prices[coinKeyToString(coin)] ?? 0
-    const fiatValue = getCoinValue({
-      amount,
-      decimals: coin.decimals,
-      price,
-    })
 
     return {
       id,
       ticker: coin.ticker,
       amount,
-      fiatValue,
+      fiatBasis: {
+        coinKey: coinKeyToString(coin),
+        amount: fromChainAmount(amount, coin.decimals),
+      },
       type: 'index',
       canUnstake: amount > 0n,
     }
@@ -54,36 +49,30 @@ const fetchYieldStakePosition = async ({
   }
 }
 
-type FetchStakePositionsInput = {
-  address: string
-  prices: Record<string, number>
-}
-
-export const fetchStakePositions = async ({
-  address,
-  prices,
-}: FetchStakePositionsInput) => {
+/**
+ * Fetches every THORChain stake position for the address as price-free raw
+ * data; fiat values are joined from live prices at render.
+ */
+export const fetchStakePositions = async (address: string) => {
   const [tcy, stcy, rujiPositions, brune, yRune, yTcy] = await Promise.all([
-    fetchTcyStakePosition({ address, prices }),
-    fetchStcyStakePosition({ address, prices }),
-    fetchRujiStakePositions({ address, prices }),
-    fetchBruneStakePosition({ address, prices }),
+    fetchTcyStakePosition(address),
+    fetchStcyStakePosition(address),
+    fetchRujiStakePositions(address),
+    fetchBruneStakePosition(address),
     fetchYieldStakePosition({
       address,
-      prices,
       id: 'thor-stake-yrune',
       coin: thorchainTokens.yRune,
     }),
     fetchYieldStakePosition({
       address,
-      prices,
       id: 'thor-stake-ytcy',
       coin: thorchainTokens.yTcy,
     }),
   ])
 
   const positions = [tcy, stcy, ...rujiPositions, brune, yRune, yTcy].filter(
-    (p): p is ThorchainStakePosition => p !== null
+    (p): p is RawThorchainStakePosition => p !== null
   )
   return { positions }
 }

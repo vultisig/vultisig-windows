@@ -56,7 +56,6 @@ export const es = {
   approval_tx: 'Aprobación Tx',
   approve: 'Aprobar',
   reject: 'Rechazar',
-  applied_discounts: 'Descuentos aplicados:',
   asset: 'Activo',
   assets: 'Activos',
   at_least_one_device: 'Al menos un dispositivo',
@@ -566,10 +565,7 @@ export const es = {
     'Puedes gestionar las notificaciones en la configuración del sistema.',
   max: 'Máximo',
   max_4_characters: 'Máximo 4 caracteres',
-  max_total_fees: 'Tarifa total máxima',
   memo: 'Memorándum',
-  merge: 'Unir',
-  merged: 'Fusionado',
   message: 'Mensaje',
   message_required: 'El mensaje es obligatorio',
   message_to_sign: 'Mensaje para firmar',
@@ -581,7 +577,6 @@ export const es = {
   missing_destination_address: 'Dirección de destino faltante',
   missing_devices_for_migration:
     'Únase a los siguientes dispositivos para migrar su bóveda',
-  missing_thorchain_address: 'Falta la dirección de THORChain',
   more: 'más',
   moreInfo: 'Más información',
   more_coming_soon: 'Próximamente más',
@@ -608,7 +603,6 @@ export const es = {
   no_connected_dapps: 'No hay dApps conectadas',
   no_connected_dapps_desc:
     'Las dApps aparecerán aquí cada vez que interactúes con ellas',
-  no_mergeable_tokens_found: 'No se encontraron tokens fusionables',
   no_referral_yet: 'Aún no hay referencias',
   no_token_found: 'Token no encontrado',
   no_transactions_yet: 'Aún no se han realizado transacciones.',
@@ -933,7 +927,6 @@ export const es = {
     input: 'El monto del intercambio es correcto',
     output: 'Estoy de acuerdo con el monto mínimo que recibiré',
   },
-  switch: 'Cambiar',
   switchToInternet: 'Volver al modo Internet',
   switchToLocal: 'Cambiar al modo local',
   target: 'Objetivo',
@@ -942,7 +935,6 @@ export const es = {
   this_device: 'Este dispositivo',
   this_device_suffix: '(este dispositivo)',
   this_vault_only: 'Sólo esta bóveda',
-  thorchain_address: 'Dirección de THORChain',
   thorchain_address_required_for_referrals:
     'Necesita tener una dirección THORChain para utilizar el programa de referencia',
   tns_alnum_only:
@@ -1003,7 +995,6 @@ export const es = {
   unlock_discount_tier_description_ultimate:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
   unlock_tier: 'Desbloquear nivel',
-  unmerge: 'Separar',
   unfreeze: 'Unfreeze',
   unknown: 'Desconocido',
   unlimited: 'Ilimitado',
@@ -1772,7 +1763,6 @@ export const es = {
   swap_limit_asset: 'Activo',
   swap_limit_buy: 'Comprar',
   swap_limit_execute_when: 'Ejecutar cuando',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Vender',
   swap_limit_blocker_chain_unavailable:
     'Esta cadena se ha detenido temporalmente en THORChain',
@@ -1781,7 +1771,7 @@ export const es = {
     'Este pedido no se puede realizar tal como se ingresó.',
   swap_limit_blocker_no_amount: 'Ingrese una cantidad para vender',
   swap_limit_blocker_no_market_price:
-    'Aún no hay precio de mercado disponible para este par.',
+    'Este par no se puede negociar en THORChain en este momento. Elija otro activo.',
   swap_limit_blocker_no_price: 'Introduzca un precio objetivo',
   swap_limit_blocker_pair_not_routable:
     'THORChain no puede enrutar una orden limitada entre estos activos.',
@@ -1876,4 +1866,18 @@ export const es = {
     'Revisa los detalles del intercambio, el destinatario y la configuración avanzada, y vuelve a intentarlo.',
   swap_no_routes_found:
     'No hay ninguna ruta de intercambio disponible para este par de activos.',
+  ripple_warning_partial_payment:
+    'Esta transacción es un pago parcial: el importe mostrado es el máximo que se puede entregar, no una cantidad garantizada. El destinatario puede recibir menos. El importe que usted gasta está limitado por el límite máximo de envío, y además se aplica la comisión de red.',
+  ripple_warning_custom_paths:
+    'El sitio proporcionó rutas candidatas para este pago. La red decide cuál utilizar, y también puede optar por la ruta directa.',
+  price_impact: 'Impacto en los precios',
+  swap_fee_included_in_rate: 'Incluido en el tipo de cambio cotizado',
+  swap_protocol_fee: 'Tarifa de protocolo',
+  swap_referral_fee: 'Comisión por recomendación',
+  select_route: 'Seleccione ruta',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'valga',
+  swap_limit_when_one: 'Cuando 1',
 }

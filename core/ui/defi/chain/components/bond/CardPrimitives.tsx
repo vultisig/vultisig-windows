@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { getColor } from '@lib/ui/theme/getters'
@@ -5,7 +6,7 @@ import styled from 'styled-components'
 
 export const BondCard = styled(Panel)`
   padding: 16px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `

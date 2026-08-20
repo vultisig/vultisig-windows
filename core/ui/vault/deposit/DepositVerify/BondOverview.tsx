@@ -14,6 +14,7 @@ import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProv
 import { useDepositData } from '@core/ui/vault/deposit/state/data'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -75,7 +76,7 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
           </BlockaidStatus>
         )}
 
-        <List border="gradient" radius={16}>
+        <List border="gradient" radius={borderRadiusPx.lg}>
           <TransactionOverviewAmount
             label={actionLabel}
             coin={coin}

@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -54,6 +55,6 @@ export const TallyBreakdown = ({ tally }: { tally: QbtcGovTally }) => {
 const Dot = styled.span<{ $token: GovColorToken }>`
   width: 10px;
   height: 10px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background: ${({ $token }) => getColor($token)};
 `

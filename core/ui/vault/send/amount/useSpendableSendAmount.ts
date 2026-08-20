@@ -1,7 +1,7 @@
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 
-import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { useSendBalanceQuery } from '../queries/useSendBalanceQuery'
 import { useSendFeeEstimateQuery } from '../queries/useSendFeeEstimateQuery'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -16,7 +16,7 @@ import { adjustAmountForFee } from './adjustAmountForFee'
 export const useSpendableSendAmount = () => {
   const coin = useCurrentSendCoin()
   const [amount] = useSendAmount()
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const feeEstimateQuery = useSendFeeEstimateQuery()
 
   const balance = balanceQuery.data

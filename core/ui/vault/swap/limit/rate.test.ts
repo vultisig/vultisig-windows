@@ -1,81 +1,67 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  fiatUnitPriceToRate,
-  rateToFiatUnitPrice,
-  rateToUnitPrice,
-  unitPriceToRate,
-} from './rate'
+import { rateToSellUnitFiatValue, sellUnitFiatValueToRate } from './rate'
 
-// Sell USDT, buy BTC at $65,800.13 -- the Figma reference values.
-const btcPerUsdt = 1 / 65_800.13
+// Sell ETH, buy BTC: 1 ETH is worth 0.02950822 BTC with BTC at ~$64,260.
+const btcPerEth = 0.02950822
+const btcFiatPrice = 64_260
 
-describe('rateToUnitPrice', () => {
-  it('inverts a rate into sell units per buy unit', () => {
-    expect(rateToUnitPrice({ rate: btcPerUsdt })).toBeCloseTo(65_800.13, 2)
+describe('rateToSellUnitFiatValue', () => {
+  it('prices one sell unit in fiat via the buy asset price', () => {
+    expect(
+      rateToSellUnitFiatValue({
+        rate: btcPerEth,
+        buyCoinFiatPrice: btcFiatPrice,
+      })
+    ).toBeCloseTo(1_896.2, 1)
   })
 
   it.each([0, -1])('returns null for a %s rate', rate => {
-    expect(rateToUnitPrice({ rate })).toBeNull()
+    expect(
+      rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: btcFiatPrice })
+    ).toBeNull()
   })
+
+  it.each([undefined, 0])(
+    'returns null without a usable buy price (%s)',
+    buyCoinFiatPrice => {
+      expect(
+        rateToSellUnitFiatValue({ rate: btcPerEth, buyCoinFiatPrice })
+      ).toBeNull()
+    }
+  )
 })
 
-describe('unitPriceToRate', () => {
-  it('round-trips with rateToUnitPrice', () => {
-    const unitPrice = rateToUnitPrice({ rate: btcPerUsdt })
-
-    expect(unitPriceToRate({ unitPrice: unitPrice as number })).toBeCloseTo(
-      btcPerUsdt,
-      12
-    )
-  })
-
-  it.each([0, -1])('returns null for a %s unit price', unitPrice => {
-    expect(unitPriceToRate({ unitPrice })).toBeNull()
-  })
-})
-
-describe('fiatUnitPriceToRate', () => {
-  it('converts a fiat price per buy unit using the sell coin price', () => {
+describe('sellUnitFiatValueToRate', () => {
+  it('round-trips with rateToSellUnitFiatValue', () => {
     expect(
-      fiatUnitPriceToRate({ fiatUnitPrice: 65_800.13, sellCoinFiatPrice: 1 })
-    ).toBeCloseTo(btcPerUsdt, 12)
+      sellUnitFiatValueToRate({
+        fiatValue: btcPerEth * btcFiatPrice,
+        buyCoinFiatPrice: btcFiatPrice,
+      })
+    ).toBeCloseTo(btcPerEth, 12)
   })
 
-  it('handles a sell asset that is not a dollar stablecoin', () => {
-    // Sell ETH at $2,000, buy BTC at $60,000 -> 1 ETH buys 1/30 BTC.
+  it('handles a buy asset that is not a dollar stablecoin', () => {
+    // 1 ETH worth $2,000 with BTC at $60,000 -> 1 ETH buys 1/30 BTC.
     expect(
-      fiatUnitPriceToRate({ fiatUnitPrice: 60_000, sellCoinFiatPrice: 2_000 })
+      sellUnitFiatValueToRate({ fiatValue: 2_000, buyCoinFiatPrice: 60_000 })
     ).toBeCloseTo(1 / 30, 12)
   })
 
   // Fabricating a rate here would become the signed LIM.
   it.each([undefined, 0])(
-    'returns null without a usable sell price (%s)',
-    sellCoinFiatPrice => {
+    'returns null without a usable buy price (%s)',
+    buyCoinFiatPrice => {
       expect(
-        fiatUnitPriceToRate({ fiatUnitPrice: 65_800, sellCoinFiatPrice })
+        sellUnitFiatValueToRate({ fiatValue: 1_896.2, buyCoinFiatPrice })
       ).toBeNull()
     }
   )
 
-  it('returns null for a non-positive fiat price', () => {
+  it('returns null for a non-positive fiat value', () => {
     expect(
-      fiatUnitPriceToRate({ fiatUnitPrice: 0, sellCoinFiatPrice: 1 })
-    ).toBeNull()
-  })
-})
-
-describe('rateToFiatUnitPrice', () => {
-  it('is the inverse of fiatUnitPriceToRate', () => {
-    expect(
-      rateToFiatUnitPrice({ rate: btcPerUsdt, sellCoinFiatPrice: 1 })
-    ).toBeCloseTo(65_800.13, 2)
-  })
-
-  it('returns null without a sell price', () => {
-    expect(
-      rateToFiatUnitPrice({ rate: btcPerUsdt, sellCoinFiatPrice: undefined })
+      sellUnitFiatValueToRate({ fiatValue: 0, buyCoinFiatPrice: btcFiatPrice })
     ).toBeNull()
   })
 })

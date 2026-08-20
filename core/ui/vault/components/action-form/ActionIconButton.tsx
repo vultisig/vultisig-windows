@@ -10,7 +10,7 @@ export const ActionIconButton = styled(IconButton)`
   font-size: 20px;
   padding: 12px 16px;
   width: 103px;
-  ${borderRadius.s};
+  ${borderRadius.sm};
 
   &:hover {
     background-color: ${getColor('foregroundExtra')};

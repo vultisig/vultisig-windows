@@ -57,7 +57,6 @@ export const nl = {
   approval_tx: 'Goedkeurings-tx',
   approve: 'Goedkeuren',
   reject: 'Weigeren',
-  applied_discounts: 'Toegepaste kortingen:',
   asset: 'Asset',
   assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
@@ -561,10 +560,7 @@ export const nl = {
     'Je kunt meldingen beheren in de systeeminstellingen.',
   max: 'Max',
   max_4_characters: 'Max 4 tekens',
-  max_total_fees: 'Max. totale fee',
   memo: 'Memo',
-  merge: 'Samenvoegen',
-  merged: 'Samengevoegd',
   message: 'Bericht',
   message_required: 'Bericht is verplicht',
   message_to_sign: 'Te ondertekenen bericht',
@@ -576,7 +572,6 @@ export const nl = {
   missing_destination_address: 'Bestemmingsadres ontbreekt',
   missing_devices_for_migration:
     'Doe mee met de volgende apparaten om je kluis te migreren',
-  missing_thorchain_address: 'THORChain-adres ontbreekt',
   more: 'meer',
   moreInfo: 'Meer info',
   more_coming_soon: 'Binnenkort meer',
@@ -603,7 +598,6 @@ export const nl = {
   no_connected_dapps: 'Geen verbonden dApps',
   no_connected_dapps_desc:
     'dApps verschijnen hier wanneer je ermee interageert',
-  no_mergeable_tokens_found: 'Geen samenvoegbare tokens gevonden',
   no_referral_yet: 'Nog geen referral.',
   no_token_found: 'Token niet gevonden',
   no_transactions_yet: 'Nog geen transacties',
@@ -922,7 +916,6 @@ export const nl = {
     input: 'Het swap-bedrag klopt',
     output: 'Ik ga akkoord met het min. bedrag dat ik ontvang',
   },
-  switch: 'Wisselen',
   switchToInternet: 'Terugschakelen naar internetmodus',
   switchToLocal: 'Overschakelen naar lokale modus',
   target: 'Doel',
@@ -931,7 +924,6 @@ export const nl = {
   this_device: 'Dit apparaat',
   this_device_suffix: '(dit apparaat)',
   this_vault_only: 'Alleen deze kluis',
-  thorchain_address: 'THORChain-adres',
   thorchain_address_required_for_referrals:
     'Je hebt een THORChain-adres nodig om het referralprogramma te gebruiken',
   tns_alnum_only: 'Referralcode mag alleen alfanumerieke tekens bevatten',
@@ -990,7 +982,6 @@ export const nl = {
   unlock_discount_tier_description_ultimate:
     'Door {{minBalance}} aan te houden, ontgrendel je het {{tier}}-niveau en krijg je <b>volledige kwijtschelding van Vultisig-fee</b> op alle swaps.',
   unlock_tier: 'Niveau ontgrendelen',
-  unmerge: 'Ontsamenvoegen',
   unfreeze: 'Unfreeze',
   unknown: 'Onbekend',
   unlimited: 'Onbeperkt',
@@ -1756,7 +1747,6 @@ export const nl = {
   swap_limit_asset: 'Bezit',
   swap_limit_buy: 'Kopen',
   swap_limit_execute_when: 'Uitvoeren wanneer',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Verkopen',
   swap_limit_blocker_chain_unavailable:
     'Deze keten is tijdelijk gestopt op THORChain',
@@ -1765,7 +1755,7 @@ export const nl = {
     'Deze bestelling kan niet worden geplaatst zoals ingevoerd.',
   swap_limit_blocker_no_amount: 'Voer een verkoopbedrag in',
   swap_limit_blocker_no_market_price:
-    'Er is nog geen marktprijs bekend voor dit paar.',
+    'Dit valutapaar kan momenteel niet worden verhandeld op THORChain. Kies een ander actief.',
   swap_limit_blocker_no_price: 'Voer een streefprijs in',
   swap_limit_blocker_pair_not_routable:
     'THORChain kan geen limietorder tussen deze activa routeren.',
@@ -1859,4 +1849,18 @@ export const nl = {
   swap_invalid_config:
     'Controleer de details van de ruil, de ontvanger en de geavanceerde instellingen en probeer het opnieuw.',
   swap_no_routes_found: 'Er is geen swaproute beschikbaar voor dit activapaar.',
+  ripple_warning_partial_payment:
+    'Deze transactie betreft een gedeeltelijke betaling: het weergegeven bedrag is het maximale bedrag dat kan worden verzonden, geen gegarandeerd bedrag. De ontvanger kan minder ontvangen. Het bedrag dat u kunt uitgeven, is beperkt door het maximale verzendbedrag, en daar bovenop komen de netwerkkosten.',
+  ripple_warning_custom_paths:
+    'De website leverde kandidaatroutes aan voor deze betaling. Het netwerk beslist welke route wordt gebruikt en kan ook de directe route kiezen.',
+  price_impact: 'Prijsimpact',
+  swap_fee_included_in_rate: 'Inbegrepen in de vermelde wisselkoers',
+  swap_protocol_fee: 'Protocolkosten',
+  swap_referral_fee: 'Verwijzingsvergoeding',
+  select_route: 'Route selecteren',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'waard is',
+  swap_limit_when_one: 'Wanneer 1',
 }

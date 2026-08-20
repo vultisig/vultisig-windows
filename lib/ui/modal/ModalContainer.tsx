@@ -31,7 +31,7 @@ const Container = styled(FocusLock)<ContainerProps>`
     width
       ? css`
           width: ${toSizeUnit(width)};
-          ${borderRadius.m};
+          ${borderRadius.md};
           max-height: calc(100% - ${toSizeUnit(offset * 2)});
           ${placement === 'top' &&
           css`

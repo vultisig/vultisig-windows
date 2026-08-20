@@ -15,7 +15,7 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { getVaultSecurityTone } from '@core/ui/vaultsOrganisation/utils/getVaultSecurityTone'
 import { Button } from '@lib/ui/buttons/Button'
-import { round } from '@lib/ui/css/round'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
@@ -46,7 +46,7 @@ type ConnectView = 'connect' | 'picker'
 
 const DappFavicon = styled(ContainImage)`
   ${sameDimensions(46)};
-  ${round};
+  ${borderRadius.pill};
   border: 1px solid rgba(255, 255, 255, 0.1);
 `
 
@@ -58,7 +58,7 @@ const VaultAvatar = styled.div<{
   tone: 'primary' | 'warning'
 }>`
   ${sameDimensions(28)};
-  ${round};
+  ${borderRadius.pill};
   align-items: center;
   display: flex;
   font-size: 14px;
@@ -81,7 +81,7 @@ const VaultAvatar = styled.div<{
 const ChangePill = styled.span`
   align-items: center;
   border: 1.5px solid ${getColor('foregroundExtra')};
-  border-radius: 99px;
+  ${borderRadius.pill};
   color: ${getColor('textShy')};
   display: inline-flex;
   font-size: 12px;
@@ -313,7 +313,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           )}
         </VStack>
         {selectedVault && (
-          <List radius={12}>
+          <List radius={borderRadiusPx.md}>
             <ListItem
               icon={<VaultRowIcon vault={selectedVault} />}
               title={selectedVault.name}

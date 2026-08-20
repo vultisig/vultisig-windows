@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Text } from '@lib/ui/text'
@@ -90,7 +91,11 @@ export const BondedSummaryCard = ({
         </BondSectionHeader>
         <Divider />
         {isPending || isSkeleton ? (
-          <Skeleton width="100%" height="44px" borderRadius="10px" />
+          <Skeleton
+            width="100%"
+            height="44px"
+            borderRadius={`${borderRadiusPx.md}px`}
+          />
         ) : (
           action
         )}

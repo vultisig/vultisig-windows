@@ -1,4 +1,5 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { NavigationXIcon } from '@lib/ui/icons/NavigationXIcon'
@@ -38,5 +39,5 @@ const BannerWrapper = styled.div`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `

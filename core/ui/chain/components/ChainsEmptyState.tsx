@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
@@ -58,7 +59,7 @@ const Wrapper = styled.div`
     alignItems: 'center',
   })};
   padding: 32px 40px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
 
   ${({ theme }) =>
@@ -66,7 +67,6 @@ const Wrapper = styled.div`
     css`
       align-self: stretch;
       border: 1px solid ${theme.colors.foregroundSuper.toCssValue()};
-      border-radius: 20px;
       padding: 28px 20px;
     `}
 `

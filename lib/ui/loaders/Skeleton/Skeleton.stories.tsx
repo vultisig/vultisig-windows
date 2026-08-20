@@ -11,7 +11,6 @@ const meta: Meta<typeof Skeleton> = {
     children: { table: { disable: true } },
   },
   args: {
-    variant: 'rectangular',
     width: '120px',
     height: '16px',
   },
@@ -24,7 +23,7 @@ export const Rectangular: Story = {}
 
 export const Circular: Story = {
   args: {
-    variant: 'circular',
+    borderRadius: '50%',
     width: '60px',
     height: '60px',
   },

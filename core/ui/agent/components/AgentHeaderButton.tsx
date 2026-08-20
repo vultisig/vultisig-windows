@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { getColor } from '@lib/ui/theme/getters'
@@ -23,7 +24,7 @@ const Container = styled(UnstyledButton)`
   flex-shrink: 0;
   font-size: 24px;
   color: ${getColor('contrast')};
-  border-radius: 4px;
+  ${borderRadius.xs};
 
   &:hover {
     opacity: 0.7;

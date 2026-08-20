@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
@@ -8,7 +9,7 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   height: 52px;
-  border-radius: 20px;
+  ${borderRadius.xl};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   ${hStack({

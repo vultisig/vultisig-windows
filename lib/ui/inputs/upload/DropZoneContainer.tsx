@@ -10,7 +10,7 @@ export const DropZoneContainer = styled.div`
   width: 100%;
   max-height: 400px;
   ${centerContent};
-  ${borderRadius.m};
+  ${borderRadius.md};
   padding: 20px;
   border: 1px dashed ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};

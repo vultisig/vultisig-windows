@@ -1,6 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ShieldCheckFilledIcon } from '@lib/ui/icons/ShieldCheckFilledIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -59,7 +60,7 @@ const IconWrapper = styled.div`
   position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  ${borderRadius.pill};
   background: #03132c;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
@@ -69,6 +70,7 @@ const IconWrapper = styled.div`
   color: ${getColor('success')};
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a non-square decorative element: 50% is an ellipse, the pill token would clamp it to a stadium
 const IconShadow = styled.div`
   position: absolute;
   bottom: -6px;
@@ -79,6 +81,8 @@ const IconShadow = styled.div`
   opacity: 0.5;
   background: ${getColor('success')};
   filter: blur(9px);
+  /* A blurred glow, not a surface: 16x8 means 50% is an ellipse and the
+     pill token would clamp it to a stadium. */
   border-radius: 50%;
   pointer-events: none;
 `

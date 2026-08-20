@@ -12,6 +12,7 @@ import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/Deposit
 import { stepFromDecimals } from '@core/ui/vault/deposit/utils/stepFromDecimals'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
@@ -459,7 +460,7 @@ export const BondForm = ({
 const SuggestionOption = styled(AmountSuggestion)`
   flex: 1;
   padding: 6px 18px;
-  border-radius: 99px;
+  ${borderRadius.pill};
 `
 
 const FixedScanQRView = styled(ScanQrView)`
@@ -542,7 +543,7 @@ const FilledTextInput = styled(TextInput)`
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid #11284a;
   background: #061b3a;
   font-size: 16px;

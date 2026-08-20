@@ -64,7 +64,6 @@ export const en = {
   approval_tx: 'Approval Tx',
   approve: 'Approve',
   reject: 'Reject',
-  applied_discounts: 'Applied Discounts:',
   asset: 'Asset',
   assets: 'Assets',
   at_least_one_device: 'At least one device',
@@ -648,10 +647,7 @@ export const en = {
   max: 'Max',
   max_4_characters: 'Max 4 characters',
   max_supply: 'Max Supply',
-  max_total_fees: 'Max. Total Fee',
   memo: 'Memo',
-  merge: 'Merge',
-  merged: 'Merged',
   message: 'Message',
   message_required: 'Message is required',
   message_to_sign: 'Message to sign',
@@ -663,7 +659,6 @@ export const en = {
   missing_destination_address: 'Missing Destination Address',
   missing_devices_for_migration:
     'Join with the following devices to migrate your vault',
-  missing_thorchain_address: 'Missing THORChain Address',
   more: 'more',
   moreInfo: 'More Info',
   more_coming_soon: 'More coming soon',
@@ -692,7 +687,6 @@ export const en = {
   no_connected_dapps: 'No connected dApps',
   no_connected_dapps_desc:
     'dApps will appear here whenever you interact with them',
-  no_mergeable_tokens_found: 'No mergeable tokens found',
   no_referral_yet: 'No referral yet.',
   no_token_found: 'Token not found',
   no_transactions_yet: 'No transactions yet',
@@ -787,6 +781,7 @@ export const en = {
   positions: 'Positions',
   powered_by: 'Powered by <provider></provider>',
   price: 'Price',
+  price_impact: 'Price Impact',
   price_impact_average: 'Average',
   price_range: 'Price Range',
   price_impact_good: 'Good',
@@ -947,6 +942,10 @@ export const en = {
   ripple_field_trust_limit: 'Trust limit',
   ripple_field_offer_sequence: 'Offer sequence',
   ripple_field_issuer: 'Issuer',
+  ripple_warning_partial_payment:
+    'This transaction is a partial payment: the amount shown is the most that can be delivered, not a guaranteed amount. The recipient can receive less than it. The amount you spend is limited separately by the send maximum, and the network fee is charged on top of that.',
+  ripple_warning_custom_paths:
+    'The site supplied candidate routes for this payment. The network decides which of them to use, and can also use the direct route.',
   review_vault_devices_subtitle:
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',
@@ -1019,6 +1018,7 @@ export const en = {
   select_chains: 'Select chains',
   select_chains_manually: 'Select chains manually',
   select_positions: 'Select positions',
+  select_route: 'Select route',
   select_positions_description:
     'Enable at least one position to view balances and manage positions.',
   compounded_token: 'Compounded {{ticker}}',
@@ -1183,20 +1183,27 @@ export const en = {
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
+  swap_fee_included_in_rate: 'Included in the quoted exchange rate',
+  swap_protocol_fee: 'Protocol Fee',
+  swap_referral_fee: 'Referral Fee',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
   swap_invalid_external_recipient:
     'Recipient address is not valid for {{chain}}',
   swap_limit_asset: 'Asset',
   swap_limit_buy: 'Buy',
   swap_limit_execute_when: 'Execute when',
-  swap_limit_one_unit: '1 {{ticker}}',
+  swap_limit_is_worth: 'is worth',
   swap_limit_sell: 'Sell',
+  swap_limit_when_one: 'When 1',
   swap_limit_blocker_chain_unavailable:
     'This chain is temporarily halted on THORChain',
   swap_limit_blocker_insufficient_balance: 'Amount exceeds your balance',
   swap_limit_blocker_memo_invalid: 'This order cannot be placed as entered',
   swap_limit_blocker_no_amount: 'Enter an amount to sell',
   swap_limit_blocker_no_market_price:
-    'No market price available for this pair yet',
+    "This pair can't be traded on THORChain right now. Pick a different asset.",
   swap_limit_blocker_no_price: 'Enter a target price',
   swap_limit_blocker_pair_not_routable:
     'THORChain cannot route a limit order between these assets',
@@ -1287,7 +1294,6 @@ export const en = {
     input: 'The swap amount is correct',
     output: "I agree with the min. amount I'll receive",
   },
-  switch: 'Switch',
   switchToInternet: 'Switch back to internet mode',
   switchToLocal: 'Switch to local mode',
   target: 'Target',
@@ -1296,7 +1302,6 @@ export const en = {
   this_device: 'This Device',
   this_device_suffix: '(this device)',
   this_vault_only: 'This Vault Only',
-  thorchain_address: 'THORChain Address',
   thorchain_address_required_for_referrals:
     'You need to have a THORChain address to use the referral program',
   tns_alnum_only: 'Referral code must contain only alphanumeric characters',
@@ -1361,7 +1366,6 @@ export const en = {
   unlock_discount_tier_description_ultimate:
     "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>complete Vultisig fee waiver</b> on all swaps.",
   unlock_tier: 'Unlock Tier',
-  unmerge: 'Unmerge',
   unfreeze: 'Unfreeze',
   unknown: 'Unknown',
   unlimited: 'Unlimited',

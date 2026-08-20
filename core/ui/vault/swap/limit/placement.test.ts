@@ -1,7 +1,11 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { describe, expect, it } from 'vitest'
 
-import { getLimitOrderBlocker } from './placement'
+import {
+  getLimitBlockerNotice,
+  getLimitOrderBlocker,
+  getLimitPairBlocker,
+} from './placement'
 
 const placeable = {
   fromChain: Chain.Bitcoin,
@@ -124,6 +128,132 @@ describe('getLimitOrderBlocker', () => {
         price: null,
       })
     ).toBe('queueUnavailable')
+  })
+
+  // The asset step is reached before an amount or a price exists, so a
+  // pair-level problem has to outrank both — otherwise an unroutable pair reads
+  // as "enter an amount" and the user only learns the truth a step later.
+  it.each([
+    ['pairNotRoutable', { toChain: Chain.Sui }],
+    ['chainUnavailable', { supportedChains: undefined }],
+    ['sameAsset', { isSameAsset: true }],
+    ['noDestination', { destinationAddress: undefined }],
+    ['noMarketPrice', { marketPrice: undefined }],
+  ] as const)(
+    'reports %s ahead of the missing inputs',
+    (expected, override) => {
+      expect(
+        getLimitOrderBlocker({
+          ...placeable,
+          ...override,
+          amount: null,
+          balance: undefined,
+          price: null,
+        })
+      ).toBe(expected)
+    }
+  )
+})
+
+// What the asset step gates on: everything the pair alone decides, with no
+// amount or price in the picture.
+describe('getLimitPairBlocker', () => {
+  const pair = {
+    fromChain: placeable.fromChain,
+    toChain: placeable.toChain,
+    isSameAsset: placeable.isSameAsset,
+    isQueueEnabled: placeable.isQueueEnabled,
+    supportedChains: placeable.supportedChains,
+    marketPrice: placeable.marketPrice,
+    destinationAddress: placeable.destinationAddress,
+  }
+
+  it('clears a routable pair before any amount or price is entered', () => {
+    expect(getLimitPairBlocker(pair)).toBeUndefined()
+  })
+
+  it.each([
+    ['queueUnavailable', { isQueueEnabled: false }],
+    ['pairNotRoutable', { toChain: Chain.Sui }],
+    ['chainUnavailable', { supportedChains: undefined }],
+    ['sameAsset', { isSameAsset: true }],
+    ['noDestination', { destinationAddress: '   ' }],
+    ['noMarketPrice', { marketPrice: undefined }],
+  ] as const)('blocks the pair with %s', (expected, override) => {
+    expect(getLimitPairBlocker({ ...pair, ...override })).toBe(expected)
+  })
+
+  // The two must agree by construction: the CTA gate delegates here, so a pair
+  // the asset step calls tradeable can never be one the CTA rejects for a
+  // pair-level reason (or vice versa).
+  it('is what the full gate reports for a pair-level problem', () => {
+    const input = { ...placeable, toChain: Chain.Sui }
+
+    expect(getLimitOrderBlocker(input)).toBe(getLimitPairBlocker(input))
+  })
+})
+
+// The gates fail closed, so every one of them reads as "blocked" while it
+// loads. That is right for the button and wrong for the message.
+describe('getLimitBlockerNotice', () => {
+  const resolved = {
+    isQueueEnabled: true,
+    supportedChains: placeable.supportedChains,
+    balance: placeable.balance,
+    isMarketPriceLoading: false,
+  }
+
+  it('says nothing when nothing is blocked', () => {
+    expect(
+      getLimitBlockerNotice({ ...resolved, blocker: undefined })
+    ).toBeUndefined()
+  })
+
+  it.each([
+    ['queueUnavailable', { isQueueEnabled: undefined }],
+    ['chainUnavailable', { supportedChains: undefined }],
+    ['insufficientBalance', { balance: undefined }],
+    ['noMarketPrice', { isMarketPriceLoading: true }],
+  ] as const)(
+    'withholds %s while its gate is unresolved',
+    (blocker, pending) => {
+      expect(
+        getLimitBlockerNotice({ ...resolved, ...pending, blocker })
+      ).toBeUndefined()
+    }
+  )
+
+  it.each([
+    ['queueUnavailable', { isQueueEnabled: false }],
+    ['chainUnavailable', {}],
+    ['insufficientBalance', {}],
+    ['noMarketPrice', {}],
+  ] as const)('announces %s once its gate has answered', (blocker, settled) => {
+    expect(getLimitBlockerNotice({ ...resolved, ...settled, blocker })).toBe(
+      blocker
+    )
+  })
+
+  // No live gate stands behind these, so they are verdicts the instant they
+  // appear.
+  it.each([
+    'pairNotRoutable',
+    'sameAsset',
+    'noDestination',
+    'noAmount',
+    'noPrice',
+    'memoInvalid',
+  ] as const)('announces %s immediately', blocker => {
+    expect(
+      getLimitBlockerNotice({
+        ...resolved,
+        isQueueEnabled: undefined,
+        supportedChains: undefined,
+        balance: undefined,
+        isMarketPriceLoading: true,
+        blocker,
+      })
+    ).toBe(blocker)
   })
 })
 

@@ -1,6 +1,8 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { formatDateShort } from '@core/ui/defi/shared/formatters'
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -17,13 +19,13 @@ import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 const Card = styled(Panel)`
   padding: 20px;
-  border-radius: 24px;
+  ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
 `
@@ -64,68 +66,6 @@ const ActionsRow = styled(HStack)`
   flex-wrap: wrap;
 `
 
-const ActionButton = styled.button.attrs({ type: 'button' })<
-  ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant: 'primary' | 'secondary'
-  }
->`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border-radius: 999px;
-  height: 48px;
-  padding: 0 26px;
-  font-size: 16px;
-  font-weight: 600;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-  color: ${getColor('contrast')};
-
-  ${({ variant }) =>
-    variant === 'primary'
-      ? css`
-          background: ${getColor('buttonPrimary')};
-          box-shadow: 0px 8px 24px rgba(31, 39, 61, 0.35);
-        `
-      : css`
-          background: rgba(11, 19, 38, 0.95);
-          border-color: ${getColor('buttonPrimary')};
-        `}
-
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      opacity: 0.4;
-      cursor: default;
-    `}
-`
-
-const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-left: -12px;
-  color: ${getColor('contrast')};
-  ${({ variant }) =>
-    variant === 'primary'
-      ? css`
-          background: rgba(255, 255, 255, 0.2);
-        `
-      : css`
-          background: rgba(255, 255, 255, 0.12);
-        `}
-`
-
 type Props = {
   coin: Coin
   title: string
@@ -150,6 +90,13 @@ type Props = {
   isPendingAction?: boolean
   infoUrl?: string
   onTransfer?: () => void
+  /**
+   * Coin the transfer actually moves. For receipt-backed positions this is the
+   * receipt token (e.g. sRUJI), not the coin shown in the card header.
+   */
+  transferCoin?: Coin
+  /** Base-unit balance of {@link Props.transferCoin}, once resolved. */
+  transferAmount?: bigint
 }
 
 export const StakeCard = ({
@@ -176,12 +123,21 @@ export const StakeCard = ({
   isPendingAction = false,
   infoUrl,
   onTransfer,
+  transferCoin,
+  transferAmount,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const unstakeAllowed = canUnstake ?? true
   const unstakeDisabled = actionsDisabled || !unstakeAllowed || isPendingAction
   const stakeDisabled = actionsDisabled || isPendingAction
+  const transferLabel =
+    transferCoin && transferAmount !== undefined
+      ? `${t('transfer')} ${formatAmount(
+          fromChainAmount(transferAmount, transferCoin.decimals),
+          { ticker: transferCoin.ticker }
+        )}`
+      : t('transfer')
   const unstakeMessage =
     !unstakeAllowed && unstakeAvailableDate
       ? t('unstake_available_on', {
@@ -317,85 +273,79 @@ export const StakeCard = ({
         <StatRow>
           {rewards !== undefined && rewards > 0
             ? renderAction(
-                <ActionButton
-                  variant="primary"
+                <Button
                   onClick={onWithdrawRewards}
                   disabled={actionsDisabled}
-                  style={{ width: '100%' }}
+                  icon={<CircleMinusIcon />}
                 >
-                  <ActionIcon variant="primary">
-                    <CircleMinusIcon />
-                  </ActionIcon>
-                  <Text as="span" size={14} weight="600" color="contrast">
-                    {t('withdraw')}{' '}
-                    {formatAmount(rewards, {
-                      ticker: rewardTicker ?? coin.ticker,
-                    })}
-                  </Text>
-                </ActionButton>,
+                  {t('withdraw')}{' '}
+                  {formatAmount(rewards, {
+                    ticker: rewardTicker ?? coin.ticker,
+                  })}
+                </Button>,
                 { width: '100%' }
               )
             : null}
         </StatRow>
 
-        {onTransfer && (
-          <ActionsRow>
-            {renderAction(
-              <ActionButton
-                variant="primary"
-                onClick={onTransfer}
-                disabled={actionsDisabled || isPendingAction}
-                style={{ width: '100%' }}
-              >
-                <ActionIcon variant="primary">
-                  <ArrowUpRightIcon />
-                </ActionIcon>
-                {t('transfer')}
-              </ActionButton>,
-              { width: '100%' }
-            )}
-          </ActionsRow>
-        )}
-
         <ActionsRow>
           {isSkeleton ? (
             <>
-              <Skeleton width="48%" height="42px" borderRadius="10px" />
-              <Skeleton width="48%" height="42px" borderRadius="10px" />
+              <Skeleton
+                width="48%"
+                height="42px"
+                borderRadius={`${borderRadiusPx.md}px`}
+              />
+              <Skeleton
+                width="48%"
+                height="42px"
+                borderRadius={`${borderRadiusPx.md}px`}
+              />
             </>
           ) : (
             <>
               {renderAction(
-                <ActionButton
-                  variant="secondary"
+                <Button
+                  kind="secondary"
                   onClick={onUnstake}
                   style={{ flex: 1 }}
                   disabled={unstakeDisabled}
+                  icon={<CircleMinusIcon />}
                 >
-                  <ActionIcon variant="secondary">
-                    <CircleMinusIcon />
-                  </ActionIcon>
                   {_unstakeLabel ?? t('unstake')}
-                </ActionButton>,
+                </Button>,
                 { flex: 1 }
               )}
               {renderAction(
-                <ActionButton
-                  variant="primary"
+                <Button
                   onClick={onStake}
                   style={{ flex: 1 }}
                   disabled={stakeDisabled}
+                  icon={<CirclePlusIcon />}
                 >
-                  <ActionIcon variant="primary">
-                    <CirclePlusIcon />
-                  </ActionIcon>
                   {_stakeLabel ?? t('stake')}
-                </ActionButton>,
+                </Button>,
                 { flex: 1 }
               )}
             </>
           )}
         </ActionsRow>
+
+        {onTransfer && (
+          <ActionsRow>
+            {renderAction(
+              <Button
+                kind="secondary"
+                onClick={onTransfer}
+                disabled={actionsDisabled || isPendingAction}
+                icon={<ArrowUpRightIcon />}
+              >
+                {transferLabel}
+              </Button>,
+              { width: '100%' }
+            )}
+          </ActionsRow>
+        )}
         {isPendingAction ? (
           <Text size={12} color="primary">
             {t('adding_coin_to_vault')}

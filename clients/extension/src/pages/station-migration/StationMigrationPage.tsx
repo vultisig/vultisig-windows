@@ -14,6 +14,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { currentProductBrand } from '@core/ui/product/brand'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -564,7 +565,7 @@ const SummaryGrid = styled.div`
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   overflow: hidden;
-  border-radius: 8px;
+  ${borderRadius.sm};
   background: ${getColor('mistExtra')};
 `
 
@@ -589,6 +590,6 @@ const WalletTitleRow = styled(HStack).attrs({
 const StatusBadge = styled.span`
   flex: 0 0 auto;
   padding: 5px 8px;
-  border-radius: 999px;
+  ${borderRadius.pill};
   background: ${getColor('foregroundExtra')};
 `

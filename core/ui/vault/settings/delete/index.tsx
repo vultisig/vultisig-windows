@@ -5,6 +5,7 @@ import { useDeleteVaultMutation, useVaults } from '@core/ui/storage/vaults'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
@@ -170,7 +171,7 @@ const Item = styled.div`
     gap: 12,
   })};
 
-  border-radius: 12px;
+  ${borderRadius.md};
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
   min-width: 0;
@@ -181,6 +182,7 @@ const VItem = styled(Item)`
   flex: 1;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const GradientBackground = styled.div`
   position: absolute;
   top: 50%;

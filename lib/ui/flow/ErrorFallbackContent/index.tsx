@@ -8,6 +8,7 @@ import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
 import { ErrorStatusIcon, ErrorStatusVariant } from './ErrorStatusIcon'
 import { ShowExactErrorModal } from './ShowExactErrorModal'
 
@@ -101,7 +102,7 @@ export const ErrorFallbackContent = ({
 
 const ShowExactErrorCard = styled(HStack)`
   width: 100%;
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 20px;

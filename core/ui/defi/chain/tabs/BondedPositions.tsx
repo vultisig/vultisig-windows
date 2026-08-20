@@ -5,6 +5,7 @@ import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { useHasVaultCoin } from '@core/ui/vault/state/useHasVaultCoin'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -38,7 +39,7 @@ const collapsibleVariants = {
 } as const
 
 const SectionContainer = styled.div`
-  border-radius: 16px;
+  ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   overflow: hidden;

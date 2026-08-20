@@ -12,7 +12,6 @@ const featureFlagDefaults = {
   agent: false,
   mldsaKeygen: true,
   transactionHistory: true,
-  limitSwap: false,
 }
 
 export const featureFlags: FeatureFlags = {

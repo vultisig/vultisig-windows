@@ -57,7 +57,6 @@ export const ko = {
   approval_tx: '승인 거래',
   approve: '승인하다',
   reject: '거부하다',
-  applied_discounts: '적용된 할인:',
   asset: '자산',
   assets: '자산',
   at_least_one_device: '최소 한 개의 기기',
@@ -557,10 +556,7 @@ export const ko = {
     '시스템 설정에서 알림을 관리할 수 있습니다.',
   max: '맥스',
   max_4_characters: '최대 4자',
-  max_total_fees: '최대 총 수수료',
   memo: '메모',
-  merge: '병합',
-  merged: '병합됨',
   message: '메시지',
   message_required: '메시지는 필수 입력 사항입니다.',
   message_to_sign: '서명할 메시지',
@@ -572,7 +568,6 @@ export const ko = {
   missing_destination_address: '목적지 주소가 누락되었습니다',
   missing_devices_for_migration:
     '다음 기기들과 연결하여 금고를 마이그레이션하세요.',
-  missing_thorchain_address: 'THORChain 주소가 누락되었습니다',
   more: '더',
   moreInfo: '더 자세한 정보',
   more_coming_soon: '곧 더 추가됩니다',
@@ -599,7 +594,6 @@ export const ko = {
   no_connected_dapps: '연결된 dApp이 없습니다.',
   no_connected_dapps_desc:
     '사용자가 dApp과 상호 작용할 때마다 해당 dApp이 여기에 표시됩니다.',
-  no_mergeable_tokens_found: '병합 가능한 토큰을 찾을 수 없습니다.',
   no_referral_yet: '아직 추천이 없습니다.',
   no_token_found: '토큰을 찾을 수 없습니다',
   no_transactions_yet: '아직 거래 내역이 없습니다.',
@@ -914,7 +908,6 @@ export const ko = {
     input: '교환 금액이 정확합니다.',
     output: '저는 제가 받을 최소 금액에 동의합니다.',
   },
-  switch: '스위치',
   switchToInternet: '인터넷 모드로 다시 전환하세요',
   switchToLocal: '로컬 모드로 전환',
   target: '목표',
@@ -923,7 +916,6 @@ export const ko = {
   this_device: '이 장치',
   this_device_suffix: '(이 장치)',
   this_vault_only: '이 금고에만 해당',
-  thorchain_address: 'THORChain 주소',
   thorchain_address_required_for_referrals:
     '추천 프로그램을 이용하려면 THORChain 주소가 필요합니다.',
   tns_alnum_only: '추천 코드는 영숫자만 포함해야 합니다.',
@@ -982,7 +974,6 @@ export const ko = {
   unlock_discount_tier_description_ultimate:
     '{{minBalance}}를 보유하면 {{tier}} 등급이 활성화되어 모든 스왑 거래에 대한 <b>Vultisig 수수료가 완전히</b> 면제됩니다.',
   unlock_tier: '잠금 해제 티어',
-  unmerge: '병합 해제',
   unfreeze: '동결 해제',
   unknown: '알려지지 않은',
   unlimited: '제한 없는',
@@ -1734,7 +1725,6 @@ export const ko = {
   swap_limit_asset: '유산',
   swap_limit_buy: '구입하다',
   swap_limit_execute_when: '실행 시점',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: '팔다',
   swap_limit_blocker_chain_unavailable:
     '이 체인은 THORChain 에서 일시적으로 중단되었습니다.',
@@ -1743,7 +1733,7 @@ export const ko = {
     '입력하신 내용으로는 주문을 처리할 수 없습니다.',
   swap_limit_blocker_no_amount: '판매할 금액을 입력하세요',
   swap_limit_blocker_no_market_price:
-    '이 제품에 대한 시장 가격은 아직 확인되지 않았습니다.',
+    '이 쌍은 현재 THORChain에서 거래할 수 없습니다. 다른 자산을 선택하세요.',
   swap_limit_blocker_no_price: '목표 가격을 입력하세요',
   swap_limit_blocker_pair_not_routable:
     'THORChain 이 자산들 간에 지정가 주문을 라우팅할 수 없습니다.',
@@ -1836,4 +1826,18 @@ export const ko = {
   swap_invalid_config:
     '교환 세부 정보, 수신자 및 고급 설정을 검토한 후 다시 시도하십시오.',
   swap_no_routes_found: '이 자산 쌍에 사용할 수 있는 스왑 경로가 없습니다.',
+  ripple_warning_partial_payment:
+    '이 거래는 부분 결제입니다. 표시된 금액은 최대 송금 가능 금액이며, 보장된 금액은 아닙니다. 수취인은 표시된 금액보다 적은 금액을 받을 수 있습니다. 송금액은 송금 최대 한도에 따라 별도로 제한되며, 네트워크 수수료가 추가로 부과됩니다.',
+  ripple_warning_custom_paths:
+    '해당 사이트는 이 결제를 위한 후보 경로를 제공했습니다. 네트워크는 이 경로들 중 어떤 것을 사용할지 결정하며, 직접 경로를 사용할 수도 있습니다.',
+  price_impact: '가격 영향',
+  swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
+  swap_protocol_fee: '프로토콜 수수료',
+  swap_referral_fee: '소개 수수료',
+  select_route: '경로를 선택하세요',
+  swap_route_eta_hours: '~{{hours}}시간',
+  swap_route_eta_hours_minutes: '~{{hours}}시간 {{minutes}}분',
+  swap_route_eta_minutes: '~{{minutes}}분',
+  swap_limit_is_worth: '의 가치가',
+  swap_limit_when_one: '1',
 }

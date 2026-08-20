@@ -5,13 +5,11 @@ import {
 } from '@core/ui/defi/chain/constants/time'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { midgardBaseUrl, thornodeBaseUrl } from '../../constants'
 import { runeCoin, thorchainTokens } from '../../tokens'
-import { ThorchainStakePosition } from '../../types'
-import { convertAPYtoAPR } from '../../utils/apy'
+import { RawThorchainStakePosition } from '../../types'
 import { toDecimalFactor } from '../../utils/decimals'
 import { parseBigint, parseNumber } from '../../utils/parsers'
 import { getLastBlock, getThorchainConstants } from './shared'
@@ -37,27 +35,20 @@ const getTcyStakers = () =>
     `${thornodeBaseUrl}/tcy_stakers`
   )
 
-type FetchTcyStakePositionInput = {
+/**
+ * Fetches the TCY stake position as price-free raw data. The APY depends on a
+ * price ratio (RUNE rewards over staked TCY value), so the annual RUNE reward
+ * is emitted as an `aprBasis` and the APR is joined from live prices at
+ * render.
+ */
+export const fetchTcyStakePosition = async (
   address: string
-  prices: Record<string, number>
-}
-
-export const fetchTcyStakePosition = async ({
-  address,
-  prices,
-}: FetchTcyStakePositionInput): Promise<ThorchainStakePosition | null> => {
+): Promise<RawThorchainStakePosition | null> => {
   const staker = await getTcyStaker(address).catch(() => undefined)
   const amount = parseBigint(staker?.amount)
 
-  const price = prices[coinKeyToString(thorchainTokens.tcy)] ?? 0
-  const fiatValue = getCoinValue({
-    amount,
-    decimals: thorchainTokens.tcy.decimals,
-    price,
-  })
-
   let estimatedReward = 0
-  let apyPercent = 0
+  let annualRewardRune = 0
   let nextPayout: Date | undefined
 
   try {
@@ -75,12 +66,7 @@ export const fetchTcyStakePosition = async ({
         0
       )
       const avgDailyRune = totalRune / distributions.length
-      const annualRune = avgDailyRune * daysInYear
-      const runePrice = prices[coinKeyToString(runeCoin)] ?? 0
-      const annualUSD = annualRune * runePrice
-      const stakedValueUSD =
-        fromChainAmount(amount, thorchainTokens.tcy.decimals) * price
-      apyPercent = stakedValueUSD > 0 ? (annualUSD / stakedValueUSD) * 100 : 0
+      annualRewardRune = avgDailyRune * daysInYear
     }
 
     const runeBalance = moduleBalance?.coins?.find(
@@ -134,9 +120,15 @@ export const fetchTcyStakePosition = async ({
     amount,
     type: 'stake',
     canUnstake: amount > 0n,
-    fiatValue,
+    fiatBasis: {
+      coinKey: coinKeyToString(thorchainTokens.tcy),
+      amount: fromChainAmount(amount, thorchainTokens.tcy.decimals),
+    },
+    aprBasis: {
+      rewardCoinKey: coinKeyToString(runeCoin),
+      annualRewardAmount: annualRewardRune,
+    },
     estimatedReward,
-    apr: convertAPYtoAPR(apyPercent),
     nextPayout,
     rewardTicker: runeCoin.ticker,
   }

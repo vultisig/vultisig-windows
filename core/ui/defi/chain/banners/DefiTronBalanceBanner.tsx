@@ -1,6 +1,7 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -21,7 +22,7 @@ const TronBannerContainer = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 122px;
-  border-radius: 16px;
+  ${borderRadius.lg};
   border: 1px solid ${tronAccent};
   background: linear-gradient(
     180deg,

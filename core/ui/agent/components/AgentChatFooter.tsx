@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { LockClosedIcon } from '@lib/ui/icons/LockClosedIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
@@ -64,7 +65,7 @@ export const AgentChatFooter: FC<AgentChatFooterProps> = props => {
                 placeholder={t('enter_vault_password')}
                 inputType="password"
                 containerHeight={70}
-                containerBorderRadius={24}
+                containerBorderRadius={borderRadiusPx.xl}
                 actionIcon={<LockClosedIcon style={{ fontSize: 20 }} />}
                 actionAriaLabel={label}
                 isLoading={props.isLoading}
@@ -136,7 +137,7 @@ const SideButton = styled(UnstyledButton)`
   justify-content: center;
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 40px;
+  ${borderRadius.pill};
   color: ${getColor('textShy')};
   cursor: pointer;
   transition: background-color 0.2s;

@@ -56,7 +56,6 @@ export const ru = {
   approval_tx: 'Tx подтверждения',
   approve: 'Подтвердить',
   reject: 'Отклонить',
-  applied_discounts: 'Примененные скидки:',
   asset: 'Актив',
   assets: 'активы',
   at_least_one_device: 'Минимум одно устройство',
@@ -558,10 +557,7 @@ export const ru = {
     'Управлять уведомлениями можно в системных настройках.',
   max: 'Макс',
   max_4_characters: 'Макс 4 символа',
-  max_total_fees: 'Макс. общая комиссия',
   memo: 'Memo',
-  merge: 'Объединить',
-  merged: 'Объединено',
   message: 'Сообщение',
   message_required: 'Сообщение обязательно',
   message_to_sign: 'Сообщение для подписи',
@@ -573,7 +569,6 @@ export const ru = {
   missing_destination_address: 'Отсутствует адрес получателя',
   missing_devices_for_migration:
     'Подключите следующие устройства, чтобы мигрировать хранилище',
-  missing_thorchain_address: 'Отсутствует THORChain-адрес',
   more: 'ещё',
   moreInfo: 'Подробнее',
   more_coming_soon: 'Скоро ещё',
@@ -600,7 +595,6 @@ export const ru = {
   no_connected_dapps: 'Нет подключённых dApps',
   no_connected_dapps_desc:
     'dApps появятся здесь, когда вы будете с ними взаимодействовать',
-  no_mergeable_tokens_found: 'Токены для объединения не найдены',
   no_referral_yet: 'Пока нет referral.',
   no_token_found: 'Токен не найден',
   no_transactions_yet: 'Пока нет транзакций.',
@@ -919,7 +913,6 @@ export const ru = {
     input: 'Сумма свопа указана верно',
     output: 'Я согласен(на) с мин. суммой, которую получу',
   },
-  switch: 'Переключить',
   switchToInternet: 'Вернуться в интернет-режим',
   switchToLocal: 'Переключиться в локальный режим',
   target: 'Цель',
@@ -928,7 +921,6 @@ export const ru = {
   this_device: 'Это устройство',
   this_device_suffix: '(это устройство)',
   this_vault_only: 'Только это хранилище',
-  thorchain_address: 'THORChain-адрес',
   thorchain_address_required_for_referrals:
     'Чтобы использовать реферальную программу, нужен THORChain-адрес',
   tns_alnum_only: 'Referral-код должен содержать только буквы и цифры',
@@ -987,7 +979,6 @@ export const ru = {
   unlock_discount_tier_description_ultimate:
     'Удерживая {{minBalance}}, вы разблокируете уровень {{tier}} и получите <b>полную отмену комиссии Vultisig</b> для всех свопов.',
   unlock_tier: 'Разблокировать уровень',
-  unmerge: 'Разъединить',
   unfreeze: 'Unfreeze',
   unknown: 'Неизвестно',
   unlimited: 'Без ограничений',
@@ -1752,7 +1743,6 @@ export const ru = {
   swap_limit_asset: 'Объект',
   swap_limit_buy: 'Купить',
   swap_limit_execute_when: 'Выполнить при',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Продавать',
   swap_limit_blocker_chain_unavailable:
     'Данная цепочка временно остановлена ​​на THORChain',
@@ -1761,7 +1751,7 @@ export const ru = {
     'Этот заказ не может быть оформлен в том виде, в котором он был введен.',
   swap_limit_blocker_no_amount: 'Введите сумму для продажи',
   swap_limit_blocker_no_market_price:
-    'Рыночная цена этой пары пока недоступна.',
+    'Торговать этой валютной парой на THORChain в данный момент невозможно. Выберите другой актив.',
   swap_limit_blocker_no_price: 'Введите целевую цену',
   swap_limit_blocker_pair_not_routable:
     'THORChain не может направить лимитный ордер между этими активами.',
@@ -1855,4 +1845,18 @@ export const ru = {
   swap_invalid_config:
     'Проверьте детали обмена, получателя и расширенные настройки, затем попробуйте снова.',
   swap_no_routes_found: 'Для этой пары активов нет доступного маршрута обмена.',
+  ripple_warning_partial_payment:
+    'Данная транзакция представляет собой частичную оплату: указанная сумма — это максимальная сумма, которая может быть доставлена, а не гарантированная. Получатель может получить меньшую сумму. Сумма, которую вы потратите, ограничена отдельно максимальной суммой отправки, а комиссия сети взимается дополнительно.',
+  ripple_warning_custom_paths:
+    'На сайте были предоставлены варианты маршрутов для этой оплаты. Сеть решает, какой из них использовать, а также может использовать прямой маршрут.',
+  price_impact: 'Влияние цены',
+  swap_fee_included_in_rate: 'Включено в указанный обменный курс',
+  swap_protocol_fee: 'Протокольный сбор',
+  swap_referral_fee: 'Комиссионное вознаграждение за привлечение клиентов',
+  select_route: 'Выберите маршрут',
+  swap_route_eta_hours: '~{{hours}}ч',
+  swap_route_eta_hours_minutes: '~{{hours}}ч {{minutes}}мин',
+  swap_route_eta_minutes: '~{{minutes}}мин',
+  swap_limit_is_worth: 'стоит',
+  swap_limit_when_one: 'Когда 1',
 }

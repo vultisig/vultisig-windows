@@ -3,6 +3,7 @@ import { useCosmosRewardsQuery } from '@core/ui/chain/cosmos/staking/queries/use
 import { stakingDenomForChain } from '@core/ui/chain/cosmos/staking/stakingDenom'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -115,5 +116,5 @@ export const ClaimRewardsSpecific = () => {
 const Card = styled(VStack).attrs({ gap: 8 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
 `

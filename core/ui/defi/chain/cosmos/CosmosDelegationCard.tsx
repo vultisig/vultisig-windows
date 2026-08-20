@@ -2,6 +2,7 @@ import { ValidatorAvatar } from '@core/ui/chain/cosmos/staking/components/Valida
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -186,7 +187,7 @@ export const CosmosDelegationCard = ({
 const Card = styled(VStack).attrs({ gap: 12 })`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${getColor('foreground')};
 `
 

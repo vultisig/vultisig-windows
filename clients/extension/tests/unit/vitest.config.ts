@@ -16,7 +16,7 @@ export default defineConfig({
     environment: 'node',
     pool: 'forks',
     setupFiles: [path.resolve(__dirname, 'setup.ts')],
-    include: [path.resolve(__dirname, '**/*.test.ts')],
+    include: [path.resolve(__dirname, '**/*.test.{ts,tsx}')],
     testTimeout: 30000,
   },
 })

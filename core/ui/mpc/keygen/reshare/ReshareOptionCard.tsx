@@ -1,3 +1,4 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -16,7 +17,7 @@ const Card = styled.button`
   align-items: center;
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 20px;
+  ${borderRadius.xl};
   cursor: pointer;
   display: flex;
   gap: 16px;

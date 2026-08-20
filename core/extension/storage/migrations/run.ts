@@ -2,8 +2,9 @@ import { prefixErrorWith } from '@vultisig/lib-utils/error/prefixErrorWith'
 import { transformError } from '@vultisig/lib-utils/error/transformError'
 
 import { storageMigrationKeys, storageMigrations } from '.'
-import { getLatestMigration } from './latestMigration'
+import { getLatestMigration, setLatestMigration } from './latestMigration'
 
+/** Runs pending storage migrations and checkpoints each successful migration. */
 export const runStorageMigrations = async () => {
   const latestMigration = await getLatestMigration()
 
@@ -20,5 +21,6 @@ export const runStorageMigrations = async () => {
       migration(),
       prefixErrorWith(`Failed to run ${migrationKey} storage migration `)
     )
+    await setLatestMigration(migrationKey)
   }
 }

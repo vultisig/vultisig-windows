@@ -2,6 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -21,6 +22,7 @@ const PageWrapper = styled(VStack)`
   overflow: hidden;
 `
 
+// eslint-disable-next-line local/no-hardcoded-border-radius -- a non-square decorative element: 50% is an ellipse, the pill token would clamp it to a stadium
 const TopGradient = styled.div`
   position: absolute;
   top: -200px;
@@ -28,6 +30,8 @@ const TopGradient = styled.div`
   transform: translateX(-50%);
   width: 600px;
   height: 500px;
+  /* A decorative radial glow, not a surface: 600x500 means 50% is an
+     ellipse and the pill token would clamp it to a stadium. */
   border-radius: 50%;
   background: radial-gradient(
     50% 50% at 50% 50%,
@@ -43,7 +47,7 @@ const LogoContainer = styled.div`
   justify-content: center;
   width: 60px;
   height: 60px;
-  border-radius: 19px;
+  ${borderRadius.lg};
   background: linear-gradient(180deg, #4879fd 0%, #0d39b1 100%);
   box-shadow: inset 0px 1.2px 1.2px 0px rgba(255, 255, 255, 0.35);
   color: white;

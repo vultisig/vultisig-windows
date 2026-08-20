@@ -58,7 +58,6 @@ export const it = {
   approval_tx: 'Approvazione Tx',
   approve: 'Approvare',
   reject: 'Rifiutare',
-  applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
   assets: 'Attività',
   at_least_one_device: 'Almeno un dispositivo',
@@ -571,10 +570,7 @@ export const it = {
     'È possibile gestire le notifiche nelle impostazioni di sistema.',
   max: 'Massimo',
   max_4_characters: 'Massimo 4 caratteri',
-  max_total_fees: 'Commissione totale massima',
   memo: 'Promemoria',
-  merge: 'Unisci',
-  merged: 'Unito',
   message: 'Messaggio',
   message_required: 'Il messaggio è obbligatorio',
   message_to_sign: 'Messaggio da firmare',
@@ -586,7 +582,6 @@ export const it = {
   missing_destination_address: 'Indirizzo di destinazione mancante',
   missing_devices_for_migration:
     'Unisciti ai seguenti dispositivi per migrare il tuo vault',
-  missing_thorchain_address: 'Indirizzo THORChain mancante',
   more: 'Di più',
   moreInfo: 'Maggiori informazioni',
   more_coming_soon: 'Altro in arrivo',
@@ -613,7 +608,6 @@ export const it = {
   no_connected_dapps: 'Nessuna dApp connessa',
   no_connected_dapps_desc:
     'Le dApp appariranno qui ogni volta che interagisci con esse',
-  no_mergeable_tokens_found: 'Nessun token unificabile trovato',
   no_referral_yet: 'Nessun riferimento ancora.',
   no_token_found: 'Token non trovato',
   no_transactions_yet: 'Nessuna transazione ancora',
@@ -934,7 +928,6 @@ export const it = {
     input: "L'importo dello swap è corretto",
     output: "Accetto l'importo minimo che riceverò",
   },
-  switch: 'Interruttore',
   switchToInternet: 'Torna alla modalità Internet',
   switchToLocal: 'Passa alla modalità locale',
   target: 'Bersaglio',
@@ -943,7 +936,6 @@ export const it = {
   this_device: 'Questo dispositivo',
   this_device_suffix: '(questo dispositivo)',
   this_vault_only: 'Solo questo Vault',
-  thorchain_address: 'Indirizzo THORChain',
   thorchain_address_required_for_referrals:
     'Devi avere un indirizzo THORChain per utilizzare il programma di referral',
   tns_alnum_only:
@@ -1006,7 +998,6 @@ export const it = {
   unlock_discount_tier_description_ultimate:
     "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
   unlock_tier: 'Sblocca livello',
-  unmerge: 'Separare',
   unfreeze: 'Unfreeze',
   unknown: 'Sconosciuto',
   unlimited: 'Illimitato',
@@ -1778,7 +1769,6 @@ export const it = {
   swap_limit_asset: 'Risorsa',
   swap_limit_buy: 'Acquistare',
   swap_limit_execute_when: 'Eseguire quando',
-  swap_limit_one_unit: '1 {{ticker}}',
   swap_limit_sell: 'Vendere',
   swap_limit_blocker_chain_unavailable:
     'Questa catena è temporaneamente interrotta su THORChain',
@@ -1787,7 +1777,7 @@ export const it = {
     'Questo ordine non può essere effettuato come inserito',
   swap_limit_blocker_no_amount: 'Inserisci la quantità da vendere',
   swap_limit_blocker_no_market_price:
-    'Non è ancora disponibile un prezzo di mercato per questo paio.',
+    'Al momento non è possibile negoziare questa coppia di token su THORChain. Scegli un altro asset.',
   swap_limit_blocker_no_price: 'Inserisci un prezzo obiettivo',
   swap_limit_blocker_pair_not_routable:
     'THORChain non può instradare un ordine limite tra questi asset',
@@ -1882,4 +1872,18 @@ export const it = {
     'Rivedi i dettagli dello scambio, il destinatario e le impostazioni avanzate, quindi riprova.',
   swap_no_routes_found:
     'Non è disponibile alcuna rotta di swap per questa coppia di asset.',
+  ripple_warning_partial_payment:
+    "Questa transazione è un pagamento parziale: l'importo mostrato è l'importo massimo che può essere inviato, non un importo garantito. Il destinatario potrebbe ricevere un importo inferiore. L'importo che puoi inviare è limitato separatamente dal limite massimo di invio, a cui si aggiungono le commissioni di rete.",
+  ripple_warning_custom_paths:
+    'Il sito ha fornito percorsi candidati per questo pagamento. La rete decide quale utilizzare, e può anche utilizzare il percorso diretto.',
+  price_impact: 'Impatto sul prezzo',
+  swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
+  swap_protocol_fee: 'Tariffa del protocollo',
+  swap_referral_fee: 'Commissione di segnalazione',
+  select_route: 'Seleziona il percorso',
+  swap_route_eta_hours: '~{{hours}}h',
+  swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
+  swap_route_eta_minutes: '~{{minutes}}m',
+  swap_limit_is_worth: 'vale',
+  swap_limit_when_one: 'Quando 1',
 }

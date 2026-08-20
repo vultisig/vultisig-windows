@@ -2,6 +2,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -33,9 +34,9 @@ export type LimitOrderReviewData = {
   expectedToAmount: bigint
   /** The `=<` memo to sign. */
   memo: string
-  /** Target price of one buy unit, in sell-asset units. */
+  /** Target worth of one sell unit, in buy-asset units. */
   unitPrice: string | undefined
-  /** Target price of one buy unit, in fiat. */
+  /** Target worth of one sell unit, in fiat. */
   targetPriceLabel: string | undefined
   expiryHours: LimitSwapExpiryHours
 }
@@ -168,7 +169,7 @@ const Row: FC<RowProps> = ({ label, value }) => (
 
 const Card = styled(VStack)`
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
-  border-radius: 12px;
+  ${borderRadius.md};
   padding: 16px;
 `
 

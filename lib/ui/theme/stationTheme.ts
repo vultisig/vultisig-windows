@@ -46,6 +46,7 @@ export const stationTheme: DefaultTheme = {
     buttonSecondaryHover: new HSLA(240, 5, 25),
     buttonNeutral: new HSLA(224, 82, 60), // #4572ed
     buttonNeutralHover: new HSLA(224, 89, 66), // #5b84f5
+    buttonSuccessHover: new HSLA(167, 85, 61), // #47f0cb
     buttonTextDisabled: new HSLA(240, 3, 54),
     primaryAccentTwo: new HSLA(224, 82, 60),
     primaryAccentFour: new HSLA(224, 89, 66),

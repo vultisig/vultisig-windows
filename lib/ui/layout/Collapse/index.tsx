@@ -6,9 +6,11 @@ import { getColor } from '@lib/ui/theme/getters'
 import { FC, ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
+import { borderRadius } from '../../css/borderRadius'
+
 const CollapseWrapper = styled(VStack)`
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  ${borderRadius.lg};
 `
 
 const CollapseHeader = styled(HStack)`

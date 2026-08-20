@@ -1,4 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -136,7 +137,7 @@ const PromptChip = styled(UnstyledButton)<{ $variant: PromptVariant }>`
   align-items: center;
   justify-content: center;
   padding: 12px;
-  border-radius: 12px;
+  ${borderRadius.md};
   background: ${p => promptVariantBackground[p.$variant]};
   border: 1px solid rgba(255, 255, 255, 0.03);
   color: ${getColor('text')};

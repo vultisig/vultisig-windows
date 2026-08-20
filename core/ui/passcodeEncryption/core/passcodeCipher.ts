@@ -42,6 +42,15 @@ const hasPbkdf2Magic = (value: Buffer): boolean =>
   value.length >= VAULT_BACKUP_PBKDF2_HEADER_LEN + gcmTagLength &&
   value.subarray(0, VAULT_BACKUP_MAGIC_LEN).equals(VAULT_BACKUP_BLOB_MAGIC)
 
+/**
+ * Whether a blob is recognizably sealed with this cipher. Only the PBKDF2
+ * format carries a header; legacy `SHA-256(passcode)` blobs are headerless and
+ * so indistinguishable from plaintext. A `false` therefore means "no proof it
+ * is sealed", never "proven plain".
+ */
+export const isPasscodeEncryptedBlob = (value: Buffer): boolean =>
+  hasPbkdf2Magic(value)
+
 /** A blob is legacy when it lacks the PBKDF2 magic header (still SHA-256 KDF). */
 export const isLegacyPasscodeBlob = (value: Buffer): boolean =>
   !hasPbkdf2Magic(value)

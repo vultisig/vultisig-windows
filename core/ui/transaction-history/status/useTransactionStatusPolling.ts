@@ -8,12 +8,10 @@ import {
   getCowSwapOrderApiBase,
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
-import { shouldFailStaleTransaction } from './staleTransaction'
-import { toRecordStatus } from './toRecordStatus'
+import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
+import { getStatusPollingInterval } from './staleTransaction'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
-
-const pollingInterval = 3000
 
 /** Polls chain status for a single pending transaction and updates its record when finalized. */
 export const useTransactionStatusPolling = (record: TransactionRecord) => {
@@ -32,10 +30,10 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
     queryFn: async () => {
       const current = recordRef.current
 
-      // CowSwap orders settle off-chain. Poll the orderbook by UID instead of a
-      // chain hash, and skip the generic stale-timeout: a CowSwap order can stay
-      // open up to its 15-min validity window, and the orderbook's authoritative
-      // `expired` status is what fails it — not an arbitrary client-side cutoff.
+      // CowSwap orders settle off-chain. Poll the orderbook by UID instead of
+      // a chain hash: an order can rest up to its 15-min validity window, and
+      // only the orderbook's authoritative `expired`/`cancelled` status fails
+      // it.
       const cowSwapOrder = getCowSwapOrderApiBase(current)
       if (cowSwapOrder) {
         const { status, record: updatedRecord } =
@@ -49,19 +47,14 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
         return { status }
       }
 
-      if (shouldFailStaleTransaction(current)) {
-        updateRecord({ ...current, status: 'failed' })
-        return { status: 'error' as const }
-      }
-
       const result = await getTxStatus({
         chain: current.chain,
         hash: current.txHash,
       })
 
-      const newStatus = toRecordStatus[result.status]
-      if (newStatus !== current.status) {
-        updateRecord({ ...current, status: newStatus })
+      const update = getTxStatusRecordUpdate({ record: current, result })
+      if (update) {
+        updateRecord(update)
       }
 
       return result
@@ -70,7 +63,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
     refetchInterval: query => {
       const status = query.state.data?.status
       if (status === 'success' || status === 'error') return false
-      return pollingInterval
+      return getStatusPollingInterval(recordRef.current)
     },
   })
 }

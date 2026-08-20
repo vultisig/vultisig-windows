@@ -1,4 +1,5 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -124,7 +125,7 @@ const FaqContent = styled.div`
 `
 
 const RowsWrapper = styled.div`
-  border-radius: 12px;
+  ${borderRadius.md};
   background-color: ${getColor('foreground')};
 
   & > ${RowWrapper}:first-of-type {

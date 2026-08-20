@@ -1,11 +1,36 @@
-import { computePasscodeUnlockSessionExpiresAt } from '@core/ui/storage/passcodeUnlockSession'
 import {
   passcodeUnlockSessionChromeStorageKey,
   passcodeUnlockSessionStorage,
 } from '@core/extension/storage/passcodeUnlockSession'
+import { sealPasscode } from '@core/extension/storage/passcodeUnlockSessionCipher'
+import { computePasscodeUnlockSessionExpiresAt } from '@core/ui/storage/passcodeUnlockSession'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { chromeMock } from './mocks/chrome'
+
+const storeSealedSession = async (
+  passcode: string,
+  expiresAt: number | null
+) => {
+  const { iv, sealedPasscode } = await sealPasscode(passcode)
+
+  await chrome.storage.session.set({
+    [passcodeUnlockSessionChromeStorageKey]: {
+      v: 2,
+      iv,
+      sealedPasscode,
+      expiresAt,
+    },
+  })
+}
+
+const readStoredPayload = async () => {
+  const stored = await chrome.storage.session.get(
+    passcodeUnlockSessionChromeStorageKey
+  )
+
+  return stored[passcodeUnlockSessionChromeStorageKey]
+}
 
 describe('passcodeUnlockSessionStorage (extension)', () => {
   afterEach(() => {
@@ -32,22 +57,13 @@ describe('passcodeUnlockSessionStorage (extension)', () => {
   })
 
   it('returns null and clears storage when session is expired', async () => {
-    await chrome.storage.session.set({
-      [passcodeUnlockSessionChromeStorageKey]: {
-        v: 1,
-        passcode: 'stale',
-        expiresAt: Date.now() - 60_000,
-      },
-    })
+    await storeSealedSession('stale', Date.now() - 60_000)
 
     await expect(
       passcodeUnlockSessionStorage.getPasscodeUnlockSession()
     ).resolves.toBeNull()
 
-    const after = await chrome.storage.session.get(
-      passcodeUnlockSessionChromeStorageKey
-    )
-    expect(after[passcodeUnlockSessionChromeStorageKey]).toBeUndefined()
+    await expect(readStoredPayload()).resolves.toBeUndefined()
   })
 
   it('refreshes TTL on subsequent writes', async () => {
@@ -103,6 +119,34 @@ describe('passcodeUnlockSessionStorage (extension)', () => {
     ).resolves.toEqual({ passcode: 'session-only', expiresAt: null })
   })
 
+  it('never writes the passcode in the clear', async () => {
+    await passcodeUnlockSessionStorage.setPasscodeUnlockSession({
+      passcode: 'plaintext-passcode',
+      expiresAt: computePasscodeUnlockSessionExpiresAt(null),
+    })
+
+    const payload = await readStoredPayload()
+
+    expect(JSON.stringify(payload)).not.toContain('plaintext-passcode')
+    expect(payload).not.toHaveProperty('passcode')
+  })
+
+  it('seals repeated writes of one passcode under different nonces', async () => {
+    await passcodeUnlockSessionStorage.setPasscodeUnlockSession({
+      passcode: 'same',
+      expiresAt: null,
+    })
+    const first = await readStoredPayload()
+
+    await passcodeUnlockSessionStorage.setPasscodeUnlockSession({
+      passcode: 'same',
+      expiresAt: null,
+    })
+    const second = await readStoredPayload()
+
+    expect(first).not.toEqual(second)
+  })
+
   it('falls back to locked state when session storage read fails', async () => {
     chromeMock.storage.session.get.mockRejectedValueOnce(new Error('boom'))
 
@@ -111,15 +155,55 @@ describe('passcodeUnlockSessionStorage (extension)', () => {
     ).resolves.toBeNull()
   })
 
+  it('rejects and discards a plaintext v1 record', async () => {
+    await chrome.storage.session.set({
+      [passcodeUnlockSessionChromeStorageKey]: {
+        v: 1,
+        passcode: 'legacy-plaintext',
+        expiresAt: null,
+      },
+    })
+
+    await expect(
+      passcodeUnlockSessionStorage.getPasscodeUnlockSession()
+    ).resolves.toBeNull()
+
+    await expect(readStoredPayload()).resolves.toBeUndefined()
+  })
+
   it.each([
-    ['wrong schema version', { v: 2, passcode: 'x', expiresAt: null }],
-    ['missing passcode', { v: 1, expiresAt: null }],
-    ['missing expiresAt key', { v: 1, passcode: 'x' }],
-    ['expiresAt is NaN', { v: 1, passcode: 'x', expiresAt: Number.NaN }],
-    ['expiresAt is non-number', { v: 1, passcode: 'x', expiresAt: 'nope' }],
+    ['unknown schema version', { v: 3, iv: 'a', sealedPasscode: 'b', expiresAt: null }],
+    ['missing iv', { v: 2, sealedPasscode: 'b', expiresAt: null }],
+    ['missing sealedPasscode', { v: 2, iv: 'a', expiresAt: null }],
+    ['missing expiresAt key', { v: 2, iv: 'a', sealedPasscode: 'b' }],
+    [
+      'expiresAt is NaN',
+      { v: 2, iv: 'a', sealedPasscode: 'b', expiresAt: Number.NaN },
+    ],
+    [
+      'expiresAt is non-number',
+      { v: 2, iv: 'a', sealedPasscode: 'b', expiresAt: 'nope' },
+    ],
   ])('returns null for corrupt payload: %s', async (_label, payload) => {
     await chrome.storage.session.set({
       [passcodeUnlockSessionChromeStorageKey]: payload,
+    })
+
+    await expect(
+      passcodeUnlockSessionStorage.getPasscodeUnlockSession()
+    ).resolves.toBeNull()
+  })
+
+  it('returns null when the sealed passcode cannot be opened', async () => {
+    const { iv } = await sealPasscode('x')
+
+    await chrome.storage.session.set({
+      [passcodeUnlockSessionChromeStorageKey]: {
+        v: 2,
+        iv,
+        sealedPasscode: 'dGFtcGVyZWQtY2lwaGVydGV4dA==',
+        expiresAt: null,
+      },
     })
 
     await expect(
@@ -166,13 +250,7 @@ describe('passcodeUnlockSessionStorage (extension)', () => {
     const now = new Date('2026-03-01T12:00:00.000Z')
     vi.setSystemTime(now)
 
-    await chrome.storage.session.set({
-      [passcodeUnlockSessionChromeStorageKey]: {
-        v: 1,
-        passcode: 'edge',
-        expiresAt: now.getTime(),
-      },
-    })
+    await storeSealedSession('edge', now.getTime())
 
     await expect(
       passcodeUnlockSessionStorage.getPasscodeUnlockSession()

@@ -105,27 +105,6 @@ describe('TON stake/unstake validation', () => {
     expect(result.success).toBe(true)
   })
 
-  it('requires merge node address to be valid', () => {
-    vi.mocked(isValidAddress).mockImplementation(
-      ({ address }) => address === 'thor1valid'
-    )
-
-    const { schema } = getDepositFormConfig({
-      t,
-      coin: { ...tonCoin, chain: Chain.THORChain } as any,
-      walletCore: {} as any,
-      totalAmountAvailable: 2,
-      totalAmountAvailableUnits: null,
-      selectedChainAction: 'merge',
-    })
-
-    const invalid = schema.safeParse({ amount: 1, nodeAddress: 'bad' })
-    expect(invalid.success).toBe(false)
-
-    const valid = schema.safeParse({ amount: 1, nodeAddress: 'thor1valid' })
-    expect(valid.success).toBe(true)
-  })
-
   it('validates IBC destination address against selected chain', () => {
     vi.mocked(isValidAddress).mockImplementation(
       ({ chain, address }) =>
