@@ -1909,4 +1909,10 @@ export const es = {
   kamino_earn_you_receive: 'Usted recibe',
   kamino_earn_no_solana_address:
     'Esta bóveda no tiene dirección de Solana, por lo que Kamino Earn no está disponible.',
+  kamino_earn_entire_position: 'La posición completa',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Este depósito abre una cuenta SOL protegida. El alquiler permanece bloqueado hasta que usted lo retire.',
+  kamino_earn_unreadable_description:
+    'Llega a una bóveda de Kamino, pero esta aplicación no puede leer su contenido, por lo que no lo firmará.',
+  kamino_earn_unreadable_title: 'Esta transacción no puede ser verificada.',
 }

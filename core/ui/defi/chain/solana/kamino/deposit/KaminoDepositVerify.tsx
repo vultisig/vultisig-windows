@@ -15,6 +15,9 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
+import { KaminoTransactionSummary } from '../verify/KaminoTransactionSummary'
+import { KaminoUnreadableTransaction } from '../verify/KaminoUnreadableTransaction'
+import { readKaminoKeysignTransaction } from '../verify/readKaminoKeysignTransaction'
 import { useKaminoDepositKeysignPayloadQuery } from './queries/useKaminoDepositKeysignPayloadQuery'
 
 type KaminoDepositVerifyProps = OnBackProp & {
@@ -48,11 +51,19 @@ export const KaminoDepositVerify = ({
 
   const humanAmount = fromChainAmount(amount.baseUnits, amount.decimals)
 
+  // An independent reading of the bytes the payload carries, so this screen
+  // checks the transaction rather than echoing the form that built it — the
+  // same reading a co-signing device performs.
+  const reading = data ? readKaminoKeysignTransaction(data) : undefined
+  const isUnreadable = reading !== undefined && 'unreadable' in reading
+
   const promptProps = isPending
     ? { disabledMessage: t('loading') }
     : error
       ? { disabledMessage: extractErrorMsg(error) }
-      : { keysignPayload: { keysign: data } }
+      : isUnreadable
+        ? { disabledMessage: t('kamino_earn_unreadable_title') }
+        : { keysignPayload: { keysign: data } }
 
   return (
     <>
@@ -86,6 +97,10 @@ export const KaminoDepositVerify = ({
             hoverable={false}
           />
         </List>
+        {reading && 'decoded' in reading ? (
+          <KaminoTransactionSummary decoded={reading.decoded} />
+        ) : null}
+        {isUnreadable ? <KaminoUnreadableTransaction /> : null}
       </PageContent>
       <PageFooter>
         <StartKeysignPromptWithRefresh

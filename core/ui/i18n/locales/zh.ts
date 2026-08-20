@@ -1752,4 +1752,10 @@ export const zh = {
   kamino_earn_you_receive: '您收到',
   kamino_earn_no_solana_address:
     '该保险库没有 Solana 地址，因此 Kamino Earn 不可用。',
+  kamino_earn_entire_position: '整个职位',
+  kamino_earn_strands_wrapped_sol_rent:
+    '这笔存款将开设一个独立的SOL账户。账户中的租金将被锁定，直到您提取为止。',
+  kamino_earn_unreadable_description:
+    '它到达了 Kamino 保险库，但此应用程序无法读取它的内容，因此不会对其进行签名。',
+  kamino_earn_unreadable_title: '此交易无法验证',
 }

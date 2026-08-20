@@ -1869,4 +1869,10 @@ export const ko = {
   kamino_earn_you_receive: '당신은 받습니다',
   kamino_earn_no_solana_address:
     '이 금고에는 솔라나 주소가 없으므로 카미노 언(Kamino Earn)을 이용할 수 없습니다.',
+  kamino_earn_entire_position: '전체 직책',
+  kamino_earn_strands_wrapped_sol_rent:
+    '이 예치금은 래핑된 SOL 계좌를 개설하는 데 사용됩니다. 해당 계좌의 임대료는 인출할 때까지 묶여 있게 됩니다.',
+  kamino_earn_unreadable_description:
+    '해당 데이터는 카미노 금고에 도달하지만, 이 앱은 데이터 내용을 읽을 수 없으므로 서명하지 않습니다.',
+  kamino_earn_unreadable_title: '이 거래는 확인되지 않았습니다.',
 }
