@@ -48,6 +48,7 @@ type TransactionOverviewAmountProps = {
   fallbackAmount: number
   keysignPayloadQuery: Query<KeysignPayload>
   getPayloadAmount?: (payload: KeysignPayload) => bigint | number | string
+  hidePayloadAmount?: (payload: KeysignPayload) => boolean
 }
 
 export const TransactionOverviewAmount = ({
@@ -56,6 +57,7 @@ export const TransactionOverviewAmount = ({
   fallbackAmount,
   keysignPayloadQuery,
   getPayloadAmount = payload => payload.toAmount,
+  hidePayloadAmount,
 }: TransactionOverviewAmountProps) => {
   return (
     <ListItem
@@ -81,16 +83,18 @@ export const TransactionOverviewAmount = ({
               value={keysignPayloadQuery}
               pending={() => <Spinner />}
               error={() => <HeroAmount coin={coin} amount={fallbackAmount} />}
-              success={payload => (
-                <HeroAmount
-                  coin={coin}
-                  amount={fromChainAmount(
-                    getPayloadAmount(payload),
-                    coin.decimals
-                  )}
-                  highPrecision
-                />
-              )}
+              success={payload =>
+                hidePayloadAmount?.(payload) ? null : (
+                  <HeroAmount
+                    coin={coin}
+                    amount={fromChainAmount(
+                      getPayloadAmount(payload),
+                      coin.decimals
+                    )}
+                    highPrecision
+                  />
+                )
+              }
             />
           </HStack>
         </VStack>

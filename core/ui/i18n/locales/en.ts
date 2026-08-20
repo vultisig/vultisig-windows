@@ -1605,6 +1605,14 @@ export const en = {
   claim_n_validators: 'Claim from {{count}} validators',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: "You're rebonding",
+  signed_tx_you_are_merging: "You're merging",
+  signed_tx_you_are_unmerging: "You're unmerging",
+  signed_tx_you_are_switching: "You're switching chains",
+  signed_tx_rebonded: 'Rebonded',
+  signed_tx_merged: 'Merged',
+  signed_tx_unmerged: 'Unmerged',
+  signed_tx_switched: 'Switched chains',
   vaultSetupOverview: {
     title: 'Your vault setup',
     fast: {

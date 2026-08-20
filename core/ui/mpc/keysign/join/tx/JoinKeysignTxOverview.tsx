@@ -10,6 +10,7 @@ import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
+import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-decoding/useThorchainInboundAddresses'
 import { VerifyTransactionOverview } from '@core/ui/mpc/keysign/verify/VerifyTransactionOverview'
 import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
 import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
@@ -139,6 +140,7 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const memoValue = tronStaking ? tronStaking.resource : displayMemo
 
   const keysignPayloadQuery = getResolvedQuery(value)
+  const thorchainInboundAddresses = useThorchainInboundAddresses(value)
 
   // Sui dApp signing carries a pre-built PTB with no transfer amount/recipient,
   // so the standard "You're sending" card would read an empty 0-SUI transfer.
@@ -180,6 +182,7 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         chain={coin.chain}
         amountLabel={amountLabel}
         keysignPayloadQuery={keysignPayloadQuery}
+        decoderContext={{ thorchainInboundAddresses }}
         getPayloadAmount={
           wasmDisplay ? () => wasmDisplay.fundAmount : undefined
         }

@@ -1046,6 +1046,14 @@ export const zh = {
   you_are_unstaking: '您正在取消质押',
   you_are_minting: '您正在铸造',
   you_are_redeeming: '您正在赎回',
+  signed_tx_you_are_rebonding: '您正在重新绑定',
+  signed_tx_you_are_merging: '您正在合并',
+  signed_tx_you_are_unmerging: '您正在拆分',
+  signed_tx_you_are_switching: '您正在切换链',
+  signed_tx_rebonded: '已重新绑定',
+  signed_tx_merged: '已合并',
+  signed_tx_unmerged: '已拆分',
+  signed_tx_switched: '已切换链',
   vaultSetupOverview: {
     title: '您的保险库设置',
     fast: {

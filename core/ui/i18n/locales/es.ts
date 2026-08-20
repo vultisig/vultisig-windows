@@ -1133,6 +1133,14 @@ export const es = {
   you_are_unstaking: 'Estás haciendo unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Estás reasignando',
+  signed_tx_you_are_merging: 'Estás fusionando',
+  signed_tx_you_are_unmerging: 'Estás separando',
+  signed_tx_you_are_switching: 'Estás cambiando de red',
+  signed_tx_rebonded: 'Reasignado',
+  signed_tx_merged: 'Fusionado',
+  signed_tx_unmerged: 'Separado',
+  signed_tx_switched: 'Red cambiada',
   vaultSetupOverview: {
     title: 'La configuración de su bóveda',
     fast: {

@@ -1112,6 +1112,14 @@ export const ru = {
   you_are_unstaking: 'Вы выполняете unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Вы перепривязываете',
+  signed_tx_you_are_merging: 'Вы объединяете',
+  signed_tx_you_are_unmerging: 'Вы разделяете',
+  signed_tx_you_are_switching: 'Вы переключаете сеть',
+  signed_tx_rebonded: 'Перепривязано',
+  signed_tx_merged: 'Объединено',
+  signed_tx_unmerged: 'Разделено',
+  signed_tx_switched: 'Сеть переключена',
   vaultSetupOverview: {
     title: 'Настройка вашего хранилища',
     fast: {

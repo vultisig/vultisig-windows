@@ -1144,6 +1144,14 @@ export const ko = {
   claim_n_validators: '{{count}} 검증자로부터의 클레임',
   you_are_minting: '민팅하고 있습니다',
   you_are_redeeming: '상환하고 있습니다',
+  signed_tx_you_are_rebonding: '재연결 중이에요',
+  signed_tx_you_are_merging: '병합 중이에요',
+  signed_tx_you_are_unmerging: '분리 중이에요',
+  signed_tx_you_are_switching: '체인을 전환 중이에요',
+  signed_tx_rebonded: '재연결됨',
+  signed_tx_merged: '병합됨',
+  signed_tx_unmerged: '분리됨',
+  signed_tx_switched: '체인 전환됨',
   vaultSetupOverview: {
     title: '금고 설정',
     fast: {

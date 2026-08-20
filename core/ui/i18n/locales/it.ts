@@ -1136,6 +1136,14 @@ export const it = {
   you_are_unstaking: 'Stai facendo unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Stai riassociando',
+  signed_tx_you_are_merging: 'Stai unendo',
+  signed_tx_you_are_unmerging: 'Stai separando',
+  signed_tx_you_are_switching: 'Stai cambiando chain',
+  signed_tx_rebonded: 'Riassociato',
+  signed_tx_merged: 'Unito',
+  signed_tx_unmerged: 'Separato',
+  signed_tx_switched: 'Chain cambiata',
   vaultSetupOverview: {
     title: 'La configurazione del tuo caveau',
     fast: {

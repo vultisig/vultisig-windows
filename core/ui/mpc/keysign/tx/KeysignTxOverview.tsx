@@ -8,6 +8,12 @@ import {
 } from '@core/ui/chain/tx/getTronStakingDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
+import {
+  decodedAmountCanBeShown,
+  decodeSignedTransaction,
+} from '@core/ui/mpc/keysign/transaction-decoding/decodeSignedTransaction'
+import { getDoneTransactionTitleKey } from '@core/ui/mpc/keysign/transaction-decoding/presentation'
+import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-decoding/useThorchainInboundAddresses'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCore } from '@core/ui/state/core'
@@ -78,6 +84,17 @@ export const KeysignTxOverview = ({
   const memoValue = tronStaking ? tronStaking.resource : memo
 
   const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
+  const thorchainInboundAddresses = useThorchainInboundAddresses(keysignPayload)
+  const decodedTransaction = decodeSignedTransaction(keysignPayload, {
+    thorchainInboundAddresses,
+  })
+  const decodedDoneTitleKey = getDoneTransactionTitleKey(
+    decodedTransaction.operation
+  )
+  const usesDecodedTitle =
+    !tronStaking &&
+    (!txAction || txAction.action === 'send') &&
+    decodedDoneTitleKey !== undefined
 
   const showAmountOrAction =
     // A dApp XRPL transaction carries no single send amount (`toAmount` is 0,
@@ -85,7 +102,8 @@ export const KeysignTxOverview = ({
     // suppress the generic "0 XRP" header here.
     keysignPayload.signData.case !== 'signRipple' &&
     (formattedToAmount !== null ||
-      (txAction !== null && txAction.action !== 'send'))
+      (txAction !== null && txAction.action !== 'send') ||
+      usesDecodedTitle)
 
   const toVaultName = useVaultNameForAddress({
     address: displayToAddress,
@@ -132,7 +150,14 @@ export const KeysignTxOverview = ({
           resolvedLabel={
             tronStaking
               ? t(tronStakingTitleKey[tronStaking.operation])
-              : undefined
+              : usesDecodedTitle && decodedDoneTitleKey
+                ? t(decodedDoneTitleKey)
+                : undefined
+          }
+          hideAmount={
+            usesDecodedTitle &&
+            !wasmDisplay &&
+            !decodedAmountCanBeShown(decodedTransaction.amount)
           }
         />
       )}

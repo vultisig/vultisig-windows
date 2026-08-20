@@ -11,6 +11,12 @@ import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEv
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { lookupKnownEvmContract } from '@core/ui/chain/tx/utils/knownEvmContracts'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
+import {
+  decodedAmountCanBeShown,
+  decodeSignedTransaction,
+} from '@core/ui/mpc/keysign/transaction-decoding/decodeSignedTransaction'
+import { getDoneTransactionTitleKey } from '@core/ui/mpc/keysign/transaction-decoding/presentation'
+import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-decoding/useThorchainInboundAddresses'
 import { UniversalRouterSwapSummary } from '@core/ui/mpc/keysign/tx/swap/UniversalRouterSwapSummary'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
@@ -110,14 +116,27 @@ export const TxSuccess = ({
   // A TRON freeze/unfreeze is signed as a staking contract, so name the
   // operation rather than reporting the staked amount as sent.
   const tronStaking = getTronStakingDisplay({ chain: coin.chain, memo })
+  const thorchainInboundAddresses = useThorchainInboundAddresses(value)
+
+  const decodedTransaction = useMemo(
+    () => decodeSignedTransaction(value, { thorchainInboundAddresses }),
+    [thorchainInboundAddresses, value]
+  )
+  const decodedDoneTitleKey = getDoneTransactionTitleKey(
+    decodedTransaction.operation
+  )
 
   const rawFunctionName =
     functionQuery.data?.functionSignature?.split('(')[0] ?? undefined
+  const usesDecodedTitle =
+    !tronStaking && !rawFunctionName && decodedDoneTitleKey !== undefined
   const resolvedLabel = tronStaking
     ? t(tronStakingTitleKey[tronStaking.operation])
     : rawFunctionName
       ? capitalizeFirstLetter(rawFunctionName)
-      : undefined
+      : decodedDoneTitleKey
+        ? t(decodedDoneTitleKey)
+        : undefined
 
   const resolvedToken = useMemo(() => {
     if (!functionQuery.data) return null
@@ -200,6 +219,8 @@ export const TxSuccess = ({
     : resolvedToken?.amountOverride
   const txActionLabel =
     txAction?.action !== 'send' ? txAction?.labelKey : undefined
+  const txActionHasAmount =
+    txAction !== null && 'amount' in txAction && txAction.amount !== undefined
   const amountPresentation = getTxSuccessAmountPresentation({
     amount: displayAmount,
     amountOverride: displayAmountOverride,
@@ -255,6 +276,12 @@ export const TxSuccess = ({
             resolvedLabel={resolvedLabel}
             amountOverride={displayAmountOverride}
             hideZeroAmount={amountPresentation.hideZeroAmount}
+            hideAmount={
+              usesDecodedTitle &&
+              !wasmDisplay &&
+              !txActionHasAmount &&
+              !decodedAmountCanBeShown(decodedTransaction.amount)
+            }
           />
         )}
         {evmChain && (knownContract || approvalCounterparty) && (
