@@ -17,7 +17,10 @@ import { DefiPositionEmptyState } from '../../tabs/DefiPositionEmptyState'
 import { DefiPositionErrorState } from '../../tabs/DefiPositionErrorState'
 import { KaminoEarnSkeleton } from './KaminoEarnSkeleton'
 import { KaminoVaultCard } from './KaminoVaultCard'
-import { kaminoEarnPositionId } from './positionId'
+import {
+  kaminoEarnPositionId,
+  kaminoVaultAddressFromPositionId,
+} from './positionId'
 import { useKaminoPositionsQuery } from './queries/useKaminoPositionsQuery'
 import { useKaminoVaultsQuery } from './queries/useKaminoVaultsQuery'
 import { kaminoUnderlyingCoin } from './underlyingCoin'
@@ -39,13 +42,31 @@ export const KaminoEarnView = () => {
 
   const vaultsQuery = useKaminoVaultsQuery()
   const positionsQuery = useKaminoPositionsQuery(owner)
+  // Deduplicated: the dollar vaults share USDC, and one price is one request.
   const pricesQuery = useCoinPricesQuery({
-    coins: (vaultsQuery.data ?? []).map(info =>
-      kaminoUnderlyingCoin(info.descriptor)
+    coins: Object.values(
+      Object.fromEntries(
+        (vaultsQuery.data ?? [])
+          .map(info => kaminoUnderlyingCoin(info.descriptor))
+          .map(coin => [
+            coinKeyToString({ chain: coin.chain, id: coin.id }),
+            coin,
+          ])
+      )
     ),
   })
 
   const selected = new Set(selectedPositions)
+
+  // Answered from stored selection alone, before the vaults resolve: a user
+  // who has enabled nothing is not waiting on a network read, and showing
+  // them a skeleton that resolves to the opt-in banner reads as a stall.
+  const hasEnabledVaults = selectedPositions.some(
+    id => kaminoVaultAddressFromPositionId(id) !== undefined
+  )
+  if (!hasEnabledVaults) {
+    return <DefiPositionEmptyState returnTab="earn" />
+  }
 
   return (
     <MatchQuery
