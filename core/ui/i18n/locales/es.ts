@@ -1907,4 +1907,6 @@ export const es = {
   kamino_earn_withdraw: 'Retirar de la bóveda',
   kamino_earn_withdraw_from: 'Retirarse de',
   kamino_earn_you_receive: 'Usted recibe',
+  kamino_earn_no_solana_address:
+    'Esta bóveda no tiene dirección de Solana, por lo que Kamino Earn no está disponible.',
 }

@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { getDynamicPriorityFeePrice } from '@vultisig/core-chain/chains/solana/getDynamicPriorityFeePrice'
+import { kaminoShareToTokenValue } from '@vultisig/core-chain/chains/solana/kamino/amount'
 import { KaminoVaultInfo } from '@vultisig/core-chain/chains/solana/kamino/models'
 import { buildKaminoWithdrawTransaction } from '@vultisig/core-chain/chains/solana/kamino/tx/actions'
 import {
@@ -67,6 +68,21 @@ export const buildKaminoWithdrawKeysignPayload = async ({
   localPartyId,
   libType,
 }: BuildKaminoWithdrawKeysignPayloadInput): Promise<KeysignPayload> => {
+  // What the holder receives, in the COIN's units. Every generic surface —
+  // history, QR export, the ceremony's own views — formats `toAmount` with
+  // `coin.decimals`, so putting a share count there would misreport a vault
+  // whose share and token scales differ by three orders of magnitude. The
+  // share count stays where it belongs: the instruction argument, which the
+  // validator pins.
+  const receives = kaminoShareToTokenValue({
+    shares: request.shares,
+    tokensPerShare: vault.tokensPerShare,
+    tokenDecimals: coin.decimals,
+  })
+  if (!receives) {
+    throw new Error('Kamino withdrawal amount could not be converted')
+  }
+
   const built = await buildKaminoWithdrawTransaction({
     owner: coin.address,
     vaultAddress: vault.descriptor.address,
@@ -114,9 +130,7 @@ export const buildKaminoWithdrawKeysignPayload = async ({
   return create(KeysignPayloadSchema, {
     coin: toCommCoin({ ...coin, hexPublicKey }),
     toAddress: vault.descriptor.address,
-    // The share count the instruction burns, in share base units — not the
-    // token amount the holder receives, which the vault decides at settlement.
-    toAmount: request.shares.baseUnits.toString(),
+    toAmount: receives.baseUnits.toString(),
     memo: '',
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,

@@ -1750,4 +1750,6 @@ export const zh = {
   kamino_earn_withdraw: '从金库提取',
   kamino_earn_withdraw_from: '退出',
   kamino_earn_you_receive: '您收到',
+  kamino_earn_no_solana_address:
+    '该保险库没有 Solana 地址，因此 Kamino Earn 不可用。',
 }

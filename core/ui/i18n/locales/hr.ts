@@ -1877,4 +1877,6 @@ export const hr = {
   kamino_earn_withdraw: 'Isplata iz trezora',
   kamino_earn_withdraw_from: 'Povuci se iz',
   kamino_earn_you_receive: 'Primate',
+  kamino_earn_no_solana_address:
+    'Ovaj trezor nema Solana adresu, tako da Kamino Earn nije dostupan.',
 }

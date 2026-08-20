@@ -1910,4 +1910,6 @@ export const pt = {
   kamino_earn_withdraw: 'Retirar do cofre',
   kamino_earn_withdraw_from: 'Retirar-se de',
   kamino_earn_you_receive: 'Você recebe',
+  kamino_earn_no_solana_address:
+    'Este cofre não possui endereço Solana, portanto o Kamino Earn está indisponível.',
 }

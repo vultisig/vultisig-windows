@@ -45,7 +45,6 @@ export const KaminoWithdrawForm = ({
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const [value, setValue] = useState<number | null>(null)
-  const [isMax, setIsMax] = useState(false)
 
   const spendableTokens = kaminoShareToTokenValue({
     shares: position.spendable,
@@ -55,6 +54,11 @@ export const KaminoWithdrawForm = ({
   const available = spendableTokens
     ? fromChainAmount(spendableTokens.baseUnits, coin.decimals)
     : 0
+
+  // Derived, never tracked: a flag set by one control goes stale the moment
+  // another moves the value, and the max path must engage whichever control
+  // reached the balance — the slider at 100%, or the amount typed out in full.
+  const isMax = value !== null && available > 0 && value >= available
 
   const shares =
     value === null || value <= 0
@@ -116,10 +120,7 @@ export const KaminoWithdrawForm = ({
       <PageContent gap={16} flexGrow scrollable>
         <KaminoAmountField
           value={value}
-          onChange={next => {
-            setValue(next)
-            setIsMax(false)
-          }}
+          onChange={setValue}
           ticker={coin.ticker}
           decimals={coin.decimals}
           balance={available}

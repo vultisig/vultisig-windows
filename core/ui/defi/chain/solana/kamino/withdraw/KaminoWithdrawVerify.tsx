@@ -53,19 +53,24 @@ export const KaminoWithdrawVerify = ({
     tokensPerShare: vault.tokensPerShare,
     tokenDecimals: coin.decimals,
   })
+  // A conversion that failed is not a zero payout: reporting one would tell
+  // the holder they receive nothing for shares the chain is about to burn.
   const humanAmount = tokenValue
     ? fromChainAmount(tokenValue.baseUnits, coin.decimals)
-    : 0
+    : undefined
 
   // A withdrawal that has to release shares from the farm first runs two extra
   // instructions; saying so explains why this one differs from the last.
   const releasesFromFarm = kaminoUnstakeShares(request).baseUnits > 0n
 
-  const promptProps = isPending
-    ? { disabledMessage: t('loading') }
-    : error
-      ? { disabledMessage: extractErrorMsg(error) }
-      : { keysignPayload: { keysign: data } }
+  const promptProps =
+    humanAmount === undefined
+      ? { disabledMessage: t('kamino_earn_amount_unavailable') }
+      : isPending
+        ? { disabledMessage: t('loading') }
+        : error
+          ? { disabledMessage: extractErrorMsg(error) }
+          : { keysignPayload: { keysign: data } }
 
   return (
     <>
@@ -83,10 +88,14 @@ export const KaminoWithdrawVerify = ({
           />
           <ListItem
             title={t('kamino_earn_you_receive')}
-            extra={formatAmount(humanAmount, { ticker: coin.ticker })}
+            extra={
+              humanAmount === undefined
+                ? t('kamino_earn_amount_unavailable')
+                : formatAmount(humanAmount, { ticker: coin.ticker })
+            }
             hoverable={false}
           />
-          {priceUsd > 0 ? (
+          {priceUsd > 0 && humanAmount !== undefined ? (
             <ListItem
               title={t('value')}
               extra={formatFiatAmount(humanAmount * priceUsd)}

@@ -1886,4 +1886,6 @@ export const ru = {
   kamino_earn_withdraw: 'Извлечь из хранилища',
   kamino_earn_withdraw_from: 'Выйти из',
   kamino_earn_you_receive: 'Вы получаете',
+  kamino_earn_no_solana_address:
+    'У этого хранилища нет адреса на Солане, поэтому Kamino Earn недоступен.',
 }

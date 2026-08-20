@@ -6,6 +6,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Chain } from '@vultisig/core-chain/Chain'
 
 import { DefiPositionErrorState } from '../../../tabs/DefiPositionErrorState'
+import { KaminoMissingAddress } from '../KaminoMissingAddress'
 import { useKaminoVaultsQuery } from '../queries/useKaminoVaultsQuery'
 import { KaminoDepositFlow } from './KaminoDepositFlow'
 
@@ -22,6 +23,12 @@ export const KaminoDepositPage = () => {
   const [{ vaultAddress }] = useCoreViewState<'kaminoDeposit'>()
   const owner = useCurrentVaultAddress(Chain.Solana)
   const vaultsQuery = useKaminoVaultsQuery()
+
+  // A vault with no Solana address has nothing to act on, so the flow would
+  // otherwise open on a form it can neither fund nor sign.
+  if (!owner) {
+    return <KaminoMissingAddress />
+  }
 
   return (
     <MatchQuery

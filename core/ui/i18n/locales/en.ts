@@ -1443,6 +1443,8 @@ export const en = {
   kamino_earn_withdraw: 'Withdraw from vault',
   kamino_earn_withdraw_from: 'Withdraw from',
   kamino_earn_you_receive: 'You receive',
+  kamino_earn_no_solana_address:
+    'This vault has no Solana address, so Kamino Earn is unavailable.',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_curated_by: 'Curated by {{curator}}',
   kamino_earn_no_position: 'You have nothing in this vault yet',

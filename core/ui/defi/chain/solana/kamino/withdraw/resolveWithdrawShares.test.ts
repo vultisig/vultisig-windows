@@ -51,6 +51,21 @@ describe('resolveWithdrawShares', () => {
     expect(shares!.baseUnits).toBeLessThan(position.total.baseUnits)
   })
 
+  it('reaching the spendable balance takes the max path, not the conversion', () => {
+    // The regression this guards: with the max path unreachable, a full
+    // withdrawal goes through the truncating conversion and strands dust in
+    // the vault. Typing the balance out in full must behave exactly like
+    // dragging the slider to 100%.
+    const availableTokens = 1.053604
+    const viaConversion = resolve(availableTokens)
+    const viaMax = resolve(availableTokens, true)
+
+    expect(viaMax).toBe(position.spendable)
+    expect(viaConversion?.baseUnits).toBeLessThanOrEqual(
+      position.spendable.baseUnits
+    )
+  })
+
   it('refuses an amount it cannot convert', () => {
     const zeroRate = parseKaminoRate('0')!
     expect(

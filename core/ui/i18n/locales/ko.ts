@@ -1867,4 +1867,6 @@ export const ko = {
   kamino_earn_withdraw: '금고에서 인출',
   kamino_earn_withdraw_from: '인출하다',
   kamino_earn_you_receive: '당신은 받습니다',
+  kamino_earn_no_solana_address:
+    '이 금고에는 솔라나 주소가 없으므로 카미노 언(Kamino Earn)을 이용할 수 없습니다.',
 }

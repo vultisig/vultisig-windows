@@ -1921,4 +1921,6 @@ export const de = {
   kamino_earn_withdraw: 'Aus dem Tresor abheben',
   kamino_earn_withdraw_from: 'Zurückziehen von',
   kamino_earn_you_receive: 'Sie erhalten',
+  kamino_earn_no_solana_address:
+    'Dieser Tresor hat keine Solana-Adresse, daher ist Kamino Earn nicht verfügbar.',
 }

@@ -1913,4 +1913,6 @@ export const it = {
   kamino_earn_withdraw: 'Prelevare dal caveau',
   kamino_earn_withdraw_from: 'Ritirarsi da',
   kamino_earn_you_receive: 'Tu ricevi',
+  kamino_earn_no_solana_address:
+    'Questo caveau non ha un indirizzo Solana, quindi Kamino Earn non è disponibile.',
 }

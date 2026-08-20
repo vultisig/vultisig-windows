@@ -6,6 +6,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Chain } from '@vultisig/core-chain/Chain'
 
 import { DefiPositionErrorState } from '../../../tabs/DefiPositionErrorState'
+import { KaminoMissingAddress } from '../KaminoMissingAddress'
 import { useKaminoPositionsQuery } from '../queries/useKaminoPositionsQuery'
 import { useKaminoVaultsQuery } from '../queries/useKaminoVaultsQuery'
 import { KaminoWithdrawFlow } from './KaminoWithdrawFlow'
@@ -33,6 +34,13 @@ export const KaminoWithdrawPage = () => {
   const owner = useCurrentVaultAddress(Chain.Solana)
   const vaultsQuery = useKaminoVaultsQuery()
   const positionsQuery = useKaminoPositionsQuery(owner)
+
+  // A vault with no Solana address has nothing to act on, and the position
+  // read is disabled without one — so it would otherwise sit on a spinner
+  // that never resolves.
+  if (!owner) {
+    return <KaminoMissingAddress />
+  }
 
   return (
     <MatchQuery

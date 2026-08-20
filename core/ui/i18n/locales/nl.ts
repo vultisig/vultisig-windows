@@ -1890,4 +1890,6 @@ export const nl = {
   kamino_earn_withdraw: 'Opname uit de kluis',
   kamino_earn_withdraw_from: 'Terugtrekken uit',
   kamino_earn_you_receive: 'U ontvangt',
+  kamino_earn_no_solana_address:
+    'Deze kluis heeft geen adres in Solana, dus Kamino Earn is niet beschikbaar.',
 }
