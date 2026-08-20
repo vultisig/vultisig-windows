@@ -1882,9 +1882,8 @@ export const es = {
   swap_limit_is_worth: 'valga',
   swap_limit_when_one: 'Cuando 1',
   kamino_earn_apy_30d: 'APY (30 días)',
-  kamino_earn_balance: 'Balance',
   kamino_earn_curated_by: 'Seleccionado por {{curator}}',
-  kamino_earn_no_position: 'Aún no se ha realizado ningún depósito.',
+  kamino_earn_no_position: 'Todavía no tienes nada en esta bóveda.',
   kamino_earn_pnl: 'Ganancia/pérdida',
   kamino_earn_positions_unavailable:
     'No se pudieron cargar los saldos. Las bóvedas mostradas están actualizadas.',

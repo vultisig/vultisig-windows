@@ -1865,9 +1865,8 @@ export const nl = {
   swap_limit_is_worth: 'waard is',
   swap_limit_when_one: 'Wanneer 1',
   kamino_earn_apy_30d: 'APY (30d)',
-  kamino_earn_balance: 'Evenwicht',
   kamino_earn_curated_by: 'Samengesteld door {{curator}}',
-  kamino_earn_no_position: 'Nog geen aanbetaling',
+  kamino_earn_no_position: 'Je hebt nog niets in deze kluis.',
   kamino_earn_pnl: 'Winst/verlies',
   kamino_earn_positions_unavailable:
     "Saldo's konden niet worden geladen. De weergegeven kluizen zijn actueel.",

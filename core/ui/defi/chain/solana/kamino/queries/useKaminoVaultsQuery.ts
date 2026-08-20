@@ -20,9 +20,18 @@ export const useKaminoVaultsQuery = () =>
         kaminoVaultRegistry.map(({ address }) => fetchKaminoVaultInfo(address))
       )
 
-      return results.flatMap(result =>
+      const vaults = results.flatMap(result =>
         result.status === 'fulfilled' ? [result.value] : []
       )
+
+      // Every vault failing is a failed read, not an empty registry, and
+      // `allSettled` would otherwise resolve it as one — sending a user who
+      // enabled vaults to the opt-in banner with nothing to retry.
+      if (vaults.length === 0 && results.length > 0) {
+        throw new Error('No Kamino vault could be loaded')
+      }
+
+      return vaults
     },
     // APY and the share rate move slowly, and the deposit form re-reads both
     // at build time — the figures here are display-only.

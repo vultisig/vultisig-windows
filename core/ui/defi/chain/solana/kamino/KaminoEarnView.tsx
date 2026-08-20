@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DefiPositionEmptyState } from '../../tabs/DefiPositionEmptyState'
 import { DefiPositionErrorState } from '../../tabs/DefiPositionErrorState'
+import { cardPosition } from './cardPosition'
 import { KaminoEarnSkeleton } from './KaminoEarnSkeleton'
 import { KaminoVaultCard } from './KaminoVaultCard'
 import {
@@ -105,12 +106,14 @@ export const KaminoEarnView = () => {
                       coinKeyToString({ chain: coin.chain, id: coin.id })
                     ] ?? 0
                   }
-                  tokenAmount={
-                    tokenValue
+                  position={cardPosition({
+                    tokenAmount: tokenValue
                       ? fromChainAmount(tokenValue.baseUnits, coin.decimals)
-                      : 0
-                  }
-                  pnlToken={position?.pnlToken}
+                      : 0,
+                    pnlToken: position?.pnlToken,
+                    isPending: positionsQuery.isPending,
+                    hasFailed: positionsQuery.data === undefined,
+                  })}
                 />
               )
             })}

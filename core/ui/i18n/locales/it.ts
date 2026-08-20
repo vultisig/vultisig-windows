@@ -1888,9 +1888,8 @@ export const it = {
   swap_limit_is_worth: 'vale',
   swap_limit_when_one: 'Quando 1',
   kamino_earn_apy_30d: 'APY (30 giorni)',
-  kamino_earn_balance: 'Bilancia',
   kamino_earn_curated_by: 'Selezionato da {{curator}}',
-  kamino_earn_no_position: 'Nessun deposito ancora',
+  kamino_earn_no_position: 'Non hai ancora nulla in questa cassaforte',
   kamino_earn_pnl: 'Profitto/perdita',
   kamino_earn_positions_unavailable:
     'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',

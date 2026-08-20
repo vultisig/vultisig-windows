@@ -11,7 +11,7 @@ import {
 import { getKaminoVaultDescriptor } from '@vultisig/core-chain/chains/solana/kamino/registry'
 
 /** One curated vault's position, as held by the current vault's Solana address. */
-export type KaminoOwnedPosition = {
+type KaminoOwnedPosition = {
   vaultAddress: string
   shares: KaminoSharePosition
   /**

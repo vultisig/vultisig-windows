@@ -1852,9 +1852,8 @@ export const hr = {
   swap_limit_is_worth: 'vrijedi',
   swap_limit_when_one: 'Kada 1',
   kamino_earn_apy_30d: 'APY (30d)',
-  kamino_earn_balance: 'Stanje',
   kamino_earn_curated_by: 'Odabrao {{curator}}',
-  kamino_earn_no_position: 'Još nema depozita',
+  kamino_earn_no_position: 'Još nemaš ništa u ovom trezoru',
   kamino_earn_pnl: 'Dobit / gubitak',
   kamino_earn_positions_unavailable:
     'Stanje nije moguće učitati. Prikazani trezori su ažurirani.',

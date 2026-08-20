@@ -12,17 +12,33 @@ import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { PnlRow } from './PnlRow'
+
 type KaminoVaultCardProps = {
   info: KaminoVaultInfo
   /** The vault's underlying coin, for the logo and the fiat conversion. */
   coin: Coin
   /** USD price of the underlying token, `0` when it could not be read. */
   priceUsd: number
-  /** The position's value in the underlying token, `0` when none is held. */
-  tokenAmount: number
-  /** Lifetime PnL in the underlying token, `undefined` when unreadable. */
-  pnlToken?: number
+  /**
+   * What is known about the owner's position in this vault. A balance still
+   * being read is NOT an empty vault: reporting one as the other would tell a
+   * depositor their funds are gone, so the three states stay distinct.
+   */
+  position: KaminoCardPosition
 }
+
+/** The owner's position in one vault, as far as the balance read got. */
+export type KaminoCardPosition =
+  | { status: 'pending' }
+  | { status: 'unavailable' }
+  | {
+      status: 'settled'
+      /** Value in the underlying token; `0` is a confirmed empty vault. */
+      tokenAmount: number
+      /** Lifetime PnL in the underlying token, absent when unreadable. */
+      pnlToken?: number
+    }
 
 /**
  * The risk tier is curation, not API data — Kamino exposes no risk field — so
@@ -50,13 +66,12 @@ export const KaminoVaultCard = ({
   info,
   coin,
   priceUsd,
-  tokenAmount,
-  pnlToken,
+  position,
 }: KaminoVaultCardProps) => {
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const { riskTier, curator } = info.descriptor
-  const hasPosition = tokenAmount > 0
+  const hasPosition = position.status === 'settled' && position.tokenAmount > 0
 
   return (
     <Container gap={12}>
@@ -87,41 +102,43 @@ export const KaminoVaultCard = ({
         </Text>
       </HStack>
 
-      {hasPosition ? (
-        <>
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text size={13} color="shy">
-              {t('kamino_earn_balance')}
-            </Text>
-            <VStack alignItems="flex-end" gap={2}>
-              <Text weight={500}>
-                {formatAmount(tokenAmount, { ticker: coin.ticker })}
-              </Text>
-              {priceUsd > 0 ? (
-                <Text size={13} color="shy">
-                  {formatFiatAmount(tokenAmount * priceUsd)}
-                </Text>
-              ) : null}
-            </VStack>
-          </HStack>
-
-          {pnlToken !== undefined ? (
+      {position.status === 'settled' ? (
+        hasPosition ? (
+          <>
             <HStack justifyContent="space-between" alignItems="center">
               <Text size={13} color="shy">
-                {t('kamino_earn_pnl')}
+                {t('balance')}
               </Text>
-              <Text size={13} color={pnlToken < 0 ? 'danger' : 'success'}>
-                {`${pnlToken < 0 ? '' : '+'}${formatAmount(pnlToken, {
-                  ticker: coin.ticker,
-                })}`}
-              </Text>
+              <VStack alignItems="flex-end" gap={2}>
+                <Text weight={500}>
+                  {formatAmount(position.tokenAmount, { ticker: coin.ticker })}
+                </Text>
+                {priceUsd > 0 ? (
+                  <Text size={13} color="shy">
+                    {formatFiatAmount(position.tokenAmount * priceUsd)}
+                  </Text>
+                ) : null}
+              </VStack>
             </HStack>
-          ) : null}
-        </>
+
+            {position.pnlToken !== undefined ? (
+              <PnlRow amount={position.pnlToken} ticker={coin.ticker} />
+            ) : null}
+          </>
+        ) : (
+          <Text size={12} color="shy">
+            {t('kamino_earn_no_position')}
+          </Text>
+        )
       ) : (
-        <Text size={12} color="shy">
-          {t('kamino_earn_no_position')}
-        </Text>
+        <HStack justifyContent="space-between" alignItems="center">
+          <Text size={13} color="shy">
+            {t('balance')}
+          </Text>
+          <Text size={13} color="shy">
+            {position.status === 'pending' ? t('loading') : t('failed_to_load')}
+          </Text>
+        </HStack>
       )}
     </Container>
   )

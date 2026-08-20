@@ -27,15 +27,15 @@ export const isKaminoShareCoin = (coin: CoinKey): boolean =>
   kaminoShareMints.has(coin.id)
 
 /**
- * Drops Kamino share entries. Returns the input array instance when nothing
- * is removed so downstream `useMemo` deps stay stable for the typical vault,
- * which holds none.
+ * Drops Kamino share entries. Returns the input array instance itself when
+ * nothing is removed, so downstream `useMemo` deps stay stable for the typical
+ * vault, which holds none — which is also why the parameter is a mutable
+ * array: handing back a `readonly` input as mutable would launder away the
+ * caller's guarantee.
  */
-export const withoutKaminoShareCoins = <T extends CoinKey>(
-  coins: readonly T[]
-): T[] => {
+export const withoutKaminoShareCoins = <T extends CoinKey>(coins: T[]): T[] => {
   if (!coins.some(isKaminoShareCoin)) {
-    return coins as T[]
+    return coins
   }
 
   return coins.filter(coin => !isKaminoShareCoin(coin))

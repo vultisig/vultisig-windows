@@ -1427,9 +1427,8 @@ export const en = {
   solana_staking_delegate_new_validator: 'Delegate to New Validator',
   solana_staking_stake_accounts: 'Stake Accounts',
   kamino_earn_apy_30d: 'APY (30d)',
-  kamino_earn_balance: 'Balance',
   kamino_earn_curated_by: 'Curated by {{curator}}',
-  kamino_earn_no_position: 'No deposit yet',
+  kamino_earn_no_position: 'You have nothing in this vault yet',
   kamino_earn_pnl: 'Profit / loss',
   kamino_earn_positions_unavailable:
     'Balances could not be loaded. The vaults shown are up to date.',

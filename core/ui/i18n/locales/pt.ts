@@ -1885,9 +1885,8 @@ export const pt = {
   swap_limit_is_worth: 'valer',
   swap_limit_when_one: 'Quando 1',
   kamino_earn_apy_30d: 'APY (30 dias)',
-  kamino_earn_balance: 'Equilíbrio',
   kamino_earn_curated_by: 'Com curadoria de {{curator}}',
-  kamino_earn_no_position: 'Ainda não foi feito nenhum depósito.',
+  kamino_earn_no_position: 'Você ainda não tem nada neste cofre.',
   kamino_earn_pnl: 'Lucro/prejuízo',
   kamino_earn_positions_unavailable:
     'Não foi possível carregar os saldos. Os cofres exibidos estão atualizados.',
