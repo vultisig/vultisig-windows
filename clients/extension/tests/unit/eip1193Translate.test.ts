@@ -1,4 +1,5 @@
 import {
+  broadcastFailedPopupResult,
   callNotFoundPopupResult,
   PopupError,
   signingFailedPopupResult,
@@ -21,6 +22,14 @@ describe('toEip1193Error', () => {
     expect(error.code).toBe(internalErrorCode)
     expect(error.message).toMatch(/signing/i)
     expect(error.message).not.toBe('Internal error')
+  })
+
+  it('does not claim a broadcast failure was never signed', () => {
+    const error = toEip1193Error(overMessaging(broadcastFailedPopupResult))
+
+    expect(error.code).toBe(internalErrorCode)
+    expect(error.message).toMatch(/broadcast/i)
+    expect(error.message).not.toMatch(/not signed/i)
   })
 
   it('reports a missing pending call with readable wording', () => {

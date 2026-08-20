@@ -1,6 +1,7 @@
 export enum PopupError {
   RejectedByUser = 'rejectedByUser',
   SigningFailed = 'signingFailed',
+  BroadcastFailed = 'broadcastFailed',
   CallNotFound = 'callNotFound',
 }
 
@@ -29,6 +30,16 @@ export const signingFailedPopupResult = {
 } as const
 
 /**
+ * Result a popup view finishes with when signing succeeded but the network
+ * rejected the broadcast. Distinct from {@link signingFailedPopupResult}
+ * because the transaction is signed and may yet be known to the chain, so a
+ * dApp must not be told it was never signed.
+ */
+export const broadcastFailedPopupResult = {
+  error: PopupError.BroadcastFailed,
+} as const
+
+/**
  * Result the popup shell finishes with when it cannot load the pending call
  * from storage, so no view ever renders. Plain string for the same
  * serialization reason as {@link userRejectedPopupResult}.
@@ -43,17 +54,25 @@ export const callNotFoundPopupResult = {
  * translators look the wording up here rather than surfacing `"signingFailed"`
  * to a dApp developer. `RejectedByUser` is absent on purpose: it maps to the
  * standard `4001 UserRejectedRequest`, which supplies its own message.
+ *
+ * Exhaustive over every other member, so adding a sentinel without wording is
+ * a compile error rather than a silent fall back to `"Internal error"`.
  */
-const popupErrorMessages = new Map<string, string>([
-  [
-    PopupError.SigningFailed,
+const messagesByPopupError: Record<
+  Exclude<PopupError, PopupError.RejectedByUser>,
+  string
+> = {
+  [PopupError.SigningFailed]:
     'Signing failed in the Vultisig popup. The transaction was not signed.',
-  ],
-  [
-    PopupError.CallNotFound,
+  [PopupError.BroadcastFailed]:
+    'The transaction was signed but the network rejected the broadcast.',
+  [PopupError.CallNotFound]:
     'Vultisig could not load the pending request. It may have expired.',
-  ],
-])
+}
+
+const popupErrorMessages = new Map<string, string>(
+  Object.entries(messagesByPopupError)
+)
 
 /**
  * dApp-facing wording for a popup failure sentinel, or `undefined` when the
@@ -62,3 +81,18 @@ const popupErrorMessages = new Map<string, string>([
  */
 export const getPopupErrorMessage = (error: unknown): string | undefined =>
   typeof error === 'string' ? popupErrorMessages.get(error) : undefined
+
+/**
+ * The form a popup failure should reach dApp-facing provider code in.
+ * `RejectedByUser` stays the bare sentinel because providers compare against
+ * it by identity; every other sentinel becomes an `Error` carrying its
+ * dApp-facing wording, so the many providers that simply let the rejection
+ * propagate hand the dApp a readable message instead of the raw
+ * `"signingFailed"` identifier. Applied once, at the inpage `callPopup`
+ * boundary — the last hop before dApp code, so nothing serializes it again.
+ */
+export const toPopupCallError = (error: unknown): unknown => {
+  const message = getPopupErrorMessage(error)
+
+  return message ? new Error(message) : error
+}
