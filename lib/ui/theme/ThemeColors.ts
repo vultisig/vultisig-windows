@@ -42,6 +42,13 @@ export type ThemeColors = {
 
   transparent: HSLA
   white: HSLA
+
+  bannerAccentUpgrade: HSLA
+  bannerAccentRujira: HSLA
+  bannerAccentFollowX: HSLA
+  bannerAccentBackup: HSLA
+  bannerAccentReferral: HSLA
+  bannerAccentBuyVult: HSLA
 }
 
 export type ThemeColor = keyof ThemeColors
