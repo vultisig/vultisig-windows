@@ -1894,7 +1894,7 @@ export const pt = {
   kamino_earn_risk_private_credit: 'Crédito privado',
   kamino_earn_below_minimum:
     'Este cofre aceita depósitos de {{amount}} ou mais.',
-  kamino_earn_deposit: 'Depósito',
+  kamino_earn_deposit: 'Depositar no cofre',
   kamino_earn_deposit_to: 'Depositar em',
   kamino_earn_minimum_deposit: 'depósito mínimo',
 }

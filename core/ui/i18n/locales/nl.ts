@@ -1874,7 +1874,7 @@ export const nl = {
   kamino_earn_risk_private_credit: 'Particuliere kredietverlening',
   kamino_earn_below_minimum:
     'Deze kluis accepteert stortingen van {{amount}} of meer.',
-  kamino_earn_deposit: 'Borg',
+  kamino_earn_deposit: 'Storten in de kluis',
   kamino_earn_deposit_to: 'Storten aan',
   kamino_earn_minimum_deposit: 'Minimale storting',
 }

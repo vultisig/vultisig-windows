@@ -1736,7 +1736,7 @@ export const zh = {
   kamino_earn_risk_conservative: '保守的',
   kamino_earn_risk_private_credit: '私人信贷',
   kamino_earn_below_minimum: '此金库接受{{amount}}或更多金额的存款。',
-  kamino_earn_deposit: '订金',
+  kamino_earn_deposit: '存入金库',
   kamino_earn_deposit_to: '存款',
   kamino_earn_minimum_deposit: '最低存款',
 }

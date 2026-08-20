@@ -1861,7 +1861,7 @@ export const hr = {
   kamino_earn_risk_private_credit: 'Privatni kredit',
   kamino_earn_below_minimum:
     'Ovaj trezor prima depozite od {{amount}} ili više',
-  kamino_earn_deposit: 'Polog',
+  kamino_earn_deposit: 'Polog u trezor',
   kamino_earn_deposit_to: 'Uplata na',
   kamino_earn_minimum_deposit: 'Minimalni depozit',
 }

@@ -1905,7 +1905,7 @@ export const de = {
   kamino_earn_risk_private_credit: 'Privatkredit',
   kamino_earn_below_minimum:
     'Dieser Tresor akzeptiert Einlagen von {{amount}} oder mehr.',
-  kamino_earn_deposit: 'Kaution',
+  kamino_earn_deposit: 'Einzahlung in den Tresor',
   kamino_earn_deposit_to: 'Einzahlung an',
   kamino_earn_minimum_deposit: 'Mindesteinzahlung',
 }
