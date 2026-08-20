@@ -1923,9 +1923,9 @@ export const de = {
   kamino_earn_you_receive: 'Sie erhalten',
   kamino_earn_no_solana_address:
     'Dieser Tresor hat keine Solana-Adresse, daher ist Kamino Earn nicht verfügbar.',
-  kamino_earn_entire_position: 'Die gesamte Position',
+  kamino_earn_entire_position: 'Alles in diesem Tresor',
   kamino_earn_strands_wrapped_sol_rent:
-    'Mit dieser Einzahlung wird ein SOL-Konto (Wrapped SOL) eröffnet. Die Miete bleibt bis zur Auszahlung gesperrt.',
+    'Mit dieser Einzahlung wird ein Wrapped-SOL-Konto eröffnet, auf dem ein kleiner Betrag an SOL gehalten wird, bis Sie ihn abheben.',
   kamino_earn_unreadable_description:
     'Es erreicht einen Kamino-Tresor, aber diese App kann nicht lesen, was es tut, daher wird es nicht signiert.',
   kamino_earn_unreadable_title:

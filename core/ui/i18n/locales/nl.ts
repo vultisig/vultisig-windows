@@ -1892,9 +1892,9 @@ export const nl = {
   kamino_earn_you_receive: 'U ontvangt',
   kamino_earn_no_solana_address:
     'Deze kluis heeft geen adres in Solana, dus Kamino Earn is niet beschikbaar.',
-  kamino_earn_entire_position: 'De gehele positie',
+  kamino_earn_entire_position: 'Alles in deze kluis',
   kamino_earn_strands_wrapped_sol_rent:
-    "Met deze storting wordt een zogenaamde 'wrapped SOL'-rekening geopend. De huurinkomsten blijven vaststaan ​​totdat u het geld opneemt.",
+    "Met deze storting wordt een 'wrapped SOL'-rekening geopend, waarop een klein bedrag aan SOL wordt vastgehouden totdat u het opneemt.",
   kamino_earn_unreadable_description:
     'Het bereikt een Kamino-kluis, maar deze app kan niet lezen wat het doet, dus zal het niet ondertekenen.',
   kamino_earn_unreadable_title: 'Deze transactie kan niet worden geverifieerd.',
