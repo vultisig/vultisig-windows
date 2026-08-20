@@ -1,5 +1,4 @@
 import { CollapsingBalance } from '@core/ui/page/CollapsingBalance'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -12,12 +11,9 @@ import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { RefObject } from 'react'
 import styled, { css } from 'styled-components'
 
-import { currentProductBrand } from '../../../product/brand'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
-import { BuyVultPromoBanner } from '../banners/BuyVultPromoBanner/BuyVultPromoBanner'
-import { FollowOnXBanner } from '../banners/FollowOnXBanner/FollowOnXBanner'
-import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
+import { useHomePromoBanners } from '../banners/useHomePromoBanners'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 import { VaultTabs } from './VaultTabs/VaultTabs'
 
@@ -37,41 +33,13 @@ type VaultOverviewProps = {
   scrollContainerRef: RefObject<HTMLDivElement>
 }
 
+/**
+ * The vault home screen: total balance, primary actions, the promo carousel
+ * and the asset tabs. The scroll container is owned here but shared with
+ * `CollapsingBalance`, which collapses the balance as that container scrolls.
+ */
 export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
-  const { libType } = useCurrentVault()
-
-  const banners = [
-    ...(libType !== 'DKLS'
-      ? [
-          {
-            id: 'migrate' as const,
-            component: (props: { onDismiss: () => void }) => (
-              <MigrateVaultPrompt onDismiss={props.onDismiss} />
-            ),
-          },
-        ]
-      : []),
-    ...(currentProductBrand === 'vultisig'
-      ? [
-          {
-            id: 'buyVultPromo' as const,
-            component: (props: { onDismiss: () => void }) => (
-              <BuyVultPromoBanner onDismiss={props.onDismiss} />
-            ),
-          },
-        ]
-      : []),
-    ...(currentProductBrand === 'vultisig'
-      ? [
-          {
-            id: 'followOnX' as const,
-            component: (props: { onDismiss: () => void }) => (
-              <FollowOnXBanner onDismiss={props.onDismiss} />
-            ),
-          },
-        ]
-      : []),
-  ]
+  const banners = useHomePromoBanners()
 
   return (
     <Container flexGrow>
