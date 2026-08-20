@@ -10,10 +10,11 @@ import { fileURLToPath } from 'url'
 
 import { getCoinLogoSrc } from '../chain/coin/icon/utils/getCoinLogoSrc'
 import { getChainLogoSrc } from '../chain/metadata/getChainLogoSrc'
+import { getChainMonoLogoSrc } from '../chain/metadata/getChainMonoLogoSrc'
 
 const currentDirname = dirname(fileURLToPath(import.meta.url))
 
-type Entity = 'coin' | 'chain'
+type Entity = 'coin' | 'chain' | 'chain badge'
 
 type ValidationResult = {
   entity: Entity
@@ -106,11 +107,14 @@ const extraCoinAssets = [
 
 const main = async () => {
   try {
-    const [coinFiles, chainFiles] = await Promise.all(
-      ['coins', 'chains'].map(dir =>
+    const [coinFiles, chainDirEntries, chainBadgeFiles] = await Promise.all(
+      ['coins', 'chains', 'chains/mono'].map(dir =>
         readdir(path.resolve(currentDirname, '../public', dir))
       )
     )
+
+    // The badge set lives in a subfolder, so it is not a stray chain logo.
+    const chainFiles = chainDirEntries.filter(entry => entry !== 'mono')
 
     const expectedCoins = withoutDuplicates(
       [...Object.values(thorchainNativeTokensMetadata), ...Object.values(coins)]
@@ -131,6 +135,11 @@ const main = async () => {
       .map(getChainLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
 
+    // Every chain needs a badge — a coin icon renders one for any chain.
+    const expectedChainBadges = Object.values(Chain)
+      .map(getChainMonoLogoSrc)
+      .map(logo => getLastItem(logo.split('/')))
+
     const results = [
       validateAssets({
         expected: expectedCoins,
@@ -141,6 +150,11 @@ const main = async () => {
         expected: expectedChains,
         actual: chainFiles,
         entity: 'chain',
+      }),
+      validateAssets({
+        expected: expectedChainBadges,
+        actual: chainBadgeFiles,
+        entity: 'chain badge',
       }),
     ]
 

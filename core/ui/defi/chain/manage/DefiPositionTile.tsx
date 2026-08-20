@@ -1,7 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { WithChainIcon } from '@core/ui/chain/coin/icon/WithChainIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
@@ -106,7 +105,7 @@ export const DefiPositionTile = ({
         <DualIconWrapper>
           {position.coin && shouldDisplayChainLogo(position.coin) ? (
             <WithChainIcon
-              src={getChainLogoSrc(position.coin.chain)}
+              chain={position.coin.chain}
               style={{ fontSize: 27.5 }}
             >
               <ChainEntityIcon value={icon} />
