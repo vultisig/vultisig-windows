@@ -12,7 +12,7 @@ fi
 binary_path="$1"
 needed=$(readelf --dynamic "$binary_path" | grep -E '\(NEEDED\)' || true)
 
-if grep -E --quiet "Shared library:[[:space:]]*\[${WEBKIT_SONAME}\]" <<<"$needed"; then
+if grep --fixed-strings --quiet "[${WEBKIT_SONAME}]" <<<"$needed"; then
   exit 0
 fi
 
