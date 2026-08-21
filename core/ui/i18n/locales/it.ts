@@ -1901,4 +1901,9 @@ export const it = {
     'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',
   kamino_earn_risk_conservative: 'Conservatore',
   kamino_earn_risk_private_credit: 'Credito privato',
+  kamino_earn_below_minimum:
+    'Questo caveau accetta depositi di {{amount}} o superiori',
+  kamino_earn_deposit: 'Depositare nel caveau',
+  kamino_earn_deposit_to: 'Deposito a',
+  kamino_earn_minimum_deposit: 'Deposito minimo',
 }

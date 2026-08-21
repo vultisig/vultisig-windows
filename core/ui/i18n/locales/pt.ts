@@ -1898,4 +1898,9 @@ export const pt = {
     'Não foi possível carregar os saldos. Os cofres exibidos estão atualizados.',
   kamino_earn_risk_conservative: 'Conservador',
   kamino_earn_risk_private_credit: 'Crédito privado',
+  kamino_earn_below_minimum:
+    'Este cofre aceita depósitos de {{amount}} ou mais.',
+  kamino_earn_deposit: 'Depositar no cofre',
+  kamino_earn_deposit_to: 'Depositar em',
+  kamino_earn_minimum_deposit: 'depósito mínimo',
 }

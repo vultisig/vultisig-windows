@@ -1855,4 +1855,9 @@ export const ko = {
     '잔액을 불러올 수 없습니다. 표시된 금고 정보가 최신 상태입니다.',
   kamino_earn_risk_conservative: '보수적인',
   kamino_earn_risk_private_credit: '개인 신용',
+  kamino_earn_below_minimum:
+    '이 금고는 {{amount}} 이상의 금액을 예치할 수 있습니다.',
+  kamino_earn_deposit: '금고에 예치',
+  kamino_earn_deposit_to: '입금',
+  kamino_earn_minimum_deposit: '최소 예치금',
 }

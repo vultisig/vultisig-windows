@@ -1874,4 +1874,9 @@ export const ru = {
     'Не удалось загрузить данные о балансе. Отображаемые данные по хранилищам актуальны.',
   kamino_earn_risk_conservative: 'Консервативный',
   kamino_earn_risk_private_credit: 'Частный кредит',
+  kamino_earn_below_minimum:
+    'В это хранилище принимаются депозиты в размере {{amount}} или более.',
+  kamino_earn_deposit: 'Внести в хранилище',
+  kamino_earn_deposit_to: 'Внести депозит',
+  kamino_earn_minimum_deposit: 'Минимальный депозит',
 }
