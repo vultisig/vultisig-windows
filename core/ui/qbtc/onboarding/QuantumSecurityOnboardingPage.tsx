@@ -1,5 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
+import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChainLinkIcon3 } from '@lib/ui/icons/ChainLinkIcon3'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
@@ -16,7 +17,7 @@ import {
   FeatureIcon,
   FeatureList,
   FeatureText,
-  HeroFrame,
+  HeroAnimation,
   PageBody,
   TitleStack,
 } from './QuantumSecurityOnboardingPage.styles'
@@ -83,7 +84,12 @@ export const QuantumSecurityOnboardingPage = () => {
 
         <WarningBlock>{t('qbtc_onboarding_key_warning')}</WarningBlock>
 
-        <HeroFrame aria-hidden />
+        <HeroAnimation aria-hidden>
+          <Animation
+            src="/core/animations/quantum-key-pair.riv"
+            stateMachines="State Machine 1"
+          />
+        </HeroAnimation>
 
         <FeatureList>
           {features.map(feature => (
