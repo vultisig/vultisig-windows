@@ -15,6 +15,8 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 
+import { getKaminoPositionsQueryKey } from './chain/solana/kamino/queries/useKaminoPositionsQuery'
+import { kaminoVaultsQueryKey } from './chain/solana/kamino/queries/useKaminoVaultsQuery'
 import {
   getCircleAccountQueryKey,
   useCircleAccountQuery,
@@ -23,6 +25,12 @@ import {
 type DefiRefreshConfig = {
   getPositionsQueryKey: (address: string) => QueryKey
   poolQueryKeys: QueryKey[]
+  /**
+   * Positions a chain surfaces alongside its main one — Solana carries both
+   * native staking and the Kamino Earn vaults, and a refresh that covered only
+   * the first would leave the other tab stale.
+   */
+  getAdditionalPositionQueryKeys?: (address: string) => QueryKey[]
 }
 
 const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
@@ -75,6 +83,10 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
   [Chain.Solana]: {
     getPositionsQueryKey: address => ['solanaStakeAccounts', address],
     poolQueryKeys: [['solanaValidators']],
+    getAdditionalPositionQueryKeys: address => [
+      getKaminoPositionsQueryKey(address),
+      kaminoVaultsQueryKey,
+    ],
   },
 }
 
@@ -111,9 +123,17 @@ export const RefreshDefiData = () => {
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {
-        const { getPositionsQueryKey, poolQueryKeys } = defiRefreshConfig[chain]
+        const {
+          getPositionsQueryKey,
+          poolQueryKeys,
+          getAdditionalPositionQueryKeys,
+        } = defiRefreshConfig[chain]
 
-        return [getPositionsQueryKey(addresses[chain]), ...poolQueryKeys]
+        return [
+          getPositionsQueryKey(addresses[chain]),
+          ...poolQueryKeys,
+          ...(getAdditionalPositionQueryKeys?.(addresses[chain]) ?? []),
+        ]
       }) as QueryKey[]
 
       if (isCircleVisible) {

@@ -228,6 +228,7 @@ export const zh = {
     staked: '已质押',
     lps: '流动性池',
     governance: '治理',
+    earn: '赚',
   },
   vaultTabs: {
     portfolio: '投资组合',
@@ -1740,4 +1741,29 @@ export const zh = {
   swap_route_eta_minutes: '~{{minutes}}分',
   swap_limit_is_worth: '价值达到',
   swap_limit_when_one: '当 1',
+  kamino_earn_apy_30d: '年收益率（30天）',
+  kamino_earn_curated_by: '由{{curator}}策划',
+  kamino_earn_no_position: '你这个保险库里目前什么都没有。',
+  kamino_earn_pnl: '利润/亏损',
+  kamino_earn_positions_unavailable:
+    '余额加载失败。显示的库房信息均为最新信息。',
+  kamino_earn_risk_conservative: '保守的',
+  kamino_earn_risk_private_credit: '私人信贷',
+  kamino_earn_below_minimum: '此金库接受{{amount}}或更多金额的存款。',
+  kamino_earn_deposit: '存入金库',
+  kamino_earn_deposit_to: '存款',
+  kamino_earn_minimum_deposit: '最低存款',
+  kamino_earn_amount_unavailable: '此金额目前无法转换，请稍后再试。',
+  kamino_earn_available_to_withdraw: '可提取',
+  kamino_earn_delayed_liquidity:
+    '这比金库目前容纳的液体量还要多，因此可能需要更长时间才能稳定下来。',
+  kamino_earn_receive_estimate: '最终金额在提款结算时确定，可能会略有不同。',
+  kamino_earn_releases_from_farm:
+    '这部分仓位已进行质押，因此提款会首先释放这部分质押仓位。',
+  kamino_earn_shares_burned: '股票被烧毁',
+  kamino_earn_withdraw: '从金库提取',
+  kamino_earn_withdraw_from: '退出',
+  kamino_earn_you_receive: '您收到',
+  kamino_earn_no_solana_address:
+    '该保险库没有 Solana 地址，因此 Kamino Earn 不可用。',
 }

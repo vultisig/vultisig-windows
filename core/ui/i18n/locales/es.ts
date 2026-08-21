@@ -242,6 +242,7 @@ export const es = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Gobernancia',
+    earn: 'Ganar',
   },
   vaultTabs: {
     portfolio: 'Portafolio',
@@ -1894,4 +1895,32 @@ export const es = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valga',
   swap_limit_when_one: 'Cuando 1',
+  kamino_earn_apy_30d: 'APY (30 días)',
+  kamino_earn_curated_by: 'Seleccionado por {{curator}}',
+  kamino_earn_no_position: 'Todavía no tienes nada en esta bóveda.',
+  kamino_earn_pnl: 'Ganancia/pérdida',
+  kamino_earn_positions_unavailable:
+    'No se pudieron cargar los saldos. Las bóvedas mostradas están actualizadas.',
+  kamino_earn_risk_conservative: 'Conservador',
+  kamino_earn_risk_private_credit: 'Crédito privado',
+  kamino_earn_below_minimum:
+    'Esta bóveda acepta depósitos de {{amount}} o más.',
+  kamino_earn_deposit: 'Depositar en la bóveda',
+  kamino_earn_deposit_to: 'Depositar en',
+  kamino_earn_minimum_deposit: 'Depósito mínimo',
+  kamino_earn_amount_unavailable:
+    'Este importe no se puede convertir en este momento. Inténtelo de nuevo en un instante.',
+  kamino_earn_available_to_withdraw: 'Disponible para retirar',
+  kamino_earn_delayed_liquidity:
+    'Esta cantidad supera la capacidad actual de la bóveda en cuanto a líquido, por lo que podría tardar más tiempo en estabilizarse.',
+  kamino_earn_receive_estimate:
+    'El importe final se fija cuando se procesa el retiro y puede variar ligeramente.',
+  kamino_earn_releases_from_farm:
+    'Parte de esta posición está en staking, por lo que el retiro la libera primero.',
+  kamino_earn_shares_burned: 'Acciones quemadas',
+  kamino_earn_withdraw: 'Retirar de la bóveda',
+  kamino_earn_withdraw_from: 'Retirarse de',
+  kamino_earn_you_receive: 'Usted recibe',
+  kamino_earn_no_solana_address:
+    'Esta bóveda no tiene dirección de Solana, por lo que Kamino Earn no está disponible.',
 }

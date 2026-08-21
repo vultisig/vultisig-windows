@@ -7,6 +7,8 @@ import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustom
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { TonStakePage } from '@core/ui/chain/ton/staking/TonStakePage'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
+import { KaminoDepositPage } from '@core/ui/defi/chain/solana/kamino/deposit/KaminoDepositPage'
+import { KaminoWithdrawPage } from '@core/ui/defi/chain/solana/kamino/withdraw/KaminoWithdrawPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { ChooseVaultsView } from '@core/ui/notifications/choose-vaults/ChooseVaultsView'
@@ -85,6 +87,8 @@ export type SharedViewId = Extract<
   | 'languageSettings'
   | 'manageDefiChains'
   | 'manageDefiPositions'
+  | 'kaminoDeposit'
+  | 'kaminoWithdraw'
   | 'tonStake'
   | 'limitOrders'
   | 'cancelLimitOrder'
@@ -160,6 +164,8 @@ export const sharedViews: Views<SharedViewId> = {
   languageSettings: LanguagePage,
   manageDefiChains: ManageDefiChainsPage,
   manageDefiPositions: ManageDefiPositionsPage,
+  kaminoDeposit: KaminoDepositPage,
+  kaminoWithdraw: KaminoWithdrawPage,
   tonStake: TonStakePage,
   lpPositionForm: LpPositionFormPage,
   manageVaultChains: ManageVaultChainsPage,

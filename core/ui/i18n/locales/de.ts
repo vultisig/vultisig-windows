@@ -244,6 +244,7 @@ export const de = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governance',
+    earn: 'Verdienen',
   },
   vaultTabs: {
     portfolio: 'Portfolio',
@@ -1908,4 +1909,32 @@ export const de = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'wert ist',
   swap_limit_when_one: 'Wenn 1',
+  kamino_earn_apy_30d: 'Jahreszins (30 Tage)',
+  kamino_earn_curated_by: 'Kuratiert von {{curator}}',
+  kamino_earn_no_position: 'Du hast noch nichts in diesem Tresor.',
+  kamino_earn_pnl: 'Gewinn / Verlust',
+  kamino_earn_positions_unavailable:
+    'Die Salden konnten nicht geladen werden. Die angezeigten Tresore sind aktuell.',
+  kamino_earn_risk_conservative: 'Konservativ',
+  kamino_earn_risk_private_credit: 'Privatkredit',
+  kamino_earn_below_minimum:
+    'Dieser Tresor akzeptiert Einlagen von {{amount}} oder mehr.',
+  kamino_earn_deposit: 'Einzahlung in den Tresor',
+  kamino_earn_deposit_to: 'Einzahlung an',
+  kamino_earn_minimum_deposit: 'Mindesteinzahlung',
+  kamino_earn_amount_unavailable:
+    'Dieser Betrag kann momentan nicht umgerechnet werden. Bitte versuchen Sie es später erneut.',
+  kamino_earn_available_to_withdraw: 'Verfügbar zum Abheben',
+  kamino_earn_delayed_liquidity:
+    'Dies ist mehr Flüssigkeit, als der Tresor derzeit fasst, daher kann es länger dauern, bis sich die Lage beruhigt hat.',
+  kamino_earn_receive_estimate:
+    'Der endgültige Betrag wird bei der Abwicklung der Auszahlung festgelegt und kann geringfügig abweichen.',
+  kamino_earn_releases_from_farm:
+    'Ein Teil dieser Position ist gestakt, daher wird er bei der Auszahlung zuerst freigegeben.',
+  kamino_earn_shares_burned: 'Aktien verbrannt',
+  kamino_earn_withdraw: 'Aus dem Tresor abheben',
+  kamino_earn_withdraw_from: 'Zurückziehen von',
+  kamino_earn_you_receive: 'Sie erhalten',
+  kamino_earn_no_solana_address:
+    'Dieser Tresor hat keine Solana-Adresse, daher ist Kamino Earn nicht verfügbar.',
 }

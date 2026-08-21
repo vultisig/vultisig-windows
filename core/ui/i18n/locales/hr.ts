@@ -241,6 +241,7 @@ export const hr = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Upravljanje',
+    earn: 'Zaraditi',
   },
   vaultTabs: {
     portfolio: 'Portfelj',
@@ -1864,4 +1865,32 @@ export const hr = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vrijedi',
   swap_limit_when_one: 'Kada 1',
+  kamino_earn_apy_30d: 'APY (30d)',
+  kamino_earn_curated_by: 'Odabrao {{curator}}',
+  kamino_earn_no_position: 'Još nemaš ništa u ovom trezoru',
+  kamino_earn_pnl: 'Dobit / gubitak',
+  kamino_earn_positions_unavailable:
+    'Stanje nije moguće učitati. Prikazani trezori su ažurirani.',
+  kamino_earn_risk_conservative: 'Konzervativac',
+  kamino_earn_risk_private_credit: 'Privatni kredit',
+  kamino_earn_below_minimum:
+    'Ovaj trezor prima depozite od {{amount}} ili više',
+  kamino_earn_deposit: 'Polog u trezor',
+  kamino_earn_deposit_to: 'Uplata na',
+  kamino_earn_minimum_deposit: 'Minimalni depozit',
+  kamino_earn_amount_unavailable:
+    'Ovaj iznos trenutno nije moguće pretvoriti. Pokušajte ponovno za trenutak.',
+  kamino_earn_available_to_withdraw: 'Dostupno za isplatu',
+  kamino_earn_delayed_liquidity:
+    'To je više nego što trezor trenutno sadrži tekućinu, pa bi moglo trebati dulje da se slegne.',
+  kamino_earn_receive_estimate:
+    'Konačni iznos se utvrđuje prilikom isplate i može se neznatno razlikovati.',
+  kamino_earn_releases_from_farm:
+    'Dio ove pozicije je uložen, pa se povlačenjem prvo oslobađa.',
+  kamino_earn_shares_burned: 'Spaljene dionice',
+  kamino_earn_withdraw: 'Isplata iz trezora',
+  kamino_earn_withdraw_from: 'Povuci se iz',
+  kamino_earn_you_receive: 'Primate',
+  kamino_earn_no_solana_address:
+    'Ovaj trezor nema Solana adresu, tako da Kamino Earn nije dostupan.',
 }

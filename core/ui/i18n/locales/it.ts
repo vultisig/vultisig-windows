@@ -245,6 +245,7 @@ export const it = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governance',
+    earn: 'Guadagnare',
   },
   vaultTabs: {
     portfolio: 'Portafoglio',
@@ -1900,4 +1901,32 @@ export const it = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vale',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_apy_30d: 'APY (30 giorni)',
+  kamino_earn_curated_by: 'Selezionato da {{curator}}',
+  kamino_earn_no_position: 'Non hai ancora nulla in questa cassaforte',
+  kamino_earn_pnl: 'Profitto/perdita',
+  kamino_earn_positions_unavailable:
+    'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',
+  kamino_earn_risk_conservative: 'Conservatore',
+  kamino_earn_risk_private_credit: 'Credito privato',
+  kamino_earn_below_minimum:
+    'Questo caveau accetta depositi di {{amount}} o superiori',
+  kamino_earn_deposit: 'Depositare nel caveau',
+  kamino_earn_deposit_to: 'Deposito a',
+  kamino_earn_minimum_deposit: 'Deposito minimo',
+  kamino_earn_amount_unavailable:
+    'Questo importo non può essere convertito al momento. Riprova tra un attimo.',
+  kamino_earn_available_to_withdraw: 'Disponibile per il prelievo',
+  kamino_earn_delayed_liquidity:
+    'Si tratta di una somma superiore alla quantità di liquidi attualmente contenuta nel caveau, pertanto la liquidazione potrebbe richiedere più tempo.',
+  kamino_earn_receive_estimate:
+    "L'importo finale viene stabilito al momento della liquidazione del prelievo e potrebbe variare leggermente.",
+  kamino_earn_releases_from_farm:
+    'Una parte di questa posizione è bloccata, quindi il prelievo la sblocca per prima.',
+  kamino_earn_shares_burned: 'azioni bruciate',
+  kamino_earn_withdraw: 'Prelevare dal caveau',
+  kamino_earn_withdraw_from: 'Ritirarsi da',
+  kamino_earn_you_receive: 'Tu ricevi',
+  kamino_earn_no_solana_address:
+    'Questo caveau non ha un indirizzo Solana, quindi Kamino Earn non è disponibile.',
 }

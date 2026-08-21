@@ -244,6 +244,7 @@ export const pt = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governança',
+    earn: 'Ganhar',
   },
   vaultTabs: {
     portfolio: 'Portfólio',
@@ -1897,4 +1898,32 @@ export const pt = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valer',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_apy_30d: 'APY (30 dias)',
+  kamino_earn_curated_by: 'Com curadoria de {{curator}}',
+  kamino_earn_no_position: 'Você ainda não tem nada neste cofre.',
+  kamino_earn_pnl: 'Lucro/prejuízo',
+  kamino_earn_positions_unavailable:
+    'Não foi possível carregar os saldos. Os cofres exibidos estão atualizados.',
+  kamino_earn_risk_conservative: 'Conservador',
+  kamino_earn_risk_private_credit: 'Crédito privado',
+  kamino_earn_below_minimum:
+    'Este cofre aceita depósitos de {{amount}} ou mais.',
+  kamino_earn_deposit: 'Depositar no cofre',
+  kamino_earn_deposit_to: 'Depositar em',
+  kamino_earn_minimum_deposit: 'depósito mínimo',
+  kamino_earn_amount_unavailable:
+    'Este valor não pode ser convertido neste momento. Tente novamente em instantes.',
+  kamino_earn_available_to_withdraw: 'Disponível para retirada',
+  kamino_earn_delayed_liquidity:
+    'Essa quantidade de líquido é maior do que a capacidade atual do cofre, portanto, pode levar mais tempo para que a água seque.',
+  kamino_earn_receive_estimate:
+    'O valor final é definido quando o saque é liquidado e pode variar ligeiramente.',
+  kamino_earn_releases_from_farm:
+    'Parte dessa posição está em staking, portanto, o saque a libera primeiro.',
+  kamino_earn_shares_burned: 'Ações queimadas',
+  kamino_earn_withdraw: 'Retirar do cofre',
+  kamino_earn_withdraw_from: 'Retirar-se de',
+  kamino_earn_you_receive: 'Você recebe',
+  kamino_earn_no_solana_address:
+    'Este cofre não possui endereço Solana, portanto o Kamino Earn está indisponível.',
 }

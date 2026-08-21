@@ -240,6 +240,7 @@ export const ru = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Управление',
+    earn: 'Зарабатывать',
   },
   vaultTabs: {
     portfolio: 'Портфель',
@@ -1873,4 +1874,32 @@ export const ru = {
   swap_route_eta_minutes: '~{{minutes}}мин',
   swap_limit_is_worth: 'стоит',
   swap_limit_when_one: 'Когда 1',
+  kamino_earn_apy_30d: 'Годовая процентная доходность (30 дней)',
+  kamino_earn_curated_by: 'Подборка от {{curator}}',
+  kamino_earn_no_position: 'В этом хранилище пока ничего нет.',
+  kamino_earn_pnl: 'Прибыль / убыток',
+  kamino_earn_positions_unavailable:
+    'Не удалось загрузить данные о балансе. Отображаемые данные по хранилищам актуальны.',
+  kamino_earn_risk_conservative: 'Консервативный',
+  kamino_earn_risk_private_credit: 'Частный кредит',
+  kamino_earn_below_minimum:
+    'В это хранилище принимаются депозиты в размере {{amount}} или более.',
+  kamino_earn_deposit: 'Внести в хранилище',
+  kamino_earn_deposit_to: 'Внести депозит',
+  kamino_earn_minimum_deposit: 'Минимальный депозит',
+  kamino_earn_amount_unavailable:
+    'В данный момент конвертация этой суммы невозможна. Попробуйте позже.',
+  kamino_earn_available_to_withdraw: 'Доступно для вывода средств',
+  kamino_earn_delayed_liquidity:
+    'Это больше, чем вмещает хранилище в данный момент жидкости, поэтому для оседания может потребоваться больше времени.',
+  kamino_earn_receive_estimate:
+    'Окончательная сумма устанавливается при расчете вывода средств и может незначительно отличаться.',
+  kamino_earn_releases_from_farm:
+    'Часть этой позиции заблокирована, поэтому при выводе средств сначала освобождается именно она.',
+  kamino_earn_shares_burned: 'Сгорели акции',
+  kamino_earn_withdraw: 'Извлечь из хранилища',
+  kamino_earn_withdraw_from: 'Выйти из',
+  kamino_earn_you_receive: 'Вы получаете',
+  kamino_earn_no_solana_address:
+    'У этого хранилища нет адреса на Солане, поэтому Kamino Earn недоступен.',
 }

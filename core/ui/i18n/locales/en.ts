@@ -270,6 +270,7 @@ export const en = {
   defiChainTabs: {
     bonded: 'Bonded',
     staked: 'Staked',
+    earn: 'Earn',
     lps: 'LPs',
     governance: 'Governance',
   },
@@ -1431,6 +1432,33 @@ export const en = {
   solana_staking_total_staked: 'Total Staked {{ticker}}',
   solana_staking_delegate_new_validator: 'Delegate to New Validator',
   solana_staking_stake_accounts: 'Stake Accounts',
+  kamino_earn_below_minimum: 'This vault takes deposits of {{amount}} or more',
+  kamino_earn_deposit: 'Deposit into vault',
+  kamino_earn_deposit_to: 'Deposit to',
+  kamino_earn_minimum_deposit: 'Minimum deposit',
+  kamino_earn_amount_unavailable:
+    'This amount cannot be converted right now. Try again in a moment.',
+  kamino_earn_available_to_withdraw: 'Available to withdraw',
+  kamino_earn_delayed_liquidity:
+    'This is more than the vault currently holds liquid, so it may take longer to settle.',
+  kamino_earn_receive_estimate:
+    'The final amount is set when the withdrawal settles and may differ slightly.',
+  kamino_earn_releases_from_farm:
+    'Part of this position is staked, so the withdrawal releases it first.',
+  kamino_earn_shares_burned: 'Shares burned',
+  kamino_earn_withdraw: 'Withdraw from vault',
+  kamino_earn_withdraw_from: 'Withdraw from',
+  kamino_earn_you_receive: 'You receive',
+  kamino_earn_no_solana_address:
+    'This vault has no Solana address, so Kamino Earn is unavailable.',
+  kamino_earn_apy_30d: 'APY (30d)',
+  kamino_earn_curated_by: 'Curated by {{curator}}',
+  kamino_earn_no_position: 'You have nothing in this vault yet',
+  kamino_earn_pnl: 'Profit / loss',
+  kamino_earn_positions_unavailable:
+    'Balances could not be loaded. The vaults shown are up to date.',
+  kamino_earn_risk_conservative: 'Conservative',
+  kamino_earn_risk_private_credit: 'Private credit',
   solana_staking_apy: 'APY',
   solana_staking_rent_reserve: 'Rent reserve',
   solana_staking_min_delegation: 'Minimum delegation is {{amount}} {{ticker}}',

@@ -239,6 +239,7 @@ export const ko = {
     staked: '스테이킹됨',
     lps: 'LPs',
     governance: '통치',
+    earn: '벌다',
   },
   vaultTabs: {
     portfolio: '포트폴리오',
@@ -1854,4 +1855,32 @@ export const ko = {
   swap_route_eta_minutes: '~{{minutes}}분',
   swap_limit_is_worth: '의 가치가',
   swap_limit_when_one: '1',
+  kamino_earn_apy_30d: 'APY(30일)',
+  kamino_earn_curated_by: '{{curator}} 님이 큐레이션했습니다.',
+  kamino_earn_no_position: '이 금고에는 아직 아무것도 없습니다.',
+  kamino_earn_pnl: '이익/손실',
+  kamino_earn_positions_unavailable:
+    '잔액을 불러올 수 없습니다. 표시된 금고 정보가 최신 상태입니다.',
+  kamino_earn_risk_conservative: '보수적인',
+  kamino_earn_risk_private_credit: '개인 신용',
+  kamino_earn_below_minimum:
+    '이 금고는 {{amount}} 이상의 금액을 예치할 수 있습니다.',
+  kamino_earn_deposit: '금고에 예치',
+  kamino_earn_deposit_to: '입금',
+  kamino_earn_minimum_deposit: '최소 예치금',
+  kamino_earn_amount_unavailable:
+    '지금은 이 금액으로 환전할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+  kamino_earn_available_to_withdraw: '인출 가능',
+  kamino_earn_delayed_liquidity:
+    '이는 현재 금고에 보관된 액체보다 많은 양이므로 안정화되는 데 더 오랜 시간이 걸릴 수 있습니다.',
+  kamino_earn_receive_estimate:
+    '최종 금액은 인출이 완료될 때 확정되며, 약간의 차이가 있을 수 있습니다.',
+  kamino_earn_releases_from_farm:
+    '이 포지션의 일부는 스테이킹되어 있으므로, 출금 시 스테이킹된 부분이 먼저 해제됩니다.',
+  kamino_earn_shares_burned: '주식이 불탔다',
+  kamino_earn_withdraw: '금고에서 인출',
+  kamino_earn_withdraw_from: '인출하다',
+  kamino_earn_you_receive: '당신은 받습니다',
+  kamino_earn_no_solana_address:
+    '이 금고에는 솔라나 주소가 없으므로 카미노 언(Kamino Earn)을 이용할 수 없습니다.',
 }
