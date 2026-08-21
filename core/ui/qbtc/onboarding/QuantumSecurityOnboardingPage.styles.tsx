@@ -1,9 +1,6 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-const heroImageUrl = '/core/images/qbtc-onboarding-hero.png'
 
 export const PageBody = styled.div`
   ${vStack({ gap: 32, alignItems: 'stretch' })};
@@ -14,17 +11,10 @@ export const TitleStack = styled.div`
   ${vStack({ gap: 14 })};
 `
 
-export const HeroFrame = styled.div`
+export const HeroAnimation = styled.div`
   width: 100%;
-  max-width: 350px;
-  aspect-ratio: 350 / 240;
+  height: 240px;
   align-self: center;
-  ${borderRadius.sm};
-  border: 1px dashed ${getColor('foregroundExtra')};
-  background-image: url('${heroImageUrl}');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
 `
 
 export const FeatureList = styled.div`
