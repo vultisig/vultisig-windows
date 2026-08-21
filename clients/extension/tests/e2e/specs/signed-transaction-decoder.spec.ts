@@ -57,7 +57,7 @@ test.describe('signed transaction decoder', () => {
     })
   })
 
-  test('shows the signed THOR rebond operation to a co-signer', async ({
+  test('shows the signed THOR rebond operation to a Korean co-signer', async ({
     context,
     extensionId,
   }) => {
@@ -96,18 +96,18 @@ test.describe('signed transaction decoder', () => {
     await qrPage.locator('svg').screenshot({ path: qrPath })
     await qrPage.close()
 
+    await writeChromeStorageMultiple(context, { language: 'ko' })
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
     await vaultPage.goto()
     await vaultPage.waitForView(15_000)
-    await page.getByRole('button', { name: 'Scan QR' }).click()
-    await page.getByRole('button', { name: 'Upload QR Code' }).click()
+    await page.getByRole('button', { name: 'QR 코드를 스캔하세요' }).click()
+    await page.getByRole('button', { name: 'QR 코드 업로드' }).click()
     await page.locator('input[type="file"]').setInputFiles(qrPath)
-    await page.getByRole('button', { name: 'Continue' }).click()
+    await page.getByRole('button', { name: '계속하다' }).click()
 
-    await expect(page.getByText('Verify', { exact: true })).toBeVisible()
     await expect(
-      page.getByText("You're rebonding", { exact: true })
+      page.getByText('재본딩 중이에요', { exact: true })
     ).toBeVisible()
     await expect(page.getByText('0 RUNE', { exact: true })).toHaveCount(0)
 
