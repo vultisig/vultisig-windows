@@ -1129,6 +1129,14 @@ export const hr = {
   you_are_unstaking: 'Povlačite stake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Ponovno vežeš',
+  signed_tx_you_are_merging: 'Spajaš',
+  signed_tx_you_are_unmerging: 'Razdvajaš',
+  signed_tx_you_are_switching: 'Mijenjaš lanac',
+  signed_tx_rebonded: 'Ponovno vezano',
+  signed_tx_merged: 'Spojeno',
+  signed_tx_unmerged: 'Razdvojeno',
+  signed_tx_switched: 'Lanac promijenjen',
   vaultSetupOverview: {
     title: 'Postavke vašeg trezora',
     fast: {

@@ -1150,6 +1150,14 @@ export const de = {
   you_are_unstaking: 'Du entstakest',
   you_are_minting: 'Du mintest',
   you_are_redeeming: 'Du löst ein',
+  signed_tx_you_are_rebonding: 'Du bindest erneut',
+  signed_tx_you_are_merging: 'Du führst zusammen',
+  signed_tx_you_are_unmerging: 'Du trennst',
+  signed_tx_you_are_switching: 'Du wechselst die Chain',
+  signed_tx_rebonded: 'Neu gebunden',
+  signed_tx_merged: 'Zusammengeführt',
+  signed_tx_unmerged: 'Getrennt',
+  signed_tx_switched: 'Chain gewechselt',
   vaultSetupOverview: {
     title: 'Ihre Tresorkonfiguration',
     fast: {

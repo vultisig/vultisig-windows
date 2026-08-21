@@ -31,6 +31,7 @@ type TxOverviewAmountProps = ValueProp<Coin> & {
    *  Used for "Unlimited" approvals where the numeric value is meaningless. */
   amountOverride?: string
   hideZeroAmount?: boolean
+  hideAmount?: boolean
 }
 
 export const TxOverviewAmount = ({
@@ -40,6 +41,7 @@ export const TxOverviewAmount = ({
   resolvedLabel,
   amountOverride,
   hideZeroAmount,
+  hideAmount,
 }: TxOverviewAmountProps) => {
   const priceQuery = useCoinPriceQuery({ coin: value })
   const formatFiatAmount = useFormatFiatAmount()
@@ -55,8 +57,9 @@ export const TxOverviewAmount = ({
   // actual token being moved (e.g. Uniswap V4 execute, multicalls). The
   // function label alone is more informative than a misleading zero amount.
   const showAmount =
-    !!amountOverride || amount > 0 || (!resolvedLabel && !hideZeroAmount)
-  const showFiat = !amountOverride && amount > 0
+    !hideAmount &&
+    (!!amountOverride || amount > 0 || (!resolvedLabel && !hideZeroAmount))
+  const showFiat = !hideAmount && !amountOverride && amount > 0
 
   return (
     <Panel>

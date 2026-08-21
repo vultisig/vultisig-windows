@@ -39,6 +39,17 @@ const workspaceRoot = path.resolve(currentDirname, '../../../..')
 const sourceLocaleFilePath = 'core/ui/i18n/locales/en.ts'
 const sourceChangeBaseRef = process.env.I18N_TRANSLATE_BASE_REF ?? 'HEAD'
 
+const topLevelTranslationOverrides: Partial<
+  Record<Language, Record<string, string>>
+> = {
+  ko: {
+    // Google Translate renders "rebond" as reconnecting, which is misleading
+    // on a transaction approval surface. Keep the THORChain operation name.
+    signed_tx_you_are_rebonding: '재본딩 중이에요',
+    signed_tx_rebonded: '재본딩됨',
+  },
+}
+
 const isRecursiveRecord = (value: unknown): value is RecursiveRecord =>
   typeof value === 'object' && value !== null
 
@@ -167,6 +178,18 @@ const processTranslations = async ({
       current[item.key] = translatedTexts[index]
     })
   }
+
+  Object.entries(topLevelTranslationOverrides[toLang] ?? {}).forEach(
+    ([key, value]) => {
+      if (typeof sourceCopy[key] !== 'string') {
+        throw new Error(
+          `Translation override ${toLang}.${key} has no top-level source string`
+        )
+      }
+
+      result[key] = value
+    }
+  )
 
   return result
 }

@@ -1124,6 +1124,14 @@ export const nl = {
   you_are_unstaking: 'Je bent aan het unstaken',
   you_are_minting: 'Je bent aan het minten',
   you_are_redeeming: 'Je bent aan het inwisselen',
+  signed_tx_you_are_rebonding: 'Je bindt opnieuw',
+  signed_tx_you_are_merging: 'Je voegt samen',
+  signed_tx_you_are_unmerging: 'Je splitst',
+  signed_tx_you_are_switching: 'Je wisselt van chain',
+  signed_tx_rebonded: 'Opnieuw gebonden',
+  signed_tx_merged: 'Samengevoegd',
+  signed_tx_unmerged: 'Gesplitst',
+  signed_tx_switched: 'Van chain gewisseld',
   vaultSetupOverview: {
     title: 'Uw kluisinstellingen',
     fast: {

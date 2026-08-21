@@ -1141,6 +1141,14 @@ export const pt = {
   you_are_unstaking: 'Você está desfazendo stake',
   you_are_minting: 'Você está cunhando',
   you_are_redeeming: 'Você está resgatando',
+  signed_tx_you_are_rebonding: 'Você está reassociando',
+  signed_tx_you_are_merging: 'Você está combinando',
+  signed_tx_you_are_unmerging: 'Você está separando',
+  signed_tx_you_are_switching: 'Você está mudando de rede',
+  signed_tx_rebonded: 'Reassociado',
+  signed_tx_merged: 'Combinado',
+  signed_tx_unmerged: 'Separado',
+  signed_tx_switched: 'Rede alterada',
   vaultSetupOverview: {
     title: 'Configuração do seu cofre',
     fast: {
