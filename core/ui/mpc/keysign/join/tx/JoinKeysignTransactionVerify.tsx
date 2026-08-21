@@ -1,4 +1,7 @@
 import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
+import { KaminoTransactionSummary } from '@core/ui/defi/chain/solana/kamino/verify/KaminoTransactionSummary'
+import { KaminoUnreadableTransaction } from '@core/ui/defi/chain/solana/kamino/verify/KaminoUnreadableTransaction'
+import { readKaminoKeysignTransaction } from '@core/ui/defi/chain/solana/kamino/verify/readKaminoKeysignTransaction'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -47,6 +50,11 @@ export const JoinKeysignTransactionVerify = ({
 }: ValueProp<KeysignPayload> & OnFinishProp) => {
   const { t } = useTranslation()
 
+  // Ahead of every other reading: a Kamino transaction carries no memo and no
+  // swap payload, so it would otherwise fall through to the generic transfer
+  // view — which would describe a vault deposit as a send to an opaque address.
+  const kamino = readKaminoKeysignTransaction(value)
+
   const lp = value.memo ? parseThorLpMemo(value.memo) : null
   // Ahead of the swap check on purpose: only ERC20-sourced limit orders carry a
   // swap payload, so keying off the payload alone would route RUNE and
@@ -60,31 +68,41 @@ export const JoinKeysignTransactionVerify = ({
   const isSwap =
     !lp && !limitOrder && !limitOrderCancel && !!value.swapPayload?.value
 
+  // The send terms belong to a transfer. A vault deposit or withdrawal is
+  // neither, and a transaction this device cannot read has nothing to confirm.
   const terms = limitOrder
     ? [t('swap_limit_confirm')]
-    : lp || isSwap || limitOrderCancel
+    : lp || isSwap || limitOrderCancel || !('unrelated' in kamino)
       ? []
       : sendTerms.map(term => t(term))
   const [termsAccepted, setTermsAccepted] = useState<boolean[]>(
     new Array(terms.length).fill(false)
   )
 
-  const content = lp ? (
-    <JoinKeysignLpVerify value={value} lp={lp} />
-  ) : limitOrder ? (
-    <JoinKeysignLimitOrderVerify value={value} order={limitOrder} />
-  ) : limitOrderCancel ? (
-    <JoinKeysignLimitOrderCancelVerify
-      value={value}
-      cancel={limitOrderCancel}
-    />
-  ) : isSwap ? (
-    <JoinKeysignSwapVerify value={value} />
-  ) : (
-    <JoinKeysignTxOverview value={value} />
-  )
+  const content =
+    'decoded' in kamino ? (
+      <KaminoTransactionSummary decoded={kamino.decoded} />
+    ) : 'unreadable' in kamino ? (
+      <KaminoUnreadableTransaction />
+    ) : lp ? (
+      <JoinKeysignLpVerify value={value} lp={lp} />
+    ) : limitOrder ? (
+      <JoinKeysignLimitOrderVerify value={value} order={limitOrder} />
+    ) : limitOrderCancel ? (
+      <JoinKeysignLimitOrderCancelVerify
+        value={value}
+        cancel={limitOrderCancel}
+      />
+    ) : isSwap ? (
+      <JoinKeysignSwapVerify value={value} />
+    ) : (
+      <JoinKeysignTxOverview value={value} />
+    )
 
-  const disabled = termsAccepted.some(term => !term)
+  // A transaction that reaches the kVaults program and does not decode is not
+  // joinable: this device cannot say what it authorises, and joining anyway
+  // would contribute a signature to bytes nobody on this screen has read.
+  const disabled = 'unreadable' in kamino || termsAccepted.some(term => !term)
 
   return (
     <>
@@ -110,7 +128,13 @@ export const JoinKeysignTransactionVerify = ({
       <PageFooter>
         <JoinKeysignButton
           onClick={onFinish}
-          disabled={disabled ? t('terms_required') : undefined}
+          disabled={
+            'unreadable' in kamino
+              ? t('kamino_earn_unreadable_title')
+              : disabled
+                ? t('terms_required')
+                : undefined
+          }
         />
       </PageFooter>
     </>

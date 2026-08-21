@@ -1921,4 +1921,10 @@ export const it = {
   kamino_earn_you_receive: 'Tu ricevi',
   kamino_earn_no_solana_address:
     'Questo caveau non ha un indirizzo Solana, quindi Kamino Earn non è disponibile.',
+  kamino_earn_entire_position: 'Tutto ciò che si trova in questa cassaforte',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Questo deposito apre un conto SOL protetto, che detiene una piccola quantità di SOL fino al momento del prelievo.',
+  kamino_earn_unreadable_description:
+    'Raggiunge un vault di Kamino, ma questa app non può leggerne il contenuto, quindi non lo firmerà.',
+  kamino_earn_unreadable_title: 'Questa transazione non può essere verificata',
 }

@@ -18,6 +18,9 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
+import { KaminoTransactionSummary } from '../verify/KaminoTransactionSummary'
+import { KaminoUnreadableTransaction } from '../verify/KaminoUnreadableTransaction'
+import { readKaminoKeysignTransaction } from '../verify/readKaminoKeysignTransaction'
 import { useKaminoWithdrawKeysignPayloadQuery } from './queries/useKaminoWithdrawKeysignPayloadQuery'
 
 type KaminoWithdrawVerifyProps = OnBackProp & {
@@ -63,6 +66,14 @@ export const KaminoWithdrawVerify = ({
   // instructions; saying so explains why this one differs from the last.
   const releasesFromFarm = kaminoUnstakeShares(request).baseUnits > 0n
 
+  // An independent reading of the bytes the payload carries, so this screen
+  // checks the transaction rather than echoing the form that built it — the
+  // same reading a co-signing device performs.
+  const reading = data ? readKaminoKeysignTransaction(data) : undefined
+  const isUnreadable = reading !== undefined && 'unreadable' in reading
+
+  // Both refusals block signing: an amount that could not be computed, and
+  // bytes that could not be read.
   const promptProps =
     humanAmount === undefined
       ? { disabledMessage: t('kamino_earn_amount_unavailable') }
@@ -70,7 +81,9 @@ export const KaminoWithdrawVerify = ({
         ? { disabledMessage: t('loading') }
         : error
           ? { disabledMessage: extractErrorMsg(error) }
-          : { keysignPayload: { keysign: data } }
+          : isUnreadable
+            ? { disabledMessage: t('kamino_earn_unreadable_title') }
+            : { keysignPayload: { keysign: data } }
 
   return (
     <>
@@ -110,6 +123,10 @@ export const KaminoWithdrawVerify = ({
             hoverable={false}
           />
         </List>
+        {reading && 'decoded' in reading ? (
+          <KaminoTransactionSummary decoded={reading.decoded} />
+        ) : null}
+        {isUnreadable ? <KaminoUnreadableTransaction /> : null}
         <Text size={12} color="shy">
           {t('kamino_earn_receive_estimate')}
         </Text>

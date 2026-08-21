@@ -1894,4 +1894,10 @@ export const ru = {
   kamino_earn_you_receive: 'Вы получаете',
   kamino_earn_no_solana_address:
     'У этого хранилища нет адреса на Солане, поэтому Kamino Earn недоступен.',
+  kamino_earn_entire_position: 'Всё, что находится в этом хранилище',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Этот депозит открывает счет в виде «обернутых» SOL, на котором хранится небольшая сумма SOL до момента вывода средств.',
+  kamino_earn_unreadable_description:
+    'Оно достигает хранилища Камино, но это приложение не может прочитать его содержимое, поэтому оно не будет подписано.',
+  kamino_earn_unreadable_title: 'Данная транзакция не может быть подтверждена.',
 }
