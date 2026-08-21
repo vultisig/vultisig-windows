@@ -1903,4 +1903,19 @@ export const pt = {
   kamino_earn_deposit: 'Depositar no cofre',
   kamino_earn_deposit_to: 'Depositar em',
   kamino_earn_minimum_deposit: 'depósito mínimo',
+  kamino_earn_amount_unavailable:
+    'Este valor não pode ser convertido neste momento. Tente novamente em instantes.',
+  kamino_earn_available_to_withdraw: 'Disponível para retirada',
+  kamino_earn_delayed_liquidity:
+    'Essa quantidade de líquido é maior do que a capacidade atual do cofre, portanto, pode levar mais tempo para que a água seque.',
+  kamino_earn_receive_estimate:
+    'O valor final é definido quando o saque é liquidado e pode variar ligeiramente.',
+  kamino_earn_releases_from_farm:
+    'Parte dessa posição está em staking, portanto, o saque a libera primeiro.',
+  kamino_earn_shares_burned: 'Ações queimadas',
+  kamino_earn_withdraw: 'Retirar do cofre',
+  kamino_earn_withdraw_from: 'Retirar-se de',
+  kamino_earn_you_receive: 'Você recebe',
+  kamino_earn_no_solana_address:
+    'Este cofre não possui endereço Solana, portanto o Kamino Earn está indisponível.',
 }

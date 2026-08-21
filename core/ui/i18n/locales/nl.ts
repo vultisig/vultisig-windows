@@ -1883,4 +1883,19 @@ export const nl = {
   kamino_earn_deposit: 'Storten in de kluis',
   kamino_earn_deposit_to: 'Storten aan',
   kamino_earn_minimum_deposit: 'Minimale storting',
+  kamino_earn_amount_unavailable:
+    'Dit bedrag kan momenteel niet worden omgerekend. Probeer het over een moment opnieuw.',
+  kamino_earn_available_to_withdraw: 'Beschikbaar om op te nemen',
+  kamino_earn_delayed_liquidity:
+    'Dit is meer dan de kluis momenteel aan vloeistof kan bevatten, dus het kan langer duren voordat het bezinkt.',
+  kamino_earn_receive_estimate:
+    'Het definitieve bedrag wordt vastgesteld wanneer de opname is verwerkt en kan enigszins afwijken.',
+  kamino_earn_releases_from_farm:
+    'Een deel van deze positie is gestaked, dus bij een opname wordt dat deel eerst vrijgegeven.',
+  kamino_earn_shares_burned: 'Aandelen verbrand',
+  kamino_earn_withdraw: 'Opname uit de kluis',
+  kamino_earn_withdraw_from: 'Terugtrekken uit',
+  kamino_earn_you_receive: 'U ontvangt',
+  kamino_earn_no_solana_address:
+    'Deze kluis heeft geen adres in Solana, dus Kamino Earn is niet beschikbaar.',
 }

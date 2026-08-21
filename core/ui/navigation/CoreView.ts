@@ -130,6 +130,7 @@ export type CoreView =
   | { id: 'manageDefiChains' }
   | { id: 'manageDefiPositions'; state: { chain: Chain; returnTab?: string } }
   | { id: 'kaminoDeposit'; state: { vaultAddress: string } }
+  | { id: 'kaminoWithdraw'; state: { vaultAddress: string } }
   | {
       id: 'tonStake'
       state: {

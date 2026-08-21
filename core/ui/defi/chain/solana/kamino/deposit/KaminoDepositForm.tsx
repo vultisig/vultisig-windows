@@ -2,7 +2,6 @@ import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Button } from '@lib/ui/buttons/Button'
-import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -21,6 +20,8 @@ import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { KaminoAmountField } from '../KaminoAmountField'
 
 type KaminoDepositFormProps = OnFinishProp<KaminoTokenAmount> & {
   vault: KaminoVaultInfo
@@ -79,25 +80,17 @@ export const KaminoDepositForm = ({
         hasBorder
       />
       <PageContent gap={16} flexGrow scrollable>
-        <AmountTextInput
-          label={t('amount')}
+        <KaminoAmountField
           value={value}
-          onValueChange={setValue}
-          suggestion={
-            <Button kind="link" onClick={() => setValue(balance)} type="button">
-              {t('max')}
-            </Button>
-          }
+          onChange={setValue}
+          ticker={coin.ticker}
+          decimals={coin.decimals}
+          balance={balance}
+          balanceUnits={balanceUnits}
+          balanceLabel={t('balance_available')}
+          error={error}
         />
         <VStack gap={8}>
-          <HStack justifyContent="space-between">
-            <Text size={13} color="shy">
-              {t('balance')}
-            </Text>
-            <Text size={13} color="supporting">
-              {formatAmount(balance, { ticker: coin.ticker })}
-            </Text>
-          </HStack>
           <HStack justifyContent="space-between">
             <Text size={13} color="shy">
               {t('kamino_earn_minimum_deposit')}
@@ -117,11 +110,6 @@ export const KaminoDepositForm = ({
             </HStack>
           ) : null}
         </VStack>
-        {error ? (
-          <Text size={13} color="danger">
-            {error}
-          </Text>
-        ) : null}
       </PageContent>
       <PageFooter>
         <Button

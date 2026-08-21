@@ -1914,4 +1914,19 @@ export const de = {
   kamino_earn_deposit: 'Einzahlung in den Tresor',
   kamino_earn_deposit_to: 'Einzahlung an',
   kamino_earn_minimum_deposit: 'Mindesteinzahlung',
+  kamino_earn_amount_unavailable:
+    'Dieser Betrag kann momentan nicht umgerechnet werden. Bitte versuchen Sie es später erneut.',
+  kamino_earn_available_to_withdraw: 'Verfügbar zum Abheben',
+  kamino_earn_delayed_liquidity:
+    'Dies ist mehr Flüssigkeit, als der Tresor derzeit fasst, daher kann es länger dauern, bis sich die Lage beruhigt hat.',
+  kamino_earn_receive_estimate:
+    'Der endgültige Betrag wird bei der Abwicklung der Auszahlung festgelegt und kann geringfügig abweichen.',
+  kamino_earn_releases_from_farm:
+    'Ein Teil dieser Position ist gestakt, daher wird er bei der Auszahlung zuerst freigegeben.',
+  kamino_earn_shares_burned: 'Aktien verbrannt',
+  kamino_earn_withdraw: 'Aus dem Tresor abheben',
+  kamino_earn_withdraw_from: 'Zurückziehen von',
+  kamino_earn_you_receive: 'Sie erhalten',
+  kamino_earn_no_solana_address:
+    'Dieser Tresor hat keine Solana-Adresse, daher ist Kamino Earn nicht verfügbar.',
 }

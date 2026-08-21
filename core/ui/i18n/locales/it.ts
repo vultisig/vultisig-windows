@@ -1906,4 +1906,19 @@ export const it = {
   kamino_earn_deposit: 'Depositare nel caveau',
   kamino_earn_deposit_to: 'Deposito a',
   kamino_earn_minimum_deposit: 'Deposito minimo',
+  kamino_earn_amount_unavailable:
+    'Questo importo non può essere convertito al momento. Riprova tra un attimo.',
+  kamino_earn_available_to_withdraw: 'Disponibile per il prelievo',
+  kamino_earn_delayed_liquidity:
+    'Si tratta di una somma superiore alla quantità di liquidi attualmente contenuta nel caveau, pertanto la liquidazione potrebbe richiedere più tempo.',
+  kamino_earn_receive_estimate:
+    "L'importo finale viene stabilito al momento della liquidazione del prelievo e potrebbe variare leggermente.",
+  kamino_earn_releases_from_farm:
+    'Una parte di questa posizione è bloccata, quindi il prelievo la sblocca per prima.',
+  kamino_earn_shares_burned: 'azioni bruciate',
+  kamino_earn_withdraw: 'Prelevare dal caveau',
+  kamino_earn_withdraw_from: 'Ritirarsi da',
+  kamino_earn_you_receive: 'Tu ricevi',
+  kamino_earn_no_solana_address:
+    'Questo caveau non ha un indirizzo Solana, quindi Kamino Earn non è disponibile.',
 }
