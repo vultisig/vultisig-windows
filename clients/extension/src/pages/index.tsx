@@ -18,7 +18,7 @@ import {
 import { createGlobalStyle, css } from 'styled-components'
 
 const isPopup = isPopupView()
-const popupWidth = 480
+const popupWidth = 360
 const popupHeight = 600
 
 const ExtensionGlobalStyle = createGlobalStyle`

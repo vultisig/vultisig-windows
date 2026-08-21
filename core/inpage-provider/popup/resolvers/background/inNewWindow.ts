@@ -12,8 +12,8 @@ type Input<T> = PopupOptions & {
   execute: (input: ExecuteInput) => Promise<T>
 }
 
-const windowWidth = 480
-const windowHeight = 600
+const windowWidth = 360
+const windowHeight = 650
 
 const getPopupPosition = async (): Promise<
   { left: number; top: number } | undefined

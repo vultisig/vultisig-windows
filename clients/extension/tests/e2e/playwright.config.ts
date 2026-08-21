@@ -38,7 +38,7 @@ config({ path: path.resolve(currentDirectory, '.env') })
 // the closest equivalent. CI keeps default positioning.
 const offscreenArgs =
   process.env.PLAYWRIGHT_OFFSCREEN === '1'
-    ? ['--window-position=-3000,-3000', '--window-size=480,600']
+    ? ['--window-position=-3000,-3000', '--window-size=360,650']
     : []
 
 const extensionLaunchArgs = [
@@ -77,7 +77,7 @@ export default defineConfig({
   use: {
     // Chrome extensions require headed Chromium
     headless: false,
-    viewport: { width: 480, height: 600 }, // Extension popup dimensions
+    viewport: { width: 360, height: 600 }, // Chrome action popup dimensions
     actionTimeout: 15_000,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
