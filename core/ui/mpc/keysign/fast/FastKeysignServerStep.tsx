@@ -29,7 +29,7 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { assertField } from '@vultisig/lib-utils/record/assertField'
-import { useEffect } from 'react'
+import { ReactNode, useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -44,12 +44,16 @@ import { getCustomMessageHex } from '../customMessage/getCustomMessageHex'
 import { resolveServerChainForKeyImport } from './utils/resolveServerChainForKeyImport'
 
 type FastKeysignServerStepProps = OnFinishProp & {
+  onError?: () => void
   password: string
+  renderPending?: () => ReactNode
 }
 
 export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
+  onError,
   onFinish,
   password,
+  renderPending,
 }) => {
   const { t } = useTranslation()
 
@@ -224,6 +228,9 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
   })
 
   useEffect(mutate, [mutate])
+  useLayoutEffect(() => {
+    if (state.isError) onError?.()
+  }, [onError, state.isError])
 
   const title = t('fast_sign')
 
@@ -239,18 +246,26 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
     <>
       <MatchQuery
         value={state}
-        pending={() => (
-          <>
-            {header}
-            <WaitForServerLoader />
-          </>
-        )}
-        success={() => (
-          <>
-            {header}
-            <WaitForServerLoader />
-          </>
-        )}
+        pending={() =>
+          renderPending ? (
+            renderPending()
+          ) : (
+            <>
+              {header}
+              <WaitForServerLoader />
+            </>
+          )
+        }
+        success={() =>
+          renderPending ? (
+            renderPending()
+          ) : (
+            <>
+              {header}
+              <WaitForServerLoader />
+            </>
+          )
+        }
         error={error => (
           <FullPageFlowErrorState
             title={t('failed_to_connect_with_server')}

@@ -20,7 +20,7 @@ export const KeygenConnectingAnimation = ({
 }: {
   securityType?: VaultSecurityType
 }) => (
-  <Container>
+  <Container data-testid="keygen-connecting-progress">
     <KeygenLoadingAnimation isConnected={false} securityType={securityType} />
   </Container>
 )

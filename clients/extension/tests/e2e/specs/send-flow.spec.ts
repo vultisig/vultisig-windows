@@ -195,7 +195,37 @@ test.describe('Send Flow', () => {
         path: `test-results/send-before-sign-${chain}-${Date.now()}.png`,
       })
 
+      const connectingProgressHostPromise = page.waitForSelector(
+        '[data-testid="keysign-progress"][data-phase="connecting"]',
+        { state: 'visible', timeout: 15_000 }
+      )
       await sendFlow.sign()
+      const connectingProgressHost = await connectingProgressHostPromise
+      expect(await connectingProgressHost.isVisible()).toBe(true)
+      await expect(
+        page.getByText('Looking for FastVaultServer...')
+      ).toBeHidden()
+      await expect(page.getByTestId('keygen-connecting-progress')).toBeHidden()
+
+      const progressHost = page.getByTestId('keysign-progress')
+      await expect(progressHost).toHaveAttribute('data-phase', 'signing', {
+        timeout: 30_000,
+      })
+      await expect(progressHost).toBeVisible()
+      await expect(
+        page.getByText('Looking for FastVaultServer...')
+      ).toBeHidden()
+      await expect(page.getByTestId('keygen-connecting-progress')).toBeHidden()
+      const signingProgressHost = await progressHost.elementHandle()
+      if (!signingProgressHost) {
+        throw new Error('Fast keysign signing progress host was not mounted')
+      }
+      expect(
+        await signingProgressHost.evaluate(
+          (current, connecting) => current === connecting,
+          connectingProgressHost
+        )
+      ).toBe(true)
 
       // Take screenshot after sign
       await page.screenshot({
