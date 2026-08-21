@@ -2,7 +2,6 @@ export const zh = {
   accept_continue: '接受并继续',
   action: '行动',
   active: '活跃',
-  agent: '代理人',
   agent_nav_tip_description: 'Vulti Agent 已上线。点击即可设置。',
   agent_nav_tip_title: '新的！',
   active_chains_found_one: '我们找到了 {{count}} 条活跃链',
@@ -120,6 +119,7 @@ export const zh = {
   by_vultisig: '作者：{{productName}}',
   camera_access_blocked: '摄像头访问已被阻止。请在浏览器设置中启用此功能。',
   cache_password_for_5_min: '记住密码 5 分钟',
+  card: '卡片',
   cancel: '取消',
   chain: '链',
   chainFunctions: {
@@ -259,6 +259,7 @@ export const zh = {
   discount_tiers_description: '持有 $VULT 即可享受更低的交易手续费。',
   discovering_mediator: '正在查找调解服务，请稍候……',
   done: '完毕',
+  earn: '收益',
   edit_address: '编辑地址',
   edit_friends_referral: '编辑好友推荐',
   edit_referral: '编辑推荐',

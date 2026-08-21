@@ -2,7 +2,6 @@ export const hr = {
   accept_continue: 'Prihvati i nastavi',
   action: 'Radnja',
   active: 'Aktivan',
-  agent: 'Agent',
   agent_nav_tip_description:
     'Vulti Agent je dostupan. Dodirnite za postavljanje.',
   agent_nav_tip_title: 'Novi!',
@@ -129,6 +128,7 @@ export const hr = {
   camera_access_blocked:
     'Pristup kameri je blokiran. Molimo omogućite ga u postavkama preglednika.',
   cache_password_for_5_min: 'Zapamti lozinku 5 minuta',
+  card: 'Kartica',
   cancel: 'Otkazati',
   chain: 'Lanac',
   chainFunctions: {
@@ -273,6 +273,7 @@ export const hr = {
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
   discovering_mediator: 'Otkrivanje usluge posrednika, molimo pričekajte...',
   done: 'Gotovo',
+  earn: 'Zarada',
   edit_address: 'Uredi adresu',
   edit_friends_referral: 'Uredi preporuku prijatelja',
   edit_referral: 'Uredi preporuku',

@@ -2,7 +2,6 @@ export const ko = {
   accept_continue: '수락하고 계속 진행하세요',
   action: '작업',
   active: '활성',
-  agent: '대리인',
   agent_nav_tip_description:
     'Vulti Agent를 사용할 수 있습니다. 탭하여 설정하세요.',
   agent_nav_tip_title: '새로운!',
@@ -127,6 +126,7 @@ export const ko = {
   camera_access_blocked:
     '카메라 접근이 차단되었습니다. 브라우저 설정에서 카메라 접근을 허용해 주세요.',
   cache_password_for_5_min: '5분 동안 비밀번호를 기억하세요',
+  card: '카드',
   cancel: '취소',
   chain: '체인',
   chainFunctions: {
@@ -272,6 +272,7 @@ export const ko = {
     '$VULT를 보유하면 거래 수수료를 낮출 수 있습니다.',
   discovering_mediator: '중재자 서비스를 찾는 중입니다. 잠시 기다려 주세요...',
   done: '완료',
+  earn: '수익',
   edit_address: '주소 수정',
   edit_friends_referral: '친구 추천 수정',
   edit_referral: '추천 수정',

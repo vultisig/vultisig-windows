@@ -3,7 +3,6 @@ export const en = {
   action: 'Action',
   active: 'Active',
   active_vaults: 'Active Vaults',
-  agent: 'Agent',
   agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
   agent_nav_tip_title: 'New!',
   active_chains_found_one: 'We found {{count}} active chain',
@@ -130,6 +129,7 @@ export const en = {
   camera_permission_required_description:
     'Camera permission is required to proceed. Please enable it in Settings.',
   cache_password_for_5_min: 'Remember password for 5 minutes',
+  card: 'Card',
   cancel: 'Cancel',
   chain: 'Chain',
   chainFunctions: {
@@ -347,6 +347,7 @@ export const en = {
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
+  earn: 'Earn',
   edit_address: 'Edit Address',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',

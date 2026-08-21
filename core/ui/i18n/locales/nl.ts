@@ -2,7 +2,6 @@ export const nl = {
   accept_continue: 'Accepteren en doorgaan',
   action: 'Actie',
   active: 'Actief',
-  agent: 'Agent',
   agent_nav_tip_description:
     'Vulti Agent is beschikbaar. Tik om het in te stellen.',
   agent_nav_tip_title: 'Nieuw!',
@@ -130,6 +129,7 @@ export const nl = {
   camera_access_blocked:
     'Cameratoegang is geblokkeerd. Schakel dit in via je browserinstellingen.',
   cache_password_for_5_min: 'Onthoud het wachtwoord gedurende 5 minuten.',
+  card: 'Kaart',
   cancel: 'Annuleren',
   chain: 'Chain',
   chainFunctions: {
@@ -274,6 +274,7 @@ export const nl = {
     'Houd $VULT aan om lagere trading fees te ontgrendelen.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
+  earn: 'Verdienen',
   edit_address: 'Adres bewerken',
   edit_friends_referral: 'Referral van vriend bewerken',
   edit_referral: 'Referral bewerken',

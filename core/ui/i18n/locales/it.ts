@@ -2,7 +2,6 @@ export const it = {
   accept_continue: 'Accetta e continua',
   action: 'Azione',
   active: 'Attivo',
-  agent: 'Agente',
   agent_nav_tip_description:
     'Vulti Agent è disponibile. Tocca per configurarlo.',
   agent_nav_tip_title: 'Nuovo!',
@@ -132,6 +131,7 @@ export const it = {
   camera_access_blocked:
     "L'accesso alla telecamera è bloccato. Abilitalo nelle impostazioni del tuo browser.",
   cache_password_for_5_min: 'Ricorda la password per 5 minuti',
+  card: 'Carta',
   cancel: 'Cancellare',
   chain: 'Catena',
   chainFunctions: {
@@ -279,6 +279,7 @@ export const it = {
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
   discovering_mediator: 'Servizio di mediazione in corso, attendere prego...',
   done: 'Fatto',
+  earn: 'Guadagna',
   edit_address: 'Modifica indirizzo',
   edit_friends_referral: 'Modifica referral amico',
   edit_referral: 'Modifica referral',

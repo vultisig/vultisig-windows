@@ -2,7 +2,6 @@ export const ru = {
   accept_continue: 'Принять и продолжить',
   action: 'Действие',
   active: 'Активно',
-  agent: 'Агент',
   agent_nav_tip_description:
     'Vulti Agent доступен. Нажмите, чтобы настроить его.',
   agent_nav_tip_title: 'Новый!',
@@ -129,6 +128,7 @@ export const ru = {
   camera_access_blocked:
     'Доступ к камере заблокирован. Включите его в настройках браузера.',
   cache_password_for_5_min: 'Запомнить пароль на 5 минут',
+  card: 'Карта',
   cancel: 'Отмена',
   chain: 'Сеть',
   chainFunctions: {
@@ -272,6 +272,7 @@ export const ru = {
     'Держите $VULT, чтобы разблокировать меньшие торговые комиссии.',
   discovering_mediator: 'Поиск mediator-сервиса, пожалуйста подождите...',
   done: 'Готово',
+  earn: 'Доход',
   edit_address: 'Редактировать адрес',
   edit_friends_referral: 'Редактировать referral друга',
   edit_referral: 'Редактировать referral',

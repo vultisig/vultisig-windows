@@ -2,7 +2,6 @@ export const es = {
   accept_continue: 'Aceptar y continuar',
   action: 'Acción',
   active: 'Activo',
-  agent: 'Agente',
   agent_nav_tip_description:
     'Vulti Agent está disponible. Toca para configurarlo.',
   agent_nav_tip_title: '¡Nuevo!',
@@ -130,6 +129,7 @@ export const es = {
   camera_access_blocked:
     'El acceso a la cámara está bloqueado. Habilítalo en la configuración de tu navegador.',
   cache_password_for_5_min: 'Recuerda la contraseña durante 5 minutos.',
+  card: 'Tarjeta',
   cancel: 'Cancelar',
   chain: 'Cadena',
   chainFunctions: {
@@ -277,6 +277,7 @@ export const es = {
   discovering_mediator:
     'Descubriendo el servicio de mediación, por favor espere...',
   done: 'Hecho',
+  earn: 'Ganar',
   edit_address: 'Editar dirección',
   edit_friends_referral: 'Editar recomendación de amistad',
   edit_referral: 'Editar referencia',

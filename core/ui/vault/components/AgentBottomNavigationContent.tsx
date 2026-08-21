@@ -8,21 +8,18 @@ import { Coachmark } from '@lib/ui/coachmark/Coachmark'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { AgentIcon } from '@lib/ui/icons/AgentIcon'
-import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
+import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
 import { NodesIcon } from '@lib/ui/icons/NodesIcon'
 import {
   StationCreditCardIcon,
-  StationLayers2FilledIcon,
   StationWalletFilledIcon,
 } from '@lib/ui/icons/StationFigmaIcons'
-import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css, useTheme } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const navHeight = 66
 const cameraButtonSize = 56
@@ -42,7 +39,6 @@ export const AgentBottomNavigationContent = ({
   onCameraPress,
 }: AgentBottomNavigationContentProps) => {
   const { t } = useTranslation()
-  const { iconStyle } = useTheme()
   const dismissBanner = useDismissBanner()
   const { hasLoaded, isBannerDismissed } = useDismissedBanners()
   const [isCoachmarkOpen, setIsCoachmarkOpen] = useState(false)
@@ -126,9 +122,6 @@ export const AgentBottomNavigationContent = ({
   return (
     <>
       {isCoachmarkOpen && <ContentOverlay />}
-      <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
-        <Camera2Icon />
-      </FloatingCamera>
       <NavContainer>
         <NavSurface />
         <TabsRow>
@@ -136,11 +129,7 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'wallet'}
             onClick={() => onTabChange('wallet')}
           >
-            {iconStyle === 'station' ? (
-              <StationWalletFilledIcon />
-            ) : (
-              <WalletIcon />
-            )}
+            <StationWalletFilledIcon />
             <Text as="span" size={10}>
               {t('wallet')}
             </Text>
@@ -149,13 +138,9 @@ export const AgentBottomNavigationContent = ({
             isActive={activeTab === 'defi'}
             onClick={() => onTabChange('defi')}
           >
-            {iconStyle === 'station' ? (
-              <StationLayers2FilledIcon />
-            ) : (
-              <NodesIcon />
-            )}
+            <NodesIcon />
             <Text as="span" size={10}>
-              {t('defi')}
+              {t('earn')}
             </Text>
           </TabButton>
           <TabButton
@@ -169,16 +154,15 @@ export const AgentBottomNavigationContent = ({
               onTabChange('agent')
             }}
           >
-            {iconStyle === 'station' ? (
-              <StationCreditCardIcon />
-            ) : (
-              <AgentIcon />
-            )}
+            <StationCreditCardIcon />
             <Text as="span" size={10}>
-              {t('agent')}
+              {t('card')}
             </Text>
           </TabButton>
         </TabsRow>
+        <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
+          <CameraFilledIcon />
+        </FloatingCamera>
         {isCoachmarkOpen && (
           <CoachmarkContainer
             ref={refs.setFloating}
@@ -246,13 +230,14 @@ const TabsRow = styled.div`
   z-index: 30;
   width: 100%;
   max-width: ${tabsMaxWidth}px;
+  padding-right: 72px;
 `
 
 const FloatingCamera = styled(UnstyledButton)`
-  position: fixed;
+  position: absolute;
   right: 28px;
-  bottom: 80px;
-  z-index: 16;
+  top: 5px;
+  z-index: 35;
   ${borderRadius.pill};
   ${centerContent};
   ${sameDimensions(cameraButtonSize)};
@@ -270,10 +255,6 @@ const FloatingCamera = styled(UnstyledButton)`
       theme.iconStyle === 'station'
         ? theme.colors.buttonHover.toCssValue()
         : '#5a8aff'};
-  }
-
-  @supports (bottom: calc(0px + env(safe-area-inset-bottom))) {
-    bottom: calc(80px + env(safe-area-inset-bottom));
   }
 `
 
