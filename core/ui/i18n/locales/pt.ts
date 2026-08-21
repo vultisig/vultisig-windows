@@ -1926,4 +1926,10 @@ export const pt = {
   kamino_earn_you_receive: 'Você recebe',
   kamino_earn_no_solana_address:
     'Este cofre não possui endereço Solana, portanto o Kamino Earn está indisponível.',
+  kamino_earn_entire_position: 'Tudo neste cofre',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Este depósito abre uma conta SOL vinculada, que retém uma pequena quantia de SOL até que você faça um saque.',
+  kamino_earn_unreadable_description:
+    'O pacote chega a um cofre de Kamino, mas este aplicativo não consegue ler o que ele faz, então não o assinará.',
+  kamino_earn_unreadable_title: 'Esta transação não pode ser verificada.',
 }

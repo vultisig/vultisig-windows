@@ -1893,4 +1893,10 @@ export const hr = {
   kamino_earn_you_receive: 'Primate',
   kamino_earn_no_solana_address:
     'Ovaj trezor nema Solana adresu, tako da Kamino Earn nije dostupan.',
+  kamino_earn_entire_position: 'Sve u ovom trezoru',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Ovaj depozit otvara zatvoreni SOL račun na kojem se nalazi mali iznos SOL-a dok se ne povuče novac.',
+  kamino_earn_unreadable_description:
+    'Dolazi do Kamino trezora, ali ova aplikacija ne može pročitati što radi, pa ga neće potpisati.',
+  kamino_earn_unreadable_title: 'Ovu transakciju nije moguće potvrditi',
 }
