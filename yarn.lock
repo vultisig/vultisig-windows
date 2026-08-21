@@ -717,11 +717,11 @@ __metadata:
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
-    "@vultisig/core-chain": "npm:2.37.0"
+    "@vultisig/core-chain": "npm:2.38.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.19.2"
+    "@vultisig/core-mpc": "npm:1.20.2"
     "@vultisig/lib-utils": "npm:0.10.5"
-    "@vultisig/sdk": "npm:4.5.0"
+    "@vultisig/sdk": "npm:5.0.0"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -781,10 +781,10 @@ __metadata:
     "@types/react-dom": "npm:^19.2.3"
     "@types/web-push": "npm:^3"
     "@types/ws": "npm:^8"
-    "@vultisig/core-chain": "npm:2.37.0"
-    "@vultisig/core-mpc": "npm:1.19.2"
+    "@vultisig/core-chain": "npm:2.38.0"
+    "@vultisig/core-mpc": "npm:1.20.2"
     "@vultisig/lib-utils": "npm:0.10.5"
-    "@vultisig/sdk": "npm:4.5.0"
+    "@vultisig/sdk": "npm:5.0.0"
     "@wallet-standard/base": "npm:^1.1.1"
     "@wallet-standard/features": "npm:^1.1.1"
     bech32: "npm:^2.0.0"
@@ -879,9 +879,9 @@ __metadata:
     "@tanstack/react-query": "npm:^5.101.0"
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.37.0"
+    "@vultisig/core-chain": "npm:2.38.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.19.2"
+    "@vultisig/core-mpc": "npm:1.20.2"
     "@vultisig/lib-utils": "npm:0.10.5"
     react: "npm:19.2.4"
     react-i18next: "npm:^16.5.8"
@@ -903,9 +903,9 @@ __metadata:
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.37.0"
+    "@vultisig/core-chain": "npm:2.38.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.19.2"
+    "@vultisig/core-mpc": "npm:1.20.2"
     "@vultisig/lib-utils": "npm:0.10.5"
     bitcoinjs-lib: "npm:^7.0.1"
     cosmjs-types: "npm:^0.11.0"
@@ -953,11 +953,11 @@ __metadata:
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitejs/plugin-react": "npm:5.1.3"
-    "@vultisig/core-chain": "npm:2.37.0"
+    "@vultisig/core-chain": "npm:2.38.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.19.2"
+    "@vultisig/core-mpc": "npm:1.20.2"
     "@vultisig/lib-utils": "npm:0.10.5"
-    "@vultisig/sdk": "npm:4.5.0"
+    "@vultisig/sdk": "npm:5.0.0"
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
@@ -2576,6 +2576,111 @@ __metadata:
   peerDependencies:
     starknet: ^8
   checksum: 10c0/86a1e1e0493aac751d82bbce7961a65997557304f1276e7be69a1a5eaf25ceb80b0c39682f116cd0d89f2916f8edfea88e9fc094503ea8c04bbcb2658ac79ffd
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-darwin-arm64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-darwin-arm64@npm:3.1.5"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-darwin-x64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-darwin-x64@npm:3.1.5"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-freebsd-arm64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-freebsd-arm64@npm:3.1.5"
+  conditions: os=freebsd & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-freebsd-ia32@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-freebsd-ia32@npm:3.1.5"
+  conditions: os=freebsd & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-freebsd-x64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-freebsd-x64@npm:3.1.5"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-linux-arm64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-linux-arm64@npm:3.1.5"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-linux-ia32@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-linux-ia32@npm:3.1.5"
+  conditions: os=linux & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-linux-loong64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-linux-loong64@npm:3.1.5"
+  conditions: os=linux & cpu=loong64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-linux-riscv64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-linux-riscv64@npm:3.1.5"
+  conditions: os=linux & cpu=riscv64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-linux-x64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-linux-x64@npm:3.1.5"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-openbsd-ia32@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-openbsd-ia32@npm:3.1.5"
+  conditions: os=openbsd & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-openbsd-x64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-openbsd-x64@npm:3.1.5"
+  conditions: os=openbsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-win32-arm64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-win32-arm64@npm:3.1.5"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-win32-ia32@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-win32-ia32@npm:3.1.5"
+  conditions: os=win32 & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@koromix/koffi-win32-x64@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@koromix/koffi-win32-x64@npm:3.1.5"
+  conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
@@ -4216,9 +4321,9 @@ __metadata:
     "@core/ui": "workspace:^"
     "@lib/ui": "workspace:^"
     "@tanstack/react-query": "npm:^5.101.0"
-    "@vultisig/core-chain": "npm:2.35.1"
+    "@vultisig/core-chain": "npm:2.38.0"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:1.19.2"
+    "@vultisig/core-mpc": "npm:1.20.2"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     styled-components: "npm:6.4.4"
@@ -6314,48 +6419,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-chain@npm:2.35.1":
-  version: 2.35.1
-  resolution: "@vultisig/core-chain@npm:2.35.1"
-  dependencies:
-    7z-wasm: "npm:^1.2.0"
-    "@bufbuild/protobuf": "npm:^2.13.0"
-    "@cosmjs/amino": "npm:^0.39.0"
-    "@cosmjs/encoding": "npm:^0.39.0"
-    "@cosmjs/proto-signing": "npm:^0.39.0"
-    "@cosmjs/stargate": "npm:^0.39.0"
-    "@lifi/sdk": "npm:^4.1.0"
-    "@mysten/sui": "npm:^2.22.1"
-    "@noble/hashes": "npm:^1.8.0"
-    "@polkadot/api": "npm:^16.5.6"
-    "@polkadot/util": "npm:^14.0.3"
-    "@polkadot/util-crypto": "npm:^14.0.3"
-    "@solana/spl-token": "npm:^0.4.14"
-    "@solana/web3.js": "npm:^1.98.4"
-    "@ton/core": "npm:^0.63.1"
-    "@ton/crypto": "npm:^3.3.0"
-    "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/lib-utils": "npm:0.10.4"
-    bip32: "npm:^5.0.1"
-    bitcoinjs-lib: "npm:^7.0.1"
-    bs58: "npm:^6.0.0"
-    bs58check: "npm:^4.0.0"
-    cbor-x: "npm:^1.6.4"
-    date-fns: "npm:^4.4.0"
-    ethers: "npm:^6.17.0"
-    long: "npm:^5.3.2"
-    ripple-address-codec: "npm:^5.0.1"
-    tiny-secp256k1: "npm:^2.2.4"
-    viem: "npm:^2.55.10"
-    xrpl: "npm:^5.0.0"
-  checksum: 10c0/aeffe0df62ce83c182de569a02b3c063ad6699688e641876f78c16d10a7b07a44f70a8e6ec7ac3187003a44e3f31c0c11fa8b2c2c1045800363fe08bbbf9a41d
-  languageName: node
-  linkType: hard
-
-"@vultisig/core-chain@npm:2.37.0":
-  version: 2.37.0
-  resolution: "@vultisig/core-chain@npm:2.37.0"
+"@vultisig/core-chain@npm:2.38.0":
+  version: 2.38.0
+  resolution: "@vultisig/core-chain@npm:2.38.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.13.0"
@@ -6388,7 +6454,7 @@ __metadata:
     tiny-secp256k1: "npm:^2.2.4"
     viem: "npm:^2.55.10"
     xrpl: "npm:^5.0.0"
-  checksum: 10c0/ffbd485a96a22c9a72a0c43b6204a413d8f45bc92c6d3a380f46a66515a8af05fb4bf194de310f309f29f5ad6c295c01a75068594b28c4f478db920879a5c7fa
+  checksum: 10c0/ce02a5665fc2d66091d82f9a4f1ccce41e6fdbec06b09ddedac7a9ed2bce1bef1dd30d4364cb5fefce5c4be1a46aa22b1d53d1bd9e969e1e3c6d9baf19b935e4
   languageName: node
   linkType: hard
 
@@ -6399,9 +6465,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-mpc@npm:1.19.2":
-  version: 1.19.2
-  resolution: "@vultisig/core-mpc@npm:1.19.2"
+"@vultisig/core-mpc@npm:1.20.2":
+  version: 1.20.2
+  resolution: "@vultisig/core-mpc@npm:1.20.2"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.13.0"
@@ -6410,12 +6476,12 @@ __metadata:
     "@noble/hashes": "npm:^1.8.0"
     "@solana/web3.js": "npm:^1.98.4"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:2.35.1"
+    "@vultisig/core-chain": "npm:2.38.0"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/lib-dkls": "npm:0.9.0"
     "@vultisig/lib-mldsa": "npm:0.9.0"
     "@vultisig/lib-schnorr": "npm:0.9.0"
-    "@vultisig/lib-utils": "npm:0.10.4"
+    "@vultisig/lib-utils": "npm:0.10.5"
     "@vultisig/mpc-types": "npm:0.2.3"
     bitcoinjs-lib: "npm:^7.0.1"
     bs58: "npm:^6.0.0"
@@ -6423,7 +6489,7 @@ __metadata:
     cosmjs-types: "npm:^0.11.0"
     long: "npm:^5.3.2"
     viem: "npm:^2.55.10"
-  checksum: 10c0/177f8d7f5cd826e76e62e3afd68f928c4228346a43988baba9d54bbc0503ff033f9f6c8900ee6c17796f2b948c5ced54fa659c41e80dd88e73070c8aed5964e8
+  checksum: 10c0/6d3f1b3f101b9386fb1a400e3ef23639dcc90dc30bb26a800f183478f35b25f9948376a248e51f69a7d23f6f06c2f9c91bec1963bc09967c8f93a917c9688043
   languageName: node
   linkType: hard
 
@@ -6445,18 +6511,6 @@ __metadata:
   version: 0.9.0
   resolution: "@vultisig/lib-schnorr@npm:0.9.0"
   checksum: 10c0/813f13345f83bf182ce41d2d64d6cb3a0cfc6b3c104d3f2bde2d34a14590d69cb9bd6754f7f554f5fd4bc5e87921cc31c59c2168ed1d2ccdd0183c75a596760f
-  languageName: node
-  linkType: hard
-
-"@vultisig/lib-utils@npm:0.10.4":
-  version: 0.10.4
-  resolution: "@vultisig/lib-utils@npm:0.10.4"
-  dependencies:
-    buffer: "npm:^6.0.3"
-    long: "npm:^5.3.2"
-    tldts: "npm:^6.1.0"
-    viem: "npm:^2.53.1"
-  checksum: 10c0/e658da35936d396e5c97a953aeef2dccb0e94526a5eaa0076d5acddde12d90b7f6b79940f4e9d188f5235059503b7f8a1b43a06ba18d6ac5b35677b8f33f2d53
   languageName: node
   linkType: hard
 
@@ -6484,9 +6538,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/sdk@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@vultisig/sdk@npm:4.5.0"
+"@vultisig/sdk@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@vultisig/sdk@npm:5.0.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@balancer-labs/balancer-maths": "npm:^0.0.41"
@@ -6531,6 +6585,7 @@ __metadata:
     i18next: "npm:^26.3.1"
     i18next-http-backend: "npm:^4.0.1"
     isomorphic-fetch: "npm:^3.0.0"
+    koffi: "npm:^3.1.4"
     node-fetch: "npm:^3.3.2"
     path-browserify: "npm:^1.0.1"
     process: "npm:^0.11.10"
@@ -6551,6 +6606,7 @@ __metadata:
     "@vultisig/mpc-native": 0.1.4
     "@vultisig/walletcore-native": 0.2.0
     expo-crypto: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^55.0.0
+    expo-sqlite: ^14.0.3 || ^15.0.0 || ^16.0.0 || ^55.0.0 || ^56.0.0 || ^57.0.0
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     "@react-native-async-storage/async-storage":
@@ -6561,9 +6617,11 @@ __metadata:
       optional: true
     expo-crypto:
       optional: true
+    expo-sqlite:
+      optional: true
     vite:
       optional: true
-  checksum: 10c0/5c7e67c06cc8fcddfd3e561ea49db9ee68bc73fd76dd00f173382ce584c6433592717567976bb697e8e66f021501e4f54c0871075307ac67191198eb1cd02747
+  checksum: 10c0/d488f4d9cc41c07354858bff89f6f80015a36b7b1d38978dab6dd0000bea9623cbff8a0ed4d1d880d72881351de3983d602422bdb9f8bb97196bff13182058de
   languageName: node
   linkType: hard
 
@@ -12202,6 +12260,60 @@ __metadata:
   languageName: node
   linkType: hard
 
+"koffi@npm:^3.1.4":
+  version: 3.1.5
+  resolution: "koffi@npm:3.1.5"
+  dependencies:
+    "@koromix/koffi-darwin-arm64": "npm:3.1.5"
+    "@koromix/koffi-darwin-x64": "npm:3.1.5"
+    "@koromix/koffi-freebsd-arm64": "npm:3.1.5"
+    "@koromix/koffi-freebsd-ia32": "npm:3.1.5"
+    "@koromix/koffi-freebsd-x64": "npm:3.1.5"
+    "@koromix/koffi-linux-arm64": "npm:3.1.5"
+    "@koromix/koffi-linux-ia32": "npm:3.1.5"
+    "@koromix/koffi-linux-loong64": "npm:3.1.5"
+    "@koromix/koffi-linux-riscv64": "npm:3.1.5"
+    "@koromix/koffi-linux-x64": "npm:3.1.5"
+    "@koromix/koffi-openbsd-ia32": "npm:3.1.5"
+    "@koromix/koffi-openbsd-x64": "npm:3.1.5"
+    "@koromix/koffi-win32-arm64": "npm:3.1.5"
+    "@koromix/koffi-win32-ia32": "npm:3.1.5"
+    "@koromix/koffi-win32-x64": "npm:3.1.5"
+  dependenciesMeta:
+    "@koromix/koffi-darwin-arm64":
+      optional: true
+    "@koromix/koffi-darwin-x64":
+      optional: true
+    "@koromix/koffi-freebsd-arm64":
+      optional: true
+    "@koromix/koffi-freebsd-ia32":
+      optional: true
+    "@koromix/koffi-freebsd-x64":
+      optional: true
+    "@koromix/koffi-linux-arm64":
+      optional: true
+    "@koromix/koffi-linux-ia32":
+      optional: true
+    "@koromix/koffi-linux-loong64":
+      optional: true
+    "@koromix/koffi-linux-riscv64":
+      optional: true
+    "@koromix/koffi-linux-x64":
+      optional: true
+    "@koromix/koffi-openbsd-ia32":
+      optional: true
+    "@koromix/koffi-openbsd-x64":
+      optional: true
+    "@koromix/koffi-win32-arm64":
+      optional: true
+    "@koromix/koffi-win32-ia32":
+      optional: true
+    "@koromix/koffi-win32-x64":
+      optional: true
+  checksum: 10c0/2941703da4b733c6aa92696dd41780194682389058a3ad4a6fed5634959a245dd8ecb3faa257804e965ca2ca6abc1523b784536d40f073c41c5950bc5118fc78
+  languageName: node
+  linkType: hard
+
 "language-subtag-registry@npm:^0.3.20":
   version: 0.3.23
   resolution: "language-subtag-registry@npm:0.3.23"
@@ -16643,28 +16755,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tldts-core@npm:^6.1.86":
-  version: 6.1.86
-  resolution: "tldts-core@npm:6.1.86"
-  checksum: 10c0/8133c29375f3f99f88fce5f4d62f6ecb9532b106f31e5423b27c1eb1b6e711bd41875184a456819ceaed5c8b94f43911b1ad57e25c6eb86e1fc201228ff7e2af
-  languageName: node
-  linkType: hard
-
 "tldts-core@npm:^7.4.10":
   version: 7.4.10
   resolution: "tldts-core@npm:7.4.10"
   checksum: 10c0/a5f42aad8aa8adfc57d33e9bd5c43094e9de226dce4851867ea7014d8679040b4c01c500b9947595ab22cdfe9783ea5d88a7c0be2092d19a14f75c7cd4671181
-  languageName: node
-  linkType: hard
-
-"tldts@npm:^6.1.0":
-  version: 6.1.86
-  resolution: "tldts@npm:6.1.86"
-  dependencies:
-    tldts-core: "npm:^6.1.86"
-  bin:
-    tldts: bin/cli.js
-  checksum: 10c0/27ae7526d9d78cb97b2de3f4d102e0b4321d1ccff0648a7bb0e039ed54acbce86bacdcd9cd3c14310e519b457854e7bafbef1f529f58a1e217a737ced63f0940
   languageName: node
   linkType: hard
 

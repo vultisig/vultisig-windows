@@ -244,6 +244,7 @@ export const pt = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governança',
+    earn: 'Ganhar',
   },
   vaultTabs: {
     portfolio: 'Portfólio',
@@ -1889,4 +1890,12 @@ export const pt = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valer',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_apy_30d: 'APY (30 dias)',
+  kamino_earn_curated_by: 'Com curadoria de {{curator}}',
+  kamino_earn_no_position: 'Você ainda não tem nada neste cofre.',
+  kamino_earn_pnl: 'Lucro/prejuízo',
+  kamino_earn_positions_unavailable:
+    'Não foi possível carregar os saldos. Os cofres exibidos estão atualizados.',
+  kamino_earn_risk_conservative: 'Conservador',
+  kamino_earn_risk_private_credit: 'Crédito privado',
 }

@@ -239,6 +239,7 @@ export const ko = {
     staked: '스테이킹됨',
     lps: 'LPs',
     governance: '통치',
+    earn: '벌다',
   },
   vaultTabs: {
     portfolio: '포트폴리오',
@@ -1846,4 +1847,12 @@ export const ko = {
   swap_route_eta_minutes: '~{{minutes}}분',
   swap_limit_is_worth: '의 가치가',
   swap_limit_when_one: '1',
+  kamino_earn_apy_30d: 'APY(30일)',
+  kamino_earn_curated_by: '{{curator}} 님이 큐레이션했습니다.',
+  kamino_earn_no_position: '이 금고에는 아직 아무것도 없습니다.',
+  kamino_earn_pnl: '이익/손실',
+  kamino_earn_positions_unavailable:
+    '잔액을 불러올 수 없습니다. 표시된 금고 정보가 최신 상태입니다.',
+  kamino_earn_risk_conservative: '보수적인',
+  kamino_earn_risk_private_credit: '개인 신용',
 }

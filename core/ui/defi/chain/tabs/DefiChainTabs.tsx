@@ -23,6 +23,8 @@ export const DefiChainTabs = () => {
   const includeLps = chain === Chain.THORChain || chain === Chain.MayaChain
   // QBTC is the only chain exposing the in-app governance segment.
   const includeGovernance = chain === Chain.QBTC
+  // Solana is the only chain with curated earn vaults (Kamino Earn).
+  const includeEarn = chain === Chain.Solana
 
   const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
@@ -36,8 +38,9 @@ export const DefiChainTabs = () => {
         includeBonded: includeBonding,
         includeLps,
         includeGovernance,
+        includeEarn,
       }),
-    [t, includeBonding, includeLps, includeGovernance]
+    [t, includeBonding, includeLps, includeGovernance, includeEarn]
   )
 
   useEffect(() => {

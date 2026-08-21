@@ -245,6 +245,7 @@ export const it = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governance',
+    earn: 'Guadagnare',
   },
   vaultTabs: {
     portfolio: 'Portafoglio',
@@ -1892,4 +1893,12 @@ export const it = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vale',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_apy_30d: 'APY (30 giorni)',
+  kamino_earn_curated_by: 'Selezionato da {{curator}}',
+  kamino_earn_no_position: 'Non hai ancora nulla in questa cassaforte',
+  kamino_earn_pnl: 'Profitto/perdita',
+  kamino_earn_positions_unavailable:
+    'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',
+  kamino_earn_risk_conservative: 'Conservatore',
+  kamino_earn_risk_private_credit: 'Credito privato',
 }

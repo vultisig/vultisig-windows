@@ -228,6 +228,7 @@ export const zh = {
     staked: '已质押',
     lps: '流动性池',
     governance: '治理',
+    earn: '赚',
   },
   vaultTabs: {
     portfolio: '投资组合',
@@ -1732,4 +1733,12 @@ export const zh = {
   swap_route_eta_minutes: '~{{minutes}}分',
   swap_limit_is_worth: '价值达到',
   swap_limit_when_one: '当 1',
+  kamino_earn_apy_30d: '年收益率（30天）',
+  kamino_earn_curated_by: '由{{curator}}策划',
+  kamino_earn_no_position: '你这个保险库里目前什么都没有。',
+  kamino_earn_pnl: '利润/亏损',
+  kamino_earn_positions_unavailable:
+    '余额加载失败。显示的库房信息均为最新信息。',
+  kamino_earn_risk_conservative: '保守的',
+  kamino_earn_risk_private_credit: '私人信贷',
 }

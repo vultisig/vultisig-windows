@@ -241,6 +241,7 @@ export const nl = {
     staked: 'Gestaked',
     lps: "LP's",
     governance: 'Bestuur',
+    earn: 'Verdienen',
   },
   vaultTabs: {
     portfolio: 'Portfolio',
@@ -1869,4 +1870,12 @@ export const nl = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'waard is',
   swap_limit_when_one: 'Wanneer 1',
+  kamino_earn_apy_30d: 'APY (30d)',
+  kamino_earn_curated_by: 'Samengesteld door {{curator}}',
+  kamino_earn_no_position: 'Je hebt nog niets in deze kluis.',
+  kamino_earn_pnl: 'Winst/verlies',
+  kamino_earn_positions_unavailable:
+    "Saldo's konden niet worden geladen. De weergegeven kluizen zijn actueel.",
+  kamino_earn_risk_conservative: 'Conservatief',
+  kamino_earn_risk_private_credit: 'Particuliere kredietverlening',
 }

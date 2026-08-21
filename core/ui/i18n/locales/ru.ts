@@ -240,6 +240,7 @@ export const ru = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Управление',
+    earn: 'Зарабатывать',
   },
   vaultTabs: {
     portfolio: 'Портфель',
@@ -1865,4 +1866,12 @@ export const ru = {
   swap_route_eta_minutes: '~{{minutes}}мин',
   swap_limit_is_worth: 'стоит',
   swap_limit_when_one: 'Когда 1',
+  kamino_earn_apy_30d: 'Годовая процентная доходность (30 дней)',
+  kamino_earn_curated_by: 'Подборка от {{curator}}',
+  kamino_earn_no_position: 'В этом хранилище пока ничего нет.',
+  kamino_earn_pnl: 'Прибыль / убыток',
+  kamino_earn_positions_unavailable:
+    'Не удалось загрузить данные о балансе. Отображаемые данные по хранилищам актуальны.',
+  kamino_earn_risk_conservative: 'Консервативный',
+  kamino_earn_risk_private_credit: 'Частный кредит',
 }

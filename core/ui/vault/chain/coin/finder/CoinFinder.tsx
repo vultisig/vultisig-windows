@@ -1,3 +1,4 @@
+import { withoutKaminoShareCoins } from '@core/ui/chain/coin/solana/isKaminoShareCoin'
 import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { useCreateCoinsMutation } from '@core/ui/storage/coins'
@@ -29,8 +30,8 @@ export const CoinFinder = () => {
   useEffect(() => {
     if (!data) return
 
-    const newCoins = withoutBondedRuneReceiptCoins(
-      withoutRujiStakingReceiptCoins(data)
+    const newCoins = withoutKaminoShareCoins(
+      withoutBondedRuneReceiptCoins(withoutRujiStakingReceiptCoins(data))
     )
       .filter(coin => !coinFinderIgnore.some(c => areEqualCoins(c, coin)))
       .map(coin => {
