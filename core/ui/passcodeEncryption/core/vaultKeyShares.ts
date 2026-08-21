@@ -15,6 +15,7 @@ import {
   decryptWithPasscode,
   encryptWithPasscode,
   isLegacyPasscodeBlob,
+  isPasscodeEncryptedBlob,
 } from './passcodeCipher'
 
 type EncryptInput = VaultAllKeyShares & { key: string }
@@ -130,21 +131,36 @@ export const mapVaultsKeyShares = async ({
 export const isLegacyEncryptedPasscodeBlob = (value: string): boolean =>
   isLegacyPasscodeBlob(Buffer.from(value, encryptedEncoding))
 
-/**
- * Whether any of a vault's encrypted shares still use the legacy
- * `SHA-256(passcode)` KDF and should be re-encrypted with PBKDF2 on unlock.
- * Only meaningful while passcode encryption is enabled.
- */
-export const vaultKeySharesNeedPasscodeUpgrade = ({
+const storedKeyShareValues = ({
   keyShares,
   chainKeyShares,
   keyShareMldsa,
-}: VaultAllKeyShares): boolean => {
-  const values = [
+}: VaultAllKeyShares): string[] =>
+  [
     ...Object.values(keyShares),
     ...Object.values(chainKeyShares ?? {}),
     ...(keyShareMldsa ? [keyShareMldsa] : []),
   ].filter((value): value is string => Boolean(value))
 
-  return values.some(isLegacyEncryptedPasscodeBlob)
-}
+/**
+ * Whether any of a vault's encrypted shares still use the legacy
+ * `SHA-256(passcode)` KDF and should be re-encrypted with PBKDF2 on unlock.
+ * Only meaningful while passcode encryption is enabled.
+ */
+export const vaultKeySharesNeedPasscodeUpgrade = (
+  allKeyShares: VaultAllKeyShares
+): boolean =>
+  storedKeyShareValues(allKeyShares).some(isLegacyEncryptedPasscodeBlob)
+
+/**
+ * Whether a vault's stored shares are recognizably sealed with the passcode
+ * cipher. This is what makes sealed shares self-describing: the app can tell a
+ * passcode is in play from the shares alone, without the separate proof that a
+ * half-landed write may have left behind.
+ */
+export const vaultKeySharesArePasscodeEncrypted = (
+  allKeyShares: VaultAllKeyShares
+): boolean =>
+  storedKeyShareValues(allKeyShares).some(value =>
+    isPasscodeEncryptedBlob(Buffer.from(value, encryptedEncoding))
+  )

@@ -2,6 +2,11 @@
  * Type declarations for the providers injected by VultiConnect.
  * Used in Playwright evaluate() calls.
  */
+type ProviderRequest = (args: {
+  method: string
+  params?: unknown[]
+}) => Promise<unknown>
+
 interface EthereumProvider {
   isMetaMask: boolean
   isVultiConnect: boolean
@@ -113,20 +118,26 @@ interface VultisigProvider {
   litecoin: UTXOProvider
   zcash: UTXOProvider
   cosmos: CosmosProvider
-  dash: { chainId: string; request: Function }
+  dash: { chainId: string; request: ProviderRequest }
   ethereum: EthereumProvider
   keplr: KeplrProvider
   mayachain: CosmosProvider
   polkadot: PolkadotInjected
-  ripple: { request: Function }
+  ripple: { request: ProviderRequest }
   solana: SolanaProvider
-  sui: { request: Function }
+  sui: { request: ProviderRequest }
   thorchain: CosmosProvider
   tron: TronLinkProvider
-  cardano: { request: Function }
+  cardano: { request: ProviderRequest }
   plugin: unknown
   getVault(): Promise<unknown>
   getVaults(): Promise<unknown>
+  // Non-enumerable EIP-1193 delegates bound to `ethereum` for legacy
+  // integrations that treat `window.vultisig` as the provider itself
+  request: EthereumProvider['request']
+  on: EthereumProvider['on']
+  removeListener: EthereumProvider['removeListener']
+  isConnected: EthereumProvider['isConnected']
 }
 
 declare global {

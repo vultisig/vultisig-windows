@@ -1,4 +1,5 @@
 import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
+import { isWeakPasscode } from '@core/ui/passcodeEncryption/core/passcodePolicy'
 import { useChangePasscodeMutation } from '@core/ui/passcodeEncryption/manage/change/mutations/changePasscode'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
@@ -46,13 +47,22 @@ export const ChangePasscode = () => {
       return t('confirm_new_passcode')
     }
 
+    if (
+      newPasscode.length === passcodeEncryptionConfig.passcodeLength &&
+      isWeakPasscode(newPasscode)
+    ) {
+      return t('invalid_passcode')
+    }
+
     if (newPasscode !== confirmNewPasscode) {
       return t('passcodes_do_not_match')
     }
   }, [confirmNewPasscode, currentPasscode, newPasscode, passcode, t])
 
   const currentPasscodeFull =
-    currentPasscode?.length === passcodeEncryptionConfig.passcodeLength
+    !!currentPasscode &&
+    !!passcode &&
+    currentPasscode.length === passcode.length
 
   const currentPasscodeValidation =
     currentPasscodeFull && currentPasscode !== passcode
@@ -122,12 +132,23 @@ export const ChangePasscode = () => {
                   ? { invalid: t('incorrect_passcode') }
                   : undefined
               }
+              length={
+                passcode?.length ?? passcodeEncryptionConfig.passcodeLength
+              }
               autoFocus
             />
             <PasscodeInput
               label={t('new_passcode')}
               onChange={setNewPasscode}
               value={newPasscode}
+              validation={
+                newPasscode?.length ===
+                  passcodeEncryptionConfig.passcodeLength &&
+                isWeakPasscode(newPasscode)
+                  ? 'invalid'
+                  : undefined
+              }
+              validationMessages={{ invalid: t('invalid_passcode') }}
             />
             <PasscodeInput
               label={t('confirm_new_passcode')}

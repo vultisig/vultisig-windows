@@ -6,12 +6,11 @@ import {
 } from '@core/ui/defi/chain/constants/time'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { mayaMidgardBaseUrl, mayanodeBaseUrl } from '../constants'
 import { mayaCoin } from '../tokens'
-import { ThorchainBondPosition } from '../types'
+import { RawThorchainBondPosition } from '../types'
 import { toDecimalFactor } from '../utils/decimals'
 import {
   canUnbondNode,
@@ -126,20 +125,19 @@ const calculateBondMetrics = ({
 
 type FetchBondPositionsInput = {
   address: string
-  prices: Record<string, number>
   churns: ChurnEntry[]
   networkInfo: NetworkInfo
   health: HealthInfo
 }
 
 /**
- * Fetches all MayaChain bond positions for a given address.
+ * Fetches all MayaChain bond positions for a given address as price-free raw
+ * data; fiat values are joined from live prices at render.
  * Uses the iOS pattern: fetch all nodes, filter client-side for the user's bonds.
  * Maya Midgard does not have a /bonds/{address} endpoint.
  */
 export const fetchBondPositions = async ({
   address,
-  prices,
   churns,
   networkInfo,
   health,
@@ -163,7 +161,7 @@ export const fetchBondPositions = async ({
     blockTimeSeconds: mayachainBlockTimeSeconds,
   })
 
-  const positions: ThorchainBondPosition[] = []
+  const positions: RawThorchainBondPosition[] = []
   const bondedNodeAddresses = new Set<string>()
 
   for (const node of allNodes) {
@@ -179,11 +177,6 @@ export const fetchBondPositions = async ({
 
     const metrics = calculateBondMetrics({ node, address, churns })
     const apy = metrics.apy || (networkInfo?.bondingAPY ?? 0)
-    const fiatValue = getCoinValue({
-      amount: metrics.myBond,
-      decimals: mayaCoin.decimals,
-      price: prices[coinKeyToString(mayaCoin)] ?? 0,
-    })
 
     positions.push({
       id: 'maya-bond-cacao',
@@ -193,7 +186,10 @@ export const fetchBondPositions = async ({
       nextReward: metrics.myAward,
       nextChurn,
       status: metrics.status,
-      fiatValue,
+      fiatBasis: {
+        coinKey: coinKeyToString(mayaCoin),
+        amount: fromChainAmount(metrics.myBond, mayaCoin.decimals),
+      },
       canUnbond: canUnbondNode(metrics.status),
     })
   }

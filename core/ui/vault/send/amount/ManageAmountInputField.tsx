@@ -1,5 +1,4 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
@@ -11,6 +10,7 @@ import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
+import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
@@ -54,7 +54,7 @@ export const ManageAmountInputField = () => {
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
   const feeEstimateQuery = useSendFeeEstimateQuery()
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
   const isNative = isFeeCoin(coin)
 
@@ -248,6 +248,7 @@ export const ManageAmountInputField = () => {
                 <TotalBalanceWrapper
                   justifyContent="space-between"
                   alignItems="center"
+                  data-testid="send-available-balance"
                 >
                   <Text as="span" size={14} color="contrast">
                     {t('balance_available')}:

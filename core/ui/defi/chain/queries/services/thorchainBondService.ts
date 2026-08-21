@@ -6,12 +6,11 @@ import {
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { midgardBaseUrl, thornodeBaseUrl } from '../constants'
 import { runeCoin } from '../tokens'
-import { ThorchainBondPosition } from '../types'
+import { RawThorchainBondPosition } from '../types'
 import { toDecimalFactor } from '../utils/decimals'
 import {
   canUnbondNode,
@@ -135,9 +134,13 @@ const calculateBondMetrics = async (
   }
 }
 
+const getRuneFiatBasis = (amount: bigint) => ({
+  coinKey: coinKeyToString(runeCoin),
+  amount: fromChainAmount(amount, runeCoin.decimals),
+})
+
 export const fetchBondPositions = async (
   address: string,
-  prices: Record<string, number>,
   churns: ChurnEntry[],
   networkInfo: NetworkInfo,
   health: HealthInfo,
@@ -147,9 +150,8 @@ export const fetchBondPositions = async (
   if (useMockBondPositions) {
     const mockAmount1 = toChainAmount(800, runeCoin.decimals)
     const mockAmount2 = toChainAmount(700, runeCoin.decimals)
-    const runePrice = prices[coinKeyToString(runeCoin)] ?? 1
 
-    const mockPositions: ThorchainBondPosition[] = [
+    const mockPositions: RawThorchainBondPosition[] = [
       {
         id: 'thor-bond-rune',
         nodeAddress: 'thor1ca7qwlmue4t2y8lck5xnpzfkhpt0ycwyw8xyzf',
@@ -158,11 +160,7 @@ export const fetchBondPositions = async (
         nextReward: 20,
         nextChurn: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         status: 'churned out',
-        fiatValue: getCoinValue({
-          amount: mockAmount1,
-          decimals: runeCoin.decimals,
-          price: runePrice,
-        }),
+        fiatBasis: getRuneFiatBasis(mockAmount1),
         canUnbond: chainAllowsUnbond && canUnbondNode('churned out'),
       },
       {
@@ -173,11 +171,7 @@ export const fetchBondPositions = async (
         nextReward: 15,
         nextChurn: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         status: 'active',
-        fiatValue: getCoinValue({
-          amount: mockAmount2,
-          decimals: runeCoin.decimals,
-          price: runePrice,
-        }),
+        fiatBasis: getRuneFiatBasis(mockAmount2),
         canUnbond: chainAllowsUnbond && canUnbondNode('active'),
       },
     ]
@@ -200,7 +194,7 @@ export const fetchBondPositions = async (
     churns,
   })
 
-  const positions: ThorchainBondPosition[] = []
+  const positions: RawThorchainBondPosition[] = []
 
   for (const node of nodes) {
     const metrics = await calculateBondMetrics(
@@ -211,11 +205,6 @@ export const fetchBondPositions = async (
     const amount = metrics?.myBond ?? parseBigint(node.bond)
     const apy = metrics?.apy ?? networkInfo?.bondingAPY ?? 0
     const nextReward = metrics?.myAward ?? 0
-    const fiatValue = getCoinValue({
-      amount,
-      decimals: runeCoin.decimals,
-      price: prices[coinKeyToString(runeCoin)] ?? 0,
-    })
 
     const status = metrics?.status ?? toBondStatusLabel(node.status)
     positions.push({
@@ -226,7 +215,7 @@ export const fetchBondPositions = async (
       nextReward,
       nextChurn,
       status,
-      fiatValue,
+      fiatBasis: getRuneFiatBasis(amount),
       canUnbond: chainAllowsUnbond && canUnbondNode(status),
     })
   }

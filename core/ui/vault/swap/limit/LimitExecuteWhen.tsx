@@ -25,7 +25,8 @@ export const limitPriceUnits = ['asset', 'fiat'] as const
 export type LimitPriceUnit = (typeof limitPriceUnits)[number]
 
 type LimitExecuteWhenProps = {
-  toCoin: Coin
+  /** The sell asset the header prices: "When 1 <sell ticker> is worth". */
+  fromCoin: Coin
   /** Raw text in the price field, in the active unit. */
   priceInput: string
   onPriceInputChange: (value: string) => void
@@ -33,7 +34,7 @@ type LimitExecuteWhenProps = {
   onUnitChange: (unit: LimitPriceUnit) => void
   /** Rendered before the value (`$` in fiat mode). */
   valuePrefix: string | undefined
-  /** Rendered after the value (the buy ticker in token mode). */
+  /** Rendered after the value (the buy ticker in asset mode). */
   valueSuffix: string | undefined
   /** Secondary line under the value: the other representation. */
   secondaryLabel: string | undefined
@@ -51,13 +52,13 @@ type LimitExecuteWhenProps = {
 /**
  * The price step: what the order waits for.
  *
- * The price is entered against one unit of the *buy* asset ("1 BTC is worth …"),
- * which is how the design reads it. The authoritative value the memo encodes is
- * still the asset-to-asset rate — see `rate.ts` for why fiat entry converts once
- * rather than being stored.
+ * The price is denominated in the *sell* asset: "When 1 ETH is worth …". Asset
+ * mode edits the rate itself (buy units per sell unit) — exactly what the memo's
+ * LIM encodes — and fiat mode edits the fiat value of one sell unit. See
+ * `rate.ts` for why fiat entry converts once rather than being stored.
  */
 export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
-  toCoin,
+  fromCoin,
   priceInput,
   onPriceInputChange,
   unit,
@@ -93,9 +94,12 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
       <PriceRow>
         <VStack gap={6} alignItems="center">
           <HStack alignItems="center" gap={6}>
-            <CoinIcon coin={toCoin} style={{ fontSize: 20 }} />
             <Text size={13} color="supporting">
-              {t('swap_limit_one_unit', { ticker: toCoin.ticker })}
+              {t('swap_limit_when_one')}
+            </Text>
+            <CoinIcon coin={fromCoin} style={{ fontSize: 20 }} />
+            <Text size={13} color="supporting">
+              {`${fromCoin.ticker} ${t('swap_limit_is_worth')}`}
             </Text>
           </HStack>
           <ValueRow>

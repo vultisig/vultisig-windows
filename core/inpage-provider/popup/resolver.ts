@@ -8,6 +8,7 @@ import { Resolver } from '@vultisig/lib-utils/types/Resolver'
 import { Result } from '@vultisig/lib-utils/types/Result'
 
 import { MethodBasedContext } from '../call/context'
+import { PopupError } from './error'
 
 type PopupMessageSource = 'popup'
 
@@ -25,8 +26,14 @@ export type PopupCall<M extends PopupMethod> = {
   [K in M]: PopupInterface[K]['input']
 }
 
+/**
+ * A popup response crosses `chrome.runtime` messaging, which serializes it,
+ * so the failure side is restricted to `PopupError` sentinels. Anything
+ * richer — notably an `Error` instance — would arrive as a bare `{}` and
+ * lose its message, so passing one is a compile error.
+ */
 export type PopupResponse<M extends PopupMethod> = PopupMessageKey & {
-  result: Result<PopupInterface[M]['output']>
+  result: Result<PopupInterface[M]['output'], PopupError>
   shouldClosePopup: boolean
 }
 

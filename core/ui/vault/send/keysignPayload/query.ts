@@ -22,6 +22,7 @@ import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
+import { reconcileUtxoPlanAmount } from './reconcileUtxoPlanAmount'
 
 type UseSendKeysignPayloadQueryProps = {
   feeSettings?: FeeSettings
@@ -71,7 +72,15 @@ export const useSendKeysignPayloadQuery = ({
 
   return useQuery({
     queryKey: ['sendTxKeysignPayload', omit(input, 'walletCore', 'publicKey')],
-    queryFn: () => buildSendKeysignPayload(input),
+    queryFn: async () => {
+      const keysignPayload = await buildSendKeysignPayload(input)
+
+      return reconcileUtxoPlanAmount({
+        keysignPayload,
+        publicKey: input.publicKey,
+        walletCore: input.walletCore,
+      })
+    },
     ...noRefetchQueryOptions,
     retry: (failureCount, error) => {
       if (error instanceof BuildKeysignPayloadError) {

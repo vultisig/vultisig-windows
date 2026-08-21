@@ -2,7 +2,6 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { UiProps } from '@lib/ui/props'
 import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
 
-import { getChainLogoSrc } from '../../metadata/getChainLogoSrc'
 import { getCoinLogoSrc } from './utils/getCoinLogoSrc'
 import { shouldDisplayChainLogo } from './utils/shouldDisplayChainLogo'
 import { WithChainIcon } from './WithChainIcon'
@@ -16,7 +15,7 @@ export const CoinIcon = ({ coin, ...rest }: CoinIconProps) => {
 
   if (shouldDisplayChainLogo(coin)) {
     return (
-      <WithChainIcon {...rest} src={getChainLogoSrc(coin.chain)}>
+      <WithChainIcon {...rest} chain={coin.chain}>
         <ChainEntityIcon value={coinSrc} />
       </WithChainIcon>
     )

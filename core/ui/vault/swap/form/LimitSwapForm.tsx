@@ -45,12 +45,7 @@ import {
 import { useAdvancedSwapQueueEnabledQuery } from '../limit/queries/useAdvancedSwapQueueEnabledQuery'
 import { useLimitMarketPriceQuery } from '../limit/queries/useLimitMarketPriceQuery'
 import { useLimitSwapSupportedChainsQuery } from '../limit/queries/useLimitSwapSupportedChainsQuery'
-import {
-  fiatUnitPriceToRate,
-  rateToFiatUnitPrice,
-  rateToUnitPrice,
-  unitPriceToRate,
-} from '../limit/rate'
+import { rateToSellUnitFiatValue, sellUnitFiatValueToRate } from '../limit/rate'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
@@ -79,8 +74,8 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
     useState<LimitSwapExpiryHours>(defaultExpiryHours)
 
   // The entered price is meaningless without the exact pair it was typed
-  // against (fiat mode divides by the sell coin's price; asset mode is
-  // sell-per-buy for this pair), so clear it whenever the pair changes —
+  // against (fiat mode anchors on the buy coin's price; asset mode is the
+  // buy-per-sell rate for this pair), so clear it whenever the pair changes —
   // including via the reverse button — rather than carrying a stale value into
   // the new pair.
   const pairKey = `${coinKeyToString(fromCoinKey)}>${coinKeyToString(toCoinKey)}`
@@ -94,7 +89,11 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   const { data: marketRate, isFetching: isMarketPriceLoading } =
     useLimitMarketPriceQuery({ fromCoin, toCoin })
   const { data: balance } = useBalanceQuery(extractAccountCoinKey(fromCoin))
-  const { data: fromCoinFiatPrice } = useCoinPriceQuery({ coin: fromCoinKey })
+  // The full vault coin, not the bare view-state key: the price query resolves
+  // a fiat price through the coin's priceProviderId, which the key lacks — with
+  // the key alone the query errors and fiat mode (entry, presets, market label)
+  // silently dies.
+  const { data: toCoinFiatPrice } = useCoinPriceQuery({ coin: toCoin })
 
   // The rate (buy units per sell unit) is authoritative -- it is what the memo's
   // LIM encodes. Fiat entry converts into it once, here, rather than being
@@ -108,16 +107,17 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       return null
     }
 
-    // Both modes express the price of ONE buy unit -- in fiat, or in sell-asset
-    // units ("1 ETH = 0.02 BTC"). Only the unit differs, never the meaning.
+    // Both modes express what ONE sell unit is worth -- in buy-asset units
+    // ("When 1 ETH is worth 0.02 BTC", the rate itself) or in fiat. Only the
+    // unit differs, never the meaning.
     if (unit === 'fiat') {
-      return fiatUnitPriceToRate({
-        fiatUnitPrice: entered,
-        sellCoinFiatPrice: fromCoinFiatPrice,
+      return sellUnitFiatValueToRate({
+        fiatValue: entered,
+        buyCoinFiatPrice: toCoinFiatPrice,
       })
     }
 
-    return unitPriceToRate({ unitPrice: entered })
+    return entered
   })()
 
   // Quantize to the memo's representable precision: a rate from a division has
@@ -126,23 +126,39 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   // and signed LIM all agreeing on the value the memo will hold.
   const rate = rawRate === null ? null : quantizeTargetPrice(rawRate)
 
-  const toInputValue = (forRate: number, forUnit: LimitPriceUnit) =>
+  type ToInputValueInput = {
+    forRate: number
+    forUnit: LimitPriceUnit
+  }
+
+  const toInputValue = ({ forRate, forUnit }: ToInputValueInput) =>
     forUnit === 'fiat'
-      ? rateToFiatUnitPrice({
+      ? rateToSellUnitFiatValue({
           rate: forRate,
-          sellCoinFiatPrice: fromCoinFiatPrice,
+          buyCoinFiatPrice: toCoinFiatPrice,
         })
-      : rateToUnitPrice({ rate: forRate })
+      : forRate
 
-  const setPriceFromRate = (nextRate: number, forUnit: LimitPriceUnit) => {
-    const next = toInputValue(nextRate, forUnit)
+  type SetPriceFromRateInput = {
+    nextRate: number
+    forUnit: LimitPriceUnit
+  }
 
-    if (next !== null) {
-      // toFixed keeps plain decimal notation (a Number round-trip would emit
-      // "1e-8" for tiny values, which parseLimitPrice then rejects); strip the
-      // trailing zeros it pads.
-      setPriceInput(next.toFixed(8).replace(/\.?0+$/, ''))
+  // Returns whether the input was actually populated, so callers don't mark
+  // state (like an active preset) for a price that never made it into the field
+  // — fiat conversion can fail while the fiat price is still loading.
+  const setPriceFromRate = ({ nextRate, forUnit }: SetPriceFromRateInput) => {
+    const next = toInputValue({ forRate: nextRate, forUnit })
+
+    if (next === null) {
+      return false
     }
+
+    // toFixed keeps plain decimal notation (a Number round-trip would emit
+    // "1e-8" for tiny values, which parseLimitPrice then rejects); strip the
+    // trailing zeros it pads.
+    setPriceInput(next.toFixed(8).replace(/\.?0+$/, ''))
+    return true
   }
 
   // Switching units re-expresses the same rate rather than clearing it, so the
@@ -150,7 +166,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
   const handleUnitChange = (nextUnit: LimitPriceUnit) => {
     if (nextUnit !== unit) {
       if (rate !== null) {
-        setPriceFromRate(rate, nextUnit)
+        setPriceFromRate({ nextRate: rate, forUnit: nextUnit })
       }
       setUnit(nextUnit)
     }
@@ -265,18 +281,18 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       ? getLimitPriceWarning({ price: rate, marketPrice: marketRate })
       : undefined
 
-  const formatUnitPrice = (value: number) =>
+  const formatDisplayPrice = (value: number) =>
     unit === 'fiat'
       ? `$${formatNumber(value, 2)}`
-      : `${formatNumber(value)} ${fromCoin.ticker}`
+      : `${formatNumber(value)} ${toCoin.ticker}`
 
-  const marketUnitPrice = marketRate
+  const marketDisplayPrice = marketRate
     ? unit === 'fiat'
-      ? rateToFiatUnitPrice({
+      ? rateToSellUnitFiatValue({
           rate: marketRate,
-          sellCoinFiatPrice: fromCoinFiatPrice,
+          buyCoinFiatPrice: toCoinFiatPrice,
         })
-      : rateToUnitPrice({ rate: marketRate })
+      : marketRate
     : null
 
   // The receive amount is the memo's truncated LIM, not amount x rate: showing a
@@ -293,31 +309,30 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
         )
       : null
 
+  // The secondary line mirrors the same unit price in the other unit, so both
+  // readings of the order's trigger stay visible at once.
   const secondaryLabel = (() => {
     if (unit === 'fiat') {
-      return receiveAmount !== null
-        ? `${formatNumber(receiveAmount)} ${toCoin.ticker}`
+      return rate !== null
+        ? `${formatNumber(rate)} ${toCoin.ticker}`
         : undefined
     }
 
     const fiat =
       rate !== null
-        ? rateToFiatUnitPrice({ rate, sellCoinFiatPrice: fromCoinFiatPrice })
+        ? rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: toCoinFiatPrice })
         : null
 
     return fiat !== null ? `$${formatNumber(fiat, 2)}` : undefined
   })()
 
-  // Fiat price of one buy unit, only when the (ungated, independently-loaded)
+  // Fiat value of one sell unit, only when the (ungated, independently-loaded)
   // fiat query has actually resolved — a `?? 0` here would show "$0.00" as the
-  // target price instead of falling back to the asset ratio.
+  // target price instead of falling back to the asset rate.
   const targetFiatPrice =
     rate !== null
-      ? rateToFiatUnitPrice({ rate, sellCoinFiatPrice: fromCoinFiatPrice })
+      ? rateToSellUnitFiatValue({ rate, buyCoinFiatPrice: toCoinFiatPrice })
       : null
-  // Always the asset ratio (sell units per buy unit), never `$`-prefixed, so it
-  // is a correct fallback regardless of the live unit toggle.
-  const targetAssetPrice = rate !== null ? rateToUnitPrice({ rate }) : null
 
   // Hand off through the page-level flow (like the market form) so the review
   // screen replaces the whole form — header and Market/Limit tabs included —
@@ -342,9 +357,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       expectedToAmount,
       memo: memoValue,
       unitPrice:
-        targetAssetPrice !== null
-          ? `${formatNumber(targetAssetPrice)} ${fromCoin.ticker}`
-          : undefined,
+        rate !== null ? `${formatNumber(rate)} ${toCoin.ticker}` : undefined,
       targetPriceLabel:
         targetFiatPrice !== null
           ? `$${formatNumber(targetFiatPrice, 2)}`
@@ -375,7 +388,7 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               onEdit={() => setStep('asset')}
             />
             <LimitExecuteWhen
-              toCoin={toCoin}
+              fromCoin={fromCoin}
               priceInput={priceInput}
               onPriceInputChange={value => {
                 setPriceInput(value)
@@ -383,27 +396,35 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
               }}
               unit={unit}
               onUnitChange={handleUnitChange}
-              valueSuffix={unit === 'fiat' ? undefined : fromCoin.ticker}
+              valueSuffix={unit === 'fiat' ? undefined : toCoin.ticker}
               valuePrefix={unit === 'fiat' ? '$' : undefined}
               secondaryLabel={secondaryLabel}
               marketLabel={
-                marketUnitPrice !== null
-                  ? formatUnitPrice(marketUnitPrice)
+                marketDisplayPrice !== null
+                  ? formatDisplayPrice(marketDisplayPrice)
                   : undefined
               }
               hasMarketPrice={Boolean(marketRate)}
               activePreset={activePreset}
               onPresetSelect={preset => {
                 if (marketRate) {
-                  setPriceFromRate(
-                    getPresetPrice({ marketPrice: marketRate, preset }),
-                    unit
-                  )
+                  const applied = setPriceFromRate({
+                    nextRate: getPresetPrice({
+                      marketPrice: marketRate,
+                      preset,
+                    }),
+                    forUnit: unit,
+                  })
+
                   // Remembered rather than re-derived from the live market: the
                   // market moves between the click and the next render, so
                   // comparing the stored rate against a freshly computed preset
-                  // price deselected the pill on the next tick.
-                  setActivePreset(preset)
+                  // price deselected the pill on the next tick. Only remembered
+                  // when the price landed in the field — a highlighted pill
+                  // over an empty input would claim a choice that wasn't made.
+                  if (applied) {
+                    setActivePreset(preset)
+                  }
                 }
               }}
               expiryHours={expiryHours}

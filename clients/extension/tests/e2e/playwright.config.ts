@@ -6,9 +6,9 @@ import { fileURLToPath } from 'url'
 import { extensionPath } from './extension-path'
 
 // Load .env from e2e directory for test vault configuration
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-config({ path: path.resolve(__dirname, '.env') })
+const currentFilename = fileURLToPath(import.meta.url)
+const currentDirectory = path.dirname(currentFilename)
+config({ path: path.resolve(currentDirectory, '.env') })
 
 /**
  * Playwright config for VultiConnect extension E2E tests.
@@ -52,12 +52,12 @@ const extensionLaunchArgs = [
 ]
 
 export default defineConfig({
-  testDir: __dirname,
+  testDir: currentDirectory,
   testMatch: '**/*.spec.ts',
 
   // Global setup/teardown
-  globalSetup: path.resolve(__dirname, 'global-setup.ts'),
-  globalTeardown: path.resolve(__dirname, 'global-teardown.ts'),
+  globalSetup: path.resolve(currentDirectory, 'global-setup.ts'),
+  globalTeardown: path.resolve(currentDirectory, 'global-teardown.ts'),
 
   // Default timeout
   timeout: 60_000,
@@ -72,7 +72,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
 
   // Output
-  outputDir: path.resolve(__dirname, 'test-results'),
+  outputDir: path.resolve(currentDirectory, 'test-results'),
 
   use: {
     // Chrome extensions require headed Chromium
@@ -105,6 +105,7 @@ export default defineConfig({
         '**/passcode-lock-layering.spec.ts',
         '**/visual-regression.spec.ts',
         '**/station-migration.spec.ts',
+        '**/storage-preservation.spec.ts',
         '**/search-field.spec.ts',
         '**/viewport-fit.spec.ts',
       ],
@@ -134,6 +135,7 @@ export default defineConfig({
         '**/push-notifications-integration.spec.ts',
         '**/station-migration.spec.ts',
         '**/xrp-destination-tag.spec.ts',
+        '**/signed-transaction-decoder.spec.ts',
       ],
       use: {
         launchOptions: {
@@ -151,6 +153,7 @@ export default defineConfig({
         '**/send-flow.spec.ts',
         '**/swap-flow.spec.ts',
         '**/secure-vault-flows.spec.ts',
+        '**/signed-transaction-decoder-live.spec.ts',
         '**/vault-operations.spec.ts',
         '**/import-export.spec.ts',
         '**/error-handling.spec.ts',
@@ -175,12 +178,14 @@ export default defineConfig({
       'html',
       {
         open: 'never',
-        outputFolder: path.resolve(__dirname, 'playwright-report'),
+        outputFolder: path.resolve(currentDirectory, 'playwright-report'),
       },
     ],
     [
       'json',
-      { outputFile: path.resolve(__dirname, 'test-results/results.json') },
+      {
+        outputFile: path.resolve(currentDirectory, 'test-results/results.json'),
+      },
     ],
   ],
 })

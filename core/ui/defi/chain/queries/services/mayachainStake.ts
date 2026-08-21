@@ -1,12 +1,12 @@
 import { mayachainBlockTimeSeconds } from '@core/ui/defi/chain/constants/time'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { mayaMidgardBaseUrl, mayanodeBaseUrl } from '../constants'
 import { mayaCoin } from '../tokens'
-import { ThorchainStakePosition } from '../types'
+import { RawThorchainStakePosition } from '../types'
 import { convertAPYtoAPR } from '../utils/apy'
 import { parseBigint, parseNumber } from '../utils/parsers'
 
@@ -47,29 +47,17 @@ const getMayaMimir = () =>
     headers: { 'X-Client-ID': 'vultisig' },
   })
 
-type FetchMayaStakePositionsInput = {
-  address: string
-  prices: Record<string, number>
-}
-
-/** Fetches Maya CACAO stake positions for a given address. */
-export const fetchMayaStakePositions = async ({
-  address,
-  prices,
-}: FetchMayaStakePositionsInput) => {
+/**
+ * Fetches Maya CACAO stake positions for a given address as price-free raw
+ * data; fiat values are joined from live prices at render.
+ */
+export const fetchMayaStakePositions = async (address: string) => {
   const member = await getCacaoPoolMember(address).catch(() => undefined)
 
   const deposited = parseBigint(member?.deposit_amount)
   const withdrawn = parseBigint(member?.withdraw_amount)
   const net = deposited - withdrawn
   const amount = net > 0n ? net : 0n
-
-  const price = prices[coinKeyToString(mayaCoin)] ?? 0
-  const fiatValue = getCoinValue({
-    amount,
-    decimals: mayaCoin.decimals,
-    price,
-  })
 
   let apyPercent = 0
   let canUnstake = amount > 0n
@@ -105,11 +93,14 @@ export const fetchMayaStakePositions = async ({
 
   const apr = convertAPYtoAPR(apyPercent)
 
-  const position: ThorchainStakePosition = {
+  const position: RawThorchainStakePosition = {
     id: 'maya-stake-cacao',
     ticker: mayaCoin.ticker,
     amount,
-    fiatValue,
+    fiatBasis: {
+      coinKey: coinKeyToString(mayaCoin),
+      amount: fromChainAmount(amount, mayaCoin.decimals),
+    },
     apr,
     type: 'stake',
     canUnstake,

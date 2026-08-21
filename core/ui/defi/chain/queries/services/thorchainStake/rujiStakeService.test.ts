@@ -72,8 +72,7 @@ const mockQueries = ({
   })
 }
 
-const fetchPositions = () =>
-  fetchRujiStakePositions({ address: 'thor1test', prices: {} })
+const fetchPositions = () => fetchRujiStakePositions('thor1test')
 
 describe('fetchRujiStakePositions', () => {
   beforeEach(() => {

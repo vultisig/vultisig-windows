@@ -1,3 +1,4 @@
+import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { Clone2Icon } from '@lib/ui/icons/Clone2Icon'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
@@ -9,13 +10,16 @@ import { ListItem } from '@lib/ui/list/item'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { getSwapQuoteProviderName } from '@vultisig/core-chain/swap/quote/getSwapQuoteProviderName'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSwapRoutes } from '../../queries/useSwapRoutes'
 import { useSwapFromCoin } from '../../state/fromCoin'
 import { AdvancedSheet } from './AdvancedSheet'
 import { ExternalRecipientSheet } from './ExternalRecipientSheet'
 import { GasLimitSheet } from './GasLimitSheet'
+import { SelectRouteSheet } from './SelectRouteSheet'
 import { formatSlippage, SlippageValue } from './slippage'
 import { SlippageSheet } from './SlippageSheet'
 
@@ -50,8 +54,9 @@ export const AdvancedSwapSettingsSheet = ({
 }: AdvancedSwapSettingsSheetProps) => {
   const { t } = useTranslation()
   const [fromCoinKey] = useSwapFromCoin()
+  const { canSelectRoute, activeRoute, isOverridden } = useSwapRoutes()
   const [openSheet, setOpenSheet] = useState<
-    'slippage' | 'gasLimit' | 'externalRecipient' | null
+    'selectRoute' | 'slippage' | 'gasLimit' | 'externalRecipient' | null
   >(null)
 
   // A custom gas limit only applies to EVM source transactions (see the
@@ -60,6 +65,20 @@ export const AdvancedSwapSettingsSheet = ({
   const isEvmSwap = isChainOfKind(fromCoinKey.chain, 'evm')
 
   const rows: SettingRow[] = [
+    ...(canSelectRoute
+      ? [
+          {
+            key: 'selectRoute',
+            icon: <ArrowSplitIcon />,
+            title: t('select_route'),
+            value:
+              isOverridden && activeRoute
+                ? getSwapQuoteProviderName(activeRoute.quote)
+                : t('auto'),
+            onClick: () => setOpenSheet('selectRoute'),
+          },
+        ]
+      : []),
     {
       key: 'slippage',
       icon: <LightningIcon />,
@@ -115,6 +134,9 @@ export const AdvancedSwapSettingsSheet = ({
           />
         ))}
       </List>
+      {openSheet === 'selectRoute' && (
+        <SelectRouteSheet onClose={() => setOpenSheet(null)} />
+      )}
       {openSheet === 'slippage' && (
         <SlippageSheet
           value={slippage}
