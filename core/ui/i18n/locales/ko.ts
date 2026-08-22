@@ -2,10 +2,6 @@ export const ko = {
   accept_continue: '수락하고 계속 진행하세요',
   action: '작업',
   active: '활성',
-  agent: '대리인',
-  agent_nav_tip_description:
-    'Vulti Agent를 사용할 수 있습니다. 탭하여 설정하세요.',
-  agent_nav_tip_title: '새로운!',
   active_chains_found_one: '활성 체인을 {{count}}개 찾았습니다.',
   active_chains_found_other: '우리는 {{count}}개의 활성 체인을 발견했습니다.',
   active_chains_warning:
@@ -272,6 +268,7 @@ export const ko = {
     '$VULT를 보유하면 거래 수수료를 낮출 수 있습니다.',
   discovering_mediator: '중재자 서비스를 찾는 중입니다. 잠시 기다려 주세요...',
   done: '완료',
+  earn: '수익',
   edit_address: '주소 수정',
   edit_friends_referral: '친구 추천 수정',
   edit_referral: '추천 수정',

@@ -2,10 +2,6 @@ export const es = {
   accept_continue: 'Aceptar y continuar',
   action: 'Acción',
   active: 'Activo',
-  agent: 'Agente',
-  agent_nav_tip_description:
-    'Vulti Agent está disponible. Toca para configurarlo.',
-  agent_nav_tip_title: '¡Nuevo!',
   active_chains_found_one: 'Encontramos {{count}} cadena activa',
   active_chains_found_other: 'Encontramos {{count}} cadenas activas',
   active_chains_warning:
@@ -277,6 +273,7 @@ export const es = {
   discovering_mediator:
     'Descubriendo el servicio de mediación, por favor espere...',
   done: 'Hecho',
+  earn: 'Ganar',
   edit_address: 'Editar dirección',
   edit_friends_referral: 'Editar recomendación de amistad',
   edit_referral: 'Editar referencia',

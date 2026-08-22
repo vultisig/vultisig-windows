@@ -2,10 +2,6 @@ export const de = {
   accept_continue: 'Akzeptieren & fortfahren',
   action: 'Aktion',
   active: 'Aktiv',
-  agent: 'Agent',
-  agent_nav_tip_description:
-    'Vulti Agent ist verfügbar. Tippen Sie hier, um ihn einzurichten.',
-  agent_nav_tip_title: 'Neu!',
   active_chains_found_one: 'Wir haben {{count}} aktive Kette gefunden',
   active_chains_found_other: 'Wir haben {{count}} aktive Ketten gefunden',
   active_chains_warning:
@@ -277,6 +273,7 @@ export const de = {
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
   discovering_mediator: 'Mediatordienst wird ermittelt, bitte warten...',
   done: 'Erledigt',
+  earn: 'Verdienen',
   edit_address: 'Adresse bearbeiten',
   edit_friends_referral: 'Freundesempfehlung bearbeiten',
   edit_referral: 'Empfehlung bearbeiten',

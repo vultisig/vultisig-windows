@@ -2,10 +2,6 @@ export const nl = {
   accept_continue: 'Accepteren en doorgaan',
   action: 'Actie',
   active: 'Actief',
-  agent: 'Agent',
-  agent_nav_tip_description:
-    'Vulti Agent is beschikbaar. Tik om het in te stellen.',
-  agent_nav_tip_title: 'Nieuw!',
   active_chains_found_one: 'We hebben {{count}} actieve chain gevonden',
   active_chains_found_other: 'We hebben {{count}} actieve chains gevonden',
   active_chains_warning:
@@ -274,6 +270,7 @@ export const nl = {
     'Houd $VULT aan om lagere trading fees te ontgrendelen.',
   discovering_mediator: 'Mediatorservice ontdekken, even geduld...',
   done: 'Klaar',
+  earn: 'Verdienen',
   edit_address: 'Adres bewerken',
   edit_friends_referral: 'Referral van vriend bewerken',
   edit_referral: 'Referral bewerken',

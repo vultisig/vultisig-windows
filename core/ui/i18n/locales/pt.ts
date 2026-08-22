@@ -2,10 +2,6 @@ export const pt = {
   accept_continue: 'Aceitar e continuar',
   action: 'Ação',
   active: 'Ativo',
-  agent: 'Agente',
-  agent_nav_tip_description:
-    'O Vulti Agent está disponível. Toque para configurá-lo.',
-  agent_nav_tip_title: 'Novo!',
   active_chains_found_one: 'Encontramos {{count}} cadeias ativas',
   active_chains_found_other: 'Encontramos {{count}} cadeias ativas',
   active_chains_warning:
@@ -276,6 +272,7 @@ export const pt = {
     'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',
   discovering_mediator: 'Descobrindo o serviço de mediação, aguarde...',
   done: 'Feito',
+  earn: 'Ganhar',
   edit_address: 'Editar endereço',
   edit_friends_referral: 'Editar Indicação de Amigo',
   edit_referral: 'Editar encaminhamento',

@@ -2,10 +2,6 @@ export const it = {
   accept_continue: 'Accetta e continua',
   action: 'Azione',
   active: 'Attivo',
-  agent: 'Agente',
-  agent_nav_tip_description:
-    'Vulti Agent è disponibile. Tocca per configurarlo.',
-  agent_nav_tip_title: 'Nuovo!',
   active_chains_found_one: 'Abbiamo trovato {{count}} catena attiva',
   active_chains_found_other: 'Abbiamo trovato {{count}} catene attive',
   active_chains_warning:
@@ -279,6 +275,7 @@ export const it = {
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
   discovering_mediator: 'Servizio di mediazione in corso, attendere prego...',
   done: 'Fatto',
+  earn: 'Guadagna',
   edit_address: 'Modifica indirizzo',
   edit_friends_referral: 'Modifica referral amico',
   edit_referral: 'Modifica referral',

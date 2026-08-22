@@ -2,10 +2,6 @@ export const hr = {
   accept_continue: 'Prihvati i nastavi',
   action: 'Radnja',
   active: 'Aktivan',
-  agent: 'Agent',
-  agent_nav_tip_description:
-    'Vulti Agent je dostupan. Dodirnite za postavljanje.',
-  agent_nav_tip_title: 'Novi!',
   active_chains_found_one: 'Pronašli smo {{count}} aktivnog lanca',
   active_chains_found_other: 'Pronašli smo {{count}} aktivnih lanaca',
   active_chains_warning:
@@ -273,6 +269,7 @@ export const hr = {
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
   discovering_mediator: 'Otkrivanje usluge posrednika, molimo pričekajte...',
   done: 'Gotovo',
+  earn: 'Zarada',
   edit_address: 'Uredi adresu',
   edit_friends_referral: 'Uredi preporuku prijatelja',
   edit_referral: 'Uredi preporuku',

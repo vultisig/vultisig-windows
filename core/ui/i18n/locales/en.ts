@@ -3,9 +3,6 @@ export const en = {
   action: 'Action',
   active: 'Active',
   active_vaults: 'Active Vaults',
-  agent: 'Agent',
-  agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
-  agent_nav_tip_title: 'New!',
   active_chains_found_one: 'We found {{count}} active chain',
   active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
@@ -347,6 +344,7 @@ export const en = {
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discovering_mediator: 'Discovering mediator service, please wait...',
   done: 'Done',
+  earn: 'Earn',
   edit_address: 'Edit Address',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',

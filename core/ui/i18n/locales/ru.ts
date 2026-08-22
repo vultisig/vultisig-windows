@@ -2,10 +2,6 @@ export const ru = {
   accept_continue: 'Принять и продолжить',
   action: 'Действие',
   active: 'Активно',
-  agent: 'Агент',
-  agent_nav_tip_description:
-    'Vulti Agent доступен. Нажмите, чтобы настроить его.',
-  agent_nav_tip_title: 'Новый!',
   active_chains_found_one: 'Мы нашли {{count}} активную сеть',
   active_chains_found_other: 'Мы нашли {{count}} активных сетей',
   active_chains_warning:
@@ -272,6 +268,7 @@ export const ru = {
     'Держите $VULT, чтобы разблокировать меньшие торговые комиссии.',
   discovering_mediator: 'Поиск mediator-сервиса, пожалуйста подождите...',
   done: 'Готово',
+  earn: 'Доход',
   edit_address: 'Редактировать адрес',
   edit_friends_referral: 'Редактировать referral друга',
   edit_referral: 'Редактировать referral',
