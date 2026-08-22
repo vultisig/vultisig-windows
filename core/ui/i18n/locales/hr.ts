@@ -1864,4 +1864,6 @@ export const hr = {
   kamino_earn_deposit: 'Polog u trezor',
   kamino_earn_deposit_to: 'Uplata na',
   kamino_earn_minimum_deposit: 'Minimalni depozit',
+  kamino_earn_build_failed:
+    'Kamino nije mogao pripremiti ovu transakciju. Ništa nije potpisano ili poslano.',
 }

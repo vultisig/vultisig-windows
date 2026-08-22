@@ -1430,6 +1430,8 @@ export const en = {
   kamino_earn_deposit: 'Deposit into vault',
   kamino_earn_deposit_to: 'Deposit to',
   kamino_earn_minimum_deposit: 'Minimum deposit',
+  kamino_earn_build_failed:
+    'Kamino could not prepare this transaction. Nothing has been signed or sent.',
   kamino_earn_apy_30d: 'APY (30d)',
   kamino_earn_curated_by: 'Curated by {{curator}}',
   kamino_earn_no_position: 'You have nothing in this vault yet',

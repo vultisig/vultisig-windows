@@ -1908,4 +1908,6 @@ export const de = {
   kamino_earn_deposit: 'Einzahlung in den Tresor',
   kamino_earn_deposit_to: 'Einzahlung an',
   kamino_earn_minimum_deposit: 'Mindesteinzahlung',
+  kamino_earn_build_failed:
+    'Kamino konnte diese Transaktion nicht vorbereiten. Es wurde nichts unterzeichnet oder versendet.',
 }

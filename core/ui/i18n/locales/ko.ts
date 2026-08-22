@@ -1854,4 +1854,6 @@ export const ko = {
   kamino_earn_deposit: '금고에 예치',
   kamino_earn_deposit_to: '입금',
   kamino_earn_minimum_deposit: '최소 예치금',
+  kamino_earn_build_failed:
+    '카미노는 이 거래를 준비할 수 없었습니다. 서명된 서류나 발송된 서류는 없습니다.',
 }

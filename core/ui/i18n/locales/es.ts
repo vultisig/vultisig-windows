@@ -1894,4 +1894,6 @@ export const es = {
   kamino_earn_deposit: 'Depositar en la bóveda',
   kamino_earn_deposit_to: 'Depositar en',
   kamino_earn_minimum_deposit: 'Depósito mínimo',
+  kamino_earn_build_failed:
+    'Kamino no pudo preparar esta transacción. No se ha firmado ni enviado nada.',
 }

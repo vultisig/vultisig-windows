@@ -1897,4 +1897,6 @@ export const pt = {
   kamino_earn_deposit: 'Depositar no cofre',
   kamino_earn_deposit_to: 'Depositar em',
   kamino_earn_minimum_deposit: 'depósito mínimo',
+  kamino_earn_build_failed:
+    'Kamino não pôde preparar esta transação. Nada foi assinado ou enviado.',
 }

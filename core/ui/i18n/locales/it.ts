@@ -1900,4 +1900,6 @@ export const it = {
   kamino_earn_deposit: 'Depositare nel caveau',
   kamino_earn_deposit_to: 'Deposito a',
   kamino_earn_minimum_deposit: 'Deposito minimo',
+  kamino_earn_build_failed:
+    'Kamino non è riuscito a completare questa transazione. Nulla è stato firmato o inviato.',
 }

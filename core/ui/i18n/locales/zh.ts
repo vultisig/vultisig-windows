@@ -1739,4 +1739,6 @@ export const zh = {
   kamino_earn_deposit: '存入金库',
   kamino_earn_deposit_to: '存款',
   kamino_earn_minimum_deposit: '最低存款',
+  kamino_earn_build_failed:
+    'Kamino无法完成这笔交易。任何文件都尚未签署或发送。',
 }

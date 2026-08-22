@@ -1873,4 +1873,6 @@ export const ru = {
   kamino_earn_deposit: 'Внести в хранилище',
   kamino_earn_deposit_to: 'Внести депозит',
   kamino_earn_minimum_deposit: 'Минимальный депозит',
+  kamino_earn_build_failed:
+    'Камино не смог подготовить эту сделку. Ничего не было подписано или отправлено.',
 }

@@ -1877,4 +1877,6 @@ export const nl = {
   kamino_earn_deposit: 'Storten in de kluis',
   kamino_earn_deposit_to: 'Storten aan',
   kamino_earn_minimum_deposit: 'Minimale storting',
+  kamino_earn_build_failed:
+    'Kamino kon deze transactie niet voorbereiden. Er is niets getekend of verzonden.',
 }
