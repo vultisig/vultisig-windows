@@ -2,9 +2,6 @@ export const pt = {
   accept_continue: 'Aceitar e continuar',
   action: 'Ação',
   active: 'Ativo',
-  agent_nav_tip_description:
-    'O Vulti Agent está disponível. Toque para configurá-lo.',
-  agent_nav_tip_title: 'Novo!',
   active_chains_found_one: 'Encontramos {{count}} cadeias ativas',
   active_chains_found_other: 'Encontramos {{count}} cadeias ativas',
   active_chains_warning:
@@ -131,7 +128,6 @@ export const pt = {
   camera_access_blocked:
     'O acesso à câmera está bloqueado. Por favor, habilite-o nas configurações do seu navegador.',
   cache_password_for_5_min: 'Lembre-se da senha por 5 minutos.',
-  card: 'Cartão',
   cancel: 'Cancelar',
   chain: 'Corrente',
   chainFunctions: {

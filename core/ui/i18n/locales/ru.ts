@@ -2,9 +2,6 @@ export const ru = {
   accept_continue: 'Принять и продолжить',
   action: 'Действие',
   active: 'Активно',
-  agent_nav_tip_description:
-    'Vulti Agent доступен. Нажмите, чтобы настроить его.',
-  agent_nav_tip_title: 'Новый!',
   active_chains_found_one: 'Мы нашли {{count}} активную сеть',
   active_chains_found_other: 'Мы нашли {{count}} активных сетей',
   active_chains_warning:
@@ -128,7 +125,6 @@ export const ru = {
   camera_access_blocked:
     'Доступ к камере заблокирован. Включите его в настройках браузера.',
   cache_password_for_5_min: 'Запомнить пароль на 5 минут',
-  card: 'Карта',
   cancel: 'Отмена',
   chain: 'Сеть',
   chainFunctions: {

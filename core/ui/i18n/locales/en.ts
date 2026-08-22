@@ -3,8 +3,6 @@ export const en = {
   action: 'Action',
   active: 'Active',
   active_vaults: 'Active Vaults',
-  agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
-  agent_nav_tip_title: 'New!',
   active_chains_found_one: 'We found {{count}} active chain',
   active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
@@ -129,7 +127,6 @@ export const en = {
   camera_permission_required_description:
     'Camera permission is required to proceed. Please enable it in Settings.',
   cache_password_for_5_min: 'Remember password for 5 minutes',
-  card: 'Card',
   cancel: 'Cancel',
   chain: 'Chain',
   chainFunctions: {

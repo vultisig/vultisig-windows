@@ -2,9 +2,6 @@ export const it = {
   accept_continue: 'Accetta e continua',
   action: 'Azione',
   active: 'Attivo',
-  agent_nav_tip_description:
-    'Vulti Agent è disponibile. Tocca per configurarlo.',
-  agent_nav_tip_title: 'Nuovo!',
   active_chains_found_one: 'Abbiamo trovato {{count}} catena attiva',
   active_chains_found_other: 'Abbiamo trovato {{count}} catene attive',
   active_chains_warning:
@@ -131,7 +128,6 @@ export const it = {
   camera_access_blocked:
     "L'accesso alla telecamera è bloccato. Abilitalo nelle impostazioni del tuo browser.",
   cache_password_for_5_min: 'Ricorda la password per 5 minuti',
-  card: 'Carta',
   cancel: 'Cancellare',
   chain: 'Catena',
   chainFunctions: {

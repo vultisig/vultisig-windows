@@ -2,9 +2,6 @@ export const nl = {
   accept_continue: 'Accepteren en doorgaan',
   action: 'Actie',
   active: 'Actief',
-  agent_nav_tip_description:
-    'Vulti Agent is beschikbaar. Tik om het in te stellen.',
-  agent_nav_tip_title: 'Nieuw!',
   active_chains_found_one: 'We hebben {{count}} actieve chain gevonden',
   active_chains_found_other: 'We hebben {{count}} actieve chains gevonden',
   active_chains_warning:
@@ -129,7 +126,6 @@ export const nl = {
   camera_access_blocked:
     'Cameratoegang is geblokkeerd. Schakel dit in via je browserinstellingen.',
   cache_password_for_5_min: 'Onthoud het wachtwoord gedurende 5 minuten.',
-  card: 'Kaart',
   cancel: 'Annuleren',
   chain: 'Chain',
   chainFunctions: {

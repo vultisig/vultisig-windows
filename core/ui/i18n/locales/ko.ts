@@ -2,9 +2,6 @@ export const ko = {
   accept_continue: '수락하고 계속 진행하세요',
   action: '작업',
   active: '활성',
-  agent_nav_tip_description:
-    'Vulti Agent를 사용할 수 있습니다. 탭하여 설정하세요.',
-  agent_nav_tip_title: '새로운!',
   active_chains_found_one: '활성 체인을 {{count}}개 찾았습니다.',
   active_chains_found_other: '우리는 {{count}}개의 활성 체인을 발견했습니다.',
   active_chains_warning:
@@ -126,7 +123,6 @@ export const ko = {
   camera_access_blocked:
     '카메라 접근이 차단되었습니다. 브라우저 설정에서 카메라 접근을 허용해 주세요.',
   cache_password_for_5_min: '5분 동안 비밀번호를 기억하세요',
-  card: '카드',
   cancel: '취소',
   chain: '체인',
   chainFunctions: {

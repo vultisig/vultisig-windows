@@ -2,9 +2,6 @@ export const de = {
   accept_continue: 'Akzeptieren & fortfahren',
   action: 'Aktion',
   active: 'Aktiv',
-  agent_nav_tip_description:
-    'Vulti Agent ist verfügbar. Tippen Sie hier, um ihn einzurichten.',
-  agent_nav_tip_title: 'Neu!',
   active_chains_found_one: 'Wir haben {{count}} aktive Kette gefunden',
   active_chains_found_other: 'Wir haben {{count}} aktive Ketten gefunden',
   active_chains_warning:
@@ -130,7 +127,6 @@ export const de = {
   camera_access_blocked:
     'Der Kamerazugriff ist gesperrt. Bitte aktivieren Sie ihn in Ihren Browsereinstellungen.',
   cache_password_for_5_min: 'Passwort 5 Minuten lang merken',
-  card: 'Karte',
   cancel: 'Abbrechen',
   chain: 'Kette',
   chainFunctions: {

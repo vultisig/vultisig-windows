@@ -2,9 +2,6 @@ export const hr = {
   accept_continue: 'Prihvati i nastavi',
   action: 'Radnja',
   active: 'Aktivan',
-  agent_nav_tip_description:
-    'Vulti Agent je dostupan. Dodirnite za postavljanje.',
-  agent_nav_tip_title: 'Novi!',
   active_chains_found_one: 'Pronašli smo {{count}} aktivnog lanca',
   active_chains_found_other: 'Pronašli smo {{count}} aktivnih lanaca',
   active_chains_warning:
@@ -128,7 +125,6 @@ export const hr = {
   camera_access_blocked:
     'Pristup kameri je blokiran. Molimo omogućite ga u postavkama preglednika.',
   cache_password_for_5_min: 'Zapamti lozinku 5 minuta',
-  card: 'Kartica',
   cancel: 'Otkazati',
   chain: 'Lanac',
   chainFunctions: {

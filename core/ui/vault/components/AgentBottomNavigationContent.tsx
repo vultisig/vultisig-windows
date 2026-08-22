@@ -1,183 +1,59 @@
-import {
-  useDismissBanner,
-  useDismissedBanners,
-} from '@core/ui/storage/dismissedBanners'
-import { autoUpdate, offset, shift, useFloating } from '@floating-ui/react'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { Coachmark } from '@lib/ui/coachmark/Coachmark'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
 import { NodesIcon } from '@lib/ui/icons/NodesIcon'
-import {
-  StationCreditCardIcon,
-  StationWalletFilledIcon,
-} from '@lib/ui/icons/StationFigmaIcons'
+import { StationWalletFilledIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 const navHeight = 66
 const cameraButtonSize = 56
-const agentNavigationCoachmarkId = 'agentNavigationCoachmark'
 
 type AgentBottomNavigationContentProps = {
   activeTab?: 'wallet' | 'defi' | 'agent'
-  showAgentCoachmark?: boolean
-  onTabChange: (tab: 'wallet' | 'defi' | 'agent') => void
+  onTabChange: (tab: 'wallet' | 'defi') => void
   onCameraPress: () => void
 }
 
 export const AgentBottomNavigationContent = ({
   activeTab = 'wallet',
-  showAgentCoachmark = false,
   onTabChange,
   onCameraPress,
 }: AgentBottomNavigationContentProps) => {
   const { t } = useTranslation()
-  const dismissBanner = useDismissBanner()
-  const { hasLoaded, isBannerDismissed } = useDismissedBanners()
-  const [isCoachmarkOpen, setIsCoachmarkOpen] = useState(false)
-
-  const shouldShowCoachmark =
-    showAgentCoachmark &&
-    activeTab !== 'agent' &&
-    hasLoaded &&
-    !isBannerDismissed(agentNavigationCoachmarkId)
-
-  async function closeCoachmark() {
-    setIsCoachmarkOpen(false)
-    await dismissBanner(agentNavigationCoachmarkId)
-  }
-
-  const { refs, floatingStyles } = useFloating({
-    open: isCoachmarkOpen,
-    placement: 'top',
-    strategy: 'fixed',
-    middleware: [
-      offset({ mainAxis: 22, crossAxis: -63 }),
-      shift({ padding: 12 }),
-    ],
-    whileElementsMounted: autoUpdate,
-  })
-
-  useEffect(() => {
-    setIsCoachmarkOpen(shouldShowCoachmark)
-  }, [shouldShowCoachmark])
-
-  useEffect(() => {
-    if (!isCoachmarkOpen) return
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsCoachmarkOpen(false)
-        void dismissBanner(agentNavigationCoachmarkId)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [dismissBanner, isCoachmarkOpen])
-
-  useEffect(() => {
-    if (!isCoachmarkOpen) return
-
-    const handlePointerDown = (event: PointerEvent) => {
-      const target = event.target
-
-      if (!(target instanceof Node)) return
-
-      const referenceElement = refs.reference.current
-      const floatingElement = refs.floating.current
-
-      const isReferenceTarget =
-        referenceElement instanceof Element && referenceElement.contains(target)
-      const isFloatingTarget =
-        floatingElement instanceof Element && floatingElement.contains(target)
-
-      if (isReferenceTarget || isFloatingTarget) {
-        return
-      }
-
-      event.preventDefault()
-      event.stopPropagation()
-      setIsCoachmarkOpen(false)
-      void dismissBanner(agentNavigationCoachmarkId)
-    }
-
-    document.addEventListener('pointerdown', handlePointerDown, true)
-
-    return () => {
-      document.removeEventListener('pointerdown', handlePointerDown, true)
-    }
-  }, [dismissBanner, isCoachmarkOpen, refs.floating, refs.reference])
 
   return (
-    <>
-      {isCoachmarkOpen && <ContentOverlay />}
-      <NavContainer>
-        <NavSurface />
-        <TabsRow>
-          <TabButton
-            isActive={activeTab === 'wallet'}
-            onClick={() => onTabChange('wallet')}
-          >
-            <StationWalletFilledIcon />
-            <Text as="span" size={10}>
-              {t('wallet')}
-            </Text>
-          </TabButton>
-          <TabButton
-            isActive={activeTab === 'defi'}
-            onClick={() => onTabChange('defi')}
-          >
-            <NodesIcon />
-            <Text as="span" size={10}>
-              {t('earn')}
-            </Text>
-          </TabButton>
-          <TabButton
-            ref={refs.setReference}
-            isActive={activeTab === 'agent'}
-            onClick={() => {
-              if (isCoachmarkOpen) {
-                void closeCoachmark()
-              }
-
-              onTabChange('agent')
-            }}
-          >
-            <StationCreditCardIcon />
-            <Text as="span" size={10}>
-              {t('card')}
-            </Text>
-          </TabButton>
-        </TabsRow>
-        <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
-          <CameraFilledIcon />
-        </FloatingCamera>
-        {isCoachmarkOpen && (
-          <CoachmarkContainer
-            ref={refs.setFloating}
-            style={floatingStyles}
-            onClick={event => event.stopPropagation()}
-          >
-            <Coachmark
-              title={t('agent_nav_tip_title')}
-              description={t('agent_nav_tip_description')}
-              onClose={() => void closeCoachmark()}
-            />
-          </CoachmarkContainer>
-        )}
-      </NavContainer>
-    </>
+    <NavContainer>
+      <NavSurface />
+      <TabsRow>
+        <TabButton
+          isActive={activeTab === 'wallet'}
+          onClick={() => onTabChange('wallet')}
+        >
+          <StationWalletFilledIcon />
+          <Text as="span" size={10}>
+            {t('wallet')}
+          </Text>
+        </TabButton>
+        <TabButton
+          isActive={activeTab === 'defi'}
+          onClick={() => onTabChange('defi')}
+        >
+          <NodesIcon />
+          <Text as="span" size={10}>
+            {t('earn')}
+          </Text>
+        </TabButton>
+      </TabsRow>
+      <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
+        <CameraFilledIcon />
+      </FloatingCamera>
+    </NavContainer>
   )
 }
 
@@ -199,16 +75,6 @@ const NavContainer = styled.div`
     height: calc(${navHeight}px + env(safe-area-inset-bottom));
     padding-bottom: calc(10px + env(safe-area-inset-bottom));
   }
-`
-
-const ContentOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 18;
-  pointer-events: none;
-  backdrop-filter: blur(6px);
-  background: ${({ theme }) =>
-    theme.colors.overlay.withAlpha(0.4).toCssValue()};
 `
 
 const NavSurface = styled.div`
@@ -256,10 +122,6 @@ const FloatingCamera = styled(UnstyledButton)`
         ? theme.colors.buttonHover.toCssValue()
         : '#5a8aff'};
   }
-`
-
-const CoachmarkContainer = styled.div`
-  z-index: 40;
 `
 
 type TabButtonProps = {

@@ -34,15 +34,13 @@ export const BottomNavigation = ({
     }
   }, [])
 
-  const handleTabChange = (tab: 'wallet' | 'defi' | 'agent') => {
+  const handleTabChange = (tab: 'wallet' | 'defi') => {
     if (tab === activeTab && isActiveTabRoot) return
 
     if (tab === 'wallet') {
       navigate({ id: 'vault' }, { replace: true })
     } else if (tab === 'defi') {
       navigate({ id: 'defi', state: {} }, { replace: true })
-    } else if (tab === 'agent') {
-      navigate({ id: 'agentChat', state: {} }, { replace: true })
     }
   }
 
