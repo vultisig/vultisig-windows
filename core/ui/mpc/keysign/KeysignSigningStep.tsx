@@ -33,7 +33,7 @@ import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
-import { useEffect } from 'react'
+import { ReactNode, useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 
@@ -42,10 +42,18 @@ import { BroadcastError } from './broadcastKeysignTx'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 import { LimitOrderCancelDoneHint } from './tx/LimitOrderCancelDoneHint'
 
-type KeysignSigningStepProps = Partial<OnBackProp> & { toAddressLabel?: string }
+type KeysignSigningStepProps = Partial<OnBackProp> & {
+  onSettled?: () => void
+  onStart?: () => void
+  renderPending?: () => ReactNode
+  toAddressLabel?: string
+}
 
 export const KeysignSigningStep = ({
   onBack,
+  onSettled,
+  onStart,
+  renderPending,
   toAddressLabel,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
@@ -56,6 +64,10 @@ export const KeysignSigningStep = ({
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
   const [, copyToClipboard] = useCopyToClipboard()
+  useLayoutEffect(() => onStart?.(), [onStart])
+  useLayoutEffect(() => {
+    if (mutationStatus.isError || mutationStatus.isSuccess) onSettled?.()
+  }, [mutationStatus.isError, mutationStatus.isSuccess, onSettled])
   useEffect(startKeysign, [startKeysign])
 
   return (
@@ -281,21 +293,25 @@ export const KeysignSigningStep = ({
           />
         )
       }}
-      pending={() => (
-        <>
-          <PageHeader
-            primaryControls={<PageHeaderBackButton onClick={onBack} />}
-            title={t('keysign')}
-            hasBorder
-          />
-          <KeysignSigningState />
-          <PageFooter alignItems="center">
-            <Text color="shy" size={12}>
-              {t('version')} {version}
-            </Text>
-          </PageFooter>
-        </>
-      )}
+      pending={() =>
+        renderPending ? (
+          renderPending()
+        ) : (
+          <>
+            <PageHeader
+              primaryControls={<PageHeaderBackButton onClick={onBack} />}
+              title={t('keysign')}
+              hasBorder
+            />
+            <KeysignSigningState />
+            <PageFooter alignItems="center">
+              <Text color="shy" size={12}>
+                {t('version')} {version}
+              </Text>
+            </PageFooter>
+          </>
+        )
+      }
     />
   )
 }

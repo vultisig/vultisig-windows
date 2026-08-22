@@ -4,20 +4,37 @@ import { KeygenConnectingAnimation } from '@core/ui/mpc/keygen/progress/KeygenCo
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { FC, useEffect } from 'react'
+import { FC, ReactNode, useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const WaitForServerStep: FC<OnFinishProp<string[]>> = ({ onFinish }) => {
+type WaitForServerStepProps = OnFinishProp<string[]> & {
+  onError?: () => void
+  onErrorChange?: (isError: boolean) => void
+  renderPending?: () => ReactNode
+}
+
+export const WaitForServerStep: FC<WaitForServerStepProps> = ({
+  onError,
+  onErrorChange,
+  onFinish,
+  renderPending,
+}) => {
   const { t } = useTranslation()
   const peersQuery = useMpcPeerOptionsQuery()
 
   useEffect(() => {
     if (peersQuery.data) onFinish(peersQuery.data)
   }, [onFinish, peersQuery.data])
+  useLayoutEffect(() => {
+    onErrorChange?.(peersQuery.isError)
+    if (peersQuery.isError) onError?.()
+  }, [onError, onErrorChange, peersQuery.isError])
 
   return (
     <>
-      <PageHeader title={t('connecting_to_server')} hasBorder />
+      {!renderPending || peersQuery.isError ? (
+        <PageHeader title={t('connecting_to_server')} hasBorder />
+      ) : null}
       <MatchQuery
         value={peersQuery}
         error={error => (
@@ -26,7 +43,13 @@ export const WaitForServerStep: FC<OnFinishProp<string[]>> = ({ onFinish }) => {
             error={error}
           />
         )}
-        pending={() => <KeygenConnectingAnimation securityType="fast" />}
+        pending={() =>
+          renderPending ? (
+            renderPending()
+          ) : (
+            <KeygenConnectingAnimation securityType="fast" />
+          )
+        }
       />
     </>
   )

@@ -18,12 +18,18 @@ const signingTickMs = 200
  * Renders the Rive animation with the signing coin's logo (falling back to
  * the chain logo when no coin logo is available).
  */
-export const KeysignSigningState = () => {
+export const KeysignSigningState = ({
+  isConnected = true,
+}: {
+  isConnected?: boolean
+}) => {
   const payload = useKeysignMessagePayload()
   const logoSrc = getKeysignPayloadLogoSrc(payload)
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
+    if (!isConnected) return
+
     const start = Date.now()
     const interval = setInterval(() => {
       const ratio = Math.min((Date.now() - start) / signingDurationMs, 1)
@@ -32,12 +38,15 @@ export const KeysignSigningState = () => {
     }, signingTickMs)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [isConnected])
 
   return (
-    <Container>
+    <Container
+      data-phase={isConnected ? 'signing' : 'connecting'}
+      data-testid="keysign-progress"
+    >
       <KeysignLoadingAnimation
-        isConnected
+        isConnected={isConnected}
         progress={progress}
         logoSrc={logoSrc}
       />
