@@ -13,6 +13,7 @@ import styled, { css } from 'styled-components'
 
 const navHeight = 66
 const cameraButtonSize = 56
+const cameraButtonInset = 28
 
 type AgentBottomNavigationContentProps = {
   activeTab?: 'wallet' | 'defi' | 'agent'
@@ -96,12 +97,12 @@ const TabsRow = styled.div`
   z-index: 30;
   width: 100%;
   max-width: ${tabsMaxWidth}px;
-  padding-right: 72px;
+  padding-right: ${cameraButtonSize + cameraButtonInset}px;
 `
 
 const FloatingCamera = styled(UnstyledButton)`
   position: absolute;
-  right: 28px;
+  right: ${cameraButtonInset}px;
   top: 5px;
   z-index: 35;
   ${borderRadius.pill};
