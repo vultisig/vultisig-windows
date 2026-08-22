@@ -17,7 +17,8 @@ export const ScanningChainsStep = () => {
   const [, setStep] = useImportSeedphraseStep()
   const [, setUsePhantomSolanaPath] = useUsePhantomSolanaPath()
 
-  const { data } = useScanChainsWithBalanceQuery()
+  const { data, errors, isPending } = useScanChainsWithBalanceQuery()
+  const hasFailed = !isPending && errors.length > 0 && !data
 
   useEffect(() => {
     if (data) {
@@ -35,20 +36,28 @@ export const ScanningChainsStep = () => {
 
   return (
     <PageContent alignItems="center" justifyContent="center" gap={24} flexGrow>
-      <Spinner size={24} />
-      <VStack alignItems="center" gap={12}>
-        <Text centerHorizontally color="contrast" size={22} weight={600}>
-          {t('scanning_for_chains')}
+      {hasFailed ? (
+        <Text centerHorizontally color="danger" size={22} weight={600}>
+          {t('failed_to_load')}
         </Text>
-        <Text centerHorizontally color="supporting" size={14}>
-          <Trans
-            i18nKey="scanning_for_chains_subtitle"
-            components={{
-              highlight: <Text as="span" color="regular" />,
-            }}
-          />
-        </Text>
-      </VStack>
+      ) : (
+        <>
+          <Spinner size={24} />
+          <VStack alignItems="center" gap={12}>
+            <Text centerHorizontally color="contrast" size={22} weight={600}>
+              {t('scanning_for_chains')}
+            </Text>
+            <Text centerHorizontally color="supporting" size={14}>
+              <Trans
+                i18nKey="scanning_for_chains_subtitle"
+                components={{
+                  highlight: <Text as="span" color="regular" />,
+                }}
+              />
+            </Text>
+          </VStack>
+        </>
+      )}
       <VStack style={{ marginTop: 'auto' }} fullWidth>
         <Button kind="outlined" onClick={handleSelectManually}>
           {t('select_chains_manually')}
