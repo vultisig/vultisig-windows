@@ -12,6 +12,7 @@ import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { groupItems } from '@vultisig/lib-utils/array/groupItems'
 import { order } from '@vultisig/lib-utils/array/order'
 import { sum } from '@vultisig/lib-utils/array/sum'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 import { useMemo } from 'react'
@@ -47,24 +48,38 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
     )
 
     const groupedCoins = groupItems(coinsWithKnownChain, coin => coin.chain)
+    const unresolvedCoin = coinsWithKnownChain.find(coin => {
+      const key = accountCoinKeyToString(extractAccountCoinKey(coin))
+      return balancesQuery.data?.[key] === undefined
+    })
+    const errors = [...balancesQuery.errors, ...pricesQuery.errors]
+
+    if (unresolvedCoin) {
+      return {
+        isPending,
+        data: undefined,
+        errors:
+          errors.length > 0
+            ? errors
+            : isPending
+              ? []
+              : [
+                  new Error(
+                    `Failed to resolve ${unresolvedCoin.chain} balance`
+                  ),
+                ],
+      }
+    }
 
     const balancesByChain = recordMap(groupedCoins, chainCoins => {
       return chainCoins.map(coin => {
-        const getAmount = () => {
-          if (balancesQuery.data) {
-            const key = accountCoinKeyToString(extractAccountCoinKey(coin))
-            if (key in balancesQuery.data) {
-              return balancesQuery.data[key]
-            }
-          }
-
-          return BigInt(0)
-        }
+        const key = accountCoinKeyToString(extractAccountCoinKey(coin))
+        const amount = shouldBePresent(balancesQuery.data?.[key])
 
         const price = pricesQuery?.data?.[coinKeyToString(coin)] ?? 0
         return {
           ...coin,
-          amount: getAmount(),
+          amount,
           price,
         }
       })
@@ -82,7 +97,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
     return {
       isPending,
       data,
-      errors: [...balancesQuery.errors, ...pricesQuery.errors],
+      errors,
     }
   }, [coins, pricesQuery, balancesQuery])
 }

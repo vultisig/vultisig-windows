@@ -10,6 +10,7 @@ import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalB
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { pageConfig } from '@lib/ui/page/config'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -61,9 +62,10 @@ export const VaultPageHeader = ({
   const isCollapsed = isHeaderCollapsed(progress)
   const { t } = useTranslation()
 
-  const { data: totalBalance = 0 } = useVaultTotalBalanceQuery()
+  const { data: totalBalance, error } = useVaultTotalBalanceQuery()
   const formatFiatAmount = useFormatFiatAmount()
-  const formattedBalance = formatFiatAmount(totalBalance)
+  const formattedBalance =
+    totalBalance === undefined ? undefined : formatFiatAmount(totalBalance)
 
   return (
     <HeaderContainer>
@@ -79,7 +81,11 @@ export const VaultPageHeader = ({
             {t('portfolio_balance')}
           </Text>
           <Text size={14}>
-            <BalanceVisibilityAware>{formattedBalance}</BalanceVisibilityAware>
+            <BalanceVisibilityAware>
+              {error && totalBalance === undefined
+                ? t('failed_to_load')
+                : (formattedBalance ?? <Spinner size="0.9em" />)}
+            </BalanceVisibilityAware>
           </Text>
         </VStack>
       </CollapsedContent>

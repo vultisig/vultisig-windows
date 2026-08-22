@@ -1,3 +1,9 @@
+import { queryClientDefaultOptions } from '@lib/ui/query/queryClientDefaultOptions'
+import {
+  defaultShouldDehydrateQuery,
+  dehydrate,
+  QueryClient,
+} from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
 import { getCoinBalance } from '@vultisig/core-chain/coin/balance'
@@ -88,6 +94,36 @@ describe('getCoinBalanceQueryAmount', () => {
     expect(getEvmChainBalances).toHaveBeenCalledTimes(1)
   })
 
+  it('rejects failed EVM reads instead of reporting them as zero', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+
+    await expect(getCoinBalanceQueryAmount(ethInput)).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+  })
+
+  it('preserves genuine zero EVM balances', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({
+      [accountCoinKeyToString(ethInput)]: 0n,
+    })
+
+    await expect(getCoinBalanceQueryAmount(ethInput)).resolves.toBe(0n)
+  })
+
+  it('rejects only failed reads in a partially successful EVM batch', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({
+      [accountCoinKeyToString(ethInput)]: 11n,
+    })
+
+    const ethBalance = getCoinBalanceQueryAmount(ethInput)
+    const usdcBalance = getCoinBalanceQueryAmount(usdcInput)
+
+    await expect(ethBalance).resolves.toBe(11n)
+    await expect(usdcBalance).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+  })
+
   it('keeps non-EVM balances on the existing per-coin resolver', async () => {
     vi.mocked(getCoinBalance).mockResolvedValue(33n)
 
@@ -114,5 +150,64 @@ describe('getBalanceQueryOptions', () => {
       [accountCoinKeyToString(ethInput)]: 44n,
     })
     expect(options.queryKey).toEqual(['coinBalance', ethInput])
+  })
+
+  it('surfaces a failed EVM batch read as a query error', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+
+    const options = getBalanceQueryOptions(ethInput)
+
+    await expect(options.queryFn()).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+  })
+
+  it('does not dehydrate a failed EVM balance read for persistence', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          ...queryClientDefaultOptions?.queries,
+          retry: false,
+        },
+      },
+    })
+    const options = getBalanceQueryOptions(ethInput)
+
+    await expect(queryClient.fetchQuery(options)).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+
+    expect(queryClient.getQueryState(options.queryKey)?.status).toBe('error')
+    expect(
+      dehydrate(queryClient, {
+        shouldDehydrateQuery: query =>
+          query.meta?.shouldPersist === true &&
+          defaultShouldDehydrateQuery(query),
+      }).queries
+    ).toEqual([])
+  })
+
+  it('recovers from a transient EVM read failure through query retries', async () => {
+    vi.mocked(getEvmChainBalances)
+      .mockResolvedValueOnce({})
+      .mockResolvedValueOnce({
+        [accountCoinKeyToString(ethInput)]: 77n,
+      })
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          ...queryClientDefaultOptions?.queries,
+          retryDelay: 0,
+        },
+      },
+    })
+
+    await expect(
+      queryClient.fetchQuery(getBalanceQueryOptions(ethInput))
+    ).resolves.toEqual({
+      [accountCoinKeyToString(ethInput)]: 77n,
+    })
+    expect(getEvmChainBalances).toHaveBeenCalledTimes(2)
   })
 })
