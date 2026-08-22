@@ -2,16 +2,19 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { inNewWindow } from './inNewWindow'
 
+type WindowFixture = Pick<
+  chrome.windows.Window,
+  'id' | 'left' | 'top' | 'width' | 'height' | 'state'
+>
+
 type ChromeStub = {
-  lastFocused: chrome.windows.Window
+  lastFocused: WindowFixture
   created: chrome.windows.CreateData[]
-  updates: Array<[number, chrome.windows.UpdateInfo]>
+  updates: Array<{ windowId: number; info: chrome.windows.UpdateInfo }>
   badgeTexts: string[]
 }
 
-const stubChrome = (
-  lastFocused: Partial<chrome.windows.Window> = {}
-): ChromeStub => {
+const stubChrome = (lastFocused: WindowFixture = {}): ChromeStub => {
   const stub: ChromeStub = {
     lastFocused: {
       id: 1,
@@ -20,17 +23,15 @@ const stubChrome = (
       width: 1200,
       height: 800,
       state: 'normal',
-      focused: true,
-      incognito: false,
-      alwaysOnTop: false,
-      type: 'normal',
       ...lastFocused,
-    } as chrome.windows.Window,
+    },
     created: [],
     updates: [],
     badgeTexts: [],
   }
 
+  // These handlers mirror the Chrome API signatures they stand in for, so they
+  // keep Chrome's positional arguments rather than a single input object.
   vi.stubGlobal('chrome', {
     action: {
       setBadgeText: ({ text }: { text: string }) => {
@@ -44,19 +45,19 @@ const stubChrome = (
       getLastFocused: () => Promise.resolve(stub.lastFocused),
       create: (
         data: chrome.windows.CreateData,
-        callback: (window: chrome.windows.Window) => void
+        callback: (window: WindowFixture) => void
       ) => {
         stub.created.push(data)
         callback({
           ...stub.lastFocused,
           id: 99,
-          type: 'popup',
+          state: 'normal',
           left: data.left ?? 0,
           top: data.top ?? 0,
-        } as chrome.windows.Window)
+        })
       },
       update: (windowId: number, info: chrome.windows.UpdateInfo) => {
-        stub.updates.push([windowId, info])
+        stub.updates.push({ windowId, info })
         return Promise.resolve(stub.lastFocused)
       },
       remove: () => Promise.resolve(),
@@ -84,8 +85,8 @@ describe('inNewWindow', () => {
     await inNewWindow({ url: 'popup.html', execute: async () => 'done' })
 
     expect(stub.created[0].focused).toBe(true)
-    expect(stub.updates[0][0]).toBe(99)
-    expect(stub.updates[0][1]).toMatchObject({
+    expect(stub.updates[0].windowId).toBe(99)
+    expect(stub.updates[0].info).toMatchObject({
       focused: true,
       drawAttention: true,
     })
