@@ -1872,9 +1872,6 @@ export const ru = {
   swap_limit_is_worth: 'стоит',
   swap_limit_when_one: 'Когда 1',
   kamino_earn_apy_30d: 'Годовая процентная доходность (30 дней)',
-  kamino_earn_curated_by: 'Подборка от {{curator}}',
-  kamino_earn_no_position: 'В этом хранилище пока ничего нет.',
-  kamino_earn_pnl: 'Прибыль / убыток',
   kamino_earn_positions_unavailable:
     'Не удалось загрузить данные о балансе. Отображаемые данные по хранилищам актуальны.',
   kamino_earn_risk_conservative: 'Консервативный',
@@ -1905,4 +1902,9 @@ export const ru = {
   kamino_earn_unreadable_description:
     'Оно достигает хранилища Камино, но это приложение не может прочитать его содержимое, поэтому оно не будет подписано.',
   kamino_earn_unreadable_title: 'Данная транзакция не может быть подтверждена.',
+  kamino_earn_card_deposit: 'Внести',
+  kamino_earn_card_withdraw: 'Вывести',
+  kamino_earn_deposited: 'Внесено: {{amount}}',
+  kamino_earn_earned: 'Заработано: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

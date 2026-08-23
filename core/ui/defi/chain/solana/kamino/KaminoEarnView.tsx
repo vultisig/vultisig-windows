@@ -28,8 +28,8 @@ import { kaminoUnderlyingCoin } from './underlyingCoin'
 
 /**
  * Kamino Earn on the Solana DeFi tab: the curated vaults the user has enabled,
- * each with its live 30-day APY and — where the vault holds one — the
- * position's balance, fiat value and lifetime PnL.
+ * each with its live 30-day APY and — where the vault holds one — what the
+ * position is worth and what it has earned, each with its fiat value.
  *
  * A position's value is its SHARE balance valued through `tokensPerShare`,
  * never through the metrics endpoint's USD `sharePrice`: the two only coincide

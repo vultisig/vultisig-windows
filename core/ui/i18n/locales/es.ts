@@ -1893,9 +1893,6 @@ export const es = {
   swap_limit_is_worth: 'valga',
   swap_limit_when_one: 'Cuando 1',
   kamino_earn_apy_30d: 'APY (30 días)',
-  kamino_earn_curated_by: 'Seleccionado por {{curator}}',
-  kamino_earn_no_position: 'Todavía no tienes nada en esta bóveda.',
-  kamino_earn_pnl: 'Ganancia/pérdida',
   kamino_earn_positions_unavailable:
     'No se pudieron cargar los saldos. Las bóvedas mostradas están actualizadas.',
   kamino_earn_risk_conservative: 'Conservador',
@@ -1926,4 +1923,9 @@ export const es = {
   kamino_earn_unreadable_description:
     'Llega a una bóveda de Kamino, pero esta aplicación no puede leer su contenido, por lo que no lo firmará.',
   kamino_earn_unreadable_title: 'Esta transacción no puede ser verificada.',
+  kamino_earn_card_deposit: 'Depositar',
+  kamino_earn_card_withdraw: 'Retirar',
+  kamino_earn_deposited: 'Depositado: {{amount}}',
+  kamino_earn_earned: 'Ganado: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

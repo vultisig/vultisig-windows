@@ -1896,9 +1896,6 @@ export const pt = {
   swap_limit_is_worth: 'valer',
   swap_limit_when_one: 'Quando 1',
   kamino_earn_apy_30d: 'APY (30 dias)',
-  kamino_earn_curated_by: 'Com curadoria de {{curator}}',
-  kamino_earn_no_position: 'Você ainda não tem nada neste cofre.',
-  kamino_earn_pnl: 'Lucro/prejuízo',
   kamino_earn_positions_unavailable:
     'Não foi possível carregar os saldos. Os cofres exibidos estão atualizados.',
   kamino_earn_risk_conservative: 'Conservador',
@@ -1929,4 +1926,9 @@ export const pt = {
   kamino_earn_unreadable_description:
     'O pacote chega a um cofre de Kamino, mas este aplicativo não consegue ler o que ele faz, então não o assinará.',
   kamino_earn_unreadable_title: 'Esta transação não pode ser verificada.',
+  kamino_earn_card_deposit: 'Depositar',
+  kamino_earn_card_withdraw: 'Retirar',
+  kamino_earn_deposited: 'Depositado: {{amount}}',
+  kamino_earn_earned: 'Ganho: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }
