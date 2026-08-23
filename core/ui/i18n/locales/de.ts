@@ -1938,9 +1938,9 @@ export const de = {
     'Es erreicht einen Kamino-Tresor, aber diese App kann nicht lesen, was es tut, daher wird es nicht signiert.',
   kamino_earn_unreadable_title:
     'Diese Transaktion kann nicht verifiziert werden.',
-  kamino_earn_card_deposit: 'Kaution',
-  kamino_earn_card_withdraw: 'Zurückziehen',
+  kamino_earn_card_deposit: 'Einzahlen',
+  kamino_earn_card_withdraw: 'Abheben',
   kamino_earn_deposited: 'Eingezahlt: {{amount}}',
-  kamino_earn_earned: 'Erhalten: {{amount}}',
+  kamino_earn_earned: 'Verdient: {{amount}}',
   kamino_earn_protocol: 'Kamino',
 }

@@ -14,8 +14,11 @@ const scenarios = {
 
 type ScenarioName = keyof typeof scenarios
 
+// `Object.hasOwn`, not `in`: `?scenario=constructor` would otherwise resolve
+// through the prototype chain and render whatever it found instead of the
+// fallback.
 const isScenarioName = (value: string | null): value is ScenarioName =>
-  value !== null && value in scenarios
+  value !== null && Object.hasOwn(scenarios, value)
 
 const requested = new URLSearchParams(window.location.search).get('scenario')
 const Scenario = scenarios[isScenarioName(requested) ? requested : 'circle']

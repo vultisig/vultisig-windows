@@ -1883,9 +1883,9 @@ export const ko = {
   kamino_earn_unreadable_description:
     '해당 데이터는 카미노 금고에 도달하지만, 이 앱은 데이터 내용을 읽을 수 없으므로 서명하지 않습니다.',
   kamino_earn_unreadable_title: '이 거래는 확인되지 않았습니다.',
-  kamino_earn_card_deposit: '보증금',
-  kamino_earn_card_withdraw: '철회하다',
-  kamino_earn_deposited: '입금됨: {{amount}}',
-  kamino_earn_earned: '획득: {{amount}}',
-  kamino_earn_protocol: '카미노',
+  kamino_earn_card_deposit: '예치',
+  kamino_earn_card_withdraw: '출금',
+  kamino_earn_deposited: '예치됨: {{amount}}',
+  kamino_earn_earned: '수익: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

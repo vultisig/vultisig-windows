@@ -1926,7 +1926,7 @@ export const pt = {
   kamino_earn_unreadable_description:
     'O pacote chega a um cofre de Kamino, mas este aplicativo não consegue ler o que ele faz, então não o assinará.',
   kamino_earn_unreadable_title: 'Esta transação não pode ser verificada.',
-  kamino_earn_card_deposit: 'Depósito',
+  kamino_earn_card_deposit: 'Depositar',
   kamino_earn_card_withdraw: 'Retirar',
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganho: {{amount}}',

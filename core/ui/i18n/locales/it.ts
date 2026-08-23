@@ -1929,8 +1929,8 @@ export const it = {
   kamino_earn_unreadable_description:
     'Raggiunge un vault di Kamino, ma questa app non può leggerne il contenuto, quindi non lo firmerà.',
   kamino_earn_unreadable_title: 'Questa transazione non può essere verificata',
-  kamino_earn_card_deposit: 'Depositare',
-  kamino_earn_card_withdraw: 'Ritirare',
+  kamino_earn_card_deposit: 'Deposita',
+  kamino_earn_card_withdraw: 'Preleva',
   kamino_earn_deposited: 'Depositato: {{amount}}',
   kamino_earn_earned: 'Guadagnato: {{amount}}',
   kamino_earn_protocol: 'Kamino',

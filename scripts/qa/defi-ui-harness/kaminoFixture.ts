@@ -33,7 +33,13 @@ type SeedKaminoInput = {
   vaults: QaKaminoVault[]
 }
 
-const toBaseUnits = (value: number, decimals: number) =>
+type ToBaseUnitsInput = {
+  /** Human-units figure, as a scenario writes it. */
+  value: number
+  decimals: number
+}
+
+const toBaseUnits = ({ value, decimals }: ToBaseUnitsInput) =>
   BigInt(Math.round(value * 10 ** decimals))
 
 const buildVaultInfo = ({
@@ -45,11 +51,11 @@ const buildVaultInfo = ({
   descriptor,
   name,
   minDeposit: kaminoTokenAmount(
-    toBaseUnits(0.1, descriptor.tokenDecimals),
+    toBaseUnits({ value: 0.1, decimals: descriptor.tokenDecimals }),
     descriptor.tokenDecimals
   ),
   minWithdraw: kaminoShareAmount(
-    toBaseUnits(0.1, descriptor.sharesDecimals),
+    toBaseUnits({ value: 0.1, decimals: descriptor.sharesDecimals }),
     descriptor.sharesDecimals
   ),
   lookupTable: 'QALookupTable111111111111111111111111111111',
@@ -60,14 +66,14 @@ const buildVaultInfo = ({
   ),
   tokenPriceUsd: 1,
   tokensAvailable: kaminoTokenAmount(
-    toBaseUnits(50_000, descriptor.tokenDecimals),
+    toBaseUnits({ value: 50_000, decimals: descriptor.tokenDecimals }),
     descriptor.tokenDecimals
   ),
 })
 
 const buildOwnedPosition = ({ descriptor, shares, pnlToken }: QaKaminoVault) => {
   const amount = kaminoShareAmount(
-    toBaseUnits(shares, descriptor.sharesDecimals),
+    toBaseUnits({ value: shares, decimals: descriptor.sharesDecimals }),
     descriptor.sharesDecimals
   )
 

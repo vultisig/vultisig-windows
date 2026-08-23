@@ -1906,9 +1906,9 @@ export const nl = {
   kamino_earn_unreadable_description:
     'Het bereikt een Kamino-kluis, maar deze app kan niet lezen wat het doet, dus zal het niet ondertekenen.',
   kamino_earn_unreadable_title: 'Deze transactie kan niet worden geverifieerd.',
-  kamino_earn_card_deposit: 'Borg',
-  kamino_earn_card_withdraw: 'Terugtrekken',
-  kamino_earn_deposited: 'Gedeponeerd: {{amount}}',
+  kamino_earn_card_deposit: 'Storten',
+  kamino_earn_card_withdraw: 'Opnemen',
+  kamino_earn_deposited: 'Gestort: {{amount}}',
   kamino_earn_earned: 'Verdiend: {{amount}}',
   kamino_earn_protocol: 'Kamino',
 }

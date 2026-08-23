@@ -1893,7 +1893,7 @@ export const hr = {
   kamino_earn_unreadable_description:
     'Dolazi do Kamino trezora, ali ova aplikacija ne može pročitati što radi, pa ga neće potpisati.',
   kamino_earn_unreadable_title: 'Ovu transakciju nije moguće potvrditi',
-  kamino_earn_card_deposit: 'Polog',
+  kamino_earn_card_deposit: 'Uplati',
   kamino_earn_card_withdraw: 'Povući',
   kamino_earn_deposited: 'Položeno: {{amount}}',
   kamino_earn_earned: 'Zarađeno: {{amount}}',

@@ -1923,9 +1923,9 @@ export const es = {
   kamino_earn_unreadable_description:
     'Llega a una bóveda de Kamino, pero esta aplicación no puede leer su contenido, por lo que no lo firmará.',
   kamino_earn_unreadable_title: 'Esta transacción no puede ser verificada.',
-  kamino_earn_card_deposit: 'Depósito',
+  kamino_earn_card_deposit: 'Depositar',
   kamino_earn_card_withdraw: 'Retirar',
   kamino_earn_deposited: 'Depositado: {{amount}}',
-  kamino_earn_earned: 'Obtenido: {{amount}}',
+  kamino_earn_earned: 'Ganado: {{amount}}',
   kamino_earn_protocol: 'Kamino',
 }

@@ -72,6 +72,11 @@ export const i18nGlossary = [
     note: 'Protocol name; keep exactly as written.',
   },
   {
+    term: 'Kamino',
+    preserve: true,
+    note: 'Protocol name; keep exactly as written. Machine translation renders it as a common noun (zh: 神之野) or transliterates it (ru: Камино), neither of which names the protocol.',
+  },
+  {
     term: 'Ethereum',
     preserve: true,
     note: 'Chain name; keep exactly as written.',

@@ -1902,9 +1902,9 @@ export const ru = {
   kamino_earn_unreadable_description:
     'Оно достигает хранилища Камино, но это приложение не может прочитать его содержимое, поэтому оно не будет подписано.',
   kamino_earn_unreadable_title: 'Данная транзакция не может быть подтверждена.',
-  kamino_earn_card_deposit: 'Вклад',
-  kamino_earn_card_withdraw: 'Отзывать',
+  kamino_earn_card_deposit: 'Внести',
+  kamino_earn_card_withdraw: 'Вывести',
   kamino_earn_deposited: 'Внесено: {{amount}}',
   kamino_earn_earned: 'Заработано: {{amount}}',
-  kamino_earn_protocol: 'Камино',
+  kamino_earn_protocol: 'Kamino',
 }
