@@ -18,7 +18,7 @@ import { Text } from '@lib/ui/text'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DefiChainPageTab } from '../tabs/config'
+import { DefiChainPageTab } from '../tabs/core'
 import { setLastDefiChainTab } from '../tabs/lastTab'
 import { DefiPositionTile } from './DefiPositionTile'
 import { PositionsEmptyState } from './PositionsEmptyState'

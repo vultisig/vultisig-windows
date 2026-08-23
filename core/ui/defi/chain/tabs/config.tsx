@@ -4,16 +4,10 @@ import { TFunction } from 'i18next'
 
 import { featureFlags } from '../../../featureFlags'
 import { BondedPositions } from './BondedPositions'
+import { DefiChainPageTab } from './core'
 import { EarnPositions } from './EarnPositions'
 import { LpPositions } from './LpPositions'
 import { StakedPositions } from './StakedPositions'
-
-export type DefiChainPageTab =
-  | 'bonded'
-  | 'staked'
-  | 'earn'
-  | 'lps'
-  | 'governance'
 
 type DefiChainTabsOptions = {
   includeBonded?: boolean
