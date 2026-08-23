@@ -1,11 +1,15 @@
-import { TFunction } from 'i18next'
+import { createInstance } from 'i18next'
 import { describe, expect, it } from 'vitest'
 
 import { getDefiChainTabs } from './config'
 
-// The labels are irrelevant to ordering; echo the key back so a failure names
-// the tab rather than a translated string.
-const t = ((key: string) => key) as unknown as TFunction
+// A real i18next instance with no resources: t(key) returns the key verbatim,
+// giving an identity translator with a genuine TFunction type (no casts). The
+// labels are irrelevant to ordering, and echoing the key back means a failure
+// names the tab rather than a translated string.
+const i18n = createInstance()
+void i18n.init({ lng: 'en', resources: {} })
+const t = i18n.t
 
 const tabValues = (...args: Parameters<typeof getDefiChainTabs>) =>
   getDefiChainTabs(...args).map(tab => tab.value)
