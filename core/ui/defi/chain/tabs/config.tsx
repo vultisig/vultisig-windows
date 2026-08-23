@@ -21,11 +21,20 @@ type DefiChainTabsOptions = {
   includeGovernance?: boolean
   /**
    * Solana-only Earn segment (Kamino Earn vaults). Other chains have no
-   * curated earn vaults, so the tab would render empty for them.
+   * curated earn vaults, so the tab would render empty for them. Where it is
+   * present it leads `staked` — see the ordering note on `getDefiChainTabs`.
    */
   includeEarn?: boolean
 }
 
+/**
+ * Tabs for the DeFi chain page, in render order.
+ *
+ * `earn` deliberately precedes `staked`: yield is the reason most users open
+ * this screen, so the design leads with it, and `vultisig-android` orders its
+ * Solana tabs the same way. `bonded` still leads where it is present
+ * (THORChain / MayaChain), which have no earn segment.
+ */
 export const getDefiChainTabs = (
   t: TFunction,
   {
@@ -44,11 +53,6 @@ export const getDefiChainTabs = (
         },
       ]
     : []),
-  {
-    value: 'staked' as const,
-    label: t('defiChainTabs.staked'),
-    renderContent: StakedPositions,
-  },
   ...(includeEarn
     ? [
         {
@@ -58,6 +62,11 @@ export const getDefiChainTabs = (
         },
       ]
     : []),
+  {
+    value: 'staked' as const,
+    label: t('defiChainTabs.staked'),
+    renderContent: StakedPositions,
+  },
   ...(featureFlags.defiLpsTab && includeLps
     ? [
         {

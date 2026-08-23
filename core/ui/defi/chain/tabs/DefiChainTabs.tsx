@@ -38,7 +38,14 @@ export const DefiChainTabs = () => {
   // Solana is the only chain with curated earn vaults (Kamino Earn).
   const includeEarn = chain === Chain.Solana
 
-  const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
+  // Whichever tab leads in `getDefiChainTabs` is the one the screen opens on,
+  // so Solana lands on Earn rather than on the second tab — matching the design
+  // and `vultisig-android`.
+  const defaultTab: DefiChainPageTab = includeBonding
+    ? 'bonded'
+    : includeEarn
+      ? 'earn'
+      : 'staked'
   // An entry point that named a tab wins over the tab last left open: it is
   // the only one that knows what the user just asked to see. A tab this chain
   // does not offer falls through to the reset below.
