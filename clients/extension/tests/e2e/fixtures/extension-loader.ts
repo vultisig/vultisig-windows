@@ -53,8 +53,10 @@ export const test = base.extend<{
 }>({
   context: async ({}, use) => {
     const videoDir = process.env.EXTENSION_QA_VIDEO_DIR
+    const browserChannel = process.env.PLAYWRIGHT_BROWSER_CHANNEL
     const context = await chromium.launchPersistentContext('', {
       headless: false,
+      ...(browserChannel ? { channel: browserChannel } : {}),
       ...(videoDir
         ? {
             viewport: { width: 1280, height: 720 },
