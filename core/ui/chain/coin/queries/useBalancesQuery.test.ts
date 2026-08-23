@@ -11,8 +11,11 @@ import { getEvmChainBalances } from '@vultisig/core-chain/coin/balance/getEvmCha
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
+  balanceQueryKey,
   getBalanceQueryOptions,
   getCoinBalanceQueryAmount,
+  getLiveBalanceQueryOptions,
+  invalidateBalanceQueries,
 } from './useBalancesQuery'
 
 vi.mock('@vultisig/core-chain/coin/balance', () => ({
@@ -150,6 +153,30 @@ describe('getBalanceQueryOptions', () => {
       [accountCoinKeyToString(ethInput)]: 44n,
     })
     expect(options.queryKey).toEqual(['coinBalance', ethInput])
+    expect(options.queryKey.slice(0, balanceQueryKey.length)).toEqual(
+      balanceQueryKey
+    )
+    expect(options).toMatchObject({
+      meta: { shouldPersist: true },
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      staleTime: 30_000,
+    })
+    expect(options.refetchInterval).toBeUndefined()
+    expect(options.refetchIntervalInBackground).toBeUndefined()
+  })
+
+  it('adds mount verification and polling only for live wallet observers', () => {
+    expect(getLiveBalanceQueryOptions(ethInput)).toMatchObject({
+      meta: { shouldPersist: true },
+      refetchOnMount: 'always',
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      staleTime: 30_000,
+      refetchInterval: 30_000,
+      refetchIntervalInBackground: false,
+    })
   })
 
   it('surfaces a failed EVM batch read as a query error', async () => {
@@ -209,5 +236,26 @@ describe('getBalanceQueryOptions', () => {
       [accountCoinKeyToString(ethInput)]: 77n,
     })
     expect(getEvmChainBalances).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('invalidateBalanceQueries', () => {
+  it('invalidates every balance without touching unrelated query families', async () => {
+    const queryClient = new QueryClient()
+    const ethKey = getBalanceQueryOptions(ethInput).queryKey
+    const runeKey = getBalanceQueryOptions(runeInput).queryKey
+    const priceKey = ['coinPrices', { coins: ['ETH'] }]
+
+    queryClient.setQueryData(ethKey, { eth: 1n })
+    queryClient.setQueryData(runeKey, { rune: 2n })
+    queryClient.setQueryData(priceKey, { eth: 3 })
+
+    await invalidateBalanceQueries(queryClient)
+
+    expect(queryClient.getQueryState(ethKey)?.isInvalidated).toBe(true)
+    expect(queryClient.getQueryState(runeKey)?.isInvalidated).toBe(true)
+    expect(queryClient.getQueryState(priceKey)?.isInvalidated).toBe(false)
+
+    queryClient.clear()
   })
 })

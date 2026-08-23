@@ -40,6 +40,23 @@ export const persistQueryOptions: UseQueryGenericOptions = {
   staleTime: persistQueryStaleTime,
 }
 
+export const liveBalanceQueryRefetchInterval = convertDuration(30, 's', 'ms')
+
+/**
+ * Options layered onto persisted balance queries shown on a live wallet
+ * surface. The cached value renders immediately, every mount verifies it, and
+ * a bounded foreground interval follows incoming or settling transactions.
+ * One-shot import scans deliberately do not use these options.
+ */
+export const liveBalanceQueryOptions: UseQueryGenericOptions = {
+  refetchOnMount: 'always',
+  refetchOnWindowFocus: true,
+  refetchOnReconnect: true,
+  staleTime: persistQueryStaleTime,
+  refetchInterval: liveBalanceQueryRefetchInterval,
+  refetchIntervalInBackground: false,
+}
+
 export const priceQueryStaleTime = convertDuration(1, 'min', 'ms')
 
 export const priceQueryRefetchInterval = convertDuration(5, 'min', 'ms')

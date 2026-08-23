@@ -25,7 +25,7 @@ type ChainFamily = 'evm' | 'utxo' | 'cosmos' | 'solana'
  */
 const RPC_ENDPOINTS: Record<string, string> = {
   // EVM chains
-  ethereum: 'https://eth.llamarpc.com',
+  ethereum: 'https://ethereum-rpc.publicnode.com',
   bsc: 'https://bsc-dataseed.binance.org',
   polygon: 'https://polygon-rpc.com',
   arbitrum: 'https://arb1.arbitrum.io/rpc',
@@ -50,7 +50,15 @@ const RPC_ENDPOINTS: Record<string, string> = {
  * Determine chain family from chain name
  */
 function getChainFamily(chain: string): ChainFamily {
-  const evmChains = ['ethereum', 'bsc', 'polygon', 'arbitrum', 'optimism', 'avalanche', 'base']
+  const evmChains = [
+    'ethereum',
+    'bsc',
+    'polygon',
+    'arbitrum',
+    'optimism',
+    'avalanche',
+    'base',
+  ]
   const utxoChains = ['bitcoin', 'litecoin', 'dogecoin', 'dash', 'zcash']
   const cosmosChains = ['cosmos', 'thorchain', 'osmosis', 'kava', 'terra']
 
@@ -108,7 +116,7 @@ async function pollEvmTx(
       console.warn('EVM poll error:', error)
     }
 
-    await new Promise((r) => setTimeout(r, pollInterval))
+    await new Promise(r => setTimeout(r, pollInterval))
   }
 
   return {
@@ -121,7 +129,7 @@ async function pollEvmTx(
 
 /**
  * Poll for UTXO transaction in mempool (Bitcoin, Litecoin, etc.)
- * 
+ *
  * For E2E tests, we only verify the tx is BROADCAST (seen in mempool).
  * We don't wait for block confirmation since UTXO chains can take 10+ minutes.
  * "Broadcast successful" = tx exists in mempool = confirmed: true
@@ -140,18 +148,20 @@ async function pollUtxoTx(
       if (chain === 'bitcoin' || chain === 'litecoin') {
         // Mempool.space API - check if tx EXISTS (in mempool OR confirmed)
         const response = await fetch(`${apiUrl}/tx/${txHash}`)
-        
+
         if (response.ok) {
           const data = await response.json()
-          
+
           // Tx exists! Could be in mempool (unconfirmed) or in a block (confirmed)
           // Either way, broadcast was successful - that's all we need for E2E
           const inMempool = data.txid === txHash
           const inBlock = data.status?.confirmed === true
-          
+
           if (inMempool || inBlock) {
             const blockNumber = inBlock ? data.status.block_height : null
-            console.log(`✅ ${chain} tx ${txHash.slice(0, 16)}... found in ${inBlock ? 'block ' + blockNumber : 'mempool'}`)
+            console.log(
+              `✅ ${chain} tx ${txHash.slice(0, 16)}... found in ${inBlock ? 'block ' + blockNumber : 'mempool'}`
+            )
             return {
               confirmed: true, // "confirmed" means "broadcast successful" for E2E
               blockNumber,
@@ -162,10 +172,10 @@ async function pollUtxoTx(
       } else if (chain === 'dogecoin') {
         // Dogechain API
         const response = await fetch(`${apiUrl}/transaction/${txHash}`)
-        
+
         if (response.ok) {
           const data = await response.json()
-          
+
           if (data.transaction) {
             // Tx exists - broadcast successful
             const blockNumber = data.transaction.block_height || null
@@ -182,7 +192,7 @@ async function pollUtxoTx(
       console.warn('UTXO poll error:', error)
     }
 
-    await new Promise((r) => setTimeout(r, pollInterval))
+    await new Promise(r => setTimeout(r, pollInterval))
   }
 
   return {
@@ -229,7 +239,7 @@ async function pollCosmosTx(
       console.warn('Cosmos poll error:', error)
     }
 
-    await new Promise((r) => setTimeout(r, pollInterval))
+    await new Promise(r => setTimeout(r, pollInterval))
   }
 
   return {
@@ -269,7 +279,10 @@ async function pollSolanaTx(
       if (data.result?.value?.[0]) {
         const status = data.result.value[0]
 
-        if (status.confirmationStatus === 'finalized' || status.confirmationStatus === 'confirmed') {
+        if (
+          status.confirmationStatus === 'finalized' ||
+          status.confirmationStatus === 'confirmed'
+        ) {
           return {
             confirmed: status.err === null,
             blockNumber: status.slot,
@@ -282,7 +295,7 @@ async function pollSolanaTx(
       console.warn('Solana poll error:', error)
     }
 
-    await new Promise((r) => setTimeout(r, pollInterval))
+    await new Promise(r => setTimeout(r, pollInterval))
   }
 
   return {
@@ -328,7 +341,12 @@ export async function waitForTxConfirmation(
 
     case 'utxo':
       // Shorter timeout for UTXO since we're just checking mempool, not block confirmation
-      return pollUtxoTx(endpoint, txHash, Math.min(timeoutMs, 30_000), chainLower)
+      return pollUtxoTx(
+        endpoint,
+        txHash,
+        Math.min(timeoutMs, 30_000),
+        chainLower
+      )
 
     case 'cosmos':
       return pollCosmosTx(endpoint, txHash, timeoutMs)
@@ -349,7 +367,10 @@ export async function waitForTxConfirmation(
 /**
  * Check if a transaction is already confirmed (single check, no polling)
  */
-export async function isTxConfirmed(chain: string, txHash: string): Promise<boolean> {
+export async function isTxConfirmed(
+  chain: string,
+  txHash: string
+): Promise<boolean> {
   const result = await waitForTxConfirmation(chain, txHash, 5000)
   return result.confirmed
 }

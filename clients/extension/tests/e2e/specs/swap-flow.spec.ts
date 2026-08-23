@@ -21,12 +21,15 @@
  * - Only swap fees + gas are consumed
  */
 
+import type { BrowserContext, Page } from '@playwright/test'
+
 import { expect, test } from '../fixtures/extension-loader'
 import {
   type ChainId,
   SUPPORTED_CHAINS,
   updateStaleness,
 } from '../helpers/chain-rotation'
+import { readChromeStorage } from '../helpers/chrome-storage'
 import {
   canSwap,
   CHAIN_SYMBOLS,
@@ -44,6 +47,102 @@ import { SwapFlow } from '../page-objects/SwapFlow.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
+const ASSERT_BALANCE_AUTO_REFRESH =
+  process.env.VULTISIG_E2E_ASSERT_SWAP_BALANCE_AUTO_REFRESH === 'true'
+
+type BalanceQueryInput = {
+  chain: string
+  id?: string
+  address: string
+}
+
+type PersistedBalanceQuery = {
+  queryKey?: [string, BalanceQueryInput]
+  state?: {
+    data?: Record<string, bigint>
+    dataUpdatedAt?: number
+  }
+}
+
+const parsePersistedQueryClient = (value: string) =>
+  JSON.parse(value, (_, item) => {
+    if (typeof item === 'string' && /^-?\d+n$/.test(item)) {
+      return BigInt(item.slice(0, -1))
+    }
+    return item
+  }) as { clientState?: { queries?: PersistedBalanceQuery[] } }
+
+const findPersistedBalanceQuery = async (
+  context: BrowserContext,
+  input: BalanceQueryInput
+) => {
+  const raw = await readChromeStorage<string>(context, 'queriesPersister')
+  if (!raw) return null
+
+  return (
+    parsePersistedQueryClient(raw).clientState?.queries?.find(query => {
+      const [category, candidate] = query.queryKey ?? []
+      return (
+        category === 'coinBalance' &&
+        candidate?.chain === input.chain &&
+        candidate.address === input.address &&
+        candidate.id === input.id
+      )
+    }) ?? null
+  )
+}
+
+const readPersistedBalance = async (
+  context: BrowserContext,
+  input: BalanceQueryInput
+) => {
+  const query = await findPersistedBalanceQuery(context, input)
+  const amount = Object.values(query?.state?.data ?? {})[0]
+
+  return {
+    amount: typeof amount === 'bigint' ? amount : null,
+    dataUpdatedAt: query?.state?.dataUpdatedAt ?? 0,
+  }
+}
+
+const getStoredCoin = async (
+  context: BrowserContext,
+  ticker: string
+): Promise<BalanceQueryInput> => {
+  const currentVaultId = await readChromeStorage<string>(
+    context,
+    'currentVaultId'
+  )
+  const vaultsCoins = await readChromeStorage<
+    Record<string, Array<BalanceQueryInput & { ticker?: string }>>
+  >(context, 'vaultsCoins')
+  const coin = vaultsCoins?.[currentVaultId ?? '']?.find(
+    item => item.ticker === ticker
+  )
+
+  expect(coin, `${ticker} should exist in the designated QA vault`).toBeTruthy()
+  return { chain: coin!.chain, id: coin!.id, address: coin!.address }
+}
+
+const getChainRowText = async (page: Page, chain: string) => {
+  const row = getChainRow(page, chain)
+  await row.waitFor({ state: 'visible' })
+  return (await row.innerText()).trim()
+}
+
+const getChainRow = (page: Page, chain: string) =>
+  page
+    .locator('[data-testid="VaultChainItem-Panel"]')
+    .filter({ hasText: new RegExp(chain, 'i') })
+
+const captureChainRow = async (page: Page, chain: string, path: string) => {
+  const row = getChainRow(page, chain)
+  await row.evaluate(element =>
+    element.scrollIntoView({ block: 'center', inline: 'nearest' })
+  )
+  await page.waitForTimeout(250)
+  await row.screenshot({ path })
+}
 
 const parseVisibleAmount = (value: string) => {
   const normalized = value.replace(/,/g, '')
@@ -60,16 +159,12 @@ const getDifferentAmount = (amount: string) => {
 }
 
 type PasteAmountInput = {
-  page: import('@playwright/test').Page,
+  page: import('@playwright/test').Page
   swapFlow: SwapFlow
   amount: string
 }
 
-const pasteAmount = async ({
-  page,
-  swapFlow,
-  amount,
-}: PasteAmountInput) => {
+const pasteAmount = async ({ page, swapFlow, amount }: PasteAmountInput) => {
   await swapFlow.fromAmountInput.click({ force: true })
   await page.evaluate(async value => {
     await navigator.clipboard.writeText(value)
@@ -156,9 +251,11 @@ test.describe('Swap Flow', () => {
         `Quote: ${swapConfig.amount} ${swapConfig.fromSymbol} → ${expectedOutput} ${swapConfig.toSymbol}`
       )
 
-      const canContinue = await swapFlow.isContinueEnabled()
+      const canContinue = await swapFlow.waitForContinueEnabled()
       if (!canContinue) {
+        const validationError = await swapFlow.getValidationError()
         console.log('⚠️ Continue button disabled - amount may be too small')
+        console.log(`Swap validation error: ${validationError ?? 'unknown'}`)
         test.skip()
         return
       }
@@ -212,6 +309,155 @@ test.describe('Swap Flow', () => {
         }
       }
     } finally {
+      await page.close()
+    }
+  })
+
+  test('funded swap updates the source balance without manual refresh', async ({
+    context,
+    extensionId,
+  }, testInfo) => {
+    test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+    test.skip(
+      !ASSERT_BALANCE_AUTO_REFRESH,
+      'Funded swap balance auto-refresh proof disabled'
+    )
+    test.setTimeout(600_000)
+
+    const sourceTicker = 'VULT'
+    const destinationTicker = 'ETH'
+    const sourceInput = await getStoredCoin(context, sourceTicker)
+    const page = await context.newPage()
+    const monitorPage = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
+    const monitorVaultPage = new VaultPage(monitorPage, extensionId)
+    const swapFlow = new SwapFlow(page, extensionId)
+    const keysignProgress = new KeysignProgress(page, extensionId)
+
+    try {
+      const monitorOpenedAt = Date.now()
+      await monitorVaultPage.goto()
+      await monitorVaultPage.waitForView(15_000)
+      await expect
+        .poll(
+          async () =>
+            (await readPersistedBalance(context, sourceInput)).dataUpdatedAt,
+          { timeout: 60_000, intervals: [2_000] }
+        )
+        .toBeGreaterThan(monitorOpenedAt)
+
+      const initialBalance = (await readPersistedBalance(context, sourceInput))
+        .amount
+      expect(initialBalance).not.toBeNull()
+      expect(initialBalance!).toBeGreaterThan(0n)
+      const initialChainRow = await getChainRowText(
+        monitorPage,
+        sourceInput.chain
+      )
+      const initialRowProof = testInfo.outputPath(
+        'swap-balance-before-transaction.png'
+      )
+      await captureChainRow(monitorPage, sourceInput.chain, initialRowProof)
+      await testInfo.attach('swap balance row before transaction', {
+        path: initialRowProof,
+        contentType: 'image/png',
+      })
+
+      await vaultPage.goto()
+      await vaultPage.waitForView(15_000)
+      await navigateToSwap(page)
+      await swapFlow.waitForView()
+
+      // Switch to the funded Ethereum chain first, then choose its VULT token.
+      await swapFlow.selectFromCoin('ETH')
+      await swapFlow.selectFromCoin(sourceTicker)
+      await swapFlow.selectToCoin(destinationTicker)
+      await swapFlow.clickPercentage(25)
+      await swapFlow.waitForQuote()
+
+      const expectedOutput = await swapFlow.getExpectedOutput()
+      console.log(
+        `Balance auto-refresh swap quote: ${sourceTicker}>${destinationTicker} output=${expectedOutput}; validation=${(await swapFlow.getValidationError()) ?? 'none'}`
+      )
+      expect(expectedOutput).not.toBe('')
+      expect(expectedOutput).not.toBe('0')
+      expect(
+        await swapFlow.waitForContinueEnabled(60_000),
+        (await swapFlow.getValidationError()) ??
+          'swap validation did not settle'
+      ).toBe(true)
+      await swapFlow.assertSelectionMatches({
+        fromSymbol: sourceTicker,
+        toSymbol: destinationTicker,
+      })
+
+      await swapFlow.continue()
+      await swapFlow.acceptTerms()
+      await swapFlow.sign()
+      await keysignProgress.waitForView(30_000)
+      expect(await keysignProgress.waitForComplete(180_000)).toBe('success')
+
+      const txHash = await keysignProgress.getTxHash()
+      expect(txHash).toBeTruthy()
+      const confirmation = await waitForTxConfirmation(
+        'ethereum',
+        txHash,
+        180_000
+      )
+      expect(confirmation.confirmed, confirmation.error).toBe(true)
+
+      await expect
+        .poll(
+          async () =>
+            (
+              await readPersistedBalance(context, sourceInput)
+            ).amount?.toString(),
+          { timeout: 180_000, intervals: [5_000] }
+        )
+        .not.toBe(initialBalance!.toString())
+
+      await expect
+        .poll(() => getChainRowText(monitorPage, sourceInput.chain), {
+          timeout: 180_000,
+          intervals: [5_000],
+        })
+        .not.toBe(initialChainRow)
+
+      const finalBalance = (await readPersistedBalance(context, sourceInput))
+        .amount
+      const finalChainRow = await getChainRowText(
+        monitorPage,
+        sourceInput.chain
+      )
+
+      const proof = testInfo.outputPath('swap-balance-auto-updated.png')
+      await captureChainRow(monitorPage, sourceInput.chain, proof)
+      await testInfo.attach('swap balance auto-updated without refresh', {
+        path: proof,
+        contentType: 'image/png',
+      })
+      await testInfo.attach('swap balance auto-refresh receipt', {
+        body: Buffer.from(
+          JSON.stringify(
+            {
+              revision: process.env.VULTISIG_E2E_PROOF_REVISION ?? 'unknown',
+              route: `${sourceTicker}>${destinationTicker}`,
+              transactionHash: txHash,
+              initialPersistedBalance: initialBalance!.toString(),
+              autoUpdatedPersistedBalance: finalBalance?.toString() ?? null,
+              initialRowText: initialChainRow,
+              autoUpdatedRowText: finalChainRow,
+              refreshControlInvoked: false,
+            },
+            null,
+            2
+          )
+        ),
+        contentType: 'application/json',
+      })
+      console.log(`✅ ${sourceTicker}>${destinationTicker} swap tx: ${txHash}`)
+    } finally {
+      await monitorPage.close()
       await page.close()
     }
   })
@@ -418,10 +664,11 @@ test.describe('Swap Flow', () => {
           `Quote: ${amount} ${fromSymbol} → ${expectedOutput} ${toSymbol}`
         )
 
-        const canContinue = await swapFlow.isContinueEnabled()
+        const canContinue = await swapFlow.waitForContinueEnabled()
         if (!canContinue) {
+          const validationError = await swapFlow.getValidationError()
           console.log(
-            '⚠️ Continue disabled - quote present but blocked (likely balance or min)'
+            `⚠️ Continue disabled - quote present but blocked: ${validationError ?? 'unknown validation error'}`
           )
           test.skip()
           return

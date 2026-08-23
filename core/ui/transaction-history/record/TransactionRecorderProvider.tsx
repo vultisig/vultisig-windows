@@ -1,4 +1,4 @@
-import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
+import { invalidateBalanceQueries } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import {
   KeysignMutationListenerProvider,
   useKeysignMutationListener,
@@ -11,9 +11,7 @@ import {
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useQueryClient } from '@tanstack/react-query'
-import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { isCancelLimitSwapMemo } from '@vultisig/core-chain/swap/native/limitSwapCancelMemo'
-import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -109,12 +107,11 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
             console.error('Failed to record a broadcast transaction', error)
           })
 
-          if (!keysignPayload.coin) return
-
-          const coin = getKeysignCoin(keysignPayload)
-          void queryClient.invalidateQueries({
-            queryKey: getBalanceQueryKey(extractAccountCoinKey(coin)),
-          })
+          // A broadcast can change more than the selected coin: fees touch the
+          // native asset and swaps also affect their destination asset. Mark
+          // the whole balance family stale so active queries refetch now and
+          // inactive persisted queries refresh when the wallet remounts.
+          void invalidateBalanceQueries(queryClient)
         },
       }}
     >
