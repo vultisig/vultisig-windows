@@ -465,14 +465,23 @@ export class SwapFlow extends BasePage {
    * USDC>ETH instead of ETH>$DEST. Without this gate the test broadcasts
    * real money on the wrong pair.
    */
-  // Splits selector text into uppercase tokens (A-Z0-9 only) for exact symbol matching.
-  // Prevents "USDC on Ethereum" from matching as "ETH".
+  // Exact-token match ("USDC on Ethereum" must not satisfy "ETH"). The selector
+  // fuses ticker+badge ("RUNENATIVE"), so badge suffixes are peeled into extra
+  // exact tokens — never substring-matched, or WETH would satisfy ETH.
   private hasSelectedSymbol(text: string, symbol: string): boolean {
+    const badgeSuffixes = ['NATIVE']
     const tokens = text
       .toUpperCase()
       .split(/[^A-Z0-9]+/)
       .filter(Boolean)
-    return tokens.includes(symbol.toUpperCase())
+    const peeled = tokens.flatMap(token =>
+      badgeSuffixes
+        .filter(
+          suffix => token.length > suffix.length && token.endsWith(suffix)
+        )
+        .map(suffix => token.slice(0, -suffix.length))
+    )
+    return [...tokens, ...peeled].includes(symbol.toUpperCase())
   }
 
   /**
