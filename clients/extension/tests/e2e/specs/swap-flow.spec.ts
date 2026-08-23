@@ -408,10 +408,12 @@ test.describe('Swap Flow', () => {
 
       await expect
         .poll(
-          async () =>
-            (
+          async () => {
+            const persistedBalance = (
               await readPersistedBalance(context, sourceInput)
-            ).amount?.toString(),
+            ).amount
+            return persistedBalance?.toString() ?? initialBalance!.toString()
+          },
           { timeout: 180_000, intervals: [5_000] }
         )
         .not.toBe(initialBalance!.toString())

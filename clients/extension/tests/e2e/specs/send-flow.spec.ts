@@ -213,10 +213,11 @@ async function waitForSendTxConfirmation(
   }
 
   const startedAt = Date.now()
+  const normalizedHash = txHash.trim().replace(/^0x/i, '')
   while (Date.now() - startedAt < timeoutMs) {
     try {
       const response = await fetch(
-        `https://gateway.liquify.com/chain/thorchain_rpc/tx?hash=0x${txHash}&prove=false`
+        `https://gateway.liquify.com/chain/thorchain_rpc/tx?hash=0x${normalizedHash}&prove=false`
       )
       if (response.ok) {
         const data = await response.json()
@@ -544,10 +545,16 @@ test.describe('Send Flow', () => {
           ) {
             await expect
               .poll(
-                async () =>
-                  (
-                    await readPersistedBalance(context, balanceQueryInput!)
-                  )?.toString() ?? null,
+                async () => {
+                  const persistedBalance = await readPersistedBalance(
+                    context,
+                    balanceQueryInput!
+                  )
+                  return (
+                    persistedBalance?.toString() ??
+                    initialNativeBalance.toString()
+                  )
+                },
                 {
                   message: `${chainInfo.symbol} native balance query should auto-update without the refresh button`,
                   timeout: 180_000,
