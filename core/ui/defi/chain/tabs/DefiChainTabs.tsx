@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
-import { DefiChainPageTab, getDefiChainTabs } from './config'
+import { defaultDefiChainTab, getDefiChainTabs } from './config'
 import { getLastDefiChainTab, setLastDefiChainTab } from './lastTab'
 
 export const DefiChainTabs = () => {
@@ -26,8 +26,11 @@ export const DefiChainTabs = () => {
   // Solana is the only chain with curated earn vaults (Kamino Earn).
   const includeEarn = chain === Chain.Solana
 
-  const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
-  const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
+  const defaultTab = defaultDefiChainTab({
+    includeEarn,
+    includeBonded: includeBonding,
+  })
+  const [activeTab, setActiveTab] = useState(
     getLastDefiChainTab(chain) ?? defaultTab
   )
   const { colors } = useTheme()

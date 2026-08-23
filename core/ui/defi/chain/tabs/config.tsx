@@ -32,6 +32,18 @@ type DefiChainTabsOptions = {
   includeEarn?: boolean
 }
 
+export const defaultDefiChainTab = ({
+  includeEarn = false,
+  includeBonded = false,
+}: Pick<
+  DefiChainTabsOptions,
+  'includeEarn' | 'includeBonded'
+> = {}): DefiChainPageTab => {
+  if (includeEarn) return 'earn'
+  if (includeBonded) return 'bonded'
+  return 'staked'
+}
+
 export const getDefiChainTabs = (
   t: TFunction,
   {
@@ -41,6 +53,15 @@ export const getDefiChainTabs = (
     includeEarn = false,
   }: DefiChainTabsOptions = {}
 ): Tab<DefiChainPageTab>[] => [
+  ...(includeEarn
+    ? [
+        {
+          value: 'earn' as const,
+          label: t('defiChainTabs.earn'),
+          renderContent: EarnPositions,
+        },
+      ]
+    : []),
   ...(includeBonded
     ? [
         {
@@ -55,15 +76,6 @@ export const getDefiChainTabs = (
     label: t('defiChainTabs.staked'),
     renderContent: StakedPositions,
   },
-  ...(includeEarn
-    ? [
-        {
-          value: 'earn' as const,
-          label: t('defiChainTabs.earn'),
-          renderContent: EarnPositions,
-        },
-      ]
-    : []),
   ...(featureFlags.defiLpsTab && includeLps
     ? [
         {
