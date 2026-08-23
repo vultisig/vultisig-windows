@@ -25,6 +25,11 @@ import {
 import { DefiChainItem } from './DefiChainItem'
 import { useSearchChain } from './state/searchChainProvider'
 
+/**
+ * The DeFi tab's portfolio list. Rows are ordered by the fiat value each one
+ * displays, descending, with the Circle yield account ranked alongside the
+ * chains rather than pinned to either end.
+ */
 export const DefiChainsList = () => {
   const { data: chainPortfolios = [], isPending } = useDefiChainPortfolios()
   const defiChains = useDefiChains()
