@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
-import { DefiChainPageTab } from './config'
+import { DefiChainPageTab } from './core'
 
 type DefiPositionEmptyStateProps = {
   returnTab?: DefiChainPageTab
