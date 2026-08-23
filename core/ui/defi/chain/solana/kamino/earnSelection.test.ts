@@ -19,23 +19,20 @@ describe('resolveKaminoEarnSelection', () => {
     })
   })
 
-  it('keeps the chains and positions the user already selected', () => {
+  it('keeps the chains and positions of other chains', () => {
     const { defiChains, defiPositions } = resolveKaminoEarnSelection({
       defiChains: [Chain.THORChain],
-      defiPositions: {
-        [Chain.THORChain]: ['thor-stake-tcy'],
-        [Chain.Solana]: ['solana-stake-sol'],
-      },
+      defiPositions: { [Chain.THORChain]: ['thor-stake-tcy'] },
     })
 
     expect(defiChains).toEqual([Chain.THORChain, Chain.Solana])
     expect(defiPositions).toEqual({
       [Chain.THORChain]: ['thor-stake-tcy'],
-      [Chain.Solana]: ['solana-stake-sol', ...kaminoPositionIds],
+      [Chain.Solana]: kaminoPositionIds,
     })
   })
 
-  it('writes nothing once Solana and a curated vault are selected', () => {
+  it('writes nothing once Solana and the curated vaults are selected', () => {
     expect(
       resolveKaminoEarnSelection({
         defiChains: [Chain.Solana],
@@ -55,17 +52,30 @@ describe('resolveKaminoEarnSelection', () => {
     ).toBeUndefined()
   })
 
-  it('adds the vaults for a Solana chain enabled before Kamino shipped', () => {
+  it('honours a Solana selection that deliberately holds no Kamino vault', () => {
     expect(
       resolveKaminoEarnSelection({
         defiChains: [Chain.Solana],
         defiPositions: { [Chain.Solana]: ['solana-stake-sol'] },
+      }).defiPositions
+    ).toBeUndefined()
+  })
+
+  it('honours a Solana selection emptied of every position', () => {
+    expect(
+      resolveKaminoEarnSelection({
+        defiChains: [Chain.Solana],
+        defiPositions: { [Chain.Solana]: [] },
+      }).defiPositions
+    ).toBeUndefined()
+  })
+
+  it('still adds Solana to the chain list when its positions are already set', () => {
+    expect(
+      resolveKaminoEarnSelection({
+        defiChains: [],
+        defiPositions: { [Chain.Solana]: kaminoPositionIds },
       })
-    ).toEqual({
-      defiChains: undefined,
-      defiPositions: {
-        [Chain.Solana]: ['solana-stake-sol', ...kaminoPositionIds],
-      },
-    })
+    ).toEqual({ defiChains: [Chain.Solana], defiPositions: undefined })
   })
 })

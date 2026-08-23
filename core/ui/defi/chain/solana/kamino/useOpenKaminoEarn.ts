@@ -12,7 +12,8 @@ import { resolveKaminoEarnSelection } from './earnSelection'
  * Earn tab reads can be assumed: Solana is not on the DeFi tab until the user
  * adds it, and the curated vaults are not selected until something selects
  * them. An entry point that only navigated would land on the "no positions
- * selected" state, so whatever is missing is added first.
+ * selected" state, so the selection is seeded first - see
+ * {@link resolveKaminoEarnSelection} for what counts as unseeded.
  *
  * Writing the selection is best-effort - an Earn tab the user has to populate
  * themselves still beats a tap that goes nowhere.

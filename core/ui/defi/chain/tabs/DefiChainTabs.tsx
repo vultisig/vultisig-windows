@@ -16,6 +16,15 @@ import { getDefiChainTabs } from './config'
 import { DefiChainPageTab } from './core'
 import { getLastDefiChainTab, setLastDefiChainTab } from './lastTab'
 
+/**
+ * The DeFi chain detail page's segmented content, with the segments this chain
+ * has anything to show under.
+ *
+ * Opens the tab the navigation state asked for, falling back to the tab last
+ * left open for this chain and then to the chain's default. A tab this chain
+ * does not offer - a stale one from persisted navigation state, or one meant
+ * for another chain - resets to the first it does.
+ */
 export const DefiChainTabs = () => {
   const { t } = useTranslation()
   const chain = useCurrentDefiChain()
