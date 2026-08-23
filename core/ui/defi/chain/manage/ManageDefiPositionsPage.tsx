@@ -18,7 +18,7 @@ import { Text } from '@lib/ui/text'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DefiChainPageTab } from '../tabs/config'
+import { isDefiChainPageTab } from '../tabs/core'
 import { setLastDefiChainTab } from '../tabs/lastTab'
 import { DefiPositionTile } from './DefiPositionTile'
 import { PositionsEmptyState } from './PositionsEmptyState'
@@ -31,8 +31,8 @@ export const ManageDefiPositionsPage = () => {
   const { goBack } = useCore()
 
   useEffect(() => {
-    if (returnTab && ['bonded', 'staked', 'earn', 'lps'].includes(returnTab)) {
-      setLastDefiChainTab(chain, returnTab as DefiChainPageTab)
+    if (returnTab && isDefiChainPageTab(returnTab)) {
+      setLastDefiChainTab(chain, returnTab)
     }
   }, [chain, returnTab])
 

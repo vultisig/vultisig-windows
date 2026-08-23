@@ -1,4 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Tabs } from '@lib/ui/base/Tabs'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -11,12 +12,23 @@ import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
-import { DefiChainPageTab, getDefiChainTabs } from './config'
+import { getDefiChainTabs } from './config'
+import { DefiChainPageTab } from './core'
 import { getLastDefiChainTab, setLastDefiChainTab } from './lastTab'
 
+/**
+ * The DeFi chain detail page's segmented content, with the segments this chain
+ * has anything to show under.
+ *
+ * Opens the tab the navigation state asked for, falling back to the tab last
+ * left open for this chain and then to the chain's default. A tab this chain
+ * does not offer - a stale one from persisted navigation state, or one meant
+ * for another chain - resets to the first it does.
+ */
 export const DefiChainTabs = () => {
   const { t } = useTranslation()
   const chain = useCurrentDefiChain()
+  const [{ tab: requestedTab }] = useCoreViewState<'defiChainDetail'>()
   const includeBonding = chain === Chain.THORChain || chain === Chain.MayaChain
   // LP positions are only modeled for THORChain / MayaChain — the LpPositions
   // tab queries their LP services and would render empty for other chains.
@@ -27,8 +39,11 @@ export const DefiChainTabs = () => {
   const includeEarn = chain === Chain.Solana
 
   const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
+  // An entry point that named a tab wins over the tab last left open: it is
+  // the only one that knows what the user just asked to see. A tab this chain
+  // does not offer falls through to the reset below.
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
-    getLastDefiChainTab(chain) ?? defaultTab
+    requestedTab ?? getLastDefiChainTab(chain) ?? defaultTab
   )
   const { colors } = useTheme()
   const navigate = useCoreNavigate()

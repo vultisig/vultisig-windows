@@ -1,3 +1,4 @@
+import { DefiChainPageTab } from '@core/ui/defi/chain/tabs/core'
 import { DefiProtocol } from '@core/ui/defi/protocols/core'
 import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInput'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
@@ -126,7 +127,7 @@ export type CoreView =
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
   | { id: 'defi'; state: { protocol?: DefiProtocol } }
-  | { id: 'defiChainDetail'; state: { chain: Chain; tab?: string } }
+  | { id: 'defiChainDetail'; state: { chain: Chain; tab?: DefiChainPageTab } }
   | { id: 'manageDefiChains' }
   | { id: 'manageDefiPositions'; state: { chain: Chain; returnTab?: string } }
   | { id: 'kaminoDeposit'; state: { vaultAddress: string } }
