@@ -22,7 +22,7 @@ const pulse = keyframes`
 `
 
 const SkeletonCard = styled.div`
-  height: 132px;
+  height: 156px;
   ${borderRadius.xl};
   background: rgba(255, 255, 255, 0.04);
   animation: ${pulse} 1.6s ease-in-out infinite;

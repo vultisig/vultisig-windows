@@ -1899,9 +1899,6 @@ export const it = {
   swap_limit_is_worth: 'vale',
   swap_limit_when_one: 'Quando 1',
   kamino_earn_apy_30d: 'APY (30 giorni)',
-  kamino_earn_curated_by: 'Selezionato da {{curator}}',
-  kamino_earn_no_position: 'Non hai ancora nulla in questa cassaforte',
-  kamino_earn_pnl: 'Profitto/perdita',
   kamino_earn_positions_unavailable:
     'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',
   kamino_earn_risk_conservative: 'Conservatore',
@@ -1932,4 +1929,9 @@ export const it = {
   kamino_earn_unreadable_description:
     'Raggiunge un vault di Kamino, ma questa app non può leggerne il contenuto, quindi non lo firmerà.',
   kamino_earn_unreadable_title: 'Questa transazione non può essere verificata',
+  kamino_earn_card_deposit: 'Depositare',
+  kamino_earn_card_withdraw: 'Ritirare',
+  kamino_earn_deposited: 'Depositato: {{amount}}',
+  kamino_earn_earned: 'Guadagnato: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

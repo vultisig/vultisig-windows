@@ -4324,6 +4324,7 @@ __metadata:
     "@vultisig/core-chain": "npm:2.39.0"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/core-mpc": "npm:1.20.4"
+    "@vultisig/lib-utils": "npm:0.10.5"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
     styled-components: "npm:6.4.4"

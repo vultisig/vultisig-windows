@@ -1876,9 +1876,6 @@ export const nl = {
   swap_limit_is_worth: 'waard is',
   swap_limit_when_one: 'Wanneer 1',
   kamino_earn_apy_30d: 'APY (30d)',
-  kamino_earn_curated_by: 'Samengesteld door {{curator}}',
-  kamino_earn_no_position: 'Je hebt nog niets in deze kluis.',
-  kamino_earn_pnl: 'Winst/verlies',
   kamino_earn_positions_unavailable:
     "Saldo's konden niet worden geladen. De weergegeven kluizen zijn actueel.",
   kamino_earn_risk_conservative: 'Conservatief',
@@ -1909,4 +1906,9 @@ export const nl = {
   kamino_earn_unreadable_description:
     'Het bereikt een Kamino-kluis, maar deze app kan niet lezen wat het doet, dus zal het niet ondertekenen.',
   kamino_earn_unreadable_title: 'Deze transactie kan niet worden geverifieerd.',
+  kamino_earn_card_deposit: 'Borg',
+  kamino_earn_card_withdraw: 'Terugtrekken',
+  kamino_earn_deposited: 'Gedeponeerd: {{amount}}',
+  kamino_earn_earned: 'Verdiend: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

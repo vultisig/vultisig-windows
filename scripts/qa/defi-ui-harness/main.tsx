@@ -1,65 +1,30 @@
-import { CircleView } from '@core/ui/defi/protocols/circle/CircleView'
 import '@core/ui/i18n/config'
-import { usdc } from '@vultisig/core-chain/coin/knownTokens'
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import styled from 'styled-components'
 
-import {
-  createDefiQaQueryClient,
-  createQaVault,
-  DefiQaProviders,
-  qaCircleAccountAddress,
-  qaEthCoin,
-  qaOwnerAddress,
-  seedCircleAccount,
-  seedCoinBalance,
-  seedCoinPrices,
-  seedStoredSettings,
-} from './fixture'
+import { CircleScenario } from './circleScenario'
+import { KaminoScenario } from './kaminoScenario'
 
-const vaultUsdc = {
-  ...usdc,
-  address: qaOwnerAddress,
+const scenarios = {
+  circle: CircleScenario,
+  kamino: KaminoScenario,
 }
 
-const circleAccountUsdc = {
-  ...usdc,
-  address: qaCircleAccountAddress,
-}
+type ScenarioName = keyof typeof scenarios
 
-const vault = createQaVault({
-  name: 'QA Circle Vault',
-  coins: [qaEthCoin, vaultUsdc],
-})
+const isScenarioName = (value: string | null): value is ScenarioName =>
+  value !== null && value in scenarios
 
-const queryClient = createDefiQaQueryClient()
-
-seedStoredSettings({ queryClient })
-seedCircleAccount({
-  queryClient,
-  ownerAddress: qaOwnerAddress,
-  accountAddress: qaCircleAccountAddress,
-})
-seedCoinBalance({
-  queryClient,
-  coin: circleAccountUsdc,
-  balance: 125_000_000n,
-})
-seedCoinPrices({
-  queryClient,
-  prices: [
-    {
-      coin: usdc,
-      price: 1,
-    },
-  ],
-})
+const requested = new URLSearchParams(window.location.search).get('scenario')
+const Scenario = scenarios[isScenarioName(requested) ? requested : 'circle']
 
 const Page = styled.div`
   width: 430px;
   min-height: 720px;
   margin: 0 auto;
+  padding: 16px;
 `
 
 const rootElement = document.getElementById('root')
@@ -70,10 +35,8 @@ if (rootElement === null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <DefiQaProviders queryClient={queryClient} vault={vault}>
-      <Page>
-        <CircleView />
-      </Page>
-    </DefiQaProviders>
+    <Page>
+      <Scenario />
+    </Page>
   </StrictMode>
 )

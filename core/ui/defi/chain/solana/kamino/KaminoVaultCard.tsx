@@ -1,12 +1,14 @@
-import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { SafeImage } from '@lib/ui/images/SafeImage'
+import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
+import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PercentIcon } from '@lib/ui/icons/PercentIcon'
+import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { Text, TextColor } from '@lib/ui/text'
 import { KaminoVaultInfo } from '@vultisig/core-chain/chains/solana/kamino/models'
 import { KaminoRiskTier } from '@vultisig/core-chain/chains/solana/kamino/registry'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
@@ -14,7 +16,9 @@ import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { PnlRow } from './PnlRow'
+import { KaminoMarkIcon } from './KaminoMarkIcon'
+import { KaminoPositionFigure } from './KaminoPositionFigure'
+import { KaminoVaultLogos } from './KaminoVaultLogos'
 
 type KaminoVaultCardProps = {
   info: KaminoVaultInfo
@@ -53,16 +57,18 @@ const riskTierLabelKey = {
   privateCredit: 'kamino_earn_risk_private_credit',
 } as const satisfies Record<KaminoRiskTier, string>
 
+// A caption beside the name rather than a filled pill: the tier qualifies the
+// vault's identity, and only private credit is a caveat worth the alert hue.
 const riskTierColor = {
-  conservative: 'success',
-  privateCredit: 'idle',
-} as const satisfies Record<KaminoRiskTier, string>
+  conservative: 'shy',
+  privateCredit: 'warning',
+} as const satisfies Record<KaminoRiskTier, TextColor>
 
 /**
  * One curated Kamino Earn vault on the Solana DeFi tab: the vault's live name
- * and its curator, the risk tier it is offered under, the 30-day APY, and —
- * when the vault holds one — the position's balance, fiat value and lifetime
- * PnL.
+ * and risk tier, the protocol it runs on, its 30-day APY, and — when the vault
+ * holds one — the position's deposited and earned figures with the actions
+ * that move them.
  */
 export const KaminoVaultCard = ({
   info,
@@ -73,100 +79,94 @@ export const KaminoVaultCard = ({
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const navigate = useCoreNavigate()
-  const { riskTier, curator } = info.descriptor
+  const { riskTier } = info.descriptor
   const hasPosition = position.status === 'settled' && position.tokenAmount > 0
+
+  // Withdraw stays reachable while the read is pending or failed: a position
+  // must never be made unreachable by a request that did not land.
+  const isConfirmedEmpty = position.status === 'settled' && !hasPosition
+
+  const toFiat = (amount: number) =>
+    priceUsd > 0 ? formatFiatAmount(amount * priceUsd) : undefined
+
+  const goToDeposit = () =>
+    navigate({
+      id: 'kaminoDeposit',
+      state: { vaultAddress: info.descriptor.address },
+    })
 
   return (
     <Container gap={12}>
-      <HStack justifyContent="space-between" alignItems="center" gap={8}>
-        <HStack gap={8} alignItems="center">
-          <SafeImage
-            src={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
-            render={props => <VaultLogo {...props} />}
-          />
-          <VStack gap={2}>
-            <Text weight={500}>{info.name}</Text>
+      <HStack gap={8} alignItems="center">
+        <KaminoVaultLogos coin={coin} />
+        <Identity gap={2}>
+          <HStack gap={8} alignItems="center" justifyContent="space-between">
+            <VaultName weight={500} cropped>
+              {info.name}
+            </VaultName>
+            <RiskCaption size={12} color={riskTierColor[riskTier]}>
+              {t(riskTierLabelKey[riskTier])}
+            </RiskCaption>
+          </HStack>
+          <HStack gap={4} alignItems="center">
+            <IconWrapper size={14}>
+              <KaminoMarkIcon />
+            </IconWrapper>
             <Text size={12} color="shy">
-              {t('kamino_earn_curated_by', { curator })}
+              {t('kamino_earn_protocol')}
             </Text>
-          </VStack>
-        </HStack>
-        <RiskBadge color={riskTierColor[riskTier]} size={12}>
-          {t(riskTierLabelKey[riskTier])}
-        </RiskBadge>
+          </HStack>
+        </Identity>
       </HStack>
 
-      <HStack justifyContent="space-between" alignItems="center">
-        <Text size={13} color="shy">
-          {t('kamino_earn_apy_30d')}
-        </Text>
+      {position.status === 'settled' && hasPosition ? (
+        <>
+          <KaminoPositionFigure
+            label={t('kamino_earn_deposited', {
+              amount: formatAmount(position.tokenAmount, {
+                ticker: coin.ticker,
+              }),
+            })}
+            fiat={toFiat(position.tokenAmount)}
+          />
+          {position.pnlToken !== undefined ? (
+            <KaminoPositionFigure
+              label={t('kamino_earn_earned', {
+                amount: formatAmount(position.pnlToken, {
+                  ticker: coin.ticker,
+                }),
+              })}
+              fiat={toFiat(position.pnlToken)}
+            />
+          ) : null}
+        </>
+      ) : null}
+
+      <HStack justifyContent="space-between" alignItems="center" gap={8}>
+        <HStack gap={6} alignItems="center">
+          <IconWrapper size={16} color="textShy">
+            <PercentIcon />
+          </IconWrapper>
+          <Text size={13} color="shy">
+            {t('apy')}
+          </Text>
+        </HStack>
         <Text size={13} color="success">
           {`${(info.apy30d * 100).toFixed(2)}%`}
         </Text>
       </HStack>
 
-      {position.status === 'settled' ? (
-        hasPosition ? (
-          <>
-            <HStack justifyContent="space-between" alignItems="center">
-              <Text size={13} color="shy">
-                {t('balance')}
-              </Text>
-              <VStack alignItems="flex-end" gap={2}>
-                <Text weight={500}>
-                  {formatAmount(position.tokenAmount, { ticker: coin.ticker })}
-                </Text>
-                {priceUsd > 0 ? (
-                  <Text size={13} color="shy">
-                    {formatFiatAmount(position.tokenAmount * priceUsd)}
-                  </Text>
-                ) : null}
-              </VStack>
-            </HStack>
-
-            {position.pnlToken !== undefined ? (
-              <PnlRow amount={position.pnlToken} ticker={coin.ticker} />
-            ) : null}
-          </>
-        ) : (
-          <Text size={12} color="shy">
-            {t('kamino_earn_no_position')}
-          </Text>
-        )
+      {isConfirmedEmpty ? (
+        <Button icon={<CirclePlusIcon />} onClick={goToDeposit}>
+          {t('kamino_earn_card_deposit')}
+        </Button>
       ) : (
-        <HStack justifyContent="space-between" alignItems="center">
-          <Text size={13} color="shy">
-            {t('balance')}
-          </Text>
-          <Text size={13} color="shy">
-            {position.status === 'pending' ? t('loading') : t('failed_to_load')}
-          </Text>
-        </HStack>
-      )}
-
-      <HStack gap={8}>
-        {/*
-         * Withdraw appears once the vault is known to hold something, and
-         * while that is still unknown: a position must never be made
-         * unreachable by a read that failed. Deposit takes the whole width
-         * when it is alone, because a half-width button beside empty space
-         * reads as a control that is missing rather than one that is absent.
-         */}
-        {position.status === 'settled' && !hasPosition ? (
-          <Button
-            onClick={() =>
-              navigate({
-                id: 'kaminoDeposit',
-                state: { vaultAddress: info.descriptor.address },
-              })
-            }
-          >
-            {t('kamino_earn_deposit')}
-          </Button>
-        ) : (
-          <>
+        <>
+          <LineSeparator kind="regular" />
+          <HStack gap={8}>
             <Button
               kind="secondary"
+              icon={<CircleMinusIcon />}
               onClick={() =>
                 navigate({
                   id: 'kaminoWithdraw',
@@ -174,21 +174,14 @@ export const KaminoVaultCard = ({
                 })
               }
             >
-              {t('kamino_earn_withdraw')}
+              {t('kamino_earn_card_withdraw')}
             </Button>
-            <Button
-              onClick={() =>
-                navigate({
-                  id: 'kaminoDeposit',
-                  state: { vaultAddress: info.descriptor.address },
-                })
-              }
-            >
-              {t('kamino_earn_deposit')}
+            <Button icon={<CirclePlusIcon />} onClick={goToDeposit}>
+              {t('kamino_earn_card_deposit')}
             </Button>
-          </>
-        )}
-      </HStack>
+          </HStack>
+        </>
+      )}
     </Container>
   )
 }
@@ -199,14 +192,17 @@ const Container = styled(VStack)`
   background: rgba(255, 255, 255, 0.04);
 `
 
-const VaultLogo = styled.img`
-  width: 36px;
-  height: 36px;
-  ${borderRadius.pill};
+const Identity = styled(VStack)`
+  flex: 1;
+  min-width: 0;
 `
 
-const RiskBadge = styled(Text)`
-  padding: 4px 8px;
-  ${borderRadius.sm};
-  background: ${getColor('foreground')};
+const VaultName = styled(Text)`
+  min-width: 0;
+`
+
+// The tier is the shorter, more surprising half of the line, so the name is
+// what gives way when the two do not fit.
+const RiskCaption = styled(Text)`
+  flex-shrink: 0;
 `

@@ -21,6 +21,7 @@ import {
   accountCoinKeyToString,
   extractAccountCoinKey,
 } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { CoinKey, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
 import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
@@ -63,6 +64,12 @@ type SeedCoinPricesInput = {
   prices: SeedCoinPrice[]
 }
 
+type SeedDefiPositionsInput = {
+  queryClient: QueryClient
+  /** Enabled position ids per chain, as `defiPositions` storage holds them. */
+  positions: Record<string, string[]>
+}
+
 type DefiQaProvidersProps = ChildrenProp & {
   queryClient: QueryClient
   vault: QaVault
@@ -79,6 +86,18 @@ export const qaEthCoin: AccountCoin = {
   address: qaOwnerAddress,
   ticker: 'ETH',
   decimals: 18,
+}
+
+/** A fake but base58-shaped Solana address, for scenarios on that chain. */
+export const qaSolanaOwnerAddress = 'QAKamino1111111111111111111111111111111111111'
+
+/**
+ * The vault's native Solana coin. Present so `useCurrentVaultAddress` resolves
+ * an address from storage rather than deriving one through WalletCore.
+ */
+export const qaSolanaCoin: AccountCoin = {
+  ...chainFeeCoin[Chain.Solana],
+  address: qaSolanaOwnerAddress,
 }
 
 /**
@@ -206,6 +225,18 @@ export const seedCoinPrices = ({
     }),
     data
   )
+}
+
+/**
+ * Seeds the set of DeFi positions the user has enabled, which the chain tabs
+ * read before any network call — an unseeded record renders the opt-in banner
+ * instead of the position list.
+ */
+export const seedDefiPositions = ({
+  queryClient,
+  positions,
+}: SeedDefiPositionsInput) => {
+  queryClient.setQueryData([StorageKey.defiPositions], positions)
 }
 
 let qaSolanaMoveStakeDestinations: SolanaMoveStakeDestinations = {}

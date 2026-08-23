@@ -1853,9 +1853,6 @@ export const ko = {
   swap_limit_is_worth: '의 가치가',
   swap_limit_when_one: '1',
   kamino_earn_apy_30d: 'APY(30일)',
-  kamino_earn_curated_by: '{{curator}} 님이 큐레이션했습니다.',
-  kamino_earn_no_position: '이 금고에는 아직 아무것도 없습니다.',
-  kamino_earn_pnl: '이익/손실',
   kamino_earn_positions_unavailable:
     '잔액을 불러올 수 없습니다. 표시된 금고 정보가 최신 상태입니다.',
   kamino_earn_risk_conservative: '보수적인',
@@ -1886,4 +1883,9 @@ export const ko = {
   kamino_earn_unreadable_description:
     '해당 데이터는 카미노 금고에 도달하지만, 이 앱은 데이터 내용을 읽을 수 없으므로 서명하지 않습니다.',
   kamino_earn_unreadable_title: '이 거래는 확인되지 않았습니다.',
+  kamino_earn_card_deposit: '보증금',
+  kamino_earn_card_withdraw: '철회하다',
+  kamino_earn_deposited: '입금됨: {{amount}}',
+  kamino_earn_earned: '획득: {{amount}}',
+  kamino_earn_protocol: '카미노',
 }

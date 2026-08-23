@@ -1740,9 +1740,6 @@ export const zh = {
   swap_limit_is_worth: '价值达到',
   swap_limit_when_one: '当 1',
   kamino_earn_apy_30d: '年收益率（30天）',
-  kamino_earn_curated_by: '由{{curator}}策划',
-  kamino_earn_no_position: '你这个保险库里目前什么都没有。',
-  kamino_earn_pnl: '利润/亏损',
   kamino_earn_positions_unavailable:
     '余额加载失败。显示的库房信息均为最新信息。',
   kamino_earn_risk_conservative: '保守的',
@@ -1770,4 +1767,9 @@ export const zh = {
   kamino_earn_unreadable_description:
     '它到达了 Kamino 保险库，但此应用程序无法读取它的内容，因此不会对其进行签名。',
   kamino_earn_unreadable_title: '此交易无法验证',
+  kamino_earn_card_deposit: '订金',
+  kamino_earn_card_withdraw: '提取',
+  kamino_earn_deposited: '已存入： {{amount}}',
+  kamino_earn_earned: '已获得： {{amount}}',
+  kamino_earn_protocol: '神之野',
 }

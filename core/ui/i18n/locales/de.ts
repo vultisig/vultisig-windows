@@ -1907,9 +1907,6 @@ export const de = {
   swap_limit_is_worth: 'wert ist',
   swap_limit_when_one: 'Wenn 1',
   kamino_earn_apy_30d: 'Jahreszins (30 Tage)',
-  kamino_earn_curated_by: 'Kuratiert von {{curator}}',
-  kamino_earn_no_position: 'Du hast noch nichts in diesem Tresor.',
-  kamino_earn_pnl: 'Gewinn / Verlust',
   kamino_earn_positions_unavailable:
     'Die Salden konnten nicht geladen werden. Die angezeigten Tresore sind aktuell.',
   kamino_earn_risk_conservative: 'Konservativ',
@@ -1941,4 +1938,9 @@ export const de = {
     'Es erreicht einen Kamino-Tresor, aber diese App kann nicht lesen, was es tut, daher wird es nicht signiert.',
   kamino_earn_unreadable_title:
     'Diese Transaktion kann nicht verifiziert werden.',
+  kamino_earn_card_deposit: 'Kaution',
+  kamino_earn_card_withdraw: 'Zurückziehen',
+  kamino_earn_deposited: 'Eingezahlt: {{amount}}',
+  kamino_earn_earned: 'Erhalten: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

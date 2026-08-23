@@ -1863,9 +1863,6 @@ export const hr = {
   swap_limit_is_worth: 'vrijedi',
   swap_limit_when_one: 'Kada 1',
   kamino_earn_apy_30d: 'APY (30d)',
-  kamino_earn_curated_by: 'Odabrao {{curator}}',
-  kamino_earn_no_position: 'Još nemaš ništa u ovom trezoru',
-  kamino_earn_pnl: 'Dobit / gubitak',
   kamino_earn_positions_unavailable:
     'Stanje nije moguće učitati. Prikazani trezori su ažurirani.',
   kamino_earn_risk_conservative: 'Konzervativac',
@@ -1896,4 +1893,9 @@ export const hr = {
   kamino_earn_unreadable_description:
     'Dolazi do Kamino trezora, ali ova aplikacija ne može pročitati što radi, pa ga neće potpisati.',
   kamino_earn_unreadable_title: 'Ovu transakciju nije moguće potvrditi',
+  kamino_earn_card_deposit: 'Polog',
+  kamino_earn_card_withdraw: 'Povući',
+  kamino_earn_deposited: 'Položeno: {{amount}}',
+  kamino_earn_earned: 'Zarađeno: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }
