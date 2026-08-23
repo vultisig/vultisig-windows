@@ -6,11 +6,14 @@ import { useCore } from '../../state/core'
 import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
 import { computePasscodeUnlockSessionExpiresAt } from '../../storage/passcodeUnlockSession'
 import { usePasscode } from '../state/passcode'
+import { usePasscodeAutoLockHolds } from './passcodeAutoLockHolds'
 
 export const PasscodeAutoLock = () => {
   const [passcode, setPasscode] = usePasscode()
   const passcodeAutoLock = shouldBePresent(usePasscodeAutoLock())
   const { setPasscodeUnlockSession } = useCore()
+  const [autoLockHolds] = usePasscodeAutoLockHolds()
+  const isHeld = autoLockHolds > 0
 
   const [lastInteractionAt, setLastInteractionAt] = useState<number | null>(
     null
@@ -71,6 +74,16 @@ export const PasscodeAutoLock = () => {
     const lockDelayMs = convertDuration(passcodeAutoLock, 'min', 'ms')
 
     timeoutRef.current = setTimeout(() => {
+      // A held lock (an active keygen ceremony) defers instead of firing:
+      // clearing the passcode mid-ceremony would make the completed key share
+      // impossible to seal and persist (#4598). Bumping the interaction
+      // timestamp re-arms the timer, so the lock lands one full interval
+      // after the hold is released at the latest.
+      if (isHeld) {
+        setLastInteractionAt(Date.now())
+        return
+      }
+
       setPasscode(null)
     }, lockDelayMs)
 
@@ -86,6 +99,7 @@ export const PasscodeAutoLock = () => {
       }
     }
   }, [
+    isHeld,
     lastInteractionAt,
     passcode,
     passcodeAutoLock,
