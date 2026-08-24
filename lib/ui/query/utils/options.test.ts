@@ -4,8 +4,6 @@ import {
   balancePersistQueryOptions,
   balanceQueryRefetchInterval,
   balanceQueryStaleTime,
-  liveBalanceQueryOptions,
-  liveBalanceQueryRefetchInterval,
   persistQueryOptions,
   persistQueryStaleTime,
   pricePersistQueryOptions,
@@ -44,13 +42,6 @@ describe('balancePersistQueryOptions', () => {
 
   it('is not tagged with a category, so refresh buttons cannot invalidate every vault at once', () => {
     expect(balancePersistQueryOptions.meta).not.toHaveProperty('category')
-  })
-})
-
-describe('liveBalanceQueryOptions', () => {
-  it('aliases the balance options so live surfaces cannot drift from them', () => {
-    expect(liveBalanceQueryOptions).toBe(balancePersistQueryOptions)
-    expect(liveBalanceQueryRefetchInterval).toBe(balanceQueryRefetchInterval)
   })
 })
 
