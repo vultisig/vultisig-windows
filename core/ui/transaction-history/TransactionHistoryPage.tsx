@@ -65,6 +65,9 @@ const TransactionHistoryContent = ({
   const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
   const [search, setSearch] = useState('')
 
+  // One-shot sweep on open: re-checks pending records and heals ones an older
+  // client wrongly failed. Continuous polling is `TransactionStatusWatcher`'s
+  // job, app-wide; this covers the backlog that watcher never saw.
   useRefreshPendingTransactions(records)
   // Keeps limit-order records in step with THORChain's queue while the page
   // is open — the same page-mounted pattern as the pending-tx refresher above.

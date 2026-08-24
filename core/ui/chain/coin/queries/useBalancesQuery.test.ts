@@ -1,3 +1,12 @@
+import { queryClientDefaultOptions } from '@lib/ui/query/queryClientDefaultOptions'
+import { balanceQueryStaleTime } from '@lib/ui/query/utils/options'
+import {
+  defaultShouldDehydrateQuery,
+  dehydrate,
+  hydrate,
+  QueryClient,
+  QueryObserver,
+} from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
 import { getCoinBalance } from '@vultisig/core-chain/coin/balance'
@@ -88,6 +97,36 @@ describe('getCoinBalanceQueryAmount', () => {
     expect(getEvmChainBalances).toHaveBeenCalledTimes(1)
   })
 
+  it('rejects failed EVM reads instead of reporting them as zero', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+
+    await expect(getCoinBalanceQueryAmount(ethInput)).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+  })
+
+  it('preserves genuine zero EVM balances', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({
+      [accountCoinKeyToString(ethInput)]: 0n,
+    })
+
+    await expect(getCoinBalanceQueryAmount(ethInput)).resolves.toBe(0n)
+  })
+
+  it('rejects only failed reads in a partially successful EVM batch', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({
+      [accountCoinKeyToString(ethInput)]: 11n,
+    })
+
+    const ethBalance = getCoinBalanceQueryAmount(ethInput)
+    const usdcBalance = getCoinBalanceQueryAmount(usdcInput)
+
+    await expect(ethBalance).resolves.toBe(11n)
+    await expect(usdcBalance).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+  })
+
   it('keeps non-EVM balances on the existing per-coin resolver', async () => {
     vi.mocked(getCoinBalance).mockResolvedValue(33n)
 
@@ -114,5 +153,131 @@ describe('getBalanceQueryOptions', () => {
       [accountCoinKeyToString(ethInput)]: 44n,
     })
     expect(options.queryKey).toEqual(['coinBalance', ethInput])
+  })
+
+  it('surfaces a failed EVM batch read as a query error', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+
+    const options = getBalanceQueryOptions(ethInput)
+
+    await expect(options.queryFn()).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+  })
+
+  it('does not dehydrate a failed EVM balance read for persistence', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          ...queryClientDefaultOptions?.queries,
+          retry: false,
+        },
+      },
+    })
+    const options = getBalanceQueryOptions(ethInput)
+
+    await expect(queryClient.fetchQuery(options)).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+
+    expect(queryClient.getQueryState(options.queryKey)?.status).toBe('error')
+    expect(
+      dehydrate(queryClient, {
+        shouldDehydrateQuery: query =>
+          query.meta?.shouldPersist === true &&
+          defaultShouldDehydrateQuery(query),
+      }).queries
+    ).toEqual([])
+  })
+
+  // The extension popup remounts its whole tree on every open, so a restored
+  // balance is only spared a refetch by `staleTime` reading the persisted
+  // `dataUpdatedAt`. These two cases are the popup-reopen throttle itself.
+  describe('persisted staleness throttle', () => {
+    // Populates a cache the way the app does — through the query options, so
+    // `meta.shouldPersist` is attached and the query actually dehydrates —
+    // ages it, then restores it into the fresh client a popup open would build.
+    const reopenPopupWithPersistedBalance = async (dataAge: number) => {
+      vi.mocked(getEvmChainBalances).mockResolvedValue({
+        [accountCoinKeyToString(ethInput)]: 99n,
+      })
+
+      const options = getBalanceQueryOptions(ethInput)
+      const sourceClient = new QueryClient({
+        defaultOptions: queryClientDefaultOptions,
+      })
+      await sourceClient.fetchQuery(options)
+      sourceClient
+        .getQueryCache()
+        .find({ queryKey: options.queryKey })!.state.dataUpdatedAt =
+        Date.now() - dataAge
+
+      const dehydrated = dehydrate(sourceClient, {
+        shouldDehydrateQuery: query =>
+          query.meta?.shouldPersist === true &&
+          defaultShouldDehydrateQuery(query),
+      })
+      expect(dehydrated.queries).toHaveLength(1)
+
+      const restoredClient = new QueryClient({
+        defaultOptions: queryClientDefaultOptions,
+      })
+      hydrate(restoredClient, dehydrated)
+
+      vi.mocked(getEvmChainBalances).mockClear()
+
+      const observer = new QueryObserver(restoredClient, options)
+      const unsubscribe = observer.subscribe(() => {})
+      await vi.waitFor(() =>
+        expect(observer.getCurrentResult().isFetching).toBe(false)
+      )
+      unsubscribe()
+
+      return getEvmChainBalances
+    }
+
+    beforeEach(() => {
+      vi.mocked(getEvmChainBalances).mockReset()
+    })
+
+    it('serves a recently persisted balance without refetching', async () => {
+      const fetcher = await reopenPopupWithPersistedBalance(
+        balanceQueryStaleTime / 2
+      )
+
+      expect(fetcher).not.toHaveBeenCalled()
+    })
+
+    it('refetches a persisted balance that outlived its stale time', async () => {
+      const fetcher = await reopenPopupWithPersistedBalance(
+        balanceQueryStaleTime * 1.5
+      )
+
+      expect(fetcher).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('recovers from a transient EVM read failure through query retries', async () => {
+    vi.mocked(getEvmChainBalances)
+      .mockResolvedValueOnce({})
+      .mockResolvedValueOnce({
+        [accountCoinKeyToString(ethInput)]: 77n,
+      })
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          ...queryClientDefaultOptions?.queries,
+          retryDelay: 0,
+        },
+      },
+    })
+
+    await expect(
+      queryClient.fetchQuery(getBalanceQueryOptions(ethInput))
+    ).resolves.toEqual({
+      [accountCoinKeyToString(ethInput)]: 77n,
+    })
+    expect(getEvmChainBalances).toHaveBeenCalledTimes(2)
   })
 })

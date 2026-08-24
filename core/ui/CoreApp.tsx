@@ -8,6 +8,7 @@ import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { CustomRpcOverridesSync } from '@core/ui/storage/CustomRpcOverridesSync'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
 import { useVaults } from '@core/ui/storage/vaults'
+import { TransactionStatusWatcher } from '@core/ui/transaction-history/status/TransactionStatusWatcher'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
 import { CoinsMetadataManager } from '@core/ui/vault/chain/coin/metadata/CoinsMetadataManager'
@@ -49,6 +50,7 @@ const VaultDependentContent = () => {
       <CoinFinder />
       <CoinsMetadataManager />
       <CustomRpcOverridesSync />
+      <TransactionStatusWatcher />
     </ActiveVaultOnly>
   )
 }

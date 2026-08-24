@@ -11,9 +11,7 @@ import {
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useQueryClient } from '@tanstack/react-query'
-import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { isCancelLimitSwapMemo } from '@vultisig/core-chain/swap/native/limitSwapCancelMemo'
-import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -21,6 +19,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useKeysignMessagePayload } from '../../mpc/keysign/state/keysignMessagePayload'
 import { applyLimitOrderCancel } from './applyLimitOrderCancel'
 import { createTransactionRecord } from './createTransactionRecord'
+import { getKeysignAffectedCoinKeys } from './getKeysignAffectedCoinKeys'
 
 export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
   const parentListener = useKeysignMutationListener()
@@ -111,9 +110,16 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
 
           if (!keysignPayload.coin) return
 
-          const coin = getKeysignCoin(keysignPayload)
-          void queryClient.invalidateQueries({
-            queryKey: getBalanceQueryKey(extractAccountCoinKey(coin)),
+          // Mark stale WITHOUT refetching. At broadcast the node almost always
+          // still reports pre-transaction balances, so reading now would cache
+          // the old amount and reset its freshness — leaving the stale figure
+          // pinned for a whole `staleTime` window. `TransactionStatusWatcher`
+          // refetches once the transaction actually confirms.
+          getKeysignAffectedCoinKeys(keysignPayload).forEach(coinKey => {
+            void queryClient.invalidateQueries({
+              queryKey: getBalanceQueryKey(coinKey),
+              refetchType: 'none',
+            })
           })
         },
       }}

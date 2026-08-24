@@ -1,4 +1,3 @@
-import { useUpdateTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
@@ -9,6 +8,7 @@ import {
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
+import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpdate'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
@@ -26,8 +26,13 @@ const isHealCandidate = (record: TransactionRecord): boolean =>
 
 /** Checks chain status for pending/broadcasted transactions and updates their status in storage. */
 export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
-  const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
+  const applyRecordUpdate = useApplyTransactionRecordUpdate()
   const isRefreshingRef = useRef(false)
+  // Read through a ref so the sweep keeps `records` as its only trigger. The
+  // applier closes over the vault's addresses, so it is not referentially
+  // stable the way the raw storage mutation it replaced was.
+  const applyRecordUpdateRef = useRef(applyRecordUpdate)
+  applyRecordUpdateRef.current = applyRecordUpdate
 
   useEffect(() => {
     // Limit orders are queue-driven: their inbound deposit confirms in seconds
@@ -59,7 +64,7 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
                   apiBase: cowSwapOrder.apiBase,
                 })
               if (updatedRecord) {
-                updateRecord(updatedRecord)
+                applyRecordUpdateRef.current(record, updatedRecord)
               }
               return
             }
@@ -77,7 +82,7 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
               result: result.data,
             })
             if (update) {
-              updateRecord(update)
+              applyRecordUpdateRef.current(record, update)
             }
           })
         )
@@ -87,5 +92,5 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
     }
 
     refresh()
-  }, [records, updateRecord])
+  }, [records])
 }

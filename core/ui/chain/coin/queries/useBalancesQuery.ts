@@ -1,5 +1,5 @@
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
-import { persistQueryOptions } from '@lib/ui/query/utils/options'
+import { balancePersistQueryOptions } from '@lib/ui/query/utils/options'
 import { useQueries } from '@tanstack/react-query'
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -48,8 +48,15 @@ const resolveEvmBalanceBatch = async (requests: EvmBalanceRequest[]) => {
     ])
   )
 
-  requests.forEach(({ input, resolve }) => {
-    resolve(normalizedBalances[getNormalizedBalanceKey(input)] ?? 0n)
+  requests.forEach(({ input, resolve, reject }) => {
+    const balance = normalizedBalances[getNormalizedBalanceKey(input)]
+
+    if (balance === undefined) {
+      reject(new Error(`Failed to resolve ${input.chain} balance`))
+      return
+    }
+
+    resolve(balance)
   })
 }
 
@@ -105,7 +112,7 @@ export const getBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
       [accountCoinKeyToString(input)]: amount,
     }
   },
-  ...persistQueryOptions,
+  ...balancePersistQueryOptions,
 })
 
 export const useBalancesQuery = <T extends CoinBalanceResolverInput>(

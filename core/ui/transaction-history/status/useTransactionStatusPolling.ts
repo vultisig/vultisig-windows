@@ -1,4 +1,3 @@
-import { useUpdateTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
 import { useQuery } from '@tanstack/react-query'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { useRef } from 'react'
@@ -10,12 +9,13 @@ import {
 } from './getCowSwapOrderRecordUpdate'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
 import { getStatusPollingInterval } from './staleTransaction'
+import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpdate'
 
 const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
 /** Polls chain status for a single pending transaction and updates its record when finalized. */
 export const useTransactionStatusPolling = (record: TransactionRecord) => {
-  const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
+  const applyRecordUpdate = useApplyTransactionRecordUpdate()
   // Limit orders are queue-driven, not chain-status-driven: the inbound tx
   // confirms long before the order settles, and letting this poller flip the
   // record to `confirmed` would end tracking on an order that is still resting.
@@ -42,7 +42,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
             apiBase: cowSwapOrder.apiBase,
           })
         if (updatedRecord) {
-          updateRecord(updatedRecord)
+          applyRecordUpdate(current, updatedRecord)
         }
         return { status }
       }
@@ -54,7 +54,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
 
       const update = getTxStatusRecordUpdate({ record: current, result })
       if (update) {
-        updateRecord(update)
+        applyRecordUpdate(current, update)
       }
 
       return result

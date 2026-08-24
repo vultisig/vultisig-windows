@@ -15,12 +15,14 @@ const balanceKey = accountCoinKeyToString(input)
 const persistedData = { [balanceKey]: 1_000_000n }
 
 describe('getSendBalanceQueryOptions', () => {
+  // Send's guarantee is that a mounted flow always refetches and never trusts
+  // a cached amount, which `'always'` and `staleTime: 0` carry on their own —
+  // deliberately overriding the shared balance options, whose staleness
+  // throttle would otherwise let a persisted amount through.
   it('keeps balance persistence while always refreshing on Send mount', () => {
     expect(getSendBalanceQueryOptions(input)).toMatchObject({
       meta: { shouldPersist: true },
       refetchOnMount: 'always',
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
       staleTime: 0,
     })
   })
