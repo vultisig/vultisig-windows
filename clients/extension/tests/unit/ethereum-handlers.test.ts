@@ -122,6 +122,8 @@ describe('ethereumHandlers map', () => {
     'eth_call',
     'eth_getTransactionReceipt',
     'eth_getTransactionByHash',
+    'eth_signTypedData',
+    'eth_signTypedData_v3',
     'eth_signTypedData_v4',
     'personal_sign',
     'eth_sendTransaction',
@@ -135,6 +137,15 @@ describe('ethereumHandlers map', () => {
 
   it('has exactly the expected number of methods (no extras)', () => {
     expect(Object.keys(ethereumHandlers)).toHaveLength(expectedMethods.length)
+  })
+
+  it('serves the signTypedData aliases with the v4 handler', () => {
+    expect(ethereumHandlers.eth_signTypedData).toBe(
+      ethereumHandlers.eth_signTypedData_v4
+    )
+    expect(ethereumHandlers.eth_signTypedData_v3).toBe(
+      ethereumHandlers.eth_signTypedData_v4
+    )
   })
 
   it('all handlers are functions', () => {
