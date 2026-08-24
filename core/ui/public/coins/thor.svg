@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>THOR vector reconstruction</title>
+  <defs>
+    <linearGradient id="thor-ring" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3efeff"/>
+      <stop offset="1" stop-color="#0ab1fd"/>
+    </linearGradient>
+    <linearGradient id="thor-mark" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#39f2f4"/>
+      <stop offset=".5" stop-color="#24d0f8"/>
+      <stop offset="1" stop-color="#0a5a74"/>
+    </linearGradient>
+    <linearGradient id="thor-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#002e50"/>
+      <stop offset="1" stop-color="#000305"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="122" fill="#000" stroke="url(#thor-ring)" stroke-width="10"/>
+  <path d="M202 37 97 81l38 38zM54 219l105-44-38-38z" fill="url(#thor-fill)" stroke="url(#thor-mark)" stroke-width="8" stroke-linejoin="miter" stroke-miterlimit="6"/>
+</svg>

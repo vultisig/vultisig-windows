@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>vTHOR vector reconstruction</title>
+  <defs>
+    <linearGradient id="vthor-ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2c982"/>
+      <stop offset="1" stop-color="#c87716"/>
+    </linearGradient>
+    <linearGradient id="vthor-mark" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e5a945"/>
+      <stop offset=".5" stop-color="#ffd275"/>
+      <stop offset="1" stop-color="#6b4a10"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="122" fill="#000" stroke="url(#vthor-ring)" stroke-width="10"/>
+  <path d="M202 37 97 81l38 38zM54 219l105-44-38-38z" fill="none" stroke="url(#vthor-mark)" stroke-width="8" stroke-linejoin="miter" stroke-miterlimit="6"/>
+</svg>
