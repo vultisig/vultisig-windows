@@ -1931,4 +1931,6 @@ export const pt = {
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganho: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'em {{chain}}',
+  max_total_fee: 'Taxa máxima total',
 }

@@ -1907,4 +1907,6 @@ export const ru = {
   kamino_earn_deposited: 'Внесено: {{amount}}',
   kamino_earn_earned: 'Заработано: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'на {{chain}}',
+  max_total_fee: 'Максимальная общая сумма комиссии',
 }
