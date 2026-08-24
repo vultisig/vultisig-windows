@@ -1,4 +1,3 @@
-import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { callPopup } from '@core/inpage-provider/popup'
 import { getEip712PayloadIssue } from '@core/inpage-provider/popup/eip712'
 import {
@@ -7,6 +6,7 @@ import {
 } from '@core/inpage-provider/popup/interface'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 
+import { EIP1193Error } from '../../../../background/handlers/errorHandler'
 import { getChain, processSignature } from '../utils'
 
 const evmAddressPattern = /^0x[0-9a-fA-F]{40}$/

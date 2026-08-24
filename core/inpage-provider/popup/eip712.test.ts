@@ -64,6 +64,18 @@ describe('getEip712PayloadIssue', () => {
     expect(getEip712PayloadIssue(payload)).toContain('domain.salt')
   })
 
+  it('does not blame empty bytes for invalid bytesN widths', () => {
+    const payload = makePayload({
+      types: {
+        Order: [{ name: 'salt', type: 'bytes33' }],
+      },
+      message: { salt: '' },
+    })
+    const issue = getEip712PayloadIssue(payload)
+    expect(issue).toContain('invalid bytes width')
+    expect(issue).not.toContain('empty string in bytes field')
+  })
+
   it('falls back to the ethers message for non-bytes problems', () => {
     const payload = makePayload({
       types: {

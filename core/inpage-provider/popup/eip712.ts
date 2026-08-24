@@ -5,7 +5,7 @@ import { TypedDataEncoder } from 'ethers'
 
 import { Eip712V4Payload } from './interface'
 
-const bytesTypePattern = /^bytes\d*$/
+const bytesTypePattern = /^bytes(?:[1-9]|[12]\d|3[0-2])?$/
 const arrayTypePattern = /^(.*)\[\d*\]$/
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -26,13 +26,19 @@ export const findEmptyEip712BytesFields = ({
 }: Eip712V4Payload): string[] => {
   const result: string[] = []
 
-  const visit = (type: string, value: unknown, path: string) => {
+  type VisitInput = {
+    type: string
+    value: unknown
+    path: string
+  }
+
+  const visit = ({ type, value, path }: VisitInput) => {
     const arrayMatch = type.match(arrayTypePattern)
     if (arrayMatch) {
       if (Array.isArray(value)) {
-        value.forEach((item, index) =>
-          visit(arrayMatch[1], item, `${path}[${index}]`)
-        )
+        for (const [index, item] of value.entries()) {
+          visit({ type: arrayMatch[1], value: item, path: `${path}[${index}]` })
+        }
       }
       return
     }
@@ -46,13 +52,13 @@ export const findEmptyEip712BytesFields = ({
 
     const fields = types[type]
     if (fields && isRecord(value)) {
-      fields.forEach(({ name, type: fieldType }) =>
-        visit(fieldType, value[name], `${path}.${name}`)
-      )
+      for (const { name, type: fieldType } of fields) {
+        visit({ type: fieldType, value: value[name], path: `${path}.${name}` })
+      }
     }
   }
 
-  visit(primaryType, message, 'message')
+  visit({ type: primaryType, value: message, path: 'message' })
 
   if (domain.salt === '') {
     result.push('domain.salt')
