@@ -2,10 +2,6 @@ export const ko = {
   accept_continue: '수락하고 계속 진행하세요',
   action: '작업',
   active: '활성',
-  agent: '대리인',
-  agent_nav_tip_description:
-    'Vulti Agent를 사용할 수 있습니다. 탭하여 설정하세요.',
-  agent_nav_tip_title: '새로운!',
   active_chains_found_one: '활성 체인을 {{count}}개 찾았습니다.',
   active_chains_found_other: '우리는 {{count}}개의 활성 체인을 발견했습니다.',
   active_chains_warning:
@@ -239,6 +235,7 @@ export const ko = {
     staked: '스테이킹됨',
     lps: 'LPs',
     governance: '통치',
+    earn: '벌다',
   },
   vaultTabs: {
     portfolio: '포트폴리오',
@@ -271,6 +268,7 @@ export const ko = {
     '$VULT를 보유하면 거래 수수료를 낮출 수 있습니다.',
   discovering_mediator: '중재자 서비스를 찾는 중입니다. 잠시 기다려 주세요...',
   done: '완료',
+  earn: '수익',
   edit_address: '주소 수정',
   edit_friends_referral: '친구 추천 수정',
   edit_referral: '추천 수정',
@@ -423,12 +421,18 @@ export const ko = {
   folder_at_least_one_vault_required: '최소 하나의 금고가 필요합니다.',
   folders: '폴더',
   banner_carousel_go_to_banner: '배너 {{number}} 으로 이동하세요',
-  buy_vult_banner_cta: '$VULT를 매수하세요',
-  buy_vult_banner_subtitle: '그리고 환전 수수료를 절약하세요',
-  buy_vult_banner_title: '$VULT를 매수하세요',
-  follow_banner_button: '@Vultisig를 팔로우하세요',
-  follow_banner_subtitle: 'Vultisig는 여러분과 함께 만들어갑니다.',
+  buy_vult_banner_title: '그리고 환전 수수료를 절약하세요',
+  buy_vult_banner_caption: '$VULT 구매',
+  follow_banner_caption: 'Vultisig 는 당신과 함께 구축 중입니다.',
   follow_banner_title: 'X에서 저희를 팔로우하세요',
+  rujira_banner_caption: '투자하고 수익을 얻으세요',
+  rujira_banner_title: '루지라 스테이킹 지금 진행 중',
+  vault_backup_banner_caption: '금고를 백업하세요',
+  vault_backup_banner_title: '금고 전체 관리 권한을 요청합니다.',
+  referral_banner_caption: '보상을 놓치지 마세요',
+  referral_banner_title: '추천 코드를 추가하세요',
+  kamino_banner_caption: '솔라나에 새로 추가된 내용',
+  kamino_banner_title: '카미노로 수익 창출을 시작하세요',
   from: '에서',
   freeze: '동결',
   function_arguments: '함수 인자',
@@ -1144,6 +1148,14 @@ export const ko = {
   claim_n_validators: '{{count}} 검증자로부터의 클레임',
   you_are_minting: '민팅하고 있습니다',
   you_are_redeeming: '상환하고 있습니다',
+  signed_tx_you_are_rebonding: '재본딩 중이에요',
+  signed_tx_you_are_merging: '병합 중이에요',
+  signed_tx_you_are_unmerging: '분리 중이에요',
+  signed_tx_you_are_switching: '체인을 전환 중이에요',
+  signed_tx_rebonded: '재본딩됨',
+  signed_tx_merged: '병합됨',
+  signed_tx_unmerged: '분리됨',
+  signed_tx_switched: '체인 전환됨',
   vaultSetupOverview: {
     title: '금고 설정',
     fast: {
@@ -1840,4 +1852,40 @@ export const ko = {
   swap_route_eta_minutes: '~{{minutes}}분',
   swap_limit_is_worth: '의 가치가',
   swap_limit_when_one: '1',
+  kamino_earn_apy_30d: 'APY(30일)',
+  kamino_earn_positions_unavailable:
+    '잔액을 불러올 수 없습니다. 표시된 금고 정보가 최신 상태입니다.',
+  kamino_earn_risk_conservative: '보수적인',
+  kamino_earn_risk_private_credit: '개인 신용',
+  kamino_earn_below_minimum:
+    '이 금고는 {{amount}} 이상의 금액을 예치할 수 있습니다.',
+  kamino_earn_deposit: '금고에 예치',
+  kamino_earn_deposit_to: '입금',
+  kamino_earn_minimum_deposit: '최소 예치금',
+  kamino_earn_amount_unavailable:
+    '지금은 이 금액으로 환전할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+  kamino_earn_available_to_withdraw: '인출 가능',
+  kamino_earn_delayed_liquidity:
+    '이는 현재 금고에 보관된 액체보다 많은 양이므로 안정화되는 데 더 오랜 시간이 걸릴 수 있습니다.',
+  kamino_earn_receive_estimate:
+    '최종 금액은 인출이 완료될 때 확정되며, 약간의 차이가 있을 수 있습니다.',
+  kamino_earn_releases_from_farm:
+    '이 포지션의 일부는 스테이킹되어 있으므로, 출금 시 스테이킹된 부분이 먼저 해제됩니다.',
+  kamino_earn_shares_burned: '주식이 불탔다',
+  kamino_earn_withdraw: '금고에서 인출',
+  kamino_earn_withdraw_from: '인출하다',
+  kamino_earn_you_receive: '당신은 받습니다',
+  kamino_earn_no_solana_address:
+    '이 금고에는 솔라나 주소가 없으므로 카미노 언(Kamino Earn)을 이용할 수 없습니다.',
+  kamino_earn_entire_position: '이 금고 안의 모든 것',
+  kamino_earn_strands_wrapped_sol_rent:
+    '이 입금으로 소량의 SOL이 보관되는 래핑 SOL 계좌가 개설되며, 출금할 때까지 해당 계좌에 보관됩니다.',
+  kamino_earn_unreadable_description:
+    '해당 데이터는 카미노 금고에 도달하지만, 이 앱은 데이터 내용을 읽을 수 없으므로 서명하지 않습니다.',
+  kamino_earn_unreadable_title: '이 거래는 확인되지 않았습니다.',
+  kamino_earn_card_deposit: '예치',
+  kamino_earn_card_withdraw: '출금',
+  kamino_earn_deposited: '예치됨: {{amount}}',
+  kamino_earn_earned: '수익: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

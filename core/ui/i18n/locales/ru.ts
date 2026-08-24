@@ -2,10 +2,6 @@ export const ru = {
   accept_continue: 'Принять и продолжить',
   action: 'Действие',
   active: 'Активно',
-  agent: 'Агент',
-  agent_nav_tip_description:
-    'Vulti Agent доступен. Нажмите, чтобы настроить его.',
-  agent_nav_tip_title: 'Новый!',
   active_chains_found_one: 'Мы нашли {{count}} активную сеть',
   active_chains_found_other: 'Мы нашли {{count}} активных сетей',
   active_chains_warning:
@@ -240,6 +236,7 @@ export const ru = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Управление',
+    earn: 'Зарабатывать',
   },
   vaultTabs: {
     portfolio: 'Портфель',
@@ -271,6 +268,7 @@ export const ru = {
     'Держите $VULT, чтобы разблокировать меньшие торговые комиссии.',
   discovering_mediator: 'Поиск mediator-сервиса, пожалуйста подождите...',
   done: 'Готово',
+  earn: 'Доход',
   edit_address: 'Редактировать адрес',
   edit_friends_referral: 'Редактировать referral друга',
   edit_referral: 'Редактировать referral',
@@ -423,12 +421,18 @@ export const ru = {
   folder_at_least_one_vault_required: 'Требуется как минимум одно хранилище',
   folders: 'Папки',
   banner_carousel_go_to_banner: 'Перейти к баннеру {{number}}',
-  buy_vult_banner_cta: 'Купить $VULT',
-  buy_vult_banner_subtitle: 'И сэкономьте на комиссиях за свопы.',
-  buy_vult_banner_title: 'Купить $VULT',
-  follow_banner_button: 'Подписаться на @Vultisig',
-  follow_banner_subtitle: 'Vultisig строит вместе с вами.',
+  buy_vult_banner_title: 'И сэкономьте на комиссиях за свопы.',
+  buy_vult_banner_caption: 'Купить $VULT',
+  follow_banner_caption: 'Vultisig строится вместе с вами',
   follow_banner_title: 'Подписывайтесь на нас в X',
+  rujira_banner_caption: 'Ставьте и зарабатывайте',
+  rujira_banner_title: 'Ставки Rujira доступны прямо сейчас',
+  vault_backup_banner_caption: 'Создайте резервную копию своего хранилища.',
+  vault_backup_banner_title: 'Запросить полное хранение в хранилище',
+  referral_banner_caption: 'Не упустите награды!',
+  referral_banner_title: 'Введите свой реферальный код',
+  kamino_banner_caption: 'Новое на Солане',
+  kamino_banner_title: 'Начните зарабатывать с Kamino!',
   from: 'От',
   freeze: 'Freeze',
   function_arguments: 'Аргументы функции',
@@ -1112,6 +1116,14 @@ export const ru = {
   you_are_unstaking: 'Вы выполняете unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Вы перепривязываете',
+  signed_tx_you_are_merging: 'Вы объединяете',
+  signed_tx_you_are_unmerging: 'Вы разделяете',
+  signed_tx_you_are_switching: 'Вы переключаете сеть',
+  signed_tx_rebonded: 'Перепривязано',
+  signed_tx_merged: 'Объединено',
+  signed_tx_unmerged: 'Разделено',
+  signed_tx_switched: 'Сеть переключена',
   vaultSetupOverview: {
     title: 'Настройка вашего хранилища',
     fast: {
@@ -1859,4 +1871,40 @@ export const ru = {
   swap_route_eta_minutes: '~{{minutes}}мин',
   swap_limit_is_worth: 'стоит',
   swap_limit_when_one: 'Когда 1',
+  kamino_earn_apy_30d: 'Годовая процентная доходность (30 дней)',
+  kamino_earn_positions_unavailable:
+    'Не удалось загрузить данные о балансе. Отображаемые данные по хранилищам актуальны.',
+  kamino_earn_risk_conservative: 'Консервативный',
+  kamino_earn_risk_private_credit: 'Частный кредит',
+  kamino_earn_below_minimum:
+    'В это хранилище принимаются депозиты в размере {{amount}} или более.',
+  kamino_earn_deposit: 'Внести в хранилище',
+  kamino_earn_deposit_to: 'Внести депозит',
+  kamino_earn_minimum_deposit: 'Минимальный депозит',
+  kamino_earn_amount_unavailable:
+    'В данный момент конвертация этой суммы невозможна. Попробуйте позже.',
+  kamino_earn_available_to_withdraw: 'Доступно для вывода средств',
+  kamino_earn_delayed_liquidity:
+    'Это больше, чем вмещает хранилище в данный момент жидкости, поэтому для оседания может потребоваться больше времени.',
+  kamino_earn_receive_estimate:
+    'Окончательная сумма устанавливается при расчете вывода средств и может незначительно отличаться.',
+  kamino_earn_releases_from_farm:
+    'Часть этой позиции заблокирована, поэтому при выводе средств сначала освобождается именно она.',
+  kamino_earn_shares_burned: 'Сгорели акции',
+  kamino_earn_withdraw: 'Извлечь из хранилища',
+  kamino_earn_withdraw_from: 'Выйти из',
+  kamino_earn_you_receive: 'Вы получаете',
+  kamino_earn_no_solana_address:
+    'У этого хранилища нет адреса на Солане, поэтому Kamino Earn недоступен.',
+  kamino_earn_entire_position: 'Всё, что находится в этом хранилище',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Этот депозит открывает счет в виде «обернутых» SOL, на котором хранится небольшая сумма SOL до момента вывода средств.',
+  kamino_earn_unreadable_description:
+    'Оно достигает хранилища Камино, но это приложение не может прочитать его содержимое, поэтому оно не будет подписано.',
+  kamino_earn_unreadable_title: 'Данная транзакция не может быть подтверждена.',
+  kamino_earn_card_deposit: 'Внести',
+  kamino_earn_card_withdraw: 'Вывести',
+  kamino_earn_deposited: 'Внесено: {{amount}}',
+  kamino_earn_earned: 'Заработано: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

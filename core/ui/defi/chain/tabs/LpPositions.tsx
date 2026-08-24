@@ -1,7 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { WithChainIcon } from '@core/ui/chain/coin/icon/WithChainIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
   DefiPosition,
@@ -235,7 +234,7 @@ export const LpPositions = () => {
                 <HStack gap={12} alignItems="center" fullWidth>
                   {position.coin && shouldDisplayChainLogo(position.coin) ? (
                     <WithChainIcon
-                      src={getChainLogoSrc(position.coin.chain)}
+                      chain={position.coin.chain}
                       style={{ fontSize: 42 }}
                     >
                       <ChainEntityIcon value={icon} />

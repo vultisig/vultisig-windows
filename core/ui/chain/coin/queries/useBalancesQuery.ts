@@ -1,6 +1,9 @@
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
-import { balancePersistQueryOptions } from '@lib/ui/query/utils/options'
-import { useQueries } from '@tanstack/react-query'
+import {
+  balancePersistQueryOptions,
+  persistQueryOptions,
+} from '@lib/ui/query/utils/options'
+import { QueryClient, useQueries } from '@tanstack/react-query'
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
@@ -99,8 +102,13 @@ export const getCoinBalanceQueryAmount = (input: CoinBalanceResolverInput) => {
 export function getBalanceQueryKey<T extends CoinBalanceResolverInput>(
   input: Exact<CoinBalanceResolverInput, T>
 ): [string, CoinBalanceResolverInput] {
-  return ['coinBalance', input]
+  return [...balanceQueryKey, input]
 }
+
+export const balanceQueryKey = ['coinBalance'] as const
+
+export const invalidateBalanceQueries = (queryClient: QueryClient) =>
+  queryClient.invalidateQueries({ queryKey: balanceQueryKey })
 
 export const getBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
   input: Exact<CoinBalanceResolverInput, T>
@@ -112,14 +120,28 @@ export const getBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
       [accountCoinKeyToString(input)]: amount,
     }
   },
+  ...persistQueryOptions,
+})
+
+export const getLiveBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
+  input: Exact<CoinBalanceResolverInput, T>
+) => ({
+  ...getBalanceQueryOptions(input),
   ...balancePersistQueryOptions,
 })
 
+type UseBalancesQueryOptions = {
+  live?: boolean
+}
+
 export const useBalancesQuery = <T extends CoinBalanceResolverInput>(
-  inputs: Exact<CoinBalanceResolverInput, T>[]
+  inputs: Exact<CoinBalanceResolverInput, T>[],
+  { live = true }: UseBalancesQueryOptions = {}
 ) => {
   const queries = useQueries({
-    queries: inputs.map(input => getBalanceQueryOptions(input)),
+    queries: inputs.map(input =>
+      live ? getLiveBalanceQueryOptions(input) : getBalanceQueryOptions(input)
+    ),
   })
 
   return useCombineQueries({

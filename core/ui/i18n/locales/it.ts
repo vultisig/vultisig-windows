@@ -2,10 +2,6 @@ export const it = {
   accept_continue: 'Accetta e continua',
   action: 'Azione',
   active: 'Attivo',
-  agent: 'Agente',
-  agent_nav_tip_description:
-    'Vulti Agent è disponibile. Tocca per configurarlo.',
-  agent_nav_tip_title: 'Nuovo!',
   active_chains_found_one: 'Abbiamo trovato {{count}} catena attiva',
   active_chains_found_other: 'Abbiamo trovato {{count}} catene attive',
   active_chains_warning:
@@ -245,6 +241,7 @@ export const it = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governance',
+    earn: 'Guadagnare',
   },
   vaultTabs: {
     portfolio: 'Portafoglio',
@@ -278,6 +275,7 @@ export const it = {
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
   discovering_mediator: 'Servizio di mediazione in corso, attendere prego...',
   done: 'Fatto',
+  earn: 'Guadagna',
   edit_address: 'Modifica indirizzo',
   edit_friends_referral: 'Modifica referral amico',
   edit_referral: 'Modifica referral',
@@ -436,12 +434,18 @@ export const it = {
   folder_at_least_one_vault_required: 'È richiesto almeno un vault',
   folders: 'Cartelle',
   banner_carousel_go_to_banner: 'Vai al banner {{number}}',
-  buy_vult_banner_cta: 'Acquista $VULT',
-  buy_vult_banner_subtitle: 'E risparmia sulle commissioni di scambio',
-  buy_vult_banner_title: 'Acquista $VULT',
-  follow_banner_button: 'Segui @Vultisig',
-  follow_banner_subtitle: 'Vultisig costruisce con te.',
+  buy_vult_banner_title: 'E risparmia sulle commissioni di scambio',
+  buy_vult_banner_caption: 'Acquista $VULT',
+  follow_banner_caption: 'Vultisig si sta sviluppando con te',
   follow_banner_title: 'Seguici su X',
+  rujira_banner_caption: 'Punta e guadagna',
+  rujira_banner_title: 'Staking su Rujira in diretta ora',
+  vault_backup_banner_caption: 'Esegui il backup del tuo archivio',
+  vault_backup_banner_title: 'Richiesta di custodia completa del caveau',
+  referral_banner_caption: 'Non perderti i premi',
+  referral_banner_title: 'Inserisci il tuo codice di riferimento',
+  kamino_banner_caption: 'Novità su Solana',
+  kamino_banner_title: 'Inizia a guadagnare con Kamino',
   from: 'Da',
   freeze: 'Freeze',
   function_arguments: 'Argomenti della funzione',
@@ -1136,6 +1140,14 @@ export const it = {
   you_are_unstaking: 'Stai facendo unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Stai riassociando',
+  signed_tx_you_are_merging: 'Stai unendo',
+  signed_tx_you_are_unmerging: 'Stai separando',
+  signed_tx_you_are_switching: 'Stai cambiando chain',
+  signed_tx_rebonded: 'Riassociato',
+  signed_tx_merged: 'Unito',
+  signed_tx_unmerged: 'Separato',
+  signed_tx_switched: 'Chain cambiata',
   vaultSetupOverview: {
     title: 'La configurazione del tuo caveau',
     fast: {
@@ -1886,4 +1898,40 @@ export const it = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vale',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_apy_30d: 'APY (30 giorni)',
+  kamino_earn_positions_unavailable:
+    'Impossibile caricare i saldi. I fondi visualizzati sono aggiornati.',
+  kamino_earn_risk_conservative: 'Conservatore',
+  kamino_earn_risk_private_credit: 'Credito privato',
+  kamino_earn_below_minimum:
+    'Questo caveau accetta depositi di {{amount}} o superiori',
+  kamino_earn_deposit: 'Depositare nel caveau',
+  kamino_earn_deposit_to: 'Deposito a',
+  kamino_earn_minimum_deposit: 'Deposito minimo',
+  kamino_earn_amount_unavailable:
+    'Questo importo non può essere convertito al momento. Riprova tra un attimo.',
+  kamino_earn_available_to_withdraw: 'Disponibile per il prelievo',
+  kamino_earn_delayed_liquidity:
+    'Si tratta di una somma superiore alla quantità di liquidi attualmente contenuta nel caveau, pertanto la liquidazione potrebbe richiedere più tempo.',
+  kamino_earn_receive_estimate:
+    "L'importo finale viene stabilito al momento della liquidazione del prelievo e potrebbe variare leggermente.",
+  kamino_earn_releases_from_farm:
+    'Una parte di questa posizione è bloccata, quindi il prelievo la sblocca per prima.',
+  kamino_earn_shares_burned: 'azioni bruciate',
+  kamino_earn_withdraw: 'Prelevare dal caveau',
+  kamino_earn_withdraw_from: 'Ritirarsi da',
+  kamino_earn_you_receive: 'Tu ricevi',
+  kamino_earn_no_solana_address:
+    'Questo caveau non ha un indirizzo Solana, quindi Kamino Earn non è disponibile.',
+  kamino_earn_entire_position: 'Tutto ciò che si trova in questa cassaforte',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Questo deposito apre un conto SOL protetto, che detiene una piccola quantità di SOL fino al momento del prelievo.',
+  kamino_earn_unreadable_description:
+    'Raggiunge un vault di Kamino, ma questa app non può leggerne il contenuto, quindi non lo firmerà.',
+  kamino_earn_unreadable_title: 'Questa transazione non può essere verificata',
+  kamino_earn_card_deposit: 'Deposita',
+  kamino_earn_card_withdraw: 'Preleva',
+  kamino_earn_deposited: 'Depositato: {{amount}}',
+  kamino_earn_earned: 'Guadagnato: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

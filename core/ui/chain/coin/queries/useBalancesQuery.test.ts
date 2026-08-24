@@ -1,5 +1,8 @@
 import { queryClientDefaultOptions } from '@lib/ui/query/queryClientDefaultOptions'
-import { balanceQueryStaleTime } from '@lib/ui/query/utils/options'
+import {
+  balanceQueryRefetchInterval,
+  balanceQueryStaleTime,
+} from '@lib/ui/query/utils/options'
 import {
   defaultShouldDehydrateQuery,
   dehydrate,
@@ -14,8 +17,11 @@ import { getEvmChainBalances } from '@vultisig/core-chain/coin/balance/getEvmCha
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
+  balanceQueryKey,
   getBalanceQueryOptions,
   getCoinBalanceQueryAmount,
+  getLiveBalanceQueryOptions,
+  invalidateBalanceQueries,
 } from './useBalancesQuery'
 
 vi.mock('@vultisig/core-chain/coin/balance', () => ({
@@ -153,6 +159,114 @@ describe('getBalanceQueryOptions', () => {
       [accountCoinKeyToString(ethInput)]: 44n,
     })
     expect(options.queryKey).toEqual(['coinBalance', ethInput])
+    expect(options.queryKey.slice(0, balanceQueryKey.length)).toEqual(
+      balanceQueryKey
+    )
+    expect(options).toMatchObject({
+      meta: { shouldPersist: true },
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      staleTime: 30_000,
+    })
+    expect(options.refetchInterval).toBeUndefined()
+    expect(options.refetchIntervalInBackground).toBeUndefined()
+  })
+
+  it('adds mount verification and polling only for live wallet observers', () => {
+    expect(getLiveBalanceQueryOptions(ethInput)).toMatchObject({
+      meta: { shouldPersist: true },
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      staleTime: balanceQueryStaleTime,
+      refetchInterval: balanceQueryRefetchInterval,
+      refetchIntervalInBackground: false,
+    })
+  })
+
+  it('surfaces a failed EVM batch read as a query error', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+
+    const options = getBalanceQueryOptions(ethInput)
+
+    await expect(options.queryFn()).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+  })
+
+  it('does not dehydrate a failed EVM balance read for persistence', async () => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({})
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          ...queryClientDefaultOptions?.queries,
+          retry: false,
+        },
+      },
+    })
+    const options = getBalanceQueryOptions(ethInput)
+
+    await expect(queryClient.fetchQuery(options)).rejects.toThrow(
+      'Failed to resolve Ethereum balance'
+    )
+
+    expect(queryClient.getQueryState(options.queryKey)?.status).toBe('error')
+    expect(
+      dehydrate(queryClient, {
+        shouldDehydrateQuery: query =>
+          query.meta?.shouldPersist === true &&
+          defaultShouldDehydrateQuery(query),
+      }).queries
+    ).toEqual([])
+  })
+
+  it('recovers from a transient EVM read failure through query retries', async () => {
+    vi.mocked(getEvmChainBalances)
+      .mockResolvedValueOnce({})
+      .mockResolvedValueOnce({
+        [accountCoinKeyToString(ethInput)]: 77n,
+      })
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          ...queryClientDefaultOptions?.queries,
+          retryDelay: 0,
+        },
+      },
+    })
+
+    await expect(
+      queryClient.fetchQuery(getBalanceQueryOptions(ethInput))
+    ).resolves.toEqual({
+      [accountCoinKeyToString(ethInput)]: 77n,
+    })
+    expect(getEvmChainBalances).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('invalidateBalanceQueries', () => {
+  beforeEach(() => {
+    vi.mocked(getEvmChainBalances).mockReset()
+  })
+
+  it('invalidates every balance without touching unrelated query families', async () => {
+    const queryClient = new QueryClient()
+    const ethKey = getBalanceQueryOptions(ethInput).queryKey
+    const runeKey = getBalanceQueryOptions(runeInput).queryKey
+    const priceKey = ['coinPrices', { coins: ['ETH'] }]
+
+    queryClient.setQueryData(ethKey, { eth: 1n })
+    queryClient.setQueryData(runeKey, { rune: 2n })
+    queryClient.setQueryData(priceKey, { eth: 3 })
+
+    await invalidateBalanceQueries(queryClient)
+
+    expect(queryClient.getQueryState(ethKey)?.isInvalidated).toBe(true)
+    expect(queryClient.getQueryState(runeKey)?.isInvalidated).toBe(true)
+    expect(queryClient.getQueryState(priceKey)?.isInvalidated).toBe(false)
+
+    queryClient.clear()
   })
 
   it('surfaces a failed EVM batch read as a query error', async () => {
@@ -203,7 +317,7 @@ describe('getBalanceQueryOptions', () => {
         [accountCoinKeyToString(ethInput)]: 99n,
       })
 
-      const options = getBalanceQueryOptions(ethInput)
+      const options = getLiveBalanceQueryOptions(ethInput)
       const sourceClient = new QueryClient({
         defaultOptions: queryClientDefaultOptions,
       })
@@ -233,6 +347,11 @@ describe('getBalanceQueryOptions', () => {
         expect(observer.getCurrentResult().isFetching).toBe(false)
       )
       unsubscribe()
+
+      // Live options carry a refetch interval, so both clients keep timers
+      // alive and would keep calling the shared mock after this helper returns.
+      sourceClient.clear()
+      restoredClient.clear()
 
       return getEvmChainBalances
     }

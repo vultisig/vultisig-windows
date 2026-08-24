@@ -1,28 +1,10 @@
-import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { centerContent } from '@lib/ui/css/centerContent'
-import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
-import { NodesIcon } from '@lib/ui/icons/NodesIcon'
-import {
-  StationLayers2FilledIcon,
-  StationWalletFilledIcon,
-} from '@lib/ui/icons/StationFigmaIcons'
-import { WalletIcon } from '@lib/ui/icons/WalletIcon'
-import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled, { css, useTheme } from 'styled-components'
 
 import { AgentBottomNavigationContent } from './AgentBottomNavigationContent'
 
 const bottomNavigationHeight = 66
-const centerButtonSize = 56
 
 type BottomNavigationProps = {
   activeTab?: 'wallet' | 'defi' | 'agent'
@@ -34,8 +16,6 @@ export const BottomNavigation = ({
   isActiveTabRoot = true,
 }: BottomNavigationProps) => {
   const navigate = useCoreNavigate()
-  const { t } = useTranslation()
-  const { iconStyle } = useTheme()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -54,159 +34,21 @@ export const BottomNavigation = ({
     }
   }, [])
 
-  if (!featureFlags.agent) {
-    const handleTabChangeOld = (tab: 'wallet' | 'defi') => {
-      if (tab === activeTab && isActiveTabRoot) return
-      if (tab === 'wallet') {
-        navigate({ id: 'vault' }, { replace: true })
-      } else {
-        navigate({ id: 'defi', state: {} }, { replace: true })
-      }
-    }
-    return (
-      <ContainerOld>
-        <TabButtonOld
-          isActive={activeTab === 'wallet'}
-          onClick={() => handleTabChangeOld('wallet')}
-        >
-          {iconStyle === 'station' ? (
-            <StationWalletFilledIcon />
-          ) : (
-            <WalletIcon />
-          )}
-          <Text as="span" size={10}>
-            {t('wallet')}
-          </Text>
-        </TabButtonOld>
-        <CameraButton
-          aria-label={t('scan_qr')}
-          onClick={() => navigate({ id: 'uploadQr', state: {} })}
-        >
-          <Camera2Icon />
-        </CameraButton>
-        <TabButtonOld
-          isActive={activeTab === 'defi'}
-          onClick={() => handleTabChangeOld('defi')}
-        >
-          {iconStyle === 'station' ? (
-            <StationLayers2FilledIcon />
-          ) : (
-            <NodesIcon />
-          )}
-          <Text as="span" size={10}>
-            {t('defi')}
-          </Text>
-        </TabButtonOld>
-      </ContainerOld>
-    )
-  }
-
-  const handleTabChange = (tab: 'wallet' | 'defi' | 'agent') => {
+  const handleTabChange = (tab: 'wallet' | 'defi') => {
     if (tab === activeTab && isActiveTabRoot) return
 
     if (tab === 'wallet') {
       navigate({ id: 'vault' }, { replace: true })
     } else if (tab === 'defi') {
       navigate({ id: 'defi', state: {} }, { replace: true })
-    } else if (tab === 'agent') {
-      navigate({ id: 'agentChat', state: {} }, { replace: true })
     }
   }
 
   return (
     <AgentBottomNavigationContent
       activeTab={activeTab}
-      showAgentCoachmark={isActiveTabRoot}
       onTabChange={handleTabChange}
       onCameraPress={() => navigate({ id: 'uploadQr', state: {} })}
     />
   )
 }
-
-const ContainerOld = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: ${bottomNavigationHeight}px;
-  ${hStack({
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  })};
-  background: ${({ theme }) =>
-    theme.iconStyle === 'station'
-      ? theme.colors.foreground.withAlpha(0.5).toCssValue()
-      : theme.colors.foreground.toCssValue()};
-  backdrop-filter: blur(32px);
-  padding: 8px 12px 10px 12px;
-  border-top: 1px solid ${getColor('foregroundExtra')};
-
-  @supports (padding-bottom: calc(0px + env(safe-area-inset-bottom))) {
-    height: calc(${bottomNavigationHeight}px + env(safe-area-inset-bottom));
-    padding-bottom: calc(10px + env(safe-area-inset-bottom));
-  }
-`
-
-const CameraButton = styled(UnstyledButton)`
-  ${borderRadius.pill};
-  background: ${({ theme }) =>
-    theme.iconStyle === 'station'
-      ? theme.colors.buttonPrimary.toCssValue()
-      : '#4879fd'};
-  ${centerContent};
-  ${sameDimensions(centerButtonSize)};
-  font-size: 24px;
-  color: ${getColor('text')};
-  transition: all 0.2s;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  margin-bottom: 12px;
-
-  &:hover {
-    background: ${({ theme }) =>
-      theme.iconStyle === 'station'
-        ? theme.colors.buttonHover.toCssValue()
-        : '#5a8aff'};
-  }
-`
-
-type TabButtonOldProps = {
-  isActive?: boolean
-  isDisabled?: boolean
-}
-
-const TabButtonOld = styled(UnstyledButton)<TabButtonOldProps>`
-  width: 137px;
-  height: 48px;
-  padding: 3px 20px;
-  font-size: 24px;
-  ${borderRadius.pill};
-  transition: all 0.2s ease-in-out;
-  background: transparent;
-
-  ${vStack({
-    gap: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  })};
-
-  ${({ isActive }) =>
-    isActive
-      ? css`
-          color: ${getColor('contrast')};
-        `
-      : css`
-          color: ${getColor('textShy')};
-        `}
-
-  ${({ isDisabled }) =>
-    isDisabled &&
-    css`
-      cursor: not-allowed;
-      opacity: 0.6;
-    `}
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-`

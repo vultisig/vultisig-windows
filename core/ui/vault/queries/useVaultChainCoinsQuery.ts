@@ -42,11 +42,25 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
     if (pricesQuery.data && balancesQuery.data) {
       const basePrices = shouldBePresent(pricesQuery.data)
       const balances = shouldBePresent(balancesQuery.data)
+      const unresolvedCoin = coins.find(coin => {
+        const key = accountCoinKeyToString(extractAccountCoinKey(coin))
+        return balances[key] === undefined
+      })
+
+      if (unresolvedCoin) {
+        return {
+          isPending: false,
+          data: undefined,
+          error:
+            balancesQuery.errors[0] ??
+            new Error(`Failed to resolve ${unresolvedCoin.chain} balance`),
+        }
+      }
 
       const data = without(
         coins.map(coin => {
           const balanceKey = accountCoinKeyToString(extractAccountCoinKey(coin))
-          const amount = balances[balanceKey] ?? BigInt(0)
+          const amount = shouldBePresent(balances[balanceKey])
           const price = basePrices[coinKeyToString(coin)]
 
           return { ...coin, amount, price }

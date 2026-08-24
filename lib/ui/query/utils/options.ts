@@ -91,6 +91,17 @@ export const balancePersistQueryOptions: UseQueryGenericOptions = {
   refetchIntervalInBackground: false,
 }
 
+export const liveBalanceQueryRefetchInterval = balanceQueryRefetchInterval
+
+/**
+ * Options layered onto persisted balance queries shown on a live wallet
+ * surface. One-shot import scans deliberately do not use these options.
+ *
+ * Retained as an alias of `balancePersistQueryOptions` so live wallet surfaces
+ * and the balance options they build on cannot drift apart.
+ */
+export const liveBalanceQueryOptions = balancePersistQueryOptions
+
 export const pollingQueryOptions = (
   interval: number
 ): UseQueryGenericOptions => ({

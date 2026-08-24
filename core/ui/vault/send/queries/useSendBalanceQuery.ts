@@ -8,12 +8,12 @@ import { CoinBalanceResolverInput } from '@vultisig/core-chain/coin/balance/reso
 import { Exact } from '@vultisig/lib-utils/types/Exact'
 import { useMemo, useRef } from 'react'
 
-import { getBalanceQueryOptions } from '../../../chain/coin/queries/useBalancesQuery'
+import { getLiveBalanceQueryOptions } from '../../../chain/coin/queries/useBalancesQuery'
 
 export const getSendBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
   input: Exact<CoinBalanceResolverInput, T>
 ) => ({
-  ...getBalanceQueryOptions(input),
+  ...getLiveBalanceQueryOptions(input),
   refetchOnMount: 'always' as const,
   staleTime: 0,
 })

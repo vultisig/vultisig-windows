@@ -14,6 +14,7 @@ import { Solana } from '../providers/solana'
 import { registerWallet } from '../providers/solana/register'
 import { UTXO } from '../providers/utxo'
 import { createXrplProvider, installXrplAdapter } from '../providers/xrpl'
+import { installEip1193Delegates } from './eip1193Delegates'
 
 // Wallet-picker descriptor pushed to `window.terraWallets` /
 // `window.interchainWallets`. Mirrors the `STATION_INFO` shape the official
@@ -46,6 +47,14 @@ export const injectToWindow = () => {
     getVault: async () => callBackground({ exportVault: {} }),
     getVaults: async () => callPopup({ exportVaults: {} }),
   }
+
+  // Legacy EVM integrations (web3-onboard custom entries, hand-rolled dapp
+  // allowlists) call `window.vultisig.request(...)` directly instead of
+  // going through EIP-6963 or `window.vultisig.ethereum` (#4626).
+  installEip1193Delegates({
+    container: vultisigProvider,
+    evmProvider: ethereumProvider,
+  })
 
   Object.defineProperty(window, 'vultisig', {
     value: vultisigProvider,

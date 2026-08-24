@@ -2,10 +2,6 @@ export const de = {
   accept_continue: 'Akzeptieren & fortfahren',
   action: 'Aktion',
   active: 'Aktiv',
-  agent: 'Agent',
-  agent_nav_tip_description:
-    'Vulti Agent ist verfügbar. Tippen Sie hier, um ihn einzurichten.',
-  agent_nav_tip_title: 'Neu!',
   active_chains_found_one: 'Wir haben {{count}} aktive Kette gefunden',
   active_chains_found_other: 'Wir haben {{count}} aktive Ketten gefunden',
   active_chains_warning:
@@ -244,6 +240,7 @@ export const de = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governance',
+    earn: 'Verdienen',
   },
   vaultTabs: {
     portfolio: 'Portfolio',
@@ -276,6 +273,7 @@ export const de = {
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
   discovering_mediator: 'Mediatordienst wird ermittelt, bitte warten...',
   done: 'Erledigt',
+  earn: 'Verdienen',
   edit_address: 'Adresse bearbeiten',
   edit_friends_referral: 'Freundesempfehlung bearbeiten',
   edit_referral: 'Empfehlung bearbeiten',
@@ -435,12 +433,18 @@ export const de = {
   folder_at_least_one_vault_required: 'Mindestens ein Vault ist erforderlich',
   folders: 'Ordner',
   banner_carousel_go_to_banner: 'Gehe zum Banner {{number}}',
-  buy_vult_banner_cta: 'Kaufen Sie $VULT',
-  buy_vult_banner_subtitle: 'Und sparen Sie Tauschgebühren',
-  buy_vult_banner_title: 'Kaufen Sie $VULT',
-  follow_banner_button: 'Folge @Vultisig',
-  follow_banner_subtitle: 'Vultisig baut mit Ihnen zusammen.',
+  buy_vult_banner_title: 'Und sparen Sie Tauschgebühren',
+  buy_vult_banner_caption: 'Kaufen Sie $VULT',
+  follow_banner_caption: 'Vultisig wird mit Ihnen erstellt',
   follow_banner_title: 'Folgen Sie uns auf X',
+  rujira_banner_caption: 'Setzen und verdienen',
+  rujira_banner_title: 'Rujira-Staking jetzt live',
+  vault_backup_banner_caption: 'Sichern Sie Ihren Tresor',
+  vault_backup_banner_title: 'Antrag auf vollständige Tresorverwahrung',
+  referral_banner_caption: 'Verpassen Sie keine Belohnungen',
+  referral_banner_title: 'Füge deinen Empfehlungscode hinzu',
+  kamino_banner_caption: 'Neu bei Solana',
+  kamino_banner_title: 'Verdienen Sie Geld mit Kamino',
   from: 'Von',
   freeze: 'Freeze',
   function_arguments: 'Funktionsargumente',
@@ -1143,6 +1147,14 @@ export const de = {
   you_are_unstaking: 'Du entstakest',
   you_are_minting: 'Du mintest',
   you_are_redeeming: 'Du löst ein',
+  signed_tx_you_are_rebonding: 'Du bindest erneut',
+  signed_tx_you_are_merging: 'Du führst zusammen',
+  signed_tx_you_are_unmerging: 'Du trennst',
+  signed_tx_you_are_switching: 'Du wechselst die Chain',
+  signed_tx_rebonded: 'Neu gebunden',
+  signed_tx_merged: 'Zusammengeführt',
+  signed_tx_unmerged: 'Getrennt',
+  signed_tx_switched: 'Chain gewechselt',
   vaultSetupOverview: {
     title: 'Ihre Tresorkonfiguration',
     fast: {
@@ -1894,4 +1906,41 @@ export const de = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'wert ist',
   swap_limit_when_one: 'Wenn 1',
+  kamino_earn_apy_30d: 'Jahreszins (30 Tage)',
+  kamino_earn_positions_unavailable:
+    'Die Salden konnten nicht geladen werden. Die angezeigten Tresore sind aktuell.',
+  kamino_earn_risk_conservative: 'Konservativ',
+  kamino_earn_risk_private_credit: 'Privatkredit',
+  kamino_earn_below_minimum:
+    'Dieser Tresor akzeptiert Einlagen von {{amount}} oder mehr.',
+  kamino_earn_deposit: 'Einzahlung in den Tresor',
+  kamino_earn_deposit_to: 'Einzahlung an',
+  kamino_earn_minimum_deposit: 'Mindesteinzahlung',
+  kamino_earn_amount_unavailable:
+    'Dieser Betrag kann momentan nicht umgerechnet werden. Bitte versuchen Sie es später erneut.',
+  kamino_earn_available_to_withdraw: 'Verfügbar zum Abheben',
+  kamino_earn_delayed_liquidity:
+    'Dies ist mehr Flüssigkeit, als der Tresor derzeit fasst, daher kann es länger dauern, bis sich die Lage beruhigt hat.',
+  kamino_earn_receive_estimate:
+    'Der endgültige Betrag wird bei der Abwicklung der Auszahlung festgelegt und kann geringfügig abweichen.',
+  kamino_earn_releases_from_farm:
+    'Ein Teil dieser Position ist gestakt, daher wird er bei der Auszahlung zuerst freigegeben.',
+  kamino_earn_shares_burned: 'Aktien verbrannt',
+  kamino_earn_withdraw: 'Aus dem Tresor abheben',
+  kamino_earn_withdraw_from: 'Zurückziehen von',
+  kamino_earn_you_receive: 'Sie erhalten',
+  kamino_earn_no_solana_address:
+    'Dieser Tresor hat keine Solana-Adresse, daher ist Kamino Earn nicht verfügbar.',
+  kamino_earn_entire_position: 'Alles in diesem Tresor',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Mit dieser Einzahlung wird ein Wrapped-SOL-Konto eröffnet, auf dem ein kleiner Betrag an SOL gehalten wird, bis Sie ihn abheben.',
+  kamino_earn_unreadable_description:
+    'Es erreicht einen Kamino-Tresor, aber diese App kann nicht lesen, was es tut, daher wird es nicht signiert.',
+  kamino_earn_unreadable_title:
+    'Diese Transaktion kann nicht verifiziert werden.',
+  kamino_earn_card_deposit: 'Einzahlen',
+  kamino_earn_card_withdraw: 'Abheben',
+  kamino_earn_deposited: 'Eingezahlt: {{amount}}',
+  kamino_earn_earned: 'Verdient: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

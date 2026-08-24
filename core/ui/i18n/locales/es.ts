@@ -2,10 +2,6 @@ export const es = {
   accept_continue: 'Aceptar y continuar',
   action: 'Acción',
   active: 'Activo',
-  agent: 'Agente',
-  agent_nav_tip_description:
-    'Vulti Agent está disponible. Toca para configurarlo.',
-  agent_nav_tip_title: '¡Nuevo!',
   active_chains_found_one: 'Encontramos {{count}} cadena activa',
   active_chains_found_other: 'Encontramos {{count}} cadenas activas',
   active_chains_warning:
@@ -242,6 +238,7 @@ export const es = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Gobernancia',
+    earn: 'Ganar',
   },
   vaultTabs: {
     portfolio: 'Portafolio',
@@ -276,6 +273,7 @@ export const es = {
   discovering_mediator:
     'Descubriendo el servicio de mediación, por favor espere...',
   done: 'Hecho',
+  earn: 'Ganar',
   edit_address: 'Editar dirección',
   edit_friends_referral: 'Editar recomendación de amistad',
   edit_referral: 'Editar referencia',
@@ -429,12 +427,18 @@ export const es = {
   folder_at_least_one_vault_required: 'Se requiere al menos una bóveda',
   folders: 'Carpetas',
   banner_carousel_go_to_banner: 'Ir al banner {{number}}',
-  buy_vult_banner_cta: 'Compra $VULT',
-  buy_vult_banner_subtitle: 'Y ahorre en comisiones de intercambio.',
-  buy_vult_banner_title: 'Compra $VULT',
-  follow_banner_button: 'Sigue a @Vultisig',
-  follow_banner_subtitle: 'Vultisig construye contigo.',
+  buy_vult_banner_title: 'Y ahorre en comisiones de intercambio.',
+  buy_vult_banner_caption: 'Compra $VULT',
+  follow_banner_caption: 'Vultisig se está construyendo contigo',
   follow_banner_title: 'Síguenos en X',
+  rujira_banner_caption: 'Apuesta y gana',
+  rujira_banner_title: 'El staking de Rujira ya está disponible.',
+  vault_backup_banner_caption: 'Realice una copia de seguridad de su bóveda.',
+  vault_backup_banner_title: 'Solicitar custodia total de la bóveda',
+  referral_banner_caption: 'No te pierdas las recompensas',
+  referral_banner_title: 'Añade tu código de referencia',
+  kamino_banner_caption: 'Novedades en Solana',
+  kamino_banner_title: 'Empieza a ganar dinero con Kamino.',
   from: 'De',
   freeze: 'Freeze',
   function_arguments: 'Argumentos de función',
@@ -1133,6 +1137,14 @@ export const es = {
   you_are_unstaking: 'Estás haciendo unstake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Estás reasignando',
+  signed_tx_you_are_merging: 'Estás fusionando',
+  signed_tx_you_are_unmerging: 'Estás separando',
+  signed_tx_you_are_switching: 'Estás cambiando de red',
+  signed_tx_rebonded: 'Reasignado',
+  signed_tx_merged: 'Fusionado',
+  signed_tx_unmerged: 'Separado',
+  signed_tx_switched: 'Red cambiada',
   vaultSetupOverview: {
     title: 'La configuración de su bóveda',
     fast: {
@@ -1880,4 +1892,40 @@ export const es = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valga',
   swap_limit_when_one: 'Cuando 1',
+  kamino_earn_apy_30d: 'APY (30 días)',
+  kamino_earn_positions_unavailable:
+    'No se pudieron cargar los saldos. Las bóvedas mostradas están actualizadas.',
+  kamino_earn_risk_conservative: 'Conservador',
+  kamino_earn_risk_private_credit: 'Crédito privado',
+  kamino_earn_below_minimum:
+    'Esta bóveda acepta depósitos de {{amount}} o más.',
+  kamino_earn_deposit: 'Depositar en la bóveda',
+  kamino_earn_deposit_to: 'Depositar en',
+  kamino_earn_minimum_deposit: 'Depósito mínimo',
+  kamino_earn_amount_unavailable:
+    'Este importe no se puede convertir en este momento. Inténtelo de nuevo en un instante.',
+  kamino_earn_available_to_withdraw: 'Disponible para retirar',
+  kamino_earn_delayed_liquidity:
+    'Esta cantidad supera la capacidad actual de la bóveda en cuanto a líquido, por lo que podría tardar más tiempo en estabilizarse.',
+  kamino_earn_receive_estimate:
+    'El importe final se fija cuando se procesa el retiro y puede variar ligeramente.',
+  kamino_earn_releases_from_farm:
+    'Parte de esta posición está en staking, por lo que el retiro la libera primero.',
+  kamino_earn_shares_burned: 'Acciones quemadas',
+  kamino_earn_withdraw: 'Retirar de la bóveda',
+  kamino_earn_withdraw_from: 'Retirarse de',
+  kamino_earn_you_receive: 'Usted recibe',
+  kamino_earn_no_solana_address:
+    'Esta bóveda no tiene dirección de Solana, por lo que Kamino Earn no está disponible.',
+  kamino_earn_entire_position: 'Todo lo que hay en esta bóveda',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Este depósito abre una cuenta SOL protegida, que retiene una pequeña cantidad de SOL hasta que usted la retire.',
+  kamino_earn_unreadable_description:
+    'Llega a una bóveda de Kamino, pero esta aplicación no puede leer su contenido, por lo que no lo firmará.',
+  kamino_earn_unreadable_title: 'Esta transacción no puede ser verificada.',
+  kamino_earn_card_deposit: 'Depositar',
+  kamino_earn_card_withdraw: 'Retirar',
+  kamino_earn_deposited: 'Depositado: {{amount}}',
+  kamino_earn_earned: 'Ganado: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

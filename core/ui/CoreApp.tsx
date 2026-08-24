@@ -1,6 +1,7 @@
 import './mpc/bootstrapMpcEngine'
 
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
+import { PasscodeAutoLockHoldsProvider } from '@core/ui/passcodeEncryption/autoLock/passcodeAutoLockHolds'
 import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
 import { StartupSplashProvider } from '@core/ui/product/startupSplash'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
@@ -74,11 +75,13 @@ export const CoreApp = ({
                 <ToastProvider>
                   <NotificationBannerProvider>
                     <ResponsivenessProvider>
-                      <Container>
-                        {children}
-                        {!isLimited && <VaultDependentContent />}
-                      </Container>
-                      <PasscodeGuard />
+                      <PasscodeAutoLockHoldsProvider>
+                        <Container>
+                          {children}
+                          {!isLimited && <VaultDependentContent />}
+                        </Container>
+                        <PasscodeGuard />
+                      </PasscodeAutoLockHoldsProvider>
                     </ResponsivenessProvider>
                   </NotificationBannerProvider>
                 </ToastProvider>

@@ -10,7 +10,7 @@ const meta = {
 export default meta
 type Story = StoryObj
 
-type ActiveTab = 'wallet' | 'defi' | 'agent'
+type ActiveTab = 'wallet' | 'defi'
 
 function Interactive({ initial = 'wallet' }: { initial?: ActiveTab }) {
   const [activeTab, setActiveTab] = useState<ActiveTab>(initial)
@@ -30,8 +30,4 @@ export const WalletActive: Story = {
 
 export const DeFiActive: Story = {
   render: () => <Interactive initial="defi" />,
-}
-
-export const AgentActive: Story = {
-  render: () => <Interactive initial="agent" />,
 }

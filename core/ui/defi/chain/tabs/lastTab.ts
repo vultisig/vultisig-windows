@@ -1,6 +1,6 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 
-import { DefiChainPageTab } from './config'
+import { DefiChainPageTab } from './core'
 
 const lastTabByChain: Partial<Record<Chain, DefiChainPageTab>> = {}
 

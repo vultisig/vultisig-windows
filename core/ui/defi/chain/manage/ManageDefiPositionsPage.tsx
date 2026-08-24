@@ -18,7 +18,7 @@ import { Text } from '@lib/ui/text'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DefiChainPageTab } from '../tabs/config'
+import { isDefiChainPageTab } from '../tabs/core'
 import { setLastDefiChainTab } from '../tabs/lastTab'
 import { DefiPositionTile } from './DefiPositionTile'
 import { PositionsEmptyState } from './PositionsEmptyState'
@@ -31,8 +31,8 @@ export const ManageDefiPositionsPage = () => {
   const { goBack } = useCore()
 
   useEffect(() => {
-    if (returnTab && ['bonded', 'staked', 'lps'].includes(returnTab)) {
-      setLastDefiChainTab(chain, returnTab as DefiChainPageTab)
+    if (returnTab && isDefiChainPageTab(returnTab)) {
+      setLastDefiChainTab(chain, returnTab)
     }
   }, [chain, returnTab])
 
@@ -49,6 +49,10 @@ export const ManageDefiPositionsPage = () => {
     () => availablePositions.filter(position => position.type === 'stake'),
     [availablePositions]
   )
+  const earnPositions = useMemo(
+    () => availablePositions.filter(position => position.type === 'earn'),
+    [availablePositions]
+  )
   const lpPositions = useMemo(
     () => availablePositions.filter(position => position.type === 'lp'),
     [availablePositions]
@@ -56,17 +60,20 @@ export const ManageDefiPositionsPage = () => {
 
   const filteredBondPositions = filterPositionsBySearch(bondPositions, search)
   const filteredStakePositions = filterPositionsBySearch(stakePositions, search)
+  const filteredEarnPositions = filterPositionsBySearch(earnPositions, search)
   const filteredLpPositions = filterPositionsBySearch(lpPositions, search)
 
   const hasResults =
     filteredBondPositions.length > 0 ||
     filteredStakePositions.length > 0 ||
+    filteredEarnPositions.length > 0 ||
     filteredLpPositions.length > 0
 
   const isLoadingWithoutResults =
     isPositionsLoading &&
     !filteredBondPositions.length &&
     !filteredStakePositions.length &&
+    !filteredEarnPositions.length &&
     !filteredLpPositions.length
 
   const sections = useMemo(
@@ -74,9 +81,16 @@ export const ManageDefiPositionsPage = () => {
       [
         { title: t('bond'), positions: filteredBondPositions },
         { title: t('stake'), positions: filteredStakePositions },
+        { title: t('defiChainTabs.earn'), positions: filteredEarnPositions },
         { title: t('liquidity_pools'), positions: filteredLpPositions },
       ].filter(section => section.positions.length > 0),
-    [filteredBondPositions, filteredStakePositions, filteredLpPositions, t]
+    [
+      filteredBondPositions,
+      filteredStakePositions,
+      filteredEarnPositions,
+      filteredLpPositions,
+      t,
+    ]
   )
 
   return (

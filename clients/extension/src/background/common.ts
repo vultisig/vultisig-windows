@@ -1,5 +1,6 @@
 import { runBackgroundEventsAgent } from '@core/inpage-provider/background/events/background'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
+import { resetPendingRequestsBadge } from '@core/inpage-provider/popup/resolvers/background/pendingRequestsBadge'
 
 import { getIsSidePanelEnabled } from '../storage/isSidePanelEnabled'
 import { registerFastVaultPasswordCacheExpiry } from './registerFastVaultPasswordCacheExpiry'
@@ -8,6 +9,7 @@ registerFastVaultPasswordCacheExpiry()
 
 /**
  * Bootstraps the extension background: locks down built-in prototypes (non-Firefox),
+ * clears any pending-request badge left by an earlier service worker generation,
  * starts the inpage-provider bridge and background event agents, applies the persisted
  * side panel behavior on Chromium, and wires the dev WebSocket reload when enabled.
  */
@@ -28,6 +30,8 @@ export const initExtensionBackground = () => {
       Boolean.prototype,
     ].forEach(Object.freeze)
   }
+
+  resetPendingRequestsBadge()
 
   runInpageProviderBridgeBackgroundAgent()
 

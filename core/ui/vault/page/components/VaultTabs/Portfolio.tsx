@@ -4,7 +4,9 @@ import { Match } from '@lib/ui/base/Match'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { List } from '@lib/ui/list'
-import { useDeferredValue, useMemo } from 'react'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Text } from '@lib/ui/text'
+import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
 
@@ -15,7 +17,12 @@ import { VaultChainItem } from '../VaultChainItem'
 type PortfolioViewState = 'noChains' | 'noSearchResults' | 'list'
 
 export const Portfolio = () => {
-  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
+  const {
+    data: vaultChainBalancesData,
+    errors,
+    isPending,
+  } = useVaultChainsBalancesQuery()
+  const vaultChainBalances = vaultChainBalancesData ?? []
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
@@ -24,35 +31,38 @@ export const Portfolio = () => {
 
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
-  const filteredBalances = useMemo(() => {
-    if (!normalizedQuery) {
-      return vaultChainBalances
-    }
+  const filteredBalances = normalizedQuery
+    ? vaultChainBalances.filter(({ chain, coins }) => {
+        const normalizedChain = String(chain).toLowerCase()
 
-    return vaultChainBalances.filter(({ chain, coins }) => {
-      const normalizedChain = String(chain).toLowerCase()
+        if (normalizedChain.includes(normalizedQuery)) {
+          return true
+        }
 
-      if (normalizedChain.includes(normalizedQuery)) {
-        return true
-      }
+        return coins.some(coin =>
+          coin.ticker?.toLowerCase().includes(normalizedQuery)
+        )
+      })
+    : vaultChainBalances
 
-      return coins.some(coin =>
-        coin.ticker?.toLowerCase().includes(normalizedQuery)
-      )
-    })
-  }, [normalizedQuery, vaultChainBalances])
-
-  const viewState = useMemo((): PortfolioViewState => {
-    if (vaultChainBalances.length === 0) {
-      return 'noChains'
-    }
-    if (filteredBalances.length === 0 && normalizedQuery) {
-      return 'noSearchResults'
-    }
-    return 'list'
-  }, [vaultChainBalances.length, filteredBalances.length, normalizedQuery])
+  const viewState: PortfolioViewState =
+    vaultChainBalances.length === 0
+      ? 'noChains'
+      : filteredBalances.length === 0 && normalizedQuery
+        ? 'noSearchResults'
+        : 'list'
 
   const handleCustomize = () => navigate({ id: 'manageVaultChains' })
+
+  if (!vaultChainBalancesData) {
+    if (errors.length > 0) {
+      return <Text centerHorizontally>{t('failed_to_load')}</Text>
+    }
+
+    if (isPending) {
+      return <Spinner />
+    }
+  }
 
   return (
     <Match

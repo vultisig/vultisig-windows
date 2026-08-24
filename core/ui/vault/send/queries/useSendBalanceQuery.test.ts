@@ -23,7 +23,11 @@ describe('getSendBalanceQueryOptions', () => {
     expect(getSendBalanceQueryOptions(input)).toMatchObject({
       meta: { shouldPersist: true },
       refetchOnMount: 'always',
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
       staleTime: 0,
+      refetchInterval: 120_000,
+      refetchIntervalInBackground: false,
     })
   })
 })

@@ -11,6 +11,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
+import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPasscodeRequired'
 
 export const SaveVaultStep: React.FC<
   ValueProp<Vault> &
@@ -34,15 +36,29 @@ export const SaveVaultStep: React.FC<
     },
   })
 
+  const hasPasscodeEncryption = useIsPasscodeRequired()
+  const [passcode] = usePasscode()
+
+  // Saving seals the key shares with the in-memory passcode. If the app is
+  // locked when the ceremony completes, defer the save until unlock instead of
+  // firing a mutation that throws and discards the only copy of the new share
+  // (#4598) — the passcode prompt is already on screen at that point.
+  const canSealKeyShares = !hasPasscodeEncryption || passcode !== null
+
   useEffect(() => {
+    if (!canSealKeyShares) {
+      return
+    }
+
     mutate({ vault: value, pendingReferral: referral ?? '' })
-  }, [mutate, value, referral])
+  }, [canSealKeyShares, mutate, value, referral])
 
   return (
     <>
       <FlowPageHeader title={title} />
       <MatchQuery
         value={mutationState}
+        inactive={() => <FlowPendingPageContent title={t('saving_vault')} />}
         pending={() => <FlowPendingPageContent title={t('saving_vault')} />}
         success={() => null}
         error={error => (

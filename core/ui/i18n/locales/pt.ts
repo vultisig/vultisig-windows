@@ -2,10 +2,6 @@ export const pt = {
   accept_continue: 'Aceitar e continuar',
   action: 'Ação',
   active: 'Ativo',
-  agent: 'Agente',
-  agent_nav_tip_description:
-    'O Vulti Agent está disponível. Toque para configurá-lo.',
-  agent_nav_tip_title: 'Novo!',
   active_chains_found_one: 'Encontramos {{count}} cadeias ativas',
   active_chains_found_other: 'Encontramos {{count}} cadeias ativas',
   active_chains_warning:
@@ -244,6 +240,7 @@ export const pt = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Governança',
+    earn: 'Ganhar',
   },
   vaultTabs: {
     portfolio: 'Portfólio',
@@ -275,6 +272,7 @@ export const pt = {
     'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',
   discovering_mediator: 'Descobrindo o serviço de mediação, aguarde...',
   done: 'Feito',
+  earn: 'Ganhar',
   edit_address: 'Editar endereço',
   edit_friends_referral: 'Editar Indicação de Amigo',
   edit_referral: 'Editar encaminhamento',
@@ -430,12 +428,18 @@ export const pt = {
   folder_at_least_one_vault_required: 'Pelo menos um cofre é necessário',
   folders: 'Pastas',
   banner_carousel_go_to_banner: 'Acesse o banner {{number}}',
-  buy_vult_banner_cta: 'Compre $VULT',
-  buy_vult_banner_subtitle: 'E economize nas taxas de swap.',
-  buy_vult_banner_title: 'Compre $VULT',
-  follow_banner_button: 'Siga @Vultisig',
-  follow_banner_subtitle: 'Vultisig está construindo com você.',
+  buy_vult_banner_title: 'E economize nas taxas de swap.',
+  buy_vult_banner_caption: 'Comprar $VULT',
+  follow_banner_caption: 'Vultisig está sendo construído com você.',
   follow_banner_title: 'Siga-nos no X',
+  rujira_banner_caption: 'Aposte e ganhe',
+  rujira_banner_title: 'Apostas em Rujira já estão disponíveis.',
+  vault_backup_banner_caption: 'Faça backup do seu cofre',
+  vault_backup_banner_title: 'Solicitar custódia total do cofre.',
+  referral_banner_caption: 'Não perca as recompensas',
+  referral_banner_title: 'Adicione seu código de indicação',
+  kamino_banner_caption: 'Novidades em Solana',
+  kamino_banner_title: 'Comece a ganhar dinheiro com a Kamino',
   from: 'De',
   freeze: 'Freeze',
   function_arguments: 'Argumentos da função',
@@ -1134,6 +1138,14 @@ export const pt = {
   you_are_unstaking: 'Você está desfazendo stake',
   you_are_minting: 'Você está cunhando',
   you_are_redeeming: 'Você está resgatando',
+  signed_tx_you_are_rebonding: 'Você está reassociando',
+  signed_tx_you_are_merging: 'Você está combinando',
+  signed_tx_you_are_unmerging: 'Você está separando',
+  signed_tx_you_are_switching: 'Você está mudando de rede',
+  signed_tx_rebonded: 'Reassociado',
+  signed_tx_merged: 'Combinado',
+  signed_tx_unmerged: 'Separado',
+  signed_tx_switched: 'Rede alterada',
   vaultSetupOverview: {
     title: 'Configuração do seu cofre',
     fast: {
@@ -1883,4 +1895,40 @@ export const pt = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'valer',
   swap_limit_when_one: 'Quando 1',
+  kamino_earn_apy_30d: 'APY (30 dias)',
+  kamino_earn_positions_unavailable:
+    'Não foi possível carregar os saldos. Os cofres exibidos estão atualizados.',
+  kamino_earn_risk_conservative: 'Conservador',
+  kamino_earn_risk_private_credit: 'Crédito privado',
+  kamino_earn_below_minimum:
+    'Este cofre aceita depósitos de {{amount}} ou mais.',
+  kamino_earn_deposit: 'Depositar no cofre',
+  kamino_earn_deposit_to: 'Depositar em',
+  kamino_earn_minimum_deposit: 'depósito mínimo',
+  kamino_earn_amount_unavailable:
+    'Este valor não pode ser convertido neste momento. Tente novamente em instantes.',
+  kamino_earn_available_to_withdraw: 'Disponível para retirada',
+  kamino_earn_delayed_liquidity:
+    'Essa quantidade de líquido é maior do que a capacidade atual do cofre, portanto, pode levar mais tempo para que a água seque.',
+  kamino_earn_receive_estimate:
+    'O valor final é definido quando o saque é liquidado e pode variar ligeiramente.',
+  kamino_earn_releases_from_farm:
+    'Parte dessa posição está em staking, portanto, o saque a libera primeiro.',
+  kamino_earn_shares_burned: 'Ações queimadas',
+  kamino_earn_withdraw: 'Retirar do cofre',
+  kamino_earn_withdraw_from: 'Retirar-se de',
+  kamino_earn_you_receive: 'Você recebe',
+  kamino_earn_no_solana_address:
+    'Este cofre não possui endereço Solana, portanto o Kamino Earn está indisponível.',
+  kamino_earn_entire_position: 'Tudo neste cofre',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Este depósito abre uma conta SOL vinculada, que retém uma pequena quantia de SOL até que você faça um saque.',
+  kamino_earn_unreadable_description:
+    'O pacote chega a um cofre de Kamino, mas este aplicativo não consegue ler o que ele faz, então não o assinará.',
+  kamino_earn_unreadable_title: 'Esta transação não pode ser verificada.',
+  kamino_earn_card_deposit: 'Depositar',
+  kamino_earn_card_withdraw: 'Retirar',
+  kamino_earn_deposited: 'Depositado: {{amount}}',
+  kamino_earn_earned: 'Ganho: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

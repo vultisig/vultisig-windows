@@ -65,9 +65,13 @@ export const useCoinsTotalBalanceQuery = (
   // 0 so callers render "$0.00" instead of a blank header.
   const isSettledZero =
     noCoins || (!isUpdating && !error && resolvedCount === 0)
+  const hasCompleteData = resolvedCount === coins.length
 
   return {
-    data: resolvedCount > 0 || isSettledZero ? total : undefined,
+    data:
+      (error && !hasCompleteData) || (resolvedCount === 0 && !isSettledZero)
+        ? undefined
+        : total,
     isPending: resolvedCount === 0 && !isSettledZero && isUpdating,
     isUpdating,
     error,

@@ -7,6 +7,7 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { kaminoVaultRegistry } from '@vultisig/core-chain/chains/solana/kamino/registry'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import {
@@ -17,11 +18,13 @@ import { findByTicker } from '@vultisig/core-chain/coin/utils/findByTicker'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useMemo } from 'react'
 
+import { kaminoEarnPositionId } from '../defi/chain/solana/kamino/positionId'
+import { kaminoUnderlyingCoin } from '../defi/chain/solana/kamino/underlyingCoin'
 import { currentProductBrand, ProductBrand } from '../product/brand'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-type DefiPositionType = 'bond' | 'stake' | 'lp'
+type DefiPositionType = 'bond' | 'stake' | 'lp' | 'earn'
 
 export type DefiPosition = {
   id: string
@@ -36,6 +39,27 @@ export type DefiPosition = {
 }
 
 type LpSupportedChain = typeof Chain.THORChain | typeof Chain.MayaChain
+
+/**
+ * The curated Kamino Earn vaults as selectable DeFi positions.
+ *
+ * Built from the registry rather than listed here, so adding a vault upstream
+ * surfaces it without a second edit. The coin comes from the shared resolver
+ * the Earn cards use, so a tile and its card can never show different tokens.
+ */
+const kaminoEarnPositions = (): DefiPosition[] =>
+  kaminoVaultRegistry.map(descriptor => {
+    const coin = kaminoUnderlyingCoin(descriptor)
+
+    return {
+      id: kaminoEarnPositionId(descriptor.address),
+      name: descriptor.fallbackName,
+      ticker: coin.ticker,
+      type: 'earn' as const,
+      chain: Chain.Solana,
+      coin,
+    }
+  })
 
 const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
   [Chain.THORChain]: [
@@ -149,6 +173,7 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       type: 'stake',
       chain: Chain.Solana,
     },
+    ...kaminoEarnPositions(),
   ],
 }
 

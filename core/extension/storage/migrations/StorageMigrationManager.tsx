@@ -14,7 +14,13 @@ export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
   const { version } = useCore()
 
   const { mutate: migrate, ...mutationStatus } = useMutation({
-    mutationFn: () => migrateExtensionStorage(version),
+    // MatchQuery only takes the success branch for defined data, so a void
+    // mutation would keep the whole app on the null `inactive` branch after
+    // migrations finish
+    mutationFn: async () => {
+      await migrateExtensionStorage(version)
+      return true
+    },
   })
 
   useEffect(() => {

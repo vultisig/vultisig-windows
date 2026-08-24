@@ -12,7 +12,11 @@ vi.mock('./inNewWindow', () => ({
   inNewWindow: (...args: unknown[]) => mockInNewWindow(...args),
 }))
 
-import { PopupError, userRejectedPopupResult } from '../../error'
+import {
+  PopupError,
+  signingFailedPopupResult,
+  userRejectedPopupResult,
+} from '../../error'
 import { getPopupMessageSourceId } from '../../resolver'
 import { callPopupFromBackground } from '.'
 
@@ -150,5 +154,56 @@ describe('callPopupFromBackground', () => {
     listeners.forEach(listener => listener(response))
 
     await expect(call).rejects.toBe(PopupError.RejectedByUser)
+  })
+
+  it('rejects with the SigningFailed sentinel when signing fails', async () => {
+    const listeners = new Set<(message: unknown) => void>()
+    vi.stubGlobal('chrome', {
+      runtime: {
+        getURL: (path: string) => `chrome-extension://id/${path}`,
+        onMessage: {
+          addListener: (listener: (message: unknown) => void) =>
+            listeners.add(listener),
+          removeListener: (listener: (message: unknown) => void) =>
+            listeners.delete(listener),
+        },
+      },
+    })
+    type ExecuteWindow = {
+      execute: (input: {
+        abortSignal: AbortSignal
+        close: () => void
+      }) => Promise<unknown>
+    }
+    mockInNewWindow.mockImplementation(({ execute }: ExecuteWindow) =>
+      execute({
+        abortSignal: new AbortController().signal,
+        close: () => undefined,
+      })
+    )
+
+    const call = callPopupFromBackground({
+      call: { grantVaultAccess: { chain: Chain.Ethereum } },
+      options: {},
+      context: { requestOrigin: 'https://fail.example.com' },
+    })
+
+    await vi.waitFor(() => {
+      expect(listeners.size).toBe(1)
+    })
+
+    // The serialization round trip is the whole point: `new Error('Signing
+    // failed')` would arrive here as `{}` and the reason would be lost.
+    const response = JSON.parse(
+      JSON.stringify({
+        sourceId: getPopupMessageSourceId('popup'),
+        callId: 'call-1',
+        result: signingFailedPopupResult,
+        shouldClosePopup: true,
+      })
+    )
+    listeners.forEach(listener => listener(response))
+
+    await expect(call).rejects.toBe(PopupError.SigningFailed)
   })
 })

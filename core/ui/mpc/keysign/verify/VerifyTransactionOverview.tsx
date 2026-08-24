@@ -1,5 +1,11 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import {
+  decodedAmountCanBeShown,
+  decodeSignedTransaction,
+  SignedTransactionDecoderContext,
+} from '@core/ui/mpc/keysign/transaction-decoding/decodeSignedTransaction'
+import { getVerifyTransactionTitleKey } from '@core/ui/mpc/keysign/transaction-decoding/presentation'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import {
   TransactionOverviewAmount,
@@ -62,6 +68,7 @@ type VerifyTransactionOverviewProps = {
    * so the caller supplies a reader that derives it from the signed payload.
    */
   getPayloadAmount?: (payload: KeysignPayload) => bigint | number | string
+  decoderContext?: SignedTransactionDecoderContext
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
   children?: ReactNode
 }
@@ -79,11 +86,26 @@ export const VerifyTransactionOverview = ({
   amountLabel,
   keysignPayloadQuery,
   getPayloadAmount,
+  decoderContext,
   renderFeeExtra,
   children,
 }: VerifyTransactionOverviewProps) => {
   const { t } = useTranslation()
   const formattedAmount = fromChainAmount(amount, coin.decimals)
+  const fallbackAmountLabel = amountLabel ?? t('you_are_sending')
+  const resolvedAmountLabel = amountLabel ?? (
+    <MatchQuery
+      value={keysignPayloadQuery}
+      pending={() => fallbackAmountLabel}
+      error={() => fallbackAmountLabel}
+      success={payload => {
+        const titleKey = getVerifyTransactionTitleKey(
+          decodeSignedTransaction(payload, decoderContext).operation
+        )
+        return titleKey ? t(titleKey) : fallbackAmountLabel
+      }}
+    />
+  )
 
   const receiverDisplay: ReactNode = (() => {
     if (typeof receiver !== 'string') return receiver
@@ -110,11 +132,19 @@ export const VerifyTransactionOverview = ({
   return (
     <List border="gradient" radius={borderRadiusPx.lg}>
       <TransactionOverviewAmount
-        label={amountLabel ?? t('you_are_sending')}
+        label={resolvedAmountLabel}
         coin={coin}
         fallbackAmount={formattedAmount}
         keysignPayloadQuery={keysignPayloadQuery}
         getPayloadAmount={getPayloadAmount}
+        hidePayloadAmount={payload => {
+          const result = decodeSignedTransaction(payload, decoderContext)
+          return (
+            getVerifyTransactionTitleKey(result.operation) !== undefined &&
+            getPayloadAmount === undefined &&
+            !decodedAmountCanBeShown(result.amount)
+          )
+        }}
       />
       <TransactionOverviewItem
         label={t('from')}

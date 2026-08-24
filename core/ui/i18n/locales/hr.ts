@@ -2,10 +2,6 @@ export const hr = {
   accept_continue: 'Prihvati i nastavi',
   action: 'Radnja',
   active: 'Aktivan',
-  agent: 'Agent',
-  agent_nav_tip_description:
-    'Vulti Agent je dostupan. Dodirnite za postavljanje.',
-  agent_nav_tip_title: 'Novi!',
   active_chains_found_one: 'Pronašli smo {{count}} aktivnog lanca',
   active_chains_found_other: 'Pronašli smo {{count}} aktivnih lanaca',
   active_chains_warning:
@@ -241,6 +237,7 @@ export const hr = {
     staked: 'Staked',
     lps: 'LPs',
     governance: 'Upravljanje',
+    earn: 'Zaraditi',
   },
   vaultTabs: {
     portfolio: 'Portfelj',
@@ -272,6 +269,7 @@ export const hr = {
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
   discovering_mediator: 'Otkrivanje usluge posrednika, molimo pričekajte...',
   done: 'Gotovo',
+  earn: 'Zarada',
   edit_address: 'Uredi adresu',
   edit_friends_referral: 'Uredi preporuku prijatelja',
   edit_referral: 'Uredi preporuku',
@@ -424,12 +422,18 @@ export const hr = {
   folder_at_least_one_vault_required: 'Potreban je barem jedan trezor',
   folders: 'Mape',
   banner_carousel_go_to_banner: 'Idi na banner {{number}}',
-  buy_vult_banner_cta: 'Kupi $VULT',
-  buy_vult_banner_subtitle: 'I uštedite na naknadama za zamjenu',
-  buy_vult_banner_title: 'Kupi $VULT',
-  follow_banner_button: 'Pratite @Vultisig',
-  follow_banner_subtitle: 'Vultisig gradi s vama.',
+  buy_vult_banner_title: 'I uštedite na naknadama za zamjenu',
+  buy_vult_banner_caption: 'Kupi $VULT',
+  follow_banner_caption: 'Vultisig gradi s vama',
   follow_banner_title: 'Pratite nas na X-u',
+  rujira_banner_caption: 'Uložite i zaradite',
+  rujira_banner_title: 'Rujira sada uživo ulaže',
+  vault_backup_banner_caption: 'Napravite sigurnosnu kopiju svog trezora',
+  vault_backup_banner_title: 'Zahtjev za potpuno čuvanje u trezoru',
+  referral_banner_caption: 'Ne propustite nagrade',
+  referral_banner_title: 'Dodajte svoj referalni kod',
+  kamino_banner_caption: 'Novo na Solani',
+  kamino_banner_title: 'Počnite zarađivati ​​s Kaminom',
   from: 'Iz',
   freeze: 'Freeze',
   function_arguments: 'Argumenti funkcije',
@@ -1122,6 +1126,14 @@ export const hr = {
   you_are_unstaking: 'Povlačite stake',
   you_are_minting: "You're minting",
   you_are_redeeming: "You're redeeming",
+  signed_tx_you_are_rebonding: 'Ponovno vežeš',
+  signed_tx_you_are_merging: 'Spajaš',
+  signed_tx_you_are_unmerging: 'Razdvajaš',
+  signed_tx_you_are_switching: 'Mijenjaš lanac',
+  signed_tx_rebonded: 'Ponovno vezano',
+  signed_tx_merged: 'Spojeno',
+  signed_tx_unmerged: 'Razdvojeno',
+  signed_tx_switched: 'Lanac promijenjen',
   vaultSetupOverview: {
     title: 'Postavke vašeg trezora',
     fast: {
@@ -1850,4 +1862,40 @@ export const hr = {
   swap_route_eta_minutes: '~{{minutes}}m',
   swap_limit_is_worth: 'vrijedi',
   swap_limit_when_one: 'Kada 1',
+  kamino_earn_apy_30d: 'APY (30d)',
+  kamino_earn_positions_unavailable:
+    'Stanje nije moguće učitati. Prikazani trezori su ažurirani.',
+  kamino_earn_risk_conservative: 'Konzervativac',
+  kamino_earn_risk_private_credit: 'Privatni kredit',
+  kamino_earn_below_minimum:
+    'Ovaj trezor prima depozite od {{amount}} ili više',
+  kamino_earn_deposit: 'Polog u trezor',
+  kamino_earn_deposit_to: 'Uplata na',
+  kamino_earn_minimum_deposit: 'Minimalni depozit',
+  kamino_earn_amount_unavailable:
+    'Ovaj iznos trenutno nije moguće pretvoriti. Pokušajte ponovno za trenutak.',
+  kamino_earn_available_to_withdraw: 'Dostupno za isplatu',
+  kamino_earn_delayed_liquidity:
+    'To je više nego što trezor trenutno sadrži tekućinu, pa bi moglo trebati dulje da se slegne.',
+  kamino_earn_receive_estimate:
+    'Konačni iznos se utvrđuje prilikom isplate i može se neznatno razlikovati.',
+  kamino_earn_releases_from_farm:
+    'Dio ove pozicije je uložen, pa se povlačenjem prvo oslobađa.',
+  kamino_earn_shares_burned: 'Spaljene dionice',
+  kamino_earn_withdraw: 'Isplata iz trezora',
+  kamino_earn_withdraw_from: 'Povuci se iz',
+  kamino_earn_you_receive: 'Primate',
+  kamino_earn_no_solana_address:
+    'Ovaj trezor nema Solana adresu, tako da Kamino Earn nije dostupan.',
+  kamino_earn_entire_position: 'Sve u ovom trezoru',
+  kamino_earn_strands_wrapped_sol_rent:
+    'Ovaj depozit otvara zatvoreni SOL račun na kojem se nalazi mali iznos SOL-a dok se ne povuče novac.',
+  kamino_earn_unreadable_description:
+    'Dolazi do Kamino trezora, ali ova aplikacija ne može pročitati što radi, pa ga neće potpisati.',
+  kamino_earn_unreadable_title: 'Ovu transakciju nije moguće potvrditi',
+  kamino_earn_card_deposit: 'Uplati',
+  kamino_earn_card_withdraw: 'Povući',
+  kamino_earn_deposited: 'Položeno: {{amount}}',
+  kamino_earn_earned: 'Zarađeno: {{amount}}',
+  kamino_earn_protocol: 'Kamino',
 }

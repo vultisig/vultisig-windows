@@ -699,12 +699,6 @@
       "source": "ios"
     },
     {
-      "desktop": "Camera2Icon",
-      "v3": "camera-2",
-      "status": "migrated",
-      "source": "ios"
-    },
-    {
       "desktop": "ClockRotateClockwiseIcon",
       "v3": "clock-rotate-clockwise",
       "status": "migrated",
