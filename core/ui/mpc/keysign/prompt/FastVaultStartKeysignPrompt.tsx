@@ -28,7 +28,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   const navigate = useCoreNavigate()
   const [showModal, setShowModal] = useState(false)
 
-  const { onBeforeStart, ...navigationProps } = props
+  const { onBeforeStart, isLoading, ...navigationProps } = props
   const keysignPayload =
     'keysignPayload' in navigationProps
       ? navigationProps.keysignPayload
@@ -81,19 +81,17 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
     })
   }
 
-  const buttonProps = {
-    disabled: keysignPayload
-      ? false
-      : 'disabledMessage' in props
-        ? props.disabledMessage
-        : true,
-  }
+  const disabled = keysignPayload
+    ? false
+    : 'disabledMessage' in props
+      ? props.disabledMessage
+      : true
 
   return (
     <>
       <HStack gap={12} fullWidth>
         <PairedButton
-          {...buttonProps}
+          disabled={disabled}
           kind="secondary"
           icon={<DevicesIcon />}
           onClick={() => executeNavigation('secure')}
@@ -101,7 +99,8 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
           {t('paired')}
         </PairedButton>
         <FastSignButton
-          {...buttonProps}
+          disabled={disabled}
+          loading={isLoading}
           onClick={() => executeNavigation('fast')}
         >
           {t('fast_sign')}
