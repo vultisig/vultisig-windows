@@ -40,11 +40,11 @@ export const SwapNetworkFeeRow = ({
         value:
           layout === 'stacked' ? (
             <VStack alignItems="end" gap={2}>
-              <Text color="contrast" weight="500">
+              <Text color="contrast" size={14}>
                 {amount}
               </Text>
-              <Text color="shy">
-                ~<SwapFeeFiatValue value={[fee]} />
+              <Text color="shy" size={13}>
+                <SwapFeeFiatValue value={[fee]} />
               </Text>
             </VStack>
           ) : (

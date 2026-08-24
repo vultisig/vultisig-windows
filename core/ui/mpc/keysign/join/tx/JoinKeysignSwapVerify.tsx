@@ -1,6 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
-import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
@@ -24,6 +23,7 @@ import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
+import { JoinKeysignNetworkFeeValue } from './JoinKeysignNetworkFeeValue'
 import { JoinKeysignSwapTotalFee } from './JoinKeysignSwapTotalFee'
 
 const logoSize = 14
@@ -113,7 +113,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
         />
         <SwapVerifyRow
           label={t('network_fee')}
-          value={<KeysignFeeAmount keysignPayload={value} />}
+          value={<JoinKeysignNetworkFeeValue value={value} />}
         />
         {swapFee && (
           <>
