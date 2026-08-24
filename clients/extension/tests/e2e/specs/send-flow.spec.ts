@@ -13,6 +13,8 @@
  * - Tests skip gracefully if chain has insufficient funds
  */
 
+import type { BrowserContext, Page } from '@playwright/test'
+
 import { expect, test } from '../fixtures/extension-loader'
 import {
   type ChainId,
@@ -24,6 +26,7 @@ import {
   readChromeStorage,
   writeChromeStorage,
 } from '../helpers/chrome-storage'
+import { CHAIN_UI_LABELS } from '../helpers/enable-chains'
 import { waitForTxConfirmation } from '../helpers/tx-confirmation'
 import {
   getAddressForChain,
@@ -39,6 +42,203 @@ import { VaultPage } from '../page-objects/VaultPage.po'
 
 // Skip if fund-dependent tests not enabled
 const enableTxTests = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
+const assertBalanceAutoRefresh =
+  process.env.VULTISIG_E2E_ASSERT_BALANCE_AUTO_REFRESH === 'true'
+const configuredSendDestination =
+  process.env.VULTISIG_E2E_SEND_DESTINATION?.trim()
+
+async function getDisplayedChainBalance(page: Page, chain: string) {
+  const chainRow = getChainRow(page, chain)
+  await chainRow.waitFor({ state: 'visible' })
+
+  const text = await chainRow.textContent()
+  const tokenAmount = text?.match(/[\d.,]+\s*[A-Z]{3,}/)
+  const fiatAmount = text?.match(/[$€£]\s*[\d.,]+/)
+
+  return tokenAmount?.[0] || fiatAmount?.[0] || '0'
+}
+
+const getChainRow = (page: Page, chain: string) =>
+  page
+    .locator('[data-testid="VaultChainItem-Panel"]')
+    .filter({ hasText: new RegExp(chain, 'i') })
+
+const captureChainRow = async (page: Page, chain: string, path: string) => {
+  const row = getChainRow(page, chain)
+  await row.evaluate(element =>
+    element.scrollIntoView({ block: 'center', inline: 'nearest' })
+  )
+  await page.waitForTimeout(250)
+  await row.screenshot({ path })
+}
+
+type BalanceQueryInput = {
+  chain: string
+  id?: string
+  address: string
+}
+
+type PersistedQuery = {
+  queryKey?: [string, BalanceQueryInput]
+  state?: {
+    data?: Record<string, bigint>
+    dataUpdatedAt?: number
+  }
+}
+
+type PersistedQueryClient = {
+  timestamp: number
+  clientState?: { queries?: PersistedQuery[] }
+}
+
+const parsePersistedQueryClient = (value: string): PersistedQueryClient =>
+  JSON.parse(value, (_, item) => {
+    if (typeof item === 'string' && /^-?\d+n$/.test(item)) {
+      return BigInt(item.slice(0, -1))
+    }
+    return item
+  })
+
+const serializePersistedQueryClient = (value: PersistedQueryClient) =>
+  JSON.stringify(value, (_, item) =>
+    typeof item === 'bigint' ? `${item}n` : item
+  )
+
+const findBalanceQuery = (
+  client: PersistedQueryClient,
+  input: BalanceQueryInput
+) =>
+  client.clientState?.queries?.find(query => {
+    const [category, candidate] = query.queryKey ?? []
+    return (
+      category === 'coinBalance' &&
+      candidate?.chain === input.chain &&
+      candidate.address === input.address &&
+      candidate.id === input.id
+    )
+  })
+
+async function getNativeBalanceQueryInput(
+  context: BrowserContext,
+  chain: ChainId,
+  address: string,
+  ticker: string
+): Promise<BalanceQueryInput> {
+  const currentVaultId = await readChromeStorage<string>(
+    context,
+    'currentVaultId'
+  )
+  const vaultsCoins = await readChromeStorage<
+    Record<string, Array<BalanceQueryInput & { ticker?: string }>>
+  >(context, 'vaultsCoins')
+  const expectedChain = CHAIN_UI_LABELS[chain]
+  expect(
+    expectedChain,
+    `Stored-chain mapping should exist for ${chain}`
+  ).toBeTruthy()
+  const coin = vaultsCoins?.[currentVaultId ?? '']?.find(
+    item =>
+      item.chain === expectedChain &&
+      item.address === address &&
+      item.ticker === ticker &&
+      item.id == null
+  )
+
+  expect(
+    coin,
+    `Native ${ticker} coin on ${expectedChain} should exist in vault storage`
+  ).toBeTruthy()
+  return { chain: coin!.chain, address: coin!.address }
+}
+
+async function readPersistedBalance(
+  context: BrowserContext,
+  input: BalanceQueryInput
+) {
+  return (await readPersistedBalanceSnapshot(context, input))?.amount ?? null
+}
+
+async function readPersistedBalanceSnapshot(
+  context: BrowserContext,
+  input: BalanceQueryInput
+) {
+  const raw = await readChromeStorage<string>(context, 'queriesPersister')
+  if (!raw) return null
+
+  const query = findBalanceQuery(parsePersistedQueryClient(raw), input)
+  const amount = Object.values(query?.state?.data ?? {})[0]
+  if (typeof amount !== 'bigint') return null
+
+  return {
+    amount,
+    dataUpdatedAt: query?.state?.dataUpdatedAt ?? 0,
+  }
+}
+
+async function replacePersistedBalance(
+  context: BrowserContext,
+  input: BalanceQueryInput,
+  amount: bigint
+) {
+  const raw = await readChromeStorage<string>(context, 'queriesPersister')
+  expect(raw, 'Persisted query client should exist').toBeTruthy()
+
+  const client = parsePersistedQueryClient(raw!)
+  const query = findBalanceQuery(client, input)
+  expect(
+    query?.state?.data,
+    'Native balance query should be persisted'
+  ).toBeTruthy()
+
+  query!.state!.data = Object.fromEntries(
+    Object.keys(query!.state!.data!).map(key => [key, amount])
+  )
+  query!.state!.dataUpdatedAt = Date.now()
+  client.timestamp = Date.now()
+
+  await writeChromeStorage(
+    context,
+    'queriesPersister',
+    serializePersistedQueryClient(client)
+  )
+}
+
+async function waitForSendTxConfirmation(
+  chain: ChainId,
+  txHash: string,
+  timeoutMs: number
+) {
+  if (chain !== 'thorchain') {
+    return waitForTxConfirmation(chain, txHash, timeoutMs)
+  }
+
+  const startedAt = Date.now()
+  const normalizedHash = txHash.trim().replace(/^0x/i, '')
+  while (Date.now() - startedAt < timeoutMs) {
+    try {
+      const response = await fetch(
+        `https://gateway.liquify.com/chain/thorchain_rpc/tx?hash=0x${normalizedHash}&prove=false`
+      )
+      if (response.ok) {
+        const data = await response.json()
+        const txResult = data.result?.tx_result
+        if (txResult) {
+          const confirmed = Number(txResult.code ?? 0) === 0
+          return {
+            confirmed,
+            error: confirmed ? undefined : txResult.log,
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('THORChain RPC confirmation error:', error)
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 5_000))
+  }
+
+  return { confirmed: false, error: 'Timeout waiting for confirmation' }
+}
 
 function isChainId(value: string): value is ChainId {
   return Object.hasOwn(SUPPORTED_CHAINS, value)
@@ -117,8 +317,11 @@ test.describe('Send Flow', () => {
   test('send native token on chain 1 - broadcasts and confirms', async ({
     context,
     extensionId,
-  }) => {
+  }, testInfo) => {
     test.skip(!enableTxTests, 'TX signing tests disabled')
+    if (assertBalanceAutoRefresh) {
+      test.setTimeout(600_000)
+    }
 
     const chain = selectedChains[0]
     if (!chain) {
@@ -141,16 +344,81 @@ test.describe('Send Flow', () => {
       return
     }
     const sendAmount = getSendAmount(chain)
+    const sendDestination = configuredSendDestination || ownAddress
     console.log(
-      `Self-send on ${chain}: ${ownAddress} (amount: ${sendAmount} ${chainInfo.symbol})`
+      `${configuredSendDestination ? 'Designated-vault transfer' : 'Self-send'} on ${chain}: ${sendDestination} (amount: ${sendAmount} ${chainInfo.symbol})`
     )
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
     const sendFlow = new SendFlow(page, extensionId)
     const keysignProgress = new KeysignProgress(page, extensionId)
+    const monitorPage = assertBalanceAutoRefresh
+      ? await context.newPage()
+      : null
+    const monitorVaultPage = monitorPage
+      ? new VaultPage(monitorPage, extensionId)
+      : null
+    let initialMonitoredBalance: string | null = null
+    let balanceQueryInput: BalanceQueryInput | null = null
+    let initialNativeBalance: bigint | null = null
+    let initialRowText: string | null = null
+    let autoUpdatedRowText: string | null = null
+    let reopenedRowText: string | null = null
 
     try {
+      if (monitorPage && monitorVaultPage) {
+        const monitorOpenedAt = Date.now()
+        await monitorVaultPage.goto()
+        await monitorVaultPage.waitForView(15_000)
+        balanceQueryInput = await getNativeBalanceQueryInput(
+          context,
+          chain,
+          ownAddress,
+          chainInfo.symbol
+        )
+        await expect
+          .poll(
+            async () =>
+              (await readPersistedBalanceSnapshot(context, balanceQueryInput!))
+                ?.dataUpdatedAt ?? 0,
+            {
+              message: `${chainInfo.symbol} monitor mount refetch should finish before the send baseline`,
+              timeout: 60_000,
+              intervals: [2_000],
+            }
+          )
+          .toBeGreaterThan(monitorOpenedAt)
+        initialNativeBalance = await readPersistedBalance(
+          context,
+          balanceQueryInput
+        )
+        expect(initialNativeBalance).not.toBeNull()
+
+        await expect
+          .poll(() => getDisplayedChainBalance(monitorPage, chain), {
+            message: `${chainInfo.symbol} monitor balance should finish loading before the send`,
+            timeout: 60_000,
+            intervals: [2_000],
+          })
+          .not.toBe('0')
+        initialMonitoredBalance = await getDisplayedChainBalance(
+          monitorPage,
+          chain
+        )
+        initialRowText = (
+          await getChainRow(monitorPage, chain).innerText()
+        ).trim()
+        const initialRowScreenshot = testInfo.outputPath(
+          `balance-before-send-${chain}.png`
+        )
+        await captureChainRow(monitorPage, chain, initialRowScreenshot)
+        await testInfo.attach('balance row before send', {
+          path: initialRowScreenshot,
+          contentType: 'image/png',
+        })
+      }
+
       await vaultPage.goto()
       await vaultPage.waitForView(15_000)
 
@@ -158,9 +426,10 @@ test.describe('Send Flow', () => {
       await navigateToSend(page)
       await sendFlow.waitForView()
 
-      // Fill send form (SELF-SEND: sending to own address)
+      // Default to a self-send; the opt-in balance-refresh proof may target a
+      // second designated QA vault so the visible fiat row changes materially.
       await sendFlow.selectCoin(chainInfo.symbol)
-      await sendFlow.fillAddress(ownAddress)
+      await sendFlow.fillAddress(sendDestination)
       await sendFlow.fillAmount(sendAmount)
 
       // Wait for fee estimation and balance to load
@@ -261,12 +530,161 @@ test.describe('Send Flow', () => {
 
         if (txHash) {
           console.log(`✅ ${chain} send tx: ${txHash}`)
-          const confirmation = await waitForTxConfirmation(
+          const confirmationPromise = waitForSendTxConfirmation(
             chain,
             txHash,
-            120_000
+            180_000
           )
-          expect(confirmation.confirmed).toBe(true)
+
+          if (
+            monitorPage &&
+            monitorVaultPage &&
+            initialMonitoredBalance &&
+            balanceQueryInput &&
+            initialNativeBalance !== null
+          ) {
+            await expect
+              .poll(
+                async () => {
+                  const persistedBalance = await readPersistedBalance(
+                    context,
+                    balanceQueryInput!
+                  )
+                  return (
+                    persistedBalance?.toString() ??
+                    initialNativeBalance.toString()
+                  )
+                },
+                {
+                  message: `${chainInfo.symbol} native balance query should auto-update without the refresh button`,
+                  timeout: 180_000,
+                  intervals: [5_000],
+                }
+              )
+              .not.toBe(initialNativeBalance.toString())
+
+            const autoUpdatedNativeBalance = await readPersistedBalance(
+              context,
+              balanceQueryInput
+            )
+            expect(autoUpdatedNativeBalance).not.toBeNull()
+
+            await expect
+              .poll(() => getDisplayedChainBalance(monitorPage, chain), {
+                message: `${chainInfo.symbol} balance should auto-update without the refresh button`,
+                timeout: 180_000,
+                intervals: [5_000],
+              })
+              .not.toBe(initialMonitoredBalance)
+
+            autoUpdatedRowText = (
+              await getChainRow(monitorPage, chain).innerText()
+            ).trim()
+
+            const openPopupScreenshot = testInfo.outputPath(
+              `balance-auto-updated-open-${chain}.png`
+            )
+            await captureChainRow(monitorPage, chain, openPopupScreenshot)
+            await testInfo.attach(
+              'balance auto-updated while popup stayed open',
+              {
+                path: openPopupScreenshot,
+                contentType: 'image/png',
+              }
+            )
+
+            await monitorPage.close()
+            await page.close()
+
+            const bogusFreshBalance = autoUpdatedNativeBalance! + 123_456_789n
+            await replacePersistedBalance(
+              context,
+              balanceQueryInput,
+              bogusFreshBalance
+            )
+
+            const reopenedPage = await context.newPage()
+            const reopenedVaultPage = new VaultPage(reopenedPage, extensionId)
+            try {
+              await reopenedPage.bringToFront()
+              await reopenedVaultPage.goto()
+              await reopenedVaultPage.waitForView(15_000)
+              await expect
+                .poll(
+                  async () =>
+                    (
+                      await readPersistedBalance(context, balanceQueryInput!)
+                    )?.toString() ?? null,
+                  {
+                    message: `${chainInfo.symbol} fresh persisted balance should refetch after reopening the popup`,
+                    timeout: 60_000,
+                    intervals: [2_000],
+                  }
+                )
+                .toBe(autoUpdatedNativeBalance!.toString())
+
+              await expect
+                .poll(() => getDisplayedChainBalance(reopenedPage, chain), {
+                  message: `${chainInfo.symbol} balance should render after reopening the popup`,
+                  timeout: 30_000,
+                  intervals: [2_000],
+                })
+                .not.toBe('0')
+
+              await expect(
+                reopenedVaultPage.totalBalanceContainer
+              ).toBeVisible()
+              await reopenedPage.waitForTimeout(3_000)
+
+              reopenedRowText = (
+                await getChainRow(reopenedPage, chain).innerText()
+              ).trim()
+
+              const reopenedScreenshot = testInfo.outputPath(
+                `balance-current-after-reopen-${chain}.png`
+              )
+              await captureChainRow(reopenedPage, chain, reopenedScreenshot)
+              await testInfo.attach('balance current after popup reopen', {
+                path: reopenedScreenshot,
+                contentType: 'image/png',
+              })
+
+              await testInfo.attach('balance auto-refresh receipt', {
+                body: Buffer.from(
+                  JSON.stringify(
+                    {
+                      revision:
+                        process.env.VULTISIG_E2E_PROOF_REVISION ?? 'unknown',
+                      chain,
+                      ticker: chainInfo.symbol,
+                      transactionHash: txHash,
+                      initialPersistedBalance: initialNativeBalance.toString(),
+                      autoUpdatedPersistedBalance:
+                        autoUpdatedNativeBalance!.toString(),
+                      injectedFreshBalance: bogusFreshBalance.toString(),
+                      reopenedPersistedBalance:
+                        (
+                          await readPersistedBalance(context, balanceQueryInput)
+                        )?.toString() ?? null,
+                      initialRowText,
+                      autoUpdatedRowText,
+                      reopenedRowText,
+                      refreshControlInvoked: false,
+                    },
+                    null,
+                    2
+                  )
+                ),
+                contentType: 'application/json',
+              })
+            } finally {
+              await reopenedPage.close()
+            }
+          }
+
+          const confirmation = await confirmationPromise
+          expect(confirmation.confirmed, confirmation.error).toBe(true)
+
           updateStaleness([chain], true)
         }
       } else {
@@ -278,7 +696,12 @@ test.describe('Send Flow', () => {
         }
       }
     } finally {
-      await page.close()
+      if (monitorPage && !monitorPage.isClosed()) {
+        await monitorPage.close()
+      }
+      if (!page.isClosed()) {
+        await page.close()
+      }
     }
   })
 

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  liveBalanceQueryOptions,
+  liveBalanceQueryRefetchInterval,
   persistQueryOptions,
   persistQueryStaleTime,
   pricePersistQueryOptions,
@@ -18,6 +20,20 @@ describe('persistQueryOptions', () => {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       staleTime: persistQueryStaleTime,
+    })
+  })
+})
+
+describe('liveBalanceQueryOptions', () => {
+  it('always verifies reopened balances and polls only live wallet observers', () => {
+    expect(liveBalanceQueryRefetchInterval).toBe(30_000)
+    expect(liveBalanceQueryOptions).toMatchObject({
+      refetchOnMount: 'always',
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      staleTime: persistQueryStaleTime,
+      refetchInterval: liveBalanceQueryRefetchInterval,
+      refetchIntervalInBackground: false,
     })
   })
 })

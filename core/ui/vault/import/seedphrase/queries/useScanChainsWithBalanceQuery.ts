@@ -41,7 +41,9 @@ export const useScanChainsWithBalanceQuery =
       [trustWalletInputs, phantomSolanaInput]
     )
 
-    const balancesQuery = useBalancesQuery(allInputs)
+    // Import discovery is a bounded one-shot scan, not a live wallet surface.
+    // Polling every derived chain would keep an unnecessary RPC fanout alive.
+    const balancesQuery = useBalancesQuery(allInputs, { live: false })
 
     return useMemo(() => {
       const { isPending, errors, data: balances } = balancesQuery
