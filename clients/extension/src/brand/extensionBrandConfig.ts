@@ -49,9 +49,9 @@ const vultisigExtensionBrandConfig: ExtensionBrandConfig = {
   popupTitle: 'Vultisig Extension Popup',
   websiteUrl: 'https://vultisig.com',
   manifest: {
-    name: 'Vultisig Extension',
+    name: 'Vultisig: Seedless Crypto Wallet',
     description:
-      'Vultisig Extension integrates Vultisig into web applications, enabling users to securely sign blockchain transactions.',
+      'Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 30+ chains.',
     author: {
       name: 'Vultisig',
       email: 'info@vultisig.com',

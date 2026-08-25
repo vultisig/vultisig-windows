@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Vultisig Extension",
-  "description": "Vultisig Extension integrates Vultisig into web applications, enabling users to securely sign blockchain transactions.",
+  "name": "Vultisig: Seedless Crypto Wallet",
+  "short_name": "Vultisig",
+  "description": "Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 30+ chains.",
   "author": {
     "name": "Vultisig",
     "email": "info@vultisig.com",
@@ -25,16 +26,30 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "exclude_matches": ["https://*.google.com/*"],
-      "js": ["content.js"],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "exclude_matches": [
+        "https://*.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_start",
       "all_frames": true
     },
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "exclude_matches": ["https://*.google.com/*"],
-      "js": ["inpage.js"],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "exclude_matches": [
+        "https://*.google.com/*"
+      ],
+      "js": [
+        "inpage.js"
+      ],
       "run_at": "document_start",
       "world": "MAIN",
       "all_frames": true
@@ -43,7 +58,9 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval';object-src 'self'"
   },
-  "host_permissions": ["https://*/*"],
+  "host_permissions": [
+    "https://*/*"
+  ],
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
@@ -51,13 +68,25 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["activeTab", "alarms", "clipboardRead", "clipboardWrite", "notifications", "sidePanel", "storage", "windows", "tabs"],
+  "permissions": [
+    "activeTab",
+    "alarms",
+    "clipboardRead",
+    "clipboardWrite",
+    "notifications",
+    "sidePanel",
+    "storage",
+    "windows",
+    "tabs"
+  ],
   "side_panel": {
     "default_path": "index.html"
   },
   "web_accessible_resources": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "<all_urls>"
+      ],
       "resources": [
         "wallet-core.wasm",
         "popup.html",
@@ -66,8 +95,12 @@
       "use_dynamic_url": false
     },
     {
-      "matches": ["<all_urls>"],
-      "resources": ["inpage.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "inpage.js"
+      ],
       "use_dynamic_url": false
     }
   ]
