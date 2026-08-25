@@ -185,6 +185,16 @@ const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
 export const getDefaultDefiPositionIds = (chain: Chain): string[] =>
   getAvailablePositionsForChain(chain).map(p => p.id)
 
+/**
+ * IDs of a chain's static stake positions only. A staking entry point seeds
+ * these instead of the full default set, so bond and LP tiles stay something
+ * the user opts into.
+ */
+export const getDefaultStakePositionIds = (chain: Chain): string[] =>
+  getAvailablePositionsForChain(chain)
+    .filter(({ type }) => type === 'stake')
+    .map(({ id }) => id)
+
 type DefiPositionsRecord = Record<string, string[]> // chain -> position ids
 
 export const getInitialDefiPositions = (
