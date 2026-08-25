@@ -3,17 +3,27 @@ import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { HStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
 import { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-const Container = styled.div`
-  ${horizontalPadding(pageConfig.horizontalPadding)};
-  ${verticalPadding(pageConfig.verticalPadding)};
+const Container = styled.div<{ $isExtension: boolean }>`
   align-items: center;
   column-gap: 12px;
   display: grid;
   grid-template-columns: 1fr minmax(0, auto) 1fr;
-  min-height: 60px;
   position: relative;
+
+  ${({ $isExtension }) =>
+    $isExtension
+      ? css`
+          box-sizing: border-box;
+          height: 100%;
+          padding: 8px 8px 8px 16px;
+        `
+      : css`
+          ${horizontalPadding(pageConfig.horizontalPadding)};
+          ${verticalPadding(pageConfig.verticalPadding)};
+          min-height: 60px;
+        `}
 `
 
 const PrimarySlot = styled(HStack)`
@@ -31,6 +41,7 @@ const SecondarySlot = styled(HStack)`
 `
 
 type VaultPageHeaderRowProps = {
+  isExtension?: boolean
   primaryControls?: ReactNode
   secondaryControls?: ReactNode
   title: ReactNode
@@ -44,17 +55,20 @@ type VaultPageHeaderRowProps = {
  * title optically centered whenever it fits.
  */
 export const VaultPageHeaderRow = ({
+  isExtension = false,
   primaryControls,
   secondaryControls,
   title,
-}: VaultPageHeaderRowProps) => (
-  <Container>
-    <PrimarySlot alignItems="center" gap={8}>
-      {primaryControls}
-    </PrimarySlot>
-    <TitleSlot>{title}</TitleSlot>
-    <SecondarySlot alignItems="center" gap={8}>
-      {secondaryControls}
-    </SecondarySlot>
-  </Container>
-)
+}: VaultPageHeaderRowProps) => {
+  return (
+    <Container $isExtension={isExtension} data-testid="vault-page-header-row">
+      <PrimarySlot alignItems="center" gap={8}>
+        {primaryControls}
+      </PrimarySlot>
+      <TitleSlot>{title}</TitleSlot>
+      <SecondarySlot alignItems="center" gap={8}>
+        {secondaryControls}
+      </SecondarySlot>
+    </Container>
+  )
+}

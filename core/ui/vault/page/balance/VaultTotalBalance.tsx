@@ -1,4 +1,5 @@
 import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
+import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
@@ -21,6 +22,8 @@ import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVis
  * two indicators are independent because both states can hold at once.
  */
 export const VaultTotalBalance = () => {
+  const { client } = useCore()
+  const isExtension = client === 'extension'
   const query = useVaultTotalBalanceQuery()
   const fiatCurrency = useFiatCurrency()
 
@@ -41,7 +44,8 @@ export const VaultTotalBalance = () => {
           <HStack gap={8} alignItems="center">
             <Text
               color="contrast"
-              size={28}
+              size={isExtension ? undefined : 28}
+              variant={isExtension ? 'stationTitle1' : undefined}
               centerVertically
               data-testid="balance-value"
             >

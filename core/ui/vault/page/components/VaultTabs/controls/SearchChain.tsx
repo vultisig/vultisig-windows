@@ -1,3 +1,4 @@
+import { useCore } from '@core/ui/state/core'
 import { useSearchChain } from '@core/ui/vault/page/state/searchChainProvider'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -14,7 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDeferredValue, useEffect, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 const debounceDelayMs = 250
 
@@ -27,14 +28,17 @@ export const SearchChain = ({
   onOpenChange,
   isFullWidth = false,
 }: SearchChainProps) => {
+  const { client } = useCore()
   const [isOpen, { set, unset }] = useBoolean(false)
   const [searchQuery, setSearchQuery] = useSearchChain()
   const [inputValue, setInputValue] = useState(searchQuery)
   const debouncedValue = useDebounce(inputValue, debounceDelayMs)
   const deferredValue = useDeferredValue(debouncedValue)
   const [, startTransition] = useTransition()
-  const { iconStyle } = useTheme()
   const { t } = useTranslation()
+  const { iconStyle } = useTheme()
+  const isExtension = client === 'extension'
+  const usesStationSearch = isExtension || iconStyle === 'station'
 
   useEffect(() => {
     setInputValue(searchQuery)
@@ -61,8 +65,6 @@ export const SearchChain = ({
     startTransition(() => setSearchQuery(''))
   }
 
-  const isStation = iconStyle === 'station'
-
   return (
     <AnimatePresence mode="wait">
       {isOpen ? (
@@ -80,21 +82,24 @@ export const SearchChain = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.1 }}
           >
-            <SearchRow>
+            <SearchRow $usesStationSearch={usesStationSearch}>
               <SearchFieldWrapper fullWidth={isFullWidth}>
                 <SearchField
                   value={inputValue}
                   onSearch={nextValue => setInputValue(nextValue)}
                 />
-                <CloseButton onClick={isStation ? handleClear : handleClose}>
-                  {isStation ? (
+                <CloseButton
+                  $usesStationSearch={usesStationSearch}
+                  onClick={usesStationSearch ? handleClear : handleClose}
+                >
+                  {usesStationSearch ? (
                     <StationCircleXmarkFilledIcon />
                   ) : (
                     <CircleCrossFilledIcon />
                   )}
                 </CloseButton>
               </SearchFieldWrapper>
-              {isStation && (
+              {usesStationSearch && (
                 <CancelButton onClick={handleClose}>{t('cancel')}</CancelButton>
               )}
             </SearchRow>
@@ -108,28 +113,25 @@ export const SearchChain = ({
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <IconButton
+          <SearchButton
+            $isExtension={isExtension}
             data-testid="vault-chain-search-button"
-            kind="secondary"
+            kind={isExtension ? undefined : 'secondary'}
             onClick={handleOpen}
             size="lg"
           >
-            {iconStyle === 'station' ? (
-              <StationMagnifierIcon />
-            ) : (
-              <SearchIcon />
-            )}
-          </IconButton>
+            {usesStationSearch ? <StationMagnifierIcon /> : <SearchIcon />}
+          </SearchButton>
         </motion.div>
       )}
     </AnimatePresence>
   )
 }
 
-const SearchRow = styled.div`
+const SearchRow = styled.div<{ $usesStationSearch: boolean }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => (theme.iconStyle === 'station' ? 12 : 0)}px;
+  gap: ${({ $usesStationSearch }) => ($usesStationSearch ? 12 : 0)}px;
   width: 100%;
 `
 
@@ -147,7 +149,7 @@ const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
   }
 `
 
-const CloseButton = styled(UnstyledButton)`
+const CloseButton = styled(UnstyledButton)<{ $usesStationSearch: boolean }>`
   align-items: center;
   display: flex;
   flex-shrink: 0;
@@ -161,14 +163,12 @@ const CloseButton = styled(UnstyledButton)`
   width: fit-content;
 
   svg {
-    color: ${({ theme }) =>
-      theme.iconStyle === 'station'
+    color: ${({ $usesStationSearch, theme }) =>
+      $usesStationSearch
         ? theme.colors.textShy.toCssValue()
         : theme.colors.foreground.toCssValue()};
-    fill: ${({ theme }) =>
-      theme.iconStyle === 'station'
-        ? 'currentColor'
-        : theme.colors.textShy.toCssValue()};
+    fill: ${({ $usesStationSearch, theme }) =>
+      $usesStationSearch ? 'currentColor' : theme.colors.textShy.toCssValue()};
   }
 `
 
@@ -183,4 +183,17 @@ const CancelButton = styled(UnstyledButton)`
   &:hover {
     color: ${getColor('textSupporting')};
   }
+`
+
+const SearchButton = styled(IconButton)<{ $isExtension: boolean }>`
+  ${({ $isExtension }) =>
+    $isExtension &&
+    css`
+      background: ${getColor('foreground')};
+      box-shadow: inset 0 0 8px rgba(240, 244, 252, 0.03);
+
+      &:hover {
+        background: ${getColor('foregroundDark')};
+      }
+    `}
 `

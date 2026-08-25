@@ -2,7 +2,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const ActionsWrapper = styled(HStack)`
   flex-wrap: wrap;
@@ -14,14 +14,25 @@ export const ActionsWrapper = styled(HStack)`
   }
 `
 
-const ActionWrapper = styled(UnstyledButton)`
+const ActionWrapper = styled(UnstyledButton)<{ $isExtension?: boolean }>`
   min-width: 52px;
   max-height: 52px;
   display: flex;
-  padding: 16px;
   justify-content: center;
   align-items: center;
   gap: 6px;
+
+  ${({ $isExtension }) =>
+    $isExtension
+      ? css`
+          box-sizing: border-box;
+          width: 52px;
+          height: 52px;
+          padding: 15px;
+        `
+      : css`
+          padding: 16px;
+        `}
   ${borderRadius.lg};
   line-height: 0;
   font-size: 20px;

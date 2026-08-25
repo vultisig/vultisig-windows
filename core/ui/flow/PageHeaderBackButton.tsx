@@ -10,7 +10,7 @@ export const PageHeaderBackButton = ({ onClick }: Partial<OnClickProp>) => {
   const { iconStyle } = useTheme()
 
   return (
-    <IconButton onClick={onClick ?? goBack}>
+    <IconButton data-testid="page-header-back" onClick={onClick ?? goBack}>
       {iconStyle === 'station' ? (
         <StationChevronLeftIcon />
       ) : (

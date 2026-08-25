@@ -1,4 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
 import { useEffect } from 'react'
 
@@ -15,6 +16,7 @@ export const BottomNavigation = ({
   activeTab = 'wallet',
   isActiveTabRoot = true,
 }: BottomNavigationProps) => {
+  const { client } = useCore()
   const navigate = useCoreNavigate()
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export const BottomNavigation = ({
   return (
     <AgentBottomNavigationContent
       activeTab={activeTab}
+      isExtension={client === 'extension'}
       onTabChange={handleTabChange}
       onCameraPress={() => navigate({ id: 'uploadQr', state: {} })}
     />
