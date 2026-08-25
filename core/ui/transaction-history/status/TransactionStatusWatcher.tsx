@@ -1,16 +1,7 @@
 import { useTransactionRecordsQuery } from '@core/ui/storage/transactionHistory'
 
-import { TransactionRecord, TransactionRecordStatus } from '../core'
+import { isChainPollable } from './pendingRecord'
 import { PendingTransactionWatch } from './PendingTransactionWatch'
-
-const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
-
-// Limit orders are queue-driven: their inbound deposit confirms in seconds
-// while the order rests for hours, so chain status would mark the record
-// `confirmed` and contradict the order's own state. `useLimitOrderTracking`
-// owns their lifecycle.
-const isChainPollable = (record: TransactionRecord) =>
-  pendingStatuses.includes(record.status) && record.type !== 'limitSwap'
 
 /**
  * Polls the active vault's pending transactions app-wide so balances settle

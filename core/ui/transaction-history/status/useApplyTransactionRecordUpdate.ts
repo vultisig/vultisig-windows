@@ -6,6 +6,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { TransactionRecord } from '../core'
 import { getRecordAffectedCoinKeys } from './getRecordAffectedCoinKeys'
 
+type ApplyTransactionRecordUpdateInput = {
+  /** The record as stored before this poll. */
+  previous: TransactionRecord
+  /** The record the poll produced, to persist in its place. */
+  update: TransactionRecord
+}
+
 /**
  * Persists a polled status update and, on the transition into `confirmed`,
  * refreshes the balances that transaction moved.
@@ -20,7 +27,7 @@ export const useApplyTransactionRecordUpdate = () => {
   const queryClient = useQueryClient()
   const vaultAddresses = useCurrentVaultAddresses()
 
-  return (previous: TransactionRecord, update: TransactionRecord) => {
+  return ({ previous, update }: ApplyTransactionRecordUpdateInput) => {
     updateRecord(update)
 
     if (update.status !== 'confirmed' || previous.status === 'confirmed') return

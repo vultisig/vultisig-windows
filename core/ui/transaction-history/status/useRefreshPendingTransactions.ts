@@ -2,15 +2,14 @@ import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
 
-import { TransactionRecord, TransactionRecordStatus } from '../core'
+import { TransactionRecord } from '../core'
 import {
   getCowSwapOrderApiBase,
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
+import { isChainPollable } from './pendingRecord'
 import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpdate'
-
-const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
 const healWindowMs = 30 * 24 * 60 * 60 * 1000
 
@@ -28,21 +27,10 @@ const isHealCandidate = (record: TransactionRecord): boolean =>
 export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
   const applyRecordUpdate = useApplyTransactionRecordUpdate()
   const isRefreshingRef = useRef(false)
-  // Read through a ref so the sweep keeps `records` as its only trigger. The
-  // applier closes over the vault's addresses, so it is not referentially
-  // stable the way the raw storage mutation it replaced was.
-  const applyRecordUpdateRef = useRef(applyRecordUpdate)
-  applyRecordUpdateRef.current = applyRecordUpdate
 
   useEffect(() => {
-    // Limit orders are queue-driven: their inbound deposit confirms in seconds
-    // while the order rests for hours, so chain status would mark the record
-    // `confirmed` and contradict the order's own state. useLimitOrderTracking
-    // owns their lifecycle.
     const refreshableRecords = records.filter(
-      r =>
-        (pendingStatuses.includes(r.status) && r.type !== 'limitSwap') ||
-        isHealCandidate(r)
+      r => isChainPollable(r) || isHealCandidate(r)
     )
 
     if (refreshableRecords.length === 0 || isRefreshingRef.current) return
@@ -64,7 +52,7 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
                   apiBase: cowSwapOrder.apiBase,
                 })
               if (updatedRecord) {
-                applyRecordUpdateRef.current(record, updatedRecord)
+                applyRecordUpdate({ previous: record, update: updatedRecord })
               }
               return
             }
@@ -82,7 +70,7 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
               result: result.data,
             })
             if (update) {
-              applyRecordUpdateRef.current(record, update)
+              applyRecordUpdate({ previous: record, update })
             }
           })
         )
@@ -92,5 +80,5 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
     }
 
     refresh()
-  }, [records])
+  }, [records, applyRecordUpdate])
 }
