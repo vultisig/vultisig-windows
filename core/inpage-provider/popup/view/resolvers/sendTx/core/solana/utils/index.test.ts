@@ -6,7 +6,7 @@ import {
 import { describe, expect, it } from 'vitest'
 
 import { AddressTableLookup } from '../types/types'
-import { resolveAddressTableKeys } from '.'
+import { accountKeyAt, resolveAddressTableKeys } from '.'
 
 const publicKeyFromSeed = (seed: number) =>
   new PublicKey(new Uint8Array(32).fill(seed))
@@ -137,5 +137,45 @@ describe('resolveAddressTableKeys', () => {
       publicKeyFromSeed(11).toBase58(),
       publicKeyFromSeed(21).toBase58(),
     ])
+  })
+  it('fetches every lookup table concurrently', async () => {
+    const firstTable = tableAccount([publicKeyFromSeed(10)], 1)
+    const secondTable = tableAccount([publicKeyFromSeed(20)], 2)
+    const tables = {
+      [firstTable.key.toBase58()]: firstTable,
+      [secondTable.key.toBase58()]: secondTable,
+    }
+
+    let inFlight = 0
+    let peakInFlight = 0
+
+    await resolveAddressTableKeys({
+      lookups: [lookup([0], [], 1), lookup([0], [], 2)],
+      connection: {
+        getAddressLookupTable: async key => {
+          inFlight += 1
+          peakInFlight = Math.max(peakInFlight, inFlight)
+          await Promise.resolve()
+          inFlight -= 1
+          return { context: { slot: 0 }, value: tables[key.toBase58()] ?? null }
+        },
+      },
+    })
+
+    expect(peakInFlight).toBe(2)
+  })
+})
+
+describe('accountKeyAt', () => {
+  it('reads the account the transaction addresses by index', () => {
+    const keys = [publicKeyFromSeed(1), publicKeyFromSeed(2)]
+
+    expect(accountKeyAt(keys, 1).toBase58()).toBe(
+      publicKeyFromSeed(2).toBase58()
+    )
+  })
+
+  it('fails closed instead of handing back an undefined account', () => {
+    expect(() => accountKeyAt([publicKeyFromSeed(1)], 3)).toThrow()
   })
 })

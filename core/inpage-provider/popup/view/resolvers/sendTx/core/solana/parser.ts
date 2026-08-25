@@ -167,11 +167,11 @@ export const parseSolanaTx = async ({
   if (parsedSimulation) {
     return parsedSimulation
   }
-  const resolvedKeys = await attempt(
+  const addressTableLookups = decodedTx.transaction.v0?.addressTableLookups
+
+  const resolvedKeys = await attempt(async () =>
     resolveAddressTableKeys({
-      lookups: toAddressTableLookups(
-        decodedTx.transaction.v0?.addressTableLookups
-      ),
+      lookups: toAddressTableLookups(addressTableLookups),
       connection: new Connection(solanaRpcUrl),
     })
   )
