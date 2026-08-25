@@ -1900,4 +1900,8 @@ export const hr = {
   kamino_earn_protocol: 'Kamino',
   on_chain: 'na {{chain}}',
   max_total_fee: 'Maks. ukupna naknada',
+  broadcast_refused: 'Emitiranje nije potvrđeno',
+  broadcast_refused_description:
+    'Vaši su uređaji potpisali ovu transakciju, ali ovaj je uređaj odbio emitirati je nakon završne sigurnosne provjere. Drugi uređaj za potpisivanje ju je možda ipak emitirao - pogledajte status u nastavku i potvrdite ishod prije ponovnog potpisivanja.',
+  not_seen_onchain: 'Još nije viđeno na lancu',
 }

@@ -1933,4 +1933,8 @@ export const pt = {
   kamino_earn_protocol: 'Kamino',
   on_chain: 'em {{chain}}',
   max_total_fee: 'Taxa máxima total',
+  broadcast_refused: 'Transmissão não confirmada',
+  broadcast_refused_description:
+    'Seus dispositivos assinaram esta transação, mas este dispositivo recusou-se a transmiti-la após uma verificação de segurança final. Outro dispositivo de assinatura pode tê-la transmitido mesmo assim — observe o status abaixo e confirme o resultado antes de assinar novamente.',
+  not_seen_onchain: 'Ainda não foi visto na blockchain.',
 }

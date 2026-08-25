@@ -1774,4 +1774,8 @@ export const zh = {
   kamino_earn_protocol: 'Kamino',
   on_chain: '在{{chain}}上',
   max_total_fee: '最高总费用',
+  broadcast_refused: '播出尚未确认',
+  broadcast_refused_description:
+    '您的设备已签署此交易，但此设备在最终安全检查后拒绝广播该交易。其他签署设备可能已广播该交易——请查看下方状态并确认结果后再重新签署。',
+  not_seen_onchain: '尚未在链上看到',
 }

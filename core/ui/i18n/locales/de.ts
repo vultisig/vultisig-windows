@@ -1945,4 +1945,8 @@ export const de = {
   kamino_earn_protocol: 'Kamino',
   on_chain: 'auf {{chain}}',
   max_total_fee: 'Maximale Gesamtgebühr',
+  broadcast_refused: 'Übertragung nicht bestätigt',
+  broadcast_refused_description:
+    'Ihre Geräte haben diese Transaktion signiert, aber dieses Gerät hat die Übertragung nach einer abschließenden Sicherheitsprüfung abgelehnt. Ein anderes signierendes Gerät hat sie möglicherweise trotzdem übertragen – überprüfen Sie den Status unten und bestätigen Sie das Ergebnis, bevor Sie erneut signieren.',
+  not_seen_onchain: 'Noch nicht in der Blockchain gesehen',
 }

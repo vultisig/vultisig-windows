@@ -1,9 +1,13 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { Tx } from '@vultisig/core-chain/tx'
 import { assertNativeSwapReadyForBroadcast } from '@vultisig/core-mpc/keysign/swap/assertNativeSwapReadyForBroadcast'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { assertReadyToBroadcast } from './assertReadyToBroadcast'
+import {
+  assertReadyToBroadcast,
+  BroadcastRefusedError,
+} from './assertReadyToBroadcast'
 import { BroadcastError } from './broadcastKeysignTx'
 
 vi.mock(
@@ -13,9 +17,12 @@ vi.mock(
   })
 )
 
+const txs = [{ hash: '0xabc' } as Tx]
+
 const input = {
   chain: Chain.Ethereum,
   keysignPayload: {} as KeysignPayload,
+  txs,
 }
 
 describe('assertReadyToBroadcast', () => {
@@ -49,6 +56,21 @@ describe('assertReadyToBroadcast', () => {
     )
   })
 
+  it('keeps the signed txs on an inbound-vault rotation so the hash survives', async () => {
+    // The rotation race: the vault churns between signing and this device's
+    // check, while a co-signer whose check passed already broadcast the same
+    // signed tx. The refusal must carry the txs so the UI can show the hash
+    // and a pending state instead of a terminal failure with no hash.
+    vi.mocked(assertNativeSwapReadyForBroadcast).mockRejectedValue(
+      new Error('THORChain inbound vault address changed')
+    )
+
+    const error = await assertReadyToBroadcast(input).catch(error => error)
+
+    expect(error).toBeInstanceOf(BroadcastRefusedError)
+    expect(error.txs).toBe(txs)
+  })
+
   it('keeps the reason the guard gave', async () => {
     vi.mocked(assertNativeSwapReadyForBroadcast).mockRejectedValue(
       new Error('Native swap quote is expired')
@@ -64,6 +86,9 @@ describe('assertReadyToBroadcast', () => {
 
     await assertReadyToBroadcast(input)
 
-    expect(assertNativeSwapReadyForBroadcast).toHaveBeenCalledWith(input)
+    expect(assertNativeSwapReadyForBroadcast).toHaveBeenCalledWith({
+      chain: input.chain,
+      keysignPayload: input.keysignPayload,
+    })
   })
 })

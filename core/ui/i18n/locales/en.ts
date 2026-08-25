@@ -114,6 +114,10 @@ export const en = {
   broadcast_error: 'The network rejected this transaction',
   broadcast_error_description:
     'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
+  broadcast_refused: 'Broadcast not confirmed',
+  broadcast_refused_description:
+    'Your devices signed this transaction, but this device declined to broadcast it after a final safety check. Another signing device may have broadcast it anyway — watch the status below and confirm the outcome before signing again.',
+  not_seen_onchain: 'Not seen on-chain yet',
   broadcasted: 'Broadcasted',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
