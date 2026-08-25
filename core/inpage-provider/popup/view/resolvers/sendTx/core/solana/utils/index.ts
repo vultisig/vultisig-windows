@@ -8,23 +8,77 @@ export const readU64LE = (buf: Buffer, off: number) => {
   return (hi << 32n) | lo
 }
 
-export const resolveAddressTableKeys = async (
-  lookups: AddressTableLookup[],
-  connection: Connection
-): Promise<PublicKey[]> => {
-  const out: PublicKey[] = []
-  for (const l of lookups ?? []) {
-    const res = await connection.getAddressLookupTable(
-      new PublicKey(l.accountKey)
-    )
-    const table = res.value?.state.addresses ?? []
-    out.push(
-      ...l.writableIndexes.map(i => table[i]),
-      ...l.readonlyIndexes.map(i => table[i])
+/** The slice of `Connection` needed to read address lookup tables. */
+type AddressLookupTableReader = Pick<Connection, 'getAddressLookupTable'>
+
+type ResolveAddressTableKeysInput = {
+  lookups: AddressTableLookup[]
+  connection: AddressLookupTableReader
+}
+
+/**
+ * Resolves the account keys a v0 transaction loads from on-chain address
+ * lookup tables. Every table is fetched concurrently, but writable entries
+ * from all tables still come before readonly ones, matching how Solana orders
+ * loaded addresses. Fails closed: an unreadable table or an index outside it
+ * throws instead of yielding undefined keys, so callers can never present a
+ * partially decoded transaction as a complete one.
+ */
+export const resolveAddressTableKeys = async ({
+  lookups,
+  connection,
+}: ResolveAddressTableKeysInput): Promise<PublicKey[]> => {
+  const resolved = await Promise.all(
+    lookups.map(async lookup => {
+      const { value } = await connection.getAddressLookupTable(
+        new PublicKey(lookup.accountKey)
+      )
+      if (!value) {
+        throw new Error(
+          `Address lookup table ${lookup.accountKey} could not be read`
+        )
+      }
+
+      const { addresses } = value.state
+      const resolveIndex = (index: number) => {
+        const address = addresses[index]
+        if (!address) {
+          throw new Error(
+            `Address lookup table ${lookup.accountKey} has no entry at index ${index}`
+          )
+        }
+        return address
+      }
+
+      return {
+        writable: lookup.writableIndexes.map(resolveIndex),
+        readonly: lookup.readonlyIndexes.map(resolveIndex),
+      }
+    })
+  )
+
+  return [
+    ...resolved.flatMap(({ writable }) => writable),
+    ...resolved.flatMap(({ readonly }) => readonly),
+  ]
+}
+
+/**
+ * Reads the account a transaction addresses by index, against the merged
+ * static-plus-lookup key list. Throws rather than returning undefined, since
+ * an index past the resolved keys means the transaction was only partially
+ * decoded and any account read from it would be a guess.
+ */
+export const accountKeyAt = (keys: PublicKey[], index: number): PublicKey => {
+  const key = keys[index]
+  if (!key) {
+    throw new Error(
+      `Transaction references account index ${index}, outside the ${keys.length} resolved account keys`
     )
   }
-  return out
+  return key
 }
+
 export const mergedKeys = (staticKeys: PublicKey[], loaded: PublicKey[]) => {
   return [...staticKeys, ...loaded]
 }

@@ -17,6 +17,7 @@ import {
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { Coin as CommCoin } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
@@ -37,6 +38,18 @@ type ParseSolanaTxInput = {
   swapProvider: string
 }
 
+const toAddressTableLookups = (
+  lookups:
+    | TW.Solana.Proto.RawMessage.IMessageAddressTableLookup[]
+    | null
+    | undefined
+): AddressTableLookup[] =>
+  (lookups ?? []).map(({ accountKey, writableIndexes, readonlyIndexes }) => ({
+    accountKey: shouldBePresent(accountKey, 'addressTableLookup.accountKey'),
+    writableIndexes: writableIndexes ?? [],
+    readonlyIndexes: readonlyIndexes ?? [],
+  }))
+
 export const parseSolanaTx = async ({
   fromCoin,
   walletCore,
@@ -50,7 +63,6 @@ export const parseSolanaTx = async ({
   }
 
   const buffer = getSerializedSolanaTxBuffer(data)
-  const connection = new Connection(solanaRpcUrl)
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
     buffer
@@ -63,16 +75,6 @@ export const parseSolanaTx = async ({
   const tx = decodedTx.transaction?.v0 ?? decodedTx.transaction?.legacy
   if (!tx)
     throw new Error('Invalid Solana transaction: missing v0 transaction data')
-
-  const staticKeys = (tx.accountKeys ?? []).map(k => new PublicKey(k))
-
-  const resolvedKeys = await resolveAddressTableKeys(
-    ('addressTableLookups' in tx
-      ? tx.addressTableLookups
-      : []) as AddressTableLookup[],
-    connection
-  )
-  const keys = mergedKeys(staticKeys, resolvedKeys)
 
   const { data: parsedSimulation } = await attempt(async () => {
     const keysignPayload = create(KeysignPayloadSchema, {
@@ -165,6 +167,26 @@ export const parseSolanaTx = async ({
   if (parsedSimulation) {
     return parsedSimulation
   }
+  const addressTableLookups = decodedTx.transaction.v0?.addressTableLookups
+
+  const resolvedKeys = await attempt(async () =>
+    resolveAddressTableKeys({
+      lookups: toAddressTableLookups(addressTableLookups),
+      connection: new Connection(solanaRpcUrl),
+    })
+  )
+
+  if ('error' in resolvedKeys) {
+    console.warn(
+      'could not resolve Solana address lookup tables, returning raw fallback',
+      resolvedKeys.error
+    )
+    return getSolanaRawTxFallback(data)
+  }
+
+  const staticKeys = (tx.accountKeys ?? []).map(k => new PublicKey(k))
+  const keys = mergedKeys(staticKeys, resolvedKeys.data)
+
   const { data: parsedTx } = await attempt(
     parseProgramCall({
       tx,
