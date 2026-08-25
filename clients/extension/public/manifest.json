@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Vultisig: Seedless Crypto Wallet",
   "short_name": "Vultisig",
-  "description": "Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 30+ chains.",
+  "description": "Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 35+ chains.",
   "author": {
     "name": "Vultisig",
     "email": "info@vultisig.com",
