@@ -159,7 +159,14 @@ describe('getRecordAffectedCoinKeys', () => {
     expect(keysFor(restingLimitOrder)).toEqual([])
   })
 
-  it('ignores trust line records', () => {
-    expect(keysFor(openedTrustLine)).toEqual([])
+  it('refreshes the fee coin a trust line burned', () => {
+    const result = keysFor(openedTrustLine)
+
+    expect(result).toEqual([
+      accountCoinKeyToString({
+        ...chainFeeCoin[Chain.Ripple],
+        address: 'rWallet',
+      }),
+    ])
   })
 })

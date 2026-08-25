@@ -22,9 +22,9 @@ type GetRecordAffectedCoinKeysInput = {
  * Every balance a confirmed transaction moved, derived from its stored record.
  *
  * Returns nothing for the record types whose lifecycle another tracker owns
- * (`limitSwap`) or that move no balance beyond the fee (`trustLine`). A swap
- * leg whose chain the vault holds no address for is dropped rather than keyed
- * against `undefined`.
+ * (`limitSwap`). A trust line moves no token balance, but it still burns the
+ * fee, so its fee coin is returned. A swap leg whose chain the vault holds no
+ * address for is dropped rather than keyed against `undefined`.
  */
 export const getRecordAffectedCoinKeys = ({
   record,
@@ -63,7 +63,9 @@ export const getRecordAffectedCoinKeys = ({
       // Owned by `useLimitOrderTracking`: the inbound tx confirms long before
       // the order settles, so a balance read here would be premature.
       limitSwap: () => [],
-      trustLine: () => [],
+      trustLine: data => [
+        { ...chainFeeCoin[record.chain], address: data.fromAddress },
+      ],
     }
   )
 

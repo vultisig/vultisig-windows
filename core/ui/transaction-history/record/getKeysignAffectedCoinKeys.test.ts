@@ -5,6 +5,7 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { KyberSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/kyberswap_swap_payload_pb'
 import { THORChainSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 import { describe, expect, it } from 'vitest'
 
@@ -106,7 +107,10 @@ describe('getKeysignAffectedCoinKeys', () => {
     const result = keys(
       create(KeysignPayloadSchema, {
         coin: create(CoinSchema, usdcCoin),
-        swapPayload: { case: 'kyberswapSwapPayload', value: {} as never },
+        swapPayload: {
+          case: 'kyberswapSwapPayload',
+          value: create(KyberSwapPayloadSchema, {}),
+        },
       })
     )
 
