@@ -8,19 +8,44 @@ export const readU64LE = (buf: Buffer, off: number) => {
   return (hi << 32n) | lo
 }
 
+/** The slice of `Connection` needed to read address lookup tables. */
+type AddressLookupTableReader = Pick<Connection, 'getAddressLookupTable'>
+
+/**
+ * Resolves the account keys a v0 transaction loads from on-chain address
+ * lookup tables, writable entries first. Fails closed: an unreadable table or
+ * an index outside it throws instead of yielding undefined keys, so callers
+ * can never present a partially decoded transaction as a complete one.
+ */
 export const resolveAddressTableKeys = async (
   lookups: AddressTableLookup[],
-  connection: Connection
+  connection: AddressLookupTableReader
 ): Promise<PublicKey[]> => {
   const out: PublicKey[] = []
-  for (const l of lookups ?? []) {
-    const res = await connection.getAddressLookupTable(
-      new PublicKey(l.accountKey)
+  for (const lookup of lookups) {
+    const { value } = await connection.getAddressLookupTable(
+      new PublicKey(lookup.accountKey)
     )
-    const table = res.value?.state.addresses ?? []
+    if (!value) {
+      throw new Error(
+        `Address lookup table ${lookup.accountKey} could not be read`
+      )
+    }
+
+    const addresses = value.state.addresses
+    const resolveIndex = (index: number) => {
+      const address = addresses[index]
+      if (!address) {
+        throw new Error(
+          `Address lookup table ${lookup.accountKey} has no entry at index ${index}`
+        )
+      }
+      return address
+    }
+
     out.push(
-      ...l.writableIndexes.map(i => table[i]),
-      ...l.readonlyIndexes.map(i => table[i])
+      ...lookup.writableIndexes.map(resolveIndex),
+      ...lookup.readonlyIndexes.map(resolveIndex)
     )
   }
   return out

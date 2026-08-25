@@ -50,7 +50,6 @@ export const parseSolanaTx = async ({
   }
 
   const buffer = getSerializedSolanaTxBuffer(data)
-  const connection = new Connection(solanaRpcUrl)
   const encodedTx = walletCore.TransactionDecoder.decode(
     walletCore.CoinType.solana,
     buffer
@@ -63,16 +62,6 @@ export const parseSolanaTx = async ({
   const tx = decodedTx.transaction?.v0 ?? decodedTx.transaction?.legacy
   if (!tx)
     throw new Error('Invalid Solana transaction: missing v0 transaction data')
-
-  const staticKeys = (tx.accountKeys ?? []).map(k => new PublicKey(k))
-
-  const resolvedKeys = await resolveAddressTableKeys(
-    ('addressTableLookups' in tx
-      ? tx.addressTableLookups
-      : []) as AddressTableLookup[],
-    connection
-  )
-  const keys = mergedKeys(staticKeys, resolvedKeys)
 
   const { data: parsedSimulation } = await attempt(async () => {
     const keysignPayload = create(KeysignPayloadSchema, {
@@ -165,6 +154,26 @@ export const parseSolanaTx = async ({
   if (parsedSimulation) {
     return parsedSimulation
   }
+  const resolvedKeys = await attempt(
+    resolveAddressTableKeys(
+      ('addressTableLookups' in tx
+        ? tx.addressTableLookups
+        : []) as AddressTableLookup[],
+      new Connection(solanaRpcUrl)
+    )
+  )
+
+  if ('error' in resolvedKeys) {
+    console.warn(
+      'could not resolve Solana address lookup tables, returning raw fallback',
+      resolvedKeys.error
+    )
+    return getSolanaRawTxFallback(data)
+  }
+
+  const staticKeys = (tx.accountKeys ?? []).map(k => new PublicKey(k))
+  const keys = mergedKeys(staticKeys, resolvedKeys.data)
+
   const { data: parsedTx } = await attempt(
     parseProgramCall({
       tx,
