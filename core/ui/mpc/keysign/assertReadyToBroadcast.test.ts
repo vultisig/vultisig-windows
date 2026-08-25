@@ -1,7 +1,9 @@
+import { create } from '@bufbuild/protobuf'
+import { TW } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { Tx } from '@vultisig/core-chain/tx'
 import { assertNativeSwapReadyForBroadcast } from '@vultisig/core-mpc/keysign/swap/assertNativeSwapReadyForBroadcast'
-import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
@@ -17,11 +19,13 @@ vi.mock(
   })
 )
 
-const txs = [{ hash: '0xabc' } as Tx]
+const txs: Tx[] = [
+  { hash: '0xabc', data: TW.Ethereum.Proto.SigningOutput.create() },
+]
 
 const input = {
   chain: Chain.Ethereum,
-  keysignPayload: {} as KeysignPayload,
+  keysignPayload: create(KeysignPayloadSchema),
   txs,
 }
 
