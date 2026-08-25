@@ -17,6 +17,7 @@ import {
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { Coin as CommCoin } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
@@ -36,6 +37,18 @@ type ParseSolanaTxInput = {
   getCoin: (coinKey: CoinKey) => Promise<Coin>
   swapProvider: string
 }
+
+const toAddressTableLookups = (
+  lookups:
+    | TW.Solana.Proto.RawMessage.IMessageAddressTableLookup[]
+    | null
+    | undefined
+): AddressTableLookup[] =>
+  (lookups ?? []).map(({ accountKey, writableIndexes, readonlyIndexes }) => ({
+    accountKey: shouldBePresent(accountKey, 'addressTableLookup.accountKey'),
+    writableIndexes: writableIndexes ?? [],
+    readonlyIndexes: readonlyIndexes ?? [],
+  }))
 
 export const parseSolanaTx = async ({
   fromCoin,
@@ -155,12 +168,12 @@ export const parseSolanaTx = async ({
     return parsedSimulation
   }
   const resolvedKeys = await attempt(
-    resolveAddressTableKeys(
-      ('addressTableLookups' in tx
-        ? tx.addressTableLookups
-        : []) as AddressTableLookup[],
-      new Connection(solanaRpcUrl)
-    )
+    resolveAddressTableKeys({
+      lookups: toAddressTableLookups(
+        decodedTx.transaction.v0?.addressTableLookups
+      ),
+      connection: new Connection(solanaRpcUrl),
+    })
   )
 
   if ('error' in resolvedKeys) {

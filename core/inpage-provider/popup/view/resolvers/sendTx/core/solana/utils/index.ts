@@ -11,17 +11,25 @@ export const readU64LE = (buf: Buffer, off: number) => {
 /** The slice of `Connection` needed to read address lookup tables. */
 type AddressLookupTableReader = Pick<Connection, 'getAddressLookupTable'>
 
+type ResolveAddressTableKeysInput = {
+  lookups: AddressTableLookup[]
+  connection: AddressLookupTableReader
+}
+
 /**
  * Resolves the account keys a v0 transaction loads from on-chain address
- * lookup tables, writable entries first. Fails closed: an unreadable table or
- * an index outside it throws instead of yielding undefined keys, so callers
- * can never present a partially decoded transaction as a complete one.
+ * lookup tables. Writable entries from every table come before readonly ones,
+ * matching how Solana orders loaded addresses. Fails closed: an unreadable
+ * table or an index outside it throws instead of yielding undefined keys, so
+ * callers can never present a partially decoded transaction as a complete one.
  */
-export const resolveAddressTableKeys = async (
-  lookups: AddressTableLookup[],
-  connection: AddressLookupTableReader
-): Promise<PublicKey[]> => {
-  const out: PublicKey[] = []
+export const resolveAddressTableKeys = async ({
+  lookups,
+  connection,
+}: ResolveAddressTableKeysInput): Promise<PublicKey[]> => {
+  const writable: PublicKey[] = []
+  const readonly: PublicKey[] = []
+
   for (const lookup of lookups) {
     const { value } = await connection.getAddressLookupTable(
       new PublicKey(lookup.accountKey)
@@ -43,12 +51,11 @@ export const resolveAddressTableKeys = async (
       return address
     }
 
-    out.push(
-      ...lookup.writableIndexes.map(resolveIndex),
-      ...lookup.readonlyIndexes.map(resolveIndex)
-    )
+    writable.push(...lookup.writableIndexes.map(resolveIndex))
+    readonly.push(...lookup.readonlyIndexes.map(resolveIndex))
   }
-  return out
+
+  return [...writable, ...readonly]
 }
 export const mergedKeys = (staticKeys: PublicKey[], loaded: PublicKey[]) => {
   return [...staticKeys, ...loaded]
