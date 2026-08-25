@@ -1898,4 +1898,6 @@ export const hr = {
   kamino_earn_deposited: 'Položeno: {{amount}}',
   kamino_earn_earned: 'Zarađeno: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'na {{chain}}',
+  max_total_fee: 'Maks. ukupna naknada',
 }

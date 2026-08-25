@@ -1888,4 +1888,6 @@ export const ko = {
   kamino_earn_deposited: '예치됨: {{amount}}',
   kamino_earn_earned: '수익: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: '{{chain}} 에서',
+  max_total_fee: '최대 총 수수료',
 }

@@ -390,6 +390,7 @@ export const en = {
   error_message: 'Error message',
   est_network_fee: 'Est. Network Fee',
   expand_view: 'Expand View',
+  on_chain: 'on {{chain}}',
   open_as_side_panel: 'Open as Side Panel',
   push_notifications: 'Push Notifications',
   push_notifications_description:
@@ -652,6 +653,7 @@ export const en = {
   max: 'Max',
   max_4_characters: 'Max 4 characters',
   max_supply: 'Max Supply',
+  max_total_fee: 'Max. Total Fee',
   memo: 'Memo',
   message: 'Message',
   message_required: 'Message is required',
