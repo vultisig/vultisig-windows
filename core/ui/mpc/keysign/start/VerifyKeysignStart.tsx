@@ -1,29 +1,21 @@
-import { getBlockaidTxValidationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxValidation'
-import { StartKeysignPromptProps } from '@core/ui/mpc/keysign/prompt/StartKeysignPromptProps'
-import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
+import { useBlockaidTxScanQuery } from '@core/ui/chain/security/blockaid/tx/queries/useBlockaidTxScanQuery'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { useTransformQueryDataAsync } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
-import { getBlockaidTxValidationInput } from '@vultisig/core-mpc/security/blockaid/tx/validation/input'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
-import { match } from '@vultisig/lib-utils/match'
-import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
-import { BlockaidTxScanStatus } from '../../../chain/security/blockaid/tx/BlockaidTxScanStatus'
+import { BlockaidTxScan } from '../../../chain/security/blockaid/tx/BlockaidTxScan'
 import { RefetchableKeysignPayloadQuery } from './refreshKeysignPayload'
+import { resolveStartKeysignPromptProps } from './resolveStartKeysignPromptProps'
 import { StartKeysignPromptWithRefresh } from './StartKeysignPromptWithRefresh'
 
 type VerifyKeysignStartInput = {
@@ -65,121 +57,28 @@ export const VerifyKeysignStart = ({
   swapQuote,
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
-  const isBlockaidEnabled = useIsBlockaidEnabled()
 
   const [termsAccepted, setTermsAccepted] = useState<boolean[]>(
     new Array(terms.length).fill(false)
   )
 
-  const walletCore = useAssertWalletCore()
+  const { isScanning } = useBlockaidTxScanQuery(keysignPayloadQuery)
 
-  const txScanInput = useTransformQueryDataAsync(
-    keysignPayloadQuery,
-    useCallback(
-      async payload => {
-        if (!isBlockaidEnabled) {
-          return null
-        }
-
-        return getBlockaidTxValidationInput({
-          payload,
-          walletCore,
-        })
-      },
-      [isBlockaidEnabled, walletCore]
-    ),
-    ['keysignStartBlockaidTxValidationInput', isBlockaidEnabled]
-  )
-
-  const txScanQueryBase = usePotentialQuery(
-    txScanInput.data || undefined,
-    getBlockaidTxValidationQuery
-  )
-  const txScanQuery = {
-    ...txScanQueryBase,
-    error: txScanInput.error ?? txScanQueryBase.error,
-    isPending: txScanInput.isPending || txScanQueryBase.isPending,
-  }
-
-  const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
-    if (termsAccepted.some(term => !term)) {
-      return {
-        disabledMessage: t('terms_required'),
-      }
-    }
-
-    if (txScanQuery.isPending) {
-      return {
-        disabledMessage: t('scanning'),
-      }
-    }
-
-    if (keysignPayloadQuery.isPending) {
-      return {
-        disabledMessage: t('loading'),
-      }
-    }
-
-    if (extraPendingMessage) {
-      return {
-        disabledMessage: extraPendingMessage,
-      }
-    }
-
-    if (keysignPayloadQuery.error) {
-      if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
-        return {
-          disabledMessage: match(keysignPayloadQuery.error.type, {
-            'not-enough-funds': () => t('not_enough_funds'),
-            'ripple-destination-tag-invalid': () =>
-              extractErrorMsg(keysignPayloadQuery.error),
-            'ripple-destination-tag-required': () =>
-              t('ripple_destination_tag_required'),
-          }),
-        }
-      }
-      return {
-        disabledMessage: extractErrorMsg(keysignPayloadQuery.error),
-      }
-    }
-
-    const keysign = keysignPayloadQuery.data
-
-    if (!keysign) {
-      if (keysignPayloadQuery.isPending) {
-        return {
-          disabledMessage: t('loading'),
-        }
-      }
-      return {}
-    }
-
-    if (disabledMessage) {
-      return { disabledMessage }
-    }
-
-    return {
-      keysignPayload: { keysign },
-      ...(toAddressLabel ? { toAddressLabel } : {}),
-      ...(swapQuote ? { swapQuote } : {}),
-    }
-  }, [
-    disabledMessage,
-    extraPendingMessage,
-    keysignPayloadQuery.data,
-    keysignPayloadQuery.error,
-    keysignPayloadQuery.isPending,
-    swapQuote,
+  const startKeysignPromptProps = resolveStartKeysignPromptProps({
     t,
     termsAccepted,
+    keysignPayloadQuery,
+    isScanning,
+    extraPendingMessage,
+    disabledMessage,
     toAddressLabel,
-    txScanQuery.isPending,
-  ])
+    swapQuote,
+  })
 
   return (
     <>
       <PageContent gap={12} scrollable>
-        {isBlockaidEnabled && <BlockaidTxScanStatus value={txScanQuery} />}
+        <BlockaidTxScan keysignPayloadQuery={keysignPayloadQuery} />
 
         {children}
 
