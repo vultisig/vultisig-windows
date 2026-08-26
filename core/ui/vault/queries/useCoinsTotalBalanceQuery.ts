@@ -28,7 +28,8 @@ export const useCoinsTotalBalanceQuery = (
     coins,
     prices: pricesQuery.data,
     balances: balancesQuery.data,
-    isPending: pricesQuery.isPending || balancesQuery.isPending,
+    failedCoins: balancesQuery.failedCoins,
+    isPricesPending: pricesQuery.isPending,
     error: [...balancesQuery.errors, ...pricesQuery.errors][0] ?? null,
   })
 }

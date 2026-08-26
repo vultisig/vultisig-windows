@@ -15,10 +15,11 @@ const chainRegistry = new Set<string>(Object.values(Chain))
 const isKnownChain = (value: string): value is Chain => chainRegistry.has(value)
 
 /**
- * Portfolio balances of the current vault resolved per chain. `data` stays
- * undefined while any chain is still loading or when every chain failed; a
- * failed read on one chain otherwise only lands in `failedChains` and never
- * hides the chains that resolved.
+ * Portfolio balances of the current vault resolved per chain. `data` is
+ * undefined only while no chain has resolved yet: pending when some chain is
+ * still loading, failed when every chain failed. Once any chain resolved, the
+ * others are reported as loading or failed alongside it and a failed read
+ * never hides the chains that resolved — not even while it is being retried.
  */
 export const useVaultChainsBalancesQuery =
   (): EagerQuery<VaultChainsBalances> => {
@@ -40,12 +41,16 @@ export const useVaultChainsBalancesQuery =
       ),
       balances: balancesQuery.data,
       prices: pricesQuery.data,
-      isBalancesPending: balancesQuery.isPending,
+      failedCoins: balancesQuery.failedCoins,
     })
 
-    if (data && data.balances.length === 0 && data.failedChains.length > 0) {
+    if (data.balances.length === 0 && data.loadingChains.length > 0) {
+      return { isPending: true, data: undefined, errors }
+    }
+
+    if (data.balances.length === 0 && data.failedChains.length > 0) {
       return {
-        isPending,
+        isPending: false,
         data: undefined,
         errors:
           errors.length > 0

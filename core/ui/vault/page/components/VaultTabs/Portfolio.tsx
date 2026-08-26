@@ -20,9 +20,10 @@ type PortfolioViewState = 'noChains' | 'noSearchResults' | 'list'
 
 /**
  * Vault home chain list. Chains whose balances resolved render with their
- * values; a chain whose balance read failed keeps its row with a "failed to
- * load" state instead of disappearing or showing zero. The page-level failure
- * state only appears when no chain resolved at all.
+ * values; a chain still waiting for its first balance keeps its row with a
+ * spinner, and a chain whose balance read failed keeps its row with a "failed
+ * to load" state instead of disappearing or showing zero. The page-level
+ * loading and failure states only appear when no chain resolved at all.
  */
 export const Portfolio = () => {
   const { data, isPending } = useVaultChainsBalancesQuery()
@@ -42,7 +43,7 @@ export const Portfolio = () => {
     )
   }
 
-  const { balances, failedChains } = data
+  const { balances, loadingChains, failedChains } = data
 
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
@@ -59,18 +60,27 @@ export const Portfolio = () => {
       )
     : balances
 
+  const filteredLoadingChains = normalizedQuery
+    ? loadingChains.filter(matchesChain)
+    : loadingChains
+
   const filteredFailedChains = normalizedQuery
     ? failedChains.filter(matchesChain)
     : failedChains
 
-  const viewState: PortfolioViewState =
-    balances.length === 0 && failedChains.length === 0
-      ? 'noChains'
-      : filteredBalances.length === 0 &&
-          filteredFailedChains.length === 0 &&
-          normalizedQuery
-        ? 'noSearchResults'
-        : 'list'
+  const hasChains =
+    balances.length + loadingChains.length + failedChains.length > 0
+  const hasMatches =
+    filteredBalances.length +
+      filteredLoadingChains.length +
+      filteredFailedChains.length >
+    0
+
+  const viewState: PortfolioViewState = !hasChains
+    ? 'noChains'
+    : !hasMatches && normalizedQuery
+      ? 'noSearchResults'
+      : 'list'
 
   return (
     <Match
@@ -107,6 +117,11 @@ export const Portfolio = () => {
           {filteredBalances.map(({ chain, coins }) => (
             <VaultChainItem key={chain} chain={chain}>
               <VaultChainItemBalance coins={coins} />
+            </VaultChainItem>
+          ))}
+          {filteredLoadingChains.map(chain => (
+            <VaultChainItem key={chain} chain={chain}>
+              <Spinner />
             </VaultChainItem>
           ))}
           {filteredFailedChains.map(chain => (

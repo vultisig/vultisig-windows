@@ -22,11 +22,13 @@ export type VaultChainBalance = {
 
 /**
  * Portfolio balances resolved per chain: `balances` holds every chain whose
- * coins all have a balance (ordered by fiat value, highest first) and
- * `failedChains` the chains whose balance reads settled without one.
+ * coins all have a balance (ordered by fiat value, highest first),
+ * `failedChains` the chains where a balance read failed and `loadingChains`
+ * the chains still waiting for a first balance.
  */
 export type VaultChainsBalances = {
   balances: VaultChainBalance[]
+  loadingChains: Chain[]
   failedChains: Chain[]
 }
 
@@ -34,7 +36,7 @@ type ResolveVaultChainsBalancesInput = {
   coins: AccountCoin[]
   balances: Record<string, bigint> | undefined
   prices: Record<string, number> | undefined
-  isBalancesPending: boolean
+  failedCoins: string[]
 }
 
 type ResolvedChainCoin = VaultChainCoin & EntityWithPrice
@@ -44,18 +46,20 @@ type ResolvedChainBalance = {
   coins: ResolvedChainCoin[]
 }
 
+const getBalanceKey = (coin: AccountCoin) =>
+  accountCoinKeyToString(extractAccountCoinKey(coin))
+
 const resolveChainCoins = ({
   coins,
   balances,
   prices,
-}: Omit<ResolveVaultChainsBalancesInput, 'isBalancesPending'>):
+}: Pick<ResolveVaultChainsBalancesInput, 'coins' | 'balances' | 'prices'>):
   | ResolvedChainCoin[]
   | undefined => {
   const chainCoins: ResolvedChainCoin[] = []
 
   for (const coin of coins) {
-    const amount =
-      balances?.[accountCoinKeyToString(extractAccountCoinKey(coin))]
+    const amount = balances?.[getBalanceKey(coin)]
 
     if (amount === undefined) {
       return undefined
@@ -74,17 +78,20 @@ const resolveChainCoins = ({
 /**
  * Resolves portfolio coins into per-chain balances, isolating a failure to the
  * chain it belongs to: a chain is resolved once every one of its coins has a
- * balance and failed once the balance reads have settled without one. Returns
- * `undefined` while any chain is still loading. A missing balance is unknown,
- * never zero.
+ * balance, failed when any of its coins' balance read failed, and loading
+ * otherwise. Failure is judged per coin rather than from a global pending flag
+ * so a failed chain stays failed while its read is retried in the background.
+ * A missing balance is unknown, never zero.
  */
 export const resolveVaultChainsBalances = ({
   coins,
   balances,
   prices,
-  isBalancesPending,
-}: ResolveVaultChainsBalancesInput): VaultChainsBalances | undefined => {
+  failedCoins,
+}: ResolveVaultChainsBalancesInput): VaultChainsBalances => {
+  const failedCoinKeys = new Set(failedCoins)
   const resolvedBalances: ResolvedChainBalance[] = []
+  const loadingChains: Chain[] = []
   const failedChains: Chain[] = []
 
   const chains = toEntries(groupItems(coins, coin => coin.chain))
@@ -98,10 +105,12 @@ export const resolveVaultChainsBalances = ({
 
     if (resolvedCoins) {
       resolvedBalances.push({ chain, coins: resolvedCoins })
-    } else if (isBalancesPending) {
-      return undefined
-    } else {
+    } else if (
+      chainCoins.some(coin => failedCoinKeys.has(getBalanceKey(coin)))
+    ) {
       failedChains.push(chain)
+    } else {
+      loadingChains.push(chain)
     }
   }
 
@@ -111,6 +120,7 @@ export const resolveVaultChainsBalances = ({
       ({ coins }) => sum(coins.map(getCoinValue)),
       'desc'
     ),
+    loadingChains,
     failedChains,
   }
 }

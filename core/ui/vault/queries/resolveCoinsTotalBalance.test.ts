@@ -37,25 +37,38 @@ const prices = {
   [coinKeyToString(rune)]: 2,
 }
 
-const balances = {
-  [accountCoinKeyToString(eth)]: 10n ** 18n,
-  [accountCoinKeyToString(btc)]: 10n ** 8n,
-  [accountCoinKeyToString(rune)]: 10n ** 8n,
-}
+const balancesOf = (entries: [AccountCoin, bigint][]) =>
+  Object.fromEntries(
+    entries.map(([coin, amount]) => [accountCoinKeyToString(coin), amount])
+  )
+
+const failed = (...failedCoins: AccountCoin[]) =>
+  failedCoins.map(coin => accountCoinKeyToString(coin))
+
+const oneEth = 10n ** 18n
+const oneBtc = 10n ** 8n
+const oneRune = 10n ** 8n
+
+const allBalances = balancesOf([
+  [eth, oneEth],
+  [btc, oneBtc],
+  [rune, oneRune],
+])
 
 const rpcError = new Error('RPC unavailable')
 
 describe('resolveCoinsTotalBalance', () => {
   it('sums every resolved coin and marks the total incomplete when one read failed', () => {
-    const balancesWithoutRune = { ...balances }
-    delete balancesWithoutRune[accountCoinKeyToString(rune)]
-
     expect(
       resolveCoinsTotalBalance({
         coins,
         prices,
-        balances: balancesWithoutRune,
-        isPending: false,
+        balances: balancesOf([
+          [eth, oneEth],
+          [btc, oneBtc],
+        ]),
+        failedCoins: failed(rune),
+        isPricesPending: false,
         error: rpcError,
       })
     ).toEqual({
@@ -67,13 +80,54 @@ describe('resolveCoinsTotalBalance', () => {
     })
   })
 
+  it('keeps the total incomplete while a failed read is being retried', () => {
+    expect(
+      resolveCoinsTotalBalance({
+        coins,
+        prices,
+        balances: balancesOf([
+          [eth, oneEth],
+          [btc, oneBtc],
+        ]),
+        failedCoins: failed(rune),
+        isPricesPending: false,
+        error: null,
+      })
+    ).toEqual({
+      data: 52000,
+      isPending: false,
+      isUpdating: false,
+      isIncomplete: true,
+      error: expect.any(Error),
+    })
+  })
+
+  it('shows both updating and incomplete when one coin failed and another is loading', () => {
+    expect(
+      resolveCoinsTotalBalance({
+        coins,
+        prices,
+        balances: balancesOf([[btc, oneBtc]]),
+        failedCoins: failed(rune),
+        isPricesPending: false,
+        error: null,
+      })
+    ).toMatchObject({
+      data: 50000,
+      isPending: false,
+      isUpdating: true,
+      isIncomplete: true,
+    })
+  })
+
   it('returns a complete total when every coin resolved', () => {
     expect(
       resolveCoinsTotalBalance({
         coins,
         prices,
-        balances,
-        isPending: false,
+        balances: allBalances,
+        failedCoins: [],
+        isPricesPending: false,
         error: null,
       })
     ).toEqual({
@@ -90,8 +144,9 @@ describe('resolveCoinsTotalBalance', () => {
       resolveCoinsTotalBalance({
         coins,
         prices,
-        balances,
-        isPending: false,
+        balances: allBalances,
+        failedCoins: [],
+        isPricesPending: false,
         error: rpcError,
       })
     ).toEqual({
@@ -103,13 +158,14 @@ describe('resolveCoinsTotalBalance', () => {
     })
   })
 
-  it('surfaces the error only when nothing resolved after settling', () => {
+  it('surfaces the error only when nothing resolved and every coin failed', () => {
     expect(
       resolveCoinsTotalBalance({
         coins,
         prices,
         balances: undefined,
-        isPending: false,
+        failedCoins: failed(eth, btc, rune),
+        isPricesPending: false,
         error: rpcError,
       })
     ).toEqual({
@@ -121,14 +177,34 @@ describe('resolveCoinsTotalBalance', () => {
     })
   })
 
-  it('stays pending without an error while nothing resolved and reads are in flight', () => {
+  it('stays failed rather than pending while every failed coin is retried', () => {
     expect(
       resolveCoinsTotalBalance({
         coins,
         prices,
         balances: undefined,
-        isPending: true,
-        error: rpcError,
+        failedCoins: failed(eth, btc, rune),
+        isPricesPending: false,
+        error: null,
+      })
+    ).toEqual({
+      data: undefined,
+      isPending: false,
+      isUpdating: false,
+      isIncomplete: false,
+      error: expect.any(Error),
+    })
+  })
+
+  it('stays pending without an error while nothing resolved and reads are loading', () => {
+    expect(
+      resolveCoinsTotalBalance({
+        coins,
+        prices,
+        balances: undefined,
+        failedCoins: failed(rune),
+        isPricesPending: false,
+        error: null,
       })
     ).toEqual({
       data: undefined,
@@ -144,8 +220,9 @@ describe('resolveCoinsTotalBalance', () => {
       resolveCoinsTotalBalance({
         coins,
         prices,
-        balances: { [accountCoinKeyToString(btc)]: 10n ** 8n },
-        isPending: true,
+        balances: balancesOf([[btc, oneBtc]]),
+        failedCoins: [],
+        isPricesPending: false,
         error: null,
       })
     ).toEqual({
@@ -157,13 +234,33 @@ describe('resolveCoinsTotalBalance', () => {
     })
   })
 
+  it('keeps updating while a resolved balance still waits for its price', () => {
+    expect(
+      resolveCoinsTotalBalance({
+        coins: [btc],
+        prices: undefined,
+        balances: balancesOf([[btc, oneBtc]]),
+        failedCoins: [],
+        isPricesPending: true,
+        error: null,
+      })
+    ).toEqual({
+      data: undefined,
+      isPending: true,
+      isUpdating: true,
+      isIncomplete: false,
+      error: null,
+    })
+  })
+
   it('settles to zero when no coin has a price and nothing failed', () => {
     expect(
       resolveCoinsTotalBalance({
         coins,
         prices: {},
-        balances,
-        isPending: false,
+        balances: allBalances,
+        failedCoins: [],
+        isPricesPending: false,
         error: null,
       })
     ).toMatchObject({ data: 0, isPending: false, isIncomplete: false })
@@ -175,7 +272,8 @@ describe('resolveCoinsTotalBalance', () => {
         coins: [],
         prices: undefined,
         balances: undefined,
-        isPending: false,
+        failedCoins: [],
+        isPricesPending: false,
         error: null,
       })
     ).toEqual({

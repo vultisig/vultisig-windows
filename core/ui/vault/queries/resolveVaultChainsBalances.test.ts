@@ -44,6 +44,9 @@ const balancesOf = (entries: [AccountCoin, bigint][]) =>
     entries.map(([coin, amount]) => [accountCoinKeyToString(coin), amount])
   )
 
+const failed = (...failedCoins: AccountCoin[]) =>
+  failedCoins.map(coin => accountCoinKeyToString(coin))
+
 const prices = {
   [coinKeyToString(eth)]: 2000,
   [coinKeyToString(usdc)]: 1,
@@ -57,7 +60,7 @@ const oneBtc = 10n ** 8n
 const oneRune = 10n ** 8n
 
 describe('resolveVaultChainsBalances', () => {
-  it('keeps every resolved chain when one chain settled without a balance', () => {
+  it('keeps every resolved chain when one chain failed to load', () => {
     const result = resolveVaultChainsBalances({
       coins,
       balances: balancesOf([
@@ -66,16 +69,17 @@ describe('resolveVaultChainsBalances', () => {
         [btc, oneBtc],
       ]),
       prices,
-      isBalancesPending: false,
+      failedCoins: failed(rune),
     })
 
-    expect(result?.failedChains).toEqual([Chain.THORChain])
-    expect(result?.balances.map(({ chain }) => chain)).toEqual([
+    expect(result.failedChains).toEqual([Chain.THORChain])
+    expect(result.loadingChains).toEqual([])
+    expect(result.balances.map(({ chain }) => chain)).toEqual([
       Chain.Bitcoin,
       Chain.Ethereum,
     ])
     expect(
-      result?.balances
+      result.balances
         .find(({ chain }) => chain === Chain.Ethereum)
         ?.coins.map(({ ticker, amount, price }) => ({ ticker, amount, price }))
     ).toEqual([
@@ -84,43 +88,27 @@ describe('resolveVaultChainsBalances', () => {
     ])
   })
 
-  it('returns undefined while an unresolved chain is still loading', () => {
-    expect(
-      resolveVaultChainsBalances({
-        coins,
-        balances: balancesOf([
-          [eth, oneEth],
-          [usdc, fiveUsdc],
-          [btc, oneBtc],
-        ]),
-        prices,
-        isBalancesPending: true,
-      })
-    ).toBeUndefined()
-  })
-
-  it('resolves every chain once all balances are present even while reads are pending', () => {
+  it('reports a chain without a balance or a failure as loading', () => {
     const result = resolveVaultChainsBalances({
       coins,
       balances: balancesOf([
         [eth, oneEth],
         [usdc, fiveUsdc],
         [btc, oneBtc],
-        [rune, oneRune],
       ]),
       prices,
-      isBalancesPending: true,
+      failedCoins: [],
     })
 
-    expect(result?.failedChains).toEqual([])
-    expect(result?.balances.map(({ chain }) => chain)).toEqual([
+    expect(result.loadingChains).toEqual([Chain.THORChain])
+    expect(result.failedChains).toEqual([])
+    expect(result.balances.map(({ chain }) => chain)).toEqual([
       Chain.Bitcoin,
       Chain.Ethereum,
-      Chain.THORChain,
     ])
   })
 
-  it('fails a chain when any of its coins is unresolved', () => {
+  it('fails a chain when any of its coins failed', () => {
     const result = resolveVaultChainsBalances({
       coins,
       balances: balancesOf([
@@ -129,26 +117,62 @@ describe('resolveVaultChainsBalances', () => {
         [rune, oneRune],
       ]),
       prices,
-      isBalancesPending: false,
+      failedCoins: failed(usdc),
     })
 
-    expect(result?.failedChains).toEqual([Chain.Ethereum])
-    expect(result?.balances.map(({ chain }) => chain)).toEqual([
+    expect(result.failedChains).toEqual([Chain.Ethereum])
+    expect(result.balances.map(({ chain }) => chain)).toEqual([
       Chain.Bitcoin,
       Chain.THORChain,
     ])
   })
 
-  it('reports every chain as failed when nothing resolved after settling', () => {
+  it('fails a chain that has both a failed and a loading coin', () => {
+    const result = resolveVaultChainsBalances({
+      coins,
+      balances: balancesOf([
+        [btc, oneBtc],
+        [rune, oneRune],
+      ]),
+      prices,
+      failedCoins: failed(eth),
+    })
+
+    expect(result.failedChains).toEqual([Chain.Ethereum])
+    expect(result.loadingChains).toEqual([])
+  })
+
+  it('resolves a chain once its balance arrives even after earlier failures', () => {
+    const result = resolveVaultChainsBalances({
+      coins: [rune],
+      balances: balancesOf([[rune, oneRune]]),
+      prices,
+      failedCoins: failed(rune),
+    })
+
+    expect(result).toEqual({
+      balances: [
+        {
+          chain: Chain.THORChain,
+          coins: [{ ...rune, amount: oneRune, price: 2 }],
+        },
+      ],
+      loadingChains: [],
+      failedChains: [],
+    })
+  })
+
+  it('reports every chain as failed when nothing resolved', () => {
     expect(
       resolveVaultChainsBalances({
         coins,
         balances: undefined,
         prices,
-        isBalancesPending: false,
+        failedCoins: failed(eth, usdc, btc, rune),
       })
     ).toEqual({
       balances: [],
+      loadingChains: [],
       failedChains: [Chain.Ethereum, Chain.Bitcoin, Chain.THORChain],
     })
   })
@@ -159,7 +183,7 @@ describe('resolveVaultChainsBalances', () => {
         coins: [btc],
         balances: balancesOf([[btc, oneBtc]]),
         prices: undefined,
-        isBalancesPending: false,
+        failedCoins: [],
       })
     ).toEqual({
       balances: [
@@ -168,6 +192,7 @@ describe('resolveVaultChainsBalances', () => {
           coins: [{ ...btc, amount: oneBtc, price: 0 }],
         },
       ],
+      loadingChains: [],
       failedChains: [],
     })
   })
@@ -178,8 +203,8 @@ describe('resolveVaultChainsBalances', () => {
         coins: [],
         balances: {},
         prices: {},
-        isBalancesPending: false,
+        failedCoins: [],
       })
-    ).toEqual({ balances: [], failedChains: [] })
+    ).toEqual({ balances: [], loadingChains: [], failedChains: [] })
   })
 })
