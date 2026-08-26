@@ -40,23 +40,6 @@ export const persistQueryOptions: UseQueryGenericOptions = {
   staleTime: persistQueryStaleTime,
 }
 
-export const liveBalanceQueryRefetchInterval = convertDuration(30, 's', 'ms')
-
-/**
- * Options layered onto persisted balance queries shown on a live wallet
- * surface. The cached value renders immediately, every mount verifies it, and
- * a bounded foreground interval follows incoming or settling transactions.
- * One-shot import scans deliberately do not use these options.
- */
-export const liveBalanceQueryOptions: UseQueryGenericOptions = {
-  refetchOnMount: 'always',
-  refetchOnWindowFocus: true,
-  refetchOnReconnect: true,
-  staleTime: persistQueryStaleTime,
-  refetchInterval: liveBalanceQueryRefetchInterval,
-  refetchIntervalInBackground: false,
-}
-
 export const priceQueryStaleTime = convertDuration(1, 'min', 'ms')
 
 export const priceQueryRefetchInterval = convertDuration(5, 'min', 'ms')
@@ -75,6 +58,36 @@ export const pricePersistQueryOptions: UseQueryGenericOptions = {
   refetchOnReconnect: true,
   staleTime: priceQueryStaleTime,
   refetchInterval: priceQueryRefetchInterval,
+  refetchIntervalInBackground: false,
+}
+
+export const balanceQueryStaleTime = convertDuration(1, 'min', 'ms')
+
+export const balanceQueryRefetchInterval = convertDuration(2, 'min', 'ms')
+
+/**
+ * Persisted balance queries: cached amounts render instantly, but staleness is
+ * respected so balances renew without a manual refresh.
+ *
+ * `staleTime` is load-bearing rather than cosmetic. The extension popup tears
+ * down its whole React tree on close, so every open is a remount — with
+ * `refetchOnMount` enabled and no throttle, opening the popup twice in a row
+ * would fan out a full balance refresh each time. Persistence keeps
+ * `dataUpdatedAt` across popup sessions, so `staleTime` becomes a real
+ * cross-session throttle: the disk-backed equivalent of the in-memory interval
+ * iOS gets from `throttledOnAppear`.
+ *
+ * `refetchIntervalInBackground` stays false so a backgrounded desktop window
+ * does not keep fanning out RPCs; the interval exists for long-lived windows
+ * that neither remount nor regain focus.
+ */
+export const balancePersistQueryOptions: UseQueryGenericOptions = {
+  meta: { shouldPersist: true },
+  refetchOnMount: true,
+  refetchOnWindowFocus: true,
+  refetchOnReconnect: true,
+  staleTime: balanceQueryStaleTime,
+  refetchInterval: balanceQueryRefetchInterval,
   refetchIntervalInBackground: false,
 }
 

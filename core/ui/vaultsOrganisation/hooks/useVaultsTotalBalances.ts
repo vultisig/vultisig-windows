@@ -4,8 +4,8 @@ import { withoutKaminoShareCoins } from '@core/ui/chain/coin/solana/isKaminoShar
 import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isBondedRuneReceiptCoin'
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { useVaults } from '@core/ui/storage/vaults'
-import { balanceStaleTimeMs } from '@core/ui/vaultsOrganisation/hooks/balanceStaleTimeMs'
 import { computeVaultTotalValue } from '@core/ui/vaultsOrganisation/utils/computeVaultTotalValue'
+import { balanceQueryStaleTime } from '@lib/ui/query/utils/options'
 import { useQueries } from '@tanstack/react-query'
 import {
   AccountCoin,
@@ -78,13 +78,17 @@ export const useVaultsTotalBalances = ({
   const balanceQueries = useQueries({
     // Reuse the exact query keys / persistence meta from
     // `getBalanceQueryOptions` (shared with `useBalancesQuery`) so every
-    // balance consumer in the app shares cache. `staleTime` is per-observer
-    // in TanStack Query — setting it here only affects refetch behavior for
-    // *this* observer, which is exactly what we want: other consumers with
-    // their own fresher expectations are unaffected.
+    // balance consumer in the app shares cache. Those base options leave
+    // refetch on mount/focus/reconnect off, and that — not the `staleTime`
+    // below — is what keeps this screen from fanning out a balance read for
+    // every coin of every vault each time it opens; the active-vault
+    // surfaces are what keep those cache entries current. `staleTime` is
+    // per-observer in TanStack Query, so the shared value is restated here
+    // to hold this screen to the same freshness expectation as those
+    // surfaces if these observers ever drive a read of their own.
     queries: allCoins.map(coin => ({
       ...getBalanceQueryOptions(extractAccountCoinKey(coin)),
-      staleTime: balanceStaleTimeMs,
+      staleTime: balanceQueryStaleTime,
     })),
   })
 

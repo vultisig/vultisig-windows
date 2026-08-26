@@ -1,8 +1,14 @@
 import { queryClientDefaultOptions } from '@lib/ui/query/queryClientDefaultOptions'
 import {
+  balanceQueryRefetchInterval,
+  balanceQueryStaleTime,
+} from '@lib/ui/query/utils/options'
+import {
   defaultShouldDehydrateQuery,
   dehydrate,
+  hydrate,
   QueryClient,
+  QueryObserver,
 } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
@@ -15,7 +21,6 @@ import {
   getBalanceQueryOptions,
   getCoinBalanceQueryAmount,
   getLiveBalanceQueryOptions,
-  invalidateBalanceQueries,
 } from './useBalancesQuery'
 
 vi.mock('@vultisig/core-chain/coin/balance', () => ({
@@ -170,11 +175,11 @@ describe('getBalanceQueryOptions', () => {
   it('adds mount verification and polling only for live wallet observers', () => {
     expect(getLiveBalanceQueryOptions(ethInput)).toMatchObject({
       meta: { shouldPersist: true },
-      refetchOnMount: 'always',
+      refetchOnMount: true,
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
-      staleTime: 30_000,
-      refetchInterval: 30_000,
+      staleTime: balanceQueryStaleTime,
+      refetchInterval: balanceQueryRefetchInterval,
       refetchIntervalInBackground: false,
     })
   })
@@ -239,23 +244,75 @@ describe('getBalanceQueryOptions', () => {
   })
 })
 
-describe('invalidateBalanceQueries', () => {
-  it('invalidates every balance without touching unrelated query families', async () => {
-    const queryClient = new QueryClient()
-    const ethKey = getBalanceQueryOptions(ethInput).queryKey
-    const runeKey = getBalanceQueryOptions(runeInput).queryKey
-    const priceKey = ['coinPrices', { coins: ['ETH'] }]
+describe('persisted staleness throttle', () => {
+  // The extension popup remounts its whole tree on every open, so a restored
+  // balance is only spared a refetch by `staleTime` reading the persisted
+  // `dataUpdatedAt`. These two cases are the popup-reopen throttle itself.
 
-    queryClient.setQueryData(ethKey, { eth: 1n })
-    queryClient.setQueryData(runeKey, { rune: 2n })
-    queryClient.setQueryData(priceKey, { eth: 3 })
+  // Populates a cache the way the app does — through the query options, so
+  // `meta.shouldPersist` is attached and the query actually dehydrates —
+  // ages it, then restores it into the fresh client a popup open would build.
+  const reopenPopupWithPersistedBalance = async (dataAge: number) => {
+    vi.mocked(getEvmChainBalances).mockResolvedValue({
+      [accountCoinKeyToString(ethInput)]: 99n,
+    })
 
-    await invalidateBalanceQueries(queryClient)
+    const options = getLiveBalanceQueryOptions(ethInput)
+    const sourceClient = new QueryClient({
+      defaultOptions: queryClientDefaultOptions,
+    })
+    await sourceClient.fetchQuery(options)
+    sourceClient
+      .getQueryCache()
+      .find({ queryKey: options.queryKey })!.state.dataUpdatedAt =
+      Date.now() - dataAge
 
-    expect(queryClient.getQueryState(ethKey)?.isInvalidated).toBe(true)
-    expect(queryClient.getQueryState(runeKey)?.isInvalidated).toBe(true)
-    expect(queryClient.getQueryState(priceKey)?.isInvalidated).toBe(false)
+    const dehydrated = dehydrate(sourceClient, {
+      shouldDehydrateQuery: query =>
+        query.meta?.shouldPersist === true &&
+        defaultShouldDehydrateQuery(query),
+    })
+    expect(dehydrated.queries).toHaveLength(1)
 
-    queryClient.clear()
+    const restoredClient = new QueryClient({
+      defaultOptions: queryClientDefaultOptions,
+    })
+    hydrate(restoredClient, dehydrated)
+
+    vi.mocked(getEvmChainBalances).mockClear()
+
+    const observer = new QueryObserver(restoredClient, options)
+    const unsubscribe = observer.subscribe(() => {})
+    await vi.waitFor(() =>
+      expect(observer.getCurrentResult().isFetching).toBe(false)
+    )
+    unsubscribe()
+
+    // Live options carry a refetch interval, so both clients keep timers
+    // alive and would keep calling the shared mock after this helper returns.
+    sourceClient.clear()
+    restoredClient.clear()
+
+    return getEvmChainBalances
+  }
+
+  beforeEach(() => {
+    vi.mocked(getEvmChainBalances).mockReset()
+  })
+
+  it('serves a recently persisted balance without refetching', async () => {
+    const fetcher = await reopenPopupWithPersistedBalance(
+      balanceQueryStaleTime / 2
+    )
+
+    expect(fetcher).not.toHaveBeenCalled()
+  })
+
+  it('refetches a persisted balance that outlived its stale time', async () => {
+    const fetcher = await reopenPopupWithPersistedBalance(
+      balanceQueryStaleTime * 1.5
+    )
+
+    expect(fetcher).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  liveBalanceQueryOptions,
-  liveBalanceQueryRefetchInterval,
+  balancePersistQueryOptions,
+  balanceQueryRefetchInterval,
+  balanceQueryStaleTime,
   persistQueryOptions,
   persistQueryStaleTime,
   pricePersistQueryOptions,
@@ -24,17 +25,23 @@ describe('persistQueryOptions', () => {
   })
 })
 
-describe('liveBalanceQueryOptions', () => {
-  it('always verifies reopened balances and polls only live wallet observers', () => {
-    expect(liveBalanceQueryRefetchInterval).toBe(30_000)
-    expect(liveBalanceQueryOptions).toMatchObject({
-      refetchOnMount: 'always',
+describe('balancePersistQueryOptions', () => {
+  it('persists balances but lets staleness drive refetches', () => {
+    expect(balanceQueryStaleTime).toBe(60_000)
+    expect(balanceQueryRefetchInterval).toBe(120_000)
+    expect(balancePersistQueryOptions).toMatchObject({
+      meta: { shouldPersist: true },
+      refetchOnMount: true,
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
-      staleTime: persistQueryStaleTime,
-      refetchInterval: liveBalanceQueryRefetchInterval,
+      staleTime: balanceQueryStaleTime,
+      refetchInterval: balanceQueryRefetchInterval,
       refetchIntervalInBackground: false,
     })
+  })
+
+  it('is not tagged with a category, so refresh buttons cannot invalidate every vault at once', () => {
+    expect(balancePersistQueryOptions.meta).not.toHaveProperty('category')
   })
 })
 

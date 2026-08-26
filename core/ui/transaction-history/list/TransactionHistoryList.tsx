@@ -6,12 +6,11 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { TransactionRecord, TransactionRecordStatus } from '../core'
+import { TransactionRecord } from '../core'
 import { PendingTransactionProgressCard } from '../progress/PendingTransactionProgressCard'
+import { pendingStatuses } from '../status/pendingRecord'
 import { groupByDate } from './groupByDate'
 import { TransactionRecordCard } from './TransactionRecordCard'
-
-const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
 type TransactionHistoryListProps = {
   records: TransactionRecord[]

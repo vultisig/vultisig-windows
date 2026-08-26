@@ -15,7 +15,7 @@ import styled, { css } from 'styled-components'
 import { useLimitOrderTracking } from '../vault/swap/limit/tracking/useLimitOrderTracking'
 import { TransactionRecord } from './core'
 import { TransactionHistoryList } from './list/TransactionHistoryList'
-import { useRefreshPendingTransactions } from './status/useRefreshPendingTransactions'
+import { useHealFailedTransactions } from './status/useHealFailedTransactions'
 import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
 
 const transactionHistoryTabs = [
@@ -65,9 +65,11 @@ const TransactionHistoryContent = ({
   const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
   const [search, setSearch] = useState('')
 
-  useRefreshPendingTransactions(records)
+  // Heals sends an older client wrongly failed. Pending records need no sweep
+  // here: `TransactionStatusWatcher` polls them app-wide, this page included.
+  useHealFailedTransactions(records)
   // Keeps limit-order records in step with THORChain's queue while the page
-  // is open — the same page-mounted pattern as the pending-tx refresher above.
+  // is open — the same page-mounted pattern as the healer above.
   useLimitOrderTracking()
 
   const searchFiltered = filterTransactionsBySearch({

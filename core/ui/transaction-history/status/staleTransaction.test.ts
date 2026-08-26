@@ -13,6 +13,9 @@ const staleTimestamp = () => new Date(Date.now() - 6 * 60 * 1000).toISOString()
 
 const freshTimestamp = () => new Date(Date.now() - 60 * 1000).toISOString()
 
+const agedTimestamp = () =>
+  new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString()
+
 const baseRecord = {
   id: 'record-1',
   vaultId: 'vault-1',
@@ -193,5 +196,15 @@ describe('getStatusPollingInterval', () => {
     expect(
       getStatusPollingInterval(sendRecord({ timestamp: staleTimestamp() }))
     ).toBe(30000)
+  })
+
+  // A dropped transaction never leaves `pending`, and the app-wide watcher
+  // would otherwise ask the chain about it every half minute for good.
+  it('slows to minutes for pending records older than a day', () => {
+    vi.setSystemTime(new Date('2026-06-25T18:00:00Z'))
+
+    expect(
+      getStatusPollingInterval(sendRecord({ timestamp: agedTimestamp() }))
+    ).toBe(600000)
   })
 })

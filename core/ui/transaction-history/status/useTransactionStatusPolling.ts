@@ -1,27 +1,21 @@
-import { useUpdateTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
 import { useQuery } from '@tanstack/react-query'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { useRef } from 'react'
 
-import { TransactionRecord, TransactionRecordStatus } from '../core'
+import { TransactionRecord } from '../core'
 import {
   getCowSwapOrderApiBase,
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
+import { isChainPollable } from './pendingRecord'
 import { getStatusPollingInterval } from './staleTransaction'
-
-const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
+import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpdate'
 
 /** Polls chain status for a single pending transaction and updates its record when finalized. */
 export const useTransactionStatusPolling = (record: TransactionRecord) => {
-  const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
-  // Limit orders are queue-driven, not chain-status-driven: the inbound tx
-  // confirms long before the order settles, and letting this poller flip the
-  // record to `confirmed` would end tracking on an order that is still resting.
-  // useLimitOrderTracking owns their lifecycle.
-  const isPending =
-    pendingStatuses.includes(record.status) && record.type !== 'limitSwap'
+  const applyRecordUpdate = useApplyTransactionRecordUpdate()
+  const isPending = isChainPollable(record)
   const recordRef = useRef(record)
   recordRef.current = record
 
@@ -42,7 +36,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
             apiBase: cowSwapOrder.apiBase,
           })
         if (updatedRecord) {
-          updateRecord(updatedRecord)
+          applyRecordUpdate({ previous: current, update: updatedRecord })
         }
         return { status }
       }
@@ -54,7 +48,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
 
       const update = getTxStatusRecordUpdate({ record: current, result })
       if (update) {
-        updateRecord(update)
+        applyRecordUpdate({ previous: current, update })
       }
 
       return result

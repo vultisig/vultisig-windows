@@ -1,4 +1,4 @@
-import { invalidateBalanceQueries } from '@core/ui/chain/coin/queries/useBalancesQuery'
+import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import {
   KeysignMutationListenerProvider,
   useKeysignMutationListener,
@@ -19,6 +19,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useKeysignMessagePayload } from '../../mpc/keysign/state/keysignMessagePayload'
 import { applyLimitOrderCancel } from './applyLimitOrderCancel'
 import { createTransactionRecord } from './createTransactionRecord'
+import { getKeysignAffectedCoinKeys } from './getKeysignAffectedCoinKeys'
 
 export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
   const parentListener = useKeysignMutationListener()
@@ -107,11 +108,19 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
             console.error('Failed to record a broadcast transaction', error)
           })
 
-          // A broadcast can change more than the selected coin: fees touch the
-          // native asset and swaps also affect their destination asset. Mark
-          // the whole balance family stale so active queries refetch now and
-          // inactive persisted queries refresh when the wallet remounts.
-          void invalidateBalanceQueries(queryClient)
+          if (!keysignPayload.coin) return
+
+          // Mark stale WITHOUT refetching. At broadcast the node almost always
+          // still reports pre-transaction balances, so reading now would cache
+          // the old amount and reset its freshness — leaving the stale figure
+          // pinned for a whole `staleTime` window. `TransactionStatusWatcher`
+          // refetches once the transaction actually confirms.
+          getKeysignAffectedCoinKeys(keysignPayload).forEach(coinKey => {
+            void queryClient.invalidateQueries({
+              queryKey: getBalanceQueryKey(coinKey),
+              refetchType: 'none',
+            })
+          })
         },
       }}
     >
