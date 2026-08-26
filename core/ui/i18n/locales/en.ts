@@ -114,6 +114,10 @@ export const en = {
   broadcast_error: 'The network rejected this transaction',
   broadcast_error_description:
     'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
+  broadcast_refused: 'Broadcast not confirmed',
+  broadcast_refused_description:
+    'Your devices signed this transaction, but this device declined to broadcast it after a final safety check. Another signing device may have broadcast it anyway — watch the status below and confirm the outcome before signing again.',
+  not_seen_onchain: 'Not seen on-chain yet',
   broadcasted: 'Broadcasted',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
@@ -390,6 +394,7 @@ export const en = {
   error_message: 'Error message',
   est_network_fee: 'Est. Network Fee',
   expand_view: 'Expand View',
+  on_chain: 'on {{chain}}',
   open_as_side_panel: 'Open as Side Panel',
   push_notifications: 'Push Notifications',
   push_notifications_description:
@@ -652,6 +657,7 @@ export const en = {
   max: 'Max',
   max_4_characters: 'Max 4 characters',
   max_supply: 'Max Supply',
+  max_total_fee: 'Max. Total Fee',
   memo: 'Memo',
   message: 'Message',
   message_required: 'Message is required',

@@ -73,4 +73,13 @@ describe('getBlockaidTxValidationQuery', () => {
       description: 'Known malicious destination',
     })
   })
+
+  it('always reaches a verdict the sign button can act on', () => {
+    const { networkMode, retry } = getBlockaidTxValidationQuery(input)
+
+    // `online` would park the query in `pending` while the device reports
+    // itself offline, leaving the sign button disabled with no way out.
+    expect(networkMode).toBe('always')
+    expect(retry).toBe(1)
+  })
 })

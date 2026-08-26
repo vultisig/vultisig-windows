@@ -1928,4 +1928,10 @@ export const es = {
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganado: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'en {{chain}}',
+  max_total_fee: 'Tarifa total máxima',
+  broadcast_refused: 'Transmisión no confirmada',
+  broadcast_refused_description:
+    'Tus dispositivos firmaron esta transacción, pero este dispositivo se negó a transmitirla tras una comprobación de seguridad final. Es posible que otro dispositivo firmante la haya transmitido de todos modos; consulta el estado a continuación y confirma el resultado antes de volver a firmar.',
+  not_seen_onchain: 'Aún no se ha visto en la cadena de bloques.',
 }

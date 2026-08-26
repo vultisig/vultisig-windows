@@ -1911,4 +1911,10 @@ export const nl = {
   kamino_earn_deposited: 'Gestort: {{amount}}',
   kamino_earn_earned: 'Verdiend: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'op {{chain}}',
+  max_total_fee: 'Maximale totale kosten',
+  broadcast_refused: 'Uitzending nog niet bevestigd',
+  broadcast_refused_description:
+    'Uw apparaten hebben deze transactie ondertekend, maar dit apparaat heeft na een laatste veiligheidscontrole geweigerd deze te verzenden. Een ander apparaat dat de transactie heeft ondertekend, heeft deze mogelijk wel verzonden. Bekijk de status hieronder en bevestig het resultaat voordat u opnieuw ondertekent.',
+  not_seen_onchain: 'Nog niet op de blockchain gezien',
 }

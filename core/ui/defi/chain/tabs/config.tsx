@@ -4,16 +4,10 @@ import { TFunction } from 'i18next'
 
 import { featureFlags } from '../../../featureFlags'
 import { BondedPositions } from './BondedPositions'
+import { DefiChainPageTab } from './core'
 import { EarnPositions } from './EarnPositions'
 import { LpPositions } from './LpPositions'
 import { StakedPositions } from './StakedPositions'
-
-export type DefiChainPageTab =
-  | 'bonded'
-  | 'staked'
-  | 'earn'
-  | 'lps'
-  | 'governance'
 
 type DefiChainTabsOptions = {
   includeBonded?: boolean
@@ -27,23 +21,20 @@ type DefiChainTabsOptions = {
   includeGovernance?: boolean
   /**
    * Solana-only Earn segment (Kamino Earn vaults). Other chains have no
-   * curated earn vaults, so the tab would render empty for them.
+   * curated earn vaults, so the tab would render empty for them. Where it is
+   * present it leads `staked` — see the ordering note on `getDefiChainTabs`.
    */
   includeEarn?: boolean
 }
 
-export const defaultDefiChainTab = ({
-  includeEarn = false,
-  includeBonded = false,
-}: Pick<
-  DefiChainTabsOptions,
-  'includeEarn' | 'includeBonded'
-> = {}): DefiChainPageTab => {
-  if (includeEarn) return 'earn'
-  if (includeBonded) return 'bonded'
-  return 'staked'
-}
-
+/**
+ * Tabs for the DeFi chain page, in render order.
+ *
+ * `earn` deliberately precedes `staked`: yield is the reason most users open
+ * this screen, so the design leads with it, and `vultisig-android` orders its
+ * Solana tabs the same way. `bonded` still leads where it is present
+ * (THORChain / MayaChain), which have no earn segment.
+ */
 export const getDefiChainTabs = (
   t: TFunction,
   {
@@ -53,21 +44,21 @@ export const getDefiChainTabs = (
     includeEarn = false,
   }: DefiChainTabsOptions = {}
 ): Tab<DefiChainPageTab>[] => [
-  ...(includeEarn
-    ? [
-        {
-          value: 'earn' as const,
-          label: t('defiChainTabs.earn'),
-          renderContent: EarnPositions,
-        },
-      ]
-    : []),
   ...(includeBonded
     ? [
         {
           value: 'bonded' as const,
           label: t('defiChainTabs.bonded'),
           renderContent: BondedPositions,
+        },
+      ]
+    : []),
+  ...(includeEarn
+    ? [
+        {
+          value: 'earn' as const,
+          label: t('defiChainTabs.earn'),
+          renderContent: EarnPositions,
         },
       ]
     : []),

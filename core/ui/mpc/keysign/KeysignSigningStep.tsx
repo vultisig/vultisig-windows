@@ -38,7 +38,9 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { BroadcastRefusedError } from './assertReadyToBroadcast'
 import { BroadcastError } from './broadcastKeysignTx'
+import { KeysignBroadcastRefusal } from './KeysignBroadcastRefusal'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 import { LimitOrderCancelDoneHint } from './tx/LimitOrderCancelDoneHint'
 
@@ -268,6 +270,14 @@ export const KeysignSigningStep = ({
               description={t('fast_vault_session_conflict_description')}
             />
           )
+        }
+
+        // Signing succeeded but this device refused to broadcast (e.g. the
+        // swap's inbound vault rotated mid-ceremony). Co-signers broadcast the
+        // same signed tx independently, so this is not a terminal failure:
+        // keep the hash on screen and track the real on-chain outcome.
+        if (error instanceof BroadcastRefusedError) {
+          return <KeysignBroadcastRefusal error={error} />
         }
 
         // Signing succeeded but the network rejected the broadcast — headline it

@@ -209,7 +209,7 @@ export class SwapFlow extends BasePage {
 
     const currentCoin = await this.swapForm
       .locator('[data-testid="swap-from-coin-selector"]')
-      .textContent()
+      .innerText()
       .catch(() => '')
     if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
       console.log(`From coin ${coin} already selected`)
@@ -222,6 +222,10 @@ export class SwapFlow extends BasePage {
     const chainOption = this.getExplorerChainOption(chainName)
     if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
       await chainOption.click({ force: true })
+      await waitForLoadingComplete(this.page)
+      const nativeCoinOption = this.getCoinOption(coin).first()
+      await nativeCoinOption.waitFor({ state: 'visible', timeout: 10_000 })
+      await nativeCoinOption.click({ force: true })
       await this.page.waitForTimeout(500)
       console.log(`Selected ${chainName} from explorer carousel`)
       return
@@ -246,7 +250,7 @@ export class SwapFlow extends BasePage {
 
     const currentCoin = await this.swapForm
       .locator('[data-testid="swap-to-coin-selector"]')
-      .textContent()
+      .innerText()
       .catch(() => '')
     if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
       console.log(`To coin ${coin} already selected`)
@@ -259,6 +263,10 @@ export class SwapFlow extends BasePage {
     const chainOption = this.getExplorerChainOption(chainName)
     if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
       await chainOption.click({ force: true })
+      await waitForLoadingComplete(this.page)
+      const nativeCoinOption = this.getCoinOption(coin).first()
+      await nativeCoinOption.waitFor({ state: 'visible', timeout: 10_000 })
+      await nativeCoinOption.click({ force: true })
       await this.page.waitForTimeout(500)
       console.log(`Selected ${chainName} from explorer carousel (to)`)
       return
@@ -389,7 +397,7 @@ export class SwapFlow extends BasePage {
   // Fast vaults open a password modal after "Fast Sign".
   async sign(): Promise<void> {
     await waitForLoadingComplete(this.page)
-    await robustClick(this.signButton)
+    await robustClick(this.signButton, { timeout: 60_000 })
     await this.page.waitForTimeout(500)
 
     if (
@@ -454,6 +462,35 @@ export class SwapFlow extends BasePage {
     return this.continueButton.isEnabled()
   }
 
+  async waitForContinueEnabled(timeout = 30_000): Promise<boolean> {
+    // A missing Continue control is a structural regression and must fail the
+    // funded test. Only a confirmed visible-but-disabled control is a valid
+    // insufficient-balance/validation outcome for callers to skip.
+    await this.continueButton.waitFor({ state: 'visible', timeout })
+    try {
+      await expect(this.continueButton).toBeEnabled({ timeout })
+      return true
+    } catch (error) {
+      const stillVisible = await this.continueButton
+        .isVisible()
+        .catch(() => false)
+      if (!stillVisible) throw error
+
+      const enabledAfterTimeout = await this.continueButton
+        .isEnabled()
+        .catch(() => false)
+      return enabledAfterTimeout
+    }
+  }
+
+  async getValidationError(): Promise<string | null> {
+    const tooltip = this.page.getByRole('tooltip')
+    if (!(await tooltip.isVisible().catch(() => false))) return null
+
+    const text = (await tooltip.innerText()).trim()
+    return text || null
+  }
+
   /**
    * Pre-broadcast safety gate. Reads the visible from/to coin selectors and
    * confirms they match the intended symbols. Throws if mismatch so callers
@@ -493,11 +530,9 @@ export class SwapFlow extends BasePage {
     toSymbol,
   }: AssertSelectionMatchesInput): Promise<void> {
     const fromText = (
-      (await this.fromCoinSelector.textContent()) || ''
+      (await this.fromCoinSelector.innerText()) || ''
     ).toUpperCase()
-    const toText = (
-      (await this.toCoinSelector.textContent()) || ''
-    ).toUpperCase()
+    const toText = ((await this.toCoinSelector.innerText()) || '').toUpperCase()
 
     const fromOk = this.hasSelectedSymbol(fromText, fromSymbol)
     const toOk = this.hasSelectedSymbol(toText, toSymbol)
@@ -569,9 +604,9 @@ export class SwapFlow extends BasePage {
     await this.page.waitForTimeout(500)
 
     const currentFromText =
-      (await this.fromCoinSelector.textContent().catch(() => '')) || ''
+      (await this.fromCoinSelector.innerText().catch(() => '')) || ''
     const currentToText =
-      (await this.toCoinSelector.textContent().catch(() => '')) || ''
+      (await this.toCoinSelector.innerText().catch(() => '')) || ''
     console.log(`Current selection: ${currentFromText} → ${currentToText}`)
 
     if (
@@ -586,7 +621,7 @@ export class SwapFlow extends BasePage {
     }
 
     const updatedToText =
-      (await this.toCoinSelector.textContent().catch(() => '')) || ''
+      (await this.toCoinSelector.innerText().catch(() => '')) || ''
     if (!this.hasSelectedSymbol(updatedToText, toSymbol)) {
       await this.selectToCoin(toSymbol)
     }
