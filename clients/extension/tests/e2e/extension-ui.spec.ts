@@ -129,7 +129,7 @@ test.describe('Manifest & Extension Metadata', () => {
     // If content is available, verify it
     if (content && content.manifest_version) {
       expect(content.manifest_version).toBe(3)
-      expect(content.name).toBe('Vultisig Extension')
+      expect(content.name).toBe('Vultisig: Seedless Crypto Wallet')
     }
   })
 })

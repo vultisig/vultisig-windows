@@ -10,9 +10,9 @@ import ts from 'typescript'
 
 const expectedByBrand = {
   vultisig: {
-    manifestName: 'Vultisig Extension',
+    manifestName: 'Vultisig: Seedless Crypto Wallet',
     manifestDescription:
-      'Vultisig Extension integrates Vultisig into web applications, enabling users to securely sign blockchain transactions.',
+      'Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 30+ chains.',
     manifestAuthor: {
       name: 'Vultisig',
       email: 'info@vultisig.com',
