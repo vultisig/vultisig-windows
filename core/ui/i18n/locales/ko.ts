@@ -877,6 +877,9 @@ export const ko = {
   signed_signature: '서명',
   signing_address: '서명 주소',
   signing_error: '서명 오류입니다. 다시 시도해 주세요.',
+  keysign_malicious_party_error: '악의적인 서명자가 감지되었습니다',
+  keysign_malicious_party_error_description:
+    '서명자 중 하나가 악의적으로 동작하여 Keysign이 중지되었습니다. 해당 서명자를 Keysign에 다시 사용하지 마세요.',
   signing_method: '서명 방식',
   silver: '은',
   site: '대지',
@@ -1888,4 +1891,10 @@ export const ko = {
   kamino_earn_deposited: '예치됨: {{amount}}',
   kamino_earn_earned: '수익: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: '{{chain}} 에서',
+  max_total_fee: '최대 총 수수료',
+  broadcast_refused: '방송 확정되지 않음',
+  broadcast_refused_description:
+    '귀하의 기기들이 이 거래에 서명했지만, 최종 보안 검사 후 이 기기가 전송을 거부했습니다. 다른 서명 기기가 전송했을 수도 있습니다. 아래 상태를 확인하고 다시 서명하기 전에 결과를 확인하십시오.',
+  not_seen_onchain: '아직 온체인에서 확인되지 않았습니다.',
 }

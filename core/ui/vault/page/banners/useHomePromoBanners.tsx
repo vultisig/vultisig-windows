@@ -1,4 +1,5 @@
 import { useOpenKaminoEarn } from '@core/ui/defi/chain/solana/kamino/useOpenKaminoEarn'
+import { useOpenThorchainStaked } from '@core/ui/defi/chain/thorchain/useOpenThorchainStaked'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { vultisigTwitterUrl } from '@core/ui/settings/constants'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
@@ -47,6 +48,7 @@ export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
   const vaultCoins = useCurrentVaultCoins()
   const vaultChains = useCurrentVaultChains()
   const openKaminoEarn = useOpenKaminoEarn()
+  const openThorchainStaked = useOpenThorchainStaked()
   const { mutate: createCoin } = useCreateCoinMutation()
   const { data: friendReferral } = useFriendReferralQuery(getVaultId(vault))
 
@@ -55,6 +57,10 @@ export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
   // Solana address, so a vault without one - a key import with no EdDSA key -
   // has nothing the banner could open.
   const hasSolana = vaultChains.includes(Chain.Solana)
+  // The Staked tab reads positions from the vault's own THORChain address, so
+  // a vault without one - a key import with no ECDSA THORChain key - has
+  // nothing the Ruji banner could open.
+  const hasThorchain = vaultChains.includes(Chain.THORChain)
 
   const openSwapToVult = () => {
     const existingVultCoin = vaultCoins.find(coin => areEqualCoins(coin, vult))
@@ -110,13 +116,15 @@ export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
           }),
         ]
       : []),
-    ...(isVultisigBrand
+    ...(isVultisigBrand && hasThorchain
       ? [
           banner({
             id: 'rujiraStaking',
             caption: t('rujira_banner_caption'),
             title: t('rujira_banner_title'),
-            onClick: () => navigate({ id: 'defi', state: {} }),
+            onClick: () => {
+              openThorchainStaked()
+            },
           }),
         ]
       : []),

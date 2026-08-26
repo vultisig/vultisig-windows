@@ -901,6 +901,9 @@ export const de = {
   signed_signature: 'Unterschrift',
   signing_address: 'Unterschriftsadresse',
   signing_error: 'Signierfehler. Bitte versuchen Sie es erneut.',
+  keysign_malicious_party_error: 'Bösartiger Signierer erkannt',
+  keysign_malicious_party_error_description:
+    'Keysign wurde gestoppt, weil sich ein Signierer bösartig verhalten hat. Verwenden Sie diesen Signierer nicht erneut für Keysign.',
   signing_method: 'Signaturverfahren',
   silver: 'Silber',
   site: 'Website',
@@ -1943,4 +1946,10 @@ export const de = {
   kamino_earn_deposited: 'Eingezahlt: {{amount}}',
   kamino_earn_earned: 'Verdient: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'auf {{chain}}',
+  max_total_fee: 'Maximale Gesamtgebühr',
+  broadcast_refused: 'Übertragung nicht bestätigt',
+  broadcast_refused_description:
+    'Ihre Geräte haben diese Transaktion signiert, aber dieses Gerät hat die Übertragung nach einer abschließenden Sicherheitsprüfung abgelehnt. Ein anderes signierendes Gerät hat sie möglicherweise trotzdem übertragen – überprüfen Sie den Status unten und bestätigen Sie das Ergebnis, bevor Sie erneut signieren.',
+  not_seen_onchain: 'Noch nicht in der Blockchain gesehen',
 }

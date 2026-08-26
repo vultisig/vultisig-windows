@@ -12,7 +12,7 @@ export const SecureVaultStartKeysignPrompt = (
   const navigate = useCoreNavigate()
 
   const buttonProps = useMemo(() => {
-    const { onBeforeStart, ...navigationProps } = props
+    const { onBeforeStart, isLoading, ...navigationProps } = props
     const keysignPayload =
       'keysignPayload' in navigationProps
         ? navigationProps.keysignPayload
@@ -21,6 +21,7 @@ export const SecureVaultStartKeysignPrompt = (
     if (!keysignPayload) {
       return {
         disabled: 'disabledMessage' in props ? props.disabledMessage : true,
+        loading: isLoading,
       }
     }
 

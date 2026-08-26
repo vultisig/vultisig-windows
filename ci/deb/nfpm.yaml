@@ -10,6 +10,8 @@ description: |
 vendor: "Vultisig"
 homepage: "https://vultisig.com"
 license: "MIT"
+depends:
+  - libwebkit2gtk-4.1-0
 contents:
   - src: ../../build/bin/vultisig
     dst: /usr/bin/vultisig

@@ -827,6 +827,9 @@ export const zh = {
   signed_signature: '签名',
   signing_address: '签名地址',
   signing_error: '签名错误，请重试。',
+  keysign_malicious_party_error: '检测到恶意签名方',
+  keysign_malicious_party_error_description:
+    'Keysign 已停止，因为一名签名方存在恶意行为。请勿再次使用该签名方进行 Keysign。',
   signing_method: '签名方法',
   silver: '银',
   site: '地点',
@@ -1772,4 +1775,10 @@ export const zh = {
   kamino_earn_deposited: '已存入：{{amount}}',
   kamino_earn_earned: '已获得：{{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: '在{{chain}}上',
+  max_total_fee: '最高总费用',
+  broadcast_refused: '播出尚未确认',
+  broadcast_refused_description:
+    '您的设备已签署此交易，但此设备在最终安全检查后拒绝广播该交易。其他签署设备可能已广播该交易——请查看下方状态并确认结果后再重新签署。',
+  not_seen_onchain: '尚未在链上看到',
 }

@@ -6,7 +6,7 @@ const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
 const artifactConfig = {
   dist: {
     brand: 'vultisig',
-    manifestName: 'Vultisig Extension',
+    manifestName: 'Vultisig: Seedless Crypto Wallet',
     productName: 'Vultisig',
   },
   'dist-station': {

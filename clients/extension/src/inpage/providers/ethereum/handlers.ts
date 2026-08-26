@@ -30,6 +30,12 @@ import { watchAsset } from './resolvers/wallet_watchAsset'
 
 export { processSignature } from './utils'
 
+/**
+ * EIP-1193 request handlers keyed by method name. `eth_signTypedData` and
+ * `eth_signTypedData_v3` alias the v4 resolver for MetaMask parity: EIP-712
+ * hashing is identical for v3-compatible payloads, and V1 array payloads are
+ * rejected there with a descriptive error instead of `UnsupportedMethod`.
+ */
 export const ethereumHandlers = {
   eth_chainId: getEthChainId,
   eth_accounts: getEthAccounts,
@@ -57,6 +63,8 @@ export const ethereumHandlers = {
   eth_call: callEth,
   eth_getTransactionReceipt: getEthTransactionReceipt,
   eth_getTransactionByHash: getEthTransactionByHash,
+  eth_signTypedData: signEthTypedDataV4,
+  eth_signTypedData_v3: signEthTypedDataV4,
   eth_signTypedData_v4: signEthTypedDataV4,
   personal_sign: personalSign,
   eth_sendTransaction: sendEthTransaction,

@@ -896,6 +896,9 @@ export const es = {
   signed_signature: 'Firma firmada',
   signing_address: 'Dirección de firma',
   signing_error: 'Error de firma. Inténtalo de nuevo.',
+  keysign_malicious_party_error: 'Firmante malicioso detectado',
+  keysign_malicious_party_error_description:
+    'Keysign se detuvo porque un firmante se comportó de forma maliciosa. No vuelvas a usar ese firmante para Keysign.',
   signing_method: 'Método de firma',
   silver: 'Plata',
   site: 'Sitio',
@@ -1928,4 +1931,10 @@ export const es = {
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganado: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'en {{chain}}',
+  max_total_fee: 'Tarifa total máxima',
+  broadcast_refused: 'Transmisión no confirmada',
+  broadcast_refused_description:
+    'Tus dispositivos firmaron esta transacción, pero este dispositivo se negó a transmitirla tras una comprobación de seguridad final. Es posible que otro dispositivo firmante la haya transmitido de todos modos; consulta el estado a continuación y confirma el resultado antes de volver a firmar.',
+  not_seen_onchain: 'Aún no se ha visto en la cadena de bloques.',
 }

@@ -1,22 +1,16 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
-import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
-import {
-  ContainerWrapper,
-  HorizontalLine,
-  IconWrapper,
-} from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { SwapVerifyAmount } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyAmount'
+import { SwapVerifyCard } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyCard'
+import { SwapVerifyChainChip } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyChainChip'
 import { SwapVerifyRecipient } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRecipient'
-import { borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
+import { SwapVerifyRow } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyRow'
+import { SwapVerifyToDivider } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyToDivider'
+import { SwapVerifyVaultRow } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyVaultRow'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -26,12 +20,13 @@ import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
+import { JoinKeysignNetworkFeeValue } from './JoinKeysignNetworkFeeValue'
 import { JoinKeysignSwapTotalFee } from './JoinKeysignSwapTotalFee'
-import { JoinSwapFiatAmount } from './JoinSwapFiatAmount'
+
+const logoSize = 14
 
 /**
  * Joiner verify view for a swap. Carries the same cost breakdown and signing
@@ -45,7 +40,6 @@ import { JoinSwapFiatAmount } from './JoinSwapFiatAmount'
  */
 export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
-  const vault = useCurrentVault()
 
   const swapPayload = shouldBePresent(
     getKeysignSwapPayload(value),
@@ -77,124 +71,68 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
 
   return (
     <>
-      <ContainerWrapper radius={borderRadiusPx.lg}>
-        <VStack
-          bgColor="foreground"
-          gap={24}
-          padding={24}
-          radius={borderRadiusPx.lg}
-        >
+      <SwapVerifyCard>
+        <VStack gap={24} padding={24}>
           <Text color="supporting" size={15}>
             {t('youre_swapping')}
           </Text>
           <VStack gap={16}>
-            <HStack gap={12} alignItems="center">
-              <CoinIcon coin={fromCoin} style={{ fontSize: 32 }} />
-              <VStack gap={2}>
-                <Text weight="500" size={17} color="contrast">
-                  {formatAmount(fromAmountDecimal, fromCoin)}
-                </Text>
-                <JoinSwapFiatAmount
-                  coin={fromCoin}
-                  amount={fromAmountDecimal}
-                />
-              </VStack>
-            </HStack>
-            <HStack alignItems="center" gap={10}>
-              <IconWrapper>
-                <ArrowDownIcon />
-              </IconWrapper>
-              {t('swap_expected_payout')}
-              <HorizontalLine />
-            </HStack>
+            <SwapVerifyAmount coin={fromCoin} amount={fromAmountDecimal} />
+            <SwapVerifyToDivider />
             {toCoin && (
-              <HStack gap={12} alignItems="center">
-                <CoinIcon coin={toCoin} style={{ fontSize: 32 }} />
-                <VStack gap={2}>
-                  <Text weight="500" size={17} color="contrast">
-                    {formatAmount(toAmount, toCoin)}
-                  </Text>
-                  <JoinSwapFiatAmount coin={toCoin} amount={toAmount} />
-                  {toAmountLimit !== null && (
-                    <Text size={13} color="shy">
-                      {`${t('to_min_payout')}: ${formatAmount(
+              <SwapVerifyAmount
+                coin={toCoin}
+                amount={toAmount}
+                caption={
+                  toAmountLimit === null
+                    ? undefined
+                    : `${t('to_min_payout')}: ${formatAmount(
                         toAmountLimit,
                         toCoin
-                      )}`}
-                    </Text>
-                  )}
-                </VStack>
-              </HStack>
+                      )}`
+                }
+                extra={<SwapVerifyChainChip value={toCoin.chain} />}
+              />
             )}
           </VStack>
         </VStack>
-      </ContainerWrapper>
-      <VStack
-        bgColor="foreground"
-        gap={12}
-        padding={12}
-        radius={borderRadiusPx.lg}
-      >
-        <List>
-          <ListItem
-            hoverable={false}
-            title={t('provider')}
-            extra={
-              <HStack alignItems="center" gap={6}>
-                {providerLogoSrc ? (
-                  <ChainEntityIcon
-                    value={providerLogoSrc}
-                    style={{ fontSize: 16 }}
-                  />
-                ) : null}
-                <Text color="shy">{provider}</Text>
-              </HStack>
-            }
-          />
-          <ListItem
-            hoverable={false}
-            title={t('network_fee')}
-            extra={<KeysignFeeAmount keysignPayload={value} />}
-          />
-          {swapFee && (
-            <>
-              <ListItem
-                hoverable={false}
-                title={t('swap_fee')}
-                extra={
-                  <Text color="shy">
-                    <SwapFeeFiatValue value={[swapFee]} />
-                  </Text>
-                }
-              />
-              <ListItem
-                hoverable={false}
-                title={t('total_fee')}
-                extra={
-                  <Text color="supporting">
-                    <JoinKeysignSwapTotalFee
-                      keysignPayload={value}
-                      swapFee={swapFee}
-                    />
-                  </Text>
-                }
-              />
-            </>
-          )}
-          <ListItem
-            hoverable={false}
-            title={t('vault')}
-            extra={
-              <Text color="contrast">
-                {vault.name}{' '}
-                <Text as="span" color="shy">
-                  ({formatWalletAddress(fromCoin.address)})
-                </Text>
-              </Text>
-            }
-          />
-        </List>
-      </VStack>
+        <SwapVerifyVaultRow value={fromCoin.address} />
+        <SwapVerifyRow
+          label={t('provider')}
+          value={
+            <HStack alignItems="center" gap={6} justifyContent="end">
+              {providerLogoSrc ? (
+                <ChainEntityIcon
+                  value={providerLogoSrc}
+                  style={{ fontSize: logoSize }}
+                />
+              ) : null}
+              <Text cropped>{provider}</Text>
+            </HStack>
+          }
+        />
+        <SwapVerifyRow
+          label={t('network_fee')}
+          value={<JoinKeysignNetworkFeeValue value={value} />}
+        />
+        {swapFee && (
+          <>
+            <SwapVerifyRow
+              label={t('swap_fee')}
+              value={<SwapFeeFiatValue value={[swapFee]} />}
+            />
+            <SwapVerifyRow
+              label={t('max_total_fee')}
+              value={
+                <JoinKeysignSwapTotalFee
+                  keysignPayload={value}
+                  swapFee={swapFee}
+                />
+              }
+            />
+          </>
+        )}
+      </SwapVerifyCard>
       <SwapVerifyRecipient keysignPayload={value} />
     </>
   )
