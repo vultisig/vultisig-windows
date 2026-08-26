@@ -894,6 +894,9 @@ export const pt = {
   signed_signature: 'Assinatura assinada',
   signing_address: 'Endereço de assinatura',
   signing_error: 'Erro ao assinar. Tente novamente.',
+  keysign_malicious_party_error: 'Signatário malicioso detectado',
+  keysign_malicious_party_error_description:
+    'O Keysign foi interrompido porque um signatário se comportou de forma maliciosa. Não use esse signatário novamente para Keysign.',
   signing_method: 'Método de assinatura',
   silver: 'Prata',
   site: 'Site',

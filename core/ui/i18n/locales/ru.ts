@@ -882,6 +882,9 @@ export const ru = {
   signed_signature: 'Подписанная подпись',
   signing_address: 'Адрес подписи',
   signing_error: 'Ошибка подписи. Попробуйте ещё раз.',
+  keysign_malicious_party_error: 'Обнаружен вредоносный подписант',
+  keysign_malicious_party_error_description:
+    'Keysign остановлен, потому что один из подписантов вел себя вредоносно. Не используйте этого подписанта для Keysign снова.',
   signing_method: 'Метод подписи',
   silver: 'Серебро',
   site: 'Сайт',

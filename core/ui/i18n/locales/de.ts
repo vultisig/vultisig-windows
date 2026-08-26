@@ -901,6 +901,9 @@ export const de = {
   signed_signature: 'Unterschrift',
   signing_address: 'Unterschriftsadresse',
   signing_error: 'Signierfehler. Bitte versuchen Sie es erneut.',
+  keysign_malicious_party_error: 'Bösartiger Signierer erkannt',
+  keysign_malicious_party_error_description:
+    'Keysign wurde gestoppt, weil sich ein Signierer bösartig verhalten hat. Verwenden Sie diesen Signierer nicht erneut für Keysign.',
   signing_method: 'Signaturverfahren',
   silver: 'Silber',
   site: 'Website',

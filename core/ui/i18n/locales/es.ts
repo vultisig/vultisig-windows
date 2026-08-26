@@ -896,6 +896,9 @@ export const es = {
   signed_signature: 'Firma firmada',
   signing_address: 'Dirección de firma',
   signing_error: 'Error de firma. Inténtalo de nuevo.',
+  keysign_malicious_party_error: 'Firmante malicioso detectado',
+  keysign_malicious_party_error_description:
+    'Keysign se detuvo porque un firmante se comportó de forma maliciosa. No vuelvas a usar ese firmante para Keysign.',
   signing_method: 'Método de firma',
   silver: 'Plata',
   site: 'Sitio',

@@ -897,6 +897,9 @@ export const it = {
   signed_signature: 'Firma firmata',
   signing_address: 'Indirizzo di firma',
   signing_error: 'Errore di firma. Riprova.',
+  keysign_malicious_party_error: 'Firmatario malevolo rilevato',
+  keysign_malicious_party_error_description:
+    'Keysign è stato interrotto perché un firmatario si è comportato in modo malevolo. Non usare di nuovo quel firmatario per Keysign.',
   signing_method: 'Metodo di firma',
   silver: 'Argento',
   site: 'Sito',
