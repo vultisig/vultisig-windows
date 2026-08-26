@@ -334,7 +334,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               // Defense in depth behind the sign-time payload rebuild: the
               // ceremony itself takes time, so re-check the swap's freshness
               // now that it is about to go out.
-              await assertReadyToBroadcast({ chain, keysignPayload: payload })
+              await assertReadyToBroadcast({
+                chain,
+                keysignPayload: payload,
+                txs,
+              })
 
               await chainPromises(
                 txs.map(

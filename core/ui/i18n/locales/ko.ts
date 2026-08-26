@@ -1890,4 +1890,8 @@ export const ko = {
   kamino_earn_protocol: 'Kamino',
   on_chain: '{{chain}} 에서',
   max_total_fee: '최대 총 수수료',
+  broadcast_refused: '방송 확정되지 않음',
+  broadcast_refused_description:
+    '귀하의 기기들이 이 거래에 서명했지만, 최종 보안 검사 후 이 기기가 전송을 거부했습니다. 다른 서명 기기가 전송했을 수도 있습니다. 아래 상태를 확인하고 다시 서명하기 전에 결과를 확인하십시오.',
+  not_seen_onchain: '아직 온체인에서 확인되지 않았습니다.',
 }
