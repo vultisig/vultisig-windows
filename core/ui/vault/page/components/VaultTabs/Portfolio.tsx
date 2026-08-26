@@ -18,6 +18,12 @@ import { VaultChainItemBalance } from '../VaultChainItemBalance'
 
 type PortfolioViewState = 'noChains' | 'noSearchResults' | 'list'
 
+/**
+ * Vault home chain list. Chains whose balances resolved render with their
+ * values; a chain whose balance read failed keeps its row with a "failed to
+ * load" state instead of disappearing or showing zero. The page-level failure
+ * state only appears when no chain resolved at all.
+ */
 export const Portfolio = () => {
   const { data, isPending } = useVaultChainsBalancesQuery()
   const [searchQuery] = useSearchChain()

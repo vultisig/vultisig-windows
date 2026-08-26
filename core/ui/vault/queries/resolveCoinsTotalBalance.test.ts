@@ -85,6 +85,24 @@ describe('resolveCoinsTotalBalance', () => {
     })
   })
 
+  it('clears the error when every coin still has data after a failed refetch', () => {
+    expect(
+      resolveCoinsTotalBalance({
+        coins,
+        prices,
+        balances,
+        isPending: false,
+        error: rpcError,
+      })
+    ).toEqual({
+      data: 52002,
+      isPending: false,
+      isUpdating: false,
+      isIncomplete: false,
+      error: null,
+    })
+  })
+
   it('surfaces the error only when nothing resolved after settling', () => {
     expect(
       resolveCoinsTotalBalance({

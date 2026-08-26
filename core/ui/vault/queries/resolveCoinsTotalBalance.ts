@@ -35,6 +35,8 @@ type ResolveCoinsTotalBalanceInput = {
  * coin without a balance contributes nothing rather than zero; with at least one
  * resolved coin the partial total is returned and marked incomplete when a read
  * failed, and only when nothing resolved does the failure surface as an error.
+ * A failed background refetch that left every coin with cached data is not an
+ * error either: the total is complete, so `error` stays null.
  */
 export const resolveCoinsTotalBalance = ({
   coins,
@@ -72,13 +74,14 @@ export const resolveCoinsTotalBalance = ({
   const isSettledZero =
     noCoins || (!isUpdating && !hasError && resolvedCount === 0)
   const hasResolvedData = resolvedCount > 0 || isSettledZero
+  const hasCompleteData = resolvedCount === coins.length
   const isPendingResult = !hasResolvedData && isUpdating
 
   return {
     data: hasResolvedData ? total : undefined,
     isPending: isPendingResult,
     isUpdating,
-    isIncomplete: hasResolvedData && hasError && resolvedCount < coins.length,
-    error: isPendingResult ? null : error,
+    isIncomplete: hasResolvedData && hasError && !hasCompleteData,
+    error: isPendingResult || hasCompleteData ? null : error,
   }
 }
