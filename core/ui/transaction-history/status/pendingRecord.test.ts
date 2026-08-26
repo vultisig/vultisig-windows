@@ -76,31 +76,34 @@ describe('isChainPollable', () => {
 })
 
 describe('isSettlingTransition', () => {
-  const transition = (
-    from: TransactionRecordStatus,
+  type TransitionInput = {
+    from: TransactionRecordStatus
     to: TransactionRecordStatus
-  ) => isSettlingTransition({ previous: sendWith(from), update: sendWith(to) })
+  }
+
+  const transition = ({ from, to }: TransitionInput) =>
+    isSettlingTransition({ previous: sendWith(from), update: sendWith(to) })
 
   it('settles on confirmation', () => {
-    expect(transition('pending', 'confirmed')).toBe(true)
+    expect(transition({ from: 'pending', to: 'confirmed' })).toBe(true)
   })
 
   // A reverted transaction still burned its fee, so the balance it drew the
   // fee from is as stale as after a confirmation.
   it('settles on failure', () => {
-    expect(transition('pending', 'failed')).toBe(true)
+    expect(transition({ from: 'pending', to: 'failed' })).toBe(true)
   })
 
   it('settles again when a failed send heals to confirmed', () => {
-    expect(transition('failed', 'confirmed')).toBe(true)
+    expect(transition({ from: 'failed', to: 'confirmed' })).toBe(true)
   })
 
   it('does not settle while still in flight', () => {
-    expect(transition('broadcasted', 'pending')).toBe(false)
+    expect(transition({ from: 'broadcasted', to: 'pending' })).toBe(false)
   })
 
   it('does not settle twice on a re-poll of the same verdict', () => {
-    expect(transition('confirmed', 'confirmed')).toBe(false)
-    expect(transition('failed', 'failed')).toBe(false)
+    expect(transition({ from: 'confirmed', to: 'confirmed' })).toBe(false)
+    expect(transition({ from: 'failed', to: 'failed' })).toBe(false)
   })
 })

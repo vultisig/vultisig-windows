@@ -78,12 +78,14 @@ export const useVaultsTotalBalances = ({
   const balanceQueries = useQueries({
     // Reuse the exact query keys / persistence meta from
     // `getBalanceQueryOptions` (shared with `useBalancesQuery`) so every
-    // balance consumer in the app shares cache. `staleTime` is per-observer
-    // in TanStack Query, so it has to be stated here: it is this throttle
-    // that prevents the mount-time refetch storm when switching between
-    // vault/manage/folder screens, and using the shared value keeps this
-    // screen and the active-vault screens agreeing on how long a cached
-    // balance stays fresh.
+    // balance consumer in the app shares cache. Those base options leave
+    // refetch on mount/focus/reconnect off, and that — not the `staleTime`
+    // below — is what keeps this screen from fanning out a balance read for
+    // every coin of every vault each time it opens; the active-vault
+    // surfaces are what keep those cache entries current. `staleTime` is
+    // per-observer in TanStack Query, so the shared value is restated here
+    // to hold this screen to the same freshness expectation as those
+    // surfaces if these observers ever drive a read of their own.
     queries: allCoins.map(coin => ({
       ...getBalanceQueryOptions(extractAccountCoinKey(coin)),
       staleTime: balanceQueryStaleTime,
