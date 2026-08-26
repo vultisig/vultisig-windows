@@ -889,6 +889,9 @@ export const hr = {
   signed_signature: 'Potpis',
   signing_address: 'Adresa za potpisivanje',
   signing_error: 'Pogreška pri potpisivanju. Pokušajte ponovno.',
+  keysign_malicious_party_error: 'Otkriven je zlonamjerni potpisnik',
+  keysign_malicious_party_error_description:
+    'Keysign je zaustavljen jer se jedan potpisnik ponašao zlonamjerno. Nemojte ponovno koristiti tog potpisnika za Keysign.',
   signing_method: 'Metoda potpisivanja',
   silver: 'Srebro',
   site: 'Stranica',

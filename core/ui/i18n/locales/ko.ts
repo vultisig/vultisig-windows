@@ -877,6 +877,9 @@ export const ko = {
   signed_signature: '서명',
   signing_address: '서명 주소',
   signing_error: '서명 오류입니다. 다시 시도해 주세요.',
+  keysign_malicious_party_error: '악의적인 서명자가 감지되었습니다',
+  keysign_malicious_party_error_description:
+    '서명자 중 하나가 악의적으로 동작하여 Keysign이 중지되었습니다. 해당 서명자를 Keysign에 다시 사용하지 마세요.',
   signing_method: '서명 방식',
   silver: '은',
   site: '대지',

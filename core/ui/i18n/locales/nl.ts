@@ -884,6 +884,9 @@ export const nl = {
   signed_signature: 'Ondertekende handtekening',
   signing_address: 'Ondertekenadres',
   signing_error: 'Ondertekenfout. Probeer opnieuw.',
+  keysign_malicious_party_error: 'Kwaadwillende ondertekenaar gedetecteerd',
+  keysign_malicious_party_error_description:
+    'Keysign is gestopt omdat een ondertekenaar zich kwaadwillend gedroeg. Gebruik die ondertekenaar niet opnieuw voor Keysign.',
   signing_method: 'Ondertekenmethode',
   silver: 'Zilver',
   site: 'Site',

@@ -1108,6 +1108,9 @@ export const en = {
   signing_error: 'Signing Error. Please try again.',
   signing_error_description:
     "One of your devices didn't respond in time. Check your connection and try again.",
+  keysign_malicious_party_error: 'Malicious signer detected',
+  keysign_malicious_party_error_description:
+    'Keysign was stopped because one signer behaved maliciously. Do not use that signer for keysign again.',
   signing_method: 'Signing Method',
   silver: 'Silver',
   site: 'Site',

@@ -51,6 +51,14 @@ type KeysignSigningStepProps = Partial<OnBackProp> & {
   toAddressLabel?: string
 }
 
+const isDklsMaliciousPartyError = (error: unknown) => {
+  if (error instanceof Error && error.name === 'DklsMaliciousPartyError') {
+    return true
+  }
+
+  return extractErrorMsg(error).includes('DKLS keysign aborted because party')
+}
+
 export const KeysignSigningStep = ({
   onBack,
   onSettled,
@@ -290,6 +298,17 @@ export const KeysignSigningStep = ({
               error={error}
               title={t('broadcast_error')}
               description={t('broadcast_error_description')}
+            />
+          )
+        }
+
+        if (isDklsMaliciousPartyError(error)) {
+          return (
+            <FullPageFlowErrorState
+              variant="error"
+              error={error}
+              title={t('keysign_malicious_party_error')}
+              description={t('keysign_malicious_party_error_description')}
             />
           )
         }

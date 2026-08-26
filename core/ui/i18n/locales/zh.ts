@@ -827,6 +827,9 @@ export const zh = {
   signed_signature: '签名',
   signing_address: '签名地址',
   signing_error: '签名错误，请重试。',
+  keysign_malicious_party_error: '检测到恶意签名方',
+  keysign_malicious_party_error_description:
+    'Keysign 已停止，因为一名签名方存在恶意行为。请勿再次使用该签名方进行 Keysign。',
   signing_method: '签名方法',
   silver: '银',
   site: '地点',
