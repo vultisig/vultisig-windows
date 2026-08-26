@@ -1,6 +1,7 @@
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 
 import { useCore } from '../state/core'
@@ -36,18 +37,25 @@ export type LegacyDismissedBanners = BannerId[]
 export type StoredDismissedBanners = DismissedBanners | LegacyDismissedBanners
 
 /**
- * Per-banner cooldown (in ms) after dismissal, after which the banner may show
- * again. Configurable per banner rather than hard-coded in carousel logic.
+ * What a dismissal means for a given banner: `ttl` lets it resurface once that
+ * many ms have elapsed, `permanent` keeps it hidden for good.
  */
-export const bannerDismissalTtl: Record<BannerId, number> = {
-  buyVultPromo: convertDuration(7, 'd', 'ms'),
-  followOnX: convertDuration(15, 'd', 'ms'),
-  migrate: convertDuration(15, 'd', 'ms'),
-  agentNavigationCoachmark: convertDuration(15, 'd', 'ms'),
-  rujiraStaking: convertDuration(7, 'd', 'ms'),
-  vaultBackup: convertDuration(7, 'd', 'ms'),
-  referralCode: convertDuration(7, 'd', 'ms'),
-  kamino: convertDuration(7, 'd', 'ms'),
+export type BannerDismissPolicy = { ttl: number } | { permanent: null }
+
+/**
+ * Per-banner dismissal policy. Configurable per banner rather than hard-coded
+ * in carousel logic. These are the fallback values used until a remote policy
+ * assigns something else.
+ */
+export const bannerDismissPolicy: Record<BannerId, BannerDismissPolicy> = {
+  buyVultPromo: { ttl: convertDuration(7, 'd', 'ms') },
+  followOnX: { ttl: convertDuration(15, 'd', 'ms') },
+  migrate: { ttl: convertDuration(15, 'd', 'ms') },
+  agentNavigationCoachmark: { ttl: convertDuration(15, 'd', 'ms') },
+  rujiraStaking: { ttl: convertDuration(7, 'd', 'ms') },
+  vaultBackup: { ttl: convertDuration(7, 'd', 'ms') },
+  referralCode: { ttl: convertDuration(7, 'd', 'ms') },
+  kamino: { ttl: convertDuration(7, 'd', 'ms') },
 }
 
 /**
@@ -70,23 +78,28 @@ type IsBannerDismissedInput = {
   banners: DismissedBanners
   id: BannerId
   now: number
+  policy?: Record<BannerId, BannerDismissPolicy>
 }
 
 /**
- * A banner counts as dismissed only while it is within its TTL window. Once the
- * TTL has elapsed the dismissal is ignored and the banner can show again.
+ * Whether a dismissal still hides the banner. A `permanent` policy hides it for
+ * good; a `ttl` policy only hides it until that window has elapsed.
  */
 export const isBannerDismissed = ({
   banners,
   id,
   now,
+  policy = bannerDismissPolicy,
 }: IsBannerDismissedInput): boolean => {
   const dismissal = banners[id]
   if (!dismissal) {
     return false
   }
 
-  return now - dismissal.dismissedAt < bannerDismissalTtl[id]
+  return matchRecordUnion<BannerDismissPolicy, boolean>(policy[id], {
+    ttl: ms => now - dismissal.dismissedAt < ms,
+    permanent: () => true,
+  })
 }
 
 type GetDismissedBannersFunction = () => Promise<StoredDismissedBanners>
