@@ -6,6 +6,8 @@ export const pendingStatuses: TransactionRecordStatus[] = [
   'pending',
 ]
 
+const settledStatuses: TransactionRecordStatus[] = ['confirmed', 'failed']
+
 /**
  * Whether a record's status should be driven by reading chain state.
  *
@@ -16,3 +18,20 @@ export const pendingStatuses: TransactionRecordStatus[] = [
  */
 export const isChainPollable = (record: TransactionRecord) =>
   pendingStatuses.includes(record.status) && record.type !== 'limitSwap'
+
+type IsSettlingTransitionInput = {
+  previous: TransactionRecord
+  update: TransactionRecord
+}
+
+/**
+ * Whether an update moves a record into a settled status it did not hold
+ * before — the one moment per chain verdict at which the balances it touched
+ * are worth re-reading. A healed send counts: `failed` to `confirmed` is a new
+ * verdict, while a re-poll reporting the same settled status is not.
+ */
+export const isSettlingTransition = ({
+  previous,
+  update,
+}: IsSettlingTransitionInput) =>
+  settledStatuses.includes(update.status) && update.status !== previous.status

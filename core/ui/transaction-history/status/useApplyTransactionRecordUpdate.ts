@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { TransactionRecord } from '../core'
 import { getRecordAffectedCoinKeys } from './getRecordAffectedCoinKeys'
+import { isSettlingTransition } from './pendingRecord'
 
 type ApplyTransactionRecordUpdateInput = {
   /** The record as stored before this poll. */
@@ -14,13 +15,14 @@ type ApplyTransactionRecordUpdateInput = {
 }
 
 /**
- * Persists a polled status update and, on the transition into `confirmed`,
- * refreshes the balances that transaction moved.
+ * Persists a polled status update and, once the transaction settles, refreshes
+ * the balances it moved.
  *
  * Confirmation is the first moment a node reliably reports the new amounts —
  * the invalidation at broadcast time usually still reads pre-transaction
  * balances — so this is what makes a send or swap settle on screen without a
- * manual refresh. Guarding on the transition keeps it to once per transaction.
+ * manual refresh. A failure settles too: a reverted transaction still burned
+ * its fee. Guarding on the transition keeps it to once per verdict.
  */
 export const useApplyTransactionRecordUpdate = () => {
   const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
@@ -30,7 +32,7 @@ export const useApplyTransactionRecordUpdate = () => {
   return ({ previous, update }: ApplyTransactionRecordUpdateInput) => {
     updateRecord(update)
 
-    if (update.status !== 'confirmed' || previous.status === 'confirmed') return
+    if (!isSettlingTransition({ previous, update })) return
 
     getRecordAffectedCoinKeys({ record: update, vaultAddresses }).forEach(
       coinKey => {

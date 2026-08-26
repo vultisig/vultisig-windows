@@ -2,7 +2,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { describe, expect, it } from 'vitest'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'
-import { isChainPollable } from './pendingRecord'
+import { isChainPollable, isSettlingTransition } from './pendingRecord'
 
 const base = {
   id: 'record-1',
@@ -72,5 +72,35 @@ describe('isChainPollable', () => {
   it('leaves limit orders to their own tracker even while pending', () => {
     expect(isChainPollable(limitSwapWith('pending'))).toBe(false)
     expect(isChainPollable(limitSwapWith('broadcasted'))).toBe(false)
+  })
+})
+
+describe('isSettlingTransition', () => {
+  const transition = (
+    from: TransactionRecordStatus,
+    to: TransactionRecordStatus
+  ) => isSettlingTransition({ previous: sendWith(from), update: sendWith(to) })
+
+  it('settles on confirmation', () => {
+    expect(transition('pending', 'confirmed')).toBe(true)
+  })
+
+  // A reverted transaction still burned its fee, so the balance it drew the
+  // fee from is as stale as after a confirmation.
+  it('settles on failure', () => {
+    expect(transition('pending', 'failed')).toBe(true)
+  })
+
+  it('settles again when a failed send heals to confirmed', () => {
+    expect(transition('failed', 'confirmed')).toBe(true)
+  })
+
+  it('does not settle while still in flight', () => {
+    expect(transition('broadcasted', 'pending')).toBe(false)
+  })
+
+  it('does not settle twice on a re-poll of the same verdict', () => {
+    expect(transition('confirmed', 'confirmed')).toBe(false)
+    expect(transition('failed', 'failed')).toBe(false)
   })
 })
