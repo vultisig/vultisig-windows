@@ -1928,4 +1928,5 @@ export const es = {
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganado: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  some_balances_failed_to_load: 'Algunos saldos no se cargaron correctamente.',
 }

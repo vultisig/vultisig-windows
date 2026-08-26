@@ -2,15 +2,24 @@ import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
+import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { fiatCurrencySymbolRecord } from '@vultisig/core-config/FiatCurrency'
 import { useTranslation } from 'react-i18next'
 
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility'
 
+/**
+ * Vault-wide fiat total for the vault home header. Shows the running total as
+ * soon as any coin resolves, a spinner while other coins are still loading and
+ * an alert when the total excludes chains whose balances failed to load; the
+ * two indicators are independent because both states can hold at once.
+ */
 export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery()
   const fiatCurrency = useFiatCurrency()
@@ -42,6 +51,16 @@ export const VaultTotalBalance = () => {
             </Text>
             {query.isUpdating ? (
               <Spinner size="0.9em" style={{ opacity: 0.5 }} />
+            ) : null}
+            {query.isIncomplete ? (
+              <Tooltip
+                content={t('some_balances_failed_to_load')}
+                renderOpener={props => (
+                  <IconWrapper {...props} color="danger" size={16}>
+                    <CircleAlertIcon />
+                  </IconWrapper>
+                )}
+              />
             ) : null}
           </HStack>
         )}
