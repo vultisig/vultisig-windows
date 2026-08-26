@@ -14,6 +14,7 @@
 import { ed25519 } from '@noble/curves/ed25519'
 import type { BrowserContext, Page } from '@playwright/test'
 import {
+  Connection,
   PublicKey,
   SystemProgram,
   TransactionMessage,
@@ -619,20 +620,8 @@ test.describe('DApp Provider', () => {
   async function fetchSolanaBlockhash(): Promise<string> {
     for (const endpoint of solanaRpcEndpoints) {
       try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'getLatestBlockhash',
-            params: [{ commitment: 'finalized' }],
-          }),
-        })
-        const body = (await response.json()) as {
-          result?: { value?: { blockhash?: string } }
-        }
-        const blockhash = body.result?.value?.blockhash
+        const connection = new Connection(endpoint)
+        const { blockhash } = await connection.getLatestBlockhash('finalized')
         if (blockhash) return blockhash
       } catch {
         // try the next endpoint

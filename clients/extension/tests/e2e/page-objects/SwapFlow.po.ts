@@ -13,6 +13,11 @@ type AssertSelectionMatchesInput = {
   toSymbol: string
 }
 
+type HasSelectedSymbolInput = {
+  text: string
+  symbol: string
+}
+
 type PrepareSwapWithAmountInput = {
   fromChainId: string
   toChainId: string
@@ -505,7 +510,7 @@ export class SwapFlow extends BasePage {
   // Exact-token match ("USDC on Ethereum" must not satisfy "ETH"). The selector
   // fuses ticker+badge ("RUNENATIVE"), so badge suffixes are peeled into extra
   // exact tokens — never substring-matched, or WETH would satisfy ETH.
-  private hasSelectedSymbol(text: string, symbol: string): boolean {
+  private hasSelectedSymbol({ text, symbol }: HasSelectedSymbolInput): boolean {
     const badgeSuffixes = ['NATIVE']
     const tokens = text
       .toUpperCase()
@@ -534,8 +539,11 @@ export class SwapFlow extends BasePage {
     ).toUpperCase()
     const toText = ((await this.toCoinSelector.innerText()) || '').toUpperCase()
 
-    const fromOk = this.hasSelectedSymbol(fromText, fromSymbol)
-    const toOk = this.hasSelectedSymbol(toText, toSymbol)
+    const fromOk = this.hasSelectedSymbol({
+      text: fromText,
+      symbol: fromSymbol,
+    })
+    const toOk = this.hasSelectedSymbol({ text: toText, symbol: toSymbol })
 
     // Catch the "fell back to USDC" failure mode. If the test was not expecting
     // a stable, presence of a common stable symbol in the from selector is a
@@ -546,7 +554,9 @@ export class SwapFlow extends BasePage {
     )
     const unexpectedStableInSource =
       !expectingStableSource &&
-      stableSymbols.some(s => this.hasSelectedSymbol(fromText, s))
+      stableSymbols.some(s =>
+        this.hasSelectedSymbol({ text: fromText, symbol: s })
+      )
 
     if (!fromOk || !toOk || unexpectedStableInSource) {
       throw new Error(
@@ -610,19 +620,21 @@ export class SwapFlow extends BasePage {
     console.log(`Current selection: ${currentFromText} → ${currentToText}`)
 
     if (
-      this.hasSelectedSymbol(currentFromText, toSymbol) &&
-      this.hasSelectedSymbol(currentToText, fromSymbol)
+      this.hasSelectedSymbol({ text: currentFromText, symbol: toSymbol }) &&
+      this.hasSelectedSymbol({ text: currentToText, symbol: fromSymbol })
     ) {
       console.log('Using reverse button to swap direction')
       await this.reverse()
       await this.page.waitForTimeout(500)
-    } else if (!this.hasSelectedSymbol(currentFromText, fromSymbol)) {
+    } else if (
+      !this.hasSelectedSymbol({ text: currentFromText, symbol: fromSymbol })
+    ) {
       await this.selectFromCoin(fromSymbol)
     }
 
     const updatedToText =
       (await this.toCoinSelector.innerText().catch(() => '')) || ''
-    if (!this.hasSelectedSymbol(updatedToText, toSymbol)) {
+    if (!this.hasSelectedSymbol({ text: updatedToText, symbol: toSymbol })) {
       await this.selectToCoin(toSymbol)
     }
 
