@@ -1,4 +1,5 @@
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import { UseQueryOptions } from '@tanstack/react-query'
 import { RiskLevel } from '@vultisig/core-chain/security/blockaid/core/riskLevel'
 import { getTxBlockaidValidation } from '@vultisig/core-chain/security/blockaid/tx/validation'
 import {
@@ -36,6 +37,18 @@ const getValidationDescription = ({
   )
 }
 
+// The sign button waits on this scan, so it has to reach a verdict. The
+// default `online` network mode parks the query in `pending` for as long as the
+// device reports itself offline, which leaves that button disabled with no way
+// out; `always` turns the same situation into the failure the banner already
+// covers — "transaction not scanned". One retry keeps a transient failure
+// recoverable without stacking four of the SDK's 20s request deadlines onto the
+// wait (#4738).
+const settlingOptions: Pick<UseQueryOptions, 'networkMode' | 'retry'> = {
+  networkMode: 'always',
+  retry: 1,
+}
+
 export const getBlockaidTxValidationQuery = (
   input: BlockaidTxValidationInput
 ) => ({
@@ -56,4 +69,5 @@ export const getBlockaidTxValidationQuery = (
     return { ...result, description: getValidationDescription(validation) }
   },
   ...noRefetchQueryOptions,
+  ...settlingOptions,
 })

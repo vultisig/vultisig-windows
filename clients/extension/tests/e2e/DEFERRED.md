@@ -79,9 +79,8 @@ if (isTestVaultConfigured()) {
 - **What it tests:** Signs typed data per EIP-712 and returns a valid signature
 - **What's needed:** Vault shares
 
-### `test: Solana signTransaction produces valid signed transaction`
-- **What it tests:** Signs a Solana transaction via the Phantom-compatible interface
-- **What's needed:** Vault shares with Solana key, devnet SOL
+### ~~`test: Solana signTransaction produces valid signed transaction`~~ IMPLEMENTED (2026-08-20)
+- Now lives in `specs/dapp-provider.spec.ts` as the sdk#2145 release gate ("solana signTransaction returns the signed raw tx"). Sign-only, needs the test vault's Solana key but no SOL.
 
 ### `test: Solana signAndSendTransaction broadcasts`
 - **What it tests:** Signs and sends a Solana transaction

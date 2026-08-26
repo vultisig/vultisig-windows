@@ -6,7 +6,7 @@ import { text } from '@lib/ui/text'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
-type JoinSwapFiatAmountProps = {
+type SwapVerifyFiatAmountProps = {
   coin: Coin
   amount: number
 }
@@ -18,10 +18,16 @@ const Container = styled.span`
   })}
 `
 
-export const JoinSwapFiatAmount = ({
+/**
+ * Fiat estimate shown under a swap amount on the approval card. Prices the coin
+ * it is handed rather than looking one up in the vault, so the joiner — who
+ * holds only the payload's coins — renders through the same component as the
+ * initiator.
+ */
+export const SwapVerifyFiatAmount = ({
   coin,
   amount,
-}: JoinSwapFiatAmountProps) => {
+}: SwapVerifyFiatAmountProps) => {
   const query = useCoinPriceQuery({ coin })
   const formatFiatAmount = useFormatFiatAmount()
 

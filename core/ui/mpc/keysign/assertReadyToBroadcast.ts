@@ -1,4 +1,5 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { Tx } from '@vultisig/core-chain/tx'
 import { assertNativeSwapReadyForBroadcast } from '@vultisig/core-mpc/keysign/swap/assertNativeSwapReadyForBroadcast'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -8,6 +9,26 @@ import { BroadcastError } from './broadcastKeysignTx'
 type AssertReadyToBroadcastInput = {
   chain: Chain
   keysignPayload: KeysignPayload
+  txs: Tx[]
+}
+
+/**
+ * This device declining to broadcast a transaction that is already fully
+ * signed and compiled. Unlike an RPC rejection, a refusal says nothing about
+ * the transaction's fate: every signing device broadcasts independently, so a
+ * co-signer whose own check passed moments earlier may already have put the
+ * exact same bytes on-chain. The compiled txs (hashes included) ride along so
+ * the UI can keep the hash visible and present an unconfirmed state instead
+ * of a terminal failure.
+ */
+export class BroadcastRefusedError extends BroadcastError {
+  readonly txs: Tx[]
+
+  constructor(cause: unknown, txs: Tx[]) {
+    super(cause)
+    this.name = 'BroadcastRefusedError'
+    this.txs = txs
+  }
 }
 
 /**
@@ -22,19 +43,20 @@ type AssertReadyToBroadcastInput = {
  * and one refusal costs nothing beyond a duplicate broadcast that the other
  * device already handles.
  *
- * Reported as a {@link BroadcastError} because signing has already completed by
- * the time this runs: the failure belongs to the broadcast stage, and the
- * device/timeout copy the generic branch shows would be actively misleading.
+ * Because of that asymmetry a refusal must never look like a terminal failure:
+ * the signed txs are attached to the {@link BroadcastRefusedError} so the UI
+ * can surface each hash and track the real on-chain outcome.
  */
 export const assertReadyToBroadcast = async ({
   chain,
   keysignPayload,
+  txs,
 }: AssertReadyToBroadcastInput): Promise<void> => {
   const result = await attempt(() =>
     assertNativeSwapReadyForBroadcast({ chain, keysignPayload })
   )
 
   if ('error' in result) {
-    throw new BroadcastError(result.error)
+    throw new BroadcastRefusedError(result.error, txs)
   }
 }

@@ -7,6 +7,7 @@ import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { SwapVerifyFiatAmount } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyFiatAmount'
 import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { ClockIcon } from '@lib/ui/icons/ClockIcon'
@@ -25,7 +26,6 @@ import { useTranslation } from 'react-i18next'
 
 import { isOwnLimitOrderDestination } from './isOwnLimitOrderDestination'
 import { JoinKeysignNetworkFeeValue } from './JoinKeysignNetworkFeeValue'
-import { JoinSwapFiatAmount } from './JoinSwapFiatAmount'
 import { getLimitOrderBuyCoin } from './limitOrderBuyCoin'
 import { getLimitOrderUnitPriceLabel } from './limitOrderUnitPrice'
 import { getThorchainAssetTicker } from './thorchainAssetTicker'
@@ -55,7 +55,7 @@ const Leg = ({ coin, amount, ticker }: LegProps) => (
           {ticker}
         </Text>
       </Text>
-      {coin ? <JoinSwapFiatAmount coin={coin} amount={amount} /> : null}
+      {coin ? <SwapVerifyFiatAmount coin={coin} amount={amount} /> : null}
     </VStack>
   </HStack>
 )

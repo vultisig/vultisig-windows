@@ -38,7 +38,9 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 
 import { TxHashProvider } from '../../chain/state/txHash'
+import { BroadcastRefusedError } from './assertReadyToBroadcast'
 import { BroadcastError } from './broadcastKeysignTx'
+import { KeysignBroadcastRefusal } from './KeysignBroadcastRefusal'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 import { LimitOrderCancelDoneHint } from './tx/LimitOrderCancelDoneHint'
 
@@ -47,6 +49,14 @@ type KeysignSigningStepProps = Partial<OnBackProp> & {
   onStart?: () => void
   renderPending?: () => ReactNode
   toAddressLabel?: string
+}
+
+const isDklsMaliciousPartyError = (error: unknown) => {
+  if (error instanceof Error && error.name === 'DklsMaliciousPartyError') {
+    return true
+  }
+
+  return extractErrorMsg(error).includes('DKLS keysign aborted because party')
 }
 
 export const KeysignSigningStep = ({
@@ -270,6 +280,14 @@ export const KeysignSigningStep = ({
           )
         }
 
+        // Signing succeeded but this device refused to broadcast (e.g. the
+        // swap's inbound vault rotated mid-ceremony). Co-signers broadcast the
+        // same signed tx independently, so this is not a terminal failure:
+        // keep the hash on screen and track the real on-chain outcome.
+        if (error instanceof BroadcastRefusedError) {
+          return <KeysignBroadcastRefusal error={error} />
+        }
+
         // Signing succeeded but the network rejected the broadcast — headline it
         // as an on-chain failure, not a device/connection timeout. The raw RPC
         // reason stays available under "Show exact error".
@@ -280,6 +298,17 @@ export const KeysignSigningStep = ({
               error={error}
               title={t('broadcast_error')}
               description={t('broadcast_error_description')}
+            />
+          )
+        }
+
+        if (isDklsMaliciousPartyError(error)) {
+          return (
+            <FullPageFlowErrorState
+              variant="error"
+              error={error}
+              title={t('keysign_malicious_party_error')}
+              description={t('keysign_malicious_party_error_description')}
             />
           )
         }

@@ -2,7 +2,7 @@
   "name": "@clients/extension",
   "private": true,
   "version": "0.2.1",
-  "description": "Vultisig Extension integrates Vultisig into web applications, enabling users to securely sign blockchain transactions.",
+  "description": "Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 30+ chains.",
   "author": {
     "name": "Vultisig",
     "email": "info@vultisig.com",

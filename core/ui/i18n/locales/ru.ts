@@ -882,6 +882,9 @@ export const ru = {
   signed_signature: 'Подписанная подпись',
   signing_address: 'Адрес подписи',
   signing_error: 'Ошибка подписи. Попробуйте ещё раз.',
+  keysign_malicious_party_error: 'Обнаружен вредоносный подписант',
+  keysign_malicious_party_error_description:
+    'Keysign остановлен, потому что один из подписантов вел себя вредоносно. Не используйте этого подписанта для Keysign снова.',
   signing_method: 'Метод подписи',
   silver: 'Серебро',
   site: 'Сайт',
@@ -1907,4 +1910,10 @@ export const ru = {
   kamino_earn_deposited: 'Внесено: {{amount}}',
   kamino_earn_earned: 'Заработано: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'на {{chain}}',
+  max_total_fee: 'Максимальная общая сумма комиссии',
+  broadcast_refused: 'Трансляция не подтверждена',
+  broadcast_refused_description:
+    'Ваши устройства подписали эту транзакцию, но это устройство отказалось передавать её после окончательной проверки безопасности. Возможно, другое устройство, передающее транзакцию, всё равно её передало — следите за статусом ниже и подтвердите результат, прежде чем подписывать её снова.',
+  not_seen_onchain: 'Пока не обнаружено в сети.',
 }

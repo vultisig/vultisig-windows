@@ -897,6 +897,9 @@ export const it = {
   signed_signature: 'Firma firmata',
   signing_address: 'Indirizzo di firma',
   signing_error: 'Errore di firma. Riprova.',
+  keysign_malicious_party_error: 'Firmatario malevolo rilevato',
+  keysign_malicious_party_error_description:
+    'Keysign è stato interrotto perché un firmatario si è comportato in modo malevolo. Non usare di nuovo quel firmatario per Keysign.',
   signing_method: 'Metodo di firma',
   silver: 'Argento',
   site: 'Sito',
@@ -1934,4 +1937,10 @@ export const it = {
   kamino_earn_deposited: 'Depositato: {{amount}}',
   kamino_earn_earned: 'Guadagnato: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'su {{chain}}',
+  max_total_fee: 'Tariffa totale massima',
+  broadcast_refused: 'Trasmissione non confermata',
+  broadcast_refused_description:
+    "I tuoi dispositivi hanno firmato questa transazione, ma questo dispositivo ha rifiutato di trasmetterla dopo un controllo di sicurezza finale. Un altro dispositivo firmatario potrebbe averla comunque trasmessa: controlla lo stato qui sotto e conferma l'esito prima di firmare di nuovo.",
+  not_seen_onchain: 'Non ancora visualizzato sulla blockchain',
 }

@@ -894,6 +894,9 @@ export const pt = {
   signed_signature: 'Assinatura assinada',
   signing_address: 'Endereço de assinatura',
   signing_error: 'Erro ao assinar. Tente novamente.',
+  keysign_malicious_party_error: 'Signatário malicioso detectado',
+  keysign_malicious_party_error_description:
+    'O Keysign foi interrompido porque um signatário se comportou de forma maliciosa. Não use esse signatário novamente para Keysign.',
   signing_method: 'Método de assinatura',
   silver: 'Prata',
   site: 'Site',
@@ -1931,4 +1934,10 @@ export const pt = {
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganho: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  on_chain: 'em {{chain}}',
+  max_total_fee: 'Taxa máxima total',
+  broadcast_refused: 'Transmissão não confirmada',
+  broadcast_refused_description:
+    'Seus dispositivos assinaram esta transação, mas este dispositivo recusou-se a transmiti-la após uma verificação de segurança final. Outro dispositivo de assinatura pode tê-la transmitido mesmo assim — observe o status abaixo e confirme o resultado antes de assinar novamente.',
+  not_seen_onchain: 'Ainda não foi visto na blockchain.',
 }
