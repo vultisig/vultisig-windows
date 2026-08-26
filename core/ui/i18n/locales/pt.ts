@@ -1940,4 +1940,5 @@ export const pt = {
   broadcast_refused_description:
     'Seus dispositivos assinaram esta transação, mas este dispositivo recusou-se a transmiti-la após uma verificação de segurança final. Outro dispositivo de assinatura pode tê-la transmitido mesmo assim — observe o status abaixo e confirme o resultado antes de assinar novamente.',
   not_seen_onchain: 'Ainda não foi visto na blockchain.',
+  some_balances_failed_to_load: 'Alguns saldos não foram carregados.',
 }

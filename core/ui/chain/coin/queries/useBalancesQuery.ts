@@ -131,6 +131,25 @@ type UseBalancesQueryOptions = {
   live?: boolean
 }
 
+type BalanceQueryState = {
+  data: unknown
+  errorUpdateCount: number
+}
+
+/**
+ * A balance read that has errored at least once and still has no data. React
+ * Query clears `error` and reports the query as pending again on every
+ * background refetch, so this is judged from `errorUpdateCount` to keep a
+ * failed read failed while it is retried.
+ */
+const isFailedBalanceQuery = ({ data, errorUpdateCount }: BalanceQueryState) =>
+  data === undefined && errorUpdateCount > 0
+
+/**
+ * Balances of the given coins merged into one record keyed by account coin key.
+ * `failedCoins` lists the keys whose read failed and has no data yet, and stays
+ * populated while those reads are retried in the background.
+ */
 export const useBalancesQuery = <T extends CoinBalanceResolverInput>(
   inputs: Exact<CoinBalanceResolverInput, T>[],
   { live = true }: UseBalancesQueryOptions = {}
@@ -141,8 +160,14 @@ export const useBalancesQuery = <T extends CoinBalanceResolverInput>(
     ),
   })
 
-  return useCombineQueries({
+  const combinedQuery = useCombineQueries({
     queries,
     joinData: data => mergeRecords(...data),
   })
+
+  const failedCoins = inputs
+    .filter((_, index) => isFailedBalanceQuery(queries[index]))
+    .map(input => accountCoinKeyToString(input))
+
+  return { ...combinedQuery, failedCoins }
 }

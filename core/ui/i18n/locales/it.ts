@@ -1943,4 +1943,5 @@ export const it = {
   broadcast_refused_description:
     "I tuoi dispositivi hanno firmato questa transazione, ma questo dispositivo ha rifiutato di trasmetterla dopo un controllo di sicurezza finale. Un altro dispositivo firmatario potrebbe averla comunque trasmessa: controlla lo stato qui sotto e conferma l'esito prima di firmare di nuovo.",
   not_seen_onchain: 'Non ancora visualizzato sulla blockchain',
+  some_balances_failed_to_load: 'Alcuni saldi non sono stati caricati',
 }

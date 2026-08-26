@@ -6,6 +6,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { List } from '@lib/ui/list'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
@@ -13,56 +14,73 @@ import { useTheme } from 'styled-components'
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useSearchChain } from '../../state/searchChainProvider'
 import { VaultChainItem } from '../VaultChainItem'
+import { VaultChainItemBalance } from '../VaultChainItemBalance'
 
 type PortfolioViewState = 'noChains' | 'noSearchResults' | 'list'
 
+/**
+ * Vault home chain list. Chains whose balances resolved render with their
+ * values; a chain still waiting for its first balance keeps its row with a
+ * spinner, and a chain whose balance read failed keeps its row with a "failed
+ * to load" state instead of disappearing or showing zero. The page-level
+ * loading and failure states only appear when no chain resolved at all.
+ */
 export const Portfolio = () => {
-  const {
-    data: vaultChainBalancesData,
-    errors,
-    isPending,
-  } = useVaultChainsBalancesQuery()
-  const vaultChainBalances = vaultChainBalancesData ?? []
+  const { data, isPending } = useVaultChainsBalancesQuery()
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const { iconStyle } = useTheme()
 
-  const normalizedQuery = deferredQuery.trim().toLowerCase()
-
-  const filteredBalances = normalizedQuery
-    ? vaultChainBalances.filter(({ chain, coins }) => {
-        const normalizedChain = String(chain).toLowerCase()
-
-        if (normalizedChain.includes(normalizedQuery)) {
-          return true
-        }
-
-        return coins.some(coin =>
-          coin.ticker?.toLowerCase().includes(normalizedQuery)
-        )
-      })
-    : vaultChainBalances
-
-  const viewState: PortfolioViewState =
-    vaultChainBalances.length === 0
-      ? 'noChains'
-      : filteredBalances.length === 0 && normalizedQuery
-        ? 'noSearchResults'
-        : 'list'
-
   const handleCustomize = () => navigate({ id: 'manageVaultChains' })
 
-  if (!vaultChainBalancesData) {
-    if (errors.length > 0) {
-      return <Text centerHorizontally>{t('failed_to_load')}</Text>
-    }
-
-    if (isPending) {
-      return <Spinner />
-    }
+  if (!data) {
+    return isPending ? (
+      <Spinner />
+    ) : (
+      <Text centerHorizontally>{t('failed_to_load')}</Text>
+    )
   }
+
+  const { balances, loadingChains, failedChains } = data
+
+  const normalizedQuery = deferredQuery.trim().toLowerCase()
+
+  const matchesChain = (chain: Chain) =>
+    chain.toLowerCase().includes(normalizedQuery)
+
+  const filteredBalances = normalizedQuery
+    ? balances.filter(
+        ({ chain, coins }) =>
+          matchesChain(chain) ||
+          coins.some(coin =>
+            coin.ticker.toLowerCase().includes(normalizedQuery)
+          )
+      )
+    : balances
+
+  const filteredLoadingChains = normalizedQuery
+    ? loadingChains.filter(matchesChain)
+    : loadingChains
+
+  const filteredFailedChains = normalizedQuery
+    ? failedChains.filter(matchesChain)
+    : failedChains
+
+  const hasChains =
+    balances.length + loadingChains.length + failedChains.length > 0
+  const hasMatches =
+    filteredBalances.length +
+      filteredLoadingChains.length +
+      filteredFailedChains.length >
+    0
+
+  const viewState: PortfolioViewState = !hasChains
+    ? 'noChains'
+    : !hasMatches && normalizedQuery
+      ? 'noSearchResults'
+      : 'list'
 
   return (
     <Match
@@ -96,8 +114,22 @@ export const Portfolio = () => {
           border={iconStyle === 'station' ? 'solid' : undefined}
           radius={iconStyle === 'station' ? 24 : undefined}
         >
-          {filteredBalances.map(balance => (
-            <VaultChainItem key={balance.chain} balance={balance} />
+          {filteredBalances.map(({ chain, coins }) => (
+            <VaultChainItem key={chain} chain={chain}>
+              <VaultChainItemBalance coins={coins} />
+            </VaultChainItem>
+          ))}
+          {filteredLoadingChains.map(chain => (
+            <VaultChainItem key={chain} chain={chain}>
+              <Spinner />
+            </VaultChainItem>
+          ))}
+          {filteredFailedChains.map(chain => (
+            <VaultChainItem key={chain} chain={chain}>
+              <Text color="danger" weight="550" size={14}>
+                {t('failed_to_load')}
+              </Text>
+            </VaultChainItem>
           ))}
         </List>
       )}
