@@ -15,9 +15,9 @@ import {
 } from '@clients/extension/src/brand/manifest'
 
 const baseManifest: ExtensionManifest = {
-  name: 'Vultisig Extension',
+  name: 'Vultisig: Seedless Crypto Wallet',
   description:
-    'Vultisig Extension integrates Vultisig into web applications, enabling users to securely sign blockchain transactions.',
+    'Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 30+ chains.',
   author: {
     name: 'Vultisig',
     email: 'info@vultisig.com',
@@ -69,8 +69,8 @@ describe('extension brand config', () => {
       extensionBrandConfigs.vultisig
     )
 
-    expect(manifest.name).toBe('Vultisig Extension')
-    expect(manifest.description).toContain('Vultisig Extension')
+    expect(manifest.name).toBe('Vultisig: Seedless Crypto Wallet')
+    expect(manifest.description).toContain('MPC crypto wallet')
     expect(manifest.author?.name).toBe('Vultisig')
     expect(manifest.icons?.['128']).toBe('icon128.png')
   })
