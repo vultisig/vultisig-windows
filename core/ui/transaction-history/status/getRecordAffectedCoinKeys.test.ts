@@ -1,6 +1,4 @@
 import { Chain } from '@vultisig/core-chain/Chain'
-import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { describe, expect, it } from 'vitest'
 
 import {
@@ -14,6 +12,7 @@ import { getRecordAffectedCoinKeys } from './getRecordAffectedCoinKeys'
 
 const evmAddress = '0x1111111111111111111111111111111111111111'
 const thorAddress = 'thor1wallet'
+const rippleAddress = 'rWallet'
 const usdcId = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
 
 const vaultAddresses: Partial<Record<Chain, string>> = {
@@ -90,7 +89,7 @@ const openedTrustLine: TrustLineTransactionRecord = {
   type: 'trustLine',
   chain: Chain.Ripple,
   data: {
-    fromAddress: 'rWallet',
+    fromAddress: rippleAddress,
     issuer: 'rIssuer',
     token: 'USD',
     tokenLogo: 'usd',
@@ -103,56 +102,30 @@ const openedTrustLine: TrustLineTransactionRecord = {
 const keysFor = (
   record: TransactionRecord,
   addresses: Partial<Record<Chain, string>> = vaultAddresses
-) =>
-  getRecordAffectedCoinKeys({ record, vaultAddresses: addresses }).map(
-    accountCoinKeyToString
-  )
+) => getRecordAffectedCoinKeys({ record, vaultAddresses: addresses })
 
-const ethFeeKey = accountCoinKeyToString({
-  ...chainFeeCoin[Chain.Ethereum],
-  address: evmAddress,
-})
+// Compared whole rather than through `accountCoinKeyToString`: a key carrying
+// coin metadata stringifies the same as a bare one yet matches no cached
+// balance query, so only an exact comparison proves the keys usable.
+const ethKey = { chain: Chain.Ethereum, address: evmAddress }
+const usdcKey = { chain: Chain.Ethereum, id: usdcId, address: evmAddress }
+const runeKey = { chain: Chain.THORChain, address: thorAddress }
+const xrpKey = { chain: Chain.Ripple, address: rippleAddress }
 
 describe('getRecordAffectedCoinKeys', () => {
   it('pairs a token send with its chain fee coin', () => {
-    const result = keysFor(usdcSend)
-
-    expect(result).toContain(
-      accountCoinKeyToString({
-        chain: Chain.Ethereum,
-        id: usdcId,
-        address: evmAddress,
-      })
-    )
-    expect(result).toContain(ethFeeKey)
-    expect(result).toHaveLength(2)
+    expect(keysFor(usdcSend)).toEqual([usdcKey, ethKey])
   })
 
   it('covers both legs and the source fee coin of a swap', () => {
-    const result = keysFor(usdcToRuneSwap)
-
-    expect(result).toContain(
-      accountCoinKeyToString({
-        chain: Chain.Ethereum,
-        id: usdcId,
-        address: evmAddress,
-      })
-    )
-    expect(result).toContain(
-      accountCoinKeyToString({ chain: Chain.THORChain, address: thorAddress })
-    )
-    expect(result).toContain(ethFeeKey)
+    expect(keysFor(usdcToRuneSwap)).toEqual([usdcKey, ethKey, runeKey])
   })
 
   it('drops a swap leg the vault has no address for', () => {
-    const result = keysFor(usdcToRuneSwap, {
-      [Chain.Ethereum]: evmAddress,
-    })
-
-    expect(result).not.toContain(
-      accountCoinKeyToString({ chain: Chain.THORChain, address: thorAddress })
-    )
-    expect(result).toContain(ethFeeKey)
+    expect(keysFor(usdcToRuneSwap, { [Chain.Ethereum]: evmAddress })).toEqual([
+      usdcKey,
+      ethKey,
+    ])
   })
 
   it('leaves limit orders to their own tracker', () => {
@@ -160,13 +133,6 @@ describe('getRecordAffectedCoinKeys', () => {
   })
 
   it('refreshes the fee coin a trust line burned', () => {
-    const result = keysFor(openedTrustLine)
-
-    expect(result).toEqual([
-      accountCoinKeyToString({
-        ...chainFeeCoin[Chain.Ripple],
-        address: 'rWallet',
-      }),
-    ])
+    expect(keysFor(openedTrustLine)).toEqual([xrpKey])
   })
 })

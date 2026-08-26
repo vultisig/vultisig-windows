@@ -1,6 +1,21 @@
+import { create } from '@bufbuild/protobuf'
+import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { balancePersistQueryOptions } from '@lib/ui/query/utils/options'
 import { QueryClient, QueryObserver } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
+import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { describe, expect, it, vi } from 'vitest'
+
+import { getKeysignAffectedCoinKeys } from './getKeysignAffectedCoinKeys'
+
+vi.mock('@vultisig/core-chain/coin/balance', () => ({
+  getCoinBalance: vi.fn(),
+}))
+
+vi.mock('@vultisig/core-chain/coin/balance/getEvmChainBalances', () => ({
+  getEvmChainBalances: vi.fn(),
+}))
 
 const key = ['coinBalance', { chain: 'Ethereum', id: 'usdt', address: '0x1' }]
 
@@ -59,5 +74,45 @@ describe('balance invalidation at broadcast', () => {
       expect(observer.getCurrentResult().data?.v).toBe(500n)
     )
     unsubscribe()
+  })
+
+  // Drives the keys the recorder derives from the payload through the same
+  // `getBalanceQueryKey` the app caches balances under, so a key shape the
+  // cache cannot match fails here rather than silently skipping a balance.
+  it('marks both the spent token and the fee coin stale for a token send', async () => {
+    const address = '0x1111111111111111111111111111111111111111'
+    const usdcId = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+    const queryClient = new QueryClient()
+    const cachedKeys = [
+      getBalanceQueryKey({ chain: Chain.Ethereum, id: usdcId, address }),
+      getBalanceQueryKey({ chain: Chain.Ethereum, address }),
+    ]
+    cachedKeys.forEach(cachedKey =>
+      queryClient.setQueryData(cachedKey, { v: 0n })
+    )
+
+    const payload = create(KeysignPayloadSchema, {
+      coin: create(CoinSchema, {
+        chain: Chain.Ethereum,
+        ticker: 'USDC',
+        contractAddress: usdcId,
+        address,
+        decimals: 6,
+        isNativeToken: false,
+      }),
+    })
+
+    await Promise.all(
+      getKeysignAffectedCoinKeys(payload).map(coinKey =>
+        queryClient.invalidateQueries({
+          queryKey: getBalanceQueryKey(coinKey),
+          refetchType: 'none',
+        })
+      )
+    )
+
+    cachedKeys.forEach(cachedKey =>
+      expect(queryClient.getQueryState(cachedKey)?.isInvalidated).toBe(true)
+    )
   })
 })

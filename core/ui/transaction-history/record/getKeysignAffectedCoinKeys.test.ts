@@ -1,7 +1,5 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -13,6 +11,7 @@ import { getKeysignAffectedCoinKeys } from './getKeysignAffectedCoinKeys'
 
 const evmAddress = '0x1111111111111111111111111111111111111111'
 const thorAddress = 'thor1wallet'
+const usdcId = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
 
 const ethCoin = {
   chain: Chain.Ethereum,
@@ -25,7 +24,7 @@ const ethCoin = {
 const usdcCoin = {
   chain: Chain.Ethereum,
   ticker: 'USDC',
-  contractAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+  contractAddress: usdcId,
   address: evmAddress,
   decimals: 6,
   isNativeToken: false,
@@ -39,34 +38,32 @@ const runeCoin = {
   isNativeToken: true,
 }
 
-const keys = (payload: Parameters<typeof getKeysignAffectedCoinKeys>[0]) =>
-  getKeysignAffectedCoinKeys(payload).map(accountCoinKeyToString)
+// The keys are compared whole, not through `accountCoinKeyToString`: a key
+// carrying coin metadata stringifies the same as a bare one yet matches no
+// cached balance query, so only an exact comparison proves the keys usable.
+const ethKey = { chain: Chain.Ethereum, address: evmAddress }
+const usdcKey = { chain: Chain.Ethereum, id: usdcId, address: evmAddress }
+const runeKey = { chain: Chain.THORChain, address: thorAddress }
 
 describe('getKeysignAffectedCoinKeys', () => {
-  it('includes the native fee coin when a token is spent', () => {
-    const result = keys(
+  it('pairs a token spend with the native fee coin', () => {
+    const result = getKeysignAffectedCoinKeys(
       create(KeysignPayloadSchema, { coin: create(CoinSchema, usdcCoin) })
     )
 
-    expect(result).toContain(
-      accountCoinKeyToString({
-        ...chainFeeCoin[Chain.Ethereum],
-        address: evmAddress,
-      })
-    )
-    expect(result).toHaveLength(2)
+    expect(result).toEqual([usdcKey, ethKey])
   })
 
   it('dedupes when the spent coin is already the fee coin', () => {
-    const result = keys(
+    const result = getKeysignAffectedCoinKeys(
       create(KeysignPayloadSchema, { coin: create(CoinSchema, ethCoin) })
     )
 
-    expect(result).toHaveLength(1)
+    expect(result).toEqual([ethKey])
   })
 
   it('includes the destination coin of a native swap', () => {
-    const result = keys(
+    const result = getKeysignAffectedCoinKeys(
       create(KeysignPayloadSchema, {
         coin: create(CoinSchema, runeCoin),
         swapPayload: {
@@ -79,12 +76,11 @@ describe('getKeysignAffectedCoinKeys', () => {
       })
     )
 
-    expect(result).toContain(accountCoinKeyToString(ethCoin))
-    expect(result).toContain(accountCoinKeyToString(runeCoin))
+    expect(result).toEqual([runeKey, ethKey])
   })
 
   it('includes the destination coin of a general swap', () => {
-    const result = keys(
+    const result = getKeysignAffectedCoinKeys(
       create(KeysignPayloadSchema, {
         coin: create(CoinSchema, usdcCoin),
         swapPayload: {
@@ -97,14 +93,13 @@ describe('getKeysignAffectedCoinKeys', () => {
       })
     )
 
-    expect(result).toContain(accountCoinKeyToString(ethCoin))
-    expect(result).toContain(accountCoinKeyToString(usdcCoin))
+    expect(result).toEqual([usdcKey, ethKey])
   })
 
   // The helper runs inside a keysign success handler, so a deprecated payload
   // must not surface as a signing failure on an already-broadcast transaction.
   it('still returns the spendable keys for a deprecated kyberswap payload', () => {
-    const result = keys(
+    const result = getKeysignAffectedCoinKeys(
       create(KeysignPayloadSchema, {
         coin: create(CoinSchema, usdcCoin),
         swapPayload: {
@@ -114,12 +109,6 @@ describe('getKeysignAffectedCoinKeys', () => {
       })
     )
 
-    expect(result).toContain(accountCoinKeyToString(usdcCoin))
-    expect(result).toContain(
-      accountCoinKeyToString({
-        ...chainFeeCoin[Chain.Ethereum],
-        address: evmAddress,
-      })
-    )
+    expect(result).toEqual([usdcKey, ethKey])
   })
 })

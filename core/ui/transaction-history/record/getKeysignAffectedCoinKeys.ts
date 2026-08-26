@@ -1,18 +1,17 @@
 import {
   AccountCoinKey,
-  accountCoinKeyToString,
   extractAccountCoinKey,
 } from '@vultisig/core-chain/coin/AccountCoin'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { Coin } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+
+import { getFeeCoinKey, withoutDuplicateCoinKeys } from '../coinKeys'
 
 /**
  * Every balance a broadcast keysign can move: the coin being spent, the coin a
@@ -31,7 +30,7 @@ export const getKeysignAffectedCoinKeys = (
 
   const keys: AccountCoinKey[] = [
     extractAccountCoinKey(sourceCoin),
-    { ...chainFeeCoin[chain], address },
+    getFeeCoinKey({ chain, address }),
   ]
 
   // Legacy kyberswap payloads make `getKeysignSwapPayload` throw. This runs in a
@@ -54,9 +53,5 @@ export const getKeysignAffectedCoinKeys = (
     keys.push(extractAccountCoinKey(fromCommCoin(destinationCoin)))
   }
 
-  return withoutDuplicates(
-    keys,
-    (one, another) =>
-      accountCoinKeyToString(one) === accountCoinKeyToString(another)
-  )
+  return withoutDuplicateCoinKeys(keys)
 }
