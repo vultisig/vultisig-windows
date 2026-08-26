@@ -3,7 +3,7 @@ import {
   balancePersistQueryOptions,
   persistQueryOptions,
 } from '@lib/ui/query/utils/options'
-import { QueryClient, useQueries } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
@@ -106,9 +106,6 @@ export function getBalanceQueryKey<T extends CoinBalanceResolverInput>(
 }
 
 export const balanceQueryKey = ['coinBalance'] as const
-
-export const invalidateBalanceQueries = (queryClient: QueryClient) =>
-  queryClient.invalidateQueries({ queryKey: balanceQueryKey })
 
 export const getBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
   input: Exact<CoinBalanceResolverInput, T>
