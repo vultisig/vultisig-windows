@@ -1907,4 +1907,5 @@ export const hr = {
   broadcast_refused_description:
     'Vaši su uređaji potpisali ovu transakciju, ali ovaj je uređaj odbio emitirati je nakon završne sigurnosne provjere. Drugi uređaj za potpisivanje ju je možda ipak emitirao - pogledajte status u nastavku i potvrdite ishod prije ponovnog potpisivanja.',
   not_seen_onchain: 'Još nije viđeno na lancu',
+  some_balances_failed_to_load: 'Učitavanje nekih stanja nije uspjelo',
 }

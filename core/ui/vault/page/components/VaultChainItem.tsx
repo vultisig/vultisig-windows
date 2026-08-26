@@ -1,9 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useHandleVaultChainItemPress } from '@core/ui/vault/page/components/useHandleVaultChainItemPress'
-import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -11,26 +8,27 @@ import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
 import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
+import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
-import { sum } from '@vultisig/lib-utils/array/sum'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
-import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
 type VaultChainItemProps = {
-  balance: VaultChainBalance
-}
+  chain: Chain
+} & ChildrenProp
 
-export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
-  const { chain, coins } = balance
-
+/**
+ * Portfolio row for one chain: logo, name, copyable address and navigation to
+ * the chain page. `children` fills the balance slot on the right, so the row
+ * looks the same whether the chain's balances resolved or failed to load.
+ */
+export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
   const addresses = useCurrentVaultAddresses()
   const address = shouldBePresent(
     addresses[chain],
@@ -66,20 +64,6 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
       message: t('chain_address_copied', { chain }),
     })
   }
-
-  const formatFiatAmount = useFormatFiatAmount()
-
-  const singleCoin = coins.length === 1 ? coins[0] : null
-
-  const totalAmount = sum(
-    coins.map(coin =>
-      getCoinValue({
-        price: coin.price ?? 0,
-        amount: coin.amount,
-        decimals: coin.decimals,
-      })
-    )
-  )
 
   return (
     <StyledPanel data-testid="VaultChainItem-Panel" {...pressHandlers}>
@@ -126,27 +110,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 justifyContent="space-between"
                 alignItems="flex-end"
               >
-                <Text centerVertically color="contrast" weight="550" size={14}>
-                  <BalanceVisibilityAware>
-                    {formatFiatAmount(totalAmount)}
-                  </BalanceVisibilityAware>
-                </Text>
-                <Text color="shy" weight="500" size={12} centerVertically>
-                  {singleCoin ? (
-                    <BalanceVisibilityAware>
-                      {formatAmount(
-                        fromChainAmount(singleCoin.amount, singleCoin.decimals),
-                        { precision: 'high', ticker: singleCoin.ticker }
-                      )}
-                    </BalanceVisibilityAware>
-                  ) : coins.length > 1 ? (
-                    <BalanceVisibilityAware>
-                      <>
-                        {coins.length} {t('assets')}
-                      </>
-                    </BalanceVisibilityAware>
-                  ) : null}
-                </Text>
+                {children}
               </VStack>
               <IconWrapper>
                 {iconStyle === 'station' ? (

@@ -1937,4 +1937,5 @@ export const es = {
   broadcast_refused_description:
     'Tus dispositivos firmaron esta transacción, pero este dispositivo se negó a transmitirla tras una comprobación de seguridad final. Es posible que otro dispositivo firmante la haya transmitido de todos modos; consulta el estado a continuación y confirma el resultado antes de volver a firmar.',
   not_seen_onchain: 'Aún no se ha visto en la cadena de bloques.',
+  some_balances_failed_to_load: 'Algunos saldos no se cargaron correctamente.',
 }
