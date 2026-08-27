@@ -33,7 +33,7 @@ export const AgentBottomNavigationContent = ({
   return (
     <NavContainer data-testid="bottom-navigation">
       <NavSurface $isExtension={isExtension} />
-      <TabsRow data-testid="bottom-navigation-tabs">
+      <TabsRow $isExtension={isExtension} data-testid="bottom-navigation-tabs">
         <TabButton
           $isActive={activeTab === 'wallet'}
           onClick={() => onTabChange('wallet')}
@@ -104,18 +104,23 @@ const NavSurface = styled.div<{ $isExtension: boolean }>`
         : theme.colors.foregroundExtra.toCssValue()};
 `
 
-const TabsRow = styled.div`
+const TabsRow = styled.div<{ $isExtension: boolean }>`
   position: relative;
   display: flex;
   z-index: 30;
   width: 100%;
   max-width: ${tabsMaxWidth}px;
-  padding-right: ${cameraButtonSize + cameraButtonInset}px;
+  padding-right: ${({ $isExtension }) =>
+    $isExtension ? 0 : cameraButtonSize + cameraButtonInset}px;
 `
 
 const FloatingCamera = styled(UnstyledButton)<{ $isExtension: boolean }>`
   position: ${({ $isExtension }) => ($isExtension ? 'fixed' : 'absolute')};
-  right: ${cameraButtonInset}px;
+  right: ${({ $isExtension }) =>
+    $isExtension ? 'auto' : `${cameraButtonInset}px`};
+  left: ${({ $isExtension }) => ($isExtension ? '50%' : 'auto')};
+  transform: ${({ $isExtension }) =>
+    $isExtension ? 'translateX(-50%)' : 'none'};
   ${({ $isExtension }) =>
     $isExtension
       ? css`

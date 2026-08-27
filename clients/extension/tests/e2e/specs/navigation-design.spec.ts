@@ -85,6 +85,8 @@ test('extension vault matches the Figma home shell', async ({
   const portfolio = page.getByTestId('vault-portfolio')
   const navigation = page.getByTestId('bottom-navigation')
   const tabs = page.getByTestId('bottom-navigation-tabs')
+  const walletTab = tabs.getByText('Wallet', { exact: true }).locator('..')
+  const earnTab = tabs.getByText('Earn', { exact: true }).locator('..')
   const scan = page.getByTestId('bottom-navigation-scan')
 
   await expect(header).toBeVisible()
@@ -103,6 +105,7 @@ test('extension vault matches the Figma home shell', async ({
   await expect(tabs.getByText('Wallet', { exact: true })).toBeVisible()
   await expect(tabs.getByText('Earn', { exact: true })).toBeVisible()
   await expect(tabs.getByText('Agent', { exact: true })).toBeHidden()
+  await expect(tabs.getByText('Card', { exact: true })).toBeHidden()
   await expect(scan).toBeVisible()
   await page.waitForTimeout(250)
 
@@ -114,6 +117,8 @@ test('extension vault matches the Figma home shell', async ({
     bannerBox,
     portfolioBox,
     navigationBox,
+    walletTabBox,
+    earnTabBox,
     scanBox,
   ] = await Promise.all([
     header.boundingBox(),
@@ -123,6 +128,8 @@ test('extension vault matches the Figma home shell', async ({
     banner.boundingBox(),
     portfolio.boundingBox(),
     navigation.boundingBox(),
+    walletTab.boundingBox(),
+    earnTab.boundingBox(),
     scan.boundingBox(),
   ])
   const balanceActionsComputedStyle = await balanceActions.evaluate(element => {
@@ -151,6 +158,8 @@ test('extension vault matches the Figma home shell', async ({
           upgradeBanner: bannerBox,
           portfolio: portfolioBox,
           bottomNavigation: navigationBox,
+          walletTab: walletTabBox,
+          earnTab: earnTabBox,
           scan: scanBox,
         },
         null,
@@ -186,7 +195,19 @@ test('extension vault matches the Figma home shell', async ({
   expect(bannerBox).toEqual({ x: 16, y: 298, width: 328, height: 81 })
   expect(portfolioBox).toMatchObject({ x: 16, y: 419, width: 328 })
   expect(navigationBox).toEqual({ x: 0, y: 584, width: 360, height: 66 })
-  expect(scanBox).toEqual({ x: 276, y: 514, width: 56, height: 56 })
+  expect(walletTabBox).toEqual({ x: 12, y: 592, width: 168, height: 48 })
+  expect(earnTabBox).toEqual({ x: 180, y: 592, width: 168, height: 48 })
+  expect(scanBox).toEqual({ x: 152, y: 514, width: 56, height: 56 })
+  expect(scanBox!.x + scanBox!.width / 2).toBe(
+    navigationBox!.x + navigationBox!.width / 2
+  )
+  expect(
+    scanBox!.x +
+      scanBox!.width / 2 -
+      (walletTabBox!.x + walletTabBox!.width / 2)
+  ).toBe(
+    earnTabBox!.x + earnTabBox!.width / 2 - (scanBox!.x + scanBox!.width / 2)
+  )
   expect(scanBox!.y + scanBox!.height).toBeLessThan(navigationBox!.y)
 
   await tabs.getByText('Earn', { exact: true }).click()
