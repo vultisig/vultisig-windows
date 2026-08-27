@@ -1,6 +1,8 @@
 import { VaultAllKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
+import { passcodeEncryptionConfig } from './config'
+import { getStoredPasscodeLength } from './passcodePolicy'
 import { decryptSample } from './sample'
 import {
   decryptVaultAllKeyShares,
@@ -51,6 +53,62 @@ type VerifyPasscodeInput = PasscodeLockState & {
   passcode: string
 }
 
+type PasscodeEntryInput = VerifyPasscodeInput & {
+  allowProoflessLegacy?: boolean
+  storedPasscodeLength?: number
+}
+
+type PasscodeEntryVerification = 'incomplete' | 'invalid' | 'valid'
+
+/**
+ * Number of input slots to show on the lock screen.
+ *
+ * A stored proof carries enough metadata to preserve the passcode length used
+ * when it was written. When that proof is gone, encrypted shares prove that a
+ * passcode still exists but cannot reveal its length, so recovery shows the
+ * current six-digit policy. A legacy five-digit passcode can still be submitted
+ * explicitly, but is never probed automatically while the sixth digit is being
+ * entered.
+ */
+export const getPasscodeEntryLength = ({
+  encryptedSample,
+  storedPasscodeLength,
+}: Pick<PasscodeEntryInput, 'encryptedSample' | 'storedPasscodeLength'>) =>
+  encryptedSample === null
+    ? passcodeEncryptionConfig.passcodeLength
+    : getStoredPasscodeLength(storedPasscodeLength)
+
+/**
+ * Whether the entered passcode is complete enough to verify.
+ *
+ * Proof-backed candidates use the stored passcode length. Proofless recovery
+ * uses the current length unless the user explicitly submits a legacy-length
+ * candidate through `allowProoflessLegacy`.
+ */
+export const isPasscodeEntryCandidate = ({
+  allowProoflessLegacy = false,
+  encryptedSample,
+  passcode,
+  storedPasscodeLength,
+}: Pick<
+  PasscodeEntryInput,
+  | 'allowProoflessLegacy'
+  | 'encryptedSample'
+  | 'passcode'
+  | 'storedPasscodeLength'
+>): boolean => {
+  const isExplicitLegacyRecovery =
+    allowProoflessLegacy &&
+    encryptedSample === null &&
+    passcode.length === passcodeEncryptionConfig.legacyPasscodeLength
+
+  return (
+    isExplicitLegacyRecovery ||
+    passcode.length ===
+      getPasscodeEntryLength({ encryptedSample, storedPasscodeLength })
+  )
+}
+
 /**
  * Whether a passcode opens what is actually stored.
  *
@@ -92,6 +150,31 @@ export const verifyPasscode = async ({
   )
 
   return 'data' in result
+}
+
+/**
+ * Verify one complete lock-screen candidate.
+ *
+ * Only the proof-declared length, the current six-digit recovery length, or an
+ * explicitly submitted proofless legacy value reaches the expensive verifier.
+ * This keeps every failed verification inside the normal attempt throttle.
+ */
+export const verifyPasscodeEntry = async ({
+  storedPasscodeLength,
+  ...input
+}: PasscodeEntryInput): Promise<PasscodeEntryVerification> => {
+  if (
+    !isPasscodeEntryCandidate({
+      allowProoflessLegacy: input.allowProoflessLegacy,
+      encryptedSample: input.encryptedSample,
+      passcode: input.passcode,
+      storedPasscodeLength,
+    })
+  ) {
+    return 'incomplete'
+  }
+
+  return (await verifyPasscode(input)) ? 'valid' : 'invalid'
 }
 
 type NeedsPasscodeSampleRewriteInput = PasscodeLockState & {

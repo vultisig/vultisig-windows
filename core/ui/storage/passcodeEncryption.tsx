@@ -7,7 +7,7 @@ import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
 type PasscodeEncryption = {
-  encryptedSample: string
+  encryptedSample: string | null
   passcodeLength?: number
   attemptState?: PasscodeAttemptState
 }

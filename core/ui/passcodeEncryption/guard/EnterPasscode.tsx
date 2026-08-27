@@ -1,25 +1,30 @@
-import {
-  getPasscodeAttemptDelayMs,
-  recordFailedPasscodeAttempt,
-  withPasscodeOperationLock,
-} from '@core/ui/passcodeEncryption/core/passcodeAttemptThrottle'
-import { verifyPasscode } from '@core/ui/passcodeEncryption/core/passcodeLock'
-import { getStoredPasscodeLength } from '@core/ui/passcodeEncryption/core/passcodePolicy'
-import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
-import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
-import { useCore } from '@core/ui/state/core'
-import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
-import { StorageKey } from '@core/ui/storage/StorageKey'
+import { Button } from '@lib/ui/buttons/Button'
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { useCore } from '../../state/core'
+import { usePasscodeEncryption } from '../../storage/passcodeEncryption'
+import { StorageKey } from '../../storage/StorageKey'
+import { passcodeEncryptionConfig } from '../core/config'
+import {
+  getPasscodeAttemptDelayMs,
+  recordFailedPasscodeAttempt,
+  withPasscodeOperationLock,
+} from '../core/passcodeAttemptThrottle'
+import {
+  getPasscodeEntryLength,
+  isPasscodeEntryCandidate,
+  verifyPasscodeEntry,
+} from '../core/passcodeLock'
+import { PasscodeInput } from '../manage/PasscodeInput'
+import { usePasscode } from '../state/passcode'
 
 const Wrapper = styled.div`
   ${takeWholeSpace}
@@ -63,19 +68,30 @@ export const EnterPasscode = () => {
   const [, setPasscode] = usePasscode()
   const [isInvalid, setIsInvalid] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
-  const isVerifyingRef = useRef(false)
+  const [legacyRecoverySubmission, setLegacyRecoverySubmission] = useState<
+    string | null
+  >(null)
   const [attemptState, setAttemptState] = useState(
     passcodeEncryption?.attemptState
   )
   const [now, setNow] = useState(Date.now)
 
-  const passcodeLength = getStoredPasscodeLength(
-    passcodeEncryption?.passcodeLength
-  )
+  const encryptedSample = passcodeEncryption?.encryptedSample ?? null
+  const passcodeLength = getPasscodeEntryLength({
+    encryptedSample,
+    storedPasscodeLength: passcodeEncryption?.passcodeLength,
+  })
   const retryDelayMs = getPasscodeAttemptDelayMs({ state: attemptState, now })
   const isLockedOut = retryDelayMs > 0
 
-  const isComplete = !!inputValue && inputValue.length === passcodeLength
+  const isComplete =
+    !!inputValue &&
+    (legacyRecoverySubmission === inputValue ||
+      isPasscodeEntryCandidate({
+        encryptedSample,
+        passcode: inputValue,
+        storedPasscodeLength: passcodeEncryption?.passcodeLength,
+      }))
 
   useEffect(() => {
     setAttemptState(passcodeEncryption?.attemptState)
@@ -96,26 +112,25 @@ export const EnterPasscode = () => {
   // on every keystroke would block the UI. On success the passcode unlocks the
   // app.
   useEffect(() => {
-    if (!isComplete || isLockedOut || isVerifyingRef.current) {
+    if (!isComplete || isLockedOut) {
       return
     }
 
     let cancelled = false
 
     const verifyEnteredPasscode = async () => {
-      isVerifyingRef.current = true
       setIsVerifying(true)
 
       await withPasscodeOperationLock(async () => {
         const [current, currentVaults] = await Promise.all([
-          getPasscodeEncryption().then(shouldBePresent),
+          getPasscodeEncryption(),
           getVaults(),
         ])
         const activeAttemptState =
           (attemptState?.failedAttempts ?? 0) >
-          (current.attemptState?.failedAttempts ?? 0)
+          (current?.attemptState?.failedAttempts ?? 0)
             ? attemptState
-            : current.attemptState
+            : current?.attemptState
         const currentDelay = getPasscodeAttemptDelayMs({
           state: activeAttemptState,
           now: Date.now(),
@@ -130,13 +145,19 @@ export const EnterPasscode = () => {
           return
         }
 
-        const isValid = await verifyPasscode({
+        const verification = await verifyPasscodeEntry({
+          allowProoflessLegacy: legacyRecoverySubmission === inputValue,
           vaults: currentVaults,
-          encryptedSample: current.encryptedSample,
+          encryptedSample: current?.encryptedSample ?? null,
           passcode: inputValue,
+          storedPasscodeLength: current?.passcodeLength,
         })
 
-        if (!isValid) {
+        if (verification === 'incomplete') {
+          return
+        }
+
+        if (verification === 'invalid') {
           const nextAttemptState = recordFailedPasscodeAttempt({
             state: activeAttemptState,
             now: Date.now(),
@@ -144,6 +165,7 @@ export const EnterPasscode = () => {
 
           await setPasscodeEncryption({
             ...current,
+            encryptedSample: current?.encryptedSample ?? null,
             attemptState: nextAttemptState,
           })
           await refetchQueries([StorageKey.passcodeEncryption])
@@ -157,10 +179,14 @@ export const EnterPasscode = () => {
           return
         }
 
-        const cleared = { ...current }
-        delete cleared.attemptState
-        await setPasscodeEncryption(cleared)
-        await refetchQueries([StorageKey.passcodeEncryption])
+        if (current?.attemptState) {
+          const cleared = { ...current }
+          delete cleared.attemptState
+          await setPasscodeEncryption(
+            cleared.encryptedSample === null ? null : cleared
+          )
+          await refetchQueries([StorageKey.passcodeEncryption])
+        }
 
         if (!cancelled) {
           setIsInvalid(false)
@@ -177,7 +203,6 @@ export const EnterPasscode = () => {
         }
       })
       .finally(() => {
-        isVerifyingRef.current = false
         if (!cancelled) {
           setIsVerifying(false)
         }
@@ -193,6 +218,7 @@ export const EnterPasscode = () => {
     inputValue,
     isComplete,
     isLockedOut,
+    legacyRecoverySubmission,
     refetchQueries,
     setPasscode,
     setPasscodeEncryption,
@@ -230,6 +256,7 @@ export const EnterPasscode = () => {
             length={passcodeLength}
             onChange={value => {
               setInputValue(value)
+              setLegacyRecoverySubmission(null)
               setIsInvalid(false)
             }}
             validation={validation}
@@ -237,6 +264,16 @@ export const EnterPasscode = () => {
             value={inputValue}
             autoFocus
           />
+          {encryptedSample === null &&
+            inputValue?.length ===
+              passcodeEncryptionConfig.legacyPasscodeLength && (
+              <Button
+                disabled={isVerifying || isLockedOut}
+                onClick={() => setLegacyRecoverySubmission(inputValue)}
+              >
+                {t('continue')}
+              </Button>
+            )}
         </Content>
       </Container>
     </Wrapper>

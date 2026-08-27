@@ -7,10 +7,12 @@ import {
 import { beforeAll, describe, expect, it } from 'vitest'
 
 import {
+  getPasscodeEntryLength,
   isPasscodeRequired,
   mayNeedPasscodeSampleRewrite,
   needsPasscodeSampleRewrite,
   verifyPasscode,
+  verifyPasscodeEntry,
 } from './passcodeLock'
 import { encryptSample } from './sample'
 import { encryptVaultAllKeyShares } from './vaultKeyShares'
@@ -133,6 +135,110 @@ describe('verifyPasscode', () => {
         passcode,
       })
     ).resolves.toBe(false)
+  })
+})
+
+describe('passcode entry recovery', () => {
+  it('shows the current six-digit input when the proof is missing', () => {
+    expect(
+      getPasscodeEntryLength({
+        encryptedSample: null,
+        storedPasscodeLength: undefined,
+      })
+    ).toBe(6)
+  })
+
+  it('accepts a proof-declared legacy five-digit passcode', async () => {
+    const legacyPasscode = '13579'
+    const legacySealedShares = await encryptVaultAllKeyShares({
+      ...plainShares,
+      key: legacyPasscode,
+    })
+    const legacyPasscodeSample = await encryptSample({
+      key: legacyPasscode,
+      value: 'sample',
+    })
+
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [legacySealedShares],
+        encryptedSample: legacyPasscodeSample,
+        passcode: legacyPasscode,
+        storedPasscodeLength: 5,
+      })
+    ).resolves.toBe('valid')
+  })
+
+  it('accepts a proofless legacy passcode only when explicitly submitted', async () => {
+    const legacyPasscode = '13579'
+    const legacySealedShares = await encryptVaultAllKeyShares({
+      ...plainShares,
+      key: legacyPasscode,
+    })
+    const input = {
+      vaults: [legacySealedShares],
+      encryptedSample: null,
+      passcode: legacyPasscode,
+    }
+
+    await expect(verifyPasscodeEntry(input)).resolves.toBe('incomplete')
+    await expect(
+      verifyPasscodeEntry({ ...input, allowProoflessLegacy: true })
+    ).resolves.toBe('valid')
+  })
+
+  it('rejects an incorrect explicitly submitted proofless legacy passcode', async () => {
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [sealedShares],
+        encryptedSample: null,
+        passcode: '54321',
+        allowProoflessLegacy: true,
+      })
+    ).resolves.toBe('invalid')
+  })
+
+  it('does not submit a five-digit prefix when proof recovery requires six digits', async () => {
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [sealedShares],
+        encryptedSample: null,
+        passcode: passcode.slice(0, -1),
+      })
+    ).resolves.toBe('incomplete')
+
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [sealedShares],
+        encryptedSample: null,
+        passcode,
+      })
+    ).resolves.toBe('valid')
+  })
+
+  it('rejects an incorrect six-digit recovery code', async () => {
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [sealedShares],
+        encryptedSample: null,
+        passcode: otherPasscode,
+      })
+    ).resolves.toBe('invalid')
+  })
+
+  it('preserves the stored length when a proof is present', () => {
+    expect(
+      getPasscodeEntryLength({
+        encryptedSample: sample,
+        storedPasscodeLength: 5,
+      })
+    ).toBe(5)
+    expect(
+      getPasscodeEntryLength({
+        encryptedSample: sample,
+        storedPasscodeLength: 6,
+      })
+    ).toBe(6)
   })
 })
 

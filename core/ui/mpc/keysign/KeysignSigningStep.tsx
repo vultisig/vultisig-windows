@@ -1,4 +1,5 @@
 import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
@@ -85,7 +86,6 @@ export const KeysignSigningStep = ({
       value={mutationStatus}
       success={result => (
         <>
-          <PageHeader title={t('done')} hasBorder />
           <MatchRecordUnion
             value={payload}
             handlers={{
@@ -96,6 +96,7 @@ export const KeysignSigningStep = ({
                 if (payload.isQbtcClaim) {
                   return (
                     <>
+                      <PageHeader title={t('done')} hasBorder />
                       <PageContent alignItems="center" scrollable>
                         <VStack gap={16} maxWidth={576} fullWidth>
                           <Panel>
@@ -119,25 +120,29 @@ export const KeysignSigningStep = ({
                 return (
                   <TxHashProvider value={getLastItem(txs).hash}>
                     {isSwapTx ? (
-                      <PageContent alignItems="center" scrollable>
-                        <AnimatedVisibility
-                          animationConfig="bottomToTop"
-                          overlayStyles={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            width: '100%',
-                          }}
-                        >
-                          <SwapKeysignTxOverview
-                            txHashes={txs.map(tx => tx.hash)}
-                            value={payload}
-                          />
-                        </AnimatedVisibility>
-                      </PageContent>
+                      <>
+                        <PageHeader title={t('done')} hasBorder />
+                        <PageContent alignItems="center" scrollable>
+                          <AnimatedVisibility
+                            animationConfig="bottomToTop"
+                            overlayStyles={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              width: '100%',
+                            }}
+                          >
+                            <SwapKeysignTxOverview
+                              txHashes={txs.map(tx => tx.hash)}
+                              value={payload}
+                            />
+                          </AnimatedVisibility>
+                        </PageContent>
+                      </>
                     ) : (
                       <StepTransition
                         from={({ onFinish: onSeeTxDetails }) => (
                           <>
+                            <PageHeader title={t('done')} hasBorder />
                             <PageContent alignItems="center" scrollable>
                               <AnimatedVisibility
                                 animationConfig="bottomToTop"
@@ -196,8 +201,12 @@ export const KeysignSigningStep = ({
                             </PageFooter>
                           </>
                         )}
-                        to={() => (
+                        to={({ onBack: onBackToReceipt }) => (
                           <>
+                            <FlowPageHeader
+                              title={t('transaction_details')}
+                              onBack={onBackToReceipt}
+                            />
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
                                 <DappRequestBanner
@@ -227,6 +236,7 @@ export const KeysignSigningStep = ({
 
                 return (
                   <>
+                    <PageHeader title={t('done')} hasBorder />
                     <PageContent alignItems="center" scrollable>
                       <VStack gap={16} maxWidth={576} fullWidth>
                         <Panel>

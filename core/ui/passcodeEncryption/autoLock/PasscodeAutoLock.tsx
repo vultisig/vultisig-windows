@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useCore } from '../../state/core'
 import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
 import { computePasscodeUnlockSessionExpiresAt } from '../../storage/passcodeUnlockSession'
+import { withPasscodeOperationLock } from '../core/passcodeAttemptThrottle'
 import { usePasscode } from '../state/passcode'
 import { usePasscodeAutoLockHolds } from './passcodeAutoLockHolds'
 
@@ -87,10 +88,12 @@ export const PasscodeAutoLock = () => {
       setPasscode(null)
     }, lockDelayMs)
 
-    void setPasscodeUnlockSession({
-      passcode,
-      expiresAt: computePasscodeUnlockSessionExpiresAt(passcodeAutoLock),
-    })
+    void withPasscodeOperationLock(() =>
+      setPasscodeUnlockSession({
+        passcode,
+        expiresAt: computePasscodeUnlockSessionExpiresAt(passcodeAutoLock),
+      })
+    )
 
     return () => {
       if (timeoutRef.current) {
