@@ -116,11 +116,7 @@ const TabsRow = styled.div<{ $isExtension: boolean }>`
 
 const FloatingCamera = styled(UnstyledButton)<{ $isExtension: boolean }>`
   position: ${({ $isExtension }) => ($isExtension ? 'fixed' : 'absolute')};
-  right: ${({ $isExtension }) =>
-    $isExtension ? 'auto' : `${cameraButtonInset}px`};
-  left: ${({ $isExtension }) => ($isExtension ? '50%' : 'auto')};
-  transform: ${({ $isExtension }) =>
-    $isExtension ? 'translateX(-50%)' : 'none'};
+  right: ${cameraButtonInset}px;
   ${({ $isExtension }) =>
     $isExtension
       ? css`

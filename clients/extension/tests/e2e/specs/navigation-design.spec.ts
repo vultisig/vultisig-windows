@@ -197,17 +197,10 @@ test('extension vault matches the Figma home shell', async ({
   expect(navigationBox).toEqual({ x: 0, y: 584, width: 360, height: 66 })
   expect(walletTabBox).toEqual({ x: 12, y: 592, width: 168, height: 48 })
   expect(earnTabBox).toEqual({ x: 180, y: 592, width: 168, height: 48 })
-  expect(scanBox).toEqual({ x: 152, y: 514, width: 56, height: 56 })
-  expect(scanBox!.x + scanBox!.width / 2).toBe(
-    navigationBox!.x + navigationBox!.width / 2
-  )
+  expect(scanBox).toEqual({ x: 276, y: 514, width: 56, height: 56 })
   expect(
-    scanBox!.x +
-      scanBox!.width / 2 -
-      (walletTabBox!.x + walletTabBox!.width / 2)
-  ).toBe(
-    earnTabBox!.x + earnTabBox!.width / 2 - (scanBox!.x + scanBox!.width / 2)
-  )
+    navigationBox!.x + navigationBox!.width - (scanBox!.x + scanBox!.width)
+  ).toBe(28)
   expect(scanBox!.y + scanBox!.height).toBeLessThan(navigationBox!.y)
 
   await tabs.getByText('Earn', { exact: true }).click()
