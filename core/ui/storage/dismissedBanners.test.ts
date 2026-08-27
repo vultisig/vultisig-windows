@@ -62,6 +62,14 @@ describe('isBannerDismissed', () => {
     ).toBe(false)
   })
 
+  it('resurfaces the QBTC claim banner once its cooldown elapses', () => {
+    const banners: DismissedBanners = {
+      qbtcClaim: { dismissedAt: now - bannerDismissalTtl.qbtcClaim },
+    }
+
+    expect(isBannerDismissed({ banners, id: 'qbtcClaim', now })).toBe(false)
+  })
+
   it('applies a per-banner TTL: buyVultPromo resurfaces before other banners', () => {
     const dismissedAt = now - convertDuration(10, 'd', 'ms')
     const banners: DismissedBanners = {

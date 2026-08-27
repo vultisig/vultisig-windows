@@ -18,7 +18,7 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { currentProductBrand } from '../../../product/brand'
-import { homePromoBannerVisuals } from './homePromoBanners'
+import { HomePromoBannerId, homePromoBannerVisuals } from './homePromoBanners'
 import { HomePromoBanner } from './shared/HomePromoBanner'
 import { HomePromoBannerIcon } from './shared/HomePromoBannerIcon'
 
@@ -28,7 +28,7 @@ type HomePromoBannerEntry = {
 }
 
 type BannerInput = {
-  id: Exclude<BannerId, 'agentNavigationCoachmark'>
+  id: HomePromoBannerId
   /** The small line above the title. */
   caption: string
   /** The emphasised line the banner leads with. */

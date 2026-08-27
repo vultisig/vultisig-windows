@@ -54,9 +54,9 @@ export const VaultChainPage = () => {
         />
         <StyledPageContent scrollable gap={32} flexGrow>
           <VaultChainOverview />
+          {chain === Chain.Bitcoin && <QbtcClaimBanner />}
           {chain === Chain.Tron && <TronResourcesSection />}
           <VaultChainTabs />
-          {chain === Chain.Bitcoin && <QbtcClaimBanner />}
         </StyledPageContent>
         {chain === Chain.QBTC && (
           <BottomCtaArea>
