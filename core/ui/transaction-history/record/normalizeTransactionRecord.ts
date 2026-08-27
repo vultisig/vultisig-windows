@@ -15,6 +15,13 @@ import { TransactionRecord } from '../core'
  *
  * Returns the record unchanged when nothing needed repairing, so React Query
  * consumers keep their referential identity.
+ *
+ * This runs on the far side of a `JSON.parse` and an unchecked cast, so it is
+ * the one place that cannot take its own types at face value: a record whose
+ * `targetAsset` did not survive storage is passed through untouched rather than
+ * throwing. A repair pass that dies on damaged input would take the entire
+ * history query down with it — every record, not just the bad one — which is
+ * the opposite of what it is here to do.
  */
 export const normalizeTransactionRecord = (
   record: TransactionRecord
@@ -23,7 +30,12 @@ export const normalizeTransactionRecord = (
     return record
   }
 
-  const buyTicker = getThorchainAssetTicker(record.data.targetAsset)
+  const { targetAsset } = record.data
+  if (typeof targetAsset !== 'string' || !targetAsset) {
+    return record
+  }
+
+  const buyTicker = getThorchainAssetTicker(targetAsset)
   if (buyTicker === record.data.buyTicker) {
     return record
   }

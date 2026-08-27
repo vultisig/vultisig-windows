@@ -62,6 +62,25 @@ describe('normalizeTransactionRecord', () => {
     expect(normalizeTransactionRecord(record)).toBe(record)
   })
 
+  // Storage is JSON behind an unchecked cast, so a damaged record must not take
+  // the whole history query down with it on its way out.
+  it.each([
+    ['a missing targetAsset', undefined],
+    ['a null targetAsset', null],
+    ['an empty targetAsset', ''],
+    ['a non-string targetAsset', 42],
+  ])(
+    'passes a limit record with %s through untouched',
+    (_label, targetAsset) => {
+      const record = order({
+        targetAsset: targetAsset as unknown as string,
+      })
+
+      expect(() => normalizeTransactionRecord(record)).not.toThrow()
+      expect(normalizeTransactionRecord(record)).toBe(record)
+    }
+  )
+
   it('passes non-limit records through untouched', () => {
     const record: SendTransactionRecord = {
       id: 'send-1',
