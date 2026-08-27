@@ -1,9 +1,11 @@
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { match } from '@vultisig/lib-utils/match'
 import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 
 import { useCore } from '../state/core'
+import { useAssertCurrentVaultId } from './currentVaultId'
 import { StorageKey } from './StorageKey'
 
 export const bannerIds = [
@@ -20,21 +22,34 @@ export const bannerIds = [
 
 export type BannerId = (typeof bannerIds)[number]
 
-export type BannerDismissal = {
+type BannerDismissal = {
   dismissedAt: number
 }
 
+/** One dismissal record: the banners waved away, each with when it happened. */
+export type BannerDismissals = Partial<Record<BannerId, BannerDismissal>>
+
 /**
- * Global, timestamped record of dismissed banners. Each banner keeps its own
- * dismissal time so it can resurface once its per-banner TTL has elapsed.
+ * Dismissals split by what they apply to. `global` covers the whole profile;
+ * `byVault` keeps a separate record per vault id, so a banner gated on the
+ * current vault is only hidden on the vault it was dismissed on.
  */
-export type DismissedBanners = Partial<Record<BannerId, BannerDismissal>>
+export type DismissedBanners = {
+  global: BannerDismissals
+  byVault: Partial<Record<string, BannerDismissals>>
+}
 
 /** Legacy on-disk shape: a plain list of dismissed banner ids without timestamps. */
-export type LegacyDismissedBanners = BannerId[]
+export type LegacyDismissedBannerIds = BannerId[]
 
-/** Either the legacy array shape or the current timestamped record shape. */
-export type StoredDismissedBanners = DismissedBanners | LegacyDismissedBanners
+/** Legacy on-disk shape: one timestamped record covering the whole profile. */
+export type LegacyDismissedBannerRecord = BannerDismissals
+
+/** Any shape the key may hold on disk, current or legacy. */
+export type StoredDismissedBanners =
+  | DismissedBanners
+  | LegacyDismissedBannerRecord
+  | LegacyDismissedBannerIds
 
 /**
  * Per-banner cooldown (in ms) after dismissal, after which the banner may show
@@ -57,42 +72,126 @@ export const bannerDismissalTtl: Record<BannerId, number> = {
 }
 
 /**
- * Reads either storage shape into the current timestamped record. Legacy
- * entries (no timestamp) are stamped with `now` so the TTL clock starts from
- * the migration moment instead of expiring or never elapsing.
+ * What a dismissal applies to: the whole profile, or only the vault it was made
+ * on. Assigned here next to the TTL rather than in carousel logic, so a banner's
+ * whole dismiss behaviour reads from one place.
  */
-export const migrateDismissedBanners = (
-  stored: StoredDismissedBanners,
+type BannerDismissScope = 'global' | 'vault'
+
+/**
+ * A banner whose visibility is decided from the current vault takes `vault`.
+ * Anything else - a campaign that is the same on every vault - takes `global`.
+ *
+ * Getting this wrong in the `global` direction is what #4769 was: a banner
+ * dismissed on a vault it had nothing to offer stayed hidden on a vault that
+ * qualified.
+ */
+const bannerDismissScope: Record<BannerId, BannerDismissScope> = {
+  buyVultPromo: 'global',
+  followOnX: 'global',
+  migrate: 'global',
+  agentNavigationCoachmark: 'global',
+  rujiraStaking: 'global',
+  kamino: 'global',
+  // Gated on `vault.isBackedUp`.
+  vaultBackup: 'vault',
+  // Gated on the referral stored against this vault's id.
+  referralCode: 'vault',
+  // Gated on this vault's MLDSA key and its BTC address's claimable UTXOs.
+  qbtcClaim: 'vault',
+}
+
+const emptyDismissedBanners: DismissedBanners = { global: {}, byVault: {} }
+
+/**
+ * Reads any stored shape into the current one. Legacy entries carry no vault,
+ * so they land in `global`; a vault-scoped banner therefore ignores its old
+ * profile-wide dismissal and may show once more per vault. Every vault-scoped
+ * banner has a TTL of at most 7 days, so that costs a reappearance the user was
+ * days away from anyway - cheaper than guessing which vault meant to dismiss it.
+ */
+type MigrateDismissedBannersInput = {
+  stored: StoredDismissedBanners
   now: number
-): DismissedBanners => {
-  if (!Array.isArray(stored)) {
+}
+
+export const migrateDismissedBanners = ({
+  stored,
+  now,
+}: MigrateDismissedBannersInput): DismissedBanners => {
+  if (Array.isArray(stored)) {
+    return {
+      global: Object.fromEntries(stored.map(id => [id, { dismissedAt: now }])),
+      byVault: {},
+    }
+  }
+
+  if ('global' in stored) {
     return stored
   }
 
-  return Object.fromEntries(stored.map(id => [id, { dismissedAt: now }]))
+  return { global: stored, byVault: {} }
 }
 
 type IsBannerDismissedInput = {
   banners: DismissedBanners
   id: BannerId
   now: number
+  vaultId: string
 }
 
 /**
- * A banner counts as dismissed only while it is within its TTL window. Once the
- * TTL has elapsed the dismissal is ignored and the banner can show again.
+ * A banner counts as dismissed only while it is within its TTL window, and only
+ * against the record its scope names. Once the TTL has elapsed the dismissal is
+ * ignored and the banner can show again.
  */
 export const isBannerDismissed = ({
   banners,
   id,
   now,
+  vaultId,
 }: IsBannerDismissedInput): boolean => {
-  const dismissal = banners[id]
+  const dismissal = match(bannerDismissScope[id], {
+    global: () => banners.global[id],
+    vault: () => banners.byVault[vaultId]?.[id],
+  })
+
   if (!dismissal) {
     return false
   }
 
   return now - dismissal.dismissedAt < bannerDismissalTtl[id]
+}
+
+type RecordBannerDismissalInput = {
+  banners: DismissedBanners
+  id: BannerId
+  now: number
+  vaultId: string
+}
+
+/** Writes a dismissal into whichever record the banner's scope names. */
+export const recordBannerDismissal = ({
+  banners,
+  id,
+  now,
+  vaultId,
+}: RecordBannerDismissalInput): DismissedBanners => {
+  const dismissal: BannerDismissal = { dismissedAt: now }
+
+  return match(bannerDismissScope[id], {
+    global: () => ({
+      ...banners,
+      global: { ...banners.global, [id]: dismissal },
+    }),
+    vault: () => ({
+      ...banners,
+      byVault: {
+        ...banners.byVault,
+        [vaultId]: { ...banners.byVault[vaultId], [id]: dismissal },
+      },
+    }),
+  })
 }
 
 type GetDismissedBannersFunction = () => Promise<StoredDismissedBanners>
@@ -110,9 +209,13 @@ const useDismissedBannersQuery = () => {
     queryKey: [StorageKey.dismissedBanners],
     queryFn: async () => {
       const stored = await getDismissedBanners()
-      const migrated = migrateDismissedBanners(stored, Date.now())
+      const migrated = migrateDismissedBanners({ stored, now: Date.now() })
 
-      if (Array.isArray(stored) && stored.length > 0) {
+      const needsRewrite = Array.isArray(stored)
+        ? stored.length > 0
+        : !('global' in stored)
+
+      if (needsRewrite) {
         await setDismissedBanners(migrated)
       }
 
@@ -122,32 +225,49 @@ const useDismissedBannersQuery = () => {
   })
 }
 
+/**
+ * Reports whether the stored dismissals have loaded, and answers whether a
+ * given banner counts as dismissed - against the whole profile or against the
+ * current vault, whichever that banner's scope names.
+ */
 export const useDismissedBanners = () => {
   const { data } = useDismissedBannersQuery()
+  const vaultId = useAssertCurrentVaultId()
 
   return {
     hasLoaded: data !== undefined,
     isBannerDismissed: (id: BannerId) =>
-      isBannerDismissed({ banners: data || {}, id, now: Date.now() }),
+      isBannerDismissed({
+        banners: data || emptyDismissedBanners,
+        id,
+        now: Date.now(),
+        vaultId,
+      }),
   }
 }
 
 const useDismissBannerMutation = () => {
   const { getDismissedBanners, setDismissedBanners } = useCore()
   const refetchQueries = useRefetchQueries()
+  const vaultId = useAssertCurrentVaultId()
 
   const mutationFn = async (bannerId: BannerId) => {
     // Read the latest stored state at mutation time rather than merging against
     // a render-time snapshot, so quick successive dismissals don't drop each
     // other's entries.
-    const current = migrateDismissedBanners(
-      await getDismissedBanners(),
-      Date.now()
-    )
-    await setDismissedBanners({
-      ...current,
-      [bannerId]: { dismissedAt: Date.now() },
+    const current = migrateDismissedBanners({
+      stored: await getDismissedBanners(),
+      now: Date.now(),
     })
+
+    await setDismissedBanners(
+      recordBannerDismissal({
+        banners: current,
+        id: bannerId,
+        now: Date.now(),
+        vaultId,
+      })
+    )
     await refetchQueries([StorageKey.dismissedBanners])
   }
 
