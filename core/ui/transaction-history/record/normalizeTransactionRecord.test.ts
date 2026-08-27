@@ -1,7 +1,11 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { describe, expect, it } from 'vitest'
 
-import { LimitSwapTransactionRecord, SendTransactionRecord } from '../core'
+import {
+  LimitSwapTransactionRecord,
+  SendTransactionRecord,
+  TransactionRecord,
+} from '../core'
 import { normalizeTransactionRecord } from './normalizeTransactionRecord'
 
 const securedUsdc = 'ETH-USDC-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
@@ -35,13 +39,25 @@ const order = (
   },
 })
 
+/**
+ * A record as it comes back from storage, where `data` is JSON that carries no
+ * shape guarantee — the same value `deserializeRecord` hands the normalizer.
+ *
+ * Round-tripping through JSON reproduces damage rather than simulating it: an
+ * `undefined` field is dropped by `JSON.stringify` exactly as it would be on the
+ * way in, so the record really does come back without the key.
+ */
+const fromStorage = (data: unknown): TransactionRecord =>
+  JSON.parse(JSON.stringify({ ...order(), data }))
+
 describe('normalizeTransactionRecord', () => {
   // Orders placed before the ticker decode understood secured notation stored
   // the whole denom where the ticker belongs, and it renders on every surface.
   it('re-derives a buy ticker that was stored as the raw denom', () => {
-    const record = normalizeTransactionRecord(
-      order({ buyTicker: securedUsdc })
-    ) as LimitSwapTransactionRecord
+    const record = normalizeTransactionRecord(order({ buyTicker: securedUsdc }))
+    if (record.type !== 'limitSwap') {
+      throw new Error(`expected a limit swap record, got ${record.type}`)
+    }
 
     expect(record.data.buyTicker).toBe('USDC')
     expect(record.data.targetAsset).toBe(securedUsdc)
@@ -72,9 +88,7 @@ describe('normalizeTransactionRecord', () => {
   ])(
     'passes a limit record with %s through untouched',
     (_label, targetAsset) => {
-      const record = order({
-        targetAsset: targetAsset as unknown as string,
-      })
+      const record = fromStorage({ ...order().data, targetAsset })
 
       expect(() => normalizeTransactionRecord(record)).not.toThrow()
       expect(normalizeTransactionRecord(record)).toBe(record)
