@@ -21,7 +21,6 @@ import {
   CoinKey,
   coinKeyToString,
 } from '@vultisig/core-chain/coin/Coin'
-import { thorchainAssetPrefixToChain } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
@@ -159,11 +158,7 @@ const LimitSwapProgressContent = ({
     { chain: data.fromChain, id: data.fromTokenId },
     fromAmount
   )
-  const buyCoin = getLimitOrderBuyCoin({
-    targetAsset: data.targetAsset,
-    targetChain:
-      thorchainAssetPrefixToChain[data.targetAsset.split('.')[0].toUpperCase()],
-  })
+  const buyCoin = getLimitOrderBuyCoin({ targetAsset: data.targetAsset })
 
   return (
     <StepperContainer>
