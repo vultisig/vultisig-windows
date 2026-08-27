@@ -54,9 +54,18 @@ export const test = base.extend<{
   context: async ({}, use) => {
     const videoDir = process.env.EXTENSION_QA_VIDEO_DIR
     const browserChannel = process.env.PLAYWRIGHT_BROWSER_CHANNEL
+    const browserExecutablePath =
+      process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
     const context = await chromium.launchPersistentContext('', {
       headless: false,
+      // Recent Chrome-for-Testing builds inherit Playwright's default
+      // `--disable-extensions` switch even when an unpacked extension is
+      // explicitly supplied below. Remove only that conflicting default.
+      ignoreDefaultArgs: ['--disable-extensions'],
       ...(browserChannel ? { channel: browserChannel } : {}),
+      ...(browserExecutablePath
+        ? { executablePath: browserExecutablePath }
+        : {}),
       ...(videoDir
         ? {
             viewport: { width: 1280, height: 720 },
