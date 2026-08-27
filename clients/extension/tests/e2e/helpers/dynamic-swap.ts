@@ -52,7 +52,6 @@ export const CHAIN_SYMBOLS: Record<string, string> = {
   cosmos: 'ATOM',
   dash: 'DASH',
   dogecoin: 'DOGE',
-  kujira: 'KUJI',
   litecoin: 'LTC',
   mayachain: 'CACAO',
   ripple: 'XRP',

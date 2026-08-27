@@ -7,7 +7,6 @@ export const depositEnabledChains = [
   Chain.Ton,
   Chain.Solana,
   Chain.Tron,
-  Chain.Kujira,
   Chain.Osmosis,
   Chain.Cosmos,
   Chain.Terra,

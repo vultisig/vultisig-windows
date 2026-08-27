@@ -28,7 +28,6 @@ export const CHAIN_UI_LABELS: Record<string, string> = {
   cosmos: 'Cosmos',
   osmosis: 'Osmosis',
   dydx: 'Dydx',
-  kujira: 'Kujira',
   terra: 'Terra',
   terraclassic: 'TerraClassic',
   noble: 'Noble',

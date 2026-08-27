@@ -78,7 +78,6 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Dydx]: ['vote'],
   [Chain.Ton]: ['stake', 'unstake'],
   [Chain.Solana]: [...solanaStakingActions],
-  [Chain.Kujira]: ['ibc_transfer', 'add_thor_lp'],
   [Chain.Osmosis]: ['ibc_transfer'],
   [Chain.Cosmos]: ['ibc_transfer', 'add_thor_lp'],
   [Chain.Terra]: ['ibc_transfer', ...cosmosStakingActions],
