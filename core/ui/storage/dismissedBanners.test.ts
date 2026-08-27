@@ -18,7 +18,9 @@ const empty: DismissedBanners = { global: {}, byVault: {} }
 
 describe('migrateDismissedBanners', () => {
   it('stamps legacy array entries with the migration time', () => {
-    expect(migrateDismissedBanners(['migrate', 'followOnX'], now)).toEqual({
+    expect(
+      migrateDismissedBanners({ stored: ['migrate', 'followOnX'], now })
+    ).toEqual({
       global: {
         migrate: { dismissedAt: now },
         followOnX: { dismissedAt: now },
@@ -28,12 +30,15 @@ describe('migrateDismissedBanners', () => {
   })
 
   it('returns an empty record for an empty legacy array', () => {
-    expect(migrateDismissedBanners([], now)).toEqual(empty)
+    expect(migrateDismissedBanners({ stored: [], now })).toEqual(empty)
   })
 
   it('lifts a legacy profile-wide record into the global side', () => {
     expect(
-      migrateDismissedBanners({ buyVultPromo: { dismissedAt: 42 } }, now)
+      migrateDismissedBanners({
+        stored: { buyVultPromo: { dismissedAt: 42 } },
+        now,
+      })
     ).toEqual({
       global: { buyVultPromo: { dismissedAt: 42 } },
       byVault: {},
@@ -46,7 +51,7 @@ describe('migrateDismissedBanners', () => {
       byVault: { [vaultA]: { vaultBackup: { dismissedAt: 42 } } },
     }
 
-    expect(migrateDismissedBanners(stored, now)).toBe(stored)
+    expect(migrateDismissedBanners({ stored, now })).toBe(stored)
   })
 })
 
@@ -155,10 +160,10 @@ describe('isBannerDismissed', () => {
   })
 
   it('ignores a legacy profile-wide dismissal of a vault-scoped banner', () => {
-    const banners = migrateDismissedBanners(
-      { vaultBackup: { dismissedAt: now } },
-      now
-    )
+    const banners = migrateDismissedBanners({
+      stored: { vaultBackup: { dismissedAt: now } },
+      now,
+    })
 
     expect(
       isBannerDismissed({ banners, id: 'vaultBackup', now, vaultId: vaultA })

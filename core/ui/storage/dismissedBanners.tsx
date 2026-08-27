@@ -110,10 +110,15 @@ const emptyDismissedBanners: DismissedBanners = { global: {}, byVault: {} }
  * banner has a TTL of at most 7 days, so that costs a reappearance the user was
  * days away from anyway - cheaper than guessing which vault meant to dismiss it.
  */
-export const migrateDismissedBanners = (
-  stored: StoredDismissedBanners,
+type MigrateDismissedBannersInput = {
+  stored: StoredDismissedBanners
   now: number
-): DismissedBanners => {
+}
+
+export const migrateDismissedBanners = ({
+  stored,
+  now,
+}: MigrateDismissedBannersInput): DismissedBanners => {
   if (Array.isArray(stored)) {
     return {
       global: Object.fromEntries(stored.map(id => [id, { dismissedAt: now }])),
@@ -204,7 +209,7 @@ const useDismissedBannersQuery = () => {
     queryKey: [StorageKey.dismissedBanners],
     queryFn: async () => {
       const stored = await getDismissedBanners()
-      const migrated = migrateDismissedBanners(stored, Date.now())
+      const migrated = migrateDismissedBanners({ stored, now: Date.now() })
 
       const needsRewrite = Array.isArray(stored)
         ? stored.length > 0
@@ -220,6 +225,11 @@ const useDismissedBannersQuery = () => {
   })
 }
 
+/**
+ * Reports whether the stored dismissals have loaded, and answers whether a
+ * given banner counts as dismissed - against the whole profile or against the
+ * current vault, whichever that banner's scope names.
+ */
 export const useDismissedBanners = () => {
   const { data } = useDismissedBannersQuery()
   const vaultId = useAssertCurrentVaultId()
@@ -245,10 +255,10 @@ const useDismissBannerMutation = () => {
     // Read the latest stored state at mutation time rather than merging against
     // a render-time snapshot, so quick successive dismissals don't drop each
     // other's entries.
-    const current = migrateDismissedBanners(
-      await getDismissedBanners(),
-      Date.now()
-    )
+    const current = migrateDismissedBanners({
+      stored: await getDismissedBanners(),
+      now: Date.now(),
+    })
 
     await setDismissedBanners(
       recordBannerDismissal({
