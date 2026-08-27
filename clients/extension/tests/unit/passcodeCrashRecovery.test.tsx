@@ -417,7 +417,15 @@ describe('passcode set/change survives a popup teardown', () => {
     // a WebView2 profile reset wipes one and leaves the other.
     await chrome.storage.local.remove(StorageKey.passcodeEncryption)
 
+    expect(await openVaultOnNextLaunch([newPasscode])).toEqual({
+      ecdsaShare: null,
+      servedCiphertext: false,
+    })
     expect(await openVaultOnNextLaunch([passcode])).toEqual(healthyVault)
+
+    await reconcileAfterUnlock(passcode)
+
+    expect(await proofOpensWith([passcode, newPasscode])).toEqual([passcode])
   })
 
   // Change-passcode runs to completion in both of these, so the new passcode is

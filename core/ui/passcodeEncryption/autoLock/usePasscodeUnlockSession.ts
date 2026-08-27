@@ -6,6 +6,8 @@ import {
   computePasscodeUnlockSessionExpiresAt,
   PasscodeUnlockSession,
 } from '../../storage/passcodeUnlockSession'
+import { withPasscodeOperationLock } from '../core/passcodeAttemptThrottle'
+import { verifyPasscode } from '../core/passcodeLock'
 import { usePasscode } from '../state/passcode'
 
 type UsePasscodeUnlockSessionInput = {
@@ -29,6 +31,8 @@ export const usePasscodeUnlockSession = ({
     getPasscodeUnlockSession,
     setPasscodeUnlockSession,
     clearPasscodeUnlockSession,
+    getPasscodeEncryption,
+    getVaults,
   } = useCore()
 
   const [restoreState, setRestoreState] = useState<RestoreState>(() => {
@@ -77,33 +81,56 @@ export const usePasscodeUnlockSession = ({
 
     let cancelled = false
 
-    getPasscodeUnlockSession()
-      .then(session => {
-        if (cancelled) {
-          return
-        }
+    const restorePasscodeUnlockSession = async () => {
+      try {
+        await withPasscodeOperationLock(async () => {
+          const session = await getPasscodeUnlockSession()
 
-        if (session !== null) {
-          setPasscode(session.passcode)
-        }
+          if (cancelled || session === null) {
+            return
+          }
 
-        setRestoreState({
-          hasPasscodeEncryption,
-          canPersistPasscodeUnlockSession,
-          complete: true,
+          const [passcodeEncryption, vaults] = await Promise.all([
+            getPasscodeEncryption(),
+            getVaults(),
+          ])
+
+          if (cancelled) {
+            return
+          }
+
+          const isValid = await verifyPasscode({
+            vaults,
+            encryptedSample: passcodeEncryption?.encryptedSample ?? null,
+            passcode: session.passcode,
+          })
+
+          if (cancelled) {
+            return
+          }
+
+          if (isValid) {
+            setPasscode(session.passcode)
+          } else {
+            await clearPasscodeUnlockSession()
+          }
         })
-      })
-      .catch(() => {
-        if (cancelled) {
-          return
+      } catch {
+        if (!cancelled) {
+          await clearPasscodeUnlockSession().catch(() => {})
         }
+      } finally {
+        if (!cancelled) {
+          setRestoreState({
+            hasPasscodeEncryption,
+            canPersistPasscodeUnlockSession,
+            complete: true,
+          })
+        }
+      }
+    }
 
-        setRestoreState({
-          hasPasscodeEncryption,
-          canPersistPasscodeUnlockSession,
-          complete: true,
-        })
-      })
+    void restorePasscodeUnlockSession()
 
     return () => {
       cancelled = true
@@ -111,7 +138,10 @@ export const usePasscodeUnlockSession = ({
   }, [
     hasPasscodeEncryption,
     canPersistPasscodeUnlockSession,
+    clearPasscodeUnlockSession,
+    getPasscodeEncryption,
     getPasscodeUnlockSession,
+    getVaults,
     setPasscode,
   ])
 
