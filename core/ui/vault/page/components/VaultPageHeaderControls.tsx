@@ -5,7 +5,6 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ClockRotateClockwiseIcon } from '@lib/ui/icons/ClockRotateClockwiseIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
-import { StationOutlineSettingsIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { HStack } from '@lib/ui/layout/Stack'
 
 import { RefreshVaultBalance } from '../balance/RefreshVaultBalance'
@@ -35,7 +34,7 @@ export const VaultPageHeaderControls = () => {
         size={isExtension ? 'lg' : undefined}
       >
         <IconWrapper size={24}>
-          {isExtension ? <StationOutlineSettingsIcon /> : <SettingsIcon />}
+          <SettingsIcon />
         </IconWrapper>
       </IconButton>
     </HStack>
