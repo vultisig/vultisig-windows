@@ -2,6 +2,7 @@ import {
   SerializedTransactionRecord,
   TransactionRecord,
 } from '@core/ui/transaction-history/core'
+import { normalizeTransactionRecord } from '@core/ui/transaction-history/record/normalizeTransactionRecord'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
@@ -41,7 +42,10 @@ const deserializeRecord = (
     throw new Error(`Failed to parse transaction data for record ${record.id}`)
   }
 
-  return { ...record, data: parsedData } as TransactionRecord
+  return normalizeTransactionRecord({
+    ...record,
+    data: parsedData,
+  } as TransactionRecord)
 }
 
 const serializeRecord = (
