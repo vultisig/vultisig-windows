@@ -31,8 +31,8 @@ import {
  * into the QBTC claim flow. Visible for any vault holding an MLDSA key with at
  * least one claimable UTXO, where ClaimWithProof is not globally disabled - the
  * flow itself co-signs with the server or a second device depending on the
- * vault, so neither kind is excluded here. Dismissing it hides it for good,
- * per the `qbtcClaim` entry in the shared per-banner dismiss registry. */
+ * vault, so neither kind is excluded here. Dismissing it hides it for the
+ * cooldown its entry sets in the shared per-banner dismiss registry. */
 export const QbtcClaimBanner = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
