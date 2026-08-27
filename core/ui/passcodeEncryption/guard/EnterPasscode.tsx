@@ -1,19 +1,3 @@
-import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
-import {
-  getPasscodeAttemptDelayMs,
-  recordFailedPasscodeAttempt,
-  withPasscodeOperationLock,
-} from '@core/ui/passcodeEncryption/core/passcodeAttemptThrottle'
-import {
-  getPasscodeEntryLength,
-  isPasscodeEntryCandidate,
-  verifyPasscodeEntry,
-} from '@core/ui/passcodeEncryption/core/passcodeLock'
-import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
-import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
-import { useCore } from '@core/ui/state/core'
-import { usePasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
-import { StorageKey } from '@core/ui/storage/StorageKey'
 import { Button } from '@lib/ui/buttons/Button'
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
@@ -24,6 +8,23 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { useCore } from '../../state/core'
+import { usePasscodeEncryption } from '../../storage/passcodeEncryption'
+import { StorageKey } from '../../storage/StorageKey'
+import { passcodeEncryptionConfig } from '../core/config'
+import {
+  getPasscodeAttemptDelayMs,
+  recordFailedPasscodeAttempt,
+  withPasscodeOperationLock,
+} from '../core/passcodeAttemptThrottle'
+import {
+  getPasscodeEntryLength,
+  isPasscodeEntryCandidate,
+  verifyPasscodeEntry,
+} from '../core/passcodeLock'
+import { PasscodeInput } from '../manage/PasscodeInput'
+import { usePasscode } from '../state/passcode'
 
 const Wrapper = styled.div`
   ${takeWholeSpace}

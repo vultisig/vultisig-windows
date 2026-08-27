@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 
 import { usePasscodeUnlockSession } from '@core/ui/passcodeEncryption/autoLock/usePasscodeUnlockSession'
+import { withPasscodeOperationLock } from '@core/ui/passcodeEncryption/core/passcodeAttemptThrottle'
 import { verifyPasscode } from '@core/ui/passcodeEncryption/core/passcodeLock'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
 import { useCore } from '@core/ui/state/core'
@@ -24,6 +25,10 @@ describe('usePasscodeUnlockSession', () => {
     vi.mocked(useCore).mockReset()
     vi.mocked(usePasscode).mockReset()
     vi.mocked(verifyPasscode).mockReset()
+    Object.defineProperty(navigator, 'locks', {
+      configurable: true,
+      value: undefined,
+    })
   })
 
   it('when persistence is disabled: no pending restore and no storage calls', () => {
@@ -229,6 +234,66 @@ describe('usePasscodeUnlockSession', () => {
     })
 
     expect(setPasscode).not.toHaveBeenCalled()
+  })
+
+  it('serializes failed-restore clearing ahead of a concurrent session write', async () => {
+    let tail = Promise.resolve<unknown>(undefined)
+    const request = vi.fn(
+      (_name: string, operation: () => Promise<unknown>) => {
+        const result = tail.then(operation)
+        tail = result.catch(() => undefined)
+        return result
+      }
+    )
+    Object.defineProperty(navigator, 'locks', {
+      configurable: true,
+      value: { request },
+    })
+
+    let finishClear!: () => void
+    const clearPending = new Promise<void>(resolve => {
+      finishClear = resolve
+    })
+    const getPasscodeUnlockSession = vi.fn(async () => {
+      throw new Error('restore failed')
+    })
+    const setPasscodeUnlockSession = vi.fn(async () => {})
+    const clearPasscodeUnlockSession = vi.fn(() => clearPending)
+
+    vi.mocked(useCore).mockReturnValue({
+      canPersistPasscodeUnlockSession: true,
+      getPasscodeUnlockSession,
+      setPasscodeUnlockSession,
+      clearPasscodeUnlockSession,
+    } as ReturnType<typeof useCore>)
+    vi.mocked(usePasscode).mockReturnValue([null, vi.fn()])
+
+    const { unmount } = renderHook(() =>
+      usePasscodeUnlockSession({
+        hasPasscodeEncryption: true,
+        passcodeAutoLock: null,
+      })
+    )
+
+    await waitFor(() => {
+      expect(clearPasscodeUnlockSession).toHaveBeenCalledTimes(1)
+    })
+    unmount()
+
+    const concurrentWrite = withPasscodeOperationLock(() =>
+      setPasscodeUnlockSession({ passcode: 'new-session', expiresAt: null })
+    )
+
+    expect(setPasscodeUnlockSession).not.toHaveBeenCalled()
+
+    finishClear()
+    await concurrentWrite
+
+    expect(setPasscodeUnlockSession).toHaveBeenCalledWith({
+      passcode: 'new-session',
+      expiresAt: null,
+    })
+    expect(request).toHaveBeenCalledTimes(2)
   })
 
   it('disabling passcode encryption clears persisted session', async () => {

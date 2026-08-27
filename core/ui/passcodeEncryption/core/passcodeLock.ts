@@ -78,6 +78,13 @@ export const getPasscodeEntryLength = ({
     ? passcodeEncryptionConfig.passcodeLength
     : getStoredPasscodeLength(storedPasscodeLength)
 
+/**
+ * Whether the entered passcode is complete enough to verify.
+ *
+ * Proof-backed candidates use the stored passcode length. Proofless recovery
+ * uses the current length unless the user explicitly submits a legacy-length
+ * candidate through `allowProoflessLegacy`.
+ */
 export const isPasscodeEntryCandidate = ({
   allowProoflessLegacy = false,
   encryptedSample,

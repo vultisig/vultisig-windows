@@ -82,8 +82,8 @@ export const usePasscodeUnlockSession = ({
     let cancelled = false
 
     const restorePasscodeUnlockSession = async () => {
-      try {
-        await withPasscodeOperationLock(async () => {
+      await withPasscodeOperationLock(async () => {
+        try {
           const session = await getPasscodeUnlockSession()
 
           if (cancelled || session === null) {
@@ -114,12 +114,12 @@ export const usePasscodeUnlockSession = ({
           } else {
             await clearPasscodeUnlockSession()
           }
-        })
-      } catch {
-        if (!cancelled) {
-          await clearPasscodeUnlockSession().catch(() => {})
+        } catch {
+          if (!cancelled) {
+            await clearPasscodeUnlockSession().catch(() => {})
+          }
         }
-      } finally {
+      }).finally(() => {
         if (!cancelled) {
           setRestoreState({
             hasPasscodeEncryption,
@@ -127,7 +127,7 @@ export const usePasscodeUnlockSession = ({
             complete: true,
           })
         }
-      }
+      })
     }
 
     void restorePasscodeUnlockSession()
@@ -150,24 +150,26 @@ export const usePasscodeUnlockSession = ({
       return
     }
 
-    if (!hasPasscodeEncryption) {
-      void clearPasscodeUnlockSession()
+    if (hasPasscodeEncryption && !restoreComplete) {
       return
     }
 
-    if (!restoreComplete) {
-      return
-    }
-
-    if (passcode) {
-      const session: PasscodeUnlockSession = {
-        passcode,
-        expiresAt: computePasscodeUnlockSessionExpiresAt(passcodeAutoLock),
+    void withPasscodeOperationLock(async () => {
+      if (!hasPasscodeEncryption) {
+        await clearPasscodeUnlockSession()
+        return
       }
-      void setPasscodeUnlockSession(session)
-    } else {
-      void clearPasscodeUnlockSession()
-    }
+
+      if (passcode) {
+        const session: PasscodeUnlockSession = {
+          passcode,
+          expiresAt: computePasscodeUnlockSessionExpiresAt(passcodeAutoLock),
+        }
+        await setPasscodeUnlockSession(session)
+      } else {
+        await clearPasscodeUnlockSession()
+      }
+    })
   }, [
     hasPasscodeEncryption,
     passcode,
