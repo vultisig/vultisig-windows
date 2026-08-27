@@ -15,6 +15,7 @@ export const bannerIds = [
   'vaultBackup',
   'referralCode',
   'kamino',
+  'qbtcClaim',
 ] as const
 
 export type BannerId = (typeof bannerIds)[number]
@@ -36,6 +37,14 @@ export type LegacyDismissedBanners = BannerId[]
 export type StoredDismissedBanners = DismissedBanners | LegacyDismissedBanners
 
 /**
+ * Cooldown assigned to banners whose dismissal is meant to be final: the window
+ * never elapses, so the banner never comes back. Campaign banners the user has
+ * explicitly waved away use this instead of a one-off "hidden" flag, so the
+ * choice stays in the per-banner registry below.
+ */
+const neverReturnsAfterDismissal = Number.POSITIVE_INFINITY
+
+/**
  * Per-banner cooldown (in ms) after dismissal, after which the banner may show
  * again. Configurable per banner rather than hard-coded in carousel logic.
  */
@@ -48,6 +57,7 @@ export const bannerDismissalTtl: Record<BannerId, number> = {
   vaultBackup: convertDuration(7, 'd', 'ms'),
   referralCode: convertDuration(7, 'd', 'ms'),
   kamino: convertDuration(7, 'd', 'ms'),
+  qbtcClaim: neverReturnsAfterDismissal,
 }
 
 /**

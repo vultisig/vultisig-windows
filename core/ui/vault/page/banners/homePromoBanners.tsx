@@ -7,6 +7,16 @@ import { ThemeColor } from '@lib/ui/theme/ThemeColors'
 import { ComponentType } from 'react'
 
 /**
+ * The banners the home carousel actually renders. Banners that live on their
+ * own surface - the agent coachmark, the QBTC claim promo on the Bitcoin page -
+ * share the dismissal registry but not the carousel's presentation.
+ */
+export type HomePromoBannerId = Exclude<
+  BannerId,
+  'agentNavigationCoachmark' | 'qbtcClaim'
+>
+
+/**
  * Static presentation for each home promo banner: the artwork, the accent hue
  * behind it, and what fills the icon tile. Copy lives in i18n and the tap
  * destination lives with the carousel, so this record stays free of both.
@@ -25,7 +35,7 @@ export type HomePromoBannerVisuals = {
 const artSrc = (name: string) => `/core/images/banner-art-${name}.png`
 
 export const homePromoBannerVisuals: Record<
-  Exclude<BannerId, 'agentNavigationCoachmark'>,
+  HomePromoBannerId,
   HomePromoBannerVisuals
 > = {
   migrate: {

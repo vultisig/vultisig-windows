@@ -62,6 +62,20 @@ describe('isBannerDismissed', () => {
     ).toBe(false)
   })
 
+  it('never resurfaces a banner whose dismissal is final', () => {
+    const banners: DismissedBanners = {
+      qbtcClaim: { dismissedAt: 0 },
+    }
+
+    expect(
+      isBannerDismissed({
+        banners,
+        id: 'qbtcClaim',
+        now: convertDuration(3650, 'd', 'ms'),
+      })
+    ).toBe(true)
+  })
+
   it('applies a per-banner TTL: buyVultPromo resurfaces before other banners', () => {
     const dismissedAt = now - convertDuration(10, 'd', 'ms')
     const banners: DismissedBanners = {
