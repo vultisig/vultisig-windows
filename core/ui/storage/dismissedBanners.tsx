@@ -15,6 +15,7 @@ export const bannerIds = [
   'vaultBackup',
   'referralCode',
   'kamino',
+  'qbtcClaim',
 ] as const
 
 export type BannerId = (typeof bannerIds)[number]
@@ -48,6 +49,11 @@ export const bannerDismissalTtl: Record<BannerId, number> = {
   vaultBackup: convertDuration(7, 'd', 'ms'),
   referralCode: convertDuration(7, 'd', 'ms'),
   kamino: convertDuration(7, 'd', 'ms'),
+  // Deliberately a TTL rather than a permanent dismissal: this banner is gated
+  // on the current vault, but the dismissal is stored per profile (#4769), so a
+  // dismissal on a vault with nothing to claim would otherwise hide the banner
+  // for good on a vault that does have claimable UTXOs.
+  qbtcClaim: convertDuration(7, 'd', 'ms'),
 }
 
 /**
