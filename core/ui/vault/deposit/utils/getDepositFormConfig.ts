@@ -142,7 +142,7 @@ export const getDepositFormConfig = ({
       // amount is display-only because the native contract sweeps all matured
       // entries. Requiring it prevents a private action route from fabricating
       // a zero-value claim presentation.
-      schema: z.object({ amount: z.string() }),
+      schema: z.object({ amount: requiredAmountSchema(t) }),
     }),
     withdraw_ruji_rewards: () => ({
       fields: [],

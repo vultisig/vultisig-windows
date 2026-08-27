@@ -13,5 +13,6 @@ export const useTronAccountResourcesQuery = () => {
   return useQuery({
     queryKey: getTronAccountResourcesQueryKey(address),
     queryFn: () => getExactTronAccountResources(address),
+    enabled: Boolean(address),
   })
 }

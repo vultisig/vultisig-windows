@@ -17,7 +17,7 @@ permissions:
 
 env:
   NODE_OPTIONS: '--max-old-space-size=8192'
-  NODE_VERSION: '23.7.0'
+  NODE_VERSION: '24.14.1'
 
 jobs:
   lint:

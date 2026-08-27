@@ -9,6 +9,7 @@ export const tronWithdrawExpireUnfreezeAction =
  */
 export const tronWithdrawExpireUnfreezeMemo = 'WITHDRAW_EXPIRE_UNFREEZE'
 
+/** Whether a Stake 2.0 withdrawal has reached its claim timestamp. */
 export const isTronWithdrawalClaimable = (
   expireTimeMs: number,
   nowMs = Date.now()
@@ -35,6 +36,7 @@ export const getTronClaimableAmount = (
     6
   )
 
+/** Formats the hidden claim amount for the verify screen when it is present. */
 export const getTronClaimAmountDisplay = ({
   amount,
   ticker,
@@ -55,6 +57,7 @@ export const getTronClaimChainAmountDisplay = ({
   decimals: number
 }) => toExactAmountString(BigInt(amount), decimals)
 
+/** Whether a keysign payload represents the native expired-unfreeze claim. */
 export const isTronWithdrawExpireUnfreezePayload = ({
   chain,
   memo,
