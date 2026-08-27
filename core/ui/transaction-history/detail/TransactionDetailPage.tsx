@@ -18,6 +18,7 @@ import {
 import { getRecordTagType } from '@core/ui/transaction-history/recordTagType'
 import { useTransactionStatusPolling } from '@core/ui/transaction-history/status/useTransactionStatusPolling'
 import { TransactionHistoryTag } from '@core/ui/transaction-history/TransactionHistoryTag'
+import { getTronClaimChainAmountDisplay } from '@core/ui/vault/deposit/tron/withdrawExpireUnfreeze'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { toNativeSwapLimitAmount } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { fromThorchainFixedPoint } from '@core/ui/vault/swap/limit/amount'
@@ -168,6 +169,13 @@ const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
     fiatValue: record.fiatValue,
     cryptoAmount,
   })
+  const amountDisplay =
+    data.operation === 'tronWithdrawExpireUnfreeze'
+      ? getTronClaimChainAmountDisplay({
+          amount: data.amount,
+          decimals: data.decimals,
+        })
+      : formatCryptoDisplay(safeBigInt(data.amount), data.decimals)
 
   return (
     <AmountCard gap={12} alignItems="center">
@@ -183,8 +191,7 @@ const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
       )}
       <VStack alignItems="center" gap={2}>
         <Text size={18} weight={500} centerHorizontally>
-          {formatCryptoDisplay(safeBigInt(data.amount), data.decimals)}{' '}
-          {data.token}
+          {amountDisplay} {data.token}
         </Text>
         {formattedFiat && (
           <Text size={14} color="supporting" centerHorizontally>
@@ -206,9 +213,15 @@ const SendDetailPanel = ({ record }: { record: SendTransactionRecord }) => {
         <DetailRow label={t('from')}>
           <MiddleTruncate text={data.fromAddress} width={160} />
         </DetailRow>
-        <DetailRow label={t('to')}>
-          <MiddleTruncate text={data.toAddress} width={160} />
-        </DetailRow>
+        {data.operation === 'tronWithdrawExpireUnfreeze' ? (
+          <DetailRow label={t('action')}>
+            <Text>{t('withdraw_expire_unfreeze')}</Text>
+          </DetailRow>
+        ) : (
+          <DetailRow label={t('to')}>
+            <MiddleTruncate text={data.toAddress} width={160} />
+          </DetailRow>
+        )}
         {data.feeEstimate && (
           <DetailRow label={t('network_fee')}>
             <Text>{data.feeEstimate}</Text>
@@ -526,6 +539,9 @@ export const TransactionDetailPage = () => {
     records.find(r => r.id === id),
     'transaction record for detail view'
   )
+  const isTronClaim =
+    record.type === 'send' &&
+    record.data.operation === 'tronWithdrawExpireUnfreeze'
 
   useTransactionStatusPolling(record)
   // Keeps a limit order's own state fresh while its detail is on screen; the
@@ -545,9 +561,10 @@ export const TransactionDetailPage = () => {
       <VStack gap={20} alignItems="stretch">
         <VStack alignItems="center">
           <TransactionHistoryTag
-            type={getRecordTagType(record.type)}
+            type={isTronClaim ? 'receive' : getRecordTagType(record.type)}
             label={match(record.type, {
-              send: () => undefined,
+              send: () =>
+                isTronClaim ? t('withdraw_expire_unfreeze') : undefined,
               swap: () => undefined,
               limitSwap: () => t('swap_mode_limit'),
               trustLine: () => t('trust_line'),

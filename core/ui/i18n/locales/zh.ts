@@ -908,6 +908,7 @@ export const zh = {
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: '可领取',
+  withdraw_expire_unfreeze: '领取',
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: '带宽和能量',
   tron_bandwidth_description:

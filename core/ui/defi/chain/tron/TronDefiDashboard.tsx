@@ -1,6 +1,12 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { TronResourcesSection } from '@core/ui/vault/chain/tron/TronResourcesSection'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
+import {
+  getTronClaimableAmount,
+  isTronWithdrawalClaimable,
+  tronWithdrawExpireUnfreezeAction,
+} from '@core/ui/vault/deposit/tron/withdrawExpireUnfreeze'
+import { toExactAmountString } from '@core/ui/vault/deposit/utils/exactAmountString'
 import { Button } from '@lib/ui/buttons/Button'
 import { CalendarClockIcon } from '@lib/ui/icons/CalendarClockIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -85,6 +91,26 @@ export const TronDefiDashboard = () => {
     })
   }
 
+  const navigateToClaim = () => {
+    const claimableAmount = getTronClaimableAmount(
+      resourcesQuery.data?.unfreezingEntries ?? []
+    )
+
+    navigate({
+      id: 'deposit',
+      state: {
+        coin: tronCoinKey,
+        action: tronWithdrawExpireUnfreezeAction,
+        // WithdrawExpireUnfreeze sweeps every matured entry. The native
+        // contract has no amount field, but carrying the sum in the keysign
+        // payload keeps initiator/co-signer/history displays truthful and
+        // matches the cross-platform payload contract.
+        form: { amount: claimableAmount },
+        entryPoint: 'defi',
+      },
+    })
+  }
+
   return (
     <VStack gap={16}>
       <TronResourcesSection />
@@ -137,9 +163,14 @@ export const TronDefiDashboard = () => {
 
               <VStack>
                 {resourcesQuery.data.unfreezingEntries.map((entry, index) => {
-                  const amountTrx = sunToTrx(entry.unfreezeAmountSun)
+                  const amountTrx = toExactAmountString(
+                    entry.unfreezeAmountSun,
+                    6
+                  )
                   const timeLabel = formatTronWithdrawalTime(entry.expireTimeMs)
-                  const isClaimable = entry.expireTimeMs <= Date.now()
+                  const isClaimable = isTronWithdrawalClaimable(
+                    entry.expireTimeMs
+                  )
 
                   return (
                     <WithdrawalRow
@@ -149,7 +180,7 @@ export const TronDefiDashboard = () => {
                       fullWidth
                     >
                       <VStack gap={2}>
-                        <Text size={14}>{amountTrx.toFixed(6)} TRX</Text>
+                        <Text size={14}>{amountTrx} TRX</Text>
                         {isClaimable ? (
                           <ClaimableBadge size={12}>
                             {t('tron_ready_to_claim')}
@@ -160,6 +191,15 @@ export const TronDefiDashboard = () => {
                           </Text>
                         )}
                       </VStack>
+                      {isClaimable ? (
+                        <Button
+                          kind="secondary"
+                          onClick={navigateToClaim}
+                          style={{ flexShrink: 0, width: 'auto' }}
+                        >
+                          {t(tronWithdrawExpireUnfreezeAction)}
+                        </Button>
+                      ) : null}
                     </WithdrawalRow>
                   )
                 })}

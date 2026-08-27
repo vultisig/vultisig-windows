@@ -97,6 +97,34 @@ const keysignPayload = ({
   })
 
 describe('createTransactionRecord', () => {
+  it('records a TRON expired-unfreeze as a claim operation without persisting its routing marker', () => {
+    const owner = 'TClaimOwner'
+    const payload = create(KeysignPayloadSchema, {
+      coin: create(CoinSchema, {
+        chain: Chain.Tron,
+        ticker: 'TRX',
+        address: owner,
+        decimals: 6,
+        isNativeToken: true,
+      }),
+      toAddress: owner,
+      toAmount: '12500000',
+      memo: 'WITHDRAW_EXPIRE_UNFREEZE',
+    })
+
+    const record = createTransactionRecord({
+      payload,
+      txHash: 'tron-claim-hash',
+      vaultId: 'vault-1',
+    })
+
+    expect(record.type).toBe('send')
+    if (record.type !== 'send') return
+    expect(record.data.operation).toBe('tronWithdrawExpireUnfreeze')
+    expect(record.data.amount).toBe('12500000')
+    expect(record.data.memo).toBeUndefined()
+  })
+
   it('uses LI.FI scan URL for general LI.FI swap', () => {
     const txHash =
       '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'

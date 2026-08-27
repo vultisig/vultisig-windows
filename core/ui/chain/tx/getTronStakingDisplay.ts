@@ -1,17 +1,18 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 
-type TronStakingOperation = 'freeze' | 'unfreeze'
+type TronStakingOperation = 'freeze' | 'unfreeze' | 'claim'
 
 type TronStakingDisplay = {
   operation: TronStakingOperation
-  resource: TronResourceType
+  resource?: TronResourceType
 }
 
 /** Amount heading each staking operation replaces "You're sending" / "Sent" with. */
 export const tronStakingTitleKey = {
   freeze: 'tron_freeze_verify_title',
   unfreeze: 'tron_unfreeze_verify_title',
+  claim: 'withdraw_expire_unfreeze',
 } as const satisfies Record<TronStakingOperation, string>
 
 const operationByMemoPrefix: Record<string, TronStakingOperation> = {
@@ -33,9 +34,9 @@ type GetTronStakingDisplayInput = {
 
 /**
  * TRON Stake 2.0 rides through the regular transfer payload and carries its
- * operation only as an internal `FREEZE:<resource>` / `UNFREEZE:<resource>`
- * memo, which the signer turns into a FreezeBalanceV2 / UnfreezeBalanceV2
- * contract — the memo itself never reaches the chain. Recognizing it lets the
+ * operation only as an internal `FREEZE:<resource>`, `UNFREEZE:<resource>`, or
+ * `WITHDRAW_EXPIRE_UNFREEZE` memo, which the signer turns into the matching
+ * native contract — the memo itself never reaches the chain. Recognizing it lets the
  * verify screens name the operation and surface the frozen resource the same
  * way the initiating device does, instead of leaking the raw marker as a memo.
  *
@@ -47,6 +48,10 @@ export const getTronStakingDisplay = ({
   memo,
 }: GetTronStakingDisplayInput): TronStakingDisplay | undefined => {
   if (chain !== Chain.Tron || !memo) return undefined
+
+  if (memo === 'WITHDRAW_EXPIRE_UNFREEZE') {
+    return { operation: 'claim' }
+  }
 
   const match = stakingMemo.exec(memo)
   if (!match) return undefined

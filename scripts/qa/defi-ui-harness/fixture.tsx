@@ -2,11 +2,13 @@ import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoi
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { getCircleAccountQueryKey } from '@core/ui/defi/protocols/circle/queries/circleAccount'
+import { CoreView } from '@core/ui/navigation/CoreView'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { CurrentVaultIdProvider } from '@core/ui/storage/currentVaultId'
 import { SolanaMoveStakeDestinations } from '@core/ui/storage/solanaMoveStakeDestinations'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { VaultsProvider } from '@core/ui/storage/vaults'
+import { getTronAccountResourcesQueryKey } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { NavigationProvider } from '@lib/ui/navigation/state'
@@ -16,6 +18,7 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { TronAccountResources } from '@vultisig/core-chain/chains/tron/resources'
 import {
   AccountCoin,
   accountCoinKeyToString,
@@ -70,9 +73,16 @@ type SeedDefiPositionsInput = {
   positions: Record<string, string[]>
 }
 
+type SeedTronAccountResourcesInput = {
+  queryClient: QueryClient
+  address: string
+  resources: TronAccountResources
+}
+
 type DefiQaProvidersProps = ChildrenProp & {
   queryClient: QueryClient
   vault: QaVault
+  initialView?: CoreView
 }
 
 const noop = async () => {}
@@ -80,6 +90,7 @@ const noop = async () => {}
 export const qaOwnerAddress = '0x0000000000000000000000000000000000000001'
 export const qaCircleAccountAddress =
   '0x0000000000000000000000000000000000000002'
+export const qaTronAddress = 'TQ1QaHarnessAddress11111111111111111'
 
 export const qaEthCoin: AccountCoin = {
   chain: Chain.Ethereum,
@@ -89,7 +100,8 @@ export const qaEthCoin: AccountCoin = {
 }
 
 /** A fake but base58-shaped Solana address, for scenarios on that chain. */
-export const qaSolanaOwnerAddress = 'QAKamino1111111111111111111111111111111111111'
+export const qaSolanaOwnerAddress =
+  'QAKamino1111111111111111111111111111111111111'
 
 /**
  * The vault's native Solana coin. Present so `useCurrentVaultAddress` resolves
@@ -98,6 +110,13 @@ export const qaSolanaOwnerAddress = 'QAKamino11111111111111111111111111111111111
 export const qaSolanaCoin: AccountCoin = {
   ...chainFeeCoin[Chain.Solana],
   address: qaSolanaOwnerAddress,
+}
+
+export const qaTronCoin: AccountCoin = {
+  chain: Chain.Tron,
+  address: qaTronAddress,
+  ticker: 'TRX',
+  decimals: 6,
 }
 
 /**
@@ -239,6 +258,20 @@ export const seedDefiPositions = ({
   queryClient.setQueryData([StorageKey.defiPositions], positions)
 }
 
+/**
+ * Seeds the TRON resource lookup with deterministic frozen and withdrawal data.
+ *
+ * @param input - Query client, TRON address, and resource response fixture.
+ * @returns Nothing; the response is written into the query cache.
+ */
+export const seedTronAccountResources = ({
+  queryClient,
+  address,
+  resources,
+}: SeedTronAccountResourcesInput) => {
+  queryClient.setQueryData(getTronAccountResourcesQueryKey(address), resources)
+}
+
 let qaSolanaMoveStakeDestinations: SolanaMoveStakeDestinations = {}
 
 const createQaCoreState = (vault: QaVault): CoreState => {
@@ -338,6 +371,7 @@ const createQaCoreState = (vault: QaVault): CoreState => {
 export const DefiQaProviders = ({
   queryClient,
   vault,
+  initialView = { id: 'defi', state: { protocol: 'circle' } },
   children,
 }: DefiQaProvidersProps) => {
   const vaultId = getVaultId(vault)
@@ -353,7 +387,7 @@ export const DefiQaProviders = ({
                 <CurrentVaultProvider value={vault}>
                   <NavigationProvider
                     initialValue={{
-                      history: [{ id: 'defi', state: { protocol: 'circle' } }],
+                      history: [initialView],
                     }}
                   >
                     {children}

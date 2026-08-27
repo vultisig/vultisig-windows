@@ -28,6 +28,17 @@ Use Playwright or the in-app browser to capture the important states.
    opposite, a divider, and the Withdraw + Deposit pair.
 2. The other two are empty: identity, APY, and a full-width Deposit.
 
+**TRON Stake 2.0**
+
+Open `http://127.0.0.1:5177/?scenario=tron-withdrawals` to render a TRON
+resource dashboard with one expired withdrawal and one future withdrawal. The
+expired row must show **Claim**, while the future row must only show its
+countdown.
+
+Open `http://127.0.0.1:5177/?scenario=tron-claim-form` to render the claim
+action after it has entered the deposit/sign flow. The form has no amount or
+recipient fields and exposes only the ready state and **Continue** action.
+
 The fixture helpers in `fixture.tsx` seed React Query through production query
 key helpers:
 
@@ -37,6 +48,7 @@ key helpers:
 - `seedDefiPositions` writes the `defiPositions` storage key.
 - `seedKaminoEarn` (in `kaminoFixture.ts`) uses `kaminoVaultsQueryKey` and
   `getKaminoPositionsQueryKey`.
+- `seedTronAccountResources` uses `getTronAccountResourcesQueryKey`.
 
 `seedCoinPrices` keys on the whole coin list, so a scenario has to deduplicate
 its coins exactly as the screen does — a list of a different length is a

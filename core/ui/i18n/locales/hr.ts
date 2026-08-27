@@ -971,6 +971,7 @@ export const hr = {
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Spremno za preuzimanje',
+  withdraw_expire_unfreeze: 'Preuzmi',
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Propusnost i energija',
   tron_bandwidth_description:

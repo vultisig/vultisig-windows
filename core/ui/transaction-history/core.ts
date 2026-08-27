@@ -47,6 +47,8 @@ export type SendTransactionData = {
    * non-Cosmos sends, which keep the default "Send" label.
    */
   messageTypeUrl?: string
+  /** Native system operation carried by an internal keysign marker. */
+  operation?: 'tronWithdrawExpireUnfreeze'
 }
 
 export type SwapTransactionData = {

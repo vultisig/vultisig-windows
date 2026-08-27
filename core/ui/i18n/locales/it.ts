@@ -983,6 +983,7 @@ export const it = {
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Pronto da reclamare',
+  withdraw_expire_unfreeze: 'Reclama',
   tron_unfreeze_button: 'Unfreeze',
   tron_bandwidth_and_energy: 'Larghezza di banda e energia',
   tron_bandwidth_description:

@@ -20,6 +20,10 @@ import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositData } from '../state/data'
+import {
+  getTronClaimAmountDisplay,
+  tronWithdrawExpireUnfreezeAction,
+} from '../tron/withdrawExpireUnfreeze'
 import { BondOverview } from './BondOverview'
 import { StakeOverview } from './StakeOverview'
 
@@ -55,6 +59,13 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
   const amountTicker = isOpenTrustLine
     ? String(depositData['currency'] ?? '')
     : coin.ticker
+  const tronClaimAmount =
+    selectedChainAction === tronWithdrawExpireUnfreezeAction
+      ? getTronClaimAmountDisplay({
+          amount: depositData['amount'],
+          ticker: coin.ticker,
+        })
+      : undefined
 
   const shouldUseBondOverview =
     entryPoint === 'defi' &&
@@ -89,6 +100,17 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
         <ProgressLine value={0.3} />
         <List>
           <ListItem description={sender} title={t('from')} />
+          {selectedChainAction === tronWithdrawExpireUnfreezeAction && (
+            <>
+              <ListItem
+                description={t(tronWithdrawExpireUnfreezeAction)}
+                title={t('action')}
+              />
+              {tronClaimAmount && (
+                <ListItem description={tronClaimAmount} title={t('amount')} />
+              )}
+            </>
+          )}
           {actionFields.map(field => {
             if (
               formattedDepositFormData[field.name] == null ||

@@ -4,6 +4,15 @@ import { describe, expect, it } from 'vitest'
 import { getTronStakingDisplay } from './getTronStakingDisplay'
 
 describe('getTronStakingDisplay', () => {
+  it('recognizes an expired-unfreeze claim without exposing a resource marker', () => {
+    expect(
+      getTronStakingDisplay({
+        chain: Chain.Tron,
+        memo: 'WITHDRAW_EXPIRE_UNFREEZE',
+      })
+    ).toEqual({ operation: 'claim' })
+  })
+
   it.each([
     ['FREEZE:BANDWIDTH', 'freeze', 'BANDWIDTH'],
     ['FREEZE:ENERGY', 'freeze', 'ENERGY'],

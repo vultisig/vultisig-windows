@@ -8,6 +8,8 @@ import {
   useTransactionRecordsQuery,
   useUpdateTransactionRecordMutation,
 } from '@core/ui/storage/transactionHistory'
+import { getTronAccountResourcesQueryKey } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
+import { isTronWithdrawExpireUnfreezePayload } from '@core/ui/vault/deposit/tron/withdrawExpireUnfreeze'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useQueryClient } from '@tanstack/react-query'
@@ -121,6 +123,19 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
               refetchType: 'none',
             })
           })
+
+          if (
+            isTronWithdrawExpireUnfreezePayload({
+              chain: keysignPayload.coin.chain,
+              memo: keysignPayload.memo,
+            })
+          ) {
+            void queryClient.invalidateQueries({
+              queryKey: getTronAccountResourcesQueryKey(
+                keysignPayload.coin.address
+              ),
+            })
+          }
         },
       }}
     >

@@ -40,5 +40,8 @@ export default defineConfig(({ mode }) => {
       port: 5177,
       strictPort: true,
     },
+    build: {
+      target: 'esnext',
+    },
   }
 })

@@ -51,6 +51,7 @@ export const useAvailableChainActions = (chain: Chain) => {
         unstake: () => areStakeActionsAvailable,
         freeze: () => true,
         unfreeze: () => true,
+        withdraw_expire_unfreeze: () => false,
         ibc_transfer: () => true,
         mint: () => mintOptions.length > 0,
         redeem: () => redeemOptions.length > 0,

@@ -1358,6 +1358,7 @@ export const en = {
   tron_frozen_label: 'Frozen',
   tron_pending_withdrawals: 'Pending Withdrawals',
   tron_ready_to_claim: 'Ready to claim',
+  withdraw_expire_unfreeze: 'Claim',
   tron_unfreeze_button: 'Unfreeze',
   tron_unfreeze_verify_title: 'Unfreeze TRON',
   tron_bandwidth_and_energy: 'Bandwidth & Energy',

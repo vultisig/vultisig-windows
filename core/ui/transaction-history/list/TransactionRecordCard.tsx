@@ -3,6 +3,7 @@ import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPri
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { getTronClaimChainAmountDisplay } from '@core/ui/vault/deposit/tron/withdrawExpireUnfreeze'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useLimitOrderStatusLabels } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -171,16 +172,24 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
     }
   }
 
+  const isTronClaim = record.data.operation === 'tronWithdrawExpireUnfreeze'
   const rawAmount = Number(
     fromChainAmount(BigInt(record.data.amount), record.data.decimals)
   )
 
   return {
-    tagType: 'send',
-    amountCrypto: formatCryptoAmount(rawAmount),
+    tagType: isTronClaim ? 'receive' : 'send',
+    amountCrypto: isTronClaim
+      ? getTronClaimChainAmountDisplay({
+          amount: record.data.amount,
+          decimals: record.data.decimals,
+        })
+      : formatCryptoAmount(rawAmount),
     cryptoAmount: rawAmount,
     symbol: record.data.token,
-    pill: { direction: 'to', address: record.data.toAddress },
+    pill: isTronClaim
+      ? getProviderPill({ provider: Chain.Tron, fromChain: record.chain })
+      : { direction: 'to', address: record.data.toAddress },
     coin: record.data.tokenLogo
       ? {
           chain: record.chain,
@@ -254,6 +263,9 @@ export const TransactionRecordCard = ({
   const limitStatusLabel = useLimitOrderStatusLabels()
   const navigate = useCoreNavigate()
   const display = getDisplayData(record)
+  const isTronClaim =
+    record.type === 'send' &&
+    record.data.operation === 'tronWithdrawExpireUnfreeze'
   const amountUsd = useFiatDisplay(record, display.cryptoAmount)
   // `send` and `swap` defer to the Cosmos message label, which turns an
   // otherwise-generic send into "Delegate"/"Vote" when the payload says so.
@@ -261,7 +273,9 @@ export const TransactionRecordCard = ({
     limitSwap: () => t('swap_mode_limit'),
     trustLine: () => t('trust_line'),
     send: () =>
-      getTransactionTagLabel({ messageTypeUrl: display.messageTypeUrl, t }),
+      isTronClaim
+        ? t('withdraw_expire_unfreeze')
+        : getTransactionTagLabel({ messageTypeUrl: display.messageTypeUrl, t }),
     swap: () =>
       getTransactionTagLabel({ messageTypeUrl: display.messageTypeUrl, t }),
   })
