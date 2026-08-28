@@ -417,11 +417,7 @@ test.describe('Swap Flow', () => {
 
       const txHash = await keysignProgress.getTxHash()
       expect(txHash).toBeTruthy()
-      const confirmation = await waitForTxConfirmation(
-        'ethereum',
-        txHash,
-        180_000
-      )
+      const confirmation = await waitForTxConfirmation('ethereum', txHash)
       expect(confirmation.confirmed, confirmation.error).toBe(true)
 
       await expect
