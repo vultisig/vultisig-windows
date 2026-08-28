@@ -22,7 +22,7 @@ import {
 } from '@solana/web3.js'
 import http from 'http'
 
-import { TEST_DAPP_HTML } from '../fixtures/dapp-page.fixture'
+import { testDappHtml } from '../fixtures/dapp-page.fixture'
 import { expect, test } from '../fixtures/extension-loader'
 import { getVaultAddresses } from '../helpers/vault-addresses'
 import {
@@ -65,7 +65,7 @@ test.describe('DApp Provider', () => {
     // Start DApp server
     dappServer = http.createServer((req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/html' })
-      res.end(TEST_DAPP_HTML)
+      res.end(testDappHtml)
     })
 
     await new Promise<void>(resolve => {
