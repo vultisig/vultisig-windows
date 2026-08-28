@@ -14,9 +14,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
-import http from 'http'
 
-import { testDappHtml } from '../fixtures/dapp-page.fixture'
 import { getVaultAddresses } from './vault-addresses'
 
 const solanaRpcEndpoints = [
@@ -27,21 +25,6 @@ const solanaRpcEndpoints = [
 const signedPrefix = 'SolanaSigned: '
 const driveDeadlineMs = 240_000
 const popupPollMs = 1_500
-
-export type TestDappServer = { url: string; close: () => void }
-
-export async function startTestDappServer(): Promise<TestDappServer> {
-  const server = http.createServer((_req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' })
-    res.end(testDappHtml)
-  })
-  await new Promise<void>(resolve => {
-    server.listen(0, '127.0.0.1', () => resolve())
-  })
-  const addr = server.address()
-  const port = typeof addr === 'object' && addr ? addr.port : 0
-  return { url: `http://127.0.0.1:${port}`, close: () => server.close() }
-}
 
 async function fetchSolanaBlockhash(): Promise<string> {
   for (const endpoint of solanaRpcEndpoints) {
@@ -65,6 +48,10 @@ type SubmitFastVaultPasswordIfPromptedInput = {
   probeTimeout?: number
 }
 
+/**
+ * Fills the Fast Vault password prompt when a keysign popup shows one;
+ * a no-op when the prompt never appears within probeTimeout.
+ */
 export async function submitFastVaultPasswordIfPrompted({
   popup,
   password,
@@ -99,9 +86,8 @@ type DriveApprovalPopupsInput = {
   password: string
 }
 
-// A finished keysign leaves its popup on a "Done" screen; the next round's
-// driver would keep finding that one instead of the fresh request. Closes
-// every extension page in the (per-test) context — callers own that context.
+// A finished keysign parks its popup on "Done"; the next round's driver would
+// keep finding it. Closes every extension page in the per-test context.
 async function closeExtensionPopups(
   context: BrowserContext,
   extensionId: string
@@ -128,9 +114,8 @@ const findExtensionPopup = (
         !p.isClosed() && p.url().includes(`chrome-extension://${extensionId}`)
     )
 
-// A "Try Again" screen means the keysign errored — surface the popup's own
-// error text instead of spinning until timeout. The raw error hides behind
-// the "Show exact error" card, so open it first.
+// "Try Again" means the keysign errored; the raw error hides behind the
+// "Show exact error" card, so open it and fail with the popup's own text.
 async function throwKeysignPopupError(popup: Page): Promise<never> {
   await popup
     .getByText(/show exact error/i)
@@ -217,6 +202,7 @@ async function driveApprovalPopupsUntilResult({
   )
 }
 
+/** Inputs for one sign-only dApp keysign against the test vault. */
 export type SignSolanaSelfTransferInput = {
   context: BrowserContext
   extensionId: string
@@ -224,12 +210,17 @@ export type SignSolanaSelfTransferInput = {
   dappUrl: string
 }
 
+/** The signed bytes plus what the dApp submitted, for byte-level assertions. */
 export type SignedSolanaSelfTransfer = {
   signedBase64: string
   messageBase64: string
   payer: PublicKey
 }
 
+/**
+ * Drives one dApp signTransaction through the extension's connect + sign
+ * popups and returns the signed transaction. Nothing is broadcast.
+ */
 export async function signSolanaSelfTransferViaDapp({
   context,
   extensionId,

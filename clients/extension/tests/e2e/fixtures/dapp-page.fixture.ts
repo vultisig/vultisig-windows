@@ -370,6 +370,26 @@ const testDappHtml = `
 </html>
 `
 
+/** A throwaway HTTP server for the synthetic dApp page, bound to a free port. */
+export type TestDappServer = { url: string; close: () => void }
+
+/**
+ * Serves the synthetic dApp page so the extension's content script injects
+ * into a real http origin. Callers own the returned close().
+ */
+export async function startTestDappServer(): Promise<TestDappServer> {
+  const server = http.createServer((_req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html' })
+    res.end(testDappHtml)
+  })
+  await new Promise<void>(resolve => {
+    server.listen(0, '127.0.0.1', () => resolve())
+  })
+  const addr = server.address()
+  const port = typeof addr === 'object' && addr ? addr.port : 0
+  return { url: `http://127.0.0.1:${port}`, close: () => server.close() }
+}
+
 export type DAppFixtures = {
   /** URL of the test DApp server */
   testDappUrl: string
@@ -384,25 +404,9 @@ export const dappFixture = base.extend<DAppFixtures>({
   // Test DApp server URL
   // eslint-disable-next-line no-empty-pattern
   testDappUrl: async ({}, provide) => {
-    // Create HTTP server
-    const server = http.createServer((req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' })
-      res.end(testDappHtml)
-    })
-
-    // Start server on random port
-    await new Promise<void>(resolve => {
-      server.listen(0, '127.0.0.1', () => resolve())
-    })
-
-    const addr = server.address()
-    const port = typeof addr === 'object' && addr ? addr.port : 0
-    const url = `http://127.0.0.1:${port}`
-
+    const { url, close } = await startTestDappServer()
     await provide(url)
-
-    // Cleanup
-    server.close()
+    close()
   },
 
   // DApp page with provider injected

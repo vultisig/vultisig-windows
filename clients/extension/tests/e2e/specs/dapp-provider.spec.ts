@@ -15,12 +15,14 @@ import { ed25519 } from '@noble/curves/ed25519'
 import type { BrowserContext, Page } from '@playwright/test'
 import { VersionedTransaction } from '@solana/web3.js'
 
+import {
+  startTestDappServer,
+  type TestDappServer,
+} from '../fixtures/dapp-page.fixture'
 import { expect, test } from '../fixtures/extension-loader'
 import {
   signSolanaSelfTransferViaDapp,
-  startTestDappServer,
   submitFastVaultPasswordIfPrompted,
-  type TestDappServer,
 } from '../helpers/solana-dapp-sign'
 import {
   ensureVaultExists,

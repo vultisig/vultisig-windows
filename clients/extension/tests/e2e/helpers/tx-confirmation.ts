@@ -15,7 +15,7 @@ export type TxConfirmationResult = {
   error?: string
 }
 
-// Keysign + inclusion regularly exceeds two minutes on mainnet.
+/** Default confirmation cap: keysign plus inclusion regularly exceeds two minutes on mainnet. */
 export const defaultConfirmationTimeoutMs = 300_000
 
 /**
@@ -423,6 +423,7 @@ export function getChainFamilyForChain(chain: string): ChainFamily {
   return getChainFamily(chain)
 }
 
+/** Outcome of waiting on THORChain's tx status; stage is the last completed stage seen. */
 export type ThorchainSwapSettlement = {
   settled: boolean
   stage: string

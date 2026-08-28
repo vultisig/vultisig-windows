@@ -7,12 +7,12 @@
 import { ed25519 } from '@noble/curves/ed25519'
 import { VersionedTransaction } from '@solana/web3.js'
 
-import { expect, test } from '../fixtures/extension-loader'
 import {
-  signSolanaSelfTransferViaDapp,
   startTestDappServer,
   type TestDappServer,
-} from '../helpers/solana-dapp-sign'
+} from '../fixtures/dapp-page.fixture'
+import { expect, test } from '../fixtures/extension-loader'
+import { signSolanaSelfTransferViaDapp } from '../helpers/solana-dapp-sign'
 import {
   ensureVaultExists,
   getVaultConfigFromEnv,
@@ -45,14 +45,18 @@ const verifiesAgainstPayer = (
 }
 
 test.describe('Keysign stability', () => {
-  let dapp: TestDappServer | undefined
+  let dappServer: TestDappServer | null = null
+  let dappUrl = ''
 
   test.beforeAll(async () => {
-    dapp = await startTestDappServer()
+    dappServer = await startTestDappServer()
+    dappUrl = dappServer.url
   })
 
   test.afterAll(() => {
-    dapp?.close()
+    if (dappServer) {
+      dappServer.close()
+    }
   })
 
   test('sequential sign-only keysigns all verify', async ({
@@ -79,7 +83,7 @@ test.describe('Keysign stability', () => {
         context,
         extensionId,
         password,
-        dappUrl: dapp.url,
+        dappUrl,
       })
       const durationMs = Date.now() - startedAt
       durationsMs.push(durationMs)
