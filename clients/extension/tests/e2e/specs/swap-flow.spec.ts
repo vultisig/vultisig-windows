@@ -182,13 +182,16 @@ const readOutputAmount = async (swapFlow: SwapFlow) =>
 // which only disables Continue — the quote and its breakdown still render.
 const feeBreakdownQuoteAmountEth = '0.01'
 
-// Source-chain inclusion proves the deposit; for THORChain-sourced swaps the
-// status endpoint proves the swap itself finalised.
-async function assertThorchainSettledIfSourced(
-  fromChain: string,
-  txHash: string
-): Promise<void> {
-  if (fromChain.toLowerCase() !== 'thorchain') return
+// Source-chain inclusion proves the deposit; when either leg is THORChain the
+// swap itself went through THORChain, so require it finalised as a swap.
+type AssertThorchainSettledInput = { from: string; to: string; txHash: string }
+async function assertThorchainSettledIfRouted({
+  from,
+  to,
+  txHash,
+}: AssertThorchainSettledInput): Promise<void> {
+  const legs = [from, to].map(chain => chain.toLowerCase())
+  if (!legs.includes('thorchain')) return
   const settlement = await waitForThorchainSwapSettlement(txHash)
   expect(settlement.settled, settlement.error).toBe(true)
 }
@@ -302,7 +305,11 @@ test.describe('Swap Flow', () => {
             txHash
           )
           expect(confirmation.confirmed).toBe(true)
-          await assertThorchainSettledIfSourced(swapConfig.fromChain, txHash)
+          await assertThorchainSettledIfRouted({
+            from: swapConfig.fromChain,
+            to: swapConfig.toChain,
+            txHash,
+          })
           updateStaleness(
             [swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId],
             true
@@ -500,7 +507,7 @@ test.describe('Swap Flow', () => {
         amount: feeBreakdownQuoteAmountEth,
       })
       await expect
-        .poll(async () => Number(await swapFlow.getExpectedOutput()), {
+        .poll(() => readOutputAmount(swapFlow), {
           message: 'HARNESS/ENV: no ETH→BTC quote (providers down or halted)',
           timeout: 30_000,
         })
@@ -529,7 +536,7 @@ test.describe('Swap Flow', () => {
         .locator('..')
       await expect(swapFeeRow).toBeVisible()
       await expect(swapFeeRow).toHaveText(
-        /(\$\d|Included in the quoted exchange rate|waive)/i
+        /(\$\d|Included in the quoted exchange rate|No Fee)/i
       )
 
       await page.getByTestId('advanced-swap-settings').click()
@@ -539,16 +546,51 @@ test.describe('Swap Flow', () => {
       await expect(
         page.getByText('Slippage Tolerance', { exact: true })
       ).toBeVisible()
+    } finally {
+      await page.close()
+    }
+  })
 
-      // The route picker (#4671) only renders when more than one route quoted.
+  // The route picker (#4671) renders only when more than one route quoted, so
+  // a single-route market is a loud environment miss, never a silent pass.
+  test('advanced swap offers the route picker when routes compete', async ({
+    context,
+    extensionId,
+  }) => {
+    const page = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
+    const swapFlow = new SwapFlow(page, extensionId)
+
+    try {
+      await vaultPage.goto()
+      await vaultPage.waitForView(10_000)
+
+      await navigateToSwap(page)
+      await swapFlow.waitForView(10_000)
+      await swapFlow.prepareSwapWithAmount({
+        fromChainId: 'ethereum',
+        toChainId: 'bitcoin',
+        amount: feeBreakdownQuoteAmountEth,
+      })
+      await expect
+        .poll(() => readOutputAmount(swapFlow), {
+          message: 'HARNESS/ENV: no ETH→BTC quote (providers down or halted)',
+          timeout: 30_000,
+        })
+        .toBeGreaterThan(0)
+
+      await page.getByTestId('advanced-swap-settings').click()
+      // ListItem: title sits in the first HStack, the value in its sibling.
       const routeRow = page
         .getByText('Select route', { exact: true })
         .locator('..')
-      const canSelectRoute = await routeRow.isVisible().catch(() => false)
-      console.log(`Route picker offered: ${canSelectRoute}`)
-      if (canSelectRoute) {
-        await expect(routeRow).toHaveText(/Select route\s*\S+/)
+        .locator('..')
+      if ((await routeRow.count()) === 0) {
+        throw new Error(
+          'HARNESS/ENV: only one route quoted — route picker (#4671) not exercised'
+        )
       }
+      await expect(routeRow).toHaveText(/Select route\s*\S+/)
     } finally {
       await page.close()
     }
@@ -739,7 +781,11 @@ test.describe('Swap Flow', () => {
             console.log(`✅ ${route.from}>${route.to} swap tx: ${txHash}`)
             const confirmation = await waitForTxConfirmation(route.from, txHash)
             expect(confirmation.confirmed).toBe(true)
-            await assertThorchainSettledIfSourced(route.from, txHash)
+            await assertThorchainSettledIfRouted({
+              from: route.from,
+              to: route.to,
+              txHash,
+            })
             if (
               route.from in SUPPORTED_CHAINS &&
               route.to in SUPPORTED_CHAINS
