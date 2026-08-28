@@ -182,6 +182,29 @@ const readOutputAmount = async (swapFlow: SwapFlow) =>
 // which only disables Continue — the quote and its breakdown still render.
 const feeBreakdownQuoteAmountEth = '0.01'
 
+// Quote-only ETH→BTC for the fee/route sheets: needs a quote, not a balance.
+async function quoteFeeBreakdownPair({
+  page,
+  swapFlow,
+}: {
+  page: Page
+  swapFlow: SwapFlow
+}): Promise<void> {
+  await navigateToSwap(page)
+  await swapFlow.waitForView(10_000)
+  await swapFlow.prepareSwapWithAmount({
+    fromChainId: 'ethereum',
+    toChainId: 'bitcoin',
+    amount: feeBreakdownQuoteAmountEth,
+  })
+  await expect
+    .poll(() => readOutputAmount(swapFlow), {
+      message: 'HARNESS/ENV: no ETH→BTC quote (providers down or halted)',
+      timeout: 30_000,
+    })
+    .toBeGreaterThan(0)
+}
+
 // Source-chain inclusion proves the deposit; when either leg is THORChain the
 // swap itself went through THORChain, so require it finalised as a swap.
 type AssertThorchainSettledInput = { from: string; to: string; txHash: string }
@@ -497,21 +520,7 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(10_000)
 
-      // Quote-only: a fee breakdown needs a quote, not a balance, so a fixed
-      // pair keeps this independent of the vault-page balance parser.
-      await navigateToSwap(page)
-      await swapFlow.waitForView(10_000)
-      await swapFlow.prepareSwapWithAmount({
-        fromChainId: 'ethereum',
-        toChainId: 'bitcoin',
-        amount: feeBreakdownQuoteAmountEth,
-      })
-      await expect
-        .poll(() => readOutputAmount(swapFlow), {
-          message: 'HARNESS/ENV: no ETH→BTC quote (providers down or halted)',
-          timeout: 30_000,
-        })
-        .toBeGreaterThan(0)
+      await quoteFeeBreakdownPair({ page, swapFlow })
 
       const providerRow = page
         .getByText('Provider', { exact: true })
@@ -565,19 +574,7 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(10_000)
 
-      await navigateToSwap(page)
-      await swapFlow.waitForView(10_000)
-      await swapFlow.prepareSwapWithAmount({
-        fromChainId: 'ethereum',
-        toChainId: 'bitcoin',
-        amount: feeBreakdownQuoteAmountEth,
-      })
-      await expect
-        .poll(() => readOutputAmount(swapFlow), {
-          message: 'HARNESS/ENV: no ETH→BTC quote (providers down or halted)',
-          timeout: 30_000,
-        })
-        .toBeGreaterThan(0)
+      await quoteFeeBreakdownPair({ page, swapFlow })
 
       await page.getByTestId('advanced-swap-settings').click()
       // ListItem: title sits in the first HStack, the value in its sibling.
