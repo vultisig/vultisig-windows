@@ -167,7 +167,8 @@ export default defineConfig({
       },
       // 1 worker, serial, real sends/swaps
       fullyParallel: false,
-      timeout: 120_000, // Longer timeout for real transactions
+      // Keysign (≤180s) + inclusion (≤300s) + THORChain settlement (≤300s)
+      timeout: 900_000,
       retries: process.env.CI ? 2 : 0, // More retries for network flakiness
       dependencies: ['network'],
     },
