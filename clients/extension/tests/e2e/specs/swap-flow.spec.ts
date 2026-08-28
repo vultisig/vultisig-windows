@@ -37,7 +37,10 @@ import {
   selectSwapPair,
   SYMBOL_FALLBACK_AMOUNTS,
 } from '../helpers/dynamic-swap'
-import { waitForTxConfirmation } from '../helpers/tx-confirmation'
+import {
+  waitForThorchainSwapSettlement,
+  waitForTxConfirmation,
+} from '../helpers/tx-confirmation'
 import {
   ensureVaultExists,
   getVaultConfigFromEnv,
@@ -46,8 +49,8 @@ import { KeysignProgress } from '../page-objects/KeysignProgress.po'
 import { SwapFlow } from '../page-objects/SwapFlow.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
-const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
-const ASSERT_BALANCE_AUTO_REFRESH =
+const enableTxTests = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
+const assertBalanceAutoRefresh =
   process.env.VULTISIG_E2E_ASSERT_SWAP_BALANCE_AUTO_REFRESH === 'true'
 
 type BalanceQueryInput = {
@@ -175,6 +178,17 @@ const pasteAmount = async ({ page, swapFlow, amount }: PasteAmountInput) => {
 const readOutputAmount = async (swapFlow: SwapFlow) =>
   parseVisibleAmount(await swapFlow.getExpectedOutput())
 
+// Source-chain inclusion proves the deposit; for THORChain-sourced swaps the
+// status endpoint proves the swap itself finalised.
+async function assertThorchainSettledIfSourced(
+  fromChain: string,
+  txHash: string
+): Promise<void> {
+  if (fromChain.toLowerCase() !== 'thorchain') return
+  const settlement = await waitForThorchainSwapSettlement(txHash)
+  expect(settlement.settled, settlement.error).toBe(true)
+}
+
 test.describe('Swap Flow', () => {
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
@@ -199,7 +213,7 @@ test.describe('Swap Flow', () => {
     context,
     extensionId,
   }) => {
-    test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+    test.skip(!enableTxTests, 'TX signing tests disabled')
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
@@ -281,10 +295,10 @@ test.describe('Swap Flow', () => {
           console.log(`✅ Swap tx: ${txHash}`)
           const confirmation = await waitForTxConfirmation(
             swapConfig.fromChain as ChainId,
-            txHash,
-            120_000
+            txHash
           )
           expect(confirmation.confirmed).toBe(true)
+          await assertThorchainSettledIfSourced(swapConfig.fromChain, txHash)
           updateStaleness(
             [swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId],
             true
@@ -317,9 +331,9 @@ test.describe('Swap Flow', () => {
     context,
     extensionId,
   }, testInfo) => {
-    test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+    test.skip(!enableTxTests, 'TX signing tests disabled')
     test.skip(
-      !ASSERT_BALANCE_AUTO_REFRESH,
+      !assertBalanceAutoRefresh,
       'Funded swap balance auto-refresh proof disabled'
     )
     test.setTimeout(600_000)
@@ -626,7 +640,7 @@ test.describe('Swap Flow', () => {
       context,
       extensionId,
     }) => {
-      test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+      test.skip(!enableTxTests, 'TX signing tests disabled')
       test.skip(
         !fromSymbol || !toSymbol,
         `Unknown chain in route ${route.from}>${route.to}`
@@ -695,12 +709,9 @@ test.describe('Swap Flow', () => {
           expect(txHash).toBeTruthy()
           if (txHash) {
             console.log(`✅ ${route.from}>${route.to} swap tx: ${txHash}`)
-            const confirmation = await waitForTxConfirmation(
-              route.from,
-              txHash,
-              120_000
-            )
+            const confirmation = await waitForTxConfirmation(route.from, txHash)
             expect(confirmation.confirmed).toBe(true)
+            await assertThorchainSettledIfSourced(route.from, txHash)
             if (
               route.from in SUPPORTED_CHAINS &&
               route.to in SUPPORTED_CHAINS
@@ -738,7 +749,7 @@ test.describe('Swap Flow', () => {
     context,
     extensionId,
   }) => {
-    test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+    test.skip(!enableTxTests, 'TX signing tests disabled')
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)

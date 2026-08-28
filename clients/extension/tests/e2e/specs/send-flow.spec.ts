@@ -764,11 +764,7 @@ test.describe('Send Flow', () => {
 
         if (txHash) {
           console.log(`✅ ${chain} send tx: ${txHash}`)
-          const confirmation = await waitForTxConfirmation(
-            chain,
-            txHash,
-            120_000
-          )
+          const confirmation = await waitForTxConfirmation(chain, txHash)
           expect(confirmation.confirmed).toBe(true)
           updateStaleness([chain], true)
         }
