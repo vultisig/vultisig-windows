@@ -83,8 +83,8 @@ function getChainFamily(chain: string): ChainFamily {
 const evmFallbackEndpoints: Record<string, string[]> = {
   ethereum: [
     'https://ethereum-rpc.publicnode.com',
-    'https://eth.llamarpc.com',
-    'https://cloudflare-eth.com',
+    'https://eth.drpc.org',
+    'https://1rpc.io/eth',
   ],
 }
 
@@ -111,7 +111,14 @@ async function fetchEvmReceipt(
   if (!body.trimStart().startsWith('{')) {
     throw new Error(`non-JSON body from ${rpcUrl}: ${body.slice(0, 40)}`)
   }
-  return (JSON.parse(body).result as EvmReceipt | null) ?? null
+  const { result, error } = JSON.parse(body) as {
+    result?: EvmReceipt | null
+    error?: { message?: string }
+  }
+  if (error) {
+    throw new Error(`RPC error from ${rpcUrl}: ${error.message ?? 'unknown'}`)
+  }
+  return result ?? null
 }
 
 /**
@@ -426,14 +433,16 @@ export type ThorchainSwapSettlement = {
 
 type ThorchainTxStatus = {
   stages?: Record<string, { completed?: boolean }>
+  planned_out_txs?: { refund?: boolean }[]
+  out_txs?: { memo?: string }[]
 }
 
 const thorchainStageOrder = [
   'inbound_observed',
   'inbound_confirmation_counted',
   'inbound_finalised',
-  'swap_status',
   'swap_finalised',
+  'outbound_delay',
   'outbound_signed',
 ]
 
@@ -441,9 +450,19 @@ const latestCompletedStage = (stages: ThorchainTxStatus['stages']): string =>
   thorchainStageOrder.filter(stage => stages?.[stage]?.completed).at(-1) ??
   'none'
 
+// swap_finalised flips for refunds too; the refund shows up on the outbound.
+const isRefunded = ({ planned_out_txs, out_txs }: ThorchainTxStatus): boolean =>
+  (planned_out_txs ?? []).some(tx => tx.refund === true) ||
+  (out_txs ?? []).some(tx => tx.memo?.startsWith('REFUND:'))
+
+const isSwapSettled = ({ stages }: ThorchainTxStatus): boolean =>
+  stages?.swap_finalised?.completed === true &&
+  stages?.outbound_signed?.completed === true
+
 /**
- * Poll THORChain's tx status until the swap itself is finalised. Source-chain
- * inclusion only proves the deposit landed; this proves THORChain swapped it.
+ * Poll THORChain's tx status until the swap finalised AND its outbound was
+ * signed as a swap output, not a refund. Source-chain inclusion only proves
+ * the deposit landed.
  */
 export async function waitForThorchainSwapSettlement(
   txHash: string,
@@ -451,16 +470,24 @@ export async function waitForThorchainSwapSettlement(
 ): Promise<ThorchainSwapSettlement> {
   const startTime = Date.now()
   const pollInterval = 10_000
-  const url = `${rpcEndpoints.thorchain}/thorchain/tx/status/${txHash.replace(/^0x/, '')}`
+  const hash = txHash.trim().replace(/^0x/i, '')
+  const url = `${rpcEndpoints.thorchain}/thorchain/tx/status/${hash}`
   let stage = 'none'
 
   while (Date.now() - startTime < timeoutMs) {
     try {
       const response = await fetch(url)
       if (response.ok) {
-        const { stages } = (await response.json()) as ThorchainTxStatus
-        stage = latestCompletedStage(stages)
-        if (stages?.swap_finalised?.completed) return { settled: true, stage }
+        const status = (await response.json()) as ThorchainTxStatus
+        stage = latestCompletedStage(status.stages)
+        if (isRefunded(status)) {
+          return {
+            settled: false,
+            stage: 'refunded',
+            error: `THORChain refunded ${hash} instead of swapping (last stage: ${stage})`,
+          }
+        }
+        if (isSwapSettled(status)) return { settled: true, stage }
       }
     } catch (error) {
       console.warn('THORChain status poll error:', error)
