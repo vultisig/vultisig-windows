@@ -91,10 +91,21 @@ const getEvmEndpoints = (chain: string, primary: string): string[] => [
 
 type EvmReceipt = { status: string; blockNumber: string; gasUsed: string }
 
-async function fetchEvmReceipt(
-  rpcUrl: string,
-  txHash: string
-): Promise<EvmReceipt | null> {
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const isEvmReceipt = (value: unknown): value is EvmReceipt =>
+  isRecord(value) &&
+  typeof value.status === 'string' &&
+  typeof value.blockNumber === 'string' &&
+  typeof value.gasUsed === 'string'
+
+type FetchEvmReceiptInput = { rpcUrl: string; txHash: string }
+
+async function fetchEvmReceipt({
+  rpcUrl,
+  txHash,
+}: FetchEvmReceiptInput): Promise<EvmReceipt | null> {
   const response = await fetch(rpcUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -109,25 +120,38 @@ async function fetchEvmReceipt(
   if (!body.trimStart().startsWith('{')) {
     throw new Error(`non-JSON body from ${rpcUrl}: ${body.slice(0, 40)}`)
   }
-  const { result, error } = JSON.parse(body) as {
-    result?: EvmReceipt | null
-    error?: { message?: string }
+  const envelope: unknown = JSON.parse(body)
+  if (!isRecord(envelope)) {
+    throw new Error(`unexpected RPC body from ${rpcUrl}: ${body.slice(0, 40)}`)
   }
-  if (error) {
-    throw new Error(`RPC error from ${rpcUrl}: ${error.message ?? 'unknown'}`)
+  if (isRecord(envelope.error)) {
+    throw new Error(
+      `RPC error from ${rpcUrl}: ${String(envelope.error.message ?? 'unknown')}`
+    )
   }
-  return result ?? null
+  if (envelope.result == null) return null
+  if (!isEvmReceipt(envelope.result)) {
+    throw new Error(`unexpected receipt shape from ${rpcUrl}`)
+  }
+  return envelope.result
 }
 
 /**
  * Poll for EVM transaction confirmation
  */
-async function pollEvmTx(
-  chain: string,
-  primaryUrl: string,
-  txHash: string,
+type PollEvmTxInput = {
+  chain: string
+  primaryUrl: string
+  txHash: string
   timeoutMs: number
-): Promise<TxConfirmationResult> {
+}
+
+async function pollEvmTx({
+  chain,
+  primaryUrl,
+  txHash,
+  timeoutMs,
+}: PollEvmTxInput): Promise<TxConfirmationResult> {
   const startTime = Date.now()
   const pollInterval = 3000
   const endpoints = getEvmEndpoints(chain, primaryUrl)
@@ -136,7 +160,7 @@ async function pollEvmTx(
   while (Date.now() - startTime < timeoutMs) {
     const rpcUrl = endpoints[attempt++ % endpoints.length]
     try {
-      const receipt = await fetchEvmReceipt(rpcUrl, txHash)
+      const receipt = await fetchEvmReceipt({ rpcUrl, txHash })
       if (receipt) {
         const confirmed = receipt.status === '0x1'
         return {
@@ -371,7 +395,12 @@ export async function waitForTxConfirmation(
 
   switch (family) {
     case 'evm':
-      return pollEvmTx(chainLower, endpoint, txHash, timeoutMs)
+      return pollEvmTx({
+        chain: chainLower,
+        primaryUrl: endpoint,
+        txHash,
+        timeoutMs,
+      })
 
     case 'utxo':
       // Shorter timeout for UTXO since we're just checking mempool, not block confirmation
@@ -436,6 +465,13 @@ type ThorchainTxStatus = {
   out_txs?: { memo?: string }[]
 }
 
+const isThorchainTxStatus = (value: unknown): value is ThorchainTxStatus =>
+  isRecord(value) &&
+  (value.stages === undefined || isRecord(value.stages)) &&
+  (value.planned_out_txs === undefined ||
+    Array.isArray(value.planned_out_txs)) &&
+  (value.out_txs === undefined || Array.isArray(value.out_txs))
+
 const thorchainStageOrder = [
   'inbound_observed',
   'inbound_confirmation_counted',
@@ -477,7 +513,10 @@ export async function waitForThorchainSwapSettlement(
     try {
       const response = await fetch(url)
       if (response.ok) {
-        const status = (await response.json()) as ThorchainTxStatus
+        const status: unknown = await response.json()
+        if (!isThorchainTxStatus(status)) {
+          throw new Error('unexpected THORChain tx status shape')
+        }
         stage = latestCompletedStage(status.stages)
         if (isRefunded(status)) {
           return {

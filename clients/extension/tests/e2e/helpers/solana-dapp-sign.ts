@@ -6,7 +6,12 @@
  * is broadcast, so it needs no SOL — only a Fast Vault with Solana enabled.
  */
 
-import { type BrowserContext, expect, type Page } from '@playwright/test'
+import {
+  type BrowserContext,
+  expect,
+  type Locator,
+  type Page,
+} from '@playwright/test'
 import {
   Connection,
   PublicKey,
@@ -82,16 +87,18 @@ export async function submitFastVaultPasswordIfPrompted({
 type DriveApprovalPopupsInput = {
   context: BrowserContext
   extensionId: string
-  result: ReturnType<Page['locator']>
+  result: Locator
   password: string
 }
 
 // A finished keysign parks its popup on "Done"; the next round's driver would
 // keep finding it. Closes every extension page in the per-test context.
-async function closeExtensionPopups(
-  context: BrowserContext,
-  extensionId: string
-): Promise<void> {
+type ExtensionPopupsInput = { context: BrowserContext; extensionId: string }
+
+async function closeExtensionPopups({
+  context,
+  extensionId,
+}: ExtensionPopupsInput): Promise<void> {
   await Promise.all(
     context
       .pages()
@@ -103,10 +110,10 @@ async function closeExtensionPopups(
   )
 }
 
-const findExtensionPopup = (
-  context: BrowserContext,
-  extensionId: string
-): Page | undefined =>
+const findExtensionPopup = ({
+  context,
+  extensionId,
+}: ExtensionPopupsInput): Page | undefined =>
   context
     .pages()
     .find(
@@ -166,7 +173,7 @@ async function driveApprovalPopupsUntilResult({
     if (resultText.startsWith(signedPrefix) || resultText.startsWith('Error:'))
       return
 
-    const popup = findExtensionPopup(context, extensionId)
+    const popup = findExtensionPopup({ context, extensionId })
     if (!popup) {
       await new Promise(resolve => setTimeout(resolve, 1_000))
       continue
@@ -288,6 +295,6 @@ export async function signSolanaSelfTransferViaDapp({
     }
   } finally {
     await page.close()
-    await closeExtensionPopups(context, extensionId)
+    await closeExtensionPopups({ context, extensionId })
   }
 }

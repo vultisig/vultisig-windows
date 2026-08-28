@@ -386,8 +386,11 @@ export async function startTestDappServer(): Promise<TestDappServer> {
     server.listen(0, '127.0.0.1', () => resolve())
   })
   const addr = server.address()
-  const port = typeof addr === 'object' && addr ? addr.port : 0
-  return { url: `http://127.0.0.1:${port}`, close: () => server.close() }
+  if (typeof addr !== 'object' || !addr) {
+    server.close()
+    throw new Error('HARNESS: test dApp server did not report a listening port')
+  }
+  return { url: `http://127.0.0.1:${addr.port}`, close: () => server.close() }
 }
 
 export type DAppFixtures = {

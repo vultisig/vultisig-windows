@@ -567,10 +567,13 @@ test.describe('Swap Flow', () => {
       await openQuotedEthToBtcSwap({ page, swapFlow })
 
       await page.getByTestId('advanced-swap-settings').click()
+      await expect(
+        page.getByText('Advanced swap', { exact: true })
+      ).toBeVisible()
       const { routeRow } = swapFlow
       if ((await routeRow.count()) === 0) {
         throw new Error(
-          'HARNESS/ENV: only one route quoted — route picker (#4671) not exercised'
+          'HARNESS/ENV: no "Select route" row on the Advanced swap sheet — only one route quoted (or the row label changed); route picker (#4671) not exercised'
         )
       }
       await expect(routeRow).toHaveText(/Select route\s*\S+/)

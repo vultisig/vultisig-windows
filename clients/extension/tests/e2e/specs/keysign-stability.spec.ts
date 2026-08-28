@@ -20,6 +20,8 @@ import {
 
 const defaultRounds = 3
 const perRoundTimeoutMs = 240_000
+// Vault import, blockhash fetch and page setup share the budget with the rounds.
+const setupBudgetMs = 120_000
 const parsedRounds = Number.parseInt(
   process.env.KEYSIGN_STABILITY_ROUNDS ?? '',
   10
@@ -29,10 +31,15 @@ const rounds =
     ? parsedRounds
     : defaultRounds
 
-const verifiesAgainstPayer = (
-  signedBase64: string,
+type VerifiesAgainstPayerInput = {
+  signedBase64: string
   payerBytes: Uint8Array
-): boolean => {
+}
+
+const verifiesAgainstPayer = ({
+  signedBase64,
+  payerBytes,
+}: VerifiesAgainstPayerInput): boolean => {
   const signed = VersionedTransaction.deserialize(
     new Uint8Array(Buffer.from(signedBase64, 'base64'))
   )
@@ -69,7 +76,7 @@ test.describe('Keysign stability', () => {
       'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
     )
     if (!config) return
-    test.setTimeout(rounds * perRoundTimeoutMs)
+    test.setTimeout(rounds * perRoundTimeoutMs + setupBudgetMs)
 
     const { vaultPath, password } = config
     expect(
@@ -92,7 +99,7 @@ test.describe('Keysign stability', () => {
       )
 
       expect(
-        verifiesAgainstPayer(signedBase64, payer.toBytes()),
+        verifiesAgainstPayer({ signedBase64, payerBytes: payer.toBytes() }),
         `round ${round} signature must verify against the vault Solana pubkey`
       ).toBe(true)
     }
