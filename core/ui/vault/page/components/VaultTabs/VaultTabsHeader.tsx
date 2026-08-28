@@ -69,7 +69,7 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
                 <IconWrapper size={16}>
                   <PencilIcon />
                 </IconWrapper>
-                <Text variant="footnote" color="supporting">
+                <Text variant="footnote" color="contrast">
                   {t('chains')}
                 </Text>
               </ManagePillButton>

@@ -76,7 +76,7 @@ export const VaultChainTabsHeader = ({ children }: ChildrenProp) => {
                 <IconWrapper size={16}>
                   <PencilIcon />
                 </IconWrapper>
-                <Text variant="footnote" color="supporting">
+                <Text variant="footnote" color="contrast">
                   {t('vaultChainTabs.tokens')}
                 </Text>
               </ManagePillButton>
