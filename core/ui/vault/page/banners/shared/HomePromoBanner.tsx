@@ -22,6 +22,7 @@ type HomePromoBannerProps = {
   onClick: () => void
   onDismiss: () => void
   testId?: string
+  isExtension?: boolean
 }
 
 /**
@@ -39,12 +40,14 @@ export const HomePromoBanner = ({
   onClick,
   onDismiss,
   testId,
+  isExtension = false,
 }: HomePromoBannerProps) => {
   const { t } = useTranslation()
 
   return (
     <HomePromoBannerRoot
       $accent={accent}
+      $isExtension={isExtension}
       role="button"
       tabIndex={0}
       onClick={onClick}
@@ -67,7 +70,10 @@ export const HomePromoBanner = ({
       <HomePromoBannerContent>
         <HomePromoBannerIconTile>{icon}</HomePromoBannerIconTile>
 
-        <HomePromoBannerTextStack>
+        <HomePromoBannerTextStack
+          $isExtension={isExtension}
+          data-testid="home-promo-banner-text"
+        >
           <Text variant="caption" color="shy">
             {caption}
           </Text>
@@ -78,6 +84,7 @@ export const HomePromoBanner = ({
       </HomePromoBannerContent>
 
       <HomePromoBannerCloseButton
+        $isExtension={isExtension}
         size="lg"
         aria-label={t('close')}
         onClick={event => {

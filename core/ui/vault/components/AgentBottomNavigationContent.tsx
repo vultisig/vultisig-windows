@@ -17,23 +17,25 @@ const cameraButtonInset = 28
 
 type AgentBottomNavigationContentProps = {
   activeTab?: 'wallet' | 'defi' | 'agent'
+  isExtension?: boolean
   onTabChange: (tab: 'wallet' | 'defi') => void
   onCameraPress: () => void
 }
 
 export const AgentBottomNavigationContent = ({
   activeTab = 'wallet',
+  isExtension = false,
   onTabChange,
   onCameraPress,
 }: AgentBottomNavigationContentProps) => {
   const { t } = useTranslation()
 
   return (
-    <NavContainer>
-      <NavSurface />
-      <TabsRow>
+    <NavContainer data-testid="bottom-navigation">
+      <NavSurface $isExtension={isExtension} />
+      <TabsRow $isExtension={isExtension} data-testid="bottom-navigation-tabs">
         <TabButton
-          isActive={activeTab === 'wallet'}
+          $isActive={activeTab === 'wallet'}
           onClick={() => onTabChange('wallet')}
         >
           <StationWalletFilledIcon />
@@ -42,7 +44,7 @@ export const AgentBottomNavigationContent = ({
           </Text>
         </TabButton>
         <TabButton
-          isActive={activeTab === 'defi'}
+          $isActive={activeTab === 'defi'}
           onClick={() => onTabChange('defi')}
         >
           <NodesIcon />
@@ -51,7 +53,12 @@ export const AgentBottomNavigationContent = ({
           </Text>
         </TabButton>
       </TabsRow>
-      <FloatingCamera aria-label={t('scan_qr')} onClick={onCameraPress}>
+      <FloatingCamera
+        $isExtension={isExtension}
+        aria-label={t('scan_qr')}
+        data-testid="bottom-navigation-scan"
+        onClick={onCameraPress}
+      >
         <CameraFilledIcon />
       </FloatingCamera>
     </NavContainer>
@@ -78,32 +85,46 @@ const NavContainer = styled.div`
   }
 `
 
-const NavSurface = styled.div`
+const NavSurface = styled.div<{ $isExtension: boolean }>`
   position: absolute;
   inset: 0;
   z-index: 25;
   pointer-events: none;
-  background: ${({ theme }) =>
-    theme.iconStyle === 'station'
-      ? theme.colors.foreground.withAlpha(0.5).toCssValue()
-      : theme.colors.foreground.toCssValue()};
+  background: ${({ $isExtension, theme }) =>
+    $isExtension
+      ? 'rgba(19, 46, 86, 0.6)'
+      : theme.iconStyle === 'station'
+        ? theme.colors.foreground.withAlpha(0.5).toCssValue()
+        : theme.colors.foreground.toCssValue()};
   backdrop-filter: blur(32px);
-  border-top: 1px solid ${getColor('foregroundExtra')};
+  border-top: 1px solid
+    ${({ $isExtension, theme }) =>
+      $isExtension
+        ? theme.colors.foregroundSuper.toCssValue()
+        : theme.colors.foregroundExtra.toCssValue()};
 `
 
-const TabsRow = styled.div`
+const TabsRow = styled.div<{ $isExtension: boolean }>`
   position: relative;
   display: flex;
   z-index: 30;
   width: 100%;
   max-width: ${tabsMaxWidth}px;
-  padding-right: ${cameraButtonSize + cameraButtonInset}px;
+  padding-right: ${({ $isExtension }) =>
+    $isExtension ? 0 : cameraButtonSize + cameraButtonInset}px;
 `
 
-const FloatingCamera = styled(UnstyledButton)`
-  position: absolute;
+const FloatingCamera = styled(UnstyledButton)<{ $isExtension: boolean }>`
+  position: ${({ $isExtension }) => ($isExtension ? 'fixed' : 'absolute')};
   right: ${cameraButtonInset}px;
-  top: 5px;
+  ${({ $isExtension }) =>
+    $isExtension
+      ? css`
+          bottom: 80px;
+        `
+      : css`
+          top: 5px;
+        `}
   z-index: 35;
   ${borderRadius.pill};
   ${centerContent};
@@ -123,10 +144,18 @@ const FloatingCamera = styled(UnstyledButton)`
         ? theme.colors.buttonHover.toCssValue()
         : '#5a8aff'};
   }
+
+  ${({ $isExtension }) =>
+    $isExtension &&
+    css`
+      @supports (bottom: calc(0px + env(safe-area-inset-bottom))) {
+        bottom: calc(80px + env(safe-area-inset-bottom));
+      }
+    `}
 `
 
 type TabButtonProps = {
-  isActive?: boolean
+  $isActive?: boolean
 }
 
 const TabButton = styled(UnstyledButton)<TabButtonProps>`
@@ -145,8 +174,8 @@ const TabButton = styled(UnstyledButton)<TabButtonProps>`
     alignItems: 'center',
   })};
 
-  ${({ isActive }) =>
-    isActive
+  ${({ $isActive }) =>
+    $isActive
       ? css`
           color: ${getColor('contrast')};
         `

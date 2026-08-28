@@ -1,4 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { ArrowsRotateCenterIcon } from '@lib/ui/icons/ArrowsRotateCenterIcon'
 import { StationArrowsRotateCenterIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -12,15 +13,18 @@ import { PrimaryActionWrapper } from './PrimaryActions.styled'
 export const SwapPrompt = (state: CoreViewState<'swap'>) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const { client } = useCore()
   const { iconStyle } = useTheme()
+  const isExtension = client === 'extension'
 
   return (
     <VStack alignItems="center" gap={8}>
       <PrimaryActionWrapper
+        $isExtension={isExtension}
         data-testid="vault-action-swap"
         onClick={() => navigate({ id: 'swap', state })}
       >
-        {iconStyle === 'station' ? (
+        {isExtension || iconStyle === 'station' ? (
           <StationArrowsRotateCenterIcon />
         ) : (
           <ArrowsRotateCenterIcon />

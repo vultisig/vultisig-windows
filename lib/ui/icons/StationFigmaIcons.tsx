@@ -1,6 +1,30 @@
 import { SvgProps } from '@lib/ui/props'
 import { FC } from 'react'
 
+export const StationSecureVaultIcon: FC<SvgProps> = props => (
+  <svg viewBox="0 0 16 16" fill="none" width="1em" height="1em" {...props}>
+    <path
+      d="M13.5 4.62847C13.5 4.05457 13.1327 3.54505 12.5883 3.36356L8.42167 1.97468C8.14793 1.88344 7.85207 1.88344 7.57833 1.97468L3.41169 3.36356C2.86724 3.54505 2.5 4.05457 2.5 4.62847V7.94238C2.5 11.2573 5.33333 12.8341 8 14.2727C10.6667 12.8341 13.5 11.2573 13.5 7.94238V4.62847Z"
+      fill="#13C89D"
+      stroke="#13C89D"
+      strokeLinecap="square"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+export const StationPenIcon: FC<SvgProps> = props => (
+  <svg viewBox="0 0 16 16" fill="none" width="1em" height="1em" {...props}>
+    <path
+      d="M2.39974 13.6002L3.19974 9.60019L9.93094 2.86899C10.5557 2.24419 11.5685 2.24419 12.1933 2.86899L13.1309 3.80659C13.7557 4.43139 13.7557 5.44419 13.1309 6.06899L6.39974 12.8002L2.39974 13.6002Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
 export const StationArrowsRotateCenterIcon: FC<SvgProps> = props => (
   <svg viewBox="0 0 20 20" fill="none" width="1em" height="1em" {...props}>
     <path

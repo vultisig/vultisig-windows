@@ -1,4 +1,5 @@
 import { CollapsingBalance } from '@core/ui/page/CollapsingBalance'
+import { useCore } from '@core/ui/state/core'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -17,15 +18,20 @@ import { useHomePromoBanners } from '../banners/useHomePromoBanners'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 import { VaultTabs } from './VaultTabs/VaultTabs'
 
-const PromptsContainer = styled.div`
-  padding-inline: 20px;
+const PromptsContainer = styled.div<{ $isExtension: boolean }>`
   margin-top: 12px;
   ${vStack({ gap: 20 })};
+
+  ${({ $isExtension }) => !$isExtension && `padding-inline: 20px;`}
 `
 
 const PromptsWrapper = ({ children }: ChildrenProp) => {
+  const { client } = useCore()
+
   return areEmptyChildren(children) ? null : (
-    <PromptsContainer>{children}</PromptsContainer>
+    <PromptsContainer $isExtension={client === 'extension'}>
+      {children}
+    </PromptsContainer>
   )
 }
 
@@ -39,13 +45,24 @@ type VaultOverviewProps = {
  * `CollapsingBalance`, which collapses the balance as that container scrolls.
  */
 export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
+  const { client } = useCore()
+  const isExtension = client === 'extension'
   const banners = useHomePromoBanners()
 
   return (
-    <Container flexGrow>
-      <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
+    <Container flexGrow data-testid="vault-overview">
+      <StyledPageContent
+        $isExtension={isExtension}
+        ref={scrollContainerRef}
+        scrollable
+        gap={32}
+        flexGrow
+      >
         <BlurEffect />
-        <BalanceWrapper data-testid="vault-overview-balance-wrapper">
+        <BalanceWrapper
+          $isExtension={isExtension}
+          data-testid="vault-overview-balance-wrapper"
+        >
           <CollapsingBalance scrollContainerRef={scrollContainerRef}>
             <VaultTotalBalance />
           </CollapsingBalance>
@@ -54,7 +71,7 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
         <Wrap wrap={PromptsWrapper}>
           <BannerCarousel banners={banners} />
         </Wrap>
-        <Divider />
+        <Divider $isExtension={isExtension} />
         <VaultTabs />
       </StyledPageContent>
     </Container>
@@ -65,27 +82,43 @@ const Container = styled(VStack)`
   min-height: 0;
 `
 
-const StyledPageContent = styled(PageContent)`
+const StyledPageContent = styled(PageContent)<{ $isExtension: boolean }>`
   ${hideScrollbars};
   position: relative;
 
-  ${({ theme }) =>
-    theme.iconStyle === 'station' &&
-    css`
-      gap: 20px;
-      padding-top: 24px;
-    `}
+  ${({ $isExtension, theme }) =>
+    $isExtension
+      ? css`
+          gap: 20px;
+          padding-top: 32px;
+        `
+      : theme.iconStyle === 'station' &&
+        css`
+          gap: 20px;
+          padding-top: 24px;
+        `}
 `
 
-const BalanceWrapper = styled.div`
-  ${vStack({ alignItems: 'center', gap: 24 })};
+const BalanceWrapper = styled.div<{ $isExtension: boolean }>`
   position: relative;
 
-  ${({ theme }) =>
-    theme.iconStyle === 'station' &&
-    css`
-      gap: 20px;
-    `}
+  ${({ $isExtension, theme }) =>
+    $isExtension
+      ? css`
+          ${vStack({ alignItems: 'center', gap: 32 })};
+          flex-shrink: 0;
+          height: 178px;
+          min-height: 178px;
+          max-height: 178px;
+        `
+      : css`
+          ${vStack({ alignItems: 'center', gap: 24 })};
+
+          ${theme.iconStyle === 'station' &&
+          css`
+            gap: 20px;
+          `}
+        `}
 `
 
 // eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
@@ -119,14 +152,35 @@ const BlurEffect = styled.div`
     `}
 `
 
-const Divider = styled.div`
-  height: 1px;
+const Divider = styled.div<{ $isExtension: boolean }>`
   align-self: stretch;
-  background: ${getColor('foregroundExtra')};
 
-  ${({ theme }) =>
-    theme.iconStyle === 'station' &&
-    css`
-      background: ${theme.colors.foregroundSuper.toCssValue()};
-    `}
+  ${({ $isExtension, theme }) =>
+    $isExtension
+      ? css`
+          height: 0;
+
+          &::after {
+            content: '';
+            display: block;
+            height: 1px;
+            background: ${getColor('foregroundExtra')};
+          }
+
+          ${theme.iconStyle === 'station' &&
+          css`
+            &::after {
+              background: ${theme.colors.foregroundSuper.toCssValue()};
+            }
+          `}
+        `
+      : css`
+          height: 1px;
+          background: ${getColor('foregroundExtra')};
+
+          ${theme.iconStyle === 'station' &&
+          css`
+            background: ${theme.colors.foregroundSuper.toCssValue()};
+          `}
+        `}
 `

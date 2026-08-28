@@ -1,21 +1,31 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { StationPenIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
 import { SearchChain } from './controls/SearchChain'
 
 export const VaultTabsHeader = ({ children }: ChildrenProp) => {
+  const { client } = useCore()
   const { colors } = useTheme()
   const vault = useCurrentVault()
   const navigate = useCoreNavigate()
+  const { t } = useTranslation()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+  const isExtension = client === 'extension'
 
   return (
     <Wrapper>
@@ -59,17 +69,29 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
-              <IconButton
-                data-testid="manage-chains-button"
-                kind="secondary"
-                onClick={() => navigate({ id: 'manageVaultChains' })}
-                style={{
-                  color: colors.info.toCssValue(),
-                }}
-                size="lg"
-              >
-                <HousePenIcon />
-              </IconButton>
+              {isExtension ? (
+                <ManageChainsButton
+                  data-testid="manage-chains-button"
+                  onClick={() => navigate({ id: 'manageVaultChains' })}
+                >
+                  <IconWrapper size={16}>
+                    <StationPenIcon />
+                  </IconWrapper>
+                  <Text variant="footnote" color="supporting">
+                    {t('chains')}
+                  </Text>
+                </ManageChainsButton>
+              ) : (
+                <IconButton
+                  data-testid="manage-chains-button"
+                  kind="secondary"
+                  onClick={() => navigate({ id: 'manageVaultChains' })}
+                  style={{ color: colors.info.toCssValue() }}
+                  size="lg"
+                >
+                  <HousePenIcon />
+                </IconButton>
+              )}
             </ManageButtonMotion>
           )}
         </AnimatePresence>
@@ -133,3 +155,14 @@ const SearchArea = styled(motion.div)`
 const ManageButtonMotion = styled(motion.div)`
   display: flex;
 `
+
+const ManageChainsButton = styled(UnstyledButton)`
+  ${hStack({ alignItems: 'center', gap: 8 })};
+  ${borderRadius.pill};
+  height: 40px;
+  padding: 12px;
+  color: ${getColor('contrast')};
+  background: ${getColor('foreground')};
+  box-shadow: inset 0 0 8px rgba(240, 244, 252, 0.03);
+`
+import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'

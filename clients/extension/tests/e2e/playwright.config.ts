@@ -107,6 +107,7 @@ export default defineConfig({
         '**/station-migration.spec.ts',
         '**/storage-preservation.spec.ts',
         '**/search-field.spec.ts',
+        '**/navigation-design.spec.ts',
         '**/viewport-fit.spec.ts',
       ],
       use: {

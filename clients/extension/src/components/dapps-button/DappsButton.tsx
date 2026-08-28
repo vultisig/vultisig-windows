@@ -22,6 +22,16 @@ const IconContainer = styled.div`
   ${sameDimensions('36px')};
 `
 
+const DappsControl = styled(IconButton)`
+  align-items: flex-start;
+  box-sizing: border-box;
+  width: 50px;
+  height: 39px;
+  min-width: 50px;
+  padding: 4px 6px 4px 4px;
+  justify-content: flex-start;
+`
+
 const Badge = styled.div<{ isConnected: boolean }>`
   position: absolute;
   top: -0.15em;
@@ -74,7 +84,10 @@ export const DappsButton = () => {
     : false
 
   return tabInfo ? (
-    <IconButton onClick={() => navigate({ id: 'connectedDapps' })}>
+    <DappsControl
+      data-testid="dapps-button"
+      onClick={() => navigate({ id: 'connectedDapps' })}
+    >
       <IconWrapper>
         <IconContainer>
           <SafeImage
@@ -84,6 +97,6 @@ export const DappsButton = () => {
           {tabInfo.url && <Badge isConnected={isConnected} />}
         </IconContainer>
       </IconWrapper>
-    </IconButton>
+    </DappsControl>
   ) : null
 }

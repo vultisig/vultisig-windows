@@ -1,11 +1,15 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { useCore } from '@core/ui/state/core'
 import { useHandleVaultChainItemPress } from '@core/ui/vault/page/components/useHandleVaultChainItemPress'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
-import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
+import {
+  StationChevronRightSmallIcon,
+  StationCopies3FilledIcon,
+} from '@lib/ui/icons/StationFigmaIcons'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { ChildrenProp } from '@lib/ui/props'
@@ -29,6 +33,7 @@ type VaultChainItemProps = {
  * looks the same whether the chain's balances resolved or failed to load.
  */
 export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
+  const { client } = useCore()
   const addresses = useCurrentVaultAddresses()
   const address = shouldBePresent(
     addresses[chain],
@@ -42,6 +47,7 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
   const { t } = useTranslation()
   const { addToast } = useToast()
   const { iconStyle } = useTheme()
+  const isExtension = client === 'extension'
 
   const handleCopyAddress = async (
     e: React.MouseEvent | React.KeyboardEvent
@@ -66,11 +72,15 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
   }
 
   return (
-    <StyledPanel data-testid="VaultChainItem-Panel" {...pressHandlers}>
+    <StyledPanel
+      $isExtension={isExtension}
+      data-testid="VaultChainItem-Panel"
+      {...pressHandlers}
+    >
       <HStack fullWidth alignItems="center" gap={12}>
         <ChainEntityIcon
           value={getChainLogoSrc(chain)}
-          style={{ fontSize: iconStyle === 'station' ? 36 : 32 }}
+          style={{ fontSize: isExtension || iconStyle === 'station' ? 36 : 32 }}
         />
 
         <VStack fullWidth alignItems="start" gap={12}>
@@ -101,7 +111,13 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
                 <Text weight={500} color="shy" size={12}>
                   {formatWalletAddress(address)}
                 </Text>
-                <SquareBehindSquare6Icon />
+                {isExtension ? (
+                  <IconWrapper size={12}>
+                    <StationCopies3FilledIcon />
+                  </IconWrapper>
+                ) : (
+                  <SquareBehindSquare6Icon />
+                )}
               </AddressRow>
             </VStack>
             <HStack gap={8} alignItems="center">
@@ -113,7 +129,7 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
                 {children}
               </VStack>
               <IconWrapper>
-                {iconStyle === 'station' ? (
+                {isExtension || iconStyle === 'station' ? (
                   <StationChevronRightSmallIcon />
                 ) : (
                   <ChevronRightIcon />
@@ -127,26 +143,31 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
   )
 }
 
-const StyledPanel = styled(Panel)`
+const StyledPanel = styled(Panel)<{ $isExtension: boolean }>`
   cursor: pointer;
-
   transition: background-color 0.3s ease;
 
   &:hover {
     background-color: ${getColor('foregroundExtra')};
   }
 
-  ${({ theme }) =>
-    theme.iconStyle === 'station' &&
-    css`
-      border-radius: 0;
-      background: ${theme.colors.foreground.toCssValue()};
-      padding: 12px;
+  ${({ $isExtension, theme }) =>
+    $isExtension
+      ? css`
+          border-radius: 0;
+          background: ${getColor('foreground')};
+          padding: 12px 16px;
+        `
+      : theme.iconStyle === 'station' &&
+        css`
+          border-radius: 0;
+          background: ${theme.colors.foreground.toCssValue()};
+          padding: 12px;
 
-      &:hover {
-        background: ${theme.colors.foregroundDark.toCssValue()};
-      }
-    `}
+          &:hover {
+            background: ${theme.colors.foregroundDark.toCssValue()};
+          }
+        `}
 `
 
 const AddressRow = styled(HStack)`
