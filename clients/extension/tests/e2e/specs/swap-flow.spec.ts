@@ -180,22 +180,20 @@ const readOutputAmount = async (swapFlow: SwapFlow) =>
 
 // Above cross-chain provider minimums; may exceed the test vault's balance,
 // which only disables Continue — the quote and its breakdown still render.
-const feeBreakdownQuoteAmountEth = '0.01'
+const quoteOnlyAmountEth = '0.01'
 
 // Quote-only ETH→BTC for the fee/route sheets: needs a quote, not a balance.
-async function quoteFeeBreakdownPair({
+type OpenQuotedEthToBtcSwapInput = { page: Page; swapFlow: SwapFlow }
+async function openQuotedEthToBtcSwap({
   page,
   swapFlow,
-}: {
-  page: Page
-  swapFlow: SwapFlow
-}): Promise<void> {
+}: OpenQuotedEthToBtcSwapInput): Promise<void> {
   await navigateToSwap(page)
   await swapFlow.waitForView(10_000)
   await swapFlow.prepareSwapWithAmount({
     fromChainId: 'ethereum',
     toChainId: 'bitcoin',
-    amount: feeBreakdownQuoteAmountEth,
+    amount: quoteOnlyAmountEth,
   })
   await expect
     .poll(() => readOutputAmount(swapFlow), {
@@ -520,19 +518,14 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(10_000)
 
-      await quoteFeeBreakdownPair({ page, swapFlow })
+      await openQuotedEthToBtcSwap({ page, swapFlow })
 
-      const providerRow = page
-        .getByText('Provider', { exact: true })
-        .locator('..')
-      await expect(providerRow).toBeVisible()
-      await expect(providerRow).toHaveText(/Provider\s*\S+/, {
+      await expect(swapFlow.providerRow).toBeVisible()
+      await expect(swapFlow.providerRow).toHaveText(/Provider\s*\S+/, {
         timeout: 15_000,
       })
 
-      const totalFeesRow = page
-        .getByText('Total Fees', { exact: true })
-        .locator('..')
+      const { totalFeesRow } = swapFlow
       await expect(totalFeesRow).toHaveText(/Total Fees\s*\$\d/, {
         timeout: 15_000,
       })
@@ -540,11 +533,8 @@ test.describe('Swap Flow', () => {
 
       await expect(page.getByText('Network Fee', { exact: true })).toBeVisible()
       // The affiliate rate is disclosed in the label itself (#4593).
-      const swapFeeRow = page
-        .getByText(/Swap Fee \(\d+(\.\d+)?%\)$/)
-        .locator('..')
-      await expect(swapFeeRow).toBeVisible()
-      await expect(swapFeeRow).toHaveText(
+      await expect(swapFlow.swapFeeRow).toBeVisible()
+      await expect(swapFlow.swapFeeRow).toHaveText(
         /(\$\d|Included in the quoted exchange rate|No Fee)/i
       )
 
@@ -574,14 +564,10 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(10_000)
 
-      await quoteFeeBreakdownPair({ page, swapFlow })
+      await openQuotedEthToBtcSwap({ page, swapFlow })
 
       await page.getByTestId('advanced-swap-settings').click()
-      // ListItem: title sits in the first HStack, the value in its sibling.
-      const routeRow = page
-        .getByText('Select route', { exact: true })
-        .locator('..')
-        .locator('..')
+      const { routeRow } = swapFlow
       if ((await routeRow.count()) === 0) {
         throw new Error(
           'HARNESS/ENV: only one route quoted — route picker (#4671) not exercised'

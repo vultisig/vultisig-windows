@@ -78,18 +78,16 @@ function getChainFamily(chain: string): ChainFamily {
 
 /**
  * Public EVM endpoints intermittently answer with an HTML challenge page
- * instead of JSON. Rotate through these per poll rather than failing the run.
+ * instead of JSON. Backups only — the primary always comes from rpcEndpoints.
  */
-const evmFallbackEndpoints: Record<string, string[]> = {
-  ethereum: [
-    'https://ethereum-rpc.publicnode.com',
-    'https://eth.drpc.org',
-    'https://1rpc.io/eth',
-  ],
+const evmBackupEndpoints: Record<string, string[]> = {
+  ethereum: ['https://eth.drpc.org', 'https://1rpc.io/eth'],
 }
 
-const getEvmEndpoints = (chain: string, primary: string): string[] =>
-  evmFallbackEndpoints[chain] ?? [primary]
+const getEvmEndpoints = (chain: string, primary: string): string[] => [
+  primary,
+  ...(evmBackupEndpoints[chain] ?? []),
+]
 
 type EvmReceipt = { status: string; blockNumber: string; gasUsed: string }
 

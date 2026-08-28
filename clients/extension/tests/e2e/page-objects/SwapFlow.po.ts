@@ -319,6 +319,30 @@ export class SwapFlow extends BasePage {
 
   // Quotes come from aggregators (THORChain/1inch/etc.) and can take seconds.
   // Settle when an output appears, continue is enabled, or an error shows.
+  // Info rows render the label and the value as siblings; ListItem nests the
+  // title one level deeper, so the route row climbs twice.
+  private infoRow(label: string | RegExp): Locator {
+    return this.page
+      .getByText(label, { exact: typeof label === 'string' })
+      .locator('..')
+  }
+
+  get providerRow(): Locator {
+    return this.infoRow('Provider')
+  }
+
+  get totalFeesRow(): Locator {
+    return this.infoRow('Total Fees')
+  }
+
+  get swapFeeRow(): Locator {
+    return this.infoRow(/Swap Fee \(\d+(\.\d+)?%\)$/)
+  }
+
+  get routeRow(): Locator {
+    return this.infoRow('Select route').locator('..')
+  }
+
   async waitForQuote(timeout = 30_000): Promise<void> {
     await this.quoteLoading
       .waitFor({ state: 'visible', timeout: 5000 })

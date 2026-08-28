@@ -45,7 +45,7 @@ const verifiesAgainstPayer = (
 }
 
 test.describe('Keysign stability', () => {
-  let dapp: TestDappServer
+  let dapp: TestDappServer | undefined
 
   test.beforeAll(async () => {
     dapp = await startTestDappServer()
@@ -55,7 +55,7 @@ test.describe('Keysign stability', () => {
     dapp?.close()
   })
 
-  test(`${rounds} sequential sign-only keysigns all verify`, async ({
+  test('sequential sign-only keysigns all verify', async ({
     context,
     extensionId,
   }) => {
@@ -81,9 +81,10 @@ test.describe('Keysign stability', () => {
         password,
         dappUrl: dapp.url,
       })
-      durationsMs.push(Date.now() - startedAt)
+      const durationMs = Date.now() - startedAt
+      durationsMs.push(durationMs)
       console.log(
-        `[keysign stability] round ${round}/${rounds}: ${durationsMs.at(-1)}ms`
+        `[keysign stability] round ${round}/${rounds}: ${durationMs}ms`
       )
 
       expect(

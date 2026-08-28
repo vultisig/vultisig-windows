@@ -163,6 +163,7 @@ async function clickPrimaryAction(popup: Page): Promise<void> {
   const canClick = await primaryAction
     .isEnabled({ timeout: 2_000 })
     .catch(() => false)
+  // The popup can navigate away mid-click; the drive loop re-polls anyway.
   if (canClick) await primaryAction.click().catch(() => {})
 }
 
@@ -173,6 +174,7 @@ async function driveApprovalPopupsUntilResult({
   password,
 }: DriveApprovalPopupsInput): Promise<void> {
   const deadline = Date.now() + driveDeadlineMs
+  let lastLogged = ''
 
   while (Date.now() < deadline) {
     const resultText = (await result.textContent().catch(() => '')) ?? ''
@@ -197,9 +199,11 @@ async function driveApprovalPopupsUntilResult({
       .locator('button')
       .allTextContents()
       .catch(() => [] as string[])
-    console.log(
-      `[solana dApp sign] popup=${popup.url().slice(-40)} buttons=${JSON.stringify(buttonTexts)} result=${JSON.stringify(resultText)}`
-    )
+    const line = `[solana dApp sign] popup=${popup.url().slice(-40)} buttons=${JSON.stringify(buttonTexts)} result=${JSON.stringify(resultText)}`
+    if (line !== lastLogged) {
+      console.log(line)
+      lastLogged = line
+    }
     if (buttonTexts.some(text => /try again/i.test(text))) {
       await throwKeysignPopupError(popup)
     }
