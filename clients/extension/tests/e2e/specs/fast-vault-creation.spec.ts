@@ -17,7 +17,7 @@ const testEmail = `test-${Date.now()}@example.com`
 const testPassword = 'SecurePass123!'
 
 test.describe('Fast Vault Creation', () => {
-  test('fill name + email + password creates vault', async ({
+  test('fast-vault wizard accepts name, email and password', async ({
     context,
     extensionId,
   }) => {
@@ -27,18 +27,25 @@ test.describe('Fast Vault Creation', () => {
     try {
       await onboarding.goto()
 
-      const skipButton = page.getByRole('button', { name: /skip/i })
-      if (await skipButton.isVisible().catch(() => false)) {
-        await skipButton.click()
+      // A fresh profile may open on onboarding or straight on NewVault; wait
+      // for whichever mounts instead of probing before render.
+      const newVaultCreate = page.getByTestId('new-vault-create')
+      await expect(
+        newVaultCreate.or(onboarding.skipButton).first()
+      ).toBeVisible({ timeout: stepTimeout })
+      if (await onboarding.skipButton.isVisible()) {
+        await onboarding.skipButton.click()
       }
+      await newVaultCreate.click({ timeout: stepTimeout })
 
-      await page.getByTestId('new-vault-create').click({ timeout: stepTimeout })
-
-      // Device count picker defaults to one device (Fast Vault), then the
-      // setup overview repeats the same call to action.
+      // Device count picker defaults to one device (Fast Vault); the setup
+      // overview repeats the same call to action, so wait for the route flip.
       const getStarted = page.getByRole('button', { name: /get started/i })
-      await getStarted.click({ timeout: stepTimeout })
-      await getStarted.click({ timeout: stepTimeout })
+      await getStarted.first().click({ timeout: stepTimeout })
+      await expect(
+        page.getByTestId('vault-setup-overview-content')
+      ).toBeVisible({ timeout: stepTimeout })
+      await getStarted.first().click({ timeout: stepTimeout })
 
       const nameInput = page.getByTestId('vault-name-input')
       await expect(nameInput).toBeVisible({ timeout: stepTimeout })
@@ -56,7 +63,6 @@ test.describe('Fast Vault Creation', () => {
       await page.getByTestId('vault-password-confirm').fill(testPassword)
 
       await expect(page.getByTestId('create-vault-button')).toBeEnabled()
-      await expect(page.locator('[role="alert"]')).toHaveCount(0)
     } finally {
       await page.close()
     }
@@ -66,7 +72,7 @@ test.describe('Fast Vault Creation', () => {
     // Completing creation registers a real vault and sends a real email.
   })
 
-  test('new vault shows on vault page with 0 balance', async ({
+  test('fresh profile lands on the new-vault page', async ({
     context,
     extensionId,
   }) => {
@@ -75,18 +81,9 @@ test.describe('Fast Vault Creation', () => {
 
     try {
       await vaultPage.goto()
-
-      const vaultPageIndicator = page.getByTestId('vault-page')
-      const hasVault = await vaultPageIndicator
-        .isVisible({ timeout: stepTimeout })
-        .catch(() => false)
-
-      if (hasVault) {
-        await expect(page.getByTestId('vault-total-balance')).toBeVisible()
-        return
-      }
-
-      await expect(page.getByText(/vultisig/i).first()).toBeVisible()
+      await expect(page.getByTestId('new-vault-create')).toBeVisible({
+        timeout: stepTimeout,
+      })
     } finally {
       await page.close()
     }

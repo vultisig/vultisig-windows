@@ -24,6 +24,7 @@ const solanaRpcEndpoints = [
   'https://solana-rpc.publicnode.com',
 ]
 
+const signedPrefix = 'SolanaSigned: '
 const driveDeadlineMs = 240_000
 const popupPollMs = 1_500
 
@@ -76,7 +77,8 @@ export async function submitFastVaultPasswordIfPrompted({
     .first()
 
   const isPasswordPromptVisible = await passwordInput
-    .isVisible({ timeout: probeTimeout })
+    .waitFor({ state: 'visible', timeout: probeTimeout })
+    .then(() => true)
     .catch(() => false)
   if (!isPasswordPromptVisible) return
 
@@ -98,7 +100,8 @@ type DriveApprovalPopupsInput = {
 }
 
 // A finished keysign leaves its popup on a "Done" screen; the next round's
-// driver would keep finding that one instead of the fresh request.
+// driver would keep finding that one instead of the fresh request. Closes
+// every extension page in the (per-test) context — callers own that context.
 async function closeExtensionPopups(
   context: BrowserContext,
   extensionId: string
@@ -173,7 +176,8 @@ async function driveApprovalPopupsUntilResult({
 
   while (Date.now() < deadline) {
     const resultText = (await result.textContent().catch(() => '')) ?? ''
-    if (/^(SolanaSigned|Error):/.test(resultText)) return
+    if (resultText.startsWith(signedPrefix) || resultText.startsWith('Error:'))
+      return
 
     const popup = findExtensionPopup(context, extensionId)
     if (!popup) {
@@ -276,15 +280,14 @@ export async function signSolanaSelfTransferViaDapp({
     })
 
     const settled = (await result.textContent()) ?? ''
-    if (settled.startsWith('Error:')) {
+    if (!settled.startsWith(signedPrefix)) {
       throw new Error(
         `dApp signTransaction rejected (signSolana path, see sdk#2145): ${settled}`
       )
     }
-    await expect(result).toHaveText(/^SolanaSigned: /, { timeout: 300_000 })
 
     return {
-      signedBase64: settled.replace('SolanaSigned: ', ''),
+      signedBase64: settled.slice(signedPrefix.length),
       messageBase64: Buffer.from(message.serialize()).toString('base64'),
       payer,
     }

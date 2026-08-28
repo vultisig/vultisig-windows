@@ -14,13 +14,13 @@
 import { ed25519 } from '@noble/curves/ed25519'
 import type { BrowserContext, Page } from '@playwright/test'
 import { VersionedTransaction } from '@solana/web3.js'
-import http from 'http'
 
-import { testDappHtml } from '../fixtures/dapp-page.fixture'
 import { expect, test } from '../fixtures/extension-loader'
 import {
   signSolanaSelfTransferViaDapp,
+  startTestDappServer,
   submitFastVaultPasswordIfPrompted,
+  type TestDappServer,
 } from '../helpers/solana-dapp-sign'
 import {
   ensureVaultExists,
@@ -29,7 +29,7 @@ import {
 import { DAppApproval } from '../page-objects/DAppApproval.po'
 
 // Store DApp server at module level for sharing
-let dappServer: http.Server | null = null
+let dappServer: TestDappServer | null = null
 let dappUrl: string = ''
 
 const connectedAccountPattern =
@@ -53,19 +53,8 @@ type ConnectDappWalletInput = ExtensionContextInput & {
 
 test.describe('DApp Provider', () => {
   test.beforeAll(async () => {
-    // Start DApp server
-    dappServer = http.createServer((req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' })
-      res.end(testDappHtml)
-    })
-
-    await new Promise<void>(resolve => {
-      dappServer!.listen(0, '127.0.0.1', () => resolve())
-    })
-
-    const addr = dappServer.address()
-    const port = typeof addr === 'object' && addr ? addr.port : 0
-    dappUrl = `http://127.0.0.1:${port}`
+    dappServer = await startTestDappServer()
+    dappUrl = dappServer.url
   })
 
   test.afterAll(async () => {

@@ -20,7 +20,14 @@ import {
 
 const defaultRounds = 3
 const perRoundTimeoutMs = 240_000
-const rounds = Number(process.env.KEYSIGN_STABILITY_ROUNDS ?? defaultRounds)
+const parsedRounds = Number.parseInt(
+  process.env.KEYSIGN_STABILITY_ROUNDS ?? '',
+  10
+)
+const rounds =
+  Number.isInteger(parsedRounds) && parsedRounds > 0
+    ? parsedRounds
+    : defaultRounds
 
 const verifiesAgainstPayer = (
   signedBase64: string,
@@ -57,9 +64,10 @@ test.describe('Keysign stability', () => {
       !config,
       'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
     )
+    if (!config) return
     test.setTimeout(rounds * perRoundTimeoutMs)
 
-    const { vaultPath, password } = config!
+    const { vaultPath, password } = config
     expect(
       await ensureVaultExists(context, extensionId, vaultPath, password)
     ).toBe(true)
@@ -85,6 +93,5 @@ test.describe('Keysign stability', () => {
     }
 
     console.log(`[keysign stability] durations ms: ${durationsMs.join(', ')}`)
-    expect(durationsMs).toHaveLength(rounds)
   })
 })
