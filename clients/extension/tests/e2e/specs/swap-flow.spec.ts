@@ -178,6 +178,10 @@ const pasteAmount = async ({ page, swapFlow, amount }: PasteAmountInput) => {
 const readOutputAmount = async (swapFlow: SwapFlow) =>
   parseVisibleAmount(await swapFlow.getExpectedOutput())
 
+// Above cross-chain provider minimums; may exceed the test vault's balance,
+// which only disables Continue — the quote and its breakdown still render.
+const feeBreakdownQuoteAmountEth = '0.01'
+
 // Source-chain inclusion proves the deposit; for THORChain-sourced swaps the
 // status endpoint proves the swap itself finalised.
 async function assertThorchainSettledIfSourced(
@@ -490,37 +494,65 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(10_000)
 
+      // Quote-only: a fee breakdown needs a quote, not a balance, so a fixed
+      // pair keeps this independent of the vault-page balance parser.
       await navigateToSwap(page)
       await swapFlow.waitForView(10_000)
+      await swapFlow.prepareSwapWithAmount({
+        fromChainId: 'ethereum',
+        toChainId: 'bitcoin',
+        amount: feeBreakdownQuoteAmountEth,
+      })
+      await expect
+        .poll(async () => Number(await swapFlow.getExpectedOutput()), {
+          message: 'HARNESS/ENV: no ETH→BTC quote (providers down or halted)',
+          timeout: 30_000,
+        })
+        .toBeGreaterThan(0)
 
-      await swapFlow.fillAmount('0.001')
-      await page.waitForTimeout(500)
-      await swapFlow.waitForQuote()
+      const providerRow = page
+        .getByText('Provider', { exact: true })
+        .locator('..')
+      await expect(providerRow).toBeVisible()
+      await expect(providerRow).toHaveText(/Provider\s*\S+/, {
+        timeout: 15_000,
+      })
 
-      const providerInfo = page.locator(
-        'text=/thorchain|maya|1inch|jupiter|lifi|provider|aggregator/i'
+      const totalFeesRow = page
+        .getByText('Total Fees', { exact: true })
+        .locator('..')
+      await expect(totalFeesRow).toHaveText(/Total Fees\s*\$\d/, {
+        timeout: 15_000,
+      })
+      await totalFeesRow.getByRole('button').click()
+
+      await expect(page.getByText('Network Fee', { exact: true })).toBeVisible()
+      // The affiliate rate is disclosed in the label itself (#4593).
+      const swapFeeRow = page
+        .getByText(/Swap Fee \(\d+(\.\d+)?%\)$/)
+        .locator('..')
+      await expect(swapFeeRow).toBeVisible()
+      await expect(swapFeeRow).toHaveText(
+        /(\$\d|Included in the quoted exchange rate|waive)/i
       )
-      const feeInfo = page.locator('text=/fee|cost|network fee|gas/i')
-      const slippageInfo = page.locator('text=/slippage|price impact/i')
 
-      const hasProvider = await providerInfo
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const hasFee = await feeInfo
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const hasSlippage = await slippageInfo
-        .first()
-        .isVisible()
-        .catch(() => false)
+      await page.getByTestId('advanced-swap-settings').click()
+      await expect(
+        page.getByText('Advanced swap', { exact: true })
+      ).toBeVisible()
+      await expect(
+        page.getByText('Slippage Tolerance', { exact: true })
+      ).toBeVisible()
 
-      console.log(
-        `Provider info: ${hasProvider}, Fee info: ${hasFee}, Slippage: ${hasSlippage}`
-      )
-    } catch (error) {
-      console.log('Could not verify swap provider/fees:', error)
+      // The route picker (#4671) only renders when more than one route quoted.
+      const routeRow = page
+        .getByText('Select route', { exact: true })
+        .locator('..')
+      const canSelectRoute = await routeRow.isVisible().catch(() => false)
+      console.log(`Route picker offered: ${canSelectRoute}`)
+      if (canSelectRoute) {
+        await expect(routeRow).toHaveText(/Select route\s*\S+/)
+      }
     } finally {
       await page.close()
     }
