@@ -19,6 +19,12 @@ import { MarketDataSource } from '../MarketDataSource'
 type UseCoinMarketChartQueryInput = {
   source: MarketDataSource | null
   range: MarketChartRange
+  /**
+   * Lets a caller hold the fetch back until the chart is actually on screen.
+   * The key is unaffected, so the series is still shared with every other
+   * consumer of the same coin, currency and range.
+   */
+  isEnabled?: boolean
 }
 
 type CoinMarketChartQueryKeyInput = {
@@ -36,17 +42,18 @@ export const getCoinMarketChartQueryKey = (
 ) => ['coinMarketChart', input]
 
 /**
- * Price series for the coin-detail chart, resampled to a fixed point count
- * so range switches morph in place. Resolves to `null` when the series is
- * too sparse to draw honestly. Inactive for pool-priced coins (`source`
- * null). Freshness follows the range (1m for 1D up to 1h for 1Y/ALL); no
- * polling — data refetches only on open or range/currency change. While a
- * new range loads, the previous series stays available as placeholder data
- * so the layout never collapses to a spinner.
+ * Price series for a coin's chart, resampled to a fixed point count so range
+ * switches morph in place. Resolves to `null` when the series is too sparse to
+ * draw honestly. Inactive for pool-priced coins (`source` null) and while a
+ * caller holds it back with `isEnabled`. Freshness follows the range (1m for
+ * 1D up to 1h for 1Y/ALL); no polling — data refetches only on open or
+ * range/currency change. While a new range loads, the previous series stays
+ * available as placeholder data so the layout never collapses to a spinner.
  */
 export const useCoinMarketChartQuery = ({
   source,
   range,
+  isEnabled = true,
 }: UseCoinMarketChartQueryInput) => {
   const fiatCurrency = useFiatCurrency()
 
@@ -65,7 +72,7 @@ export const useCoinMarketChartQuery = ({
 
       return resampleMarketChart({ points, count: marketChartPointCount })
     },
-    enabled: source !== null,
+    enabled: isEnabled && source !== null,
     placeholderData: keepPreviousData,
     ...persistQueryOptions,
     staleTime: marketChartRangeStaleTime[range],

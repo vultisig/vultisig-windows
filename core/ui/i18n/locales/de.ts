@@ -1954,4 +1954,12 @@ export const de = {
     'Ihre Geräte haben diese Transaktion signiert, aber dieses Gerät hat die Übertragung nach einer abschließenden Sicherheitsprüfung abgelehnt. Ein anderes signierendes Gerät hat sie möglicherweise trotzdem übertragen – überprüfen Sie den Status unten und bestätigen Sie das Ergebnis, bevor Sie erneut signieren.',
   not_seen_onchain: 'Noch nicht in der Blockchain gesehen',
   some_balances_failed_to_load: 'Einige Guthaben konnten nicht geladen werden.',
+  swap_limit_chart_title: 'Preisdiagramm',
+  swap_limit_chart_drag_label: 'Kursziel',
+  swap_limit_chart_unavailable:
+    'Für dieses Paar ist keine Preishistorie verfügbar.',
+  swap_limit_chart_fills_immediately: 'Wird zu diesem Preis sofort ausgeführt',
+  swap_limit_chart_last_traded: 'Zuletzt gehandelt hier: {{when}}',
+  swap_limit_chart_not_reached:
+    'In diesem Zeitfenster nicht gehandelt — das Hoch lag bei {{price}}',
 }

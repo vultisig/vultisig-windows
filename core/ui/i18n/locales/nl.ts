@@ -1922,4 +1922,13 @@ export const nl = {
     'Uw apparaten hebben deze transactie ondertekend, maar dit apparaat heeft na een laatste veiligheidscontrole geweigerd deze te verzenden. Een ander apparaat dat de transactie heeft ondertekend, heeft deze mogelijk wel verzonden. Bekijk de status hieronder en bevestig het resultaat voordat u opnieuw ondertekent.',
   not_seen_onchain: 'Nog niet op de blockchain gezien',
   some_balances_failed_to_load: 'Sommige saldi konden niet worden geladen.',
+  swap_limit_chart_title: 'Prijsgrafiek',
+  swap_limit_chart_drag_label: 'Doelprijs',
+  swap_limit_chart_unavailable:
+    'Voor dit paar is geen prijsgeschiedenis beschikbaar',
+  swap_limit_chart_fills_immediately:
+    'Wordt direct uitgevoerd tegen deze prijs',
+  swap_limit_chart_last_traded: 'Laatst verhandeld hier: {{when}}',
+  swap_limit_chart_not_reached:
+    'Er is hier in dit tijdsvenster niet in gehandeld — de hoogste koers was {{price}}',
 }
