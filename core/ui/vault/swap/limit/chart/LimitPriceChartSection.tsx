@@ -2,12 +2,13 @@ import { MarketChartRange } from '@core/ui/chain/coin/price/market/MarketChartRa
 import { CoinChartRangePicker } from '@core/ui/vault/chain/coin/market/CoinChartRangePicker'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
+import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -49,6 +50,7 @@ export const LimitPriceChartSection = ({
   onTargetChange,
 }: LimitPriceChartSectionProps) => {
   const { t } = useTranslation()
+  const prefersReduced = useReducedMotion()
   const [isExpanded, setIsExpanded] = useIsLimitPriceChartExpanded()
   const [range, setRange] = useState<MarketChartRange>(limitChartRanges[0])
 
@@ -66,7 +68,10 @@ export const LimitPriceChartSection = ({
   )
 
   return (
-    <VStack gap={12}>
+    // No gap on the outer stack: the panel's own top padding grows with it, so
+    // the space above the chart opens with the chart instead of popping in
+    // ahead of it.
+    <VStack>
       <DisclosureRow
         type="button"
         aria-expanded={isExpanded}
@@ -75,59 +80,71 @@ export const LimitPriceChartSection = ({
         <Text size={14} weight={500} color="contrast">
           {t('swap_limit_chart_title')}
         </Text>
-        <Chevron style={{ rotate: isExpanded ? '180deg' : undefined }}>
-          <ChevronDownIcon />
-        </Chevron>
+        <Chevron isOpen={isExpanded} />
       </DisclosureRow>
 
-      {isExpanded ? (
-        <VStack gap={12}>
-          <MatchQuery
-            value={query}
-            pending={() => (
-              <Skeleton
-                height={`${limitChartHeight}px`}
-                borderRadius={`${borderRadiusPx.md}px`}
-              />
-            )}
-            error={() => unavailable}
-            success={points =>
-              points && marketPrice !== undefined ? (
-                // Dimmed while a range switch is in flight: the legs resolve
-                // independently, so for a moment the ratio is drawn over
-                // whichever window arrived first.
-                <VStack
-                  gap={8}
-                  style={{ opacity: query.isPlaceholderData ? 0.3 : 1 }}
-                >
-                  <LimitPriceChart
-                    points={points}
-                    marketPrice={marketPrice}
-                    targetPrice={targetPrice}
-                    formatPrice={formatPrice}
-                    onTargetChange={onTargetChange}
+      <AnimatePresence initial={false}>
+        {isExpanded ? (
+          <motion.div
+            key="chart"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{
+              duration: prefersReduced ? 0 : 0.28,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{ overflow: 'hidden' }}
+          >
+            <VStack gap={12} style={{ paddingTop: 12 }}>
+              <MatchQuery
+                value={query}
+                pending={() => (
+                  <Skeleton
+                    height={`${limitChartHeight}px`}
+                    borderRadius={`${borderRadiusPx.md}px`}
                   />
-                  {targetPrice !== null ? (
-                    <LimitPriceChartVerdict
-                      points={points}
-                      marketPrice={marketPrice}
-                      targetPrice={targetPrice}
-                      formatPrice={formatPrice}
-                    />
-                  ) : null}
-                </VStack>
-              ) : (
-                unavailable
-              )
-            }
-          />
-          <CoinChartRangePicker
-            value={range}
-            onChange={setRange}
-            ranges={limitChartRanges}
-          />
-        </VStack>
-      ) : null}
+                )}
+                error={() => unavailable}
+                success={points =>
+                  points && marketPrice !== undefined ? (
+                    // Dimmed while a range switch is in flight: the legs resolve
+                    // independently, so for a moment the ratio is drawn over
+                    // whichever window arrived first.
+                    <VStack
+                      gap={8}
+                      style={{ opacity: query.isPlaceholderData ? 0.3 : 1 }}
+                    >
+                      <LimitPriceChart
+                        points={points}
+                        marketPrice={marketPrice}
+                        targetPrice={targetPrice}
+                        formatPrice={formatPrice}
+                        onTargetChange={onTargetChange}
+                      />
+                      {targetPrice !== null ? (
+                        <LimitPriceChartVerdict
+                          points={points}
+                          marketPrice={marketPrice}
+                          targetPrice={targetPrice}
+                          formatPrice={formatPrice}
+                        />
+                      ) : null}
+                    </VStack>
+                  ) : (
+                    unavailable
+                  )
+                }
+              />
+              <CoinChartRangePicker
+                value={range}
+                onChange={setRange}
+                ranges={limitChartRanges}
+              />
+            </VStack>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </VStack>
   )
 }
@@ -144,9 +161,10 @@ const DisclosureRow = styled(UnstyledButton)`
   cursor: pointer;
 `
 
-const Chevron = styled.div`
-  display: flex;
+// The shared indicator only sets the rotation; the easing here is the one the
+// panel below opens with, so the two read as one motion.
+const Chevron = styled(CollapsableStateIndicator)`
   font-size: 16px;
   color: ${({ theme }) => theme.colors.textShy.toCssValue()};
-  transition: rotate 0.2s ease-in-out;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 `
