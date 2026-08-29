@@ -8,6 +8,7 @@ import {
 import { getVerifyTransactionTitleKey } from '@core/ui/mpc/keysign/transaction-decoding/presentation'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import {
+  TransactionOverviewAddress,
   TransactionOverviewAmount,
   TransactionOverviewItem,
 } from '@core/ui/mpc/keysign/verify/components'
@@ -18,12 +19,10 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
-import { MiddleTruncate } from '@lib/ui/truncate'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -107,27 +106,8 @@ export const VerifyTransactionOverview = ({
     />
   )
 
-  const receiverDisplay: ReactNode = (() => {
-    if (typeof receiver !== 'string') return receiver
-
-    const label =
-      receiverVaultName ?? receiverAddressBookName ?? receiverAddressLabel
-
-    if (label !== undefined) {
-      return (
-        <HStack alignItems="center" gap={8}>
-          <Text as="span" size={14} weight={500}>
-            {label}
-          </Text>
-          <Text as="span" color="shy" size={14} weight={500}>
-            ({formatWalletAddress(receiver)})
-          </Text>
-        </HStack>
-      )
-    }
-
-    return <MiddleTruncate size={14} text={receiver} weight={500} width={200} />
-  })()
+  const receiverName =
+    receiverVaultName ?? receiverAddressBookName ?? receiverAddressLabel
 
   return (
     <List border="gradient" radius={borderRadiusPx.lg}>
@@ -146,20 +126,20 @@ export const VerifyTransactionOverview = ({
           )
         }}
       />
-      <TransactionOverviewItem
+      <TransactionOverviewAddress
         label={t('from')}
-        value={
-          <HStack alignItems="center" gap={8}>
-            <Text as="span" size={14} weight={500}>
-              {senderName}
-            </Text>
-            <Text as="span" color="shy" size={14} weight={500}>
-              ({formatWalletAddress(senderAddress)})
-            </Text>
-          </HStack>
-        }
+        address={senderAddress}
+        name={senderName}
       />
-      <TransactionOverviewItem label={t('to')} value={receiverDisplay} />
+      {typeof receiver === 'string' ? (
+        <TransactionOverviewAddress
+          label={t('to')}
+          address={receiver}
+          name={receiverName}
+        />
+      ) : (
+        <TransactionOverviewItem label={t('to')} value={receiver} />
+      )}
       <TransactionOverviewItem
         label={t('network')}
         value={
