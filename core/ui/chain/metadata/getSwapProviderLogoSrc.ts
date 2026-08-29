@@ -17,6 +17,7 @@ const generalSwapProviderLogo: Record<GeneralSwapProvider, string> = {
   swapkit: 'swapkit.svg',
   cowswap: 'cowswap.svg',
   jupiter: 'jupiter.svg',
+  ruji: 'ruji.svg',
 }
 
 const logoSrcByProviderName = new Map<string, string>([

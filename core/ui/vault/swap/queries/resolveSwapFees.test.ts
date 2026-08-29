@@ -334,4 +334,43 @@ describe('resolveSwapFees', () => {
     expect(result.protocol?.amount).toBe(250n)
     expect(result.affiliate).toBeUndefined()
   })
+
+  it('itemizes no charge for a RUJI Trade execute and keeps the computed gas', () => {
+    const quote: SwapQuoteResult = {
+      general: {
+        dstAmount: '1000000',
+        provider: 'ruji',
+        tx: {
+          cosmosWasm: {
+            sender: 'thor1sender',
+            contract: 'thor1market',
+            executeMsg:
+              '{"swap":{"min":{"min_return":"990000","to":"thor1dest"}}}',
+            funds: [{ denom: 'rune', amount: '1000' }],
+          },
+        },
+      },
+    }
+
+    const result = resolveSwapFees({
+      quote,
+      network: computedNetworkFee,
+      toCoinKey,
+      toCoin: undefined,
+      fromCoin: {
+        chain: Chain.THORChain,
+        decimals: 8,
+        ticker: 'RUNE',
+        logo: 'rune',
+      },
+      affiliateBps: noDiscount,
+    })
+
+    // FIN's protocol fee is simulated on-contract and already netted out of
+    // `dstAmount`, so there is nothing to itemize; gas stays the keysign
+    // payload's computed figure.
+    expect(result.affiliate).toBeUndefined()
+    expect(result.protocol).toBeUndefined()
+    expect(result.network).toEqual(computedNetworkFee)
+  })
 })
