@@ -162,6 +162,10 @@ const getSwapProviderCharges = ({
         // still known from the bps that were sent, so the row discloses the
         // percentage and reports the amount as part of the quoted rate.
         transfer: () => ({}),
+        // RUJI Trade's FIN execute carries no fee fields: the protocol fee is
+        // simulated on the contract and already netted out of the quote's
+        // `dstAmount`, so there is nothing to disclose separately here.
+        cosmosWasm: () => ({}),
         cowswap_order: ({ feeAmount }) => {
           const amount = BigInt(feeAmount)
 
@@ -212,6 +216,9 @@ const resolveSwapNetworkFee = ({
         }),
         transfer: () => network,
         cowswap_order: () => network,
+        // The FIN execute is an ordinary THORChain CosmWasm message, so its gas
+        // is the keysign payload's computed network fee.
+        cosmosWasm: () => network,
       }),
   })
 
