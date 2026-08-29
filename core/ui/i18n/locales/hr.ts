@@ -1909,4 +1909,11 @@ export const hr = {
     'Vaši su uređaji potpisali ovu transakciju, ali ovaj je uređaj odbio emitirati je nakon završne sigurnosne provjere. Drugi uređaj za potpisivanje ju je možda ipak emitirao - pogledajte status u nastavku i potvrdite ishod prije ponovnog potpisivanja.',
   not_seen_onchain: 'Još nije viđeno na lancu',
   some_balances_failed_to_load: 'Učitavanje nekih stanja nije uspjelo',
+  swap_limit_chart_title: 'Grafikon cijena',
+  swap_limit_chart_drag_label: 'Ciljana cijena',
+  swap_limit_chart_unavailable: 'Povijest cijena nije dostupna za ovaj par',
+  swap_limit_chart_fills_immediately: 'Odmah se izvršava po ovoj cijeni',
+  swap_limit_chart_last_traded: 'Zadnje trgovanje ovdje {{when}}',
+  swap_limit_chart_not_reached:
+    'Nije trgovao ovdje u ovom prozoru — najviša cijena je bila {{price}}',
 }

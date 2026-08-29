@@ -313,6 +313,8 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     setHasFinishedOnboarding: noop,
     getHasSeenNotificationPrompt: async () => true,
     setHasSeenNotificationPrompt: noop,
+    getIsLimitPriceChartExpanded: async () => false,
+    setIsLimitPriceChartExpanded: noop,
     getHasFinishedReferralsOnboarding: async () => true,
     setHasFinishedReferralsOnboarding: noop,
     getCoinFinderIgnore: async () => [],

@@ -17,6 +17,7 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { LimitPriceChartSection } from '../limit/chart/LimitPriceChartSection'
 import { LimitAssetStep } from '../limit/LimitAssetStep'
 import { LimitAssetSummary } from '../limit/LimitAssetSummary'
 import { LimitExecuteWhen, LimitPriceUnit } from '../limit/LimitExecuteWhen'
@@ -281,6 +282,11 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
       ? getLimitPriceWarning({ price: rate, marketPrice: marketRate })
       : undefined
 
+  // The chart's axis is the rate itself, so its labels are always in the pair's
+  // units — never the fiat the field may currently be showing.
+  const formatRate = (value: number) =>
+    `${formatNumber(value)} ${toCoin.ticker}`
+
   const formatDisplayPrice = (value: number) =>
     unit === 'fiat'
       ? `$${formatNumber(value, 2)}`
@@ -427,6 +433,19 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
                   }
                 }
               }}
+              priceChart={
+                <LimitPriceChartSection
+                  fromCoin={fromCoin}
+                  toCoin={toCoin}
+                  marketPrice={marketRate}
+                  targetPrice={rate}
+                  formatPrice={formatRate}
+                  onTargetChange={nextRate => {
+                    setPriceFromRate({ nextRate, forUnit: unit })
+                    setActivePreset(undefined)
+                  }}
+                />
+              }
               expiryHours={expiryHours}
               onExpiryChange={setExpiryHours}
             />

@@ -1257,6 +1257,13 @@ export const en = {
   swap_limit_cancel_sent: 'Cancellation sent',
   swap_limit_cancel_sent_detail:
     'Your order stays open until THORChain confirms it closed.',
+  swap_limit_chart_title: 'Price chart',
+  swap_limit_chart_drag_label: 'Target price',
+  swap_limit_chart_unavailable: 'Price history is unavailable for this pair',
+  swap_limit_chart_fills_immediately: 'Fills immediately at this price',
+  swap_limit_chart_last_traded: 'Last traded here {{when}}',
+  swap_limit_chart_not_reached:
+    "Hasn't traded here in this window — the high was {{price}}",
   swap_limit_expiry_days: '{{days}}d',
   swap_limit_expiry_days_hours: '{{days}}d {{hours}}h',
   swap_limit_expiry_hours: '{{hours}}h',

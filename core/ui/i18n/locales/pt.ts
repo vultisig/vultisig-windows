@@ -1942,4 +1942,12 @@ export const pt = {
     'Seus dispositivos assinaram esta transação, mas este dispositivo recusou-se a transmiti-la após uma verificação de segurança final. Outro dispositivo de assinatura pode tê-la transmitido mesmo assim — observe o status abaixo e confirme o resultado antes de assinar novamente.',
   not_seen_onchain: 'Ainda não foi visto na blockchain.',
   some_balances_failed_to_load: 'Alguns saldos não foram carregados.',
+  swap_limit_chart_title: 'Gráfico de preços',
+  swap_limit_chart_drag_label: 'Preço alvo',
+  swap_limit_chart_unavailable:
+    'O histórico de preços não está disponível para este par',
+  swap_limit_chart_fills_immediately: 'É executada imediatamente a este preço',
+  swap_limit_chart_last_traded: 'Última negociação aqui: {{when}}',
+  swap_limit_chart_not_reached:
+    'Não houve negociações aqui neste período — a máxima foi {{price}}',
 }

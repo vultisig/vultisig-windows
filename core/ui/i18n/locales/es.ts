@@ -1939,4 +1939,12 @@ export const es = {
     'Tus dispositivos firmaron esta transacción, pero este dispositivo se negó a transmitirla tras una comprobación de seguridad final. Es posible que otro dispositivo firmante la haya transmitido de todos modos; consulta el estado a continuación y confirma el resultado antes de volver a firmar.',
   not_seen_onchain: 'Aún no se ha visto en la cadena de bloques.',
   some_balances_failed_to_load: 'Algunos saldos no se cargaron correctamente.',
+  swap_limit_chart_title: 'Gráfico de precios',
+  swap_limit_chart_drag_label: 'Precio objetivo',
+  swap_limit_chart_unavailable:
+    'El historial de precios no está disponible para este par',
+  swap_limit_chart_fills_immediately: 'Se ejecuta inmediatamente a este precio',
+  swap_limit_chart_last_traded: 'Última transacción realizada aquí: {{when}}',
+  swap_limit_chart_not_reached:
+    'No ha cotizado aquí en este período; el máximo fue {{price}}',
 }
