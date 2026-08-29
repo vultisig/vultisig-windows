@@ -13,18 +13,6 @@ export const StationSecureVaultIcon: FC<SvgProps> = props => (
   </svg>
 )
 
-export const StationPenIcon: FC<SvgProps> = props => (
-  <svg viewBox="0 0 16 16" fill="none" width="1em" height="1em" {...props}>
-    <path
-      d="M2.39974 13.6002L3.19974 9.60019L9.93094 2.86899C10.5557 2.24419 11.5685 2.24419 12.1933 2.86899L13.1309 3.80659C13.7557 4.43139 13.7557 5.44419 13.1309 6.06899L6.39974 12.8002L2.39974 13.6002Z"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
 export const StationArrowsRotateCenterIcon: FC<SvgProps> = props => (
   <svg viewBox="0 0 20 20" fill="none" width="1em" height="1em" {...props}>
     <path
