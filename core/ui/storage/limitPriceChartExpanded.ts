@@ -17,6 +17,10 @@ type SetIsLimitPriceChartExpandedFunction = (
   isExpanded: boolean
 ) => Promise<void>
 
+/**
+ * Client-provided persistence for the limit chart's expansion state, so the
+ * desktop app and the extension each store it their own way.
+ */
 export type LimitPriceChartExpansionStorage = {
   getIsLimitPriceChartExpanded: GetIsLimitPriceChartExpandedFunction
   setIsLimitPriceChartExpanded: SetIsLimitPriceChartExpandedFunction

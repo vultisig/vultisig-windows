@@ -441,8 +441,12 @@ export const LimitSwapForm: FC<OnFinishProp<LimitOrderReviewData>> = ({
                   targetPrice={rate}
                   formatPrice={formatRate}
                   onTargetChange={nextRate => {
-                    setPriceFromRate({ nextRate, forUnit: unit })
-                    setActivePreset(undefined)
+                    // Same guard as the preset pills: a drag that could not be
+                    // written (fiat conversion still loading) must not
+                    // deselect a pill whose price is still in the field.
+                    if (setPriceFromRate({ nextRate, forUnit: unit })) {
+                      setActivePreset(undefined)
+                    }
                   }}
                 />
               }

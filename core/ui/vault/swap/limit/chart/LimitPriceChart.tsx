@@ -135,11 +135,10 @@ export const LimitPriceChart = ({
   }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const direction = { ArrowUp: 1, ArrowDown: -1 }[event.key]
-    if (direction === undefined) return
+    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return
 
     event.preventDefault()
-    nudge(direction)
+    nudge(event.key === 'ArrowUp' ? 1 : -1)
   }
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -233,7 +232,9 @@ export const LimitPriceChart = ({
         aria-orientation="vertical"
         aria-valuemin={domain.min}
         aria-valuemax={domain.max}
-        aria-valuenow={targetPrice ?? marketPrice}
+        // The pinned value, so it never contradicts the declared range; the
+        // real target, off-scale or not, is what `aria-valuetext` reads out.
+        aria-valuenow={getLimitChartValue({ fraction: handleFraction, domain })}
         aria-valuetext={formatPrice(targetPrice ?? marketPrice)}
         style={{ top: `${handleFraction * 100}%` }}
         onKeyDown={handleKeyDown}

@@ -274,6 +274,8 @@ export const seedTronAccountResources = ({
 
 let qaSolanaMoveStakeDestinations: SolanaMoveStakeDestinations = {}
 
+let qaIsLimitPriceChartExpanded = false
+
 const createQaCoreState = (vault: QaVault): CoreState => {
   const vaultId = getVaultId(vault)
 
@@ -313,8 +315,10 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     setHasFinishedOnboarding: noop,
     getHasSeenNotificationPrompt: async () => true,
     setHasSeenNotificationPrompt: noop,
-    getIsLimitPriceChartExpanded: async () => false,
-    setIsLimitPriceChartExpanded: noop,
+    getIsLimitPriceChartExpanded: async () => qaIsLimitPriceChartExpanded,
+    setIsLimitPriceChartExpanded: async isExpanded => {
+      qaIsLimitPriceChartExpanded = isExpanded
+    },
     getHasFinishedReferralsOnboarding: async () => true,
     setHasFinishedReferralsOnboarding: noop,
     getCoinFinderIgnore: async () => [],
