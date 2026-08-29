@@ -93,7 +93,13 @@ export const LimitPriceChartSection = ({
             error={() => unavailable}
             success={points =>
               points && marketPrice !== undefined ? (
-                <VStack gap={8}>
+                // Dimmed while a range switch is in flight: the legs resolve
+                // independently, so for a moment the ratio is drawn over
+                // whichever window arrived first.
+                <VStack
+                  gap={8}
+                  style={{ opacity: query.isPlaceholderData ? 0.3 : 1 }}
+                >
                   <LimitPriceChart
                     points={points}
                     marketPrice={marketPrice}

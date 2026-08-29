@@ -202,28 +202,29 @@ export const LimitPriceChart = ({
 
       <MarketRule style={{ top: `${marketFraction * 100}%` }} />
 
-      <TargetRule
-        style={{
-          top: `${handleFraction * 100}%`,
-          borderTopColor: tint.toCssValue(),
-          borderTopStyle: target?.offScale ? 'dashed' : 'solid',
-        }}
-      />
-
-      {targetPrice === null ? null : (
-        <TargetLabel
-          style={{
-            top: `${handleFraction * 100}%`,
-            background: tint.withAlpha(0.16).toCssValue(),
-          }}
-        >
-          <Text size={11} weight={600} as="span" color="contrast">
-            {target?.offScale
-              ? `${offScaleMarker[target.offScale]} ${formatPrice(targetPrice)}`
-              : formatPrice(targetPrice)}
-          </Text>
-        </TargetLabel>
-      )}
+      {target && targetPrice !== null ? (
+        <>
+          <TargetRule
+            style={{
+              top: `${handleFraction * 100}%`,
+              borderTopColor: tint.toCssValue(),
+              borderTopStyle: target.offScale ? 'dashed' : 'solid',
+            }}
+          />
+          <TargetLabel
+            style={{
+              top: `${handleFraction * 100}%`,
+              background: tint.withAlpha(0.16).toCssValue(),
+            }}
+          >
+            <Text size={11} weight={600} as="span" color="contrast">
+              {target.offScale
+                ? `${offScaleMarker[target.offScale]} ${formatPrice(targetPrice)}`
+                : formatPrice(targetPrice)}
+            </Text>
+          </TargetLabel>
+        </>
+      ) : null}
 
       <DragHandle
         role="slider"
