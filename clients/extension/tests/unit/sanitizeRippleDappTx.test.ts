@@ -70,6 +70,20 @@ describe('sanitizeRippleDappTx', () => {
     }
   })
 
+  it('rejects issued-currency Payments before confirmation', () => {
+    expect(() =>
+      sanitize({
+        TransactionType: 'Payment',
+        Destination: vaultAddress,
+        Amount: {
+          currency: 'USD',
+          issuer: 'rIssuer00000000000000000000000000000',
+          value: '1',
+        },
+      })
+    ).toThrow(/issued-currency Payments are not supported/)
+  })
+
   it('rejects a transaction type outside the allowlist', () => {
     // SetRegularKey could hand account control to an attacker key — exactly the
     // kind of request that must never ride in on a "sign this swap" prompt.
@@ -160,21 +174,13 @@ describe('sanitizeRippleDappTx', () => {
     }
   )
 
-  it('accepts a partial payment floored by an issued-currency DeliverMin', () => {
-    const deliverMin = {
-      currency: '524C555344000000000000000000000000000000',
-      issuer: 'rIssuer00000000000000000000000000000',
-      value: '1.5',
-    }
+  it('accepts a partial payment floored by a positive native DeliverMin', () => {
+    const deliverMin = '1500000'
 
     const result = sanitize({
       TransactionType: 'Payment',
       Destination: vaultAddress,
-      Amount: {
-        currency: '524C555344000000000000000000000000000000',
-        issuer: 'rIssuer00000000000000000000000000000',
-        value: '2',
-      },
+      Amount: '2000000',
       SendMax: '1200000',
       DeliverMin: deliverMin,
       Flags: 131072,

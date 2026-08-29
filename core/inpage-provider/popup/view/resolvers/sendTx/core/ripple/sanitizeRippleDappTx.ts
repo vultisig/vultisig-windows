@@ -157,6 +157,21 @@ export const sanitizeRippleDappTx = ({
     )
   }
 
+  // Serialized XRPL requests currently use the native XRP coin in the
+  // keysign payload. The signer requires an issued-currency Payment to carry
+  // that exact issued coin (currency + issuer), so letting an Amount object
+  // reach confirmation would only fail later in keysign after misleading the
+  // user that the request was signable.
+  if (
+    transactionType === 'Payment' &&
+    typeof record.Amount === 'object' &&
+    record.Amount !== null
+  ) {
+    throw new Error(
+      'Ripple issued-currency Payments are not supported; use a native XRP amount'
+    )
+  }
+
   const sanitized: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(record)) {
     if (!strippedFields.includes(key)) {
