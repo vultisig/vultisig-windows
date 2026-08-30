@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 
 import { create } from '@bufbuild/protobuf'
-import type { Page } from '@playwright/test'
+import type { BrowserContext, Page } from '@playwright/test'
 import { getJoinKeysignUrl } from '@vultisig/core-mpc/keysign/utils/getJoinKeysignUrl'
 import { RippleSpecificSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
@@ -13,10 +13,6 @@ import QRCode from 'react-qr-code'
 import { expect, test } from '../fixtures/extension-loader'
 import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
 import { enableChains } from '../helpers/enable-chains'
-import {
-  ensureVaultExists,
-  getVaultConfigFromEnv,
-} from '../helpers/vault-import'
 import { SendFlow } from '../page-objects/SendFlow.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
@@ -35,21 +31,9 @@ const captureProof = async (page: Page, name: string) => {
   })
 }
 
-const ensureDestinationTagVault = async (
-  context: Parameters<typeof ensureVaultExists>[0],
-  extensionId: string
-) => {
-  const config = getVaultConfigFromEnv()
-  if (config) {
-    await ensureVaultExists(
-      context,
-      extensionId,
-      config.vaultPath,
-      config.password
-    )
-    return
-  }
-
+// Always the synthetic fixture: the assertions below are written against it,
+// and the real test vault's unfunded XRP account cannot reach Verify.
+const ensureDestinationTagVault = async (context: BrowserContext) => {
   await writeChromeStorageMultiple(context, {
     currentVaultId: fixturePublicKey,
     hasFinishedOnboarding: true,
@@ -88,16 +72,16 @@ const ensureDestinationTagVault = async (
 }
 
 test.describe('XRP destination tag', () => {
-  test.beforeEach(async ({ context, extensionId }) => {
+  test.beforeEach(async ({ context }) => {
     test.setTimeout(300_000)
-    await ensureDestinationTagVault(context, extensionId)
+    await ensureDestinationTagVault(context)
   })
 
   const openRippleSendForm = async ({
     context,
     extensionId,
   }: {
-    context: Parameters<typeof ensureVaultExists>[0]
+    context: BrowserContext
     extensionId: string
   }) => {
     const page = await context.newPage()

@@ -27,7 +27,10 @@ import {
   writeChromeStorage,
 } from '../helpers/chrome-storage'
 import { CHAIN_UI_LABELS } from '../helpers/enable-chains'
-import { waitForTxConfirmation } from '../helpers/tx-confirmation'
+import {
+  defaultConfirmationTimeoutMs,
+  waitForTxConfirmation,
+} from '../helpers/tx-confirmation'
 import {
   getAddressForChain,
   getVaultAddresses,
@@ -206,7 +209,7 @@ async function replacePersistedBalance(
 async function waitForSendTxConfirmation(
   chain: ChainId,
   txHash: string,
-  timeoutMs: number
+  timeoutMs = defaultConfirmationTimeoutMs
 ) {
   if (chain !== 'thorchain') {
     return waitForTxConfirmation(chain, txHash, timeoutMs)
@@ -530,11 +533,7 @@ test.describe('Send Flow', () => {
 
         if (txHash) {
           console.log(`✅ ${chain} send tx: ${txHash}`)
-          const confirmationPromise = waitForSendTxConfirmation(
-            chain,
-            txHash,
-            180_000
-          )
+          const confirmationPromise = waitForSendTxConfirmation(chain, txHash)
 
           if (
             monitorPage &&
@@ -764,11 +763,7 @@ test.describe('Send Flow', () => {
 
         if (txHash) {
           console.log(`✅ ${chain} send tx: ${txHash}`)
-          const confirmation = await waitForTxConfirmation(
-            chain,
-            txHash,
-            120_000
-          )
+          const confirmation = await waitForTxConfirmation(chain, txHash)
           expect(confirmation.confirmed).toBe(true)
           updateStaleness([chain], true)
         }

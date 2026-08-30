@@ -13,18 +13,17 @@
 
 import { ed25519 } from '@noble/curves/ed25519'
 import type { BrowserContext, Page } from '@playwright/test'
-import {
-  Connection,
-  PublicKey,
-  SystemProgram,
-  TransactionMessage,
-  VersionedTransaction,
-} from '@solana/web3.js'
-import http from 'http'
+import { VersionedTransaction } from '@solana/web3.js'
 
-import { TEST_DAPP_HTML } from '../fixtures/dapp-page.fixture'
+import {
+  startTestDappServer,
+  type TestDappServer,
+} from '../fixtures/dapp-page.fixture'
 import { expect, test } from '../fixtures/extension-loader'
-import { getVaultAddresses } from '../helpers/vault-addresses'
+import {
+  signSolanaSelfTransferViaDapp,
+  submitFastVaultPasswordIfPrompted,
+} from '../helpers/solana-dapp-sign'
 import {
   ensureVaultExists,
   getVaultConfigFromEnv,
@@ -32,7 +31,7 @@ import {
 import { DAppApproval } from '../page-objects/DAppApproval.po'
 
 // Store DApp server at module level for sharing
-let dappServer: http.Server | null = null
+let dappServer: TestDappServer | null = null
 let dappUrl: string = ''
 
 const connectedAccountPattern =
@@ -50,31 +49,14 @@ type ApproveRequiredDappRequestInput = ExtensionContextInput & {
   waitForClose?: boolean
 }
 
-type SubmitFastVaultPasswordIfPromptedInput = {
-  popup: Page
-  password: string
-  probeTimeout?: number
-}
-
 type ConnectDappWalletInput = ExtensionContextInput & {
   page: Page
 }
 
 test.describe('DApp Provider', () => {
   test.beforeAll(async () => {
-    // Start DApp server
-    dappServer = http.createServer((req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' })
-      res.end(TEST_DAPP_HTML)
-    })
-
-    await new Promise<void>(resolve => {
-      dappServer!.listen(0, '127.0.0.1', () => resolve())
-    })
-
-    const addr = dappServer.address()
-    const port = typeof addr === 'object' && addr ? addr.port : 0
-    dappUrl = `http://127.0.0.1:${port}`
+    dappServer = await startTestDappServer()
+    dappUrl = dappServer.url
   })
 
   test.afterAll(async () => {
@@ -163,35 +145,6 @@ test.describe('DApp Provider', () => {
     }
 
     return approval
-  }
-
-  async function submitFastVaultPasswordIfPrompted(
-    input: SubmitFastVaultPasswordIfPromptedInput
-  ): Promise<void> {
-    const { popup, password, probeTimeout = 5_000 } = input
-    const passwordInput = popup
-      .locator(
-        '[data-testid="fast-vault-password-input"], input[type="password"], input[placeholder*="password" i]'
-      )
-      .first()
-
-    const isPasswordPromptVisible = await passwordInput
-      .isVisible({ timeout: probeTimeout })
-      .catch(() => false)
-
-    if (!isPasswordPromptVisible) {
-      return
-    }
-
-    await passwordInput.fill(password)
-
-    const confirmButton = popup
-      .locator('[data-testid="fast-vault-submit"]')
-      .or(popup.getByRole('button', { name: /confirm/i }))
-      .first()
-
-    await expect(confirmButton).toBeEnabled({ timeout: 5_000 })
-    await confirmButton.click()
   }
 
   async function connectDappWallet(
@@ -513,220 +466,37 @@ test.describe('DApp Provider', () => {
     test.setTimeout(480_000)
     const config = await ensureDappProviderVault({ context, extensionId })
 
-    const addresses = await getVaultAddresses(context)
-    const solanaAddress = Object.entries(addresses).find(
-      ([chain]) => chain.toLowerCase() === 'solana'
-    )?.[1]
-    if (!solanaAddress) {
-      throw new Error(
-        'Test vault has no Solana address in chrome.storage — enable the Solana chain on the test vault'
-      )
-    }
-
-    const recentBlockhash = await fetchSolanaBlockhash()
-    const payer = new PublicKey(solanaAddress)
-    const message = new TransactionMessage({
-      payerKey: payer,
-      recentBlockhash,
-      instructions: [
-        SystemProgram.transfer({
-          fromPubkey: payer,
-          toPubkey: payer,
-          lamports: 1,
-        }),
-      ],
-    }).compileToV0Message()
-    const unsigned = new VersionedTransaction(message)
-    const unsignedBase64 = Buffer.from(unsigned.serialize()).toString('base64')
-
-    const page = await context.newPage()
-
-    try {
-      await page.goto(dappUrl)
-      await page.waitForLoadState('domcontentloaded')
-      await page.waitForFunction(
-        () => !!(window.vultisig?.solana || window.phantom?.solana),
-        null,
-        { timeout: 10000 }
-      )
-
-      await page.locator('[data-testid="solana-tx-input"]').fill(unsignedBase64)
-      await page.locator('[data-testid="solana-sign-tx"]').click()
-
-      // Two sequential popups: Solana account connect, then the sendTx
-      // verify/sign flow (which may be multi-step and ask for the fast-vault
-      // password). Walk primary actions until the page reports a result.
-      const solanaResult = page.locator('[data-testid="solana-sign-result"]')
-      await driveApprovalPopupsUntilResult({
+    const { signedBase64, messageBase64, payer } =
+      await signSolanaSelfTransferViaDapp({
         context,
         extensionId,
-        result: solanaResult,
         password: config.password,
+        dappUrl,
       })
 
-      // Fail fast on a settled error — otherwise the expect below polls a
-      // string that will never change until the test timeout swallows it.
-      const settledResult = (await solanaResult.textContent()) ?? ''
-      if (settledResult.startsWith('Error:')) {
-        throw new Error(
-          `dApp signTransaction rejected (signSolana path, see sdk#2145): ${settledResult}`
-        )
-      }
+    const signed = VersionedTransaction.deserialize(
+      new Uint8Array(Buffer.from(signedBase64, 'base64'))
+    )
 
-      await expect(
-        solanaResult,
-        'dApp signTransaction must return signed bytes — a popup error here ' +
-          'means the signSolana compile/hash path is broken (see sdk#2145)'
-      ).toHaveText(/^SolanaSigned: /, { timeout: 300_000 })
+    const signature = signed.signatures[0]
+    expect(
+      signature,
+      'signed tx must carry a fee-payer signature'
+    ).toBeDefined()
+    expect(
+      signature.some(byte => byte !== 0),
+      'fee-payer signature must not be all zeroes'
+    ).toBe(true)
 
-      const signedBase64 = (await solanaResult.textContent())!.replace(
-        'SolanaSigned: ',
-        ''
-      )
-      const signed = VersionedTransaction.deserialize(
-        new Uint8Array(Buffer.from(signedBase64, 'base64'))
-      )
+    // The splice must not disturb the message: same bytes the dApp submitted.
+    expect(Buffer.from(signed.message.serialize()).toString('base64')).toBe(
+      messageBase64
+    )
 
-      const signature = signed.signatures[0]
-      expect(
-        signature,
-        'signed tx must carry a fee-payer signature'
-      ).toBeDefined()
-      expect(
-        signature.some(byte => byte !== 0),
-        'fee-payer signature must not be all zeroes'
-      ).toBe(true)
-
-      // The splice must not disturb the message: same bytes the dApp submitted.
-      expect(Buffer.from(signed.message.serialize()).toString('base64')).toBe(
-        Buffer.from(message.serialize()).toString('base64')
-      )
-
-      // And the signature must actually verify over those bytes.
-      expect(
-        ed25519.verify(signature, signed.message.serialize(), payer.toBytes()),
-        'ed25519 signature must verify against the vault Solana pubkey'
-      ).toBe(true)
-    } finally {
-      await page.close()
-    }
+    // And the signature must actually verify over those bytes.
+    expect(
+      ed25519.verify(signature, signed.message.serialize(), payer.toBytes()),
+      'ed25519 signature must verify against the vault Solana pubkey'
+    ).toBe(true)
   })
-
-  const solanaRpcEndpoints = [
-    'https://api.mainnet-beta.solana.com',
-    'https://solana-rpc.publicnode.com',
-  ]
-
-  async function fetchSolanaBlockhash(): Promise<string> {
-    for (const endpoint of solanaRpcEndpoints) {
-      try {
-        const connection = new Connection(endpoint)
-        const { blockhash } = await connection.getLatestBlockhash('finalized')
-        if (blockhash) return blockhash
-      } catch {
-        // try the next endpoint
-      }
-    }
-    throw new Error(
-      'HARNESS: no Solana RPC endpoint reachable for getLatestBlockhash — not an app defect'
-    )
-  }
-
-  type DriveApprovalPopupsInput = ExtensionContextInput & {
-    result: ReturnType<Page['locator']>
-    password: string
-  }
-
-  async function driveApprovalPopupsUntilResult({
-    context,
-    extensionId,
-    result,
-    password,
-  }: DriveApprovalPopupsInput): Promise<void> {
-    const deadline = Date.now() + 240_000
-
-    while (Date.now() < deadline) {
-      const resultText = (await result.textContent().catch(() => '')) ?? ''
-      if (
-        resultText.startsWith('SolanaSigned:') ||
-        resultText.startsWith('Error:')
-      ) {
-        return
-      }
-
-      const popup = context
-        .pages()
-        .find(
-          (p: Page) =>
-            !p.isClosed() &&
-            p.url().includes(`chrome-extension://${extensionId}`)
-        )
-
-      if (!popup) {
-        await new Promise(resolve => setTimeout(resolve, 1_000))
-        continue
-      }
-
-      // Short probe: the loop re-polls every ~1.5s, so a slow password prompt
-      // is caught on a later iteration without burning the drive deadline.
-      await submitFastVaultPasswordIfPrompted({
-        popup,
-        password,
-        probeTimeout: 500,
-      }).catch(() => {})
-
-      const buttonTexts = await popup
-        .locator('button')
-        .allTextContents()
-        .catch(() => [] as string[])
-      console.log(
-        `[sdk#2145 gate] popup=${popup.url().slice(-40)} buttons=${JSON.stringify(buttonTexts)} result=${JSON.stringify(resultText)}`
-      )
-
-      // A "Try Again" screen means the keysign errored — surface the popup's
-      // own error text as the failure instead of spinning until timeout. The
-      // raw error hides behind the "Show exact error" card, so open it first.
-      if (buttonTexts.some(text => /try again/i.test(text))) {
-        await popup
-          .getByText(/show exact error/i)
-          .first()
-          .click({ timeout: 3_000 })
-          .catch(() => {})
-        await popup.waitForTimeout(1_000)
-        const popupText = await popup
-          .locator('body')
-          .innerText()
-          .catch(() => '<unreadable>')
-        throw new Error(
-          `Keysign popup reported failure during dApp Solana signing:\n${popupText}`
-        )
-      }
-
-      // hasNotText guard: the name regex substring-matches, so without it
-      // "Disconnect" satisfies /connect/ and "Sign out" satisfies /sign/.
-      const primaryAction = popup
-        .locator('[data-testid="approve-button"]')
-        .or(
-          popup
-            .getByRole('button', {
-              name: /approve|confirm|connect|sign|continue|next|allow/i,
-            })
-            .filter({ hasNotText: /disconnect|sign out|log out|reject/i })
-        )
-        .first()
-
-      const canClick = await primaryAction
-        .isEnabled({ timeout: 2_000 })
-        .catch(() => false)
-      if (canClick) {
-        await primaryAction.click().catch(() => {})
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 1_500))
-    }
-
-    throw new Error(
-      'Timed out driving the Solana dApp approval popups — no sign result surfaced'
-    )
-  }
 })

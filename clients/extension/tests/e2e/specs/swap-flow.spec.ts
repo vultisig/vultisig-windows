@@ -37,7 +37,10 @@ import {
   selectSwapPair,
   SYMBOL_FALLBACK_AMOUNTS,
 } from '../helpers/dynamic-swap'
-import { waitForTxConfirmation } from '../helpers/tx-confirmation'
+import {
+  waitForThorchainSwapSettlement,
+  waitForTxConfirmation,
+} from '../helpers/tx-confirmation'
 import {
   ensureVaultExists,
   getVaultConfigFromEnv,
@@ -46,8 +49,8 @@ import { KeysignProgress } from '../page-objects/KeysignProgress.po'
 import { SwapFlow } from '../page-objects/SwapFlow.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
-const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
-const ASSERT_BALANCE_AUTO_REFRESH =
+const enableTxTests = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
+const assertBalanceAutoRefresh =
   process.env.VULTISIG_E2E_ASSERT_SWAP_BALANCE_AUTO_REFRESH === 'true'
 
 type BalanceQueryInput = {
@@ -175,6 +178,45 @@ const pasteAmount = async ({ page, swapFlow, amount }: PasteAmountInput) => {
 const readOutputAmount = async (swapFlow: SwapFlow) =>
   parseVisibleAmount(await swapFlow.getExpectedOutput())
 
+// Above cross-chain provider minimums; may exceed the test vault's balance,
+// which only disables Continue — the quote and its breakdown still render.
+const quoteOnlyAmountEth = '0.01'
+
+// Quote-only ETH→BTC for the fee/route sheets: needs a quote, not a balance.
+type OpenQuotedEthToBtcSwapInput = { page: Page; swapFlow: SwapFlow }
+async function openQuotedEthToBtcSwap({
+  page,
+  swapFlow,
+}: OpenQuotedEthToBtcSwapInput): Promise<void> {
+  await navigateToSwap(page)
+  await swapFlow.waitForView(10_000)
+  await swapFlow.prepareSwapWithAmount({
+    fromChainId: 'ethereum',
+    toChainId: 'bitcoin',
+    amount: quoteOnlyAmountEth,
+  })
+  await expect
+    .poll(() => readOutputAmount(swapFlow), {
+      message: 'HARNESS/ENV: no ETH→BTC quote (providers down or halted)',
+      timeout: 30_000,
+    })
+    .toBeGreaterThan(0)
+}
+
+// Source-chain inclusion proves the deposit; when either leg is THORChain the
+// swap itself went through THORChain, so require it finalised as a swap.
+type AssertThorchainSettledInput = { from: string; to: string; txHash: string }
+async function assertThorchainSettledIfRouted({
+  from,
+  to,
+  txHash,
+}: AssertThorchainSettledInput): Promise<void> {
+  const legs = [from, to].map(chain => chain.toLowerCase())
+  if (!legs.includes('thorchain')) return
+  const settlement = await waitForThorchainSwapSettlement(txHash)
+  expect(settlement.settled, settlement.error).toBe(true)
+}
+
 test.describe('Swap Flow', () => {
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
@@ -199,7 +241,7 @@ test.describe('Swap Flow', () => {
     context,
     extensionId,
   }) => {
-    test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+    test.skip(!enableTxTests, 'TX signing tests disabled')
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
@@ -281,10 +323,14 @@ test.describe('Swap Flow', () => {
           console.log(`✅ Swap tx: ${txHash}`)
           const confirmation = await waitForTxConfirmation(
             swapConfig.fromChain as ChainId,
-            txHash,
-            120_000
+            txHash
           )
           expect(confirmation.confirmed).toBe(true)
+          await assertThorchainSettledIfRouted({
+            from: swapConfig.fromChain,
+            to: swapConfig.toChain,
+            txHash,
+          })
           updateStaleness(
             [swapConfig.fromChain as ChainId, swapConfig.toChain as ChainId],
             true
@@ -317,9 +363,9 @@ test.describe('Swap Flow', () => {
     context,
     extensionId,
   }, testInfo) => {
-    test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+    test.skip(!enableTxTests, 'TX signing tests disabled')
     test.skip(
-      !ASSERT_BALANCE_AUTO_REFRESH,
+      !assertBalanceAutoRefresh,
       'Funded swap balance auto-refresh proof disabled'
     )
     test.setTimeout(600_000)
@@ -399,11 +445,7 @@ test.describe('Swap Flow', () => {
 
       const txHash = await keysignProgress.getTxHash()
       expect(txHash).toBeTruthy()
-      const confirmation = await waitForTxConfirmation(
-        'ethereum',
-        txHash,
-        180_000
-      )
+      const confirmation = await waitForTxConfirmation('ethereum', txHash)
       expect(confirmation.confirmed, confirmation.error).toBe(true)
 
       await expect
@@ -476,37 +518,65 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(10_000)
 
-      await navigateToSwap(page)
-      await swapFlow.waitForView(10_000)
+      await openQuotedEthToBtcSwap({ page, swapFlow })
 
-      await swapFlow.fillAmount('0.001')
-      await page.waitForTimeout(500)
-      await swapFlow.waitForQuote()
+      await expect(swapFlow.providerRow).toBeVisible()
+      await expect(swapFlow.providerRow).toHaveText(/Provider\s*\S+/, {
+        timeout: 15_000,
+      })
 
-      const providerInfo = page.locator(
-        'text=/thorchain|maya|1inch|jupiter|lifi|provider|aggregator/i'
+      const { totalFeesRow } = swapFlow
+      await expect(totalFeesRow).toHaveText(/Total Fees\s*\$\d/, {
+        timeout: 15_000,
+      })
+      await totalFeesRow.getByRole('button').click()
+
+      await expect(page.getByText('Network Fee', { exact: true })).toBeVisible()
+      // The affiliate rate is disclosed in the label itself (#4593).
+      await expect(swapFlow.swapFeeRow).toBeVisible()
+      await expect(swapFlow.swapFeeRow).toHaveText(
+        /(\$\d|Included in the quoted exchange rate|No Fee)/i
       )
-      const feeInfo = page.locator('text=/fee|cost|network fee|gas/i')
-      const slippageInfo = page.locator('text=/slippage|price impact/i')
 
-      const hasProvider = await providerInfo
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const hasFee = await feeInfo
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const hasSlippage = await slippageInfo
-        .first()
-        .isVisible()
-        .catch(() => false)
+      await page.getByTestId('advanced-swap-settings').click()
+      await expect(
+        page.getByText('Advanced swap', { exact: true })
+      ).toBeVisible()
+      await expect(
+        page.getByText('Slippage Tolerance', { exact: true })
+      ).toBeVisible()
+    } finally {
+      await page.close()
+    }
+  })
 
-      console.log(
-        `Provider info: ${hasProvider}, Fee info: ${hasFee}, Slippage: ${hasSlippage}`
-      )
-    } catch (error) {
-      console.log('Could not verify swap provider/fees:', error)
+  // The route picker (#4671) renders only when more than one route quoted, so
+  // a single-route market is a loud environment miss, never a silent pass.
+  test('advanced swap offers the route picker when routes compete', async ({
+    context,
+    extensionId,
+  }) => {
+    const page = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
+    const swapFlow = new SwapFlow(page, extensionId)
+
+    try {
+      await vaultPage.goto()
+      await vaultPage.waitForView(10_000)
+
+      await openQuotedEthToBtcSwap({ page, swapFlow })
+
+      await page.getByTestId('advanced-swap-settings').click()
+      await expect(
+        page.getByText('Advanced swap', { exact: true })
+      ).toBeVisible()
+      const { routeRow } = swapFlow
+      if ((await routeRow.count()) === 0) {
+        throw new Error(
+          'HARNESS/ENV: no "Select route" row on the Advanced swap sheet — only one route quoted (or the row label changed); route picker (#4671) not exercised'
+        )
+      }
+      await expect(routeRow).toHaveText(/Select route\s*\S+/)
     } finally {
       await page.close()
     }
@@ -626,7 +696,7 @@ test.describe('Swap Flow', () => {
       context,
       extensionId,
     }) => {
-      test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+      test.skip(!enableTxTests, 'TX signing tests disabled')
       test.skip(
         !fromSymbol || !toSymbol,
         `Unknown chain in route ${route.from}>${route.to}`
@@ -695,12 +765,13 @@ test.describe('Swap Flow', () => {
           expect(txHash).toBeTruthy()
           if (txHash) {
             console.log(`✅ ${route.from}>${route.to} swap tx: ${txHash}`)
-            const confirmation = await waitForTxConfirmation(
-              route.from,
-              txHash,
-              120_000
-            )
+            const confirmation = await waitForTxConfirmation(route.from, txHash)
             expect(confirmation.confirmed).toBe(true)
+            await assertThorchainSettledIfRouted({
+              from: route.from,
+              to: route.to,
+              txHash,
+            })
             if (
               route.from in SUPPORTED_CHAINS &&
               route.to in SUPPORTED_CHAINS
@@ -738,7 +809,7 @@ test.describe('Swap Flow', () => {
     context,
     extensionId,
   }) => {
-    test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
+    test.skip(!enableTxTests, 'TX signing tests disabled')
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)

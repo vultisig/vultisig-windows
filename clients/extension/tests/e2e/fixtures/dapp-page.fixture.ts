@@ -10,13 +10,13 @@
  * Results are displayed in DOM elements for easy assertion.
  */
 
+import { type Page, test as base } from '@playwright/test'
 import http from 'http'
-import { test as base, type Page } from '@playwright/test'
 
 /**
  * Test DApp HTML with interactive buttons and result displays
  */
-const TEST_DAPP_HTML = `
+const testDappHtml = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,6 +116,13 @@ const TEST_DAPP_HTML = `
     </select>
     <button id="btn-switch" data-testid="switch-chain" disabled>Switch Chain</button>
     <div id="switch-result" class="result" data-testid="switch-result"></div>
+  </div>
+
+  <div class="section">
+    <h2>Solana Sign Transaction</h2>
+    <input type="text" id="solana-tx-input" data-testid="solana-tx-input" placeholder="Unsigned tx (base64)" style="padding: 10px; width: 300px; margin-right: 10px;">
+    <button id="btn-solana-sign" data-testid="solana-sign-tx">Sign Solana Tx</button>
+    <div id="solana-sign-result" class="result" data-testid="solana-sign-result"></div>
   </div>
 
   <div class="section">
@@ -295,6 +302,40 @@ const TEST_DAPP_HTML = `
       }
     };
 
+    // Sign Solana transaction (dApp raw-tx path: signSolana splice, sdk#2145)
+    document.getElementById('btn-solana-sign').onclick = async () => {
+      const solanaResult = document.getElementById('solana-sign-result');
+      solanaResult.className = 'result';
+      solanaResult.textContent = 'Signing...';
+
+      try {
+        const provider = (window.vultisig && window.vultisig.solana) || (window.phantom && window.phantom.solana);
+        if (!provider) throw new Error('No Solana provider injected');
+
+        await provider.connect();
+
+        const b64 = document.getElementById('solana-tx-input').value.trim();
+        if (!b64) throw new Error('No transaction provided');
+        const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+        // Duck-typed VersionedTransaction: the provider's type guard reads
+        // version/message, and serializeTransaction() only calls serialize().
+        const tx = { version: 0, message: {}, signatures: [], serialize: () => bytes };
+        const signed = await provider.signTransaction(tx);
+
+        const signedBytes = signed.serialize();
+        let bin = '';
+        for (const byte of signedBytes) bin += String.fromCharCode(byte);
+        solanaResult.className = 'result success';
+        solanaResult.textContent = 'SolanaSigned: ' + btoa(bin);
+        logEvent('solana-signed', { bytes: signedBytes.length });
+      } catch (err) {
+        solanaResult.className = 'result error';
+        solanaResult.textContent = 'Error: ' + (err.message || err.code || err);
+        logEvent('solana-sign-error', { error: err.message, code: err.code });
+      }
+    };
+
     // Clear log
     btnClearLog.onclick = () => {
       eventsLog.innerHTML = '';
@@ -327,9 +368,32 @@ const TEST_DAPP_HTML = `
   </script>
 </body>
 </html>
-`;
+`
 
-export interface DAppFixtures {
+/** A throwaway HTTP server for the synthetic dApp page, bound to a free port. */
+export type TestDappServer = { url: string; close: () => void }
+
+/**
+ * Serves the synthetic dApp page so the extension's content script injects
+ * into a real http origin. Callers own the returned close().
+ */
+export async function startTestDappServer(): Promise<TestDappServer> {
+  const server = http.createServer((_req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html' })
+    res.end(testDappHtml)
+  })
+  await new Promise<void>(resolve => {
+    server.listen(0, '127.0.0.1', () => resolve())
+  })
+  const addr = server.address()
+  if (typeof addr !== 'object' || !addr) {
+    server.close()
+    throw new Error('HARNESS: test dApp server did not report a listening port')
+  }
+  return { url: `http://127.0.0.1:${addr.port}`, close: () => server.close() }
+}
+
+export type DAppFixtures = {
   /** URL of the test DApp server */
   testDappUrl: string
   /** Navigate to DApp and wait for provider injection */
@@ -342,45 +406,27 @@ export interface DAppFixtures {
 export const dappFixture = base.extend<DAppFixtures>({
   // Test DApp server URL
   // eslint-disable-next-line no-empty-pattern
-  testDappUrl: async ({}, use) => {
-    // Create HTTP server
-    const server = http.createServer((req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' })
-      res.end(TEST_DAPP_HTML)
-    })
-
-    // Start server on random port
-    await new Promise<void>((resolve) => {
-      server.listen(0, '127.0.0.1', () => resolve())
-    })
-
-    const addr = server.address()
-    const port = typeof addr === 'object' && addr ? addr.port : 0
-    const url = `http://127.0.0.1:${port}`
-
-    await use(url)
-
-    // Cleanup
-    server.close()
+  testDappUrl: async ({}, provide) => {
+    const { url, close } = await startTestDappServer()
+    await provide(url)
+    close()
   },
 
   // DApp page with provider injected
-  dappPage: async ({ context, testDappUrl }, use) => {
+  dappPage: async ({ context, testDappUrl }, provide) => {
     const page = await context.newPage()
     await page.goto(testDappUrl)
     await page.waitForLoadState('domcontentloaded')
 
     // Wait for provider injection (extension content script)
-    await page.waitForFunction(
-      () => !!window.ethereum,
-      null,
-      { timeout: 10_000 }
-    )
+    await page.waitForFunction(() => !!window.ethereum, null, {
+      timeout: 10_000,
+    })
 
-    await use(page)
+    await provide(page)
 
     await page.close()
   },
 })
 
-export { TEST_DAPP_HTML }
+export { testDappHtml }
