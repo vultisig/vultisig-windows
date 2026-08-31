@@ -229,6 +229,22 @@ export class SwapFlow extends BasePage {
     )
   }
 
+  /**
+   * Whether the option shows up within the budget. `Locator.isVisible` is an
+   * immediate check — its `timeout` does not wait — so an option rendered a
+   * beat late used to read as absent. That was survivable while a miss only
+   * logged; now that it throws, the wait has to be real.
+   */
+  private async becomesVisible(
+    locator: Locator,
+    timeout: number
+  ): Promise<boolean> {
+    return locator
+      .waitFor({ state: 'visible', timeout })
+      .then(() => true)
+      .catch(() => false)
+  }
+
   // Clicking a chain in the explorer's chain carousel switches chain AND selects its native token.
   async selectFromCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
@@ -249,7 +265,7 @@ export class SwapFlow extends BasePage {
     await this.page.waitForTimeout(800)
 
     const chainOption = this.getExplorerChainOption(chainName)
-    if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (await this.becomesVisible(chainOption, 3000)) {
       await chainOption.click({ force: true })
       await waitForLoadingComplete(this.page)
       const nativeCoinOption = this.getCoinOption(coin).first()
@@ -261,7 +277,7 @@ export class SwapFlow extends BasePage {
     }
 
     const coinOption = this.getCoinOption(coin)
-    if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (await this.becomesVisible(coinOption, 2000)) {
       await coinOption.click({ force: true })
       await this.page.waitForTimeout(500)
       console.log(`Selected ${coin} from coin options`)
@@ -294,7 +310,7 @@ export class SwapFlow extends BasePage {
     await this.page.waitForTimeout(800)
 
     const chainOption = this.getExplorerChainOption(chainName)
-    if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (await this.becomesVisible(chainOption, 3000)) {
       await chainOption.click({ force: true })
       await waitForLoadingComplete(this.page)
       const nativeCoinOption = this.getCoinOption(coin).first()
@@ -306,7 +322,7 @@ export class SwapFlow extends BasePage {
     }
 
     const coinOption = this.getCoinOption(coin)
-    if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (await this.becomesVisible(coinOption, 2000)) {
       await coinOption.click({ force: true })
       await this.page.waitForTimeout(500)
       console.log(`Selected ${coin} from coin options (to)`)
@@ -633,6 +649,7 @@ export class SwapFlow extends BasePage {
     )
     await this.selectFromCoin(fromSymbol)
     await this.selectToCoin(toSymbol)
+    await this.assertSelectionMatches({ fromSymbol, toSymbol })
     await this.clickPercentage(percent)
     await this.waitForQuote()
   }
