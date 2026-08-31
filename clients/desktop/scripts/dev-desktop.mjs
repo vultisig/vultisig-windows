@@ -148,7 +148,7 @@ export const createProcessTreeTracker = ({
           ? JSON.parse(value)
           : { pid: Number(value) }
         const registered = liveByPid.get(Number(registration.pid))
-        if (registered) {
+        if (registered && registration.identity === registered.identity) {
           remember(registered, { trustedGroup: platform !== 'win32' })
           if (platform !== 'win32') {
             activeTrustedGroups.add(registered.pgid)
@@ -252,14 +252,23 @@ export const createFrontendWatcherSupervisor = ({
   writeFileSync(
     supervisorPath,
     [
-      "const { spawn } = require('node:child_process')",
+      "const { spawn, spawnSync } = require('node:child_process')",
       "const { renameSync, writeFileSync } = require('node:fs')",
       "if (process.platform !== 'win32') process.on('SIGHUP', () => {})",
+      "const identityResult = process.platform === 'win32'",
+      "  ? spawnSync('powershell.exe', [",
+      "      '-NoProfile', '-NonInteractive',",
+      "      '-Command', `(Get-CimInstance Win32_Process -Filter \"ProcessId = ${process.pid}\").CreationDate.ToUniversalTime().ToString('o')`,",
+      "    ], { encoding: 'utf8', windowsHide: true })",
+      "  : spawnSync('ps', ['-o', 'lstart=', '-p', String(process.pid)], { encoding: 'utf8' })",
+      "if (identityResult.error || identityResult.status !== 0) throw new Error('Unable to identify Yarn watcher supervisor')",
+      "const identity = String(identityResult.stdout || '').trim()",
+      "if (!identity) throw new Error('Yarn watcher supervisor identity is empty')",
       'const pidFile = process.env.VULTISIG_DESKTOP_WATCHER_PID_FILE',
       'const pendingPidFile = `${pidFile}.${process.pid}.tmp`',
       'writeFileSync(',
       '  pendingPidFile,',
-      "  JSON.stringify({ pid: process.pid, pgid: process.platform === 'win32' ? null : process.pid })",
+      "  JSON.stringify({ identity, pid: process.pid, pgid: process.platform === 'win32' ? null : process.pid })",
       ')',
       'renameSync(pendingPidFile, pidFile)',
       'const child = spawn(process.env.VULTISIG_REAL_YARN, process.argv.slice(2), {',
@@ -282,8 +291,7 @@ export const createFrontendWatcherSupervisor = ({
       '  const finish = () => {',
       "    process.exitCode = signal === 'SIGINT' ? 130 : signal === 'SIGTERM' ? 143 : (code ?? 1)",
       '  }',
-      '  if (requestedSignal) finish()',
-      '  else setTimeout(finish, 2500)',
+      '  setTimeout(finish, 2500)',
       '})',
       '',
     ].join('\n')
@@ -341,8 +349,7 @@ export const createFrontendWatcherSupervisor = ({
       '  const finish = () => {',
       "    process.exitCode = signal === 'SIGINT' ? 130 : signal === 'SIGTERM' ? 143 : (code ?? 1)",
       '  }',
-      '  if (requestedSignal) finish()',
-      '  else setTimeout(finish, 2500)',
+      '  setTimeout(finish, 2500)',
       '})',
       '',
     ].join('\n')

@@ -1,6 +1,12 @@
 import { spawn, spawnSync } from 'node:child_process'
 import { EventEmitter, once } from 'node:events'
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { createInterface } from 'node:readline'
@@ -489,6 +495,64 @@ describe('desktop launcher process-tree lifecycle', () => {
     }
   })
 
+  it('does not reacquire a recycled PID from a stale watcher registration', () => {
+    const directory = mkdtempSync(
+      path.join(tmpdir(), 'vultisig-registration-test-')
+    )
+    const pidFile = path.join(directory, 'watcher.pid')
+    writeFileSync(
+      pidFile,
+      JSON.stringify({
+        identity: 'Mon Aug 31 10:00:00 2026',
+        pgid: 10,
+        pid: 10,
+      })
+    )
+    const spawnSyncImpl = vi
+      .fn()
+      .mockReturnValueOnce({
+        status: 0,
+        stdout: [
+          '99 1 99 Mon Aug 31 09:59:59 2026',
+          '10 1 10 Mon Aug 31 10:00:00 2026',
+        ].join('\n'),
+      })
+      .mockReturnValue({
+        status: 0,
+        stdout: [
+          '99 1 99 Mon Aug 31 09:59:59 2026',
+          '10 1 10 Mon Aug 31 10:00:01 2026',
+          '11 10 10 Mon Aug 31 10:00:02 2026',
+        ].join('\n'),
+      })
+    const tracker = createProcessTreeTracker({
+      intervalMs: 100_000,
+      pid: 99,
+      pidFiles: [pidFile],
+      platform: 'linux',
+      spawnSyncImpl,
+    })
+
+    try {
+      tracker.refresh()
+      const snapshot = tracker.snapshot()
+      expect(snapshot).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            identity: 'Mon Aug 31 10:00:01 2026',
+            pid: 10,
+          }),
+        ])
+      )
+      expect(snapshot).not.toEqual(
+        expect.arrayContaining([expect.objectContaining({ pid: 11 })])
+      )
+    } finally {
+      tracker.stop()
+      rmSync(directory, { force: true, recursive: true })
+    }
+  })
+
   it('rejects when Windows force cleanup fails and the identity-matched process remains', async () => {
     const processLine = '43 1 2026-08-31T10:00:00.0000000Z\n'
     const spawnSyncImpl = vi.fn(command =>
@@ -599,13 +663,20 @@ describe('desktop launcher process-tree lifecycle', () => {
     )
     const pidFile = path.join(fixtureDirectory, 'watcher.pid')
     const childScript = `
-      const { spawn } = require('node:child_process')
+      const { spawn, spawnSync } = require('node:child_process')
       const { writeFileSync } = require('node:fs')
       const descendant = spawn(process.execPath, ['-e', 'process.on("SIGTERM", () => {}); setInterval(() => {}, 1000)'], {
         detached: true,
         stdio: 'ignore',
       })
-      writeFileSync(${JSON.stringify(pidFile)}, String(descendant.pid))
+      const identity = spawnSync('ps', ['-o', 'lstart=', '-p', String(descendant.pid)], {
+        encoding: 'utf8',
+      }).stdout.trim()
+      writeFileSync(${JSON.stringify(pidFile)}, JSON.stringify({
+        identity,
+        pgid: descendant.pid,
+        pid: descendant.pid,
+      }))
       console.log(JSON.stringify({ descendant: descendant.pid, root: process.pid }))
       setTimeout(() => process.exit(7), 10)
     `
