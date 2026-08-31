@@ -12,21 +12,67 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
+import {
+  FirmSwapQuoteReference,
+  useLastFirmSwapQuoteReference,
+} from './useLastFirmSwapQuoteReference'
 
 type Prices = {
   fromPrice: number
   toPrice: number
 }
 
-const getIndicativeSwapOutputAmount = ({
+type GetImpliedSwapFeeInput = Prices & {
+  reference: FirmSwapQuoteReference
+}
+
+/**
+ * What the last firm quote charged, expressed in destination-token units: the
+ * gap between what spot prices imply the swap is worth and what the provider
+ * actually promised.
+ *
+ * Re-applied to a new amount as a flat cost, because the components that
+ * dominate it — the network fee and the protocol's outbound fee — are flat
+ * amounts that do not scale with trade size. The part that does scale is the
+ * affiliate bps, a fraction of a percent, so carrying the whole figure over
+ * errs on the conservative side by less than that.
+ */
+export const getImpliedSwapFee = ({
+  reference,
+  fromPrice,
+  toPrice,
+}: GetImpliedSwapFeeInput): number => {
+  const spotValueOfInput = (reference.input * fromPrice) / toPrice
+
+  return Math.max(spotValueOfInput - reference.output, 0)
+}
+
+type GetIndicativeSwapOutputAmountInput = Prices & {
+  amount: number
+  impliedFee: number
+}
+
+/**
+ * The payout to show while a firm quote resolves. Spot value less the fee the
+ * last firm quote for this pair revealed — without that subtraction the figure
+ * runs 10-12% above the quote that replaces it at these trade sizes, which
+ * reads as a worse rate arriving rather than an estimate settling.
+ *
+ * Floors at zero: a trade too small to cover the flat fees really does pay out
+ * nothing, and a negative payout is not a thing to display.
+ */
+export const getIndicativeSwapOutputAmount = ({
   amount,
   fromPrice,
   toPrice,
-}: Prices & { amount: number }) => {
-  return (amount * fromPrice) / toPrice
-}
+  impliedFee,
+}: GetIndicativeSwapOutputAmountInput): number =>
+  Math.max((amount * fromPrice) / toPrice - impliedFee, 0)
 
-/** Returns a price-based output estimate while a firm swap quote is loading. */
+/**
+ * A price-based output estimate for while a firm swap quote is loading,
+ * corrected by the fees the previous firm quote for the same pair revealed.
+ */
 export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
   const [fromAmount] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
@@ -37,6 +83,7 @@ export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
 
   const fromPriceQuery = useCoinPriceQuery({ coin: fromCoin })
   const toPriceQuery = useCoinPriceQuery({ coin: toCoin })
+  const reference = useLastFirmSwapQuoteReference()
 
   const pricesQuery = useCombineQueries({
     queries: {
@@ -58,11 +105,16 @@ export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
       return inactiveQuery
     }
 
+    const impliedFee = reference
+      ? getImpliedSwapFee({ reference, fromPrice, toPrice })
+      : 0
+
     return getResolvedQuery(
       getIndicativeSwapOutputAmount({
         amount: fromChainAmount(fromAmount, fromCoin.decimals),
         fromPrice,
         toPrice,
+        impliedFee,
       })
     )
   }
