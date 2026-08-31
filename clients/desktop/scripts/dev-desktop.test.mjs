@@ -105,6 +105,29 @@ describe('desktop launcher process-tree lifecycle', () => {
     expect(existsSync(supervisor.wrapperPath)).toBe(false)
   })
 
+  it('preserves Windows Path casing and selects an invocable Yarn command', () => {
+    const supervisor = createFrontendWatcherSupervisor({
+      env: { Path: 'C:\\fixture\\bin' },
+      platform: 'win32',
+      spawnSyncImpl: vi.fn(() => ({
+        status: 0,
+        stdout: ['C:\\fixture\\bin\\yarn', 'C:\\fixture\\bin\\yarn.cmd'].join(
+          '\r\n'
+        ),
+      })),
+    })
+
+    try {
+      expect(supervisor.envOverrides.Path).toContain('C:\\fixture\\bin')
+      expect(supervisor.envOverrides).not.toHaveProperty('PATH')
+      expect(supervisor.envOverrides.VULTISIG_REAL_YARN).toBe(
+        'C:\\fixture\\bin\\yarn.cmd'
+      )
+    } finally {
+      supervisor.cleanup()
+    }
+  })
+
   it('terminates identity-matched processes on POSIX and uses taskkill tree mode on Windows', () => {
     const killImpl = vi.fn()
     const posixSpawnSync = vi.fn(() => ({
@@ -225,6 +248,7 @@ describe('desktop launcher process-tree lifecycle', () => {
     const processRef = new EventEmitter()
     const terminateImpl = vi.fn(async () => undefined)
     const terminateSyncImpl = vi.fn()
+    const cleanupSyncImpl = vi.fn()
     const tracker = {
       refresh: vi.fn(),
       snapshot: vi.fn(() => [{ identity: 'fixture-start', pid: 46 }]),
@@ -233,6 +257,7 @@ describe('desktop launcher process-tree lifecycle', () => {
     const run = runOwnedProcessTree({
       args: ['dev'],
       command: 'wails',
+      cleanupSyncImpl,
       options: {},
       platform: 'linux',
       processRef,
@@ -250,6 +275,7 @@ describe('desktop launcher process-tree lifecycle', () => {
         signal: 'SIGKILL',
       })
     )
+    expect(cleanupSyncImpl).toHaveBeenCalledOnce()
 
     processRef.emit('SIGTERM')
     child.emit('exit', null, 'SIGTERM')
@@ -264,6 +290,37 @@ describe('desktop launcher process-tree lifecycle', () => {
     expect(tracker.stop).toHaveBeenCalledOnce()
     expect(processRef.listenerCount('SIGTERM')).toBe(0)
     expect(processRef.listenerCount('exit')).toBe(0)
+  })
+
+  it('returns failure instead of hanging when signal-triggered cleanup fails', async () => {
+    const child = new EventEmitter()
+    child.pid = 50
+    const processRef = new EventEmitter()
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const run = runOwnedProcessTree({
+      args: ['dev'],
+      command: 'wails',
+      options: {},
+      platform: 'linux',
+      processRef,
+      spawnImpl: () => child,
+      terminateImpl: vi.fn(async () => {
+        throw new Error('fixture enumeration failure')
+      }),
+      trackerFactory: () => ({
+        refresh: vi.fn(),
+        snapshot: vi.fn(() => []),
+        stop: vi.fn(),
+      }),
+    })
+
+    processRef.emit('SIGTERM')
+
+    await expect(run).resolves.toBe(1)
+    expect(error).toHaveBeenCalledWith(
+      'Unable to stop the Wails process tree: fixture enumeration failure'
+    )
+    error.mockRestore()
   })
 
   it('preserves a normal child exit code', async () => {
@@ -446,6 +503,76 @@ describe('desktop launcher process-tree lifecycle', () => {
         terminateProcessTreeSync({ pid: child.pid, signal: 'SIGKILL' })
       }
       terminateProcessTreeSync({ pid: control.pid, signal: 'SIGKILL' })
+      rmSync(fixtureDirectory, { force: true, recursive: true })
+    }
+  }, 10_000)
+
+  it('recovers the real Yarn process group when Wails kills its wrapper before the production poll interval', async () => {
+    const fixtureDirectory = mkdtempSync(
+      path.join(tmpdir(), 'vultisig-desktop-wrapper-test-')
+    )
+    const descendantFile = path.join(fixtureDirectory, 'descendant.json')
+    const supervisor = createFrontendWatcherSupervisor({
+      env: process.env,
+      spawnSyncImpl: vi.fn(() => ({
+        status: 0,
+        stdout: `${process.execPath}\n`,
+      })),
+    })
+    const yarnScript = `
+      const { spawn } = require('node:child_process')
+      const { writeFileSync } = require('node:fs')
+      const descendant = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], {
+        stdio: 'ignore',
+      })
+      writeFileSync(${JSON.stringify(descendantFile)}, JSON.stringify({
+        descendant: descendant.pid,
+        yarn: process.pid,
+      }))
+      setInterval(() => {}, 1000)
+    `
+    const rootScript = `
+      const { spawn } = require('node:child_process')
+      const { existsSync } = require('node:fs')
+      const wrapper = spawn(${JSON.stringify(supervisor.wrapperPath)}, ['-e', ${JSON.stringify(yarnScript)}], {
+        env: process.env,
+        stdio: 'ignore',
+      })
+      const deadline = Date.now() + 2000
+      const timer = setInterval(() => {
+        if (!existsSync(${JSON.stringify(supervisor.pidFile)}) && Date.now() < deadline) return
+        clearInterval(timer)
+        try { process.kill(wrapper.pid, 'SIGKILL') } catch {}
+        process.exit(7)
+      }, 5)
+    `
+    let pids
+
+    try {
+      const run = runOwnedProcessTree({
+        args: ['-e', rootScript],
+        command: process.execPath,
+        options: {
+          env: { ...process.env, ...supervisor.envOverrides },
+          stdio: 'ignore',
+        },
+        ownedPidFiles: [supervisor.pidFile],
+        terminateImpl: options =>
+          terminateProcessTree({ ...options, graceMs: 100, pollMs: 10 }),
+      })
+
+      await waitFor(() => existsSync(descendantFile))
+      pids = JSON.parse(readFileSync(descendantFile, 'utf8'))
+      await expect(run).resolves.toBe(7)
+      await waitFor(() => !pidExists(pids.yarn) && !pidExists(pids.descendant))
+    } finally {
+      if (pids?.descendant) {
+        terminateProcessTreeSync({ pid: pids.descendant, signal: 'SIGKILL' })
+      }
+      if (pids?.yarn) {
+        terminateProcessTreeSync({ pid: pids.yarn, signal: 'SIGKILL' })
+      }
+      supervisor.cleanup()
       rmSync(fixtureDirectory, { force: true, recursive: true })
     }
   }, 10_000)

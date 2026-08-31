@@ -111,6 +111,13 @@ export const createProcessTreeTracker = ({
   spawnSyncImpl = spawnSync,
 }) => {
   const ownedProcesses = new Map()
+  const ownedProcessGroups = new Set()
+  const remember = process => {
+    ownedProcesses.set(process.pid, process)
+    if (platform !== 'win32' && Number.isInteger(process.pgid)) {
+      ownedProcessGroups.add(process.pgid)
+    }
+  }
   const refresh = () => {
     let processes
     try {
@@ -121,29 +128,37 @@ export const createProcessTreeTracker = ({
     const liveByPid = new Map(processes.map(process => [process.pid, process]))
     const root = liveByPid.get(pid)
     if (root && !ownedProcesses.has(pid)) {
-      ownedProcesses.set(pid, root.identity)
-    }
-    if (platform !== 'win32') {
-      for (const process of processes) {
-        if (process.pgid === pid && process.pid !== pid) {
-          ownedProcesses.set(process.pid, process.identity)
-        }
-      }
+      remember(root)
     }
     for (const pidFile of pidFiles) {
       try {
-        const registeredPid = Number(readFileSync(pidFile, 'utf8').trim())
-        const registered = liveByPid.get(registeredPid)
-        if (registered) ownedProcesses.set(registered.pid, registered.identity)
+        const value = readFileSync(pidFile, 'utf8').trim()
+        const registration = value.startsWith('{')
+          ? JSON.parse(value)
+          : { pid: Number(value) }
+        if (
+          platform !== 'win32' &&
+          Number.isInteger(registration.pgid) &&
+          registration.pgid > 0
+        ) {
+          ownedProcessGroups.add(registration.pgid)
+        }
+        const registered = liveByPid.get(Number(registration.pid))
+        if (registered) remember(registered)
       } catch (error) {
         if (error?.code !== 'ENOENT') throw error
+      }
+    }
+    if (platform !== 'win32') {
+      for (const process of processes) {
+        if (ownedProcessGroups.has(process.pgid)) remember(process)
       }
     }
     let changed = true
     while (changed) {
       changed = false
       for (const process of processes) {
-        const parentIdentity = ownedProcesses.get(process.parentPid)
+        const parentIdentity = ownedProcesses.get(process.parentPid)?.identity
         const parent = liveByPid.get(process.parentPid)
         if (
           !parentIdentity ||
@@ -152,7 +167,7 @@ export const createProcessTreeTracker = ({
         ) {
           continue
         }
-        ownedProcesses.set(process.pid, process.identity)
+        remember(process)
         changed = true
       }
     }
@@ -167,20 +182,16 @@ export const createProcessTreeTracker = ({
 
   return {
     refresh,
-    snapshot: () =>
-      [...ownedProcesses].map(([ownedPid, identity]) => ({
-        identity,
-        pid: ownedPid,
-      })),
+    snapshot: () => [...ownedProcesses.values()],
     stop: () => clearInterval(timer),
   }
 }
 
-const firstOutputLine = result =>
+const outputLines = result =>
   String(result.stdout ?? '')
     .trim()
     .split(/\r?\n/)
-    .find(Boolean)
+    .filter(Boolean)
 
 export const createFrontendWatcherSupervisor = ({
   env,
@@ -193,7 +204,11 @@ export const createFrontendWatcherSupervisor = ({
     env,
     windowsHide: true,
   })
-  const realYarn = firstOutputLine(result)
+  const candidates = outputLines(result)
+  const realYarn =
+    platform === 'win32'
+      ? candidates.find(candidate => /\.(cmd|exe|ps1)$/i.test(candidate))
+      : candidates[0]
   if (result.error || result.status !== 0 || !realYarn) {
     throw new Error(
       `Unable to resolve Yarn for desktop watcher supervision: ${
@@ -204,30 +219,56 @@ export const createFrontendWatcherSupervisor = ({
 
   const directory = mkdtempSync(path.join(tmpdir(), 'vultisig-desktop-'))
   const pidFile = path.join(directory, 'watcher.pid')
+  const scriptPath = path.join(directory, 'watcher.cjs')
   let wrapperPath
+  const sourcePathKey =
+    Object.keys(env).find(key => key.toLowerCase() === 'path') ?? 'PATH'
+  const pathDelimiter = platform === 'win32' ? ';' : path.delimiter
   const envOverrides = {
-    PATH: `${directory}${path.delimiter}${env.PATH ?? ''}`,
+    [sourcePathKey]: `${directory}${pathDelimiter}${env[sourcePathKey] ?? ''}`,
     VULTISIG_DESKTOP_WATCHER_PID_FILE: pidFile,
+    VULTISIG_DESKTOP_WATCHER_SCRIPT: scriptPath,
+    VULTISIG_NODE: process.execPath,
     VULTISIG_REAL_YARN: realYarn,
   }
 
+  writeFileSync(
+    scriptPath,
+    [
+      "const { spawn } = require('node:child_process')",
+      "const { writeFileSync } = require('node:fs')",
+      'const child = spawn(process.env.VULTISIG_REAL_YARN, process.argv.slice(2), {',
+      "  detached: true, env: process.env, shell: process.platform === 'win32', stdio: 'inherit',",
+      '})',
+      'writeFileSync(',
+      '  process.env.VULTISIG_DESKTOP_WATCHER_PID_FILE,',
+      "  JSON.stringify({ pid: child.pid, pgid: process.platform === 'win32' ? null : child.pid })",
+      ')',
+      "for (const signal of ['SIGINT', 'SIGTERM']) {",
+      '  process.on(signal, () => {',
+      '    try { child.kill(signal) } catch (error) {',
+      "      if (error?.code !== 'ESRCH') throw error",
+      '    }',
+      '  })',
+      '}',
+      "child.on('error', error => {",
+      '  console.error(`Unable to start Yarn watcher: ${error.message}`)',
+      '  process.exitCode = 1',
+      '})',
+      "child.on('exit', (code, signal) => {",
+      "  process.exitCode = signal === 'SIGINT' ? 130 : signal === 'SIGTERM' ? 143 : (code ?? 1)",
+      '})',
+      '',
+    ].join('\n')
+  )
+
   if (platform === 'win32') {
-    const scriptPath = path.join(directory, 'watcher.ps1')
-    writeFileSync(
-      scriptPath,
-      [
-        'Set-Content -LiteralPath $env:VULTISIG_DESKTOP_WATCHER_PID_FILE -Value $PID',
-        '& $env:VULTISIG_REAL_YARN @args',
-        'exit $LASTEXITCODE',
-        '',
-      ].join('\r\n')
-    )
     wrapperPath = path.join(directory, 'yarn.cmd')
     writeFileSync(
       wrapperPath,
       [
         '@echo off',
-        `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "${scriptPath}" %*`,
+        '"%VULTISIG_NODE%" "%VULTISIG_DESKTOP_WATCHER_SCRIPT%" %*',
         'exit /b %ERRORLEVEL%',
         '',
       ].join('\r\n')
@@ -236,14 +277,7 @@ export const createFrontendWatcherSupervisor = ({
     wrapperPath = path.join(directory, 'yarn')
     writeFileSync(
       wrapperPath,
-      [
-        '#!/bin/sh',
-        'printf "%s\\n" "$$" > "$VULTISIG_DESKTOP_WATCHER_PID_FILE"',
-        '"$VULTISIG_REAL_YARN" "$@"',
-        'exit_code=$?',
-        'exit "$exit_code"',
-        '',
-      ].join('\n')
+      [`#!${process.execPath}`, readFileSync(scriptPath, 'utf8'), ''].join('\n')
     )
     chmodSync(wrapperPath, 0o755)
   }
@@ -265,21 +299,27 @@ const captureOwnedProcesses = ({
   const processes = processTable(platform, spawnSyncImpl)
   const liveByPid = new Map(processes.map(process => [process.pid, process]))
   const owned = new Map()
+  const ownedProcessGroups = new Set(
+    knownProcesses
+      .map(process => process.pgid)
+      .filter(group => Number.isInteger(group) && group > 0)
+  )
 
   for (const process of knownProcesses) {
     if (liveByPid.get(process.pid)?.identity === process.identity) {
-      owned.set(process.pid, process.identity)
+      owned.set(process.pid, liveByPid.get(process.pid))
     }
   }
   if (!knownProcesses.length) {
     const root = liveByPid.get(pid)
-    if (root) owned.set(root.pid, root.identity)
+    if (root) {
+      owned.set(root.pid, root)
+      if (Number.isInteger(root.pgid)) ownedProcessGroups.add(root.pgid)
+    }
   }
   if (platform !== 'win32') {
     for (const process of processes) {
-      if (process.pgid === pid && process.pid !== pid) {
-        owned.set(process.pid, process.identity)
-      }
+      if (ownedProcessGroups.has(process.pgid)) owned.set(process.pid, process)
     }
   }
 
@@ -287,7 +327,7 @@ const captureOwnedProcesses = ({
   while (changed) {
     changed = false
     for (const process of processes) {
-      const parentIdentity = owned.get(process.parentPid)
+      const parentIdentity = owned.get(process.parentPid)?.identity
       if (
         !parentIdentity ||
         liveByPid.get(process.parentPid)?.identity !== parentIdentity ||
@@ -295,7 +335,7 @@ const captureOwnedProcesses = ({
       ) {
         continue
       }
-      owned.set(process.pid, process.identity)
+      owned.set(process.pid, process)
       changed = true
     }
   }
@@ -304,11 +344,9 @@ const captureOwnedProcesses = ({
 }
 
 const matchingProcesses = (owned, liveByPid) =>
-  [...owned]
-    .filter(
-      ([ownedPid, identity]) => liveByPid.get(ownedPid)?.identity === identity
-    )
-    .map(([ownedPid, identity]) => ({ identity, pid: ownedPid }))
+  [...owned.values()].filter(
+    process => liveByPid.get(process.pid)?.identity === process.identity
+  )
 
 const taskkill = ({ force, pid, spawnSyncImpl }) =>
   spawnSyncImpl(
@@ -390,21 +428,16 @@ export const terminateProcessTree = async ({
     return
   }
 
-  const owned = new Map(
-    knownProcesses.map(process => [process.pid, process.identity])
-  )
+  const owned = new Map(knownProcesses.map(process => [process.pid, process]))
   const signalOwnedProcesses = ownedSignal => {
     const captured = captureOwnedProcesses({
-      knownProcesses: [...owned].map(([ownedPid, identity]) => ({
-        identity,
-        pid: ownedPid,
-      })),
+      knownProcesses: [...owned.values()],
       pid,
       platform,
       spawnSyncImpl,
     })
-    for (const [ownedPid, identity] of captured.owned) {
-      owned.set(ownedPid, identity)
+    for (const process of captured.owned.values()) {
+      owned.set(process.pid, process)
     }
     for (const process of matchingProcesses(
       captured.owned,
@@ -428,10 +461,7 @@ export const terminateProcessTree = async ({
   }
 
   terminateProcessTreeSync({
-    knownProcesses: [...owned].map(([ownedPid, identity]) => ({
-      identity,
-      pid: ownedPid,
-    })),
+    knownProcesses: [...owned.values()],
     killImpl,
     pid,
     platform,
@@ -453,6 +483,7 @@ export const spawnOwnedProcessTree = (
 
 export const runOwnedProcessTree = async ({
   args,
+  cleanupSyncImpl = () => {},
   command,
   options,
   ownedPidFiles = [],
@@ -484,6 +515,13 @@ export const runOwnedProcessTree = async ({
 
   let requestedSignal = null
   let terminationPromise = null
+  let terminationError = null
+  let settleChildResult
+  const childResult = new Promise(resolve => {
+    settleChildResult = resolve
+    child.once('error', error => resolve({ error }))
+    child.once('exit', (code, signal) => resolve({ code, signal }))
+  })
   const startTermination = signal => {
     tracker.refresh()
     terminationPromise ??= Promise.resolve(
@@ -495,7 +533,9 @@ export const runOwnedProcessTree = async ({
         spawnSyncImpl,
       })
     ).catch(error => {
+      terminationError = error
       console.error(`Unable to stop the Wails process tree: ${error.message}`)
+      settleChildResult({ cleanupError: error })
     })
   }
   const signalHandlers = Object.fromEntries(
@@ -512,21 +552,22 @@ export const runOwnedProcessTree = async ({
   }
 
   const exitFallback = () => {
-    tracker.refresh()
-    terminateSyncImpl({
-      knownProcesses: tracker.snapshot(),
-      pid: child.pid,
-      platform,
-      signal: 'SIGKILL',
-      spawnSyncImpl,
-    })
+    try {
+      tracker.refresh()
+      terminateSyncImpl({
+        knownProcesses: tracker.snapshot(),
+        pid: child.pid,
+        platform,
+        signal: 'SIGKILL',
+        spawnSyncImpl,
+      })
+    } finally {
+      cleanupSyncImpl()
+    }
   }
   processRef.on('exit', exitFallback)
 
-  const result = await new Promise(resolve => {
-    child.once('error', error => resolve({ error }))
-    child.once('exit', (code, signal) => resolve({ code, signal }))
-  })
+  const result = await childResult
 
   startTermination(requestedSignal ?? 'SIGTERM')
   await terminationPromise
@@ -541,6 +582,7 @@ export const runOwnedProcessTree = async ({
     console.error(`Unable to start Wails: ${result.error.message}`)
     return 1
   }
+  if (terminationError || result.cleanupError) return 1
   if (requestedSignal) return signalExitCodes[requestedSignal]
   if (result.signal) return signalExitCodes[result.signal] ?? 1
   return result.code ?? 1
@@ -586,6 +628,7 @@ export const runDesktopLauncher = async ({
   try {
     return await runOwnedProcessTree({
       args: wailsArgs,
+      cleanupSyncImpl: watcherSupervisor.cleanup,
       command: 'wails',
       options: {
         cwd,
