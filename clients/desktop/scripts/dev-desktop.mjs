@@ -111,7 +111,6 @@ export const createProcessTreeTracker = ({
   spawnSyncImpl = spawnSync,
 }) => {
   const ownedProcesses = new Map()
-  const ownedProcessGroups = new Set()
   const remember = (process, { trustedGroup = false } = {}) => {
     const remembered = {
       ...process,
@@ -120,9 +119,6 @@ export const createProcessTreeTracker = ({
         : {}),
     }
     ownedProcesses.set(process.pid, remembered)
-    if (platform !== 'win32' && Number.isInteger(process.pgid)) {
-      ownedProcessGroups.add(process.pgid)
-    }
   }
   const refresh = () => {
     let processes
@@ -132,9 +128,18 @@ export const createProcessTreeTracker = ({
       return false
     }
     const liveByPid = new Map(processes.map(process => [process.pid, process]))
+    const activeTrustedGroups = new Set()
     const root = liveByPid.get(pid)
     if (root && !ownedProcesses.has(pid)) {
       remember(root, { trustedGroup: platform !== 'win32' })
+    }
+    if (platform !== 'win32') {
+      for (const owned of ownedProcesses.values()) {
+        const live = liveByPid.get(owned.pid)
+        if (owned.trustedPgid === true && live?.identity === owned.identity) {
+          activeTrustedGroups.add(live.pgid)
+        }
+      }
     }
     for (const pidFile of pidFiles) {
       try {
@@ -142,16 +147,12 @@ export const createProcessTreeTracker = ({
         const registration = value.startsWith('{')
           ? JSON.parse(value)
           : { pid: Number(value) }
-        if (
-          platform !== 'win32' &&
-          Number.isInteger(registration.pgid) &&
-          registration.pgid > 0
-        ) {
-          ownedProcessGroups.add(registration.pgid)
-        }
         const registered = liveByPid.get(Number(registration.pid))
         if (registered) {
           remember(registered, { trustedGroup: platform !== 'win32' })
+          if (platform !== 'win32') {
+            activeTrustedGroups.add(registered.pgid)
+          }
         }
       } catch (error) {
         if (error?.code !== 'ENOENT' && !(error instanceof SyntaxError)) {
@@ -161,7 +162,7 @@ export const createProcessTreeTracker = ({
     }
     if (platform !== 'win32') {
       for (const process of processes) {
-        if (ownedProcessGroups.has(process.pgid)) {
+        if (activeTrustedGroups.has(process.pgid)) {
           remember(process, { trustedGroup: true })
         }
       }
@@ -231,7 +232,9 @@ export const createFrontendWatcherSupervisor = ({
 
   const directory = mkdtempSync(path.join(tmpdir(), 'vultisig-desktop-'))
   const pidFile = path.join(directory, 'watcher.pid')
-  const scriptPath = path.join(directory, 'watcher.cjs')
+  const scriptPath = path.join(directory, 'watcher-launcher.cjs')
+  const supervisorPath = path.join(directory, 'watcher-supervisor.cjs')
+  const wailsSupervisorPath = path.join(directory, 'wails-supervisor.cjs')
   let wrapperPath
   const sourcePathKey =
     Object.keys(env).find(key => key.toLowerCase() === 'path') ?? 'PATH'
@@ -240,27 +243,32 @@ export const createFrontendWatcherSupervisor = ({
     [sourcePathKey]: `${directory}${pathDelimiter}${env[sourcePathKey] ?? ''}`,
     VULTISIG_DESKTOP_WATCHER_PID_FILE: pidFile,
     VULTISIG_DESKTOP_WATCHER_SCRIPT: scriptPath,
+    VULTISIG_DESKTOP_WATCHER_SUPERVISOR: supervisorPath,
     VULTISIG_NODE: process.execPath,
     VULTISIG_REAL_YARN: realYarn,
+    VULTISIG_REAL_WAILS: 'wails',
   }
 
   writeFileSync(
-    scriptPath,
+    supervisorPath,
     [
       "const { spawn } = require('node:child_process')",
       "const { renameSync, writeFileSync } = require('node:fs')",
-      'const child = spawn(process.env.VULTISIG_REAL_YARN, process.argv.slice(2), {',
-      "  detached: true, env: process.env, shell: process.platform === 'win32', stdio: 'inherit',",
-      '})',
+      "if (process.platform !== 'win32') process.on('SIGHUP', () => {})",
       'const pidFile = process.env.VULTISIG_DESKTOP_WATCHER_PID_FILE',
       'const pendingPidFile = `${pidFile}.${process.pid}.tmp`',
       'writeFileSync(',
       '  pendingPidFile,',
-      "  JSON.stringify({ pid: child.pid, pgid: process.platform === 'win32' ? null : child.pid })",
+      "  JSON.stringify({ pid: process.pid, pgid: process.platform === 'win32' ? null : process.pid })",
       ')',
       'renameSync(pendingPidFile, pidFile)',
+      'const child = spawn(process.env.VULTISIG_REAL_YARN, process.argv.slice(2), {',
+      "  env: process.env, shell: process.platform === 'win32', stdio: 'inherit',",
+      '})',
+      'let requestedSignal = null',
       "for (const signal of ['SIGINT', 'SIGTERM']) {",
       '  process.on(signal, () => {',
+      '    requestedSignal ??= signal',
       '    try { child.kill(signal) } catch (error) {',
       "      if (error?.code !== 'ESRCH') throw error",
       '    }',
@@ -271,7 +279,70 @@ export const createFrontendWatcherSupervisor = ({
       '  process.exitCode = 1',
       '})',
       "child.on('exit', (code, signal) => {",
+      '  const finish = () => {',
+      "    process.exitCode = signal === 'SIGINT' ? 130 : signal === 'SIGTERM' ? 143 : (code ?? 1)",
+      '  }',
+      '  if (requestedSignal) finish()',
+      '  else setTimeout(finish, 2500)',
+      '})',
+      '',
+    ].join('\n')
+  )
+
+  writeFileSync(
+    scriptPath,
+    [
+      "const { spawn } = require('node:child_process')",
+      'const child = spawn(',
+      '  process.env.VULTISIG_NODE,',
+      '  [process.env.VULTISIG_DESKTOP_WATCHER_SUPERVISOR, ...process.argv.slice(2)],',
+      "  { detached: true, env: process.env, stdio: 'inherit' }",
+      ')',
+      "for (const signal of ['SIGINT', 'SIGTERM']) {",
+      '  process.on(signal, () => {',
+      '    try { child.kill(signal) } catch (error) {',
+      "      if (error?.code !== 'ESRCH') throw error",
+      '    }',
+      '  })',
+      '}',
+      "child.on('error', error => {",
+      '  console.error(`Unable to start Yarn watcher supervisor: ${error.message}`)',
+      '  process.exitCode = 1',
+      '})',
+      "child.on('exit', (code, signal) => {",
       "  process.exitCode = signal === 'SIGINT' ? 130 : signal === 'SIGTERM' ? 143 : (code ?? 1)",
+      '})',
+      '',
+    ].join('\n')
+  )
+
+  writeFileSync(
+    wailsSupervisorPath,
+    [
+      "const { spawn } = require('node:child_process')",
+      "if (process.platform !== 'win32') process.on('SIGHUP', () => {})",
+      'const child = spawn(process.env.VULTISIG_REAL_WAILS, process.argv.slice(2), {',
+      "  env: process.env, shell: process.platform === 'win32', stdio: 'inherit',",
+      '})',
+      'let requestedSignal = null',
+      "for (const signal of ['SIGINT', 'SIGTERM']) {",
+      '  process.on(signal, () => {',
+      '    requestedSignal ??= signal',
+      '    try { child.kill(signal) } catch (error) {',
+      "      if (error?.code !== 'ESRCH') throw error",
+      '    }',
+      '  })',
+      '}',
+      "child.on('error', error => {",
+      '  console.error(`Unable to start Wails: ${error.message}`)',
+      '  process.exitCode = 1',
+      '})',
+      "child.on('exit', (code, signal) => {",
+      '  const finish = () => {',
+      "    process.exitCode = signal === 'SIGINT' ? 130 : signal === 'SIGTERM' ? 143 : (code ?? 1)",
+      '  }',
+      '  if (requestedSignal) finish()',
+      '  else setTimeout(finish, 2500)',
       '})',
       '',
     ].join('\n')
@@ -301,6 +372,7 @@ export const createFrontendWatcherSupervisor = ({
     cleanup: () => rmSync(directory, { force: true, recursive: true }),
     envOverrides,
     pidFile,
+    wailsSupervisorPath,
     wrapperPath,
   }
 }
@@ -315,18 +387,6 @@ const captureOwnedProcesses = ({
   const liveByPid = new Map(processes.map(process => [process.pid, process]))
   const owned = new Map()
   const ownedProcessGroups = new Set()
-
-  if (platform !== 'win32') {
-    for (const process of knownProcesses) {
-      if (
-        process.trustedPgid === true &&
-        Number.isInteger(process.pgid) &&
-        process.pgid > 0
-      ) {
-        ownedProcessGroups.add(process.pgid)
-      }
-    }
-  }
 
   for (const process of knownProcesses) {
     if (liveByPid.get(process.pid)?.identity === process.identity) {
@@ -388,6 +448,10 @@ const taskkill = ({ force, pid, spawnSyncImpl }) =>
   )
 
 const forceTaskkill = ({ process, spawnSyncImpl }) => {
+  const current = processTable('win32', spawnSyncImpl).find(
+    candidate => candidate.pid === process.pid
+  )
+  if (current?.identity !== process.identity) return
   const result = taskkill({ force: true, pid: process.pid, spawnSyncImpl })
   if (!result?.error && result?.status === 0) return
   const live = processTable('win32', spawnSyncImpl).find(
@@ -688,9 +752,9 @@ export const runDesktopLauncher = async ({
 
   try {
     return await runOwnedProcessTree({
-      args: wailsArgs,
+      args: [watcherSupervisor.wailsSupervisorPath, ...wailsArgs],
       cleanupSyncImpl: watcherSupervisor.cleanup,
-      command: 'wails',
+      command: process.execPath,
       options: {
         cwd,
         env: { ...env, ...watcherSupervisor.envOverrides },

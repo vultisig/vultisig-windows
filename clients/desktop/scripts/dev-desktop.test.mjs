@@ -97,8 +97,14 @@ describe('desktop launcher process-tree lifecycle', () => {
     )
     expect(supervisor.envOverrides.VULTISIG_REAL_YARN).toBe('/fixture/bin/yarn')
     expect(readFileSync(supervisor.wrapperPath, 'utf8')).toContain(
-      'VULTISIG_DESKTOP_WATCHER_PID_FILE'
+      'VULTISIG_DESKTOP_WATCHER_SUPERVISOR'
     )
+    expect(
+      readFileSync(
+        supervisor.envOverrides.VULTISIG_DESKTOP_WATCHER_SUPERVISOR,
+        'utf8'
+      )
+    ).toContain('VULTISIG_DESKTOP_WATCHER_PID_FILE')
     expect(existsSync(supervisor.wrapperPath)).toBe(true)
 
     supervisor.cleanup()
@@ -143,13 +149,14 @@ describe('desktop launcher process-tree lifecycle', () => {
     })
     expect(killImpl).toHaveBeenCalledWith(42, 'SIGKILL')
 
-    const windowsSpawnSync = vi
-      .fn()
-      .mockReturnValueOnce({
-        status: 0,
-        stdout: '43 1 2026-08-31T10:00:00.0000000Z\n',
-      })
-      .mockReturnValue({ status: 0 })
+    const windowsSpawnSync = vi.fn(command =>
+      command === 'powershell.exe'
+        ? {
+            status: 0,
+            stdout: '43 1 2026-08-31T10:00:00.0000000Z\n',
+          }
+        : { status: 0 }
+    )
     terminateProcessTreeSync({
       pid: 43,
       platform: 'win32',
@@ -187,13 +194,14 @@ describe('desktop launcher process-tree lifecycle', () => {
   })
 
   it('force-terminates a tracked Windows descendant after the root exits', async () => {
-    const spawnSyncImpl = vi
-      .fn()
-      .mockReturnValueOnce({
-        status: 0,
-        stdout: '44 1 2026-08-31T10:00:01.0000000Z\n',
-      })
-      .mockReturnValue({ status: 0 })
+    const spawnSyncImpl = vi.fn(command =>
+      command === 'powershell.exe'
+        ? {
+            status: 0,
+            stdout: '44 1 2026-08-31T10:00:01.0000000Z\n',
+          }
+        : { status: 0 }
+    )
 
     await terminateProcessTree({
       knownProcesses: [
@@ -214,16 +222,15 @@ describe('desktop launcher process-tree lifecycle', () => {
   })
 
   it('checks tracked Windows survivors even after a successful root tree kill', async () => {
-    const spawnSyncImpl = vi
-      .fn()
-      .mockReturnValueOnce({
-        status: 0,
-        stdout: [
-          '43 1 2026-08-31T10:00:00.0000000Z',
-          '44 1 2026-08-31T10:00:01.0000000Z',
-        ].join('\n'),
-      })
-      .mockReturnValue({ status: 0 })
+    const processLines = [
+      '43 1 2026-08-31T10:00:00.0000000Z',
+      '44 1 2026-08-31T10:00:01.0000000Z',
+    ].join('\n')
+    const spawnSyncImpl = vi.fn(command =>
+      command === 'powershell.exe'
+        ? { status: 0, stdout: processLines }
+        : { status: 0 }
+    )
 
     await terminateProcessTree({
       knownProcesses: [
@@ -239,6 +246,41 @@ describe('desktop launcher process-tree lifecycle', () => {
       'taskkill.exe',
       ['/PID', '44', '/T', '/F'],
       { stdio: 'ignore', windowsHide: true }
+    )
+  })
+
+  it('does not force-kill a tracked Windows PID recycled after root shutdown', async () => {
+    const originalProcesses = [
+      '43 1 2026-08-31T10:00:00.0000000Z',
+      '44 43 2026-08-31T10:00:01.0000000Z',
+    ].join('\n')
+    const recycledProcesses = '44 1 2026-08-31T10:00:02.0000000Z\n'
+    let enumerations = 0
+    const spawnSyncImpl = vi.fn(command => {
+      if (command === 'powershell.exe') {
+        enumerations += 1
+        return {
+          status: 0,
+          stdout: enumerations === 1 ? originalProcesses : recycledProcesses,
+        }
+      }
+      return { status: 0 }
+    })
+
+    await terminateProcessTree({
+      knownProcesses: [
+        { identity: '2026-08-31T10:00:00.0000000Z', pid: 43 },
+        { identity: '2026-08-31T10:00:01.0000000Z', pid: 44 },
+      ],
+      pid: 43,
+      platform: 'win32',
+      spawnSyncImpl,
+    })
+
+    expect(spawnSyncImpl).not.toHaveBeenCalledWith(
+      'taskkill.exe',
+      ['/PID', '44', '/T', '/F'],
+      expect.anything()
     )
   })
 
@@ -411,6 +453,40 @@ describe('desktop launcher process-tree lifecycle', () => {
     })
 
     expect(killImpl).not.toHaveBeenCalled()
+  })
+
+  it('does not reacquire a recycled trusted process group', () => {
+    const spawnSyncImpl = vi
+      .fn()
+      .mockReturnValueOnce({
+        status: 0,
+        stdout: '10 1 10 Mon Aug 31 10:00:00 2026\n',
+      })
+      .mockReturnValue({
+        status: 0,
+        stdout: [
+          '10 1 10 Mon Aug 31 10:00:01 2026',
+          '11 10 10 Mon Aug 31 10:00:02 2026',
+        ].join('\n'),
+      })
+    const tracker = createProcessTreeTracker({
+      intervalMs: 100_000,
+      pid: 10,
+      platform: 'linux',
+      spawnSyncImpl,
+    })
+
+    try {
+      tracker.refresh()
+      expect(tracker.snapshot()).toEqual([
+        expect.objectContaining({
+          identity: 'Mon Aug 31 10:00:00 2026',
+          pid: 10,
+        }),
+      ])
+    } finally {
+      tracker.stop()
+    }
   })
 
   it('rejects when Windows force cleanup fails and the identity-matched process remains', async () => {
@@ -662,6 +738,13 @@ describe('desktop launcher process-tree lifecycle', () => {
   }, 10_000)
 
   it('cleans an invocation-group descendant when the root fails before the production poll interval', async () => {
+    const supervisor = createFrontendWatcherSupervisor({
+      env: process.env,
+      spawnSyncImpl: vi.fn(() => ({
+        status: 0,
+        stdout: `${process.execPath}\n`,
+      })),
+    })
     const childScript = `
       const { spawn } = require('node:child_process')
       const descendant = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], {
@@ -675,9 +758,16 @@ describe('desktop launcher process-tree lifecycle', () => {
 
     try {
       const run = runOwnedProcessTree({
-        args: ['-e', childScript],
+        args: [supervisor.wailsSupervisorPath, '-e', childScript],
         command: process.execPath,
-        options: { stdio: ['ignore', 'pipe', 'inherit'] },
+        options: {
+          env: {
+            ...process.env,
+            ...supervisor.envOverrides,
+            VULTISIG_REAL_WAILS: process.execPath,
+          },
+          stdio: ['ignore', 'pipe', 'inherit'],
+        },
         spawnImpl: (...spawnArgs) => {
           child = spawn(...spawnArgs)
           return child
@@ -699,6 +789,7 @@ describe('desktop launcher process-tree lifecycle', () => {
       if (child?.pid) {
         terminateProcessTreeSync({ pid: child.pid, signal: 'SIGKILL' })
       }
+      supervisor.cleanup()
     }
   }, 10_000)
 
