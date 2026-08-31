@@ -1,4 +1,5 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { TFunction } from 'i18next'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -23,7 +24,7 @@ vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
 
 const t: TFunction = ((key: string) => key) as TFunction
 
-const cosmosCoin = {
+const cosmosCoin: AccountCoin = {
   chain: Chain.Cosmos,
   id: 'uatom',
   ticker: 'ATOM',
@@ -44,7 +45,7 @@ describe('IBC transfer validation', () => {
 
     const { schema } = getDepositFormConfig({
       t,
-      coin: cosmosCoin as any,
+      coin: cosmosCoin,
       walletCore: {} as any,
       totalAmountAvailable: 10,
       totalAmountAvailableUnits: null,

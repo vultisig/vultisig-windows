@@ -5,7 +5,6 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
-import { useMemo } from 'react'
 
 import { useUnstakableBruneQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableBruneQuery'
 import { useUnstakableRujiQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableRujiQuery'
@@ -33,11 +32,8 @@ export const useStakeBalance = (): StakeBalanceResult => {
   const isUnstake = action === 'unstake'
   const autocompound = form?.autoCompound === true
 
-  const stakeId = useMemo(
-    () =>
-      attempt(() => selectStakeId(selectedCoin, { autocompound })).data ?? null,
-    [selectedCoin, autocompound]
-  )
+  const stakeId =
+    attempt(() => selectStakeId(selectedCoin, { autocompound })).data ?? null
 
   const { data: nativeTcyBalance = 0n, isLoading: isLoadingNativeTcy } =
     useUnstakableTcyQuery({
