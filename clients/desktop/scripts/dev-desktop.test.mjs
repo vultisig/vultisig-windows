@@ -227,7 +227,7 @@ describe('desktop launcher process-tree lifecycle', () => {
     )
   })
 
-  it('keeps discovering process registrations throughout the shutdown grace period', async () => {
+  it('discovers a process registration at the shutdown grace boundary', async () => {
     const root = {
       identity: 'Mon Aug 31 10:00:00 2026',
       parentPid: 1,
@@ -253,24 +253,25 @@ describe('desktop launcher process-tree lifecycle', () => {
         )
         .join('\n')
     const killImpl = vi.fn(pid => liveProcesses.delete(Math.abs(pid)))
+    const registrationAt = Date.now() + 40
     let refreshes = 0
 
     await terminateProcessTree({
-      graceMs: 40,
+      graceMs: 45,
       knownProcesses: [root],
       killImpl,
       pid: root.pid,
       platform: 'linux',
-      pollMs: 5,
+      pollMs: 30,
       refreshKnownProcesses: () => {
         refreshes += 1
-        return refreshes >= 2 ? [root, watcher] : [root]
+        return Date.now() >= registrationAt ? [root, watcher] : [root]
       },
       spawnSyncImpl: vi.fn(() => ({ status: 0, stdout: processRows() })),
     })
 
     expect(refreshes).toBeGreaterThanOrEqual(2)
-    expect(killImpl).toHaveBeenCalledWith(watcher.pid, 'SIGTERM')
+    expect(killImpl).toHaveBeenCalledWith(watcher.pid, 'SIGKILL')
     expect(liveProcesses.has(watcher.pid)).toBe(false)
   })
 

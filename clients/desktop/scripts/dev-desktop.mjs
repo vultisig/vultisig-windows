@@ -593,6 +593,10 @@ export const terminateProcessTree = async ({
     await delay(pollMs)
   }
 
+  for (const process of refreshKnownProcesses?.() ?? []) {
+    owned.set(process.pid, process)
+  }
+
   terminateProcessTreeSync({
     knownProcesses: [...owned.values()],
     killImpl,
