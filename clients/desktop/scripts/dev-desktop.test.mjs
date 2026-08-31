@@ -1,11 +1,15 @@
 import { spawn } from 'node:child_process'
 import { EventEmitter, once } from 'node:events'
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 import { createInterface } from 'node:readline'
 
 import { describe, expect, it, vi } from 'vitest'
 
 import {
   collectDescendantProcessIds,
+  createFrontendWatcherSupervisor,
   createProcessTreeTracker,
   runOwnedProcessTree,
   spawnOwnedProcessTree,
@@ -78,11 +82,34 @@ describe('desktop launcher process-tree lifecycle', () => {
     )
   })
 
+  it('creates a long-lived Yarn watcher supervisor and removes its private directory', () => {
+    const supervisor = createFrontendWatcherSupervisor({
+      env: { PATH: '/fixture/bin' },
+      platform: 'darwin',
+      spawnSyncImpl: vi.fn(() => ({
+        status: 0,
+        stdout: '/fixture/bin/yarn\n',
+      })),
+    })
+
+    expect(supervisor.envOverrides.PATH).toContain(
+      path.dirname(supervisor.wrapperPath)
+    )
+    expect(supervisor.envOverrides.VULTISIG_REAL_YARN).toBe('/fixture/bin/yarn')
+    expect(readFileSync(supervisor.wrapperPath, 'utf8')).toContain(
+      'VULTISIG_DESKTOP_WATCHER_PID_FILE'
+    )
+    expect(existsSync(supervisor.wrapperPath)).toBe(true)
+
+    supervisor.cleanup()
+    expect(existsSync(supervisor.wrapperPath)).toBe(false)
+  })
+
   it('terminates identity-matched processes on POSIX and uses taskkill tree mode on Windows', () => {
     const killImpl = vi.fn()
     const posixSpawnSync = vi.fn(() => ({
       status: 0,
-      stdout: '42 1 Mon Aug 31 10:00:00 2026\n',
+      stdout: '42 1 42 Mon Aug 31 10:00:00 2026\n',
     }))
 
     terminateProcessTreeSync({
@@ -153,6 +180,35 @@ describe('desktop launcher process-tree lifecycle', () => {
       pid: 43,
       platform: 'win32',
       signal: 'SIGTERM',
+      spawnSyncImpl,
+    })
+
+    expect(spawnSyncImpl).toHaveBeenCalledWith(
+      'taskkill.exe',
+      ['/PID', '44', '/T', '/F'],
+      { stdio: 'ignore', windowsHide: true }
+    )
+  })
+
+  it('checks tracked Windows survivors even after a successful root tree kill', async () => {
+    const spawnSyncImpl = vi
+      .fn()
+      .mockReturnValueOnce({
+        status: 0,
+        stdout: [
+          '43 1 2026-08-31T10:00:00.0000000Z',
+          '44 1 2026-08-31T10:00:01.0000000Z',
+        ].join('\n'),
+      })
+      .mockReturnValue({ status: 0 })
+
+    await terminateProcessTree({
+      knownProcesses: [
+        { identity: '2026-08-31T10:00:00.0000000Z', pid: 43 },
+        { identity: '2026-08-31T10:00:01.0000000Z', pid: 44 },
+      ],
+      pid: 43,
+      platform: 'win32',
       spawnSyncImpl,
     })
 
@@ -243,7 +299,7 @@ describe('desktop launcher process-tree lifecycle', () => {
     const killImpl = vi.fn()
     const spawnSyncImpl = vi.fn(() => ({
       status: 0,
-      stdout: '48 1 Mon Aug 31 10:00:01 2026\n',
+      stdout: '48 1 48 Mon Aug 31 10:00:01 2026\n',
     }))
 
     terminateProcessTreeSync({
@@ -337,15 +393,21 @@ describe('desktop launcher process-tree lifecycle', () => {
     }
   }, 10_000)
 
-  it('cleans a tracked detached descendant after the immediate child fails', async () => {
+  it('cleans a registered detached descendant when the immediate child fails before the production poll interval', async () => {
+    const fixtureDirectory = mkdtempSync(
+      path.join(tmpdir(), 'vultisig-desktop-test-')
+    )
+    const pidFile = path.join(fixtureDirectory, 'watcher.pid')
     const childScript = `
       const { spawn } = require('node:child_process')
+      const { writeFileSync } = require('node:fs')
       const descendant = spawn(process.execPath, ['-e', 'process.on("SIGTERM", () => {}); setInterval(() => {}, 1000)'], {
         detached: true,
         stdio: 'ignore',
       })
+      writeFileSync(${JSON.stringify(pidFile)}, String(descendant.pid))
       console.log(JSON.stringify({ descendant: descendant.pid, root: process.pid }))
-      setTimeout(() => process.exit(7), 200)
+      setTimeout(() => process.exit(7), 10)
     `
     const control = spawn(
       process.execPath,
@@ -360,14 +422,13 @@ describe('desktop launcher process-tree lifecycle', () => {
         args: ['-e', childScript],
         command: process.execPath,
         options: { stdio: ['ignore', 'pipe', 'inherit'] },
+        ownedPidFiles: [pidFile],
         spawnImpl: (...spawnArgs) => {
           child = spawn(...spawnArgs)
           return child
         },
         terminateImpl: options =>
           terminateProcessTree({ ...options, graceMs: 100, pollMs: 10 }),
-        trackerFactory: options =>
-          createProcessTreeTracker({ ...options, intervalMs: 10 }),
       })
       const lines = createInterface({ input: child.stdout })
       const [line] = await once(lines, 'line')
@@ -385,8 +446,69 @@ describe('desktop launcher process-tree lifecycle', () => {
         terminateProcessTreeSync({ pid: child.pid, signal: 'SIGKILL' })
       }
       terminateProcessTreeSync({ pid: control.pid, signal: 'SIGKILL' })
+      rmSync(fixtureDirectory, { force: true, recursive: true })
     }
   }, 10_000)
+
+  it('cleans an invocation-group descendant when the root fails before the production poll interval', async () => {
+    const childScript = `
+      const { spawn } = require('node:child_process')
+      const descendant = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], {
+        stdio: 'ignore',
+      })
+      console.log(JSON.stringify({ descendant: descendant.pid, root: process.pid }))
+      setTimeout(() => process.exit(9), 10)
+    `
+    let child
+    let pids
+
+    try {
+      const run = runOwnedProcessTree({
+        args: ['-e', childScript],
+        command: process.execPath,
+        options: { stdio: ['ignore', 'pipe', 'inherit'] },
+        spawnImpl: (...spawnArgs) => {
+          child = spawn(...spawnArgs)
+          return child
+        },
+        terminateImpl: options =>
+          terminateProcessTree({ ...options, graceMs: 100, pollMs: 10 }),
+      })
+      const lines = createInterface({ input: child.stdout })
+      const [line] = await once(lines, 'line')
+      lines.close()
+      pids = JSON.parse(line)
+
+      await expect(run).resolves.toBe(9)
+      await waitFor(() => !pidExists(pids.root) && !pidExists(pids.descendant))
+    } finally {
+      if (pids?.descendant) {
+        terminateProcessTreeSync({ pid: pids.descendant, signal: 'SIGKILL' })
+      }
+      if (child?.pid) {
+        terminateProcessTreeSync({ pid: child.pid, signal: 'SIGKILL' })
+      }
+    }
+  }, 10_000)
+
+  it('surfaces process-enumeration failure instead of reporting successful cleanup', async () => {
+    const spawnSyncImpl = vi.fn(() => ({ status: 1, stdout: '' }))
+
+    await expect(
+      terminateProcessTree({
+        pid: 49,
+        platform: 'linux',
+        spawnSyncImpl,
+      })
+    ).rejects.toThrow('Unable to enumerate desktop processes')
+    expect(() =>
+      terminateProcessTreeSync({
+        pid: 49,
+        platform: 'linux',
+        spawnSyncImpl,
+      })
+    ).toThrow('Unable to enumerate desktop processes')
+  })
 
   it('synchronously cleans a tracked cross-group descendant and preserves an unrelated process', async () => {
     const ownedScript = `
