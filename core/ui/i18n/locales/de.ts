@@ -1962,4 +1962,6 @@ export const de = {
   swap_limit_chart_last_traded: 'Zuletzt gehandelt hier: {{when}}',
   swap_limit_chart_not_reached:
     'In diesem Zeitfenster nicht gehandelt — das Hoch lag bei {{price}}',
+  swap_quote_expired:
+    'Dieses Angebot ist abgelaufen. Aktualisieren Sie die Seite, um einen aktuellen Preis zu erhalten.',
 }

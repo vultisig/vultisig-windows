@@ -1950,4 +1950,6 @@ export const pt = {
   swap_limit_chart_last_traded: 'Última negociação aqui: {{when}}',
   swap_limit_chart_not_reached:
     'Não houve negociações aqui neste período — a máxima foi {{price}}',
+  swap_quote_expired:
+    'Esta cotação expirou. Atualize a página para ver o preço atual.',
 }

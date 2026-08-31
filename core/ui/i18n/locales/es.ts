@@ -1947,4 +1947,6 @@ export const es = {
   swap_limit_chart_last_traded: 'Última transacción realizada aquí: {{when}}',
   swap_limit_chart_not_reached:
     'No ha cotizado aquí en este período; el máximo fue {{price}}',
+  swap_quote_expired:
+    'Esta cotización ha caducado. Actualiza la página para ver el precio actual.',
 }
