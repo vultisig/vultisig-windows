@@ -306,7 +306,6 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                     .map(field => {
                       const config = getBalanceDisplayConfig({
                         chainAction: selectedChainAction,
-                        chain: coin.chain,
                       })
                       const showBalance = shouldShowBalance({
                         fieldName: field.name,
@@ -315,7 +314,6 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                       const showTickerWithBalance = shouldShowTicker({
                         fieldName: field.name,
                         chainAction: selectedChainAction,
-                        chain: coin.chain,
                       })
 
                       return (

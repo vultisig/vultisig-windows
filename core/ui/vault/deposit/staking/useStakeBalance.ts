@@ -5,13 +5,11 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
-import { useMemo } from 'react'
 
 import { useUnstakableBruneQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableBruneQuery'
 import { useUnstakableRujiQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableRujiQuery'
 import { useUnstakableStcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableSTcyQuery'
 import { useUnstakableTcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableTcyQuery'
-import { useTonUnstakableQuery } from '../hooks/useTonUnstakableQuery'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { selectStakeId } from './resolvers'
@@ -30,18 +28,12 @@ export const useStakeBalance = (): StakeBalanceResult => {
   const [action] = useDepositAction()
   const [{ form }] = useCoreViewState<'deposit'>()
   const thorchainVaultAddress = useCurrentVaultAddress(Chain.THORChain)
-  const tonVaultAddress = useCurrentVaultAddress(Chain.Ton)
 
   const isUnstake = action === 'unstake'
-  const isTonChain = selectedCoin.chain === Chain.Ton
   const autocompound = form?.autoCompound === true
 
-  const stakeId = useMemo(() => {
-    if (isTonChain) return null
-    return (
-      attempt(() => selectStakeId(selectedCoin, { autocompound })).data ?? null
-    )
-  }, [selectedCoin, isTonChain, autocompound])
+  const stakeId =
+    attempt(() => selectStakeId(selectedCoin, { autocompound })).data ?? null
 
   const { data: nativeTcyBalance = 0n, isLoading: isLoadingNativeTcy } =
     useUnstakableTcyQuery({
@@ -81,24 +73,8 @@ export const useStakeBalance = (): StakeBalanceResult => {
       },
     })
 
-  const { data: tonBalance, isLoading: isLoadingTon } = useTonUnstakableQuery({
-    address: tonVaultAddress,
-    options: {
-      enabled: Boolean(tonVaultAddress && isUnstake && isTonChain),
-    },
-  })
-
   if (!isUnstake) {
     return { balance: 0, balanceUnits: 0n, isLoading: false, stakeId }
-  }
-
-  if (isTonChain) {
-    return {
-      balance: tonBalance?.humanReadableBalance ?? 0,
-      balanceUnits: tonBalance?.chainBalance ?? 0n,
-      isLoading: isLoadingTon,
-      stakeId: null,
-    }
   }
 
   if (!stakeId) {
