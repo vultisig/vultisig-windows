@@ -268,7 +268,11 @@ export class SwapFlow extends BasePage {
       return
     }
 
-    console.log(`Could not select from coin ${coin}`)
+    throw new Error(
+      `Could not select from coin ${coin} — neither the ${chainName} chain option ` +
+        `nor a ${coin} coin option was visible. Continuing would type the amount ` +
+        `into whichever pair the form happens to show.`
+    )
   }
 
   async selectToCoin(coin: string): Promise<void> {
@@ -309,7 +313,11 @@ export class SwapFlow extends BasePage {
       return
     }
 
-    console.log(`Could not select to coin ${coin}`)
+    throw new Error(
+      `Could not select to coin ${coin} — neither the ${chainName} chain option ` +
+        `nor a ${coin} coin option was visible. Continuing would assert against ` +
+        `whichever destination the form happens to show.`
+    )
   }
 
   async fillAmount(amount: string): Promise<void> {
@@ -551,8 +559,11 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Pre-broadcast safety gate: confirms the from/to coin selectors match the
-   * expected symbols before broadcast. Throws on mismatch.
+   * Confirms the from/to coin selectors match the expected symbols. Every
+   * `prepare*` path runs this before typing an amount, because the selection
+   * clicks can report success and still leave a different pair on screen —
+   * asserting past that point tests a swap the caller never asked for. Also a
+   * pre-broadcast safety gate. Throws on mismatch.
    */
   async assertSelectionMatches({
     fromSymbol,
@@ -600,6 +611,10 @@ export class SwapFlow extends BasePage {
   ): Promise<void> {
     await this.selectFromCoin(fromCoin)
     await this.selectToCoin(toCoin)
+    await this.assertSelectionMatches({
+      fromSymbol: fromCoin,
+      toSymbol: toCoin,
+    })
     await this.fillAmount(amount)
     await this.waitForQuote()
   }
@@ -661,6 +676,8 @@ export class SwapFlow extends BasePage {
     if (!this.hasSelectedSymbol({ text: updatedToText, symbol: toSymbol })) {
       await this.selectToCoin(toSymbol)
     }
+
+    await this.assertSelectionMatches({ fromSymbol, toSymbol })
 
     await this.fillAmount(amount)
     await this.waitForQuote()
