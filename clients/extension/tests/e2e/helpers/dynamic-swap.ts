@@ -231,10 +231,15 @@ export function getSwapPreconditionFailure(
  * developer without funds is not blocked. In CI it fails: a release run that
  * silently drops swap coverage and still exits 0 is worse than a red build.
  */
-export function requireSwapPreconditions(
-  balances: ChainBalance[],
+type RequireSwapPreconditionsInput = {
+  balances: ChainBalance[]
   skip: (condition: true, reason: string) => void
-): boolean {
+}
+
+export function requireSwapPreconditions({
+  balances,
+  skip,
+}: RequireSwapPreconditionsInput): boolean {
   const failure = getSwapPreconditionFailure(balances)
   if (!failure) {
     return true

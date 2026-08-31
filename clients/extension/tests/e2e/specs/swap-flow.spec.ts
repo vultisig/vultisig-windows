@@ -256,9 +256,10 @@ test.describe('Swap Flow', () => {
       const balances = await getVaultBalances(page)
 
       if (
-        !requireSwapPreconditions(balances, (condition, reason) =>
-          test.skip(condition, reason)
-        )
+        !requireSwapPreconditions({
+          balances,
+          skip: (condition, reason) => test.skip(condition, reason),
+        })
       ) {
         return
       }
@@ -598,9 +599,10 @@ test.describe('Swap Flow', () => {
 
       const balances = await getVaultBalances(page)
       if (
-        !requireSwapPreconditions(balances, (condition, reason) =>
-          test.skip(condition, reason)
-        )
+        !requireSwapPreconditions({
+          balances,
+          skip: (condition, reason) => test.skip(condition, reason),
+        })
       ) {
         return
       }
