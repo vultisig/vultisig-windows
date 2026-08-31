@@ -1,4 +1,5 @@
 import { reportBugUrl } from '@core/ui/errors/constants'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -40,7 +41,17 @@ export const RootErrorFallback = ({
 
   return (
     <VStack fullSize>
-      <PageHeader title={t('something_went_wrong')} />
+      <PageHeader
+        primaryControls={
+          <PageHeaderBackButton
+            onClick={() => {
+              goBack()
+              clearError()
+            }}
+          />
+        }
+        title={t('something_went_wrong')}
+      />
       <PageContent gap={20}>
         <VStack flexGrow gap={40} alignItems="center" justifyContent="center">
           <FilledAlertIcon style={{ fontSize: 66 }} />
@@ -60,14 +71,7 @@ export const RootErrorFallback = ({
           <Button kind="secondary" onClick={() => openUrl(reportBugUrl)}>
             {t('report_error')}
           </Button>
-          <Button
-            onClick={() => {
-              goBack()
-              clearError()
-            }}
-          >
-            {t('try_again')}
-          </Button>
+          <Button onClick={clearError}>{t('try_again')}</Button>
         </UniformColumnGrid>
       </PageContent>
     </VStack>
