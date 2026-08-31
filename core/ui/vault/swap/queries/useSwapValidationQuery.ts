@@ -5,6 +5,7 @@ import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { BoundSwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { t } from 'i18next'
+import { useEffect, useState } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
@@ -41,6 +42,11 @@ export const getSwapBalanceValidationError = ({
   return null
 }
 
+type GetSwapQuoteExpiryValidationErrorInput = {
+  quote: Pick<BoundSwapQuote, 'expiresAt'>
+  now: number
+}
+
 /**
  * Rejects a quote whose absolute expiry has already passed. React Query keeps a
  * quote for a day and retains it when a refetch fails, so a cached one can be
@@ -48,10 +54,57 @@ export const getSwapBalanceValidationError = ({
  * amount while offline is enough. Nothing else in the swap flow compares a
  * quote against the clock, so without this the user can submit a stale price.
  */
-export const getSwapQuoteExpiryValidationError = (
-  quote: BoundSwapQuote,
-  now: number = Date.now()
-): string | null => (quote.expiresAt <= now ? t('swap_quote_expired') : null)
+export const getSwapQuoteExpiryValidationError = ({
+  quote,
+  now,
+}: GetSwapQuoteExpiryValidationErrorInput): string | null =>
+  quote.expiresAt <= now ? t('swap_quote_expired') : null
+
+type GetSwapQuoteExpiryDelayInput = {
+  expiresAt: number
+  now: number
+}
+
+/**
+ * How long until the quote expires, or `null` when it already has. Drives the
+ * single timer below, and is separated from it so the scheduling decision can
+ * be tested without fake timers.
+ */
+export const getSwapQuoteExpiryDelay = ({
+  expiresAt,
+  now,
+}: GetSwapQuoteExpiryDelayInput): number | null =>
+  expiresAt > now ? expiresAt - now : null
+
+/**
+ * A clock that advances exactly when the current quote expires.
+ *
+ * Validation is memoized on query data, and a quote sitting past its expiry
+ * produces no new data — so without a value that changes at that moment, the
+ * last "valid" verdict would stand indefinitely and Continue would stay
+ * enabled. One timer per quote rather than a poll: the only interesting
+ * instant is known in advance.
+ */
+const useSwapQuoteExpiryClock = (expiresAt: number | undefined) => {
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    if (expiresAt === undefined) {
+      return
+    }
+
+    const delay = getSwapQuoteExpiryDelay({ expiresAt, now: Date.now() })
+    if (delay === null) {
+      return
+    }
+
+    const timer = setTimeout(() => setNow(Date.now()), delay)
+
+    return () => clearTimeout(timer)
+  }, [expiresAt])
+
+  return now
+}
 
 /** Input for swap validation that does not depend on async quote or balance data. */
 type GetImmediateSwapValidationErrorInput = {
@@ -96,6 +149,7 @@ export const useSwapValidationQuery = () => {
   const firmSwapQuoteQuery = swapQuoteQuery.isPlaceholderData
     ? { ...swapQuoteQuery, data: undefined, isPending: true }
     : swapQuoteQuery
+  const now = useSwapQuoteExpiryClock(firmSwapQuoteQuery.data?.expiresAt)
 
   const combined = useCombineQueries({
     queries: {
@@ -105,7 +159,7 @@ export const useSwapValidationQuery = () => {
     joinData: ({ balance, swapQuote }) => {
       return (
         getSwapBalanceValidationError({ amount, balance }) ??
-        getSwapQuoteExpiryValidationError(swapQuote)
+        getSwapQuoteExpiryValidationError({ quote: swapQuote, now })
       )
     },
     eager: false,
