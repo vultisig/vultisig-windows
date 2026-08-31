@@ -484,6 +484,7 @@ export const buildSendTxKeysignPayload = async ({
               to: msg.to,
               amount: msg.amount,
               payload: msg.payload,
+              stateInit: msg.stateInit,
             })
           ),
         }
