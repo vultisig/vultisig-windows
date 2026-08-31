@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import { EventEmitter, once } from 'node:events'
 import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -323,6 +323,44 @@ describe('desktop launcher process-tree lifecycle', () => {
     error.mockRestore()
   })
 
+  it('unrefs a real child when both graceful and force cleanup fail', async () => {
+    let child
+    const processRef = new EventEmitter()
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const startedAt = Date.now()
+    const run = runOwnedProcessTree({
+      args: ['-e', 'setTimeout(() => {}, 1500)'],
+      command: process.execPath,
+      options: { stdio: 'ignore' },
+      processRef,
+      spawnImpl: (...spawnArgs) => {
+        child = spawn(...spawnArgs)
+        return child
+      },
+      terminateImpl: async () => {
+        throw new Error('fixture graceful failure')
+      },
+      terminateSyncImpl: () => {
+        throw new Error('fixture force failure')
+      },
+      trackerFactory: () => ({
+        refresh: vi.fn(),
+        snapshot: vi.fn(() => []),
+        stop: vi.fn(),
+      }),
+    })
+
+    try {
+      processRef.emit('SIGTERM')
+      await expect(run).resolves.toBe(1)
+      expect(Date.now() - startedAt).toBeLessThan(500)
+      expect(pidExists(child.pid)).toBe(true)
+    } finally {
+      process.kill(child.pid, 'SIGKILL')
+      error.mockRestore()
+    }
+  })
+
   it('preserves a normal child exit code', async () => {
     const child = new EventEmitter()
     child.pid = 47
@@ -356,11 +394,16 @@ describe('desktop launcher process-tree lifecycle', () => {
     const killImpl = vi.fn()
     const spawnSyncImpl = vi.fn(() => ({
       status: 0,
-      stdout: '48 1 48 Mon Aug 31 10:00:01 2026\n',
+      stdout: [
+        '48 1 48 Mon Aug 31 10:00:01 2026',
+        '49 48 48 Mon Aug 31 10:00:02 2026',
+      ].join('\n'),
     }))
 
     terminateProcessTreeSync({
-      knownProcesses: [{ identity: 'Mon Aug 31 10:00:00 2026', pid: 48 }],
+      knownProcesses: [
+        { identity: 'Mon Aug 31 10:00:00 2026', pgid: 48, pid: 48 },
+      ],
       killImpl,
       pid: 48,
       platform: 'linux',
@@ -368,6 +411,30 @@ describe('desktop launcher process-tree lifecycle', () => {
     })
 
     expect(killImpl).not.toHaveBeenCalled()
+  })
+
+  it('rejects when Windows force cleanup fails and the identity-matched process remains', async () => {
+    const processLine = '43 1 2026-08-31T10:00:00.0000000Z\n'
+    const spawnSyncImpl = vi.fn(command =>
+      command === 'powershell.exe'
+        ? { status: 0, stdout: processLine }
+        : { status: 5 }
+    )
+
+    await expect(
+      terminateProcessTree({
+        knownProcesses: [
+          {
+            identity: '2026-08-31T10:00:00.0000000Z',
+            pgid: null,
+            pid: 43,
+          },
+        ],
+        pid: 43,
+        platform: 'win32',
+        spawnSyncImpl,
+      })
+    ).rejects.toThrow('Unable to terminate desktop process 43')
   })
 
   it('cleans up the process tree when the child fails to start', async () => {
@@ -564,7 +631,24 @@ describe('desktop launcher process-tree lifecycle', () => {
       await waitFor(() => existsSync(descendantFile))
       pids = JSON.parse(readFileSync(descendantFile, 'utf8'))
       await expect(run).resolves.toBe(7)
-      await waitFor(() => !pidExists(pids.yarn) && !pidExists(pids.descendant))
+      await waitFor(
+        () => !pidExists(pids.yarn) && !pidExists(pids.descendant)
+      ).catch(() => {
+        throw new Error(
+          `Owned watcher processes remained: yarn=${pidExists(pids.yarn)}, descendant=${pidExists(pids.descendant)}, state=${String(
+            spawnSync(
+              'ps',
+              [
+                '-o',
+                'pid=,ppid=,pgid=,state=,command=',
+                '-p',
+                String(pids.descendant),
+              ],
+              { encoding: 'utf8' }
+            ).stdout
+          ).trim()}`
+        )
+      })
     } finally {
       if (pids?.descendant) {
         terminateProcessTreeSync({ pid: pids.descendant, signal: 'SIGKILL' })

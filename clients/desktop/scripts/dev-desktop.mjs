@@ -112,8 +112,14 @@ export const createProcessTreeTracker = ({
 }) => {
   const ownedProcesses = new Map()
   const ownedProcessGroups = new Set()
-  const remember = process => {
-    ownedProcesses.set(process.pid, process)
+  const remember = (process, { trustedGroup = false } = {}) => {
+    const remembered = {
+      ...process,
+      ...(trustedGroup || ownedProcesses.get(process.pid)?.trustedPgid
+        ? { trustedPgid: true }
+        : {}),
+    }
+    ownedProcesses.set(process.pid, remembered)
     if (platform !== 'win32' && Number.isInteger(process.pgid)) {
       ownedProcessGroups.add(process.pgid)
     }
@@ -128,7 +134,7 @@ export const createProcessTreeTracker = ({
     const liveByPid = new Map(processes.map(process => [process.pid, process]))
     const root = liveByPid.get(pid)
     if (root && !ownedProcesses.has(pid)) {
-      remember(root)
+      remember(root, { trustedGroup: platform !== 'win32' })
     }
     for (const pidFile of pidFiles) {
       try {
@@ -144,14 +150,20 @@ export const createProcessTreeTracker = ({
           ownedProcessGroups.add(registration.pgid)
         }
         const registered = liveByPid.get(Number(registration.pid))
-        if (registered) remember(registered)
+        if (registered) {
+          remember(registered, { trustedGroup: platform !== 'win32' })
+        }
       } catch (error) {
-        if (error?.code !== 'ENOENT') throw error
+        if (error?.code !== 'ENOENT' && !(error instanceof SyntaxError)) {
+          throw error
+        }
       }
     }
     if (platform !== 'win32') {
       for (const process of processes) {
-        if (ownedProcessGroups.has(process.pgid)) remember(process)
+        if (ownedProcessGroups.has(process.pgid)) {
+          remember(process, { trustedGroup: true })
+        }
       }
     }
     let changed = true
@@ -207,7 +219,7 @@ export const createFrontendWatcherSupervisor = ({
   const candidates = outputLines(result)
   const realYarn =
     platform === 'win32'
-      ? candidates.find(candidate => /\.(cmd|exe|ps1)$/i.test(candidate))
+      ? candidates.find(candidate => /\.(cmd|exe)$/i.test(candidate))
       : candidates[0]
   if (result.error || result.status !== 0 || !realYarn) {
     throw new Error(
@@ -236,14 +248,17 @@ export const createFrontendWatcherSupervisor = ({
     scriptPath,
     [
       "const { spawn } = require('node:child_process')",
-      "const { writeFileSync } = require('node:fs')",
+      "const { renameSync, writeFileSync } = require('node:fs')",
       'const child = spawn(process.env.VULTISIG_REAL_YARN, process.argv.slice(2), {',
       "  detached: true, env: process.env, shell: process.platform === 'win32', stdio: 'inherit',",
       '})',
+      'const pidFile = process.env.VULTISIG_DESKTOP_WATCHER_PID_FILE',
+      'const pendingPidFile = `${pidFile}.${process.pid}.tmp`',
       'writeFileSync(',
-      '  process.env.VULTISIG_DESKTOP_WATCHER_PID_FILE,',
+      '  pendingPidFile,',
       "  JSON.stringify({ pid: child.pid, pgid: process.platform === 'win32' ? null : child.pid })",
       ')',
+      'renameSync(pendingPidFile, pidFile)',
       "for (const signal of ['SIGINT', 'SIGTERM']) {",
       '  process.on(signal, () => {',
       '    try { child.kill(signal) } catch (error) {',
@@ -299,15 +314,30 @@ const captureOwnedProcesses = ({
   const processes = processTable(platform, spawnSyncImpl)
   const liveByPid = new Map(processes.map(process => [process.pid, process]))
   const owned = new Map()
-  const ownedProcessGroups = new Set(
-    knownProcesses
-      .map(process => process.pgid)
-      .filter(group => Number.isInteger(group) && group > 0)
-  )
+  const ownedProcessGroups = new Set()
+
+  if (platform !== 'win32') {
+    for (const process of knownProcesses) {
+      if (
+        process.trustedPgid === true &&
+        Number.isInteger(process.pgid) &&
+        process.pgid > 0
+      ) {
+        ownedProcessGroups.add(process.pgid)
+      }
+    }
+  }
 
   for (const process of knownProcesses) {
     if (liveByPid.get(process.pid)?.identity === process.identity) {
-      owned.set(process.pid, liveByPid.get(process.pid))
+      const live = {
+        ...liveByPid.get(process.pid),
+        ...(process.trustedPgid === true ? { trustedPgid: true } : {}),
+      }
+      owned.set(process.pid, live)
+      if (platform !== 'win32' && Number.isInteger(live.pgid)) {
+        ownedProcessGroups.add(live.pgid)
+      }
     }
   }
   if (!knownProcesses.length) {
@@ -319,7 +349,9 @@ const captureOwnedProcesses = ({
   }
   if (platform !== 'win32') {
     for (const process of processes) {
-      if (ownedProcessGroups.has(process.pgid)) owned.set(process.pid, process)
+      if (ownedProcessGroups.has(process.pgid)) {
+        owned.set(process.pid, { ...process, trustedPgid: true })
+      }
     }
   }
 
@@ -355,6 +387,17 @@ const taskkill = ({ force, pid, spawnSyncImpl }) =>
     { stdio: 'ignore', windowsHide: true }
   )
 
+const forceTaskkill = ({ process, spawnSyncImpl }) => {
+  const result = taskkill({ force: true, pid: process.pid, spawnSyncImpl })
+  if (!result?.error && result?.status === 0) return
+  const live = processTable('win32', spawnSyncImpl).find(
+    candidate => candidate.pid === process.pid
+  )
+  if (live?.identity === process.identity) {
+    throw new Error(`Unable to terminate desktop process ${process.pid}`)
+  }
+}
+
 export const terminateProcessTreeSync = ({
   knownProcesses = [],
   killImpl = process.kill,
@@ -375,10 +418,10 @@ export const terminateProcessTreeSync = ({
 
   if (platform === 'win32') {
     const root = matches.find(process => process.pid === pid)
-    if (root) taskkill({ force: true, pid, spawnSyncImpl })
+    if (root) forceTaskkill({ process: root, spawnSyncImpl })
     for (const process of matches.reverse()) {
       if (process.pid !== pid) {
-        taskkill({ force: true, pid: process.pid, spawnSyncImpl })
+        forceTaskkill({ process, spawnSyncImpl })
       }
     }
     return
@@ -417,12 +460,12 @@ export const terminateProcessTree = async ({
     if (root) {
       const result = taskkill({ force: false, pid, spawnSyncImpl })
       if (result?.error || result?.status !== 0) {
-        taskkill({ force: true, pid, spawnSyncImpl })
+        forceTaskkill({ process: root, spawnSyncImpl })
       }
     }
     for (const process of matches.reverse()) {
       if (process.pid !== pid) {
-        taskkill({ force: true, pid: process.pid, spawnSyncImpl })
+        forceTaskkill({ process, spawnSyncImpl })
       }
     }
     return
@@ -442,7 +485,7 @@ export const terminateProcessTree = async ({
     for (const process of matchingProcesses(
       captured.owned,
       captured.liveByPid
-    )) {
+    ).reverse()) {
       try {
         killImpl(process.pid, ownedSignal)
       } catch (error) {
@@ -535,6 +578,24 @@ export const runOwnedProcessTree = async ({
     ).catch(error => {
       terminationError = error
       console.error(`Unable to stop the Wails process tree: ${error.message}`)
+      try {
+        tracker.refresh()
+        terminateSyncImpl({
+          knownProcesses: tracker.snapshot(),
+          pid: child.pid,
+          platform,
+          signal: 'SIGKILL',
+          spawnSyncImpl,
+        })
+      } catch (fallbackError) {
+        console.error(
+          `Unable to force-stop the Wails process tree: ${fallbackError.message}`
+        )
+      }
+      child.unref?.()
+      child.stdin?.unref?.()
+      child.stdout?.unref?.()
+      child.stderr?.unref?.()
       settleChildResult({ cleanupError: error })
     })
   }
