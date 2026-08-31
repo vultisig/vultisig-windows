@@ -2,6 +2,7 @@ import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import { BoundSwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { t } from 'i18next'
 
@@ -39,6 +40,18 @@ export const getSwapBalanceValidationError = ({
 
   return null
 }
+
+/**
+ * Rejects a quote whose absolute expiry has already passed. React Query keeps a
+ * quote for a day and retains it when a refetch fails, so a cached one can be
+ * displayed long after it was fetched — returning to an unchanged pair and
+ * amount while offline is enough. Nothing else in the swap flow compares a
+ * quote against the clock, so without this the user can submit a stale price.
+ */
+export const getSwapQuoteExpiryValidationError = (
+  quote: BoundSwapQuote,
+  now: number = Date.now()
+): string | null => (quote.expiresAt <= now ? t('swap_quote_expired') : null)
 
 /** Input for swap validation that does not depend on async quote or balance data. */
 type GetImmediateSwapValidationErrorInput = {
@@ -89,8 +102,11 @@ export const useSwapValidationQuery = () => {
       balance: balanceQuery,
       swapQuote: firmSwapQuoteQuery,
     },
-    joinData: ({ balance }) => {
-      return getSwapBalanceValidationError({ amount, balance })
+    joinData: ({ balance, swapQuote }) => {
+      return (
+        getSwapBalanceValidationError({ amount, balance }) ??
+        getSwapQuoteExpiryValidationError(swapQuote)
+      )
     },
     eager: false,
   })

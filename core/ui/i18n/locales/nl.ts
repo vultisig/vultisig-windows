@@ -1931,4 +1931,6 @@ export const nl = {
   swap_limit_chart_last_traded: 'Laatst verhandeld hier: {{when}}',
   swap_limit_chart_not_reached:
     'Er is hier in dit tijdsvenster niet in gehandeld — de hoogste koers was {{price}}',
+  swap_quote_expired:
+    'Deze prijsopgave is verlopen. Vernieuw de pagina voor de actuele prijs.',
 }

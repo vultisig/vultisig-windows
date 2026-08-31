@@ -1916,4 +1916,6 @@ export const hr = {
   swap_limit_chart_last_traded: 'Zadnje trgovanje ovdje {{when}}',
   swap_limit_chart_not_reached:
     'Nije trgovao ovdje u ovom prozoru — najviša cijena je bila {{price}}',
+  swap_quote_expired:
+    'Ova ponuda je istekla. Osvježite stranicu da biste dobili trenutnu cijenu.',
 }

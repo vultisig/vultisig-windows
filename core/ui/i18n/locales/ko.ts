@@ -1907,4 +1907,6 @@ export const ko = {
   swap_limit_chart_last_traded: '여기서 마지막 거래: {{when}}',
   swap_limit_chart_not_reached:
     '이 기간 동안에는 거래되지 않았습니다. 최고가는 {{price}} 였습니다.',
+  swap_quote_expired:
+    '이 견적은 만료되었습니다. 최신 가격을 확인하려면 페이지를 새로고침하세요.',
 }

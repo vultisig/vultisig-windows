@@ -1925,4 +1925,6 @@ export const ru = {
   swap_limit_chart_last_traded: 'Последняя сделка здесь: {{when}}',
   swap_limit_chart_not_reached:
     'В этот период здесь ничего не торговалось — максимум был {{price}}',
+  swap_quote_expired:
+    'Срок действия этого предложения истек. Обновите страницу, чтобы узнать актуальную цену.',
 }

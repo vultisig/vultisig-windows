@@ -1953,4 +1953,6 @@ export const it = {
   swap_limit_chart_last_traded: 'Ultimo scambio qui {{when}}',
   swap_limit_chart_not_reached:
     'Non è stato scambiato qui in questa finestra — il massimo è stato {{price}}',
+  swap_quote_expired:
+    'Questo preventivo è scaduto. Aggiorna la pagina per visualizzare il prezzo attuale.',
 }

@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   getImmediateSwapValidationError,
   getSwapBalanceValidationError,
+  getSwapQuoteExpiryValidationError,
 } from './useSwapValidationQuery'
 
 vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
@@ -96,5 +97,28 @@ describe('getImmediateSwapValidationError', () => {
         walletCore: {} as never,
       })
     ).toBe(null)
+  })
+})
+
+describe('getSwapQuoteExpiryValidationError', () => {
+  const quoteExpiringAt = (expiresAt: number) =>
+    ({ expiresAt }) as Parameters<typeof getSwapQuoteExpiryValidationError>[0]
+
+  it('accepts a quote that is still valid', () => {
+    expect(
+      getSwapQuoteExpiryValidationError(quoteExpiringAt(1_500), 1_000)
+    ).toBeNull()
+  })
+
+  it('rejects a quote whose expiry has passed', () => {
+    expect(getSwapQuoteExpiryValidationError(quoteExpiringAt(500), 1_000)).toBe(
+      'swap_quote_expired'
+    )
+  })
+
+  it('rejects a quote expiring exactly now, since it can no longer be signed in time', () => {
+    expect(
+      getSwapQuoteExpiryValidationError(quoteExpiringAt(1_000), 1_000)
+    ).toBe('swap_quote_expired')
   })
 })
