@@ -198,3 +198,54 @@ export function canSwap(balances: ChainBalance[]): boolean {
   const validSources = balances.filter(b => b.balanceUsd >= MIN_SWAP_USD)
   return validSources.length > 0 && balances.length >= 2
 }
+
+/**
+ * Why the swap specs cannot run against the configured vault, or `null` when
+ * they can. Test vaults spend down over time, so an underfunded run is the
+ * expected end state rather than an anomaly — it needs to report the shortfall
+ * and the knob that moves it, not a bare "insufficient balance".
+ */
+export function getSwapPreconditionFailure(
+  balances: ChainBalance[]
+): string | null {
+  if (canSwap(balances)) {
+    return null
+  }
+
+  if (balances.length < 2) {
+    return `Swap needs balances on at least 2 chains, found ${balances.length}. The test vault cannot exercise a swap.`
+  }
+
+  const richest = [...balances].sort((a, b) => b.balanceUsd - a.balanceUsd)[0]
+
+  return [
+    `No chain holds the $${MIN_SWAP_USD} needed to source a swap.`,
+    `Highest balance is ${richest.chainId} at $${richest.balanceUsd.toFixed(2)}.`,
+    `Top up the test vault, or lower SWAP_MIN_USD / SWAP_TARGET_USD —`,
+    `but note the protocol inbound minimum is roughly $5-10, below which no route quotes.`,
+  ].join(' ')
+}
+
+/**
+ * Enforces the swap preconditions. Locally an underfunded vault skips, so a
+ * developer without funds is not blocked. In CI it fails: a release run that
+ * silently drops swap coverage and still exits 0 is worse than a red build.
+ */
+export function requireSwapPreconditions(
+  balances: ChainBalance[],
+  skip: (condition: true, reason: string) => void
+): boolean {
+  const failure = getSwapPreconditionFailure(balances)
+  if (!failure) {
+    return true
+  }
+
+  console.log(`⚠️ Swap preconditions not met — ${failure}`)
+
+  if (process.env.CI) {
+    throw new Error(`Swap preconditions not met: ${failure}`)
+  }
+
+  skip(true, failure)
+  return false
+}
