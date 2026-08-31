@@ -227,6 +227,53 @@ describe('desktop launcher process-tree lifecycle', () => {
     )
   })
 
+  it('keeps discovering process registrations throughout the shutdown grace period', async () => {
+    const root = {
+      identity: 'Mon Aug 31 10:00:00 2026',
+      parentPid: 1,
+      pgid: 43,
+      pid: 43,
+    }
+    const watcher = {
+      identity: 'Mon Aug 31 10:00:01 2026',
+      parentPid: 1,
+      pgid: 44,
+      pid: 44,
+      trustedPgid: true,
+    }
+    const liveProcesses = new Map([
+      [root.pid, root],
+      [watcher.pid, watcher],
+    ])
+    const processRows = () =>
+      [...liveProcesses.values()]
+        .map(
+          process =>
+            `${process.pid} ${process.parentPid} ${process.pgid} ${process.identity}`
+        )
+        .join('\n')
+    const killImpl = vi.fn(pid => liveProcesses.delete(Math.abs(pid)))
+    let refreshes = 0
+
+    await terminateProcessTree({
+      graceMs: 40,
+      knownProcesses: [root],
+      killImpl,
+      pid: root.pid,
+      platform: 'linux',
+      pollMs: 5,
+      refreshKnownProcesses: () => {
+        refreshes += 1
+        return refreshes >= 2 ? [root, watcher] : [root]
+      },
+      spawnSyncImpl: vi.fn(() => ({ status: 0, stdout: processRows() })),
+    })
+
+    expect(refreshes).toBeGreaterThanOrEqual(2)
+    expect(killImpl).toHaveBeenCalledWith(watcher.pid, 'SIGTERM')
+    expect(liveProcesses.has(watcher.pid)).toBe(false)
+  })
+
   it('checks tracked Windows survivors even after a successful root tree kill', async () => {
     const processLines = [
       '43 1 2026-08-31T10:00:00.0000000Z',

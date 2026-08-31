@@ -514,29 +514,45 @@ export const terminateProcessTree = async ({
   pid,
   platform = process.platform,
   pollMs = 25,
+  refreshKnownProcesses,
   signal = 'SIGTERM',
   spawnSyncImpl = spawnSync,
 }) => {
   if (!Number.isInteger(pid) || pid <= 0) return
 
   if (platform === 'win32') {
-    const { liveByPid, owned } = captureOwnedProcesses({
-      knownProcesses,
-      pid,
-      platform,
-      spawnSyncImpl,
-    })
-    const matches = matchingProcesses(owned, liveByPid)
-    const root = matches.find(process => process.pid === pid)
-    if (root) {
-      const result = taskkill({ force: false, pid, spawnSyncImpl })
-      if (result?.error || result?.status !== 0) {
-        forceTaskkill({ process: root, spawnSyncImpl })
+    const stopKnownProcesses = (processes, { forceRoot = false } = {}) => {
+      const { liveByPid, owned } = captureOwnedProcesses({
+        knownProcesses: processes,
+        pid,
+        platform,
+        spawnSyncImpl,
+      })
+      const matches = matchingProcesses(owned, liveByPid)
+      const root = matches.find(process => process.pid === pid)
+      if (root) {
+        if (forceRoot) {
+          forceTaskkill({ process: root, spawnSyncImpl })
+        } else {
+          const result = taskkill({ force: false, pid, spawnSyncImpl })
+          if (result?.error || result?.status !== 0) {
+            forceTaskkill({ process: root, spawnSyncImpl })
+          }
+        }
+      }
+      for (const process of matches.reverse()) {
+        if (process.pid !== pid) {
+          forceTaskkill({ process, spawnSyncImpl })
+        }
       }
     }
-    for (const process of matches.reverse()) {
-      if (process.pid !== pid) {
-        forceTaskkill({ process, spawnSyncImpl })
+
+    stopKnownProcesses(knownProcesses)
+    if (refreshKnownProcesses) {
+      const deadline = Date.now() + graceMs
+      while (Date.now() < deadline) {
+        await delay(pollMs)
+        stopKnownProcesses(refreshKnownProcesses(), { forceRoot: true })
       }
     }
     return
@@ -544,6 +560,9 @@ export const terminateProcessTree = async ({
 
   const owned = new Map(knownProcesses.map(process => [process.pid, process]))
   const signalOwnedProcesses = ownedSignal => {
+    for (const process of refreshKnownProcesses?.() ?? []) {
+      owned.set(process.pid, process)
+    }
     const captured = captureOwnedProcesses({
       knownProcesses: [...owned.values()],
       pid,
@@ -570,7 +589,7 @@ export const terminateProcessTree = async ({
 
   const deadline = Date.now() + graceMs
   while (Date.now() < deadline) {
-    if (!signalOwnedProcesses(signal)) return
+    if (!signalOwnedProcesses(signal) && !refreshKnownProcesses) return
     await delay(pollMs)
   }
 
@@ -643,6 +662,10 @@ export const runOwnedProcessTree = async ({
         knownProcesses: tracker.snapshot(),
         pid: child.pid,
         platform,
+        refreshKnownProcesses: () => {
+          tracker.refresh()
+          return tracker.snapshot()
+        },
         signal,
         spawnSyncImpl,
       })
