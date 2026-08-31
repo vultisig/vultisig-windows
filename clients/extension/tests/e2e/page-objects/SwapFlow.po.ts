@@ -229,6 +229,22 @@ export class SwapFlow extends BasePage {
     )
   }
 
+  /**
+   * Whether the option shows up within the budget. `Locator.isVisible` is an
+   * immediate check — its `timeout` does not wait — so an option rendered a
+   * beat late used to read as absent. That was survivable while a miss only
+   * logged; now that it throws, the wait has to be real.
+   */
+  private async becomesVisible(
+    locator: Locator,
+    timeout: number
+  ): Promise<boolean> {
+    return locator
+      .waitFor({ state: 'visible', timeout })
+      .then(() => true)
+      .catch(() => false)
+  }
+
   // Clicking a chain in the explorer's chain carousel switches chain AND selects its native token.
   async selectFromCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
@@ -249,7 +265,7 @@ export class SwapFlow extends BasePage {
     await this.page.waitForTimeout(800)
 
     const chainOption = this.getExplorerChainOption(chainName)
-    if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (await this.becomesVisible(chainOption, 3000)) {
       await chainOption.click({ force: true })
       await waitForLoadingComplete(this.page)
       const nativeCoinOption = this.getCoinOption(coin).first()
@@ -261,14 +277,18 @@ export class SwapFlow extends BasePage {
     }
 
     const coinOption = this.getCoinOption(coin)
-    if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (await this.becomesVisible(coinOption, 2000)) {
       await coinOption.click({ force: true })
       await this.page.waitForTimeout(500)
       console.log(`Selected ${coin} from coin options`)
       return
     }
 
-    console.log(`Could not select from coin ${coin}`)
+    throw new Error(
+      `Could not select from coin ${coin} — neither the ${chainName} chain option ` +
+        `nor a ${coin} coin option was visible. Continuing would type the amount ` +
+        `into whichever pair the form happens to show.`
+    )
   }
 
   async selectToCoin(coin: string): Promise<void> {
@@ -290,7 +310,7 @@ export class SwapFlow extends BasePage {
     await this.page.waitForTimeout(800)
 
     const chainOption = this.getExplorerChainOption(chainName)
-    if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (await this.becomesVisible(chainOption, 3000)) {
       await chainOption.click({ force: true })
       await waitForLoadingComplete(this.page)
       const nativeCoinOption = this.getCoinOption(coin).first()
@@ -302,14 +322,18 @@ export class SwapFlow extends BasePage {
     }
 
     const coinOption = this.getCoinOption(coin)
-    if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (await this.becomesVisible(coinOption, 2000)) {
       await coinOption.click({ force: true })
       await this.page.waitForTimeout(500)
       console.log(`Selected ${coin} from coin options (to)`)
       return
     }
 
-    console.log(`Could not select to coin ${coin}`)
+    throw new Error(
+      `Could not select to coin ${coin} — neither the ${chainName} chain option ` +
+        `nor a ${coin} coin option was visible. Continuing would assert against ` +
+        `whichever destination the form happens to show.`
+    )
   }
 
   async fillAmount(amount: string): Promise<void> {
@@ -551,8 +575,11 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Pre-broadcast safety gate: confirms the from/to coin selectors match the
-   * expected symbols before broadcast. Throws on mismatch.
+   * Confirms the from/to coin selectors match the expected symbols. Every
+   * `prepare*` path runs this before typing an amount, because the selection
+   * clicks can report success and still leave a different pair on screen —
+   * asserting past that point tests a swap the caller never asked for. Also a
+   * pre-broadcast safety gate. Throws on mismatch.
    */
   async assertSelectionMatches({
     fromSymbol,
@@ -600,6 +627,10 @@ export class SwapFlow extends BasePage {
   ): Promise<void> {
     await this.selectFromCoin(fromCoin)
     await this.selectToCoin(toCoin)
+    await this.assertSelectionMatches({
+      fromSymbol: fromCoin,
+      toSymbol: toCoin,
+    })
     await this.fillAmount(amount)
     await this.waitForQuote()
   }
@@ -618,6 +649,7 @@ export class SwapFlow extends BasePage {
     )
     await this.selectFromCoin(fromSymbol)
     await this.selectToCoin(toSymbol)
+    await this.assertSelectionMatches({ fromSymbol, toSymbol })
     await this.clickPercentage(percent)
     await this.waitForQuote()
   }
@@ -661,6 +693,8 @@ export class SwapFlow extends BasePage {
     if (!this.hasSelectedSymbol({ text: updatedToText, symbol: toSymbol })) {
       await this.selectToCoin(toSymbol)
     }
+
+    await this.assertSelectionMatches({ fromSymbol, toSymbol })
 
     await this.fillAmount(amount)
     await this.waitForQuote()
