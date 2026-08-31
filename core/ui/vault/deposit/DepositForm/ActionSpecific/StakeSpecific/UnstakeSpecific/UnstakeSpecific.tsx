@@ -56,7 +56,6 @@ export const UnstakeSpecific = () => {
             )}
           />
         )}
-        Ton={() => null}
       />
       <Match
         value={chain as StakeableChain}
@@ -66,7 +65,6 @@ export const UnstakeSpecific = () => {
           // the shared deposit form fields, so it renders nothing extra here.
           selectedCoinTicker === 'TCY' ? <UnstakeTCYSpecific /> : null
         }
-        Ton={() => null}
       />
     </>
   )

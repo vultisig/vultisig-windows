@@ -100,7 +100,6 @@ export type BuildDepositKeysignPayloadInput = {
   /** Human amount as an exact decimal string — never a float64 (#4494). */
   amount?: string
   memo?: string
-  validatorAddress?: string
   slippage?: number
   autocompound?: boolean
   transactionType?: TransactionType
@@ -129,7 +128,6 @@ export const buildDepositKeysignPayload = async ({
   receiver,
   amount,
   memo = '',
-  validatorAddress,
   walletCore,
   slippage = 0,
   autocompound = false,
@@ -197,7 +195,6 @@ export const buildDepositKeysignPayload = async ({
   }
 
   const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
-  const isTonFunction = coin.chain === Chain.Ton
 
   const hasAmount =
     amount !== undefined && amount !== '' && Number.isFinite(Number(amount))
@@ -536,9 +533,7 @@ export const buildDepositKeysignPayload = async ({
     keysignPayload = create(KeysignPayloadSchema, {
       ...keysignPayload,
       contractPayload: { case: undefined },
-      toAddress: isTonFunction
-        ? shouldBePresent(validatorAddress)
-        : (receiver ?? keysignPayload.toAddress),
+      toAddress: receiver ?? keysignPayload.toAddress,
       toAmount: toAmountForAction,
     })
   } else if (!isOneOf(action, ['vote'])) {

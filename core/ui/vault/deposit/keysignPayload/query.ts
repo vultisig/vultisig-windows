@@ -52,7 +52,6 @@ export const useDepositKeysignPayloadQuery = (
       ? undefined
       : String(rawAmount)
   const slippage = Number(depositData['slippage'] ?? 0)
-  const validatorAddress = depositData['validatorAddress'] as string | undefined
   const autocompound = Boolean(depositData['autoCompound'])
 
   const input: BuildDepositKeysignPayloadInput = useMemo(
@@ -63,7 +62,6 @@ export const useDepositKeysignPayloadQuery = (
       receiver,
       amount,
       memo,
-      validatorAddress,
       slippage,
       autocompound,
       transactionType: transactionType ?? undefined,
@@ -86,7 +84,6 @@ export const useDepositKeysignPayloadQuery = (
       receiver,
       slippage,
       transactionType,
-      validatorAddress,
       vault,
     ]
   )

@@ -23,86 +23,17 @@ vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
 
 const t: TFunction = ((key: string) => key) as TFunction
 
-const tonCoin = {
-  chain: Chain.Ton,
-  id: 'ton',
-  ticker: 'GRAM',
-  decimals: 9,
+const cosmosCoin = {
+  chain: Chain.Cosmos,
+  id: 'uatom',
+  ticker: 'ATOM',
+  decimals: 6,
   address: 'sender',
 }
 
-describe('TON stake/unstake validation', () => {
+describe('IBC transfer validation', () => {
   beforeEach(() => {
     vi.mocked(isValidAddress).mockReset()
-    vi.mocked(isValidAddress).mockImplementation(({ address }) =>
-      String(address).includes('valid')
-    )
-  })
-
-  it('rejects stake amount above available balance', () => {
-    vi.mocked(isValidAddress).mockReturnValue(true)
-
-    const { schema } = getDepositFormConfig({
-      t,
-      coin: tonCoin as any,
-      walletCore: {} as any,
-      totalAmountAvailable: 5,
-      totalAmountAvailableUnits: null,
-      selectedChainAction: 'stake',
-    })
-
-    const result = schema.safeParse({
-      amount: 10,
-      validatorAddress: 'EQ123',
-    })
-
-    expect(result.success).toBe(false)
-    expect(result.error?.issues[0]?.message).toBe(
-      'chainFunctions.amountExceeded'
-    )
-  })
-
-  it('rejects invalid validator address for stake', () => {
-    vi.mocked(isValidAddress).mockReturnValue(false)
-
-    const { schema } = getDepositFormConfig({
-      t,
-      coin: tonCoin as any,
-      walletCore: {} as any,
-      totalAmountAvailable: 10,
-      totalAmountAvailableUnits: null,
-      selectedChainAction: 'stake',
-    })
-
-    const result = schema.safeParse({
-      amount: 1,
-      validatorAddress: 'bad-address',
-    })
-
-    expect(result.success).toBe(false)
-    expect(result.error?.issues[0]?.message).toBe(
-      'send_invalid_receiver_address'
-    )
-  })
-
-  it('validates unstake amount and address', () => {
-    vi.mocked(isValidAddress).mockReturnValue(true)
-
-    const { schema } = getDepositFormConfig({
-      t,
-      coin: tonCoin as any,
-      walletCore: {} as any,
-      totalAmountAvailable: 3,
-      totalAmountAvailableUnits: null,
-      selectedChainAction: 'unstake',
-    })
-
-    const result = schema.safeParse({
-      amount: 2,
-      validatorAddress: 'EQvalid',
-    })
-
-    expect(result.success).toBe(true)
   })
 
   it('validates IBC destination address against selected chain', () => {
@@ -113,7 +44,7 @@ describe('TON stake/unstake validation', () => {
 
     const { schema } = getDepositFormConfig({
       t,
-      coin: { ...tonCoin, chain: Chain.Cosmos } as any,
+      coin: cosmosCoin as any,
       walletCore: {} as any,
       totalAmountAvailable: 10,
       totalAmountAvailableUnits: null,

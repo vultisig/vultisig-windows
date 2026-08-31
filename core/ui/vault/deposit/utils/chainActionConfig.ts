@@ -1,5 +1,3 @@
-import { Chain } from '@vultisig/core-chain/Chain'
-
 import { ChainAction } from '../ChainAction'
 import { tronWithdrawExpireUnfreezeAction } from '../tron/withdrawExpireUnfreeze'
 
@@ -63,16 +61,14 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
 
 type GetBalanceDisplayConfigInput = {
   chainAction: ChainAction
-  chain: Chain
 }
 
 export const getBalanceDisplayConfig = ({
   chainAction,
-  chain,
 }: GetBalanceDisplayConfigInput): BalanceDisplayConfig => {
   const baseConfig = chainActionConfig[chainAction]
 
-  if (chainAction === 'stake' && chain !== Chain.Ton) {
+  if (chainAction === 'stake') {
     return {
       ...baseConfig,
       showTicker: false,
@@ -98,15 +94,13 @@ export const shouldShowBalance = ({
 type ShouldShowTickerInput = {
   fieldName: string
   chainAction: ChainAction
-  chain: Chain
 }
 
 export const shouldShowTicker = ({
   fieldName,
   chainAction,
-  chain,
 }: ShouldShowTickerInput): boolean => {
   if (fieldName !== 'amount') return false
-  const config = getBalanceDisplayConfig({ chainAction, chain })
+  const config = getBalanceDisplayConfig({ chainAction })
   return config.showTicker
 }
