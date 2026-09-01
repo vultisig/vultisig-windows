@@ -1898,4 +1898,5 @@ export const hr = {
   kamino_earn_deposited: 'Položeno: {{amount}}',
   kamino_earn_earned: 'Zarađeno: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  some_balances_failed_to_load: 'Učitavanje nekih stanja nije uspjelo',
 }

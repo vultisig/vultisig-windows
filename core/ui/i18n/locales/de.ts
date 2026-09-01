@@ -1943,4 +1943,5 @@ export const de = {
   kamino_earn_deposited: 'Eingezahlt: {{amount}}',
   kamino_earn_earned: 'Verdient: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  some_balances_failed_to_load: 'Einige Guthaben konnten nicht geladen werden.',
 }

@@ -1907,4 +1907,5 @@ export const ru = {
   kamino_earn_deposited: 'Внесено: {{amount}}',
   kamino_earn_earned: 'Заработано: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  some_balances_failed_to_load: 'Не удалось загрузить некоторые балансы.',
 }

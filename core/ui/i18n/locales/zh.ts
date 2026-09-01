@@ -1772,4 +1772,5 @@ export const zh = {
   kamino_earn_deposited: '已存入：{{amount}}',
   kamino_earn_earned: '已获得：{{amount}}',
   kamino_earn_protocol: 'Kamino',
+  some_balances_failed_to_load: '部分余额加载失败。',
 }

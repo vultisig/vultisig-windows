@@ -1911,4 +1911,5 @@ export const nl = {
   kamino_earn_deposited: 'Gestort: {{amount}}',
   kamino_earn_earned: 'Verdiend: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  some_balances_failed_to_load: 'Sommige saldi konden niet worden geladen.',
 }

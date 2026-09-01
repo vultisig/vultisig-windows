@@ -1888,4 +1888,5 @@ export const ko = {
   kamino_earn_deposited: '예치됨: {{amount}}',
   kamino_earn_earned: '수익: {{amount}}',
   kamino_earn_protocol: 'Kamino',
+  some_balances_failed_to_load: '일부 잔액이 불러와지지 않았습니다.',
 }

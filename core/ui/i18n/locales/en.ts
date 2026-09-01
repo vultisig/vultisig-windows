@@ -423,6 +423,7 @@ export const en = {
   failed_to_load: 'Failed to load',
   failed_to_migrate_storage: 'Failed to migrate storage',
   failed_to_load_transactions: 'Failed to load transactions',
+  some_balances_failed_to_load: 'Some balances failed to load',
   failed_to_process_transaction: 'Failed to process transaction',
   failed_to_process_url: 'Failed to process URL',
   failed_to_read_qr_code: 'Failed to read QR code',
