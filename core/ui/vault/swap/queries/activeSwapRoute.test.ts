@@ -81,9 +81,13 @@ const requestId = getSwapQuoteRequestId({
 })
 
 const overrideOn = (
-  providerName: SwapQuoteProviderName,
-  pickedFor = requestId
-): SwapRouteOverride => ({ providerName, requestId: pickedFor })
+  providerName: SwapQuoteProviderName
+): SwapRouteOverride => ({ providerName, requestId })
+
+/** A pick the user made before editing the pair or the amount. */
+const overrideFromAnotherSwap = (
+  providerName: SwapQuoteProviderName
+): SwapRouteOverride => ({ providerName, requestId: 'a-different-swap' })
 
 describe('getSwapQuoteRequestId', () => {
   it('is unchanged by a re-quote of the same pair and amount', () => {
@@ -158,7 +162,7 @@ describe('resolveActiveSwapQuote', () => {
     expect(
       resolveActiveSwapQuote({
         quotes,
-        override: overrideOn('CowSwap', 'a-different-swap'),
+        override: overrideFromAnotherSwap('CowSwap'),
         requestId,
       })
     ).toBe(lifi.quote)
@@ -211,7 +215,7 @@ describe('getActiveSwapRouteOverride', () => {
     expect(
       getActiveSwapRouteOverride({
         quotes,
-        override: overrideOn('THORChain', 'a-different-swap'),
+        override: overrideFromAnotherSwap('THORChain'),
         requestId,
       })
     ).toBeNull()
