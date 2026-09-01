@@ -14,6 +14,7 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 
 import { useAssertCurrentVaultId } from './currentVaultId'
 import { StorageKey } from './StorageKey'
+import { getTonWalletVersion } from './tonW5Enabled'
 
 type CreateCoinsInput = {
   vaultId: string
@@ -56,7 +57,7 @@ export const useCreateCoinMutation = () => {
 
   const refetch = useRefetchQueries()
 
-  const { createCoin } = useCore()
+  const { createCoin, getIsTonW5Enabled } = useCore()
 
   const vaultId = useAssertCurrentVaultId()
 
@@ -77,6 +78,7 @@ export const useCreateCoinMutation = () => {
       publicKeys: vault.publicKeys,
       publicKeyMldsa: vault.publicKeyMldsa,
       chainPublicKeys: vault.chainPublicKeys,
+      tonWalletVersion: getTonWalletVersion(await getIsTonW5Enabled()),
     })
 
     const accountCoin = { ...coin, address }

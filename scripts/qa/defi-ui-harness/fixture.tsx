@@ -349,6 +349,8 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     getIsMLDSAEnabled: async () => false,
     getIsTssBatchingEnabled: async () => false,
     setIsTssBatchingEnabled: noop,
+    getIsTonW5Enabled: async () => false,
+    setIsTonW5Enabled: noop,
     getCustomRpcOverrides: async () => ({}),
     setCustomRpcOverrides: noop,
     // Stateful, unlike the other stubs: the move flow writes a destination on
