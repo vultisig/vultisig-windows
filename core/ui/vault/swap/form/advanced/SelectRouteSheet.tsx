@@ -11,8 +11,9 @@ import { SwapRouteOption } from './SwapRouteOption'
 /**
  * Every route fetched for the current quote cycle, best→worst by net output,
  * with the active pick lifted to the top so it is visible without scrolling.
- * Picking a route applies it to this cycle only and returns to the Advanced
- * Swap sheet.
+ * Picking a route holds for as long as the pair and amount stay put — later
+ * refreshes re-quote that provider rather than reverting to the winner — and
+ * returns to the Advanced Swap sheet.
  */
 export const SelectRouteSheet = ({ onClose }: OnCloseProp) => {
   const { t } = useTranslation()

@@ -11,7 +11,7 @@ import { SwapRouteOverride } from '../state/routeOverride'
 import {
   canSelectSwapRoute,
   getActiveSwapRouteOverride,
-  getSwapQuoteCycleId,
+  getSwapQuoteRequestId,
   resolveActiveSwapQuote,
   resolveActiveSwapRoute,
 } from './activeSwapRoute'
@@ -74,34 +74,94 @@ const quotes: FindSwapQuotesResult = {
   ranked: [thorchain, lifi, cowswap],
 }
 
+const requestId = getSwapQuoteRequestId({
+  from: { chain: Chain.Ethereum },
+  to: { chain: Chain.Ethereum, id: '0xusdc' },
+  amount: 1000n,
+})
+
 const overrideOn = (
   providerName: SwapQuoteProviderName,
-  cycleId = getSwapQuoteCycleId(quotes)
-): SwapRouteOverride => ({ providerName, cycleId })
+  pickedFor = requestId
+): SwapRouteOverride => ({ providerName, requestId: pickedFor })
+
+describe('getSwapQuoteRequestId', () => {
+  it('is unchanged by a re-quote of the same pair and amount', () => {
+    expect(
+      getSwapQuoteRequestId({
+        from: { chain: Chain.Ethereum },
+        to: { chain: Chain.Ethereum, id: '0xusdc' },
+        amount: 1000n,
+      })
+    ).toBe(requestId)
+  })
+
+  it('changes when the amount changes', () => {
+    expect(
+      getSwapQuoteRequestId({
+        from: { chain: Chain.Ethereum },
+        to: { chain: Chain.Ethereum, id: '0xusdc' },
+        amount: 1001n,
+      })
+    ).not.toBe(requestId)
+  })
+
+  it('changes when the pair is reversed', () => {
+    expect(
+      getSwapQuoteRequestId({
+        from: { chain: Chain.Ethereum, id: '0xusdc' },
+        to: { chain: Chain.Ethereum },
+        amount: 1000n,
+      })
+    ).not.toBe(requestId)
+  })
+})
 
 describe('resolveActiveSwapQuote', () => {
   it('takes the auto-selected winner when nothing was picked', () => {
-    expect(resolveActiveSwapQuote({ quotes, override: null })).toBe(lifi.quote)
+    expect(resolveActiveSwapQuote({ quotes, override: null, requestId })).toBe(
+      lifi.quote
+    )
   })
 
   it('hands the picked route to the caller that builds the keysign payload', () => {
     expect(
-      resolveActiveSwapQuote({ quotes, override: overrideOn('CowSwap') })
+      resolveActiveSwapQuote({
+        quotes,
+        override: overrideOn('CowSwap'),
+        requestId,
+      })
     ).toBe(cowswap.quote)
   })
 
-  it('re-defaults to the winner once a refresh starts a new quote cycle', () => {
+  it('keeps the pick through a refresh, on its newly fetched quote', () => {
+    const refreshedCowswap = makeCandidate({
+      providerName: 'CowSwap',
+      outputAmount: 120n,
+      safetyFingerprint: 'cowswap-cycle-2',
+    })
     const refreshed: FindSwapQuotesResult = {
       best: thorchain.quote,
-      ranked: [thorchain, lifi],
+      ranked: [thorchain, refreshedCowswap],
     }
 
     expect(
       resolveActiveSwapQuote({
         quotes: refreshed,
         override: overrideOn('CowSwap'),
+        requestId,
       })
-    ).toBe(thorchain.quote)
+    ).toBe(refreshedCowswap.quote)
+  })
+
+  it('re-defaults to the winner once the user edits the swap', () => {
+    expect(
+      resolveActiveSwapQuote({
+        quotes,
+        override: overrideOn('CowSwap', 'a-different-swap'),
+        requestId,
+      })
+    ).toBe(lifi.quote)
   })
 
   it('falls back to the winner when the picked provider stops quoting', () => {
@@ -113,10 +173,8 @@ describe('resolveActiveSwapQuote', () => {
     expect(
       resolveActiveSwapQuote({
         quotes: withoutCowSwap,
-        override: {
-          providerName: 'CowSwap',
-          cycleId: getSwapQuoteCycleId(withoutCowSwap),
-        },
+        override: overrideOn('CowSwap'),
+        requestId,
       })
     ).toBe(lifi.quote)
   })
@@ -124,28 +182,37 @@ describe('resolveActiveSwapQuote', () => {
 
 describe('resolveActiveSwapRoute', () => {
   it('resolves the winner to its own candidate rather than the top-ranked one', () => {
-    expect(resolveActiveSwapRoute({ quotes, override: null })).toBe(lifi)
+    expect(resolveActiveSwapRoute({ quotes, override: null, requestId })).toBe(
+      lifi
+    )
   })
 
   it('resolves a pick to the candidate the sheet marks as selected', () => {
     expect(
-      resolveActiveSwapRoute({ quotes, override: overrideOn('THORChain') })
+      resolveActiveSwapRoute({
+        quotes,
+        override: overrideOn('THORChain'),
+        requestId,
+      })
     ).toBe(thorchain)
   })
 })
 
 describe('getActiveSwapRouteOverride', () => {
-  it('reports a pick made in the current cycle', () => {
+  it('reports a pick made for the swap being quoted', () => {
     const override = overrideOn('THORChain')
 
-    expect(getActiveSwapRouteOverride({ quotes, override })).toBe(override)
+    expect(getActiveSwapRouteOverride({ quotes, override, requestId })).toBe(
+      override
+    )
   })
 
-  it('drops a pick made against an earlier cycle', () => {
+  it('drops a pick made for a different swap', () => {
     expect(
       getActiveSwapRouteOverride({
         quotes,
-        override: overrideOn('THORChain', 'lifi-cycle-0'),
+        override: overrideOn('THORChain', 'a-different-swap'),
+        requestId,
       })
     ).toBeNull()
   })
