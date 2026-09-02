@@ -19,22 +19,34 @@ export const SaveVaultStep: React.FC<
     OnFinishProp &
     TitleProp &
     OnBackProp & {
+      recoveryVault?: Vault
       onVaultSaveError?: (error: Error) => void | Promise<void>
       onVaultSaved?: (vault: Vault) => void | Promise<void>
     }
-> = ({ value, onFinish, title, onBack, onVaultSaveError, onVaultSaved }) => {
+> = ({
+  value,
+  onFinish,
+  title,
+  onBack,
+  recoveryVault,
+  onVaultSaveError,
+  onVaultSaved,
+}) => {
   const { t } = useTranslation()
 
   const input = useVaultCreationInput()
   const referral = input ? getRecordUnionValue(input).referral : undefined
 
-  const { mutate, ...mutationState } = useCreateVaultWithReferralMutation({
-    onError: onVaultSaveError,
-    onSuccess: async vault => {
-      await onVaultSaved?.(vault)
-      onFinish()
+  const { mutate, ...mutationState } = useCreateVaultWithReferralMutation(
+    {
+      onError: onVaultSaveError,
+      onSuccess: async vault => {
+        await onVaultSaved?.(vault)
+        onFinish()
+      },
     },
-  })
+    recoveryVault
+  )
 
   const hasPasscodeEncryption = useIsPasscodeRequired()
   const [passcode] = usePasscode()

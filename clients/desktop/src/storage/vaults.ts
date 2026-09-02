@@ -8,6 +8,7 @@ import {
   DeleteVault,
   GetVault,
   GetVaults,
+  ReplaceVault,
   SaveVault,
   SaveVaultsKeyShares,
 } from '../../wailsjs/go/storage/Store'
@@ -38,6 +39,10 @@ export const vaultsStorage: VaultsStorage = {
 
     await SaveVault(storageVault)
 
+    return vault
+  },
+  replaceVault: async ({ expectedVault, vault }) => {
+    await ReplaceVault(toStorageVault(expectedVault), toStorageVault(vault))
     return vault
   },
   getVaults,

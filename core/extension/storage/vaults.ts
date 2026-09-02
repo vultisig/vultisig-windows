@@ -6,6 +6,7 @@ import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
+import { assertVaultRecoveryReplacement } from '../../ui/storage/vaultRecoveryReplacement'
 import { deleteCoinsForVault } from './coins'
 
 const getVaults = async () =>
@@ -50,6 +51,27 @@ export const vaultsStorage: VaultsStorage = {
       vault,
     ])
 
+    return vault
+  },
+  replaceVault: async ({ expectedVault, vault }) => {
+    const currentVaults = await getVaults()
+    const vaultId = getVaultId(vault)
+    const matchingIndexes = currentVaults.flatMap((candidate, index) =>
+      getVaultId(candidate) === vaultId ? [index] : []
+    )
+
+    if (matchingIndexes.length !== 1) {
+      throw new Error('Recovery replacement requires exactly one stored vault')
+    }
+
+    const vaultIndex = matchingIndexes[0]
+    assertVaultRecoveryReplacement({
+      currentVault: currentVaults[vaultIndex],
+      expectedVault,
+      replacementVault: vault,
+    })
+
+    await updateVaults(updateAtIndex(currentVaults, vaultIndex, () => vault))
     return vault
   },
   updateVaultsKeyShares: async vaultsKeyShares => {

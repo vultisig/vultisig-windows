@@ -15,10 +15,14 @@ export const useCreateVaultWithReferralMutation = (
     Error,
     CreateVaultWithReferralInput,
     unknown
-  >
+  >,
+  recoveryVault?: Vault
 ) => {
   const { setFriendReferral } = useCore()
-  const { mutateAsync: createVault } = useCreateVaultMutation()
+  const { mutateAsync: createVault } = useCreateVaultMutation(
+    undefined,
+    recoveryVault
+  )
 
   return useMutation({
     mutationFn: async ({
