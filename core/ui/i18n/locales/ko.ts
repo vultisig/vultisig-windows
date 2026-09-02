@@ -1909,4 +1909,10 @@ export const ko = {
     '이 기간 동안에는 거래되지 않았습니다. 최고가는 {{price}} 였습니다.',
   swap_quote_expired:
     '이 견적은 만료되었습니다. 최신 가격을 확인하려면 페이지를 새로고침하세요.',
+  token_verification_unverified: '미확인',
+  token_verification_unverified_hint:
+    '이 토큰은 검증된 목록에 없습니다. 신뢰하기 전에 해당 계약 주소를 확인하세요.',
+  token_verification_scam: '스캠',
+  token_verification_scam_hint:
+    '이 토큰은 검증된 토큰의 이름을 모방했지만, 다른 컨트랙트 주소에 존재합니다. 이는 위조 토큰이므로 신뢰하지 마십시오.',
 }

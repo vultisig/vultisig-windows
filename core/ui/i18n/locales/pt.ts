@@ -1952,4 +1952,10 @@ export const pt = {
     'Não houve negociações aqui neste período — a máxima foi {{price}}',
   swap_quote_expired:
     'Esta cotação expirou. Atualize a página para ver o preço atual.',
+  token_verification_unverified: 'Não verificado',
+  token_verification_unverified_hint:
+    'Este token não está na lista de tokens verificados. Verifique o endereço do contrato antes de confiar nele.',
+  token_verification_scam: 'FRAUDE',
+  token_verification_scam_hint:
+    'Este token copia o nome de um token verificado, mas reside em um endereço de contrato diferente. É uma falsificação — não confie nele.',
 }

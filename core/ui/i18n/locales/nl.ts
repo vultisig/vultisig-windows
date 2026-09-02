@@ -1933,4 +1933,10 @@ export const nl = {
     'Er is hier in dit tijdsvenster niet in gehandeld — de hoogste koers was {{price}}',
   swap_quote_expired:
     'Deze prijsopgave is verlopen. Vernieuw de pagina voor de actuele prijs.',
+  token_verification_unverified: 'Niet geverifieerd',
+  token_verification_unverified_hint:
+    'Dit token staat niet op de lijst met geverifieerde tokens. Controleer het contractadres voordat u het vertrouwt.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
 }

@@ -1918,4 +1918,10 @@ export const hr = {
     'Nije trgovao ovdje u ovom prozoru — najviša cijena je bila {{price}}',
   swap_quote_expired:
     'Ova ponuda je istekla. Osvježite stranicu da biste dobili trenutnu cijenu.',
+  token_verification_unverified: 'Nepotvrđeno',
+  token_verification_unverified_hint:
+    'Ovaj token nije na provjerenom popisu. Provjerite njegovu ugovornu adresu prije nego što mu vjerujete.',
+  token_verification_scam: 'PRIJEVARA',
+  token_verification_scam_hint:
+    'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
 }

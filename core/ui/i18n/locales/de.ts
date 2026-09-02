@@ -1964,4 +1964,10 @@ export const de = {
     'In diesem Zeitfenster nicht gehandelt — das Hoch lag bei {{price}}',
   swap_quote_expired:
     'Dieses Angebot ist abgelaufen. Aktualisieren Sie die Seite, um einen aktuellen Preis zu erhalten.',
+  token_verification_unverified: 'Unbestätigt',
+  token_verification_unverified_hint:
+    'Dieser Token befindet sich nicht auf der Liste der verifizierten Token. Überprüfen Sie seine Vertragsadresse, bevor Sie ihm vertrauen.',
+  token_verification_scam: 'BETRUG',
+  token_verification_scam_hint:
+    'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
 }
