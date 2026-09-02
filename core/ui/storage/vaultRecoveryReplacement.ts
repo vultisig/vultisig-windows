@@ -52,7 +52,8 @@ export const assertVaultRecoveryReplacement = ({
     recordsEqual(currentVault.chainPublicKeys, expectedVault.chainPublicKeys) &&
     recordsEqual(currentVault.chainKeyShares, expectedVault.chainKeyShares) &&
     currentVault.publicKeyMldsa === expectedVault.publicKeyMldsa &&
-    currentVault.keyShareMldsa === expectedVault.keyShareMldsa
+    currentVault.keyShareMldsa === expectedVault.keyShareMldsa &&
+    currentVault.saplingExtras === expectedVault.saplingExtras
 
   if (!currentStateIsExpected) {
     throw new Error('Vault changed while recovery was in progress')
@@ -71,6 +72,10 @@ export const assertVaultRecoveryReplacement = ({
     !preservesIdentity(
       currentVault.publicKeyMldsa,
       replacementVault.publicKeyMldsa
+    ) ||
+    !preservesIdentity(
+      currentVault.saplingExtras,
+      replacementVault.saplingExtras
     )
   ) {
     throw new Error('Recovery backup does not preserve every vault identity')

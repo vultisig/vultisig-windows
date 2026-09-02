@@ -32,10 +32,15 @@ export const useCreateVaultWithReferralMutation = (
       const createdVault = await createVault(vault)
 
       if (pendingReferral.trim()) {
-        await setFriendReferral(
+        const saveReferral = setFriendReferral(
           getVaultId(createdVault),
           pendingReferral.trim().toUpperCase()
         )
+        if (recoveryVault) {
+          await Promise.allSettled([saveReferral])
+        } else {
+          await saveReferral
+        }
       }
 
       return createdVault

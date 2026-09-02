@@ -251,7 +251,11 @@ func validateVaultRecoveryReplacement(current, expected, replacement *Vault) err
 	}
 	if current.LibType != replacement.LibType ||
 		!preservesVaultIdentity(current.PublicKeyEdDSA, replacement.PublicKeyEdDSA) ||
-		!preservesVaultIdentity(current.PublicKeyMLDSA, replacement.PublicKeyMLDSA) {
+		!preservesVaultIdentity(current.PublicKeyMLDSA, replacement.PublicKeyMLDSA) ||
+		!preservesVaultIdentity(
+			current.ChainPublicKeys["SaplingExtras"],
+			replacement.ChainPublicKeys["SaplingExtras"],
+		) {
 		return fmt.Errorf("recovery backup does not preserve every vault identity")
 	}
 
