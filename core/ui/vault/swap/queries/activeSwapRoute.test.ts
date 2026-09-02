@@ -14,6 +14,7 @@ import {
   getSwapQuoteRequestId,
   resolveActiveSwapQuote,
   resolveActiveSwapRoute,
+  shouldDropSwapRouteOverride,
 } from './activeSwapRoute'
 
 type CandidateInput = {
@@ -74,11 +75,15 @@ const quotes: FindSwapQuotesResult = {
   ranked: [thorchain, lifi, cowswap],
 }
 
-const requestId = getSwapQuoteRequestId({
+const swapRequest = {
   from: { chain: Chain.Ethereum },
   to: { chain: Chain.Ethereum, id: '0xusdc' },
   amount: 1000n,
-})
+  slippageTolerance: 0.5,
+  recipient: undefined,
+}
+
+const requestId = getSwapQuoteRequestId(swapRequest)
 
 const overrideOn = (
   providerName: SwapQuoteProviderName
@@ -90,33 +95,35 @@ const overrideFromAnotherSwap = (
 ): SwapRouteOverride => ({ providerName, requestId: 'a-different-swap' })
 
 describe('getSwapQuoteRequestId', () => {
-  it('is unchanged by a re-quote of the same pair and amount', () => {
-    expect(
-      getSwapQuoteRequestId({
-        from: { chain: Chain.Ethereum },
-        to: { chain: Chain.Ethereum, id: '0xusdc' },
-        amount: 1000n,
-      })
-    ).toBe(requestId)
+  it('is unchanged by a re-quote of the same swap', () => {
+    expect(getSwapQuoteRequestId({ ...swapRequest })).toBe(requestId)
   })
 
   it('changes when the amount changes', () => {
-    expect(
-      getSwapQuoteRequestId({
-        from: { chain: Chain.Ethereum },
-        to: { chain: Chain.Ethereum, id: '0xusdc' },
-        amount: 1001n,
-      })
-    ).not.toBe(requestId)
+    expect(getSwapQuoteRequestId({ ...swapRequest, amount: 1001n })).not.toBe(
+      requestId
+    )
   })
 
   it('changes when the pair is reversed', () => {
     expect(
       getSwapQuoteRequestId({
-        from: { chain: Chain.Ethereum, id: '0xusdc' },
-        to: { chain: Chain.Ethereum },
-        amount: 1000n,
+        ...swapRequest,
+        from: swapRequest.to,
+        to: swapRequest.from,
       })
+    ).not.toBe(requestId)
+  })
+
+  it('changes when the slippage tolerance changes', () => {
+    expect(
+      getSwapQuoteRequestId({ ...swapRequest, slippageTolerance: 3 })
+    ).not.toBe(requestId)
+  })
+
+  it('changes when an external recipient is set', () => {
+    expect(
+      getSwapQuoteRequestId({ ...swapRequest, recipient: '0xrecipient' })
     ).not.toBe(requestId)
   })
 })
@@ -230,5 +237,62 @@ describe('canSelectSwapRoute', () => {
   it('hides the row when there is nothing to choose between', () => {
     expect(canSelectSwapRoute([thorchain])).toBe(false)
     expect(canSelectSwapRoute([])).toBe(false)
+  })
+})
+
+describe('shouldDropSwapRouteOverride', () => {
+  it('keeps a pick that still applies', () => {
+    expect(
+      shouldDropSwapRouteOverride({
+        quotes,
+        override: overrideOn('CowSwap'),
+        requestId,
+      })
+    ).toBe(false)
+  })
+
+  it('has nothing to drop when no pick was made', () => {
+    expect(
+      shouldDropSwapRouteOverride({ quotes, override: null, requestId })
+    ).toBe(false)
+  })
+
+  // Without this the pick is only ignored, so editing the amount away and back
+  // resurrects a provider the form has already shown as Auto.
+  it('drops a pick once the user edits the swap', () => {
+    expect(
+      shouldDropSwapRouteOverride({
+        quotes,
+        override: overrideFromAnotherSwap('CowSwap'),
+        requestId,
+      })
+    ).toBe(true)
+  })
+
+  // Same recurrence the other way round: the provider drops out of one quote
+  // cycle and comes back in the next.
+  it('drops a pick once its provider stops quoting', () => {
+    const withoutCowSwap: FindSwapQuotesResult = {
+      best: lifi.quote,
+      ranked: [thorchain, lifi],
+    }
+
+    expect(
+      shouldDropSwapRouteOverride({
+        quotes: withoutCowSwap,
+        override: overrideOn('CowSwap'),
+        requestId,
+      })
+    ).toBe(true)
+  })
+
+  it('waits for the candidates before dropping a pick it cannot check yet', () => {
+    expect(
+      shouldDropSwapRouteOverride({
+        quotes: undefined,
+        override: overrideOn('CowSwap'),
+        requestId,
+      })
+    ).toBe(false)
   })
 })
