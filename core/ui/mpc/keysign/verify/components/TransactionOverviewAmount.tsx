@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -37,6 +38,7 @@ const HeroAmount = ({ coin, amount, highPrecision }: HeroAmountProps) => (
       <Text as="span" color="shy" size={17}>
         {coin.ticker}
       </Text>
+      <TokenVerificationBadge value={coin} />
     </HStack>
     <TransactionOverviewFiatAmount coin={coin} amount={amount} />
   </VStack>

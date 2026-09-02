@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -71,7 +72,10 @@ export const VaultChainCoinItem = ({
           gap={20}
         >
           <VStack gap={4} flexGrow style={{ minWidth: 0 }}>
-            <CoinTicker ticker={ticker} />
+            <HStack alignItems="center" gap={6}>
+              <CoinTicker ticker={ticker} />
+              <TokenVerificationBadge value={value} />
+            </HStack>
             <PriceBadge>
               <Text weight={500} color="shyExtra" size={12}>
                 <FiatAmountText value={price ?? 0} />

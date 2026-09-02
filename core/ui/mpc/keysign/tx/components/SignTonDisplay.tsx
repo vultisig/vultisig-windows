@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import {
   DecodedTonMessage,
   useTonMessageDecode,
@@ -135,13 +136,14 @@ const TonSwapAmount = ({
   coin: Coin | null
 }) =>
   coin ? (
-    <HStack gap={8}>
+    <HStack gap={8} alignItems="center">
       <RoundedCoinIconWrapper>
         <CoinIcon coin={coin} style={{ fontSize: 24 }} />
       </RoundedCoinIconWrapper>
       <Text color="contrast" size={17} weight="500">
         {formatSwapAmount({ amount, coin })}
       </Text>
+      <TokenVerificationBadge value={coin} />
     </HStack>
   ) : (
     <Text color="contrast" size={17} weight="500">
@@ -225,9 +227,16 @@ const TonMessageItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
   const { message, intent, jettonCoin } = decoded
 
   if (intent?.kind === 'jettonTransfer') {
-    const amountLabel = jettonCoin
-      ? `${formatUnits(intent.amount, jettonCoin.decimals)} ${jettonCoin.ticker}`
-      : intent.amount.toString()
+    const amountLabel = jettonCoin ? (
+      <HStack alignItems="center" gap={6}>
+        <span>
+          {formatUnits(intent.amount, jettonCoin.decimals)} {jettonCoin.ticker}
+        </span>
+        <TokenVerificationBadge value={jettonCoin} />
+      </HStack>
+    ) : (
+      intent.amount.toString()
+    )
 
     return (
       <List>

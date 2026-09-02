@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { useCore } from '@core/ui/state/core'
 import {
   useCreateCoinMutation,
@@ -98,9 +99,12 @@ export const CustomTokenResult = ({ id }: { id: string }) => {
                 style={{ fontSize: 32 }}
               />
               <VStack gap={4}>
-                <Text color="contrast" size={14} weight={500}>
-                  {coin.ticker}
-                </Text>
+                <HStack alignItems="center" gap={6}>
+                  <Text color="contrast" size={14} weight={500}>
+                    {coin.ticker}
+                  </Text>
+                  <TokenVerificationBadge value={coin} />
+                </HStack>
                 <Text color="shy" size={12} cropped>
                   {coin.chain}
                 </Text>

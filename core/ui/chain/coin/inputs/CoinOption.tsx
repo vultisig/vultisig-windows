@@ -1,5 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
@@ -45,6 +46,7 @@ export const CoinOption = ({
           <Text color="contrast" size={13} weight="500">
             {ticker}
           </Text>
+          <TokenVerificationBadge value={value} />
           <PillWrapper>
             <Text color="shy" size={11} weight="500">
               {chain}
