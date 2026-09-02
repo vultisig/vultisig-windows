@@ -27,7 +27,7 @@ export const vaultsInitialValue: Vault[] = []
 
 type CreateVaultFunction = (vault: Vault) => Promise<Vault>
 
-export type ReplaceVaultInput = {
+type ReplaceVaultInput = {
   expectedVault: Vault
   vault: Vault
 }
