@@ -38,7 +38,7 @@ const toBytes = (value: Buffer): Uint8Array<ArrayBuffer> => {
   return bytes
 }
 
-export const isPasscodeEncryptedBlob = (value: Buffer): boolean =>
+const hasPbkdf2Magic = (value: Buffer): boolean =>
   value.length >= VAULT_BACKUP_PBKDF2_HEADER_LEN + gcmTagLength &&
   value.subarray(0, VAULT_BACKUP_MAGIC_LEN).equals(VAULT_BACKUP_BLOB_MAGIC)
 
@@ -53,7 +53,7 @@ export const isPasscodeEncryptedBlob = (value: Buffer): boolean =>
 
 /** A blob is legacy when it lacks the PBKDF2 magic header (still SHA-256 KDF). */
 export const isLegacyPasscodeBlob = (value: Buffer): boolean =>
-  !isPasscodeEncryptedBlob(value)
+  !hasPbkdf2Magic(value)
 
 type DerivePasscodeKeyInput = {
   passcode: string
@@ -175,7 +175,7 @@ export const decryptWithPasscode = async ({
 
   return Promise.all(
     values.map(async value => {
-      if (isPasscodeEncryptedBlob(value)) {
+      if (hasPbkdf2Magic(value)) {
         const salt = value.subarray(
           VAULT_BACKUP_MAGIC_LEN,
           VAULT_BACKUP_MAGIC_LEN + VAULT_BACKUP_SALT_LEN

@@ -464,6 +464,7 @@ export const zh = {
   import_seedphrase_onboarding_title:
     '您即将进入一个新时代，<g>告别旧的种子短语。</g> 您需要：',
   import_vault: '导入库',
+  import_vult_backup: '导入 .vult 备份',
   import_vault_share: '导入保险库共享',
   import_vault_share_description: '使用保险库共享来恢复您的保险库。',
   import_vault_share_supported_files: '支持的文件类型：.bak 和 .vult',
@@ -965,9 +966,14 @@ export const zh = {
     version: '版本 {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" 已存在',
-  vault_cannot_be_opened: '无法打开此 Vault',
+  vault_cannot_be_opened: '本设备无法打开此 vault',
+  vault_cannot_be_opened_backup_description:
+    '您的 .vult 备份就是找回的途径。导入备份后，此 vault 即可恢复使用。',
   vault_cannot_be_opened_description:
-    '无法解密此设备上的密钥分片。请从 .vult 备份恢复 Vault。',
+    '它的 key share 已加密，而解锁所需的密钥并没有随本次恢复一起带过来。本设备上没有任何东西能读取它们，因此无法用此 vault 签名。',
+  vault_cannot_be_opened_no_backup: '我没有备份',
+  vault_cannot_be_opened_no_backup_description:
+    '没有 .vult 备份，本设备上的 key share 将无法再解密——这部分无法恢复。但 vault 本身可能仍然可用：如果您的其他设备仍持有各自的 share 并且达到签名门限，即使没有本设备，vault 也能继续工作。',
   vault_backup_page_password_info:
     '切勿将来自不同设备的 Vault 共享文件存储在同一位置',
   vault_backup_page_password_protection: '您可以选择为您的保险库设置密码保护。',
