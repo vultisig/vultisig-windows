@@ -64,7 +64,12 @@ export const AmountBlock = styled(HStack).attrs({
   flex: 1;
 `
 
-/** Icon slot: 24x24. */
+/**
+ * Icon slot: reserves 24x24 in the row but never clips. `CoinIcon` hangs its
+ * chain badge outside the icon's box, so a slot that clipped would slice the
+ * badge; the badge is absolutely positioned, so letting it paint out costs no
+ * layout.
+ */
 export const IconSlot = styled.div`
   width: 24px;
   height: 24px;
@@ -72,8 +77,6 @@ export const IconSlot = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  ${borderRadius.md};
 `
 
 /** USD + crypto stack. Minimal gap (Figma ~0 between lines in some frames). */
