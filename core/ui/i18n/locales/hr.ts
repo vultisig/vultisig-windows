@@ -1934,8 +1934,6 @@ export const hr = {
     'Odredišna adresa nije valjana na TON . Provjerite adresu i pokušajte ponovno.',
   ton_tx_failure_not_enough_jettons:
     'Ovaj novčanik ne sadrži dovoljno tokena za slanje tog iznosa.',
-  ton_tx_failure_jetton_gas_underfunded:
-    'Nije priloženo dovoljno TON za plaćanje prijenosa tokena. Zadržite oko 0,05 TON za naknade i pokušajte ponovno.',
   ton_tx_failure_jetton_unauthorized:
     'Ugovor o tokenu odbio je prijenos jer ovom novčaniku nije dopušteno premještanje ovih tokena.',
   ton_tx_failure_action_failed:

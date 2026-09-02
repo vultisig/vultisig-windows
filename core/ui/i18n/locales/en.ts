@@ -1363,8 +1363,6 @@ export const en = {
     'The destination address is not valid on TON. Check the address and try again.',
   ton_tx_failure_not_enough_jettons:
     'This wallet does not hold enough of the token to send that amount.',
-  ton_tx_failure_jetton_gas_underfunded:
-    'Not enough TON was attached to pay for the token transfer. Keep about 0.05 TON for fees and try again.',
   ton_tx_failure_jetton_unauthorized:
     'The token contract refused the transfer because this wallet is not allowed to move these tokens.',
   ton_tx_failure_action_failed:

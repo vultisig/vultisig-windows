@@ -15,7 +15,6 @@ const tonTxFailureKeys = {
   'out-of-gas': 'ton_tx_failure_out_of_gas',
   'invalid-destination': 'ton_tx_failure_invalid_destination',
   'not-enough-jettons': 'ton_tx_failure_not_enough_jettons',
-  'jetton-gas-underfunded': 'ton_tx_failure_jetton_gas_underfunded',
   'jetton-unauthorized': 'ton_tx_failure_jetton_unauthorized',
   'action-failed': 'ton_tx_failure_action_failed',
   aborted: 'ton_tx_failure_aborted',

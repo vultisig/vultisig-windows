@@ -1965,8 +1965,6 @@ export const es = {
     'La dirección de destino no es válida en TON . Verifique la dirección e inténtelo de nuevo.',
   ton_tx_failure_not_enough_jettons:
     'Esta billetera no contiene suficientes tokens para enviar esa cantidad.',
-  ton_tx_failure_jetton_gas_underfunded:
-    'No se adjuntó suficiente TON para pagar la transferencia del token. Conserve aproximadamente 0.05 TON para cubrir las comisiones e inténtelo de nuevo.',
   ton_tx_failure_jetton_unauthorized:
     'El contrato del token rechazó la transferencia porque esta billetera no tiene permiso para mover estos tokens.',
   ton_tx_failure_action_failed:

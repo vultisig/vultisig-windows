@@ -1949,8 +1949,6 @@ export const nl = {
     'Het bestemmingsadres is niet geldig op TON . Controleer het adres en probeer het opnieuw.',
   ton_tx_failure_not_enough_jettons:
     'Deze portemonnee bevat onvoldoende tokens om dat bedrag te verzenden.',
-  ton_tx_failure_jetton_gas_underfunded:
-    'Er was onvoldoende TON beschikbaar om de tokenoverdracht te betalen. Houd ongeveer 0,05 TON over voor transactiekosten en probeer het opnieuw.',
   ton_tx_failure_jetton_unauthorized:
     'Het tokencontract weigerde de overdracht omdat deze wallet geen toestemming heeft om deze tokens te verplaatsen.',
   ton_tx_failure_action_failed:

@@ -1971,8 +1971,6 @@ export const it = {
     "L'indirizzo di destinazione non è valido su TON . Verifica l'indirizzo e riprova.",
   ton_tx_failure_not_enough_jettons:
     'Questo portafoglio non contiene una quantità sufficiente di token per inviare tale importo.',
-  ton_tx_failure_jetton_gas_underfunded:
-    'Non sono stati allegati token TON a sufficienza per pagare il trasferimento. Conserva circa 0,05 TON per le commissioni e riprova.',
   ton_tx_failure_jetton_unauthorized:
     'Il contratto del token ha rifiutato il trasferimento perché questo portafoglio non è autorizzato a spostare questi token.',
   ton_tx_failure_action_failed:

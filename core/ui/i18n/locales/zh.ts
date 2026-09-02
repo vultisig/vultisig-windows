@@ -1804,8 +1804,6 @@ export const zh = {
     '交易因 gas 不足而无法完成。请为转账附加更多TON ，然后重试。',
   ton_tx_failure_invalid_destination: '目标地址在TON上无效。请检查地址并重试。',
   ton_tx_failure_not_enough_jettons: '此钱包中没有足够的代币来发送该金额。',
-  ton_tx_failure_jetton_gas_underfunded:
-    '支付代币转账所需的TON金额不足。请保留约 0.05 TON作为手续费，然后重试。',
   ton_tx_failure_jetton_unauthorized:
     '代币合约拒绝了转账，因为该钱包无权转移这些代币。',
   ton_tx_failure_action_failed:

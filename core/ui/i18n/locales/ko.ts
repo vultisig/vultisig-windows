@@ -1925,8 +1925,6 @@ export const ko = {
     '목적지 주소가 TON 에서 유효하지 않습니다. 주소를 확인하고 다시 시도하십시오.',
   ton_tx_failure_not_enough_jettons:
     '이 지갑에는 해당 금액을 보내기에 충분한 토큰이 없습니다.',
-  ton_tx_failure_jetton_gas_underfunded:
-    '토큰 전송 비용을 지불하기에 충분한 TON 첨부되지 않았습니다. 수수료를 위해 약 0.05 TON 남겨두고 다시 시도하십시오.',
   ton_tx_failure_jetton_unauthorized:
     '토큰 계약이 해당 지갑에서 이러한 토큰을 이동할 수 없기 때문에 전송을 거부했습니다.',
   ton_tx_failure_action_failed:

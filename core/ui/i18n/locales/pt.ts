@@ -1968,8 +1968,6 @@ export const pt = {
     'O endereço de destino não é válido em TON . Verifique o endereço e tente novamente.',
   ton_tx_failure_not_enough_jettons:
     'Esta carteira não possui tokens suficientes para enviar essa quantia.',
-  ton_tx_failure_jetton_gas_underfunded:
-    'Não foi possível vincular TON suficiente para pagar a transferência de tokens. Reserve cerca de 0,05 TON para taxas e tente novamente.',
   ton_tx_failure_jetton_unauthorized:
     'O contrato do token recusou a transferência porque esta carteira não tem permissão para movimentar esses tokens.',
   ton_tx_failure_action_failed:

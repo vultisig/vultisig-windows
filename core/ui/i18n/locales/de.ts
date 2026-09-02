@@ -1980,8 +1980,6 @@ export const de = {
     'Die Zieladresse ist für TON ungültig. Überprüfen Sie die Adresse und versuchen Sie es erneut.',
   ton_tx_failure_not_enough_jettons:
     'Diese Wallet enthält nicht genügend Token, um diesen Betrag zu senden.',
-  ton_tx_failure_jetton_gas_underfunded:
-    'Es wurden nicht genügend TON für die Token-Übertragung hinterlegt. Bitte behalten Sie etwa 0,05 TON für die Gebühren und versuchen Sie es erneut.',
   ton_tx_failure_jetton_unauthorized:
     'Der Token-Vertrag hat die Überweisung abgelehnt, da diese Wallet nicht berechtigt ist, diese Token zu transferieren.',
   ton_tx_failure_action_failed:
