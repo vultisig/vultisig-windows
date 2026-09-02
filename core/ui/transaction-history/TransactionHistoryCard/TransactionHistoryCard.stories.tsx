@@ -132,12 +132,12 @@ export const SuccessfulSend: Story = {
 
 export const ErrorWithMessage: Story = {
   args: {
-    tagType: 'send' as TransactionHistoryTagType,
+    tagType: 'send',
     status: 'error',
     amountUsd: '$1,000.54',
     amountCrypto: '1,000.12',
     symbol: 'RUNE',
-    pill: { direction: 'to' as const, address: ethAddress },
+    pill: { direction: 'to', address: ethAddress },
     errorMessage: 'Slippage tolerance exceeded',
   },
   render: args => <TransactionHistoryCard {...args} coin={runeCoin} />,
@@ -147,12 +147,12 @@ export const ErrorWithMessage: Story = {
  *  bottom-right corner — the one combination where the two can collide. */
 export const ErrorWithMessageAndProviderPill: Story = {
   args: {
-    tagType: 'swap' as TransactionHistoryTagType,
+    tagType: 'swap',
     status: 'error',
     amountUsd: '$34,752.57',
     amountCrypto: '20.50',
     symbol: 'ETH',
-    pill: { providerName: 'LI.FI' as const, pillIcon: providerPillIcon },
+    pill: { providerName: 'LI.FI', pillIcon: providerPillIcon },
     errorMessage: 'Price moved past slippage',
   },
   render: args => <TransactionHistoryCard {...args} coin={ethCoin} />,

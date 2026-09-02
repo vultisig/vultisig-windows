@@ -8,6 +8,12 @@ import {
   RawContractError,
 } from 'viem'
 
+/**
+ * What a node said when a transaction was replayed and reverted again. Carries
+ * both forms a reason can arrive in, because neither is always present: a
+ * `require` string reaches the client as prose, while a custom error reaches it
+ * as four bytes the text never names.
+ */
 export type EvmTxRevert = {
   /** Everything the node and the client said about the revert. */
   text: string
