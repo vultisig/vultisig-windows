@@ -506,6 +506,7 @@ export const pt = {
   import_seedphrase_onboarding_title:
     'Você está entrando em uma nova era, <g> para trás </g> antigas frases de recuperação. Você precisará de:',
   import_vault: 'Cofre de Importação',
+  import_vult_backup: 'Importar cópia .vult',
   import_vault_share: 'Compartilhamento do cofre de importação',
   import_vault_share_description:
     'Utilize uma pasta compartilhada do cofre para recuperar seu cofre.',
@@ -1040,9 +1041,14 @@ export const pt = {
     version: 'Versão {{latestVersion}}',
   },
   vault_already_exists: 'O Vault "{{name}}" já existe.',
-  vault_cannot_be_opened: 'Não é possível abrir este Vault',
+  vault_cannot_be_opened: 'Este vault não pode ser aberto neste dispositivo',
+  vault_cannot_be_opened_backup_description:
+    'A sua cópia de segurança .vult é o caminho de volta. Importe-a e este vault volta a funcionar.',
   vault_cannot_be_opened_description:
-    'Os compartilhamentos de chave neste dispositivo não podem ser descriptografados. Restaure o Vault a partir de um backup .vult.',
+    'Os seus key shares estão encriptados e a chave que os desbloqueia não veio com este restauro. Nada neste dispositivo os consegue ler, por isso não pode assinar com este vault.',
+  vault_cannot_be_opened_no_backup: 'Não tenho cópia de segurança',
+  vault_cannot_be_opened_no_backup_description:
+    'Sem uma cópia .vult, os key shares deste dispositivo já não podem ser desencriptados — essa parte não é recuperável. O vault em si ainda pode ser: se os seus outros dispositivos guardarem os próprios shares e continuarem a atingir o limiar de assinatura, ele continua a funcionar sem este dispositivo.',
   vault_backup_page_password_info:
     'Nunca armazene compartilhamentos do Vault de dispositivos diferentes no mesmo local.',
   vault_backup_page_password_protection:

@@ -1,12 +1,7 @@
-import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useCore } from '@core/ui/state/core'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
-import { Button } from '@lib/ui/buttons/Button'
-import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigation } from '@lib/ui/navigation/state'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -21,14 +16,14 @@ import {
 } from '@vultisig/core-mpc/vault/Vault'
 import { useEffect, useMemo, useState } from 'react'
 import { createContext, useContext } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { readVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPasscodeRequired'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
-import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { useVaults } from '../../storage/vaults'
+import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
 
 const UnreadableVaultRecoveryContext = createContext<string | null>(null)
 
@@ -60,34 +55,13 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   return 'secure'
 }
 
-const VaultCannotBeOpened = () => {
-  const { t } = useTranslation()
-  const navigate = useCoreNavigate()
-
-  return (
-    <VStack fullSize>
-      <PageHeader />
-      <FlowErrorPageContent
-        title={t('vault_cannot_be_opened')}
-        description={t('vault_cannot_be_opened_description')}
-        variant="error"
-        action={
-          <Button onClick={() => navigate({ id: 'importVault' })}>
-            {t('import_vault_share')}
-          </Button>
-        }
-      />
-    </VStack>
-  )
-}
-
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const { validateLegacyVaultKeyShares } = useCore()
   const [navigation] = useNavigation()
   const id = useCurrentVaultId()
   const vaults = useVaults()
   const [passcode] = usePasscode()
-  const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const hasPasscodeEncryption = useIsPasscodeRequired()
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
 
@@ -173,7 +147,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       )
     }
 
-    return <VaultCannotBeOpened />
+    return <UnreadableVaultRecovery />
   }
 
   const value = { ...vault, ...shareState.result.shares }

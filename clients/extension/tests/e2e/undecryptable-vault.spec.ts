@@ -116,17 +116,14 @@ const createRecoveryBackup = async () => {
   }
 }
 
-test('orphaned encrypted shares fail closed and route to backup import', async ({
+test('unreadable shares fail closed and route to backup import', async ({
   extensionPage,
 }) => {
   const vaultId = '03'.repeat(33)
-  const passcodeCiphertext = Buffer.concat([
-    Buffer.from([0x56, 0x4c, 0x54, 0x02]),
-    Buffer.alloc(44),
-  ]).toString('base64')
+  const malformedShare = 'not-a-valid-keyshare'
 
   await extensionPage.evaluate(
-    async ({ encryptedShare, currentVaultId }) => {
+    async ({ unreadableShare, currentVaultId }) => {
       await chrome.storage.local.set({
         currentVaultId,
         hasFinishedOnboarding: true,
@@ -145,8 +142,8 @@ test('orphaned encrypted shares fail closed and route to backup import', async (
             localPartyId: 'device-1',
             hexChainCode: '00'.repeat(32),
             keyShares: {
-              ecdsa: encryptedShare,
-              eddsa: encryptedShare,
+              ecdsa: unreadableShare,
+              eddsa: unreadableShare,
             },
             libType: 'DKLS',
             isBackedUp: false,
@@ -155,18 +152,18 @@ test('orphaned encrypted shares fail closed and route to backup import', async (
         ],
       })
     },
-    { encryptedShare: passcodeCiphertext, currentVaultId: vaultId }
+    { unreadableShare: malformedShare, currentVaultId: vaultId }
   )
 
   await extensionPage.reload()
   await extensionPage.setViewportSize({ width: 480, height: 600 })
 
   await expect(
-    extensionPage.getByText('This Vault cannot be opened').first()
+    extensionPage.getByText("This vault can't be opened on this device").first()
   ).toBeVisible()
   await expect(
     extensionPage.getByText(
-      'The key shares on this device cannot be decrypted. Restore the Vault from a .vult backup.'
+      'Its key shares are encrypted, and the key that unlocks them did not come across with this restore. Nothing on this device can read them, so it cannot sign with this vault. Your .vult backup is the way back. Import it and this vault works again.'
     )
   ).toBeVisible()
   await expect(
@@ -174,7 +171,7 @@ test('orphaned encrypted shares fail closed and route to backup import', async (
   ).not.toBeVisible()
 
   const importButton = extensionPage.getByRole('button', {
-    name: 'Import vault share',
+    name: 'Import .vult backup',
   })
   const importButtonBox = await importButton.boundingBox()
   expect(importButtonBox).not.toBeNull()
@@ -187,6 +184,16 @@ test('orphaned encrypted shares fail closed and route to backup import', async (
     await extensionPage.screenshot({ path: screenshotPath })
   }
 
+  const noBackupButton = extensionPage.getByRole('button', {
+    name: "I don't have a backup",
+  })
+  await noBackupButton.click()
+  await expect(
+    extensionPage.getByText(
+      'Without a .vult backup, the key shares on this device cannot be unlocked again — that part is not recoverable. The vault itself may still be: if your other devices hold their own shares and still reach its signing threshold, it keeps working without this one.'
+    )
+  ).toBeVisible()
+
   await importButton.click()
   await expect(
     extensionPage.locator('[data-testid="import-vault-form"]')
@@ -198,13 +205,10 @@ test('a valid recovery backup replaces the exact unreadable vault', async ({
 }) => {
   const { vault, file } = await createRecoveryBackup()
   const vaultId = vault.publicKeys.ecdsa
-  const passcodeCiphertext = Buffer.concat([
-    Buffer.from([0x56, 0x4c, 0x54, 0x02]),
-    Buffer.alloc(44),
-  ]).toString('base64')
+  const malformedShare = 'not-a-valid-keyshare'
 
   await extensionPage.evaluate(
-    async ({ encryptedShare, currentVaultId, publicKeys, hexChainCode }) => {
+    async ({ unreadableShare, currentVaultId, publicKeys, hexChainCode }) => {
       await chrome.storage.local.set({
         currentVaultId,
         hasFinishedOnboarding: true,
@@ -220,8 +224,8 @@ test('a valid recovery backup replaces the exact unreadable vault', async ({
             localPartyId: 'device-1',
             hexChainCode,
             keyShares: {
-              ecdsa: encryptedShare,
-              eddsa: encryptedShare,
+              ecdsa: unreadableShare,
+              eddsa: unreadableShare,
             },
             libType: 'DKLS',
             isBackedUp: false,
@@ -231,7 +235,7 @@ test('a valid recovery backup replaces the exact unreadable vault', async ({
       })
     },
     {
-      encryptedShare: passcodeCiphertext,
+      unreadableShare: malformedShare,
       currentVaultId: vaultId,
       publicKeys: vault.publicKeys,
       hexChainCode: vault.hexChainCode,
@@ -240,7 +244,7 @@ test('a valid recovery backup replaces the exact unreadable vault', async ({
 
   await extensionPage.reload()
   await extensionPage
-    .getByRole('button', { name: 'Import vault share' })
+    .getByRole('button', { name: 'Import .vult backup' })
     .click()
 
   const fileInput = extensionPage.locator('input[type="file"]')

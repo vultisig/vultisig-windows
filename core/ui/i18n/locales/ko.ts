@@ -498,6 +498,7 @@ export const ko = {
   import_seedphrase_onboarding_title:
     '당신은 새로운 시대로 접어들고 있습니다.<g> 기존의 핵심 문구들을 뒤로하고.</g> 필요한 준비물:',
   import_vault: '볼트 가져오기',
+  import_vult_backup: '.vult 백업 가져오기',
   import_vault_share: '가져오기 볼트 공유',
   import_vault_share_description: '볼트 공유를 사용하여 볼트를 복구하세요.',
   import_vault_share_supported_files: '지원되는 파일 형식: .bak 및 .vult',
@@ -1049,9 +1050,14 @@ export const ko = {
     version: '버전 {{latestVersion}}',
   },
   vault_already_exists: 'Vault &quot;{{name}}&quot;이 이미 존재합니다.',
-  vault_cannot_be_opened: '이 Vault를 열 수 없습니다',
+  vault_cannot_be_opened: '이 기기에서는 이 볼트를 열 수 없습니다',
+  vault_cannot_be_opened_backup_description:
+    '.vult 백업이 돌아가는 길입니다. 백업을 가져오면 이 볼트를 다시 사용할 수 있습니다.',
   vault_cannot_be_opened_description:
-    '이 기기의 키 공유를 복호화할 수 없습니다. .vult 백업에서 Vault를 복원하세요.',
+    '이 볼트의 키 셰어는 암호화되어 있는데, 이를 여는 키가 이번 복원에 함께 오지 않았습니다. 이 기기에서는 아무것도 키 셰어를 읽을 수 없으므로 이 볼트로 서명할 수 없습니다.',
+  vault_cannot_be_opened_no_backup: '백업이 없습니다',
+  vault_cannot_be_opened_no_backup_description:
+    '.vult 백업이 없으면 이 기기의 키 셰어는 다시 복호화할 수 없으며, 그 부분은 복구되지 않습니다. 볼트 자체는 아직 살아 있을 수 있습니다. 다른 기기들이 각자의 셰어를 가지고 있고 서명 임계값을 여전히 충족한다면, 이 기기 없이도 볼트는 계속 동작합니다.',
   vault_backup_page_password_info:
     '서로 다른 기기의 Vault 공유 파일을 같은 위치에 저장하지 마십시오.',
   vault_backup_page_password_protection:

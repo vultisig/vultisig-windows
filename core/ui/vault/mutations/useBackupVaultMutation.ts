@@ -14,9 +14,9 @@ import { useRef } from 'react'
 
 import { readVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPasscodeRequired'
 import { currentProductBrandConfig } from '../../product/brand'
 import { useCore } from '../../state/core'
-import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { useVaults } from '../../storage/vaults'
 
 const getExportName = (vault: Vault) => {
@@ -108,7 +108,7 @@ export const useBackupVaultMutation = ({
   const vaults = useVaults()
 
   const [passcode] = usePasscode()
-  const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const hasPasscodeEncryption = useIsPasscodeRequired()
 
   // Synchronous in-flight guard: `isPending` only disables the button after a
   // re-render, so a fast double-click can fire two backups before that commits
