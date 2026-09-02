@@ -12,6 +12,7 @@ import { decodeErrorResult, Hex, isHex, slice, toFunctionSelector } from 'viem'
  */
 export const swapFailureReasons = ['slippage'] as const
 
+/** A recognised swap failure, narrow enough that history has wording for it. */
 export type SwapFailureReason = (typeof swapFailureReasons)[number]
 
 /**

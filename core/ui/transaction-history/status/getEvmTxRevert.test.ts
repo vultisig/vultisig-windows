@@ -1,7 +1,9 @@
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import {
+  type Address,
   CallExecutionError,
   ExecutionRevertedError,
+  type Hex,
   HttpRequestError,
   RpcRequestError,
 } from 'viem'
@@ -27,7 +29,14 @@ const transaction = {
   value: 0n,
   gas: 300000n,
   blockNumber: 21000000n,
-} as const
+} satisfies {
+  from: Address
+  to: Address
+  input: Hex
+  value: bigint
+  gas: bigint
+  blockNumber: bigint
+}
 
 const callArgs = {
   account: transaction.from,

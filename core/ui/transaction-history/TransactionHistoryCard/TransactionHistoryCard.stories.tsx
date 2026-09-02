@@ -111,7 +111,7 @@ export const AllCards: Story = {
         amountCrypto="20.50"
         symbol="ETH"
         pill={{ providerName: 'LI.FI', pillIcon: providerPillIcon }}
-        errorMessage="Price moved past slippage"
+        errorMessage="Price moved past slippage tolerance"
         coin={ethCoin}
       />
     </div>
@@ -153,7 +153,7 @@ export const ErrorWithMessageAndProviderPill: Story = {
     amountCrypto: '20.50',
     symbol: 'ETH',
     pill: { providerName: 'LI.FI', pillIcon: providerPillIcon },
-    errorMessage: 'Price moved past slippage',
+    errorMessage: 'Price moved past slippage tolerance',
   },
   render: args => <TransactionHistoryCard {...args} coin={ethCoin} />,
 }

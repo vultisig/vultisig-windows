@@ -1955,7 +1955,7 @@ export const it = {
     'Non è stato scambiato qui in questa finestra — il massimo è stato {{price}}',
   swap_quote_expired:
     'Questo preventivo è scaduto. Aggiorna la pagina per visualizzare il prezzo attuale.',
-  swap_failed_slippage: 'Il prezzo ha superato lo slittamento',
+  swap_failed_slippage: 'Il prezzo ha superato la soglia di slittamento',
   swap_failed_slippage_description:
     'Il prezzo si è mosso prima che questo scambio venisse eseguito, quindi il pagamento sarebbe stato inferiore alla tolleranza di slippage consentita e la rete lo ha annullato. Aumenta la tolleranza di slippage o riprova.',
 }

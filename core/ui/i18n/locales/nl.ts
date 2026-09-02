@@ -1933,7 +1933,7 @@ export const nl = {
     'Er is hier in dit tijdsvenster niet in gehandeld — de hoogste koers was {{price}}',
   swap_quote_expired:
     'Deze prijsopgave is verlopen. Vernieuw de pagina voor de actuele prijs.',
-  swap_failed_slippage: 'De prijs is voorbij de slippage gekomen.',
+  swap_failed_slippage: 'De prijs is buiten de sliptolerantie getreden.',
   swap_failed_slippage_description:
     'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
 }

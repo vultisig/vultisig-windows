@@ -1305,7 +1305,7 @@ export const en = {
   swap_same_asset: 'Cannot swap between the same asset',
   swap_all_providers_failed:
     'Swap providers are temporarily unavailable. Please try again in a moment.',
-  swap_failed_slippage: 'Price moved past slippage',
+  swap_failed_slippage: 'Price moved past slippage tolerance',
   swap_failed_slippage_description:
     'The price moved before this swap landed, so it would have paid out less than your slippage tolerance allowed and the network reverted it. Raise your slippage tolerance or try again.',
   swap_amount_below_minimum:
