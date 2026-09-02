@@ -194,6 +194,11 @@ test('unreadable shares fail closed and route to backup import', async ({
     )
   ).toBeVisible()
 
+  const noBackupScreenshotPath = process.env.QA_NO_BACKUP_SCREENSHOT_PATH
+  if (noBackupScreenshotPath) {
+    await extensionPage.screenshot({ path: noBackupScreenshotPath })
+  }
+
   await importButton.click()
   await expect(
     extensionPage.locator('[data-testid="import-vault-form"]')
