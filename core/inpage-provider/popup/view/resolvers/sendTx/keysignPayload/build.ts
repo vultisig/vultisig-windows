@@ -134,6 +134,12 @@ export const buildSendTxKeysignPayload = async ({
     }
   }
 
+  const getTonValidUntil = () => {
+    if ('regular' in customTxData) {
+      return customTxData.regular.transactionDetails.tonValidUntil
+    }
+  }
+
   const getTronMeta = () => {
     if ('regular' in customTxData) {
       const { regular } = customTxData
@@ -605,6 +611,7 @@ export const buildSendTxKeysignPayload = async ({
       }),
       transactionType: getTransactionType(),
       timeoutTimestamp: getTimeoutTimestamp(),
+      validUntil: getTonValidUntil(),
       ...getTronMeta(),
       psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
     })
