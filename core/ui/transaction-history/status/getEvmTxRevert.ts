@@ -1,7 +1,12 @@
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
 import { attempt } from '@vultisig/lib-utils/attempt'
-import { BaseError, isHex } from 'viem'
+import {
+  BaseError,
+  ExecutionRevertedError,
+  isHex,
+  RawContractError,
+} from 'viem'
 
 export type EvmTxRevert = {
   /** Everything the node and the client said about the revert. */
@@ -27,6 +32,33 @@ const getRevertData = (error: BaseError) => {
   return undefined
 }
 
+// The JSON-RPC code every node uses for "the EVM reverted", which some return
+// without the `execution reverted` wording viem matches on.
+const jsonRpcRevertCode = 3
+
+const hasRevertCode = (value: unknown) =>
+  typeof value === 'object' &&
+  value !== null &&
+  'code' in value &&
+  value.code === jsonRpcRevertCode
+
+/**
+ * Whether a failed `eth_call` failed because the EVM reverted, rather than
+ * because the lookup itself did.
+ *
+ * A rate limit, a timeout, or a node holding no state for the block are
+ * failures of the question, not answers to it — and their messages are prose
+ * like any revert's, so reading a reason out of one would be reading it out of
+ * the wrong sentence.
+ */
+const isExecutionRevert = (error: BaseError) =>
+  error.walk(
+    err =>
+      err instanceof ExecutionRevertedError ||
+      err instanceof RawContractError ||
+      hasRevertCode(err)
+  ) !== null
+
 type GetEvmTxRevertInput = {
   chain: EvmChain
   txHash: string
@@ -36,6 +68,12 @@ type GetEvmTxRevertInput = {
  * Recovers why a mined transaction reverted by replaying it with `eth_call` —
  * a receipt records only that it failed, and the reason is stored nowhere on
  * chain.
+ *
+ * The chain's own receipt decides whether there is anything to explain, never
+ * the caller's record: a transaction wrongly stored as failed did in fact land,
+ * and replaying it would run against a pool its own swap had already moved,
+ * trip the router's minimum, and answer confidently about a swap that
+ * succeeded.
  *
  * The replay runs against the end state of the block the transaction was mined
  * in, deliberately including the transactions that shared it. A swap is most
@@ -56,7 +94,12 @@ export const getEvmTxRevert = async ({
 
   const client = getEvmClient(chain)
 
-  const tx = await attempt(() => client.getTransaction({ hash: txHash }))
+  const [receipt, tx] = await Promise.all([
+    attempt(() => client.getTransactionReceipt({ hash: txHash })),
+    attempt(() => client.getTransaction({ hash: txHash })),
+  ])
+
+  if ('error' in receipt || receipt.data.status !== 'reverted') return undefined
   if ('error' in tx) return undefined
 
   const { from, to, input, value, gas, blockNumber } = tx.data
@@ -68,8 +111,8 @@ export const getEvmTxRevert = async ({
   if (!('error' in replay)) return undefined
 
   const { error } = replay
-  if (!(error instanceof BaseError)) {
-    return { text: error instanceof Error ? error.message : String(error) }
+  if (!(error instanceof BaseError) || !isExecutionRevert(error)) {
+    return undefined
   }
 
   return { text: error.message, data: getRevertData(error) }

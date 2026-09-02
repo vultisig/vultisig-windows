@@ -1,3 +1,5 @@
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Chain } from '@vultisig/core-chain/Chain'
 
@@ -27,6 +29,18 @@ type Story = StoryObj<typeof TransactionHistoryCard>
 /** Realistic addresses (full); card displays them truncated via truncateId (6...4). */
 const ethAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1'
 const solAddress = 'HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH'
+
+/**
+ * The pill icon the app always supplies, which is what makes a provider pill
+ * stand a full icon slot tall. A story without it renders a shorter pill and
+ * cannot show whether the error message clears one.
+ */
+const providerPillIcon = (
+  <ChainEntityIcon
+    value={getChainLogoSrc(Chain.Ethereum)}
+    style={{ fontSize: 16 }}
+  />
+)
 
 /** Coins with logos for real asset icons (same as chainFeeCoin / CoinIcon). */
 const runeCoin = { chain: Chain.THORChain, logo: 'rune' as const }
@@ -96,7 +110,7 @@ export const AllCards: Story = {
         amountUsd="$34,752.57"
         amountCrypto="20.50"
         symbol="ETH"
-        pill={{ providerName: 'LI.FI' }}
+        pill={{ providerName: 'LI.FI', pillIcon: providerPillIcon }}
         errorMessage="Price moved past slippage"
         coin={ethCoin}
       />
@@ -138,7 +152,7 @@ export const ErrorWithMessageAndProviderPill: Story = {
     amountUsd: '$34,752.57',
     amountCrypto: '20.50',
     symbol: 'ETH',
-    pill: { providerName: 'LI.FI' as const },
+    pill: { providerName: 'LI.FI' as const, pillIcon: providerPillIcon },
     errorMessage: 'Price moved past slippage',
   },
   render: args => <TransactionHistoryCard {...args} coin={ethCoin} />,
