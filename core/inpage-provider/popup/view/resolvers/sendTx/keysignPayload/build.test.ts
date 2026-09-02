@@ -1,9 +1,12 @@
+import { initWasm, WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getRippleSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ripple'
-import { describe, expect, it, vi } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { RippleTransaction } from '../core/ripple/sanitizeRippleDappTx'
 import { buildSendTxKeysignPayload } from './build'
 
 vi.mock('@vultisig/core-mpc/keysign/chainSpecific', () => ({
@@ -36,9 +39,19 @@ const tonCoin: AccountCoin = {
   ticker: 'GRAM',
 }
 
-const publicKey = {
-  data: () => new Uint8Array([1, 2, 3, 4]),
-}
+let walletCore: WalletCore
+let publicKey: PublicKey
+
+beforeAll(async () => {
+  walletCore = await initWasm()
+  const privateKey = walletCore.PrivateKey.createWithData(
+    new Uint8Array(32).fill(1)
+  )
+  publicKey = privateKey.getPublicKeySecp256k1(true)
+  privateKey.delete()
+})
+
+afterAll(() => publicKey?.delete())
 
 const rippleAccount = 'rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY'
 const rippleDestination = 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh'
@@ -47,18 +60,23 @@ const rippleCoin: AccountCoin = {
   address: rippleAccount,
 }
 
-const buildRipplePayload = (
-  transaction: Record<string, unknown>,
-  skipBroadcast = false
-) =>
+type BuildRipplePayloadInput = {
+  transaction: RippleTransaction
+  skipBroadcast?: boolean
+}
+
+const buildRipplePayload = ({
+  transaction,
+  skipBroadcast = false,
+}: BuildRipplePayloadInput) =>
   buildSendTxKeysignPayload({
     parsedTx: {
       coin: rippleCoin,
-      customTxData: { ripple: { transaction: transaction as never } },
+      customTxData: { ripple: { transaction } },
       skipBroadcast,
     },
-    publicKey: publicKey as never,
-    walletCore: {} as never,
+    publicKey,
+    walletCore,
     vaultId: 'vault-id',
     localPartyId: 'local-party',
   })
@@ -80,8 +98,8 @@ describe('buildSendTxKeysignPayload', () => {
           },
         },
       },
-      publicKey: publicKey as never,
-      walletCore: {} as never,
+      publicKey,
+      walletCore,
       vaultId: 'vault-id',
       localPartyId: 'local-party',
     })
@@ -130,8 +148,8 @@ describe('buildSendTxKeysignPayload', () => {
           },
         },
       },
-      publicKey: publicKey as never,
-      walletCore: {} as never,
+      publicKey,
+      walletCore,
       vaultId: 'vault-id',
       localPartyId: 'local-party',
     })
@@ -152,15 +170,15 @@ describe('buildSendTxKeysignPayload', () => {
     'binds a native XRPL Payment amount with skipBroadcast=%s',
     async skipBroadcast => {
       const amount = '1'
-      const payload = await buildRipplePayload(
-        {
+      const payload = await buildRipplePayload({
+        transaction: {
           TransactionType: 'Payment',
           Account: rippleAccount,
           Destination: rippleDestination,
           Amount: amount,
         },
-        skipBroadcast
-      )
+        skipBroadcast,
+      })
 
       expect(payload).toMatchObject({
         toAddress: rippleDestination,
@@ -171,7 +189,7 @@ describe('buildSendTxKeysignPayload', () => {
 
       const [signingInput] = await getRippleSigningInputs({
         keysignPayload: payload,
-        walletCore: {} as never,
+        walletCore,
       })
 
       expect(signingInput.rawJson).toBe(
@@ -183,9 +201,9 @@ describe('buildSendTxKeysignPayload', () => {
   )
 
   it.each([
-    [
-      'OfferCreate',
-      {
+    {
+      type: 'OfferCreate',
+      fields: {
         TakerGets: '1000000',
         TakerPays: {
           currency: 'USD',
@@ -193,32 +211,34 @@ describe('buildSendTxKeysignPayload', () => {
           value: '1',
         },
       },
-    ],
-    ['OfferCancel', { OfferSequence: 7 }],
-    [
-      'TrustSet',
-      {
+    },
+    { type: 'OfferCancel', fields: { OfferSequence: 7 } },
+    {
+      type: 'TrustSet',
+      fields: {
         LimitAmount: {
           currency: 'USD',
           issuer: rippleDestination,
           value: '10',
         },
       },
-    ],
+    },
   ])(
-    'keeps XRPL %s signable without a reviewed scalar',
-    async (type, fields) => {
+    'keeps XRPL $type signable without a reviewed scalar',
+    async ({ type, fields }) => {
       const payload = await buildRipplePayload({
-        TransactionType: type,
-        Account: rippleAccount,
-        ...fields,
+        transaction: {
+          TransactionType: type,
+          Account: rippleAccount,
+          ...fields,
+        },
       })
 
       expect(payload.toAmount).toBe('0')
       expect(
         getRippleSigningInputs({
           keysignPayload: payload,
-          walletCore: {} as never,
+          walletCore,
         })
       ).toHaveLength(1)
     }

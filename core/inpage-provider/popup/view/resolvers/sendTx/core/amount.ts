@@ -5,6 +5,7 @@ import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordU
 import { CustomTxData } from './customTxData'
 import { ParsedTx } from './parsedTx'
 
+/** Returns native XRPL Payment drops verbatim; other routes return a bigint. */
 export const getTxAmount = ({ coin, customTxData }: ParsedTx) =>
   matchRecordUnion<CustomTxData, bigint | string>(customTxData, {
     regular: ({ transactionDetails }) =>

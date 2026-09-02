@@ -84,7 +84,8 @@ type SanitizeInput = {
  * out from under the user. `Flags` must decode as a uint32, and a `Payment`
  * carrying `tfPartialPayment` without a positive `DeliverMin` is refused: its
  * `Amount` is a ceiling, so no confirmation screen could state what the user
- * receives.
+ * receives. Payment `Amount` must be a non-negative integer drops string;
+ * issued-currency Payments are not supported by this native-XRP route.
  *
  * `Paths` is left intact — it is legitimate on a cross-currency payment — and
  * is instead surfaced to the user by the confirmation display. The result is
@@ -169,6 +170,15 @@ export const sanitizeRippleDappTx = ({
   ) {
     throw new Error(
       'Ripple issued-currency Payments are not supported; use a native XRP amount'
+    )
+  }
+
+  if (
+    transactionType === 'Payment' &&
+    (typeof record.Amount !== 'string' || !/^\d+$/.test(record.Amount))
+  ) {
+    throw new Error(
+      'Ripple Payment Amount must be a non-negative integer drops string'
     )
   }
 

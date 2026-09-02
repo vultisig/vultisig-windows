@@ -64,7 +64,7 @@ describe('sanitizeRippleDappTx', () => {
       'OfferCancel',
       'TrustSet',
     ]) {
-      expect(sanitize({ TransactionType }).TransactionType).toBe(
+      expect(sanitize({ TransactionType, Amount: '1' }).TransactionType).toBe(
         TransactionType
       )
     }
@@ -84,6 +84,40 @@ describe('sanitizeRippleDappTx', () => {
     ).toThrow(/issued-currency Payments are not supported/)
   })
 
+  it.each([
+    '1.5',
+    '-1',
+    '+1',
+    '1e6',
+    '0x10',
+    '',
+    ' ',
+    ' 1',
+    '1\n',
+    'NaN',
+    'Infinity',
+    null,
+    undefined,
+    1,
+    true,
+  ])(
+    'rejects malformed native Payment Amount %j before confirmation',
+    Amount => {
+      expect(() => sanitize({ TransactionType: 'Payment', Amount })).toThrow(
+        /Amount must be a non-negative integer drops string/
+      )
+    }
+  )
+
+  it.each(['0', '1', '0001', '100000000000000000'])(
+    'preserves native Payment Amount %s without coercion',
+    Amount => {
+      expect(sanitize({ TransactionType: 'Payment', Amount }).Amount).toBe(
+        Amount
+      )
+    }
+  )
+
   it('rejects a transaction type outside the allowlist', () => {
     // SetRegularKey could hand account control to an attacker key — exactly the
     // kind of request that must never ride in on a "sign this swap" prompt.
@@ -98,10 +132,16 @@ describe('sanitizeRippleDappTx', () => {
 
   it('rejects non-object and non-JSON input', () => {
     expect(() =>
-      sanitizeRippleDappTx({ rawJson: '"just a string"', accountAddress: vaultAddress })
+      sanitizeRippleDappTx({
+        rawJson: '"just a string"',
+        accountAddress: vaultAddress,
+      })
     ).toThrow(/must be a JSON object/)
     expect(() =>
-      sanitizeRippleDappTx({ rawJson: 'not json', accountAddress: vaultAddress })
+      sanitizeRippleDappTx({
+        rawJson: 'not json',
+        accountAddress: vaultAddress,
+      })
     ).toThrow(/not valid JSON/)
   })
 
