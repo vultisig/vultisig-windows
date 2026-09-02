@@ -342,12 +342,21 @@ export const readVaultAllKeyShares = async ({
       validateLegacyVaultKeyShares,
     })
     return decrypted
-  } catch (error) {
-    if (error instanceof UnreadableVaultKeySharesError) {
-      throw error
-    }
-
-    throw new UnreadableVaultKeySharesError()
+  } catch {
+    // Disabling a passcode writes plaintext shares before it clears the
+    // encryption proof. If the app stops between those two durable writes, a
+    // later unlock still sees the stale proof. Accept the stored values only
+    // when their MPC public-key identity proves they are already plaintext;
+    // ciphertext and malformed values continue to fail this validation.
+    await assertVaultKeySharesReadable({
+      ...allKeyShares,
+      libType,
+      publicKeys,
+      chainPublicKeys,
+      publicKeyMldsa,
+      validateLegacyVaultKeyShares,
+    })
+    return allKeyShares
   }
 }
 

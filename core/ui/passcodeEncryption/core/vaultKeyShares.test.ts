@@ -107,6 +107,17 @@ describe('readVaultAllKeyShares', () => {
     ).resolves.toEqual(plainShares)
   })
 
+  it('recovers valid plaintext left by an interrupted passcode disable', async () => {
+    await expect(
+      readVaultAllKeyShares({
+        ...plainShares,
+        ...vaultMetadata,
+        hasPasscodeEncryption: true,
+        key: passcode,
+      })
+    ).resolves.toEqual(plainShares)
+  })
+
   it('rejects the whole vault when any encrypted share cannot be decrypted', async () => {
     const encrypted = await encryptVaultAllKeyShares({
       ...plainShares,

@@ -8,6 +8,8 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { FlowErrorPageContent } from '../flow/FlowErrorPageContent'
 import { I18nProvider } from '../i18n/I18nProvider'
+import { PasscodeAutoLockHoldsProvider } from '../passcodeEncryption/autoLock/passcodeAutoLockHolds'
+import { PasscodeGuard } from '../passcodeEncryption/guard/PasscodeGuard'
 import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
 import { useCore } from '../state/core'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
@@ -85,9 +87,12 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
               <VaultsProvider value={vaults}>
                 <CurrentVaultIdProvider value={targetVaultId ?? currentVaultId}>
                   <PasscodeProvider initialValue={null}>
-                    <RootCurrentVaultProvider>
-                      {children}
-                    </RootCurrentVaultProvider>
+                    <PasscodeAutoLockHoldsProvider>
+                      <RootCurrentVaultProvider>
+                        {children}
+                      </RootCurrentVaultProvider>
+                      <PasscodeGuard />
+                    </PasscodeAutoLockHoldsProvider>
                   </PasscodeProvider>
                 </CurrentVaultIdProvider>
               </VaultsProvider>
