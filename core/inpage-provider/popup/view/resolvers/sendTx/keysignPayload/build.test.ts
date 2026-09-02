@@ -1,5 +1,6 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import { describe, expect, it, vi } from 'vitest'
 
 import { buildSendTxKeysignPayload } from './build'
@@ -111,5 +112,43 @@ describe('buildSendTxKeysignPayload', () => {
         : []
 
     expect(secondMessage?.stateInit).toBeUndefined()
+  })
+
+  // The dApp's `valid_until` is the only expiry the dApp sees. It has to reach the
+  // chain-specific resolver, which clamps the signed expiry to it.
+  it('passes a TonConnect deadline through to the chain-specific resolver', async () => {
+    const tonValidUntil = 1_753_579_060
+    const message = {
+      to: 'EQDmLe6ticcY_uLZsfurdYONshNuCn8IS81KcJ8p6M6ISJrE',
+      amount: '50000000',
+    }
+
+    await buildSendTxKeysignPayload({
+      parsedTx: {
+        coin: tonCoin,
+        customTxData: {
+          regular: {
+            chain: Chain.Ton,
+            coin: tonCoin,
+            transactionDetails: {
+              from: tonCoin.address,
+              to: message.to,
+              asset: { ticker: tonCoin.ticker },
+              amount: { amount: message.amount, decimals: tonCoin.decimals },
+              tonMessages: [message],
+              tonValidUntil,
+            },
+          },
+        },
+      },
+      publicKey: publicKey as never,
+      walletCore: {} as never,
+      vaultId: 'vault-id',
+      localPartyId: 'local-party',
+    })
+
+    expect(vi.mocked(getChainSpecific)).toHaveBeenLastCalledWith(
+      expect.objectContaining({ validUntil: tonValidUntil })
+    )
   })
 })

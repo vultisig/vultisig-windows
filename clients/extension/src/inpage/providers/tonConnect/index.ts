@@ -642,6 +642,7 @@ export class TonConnectBridge {
           },
           data: firstMessage.payload,
           tonMessages,
+          tonValidUntil: validUntil,
         },
       },
     }

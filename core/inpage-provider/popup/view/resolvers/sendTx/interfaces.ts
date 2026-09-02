@@ -188,6 +188,8 @@ export type TransactionDetails = {
     payload?: string
     stateInit?: string
   }>
+  /** Deadline (unix seconds) the dApp attached to a TonConnect `sendTransaction` (`valid_until`). */
+  tonValidUntil?: number
 }
 
 export type DepositTransactionDetails = {

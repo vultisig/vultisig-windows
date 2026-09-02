@@ -51,22 +51,16 @@ vi.mock(
   })
 )
 
-vi.mock(
-  '@clients/extension/src/inpage/providers/tonConnect/tonProof',
-  () => ({
-    buildTonProofPayload: vi.fn(),
-    formatTonProofReply: vi.fn(),
-    getTonProofHash: vi.fn(),
-  })
-)
+vi.mock('@clients/extension/src/inpage/providers/tonConnect/tonProof', () => ({
+  buildTonProofPayload: vi.fn(),
+  formatTonProofReply: vi.fn(),
+  getTonProofHash: vi.fn(),
+}))
 
-vi.mock(
-  '@clients/extension/src/inpage/providers/tonConnect/signData',
-  () => ({
-    buildSignDataTextBinaryHash: vi.fn(),
-    buildSignDataCellHash: vi.fn(),
-  })
-)
+vi.mock('@clients/extension/src/inpage/providers/tonConnect/signData', () => ({
+  buildSignDataTextBinaryHash: vi.fn(),
+  buildSignDataCellHash: vi.fn(),
+}))
 
 vi.mock(
   '@clients/extension/src/inpage/providers/tonConnect/getWalletStateInit',
@@ -140,9 +134,7 @@ describe('TonConnectBridge.send', () => {
       const result = await bridge.send(
         makeSendTxRequest({
           valid_until: Math.floor(Date.now() / 1000) - 10,
-          messages: [
-            { address: 'EQTest', amount: '100000000' },
-          ],
+          messages: [{ address: 'EQTest', amount: '100000000' }],
         })
       )
 
@@ -258,7 +250,8 @@ describe('TonConnectBridge.send', () => {
 
       expect(mockCallPopup).toHaveBeenCalled()
       const popupCall = mockCallPopup.mock.calls[0][0]
-      const tonMessages = popupCall.sendTx.keysign.transactionDetails.tonMessages
+      const tonMessages =
+        popupCall.sendTx.keysign.transactionDetails.tonMessages
 
       expect(tonMessages).toHaveLength(1)
       expect(tonMessages[0].stateInit).toBe(stateInitBoc)
@@ -284,7 +277,8 @@ describe('TonConnectBridge.send', () => {
 
       expect(mockCallPopup).toHaveBeenCalled()
       const popupCall = mockCallPopup.mock.calls[0][0]
-      const tonMessages = popupCall.sendTx.keysign.transactionDetails.tonMessages
+      const tonMessages =
+        popupCall.sendTx.keysign.transactionDetails.tonMessages
 
       expect(tonMessages).toHaveLength(1)
       expect(tonMessages[0].stateInit).toBeUndefined()
@@ -318,7 +312,8 @@ describe('TonConnectBridge.send', () => {
       )
 
       const popupCall = mockCallPopup.mock.calls[0][0]
-      const tonMessages = popupCall.sendTx.keysign.transactionDetails.tonMessages
+      const tonMessages =
+        popupCall.sendTx.keysign.transactionDetails.tonMessages
 
       expect(tonMessages).toHaveLength(3)
       expect(tonMessages[0].stateInit).toBe('state-init-1')
@@ -331,9 +326,7 @@ describe('TonConnectBridge.send', () => {
     it('should return signed BOC on success', async () => {
       const bocResult = 'te6cckEBAgSignedBoc'
 
-      mockCallPopup.mockResolvedValue([
-        { data: { encoded: bocResult } },
-      ])
+      mockCallPopup.mockResolvedValue([{ data: { encoded: bocResult } }])
 
       const result = await bridge.send(
         makeSendTxRequest({
@@ -351,9 +344,7 @@ describe('TonConnectBridge.send', () => {
     })
 
     it('should pass chain as Ton in the keysign payload', async () => {
-      mockCallPopup.mockResolvedValue([
-        { data: { encoded: 'mock-boc' } },
-      ])
+      mockCallPopup.mockResolvedValue([{ data: { encoded: 'mock-boc' } }])
 
       await bridge.send(
         makeSendTxRequest({
@@ -411,6 +402,36 @@ describe('TonConnectBridge.send', () => {
 
       expect((result as any).error.code).toBe(100)
       expect((result as any).error.message).toBe('Failed to get account')
+    })
+  })
+
+  describe('valid_until passthrough', () => {
+    // The bridge already rejects an expired deadline; the accepted one has to
+    // travel with the messages so the signed expiry can be clamped to it.
+    it('forwards the validated deadline to the popup', async () => {
+      const deadline = validUntil()
+
+      mockCallPopup.mockResolvedValue([
+        { data: { encoded: 'mock-boc-result' } },
+      ])
+
+      await bridge.send(
+        makeSendTxRequest({
+          valid_until: deadline,
+          messages: [
+            {
+              address: 'EQARULUYsmJq1RiZ-YiH-IJLcAZUVkVff-KBPwEmmaQGH6aC',
+              amount: '100000000',
+            },
+          ],
+        })
+      )
+
+      const popupCall = mockCallPopup.mock.calls[0][0]
+
+      expect(popupCall.sendTx.keysign.transactionDetails.tonValidUntil).toBe(
+        deadline
+      )
     })
   })
 })
