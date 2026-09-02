@@ -33,6 +33,16 @@ const runeCoin = { chain: Chain.THORChain, logo: 'rune' as const }
 const solCoin = { chain: Chain.Solana, logo: 'solana' as const }
 const ethCoin = { chain: Chain.Ethereum, logo: 'eth' as const }
 
+/**
+ * A non-fee token, so `CoinIcon` overlays the chain badge that fee coins never
+ * render. The card's icon slot has to leave that badge room.
+ */
+const usdcCoin = {
+  chain: Chain.Ethereum,
+  id: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  logo: 'usdc' as const,
+}
+
 /** Single story page: all card variants (successful Send/Receive/Swap, error with and without message) for quick glance. */
 export const AllCards: Story = {
   render: () => (
@@ -92,6 +102,19 @@ export const AllCards: Story = {
       />
     </div>
   ),
+}
+
+/** Token transfer: the coin icon carries a chain badge on its bottom-right. */
+export const TokenWithChainBadge: Story = {
+  args: {
+    tagType: 'swap',
+    status: 'successful',
+    amountUsd: '$39.99',
+    amountCrypto: '40',
+    symbol: 'USDC',
+    pill: { providerName: 'THORChain' },
+  },
+  render: args => <TransactionHistoryCard {...args} coin={usdcCoin} />,
 }
 
 export const SuccessfulSend: Story = {
