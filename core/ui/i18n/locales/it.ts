@@ -1955,4 +1955,10 @@ export const it = {
     'Non è stato scambiato qui in questa finestra — il massimo è stato {{price}}',
   swap_quote_expired:
     'Questo preventivo è scaduto. Aggiorna la pagina per visualizzare il prezzo attuale.',
+  token_verification_unverified: 'Non verificato',
+  token_verification_unverified_hint:
+    "Questo token non è presente nell'elenco verificato. Controlla l'indirizzo del contratto prima di considerarlo valido.",
+  token_verification_scam: 'TRUFFA',
+  token_verification_scam_hint:
+    'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
 }

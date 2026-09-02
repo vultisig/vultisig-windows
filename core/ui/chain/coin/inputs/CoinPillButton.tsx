@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -42,7 +43,11 @@ export const CoinPillButton = ({
             <Text weight="500" size={12} color="shy">
               {t('native')}
             </Text>
-          ) : null}
+          ) : (
+            <HStack>
+              <TokenVerificationBadge value={value} />
+            </HStack>
+          )}
         </VStack>
         <ChevronRightIcon />
       </HStack>

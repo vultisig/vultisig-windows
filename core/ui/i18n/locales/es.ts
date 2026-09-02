@@ -1949,4 +1949,10 @@ export const es = {
     'No ha cotizado aquí en este período; el máximo fue {{price}}',
   swap_quote_expired:
     'Esta cotización ha caducado. Actualiza la página para ver el precio actual.',
+  token_verification_unverified: 'Inconfirmado',
+  token_verification_unverified_hint:
+    'Este token no está en la lista verificada. Compruebe su dirección de contrato antes de confiar en él.',
+  token_verification_scam: 'ESTAFA',
+  token_verification_scam_hint:
+    'Este token copia el nombre de un token verificado, pero reside en una dirección de contrato diferente. Es falso; no confíe en él.',
 }

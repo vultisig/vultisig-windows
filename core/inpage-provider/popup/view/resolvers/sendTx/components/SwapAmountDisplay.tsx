@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -24,7 +25,7 @@ export const SwapAmountDisplay = ({
   const icon = <CoinIcon coin={coin} style={{ fontSize: 24 }} />
 
   return (
-    <HStack gap={8}>
+    <HStack gap={8} alignItems="center">
       {useRoundedIcon ? (
         <RoundedCoinIconWrapper>{icon}</RoundedCoinIconWrapper>
       ) : (
@@ -38,6 +39,7 @@ export const SwapAmountDisplay = ({
           </Text>
         )}
       </Text>
+      <TokenVerificationBadge value={coin} />
     </HStack>
   )
 }

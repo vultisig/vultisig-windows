@@ -1790,4 +1790,10 @@ export const zh = {
   swap_limit_chart_last_traded: '此处最后交易记录为{{when}}',
   swap_limit_chart_not_reached: '本窗口期内未在此交易——最高价为{{price}}',
   swap_quote_expired: '此报价已过期，请刷新页面查看最新价格。',
+  token_verification_unverified: '未经证实',
+  token_verification_unverified_hint:
+    '此代币不在已验证列表中。信任此代币前，请先检查其合约地址。',
+  token_verification_scam: '骗局',
+  token_verification_scam_hint:
+    '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
 }
