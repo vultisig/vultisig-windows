@@ -1,3 +1,4 @@
+import { getTxFailureDescription } from '@core/ui/chain/tx/failure/getTxFailureDescription'
 import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -28,6 +29,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { TonBroadcastRejectedError } from '@vultisig/core-chain/chains/ton/failure'
 import { getKeysignLimitSwapCancel } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapCancel'
 import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
@@ -302,12 +304,28 @@ export const KeysignSigningStep = ({
         // as an on-chain failure, not a device/connection timeout. The raw RPC
         // reason stays available under "Show exact error".
         if (error instanceof BroadcastError) {
+          // A TON wallet contract refusing the message has a known cause and a
+          // known fix (a replayed seqno, an expired deadline from a drifted
+          // clock, …): lead with that, and keep toncenter's raw text behind
+          // "Show exact error".
+          const tonRejection =
+            error.cause instanceof TonBroadcastRejectedError
+              ? error.cause
+              : null
+
           return (
             <FullPageFlowErrorState
               variant="error"
-              error={error}
+              error={tonRejection ? tonRejection.cause : error}
               title={t('broadcast_error')}
-              description={t('broadcast_error_description')}
+              description={
+                tonRejection
+                  ? getTxFailureDescription({
+                      failure: tonRejection.failure,
+                      t,
+                    })
+                  : t('broadcast_error_description')
+              }
             />
           )
         }

@@ -1790,4 +1790,25 @@ export const zh = {
   swap_limit_chart_last_traded: '此处最后交易记录为{{when}}',
   swap_limit_chart_not_reached: '本窗口期内未在此交易——最高价为{{price}}',
   swap_quote_expired: '此报价已过期，请刷新页面查看最新价格。',
+  ton_tx_failure_seqno_mismatch:
+    '由于该钱包中另一笔交易已先被处理，因此网络认为这笔交易顺序错误而拒绝了它。请检查您的交易记录：如果找不到这笔转账，请重新发送。',
+  ton_tx_failure_expired:
+    '交易时间窗口在网络处理之前已关闭。请确保您的设备日期和时间已设置为自动，然后重新发送。',
+  ton_tx_failure_invalid_signature:
+    '钱包合约拒绝了签名。请重新签署交易；如果仍然失败，则表示此地址的钱包合约与此金库不匹配。',
+  ton_tx_failure_wallet_id_mismatch:
+    '该交易是为与部署在此地址的钱包合约版本不同的钱包合约版本构建的。',
+  ton_tx_failure_insufficient_funds:
+    'TON金额不足，无法支付交易金额及网络费用。请预留约 0.05 TON用于支付费用，并重试。',
+  ton_tx_failure_out_of_gas:
+    '交易因 gas 不足而无法完成。请为转账附加更多TON ，然后重试。',
+  ton_tx_failure_invalid_destination: '目标地址在TON上无效。请检查地址并重试。',
+  ton_tx_failure_not_enough_jettons: '此钱包中没有足够的代币来发送该金额。',
+  ton_tx_failure_jetton_unauthorized:
+    '代币合约拒绝了转账，因为该钱包无权转移这些代币。',
+  ton_tx_failure_action_failed:
+    '钱包已接受交易，但无法完成转账，因此未发送任何款项。网络手续费仍被收取。请查看余额并重试。',
+  ton_tx_failure_aborted: '网络在完成转账之前中止了这笔交易。',
+  ton_tx_failure_contract_rejected:
+    '合约拒绝了该交易（退出代码{{exitCode}} ）。',
 }

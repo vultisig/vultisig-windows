@@ -1909,4 +1909,28 @@ export const ko = {
     '이 기간 동안에는 거래되지 않았습니다. 최고가는 {{price}} 였습니다.',
   swap_quote_expired:
     '이 견적은 만료되었습니다. 최신 가격을 확인하려면 페이지를 새로고침하세요.',
+  ton_tx_failure_seqno_mismatch:
+    '이 지갑에서 다른 거래가 먼저 처리되었기 때문에 네트워크에서 이 거래를 순서가 맞지 않는 것으로 간주하여 거부했습니다. 거래 내역을 확인해 보세요. 해당 거래가 없으면 다시 보내주세요.',
+  ton_tx_failure_expired:
+    '네트워크에서 거래를 처리하기 전에 거래 가능 시간이 종료되었습니다. 기기의 날짜와 시간이 자동으로 설정되었는지 확인한 후 다시 보내주세요.',
+  ton_tx_failure_invalid_signature:
+    '지갑 계약에서 서명을 거부했습니다. 거래에 다시 서명해 보세요. 계속 실패하면 해당 주소의 지갑 계약이 이 금고와 일치하지 않는 것입니다.',
+  ton_tx_failure_wallet_id_mismatch:
+    '해당 거래는 이 주소에 배포된 지갑 계약 버전과 다른 버전을 기준으로 생성되었습니다.',
+  ton_tx_failure_insufficient_funds:
+    '결제 금액과 네트워크 수수료를 충당하기에 TON 부족합니다. 수수료를 위해 약 0.05 TON 토큰을 남겨두고 다시 시도해 주세요.',
+  ton_tx_failure_out_of_gas:
+    '거래가 완료되기 전에 가스가 부족해졌습니다. 전송에 TON 더 추가하고 다시 시도하십시오.',
+  ton_tx_failure_invalid_destination:
+    '목적지 주소가 TON 에서 유효하지 않습니다. 주소를 확인하고 다시 시도하십시오.',
+  ton_tx_failure_not_enough_jettons:
+    '이 지갑에는 해당 금액을 보내기에 충분한 토큰이 없습니다.',
+  ton_tx_failure_jetton_unauthorized:
+    '토큰 계약이 해당 지갑에서 이러한 토큰을 이동할 수 없기 때문에 전송을 거부했습니다.',
+  ton_tx_failure_action_failed:
+    '지갑에서 거래를 승인했지만 이체를 완료할 수 없어 아무것도 전송되지 않았습니다. 네트워크 수수료는 부과되었습니다. 잔액을 확인하고 다시 시도해 주세요.',
+  ton_tx_failure_aborted:
+    '네트워크가 해당 거래를 실행하기 전에 중단시켰습니다.',
+  ton_tx_failure_contract_rejected:
+    '계약에서 거래를 거부했습니다(종료 코드 {{exitCode}} ).',
 }

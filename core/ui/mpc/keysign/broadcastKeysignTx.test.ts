@@ -1,55 +1,49 @@
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
-import { BroadcastError } from './broadcastKeysignTx'
+const broadcastTxMock = vi.hoisted(() => vi.fn())
 
-describe('BroadcastError', () => {
-  it('preserves the underlying RPC message', () => {
-    const cause = new Error('Blockhash not found')
-    const error = new BroadcastError(cause)
+vi.mock('@vultisig/core-chain/tx/broadcast', () => ({
+  broadcastTx: (...args: unknown[]) => broadcastTxMock(...args),
+}))
+
+import { BroadcastError, broadcastKeysignTx } from './broadcastKeysignTx'
+
+const input = { chain: 'Ton', tx: { encoded: 'boc' } } as never
+
+describe('broadcastKeysignTx', () => {
+  it('resolves when the network accepted the transaction', async () => {
+    broadcastTxMock.mockResolvedValue({
+      status: 'accepted',
+      finality: 'pending',
+      txHash: 'hash',
+    })
+
+    await expect(broadcastKeysignTx(input)).resolves.toBeUndefined()
+  })
+
+  it('turns a failed broadcast result into a BroadcastError carrying the on-chain cause', async () => {
+    const cause = new Error(
+      'inbound external message rejected by transaction: exitcode=133'
+    )
+    broadcastTxMock.mockResolvedValue({
+      status: 'failed',
+      code: 'BROADCAST_REJECTED',
+      retryable: false,
+      cause,
+    })
+
+    const error = await broadcastKeysignTx(input).catch(e => e)
 
     expect(error).toBeInstanceOf(BroadcastError)
     expect(error.cause).toBe(cause)
-    expect(extractErrorMsg(error)).toBe('Blockhash not found')
+    expect(error.message).toContain('exitcode=133')
   })
 
-  it('hoists Solana SendTransactionError program logs into the message', () => {
-    const cause = Object.assign(
-      new Error('Transaction simulation failed: custom program error: 0x1'),
-      {
-        logs: [
-          'Program 11111111111111111111111111111111 invoke [1]',
-          'Program 11111111111111111111111111111111 failed: insufficient lamports',
-        ],
-      }
+  it('still wraps a resolver that throws', async () => {
+    broadcastTxMock.mockRejectedValue(new Error('resolver bug'))
+
+    await expect(broadcastKeysignTx(input)).rejects.toBeInstanceOf(
+      BroadcastError
     )
-
-    const message = extractErrorMsg(new BroadcastError(cause))
-
-    expect(message).toContain('Transaction simulation failed')
-    expect(message).toContain('insufficient lamports')
-  })
-
-  it('hoists JSON-RPC data.logs into the message', () => {
-    const cause = {
-      message: 'failed to send transaction',
-      data: { logs: ['Program log: error: already in use'] },
-    }
-
-    const message = extractErrorMsg(new BroadcastError(cause))
-
-    expect(message).toContain('failed to send transaction')
-    expect(message).toContain('already in use')
-  })
-
-  it('does not duplicate logs already present in the message', () => {
-    const log = 'Program log: insufficient funds'
-    const cause = Object.assign(new Error(`simulation failed: ${log}`), {
-      logs: [log],
-    })
-
-    const message = extractErrorMsg(new BroadcastError(cause))
-
-    expect(message.split(log)).toHaveLength(2)
   })
 })

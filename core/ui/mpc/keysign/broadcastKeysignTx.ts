@@ -36,6 +36,13 @@ export const broadcastKeysignTx = async (
   if ('error' in result) {
     throw new BroadcastError(result.error)
   }
+
+  // `broadcastTx` reports a rejection as a result rather than throwing; only
+  // a resolver bug throws. Both are on-chain rejections from the user's point
+  // of view, so both become a BroadcastError.
+  if (result.data.status === 'failed') {
+    throw new BroadcastError(result.data.cause)
+  }
 }
 
 const extractBroadcastReason = (cause: unknown): string => {

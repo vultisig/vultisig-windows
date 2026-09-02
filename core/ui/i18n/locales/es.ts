@@ -1949,4 +1949,28 @@ export const es = {
     'No ha cotizado aquí en este período; el máximo fue {{price}}',
   swap_quote_expired:
     'Esta cotización ha caducado. Actualiza la página para ver el precio actual.',
+  ton_tx_failure_seqno_mismatch:
+    'Otra transacción de esta billetera se procesó primero, por lo que la red rechazó esta por estar fuera de orden. Revisa tu historial: si esta transferencia no aparece, envíala de nuevo.',
+  ton_tx_failure_expired:
+    'El plazo para procesar la transacción finalizó antes de que la red la procesara. Asegúrate de que la fecha y la hora de tu dispositivo estén configuradas automáticamente y vuelve a enviarla.',
+  ton_tx_failure_invalid_signature:
+    'El contrato de la billetera rechazó la firma. Firme la transacción nuevamente; si sigue fallando, el contrato de la billetera en esta dirección no coincide con esta bóveda.',
+  ton_tx_failure_wallet_id_mismatch:
+    'La transacción se creó para una versión del contrato de la billetera diferente a la que está desplegada en esta dirección.',
+  ton_tx_failure_insufficient_funds:
+    'No hay suficientes TON para cubrir el importe más las comisiones de red. Reserve aproximadamente 0,05 TON para las comisiones e inténtelo de nuevo.',
+  ton_tx_failure_out_of_gas:
+    'La transacción se quedó sin gas antes de poder finalizar. Añada más TON a la transferencia e inténtelo de nuevo.',
+  ton_tx_failure_invalid_destination:
+    'La dirección de destino no es válida en TON . Verifique la dirección e inténtelo de nuevo.',
+  ton_tx_failure_not_enough_jettons:
+    'Esta billetera no contiene suficientes tokens para enviar esa cantidad.',
+  ton_tx_failure_jetton_unauthorized:
+    'El contrato del token rechazó la transferencia porque esta billetera no tiene permiso para mover estos tokens.',
+  ton_tx_failure_action_failed:
+    'La billetera aceptó la transacción, pero no pudo realizar la transferencia, por lo que no se envió nada. Aun así, se cobró la comisión de red. Verifique su saldo e inténtelo de nuevo.',
+  ton_tx_failure_aborted:
+    'La red abortó esta transacción antes de que pudiera completarse la transferencia.',
+  ton_tx_failure_contract_rejected:
+    'El contrato rechazó la transacción (código de salida {{exitCode}} ).',
 }
