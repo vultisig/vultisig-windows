@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { vStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
@@ -12,7 +13,6 @@ export const BannerRoot = styled.div`
   position: relative;
   width: 100%;
   min-height: 156px;
-  margin-bottom: 32px;
   box-sizing: border-box;
   padding: 24px;
   ${borderRadius.md};
@@ -131,4 +131,26 @@ export const BannerCta = styled(Button).attrs({ size: 'xs' })`
   align-self: center;
   white-space: nowrap;
   z-index: 2;
+`
+
+/**
+ * The dismiss affordance, floated over the top-right coin artwork. It carries a
+ * scrim of the banner's own base colour rather than the usual white `mist`,
+ * which would wash out against the gold coin instead of holding the glyph.
+ */
+export const BannerDismissButton = styled(IconButton).attrs({ size: 'md' })`
+  position: absolute;
+  z-index: 3;
+  top: 8px;
+  right: 8px;
+  border: none;
+  color: ${getColor('contrast')};
+  background: ${({ theme }) =>
+    theme.colors.background.withAlpha(0.6).toCssValue()};
+  backdrop-filter: blur(8px);
+
+  &:hover {
+    background: ${({ theme }) =>
+      theme.colors.background.withAlpha(0.8).toCssValue()};
+  }
 `

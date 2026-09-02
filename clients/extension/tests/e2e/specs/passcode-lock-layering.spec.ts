@@ -24,8 +24,17 @@
  */
 
 import type { Locator, Page } from '@playwright/test'
+import type { Vault } from '@vultisig/core-mpc/vault/Vault'
+import fs from 'fs'
+import path from 'path'
 
 import { expect, test } from '../fixtures/extension-loader'
+import {
+  readChromeSessionStorage,
+  readChromeStorage,
+  removeChromeSessionStorage,
+  removeChromeStorage,
+} from '../helpers/chrome-storage'
 import {
   ensureVaultExists,
   getVaultConfigFromEnv,
@@ -38,6 +47,23 @@ const autoLockMinutes = 1
 // `topLayerTextAt` compares raw textContent, so the casing has to be right.
 const modalMarker = 'Select chain'
 const gateMarker = 'App Locked'
+const passcodeEncryptionStorageKey = 'passcodeEncryption'
+const vaultsStorageKey = 'vaults'
+const qaArtifactDirectory = process.env.PASSCODE_RECOVERY_QA_DIR
+// Matches the production-only chrome.storage.session key. The value remains
+// sealed; the E2E needs only presence/absence for the restoration boundary.
+const passcodeUnlockSessionChromeStorageKey = 'extensionPasscodeUnlockSession'
+
+const captureQaArtifact = async (page: Page, name: string) => {
+  if (!qaArtifactDirectory) {
+    return
+  }
+
+  fs.mkdirSync(qaArtifactDirectory, { recursive: true })
+  await page.screenshot({
+    path: path.join(qaArtifactDirectory, name),
+  })
+}
 
 /**
  * Returns the text of the top-level layer that owns the centre of the viewport.
@@ -114,6 +140,94 @@ const enablePasscode = async (page: Page) => {
   await expect(page.getByText('ON', { exact: true })).toBeVisible({
     timeout: 30_000,
   })
+}
+
+const enterPasscode = async (page: Page, value: string) => {
+  const digitBoxes = page.locator('input[type="password"]')
+  await expect(digitBoxes).toHaveCount(6)
+  await digitBoxes.first().click()
+  await page.keyboard.type(value)
+}
+
+const waitForUnlockSession = (
+  context: Parameters<typeof readChromeSessionStorage>[0]
+) =>
+  expect
+    .poll(() =>
+      readChromeSessionStorage(context, passcodeUnlockSessionChromeStorageKey)
+    )
+    .not.toBeUndefined()
+
+const openVaultPage = async (
+  context: Parameters<typeof readChromeStorage>[0],
+  extensionId: string
+) => {
+  const page = await context.newPage()
+  await page.setViewportSize({ width: 480, height: 600 })
+  const vaultPage = new VaultPage(page, extensionId)
+  await vaultPage.goto()
+
+  return { page, vaultPage }
+}
+
+const interruptPasscodeChange = async ({
+  context,
+  page,
+  toPasscode,
+}: {
+  context: Parameters<typeof readChromeStorage>[0]
+  page: Page
+  toPasscode: string
+}) => {
+  const before = await readChromeStorage<Vault[]>(context, vaultsStorageKey)
+  const beforeKeyShares = JSON.stringify(
+    before?.map(({ chainKeyShares, keyShareMldsa, keyShares }) => ({
+      chainKeyShares,
+      keyShareMldsa,
+      keyShares,
+    }))
+  )
+
+  await page.evaluate(() => {
+    const originalSet = chrome.storage.local.set
+
+    chrome.storage.local.set = async items => {
+      await originalSet.call(chrome.storage.local, items)
+
+      if ('vaults' in items) {
+        throw new Error('popup destroyed after vault write')
+      }
+    }
+  })
+
+  await page.getByRole('button', { name: /change passcode/i }).click()
+
+  const digitBoxes = page.locator('input[type="password"]')
+  await expect(digitBoxes).toHaveCount(18)
+  await digitBoxes.first().click()
+  await page.keyboard.type(passcode)
+  await digitBoxes.nth(6).click()
+  await page.keyboard.type(toPasscode)
+  await digitBoxes.nth(12).click()
+  await page.keyboard.type(toPasscode)
+  await page.getByRole('button', { name: 'Save', exact: true }).click()
+
+  await expect
+    .poll(async () => {
+      const current = await readChromeStorage<Vault[]>(
+        context,
+        vaultsStorageKey
+      )
+
+      return JSON.stringify(
+        current?.map(({ chainKeyShares, keyShareMldsa, keyShares }) => ({
+          chainKeyShares,
+          keyShareMldsa,
+          keyShares,
+        }))
+      )
+    })
+    .not.toBe(beforeKeyShares)
 }
 
 /**
@@ -231,6 +345,154 @@ test.describe('Passcode lock layering', () => {
       await expect(page.getByText(modalMarker)).toBeVisible()
     } finally {
       await page.close()
+    }
+  })
+
+  test('recovers after proof loss, preserves throttling, and repairs restart state', async ({
+    context,
+    extensionId,
+  }) => {
+    test.slow()
+
+    const { page, vaultPage } = await openVaultPage(context, extensionId)
+
+    try {
+      await vaultPage.waitForView()
+      await vaultPage.dismissPromptSheets()
+      await page.locator('[data-testid="settings-button"]').click()
+      await expect(
+        page.getByText('Security', { exact: true }).first()
+      ).toBeVisible()
+      await enablePasscode(page)
+      await waitForUnlockSession(context)
+
+      await removeChromeStorage(context, passcodeEncryptionStorageKey)
+      await removeChromeSessionStorage(
+        context,
+        passcodeUnlockSessionChromeStorageKey
+      )
+    } finally {
+      await page.close()
+    }
+
+    const recovery = await openVaultPage(context, extensionId)
+
+    try {
+      await expect(recovery.page.getByText(gateMarker)).toBeVisible()
+      await expect(recovery.page.locator('input[type="password"]')).toHaveCount(
+        6
+      )
+
+      await enterPasscode(recovery.page, '246801')
+      await expect(recovery.page.getByText('Invalid passcode')).toBeVisible({
+        timeout: 15_000,
+      })
+
+      const throttled = await readChromeStorage<{
+        encryptedSample: null
+        attemptState: { failedAttempts: number }
+      }>(context, passcodeEncryptionStorageKey)
+
+      expect(throttled).toMatchObject({
+        encryptedSample: null,
+        attemptState: { failedAttempts: 1 },
+      })
+
+      await captureQaArtifact(recovery.page, 'proof-loss-invalid-passcode.png')
+
+      await enterPasscode(recovery.page, passcode)
+      await expect(recovery.page.getByText(gateMarker)).toBeHidden({
+        timeout: 15_000,
+      })
+
+      await expect
+        .poll(
+          () =>
+            readChromeStorage<{
+              encryptedSample: string | null
+              passcodeLength?: number
+              attemptState?: unknown
+            }>(context, passcodeEncryptionStorageKey),
+          { timeout: 15_000 }
+        )
+        .toMatchObject({
+          encryptedSample: expect.any(String),
+          passcodeLength: 6,
+        })
+    } finally {
+      await recovery.page.close()
+    }
+
+    const restarted = await openVaultPage(context, extensionId)
+
+    try {
+      await restarted.vaultPage.waitForView()
+      await expect(restarted.page.getByText(gateMarker)).toBeHidden()
+    } finally {
+      await restarted.page.close()
+    }
+  })
+
+  test('rejects a stale restored session before accepting the shares passcode', async ({
+    context,
+    extensionId,
+  }) => {
+    test.slow()
+
+    const newPasscode = '246801'
+    const { page, vaultPage } = await openVaultPage(context, extensionId)
+
+    try {
+      await vaultPage.waitForView()
+      await vaultPage.dismissPromptSheets()
+      await page.locator('[data-testid="settings-button"]').click()
+      await expect(
+        page.getByText('Security', { exact: true }).first()
+      ).toBeVisible()
+      await enablePasscode(page)
+      await waitForUnlockSession(context)
+      await interruptPasscodeChange({
+        context,
+        page,
+        toPasscode: newPasscode,
+      })
+    } finally {
+      await page.close()
+    }
+
+    const recovery = await openVaultPage(context, extensionId)
+
+    try {
+      await expect(recovery.page.getByText(gateMarker)).toBeVisible({
+        timeout: 15_000,
+      })
+      await expect
+        .poll(() =>
+          readChromeSessionStorage(
+            context,
+            passcodeUnlockSessionChromeStorageKey
+          )
+        )
+        .toBeUndefined()
+
+      await captureQaArtifact(recovery.page, 'stale-session-rejected.png')
+
+      await enterPasscode(recovery.page, newPasscode)
+      await expect(recovery.page.getByText(gateMarker)).toBeHidden({
+        timeout: 15_000,
+      })
+      await waitForUnlockSession(context)
+    } finally {
+      await recovery.page.close()
+    }
+
+    const restarted = await openVaultPage(context, extensionId)
+
+    try {
+      await restarted.vaultPage.waitForView()
+      await expect(restarted.page.getByText(gateMarker)).toBeHidden()
+    } finally {
+      await restarted.page.close()
     }
   })
 })

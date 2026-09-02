@@ -14,16 +14,19 @@ import styled, { css } from 'styled-components'
 type CoinChartRangePickerProps = {
   value: MarketChartRange
   onChange: (value: MarketChartRange) => void
+  /** Which windows to offer; every range when omitted. */
+  ranges?: readonly MarketChartRange[]
 }
 
 /**
- * Equal-width 1D / 1W / 1M / 1Y / ALL segments for the coin-detail price
- * chart. Selecting the already-active range is a no-op upstream (the query
- * key doesn't change).
+ * Equal-width 1D / 1W / 1M / 1Y / ALL segments for a price chart, or whichever
+ * subset the caller offers. Selecting the already-active range is a no-op
+ * upstream (the query key doesn't change).
  */
 export const CoinChartRangePicker = ({
   value,
   onChange,
+  ranges = marketChartRanges,
 }: CoinChartRangePickerProps) => {
   const { t } = useTranslation()
 
@@ -37,7 +40,7 @@ export const CoinChartRangePicker = ({
 
   return (
     <HStack fullWidth gap={4}>
-      {marketChartRanges.map(range => (
+      {ranges.map(range => (
         <Segment
           key={range}
           type="button"

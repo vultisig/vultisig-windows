@@ -22,6 +22,7 @@ export enum StorageKey {
   dismissedBanners = 'dismissedBanners',
   isCircleVisible = 'isCircleVisible',
   isMLDSAEnabled = 'isMLDSAEnabled',
+  isLimitPriceChartExpanded = 'isLimitPriceChartExpanded',
   isTssBatchingEnabled = 'isTssBatchingEnabled',
   transactionHistory = 'transactionHistory',
   hasSeenNotificationPrompt = 'hasSeenNotificationPrompt',

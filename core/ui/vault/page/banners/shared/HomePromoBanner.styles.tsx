@@ -4,7 +4,7 @@ import { interactive } from '@lib/ui/css/interactive'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColor } from '@lib/ui/theme/ThemeColors'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 /**
  * Opacity the Figma banner gradient applies to each campaign's accent hue.
@@ -23,6 +23,7 @@ const accentAlpha = 0.69
  */
 export const HomePromoBannerRoot = styled.div<{
   $accent: ThemeColor
+  $isExtension: boolean
 }>`
   ${interactive};
   position: relative;
@@ -41,6 +42,8 @@ export const HomePromoBannerRoot = styled.div<{
       .withAlpha(accentAlpha)
       .toCssValue()} 50%, ${accent} 100%), ${base}`
   }};
+
+  ${({ $isExtension }) => $isExtension && `height: 81px;`}
 `
 
 export const HomePromoBannerContent = styled.div`
@@ -60,26 +63,42 @@ export const HomePromoBannerIconTile = styled.div`
   background: ${getColor('buttonSecondary')};
 `
 
-export const HomePromoBannerTextStack = styled.div`
+export const HomePromoBannerTextStack = styled.div<{ $isExtension: boolean }>`
   ${vStack({ gap: 2 })};
   flex: 1 0 0;
   min-width: 0;
   overflow-wrap: break-word;
+
+  ${({ $isExtension }) =>
+    $isExtension &&
+    css`
+      > * {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    `}
 `
 
 // eslint-disable-next-line local/no-hardcoded-border-radius -- a glass pill, not a surface
-export const HomePromoBannerCloseButton = styled(IconButton)`
+export const HomePromoBannerCloseButton = styled(IconButton)<{
+  $isExtension: boolean
+}>`
   position: absolute;
   z-index: 3;
-  top: 0;
-  right: 0;
+  top: ${({ $isExtension }) => ($isExtension ? 10 : 0)}px;
+  right: ${({ $isExtension }) => ($isExtension ? 10 : 0)}px;
   width: 40px;
   height: 40px;
   min-width: 40px;
   min-height: 40px;
   border-radius: 77px;
   border: none;
-  background: ${getColor('mist')};
+  background: ${({ $isExtension, theme }) =>
+    $isExtension
+      ? 'rgba(255, 255, 255, 0.01)'
+      : theme.colors.mist.toCssValue()};
   backdrop-filter: blur(8px);
 `
 

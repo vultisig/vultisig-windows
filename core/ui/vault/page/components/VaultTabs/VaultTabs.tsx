@@ -1,3 +1,4 @@
+import { useCore } from '@core/ui/state/core'
 import { Tabs } from '@lib/ui/base/Tabs'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hStack } from '@lib/ui/layout/Stack'
@@ -12,39 +13,49 @@ import { getVaultTabs, VaultPageTab } from './config'
 import { VaultTabsHeader } from './VaultTabsHeader'
 
 export const VaultTabs = () => {
+  const { client } = useCore()
   const [activeTab, setActiveTab] = useState<VaultPageTab>('portfolio')
   const { t } = useTranslation()
   const tabs = getVaultTabs(t)
+  const tabsContent = (
+    <Tabs
+      tabs={tabs}
+      value={activeTab}
+      onValueChange={setActiveTab}
+      triggerSlot={({ tab: { label, disabled }, isActive }) => (
+        <TriggerItem isActive={isActive} isDisabled={disabled}>
+          <Text
+            size={14}
+            as="span"
+            color={isActive ? 'contrast' : 'supporting'}
+          >
+            {label}
+          </Text>
+          {disabled && (
+            <ComingSoonWrapper>
+              <Text size={10} as="span" color="info">
+                {t('soon')}
+              </Text>
+            </ComingSoonWrapper>
+          )}
+        </TriggerItem>
+      )}
+      triggersContainer={VaultTabsHeader}
+    />
+  )
 
   return (
     <SearchChainProvider initialValue="">
-      <Tabs
-        tabs={tabs}
-        value={activeTab}
-        onValueChange={setActiveTab}
-        triggerSlot={({ tab: { label, disabled }, isActive }) => (
-          <TriggerItem isActive={isActive} isDisabled={disabled}>
-            <Text
-              size={14}
-              as="span"
-              color={isActive ? 'contrast' : 'supporting'}
-            >
-              {label}
-            </Text>
-            {disabled && (
-              <ComingSoonWrapper>
-                <Text size={10} as="span" color="info">
-                  {t('soon')}
-                </Text>
-              </ComingSoonWrapper>
-            )}
-          </TriggerItem>
-        )}
-        triggersContainer={VaultTabsHeader}
-      />
+      {client === 'extension' ? (
+        <Container data-testid="vault-portfolio">{tabsContent}</Container>
+      ) : (
+        tabsContent
+      )}
     </SearchChainProvider>
   )
 }
+
+const Container = styled.div``
 
 const TriggerItem = styled.div<IsActiveProp & IsDisabledProp>`
   width: fit-content;

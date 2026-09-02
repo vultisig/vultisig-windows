@@ -13,7 +13,7 @@ import {
   LimitSwapExpiryHours,
   limitSwapExpiryHours,
 } from '@vultisig/core-chain/swap/native/limitSwapMemo'
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -45,6 +45,11 @@ type LimitExecuteWhenProps = {
   /** Current market price, already formatted in the active unit. */
   marketLabel: string | undefined
   onPresetSelect: (preset: LimitPricePreset) => void
+  /**
+   * The price chart disclosure, passed in rather than built here so the card
+   * stays a layout for the price step and knows nothing about market history.
+   */
+  priceChart: ReactNode
   expiryHours: LimitSwapExpiryHours
   onExpiryChange: (hours: LimitSwapExpiryHours) => void
 }
@@ -70,6 +75,7 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
   activePreset,
   marketLabel,
   onPresetSelect,
+  priceChart,
   expiryHours,
   onExpiryChange,
 }) => {
@@ -160,6 +166,8 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
           </Pill>
         ))}
       </HStack>
+
+      {priceChart}
 
       <ExpiryCard alignItems="center" justifyContent="space-between" gap={12}>
         <Text size={14} weight={500} color="contrast">

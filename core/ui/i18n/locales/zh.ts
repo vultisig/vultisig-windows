@@ -1783,4 +1783,11 @@ export const zh = {
     '您的设备已签署此交易，但此设备在最终安全检查后拒绝广播该交易。其他签署设备可能已广播该交易——请查看下方状态并确认结果后再重新签署。',
   not_seen_onchain: '尚未在链上看到',
   some_balances_failed_to_load: '部分余额加载失败。',
+  swap_limit_chart_title: '价格图表',
+  swap_limit_chart_drag_label: '目标价格',
+  swap_limit_chart_unavailable: '该交易对暂无价格历史记录',
+  swap_limit_chart_fills_immediately: '此价格会立即成交',
+  swap_limit_chart_last_traded: '此处最后交易记录为{{when}}',
+  swap_limit_chart_not_reached: '本窗口期内未在此交易——最高价为{{price}}',
+  swap_quote_expired: '此报价已过期，请刷新页面查看最新价格。',
 }

@@ -1,20 +1,23 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { ManagePillButton } from '@core/ui/vault/components/ManagePillButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import styled, { css, useTheme } from 'styled-components'
+import { useTranslation } from 'react-i18next'
+import styled, { css } from 'styled-components'
 
 import { SearchChain } from './controls/SearchChain'
 
 export const VaultTabsHeader = ({ children }: ChildrenProp) => {
-  const { colors } = useTheme()
   const vault = useCurrentVault()
   const navigate = useCoreNavigate()
+  const { t } = useTranslation()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
 
   return (
@@ -59,17 +62,17 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
-              <IconButton
+              <ManagePillButton
                 data-testid="manage-chains-button"
-                kind="secondary"
                 onClick={() => navigate({ id: 'manageVaultChains' })}
-                style={{
-                  color: colors.info.toCssValue(),
-                }}
-                size="lg"
               >
-                <HousePenIcon />
-              </IconButton>
+                <IconWrapper size={16}>
+                  <PencilIcon />
+                </IconWrapper>
+                <Text variant="footnote" color="contrast">
+                  {t('chains')}
+                </Text>
+              </ManagePillButton>
             </ManageButtonMotion>
           )}
         </AnimatePresence>

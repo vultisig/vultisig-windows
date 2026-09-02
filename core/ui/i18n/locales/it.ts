@@ -1945,4 +1945,14 @@ export const it = {
     "I tuoi dispositivi hanno firmato questa transazione, ma questo dispositivo ha rifiutato di trasmetterla dopo un controllo di sicurezza finale. Un altro dispositivo firmatario potrebbe averla comunque trasmessa: controlla lo stato qui sotto e conferma l'esito prima di firmare di nuovo.",
   not_seen_onchain: 'Non ancora visualizzato sulla blockchain',
   some_balances_failed_to_load: 'Alcuni saldi non sono stati caricati',
+  swap_limit_chart_title: 'Grafico dei prezzi',
+  swap_limit_chart_drag_label: 'Prezzo obiettivo',
+  swap_limit_chart_unavailable:
+    'Lo storico dei prezzi non è disponibile per questa coppia',
+  swap_limit_chart_fills_immediately: 'Viene eseguito subito a questo prezzo',
+  swap_limit_chart_last_traded: 'Ultimo scambio qui {{when}}',
+  swap_limit_chart_not_reached:
+    'Non è stato scambiato qui in questa finestra — il massimo è stato {{price}}',
+  swap_quote_expired:
+    'Questo preventivo è scaduto. Aggiorna la pagina per visualizzare il prezzo attuale.',
 }

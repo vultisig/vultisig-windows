@@ -1,22 +1,25 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
+import { ManagePillButton } from '@core/ui/vault/components/ManagePillButton'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { chainsWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { SearchChainToken } from './controls/SearchChainToken'
 
 export const VaultChainTabsHeader = ({ children }: ChildrenProp) => {
-  const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const chain = useCurrentVaultChain()
+  const { t } = useTranslation()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
   const hasMultipleCoinsSupport =
     knownTokens[chain].length > 0 ||
@@ -64,18 +67,19 @@ export const VaultChainTabsHeader = ({ children }: ChildrenProp) => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
-              <IconButton
-                kind="secondary"
+              <ManagePillButton
+                data-testid="manage-chain-coins-button"
                 onClick={() =>
                   navigate({ id: 'manageVaultChainCoins', state: { chain } })
                 }
-                style={{
-                  color: colors.info.toCssValue(),
-                }}
-                size="lg"
               >
-                <HousePenIcon />
-              </IconButton>
+                <IconWrapper size={16}>
+                  <PencilIcon />
+                </IconWrapper>
+                <Text variant="footnote" color="contrast">
+                  {t('vaultChainTabs.tokens')}
+                </Text>
+              </ManagePillButton>
             </ManageButtonMotion>
           )}
         </AnimatePresence>

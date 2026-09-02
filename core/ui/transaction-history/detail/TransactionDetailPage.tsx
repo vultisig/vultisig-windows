@@ -47,7 +47,6 @@ import {
   CoinKey,
   coinKeyToString,
 } from '@vultisig/core-chain/coin/Coin'
-import { thorchainAssetPrefixToChain } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
@@ -322,20 +321,20 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
             style={{ fontSize: 36 }}
           />
         )}
-        <VStack alignItems="center" gap={2}>
-          <Text size={14} weight={500} centerHorizontally>
+        <SwapCoinCardContent>
+          <SwapCoinAmount size={14} weight={500} centerHorizontally>
             {formatCryptoDisplay(
               safeBigInt(data.fromAmount),
               data.fromDecimals
             )}{' '}
             {data.fromToken}
-          </Text>
+          </SwapCoinAmount>
           {fromFiat && (
             <Text size={12} color="supporting" centerHorizontally>
               {fromFiat}
             </Text>
           )}
-        </VStack>
+        </SwapCoinCardContent>
       </SwapCoinCard>
 
       <SwapChevronWrapper alignItems="center" justifyContent="center">
@@ -355,10 +354,10 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
             style={{ fontSize: 36 }}
           />
         )}
-        <VStack alignItems="center" gap={2}>
-          <Text size={14} weight={500} centerHorizontally>
+        <SwapCoinCardContent>
+          <SwapCoinAmount size={14} weight={500} centerHorizontally>
             {formatAmount(toCryptoAmount, { precision: 'high' })} {data.toToken}
-          </Text>
+          </SwapCoinAmount>
           {toFiat && (
             <Text size={12} color="supporting" centerHorizontally>
               {toFiat}
@@ -371,7 +370,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
               })} ${data.toToken}`}
             </Text>
           )}
-        </VStack>
+        </SwapCoinCardContent>
       </SwapCoinCard>
     </HStack>
   )
@@ -427,11 +426,7 @@ const LimitSwapAmountDisplay = ({
   // The memo only names the buy asset in THORChain notation; resolve it back to
   // a real coin for its logo. Unresolvable assets render as text, never as
   // another coin's icon.
-  const buyCoin = getLimitOrderBuyCoin({
-    targetAsset: data.targetAsset,
-    targetChain:
-      thorchainAssetPrefixToChain[data.targetAsset.split('.')[0].toUpperCase()],
-  })
+  const buyCoin = getLimitOrderBuyCoin({ targetAsset: data.targetAsset })
 
   return (
     <HStack gap={8} style={{ position: 'relative' }}>
@@ -446,15 +441,15 @@ const LimitSwapAmountDisplay = ({
             style={{ fontSize: 36 }}
           />
         )}
-        <VStack alignItems="center" gap={2}>
-          <Text size={14} weight={500} centerHorizontally>
+        <SwapCoinCardContent>
+          <SwapCoinAmount size={14} weight={500} centerHorizontally>
             {formatCryptoDisplay(
               safeBigInt(data.fromAmount),
               data.fromDecimals
             )}{' '}
             {data.fromToken}
-          </Text>
-        </VStack>
+          </SwapCoinAmount>
+        </SwapCoinCardContent>
       </SwapCoinCard>
 
       <SwapChevronWrapper alignItems="center" justifyContent="center">
@@ -465,14 +460,14 @@ const LimitSwapAmountDisplay = ({
 
       <SwapCoinCard gap={12} alignItems="center">
         {buyCoin ? <CoinIcon coin={buyCoin} style={{ fontSize: 36 }} /> : null}
-        <VStack alignItems="center" gap={2}>
-          <Text size={14} weight={500} centerHorizontally>
+        <SwapCoinCardContent>
+          <SwapCoinAmount size={14} weight={500} centerHorizontally>
             {`${data.minimumReceived} ${data.buyTicker}`}
-          </Text>
+          </SwapCoinAmount>
           <Text size={12} color="shy" centerHorizontally>
             {t('swap_limit_minimum_received')}
           </Text>
-        </VStack>
+        </SwapCoinCardContent>
       </SwapCoinCard>
     </HStack>
   )
@@ -658,7 +653,39 @@ const SwapCoinCard = styled(VStack)`
   border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
   ${borderRadius.lg};
   flex: 1;
+  /* Without this a flex item refuses to shrink below its content, so one long
+     unbreakable asset string pushes both cards past the viewport and out from
+     under the absolutely-centred chevron. */
+  min-width: 0;
   padding: 24px 16px;
+`
+
+/**
+ * The text column inside a swap card. `align-items: center` alone leaves each
+ * line free to size to its own content and spill past the card's edge, so the
+ * column is pinned to the card's width and long asset strings are allowed to
+ * break mid-token — THORChain's secured denoms carry a 42-character contract
+ * address with nothing a normal line break could land on.
+ */
+const SwapCoinCardContent = styled(VStack)`
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+`
+
+/**
+ * The amount-and-ticker line, clamped to two lines. An asset this screen cannot
+ * shorten to a ticker would otherwise wrap into a paragraph and push the rest of
+ * the card off-screen; two lines is enough to read an amount and still tell the
+ * user the asset is one the app didn't recognise.
+ */
+const SwapCoinAmount = styled(Text)`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 `
 
 const SwapChevronWrapper = styled(HStack)`

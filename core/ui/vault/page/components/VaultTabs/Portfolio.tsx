@@ -1,6 +1,8 @@
 import { ChainsEmptyState } from '@core/ui/chain/components/ChainsEmptyState'
+import { useCore } from '@core/ui/state/core'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { Match } from '@lib/ui/base/Match'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { List } from '@lib/ui/list'
@@ -26,12 +28,14 @@ type PortfolioViewState = 'noChains' | 'noSearchResults' | 'list'
  * loading and failure states only appear when no chain resolved at all.
  */
 export const Portfolio = () => {
+  const { client } = useCore()
   const { data, isPending } = useVaultChainsBalancesQuery()
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const { iconStyle } = useTheme()
+  const usesStationList = client === 'extension' || iconStyle === 'station'
 
   const handleCustomize = () => navigate({ id: 'manageVaultChains' })
 
@@ -111,8 +115,8 @@ export const Portfolio = () => {
       )}
       list={() => (
         <List
-          border={iconStyle === 'station' ? 'solid' : undefined}
-          radius={iconStyle === 'station' ? 24 : undefined}
+          border={usesStationList ? 'solid' : undefined}
+          radius={usesStationList ? borderRadiusPx.xl : undefined}
         >
           {filteredBalances.map(({ chain, coins }) => (
             <VaultChainItem key={chain} chain={chain}>

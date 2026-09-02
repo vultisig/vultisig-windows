@@ -5,6 +5,8 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   getImmediateSwapValidationError,
   getSwapBalanceValidationError,
+  getSwapQuoteExpiryDelay,
+  getSwapQuoteExpiryValidationError,
 } from './useSwapValidationQuery'
 
 vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
@@ -96,5 +98,50 @@ describe('getImmediateSwapValidationError', () => {
         walletCore: {} as never,
       })
     ).toBe(null)
+  })
+})
+
+describe('getSwapQuoteExpiryValidationError', () => {
+  it('accepts a quote that is still valid', () => {
+    expect(
+      getSwapQuoteExpiryValidationError({
+        quote: { expiresAt: 1_500 },
+        now: 1_000,
+      })
+    ).toBeNull()
+  })
+
+  it('rejects a quote whose expiry has passed', () => {
+    expect(
+      getSwapQuoteExpiryValidationError({
+        quote: { expiresAt: 500 },
+        now: 1_000,
+      })
+    ).toBe('swap_quote_expired')
+  })
+
+  it('rejects a quote expiring exactly now, since it can no longer be signed in time', () => {
+    expect(
+      getSwapQuoteExpiryValidationError({
+        quote: { expiresAt: 1_000 },
+        now: 1_000,
+      })
+    ).toBe('swap_quote_expired')
+  })
+})
+
+describe('getSwapQuoteExpiryDelay', () => {
+  it('reports the wait until a live quote expires', () => {
+    expect(getSwapQuoteExpiryDelay({ expiresAt: 5_000, now: 1_000 })).toBe(
+      4_000
+    )
+  })
+
+  it('reports nothing to wait for once the quote has expired', () => {
+    expect(getSwapQuoteExpiryDelay({ expiresAt: 500, now: 1_000 })).toBeNull()
+  })
+
+  it('reports nothing to wait for at the exact expiry instant', () => {
+    expect(getSwapQuoteExpiryDelay({ expiresAt: 1_000, now: 1_000 })).toBeNull()
   })
 })

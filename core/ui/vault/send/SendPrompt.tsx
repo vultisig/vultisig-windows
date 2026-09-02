@@ -1,4 +1,5 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { StationArrowToCornerTopRightIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -12,11 +13,14 @@ import { SecondaryActionWrapper } from '../components/PrimaryActions.styled'
 export const SendPrompt = (state: CoreViewState<'send'>) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const { client } = useCore()
   const { iconStyle } = useTheme()
+  const isExtension = client === 'extension'
 
   return (
     <VStack alignItems="center" gap={8}>
       <SecondaryActionWrapper
+        $isExtension={isExtension}
         data-testid="vault-action-send"
         onClick={() =>
           navigate({
@@ -25,7 +29,7 @@ export const SendPrompt = (state: CoreViewState<'send'>) => {
           })
         }
       >
-        {iconStyle === 'station' ? (
+        {isExtension || iconStyle === 'station' ? (
           <StationArrowToCornerTopRightIcon />
         ) : (
           <ArrowUpRightIcon />

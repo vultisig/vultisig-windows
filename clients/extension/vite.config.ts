@@ -27,6 +27,26 @@ const extensionNodePolyfills = (isFirefoxBuild = false) =>
   })
 const extensionVultisigSdk = () => vultisigSdk({ browserGlobals: false })
 
+// `define-data-property` declares itself side-effect-free, but its exported
+// function performs the property writes used by `globalthis`. When the SDK
+// pulls xstream into the app chunk, Rollup can otherwise remove those calls
+// and the extension crashes before React mounts (`getPolyfill is not a
+// function`). Keep only this module's body intact instead of disabling tree
+// shaking for the whole extension.
+const preserveDefineDataProperty = (): PluginOption => ({
+  name: 'vultisig:preserve-define-data-property',
+  enforce: 'pre',
+  async resolveId(source, importer) {
+    if (source !== 'define-data-property') return null
+
+    const resolved = await this.resolve(source, importer, { skipSelf: true })
+
+    return resolved
+      ? { ...resolved, moduleSideEffects: 'no-treeshake' }
+      : resolved
+  },
+})
+
 /** One physical copy of MPC entry + types across chunks (vultisig-windows#3831 / #3777). */
 const vultisigMpcDedupe: readonly string[] = [
   '@vultisig/sdk',
@@ -143,6 +163,7 @@ export default defineConfig(async ({ mode }) => {
       define: defines,
       resolve: { dedupe: [...vultisigMpcDedupe] },
       plugins: [
+        preserveDefineDataProperty(),
         extensionVultisigSdk(),
         tsconfigPaths({ root: rootDir }),
         extensionBrandVitePlugin({
@@ -186,6 +207,7 @@ export default defineConfig(async ({ mode }) => {
       define: defines,
       resolve: { dedupe: [...vultisigMpcDedupe] },
       plugins: [
+        preserveDefineDataProperty(),
         tsconfigPaths({ root: rootDir }),
         ...getCommonPlugins({
           nodePolyfills: extensionNodePolyfills(isFirefoxBuild),

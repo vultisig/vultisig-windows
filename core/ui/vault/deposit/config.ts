@@ -5,11 +5,11 @@ import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-b
 const mayachainApiBaseUrl = `${cosmosRpcUrl[CosmosChain.MayaChain]}/mayachain`
 export const mayachainPoolsEndpoint = `${mayachainApiBaseUrl}/pools`
 
-const stakeableChains = [Chain.Ton, Chain.THORChain] as const
+const stakeableChains = [Chain.THORChain] as const
 /** A chain that exposes a native staking flow in the deposit UI. */
 export type StakeableChain = (typeof stakeableChains)[number]
 /** Tickers that can be staked through the deposit flow (exact match). */
-const stakeableAssetsTickers = ['TCY', 'RUJI', 'GRAM'] as const
+const stakeableAssetsTickers = ['TCY', 'RUJI'] as const
 
 /** Whether `c` exposes a native staking flow. */
 export const isStakeableChain = (c: Chain): c is StakeableChain =>

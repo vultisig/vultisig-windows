@@ -14,6 +14,7 @@ import { dismissedBannersStorage } from './dismissedBanners'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { hasSeenNotificationPromptStorage } from './hasSeenNotificationPrompt'
 import { languageStorage } from './language'
+import { limitPriceChartExpansionStorage } from './limitPriceChartExpanded'
 import { mldsaEnabledStorage } from './mldsaEnabled'
 import { onboardingStorage } from './onboarding'
 import { passcodeAutoLockStorage } from './passcodeAutoLock'
@@ -38,6 +39,7 @@ export const storage: CoreStorage = {
   ...coinsStorage,
   ...addressBookStorage,
   ...languageStorage,
+  ...limitPriceChartExpansionStorage,
   ...balanceVisibilityStorage,
   ...blockaidStorage,
   ...onboardingStorage,

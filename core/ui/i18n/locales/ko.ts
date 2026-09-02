@@ -1899,4 +1899,14 @@ export const ko = {
     '귀하의 기기들이 이 거래에 서명했지만, 최종 보안 검사 후 이 기기가 전송을 거부했습니다. 다른 서명 기기가 전송했을 수도 있습니다. 아래 상태를 확인하고 다시 서명하기 전에 결과를 확인하십시오.',
   not_seen_onchain: '아직 온체인에서 확인되지 않았습니다.',
   some_balances_failed_to_load: '일부 잔액이 불러와지지 않았습니다.',
+  swap_limit_chart_title: '가격 차트',
+  swap_limit_chart_drag_label: '목표 가격',
+  swap_limit_chart_unavailable:
+    '이 통화쌍의 가격 변동 내역을 확인할 수 없습니다',
+  swap_limit_chart_fills_immediately: '이 가격이면 즉시 체결됩니다',
+  swap_limit_chart_last_traded: '여기서 마지막 거래: {{when}}',
+  swap_limit_chart_not_reached:
+    '이 기간 동안에는 거래되지 않았습니다. 최고가는 {{price}} 였습니다.',
+  swap_quote_expired:
+    '이 견적은 만료되었습니다. 최신 가격을 확인하려면 페이지를 새로고침하세요.',
 }

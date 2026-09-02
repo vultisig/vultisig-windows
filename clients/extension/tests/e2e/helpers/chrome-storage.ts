@@ -23,10 +23,14 @@ export const StorageKey = {
 /**
  * Get the service worker for chrome.storage access
  */
-export async function getServiceWorker(context: BrowserContext): Promise<Worker> {
+export async function getServiceWorker(
+  context: BrowserContext
+): Promise<Worker> {
   let [background] = context.serviceWorkers()
   if (!background) {
-    background = await context.waitForEvent('serviceworker', { timeout: 30_000 })
+    background = await context.waitForEvent('serviceworker', {
+      timeout: 30_000,
+    })
   }
   return background
 }
@@ -41,8 +45,8 @@ export async function readChromeStorage<T = unknown>(
   const worker = await getServiceWorker(context)
 
   const result = await worker.evaluate(async (storageKey: string) => {
-    return new Promise((resolve) => {
-      chrome.storage.local.get([storageKey], (result) => {
+    return new Promise(resolve => {
+      chrome.storage.local.get([storageKey], result => {
         resolve(result[storageKey])
       })
     })
@@ -61,9 +65,34 @@ export async function writeChromeStorage(
 ): Promise<void> {
   const worker = await getServiceWorker(context)
 
-  await worker.evaluate(async ({ key, value }: { key: string; value: unknown }) => {
+  await worker.evaluate(
+    async ({ key, value }: { key: string; value: unknown }) => {
+      return new Promise<void>((resolve, reject) => {
+        chrome.storage.local.set({ [key]: value }, () => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message))
+          } else {
+            resolve()
+          }
+        })
+      })
+    },
+    { key, value }
+  )
+}
+
+/**
+ * Remove one value from chrome.storage.local.
+ */
+export async function removeChromeStorage(
+  context: BrowserContext,
+  key: string
+): Promise<void> {
+  const worker = await getServiceWorker(context)
+
+  await worker.evaluate(async (storageKey: string) => {
     return new Promise<void>((resolve, reject) => {
-      chrome.storage.local.set({ [key]: value }, () => {
+      chrome.storage.local.remove(storageKey, () => {
         if (chrome.runtime.lastError) {
           reject(new Error(chrome.runtime.lastError.message))
         } else {
@@ -71,7 +100,49 @@ export async function writeChromeStorage(
         }
       })
     })
-  }, { key, value })
+  }, key)
+}
+
+/**
+ * Read one value from chrome.storage.session.
+ */
+export async function readChromeSessionStorage<T = unknown>(
+  context: BrowserContext,
+  key: string
+): Promise<T | undefined> {
+  const worker = await getServiceWorker(context)
+
+  const result = await worker.evaluate(async (storageKey: string) => {
+    return new Promise(resolve => {
+      chrome.storage.session.get([storageKey], result => {
+        resolve(result[storageKey])
+      })
+    })
+  }, key)
+
+  return result as T | undefined
+}
+
+/**
+ * Remove one value from chrome.storage.session.
+ */
+export async function removeChromeSessionStorage(
+  context: BrowserContext,
+  key: string
+): Promise<void> {
+  const worker = await getServiceWorker(context)
+
+  await worker.evaluate(async (storageKey: string) => {
+    return new Promise<void>((resolve, reject) => {
+      chrome.storage.session.remove(storageKey, () => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message))
+        } else {
+          resolve()
+        }
+      })
+    })
+  }, key)
 }
 
 /**
@@ -99,7 +170,9 @@ export async function writeChromeStorageMultiple(
 /**
  * Clear all chrome.storage.local data
  */
-export async function clearChromeStorage(context: BrowserContext): Promise<void> {
+export async function clearChromeStorage(
+  context: BrowserContext
+): Promise<void> {
   const worker = await getServiceWorker(context)
 
   await worker.evaluate(async () => {
@@ -124,8 +197,8 @@ export async function readAllChromeStorage(
   const worker = await getServiceWorker(context)
 
   const result = await worker.evaluate(async () => {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(null, (result) => {
+    return new Promise(resolve => {
+      chrome.storage.local.get(null, result => {
         resolve(result)
       })
     })

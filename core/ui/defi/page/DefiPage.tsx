@@ -15,7 +15,7 @@ export const DefiPage = () => {
   const [{ protocol }] = useCoreViewState<'defi'>()
 
   return (
-    <Wrapper justifyContent="space-between" flexGrow>
+    <Wrapper justifyContent="space-between" flexGrow data-testid="defi-page">
       <VStack flexGrow>
         {protocol === 'circle' ? (
           <CircleView />

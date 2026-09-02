@@ -12,21 +12,31 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
+import { getSwapPayoutEstimate } from './swapPayoutModel'
+import { useLastSwapPayoutModel } from './useLastSwapPayoutModel'
 
-type Prices = {
+type GetSpotSwapOutputAmountInput = {
+  amount: number
   fromPrice: number
   toPrice: number
 }
 
-const getIndicativeSwapOutputAmount = ({
+/**
+ * What the pair is worth at spot prices, gross of every fee. Used only until
+ * the pair's first firm quote reveals what it actually costs — it runs 10-12%
+ * above the quote that replaces it at small trade sizes.
+ */
+const getSpotSwapOutputAmount = ({
   amount,
   fromPrice,
   toPrice,
-}: Prices & { amount: number }) => {
-  return (amount * fromPrice) / toPrice
-}
+}: GetSpotSwapOutputAmountInput): number => (amount * fromPrice) / toPrice
 
-/** Returns a price-based output estimate while a firm swap quote is loading. */
+/**
+ * The output estimate shown while a firm swap quote is loading: the payout
+ * predicted by the model fitted to the previous firm quote for this pair,
+ * falling back to spot until there is one.
+ */
 export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
   const [fromAmount] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
@@ -37,6 +47,7 @@ export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
 
   const fromPriceQuery = useCoinPriceQuery({ coin: fromCoin })
   const toPriceQuery = useCoinPriceQuery({ coin: toCoin })
+  const payoutModel = useLastSwapPayoutModel()
 
   const pricesQuery = useCombineQueries({
     queries: {
@@ -51,6 +62,14 @@ export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
     return inactiveQuery
   }
 
+  const amount = fromChainAmount(fromAmount, fromCoin.decimals)
+
+  if (payoutModel) {
+    return getResolvedQuery(
+      getSwapPayoutEstimate({ amount, model: payoutModel })
+    )
+  }
+
   if (pricesQuery.data) {
     const { fromPrice, toPrice } = pricesQuery.data
 
@@ -59,11 +78,7 @@ export const useIndicativeSwapOutputAmountQuery = (): Query<number> => {
     }
 
     return getResolvedQuery(
-      getIndicativeSwapOutputAmount({
-        amount: fromChainAmount(fromAmount, fromCoin.decimals),
-        fromPrice,
-        toPrice,
-      })
+      getSpotSwapOutputAmount({ amount, fromPrice, toPrice })
     )
   }
 

@@ -2,6 +2,7 @@ import { useOpenKaminoEarn } from '@core/ui/defi/chain/solana/kamino/useOpenKami
 import { useOpenThorchainStaked } from '@core/ui/defi/chain/thorchain/useOpenThorchainStaked'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { vultisigTwitterUrl } from '@core/ui/settings/constants'
+import { useCore } from '@core/ui/state/core'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { BannerId } from '@core/ui/storage/dismissedBanners'
 import { useFriendReferralQuery } from '@core/ui/storage/referrals'
@@ -18,7 +19,7 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { currentProductBrand } from '../../../product/brand'
-import { homePromoBannerVisuals } from './homePromoBanners'
+import { HomePromoBannerId, homePromoBannerVisuals } from './homePromoBanners'
 import { HomePromoBanner } from './shared/HomePromoBanner'
 import { HomePromoBannerIcon } from './shared/HomePromoBannerIcon'
 
@@ -28,7 +29,7 @@ type HomePromoBannerEntry = {
 }
 
 type BannerInput = {
-  id: Exclude<BannerId, 'agentNavigationCoachmark'>
+  id: HomePromoBannerId
   /** The small line above the title. */
   caption: string
   /** The emphasised line the banner leads with. */
@@ -42,6 +43,7 @@ type BannerInput = {
  * carousel only ever shows banners that still have something to offer.
  */
 export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
+  const { client } = useCore()
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
@@ -100,6 +102,7 @@ export const useHomePromoBanners = (): HomePromoBannerEntry[] => {
           onClick={onClick}
           onDismiss={onDismiss}
           testId={`${id}-promo-banner`}
+          isExtension={client === 'extension'}
         />
       ),
     }

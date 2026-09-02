@@ -46,7 +46,6 @@ export const StakeSpecific = () => {
           )}
         />
       )}
-      Ton={() => null}
     />
   )
 }

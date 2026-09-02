@@ -8,12 +8,15 @@
 /**
  * TX confirmation result
  */
-export interface TxConfirmationResult {
+export type TxConfirmationResult = {
   confirmed: boolean
   blockNumber: number | null
   gasUsed: bigint | null
   error?: string
 }
+
+/** Default confirmation cap: keysign plus inclusion regularly exceeds two minutes on mainnet. */
+export const defaultConfirmationTimeoutMs = 300_000
 
 /**
  * Chain family type
@@ -23,7 +26,7 @@ type ChainFamily = 'evm' | 'utxo' | 'cosmos' | 'solana'
 /**
  * RPC endpoints for different chains
  */
-const RPC_ENDPOINTS: Record<string, string> = {
+const rpcEndpoints: Record<string, string> = {
   // EVM chains
   ethereum: 'https://ethereum-rpc.publicnode.com',
   bsc: 'https://bsc-dataseed.binance.org',
@@ -74,41 +77,96 @@ function getChainFamily(chain: string): ChainFamily {
 }
 
 /**
+ * Public EVM endpoints intermittently answer with an HTML challenge page
+ * instead of JSON. Backups only — the primary always comes from rpcEndpoints.
+ */
+const evmBackupEndpoints: Record<string, string[]> = {
+  ethereum: ['https://eth.drpc.org', 'https://1rpc.io/eth'],
+}
+
+const getEvmEndpoints = (chain: string, primary: string): string[] => [
+  primary,
+  ...(evmBackupEndpoints[chain] ?? []),
+]
+
+type EvmReceipt = { status: string; blockNumber: string; gasUsed: string }
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const isEvmReceipt = (value: unknown): value is EvmReceipt =>
+  isRecord(value) &&
+  typeof value.status === 'string' &&
+  typeof value.blockNumber === 'string' &&
+  typeof value.gasUsed === 'string'
+
+type FetchEvmReceiptInput = { rpcUrl: string; txHash: string }
+
+async function fetchEvmReceipt({
+  rpcUrl,
+  txHash,
+}: FetchEvmReceiptInput): Promise<EvmReceipt | null> {
+  const response = await fetch(rpcUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'eth_getTransactionReceipt',
+      params: [txHash],
+      id: 1,
+    }),
+  })
+  const body = await response.text()
+  if (!body.trimStart().startsWith('{')) {
+    throw new Error(`non-JSON body from ${rpcUrl}: ${body.slice(0, 40)}`)
+  }
+  const envelope: unknown = JSON.parse(body)
+  if (!isRecord(envelope)) {
+    throw new Error(`unexpected RPC body from ${rpcUrl}: ${body.slice(0, 40)}`)
+  }
+  if (isRecord(envelope.error)) {
+    throw new Error(
+      `RPC error from ${rpcUrl}: ${String(envelope.error.message ?? 'unknown')}`
+    )
+  }
+  if (envelope.result == null) return null
+  if (!isEvmReceipt(envelope.result)) {
+    throw new Error(`unexpected receipt shape from ${rpcUrl}`)
+  }
+  return envelope.result
+}
+
+/**
  * Poll for EVM transaction confirmation
  */
-async function pollEvmTx(
-  rpcUrl: string,
-  txHash: string,
+type PollEvmTxInput = {
+  chain: string
+  primaryUrl: string
+  txHash: string
   timeoutMs: number
-): Promise<TxConfirmationResult> {
+}
+
+async function pollEvmTx({
+  chain,
+  primaryUrl,
+  txHash,
+  timeoutMs,
+}: PollEvmTxInput): Promise<TxConfirmationResult> {
   const startTime = Date.now()
   const pollInterval = 3000
+  const endpoints = getEvmEndpoints(chain, primaryUrl)
+  let attempt = 0
 
   while (Date.now() - startTime < timeoutMs) {
+    const rpcUrl = endpoints[attempt++ % endpoints.length]
     try {
-      const response = await fetch(rpcUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'eth_getTransactionReceipt',
-          params: [txHash],
-          id: 1,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (data.result) {
-        const receipt = data.result
+      const receipt = await fetchEvmReceipt({ rpcUrl, txHash })
+      if (receipt) {
         const confirmed = receipt.status === '0x1'
-        const blockNumber = parseInt(receipt.blockNumber, 16)
-        const gasUsed = BigInt(receipt.gasUsed)
-
         return {
           confirmed,
-          blockNumber,
-          gasUsed,
+          blockNumber: parseInt(receipt.blockNumber, 16),
+          gasUsed: BigInt(receipt.gasUsed),
           error: confirmed ? undefined : 'Transaction reverted',
         }
       }
@@ -123,7 +181,7 @@ async function pollEvmTx(
     confirmed: false,
     blockNumber: null,
     gasUsed: null,
-    error: 'Timeout waiting for confirmation',
+    error: `Timeout waiting for confirmation after ${timeoutMs}ms`,
   }
 }
 
@@ -316,11 +374,11 @@ async function pollSolanaTx(
 export async function waitForTxConfirmation(
   chain: string,
   txHash: string,
-  timeoutMs = 120_000
+  timeoutMs = defaultConfirmationTimeoutMs
 ): Promise<TxConfirmationResult> {
   const chainLower = chain.toLowerCase()
   const family = getChainFamily(chainLower)
-  const endpoint = RPC_ENDPOINTS[chainLower]
+  const endpoint = rpcEndpoints[chainLower]
 
   if (!endpoint) {
     return {
@@ -337,7 +395,12 @@ export async function waitForTxConfirmation(
 
   switch (family) {
     case 'evm':
-      return pollEvmTx(endpoint, txHash, timeoutMs)
+      return pollEvmTx({
+        chain: chainLower,
+        primaryUrl: endpoint,
+        txHash,
+        timeoutMs,
+      })
 
     case 'utxo':
       // Shorter timeout for UTXO since we're just checking mempool, not block confirmation
@@ -379,7 +442,7 @@ export async function isTxConfirmed(
  * Get RPC endpoint for a chain
  */
 export function getRpcEndpoint(chain: string): string | undefined {
-  return RPC_ENDPOINTS[chain.toLowerCase()]
+  return rpcEndpoints[chain.toLowerCase()]
 }
 
 /**
@@ -387,4 +450,92 @@ export function getRpcEndpoint(chain: string): string | undefined {
  */
 export function getChainFamilyForChain(chain: string): ChainFamily {
   return getChainFamily(chain)
+}
+
+/** Outcome of waiting on THORChain's tx status; stage is the last completed stage seen. */
+export type ThorchainSwapSettlement = {
+  settled: boolean
+  stage: string
+  error?: string
+}
+
+type ThorchainTxStatus = {
+  stages?: Record<string, { completed?: boolean }>
+  planned_out_txs?: { refund?: boolean }[]
+  out_txs?: { memo?: string }[]
+}
+
+const isThorchainTxStatus = (value: unknown): value is ThorchainTxStatus =>
+  isRecord(value) &&
+  (value.stages === undefined || isRecord(value.stages)) &&
+  (value.planned_out_txs === undefined ||
+    Array.isArray(value.planned_out_txs)) &&
+  (value.out_txs === undefined || Array.isArray(value.out_txs))
+
+const thorchainStageOrder = [
+  'inbound_observed',
+  'inbound_confirmation_counted',
+  'inbound_finalised',
+  'swap_finalised',
+  'outbound_delay',
+  'outbound_signed',
+]
+
+const latestCompletedStage = (stages: ThorchainTxStatus['stages']): string =>
+  thorchainStageOrder.filter(stage => stages?.[stage]?.completed).at(-1) ??
+  'none'
+
+// swap_finalised flips for refunds too; the refund shows up on the outbound.
+const isRefunded = ({ planned_out_txs, out_txs }: ThorchainTxStatus): boolean =>
+  (planned_out_txs ?? []).some(tx => tx.refund === true) ||
+  (out_txs ?? []).some(tx => tx.memo?.startsWith('REFUND:'))
+
+const isSwapSettled = ({ stages }: ThorchainTxStatus): boolean =>
+  stages?.swap_finalised?.completed === true &&
+  stages?.outbound_signed?.completed === true
+
+/**
+ * Poll THORChain's tx status until the swap finalised AND its outbound was
+ * signed as a swap output, not a refund. Source-chain inclusion only proves
+ * the deposit landed.
+ */
+export async function waitForThorchainSwapSettlement(
+  txHash: string,
+  timeoutMs = defaultConfirmationTimeoutMs
+): Promise<ThorchainSwapSettlement> {
+  const startTime = Date.now()
+  const pollInterval = 10_000
+  const hash = txHash.trim().replace(/^0x/i, '')
+  const url = `${rpcEndpoints.thorchain}/thorchain/tx/status/${hash}`
+  let stage = 'none'
+
+  while (Date.now() - startTime < timeoutMs) {
+    try {
+      const response = await fetch(url)
+      if (response.ok) {
+        const status: unknown = await response.json()
+        if (!isThorchainTxStatus(status)) {
+          throw new Error('unexpected THORChain tx status shape')
+        }
+        stage = latestCompletedStage(status.stages)
+        if (isRefunded(status)) {
+          return {
+            settled: false,
+            stage: 'refunded',
+            error: `THORChain refunded ${hash} instead of swapping (last stage: ${stage})`,
+          }
+        }
+        if (isSwapSettled(status)) return { settled: true, stage }
+      }
+    } catch (error) {
+      console.warn('THORChain status poll error:', error)
+    }
+    await new Promise(r => setTimeout(r, pollInterval))
+  }
+
+  return {
+    settled: false,
+    stage,
+    error: `Timeout waiting for THORChain swap settlement after ${timeoutMs}ms (last stage: ${stage})`,
+  }
 }
