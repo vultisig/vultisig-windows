@@ -79,6 +79,9 @@ export const SaveImportedVaultStep = ({
       ...overriddenValue,
       order: recoveryVault?.order ?? getLastItemOrder(stableVaultOrders),
       ...(recoveryVault?.folderId ? { folderId: recoveryVault.folderId } : {}),
+      ...(recoveryVault?.saplingExtras
+        ? { saplingExtras: recoveryVault.saplingExtras }
+        : {}),
     }
   }, [override, value, stableVaultOrders, recoveryVault])
 

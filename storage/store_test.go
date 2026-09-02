@@ -177,6 +177,27 @@ func TestReplaceVaultRejectsDroppedStoredIdentity(t *testing.T) {
 	}
 }
 
+func TestReplaceVaultRejectsDroppedSaplingKeyMaterial(t *testing.T) {
+	store := newTestStore(t)
+	stored := testVault()
+	stored.ChainPublicKeys = map[string]string{
+		"SaplingExtras": "stored-sapling-key-material",
+	}
+	if err := store.SaveVault(stored); err != nil {
+		t.Fatal(err)
+	}
+	expected, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	replacement := *expected
+	replacement.ChainPublicKeys = nil
+
+	if err := store.ReplaceVault(expected, &replacement); err == nil {
+		t.Fatal("expected dropped Sapling key material to be rejected")
+	}
+}
+
 func TestReplaceVaultRejectsStaleRecoverySnapshot(t *testing.T) {
 	store := newTestStore(t)
 	stored := testVault()

@@ -110,6 +110,18 @@ describe('hasVaultRecoveryIdentityProof', () => {
     ).toBe(false)
   })
 
+  it('rejects replacement until stored Sapling key material is carried forward', () => {
+    expect(
+      hasVaultRecoveryIdentityProof({
+        existingVault: {
+          ...regularVault,
+          saplingExtras: 'stored-sapling-key-material',
+        },
+        importedVault: regularVault,
+      })
+    ).toBe(false)
+  })
+
   it('binds chain-only KeyImport recovery to the damaged vault metadata', () => {
     expect(
       hasVaultRecoveryIdentityProof({
