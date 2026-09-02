@@ -5,8 +5,14 @@ import { decodeErrorResult, Hex, isHex, slice, toFunctionSelector } from 'viem'
  * Why a swap the chain reverted failed, in terms history can explain. Only
  * reasons the user can act on are modelled — every other revert stays a plain
  * failure rather than being given an explanation it does not have.
+ *
+ * Listed rather than declared as a union so a stored value can be checked
+ * against it: records outlive the build that wrote them, and one written by a
+ * newer build carries a reason this build has no wording for.
  */
-export type SwapFailureReason = 'slippage'
+export const swapFailureReasons = ['slippage'] as const
+
+export type SwapFailureReason = (typeof swapFailureReasons)[number]
 
 /**
  * The phrases aggregators revert with when a swap executed but would have paid
@@ -25,7 +31,6 @@ const slippageRevertNeedles = [
   'amountoutmin',
   'lessthanexpected', // ParaSwap
   'lessthenexpected', // ParaSwap, as the contract itself spells it
-  'incompletetransformerc20', // 0x
 ]
 
 /**
@@ -38,9 +43,13 @@ const slippageErrorSignatures = [
   'TooLittleReceived()',
   'V2TooLittleReceived()',
   'V3TooLittleReceived()',
+  'V4TooLittleReceived(uint256,uint256)',
   'InsufficientOutputAmount()',
   'CumulativeSlippageTooHigh(uint256,uint256)',
   'SlippageTooHigh(uint256,uint256)',
+  // 0x encodes its rich errors the same way, so the name it declares them with
+  // never reaches the client as text either.
+  'IncompleteTransformERC20Error(address,uint256,uint256)',
 ]
 
 const slippageErrorSelectors = new Set<string>(

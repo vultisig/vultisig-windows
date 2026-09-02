@@ -78,9 +78,14 @@ export type SwapTransactionData = {
    * `txHash` with the on-chain settlement hash. */
   cowSwapOrderApiBase?: string
   /** Why the chain rejected this swap, once the revert has been read back and
-   * recognised. Only ever set on a `failed` record, and absent whenever the
-   * reason could not be established — see `useResolveSwapFailureReasons`. */
+   * recognised. Absent whenever the reason could not be established. Set while
+   * the record is `failed` but never cleared when one heals, so
+   * `getRecordFailureReason` — not this field — decides what a row shows. */
   failureReason?: SwapFailureReason
+  /** When the chain was asked why this swap failed, whether or not it gave an
+   * answer. Present means never ask again: an unanswered replay is a block no
+   * node holds state for any more, and waiting only ages it further. */
+  failureReasonCheckedAt?: string
 }
 
 export type SendTransactionRecord = TransactionRecordBase & {

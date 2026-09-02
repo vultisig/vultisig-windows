@@ -58,6 +58,22 @@ describe('getSwapFailureReason', () => {
     ).toBe('slippage')
   })
 
+  // These two revert as custom errors only. Their names never reach the client
+  // as text, so a needle can never match them and the selector is the only
+  // thing that can.
+  it('recognises the custom errors that carry no text at all', () => {
+    const selectorOnly = [
+      'V4TooLittleReceived(uint256,uint256)',
+      'IncompleteTransformERC20Error(address,uint256,uint256)',
+    ]
+
+    selectorOnly.forEach(signature => {
+      expect(
+        getSwapFailureReason({ data: toFunctionSelector(signature) })
+      ).toBe('slippage')
+    })
+  })
+
   it('leaves an unrelated revert without a reason', () => {
     expect(
       getSwapFailureReason({

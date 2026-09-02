@@ -76,10 +76,14 @@ type GetEvmTxRevertInput = {
  * succeeded.
  *
  * The replay runs against the end state of the block the transaction was mined
- * in, deliberately including the transactions that shared it. A swap is most
- * often starved of its minimum output by a trade landing just ahead of it in
- * the very same block, and replaying from the block before would step back over
- * that trade and quietly succeed.
+ * in, which is an approximation in both directions and the better one of two.
+ * A swap is most often starved of its minimum output by a trade landing just
+ * ahead of it in the same block, and replaying from the block before would step
+ * back over that trade and quietly succeed. Replaying from the end instead also
+ * includes what landed *after* it: a back-run can restore the price and hide
+ * the revert, and unrelated state from later in the block can produce a
+ * different revert than the transaction actually hit. Both push towards saying
+ * nothing rather than saying something wrong, which is the direction to err in.
  *
  * Returns `undefined` whenever the reason cannot be established: an RPC holding
  * no state for that block cannot replay it, and a replay that succeeds says the
