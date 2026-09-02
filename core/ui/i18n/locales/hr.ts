@@ -1918,4 +1918,30 @@ export const hr = {
     'Nije trgovao ovdje u ovom prozoru — najviša cijena je bila {{price}}',
   swap_quote_expired:
     'Ova ponuda je istekla. Osvježite stranicu da biste dobili trenutnu cijenu.',
+  ton_tx_failure_seqno_mismatch:
+    'Prvo je obrađena druga transakcija iz ovog novčanika, pa je mreža odbacila ovu kao neispravnu. Provjerite svoju povijest: ako ovog transfera nema, pošaljite ga ponovno.',
+  ton_tx_failure_expired:
+    'Vremenski okvir transakcije zatvorio se prije nego što ju je mreža obradila. Provjerite jesu li datum i vrijeme na vašem uređaju automatski postavljeni, a zatim je ponovno pošaljite.',
+  ton_tx_failure_invalid_signature:
+    'Ugovor o novčaniku odbio je potpis. Ponovno potpišite transakciju; ako se i dalje ne uspijeva, ugovor o novčaniku na ovoj adresi ne odgovara ovom trezoru.',
+  ton_tx_failure_wallet_id_mismatch:
+    'Transakcija je izrađena za drugačiju verziju ugovora o novčaniku od one koja je implementirana na ovoj adresi.',
+  ton_tx_failure_insufficient_funds:
+    'Nema dovoljno TON za pokrivanje iznosa plus mrežnih naknada. Ostavite oko 0,05 TON rezerve za naknade i pokušajte ponovno.',
+  ton_tx_failure_out_of_gas:
+    'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još TON transferu i pokušajte ponovno.',
+  ton_tx_failure_invalid_destination:
+    'Odredišna adresa nije valjana na TON . Provjerite adresu i pokušajte ponovno.',
+  ton_tx_failure_not_enough_jettons:
+    'Ovaj novčanik ne sadrži dovoljno tokena za slanje tog iznosa.',
+  ton_tx_failure_jetton_gas_underfunded:
+    'Nije priloženo dovoljno TON za plaćanje prijenosa tokena. Zadržite oko 0,05 TON za naknade i pokušajte ponovno.',
+  ton_tx_failure_jetton_unauthorized:
+    'Ugovor o tokenu odbio je prijenos jer ovom novčaniku nije dopušteno premještanje ovih tokena.',
+  ton_tx_failure_action_failed:
+    'Novčanik je prihvatio transakciju, ali nije mogao izvršiti transfer, pa ništa nije poslano. Mrežna naknada je i dalje naplaćena. Provjerite stanje i pokušajte ponovno.',
+  ton_tx_failure_aborted:
+    'Mreža je prekinula ovu transakciju prije nego što je mogla izvršiti transfer.',
+  ton_tx_failure_contract_rejected:
+    'Ugovor je odbio transakciju (izlazni kod {{exitCode}} ).',
 }

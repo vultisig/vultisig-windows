@@ -1964,4 +1964,30 @@ export const de = {
     'In diesem Zeitfenster nicht gehandelt — das Hoch lag bei {{price}}',
   swap_quote_expired:
     'Dieses Angebot ist abgelaufen. Aktualisieren Sie die Seite, um einen aktuellen Preis zu erhalten.',
+  ton_tx_failure_seqno_mismatch:
+    'Eine andere Transaktion von dieser Wallet wurde zuerst verarbeitet, daher wurde diese vom Netzwerk als ungültig abgelehnt. Überprüfen Sie Ihren Verlauf: Falls diese Überweisung dort nicht aufgeführt ist, senden Sie sie erneut.',
+  ton_tx_failure_expired:
+    'Das Zeitfenster für die Transaktion ist abgelaufen, bevor sie vom Netzwerk verarbeitet werden konnte. Stellen Sie sicher, dass Datum und Uhrzeit Ihres Geräts automatisch eingestellt sind, und senden Sie die Transaktion erneut.',
+  ton_tx_failure_invalid_signature:
+    'Der Wallet-Vertrag hat die Signatur abgelehnt. Signieren Sie die Transaktion erneut. Sollte dies weiterhin fehlschlagen, stimmt der Wallet-Vertrag unter dieser Adresse nicht mit diesem Vault überein.',
+  ton_tx_failure_wallet_id_mismatch:
+    'Die Transaktion wurde für eine andere Wallet-Vertragsversion erstellt als die, die an dieser Adresse eingesetzt wird.',
+  ton_tx_failure_insufficient_funds:
+    'Nicht genügend TON um den Betrag zuzüglich Netzwerkgebühren zu decken. Halten Sie etwa 0,05 TON für Gebühren bereit und versuchen Sie es erneut.',
+  ton_tx_failure_out_of_gas:
+    'Die Transaktion konnte nicht abgeschlossen werden, da das Gas nicht ausreichte. Fügen Sie der Überweisung weitere TON hinzu und versuchen Sie es erneut.',
+  ton_tx_failure_invalid_destination:
+    'Die Zieladresse ist für TON ungültig. Überprüfen Sie die Adresse und versuchen Sie es erneut.',
+  ton_tx_failure_not_enough_jettons:
+    'Diese Wallet enthält nicht genügend Token, um diesen Betrag zu senden.',
+  ton_tx_failure_jetton_gas_underfunded:
+    'Es wurden nicht genügend TON für die Token-Übertragung hinterlegt. Bitte behalten Sie etwa 0,05 TON für die Gebühren und versuchen Sie es erneut.',
+  ton_tx_failure_jetton_unauthorized:
+    'Der Token-Vertrag hat die Überweisung abgelehnt, da diese Wallet nicht berechtigt ist, diese Token zu transferieren.',
+  ton_tx_failure_action_failed:
+    'Die Wallet hat die Transaktion akzeptiert, konnte die Überweisung aber nicht durchführen, daher wurde kein Geld gesendet. Die Netzwerkgebühr wurde dennoch berechnet. Überprüfen Sie Ihren Kontostand und versuchen Sie es erneut.',
+  ton_tx_failure_aborted:
+    'Das Netzwerk hat diese Transaktion abgebrochen, bevor die Überweisung durchgeführt werden konnte.',
+  ton_tx_failure_contract_rejected:
+    'Der Vertrag hat die Transaktion abgelehnt (Exit-Code {{exitCode}} ).',
 }
