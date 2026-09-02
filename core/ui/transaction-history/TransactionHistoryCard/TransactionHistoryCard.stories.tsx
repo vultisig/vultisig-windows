@@ -107,7 +107,7 @@ export const AllCards: Story = {
 /** Token transfer: the coin icon carries a chain badge on its bottom-right. */
 export const TokenWithChainBadge: Story = {
   args: {
-    tagType: 'swap' as TransactionHistoryTagType,
+    tagType: 'swap',
     status: 'successful',
     amountUsd: '$39.99',
     amountCrypto: '40',
