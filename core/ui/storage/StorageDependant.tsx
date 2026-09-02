@@ -8,7 +8,6 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { FlowErrorPageContent } from '../flow/FlowErrorPageContent'
 import { I18nProvider } from '../i18n/I18nProvider'
-import { PasscodeGuard } from '../passcodeEncryption/guard/PasscodeGuard'
 import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
 import { useCore } from '../state/core'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
@@ -89,7 +88,6 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
                     <RootCurrentVaultProvider>
                       {children}
                     </RootCurrentVaultProvider>
-                    <PasscodeGuard />
                   </PasscodeProvider>
                 </CurrentVaultIdProvider>
               </VaultsProvider>
