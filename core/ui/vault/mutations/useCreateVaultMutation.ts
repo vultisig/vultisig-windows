@@ -25,13 +25,14 @@ import { StorageKey } from '../../storage/StorageKey'
 import { getDefaultVaultChains } from '../chains/defaultVaultChains'
 
 export const useCreateVaultMutation = (
-  options?: UseMutationOptions<any, any, Vault, unknown>
+  options?: UseMutationOptions<any, any, Vault, unknown>,
+  recoveryVault?: Vault
 ) => {
   const refetchQueries = useRefetchQueries()
   const hasPasscodeEncryption = useIsPasscodeRequired()
   const [passcode] = usePasscode()
 
-  const { createVault, validateLegacyVaultKeyShares } = useCore()
+  const { createVault, replaceVault, validateLegacyVaultKeyShares } = useCore()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const { mutateAsync: createCoins } = useCreateCoinsMutation()
@@ -57,7 +58,12 @@ export const useCreateVaultMutation = (
           }
         : input
 
-      const vault = await createVault(vaultToCreate)
+      const vault = recoveryVault
+        ? await replaceVault({
+            expectedVault: recoveryVault,
+            vault: vaultToCreate,
+          })
+        : await createVault(vaultToCreate)
 
       const chainsToCreate = isKeyImportVault(vault)
         ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))

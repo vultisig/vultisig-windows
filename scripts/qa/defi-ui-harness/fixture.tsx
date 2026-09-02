@@ -294,6 +294,7 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     goHome: () => {},
     getVaults: async () => [vault],
     createVault: async input => input,
+    replaceVault: async ({ vault: input }) => input,
     updateVault: async () => vault,
     deleteVault: noop,
     updateVaultsKeyShares: noop,

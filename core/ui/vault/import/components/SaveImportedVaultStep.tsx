@@ -7,11 +7,11 @@ import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
-import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
+import { assertVaultRecoveryReplacement } from '../../../storage/vaultRecoveryReplacement'
 import { useUnreadableVaultRecoveryId } from '../../state/currentVault'
 
 export const canReplaceVaultDuringRecovery = ({
@@ -36,34 +36,16 @@ export const hasVaultRecoveryIdentityProof = ({
   existingVault: Vault
   importedVault: Vault
 }): boolean => {
-  if (importedVault.keyShares.ecdsa) return true
-
-  if (
-    existingVault.libType !== 'KeyImport' ||
-    importedVault.libType !== 'KeyImport'
-  ) {
+  try {
+    assertVaultRecoveryReplacement({
+      currentVault: existingVault,
+      expectedVault: existingVault,
+      replacementVault: importedVault,
+    })
+    return true
+  } catch {
     return false
   }
-
-  const chainShareKeys = getRecordKeys(importedVault.chainKeyShares ?? {})
-  const chainSharesMatch = chainShareKeys.every(
-    chain =>
-      Boolean(importedVault.chainKeyShares?.[chain]) &&
-      Boolean(importedVault.chainPublicKeys?.[chain]) &&
-      importedVault.chainPublicKeys?.[chain] ===
-        existingVault.chainPublicKeys?.[chain]
-  )
-  const hasMldsaShare = Boolean(importedVault.keyShareMldsa)
-  const mldsaShareMatches =
-    !hasMldsaShare ||
-    (Boolean(importedVault.publicKeyMldsa) &&
-      importedVault.publicKeyMldsa === existingVault.publicKeyMldsa)
-
-  return (
-    (chainShareKeys.length > 0 || hasMldsaShare) &&
-    chainSharesMatch &&
-    mldsaShareMatches
-  )
 }
 
 export const SaveImportedVaultStep = ({
@@ -81,20 +63,24 @@ export const SaveImportedVaultStep = ({
   const vaultOrders = useVaultOrders()
   const stableVaultOrders = useRef(vaultOrders).current
 
-  const finalValue = useMemo(() => {
-    const overriddenValue = override ? { ...value, ...override } : value
-    const recoveryVault = initialVaults.find(
+  const recoveryVault = useMemo(() => {
+    const importedVault = override ? { ...value, ...override } : value
+    return initialVaults.find(
       vault =>
         getVaultId(vault) === recoveryVaultId &&
-        getVaultId(overriddenValue) === recoveryVaultId
+        getVaultId(importedVault) === recoveryVaultId
     )
+  }, [override, value, initialVaults, recoveryVaultId])
+
+  const finalValue = useMemo(() => {
+    const overriddenValue = override ? { ...value, ...override } : value
 
     return {
       ...overriddenValue,
       order: recoveryVault?.order ?? getLastItemOrder(stableVaultOrders),
       ...(recoveryVault?.folderId ? { folderId: recoveryVault.folderId } : {}),
     }
-  }, [override, value, stableVaultOrders, initialVaults, recoveryVaultId])
+  }, [override, value, stableVaultOrders, recoveryVault])
 
   const error = useMemo(() => {
     const existingVault = initialVaults.find(
@@ -145,6 +131,7 @@ export const SaveImportedVaultStep = ({
     <SaveVaultStep
       onBack={() => navigate({ id: 'vault' })}
       onFinish={handleFinish}
+      recoveryVault={recoveryVault}
       value={finalValue}
       title={t('import_vault')}
     />
