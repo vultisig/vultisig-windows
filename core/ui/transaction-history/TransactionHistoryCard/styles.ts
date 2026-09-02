@@ -1,7 +1,7 @@
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor, matchColor } from '@lib/ui/theme/getters'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import type { TransactionHistoryCardStatus } from './TransactionHistoryCard'
 
@@ -96,13 +96,23 @@ export const AddressPill = styled(HStack).attrs({
   flex-shrink: 0;
 `
 
-/** Error message row: aligned to the right. */
+/**
+ * Error message row: aligned to the right, and lifted clear of the provider
+ * pill when there is one. The pill is absolutely positioned over the card's
+ * bottom-right corner, so a last flow child sitting on the card's own padding
+ * would be printed underneath it.
+ */
 export const ErrorMessageRow = styled(HStack).attrs({
   direction: 'horizontal',
   alignItems: 'center',
   justifyContent: 'flex-end',
-})`
+})<{ $clearsProviderPill: boolean }>`
   width: 100%;
+  ${({ $clearsProviderPill }) =>
+    $clearsProviderPill &&
+    css`
+      margin-bottom: 20px;
+    `}
 `
 
 /** Provider pill: anchored to the bottom-right corner of the card with asymmetric border radius. */

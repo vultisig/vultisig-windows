@@ -90,6 +90,16 @@ export const AllCards: Story = {
         pill={{ providerName: 'THORChain' }}
         coin={ethCoin}
       />
+      <TransactionHistoryCard
+        tagType="swap"
+        status="error"
+        amountUsd="$34,752.57"
+        amountCrypto="20.50"
+        symbol="ETH"
+        pill={{ providerName: 'LI.FI' }}
+        errorMessage="Price moved past slippage"
+        coin={ethCoin}
+      />
     </div>
   ),
 }
@@ -117,4 +127,19 @@ export const ErrorWithMessage: Story = {
     errorMessage: 'Slippage tolerance exceeded',
   },
   render: args => <TransactionHistoryCard {...args} coin={runeCoin} />,
+}
+
+/** A failed swap explains itself while the provider pill still owns the card's
+ *  bottom-right corner — the one combination where the two can collide. */
+export const ErrorWithMessageAndProviderPill: Story = {
+  args: {
+    tagType: 'swap' as TransactionHistoryTagType,
+    status: 'error',
+    amountUsd: '$34,752.57',
+    amountCrypto: '20.50',
+    symbol: 'ETH',
+    pill: { providerName: 'LI.FI' as const },
+    errorMessage: 'Price moved past slippage',
+  },
+  render: args => <TransactionHistoryCard {...args} coin={ethCoin} />,
 }

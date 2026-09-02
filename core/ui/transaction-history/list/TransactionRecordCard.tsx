@@ -24,6 +24,7 @@ import {
   TransactionRecordStatus,
 } from '../core'
 import { getTransactionTagLabel } from '../cosmosMessageLabel'
+import { getRecordFailureReason, swapFailureCopy } from '../swapFailureCopy'
 import {
   TransactionHistoryCard,
   TransactionHistoryCardPill,
@@ -293,6 +294,8 @@ export const TransactionRecordCard = ({
       ? limitStatusLabel[record.data.orderStatus]
       : undefined
 
+  const failureReason = getRecordFailureReason(record)
+
   const handleClick = () =>
     navigate({ id: 'transactionDetail', state: { id: record.id } })
 
@@ -318,6 +321,9 @@ export const TransactionRecordCard = ({
         amountCrypto={display.amountCrypto}
         symbol={display.symbol}
         pill={display.pill}
+        errorMessage={
+          failureReason ? t(swapFailureCopy[failureReason].label) : undefined
+        }
         coin={display.coin}
       />
     </div>

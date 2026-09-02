@@ -1,6 +1,8 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { limitSwapOrderStatuses } from '@vultisig/core-chain/swap/native/limitSwapOrderStatus'
 
+import { SwapFailureReason } from './status/swapFailureReason'
+
 export const transactionRecordTypes = [
   'send',
   'swap',
@@ -75,6 +77,10 @@ export type SwapTransactionData = {
    * instead of a chain tx hash. Once the order settles, the poller replaces
    * `txHash` with the on-chain settlement hash. */
   cowSwapOrderApiBase?: string
+  /** Why the chain rejected this swap, once the revert has been read back and
+   * recognised. Only ever set on a `failed` record, and absent whenever the
+   * reason could not be established — see `useResolveSwapFailureReasons`. */
+  failureReason?: SwapFailureReason
 }
 
 export type SendTransactionRecord = TransactionRecordBase & {
