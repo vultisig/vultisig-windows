@@ -3,18 +3,18 @@ import { SwapQuoteProviderName } from '@vultisig/core-chain/swap/quote/findSwapQ
 
 /**
  * A route the user picked by hand instead of taking the auto-selected winner,
- * tied to the quote cycle it was picked from. Deliberately kept out of the
- * persisted advanced settings: a pick is valid for one cycle only and must not
- * survive a quote refresh.
+ * scoped to the swap it was picked for. Deliberately kept out of the persisted
+ * advanced settings: a pick belongs to the swap being composed right now, not
+ * to the vault's saved preferences.
  */
 export type SwapRouteOverride = {
   providerName: SwapQuoteProviderName
   /**
-   * Identifies the quote cycle the pick belongs to. Once the cycle changes the
-   * pick stops applying, so no explicit reset has to be wired into every code
-   * path that can trigger a refresh.
+   * The swap the pick was made for — see `getSwapQuoteRequestId`. The pick
+   * holds across every re-quote of that same pair and amount, including the
+   * interval refresh, and stops applying once either changes.
    */
-  cycleId: string
+  requestId: string
 }
 
 /**

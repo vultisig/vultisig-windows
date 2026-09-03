@@ -1918,4 +1918,7 @@ export const hr = {
     'Nije trgovao ovdje u ovom prozoru — najviša cijena je bila {{price}}',
   swap_quote_expired:
     'Ova ponuda je istekla. Osvježite stranicu da biste dobili trenutnu cijenu.',
+  swap_failed_slippage: 'Cijena je prešla toleranciju klizanja',
+  swap_failed_slippage_description:
+    'Cijena se promijenila prije nego što je ovaj swap sletio, tako da bi isplatio manje od dopuštene tolerancije na klizanje, a mreža ga je poništila. Povećajte toleranciju na klizanje ili pokušajte ponovno.',
 }
