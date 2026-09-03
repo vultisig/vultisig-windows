@@ -26,6 +26,7 @@ import { useIsMLDSAEnabledQuery } from './mldsaEnabled'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
 import { usePasscodeEncryptionQuery } from './passcodeEncryption'
+import { useIsTonW5EnabledQuery } from './tonW5Enabled'
 import { useIsTssBatchingEnabledQuery } from './tssBatchingEnabled'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
@@ -45,6 +46,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
   const isMLDSAEnabled = useIsMLDSAEnabledQuery()
   const isTssBatchingEnabled = useIsTssBatchingEnabledQuery()
+  const isTonW5Enabled = useIsTonW5EnabledQuery()
   const customRpcOverrides = useCustomRpcOverridesQuery()
 
   const { processError, targetVaultId } = useCore()
@@ -65,6 +67,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     isBlockaidEnabled,
     isMLDSAEnabled,
     isTssBatchingEnabled,
+    isTonW5Enabled,
     customRpcOverrides,
   })
 

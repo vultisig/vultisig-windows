@@ -109,6 +109,7 @@ export default defineConfig({
         '**/search-field.spec.ts',
         '**/navigation-design.spec.ts',
         '**/viewport-fit.spec.ts',
+        '**/ton-w5-toggle.spec.ts',
       ],
       use: {
         launchOptions: {

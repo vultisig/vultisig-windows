@@ -363,6 +363,9 @@ export const en = {
   enable_all: 'Enable all',
   enable_dkls: 'Enable DKLS',
   enable_tss_batching: 'Enable TSS Batching',
+  enable_ton_w5_wallet: 'Use TON W5 wallet',
+  enable_ton_w5_wallet_description:
+    'Derive TON accounts with the W5 (v5r1) contract instead of V4R2. Each contract is a separate address with its own balance; existing TON coins move to the selected account.',
   post_quantum_keygen: 'Post-Quantum Key Generation',
   post_quantum_keygen_description:
     'Generate a post-quantum (MLDSA) key for this vault',

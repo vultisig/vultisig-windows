@@ -126,11 +126,14 @@ export const Switch: FC<SwitchProps> = ({
   return (
     <StyledContainer>
       <StyledSwitch
+        aria-busy={loading}
+        aria-checked={checked}
         checked={checked}
         disabled={disabled || loading}
         hoverable={!!onChange}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
+        role="switch"
         tabIndex={0}
       >
         <StyledSlider checked={checked}>
