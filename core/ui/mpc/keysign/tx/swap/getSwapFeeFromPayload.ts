@@ -1,40 +1,55 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/getNativeSwapDecimals'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
+import {
+  getKeysignSwapFeeFields,
+  KeysignSwapFeeFields,
+} from '@vultisig/core-mpc/keysign/swap/getKeysignSwapFeeFields'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
-import { OneInchTransaction } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
-
-// The three coin-context fields on OneInchTransaction were added to the
-// .proto in vultisig/commondata#87 and are populated by vultisig-sdk#540.
-// They will appear on the generated `OneInchTransaction` type once the
-// SDK publishes a version that bundles those regenerated protobuf files.
-// Until then, augment the type locally so this file compiles against the
-// currently-published @vultisig/core-mpc. Pre-update payloads simply leave
-// these fields undefined and the guard below skips them.
-type OneInchTransactionWithSwapFeeCoin = OneInchTransaction & {
-  swapFeeChain?: string
-  swapFeeTokenId?: string
-  swapFeeDecimals?: number
-}
 
 const chainRegistry = new Set<string>(Object.values(Chain))
 
 const isKnownChain = (value: string): value is Chain => chainRegistry.has(value)
 
+const toSwapFee = ({
+  swapFee,
+  swapFeeChain,
+  swapFeeTokenId,
+  swapFeeDecimals,
+}: KeysignSwapFeeFields): SwapFee | undefined => {
+  if (!swapFee || swapFee === '0') return undefined
+  if (!swapFeeChain || swapFeeDecimals == null) return undefined
+  // `swap_fee_chain` is a protobuf string. Validate it against the known
+  // `Chain` set at this single routing boundary so unknown senders don't
+  // produce a broken `SwapFee` downstream.
+  if (!isKnownChain(swapFeeChain)) return undefined
+
+  return {
+    chain: swapFeeChain,
+    // Keep `id` absent when the sender didn't populate it — native fee coins
+    // (e.g. ETH on Ethereum) have no token id. Coercing to '' here changes
+    // `coinKeyToString` from `"Ethereum"` to `"Ethereum:"` and breaks the
+    // vault-coin lookup, zeroing out the fiat value.
+    ...(swapFeeTokenId ? { id: swapFeeTokenId } : {}),
+    amount: BigInt(swapFee),
+    decimals: swapFeeDecimals,
+  }
+}
+
 /**
  * Extracts the swap-fee `SwapFee` from a built `KeysignPayload`.
  *
- * General swaps (1inch / LI.FI / SwapKit / KyberSwap) require all four
- * `swap_fee*` fields populated on `OneInchTransaction` so the destination
- * coin can be reconstructed — KyberSwap charges in the destination token
- * while the other providers charge in the source fee coin, so amount alone
- * is ambiguous. Payloads from senders that pre-date that proto extension
- * leave `swap_fee_chain` empty; this function returns `undefined` for them
- * rather than guessing.
+ * General swaps (1inch / LI.FI / SwapKit / KyberSwap) need the whole
+ * `swap_fee` group, wherever the payload shape keeps it, because the fee coin
+ * has to be reconstructed — KyberSwap charges in the destination token while
+ * the other providers charge in the source fee coin, so the amount alone is
+ * ambiguous. Payloads from senders that pre-date the group leave
+ * `swap_fee_chain` empty; this returns `undefined` for them rather than
+ * guessing a coin and pricing the amount as something it is not.
  *
  * Native swaps (THORChain / MAYAChain) carry the fee in the destination
  * coin implicitly; only `fee` (amount) is needed.
@@ -58,25 +73,8 @@ export const getSwapFeeFromPayload = (
           decimals: getNativeSwapDecimals(dstKey),
         }
       },
-      general: ({ quote }) => {
-        const tx = quote?.tx as OneInchTransactionWithSwapFeeCoin | undefined
-        if (!tx || !tx.swapFee || tx.swapFee === '0') return undefined
-        if (!tx.swapFeeChain || tx.swapFeeDecimals == null) return undefined
-        // `swap_fee_chain` is a protobuf string. Validate it against the known
-        // `Chain` set at this single routing boundary so unknown senders don't
-        // produce a broken `SwapFee` downstream.
-        if (!isKnownChain(tx.swapFeeChain)) return undefined
-        return {
-          chain: tx.swapFeeChain,
-          // Keep `id` absent when the SDK didn't populate it — native fee
-          // coins (e.g. ETH on Ethereum) have no token id. Coercing to ''
-          // here changes `coinKeyToString` from `"Ethereum"` to `"Ethereum:"`
-          // and breaks the vault-coin lookup, zeroing out the fiat value.
-          ...(tx.swapFeeTokenId ? { id: tx.swapFeeTokenId } : {}),
-          amount: BigInt(tx.swapFee),
-          decimals: tx.swapFeeDecimals,
-        }
-      },
+      general: generalPayload =>
+        toSwapFee(getKeysignSwapFeeFields(generalPayload)),
     }
   )
 }
