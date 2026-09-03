@@ -31,9 +31,9 @@ import {
 } from '../helpers/chain-rotation'
 import { readChromeStorage } from '../helpers/chrome-storage'
 import {
-  canSwap,
   CHAIN_SYMBOLS,
   getVaultBalances,
+  requireSwapPreconditions,
   selectSwapPair,
   SYMBOL_FALLBACK_AMOUNTS,
 } from '../helpers/dynamic-swap'
@@ -255,9 +255,12 @@ test.describe('Swap Flow', () => {
       console.log('\n📊 Reading vault balances...')
       const balances = await getVaultBalances(page)
 
-      if (!canSwap(balances)) {
-        console.log('⚠️ Insufficient balance for swap - skipping')
-        test.skip()
+      if (
+        !requireSwapPreconditions({
+          balances,
+          skip: (condition, reason) => test.skip(condition, reason),
+        })
+      ) {
         return
       }
 
@@ -595,8 +598,12 @@ test.describe('Swap Flow', () => {
       await vaultPage.waitForView(15_000)
 
       const balances = await getVaultBalances(page)
-      if (!canSwap(balances)) {
-        test.skip(true, 'Insufficient balance for swap quote UX')
+      if (
+        !requireSwapPreconditions({
+          balances,
+          skip: (condition, reason) => test.skip(condition, reason),
+        })
+      ) {
         return
       }
 

@@ -1962,4 +1962,9 @@ export const de = {
   swap_limit_chart_last_traded: 'Zuletzt gehandelt hier: {{when}}',
   swap_limit_chart_not_reached:
     'In diesem Zeitfenster nicht gehandelt — das Hoch lag bei {{price}}',
+  swap_quote_expired:
+    'Dieses Angebot ist abgelaufen. Aktualisieren Sie die Seite, um einen aktuellen Preis zu erhalten.',
+  swap_failed_slippage: 'Der Preis hat die Toleranzgrenze überschritten.',
+  swap_failed_slippage_description:
+    'Der Kurs hat sich vor der Ausführung des Swaps geändert, daher wäre die Auszahlung geringer gewesen als Ihre Slippage-Toleranz erlaubt gewesen, und das Netzwerk hat den Swap rückgängig gemacht. Erhöhen Sie Ihre Slippage-Toleranz oder versuchen Sie es erneut.',
 }

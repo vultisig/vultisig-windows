@@ -1947,4 +1947,10 @@ export const es = {
   swap_limit_chart_last_traded: 'Última transacción realizada aquí: {{when}}',
   swap_limit_chart_not_reached:
     'No ha cotizado aquí en este período; el máximo fue {{price}}',
+  swap_quote_expired:
+    'Esta cotización ha caducado. Actualiza la página para ver el precio actual.',
+  swap_failed_slippage:
+    'El precio superó el límite de tolerancia al deslizamiento.',
+  swap_failed_slippage_description:
+    'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
 }

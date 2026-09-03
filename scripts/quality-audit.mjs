@@ -50,26 +50,6 @@ const suppressions = [
     reviewBy: '2026-10-01',
   },
   {
-    id: 1124015,
-    advisory: 'GHSA-4c8g-83qw-93j6',
-    package: 'fast-uri',
-    path: 'ajv > fast-uri',
-    reason:
-      'Host confusion via failed IDN canonicalization. fast-uri is a transitive dep of ajv (JSON-schema tooling); the affected URI host-parsing path is not exercised by our usage. No patched fast-uri (>3.1.3) is resolvable in our dependency tree yet.',
-    owner: 'vultisig/windows',
-    reviewBy: '2026-10-01',
-  },
-  {
-    id: 1124064,
-    advisory: 'GHSA-v2hh-gcrm-f6hx',
-    package: 'fast-uri',
-    path: 'ajv > fast-uri',
-    reason:
-      'Host confusion via a literal backslash authority delimiter — same package and path as 1124015; suppressed together pending the same fast-uri upgrade.',
-    owner: 'vultisig/windows',
-    reviewBy: '2026-10-01',
-  },
-  {
     id: 1124334,
     advisory: 'GHSA-mh99-v99m-4gvg',
     package: 'brace-expansion',

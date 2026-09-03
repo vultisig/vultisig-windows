@@ -503,20 +503,6 @@ export const getDepositFormConfig = ({
     stake: () => ({
       fields: isStakeableChain(chain)
         ? match(chain as StakeableChain, {
-            [Chain.Ton]: () => [
-              {
-                name: 'amount',
-                type: 'number',
-                label: t('amount'),
-                required: true,
-              },
-              {
-                name: 'validatorAddress',
-                type: 'text',
-                label: t('validator_address'),
-                required: true,
-              },
-            ],
             [Chain.THORChain]: () => [
               {
                 name: 'amount',
@@ -549,48 +535,11 @@ export const getDepositFormConfig = ({
                       autoCompound: z.boolean().optional(),
                     })
                   : z.never(),
-            Ton: () =>
-              z.object({
-                amount: positiveAmountSchema({
-                  maxValue: totalAmountAvailable,
-                  t,
-                  chainAmountMax: amountMax,
-                }),
-                validatorAddress: z
-                  .string()
-                  .trim()
-                  .min(1, t('validator_address'))
-                  .refine(
-                    address =>
-                      isValidAddress({
-                        chain: chain as Chain,
-                        address,
-                        walletCore,
-                      }),
-                    {
-                      message: t('send_invalid_receiver_address'),
-                    }
-                  ),
-              }) as any,
           }),
     }),
     unstake: () => ({
       fields: isStakeableChain(chain)
         ? match(chain as StakeableChain, {
-            [Chain.Ton]: () => [
-              {
-                name: 'amount',
-                type: 'number',
-                label: t('amount'),
-                required: true,
-              },
-              {
-                name: 'validatorAddress',
-                type: 'text',
-                label: t('validator_address'),
-                required: true,
-              },
-            ],
             [Chain.THORChain]: () =>
               coin.ticker === 'RUJI' || isBruneStakeCoin(coin)
                 ? [
@@ -656,29 +605,6 @@ export const getDepositFormConfig = ({
                       }),
                     ])
                   : z.never(),
-            Ton: () =>
-              z.object({
-                validatorAddress: z
-                  .string()
-                  .trim()
-                  .min(1, t('validator_address'))
-                  .refine(
-                    address =>
-                      isValidAddress({
-                        chain: chain as Chain,
-                        address,
-                        walletCore,
-                      }),
-                    {
-                      message: t('send_invalid_receiver_address'),
-                    }
-                  ),
-                amount: positiveAmountSchema({
-                  maxValue: totalAmountAvailable,
-                  t,
-                  chainAmountMax: amountMax,
-                }),
-              }) as any,
           }),
     }),
     freeze: () => ({

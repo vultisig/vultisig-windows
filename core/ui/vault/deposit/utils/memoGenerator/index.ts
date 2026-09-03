@@ -66,7 +66,6 @@ export const generateMemo = ({
     },
     stake: () =>
       match(chain as StakeableChain, {
-        Ton: () => 'd',
         THORChain: () => {
           if (coin.ticker === 'TCY') {
             return 'tcy+'
@@ -94,7 +93,6 @@ export const generateMemo = ({
       }),
     unstake: () =>
       match(chain as StakeableChain, {
-        Ton: () => 'w',
         THORChain: () => {
           if (coin.ticker === 'TCY') {
             if (depositFormData.autoCompound) return ''

@@ -10,9 +10,23 @@ import {
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
 import { isChainPollable } from './pendingRecord'
 import { getStatusPollingInterval } from './staleTransaction'
+import {
+  isUnaskedEvmSwapFailure,
+  readSwapFailureReason,
+  withSwapFailureReason,
+} from './swapFailureReasonUpdate'
 import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpdate'
 
-/** Polls chain status for a single pending transaction and updates its record when finalized. */
+/**
+ * Polls chain status for a single pending transaction and updates its record
+ * when finalized.
+ *
+ * A swap the chain has just failed is asked why here rather than later, because
+ * the answer has a shelf life: reading a revert means replaying the transaction
+ * against the block it was mined in, and several of the chains we talk to keep
+ * only the last 128 blocks — minutes, not days. This runs seconds after the
+ * failure, and folds the reason into the same write the verdict already makes.
+ */
 export const useTransactionStatusPolling = (record: TransactionRecord) => {
   const applyRecordUpdate = useApplyTransactionRecordUpdate()
   const isPending = isChainPollable(record)
@@ -48,7 +62,15 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
 
       const update = getTxStatusRecordUpdate({ record: current, result })
       if (update) {
-        applyRecordUpdate({ previous: current, update })
+        applyRecordUpdate({
+          previous: current,
+          update: isUnaskedEvmSwapFailure(update)
+            ? withSwapFailureReason({
+                record: update,
+                reason: await readSwapFailureReason(update),
+              })
+            : update,
+        })
       }
 
       return result
