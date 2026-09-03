@@ -4,16 +4,21 @@
  * Handles the complete send transaction flow.
  */
 
-import { type Page, type Locator, expect } from '@playwright/test'
-import { BasePage } from './BasePage.po'
-import { 
-  waitForFormReady, 
-  waitForStackedFieldReady, 
+import { expect, type Locator, type Page } from '@playwright/test'
+import { Chain } from '@vultisig/core-chain/Chain'
+
+import {
   robustClick,
+  waitForFormReady,
   waitForLoadingComplete,
-  debugElementState,
-  takeDebugScreenshot,
+  waitForStackedFieldReady,
 } from '../helpers/ui-waits'
+import { BasePage } from './BasePage.po'
+
+type SendCoinSelection = {
+  chain: string
+  ticker: string
+}
 
 export class SendFlow extends BasePage {
   constructor(page: Page, extensionId: string) {
@@ -62,7 +67,7 @@ export class SendFlow extends BasePage {
    * Located in the "From" row of the coin input field.
    */
   get chainSelectorButton(): Locator {
-    return this.sendForm.locator('role=button >> text=/Bitcoin|Ethereum|THORChain|Solana|BSC|Ripple/i').first()
+    return this.coinSelector.getByRole('button').first()
   }
 
   get addressInput(): Locator {
@@ -82,7 +87,9 @@ export class SendFlow extends BasePage {
   }
 
   get termsCheckbox(): Locator {
-    return this.page.locator('[data-testid="send-terms-checkbox"], input[type="checkbox"]')
+    return this.page.locator(
+      '[data-testid="send-terms-checkbox"], input[type="checkbox"]'
+    )
   }
 
   /**
@@ -91,11 +98,16 @@ export class SendFlow extends BasePage {
    * There's no data-testid, so we match by button role and text.
    */
   get signButton(): Locator {
-    return this.page.getByRole('button', { name: /fast.sign|sign|confirm/i }).first()
+    return this.page
+      .getByRole('button', { name: /fast.sign|sign|confirm/i })
+      .first()
   }
 
   get successScreen(): Locator {
-    return this.page.locator('[data-testid="send-success"]').or(this.page.locator('text=/success|sent|complete/i')).first()
+    return this.page
+      .locator('[data-testid="send-success"]')
+      .or(this.page.locator('text=/success|sent|complete/i'))
+      .first()
   }
 
   get txHashDisplay(): Locator {
@@ -103,7 +115,10 @@ export class SendFlow extends BasePage {
   }
 
   get maxButton(): Locator {
-    return this.page.locator('[data-testid="max-amount"]').or(this.page.getByRole('button', { name: /max/i })).first()
+    return this.page
+      .locator('[data-testid="max-amount"]')
+      .or(this.page.getByRole('button', { name: /max/i }))
+      .first()
   }
 
   get feeDisplay(): Locator {
@@ -136,6 +151,151 @@ export class SendFlow extends BasePage {
     XRP: 'Ripple',
   }
 
+  private get assetPickerTitle(): Locator {
+    return this.page.getByText('Select asset', { exact: true })
+  }
+
+  private get chainPickerTitle(): Locator {
+    return this.page.getByText('Select chain', { exact: true })
+  }
+
+  private pickerForTitle(title: Locator): Locator {
+    return title.locator('xpath=../../..')
+  }
+
+  private async isActiveStackedField(locator: Locator): Promise<boolean> {
+    return (
+      (await locator.isVisible().catch(() => false)) &&
+      (await locator.locator('xpath=ancestor::*[@inert]').count()) === 0
+    )
+  }
+
+  private async ensureCoinFieldExpanded(): Promise<void> {
+    if (await this.isActiveStackedField(this.coinSelector)) return
+
+    const collapsedCoinField = this.page.getByTestId('send-coin-field')
+    if (!(await this.isActiveStackedField(collapsedCoinField))) {
+      throw new Error(
+        'Cannot inspect the selected send asset: the coin field is not visible'
+      )
+    }
+
+    await collapsedCoinField.click()
+    await expect
+      .poll(() => this.isActiveStackedField(this.coinSelector))
+      .toBe(true)
+    await waitForStackedFieldReady(this.page)
+  }
+
+  private async readCoinSelection(): Promise<SendCoinSelection> {
+    await this.ensureCoinFieldExpanded()
+
+    const chain = (await this.chainSelectorButton.innerText()).trim()
+    const ticker = (await this.coinSelectorTrigger.innerText())
+      .split(/\s+/)
+      .find(Boolean)
+
+    if (!chain || !ticker) {
+      throw new Error(
+        `Cannot read the selected send asset (chain=${
+          chain || 'missing'
+        }, ticker=${ticker || 'missing'})`
+      )
+    }
+
+    return { chain, ticker }
+  }
+
+  private async closeCoinPickers(): Promise<void> {
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const openPicker = (await this.chainPickerTitle
+        .isVisible()
+        .catch(() => false))
+        ? this.chainPickerTitle
+        : (await this.assetPickerTitle.isVisible().catch(() => false))
+          ? this.assetPickerTitle
+          : null
+
+      if (!openPicker) return
+      const picker = this.pickerForTitle(openPicker)
+      const closeButton = picker.getByRole('button').first()
+      await expect(closeButton).toBeVisible()
+      await closeButton.click()
+      await expect(openPicker).toHaveCount(0)
+    }
+
+    throw new Error('Could not close the send asset pickers')
+  }
+
+  private async selectionFailure(
+    requested: string,
+    route: string[],
+    expectedChain?: string
+  ): Promise<never> {
+    await this.closeCoinPickers()
+    const observed = await this.readCoinSelection().catch(() => ({
+      chain: 'unreadable',
+      ticker: 'unreadable',
+    }))
+    const expectation = expectedChain
+      ? `${expectedChain}/${requested}`
+      : `${observed.chain}/${requested}`
+
+    throw new Error(
+      `Unable to select ${requested} (expected ${expectation}); ` +
+        `route: ${route.join(' -> ')}; ` +
+        `observed ${observed.chain}/${observed.ticker}`
+    )
+  }
+
+  private async uniqueAssetOption(
+    assetPicker: Locator,
+    ticker: string,
+    timeout = 2_000
+  ): Promise<Locator | null> {
+    const options = assetPicker.getByTestId(`coin-option-${ticker}`)
+    await options
+      .first()
+      .waitFor({ state: 'visible', timeout })
+      .catch(() => {})
+    const count = await options.count()
+
+    if (count > 1) {
+      await this.selectionFailure(ticker, [
+        `asset:${ticker} ambiguous (${count} matches)`,
+      ])
+    }
+
+    return count === 1 ? options.first() : null
+  }
+
+  private async restoreOpenField(
+    field: 'address' | 'amount' | null
+  ): Promise<void> {
+    if (!field) return
+
+    const input = field === 'address' ? this.addressInput : this.amountInput
+    if (await this.isActiveStackedField(input)) return
+
+    const collapsedField = input.locator(
+      'xpath=ancestor::*[@inert][1]/following-sibling::*[1]/*[1]'
+    )
+    await expect
+      .poll(() => this.isActiveStackedField(collapsedField))
+      .toBe(true)
+    await collapsedField.click()
+    await expect.poll(() => this.isActiveStackedField(input)).toBe(true)
+    await waitForStackedFieldReady(this.page)
+  }
+
+  async openAddressField(): Promise<void> {
+    await this.restoreOpenField('address')
+  }
+
+  async openAmountField(): Promise<void> {
+    await this.restoreOpenField('amount')
+  }
+
   /**
    * Select coin/chain to send.
    *
@@ -149,120 +309,142 @@ export class SendFlow extends BasePage {
    * @param coin - Coin symbol (e.g. 'ETH', 'BTC', 'BNB') or chain name (e.g. 'Ethereum')
    */
   async selectCoin(coin: string): Promise<void> {
-    // Resolve chain name from symbol if needed
-    const chainName = SendFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
+    const requested = coin.trim()
+    if (!requested || !/^[a-z0-9-]+$/i.test(requested)) {
+      throw new Error(`Invalid send asset request: ${JSON.stringify(coin)}`)
+    }
 
-    // Wait for stacked field animations to complete before checking/clicking
+    const requestedTicker = requested.toUpperCase()
+    const mappedChain = SendFlow.SYMBOL_TO_CHAIN[requestedTicker]
+    const requestedChain =
+      mappedChain ??
+      Object.values(Chain).find(
+        chain => chain.toLowerCase() === requested.toLowerCase()
+      )
+    const expectedTicker =
+      mappedChain || !requestedChain ? requestedTicker : null
+    const fieldToRestore = (await this.isActiveStackedField(this.addressInput))
+      ? 'address'
+      : (await this.isActiveStackedField(this.amountInput))
+        ? 'amount'
+        : null
+    const route: string[] = []
+
     await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
+    let selected = await this.readCoinSelection()
 
-    // Check if the coin ticker is already visible in the form (collapsed or expanded)
-    const currentCoin = this.sendForm.getByText(new RegExp(`^${coin}$`, 'i')).first()
-    if (await currentCoin.isVisible({ timeout: 1000 }).catch(() => false)) {
-      console.log(`Coin ${coin} already selected`)
-      return
-    }
+    const selectionMatches = () =>
+      (!requestedChain ||
+        selected.chain.toLowerCase() === requestedChain.toLowerCase()) &&
+      (!expectedTicker || selected.ticker.toUpperCase() === expectedTicker)
 
-    // Also check by chain name
-    const currentChain = this.sendForm.getByText(new RegExp(`^${chainName}$`, 'i')).first()
-    if (await currentChain.isVisible({ timeout: 500 }).catch(() => false)) {
-      console.log(`Chain ${chainName} already selected`)
-      return
-    }
+    if (!selectionMatches()) {
+      await this.coinSelectorTrigger.click()
+      await expect(this.assetPickerTitle).toBeVisible()
+      const assetPicker = this.pickerForTitle(this.assetPickerTitle)
+      route.push(`asset:${requestedTicker} on ${selected.chain}`)
 
-    // Try data-testid coin selector trigger first
-    if (await this.coinSelectorTrigger.isVisible({ timeout: 1000 }).catch(() => false)) {
-      // Debug: log element state if we have issues
-      await debugElementState(this.coinSelectorTrigger, 'coin-selector-trigger').catch(() => {})
-      
-      // Use robust click to handle overlays
-      await robustClick(this.coinSelectorTrigger, { timeout: 10000, maxRetries: 5 })
-      await this.page.waitForTimeout(300)
-      
-      // Try to click the coin option by testid first
-      const coinOptionByTestid = this.getCoinOption(coin.toUpperCase())
-      if (await coinOptionByTestid.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await robustClick(coinOptionByTestid)
-        await this.page.waitForTimeout(300)
-        return
-      }
-      // Fallback to text matching
-      const coinOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
-      if (await coinOption.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await robustClick(coinOption)
-        await this.page.waitForTimeout(300)
-        return
-      }
-    }
+      if (
+        !requestedChain ||
+        selected.chain.toLowerCase() === requestedChain.toLowerCase()
+      ) {
+        const assetOption = expectedTicker
+          ? await this.uniqueAssetOption(assetPicker, expectedTicker)
+          : null
 
-    // The coin section may be collapsed — expand it first by clicking the "Asset" row
-    // The collapsed row shows "Asset [icon] TICKER [checkmark] [pencil]" and is clickable
-    const expandCoin = await this.page.evaluate(() => {
-      const elements = document.querySelectorAll('*')
-      for (const el of elements) {
-        const text = el.textContent?.trim()
-        if (text && /^Asset/.test(text) && el.querySelector('svg')) {
-          const style = window.getComputedStyle(el)
-          if (style.cursor === 'pointer' || el.getAttribute('role') === 'button') {
-            ;(el as HTMLElement).click()
-            return true
-          }
-          const clickable = el.closest('[role="button"], button') as HTMLElement
-          if (clickable) {
-            clickable.click()
-            return true
-          }
-          ;(el as HTMLElement).click()
-          return true
+        if (!assetOption) {
+          return this.selectionFailure(
+            requestedTicker,
+            [...route, 'missing'],
+            requestedChain
+          )
         }
-      }
-      return false
-    })
 
-    if (expandCoin) {
-      await this.page.waitForTimeout(500)
-    }
-
-    // Now the coin section should be expanded, showing the chain selector
-    // Click the chain name (has role="button" and contains the chain name + ChevronDownIcon)
-    const chainClicked = await this.page.evaluate(() => {
-      const buttons = document.querySelectorAll('[role="button"]')
-      for (const btn of buttons) {
-        if (btn.querySelector('svg') && btn.textContent) {
-          const text = btn.textContent.trim()
-          if (/^(Bitcoin|Ethereum|THORChain|Solana|BSC|Litecoin|Dogecoin|Polygon|Avalanche|Cosmos|Arbitrum|Optimism|Base|Ripple)$/i.test(text.replace(/\s/g, ''))) {
-            ;(btn as HTMLElement).click()
-            return text
-          }
+        await assetOption.click()
+        await expect(this.assetPickerTitle).toBeHidden()
+      } else {
+        const chainHeader = assetPicker
+          .getByText('Chain', { exact: true })
+          .first()
+          .locator('..')
+        const nestedChainTrigger = chainHeader.getByRole('button')
+        if ((await nestedChainTrigger.count()) !== 1) {
+          await this.selectionFailure(
+            requestedTicker,
+            [...route, 'chain picker unavailable'],
+            requestedChain
+          )
         }
-      }
-      return null
-    })
 
-    if (chainClicked) {
-      console.log(`Clicked chain selector (current: ${chainClicked})`)
-      await this.page.waitForTimeout(500)
+        await nestedChainTrigger.click()
+        await expect(this.chainPickerTitle).toBeVisible()
+        const chainPicker = this.pickerForTitle(this.chainPickerTitle)
+        const chainLabels = chainPicker.getByText(requestedChain, {
+          exact: true,
+        })
+        await chainLabels
+          .first()
+          .waitFor({ state: 'visible', timeout: 2_000 })
+          .catch(() => {})
+        const chainOptionCount = await chainLabels.count()
+        route.push(`chain:${requestedChain}`)
 
-      // The chain selector modal is open — search for the target chain by name
-      // The modal has a search input and lists chains with ChainOption components
-      const chainOption = this.page.getByText(new RegExp(`^${chainName}$`, 'i')).first()
-      if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+        if (chainOptionCount !== 1) {
+          await this.selectionFailure(
+            requestedTicker,
+            [
+              ...route,
+              chainOptionCount === 0
+                ? 'missing'
+                : `ambiguous (${chainOptionCount} matches)`,
+            ],
+            requestedChain
+          )
+        }
+
+        const chainOption = chainLabels
+          .first()
+          .locator('xpath=ancestor::*[@role="button"][1]')
+        await expect(chainOption).toHaveCount(1)
         await chainOption.click()
-        await this.page.waitForTimeout(500)
-        console.log(`Selected chain: ${chainName}`)
-        return
-      }
+        await expect(this.chainPickerTitle).toBeHidden()
 
-      // Try with the symbol too (in case it's listed differently)
-      const symbolOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
-      if (await symbolOption.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await symbolOption.click()
-        await this.page.waitForTimeout(500)
-        return
+        if (expectedTicker) {
+          const assetOption = await this.uniqueAssetOption(
+            assetPicker,
+            expectedTicker,
+            10_000
+          )
+          if (!assetOption) {
+            return this.selectionFailure(
+              requestedTicker,
+              [...route, `asset:${expectedTicker} missing`],
+              requestedChain
+            )
+          }
+          await assetOption.click()
+          await expect(this.assetPickerTitle).toBeHidden()
+        } else {
+          await this.closeCoinPickers()
+          await expect(this.assetPickerTitle).toBeHidden()
+        }
       }
     }
 
-    console.log(`Could not find chain selector to switch to ${coin} (${chainName})`)
+    await expect(this.assetPickerTitle).toHaveCount(0)
+    await expect(this.chainPickerTitle).toHaveCount(0)
+    selected = await this.readCoinSelection()
+
+    if (!selectionMatches()) {
+      await this.selectionFailure(
+        requestedTicker,
+        [...route, 'final verification failed'],
+        requestedChain
+      )
+    }
+
+    await this.restoreOpenField(fieldToRestore)
   }
 
   /**
@@ -329,7 +511,7 @@ export class SendFlow extends BasePage {
       return
     }
 
-    // Fallback: Use input[type="checkbox"] 
+    // Fallback: Use input[type="checkbox"]
     const checkboxes = this.page.locator('input[type="checkbox"]')
     const count = await checkboxes.count()
 
@@ -339,7 +521,7 @@ export class SendFlow extends BasePage {
       if (!isChecked) {
         // Click the parent <label> element which is the actual clickable container
         const label = checkbox.locator('xpath=ancestor::label')
-        if (await label.count() > 0) {
+        if ((await label.count()) > 0) {
           await label.first().click({ force: true })
         } else {
           // Fallback: force-click the hidden input
@@ -362,7 +544,11 @@ export class SendFlow extends BasePage {
     await this.page.waitForTimeout(500)
 
     // Check if fast vault password modal appeared (using testid)
-    if (await this.fastVaultPasswordModal.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (
+      await this.fastVaultPasswordModal
+        .isVisible({ timeout: 3000 })
+        .catch(() => false)
+    ) {
       const password = process.env.TEST_VAULT_PASSWORD || ''
       if (password) {
         await this.fastVaultPasswordInput.fill(password)
@@ -374,7 +560,9 @@ export class SendFlow extends BasePage {
     }
 
     // Fallback: Check for generic password input
-    const passwordInput = this.page.locator('input[type="password"], input[placeholder*="password" i]').first()
+    const passwordInput = this.page
+      .locator('input[type="password"], input[placeholder*="password" i]')
+      .first()
     if (await passwordInput.isVisible({ timeout: 2000 }).catch(() => false)) {
       const password = process.env.TEST_VAULT_PASSWORD || ''
       if (password) {
@@ -382,7 +570,9 @@ export class SendFlow extends BasePage {
         await this.page.waitForTimeout(300)
 
         // Click Confirm button in the modal
-        const confirmBtn = this.page.getByRole('button', { name: /confirm/i }).first()
+        const confirmBtn = this.page
+          .getByRole('button', { name: /confirm/i })
+          .first()
         if (await confirmBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
           await confirmBtn.click()
           await this.page.waitForTimeout(500)
@@ -427,7 +617,11 @@ export class SendFlow extends BasePage {
    * Perform complete send operation (fills form and submits)
    * Note: Does NOT sign - use for UI testing only
    */
-  async prepareSend(coin: string, address: string, amount: string): Promise<void> {
+  async prepareSend(
+    coin: string,
+    address: string,
+    amount: string
+  ): Promise<void> {
     await this.selectCoin(coin)
     await this.fillAddress(address)
     await this.fillAmount(amount)
