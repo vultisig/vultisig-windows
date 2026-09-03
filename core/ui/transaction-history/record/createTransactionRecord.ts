@@ -1,5 +1,4 @@
 import { Chain } from '@vultisig/core-chain/Chain'
-import { parseRippleTokenId } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import { decodeCowSwapKeysignData } from '@vultisig/core-chain/swap/general/cowswap/keysign/cowSwapKeysignData'
 import { getThorchainCancelMemoAsset } from '@vultisig/core-chain/swap/native/thorchainMemoAsset'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
@@ -14,6 +13,7 @@ import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChai
 import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
 import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackingUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
+import { TransactionType } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -145,15 +145,12 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
  * — and classifying that as a trust line would hide a real payment behind a
  * record that shows no amount at all.
  *
- * What separates them is who the payload is addressed to: a TrustSet names the
- * *issuer*, the party being trusted, while a send names a recipient. A verbatim
+ * The operation discriminator separates them. A verbatim
  * dApp transaction (`signRipple`) is excluded outright — it is signed as
  * supplied and may be an offer rather than a TrustSet.
  *
- * This is inference, and one case still escapes it: sending a token back to its
- * own issuer to redeem it. `RippleSpecific.transaction_type` states the
- * operation outright and settles it for good; prefer that field here once every
- * platform sets it.
+ * Sending a token back to its issuer is a Payment too, so the recipient cannot
+ * identify a TrustSet. This records only the operation actually signed.
  */
 const isRippleTrustSetPayload = (payload: KeysignPayload): boolean => {
   const { coin } = payload
@@ -168,9 +165,11 @@ const isRippleTrustSetPayload = (payload: KeysignPayload): boolean => {
     return false
   }
 
-  const issuer = attempt(() => parseRippleTokenId(coin.contractAddress).issuer)
-
-  return 'data' in issuer && issuer.data === payload.toAddress
+  return (
+    payload.blockchainSpecific.case === 'rippleSpecific' &&
+    payload.blockchainSpecific.value.transactionType ===
+      TransactionType.RIPPLE_TRUST_SET
+  )
 }
 
 const createTrustLineData = (

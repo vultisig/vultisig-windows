@@ -6,6 +6,10 @@ import {
   OneInchSwapPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import {
+  RippleSpecificSchema,
+  TransactionType,
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import {
   Coin,
   CoinSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
@@ -228,6 +232,12 @@ describe('createTransactionRecord — XRPL trust-line activation', () => {
       }),
       toAddress: ISSUER,
       toAmount: trustLimit,
+      blockchainSpecific: {
+        case: 'rippleSpecific',
+        value: create(RippleSpecificSchema, {
+          transactionType: TransactionType.RIPPLE_TRUST_SET,
+        }),
+      },
     })
 
   const record = () =>
@@ -357,13 +367,13 @@ describe('createTransactionRecord — a send of an already-held XRPL token', () 
     expect(result.data.amount).toBe('5000000000000000')
   })
 
-  it('still recognises the trust line addressed to the issuer', () => {
+  it('records an ordinary redemption to the issuer as a send', () => {
     expect(
       createTransactionRecord({
         payload: issuedTokenSend(issuer),
         txHash: '0xtrustline',
         vaultId: 'vault-1',
       }).type
-    ).toBe('trustLine')
+    ).toBe('send')
   })
 })

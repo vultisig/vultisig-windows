@@ -87,4 +87,17 @@ describe('resolveStartKeysignPromptProps', () => {
       })
     ).toStrictEqual({ disabledMessage: 'not_enough_funds' })
   })
+
+  it('keeps an oversized TON memo disabled with the SDK explanation', () => {
+    const message = 'TON memo must be at most 123 bytes (got 124).'
+    expect(
+      resolve({
+        keysignPayloadQuery: {
+          data: undefined,
+          error: new BuildKeysignPayloadError('ton-memo-too-long', message),
+          isPending: false,
+        },
+      })
+    ).toStrictEqual({ disabledMessage: message })
+  })
 })
