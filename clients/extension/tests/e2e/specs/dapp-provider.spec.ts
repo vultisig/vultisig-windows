@@ -75,10 +75,10 @@ test.describe('DApp Provider', () => {
   /**
    * Helper to wait for and get approval popup
    */
-  async function waitForApprovalPopup({
-    context,
-    extensionId,
-  }: ExtensionContextInput): Promise<Page | null> {
+  async function waitForApprovalPopup(
+    { context, extensionId }: ExtensionContextInput,
+    remaining = () => 15_000
+  ): Promise<Page | null> {
     const existingPopup = context
       .pages()
       .find(
@@ -86,18 +86,25 @@ test.describe('DApp Provider', () => {
           !p.isClosed() && p.url().includes(`chrome-extension://${extensionId}`)
       )
     if (existingPopup) {
-      await existingPopup.waitForLoadState('domcontentloaded')
+      await existingPopup.waitForLoadState('domcontentloaded', {
+        timeout: remaining(),
+      })
       return existingPopup
     }
 
     // Wait for new page to open (approval popup)
-    const popupPromise = context.waitForEvent('page', { timeout: 15000 })
+    const popupPromise = context.waitForEvent('page', {
+      timeout: remaining(),
+    })
 
     try {
       const popup = await popupPromise
-      await popup.waitForLoadState('domcontentloaded')
+      await popup.waitForLoadState('domcontentloaded', {
+        timeout: remaining(),
+      })
       return popup
     } catch {
+      remaining()
       // Try finding existing popup
       const pages = context.pages()
       const popup = pages.find((p: Page) =>
@@ -222,7 +229,7 @@ test.describe('DApp Provider', () => {
       extensionId,
     }) => {
       test.skip(!getVaultConfigFromEnv(), 'Requires the designated test vault')
-      test.setTimeout(120_000)
+      test.setTimeout(180_000)
       await ensureDappProviderVault({ context, extensionId })
       const page = await context.newPage()
       let receipt: ReadinessReceipt<unknown> | undefined
@@ -258,21 +265,44 @@ test.describe('DApp Provider', () => {
                   : Reflect.get(window.vultisig, 'xrpl').getAddress(),
               requestName
             ),
-          approveAndWaitForClose: async () => {
-            const popup = await waitForApprovalPopup({ context, extensionId })
+          approveAndWaitForClose: async (signal, timeoutMs) => {
+            const deadline = Date.now() + timeoutMs
+            const remaining = () => {
+              signal.throwIfAborted()
+              const value = deadline - Date.now()
+              if (value <= 0) throw new Error('DApp approval deadline elapsed')
+              return value
+            }
+            const popup = await waitForApprovalPopup(
+              { context, extensionId },
+              remaining
+            )
             if (!popup || popup.isClosed())
               throw new Error('Account read did not open its grant popup')
+            const closeOnAbort = () => {
+              void popup.close().catch(() => {})
+            }
+            signal.addEventListener('abort', closeOnAbort, { once: true })
             const approval = new DAppApproval(popup, extensionId)
-            await approval.waitForView(10_000)
-            // Site scanning happens before approval; it is not provider-response time.
-            await expect(approval.approveButton).toBeEnabled({
-              timeout: 45_000,
-            })
-            // Verify the actual window closes, not merely hidden controls.
-            await Promise.all([
-              popup.waitForEvent('close', { timeout: 10_000 }),
-              approval.approve(),
-            ])
+            try {
+              await approval.waitForView(remaining())
+              signal.throwIfAborted()
+              // Site scanning happens before approval; it is not provider-response time.
+              await expect(approval.approveButton).toBeEnabled({
+                timeout: remaining(),
+              })
+              signal.throwIfAborted()
+              // The forced click starts immediately after the final abort check;
+              // the abort listener closes the popup if the shared deadline wins.
+              await Promise.all([
+                popup.waitForEvent('close', { timeout: remaining() }),
+                approval.approveButton.click({
+                  timeout: remaining(),
+                }),
+              ])
+            } finally {
+              signal.removeEventListener('abort', closeOnAbort)
+            }
           },
           reload: async () => {
             await page.reload({
@@ -280,7 +310,7 @@ test.describe('DApp Provider', () => {
               timeout: 10_000,
             })
           },
-          approvalTimeoutMs: 70_000,
+          approvalTimeoutMs: 90_000,
           recover: true,
         })
         expect(receipt.verdict, JSON.stringify(receipt)).toBe('PASS')

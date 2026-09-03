@@ -123,6 +123,51 @@ test('a popup that never closes cannot pass even when the request resolves', asy
   assert.equal(receipt.recovery.attempted, false)
 })
 
+test('a popup wait that finishes after its deadline cannot approve late', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const popup = Promise.withResolvers<void>()
+  let approvals = 0
+  const run = observeDappAccountRead({
+    ...fixture(),
+    approveAndWaitForClose: async signal => {
+      await popup.promise
+      signal.throwIfAborted()
+      approvals++
+    },
+  })
+  await flush()
+  t.mock.timers.tick(10)
+  const receipt = await run
+  popup.resolve()
+  await flush()
+  assert.equal(approvals, 0)
+  assert.equal(receipt.popupClosure.state, 'pending')
+  assert.equal(receipt.verdict, 'FAIL')
+})
+
+test('aborting after an earlier check still prevents a later approval', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const beforeClick = Promise.withResolvers<void>()
+  let approvals = 0
+  const run = observeDappAccountRead({
+    ...fixture(),
+    approveAndWaitForClose: async signal => {
+      signal.throwIfAborted()
+      await beforeClick.promise
+      signal.throwIfAborted()
+      approvals++
+    },
+  })
+  await flush()
+  t.mock.timers.tick(10)
+  const receipt = await run
+  beforeClick.resolve()
+  await flush()
+  assert.equal(approvals, 0)
+  assert.equal(receipt.popupClosure.state, 'pending')
+  assert.equal(receipt.verdict, 'FAIL')
+})
+
 test('missing injection does not start a request or grant', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] })
   const run = observeDappAccountRead({

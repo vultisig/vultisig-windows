@@ -24,7 +24,10 @@ type AccountRead<T> = {
   currentOrigin: () => string
   waitForInjection: () => Promise<void>
   request: () => Promise<T>
-  approveAndWaitForClose: () => Promise<void>
+  approveAndWaitForClose: (
+    signal: AbortSignal,
+    timeoutMs: number
+  ) => Promise<void>
   reload: () => Promise<void>
   injectionTimeoutMs?: number
   approvalTimeoutMs?: number
@@ -131,7 +134,7 @@ export async function observeDappAccountRead<T>(
     return input.request()
   })
   receipt.popupClosure = await within(
-    observe(input.approveAndWaitForClose),
+    observe(signal => input.approveAndWaitForClose(signal, approvalTimeoutMs)),
     approvalTimeoutMs
   )
   receipt.requestAtPopupClosure = original.snapshot()
