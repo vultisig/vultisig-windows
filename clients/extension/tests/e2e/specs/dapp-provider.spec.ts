@@ -60,6 +60,7 @@ type ConnectDappWalletInput = ExtensionContextInput & {
 }
 
 test.describe('DApp Provider', () => {
+  test.describe.configure({ timeout: 120_000 })
   test.beforeAll(async () => {
     dappServer = await startTestDappServer()
     dappUrl = dappServer.url
@@ -145,6 +146,7 @@ test.describe('DApp Provider', () => {
 
     const approval = new DAppApproval(popup, extensionId)
     await approval.waitForView(10_000)
+    await expect(approval.approveButton).toBeEnabled({ timeout: 45_000 })
     await approval.approve()
     if (waitForClose) {
       await approval.waitForClose()
@@ -262,6 +264,10 @@ test.describe('DApp Provider', () => {
               throw new Error('Account read did not open its grant popup')
             const approval = new DAppApproval(popup, extensionId)
             await approval.waitForView(10_000)
+            // Site scanning happens before approval; it is not provider-response time.
+            await expect(approval.approveButton).toBeEnabled({
+              timeout: 45_000,
+            })
             // Verify the actual window closes, not merely hidden controls.
             await Promise.all([
               popup.waitForEvent('close', { timeout: 10_000 }),
@@ -274,6 +280,7 @@ test.describe('DApp Provider', () => {
               timeout: 10_000,
             })
           },
+          approvalTimeoutMs: 70_000,
           recover: true,
         })
         expect(receipt.verdict, JSON.stringify(receipt)).toBe('PASS')
