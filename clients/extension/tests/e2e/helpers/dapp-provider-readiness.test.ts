@@ -38,6 +38,26 @@ test('grant closure can precede a delayed successful original response', async (
   assert.equal(receipt.recovery.attempted, false)
 })
 
+test('an original response resolving after origin drift cannot pass', async () => {
+  const response = Promise.withResolvers<string>()
+  let origin = fixture().sourceOrigin
+  const receiptPromise = observeDappAccountRead({
+    ...fixture(),
+    currentOrigin: () => origin,
+    request: () => response.promise,
+  })
+  await flush()
+  origin = 'http://other.test'
+  response.resolve('rAccount')
+  const receipt = await receiptPromise
+  assert.deepEqual(receipt.original, {
+    state: 'rejected',
+    error: 'DApp origin changed; account read recovery refused',
+  })
+  assert.equal(receipt.verdict, 'FAIL')
+  assert.equal(receipt.recovery.attempted, false)
+})
+
 test('a rejected original remains rejected and never reloads', async () => {
   const receipt = await observeDappAccountRead({
     ...fixture(),
@@ -212,6 +232,30 @@ for (const changeAt of ['before-reload', 'during-reload']) {
     assert.equal(receipt.verdict, 'FAIL')
   })
 }
+
+test('a recovery response resolving after origin drift is rejected', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const recoveryResponse = Promise.withResolvers<string>()
+  let origin = fixture().sourceOrigin
+  let reads = 0
+  const run = observeDappAccountRead({
+    ...fixture(),
+    currentOrigin: () => origin,
+    request: () => (++reads === 1 ? pending() : recoveryResponse.promise),
+  })
+  await flush()
+  t.mock.timers.tick(10)
+  await flush()
+  origin = 'http://other.test'
+  recoveryResponse.resolve('rCrossOrigin')
+  const receipt = await run
+  assert.deepEqual(receipt.recovery.result, {
+    state: 'rejected',
+    error: 'DApp origin changed; account read recovery refused',
+  })
+  assert.equal(reads, 2)
+  assert.equal(receipt.verdict, 'FAIL')
+})
 
 test('pending reload is covered by the same recovery deadline', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] })

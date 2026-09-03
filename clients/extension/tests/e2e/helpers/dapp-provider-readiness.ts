@@ -131,7 +131,9 @@ export async function observeDappAccountRead<T>(
 
   const original = observe(async () => {
     checkOrigin()
-    return input.request()
+    const value = await input.request()
+    checkOrigin()
+    return value
   })
   receipt.popupClosure = await within(
     observe(signal => input.approveAndWaitForClose(signal, approvalTimeoutMs)),
@@ -160,7 +162,10 @@ export async function observeDappAccountRead<T>(
         await input.waitForInjection()
         signal.throwIfAborted()
         checkOrigin()
-        return input.request()
+        const value = await input.request()
+        signal.throwIfAborted()
+        checkOrigin()
+        return value
       }),
       responseTimeoutMs
     )
