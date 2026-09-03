@@ -253,26 +253,35 @@ describe('desktop launcher process-tree lifecycle', () => {
         )
         .join('\n')
     const killImpl = vi.fn(pid => liveProcesses.delete(Math.abs(pid)))
-    const registrationAt = Date.now() + 40
+    vi.useFakeTimers()
+    vi.setSystemTime(0)
+    const registrationAt = 40
     let refreshes = 0
 
-    await terminateProcessTree({
-      graceMs: 45,
-      knownProcesses: [root],
-      killImpl,
-      pid: root.pid,
-      platform: 'linux',
-      pollMs: 30,
-      refreshKnownProcesses: () => {
-        refreshes += 1
-        return Date.now() >= registrationAt ? [root, watcher] : [root]
-      },
-      spawnSyncImpl: vi.fn(() => ({ status: 0, stdout: processRows() })),
-    })
+    try {
+      const termination = terminateProcessTree({
+        graceMs: 45,
+        knownProcesses: [root],
+        killImpl,
+        pid: root.pid,
+        platform: 'linux',
+        pollMs: 30,
+        refreshKnownProcesses: () => {
+          refreshes += 1
+          return Date.now() >= registrationAt ? [root, watcher] : [root]
+        },
+        spawnSyncImpl: vi.fn(() => ({ status: 0, stdout: processRows() })),
+      })
 
-    expect(refreshes).toBeGreaterThanOrEqual(2)
-    expect(killImpl).toHaveBeenCalledWith(watcher.pid, 'SIGKILL')
-    expect(liveProcesses.has(watcher.pid)).toBe(false)
+      await vi.advanceTimersByTimeAsync(60)
+      await termination
+      expect(refreshes).toBeGreaterThanOrEqual(2)
+      expect(killImpl).not.toHaveBeenCalledWith(watcher.pid, 'SIGTERM')
+      expect(killImpl).toHaveBeenCalledWith(watcher.pid, 'SIGKILL')
+      expect(liveProcesses.has(watcher.pid)).toBe(false)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('checks tracked Windows survivors even after a successful root tree kill', async () => {
@@ -393,6 +402,7 @@ describe('desktop launcher process-tree lifecycle', () => {
     child.pid = 50
     const processRef = new EventEmitter()
     const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const terminateSyncImpl = vi.fn()
     const run = runOwnedProcessTree({
       args: ['dev'],
       command: 'wails',
@@ -400,6 +410,7 @@ describe('desktop launcher process-tree lifecycle', () => {
       platform: 'linux',
       processRef,
       spawnImpl: () => child,
+      terminateSyncImpl,
       terminateImpl: vi.fn(async () => {
         throw new Error('fixture enumeration failure')
       }),
@@ -413,10 +424,103 @@ describe('desktop launcher process-tree lifecycle', () => {
     processRef.emit('SIGTERM')
 
     await expect(run).resolves.toBe(1)
+    expect(terminateSyncImpl).toHaveBeenCalledWith(
+      expect.objectContaining({
+        knownProcesses: [],
+        pid: 50,
+        signal: 'SIGKILL',
+      })
+    )
     expect(error).toHaveBeenCalledWith(
       'Unable to stop the Wails process tree: fixture enumeration failure'
     )
     error.mockRestore()
+  })
+
+  it('force-cleans a spawned tree if tracker construction throws', async () => {
+    const child = new EventEmitter()
+    child.pid = 50
+    child.unref = vi.fn()
+    const processRef = new EventEmitter()
+    const terminateSyncImpl = vi.fn()
+    const cleanupSyncImpl = vi.fn()
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      const run = runOwnedProcessTree({
+        args: ['dev'],
+        command: 'wails',
+        cleanupSyncImpl,
+        options: {},
+        platform: 'linux',
+        processRef,
+        spawnImpl: () => child,
+        terminateSyncImpl,
+        trackerFactory: () => {
+          expect(child.listenerCount('error')).toBe(1)
+          throw new Error('fixture tracker startup failure')
+        },
+      })
+      // A failed spawn may still emit its asynchronous error after setup failed.
+      expect(() =>
+        child.emit('error', new Error('fixture spawn error'))
+      ).not.toThrow()
+      await expect(run).resolves.toBe(1)
+      expect(terminateSyncImpl).toHaveBeenCalledWith(
+        expect.objectContaining({
+          pid: 50,
+          platform: 'linux',
+          signal: 'SIGKILL',
+        })
+      )
+      expect(child.unref).toHaveBeenCalledOnce()
+      expect(cleanupSyncImpl).toHaveBeenCalledOnce()
+      expect(processRef.eventNames()).toEqual([])
+    } finally {
+      error.mockRestore()
+    }
+  })
+
+  it('force-cleans remembered identities if synchronous tracker refresh throws', async () => {
+    const child = new EventEmitter()
+    child.pid = 50
+    const processRef = new EventEmitter()
+    const terminateSyncImpl = vi.fn()
+    const terminateImpl = vi.fn()
+    const stop = vi.fn()
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      const run = runOwnedProcessTree({
+        args: ['dev'],
+        command: 'wails',
+        options: {},
+        platform: 'linux',
+        processRef,
+        spawnImpl: () => child,
+        terminateImpl,
+        terminateSyncImpl,
+        trackerFactory: () => ({
+          refresh: () => {
+            throw new Error('fixture refresh failure')
+          },
+          snapshot: () => [{ identity: 'fixture-start', pid: 50 }],
+          stop,
+        }),
+      })
+      expect(() => processRef.emit('SIGTERM')).not.toThrow()
+      await expect(run).resolves.toBe(1)
+      expect(terminateImpl).not.toHaveBeenCalled()
+      expect(terminateSyncImpl).toHaveBeenCalledWith(
+        expect.objectContaining({
+          knownProcesses: [{ identity: 'fixture-start', pid: 50 }],
+          pid: 50,
+          signal: 'SIGKILL',
+        })
+      )
+      expect(stop).toHaveBeenCalledOnce()
+      expect(processRef.eventNames()).toEqual([])
+    } finally {
+      error.mockRestore()
+    }
   })
 
   it('unrefs a real child when both graceful and force cleanup fail', async () => {

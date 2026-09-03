@@ -643,13 +643,6 @@ export const runOwnedProcessTree = async ({
     return 1
   }
 
-  const tracker = trackerFactory({
-    pid: child.pid,
-    pidFiles: ownedPidFiles,
-    platform,
-    spawnSyncImpl,
-  })
-
   let requestedSignal = null
   let terminationPromise = null
   let terminationError = null
@@ -659,43 +652,85 @@ export const runOwnedProcessTree = async ({
     child.once('error', error => resolve({ error }))
     child.once('exit', (code, signal) => resolve({ code, signal }))
   })
-  const startTermination = signal => {
-    tracker.refresh()
-    terminationPromise ??= Promise.resolve(
-      terminateImpl({
-        knownProcesses: tracker.snapshot(),
+  const unrefChild = () => {
+    child.unref?.()
+    child.stdin?.unref?.()
+    child.stdout?.unref?.()
+    child.stderr?.unref?.()
+  }
+  let tracker
+  try {
+    tracker = trackerFactory({
+      pid: child.pid,
+      pidFiles: ownedPidFiles,
+      platform,
+      spawnSyncImpl,
+    })
+  } catch (error) {
+    console.error(`Unable to track the Wails process tree: ${error.message}`)
+    try {
+      terminateSyncImpl({
         pid: child.pid,
         platform,
-        refreshKnownProcesses: () => {
-          tracker.refresh()
-          return tracker.snapshot()
-        },
-        signal,
+        signal: 'SIGKILL',
         spawnSyncImpl,
       })
-    ).catch(error => {
-      terminationError = error
-      console.error(`Unable to stop the Wails process tree: ${error.message}`)
-      try {
+    } catch (fallbackError) {
+      console.error(
+        `Unable to force-stop the Wails process tree: ${fallbackError.message}`
+      )
+    } finally {
+      unrefChild()
+      cleanupSyncImpl()
+    }
+    return 1
+  }
+  const forceTermination = () => {
+    try {
+      tracker.refresh()
+    } catch (error) {
+      // A registration-read failure must not discard identities already owned.
+      console.error(
+        `Unable to refresh the Wails process tree: ${error.message}`
+      )
+    }
+    terminateSyncImpl({
+      knownProcesses: tracker.snapshot(),
+      pid: child.pid,
+      platform,
+      signal: 'SIGKILL',
+      spawnSyncImpl,
+    })
+  }
+  const startTermination = signal => {
+    terminationPromise ??= Promise.resolve()
+      .then(() => {
         tracker.refresh()
-        terminateSyncImpl({
+        return terminateImpl({
           knownProcesses: tracker.snapshot(),
           pid: child.pid,
           platform,
-          signal: 'SIGKILL',
+          refreshKnownProcesses: () => {
+            tracker.refresh()
+            return tracker.snapshot()
+          },
+          signal,
           spawnSyncImpl,
         })
-      } catch (fallbackError) {
-        console.error(
-          `Unable to force-stop the Wails process tree: ${fallbackError.message}`
-        )
-      }
-      child.unref?.()
-      child.stdin?.unref?.()
-      child.stdout?.unref?.()
-      child.stderr?.unref?.()
-      settleChildResult({ cleanupError: error })
-    })
+      })
+      .catch(error => {
+        terminationError = error
+        console.error(`Unable to stop the Wails process tree: ${error.message}`)
+        try {
+          forceTermination()
+        } catch (fallbackError) {
+          console.error(
+            `Unable to force-stop the Wails process tree: ${fallbackError.message}`
+          )
+        }
+        unrefChild()
+        settleChildResult({ cleanupError: error })
+      })
   }
   const signalHandlers = Object.fromEntries(
     shutdownSignals.map(signal => [
@@ -712,14 +747,7 @@ export const runOwnedProcessTree = async ({
 
   const exitFallback = () => {
     try {
-      tracker.refresh()
-      terminateSyncImpl({
-        knownProcesses: tracker.snapshot(),
-        pid: child.pid,
-        platform,
-        signal: 'SIGKILL',
-        spawnSyncImpl,
-      })
+      forceTermination()
     } finally {
       cleanupSyncImpl()
     }
