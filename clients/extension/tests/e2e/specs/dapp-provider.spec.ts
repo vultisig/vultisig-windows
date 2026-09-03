@@ -11,6 +11,8 @@
  * - window.vultisig delegates the EIP-1193 surface without losing cross-chain keys
  */
 
+import { execFileSync } from 'node:child_process'
+
 import { ed25519 } from '@noble/curves/ed25519'
 import type { BrowserContext, Page } from '@playwright/test'
 import { VersionedTransaction } from '@solana/web3.js'
@@ -20,6 +22,10 @@ import {
   type TestDappServer,
 } from '../fixtures/dapp-page.fixture'
 import { expect, test } from '../fixtures/extension-loader'
+import {
+  observeDappAccountRead,
+  type ReadinessReceipt,
+} from '../helpers/dapp-provider-readiness'
 import {
   signSolanaSelfTransferViaDapp,
   submitFastVaultPasswordIfPrompted,
@@ -204,30 +210,108 @@ test.describe('DApp Provider', () => {
     await page.close()
   })
 
-  test('eth_requestAccounts - popup opens - approve - address returned', async ({
-    context,
-    extensionId,
-  }) => {
-    test.skip(
-      !getVaultConfigFromEnv(),
-      'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
-    )
-    await ensureDappProviderVault({ context, extensionId })
-
-    const page = await context.newPage()
-
-    try {
-      await page.goto(dappUrl)
-      await page.waitForLoadState('domcontentloaded')
-      await page.waitForFunction(() => !!window.ethereum, null, {
-        timeout: 10000,
+  const accountReads: Array<'eth_requestAccounts' | 'xrpl.getAddress'> = [
+    'eth_requestAccounts',
+    'xrpl.getAddress',
+  ]
+  for (const requestName of accountReads) {
+    test(`${requestName} - grant closure and original account response`, async ({
+      context,
+      extensionId,
+    }) => {
+      test.skip(!getVaultConfigFromEnv(), 'Requires the designated test vault')
+      test.setTimeout(120_000)
+      await ensureDappProviderVault({ context, extensionId })
+      const page = await context.newPage()
+      let receipt: ReadinessReceipt<unknown> | undefined
+      let contextClosed = false
+      context.once('close', () => {
+        contextClosed = true
       })
-
-      await connectDappWallet({ page, context, extensionId })
-    } finally {
-      await page.close()
-    }
-  })
+      try {
+        await page.goto(dappUrl)
+        receipt = await observeDappAccountRead({
+          sourceOrigin: new URL(dappUrl).origin,
+          revision: execFileSync('git', ['rev-parse', 'HEAD'], {
+            encoding: 'utf8',
+          }).trim(),
+          requestName,
+          currentOrigin: () => new URL(page.url()).origin,
+          waitForInjection: async () => {
+            await page.waitForFunction(
+              name =>
+                name === 'eth_requestAccounts'
+                  ? typeof window.ethereum?.request === 'function'
+                  : typeof Reflect.get(window.vultisig ?? {}, 'xrpl')
+                      ?.getAddress === 'function',
+              requestName,
+              { timeout: 10_000 }
+            )
+          },
+          request: () =>
+            page.evaluate(
+              name =>
+                name === 'eth_requestAccounts'
+                  ? window.ethereum.request({ method: 'eth_requestAccounts' })
+                  : Reflect.get(window.vultisig, 'xrpl').getAddress(),
+              requestName
+            ),
+          approveAndWaitForClose: async () => {
+            const popup = await waitForApprovalPopup({ context, extensionId })
+            if (!popup || popup.isClosed())
+              throw new Error('Account read did not open its grant popup')
+            const approval = new DAppApproval(popup, extensionId)
+            await approval.waitForView(10_000)
+            // Verify the actual window closes, not merely hidden controls.
+            await Promise.all([
+              popup.waitForEvent('close', { timeout: 10_000 }),
+              approval.approve(),
+            ])
+          },
+          reload: async () => {
+            await page.reload({
+              waitUntil: 'domcontentloaded',
+              timeout: 10_000,
+            })
+          },
+          recover: true,
+        })
+        expect(receipt.verdict, JSON.stringify(receipt)).toBe('PASS')
+        if (receipt.original.state !== 'resolved')
+          throw new Error('Original account call did not resolve')
+        if (requestName === 'eth_requestAccounts') {
+          expect(receipt.original.value).toEqual([
+            expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
+          ])
+        } else {
+          expect(receipt.original.value).toEqual({
+            address: expect.stringMatching(/^r[1-9A-HJ-NP-Za-km-z]{24,34}$/),
+          })
+        }
+      } catch (error) {
+        if (receipt) receipt.verdict = 'FAIL'
+        throw error
+      } finally {
+        await page.close()
+        await context.close()
+        if (receipt)
+          await test.info().attach(`${requestName}-readiness`, {
+            body: JSON.stringify(
+              {
+                ...receipt,
+                cleanup: {
+                  dappPageClosed: page.isClosed(),
+                  disposableContextClosed: contextClosed,
+                },
+              },
+              null,
+              2
+            ),
+            contentType: 'application/json',
+          })
+      }
+    })
+  }
 
   test('personal_sign - popup shows message - approve - signature returned', async ({
     context,
