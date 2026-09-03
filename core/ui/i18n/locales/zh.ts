@@ -1790,4 +1790,7 @@ export const zh = {
   swap_limit_chart_last_traded: '此处最后交易记录为{{when}}',
   swap_limit_chart_not_reached: '本窗口期内未在此交易——最高价为{{price}}',
   swap_quote_expired: '此报价已过期，请刷新页面查看最新价格。',
+  swap_failed_slippage: '价格突破了滑点容差范围',
+  swap_failed_slippage_description:
+    '此次掉期交易完成前价格发生了变动，因此支付金额低于您设定的滑点容忍度，网络已将其撤销。请提高您的滑点容忍度或重试。',
 }

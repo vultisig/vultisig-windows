@@ -16,6 +16,7 @@ import { useLimitOrderTracking } from '../vault/swap/limit/tracking/useLimitOrde
 import { TransactionRecord } from './core'
 import { TransactionHistoryList } from './list/TransactionHistoryList'
 import { useHealFailedTransactions } from './status/useHealFailedTransactions'
+import { useResolveSwapFailureReasons } from './status/useResolveSwapFailureReasons'
 import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
 
 const transactionHistoryTabs = [
@@ -68,6 +69,9 @@ const TransactionHistoryContent = ({
   // Heals sends an older client wrongly failed. Pending records need no sweep
   // here: `TransactionStatusWatcher` polls them app-wide, this page included.
   useHealFailedTransactions(records)
+  // Reads back why recently failed swaps reverted, so a slippage failure says
+  // so instead of reading as a generic one.
+  useResolveSwapFailureReasons(records)
   // Keeps limit-order records in step with THORChain's queue while the page
   // is open — the same page-mounted pattern as the healer above.
   useLimitOrderTracking()

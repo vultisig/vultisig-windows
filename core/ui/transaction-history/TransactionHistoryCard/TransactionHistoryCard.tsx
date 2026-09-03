@@ -146,7 +146,7 @@ export const TransactionHistoryCard = ({
       </DetailsRow>
 
       {status === 'error' && errorMessage != null && errorMessage !== '' && (
-        <ErrorMessageRow>
+        <ErrorMessageRow $clearsProviderPill={isProviderPill}>
           <Text variant="caption" color="danger">
             {errorMessage}
           </Text>

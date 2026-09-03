@@ -1,9 +1,25 @@
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor, matchColor } from '@lib/ui/theme/getters'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import type { TransactionHistoryCardStatus } from './TransactionHistoryCard'
+
+const cardPaddingPx = 16
+const iconSlotPx = 24
+const providerPillPaddingYPx = 8
+const providerPillBorderPx = 1
+
+// The icon slot is the tallest thing the pill ever holds, so it sets the pill's
+// height — and the pill is absolutely positioned over the card's bottom-right
+// corner, overhanging the card's own bottom padding by the difference.
+const providerPillHeightPx =
+  providerPillPaddingYPx * 2 + iconSlotPx + providerPillBorderPx
+
+const errorRowPillGapPx = 8
+
+const errorRowPillClearancePx =
+  providerPillHeightPx - cardPaddingPx + errorRowPillGapPx
 
 /** Card: foreground bg, foregroundExtra border, 16px padding, 16px radius. Figma: surface-1 #061b3a, borders/light #11284a */
 export const Card = styled(VStack).attrs({
@@ -11,7 +27,7 @@ export const Card = styled(VStack).attrs({
   alignItems: 'stretch',
   gap: 12,
 })`
-  padding: 16px;
+  padding: ${cardPaddingPx}px;
   ${borderRadius.lg};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
@@ -71,8 +87,8 @@ export const AmountBlock = styled(HStack).attrs({
  * layout.
  */
 export const IconSlot = styled.div`
-  width: 24px;
-  height: 24px;
+  width: ${iconSlotPx}px;
+  height: ${iconSlotPx}px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -99,13 +115,25 @@ export const AddressPill = styled(HStack).attrs({
   flex-shrink: 0;
 `
 
-/** Error message row: aligned to the right. */
+/**
+ * Error message row: aligned to the right, and lifted clear of the provider
+ * pill when there is one. The pill is absolutely positioned over the card's
+ * bottom-right corner, so a last flow child sitting on the card's own padding
+ * would be printed underneath it — the clearance is measured off the pill
+ * itself rather than eyeballed, because a pill carrying an icon stands taller
+ * than one that does not.
+ */
 export const ErrorMessageRow = styled(HStack).attrs({
   direction: 'horizontal',
   alignItems: 'center',
   justifyContent: 'flex-end',
-})`
+})<{ $clearsProviderPill: boolean }>`
   width: 100%;
+  ${({ $clearsProviderPill }) =>
+    $clearsProviderPill &&
+    css`
+      margin-bottom: ${errorRowPillClearancePx}px;
+    `}
 `
 
 /** Provider pill: anchored to the bottom-right corner of the card with asymmetric border radius. */
@@ -114,11 +142,11 @@ export const ProviderPill = styled(HStack).attrs({
   alignItems: 'center',
   gap: 6,
 })`
-  padding: 8px 12px;
+  padding: ${providerPillPaddingYPx}px 12px;
   border-radius: ${borderRadiusPx.md}px 0 ${borderRadiusPx.lg}px 0;
   background: ${getColor('buttonSecondary')};
-  border-top: 1px solid ${getColor('foregroundExtra')};
-  border-left: 1px solid ${getColor('foregroundExtra')};
+  border-top: ${providerPillBorderPx}px solid ${getColor('foregroundExtra')};
+  border-left: ${providerPillBorderPx}px solid ${getColor('foregroundExtra')};
   position: absolute;
   right: 0;
   bottom: 0;

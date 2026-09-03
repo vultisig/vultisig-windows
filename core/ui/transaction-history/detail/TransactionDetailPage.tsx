@@ -39,6 +39,7 @@ import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { Panel } from '@lib/ui/panel/Panel'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text, TextColor } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -56,6 +57,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { LimitOrderCancelActions } from '../../vault/swap/limit/cancel/LimitOrderCancelActions'
+import { getRecordFailureReason, swapFailureCopy } from '../swapFailureCopy'
 
 const safeBigInt = (value: string): bigint => {
   try {
@@ -543,6 +545,8 @@ export const TransactionDetailPage = () => {
   // generic poller above deliberately ignores limit records.
   useLimitOrderTracking()
 
+  const failureReason = getRecordFailureReason(record)
+
   const explorerUrl =
     record.explorerUrl ||
     getBlockExplorerUrl({
@@ -577,6 +581,11 @@ export const TransactionDetailPage = () => {
         {record.type === 'swap' && (
           <>
             <SwapAmountDisplay record={record} />
+            {failureReason && (
+              <WarningBlock>
+                {t(swapFailureCopy[failureReason].description)}
+              </WarningBlock>
+            )}
             <SwapDetailPanel record={record} />
           </>
         )}
