@@ -9,15 +9,14 @@ import { sum } from '@vultisig/lib-utils/array/sum'
 import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useCallback, useMemo } from 'react'
 
+import { toPriceableCoin } from './toPriceableCoin'
+
 export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
   const vaultCoins = usePortfolioVaultCoins()
   const coins = useMemo(
     () =>
       withoutDuplicates(
-        value.flatMap(key => {
-          const coin = vaultCoins.find(coin => areEqualCoins(coin, key))
-          return coin ? [coin] : []
-        }),
+        value.map(fee => toPriceableCoin({ fee, vaultCoins })),
         areEqualCoins
       ),
     [value, vaultCoins]
