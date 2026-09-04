@@ -3,6 +3,7 @@ import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { MpcDevice } from '@vultisig/core-mpc/devices/MpcDevice'
 import { MpcLib } from '@vultisig/core-mpc/mpcLib'
 import { MpcServerType } from '@vultisig/core-mpc/MpcServerType'
+import { VaultKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { NameProp } from '@vultisig/lib-utils/entities/props'
 
 import { CoreStorage } from '../storage/CoreStorage'
@@ -36,6 +37,7 @@ export type CoreState = CoreStorage & {
   isLocalModeAvailable: boolean
   getMpcServerUrl: (input: GetMpcServerUrlInput) => Promise<string>
   getDeveloperOptions?: () => Promise<DeveloperOptions>
+  validateLegacyVaultKeyShares?: (keyShares: VaultKeyShares) => Promise<void>
   processError?: ErrorBoundaryProcessError
   targetVaultId?: string
   isLimited?: boolean

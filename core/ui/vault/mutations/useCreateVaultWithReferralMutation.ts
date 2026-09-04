@@ -15,10 +15,14 @@ export const useCreateVaultWithReferralMutation = (
     Error,
     CreateVaultWithReferralInput,
     unknown
-  >
+  >,
+  recoveryVault?: Vault
 ) => {
   const { setFriendReferral } = useCore()
-  const { mutateAsync: createVault } = useCreateVaultMutation()
+  const { mutateAsync: createVault } = useCreateVaultMutation(
+    undefined,
+    recoveryVault
+  )
 
   return useMutation({
     mutationFn: async ({
@@ -28,10 +32,21 @@ export const useCreateVaultWithReferralMutation = (
       const createdVault = await createVault(vault)
 
       if (pendingReferral.trim()) {
-        await setFriendReferral(
+        const saveReferral = setFriendReferral(
           getVaultId(createdVault),
           pendingReferral.trim().toUpperCase()
         )
+        if (recoveryVault) {
+          const [saveReferralResult] = await Promise.allSettled([saveReferral])
+          if (saveReferralResult.status === 'rejected') {
+            console.error(
+              'Failed to persist referral during vault recovery',
+              saveReferralResult.reason
+            )
+          }
+        } else {
+          await saveReferral
+        }
       }
 
       return createdVault

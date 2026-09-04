@@ -72,6 +72,25 @@ vi.mock('@vultisig/core-chain/publicKey/address/getChainAddress', () => ({
   getChainAddress: ({ chain }: { chain: string }) => `address-${chain}`,
 }))
 
+// This test uses labeled strings instead of native MPC keyshares so it can
+// assert the exact pre/post-lock payload. Keep the real encryption and storage
+// path, but treat the ceremony output as already validated; validator behavior
+// has dedicated native-boundary coverage in vaultKeyShares.test.ts.
+vi.mock(
+  '@core/ui/passcodeEncryption/core/vaultKeyShares',
+  async importOriginal => {
+    const actual =
+      await importOriginal<
+        typeof import('@core/ui/passcodeEncryption/core/vaultKeyShares')
+      >()
+
+    return {
+      ...actual,
+      assertVaultKeySharesReadable: vi.fn().mockResolvedValue(undefined),
+    }
+  }
+)
+
 type CoreStub = Record<string, unknown>
 
 const coreHolder: { value: CoreStub | undefined } = vi.hoisted(() => ({

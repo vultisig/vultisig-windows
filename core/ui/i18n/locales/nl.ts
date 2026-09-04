@@ -499,6 +499,7 @@ export const nl = {
   import_seedphrase_onboarding_title:
     'Je betreedt een nieuw tijdperk, <g>en laat oude seed phrases achter.</g> Je hebt nodig:',
   import_vault: 'Kluis importeren',
+  import_vult_backup: '.vult-back-up importeren',
   import_vault_share: 'Kluis-share importeren',
   import_vault_share_description:
     'Gebruik een kluis-share om je kluis te herstellen.',
@@ -1027,6 +1028,14 @@ export const nl = {
     version: 'Versie {{latestVersion}}',
   },
   vault_already_exists: 'Kluis "{{name}}" bestaat al',
+  vault_cannot_be_opened: 'Deze vault kan niet op dit apparaat worden geopend',
+  vault_cannot_be_opened_backup_description:
+    'Je .vult-back-up is de weg terug. Importeer hem en deze vault werkt weer.',
+  vault_cannot_be_opened_description:
+    'De key shares zijn versleuteld en de sleutel waarmee ze worden ontgrendeld, is niet meegekomen met dit herstel. Niets op dit apparaat kan ze lezen, waardoor het niet met deze vault kan ondertekenen.',
+  vault_cannot_be_opened_no_backup: 'Ik heb geen back-up',
+  vault_cannot_be_opened_no_backup_description:
+    'Zonder een .vult-back-up kunnen de key shares op dit apparaat niet opnieuw worden ontgrendeld — dat deel kan niet worden hersteld. De vault zelf mogelijk nog wel: als je andere apparaten hun eigen shares hebben en samen nog steeds de ondertekeningsdrempel bereiken, blijft hij zonder dit apparaat werken.',
   vault_backup_page_password_info:
     'Sla kluis-shares van verschillende apparaten nooit op dezelfde locatie op',
   vault_backup_page_password_protection:

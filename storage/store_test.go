@@ -120,6 +120,186 @@ func TestSaveVaultsKeySharesRollsBackFailedChainKeyShareWrite(t *testing.T) {
 	}
 }
 
+func TestReplaceVaultAtomicallyReplacesExactRecoverySnapshot(t *testing.T) {
+	store := newTestStore(t)
+	stored := testVault()
+	stored.KeyShares[0].KeyShare = "unreadable-ecdsa"
+	stored.KeyShares[1].KeyShare = "unreadable-eddsa"
+	if err := store.SaveVault(stored); err != nil {
+		t.Fatal(err)
+	}
+
+	expected, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	replacement := *expected
+	replacement.Name = "Recovered Vault"
+	replacement.KeyShares = []KeyShare{
+		{PublicKey: stored.PublicKeyECDSA, KeyShare: "recovered-ecdsa"},
+		{PublicKey: stored.PublicKeyEdDSA, KeyShare: "recovered-eddsa"},
+	}
+
+	if err := store.ReplaceVault(expected, &replacement); err != nil {
+		t.Fatal(err)
+	}
+	saved, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if saved.Name != replacement.Name || !sameStringMap(
+		keySharesByPublicKey(saved.KeyShares),
+		keySharesByPublicKey(replacement.KeyShares),
+	) {
+		t.Fatalf("unexpected recovered vault: %#v", saved)
+	}
+}
+
+func TestReplaceVaultRejectsDroppedStoredIdentity(t *testing.T) {
+	store := newTestStore(t)
+	stored := testVault()
+	if err := store.SaveVault(stored); err != nil {
+		t.Fatal(err)
+	}
+	expected, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	replacement := *expected
+	replacement.PublicKeyEdDSA = "different-eddsa"
+	replacement.KeyShares = []KeyShare{
+		{PublicKey: stored.PublicKeyECDSA, KeyShare: "recovered-ecdsa"},
+		{PublicKey: replacement.PublicKeyEdDSA, KeyShare: "recovered-eddsa"},
+	}
+
+	if err := store.ReplaceVault(expected, &replacement); err == nil {
+		t.Fatal("expected identity-changing recovery to be rejected")
+	}
+}
+
+func TestReplaceVaultRejectsDroppedSaplingKeyMaterial(t *testing.T) {
+	store := newTestStore(t)
+	stored := testVault()
+	stored.ChainPublicKeys = map[string]string{
+		"SaplingExtras": "stored-sapling-key-material",
+	}
+	if err := store.SaveVault(stored); err != nil {
+		t.Fatal(err)
+	}
+	expected, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	replacement := *expected
+	replacement.ChainPublicKeys = nil
+
+	if err := store.ReplaceVault(expected, &replacement); err == nil {
+		t.Fatal("expected dropped Sapling key material to be rejected")
+	}
+}
+
+func TestReplaceVaultRejectsStaleRecoverySnapshot(t *testing.T) {
+	store := newTestStore(t)
+	stored := testVault()
+	if err := store.SaveVault(stored); err != nil {
+		t.Fatal(err)
+	}
+	expected, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	concurrent := *expected
+	concurrent.KeyShares = append([]KeyShare(nil), expected.KeyShares...)
+	concurrent.KeyShares[0].KeyShare = "already-recovered"
+	if err := store.SaveVault(&concurrent); err != nil {
+		t.Fatal(err)
+	}
+
+	replacement := *expected
+	replacement.Name = "Stale overwrite"
+	if err := store.ReplaceVault(expected, &replacement); err == nil {
+		t.Fatal("expected stale recovery snapshot to be rejected")
+	}
+	saved, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if keySharesByPublicKey(saved.KeyShares)[stored.PublicKeyECDSA] != "already-recovered" {
+		t.Fatal("stale recovery overwrote the newer keyshare")
+	}
+}
+
+func TestReplaceVaultRollsBackMetadataAndKeysharesTogether(t *testing.T) {
+	store := newTestStore(t)
+	stored := testVault()
+	if err := store.SaveVault(stored); err != nil {
+		t.Fatal(err)
+	}
+	expected, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	replacement := *expected
+	replacement.Name = "Must roll back"
+	replacement.KeyShares = []KeyShare{
+		{PublicKey: stored.PublicKeyECDSA, KeyShare: "recovered-ecdsa"},
+		{PublicKey: stored.PublicKeyEdDSA, KeyShare: "force-recovery-failure"},
+	}
+	if _, err := store.db.Exec(`CREATE TRIGGER fail_recovery_keyshare BEFORE INSERT ON keyshares
+		WHEN NEW.keyshare = 'force-recovery-failure'
+		BEGIN SELECT RAISE(ABORT, 'forced recovery failure'); END;`); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := store.ReplaceVault(expected, &replacement); err == nil {
+		t.Fatal("expected replacement write to fail")
+	}
+	saved, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if saved.Name != stored.Name || !sameStringMap(
+		keySharesByPublicKey(saved.KeyShares),
+		keySharesByPublicKey(stored.KeyShares),
+	) {
+		t.Fatalf("failed replacement was not rolled back: %#v", saved)
+	}
+}
+
+func TestSaveVaultRollsBackMetadataWhenKeyshareWriteFails(t *testing.T) {
+	store := newTestStore(t)
+	stored := testVault()
+	if err := store.SaveVault(stored); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := store.db.Exec(`CREATE TRIGGER fail_vault_keyshare BEFORE INSERT ON keyshares
+		WHEN NEW.keyshare = 'force-save-failure'
+		BEGIN SELECT RAISE(ABORT, 'forced save failure'); END;`); err != nil {
+		t.Fatal(err)
+	}
+
+	update := *stored
+	update.Name = "Must roll back"
+	update.KeyShares = []KeyShare{
+		{PublicKey: stored.PublicKeyECDSA, KeyShare: "updated-ecdsa"},
+		{PublicKey: stored.PublicKeyEdDSA, KeyShare: "force-save-failure"},
+	}
+	if err := store.SaveVault(&update); err == nil {
+		t.Fatal("expected vault save to fail")
+	}
+	saved, err := store.GetVault(stored.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if saved.Name != stored.Name || !sameStringMap(
+		keySharesByPublicKey(saved.KeyShares),
+		keySharesByPublicKey(stored.KeyShares),
+	) {
+		t.Fatalf("failed vault save was not rolled back: %#v", saved)
+	}
+}
+
 func newTestStore(t *testing.T) *Store {
 	t.Helper()
 

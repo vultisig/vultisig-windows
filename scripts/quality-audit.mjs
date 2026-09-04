@@ -14,7 +14,8 @@
  * Run: `node scripts/quality-audit.mjs` (add `--print` to only echo the
  * resolved command without contacting the registry).
  */
-import { execFileSync } from 'node:child_process'
+import { spawnSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 
 /**
  * @typedef {Object} AuditSuppression
@@ -80,9 +81,58 @@ const args = [
   ...suppressions.flatMap(({ id }) => ['--ignore', String(id)]),
 ]
 
-if (process.argv.includes('--print')) {
-  console.log(`yarn ${args.join(' ')}`)
-} else {
+const socketTimeoutPattern = /RequestError: Timeout awaiting 'socket' for \d+ms/
+const retryDelaysMs = [2_000, 15_000, 45_000, 90_000]
+const isMain = fileURLToPath(import.meta.url) === process.argv[1]
+
+if (isMain) {
+  if (process.argv.includes('--print')) {
+    console.log(`yarn ${args.join(' ')}`)
+  } else {
+    try {
+      await runAudit()
+    } catch (error) {
+      console.error(error.message)
+      process.exitCode = error.status ?? 1
+    }
+  }
+}
+
+export async function runAudit({
+  run = spawnSync,
+  wait = milliseconds =>
+    new Promise(resolve => setTimeout(resolve, milliseconds)),
+  stdout = process.stdout,
+  stderr = process.stderr,
+} = {}) {
   const yarn = process.platform === 'win32' ? 'yarn.cmd' : 'yarn'
-  execFileSync(yarn, args, { stdio: 'inherit' })
+
+  const maxAttempts = retryDelaysMs.length + 1
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const result = run(yarn, args, {
+      encoding: 'utf8',
+      maxBuffer: 16 * 1024 * 1024,
+    })
+    if (result.stdout) stdout.write(result.stdout)
+    if (result.stderr) stderr.write(result.stderr)
+    if (result.error) throw result.error
+    if (result.status === 0) return
+
+    const output = `${result.stdout ?? ''}\n${result.stderr ?? ''}`
+    const shouldRetry =
+      attempt < maxAttempts && socketTimeoutPattern.test(output)
+    if (!shouldRetry) {
+      const error = new Error(
+        `yarn quality:audit exited with code ${result.status}`
+      )
+      error.status = result.status ?? 1
+      throw error
+    }
+
+    const retryDelayMs = retryDelaysMs[attempt - 1]
+    stderr.write(
+      `Transient Yarn registry socket timeout; retrying audit in ${retryDelayMs / 1_000} seconds (attempt ${attempt + 1}/${maxAttempts}).\n`
+    )
+    await wait(retryDelayMs)
+  }
 }

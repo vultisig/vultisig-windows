@@ -27,6 +27,15 @@ type Store struct {
 	db  *sql.DB
 }
 
+type sqlExecutor interface {
+	Exec(query string, args ...interface{}) (sql.Result, error)
+}
+
+type sqlVaultReader interface {
+	Query(query string, args ...interface{}) (*sql.Rows, error)
+	QueryRow(query string, args ...interface{}) *sql.Row
+}
+
 // NewStore creates a new store
 func NewStore() (*Store, error) {
 	dbFilePath, err := storeDBFilePath()
@@ -77,6 +86,35 @@ func (s *Store) Migrate() error {
 
 // SaveVault saves a vault
 func (s *Store) SaveVault(vault *Vault) error {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return fmt.Errorf("could not begin vault save transaction, err: %w", err)
+	}
+	defer func() { _ = tx.Rollback() }()
+
+	if err := saveVaultMetadata(tx, vault); err != nil {
+		return err
+	}
+
+	for _, keyShare := range vault.KeyShares {
+		if err := saveKeyshareWithExecutor(tx, vault.PublicKeyECDSA, keyShare); err != nil {
+			return fmt.Errorf("could not save keyshare, err: %w", err)
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("could not commit vault save transaction, err: %w", err)
+	}
+
+	for _, coin := range vault.Coins {
+		if _, err := s.SaveCoin(vault.PublicKeyECDSA, coin); err != nil {
+			return fmt.Errorf("could not save coin, err: %w", err)
+		}
+	}
+	return nil
+}
+
+func saveVaultMetadata(executor sqlExecutor, vault *Vault) error {
 	if vault.PublicKeyECDSA == "" {
 		return fmt.Errorf("invalid vault, public key ecdsa is required")
 	}
@@ -136,7 +174,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 		chainKeyShares = string(buf)
 	}
 
-	_, err = s.db.Exec(query,
+	_, err = executor.Exec(query,
 		vault.Name,
 		vault.PublicKeyECDSA,
 		vault.PublicKeyEdDSA,
@@ -158,24 +196,161 @@ func (s *Store) SaveVault(vault *Vault) error {
 		return fmt.Errorf("could not upsert vault, err: %w", err)
 	}
 
-	for _, keyShare := range vault.KeyShares {
-		if err := s.saveKeyshare(vault.PublicKeyECDSA, keyShare); err != nil {
-			return fmt.Errorf("could not save keyshare, err: %w", err)
+	return nil
+}
+
+// ReplaceVault atomically replaces the exact unreadable vault snapshot that
+// opened recovery. It rejects stale state and incomplete or identity-changing
+// backups before deleting any stored keyshare.
+func (s *Store) ReplaceVault(expected *Vault, replacement *Vault) error {
+	if expected == nil || replacement == nil {
+		return fmt.Errorf("recovery replacement requires both vaults")
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		return fmt.Errorf("could not begin recovery replacement transaction, err: %w", err)
+	}
+	defer func() { _ = tx.Rollback() }()
+
+	current, err := s.getVault(tx, expected.PublicKeyECDSA)
+	if err != nil {
+		return fmt.Errorf("could not re-read recovery vault, err: %w", err)
+	}
+	if err := validateVaultRecoveryReplacement(current, expected, replacement); err != nil {
+		return err
+	}
+	if err := saveVaultMetadata(tx, replacement); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(
+		"DELETE FROM keyshares WHERE public_key_ecdsa = ?",
+		current.PublicKeyECDSA,
+	); err != nil {
+		return fmt.Errorf("could not clear superseded keyshares, err: %w", err)
+	}
+	for _, keyShare := range replacement.KeyShares {
+		if err := saveKeyshareWithExecutor(tx, replacement.PublicKeyECDSA, keyShare); err != nil {
+			return fmt.Errorf("could not store recovery keyshare, err: %w", err)
 		}
 	}
-	for _, coin := range vault.Coins {
-		if _, err := s.SaveCoin(vault.PublicKeyECDSA, coin); err != nil {
-			return fmt.Errorf("could not save coin, err: %w", err)
-		}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("could not commit recovery replacement, err: %w", err)
 	}
 	return nil
 }
 
+func validateVaultRecoveryReplacement(current, expected, replacement *Vault) error {
+	if current.PublicKeyECDSA != expected.PublicKeyECDSA ||
+		current.PublicKeyECDSA != replacement.PublicKeyECDSA {
+		return fmt.Errorf("recovery replacement no longer targets the same vault")
+	}
+	if !sameVaultRecoveryState(current, expected) {
+		return fmt.Errorf("vault changed while recovery was in progress")
+	}
+	if current.LibType != replacement.LibType ||
+		!preservesVaultIdentity(current.PublicKeyEdDSA, replacement.PublicKeyEdDSA) ||
+		!preservesVaultIdentity(current.PublicKeyMLDSA, replacement.PublicKeyMLDSA) ||
+		!preservesVaultIdentity(
+			current.ChainPublicKeys["SaplingExtras"],
+			replacement.ChainPublicKeys["SaplingExtras"],
+		) {
+		return fmt.Errorf("recovery backup does not preserve every vault identity")
+	}
+
+	replacementShares := keySharesByPublicKey(replacement.KeyShares)
+	for _, share := range replacement.KeyShares {
+		if strings.TrimSpace(share.PublicKey) == "" || strings.TrimSpace(share.KeyShare) == "" {
+			return fmt.Errorf("recovery backup contains an incomplete keyshare")
+		}
+	}
+	for _, share := range current.KeyShares {
+		if strings.TrimSpace(share.KeyShare) != "" && strings.TrimSpace(replacementShares[share.PublicKey]) == "" {
+			return fmt.Errorf("recovery backup omits a stored vault keyshare")
+		}
+	}
+
+	if replacement.LibType != "KeyImport" {
+		if strings.TrimSpace(replacementShares[replacement.PublicKeyECDSA]) == "" ||
+			strings.TrimSpace(replacementShares[replacement.PublicKeyEdDSA]) == "" {
+			return fmt.Errorf("recovery backup omits a declared vault keyshare")
+		}
+	}
+	if replacement.PublicKeyMLDSA != "" && strings.TrimSpace(replacementShares[replacement.PublicKeyMLDSA]) == "" {
+		return fmt.Errorf("recovery backup omits the declared MLDSA keyshare")
+	}
+
+	chainKeys := make(map[string]struct{})
+	for chain := range current.ChainPublicKeys {
+		if chain != "SaplingExtras" {
+			chainKeys[chain] = struct{}{}
+		}
+	}
+	for chain := range current.ChainKeyShares {
+		chainKeys[chain] = struct{}{}
+	}
+	for chain := range chainKeys {
+		if !preservesVaultIdentity(current.ChainPublicKeys[chain], replacement.ChainPublicKeys[chain]) ||
+			strings.TrimSpace(replacement.ChainKeyShares[chain]) == "" {
+			return fmt.Errorf("recovery backup omits a stored chain keyshare")
+		}
+	}
+	for chain, publicKey := range replacement.ChainPublicKeys {
+		if chain != "SaplingExtras" && strings.TrimSpace(publicKey) != "" && strings.TrimSpace(replacement.ChainKeyShares[chain]) == "" {
+			return fmt.Errorf("recovery backup omits a declared chain keyshare")
+		}
+	}
+	if len(replacement.KeyShares) == 0 && len(replacement.ChainKeyShares) == 0 {
+		return fmt.Errorf("recovery backup does not contain keyshares")
+	}
+
+	return nil
+}
+
+func preservesVaultIdentity(stored, replacement string) bool {
+	return stored == "" || stored == replacement
+}
+
+func sameVaultRecoveryState(left, right *Vault) bool {
+	return left.LibType == right.LibType &&
+		left.PublicKeyECDSA == right.PublicKeyECDSA &&
+		left.PublicKeyEdDSA == right.PublicKeyEdDSA &&
+		left.PublicKeyMLDSA == right.PublicKeyMLDSA &&
+		sameStringMap(left.ChainPublicKeys, right.ChainPublicKeys) &&
+		sameStringMap(left.ChainKeyShares, right.ChainKeyShares) &&
+		sameStringMap(keySharesByPublicKey(left.KeyShares), keySharesByPublicKey(right.KeyShares))
+}
+
+func sameStringMap(left, right map[string]string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for key, value := range left {
+		if right[key] != value {
+			return false
+		}
+	}
+	return true
+}
+
+func keySharesByPublicKey(shares []KeyShare) map[string]string {
+	result := make(map[string]string, len(shares))
+	for _, share := range shares {
+		result[share.PublicKey] = share.KeyShare
+	}
+	return result
+}
+
 func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
+	return s.getVault(s.db, publicKeyEcdsa)
+}
+
+func (s *Store) getVault(reader sqlVaultReader, publicKeyEcdsa string) (*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
 		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time, chain_public_keys, chain_key_shares, public_key_mldsa
 		FROM vaults WHERE public_key_ecdsa = ?`
-	row := s.db.QueryRow(query, publicKeyEcdsa)
+	row := reader.QueryRow(query, publicKeyEcdsa)
 	var signers string
 	var chainPublicKeys sql.NullString
 	var chainKeyShares sql.NullString
@@ -222,7 +397,7 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 			return nil, fmt.Errorf("could not unmarshal chain key shares, err: %w", err)
 		}
 	}
-	keyShares, err := s.getKeyShares(publicKeyEcdsa)
+	keyShares, err := s.getKeyShares(reader, publicKeyEcdsa)
 	if err != nil {
 		return nil, fmt.Errorf("could not get keyshares, err: %w", err)
 	}
@@ -238,9 +413,13 @@ func (s *Store) closeRows(rows *sql.Rows) {
 }
 
 func (s *Store) saveKeyshare(vaultPublicKeyECDSA string, keyShare KeyShare) error {
+	return saveKeyshareWithExecutor(s.db, vaultPublicKeyECDSA, keyShare)
+}
+
+func saveKeyshareWithExecutor(executor sqlExecutor, vaultPublicKeyECDSA string, keyShare KeyShare) error {
 	// delete existing keyshare first
 	deleteQuery := `DELETE FROM keyshares WHERE public_key_ecdsa = ? AND public_key = ?`
-	_, err := s.db.Exec(deleteQuery, vaultPublicKeyECDSA, keyShare.PublicKey)
+	_, err := executor.Exec(deleteQuery, vaultPublicKeyECDSA, keyShare.PublicKey)
 	if err != nil {
 		return fmt.Errorf("could not delete keyshare, err: %w", err)
 	}
@@ -253,16 +432,16 @@ func (s *Store) saveKeyshare(vaultPublicKeyECDSA string, keyShare KeyShare) erro
 	query := fmt.Sprintf(`INSERT OR REPLACE INTO keyshares (%s) VALUES (%s)`,
 		strings.Join(columns, ", "),
 		generatePlaceholders(len(columns)))
-	_, err = s.db.Exec(query, vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
+	_, err = executor.Exec(query, vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
 	if err != nil {
 		return fmt.Errorf("could not upsert keyshare, err: %w", err)
 	}
 	return nil
 }
 
-func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
+func (s *Store) getKeyShares(reader sqlVaultReader, vaultPublicKeyECDSA string) ([]KeyShare, error) {
 	keySharesQuery := `SELECT public_key, keyshare FROM keyshares WHERE public_key_ecdsa = ?`
-	keySharesRows, err := s.db.Query(keySharesQuery, vaultPublicKeyECDSA)
+	keySharesRows, err := reader.Query(keySharesQuery, vaultPublicKeyECDSA)
 	if err != nil {
 		return nil, fmt.Errorf("could not query keyshares, err: %w", err)
 	}
@@ -338,7 +517,7 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 				return nil, fmt.Errorf("could not unmarshal chain key shares, err: %w", err)
 			}
 		}
-		keyShares, err := s.getKeyShares(vault.PublicKeyECDSA)
+		keyShares, err := s.getKeyShares(s.db, vault.PublicKeyECDSA)
 		if err != nil {
 			return nil, fmt.Errorf("could not get keyshares, err: %w", err)
 		}

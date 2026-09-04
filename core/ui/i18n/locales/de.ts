@@ -510,6 +510,7 @@ export const de = {
   import_seedphrase_onboarding_title:
     'Sie treten in eine neue Ära ein, <g> lässt alte Seed-Phrasen hinter sich. </g> Sie benötigen:',
   import_vault: 'Import Vault',
+  import_vult_backup: '.vult-Backup importieren',
   import_vault_share: 'Vault-Freigabe importieren',
   import_vault_share_description:
     'Verwenden Sie eine Tresorfreigabe, um Ihren Tresor wiederherzustellen.',
@@ -1049,6 +1050,15 @@ export const de = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" existiert bereits',
+  vault_cannot_be_opened:
+    'Dieser Vault lässt sich auf diesem Gerät nicht öffnen',
+  vault_cannot_be_opened_backup_description:
+    'Ihr .vult-Backup ist der Weg zurück. Importieren Sie es, und dieser Vault funktioniert wieder.',
+  vault_cannot_be_opened_description:
+    'Seine Key Shares sind verschlüsselt, und der Schlüssel, der sie entsperrt, kam bei dieser Wiederherstellung nicht mit. Nichts auf diesem Gerät kann sie lesen, also kann es mit diesem Vault nicht signieren.',
+  vault_cannot_be_opened_no_backup: 'Ich habe kein Backup',
+  vault_cannot_be_opened_no_backup_description:
+    'Ohne .vult-Backup lassen sich die Key Shares auf diesem Gerät nicht mehr entsperren — dieser Teil ist nicht wiederherstellbar. Der Vault selbst kann es sein: Wenn Ihre anderen Geräte ihre eigenen Shares halten und damit weiterhin den Signaturschwellenwert erreichen, funktioniert er ohne dieses Gerät weiter.',
   vault_backup_page_password_info:
     'Speichern Sie Vault-Freigaben von verschiedenen Geräten niemals am selben Ort.',
   vault_backup_page_password_protection:

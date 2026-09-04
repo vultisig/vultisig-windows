@@ -582,6 +582,7 @@ export const en = {
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
   import_vault: 'Import Vault',
+  import_vult_backup: 'Import .vult backup',
   import_vault_share: 'Import vault share',
   import_vault_share_description: 'Use a vault share to recover your vault.',
   import_vault_share_supported_files: 'Supported file types: .bak & .vult',
@@ -1546,6 +1547,14 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" already exists',
+  vault_cannot_be_opened: "This vault can't be opened on this device",
+  vault_cannot_be_opened_backup_description:
+    'Your .vult backup is the way back. Import it and this vault works again.',
+  vault_cannot_be_opened_description:
+    'Its key shares are encrypted, and the key that unlocks them did not come across with this restore. Nothing on this device can read them, so it cannot sign with this vault.',
+  vault_cannot_be_opened_no_backup: "I don't have a backup",
+  vault_cannot_be_opened_no_backup_description:
+    'Without a .vult backup, the key shares on this device cannot be unlocked again — that part is not recoverable. The vault itself may still be: if your other devices hold their own shares and still reach its signing threshold, it keeps working without this one.',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_backup_page_password_protection:

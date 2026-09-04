@@ -498,6 +498,7 @@ export const hr = {
   import_seedphrase_onboarding_title:
     'Ulazite u novo doba, <g>ostavljajući stare početne fraze iza sebe.</g> Trebat će vam:',
   import_vault: 'Uvoz trezora',
+  import_vult_backup: 'Uvezi .vult kopiju',
   import_vault_share: 'Uvoz dijeljenja trezora',
   import_vault_share_description:
     'Upotrijebite dijeljenje trezora za oporavak trezora.',
@@ -1032,6 +1033,14 @@ export const hr = {
     version: 'Verzija {{latestVersion}}',
   },
   vault_already_exists: 'Trezor "{{name}}" već postoji',
+  vault_cannot_be_opened: 'Ovaj se vault ne može otvoriti na ovom uređaju',
+  vault_cannot_be_opened_backup_description:
+    'Vaša .vult sigurnosna kopija je put natrag. Uvezite je i ovaj će vault ponovno raditi.',
+  vault_cannot_be_opened_description:
+    'Njegovi su key shareovi šifrirani, a ključ koji ih otključava nije prenesen ovom obnovom. Ništa na ovom uređaju ne može ih pročitati, pa se ovim vaultom ne može potpisivati.',
+  vault_cannot_be_opened_no_backup: 'Nemam sigurnosnu kopiju',
+  vault_cannot_be_opened_no_backup_description:
+    'Bez .vult sigurnosne kopije key shareovi na ovom uređaju više se ne mogu dešifrirati — taj dio nije moguće obnoviti. Sam vault možda jest: ako vaši drugi uređaji čuvaju vlastite shareove i i dalje dosežu prag za potpisivanje, nastavlja raditi i bez ovoga.',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijeljene datoteke Vaulta s različitih uređaja na istu lokaciju',
   vault_backup_page_password_protection:
