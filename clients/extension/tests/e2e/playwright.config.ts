@@ -137,6 +137,7 @@ export default defineConfig({
         '**/push-notifications-integration.spec.ts',
         '**/station-migration.spec.ts',
         '**/xrp-destination-tag.spec.ts',
+        '**/send-coin-selection.spec.ts',
         '**/signed-transaction-decoder.spec.ts',
       ],
       use: {
