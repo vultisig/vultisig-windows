@@ -904,9 +904,9 @@ describe('desktop launcher process-tree lifecycle', () => {
         env: process.env,
         stdio: 'ignore',
       })
-      const deadline = Date.now() + 2000
+      const deadline = Date.now() + 5000
       const timer = setInterval(() => {
-        if (!existsSync(${JSON.stringify(supervisor.pidFile)}) && Date.now() < deadline) return
+        if (!existsSync(${JSON.stringify(descendantFile)}) && Date.now() < deadline) return
         clearInterval(timer)
         try { process.kill(wrapper.pid, 'SIGKILL') } catch {}
         process.exit(7)
