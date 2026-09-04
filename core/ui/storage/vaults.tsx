@@ -27,6 +27,13 @@ export const vaultsInitialValue: Vault[] = []
 
 type CreateVaultFunction = (vault: Vault) => Promise<Vault>
 
+type ReplaceVaultInput = {
+  expectedVault: Vault
+  vault: Vault
+}
+
+type ReplaceVaultFunction = (input: ReplaceVaultInput) => Promise<Vault>
+
 export type UpdateVaultFunction = (input: UpdateVaultInput) => Promise<Vault>
 
 type GetVaultsFunction = () => Promise<Vault[]>
@@ -40,6 +47,7 @@ type UpdateVaultsKeyShares = (
 export type VaultsStorage = {
   getVaults: GetVaultsFunction
   createVault: CreateVaultFunction
+  replaceVault: ReplaceVaultFunction
   updateVault: UpdateVaultFunction
   deleteVault: DeleteVaultFunction
   updateVaultsKeyShares: UpdateVaultsKeyShares
