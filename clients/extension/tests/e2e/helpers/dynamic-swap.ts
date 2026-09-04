@@ -96,7 +96,6 @@ export const SYMBOL_FALLBACK_AMOUNTS: Record<string, string> = {
   BCH: '0.03',
   DASH: '0.6',
   ZEC: '0.6',
-  KUJI: '20',
   ADA: '20',
   SUI: '5',
   TON: '3',
