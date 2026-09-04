@@ -120,9 +120,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
                     error:
                       error instanceof Error
                         ? error
-                        : new Error('Failed to read vault key shares', {
-                            cause: error,
-                          }),
+                        : new Error('Failed to read vault key shares'),
                   },
           })
         }

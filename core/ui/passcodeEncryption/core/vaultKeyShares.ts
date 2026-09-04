@@ -127,12 +127,13 @@ export const hasPasscodeEncryptedVaultKeyShare = (
 
 export class UnreadableVaultKeySharesError extends Error {
   name = 'UnreadableVaultKeySharesError'
+  cause?: unknown
 
   constructor(cause?: unknown) {
     super(
-      'Vault key shares cannot be decrypted. Restore the Vault from a .vult backup.',
-      { cause }
+      'Vault key shares cannot be decrypted. Restore the Vault from a .vult backup.'
     )
+    this.cause = cause
   }
 }
 
