@@ -71,27 +71,29 @@ export const SaveImportedVaultStep = ({
   const vaultOrders = useVaultOrders()
   const stableVaultOrders = useRef(vaultOrders).current
 
+  const importedVault = useMemo(
+    () => (override ? { ...value, ...override } : value),
+    [override, value]
+  )
+
   const recoveryVault = useMemo(() => {
-    const importedVault = override ? { ...value, ...override } : value
     return initialVaults.find(
       vault =>
         getVaultId(vault) === recoveryVaultId &&
         getVaultId(importedVault) === recoveryVaultId
     )
-  }, [override, value, initialVaults, recoveryVaultId])
+  }, [importedVault, initialVaults, recoveryVaultId])
 
   const finalValue = useMemo(() => {
-    const overriddenValue = override ? { ...value, ...override } : value
-
     return {
-      ...overriddenValue,
+      ...importedVault,
       order: recoveryVault?.order ?? getLastItemOrder(stableVaultOrders),
       ...(recoveryVault?.folderId ? { folderId: recoveryVault.folderId } : {}),
       ...(recoveryVault?.saplingExtras
         ? { saplingExtras: recoveryVault.saplingExtras }
         : {}),
     }
-  }, [override, value, stableVaultOrders, recoveryVault])
+  }, [importedVault, stableVaultOrders, recoveryVault])
 
   const error = useMemo(() => {
     const importedVaultId = getVaultId(finalValue)
@@ -119,7 +121,7 @@ export const SaveImportedVaultStep = ({
         recoveryVaultId,
         hasRecoveryIdentityProof: hasVaultRecoveryIdentityProof({
           existingVault,
-          importedVault: finalValue,
+          importedVault,
         }),
       })
     ) {
@@ -130,7 +132,15 @@ export const SaveImportedVaultStep = ({
     if (client === 'extension' && value.libType === 'GG20') {
       return t('extension_vault_import_restriction')
     }
-  }, [client, finalValue, t, value.libType, initialVaults, recoveryVaultId])
+  }, [
+    client,
+    finalValue,
+    importedVault,
+    t,
+    value.libType,
+    initialVaults,
+    recoveryVaultId,
+  ])
 
   if (error) {
     return (

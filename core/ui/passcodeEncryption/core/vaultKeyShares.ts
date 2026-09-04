@@ -136,20 +136,22 @@ export class UnreadableVaultKeySharesError extends Error {
 }
 
 /**
- * A readable share must not still be encoded as an at-rest passcode blob.
- * Checking after decryption also catches accidentally double-encrypted data.
+ * Validates the plaintext legacy keyshare shape and its public-key identity.
  */
 const assertLegacyKeyShareReadable = (
   value: string,
   expectedPublicKey: string
 ): void => {
-  const parsed = JSON.parse(value) as Record<string, unknown>
+  const parsed: unknown = JSON.parse(value)
 
   if (
     !parsed ||
     typeof parsed !== 'object' ||
+    !('pub_key' in parsed) ||
     parsed.pub_key !== expectedPublicKey ||
+    !('local_party_key' in parsed) ||
     typeof parsed.local_party_key !== 'string' ||
+    !('keygen_committee_keys' in parsed) ||
     !Array.isArray(parsed.keygen_committee_keys)
   ) {
     throw new Error('Invalid legacy keyshare')

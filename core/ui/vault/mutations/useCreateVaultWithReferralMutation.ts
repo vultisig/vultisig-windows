@@ -37,7 +37,13 @@ export const useCreateVaultWithReferralMutation = (
           pendingReferral.trim().toUpperCase()
         )
         if (recoveryVault) {
-          await Promise.allSettled([saveReferral])
+          const [saveReferralResult] = await Promise.allSettled([saveReferral])
+          if (saveReferralResult.status === 'rejected') {
+            console.error(
+              'Failed to persist referral during vault recovery',
+              saveReferralResult.reason
+            )
+          }
         } else {
           await saveReferral
         }
