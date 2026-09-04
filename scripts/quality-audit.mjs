@@ -83,12 +83,12 @@ const args = [
 
 const socketTimeoutPattern = /RequestError: Timeout awaiting 'socket' for \d+ms/
 const retryDelaysMs = [2_000, 15_000, 45_000, 90_000]
+const isMain = fileURLToPath(import.meta.url) === process.argv[1]
 
-if (process.argv.includes('--print')) {
-  console.log(`yarn ${args.join(' ')}`)
-} else {
-  const isMain = fileURLToPath(import.meta.url) === process.argv[1]
-  if (isMain) {
+if (isMain) {
+  if (process.argv.includes('--print')) {
+    console.log(`yarn ${args.join(' ')}`)
+  } else {
     try {
       await runAudit()
     } catch (error) {

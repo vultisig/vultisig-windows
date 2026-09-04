@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
 import { test } from 'node:test'
 
 import { runAudit } from './quality-audit.mjs'
@@ -15,6 +16,24 @@ const socketTimeout = "RequestError: Timeout awaiting 'socket' for 60000ms\n"
 const silentWriter = { write: () => {} }
 const runAuditForTest = options =>
   runAudit({ stdout: silentWriter, stderr: silentWriter, ...options })
+
+test('does not honor --print when imported by another command', () => {
+  const result = spawnSync(
+    process.execPath,
+    [
+      '--input-type=module',
+      '--eval',
+      `await import(${JSON.stringify(new URL('./quality-audit.mjs', import.meta.url).href)})`,
+      '--',
+      '--print',
+    ],
+    { encoding: 'utf8' }
+  )
+
+  assert.equal(result.status, 0)
+  assert.equal(result.stdout, '')
+  assert.equal(result.stderr, '')
+})
 
 test('returns after a successful audit', async () => {
   let calls = 0
