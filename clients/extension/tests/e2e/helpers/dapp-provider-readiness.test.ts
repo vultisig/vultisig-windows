@@ -5,6 +5,13 @@ import { test } from 'node:test'
 import { observeDappAccountRead } from './dapp-provider-readiness'
 
 const pending = () => new Promise<string>(() => {})
+const deferred = <T>() => {
+  let resolve!: (value: T | PromiseLike<T>) => void
+  const promise = new Promise<T>(resolvePromise => {
+    resolve = resolvePromise
+  })
+  return { promise, resolve }
+}
 const flush = async () => {
   for (let i = 0; i < 30; i++) await Promise.resolve()
 }
@@ -24,7 +31,7 @@ const fixture = (): Parameters<typeof observeDappAccountRead<string>>[0] => ({
 })
 
 test('grant closure can precede a delayed successful original response', async () => {
-  const response = Promise.withResolvers<string>()
+  const response = deferred<string>()
   const receiptPromise = observeDappAccountRead({
     ...fixture(),
     request: () => response.promise,
@@ -39,7 +46,7 @@ test('grant closure can precede a delayed successful original response', async (
 })
 
 test('an original response resolving after origin drift cannot pass', async () => {
-  const response = Promise.withResolvers<string>()
+  const response = deferred<string>()
   let origin = fixture().sourceOrigin
   const receiptPromise = observeDappAccountRead({
     ...fixture(),
@@ -78,7 +85,7 @@ test('a rejected original remains rejected and never reloads', async () => {
 
 test('successful recovery cannot mask an original timeout or late resolution', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] })
-  const response = Promise.withResolvers<string>()
+  const response = deferred<string>()
   let reads = 0
   let reloads = 0
   const run = observeDappAccountRead({
@@ -145,7 +152,7 @@ test('a popup that never closes cannot pass even when the request resolves', asy
 
 test('a popup wait that finishes after its deadline cannot approve late', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] })
-  const popup = Promise.withResolvers<void>()
+  const popup = deferred<void>()
   let approvals = 0
   const run = observeDappAccountRead({
     ...fixture(),
@@ -167,7 +174,7 @@ test('a popup wait that finishes after its deadline cannot approve late', async 
 
 test('aborting after an earlier check still prevents a later approval', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] })
-  const beforeClick = Promise.withResolvers<void>()
+  const beforeClick = deferred<void>()
   let approvals = 0
   const run = observeDappAccountRead({
     ...fixture(),
@@ -235,7 +242,7 @@ for (const changeAt of ['before-reload', 'during-reload']) {
 
 test('a recovery response resolving after origin drift is rejected', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] })
-  const recoveryResponse = Promise.withResolvers<string>()
+  const recoveryResponse = deferred<string>()
   let origin = fixture().sourceOrigin
   let reads = 0
   const run = observeDappAccountRead({
@@ -273,7 +280,7 @@ test('pending reload is covered by the same recovery deadline', async t => {
 
 test('a reload that completes after its deadline cannot issue a late recovery call', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] })
-  const reload = Promise.withResolvers<void>()
+  const reload = deferred<void>()
   let reads = 0
   const run = observeDappAccountRead({
     ...fixture(),
