@@ -16032,10 +16032,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"toml@npm:4.2.0":
-  version: 4.2.0
-  resolution: "toml@npm:4.2.0"
-  checksum: 10c0/c110fd3fd5f69d9edcd46ee9468f104462dbbdcf33b85d3a240dfb488bc29bbd8e0f9b4bbae7243ccc734ff708161b062ed1f4a3280f2df9439139506dc71ab2
+"toml@npm:4.3.0":
+  version: 4.3.0
+  resolution: "toml@npm:4.3.0"
+  checksum: 10c0/4a0ad64d4ef0b47f672a7b6bd7e776b9e03ad845998968fb105f8d561c3648eaff0217baca3f562d17e865e5bd7393441a8e54528920f0c171e41fdc8dfb39d6
   languageName: node
   linkType: hard
 
