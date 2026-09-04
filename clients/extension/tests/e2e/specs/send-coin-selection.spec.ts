@@ -96,7 +96,15 @@ const openSendForm = async ({
   return { page, sendFlow }
 }
 
-const captureProof = async (page: Page, testInfo: TestInfo, name: string) => {
+const captureProof = async ({
+  name,
+  page,
+  testInfo,
+}: {
+  name: string
+  page: Page
+  testInfo: TestInfo
+}) => {
   const path = testInfo.outputPath(`${name}.png`)
   await page.waitForTimeout(500)
   await page.screenshot({ path, fullPage: true })
@@ -166,7 +174,11 @@ test.describe('send coin selection', () => {
     await expect(sendFlow.coinSelectorTrigger).toContainText('USDC')
     await sendFlow.openAmountField()
 
-    await captureProof(page, testInfo, 'send-coin-selection-success')
+    await captureProof({
+      name: 'send-coin-selection-success',
+      page,
+      testInfo,
+    })
     await page.close()
   })
 
@@ -188,7 +200,11 @@ test.describe('send coin selection', () => {
     await sendFlow.openAmountField()
     await expect(sendFlow.amountInput).toHaveValue('')
 
-    await captureProof(page, testInfo, 'send-coin-selection-missing-chain')
+    await captureProof({
+      name: 'send-coin-selection-missing-chain',
+      page,
+      testInfo,
+    })
     await page.close()
   })
 
@@ -209,7 +225,9 @@ test.describe('send coin selection', () => {
           return
         }
 
-        const duplicate = option.cloneNode(true) as HTMLElement
+        const duplicate = option.cloneNode(true)
+        if (!(duplicate instanceof HTMLElement)) return
+
         duplicate.dataset.selectionDecoy = 'true'
         option.parentElement?.append(duplicate)
       })
