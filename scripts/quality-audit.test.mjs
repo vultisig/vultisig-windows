@@ -46,7 +46,7 @@ test('retries a registry socket timeout and then succeeds', async () => {
 
   assert.equal(calls, 2)
   assert.deepEqual(waits, [2_000])
-  assert.match(stderr.value(), /attempt 2\/3/)
+  assert.match(stderr.value(), /retrying audit in 2 seconds \(attempt 2\/5\)/)
 })
 
 test('does not retry an audit finding', async () => {
@@ -65,22 +65,22 @@ test('does not retry an audit finding', async () => {
   assert.equal(calls, 1)
 })
 
-test('recovers after two consecutive registry socket timeouts', async () => {
+test('uses the bounded backoff schedule before a final successful attempt', async () => {
   let calls = 0
   const waits = []
 
   await runAuditForTest({
     run: () => {
       calls += 1
-      return calls < 3
+      return calls < 5
         ? { status: 1, stderr: socketTimeout, stdout: '' }
         : { status: 0, stderr: '', stdout: 'audit passed\n' }
     },
     wait: milliseconds => waits.push(milliseconds),
   })
 
-  assert.equal(calls, 3)
-  assert.deepEqual(waits, [2_000, 2_000])
+  assert.equal(calls, 5)
+  assert.deepEqual(waits, [2_000, 15_000, 45_000, 90_000])
 })
 
 test('fails after all bounded attempts time out', async () => {
@@ -97,5 +97,5 @@ test('fails after all bounded attempts time out', async () => {
     /exited with code 1/
   )
 
-  assert.equal(calls, 3)
+  assert.equal(calls, 5)
 })

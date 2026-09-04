@@ -82,6 +82,7 @@ const args = [
 ]
 
 const socketTimeoutPattern = /RequestError: Timeout awaiting 'socket' for \d+ms/
+const retryDelaysMs = [2_000, 15_000, 45_000, 90_000]
 
 if (process.argv.includes('--print')) {
   console.log(`yarn ${args.join(' ')}`)
@@ -106,7 +107,7 @@ export async function runAudit({
 } = {}) {
   const yarn = process.platform === 'win32' ? 'yarn.cmd' : 'yarn'
 
-  const maxAttempts = 3
+  const maxAttempts = retryDelaysMs.length + 1
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     const result = run(yarn, args, {
       encoding: 'utf8',
@@ -128,9 +129,10 @@ export async function runAudit({
       throw error
     }
 
+    const retryDelayMs = retryDelaysMs[attempt - 1]
     stderr.write(
-      `Transient Yarn registry socket timeout; retrying audit in 2 seconds (attempt ${attempt + 1}/${maxAttempts}).\n`
+      `Transient Yarn registry socket timeout; retrying audit in ${retryDelayMs / 1_000} seconds (attempt ${attempt + 1}/${maxAttempts}).\n`
     )
-    await wait(2_000)
+    await wait(retryDelayMs)
   }
 }
