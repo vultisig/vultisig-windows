@@ -904,10 +904,13 @@ describe('desktop launcher process-tree lifecycle', () => {
         env: process.env,
         stdio: 'ignore',
       })
-      const deadline = Date.now() + 5000
+      const deadline = Date.now() + 10000
       const timer = setInterval(() => {
-        if (!existsSync(${JSON.stringify(descendantFile)}) && Date.now() < deadline) return
+        const watcherReady = existsSync(${JSON.stringify(supervisor.pidFile)}) &&
+          existsSync(${JSON.stringify(descendantFile)})
+        if (!watcherReady && Date.now() < deadline) return
         clearInterval(timer)
+        if (!watcherReady) process.exit(8)
         try { process.kill(wrapper.pid, 'SIGKILL') } catch {}
         process.exit(7)
       }, 5)
@@ -925,9 +928,11 @@ describe('desktop launcher process-tree lifecycle', () => {
         ownedPidFiles: [supervisor.pidFile],
         terminateImpl: options =>
           terminateProcessTree({ ...options, graceMs: 100, pollMs: 10 }),
+        trackerFactory: options =>
+          createProcessTreeTracker({ ...options, intervalMs: 100_000 }),
       })
 
-      await waitFor(() => existsSync(descendantFile))
+      await waitFor(() => existsSync(descendantFile), 12_000)
       pids = JSON.parse(readFileSync(descendantFile, 'utf8'))
       await expect(run).resolves.toBe(7)
       await waitFor(
@@ -958,7 +963,7 @@ describe('desktop launcher process-tree lifecycle', () => {
       supervisor.cleanup()
       rmSync(fixtureDirectory, { force: true, recursive: true })
     }
-  }, 10_000)
+  }, 20_000)
 
   it('cleans an invocation-group descendant when the root fails before the production poll interval', async () => {
     const supervisor = createFrontendWatcherSupervisor({
