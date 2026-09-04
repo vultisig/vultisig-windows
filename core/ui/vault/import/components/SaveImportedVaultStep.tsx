@@ -29,6 +29,14 @@ export const canReplaceVaultDuringRecovery = ({
   recoveryVaultId === existingVaultId &&
   importedVaultId === existingVaultId
 
+export const canImportVaultDuringRecovery = ({
+  importedVaultId,
+  recoveryVaultId,
+}: {
+  importedVaultId: string
+  recoveryVaultId: string | null
+}) => recoveryVaultId === null || importedVaultId === recoveryVaultId
+
 export const hasVaultRecoveryIdentityProof = ({
   existingVault,
   importedVault,
@@ -86,8 +94,22 @@ export const SaveImportedVaultStep = ({
   }, [override, value, stableVaultOrders, recoveryVault])
 
   const error = useMemo(() => {
+    const importedVaultId = getVaultId(finalValue)
+    if (!canImportVaultDuringRecovery({ importedVaultId, recoveryVaultId })) {
+      const recoveryTarget = initialVaults.find(
+        vault => getVaultId(vault) === recoveryVaultId
+      )
+      const recoveryInstruction = t('vault_cannot_be_opened_backup_description')
+
+      return recoveryTarget
+        ? `${t('vault_already_exists', {
+            name: recoveryTarget.name,
+          })} ${recoveryInstruction}`
+        : recoveryInstruction
+    }
+
     const existingVault = initialVaults.find(
-      v => getVaultId(v) === getVaultId(finalValue)
+      v => getVaultId(v) === importedVaultId
     )
     if (
       existingVault &&

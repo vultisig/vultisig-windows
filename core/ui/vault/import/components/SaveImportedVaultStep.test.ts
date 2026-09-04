@@ -3,9 +3,39 @@ import { describe, expect, it } from 'vitest'
 
 import { assertVaultRecoveryReplacement } from '../../../storage/vaultRecoveryReplacement'
 import {
+  canImportVaultDuringRecovery,
   canReplaceVaultDuringRecovery,
   hasVaultRecoveryIdentityProof,
 } from './SaveImportedVaultStep'
+
+describe('canImportVaultDuringRecovery', () => {
+  it('keeps the recovery gate on the exact unreadable vault', () => {
+    expect(
+      canImportVaultDuringRecovery({
+        importedVaultId: 'vault-b',
+        recoveryVaultId: 'vault-a',
+      })
+    ).toBe(false)
+  })
+
+  it('allows the matching recovery backup', () => {
+    expect(
+      canImportVaultDuringRecovery({
+        importedVaultId: 'vault-a',
+        recoveryVaultId: 'vault-a',
+      })
+    ).toBe(true)
+  })
+
+  it('does not restrict ordinary imports', () => {
+    expect(
+      canImportVaultDuringRecovery({
+        importedVaultId: 'vault-b',
+        recoveryVaultId: null,
+      })
+    ).toBe(true)
+  })
+})
 
 describe('canReplaceVaultDuringRecovery', () => {
   it('allows replacing only the exact unreadable vault', () => {
