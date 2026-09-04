@@ -128,10 +128,19 @@ export const hasPasscodeEncryptedVaultKeyShare = (
 export class UnreadableVaultKeySharesError extends Error {
   name = 'UnreadableVaultKeySharesError'
 
-  constructor() {
+  constructor(cause?: unknown) {
     super(
-      'Vault key shares cannot be decrypted. Restore the Vault from a .vult backup.'
+      'Vault key shares cannot be decrypted. Restore the Vault from a .vult backup.',
+      { cause }
     )
+  }
+}
+
+export class LegacyVaultKeyShareValidatorUnavailableError extends Error {
+  name = 'LegacyVaultKeyShareValidatorUnavailableError'
+
+  constructor() {
+    super('Legacy vault keyshare validation is unavailable')
   }
 }
 
@@ -237,9 +246,13 @@ export const assertVaultKeySharesReadable = async ({
 }: AssertVaultKeySharesReadableInput): Promise<void> => {
   try {
     if (libType === 'GG20') {
+      if (!validateLegacyVaultKeyShares) {
+        throw new LegacyVaultKeyShareValidatorUnavailableError()
+      }
+
       assertLegacyKeyShareReadable(keyShares.ecdsa, publicKeys.ecdsa)
       assertLegacyKeyShareReadable(keyShares.eddsa, publicKeys.eddsa)
-      await shouldBePresent(validateLegacyVaultKeyShares)(keyShares)
+      await validateLegacyVaultKeyShares(keyShares)
     } else {
       if (
         !getAllKeyShareValues({
@@ -286,8 +299,12 @@ export const assertVaultKeySharesReadable = async ({
     if (keyShareMldsa) {
       await assertMldsaKeyShareReadable(keyShareMldsa, publicKeyMldsa)
     }
-  } catch {
-    throw new UnreadableVaultKeySharesError()
+  } catch (error) {
+    if (error instanceof LegacyVaultKeyShareValidatorUnavailableError) {
+      throw error
+    }
+
+    throw new UnreadableVaultKeySharesError(error)
   }
 }
 

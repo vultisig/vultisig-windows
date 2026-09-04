@@ -18,7 +18,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { createContext, useContext } from 'react'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
-import { readVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import {
+  readVaultAllKeyShares,
+  UnreadableVaultKeySharesError,
+} from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPasscodeRequired'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
@@ -74,6 +77,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     result:
       | { status: 'ready'; shares: VaultAllKeyShares }
       | { status: 'unreadable' }
+      | { status: 'error'; error: Error }
   } | null>(null)
 
   useEffect(() => {
@@ -104,11 +108,22 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
           })
         }
       })
-      .catch(() => {
+      .catch(error => {
         if (!cancelled) {
           setShareState({
             sourceVault: vault,
-            result: { status: 'unreadable' },
+            result:
+              error instanceof UnreadableVaultKeySharesError
+                ? { status: 'unreadable' }
+                : {
+                    status: 'error',
+                    error:
+                      error instanceof Error
+                        ? error
+                        : new Error('Failed to read vault key shares', {
+                            cause: error,
+                          }),
+                  },
           })
         }
       })
@@ -132,6 +147,10 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
   if (shareState?.sourceVault !== vault) {
     return <ProductLogoBlock />
+  }
+
+  if (shareState.result.status === 'error') {
+    throw shareState.result.error
   }
 
   if (shareState.result.status === 'unreadable') {

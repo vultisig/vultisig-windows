@@ -40,6 +40,7 @@ vi.mock('@vultisig/lib-mldsa/vs_wasm', () => ({
 import {
   encryptVaultAllKeyShares,
   hasPasscodeEncryptedVaultKeyShare,
+  LegacyVaultKeyShareValidatorUnavailableError,
   readVaultAllKeyShares,
   UnreadableVaultKeySharesError,
 } from './vaultKeyShares'
@@ -204,6 +205,44 @@ describe('readVaultAllKeyShares', () => {
         key: null,
       })
     ).rejects.toBeInstanceOf(UnreadableVaultKeySharesError)
+  })
+
+  it('keeps missing legacy validator wiring distinct from unreadable shares', async () => {
+    const legacyShare = (publicKey: string) =>
+      JSON.stringify({
+        pub_key: publicKey,
+        local_party_key: 'device-1',
+        keygen_committee_keys: ['device-1', 'device-2'],
+      })
+
+    await expect(
+      readVaultAllKeyShares({
+        keyShares: {
+          ecdsa: legacyShare('ecdsa-public-key'),
+          eddsa: legacyShare('eddsa-public-key'),
+        },
+        libType: 'GG20',
+        publicKeys: {
+          ecdsa: 'ecdsa-public-key',
+          eddsa: 'eddsa-public-key',
+        },
+        hasPasscodeEncryption: false,
+        key: null,
+      })
+    ).rejects.toBeInstanceOf(LegacyVaultKeyShareValidatorUnavailableError)
+  })
+
+  it('preserves the share-validation failure as the unreadable error cause', async () => {
+    const error = await readVaultAllKeyShares({
+      ...plainShares,
+      ...vaultMetadata,
+      keyShares: { ...plainShares.keyShares, ecdsa: 'not-a-keyshare' },
+      hasPasscodeEncryption: false,
+      key: null,
+    }).catch(error => error)
+
+    expect(error).toBeInstanceOf(UnreadableVaultKeySharesError)
+    expect(error.cause).toBeInstanceOf(Error)
   })
 
   it('rejects a readable share for a different public key', async () => {
