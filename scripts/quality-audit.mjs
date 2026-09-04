@@ -59,6 +59,26 @@ const suppressions = [
     owner: 'vultisig/windows',
     reviewBy: '2026-10-01',
   },
+  {
+    id: 1164824,
+    advisory: 'GHSA-82x6-q7mm-w9cf',
+    package: 'toml',
+    path: '@vultisig/sdk > @coral-xyz/anchor > toml',
+    reason:
+      "Uncontrolled recursion in toml@3.0.0. Anchor 0.32.1 declares toml but its published JavaScript distribution does not import or require it, so the parser is not reachable through the shipped wallet or extension. Suppressed until Anchor removes the unused dependency or supports toml's fixed 4.x line.",
+    owner: 'vultisig/windows',
+    reviewBy: '2026-10-01',
+  },
+  {
+    id: 1164825,
+    advisory: 'GHSA-v5mp-jgw5-2x6j',
+    package: 'toml',
+    path: '@vultisig/sdk > @coral-xyz/anchor > toml',
+    reason:
+      "Prototype pollution in toml@3.0.0. Anchor 0.32.1 declares toml but its published JavaScript distribution does not import or require it, so the parser is not reachable through the shipped wallet or extension. Suppressed until Anchor removes the unused dependency or supports toml's fixed 4.x line.",
+    owner: 'vultisig/windows',
+    reviewBy: '2026-10-01',
+  },
 ]
 
 const today = new Date().toISOString().slice(0, 10)

@@ -216,6 +216,7 @@ test.describe('send coin selection', () => {
       observer.observe(document.body, { childList: true, subtree: true })
     })
 
+    await expect(sendFlow.coinSelectorTrigger).not.toContainText('XRP')
     await expect(sendFlow.selectCoin('XRP')).rejects.toThrow(
       /asset:XRP ambiguous \(2 matches\)/
     )
