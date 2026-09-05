@@ -1,71 +1,52 @@
 import { SwapDiscount } from '@vultisig/core-chain/swap/discount/SwapDiscount'
-import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { currentProductBrand } from '../../../../product/brand'
-import {
-  getReferralDiscountSavingBps,
-  getSwapDiscountSaving,
-  getVultDiscountSavingBps,
-  SwapAffiliateBps,
-} from '../../affiliate/affiliateBps'
+import { SwapDiscountSaving } from '../../affiliate/affiliateBps'
 import { ReferralDiscountRow } from './ReferralDiscountRow'
 import { SwapFeeRowRenderer } from './swapFeeRow'
 import { VultDiscountRow } from './VultDiscountRow'
 
 type SwapDiscountInfoProps = {
   renderRow: SwapFeeRowRenderer
-  discounts: SwapDiscount[]
-  /** Fee the product actually charged, used to value each discount. */
-  affiliate: SwapFee | undefined
-  /** Fallback basis when the provider itemized no fee to value against. */
-  notional: SwapFee | undefined
-  affiliateBps: SwapAffiliateBps
+  savings: SwapDiscountSaving[]
 }
 
 /**
- * Discount rows, emitted as siblings of the fee rows through the same row
- * renderer so they share the surrounding surface's row treatment.
+ * The discounts that bring the list rate above down to what the swap was
+ * charged, under a heading of their own so they read as reductions rather than
+ * as further fees.
+ *
+ * Emitted as siblings of the fee rows through the same row renderer so they
+ * share the surrounding surface's row treatment.
  */
 export const SwapDiscountInfo = ({
   renderRow,
-  discounts,
-  affiliate,
-  notional,
-  affiliateBps,
+  savings,
 }: SwapDiscountInfoProps) => {
-  const visibleDiscounts =
-    currentProductBrand === 'station'
-      ? discounts.filter(discount => !('vult' in discount))
-      : discounts
+  const { t } = useTranslation()
 
-  const getSaving = (savingBps: number) =>
-    getSwapDiscountSaving({
-      affiliate,
-      notional,
-      productBps: affiliateBps.product,
-      savingBps,
-    })
+  if (isEmpty(savings)) {
+    return null
+  }
 
   return (
     <>
-      {visibleDiscounts.map((discount, index) =>
+      {renderRow({ label: t('swap_applied_discounts'), value: null })}
+      {savings.map(({ discount, bps }, index) =>
         matchRecordUnion<SwapDiscount, ReactNode>(discount, {
           vult: ({ tier }) => (
             <VultDiscountRow
               key={index}
               renderRow={renderRow}
               tier={tier}
-              saving={getSaving(getVultDiscountSavingBps(tier))}
+              bps={bps}
             />
           ),
           referral: () => (
-            <ReferralDiscountRow
-              key={index}
-              renderRow={renderRow}
-              saving={getSaving(getReferralDiscountSavingBps())}
-            />
+            <ReferralDiscountRow key={index} renderRow={renderRow} bps={bps} />
           ),
         })
       )}

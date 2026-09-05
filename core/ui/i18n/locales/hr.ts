@@ -1868,7 +1868,6 @@ export const hr = {
   price_impact: 'Utjecaj na cijenu',
   swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
   swap_protocol_fee: 'Naknada za protokol',
-  swap_referral_fee: 'Naknada za preporuku',
   select_route: 'Odaberite rutu',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1930,4 +1929,5 @@ export const hr = {
   swap_failed_slippage: 'Cijena je prešla toleranciju klizanja',
   swap_failed_slippage_description:
     'Cijena se promijenila prije nego što je ovaj swap sletio, tako da bi isplatio manje od dopuštene tolerancije na klizanje, a mreža ga je poništila. Povećajte toleranciju na klizanje ili pokušajte ponovno.',
+  swap_applied_discounts: 'Primijenjeni popusti:',
 }

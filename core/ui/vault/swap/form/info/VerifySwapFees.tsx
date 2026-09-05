@@ -1,6 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
-import { getSwapQuoteAffiliateBps } from '@core/ui/vault/swap/affiliate/affiliateBps'
+import { getSwapFeeDisclosure } from '@core/ui/vault/swap/affiliate/affiliateBps'
 import { SwapDiscountInfo } from '@core/ui/vault/swap/form/info/SwapDiscountInfo'
 import { SwapNetworkFeeRow } from '@core/ui/vault/swap/form/info/SwapNetworkFeeRow'
 import { SwapPriceImpactRow } from '@core/ui/vault/swap/form/info/SwapPriceImpactRow'
@@ -38,7 +38,7 @@ type VerifySwapFeesProps = {
 export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ swapQuote }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery(swapQuote)
-  const affiliateBps = getSwapQuoteAffiliateBps(swapQuote.discounts)
+  const disclosure = getSwapFeeDisclosure(swapQuote.discounts)
   const provider = getSwapQuoteProviderName(swapQuote)
   const providerLogoSrc = getSwapProviderLogoSrc(provider)
 
@@ -82,14 +82,11 @@ export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ swapQuote }) => {
             <SwapProviderFeeRows
               renderRow={renderSwapVerifyRow}
               fees={fees}
-              affiliateBps={affiliateBps}
+              disclosure={disclosure}
             />
             <SwapDiscountInfo
               renderRow={renderSwapVerifyRow}
-              discounts={swapQuote.discounts}
-              affiliate={fees.affiliate}
-              notional={fees.affiliateNotional}
-              affiliateBps={affiliateBps}
+              savings={disclosure.savings}
             />
           </>
         )}

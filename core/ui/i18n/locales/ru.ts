@@ -1877,7 +1877,6 @@ export const ru = {
   price_impact: 'Влияние цены',
   swap_fee_included_in_rate: 'Включено в указанный обменный курс',
   swap_protocol_fee: 'Протокольный сбор',
-  swap_referral_fee: 'Комиссионное вознаграждение за привлечение клиентов',
   select_route: 'Выберите маршрут',
   swap_route_eta_hours: '~{{hours}}ч',
   swap_route_eta_hours_minutes: '~{{hours}}ч {{minutes}}мин',
@@ -1939,4 +1938,5 @@ export const ru = {
   swap_failed_slippage: 'Цена превысила допустимый уровень проскальзывания.',
   swap_failed_slippage_description:
     'Цена изменилась до завершения этого свопа, поэтому выплата была бы меньше допустимого вами проскальзывания, и сеть отменила бы это изменение. Увеличьте допустимое проскальзывание или попробуйте снова.',
+  swap_applied_discounts: 'Примененные скидки:',
 }
