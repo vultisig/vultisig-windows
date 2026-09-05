@@ -3,6 +3,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import { getRippleSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ripple'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
@@ -115,57 +116,64 @@ describe('buildSendTxKeysignPayload', () => {
   // A TonConnect message may deploy a contract: its `stateInit` is the code the
   // destination does not have yet. Dropping it here signs a plain transfer to an
   // address with no code, so every message must reach the signer with its own.
-  it('keeps each TonConnect message stateInit in the signTon payload', async () => {
-    const deployMessage = {
-      to: 'EQARULUYsmJq1RiZ-YiH-IJLcAZUVkVff-KBPwEmmaQGH6aC',
-      amount: '50000000',
-      payload: 'te6cckEBAQEABgAACAAAAA==',
-      stateInit: 'te6cckEBAQEAJAAAQ4ABase64EncodedStateInit',
-    }
-    const plainMessage = {
-      to: 'EQDmLe6ticcY_uLZsfurdYONshNuCn8IS81KcJ8p6M6ISJrE',
-      amount: '50000000',
-    }
+  it.each([undefined, 1_800_000_060])(
+    'preserves TonConnect messages and forwards deadline %s',
+    async validUntil => {
+      const deployMessage = {
+        to: 'EQARULUYsmJq1RiZ-YiH-IJLcAZUVkVff-KBPwEmmaQGH6aC',
+        amount: '50000000',
+        payload: 'te6cckEBAQEABgAACAAAAA==',
+        stateInit: 'te6cckEBAQEAJAAAQ4ABase64EncodedStateInit',
+      }
+      const plainMessage = {
+        to: 'EQDmLe6ticcY_uLZsfurdYONshNuCn8IS81KcJ8p6M6ISJrE',
+        amount: '50000000',
+      }
 
-    const payload = await buildSendTxKeysignPayload({
-      parsedTx: {
-        coin: tonCoin,
-        customTxData: {
-          regular: {
-            chain: Chain.Ton,
-            coin: tonCoin,
-            transactionDetails: {
-              from: tonCoin.address,
-              to: deployMessage.to,
-              asset: { ticker: tonCoin.ticker },
-              amount: {
-                amount: deployMessage.amount,
-                decimals: tonCoin.decimals,
+      const payload = await buildSendTxKeysignPayload({
+        parsedTx: {
+          coin: tonCoin,
+          customTxData: {
+            regular: {
+              chain: Chain.Ton,
+              coin: tonCoin,
+              transactionDetails: {
+                from: tonCoin.address,
+                to: deployMessage.to,
+                asset: { ticker: tonCoin.ticker },
+                amount: {
+                  amount: deployMessage.amount,
+                  decimals: tonCoin.decimals,
+                },
+                data: deployMessage.payload,
+                tonMessages: [deployMessage, plainMessage],
+                validUntil,
               },
-              data: deployMessage.payload,
-              tonMessages: [deployMessage, plainMessage],
             },
           },
         },
-      },
-      publicKey,
-      walletCore,
-      vaultId: 'vault-id',
-      localPartyId: 'local-party',
-    })
+        publicKey,
+        walletCore,
+        vaultId: 'vault-id',
+        localPartyId: 'local-party',
+      })
 
-    expect(payload.signData).toMatchObject({
-      case: 'signTon',
-      value: { tonMessages: [deployMessage, plainMessage] },
-    })
+      expect(payload.signData).toMatchObject({
+        case: 'signTon',
+        value: { tonMessages: [deployMessage, plainMessage] },
+      })
 
-    const [, secondMessage] =
-      payload.signData.case === 'signTon'
-        ? payload.signData.value.tonMessages
-        : []
+      const [, secondMessage] =
+        payload.signData.case === 'signTon'
+          ? payload.signData.value.tonMessages
+          : []
 
-    expect(secondMessage?.stateInit).toBeUndefined()
-  })
+      expect(secondMessage?.stateInit).toBeUndefined()
+      expect(getChainSpecific).toHaveBeenLastCalledWith(
+        expect.objectContaining({ validUntil })
+      )
+    }
+  )
   it.each([false, true])(
     'binds a native XRPL Payment amount with skipBroadcast=%s',
     async skipBroadcast => {

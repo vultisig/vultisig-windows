@@ -6,7 +6,6 @@ export const getCosmosChainFromAddress = (address: string): string | null => {
     osmo: Chain.Osmosis,
     terra: Chain.Terra,
     akash: Chain.Akash,
-    kujira: Chain.Kujira,
     noble: Chain.Noble,
     qbtc: Chain.QBTC,
   }

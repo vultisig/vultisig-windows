@@ -87,4 +87,36 @@ describe('resolveStartKeysignPromptProps', () => {
       })
     ).toStrictEqual({ disabledMessage: 'not_enough_funds' })
   })
+
+  it('keeps an oversized TON memo disabled with the SDK explanation', () => {
+    const message = 'TON memo must be at most 123 bytes (got 124).'
+    expect(
+      resolve({
+        keysignPayloadQuery: {
+          data: undefined,
+          error: new BuildKeysignPayloadError('ton-memo-too-long', message),
+          isPending: false,
+        },
+      })
+    ).toStrictEqual({ disabledMessage: message })
+  })
+
+  it.each<ConstructorParameters<typeof BuildKeysignPayloadError>[0]>([
+    'ripple-destination-not-activated',
+    'ripple-destination-trust-line-missing',
+    'ripple-issued-currency-amount-invalid',
+    'ripple-issuer-transfer-fee-unsupported',
+    'ripple-trust-line-issuer-not-activated',
+  ])('keeps %s disabled with its actionable SDK explanation', type => {
+    const message = `Cannot build payment: ${type}`
+    expect(
+      resolve({
+        keysignPayloadQuery: {
+          data: undefined,
+          error: new BuildKeysignPayloadError(type, message),
+          isPending: false,
+        },
+      })
+    ).toStrictEqual({ disabledMessage: message })
+  })
 })

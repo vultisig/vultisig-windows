@@ -235,7 +235,6 @@ export const lpChainMap: Partial<Record<string, Chain>> = {
   DOGE: Chain.Dogecoin,
   ETH: Chain.Ethereum,
   GAIA: Chain.Cosmos,
-  KUJI: Chain.Kujira,
   LTC: Chain.Litecoin,
   THOR: Chain.THORChain,
   TRON: Chain.Tron,
