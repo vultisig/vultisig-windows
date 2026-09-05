@@ -6,18 +6,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { getDepositFormConfig } from './getDepositFormConfig'
 
-/**
- * @vultisig/core-chain `coin/chainFeeCoin` imports `chains/cosmos/thor/kujira-merge.js`,
- * but the published package only provides `kujira-merge/index.js`, so the suite fails on
- * load in Vitest/Node ESM. Mock until the SDK fixes that internal re-export.
- */
-vi.mock('@vultisig/core-chain/coin/chainFeeCoin', () => ({
-  chainFeeCoin: {
-    Solana: { ticker: 'SOL' },
-    Ripple: { ticker: 'XRP', decimals: 6 },
-  },
-}))
-
 vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
   isValidAddress: vi.fn(),
 }))

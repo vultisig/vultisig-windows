@@ -18,7 +18,13 @@ export const TxStatusTracker = ({ chain, hash }: TxStatusTrackerProps) => {
       // `not_found` means the node has not seen the hash yet (broadcast still
       // propagating); keep showing the pending animation until it resolves.
       status={
-        isPending ? 'broadcasted' : status === 'not_found' ? 'pending' : status
+        isPending
+          ? 'broadcasted'
+          : status === 'not_found'
+            ? 'pending'
+            : status === 'expired'
+              ? 'error'
+              : status
       }
     />
   )

@@ -89,7 +89,7 @@
     "viem": "npm:2.55.10",
     "@bufbuild/protobuf": "^2.12.0",
     "@vultisig/mpc-types": "0.3.0",
-    "@vultisig/mpc-wasm": "0.1.7",
+    "@vultisig/mpc-wasm": "0.1.8",
     "tar": ">=7.5.21",
     "js-yaml@4.1.1": "4.3.1",
     "js-yaml@^4.1.1": "4.3.1",

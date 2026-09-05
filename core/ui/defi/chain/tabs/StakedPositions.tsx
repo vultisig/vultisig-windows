@@ -68,7 +68,6 @@ const tickerByCosmosStakingChain: Record<StakingChain, string> = {
   // their fee ticker so the Map type is exhaustive without unsafe casts.
   [Chain.Cosmos]: 'ATOM',
   [Chain.Osmosis]: 'OSMO',
-  [Chain.Kujira]: 'KUJI',
   [Chain.Dydx]: 'DYDX',
   [Chain.Noble]: 'USDC',
   [Chain.Akash]: 'AKT',
