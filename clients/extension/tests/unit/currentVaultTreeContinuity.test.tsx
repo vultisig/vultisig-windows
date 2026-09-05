@@ -14,6 +14,9 @@
  *   wrote becoming current
  * - the tree is still withheld before anything is on screen, so vault screens
  *   never render against unproven shares (the #4820 guarantee)
+ * - a flow running with an existing vault survives a second vault being
+ *   saved and becoming current, which is what a user with a vault already in
+ *   storage actually hits
  * - a storage refetch that rebuilds an unchanged vault neither blanks nor
  *   remounts the tree, while genuinely different shares — or a change to
  *   whether they are encrypted — still do
@@ -100,6 +103,7 @@ vi.mock('@core/ui/passcodeEncryption/core/vaultKeyShares', () => ({
 }))
 
 const vaultId = 'ecdsa-public-key'
+const secondVaultId = 'second-ecdsa-public-key'
 
 const makeVault = (overrides: Partial<Vault> = {}): Vault => ({
   name: 'Vault #1',
@@ -306,5 +310,48 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
     expect(screen.getByTestId('splash')).toBeDefined()
     expect(screen.queryByText('name your vault')).toBeNull()
+  })
+  it('keeps a running setup flow mounted when a second vault becomes current', async () => {
+    // The common case: the user already has a vault, so the flow runs with one
+    // current and the save switches the current vault rather than creating the
+    // first one.
+    storage.vaults = [makeVault()]
+    storage.currentVaultId = vaultId
+
+    const { rerender } = renderTree()
+    await settle()
+    await resolveRead()
+
+    await act(async () => {
+      screen.getByText('name your vault').click()
+    })
+    expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+    expect(mountCount).toBe(1)
+
+    storage.vaults = [
+      makeVault(),
+      makeVault({
+        name: 'Fast Vault #2',
+        publicKeys: { ecdsa: secondVaultId, eddsa: 'second-eddsa-public-key' },
+        keyShares: { ecdsa: 'second-ecdsa', eddsa: 'second-eddsa' },
+      }),
+    ]
+    storage.currentVaultId = secondVaultId
+    rerender(
+      <RootCurrentVaultProvider>
+        <SetupFlow />
+      </RootCurrentVaultProvider>
+    )
+    await settle()
+
+    expect(screen.queryByTestId('splash')).toBeNull()
+    expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+
+    await resolveRead({
+      keyShares: { ecdsa: 'proven-second-ecdsa', eddsa: 'proven-second-eddsa' },
+    })
+
+    expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+    expect(mountCount).toBe(1)
   })
 })

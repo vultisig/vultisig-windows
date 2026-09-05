@@ -40,6 +40,8 @@ export const [CurrentVaultProvider, useCurrentVault, CurrentVaultContext] =
     currentVaultContextId
   )
 
+type CurrentVaultValue = (Vault & Partial<{ coins: AccountCoin[] }>) | undefined
+
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
 
@@ -178,76 +180,81 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const resolution =
     shareState && shareState.shareKey === shareKey ? shareState.result : null
 
-  // Whether the tree below may keep running without a current vault. Replacing
-  // it with a splash unmounts every screen under this provider and discards
-  // their in-flight state, which is only free before anything is on screen. A
-  // tree that is already running without a current vault — vault creation,
-  // import, onboarding — keeps running without one while the vault it just
-  // wrote resolves, instead of being torn down and restarted from its first
-  // step (#4832). The permission is held until that read reaches a terminal
-  // result, so re-renders during it do not tear the tree down either.
-  const mayRunWithoutVault = useRef(false)
-  useEffect(() => {
+  const isImportView =
+    navigation.history[navigation.history.length - 1]?.id === 'importVault'
+
+  // What the tree below was last given: either no vault at all, or a vault
+  // whose shares were already proven. While a vault's shares are unresolved
+  // the tree holds that value instead of being torn down — replacing it with a
+  // splash unmounts every screen under this provider and discards their
+  // in-flight state, which is what dropped the fast vault setup flow back on
+  // its first step when the vault it had just saved became current (#4832).
+  // Holding never exposes unproven shares: the held value was either absent or
+  // proven.
+  const heldValue = useRef<{ value: CurrentVaultValue } | null>(null)
+
+  const provided: { value: CurrentVaultValue } | null = (() => {
     if (!vault) {
-      mayRunWithoutVault.current = true
-      return
+      return { value: undefined }
     }
 
-    if (resolution) {
-      mayRunWithoutVault.current = false
-    }
-  }, [vault, resolution])
-
-  if (!vault) {
-    return (
-      <CurrentVaultContext.Provider value={undefined}>
-        {children}
-      </CurrentVaultContext.Provider>
-    )
-  }
-
-  if (hasPasscodeEncryption && !passcode) {
-    return <ProductLogoBlock />
-  }
-
-  if (!resolution) {
-    if (mayRunWithoutVault.current) {
-      return (
-        <CurrentVaultContext.Provider value={undefined}>
-          {children}
-        </CurrentVaultContext.Provider>
-      )
+    if (hasPasscodeEncryption && !passcode) {
+      return null
     }
 
-    return <ProductLogoBlock />
-  }
+    if (!resolution) {
+      const held = heldValue.current
 
-  if (resolution.status === 'error') {
+      // A reshare keeps the vault id and replaces the shares, so holding here
+      // would pair this vault with shares it no longer has. Nothing is held
+      // for a tree that has not rendered yet either, which is what keeps vault
+      // screens from mounting against shares that were never read.
+      const isStaleSameVault =
+        held?.value !== undefined &&
+        getVaultId(held.value) === getVaultId(vault)
+
+      return isStaleSameVault ? null : held
+    }
+
+    if (resolution.status === 'error') {
+      return null
+    }
+
+    if (resolution.status === 'unreadable') {
+      return isImportView ? { value: undefined } : null
+    }
+
+    return { value: { ...vault, ...resolution.shares } }
+  })()
+
+  useEffect(() => {
+    if (provided) {
+      heldValue.current = provided
+    }
+  })
+
+  if (resolution?.status === 'error') {
     throw resolution.error
   }
 
-  if (resolution.status === 'unreadable') {
-    if (
-      navigation.history[navigation.history.length - 1]?.id === 'importVault'
-    ) {
-      return (
-        <UnreadableVaultRecoveryContext.Provider value={getVaultId(vault)}>
-          <CurrentVaultContext.Provider value={undefined}>
-            {children}
-          </CurrentVaultContext.Provider>
-        </UnreadableVaultRecoveryContext.Provider>
-      )
-    }
+  const isUnreadable = resolution?.status === 'unreadable'
 
-    return <UnreadableVaultRecovery />
+  if (!provided) {
+    return isUnreadable ? <UnreadableVaultRecovery /> : <ProductLogoBlock />
   }
 
-  const value = { ...vault, ...resolution.shares }
-
-  return (
-    <CurrentVaultContext.Provider value={value}>
+  const tree = (
+    <CurrentVaultContext.Provider value={provided.value}>
       {children}
     </CurrentVaultContext.Provider>
+  )
+
+  return isUnreadable && vault ? (
+    <UnreadableVaultRecoveryContext.Provider value={getVaultId(vault)}>
+      {tree}
+    </UnreadableVaultRecoveryContext.Provider>
+  ) : (
+    tree
   )
 }
 
