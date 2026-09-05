@@ -21,6 +21,11 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     filterFunction: (option: T, query: string) => boolean
     renderListHeader?: () => ReactNode
     renderFooter?: () => ReactNode
+    /** Rendered in place of the list when the query matches nothing. */
+    renderEmptyState?: () => ReactNode
+    /** Controls the search query; pairs with `onSearchQueryChange`. */
+    searchQuery?: string
+    onSearchQueryChange?: (query: string) => void
     virtualizePageSize?: number
     getKey?: (option: T, index: number) => string
     loadingLabel?: string
@@ -52,6 +57,11 @@ const ListWrapper = styled.div`
   overflow-y: auto;
 `
 
+/**
+ * Searchable single-choice modal. The query is uncontrolled unless
+ * `searchQuery` is supplied, which a caller needs when something outside the
+ * modal has to rewrite it — adding a token from `renderEmptyState`, say.
+ */
 export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   props: SelectItemModalProps<T>
 ) => {
@@ -63,13 +73,25 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
     filterFunction,
     renderFooter,
     renderListHeader,
+    renderEmptyState,
+    searchQuery: controlledSearchQuery,
+    onSearchQueryChange,
     virtualizePageSize,
     getKey,
     isLoading,
     loadingLabel,
   } = props
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const [uncontrolledSearchQuery, setUncontrolledSearchQuery] = useState('')
+
+  const searchQuery = controlledSearchQuery ?? uncontrolledSearchQuery
+
+  const setSearchQuery = (query: string) => {
+    if (controlledSearchQuery === undefined) {
+      setUncontrolledSearchQuery(query)
+    }
+    onSearchQueryChange?.(query)
+  }
 
   const filtered = useMemo(
     () => options.filter(o => filterFunction(o, searchQuery)),
@@ -81,10 +103,19 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
 
   const useVirtual = Boolean(virtualizePageSize) && filtered.length > 30
 
+  // The loading overlay owns the empty frame while a slower chain's options are
+  // still on the way, so an empty state can't flash before the list arrives.
+  const emptyState =
+    !isLoading && filtered.length === 0 ? renderEmptyState?.() : undefined
+
   return (
     <Modal onClose={() => onFinishRef.current()} title={title}>
       <Content gap={8}>
-        {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
+        {/* An active query has to stay clearable even when it leaves the modal
+            with fewer options than the field's own threshold. */}
+        {options.length > 1 || searchQuery ? (
+          <SearchField value={searchQuery} onSearch={setSearchQuery} />
+        ) : null}
         {renderListHeader?.() || <div />}
 
         <ListArea aria-busy={isLoading}>
@@ -92,39 +123,43 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
               Make it inert so keyboard/assistive tech can't focus or activate a
               stale option and close the modal, and guard onFinish as a backstop. */}
           <ListWrapper inert={isLoading}>
-            {useVirtual ? (
-              <Virtuoso
-                style={{ flex: 1 }}
-                totalCount={filtered.length}
-                data={filtered}
-                increaseViewportBy={
-                  virtualizePageSize ??
-                  defaultIncreaseViewportForVirtualizedList
-                }
-                itemContent={(index, item) => (
-                  <OptionComponent
-                    value={item}
-                    onClick={() => {
-                      if (!isLoading) onFinishRef.current(item)
+            {emptyState ?? (
+              <>
+                {useVirtual ? (
+                  <Virtuoso
+                    style={{ flex: 1 }}
+                    totalCount={filtered.length}
+                    data={filtered}
+                    increaseViewportBy={
+                      virtualizePageSize ??
+                      defaultIncreaseViewportForVirtualizedList
+                    }
+                    itemContent={(index, item) => (
+                      <OptionComponent
+                        value={item}
+                        onClick={() => {
+                          if (!isLoading) onFinishRef.current(item)
+                        }}
+                      />
+                    )}
+                    components={{
+                      List: StyledList,
                     }}
                   />
+                ) : (
+                  <NonVirtualList>
+                    {filtered.map((option, index) => (
+                      <OptionComponent
+                        key={getKey?.(option, index) || option?.id || index}
+                        value={option}
+                        onClick={() => {
+                          if (!isLoading) onFinishRef.current(option)
+                        }}
+                      />
+                    ))}
+                  </NonVirtualList>
                 )}
-                components={{
-                  List: StyledList,
-                }}
-              />
-            ) : (
-              <NonVirtualList>
-                {filtered.map((option, index) => (
-                  <OptionComponent
-                    key={getKey?.(option, index) || option?.id || index}
-                    value={option}
-                    onClick={() => {
-                      if (!isLoading) onFinishRef.current(option)
-                    }}
-                  />
-                ))}
-              </NonVirtualList>
+              </>
             )}
           </ListWrapper>
           {isLoading ? (

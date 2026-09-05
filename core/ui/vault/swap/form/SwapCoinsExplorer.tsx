@@ -1,7 +1,9 @@
+import { AddCustomTokenForm } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenForm'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
+import { Modal } from '@lib/ui/modal'
 import { InputProps, IsActiveProp, OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -17,7 +19,7 @@ import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
-import { useCallback, useDeferredValue, useMemo } from 'react'
+import { useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -32,7 +34,9 @@ import { SwapHorizontalDivider } from '../components/SwapHorizontalDivider'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
 import { useSwapEnabledChainsForVault } from '../state/useSwapEnabledChainsForVault'
+import { canAddCustomToken } from './canAddCustomToken'
 import { useCenteredSnapCarousel } from './hooks/useScrollSelectedChainIntoView'
+import { SwapCoinsEmptyState } from './SwapCoinsEmptyState'
 
 type SwapCoinsExplorerProps = OnCloseProp &
   Pick<InputProps<CoinKey>, 'onChange'> & {
@@ -52,6 +56,8 @@ export const SwapCoinsExplorer = ({
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
   const { mutateAsync: createCoin } = useCreateCoinMutation()
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isAddingCustomToken, setIsAddingCustomToken] = useState(false)
 
   // The carousel/highlight tracks the live `currentChain` so the selection
   // feels instant, while the heavy token list re-renders off `deferredChain`
@@ -147,14 +153,50 @@ export const SwapCoinsExplorer = ({
     []
   )
 
+  const showAddCustomToken = canAddCustomToken({
+    chain: currentChain,
+    searchQuery,
+  })
+
+  // The custom-token flow reads a contract address, which the ticker search can
+  // never match, so it replaces the picker rather than stacking on top of it.
+  if (isAddingCustomToken) {
+    return (
+      <Modal
+        title={t('find_custom_token')}
+        onClose={() => setIsAddingCustomToken(false)}
+      >
+        <AddCustomTokenForm
+          chain={currentChain}
+          onTokenAdded={coin => {
+            setIsAddingCustomToken(false)
+            // The query that found nothing still filters the list, so point it
+            // at what was just added instead of leaving the user on the empty
+            // state.
+            setSearchQuery(coin.ticker)
+          }}
+        />
+      </Modal>
+    )
+  }
+
   return (
     <SelectItemModal
       isLoading={isCoinListLoading}
       loadingLabel={t('loading')}
       virtualizePageSize={20}
       filterFunction={filterByTicker}
+      searchQuery={searchQuery}
+      onSearchQueryChange={setSearchQuery}
       title={t('select_asset')}
       optionComponent={CoinOption}
+      renderEmptyState={() => (
+        <SwapCoinsEmptyState
+          onClick={
+            showAddCustomToken ? () => setIsAddingCustomToken(true) : undefined
+          }
+        />
+      )}
       onFinish={async newValue => {
         if (newValue) {
           if (coins.some(c => areEqualCoins(c, newValue))) {

@@ -1,6 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { useCore } from '@core/ui/state/core'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -15,21 +14,31 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { EmptyState } from '@lib/ui/status/EmptyState'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
-import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { Coin, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultChainCoins } from '../../../vault/state/currentVaultCoins'
 import { useTokenMetadataQuery } from './queries/tokenMetadata'
 
-/** Pops add-custom-token then token picker (`manageVaultChainCoins`); result is inline on AddCustomTokenPage. */
-const tokenPickerDepthAfterCustomAdd = 2
+type CustomTokenResultProps = {
+  chain: Chain
+  id: string
+  onTokenAdded?: (coin: Coin) => void
+}
 
-export const CustomTokenResult = ({ id }: { id: string }) => {
-  const [{ chain, closeParentAfterAdd }] = useCoreViewState<'addCustomToken'>()
-  const { popNavigationHistory } = useCore()
+/**
+ * Resolves `id` to token metadata on `chain` and lets the user add or remove it
+ * from the vault. `onTokenAdded` fires only on a successful add, so the caller
+ * can leave the screen or refresh the list the user came from.
+ */
+export const CustomTokenResult = ({
+  chain,
+  id,
+  onTokenAdded,
+}: CustomTokenResultProps) => {
   const key = { chain, id } as const
 
   const query = useTokenMetadataQuery(key)
@@ -81,11 +90,7 @@ export const CustomTokenResult = ({ id }: { id: string }) => {
             deleteCoin.mutate(extractAccountCoinKey(currentCoin))
           } else {
             createCoin.mutate(coin, {
-              onSuccess: () => {
-                if (closeParentAfterAdd) {
-                  popNavigationHistory(tokenPickerDepthAfterCustomAdd)
-                }
-              },
+              onSuccess: () => onTokenAdded?.(coin),
             })
           }
         }

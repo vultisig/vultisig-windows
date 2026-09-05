@@ -20,9 +20,10 @@ const Container = styled(Hoverable)`
   }
 `
 
+/** Dismisses the modal it sits in; every modal that can close renders one. */
 export const ModalCloseButton = (props: OnClickProp & UiProps) => {
   return (
-    <Container {...props}>
+    <Container data-testid="modal-close-button" {...props}>
       <IconWrapper>
         <CrossIcon />
       </IconWrapper>
