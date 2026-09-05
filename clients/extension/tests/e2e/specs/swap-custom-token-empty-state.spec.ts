@@ -107,13 +107,7 @@ test.describe('swap asset search empty state', () => {
     await page.close()
   })
 
-  // Blocked on vultisig-windows#4820: `RootCurrentVaultProvider` compares the
-  // vault it resolved key shares for by object reference, and writing a coin
-  // hands it a fresh object. The whole tree is replaced by the splash for a
-  // frame, so every modal below it unmounts — the picker included — and the
-  // user lands back on a bare swap form instead of on the token they just
-  // added. Unskip once that comparison stops churning on coin writes.
-  test.fixme('a token added from the empty state can be picked into the form', async ({
+  test('a token added from the empty state can be picked into the form', async ({
     context,
     extensionId,
   }) => {
