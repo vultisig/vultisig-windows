@@ -43,14 +43,15 @@ func NewStore() (*Store, error) {
 		return nil, err
 	}
 
-	db, err := sql.Open("sqlite3", dbFilePath+"?_journal_mode=WAL")
+	// foreign_keys belongs in the DSN rather than a one-off Exec: database/sql
+	// hands out a pool of connections and the pragma is per-connection, so
+	// running it once only configures whichever connection happened to serve
+	// it. Every connection the pool opened later would default to
+	// foreign_keys=off and silently skip the ON DELETE CASCADE that clears a
+	// deleted vault's keyshares, agent tokens and transaction history.
+	db, err := sql.Open("sqlite3", dbFilePath+"?_journal_mode=WAL&_foreign_keys=on")
 	if err != nil {
 		return nil, fmt.Errorf("fail to open sqlite db, err: %w", err)
-	}
-
-	_, err = db.Exec("PRAGMA foreign_keys = ON;")
-	if err != nil {
-		return nil, fmt.Errorf("could not enable foreign key constraints: %w", err)
 	}
 
 	return &Store{
@@ -537,6 +538,16 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 func (s *Store) DeleteVault(publicKeyECDSA string) error {
 	if _, err := s.db.Exec("DELETE FROM coins WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
 		return fmt.Errorf("could not delete vault coins: %w", err)
+	}
+	// The ON DELETE CASCADE on these tables already covers them once foreign
+	// keys are on for every pooled connection. Deleting them explicitly keeps
+	// key material from outliving its vault even on a database whose rows
+	// predate that fix, or if the pragma ever regresses again.
+	if _, err := s.db.Exec("DELETE FROM keyshares WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
+		return fmt.Errorf("could not delete vault keyshares: %w", err)
+	}
+	if _, err := s.db.Exec("DELETE FROM transaction_history WHERE vault_id = ?", publicKeyECDSA); err != nil {
+		return fmt.Errorf("could not delete vault transaction history: %w", err)
 	}
 	_, err := s.db.Exec("DELETE FROM vaults WHERE public_key_ecdsa = ?", publicKeyECDSA)
 	return err
