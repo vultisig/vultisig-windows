@@ -14,7 +14,7 @@ import {
   Vault,
   VaultAllKeyShares,
 } from '@vultisig/core-mpc/vault/Vault'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createContext, useContext } from 'react'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
@@ -58,6 +58,36 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   return 'secure'
 }
 
+const sortedEntries = (
+  record: Record<string, string | undefined> | undefined
+) => Object.entries(record ?? {}).sort(([a], [b]) => a.localeCompare(b))
+
+/**
+ * Identifies the exact material a readability result was derived from. Storage
+ * rebuilds vault objects on every refetch, so tagging a settled result with the
+ * object it came from would discard it — and blank the app — on writes that
+ * never touched the shares. A reshare keeps the vault id but replaces the
+ * shares, so the shares themselves are what the key is built from.
+ */
+const getVaultShareKey = ({
+  keyShares,
+  chainKeyShares,
+  keyShareMldsa,
+  libType,
+  publicKeys,
+  chainPublicKeys,
+  publicKeyMldsa,
+}: Vault) =>
+  JSON.stringify([
+    libType,
+    keyShareMldsa ?? null,
+    publicKeyMldsa ?? null,
+    sortedEntries(keyShares),
+    sortedEntries(chainKeyShares),
+    sortedEntries(publicKeys),
+    sortedEntries(chainPublicKeys),
+  ])
+
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const { validateLegacyVaultKeyShares } = useCore()
   const [navigation] = useNavigation()
@@ -68,12 +98,14 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
 
-  // The result is tagged with the exact source vault object it came from. A
-  // reshare keeps the same id but changes the shares, so id-only state could
-  // expose a stale result. Stored shares are never provided while readability
-  // is unresolved.
+  const shareKey = vault ? getVaultShareKey(vault) : null
+
+  // The result is tagged with the share material it came from. A reshare keeps
+  // the same vault id but changes the shares, so id-only state could expose a
+  // stale result. Stored shares are never provided while readability is
+  // unresolved.
   const [shareState, setShareState] = useState<{
-    sourceVault: Vault
+    shareKey: string
     result:
       | { status: 'ready'; shares: VaultAllKeyShares }
       | { status: 'unreadable' }
@@ -103,7 +135,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .then(shares => {
         if (!cancelled) {
           setShareState({
-            sourceVault: vault,
+            shareKey: getVaultShareKey(vault),
             result: { status: 'ready', shares },
           })
         }
@@ -111,7 +143,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .catch(error => {
         if (!cancelled) {
           setShareState({
-            sourceVault: vault,
+            shareKey: getVaultShareKey(vault),
             result:
               error instanceof UnreadableVaultKeySharesError
                 ? { status: 'unreadable' }
@@ -131,6 +163,21 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     }
   }, [vault, passcode, hasPasscodeEncryption, validateLegacyVaultKeyShares])
 
+  // Whether the last committed render put the tree on screen without a current
+  // vault. Replacing the tree with a splash unmounts every screen under this
+  // provider and discards its in-flight state, which is only free before
+  // anything is on screen. A tree that is already running without a current
+  // vault — vault creation, import, onboarding — keeps running without one
+  // while the vault it just wrote resolves, instead of being torn down and
+  // restarted from its first step (#4832).
+  const wasRenderedWithoutVault = useRef(false)
+  useEffect(() => {
+    wasRenderedWithoutVault.current = !vault
+  }, [vault])
+
+  const resolution =
+    shareState && shareState.shareKey === shareKey ? shareState.result : null
+
   if (!vault) {
     return (
       <CurrentVaultContext.Provider value={undefined}>
@@ -143,15 +190,23 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return <ProductLogoBlock />
   }
 
-  if (shareState?.sourceVault !== vault) {
+  if (!resolution) {
+    if (wasRenderedWithoutVault.current) {
+      return (
+        <CurrentVaultContext.Provider value={undefined}>
+          {children}
+        </CurrentVaultContext.Provider>
+      )
+    }
+
     return <ProductLogoBlock />
   }
 
-  if (shareState.result.status === 'error') {
-    throw shareState.result.error
+  if (resolution.status === 'error') {
+    throw resolution.error
   }
 
-  if (shareState.result.status === 'unreadable') {
+  if (resolution.status === 'unreadable') {
     if (
       navigation.history[navigation.history.length - 1]?.id === 'importVault'
     ) {
@@ -167,7 +222,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return <UnreadableVaultRecovery />
   }
 
-  const value = { ...vault, ...shareState.result.shares }
+  const value = { ...vault, ...resolution.shares }
 
   return (
     <CurrentVaultContext.Provider value={value}>
