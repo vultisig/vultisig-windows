@@ -1964,4 +1964,6 @@ export const pt = {
   swap_failed_slippage_description:
     'O preço se alterou antes da conclusão desta operação de troca, portanto, o pagamento teria sido inferior à sua tolerância de slippage permitida, e a rede reverteu a transação. Aumente sua tolerância de slippage ou tente novamente.',
   swap_applied_discounts: 'Descontos aplicados:',
+  swap_add_custom_token: '+ Adicionar token personalizado',
+  swap_no_token_found: 'Nenhum token encontrado',
 }

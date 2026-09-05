@@ -1962,4 +1962,6 @@ export const es = {
   swap_failed_slippage_description:
     'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
   swap_applied_discounts: 'Descuentos aplicados:',
+  swap_add_custom_token: '+ Agregar token personalizado',
+  swap_no_token_found: 'No se encontró ningún token.',
 }
