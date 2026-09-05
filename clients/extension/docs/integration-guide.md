@@ -14,7 +14,7 @@
    - [Ethereum](#ethereum-windowvultisigethereum)
    - [THORChain](#thorchain-windowvultisigthorchain)
    - [Solana](#solana-windowvultisigsolana)
-   - [Cosmos-Based Chains](#cosmos-based-chains-dydx-gaiachain-kujira-osmosis)
+   - [Cosmos-Based Chains](#cosmos-based-chains-dydx-gaiachain-osmosis)
    - [UTXO Chains](#utxo-chains-bitcoin-bitcoincash-dogecoin-litecoin-zcash)
    - [Tron](#tron-windowtronlink-and-windowtronweb)
    - [Polkadot](#polkadot-windowvultisigpolkadot)
@@ -76,7 +76,6 @@ The extension provides:
 | DyDx        | `dydx-1`              | Cosmos        |
 | Ethereum    | `0x1`                 | EVM           |
 | GaiaChain   | `cosmoshub-4`         | Cosmos        |
-| Kujira      | `kaiyo-1`             | Cosmos        |
 | LiteCoin    | `Litecoin_litecoin`   | UTXO          |
 | MayaChain   | `MayaChain-1`         | Cosmos        |
 | Osmosis     | `osmosis-1`           | Cosmos        |
@@ -249,7 +248,7 @@ Vultisig implements the full [Solana Wallet Standard](https://github.com/wallet-
 - `signMessage(message)` -- returns `{ signature: Uint8Array }`
 - `signIn(input)` -- SIWS, returns `SolanaSignInOutput`
 
-### Cosmos-Based Chains (DyDx, GaiaChain, Kujira, Osmosis)
+### Cosmos-Based Chains (DyDx, GaiaChain, Osmosis)
 
 Accessible via `window.vultisig.cosmos`.
 
