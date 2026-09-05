@@ -28,6 +28,13 @@ import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
 import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
 
+type HasSameKeyShareSourceInput = {
+  /** The vault the held key-share result was read from. */
+  resolved: Vault
+  /** The vault currently on screen. */
+  current: Vault
+}
+
 /**
  * Whether two vault objects carry the same key-share material, which is all
  * that decides readability. Coins are merged into a fresh vault object on every
@@ -36,15 +43,18 @@ import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
  * affect readability. A reshare keeps the vault id but replaces the shares and
  * still invalidates, so the fail-closed guarantee holds.
  */
-const hasSameKeyShareSource = (a: Vault, b: Vault) =>
-  getVaultId(a) === getVaultId(b) &&
-  a.libType === b.libType &&
-  a.keyShares === b.keyShares &&
-  a.chainKeyShares === b.chainKeyShares &&
-  a.keyShareMldsa === b.keyShareMldsa &&
-  a.publicKeys === b.publicKeys &&
-  a.chainPublicKeys === b.chainPublicKeys &&
-  a.publicKeyMldsa === b.publicKeyMldsa
+const hasSameKeyShareSource = ({
+  resolved,
+  current,
+}: HasSameKeyShareSourceInput) =>
+  getVaultId(resolved) === getVaultId(current) &&
+  resolved.libType === current.libType &&
+  resolved.keyShares === current.keyShares &&
+  resolved.chainKeyShares === current.chainKeyShares &&
+  resolved.keyShareMldsa === current.keyShareMldsa &&
+  resolved.publicKeys === current.publicKeys &&
+  resolved.chainPublicKeys === current.chainPublicKeys &&
+  resolved.publicKeyMldsa === current.publicKeyMldsa
 
 const UnreadableVaultRecoveryContext = createContext<string | null>(null)
 
@@ -161,7 +171,10 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return <ProductLogoBlock />
   }
 
-  if (!shareState || !hasSameKeyShareSource(shareState.sourceVault, vault)) {
+  if (
+    !shareState ||
+    !hasSameKeyShareSource({ resolved: shareState.sourceVault, current: vault })
+  ) {
     return <ProductLogoBlock />
   }
 
