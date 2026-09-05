@@ -605,6 +605,10 @@ export const buildSendTxKeysignPayload = async ({
       }),
       transactionType: getTransactionType(),
       timeoutTimestamp: getTimeoutTimestamp(),
+      validUntil:
+        chain === Chain.Ton && 'regular' in customTxData
+          ? customTxData.regular.transactionDetails.validUntil
+          : undefined,
       ...getTronMeta(),
       psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
     })

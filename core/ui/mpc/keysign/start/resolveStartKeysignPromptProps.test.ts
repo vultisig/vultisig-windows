@@ -100,4 +100,23 @@ describe('resolveStartKeysignPromptProps', () => {
       })
     ).toStrictEqual({ disabledMessage: message })
   })
+
+  it.each<ConstructorParameters<typeof BuildKeysignPayloadError>[0]>([
+    'ripple-destination-not-activated',
+    'ripple-destination-trust-line-missing',
+    'ripple-issued-currency-amount-invalid',
+    'ripple-issuer-transfer-fee-unsupported',
+    'ripple-trust-line-issuer-not-activated',
+  ])('keeps %s disabled with its actionable SDK explanation', type => {
+    const message = `Cannot build payment: ${type}`
+    expect(
+      resolve({
+        keysignPayloadQuery: {
+          data: undefined,
+          error: new BuildKeysignPayloadError(type, message),
+          isPending: false,
+        },
+      })
+    ).toStrictEqual({ disabledMessage: message })
+  })
 })
