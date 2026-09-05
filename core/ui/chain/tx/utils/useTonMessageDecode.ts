@@ -13,7 +13,7 @@ import type {
 } from '@vultisig/core-chain/chains/ton/messageBody/types'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getKnownToken } from '@vultisig/core-chain/coin/knownTokens/utils'
 import { rootApiUrl } from '@vultisig/core-config'
 import { TonMessage } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -200,7 +200,7 @@ const isTonTokenCoin = (
 ): coin is AccountCoin & { id: string } => coin.chain === Chain.Ton && !!coin.id
 
 const getKnownTonCoin = (address: string): Coin | null =>
-  knownTokensIndex[Chain.Ton]?.[address.toLowerCase()] ?? null
+  getKnownToken({ chain: Chain.Ton, id: address }) ?? null
 
 type GetVaultTonCoinInput = {
   address: string

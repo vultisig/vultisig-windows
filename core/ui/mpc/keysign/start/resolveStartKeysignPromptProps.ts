@@ -3,7 +3,6 @@ import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
-import { match } from '@vultisig/lib-utils/match'
 import { TFunction } from 'i18next'
 
 import { StartKeysignPromptProps } from '../prompt/StartKeysignPromptProps'
@@ -66,25 +65,13 @@ export const resolveStartKeysignPromptProps = ({
 
   if (keysignPayloadQuery.error) {
     if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
-      return {
-        disabledMessage: match(keysignPayloadQuery.error.type, {
-          'not-enough-funds': () => t('not_enough_funds'),
-          'ripple-destination-not-activated': () =>
-            extractErrorMsg(keysignPayloadQuery.error),
-          'ripple-destination-tag-invalid': () =>
-            extractErrorMsg(keysignPayloadQuery.error),
-          'ripple-destination-tag-required': () =>
-            t('ripple_destination_tag_required'),
-          'ripple-destination-trust-line-missing': () =>
-            extractErrorMsg(keysignPayloadQuery.error),
-          'ripple-issued-currency-amount-invalid': () =>
-            extractErrorMsg(keysignPayloadQuery.error),
-          'ripple-issuer-transfer-fee-unsupported': () =>
-            extractErrorMsg(keysignPayloadQuery.error),
-          'ripple-trust-line-issuer-not-activated': () =>
-            extractErrorMsg(keysignPayloadQuery.error),
-          'ton-memo-too-long': () => extractErrorMsg(keysignPayloadQuery.error),
-        }),
+      if (keysignPayloadQuery.error.type === 'not-enough-funds') {
+        return { disabledMessage: t('not_enough_funds') }
+      }
+      if (
+        keysignPayloadQuery.error.type === 'ripple-destination-tag-required'
+      ) {
+        return { disabledMessage: t('ripple_destination_tag_required') }
       }
     }
     return {
