@@ -73,6 +73,7 @@ export const resolveStartKeysignPromptProps = ({
             extractErrorMsg(keysignPayloadQuery.error),
           'ripple-destination-tag-required': () =>
             t('ripple_destination_tag_required'),
+          'ton-memo-too-long': () => extractErrorMsg(keysignPayloadQuery.error),
         }),
       }
     }

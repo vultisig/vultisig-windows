@@ -117,7 +117,6 @@ type SupportedStationChain =
   | typeof Chain.Cosmos
   | typeof Chain.Osmosis
   | typeof Chain.Dydx
-  | typeof Chain.Kujira
   | typeof Chain.Terra
   | typeof Chain.TerraClassic
   | typeof Chain.Noble
@@ -139,7 +138,6 @@ const stationChainsByNetwork: Record<
     Chain.Cosmos,
     Chain.Osmosis,
     Chain.Dydx,
-    Chain.Kujira,
     Chain.Terra,
     Chain.Noble,
     Chain.Akash,
@@ -154,7 +152,6 @@ const stationChainPrefix: Record<SupportedStationChain, string> = {
   Cosmos: 'cosmos',
   Osmosis: 'osmo',
   Dydx: 'dydx',
-  Kujira: 'kujira',
   Terra: 'terra',
   TerraClassic: 'terra',
   Noble: 'noble',
@@ -168,7 +165,6 @@ const stationChainCoinType: Record<SupportedStationChain, '330' | '118'> = {
   Cosmos: '118',
   Osmosis: '118',
   Dydx: '118',
-  Kujira: '118',
   Terra: '330',
   TerraClassic: '330',
   Noble: '118',
@@ -182,7 +178,6 @@ const stationChainGasPrices: Record<
   Cosmos: { uatom: 0.025 },
   Osmosis: { uosmo: 0.025 },
   Dydx: { adydx: 12500000000 },
-  Kujira: { ukuji: 0.0034 },
   Terra: { uluna: 0.015 },
   TerraClassic: { uluna: 28.325 },
   Noble: { uusdc: 0.025 },
@@ -193,7 +188,6 @@ const stationChainGasAdjustment: Record<SupportedStationChain, number> = {
   Cosmos: 1.5,
   Osmosis: 1.5,
   Dydx: 1.5,
-  Kujira: 1.5,
   Terra: 1.75,
   TerraClassic: 2,
   Noble: 1.5,
@@ -204,7 +198,6 @@ const stationChainDisplayName: Record<SupportedStationChain, string> = {
   Cosmos: 'Cosmos Hub',
   Osmosis: 'Osmosis',
   Dydx: 'dYdX',
-  Kujira: 'Kujira',
   Terra: 'Terra',
   TerraClassic: 'Terra Classic',
   Noble: 'Noble',
@@ -374,7 +367,7 @@ export class Station {
    * Returns the chains in the currently active network as a flat
    * `Record<ChainID, ChainInfo>` — the exact shape produced by the official
    * `@terra-money/station-connector`. Mainnet exposes Cosmos Hub, Osmosis,
-   * dYdX, Kujira, Terra v2, Noble, and Akash; classic exposes Terra Classic.
+   * dYdX, Terra v2, Noble, and Akash; classic exposes Terra Classic.
    * Terra v2 and Terra Classic share the `terra` bech32 prefix and cannot
    * appear together in one network — call {@link switchNetwork}('classic')
    * to access Terra Classic.

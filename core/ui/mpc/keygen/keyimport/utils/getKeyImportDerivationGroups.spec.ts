@@ -47,7 +47,6 @@ describe('getKeyImportDerivationGroups', () => {
   it('groups Cosmos-118 chains together', () => {
     const chains: Chain[] = [
       CosmosChain.Cosmos,
-      CosmosChain.Kujira,
       CosmosChain.Dydx,
       CosmosChain.Osmosis,
       CosmosChain.Noble,
