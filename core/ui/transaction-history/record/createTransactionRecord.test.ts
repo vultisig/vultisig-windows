@@ -338,6 +338,12 @@ describe('createTransactionRecord — a send of an already-held XRPL token', () 
       }),
       toAddress,
       toAmount: '5000000000000000',
+      blockchainSpecific: {
+        case: 'rippleSpecific',
+        value: create(RippleSpecificSchema, {
+          transactionType: TransactionType.RIPPLE_PAYMENT,
+        }),
+      },
     })
 
   it('records a token send as a send, not a trust line', () => {

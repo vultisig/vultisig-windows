@@ -78,7 +78,8 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
     enabled: isPending,
     refetchInterval: query => {
       const status = query.state.data?.status
-      if (status === 'success' || status === 'error') return false
+      if (status === 'success' || status === 'error' || status === 'expired')
+        return false
       return getStatusPollingInterval(recordRef.current)
     },
   })

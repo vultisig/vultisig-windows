@@ -121,6 +121,24 @@ describe('getTxStatusRecordUpdate', () => {
     expect(update?.status).toBe('failed')
   })
 
+  it('fails a pending send when the SDK proves protocol expiration', () => {
+    const update = getTxStatusRecordUpdate({
+      record: sendRecord({ timestamp: freshTimestamp() }),
+      result: { status: 'expired', isKnown: true },
+    })
+
+    expect(update?.status).toBe('failed')
+  })
+
+  it('keeps an already failed send failed on protocol expiration', () => {
+    const update = getTxStatusRecordUpdate({
+      record: sendRecord({ timestamp: freshTimestamp(), status: 'failed' }),
+      result: { status: 'expired', isKnown: true },
+    })
+
+    expect(update).toBeNull()
+  })
+
   it('keeps stale pending swaps pending until an authoritative status resolves them', () => {
     vi.setSystemTime(new Date('2026-06-25T18:00:00Z'))
 
