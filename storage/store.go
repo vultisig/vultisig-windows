@@ -536,21 +536,36 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 
 // DeleteVault deletes a vault and its coins
 func (s *Store) DeleteVault(publicKeyECDSA string) error {
-	if _, err := s.db.Exec("DELETE FROM coins WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
+	// Every delete is one unit: a failure part-way through must not strip a
+	// vault of its keyshares while leaving the vault itself in place, because
+	// no retry can restore that key material.
+	tx, err := s.db.Begin()
+	if err != nil {
+		return fmt.Errorf("could not begin vault deletion transaction, err: %w", err)
+	}
+	defer func() { _ = tx.Rollback() }()
+
+	if _, err := tx.Exec("DELETE FROM coins WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
 		return fmt.Errorf("could not delete vault coins: %w", err)
 	}
 	// The ON DELETE CASCADE on these tables already covers them once foreign
 	// keys are on for every pooled connection. Deleting them explicitly keeps
 	// key material from outliving its vault even on a database whose rows
 	// predate that fix, or if the pragma ever regresses again.
-	if _, err := s.db.Exec("DELETE FROM keyshares WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
+	if _, err := tx.Exec("DELETE FROM keyshares WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
 		return fmt.Errorf("could not delete vault keyshares: %w", err)
 	}
-	if _, err := s.db.Exec("DELETE FROM transaction_history WHERE vault_id = ?", publicKeyECDSA); err != nil {
+	if _, err := tx.Exec("DELETE FROM transaction_history WHERE vault_id = ?", publicKeyECDSA); err != nil {
 		return fmt.Errorf("could not delete vault transaction history: %w", err)
 	}
-	_, err := s.db.Exec("DELETE FROM vaults WHERE public_key_ecdsa = ?", publicKeyECDSA)
-	return err
+	if _, err := tx.Exec("DELETE FROM vaults WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
+		return fmt.Errorf("could not delete vault: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("could not commit vault deletion, err: %w", err)
+	}
+	return nil
 }
 
 func (s *Store) GetCoins() (map[string][]Coin, error) {

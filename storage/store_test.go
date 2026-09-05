@@ -461,3 +461,37 @@ func TestForeignKeysEnabledOnEveryPooledConnection(t *testing.T) {
 		}
 	}
 }
+
+func TestDeleteVaultRollsBackWhenTheVaultDeleteFails(t *testing.T) {
+	store := newTestStore(t)
+
+	vault := testVault()
+	if err := store.SaveVault(vault); err != nil {
+		t.Fatal(err)
+	}
+
+	// Fail the final vault delete so the keyshare delete before it has already
+	// landed. Un-transacted, that is the window where a vault survives without
+	// the key material it needs and no retry can bring it back.
+	if _, err := store.db.Exec(`CREATE TRIGGER fail_vault_delete BEFORE DELETE ON vaults
+		BEGIN SELECT RAISE(ABORT, 'forced delete failure'); END;`); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := store.DeleteVault(vault.PublicKeyECDSA); err == nil {
+		t.Fatal("expected the vault delete to fail")
+	}
+
+	if _, err := store.db.Exec("DROP TRIGGER fail_vault_delete"); err != nil {
+		t.Fatal(err)
+	}
+
+	saved, err := store.GetVault(vault.PublicKeyECDSA)
+	if err != nil {
+		t.Fatalf("vault should still exist after a failed delete: %v", err)
+	}
+	if len(saved.KeyShares) != len(vault.KeyShares) {
+		t.Fatalf("keyshares destroyed by a failed delete: expected %d, got %d",
+			len(vault.KeyShares), len(saved.KeyShares))
+	}
+}
