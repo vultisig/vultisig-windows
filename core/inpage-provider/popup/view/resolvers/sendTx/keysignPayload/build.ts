@@ -7,6 +7,7 @@ import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { bittensorConfig } from '@vultisig/core-chain/chains/bittensor/config'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { polkadotConfig } from '@vultisig/core-chain/chains/polkadot/config'
+import { validateTonComment } from '@vultisig/core-chain/chains/ton/comment'
 import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
@@ -17,7 +18,6 @@ import {
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
-import { validateTonComment } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ton/native'
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
@@ -548,7 +548,7 @@ export const buildSendTxKeysignPayload = async ({
                 : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
-    validateTonComment(memo)
+    validateTonComment({ memo })
   }
 
   const needsUtxoInfo =
