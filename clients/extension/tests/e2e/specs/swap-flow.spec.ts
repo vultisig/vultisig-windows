@@ -535,10 +535,11 @@ test.describe('Swap Flow', () => {
       await totalFeesRow.getByRole('button').click()
 
       await expect(page.getByText('Network Fee', { exact: true })).toBeVisible()
-      // The affiliate rate is disclosed in the label itself (#4593).
+      // The row carries the undiscounted list rate in its label and the
+      // undiscounted amount as its value; discounts are itemized below (#4803).
       await expect(swapFlow.swapFeeRow).toBeVisible()
       await expect(swapFlow.swapFeeRow).toHaveText(
-        /(\$\d|Included in the quoted exchange rate|No Fee)/i
+        /(\$\d|Included in the quoted exchange rate)/i
       )
 
       await page.getByTestId('advanced-swap-settings').click()

@@ -2,11 +2,12 @@ import { getSwapAffiliateBps } from '@vultisig/core-chain/swap/affiliate'
 import {
   baseAffiliateBps,
   VultDiscountTier,
-  vultDiscountTierBps,
 } from '@vultisig/core-chain/swap/affiliate/config'
 import { SwapDiscount } from '@vultisig/core-chain/swap/discount/SwapDiscount'
 import { nativeSwapAffiliateConfig } from '@vultisig/core-chain/swap/native/nativeSwapAffiliateConfig'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
+import { sum } from '@vultisig/lib-utils/array/sum'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import { currentProductBrand } from '../../../product/brand'
 import { stationSwapAffiliateConfig } from './stationSwapAffiliateConfig'
@@ -86,17 +87,13 @@ export const formatFeeRateLabel = ({
 }: FormatFeeRateLabelInput): string =>
   `${name} (${formatAffiliateBpsPercent(bps)})`
 
-/** Basis points a VULT tier takes off the base affiliate rate. */
-export const getVultDiscountSavingBps = (tier: VultDiscountTier): number =>
-  vultDiscountTierBps[tier]
-
 /**
  * Basis points a friend referral takes off the base affiliate rate. Applying a
  * referral moves `referrerFeeRateBps` to the referrer and drops the product's
  * own share to `referralDiscountAffiliateFeeRateBps`, so the swap costs less in
  * total than the undiscounted base rate — that difference is the user's saving.
  */
-export const getReferralDiscountSavingBps = (): number => {
+const getReferralDiscountSavingBps = (): number => {
   const { referrerFeeRateBps, referralDiscountAffiliateFeeRateBps } =
     currentNativeSwapAffiliateConfig
 
@@ -106,45 +103,112 @@ export const getReferralDiscountSavingBps = (): number => {
   )
 }
 
-type GetSwapDiscountSavingInput = {
-  affiliate: SwapFee | undefined
-  /** Output the rate is charged on; see `SwapProviderFees.affiliateNotional`. */
-  notional: SwapFee | undefined
-  productBps: number
-  savingBps: number
+/** A discount itemized beneath the swap fee row, with the rate it waives. */
+export type SwapDiscountSaving = {
+  discount: SwapDiscount
+  bps: number
+}
+
+/** Every rate the expanded fee breakdown puts on screen. */
+export type SwapFeeDisclosure = {
+  /** bps the swap fee row is titled with, before the savings listed below it. */
+  listBps: number
+  /** bps the quote was actually requested with, across every affiliate. */
+  chargedBps: number
+  /** One entry per discount shown under the fee row, largest concern first. */
+  savings: SwapDiscountSaving[]
 }
 
 /**
- * Values a discount in the coin the affiliate fee is charged in.
+ * Prices a quote's discounts as the rates the breakdown discloses: a list rate
+ * on the fee row, and the savings that bring it down to what was charged.
  *
- * Preferred form scales the fee actually charged by the share of the rate that
- * was waived — exact, and free of any second guess at the notional. That fails
- * on two routes: one where the provider bakes its fee into the quoted rate and
- * itemizes nothing, and one already discounted to zero, where no fee remains to
- * scale from. Both still waived a real amount, so they fall back to charging
- * the waived rate against the payout rather than leaving the row blank.
+ * Savings are derived from the gap between the base rate and the bps actually
+ * requested rather than read off the tier table, so the rows always reconcile
+ * with the money. The two differ wherever a tier would waive more than the
+ * quote still had left to waive — a referred Ultimate swap keeps 10 bps for the
+ * referrer, leaving the tier 35 of its nominal 50 to claim.
+ *
+ * A discount the brand does not disclose comes off the list rate instead of
+ * appearing as a saving, so a hidden row can never break the reconciliation.
  */
-export const getSwapDiscountSaving = ({
+export const getSwapFeeDisclosure = (
+  discounts: SwapDiscount[]
+): SwapFeeDisclosure => {
+  const { product, referral } = getSwapQuoteAffiliateBps(discounts)
+  const chargedBps = product + referral
+
+  const visibleDiscounts =
+    currentProductBrand === 'station'
+      ? discounts.filter(discount => !('vult' in discount))
+      : discounts
+
+  const waivedBps = Math.max(0, baseAffiliateBps - chargedBps)
+  const referralSavingBps = visibleDiscounts.some(
+    discount => 'referral' in discount
+  )
+    ? Math.min(getReferralDiscountSavingBps(), waivedBps)
+    : 0
+
+  const savings = visibleDiscounts
+    .map(discount => ({
+      discount,
+      bps: matchRecordUnion<SwapDiscount, number>(discount, {
+        vult: () => waivedBps - referralSavingBps,
+        referral: () => referralSavingBps,
+      }),
+    }))
+    .filter(({ bps }) => bps > 0)
+
+  return {
+    chargedBps,
+    listBps: chargedBps + sum(savings.map(({ bps }) => bps)),
+    savings,
+  }
+}
+
+type GetSwapListRateFeeInput = {
+  affiliate: SwapFee | undefined
+  referral: SwapFee | undefined
+  /** Output the rate is charged on; see `SwapProviderFees.affiliateNotional`. */
+  notional: SwapFee | undefined
+  disclosure: SwapFeeDisclosure
+}
+
+/**
+ * Values the list rate in the coin the affiliate fee is charged in, so the fee
+ * row can quote the undiscounted price while the total stays net.
+ *
+ * Preferred form scales what every affiliate was actually charged up to the
+ * list rate — exact, and free of any second guess at the notional. A rate
+ * discounted all the way to zero leaves nothing to scale from, so it charges
+ * the list rate against the payout instead. A provider that itemizes no
+ * affiliate fee at all gets nothing: its cut is inside the quoted rate, and
+ * inventing an amount for it would disclose a charge the quote never made.
+ */
+export const getSwapListRateFee = ({
   affiliate,
+  referral,
   notional,
-  productBps,
-  savingBps,
-}: GetSwapDiscountSavingInput): SwapFee | undefined => {
-  if (savingBps <= 0) {
+  disclosure: { chargedBps, listBps },
+}: GetSwapListRateFeeInput): SwapFee | undefined => {
+  if (!affiliate) {
     return undefined
   }
 
-  if (affiliate && productBps > 0) {
+  if (chargedBps > 0) {
+    const chargedAmount = affiliate.amount + (referral?.amount ?? 0n)
+
     return {
       ...affiliate,
-      amount: (affiliate.amount * BigInt(savingBps)) / BigInt(productBps),
+      amount: (chargedAmount * BigInt(listBps)) / BigInt(chargedBps),
     }
   }
 
   return notional
     ? {
         ...notional,
-        amount: (notional.amount * BigInt(savingBps)) / BigInt(bpsPerUnit),
+        amount: (notional.amount * BigInt(listBps)) / BigInt(bpsPerUnit),
       }
     : undefined
 }

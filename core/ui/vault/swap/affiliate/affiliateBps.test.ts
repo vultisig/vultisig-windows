@@ -1,16 +1,17 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import { SwapDiscount } from '@vultisig/core-chain/swap/discount/SwapDiscount'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { describe, expect, it } from 'vitest'
 
 import {
   formatAffiliateBpsPercent,
-  getReferralDiscountSavingBps,
-  getSwapDiscountSaving,
+  getSwapFeeDisclosure,
+  getSwapListRateFee,
   getSwapQuoteAffiliateBps,
 } from './affiliateBps'
 
-const vultDiscount = (tier: 'gold' | 'ultimate'): SwapDiscount => ({
+const vultDiscount = (tier: VultDiscountTier): SwapDiscount => ({
   vult: { tier },
 })
 const referralDiscount: SwapDiscount = { referral: {} }
@@ -58,14 +59,6 @@ describe('getSwapQuoteAffiliateBps', () => {
   })
 })
 
-describe('getReferralDiscountSavingBps', () => {
-  it('reports the gap between the base rate and what a referral swap charges', () => {
-    const { product, referral } = getSwapQuoteAffiliateBps([referralDiscount])
-
-    expect(getReferralDiscountSavingBps()).toBe(50 - (product + referral))
-  })
-})
-
 describe('formatAffiliateBpsPercent', () => {
   it('renders basis points as a two-decimal percentage', () => {
     expect(formatAffiliateBpsPercent(50)).toBe('0.50%')
@@ -78,76 +71,166 @@ describe('formatAffiliateBpsPercent', () => {
   })
 })
 
-describe('getSwapDiscountSaving', () => {
+describe('getSwapFeeDisclosure', () => {
+  it('quotes the list rate and itemizes nothing when no discount applies', () => {
+    expect(getSwapFeeDisclosure([])).toEqual({
+      listBps: 50,
+      chargedBps: 50,
+      savings: [],
+    })
+  })
+
+  it('keeps the list rate on the fee row and states the tier as its own saving', () => {
+    expect(getSwapFeeDisclosure([vultDiscount('gold')])).toEqual({
+      listBps: 50,
+      chargedBps: 30,
+      savings: [{ discount: vultDiscount('gold'), bps: 20 }],
+    })
+  })
+
+  it('reports a referral as the gap between the base rate and what was charged', () => {
+    expect(getSwapFeeDisclosure([referralDiscount])).toEqual({
+      listBps: 50,
+      chargedBps: 45,
+      savings: [{ discount: referralDiscount, bps: 5 }],
+    })
+  })
+
+  it('itemizes a tier and a referral separately under one list rate', () => {
+    expect(
+      getSwapFeeDisclosure([vultDiscount('gold'), referralDiscount])
+    ).toEqual({
+      listBps: 50,
+      chargedBps: 25,
+      savings: [
+        { discount: vultDiscount('gold'), bps: 20 },
+        { discount: referralDiscount, bps: 5 },
+      ],
+    })
+  })
+
+  it('states a full waiver as the whole list rate coming off', () => {
+    expect(getSwapFeeDisclosure([vultDiscount('ultimate')])).toEqual({
+      listBps: 50,
+      chargedBps: 0,
+      savings: [{ discount: vultDiscount('ultimate'), bps: 50 }],
+    })
+  })
+
+  it('claims for a tier only what the referrer left it to waive', () => {
+    // The referrer still takes 10 bps, so the top tier's nominal 50 cannot all
+    // be waived — it claims 35, the referral 5, and the rows still reconcile.
+    expect(
+      getSwapFeeDisclosure([vultDiscount('ultimate'), referralDiscount])
+    ).toEqual({
+      listBps: 50,
+      chargedBps: 10,
+      savings: [
+        { discount: vultDiscount('ultimate'), bps: 35 },
+        { discount: referralDiscount, bps: 5 },
+      ],
+    })
+  })
+
+  it('reconciles the rows against the charged rate for every tier', () => {
+    const tiers: VultDiscountTier[] = [
+      'bronze',
+      'silver',
+      'gold',
+      'platinum',
+      'diamond',
+      'ultimate',
+    ]
+
+    tiers.forEach(tier => {
+      ;[[vultDiscount(tier)], [vultDiscount(tier), referralDiscount]].forEach(
+        discounts => {
+          const { listBps, chargedBps, savings } =
+            getSwapFeeDisclosure(discounts)
+          const waived = savings.reduce((total, { bps }) => total + bps, 0)
+
+          expect(listBps).toBe(50)
+          expect(chargedBps + waived).toBe(listBps)
+        }
+      )
+    })
+  })
+})
+
+describe('getSwapListRateFee', () => {
+  const disclosure = getSwapFeeDisclosure([vultDiscount('gold')])
+
+  // 300 charged at 30 bps puts the 50 bps list rate at 500.
   const affiliate: SwapFee = {
     chain: Chain.Ethereum,
     amount: 300n,
     decimals: 8,
   }
 
-  // 1_000_000 of output at 20 bps is worth 2_000.
+  // 1_000_000 of output at 50 bps is worth 5_000.
   const notional: SwapFee = {
     chain: Chain.Ethereum,
     amount: 1_000_000n,
     decimals: 8,
   }
 
-  it('scales the charged fee by the waived share of the rate', () => {
-    // 300 charged at 30 bps means 20 bps were worth 200.
+  it('scales the charged fee up to the list rate', () => {
     expect(
-      getSwapDiscountSaving({
+      getSwapListRateFee({
         affiliate,
+        referral: undefined,
         notional,
-        productBps: 30,
-        savingBps: 20,
+        disclosure,
       })
-    ).toEqual({ ...affiliate, amount: 200n })
+    ).toEqual({ ...affiliate, amount: 500n })
   })
 
-  it('charges the waived rate against the payout when the fee was never itemized', () => {
-    // A provider that bakes its fee into the quoted rate still waived a real
-    // amount; the row reports it rather than rendering blank.
+  it('counts the referrer inside the list rate rather than beside it', () => {
+    // 150 to the product and 100 to the referrer is the same 25 bps the quote
+    // was requested with, so the list rate is still worth 500.
     expect(
-      getSwapDiscountSaving({
-        affiliate: undefined,
+      getSwapListRateFee({
+        affiliate: { ...affiliate, amount: 150n },
+        referral: { ...affiliate, amount: 100n },
         notional,
-        productBps: 30,
-        savingBps: 20,
+        disclosure: getSwapFeeDisclosure([
+          vultDiscount('gold'),
+          referralDiscount,
+        ]),
       })
-    ).toEqual({ ...notional, amount: 2_000n })
+    ).toEqual({ ...affiliate, amount: 500n })
   })
 
-  it('values a discount that waived the rate entirely', () => {
-    // Nothing was charged, so there is no fee left to scale from — the full
-    // 50 bps still came off the payout.
+  it('charges the list rate against the payout when nothing was charged at all', () => {
     expect(
-      getSwapDiscountSaving({
-        affiliate,
+      getSwapListRateFee({
+        affiliate: { ...affiliate, amount: 0n },
+        referral: undefined,
         notional,
-        productBps: 0,
-        savingBps: 50,
+        disclosure: getSwapFeeDisclosure([vultDiscount('ultimate')]),
       })
     ).toEqual({ ...notional, amount: 5_000n })
   })
 
-  it('reports nothing only when neither the fee nor the payout is known', () => {
+  it('reports nothing when the provider bakes its fee into the quoted rate', () => {
+    // Inventing an amount here would disclose a charge the quote never made.
     expect(
-      getSwapDiscountSaving({
+      getSwapListRateFee({
         affiliate: undefined,
-        notional: undefined,
-        productBps: 30,
-        savingBps: 20,
+        referral: undefined,
+        notional,
+        disclosure,
       })
     ).toBeUndefined()
   })
 
-  it('reports nothing when no rate was waived at all', () => {
+  it('reports nothing when neither the fee nor the payout is known', () => {
     expect(
-      getSwapDiscountSaving({
-        affiliate,
-        notional,
-        productBps: 50,
-        savingBps: 0,
+      getSwapListRateFee({
+        affiliate: { ...affiliate, amount: 0n },
+        referral: undefined,
+        notional: undefined,
+        disclosure: getSwapFeeDisclosure([vultDiscount('ultimate')]),
       })
     ).toBeUndefined()
   })

@@ -3,7 +3,10 @@ import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderL
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getSwapQuoteAffiliateBps } from '@core/ui/vault/swap/affiliate/affiliateBps'
+import {
+  getSwapFeeDisclosure,
+  getSwapQuoteAffiliateBps,
+} from '@core/ui/vault/swap/affiliate/affiliateBps'
 import { SwapDiscountInfo } from '@core/ui/vault/swap/form/info/SwapDiscountInfo'
 import { SwapFeeRowRenderer } from '@core/ui/vault/swap/form/info/swapFeeRow'
 import { SwapPriceImpactRow } from '@core/ui/vault/swap/form/info/SwapPriceImpactRow'
@@ -76,8 +79,7 @@ const getKeysignQuoteFees = ({
   const affiliateBps = getSwapQuoteAffiliateBps(swapQuote.discounts)
 
   return {
-    affiliateBps,
-    discounts: swapQuote.discounts,
+    disclosure: getSwapFeeDisclosure(swapQuote.discounts),
     quote: swapQuote.quote,
     fees: getSwapProviderFees({
       quote: swapQuote.quote,
@@ -266,14 +268,11 @@ export const SwapKeysignTxOverview = ({
               <SwapProviderFeeRows
                 renderRow={renderFeeRow}
                 fees={quoteFees.fees}
-                affiliateBps={quoteFees.affiliateBps}
+                disclosure={quoteFees.disclosure}
               />
               <SwapDiscountInfo
                 renderRow={renderFeeRow}
-                discounts={quoteFees.discounts}
-                affiliate={quoteFees.fees.affiliate}
-                notional={quoteFees.fees.affiliateNotional}
-                affiliateBps={quoteFees.affiliateBps}
+                savings={quoteFees.disclosure.savings}
               />
               <SwapPriceImpactRow
                 renderRow={renderFeeRow}

@@ -1881,7 +1881,6 @@ export const nl = {
   price_impact: 'Prijsimpact',
   swap_fee_included_in_rate: 'Inbegrepen in de vermelde wisselkoers',
   swap_protocol_fee: 'Protocolkosten',
-  swap_referral_fee: 'Verwijzingsvergoeding',
   select_route: 'Route selecteren',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1945,4 +1944,5 @@ export const nl = {
   swap_failed_slippage: 'De prijs is buiten de sliptolerantie getreden.',
   swap_failed_slippage_description:
     'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
+  swap_applied_discounts: 'Toegepaste kortingen:',
 }
