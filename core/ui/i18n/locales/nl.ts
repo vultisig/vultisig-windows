@@ -1945,4 +1945,6 @@ export const nl = {
   swap_failed_slippage: 'De prijs is buiten de sliptolerantie getreden.',
   swap_failed_slippage_description:
     'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
+  swap_add_custom_token: '+ Voeg een aangepast token toe',
+  swap_no_token_found: 'Geen token gevonden',
 }

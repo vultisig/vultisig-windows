@@ -1977,4 +1977,6 @@ export const de = {
   swap_failed_slippage: 'Der Preis hat die Toleranzgrenze überschritten.',
   swap_failed_slippage_description:
     'Der Kurs hat sich vor der Ausführung des Swaps geändert, daher wäre die Auszahlung geringer gewesen als Ihre Slippage-Toleranz erlaubt gewesen, und das Netzwerk hat den Swap rückgängig gemacht. Erhöhen Sie Ihre Slippage-Toleranz oder versuchen Sie es erneut.',
+  swap_add_custom_token: '+ Benutzerdefiniertes Token hinzufügen',
+  swap_no_token_found: 'Kein Token gefunden',
 }

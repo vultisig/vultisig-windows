@@ -28,6 +28,34 @@ import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
 import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
 
+type HasSameKeyShareSourceInput = {
+  /** The vault the held key-share result was read from. */
+  resolved: Vault
+  /** The vault currently on screen. */
+  current: Vault
+}
+
+/**
+ * Whether two vault objects carry the same key-share material, which is all
+ * that decides readability. Coins are merged into a fresh vault object on every
+ * coin write, so comparing the objects themselves would discard a resolved
+ * result — and unmount everything below this provider — on a change that cannot
+ * affect readability. A reshare keeps the vault id but replaces the shares and
+ * still invalidates, so the fail-closed guarantee holds.
+ */
+const hasSameKeyShareSource = ({
+  resolved,
+  current,
+}: HasSameKeyShareSourceInput) =>
+  getVaultId(resolved) === getVaultId(current) &&
+  resolved.libType === current.libType &&
+  resolved.keyShares === current.keyShares &&
+  resolved.chainKeyShares === current.chainKeyShares &&
+  resolved.keyShareMldsa === current.keyShareMldsa &&
+  resolved.publicKeys === current.publicKeys &&
+  resolved.chainPublicKeys === current.chainPublicKeys &&
+  resolved.publicKeyMldsa === current.publicKeyMldsa
+
 const UnreadableVaultRecoveryContext = createContext<string | null>(null)
 
 export const useUnreadableVaultRecoveryId = () =>
@@ -143,7 +171,10 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return <ProductLogoBlock />
   }
 
-  if (shareState?.sourceVault !== vault) {
+  if (
+    !shareState ||
+    !hasSameKeyShareSource({ resolved: shareState.sourceVault, current: vault })
+  ) {
     return <ProductLogoBlock />
   }
 
