@@ -62,23 +62,33 @@ const sortedEntries = (
   record: Record<string, string | undefined> | undefined
 ) => Object.entries(record ?? {}).sort(([a], [b]) => a.localeCompare(b))
 
+type GetVaultShareKeyInput = {
+  vault: Vault
+  hasPasscodeEncryption: boolean
+}
+
 /**
- * Identifies the exact material a readability result was derived from. Storage
+ * Identifies every input a readability result was derived from. Storage
  * rebuilds vault objects on every refetch, so tagging a settled result with the
  * object it came from would discard it — and blank the app — on writes that
  * never touched the shares. A reshare keeps the vault id but replaces the
- * shares, so the shares themselves are what the key is built from.
+ * shares, and the same stored bytes read differently once encryption is
+ * switched on or off, so both are part of the key.
  */
 const getVaultShareKey = ({
-  keyShares,
-  chainKeyShares,
-  keyShareMldsa,
-  libType,
-  publicKeys,
-  chainPublicKeys,
-  publicKeyMldsa,
-}: Vault) =>
+  vault: {
+    keyShares,
+    chainKeyShares,
+    keyShareMldsa,
+    libType,
+    publicKeys,
+    chainPublicKeys,
+    publicKeyMldsa,
+  },
+  hasPasscodeEncryption,
+}: GetVaultShareKeyInput) =>
   JSON.stringify([
+    hasPasscodeEncryption,
     libType,
     keyShareMldsa ?? null,
     publicKeyMldsa ?? null,
@@ -98,7 +108,9 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
 
-  const shareKey = vault ? getVaultShareKey(vault) : null
+  const shareKey = vault
+    ? getVaultShareKey({ vault, hasPasscodeEncryption })
+    : null
 
   // The result is tagged with the share material it came from. A reshare keeps
   // the same vault id but changes the shares, so id-only state could expose a
@@ -135,7 +147,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .then(shares => {
         if (!cancelled) {
           setShareState({
-            shareKey: getVaultShareKey(vault),
+            shareKey: getVaultShareKey({ vault, hasPasscodeEncryption }),
             result: { status: 'ready', shares },
           })
         }
@@ -143,7 +155,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .catch(error => {
         if (!cancelled) {
           setShareState({
-            shareKey: getVaultShareKey(vault),
+            shareKey: getVaultShareKey({ vault, hasPasscodeEncryption }),
             result:
               error instanceof UnreadableVaultKeySharesError
                 ? { status: 'unreadable' }
@@ -163,20 +175,28 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     }
   }, [vault, passcode, hasPasscodeEncryption, validateLegacyVaultKeyShares])
 
-  // Whether the last committed render put the tree on screen without a current
-  // vault. Replacing the tree with a splash unmounts every screen under this
-  // provider and discards its in-flight state, which is only free before
-  // anything is on screen. A tree that is already running without a current
-  // vault — vault creation, import, onboarding — keeps running without one
-  // while the vault it just wrote resolves, instead of being torn down and
-  // restarted from its first step (#4832).
-  const wasRenderedWithoutVault = useRef(false)
-  useEffect(() => {
-    wasRenderedWithoutVault.current = !vault
-  }, [vault])
-
   const resolution =
     shareState && shareState.shareKey === shareKey ? shareState.result : null
+
+  // Whether the tree below may keep running without a current vault. Replacing
+  // it with a splash unmounts every screen under this provider and discards
+  // their in-flight state, which is only free before anything is on screen. A
+  // tree that is already running without a current vault — vault creation,
+  // import, onboarding — keeps running without one while the vault it just
+  // wrote resolves, instead of being torn down and restarted from its first
+  // step (#4832). The permission is held until that read reaches a terminal
+  // result, so re-renders during it do not tear the tree down either.
+  const mayRunWithoutVault = useRef(false)
+  useEffect(() => {
+    if (!vault) {
+      mayRunWithoutVault.current = true
+      return
+    }
+
+    if (resolution) {
+      mayRunWithoutVault.current = false
+    }
+  }, [vault, resolution])
 
   if (!vault) {
     return (
@@ -191,7 +211,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   }
 
   if (!resolution) {
-    if (wasRenderedWithoutVault.current) {
+    if (mayRunWithoutVault.current) {
       return (
         <CurrentVaultContext.Provider value={undefined}>
           {children}

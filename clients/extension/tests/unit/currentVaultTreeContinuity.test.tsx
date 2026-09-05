@@ -15,7 +15,8 @@
  * - the tree is still withheld before anything is on screen, so vault screens
  *   never render against unproven shares (the #4820 guarantee)
  * - a storage refetch that rebuilds an unchanged vault neither blanks nor
- *   remounts the tree, while genuinely different shares still do
+ *   remounts the tree, while genuinely different shares — or a change to
+ *   whether they are encrypted — still do
  */
 import { RootCurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
@@ -24,9 +25,16 @@ import type { Vault, VaultAllKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { useEffect } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const storage: { vaults: Vault[]; currentVaultId: string | null } = {
+const storage: {
+  vaults: Vault[]
+  currentVaultId: string | null
+  hasPasscodeEncryption: boolean
+  passcode: string | null
+} = {
   vaults: [],
   currentVaultId: null,
+  hasPasscodeEncryption: false,
+  passcode: null,
 }
 
 let readCalls: {
@@ -58,11 +66,11 @@ vi.mock('@core/ui/chain/providers/WalletCoreProvider', () => ({
 }))
 
 vi.mock('@core/ui/passcodeEncryption/state/passcode', () => ({
-  usePasscode: () => [null],
+  usePasscode: () => [storage.passcode],
 }))
 
 vi.mock('@core/ui/passcodeEncryption/state/useIsPasscodeRequired', () => ({
-  useIsPasscodeRequired: () => false,
+  useIsPasscodeRequired: () => storage.hasPasscodeEncryption,
 }))
 
 vi.mock('@core/ui/storage/vaults', () => ({
@@ -147,6 +155,8 @@ describe('RootCurrentVaultProvider tree continuity', () => {
   beforeEach(() => {
     storage.vaults = []
     storage.currentVaultId = null
+    storage.hasPasscodeEncryption = false
+    storage.passcode = null
     readCalls = []
     mountCount = 0
   })
@@ -234,6 +244,59 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     storage.vaults = [
       makeVault({ keyShares: { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' } }),
     ]
+    rerender(
+      <RootCurrentVaultProvider>
+        <SetupFlow />
+      </RootCurrentVaultProvider>
+    )
+    await settle()
+
+    expect(screen.getByTestId('splash')).toBeDefined()
+    expect(screen.queryByText('name your vault')).toBeNull()
+  })
+  it('holds the tree through re-renders while the saved vault is still unresolved', async () => {
+    const { rerender } = renderTree()
+
+    await act(async () => {
+      screen.getByText('name your vault').click()
+    })
+
+    storage.vaults = [makeVault()]
+    storage.currentVaultId = vaultId
+
+    // The save fans out several storage writes, so the provider re-renders
+    // more than once before the read it kicked off settles.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      rerender(
+        <RootCurrentVaultProvider>
+          <SetupFlow />
+        </RootCurrentVaultProvider>
+      )
+      await settle()
+
+      expect(screen.queryByTestId('splash')).toBeNull()
+      expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+    }
+
+    await resolveRead()
+
+    expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+    expect(mountCount).toBe(1)
+  })
+
+  it('withholds the tree when encryption is switched on over the same shares', async () => {
+    storage.vaults = [makeVault()]
+    storage.currentVaultId = vaultId
+
+    const { rerender } = renderTree()
+    await settle()
+    await resolveRead()
+    expect(screen.getByText('name your vault')).toBeDefined()
+
+    // Same stored bytes, but they now have to be decrypted before they can be
+    // provided, so the plaintext result proven a moment ago no longer applies.
+    storage.hasPasscodeEncryption = true
+    storage.passcode = 'passcode'
     rerender(
       <RootCurrentVaultProvider>
         <SetupFlow />
