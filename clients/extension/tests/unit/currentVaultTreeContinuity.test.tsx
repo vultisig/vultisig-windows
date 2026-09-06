@@ -20,11 +20,11 @@
  * - that hold is limited to the views that write a vault: picking another
  *   existing vault anywhere else withholds the tree until it is proven, so no
  *   screen keeps showing the previous vault under the new id
- * - a storage refetch that rebuilds an unchanged vault neither blanks nor
- *   remounts the tree, while genuinely different shares — or a change to
- *   whether they are encrypted — still do
- * - a read is tagged with the material it was requested for, so shares
- *   replaced on the same object while it was in flight are never provided
+ * - a vaults write that rebuilds the vault object neither blanks nor remounts
+ *   the tree, while genuinely different shares — or a change to whether they
+ *   are encrypted — still do
+ * - a read is tagged with the inputs it was requested under, so a result
+ *   superseded while it was in flight is never provided
  */
 import { RootCurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
@@ -154,7 +154,10 @@ const SetupFlow = () => {
 const renderTree = (children = <SetupFlow />) =>
   render(<RootCurrentVaultProvider>{children}</RootCurrentVaultProvider>)
 
-const settle = () => act(async () => { await Promise.resolve() })
+const settle = () =>
+  act(async () => {
+    await Promise.resolve()
+  })
 
 const resolveReadAt = async (index: number, shares = provenShares) => {
   const call = readCalls[index]
@@ -225,8 +228,9 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(mountCount).toBe(1)
   })
 
-  it('survives a storage refetch that rebuilds the same vault', async () => {
-    storage.vaults = [makeVault()]
+  it('survives a vaults write that rebuilds the vault object', async () => {
+    const vault = makeVault()
+    storage.vaults = [vault]
     storage.currentVaultId = vaultId
 
     const { rerender } = renderTree()
@@ -234,9 +238,13 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     await resolveRead()
     expect(mountCount).toBe(1)
 
-    // `useVaultsQuery` maps storage rows into fresh objects on every refetch,
-    // so an unrelated write hands the provider a new object for the same vault.
-    storage.vaults = [makeVault()]
+    // What a rename actually hands the provider. `useUpdateVaultMutation`
+    // refetches `[StorageKey.vaults]`, and storage builds fresh objects on
+    // every read — but React Query's structural sharing replaces only what
+    // changed, and `mergeVaultsWithCoins` then spreads each vault into
+    // `{...vault, coins}`. So the outer object is new while the share records
+    // it was read from are the same ones.
+    storage.vaults = [{ ...vault, name: 'Renamed' }]
     rerender(
       <RootCurrentVaultProvider>
         <SetupFlow />
@@ -259,7 +267,9 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
     // A reshare keeps the vault id and replaces the share material.
     storage.vaults = [
-      makeVault({ keyShares: { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' } }),
+      makeVault({
+        keyShares: { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' },
+      }),
     ]
     rerender(
       <RootCurrentVaultProvider>
@@ -409,9 +419,8 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(mountCount).toBe(2)
   })
 
-  it('never provides a read whose shares were replaced on the same object while it was in flight', async () => {
-    const vault = makeVault()
-    storage.vaults = [vault]
+  it('never provides a read that was superseded while it was in flight', async () => {
+    storage.vaults = [makeVault()]
     storage.currentVaultId = vaultId
 
     const { rerender } = renderTree()
@@ -419,9 +428,10 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(readCalls).toHaveLength(1)
     expect(screen.getByTestId('splash')).toBeDefined()
 
-    // The share material changes without the object identity changing, so the
-    // result of the first read describes shares the vault no longer holds.
-    vault.keyShares = { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' }
+    // A reshare lands before the first read settles, so that read describes
+    // shares the vault no longer holds.
+    const reshared = { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' }
+    storage.vaults = [makeVault({ keyShares: reshared })]
     rerender(
       <RootCurrentVaultProvider>
         <SetupFlow />
@@ -430,7 +440,7 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     await settle()
 
     expect(readCalls).toHaveLength(2)
-    expect(readCalls[1].input.keyShares).toEqual(vault.keyShares)
+    expect(readCalls[1].input.keyShares).toEqual(reshared)
 
     await resolveReadAt(0)
 
@@ -438,7 +448,10 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(screen.queryByText('name your vault')).toBeNull()
 
     await resolveReadAt(1, {
-      keyShares: { ecdsa: 'proven-reshared-ecdsa', eddsa: 'proven-reshared-eddsa' },
+      keyShares: {
+        ecdsa: 'proven-reshared-ecdsa',
+        eddsa: 'proven-reshared-eddsa',
+      },
     })
 
     expect(screen.queryByTestId('splash')).toBeNull()

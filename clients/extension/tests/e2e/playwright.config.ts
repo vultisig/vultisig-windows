@@ -110,6 +110,7 @@ export default defineConfig({
         '**/navigation-design.spec.ts',
         '**/viewport-fit.spec.ts',
         '**/undecryptable-vault.spec.ts',
+        '**/swap-custom-token-empty-state.spec.ts',
       ],
       use: {
         launchOptions: {

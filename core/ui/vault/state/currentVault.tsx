@@ -28,6 +28,11 @@ import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPassc
 import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
 import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
+import {
+  getVaultReadabilityInputs,
+  hasSameReadabilityInputs,
+  VaultReadabilityInputs,
+} from './vaultReadability'
 
 const UnreadableVaultRecoveryContext = createContext<string | null>(null)
 
@@ -61,46 +66,6 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   return 'secure'
 }
 
-const sortedEntries = (
-  record: Record<string, string | undefined> | undefined
-) => Object.entries(record ?? {}).sort(([a], [b]) => a.localeCompare(b))
-
-type GetVaultShareKeyInput = {
-  vault: Vault
-  hasPasscodeEncryption: boolean
-}
-
-/**
- * Identifies every input a readability result was derived from. Storage
- * rebuilds vault objects on every refetch, so tagging a settled result with the
- * object it came from would discard it — and blank the app — on writes that
- * never touched the shares. A reshare keeps the vault id but replaces the
- * shares, and the same stored bytes read differently once encryption is
- * switched on or off, so both are part of the key.
- */
-const getVaultShareKey = ({
-  vault: {
-    keyShares,
-    chainKeyShares,
-    keyShareMldsa,
-    libType,
-    publicKeys,
-    chainPublicKeys,
-    publicKeyMldsa,
-  },
-  hasPasscodeEncryption,
-}: GetVaultShareKeyInput) =>
-  JSON.stringify([
-    hasPasscodeEncryption,
-    libType,
-    keyShareMldsa ?? null,
-    publicKeyMldsa ?? null,
-    sortedEntries(keyShares),
-    sortedEntries(chainKeyShares),
-    sortedEntries(publicKeys),
-    sortedEntries(chainPublicKeys),
-  ])
-
 /**
  * Views whose flow writes a new vault and keeps running past the save: the
  * setup flows continue into backup steps held in component state, so the tree
@@ -126,16 +91,12 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
 
-  const shareKey = vault
-    ? getVaultShareKey({ vault, hasPasscodeEncryption })
-    : null
-
-  // The result is tagged with the share material it came from. A reshare keeps
-  // the same vault id but changes the shares, so id-only state could expose a
-  // stale result. Stored shares are never provided while readability is
-  // unresolved.
+  // The result is tagged with the exact inputs it was read under. A reshare
+  // keeps the same id but changes the shares, and a passcode change re-reads
+  // the same bytes, so id-only state could expose a stale result. Stored shares
+  // are never provided while readability is unresolved.
   const [shareState, setShareState] = useState<{
-    shareKey: string
+    source: VaultReadabilityInputs
     result:
       | { status: 'ready'; shares: VaultAllKeyShares }
       | { status: 'unreadable' }
@@ -148,11 +109,17 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       return
     }
 
-    // Tagged with the material the read was requested for. `vault` is closed
-    // over here, so a key computed once the read settles would describe
-    // whatever the object holds by then and could pass this result off as
-    // current for shares it was never read from.
-    const requestedShareKey = getVaultShareKey({ vault, hasPasscodeEncryption })
+    // Snapshotted before the read starts: `vault`, `passcode` and the rest are
+    // closed over here, so a snapshot taken once the read settles would describe
+    // whatever those hold by then and could pass this result off as current for
+    // inputs it was never read under.
+    const source = getVaultReadabilityInputs({
+      vault,
+      hasPasscodeEncryption,
+      passcode,
+      validateLegacyVaultKeyShares,
+    })
+
     let cancelled = false
 
     readVaultAllKeyShares({
@@ -170,7 +137,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .then(shares => {
         if (!cancelled) {
           setShareState({
-            shareKey: requestedShareKey,
+            source,
             result: { status: 'ready', shares },
           })
         }
@@ -178,7 +145,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .catch(error => {
         if (!cancelled) {
           setShareState({
-            shareKey: requestedShareKey,
+            source,
             result:
               error instanceof UnreadableVaultKeySharesError
                 ? { status: 'unreadable' }
@@ -196,17 +163,22 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return () => {
       cancelled = true
     }
-  }, [
-    vault,
-    // Re-reads when the material changes under the same object identity.
-    shareKey,
-    passcode,
-    hasPasscodeEncryption,
-    validateLegacyVaultKeyShares,
-  ])
+  }, [vault, passcode, hasPasscodeEncryption, validateLegacyVaultKeyShares])
 
   const resolution =
-    shareState && shareState.shareKey === shareKey ? shareState.result : null
+    shareState &&
+    vault &&
+    hasSameReadabilityInputs({
+      resolved: shareState.source,
+      current: getVaultReadabilityInputs({
+        vault,
+        hasPasscodeEncryption,
+        passcode,
+        validateLegacyVaultKeyShares,
+      }),
+    })
+      ? shareState.result
+      : null
 
   const viewId = navigation.history[navigation.history.length - 1]?.id
   const isImportView = viewId === 'importVault'
