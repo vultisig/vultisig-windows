@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCore } from '@core/ui/state/core'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -75,6 +76,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
                 weight={600}
                 maxWidth={240}
               />
+              <TokenVerificationBadge value={coin} />
             </HStack>
           </VStack>
           <VStack alignItems="center" gap={8}>
