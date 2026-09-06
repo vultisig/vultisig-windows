@@ -1905,7 +1905,6 @@ export const it = {
   price_impact: 'Impatto sul prezzo',
   swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
   swap_protocol_fee: 'Tariffa del protocollo',
-  swap_referral_fee: 'Commissione di segnalazione',
   select_route: 'Seleziona il percorso',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1968,4 +1967,5 @@ export const it = {
   swap_failed_slippage: 'Il prezzo ha superato la soglia di slittamento',
   swap_failed_slippage_description:
     'Il prezzo si è mosso prima che questo scambio venisse eseguito, quindi il pagamento sarebbe stato inferiore alla tolleranza di slippage consentita e la rete lo ha annullato. Aumenta la tolleranza di slippage o riprova.',
+  swap_applied_discounts: 'Sconti applicati:',
 }

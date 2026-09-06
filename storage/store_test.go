@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"database/sql"
 	"path/filepath"
 	"testing"
 	"time"
@@ -341,5 +342,156 @@ func testVault() *Vault {
 		},
 		LocalPartyID: "test-party",
 		LibType:      "DKLS",
+	}
+}
+
+func TestDeleteVaultRemovesChildRowsAcrossPooledConnections(t *testing.T) {
+	store := newTestStore(t)
+
+	// The pragma that enables foreign keys is per-connection, so a pool
+	// serving more than one connection is what exposes the bug: the delete
+	// can land on a connection that never ran it and silently skip the
+	// cascade. Hold several connections open so the pool is forced to grow
+	// past the one that happened to be configured first.
+	const connections = 8
+	store.db.SetMaxOpenConns(connections)
+	store.db.SetMaxIdleConns(connections)
+
+	ctx := context.Background()
+	held := make([]*sql.Conn, 0, connections)
+	for i := 0; i < connections; i++ {
+		conn, err := store.db.Conn(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		held = append(held, conn)
+	}
+	for _, conn := range held {
+		if err := conn.Close(); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	vault := testVault()
+	if err := store.SaveVault(vault); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := store.SaveCoin(vault.PublicKeyECDSA, Coin{
+		ID:              "coin-1",
+		Chain:           "Bitcoin",
+		Address:         "bc1qtest",
+		Ticker:          "BTC",
+		IsNativeToken:   true,
+		Logo:            "btc.png",
+		PriceProviderID: "bitcoin",
+		Decimals:        8,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if err := store.SaveTransactionRecord(TransactionRecord{
+		ID:        "tx-1",
+		VaultID:   vault.PublicKeyECDSA,
+		Type:      "send",
+		Status:    "pending",
+		Chain:     "Bitcoin",
+		Timestamp: "2026-06-14T00:00:00Z",
+		TxHash:    "tx-hash-1",
+		Data:      "{}",
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := store.DeleteVault(vault.PublicKeyECDSA); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, table := range []struct {
+		name  string
+		query string
+	}{
+		{"vaults", "SELECT COUNT(*) FROM vaults WHERE public_key_ecdsa = ?"},
+		{"keyshares", "SELECT COUNT(*) FROM keyshares WHERE public_key_ecdsa = ?"},
+		{"coins", "SELECT COUNT(*) FROM coins WHERE public_key_ecdsa = ?"},
+		{"transaction_history", "SELECT COUNT(*) FROM transaction_history WHERE vault_id = ?"},
+	} {
+		var count int
+		if err := store.db.QueryRow(table.query, vault.PublicKeyECDSA).Scan(&count); err != nil {
+			t.Fatal(err)
+		}
+		if count != 0 {
+			t.Errorf("%s left %d orphaned row(s) behind after deleting the vault", table.name, count)
+		}
+	}
+}
+
+func TestForeignKeysEnabledOnEveryPooledConnection(t *testing.T) {
+	store := newTestStore(t)
+
+	const connections = 8
+	store.db.SetMaxOpenConns(connections)
+	store.db.SetMaxIdleConns(connections)
+
+	ctx := context.Background()
+	held := make([]*sql.Conn, 0, connections)
+	t.Cleanup(func() {
+		for _, conn := range held {
+			if err := conn.Close(); err != nil {
+				t.Errorf("could not close probe connection: %v", err)
+			}
+		}
+	})
+
+	// Holding the connections open at once guarantees these are distinct
+	// connections rather than the same one handed back repeatedly.
+	for i := 0; i < connections; i++ {
+		conn, err := store.db.Conn(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		held = append(held, conn)
+	}
+
+	for i, conn := range held {
+		var foreignKeys int
+		if err := conn.QueryRowContext(ctx, "PRAGMA foreign_keys;").Scan(&foreignKeys); err != nil {
+			t.Fatal(err)
+		}
+		if foreignKeys != 1 {
+			t.Errorf("connection %d has foreign_keys off, ON DELETE CASCADE will not run on it", i)
+		}
+	}
+}
+
+func TestDeleteVaultRollsBackWhenTheVaultDeleteFails(t *testing.T) {
+	store := newTestStore(t)
+
+	vault := testVault()
+	if err := store.SaveVault(vault); err != nil {
+		t.Fatal(err)
+	}
+
+	// Fail the final vault delete so the keyshare delete before it has already
+	// landed. Un-transacted, that is the window where a vault survives without
+	// the key material it needs and no retry can bring it back.
+	if _, err := store.db.Exec(`CREATE TRIGGER fail_vault_delete BEFORE DELETE ON vaults
+		BEGIN SELECT RAISE(ABORT, 'forced delete failure'); END;`); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := store.DeleteVault(vault.PublicKeyECDSA); err == nil {
+		t.Fatal("expected the vault delete to fail")
+	}
+
+	if _, err := store.db.Exec("DROP TRIGGER fail_vault_delete"); err != nil {
+		t.Fatal(err)
+	}
+
+	saved, err := store.GetVault(vault.PublicKeyECDSA)
+	if err != nil {
+		t.Fatalf("vault should still exist after a failed delete: %v", err)
+	}
+	if len(saved.KeyShares) != len(vault.KeyShares) {
+		t.Fatalf("keyshares destroyed by a failed delete: expected %d, got %d",
+			len(vault.KeyShares), len(saved.KeyShares))
 	}
 }

@@ -1745,7 +1745,6 @@ export const zh = {
   price_impact: '价格影响',
   swap_fee_included_in_rate: '已包含在报价汇率中',
   swap_protocol_fee: '协议费',
-  swap_referral_fee: '推荐费',
   select_route: '选择路线',
   swap_route_eta_hours: '~{{hours}}小时',
   swap_route_eta_hours_minutes: '~{{hours}}小时{{minutes}}分',
@@ -1802,4 +1801,5 @@ export const zh = {
   swap_failed_slippage: '价格突破了滑点容差范围',
   swap_failed_slippage_description:
     '此次掉期交易完成前价格发生了变动，因此支付金额低于您设定的滑点容忍度，网络已将其撤销。请提高您的滑点容忍度或重试。',
+  swap_applied_discounts: '已应用折扣：',
 }

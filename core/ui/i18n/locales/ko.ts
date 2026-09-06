@@ -1858,7 +1858,6 @@ export const ko = {
   price_impact: '가격 영향',
   swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
   swap_protocol_fee: '프로토콜 수수료',
-  swap_referral_fee: '소개 수수료',
   select_route: '경로를 선택하세요',
   swap_route_eta_hours: '~{{hours}}시간',
   swap_route_eta_hours_minutes: '~{{hours}}시간 {{minutes}}분',
@@ -1921,4 +1920,5 @@ export const ko = {
   swap_failed_slippage: '가격이 슬리피지 허용 범위를 벗어났습니다.',
   swap_failed_slippage_description:
     '스왑이 체결되기 전에 가격 변동이 발생하여, 설정된 슬리피지 허용치보다 적은 금액이 지급되었을 것이므로 네트워크에서 이를 되돌렸습니다. 슬리피지 허용치를 높이거나 다시 시도하십시오.',
+  swap_applied_discounts: '적용된 할인:',
 }

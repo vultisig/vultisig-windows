@@ -12,7 +12,7 @@ import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { getSwapQuoteAffiliateBps } from '../../affiliate/affiliateBps'
+import { getSwapFeeDisclosure } from '../../affiliate/affiliateBps'
 import { getSwapFeeEntries } from '../../queries/resolveSwapFees'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { SwapDiscountInfo } from './SwapDiscountInfo'
@@ -33,7 +33,7 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
 
   const { t } = useTranslation()
   const query = useSwapFeesQuery(swapQuote)
-  const affiliateBps = getSwapQuoteAffiliateBps(swapQuote.discounts)
+  const disclosure = getSwapFeeDisclosure(swapQuote.discounts)
 
   const renderRow: SwapFeeRowRenderer = ({ label, value }) => (
     <RowComponent>
@@ -99,14 +99,11 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                     <SwapProviderFeeRows
                       renderRow={renderRow}
                       fees={fees}
-                      affiliateBps={affiliateBps}
+                      disclosure={disclosure}
                     />
                     <SwapDiscountInfo
                       renderRow={renderRow}
-                      discounts={swapQuote.discounts}
-                      affiliate={fees.affiliate}
-                      notional={fees.affiliateNotional}
-                      affiliateBps={affiliateBps}
+                      savings={disclosure.savings}
                     />
                     <SwapPriceImpactRow
                       renderRow={renderRow}
