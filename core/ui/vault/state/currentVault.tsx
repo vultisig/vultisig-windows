@@ -1,7 +1,7 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useCore } from '@core/ui/state/core'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
-import { useNavigation } from '@lib/ui/navigation/state'
+import { useOptionalNavigationHistory } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -63,9 +63,15 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   return 'secure'
 }
 
+/**
+ * Resolves the current vault's key shares and provides the vault to the tree.
+ * Also mounted by hosts without a navigation stack (the extension's dApp
+ * popup), where the backup import flow is unreachable, so an unreadable vault
+ * there always lands on the recovery page.
+ */
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const { validateLegacyVaultKeyShares } = useCore()
-  const [navigation] = useNavigation()
+  const navigationHistory = useOptionalNavigationHistory()
   const id = useCurrentVaultId()
   const vaults = useVaults()
   const [passcode] = usePasscode()
@@ -179,9 +185,9 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   }
 
   if (shareState.result.status === 'unreadable') {
-    if (
-      navigation.history[navigation.history.length - 1]?.id === 'importVault'
-    ) {
+    const currentView = navigationHistory?.[navigationHistory.length - 1]
+
+    if (currentView?.id === 'importVault') {
       return (
         <UnreadableVaultRecoveryContext.Provider value={getVaultId(vault)}>
           <CurrentVaultContext.Provider value={undefined}>

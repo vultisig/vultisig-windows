@@ -1,15 +1,25 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useOptionalNavigationHistory } from '@lib/ui/navigation/state'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ImportVaultBackupButton } from './ImportVaultBackupButton'
+
+/**
+ * Dead end for a vault whose key shares cannot be read. Offers the backup
+ * import where the host has a navigation stack to reach it; a host without
+ * one (the extension's dApp popup) can only be closed, and the vault is
+ * recovered from the main app instead.
+ */
 export const UnreadableVaultRecovery = () => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
+  const { goBack } = useCore()
+  const canImportBackup = useOptionalNavigationHistory() !== undefined
   const [isNoBackupExpanded, setIsNoBackupExpanded] = useState(false)
 
   return (
@@ -22,9 +32,11 @@ export const UnreadableVaultRecovery = () => {
         )}`}
         action={
           <VStack gap={8} fullWidth>
-            <Button onClick={() => navigate({ id: 'importVault' })}>
-              {t('import_vult_backup')}
-            </Button>
+            {canImportBackup ? (
+              <ImportVaultBackupButton />
+            ) : (
+              <Button onClick={goBack}>{t('close')}</Button>
+            )}
             <Button
               kind="link"
               aria-expanded={isNoBackupExpanded}
