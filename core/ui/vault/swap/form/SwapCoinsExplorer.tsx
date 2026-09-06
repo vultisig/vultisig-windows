@@ -153,9 +153,12 @@ export const SwapCoinsExplorer = ({
     []
   )
 
+  // `currentChain` is whatever the pair already holds, which the chain filter
+  // cannot un-pick, so the filter has to gate the CTA as well as the options.
   const showAddCustomToken = canAddCustomToken({
     chain: currentChain,
     searchQuery,
+    chainFilter,
   })
 
   // The custom-token flow reads a contract address, which the ticker search can
