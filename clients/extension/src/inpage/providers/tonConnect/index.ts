@@ -641,6 +641,7 @@ export class TonConnectBridge {
             decimals: chainFeeCoin[Chain.Ton].decimals,
           },
           data: firstMessage.payload,
+          validUntil,
           tonMessages,
         },
       },

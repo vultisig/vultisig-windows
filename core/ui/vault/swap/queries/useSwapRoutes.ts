@@ -1,38 +1,38 @@
 import { SwapQuoteProviderName } from '@vultisig/core-chain/swap/quote/findSwapQuote'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { useSwapRouteOverride } from '../state/routeOverride'
 import {
   canSelectSwapRoute,
   getActiveSwapRouteOverride,
-  getSwapQuoteCycleId,
   resolveActiveSwapRoute,
 } from './activeSwapRoute'
 import { useSwapQuotesQuery } from './useSwapQuoteQuery'
+import { useSwapQuoteRequestId } from './useSwapQuoteRequestId'
 
 /**
  * Every route the current quote cycle offers, which one the swap is going
- * through, and how to switch to another. Picking a route only holds for the
- * cycle it was picked in — the next refresh re-defaults to the auto-selected
- * winner without anything having to reset it.
+ * through, and how to switch to another. A pick holds for as long as the user
+ * keeps quoting the same pair and amount — refreshes re-rank the routes around
+ * it — and is dropped once they edit either, or once the picked provider stops
+ * quoting.
  */
 export const useSwapRoutes = () => {
   const quotes = useSwapQuotesQuery().data
   const [override, setOverride] = useSwapRouteOverride()
+  const requestId = useSwapQuoteRequestId()
 
   const candidates = quotes?.ranked ?? []
 
   return {
     candidates,
     canSelectRoute: canSelectSwapRoute(candidates),
-    activeRoute: quotes ? resolveActiveSwapRoute({ quotes, override }) : null,
+    activeRoute: quotes
+      ? resolveActiveSwapRoute({ quotes, override, requestId })
+      : null,
     isOverridden: quotes
-      ? getActiveSwapRouteOverride({ quotes, override }) !== null
+      ? getActiveSwapRouteOverride({ quotes, override, requestId }) !== null
       : false,
     selectRoute: (providerName: SwapQuoteProviderName) =>
-      setOverride({
-        providerName,
-        cycleId: getSwapQuoteCycleId(shouldBePresent(quotes, 'swap quotes')),
-      }),
+      setOverride({ providerName, requestId }),
   }
 }

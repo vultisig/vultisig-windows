@@ -29,7 +29,9 @@ export const TxStatusTracker = ({ chain, hash }: TxStatusTrackerProps) => {
             ? 'broadcasted'
             : status === 'not_found'
               ? 'pending'
-              : status
+              : status === 'expired'
+                ? 'error'
+                : status
         }
       />
       {failure ? (

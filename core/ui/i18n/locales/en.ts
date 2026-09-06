@@ -582,6 +582,7 @@ export const en = {
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
   import_vault: 'Import Vault',
+  import_vult_backup: 'Import .vult backup',
   import_vault_share: 'Import vault share',
   import_vault_share_description: 'Use a vault share to recover your vault.',
   import_vault_share_supported_files: 'Supported file types: .bak & .vult',
@@ -1194,13 +1195,13 @@ export const en = {
   support: 'Support',
   swap: 'Swap',
   swaps: 'Swaps',
+  swap_applied_discounts: 'Applied Discounts:',
   swap_discount: 'Swap Discount',
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
   swap_fee_included_in_rate: 'Included in the quoted exchange rate',
   swap_protocol_fee: 'Protocol Fee',
-  swap_referral_fee: 'Referral Fee',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
   swap_route_eta_minutes: '~{{minutes}}m',
@@ -1305,6 +1306,9 @@ export const en = {
   swap_same_asset: 'Cannot swap between the same asset',
   swap_all_providers_failed:
     'Swap providers are temporarily unavailable. Please try again in a moment.',
+  swap_failed_slippage: 'Price moved past slippage tolerance',
+  swap_failed_slippage_description:
+    'The price moved before this swap landed, so it would have paid out less than your slippage tolerance allowed and the network reverted it. Raise your slippage tolerance or try again.',
   swap_amount_below_minimum:
     "Increase the amount to meet the provider's minimum swap amount.",
   swap_amount_too_small: 'Enter a larger amount to get a swap quote.',
@@ -1347,30 +1351,6 @@ export const en = {
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   transaction_failed: 'Transaction <error>failed</error>',
-  ton_tx_failure_seqno_mismatch:
-    'Another transaction from this wallet was processed first, so the network rejected this one as out of order. Check your history: if this transfer is not there, send it again.',
-  ton_tx_failure_expired:
-    "The transaction's time window closed before the network processed it. Make sure your device's date and time are set automatically, then send it again.",
-  ton_tx_failure_invalid_signature:
-    'The wallet contract rejected the signature. Sign the transaction again; if it keeps failing, the wallet contract at this address does not match this vault.',
-  ton_tx_failure_wallet_id_mismatch:
-    'The transaction was built for a different wallet contract version than the one deployed at this address.',
-  ton_tx_failure_insufficient_funds:
-    'Not enough TON to cover the amount plus network fees. Keep about 0.05 TON spare for fees and try again.',
-  ton_tx_failure_out_of_gas:
-    'The transaction ran out of gas before it could finish. Attach more TON to the transfer and try again.',
-  ton_tx_failure_invalid_destination:
-    'The destination address is not valid on TON. Check the address and try again.',
-  ton_tx_failure_not_enough_jettons:
-    'This wallet does not hold enough of the token to send that amount.',
-  ton_tx_failure_jetton_unauthorized:
-    'The token contract refused the transfer because this wallet is not allowed to move these tokens.',
-  ton_tx_failure_action_failed:
-    'The wallet accepted the transaction but could not carry out the transfer, so nothing was sent. The network fee was still charged. Check the balance and try again.',
-  ton_tx_failure_aborted:
-    'The network aborted this transaction before it could carry out the transfer.',
-  ton_tx_failure_contract_rejected:
-    'The contract rejected the transaction (exit code {{exitCode}}).',
   transaction_broadcasted: 'The transaction has been broadcast to the network',
   transaction_pending: 'Transaction pending...',
   transaction_successful: 'Transaction <g>successful</g>',
@@ -1567,6 +1547,14 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" already exists',
+  vault_cannot_be_opened: "This vault can't be opened on this device",
+  vault_cannot_be_opened_backup_description:
+    'Your .vult backup is the way back. Import it and this vault works again.',
+  vault_cannot_be_opened_description:
+    'Its key shares are encrypted, and the key that unlocks them did not come across with this restore. Nothing on this device can read them, so it cannot sign with this vault.',
+  vault_cannot_be_opened_no_backup: "I don't have a backup",
+  vault_cannot_be_opened_no_backup_description:
+    'Without a .vult backup, the key shares on this device cannot be unlocked again — that part is not recoverable. The vault itself may still be: if your other devices hold their own shares and still reach its signing threshold, it keeps working without this one.',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_backup_page_password_protection:
@@ -1915,4 +1903,28 @@ export const en = {
     'Wallet entry is not an object.',
   station_migration_reason_unsupported_fallback:
     'This wallet needs review before it can be migrated.',
+  ton_tx_failure_seqno_mismatch:
+    'Another transaction from this wallet was processed first, so the network rejected this one as out of order. Check your history: if this transfer is not there, send it again.',
+  ton_tx_failure_expired:
+    "The transaction's time window closed before the network processed it. Make sure your device's date and time are set automatically, then send it again.",
+  ton_tx_failure_invalid_signature:
+    'The wallet contract rejected the signature. Sign the transaction again; if it keeps failing, the wallet contract at this address does not match this vault.',
+  ton_tx_failure_wallet_id_mismatch:
+    'The transaction was built for a different wallet contract version than the one deployed at this address.',
+  ton_tx_failure_insufficient_funds:
+    'Not enough TON to cover the amount plus network fees. Keep about 0.05 TON spare for fees and try again.',
+  ton_tx_failure_out_of_gas:
+    'The transaction ran out of gas before it could finish. Attach more TON to the transfer and try again.',
+  ton_tx_failure_invalid_destination:
+    'The destination address is not valid on TON. Check the address and try again.',
+  ton_tx_failure_not_enough_jettons:
+    'This wallet does not hold enough of the token to send that amount.',
+  ton_tx_failure_jetton_unauthorized:
+    'The token contract refused the transfer because this wallet is not allowed to move these tokens.',
+  ton_tx_failure_action_failed:
+    'The wallet accepted the transaction but could not carry out the transfer, so nothing was sent. The network fee was still charged. Check the balance and try again.',
+  ton_tx_failure_aborted:
+    'The network aborted this transaction before it could carry out the transfer.',
+  ton_tx_failure_contract_rejected:
+    'The contract rejected the transaction (exit code {{exitCode}}).',
 }

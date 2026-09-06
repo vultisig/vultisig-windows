@@ -503,6 +503,7 @@ export const es = {
   import_seedphrase_onboarding_title:
     'Estás entrando en una nueva era, <g> dejando atrás las antiguas frases semilla. </g> Necesitarás:',
   import_vault: 'Importar bóveda',
+  import_vult_backup: 'Importar copia .vult',
   import_vault_share: 'Importar recurso compartido de bóveda',
   import_vault_share_description:
     'Utilice un recurso compartido de bóveda para recuperar su bóveda.',
@@ -1040,6 +1041,14 @@ export const es = {
     version: 'Versión {{latestVersion}}',
   },
   vault_already_exists: 'La bóveda "{{name}}" ya existe',
+  vault_cannot_be_opened: 'Este vault no se puede abrir en este dispositivo',
+  vault_cannot_be_opened_backup_description:
+    'Tu copia de seguridad .vult es el camino de vuelta. Impórtala y este vault volverá a funcionar.',
+  vault_cannot_be_opened_description:
+    'Sus key shares están cifrados y la clave que los descifra no llegó con esta restauración. Nada en este dispositivo puede leerlos, así que no puede firmar con este vault.',
+  vault_cannot_be_opened_no_backup: 'No tengo copia de seguridad',
+  vault_cannot_be_opened_no_backup_description:
+    'Sin una copia .vult, los key shares de este dispositivo ya no se pueden descifrar: esa parte no es recuperable. El vault en sí puede seguir siéndolo: si tus otros dispositivos conservan sus propios shares y siguen alcanzando el umbral de firma, seguirá funcionando sin este.',
   vault_backup_page_password_info:
     'Nunca almacene recursos compartidos de Vault de diferentes dispositivos en la misma ubicación',
   vault_backup_page_password_protection:
@@ -1889,7 +1898,6 @@ export const es = {
   price_impact: 'Impacto en los precios',
   swap_fee_included_in_rate: 'Incluido en el tipo de cambio cotizado',
   swap_protocol_fee: 'Tarifa de protocolo',
-  swap_referral_fee: 'Comisión por recomendación',
   select_route: 'Seleccione ruta',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1949,6 +1957,11 @@ export const es = {
     'No ha cotizado aquí en este período; el máximo fue {{price}}',
   swap_quote_expired:
     'Esta cotización ha caducado. Actualiza la página para ver el precio actual.',
+  swap_failed_slippage:
+    'El precio superó el límite de tolerancia al deslizamiento.',
+  swap_failed_slippage_description:
+    'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
+  swap_applied_discounts: 'Descuentos aplicados:',
   ton_tx_failure_seqno_mismatch:
     'Otra transacción de esta billetera se procesó primero, por lo que la red rechazó esta por estar fuera de orden. Revisa tu historial: si esta transferencia no aparece, envíala de nuevo.',
   ton_tx_failure_expired:

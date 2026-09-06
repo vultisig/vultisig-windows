@@ -510,6 +510,7 @@ export const de = {
   import_seedphrase_onboarding_title:
     'Sie treten in eine neue Ära ein, <g> lässt alte Seed-Phrasen hinter sich. </g> Sie benötigen:',
   import_vault: 'Import Vault',
+  import_vult_backup: '.vult-Backup importieren',
   import_vault_share: 'Vault-Freigabe importieren',
   import_vault_share_description:
     'Verwenden Sie eine Tresorfreigabe, um Ihren Tresor wiederherzustellen.',
@@ -1049,6 +1050,15 @@ export const de = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" existiert bereits',
+  vault_cannot_be_opened:
+    'Dieser Vault lässt sich auf diesem Gerät nicht öffnen',
+  vault_cannot_be_opened_backup_description:
+    'Ihr .vult-Backup ist der Weg zurück. Importieren Sie es, und dieser Vault funktioniert wieder.',
+  vault_cannot_be_opened_description:
+    'Seine Key Shares sind verschlüsselt, und der Schlüssel, der sie entsperrt, kam bei dieser Wiederherstellung nicht mit. Nichts auf diesem Gerät kann sie lesen, also kann es mit diesem Vault nicht signieren.',
+  vault_cannot_be_opened_no_backup: 'Ich habe kein Backup',
+  vault_cannot_be_opened_no_backup_description:
+    'Ohne .vult-Backup lassen sich die Key Shares auf diesem Gerät nicht mehr entsperren — dieser Teil ist nicht wiederherstellbar. Der Vault selbst kann es sein: Wenn Ihre anderen Geräte ihre eigenen Shares halten und damit weiterhin den Signaturschwellenwert erreichen, funktioniert er ohne dieses Gerät weiter.',
   vault_backup_page_password_info:
     'Speichern Sie Vault-Freigaben von verschiedenen Geräten niemals am selben Ort.',
   vault_backup_page_password_protection:
@@ -1903,7 +1913,6 @@ export const de = {
   price_impact: 'Preisauswirkung',
   swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
   swap_protocol_fee: 'Protokollgebühr',
-  swap_referral_fee: 'Vermittlungsgebühr',
   select_route: 'Route auswählen',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1964,6 +1973,10 @@ export const de = {
     'In diesem Zeitfenster nicht gehandelt — das Hoch lag bei {{price}}',
   swap_quote_expired:
     'Dieses Angebot ist abgelaufen. Aktualisieren Sie die Seite, um einen aktuellen Preis zu erhalten.',
+  swap_failed_slippage: 'Der Preis hat die Toleranzgrenze überschritten.',
+  swap_failed_slippage_description:
+    'Der Kurs hat sich vor der Ausführung des Swaps geändert, daher wäre die Auszahlung geringer gewesen als Ihre Slippage-Toleranz erlaubt gewesen, und das Netzwerk hat den Swap rückgängig gemacht. Erhöhen Sie Ihre Slippage-Toleranz oder versuchen Sie es erneut.',
+  swap_applied_discounts: 'Angewendete Rabatte:',
   ton_tx_failure_seqno_mismatch:
     'Eine andere Transaktion von dieser Wallet wurde zuerst verarbeitet, daher wurde diese vom Netzwerk als ungültig abgelehnt. Überprüfen Sie Ihren Verlauf: Falls diese Überweisung dort nicht aufgeführt ist, senden Sie sie erneut.',
   ton_tx_failure_expired:

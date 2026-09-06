@@ -11,6 +11,8 @@
  * - window.vultisig delegates the EIP-1193 surface without losing cross-chain keys
  */
 
+import { execFileSync } from 'node:child_process'
+
 import { ed25519 } from '@noble/curves/ed25519'
 import type { BrowserContext, Page } from '@playwright/test'
 import { VersionedTransaction } from '@solana/web3.js'
@@ -20,6 +22,10 @@ import {
   type TestDappServer,
 } from '../fixtures/dapp-page.fixture'
 import { expect, test } from '../fixtures/extension-loader'
+import {
+  observeDappAccountRead,
+  type ReadinessReceipt,
+} from '../helpers/dapp-provider-readiness'
 import {
   signSolanaSelfTransferViaDapp,
   submitFastVaultPasswordIfPrompted,
@@ -54,6 +60,7 @@ type ConnectDappWalletInput = ExtensionContextInput & {
 }
 
 test.describe('DApp Provider', () => {
+  test.describe.configure({ timeout: 120_000 })
   test.beforeAll(async () => {
     dappServer = await startTestDappServer()
     dappUrl = dappServer.url
@@ -68,10 +75,10 @@ test.describe('DApp Provider', () => {
   /**
    * Helper to wait for and get approval popup
    */
-  async function waitForApprovalPopup({
-    context,
-    extensionId,
-  }: ExtensionContextInput): Promise<Page | null> {
+  async function waitForApprovalPopup(
+    { context, extensionId }: ExtensionContextInput,
+    remaining = () => 15_000
+  ): Promise<Page | null> {
     const existingPopup = context
       .pages()
       .find(
@@ -79,18 +86,25 @@ test.describe('DApp Provider', () => {
           !p.isClosed() && p.url().includes(`chrome-extension://${extensionId}`)
       )
     if (existingPopup) {
-      await existingPopup.waitForLoadState('domcontentloaded')
+      await existingPopup.waitForLoadState('domcontentloaded', {
+        timeout: remaining(),
+      })
       return existingPopup
     }
 
     // Wait for new page to open (approval popup)
-    const popupPromise = context.waitForEvent('page', { timeout: 15000 })
+    const popupPromise = context.waitForEvent('page', {
+      timeout: remaining(),
+    })
 
     try {
       const popup = await popupPromise
-      await popup.waitForLoadState('domcontentloaded')
+      await popup.waitForLoadState('domcontentloaded', {
+        timeout: remaining(),
+      })
       return popup
     } catch {
+      remaining()
       // Try finding existing popup
       const pages = context.pages()
       const popup = pages.find((p: Page) =>
@@ -139,6 +153,7 @@ test.describe('DApp Provider', () => {
 
     const approval = new DAppApproval(popup, extensionId)
     await approval.waitForView(10_000)
+    await expect(approval.approveButton).toBeEnabled({ timeout: 45_000 })
     await approval.approve()
     if (waitForClose) {
       await approval.waitForClose()
@@ -204,30 +219,136 @@ test.describe('DApp Provider', () => {
     await page.close()
   })
 
-  test('eth_requestAccounts - popup opens - approve - address returned', async ({
-    context,
-    extensionId,
-  }) => {
-    test.skip(
-      !getVaultConfigFromEnv(),
-      'Requires the designated TEST_VAULT_PATH and TEST_VAULT_PASSWORD fixture'
-    )
-    await ensureDappProviderVault({ context, extensionId })
-
-    const page = await context.newPage()
-
-    try {
-      await page.goto(dappUrl)
-      await page.waitForLoadState('domcontentloaded')
-      await page.waitForFunction(() => !!window.ethereum, null, {
-        timeout: 10000,
+  const accountReads: Array<'eth_requestAccounts' | 'xrpl.getAddress'> = [
+    'eth_requestAccounts',
+    'xrpl.getAddress',
+  ]
+  for (const requestName of accountReads) {
+    test(`${requestName} - grant closure and original account response`, async ({
+      context,
+      extensionId,
+    }) => {
+      test.skip(!getVaultConfigFromEnv(), 'Requires the designated test vault')
+      test.setTimeout(180_000)
+      await ensureDappProviderVault({ context, extensionId })
+      const page = await context.newPage()
+      let receipt: ReadinessReceipt<unknown> | undefined
+      let contextClosed = false
+      context.once('close', () => {
+        contextClosed = true
       })
-
-      await connectDappWallet({ page, context, extensionId })
-    } finally {
-      await page.close()
-    }
-  })
+      try {
+        await page.goto(dappUrl)
+        receipt = await observeDappAccountRead({
+          sourceOrigin: new URL(dappUrl).origin,
+          revision: execFileSync('git', ['rev-parse', 'HEAD'], {
+            encoding: 'utf8',
+          }).trim(),
+          requestName,
+          currentOrigin: () => new URL(page.url()).origin,
+          waitForInjection: async () => {
+            await page.waitForFunction(
+              name =>
+                name === 'eth_requestAccounts'
+                  ? typeof window.ethereum?.request === 'function'
+                  : typeof Reflect.get(window.vultisig ?? {}, 'xrpl')
+                      ?.getAddress === 'function',
+              requestName,
+              { timeout: 10_000 }
+            )
+          },
+          request: () =>
+            page.evaluate(
+              name =>
+                name === 'eth_requestAccounts'
+                  ? window.ethereum.request({ method: 'eth_requestAccounts' })
+                  : Reflect.get(window.vultisig, 'xrpl').getAddress(),
+              requestName
+            ),
+          approveAndWaitForClose: async (signal, timeoutMs) => {
+            const deadline = Date.now() + timeoutMs
+            const remaining = () => {
+              signal.throwIfAborted()
+              const value = deadline - Date.now()
+              if (value <= 0) throw new Error('DApp approval deadline elapsed')
+              return value
+            }
+            const popup = await waitForApprovalPopup(
+              { context, extensionId },
+              remaining
+            )
+            if (!popup || popup.isClosed())
+              throw new Error('Account read did not open its grant popup')
+            const closeOnAbort = () => {
+              void popup.close().catch(() => {})
+            }
+            signal.addEventListener('abort', closeOnAbort, { once: true })
+            const approval = new DAppApproval(popup, extensionId)
+            try {
+              await approval.waitForView(remaining())
+              signal.throwIfAborted()
+              // Site scanning happens before approval; it is not provider-response time.
+              await expect(approval.approveButton).toBeEnabled({
+                timeout: remaining(),
+              })
+              signal.throwIfAborted()
+              // The forced click starts immediately after the final abort check;
+              // the abort listener closes the popup if the shared deadline wins.
+              await Promise.all([
+                popup.waitForEvent('close', { timeout: remaining() }),
+                approval.approveButton.click({
+                  timeout: remaining(),
+                }),
+              ])
+            } finally {
+              signal.removeEventListener('abort', closeOnAbort)
+            }
+          },
+          reload: async () => {
+            await page.reload({
+              waitUntil: 'domcontentloaded',
+              timeout: 10_000,
+            })
+          },
+          approvalTimeoutMs: 90_000,
+          recover: true,
+        })
+        expect(receipt.verdict, JSON.stringify(receipt)).toBe('PASS')
+        if (receipt.original.state !== 'resolved')
+          throw new Error('Original account call did not resolve')
+        if (requestName === 'eth_requestAccounts') {
+          expect(receipt.original.value).toEqual([
+            expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
+          ])
+        } else {
+          expect(receipt.original.value).toEqual({
+            address: expect.stringMatching(/^r[1-9A-HJ-NP-Za-km-z]{24,34}$/),
+          })
+        }
+      } catch (error) {
+        if (receipt) receipt.verdict = 'FAIL'
+        throw error
+      } finally {
+        await page.close()
+        await context.close()
+        if (receipt)
+          await test.info().attach(`${requestName}-readiness`, {
+            body: JSON.stringify(
+              {
+                ...receipt,
+                cleanup: {
+                  dappPageClosed: page.isClosed(),
+                  disposableContextClosed: contextClosed,
+                },
+              },
+              null,
+              2
+            ),
+            contentType: 'application/json',
+          })
+      }
+    })
+  }
 
   test('personal_sign - popup shows message - approve - signature returned', async ({
     context,

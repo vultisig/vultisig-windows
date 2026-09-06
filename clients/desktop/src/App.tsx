@@ -17,6 +17,7 @@ import { useMemo } from 'react'
 
 import { SaveFile } from '../wailsjs/go/main/App'
 import { DiscoveryService } from '../wailsjs/go/mediator/Server'
+import { GetLocalUIEcdsa, GetLocalUIEdDSA } from '../wailsjs/go/tss/TssService'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { views } from './navigation/views'
@@ -45,6 +46,12 @@ const baseCoreState: Omit<
   },
   mpcDevice: 'windows',
   getClipboardText: ClipboardGetText,
+  validateLegacyVaultKeyShares: async keyShares => {
+    await Promise.all([
+      GetLocalUIEcdsa(keyShares.ecdsa),
+      GetLocalUIEdDSA(keyShares.eddsa),
+    ])
+  },
   version: buildInfo.version,
   isLocalModeAvailable: true,
   getMpcServerUrl: async ({ serverType, serviceName }) => {

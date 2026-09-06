@@ -34,18 +34,10 @@ const solanaMinDelegationSol =
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>
 > = {
-  [Chain.Kujira]: {
-    [Chain.Cosmos]: 'channel-0',
-    [Chain.Akash]: 'channel-64',
-    [Chain.Dydx]: 'channel-118',
-    [Chain.Noble]: 'channel-62',
-    [Chain.Osmosis]: 'channel-3',
-  },
   [Chain.Osmosis]: {
     [Chain.Cosmos]: 'channel-0',
   },
   [Chain.Cosmos]: {
-    [Chain.Kujira]: 'channel-343',
     [Chain.Osmosis]: 'channel-141',
     [Chain.Noble]: 'channel-536',
     [Chain.Akash]: 'channel-184',

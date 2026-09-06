@@ -1,8 +1,13 @@
+import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { initializeMpcLib } from '@vultisig/core-mpc/lib/initialize'
+import { toMpcLibKeyshare } from '@vultisig/core-mpc/lib/keyshare'
+import { initializeMldsaLib } from '@vultisig/core-mpc/mldsa/initializeMldsa'
 import {
   getVaultId,
   Vault,
   VaultAllKeyShares,
 } from '@vultisig/core-mpc/vault/Vault'
+import { Keyshare as MldsaKeyshare } from '@vultisig/lib-mldsa/vs_wasm'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import {
   encryptedEncoding,
@@ -97,6 +102,283 @@ export const decryptVaultAllKeyShares = ({
         })
       ).map(plaintext => plaintext.toString(plainTextEncoding)),
   })
+
+const getAllKeyShareValues = ({
+  keyShares,
+  chainKeyShares,
+  keyShareMldsa,
+}: VaultAllKeyShares): string[] => [
+  ...Object.values(keyShares),
+  ...Object.values(chainKeyShares ?? {}),
+  ...(keyShareMldsa !== undefined ? [keyShareMldsa] : []),
+]
+
+/**
+ * Detects the self-identifying PBKDF2 ciphertext format used for passcode
+ * encryption. This lets startup fail closed when the encryption proof has
+ * disappeared while encrypted shares remain on disk.
+ */
+export const hasPasscodeEncryptedVaultKeyShare = (
+  allKeyShares: VaultAllKeyShares
+): boolean =>
+  getAllKeyShareValues(allKeyShares).some(value =>
+    isPasscodeEncryptedBlob(Buffer.from(value, encryptedEncoding))
+  )
+
+export class UnreadableVaultKeySharesError extends Error {
+  name = 'UnreadableVaultKeySharesError'
+  cause?: unknown
+
+  constructor(cause?: unknown) {
+    super(
+      'Vault key shares cannot be decrypted. Restore the Vault from a .vult backup.'
+    )
+    this.cause = cause
+  }
+}
+
+export class LegacyVaultKeyShareValidatorUnavailableError extends Error {
+  name = 'LegacyVaultKeyShareValidatorUnavailableError'
+
+  constructor() {
+    super('Legacy vault keyshare validation is unavailable')
+  }
+}
+
+/**
+ * Validates the plaintext legacy keyshare shape and its public-key identity.
+ */
+const assertLegacyKeyShareReadable = (
+  value: string,
+  expectedPublicKey: string
+): void => {
+  const parsed: unknown = JSON.parse(value)
+
+  if (
+    !parsed ||
+    typeof parsed !== 'object' ||
+    !('pub_key' in parsed) ||
+    parsed.pub_key !== expectedPublicKey ||
+    !('local_party_key' in parsed) ||
+    typeof parsed.local_party_key !== 'string' ||
+    !('keygen_committee_keys' in parsed) ||
+    !Array.isArray(parsed.keygen_committee_keys)
+  ) {
+    throw new Error('Invalid legacy keyshare')
+  }
+}
+
+const assertMpcKeyShareReadable = async (
+  value: string,
+  signatureAlgorithm: 'ecdsa' | 'eddsa',
+  expectedPublicKey?: string
+): Promise<void> => {
+  if (!value) {
+    throw new Error('Missing MPC keyshare')
+  }
+
+  await initializeMpcLib(signatureAlgorithm)
+  const keyshare = toMpcLibKeyshare({ keyShare: value, signatureAlgorithm })
+
+  try {
+    const publicKey = Buffer.from(keyshare.publicKey()).toString('hex')
+    if (
+      !publicKey ||
+      (expectedPublicKey &&
+        publicKey.toLowerCase() !== expectedPublicKey.toLowerCase())
+    ) {
+      throw new Error('Invalid MPC keyshare')
+    }
+  } finally {
+    keyshare.free?.()
+  }
+}
+
+const assertMldsaKeyShareReadable = async (
+  value: string,
+  expectedPublicKey?: string
+): Promise<void> => {
+  await initializeMldsaLib()
+  const keyshare = MldsaKeyshare.fromBytes(
+    Buffer.from(value, encryptedEncoding)
+  )
+
+  try {
+    const publicKey = Buffer.from(keyshare.publicKey()).toString('hex')
+    if (
+      !publicKey ||
+      (expectedPublicKey &&
+        publicKey.toLowerCase() !== expectedPublicKey.toLowerCase())
+    ) {
+      throw new Error('Invalid MLDSA keyshare')
+    }
+  } finally {
+    keyshare.free()
+  }
+}
+
+type LegacyVaultKeyShareValidator = (
+  keyShares: Vault['keyShares']
+) => Promise<void>
+
+type AssertVaultKeySharesReadableInput = VaultAllKeyShares &
+  Pick<
+    Vault,
+    'chainPublicKeys' | 'libType' | 'publicKeyMldsa' | 'publicKeys'
+  > & {
+    validateLegacyVaultKeyShares?: LegacyVaultKeyShareValidator
+  }
+
+/**
+ * Proves that every non-empty plaintext share can be deserialized by the MPC
+ * implementation that will consume it. This rejects ciphertext (including
+ * legacy or truncated envelopes) and arbitrary/corrupted plaintext before a
+ * vault is exposed to the UI or backup pipeline.
+ */
+export const assertVaultKeySharesReadable = async ({
+  keyShares,
+  chainKeyShares,
+  keyShareMldsa,
+  publicKeys,
+  chainPublicKeys,
+  publicKeyMldsa,
+  libType,
+  validateLegacyVaultKeyShares,
+}: AssertVaultKeySharesReadableInput): Promise<void> => {
+  try {
+    if (libType === 'GG20') {
+      if (!validateLegacyVaultKeyShares) {
+        throw new LegacyVaultKeyShareValidatorUnavailableError()
+      }
+
+      assertLegacyKeyShareReadable(keyShares.ecdsa, publicKeys.ecdsa)
+      assertLegacyKeyShareReadable(keyShares.eddsa, publicKeys.eddsa)
+      await validateLegacyVaultKeyShares(keyShares)
+    } else {
+      if (
+        !getAllKeyShareValues({
+          keyShares,
+          chainKeyShares,
+          keyShareMldsa,
+        }).some(Boolean)
+      ) {
+        throw new Error('Vault has no keyshares')
+      }
+
+      if (libType === 'DKLS' || keyShares.ecdsa) {
+        await assertMpcKeyShareReadable(
+          keyShares.ecdsa,
+          'ecdsa',
+          publicKeys.ecdsa
+        )
+      }
+
+      if (libType === 'DKLS' || keyShares.eddsa) {
+        await assertMpcKeyShareReadable(
+          keyShares.eddsa,
+          'eddsa',
+          publicKeys.eddsa
+        )
+      }
+    }
+
+    await Promise.all(
+      getRecordKeys(chainKeyShares ?? {}).map(chain => {
+        const value = shouldBePresent(chainKeyShares?.[chain])
+        const signatureAlgorithm = getSignatureAlgorithm(chain)
+
+        return signatureAlgorithm === 'mldsa'
+          ? assertMldsaKeyShareReadable(value, chainPublicKeys?.[chain])
+          : assertMpcKeyShareReadable(
+              value,
+              signatureAlgorithm,
+              chainPublicKeys?.[chain]
+            )
+      })
+    )
+
+    if (keyShareMldsa) {
+      await assertMldsaKeyShareReadable(keyShareMldsa, publicKeyMldsa)
+    }
+  } catch (error) {
+    if (error instanceof LegacyVaultKeyShareValidatorUnavailableError) {
+      throw error
+    }
+
+    throw new UnreadableVaultKeySharesError(error)
+  }
+}
+
+type ReadVaultAllKeySharesInput = VaultAllKeyShares & {
+  hasPasscodeEncryption: boolean
+  key: string | null
+} & Pick<
+    Vault,
+    'chainPublicKeys' | 'libType' | 'publicKeyMldsa' | 'publicKeys'
+  > & { validateLegacyVaultKeyShares?: LegacyVaultKeyShareValidator }
+
+/**
+ * Resolves shares for a consumer without ever falling back to stored
+ * ciphertext. A proof requires a passcode and successful decryption; no proof
+ * requires shares that are already plaintext.
+ */
+export const readVaultAllKeyShares = async ({
+  hasPasscodeEncryption,
+  key,
+  libType,
+  publicKeys,
+  chainPublicKeys,
+  publicKeyMldsa,
+  validateLegacyVaultKeyShares,
+  ...allKeyShares
+}: ReadVaultAllKeySharesInput): Promise<VaultAllKeyShares> => {
+  if (!hasPasscodeEncryption) {
+    await assertVaultKeySharesReadable({
+      ...allKeyShares,
+      libType,
+      publicKeys,
+      chainPublicKeys,
+      publicKeyMldsa,
+      validateLegacyVaultKeyShares,
+    })
+    return allKeyShares
+  }
+
+  if (!key) {
+    throw new UnreadableVaultKeySharesError()
+  }
+
+  try {
+    const decrypted = await decryptVaultAllKeyShares({
+      ...allKeyShares,
+      key,
+    })
+    await assertVaultKeySharesReadable({
+      ...decrypted,
+      libType,
+      publicKeys,
+      chainPublicKeys,
+      publicKeyMldsa,
+      validateLegacyVaultKeyShares,
+    })
+    return decrypted
+  } catch {
+    // Disabling a passcode writes plaintext shares before it clears the
+    // encryption proof. If the app stops between those two durable writes, a
+    // later unlock still sees the stale proof. Accept the stored values only
+    // when their MPC public-key identity proves they are already plaintext;
+    // ciphertext and malformed values continue to fail this validation.
+    await assertVaultKeySharesReadable({
+      ...allKeyShares,
+      libType,
+      publicKeys,
+      chainPublicKeys,
+      publicKeyMldsa,
+      validateLegacyVaultKeyShares,
+    })
+    return allKeyShares
+  }
+}
 
 type MapVaultsKeySharesInput = {
   vaults: Vault[]

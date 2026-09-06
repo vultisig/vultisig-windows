@@ -59,7 +59,6 @@ export const SUPPORTED_CHAINS = {
   mayachain: { symbol: 'CACAO', minSend: '5', minSwap: '20' },
   cosmos: { symbol: 'ATOM', minSend: '0.01', minSwap: '0.1' },
   osmosis: { symbol: 'OSMO', minSend: '0.5', minSwap: '2' },
-  kujira: { symbol: 'KUJI', minSend: '1', minSwap: '5' },
 
   // Other chains
   solana: { symbol: 'SOL', minSend: '0.01', minSwap: '0.02' },
@@ -87,7 +86,7 @@ export type ChainId = keyof typeof SUPPORTED_CHAINS
  * Pending funding (test vault has addresses, no balance yet):
  *   EVM L2s     arbitrum, optimism, base, polygon, avalanche
  *   UTXO peers  litecoin, dogecoin, bitcoincash, zcash, dash
- *   Cosmos      mayachain, osmosis, kujira
+ *   Cosmos      mayachain, osmosis
  *   Long-tail   sui, ton, tron, ripple, polkadot, cardano
  *
  * Lookup addresses via `npx playwright test --grep "exports all chain addresses"`.
