@@ -11,6 +11,24 @@ const averageThreshold = -0.03
 
 export type PriceImpactLevel = 'good' | 'average' | 'high'
 
+type NativeSwapFees = Extract<
+  SwapQuoteResult,
+  { native: unknown }
+>['native']['fees']
+
+// `slippage_bps` moves onto `NativeSwapFees` in vultisig-sdk#2328. Intersecting
+// it in keeps this compiling against the currently-published
+// @vultisig/core-chain, whose type still declares it at the quote's top level —
+// a level the wire never populates. A quote decoded from either version stays
+// assignable, so no `as` cast is needed and the read survives the upgrade.
+type NativeSwapFeesWithSlippage = NativeSwapFees & {
+  slippage_bps?: number
+}
+
+const readNativeSlippageBps = ({
+  slippage_bps: slippageBps,
+}: NativeSwapFeesWithSlippage) => slippageBps
+
 type PriceImpactDisplay = {
   percent: string
   level: PriceImpactLevel
@@ -30,8 +48,10 @@ export const getSwapPriceImpact = (
   quote: SwapQuoteResult
 ): number | undefined =>
   matchRecordUnion<SwapQuoteResult, number | undefined>(quote, {
-    native: ({ fees: { slippage_bps: slippageBps } }) =>
-      slippageBps === undefined ? undefined : slippageBps / bpsPerUnit,
+    native: ({ fees }) => {
+      const slippageBps = readNativeSlippageBps(fees)
+      return slippageBps === undefined ? undefined : slippageBps / bpsPerUnit
+    },
     general: ({ priceImpactFraction }) => priceImpactFraction,
   })
 
