@@ -18,7 +18,12 @@ import { extensionPath } from './extension-path'
 // Playwright boots, so setting it here would be too late - `yarn test:e2e` sets
 // it instead, and this guard explains the fix rather than letting the run die
 // with a stack trace pointing into node_modules.
+// Scoped to the Playwright CLI: other tools (knip, editors) import this config
+// for analysis without registering the hooks, and must not be made to fail.
+const isPlaywrightRunner = /[\\/]playwright(\.js)?$/.test(process.argv[1] ?? '')
+
 if (
+  isPlaywrightRunner &&
   typeof module.registerHooks === 'function' &&
   !process.env.PLAYWRIGHT_FORCE_ASYNC_LOADER &&
   !process.env.PW_DISABLE_TS_ESM
