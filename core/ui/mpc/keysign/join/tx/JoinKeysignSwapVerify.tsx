@@ -1,6 +1,9 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
+import { getSwapPriceImpactFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapPriceImpactFromPayload'
+import { formatPriceImpact } from '@core/ui/vault/swap/form/info/priceImpact'
+import { PriceImpactValue } from '@core/ui/vault/swap/form/info/PriceImpactValue'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { SwapVerifyAmount } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyAmount'
@@ -36,7 +39,8 @@ const logoSize = 14
  * The swap fee and the total that includes it render only when the payload
  * carries a fee. An initiator that predates that field leaves it empty, and a
  * co-signer holds no quote to recover it from — showing a total over gas alone
- * would misstate the cost rather than admit it is unknown.
+ * would misstate the cost rather than admit it is unknown. Price impact is
+ * hidden on the same terms, and for the same reason.
  */
 export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
@@ -68,6 +72,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
   const provider = getKeysignSwapProviderName(swapPayload)
   const providerLogoSrc = getSwapProviderLogoSrc(provider)
   const swapFee = getSwapFeeFromPayload(value)
+  const priceImpact = formatPriceImpact(getSwapPriceImpactFromPayload(value))
 
   return (
     <>
@@ -115,6 +120,12 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
           label={t('network_fee')}
           value={<JoinKeysignNetworkFeeValue value={value} />}
         />
+        {priceImpact && (
+          <SwapVerifyRow
+            label={t('price_impact')}
+            value={<PriceImpactValue value={priceImpact} />}
+          />
+        )}
         {swapFee && (
           <>
             <SwapVerifyRow

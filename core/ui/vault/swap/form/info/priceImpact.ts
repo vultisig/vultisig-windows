@@ -29,7 +29,8 @@ const readNativeSlippageBps = ({
   slippage_bps: slippageBps,
 }: NativeSwapFeesWithSlippage) => slippageBps
 
-type PriceImpactDisplay = {
+/** A price impact rendered for display: signed percentage plus its band. */
+export type PriceImpactDisplay = {
   percent: string
   level: PriceImpactLevel
 }
