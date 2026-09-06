@@ -2,6 +2,7 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { match } from '@vultisig/lib-utils/match'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 
 import { useCore } from '../state/core'
@@ -52,23 +53,33 @@ export type StoredDismissedBanners =
   | LegacyDismissedBannerIds
 
 /**
- * Per-banner cooldown (in ms) after dismissal, after which the banner may show
- * again. Configurable per banner rather than hard-coded in carousel logic.
+ * What a dismissal means for a given banner: `ttl` lets it resurface once that
+ * many ms have elapsed, `permanent` keeps it hidden for good.
  */
-export const bannerDismissalTtl: Record<BannerId, number> = {
-  buyVultPromo: convertDuration(7, 'd', 'ms'),
-  followOnX: convertDuration(15, 'd', 'ms'),
-  migrate: convertDuration(15, 'd', 'ms'),
-  agentNavigationCoachmark: convertDuration(15, 'd', 'ms'),
-  rujiraStaking: convertDuration(7, 'd', 'ms'),
-  vaultBackup: convertDuration(7, 'd', 'ms'),
-  referralCode: convertDuration(7, 'd', 'ms'),
-  kamino: convertDuration(7, 'd', 'ms'),
-  // Deliberately a TTL rather than a permanent dismissal: this banner is gated
-  // on the current vault, but the dismissal is stored per profile (#4769), so a
-  // dismissal on a vault with nothing to claim would otherwise hide the banner
-  // for good on a vault that does have claimable UTXOs.
-  qbtcClaim: convertDuration(7, 'd', 'ms'),
+export type BannerDismissPolicy = { ttl: number } | { permanent: null }
+
+/**
+ * Per-banner dismissal policy, assigned here next to the scope so a banner's
+ * whole dismiss behaviour reads from one place rather than leaking into the
+ * carousel. These are the local fallback: notification#33 settled that banners
+ * are not served from the notification service, so there is no remote policy to
+ * override them.
+ */
+export const bannerDismissPolicy: Record<BannerId, BannerDismissPolicy> = {
+  buyVultPromo: { ttl: convertDuration(7, 'd', 'ms') },
+  followOnX: { ttl: convertDuration(15, 'd', 'ms') },
+  migrate: { ttl: convertDuration(15, 'd', 'ms') },
+  agentNavigationCoachmark: { ttl: convertDuration(15, 'd', 'ms') },
+  rujiraStaking: { ttl: convertDuration(7, 'd', 'ms') },
+  vaultBackup: { ttl: convertDuration(7, 'd', 'ms') },
+  referralCode: { ttl: convertDuration(7, 'd', 'ms') },
+  kamino: { ttl: convertDuration(7, 'd', 'ms') },
+  // A campaign whose claim keeps its own entry point on the QBTC chain page, so
+  // a closed card has nothing to come back for. This was a 7d TTL only because
+  // dismissals were stored per profile (#4769) and a dismissal on a vault with
+  // nothing to claim would have hidden it on a vault that could; #4770 scoped it
+  // to the vault, so the reason for the TTL is gone.
+  qbtcClaim: { permanent: null },
 }
 
 /**
@@ -138,18 +149,20 @@ type IsBannerDismissedInput = {
   id: BannerId
   now: number
   vaultId: string
+  policy?: Record<BannerId, BannerDismissPolicy>
 }
 
 /**
- * A banner counts as dismissed only while it is within its TTL window, and only
- * against the record its scope names. Once the TTL has elapsed the dismissal is
- * ignored and the banner can show again.
+ * Whether a dismissal still hides the banner, read against the record its scope
+ * names. A `permanent` policy hides it for good; a `ttl` policy only hides it
+ * until that window has elapsed.
  */
 export const isBannerDismissed = ({
   banners,
   id,
   now,
   vaultId,
+  policy = bannerDismissPolicy,
 }: IsBannerDismissedInput): boolean => {
   const dismissal = match(bannerDismissScope[id], {
     global: () => banners.global[id],
@@ -160,7 +173,10 @@ export const isBannerDismissed = ({
     return false
   }
 
-  return now - dismissal.dismissedAt < bannerDismissalTtl[id]
+  return matchRecordUnion<BannerDismissPolicy, boolean>(policy[id], {
+    ttl: ms => now - dismissal.dismissedAt < ms,
+    permanent: () => true,
+  })
 }
 
 type RecordBannerDismissalInput = {
