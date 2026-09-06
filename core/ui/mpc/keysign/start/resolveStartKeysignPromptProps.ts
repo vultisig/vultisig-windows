@@ -69,10 +69,21 @@ export const resolveStartKeysignPromptProps = ({
       return {
         disabledMessage: match(keysignPayloadQuery.error.type, {
           'not-enough-funds': () => t('not_enough_funds'),
+          'ripple-destination-not-activated': () =>
+            extractErrorMsg(keysignPayloadQuery.error),
           'ripple-destination-tag-invalid': () =>
             extractErrorMsg(keysignPayloadQuery.error),
           'ripple-destination-tag-required': () =>
             t('ripple_destination_tag_required'),
+          'ripple-destination-trust-line-missing': () =>
+            extractErrorMsg(keysignPayloadQuery.error),
+          'ripple-issued-currency-amount-invalid': () =>
+            extractErrorMsg(keysignPayloadQuery.error),
+          'ripple-issuer-transfer-fee-unsupported': () =>
+            extractErrorMsg(keysignPayloadQuery.error),
+          'ripple-trust-line-issuer-not-activated': () =>
+            extractErrorMsg(keysignPayloadQuery.error),
+          'ton-memo-too-long': () => extractErrorMsg(keysignPayloadQuery.error),
         }),
       }
     }

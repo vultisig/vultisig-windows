@@ -328,6 +328,29 @@ describe('TonConnectBridge.send', () => {
   })
 
   describe('sendTransaction success', () => {
+    it.each(['valid_until', 'validUntil'])(
+      'forwards the %s deadline to the popup',
+      async field => {
+        const deadline = validUntil()
+        mockCallPopup.mockResolvedValue([{ data: { encoded: 'mock-boc' } }])
+        await bridge.send(
+          makeSendTxRequest({
+            [field]: deadline,
+            messages: [
+              {
+                address: 'EQARULUYsmJq1RiZ-YiH-IJLcAZUVkVff-KBPwEmmaQGH6aC',
+                amount: '100000000',
+              },
+            ],
+          })
+        )
+        expect(
+          mockCallPopup.mock.calls[0][0].sendTx.keysign.transactionDetails
+            .validUntil
+        ).toBe(deadline)
+      }
+    )
+
     it('should return signed BOC on success', async () => {
       const bocResult = 'te6cckEBAgSignedBoc'
 

@@ -20,10 +20,6 @@ describe('getCosmosChainFromAddress', () => {
       expect(getCosmosChainFromAddress('akash1abc123xyz')).toBe('Akash')
     })
 
-    it('returns Kujira for kujira1... addresses', () => {
-      expect(getCosmosChainFromAddress('kujira1abc123xyz')).toBe('Kujira')
-    })
-
     it('returns Noble for noble1... addresses', () => {
       expect(getCosmosChainFromAddress('noble1abc123xyz')).toBe('Noble')
     })

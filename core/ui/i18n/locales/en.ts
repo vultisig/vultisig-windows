@@ -582,6 +582,7 @@ export const en = {
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
   import_vault: 'Import Vault',
+  import_vult_backup: 'Import .vult backup',
   import_vault_share: 'Import vault share',
   import_vault_share_description: 'Use a vault share to recover your vault.',
   import_vault_share_supported_files: 'Supported file types: .bak & .vult',
@@ -1129,12 +1130,6 @@ export const en = {
   staked: 'Staked',
   transfer: 'Transfer',
   jetton_transfer: 'Jetton Transfer',
-  token_verification_unverified: 'Unverified',
-  token_verification_unverified_hint:
-    'This token is not on the verified list. Check its contract address before trusting it.',
-  token_verification_scam: 'SCAM',
-  token_verification_scam_hint:
-    'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
   nft_transfer: 'NFT Transfer',
   excess_gas_refund: 'Excess Gas Refund',
   forward_ton_amount: 'Forward GRAM Amount',
@@ -1200,13 +1195,13 @@ export const en = {
   support: 'Support',
   swap: 'Swap',
   swaps: 'Swaps',
+  swap_applied_discounts: 'Applied Discounts:',
   swap_discount: 'Swap Discount',
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
   swap_fee_included_in_rate: 'Included in the quoted exchange rate',
   swap_protocol_fee: 'Protocol Fee',
-  swap_referral_fee: 'Referral Fee',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
   swap_route_eta_minutes: '~{{minutes}}m',
@@ -1311,6 +1306,9 @@ export const en = {
   swap_same_asset: 'Cannot swap between the same asset',
   swap_all_providers_failed:
     'Swap providers are temporarily unavailable. Please try again in a moment.',
+  swap_failed_slippage: 'Price moved past slippage tolerance',
+  swap_failed_slippage_description:
+    'The price moved before this swap landed, so it would have paid out less than your slippage tolerance allowed and the network reverted it. Raise your slippage tolerance or try again.',
   swap_amount_below_minimum:
     "Increase the amount to meet the provider's minimum swap amount.",
   swap_amount_too_small: 'Enter a larger amount to get a swap quote.',
@@ -1549,6 +1547,14 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" already exists',
+  vault_cannot_be_opened: "This vault can't be opened on this device",
+  vault_cannot_be_opened_backup_description:
+    'Your .vult backup is the way back. Import it and this vault works again.',
+  vault_cannot_be_opened_description:
+    'Its key shares are encrypted, and the key that unlocks them did not come across with this restore. Nothing on this device can read them, so it cannot sign with this vault.',
+  vault_cannot_be_opened_no_backup: "I don't have a backup",
+  vault_cannot_be_opened_no_backup_description:
+    'Without a .vult backup, the key shares on this device cannot be unlocked again — that part is not recoverable. The vault itself may still be: if your other devices hold their own shares and still reach its signing threshold, it keeps working without this one.',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_backup_page_password_protection:
@@ -1897,4 +1903,10 @@ export const en = {
     'Wallet entry is not an object.',
   station_migration_reason_unsupported_fallback:
     'This wallet needs review before it can be migrated.',
+  token_verification_unverified: 'Unverified',
+  token_verification_unverified_hint:
+    'This token is not on the verified list. Check its contract address before trusting it.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
 }

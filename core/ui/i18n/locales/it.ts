@@ -511,6 +511,7 @@ export const it = {
   import_seedphrase_onboarding_title:
     'Stai entrando in una nuova era, <g>lasciandoti alle spalle vecchie frasi fatte.</g> Avrai bisogno di:',
   import_vault: 'Importa Vault',
+  import_vult_backup: 'Importa backup .vult',
   import_vault_share: 'Importa condivisione vault',
   import_vault_share_description:
     'Utilizza una condivisione vault per recuperare il tuo vault.',
@@ -1043,6 +1044,15 @@ export const it = {
     version: 'Versione {{latestVersion}}',
   },
   vault_already_exists: 'Il caveau "{{name}}" esiste già',
+  vault_cannot_be_opened:
+    'Questo vault non può essere aperto su questo dispositivo',
+  vault_cannot_be_opened_backup_description:
+    'Il tuo backup .vult è la via del ritorno. Importalo e questo vault tornerà a funzionare.',
+  vault_cannot_be_opened_description:
+    'I suoi key share sono cifrati e la chiave che li sblocca non è arrivata con questo ripristino. Nulla su questo dispositivo può leggerli, quindi non può firmare con questo vault.',
+  vault_cannot_be_opened_no_backup: 'Non ho un backup',
+  vault_cannot_be_opened_no_backup_description:
+    'Senza un backup .vult i key share su questo dispositivo non possono più essere decifrati: questa parte non è recuperabile. Il vault stesso potrebbe esserlo ancora: se i tuoi altri dispositivi conservano i propri share e raggiungono ancora la soglia di firma, continua a funzionare senza questo.',
   vault_backup_page_password_info:
     'Non archiviare mai le condivisioni Vault di dispositivi diversi nella stessa posizione',
   vault_backup_page_password_protection:
@@ -1895,7 +1905,6 @@ export const it = {
   price_impact: 'Impatto sul prezzo',
   swap_fee_included_in_rate: 'Incluso nel tasso di cambio indicato',
   swap_protocol_fee: 'Tariffa del protocollo',
-  swap_referral_fee: 'Commissione di segnalazione',
   select_route: 'Seleziona il percorso',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1955,6 +1964,10 @@ export const it = {
     'Non è stato scambiato qui in questa finestra — il massimo è stato {{price}}',
   swap_quote_expired:
     'Questo preventivo è scaduto. Aggiorna la pagina per visualizzare il prezzo attuale.',
+  swap_failed_slippage: 'Il prezzo ha superato la soglia di slittamento',
+  swap_failed_slippage_description:
+    'Il prezzo si è mosso prima che questo scambio venisse eseguito, quindi il pagamento sarebbe stato inferiore alla tolleranza di slippage consentita e la rete lo ha annullato. Aumenta la tolleranza di slippage o riprova.',
+  swap_applied_discounts: 'Sconti applicati:',
   token_verification_unverified: 'Non verificato',
   token_verification_unverified_hint:
     "Questo token non è presente nell'elenco verificato. Controlla l'indirizzo del contratto prima di considerarlo valido.",
