@@ -27,34 +27,11 @@ import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPassc
 import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
 import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
-
-type HasSameKeyShareSourceInput = {
-  /** The vault the held key-share result was read from. */
-  resolved: Vault
-  /** The vault currently on screen. */
-  current: Vault
-}
-
-/**
- * Whether two vault objects carry the same key-share material, which is all
- * that decides readability. Coins are merged into a fresh vault object on every
- * coin write, so comparing the objects themselves would discard a resolved
- * result — and unmount everything below this provider — on a change that cannot
- * affect readability. A reshare keeps the vault id but replaces the shares and
- * still invalidates, so the fail-closed guarantee holds.
- */
-const hasSameKeyShareSource = ({
-  resolved,
-  current,
-}: HasSameKeyShareSourceInput) =>
-  getVaultId(resolved) === getVaultId(current) &&
-  resolved.libType === current.libType &&
-  resolved.keyShares === current.keyShares &&
-  resolved.chainKeyShares === current.chainKeyShares &&
-  resolved.keyShareMldsa === current.keyShareMldsa &&
-  resolved.publicKeys === current.publicKeys &&
-  resolved.chainPublicKeys === current.chainPublicKeys &&
-  resolved.publicKeyMldsa === current.publicKeyMldsa
+import {
+  getVaultReadabilityInputs,
+  hasSameReadabilityInputs,
+  VaultReadabilityInputs,
+} from './vaultReadability'
 
 const UnreadableVaultRecoveryContext = createContext<string | null>(null)
 
@@ -96,12 +73,12 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
 
-  // The result is tagged with the exact source vault object it came from. A
-  // reshare keeps the same id but changes the shares, so id-only state could
-  // expose a stale result. Stored shares are never provided while readability
-  // is unresolved.
+  // The result is tagged with the exact inputs it was read under. A reshare
+  // keeps the same id but changes the shares, and a passcode change re-reads
+  // the same bytes, so id-only state could expose a stale result. Stored shares
+  // are never provided while readability is unresolved.
   const [shareState, setShareState] = useState<{
-    sourceVault: Vault
+    source: VaultReadabilityInputs
     result:
       | { status: 'ready'; shares: VaultAllKeyShares }
       | { status: 'unreadable' }
@@ -113,6 +90,17 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       setShareState(null)
       return
     }
+
+    // Snapshotted before the read starts: `vault`, `passcode` and the rest are
+    // closed over here, so a snapshot taken once the read settles would describe
+    // whatever those hold by then and could pass this result off as current for
+    // inputs it was never read under.
+    const source = getVaultReadabilityInputs({
+      vault,
+      hasPasscodeEncryption,
+      passcode,
+      validateLegacyVaultKeyShares,
+    })
 
     let cancelled = false
 
@@ -131,7 +119,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .then(shares => {
         if (!cancelled) {
           setShareState({
-            sourceVault: vault,
+            source,
             result: { status: 'ready', shares },
           })
         }
@@ -139,7 +127,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .catch(error => {
         if (!cancelled) {
           setShareState({
-            sourceVault: vault,
+            source,
             result:
               error instanceof UnreadableVaultKeySharesError
                 ? { status: 'unreadable' }
@@ -173,7 +161,15 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
   if (
     !shareState ||
-    !hasSameKeyShareSource({ resolved: shareState.sourceVault, current: vault })
+    !hasSameReadabilityInputs({
+      resolved: shareState.source,
+      current: getVaultReadabilityInputs({
+        vault,
+        hasPasscodeEncryption,
+        passcode,
+        validateLegacyVaultKeyShares,
+      }),
+    })
   ) {
     return <ProductLogoBlock />
   }
