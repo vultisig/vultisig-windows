@@ -54,6 +54,16 @@ type KeysignSigningStepProps = Partial<OnBackProp> & {
   toAddressLabel?: string
 }
 
+/**
+ * The provider error a wrapped one was raised from. `Error.cause` is ES2022 and
+ * the extension app compiles against ES2021, where the property is not declared
+ * on `Error`, so it is read through a guard rather than off the class.
+ */
+const getErrorCause = (error: unknown): unknown =>
+  typeof error === 'object' && error !== null && 'cause' in error
+    ? error.cause
+    : undefined
+
 const isDklsMaliciousPartyError = (error: unknown) => {
   if (error instanceof Error && error.name === 'DklsMaliciousPartyError') {
     return true
@@ -316,7 +326,7 @@ export const KeysignSigningStep = ({
           return (
             <FullPageFlowErrorState
               variant="error"
-              error={tonRejection ? tonRejection.cause : error}
+              error={tonRejection ? getErrorCause(tonRejection) : error}
               title={t('broadcast_error')}
               description={
                 tonRejection
