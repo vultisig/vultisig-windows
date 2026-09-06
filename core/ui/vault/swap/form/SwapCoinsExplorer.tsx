@@ -1,4 +1,3 @@
-import { AddCustomTokenForm } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenForm'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
@@ -23,6 +22,7 @@ import { useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { AddCustomTokenForm } from '../../../chain/coin/addCustomToken/AddCustomTokenForm'
 import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
 import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
 import { useWhitelistedCoinsQuery } from '../../../chain/coin/queries/useWhitelistedCoinsQuery'
