@@ -1,9 +1,42 @@
 import { defineConfig } from '@playwright/test'
 import { config } from 'dotenv'
+import module from 'module'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { extensionPath } from './extension-path'
+
+// Playwright prefers Node's synchronous module hooks (`module.registerHooks`,
+// Node >= 22.15). Under those hooks a CJS dependency that reaches an ESM-only
+// package mid-graph fails to link, and the whole project dies at collection
+// with `ERR_VM_MODULE_LINK_FAILURE` before a single test runs. Several
+// dependencies do exactly that: @solana/web3.js -> rpc-websockets,
+// @cosmjs/crypto -> @noble/hashes v2, web-push.
+//
+// PLAYWRIGHT_FORCE_ASYNC_LOADER is Playwright's own escape hatch: it falls back
+// to the async loader, which links the graph correctly. It has to be set before
+// Playwright boots, so setting it here would be too late - `yarn test:e2e` sets
+// it instead, and this guard explains the fix rather than letting the run die
+// with a stack trace pointing into node_modules.
+if (
+  typeof module.registerHooks === 'function' &&
+  !process.env.PLAYWRIGHT_FORCE_ASYNC_LOADER &&
+  !process.env.PW_DISABLE_TS_ESM
+) {
+  throw new Error(
+    [
+      "Playwright is running with Node's synchronous module hooks, which cannot",
+      'link the ESM-only packages this suite depends on. Every spec would fail to',
+      'collect.',
+      '',
+      'Run the suite through the workspace script, which sets the flag for you:',
+      '  yarn workspace @clients/extension test:e2e --project=network',
+      '',
+      'Or set it yourself:',
+      '  PLAYWRIGHT_FORCE_ASYNC_LOADER=1 npx playwright test --config tests/e2e/playwright.config.ts',
+    ].join('\n')
+  )
+}
 
 // Load .env from e2e directory for test vault configuration
 const currentFilename = fileURLToPath(import.meta.url)
@@ -23,11 +56,12 @@ config({ path: path.resolve(currentDirectory, '.env') })
  *   2. Select `dist` (default) or `dist-station` with
  *      `VULTISIG_EXTENSION_ARTIFACT`
  *
- * Usage:
- *   npx playwright test --config clients/extension/tests/e2e/playwright.config.ts
- *   npx playwright test --project=ui-isolated
- *   npx playwright test --project=network
- *   npx playwright test --project=fund-dependent
+ * Usage (always via the workspace script - it sets
+ * PLAYWRIGHT_FORCE_ASYNC_LOADER, without which nothing collects):
+ *   yarn workspace @clients/extension test:e2e
+ *   yarn workspace @clients/extension test:e2e --project=ui-isolated
+ *   yarn workspace @clients/extension test:e2e --project=network
+ *   yarn workspace @clients/extension test:e2e --project=fund-dependent
  *
  * NOTE: Chrome extension testing requires headed mode (not headless).
  */
