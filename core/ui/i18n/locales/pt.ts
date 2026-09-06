@@ -1992,6 +1992,12 @@ export const pt = {
     'A carteira aceitou a transação, mas não conseguiu efetuar a transferência, portanto nada foi enviado. A taxa de rede foi cobrada mesmo assim. Verifique a transação e tente novamente.',
   ton_tx_failure_action_partially_failed:
     'A carteira não conseguiu efetuar pelo menos uma transferência nesta transação, embora outras possam ter sido concluídas. A taxa de rede foi cobrada mesmo assim. Verifique seu histórico de transações antes de enviar novamente.',
+  token_verification_unverified: 'Não verificado',
+  token_verification_unverified_hint:
+    'Este token não está na lista de tokens verificados. Verifique o endereço do contrato antes de confiar nele.',
+  token_verification_scam: 'FRAUDE',
+  token_verification_scam_hint:
+    'Este token copia o nome de um token verificado, mas reside em um endereço de contrato diferente. É uma falsificação — não confie nele.',
   enable_ton_w5_wallet: 'Use a carteira W5 TON',
   enable_ton_w5_wallet_description:
     'Crie contas TON com o contrato W5 (v5r1) em vez do V4R2. Isso altera o endereço usado pela carteira, e cada contrato passa a ser um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',

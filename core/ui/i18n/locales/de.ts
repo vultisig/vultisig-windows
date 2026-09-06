@@ -2005,6 +2005,12 @@ export const de = {
     'Die Wallet hat die Transaktion akzeptiert, konnte die Überweisung aber nicht durchführen, daher wurde kein Geld gesendet. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie die Transaktion und versuchen Sie es erneut.',
   ton_tx_failure_action_partially_failed:
     'Mindestens eine Überweisung dieser Transaktion konnte nicht ausgeführt werden, andere Transaktionen wurden möglicherweise erfolgreich abgeschlossen. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie Ihren Transaktionsverlauf, bevor Sie erneut eine Überweisung senden.',
+  token_verification_unverified: 'Unbestätigt',
+  token_verification_unverified_hint:
+    'Dieser Token befindet sich nicht auf der Liste der verifizierten Token. Überprüfen Sie seine Vertragsadresse, bevor Sie ihm vertrauen.',
+  token_verification_scam: 'BETRUG',
+  token_verification_scam_hint:
+    'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
   enable_ton_w5_wallet: 'Verwenden Sie TON W5-Wallet',
   enable_ton_w5_wallet_description:
     'Erstellen Sie TON-Konten mit dem W5 (v5r1)-Vertrag anstelle von V4R2. Dadurch ändert sich die Adresse, die die Wallet verwendet. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder übertragen, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',

@@ -1973,6 +1973,12 @@ export const nl = {
     'De wallet accepteerde de transactie, maar kon de overdracht niet uitvoeren, waardoor er niets is verzonden. De netwerkkosten zijn echter wel in rekening gebracht. Controleer de transactie en probeer het opnieuw.',
   ton_tx_failure_action_partially_failed:
     'De wallet kon in deze transactie ten minste één overboeking niet uitvoeren, terwijl andere overboekingen mogelijk wel zijn gelukt. De netwerkkosten zijn desondanks in rekening gebracht. Controleer uw transactiegeschiedenis voordat u opnieuw een overboeking doet.',
+  token_verification_unverified: 'Niet geverifieerd',
+  token_verification_unverified_hint:
+    'Dit token staat niet op de lijst met geverifieerde tokens. Controleer het contractadres voordat u het vertrouwt.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
     'Definieer TON-accounts met het W5 (v5r1)-contract in plaats van V4R2. Dit verandert het adres dat de wallet gebruikt, en elk contract is een apart adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',

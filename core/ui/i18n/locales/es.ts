@@ -1963,7 +1963,7 @@ export const es = {
     'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
   swap_applied_discounts: 'Descuentos aplicados:',
   swap_add_custom_token: '+ Agregar token personalizado',
-  swap_no_token_found: 'No se encontró ningún token.',
+  swap_no_token_found: 'No se encontró ningún token',
   ton_tx_failure_seqno_mismatch:
     'Otra transacción de esta billetera se procesó primero, por lo que la red rechazó esta por estar fuera de orden. Revisa tu historial: si esta transferencia no aparece, envíala de nuevo.',
   ton_tx_failure_expired:
@@ -1990,6 +1990,12 @@ export const es = {
     'La billetera aceptó la transacción, pero no pudo realizar la transferencia, por lo que no se envió nada. Aun así, se cobró la comisión de red. Verifique la transacción e inténtelo de nuevo.',
   ton_tx_failure_action_partially_failed:
     'La billetera no pudo realizar al menos una transferencia en esta transacción, aunque es posible que otras se hayan procesado correctamente. Se aplicó la comisión de red. Revise su historial de transacciones antes de volver a enviar.',
+  token_verification_unverified: 'Inconfirmado',
+  token_verification_unverified_hint:
+    'Este token no está en la lista verificada. Compruebe su dirección de contrato antes de confiar en él.',
+  token_verification_scam: 'ESTAFA',
+  token_verification_scam_hint:
+    'Este token copia el nombre de un token verificado, pero reside en una dirección de contrato diferente. Es falso; no confíe en él.',
   enable_ton_w5_wallet: 'Utilice la cartera W5 TON',
   enable_ton_w5_wallet_description:
     'Derive TON cuentas con el contrato W5 (v5r1) en lugar del V4R2. Esto cambia la dirección que usa la billetera, y cada contrato es una dirección separada con su propio saldo; no transfiere fondos, por lo que cualquier cosa que se encuentre en la otra dirección permanece allí hasta que usted la envíe.',

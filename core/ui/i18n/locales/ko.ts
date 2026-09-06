@@ -1949,6 +1949,12 @@ export const ko = {
     '지갑에서 거래를 승인했지만 이체를 실행할 수 없어 아무것도 전송되지 않았습니다. 네트워크 수수료는 부과되었습니다. 거래 내역을 확인하고 다시 시도해 주세요.',
   ton_tx_failure_action_partially_failed:
     '지갑에서 이 거래의 최소 한 건의 전송을 처리할 수 없었으며, 다른 전송은 정상적으로 처리되었을 수 있습니다. 네트워크 수수료는 부과되었습니다. 다시 전송하기 전에 거래 내역을 확인하세요.',
+  token_verification_unverified: '미확인',
+  token_verification_unverified_hint:
+    '이 토큰은 검증된 목록에 없습니다. 신뢰하기 전에 해당 계약 주소를 확인하세요.',
+  token_verification_scam: '스캠',
+  token_verification_scam_hint:
+    '이 토큰은 검증된 토큰의 이름을 모방했지만, 다른 컨트랙트 주소에 존재합니다. 이는 위조 토큰이므로 신뢰하지 마십시오.',
   enable_ton_w5_wallet: 'TON W5 지갑을 사용하세요',
   enable_ton_w5_wallet_description:
     'TON 계정을 생성할 때 V4R2 대신 W5(v5r1) 계약을 사용하세요. 이렇게 하면 지갑에서 사용하는 주소가 변경되고, 각 계약은 자체 잔액을 가진 별도의 주소가 됩니다. 자금 이동은 없으므로 다른 주소에 있는 자금은 사용자가 전송하기 전까지 그대로 유지됩니다.',
