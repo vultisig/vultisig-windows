@@ -2005,4 +2005,6 @@ export const de = {
     'Die Wallet hat die Transaktion akzeptiert, konnte die Überweisung aber nicht durchführen, daher wurde kein Geld gesendet. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie die Transaktion und versuchen Sie es erneut.',
   ton_tx_failure_action_partially_failed:
     'Mindestens eine Überweisung dieser Transaktion konnte nicht ausgeführt werden, andere Transaktionen wurden möglicherweise erfolgreich abgeschlossen. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie Ihren Transaktionsverlauf, bevor Sie erneut eine Überweisung senden.',
+  ton_simulation_will_fail:
+    'Die Transaktionsvorschau geht davon aus, dass diese Transaktion fehlschlagen wird. Wenn Sie sie trotzdem unterzeichnen, fallen wahrscheinlich Netzwerkgebühren an, ohne dass die Transaktion abgeschlossen wird.',
 }

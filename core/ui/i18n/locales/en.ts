@@ -1931,4 +1931,6 @@ export const en = {
     'The network aborted this transaction before it could carry out the transfer.',
   ton_tx_failure_contract_rejected:
     'The contract rejected the transaction (exit code {{exitCode}}).',
+  ton_simulation_will_fail:
+    'The transaction preview expects this transaction to fail. Signing it anyway is likely to cost the network fee without completing it.',
 }

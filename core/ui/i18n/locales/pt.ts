@@ -1992,4 +1992,6 @@ export const pt = {
     'A carteira aceitou a transação, mas não conseguiu efetuar a transferência, portanto nada foi enviado. A taxa de rede foi cobrada mesmo assim. Verifique a transação e tente novamente.',
   ton_tx_failure_action_partially_failed:
     'A carteira não conseguiu efetuar pelo menos uma transferência nesta transação, embora outras possam ter sido concluídas. A taxa de rede foi cobrada mesmo assim. Verifique seu histórico de transações antes de enviar novamente.',
+  ton_simulation_will_fail:
+    'A pré-visualização da transação prevê que esta transação falhará. Assiná-la mesmo assim provavelmente resultará na cobrança da taxa de rede sem que a transação seja concluída.',
 }

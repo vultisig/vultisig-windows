@@ -1973,4 +1973,6 @@ export const nl = {
     'De wallet accepteerde de transactie, maar kon de overdracht niet uitvoeren, waardoor er niets is verzonden. De netwerkkosten zijn echter wel in rekening gebracht. Controleer de transactie en probeer het opnieuw.',
   ton_tx_failure_action_partially_failed:
     'De wallet kon in deze transactie ten minste één overboeking niet uitvoeren, terwijl andere overboekingen mogelijk wel zijn gelukt. De netwerkkosten zijn desondanks in rekening gebracht. Controleer uw transactiegeschiedenis voordat u opnieuw een overboeking doet.',
+  ton_simulation_will_fail:
+    'De transactiepreview verwacht dat deze transactie zal mislukken. Als u de transactie toch ondertekent, kost dit waarschijnlijk netwerkkosten zonder dat de transactie wordt voltooid.',
 }
