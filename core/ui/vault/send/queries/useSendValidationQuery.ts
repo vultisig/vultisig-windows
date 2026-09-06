@@ -1,4 +1,5 @@
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
@@ -19,6 +20,9 @@ export const useSendValidationQuery = () => {
   const { t } = useTranslation()
 
   const coin = useCurrentSendCoin()
+  // XRPL issued currencies pay fees in XRP. Other token families may pay in
+  // the token itself, so do not infer their fee asset from chainFeeCoin.
+  const requiresNativeFee = isFeeCoin(coin) || coin.chain === Chain.Ripple
   // The spendable amount, not the entered one: an entered amount that only
   // overshoots once the fee is added is adjusted down to what the balance
   // covers, and the send is committed at that amount — so the form must judge
@@ -53,7 +57,7 @@ export const useSendValidationQuery = () => {
             balance,
             walletCore,
             t,
-            fee: isFeeCoin(coin) ? feeEstimateQuery.data : undefined,
+            fee: requiresNativeFee ? feeEstimateQuery.data : undefined,
             nativeBalance: isFeeCoin(coin)
               ? undefined
               : nativeBalanceQuery.data,
@@ -66,28 +70,37 @@ export const useSendValidationQuery = () => {
         destinationTag,
         feeEstimateQuery.data,
         nativeBalanceQuery.data,
+        requiresNativeFee,
         t,
         walletCore,
       ]
     )
   )
 
-  // A fee-coin send can't be validated until its fee is known. While the fee
-  // estimate is still loading, keep the form pending instead of reporting it
-  // as valid — otherwise Continue briefly enables (e.g. amount === balance,
-  // where the verdict flips once the fee arrives and amount + fee exceeds
-  // balance).
-  const isFeeRequiredButUnknown =
-    isFeeCoin(coin) &&
-    feeEstimateQuery.data == null &&
-    feeEstimateQuery.error == null
-
+  // XRP tokens need XRP for fees too. An unavailable balance/fee must not
+  // briefly enable Continue or hide a failed funding check.
   if (
-    isFeeRequiredButUnknown &&
+    requiresNativeFee &&
     validationQuery.data != null &&
     isRecordEmpty(validationQuery.data)
   ) {
-    return { ...validationQuery, data: undefined, isPending: true }
+    const fundingError =
+      feeEstimateQuery.error ??
+      (!isFeeCoin(coin) ? nativeBalanceQuery.error : null)
+    if (fundingError) {
+      return {
+        ...validationQuery,
+        data: undefined,
+        error: fundingError,
+        isPending: false,
+      }
+    }
+    if (
+      feeEstimateQuery.data == null ||
+      (!isFeeCoin(coin) && nativeBalanceQuery.data == null)
+    ) {
+      return { ...validationQuery, data: undefined, isPending: true }
+    }
   }
 
   return validationQuery

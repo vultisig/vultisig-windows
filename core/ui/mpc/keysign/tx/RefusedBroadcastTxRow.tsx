@@ -42,7 +42,7 @@ export const RefusedBroadcastTxRow = ({
       not_found: () => [t('not_seen_onchain'), 'warning'],
       success: () => [t('confirmed'), 'success'],
       error: () => [t('failed'), 'danger'],
-      expired: () => [t('expired_before_confirmation'), 'danger'],
+      expired: () => [t('failed'), 'danger'],
     }
   )
 
