@@ -506,6 +506,7 @@ export const pt = {
   import_seedphrase_onboarding_title:
     'Você está entrando em uma nova era, <g> para trás </g> antigas frases de recuperação. Você precisará de:',
   import_vault: 'Cofre de Importação',
+  import_vult_backup: 'Importar cópia .vult',
   import_vault_share: 'Compartilhamento do cofre de importação',
   import_vault_share_description:
     'Utilize uma pasta compartilhada do cofre para recuperar seu cofre.',
@@ -1040,6 +1041,14 @@ export const pt = {
     version: 'Versão {{latestVersion}}',
   },
   vault_already_exists: 'O Vault "{{name}}" já existe.',
+  vault_cannot_be_opened: 'Este vault não pode ser aberto neste dispositivo',
+  vault_cannot_be_opened_backup_description:
+    'A sua cópia de segurança .vult é o caminho de volta. Importe-a e este vault volta a funcionar.',
+  vault_cannot_be_opened_description:
+    'Os seus key shares estão encriptados e a chave que os desbloqueia não veio com este restauro. Nada neste dispositivo os consegue ler, por isso não pode assinar com este vault.',
+  vault_cannot_be_opened_no_backup: 'Não tenho cópia de segurança',
+  vault_cannot_be_opened_no_backup_description:
+    'Sem uma cópia .vult, os key shares deste dispositivo já não podem ser desencriptados — essa parte não é recuperável. O vault em si ainda pode ser: se os seus outros dispositivos guardarem os próprios shares e continuarem a atingir o limiar de assinatura, ele continua a funcionar sem este dispositivo.',
   vault_backup_page_password_info:
     'Nunca armazene compartilhamentos do Vault de dispositivos diferentes no mesmo local.',
   vault_backup_page_password_protection:
@@ -1892,7 +1901,6 @@ export const pt = {
   price_impact: 'Impacto no preço',
   swap_fee_included_in_rate: 'Incluído na taxa de câmbio cotada',
   swap_protocol_fee: 'Taxa de protocolo',
-  swap_referral_fee: 'Taxa de encaminhamento',
   select_route: 'Selecione a rota',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1952,4 +1960,11 @@ export const pt = {
     'Não houve negociações aqui neste período — a máxima foi {{price}}',
   swap_quote_expired:
     'Esta cotação expirou. Atualize a página para ver o preço atual.',
+  swap_failed_slippage: 'O preço ultrapassou a tolerância de derrapagem.',
+  swap_failed_slippage_description:
+    'O preço se alterou antes da conclusão desta operação de troca, portanto, o pagamento teria sido inferior à sua tolerância de slippage permitida, e a rede reverteu a transação. Aumente sua tolerância de slippage ou tente novamente.',
+  swap_applied_discounts: 'Descontos aplicados:',
+  enable_ton_w5_wallet: 'Use a carteira W5 TON',
+  enable_ton_w5_wallet_description:
+    'Crie contas TON com o contrato W5 (v5r1) em vez do V4R2. Cada contrato é um endereço separado com seu próprio saldo; as moedas TON existentes são transferidas para a conta selecionada.',
 }

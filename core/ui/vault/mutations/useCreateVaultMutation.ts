@@ -38,7 +38,12 @@ export const useCreateVaultMutation = (
   const hasPasscodeEncryption = useIsPasscodeRequired()
   const [passcode] = usePasscode()
 
-  const { createVault, getIsTonW5Enabled, replaceVault, validateLegacyVaultKeyShares } = useCore()
+  const {
+    createVault,
+    getIsTonW5Enabled,
+    replaceVault,
+    validateLegacyVaultKeyShares,
+  } = useCore()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const { mutateAsync: createCoins } = useCreateCoinsMutation()
