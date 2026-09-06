@@ -2000,5 +2000,5 @@ export const pt = {
     'Este token copia o nome de um token verificado, mas reside em um endereço de contrato diferente. É uma falsificação — não confie nele.',
   enable_ton_w5_wallet: 'Use a carteira W5 TON',
   enable_ton_w5_wallet_description:
-    'Crie contas TON com o contrato W5 (v5r1) em vez do V4R2. Isso altera o endereço usado pela carteira, e cada contrato passa a ser um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
+    'Use o contrato W5 (v5r1) em vez do V4R2 ao derivar os endereços TON deste cofre. Isso altera o endereço usado pela carteira, e cada contrato é um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
 }

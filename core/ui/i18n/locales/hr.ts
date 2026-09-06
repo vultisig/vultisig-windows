@@ -1966,5 +1966,5 @@ export const hr = {
     'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
   enable_ton_w5_wallet: 'Koristite TON W5 novčanik',
   enable_ton_w5_wallet_description:
-    'Izvedite TON račune s W5 (v5r1) ugovorom umjesto V4R2. To mijenja adresu koju novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
+    'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
 }

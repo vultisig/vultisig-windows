@@ -2013,5 +2013,5 @@ export const de = {
     'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
   enable_ton_w5_wallet: 'Verwenden Sie TON W5-Wallet',
   enable_ton_w5_wallet_description:
-    'Erstellen Sie TON-Konten mit dem W5 (v5r1)-Vertrag anstelle von V4R2. Dadurch ändert sich die Adresse, die die Wallet verwendet. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder übertragen, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
+    'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
 }

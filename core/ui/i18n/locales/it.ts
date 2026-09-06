@@ -2004,5 +2004,5 @@ export const it = {
     'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
   enable_ton_w5_wallet: 'Utilizza il wallet W5 TON',
   enable_ton_w5_wallet_description:
-    "Genera gli account TON con il contratto W5 (v5r1) invece di V4R2. Questo modifica l'indirizzo utilizzato dal portafoglio e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
+    "Utilizza il contratto W5 (v5r1) anziché V4R2 quando derivi gli indirizzi TON di questo vault. Questo modifica l'indirizzo utilizzato dal wallet e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
 }

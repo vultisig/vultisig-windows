@@ -109,6 +109,36 @@ describe('TON W5 developer toggle', () => {
     ])
   })
 
+  // The flag is written only after every coin has moved, so a move that fails
+  // partway must not leave the vault holding a mix of both contracts' addresses
+  // while it still believes it is on the old one.
+  it('puts every coin back when one rewrite fails partway through', async () => {
+    const failOnSecondCreate = {
+      ...coinsStorage,
+      createCoin: vi
+        .fn(coinsStorage.createCoin)
+        .mockImplementationOnce(coinsStorage.createCoin)
+        .mockImplementationOnce(async () => {
+          throw new Error('storage is full')
+        }),
+    }
+
+    await expect(
+      moveTonCoinsToWalletVersion({
+        vaults: [{ ...vault, coins: tonCoins }],
+        walletCore,
+        tonWalletVersion: 'v5r1',
+        createCoin: failOnSecondCreate.createCoin,
+        deleteCoin: failOnSecondCreate.deleteCoin,
+      })
+    ).rejects.toThrow('storage is full')
+
+    expect(await addressesOfStoredTonCoins()).toEqual([
+      v4r2Address,
+      v4r2Address,
+    ])
+  })
+
   it('keeps everything about the coins except the address', async () => {
     await move('v5r1')
     const coins = await coinsStorage.getCoins()

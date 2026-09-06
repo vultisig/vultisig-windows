@@ -1939,5 +1939,5 @@ export const en = {
     'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
   enable_ton_w5_wallet: 'Use TON W5 wallet',
   enable_ton_w5_wallet_description:
-    'Derive TON accounts with the W5 (v5r1) contract instead of V4R2. This changes which address the wallet uses, and each contract is a separate address with its own balance — it moves no funds, so anything held at the other address stays there until you send it.',
+    "Use the W5 (v5r1) contract instead of V4R2 when deriving this vault's TON addresses. This changes which address the wallet uses, and each contract is a separate address with its own balance — it moves no funds, so anything held at the other address stays there until you send it.",
 }

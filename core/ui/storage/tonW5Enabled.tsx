@@ -13,6 +13,7 @@ import {
   Vault,
 } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { useCore } from '../state/core'
 import { CoinsStorage } from './coins'
@@ -103,21 +104,34 @@ export const moveTonCoinsToWalletVersion = async ({
 
     const vaultId = getVaultId(vault)
 
+    const rewritten: AccountCoin[] = []
+
     for (const coin of tonCoins) {
       // Rewritten unconditionally, never skipped when the address already looks
       // right: `coins` is a query snapshot that can lag storage, so what it
       // says a coin holds is not evidence of what is actually stored.
       await deleteCoin({ vaultId, coinKey: coin })
 
-      try {
-        await createCoin({ vaultId, coin: { ...coin, address } })
-      } catch (error) {
-        // The delete has already landed. Put the record back rather than let a
-        // failed flip leave the coin recorded at no address at all, which no
-        // later run could heal because there would be nothing left to move.
-        await createCoin({ vaultId, coin })
-        throw error
+      const created = await attempt(
+        createCoin({ vaultId, coin: { ...coin, address } })
+      )
+
+      if ('error' in created) {
+        // Put this coin back — its delete has already landed — and undo the
+        // ones that already moved. The flag is written only after the whole
+        // move succeeds, so coins left on the new contract would strand the
+        // vault holding two addresses while it still believes it is on the old
+        // one. The restores are best-effort so a failing one cannot hide why
+        // the move failed in the first place.
+        for (const moved of [coin, ...rewritten]) {
+          await attempt(deleteCoin({ vaultId, coinKey: { ...moved, address } }))
+          await attempt(createCoin({ vaultId, coin: moved }))
+        }
+
+        throw created.error
       }
+
+      rewritten.push(coin)
     }
   }
 }
