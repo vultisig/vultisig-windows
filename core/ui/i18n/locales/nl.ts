@@ -1945,6 +1945,8 @@ export const nl = {
   swap_failed_slippage_description:
     'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
   swap_applied_discounts: 'Toegepaste kortingen:',
+  swap_add_custom_token: '+ Voeg een aangepast token toe',
+  swap_no_token_found: 'Geen token gevonden',
   ton_tx_failure_seqno_mismatch:
     'Een andere transactie vanuit deze portemonnee werd eerst verwerkt, waardoor het netwerk deze als niet in de juiste volgorde heeft afgewezen. Controleer uw transactiegeschiedenis: als deze overschrijving daar niet tussen staat, verstuur hem dan opnieuw.',
   ton_tx_failure_expired:

@@ -1802,6 +1802,8 @@ export const zh = {
   swap_failed_slippage_description:
     '此次掉期交易完成前价格发生了变动，因此支付金额低于您设定的滑点容忍度，网络已将其撤销。请提高您的滑点容忍度或重试。',
   swap_applied_discounts: '已应用折扣：',
+  swap_add_custom_token: '+ 添加自定义令牌',
+  swap_no_token_found: '未找到令牌',
   ton_tx_failure_seqno_mismatch:
     '由于该钱包中另一笔交易已先被处理，因此网络认为这笔交易顺序错误而拒绝了它。请检查您的交易记录：如果找不到这笔转账，请重新发送。',
   ton_tx_failure_expired:

@@ -1962,6 +1962,8 @@ export const es = {
   swap_failed_slippage_description:
     'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
   swap_applied_discounts: 'Descuentos aplicados:',
+  swap_add_custom_token: '+ Agregar token personalizado',
+  swap_no_token_found: 'No se encontró ningún token.',
   ton_tx_failure_seqno_mismatch:
     'Otra transacción de esta billetera se procesó primero, por lo que la red rechazó esta por estar fuera de orden. Revisa tu historial: si esta transferencia no aparece, envíala de nuevo.',
   ton_tx_failure_expired:

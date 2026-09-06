@@ -1930,6 +1930,8 @@ export const hr = {
   swap_failed_slippage_description:
     'Cijena se promijenila prije nego što je ovaj swap sletio, tako da bi isplatio manje od dopuštene tolerancije na klizanje, a mreža ga je poništila. Povećajte toleranciju na klizanje ili pokušajte ponovno.',
   swap_applied_discounts: 'Primijenjeni popusti:',
+  swap_add_custom_token: '+ Dodaj prilagođeni token',
+  swap_no_token_found: 'Nije pronađen token',
   ton_tx_failure_seqno_mismatch:
     'Prvo je obrađena druga transakcija iz ovog novčanika, pa je mreža odbacila ovu kao neispravnu. Provjerite svoju povijest: ako ovog transfera nema, pošaljite ga ponovno.',
   ton_tx_failure_expired:

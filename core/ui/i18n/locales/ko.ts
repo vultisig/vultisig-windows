@@ -1921,6 +1921,8 @@ export const ko = {
   swap_failed_slippage_description:
     '스왑이 체결되기 전에 가격 변동이 발생하여, 설정된 슬리피지 허용치보다 적은 금액이 지급되었을 것이므로 네트워크에서 이를 되돌렸습니다. 슬리피지 허용치를 높이거나 다시 시도하십시오.',
   swap_applied_discounts: '적용된 할인:',
+  swap_add_custom_token: '+ 사용자 지정 토큰 추가',
+  swap_no_token_found: '토큰을 찾을 수 없습니다.',
   ton_tx_failure_seqno_mismatch:
     '이 지갑에서 다른 거래가 먼저 처리되었기 때문에 네트워크에서 이 거래를 순서가 맞지 않는 것으로 간주하여 거부했습니다. 거래 내역을 확인해 보세요. 해당 거래가 없으면 다시 보내주세요.',
   ton_tx_failure_expired:
