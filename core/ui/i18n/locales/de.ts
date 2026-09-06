@@ -1977,6 +1977,8 @@ export const de = {
   swap_failed_slippage_description:
     'Der Kurs hat sich vor der Ausführung des Swaps geändert, daher wäre die Auszahlung geringer gewesen als Ihre Slippage-Toleranz erlaubt gewesen, und das Netzwerk hat den Swap rückgängig gemacht. Erhöhen Sie Ihre Slippage-Toleranz oder versuchen Sie es erneut.',
   swap_applied_discounts: 'Angewendete Rabatte:',
+  swap_add_custom_token: '+ Benutzerdefiniertes Token hinzufügen',
+  swap_no_token_found: 'Kein Token gefunden',
   enable_ton_w5_wallet: 'Verwenden Sie TON W5-Wallet',
   enable_ton_w5_wallet_description:
     'Erstellen Sie TON-Konten mit dem W5 (v5r1)-Vertrag anstelle von V4R2. Dadurch ändert sich die Adresse, die die Wallet verwendet. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder übertragen, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',

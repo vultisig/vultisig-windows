@@ -1921,6 +1921,8 @@ export const ko = {
   swap_failed_slippage_description:
     '스왑이 체결되기 전에 가격 변동이 발생하여, 설정된 슬리피지 허용치보다 적은 금액이 지급되었을 것이므로 네트워크에서 이를 되돌렸습니다. 슬리피지 허용치를 높이거나 다시 시도하십시오.',
   swap_applied_discounts: '적용된 할인:',
+  swap_add_custom_token: '+ 사용자 지정 토큰 추가',
+  swap_no_token_found: '토큰을 찾을 수 없습니다.',
   enable_ton_w5_wallet: 'TON W5 지갑을 사용하세요',
   enable_ton_w5_wallet_description:
     'TON 계정을 생성할 때 V4R2 대신 W5(v5r1) 계약을 사용하세요. 이렇게 하면 지갑에서 사용하는 주소가 변경되고, 각 계약은 자체 잔액을 가진 별도의 주소가 됩니다. 자금 이동은 없으므로 다른 주소에 있는 자금은 사용자가 전송하기 전까지 그대로 유지됩니다.',

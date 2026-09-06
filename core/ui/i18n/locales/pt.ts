@@ -1964,6 +1964,8 @@ export const pt = {
   swap_failed_slippage_description:
     'O preço se alterou antes da conclusão desta operação de troca, portanto, o pagamento teria sido inferior à sua tolerância de slippage permitida, e a rede reverteu a transação. Aumente sua tolerância de slippage ou tente novamente.',
   swap_applied_discounts: 'Descontos aplicados:',
+  swap_add_custom_token: '+ Adicionar token personalizado',
+  swap_no_token_found: 'Nenhum token encontrado',
   enable_ton_w5_wallet: 'Use a carteira W5 TON',
   enable_ton_w5_wallet_description:
     'Crie contas TON com o contrato W5 (v5r1) em vez do V4R2. Isso altera o endereço usado pela carteira, e cada contrato passa a ser um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',

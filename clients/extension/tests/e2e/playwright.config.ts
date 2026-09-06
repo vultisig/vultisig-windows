@@ -111,6 +111,7 @@ export default defineConfig({
         '**/viewport-fit.spec.ts',
         '**/ton-w5-toggle.spec.ts',
         '**/undecryptable-vault.spec.ts',
+        '**/swap-custom-token-empty-state.spec.ts',
       ],
       use: {
         launchOptions: {

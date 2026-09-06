@@ -1802,6 +1802,8 @@ export const zh = {
   swap_failed_slippage_description:
     '此次掉期交易完成前价格发生了变动，因此支付金额低于您设定的滑点容忍度，网络已将其撤销。请提高您的滑点容忍度或重试。',
   swap_applied_discounts: '已应用折扣：',
+  swap_add_custom_token: '+ 添加自定义令牌',
+  swap_no_token_found: '未找到令牌',
   enable_ton_w5_wallet: '使用TON W5 钱包',
   enable_ton_w5_wallet_description:
     '使用 W5 (v5r1) 合约而非 V4R2 合约派生TON账户。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有自己的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',

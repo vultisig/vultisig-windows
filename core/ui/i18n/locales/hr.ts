@@ -1930,6 +1930,8 @@ export const hr = {
   swap_failed_slippage_description:
     'Cijena se promijenila prije nego što je ovaj swap sletio, tako da bi isplatio manje od dopuštene tolerancije na klizanje, a mreža ga je poništila. Povećajte toleranciju na klizanje ili pokušajte ponovno.',
   swap_applied_discounts: 'Primijenjeni popusti:',
+  swap_add_custom_token: '+ Dodaj prilagođeni token',
+  swap_no_token_found: 'Nije pronađen token',
   enable_ton_w5_wallet: 'Koristite TON W5 novčanik',
   enable_ton_w5_wallet_description:
     'Izvedite TON račune s W5 (v5r1) ugovorom umjesto V4R2. To mijenja adresu koju novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',

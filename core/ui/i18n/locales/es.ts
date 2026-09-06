@@ -1962,6 +1962,8 @@ export const es = {
   swap_failed_slippage_description:
     'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
   swap_applied_discounts: 'Descuentos aplicados:',
+  swap_add_custom_token: '+ Agregar token personalizado',
+  swap_no_token_found: 'No se encontró ningún token.',
   enable_ton_w5_wallet: 'Utilice la cartera W5 TON',
   enable_ton_w5_wallet_description:
     'Derive TON cuentas con el contrato W5 (v5r1) en lugar del V4R2. Esto cambia la dirección que usa la billetera, y cada contrato es una dirección separada con su propio saldo; no transfiere fondos, por lo que cualquier cosa que se encuentre en la otra dirección permanece allí hasta que usted la envíe.',

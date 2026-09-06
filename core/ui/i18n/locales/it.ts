@@ -1968,6 +1968,8 @@ export const it = {
   swap_failed_slippage_description:
     'Il prezzo si è mosso prima che questo scambio venisse eseguito, quindi il pagamento sarebbe stato inferiore alla tolleranza di slippage consentita e la rete lo ha annullato. Aumenta la tolleranza di slippage o riprova.',
   swap_applied_discounts: 'Sconti applicati:',
+  swap_add_custom_token: '+ Aggiungi token personalizzato',
+  swap_no_token_found: 'Nessun token trovato',
   enable_ton_w5_wallet: 'Utilizza il wallet W5 TON',
   enable_ton_w5_wallet_description:
     "Genera gli account TON con il contratto W5 (v5r1) invece di V4R2. Questo modifica l'indirizzo utilizzato dal portafoglio e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",

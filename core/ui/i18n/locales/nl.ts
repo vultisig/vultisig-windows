@@ -1945,6 +1945,8 @@ export const nl = {
   swap_failed_slippage_description:
     'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
   swap_applied_discounts: 'Toegepaste kortingen:',
+  swap_add_custom_token: '+ Voeg een aangepast token toe',
+  swap_no_token_found: 'Geen token gevonden',
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
     'Definieer TON-accounts met het W5 (v5r1)-contract in plaats van V4R2. Dit verandert het adres dat de wallet gebruikt, en elk contract is een apart adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',

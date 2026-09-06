@@ -1197,6 +1197,8 @@ export const en = {
   swaps: 'Swaps',
   swap_applied_discounts: 'Applied Discounts:',
   swap_discount: 'Swap Discount',
+  swap_add_custom_token: '+ Add custom token',
+  swap_no_token_found: 'No token found',
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
