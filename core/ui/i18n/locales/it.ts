@@ -1996,4 +1996,10 @@ export const it = {
     'Il portafoglio ha accettato la transazione ma non è riuscito a completare il trasferimento, quindi non è stato inviato nulla. La commissione di rete è stata comunque addebitata. Verifica la transazione e riprova.',
   ton_tx_failure_action_partially_failed:
     'Il portafoglio non è riuscito a completare almeno un trasferimento in questa transazione, mentre altri potrebbero essere andati a buon fine. La commissione di rete è stata comunque addebitata. Controlla la cronologia delle transazioni prima di inviare nuovamente.',
+  token_verification_unverified: 'Non verificato',
+  token_verification_unverified_hint:
+    "Questo token non è presente nell'elenco verificato. Controlla l'indirizzo del contratto prima di considerarlo valido.",
+  token_verification_scam: 'TRUFFA',
+  token_verification_scam_hint:
+    'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
 }

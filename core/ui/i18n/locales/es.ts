@@ -1990,4 +1990,10 @@ export const es = {
     'La billetera aceptó la transacción, pero no pudo realizar la transferencia, por lo que no se envió nada. Aun así, se cobró la comisión de red. Verifique la transacción e inténtelo de nuevo.',
   ton_tx_failure_action_partially_failed:
     'La billetera no pudo realizar al menos una transferencia en esta transacción, aunque es posible que otras se hayan procesado correctamente. Se aplicó la comisión de red. Revise su historial de transacciones antes de volver a enviar.',
+  token_verification_unverified: 'Inconfirmado',
+  token_verification_unverified_hint:
+    'Este token no está en la lista verificada. Compruebe su dirección de contrato antes de confiar en él.',
+  token_verification_scam: 'ESTAFA',
+  token_verification_scam_hint:
+    'Este token copia el nombre de un token verificado, pero reside en una dirección de contrato diferente. Es falso; no confíe en él.',
 }
