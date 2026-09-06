@@ -1905,5 +1905,5 @@ export const en = {
     'This wallet needs review before it can be migrated.',
   enable_ton_w5_wallet: 'Use TON W5 wallet',
   enable_ton_w5_wallet_description:
-    'Derive TON accounts with the W5 (v5r1) contract instead of V4R2. Each contract is a separate address with its own balance; existing TON coins move to the selected account.',
+    'Derive TON accounts with the W5 (v5r1) contract instead of V4R2. This changes which address the wallet uses, and each contract is a separate address with its own balance — it moves no funds, so anything held at the other address stays there until you send it.',
 }

@@ -1932,5 +1932,5 @@ export const hr = {
   swap_applied_discounts: 'Primijenjeni popusti:',
   enable_ton_w5_wallet: 'Koristite TON W5 novčanik',
   enable_ton_w5_wallet_description:
-    'Izvedite TON račune s W5 (v5r1) ugovorom umjesto V4R2. Svaki ugovor je zasebna adresa s vlastitim stanjem; postojeći TON novčići premještaju se na odabrani račun.',
+    'Izvedite TON račune s W5 (v5r1) ugovorom umjesto V4R2. To mijenja adresu koju novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
 }

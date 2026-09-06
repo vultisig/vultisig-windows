@@ -102,19 +102,34 @@ export const moveTonCoinsToWalletVersion = async ({
     })
 
     const vaultId = getVaultId(vault)
+
     for (const coin of tonCoins) {
+      // Rewritten unconditionally, never skipped when the address already looks
+      // right: `coins` is a query snapshot that can lag storage, so what it
+      // says a coin holds is not evidence of what is actually stored.
       await deleteCoin({ vaultId, coinKey: coin })
-      await createCoin({ vaultId, coin: { ...coin, address } })
+
+      try {
+        await createCoin({ vaultId, coin: { ...coin, address } })
+      } catch (error) {
+        // The delete has already landed. Put the record back rather than let a
+        // failed flip leave the coin recorded at no address at all, which no
+        // later run could heal because there would be nothing left to move.
+        await createCoin({ vaultId, coin })
+        throw error
+      }
     }
   }
 }
 
 /**
  * Moves every vault's TON coins onto the matching account, then persists the
- * flag. The move goes first so a failure leaves storage exactly as it was, and
- * so a flag that somehow got ahead of the coins heals on the next flip: the
- * move is idempotent, it rewrites every TON coin to the chosen contract's
- * address whatever it held before.
+ * flag. The move goes first, so a flag can never get ahead of the coins; if one
+ * somehow does, the next flip heals it, because the move is idempotent — it
+ * rewrites every TON coin to the chosen contract's address whatever it held
+ * before. A coin whose rewrite fails is put back where it was, so an
+ * interrupted move leaves records to heal rather than a coin missing from
+ * storage entirely.
  */
 export const useSetIsTonW5EnabledMutation = () => {
   const { setIsTonW5Enabled, createCoin, deleteCoin } = useCore()

@@ -1,5 +1,6 @@
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useTonWalletVersion } from '@core/ui/storage/tonW5Enabled'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { Query } from '@lib/ui/query/Query'
@@ -26,6 +27,11 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
   const vault = useCurrentVault()
 
   const getCoin = useGetCoin()
+
+  // A TON vault can sit on either of its two wallet contracts, and they are
+  // different addresses holding different balances. Deriving the default here
+  // would build the payload for an address the funds are not at.
+  const tonWalletVersion = useTonWalletVersion()
 
   const { requestOrigin } = usePopupContext()
 
@@ -82,6 +88,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
         publicKeys: vault.publicKeys,
         publicKeyMldsa: vault.publicKeyMldsa,
         chainPublicKeys: vault.chainPublicKeys,
+        tonWalletVersion,
       })
 
       return {

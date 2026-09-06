@@ -1804,5 +1804,5 @@ export const zh = {
   swap_applied_discounts: '已应用折扣：',
   enable_ton_w5_wallet: '使用TON W5 钱包',
   enable_ton_w5_wallet_description:
-    '使用 W5 (v5r1) 合约而非 V4R2 合约创建TON账户。每个合约都是一个独立的地址，拥有各自的余额；现有的TON代币将转移到所选账户。',
+    '使用 W5 (v5r1) 合约而非 V4R2 合约派生TON账户。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有自己的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',
 }

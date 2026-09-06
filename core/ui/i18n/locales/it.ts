@@ -1970,5 +1970,5 @@ export const it = {
   swap_applied_discounts: 'Sconti applicati:',
   enable_ton_w5_wallet: 'Utilizza il wallet W5 TON',
   enable_ton_w5_wallet_description:
-    "Genera account TON con il contratto W5 (v5r1) invece di V4R2. Ogni contratto è un indirizzo separato con il proprio saldo; le monete TON esistenti vengono trasferite all'account selezionato.",
+    "Genera gli account TON con il contratto W5 (v5r1) invece di V4R2. Questo modifica l'indirizzo utilizzato dal portafoglio e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
 }

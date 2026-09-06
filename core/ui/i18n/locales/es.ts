@@ -1964,5 +1964,5 @@ export const es = {
   swap_applied_discounts: 'Descuentos aplicados:',
   enable_ton_w5_wallet: 'Utilice la cartera W5 TON',
   enable_ton_w5_wallet_description:
-    'Derive cuentas TON con el contrato W5 (v5r1) en lugar de V4R2. Cada contrato es una dirección separada con su propio saldo; las monedas TON existentes se transfieren a la cuenta seleccionada.',
+    'Derive TON cuentas con el contrato W5 (v5r1) en lugar del V4R2. Esto cambia la dirección que usa la billetera, y cada contrato es una dirección separada con su propio saldo; no transfiere fondos, por lo que cualquier cosa que se encuentre en la otra dirección permanece allí hasta que usted la envíe.',
 }

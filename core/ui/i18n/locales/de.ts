@@ -1979,5 +1979,5 @@ export const de = {
   swap_applied_discounts: 'Angewendete Rabatte:',
   enable_ton_w5_wallet: 'Verwenden Sie TON W5-Wallet',
   enable_ton_w5_wallet_description:
-    'Erstellen Sie TON -Konten mit dem W5 (v5r1)-Vertrag anstelle von V4R2. Jeder Vertrag stellt eine separate Adresse mit eigenem Guthaben dar; vorhandene TON -Coins werden auf das ausgewählte Konto übertragen.',
+    'Erstellen Sie TON-Konten mit dem W5 (v5r1)-Vertrag anstelle von V4R2. Dadurch ändert sich die Adresse, die die Wallet verwendet. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder übertragen, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
 }

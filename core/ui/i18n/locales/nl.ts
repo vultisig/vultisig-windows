@@ -1947,5 +1947,5 @@ export const nl = {
   swap_applied_discounts: 'Toegepaste kortingen:',
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
-    'Gebruik het W5 (v5r1)-contract in plaats van V4R2 om TON -accounts te genereren. Elk contract is een apart adres met een eigen saldo; bestaande TON -munten worden overgeboekt naar het geselecteerde account.',
+    'Definieer TON-accounts met het W5 (v5r1)-contract in plaats van V4R2. Dit verandert het adres dat de wallet gebruikt, en elk contract is een apart adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
 }
