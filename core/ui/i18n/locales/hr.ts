@@ -1932,6 +1932,32 @@ export const hr = {
   swap_applied_discounts: 'Primijenjeni popusti:',
   swap_add_custom_token: '+ Dodaj prilagođeni token',
   swap_no_token_found: 'Nije pronađen token',
+  ton_tx_failure_seqno_mismatch:
+    'Prvo je obrađena druga transakcija iz ovog novčanika, pa je mreža odbacila ovu kao neispravnu. Provjerite svoju povijest: ako ovog transfera nema, pošaljite ga ponovno.',
+  ton_tx_failure_expired:
+    'Vremenski okvir transakcije zatvorio se prije nego što ju je mreža obradila. Provjerite jesu li datum i vrijeme na vašem uređaju automatski postavljeni, a zatim je ponovno pošaljite.',
+  ton_tx_failure_invalid_signature:
+    'Ugovor o novčaniku odbio je potpis. Ponovno potpišite transakciju; ako se i dalje ne uspijeva, ugovor o novčaniku na ovoj adresi ne odgovara ovom trezoru.',
+  ton_tx_failure_wallet_id_mismatch:
+    'Transakcija je izrađena za drugačiju verziju ugovora o novčaniku od one koja je implementirana na ovoj adresi.',
+  ton_tx_failure_insufficient_funds:
+    'Nema dovoljno TON za pokrivanje iznosa plus mrežnih naknada. Ostavite oko 0,05 TON rezerve za naknade i pokušajte ponovno.',
+  ton_tx_failure_out_of_gas:
+    'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još TON transferu i pokušajte ponovno.',
+  ton_tx_failure_invalid_destination:
+    'Odredišna adresa nije valjana na TON. Provjerite adresu i pokušajte ponovno.',
+  ton_tx_failure_not_enough_jettons:
+    'Ovaj novčanik ne sadrži dovoljno tokena za slanje tog iznosa.',
+  ton_tx_failure_jetton_unauthorized:
+    'Ugovor o tokenu odbio je prijenos jer ovom novčaniku nije dopušteno premještanje ovih tokena.',
+  ton_tx_failure_aborted:
+    'Mreža je prekinula ovu transakciju prije nego što je mogla izvršiti transfer.',
+  ton_tx_failure_contract_rejected:
+    'Ugovor je odbio transakciju (izlazni kod {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    'Novčanik je prihvatio transakciju, ali nije mogao izvršiti transfer, pa ništa nije poslano. Mrežna naknada je i dalje naplaćena. Provjerite transakciju i pokušajte ponovno.',
+  ton_tx_failure_action_partially_failed:
+    'Novčanik nije mogao izvršiti barem jedan prijenos u ovoj transakciji, a ostali u njemu su možda prošli. Mrežna naknada je i dalje naplaćena. Provjerite povijest transakcija prije ponovnog slanja.',
   enable_ton_w5_wallet: 'Koristite TON W5 novčanik',
   enable_ton_w5_wallet_description:
     'Izvedite TON račune s W5 (v5r1) ugovorom umjesto V4R2. To mijenja adresu koju novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
