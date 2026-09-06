@@ -17,6 +17,7 @@ const tonTxFailureKeys = {
   'not-enough-jettons': 'ton_tx_failure_not_enough_jettons',
   'jetton-unauthorized': 'ton_tx_failure_jetton_unauthorized',
   'action-failed': 'ton_tx_failure_action_failed',
+  'action-partially-failed': 'ton_tx_failure_action_partially_failed',
   aborted: 'ton_tx_failure_aborted',
   'contract-rejected': 'ton_tx_failure_contract_rejected',
 } as const satisfies Record<TonTxFailureReason, string>

@@ -1982,10 +1982,12 @@ export const pt = {
     'Esta carteira não possui tokens suficientes para enviar essa quantia.',
   ton_tx_failure_jetton_unauthorized:
     'O contrato do token recusou a transferência porque esta carteira não tem permissão para movimentar esses tokens.',
-  ton_tx_failure_action_failed:
-    'A carteira aceitou a transação, mas não conseguiu efetuar a transferência, portanto nada foi enviado. A taxa de rede foi cobrada mesmo assim. Verifique o saldo e tente novamente.',
   ton_tx_failure_aborted:
     'A rede abortou esta transação antes que ela pudesse ser concluída.',
   ton_tx_failure_contract_rejected:
     'O contrato rejeitou a transação (código de saída {{exitCode}} ).',
+  ton_tx_failure_action_failed:
+    'A carteira aceitou a transação, mas não conseguiu efetuar a transferência, portanto nada foi enviado. A taxa de rede foi cobrada mesmo assim. Verifique a transação e tente novamente.',
+  ton_tx_failure_action_partially_failed:
+    'A carteira não conseguiu efetuar pelo menos uma transferência nesta transação, embora outras possam ter sido concluídas. A taxa de rede foi cobrada mesmo assim. Verifique seu histórico de transações antes de enviar novamente.',
 }

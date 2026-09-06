@@ -1986,10 +1986,12 @@ export const it = {
     'Questo portafoglio non contiene una quantità sufficiente di token per inviare tale importo.',
   ton_tx_failure_jetton_unauthorized:
     'Il contratto del token ha rifiutato il trasferimento perché questo portafoglio non è autorizzato a spostare questi token.',
-  ton_tx_failure_action_failed:
-    'Il portafoglio ha accettato la transazione ma non è riuscito a completare il trasferimento, quindi non è stato inviato nulla. La commissione di rete è stata comunque addebitata. Controlla il saldo e riprova.',
   ton_tx_failure_aborted:
     'La rete ha interrotto la transazione prima che il trasferimento potesse essere completato.',
   ton_tx_failure_contract_rejected:
     'Il contratto ha rifiutato la transazione (codice di uscita {{exitCode}} ).',
+  ton_tx_failure_action_failed:
+    'Il portafoglio ha accettato la transazione ma non è riuscito a completare il trasferimento, quindi non è stato inviato nulla. La commissione di rete è stata comunque addebitata. Verifica la transazione e riprova.',
+  ton_tx_failure_action_partially_failed:
+    'Il portafoglio non è riuscito a completare almeno un trasferimento in questa transazione, mentre altri potrebbero essere andati a buon fine. La commissione di rete è stata comunque addebitata. Controlla la cronologia delle transazioni prima di inviare nuovamente.',
 }

@@ -1980,10 +1980,12 @@ export const es = {
     'Esta billetera no contiene suficientes tokens para enviar esa cantidad.',
   ton_tx_failure_jetton_unauthorized:
     'El contrato del token rechazó la transferencia porque esta billetera no tiene permiso para mover estos tokens.',
-  ton_tx_failure_action_failed:
-    'La billetera aceptó la transacción, pero no pudo realizar la transferencia, por lo que no se envió nada. Aun así, se cobró la comisión de red. Verifique su saldo e inténtelo de nuevo.',
   ton_tx_failure_aborted:
     'La red abortó esta transacción antes de que pudiera completarse la transferencia.',
   ton_tx_failure_contract_rejected:
     'El contrato rechazó la transacción (código de salida {{exitCode}} ).',
+  ton_tx_failure_action_failed:
+    'La billetera aceptó la transacción, pero no pudo realizar la transferencia, por lo que no se envió nada. Aun así, se cobró la comisión de red. Verifique la transacción e inténtelo de nuevo.',
+  ton_tx_failure_action_partially_failed:
+    'La billetera no pudo realizar al menos una transferencia en esta transacción, aunque es posible que otras se hayan procesado correctamente. Se aplicó la comisión de red. Revise su historial de transacciones antes de volver a enviar.',
 }

@@ -1939,10 +1939,12 @@ export const ko = {
     '이 지갑에는 해당 금액을 보내기에 충분한 토큰이 없습니다.',
   ton_tx_failure_jetton_unauthorized:
     '토큰 계약이 해당 지갑에서 이러한 토큰을 이동할 수 없기 때문에 전송을 거부했습니다.',
-  ton_tx_failure_action_failed:
-    '지갑에서 거래를 승인했지만 이체를 완료할 수 없어 아무것도 전송되지 않았습니다. 네트워크 수수료는 부과되었습니다. 잔액을 확인하고 다시 시도해 주세요.',
   ton_tx_failure_aborted:
     '네트워크가 해당 거래를 실행하기 전에 중단시켰습니다.',
   ton_tx_failure_contract_rejected:
     '계약에서 거래를 거부했습니다(종료 코드 {{exitCode}} ).',
+  ton_tx_failure_action_failed:
+    '지갑에서 거래를 승인했지만 이체를 실행할 수 없어 아무것도 전송되지 않았습니다. 네트워크 수수료는 부과되었습니다. 거래 내역을 확인하고 다시 시도해 주세요.',
+  ton_tx_failure_action_partially_failed:
+    '지갑에서 이 거래의 최소 한 건의 전송을 처리할 수 없었으며, 다른 전송은 정상적으로 처리되었을 수 있습니다. 네트워크 수수료는 부과되었습니다. 다시 전송하기 전에 거래 내역을 확인하세요.',
 }

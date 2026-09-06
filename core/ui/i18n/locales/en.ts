@@ -1922,7 +1922,9 @@ export const en = {
   ton_tx_failure_jetton_unauthorized:
     'The token contract refused the transfer because this wallet is not allowed to move these tokens.',
   ton_tx_failure_action_failed:
-    'The wallet accepted the transaction but could not carry out the transfer, so nothing was sent. The network fee was still charged. Check the balance and try again.',
+    'The wallet accepted the transaction but could not carry out the transfer, so nothing was sent. The network fee was still charged. Check the transaction and try again.',
+  ton_tx_failure_action_partially_failed:
+    'The wallet could not carry out at least one transfer in this transaction, and others in it may have gone through. The network fee was still charged. Check your transaction history before sending again.',
   ton_tx_failure_aborted:
     'The network aborted this transaction before it could carry out the transfer.',
   ton_tx_failure_contract_rejected:

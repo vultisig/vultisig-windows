@@ -1818,9 +1818,11 @@ export const zh = {
   ton_tx_failure_not_enough_jettons: '此钱包中没有足够的代币来发送该金额。',
   ton_tx_failure_jetton_unauthorized:
     '代币合约拒绝了转账，因为该钱包无权转移这些代币。',
-  ton_tx_failure_action_failed:
-    '钱包已接受交易，但无法完成转账，因此未发送任何款项。网络手续费仍被收取。请查看余额并重试。',
   ton_tx_failure_aborted: '网络在完成转账之前中止了这笔交易。',
   ton_tx_failure_contract_rejected:
     '合约拒绝了该交易（退出代码{{exitCode}} ）。',
+  ton_tx_failure_action_failed:
+    '钱包已接受交易，但无法完成转账，因此未发送任何款项。网络手续费仍被收取。请检查交易并重试。',
+  ton_tx_failure_action_partially_failed:
+    '钱包在此次交易中至少有一笔转账失败，其他转账可能已成功。网络手续费仍然被收取。请在再次转账前查看您的交易记录。',
 }

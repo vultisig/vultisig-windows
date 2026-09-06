@@ -1948,10 +1948,12 @@ export const hr = {
     'Ovaj novčanik ne sadrži dovoljno tokena za slanje tog iznosa.',
   ton_tx_failure_jetton_unauthorized:
     'Ugovor o tokenu odbio je prijenos jer ovom novčaniku nije dopušteno premještanje ovih tokena.',
-  ton_tx_failure_action_failed:
-    'Novčanik je prihvatio transakciju, ali nije mogao izvršiti transfer, pa ništa nije poslano. Mrežna naknada je i dalje naplaćena. Provjerite stanje i pokušajte ponovno.',
   ton_tx_failure_aborted:
     'Mreža je prekinula ovu transakciju prije nego što je mogla izvršiti transfer.',
   ton_tx_failure_contract_rejected:
     'Ugovor je odbio transakciju (izlazni kod {{exitCode}} ).',
+  ton_tx_failure_action_failed:
+    'Novčanik je prihvatio transakciju, ali nije mogao izvršiti transfer, pa ništa nije poslano. Mrežna naknada je i dalje naplaćena. Provjerite transakciju i pokušajte ponovno.',
+  ton_tx_failure_action_partially_failed:
+    'Novčanik nije mogao izvršiti barem jedan prijenos u ovoj transakciji, a ostali u njemu su možda prošli. Mrežna naknada je i dalje naplaćena. Provjerite povijest transakcija prije ponovnog slanja.',
 }

@@ -1995,10 +1995,12 @@ export const de = {
     'Diese Wallet enthält nicht genügend Token, um diesen Betrag zu senden.',
   ton_tx_failure_jetton_unauthorized:
     'Der Token-Vertrag hat die Überweisung abgelehnt, da diese Wallet nicht berechtigt ist, diese Token zu transferieren.',
-  ton_tx_failure_action_failed:
-    'Die Wallet hat die Transaktion akzeptiert, konnte die Überweisung aber nicht durchführen, daher wurde kein Geld gesendet. Die Netzwerkgebühr wurde dennoch berechnet. Überprüfen Sie Ihren Kontostand und versuchen Sie es erneut.',
   ton_tx_failure_aborted:
     'Das Netzwerk hat diese Transaktion abgebrochen, bevor die Überweisung durchgeführt werden konnte.',
   ton_tx_failure_contract_rejected:
     'Der Vertrag hat die Transaktion abgelehnt (Exit-Code {{exitCode}} ).',
+  ton_tx_failure_action_failed:
+    'Die Wallet hat die Transaktion akzeptiert, konnte die Überweisung aber nicht durchführen, daher wurde kein Geld gesendet. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie die Transaktion und versuchen Sie es erneut.',
+  ton_tx_failure_action_partially_failed:
+    'Mindestens eine Überweisung dieser Transaktion konnte nicht ausgeführt werden, andere Transaktionen wurden möglicherweise erfolgreich abgeschlossen. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie Ihren Transaktionsverlauf, bevor Sie erneut eine Überweisung senden.',
 }

@@ -1963,10 +1963,12 @@ export const nl = {
     'Deze portemonnee bevat onvoldoende tokens om dat bedrag te verzenden.',
   ton_tx_failure_jetton_unauthorized:
     'Het tokencontract weigerde de overdracht omdat deze wallet geen toestemming heeft om deze tokens te verplaatsen.',
-  ton_tx_failure_action_failed:
-    'De wallet accepteerde de transactie, maar kon de overdracht niet uitvoeren, waardoor er niets is verzonden. De netwerkkosten zijn wel in rekening gebracht. Controleer je saldo en probeer het opnieuw.',
   ton_tx_failure_aborted:
     'Het netwerk heeft deze transactie afgebroken voordat de overdracht kon worden uitgevoerd.',
   ton_tx_failure_contract_rejected:
     'Het contract heeft de transactie afgewezen (exitcode {{exitCode}} ).',
+  ton_tx_failure_action_failed:
+    'De wallet accepteerde de transactie, maar kon de overdracht niet uitvoeren, waardoor er niets is verzonden. De netwerkkosten zijn echter wel in rekening gebracht. Controleer de transactie en probeer het opnieuw.',
+  ton_tx_failure_action_partially_failed:
+    'De wallet kon in deze transactie ten minste één overboeking niet uitvoeren, terwijl andere overboekingen mogelijk wel zijn gelukt. De netwerkkosten zijn desondanks in rekening gebracht. Controleer uw transactiegeschiedenis voordat u opnieuw een overboeking doet.',
 }
