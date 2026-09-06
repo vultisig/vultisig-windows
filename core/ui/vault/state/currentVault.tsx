@@ -81,6 +81,30 @@ const vaultWritingViews: ReadonlySet<string> = new Set<CoreViewId>([
   'importVault',
 ])
 
+/**
+ * Holds on to the previous snapshot for as long as `hasSameReadabilityInputs`
+ * still accepts it, so the read effect can take a single dependency that
+ * changes exactly when a re-read is owed — including share material replaced
+ * under a vault object that kept its identity, which observing the vault by
+ * reference alone would miss. One predicate then drives both the re-read and
+ * whether a settled result still applies, so an input added to
+ * {@link VaultReadabilityInputs} is honoured by both without being listed in
+ * either.
+ */
+const useStableReadabilityInputs = (inputs: VaultReadabilityInputs | null) => {
+  const stable = useRef<VaultReadabilityInputs | null>(null)
+
+  if (
+    !inputs ||
+    !stable.current ||
+    !hasSameReadabilityInputs({ resolved: stable.current, current: inputs })
+  ) {
+    stable.current = inputs
+  }
+
+  return stable.current
+}
+
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const { validateLegacyVaultKeyShares } = useCore()
   const [navigation] = useNavigation()
@@ -90,6 +114,20 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const hasPasscodeEncryption = useIsPasscodeRequired()
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
+
+  // Snapshotted during render, before any read is started, so a result can
+  // never be attributed to inputs it was not read under, and stable while
+  // nothing it carries changes, so it can be the read's only dependency.
+  const readabilityInputs = useStableReadabilityInputs(
+    vault && !(hasPasscodeEncryption && !passcode)
+      ? getVaultReadabilityInputs({
+          vault,
+          hasPasscodeEncryption,
+          passcode,
+          validateLegacyVaultKeyShares,
+        })
+      : null
+  )
 
   // The result is tagged with the exact inputs it was read under. A reshare
   // keeps the same id but changes the shares, and a passcode change re-reads
@@ -104,35 +142,25 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   } | null>(null)
 
   useEffect(() => {
-    if (!vault || (hasPasscodeEncryption && !passcode)) {
+    if (!readabilityInputs) {
       setShareState(null)
       return
     }
 
-    // Snapshotted before the read starts: `vault`, `passcode` and the rest are
-    // closed over here, so a snapshot taken once the read settles would describe
-    // whatever those hold by then and could pass this result off as current for
-    // inputs it was never read under.
-    const source = getVaultReadabilityInputs({
-      vault,
-      hasPasscodeEncryption,
-      passcode,
-      validateLegacyVaultKeyShares,
-    })
-
+    const source = readabilityInputs
     let cancelled = false
 
     readVaultAllKeyShares({
-      keyShares: vault.keyShares,
-      chainKeyShares: vault.chainKeyShares,
-      keyShareMldsa: vault.keyShareMldsa,
-      libType: vault.libType,
-      publicKeys: vault.publicKeys,
-      chainPublicKeys: vault.chainPublicKeys,
-      publicKeyMldsa: vault.publicKeyMldsa,
-      validateLegacyVaultKeyShares,
-      hasPasscodeEncryption,
-      key: passcode,
+      keyShares: source.keyShares,
+      chainKeyShares: source.chainKeyShares,
+      keyShareMldsa: source.keyShareMldsa,
+      libType: source.libType,
+      publicKeys: source.publicKeys,
+      chainPublicKeys: source.chainPublicKeys,
+      publicKeyMldsa: source.publicKeyMldsa,
+      validateLegacyVaultKeyShares: source.validateLegacyVaultKeyShares,
+      hasPasscodeEncryption: source.hasPasscodeEncryption,
+      key: source.passcode,
     })
       .then(shares => {
         if (!cancelled) {
@@ -163,19 +191,14 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return () => {
       cancelled = true
     }
-  }, [vault, passcode, hasPasscodeEncryption, validateLegacyVaultKeyShares])
+  }, [readabilityInputs])
 
   const resolution =
     shareState &&
-    vault &&
+    readabilityInputs &&
     hasSameReadabilityInputs({
       resolved: shareState.source,
-      current: getVaultReadabilityInputs({
-        vault,
-        hasPasscodeEncryption,
-        passcode,
-        validateLegacyVaultKeyShares,
-      }),
+      current: readabilityInputs,
     })
       ? shareState.result
       : null

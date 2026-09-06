@@ -23,8 +23,9 @@
  * - a vaults write that rebuilds the vault object neither blanks nor remounts
  *   the tree, while genuinely different shares — or a change to whether they
  *   are encrypted — still do
- * - a read is tagged with the inputs it was requested under, so a result
- *   superseded while it was in flight is never provided
+ * - a read is tagged with the inputs it was requested under, so shares
+ *   replaced on the same object while it was in flight are never provided —
+ *   and are re-read rather than leaving the tree withheld for good
  */
 import { RootCurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
@@ -254,6 +255,8 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
     expect(screen.queryByTestId('splash')).toBeNull()
     expect(mountCount).toBe(1)
+    // Nothing readability depends on moved, so the shares are not read again.
+    expect(readCalls).toHaveLength(1)
   })
 
   it('withholds the tree when the shares themselves change', async () => {
@@ -419,8 +422,9 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(mountCount).toBe(2)
   })
 
-  it('never provides a read that was superseded while it was in flight', async () => {
-    storage.vaults = [makeVault()]
+  it('never provides a read whose shares were replaced on the same object while it was in flight', async () => {
+    const vault = makeVault()
+    storage.vaults = [vault]
     storage.currentVaultId = vaultId
 
     const { rerender } = renderTree()
@@ -428,10 +432,11 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(readCalls).toHaveLength(1)
     expect(screen.getByTestId('splash')).toBeDefined()
 
-    // A reshare lands before the first read settles, so that read describes
-    // shares the vault no longer holds.
-    const reshared = { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' }
-    storage.vaults = [makeVault({ keyShares: reshared })]
+    // The share material changes without the object identity changing, so the
+    // result of the first read describes shares the vault no longer holds.
+    // Observing the vault by reference alone would neither re-read nor ever
+    // accept the in-flight result, leaving the app on the splash for good.
+    vault.keyShares = { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' }
     rerender(
       <RootCurrentVaultProvider>
         <SetupFlow />
@@ -440,7 +445,7 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     await settle()
 
     expect(readCalls).toHaveLength(2)
-    expect(readCalls[1].input.keyShares).toEqual(reshared)
+    expect(readCalls[1].input.keyShares).toEqual(vault.keyShares)
 
     await resolveReadAt(0)
 
