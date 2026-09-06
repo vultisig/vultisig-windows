@@ -20,6 +20,7 @@ import { useSwapRouteOverride } from '../state/routeOverride'
 import { useSwapToCoin } from '../state/toCoin'
 import { resolveActiveSwapQuote } from './activeSwapRoute'
 import { buildSwapQuoteInput } from './buildSwapQuoteInput'
+import { useSwapQuoteRequestId } from './useSwapQuoteRequestId'
 
 export const swapQuoteQueryKeyPrefix = 'swapQuote'
 
@@ -133,14 +134,16 @@ export const useSwapQuotesQuery = () => {
 
 /**
  * The quote the swap actually goes through: the manually picked route while one
- * is in effect for this quote cycle, otherwise the auto-selected winner. Every
- * consumer — form display, fees, verify screen, keysign payload — reads the
- * swap quote from here, so a manual pick reaches the signed transaction.
+ * is in effect, otherwise the auto-selected winner. Every consumer — form
+ * display, fees, verify screen, keysign payload — reads the swap quote from
+ * here, so a manual pick reaches the signed transaction, always as the picked
+ * provider's freshest quote rather than the one it was picked from.
  */
 export const useSwapQuoteQuery = () => {
   const [override] = useSwapRouteOverride()
+  const requestId = useSwapQuoteRequestId()
 
   return useTransformQueryData(useSwapQuotesQuery(), quotes =>
-    resolveActiveSwapQuote({ quotes, override })
+    resolveActiveSwapQuote({ quotes, override, requestId })
   )
 }

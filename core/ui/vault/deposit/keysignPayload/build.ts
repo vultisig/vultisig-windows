@@ -189,6 +189,7 @@ export const buildDepositKeysignPayload = async ({
     trustLinePayload.blockchainSpecific = await getChainSpecific({
       keysignPayload: trustLinePayload,
       walletCore,
+      transactionType: TransactionType.RIPPLE_TRUST_SET,
     })
 
     return trustLinePayload

@@ -182,6 +182,8 @@ export type TransactionDetails = {
     accountNumber: string
   }
   skipBroadcast?: boolean
+  /** TonConnect deadline in Unix seconds, applied by the SDK at payload build. */
+  validUntil?: number
   tonMessages?: Array<{
     to: string
     amount: string

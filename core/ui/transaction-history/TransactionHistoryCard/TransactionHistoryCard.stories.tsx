@@ -1,3 +1,5 @@
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Chain } from '@vultisig/core-chain/Chain'
 
@@ -28,10 +30,32 @@ type Story = StoryObj<typeof TransactionHistoryCard>
 const ethAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1'
 const solAddress = 'HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH'
 
+/**
+ * The pill icon the app always supplies, which is what makes a provider pill
+ * stand a full icon slot tall. A story without it renders a shorter pill and
+ * cannot show whether the error message clears one.
+ */
+const providerPillIcon = (
+  <ChainEntityIcon
+    value={getChainLogoSrc(Chain.Ethereum)}
+    style={{ fontSize: 16 }}
+  />
+)
+
 /** Coins with logos for real asset icons (same as chainFeeCoin / CoinIcon). */
 const runeCoin = { chain: Chain.THORChain, logo: 'rune' as const }
 const solCoin = { chain: Chain.Solana, logo: 'solana' as const }
 const ethCoin = { chain: Chain.Ethereum, logo: 'eth' as const }
+
+/**
+ * A non-fee token, so `CoinIcon` overlays the chain badge that fee coins never
+ * render. The card's icon slot has to leave that badge room.
+ */
+const usdcCoin = {
+  chain: Chain.Ethereum,
+  id: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  logo: 'usdc' as const,
+}
 
 /** Single story page: all card variants (successful Send/Receive/Swap, error with and without message) for quick glance. */
 export const AllCards: Story = {
@@ -90,8 +114,31 @@ export const AllCards: Story = {
         pill={{ providerName: 'THORChain' }}
         coin={ethCoin}
       />
+      <TransactionHistoryCard
+        tagType="swap"
+        status="error"
+        amountUsd="$34,752.57"
+        amountCrypto="20.50"
+        symbol="ETH"
+        pill={{ providerName: 'LI.FI', pillIcon: providerPillIcon }}
+        errorMessage="Price moved past slippage tolerance"
+        coin={ethCoin}
+      />
     </div>
   ),
+}
+
+/** Token transfer: the coin icon carries a chain badge on its bottom-right. */
+export const TokenWithChainBadge: Story = {
+  args: {
+    tagType: 'swap',
+    status: 'successful',
+    amountUsd: '$39.99',
+    amountCrypto: '40',
+    symbol: 'USDC',
+    pill: { providerName: 'THORChain' },
+  },
+  render: args => <TransactionHistoryCard {...args} coin={usdcCoin} />,
 }
 
 export const SuccessfulSend: Story = {
@@ -108,13 +155,28 @@ export const SuccessfulSend: Story = {
 
 export const ErrorWithMessage: Story = {
   args: {
-    tagType: 'send' as TransactionHistoryTagType,
+    tagType: 'send',
     status: 'error',
     amountUsd: '$1,000.54',
     amountCrypto: '1,000.12',
     symbol: 'RUNE',
-    pill: { direction: 'to' as const, address: ethAddress },
+    pill: { direction: 'to', address: ethAddress },
     errorMessage: 'Slippage tolerance exceeded',
   },
   render: args => <TransactionHistoryCard {...args} coin={runeCoin} />,
+}
+
+/** A failed swap explains itself while the provider pill still owns the card's
+ *  bottom-right corner — the one combination where the two can collide. */
+export const ErrorWithMessageAndProviderPill: Story = {
+  args: {
+    tagType: 'swap',
+    status: 'error',
+    amountUsd: '$34,752.57',
+    amountCrypto: '20.50',
+    symbol: 'ETH',
+    pill: { providerName: 'LI.FI', pillIcon: providerPillIcon },
+    errorMessage: 'Price moved past slippage tolerance',
+  },
+  render: args => <TransactionHistoryCard {...args} coin={ethCoin} />,
 }

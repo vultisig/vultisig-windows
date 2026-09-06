@@ -11,6 +11,50 @@ import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
+import { assertVaultRecoveryReplacement } from '../../../storage/vaultRecoveryReplacement'
+import { useUnreadableVaultRecoveryId } from '../../state/currentVault'
+
+export const canReplaceVaultDuringRecovery = ({
+  existingVaultId,
+  importedVaultId,
+  recoveryVaultId,
+  hasRecoveryIdentityProof,
+}: {
+  existingVaultId: string
+  importedVaultId: string
+  recoveryVaultId: string | null
+  hasRecoveryIdentityProof: boolean
+}) =>
+  hasRecoveryIdentityProof &&
+  recoveryVaultId === existingVaultId &&
+  importedVaultId === existingVaultId
+
+export const canImportVaultDuringRecovery = ({
+  importedVaultId,
+  recoveryVaultId,
+}: {
+  importedVaultId: string
+  recoveryVaultId: string | null
+}) => recoveryVaultId === null || importedVaultId === recoveryVaultId
+
+export const hasVaultRecoveryIdentityProof = ({
+  existingVault,
+  importedVault,
+}: {
+  existingVault: Vault
+  importedVault: Vault
+}): boolean => {
+  try {
+    assertVaultRecoveryReplacement({
+      currentVault: existingVault,
+      expectedVault: existingVault,
+      replacementVault: importedVault,
+    })
+    return true
+  } catch {
+    return false
+  }
+}
 
 export const SaveImportedVaultStep = ({
   value,
@@ -20,25 +64,67 @@ export const SaveImportedVaultStep = ({
   const { client } = useCore()
   const navigate = useCoreNavigate()
   const override = useVaultBackupOverride()
+  const recoveryVaultId = useUnreadableVaultRecoveryId()
 
   const initialVaults = useRef(useVaults()).current
 
   const vaultOrders = useVaultOrders()
   const stableVaultOrders = useRef(vaultOrders).current
 
-  const finalValue = useMemo(
-    () => ({
-      ...(override ? { ...value, ...override } : value),
-      order: getLastItemOrder(stableVaultOrders),
-    }),
-    [override, value, stableVaultOrders]
+  const importedVault = useMemo(
+    () => (override ? { ...value, ...override } : value),
+    [override, value]
   )
 
-  const error = useMemo(() => {
-    const existingVault = initialVaults.find(
-      v => getVaultId(v) === getVaultId(finalValue)
+  const recoveryVault = useMemo(() => {
+    return initialVaults.find(
+      vault =>
+        getVaultId(vault) === recoveryVaultId &&
+        getVaultId(importedVault) === recoveryVaultId
     )
-    if (existingVault) {
+  }, [importedVault, initialVaults, recoveryVaultId])
+
+  const finalValue = useMemo(() => {
+    return {
+      ...importedVault,
+      order: recoveryVault?.order ?? getLastItemOrder(stableVaultOrders),
+      ...(recoveryVault?.folderId ? { folderId: recoveryVault.folderId } : {}),
+      ...(recoveryVault?.saplingExtras
+        ? { saplingExtras: recoveryVault.saplingExtras }
+        : {}),
+    }
+  }, [importedVault, stableVaultOrders, recoveryVault])
+
+  const error = useMemo(() => {
+    const importedVaultId = getVaultId(finalValue)
+    if (!canImportVaultDuringRecovery({ importedVaultId, recoveryVaultId })) {
+      const recoveryTarget = initialVaults.find(
+        vault => getVaultId(vault) === recoveryVaultId
+      )
+      const recoveryInstruction = t('vault_cannot_be_opened_backup_description')
+
+      return recoveryTarget
+        ? `${t('vault_already_exists', {
+            name: recoveryTarget.name,
+          })} ${recoveryInstruction}`
+        : recoveryInstruction
+    }
+
+    const existingVault = initialVaults.find(
+      v => getVaultId(v) === importedVaultId
+    )
+    if (
+      existingVault &&
+      !canReplaceVaultDuringRecovery({
+        existingVaultId: getVaultId(existingVault),
+        importedVaultId: getVaultId(finalValue),
+        recoveryVaultId,
+        hasRecoveryIdentityProof: hasVaultRecoveryIdentityProof({
+          existingVault,
+          importedVault,
+        }),
+      })
+    ) {
       return t('vault_already_exists', {
         name: existingVault.name || finalValue.name,
       })
@@ -46,7 +132,15 @@ export const SaveImportedVaultStep = ({
     if (client === 'extension' && value.libType === 'GG20') {
       return t('extension_vault_import_restriction')
     }
-  }, [client, finalValue, t, value.libType, initialVaults])
+  }, [
+    client,
+    finalValue,
+    importedVault,
+    t,
+    value.libType,
+    initialVaults,
+    recoveryVaultId,
+  ])
 
   if (error) {
     return (
@@ -72,6 +166,7 @@ export const SaveImportedVaultStep = ({
     <SaveVaultStep
       onBack={() => navigate({ id: 'vault' })}
       onFinish={handleFinish}
+      recoveryVault={recoveryVault}
       value={finalValue}
       title={t('import_vault')}
     />

@@ -46,16 +46,22 @@ const seedNavigationVault = async (
         },
       ],
     },
-    dismissedBanners: Object.fromEntries(
-      [
-        'rujiraStaking',
-        'followOnX',
-        'vaultBackup',
-        'referralCode',
-        'buyVultPromo',
-        'kamino',
-      ].map(id => [id, { dismissedAt: Date.now() }])
-    ),
+    dismissedBanners: {
+      global: Object.fromEntries(
+        ['rujiraStaking', 'followOnX', 'buyVultPromo', 'kamino'].map(id => [
+          id,
+          { dismissedAt: Date.now() },
+        ])
+      ),
+      byVault: {
+        [fixturePublicKey]: Object.fromEntries(
+          ['vaultBackup', 'referralCode'].map(id => [
+            id,
+            { dismissedAt: Date.now() },
+          ])
+        ),
+      },
+    },
   })
 }
 
@@ -225,7 +231,9 @@ test('extension vault matches the Figma home shell', async ({
   await vaultPage.waitForView()
 
   const localizedBanner = page.getByTestId('migrate-promo-banner')
-  const localizedBannerText = page.getByTestId('home-promo-banner-text')
+  const localizedBannerText = localizedBanner.getByTestId(
+    'home-promo-banner-text'
+  )
   await expect(localizedBanner).toBeVisible()
   expect(await localizedBanner.boundingBox()).toMatchObject({ height: 81 })
   const localizedTextMetrics = await localizedBannerText.evaluate(element => ({

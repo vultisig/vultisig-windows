@@ -110,6 +110,7 @@ export default defineConfig({
         '**/navigation-design.spec.ts',
         '**/viewport-fit.spec.ts',
         '**/ton-w5-toggle.spec.ts',
+        '**/undecryptable-vault.spec.ts',
       ],
       use: {
         launchOptions: {
@@ -138,6 +139,7 @@ export default defineConfig({
         '**/push-notifications-integration.spec.ts',
         '**/station-migration.spec.ts',
         '**/xrp-destination-tag.spec.ts',
+        '**/send-coin-selection.spec.ts',
         '**/signed-transaction-decoder.spec.ts',
       ],
       use: {

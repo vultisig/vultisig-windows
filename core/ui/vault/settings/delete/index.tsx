@@ -42,7 +42,7 @@ export const DeleteVaultPage = () => {
     if (!isDisabled && !isPending) {
       const isLastVault = vaults.length <= 1
       deleteVault(getVaultId(vault), {
-        onSuccess: () => navigate({ id: isLastVault ? 'newVault' : 'vault' }),
+        onSuccess: () => navigate({ id: isLastVault ? 'newVault' : 'vaults' }),
       })
     }
   }

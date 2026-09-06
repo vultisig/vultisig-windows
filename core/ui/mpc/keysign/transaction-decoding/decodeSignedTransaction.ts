@@ -718,7 +718,6 @@ const decodeSignedData = (
     const bodyIsActive = (() => {
       if (
         chain === Chain.Cosmos ||
-        chain === Chain.Kujira ||
         chain === Chain.Osmosis ||
         chain === Chain.Noble ||
         chain === Chain.Akash
@@ -966,7 +965,6 @@ const decodeCosmosMetadata = (
 ): DecodedTransaction | undefined => {
   const cosmosChains: Chain[] = [
     Chain.Cosmos,
-    Chain.Kujira,
     Chain.Osmosis,
     Chain.Noble,
     Chain.Akash,
