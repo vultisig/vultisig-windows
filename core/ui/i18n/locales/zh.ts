@@ -1802,4 +1802,5 @@ export const zh = {
   swap_failed_slippage: '价格突破了滑点容差范围',
   swap_failed_slippage_description:
     '此次掉期交易完成前价格发生了变动，因此支付金额低于您设定的滑点容忍度，网络已将其撤销。请提高您的滑点容忍度或重试。',
+  expired_before_confirmation: '确认前已过期',
 }

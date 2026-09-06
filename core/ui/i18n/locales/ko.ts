@@ -1921,4 +1921,5 @@ export const ko = {
   swap_failed_slippage: '가격이 슬리피지 허용 범위를 벗어났습니다.',
   swap_failed_slippage_description:
     '스왑이 체결되기 전에 가격 변동이 발생하여, 설정된 슬리피지 허용치보다 적은 금액이 지급되었을 것이므로 네트워크에서 이를 되돌렸습니다. 슬리피지 허용치를 높이거나 다시 시도하십시오.',
+  expired_before_confirmation: '확인 전에 만료되었습니다',
 }

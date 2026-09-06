@@ -1968,4 +1968,5 @@ export const it = {
   swap_failed_slippage: 'Il prezzo ha superato la soglia di slittamento',
   swap_failed_slippage_description:
     'Il prezzo si è mosso prima che questo scambio venisse eseguito, quindi il pagamento sarebbe stato inferiore alla tolleranza di slippage consentita e la rete lo ha annullato. Aumenta la tolleranza di slippage o riprova.',
+  expired_before_confirmation: 'Scaduto prima della conferma',
 }

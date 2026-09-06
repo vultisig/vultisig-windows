@@ -1,7 +1,27 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { TxStatusResult } from '@vultisig/core-chain/tx/status/resolver'
+import { match } from '@vultisig/lib-utils/match'
 
 import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
-import { TransactionStatusAnimation } from './TransactionStatusAnimation'
+import {
+  TransactionStatus,
+  TransactionStatusAnimation,
+} from './TransactionStatusAnimation'
+
+const toAnimationStatus = (
+  status: TxStatusResult['status']
+): TransactionStatus =>
+  match<TxStatusResult['status'], TransactionStatus>(status, {
+    pending: () => 'pending',
+    success: () => 'success',
+    error: () => 'error',
+    // The node has not seen the hash yet (broadcast still propagating); keep
+    // showing the pending animation until it resolves.
+    not_found: () => 'pending',
+    // Past its expiry a raw transaction can never be included — that is a
+    // failure, not a slow confirmation.
+    expired: () => 'error',
+  })
 
 type TxStatusTrackerProps = {
   chain: Chain
@@ -15,11 +35,7 @@ export const TxStatusTracker = ({ chain, hash }: TxStatusTrackerProps) => {
 
   return (
     <TransactionStatusAnimation
-      // `not_found` means the node has not seen the hash yet (broadcast still
-      // propagating); keep showing the pending animation until it resolves.
-      status={
-        isPending ? 'broadcasted' : status === 'not_found' ? 'pending' : status
-      }
+      status={isPending ? 'broadcasted' : toAnimationStatus(status)}
     />
   )
 }

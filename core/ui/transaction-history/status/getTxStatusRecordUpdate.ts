@@ -12,6 +12,9 @@ const toRecordStatus: Record<
   // The node has not seen the hash yet (e.g. broadcast-propagation race); treat
   // it as still-awaiting rather than a distinct record state.
   not_found: 'pending',
+  // A raw transaction past its expiry can never be included, so this is
+  // terminal rather than another flavour of pending.
+  expired: 'failed',
 }
 
 type GetTxStatusRecordUpdateInput = {

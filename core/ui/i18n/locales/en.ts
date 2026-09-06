@@ -118,6 +118,7 @@ export const en = {
   broadcast_refused_description:
     'Your devices signed this transaction, but this device declined to broadcast it after a final safety check. Another signing device may have broadcast it anyway — watch the status below and confirm the outcome before signing again.',
   not_seen_onchain: 'Not seen on-chain yet',
+  expired_before_confirmation: 'Expired before confirmation',
   broadcasted: 'Broadcasted',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
