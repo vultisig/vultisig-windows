@@ -1898,7 +1898,6 @@ export const es = {
   price_impact: 'Impacto en los precios',
   swap_fee_included_in_rate: 'Incluido en el tipo de cambio cotizado',
   swap_protocol_fee: 'Tarifa de protocolo',
-  swap_referral_fee: 'Comisión por recomendación',
   select_route: 'Seleccione ruta',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1962,4 +1961,5 @@ export const es = {
     'El precio superó el límite de tolerancia al deslizamiento.',
   swap_failed_slippage_description:
     'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
+  swap_applied_discounts: 'Descuentos aplicados:',
 }

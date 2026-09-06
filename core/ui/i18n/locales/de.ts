@@ -1913,7 +1913,6 @@ export const de = {
   price_impact: 'Preisauswirkung',
   swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
   swap_protocol_fee: 'Protokollgebühr',
-  swap_referral_fee: 'Vermittlungsgebühr',
   select_route: 'Route auswählen',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1977,4 +1976,5 @@ export const de = {
   swap_failed_slippage: 'Der Preis hat die Toleranzgrenze überschritten.',
   swap_failed_slippage_description:
     'Der Kurs hat sich vor der Ausführung des Swaps geändert, daher wäre die Auszahlung geringer gewesen als Ihre Slippage-Toleranz erlaubt gewesen, und das Netzwerk hat den Swap rückgängig gemacht. Erhöhen Sie Ihre Slippage-Toleranz oder versuchen Sie es erneut.',
+  swap_applied_discounts: 'Angewendete Rabatte:',
 }

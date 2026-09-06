@@ -1901,7 +1901,6 @@ export const pt = {
   price_impact: 'Impacto no preço',
   swap_fee_included_in_rate: 'Incluído na taxa de câmbio cotada',
   swap_protocol_fee: 'Taxa de protocolo',
-  swap_referral_fee: 'Taxa de encaminhamento',
   select_route: 'Selecione a rota',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1964,4 +1963,5 @@ export const pt = {
   swap_failed_slippage: 'O preço ultrapassou a tolerância de derrapagem.',
   swap_failed_slippage_description:
     'O preço se alterou antes da conclusão desta operação de troca, portanto, o pagamento teria sido inferior à sua tolerância de slippage permitida, e a rede reverteu a transação. Aumente sua tolerância de slippage ou tente novamente.',
+  swap_applied_discounts: 'Descontos aplicados:',
 }
