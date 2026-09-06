@@ -1,3 +1,4 @@
+import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
 import { useCore } from '@core/ui/state/core'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
@@ -100,6 +101,21 @@ const getVaultShareKey = ({
     sortedEntries(chainPublicKeys),
   ])
 
+/**
+ * Views whose flow writes a new vault and keeps running past the save: the
+ * setup flows continue into backup steps held in component state, so the tree
+ * has to survive the vault they wrote becoming current. Anywhere else a
+ * current vault switch is the user picking another existing vault, and the
+ * tree is withheld until that vault's shares are proven so no screen keeps
+ * showing or acting on the previous vault under the new id.
+ */
+const vaultWritingViews: ReadonlySet<string> = new Set<CoreViewId>([
+  'setupFastVault',
+  'setupSecureVault',
+  'joinKeygen',
+  'importVault',
+])
+
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const { validateLegacyVaultKeyShares } = useCore()
   const [navigation] = useNavigation()
@@ -132,6 +148,11 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       return
     }
 
+    // Tagged with the material the read was requested for. `vault` is closed
+    // over here, so a key computed once the read settles would describe
+    // whatever the object holds by then and could pass this result off as
+    // current for shares it was never read from.
+    const requestedShareKey = getVaultShareKey({ vault, hasPasscodeEncryption })
     let cancelled = false
 
     readVaultAllKeyShares({
@@ -149,7 +170,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .then(shares => {
         if (!cancelled) {
           setShareState({
-            shareKey: getVaultShareKey({ vault, hasPasscodeEncryption }),
+            shareKey: requestedShareKey,
             result: { status: 'ready', shares },
           })
         }
@@ -157,7 +178,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       .catch(error => {
         if (!cancelled) {
           setShareState({
-            shareKey: getVaultShareKey({ vault, hasPasscodeEncryption }),
+            shareKey: requestedShareKey,
             result:
               error instanceof UnreadableVaultKeySharesError
                 ? { status: 'unreadable' }
@@ -175,22 +196,31 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return () => {
       cancelled = true
     }
-  }, [vault, passcode, hasPasscodeEncryption, validateLegacyVaultKeyShares])
+  }, [
+    vault,
+    // Re-reads when the material changes under the same object identity.
+    shareKey,
+    passcode,
+    hasPasscodeEncryption,
+    validateLegacyVaultKeyShares,
+  ])
 
   const resolution =
     shareState && shareState.shareKey === shareKey ? shareState.result : null
 
-  const isImportView =
-    navigation.history[navigation.history.length - 1]?.id === 'importVault'
+  const viewId = navigation.history[navigation.history.length - 1]?.id
+  const isImportView = viewId === 'importVault'
+  const isVaultWritingView =
+    viewId !== undefined && vaultWritingViews.has(viewId)
 
   // What the tree below was last given: either no vault at all, or a vault
-  // whose shares were already proven. While a vault's shares are unresolved
-  // the tree holds that value instead of being torn down — replacing it with a
-  // splash unmounts every screen under this provider and discards their
-  // in-flight state, which is what dropped the fast vault setup flow back on
-  // its first step when the vault it had just saved became current (#4832).
-  // Holding never exposes unproven shares: the held value was either absent or
-  // proven.
+  // whose shares were already proven. While the vault a setup flow just wrote
+  // is unresolved, the tree holds that value instead of being torn down —
+  // replacing it with a splash unmounts every screen under this provider and
+  // discards their in-flight state, which is what dropped the fast vault setup
+  // flow back on its first step when the vault it had just saved became
+  // current (#4832). Holding never exposes unproven shares: the held value was
+  // either absent or proven.
   const heldValue = useRef<{ value: CurrentVaultValue } | null>(null)
 
   const provided: { value: CurrentVaultValue } | null = (() => {
@@ -213,7 +243,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
         held?.value !== undefined &&
         getVaultId(held.value) === getVaultId(vault)
 
-      return isStaleSameVault ? null : held
+      return isVaultWritingView && !isStaleSameVault ? held : null
     }
 
     if (resolution.status === 'error') {

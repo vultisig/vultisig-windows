@@ -8,7 +8,7 @@
  * — so that teardown dropped the user back on the vault name step, in a loop
  * that created an orphan vault per pass.
  *
- * Three guarantees are pinned down here:
+ * The guarantees pinned down here:
  *
  * - a flow already running without a current vault survives the vault it just
  *   wrote becoming current
@@ -17,9 +17,14 @@
  * - a flow running with an existing vault survives a second vault being
  *   saved and becoming current, which is what a user with a vault already in
  *   storage actually hits
+ * - that hold is limited to the views that write a vault: picking another
+ *   existing vault anywhere else withholds the tree until it is proven, so no
+ *   screen keeps showing the previous vault under the new id
  * - a storage refetch that rebuilds an unchanged vault neither blanks nor
  *   remounts the tree, while genuinely different shares — or a change to
  *   whether they are encrypted — still do
+ * - a read is tagged with the material it was requested for, so shares
+ *   replaced on the same object while it was in flight are never provided
  */
 import { RootCurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
@@ -40,6 +45,10 @@ const storage: {
   passcode: null,
 }
 
+// The view on top of the navigation history: a vault setup flow by default,
+// the vault page for the ordinary vault switching cases.
+let currentViewId = 'setupFastVault'
+
 let readCalls: {
   input: VaultAllKeyShares
   resolve: (shares: VaultAllKeyShares) => void
@@ -59,7 +68,7 @@ vi.mock('@core/ui/vault/state/UnreadableVaultRecovery', () => ({
 vi.mock('@core/ui/state/core', () => ({ useCore: () => ({}) }))
 
 vi.mock('@lib/ui/navigation/state', () => ({
-  useNavigation: () => [{ history: [{ id: 'setupFastVault' }] }],
+  useNavigation: () => [{ history: [{ id: currentViewId }] }],
 }))
 
 // Imported at module scope by `currentVault.tsx` for hooks this test does not
@@ -147,13 +156,16 @@ const renderTree = (children = <SetupFlow />) =>
 
 const settle = () => act(async () => { await Promise.resolve() })
 
-const resolveRead = async (shares = provenShares) => {
-  const call = readCalls[readCalls.length - 1]
+const resolveReadAt = async (index: number, shares = provenShares) => {
+  const call = readCalls[index]
   expect(call).toBeDefined()
   await act(async () => {
     call.resolve(shares)
   })
 }
+
+const resolveRead = (shares = provenShares) =>
+  resolveReadAt(readCalls.length - 1, shares)
 
 describe('RootCurrentVaultProvider tree continuity', () => {
   beforeEach(() => {
@@ -161,6 +173,7 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     storage.currentVaultId = null
     storage.hasPasscodeEncryption = false
     storage.passcode = null
+    currentViewId = 'setupFastVault'
     readCalls = []
     mountCount = 0
   })
@@ -258,6 +271,7 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(screen.getByTestId('splash')).toBeDefined()
     expect(screen.queryByText('name your vault')).toBeNull()
   })
+
   it('holds the tree through re-renders while the saved vault is still unresolved', async () => {
     const { rerender } = renderTree()
 
@@ -311,6 +325,7 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     expect(screen.getByTestId('splash')).toBeDefined()
     expect(screen.queryByText('name your vault')).toBeNull()
   })
+
   it('keeps a running setup flow mounted when a second vault becomes current', async () => {
     // The common case: the user already has a vault, so the flow runs with one
     // current and the save switches the current vault rather than creating the
@@ -353,5 +368,80 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
     expect(screen.getByText('keygen for Vault #1')).toBeDefined()
     expect(mountCount).toBe(1)
+  })
+
+  it('withholds the tree when another existing vault is picked outside a setup flow', async () => {
+    // The vault list switches the current vault and goes home. The vault page
+    // must not keep rendering vault #1's data and actions under vault #2's id
+    // while vault #2's shares are still being read.
+    currentViewId = 'vault'
+    const secondVault = makeVault({
+      name: 'Vault #2',
+      publicKeys: { ecdsa: secondVaultId, eddsa: 'second-eddsa-public-key' },
+      keyShares: { ecdsa: 'second-ecdsa', eddsa: 'second-eddsa' },
+    })
+    storage.vaults = [makeVault(), secondVault]
+    storage.currentVaultId = vaultId
+
+    const { rerender } = renderTree()
+    await settle()
+    await resolveRead()
+    expect(screen.getByText('name your vault')).toBeDefined()
+    expect(mountCount).toBe(1)
+
+    storage.currentVaultId = secondVaultId
+    rerender(
+      <RootCurrentVaultProvider>
+        <SetupFlow />
+      </RootCurrentVaultProvider>
+    )
+    await settle()
+
+    expect(screen.getByTestId('splash')).toBeDefined()
+    expect(screen.queryByText('name your vault')).toBeNull()
+
+    await resolveRead({
+      keyShares: { ecdsa: 'proven-second-ecdsa', eddsa: 'proven-second-eddsa' },
+    })
+
+    expect(screen.queryByTestId('splash')).toBeNull()
+    expect(screen.getByText('name your vault')).toBeDefined()
+    expect(mountCount).toBe(2)
+  })
+
+  it('never provides a read whose shares were replaced on the same object while it was in flight', async () => {
+    const vault = makeVault()
+    storage.vaults = [vault]
+    storage.currentVaultId = vaultId
+
+    const { rerender } = renderTree()
+    await settle()
+    expect(readCalls).toHaveLength(1)
+    expect(screen.getByTestId('splash')).toBeDefined()
+
+    // The share material changes without the object identity changing, so the
+    // result of the first read describes shares the vault no longer holds.
+    vault.keyShares = { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' }
+    rerender(
+      <RootCurrentVaultProvider>
+        <SetupFlow />
+      </RootCurrentVaultProvider>
+    )
+    await settle()
+
+    expect(readCalls).toHaveLength(2)
+    expect(readCalls[1].input.keyShares).toEqual(vault.keyShares)
+
+    await resolveReadAt(0)
+
+    expect(screen.getByTestId('splash')).toBeDefined()
+    expect(screen.queryByText('name your vault')).toBeNull()
+
+    await resolveReadAt(1, {
+      keyShares: { ecdsa: 'proven-reshared-ecdsa', eddsa: 'proven-reshared-eddsa' },
+    })
+
+    expect(screen.queryByTestId('splash')).toBeNull()
+    expect(screen.getByText('name your vault')).toBeDefined()
   })
 })
