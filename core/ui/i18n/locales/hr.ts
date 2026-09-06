@@ -1958,4 +1958,10 @@ export const hr = {
     'Novčanik je prihvatio transakciju, ali nije mogao izvršiti transfer, pa ništa nije poslano. Mrežna naknada je i dalje naplaćena. Provjerite transakciju i pokušajte ponovno.',
   ton_tx_failure_action_partially_failed:
     'Novčanik nije mogao izvršiti barem jedan prijenos u ovoj transakciji, a ostali u njemu su možda prošli. Mrežna naknada je i dalje naplaćena. Provjerite povijest transakcija prije ponovnog slanja.',
+  token_verification_unverified: 'Nepotvrđeno',
+  token_verification_unverified_hint:
+    'Ovaj token nije na provjerenom popisu. Provjerite njegovu ugovornu adresu prije nego što mu vjerujete.',
+  token_verification_scam: 'PRIJEVARA',
+  token_verification_scam_hint:
+    'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
 }

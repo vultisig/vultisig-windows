@@ -1931,4 +1931,10 @@ export const en = {
     'The network aborted this transaction before it could carry out the transfer.',
   ton_tx_failure_contract_rejected:
     'The contract rejected the transaction (exit code {{exitCode}}).',
+  token_verification_unverified: 'Unverified',
+  token_verification_unverified_hint:
+    'This token is not on the verified list. Check its contract address before trusting it.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
 }
