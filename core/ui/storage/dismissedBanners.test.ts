@@ -2,12 +2,31 @@ import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 import { describe, expect, it } from 'vitest'
 
 import {
-  bannerDismissalTtl,
+  BannerDismissPolicy,
+  bannerDismissPolicy,
+  BannerId,
   DismissedBanners,
   isBannerDismissed,
   migrateDismissedBanners,
   recordBannerDismissal,
 } from './dismissedBanners'
+
+const ttlOf = (id: BannerId) => {
+  const policy = bannerDismissPolicy[id]
+
+  if (!('ttl' in policy)) {
+    throw new Error(`Expected a TTL policy for ${id}`)
+  }
+
+  return policy.ttl
+}
+
+const permanentPolicy = (
+  id: BannerId
+): Record<BannerId, BannerDismissPolicy> => ({
+  ...bannerDismissPolicy,
+  [id]: { permanent: null },
+})
 
 const now = convertDuration(100, 'd', 'ms')
 
@@ -68,7 +87,7 @@ describe('isBannerDismissed', () => {
   })
 
   it('keeps the banner dismissed while within its TTL', () => {
-    const dismissedAt = now - bannerDismissalTtl.buyVultPromo + 1
+    const dismissedAt = now - ttlOf('buyVultPromo') + 1
 
     expect(
       isBannerDismissed({
@@ -81,7 +100,7 @@ describe('isBannerDismissed', () => {
   })
 
   it('ignores the dismissal once the TTL has elapsed', () => {
-    const dismissedAt = now - bannerDismissalTtl.buyVultPromo
+    const dismissedAt = now - ttlOf('buyVultPromo')
 
     expect(
       isBannerDismissed({
@@ -93,18 +112,18 @@ describe('isBannerDismissed', () => {
     ).toBe(false)
   })
 
-  it('resurfaces the QBTC claim banner once its cooldown elapses', () => {
+  it('resurfaces a vault-scoped TTL banner once its cooldown elapses', () => {
     const banners: DismissedBanners = {
       global: {},
       byVault: {
         [vaultA]: {
-          qbtcClaim: { dismissedAt: now - bannerDismissalTtl.qbtcClaim },
+          vaultBackup: { dismissedAt: now - ttlOf('vaultBackup') },
         },
       },
     }
 
     expect(
-      isBannerDismissed({ banners, id: 'qbtcClaim', now, vaultId: vaultA })
+      isBannerDismissed({ banners, id: 'vaultBackup', now, vaultId: vaultA })
     ).toBe(false)
   })
 
@@ -220,5 +239,112 @@ describe('recordBannerDismissal', () => {
         [vaultA]: { vaultBackup: { dismissedAt: now } },
       },
     })
+  })
+})
+
+describe('isBannerDismissed with a permanent policy', () => {
+  it('keeps the banner hidden long after any TTL would have elapsed', () => {
+    const dismissedAt = now - convertDuration(3650, 'd', 'ms')
+
+    expect(
+      isBannerDismissed({
+        banners: { global: { buyVultPromo: { dismissedAt } }, byVault: {} },
+        id: 'buyVultPromo',
+        now,
+        vaultId: vaultA,
+        policy: permanentPolicy('buyVultPromo'),
+      })
+    ).toBe(true)
+  })
+
+  it('still shows a permanent-policy banner that was never dismissed', () => {
+    expect(
+      isBannerDismissed({
+        banners: empty,
+        id: 'buyVultPromo',
+        now,
+        vaultId: vaultA,
+        policy: permanentPolicy('buyVultPromo'),
+      })
+    ).toBe(false)
+  })
+
+  it('leaves other banners on their own TTL', () => {
+    const dismissedAt = now - convertDuration(10, 'd', 'ms')
+    const banners: DismissedBanners = {
+      global: {
+        buyVultPromo: { dismissedAt },
+        migrate: { dismissedAt },
+      },
+      byVault: {},
+    }
+    const policy = permanentPolicy('migrate')
+
+    // migrate is permanent, buyVultPromo keeps its elapsed 7d TTL.
+    expect(
+      isBannerDismissed({
+        banners,
+        id: 'migrate',
+        now,
+        vaultId: vaultA,
+        policy,
+      })
+    ).toBe(true)
+    expect(
+      isBannerDismissed({
+        banners,
+        id: 'buyVultPromo',
+        now,
+        vaultId: vaultA,
+        policy,
+      })
+    ).toBe(false)
+  })
+
+  it('honors a permanent policy for a legacy dismissal after migration', () => {
+    const banners = migrateDismissedBanners({ stored: ['followOnX'], now })
+    const laterThanAnyTtl = now + convertDuration(3650, 'd', 'ms')
+
+    expect(
+      isBannerDismissed({
+        banners,
+        id: 'followOnX',
+        now: laterThanAnyTtl,
+        vaultId: vaultA,
+        policy: permanentPolicy('followOnX'),
+      })
+    ).toBe(true)
+  })
+
+  it('keeps a dismissed qbtcClaim hidden on its vault for good', () => {
+    const banners = recordBannerDismissal({
+      banners: empty,
+      id: 'qbtcClaim',
+      now,
+      vaultId: vaultA,
+    })
+    const laterThanAnyTtl = now + convertDuration(3650, 'd', 'ms')
+
+    expect(
+      isBannerDismissed({
+        banners,
+        id: 'qbtcClaim',
+        now: laterThanAnyTtl,
+        vaultId: vaultA,
+      })
+    ).toBe(true)
+  })
+
+  it('leaves qbtcClaim showing on a vault it was not dismissed on', () => {
+    const banners = recordBannerDismissal({
+      banners: empty,
+      id: 'qbtcClaim',
+      now,
+      vaultId: vaultA,
+    })
+
+    expect(
+      isBannerDismissed({ banners, id: 'qbtcClaim', now, vaultId: vaultB })
+    ).toBe(false)
   })
 })

@@ -1921,6 +1921,8 @@ export const ko = {
   swap_failed_slippage_description:
     '스왑이 체결되기 전에 가격 변동이 발생하여, 설정된 슬리피지 허용치보다 적은 금액이 지급되었을 것이므로 네트워크에서 이를 되돌렸습니다. 슬리피지 허용치를 높이거나 다시 시도하십시오.',
   swap_applied_discounts: '적용된 할인:',
+  swap_add_custom_token: '+ 사용자 지정 토큰 추가',
+  swap_no_token_found: '토큰을 찾을 수 없습니다.',
   token_verification_unverified: '미확인',
   token_verification_unverified_hint:
     '이 토큰은 검증된 목록에 없습니다. 신뢰하기 전에 해당 계약 주소를 확인하세요.',

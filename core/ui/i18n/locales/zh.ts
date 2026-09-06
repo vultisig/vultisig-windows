@@ -1802,6 +1802,8 @@ export const zh = {
   swap_failed_slippage_description:
     '此次掉期交易完成前价格发生了变动，因此支付金额低于您设定的滑点容忍度，网络已将其撤销。请提高您的滑点容忍度或重试。',
   swap_applied_discounts: '已应用折扣：',
+  swap_add_custom_token: '+ 添加自定义令牌',
+  swap_no_token_found: '未找到令牌',
   token_verification_unverified: '未经证实',
   token_verification_unverified_hint:
     '此代币不在已验证列表中。信任此代币前，请先检查其合约地址。',

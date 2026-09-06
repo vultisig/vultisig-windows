@@ -1977,6 +1977,8 @@ export const de = {
   swap_failed_slippage_description:
     'Der Kurs hat sich vor der Ausführung des Swaps geändert, daher wäre die Auszahlung geringer gewesen als Ihre Slippage-Toleranz erlaubt gewesen, und das Netzwerk hat den Swap rückgängig gemacht. Erhöhen Sie Ihre Slippage-Toleranz oder versuchen Sie es erneut.',
   swap_applied_discounts: 'Angewendete Rabatte:',
+  swap_add_custom_token: '+ Benutzerdefiniertes Token hinzufügen',
+  swap_no_token_found: 'Kein Token gefunden',
   token_verification_unverified: 'Unbestätigt',
   token_verification_unverified_hint:
     'Dieser Token befindet sich nicht auf der Liste der verifizierten Token. Überprüfen Sie seine Vertragsadresse, bevor Sie ihm vertrauen.',

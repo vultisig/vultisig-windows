@@ -1945,6 +1945,8 @@ export const nl = {
   swap_failed_slippage_description:
     'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
   swap_applied_discounts: 'Toegepaste kortingen:',
+  swap_add_custom_token: '+ Voeg een aangepast token toe',
+  swap_no_token_found: 'Geen token gevonden',
   token_verification_unverified: 'Niet geverifieerd',
   token_verification_unverified_hint:
     'Dit token staat niet op de lijst met geverifieerde tokens. Controleer het contractadres voordat u het vertrouwt.',
