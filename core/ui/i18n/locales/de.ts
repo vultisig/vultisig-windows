@@ -1998,7 +1998,7 @@ export const de = {
   ton_tx_failure_aborted:
     'Das Netzwerk hat diese Transaktion abgebrochen, bevor die Überweisung durchgeführt werden konnte.',
   ton_tx_failure_contract_rejected:
-    'Der Vertrag hat die Transaktion abgelehnt (Exit-Code {{exitCode}} ).',
+    'Der Vertrag hat die Transaktion abgelehnt (Exit-Code {{exitCode}}).',
   ton_tx_failure_action_failed:
     'Die Wallet hat die Transaktion akzeptiert, konnte die Überweisung aber nicht durchführen, daher wurde kein Geld gesendet. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie die Transaktion und versuchen Sie es erneut.',
   ton_tx_failure_action_partially_failed:

@@ -1942,7 +1942,7 @@ export const ko = {
   ton_tx_failure_aborted:
     '네트워크가 해당 거래를 실행하기 전에 중단시켰습니다.',
   ton_tx_failure_contract_rejected:
-    '계약에서 거래를 거부했습니다(종료 코드 {{exitCode}} ).',
+    '계약에서 거래를 거부했습니다(종료 코드 {{exitCode}}).',
   ton_tx_failure_action_failed:
     '지갑에서 거래를 승인했지만 이체를 실행할 수 없어 아무것도 전송되지 않았습니다. 네트워크 수수료는 부과되었습니다. 거래 내역을 확인하고 다시 시도해 주세요.',
   ton_tx_failure_action_partially_failed:

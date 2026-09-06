@@ -1958,7 +1958,7 @@ export const nl = {
   ton_tx_failure_out_of_gas:
     'De transactie is voortijdig beëindigd vanwege gasgebrek. Voeg meer TON toe aan de overdracht en probeer het opnieuw.',
   ton_tx_failure_invalid_destination:
-    'Het bestemmingsadres is niet geldig op TON . Controleer het adres en probeer het opnieuw.',
+    'Het bestemmingsadres is niet geldig op TON. Controleer het adres en probeer het opnieuw.',
   ton_tx_failure_not_enough_jettons:
     'Deze portemonnee bevat onvoldoende tokens om dat bedrag te verzenden.',
   ton_tx_failure_jetton_unauthorized:
@@ -1966,7 +1966,7 @@ export const nl = {
   ton_tx_failure_aborted:
     'Het netwerk heeft deze transactie afgebroken voordat de overdracht kon worden uitgevoerd.',
   ton_tx_failure_contract_rejected:
-    'Het contract heeft de transactie afgewezen (exitcode {{exitCode}} ).',
+    'Het contract heeft de transactie afgewezen (exitcode {{exitCode}}).',
   ton_tx_failure_action_failed:
     'De wallet accepteerde de transactie, maar kon de overdracht niet uitvoeren, waardoor er niets is verzonden. De netwerkkosten zijn echter wel in rekening gebracht. Controleer de transactie en probeer het opnieuw.',
   ton_tx_failure_action_partially_failed:

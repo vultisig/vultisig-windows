@@ -1975,7 +1975,7 @@ export const es = {
   ton_tx_failure_out_of_gas:
     'La transacción se quedó sin gas antes de poder finalizar. Añada más TON a la transferencia e inténtelo de nuevo.',
   ton_tx_failure_invalid_destination:
-    'La dirección de destino no es válida en TON . Verifique la dirección e inténtelo de nuevo.',
+    'La dirección de destino no es válida en TON. Verifique la dirección e inténtelo de nuevo.',
   ton_tx_failure_not_enough_jettons:
     'Esta billetera no contiene suficientes tokens para enviar esa cantidad.',
   ton_tx_failure_jetton_unauthorized:
@@ -1983,7 +1983,7 @@ export const es = {
   ton_tx_failure_aborted:
     'La red abortó esta transacción antes de que pudiera completarse la transferencia.',
   ton_tx_failure_contract_rejected:
-    'El contrato rechazó la transacción (código de salida {{exitCode}} ).',
+    'El contrato rechazó la transacción (código de salida {{exitCode}}).',
   ton_tx_failure_action_failed:
     'La billetera aceptó la transacción, pero no pudo realizar la transferencia, por lo que no se envió nada. Aun así, se cobró la comisión de red. Verifique la transacción e inténtelo de nuevo.',
   ton_tx_failure_action_partially_failed:

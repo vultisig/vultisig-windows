@@ -1977,7 +1977,7 @@ export const pt = {
   ton_tx_failure_out_of_gas:
     'A transação ficou sem gás antes de ser concluída. Anexe mais TON à transferência e tente novamente.',
   ton_tx_failure_invalid_destination:
-    'O endereço de destino não é válido em TON . Verifique o endereço e tente novamente.',
+    'O endereço de destino não é válido em TON. Verifique o endereço e tente novamente.',
   ton_tx_failure_not_enough_jettons:
     'Esta carteira não possui tokens suficientes para enviar essa quantia.',
   ton_tx_failure_jetton_unauthorized:
@@ -1985,7 +1985,7 @@ export const pt = {
   ton_tx_failure_aborted:
     'A rede abortou esta transação antes que ela pudesse ser concluída.',
   ton_tx_failure_contract_rejected:
-    'O contrato rejeitou a transação (código de saída {{exitCode}} ).',
+    'O contrato rejeitou a transação (código de saída {{exitCode}}).',
   ton_tx_failure_action_failed:
     'A carteira aceitou a transação, mas não conseguiu efetuar a transferência, portanto nada foi enviado. A taxa de rede foi cobrada mesmo assim. Verifique a transação e tente novamente.',
   ton_tx_failure_action_partially_failed:

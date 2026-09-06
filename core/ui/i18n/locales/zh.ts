@@ -1813,14 +1813,14 @@ export const zh = {
   ton_tx_failure_insufficient_funds:
     'TON金额不足，无法支付交易金额及网络费用。请预留约 0.05 TON用于支付费用，并重试。',
   ton_tx_failure_out_of_gas:
-    '交易因 gas 不足而无法完成。请为转账附加更多TON ，然后重试。',
+    '交易因 gas 不足而无法完成。请为转账附加更多TON，然后重试。',
   ton_tx_failure_invalid_destination: '目标地址在TON上无效。请检查地址并重试。',
   ton_tx_failure_not_enough_jettons: '此钱包中没有足够的代币来发送该金额。',
   ton_tx_failure_jetton_unauthorized:
     '代币合约拒绝了转账，因为该钱包无权转移这些代币。',
   ton_tx_failure_aborted: '网络在完成转账之前中止了这笔交易。',
   ton_tx_failure_contract_rejected:
-    '合约拒绝了该交易（退出代码{{exitCode}} ）。',
+    '合约拒绝了该交易（退出代码{{exitCode}}）。',
   ton_tx_failure_action_failed:
     '钱包已接受交易，但无法完成转账，因此未发送任何款项。网络手续费仍被收取。请检查交易并重试。',
   ton_tx_failure_action_partially_failed:

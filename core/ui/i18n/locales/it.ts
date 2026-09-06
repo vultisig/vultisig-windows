@@ -1981,7 +1981,7 @@ export const it = {
   ton_tx_failure_out_of_gas:
     'La transazione ha esaurito il gas prima di poter essere completata. Aggiungi altro TON al trasferimento e riprova.',
   ton_tx_failure_invalid_destination:
-    "L'indirizzo di destinazione non è valido su TON . Verifica l'indirizzo e riprova.",
+    "L'indirizzo di destinazione non è valido su TON. Verifica l'indirizzo e riprova.",
   ton_tx_failure_not_enough_jettons:
     'Questo portafoglio non contiene una quantità sufficiente di token per inviare tale importo.',
   ton_tx_failure_jetton_unauthorized:
@@ -1989,7 +1989,7 @@ export const it = {
   ton_tx_failure_aborted:
     'La rete ha interrotto la transazione prima che il trasferimento potesse essere completato.',
   ton_tx_failure_contract_rejected:
-    'Il contratto ha rifiutato la transazione (codice di uscita {{exitCode}} ).',
+    'Il contratto ha rifiutato la transazione (codice di uscita {{exitCode}}).',
   ton_tx_failure_action_failed:
     'Il portafoglio ha accettato la transazione ma non è riuscito a completare il trasferimento, quindi non è stato inviato nulla. La commissione di rete è stata comunque addebitata. Verifica la transazione e riprova.',
   ton_tx_failure_action_partially_failed:

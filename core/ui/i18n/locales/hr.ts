@@ -1943,7 +1943,7 @@ export const hr = {
   ton_tx_failure_out_of_gas:
     'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još TON transferu i pokušajte ponovno.',
   ton_tx_failure_invalid_destination:
-    'Odredišna adresa nije valjana na TON . Provjerite adresu i pokušajte ponovno.',
+    'Odredišna adresa nije valjana na TON. Provjerite adresu i pokušajte ponovno.',
   ton_tx_failure_not_enough_jettons:
     'Ovaj novčanik ne sadrži dovoljno tokena za slanje tog iznosa.',
   ton_tx_failure_jetton_unauthorized:
@@ -1951,7 +1951,7 @@ export const hr = {
   ton_tx_failure_aborted:
     'Mreža je prekinula ovu transakciju prije nego što je mogla izvršiti transfer.',
   ton_tx_failure_contract_rejected:
-    'Ugovor je odbio transakciju (izlazni kod {{exitCode}} ).',
+    'Ugovor je odbio transakciju (izlazni kod {{exitCode}}).',
   ton_tx_failure_action_failed:
     'Novčanik je prihvatio transakciju, ali nije mogao izvršiti transfer, pa ništa nije poslano. Mrežna naknada je i dalje naplaćena. Provjerite transakciju i pokušajte ponovno.',
   ton_tx_failure_action_partially_failed:
