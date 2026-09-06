@@ -1933,4 +1933,10 @@ export const en = {
     'The contract rejected the transaction (exit code {{exitCode}}).',
   ton_simulation_will_fail:
     'The transaction preview expects this transaction to fail. Signing it anyway is likely to cost the network fee without completing it.',
+  token_verification_unverified: 'Unverified',
+  token_verification_unverified_hint:
+    'This token is not on the verified list. Check its contract address before trusting it.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
 }

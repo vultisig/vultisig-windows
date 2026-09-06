@@ -1998,4 +1998,10 @@ export const it = {
     'Il portafoglio non è riuscito a completare almeno un trasferimento in questa transazione, mentre altri potrebbero essere andati a buon fine. La commissione di rete è stata comunque addebitata. Controlla la cronologia delle transazioni prima di inviare nuovamente.',
   ton_simulation_will_fail:
     "L'anteprima della transazione prevede che questa transazione fallisca. Firmarla comunque probabilmente comporterà il pagamento della commissione di rete senza che la transazione venga completata.",
+  token_verification_unverified: 'Non verificato',
+  token_verification_unverified_hint:
+    "Questo token non è presente nell'elenco verificato. Controlla l'indirizzo del contratto prima di considerarlo valido.",
+  token_verification_scam: 'TRUFFA',
+  token_verification_scam_hint:
+    'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
 }

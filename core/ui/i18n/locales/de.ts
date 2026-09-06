@@ -2007,4 +2007,10 @@ export const de = {
     'Mindestens eine Überweisung dieser Transaktion konnte nicht ausgeführt werden, andere Transaktionen wurden möglicherweise erfolgreich abgeschlossen. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie Ihren Transaktionsverlauf, bevor Sie erneut eine Überweisung senden.',
   ton_simulation_will_fail:
     'Die Transaktionsvorschau geht davon aus, dass diese Transaktion fehlschlagen wird. Wenn Sie sie trotzdem unterzeichnen, fallen wahrscheinlich Netzwerkgebühren an, ohne dass die Transaktion abgeschlossen wird.',
+  token_verification_unverified: 'Unbestätigt',
+  token_verification_unverified_hint:
+    'Dieser Token befindet sich nicht auf der Liste der verifizierten Token. Überprüfen Sie seine Vertragsadresse, bevor Sie ihm vertrauen.',
+  token_verification_scam: 'BETRUG',
+  token_verification_scam_hint:
+    'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
 }

@@ -1994,4 +1994,10 @@ export const pt = {
     'A carteira não conseguiu efetuar pelo menos uma transferência nesta transação, embora outras possam ter sido concluídas. A taxa de rede foi cobrada mesmo assim. Verifique seu histórico de transações antes de enviar novamente.',
   ton_simulation_will_fail:
     'A pré-visualização da transação prevê que esta transação falhará. Assiná-la mesmo assim provavelmente resultará na cobrança da taxa de rede sem que a transação seja concluída.',
+  token_verification_unverified: 'Não verificado',
+  token_verification_unverified_hint:
+    'Este token não está na lista de tokens verificados. Verifique o endereço do contrato antes de confiar nele.',
+  token_verification_scam: 'FRAUDE',
+  token_verification_scam_hint:
+    'Este token copia o nome de um token verificado, mas reside em um endereço de contrato diferente. É uma falsificação — não confie nele.',
 }

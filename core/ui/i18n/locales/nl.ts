@@ -1975,4 +1975,10 @@ export const nl = {
     'De wallet kon in deze transactie ten minste één overboeking niet uitvoeren, terwijl andere overboekingen mogelijk wel zijn gelukt. De netwerkkosten zijn desondanks in rekening gebracht. Controleer uw transactiegeschiedenis voordat u opnieuw een overboeking doet.',
   ton_simulation_will_fail:
     'De transactiepreview verwacht dat deze transactie zal mislukken. Als u de transactie toch ondertekent, kost dit waarschijnlijk netwerkkosten zonder dat de transactie wordt voltooid.',
+  token_verification_unverified: 'Niet geverifieerd',
+  token_verification_unverified_hint:
+    'Dit token staat niet op de lijst met geverifieerde tokens. Controleer het contractadres voordat u het vertrouwt.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
 }
