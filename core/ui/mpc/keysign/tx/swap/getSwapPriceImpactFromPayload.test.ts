@@ -1,24 +1,35 @@
-import { create } from '@bufbuild/protobuf'
+import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { THORChainSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 import { describe, expect, it } from 'vitest'
 
 import { getSwapPriceImpactFromPayload } from './getSwapPriceImpactFromPayload'
 
-// `slippage_bps` is field 14, added in vultisig/commondata#104. Until the SDK
-// publishes the regenerated type, `create` does not accept it by name, so the
-// fixture attaches it the way a decoded payload carries it.
+// A co-signer never builds this message — it decodes one off the relay. Every
+// fixture therefore goes through the wire, because an in-memory message can
+// carry a property the schema does not: against a `@vultisig/core-mpc` that
+// predates `slippage_bps` (field 14), `fromBinary` parks the value in
+// `$unknown` and leaves `slippageBps` undefined, which is exactly how this
+// read once passed its tests while showing the co-signer nothing.
+const throughTheWire = (payload: KeysignPayload) =>
+  fromBinary(KeysignPayloadSchema, toBinary(KeysignPayloadSchema, payload))
+
 const nativePayload = (slippageBps: number | undefined) =>
-  create(KeysignPayloadSchema, {
-    swapPayload: {
-      case: 'thorchainSwapPayload',
-      value: Object.assign(
-        create(THORChainSwapPayloadSchema, { fromAmount: '1000' }),
-        slippageBps === undefined ? {} : { slippageBps }
-      ),
-    },
-  })
+  throughTheWire(
+    create(KeysignPayloadSchema, {
+      swapPayload: {
+        case: 'thorchainSwapPayload',
+        value: create(THORChainSwapPayloadSchema, {
+          fromAmount: '1000',
+          slippageBps,
+        }),
+      },
+    })
+  )
 
 describe('getSwapPriceImpactFromPayload', () => {
   it('reads a native payload as a fraction, matching what the quote produces', () => {
@@ -27,6 +38,16 @@ describe('getSwapPriceImpactFromPayload', () => {
       0.0019,
       10
     )
+  })
+
+  it('carries the field on the wire rather than parking it in $unknown', () => {
+    const payload = nativePayload(19)
+    const swapPayload = payload.swapPayload
+
+    expect(swapPayload.case).toBe('thorchainSwapPayload')
+    expect(
+      swapPayload.case === 'thorchainSwapPayload' && swapPayload.value.$unknown
+    ).toBeUndefined()
   })
 
   it('reports nothing when the payload omits the field', () => {
@@ -42,19 +63,23 @@ describe('getSwapPriceImpactFromPayload', () => {
   })
 
   it('reports nothing for a general swap, which carries no impact field', () => {
-    const payload = create(KeysignPayloadSchema, {
-      swapPayload: {
-        case: 'oneinchSwapPayload',
-        value: create(OneInchSwapPayloadSchema, { fromAmount: '1000' }),
-      },
-    })
+    const payload = throughTheWire(
+      create(KeysignPayloadSchema, {
+        swapPayload: {
+          case: 'oneinchSwapPayload',
+          value: create(OneInchSwapPayloadSchema, { fromAmount: '1000' }),
+        },
+      })
+    )
 
     expect(getSwapPriceImpactFromPayload(payload)).toBeUndefined()
   })
 
   it('reports nothing for a payload that is not a swap at all', () => {
     expect(
-      getSwapPriceImpactFromPayload(create(KeysignPayloadSchema, {}))
+      getSwapPriceImpactFromPayload(
+        throughTheWire(create(KeysignPayloadSchema, {}))
+      )
     ).toBeUndefined()
   })
 })
