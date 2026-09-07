@@ -19,8 +19,9 @@ cp tests/e2e/.env.example tests/e2e/.env
 TEST_VAULT_PATH=/path/to/your/test-vault.vult
 TEST_VAULT_PASSWORD=your-vault-password
 
-# 3. Run vault-dependent tests
-npx playwright test vault-operations.spec.ts
+# 3. Run vault-dependent tests (the workspace script sets
+#    PLAYWRIGHT_FORCE_ASYNC_LOADER, without which nothing collects)
+yarn workspace @clients/extension test:e2e vault-operations.spec.ts
 ```
 
 ### Files Created
