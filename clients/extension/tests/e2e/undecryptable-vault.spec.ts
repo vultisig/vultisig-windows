@@ -5,7 +5,11 @@ import { VaultSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_pb
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
 
 import { expect, test } from './fixtures/extension.fixture'
-import { generateVaultKeyshares } from './helpers/seeded-vault'
+import {
+  fixtureKeygenCommittee,
+  fixtureLocalPartyId,
+  generateVaultKeyshares,
+} from './helpers/seeded-vault'
 
 test.describe.configure({ mode: 'serial' })
 
@@ -14,8 +18,8 @@ const createRecoveryBackup = async () => {
   const vault: Vault = {
     name: 'Recovered vault',
     publicKeys: { ecdsa: ecdsa.publicKey, eddsa: eddsa.publicKey },
-    signers: ['device-1', 'device-2'],
-    localPartyId: 'device-1',
+    signers: fixtureKeygenCommittee,
+    localPartyId: fixtureLocalPartyId,
     hexChainCode: ecdsa.chainCode,
     keyShares: { ecdsa: ecdsa.keyshare, eddsa: eddsa.keyshare },
     libType: 'DKLS',

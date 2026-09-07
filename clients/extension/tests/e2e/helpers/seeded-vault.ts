@@ -1,5 +1,6 @@
 import '@vultisig/sdk/node'
 
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
 import {
   DklsEngine,
   ensureMpcEngine,
@@ -26,18 +27,34 @@ export type GeneratedVaultKeyshares = {
   eddsa: GeneratedKeyshare
 }
 
-const partyIds = ['device-1', 'device-2']
+/**
+ * The party whose share the fixture keeps. A keysign session is set up under
+ * the vault's `localPartyId`, so the keygen has to register that same string —
+ * any vault built from these shares must declare this id.
+ */
+export const fixtureLocalPartyId = 'local-device'
+
+/** The committee the fixture shares were generated for. */
+export const fixtureKeygenCommittee = [fixtureLocalPartyId, 'device-2']
 
 const runKeygen = async (engine: KeygenEngine): Promise<GeneratedKeyshare> => {
-  const setup = engine.keygenSetup(undefined, partyIds.length, partyIds)
+  const setup = engine.keygenSetup(
+    undefined,
+    fixtureKeygenCommittee.length,
+    fixtureKeygenCommittee
+  )
   const sessions = new Map<string, MpcSession<MpcKeyshare>>()
 
-  for (const partyId of partyIds) {
+  for (const partyId of fixtureKeygenCommittee) {
     sessions.set(partyId, await engine.createKeygenSession(setup, partyId))
   }
 
   const completed = new Set<string>()
-  for (let round = 0; round < 10 && completed.size < partyIds.length; round++) {
+  for (
+    let round = 0;
+    round < 10 && completed.size < fixtureKeygenCommittee.length;
+    round++
+  ) {
     const messages: { body: Uint8Array; receivers: string[] }[] = []
 
     sessions.forEach(session => {
@@ -65,16 +82,15 @@ const runKeygen = async (engine: KeygenEngine): Promise<GeneratedKeyshare> => {
     })
   }
 
-  if (completed.size !== partyIds.length) {
+  if (completed.size !== fixtureKeygenCommittee.length) {
     throw new Error('MPC fixture keygen did not complete')
   }
 
-  const [localPartyId] = partyIds
-  const session = sessions.get(localPartyId)
+  const session = sessions.get(fixtureLocalPartyId)
 
   if (!session) {
     throw new Error(
-      `MPC fixture keygen produced no session for ${localPartyId}`
+      `MPC fixture keygen produced no session for ${fixtureLocalPartyId}`
     )
   }
 
@@ -91,10 +107,12 @@ const runKeygen = async (engine: KeygenEngine): Promise<GeneratedKeyshare> => {
     partySession.free?.()
   }
 
-  const result = results.get(localPartyId)
+  const result = results.get(fixtureLocalPartyId)
 
   if (!result) {
-    throw new Error(`MPC fixture keygen produced no share for ${localPartyId}`)
+    throw new Error(
+      `MPC fixture keygen produced no share for ${fixtureLocalPartyId}`
+    )
   }
 
   return result
@@ -140,7 +158,7 @@ type CreateSeededVaultInput = {
    * supplies (via Wails), so the extension refuses every `GG20` vault outright.
    * Pass `KeyImport` when a spec needs the UI that keys off `libType !== 'DKLS'`.
    */
-  libType?: 'DKLS' | 'KeyImport'
+  libType?: Exclude<MpcLib, 'GG20'>
 }
 
 /**
@@ -160,11 +178,11 @@ export const createSeededVault = async ({
     vault: {
       name,
       publicKeys: { ecdsa: ecdsa.publicKey, eddsa: eddsa.publicKey },
-      signers: ['local-device'],
+      signers: [fixtureLocalPartyId],
       createdAt: Date.now(),
       hexChainCode: ecdsa.chainCode,
       keyShares: { ecdsa: ecdsa.keyshare, eddsa: eddsa.keyshare },
-      localPartyId: 'local-device',
+      localPartyId: fixtureLocalPartyId,
       libType,
       isBackedUp: true,
       order: 0,
