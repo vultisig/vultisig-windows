@@ -2,11 +2,10 @@ import type { BrowserContext, Page, TestInfo } from '@playwright/test'
 
 import { expect, test } from '../fixtures/extension-loader'
 import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
+import { createSeededVault } from '../helpers/seeded-vault'
 import { SendFlow } from '../page-objects/SendFlow.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
-const fixturePublicKey =
-  '02acb4bc267db7774614bf6011c59929b006c2554386a3090baff0b3fc418ec044'
 const ethereumAddress = '0x0000000000000000000000000000000000000001'
 const rippleAddress = 'rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY'
 
@@ -45,34 +44,18 @@ const seedVault = async (
   context: BrowserContext,
   { includeRipple = true }: { includeRipple?: boolean } = {}
 ) => {
+  const { vaultId, vault } = await createSeededVault({
+    name: 'Send Coin Selection QA',
+  })
+
   await writeChromeStorageMultiple(context, {
-    currentVaultId: fixturePublicKey,
+    currentVaultId: vaultId,
     hasFinishedOnboarding: true,
     latestInstalledVersion: '0.2.1',
     latestMigration: 'removeDuplicateCoins',
-    vaults: [
-      {
-        name: 'Send Coin Selection QA',
-        publicKeys: {
-          ecdsa: fixturePublicKey,
-          eddsa: '0'.repeat(64),
-        },
-        signers: ['local-device'],
-        createdAt: Date.now(),
-        hexChainCode: '0'.repeat(64),
-        keyShares: { ecdsa: '', eddsa: '' },
-        localPartyId: 'local-device',
-        libType: 'DKLS',
-        isBackedUp: true,
-        order: 0,
-      },
-    ],
+    vaults: [vault],
     vaultsCoins: {
-      [fixturePublicKey]: [
-        ethereum,
-        ethereumUsdc,
-        ...(includeRipple ? [ripple] : []),
-      ],
+      [vaultId]: [ethereum, ethereumUsdc, ...(includeRipple ? [ripple] : [])],
     },
   })
 }
