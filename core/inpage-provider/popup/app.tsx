@@ -3,6 +3,7 @@ import { callNotFoundPopupResult } from '@core/inpage-provider/popup/error'
 import { PopupMethod } from '@core/inpage-provider/popup/interface'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { NavigationProvider } from '@lib/ui/navigation/state'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUnionKey'
@@ -44,44 +45,51 @@ export const PopupApp = () => {
   }, [mutate])
 
   return (
-    <MatchQuery
-      value={mutationState}
-      success={({ call, context }) => {
-        const method = getRecordUnionKey(call) as PopupMethod
-        const input = getRecordUnionValue(call)
+    // The popup has no navigation stack: it renders a single resolver and its
+    // goBack/goHome close the window. The stack is still provided because the
+    // core app shell below reads it, and empty is the honest value — no view
+    // is current here, so the main-app-only branches keyed off the top of the
+    // history correctly do not apply.
+    <NavigationProvider initialValue={{ history: [] }}>
+      <MatchQuery
+        value={mutationState}
+        success={({ call, context }) => {
+          const method = getRecordUnionKey(call) as PopupMethod
+          const input = getRecordUnionValue(call)
 
-        const Resolver = PopupResolvers[method]
+          const Resolver = PopupResolvers[method]
 
-        return (
-          <ExtensionCoreApp
-            goBack={() => window.close()}
-            goHome={() => window.close()}
-            popNavigationHistory={() => {
-              // No navigation stack in this popup; ignore steps and close.
-              window.close()
-            }}
-            targetVaultId={context?.appSession?.vaultId}
-            isLimited={true}
-          >
-            <VaultsOnly>
-              <PopupContextProvider value={context}>
-                <PopupInputProvider value={input}>
-                  <Resolver
-                    input={input}
-                    context={context as any}
-                    onFinish={resolvePopupCall}
-                  />
-                </PopupInputProvider>
-              </PopupContextProvider>
-            </VaultsOnly>
-          </ExtensionCoreApp>
-        )
-      }}
-      pending={() => (
-        <Center>
-          <Spinner />
-        </Center>
-      )}
-    />
+          return (
+            <ExtensionCoreApp
+              goBack={() => window.close()}
+              goHome={() => window.close()}
+              popNavigationHistory={() => {
+                // No navigation stack in this popup; ignore steps and close.
+                window.close()
+              }}
+              targetVaultId={context?.appSession?.vaultId}
+              isLimited={true}
+            >
+              <VaultsOnly>
+                <PopupContextProvider value={context}>
+                  <PopupInputProvider value={input}>
+                    <Resolver
+                      input={input}
+                      context={context as any}
+                      onFinish={resolvePopupCall}
+                    />
+                  </PopupInputProvider>
+                </PopupContextProvider>
+              </VaultsOnly>
+            </ExtensionCoreApp>
+          )
+        }}
+        pending={() => (
+          <Center>
+            <Spinner />
+          </Center>
+        )}
+      />
+    </NavigationProvider>
   )
 }
