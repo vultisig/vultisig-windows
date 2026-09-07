@@ -4,6 +4,12 @@ Playwright-based end-to-end tests for the VultiConnect Chrome extension.
 
 ## Quick Start
 
+Use the Node version in the repo's `.nvmrc` (`nvm use`), and always run the
+suite through `yarn test:e2e`. That script sets `PLAYWRIGHT_FORCE_ASYNC_LOADER`,
+which the suite cannot collect without on Node >= 22.15 — see the comment at the
+top of `playwright.config.ts`. Invoking `npx playwright test` directly fails
+fast with the same explanation.
+
 ```bash
 # From repo root
 cd clients/extension
