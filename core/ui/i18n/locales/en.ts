@@ -1197,6 +1197,8 @@ export const en = {
   swaps: 'Swaps',
   swap_applied_discounts: 'Applied Discounts:',
   swap_discount: 'Swap Discount',
+  swap_add_custom_token: '+ Add custom token',
+  swap_no_token_found: 'No token found',
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
   swap_fee: 'Swap Fee',
@@ -1903,4 +1905,36 @@ export const en = {
     'Wallet entry is not an object.',
   station_migration_reason_unsupported_fallback:
     'This wallet needs review before it can be migrated.',
+  ton_tx_failure_seqno_mismatch:
+    'Another transaction from this wallet was processed first, so the network rejected this one as out of order. Check your history: if this transfer is not there, send it again.',
+  ton_tx_failure_expired:
+    "The transaction's time window closed before the network processed it. Make sure your device's date and time are set automatically, then send it again.",
+  ton_tx_failure_invalid_signature:
+    'The wallet contract rejected the signature. Sign the transaction again; if it keeps failing, the wallet contract at this address does not match this vault.',
+  ton_tx_failure_wallet_id_mismatch:
+    'The transaction was built for a different wallet contract version than the one deployed at this address.',
+  ton_tx_failure_insufficient_funds:
+    'Not enough TON to cover the amount plus network fees. Keep about 0.05 TON spare for fees and try again.',
+  ton_tx_failure_out_of_gas:
+    'The transaction ran out of gas before it could finish. Attach more TON to the transfer and try again.',
+  ton_tx_failure_invalid_destination:
+    'The destination address is not valid on TON. Check the address and try again.',
+  ton_tx_failure_not_enough_jettons:
+    'This wallet does not hold enough of the token to send that amount.',
+  ton_tx_failure_jetton_unauthorized:
+    'The token contract refused the transfer because this wallet is not allowed to move these tokens.',
+  ton_tx_failure_action_failed:
+    'The wallet accepted the transaction but could not carry out the transfer, so nothing was sent. The network fee was still charged. Check the transaction and try again.',
+  ton_tx_failure_action_partially_failed:
+    'The wallet could not carry out at least one transfer in this transaction, and others in it may have gone through. The network fee was still charged. Check your transaction history before sending again.',
+  ton_tx_failure_aborted:
+    'The network aborted this transaction before it could carry out the transfer.',
+  ton_tx_failure_contract_rejected:
+    'The contract rejected the transaction (exit code {{exitCode}}).',
+  token_verification_unverified: 'Unverified',
+  token_verification_unverified_hint:
+    'This token is not on the verified list. Check its contract address before trusting it.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
 }

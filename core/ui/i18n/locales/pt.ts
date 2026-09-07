@@ -1964,4 +1964,38 @@ export const pt = {
   swap_failed_slippage_description:
     'O preço se alterou antes da conclusão desta operação de troca, portanto, o pagamento teria sido inferior à sua tolerância de slippage permitida, e a rede reverteu a transação. Aumente sua tolerância de slippage ou tente novamente.',
   swap_applied_discounts: 'Descontos aplicados:',
+  swap_add_custom_token: '+ Adicionar token personalizado',
+  swap_no_token_found: 'Nenhum token encontrado',
+  ton_tx_failure_seqno_mismatch:
+    'Outra transação desta carteira foi processada primeiro, por isso a rede rejeitou esta por estar fora de ordem. Verifique seu histórico: se esta transferência não estiver lá, envie-a novamente.',
+  ton_tx_failure_expired:
+    'O período limite da transação expirou antes que a rede a processasse. Certifique-se de que a data e a hora do seu dispositivo estejam configuradas para automático e tente novamente.',
+  ton_tx_failure_invalid_signature:
+    'O contrato da carteira rejeitou a assinatura. Assine a transação novamente; se continuar falhando, o contrato da carteira neste endereço não corresponde a este cofre.',
+  ton_tx_failure_wallet_id_mismatch:
+    'A transação foi criada para uma versão de contrato de carteira diferente daquela implantada neste endereço.',
+  ton_tx_failure_insufficient_funds:
+    'Não há TON suficientes para cobrir o valor mais as taxas de rede. Reserve cerca de 0,05 TON para taxas e tente novamente.',
+  ton_tx_failure_out_of_gas:
+    'A transação ficou sem gás antes de ser concluída. Anexe mais TON à transferência e tente novamente.',
+  ton_tx_failure_invalid_destination:
+    'O endereço de destino não é válido em TON. Verifique o endereço e tente novamente.',
+  ton_tx_failure_not_enough_jettons:
+    'Esta carteira não possui tokens suficientes para enviar essa quantia.',
+  ton_tx_failure_jetton_unauthorized:
+    'O contrato do token recusou a transferência porque esta carteira não tem permissão para movimentar esses tokens.',
+  ton_tx_failure_aborted:
+    'A rede abortou esta transação antes que ela pudesse ser concluída.',
+  ton_tx_failure_contract_rejected:
+    'O contrato rejeitou a transação (código de saída {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    'A carteira aceitou a transação, mas não conseguiu efetuar a transferência, portanto nada foi enviado. A taxa de rede foi cobrada mesmo assim. Verifique a transação e tente novamente.',
+  ton_tx_failure_action_partially_failed:
+    'A carteira não conseguiu efetuar pelo menos uma transferência nesta transação, embora outras possam ter sido concluídas. A taxa de rede foi cobrada mesmo assim. Verifique seu histórico de transações antes de enviar novamente.',
+  token_verification_unverified: 'Não verificado',
+  token_verification_unverified_hint:
+    'Este token não está na lista de tokens verificados. Verifique o endereço do contrato antes de confiar nele.',
+  token_verification_scam: 'FRAUDE',
+  token_verification_scam_hint:
+    'Este token copia o nome de um token verificado, mas reside em um endereço de contrato diferente. É uma falsificação — não confie nele.',
 }

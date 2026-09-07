@@ -1968,4 +1968,38 @@ export const it = {
   swap_failed_slippage_description:
     'Il prezzo si è mosso prima che questo scambio venisse eseguito, quindi il pagamento sarebbe stato inferiore alla tolleranza di slippage consentita e la rete lo ha annullato. Aumenta la tolleranza di slippage o riprova.',
   swap_applied_discounts: 'Sconti applicati:',
+  swap_add_custom_token: '+ Aggiungi token personalizzato',
+  swap_no_token_found: 'Nessun token trovato',
+  ton_tx_failure_seqno_mismatch:
+    "Un'altra transazione proveniente da questo portafoglio è stata elaborata prima, quindi la rete ha rifiutato questa perché non in ordine. Controlla la cronologia: se questo trasferimento non è presente, invialo di nuovo.",
+  ton_tx_failure_expired:
+    "La finestra temporale per l'elaborazione della transazione si è chiusa prima che la rete potesse completarla. Assicurati che la data e l'ora del tuo dispositivo siano impostate automaticamente, quindi invia nuovamente la transazione.",
+  ton_tx_failure_invalid_signature:
+    'Il contratto del portafoglio ha rifiutato la firma. Firma nuovamente la transazione; se continua a fallire, il contratto del portafoglio a questo indirizzo non corrisponde a questo vault.',
+  ton_tx_failure_wallet_id_mismatch:
+    'La transazione è stata creata per una versione del contratto del portafoglio diversa da quella utilizzata a questo indirizzo.',
+  ton_tx_failure_insufficient_funds:
+    "Non ci sono abbastanza TON per coprire l'importo più le commissioni di rete. Tieni da parte circa 0,05 TON per le commissioni e riprova.",
+  ton_tx_failure_out_of_gas:
+    'La transazione ha esaurito il gas prima di poter essere completata. Aggiungi altro TON al trasferimento e riprova.',
+  ton_tx_failure_invalid_destination:
+    "L'indirizzo di destinazione non è valido su TON. Verifica l'indirizzo e riprova.",
+  ton_tx_failure_not_enough_jettons:
+    'Questo portafoglio non contiene una quantità sufficiente di token per inviare tale importo.',
+  ton_tx_failure_jetton_unauthorized:
+    'Il contratto del token ha rifiutato il trasferimento perché questo portafoglio non è autorizzato a spostare questi token.',
+  ton_tx_failure_aborted:
+    'La rete ha interrotto la transazione prima che il trasferimento potesse essere completato.',
+  ton_tx_failure_contract_rejected:
+    'Il contratto ha rifiutato la transazione (codice di uscita {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    'Il portafoglio ha accettato la transazione ma non è riuscito a completare il trasferimento, quindi non è stato inviato nulla. La commissione di rete è stata comunque addebitata. Verifica la transazione e riprova.',
+  ton_tx_failure_action_partially_failed:
+    'Il portafoglio non è riuscito a completare almeno un trasferimento in questa transazione, mentre altri potrebbero essere andati a buon fine. La commissione di rete è stata comunque addebitata. Controlla la cronologia delle transazioni prima di inviare nuovamente.',
+  token_verification_unverified: 'Non verificato',
+  token_verification_unverified_hint:
+    "Questo token non è presente nell'elenco verificato. Controlla l'indirizzo del contratto prima di considerarlo valido.",
+  token_verification_scam: 'TRUFFA',
+  token_verification_scam_hint:
+    'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
 }

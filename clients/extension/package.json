@@ -33,7 +33,7 @@
     "test:unit:watch": "vitest --config tests/unit/vitest.config.ts",
     "test:integration": "vitest run --config tests/integration/vitest.config.ts",
     "test:all": "yarn test:unit && yarn test:integration",
-    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts"
+    "test:e2e": "cross-env PLAYWRIGHT_FORCE_ASYNC_LOADER=1 playwright test --config tests/e2e/playwright.config.ts"
   },
   "dependencies": {
     "@core/extension": "workspace:^",
@@ -53,10 +53,10 @@
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^16.3.0",
     "@tonconnect/protocol": "^2.4.0",
-    "@vultisig/core-chain": "5.1.0",
-    "@vultisig/core-mpc": "3.0.1",
+    "@vultisig/core-chain": "5.2.0",
+    "@vultisig/core-mpc": "3.1.0",
     "@vultisig/lib-utils": "0.10.6",
-    "@vultisig/sdk": "7.1.0",
+    "@vultisig/sdk": "7.2.0",
     "@wallet-standard/base": "^1.1.1",
     "@wallet-standard/features": "^1.1.1",
     "bech32": "^2.0.0",
