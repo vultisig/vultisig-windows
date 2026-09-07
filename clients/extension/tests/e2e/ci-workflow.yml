@@ -33,7 +33,12 @@ on:
           - fund-dependent
 
 env:
-  NODE_VERSION: '20'
+  # Keep in sync with .nvmrc at the repo root.
+  NODE_VERSION: '24'
+  # Node >= 22.15 gives Playwright synchronous module hooks, under which the
+  # suite's ESM-only transitive dependencies fail to link and every spec dies at
+  # collection. This forces Playwright's async loader. See playwright.config.ts.
+  PLAYWRIGHT_FORCE_ASYNC_LOADER: '1'
 
 jobs:
   build:

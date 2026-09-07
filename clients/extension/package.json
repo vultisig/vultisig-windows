@@ -33,7 +33,7 @@
     "test:unit:watch": "vitest --config tests/unit/vitest.config.ts",
     "test:integration": "vitest run --config tests/integration/vitest.config.ts",
     "test:all": "yarn test:unit && yarn test:integration",
-    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts"
+    "test:e2e": "cross-env PLAYWRIGHT_FORCE_ASYNC_LOADER=1 playwright test --config tests/e2e/playwright.config.ts"
   },
   "dependencies": {
     "@core/extension": "workspace:^",

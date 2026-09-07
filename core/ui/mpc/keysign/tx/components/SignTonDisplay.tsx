@@ -1,13 +1,15 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
+import { getTxFailureDescription } from '@core/ui/chain/tx/failure/getTxFailureDescription'
+import {
+  TonSimulationFailure,
+  TonSimulationSwap,
+} from '@core/ui/chain/tx/utils/tonEmulation'
 import {
   DecodedTonMessage,
   useTonMessageDecode,
 } from '@core/ui/chain/tx/utils/useTonMessageDecode'
-import {
-  TonSimulationInfo,
-  useTonSimulation,
-} from '@core/ui/chain/tx/utils/useTonSimulation'
+import { useTonSimulation } from '@core/ui/chain/tx/utils/useTonSimulation'
 import {
   ContainerWrapper,
   HorizontalLine,
@@ -21,6 +23,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { Panel } from '@lib/ui/panel/Panel'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColor } from '@lib/ui/theme/ThemeColors'
@@ -188,11 +191,24 @@ const TonSwapItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
   )
 }
 
-const TonSimulationSwapItem = ({
-  swap,
+const TonSimulationFailureWarning = ({
+  failure,
 }: {
-  swap: NonNullable<TonSimulationInfo>['swap']
+  failure: TonSimulationFailure
 }) => {
+  const { t } = useTranslation()
+  const verdict = t('ton_simulation_will_fail')
+
+  return (
+    <WarningBlock>
+      {failure.cause
+        ? `${verdict} ${getTxFailureDescription({ failure: failure.cause, t })}`
+        : verdict}
+    </WarningBlock>
+  )
+}
+
+const TonSimulationSwapItem = ({ swap }: { swap: TonSimulationSwap }) => {
   const { t } = useTranslation()
 
   return (
@@ -297,7 +313,9 @@ const isSwapSidecarTransfer = ({
  * Renders the keysign verify/done view for a TON transaction. Decodes each
  * outgoing TON message body, resolves jetton metadata, and either displays a
  * TonAPI-simulated swap card or per-message details (jetton transfer, NFT
- * transfer, gas refund, or generic). The raw BOC payload is always available
+ * transfer, gas refund, or generic). When the emulation expects the
+ * transaction to fail, a warning says so above whatever is shown, so the user
+ * decides with that verdict in view. The raw BOC payload is always available
  * under a collapsible details section.
  */
 export const SignTonDisplay = ({
@@ -313,11 +331,11 @@ export const SignTonDisplay = ({
   const { decoded } = useTonMessageDecode({ tonMessages: signTon.tonMessages })
   const hasSwap = decoded.some(entry => entry.swapIntent)
   const tonSimulationQuery = useTonSimulation({
-    enabled: !hasSwap,
     fromAddress,
     keysignPayload,
     signTon,
   })
+  const simulationFailure = tonSimulationQuery.data?.failure
   const simulationSwap = hasSwap ? null : tonSimulationQuery.data?.swap
   const isSimulationResolving = !hasSwap && tonSimulationQuery.isFetching
   const visibleEntries =
@@ -332,6 +350,9 @@ export const SignTonDisplay = ({
 
   return (
     <VStack gap={16}>
+      {simulationFailure ? (
+        <TonSimulationFailureWarning failure={simulationFailure} />
+      ) : null}
       {simulationSwap ? (
         <VStack gap={12}>
           <TonSimulationSwapItem swap={simulationSwap} />
