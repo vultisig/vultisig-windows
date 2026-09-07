@@ -1996,6 +1996,8 @@ export const it = {
     'Il portafoglio ha accettato la transazione ma non è riuscito a completare il trasferimento, quindi non è stato inviato nulla. La commissione di rete è stata comunque addebitata. Verifica la transazione e riprova.',
   ton_tx_failure_action_partially_failed:
     'Il portafoglio non è riuscito a completare almeno un trasferimento in questa transazione, mentre altri potrebbero essere andati a buon fine. La commissione di rete è stata comunque addebitata. Controlla la cronologia delle transazioni prima di inviare nuovamente.',
+  ton_simulation_will_fail:
+    "L'anteprima della transazione prevede che questa transazione fallisca. Firmarla comunque probabilmente comporterà il pagamento della commissione di rete senza che la transazione venga completata.",
   token_verification_unverified: 'Non verificato',
   token_verification_unverified_hint:
     "Questo token non è presente nell'elenco verificato. Controlla l'indirizzo del contratto prima di considerarlo valido.",
