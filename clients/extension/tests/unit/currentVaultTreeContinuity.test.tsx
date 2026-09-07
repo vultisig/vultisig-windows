@@ -69,7 +69,7 @@ vi.mock('@core/ui/vault/state/UnreadableVaultRecovery', () => ({
 vi.mock('@core/ui/state/core', () => ({ useCore: () => ({}) }))
 
 vi.mock('@lib/ui/navigation/state', () => ({
-  useNavigation: () => [{ history: [{ id: currentViewId }] }],
+  useOptionalNavigationHistory: () => [{ id: currentViewId }],
 }))
 
 // Imported at module scope by `currentVault.tsx` for hooks this test does not
