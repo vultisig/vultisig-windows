@@ -1,7 +1,7 @@
 import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor, matchColor } from '@lib/ui/theme/getters'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import type { TransactionHistoryCardStatus } from './TransactionHistoryCard'
 
@@ -9,17 +9,6 @@ const cardPaddingPx = 16
 const iconSlotPx = 24
 const providerPillPaddingYPx = 8
 const providerPillBorderPx = 1
-
-// The icon slot is the tallest thing the pill ever holds, so it sets the pill's
-// height — and the pill is absolutely positioned over the card's bottom-right
-// corner, overhanging the card's own bottom padding by the difference.
-const providerPillHeightPx =
-  providerPillPaddingYPx * 2 + iconSlotPx + providerPillBorderPx
-
-const errorRowPillGapPx = 8
-
-const errorRowPillClearancePx =
-  providerPillHeightPx - cardPaddingPx + errorRowPillGapPx
 
 /** Card: foreground bg, foregroundExtra border, 16px padding, 16px radius. Figma: surface-1 #061b3a, borders/light #11284a */
 export const Card = styled(VStack).attrs({
@@ -37,13 +26,28 @@ export const Card = styled(VStack).attrs({
   overflow: hidden;
 `
 
-/** Row 1: tag (left) + status (right). Space-between, align center. */
+/** Row 1: tag (left) + status stack (right). Space-between, align center. */
 export const TopRow = styled(HStack).attrs({
   direction: 'horizontal',
   alignItems: 'center',
   justifyContent: 'space-between',
+  gap: 8,
 })`
   width: 100%;
+`
+
+/**
+ * Right side of the top row: the status label and, when there is one, the
+ * reason it failed. The reason belongs to the status rather than to the
+ * amounts, so it is stacked under it instead of trailing the card.
+ */
+export const StatusStack = styled(VStack).attrs({
+  direction: 'vertical',
+  alignItems: 'end',
+  gap: 2,
+})`
+  min-width: 0;
+  text-align: right;
 `
 
 /** Status label: 12px caption. Successful = green, Pending = neutral, Error = red. */
@@ -61,11 +65,12 @@ export const StatusLabel = styled.span<{
   })};
 `
 
-/** Row 2: amount block (left) + address pill (right). Space-between. */
+/** Row 2: amount block (left) + inline pill (right). Space-between. */
 export const DetailsRow = styled(HStack).attrs({
   direction: 'horizontal',
   alignItems: 'center',
   justifyContent: 'space-between',
+  gap: 8,
 })`
   width: 100%;
 `
@@ -102,8 +107,8 @@ export const AmountTextStack = styled(VStack).attrs({
   gap: 0,
 })``
 
-/** Address pill: surface-2 bg, borders/normal border. px 16 py 8, radius 99px. Gap between prefix and address (Figma ~4px). */
-export const AddressPill = styled(HStack).attrs({
+/** Pill sitting on the right of the details row — a counterparty address or a swap's asset pair. surface-2 bg, borders/normal border, px 16 py 8. */
+export const InlinePill = styled(HStack).attrs({
   direction: 'horizontal',
   alignItems: 'center',
   gap: 4,
@@ -113,27 +118,6 @@ export const AddressPill = styled(HStack).attrs({
   background: ${getColor('buttonSecondary')};
   border: 1px solid ${getColor('foregroundExtra')};
   flex-shrink: 0;
-`
-
-/**
- * Error message row: aligned to the right, and lifted clear of the provider
- * pill when there is one. The pill is absolutely positioned over the card's
- * bottom-right corner, so a last flow child sitting on the card's own padding
- * would be printed underneath it — the clearance is measured off the pill
- * itself rather than eyeballed, because a pill carrying an icon stands taller
- * than one that does not.
- */
-export const ErrorMessageRow = styled(HStack).attrs({
-  direction: 'horizontal',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-})<{ $clearsProviderPill: boolean }>`
-  width: 100%;
-  ${({ $clearsProviderPill }) =>
-    $clearsProviderPill &&
-    css`
-      margin-bottom: ${errorRowPillClearancePx}px;
-    `}
 `
 
 /** Provider pill: anchored to the bottom-right corner of the card with asymmetric border radius. */

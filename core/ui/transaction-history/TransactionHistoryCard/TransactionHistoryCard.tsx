@@ -10,15 +10,15 @@ import {
   type TransactionHistoryTagType,
 } from '../TransactionHistoryTag'
 import {
-  AddressPill,
   AmountBlock,
   AmountTextStack,
   Card,
   DetailsRow,
-  ErrorMessageRow,
   IconSlot,
+  InlinePill,
   ProviderPill,
   StatusLabel,
+  StatusStack,
   TopRow,
 } from './styles'
 
@@ -47,6 +47,12 @@ export type TransactionHistoryCardPill =
       /** Optional icon shown before the label. */
       pillIcon?: ReactNode
     }
+  | {
+      /** Ticker sold, e.g. "USDC". */
+      fromTicker: string
+      /** Ticker bought, e.g. "SOL". */
+      toTicker: string
+    }
 
 export type TransactionHistoryCardProps = {
   /** Transaction type shown in the tag (send, receive, swap, approve). */
@@ -62,17 +68,18 @@ export type TransactionHistoryCardProps = {
    */
   statusLabel?: string
   /**
-   * USD amount, e.g. "$1,000.54". Omit for records that move no value — the
-   * line is dropped entirely rather than rendered blank.
+   * The line under the amount: a transfer prints its fiat value ("$1,000.54"),
+   * a swap prints the leg it gave up ("-220.192 USDC"). Omit for records that
+   * move no value — the line is dropped entirely rather than rendered blank.
    */
-  amountUsd?: string
-  /** Crypto amount without symbol, e.g. "1,000.12". */
+  subAmount?: string
+  /** Crypto amount without symbol, e.g. "1,000.12". May carry a leading sign. */
   amountCrypto: string
   /** Symbol, e.g. "RUNE", "SOL", "ETH". */
   symbol: string
   /** Content for the info pill. */
   pill: TransactionHistoryCardPill
-  /** Optional error message shown below details when status is "error" (aligned right). */
+  /** Optional failure reason, shown under the status label when status is "error". */
   errorMessage?: string
   /**
    * Optional coin for the 24px asset icon (same approach as CoinIcon in codebase).
@@ -88,7 +95,7 @@ export const TransactionHistoryCard = ({
   tagLabel,
   status,
   statusLabel,
-  amountUsd,
+  subAmount,
   amountCrypto,
   symbol,
   pill,
@@ -107,13 +114,18 @@ export const TransactionHistoryCard = ({
   const assetIcon =
     coin != null ? <CoinIcon coin={coin} style={{ fontSize: 24 }} /> : icon
 
-  const isProviderPill = 'providerName' in pill
-
   return (
     <Card>
       <TopRow>
         <TransactionHistoryTag type={tagType} label={tagLabel} />
-        <StatusLabel $status={status}>{resolvedStatusLabel}</StatusLabel>
+        <StatusStack>
+          <StatusLabel $status={status}>{resolvedStatusLabel}</StatusLabel>
+          {status === 'error' && errorMessage ? (
+            <Text variant="caption" color="danger">
+              {errorMessage}
+            </Text>
+          ) : null}
+        </StatusStack>
       </TopRow>
 
       <DetailsRow>
@@ -126,34 +138,33 @@ export const TransactionHistoryCard = ({
                 {symbol}
               </Text>
             </Text>
-            {amountUsd ? (
+            {subAmount ? (
               <Text variant="footnote" color="shy">
-                {amountUsd}
+                {subAmount}
               </Text>
             ) : null}
           </AmountTextStack>
         </AmountBlock>
         {'direction' in pill && (
-          <AddressPill>
+          <InlinePill>
             <Text variant="caption" color="shy">
               {`${t(pill.direction)} `}
             </Text>
             <Text variant="caption" color="regular">
               {truncateId(pill.address)}
             </Text>
-          </AddressPill>
+          </InlinePill>
+        )}
+        {'fromTicker' in pill && (
+          <InlinePill>
+            <Text variant="caption" color="regular">
+              {`${pill.fromTicker} → ${pill.toTicker}`}
+            </Text>
+          </InlinePill>
         )}
       </DetailsRow>
 
-      {status === 'error' && errorMessage != null && errorMessage !== '' && (
-        <ErrorMessageRow $clearsProviderPill={isProviderPill}>
-          <Text variant="caption" color="danger">
-            {errorMessage}
-          </Text>
-        </ErrorMessageRow>
-      )}
-
-      {isProviderPill && (
+      {'providerName' in pill && (
         <ProviderPill>
           {pill.pillIcon != null && <IconSlot>{pill.pillIcon}</IconSlot>}
           <Text variant="caption" color="shy">
