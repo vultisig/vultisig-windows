@@ -83,11 +83,11 @@ describe('decodeSubstrateTransfer', () => {
   })
 
   it.each([
-    ['single-byte compact', 42n],
-    ['two-byte compact', 16_383n],
-    ['four-byte compact', 1_073_741_823n],
-    ['big-integer compact', 21_000_000_000_000_000_000n],
-  ])('decodes a %s value', (_label, amount) => {
+    { label: 'single-byte compact', amount: 42n },
+    { label: 'two-byte compact', amount: 16_383n },
+    { label: 'four-byte compact', amount: 1_073_741_823n },
+    { label: 'big-integer compact', amount: 21_000_000_000_000_000_000n },
+  ])('decodes a $label value', ({ amount }) => {
     const result = decodeSubstrateTransfer({
       method: buildTransferCall({ callIndex: transferAllowDeath, amount }),
       chain: OtherChain.Bittensor,
@@ -144,6 +144,49 @@ describe('decodeSubstrateTransfer', () => {
         chain: OtherChain.Bittensor,
       })
     ).toBeUndefined()
+  })
+
+  // `parity-scale-codec` rejects each of these with "out of range decoding
+  // Compact<T>", so the extrinsic would never decode on chain. Reading a value
+  // out of them anyway would show an amount for bytes the runtime refuses.
+  it.each([
+    {
+      label: 'a two-byte compact holding a single-byte value',
+      // (5 << 2) | 0b01, then a zero high byte.
+      compact: [0x15, 0x00],
+    },
+    {
+      label: 'a four-byte compact holding a single-byte value',
+      // (5 << 2) | 0b10, then three zero bytes.
+      compact: [0x16, 0x00, 0x00, 0x00],
+    },
+    {
+      label: 'a big-integer compact below the four-byte ceiling',
+      // length 4, little-endian 5.
+      compact: [0x03, 0x05, 0x00, 0x00, 0x00],
+    },
+    {
+      label: 'a big-integer compact padded with a zero high byte',
+      // length 5, little-endian 2^30 followed by padding.
+      compact: [0x07, 0x00, 0x00, 0x00, 0x40, 0x00],
+    },
+    {
+      label: 'a big-integer compact wider than a u128 balance',
+      // length 17, so no Balance the runtime could decode.
+      compact: [0x37, ...Array<number>(16).fill(0), 0x01],
+    },
+  ])('throws on $label', ({ compact }) => {
+    const method = toHex([
+      balancesPallet,
+      transferAllowDeath,
+      multiAddressId,
+      ...aliceAccountId,
+      ...compact,
+    ])
+
+    expect(() =>
+      decodeSubstrateTransfer({ method, chain: OtherChain.Bittensor })
+    ).toThrow()
   })
 
   it('throws when a transfer call is truncated', () => {

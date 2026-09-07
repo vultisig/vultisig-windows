@@ -64,10 +64,34 @@ const readBytes = (reader: ByteReader, length: number) => {
   return value
 }
 
+// Canonical SCALE gives every value exactly one spelling: mode 0b00 covers
+// 0-63, 0b01 covers 64-16,383, 0b10 covers 16,384 to 2^30-1, and 0b11 the rest
+// with a non-zero most significant byte. `parity-scale-codec` rejects any other
+// spelling with "out of range decoding Compact<T>", so a call carrying one is a
+// call the runtime will not decode at all. Reading it anyway would put a
+// confident number on Verify for bytes the chain refuses outright — the same
+// defect as the zero this module replaced, wearing a plausible value.
+const twoByteCompactMinimum = 64n
+const fourByteCompactMinimum = 16_384n
+const bigIntegerCompactMinimum = 1_073_741_824n
+
+// Balance is u128 on both runtimes, so a wider big-integer compact is not a
+// balance either side could decode.
+const maxBigIntegerCompactBytes = 16
+
+const assertCanonicalCompact = (value: bigint, minimum: bigint) => {
+  if (value < minimum) {
+    throw new Error('Substrate call uses a non-canonical compact integer')
+  }
+
+  return value
+}
+
 /**
- * Reads one SCALE compact integer. Every width is assembled as a bigint
- * because a four-byte compact holds values past the point where JavaScript's
- * bitwise operators start treating the number as signed.
+ * Reads one SCALE compact integer, rejecting any encoding the runtime's own
+ * codec would reject. Every width is assembled as a bigint because a four-byte
+ * compact holds values past the point where JavaScript's bitwise operators
+ * start treating the number as signed.
  */
 const readCompact = (reader: ByteReader): bigint => {
   const first = readU8(reader)
@@ -79,7 +103,7 @@ const readCompact = (reader: ByteReader): bigint => {
 
   if (mode === 0b01) {
     const raw = BigInt(first) | (BigInt(readU8(reader)) << 8n)
-    return raw >> 2n
+    return assertCanonicalCompact(raw >> 2n, twoByteCompactMinimum)
   }
 
   if (mode === 0b10) {
@@ -87,16 +111,26 @@ const readCompact = (reader: ByteReader): bigint => {
     for (let index = 1; index < 4; index++) {
       raw |= BigInt(readU8(reader)) << BigInt(8 * index)
     }
-    return raw >> 2n
+    return assertCanonicalCompact(raw >> 2n, fourByteCompactMinimum)
   }
 
   const length = (first >>> 2) + 4
-  let value = 0n
-  for (let index = 0; index < length; index++) {
-    value |= BigInt(readU8(reader)) << BigInt(8 * index)
+  if (length > maxBigIntegerCompactBytes) {
+    throw new Error('Substrate call compact integer is wider than a balance')
   }
 
-  return value
+  let value = 0n
+  let mostSignificantByte = 0
+  for (let index = 0; index < length; index++) {
+    mostSignificantByte = readU8(reader)
+    value |= BigInt(mostSignificantByte) << BigInt(8 * index)
+  }
+
+  if (mostSignificantByte === 0) {
+    throw new Error('Substrate call uses a non-canonical compact integer')
+  }
+
+  return assertCanonicalCompact(value, bigIntegerCompactMinimum)
 }
 
 /**
