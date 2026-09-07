@@ -109,7 +109,9 @@ let keyshares: Promise<GeneratedVaultKeyshares> | undefined
  * round-trip through the MPC libraries — a placeholder string will not do.
  *
  * Memoized per worker: the keygen costs a few seconds and every caller wants
- * the same throwaway identity.
+ * the same throwaway identity. A failed keygen clears the memo so the next
+ * call — including a Playwright retry, which reuses the worker process —
+ * starts a fresh attempt instead of rethrowing the cached rejection.
  */
 export const generateVaultKeyshares = (): Promise<GeneratedVaultKeyshares> => {
   keyshares ??= (async () => {
@@ -122,7 +124,10 @@ export const generateVaultKeyshares = (): Promise<GeneratedVaultKeyshares> => {
     ])
 
     return { ecdsa, eddsa }
-  })()
+  })().catch(error => {
+    keyshares = undefined
+    throw error
+  })
 
   return keyshares
 }
