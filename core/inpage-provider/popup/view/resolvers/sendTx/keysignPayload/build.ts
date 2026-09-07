@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { decodeSubstrateTransfer } from '@core/ui/polkadot/dapp/decodeTransferCall'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -174,7 +175,14 @@ export const buildSendTxKeysignPayload = async ({
         }),
       psbt: psbt =>
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
-      polkadot: () => undefined,
+      // Display only: the Substrate dApp route signs the call bytes verbatim,
+      // so nothing downstream rebuilds a transfer from this. An amount with no
+      // destination is only half a review, which is why it is read here too.
+      polkadot: ({ chain: substrateChain, signerPayload }) =>
+        decodeSubstrateTransfer({
+          method: signerPayload.method,
+          chain: substrateChain,
+        })?.recipient,
       sui: () => undefined,
       // A Payment's Destination doubles as the reserve-check target; an offer
       // has none, and the empty toAddress skips that Payment-specific check.

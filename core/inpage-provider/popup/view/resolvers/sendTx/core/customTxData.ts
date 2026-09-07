@@ -1,4 +1,7 @@
-import type { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
+import type {
+  PolkadotSignerPayloadJSON,
+  SubstrateChain,
+} from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import type { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -29,8 +32,6 @@ type RegularTxData = IKeysignTransactionPayload & {
   isEvmContractCall?: boolean
   coin: Coin
 }
-
-type SubstrateChain = OtherChain.Polkadot | OtherChain.Bittensor
 
 const bittensorGenesisHash =
   '0x2f0555cc76fc2840a25a6ea3b9637146806f1f44b090c175ffde2a7e5ab36c03'
