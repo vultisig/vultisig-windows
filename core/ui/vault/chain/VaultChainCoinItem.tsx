@@ -31,8 +31,26 @@ const PriceBadge = styled.div`
   background: ${getColor('foregroundExtra')};
 `
 
-const ChevronWrapper = styled(IconWrapper)`
-  flex-shrink: 0;
+/**
+ * Everything to the right of the coin icon. `width: 100%` alone makes it a
+ * flex item that will not shrink below the full row, which pushed the balance
+ * column out past the panel; the row only has the width the icon leaves it.
+ */
+const RowBody = styled(VStack)`
+  min-width: 0;
+`
+
+/**
+ * Native balance under the fiat value. Its cap is what keeps the balance
+ * column bounded, so the ticker beside it still gets a share of the row: the
+ * popup leaves the row 296px, of which 96 goes to the icon, gaps and chevron.
+ */
+const NativeAmount = styled(Text)`
+  max-width: 160px;
+
+  @media (max-width: 400px) {
+    max-width: 100px;
+  }
 `
 
 type VaultChainCoinItemProps = ValueProp<
@@ -68,7 +86,7 @@ export const VaultChainCoinItem = ({
     <HStack fullWidth alignItems="center" gap={12}>
       <CoinIcon coin={value} style={{ fontSize: 32 }} />
 
-      <VStack fullWidth alignItems="start" gap={12}>
+      <RowBody fullWidth alignItems="start" gap={12}>
         <HStack
           fullWidth
           alignItems="center"
@@ -86,10 +104,7 @@ export const VaultChainCoinItem = ({
               </Text>
             </PriceBadge>
           </VStack>
-          {/* Shrinks rather than pushing the fiat value out of the row: the
-              native amount crops against whatever width is left, while the
-              fiat value keeps the column from collapsing past itself. */}
-          <HStack gap={8} alignItems="center">
+          <HStack gap={8} alignItems="center" style={{ flexShrink: 0 }}>
             {onActivate ? (
               // Replaces the balance only: a zero that cannot move until the
               // trust line exists explains nothing, so the row offers the action
@@ -115,25 +130,19 @@ export const VaultChainCoinItem = ({
                     {formatFiatAmount((price || 0) * balance)}
                   </BalanceVisibilityAware>
                 </Text>
-                <Text
-                  weight={500}
-                  color="shy"
-                  size={12}
-                  cropped
-                  style={{ maxWidth: '100%' }}
-                >
+                <NativeAmount weight={500} color="shy" size={12} cropped>
                   <BalanceVisibilityAware>
                     {formatAmount(balance, { precision: 'high' })} {ticker}
                   </BalanceVisibilityAware>
-                </Text>
+                </NativeAmount>
               </VStack>
             )}
-            <ChevronWrapper>
+            <IconWrapper>
               <ChevronRightIcon />
-            </ChevronWrapper>
+            </IconWrapper>
           </HStack>
         </HStack>
-      </VStack>
+      </RowBody>
     </HStack>
   )
 }
