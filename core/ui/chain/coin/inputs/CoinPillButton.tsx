@@ -61,7 +61,6 @@ const Container = styled(UnstyledButton)`
   })}
   text-align: left;
   padding: 6px;
-  min-width: 0;
   ${borderRadius.pill};
   background-color: ${getColor('foregroundExtra')};
 
@@ -79,7 +78,8 @@ const Body = styled(HStack)`
  * The chevron is what tells the pill it opens a picker, so it must survive the
  * squeeze. Left to shrink it collapsed to nothing on the swap form's From
  * pill, where the amount field takes more of the row than the read-only To
- * amount does.
+ * amount does. The pill itself keeps its automatic minimum for the same
+ * reason: below it the chevron sits outside the pill and reads as missing.
  */
 const Chevron = styled(ChevronRightIcon)`
   flex-shrink: 0;
