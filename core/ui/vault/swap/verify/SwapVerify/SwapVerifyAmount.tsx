@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { SwapVerifyFiatAmount } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyFiatAmount'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -37,9 +38,12 @@ export const SwapVerifyAmount = ({
           {caption}
         </Text>
       )}
-      <Text weight="500" size={17} color="contrast">
-        {formatAmount(amount, coin)}
-      </Text>
+      <HStack alignItems="center" gap={6}>
+        <Text weight="500" size={17} color="contrast">
+          {formatAmount(amount, coin)}
+        </Text>
+        <TokenVerificationBadge value={coin} />
+      </HStack>
       <SwapVerifyFiatAmount coin={coin} amount={amount} />
     </VStack>
     {extra}

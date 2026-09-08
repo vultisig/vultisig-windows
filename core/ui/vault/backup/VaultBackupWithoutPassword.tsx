@@ -1,4 +1,5 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { UnreadableVaultKeySharesError } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -54,7 +55,11 @@ export const VaultBackupWithoutPassword = ({
 }: VaultBackupWithoutPasswordProps &
   Partial<OnBackProp> & { vaultIds: string[] }) => {
   const { t } = useTranslation()
-  const { mutate: backupVault, isPending } = useBackupVaultMutation({
+  const {
+    mutate: backupVault,
+    isPending,
+    error,
+  } = useBackupVaultMutation({
     onSuccess: onFinish,
     vaultIds,
   })
@@ -94,6 +99,13 @@ export const VaultBackupWithoutPassword = ({
             >
               {t('backup_with_password')}
             </Button>
+            {error && (
+              <Text color="danger" size={12}>
+                {error instanceof UnreadableVaultKeySharesError
+                  ? t('vault_cannot_be_opened_description')
+                  : t('failed_to_save_vault')}
+              </Text>
+            )}
           </VStack>
         </VStack>
       </FitPageContent>

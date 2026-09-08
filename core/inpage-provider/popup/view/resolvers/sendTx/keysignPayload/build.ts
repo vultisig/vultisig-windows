@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { decodeSubstrateTransfer } from '@core/ui/polkadot/dapp/decodeTransferCall'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
@@ -7,6 +8,7 @@ import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { bittensorConfig } from '@vultisig/core-chain/chains/bittensor/config'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { polkadotConfig } from '@vultisig/core-chain/chains/polkadot/config'
+import { validateTonComment } from '@vultisig/core-chain/chains/ton/comment'
 import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
@@ -17,7 +19,6 @@ import {
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
-import { validateTonComment } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ton/native'
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
@@ -174,7 +175,14 @@ export const buildSendTxKeysignPayload = async ({
         }),
       psbt: psbt =>
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
-      polkadot: () => undefined,
+      // Display only: the Substrate dApp route signs the call bytes verbatim,
+      // so nothing downstream rebuilds a transfer from this. An amount with no
+      // destination is only half a review, which is why it is read here too.
+      polkadot: ({ chain: substrateChain, signerPayload }) =>
+        decodeSubstrateTransfer({
+          method: signerPayload.method,
+          chain: substrateChain,
+        })?.recipient,
       sui: () => undefined,
       // A Payment's Destination doubles as the reserve-check target; an offer
       // has none, and the empty toAddress skips that Payment-specific check.
@@ -548,7 +556,7 @@ export const buildSendTxKeysignPayload = async ({
                 : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
-    validateTonComment(memo)
+    validateTonComment({ memo })
   }
 
   const needsUtxoInfo =
@@ -605,6 +613,10 @@ export const buildSendTxKeysignPayload = async ({
       }),
       transactionType: getTransactionType(),
       timeoutTimestamp: getTimeoutTimestamp(),
+      validUntil:
+        chain === Chain.Ton && 'regular' in customTxData
+          ? customTxData.regular.transactionDetails.validUntil
+          : undefined,
       ...getTronMeta(),
       psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
     })

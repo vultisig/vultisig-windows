@@ -14,7 +14,7 @@ export const zh = {
   add_referral: '添加推荐',
   add_referral_code: '保存推荐码',
   add_to_address_book: '添加到通讯录',
-  add_suggested_token: '添加建议令牌',
+  add_suggested_token: '添加建议代币',
   bech32_prefix: '地址前缀',
   chain_id: '链 ID',
   fee_currency: '费用货币',
@@ -25,7 +25,7 @@ export const zh = {
   suggest_chain_title: '添加建议链',
   add_token: '添加 {{ticker}} 代币',
   add_vaults_to_folder: '选择保险库',
-  adding_token: '正在添加令牌...',
+  adding_token: '正在添加代币...',
   address: '地址',
   address_book: '地址簿',
   address_book_no_eligible_addresses_title: '{{chain}} 没有已保存的地址',
@@ -214,7 +214,7 @@ export const zh = {
   current_expiry: '当前到期日',
   current_passcode: '当前密码',
   custom: '自定义操作',
-  custom_token: '自定义令牌',
+  custom_token: '自定义代币',
   customize_chains: '定制链条',
   date: '日期',
   decrypting_vault_keyshares: '解密保险库密钥共享...',
@@ -386,7 +386,7 @@ export const zh = {
   },
   fast_sign: '快速签名',
   fill_the_form: '填写表格',
-  find_custom_token: '查找自定义令牌',
+  find_custom_token: '查找自定义代币',
   folder_name: '文件夹名称',
   folder_name_already_exists: '该文件夹名称已存在，请尝试使用新的名称。',
   folder_name_required: '文件夹名称为必填项',
@@ -464,6 +464,7 @@ export const zh = {
   import_seedphrase_onboarding_title:
     '您即将进入一个新时代，<g>告别旧的种子短语。</g> 您需要：',
   import_vault: '导入库',
+  import_vult_backup: '导入 .vult 备份',
   import_vault_share: '导入保险库共享',
   import_vault_share_description: '使用保险库共享来恢复您的保险库。',
   import_vault_share_supported_files: '支持的文件类型：.bak 和 .vult',
@@ -559,9 +560,9 @@ export const zh = {
   no_connected_dapps: '没有已连接的去中心化应用',
   no_connected_dapps_desc: '当你与 dApp 互动时，它们就会出现在这里。',
   no_referral_yet: '尚无推荐。',
-  no_token_found: '未找到令牌',
+  no_token_found: '未找到代币',
   no_transactions_yet: '目前尚无交易记录',
-  no_tokens_found: '未找到令牌',
+  no_tokens_found: '未找到代币',
   no_positions_found: '未找到头寸',
   no_positions_selected: '未选择仓位',
   no_positions_selected_description:
@@ -698,7 +699,7 @@ export const zh = {
       title: '使用推荐码',
     },
   },
-  remove_token: '移除令牌',
+  remove_token: '移除代币',
   rename: '重命名',
   rename_vault: '重命名保险库',
   report_error: '报告错误',
@@ -784,7 +785,7 @@ export const zh = {
   select_n_devices_one: '选择 {{count}} 台设备',
   select_n_devices_other: '选择 {{count}} 台设备',
   select_pool: '选择池',
-  select_token: '选择令牌',
+  select_token: '选择代币',
   select_vault: '选择保险库',
   select_vaults_to_backup: '选择要备份的保险库',
   select_vaults_to_backup_description:
@@ -965,6 +966,14 @@ export const zh = {
     version: '版本 {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" 已存在',
+  vault_cannot_be_opened: '本设备无法打开此 vault',
+  vault_cannot_be_opened_backup_description:
+    '您的 .vult 备份就是找回的途径。导入备份后，此 vault 即可恢复使用。',
+  vault_cannot_be_opened_description:
+    '它的 key share 已加密，而解锁所需的密钥并没有随本次恢复一起带过来。本设备上没有任何东西能读取它们，因此无法用此 vault 签名。',
+  vault_cannot_be_opened_no_backup: '我没有备份',
+  vault_cannot_be_opened_no_backup_description:
+    '没有 .vult 备份，本设备上的 key share 将无法再解密——这部分无法恢复。但 vault 本身可能仍然可用：如果您的其他设备仍持有各自的 share 并且达到签名门限，即使没有本设备，vault 也能继续工作。',
   vault_backup_page_password_info:
     '切勿将来自不同设备的 Vault 共享文件存储在同一位置',
   vault_backup_page_password_protection: '您可以选择为您的保险库设置密码保护。',
@@ -1236,7 +1245,7 @@ export const zh = {
   qbtc_claim_all: '全部领取',
   qbtc_claim_count: '{{count}} 的 {{total}} 声明',
   raw_message: '原始信息',
-  token: '令牌',
+  token: '代币',
   token_approval: '代币批准',
   skip_for_now: '暂时跳过',
   station_migration_title: '迁移 Station 钱包',
@@ -1584,7 +1593,7 @@ export const zh = {
   trust_line_limit: '信任限额',
   trust_line_issuer: '发行人',
   trust_line_currency: '货币',
-  trust_line_custom_token: '自定义令牌',
+  trust_line_custom_token: '自定义代币',
   trust_line_issuer_placeholder: '发行人地址（r...）',
   trust_line_currency_placeholder: '货币代码（例如 RLUSD）',
   trust_line_reserve_warning:
@@ -1736,7 +1745,6 @@ export const zh = {
   price_impact: '价格影响',
   swap_fee_included_in_rate: '已包含在报价汇率中',
   swap_protocol_fee: '协议费',
-  swap_referral_fee: '推荐费',
   select_route: '选择路线',
   swap_route_eta_hours: '~{{hours}}小时',
   swap_route_eta_hours_minutes: '~{{hours}}小时{{minutes}}分',
@@ -1793,4 +1801,38 @@ export const zh = {
   swap_failed_slippage: '价格突破了滑点容差范围',
   swap_failed_slippage_description:
     '此次掉期交易完成前价格发生了变动，因此支付金额低于您设定的滑点容忍度，网络已将其撤销。请提高您的滑点容忍度或重试。',
+  swap_applied_discounts: '已应用折扣：',
+  swap_add_custom_token: '+ 添加自定义代币',
+  swap_no_token_found: '未找到代币',
+  ton_tx_failure_seqno_mismatch:
+    '由于该钱包中另一笔交易已先被处理，因此网络认为这笔交易顺序错误而拒绝了它。请检查您的交易记录：如果找不到这笔转账，请重新发送。',
+  ton_tx_failure_expired:
+    '交易时间窗口在网络处理之前已关闭。请确保您的设备日期和时间已设置为自动，然后重新发送。',
+  ton_tx_failure_invalid_signature:
+    '钱包合约拒绝了签名。请重新签署交易；如果仍然失败，则表示此地址的钱包合约与此金库不匹配。',
+  ton_tx_failure_wallet_id_mismatch:
+    '该交易是为与部署在此地址的钱包合约版本不同的钱包合约版本构建的。',
+  ton_tx_failure_insufficient_funds:
+    'TON金额不足，无法支付交易金额及网络费用。请预留约 0.05 TON用于支付费用，并重试。',
+  ton_tx_failure_out_of_gas:
+    '交易因 gas 不足而无法完成。请为转账附加更多TON，然后重试。',
+  ton_tx_failure_invalid_destination: '目标地址在TON上无效。请检查地址并重试。',
+  ton_tx_failure_not_enough_jettons: '此钱包中没有足够的代币来发送该金额。',
+  ton_tx_failure_jetton_unauthorized:
+    '代币合约拒绝了转账，因为该钱包无权转移这些代币。',
+  ton_tx_failure_aborted: '网络在完成转账之前中止了这笔交易。',
+  ton_tx_failure_contract_rejected:
+    '合约拒绝了该交易（退出代码{{exitCode}}）。',
+  ton_tx_failure_action_failed:
+    '钱包已接受交易，但无法完成转账，因此未发送任何款项。网络手续费仍被收取。请检查交易并重试。',
+  ton_tx_failure_action_partially_failed:
+    '钱包在此次交易中至少有一笔转账失败，其他转账可能已成功。网络手续费仍然被收取。请在再次转账前查看您的交易记录。',
+  ton_simulation_will_fail:
+    '交易预览预期此交易会失败。如果仍然签署，则可能会产生网络费用，而交易却无法完成。',
+  token_verification_unverified: '未经证实',
+  token_verification_unverified_hint:
+    '此代币不在已验证列表中。信任此代币前，请先检查其合约地址。',
+  token_verification_scam: '骗局',
+  token_verification_scam_hint:
+    '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
 }

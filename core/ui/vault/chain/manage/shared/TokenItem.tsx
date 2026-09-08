@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
@@ -56,6 +57,7 @@ export const TokenItem = ({
         <Text cropped color="contrast" size={12} weight={500}>
           {coin.ticker}
         </Text>
+        <TokenVerificationBadge value={coin} />
       </TokenNameWrapper>
     </TokenCard>
   )

@@ -498,6 +498,7 @@ export const ko = {
   import_seedphrase_onboarding_title:
     '당신은 새로운 시대로 접어들고 있습니다.<g> 기존의 핵심 문구들을 뒤로하고.</g> 필요한 준비물:',
   import_vault: '볼트 가져오기',
+  import_vult_backup: '.vult 백업 가져오기',
   import_vault_share: '가져오기 볼트 공유',
   import_vault_share_description: '볼트 공유를 사용하여 볼트를 복구하세요.',
   import_vault_share_supported_files: '지원되는 파일 형식: .bak 및 .vult',
@@ -1049,6 +1050,14 @@ export const ko = {
     version: '버전 {{latestVersion}}',
   },
   vault_already_exists: 'Vault &quot;{{name}}&quot;이 이미 존재합니다.',
+  vault_cannot_be_opened: '이 기기에서는 이 볼트를 열 수 없습니다',
+  vault_cannot_be_opened_backup_description:
+    '.vult 백업이 돌아가는 길입니다. 백업을 가져오면 이 볼트를 다시 사용할 수 있습니다.',
+  vault_cannot_be_opened_description:
+    '이 볼트의 키 셰어는 암호화되어 있는데, 이를 여는 키가 이번 복원에 함께 오지 않았습니다. 이 기기에서는 아무것도 키 셰어를 읽을 수 없으므로 이 볼트로 서명할 수 없습니다.',
+  vault_cannot_be_opened_no_backup: '백업이 없습니다',
+  vault_cannot_be_opened_no_backup_description:
+    '.vult 백업이 없으면 이 기기의 키 셰어는 다시 복호화할 수 없으며, 그 부분은 복구되지 않습니다. 볼트 자체는 아직 살아 있을 수 있습니다. 다른 기기들이 각자의 셰어를 가지고 있고 서명 임계값을 여전히 충족한다면, 이 기기 없이도 볼트는 계속 동작합니다.',
   vault_backup_page_password_info:
     '서로 다른 기기의 Vault 공유 파일을 같은 위치에 저장하지 마십시오.',
   vault_backup_page_password_protection:
@@ -1849,7 +1858,6 @@ export const ko = {
   price_impact: '가격 영향',
   swap_fee_included_in_rate: '제시된 환율에 포함되어 있습니다.',
   swap_protocol_fee: '프로토콜 수수료',
-  swap_referral_fee: '소개 수수료',
   select_route: '경로를 선택하세요',
   swap_route_eta_hours: '~{{hours}}시간',
   swap_route_eta_hours_minutes: '~{{hours}}시간 {{minutes}}분',
@@ -1912,4 +1920,41 @@ export const ko = {
   swap_failed_slippage: '가격이 슬리피지 허용 범위를 벗어났습니다.',
   swap_failed_slippage_description:
     '스왑이 체결되기 전에 가격 변동이 발생하여, 설정된 슬리피지 허용치보다 적은 금액이 지급되었을 것이므로 네트워크에서 이를 되돌렸습니다. 슬리피지 허용치를 높이거나 다시 시도하십시오.',
+  swap_applied_discounts: '적용된 할인:',
+  swap_add_custom_token: '+ 사용자 지정 토큰 추가',
+  swap_no_token_found: '토큰을 찾을 수 없습니다.',
+  ton_tx_failure_seqno_mismatch:
+    '이 지갑에서 다른 거래가 먼저 처리되었기 때문에 네트워크에서 이 거래를 순서가 맞지 않는 것으로 간주하여 거부했습니다. 거래 내역을 확인해 보세요. 해당 거래가 없으면 다시 보내주세요.',
+  ton_tx_failure_expired:
+    '네트워크에서 거래를 처리하기 전에 거래 가능 시간이 종료되었습니다. 기기의 날짜와 시간이 자동으로 설정되었는지 확인한 후 다시 보내주세요.',
+  ton_tx_failure_invalid_signature:
+    '지갑 계약에서 서명을 거부했습니다. 거래에 다시 서명해 보세요. 계속 실패하면 해당 주소의 지갑 계약이 이 금고와 일치하지 않는 것입니다.',
+  ton_tx_failure_wallet_id_mismatch:
+    '해당 거래는 이 주소에 배포된 지갑 계약 버전과 다른 버전을 기준으로 생성되었습니다.',
+  ton_tx_failure_insufficient_funds:
+    '결제 금액과 네트워크 수수료를 충당하기에 TON 부족합니다. 수수료를 위해 약 0.05 TON 토큰을 남겨두고 다시 시도해 주세요.',
+  ton_tx_failure_out_of_gas:
+    '거래가 완료되기 전에 가스가 부족해졌습니다. 전송에 TON 더 추가하고 다시 시도하십시오.',
+  ton_tx_failure_invalid_destination:
+    '목적지 주소가 TON 에서 유효하지 않습니다. 주소를 확인하고 다시 시도하십시오.',
+  ton_tx_failure_not_enough_jettons:
+    '이 지갑에는 해당 금액을 보내기에 충분한 토큰이 없습니다.',
+  ton_tx_failure_jetton_unauthorized:
+    '토큰 계약이 해당 지갑에서 이러한 토큰을 이동할 수 없기 때문에 전송을 거부했습니다.',
+  ton_tx_failure_aborted:
+    '네트워크가 해당 거래를 실행하기 전에 중단시켰습니다.',
+  ton_tx_failure_contract_rejected:
+    '계약에서 거래를 거부했습니다(종료 코드 {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    '지갑에서 거래를 승인했지만 이체를 실행할 수 없어 아무것도 전송되지 않았습니다. 네트워크 수수료는 부과되었습니다. 거래 내역을 확인하고 다시 시도해 주세요.',
+  ton_tx_failure_action_partially_failed:
+    '지갑에서 이 거래의 최소 한 건의 전송을 처리할 수 없었으며, 다른 전송은 정상적으로 처리되었을 수 있습니다. 네트워크 수수료는 부과되었습니다. 다시 전송하기 전에 거래 내역을 확인하세요.',
+  ton_simulation_will_fail:
+    '거래 미리보기에서는 이 거래가 실패할 것으로 예상됩니다. 그럼에도 불구하고 서명을 진행하면 거래가 완료되지 않고 네트워크 수수료만 발생할 가능성이 높습니다.',
+  token_verification_unverified: '미확인',
+  token_verification_unverified_hint:
+    '이 토큰은 검증된 목록에 없습니다. 신뢰하기 전에 해당 계약 주소를 확인하세요.',
+  token_verification_scam: '스캠',
+  token_verification_scam_hint:
+    '이 토큰은 검증된 토큰의 이름을 모방했지만, 다른 컨트랙트 주소에 존재합니다. 이는 위조 토큰이므로 신뢰하지 마십시오.',
 }

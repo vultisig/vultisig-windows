@@ -503,6 +503,7 @@ export const es = {
   import_seedphrase_onboarding_title:
     'Estás entrando en una nueva era, <g> dejando atrás las antiguas frases semilla. </g> Necesitarás:',
   import_vault: 'Importar bóveda',
+  import_vult_backup: 'Importar copia .vult',
   import_vault_share: 'Importar recurso compartido de bóveda',
   import_vault_share_description:
     'Utilice un recurso compartido de bóveda para recuperar su bóveda.',
@@ -1040,6 +1041,14 @@ export const es = {
     version: 'Versión {{latestVersion}}',
   },
   vault_already_exists: 'La bóveda "{{name}}" ya existe',
+  vault_cannot_be_opened: 'Este vault no se puede abrir en este dispositivo',
+  vault_cannot_be_opened_backup_description:
+    'Tu copia de seguridad .vult es el camino de vuelta. Impórtala y este vault volverá a funcionar.',
+  vault_cannot_be_opened_description:
+    'Sus key shares están cifrados y la clave que los descifra no llegó con esta restauración. Nada en este dispositivo puede leerlos, así que no puede firmar con este vault.',
+  vault_cannot_be_opened_no_backup: 'No tengo copia de seguridad',
+  vault_cannot_be_opened_no_backup_description:
+    'Sin una copia .vult, los key shares de este dispositivo ya no se pueden descifrar: esa parte no es recuperable. El vault en sí puede seguir siéndolo: si tus otros dispositivos conservan sus propios shares y siguen alcanzando el umbral de firma, seguirá funcionando sin este.',
   vault_backup_page_password_info:
     'Nunca almacene recursos compartidos de Vault de diferentes dispositivos en la misma ubicación',
   vault_backup_page_password_protection:
@@ -1889,7 +1898,6 @@ export const es = {
   price_impact: 'Impacto en los precios',
   swap_fee_included_in_rate: 'Incluido en el tipo de cambio cotizado',
   swap_protocol_fee: 'Tarifa de protocolo',
-  swap_referral_fee: 'Comisión por recomendación',
   select_route: 'Seleccione ruta',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1953,4 +1961,41 @@ export const es = {
     'El precio superó el límite de tolerancia al deslizamiento.',
   swap_failed_slippage_description:
     'El precio fluctuó antes de que se ejecutara esta operación, por lo que el pago habría sido inferior al margen de deslizamiento permitido y la red la revirtió. Aumente su margen de deslizamiento o inténtelo de nuevo.',
+  swap_applied_discounts: 'Descuentos aplicados:',
+  swap_add_custom_token: '+ Agregar token personalizado',
+  swap_no_token_found: 'No se encontró ningún token',
+  ton_tx_failure_seqno_mismatch:
+    'Otra transacción de esta billetera se procesó primero, por lo que la red rechazó esta por estar fuera de orden. Revisa tu historial: si esta transferencia no aparece, envíala de nuevo.',
+  ton_tx_failure_expired:
+    'El plazo para procesar la transacción finalizó antes de que la red la procesara. Asegúrate de que la fecha y la hora de tu dispositivo estén configuradas automáticamente y vuelve a enviarla.',
+  ton_tx_failure_invalid_signature:
+    'El contrato de la billetera rechazó la firma. Firme la transacción nuevamente; si sigue fallando, el contrato de la billetera en esta dirección no coincide con esta bóveda.',
+  ton_tx_failure_wallet_id_mismatch:
+    'La transacción se creó para una versión del contrato de la billetera diferente a la que está desplegada en esta dirección.',
+  ton_tx_failure_insufficient_funds:
+    'No hay suficientes TON para cubrir el importe más las comisiones de red. Reserve aproximadamente 0,05 TON para las comisiones e inténtelo de nuevo.',
+  ton_tx_failure_out_of_gas:
+    'La transacción se quedó sin gas antes de poder finalizar. Añada más TON a la transferencia e inténtelo de nuevo.',
+  ton_tx_failure_invalid_destination:
+    'La dirección de destino no es válida en TON. Verifique la dirección e inténtelo de nuevo.',
+  ton_tx_failure_not_enough_jettons:
+    'Esta billetera no contiene suficientes tokens para enviar esa cantidad.',
+  ton_tx_failure_jetton_unauthorized:
+    'El contrato del token rechazó la transferencia porque esta billetera no tiene permiso para mover estos tokens.',
+  ton_tx_failure_aborted:
+    'La red abortó esta transacción antes de que pudiera completarse la transferencia.',
+  ton_tx_failure_contract_rejected:
+    'El contrato rechazó la transacción (código de salida {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    'La billetera aceptó la transacción, pero no pudo realizar la transferencia, por lo que no se envió nada. Aun así, se cobró la comisión de red. Verifique la transacción e inténtelo de nuevo.',
+  ton_tx_failure_action_partially_failed:
+    'La billetera no pudo realizar al menos una transferencia en esta transacción, aunque es posible que otras se hayan procesado correctamente. Se aplicó la comisión de red. Revise su historial de transacciones antes de volver a enviar.',
+  ton_simulation_will_fail:
+    'La vista previa de la transacción prevé que esta fallará. Firmarla de todos modos probablemente generará costos adicionales para la red sin completarla.',
+  token_verification_unverified: 'Inconfirmado',
+  token_verification_unverified_hint:
+    'Este token no está en la lista verificada. Compruebe su dirección de contrato antes de confiar en él.',
+  token_verification_scam: 'ESTAFA',
+  token_verification_scam_hint:
+    'Este token copia el nombre de un token verificado, pero reside en una dirección de contrato diferente. Es falso; no confíe en él.',
 }

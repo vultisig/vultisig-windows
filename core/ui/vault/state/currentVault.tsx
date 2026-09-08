@@ -1,4 +1,8 @@
+import { CoreViewId } from '@core/ui/navigation/CoreView'
+import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { useCore } from '@core/ui/state/core'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
+import { useOptionalNavigationHistory } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -11,13 +15,29 @@ import {
   Vault,
   VaultAllKeyShares,
 } from '@vultisig/core-mpc/vault/Vault'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useContext } from 'react'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
-import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import {
+  readVaultAllKeyShares,
+  UnreadableVaultKeySharesError,
+} from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
+import { useIsPasscodeRequired } from '../../passcodeEncryption/state/useIsPasscodeRequired'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
+import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
+import {
+  getVaultReadabilityInputs,
+  hasSameReadabilityInputs,
+  VaultReadabilityInputs,
+} from './vaultReadability'
+
+const UnreadableVaultRecoveryContext = createContext<string | null>(null)
+
+export const useUnreadableVaultRecoveryId = () =>
+  useContext(UnreadableVaultRecoveryContext)
 
 export const currentVaultContextId = 'CurrentVault'
 
@@ -25,6 +45,8 @@ export const [CurrentVaultProvider, useCurrentVault, CurrentVaultContext] =
   setupValueProvider<Vault & Partial<{ coins: AccountCoin[] }>>(
     currentVaultContextId
   )
+
+type CurrentVaultValue = (Vault & Partial<{ coins: AccountCoin[] }>) | undefined
 
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
@@ -44,63 +66,226 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   return 'secure'
 }
 
+/**
+ * Views whose flow writes a new vault and keeps running past the save: the
+ * setup flows continue into backup steps held in component state, so the tree
+ * has to survive the vault they wrote becoming current. Anywhere else a
+ * current vault switch is the user picking another existing vault, and the
+ * tree is withheld until that vault's shares are proven so no screen keeps
+ * showing or acting on the previous vault under the new id.
+ */
+const vaultWritingViews: ReadonlySet<string> = new Set<CoreViewId>([
+  'setupFastVault',
+  'setupSecureVault',
+  'joinKeygen',
+  'importVault',
+])
+
+/**
+ * Holds on to the previous snapshot for as long as `hasSameReadabilityInputs`
+ * still accepts it, so the read effect can take a single dependency that
+ * changes exactly when a re-read is owed — including share material replaced
+ * under a vault object that kept its identity, which observing the vault by
+ * reference alone would miss. One predicate then drives both the re-read and
+ * whether a settled result still applies, so an input added to
+ * {@link VaultReadabilityInputs} is honoured by both without being listed in
+ * either.
+ */
+const useStableReadabilityInputs = (inputs: VaultReadabilityInputs | null) => {
+  const stable = useRef<VaultReadabilityInputs | null>(null)
+
+  if (
+    !inputs ||
+    !stable.current ||
+    !hasSameReadabilityInputs({ resolved: stable.current, current: inputs })
+  ) {
+    stable.current = inputs
+  }
+
+  return stable.current
+}
+
+/**
+ * Resolves the current vault's key shares and provides the vault to the tree.
+ * Also mounted by hosts without a navigation stack (the extension's dApp
+ * popup), where the backup import flow is unreachable, so an unreadable vault
+ * there always lands on the recovery page.
+ */
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
+  const { validateLegacyVaultKeyShares } = useCore()
+  const navigationHistory = useOptionalNavigationHistory()
   const id = useCurrentVaultId()
   const vaults = useVaults()
   const [passcode] = usePasscode()
+  const hasPasscodeEncryption = useIsPasscodeRequired()
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
 
-  // Decryption runs the PBKDF2 KDF, so it happens asynchronously (off the UI
-  // thread). The result is tagged with the exact source vault object it was
-  // derived from, not just the vault id: a reshare keeps the same id
-  // (`publicKeys.ecdsa`) but changes the key shares, so an id-only tag could
-  // merge stale shares. Until decryption resolves (or when no passcode is set)
-  // the vault is provided with its stored shares.
-  const [decrypted, setDecrypted] = useState<{
-    sourceVault: Vault
-    shares: VaultAllKeyShares
+  // Snapshotted during render, before any read is started, so a result can
+  // never be attributed to inputs it was not read under, and stable while
+  // nothing it carries changes, so it can be the read's only dependency.
+  const readabilityInputs = useStableReadabilityInputs(
+    vault && !(hasPasscodeEncryption && !passcode)
+      ? getVaultReadabilityInputs({
+          vault,
+          hasPasscodeEncryption,
+          passcode,
+          validateLegacyVaultKeyShares,
+        })
+      : null
+  )
+
+  // The result is tagged with the exact inputs it was read under. A reshare
+  // keeps the same id but changes the shares, and a passcode change re-reads
+  // the same bytes, so id-only state could expose a stale result. Stored shares
+  // are never provided while readability is unresolved.
+  const [shareState, setShareState] = useState<{
+    source: VaultReadabilityInputs
+    result:
+      | { status: 'ready'; shares: VaultAllKeyShares }
+      | { status: 'unreadable' }
+      | { status: 'error'; error: Error }
   } | null>(null)
 
   useEffect(() => {
-    if (!vault || !passcode) {
-      setDecrypted(null)
+    if (!readabilityInputs) {
+      setShareState(null)
       return
     }
 
+    const source = readabilityInputs
     let cancelled = false
 
-    decryptVaultAllKeyShares({
-      keyShares: vault.keyShares,
-      chainKeyShares: vault.chainKeyShares,
-      keyShareMldsa: vault.keyShareMldsa,
-      key: passcode,
+    readVaultAllKeyShares({
+      keyShares: source.keyShares,
+      chainKeyShares: source.chainKeyShares,
+      keyShareMldsa: source.keyShareMldsa,
+      libType: source.libType,
+      publicKeys: source.publicKeys,
+      chainPublicKeys: source.chainPublicKeys,
+      publicKeyMldsa: source.publicKeyMldsa,
+      validateLegacyVaultKeyShares: source.validateLegacyVaultKeyShares,
+      hasPasscodeEncryption: source.hasPasscodeEncryption,
+      key: source.passcode,
     })
       .then(shares => {
         if (!cancelled) {
-          setDecrypted({ sourceVault: vault, shares })
+          setShareState({
+            source,
+            result: { status: 'ready', shares },
+          })
         }
       })
-      .catch(() => {
+      .catch(error => {
         if (!cancelled) {
-          setDecrypted(null)
+          setShareState({
+            source,
+            result:
+              error instanceof UnreadableVaultKeySharesError
+                ? { status: 'unreadable' }
+                : {
+                    status: 'error',
+                    error:
+                      error instanceof Error
+                        ? error
+                        : new Error('Failed to read vault key shares'),
+                  },
+          })
         }
       })
 
     return () => {
       cancelled = true
     }
-  }, [vault, passcode])
+  }, [readabilityInputs])
 
-  const value =
-    vault && decrypted?.sourceVault === vault
-      ? { ...vault, ...decrypted.shares }
-      : vault
+  const resolution =
+    shareState &&
+    readabilityInputs &&
+    hasSameReadabilityInputs({
+      resolved: shareState.source,
+      current: readabilityInputs,
+    })
+      ? shareState.result
+      : null
 
-  return (
-    <CurrentVaultContext.Provider value={value}>
+  const viewId = navigationHistory?.[navigationHistory.length - 1]?.id
+  const isImportView = viewId === 'importVault'
+  const isVaultWritingView =
+    viewId !== undefined && vaultWritingViews.has(viewId)
+
+  // What the tree below was last given: either no vault at all, or a vault
+  // whose shares were already proven. While the vault a setup flow just wrote
+  // is unresolved, the tree holds that value instead of being torn down —
+  // replacing it with a splash unmounts every screen under this provider and
+  // discards their in-flight state, which is what dropped the fast vault setup
+  // flow back on its first step when the vault it had just saved became
+  // current (#4832). Holding never exposes unproven shares: the held value was
+  // either absent or proven.
+  const heldValue = useRef<{ value: CurrentVaultValue } | null>(null)
+
+  const provided: { value: CurrentVaultValue } | null = (() => {
+    if (!vault) {
+      return { value: undefined }
+    }
+
+    if (hasPasscodeEncryption && !passcode) {
+      return null
+    }
+
+    if (!resolution) {
+      const held = heldValue.current
+
+      // A reshare keeps the vault id and replaces the shares, so holding here
+      // would pair this vault with shares it no longer has. Nothing is held
+      // for a tree that has not rendered yet either, which is what keeps vault
+      // screens from mounting against shares that were never read.
+      const isStaleSameVault =
+        held?.value !== undefined &&
+        getVaultId(held.value) === getVaultId(vault)
+
+      return isVaultWritingView && !isStaleSameVault ? held : null
+    }
+
+    if (resolution.status === 'error') {
+      return null
+    }
+
+    if (resolution.status === 'unreadable') {
+      return isImportView ? { value: undefined } : null
+    }
+
+    return { value: { ...vault, ...resolution.shares } }
+  })()
+
+  useEffect(() => {
+    if (provided) {
+      heldValue.current = provided
+    }
+  })
+
+  if (resolution?.status === 'error') {
+    throw resolution.error
+  }
+
+  const isUnreadable = resolution?.status === 'unreadable'
+
+  if (!provided) {
+    return isUnreadable ? <UnreadableVaultRecovery /> : <ProductLogoBlock />
+  }
+
+  const tree = (
+    <CurrentVaultContext.Provider value={provided.value}>
       {children}
     </CurrentVaultContext.Provider>
+  )
+
+  return isUnreadable && vault ? (
+    <UnreadableVaultRecoveryContext.Provider value={getVaultId(vault)}>
+      {tree}
+    </UnreadableVaultRecoveryContext.Provider>
+  ) : (
+    tree
   )
 }
 

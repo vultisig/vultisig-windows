@@ -499,6 +499,7 @@ export const nl = {
   import_seedphrase_onboarding_title:
     'Je betreedt een nieuw tijdperk, <g>en laat oude seed phrases achter.</g> Je hebt nodig:',
   import_vault: 'Kluis importeren',
+  import_vult_backup: '.vult-back-up importeren',
   import_vault_share: 'Kluis-share importeren',
   import_vault_share_description:
     'Gebruik een kluis-share om je kluis te herstellen.',
@@ -1027,6 +1028,14 @@ export const nl = {
     version: 'Versie {{latestVersion}}',
   },
   vault_already_exists: 'Kluis "{{name}}" bestaat al',
+  vault_cannot_be_opened: 'Deze vault kan niet op dit apparaat worden geopend',
+  vault_cannot_be_opened_backup_description:
+    'Je .vult-back-up is de weg terug. Importeer hem en deze vault werkt weer.',
+  vault_cannot_be_opened_description:
+    'De key shares zijn versleuteld en de sleutel waarmee ze worden ontgrendeld, is niet meegekomen met dit herstel. Niets op dit apparaat kan ze lezen, waardoor het niet met deze vault kan ondertekenen.',
+  vault_cannot_be_opened_no_backup: 'Ik heb geen back-up',
+  vault_cannot_be_opened_no_backup_description:
+    'Zonder een .vult-back-up kunnen de key shares op dit apparaat niet opnieuw worden ontgrendeld — dat deel kan niet worden hersteld. De vault zelf mogelijk nog wel: als je andere apparaten hun eigen shares hebben en samen nog steeds de ondertekeningsdrempel bereiken, blijft hij zonder dit apparaat werken.',
   vault_backup_page_password_info:
     'Sla kluis-shares van verschillende apparaten nooit op dezelfde locatie op',
   vault_backup_page_password_protection:
@@ -1872,7 +1881,6 @@ export const nl = {
   price_impact: 'Prijsimpact',
   swap_fee_included_in_rate: 'Inbegrepen in de vermelde wisselkoers',
   swap_protocol_fee: 'Protocolkosten',
-  swap_referral_fee: 'Verwijzingsvergoeding',
   select_route: 'Route selecteren',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1936,4 +1944,41 @@ export const nl = {
   swap_failed_slippage: 'De prijs is buiten de sliptolerantie getreden.',
   swap_failed_slippage_description:
     'De prijs bewoog voordat deze swap werd uitgevoerd, waardoor de uitbetaling lager zou zijn geweest dan uw slippagetolerantie toestond. Het netwerk heeft de swap daarom teruggedraaid. Verhoog uw slippagetolerantie of probeer het opnieuw.',
+  swap_applied_discounts: 'Toegepaste kortingen:',
+  swap_add_custom_token: '+ Voeg een aangepast token toe',
+  swap_no_token_found: 'Geen token gevonden',
+  ton_tx_failure_seqno_mismatch:
+    'Een andere transactie vanuit deze portemonnee werd eerst verwerkt, waardoor het netwerk deze als niet in de juiste volgorde heeft afgewezen. Controleer uw transactiegeschiedenis: als deze overschrijving daar niet tussen staat, verstuur hem dan opnieuw.',
+  ton_tx_failure_expired:
+    'Het tijdsvenster voor de transactie was verlopen voordat het netwerk deze kon verwerken. Zorg ervoor dat de datum en tijd op uw apparaat automatisch zijn ingesteld en verstuur de transactie vervolgens opnieuw.',
+  ton_tx_failure_invalid_signature:
+    'Het walletcontract heeft de handtekening afgewezen. Onderteken de transactie opnieuw; als dit blijft mislukken, komt het walletcontract op dit adres niet overeen met deze kluis.',
+  ton_tx_failure_wallet_id_mismatch:
+    'De transactie is opgezet voor een andere versie van het walletcontract dan degene die op dit adres wordt gebruikt.',
+  ton_tx_failure_insufficient_funds:
+    'Er is onvoldoende TON beschikbaar om het bedrag plus netwerkkosten te dekken. Houd ongeveer 0,05 TON over voor de kosten en probeer het opnieuw.',
+  ton_tx_failure_out_of_gas:
+    'De transactie is voortijdig beëindigd vanwege gasgebrek. Voeg meer TON toe aan de overdracht en probeer het opnieuw.',
+  ton_tx_failure_invalid_destination:
+    'Het bestemmingsadres is niet geldig op TON. Controleer het adres en probeer het opnieuw.',
+  ton_tx_failure_not_enough_jettons:
+    'Deze portemonnee bevat onvoldoende tokens om dat bedrag te verzenden.',
+  ton_tx_failure_jetton_unauthorized:
+    'Het tokencontract weigerde de overdracht omdat deze wallet geen toestemming heeft om deze tokens te verplaatsen.',
+  ton_tx_failure_aborted:
+    'Het netwerk heeft deze transactie afgebroken voordat de overdracht kon worden uitgevoerd.',
+  ton_tx_failure_contract_rejected:
+    'Het contract heeft de transactie afgewezen (exitcode {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    'De wallet accepteerde de transactie, maar kon de overdracht niet uitvoeren, waardoor er niets is verzonden. De netwerkkosten zijn echter wel in rekening gebracht. Controleer de transactie en probeer het opnieuw.',
+  ton_tx_failure_action_partially_failed:
+    'De wallet kon in deze transactie ten minste één overboeking niet uitvoeren, terwijl andere overboekingen mogelijk wel zijn gelukt. De netwerkkosten zijn desondanks in rekening gebracht. Controleer uw transactiegeschiedenis voordat u opnieuw een overboeking doet.',
+  ton_simulation_will_fail:
+    'De transactiepreview verwacht dat deze transactie zal mislukken. Als u de transactie toch ondertekent, kost dit waarschijnlijk netwerkkosten zonder dat de transactie wordt voltooid.',
+  token_verification_unverified: 'Niet geverifieerd',
+  token_verification_unverified_hint:
+    'Dit token staat niet op de lijst met geverifieerde tokens. Controleer het contractadres voordat u het vertrouwt.',
+  token_verification_scam: 'SCAM',
+  token_verification_scam_hint:
+    'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
 }

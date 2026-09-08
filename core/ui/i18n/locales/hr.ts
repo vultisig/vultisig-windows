@@ -498,6 +498,7 @@ export const hr = {
   import_seedphrase_onboarding_title:
     'Ulazite u novo doba, <g>ostavljajući stare početne fraze iza sebe.</g> Trebat će vam:',
   import_vault: 'Uvoz trezora',
+  import_vult_backup: 'Uvezi .vult kopiju',
   import_vault_share: 'Uvoz dijeljenja trezora',
   import_vault_share_description:
     'Upotrijebite dijeljenje trezora za oporavak trezora.',
@@ -1032,6 +1033,14 @@ export const hr = {
     version: 'Verzija {{latestVersion}}',
   },
   vault_already_exists: 'Trezor "{{name}}" već postoji',
+  vault_cannot_be_opened: 'Ovaj se vault ne može otvoriti na ovom uređaju',
+  vault_cannot_be_opened_backup_description:
+    'Vaša .vult sigurnosna kopija je put natrag. Uvezite je i ovaj će vault ponovno raditi.',
+  vault_cannot_be_opened_description:
+    'Njegovi su key shareovi šifrirani, a ključ koji ih otključava nije prenesen ovom obnovom. Ništa na ovom uređaju ne može ih pročitati, pa se ovim vaultom ne može potpisivati.',
+  vault_cannot_be_opened_no_backup: 'Nemam sigurnosnu kopiju',
+  vault_cannot_be_opened_no_backup_description:
+    'Bez .vult sigurnosne kopije key shareovi na ovom uređaju više se ne mogu dešifrirati — taj dio nije moguće obnoviti. Sam vault možda jest: ako vaši drugi uređaji čuvaju vlastite shareove i i dalje dosežu prag za potpisivanje, nastavlja raditi i bez ovoga.',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijeljene datoteke Vaulta s različitih uređaja na istu lokaciju',
   vault_backup_page_password_protection:
@@ -1859,7 +1868,6 @@ export const hr = {
   price_impact: 'Utjecaj na cijenu',
   swap_fee_included_in_rate: 'Uključeno u kotirani tečaj',
   swap_protocol_fee: 'Naknada za protokol',
-  swap_referral_fee: 'Naknada za preporuku',
   select_route: 'Odaberite rutu',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1921,4 +1929,41 @@ export const hr = {
   swap_failed_slippage: 'Cijena je prešla toleranciju klizanja',
   swap_failed_slippage_description:
     'Cijena se promijenila prije nego što je ovaj swap sletio, tako da bi isplatio manje od dopuštene tolerancije na klizanje, a mreža ga je poništila. Povećajte toleranciju na klizanje ili pokušajte ponovno.',
+  swap_applied_discounts: 'Primijenjeni popusti:',
+  swap_add_custom_token: '+ Dodaj prilagođeni token',
+  swap_no_token_found: 'Nije pronađen token',
+  ton_tx_failure_seqno_mismatch:
+    'Prvo je obrađena druga transakcija iz ovog novčanika, pa je mreža odbacila ovu kao neispravnu. Provjerite svoju povijest: ako ovog transfera nema, pošaljite ga ponovno.',
+  ton_tx_failure_expired:
+    'Vremenski okvir transakcije zatvorio se prije nego što ju je mreža obradila. Provjerite jesu li datum i vrijeme na vašem uređaju automatski postavljeni, a zatim je ponovno pošaljite.',
+  ton_tx_failure_invalid_signature:
+    'Ugovor o novčaniku odbio je potpis. Ponovno potpišite transakciju; ako se i dalje ne uspijeva, ugovor o novčaniku na ovoj adresi ne odgovara ovom trezoru.',
+  ton_tx_failure_wallet_id_mismatch:
+    'Transakcija je izrađena za drugačiju verziju ugovora o novčaniku od one koja je implementirana na ovoj adresi.',
+  ton_tx_failure_insufficient_funds:
+    'Nema dovoljno TON za pokrivanje iznosa plus mrežnih naknada. Ostavite oko 0,05 TON rezerve za naknade i pokušajte ponovno.',
+  ton_tx_failure_out_of_gas:
+    'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još TON transferu i pokušajte ponovno.',
+  ton_tx_failure_invalid_destination:
+    'Odredišna adresa nije valjana na TON. Provjerite adresu i pokušajte ponovno.',
+  ton_tx_failure_not_enough_jettons:
+    'Ovaj novčanik ne sadrži dovoljno tokena za slanje tog iznosa.',
+  ton_tx_failure_jetton_unauthorized:
+    'Ugovor o tokenu odbio je prijenos jer ovom novčaniku nije dopušteno premještanje ovih tokena.',
+  ton_tx_failure_aborted:
+    'Mreža je prekinula ovu transakciju prije nego što je mogla izvršiti transfer.',
+  ton_tx_failure_contract_rejected:
+    'Ugovor je odbio transakciju (izlazni kod {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    'Novčanik je prihvatio transakciju, ali nije mogao izvršiti transfer, pa ništa nije poslano. Mrežna naknada je i dalje naplaćena. Provjerite transakciju i pokušajte ponovno.',
+  ton_tx_failure_action_partially_failed:
+    'Novčanik nije mogao izvršiti barem jedan prijenos u ovoj transakciji, a ostali u njemu su možda prošli. Mrežna naknada je i dalje naplaćena. Provjerite povijest transakcija prije ponovnog slanja.',
+  ton_simulation_will_fail:
+    'Pregled transakcije očekuje da će ova transakcija propasti. Potpisivanje transakcije vjerojatno će uzrokovati mrežnu naknadu bez njenog dovršavanja.',
+  token_verification_unverified: 'Nepotvrđeno',
+  token_verification_unverified_hint:
+    'Ovaj token nije na provjerenom popisu. Provjerite njegovu ugovornu adresu prije nego što mu vjerujete.',
+  token_verification_scam: 'PRIJEVARA',
+  token_verification_scam_hint:
+    'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
 }

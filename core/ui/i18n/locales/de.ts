@@ -510,6 +510,7 @@ export const de = {
   import_seedphrase_onboarding_title:
     'Sie treten in eine neue Ära ein, <g> lässt alte Seed-Phrasen hinter sich. </g> Sie benötigen:',
   import_vault: 'Import Vault',
+  import_vult_backup: '.vult-Backup importieren',
   import_vault_share: 'Vault-Freigabe importieren',
   import_vault_share_description:
     'Verwenden Sie eine Tresorfreigabe, um Ihren Tresor wiederherzustellen.',
@@ -1049,6 +1050,15 @@ export const de = {
     version: 'Version {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" existiert bereits',
+  vault_cannot_be_opened:
+    'Dieser Vault lässt sich auf diesem Gerät nicht öffnen',
+  vault_cannot_be_opened_backup_description:
+    'Ihr .vult-Backup ist der Weg zurück. Importieren Sie es, und dieser Vault funktioniert wieder.',
+  vault_cannot_be_opened_description:
+    'Seine Key Shares sind verschlüsselt, und der Schlüssel, der sie entsperrt, kam bei dieser Wiederherstellung nicht mit. Nichts auf diesem Gerät kann sie lesen, also kann es mit diesem Vault nicht signieren.',
+  vault_cannot_be_opened_no_backup: 'Ich habe kein Backup',
+  vault_cannot_be_opened_no_backup_description:
+    'Ohne .vult-Backup lassen sich die Key Shares auf diesem Gerät nicht mehr entsperren — dieser Teil ist nicht wiederherstellbar. Der Vault selbst kann es sein: Wenn Ihre anderen Geräte ihre eigenen Shares halten und damit weiterhin den Signaturschwellenwert erreichen, funktioniert er ohne dieses Gerät weiter.',
   vault_backup_page_password_info:
     'Speichern Sie Vault-Freigaben von verschiedenen Geräten niemals am selben Ort.',
   vault_backup_page_password_protection:
@@ -1903,7 +1913,6 @@ export const de = {
   price_impact: 'Preisauswirkung',
   swap_fee_included_in_rate: 'Im angegebenen Wechselkurs enthalten',
   swap_protocol_fee: 'Protokollgebühr',
-  swap_referral_fee: 'Vermittlungsgebühr',
   select_route: 'Route auswählen',
   swap_route_eta_hours: '~{{hours}}h',
   swap_route_eta_hours_minutes: '~{{hours}}h {{minutes}}m',
@@ -1967,4 +1976,41 @@ export const de = {
   swap_failed_slippage: 'Der Preis hat die Toleranzgrenze überschritten.',
   swap_failed_slippage_description:
     'Der Kurs hat sich vor der Ausführung des Swaps geändert, daher wäre die Auszahlung geringer gewesen als Ihre Slippage-Toleranz erlaubt gewesen, und das Netzwerk hat den Swap rückgängig gemacht. Erhöhen Sie Ihre Slippage-Toleranz oder versuchen Sie es erneut.',
+  swap_applied_discounts: 'Angewendete Rabatte:',
+  swap_add_custom_token: '+ Benutzerdefiniertes Token hinzufügen',
+  swap_no_token_found: 'Kein Token gefunden',
+  ton_tx_failure_seqno_mismatch:
+    'Eine andere Transaktion von dieser Wallet wurde zuerst verarbeitet, daher wurde diese vom Netzwerk als ungültig abgelehnt. Überprüfen Sie Ihren Verlauf: Falls diese Überweisung dort nicht aufgeführt ist, senden Sie sie erneut.',
+  ton_tx_failure_expired:
+    'Das Zeitfenster für die Transaktion ist abgelaufen, bevor sie vom Netzwerk verarbeitet werden konnte. Stellen Sie sicher, dass Datum und Uhrzeit Ihres Geräts automatisch eingestellt sind, und senden Sie die Transaktion erneut.',
+  ton_tx_failure_invalid_signature:
+    'Der Wallet-Vertrag hat die Signatur abgelehnt. Signieren Sie die Transaktion erneut. Sollte dies weiterhin fehlschlagen, stimmt der Wallet-Vertrag unter dieser Adresse nicht mit diesem Vault überein.',
+  ton_tx_failure_wallet_id_mismatch:
+    'Die Transaktion wurde für eine andere Wallet-Vertragsversion erstellt als die, die an dieser Adresse eingesetzt wird.',
+  ton_tx_failure_insufficient_funds:
+    'Nicht genügend TON um den Betrag zuzüglich Netzwerkgebühren zu decken. Halten Sie etwa 0,05 TON für Gebühren bereit und versuchen Sie es erneut.',
+  ton_tx_failure_out_of_gas:
+    'Die Transaktion konnte nicht abgeschlossen werden, da das Gas nicht ausreichte. Fügen Sie der Überweisung weitere TON hinzu und versuchen Sie es erneut.',
+  ton_tx_failure_invalid_destination:
+    'Die Zieladresse ist für TON ungültig. Überprüfen Sie die Adresse und versuchen Sie es erneut.',
+  ton_tx_failure_not_enough_jettons:
+    'Diese Wallet enthält nicht genügend Token, um diesen Betrag zu senden.',
+  ton_tx_failure_jetton_unauthorized:
+    'Der Token-Vertrag hat die Überweisung abgelehnt, da diese Wallet nicht berechtigt ist, diese Token zu transferieren.',
+  ton_tx_failure_aborted:
+    'Das Netzwerk hat diese Transaktion abgebrochen, bevor die Überweisung durchgeführt werden konnte.',
+  ton_tx_failure_contract_rejected:
+    'Der Vertrag hat die Transaktion abgelehnt (Exit-Code {{exitCode}}).',
+  ton_tx_failure_action_failed:
+    'Die Wallet hat die Transaktion akzeptiert, konnte die Überweisung aber nicht durchführen, daher wurde kein Geld gesendet. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie die Transaktion und versuchen Sie es erneut.',
+  ton_tx_failure_action_partially_failed:
+    'Mindestens eine Überweisung dieser Transaktion konnte nicht ausgeführt werden, andere Transaktionen wurden möglicherweise erfolgreich abgeschlossen. Die Netzwerkgebühr wurde dennoch berechnet. Bitte überprüfen Sie Ihren Transaktionsverlauf, bevor Sie erneut eine Überweisung senden.',
+  ton_simulation_will_fail:
+    'Die Transaktionsvorschau geht davon aus, dass diese Transaktion fehlschlagen wird. Wenn Sie sie trotzdem unterzeichnen, fallen wahrscheinlich Netzwerkgebühren an, ohne dass die Transaktion abgeschlossen wird.',
+  token_verification_unverified: 'Unbestätigt',
+  token_verification_unverified_hint:
+    'Dieser Token befindet sich nicht auf der Liste der verifizierten Token. Überprüfen Sie seine Vertragsadresse, bevor Sie ihm vertrauen.',
+  token_verification_scam: 'BETRUG',
+  token_verification_scam_hint:
+    'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
 }

@@ -10,6 +10,7 @@ import {
   decryptWithPasscode,
   encryptWithPasscode,
   isLegacyPasscodeBlob,
+  isPasscodeEncryptedBlob,
 } from './passcodeCipher'
 
 const passcode = '12345'
@@ -79,6 +80,7 @@ describe('passcodeCipher', () => {
     const [blob] = await encryptWithPasscode({ passcode, values: [shares[0]] })
 
     expect(blob.subarray(0, 4)).toEqual(VAULT_BACKUP_BLOB_MAGIC)
+    expect(isPasscodeEncryptedBlob(blob)).toBe(true)
     expect(isLegacyPasscodeBlob(blob)).toBe(false)
   })
 
