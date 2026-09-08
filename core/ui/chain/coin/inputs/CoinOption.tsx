@@ -44,10 +44,12 @@ export const CoinOption = ({
       <CoinDetails alignItems="center" gap={12}>
         <CoinIcon coin={value} style={{ fontSize: 32 }} />
         <CoinLabel gap={8} alignItems="center">
-          <CoinTicker ticker={ticker} size={13} weight="500" />
+          <TickerSlot>
+            <CoinTicker ticker={ticker} size={13} weight="500" />
+          </TickerSlot>
           <TokenVerificationBadge value={value} />
           <PillWrapper>
-            <Text color="shy" size={11} weight="500" nowrap>
+            <Text color="shy" size={11} weight="500" cropped>
               {chain}
             </Text>
           </PillWrapper>
@@ -159,6 +161,20 @@ const CoinLabel = styled(HStack)`
   min-width: 0;
 `
 
+/**
+ * Reserves the ticker's width before the chain pill can claim it. `LUNC` next
+ * to a `TerraClassic` pill was cropping to 25px, because how much the ticker
+ * got depended on how long the chain happened to be called.
+ */
+const TickerSlot = styled.div`
+  min-width: 0;
+
+  @media (max-width: 400px) {
+    flex-shrink: 0;
+    max-width: 72px;
+  }
+`
+
 const PillWrapper = styled.div`
   flex-shrink: 0;
   display: grid;
@@ -168,6 +184,8 @@ const PillWrapper = styled.div`
   border: 1px solid ${getColor('foregroundExtra')};
 
   @media (max-width: 400px) {
+    flex-shrink: 1;
+    min-width: 0;
     padding: 4px 8px;
   }
 `
@@ -183,6 +201,6 @@ const BalanceColumn = styled(VStack)`
 
   @media (max-width: 400px) {
     min-width: 0;
-    max-width: 90px;
+    max-width: 80px;
   }
 `
