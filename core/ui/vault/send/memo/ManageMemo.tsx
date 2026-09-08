@@ -16,7 +16,12 @@ import styled from 'styled-components'
 
 import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
 
-const chainsWithoutMemoSupport: Chain[] = [Chain.Sui]
+/**
+ * Chains whose transfer transaction has no field to carry a memo, so the
+ * input would silently be dropped at signing time. Bittensor's balance
+ * transfer extrinsic has no remark, and Sui transfers carry no memo.
+ */
+const chainsWithoutMemoSupport: Chain[] = [Chain.Sui, Chain.Bittensor]
 
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()

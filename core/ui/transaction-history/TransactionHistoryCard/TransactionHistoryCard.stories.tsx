@@ -32,8 +32,7 @@ const solAddress = 'HN7cABqLq46Es1jh92dQQisAq662SmxELLLsHHe4YWrH'
 
 /**
  * The pill icon the app always supplies, which is what makes a provider pill
- * stand a full icon slot tall. A story without it renders a shorter pill and
- * cannot show whether the error message clears one.
+ * stand a full icon slot tall. A story without it renders a shorter pill.
  */
 const providerPillIcon = (
   <ChainEntityIcon
@@ -71,7 +70,7 @@ export const AllCards: Story = {
       <TransactionHistoryCard
         tagType="send"
         status="successful"
-        amountUsd="$1,000.54"
+        subAmount="$1,000.54"
         amountCrypto="1,000.12"
         symbol="RUNE"
         pill={{ direction: 'to', address: ethAddress }}
@@ -80,7 +79,7 @@ export const AllCards: Story = {
       <TransactionHistoryCard
         tagType="receive"
         status="successful"
-        amountUsd="$12,204.56"
+        subAmount="$12,204.56"
         amountCrypto="200.50"
         symbol="SOL"
         pill={{ direction: 'from', address: solAddress }}
@@ -89,16 +88,16 @@ export const AllCards: Story = {
       <TransactionHistoryCard
         tagType="swap"
         status="successful"
-        amountUsd="$34,752.57"
-        amountCrypto="20.50"
+        subAmount="-34,752.57 USDC"
+        amountCrypto="+20.50"
         symbol="ETH"
-        pill={{ providerName: 'THORChain' }}
+        pill={{ fromTicker: 'USDC', toTicker: 'ETH' }}
         coin={ethCoin}
       />
       <TransactionHistoryCard
         tagType="send"
         status="error"
-        amountUsd="$1,000.54"
+        subAmount="$1,000.54"
         amountCrypto="1,000.12"
         symbol="RUNE"
         pill={{ direction: 'to', address: ethAddress }}
@@ -108,20 +107,19 @@ export const AllCards: Story = {
       <TransactionHistoryCard
         tagType="swap"
         status="error"
-        amountUsd="$34,752.57"
-        amountCrypto="20.50"
+        subAmount="-34,752.57 USDC"
+        amountCrypto="+20.50"
         symbol="ETH"
-        pill={{ providerName: 'THORChain' }}
+        pill={{ fromTicker: 'USDC', toTicker: 'ETH' }}
+        errorMessage="Slippage tolerance exceeded"
         coin={ethCoin}
       />
       <TransactionHistoryCard
-        tagType="swap"
-        status="error"
-        amountUsd="$34,752.57"
-        amountCrypto="20.50"
-        symbol="ETH"
+        tagType="approve"
+        status="successful"
+        amountCrypto="0.05"
+        symbol="TRX"
         pill={{ providerName: 'LI.FI', pillIcon: providerPillIcon }}
-        errorMessage="Price moved past slippage tolerance"
         coin={ethCoin}
       />
     </div>
@@ -133,10 +131,10 @@ export const TokenWithChainBadge: Story = {
   args: {
     tagType: 'swap',
     status: 'successful',
-    amountUsd: '$39.99',
-    amountCrypto: '40',
+    subAmount: '-0.02 ETH',
+    amountCrypto: '+40',
     symbol: 'USDC',
-    pill: { providerName: 'THORChain' },
+    pill: { fromTicker: 'ETH', toTicker: 'USDC' },
   },
   render: args => <TransactionHistoryCard {...args} coin={usdcCoin} />,
 }
@@ -145,7 +143,7 @@ export const SuccessfulSend: Story = {
   args: {
     tagType: 'send' as TransactionHistoryTagType,
     status: 'successful',
-    amountUsd: '$1,000.54',
+    subAmount: '$1,000.54',
     amountCrypto: '1,000.12',
     symbol: 'RUNE',
     pill: { direction: 'to' as const, address: ethAddress },
@@ -157,7 +155,7 @@ export const ErrorWithMessage: Story = {
   args: {
     tagType: 'send',
     status: 'error',
-    amountUsd: '$1,000.54',
+    subAmount: '$1,000.54',
     amountCrypto: '1,000.12',
     symbol: 'RUNE',
     pill: { direction: 'to', address: ethAddress },
@@ -166,17 +164,32 @@ export const ErrorWithMessage: Story = {
   render: args => <TransactionHistoryCard {...args} coin={runeCoin} />,
 }
 
-/** A failed swap explains itself while the provider pill still owns the card's
- *  bottom-right corner — the one combination where the two can collide. */
-export const ErrorWithMessageAndProviderPill: Story = {
+/** A swap names both legs: what it bought on top, what it gave up beneath, and
+ *  the pair in the pill. The failure reason stacks under the status. */
+export const FailedSwapWithBothLegs: Story = {
   args: {
     tagType: 'swap',
     status: 'error',
-    amountUsd: '$34,752.57',
-    amountCrypto: '20.50',
+    subAmount: '-34,752.57 USDC',
+    amountCrypto: '+20.50',
     symbol: 'ETH',
-    pill: { providerName: 'LI.FI', pillIcon: providerPillIcon },
+    pill: { fromTicker: 'USDC', toTicker: 'ETH' },
     errorMessage: 'Price moved past slippage tolerance',
   },
   render: args => <TransactionHistoryCard {...args} coin={ethCoin} />,
+}
+
+/** A limit order still resting: nothing has been paid out, so the row prints
+ *  what it put up and its fiat value, while the pill still names the pair. */
+export const RestingLimitOrder: Story = {
+  args: {
+    tagType: 'swap',
+    status: 'pending',
+    statusLabel: 'Open',
+    subAmount: '$34,752.57',
+    amountCrypto: '34,752.57',
+    symbol: 'USDC',
+    pill: { fromTicker: 'USDC', toTicker: 'ETH' },
+  },
+  render: args => <TransactionHistoryCard {...args} coin={usdcCoin} />,
 }

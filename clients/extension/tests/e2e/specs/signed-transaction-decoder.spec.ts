@@ -11,39 +11,25 @@ import QRCode from 'react-qr-code'
 
 import { expect, test } from '../fixtures/extension-loader'
 import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
+import { createSeededVault } from '../helpers/seeded-vault'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
-const fixturePublicKey =
-  '02acb4bc267db7774614bf6011c59929b006c2554386a3090baff0b3fc418ec044'
+const vaultName = 'Signed Decoder QA'
 const proofDir =
   process.env.SIGNED_TRANSACTION_DECODER_PROOF_DIR ?? 'test-results'
 
 test.describe('signed transaction decoder', () => {
   test.beforeEach(async ({ context }) => {
+    const { vaultId, vault } = await createSeededVault({ name: vaultName })
+
     await writeChromeStorageMultiple(context, {
-      currentVaultId: fixturePublicKey,
+      currentVaultId: vaultId,
       hasFinishedOnboarding: true,
       latestInstalledVersion: '0.2.1',
       latestMigration: 'removeDuplicateCoins',
-      vaults: [
-        {
-          name: 'Signed Decoder QA',
-          publicKeys: {
-            ecdsa: fixturePublicKey,
-            eddsa: '0'.repeat(64),
-          },
-          signers: ['local-device'],
-          createdAt: Date.now(),
-          hexChainCode: '0'.repeat(64),
-          keyShares: { ecdsa: '', eddsa: '' },
-          localPartyId: 'local-device',
-          libType: 'DKLS',
-          isBackedUp: true,
-          order: 0,
-        },
-      ],
+      vaults: [vault],
       vaultsCoins: {
-        [fixturePublicKey]: [
+        [vaultId]: [
           {
             address: 'thor1sender',
             chain: 'THORChain',
@@ -62,12 +48,13 @@ test.describe('signed transaction decoder', () => {
     extensionId,
   }) => {
     mkdirSync(proofDir, { recursive: true })
+    const { vaultId } = await createSeededVault({ name: vaultName })
     const payload = create(KeysignPayloadSchema, {
       coin: create(CoinSchema, {
         address: 'thor1sender',
         chain: 'THORChain',
         decimals: 8,
-        hexPublicKey: fixturePublicKey,
+        hexPublicKey: vaultId,
         isNativeToken: true,
         logo: 'rune',
         priceProviderId: 'thorchain',
@@ -83,7 +70,7 @@ test.describe('signed transaction decoder', () => {
       sessionId: 'signed-decoder-qa',
       hexEncryptionKey: '0'.repeat(64),
       payload: { keysign: payload },
-      vaultId: fixturePublicKey,
+      vaultId,
     })
 
     const qrPage = await context.newPage()
