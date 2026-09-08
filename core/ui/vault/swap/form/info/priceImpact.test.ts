@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest'
 
 import { formatPriceImpact, getSwapPriceImpact } from './priceImpact'
 
+// Mirrors a real `thorchain/quote/swap` response for ETH.ETH -> BTC.BTC:
+// slippage is reported inside `fees`, never at the top level of the quote.
 const nativeQuote = (slippageBps: number | undefined): SwapQuoteResult => ({
   native: {
     swapChain: Chain.THORChain,
@@ -11,9 +13,10 @@ const nativeQuote = (slippageBps: number | undefined): SwapQuoteResult => ({
     expiry: 0,
     fees: {
       affiliate: '0',
-      asset: 'ETH.ETH',
-      outbound: '0',
-      total: '0',
+      asset: 'BTC.BTC',
+      outbound: '1023',
+      total: '1121',
+      ...(slippageBps === undefined ? {} : { slippage_bps: slippageBps }),
       // The fee total in bps sits right next to slippage on the wire; the row
       // used to read this one, reporting fees as price impact.
       total_bps: 999,
@@ -23,7 +26,6 @@ const nativeQuote = (slippageBps: number | undefined): SwapQuoteResult => ({
     outbound_delay_blocks: 0,
     outbound_delay_seconds: 0,
     recommended_min_amount_in: '0',
-    slippage_bps: slippageBps,
     warning: '',
   },
 })
@@ -48,8 +50,23 @@ describe('getSwapPriceImpact', () => {
     expect(getSwapPriceImpact(generalQuote(-0.0039))).toBe(-0.0039)
   })
 
+  it('renders the row for a THORChain quote, which reports slippage in fees', () => {
+    // The live ETH.ETH -> BTC.BTC quote: `fees.slippage_bps` 19 against a
+    // `fees.total_bps` of 222. Reading the quote's top level — where the field
+    // is never sent — is what hid this row on every THORChain swap.
+    const quote = nativeQuote(19)
+
+    expect(getSwapPriceImpact(quote)).toBeCloseTo(0.0019, 10)
+    expect(formatPriceImpact(getSwapPriceImpact(quote))).toEqual({
+      percent: '-0.19%',
+      level: 'good',
+    })
+  })
+
   it('reports nothing when the provider publishes no impact', () => {
     expect(getSwapPriceImpact(generalQuote(undefined))).toBeUndefined()
+    // A native quote whose fees omit slippage keeps the row hidden rather
+    // than standing in the total fee bps sitting next to it.
     expect(getSwapPriceImpact(nativeQuote(undefined))).toBeUndefined()
   })
 })

@@ -1,6 +1,7 @@
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 import { ChainKind, getChainKind } from '@vultisig/core-chain/ChainKind'
+import { getSolanaTokenVerification } from '@vultisig/core-chain/chains/solana/spl/verification'
 import { getTonJettonVerification } from '@vultisig/core-chain/chains/ton/jetton/verification'
 import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
 import { TokenVerification } from '@vultisig/core-chain/coin/tokenVerification'
@@ -22,6 +23,7 @@ type TokenVerificationResolver = (
 const tokenVerificationResolvers: Partial<
   Record<ChainKind, TokenVerificationResolver>
 > = {
+  solana: getSolanaTokenVerification,
   ton: getTonJettonVerification,
 }
 
