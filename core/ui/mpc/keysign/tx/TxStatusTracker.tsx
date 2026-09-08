@@ -10,11 +10,21 @@ import { TransactionStatusAnimation } from './TransactionStatusAnimation'
 type TxStatusTrackerProps = {
   chain: Chain
   hash: string
+  /** Solana only: lets the poll settle on `expired` past the blockhash deadline. */
+  lastValidBlockHeight?: number
 }
 
-export const TxStatusTracker = ({ chain, hash }: TxStatusTrackerProps) => {
+export const TxStatusTracker = ({
+  chain,
+  hash,
+  lastValidBlockHeight,
+}: TxStatusTrackerProps) => {
   const { t } = useTranslation()
-  const { data, isPending } = useTxStatusQuery({ chain, hash })
+  const { data, isPending } = useTxStatusQuery({
+    chain,
+    hash,
+    lastValidBlockHeight,
+  })
 
   const status = data?.status ?? 'pending'
   const failure = status === 'error' ? data?.failure : undefined

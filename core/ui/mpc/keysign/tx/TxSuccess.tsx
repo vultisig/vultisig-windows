@@ -38,6 +38,7 @@ import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -258,7 +259,11 @@ export const TxSuccess = ({
       {skipBroadcast ? (
         <TransactionStatusAnimation status="success" />
       ) : (
-        <TxStatusTracker chain={coin.chain} hash={txHash} />
+        <TxStatusTracker
+          chain={coin.chain}
+          hash={txHash}
+          lastValidBlockHeight={getKeysignLastValidBlockHeight(value)}
+        />
       )}
       <VStack gap={8}>
         {showUniversalRouterSwap ? (

@@ -2013,4 +2013,8 @@ export const de = {
   token_verification_scam: 'BETRUG',
   token_verification_scam_hint:
     'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
+  solana_blockhash_expired:
+    'Die Transaktion ist abgelaufen, bevor sie bestätigt werden konnte.',
+  solana_blockhash_expired_description:
+    'Ihre Geräte haben die Transaktion signiert, aber das Solana-Netzwerk hat sie nicht vor Ablauf des Blockhashs bestätigt, daher wurde sie nicht ausgeführt. Signieren Sie sie erneut, um sie mit einem neuen Blockhash zu senden.',
 }

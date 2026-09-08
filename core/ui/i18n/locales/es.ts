@@ -1998,4 +1998,7 @@ export const es = {
   token_verification_scam: 'ESTAFA',
   token_verification_scam_hint:
     'Este token copia el nombre de un token verificado, pero reside en una dirección de contrato diferente. Es falso; no confíe en él.',
+  solana_blockhash_expired: 'La transacción expiró antes de ser confirmada.',
+  solana_blockhash_expired_description:
+    'Tus dispositivos firmaron la transacción, pero la red Solana no la confirmó antes de que expirara su blockhash, por lo que no se procesó. Vuelve a firmarla para enviarla con un blockhash actualizado.',
 }
