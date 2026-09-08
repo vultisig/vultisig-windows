@@ -31,6 +31,10 @@ const PriceBadge = styled.div`
   background: ${getColor('foregroundExtra')};
 `
 
+const ChevronWrapper = styled(IconWrapper)`
+  flex-shrink: 0;
+`
+
 type VaultChainCoinItemProps = ValueProp<
   Partial<EntityWithLogo> &
     EntityWithTicker &
@@ -82,7 +86,10 @@ export const VaultChainCoinItem = ({
               </Text>
             </PriceBadge>
           </VStack>
-          <HStack gap={8} alignItems="center" style={{ flexShrink: 0 }}>
+          {/* Shrinks rather than pushing the fiat value out of the row: the
+              native amount crops against whatever width is left, while the
+              fiat value keeps the column from collapsing past itself. */}
+          <HStack gap={8} alignItems="center">
             {onActivate ? (
               // Replaces the balance only: a zero that cannot move until the
               // trust line exists explains nothing, so the row offers the action
@@ -113,7 +120,7 @@ export const VaultChainCoinItem = ({
                   color="shy"
                   size={12}
                   cropped
-                  style={{ maxWidth: 160 }}
+                  style={{ maxWidth: '100%' }}
                 >
                   <BalanceVisibilityAware>
                     {formatAmount(balance, { precision: 'high' })} {ticker}
@@ -121,9 +128,9 @@ export const VaultChainCoinItem = ({
                 </Text>
               </VStack>
             )}
-            <IconWrapper>
+            <ChevronWrapper>
               <ChevronRightIcon />
-            </IconWrapper>
+            </ChevronWrapper>
           </HStack>
         </HStack>
       </VStack>
