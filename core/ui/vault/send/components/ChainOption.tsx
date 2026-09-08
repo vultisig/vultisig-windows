@@ -33,7 +33,7 @@ export const ChainOption = ({
       onClick={onClick}
     >
       <HStack alignItems="center" justifyContent="space-between">
-        <HStack fullWidth alignItems="center" gap={12}>
+        <ChainDetails fullWidth alignItems="center" gap={12}>
           <ChainEntityIcon
             value={getChainLogoSrc(chain)}
             style={{ fontSize: 32 }}
@@ -43,7 +43,7 @@ export const ChainOption = ({
               {chain}
             </Text>
           </VStack>
-        </HStack>
+        </ChainDetails>
 
         <Text size={12} color="shy" weight="500">
           {formatFiatAmount(totalFiatAmount)}
@@ -52,6 +52,15 @@ export const ChainOption = ({
     </Container>
   )
 }
+
+/**
+ * `width: 100%` alone makes this a flex item that will not shrink below the
+ * whole row, so the balance beside it pushed the row 8px wider than the list
+ * and the list turned that into a horizontal scrollbar.
+ */
+const ChainDetails = styled(HStack)`
+  min-width: 0;
+`
 
 const Container = styled('div')<{ isSelected?: boolean }>`
   ${panel()};
