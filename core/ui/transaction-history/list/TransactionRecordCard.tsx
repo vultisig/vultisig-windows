@@ -2,9 +2,11 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { getTronClaimChainAmountDisplay } from '@core/ui/vault/deposit/tron/withdrawExpireUnfreeze'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { fromThorchainFixedPoint } from '@core/ui/vault/swap/limit/amount'
 import { useLimitOrderStatusLabels } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -63,8 +65,14 @@ const statusToCardStatus: Record<
 type TransactionDisplayData = {
   tagType: TransactionHistoryTagType
   amountCrypto: string
+  /** The amount the fiat line prices, denominated in `getCoinKey`'s coin. */
   cryptoAmount: number
   symbol: string
+  /**
+   * The line under the amount, when the row prints one of its own instead of
+   * a fiat value. A swap prints the leg it gave up here.
+   */
+  subAmount?: string
   pill: TransactionHistoryCardPill
   coin: (CoinKey & { logo: string }) | undefined
   /** Cosmos message typeUrl driving the tag label, when present. */
@@ -100,57 +108,82 @@ const getProviderPill = ({
 
 const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
   if (record.type === 'swap') {
-    const rawAmount = Number(
-      fromChainAmount(BigInt(record.data.fromAmount), record.data.fromDecimals)
+    const { data } = record
+    const soldAmount = Number(
+      fromChainAmount(BigInt(data.fromAmount), data.fromDecimals)
     )
-
-    const pill: TransactionHistoryCardPill = record.data.provider
-      ? getProviderPill({
-          provider: record.data.provider,
-          fromChain: record.data.fromChain,
-        })
-      : getProviderPill({
-          provider: record.data.toChain,
-          fromChain: record.data.fromChain,
-        })
+    // Already a decimal string in the buy asset's own units, unlike the sell
+    // side, which the payload carries in the sell coin's smallest units.
+    const boughtAmount = Number(data.toAmount)
 
     return {
       tagType: 'swap',
-      amountCrypto: formatCryptoAmount(rawAmount),
-      cryptoAmount: rawAmount,
-      symbol: record.data.fromToken,
-      pill,
-      coin: record.data.fromTokenLogo
+      amountCrypto: `+${formatCryptoAmount(boughtAmount)}`,
+      cryptoAmount: soldAmount,
+      symbol: data.toToken,
+      subAmount: `-${formatCryptoAmount(soldAmount)} ${data.fromToken}`,
+      pill: { fromTicker: data.fromToken, toTicker: data.toToken },
+      coin: data.toTokenLogo
         ? {
-            chain: record.data.fromChain,
-            id: record.data.fromTokenId,
-            logo: record.data.fromTokenLogo,
+            chain: data.toChain,
+            id: data.toTokenId,
+            logo: data.toTokenLogo,
           }
         : undefined,
     }
   }
 
   if (record.type === 'limitSwap') {
-    const rawAmount = Number(
-      fromChainAmount(BigInt(record.data.fromAmount), record.data.fromDecimals)
+    const { data } = record
+    const soldAmount = Number(
+      fromChainAmount(BigInt(data.fromAmount), data.fromDecimals)
     )
+    const sellCoin = data.fromTokenLogo
+      ? {
+          chain: data.fromChain,
+          id: data.fromTokenId,
+          logo: data.fromTokenLogo,
+        }
+      : undefined
+    // The pill names both assets whatever the order did — an open order still
+    // says which pair it is for.
+    const pill: TransactionHistoryCardPill = {
+      fromTicker: data.fromToken,
+      toTicker: data.buyTicker,
+    }
+
+    // Only the queue's own payout accounting counts as received. An order that
+    // has not filled keeps printing what it put up, because `minimumReceived`
+    // is a floor it may never reach, and printing it as the buy leg would read
+    // as a payout that has already happened.
+    const filledAmount =
+      data.amountOut && data.amountOut !== '0'
+        ? fromThorchainFixedPoint(data.amountOut)
+        : undefined
+
+    if (filledAmount === undefined) {
+      return {
+        tagType: 'swap',
+        amountCrypto: formatCryptoAmount(soldAmount),
+        cryptoAmount: soldAmount,
+        symbol: data.fromToken,
+        pill,
+        coin: sellCoin,
+      }
+    }
+
+    const buyCoin = getLimitOrderBuyCoin({ targetAsset: data.targetAsset })
 
     return {
       tagType: 'swap',
-      amountCrypto: formatCryptoAmount(rawAmount),
-      cryptoAmount: rawAmount,
-      symbol: record.data.fromToken,
-      pill: getProviderPill({
-        provider: Chain.THORChain,
-        fromChain: record.data.fromChain,
-      }),
-      coin: record.data.fromTokenLogo
-        ? {
-            chain: record.data.fromChain,
-            id: record.data.fromTokenId,
-            logo: record.data.fromTokenLogo,
-          }
-        : undefined,
+      amountCrypto: `+${formatCryptoAmount(filledAmount)}`,
+      cryptoAmount: soldAmount,
+      symbol: data.buyTicker,
+      subAmount: `-${formatCryptoAmount(soldAmount)} ${data.fromToken}`,
+      pill,
+      coin: buyCoin?.logo
+        ? { chain: buyCoin.chain, id: buyCoin.id, logo: buyCoin.logo }
+        : sellCoin,
     }
   }
 
@@ -267,7 +300,7 @@ export const TransactionRecordCard = ({
   const isTronClaim =
     record.type === 'send' &&
     record.data.operation === 'tronWithdrawExpireUnfreeze'
-  const amountUsd = useFiatDisplay(record, display.cryptoAmount)
+  const fiatAmount = useFiatDisplay(record, display.cryptoAmount)
   // `send` and `swap` defer to the Cosmos message label, which turns an
   // otherwise-generic send into "Delegate"/"Vote" when the payload says so.
   const tagLabel = match(record.type, {
@@ -317,7 +350,7 @@ export const TransactionRecordCard = ({
         tagLabel={tagLabel}
         status={cardStatus}
         statusLabel={statusLabelOverride}
-        amountUsd={amountUsd}
+        subAmount={display.subAmount ?? fiatAmount}
         amountCrypto={display.amountCrypto}
         symbol={display.symbol}
         pill={display.pill}

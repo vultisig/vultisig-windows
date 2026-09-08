@@ -13,14 +13,14 @@ import QRCode from 'react-qr-code'
 import { expect, test } from '../fixtures/extension-loader'
 import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
 import { enableChains } from '../helpers/enable-chains'
+import { createSeededVault } from '../helpers/seeded-vault'
 import { SendFlow } from '../page-objects/SendFlow.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
 const classicAddress = 'rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY'
 const taggedXAddress = 'XV5sbjUmgPpvXv4ixFWZ5ptAYZ6PD2q1qM6owqNbug8W6KV'
 const proofDir = process.env.XRP_DESTINATION_TAG_PROOF_DIR ?? 'test-results'
-const fixturePublicKey =
-  '02acb4bc267db7774614bf6011c59929b006c2554386a3090baff0b3fc418ec044'
+const vaultName = 'XRP Destination Tag QA'
 
 const captureProof = async (page: Page, name: string) => {
   await page.mouse.move(0, 0)
@@ -34,30 +34,16 @@ const captureProof = async (page: Page, name: string) => {
 // Always the synthetic fixture: the assertions below are written against it,
 // and the real test vault's unfunded XRP account cannot reach Verify.
 const ensureDestinationTagVault = async (context: BrowserContext) => {
+  const { vaultId, vault } = await createSeededVault({ name: vaultName })
+
   await writeChromeStorageMultiple(context, {
-    currentVaultId: fixturePublicKey,
+    currentVaultId: vaultId,
     hasFinishedOnboarding: true,
     latestInstalledVersion: '0.2.1',
     latestMigration: 'removeDuplicateCoins',
-    vaults: [
-      {
-        name: 'XRP Destination Tag QA',
-        publicKeys: {
-          ecdsa: fixturePublicKey,
-          eddsa: '0'.repeat(64),
-        },
-        signers: ['local-device'],
-        createdAt: Date.now(),
-        hexChainCode: '0'.repeat(64),
-        keyShares: { ecdsa: '', eddsa: '' },
-        localPartyId: 'local-device',
-        libType: 'DKLS',
-        isBackedUp: true,
-        order: 0,
-      },
-    ],
+    vaults: [vault],
     vaultsCoins: {
-      [fixturePublicKey]: [
+      [vaultId]: [
         {
           address: classicAddress,
           chain: 'Ripple',
@@ -69,6 +55,8 @@ const ensureDestinationTagVault = async (context: BrowserContext) => {
       ],
     },
   })
+
+  return vaultId
 }
 
 test.describe('XRP destination tag', () => {
@@ -175,12 +163,13 @@ test.describe('XRP destination tag', () => {
   }) => {
     const destinationTag = 12345
     const memo = 'invoice-4300'
+    const { vaultId } = await createSeededVault({ name: vaultName })
     const payload = create(KeysignPayloadSchema, {
       coin: create(CoinSchema, {
         address: classicAddress,
         chain: 'Ripple',
         decimals: 6,
-        hexPublicKey: fixturePublicKey,
+        hexPublicKey: vaultId,
         isNativeToken: true,
         logo: 'xrp',
         priceProviderId: 'ripple',
@@ -200,7 +189,7 @@ test.describe('XRP destination tag', () => {
       sessionId: 'xrp-destination-tag-qa',
       hexEncryptionKey: '0'.repeat(64),
       payload: { keysign: payload },
-      vaultId: fixturePublicKey,
+      vaultId,
     })
 
     const qrPage = await context.newPage()

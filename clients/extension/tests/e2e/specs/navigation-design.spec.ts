@@ -3,39 +3,29 @@ import { join } from 'node:path'
 
 import { expect, test } from '../fixtures/extension-loader'
 import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
+import { createSeededVault } from '../helpers/seeded-vault'
 import { VaultPage } from '../page-objects/VaultPage.po'
 
-const fixturePublicKey =
-  '02acb4bc267db7774614bf6011c59929b006c2554386a3090baff0b3fc418ec044'
 const fixtureAddress = 'rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY'
 
 const seedNavigationVault = async (
   context: Parameters<typeof writeChromeStorageMultiple>[0]
 ) => {
+  // Not DKLS: the home shell this spec measures includes the migrate promo
+  // banner, which only renders for a vault that has something to migrate.
+  const { vaultId, vault } = await createSeededVault({
+    name: 'Main Vault',
+    libType: 'KeyImport',
+  })
+
   await writeChromeStorageMultiple(context, {
-    currentVaultId: fixturePublicKey,
+    currentVaultId: vaultId,
     hasFinishedOnboarding: true,
     latestInstalledVersion: '0.2.1',
     latestMigration: 'removeDuplicateCoins',
-    vaults: [
-      {
-        name: 'Main Vault',
-        publicKeys: {
-          ecdsa: fixturePublicKey,
-          eddsa: '0'.repeat(64),
-        },
-        signers: ['local-device'],
-        createdAt: Date.now(),
-        hexChainCode: '0'.repeat(64),
-        keyShares: { ecdsa: '', eddsa: '' },
-        localPartyId: 'local-device',
-        libType: 'GG20',
-        isBackedUp: true,
-        order: 0,
-      },
-    ],
+    vaults: [vault],
     vaultsCoins: {
-      [fixturePublicKey]: [
+      [vaultId]: [
         {
           address: fixtureAddress,
           chain: 'Ripple',
@@ -54,7 +44,7 @@ const seedNavigationVault = async (
         ])
       ),
       byVault: {
-        [fixturePublicKey]: Object.fromEntries(
+        [vaultId]: Object.fromEntries(
           ['vaultBackup', 'referralCode'].map(id => [
             id,
             { dismissedAt: Date.now() },
