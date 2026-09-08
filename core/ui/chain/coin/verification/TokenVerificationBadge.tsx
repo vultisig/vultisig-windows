@@ -22,7 +22,7 @@ const VerifiableTokenBadge = ({ value }: ValueProp<VerifiableToken>) => {
 /**
  * Drop-in verification label for anywhere a coin's ticker is shown. Resolves
  * the tier for tokens on chains that have a verification source (TON jettons
- * today) and renders nothing at all for everything else, while the lookup is
+ * and Solana mints today) and renders nothing at all for everything else, while the lookup is
  * in flight, when it fails, and for verified tokens — so it can sit next to a
  * ticker unconditionally without shifting layout for the common case.
  */
