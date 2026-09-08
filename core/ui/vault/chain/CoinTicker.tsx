@@ -3,6 +3,17 @@ import { useElementSize } from '@lib/ui/hooks/useElementSize'
 import { Text, TextColor } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { CSSProperties, useState } from 'react'
+import styled from 'styled-components'
+
+/**
+ * A contract-address ticker has no spaces to break on, so it needs both an
+ * explicit break and a width — left alone the tooltip stretches past the popup.
+ */
+const FullTicker = styled.span`
+  display: block;
+  max-width: 240px;
+  word-break: break-all;
+`
 
 type CoinTickerProps = {
   ticker: string
@@ -33,11 +44,7 @@ export const CoinTicker = ({
 
   return (
     <Tooltip
-      content={
-        isTruncated ? (
-          <span style={{ wordBreak: 'break-all' }}>{ticker}</span>
-        ) : undefined
-      }
+      content={isTruncated ? <FullTicker>{ticker}</FullTicker> : undefined}
       renderOpener={({ ref, ...props }) => (
         <MergeRefs<HTMLParagraphElement>
           refs={[ref, setElement]}

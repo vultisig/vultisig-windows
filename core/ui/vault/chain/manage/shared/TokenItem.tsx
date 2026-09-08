@@ -1,13 +1,13 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
+import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { vStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { useMemo } from 'react'
@@ -54,9 +54,7 @@ export const TokenItem = ({
         )}
       </TokenIconWrapper>
       <TokenNameWrapper>
-        <Text cropped color="contrast" size={12} weight={500}>
-          {coin.ticker}
-        </Text>
+        <CoinTicker ticker={coin.ticker} size={12} weight={500} />
         <TokenVerificationBadge value={coin} />
       </TokenNameWrapper>
     </TokenCard>
