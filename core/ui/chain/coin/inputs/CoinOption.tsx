@@ -53,21 +53,13 @@ export const CoinOption = ({
           </PillWrapper>
         </CoinLabel>
       </CoinDetails>
-      <VStack
-        gap={4}
-        justifyContent="center"
-        alignItems="flex-end"
-        style={{
-          minWidth: 100,
-          height: 50,
-        }}
-      >
+      <BalanceColumn gap={4} justifyContent="center" alignItems="flex-end">
         {vaultCoin ? (
           <VaultCoinBalance value={vaultCoin} />
         ) : (
           <CoinOptionFiatValue value={0} />
         )}
-      </VStack>
+      </BalanceColumn>
     </Container>
   )
 }
@@ -102,6 +94,7 @@ const VaultCoinBalance = ({ value }: ValueProp<Coin>) => {
               size={12}
               color="contrast"
               weight={500}
+              cropped
             >
               {formatAmount(fromChainAmount(balance, decimals), { ticker })}
             </Text>
@@ -173,4 +166,23 @@ const PillWrapper = styled.div`
   padding: 8px 12px;
   ${borderRadius.pill};
   border: 1px solid ${getColor('foregroundExtra')};
+
+  @media (max-width: 400px) {
+    padding: 4px 8px;
+  }
+`
+
+/**
+ * Balance for the row. At the popup width it gives way to the ticker, which is
+ * what tells two rows apart: capped, a four-letter ticker stays whole; without
+ * a cap the ticker was down to two legible characters.
+ */
+const BalanceColumn = styled(VStack)`
+  min-width: 100px;
+  height: 50px;
+
+  @media (max-width: 400px) {
+    min-width: 0;
+    max-width: 90px;
+  }
 `
