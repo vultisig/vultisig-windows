@@ -5,10 +5,10 @@ import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
 
 /**
- * Row that holds the vault's primary actions. The extension popup is only
- * 360px wide, where five 52px actions and the 20px desktop gap add up to four
- * pixels more than fits and the last one wraps onto a second row, so the gap
- * tightens at the same breakpoint that already narrows the padding.
+ * Row that holds the vault's primary actions. The extension popup leaves this
+ * row 328px once the page has taken its own horizontal padding, which five
+ * 52px actions cannot share at the desktop gap, so below the breakpoint the
+ * gap tightens and the row stops padding itself — the page already does it.
  */
 export const ActionsWrapper = styled(HStack)`
   flex-wrap: wrap;
@@ -18,7 +18,7 @@ export const ActionsWrapper = styled(HStack)`
 
   @media (max-width: 400px) {
     gap: 12px;
-    padding-inline: 12px;
+    padding-inline: 0;
   }
 `
 
