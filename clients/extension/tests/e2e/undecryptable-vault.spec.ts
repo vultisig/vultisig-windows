@@ -1,100 +1,25 @@
-import '@vultisig/sdk/node'
-
 import { create, toBinary } from '@bufbuild/protobuf'
 import { toCommVault } from '@vultisig/core-mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_pb'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
-import {
-  DklsEngine,
-  ensureMpcEngine,
-  MpcKeyshare,
-  MpcSession,
-  SchnorrEngine,
-} from '@vultisig/mpc-types'
 
 import { expect, test } from './fixtures/extension.fixture'
+import {
+  fixtureKeygenCommittee,
+  fixtureLocalPartyId,
+  generateVaultKeyshares,
+} from './helpers/seeded-vault'
 
 test.describe.configure({ mode: 'serial' })
 
-type KeygenEngine = Pick<
-  DklsEngine | SchnorrEngine,
-  'createKeygenSession' | 'keygenSetup'
->
-
-const createKeyshare = async (engine: KeygenEngine) => {
-  const partyIds = ['device-1', 'device-2']
-  const setup = engine.keygenSetup(undefined, partyIds.length, partyIds)
-  const sessions = new Map<string, MpcSession<MpcKeyshare>>()
-
-  for (const partyId of partyIds) {
-    sessions.set(partyId, await engine.createKeygenSession(setup, partyId))
-  }
-
-  const completed = new Set<string>()
-  for (let round = 0; round < 10 && completed.size < partyIds.length; round++) {
-    const messages: { body: Uint8Array; receivers: string[] }[] = []
-
-    sessions.forEach(session => {
-      let message = session.outputMessage()
-      while (message) {
-        messages.push({
-          body: message.body,
-          receivers: [...message.receivers],
-        })
-        message = session.outputMessage()
-      }
-    })
-
-    if (messages.length === 0) {
-      throw new Error('MPC fixture keygen stalled')
-    }
-
-    messages.forEach(message => {
-      message.receivers.forEach(receiver => {
-        const session = sessions.get(receiver)
-        if (session?.inputMessage(message.body)) {
-          completed.add(receiver)
-        }
-      })
-    })
-  }
-
-  if (completed.size !== partyIds.length) {
-    throw new Error('MPC fixture keygen did not complete')
-  }
-
-  const results = new Map<
-    string,
-    { chainCode: string; keyshare: string; publicKey: string }
-  >()
-
-  for (const [partyId, session] of sessions) {
-    const keyshare = await session.finish()
-    results.set(partyId, {
-      chainCode: Buffer.from(keyshare.rootChainCode()).toString('hex'),
-      keyshare: Buffer.from(keyshare.toBytes()).toString('base64'),
-      publicKey: Buffer.from(keyshare.publicKey()).toString('hex'),
-    })
-    keyshare.free?.()
-    session.free?.()
-  }
-
-  return results.get('device-1')!
-}
-
 const createRecoveryBackup = async () => {
-  const mpc = await ensureMpcEngine()
-  await mpc.initialize()
-  const [ecdsa, eddsa] = await Promise.all([
-    createKeyshare(mpc.dkls),
-    createKeyshare(mpc.schnorr),
-  ])
+  const { ecdsa, eddsa } = await generateVaultKeyshares()
   const vault: Vault = {
     name: 'Recovered vault',
     publicKeys: { ecdsa: ecdsa.publicKey, eddsa: eddsa.publicKey },
-    signers: ['device-1', 'device-2'],
-    localPartyId: 'device-1',
+    signers: fixtureKeygenCommittee,
+    localPartyId: fixtureLocalPartyId,
     hexChainCode: ecdsa.chainCode,
     keyShares: { ecdsa: ecdsa.keyshare, eddsa: eddsa.keyshare },
     libType: 'DKLS',

@@ -1827,6 +1827,8 @@ export const zh = {
     '钱包已接受交易，但无法完成转账，因此未发送任何款项。网络手续费仍被收取。请检查交易并重试。',
   ton_tx_failure_action_partially_failed:
     '钱包在此次交易中至少有一笔转账失败，其他转账可能已成功。网络手续费仍然被收取。请在再次转账前查看您的交易记录。',
+  ton_simulation_will_fail:
+    '交易预览预期此交易会失败。如果仍然签署，则可能会产生网络费用，而交易却无法完成。',
   token_verification_unverified: '未经证实',
   token_verification_unverified_hint:
     '此代币不在已验证列表中。信任此代币前，请先检查其合约地址。',
