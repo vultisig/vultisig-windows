@@ -71,7 +71,7 @@ const Container = styled('div')<{ isSelected?: boolean }>`
     position: absolute;
     left: 50%;
     bottom: 0;
-    width: 320px;
+    width: min(320px, 100%);
     height: 1px;
     background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
     transform: translateX(-50%);
