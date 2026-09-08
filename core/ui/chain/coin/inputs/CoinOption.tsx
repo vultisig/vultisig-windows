@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
+import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
@@ -40,20 +41,18 @@ export const CoinOption = ({
       alignItems="center"
       data-testid={`coin-option-${ticker}`}
     >
-      <HStack alignItems="center" gap={12}>
+      <CoinDetails alignItems="center" gap={12}>
         <CoinIcon coin={value} style={{ fontSize: 32 }} />
-        <HStack gap={8} alignItems="center">
-          <Text color="contrast" size={13} weight="500">
-            {ticker}
-          </Text>
+        <CoinLabel gap={8} alignItems="center">
+          <CoinTicker ticker={ticker} size={13} weight="500" />
           <TokenVerificationBadge value={value} />
           <PillWrapper>
-            <Text color="shy" size={11} weight="500">
+            <Text color="shy" size={11} weight="500" nowrap>
               {chain}
             </Text>
           </PillWrapper>
-        </HStack>
-      </HStack>
+        </CoinLabel>
+      </CoinDetails>
       <VStack
         gap={4}
         justifyContent="center"
@@ -136,7 +135,7 @@ const Container = styled(HStack)`
     position: absolute;
     left: 50%;
     bottom: 0;
-    width: 320px;
+    width: min(320px, 100%);
     height: 1px;
     background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
     transform: translateX(-50%);
@@ -148,7 +147,27 @@ const Container = styled(HStack)`
   }
 `
 
+/**
+ * Icon, ticker and chain pill. It has to shrink, or a ticker that is a raw
+ * contract address makes the row wider than the modal — and because the list
+ * around it scrolls vertically, that overflow becomes a horizontal scrollbar
+ * rather than being clipped.
+ */
+const CoinDetails = styled(HStack)`
+  min-width: 0;
+
+  > svg,
+  > img {
+    flex-shrink: 0;
+  }
+`
+
+const CoinLabel = styled(HStack)`
+  min-width: 0;
+`
+
 const PillWrapper = styled.div`
+  flex-shrink: 0;
   display: grid;
   place-items: center;
   padding: 8px 12px;
