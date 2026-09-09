@@ -206,8 +206,9 @@ export const StakeCard = ({
                     color="contrast"
                   >
                     {formatAmount(fromChainAmount(amount, coin.decimals), {
-                      ticker: coin.ticker,
-                    })}
+                      precision: 'medium',
+                    })}{' '}
+                    {coin.ticker}
                   </Text>
                   <Text size={12} color="shy">
                     {formatFiatAmount(fiat)}
