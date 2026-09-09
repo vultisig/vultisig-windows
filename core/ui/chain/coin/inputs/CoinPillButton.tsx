@@ -1,5 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
+import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -34,11 +35,9 @@ export const CoinPillButton = ({
   return (
     <Container onClick={onClick} data-testid={testId}>
       <CoinIcon coin={value} style={{ fontSize: 32 }} />
-      <HStack gap={4} alignItems="center">
+      <Body gap={4} alignItems="center">
         <VStack gap={2}>
-          <Text weight="500" size={16} color="contrast">
-            {value.ticker}
-          </Text>
+          <CoinTicker ticker={value.ticker} size={14} weight="500" />
           {isFeeCoin(value) ? (
             <Text weight="500" size={12} color="shy">
               {t('native')}
@@ -49,8 +48,8 @@ export const CoinPillButton = ({
             </HStack>
           )}
         </VStack>
-        <ChevronRightIcon />
-      </HStack>
+        <Chevron />
+      </Body>
     </Container>
   )
 }
@@ -62,6 +61,27 @@ const Container = styled(UnstyledButton)`
   })}
   text-align: left;
   padding: 6px;
+  min-width: 0;
   ${borderRadius.pill};
   background-color: ${getColor('foregroundExtra')};
+
+  > svg,
+  > img {
+    flex-shrink: 0;
+  }
+`
+
+const Body = styled(HStack)`
+  min-width: 0;
+`
+
+/**
+ * The chevron is what tells the pill it opens a picker, so it must survive the
+ * squeeze. Left to shrink it collapsed to nothing on the swap form's From
+ * pill, where the amount field takes more of the row than the read-only To
+ * amount does. The pill itself keeps its automatic minimum for the same
+ * reason: below it the chevron sits outside the pill and reads as missing.
+ */
+const Chevron = styled(ChevronRightIcon)`
+  flex-shrink: 0;
 `

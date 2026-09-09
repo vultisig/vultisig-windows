@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
+import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
@@ -79,7 +80,8 @@ export const TxOverviewAmount = ({
             </HStack>
           ) : (
             <HStack alignItems="center" gap={6}>
-              <Text size={18}>{`${amount} ${value.ticker}`}</Text>
+              <Text size={18}>{amount}</Text>
+              <CoinTicker ticker={value.ticker} size={18} maxWidth={140} />
               <TokenVerificationBadge value={value} />
             </HStack>
           ))}
