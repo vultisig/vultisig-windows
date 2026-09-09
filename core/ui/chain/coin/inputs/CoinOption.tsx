@@ -6,7 +6,6 @@ import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { panel } from '@lib/ui/panel/Panel'
@@ -27,7 +26,7 @@ export const CoinOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
-  const { chain, ticker } = value
+  const { ticker } = value
   const coins = useCurrentVaultCoins()
   const vaultCoin = coins.find(c => areEqualCoins(c, value))
 
@@ -44,15 +43,8 @@ export const CoinOption = ({
       <CoinDetails alignItems="center" gap={12}>
         <CoinIcon coin={value} style={{ fontSize: 32 }} />
         <CoinLabel gap={8} alignItems="center">
-          <TickerSlot>
-            <CoinTicker ticker={ticker} size={13} weight="500" />
-          </TickerSlot>
+          <CoinTicker ticker={ticker} size={13} weight="500" />
           <TokenVerificationBadge value={value} />
-          <PillWrapper>
-            <Text color="shy" size={11} weight="500" cropped>
-              {chain}
-            </Text>
-          </PillWrapper>
         </CoinLabel>
       </CoinDetails>
       <BalanceColumn gap={4} justifyContent="center" alignItems="flex-end">
@@ -143,7 +135,7 @@ const Container = styled(HStack)`
 `
 
 /**
- * Icon, ticker and chain pill. It has to shrink, or a ticker that is a raw
+ * Icon and ticker. It has to shrink, or a ticker that is a raw
  * contract address makes the row wider than the modal — and because the list
  * around it scrolls vertically, that overflow becomes a horizontal scrollbar
  * rather than being clipped.
@@ -162,38 +154,9 @@ const CoinLabel = styled(HStack)`
 `
 
 /**
- * Reserves the ticker's width before the chain pill can claim it. `LUNC` next
- * to a `TerraClassic` pill was cropping to 25px, because how much the ticker
- * got depended on how long the chain happened to be called.
- */
-const TickerSlot = styled.div`
-  min-width: 0;
-
-  @media (max-width: 400px) {
-    flex-shrink: 0;
-    max-width: 72px;
-  }
-`
-
-const PillWrapper = styled.div`
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  padding: 8px 12px;
-  ${borderRadius.pill};
-  border: 1px solid ${getColor('foregroundExtra')};
-
-  @media (max-width: 400px) {
-    flex-shrink: 1;
-    min-width: 0;
-    padding: 4px 8px;
-  }
-`
-
-/**
- * Balance for the row. At the popup width it gives way to the ticker, which is
- * what tells two rows apart: capped, a four-letter ticker stays whole; without
- * a cap the ticker was down to two legible characters.
+ * Balance for the row. At the popup width it still yields to the ticker, which
+ * is what tells two rows apart, but with the chain pill gone there is more to
+ * share and the cap can be looser.
  */
 const BalanceColumn = styled(VStack)`
   min-width: 100px;
@@ -201,6 +164,6 @@ const BalanceColumn = styled(VStack)`
 
   @media (max-width: 400px) {
     min-width: 0;
-    max-width: 80px;
+    max-width: 120px;
   }
 `
