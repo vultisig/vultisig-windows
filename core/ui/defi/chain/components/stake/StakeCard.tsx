@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const Card = styled(Panel)`
-  padding: 20px;
+  padding: 16px;
   ${borderRadius.xl};
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
@@ -174,8 +174,8 @@ export const StakeCard = ({
       <VStack gap={16}>
         <SectionRow>
           <HStack gap={12} alignItems="center" fullWidth>
-            <CoinIcon coin={coin} style={{ fontSize: 44 }} />
-            <VStack gap={4}>
+            <CoinIcon coin={coin} style={{ fontSize: 48 }} />
+            <VStack gap={2}>
               <HStack gap={4} alignItems="center">
                 <Text size={14} color="shy">
                   {title}
@@ -199,7 +199,12 @@ export const StakeCard = ({
                 </>
               ) : (
                 <>
-                  <Text size={28} weight="700" color="contrast">
+                  <Text
+                    size={28}
+                    weight="500"
+                    letterSpacing={-0.64}
+                    color="contrast"
+                  >
                     {formatAmount(fromChainAmount(amount, coin.decimals), {
                       ticker: coin.ticker,
                     })}
