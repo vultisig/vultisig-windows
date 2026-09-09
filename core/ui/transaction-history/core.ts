@@ -51,6 +51,13 @@ export type SendTransactionData = {
   messageTypeUrl?: string
   /** Native system operation carried by an internal keysign marker. */
   operation?: 'tronWithdrawExpireUnfreeze'
+  /**
+   * Solana only: the block height past which the signed blockhash is dead,
+   * copied off the payload at broadcast. The status poll uses it to call an
+   * unseen signature expired instead of pending forever. Absent on records
+   * written before it was carried.
+   */
+  lastValidBlockHeight?: number
 }
 
 export type SwapTransactionData = {
@@ -86,6 +93,8 @@ export type SwapTransactionData = {
    * answer. Present means never ask again: an unanswered replay is a block no
    * node holds state for any more, and waiting only ages it further. */
   failureReasonCheckedAt?: string
+  /** Solana only; see the same field on a send. */
+  lastValidBlockHeight?: number
 }
 
 export type SendTransactionRecord = TransactionRecordBase & {

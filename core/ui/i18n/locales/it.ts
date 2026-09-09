@@ -2004,4 +2004,8 @@ export const it = {
   token_verification_scam: 'TRUFFA',
   token_verification_scam_hint:
     'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
+  solana_blockhash_expired:
+    'La transazione è scaduta prima di essere confermata.',
+  solana_blockhash_expired_description:
+    "I tuoi dispositivi hanno firmato la transazione, ma la rete Solana non l'ha confermata prima della scadenza del suo blockhash, quindi non è andata a buon fine. Firmala di nuovo per inviarla con un blockhash aggiornato.",
 }

@@ -1835,4 +1835,7 @@ export const zh = {
   token_verification_scam: '骗局',
   token_verification_scam_hint:
     '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
+  solana_blockhash_expired: '交易在确认前已过期',
+  solana_blockhash_expired_description:
+    '您的设备已对交易进行签名，但 Solana 网络在区块哈希过期前未确认该交易，因此交易未成功。请重新签名以使用新的区块哈希发送该交易。',
 }

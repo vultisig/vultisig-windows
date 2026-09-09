@@ -2000,4 +2000,7 @@ export const pt = {
   token_verification_scam: 'FRAUDE',
   token_verification_scam_hint:
     'Este token copia o nome de um token verificado, mas reside em um endereço de contrato diferente. É uma falsificação — não confie nele.',
+  solana_blockhash_expired: 'A transação expirou antes de ser confirmada.',
+  solana_blockhash_expired_description:
+    'Seus dispositivos assinaram a transação, mas a rede Solana não a confirmou antes que o hash do bloco expirasse, portanto, ela não foi processada. Assine-a novamente para enviá-la com um hash de bloco atualizado.',
 }

@@ -29,6 +29,7 @@ import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
@@ -115,7 +116,11 @@ export const KeysignTxOverview = ({
   })
   const toLabel = toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
   const txHash = useTxHash()
-  const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
+  const txStatusQuery = useTxStatusQuery({
+    chain,
+    hash: txHash,
+    lastValidBlockHeight: getKeysignLastValidBlockHeight(keysignPayload),
+  })
   const receipt = txStatusQuery.data?.receipt
 
   const blockExplorerUrl = getBlockExplorerUrl({

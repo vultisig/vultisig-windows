@@ -8,6 +8,7 @@ import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import type { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -106,7 +107,11 @@ export const handleSignTx: ToolHandler = async (input, context) => {
     const signingOutput = decodeSigningOutput(chain, compiled)
     const txHash = await getTxHash({ chain, tx: signingOutput })
 
-    await broadcastTx({ chain, tx: signingOutput })
+    await broadcastTx({
+      chain,
+      tx: signingOutput,
+      lastValidBlockHeight: getKeysignLastValidBlockHeight(keysignPayload),
+    })
 
     if (conversationId && emitEvent) {
       void pollTxReceipt({ chain, txHash, conversationId, label, emitEvent })

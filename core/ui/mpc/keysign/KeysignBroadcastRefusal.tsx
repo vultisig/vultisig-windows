@@ -10,6 +10,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
@@ -52,7 +53,11 @@ export const KeysignBroadcastRefusal = ({
   const chain = getKeysignChain(keysignPayload)
   const txHashes = error.txs.map(({ hash }) => hash)
   const mainTxHash = getLastItem(error.txs).hash
-  const { data: txStatus } = useTxStatusQuery({ chain, hash: mainTxHash })
+  const { data: txStatus } = useTxStatusQuery({
+    chain,
+    hash: mainTxHash,
+    lastValidBlockHeight: getKeysignLastValidBlockHeight(keysignPayload),
+  })
 
   // `isKnown` distinguishes "the node has indexed this hash" from "no record /
   // couldn't check": only an affirmative sighting proves another device

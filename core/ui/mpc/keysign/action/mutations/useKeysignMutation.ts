@@ -37,6 +37,7 @@ import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload
 import { KeysignResult } from '@vultisig/core-mpc/keysign/KeysignResult'
 import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
 import { generateSignature } from '@vultisig/core-mpc/tx/signature/generateSignature'
@@ -340,11 +341,21 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 txs,
               })
 
+              // Solana only: bounds the SDK's resend loop by the blockhash
+              // deadline this payload was built with, so an expired tx fails
+              // with a re-sign verdict instead of a generic rejection.
+              const lastValidBlockHeight =
+                getKeysignLastValidBlockHeight(payload)
+
               await chainPromises(
                 txs.map(
                   ({ data }) =>
                     () =>
-                      broadcastKeysignTx({ chain, tx: data })
+                      broadcastKeysignTx({
+                        chain,
+                        tx: data,
+                        lastValidBlockHeight,
+                      })
                 )
               )
             }

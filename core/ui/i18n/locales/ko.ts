@@ -1957,4 +1957,7 @@ export const ko = {
   token_verification_scam: '스캠',
   token_verification_scam_hint:
     '이 토큰은 검증된 토큰의 이름을 모방했지만, 다른 컨트랙트 주소에 존재합니다. 이는 위조 토큰이므로 신뢰하지 마십시오.',
+  solana_blockhash_expired: '거래가 확정되기 전에 만료되었습니다.',
+  solana_blockhash_expired_description:
+    '귀하의 기기에서 거래에 서명했지만, 솔라나 네트워크에서 블록 해시가 만료되기 전에 이를 확인하지 못하여 거래가 완료되지 않았습니다. 새 블록 해시로 다시 서명하여 전송하세요.',
 }
