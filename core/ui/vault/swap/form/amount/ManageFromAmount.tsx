@@ -8,7 +8,7 @@ import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
-import { useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { useFromAmount } from '../../state/fromAmount'
@@ -16,6 +16,10 @@ import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
+
+type ManageFromAmountProps = {
+  coinPill: ReactNode
+}
 
 const parseAmountInputValue = (value: string, decimals: number) => {
   if (value === '') {
@@ -56,7 +60,13 @@ export const getSuggestionDisplayValue = ({
   return cropped.includes('.') ? cropped.replace(/\.?0+$/, '') : cropped
 }
 
-export const ManageFromAmount = () => {
+/**
+ * The From side of the swap form: the coin pill, the amount field, and the
+ * balance suggestions. The pill arrives as an element because the suggestions
+ * sit on their own row beneath both, which they can only do from inside the
+ * component that owns the input's value.
+ */
+export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
   const [value, setValue] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
   const swapCoin = useCurrentVaultCoin(fromCoinKey)
@@ -117,36 +127,41 @@ export const ManageFromAmount = () => {
     : [0.25, 0.5, 0.75, 1]
 
   return (
-    <VStack gap={4} alignItems="flex-end">
-      <AmountContainer gap={6} alignItems="flex-end">
-        <PositionedAmountInput
-          type="text"
-          inputMode="decimal"
-          placeholder={'0'}
-          onWheel={event => event.currentTarget.blur()}
-          value={inputValue}
-          onValueChange={handleInputValueChange}
-          onPaste={event => {
-            event.preventDefault()
-            handleInputValueChange(event.clipboardData.getData('text'))
-          }}
-          data-testid="swap-from-amount-input"
-        />
-        {value !== null && (
-          <SwapFiatAmount
-            value={{
-              ...fromCoinKey,
-              amount: fromChainAmount(value, decimals),
-            }}
-          />
-        )}
-      </AmountContainer>
+    <VStack fullWidth gap={16}>
+      <HStack justifyContent="space-between" alignItems="flex-start" gap={8}>
+        {coinPill}
+        <VStack gap={4} alignItems="flex-end">
+          <AmountContainer gap={6} alignItems="flex-end">
+            <PositionedAmountInput
+              type="text"
+              inputMode="decimal"
+              placeholder={'0'}
+              onWheel={event => event.currentTarget.blur()}
+              value={inputValue}
+              onValueChange={handleInputValueChange}
+              onPaste={event => {
+                event.preventDefault()
+                handleInputValueChange(event.clipboardData.getData('text'))
+              }}
+              data-testid="swap-from-amount-input"
+            />
+            {value !== null && (
+              <SwapFiatAmount
+                value={{
+                  ...fromCoinKey,
+                  amount: fromChainAmount(value, decimals),
+                }}
+              />
+            )}
+          </AmountContainer>
+        </VStack>
+      </HStack>
       <SwapCoinBalanceDependant
         coin={swapCoin}
         pending={() => null}
         error={() => null}
         success={amount => (
-          <HStack alignItems="center" gap={4} wrap="wrap">
+          <SuggestionRow alignItems="center" gap={8}>
             {suggestions.map(suggestion => (
               <AmountSuggestion
                 onClick={() => {
@@ -166,12 +181,21 @@ export const ManageFromAmount = () => {
                 value={suggestion}
               />
             ))}
-          </HStack>
+          </SuggestionRow>
         )}
       />
     </VStack>
   )
 }
+
+/**
+ * The suggestions span the card rather than sharing the amount field's column,
+ * so four of them get an equal share of the full width instead of being
+ * squeezed into whatever the coin pill leaves.
+ */
+const SuggestionRow = styled(HStack)`
+  width: 100%;
+`
 
 const PositionedAmountInput = styled(TextInput)`
   text-align: right;
