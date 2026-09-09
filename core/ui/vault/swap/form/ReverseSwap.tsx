@@ -74,15 +74,10 @@ export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
   )
 }
 
-/**
- * The ring of page background around the button is what separates it from the
- * two cards it sits between. At 7px the cards read as touching it, so it takes
- * the 69px the design gives the whole control.
- */
 const Wrapper = styled(HStack)`
   background-color: ${getColor('background')};
   ${borderRadius.pill};
-  padding: 14px;
+  padding: 7px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -91,8 +86,7 @@ const Wrapper = styled(HStack)`
   &::before {
     content: '';
     position: absolute;
-    left: 0;
-    width: 100%;
+    width: 54px;
     top: 0;
     height: 19px;
     ${borderRadius.pill};
@@ -105,8 +99,7 @@ const Wrapper = styled(HStack)`
   &::after {
     content: '';
     position: absolute;
-    left: 0;
-    width: 100%;
+    width: 54px;
     bottom: 0px;
     height: 19px;
     ${borderRadius.pill};
