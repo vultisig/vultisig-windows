@@ -39,9 +39,24 @@ const Foreground = styled(VStack)`
   z-index: 1;
 `
 
-const GraphicWrapper = styled.div`
-  width: 100%;
-  max-width: 300px;
+/**
+ * Takes the room the heading and the option cards leave and scales the
+ * illustration into it. The SVG carries a 300x200 viewBox and no height of its
+ * own, so left alone it always drew 200px tall and the popup clipped it.
+ */
+const GraphicArea = styled.div`
+  align-items: center;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  min-height: 0;
+
+  > svg {
+    height: 100%;
+    max-height: 200px;
+    max-width: min(100%, 300px);
+    width: auto;
+  }
 `
 
 export const ReshareVaultIntroStep = ({
@@ -80,11 +95,9 @@ export const ReshareVaultIntroStep = ({
               {t('reshare_vault_subtitle')}
             </Text>
           </VStack>
-          <VStack flexGrow alignItems="center" justifyContent="center">
-            <GraphicWrapper>
-              <ReshareDevicesGraphic />
-            </GraphicWrapper>
-          </VStack>
+          <GraphicArea>
+            <ReshareDevicesGraphic />
+          </GraphicArea>
         </Foreground>
       </Wrapper>
     </ScreenLayout>
