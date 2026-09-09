@@ -16,11 +16,11 @@ export const Container = styled(VStack)<{
     size: 16,
     weight: 700,
   })}
-  padding: clamp(12px, 3.33vw, 16px);
+  padding: 16px;
 
   /*
-   * The reverse button floats over the seam between the two cards: it is 54px
-   * tall and centred in the 8px gap, so it reaches 23px up into the From card.
+   * The reverse button floats over the seam between the two cards: its ring is
+   * 48px and centred in the 8px gap, so it reaches 20px up into the From card.
    * Without room for it the suggestions run underneath it.
    */
   ${({ side }) =>
