@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-height: 0;
   position: relative;
 `
 
@@ -35,6 +36,7 @@ const GlowLayer = styled.div`
 
 const Foreground = styled(VStack)`
   flex: 1;
+  min-height: 0;
   position: relative;
   z-index: 1;
 `
