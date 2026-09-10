@@ -106,6 +106,8 @@ test.describe('Visual Regression - Key Screens', () => {
       page.getByRole('button', { name: /get started/i }).first()
     ).toBeVisible()
 
+    await page.evaluate(() => window.scrollTo(0, 0))
+
     await expect(page).toHaveScreenshot('03-setup-vault.png', {
       maxDiffPixels: 500,
       threshold: 0.3,

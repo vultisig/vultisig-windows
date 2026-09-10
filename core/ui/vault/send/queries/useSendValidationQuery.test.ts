@@ -31,8 +31,8 @@ vi.mock('../../../chain/providers/WalletCoreProvider', () => ({
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }))
-vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
-  isValidAddress: () => true,
+vi.mock('@vultisig/core-chain/utils/isValidRecipient', () => ({
+  isValidRecipient: () => true,
 }))
 
 type FundingQuery = {
