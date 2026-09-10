@@ -63,7 +63,6 @@ const Container = styled.div`
   gap: 16px;
   padding: 24px 20px;
   ${borderRadius.lg};
-  margin: 0 20px;
   height: 136px;
 
   @media ${mediaQuery.tabletDeviceAndUp} {

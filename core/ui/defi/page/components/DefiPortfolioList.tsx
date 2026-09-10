@@ -20,5 +20,4 @@ const Container = styled.div`
   ${vStack({
     gap: 16,
   })};
-  padding: 0 20px;
 `
