@@ -61,7 +61,6 @@ const Container = styled(UnstyledButton)`
   })}
   text-align: left;
   padding: 6px;
-  min-width: 0;
   ${borderRadius.pill};
   background-color: ${getColor('foregroundExtra')};
 
