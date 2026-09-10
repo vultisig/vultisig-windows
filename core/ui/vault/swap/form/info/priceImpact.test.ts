@@ -46,6 +46,10 @@ describe('getSwapPriceImpact', () => {
     expect(getSwapPriceImpact(nativeQuote(133))).toBeCloseTo(0.0133, 10)
   })
 
+  it('reads a general quote from the impact its provider published', () => {
+    expect(getSwapPriceImpact(generalQuote(-0.0039))).toBe(-0.0039)
+  })
+
   it('renders the row for a THORChain quote, which reports slippage in fees', () => {
     // The live ETH.ETH -> BTC.BTC quote: `fees.slippage_bps` 19 against a
     // `fees.total_bps` of 222. Reading the quote's top level — where the field
@@ -57,10 +61,6 @@ describe('getSwapPriceImpact', () => {
       percent: '-0.19%',
       level: 'good',
     })
-  })
-
-  it('reads a general quote from the impact its provider published', () => {
-    expect(getSwapPriceImpact(generalQuote(-0.0039))).toBe(-0.0039)
   })
 
   it('reports nothing when the provider publishes no impact', () => {

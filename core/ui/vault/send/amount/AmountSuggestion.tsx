@@ -9,11 +9,23 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+/**
+ * Fixed at 56px the four suggestions ask for more of the row than the popup
+ * has beside the coin pill, and Max wrapped onto a line of its own. Below the
+ * breakpoint they share whatever the row leaves them instead, which keeps them
+ * on one line without a width that has to be guessed.
+ */
 const Container = styled(UnstyledButton)<{
   isActive?: boolean
 }>`
   width: 56px;
   height: 30px;
+
+  @media (max-width: 400px) {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+  }
   ${borderRadius.sm};
   ${centerContent};
   background-color: ${({ isActive }) =>

@@ -16,6 +16,7 @@ export const CHAIN_UI_LABELS: Record<string, string> = {
   cronos: 'CronosChain',
   hyperliquid: 'Hyperliquid',
   sei: 'Sei',
+  robinhood: 'Robinhood',
   bitcoin: 'Bitcoin',
   litecoin: 'Litecoin',
   dogecoin: 'Dogecoin',

@@ -2,14 +2,14 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
+import { isValidRecipient } from '@vultisig/core-chain/utils/isValidRecipient'
 import { TFunction } from 'i18next'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { validateSendForm, validateSendReceiver } from './validateSendForm'
 
-vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
-  isValidAddress: vi.fn(),
+vi.mock('@vultisig/core-chain/utils/isValidRecipient', () => ({
+  isValidRecipient: vi.fn(),
 }))
 
 vi.mock(
@@ -52,7 +52,7 @@ const validSendForm = (coin: Coin) => ({
 
 describe('validateSendForm', () => {
   beforeEach(() => {
-    vi.mocked(isValidAddress).mockReturnValue(true)
+    vi.mocked(isValidRecipient).mockReturnValue(true)
     vi.mocked(validateUtxoRequirements).mockReturnValue(undefined)
   })
 
@@ -168,8 +168,8 @@ describe('validateSendForm', () => {
 
 describe('validateSendReceiver', () => {
   beforeEach(() => {
-    vi.mocked(isValidAddress).mockClear()
-    vi.mocked(isValidAddress).mockReturnValue(true)
+    vi.mocked(isValidRecipient).mockClear()
+    vi.mocked(isValidRecipient).mockReturnValue(true)
   })
 
   it('blocks Tron self-sends before address validation', () => {
@@ -182,7 +182,7 @@ describe('validateSendReceiver', () => {
         t,
       })
     ).toBe('send_receiver_address_same_as_sender')
-    expect(isValidAddress).not.toHaveBeenCalled()
+    expect(isValidRecipient).not.toHaveBeenCalled()
   })
 
   it('requires a recipient before format validation', () => {
@@ -195,11 +195,11 @@ describe('validateSendReceiver', () => {
         t,
       })
     ).toBe('enter_address')
-    expect(isValidAddress).not.toHaveBeenCalled()
+    expect(isValidRecipient).not.toHaveBeenCalled()
   })
 
   it('appends the chain-specific format hint when the address is invalid', () => {
-    vi.mocked(isValidAddress).mockReturnValue(false)
+    vi.mocked(isValidRecipient).mockReturnValue(false)
 
     expect(
       validateSendReceiver({
@@ -213,8 +213,28 @@ describe('validateSendReceiver', () => {
     ).toBe('send_invalid_receiver_address. send_receiver_format_hint_evm')
   })
 
+  it('delegates Solana wallet-recipient semantics to the SDK validator', () => {
+    const receiverAddress = 'off-curve-solana-account'
+    vi.mocked(isValidRecipient).mockReturnValue(false)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress,
+        senderAddress: 'sender',
+        chain: Chain.Solana,
+        walletCore,
+        t,
+      })
+    ).toContain('send_invalid_receiver_address')
+    expect(isValidRecipient).toHaveBeenCalledWith({
+      address: receiverAddress,
+      chain: Chain.Solana,
+      walletCore,
+    })
+  })
+
   it('surfaces the sender bech32 prefix in the Cosmos hint', () => {
-    vi.mocked(isValidAddress).mockReturnValue(false)
+    vi.mocked(isValidRecipient).mockReturnValue(false)
 
     const cosmosT = ((
       key: string,
@@ -241,7 +261,7 @@ describe('validateSendReceiver', () => {
   })
 
   it('resolves a format hint for every acceptance-criteria chain family', () => {
-    vi.mocked(isValidAddress).mockReturnValue(false)
+    vi.mocked(isValidRecipient).mockReturnValue(false)
 
     const chains = [
       Chain.Ethereum,

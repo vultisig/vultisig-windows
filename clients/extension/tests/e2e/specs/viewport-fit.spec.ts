@@ -17,7 +17,7 @@ import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures/extension-loader'
 
 const viewports = [
-  { width: 480, height: 600 }, // popup baseline
+  { width: 480, height: 600 }, // wide side panel
   { width: 480, height: 500 }, // short side panel
   { width: 360, height: 500 }, // minimal side panel
 ]

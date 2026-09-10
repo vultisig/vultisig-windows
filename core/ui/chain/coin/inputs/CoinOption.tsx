@@ -1,11 +1,11 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
+import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { panel } from '@lib/ui/panel/Panel'
@@ -26,7 +26,7 @@ export const CoinOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
-  const { chain, ticker } = value
+  const { ticker } = value
   const coins = useCurrentVaultCoins()
   const vaultCoin = coins.find(c => areEqualCoins(c, value))
 
@@ -40,35 +40,20 @@ export const CoinOption = ({
       alignItems="center"
       data-testid={`coin-option-${ticker}`}
     >
-      <HStack alignItems="center" gap={12}>
+      <CoinDetails alignItems="center" gap={12}>
         <CoinIcon coin={value} style={{ fontSize: 32 }} />
-        <HStack gap={8} alignItems="center">
-          <Text color="contrast" size={13} weight="500">
-            {ticker}
-          </Text>
+        <CoinLabel gap={8} alignItems="center">
+          <CoinTicker ticker={ticker} size={13} weight="500" />
           <TokenVerificationBadge value={value} />
-          <PillWrapper>
-            <Text color="shy" size={11} weight="500">
-              {chain}
-            </Text>
-          </PillWrapper>
-        </HStack>
-      </HStack>
-      <VStack
-        gap={4}
-        justifyContent="center"
-        alignItems="flex-end"
-        style={{
-          minWidth: 100,
-          height: 50,
-        }}
-      >
+        </CoinLabel>
+      </CoinDetails>
+      <BalanceColumn gap={4} justifyContent="center" alignItems="flex-end">
         {vaultCoin ? (
           <VaultCoinBalance value={vaultCoin} />
         ) : (
           <CoinOptionFiatValue value={0} />
         )}
-      </VStack>
+      </BalanceColumn>
     </Container>
   )
 }
@@ -103,6 +88,7 @@ const VaultCoinBalance = ({ value }: ValueProp<Coin>) => {
               size={12}
               color="contrast"
               weight={500}
+              cropped
             >
               {formatAmount(fromChainAmount(balance, decimals), { ticker })}
             </Text>
@@ -136,7 +122,7 @@ const Container = styled(HStack)`
     position: absolute;
     left: 50%;
     bottom: 0;
-    width: 320px;
+    width: min(320px, 100%);
     height: 1px;
     background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
     transform: translateX(-50%);
@@ -148,10 +134,36 @@ const Container = styled(HStack)`
   }
 `
 
-const PillWrapper = styled.div`
-  display: grid;
-  place-items: center;
-  padding: 8px 12px;
-  ${borderRadius.pill};
-  border: 1px solid ${getColor('foregroundExtra')};
+/**
+ * Icon and ticker. It has to shrink, or a ticker that is a raw
+ * contract address makes the row wider than the modal — and because the list
+ * around it scrolls vertically, that overflow becomes a horizontal scrollbar
+ * rather than being clipped.
+ */
+const CoinDetails = styled(HStack)`
+  min-width: 0;
+
+  > svg,
+  > img {
+    flex-shrink: 0;
+  }
+`
+
+const CoinLabel = styled(HStack)`
+  min-width: 0;
+`
+
+/**
+ * Balance for the row. At the popup width it still yields to the ticker, which
+ * is what tells two rows apart, but with the chain pill gone there is more to
+ * share and the cap can be looser.
+ */
+const BalanceColumn = styled(VStack)`
+  min-width: 100px;
+  height: 50px;
+
+  @media (max-width: 400px) {
+    min-width: 0;
+    max-width: 120px;
+  }
 `
