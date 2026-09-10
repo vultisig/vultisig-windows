@@ -4,6 +4,7 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import {
@@ -58,9 +59,18 @@ type MergeVaultsWithCoinsInput = {
   coins: Record<string, AccountCoin[]>
 }
 
-const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
+const supportedChains = new Set<string>(Object.values(Chain))
+
+export const mergeVaultsWithCoins = ({
+  vaults,
+  coins,
+}: MergeVaultsWithCoinsInput) => {
   return sortEntitiesWithOrder(vaults).map(vault => {
-    const vaultCoins = coins[getVaultId(vault)] ?? []
+    // Keep retired-chain records in storage; only supported chains enter the
+    // active wallet model and its SDK resolver tables.
+    const vaultCoins = (coins[getVaultId(vault)] ?? []).filter(coin =>
+      supportedChains.has(coin.chain)
+    )
     const vaultChains = vaultCoins.filter(isFeeCoin).map(coin => coin.chain)
 
     return {

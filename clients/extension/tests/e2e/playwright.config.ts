@@ -151,6 +151,7 @@ export default defineConfig({
         '**/ton-w5-toggle.spec.ts',
         '**/undecryptable-vault.spec.ts',
         '**/swap-custom-token-empty-state.spec.ts',
+        '**/folder-vault-rows.spec.ts',
       ],
       use: {
         launchOptions: {

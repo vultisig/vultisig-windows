@@ -2,6 +2,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getKnownToken } from '@vultisig/core-chain/coin/knownTokens/utils'
 import { parseUnits } from 'viem'
 
 import { getChainFromString } from '../../utils/getChainFromString'
@@ -56,7 +57,7 @@ function makeAssetInfoFromToken(
 ): AssetInfo | null {
   const tokens = knownTokensIndex[chain]
   if (!tokens) return null
-  const token = tokens[tokenAddress.toLowerCase()]
+  const token = getKnownToken({ chain, id: tokenAddress })
   if (!token) return null
   return {
     chain,
@@ -158,7 +159,7 @@ export function resolveTickerByChainAndToken(
 
   const tokens = knownTokensIndex[resolved]
   if (tokens) {
-    const token = tokens[tokenAddress.toLowerCase()]
+    const token = getKnownToken({ chain: resolved, id: tokenAddress })
     if (token) return token.ticker
   }
 
@@ -181,7 +182,7 @@ function resolveDecimalsByChainAndToken(
 
   const tokens = knownTokensIndex[resolved]
   if (tokens) {
-    const token = tokens[tokenAddress.toLowerCase()]
+    const token = getKnownToken({ chain: resolved, id: tokenAddress })
     if (token) return token.decimals
   }
 

@@ -11,7 +11,8 @@ const averageThreshold = -0.03
 
 export type PriceImpactLevel = 'good' | 'average' | 'high'
 
-type PriceImpactDisplay = {
+/** A price impact rendered for display: signed percentage plus its band. */
+export type PriceImpactDisplay = {
   percent: string
   level: PriceImpactLevel
 }
