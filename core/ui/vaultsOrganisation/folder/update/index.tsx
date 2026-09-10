@@ -7,7 +7,6 @@ import {
 import { useFolderlessVaults, useFolderVaults } from '@core/ui/storage/vaults'
 import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { VaultSigners } from '@core/ui/vault/signers'
 import {
   LeadingIconBadge,
   VaultListRow,
@@ -156,7 +155,6 @@ const AddVaultsToFolder = ({ totals, isTotalsPending }: AddVaultsProps) => {
                   ? formatFiatAmount(value)
                   : undefined
               }
-              meta={<VaultSigners vault={vault} />}
               trailing={
                 <SwitchWrapper onClick={event => event.stopPropagation()}>
                   <Switch checked={false} onChange={handleToggle} />
@@ -269,7 +267,6 @@ const ManageFolderVaults = ({
                   ? formatFiatAmount(value)
                   : undefined
               }
-              meta={<VaultSigners vault={item} />}
               trailing={
                 <SwitchWrapper onClick={event => event.stopPropagation()}>
                   <Switch checked onChange={handleRemove} />

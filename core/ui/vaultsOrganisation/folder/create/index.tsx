@@ -6,7 +6,6 @@ import {
 } from '@core/ui/storage/vaultFolders'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
-import { VaultSigners } from '@core/ui/vault/signers'
 import {
   LeadingIconBadge,
   VaultListRow,
@@ -151,7 +150,6 @@ export const CreateVaultFolderPage = () => {
                         ? formatFiatAmount(value)
                         : undefined
                     }
-                    meta={<VaultSigners vault={vault} />}
                     trailing={
                       <SwitchWrapper
                         onClick={event => event.stopPropagation()}
