@@ -128,3 +128,6 @@ google-credentials.json
 # Vultisig ops local AI config
 .claude/
 scripts/release.sh
+
+# Build artifact, occasionally produced by the extension packaging step
+clients/extension/dist.zip

@@ -116,7 +116,7 @@ export default defineConfig({
   use: {
     // Chrome extensions require headed Chromium
     headless: false,
-    viewport: { width: 480, height: 600 }, // Extension popup dimensions
+    viewport: { width: 360, height: 600 }, // Extension popup dimensions
     actionTimeout: 15_000,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',

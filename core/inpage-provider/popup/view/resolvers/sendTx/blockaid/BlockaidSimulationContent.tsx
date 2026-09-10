@@ -345,7 +345,10 @@ const BlockaidEvmSimulationContent = ({
       }}
       error={() => fallback}
       pending={() => fallback}
-      inactive={() => null}
+      // Blockaid does not simulate every EVM chain (e.g. CronosChain), so the
+      // simulation query never activates there. Fall back to calldata decoding
+      // instead of hiding the transaction details.
+      inactive={() => fallback}
     />
   )
 }

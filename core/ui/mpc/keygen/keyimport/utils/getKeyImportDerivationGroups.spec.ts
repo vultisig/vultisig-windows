@@ -11,26 +11,14 @@ import { getKeyImportDerivationGroups } from './getKeyImportDerivationGroups'
 
 describe('getKeyImportDerivationGroups', () => {
   it('groups all EVM chains into a single derivation group', () => {
-    const chains: Chain[] = [
-      EvmChain.Ethereum,
-      EvmChain.Arbitrum,
-      EvmChain.BSC,
-      EvmChain.Polygon,
-      EvmChain.Base,
-      EvmChain.Optimism,
-      EvmChain.Avalanche,
-      EvmChain.CronosChain,
-      EvmChain.Blast,
-      EvmChain.Zksync,
-      EvmChain.Mantle,
-      EvmChain.Hyperliquid,
-      EvmChain.Sei,
-    ]
+    // Derived from the enum so a newly added EVM chain is covered without
+    // anyone updating a list here; Robinhood was the one that got missed.
+    const chains: Chain[] = Object.values(EvmChain)
 
     const groups = getKeyImportDerivationGroups(chains)
 
     expect(groups).toHaveLength(1)
-    expect(groups[0].representativeChain).toBe(EvmChain.Ethereum)
+    expect(groups[0].representativeChain).toBe(chains[0])
     expect(groups[0].chains).toEqual(chains)
   })
 
