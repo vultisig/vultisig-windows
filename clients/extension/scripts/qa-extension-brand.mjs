@@ -369,7 +369,7 @@ const stationRawVultisigLocalePolicy = {
         ],
       },
       {
-        filePath: 'core/ui/vault/swap/form/info/SwapDiscountInfo.tsx',
+        filePath: 'core/ui/vault/swap/affiliate/affiliateBps.ts',
         patterns: [
           "currentProductBrand === 'station'",
           "discounts.filter(discount => !('vult' in discount))",
