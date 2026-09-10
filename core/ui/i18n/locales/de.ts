@@ -2013,4 +2013,7 @@ export const de = {
   token_verification_scam: 'BETRUG',
   token_verification_scam_hint:
     'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
+  no_tokens_selected: 'Keine Token ausgewählt',
+  no_tokens_selected_description:
+    'Sie haben alle Token deaktiviert. Stellen Sie sicher, dass das gesuchte Token aktiviert ist.',
 }

@@ -1957,4 +1957,7 @@ export const ko = {
   token_verification_scam: '스캠',
   token_verification_scam_hint:
     '이 토큰은 검증된 토큰의 이름을 모방했지만, 다른 컨트랙트 주소에 존재합니다. 이는 위조 토큰이므로 신뢰하지 마십시오.',
+  no_tokens_selected: '선택된 토큰 없음',
+  no_tokens_selected_description:
+    '모든 토큰이 비활성화되었습니다. 찾으시는 토큰이 활성화되어 있는지 확인하세요.',
 }

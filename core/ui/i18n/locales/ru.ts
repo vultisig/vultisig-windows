@@ -1975,4 +1975,7 @@ export const ru = {
   token_verification_scam: 'МОШЕННИЧЕСТВО',
   token_verification_scam_hint:
     'Этот токен копирует имя проверенного токена, но находится по другому адресу контракта. Это подделка — не доверяйте ей.',
+  no_tokens_selected: 'Токены не выбраны',
+  no_tokens_selected_description:
+    'Вы отключили все токены. Убедитесь, что нужный вам токен включен.',
 }

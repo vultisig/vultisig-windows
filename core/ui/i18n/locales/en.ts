@@ -704,6 +704,9 @@ export const en = {
   no_token_found: 'Token not found',
   no_transactions_yet: 'No transactions yet',
   no_tokens_found: 'No tokens found',
+  no_tokens_selected: 'No tokens selected',
+  no_tokens_selected_description:
+    "You've disabled all tokens. Make sure that the token you're looking for is enabled.",
   no_positions_found: 'No positions found',
   no_positions_selected: 'No positions selected',
   no_positions_selected_description:

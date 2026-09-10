@@ -1998,4 +1998,7 @@ export const es = {
   token_verification_scam: 'ESTAFA',
   token_verification_scam_hint:
     'Este token copia el nombre de un token verificado, pero reside en una dirección de contrato diferente. Es falso; no confíe en él.',
+  no_tokens_selected: 'No se han seleccionado tokens',
+  no_tokens_selected_description:
+    'Has desactivado todos los tokens. Asegúrate de que el token que buscas esté activado.',
 }
