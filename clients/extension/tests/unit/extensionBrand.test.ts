@@ -16,6 +16,7 @@ import {
 
 const baseManifest: ExtensionManifest = {
   name: 'Vultisig: Seedless Crypto Wallet',
+  short_name: 'Vultisig',
   description:
     'Open-source MPC crypto wallet. Multisig security, no seed phrase. Connect to DeFi apps on Bitcoin, Ethereum, Solana and 30+ chains.',
   author: {
@@ -70,6 +71,7 @@ describe('extension brand config', () => {
     )
 
     expect(manifest.name).toBe('Vultisig: Seedless Crypto Wallet')
+    expect(manifest.short_name).toBe('Vultisig')
     expect(manifest.description).toContain('MPC crypto wallet')
     expect(manifest.author?.name).toBe('Vultisig')
     expect(manifest.icons?.['128']).toBe('icon128.png')
@@ -82,6 +84,7 @@ describe('extension brand config', () => {
     )
 
     expect(manifest.name).toBe('Station Wallet')
+    expect(manifest.short_name).toBe('Station')
     expect(manifest.description).toBe(
       'Station is a web application to interact with Terra Core and other supported chains.'
     )

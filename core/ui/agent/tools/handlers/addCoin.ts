@@ -1,6 +1,7 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getKnownToken } from '@vultisig/core-chain/coin/knownTokens/utils'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 
 import { getChainFromString } from '../../utils/getChainFromString'
@@ -64,7 +65,7 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
   } else if (contractAddress) {
     const tokens = knownTokensIndex[chain]
     if (tokens) {
-      const known = tokens[contractAddress.toLowerCase()]
+      const known = getKnownToken({ chain, id: contractAddress })
       if (known) {
         decimals = known.decimals
         logo = known.logo

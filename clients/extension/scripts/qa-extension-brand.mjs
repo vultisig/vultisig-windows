@@ -337,29 +337,17 @@ const disallowedStationAssetPattern =
   /install-app-logo\.png|vultisig-logo|vultisig-icon/i
 
 const stationRawVultisigLocalePolicy = {
-  follow_banner_button: {
+  follow_banner_caption: {
     exposure: 'vultisigOnly',
     reason:
       'The X follow banner points to Vultisig social accounts and is only registered in Vultisig builds.',
     guard: {
-      filePath: 'core/ui/vault/page/components/VaultOverview.tsx',
+      filePath: 'core/ui/vault/page/banners/useHomePromoBanners.tsx',
       patterns: [
-        "currentProductBrand === 'vultisig'",
+        "const isVultisigBrand = currentProductBrand === 'vultisig'",
+        '...(isVultisigBrand',
         "id: 'followOnX'",
-        '<FollowOnXBanner',
-      ],
-    },
-  },
-  follow_banner_subtitle: {
-    exposure: 'vultisigOnly',
-    reason:
-      'The X follow banner points to Vultisig social accounts and is only registered in Vultisig builds.',
-    guard: {
-      filePath: 'core/ui/vault/page/components/VaultOverview.tsx',
-      patterns: [
-        "currentProductBrand === 'vultisig'",
-        "id: 'followOnX'",
-        '<FollowOnXBanner',
+        "caption: t('follow_banner_caption')",
       ],
     },
   },
@@ -381,7 +369,7 @@ const stationRawVultisigLocalePolicy = {
         ],
       },
       {
-        filePath: 'core/ui/vault/swap/form/info/SwapDiscountInfo.tsx',
+        filePath: 'core/ui/vault/swap/affiliate/affiliateBps.ts',
         patterns: [
           "currentProductBrand === 'station'",
           "discounts.filter(discount => !('vult' in discount))",
@@ -791,6 +779,8 @@ const shouldAuditSourceFile = filePath => {
     !relativeFilePath.includes('/locales/') &&
     !relativeFilePath.includes('/coverage/') &&
     !relativeFilePath.includes('/tests/') &&
+    !relativeFilePath.endsWith('.stories.tsx') &&
+    !relativeFilePath.endsWith('.stories.ts') &&
     !relativeFilePath.endsWith('.test.ts') &&
     !relativeFilePath.endsWith('.test.tsx') &&
     !relativeFilePath.endsWith('.spec.ts') &&

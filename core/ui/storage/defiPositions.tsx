@@ -7,13 +7,15 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  getThorchainLpPool,
+  thorchainLpChainCode,
+} from '@vultisig/core-chain/chains/cosmos/thor/thorchainLp'
 import { kaminoVaultRegistry } from '@vultisig/core-chain/chains/solana/kamino/registry'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import {
-  knownTokens,
-  knownTokensIndex,
-} from '@vultisig/core-chain/coin/knownTokens'
+import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
+import { getKnownToken } from '@vultisig/core-chain/coin/knownTokens/utils'
 import { findByTicker } from '@vultisig/core-chain/coin/utils/findByTicker'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useMemo } from 'react'
@@ -280,7 +282,7 @@ const parsePoolAsset = (poolAsset: string): ParsedPoolAsset | undefined => {
   return {
     chain,
     ticker: rawTicker.toUpperCase(),
-    tokenId: tokenId?.toLowerCase(),
+    tokenId,
     poolAsset,
   }
 }
@@ -289,9 +291,17 @@ const buildCoinFromPoolAsset = ({
   chain,
   ticker,
   tokenId,
+  poolAsset,
 }: ParsedPoolAsset): Coin => {
   const knownTokenById =
-    tokenId !== undefined ? knownTokensIndex[chain]?.[tokenId] : undefined
+    tokenId !== undefined
+      ? (getKnownToken({ chain, id: tokenId }) ??
+        (thorchainLpChainCode[chain]
+          ? knownTokens[chain]?.find(
+              coin => getThorchainLpPool({ ...coin, ticker }) === poolAsset
+            )
+          : undefined))
+      : undefined
   const knownTokenByTicker = findByTicker({
     coins: knownTokens[chain] ?? [],
     ticker,
@@ -353,7 +363,7 @@ type MapLpPoolsToPositionsInput = {
   pools: MidgardPool[]
 }
 
-const mapLpPoolsToPositions = ({
+export const mapLpPoolsToPositions = ({
   chain,
   pools,
 }: MapLpPoolsToPositionsInput): DefiPosition[] => {
