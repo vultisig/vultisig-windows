@@ -20,9 +20,9 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
-import { FolderPlusIcon } from '@lib/ui/icons/FolderPlusIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PenWritingFilledIcon } from '@lib/ui/icons/PenWritingFilledIcon'
+import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -213,7 +213,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                 onClick={handleCreateVault}
                 aria-label={t('add_new_vault')}
               >
-                <FolderPlusIcon />
+                <PlusIcon />
               </IconButton>
             </>
           }
