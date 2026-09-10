@@ -74,10 +74,14 @@ export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
   )
 }
 
+/**
+ * The design's control is a 32px button inside a 48px ring of page background,
+ * which is what separates it from the two cards it floats between.
+ */
 const Wrapper = styled(HStack)`
   background-color: ${getColor('background')};
   ${borderRadius.pill};
-  padding: 7px;
+  padding: 8px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -86,7 +90,7 @@ const Wrapper = styled(HStack)`
   &::before {
     content: '';
     position: absolute;
-    width: 54px;
+    width: 48px;
     top: 0;
     height: 19px;
     ${borderRadius.pill};
@@ -99,7 +103,7 @@ const Wrapper = styled(HStack)`
   &::after {
     content: '';
     position: absolute;
-    width: 54px;
+    width: 48px;
     bottom: 0px;
     height: 19px;
     ${borderRadius.pill};
@@ -111,7 +115,7 @@ const Wrapper = styled(HStack)`
 `
 
 const Button = styled(UnstyledButton)<{ $hasError: boolean }>`
-  ${sameDimensions(40)};
+  ${sameDimensions(32)};
   background: ${({ $hasError }) =>
     $hasError ? getColor('danger') : getColor('buttonPrimary')};
   ${({ $hasError }) => ($hasError ? borderRadius.lg : borderRadius.pill)};

@@ -109,6 +109,14 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  /*
+   * Without this the automatic minimum keeps the column at its content's
+   * height, so a child that could scale into the space available — an
+   * illustration, say — has no smaller size to take and the screen scrolls
+   * instead. Content that genuinely does not fit still overflows and scrolls.
+   */
+  min-height: 0;
 `
 
 const Footer = styled.footer`

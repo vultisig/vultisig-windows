@@ -25,7 +25,6 @@ const Container = styled(UnstyledButton)<{
     flex: 1 1 0;
     width: auto;
     min-width: 0;
-    max-width: 56px;
   }
   ${borderRadius.sm};
   ${centerContent};
