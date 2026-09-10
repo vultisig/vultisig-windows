@@ -9,6 +9,8 @@ import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysig
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { parseNonNegativeBigInt } from '@vultisig/lib-utils/bigint/parseNonNegativeBigInt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 const chainRegistry = new Set<string>(Object.values(Chain))
@@ -21,7 +23,11 @@ const toSwapFee = ({
   swapFeeTokenId,
   swapFeeDecimals,
 }: KeysignSwapFeeFields): SwapFee | undefined => {
-  if (!swapFee || swapFee === '0') return undefined
+  // `swap_fee` is a protobuf string written by the initiating device, which
+  // may run another platform's code. A value that is not a base-unit integer
+  // yields no row rather than throwing out of the co-signer's render.
+  const amount = attempt(() => parseNonNegativeBigInt(swapFee))
+  if ('error' in amount || amount.data === 0n) return undefined
   if (!swapFeeChain || swapFeeDecimals == null) return undefined
   // `swap_fee_chain` is a protobuf string. Validate it against the known
   // `Chain` set at this single routing boundary so unknown senders don't
@@ -35,7 +41,7 @@ const toSwapFee = ({
     // `coinKeyToString` from `"Ethereum"` to `"Ethereum:"` and breaks the
     // vault-coin lookup, zeroing out the fiat value.
     ...(swapFeeTokenId ? { id: swapFeeTokenId } : {}),
-    amount: BigInt(swapFee),
+    amount: amount.data,
     decimals: swapFeeDecimals,
   }
 }

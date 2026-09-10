@@ -65,6 +65,36 @@ describe('getSwapFeeFromPayload', () => {
     expect(getSwapFeeFromPayload(swapkitPayload({}))).toBeUndefined()
   })
 
+  it('reports no fee when the payload states a zero fee', () => {
+    expect(
+      getSwapFeeFromPayload(
+        swapkitPayload({
+          swapFee: '0',
+          swapFeeChain: Chain.Zcash,
+          swapFeeDecimals: 8,
+        })
+      )
+    ).toBeUndefined()
+  })
+
+  it.each(['1.5', '-1', '1e5', ' 250000', 'invalid'])(
+    'reports no fee instead of throwing when the amount is %j',
+    swapFee => {
+      // The amount is written by the initiating device, which may run
+      // another platform's code. The co-signer's verify screen renders from
+      // it, so a malformed value must not throw out of that render.
+      expect(
+        getSwapFeeFromPayload(
+          swapkitPayload({
+            swapFee,
+            swapFeeChain: Chain.Zcash,
+            swapFeeDecimals: 8,
+          })
+        )
+      ).toBeUndefined()
+    }
+  )
+
   it('reports no fee when the coin context is missing', () => {
     // A sender that predates the coin context leaves the chain empty. Pricing
     // the amount against a guessed coin is worse than showing no row.
