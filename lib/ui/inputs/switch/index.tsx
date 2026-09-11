@@ -126,11 +126,18 @@ export const Switch: FC<SwitchProps> = ({
   return (
     <StyledContainer>
       <StyledSwitch
+        aria-busy={loading}
+        aria-checked={checked}
+        // The switch is a div, so the `disabled` prop only drives styling and the
+        // handlers' own guard; assistive technology needs to be told separately.
+        // It stays in the tab order on purpose, so the control is still findable.
+        aria-disabled={disabled || loading}
         checked={checked}
         disabled={disabled || loading}
         hoverable={!!onChange}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
+        role="switch"
         tabIndex={0}
       >
         <StyledSlider checked={checked}>

@@ -1835,4 +1835,7 @@ export const zh = {
   token_verification_scam: '骗局',
   token_verification_scam_hint:
     '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
+  enable_ton_w5_wallet: '使用TON W5 钱包',
+  enable_ton_w5_wallet_description:
+    '生成此金库的TON地址时，请使用 W5 (v5r1) 合约代替 V4R2 合约。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有各自的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',
 }
