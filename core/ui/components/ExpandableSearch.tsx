@@ -12,7 +12,13 @@ import {
 import { SearchField } from '@lib/ui/search/SearchField'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useDeferredValue, useEffect, useState, useTransition } from 'react'
+import {
+  useDeferredValue,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
@@ -50,11 +56,17 @@ export const ExpandableSearch = ({
   const isExtension = client === 'extension'
   const usesStationSearch = isExtension || iconStyle === 'station'
 
+  const lastEmittedQueryRef = useRef(query)
+
+  // Emitted queries commit in a transition, so their echo can land after the
+  // user has typed further; only queries changed elsewhere sync into the field.
   useEffect(() => {
+    if (query === lastEmittedQueryRef.current) return
     setInputValue(query)
   }, [query])
 
   useEffect(() => {
+    lastEmittedQueryRef.current = deferredValue
     startTransition(() => onQueryChange(deferredValue))
   }, [deferredValue, onQueryChange, startTransition])
 
@@ -63,16 +75,16 @@ export const ExpandableSearch = ({
     onOpenChange?.(true)
   }
 
-  const handleClose = () => {
-    setInputValue('')
-    startTransition(() => onQueryChange(''))
-    unset()
-    onOpenChange?.(false)
-  }
-
   const handleClear = () => {
     setInputValue('')
+    lastEmittedQueryRef.current = ''
     startTransition(() => onQueryChange(''))
+  }
+
+  const handleClose = () => {
+    handleClear()
+    unset()
+    onOpenChange?.(false)
   }
 
   return (
@@ -104,6 +116,7 @@ export const ExpandableSearch = ({
                 />
                 <CloseButton
                   $usesStationSearch={usesStationSearch}
+                  aria-label={t(usesStationSearch ? 'clear' : 'close')}
                   onClick={usesStationSearch ? handleClear : handleClose}
                 >
                   {usesStationSearch ? (
