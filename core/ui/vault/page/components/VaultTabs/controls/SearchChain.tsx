@@ -83,10 +83,14 @@ export const SearchChain = ({
             transition={{ duration: 0.1 }}
           >
             <SearchRow $usesStationSearch={usesStationSearch}>
-              <SearchFieldWrapper fullWidth={isFullWidth}>
+              <SearchFieldWrapper
+                fullWidth={isFullWidth}
+                $usesStationSearch={usesStationSearch}
+              >
                 <SearchField
                   value={inputValue}
                   onSearch={nextValue => setInputValue(nextValue)}
+                  variant={usesStationSearch ? 'pill' : 'default'}
                 />
                 <CloseButton
                   $usesStationSearch={usesStationSearch}
@@ -135,7 +139,10 @@ const SearchRow = styled.div<{ $usesStationSearch: boolean }>`
   width: 100%;
 `
 
-const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
+const SearchFieldWrapper = styled.div<{
+  fullWidth: boolean
+  $usesStationSearch: boolean
+}>`
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -144,9 +151,16 @@ const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 
   & input {
-    font-size: 12px;
     color: ${getColor('contrast')};
   }
+
+  ${({ $usesStationSearch }) =>
+    !$usesStationSearch &&
+    css`
+      & input {
+        font-size: 12px;
+      }
+    `}
 `
 
 const CloseButton = styled(UnstyledButton)<{ $usesStationSearch: boolean }>`
