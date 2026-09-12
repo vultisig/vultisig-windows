@@ -40,10 +40,9 @@ export const MultiCharacterInput = ({
   ...rest
 }: MultiCharacterInputProps) => {
   const { t } = useTranslation()
-  const { digits, handleChange, handleKeyDown, handlePaste, getRefCallback } =
-    useMultiCharacterInput({ length, value, onChange })
-
   const isDisabled = validation === 'loading'
+  const { digits, handleChange, handleKeyDown, handlePaste, getRefCallback } =
+    useMultiCharacterInput({ length, value, onChange, isDisabled })
 
   const derivedValidationMessages = {
     valid: validationMessages.valid ?? t('digit_input_success_validation'),
