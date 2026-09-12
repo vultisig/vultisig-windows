@@ -15,6 +15,12 @@ type VaultChainTokensEmptyStateProps = {
   isSearchResult?: boolean
 }
 
+/**
+ * Card shown on the chain page's Tokens tab when the list has nothing to
+ * render. With `isSearchResult` the copy says the search matched nothing;
+ * otherwise it says every token is disabled. Either way it points the user at
+ * the manage-tokens screen for the current chain.
+ */
 export const VaultChainTokensEmptyState = ({
   isSearchResult = false,
 }: VaultChainTokensEmptyStateProps) => {
