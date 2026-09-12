@@ -1,7 +1,7 @@
 /**
  * Guards the chain page's Tokens tab empty state (#4908). Searching for a
  * ticker that no enabled token matches used to leave the area under the tabs
- * header blank; it now renders the "No tokens selected" card with a shortcut
+ * header blank; it now renders the "No tokens found" card with a shortcut
  * to the manage-tokens screen, and narrowing the search back brings the list
  * back.
  */
@@ -63,10 +63,8 @@ test.describe('chain page tokens empty state', () => {
     await search.fill(unmatchableQuery)
 
     await expect(emptyState).toBeVisible()
-    await expect(emptyState).toContainText('No tokens selected')
-    await expect(emptyState).toContainText(
-      "You've disabled all tokens. Make sure that the token you're looking for is enabled."
-    )
+    await expect(emptyState).toContainText('No tokens found')
+    await expect(emptyState).not.toContainText("You've disabled all tokens.")
     await expect(nativeRow).toHaveCount(0)
 
     const artifactDirectory = process.env.EXTENSION_CHAIN_TOKENS_QA_ARTIFACT_DIR

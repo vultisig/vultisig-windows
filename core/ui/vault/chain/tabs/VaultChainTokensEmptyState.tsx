@@ -11,12 +11,13 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-/**
- * Card shown on the chain page's Tokens tab when the list has nothing to
- * render — a search that matches no enabled token, or a chain left with no
- * coins. Points the user at the manage-tokens screen for the current chain.
- */
-export const VaultChainTokensEmptyState = () => {
+type VaultChainTokensEmptyStateProps = {
+  isSearchResult?: boolean
+}
+
+export const VaultChainTokensEmptyState = ({
+  isSearchResult = false,
+}: VaultChainTokensEmptyStateProps) => {
   const { t } = useTranslation()
   const chain = useCurrentVaultChain()
   const navigate = useCoreNavigate()
@@ -28,11 +29,13 @@ export const VaultChainTokensEmptyState = () => {
       </IconWrapper>
       <Copy gap={8}>
         <Text centerHorizontally size={15} weight={500}>
-          {t('no_tokens_selected')}
+          {t(isSearchResult ? 'no_tokens_found' : 'no_tokens_selected')}
         </Text>
-        <Text centerHorizontally variant="footnote" color="shy">
-          {t('no_tokens_selected_description')}
-        </Text>
+        {!isSearchResult && (
+          <Text centerHorizontally variant="footnote" color="shy">
+            {t('no_tokens_selected_description')}
+          </Text>
+        )}
       </Copy>
       <Button
         size="xs"

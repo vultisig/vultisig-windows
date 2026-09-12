@@ -104,7 +104,11 @@ export const Tokens = () => {
           ).map(adjustVaultChainCoinsLogos)
 
           if (orderedCoins.length === 0) {
-            return <VaultChainTokensEmptyState />
+            return (
+              <VaultChainTokensEmptyState
+                isSearchResult={normalizedQuery.length > 0}
+              />
+            )
           }
 
           return (
