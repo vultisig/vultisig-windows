@@ -175,11 +175,20 @@ const DiscoveryContent = styled(VStack)`
   min-height: 100%;
 `
 
+/**
+ * Scales the illustration into whatever height the two action cards leave.
+ * The webp is 375x405, so drawn at the popup's width it alone outgrows the
+ * 600px viewport; without `min-height: 0` a flex item never shrinks below
+ * its content height and the screen scrolls instead. Where there is room
+ * (desktop, expanded view) it still draws at full size.
+ */
 const HeroIllustration = styled.img`
   align-self: center;
   display: block;
   height: auto;
   max-width: 375px;
+  min-height: 0;
+  object-fit: contain;
   width: 100%;
 `
 
