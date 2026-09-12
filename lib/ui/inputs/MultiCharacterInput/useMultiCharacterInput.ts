@@ -14,6 +14,12 @@ type UseMultiCharacterInputArgs = {
   isDisabled: boolean
 }
 
+/**
+ * Keyboard, paste and focus handling for a row of single-character inputs.
+ * Typing advances to the next cell and Backspace retreats. Pass `isDisabled`
+ * while the inputs are disabled: when they become enabled again focus is put
+ * back on the cell the user would type into next, since disabling drops it.
+ */
 export const useMultiCharacterInput = ({
   length,
   value,

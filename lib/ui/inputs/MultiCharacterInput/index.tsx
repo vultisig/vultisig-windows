@@ -27,6 +27,12 @@ export type MultiCharacterInputProps = InputProps<string | null> &
     secureEntry?: boolean
   }
 
+/**
+ * A row of single-character inputs for codes and passcodes. `loading`
+ * validation disables the cells; once it ends, focus returns to the first
+ * cell when the value was cleared and to the last one otherwise, so the user
+ * can keep typing without clicking.
+ */
 export const MultiCharacterInput = ({
   length,
   value,
