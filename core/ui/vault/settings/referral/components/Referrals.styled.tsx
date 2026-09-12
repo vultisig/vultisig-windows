@@ -26,8 +26,14 @@ export const FormFieldLabel = styled.label`
   })}
 `
 
+/**
+ * The decorative glow (`Overlay`) is wider than the card it sits behind, so
+ * at the popup width it bleeds past the page. Clipping only one axis makes
+ * the browser turn the other into `auto`, which is where the horizontal
+ * scrollbar came from — clip both so the bleed is cut off, never scrolled.
+ */
 export const ReferralPageWrapper = styled(PageContent)`
-  overflow-y: hidden;
+  overflow: hidden;
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
     max-width: 650px;
