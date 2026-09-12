@@ -18,6 +18,10 @@ type PasscodeInputProps = InputProps<string | null> &
     length?: number
   }
 
+/**
+ * A masked numeric passcode field built on `MultiCharacterInput`, defaulting
+ * to the configured passcode length and never offering a paste button.
+ */
 export const PasscodeInput = ({
   autoFocus = false,
   value,

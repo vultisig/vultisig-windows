@@ -100,6 +100,10 @@ const Content = styled.div`
   })}
 `
 
+/**
+ * The App Locked screen. Verifies the entered passcode once it reaches the
+ * stored length, throttles repeated failures, and unlocks the app on success.
+ */
 export const EnterPasscode = () => {
   const { i18n, t } = useTranslation()
   const { getPasscodeEncryption, getVaults, setPasscodeEncryption } = useCore()

@@ -36,6 +36,12 @@ export type MultiCharacterInputProps = InputProps<string | null> &
     appearance?: MultiCharacterInputAppearance
   }
 
+/**
+ * A fixed-length code entry split into one single-character input per
+ * position, with paste, backspace and auto-advance handled across them.
+ * `appearance="boxes"` shows the inputs; `appearance="dots"` hides them
+ * behind lock-screen ring indicators that fill as characters are entered.
+ */
 export const MultiCharacterInput = ({
   length,
   value,
@@ -197,16 +203,6 @@ const dotCellHeight = 43
 const dotSize = 15
 const dotStrokeWidth = 1.5
 
-const DotCell = styled.div`
-  position: relative;
-  flex-shrink: 0;
-  width: ${dotCellWidth}px;
-  height: ${dotCellHeight}px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
 const Dot = styled.div<{
   validation: DigitGroupInputValidationState
   filled: boolean
@@ -235,6 +231,23 @@ const Dot = styled.div<{
     css`
       background: currentColor;
     `}
+`
+
+// The native input over the ring is invisible, so the ring has to show which
+// digit is active — the same focus treatment Checkbox gives its box.
+const DotCell = styled.div`
+  position: relative;
+  flex-shrink: 0;
+  width: ${dotCellWidth}px;
+  height: ${dotCellHeight}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:has(:focus-visible) ${Dot} {
+    outline: 2px solid ${getColor('primary')};
+    outline-offset: 2px;
+  }
 `
 
 // Sits invisibly over its ring so clicking the ring focuses the input and the
