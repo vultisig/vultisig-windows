@@ -9,7 +9,10 @@ import { InputProps, LabelProp } from '@lib/ui/props'
 type PasscodeInputProps = InputProps<string | null> &
   Partial<LabelProp> &
   Partial<
-    Pick<MultiCharacterInputProps, 'validation' | 'validationMessages'>
+    Pick<
+      MultiCharacterInputProps,
+      'validation' | 'validationMessages' | 'appearance'
+    >
   > & {
     autoFocus?: boolean
     length?: number
@@ -22,12 +25,14 @@ export const PasscodeInput = ({
   label,
   validation,
   validationMessages,
+  appearance,
   length = passcodeEncryptionConfig.passcodeLength,
 }: PasscodeInputProps) => {
   return (
     <>
       {label && <InputLabel>{label}</InputLabel>}
       <MultiCharacterInput
+        appearance={appearance}
         autoFocusFirst={autoFocus}
         includePasteButton={false}
         length={length}
