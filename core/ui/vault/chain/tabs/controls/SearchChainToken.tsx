@@ -85,7 +85,12 @@ export const SearchChainToken = ({
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <IconButton kind="secondary" onClick={handleOpen} size="lg">
+          <IconButton
+            data-testid="vault-chain-token-search-toggle"
+            kind="secondary"
+            onClick={handleOpen}
+            size="lg"
+          >
             <SearchIcon />
           </IconButton>
         </motion.div>

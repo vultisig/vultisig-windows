@@ -1835,4 +1835,7 @@ export const zh = {
   token_verification_scam: '骗局',
   token_verification_scam_hint:
     '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
+  no_tokens_selected: '未选择代币',
+  no_tokens_selected_description:
+    '您已禁用所有代币。确保您要查找的代币已启用。',
 }

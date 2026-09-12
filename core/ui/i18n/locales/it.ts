@@ -2004,4 +2004,7 @@ export const it = {
   token_verification_scam: 'TRUFFA',
   token_verification_scam_hint:
     'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
+  no_tokens_selected: 'Nessun token selezionato',
+  no_tokens_selected_description:
+    'Hai disabilitato tutti i token. Assicurati che il token che stai cercando sia abilitato.',
 }

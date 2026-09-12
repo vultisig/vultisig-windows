@@ -1966,4 +1966,7 @@ export const hr = {
   token_verification_scam: 'PRIJEVARA',
   token_verification_scam_hint:
     'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
+  no_tokens_selected: 'Nije odabran nijedan token',
+  no_tokens_selected_description:
+    'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',
 }
