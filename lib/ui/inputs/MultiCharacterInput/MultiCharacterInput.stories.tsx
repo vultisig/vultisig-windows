@@ -20,6 +20,10 @@ const meta: Meta<typeof MultiCharacterInput> = {
       },
       description: 'Visual validation state',
     },
+    appearance: {
+      control: { type: 'radio', options: ['boxes', 'dots'] },
+      description: 'Visible input boxes, or lock-screen ring indicators',
+    },
     includePasteButton: { control: 'boolean' },
     autoFocusFirst: { control: 'boolean' },
     onChange: { action: 'value change' },
@@ -69,6 +73,17 @@ export const LoadingState: Story = {
 export const NoPasteButton: Story = {
   name: 'Without “Paste”',
   args: { includePasteButton: false },
+}
+
+export const Dots: Story = {
+  name: 'Dots (lock screen)',
+  args: {
+    appearance: 'dots',
+    length: 6,
+    includePasteButton: false,
+    secureEntry: true,
+    value: '135',
+  },
 }
 
 export const ControlledExample: Story = {
