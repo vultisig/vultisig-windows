@@ -16,8 +16,16 @@ const publicKeyHex = 'aa'.repeat(32)
 const v4r2Address = 'UQCf6aQfV3vc8KLtPI_lROY64hUeR1oyNfdbwXB-gwDaKZmi'
 const w5Address = 'UQCvaZohosTA0ak9ZFMs-cvL1JrXqogqJH8sI2uO6k8clJpn'
 
+type AddressOfStateInitInput = {
+  stateInit: string
+  workchain: number
+}
+
 /** What a dApp does with the reply: hash the state init back into an address. */
-const addressOfStateInit = (stateInit: string, workchain: number) => {
+const addressOfStateInit = ({
+  stateInit,
+  workchain,
+}: AddressOfStateInitInput) => {
   const slice = Cell.fromBase64(stateInit).beginParse()
   slice.loadBit() // split_depth
   slice.loadBit() // special
@@ -31,17 +39,22 @@ const addressOfStateInit = (stateInit: string, workchain: number) => {
 
 describe('getWalletStateInit', () => {
   it.each([
-    ['v4r2', v4r2Address],
-    ['v5r1', w5Address],
-  ])('derives %s state init that hashes back to the advertised address', (_, address) => {
-    const parsed = Address.parse(address)
+    { version: 'v4r2', address: v4r2Address },
+    { version: 'v5r1', address: w5Address },
+  ])(
+    'derives $version state init that hashes back to the advertised address',
+    ({ address }) => {
+      const parsed = Address.parse(address)
 
-    const stateInit = getWalletStateInit({ publicKeyHex, address: parsed })
+      const stateInit = getWalletStateInit({ publicKeyHex, address: parsed })
 
-    expect(addressOfStateInit(stateInit, parsed.workChain).equals(parsed)).toBe(
-      true
-    )
-  })
+      expect(
+        addressOfStateInit({ stateInit, workchain: parsed.workChain }).equals(
+          parsed
+        )
+      ).toBe(true)
+    }
+  )
 
   it('gives the two contracts different state init, so the reply cannot be reused across them', () => {
     const v4r2 = getWalletStateInit({
