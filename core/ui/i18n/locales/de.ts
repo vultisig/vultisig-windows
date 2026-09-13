@@ -232,7 +232,6 @@ export const de = {
   custom_token: 'Benutzerdefiniertes Token',
   customize_chains: 'Ketten individuell gestalten',
   date: 'Datum',
-  decrypting_vault_keyshares: 'Entschlüsselung der Tresor-Schlüsselanteile...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
   defiChainTabs: {
@@ -292,7 +291,6 @@ export const de = {
     'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
-  encrypting_vault_keyshares: 'Verschlüsselung der Tresor-Schlüsselanteile...',
   enter: 'Eingeben',
   enter_address: 'Adresse eingeben',
   enter_address_here: 'Adresse hier eingeben',

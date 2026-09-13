@@ -265,7 +265,6 @@ export const en = {
   deadline: 'Deadline',
   domain: 'Domain',
   decimals: 'Decimals',
-  decrypting_vault_keyshares: 'Decrypting vault keyshares...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
   defiChainTabs: {
@@ -368,7 +367,6 @@ export const en = {
     'Generate a post-quantum (MLDSA) key for this vault',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
-  encrypting_vault_keyshares: 'Encrypting vault keyshares...',
   enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',

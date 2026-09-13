@@ -228,7 +228,6 @@ export const ru = {
   custom_token: 'Пользовательский токен',
   customize_chains: 'Настроить сети',
   date: 'Дата',
-  decrypting_vault_keyshares: 'Расшифровка keyshares хранилища...',
   deeplink: 'Диплинк',
   defi: 'DeFi',
   defiChainTabs: {
@@ -287,7 +286,6 @@ export const ru = {
     'Сгенерируйте постквантовый (MLDSA) ключ для этого хранилища.',
   enable_token_instruction:
     'Включите минимум один токен, чтобы видеть балансы и управлять позициями.',
-  encrypting_vault_keyshares: 'Шифрование keyshares хранилища...',
   enter: 'Входить',
   enter_address: 'Введите адрес',
   enter_address_here: 'Введите адрес здесь',

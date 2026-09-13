@@ -227,7 +227,6 @@ export const ko = {
   custom_token: '사용자 지정 토큰',
   customize_chains: '체인을 맞춤 제작하세요',
   date: '날짜',
-  decrypting_vault_keyshares: '금고 키 공유를 복호화하는 중...',
   deeplink: '딥링크',
   defi: '디파이',
   defiChainTabs: {
@@ -287,7 +286,6 @@ export const ko = {
     '이 금고에 대한 양자 후 보안(MLDSA) 키를 생성하세요.',
   enable_token_instruction:
     '잔액을 확인하고 포지션을 관리하려면 최소 하나 이상의 토큰을 활성화해야 합니다.',
-  encrypting_vault_keyshares: '금고 키 공유를 암호화하는 중...',
   enter: '입력하다',
   enter_address: '주소를 입력하세요',
   enter_address_here: '여기에 주소를 입력하세요',

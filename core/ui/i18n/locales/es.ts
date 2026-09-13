@@ -230,7 +230,6 @@ export const es = {
   custom_token: 'Token personalizado',
   customize_chains: 'Personalizar cadenas',
   date: 'Fecha',
-  decrypting_vault_keyshares: 'Descifrando claves compartidas de bóveda...',
   deeplink: 'Enlace profundo',
   defi: 'DeFi',
   defiChainTabs: {
@@ -292,7 +291,6 @@ export const es = {
     'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
   enable_token_instruction:
     'Habilite al menos un token para ver saldos y administrar posiciones.',
-  encrypting_vault_keyshares: 'Cifrado de claves compartidas de bóveda...',
   enter: 'Ingresar',
   enter_address: 'Introduzca la dirección',
   enter_address_here: 'Introduzca la dirección aquí',

@@ -229,7 +229,6 @@ export const nl = {
   custom_token: 'Aangepaste token',
   customize_chains: 'Chains aanpassen',
   date: 'Datum',
-  decrypting_vault_keyshares: 'Kluis-keyshares ontsleutelen...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
   defiChainTabs: {
@@ -289,7 +288,6 @@ export const nl = {
     'Genereer een post-quantum (MLDSA) sleutel voor deze kluis.',
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
-  encrypting_vault_keyshares: 'Kluis-keyshares versleutelen...',
   enter: 'Binnenkomen',
   enter_address: 'Adres invoeren',
   enter_address_here: 'Voer hier een adres in',
