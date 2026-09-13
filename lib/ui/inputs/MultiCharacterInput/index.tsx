@@ -41,6 +41,9 @@ export type MultiCharacterInputProps = InputProps<string | null> &
  * position, with paste, backspace and auto-advance handled across them.
  * `appearance="boxes"` shows the inputs; `appearance="dots"` hides them
  * behind lock-screen ring indicators that fill as characters are entered.
+ * `loading` validation disables the cells; once it ends, focus returns to
+ * the first cell when the value was cleared and to the last one otherwise,
+ * so the user can keep typing without clicking.
  */
 export const MultiCharacterInput = ({
   length,
@@ -56,10 +59,9 @@ export const MultiCharacterInput = ({
   ...rest
 }: MultiCharacterInputProps) => {
   const { t } = useTranslation()
-  const { digits, handleChange, handleKeyDown, handlePaste, getRefCallback } =
-    useMultiCharacterInput({ length, value, onChange })
-
   const isDisabled = validation === 'loading'
+  const { digits, handleChange, handleKeyDown, handlePaste, getRefCallback } =
+    useMultiCharacterInput({ length, value, onChange, isDisabled })
 
   const derivedValidationMessages = {
     valid: validationMessages.valid ?? t('digit_input_success_validation'),
