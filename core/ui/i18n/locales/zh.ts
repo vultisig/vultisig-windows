@@ -217,7 +217,6 @@ export const zh = {
   custom_token: '自定义代币',
   customize_chains: '定制链条',
   date: '日期',
-  decrypting_vault_keyshares: '解密保险库密钥共享...',
   deeplink: '深度链接',
   defi: '去中心化金融',
   defiChainTabs: {
@@ -273,7 +272,6 @@ export const zh = {
   post_quantum_keygen: '后量子密钥生成',
   post_quantum_keygen_description: '为该保险库生成后量子（MLDSA）密钥',
   enable_token_instruction: '至少启用一个代币才能查看余额和管理持仓。',
-  encrypting_vault_keyshares: '加密保险库密钥共享...',
   enter: '进入',
   enter_address: '输入地址',
   enter_address_here: '在此输入地址',

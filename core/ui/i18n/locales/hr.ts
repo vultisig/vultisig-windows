@@ -229,7 +229,6 @@ export const hr = {
   custom_token: 'Prilagođeni token',
   customize_chains: 'Prilagodi lance',
   date: 'Datum',
-  decrypting_vault_keyshares: 'Dešifriranje dijeljenja ključeva trezora...',
   deeplink: 'Duboka veza',
   defi: 'DeFi',
   defiChainTabs: {
@@ -288,7 +287,6 @@ export const hr = {
     'Generiraj postkvantni (MLDSA) ključ za ovaj trezor',
   enable_token_instruction:
     'Omogućite barem jedan token za pregled stanja i upravljanje pozicijama.',
-  encrypting_vault_keyshares: 'Šifriranje dijeljenja ključeva trezora...',
   enter: 'Unesi',
   enter_address: 'Unesite adresu',
   enter_address_here: 'Unesite adresu ovdje',

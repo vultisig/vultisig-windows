@@ -232,8 +232,6 @@ export const it = {
   custom_token: 'Token personalizzato',
   customize_chains: 'Personalizza le catene',
   date: 'Data',
-  decrypting_vault_keyshares:
-    'Decifratura delle condivisioni delle chiavi del vault...',
   deeplink: 'Collegamento profondo',
   defi: 'DeFi',
   defiChainTabs: {
@@ -294,8 +292,6 @@ export const it = {
     'Genera una chiave post-quantistica (MLDSA) per questo vault',
   enable_token_instruction:
     'Abilita almeno un token per visualizzare i saldi e gestire le posizioni.',
-  encrypting_vault_keyshares:
-    'Crittografia delle condivisioni delle chiavi del vault...',
   enter: 'Entra',
   enter_address: "Inserisci l'indirizzo",
   enter_address_here: "Inserisci qui l'indirizzo",
