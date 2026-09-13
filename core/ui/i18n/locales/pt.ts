@@ -1999,4 +1999,7 @@ export const pt = {
   no_tokens_selected: 'Nenhum token selecionado',
   no_tokens_selected_description:
     'Você desativou todos os tokens. Certifique-se de que o token que você está procurando esteja ativado.',
+  enable_ton_w5_wallet: 'Use a carteira W5 TON',
+  enable_ton_w5_wallet_description:
+    'Use o contrato W5 (v5r1) em vez do V4R2 ao derivar os endereços TON deste cofre. Isso altera o endereço usado pela carteira, e cada contrato é um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
 }

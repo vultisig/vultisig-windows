@@ -3,6 +3,7 @@ import { withoutBondedRuneReceiptCoins } from '@core/ui/chain/coin/thorchain/isB
 import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { withoutThorchainLpCoins } from '@core/ui/chain/coin/thorchain/isThorchainLpCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useTonWalletVersion } from '@core/ui/storage/tonW5Enabled'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
@@ -73,6 +74,7 @@ export const useCurrentVaultAddress = (chain: Chain) => {
   const addresses = useCurrentVaultAddresses()
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
+  const tonWalletVersion = useTonWalletVersion()
 
   return useMemo(() => {
     const existing = addresses[chain]
@@ -97,8 +99,9 @@ export const useCurrentVaultAddress = (chain: Chain) => {
       publicKeys: vault.publicKeys,
       publicKeyMldsa: vault.publicKeyMldsa,
       chainPublicKeys: vault.chainPublicKeys,
+      tonWalletVersion,
     })
-  }, [addresses, chain, walletCore, vault])
+  }, [addresses, chain, walletCore, vault, tonWalletVersion])
 }
 
 export const useCurrentVaultChainCoins = (chain: string) => {

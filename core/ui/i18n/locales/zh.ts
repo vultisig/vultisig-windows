@@ -1836,4 +1836,7 @@ export const zh = {
   no_tokens_selected: '未选择代币',
   no_tokens_selected_description:
     '您已禁用所有代币。确保您要查找的代币已启用。',
+  enable_ton_w5_wallet: '使用TON W5 钱包',
+  enable_ton_w5_wallet_description:
+    '生成此金库的TON地址时，请使用 W5 (v5r1) 合约代替 V4R2 合约。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有各自的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',
 }

@@ -1,3 +1,4 @@
+import { getTonWalletVersion } from '@core/ui/storage/tonW5Enabled'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
@@ -34,6 +35,9 @@ export const handleAddChain: ToolHandler = async (input, context) => {
   }
 
   const { walletCore, vault } = getWalletContext()
+  const tonWalletVersion = getTonWalletVersion(
+    await storage.getIsTonW5Enabled()
+  )
 
   const address = getChainAddress({
     chain,
@@ -42,6 +46,7 @@ export const handleAddChain: ToolHandler = async (input, context) => {
     publicKeys: vault.publicKeys,
     publicKeyMldsa: vault.publicKeyMldsa,
     chainPublicKeys: vault.chainPublicKeys,
+    tonWalletVersion,
   })
   const feeCoin = chainFeeCoin[chain]
 

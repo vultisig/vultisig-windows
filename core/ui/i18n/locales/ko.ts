@@ -1958,4 +1958,7 @@ export const ko = {
   no_tokens_selected: '선택된 토큰 없음',
   no_tokens_selected_description:
     '모든 토큰이 비활성화되었습니다. 찾으시는 토큰이 활성화되어 있는지 확인하세요.',
+  enable_ton_w5_wallet: 'TON W5 지갑을 사용하세요',
+  enable_ton_w5_wallet_description:
+    '이 볼트의 TON 주소를 생성할 때 V4R2 대신 W5(v5r1) 컨트랙트를 사용하세요. 이렇게 하면 지갑에서 사용하는 주소가 변경되며, 각 컨트랙트는 자체 잔액을 가진 별도의 주소입니다. 자금 이동은 없으므로 다른 주소에 있는 모든 자산은 사용자가 전송하기 전까지 해당 주소에 그대로 유지됩니다.',
 }

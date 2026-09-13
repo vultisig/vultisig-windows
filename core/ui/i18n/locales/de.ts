@@ -2014,4 +2014,7 @@ export const de = {
   no_tokens_selected: 'Keine Token ausgewählt',
   no_tokens_selected_description:
     'Sie haben alle Token deaktiviert. Stellen Sie sicher, dass das gesuchte Token aktiviert ist.',
+  enable_ton_w5_wallet: 'Verwenden Sie TON W5-Wallet',
+  enable_ton_w5_wallet_description:
+    'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
 }
