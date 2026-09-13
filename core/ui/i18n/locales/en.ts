@@ -265,7 +265,6 @@ export const en = {
   deadline: 'Deadline',
   domain: 'Domain',
   decimals: 'Decimals',
-  decrypting_vault_keyshares: 'Decrypting vault keyshares...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
   defiChainTabs: {
@@ -368,7 +367,6 @@ export const en = {
     'Generate a post-quantum (MLDSA) key for this vault',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
-  encrypting_vault_keyshares: 'Encrypting vault keyshares...',
   enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
@@ -704,6 +702,9 @@ export const en = {
   no_token_found: 'Token not found',
   no_transactions_yet: 'No transactions yet',
   no_tokens_found: 'No tokens found',
+  no_tokens_selected: 'No tokens selected',
+  no_tokens_selected_description:
+    "You've disabled all tokens. Make sure that the token you're looking for is enabled.",
   no_positions_found: 'No positions found',
   no_positions_selected: 'No positions selected',
   no_positions_selected_description:

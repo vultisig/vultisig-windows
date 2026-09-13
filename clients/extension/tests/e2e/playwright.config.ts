@@ -152,6 +152,7 @@ export default defineConfig({
         '**/undecryptable-vault.spec.ts',
         '**/swap-custom-token-empty-state.spec.ts',
         '**/folder-vault-rows.spec.ts',
+        '**/chain-tokens-empty-state.spec.ts',
       ],
       use: {
         launchOptions: {

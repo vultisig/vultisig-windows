@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useSearchChainToken } from '../state/searchChainTokenProvider'
+import { VaultChainTokensEmptyState } from './VaultChainTokensEmptyState'
 
 const StyledPanel = styled(Panel)`
   cursor: pointer;
@@ -101,6 +102,14 @@ export const Tokens = () => {
               .flat(),
             (one, another) => one.ticker === another.ticker
           ).map(adjustVaultChainCoinsLogos)
+
+          if (orderedCoins.length === 0) {
+            return (
+              <VaultChainTokensEmptyState
+                isSearchResult={normalizedQuery.length > 0}
+              />
+            )
+          }
 
           return (
             <List>

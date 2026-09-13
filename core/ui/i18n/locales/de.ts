@@ -232,7 +232,6 @@ export const de = {
   custom_token: 'Benutzerdefiniertes Token',
   customize_chains: 'Ketten individuell gestalten',
   date: 'Datum',
-  decrypting_vault_keyshares: 'Entschlüsselung der Tresor-Schlüsselanteile...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
   defiChainTabs: {
@@ -292,7 +291,6 @@ export const de = {
     'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
-  encrypting_vault_keyshares: 'Verschlüsselung der Tresor-Schlüsselanteile...',
   enter: 'Eingeben',
   enter_address: 'Adresse eingeben',
   enter_address_here: 'Adresse hier eingeben',
@@ -2013,6 +2011,9 @@ export const de = {
   token_verification_scam: 'BETRUG',
   token_verification_scam_hint:
     'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
+  no_tokens_selected: 'Keine Token ausgewählt',
+  no_tokens_selected_description:
+    'Sie haben alle Token deaktiviert. Stellen Sie sicher, dass das gesuchte Token aktiviert ist.',
   enable_ton_w5_wallet: 'Verwenden Sie TON W5-Wallet',
   enable_ton_w5_wallet_description:
     'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',

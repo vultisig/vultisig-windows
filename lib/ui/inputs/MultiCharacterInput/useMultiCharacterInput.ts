@@ -11,12 +11,20 @@ type UseMultiCharacterInputArgs = {
   length: number
   value: string | null
   onChange: (v: string | null) => void
+  isDisabled: boolean
 }
 
+/**
+ * Keyboard, paste and focus handling for a row of single-character inputs.
+ * Typing advances to the next cell and Backspace retreats. Pass `isDisabled`
+ * while the inputs are disabled: when they become enabled again focus is put
+ * back on the cell the user would type into next, since disabling drops it.
+ */
 export const useMultiCharacterInput = ({
   length,
   value,
   onChange,
+  isDisabled,
 }: UseMultiCharacterInputArgs) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
@@ -44,6 +52,23 @@ export const useMultiCharacterInput = ({
   useEffect(() => {
     if (!value) setDigits(Array(length).fill(''))
   }, [value, length])
+
+  // Disabling the inputs while the parent verifies the entry drops focus from
+  // the cell being typed in. Once they are enabled again put it on the cell the
+  // user would type into next: the first one when the entry was cleared,
+  // otherwise the last one so Backspace works on a rejected entry. The target
+  // comes from the value prop, not the digits state, because the parent may
+  // clear the value in the same render that re-enables the inputs.
+  const wasDisabledRef = useRef(isDisabled)
+  useEffect(() => {
+    const wasDisabled = wasDisabledRef.current
+    wasDisabledRef.current = isDisabled
+
+    if (!wasDisabled || isDisabled) return
+
+    const idx = value ? Math.min(value.length, length - 1) : 0
+    inputRefs.current[idx]?.focus()
+  }, [isDisabled, length, value])
 
   const commit = (next: string[]) => {
     setDigits(next)

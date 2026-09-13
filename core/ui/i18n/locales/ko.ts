@@ -227,7 +227,6 @@ export const ko = {
   custom_token: '사용자 지정 토큰',
   customize_chains: '체인을 맞춤 제작하세요',
   date: '날짜',
-  decrypting_vault_keyshares: '금고 키 공유를 복호화하는 중...',
   deeplink: '딥링크',
   defi: '디파이',
   defiChainTabs: {
@@ -287,7 +286,6 @@ export const ko = {
     '이 금고에 대한 양자 후 보안(MLDSA) 키를 생성하세요.',
   enable_token_instruction:
     '잔액을 확인하고 포지션을 관리하려면 최소 하나 이상의 토큰을 활성화해야 합니다.',
-  encrypting_vault_keyshares: '금고 키 공유를 암호화하는 중...',
   enter: '입력하다',
   enter_address: '주소를 입력하세요',
   enter_address_here: '여기에 주소를 입력하세요',
@@ -1957,6 +1955,9 @@ export const ko = {
   token_verification_scam: '스캠',
   token_verification_scam_hint:
     '이 토큰은 검증된 토큰의 이름을 모방했지만, 다른 컨트랙트 주소에 존재합니다. 이는 위조 토큰이므로 신뢰하지 마십시오.',
+  no_tokens_selected: '선택된 토큰 없음',
+  no_tokens_selected_description:
+    '모든 토큰이 비활성화되었습니다. 찾으시는 토큰이 활성화되어 있는지 확인하세요.',
   enable_ton_w5_wallet: 'TON W5 지갑을 사용하세요',
   enable_ton_w5_wallet_description:
     '이 볼트의 TON 주소를 생성할 때 V4R2 대신 W5(v5r1) 컨트랙트를 사용하세요. 이렇게 하면 지갑에서 사용하는 주소가 변경되며, 각 컨트랙트는 자체 잔액을 가진 별도의 주소입니다. 자금 이동은 없으므로 다른 주소에 있는 모든 자산은 사용자가 전송하기 전까지 해당 주소에 그대로 유지됩니다.',

@@ -217,7 +217,6 @@ export const zh = {
   custom_token: '自定义代币',
   customize_chains: '定制链条',
   date: '日期',
-  decrypting_vault_keyshares: '解密保险库密钥共享...',
   deeplink: '深度链接',
   defi: '去中心化金融',
   defiChainTabs: {
@@ -273,7 +272,6 @@ export const zh = {
   post_quantum_keygen: '后量子密钥生成',
   post_quantum_keygen_description: '为该保险库生成后量子（MLDSA）密钥',
   enable_token_instruction: '至少启用一个代币才能查看余额和管理持仓。',
-  encrypting_vault_keyshares: '加密保险库密钥共享...',
   enter: '进入',
   enter_address: '输入地址',
   enter_address_here: '在此输入地址',
@@ -1835,6 +1833,9 @@ export const zh = {
   token_verification_scam: '骗局',
   token_verification_scam_hint:
     '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
+  no_tokens_selected: '未选择代币',
+  no_tokens_selected_description:
+    '您已禁用所有代币。确保您要查找的代币已启用。',
   enable_ton_w5_wallet: '使用TON W5 钱包',
   enable_ton_w5_wallet_description:
     '生成此金库的TON地址时，请使用 W5 (v5r1) 合约代替 V4R2 合约。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有各自的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',

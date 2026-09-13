@@ -229,7 +229,6 @@ export const nl = {
   custom_token: 'Aangepaste token',
   customize_chains: 'Chains aanpassen',
   date: 'Datum',
-  decrypting_vault_keyshares: 'Kluis-keyshares ontsleutelen...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
   defiChainTabs: {
@@ -289,7 +288,6 @@ export const nl = {
     'Genereer een post-quantum (MLDSA) sleutel voor deze kluis.',
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
-  encrypting_vault_keyshares: 'Kluis-keyshares versleutelen...',
   enter: 'Binnenkomen',
   enter_address: 'Adres invoeren',
   enter_address_here: 'Voer hier een adres in',
@@ -1981,6 +1979,9 @@ export const nl = {
   token_verification_scam: 'SCAM',
   token_verification_scam_hint:
     'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
+  no_tokens_selected: 'Geen tokens geselecteerd',
+  no_tokens_selected_description:
+    'Je hebt alle tokens uitgeschakeld. Zorg ervoor dat het token dat je zoekt is ingeschakeld.',
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
