@@ -1,7 +1,6 @@
 import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
 import { isWeakPasscode } from '@core/ui/passcodeEncryption/core/passcodePolicy'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
-import { useSetPasscodeMutation } from '@core/ui/passcodeEncryption/mutations/useSetPasscodeMutation'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -12,23 +11,24 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type SetPasscodeFormProps = {
-  onSuccess: () => void
+  error: Error | null
+  isPending: boolean
+  onSubmit: (passcode: string) => void
 }
 
 /**
  * Passcode entry and confirmation shown under the App Lock switch while a new
- * passcode is being set. The switch itself is owned by {@link AppLockSwitch},
- * so it stays mounted across the whole flow.
+ * passcode is being set. The switch and the mutation both live in
+ * {@link AppLockSwitch}, so the switch stays mounted across the whole flow and
+ * can ignore toggles while the sealing is still running.
  */
-export const SetPasscodeForm = ({ onSuccess }: SetPasscodeFormProps) => {
+export const SetPasscodeForm = ({
+  error,
+  isPending,
+  onSubmit,
+}: SetPasscodeFormProps) => {
   const [passcode, setPasscode] = useState<string | null>(null)
   const [confirmPasscode, setConfirmPasscode] = useState<string | null>(null)
-
-  const {
-    mutate: setPasscodeMutation,
-    isPending,
-    error,
-  } = useSetPasscodeMutation()
 
   const { t } = useTranslation()
 
@@ -61,9 +61,7 @@ export const SetPasscodeForm = ({ onSuccess }: SetPasscodeFormProps) => {
         isDisabled,
         isPending,
         onSubmit: () => {
-          setPasscodeMutation(shouldBePresent(passcode), {
-            onSuccess,
-          })
+          onSubmit(shouldBePresent(passcode))
         },
       })}
     >

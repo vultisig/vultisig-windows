@@ -3,6 +3,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 
 import { useDisablePasscodeMutation } from '../mutations/useDisablePasscodeMutation'
+import { useSetPasscodeMutation } from '../mutations/useSetPasscodeMutation'
 import { useIsPasscodeRequired } from '../state/useIsPasscodeRequired'
 import { ChangePasscode } from './change/ChangePasscode'
 import { EnablePasscodeInput } from './EnablePasscodeInput'
@@ -29,6 +30,12 @@ export const AppLockSwitch = () => {
     error: disableError,
   } = useDisablePasscodeMutation()
 
+  const {
+    mutate: setPasscode,
+    isPending: isEnabling,
+    error: enableError,
+  } = useSetPasscodeMutation()
+
   const isOn = hasPasscodeEnabled || isSettingPasscode
 
   return (
@@ -37,10 +44,12 @@ export const AppLockSwitch = () => {
         <EnablePasscodeInput
           value={isOn}
           onChange={() => {
-            // A second toggle while the first is still running would race it.
-            // Ignored here rather than by disabling the switch, so the control
-            // keeps sliding normally instead of greying out mid-transition.
-            if (isDisabling) {
+            // A toggle while either mutation is still running would race it —
+            // both keep going regardless of what the switch does, so the state
+            // they land on would contradict the click. Ignored here rather
+            // than by disabling the switch, so the control keeps sliding
+            // normally instead of greying out mid-transition.
+            if (isDisabling || isEnabling) {
               return
             }
 
@@ -60,7 +69,13 @@ export const AppLockSwitch = () => {
           }
         />
         {!hasPasscodeEnabled && isSettingPasscode && (
-          <SetPasscodeForm onSuccess={closeSetPasscode} />
+          <SetPasscodeForm
+            error={enableError}
+            isPending={isEnabling}
+            onSubmit={passcode =>
+              setPasscode(passcode, { onSuccess: closeSetPasscode })
+            }
+          />
         )}
       </VStack>
       {hasPasscodeEnabled && !isDisabling && <ChangePasscode />}
