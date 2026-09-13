@@ -49,6 +49,7 @@ export type CoinsStorage = {
   deleteCoin: DeleteCoinFunction
 }
 
+/** Adds a coin to the current vault, deriving its address with WalletCore once the WASM has loaded. */
 export const useCreateCoinMutation = () => {
   const vault = useCurrentVault()
 

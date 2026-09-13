@@ -46,6 +46,11 @@ type ExtensionCoreAppProps = ChildrenProp & {
   startupMode?: StartupMode
 }
 
+/**
+ * `CoreApp` wired to the extension's storage, navigation callbacks and
+ * migrations. `startupMode` is passed through so the action popup can boot
+ * without the splash.
+ */
 export const ExtensionCoreApp = ({
   children,
   processError,

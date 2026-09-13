@@ -15,8 +15,12 @@ const root = path.resolve(__dirname, '../../../..')
 const staticImportsOf = (file: string) => {
   const source = readFileSync(path.resolve(root, file), 'utf8')
 
+  // Matches `import x from 'y'` and the side-effect form `import 'y'`, and
+  // skips type-only imports, which never reach the bundle.
   return [
-    ...source.matchAll(/^import\s+(?!type\s)[^'"]*from\s+['"]([^'"]+)['"]/gm),
+    ...source.matchAll(
+      /^import\s+(?!type[\s{])(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/gm
+    ),
   ].map(match => match[1])
 }
 

@@ -75,6 +75,7 @@ const desktopSharedViewOverrides: Pick<
 
 const lazy = lazyViews(sharedViewLoaders)
 
+/** Every desktop view: shared views behind dynamic imports, desktop-only views statically. */
 export const views: Views<AppViewId> = {
   ...lazy.views,
   ...appCustomViews,

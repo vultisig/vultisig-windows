@@ -4,7 +4,7 @@
  * popup's entry chunk (vultisig/vultisig-windows#4918). A view must suspend
  * only until its loader resolves, a view warmed by the prefetcher must render
  * without suspending at all, and a load that failed must surface as an error
- * while a later successful load still lets the view render.
+ * rather than retry in a loop, while a later load still lets the view render.
  */
 import { lazyViews } from '@lib/ui/navigation/lazyViews'
 import { act, render, screen } from '@testing-library/react'
@@ -116,6 +116,47 @@ describe('lazyViews', () => {
     // mount then renders it without going through the pinned lazy element.
     await loaders.page()
     renderView(View)
+
+    expect(screen.getByTestId('page')).toBeTruthy()
+    expect(loader).toHaveBeenCalledTimes(2)
+  })
+
+  it('retries a failed load on a mount after the delay, but not on the retry React schedules', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const now = vi.spyOn(Date, 'now').mockReturnValue(10_000)
+    const loader = vi
+      .fn<() => Promise<ComponentType>>()
+      .mockRejectedValueOnce(new Error('chunk missing'))
+      .mockResolvedValue(Page)
+    const { views } = lazyViews({ page: loader })
+    const View = views.page
+
+    const renderInBoundary = () =>
+      render(
+        <Boundary>
+          <Suspense fallback={<div data-testid="fallback" />}>
+            <View />
+          </Suspense>
+        </Boundary>
+      )
+
+    const failed = renderInBoundary()
+    await act(flushSettledPromises)
+
+    expect(screen.getByTestId('error')).toBeTruthy()
+    failed.unmount()
+
+    // Still inside the delay: the pinned element throws again without a new load.
+    const tooSoon = renderInBoundary()
+    await act(flushSettledPromises)
+
+    expect(screen.getByTestId('error')).toBeTruthy()
+    expect(loader).toHaveBeenCalledTimes(1)
+    tooSoon.unmount()
+
+    now.mockReturnValue(12_000)
+    renderInBoundary()
+    await act(flushSettledPromises)
 
     expect(screen.getByTestId('page')).toBeTruthy()
     expect(loader).toHaveBeenCalledTimes(2)

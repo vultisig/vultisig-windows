@@ -60,6 +60,12 @@ const VaultDependentContent = () => {
   )
 }
 
+/**
+ * The shell shared by every client: theme, core state, startup gates,
+ * storage-backed providers and the background managers that run for the
+ * active vault. `startupMode` picks between the branded splash and the
+ * action popup's instant boot.
+ */
 export const CoreApp = ({
   children,
   coreState,

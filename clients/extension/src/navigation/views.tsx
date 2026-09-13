@@ -101,6 +101,7 @@ const staticViews: Pick<Views<AppViewId>, StaticViewId> = {
 
 const lazy = lazyViews({ ...sharedViewLoaders, ...appCustomViewLoaders })
 
+/** Every extension view: the home screens statically, everything else behind a dynamic import. */
 export const views: Views<AppViewId> = {
   ...lazy.views,
   ...staticViews,
