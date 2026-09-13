@@ -1,24 +1,22 @@
 import { Switch } from '@lib/ui/inputs/switch'
-import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type EnablePasscodeInputProps = InputProps<boolean> & {
-  pendingMessage?: string
   errorMessage?: string
 }
 
 const ActionContainer = styled.div`
-  ${vStack({ justifyContent: 'center' })}
+  ${hStack({ alignItems: 'center', gap: 12 })}
   min-height: 34px;
 `
 
 export const EnablePasscodeInput = ({
   value,
   onChange,
-  pendingMessage,
   errorMessage,
 }: EnablePasscodeInputProps) => {
   const { t } = useTranslation()
@@ -32,15 +30,16 @@ export const EnablePasscodeInput = ({
         {t('app_lock_passcode_description')}
       </Text>
       <ActionContainer>
-        {pendingMessage ? (
-          <Text color="supporting">{pendingMessage}</Text>
-        ) : (
-          <Switch
-            checked={value}
-            label={t(value ? 'on' : 'off').toUpperCase()}
-            onChange={onChange}
-          />
-        )}
+        {/* Nothing is layered over the switch while the passcode operation
+            runs: it stays mounted and simply slides, the way a plain checkbox
+            would. Turning the passcode off takes a few hundred milliseconds,
+            far below the point where a progress indicator helps — one that
+            appears and vanishes inside that window reads as a flicker. */}
+        <Switch
+          checked={value}
+          label={t(value ? 'on' : 'off').toUpperCase()}
+          onChange={onChange}
+        />
       </ActionContainer>
       {errorMessage && <Text color="danger">{errorMessage}</Text>}
     </VStack>

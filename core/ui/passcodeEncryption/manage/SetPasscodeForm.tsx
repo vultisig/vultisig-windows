@@ -1,18 +1,26 @@
 import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
 import { isWeakPasscode } from '@core/ui/passcodeEncryption/core/passcodePolicy'
-import { EnablePasscodeInput } from '@core/ui/passcodeEncryption/manage/EnablePasscodeInput'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { useSetPasscodeMutation } from '@core/ui/passcodeEncryption/mutations/useSetPasscodeMutation'
-import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const SetPasscode = () => {
+type SetPasscodeFormProps = {
+  onSuccess: () => void
+}
+
+/**
+ * Passcode entry and confirmation shown under the App Lock switch while a new
+ * passcode is being set. The switch itself is owned by {@link AppLockSwitch},
+ * so it stays mounted across the whole flow.
+ */
+export const SetPasscodeForm = ({ onSuccess }: SetPasscodeFormProps) => {
   const [passcode, setPasscode] = useState<string | null>(null)
   const [confirmPasscode, setConfirmPasscode] = useState<string | null>(null)
 
@@ -53,47 +61,34 @@ export const SetPasscode = () => {
         isDisabled,
         isPending,
         onSubmit: () => {
-          setPasscodeMutation(shouldBePresent(passcode))
+          setPasscodeMutation(shouldBePresent(passcode), {
+            onSuccess,
+          })
         },
       })}
     >
-      <Opener
-        renderOpener={({ onOpen, onClose, isOpen }) => (
-          <EnablePasscodeInput
-            value={isOpen}
-            onChange={isOpen ? onClose : onOpen}
-            pendingMessage={
-              isPending ? t('encrypting_vault_keyshares') : undefined
-            }
-            errorMessage={error ? extractErrorMsg(error) : undefined}
-          />
-        )}
-        renderContent={() => (
-          <>
-            <PasscodeInput
-              label={t('enter_passcode')}
-              onChange={setPasscode}
-              value={passcode}
-              validation={
-                passcode?.length === passcodeEncryptionConfig.passcodeLength &&
-                isWeakPasscode(passcode)
-                  ? 'invalid'
-                  : undefined
-              }
-              validationMessages={{ invalid: t('invalid_passcode') }}
-              autoFocus
-            />
-            <PasscodeInput
-              label={t('confirm_passcode')}
-              onChange={setConfirmPasscode}
-              value={confirmPasscode}
-            />
-            <Button disabled={isDisabled} loading={isPending} type="submit">
-              {t('set_passcode')}
-            </Button>
-          </>
-        )}
+      <PasscodeInput
+        label={t('enter_passcode')}
+        onChange={setPasscode}
+        value={passcode}
+        validation={
+          passcode?.length === passcodeEncryptionConfig.passcodeLength &&
+          isWeakPasscode(passcode)
+            ? 'invalid'
+            : undefined
+        }
+        validationMessages={{ invalid: t('invalid_passcode') }}
+        autoFocus
       />
+      <PasscodeInput
+        label={t('confirm_passcode')}
+        onChange={setConfirmPasscode}
+        value={confirmPasscode}
+      />
+      {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
+      <Button disabled={isDisabled} loading={isPending} type="submit">
+        {t('set_passcode')}
+      </Button>
     </VStack>
   )
 }
