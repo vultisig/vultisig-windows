@@ -1,6 +1,3 @@
-import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
-import { isWeakPasscode } from '@core/ui/passcodeEncryption/core/passcodePolicy'
-import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -9,6 +6,10 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { passcodeEncryptionConfig } from '../core/config'
+import { isWeakPasscode } from '../core/passcodePolicy'
+import { PasscodeInput } from './PasscodeInput'
 
 type SetPasscodeFormProps = {
   error: Error | null
