@@ -34,6 +34,7 @@ export const AppLockSwitch = () => {
     mutate: setPasscode,
     isPending: isEnabling,
     error: enableError,
+    reset: resetSetPasscode,
   } = useSetPasscodeMutation()
 
   const isOn = hasPasscodeEnabled || isSettingPasscode
@@ -59,6 +60,9 @@ export const AppLockSwitch = () => {
             }
 
             if (isSettingPasscode) {
+              // The mutation outlives the form now that it is owned here, so a
+              // failed attempt would still be on screen when the form reopens.
+              resetSetPasscode()
               closeSetPasscode()
             } else {
               openSetPasscode()
