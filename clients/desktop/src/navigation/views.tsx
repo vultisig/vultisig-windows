@@ -17,14 +17,19 @@ import { SetupVaultPageController } from '@clients/desktop/src/vault/setup/Setup
 import { SingleKeygenFastPage } from '@clients/desktop/src/vault/singleKeygen/fast/SingleKeygenFastPage'
 import { SingleKeygenSecurePage } from '@clients/desktop/src/vault/singleKeygen/secure/SingleKeygenSecurePage'
 import { CheckUpdatePage } from '@clients/desktop/src/versioning/CheckUpdatePage'
-import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
+import {
+  SharedViewId,
+  sharedViewLoaders,
+} from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
+import { lazyViews } from '@lib/ui/navigation/lazyViews'
 import { Views } from '@lib/ui/navigation/Views'
+import { omit } from '@vultisig/lib-utils/record/omit'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: CheckUpdatePage,
@@ -68,8 +73,22 @@ const desktopSharedViewOverrides: Pick<
   vault: DesktopVaultPage,
 }
 
+const lazy = lazyViews(sharedViewLoaders)
+
+/** Every desktop view: shared views behind dynamic imports, desktop-only views statically. */
 export const views: Views<AppViewId> = {
-  ...sharedViews,
+  ...lazy.views,
   ...appCustomViews,
   ...desktopSharedViewOverrides,
 }
+
+/** Loaders for the shared views outside the entry chunk, to warm once home has painted. */
+export const viewLoaders = omit(lazy.loaders, 'vault', 'chooseVaults')
+
+/** The views a user is most likely to open next from home, warmed first. */
+export const viewPrefetchPriority: (keyof typeof viewLoaders)[] = [
+  'send',
+  'swap',
+  'vaultChainDetail',
+  'defi',
+]

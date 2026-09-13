@@ -1,5 +1,5 @@
 import { CoreViewId } from '@core/ui/navigation/CoreView'
-import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { StartupPlaceholder } from '@core/ui/product/StartupPlaceholder'
 import { useCore } from '@core/ui/state/core'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { useOptionalNavigationHistory } from '@lib/ui/navigation/state'
@@ -271,7 +271,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const isUnreadable = resolution?.status === 'unreadable'
 
   if (!provided) {
-    return isUnreadable ? <UnreadableVaultRecovery /> : <ProductLogoBlock />
+    return isUnreadable ? <UnreadableVaultRecovery /> : <StartupPlaceholder />
   }
 
   const tree = (

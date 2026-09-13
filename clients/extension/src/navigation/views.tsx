@@ -1,120 +1,125 @@
-import { DappsButton } from '@clients/extension/src/components/dapps-button/DappsButton'
-import { ExtensionDeveloperOptions } from '@clients/extension/src/components/developer-options'
-import { ExpandView } from '@clients/extension/src/components/expand-view'
-import { ExpandViewGuard } from '@clients/extension/src/components/expand-view-guard'
-import { Prioritize } from '@clients/extension/src/components/prioritize'
-import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
-import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
-import { SingleKeygenFastVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenFastVault'
-import { SingleKeygenSecureVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenSecureVault'
-import { StationMigrationSettingsEntry } from '@clients/extension/src/components/settings/StationMigrationSettingsEntry'
-import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
-import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
-import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
-import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKeysignPage'
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
-import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
-import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
-import { StationMigrationPage } from '@clients/extension/src/pages/station-migration/StationMigrationPage'
-import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
-import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
-import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
-import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
-import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
-import { SettingsPage } from '@core/ui/settings'
-import { useVaults } from '@core/ui/storage/vaults'
-import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
-import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
-import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
-import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
-import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
+import {
+  SharedViewId,
+  sharedViewLoaders,
+} from '@core/ui/navigation/sharedViews'
+import { NewVaultPage } from '@core/ui/vault/new'
+import { lazyViews } from '@lib/ui/navigation/lazyViews'
+import { ViewLoaders } from '@lib/ui/navigation/ViewLoaders'
 import { Views } from '@lib/ui/navigation/Views'
-import { useEffect } from 'react'
+import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { ExtensionChooseVaultsView } from '../components/notifications/ExtensionChooseVaultsView'
-import { ExtensionNotificationPrompt } from '../components/notifications/ExtensionNotificationPrompt'
-import { ExtensionNotificationSettingsPage } from '../components/notifications/ExtensionNotificationSettingsPage'
-import { ManageSidePanel } from '../components/side-panel/ManageSidePanel'
+import { ExtensionVaultPage } from './views/ExtensionVaultPage'
 
-const ExtensionVaultPage = () => {
-  const vaults = useVaults()
-  const navigate = useNavigate()
+type StaticViewId = 'vault' | 'newVault' | 'chooseVaults' | 'migrateVault'
 
-  useEffect(() => {
-    if (vaults.length === 0) {
-      navigate({ id: 'newVault' }, { replace: true })
-    }
-  }, [vaults.length, navigate])
-
-  if (vaults.length === 0) return null
-
-  return (
-    <>
-      <ExtensionNotificationPrompt />
-      <VaultPage primaryControls={<DappsButton />} />
-    </>
-  )
-}
-
-const StationMigrationRoute = () => {
-  const [state] = useViewState<{ source?: 'setup' | 'settings' } | undefined>()
-
-  return <StationMigrationPage source={state?.source} />
-}
-
-const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
-  connectedDapps: ConnectedDappsPage,
-  importSeedphrase: ImportSeedphrasePage,
-  importVault: () => (
-    <ExpandViewGuard>
-      <ImportVaultPage />
-    </ExpandViewGuard>
-  ),
-  joinKeygen: JoinKeygenPage,
-  joinKeysign: JoinKeysignPage,
-  keysign: StartKeysignView,
-  migrateVault: () => null,
-  notificationSettings: ExtensionNotificationSettingsPage,
-  onboarding: () => (
-    <IncompleteOnboardingOnly>
-      <OnboardingPage />
-    </IncompleteOnboardingOnly>
-  ),
-  reshareVaultFast: ReshareFastVault,
-  reshareVaultSecure: ReshareSecureVault,
-  singleKeygenFast: SingleKeygenFastVault,
-  singleKeygenSecure: SingleKeygenSecureVault,
-  settings: () => (
-    <SettingsPage
-      insiderOptions={<ExtensionDeveloperOptions />}
-      prioritize={<Prioritize />}
-      stationMigration={<StationMigrationSettingsEntry />}
-      expandView={<ExpandView />}
-      sidePanel={<ManageSidePanel />}
-    />
-  ),
-  setupFastVault: SetupFastVaultPage,
-  setupSecureVault: SetupSecureVaultPage,
-  setupVault: () => (
-    <ExpandViewGuard>
-      <ResponsivenessProvider>
-        <SetupVaultPageController />
-      </ResponsivenessProvider>
-    </ExpandViewGuard>
-  ),
-  stationMigration: StationMigrationRoute,
-}
-
-const extensionSharedViewOverrides: Pick<
-  Views<AppViewId>,
-  'vault' | 'chooseVaults'
+const appCustomViewLoaders: ViewLoaders<
+  Exclude<AppViewId, SharedViewId | 'migrateVault'>
 > = {
-  chooseVaults: ExtensionChooseVaultsView,
-  vault: ExtensionVaultPage,
+  connectedDapps: () =>
+    import('@clients/extension/src/pages/connected-dapps').then(
+      ({ ConnectedDappsPage }) => ConnectedDappsPage
+    ),
+  importSeedphrase: () =>
+    import('@core/ui/vault/import/seedphrase/ImportSeedphrasePage').then(
+      ({ ImportSeedphrasePage }) => ImportSeedphrasePage
+    ),
+  importVault: () =>
+    import('./views/ImportVaultView').then(
+      ({ ImportVaultView }) => ImportVaultView
+    ),
+  joinKeygen: () =>
+    import('@clients/extension/src/mpc/keygen/join/JoinKeygenPage').then(
+      ({ JoinKeygenPage }) => JoinKeygenPage
+    ),
+  joinKeysign: () =>
+    import('@clients/extension/src/mpc/keysign/join/JoinKeysignPage').then(
+      ({ JoinKeysignPage }) => JoinKeysignPage
+    ),
+  keysign: () =>
+    import('@core/extension/keysign/start/StartKeysignView').then(
+      ({ StartKeysignView }) => StartKeysignView
+    ),
+  notificationSettings: () =>
+    import('../components/notifications/ExtensionNotificationSettingsPage').then(
+      ({ ExtensionNotificationSettingsPage }) =>
+        ExtensionNotificationSettingsPage
+    ),
+  onboarding: () =>
+    import('./views/OnboardingView').then(
+      ({ OnboardingView }) => OnboardingView
+    ),
+  reshareVaultFast: () =>
+    import('@clients/extension/src/components/settings/reshare/ReshareFastVault').then(
+      ({ ReshareFastVault }) => ReshareFastVault
+    ),
+  reshareVaultSecure: () =>
+    import('@clients/extension/src/components/settings/reshare/ReshareSecureVault').then(
+      ({ ReshareSecureVault }) => ReshareSecureVault
+    ),
+  singleKeygenFast: () =>
+    import('@clients/extension/src/components/settings/singleKeygen/SingleKeygenFastVault').then(
+      ({ SingleKeygenFastVault }) => SingleKeygenFastVault
+    ),
+  singleKeygenSecure: () =>
+    import('@clients/extension/src/components/settings/singleKeygen/SingleKeygenSecureVault').then(
+      ({ SingleKeygenSecureVault }) => SingleKeygenSecureVault
+    ),
+  settings: () =>
+    import('./views/ExtensionSettingsView').then(
+      ({ ExtensionSettingsView }) => ExtensionSettingsView
+    ),
+  setupFastVault: () =>
+    import('@clients/extension/src/components/setup/SetupFastVaultPage').then(
+      ({ SetupFastVaultPage }) => SetupFastVaultPage
+    ),
+  setupSecureVault: () =>
+    import('@clients/extension/src/components/setup/SetupSecureVaultPage').then(
+      ({ SetupSecureVaultPage }) => SetupSecureVaultPage
+    ),
+  setupVault: () =>
+    import('./views/SetupVaultView').then(
+      ({ SetupVaultView }) => SetupVaultView
+    ),
+  stationMigration: () =>
+    import('./views/StationMigrationView').then(
+      ({ StationMigrationView }) => StationMigrationView
+    ),
 }
 
-export const views: Views<AppViewId> = {
-  ...sharedViews,
-  ...appCustomViews,
-  ...extensionSharedViewOverrides,
+/**
+ * Views that ship in the entry chunk: the home screens the action popup must
+ * paint immediately, plus a view with nothing to load.
+ */
+const staticViews: Pick<Views<AppViewId>, StaticViewId> = {
+  vault: ExtensionVaultPage,
+  newVault: NewVaultPage,
+  chooseVaults: ExtensionChooseVaultsView,
+  migrateVault: () => null,
 }
+
+const lazy = lazyViews({ ...sharedViewLoaders, ...appCustomViewLoaders })
+
+/** Every extension view: the home screens statically, everything else behind a dynamic import. */
+export const views: Views<AppViewId> = {
+  ...lazy.views,
+  ...staticViews,
+}
+
+/** Loaders for every view outside the entry chunk, to warm once home has painted. */
+export const viewLoaders = omit(
+  lazy.loaders,
+  'vault',
+  'newVault',
+  'chooseVaults'
+)
+
+/** The views a user is most likely to open next from home, warmed first. */
+export const viewPrefetchPriority: (keyof typeof viewLoaders)[] = [
+  'send',
+  'swap',
+  'vaultChainDetail',
+  'defi',
+  'settings',
+]

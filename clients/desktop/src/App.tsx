@@ -10,6 +10,7 @@ import {
   useNavigateBack,
   usePopNavigationHistory,
 } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { PrefetchViews } from '@lib/ui/navigation/PrefetchViews'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { mpcServerUrl } from '@vultisig/core-mpc/MpcServerType'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
@@ -20,7 +21,7 @@ import { DiscoveryService } from '../wailsjs/go/mediator/Server'
 import { GetLocalUIEcdsa, GetLocalUIEdDSA } from '../wailsjs/go/tss/TssService'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
-import { views } from './navigation/views'
+import { viewLoaders, viewPrefetchPriority, views } from './navigation/views'
 import { AutoRegisterDesktopNotifications } from './notifications/AutoRegisterDesktopNotifications'
 import { DesktopNotificationManager } from './notifications/DesktopNotificationManager'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
@@ -88,6 +89,7 @@ const AppContent = () => {
       <DesktopNotificationManager />
       <AutoRegisterDesktopNotifications />
       <ActiveView views={views} />
+      <PrefetchViews loaders={viewLoaders} priority={viewPrefetchPriority} />
       <OnboardingResetter />
     </CoreApp>
   )

@@ -5,7 +5,43 @@
  * and the extension pages render without critical errors.
  */
 
+import { type Page } from '@playwright/test'
+
 import { test, expect } from './fixtures/extension-loader'
+
+/**
+ * Home is either the vault page or, on a fresh profile, the new-vault screen.
+ * The popup is usable once one of them is on screen, so tests wait on that
+ * rather than on a fixed delay.
+ */
+const homeLocator = (page: Page) =>
+  page
+    .locator('[data-testid="vault-page"], [data-testid="new-vault-create"]')
+    .first()
+
+const waitForHome = (page: Page) =>
+  expect(homeLocator(page)).toBeVisible({ timeout: 15_000 })
+
+/**
+ * Records, from before the first script runs, whether the startup splash ever
+ * entered the DOM, so a splash that flashes and is replaced still fails.
+ */
+const trackStartupSplash = (page: Page) =>
+  page.addInitScript(() => {
+    const splashSelector = '[data-testid="startup-splash"]'
+    const w = window as Window & { __startupSplashSeen?: boolean }
+    w.__startupSplashSeen = false
+    new MutationObserver(() => {
+      if (document.querySelector(splashSelector)) {
+        w.__startupSplashSeen = true
+      }
+    }).observe(document, { childList: true, subtree: true })
+  })
+
+const wasStartupSplashSeen = (page: Page) =>
+  page.evaluate(
+    () => (window as Window & { __startupSplashSeen?: boolean }).__startupSplashSeen
+  )
 
 test.describe('Extension Service Worker', () => {
   test('service worker registers successfully', async ({ context }) => {
@@ -46,8 +82,7 @@ test.describe('Extension Popup', () => {
     // Navigate to the extension popup
     await page.goto(`chrome-extension://${extensionId}/index.html`)
 
-    // Give the popup time to render
-    await page.waitForTimeout(3000)
+    await waitForHome(page)
 
     // The page should have loaded (title or some content)
     const title = await page.title()
@@ -74,7 +109,7 @@ test.describe('Extension Popup', () => {
   test('popup renders HTML content', async ({ context, extensionId }) => {
     const page = await context.newPage()
     await page.goto(`chrome-extension://${extensionId}/index.html`)
-    await page.waitForTimeout(2000)
+    await waitForHome(page)
 
     // Should have a root element (React renders into #root typically)
     const hasRoot = await page.evaluate(() => {
@@ -100,9 +135,32 @@ test.describe('Extension Popup', () => {
     })
 
     await page.goto(`chrome-extension://${extensionId}/index.html`)
-    await page.waitForTimeout(2000)
+    await waitForHome(page)
 
     expect(pageCrashed).toBe(false)
+  })
+
+  test('action popup paints home without the startup splash, on every open', async ({
+    context,
+    extensionId,
+  }) => {
+    // The toolbar popup is index.html?view=popup. Its document is destroyed on
+    // close, so a second open must be as fast and as splash-free as the first.
+    for (const attempt of [1, 2]) {
+      const page = await context.newPage()
+      await trackStartupSplash(page)
+
+      await page.goto(`chrome-extension://${extensionId}/index.html?view=popup`)
+      await waitForHome(page)
+
+      expect(
+        await wasStartupSplashSeen(page),
+        `startup splash rendered on popup open #${attempt}`
+      ).toBe(false)
+      await expect(page.locator('[data-testid="startup-splash"]')).toHaveCount(0)
+
+      await page.close()
+    }
   })
 })
 
