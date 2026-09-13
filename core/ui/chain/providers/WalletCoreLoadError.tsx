@@ -16,7 +16,7 @@ export const WalletCoreLoadError = ({
 
   return (
     <FlowErrorPageContent
-      title="Failed to load the wallet engine"
+      title={t('failed_to_load')}
       error={error}
       action={<Button onClick={onRetry}>{t('try_again')}</Button>}
     />
