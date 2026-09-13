@@ -9,12 +9,19 @@ import { InputProps, LabelProp } from '@lib/ui/props'
 type PasscodeInputProps = InputProps<string | null> &
   Partial<LabelProp> &
   Partial<
-    Pick<MultiCharacterInputProps, 'validation' | 'validationMessages'>
+    Pick<
+      MultiCharacterInputProps,
+      'validation' | 'validationMessages' | 'appearance'
+    >
   > & {
     autoFocus?: boolean
     length?: number
   }
 
+/**
+ * A masked numeric passcode field built on `MultiCharacterInput`, defaulting
+ * to the configured passcode length and never offering a paste button.
+ */
 export const PasscodeInput = ({
   autoFocus = false,
   value,
@@ -22,12 +29,14 @@ export const PasscodeInput = ({
   label,
   validation,
   validationMessages,
+  appearance,
   length = passcodeEncryptionConfig.passcodeLength,
 }: PasscodeInputProps) => {
   return (
     <>
       {label && <InputLabel>{label}</InputLabel>}
       <MultiCharacterInput
+        appearance={appearance}
         autoFocusFirst={autoFocus}
         includePasteButton={false}
         length={length}
