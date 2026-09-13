@@ -1,4 +1,4 @@
-import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { StartupPlaceholder } from '@core/ui/product/StartupPlaceholder'
 import { BlockingOverlay } from '@lib/ui/overlay/BlockingOverlay'
 
 import { usePasscodeAutoLock } from '../../storage/passcodeAutoLock'
@@ -31,7 +31,7 @@ export const PasscodeGuard = () => {
       {passcodeAutoLock && <PasscodeAutoLock />}
       {pendingPasscodeUnlockRestore && (
         <BlockingOverlay>
-          <ProductLogoBlock />
+          <StartupPlaceholder />
         </BlockingOverlay>
       )}
       {isLocked && !pendingPasscodeUnlockRestore && (

@@ -1,4 +1,4 @@
-import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { StartupPlaceholder } from '@core/ui/product/StartupPlaceholder'
 import { useStartupSplash } from '@core/ui/product/startupSplash'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
@@ -75,7 +75,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       value={query}
       success={({ currentVaultId, vaults }) => {
         if (!hasCompletedStartupSplash) {
-          return <ProductLogoBlock />
+          return <StartupPlaceholder />
         }
 
         return (
@@ -106,7 +106,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
           error={error}
         />
       )}
-      pending={() => <ProductLogoBlock />}
+      pending={() => <StartupPlaceholder />}
     />
   )
 }

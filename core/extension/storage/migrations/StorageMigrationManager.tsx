@@ -1,5 +1,5 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
-import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { StartupPlaceholder } from '@core/ui/product/StartupPlaceholder'
 import { useCore } from '@core/ui/state/core'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -30,7 +30,7 @@ export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
   return (
     <MatchQuery
       value={mutationStatus}
-      pending={() => <ProductLogoBlock />}
+      pending={() => <StartupPlaceholder />}
       error={error => (
         <FlowErrorPageContent
           title={t('failed_to_migrate_storage')}

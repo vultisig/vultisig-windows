@@ -1,7 +1,10 @@
 import './mpc/bootstrapMpcEngine'
 
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { StartupSplashProvider } from '@core/ui/product/startupSplash'
+import {
+  StartupMode,
+  StartupSplashProvider,
+} from '@core/ui/product/startupSplash'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { CustomRpcOverridesSync } from '@core/ui/storage/CustomRpcOverridesSync'
@@ -20,7 +23,7 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { stationTheme } from '@lib/ui/theme/stationTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
-import React from 'react'
+import React, { Suspense } from 'react'
 import styled from 'styled-components'
 
 import { NotificationBannerProvider } from './notifications/NotificationBannerProvider'
@@ -30,6 +33,7 @@ type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
   migrationsManager?: React.ComponentType<ChildrenProp>
   isLimited?: boolean
+  startupMode?: StartupMode
 }
 
 const Container = styled.div`
@@ -61,6 +65,7 @@ export const CoreApp = ({
   coreState,
   migrationsManager: MigrationsManager,
   isLimited = false,
+  startupMode = 'splash',
 }: CoreAppProps) => {
   const theme = currentProductBrand === 'station' ? stationTheme : darkTheme
 
@@ -68,8 +73,8 @@ export const CoreApp = ({
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <CoreProvider value={coreState}>
-        <StartupSplashProvider>
-          <WalletCoreProvider>
+        <StartupSplashProvider mode={startupMode}>
+          <WalletCoreProvider blocking={startupMode === 'splash'}>
             <Wrap wrap={MigrationsManager}>
               <StorageDependant>
                 <ToastProvider>
@@ -77,7 +82,11 @@ export const CoreApp = ({
                     <ResponsivenessProvider>
                       <Container>
                         {children}
-                        {!isLimited && <VaultDependentContent />}
+                        {!isLimited && (
+                          <Suspense fallback={null}>
+                            <VaultDependentContent />
+                          </Suspense>
+                        )}
                       </Container>
                     </ResponsivenessProvider>
                   </NotificationBannerProvider>

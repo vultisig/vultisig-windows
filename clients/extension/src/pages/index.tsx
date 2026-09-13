@@ -2,7 +2,11 @@ import '../polyfills/installFirefoxProcessGlobal'
 import '@core/ui/animations/configureRiveRuntime'
 
 import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
-import { views } from '@clients/extension/src/navigation/views'
+import {
+  viewLoaders,
+  viewPrefetchPriority,
+  views,
+} from '@clients/extension/src/navigation/views'
 import { ExtensionNotificationManager } from '@clients/extension/src/notifications/ExtensionNotificationManager'
 import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
@@ -15,6 +19,7 @@ import {
   useNavigateBack,
   usePopNavigationHistory,
 } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { PrefetchViews } from '@lib/ui/navigation/PrefetchViews'
 import { createGlobalStyle, css } from 'styled-components'
 
 const isPopup = isPopupView()
@@ -69,8 +74,10 @@ const App = () => {
       goBack={goBack}
       goHome={() => navigate(initialCoreView)}
       popNavigationHistory={popNavigationHistory}
+      startupMode={isPopup ? 'instant' : 'splash'}
     >
       <ActiveView views={views} />
+      <PrefetchViews loaders={viewLoaders} priority={viewPrefetchPriority} />
       <ExtensionNotificationManager />
     </ExtensionCoreApp>
   )
