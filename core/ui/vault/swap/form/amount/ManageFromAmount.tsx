@@ -1,13 +1,25 @@
+import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { getFiatCurrencySymbol } from '@core/ui/chain/utils/getFiatCurrencySymbol'
+import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { Match } from '@lib/ui/base/Match'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { textInputHeight } from '@lib/ui/css/textInput'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
+import { Text, text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -15,11 +27,14 @@ import { useFromAmount } from '../../state/fromAmount'
 import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
+import { getFiatInputValue, parseFiatInputValue } from './fiatInputValue'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
 type ManageFromAmountProps = {
   coinPill: ReactNode
 }
+
+type FromAmountInputMode = 'token' | 'fiat'
 
 const parseAmountInputValue = (value: string, decimals: number) => {
   if (value === '') {
@@ -65,13 +80,39 @@ export const getSuggestionDisplayValue = ({
  * balance suggestions. The pill arrives as an element because the suggestions
  * sit on their own row beneath both, which they can only do from inside the
  * component that owns the input's value.
+ *
+ * The field is token-denominated; tapping the fiat line under it flips the
+ * two so a fiat amount can be typed instead. Fiat is input conversion only:
+ * every keystroke is turned into a token amount with the same price the fiat
+ * line is rendered from, and that token amount is what the quote and the
+ * keysign see. Without a price the fiat line is not tappable and the field
+ * falls back to token input.
  */
 export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
   const [value, setValue] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
   const swapCoin = useCurrentVaultCoin(fromCoinKey)
   const { decimals } = swapCoin
+  const fiatCurrency = useFiatCurrency()
+  const priceQuery = useCoinPriceQuery({ coin: swapCoin })
+  const price =
+    priceQuery.data !== undefined && priceQuery.data > 0
+      ? priceQuery.data
+      : undefined
   const previousValueRef = useRef<bigint | null>(null)
+  const hasSwitchedModeRef = useRef(false)
+
+  const [inputMode, setInputMode] = useStateCorrector(
+    useState<FromAmountInputMode>('token'),
+    mode => (price === undefined ? 'token' : mode)
+  )
+
+  const tokenAmount = value !== null ? fromChainAmount(value, decimals) : null
+
+  const toFiatInputValue = (chainAmount: bigint | null) =>
+    chainAmount === null || price === undefined
+      ? ''
+      : getFiatInputValue(fromChainAmount(chainAmount, decimals) * price)
 
   const fullDecimalString =
     value !== null ? bigIntToDecimalString(value, decimals) : ''
@@ -79,20 +120,27 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
     ? fullDecimalString.replace(/\.?0+$/, '')
     : fullDecimalString
   const [inputValue, setInputValue] = useState<string>(trimmedDecimalString)
+  const [fiatInputValue, setFiatInputValue] = useState<string>('')
   const isFeeCoinSelected = isFeeCoin(fromCoinKey)
 
   useEffect(() => {
-    // Only update input if the value changed externally (not from user typing)
-    // We detect this by checking if the value changed but the input doesn't match
+    // Only update the inputs if the value changed externally (not from user
+    // typing). We detect this by checking if the value changed but the input
+    // doesn't match
     if (value !== previousValueRef.current) {
       const currentInputAsBigInt = parseAmountInputValue(inputValue, decimals)
       if (currentInputAsBigInt !== value) {
         // Remove trailing zeros from the decimal string for display
         setInputValue(trimmedDecimalString)
       }
+      setFiatInputValue(
+        value === null || price === undefined
+          ? ''
+          : getFiatInputValue(fromChainAmount(value, decimals) * price)
+      )
       previousValueRef.current = value
     }
-  }, [value, trimmedDecimalString, inputValue, decimals])
+  }, [value, trimmedDecimalString, inputValue, decimals, price])
 
   const handleInputValueChange = (value: string) => {
     value = value.replace(/-/g, '')
@@ -104,7 +152,7 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
     if (value === '') {
       setInputValue('')
       previousValueRef.current = null
-      setValue?.(null)
+      setValue(null)
       return
     }
 
@@ -119,7 +167,42 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
 
     setInputValue(value)
     previousValueRef.current = chainAmount
-    setValue?.(chainAmount)
+    setValue(chainAmount)
+  }
+
+  const handleFiatInputValueChange = (rawValue: string) => {
+    const normalized = parseFiatInputValue(rawValue)
+    if (normalized === undefined) {
+      return
+    }
+
+    if (normalized === '') {
+      setFiatInputValue('')
+      previousValueRef.current = null
+      setValue(null)
+      return
+    }
+
+    const chainAmount = toChainAmount(
+      Number(normalized) / shouldBePresent(price, 'from coin price'),
+      decimals
+    )
+
+    setFiatInputValue(normalized)
+    previousValueRef.current = chainAmount
+    setValue(chainAmount)
+  }
+
+  const enterFiatMode = () => {
+    hasSwitchedModeRef.current = true
+    setFiatInputValue(toFiatInputValue(value))
+    setInputMode('fiat')
+  }
+
+  const enterTokenMode = () => {
+    hasSwitchedModeRef.current = true
+    setInputValue(trimmedDecimalString)
+    setInputMode('token')
   }
 
   const suggestions = isFeeCoinSelected
@@ -132,27 +215,67 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
         {coinPill}
         <VStack gap={4} alignItems="flex-end">
           <AmountContainer gap={6} alignItems="flex-end">
-            <PositionedAmountInput
-              type="text"
-              inputMode="decimal"
-              placeholder={'0'}
-              onWheel={event => event.currentTarget.blur()}
-              value={inputValue}
-              onValueChange={handleInputValueChange}
-              onPaste={event => {
-                event.preventDefault()
-                handleInputValueChange(event.clipboardData.getData('text'))
-              }}
-              data-testid="swap-from-amount-input"
+            <Match
+              value={inputMode}
+              token={() => (
+                <>
+                  <PositionedAmountInput
+                    type="text"
+                    inputMode="decimal"
+                    placeholder={'0'}
+                    autoFocus={hasSwitchedModeRef.current}
+                    onWheel={event => event.currentTarget.blur()}
+                    value={inputValue}
+                    onValueChange={handleInputValueChange}
+                    onPaste={event => {
+                      event.preventDefault()
+                      handleInputValueChange(
+                        event.clipboardData.getData('text')
+                      )
+                    }}
+                    data-testid="swap-from-amount-input"
+                  />
+                  <SwapFiatAmount
+                    value={{ ...fromCoinKey, amount: tokenAmount ?? 0 }}
+                    onClick={enterFiatMode}
+                    testId="swap-from-fiat-amount"
+                  />
+                </>
+              )}
+              fiat={() => (
+                <>
+                  <FiatInputRow alignItems="center" justifyContent="flex-end">
+                    <Text size={22} weight={500} color="contrast">
+                      {getFiatCurrencySymbol(fiatCurrency)}
+                    </Text>
+                    <FiatAmountInput
+                      type="text"
+                      inputMode="decimal"
+                      placeholder="0"
+                      autoFocus
+                      $characters={Math.max(fiatInputValue.length, 1)}
+                      value={fiatInputValue}
+                      onChange={event =>
+                        handleFiatInputValueChange(event.currentTarget.value)
+                      }
+                      onPaste={event => {
+                        event.preventDefault()
+                        handleFiatInputValueChange(
+                          event.clipboardData.getData('text')
+                        )
+                      }}
+                      data-testid="swap-from-fiat-amount-input"
+                    />
+                  </FiatInputRow>
+                  <TokenAmountButton
+                    onClick={enterTokenMode}
+                    data-testid="swap-from-token-amount"
+                  >
+                    {formatAmount(tokenAmount ?? 0, swapCoin)}
+                  </TokenAmountButton>
+                </>
+              )}
             />
-            {value !== null && (
-              <SwapFiatAmount
-                value={{
-                  ...fromCoinKey,
-                  amount: fromChainAmount(value, decimals),
-                }}
-              />
-            )}
           </AmountContainer>
         </VStack>
       </HStack>
@@ -174,8 +297,9 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
                       chain: fromCoinKey.chain,
                     })
                   )
+                  setFiatInputValue(toFiatInputValue(suggestionAmount))
                   previousValueRef.current = suggestionAmount
-                  setValue?.(suggestionAmount)
+                  setValue(suggestionAmount)
                 }}
                 key={suggestion}
                 value={suggestion}
@@ -209,4 +333,39 @@ const PositionedAmountInput = styled(TextInput)`
   &::placeholder {
     font-size: 18px;
   }
+`
+
+/**
+ * Same box as the token field so the card does not jump when the two swap
+ * places; the symbol and the digits sit flush because the input is sized to
+ * its content instead of stretching across the row.
+ */
+const FiatInputRow = styled(HStack)`
+  height: ${textInputHeight}px;
+  padding-right: 12px;
+`
+
+const FiatAmountInput = styled.input<{ $characters: number }>`
+  width: calc(${({ $characters }) => $characters}ch + 4px);
+  max-width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: ${getColor('contrast')};
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 500;
+
+  &::placeholder {
+    ${text({ color: 'shy', size: 18, weight: '500' })}
+  }
+`
+
+const TokenAmountButton = styled(UnstyledButton)`
+  ${text({
+    color: 'shy',
+    weight: 500,
+    size: 12,
+  })};
 `
