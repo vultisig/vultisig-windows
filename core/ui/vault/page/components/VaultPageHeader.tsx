@@ -29,6 +29,10 @@ const HeaderContainer = styled.div<{ $isExtension: boolean }>`
   top: 0;
   z-index: 1;
   display: grid;
+  /* Both states share one implicit column, whose default auto sizing floors
+     it at the widest content. A long vault name then widens the column past
+     the popup and carries the controls out of view with it. */
+  grid-template-columns: minmax(0, 1fr);
   background: ${getColor('background')};
   border-bottom: 1px solid ${getColor('foregroundExtra')};
 
