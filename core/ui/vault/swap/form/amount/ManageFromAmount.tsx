@@ -363,26 +363,29 @@ const fiatInputFont = css`
 `
 
 /**
- * The input takes its width from a hidden copy of its text laid over the
- * same grid cell, so the digits end exactly where the fiat line under them
- * does; the two extra pixels past that leave room for the caret.
+ * The input takes its width from a hidden copy of its text, so the digits
+ * end exactly where the fiat line under them does; the two extra pixels past
+ * that leave room for the caret. The input is taken out of flow because an
+ * input's own intrinsic width would otherwise stretch the box past the text.
  */
 const FiatInputSizer = styled.div`
-  display: inline-grid;
+  position: relative;
   max-width: 100%;
 `
 
 const FiatInputMeasure = styled.span`
-  grid-area: 1 / 1;
+  display: block;
   visibility: hidden;
   white-space: pre;
   ${fiatInputFont};
 `
 
 const FiatAmountInput = styled.input`
-  grid-area: 1 / 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
   width: calc(100% + 2px);
-  min-width: 0;
   padding: 0;
   border: none;
   outline: none;
