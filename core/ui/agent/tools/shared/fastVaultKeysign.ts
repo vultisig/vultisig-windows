@@ -93,16 +93,18 @@ async function fastVaultKeysignAttempt({
     throw new Error('MLDSA keysign is not yet implemented')
   }
 
-  // Before the server is asked to sign: it would otherwise wait out its
-  // timeout for a local party whose SDK failed to load.
-  await loadMpcEngine()
-
   const sessionId = uuidv4()
   const hexEncryptionKey = generateEncryptionKey()
   const isEcdsa = signatureAlgorithm === 'ecdsa'
   const publicKey = isEcdsa ? vault.publicKeyEcdsa : vault.publicKeyEddsa
 
-  await registerSession(relayUrl, sessionId, vault.localPartyId)
+  // The SDK has to be loaded before the server is asked to sign, or it waits
+  // out its timeout for a local party that cannot join; registering the relay
+  // session does not depend on it, so the two overlap.
+  await Promise.all([
+    loadMpcEngine(),
+    registerSession(relayUrl, sessionId, vault.localPartyId),
+  ])
 
   await callFastVaultSign({
     publicKey,

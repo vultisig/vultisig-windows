@@ -21,7 +21,6 @@ import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
 import { without } from '@vultisig/lib-utils/array/without'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
-import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 
@@ -43,8 +42,6 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
     onStepComplete,
     signers,
   }) => {
-    await loadMpcEngine()
-
     const sharedFinalVaultFields = {
       signers,
       localPartyId,

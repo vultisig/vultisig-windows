@@ -133,10 +133,6 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
   }
 
   const validated = pluginInstallInputSchema.parse(input)
-
-  // Before any relay call: remote parties would otherwise start the protocol
-  // and wait out their timeout if the SDK failed to load.
-  await loadMpcEngine()
   const pluginId = resolvePluginId(validated.plugin_id)
   const pluginName = getPluginName(pluginId)
   if (!context.authToken) {
@@ -191,7 +187,14 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
   const serverPartyId = generateServerPartyId(sessionId)
   const libType = toLibType(vault.libType)
 
-  await registerSession(relayUrl, sessionId, vault.localPartyId)
+  // The SDK has to be loaded before the reshare is requested, or the remote
+  // parties start a protocol the local side cannot join and wait out their
+  // timeout; registering the relay session does not depend on it, so the two
+  // overlap.
+  await Promise.all([
+    loadMpcEngine(),
+    registerSession(relayUrl, sessionId, vault.localPartyId),
+  ])
 
   await requestFastVaultReshare({
     name: context.vaultName,

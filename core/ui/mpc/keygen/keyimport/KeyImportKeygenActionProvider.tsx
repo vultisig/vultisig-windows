@@ -32,7 +32,6 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
-import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {
@@ -109,8 +108,6 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, onStepStart, onStepComplete, signers }) => {
-      await loadMpcEngine()
-
       const { chains } = keyImportInput
       const isStationTerraRoot =
         isStationTerraRootKeyImportInput(keyImportInput)

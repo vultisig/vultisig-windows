@@ -9,8 +9,8 @@
 // extension's action popup keeps the SDK, and everything it drags in (WalletCore
 // glue, MPC WASM glue, chain clients), out of the chunk it evaluates before home
 // paints. Every path that reaches the engine awaits `loadMpcEngine()` first:
-// key-share reading, keygen and reshare action providers, keysign, agent plugin
-// installs. Clients that boot behind a splash await it in `MpcEngineGate`. A path
+// key-share reading, the keygen mutation, keysign, agent plugin installs.
+// Clients that boot behind a splash await it in `MpcEngineGate`. A path
 // that forgets fails loudly: `getMpcEngine` throws, and `ensureMpcEngine` cannot
 // fall back because `@vultisig/mpc-wasm` is not installed.
 //
@@ -19,23 +19,12 @@
 //   into those bundles. See eslint.config.mjs and the headers of
 //   clients/extension/src/{background,inpage}/index.ts.
 
-type VultisigSdk = typeof import('@vultisig/sdk')
-
-let loading: Promise<VultisigSdk> | null = null
+import { memoizeAsync } from '@vultisig/lib-utils/memoizeAsync'
 
 /**
  * Loads the SDK platform entry once per realm, which registers the MPC engine
  * as a side effect, and resolves to the SDK module so code that needs one of
  * its helpers shares the same load. Await it before the first MPC operation on
- * any path. A failed load is retried on the next call.
+ * any path. A failed load is not cached, so the next call retries.
  */
-export const loadMpcEngine = () => {
-  if (!loading) {
-    loading = import('@vultisig/sdk').catch((error: unknown) => {
-      loading = null
-      throw error
-    })
-  }
-
-  return loading
-}
+export const loadMpcEngine = memoizeAsync(() => import('@vultisig/sdk'))

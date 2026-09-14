@@ -14,8 +14,8 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useNavigation } from '@lib/ui/navigation/state'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
-import { attempt } from '@vultisig/lib-utils/attempt'
-import { useEffect, useRef, useState } from 'react'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { removeInitialView } from '../storage/initialView'
@@ -27,8 +27,6 @@ import {
   isVaultRegisteredForPush,
   pushNotificationRegistrationsStorageKey,
 } from './pushNotificationStorage'
-
-const vaultMetaRetryDelayMs = 5000
 
 const maxConsecutiveWsFailures = 5
 
@@ -126,30 +124,28 @@ export const ExtensionNotificationManager = () => {
   const historyRef = useRef(history)
   historyRef.current = history
 
-  const vaultBannerMetaRef = useRef(new Map<string, { isFastVault: boolean }>())
-  // Bumped after a failed SDK load so the metadata is rebuilt without waiting
-  // for the vault list to change.
-  const [vaultMetaAttempt, setVaultMetaAttempt] = useState(0)
+  const vaultsRef = useRef(vaults)
+  vaultsRef.current = vaults
 
-  useEffect(() => {
-    let cancelled = false
-    let retryTimeout: ReturnType<typeof setTimeout> | undefined
+  // Built the first time a notification needs it, and rebuilt when the vault
+  // list changes, so the SDK load it depends on is not started on mount ahead
+  // of the idle prefetch. A build that failed is dropped so the next one retries.
+  const vaultBannerMetaRef = useRef<{
+    vaults: ReturnType<typeof useVaults>
+    meta: Promise<Map<string, { isFastVault: boolean }>>
+  } | null>(null)
 
-    void (async () => {
-      const sdk = await attempt(loadMpcEngine)
-      if ('error' in sdk) {
-        if (!cancelled) {
-          retryTimeout = setTimeout(
-            () => setVaultMetaAttempt(current => current + 1),
-            vaultMetaRetryDelayMs
-          )
-        }
-        return
-      }
+  const getVaultBannerMeta = () => {
+    const currentVaults = vaultsRef.current
+    const cached = vaultBannerMetaRef.current
+    if (cached && cached.vaults === currentVaults) {
+      return cached.meta
+    }
 
-      const { computeNotificationVaultId } = sdk.data
+    const meta = (async () => {
+      const { computeNotificationVaultId } = await loadMpcEngine()
       const next = new Map<string, { isFastVault: boolean }>()
-      for (const vault of vaults) {
+      for (const vault of currentVaults) {
         if (!vault.hexChainCode) {
           continue
         }
@@ -157,21 +153,21 @@ export const ExtensionNotificationManager = () => {
           vault.publicKeys.ecdsa,
           vault.hexChainCode
         )
-        if (cancelled) {
-          return
-        }
         next.set(vaultId, { isFastVault: hasServer(vault.signers) })
       }
-      if (!cancelled) {
-        vaultBannerMetaRef.current = next
-      }
+      return next
     })()
+    meta.catch(() => {
+      if (vaultBannerMetaRef.current?.meta === meta) {
+        vaultBannerMetaRef.current = null
+      }
+    })
+    vaultBannerMetaRef.current = { vaults: currentVaults, meta }
 
-    return () => {
-      cancelled = true
-      clearTimeout(retryTimeout)
-    }
-  }, [vaults, vaultMetaAttempt])
+    return meta
+  }
+  const getVaultBannerMetaRef = useRef(getVaultBannerMeta)
+  getVaultBannerMetaRef.current = getVaultBannerMeta
 
   const connectionsRef = useRef<
     Map<string, ManagedExtensionNotificationSocket>
@@ -220,7 +216,10 @@ export const ExtensionNotificationManager = () => {
         localPartyName,
         t: tRef.current,
         topView: getLastItem(historyRef.current),
-        vaultBannerMeta: vaultBannerMetaRef.current,
+        vaultBannerMeta: withFallback(
+          await attempt(getVaultBannerMetaRef.current),
+          new Map()
+        ),
         navigateToKeysign,
         showBanner: showBannerRef.current,
         bringAppToFront: () => {

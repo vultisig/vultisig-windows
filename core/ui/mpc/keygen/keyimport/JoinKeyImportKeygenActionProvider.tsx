@@ -26,7 +26,6 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
-import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {
@@ -57,8 +56,6 @@ export const JoinKeyImportKeygenActionProvider = ({
     onStepComplete,
     signers,
   }) => {
-    await loadMpcEngine()
-
     const chains = parseKeyImportChains(shouldBePresent(keyImportChainsRaw))
 
     const sharedDklsParams = {

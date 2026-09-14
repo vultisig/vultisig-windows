@@ -17,7 +17,6 @@ import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
 import { without } from '@vultisig/lib-utils/array/without'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
-import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { useKeygenOperation } from '../state/currentKeygenOperationType'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import {
@@ -50,8 +49,6 @@ export const ReshareVaultKeygenActionProvider = ({
     onStepComplete,
     signers,
   }) => {
-    await loadMpcEngine()
-
     let timeoutMs = 60000
     if (getDeveloperOptions) {
       const { appInstallTimeout } = await getDeveloperOptions()

@@ -1,4 +1,3 @@
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import {
   KeygenAction,
   KeygenActionProvider,
@@ -40,7 +39,6 @@ export const MigrateVaultKeygenActionProvider = ({
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, signers }) => {
-      await loadMpcEngine()
       onStepChange('ecdsa')
 
       const sharedFinalVaultFields = {

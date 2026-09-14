@@ -65,7 +65,11 @@ const assertPopupEntryGraphModules = (): PluginOption => ({
       output => output.type === 'chunk'
     )
     const entry = chunks.find(chunk => chunk.isEntry && chunk.name === 'index')
-    if (!entry) return
+    if (!entry) {
+      this.error(
+        'The popup entry chunk "index" was not emitted; the entry-graph check cannot run. Keep the `index` input in rollupOptions or update this check.'
+      )
+    }
 
     // Static import chain from the entry to each chunk, for the error message.
     const importedBy = new Map<string, string | null>([[entry.fileName, null]])
