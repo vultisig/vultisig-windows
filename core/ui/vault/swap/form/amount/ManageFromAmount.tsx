@@ -321,8 +321,14 @@ const SuggestionRow = styled(HStack)`
   width: 100%;
 `
 
+/**
+ * The text-input frame pads both sides; the right one is dropped so the
+ * digits end on the card's edge, in line with the To amount and the fiat
+ * line under them.
+ */
 const PositionedAmountInput = styled(TextInput)`
   text-align: right;
+  padding-right: 0;
   border: none;
   font-family: inherit;
   font-size: 22px;
@@ -342,7 +348,6 @@ const PositionedAmountInput = styled(TextInput)`
  */
 const FiatInputRow = styled(HStack)`
   height: ${textInputHeight}px;
-  padding-right: 12px;
 `
 
 const FiatAmountInput = styled.input<{ $characters: number }>`
