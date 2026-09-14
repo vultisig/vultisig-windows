@@ -11,6 +11,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { FramedQrCode } from '@lib/ui/qr/FramedQrCode'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { currentProductBrandConfig } from '../../../product/brand'
 
@@ -50,9 +51,9 @@ export const AddressPage = () => {
         justifyContent="center"
         flexGrow
       >
-        <Text color="contrast" family="mono" size={14} weight="600">
+        <Address color="contrast" family="mono" size={14} weight="600">
           {address}
-        </Text>
+        </Address>
         <ElementSizeAware
           render={({ setElement, size }) => (
             <VStack ref={setElement}>
@@ -64,3 +65,11 @@ export const AddressPage = () => {
     </VStack>
   )
 }
+
+// An address has no break opportunities, so past the popup's 328px it ran off
+// the page and gave it a horizontal scrollbar; let it wrap anywhere instead.
+const Address = styled(Text)`
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: center;
+`

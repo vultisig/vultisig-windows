@@ -159,17 +159,17 @@ export const SwapKeysignTxOverview = ({
     )
 
   return (
-    <VStack gap={36}>
+    <VStack gap={36} maxWidth={576} fullWidth>
       <TxStatusTracker
         chain={blockExplorerChain}
         hash={getLastItem(txHashes)}
       />
-      <VStack alignItems="center" gap={8}>
-        <VStack gap={8}>
+      <VStack alignItems="center" gap={8} fullWidth>
+        <VStack gap={8} fullWidth>
           <Text centerHorizontally color="shy" size={10} height="large">
             {t('swap')}
           </Text>
-          <HStack gap={8} style={{ position: 'relative' }}>
+          <HStack gap={8} fullWidth style={{ position: 'relative' }}>
             {fromCoin && (
               <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
             )}
