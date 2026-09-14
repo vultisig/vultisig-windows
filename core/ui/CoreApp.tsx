@@ -1,8 +1,4 @@
 import {
-  loadWalletCore,
-  WalletCoreProvider,
-} from '@core/ui/chain/providers/WalletCoreProvider'
-import {
   StartupMode,
   StartupSplashProvider,
 } from '@core/ui/product/startupSplash'
@@ -27,6 +23,10 @@ import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import React, { Suspense, useEffect } from 'react'
 import styled from 'styled-components'
 
+import {
+  loadWalletCore,
+  WalletCoreProvider,
+} from './chain/providers/WalletCoreProvider'
 import { loadMpcEngine } from './mpc/bootstrapMpcEngine'
 import { MpcEngineGate } from './mpc/MpcEngineGate'
 import { NotificationBannerProvider } from './notifications/NotificationBannerProvider'

@@ -1,6 +1,5 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { featureFlags } from '@core/ui/featureFlags'
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
@@ -33,6 +32,7 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
+import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {

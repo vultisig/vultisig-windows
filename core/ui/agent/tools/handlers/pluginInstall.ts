@@ -1,4 +1,3 @@
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
 import {
   setKeygenComplete,
@@ -9,6 +8,7 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 
+import { loadMpcEngine } from '../../../mpc/bootstrapMpcEngine'
 import { relayUrl } from '../../config'
 import { requestFastVaultReshare } from '../shared/fastVaultApi'
 import { getPluginName, resolvePluginId } from '../shared/pluginConfig'
@@ -133,6 +133,10 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
   }
 
   const validated = pluginInstallInputSchema.parse(input)
+
+  // Before any relay call: remote parties would otherwise start the protocol
+  // and wait out their timeout if the SDK failed to load.
+  await loadMpcEngine()
   const pluginId = resolvePluginId(validated.plugin_id)
   const pluginName = getPluginName(pluginId)
   if (!context.authToken) {
@@ -230,8 +234,6 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
 
   const ecdsaKeyshare = getEcdsaKeyShare(vault)
   const eddsaKeyshare = getEddsaKeyShare(vault)
-
-  await loadMpcEngine()
 
   const dklsKeygen = new DKLS(
     { reshare: 'plugin' },

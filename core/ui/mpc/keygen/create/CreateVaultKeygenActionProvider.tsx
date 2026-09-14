@@ -1,5 +1,4 @@
 import { featureFlags } from '@core/ui/featureFlags'
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
@@ -22,6 +21,7 @@ import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
 import { without } from '@vultisig/lib-utils/array/without'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
+import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 

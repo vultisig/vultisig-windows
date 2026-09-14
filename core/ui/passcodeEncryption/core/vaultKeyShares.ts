@@ -1,4 +1,3 @@
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { initializeMpcLib } from '@vultisig/core-mpc/lib/initialize'
 import { toMpcLibKeyshare } from '@vultisig/core-mpc/lib/keyshare'
@@ -17,6 +16,7 @@ import {
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { recordFromKeys } from '@vultisig/lib-utils/record/recordFromKeys'
 
+import { loadMpcEngine } from '../../mpc/bootstrapMpcEngine'
 import {
   decryptWithPasscode,
   encryptWithPasscode,

@@ -67,13 +67,23 @@ const assertPopupEntryGraphModules = (): PluginOption => ({
     const entry = chunks.find(chunk => chunk.isEntry && chunk.name === 'index')
     if (!entry) return
 
-    const staticGraph = new Set<string>()
+    // Static import chain from the entry to each chunk, for the error message.
+    const importedBy = new Map<string, string | null>([[entry.fileName, null]])
     const visit = (fileName: string) => {
-      if (staticGraph.has(fileName)) return
-      staticGraph.add(fileName)
-      chunks.find(chunk => chunk.fileName === fileName)?.imports.forEach(visit)
+      chunks
+        .find(chunk => chunk.fileName === fileName)
+        ?.imports.forEach(imported => {
+          if (importedBy.has(imported)) return
+          importedBy.set(imported, fileName)
+          visit(imported)
+        })
     }
     visit(entry.fileName)
+    const staticGraph = new Set(importedBy.keys())
+    const chainTo = (fileName: string): string => {
+      const parent = importedBy.get(fileName)
+      return parent ? `${chainTo(parent)} -> ${fileName}` : fileName
+    }
 
     const offenders = chunks
       .filter(chunk => staticGraph.has(chunk.fileName))
@@ -85,7 +95,8 @@ const assertPopupEntryGraphModules = (): PluginOption => ({
             )
           )
           .map(
-            id => `${chunk.fileName}: ${id.replace(/^.*node_modules\//, '')}`
+            id =>
+              `${chainTo(chunk.fileName)}: ${id.replace(/^.*node_modules\//, '')}`
           )
       )
 
@@ -275,7 +286,11 @@ export default defineConfig(async ({ mode }) => {
         viteStaticCopy({
           targets: getStaticCopyTargets(),
         }),
-        assertPopupEntryGraphModules(),
+        // The Firefox build keeps every module of a package in one vendor chunk,
+        // so the transaction builders in @vultisig/core-mpc and core-chain, which
+        // only lazy pages use, sit next to the modules home needs and drag
+        // WalletCore in statically. Only the Chromium build can hold this line.
+        ...(isFirefoxBuild ? [] : [assertPopupEntryGraphModules()]),
       ],
       build: {
         // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's

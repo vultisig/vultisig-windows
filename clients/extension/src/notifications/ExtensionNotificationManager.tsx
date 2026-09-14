@@ -14,7 +14,8 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useNavigation } from '@lib/ui/navigation/state'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
-import { useEffect, useRef } from 'react'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { removeInitialView } from '../storage/initialView'
@@ -26,6 +27,8 @@ import {
   isVaultRegisteredForPush,
   pushNotificationRegistrationsStorageKey,
 } from './pushNotificationStorage'
+
+const vaultMetaRetryDelayMs = 5000
 
 const maxConsecutiveWsFailures = 5
 
@@ -124,12 +127,27 @@ export const ExtensionNotificationManager = () => {
   historyRef.current = history
 
   const vaultBannerMetaRef = useRef(new Map<string, { isFastVault: boolean }>())
+  // Bumped after a failed SDK load so the metadata is rebuilt without waiting
+  // for the vault list to change.
+  const [vaultMetaAttempt, setVaultMetaAttempt] = useState(0)
 
   useEffect(() => {
     let cancelled = false
+    let retryTimeout: ReturnType<typeof setTimeout> | undefined
 
     void (async () => {
-      const { computeNotificationVaultId } = await loadMpcEngine()
+      const sdk = await attempt(loadMpcEngine)
+      if ('error' in sdk) {
+        if (!cancelled) {
+          retryTimeout = setTimeout(
+            () => setVaultMetaAttempt(current => current + 1),
+            vaultMetaRetryDelayMs
+          )
+        }
+        return
+      }
+
+      const { computeNotificationVaultId } = sdk.data
       const next = new Map<string, { isFastVault: boolean }>()
       for (const vault of vaults) {
         if (!vault.hexChainCode) {
@@ -151,8 +169,9 @@ export const ExtensionNotificationManager = () => {
 
     return () => {
       cancelled = true
+      clearTimeout(retryTimeout)
     }
-  }, [vaults])
+  }, [vaults, vaultMetaAttempt])
 
   const connectionsRef = useRef<
     Map<string, ManagedExtensionNotificationSocket>

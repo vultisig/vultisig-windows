@@ -1,9 +1,9 @@
-import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import type { SignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { keysign } from '@vultisig/core-mpc/keysign'
 import type { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { v4 as uuidv4 } from 'uuid'
 
+import { loadMpcEngine } from '../../../mpc/bootstrapMpcEngine'
 import { relayUrl } from '../../config'
 import type { VaultMeta } from '../types'
 import { callFastVaultSign } from './fastVaultApi'
@@ -93,6 +93,10 @@ async function fastVaultKeysignAttempt({
     throw new Error('MLDSA keysign is not yet implemented')
   }
 
+  // Before the server is asked to sign: it would otherwise wait out its
+  // timeout for a local party whose SDK failed to load.
+  await loadMpcEngine()
+
   const sessionId = uuidv4()
   const hexEncryptionKey = generateEncryptionKey()
   const isEcdsa = signatureAlgorithm === 'ecdsa'
@@ -118,8 +122,6 @@ async function fastVaultKeysignAttempt({
   const keyShare = getKeyShare(vault, signatureAlgorithm)
   const peers = parties.filter(p => p !== vault.localPartyId)
   const mpcChainPath = derivePath.replaceAll("'", '')
-
-  await loadMpcEngine()
 
   return keysign({
     keyShare,
