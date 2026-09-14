@@ -183,6 +183,7 @@ export default defineConfig({
         '**/xrp-destination-tag.spec.ts',
         '**/send-coin-selection.spec.ts',
         '**/signed-transaction-decoder.spec.ts',
+        '**/swap-from-fiat-input.spec.ts',
       ],
       use: {
         launchOptions: {
