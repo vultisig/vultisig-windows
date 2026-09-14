@@ -116,11 +116,19 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
       ? ''
       : getFiatInputValue(fromChainAmount(chainAmount, decimals) * price)
 
-  const fullDecimalString =
-    value !== null ? bigIntToDecimalString(value, decimals) : ''
-  const trimmedDecimalString = fullDecimalString.includes('.')
-    ? fullDecimalString.replace(/\.?0+$/, '')
-    : fullDecimalString
+  const toTokenInputValue = (chainAmount: bigint | null) => {
+    if (chainAmount === null) {
+      return ''
+    }
+
+    const decimalString = bigIntToDecimalString(chainAmount, decimals)
+
+    return decimalString.includes('.')
+      ? decimalString.replace(/\.?0+$/, '')
+      : decimalString
+  }
+
+  const trimmedDecimalString = toTokenInputValue(value)
   const [inputValue, setInputValue] = useState<string>(trimmedDecimalString)
   const [fiatInputValue, setFiatInputValue] = useState<string>('')
   const isFeeCoinSelected = isFeeCoin(fromCoinKey)
@@ -180,6 +188,7 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
 
     if (normalized === '') {
       setFiatInputValue('')
+      setInputValue('')
       previousValueRef.current = null
       setValue(null)
       return
@@ -191,6 +200,9 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
     )
 
     setFiatInputValue(normalized)
+    // Kept current so a price outage, which drops the form back to token
+    // input mid-edit, shows the converted amount rather than stale text.
+    setInputValue(toTokenInputValue(chainAmount))
     previousValueRef.current = chainAmount
     setValue(chainAmount)
   }
