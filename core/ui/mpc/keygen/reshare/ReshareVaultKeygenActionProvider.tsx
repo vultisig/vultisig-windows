@@ -1,3 +1,4 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
@@ -49,6 +50,8 @@ export const ReshareVaultKeygenActionProvider = ({
     onStepComplete,
     signers,
   }) => {
+    await loadMpcEngine()
+
     let timeoutMs = 60000
     if (getDeveloperOptions) {
       const { appInstallTimeout } = await getDeveloperOptions()

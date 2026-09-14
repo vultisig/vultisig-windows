@@ -67,7 +67,7 @@ module.exports = {
     },
     exclude: {
       path: [
-        '(^|/)(dist|coverage|node_modules|storybook-static|wailsjs)(/|$)',
+        '(^|/)(dist|dist-station|coverage|node_modules|storybook-static|wailsjs)(/|$)',
         '(^|/)tests/e2e/(playwright-report|test-results)(/|$)',
         '\\.d\\.ts$',
         '_pb\\.ts$',

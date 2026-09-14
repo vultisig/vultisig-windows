@@ -20,8 +20,8 @@ vi.mock('@core/ui/product/StartupPlaceholder', () => ({
   StartupPlaceholder: () => <div data-testid="placeholder" />,
 }))
 
-vi.mock('@core/ui/chain/providers/WalletCoreLoadError', () => ({
-  WalletCoreLoadError: ({ onRetry }: { onRetry: () => void }) => (
+vi.mock('@core/ui/product/StartupLoadError', () => ({
+  StartupLoadError: ({ onRetry }: { onRetry: () => void }) => (
     <button data-testid="load-error" onClick={onRetry} />
   ),
 }))
@@ -125,6 +125,10 @@ describe('WalletCoreProvider', () => {
 
     const resolveInit = deferredInit()
     fireEvent.click(screen.getByTestId('load-error'))
+    // The package itself is imported on demand, so the init call follows a tick later.
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0))
+    })
 
     expect(screen.getByTestId('waiting')).toBeTruthy()
     expect(initWasm).toHaveBeenCalledTimes(2)

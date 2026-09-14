@@ -1,4 +1,5 @@
 import { featureFlags } from '@core/ui/featureFlags'
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
@@ -42,6 +43,8 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
     onStepComplete,
     signers,
   }) => {
+    await loadMpcEngine()
+
     const sharedFinalVaultFields = {
       signers,
       localPartyId,

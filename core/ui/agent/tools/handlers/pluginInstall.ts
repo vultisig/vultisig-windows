@@ -1,3 +1,4 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
 import {
   setKeygenComplete,
@@ -229,6 +230,8 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
 
   const ecdsaKeyshare = getEcdsaKeyShare(vault)
   const eddsaKeyshare = getEddsaKeyShare(vault)
+
+  await loadMpcEngine()
 
   const dklsKeygen = new DKLS(
     { reshare: 'plugin' },

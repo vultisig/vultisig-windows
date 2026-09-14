@@ -1,3 +1,4 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { initializeMpcLib } from '@vultisig/core-mpc/lib/initialize'
 import { toMpcLibKeyshare } from '@vultisig/core-mpc/lib/keyshare'
@@ -177,6 +178,9 @@ const assertMpcKeyShareReadable = async (
     throw new Error('Missing MPC keyshare')
   }
 
+  // The MPC lib resolves the engine the SDK registers, so the SDK has to be
+  // loaded first; on the action popup it is not part of the entry chunk.
+  await loadMpcEngine()
   await initializeMpcLib(signatureAlgorithm)
   const keyshare = toMpcLibKeyshare({ keyShare: value, signatureAlgorithm })
 

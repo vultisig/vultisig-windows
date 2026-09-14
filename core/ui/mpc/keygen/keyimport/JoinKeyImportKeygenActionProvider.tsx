@@ -1,4 +1,5 @@
 import { featureFlags } from '@core/ui/featureFlags'
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
@@ -56,6 +57,8 @@ export const JoinKeyImportKeygenActionProvider = ({
     onStepComplete,
     signers,
   }) => {
+    await loadMpcEngine()
+
     const chains = parseKeyImportChains(shouldBePresent(keyImportChainsRaw))
 
     const sharedDklsParams = {

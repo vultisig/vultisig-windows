@@ -1,3 +1,4 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { ChildrenProp } from '@lib/ui/props'
 import { keysign } from '@vultisig/core-mpc/keysign'
 import { MldsaKeysign } from '@vultisig/core-mpc/mldsa/mldsaKeysign'
@@ -36,6 +37,8 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     coinType,
     chain,
   }) => {
+    await loadMpcEngine()
+
     const stationRootChains = getStationKeyImportRootChains(vault)
     const isStationRootChain =
       isKeyImportVault(vault) &&

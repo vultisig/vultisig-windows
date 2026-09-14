@@ -1,3 +1,4 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { handleKeysignWsNotification } from '@core/ui/notifications/handleKeysignWsNotification'
 import {
   buildKeysignNotificationWebSocketUrl,
@@ -13,7 +14,6 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useNavigation } from '@lib/ui/navigation/state'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
-import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -129,6 +129,7 @@ export const ExtensionNotificationManager = () => {
     let cancelled = false
 
     void (async () => {
+      const { computeNotificationVaultId } = await loadMpcEngine()
       const next = new Map<string, { isFastVault: boolean }>()
       for (const vault of vaults) {
         if (!vault.hexChainCode) {

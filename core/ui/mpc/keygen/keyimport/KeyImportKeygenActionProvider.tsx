@@ -1,5 +1,6 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { featureFlags } from '@core/ui/featureFlags'
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
@@ -108,6 +109,8 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, onStepStart, onStepComplete, signers }) => {
+      await loadMpcEngine()
+
       const { chains } = keyImportInput
       const isStationTerraRoot =
         isStationTerraRootKeyImportInput(keyImportInput)

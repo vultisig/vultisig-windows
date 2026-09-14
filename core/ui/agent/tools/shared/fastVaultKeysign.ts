@@ -1,3 +1,4 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import type { SignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { keysign } from '@vultisig/core-mpc/keysign'
 import type { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
@@ -117,6 +118,8 @@ async function fastVaultKeysignAttempt({
   const keyShare = getKeyShare(vault, signatureAlgorithm)
   const peers = parties.filter(p => p !== vault.localPartyId)
   const mpcChainPath = derivePath.replaceAll("'", '')
+
+  await loadMpcEngine()
 
   return keysign({
     keyShare,

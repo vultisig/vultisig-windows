@@ -1,6 +1,7 @@
-import './mpc/bootstrapMpcEngine'
-
-import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
+import {
+  loadWalletCore,
+  WalletCoreProvider,
+} from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   StartupMode,
   StartupSplashProvider,
@@ -23,9 +24,11 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { stationTheme } from '@lib/ui/theme/stationTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import styled from 'styled-components'
 
+import { loadMpcEngine } from './mpc/bootstrapMpcEngine'
+import { MpcEngineGate } from './mpc/MpcEngineGate'
 import { NotificationBannerProvider } from './notifications/NotificationBannerProvider'
 import { currentProductBrand } from './product/brand'
 
@@ -74,31 +77,44 @@ export const CoreApp = ({
   startupMode = 'splash',
 }: CoreAppProps) => {
   const theme = currentProductBrand === 'station' ? stationTheme : darkTheme
+  const isBlockingStartup = startupMode === 'splash'
+
+  // A blocking boot waits on WalletCore and then on the SDK; starting both here
+  // lets the two loads overlap instead of running back to back. Each gate
+  // attaches its own rejection handling to these shared promises.
+  useEffect(() => {
+    if (!isBlockingStartup) return
+
+    loadWalletCore().catch(() => undefined)
+    loadMpcEngine().catch(() => undefined)
+  }, [isBlockingStartup])
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <CoreProvider value={coreState}>
         <StartupSplashProvider mode={startupMode}>
-          <WalletCoreProvider blocking={startupMode === 'splash'}>
-            <Wrap wrap={MigrationsManager}>
-              <StorageDependant>
-                <ToastProvider>
-                  <NotificationBannerProvider>
-                    <ResponsivenessProvider>
-                      <Container>
-                        {children}
-                        {!isLimited && (
-                          <Suspense fallback={null}>
-                            <VaultDependentContent />
-                          </Suspense>
-                        )}
-                      </Container>
-                    </ResponsivenessProvider>
-                  </NotificationBannerProvider>
-                </ToastProvider>
-              </StorageDependant>
-            </Wrap>
+          <WalletCoreProvider blocking={isBlockingStartup}>
+            <MpcEngineGate blocking={isBlockingStartup}>
+              <Wrap wrap={MigrationsManager}>
+                <StorageDependant>
+                  <ToastProvider>
+                    <NotificationBannerProvider>
+                      <ResponsivenessProvider>
+                        <Container>
+                          {children}
+                          {!isLimited && (
+                            <Suspense fallback={null}>
+                              <VaultDependentContent />
+                            </Suspense>
+                          )}
+                        </Container>
+                      </ResponsivenessProvider>
+                    </NotificationBannerProvider>
+                  </ToastProvider>
+                </StorageDependant>
+              </Wrap>
+            </MpcEngineGate>
           </WalletCoreProvider>
         </StartupSplashProvider>
       </CoreProvider>
