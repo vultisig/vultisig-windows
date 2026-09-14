@@ -21,7 +21,7 @@ import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecima
 import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useFromAmount } from '../../state/fromAmount'
 import { useSwapFromCoin } from '../../state/fromCoin'
@@ -35,6 +35,8 @@ type ManageFromAmountProps = {
 }
 
 type FromAmountInputMode = 'token' | 'fiat'
+
+const fiatInputPlaceholder = '0'
 
 const parseAmountInputValue = (value: string, decimals: number) => {
   if (value === '') {
@@ -248,24 +250,28 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
                     <Text size={22} weight={500} color="contrast">
                       {getFiatCurrencySymbol(fiatCurrency)}
                     </Text>
-                    <FiatAmountInput
-                      type="text"
-                      inputMode="decimal"
-                      placeholder="0"
-                      autoFocus
-                      $characters={Math.max(fiatInputValue.length, 1)}
-                      value={fiatInputValue}
-                      onChange={event =>
-                        handleFiatInputValueChange(event.currentTarget.value)
-                      }
-                      onPaste={event => {
-                        event.preventDefault()
-                        handleFiatInputValueChange(
-                          event.clipboardData.getData('text')
-                        )
-                      }}
-                      data-testid="swap-from-fiat-amount-input"
-                    />
+                    <FiatInputSizer>
+                      <FiatInputMeasure aria-hidden>
+                        {fiatInputValue || fiatInputPlaceholder}
+                      </FiatInputMeasure>
+                      <FiatAmountInput
+                        type="text"
+                        inputMode="decimal"
+                        placeholder={fiatInputPlaceholder}
+                        autoFocus
+                        value={fiatInputValue}
+                        onChange={event =>
+                          handleFiatInputValueChange(event.currentTarget.value)
+                        }
+                        onPaste={event => {
+                          event.preventDefault()
+                          handleFiatInputValueChange(
+                            event.clipboardData.getData('text')
+                          )
+                        }}
+                        data-testid="swap-from-fiat-amount-input"
+                      />
+                    </FiatInputSizer>
                   </FiatInputRow>
                   <TokenAmountButton
                     onClick={enterTokenMode}
@@ -350,17 +356,39 @@ const FiatInputRow = styled(HStack)`
   height: ${textInputHeight}px;
 `
 
-const FiatAmountInput = styled.input<{ $characters: number }>`
-  width: calc(${({ $characters }) => $characters}ch + 4px);
+const fiatInputFont = css`
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 500;
+`
+
+/**
+ * The input takes its width from a hidden copy of its text laid over the
+ * same grid cell, so the digits end exactly where the fiat line under them
+ * does; the two extra pixels past that leave room for the caret.
+ */
+const FiatInputSizer = styled.div`
+  display: inline-grid;
   max-width: 100%;
+`
+
+const FiatInputMeasure = styled.span`
+  grid-area: 1 / 1;
+  visibility: hidden;
+  white-space: pre;
+  ${fiatInputFont};
+`
+
+const FiatAmountInput = styled.input`
+  grid-area: 1 / 1;
+  width: calc(100% + 2px);
+  min-width: 0;
   padding: 0;
   border: none;
   outline: none;
   background: transparent;
   color: ${getColor('contrast')};
-  font-family: inherit;
-  font-size: 22px;
-  font-weight: 500;
+  ${fiatInputFont};
 
   &::placeholder {
     ${text({ color: 'shy', size: 18, weight: '500' })}
