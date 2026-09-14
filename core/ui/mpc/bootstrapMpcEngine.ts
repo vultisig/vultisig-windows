@@ -9,8 +9,10 @@
 // extension's action popup keeps the SDK, and everything it drags in (WalletCore
 // glue, MPC WASM glue, chain clients), out of the chunk it evaluates before home
 // paints. Every path that reaches the engine awaits `loadMpcEngine()` first:
-// key-share reading, the keygen mutation, keysign, agent plugin installs.
-// Clients that boot behind a splash await it in `MpcEngineGate`. A path
+// key-share reading, the keygen mutation, keysign, agent plugin installs, and
+// the fast-vault server steps that make the server start a protocol and wait
+// for the local party. Clients that boot behind a splash await it in
+// `MpcEngineGate`. A path
 // that forgets fails loudly: `getMpcEngine` throws, and `ensureMpcEngine` cannot
 // fall back because `@vultisig/mpc-wasm` is not installed.
 //
