@@ -1,10 +1,11 @@
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { useEffect } from 'react'
 
-import { ViewLoaders } from './ViewLoaders'
+/** Anything worth warming after home paints: view loaders, or a module load such as the SDK. */
+type PrefetchLoaders<T extends string> = Record<T, () => Promise<unknown>>
 
 type PrefetchViewsProps<T extends string> = {
-  loaders: ViewLoaders<T>
+  loaders: PrefetchLoaders<T>
   /** Loaded first, in this order; every other loader follows in registry order. */
   priority?: T[]
 }

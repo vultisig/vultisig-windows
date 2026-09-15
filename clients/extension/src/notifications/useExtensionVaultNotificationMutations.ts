@@ -1,6 +1,6 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useTranslation } from 'react-i18next'
 
 import { extensionPushRegistrationQueryKey } from './extensionPushRegistrationQueryKey'
@@ -71,6 +71,7 @@ export const useExtensionToggleVaultNotificationMutation = () => {
       localPartyId,
       enabled,
     }: ToggleVaultNotificationInput) => {
+      const { computeNotificationVaultId } = await loadMpcEngine()
       const vaultId = await computeNotificationVaultId(ecdsa, hexChainCode)
 
       if (enabled) {
@@ -106,6 +107,7 @@ export const useExtensionToggleAllVaultsNotificationMutation = () => {
       vaults,
       enabled,
     }: ToggleAllVaultsNotificationInput) => {
+      const { computeNotificationVaultId } = await loadMpcEngine()
       let failedCount = 0
 
       for (const vault of vaults) {

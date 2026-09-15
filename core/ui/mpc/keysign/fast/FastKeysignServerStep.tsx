@@ -32,6 +32,7 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { ReactNode, useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import {
   getKeyImportServerChains,
   getStationKeyImportRootChains,
@@ -85,6 +86,10 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
 
   const { mutate, ...state } = useMutation({
     mutationFn: async () => {
+      // The server starts signing on this call and waits for the local party,
+      // so the SDK that registers the MPC engine has to be loadable first.
+      await loadMpcEngine()
+
       return matchRecordUnion(keysignPayload, {
         keysign: async keysignPayload => {
           const coin = assertField(keysignPayload, 'coin')

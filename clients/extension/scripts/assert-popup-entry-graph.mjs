@@ -7,9 +7,17 @@ import { fileURLToPath } from 'node:url'
 // evaluated before home can paint. Pages must reach the bundle through the
 // dynamic imports in the view registries, so this budget fails the build when
 // a static import drags them back onto the first-paint path. The graph measured
-// 14.1 MB right after the view split (down from 18.8 MB with every page in it);
+// 18.8 MB with every page in it, 14.1 MB after the view split, and 8.2 MB once
+// the SDK and the WalletCore glue moved behind loadMpcEngine / loadWalletCore
+// (the Vite build also rejects those two packages in the graph by module id);
 // raise the budget only for code that genuinely belongs on home.
-const maxEntryGraphBytes = 15 * 1024 * 1024
+//
+// The Firefox build groups each package into one vendor chunk, which keeps
+// WalletCore on the static path through the core-mpc and core-chain chunks
+// (see vite.config.ts), so it gets its own, looser budget; it measured 11.2 MB
+// with WalletCore static and the SDK still loaded on demand.
+const isFirefoxBuild = process.env.VULTISIG_EXTENSION_TARGET === 'firefox'
+const maxEntryGraphBytes = (isFirefoxBuild ? 12 : 9) * 1024 * 1024
 
 const brand = process.argv[2] ?? 'vultisig'
 const currentDir = path.dirname(fileURLToPath(import.meta.url))
@@ -42,7 +50,9 @@ const sizes = await Promise.all(
 
 const total = sizes.reduce((sum, { size }) => sum + size, 0)
 
-console.log(`Popup entry graph (${artifactDirectory}/index.html):`)
+console.log(
+  `Popup entry graph (${artifactDirectory}/index.html${isFirefoxBuild ? ', firefox' : ''}):`
+)
 for (const { file, size } of sizes) {
   console.log(`  ${formatMb(size).padStart(10)}  ${file}`)
 }

@@ -12,6 +12,7 @@ import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
@@ -23,6 +24,14 @@ import { PrefetchViews } from '@lib/ui/navigation/PrefetchViews'
 import { createGlobalStyle, css } from 'styled-components'
 
 const isPopup = isPopupView()
+
+// The SDK registers the MPC engine and is needed by every signing and keygen
+// flow, so it is warmed before any page chunk.
+const prefetchLoaders = { mpcEngine: loadMpcEngine, ...viewLoaders }
+const prefetchPriority: (keyof typeof prefetchLoaders)[] = [
+  'mpcEngine',
+  ...viewPrefetchPriority,
+]
 const popupWidth = 360
 const popupHeight = 600
 
@@ -77,7 +86,7 @@ const App = () => {
       startupMode={isPopup ? 'instant' : 'splash'}
     >
       <ActiveView views={views} />
-      <PrefetchViews loaders={viewLoaders} priority={viewPrefetchPriority} />
+      <PrefetchViews loaders={prefetchLoaders} priority={prefetchPriority} />
       <ExtensionNotificationManager />
     </ExtensionCoreApp>
   )

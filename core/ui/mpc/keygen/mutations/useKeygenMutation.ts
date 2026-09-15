@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { KeygenStep } from '@vultisig/core-mpc/keygen/KeygenStep'
 import { useRef, useState } from 'react'
 
+import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { useMpcSigners } from '../../devices/state/signers'
 
 export const useKeygenMutation = () => {
@@ -46,13 +47,18 @@ export const useKeygenMutation = () => {
   }
 
   const mutation = useMutation({
-    mutationFn: async () =>
-      keygenAction({
+    mutationFn: async () => {
+      // Every keygen action reaches the MPC engine the SDK registers, so the
+      // SDK is awaited once here rather than in each action provider.
+      await loadMpcEngine()
+
+      return keygenAction({
         onStepChange: handleStepChange,
         onStepStart: handleStepStart,
         onStepComplete: handleStepComplete,
         signers,
-      }),
+      })
+    },
     onSuccess: () => {
       setProtocolStatuses(prev => {
         const next = { ...prev }

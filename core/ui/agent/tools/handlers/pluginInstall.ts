@@ -8,6 +8,7 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 
+import { loadMpcEngine } from '../../../mpc/bootstrapMpcEngine'
 import { relayUrl } from '../../config'
 import { requestFastVaultReshare } from '../shared/fastVaultApi'
 import { getPluginName, resolvePluginId } from '../shared/pluginConfig'
@@ -186,7 +187,14 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
   const serverPartyId = generateServerPartyId(sessionId)
   const libType = toLibType(vault.libType)
 
-  await registerSession(relayUrl, sessionId, vault.localPartyId)
+  // The SDK has to be loaded before the reshare is requested, or the remote
+  // parties start a protocol the local side cannot join and wait out their
+  // timeout; registering the relay session does not depend on it, so the two
+  // overlap.
+  await Promise.all([
+    loadMpcEngine(),
+    registerSession(relayUrl, sessionId, vault.localPartyId),
+  ])
 
   await requestFastVaultReshare({
     name: context.vaultName,
