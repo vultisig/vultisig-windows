@@ -106,19 +106,43 @@ describe('paysTronMemoFee', () => {
     expect(paysTronMemoFee({ ...nativeTron, memo })).toBe(false)
   })
 
-  it('does not charge an empty memo, another chain, or a TRC20 transfer', () => {
-    expect(paysTronMemoFee({ ...nativeTron, memo: '' })).toBe(false)
-    expect(
-      paysTronMemoFee({
-        chain: Chain.Ethereum,
-        isNativeToken: true,
-        memo: 'memo',
-      })
-    ).toBe(false)
+  it('charges a TRC20 transfer carrying a memo', () => {
     expect(
       paysTronMemoFee({
         chain: Chain.Tron,
         isNativeToken: false,
+        memo: 'memo',
+      })
+    ).toBe(true)
+  })
+
+  it.each([
+    'FREEZE:BANDWIDTH',
+    'FREEZE:ENERGY',
+    'UNFREEZE:BANDWIDTH',
+    'UNFREEZE:ENERGY',
+  ])(
+    'charges a TRC20 transfer whose memo only looks like staking: %s',
+    memo => {
+      expect(
+        paysTronMemoFee({ chain: Chain.Tron, isNativeToken: false, memo })
+      ).toBe(true)
+    }
+  )
+
+  it('does not charge an empty memo or another chain', () => {
+    expect(paysTronMemoFee({ ...nativeTron, memo: '' })).toBe(false)
+    expect(
+      paysTronMemoFee({
+        chain: Chain.Tron,
+        isNativeToken: false,
+        memo: '',
+      })
+    ).toBe(false)
+    expect(
+      paysTronMemoFee({
+        chain: Chain.Ethereum,
+        isNativeToken: true,
         memo: 'memo',
       })
     ).toBe(false)
@@ -136,6 +160,18 @@ describe('addTronMemoFee', () => {
         memoFee: async () => 1_000_000n,
       })
     ).resolves.toBe(1_800_000n)
+  })
+
+  it('adds the chain memo fee to a TRC20 estimate', async () => {
+    await expect(
+      addTronMemoFee({
+        fee: 27_000_000n,
+        chain: Chain.Tron,
+        isNativeToken: false,
+        memo: 'memo',
+        memoFee: async () => 1_000_000n,
+      })
+    ).resolves.toBe(28_000_000n)
   })
 
   it('does not request the memo fee when no signed memo is present', async () => {
