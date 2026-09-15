@@ -87,15 +87,20 @@ type TronMemoFeeInput = {
   memo?: string
 }
 
+/**
+ * Whether the chain burns its memo fee for this transfer. TRON charges it for
+ * any transaction carrying `raw_data.data`, so TRC20 transfers pay it too. The
+ * staking markers stay exempt only on the native coin, where the signer turns
+ * them into a stake contract and drops the memo before it reaches the wire.
+ */
 export const paysTronMemoFee = ({
   chain,
   isNativeToken,
   memo,
 }: TronMemoFeeInput) =>
   chain === Chain.Tron &&
-  isNativeToken &&
   !!memo &&
-  !getTronStakingDisplay({ chain, memo })
+  !(isNativeToken && getTronStakingDisplay({ chain, memo }))
 
 type AddTronMemoFeeInput = TronMemoFeeInput & {
   fee: bigint
