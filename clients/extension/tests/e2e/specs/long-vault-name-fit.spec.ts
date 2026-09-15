@@ -28,7 +28,12 @@ const screens: Screen[] = [
   { title: 'Vault list', initialView: { id: 'vaults' } },
 ]
 
-const seed = async (context: BrowserContext, screen: Screen) => {
+type SeedInput = {
+  context: BrowserContext
+  screen: Screen
+}
+
+const seed = async ({ context, screen }: SeedInput) => {
   const { vaultId, vault } = await createSeededVault({ name: longVaultName })
 
   await writeChromeStorageMultiple(context, {
@@ -75,7 +80,7 @@ for (const screen of screens) {
     context,
     extensionId,
   }) => {
-    await seed(context, screen)
+    await seed({ context, screen })
 
     const page = await context.newPage()
     await page.setViewportSize(popup)
