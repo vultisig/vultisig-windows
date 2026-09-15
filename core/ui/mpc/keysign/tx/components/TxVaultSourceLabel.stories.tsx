@@ -1,4 +1,7 @@
+import { TransactionOverviewItem } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewItem'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import type { Meta, StoryObj } from '@storybook/react-vite'
@@ -52,6 +55,21 @@ const SwapRow = ({ name }: { name: string }) => (
     </RowTitle>
     <TxVaultSourceLabel name={name} address={swapAddress} />
   </HStack>
+)
+
+// The deposit verify screens (Bond, Stake) put the label in a ListItem's
+// value column; 328px is what the 360px popup leaves the page after padding.
+const VerifyList = styled(List)`
+  width: 328px;
+`
+
+const VerifyRow = ({ name }: { name: string }) => (
+  <VerifyList border="gradient" radius={borderRadiusPx.lg}>
+    <TransactionOverviewItem
+      label="From"
+      value={<TxVaultSourceLabel name={name} address={`(${swapAddress})`} />}
+    />
+  </VerifyList>
 )
 
 const PlainRow = ({ name }: { name: string }) => (
@@ -110,6 +128,22 @@ export const FromRows: Story = {
         <Card data-testid="plain-long">
           <PlainRow name={longName} />
         </Card>
+      </VStack>
+      <VStack gap={8}>
+        <Text color="shy" size={12}>
+          Bond / Stake verify — short name
+        </Text>
+        <div data-testid="verify-short">
+          <VerifyRow name={shortName} />
+        </div>
+      </VStack>
+      <VStack gap={8}>
+        <Text color="shy" size={12}>
+          Bond / Stake verify — long name
+        </Text>
+        <div data-testid="verify-long">
+          <VerifyRow name={longName} />
+        </div>
       </VStack>
     </VStack>
   ),

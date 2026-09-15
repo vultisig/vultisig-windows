@@ -11,6 +11,7 @@ import {
 } from 'react'
 import styled, { css } from 'styled-components'
 
+import { shrinkable } from '../../css/shrinkable'
 import { IconWrapper } from '../../icons/IconWrapper'
 import { HStack } from '../../layout/Stack'
 import { UiProps } from '../../props'
@@ -47,6 +48,13 @@ const StyledTitle = styled.span<Styles>`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`
+
+// The value column must be able to shrink below its content, or a long value
+// (a vault name next to an address, say) floors the row at its full width and
+// spills past the list's edge instead of cropping.
+const StyledExtra = styled(HStack)`
+  ${shrinkable};
 `
 
 const StyledListItem = styled.div<{
@@ -153,14 +161,14 @@ export const ListItem: FC<ListItemProps> = ({
         )}
       </HStack>
       {(extra || showArrow) && (
-        <HStack alignItems="center" gap={8}>
+        <StyledExtra alignItems="center" gap={8}>
           {extra}
           {showArrow && (
             <IconWrapper size={16} color="textShy">
               <ChevronRightIcon />
             </IconWrapper>
           )}
-        </HStack>
+        </StyledExtra>
       )}
     </StyledListItem>
   )
