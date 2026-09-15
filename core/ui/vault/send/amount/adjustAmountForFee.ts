@@ -1,15 +1,18 @@
-import { getMaxValue } from '@vultisig/core-chain/amount/getMaxValue'
+import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 type AdjustAmountForFeeInput = {
+  chain: Chain
   amount: bigint
   balance: bigint
   fee: bigint
 }
 
 /**
- * Reduces an amount to `balance - fee` when the balance covers the amount on its
- * own but not together with the network fee. Only ever reduces, so a send never
- * grows past what was asked for.
+ * Reduces an amount to the most the balance can spend — `balance - fee`, less
+ * whatever the chain requires the sender to keep so the account is not reaped
+ * — when the balance covers the amount on its own but not together with those.
+ * Only ever reduces, so a send never grows past what was asked for.
  *
  * An amount that overshoots the balance by itself is returned untouched — that
  * is a real over-entry for the caller to reject, not a fee edge — and so is one
@@ -17,15 +20,20 @@ type AdjustAmountForFeeInput = {
  * to.
  */
 export const adjustAmountForFee = ({
+  chain,
   amount,
   balance,
   fee,
 }: AdjustAmountForFeeInput): bigint => {
-  if (amount > balance || amount + fee <= balance) {
+  if (amount > balance) {
     return amount
   }
 
-  const spendable = getMaxValue(balance, fee)
+  const spendable = getMaxSendableAmount({ chain, balance, fee })
+
+  if (amount <= spendable) {
+    return amount
+  }
 
   return spendable > 0n ? spendable : amount
 }
