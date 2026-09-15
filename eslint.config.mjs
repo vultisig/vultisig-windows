@@ -324,7 +324,7 @@ export default [
   // MPC engine chunk isolation — see vultisig/vultisig-windows#3777.
   // The extension service worker and inpage chunks must not pull @vultisig/core-mpc
   // (or related MPC packages) into their bundles unless they also import
-  // '@core/ui/mpc/bootstrapMpcEngine' at the entrypoint. Today neither chunk calls
+  // `loadMpcEngine` from '@core/ui/mpc/bootstrapMpcEngine'. Today neither chunk calls
   // getMpcEngine(); this rule prevents a future refactor from silently shipping
   // "MPC engine not configured" at runtime or bloating the SW/inpage bundle with
   // DKLS/Schnorr WASM. Protobuf types under @vultisig/core-mpc/types/** are allowed
@@ -342,7 +342,7 @@ export default [
             {
               regex: '^@vultisig/core-mpc(?!/types($|/)).*$',
               message:
-                'This chunk must not import runtime code from @vultisig/core-mpc (only @vultisig/core-mpc/types/** is allowed). If MPC is truly needed here, import "@core/ui/mpc/bootstrapMpcEngine" at the top of the entry file and update the eslint override plus the chunk header comment. See vultisig/vultisig-windows#3777.',
+                'This chunk must not import runtime code from @vultisig/core-mpc (only @vultisig/core-mpc/types/** is allowed). If MPC is truly needed here, await loadMpcEngine() from "@core/ui/mpc/bootstrapMpcEngine" before the first engine call and update the eslint override plus the chunk header comment. See vultisig/vultisig-windows#3777.',
             },
             {
               group: [
@@ -353,7 +353,7 @@ export default [
                 '@vultisig/lib-mldsa',
               ],
               message:
-                'This chunk must not import MPC engine packages. If MPC is truly needed here, import "@core/ui/mpc/bootstrapMpcEngine" at the top of the entry file and update the eslint override plus the chunk header comment. See vultisig/vultisig-windows#3777.',
+                'This chunk must not import MPC engine packages. If MPC is truly needed here, await loadMpcEngine() from "@core/ui/mpc/bootstrapMpcEngine" before the first engine call and update the eslint override plus the chunk header comment. See vultisig/vultisig-windows#3777.',
             },
           ],
         },

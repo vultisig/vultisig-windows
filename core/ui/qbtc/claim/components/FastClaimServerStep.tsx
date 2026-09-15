@@ -13,6 +13,8 @@ import { signWithServer } from '@vultisig/core-mpc/fast/api/signWithServer'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { loadMpcEngine } from '../../../mpc/bootstrapMpcEngine'
+
 type FastClaimServerStepProps = OnFinishProp & {
   messageHashHex: string
   signatureAlgorithm: SignatureAlgorithm
@@ -44,6 +46,10 @@ export const FastClaimServerStep = ({
 
   const { mutate } = useMutation({
     mutationFn: async () => {
+      // The server starts signing on this call and waits for the local party,
+      // so the SDK that registers the MPC engine has to be loadable first.
+      await loadMpcEngine()
+
       const coinType = getCoinType({ walletCore, chain })
       const derivePath = walletCore.CoinTypeExt.derivationPath(coinType)
 

@@ -160,7 +160,7 @@ export const SwapKeysignTxOverview = ({
     )
 
   return (
-    <VStack gap={36} fullWidth>
+    <VStack gap={36} maxWidth={576} fullWidth>
       <TxStatusTracker
         chain={blockExplorerChain}
         hash={getLastItem(txHashes)}

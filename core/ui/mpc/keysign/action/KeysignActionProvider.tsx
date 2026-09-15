@@ -8,6 +8,7 @@ import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '../../../vault/state/currentVault'
+import { loadMpcEngine } from '../../bootstrapMpcEngine'
 import { getStationKeyImportRootChains } from '../../keygen/keyimport/utils/keyImportServerChains'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '../../state/isInitiatingDevice'
@@ -36,6 +37,8 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     coinType,
     chain,
   }) => {
+    await loadMpcEngine()
+
     const stationRootChains = getStationKeyImportRootChains(vault)
     const isStationRootChain =
       isKeyImportVault(vault) &&

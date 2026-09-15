@@ -1,3 +1,4 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { handleKeysignWsNotification } from '@core/ui/notifications/handleKeysignWsNotification'
 import {
   buildKeysignNotificationWebSocketUrl,
@@ -13,7 +14,7 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useNavigation } from '@lib/ui/navigation/state'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
-import { computeNotificationVaultId } from '@vultisig/sdk'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -123,14 +124,28 @@ export const ExtensionNotificationManager = () => {
   const historyRef = useRef(history)
   historyRef.current = history
 
-  const vaultBannerMetaRef = useRef(new Map<string, { isFastVault: boolean }>())
+  const vaultsRef = useRef(vaults)
+  vaultsRef.current = vaults
 
-  useEffect(() => {
-    let cancelled = false
+  // Built the first time a notification needs it, and rebuilt when the vault
+  // list changes, so the SDK load it depends on is not started on mount ahead
+  // of the idle prefetch. A build that failed is dropped so the next one retries.
+  const vaultBannerMetaRef = useRef<{
+    vaults: ReturnType<typeof useVaults>
+    meta: Promise<Map<string, { isFastVault: boolean }>>
+  } | null>(null)
 
-    void (async () => {
+  const getVaultBannerMeta = () => {
+    const currentVaults = vaultsRef.current
+    const cached = vaultBannerMetaRef.current
+    if (cached && cached.vaults === currentVaults) {
+      return cached.meta
+    }
+
+    const meta = (async () => {
+      const { computeNotificationVaultId } = await loadMpcEngine()
       const next = new Map<string, { isFastVault: boolean }>()
-      for (const vault of vaults) {
+      for (const vault of currentVaults) {
         if (!vault.hexChainCode) {
           continue
         }
@@ -138,20 +153,21 @@ export const ExtensionNotificationManager = () => {
           vault.publicKeys.ecdsa,
           vault.hexChainCode
         )
-        if (cancelled) {
-          return
-        }
         next.set(vaultId, { isFastVault: hasServer(vault.signers) })
       }
-      if (!cancelled) {
-        vaultBannerMetaRef.current = next
-      }
+      return next
     })()
+    meta.catch(() => {
+      if (vaultBannerMetaRef.current?.meta === meta) {
+        vaultBannerMetaRef.current = null
+      }
+    })
+    vaultBannerMetaRef.current = { vaults: currentVaults, meta }
 
-    return () => {
-      cancelled = true
-    }
-  }, [vaults])
+    return meta
+  }
+  const getVaultBannerMetaRef = useRef(getVaultBannerMeta)
+  getVaultBannerMetaRef.current = getVaultBannerMeta
 
   const connectionsRef = useRef<
     Map<string, ManagedExtensionNotificationSocket>
@@ -200,7 +216,10 @@ export const ExtensionNotificationManager = () => {
         localPartyName,
         t: tRef.current,
         topView: getLastItem(historyRef.current),
-        vaultBannerMeta: vaultBannerMetaRef.current,
+        vaultBannerMeta: withFallback(
+          await attempt(getVaultBannerMetaRef.current),
+          new Map()
+        ),
         navigateToKeysign,
         showBanner: showBannerRef.current,
         bringAppToFront: () => {

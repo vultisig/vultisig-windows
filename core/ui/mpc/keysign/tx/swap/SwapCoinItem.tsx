@@ -50,14 +50,13 @@ export const SwapCoinItem = ({
   )
 }
 
-// The two tiles sit side by side, so a fixed 169px floor puts a ~346px minimum
-// on the whole screen and pushes the details card off-viewport in the extension
-// popup. Preferring that width instead lets the pair shrink when it has to.
+// The two cards share the row evenly; a floor on their width would push the
+// pair past the 328px the popup gives the page.
 const SwapVStackItem = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   ${borderRadius.lg};
-  flex: 1 1 169px;
+  flex: 1;
   min-width: 0;
   padding: 24px 16px;
 `

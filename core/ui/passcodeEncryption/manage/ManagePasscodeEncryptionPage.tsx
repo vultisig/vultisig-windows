@@ -12,7 +12,13 @@ export const ManagePasscodeEncryptionPage = () => {
     <VStack fullHeight>
       <FlowPageHeader title={t('security')} />
       <PageContent alignItems="center" flexGrow scrollable>
-        <AppLockSwitch />
+        {/* Centred content takes its intrinsic width, and the six passcode
+            boxes come to 336px — past the 328px the popup gives the page,
+            which turned into a horizontal scrollbar. Capping the column lets
+            the boxes shrink to fit. */}
+        <VStack maxWidth="100%">
+          <AppLockSwitch />
+        </VStack>
       </PageContent>
     </VStack>
   )

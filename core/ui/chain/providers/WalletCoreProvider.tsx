@@ -1,9 +1,9 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { initWasm, WalletCore } from '@trustwallet/wallet-core'
+import type { WalletCore } from '@trustwallet/wallet-core'
 import { createContext, useContext, useEffect, useState } from 'react'
 
+import { StartupLoadError } from '../../product/StartupLoadError'
 import { StartupPlaceholder } from '../../product/StartupPlaceholder'
-import { WalletCoreLoadError } from './WalletCoreLoadError'
 
 const WalletCoreContext = createContext<WalletCore | null>(null)
 
@@ -17,17 +17,21 @@ const walletCoreLoad: WalletCoreLoad = { loading: null, error: null }
 /**
  * Starts loading the WalletCore WASM once per realm and returns the shared
  * promise, so the provider, suspending consumers and work that runs before the
- * provider has a value all wait on the same initialisation. A failure is kept
- * as the load's error until the next call, which starts a fresh attempt.
+ * provider has a value all wait on the same initialisation. The package is
+ * imported here on demand, so its JS glue stays out of the entry chunk. A
+ * failure is kept as the load's error until the next call, which starts a
+ * fresh attempt.
  */
 export const loadWalletCore = () => {
   if (!walletCoreLoad.loading) {
     walletCoreLoad.error = null
-    walletCoreLoad.loading = initWasm().catch((error: unknown) => {
-      walletCoreLoad.loading = null
-      walletCoreLoad.error = error
-      throw error
-    })
+    walletCoreLoad.loading = import('@trustwallet/wallet-core')
+      .then(({ initWasm }) => initWasm())
+      .catch((error: unknown) => {
+        walletCoreLoad.loading = null
+        walletCoreLoad.error = error
+        throw error
+      })
   }
 
   return walletCoreLoad.loading
@@ -61,7 +65,7 @@ export const WalletCoreProvider = ({
 
   if (error !== null) {
     return (
-      <WalletCoreLoadError
+      <StartupLoadError
         error={error}
         onRetry={() => {
           setError(null)

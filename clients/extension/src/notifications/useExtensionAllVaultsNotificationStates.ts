@@ -1,7 +1,7 @@
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useQuery } from '@tanstack/react-query'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
-import { computeNotificationVaultId } from '@vultisig/sdk'
 
 import { extensionPushRegistrationQueryKey } from './extensionPushRegistrationQueryKey'
 import { isVaultRegisteredForPush } from './pushNotificationStorage'
@@ -20,6 +20,7 @@ export const useExtensionAllVaultsNotificationStates = () => {
       ...vaults.map(v => `${v.publicKeys.ecdsa}:${v.hexChainCode ?? ''}`),
     ],
     queryFn: async () => {
+      const { computeNotificationVaultId } = await loadMpcEngine()
       const result: Record<string, boolean> = {}
       for (const vault of vaults) {
         if (!vault.hexChainCode) continue

@@ -16,6 +16,7 @@ import {
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { recordFromKeys } from '@vultisig/lib-utils/record/recordFromKeys'
 
+import { loadMpcEngine } from '../../mpc/bootstrapMpcEngine'
 import {
   decryptWithPasscode,
   encryptWithPasscode,
@@ -177,6 +178,9 @@ const assertMpcKeyShareReadable = async (
     throw new Error('Missing MPC keyshare')
   }
 
+  // The MPC lib resolves the engine the SDK registers, so the SDK has to be
+  // loaded first; on the action popup it is not part of the entry chunk.
+  await loadMpcEngine()
   await initializeMpcLib(signatureAlgorithm)
   const keyshare = toMpcLibKeyshare({ keyShare: value, signatureAlgorithm })
 

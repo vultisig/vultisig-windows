@@ -2,16 +2,13 @@ import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { Button } from '@lib/ui/buttons/Button'
 import { useTranslation } from 'react-i18next'
 
-type WalletCoreLoadErrorProps = {
+type StartupLoadErrorProps = {
   error: unknown
   onRetry: () => void
 }
 
-/** Shown in place of the app when the WalletCore WASM failed to load; the action starts the load again. */
-export const WalletCoreLoadError = ({
-  error,
-  onRetry,
-}: WalletCoreLoadErrorProps) => {
+/** Replaces the app when a startup load, WalletCore or the SDK's MPC engine, failed; the action starts that load again. */
+export const StartupLoadError = ({ error, onRetry }: StartupLoadErrorProps) => {
   const { t } = useTranslation()
 
   return (
