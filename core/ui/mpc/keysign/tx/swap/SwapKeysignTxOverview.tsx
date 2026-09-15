@@ -49,6 +49,7 @@ import { useTxStatusQuery } from '../../../../chain/tx/status/useTxStatusQuery'
 import { useOptionalSwapQuote } from '../../state/swapQuote'
 import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
+import { TxVaultSourceLabel } from '../components/TxVaultSourceLabel'
 import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
 import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
@@ -226,17 +227,20 @@ export const SwapKeysignTxOverview = ({
               </Text>
             </HStack>
           </HStack>
-          <HStack fullWidth justifyContent="space-between" alignItems="center">
-            <Text weight="500" size={14} color="shy">
+          <HStack
+            fullWidth
+            justifyContent="space-between"
+            alignItems="center"
+            gap={8}
+            wrap="nowrap"
+          >
+            <RowTitle weight="500" size={14} color="shy">
               {t('from')}
-            </Text>
-
-            <Text weight={500} size={14} color="contrast">
-              {vault.name}{' '}
-              <Text cropped as="span" color="shy">
-                ({truncateId(fromCoin.address)})
-              </Text>
-            </Text>
+            </RowTitle>
+            <TxVaultSourceLabel
+              name={vault.name}
+              address={`(${truncateId(fromCoin.address)})`}
+            />
           </HStack>
           {toCoin && (
             <HStack
@@ -312,6 +316,10 @@ export const SwapKeysignTxOverview = ({
 const AddressWrapper = styled(Text)`
   overflow: hidden;
   text-align: right;
+`
+
+const RowTitle = styled(Text)`
+  flex-shrink: 0;
 `
 
 const SwapInfoWrapper = styled(SeparatedByLine)`
