@@ -22,6 +22,7 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { ValueProp } from '@lib/ui/props'
 import { getResolvedQuery } from '@lib/ui/query/Query'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -55,6 +56,11 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
   const { toAddress, memo } = value
   const { destinationTag, memo: displayMemo } = getRippleKeysignDisplay(value)
+  // A Substrate transfer signed as transfer_allow_death may reap the sender;
+  // the initiator chose that explicitly, and the co-signer must see it too.
+  const emptiesAccount =
+    value.blockchainSpecific.case === 'polkadotSpecific' &&
+    value.blockchainSpecific.value.allowDeath
 
   const coin = shouldBePresent(fromCommCoin(assertField(value, 'coin')))
 
@@ -234,6 +240,9 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           />
         )}
       </VerifyTransactionOverview>
+      {emptiesAccount && (
+        <WarningBlock>{t('substrate_account_will_be_reaped')}</WarningBlock>
+      )}
       {value.signData.case === 'signAmino' && (
         <SignAminoDisplay signAmino={value.signData.value} />
       )}

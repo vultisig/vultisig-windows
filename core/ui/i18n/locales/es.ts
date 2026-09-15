@@ -2002,4 +2002,6 @@ export const es = {
   enable_ton_w5_wallet: 'Utilice la cartera W5 TON',
   enable_ton_w5_wallet_description:
     'Utilice el contrato W5 (v5r1) en lugar del V4R2 al derivar las direcciones TON de esta bóveda. Esto cambia la dirección que utiliza la billetera, y cada contrato es una dirección independiente con su propio saldo; no transfiere fondos, por lo que cualquier saldo en la otra dirección permanece allí hasta que usted lo envíe.',
+  substrate_account_will_be_reaped:
+    'Esta transferencia vacía la cuenta del remitente: cualquier saldo que quede por debajo del depósito mínimo se destruye y la cuenta se desactiva.',
 }
