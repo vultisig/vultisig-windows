@@ -1985,4 +1985,6 @@ export const nl = {
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
+  substrate_account_will_be_reaped:
+    'Deze overschrijving leegt de rekening van de afzender: alles wat onder het minimale stortingsbedrag overblijft, wordt vernietigd en de rekening wordt gedeactiveerd.',
 }
