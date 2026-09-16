@@ -260,6 +260,77 @@ describe('validateSendReceiver', () => {
     ).toBe('send_invalid_receiver_address. starts with thor')
   })
 
+  // Format-valid but unspendable: the SDK's keysign build refuses these too,
+  // but the field-level message is what the user sees while typing.
+  it.each([
+    [Chain.Solana, '11111111111111111111111111111111', 'Solana System Program'],
+    [
+      Chain.Solana,
+      '1nc1nerator11111111111111111111111111111111',
+      'Solana Incinerator',
+    ],
+    [
+      Chain.Ethereum,
+      '0x0000000000000000000000000000000000000000',
+      'zero address',
+    ],
+    [
+      Chain.Arbitrum,
+      '0x000000000000000000000000000000000000dEaD',
+      'dead address',
+    ],
+    [Chain.Bitcoin, '1BitcoinEaterAddressDontSendf59kuE', 'Bitcoin eater'],
+    [Chain.Ripple, 'rrrrrrrrrrrrrrrrrrrrrhoLvTp', 'black-hole'],
+  ])(
+    'names the reason for a burn address on %s',
+    (chain, receiverAddress, reason) => {
+      vi.mocked(isValidRecipient).mockReturnValue(true)
+
+      const reasonT = ((key: string, options?: { reason?: string }) =>
+        key === 'send_receiver_dangerous_address'
+          ? `dangerous: ${options?.reason}`
+          : key) as TFunction
+
+      expect(
+        validateSendReceiver({
+          receiverAddress,
+          senderAddress: 'sender',
+          chain,
+          walletCore,
+          t: reasonT,
+        })
+      ).toMatch(new RegExp(`^dangerous: .*${reason}`))
+    }
+  )
+
+  it('does not treat a Solana program id as a burn address on another chain', () => {
+    vi.mocked(isValidRecipient).mockReturnValue(true)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress: '11111111111111111111111111111111',
+        senderAddress: 'sender',
+        chain: Chain.Ethereum,
+        walletCore,
+        t,
+      })
+    ).toBeUndefined()
+  })
+
+  it('reports the format error, not the burn reason, for a malformed burn lookalike', () => {
+    vi.mocked(isValidRecipient).mockReturnValue(false)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress: '0x0000000000000000000000000000000000000000',
+        senderAddress: 'sender',
+        chain: Chain.Ethereum,
+        walletCore,
+        t,
+      })
+    ).toContain('send_invalid_receiver_address')
+  })
+
   it('resolves a format hint for every acceptance-criteria chain family', () => {
     vi.mocked(isValidRecipient).mockReturnValue(false)
 

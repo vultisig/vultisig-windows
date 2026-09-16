@@ -844,6 +844,8 @@ export const ko = {
   send_overview: '개요 보내기',
   send_receiver_address_same_as_sender:
     '수신자 주소는 발신자 주소와 같을 수 없습니다.',
+  send_receiver_dangerous_address:
+    '이 주소는 자금을 받을 수 없습니다. {{reason}}입니다.',
   send_terms_0: '저는 올바른 주소로 보내고 있습니다.',
   send_terms_1: '금액이 맞습니다',
   send_to: '보내기',

@@ -851,6 +851,8 @@ export const nl = {
   send_overview: 'Verzendoverzicht',
   send_receiver_address_same_as_sender:
     'Ontvangeradres kan niet hetzelfde zijn als afzenderadres',
+  send_receiver_dangerous_address:
+    'Dit adres kan geen geld ontvangen. Het is een {{reason}}.',
   send_terms_0: 'Ik verstuur naar het juiste adres',
   send_terms_1: 'Het bedrag klopt',
   send_to: 'Verzenden naar',

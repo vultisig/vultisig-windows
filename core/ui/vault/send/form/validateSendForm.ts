@@ -2,6 +2,10 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, UtxoBasedChain } from '@vultisig/core-chain/Chain'
 import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import {
+  getChainDangerousReason,
+  getEvmDangerousReason,
+} from '@vultisig/core-chain/security/dangerousAddresses'
 import { isValidRecipient } from '@vultisig/core-chain/utils/isValidRecipient'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
@@ -42,6 +46,19 @@ export const validateSendReceiver = ({
       error: t('send_invalid_receiver_address'),
       hint: getReceiverAddressFormatHint({ chain, senderAddress, t }),
     })
+  }
+
+  // A well-formed address can still be a known burn / program destination.
+  // The SDK refuses to build the keysign payload for these, but by then the
+  // user is on the Continue button; naming it here keeps the reason next to
+  // the field that needs fixing. Same lists the SDK uses: EVM by shape, the
+  // rest keyed by chain.
+  const dangerousReason =
+    getEvmDangerousReason(receiverAddress) ??
+    getChainDangerousReason(chain, receiverAddress)
+
+  if (dangerousReason) {
+    return t('send_receiver_dangerous_address', { reason: dangerousReason })
   }
 }
 

@@ -861,6 +861,8 @@ export const it = {
   send_overview: 'Invia panoramica',
   send_receiver_address_same_as_sender:
     "L'indirizzo del destinatario non può essere uguale all'indirizzo del mittente",
+  send_receiver_dangerous_address:
+    'Questo indirizzo non può ricevere fondi. È un {{reason}}.',
   send_terms_0: "Sto inviando all'indirizzo giusto",
   send_terms_1: "L'importo è corretto",
   send_to: 'Invia a',

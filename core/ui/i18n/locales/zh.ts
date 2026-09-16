@@ -794,6 +794,7 @@ export const zh = {
   send_invalid_receiver_address: '请输入有效的收件人地址',
   send_overview: '发送概览',
   send_receiver_address_same_as_sender: '接收地址不能与发送地址相同',
+  send_receiver_dangerous_address: '此地址无法接收资金。它是 {{reason}}。',
   send_terms_0: '我寄到了正确的地址。',
   send_terms_1: '金额正确',
   send_to: '发送至',
