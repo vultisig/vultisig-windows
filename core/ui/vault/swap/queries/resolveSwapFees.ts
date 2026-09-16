@@ -3,7 +3,6 @@ import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/ge
 import { SwapQuoteResult } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
-import { maxBigInt } from '@vultisig/lib-utils/math/maxBigInt'
 
 import { SwapAffiliateBps } from '../affiliate/affiliateBps'
 
@@ -187,51 +186,26 @@ const getSwapProviderCharges = ({
       }),
   })
 
-type ResolveSwapNetworkFeeInput = {
-  quote: SwapQuoteResult
-  network: SwapFee
-}
-
-/**
- * Picks the source-chain gas cost to display.
- *
- * The `solana` branch must not blindly trust the provider's `networkFee`, which
- * is `0n` whenever the quote carries no network-fee entry (e.g. SwapKit
- * CHAINFLIP_STREAMING); it takes the larger of the computed keysign-payload fee
- * and the provider's value, so the displayed fee is never below the real
- * on-chain cost. See vultisig-windows#4381.
- */
-const resolveSwapNetworkFee = ({
-  quote,
-  network,
-}: ResolveSwapNetworkFeeInput): SwapFee =>
-  matchRecordUnion<SwapQuoteResult, SwapFee>(quote, {
-    native: () => network,
-    general: ({ tx }) =>
-      matchRecordUnion<typeof tx, SwapFee>(tx, {
-        evm: () => network,
-        solana: ({ networkFee }) => ({
-          ...network,
-          amount: maxBigInt(network.amount, networkFee),
-        }),
-        transfer: () => network,
-        cowswap_order: () => network,
-        // The FIN execute is an ordinary THORChain CosmWasm message, so its gas
-        // is the keysign payload's computed network fee.
-        cosmosWasm: () => network,
-      }),
-  })
-
 /** Input for {@link resolveSwapFees}. */
 type ResolveSwapFeesInput = GetSwapProviderFeesInput & {
   network: SwapFee
 }
 
-/** Maps a swap quote to the full itemized fee breakdown the UI renders. */
+/**
+ * Maps a swap quote to the full itemized fee breakdown the UI renders.
+ *
+ * `network` is passed through untouched: it is the fee computed from the
+ * keysign payload, and the co-signer's Verify screen holds nothing but that
+ * payload. Folding the provider's own network-fee estimate in here (as the
+ * Solana branch once did, taking the larger of the two) made the initiator
+ * show a figure the co-signer could not reproduce — see vultisig-windows#4954.
+ * A provider estimate that beats the computed fee belongs in the fee resolver
+ * (vultisig-sdk#2397), where both screens pick it up.
+ */
 export const resolveSwapFees = ({
   network,
   ...providerFeesInput
 }: ResolveSwapFeesInput): SwapFeesBreakdown => ({
-  network: resolveSwapNetworkFee({ quote: providerFeesInput.quote, network }),
+  network,
   ...getSwapProviderFees(providerFeesInput),
 })
