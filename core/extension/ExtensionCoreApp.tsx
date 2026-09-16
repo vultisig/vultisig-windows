@@ -1,4 +1,5 @@
 import { CoreApp } from '@core/ui/CoreApp'
+import { StartupMode } from '@core/ui/product/startupSplash'
 import { CoreState } from '@core/ui/state/core'
 import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
@@ -42,8 +43,14 @@ type ExtensionCoreAppProps = ChildrenProp & {
   popNavigationHistory: (steps: number) => void
   targetVaultId?: string
   isLimited?: boolean
+  startupMode?: StartupMode
 }
 
+/**
+ * `CoreApp` wired to the extension's storage, navigation callbacks and
+ * migrations. `startupMode` is passed through so the action popup can boot
+ * without the splash.
+ */
 export const ExtensionCoreApp = ({
   children,
   processError,
@@ -52,6 +59,7 @@ export const ExtensionCoreApp = ({
   targetVaultId,
   goHome,
   isLimited,
+  startupMode,
 }: ExtensionCoreAppProps) => {
   const coreState = useMemo(
     () => ({
@@ -78,6 +86,7 @@ export const ExtensionCoreApp = ({
       migrationsManager={StorageMigrationsManager}
       coreState={coreState}
       isLimited={isLimited}
+      startupMode={startupMode}
     >
       {children}
     </CoreApp>

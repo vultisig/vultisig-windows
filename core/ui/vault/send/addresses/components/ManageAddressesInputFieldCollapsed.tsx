@@ -37,14 +37,14 @@ export const ManageAddressesInputFieldCollapsed = () => {
         }))
       }}
     >
-      <HStack gap={12} alignItems="center">
-        <Text cropped size={14}>
+      <AddressRow gap={12} alignItems="center">
+        <Text nowrap size={14}>
           {t('address')}
         </Text>
-        <Text cropped size={12} color="shy">
-          <MiddleTruncate text={address} width={250} />
-        </Text>
-      </HStack>
+        <AddressText size={12} color="shy">
+          <MiddleTruncate text={address} />
+        </AddressText>
+      </AddressRow>
       <ActionFormIconsWrapper gap={12}>
         {isChecked && (
           <>
@@ -68,6 +68,24 @@ const CollapsedCoinInputContainer = styled(SendInputContainer)`
     justifyContent: 'space-between',
     alignItems: 'center',
   })}
+`
+
+/**
+ * Holds the label and the address. It takes the width the field leaves after
+ * the icons instead of its content's, or a fixed-width address pushes the
+ * check and pencil icons out of the field at the popup width.
+ */
+const AddressRow = styled(HStack)`
+  flex: 1;
+  min-width: 0;
+`
+
+// `MiddleTruncate` truncates against the width it is given, so this has to be
+// sized by the row rather than by the address, capped where the design puts it.
+const AddressText = styled(Text)`
+  flex: 1;
+  min-width: 0;
+  max-width: 250px;
 `
 
 const PencilIconWrapper = styled.div`

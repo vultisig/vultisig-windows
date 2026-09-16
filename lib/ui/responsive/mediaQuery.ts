@@ -17,6 +17,14 @@ export const mediaBreakPoints: Record<SupportedMediasWidths, number> = {
   desktopDevice: 1100,
 }
 
+/**
+ * The browser extension popup's width, and the narrowest layout any shared
+ * component has to survive. It sits below `mobileDevice`, so no device
+ * breakpoint distinguishes it — size against this instead of assuming a phone
+ * has the room a phone usually does.
+ */
+export const extensionPopupWidth = 360
+
 export const mediaQuery: Record<SupportedMedias, string> = {
   mobileDeviceAndDown: `(max-width: ${mediaBreakPoints.mobileDevice - 1}px)`,
   mobileDeviceAndUp: `(min-width: ${mediaBreakPoints.mobileDevice}px)`,

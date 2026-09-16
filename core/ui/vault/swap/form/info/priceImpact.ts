@@ -11,7 +11,8 @@ const averageThreshold = -0.03
 
 export type PriceImpactLevel = 'good' | 'average' | 'high'
 
-type PriceImpactDisplay = {
+/** A price impact rendered for display: signed percentage plus its band. */
+export type PriceImpactDisplay = {
   percent: string
   level: PriceImpactLevel
 }
@@ -20,16 +21,17 @@ type PriceImpactDisplay = {
  * Fractional price impact of a quote (`0.0133` == 1.33% of output lost), or
  * `undefined` when the provider does not report one.
  *
- * Native quotes carry it as `slippage_bps`. General quotes only expose it for
- * providers that publish it — the EVM aggregators do not, so their row is
- * hidden rather than filled with the total-fee bps, which is a different figure
- * that merely looks like slippage.
+ * Native quotes carry it as `fees.slippage_bps`, the level THORChain and
+ * MayaChain send it at. General quotes only expose it for providers that
+ * publish it — the EVM aggregators do not, so their row is hidden rather than
+ * filled with the total-fee bps, which is a different figure that merely looks
+ * like slippage.
  */
 export const getSwapPriceImpact = (
   quote: SwapQuoteResult
 ): number | undefined =>
   matchRecordUnion<SwapQuoteResult, number | undefined>(quote, {
-    native: ({ slippage_bps: slippageBps }) =>
+    native: ({ fees: { slippage_bps: slippageBps } }) =>
       slippageBps === undefined ? undefined : slippageBps / bpsPerUnit,
     general: ({ priceImpactFraction }) => priceImpactFraction,
   })

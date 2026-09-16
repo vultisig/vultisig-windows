@@ -2,7 +2,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, UtxoBasedChain } from '@vultisig/core-chain/Chain'
 import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
-import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
+import { isValidRecipient } from '@vultisig/core-chain/utils/isValidRecipient'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
@@ -37,7 +37,7 @@ export const validateSendReceiver = ({
     return t('send_receiver_address_same_as_sender')
   }
 
-  if (!isValidAddress({ address: receiverAddress, chain, walletCore })) {
+  if (!isValidRecipient({ address: receiverAddress, chain, walletCore })) {
     return t('send_invalid_receiver_address_with_hint', {
       error: t('send_invalid_receiver_address'),
       hint: getReceiverAddressFormatHint({ chain, senderAddress, t }),

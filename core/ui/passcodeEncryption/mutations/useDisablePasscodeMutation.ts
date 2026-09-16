@@ -33,10 +33,18 @@ export const useDisablePasscodeMutation = () => {
         })
 
         await updateVaultsKeyShares(vaultsKeyShares)
-        await refetchQueries([StorageKey.vaults])
-        setPasscode(null)
         await setPasscodeEncryption(null)
-        await refetchQueries([StorageKey.passcodeEncryption])
+        await refetchQueries(
+          [StorageKey.vaults],
+          [StorageKey.passcodeEncryption]
+        )
+
+        // Last, and only once both halves of `isPasscodeRequired` have been
+        // refetched. Dropping the passcode any earlier leaves a commit where a
+        // passcode is still required but none is held, which is exactly the
+        // state PasscodeGuard locks on — the lock screen would flash over the
+        // settings page for a frame before the refetches landed.
+        setPasscode(null)
       }),
   })
 }

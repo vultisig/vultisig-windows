@@ -107,6 +107,7 @@ coreHolder.value = {
   ...vaultsStorage,
   ...passcodeEncryptionStorage,
   createCoins: async () => {},
+  getIsTonW5Enabled: async () => false,
   setCurrentVaultId: async (value: string | null) => {
     currentVaultIdHolder.value = value
   },

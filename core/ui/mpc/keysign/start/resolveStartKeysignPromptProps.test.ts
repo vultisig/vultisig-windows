@@ -43,6 +43,28 @@ const resolve = (
   })
 
 describe('resolveStartKeysignPromptProps', () => {
+  it.each([
+    'ripple-destination-not-activated',
+    'ripple-destination-trust-line-missing',
+    'ripple-issued-currency-amount-invalid',
+    'ripple-issuer-transfer-fee-unsupported',
+    'ripple-trust-line-issuer-not-activated',
+    'ton-memo-too-long',
+  ] as const)('surfaces the SDK explanation for %s', type => {
+    expect(
+      resolve({
+        keysignPayloadQuery: {
+          data: undefined,
+          error: new BuildKeysignPayloadError(
+            type,
+            'The concrete SDK rejection reason'
+          ),
+          isPending: false,
+        },
+      })
+    ).toStrictEqual({ disabledMessage: 'The concrete SDK rejection reason' })
+  })
+
   it('waits on the user first, without a spinner', () => {
     expect(resolve({ termsAccepted: [true, false] })).toStrictEqual({
       disabledMessage: 'terms_required',

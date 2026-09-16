@@ -12,6 +12,7 @@ export type ExtensionManifest = {
   description?: string
   icons?: Record<string, string>
   name?: string
+  short_name?: string
 }
 
 export const applyExtensionBrandToManifest = (
@@ -22,6 +23,7 @@ export const applyExtensionBrandToManifest = (
   author: config.manifest.author,
   description: config.manifest.description,
   name: config.manifest.name,
+  short_name: config.provider.walletPickerName,
 })
 
 export const applyExtensionBrandToHtml = (html: string, title: string) =>

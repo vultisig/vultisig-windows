@@ -38,7 +38,12 @@ export const ProductLogoBlock = () => {
   }, [completeStartupSplash, hasCompletedStartupSplash])
 
   return (
-    <VStack alignItems="center" justifyContent="center" fullSize>
+    <VStack
+      alignItems="center"
+      justifyContent="center"
+      fullSize
+      data-testid="startup-splash"
+    >
       {currentProductBrand === 'station' ? (
         <ProductLogo style={{ fontSize: 96 }} />
       ) : (

@@ -14,6 +14,13 @@ export const VaultPageHeaderControls = () => {
   const { client } = useCore()
   const isExtension = client === 'extension'
 
+  // `IconButton` is `width: auto` over a `min-width` floor, so an icon wider
+  // than its box grows the button past the size asked for. In the popup that
+  // extra width comes straight out of the header's right inset, so size the
+  // glyph from the box rather than pinning it.
+  const controlSize = isExtension ? 'md' : undefined
+  const controlIconSize = isExtension ? 20 : 24
+
   return (
     <HStack gap={4} alignItems="center">
       {!isExtension && <RefreshVaultBalance />}
@@ -21,9 +28,9 @@ export const VaultPageHeaderControls = () => {
         <IconButton
           onClick={() => navigate({ id: 'transactionHistory' })}
           data-testid="transaction-history-button"
-          size={isExtension ? 'xs' : undefined}
+          size={controlSize}
         >
-          <IconWrapper size={24}>
+          <IconWrapper size={controlIconSize}>
             <ClockRotateClockwiseIcon />
           </IconWrapper>
         </IconButton>
@@ -31,9 +38,9 @@ export const VaultPageHeaderControls = () => {
       <IconButton
         onClick={() => navigate({ id: 'settings' })}
         data-testid="settings-button"
-        size={isExtension ? 'lg' : undefined}
+        size={controlSize}
       >
-        <IconWrapper size={24}>
+        <IconWrapper size={controlIconSize}>
           <SettingsIcon />
         </IconWrapper>
       </IconButton>

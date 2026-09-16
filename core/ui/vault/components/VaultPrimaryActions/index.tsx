@@ -54,7 +54,7 @@ export const VaultPrimaryActions = ({
   const depositCoin = useMemo(() => getCoin(depositEnabledChains), [getCoin])
 
   return (
-    <ActionsWrapper justifyContent="center" gap={20}>
+    <ActionsWrapper>
       {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
       <SendPrompt coin={sendCoin} />
       {buyCoin && <BuyPrompt coin={buyCoin} />}

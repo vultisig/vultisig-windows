@@ -1,4 +1,5 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { CoinTicker } from '@core/ui/vault/chain/CoinTicker'
 import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
@@ -37,15 +38,15 @@ export const ManageSendCoinCollapsedInputField = () => {
         }))
       }}
     >
-      <HStack gap={12} alignItems="center">
-        <Text size={14}>{t('asset')}</Text>
-        <HStack gap={4} alignItems="center">
+      <AssetRow gap={12} alignItems="center">
+        <Text size={14} nowrap>
+          {t('asset')}
+        </Text>
+        <CoinRow gap={4} alignItems="center">
           <CoinIcon coin={coin} style={{ fontSize: 20 }} />
-          <Text size={12} color="shy">
-            {ticker}
-          </Text>
-        </HStack>
-      </HStack>
+          <CoinTicker ticker={ticker} size={12} color="shy" />
+        </CoinRow>
+      </AssetRow>
       <ActionFormIconsWrapper gap={12}>
         {isChecked && (
           <>
@@ -69,6 +70,23 @@ const CollapsedCoinInputContainer = styled(SendInputContainer)`
     justifyContent: 'space-between',
     alignItems: 'center',
   })}
+`
+
+/**
+ * Holds the label and the coin. It has to be allowed to shrink, or the ticker
+ * beside it has no width to be cropped against.
+ */
+const AssetRow = styled(HStack)`
+  min-width: 0;
+`
+
+const CoinRow = styled(HStack)`
+  min-width: 0;
+
+  svg,
+  img {
+    flex-shrink: 0;
+  }
 `
 
 const PencilIconWrapper = styled.div`

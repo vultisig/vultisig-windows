@@ -231,8 +231,6 @@ export const pt = {
   custom_token: 'Token personalizado',
   customize_chains: 'Personalize correntes',
   date: 'Data',
-  decrypting_vault_keyshares:
-    'Descriptografando compartilhamentos de chaves do cofre...',
   deeplink: 'Link direto',
   defi: 'DeFi',
   defiChainTabs: {
@@ -291,8 +289,6 @@ export const pt = {
     'Gere uma chave pós-quântica (MLDSA) para este cofre.',
   enable_token_instruction:
     'Habilite pelo menos um token para visualizar saldos e gerenciar posições.',
-  encrypting_vault_keyshares:
-    'Criptografando compartilhamentos de chaves do cofre...',
   enter: 'Digitar',
   enter_address: 'Insira o endereço',
   enter_address_here: 'Insira o endereço aqui',
@@ -2003,4 +1999,10 @@ export const pt = {
   solana_blockhash_expired: 'A transação expirou antes de ser confirmada.',
   solana_blockhash_expired_description:
     'Seus dispositivos assinaram a transação, mas a rede Solana não a confirmou antes que o hash do bloco expirasse, portanto, ela não foi processada. Assine-a novamente para enviá-la com um hash de bloco atualizado.',
+  no_tokens_selected: 'Nenhum token selecionado',
+  no_tokens_selected_description:
+    'Você desativou todos os tokens. Certifique-se de que o token que você está procurando esteja ativado.',
+  enable_ton_w5_wallet: 'Use a carteira W5 TON',
+  enable_ton_w5_wallet_description:
+    'Use o contrato W5 (v5r1) em vez do V4R2 ao derivar os endereços TON deste cofre. Isso altera o endereço usado pela carteira, e cada contrato é um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
 }

@@ -34,11 +34,13 @@ import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
+import { TxVaultSourceLabel } from './components/TxVaultSourceLabel'
 import { KeysignFeeAmount } from './FeeAmount'
 import { getWasmExecuteTxDisplay } from './getWasmExecuteTxDisplay'
 import { SignRippleDisplay } from './ripple/SignRippleDisplay'
@@ -183,19 +185,26 @@ export const KeysignTxOverview = ({
               </HStack>
             </HStack>
           )}
-          <HStack alignItems="center" gap={4} justifyContent="space-between">
-            <Text color="shy" weight="500">
+          <HStack
+            alignItems="center"
+            gap={8}
+            justifyContent="space-between"
+            wrap="nowrap"
+          >
+            <RowTitle color="shy" weight="500">
               {t('from')}
-            </Text>
-            <HStack alignItems="center" gap={4}>
-              <Text>{name}</Text>
-              <MiddleTruncate
-                color="textShy"
-                text={`(${address})`}
-                weight={500}
-                width={80}
-              />
-            </HStack>
+            </RowTitle>
+            <TxVaultSourceLabel
+              name={name}
+              address={
+                <MiddleTruncate
+                  color="textShy"
+                  text={`(${address})`}
+                  weight={500}
+                  width={96}
+                />
+              }
+            />
           </HStack>
           {displayToAddress && (
             <VStack gap={8}>
@@ -209,15 +218,17 @@ export const KeysignTxOverview = ({
                   {t('to')}
                 </Text>
                 {toLabel !== null ? (
-                  <HStack alignItems="center" gap={4}>
-                    <Text>{toLabel}</Text>
-                    <MiddleTruncate
-                      color="textShy"
-                      text={`(${displayToAddress})`}
-                      weight={500}
-                      width={80}
-                    />
-                  </HStack>
+                  <TxVaultSourceLabel
+                    name={toLabel}
+                    address={
+                      <MiddleTruncate
+                        color="textShy"
+                        text={`(${displayToAddress})`}
+                        weight={500}
+                        width={96}
+                      />
+                    }
+                  />
                 ) : (
                   <MiddleTruncate
                     text={displayToAddress}
@@ -267,3 +278,7 @@ export const KeysignTxOverview = ({
     </>
   )
 }
+
+const RowTitle = styled(Text)`
+  flex-shrink: 0;
+`

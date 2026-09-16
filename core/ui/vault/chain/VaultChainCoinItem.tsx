@@ -31,6 +31,28 @@ const PriceBadge = styled.div`
   background: ${getColor('foregroundExtra')};
 `
 
+/**
+ * Everything to the right of the coin icon. `width: 100%` alone makes it a
+ * flex item that will not shrink below the full row, which pushed the balance
+ * column out past the panel; the row only has the width the icon leaves it.
+ */
+const RowBody = styled(VStack)`
+  min-width: 0;
+`
+
+/**
+ * Native balance under the fiat value. Its cap is what keeps the balance
+ * column bounded, so the ticker beside it still gets a share of the row: the
+ * popup leaves the row 296px, of which 96 goes to the icon, gaps and chevron.
+ */
+const NativeAmount = styled(Text)`
+  max-width: 160px;
+
+  @media (max-width: 400px) {
+    max-width: 100px;
+  }
+`
+
 type VaultChainCoinItemProps = ValueProp<
   Partial<EntityWithLogo> &
     EntityWithTicker &
@@ -64,7 +86,7 @@ export const VaultChainCoinItem = ({
     <HStack fullWidth alignItems="center" gap={12}>
       <CoinIcon coin={value} style={{ fontSize: 32 }} />
 
-      <VStack fullWidth alignItems="start" gap={12}>
+      <RowBody fullWidth alignItems="start" gap={12}>
         <HStack
           fullWidth
           alignItems="center"
@@ -108,17 +130,11 @@ export const VaultChainCoinItem = ({
                     {formatFiatAmount((price || 0) * balance)}
                   </BalanceVisibilityAware>
                 </Text>
-                <Text
-                  weight={500}
-                  color="shy"
-                  size={12}
-                  cropped
-                  style={{ maxWidth: 160 }}
-                >
+                <NativeAmount weight={500} color="shy" size={12} cropped>
                   <BalanceVisibilityAware>
                     {formatAmount(balance, { precision: 'high' })} {ticker}
                   </BalanceVisibilityAware>
-                </Text>
+                </NativeAmount>
               </VStack>
             )}
             <IconWrapper>
@@ -126,7 +142,7 @@ export const VaultChainCoinItem = ({
             </IconWrapper>
           </HStack>
         </HStack>
-      </VStack>
+      </RowBody>
     </HStack>
   )
 }

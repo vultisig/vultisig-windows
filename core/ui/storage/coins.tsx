@@ -1,4 +1,4 @@
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { loadWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
@@ -14,6 +14,7 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 
 import { useAssertCurrentVaultId } from './currentVaultId'
 import { StorageKey } from './StorageKey'
+import { getTonWalletVersion } from './tonW5Enabled'
 
 type CreateCoinsInput = {
   vaultId: string
@@ -49,14 +50,13 @@ export type CoinsStorage = {
   deleteCoin: DeleteCoinFunction
 }
 
+/** Adds a coin to the current vault, deriving its address with WalletCore once the WASM has loaded. */
 export const useCreateCoinMutation = () => {
   const vault = useCurrentVault()
 
-  const walletCore = useAssertWalletCore()
-
   const refetch = useRefetchQueries()
 
-  const { createCoin } = useCore()
+  const { createCoin, getIsTonW5Enabled } = useCore()
 
   const vaultId = useAssertCurrentVaultId()
 
@@ -70,6 +70,10 @@ export const useCreateCoinMutation = () => {
       }
     }
 
+    // Awaited here rather than asserted at render so the home screen, which
+    // mounts this mutation for its promo banners, does not wait on the WASM.
+    const walletCore = await loadWalletCore()
+
     const address = getChainAddress({
       chain: coin.chain,
       walletCore,
@@ -77,6 +81,7 @@ export const useCreateCoinMutation = () => {
       publicKeys: vault.publicKeys,
       publicKeyMldsa: vault.publicKeyMldsa,
       chainPublicKeys: vault.chainPublicKeys,
+      tonWalletVersion: getTonWalletVersion(await getIsTonW5Enabled()),
     })
 
     const accountCoin = { ...coin, address }

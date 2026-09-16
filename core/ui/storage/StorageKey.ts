@@ -24,6 +24,7 @@ export enum StorageKey {
   isMLDSAEnabled = 'isMLDSAEnabled',
   isLimitPriceChartExpanded = 'isLimitPriceChartExpanded',
   isTssBatchingEnabled = 'isTssBatchingEnabled',
+  isTonW5Enabled = 'isTonW5Enabled',
   transactionHistory = 'transactionHistory',
   hasSeenNotificationPrompt = 'hasSeenNotificationPrompt',
   keplrSuggestedChains = 'keplrSuggestedChains',

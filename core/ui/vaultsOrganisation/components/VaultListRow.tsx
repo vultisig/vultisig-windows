@@ -31,6 +31,7 @@ export const VaultListRow = ({
 }: VaultListRowProps) => {
   return (
     <Row
+      data-testid="vault-list-row"
       clickable={!!onClick}
       selected={selected}
       disabled={disabled}
@@ -49,9 +50,9 @@ export const VaultListRow = ({
             }
       }
     >
-      <RowContent gap={14} alignItems="center">
+      <MainContent gap={14} alignItems="center">
         {leading && <LeadingSlot>{leading}</LeadingSlot>}
-        <VStack gap={4} alignItems="flex-start">
+        <TextContent gap={4}>
           <Text size={16} weight={600} color="contrast" cropped>
             {title}
           </Text>
@@ -60,12 +61,14 @@ export const VaultListRow = ({
               {subtitle}
             </Text>
           )}
-        </VStack>
-      </RowContent>
-      <RowContent gap={12} alignItems="center">
-        {meta}
-        {trailing}
-      </RowContent>
+        </TextContent>
+      </MainContent>
+      {meta || trailing ? (
+        <TrailingContent gap={12} alignItems="center">
+          {meta}
+          {trailing}
+        </TrailingContent>
+      ) : null}
     </Row>
   )
 }
@@ -88,6 +91,7 @@ const Row = styled.div.withConfig({
   border: 1px solid
     ${({ theme }) => theme.colors.foregroundExtra.withAlpha(0.7).toCssValue()};
   display: flex;
+  gap: 12px;
   justify-content: space-between;
   padding: 16px 20px;
   transition:
@@ -126,13 +130,25 @@ const Row = styled.div.withConfig({
     `}
 `
 
-const RowContent = styled(HStack)`
+// The title side owns the leftover width and is allowed to shrink so a long
+// vault name ellipsizes instead of pushing the trailing control out of the row.
+const MainContent = styled(HStack)`
+  flex: 1;
+  min-width: 0;
+`
+
+const TextContent = styled(VStack)`
+  min-width: 0;
+`
+
+const TrailingContent = styled(HStack)`
   flex-shrink: 0;
 `
 
 const LeadingSlot = styled.div`
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 `
 
 type LeadingIconProps = {

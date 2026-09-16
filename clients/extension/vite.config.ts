@@ -47,6 +47,71 @@ const preserveDefineDataProperty = (): PluginOption => ({
   },
 })
 
+// Modules that must not be evaluated before the popup's home paints. They are
+// loaded through `loadMpcEngine` and `loadWalletCore`; a static import anywhere
+// on the home path would put them back into a chunk that index.html
+// modulepreloads, which the size budget alone cannot catch (#4937).
+// Matched on each package's own `dist/`: the SDK's Vite plugin resolves node
+// polyfill shims from the SDK's nested node_modules, and those are fine here.
+const popupEntryGraphForbiddenModules = [
+  '/node_modules/@vultisig/sdk/dist/',
+  '/node_modules/@trustwallet/wallet-core/dist/',
+]
+
+const assertPopupEntryGraphModules = (): PluginOption => ({
+  name: 'vultisig:assert-popup-entry-graph-modules',
+  generateBundle(_, bundle) {
+    const chunks = Object.values(bundle).filter(
+      output => output.type === 'chunk'
+    )
+    const entry = chunks.find(chunk => chunk.isEntry && chunk.name === 'index')
+    if (!entry) {
+      this.error(
+        'The popup entry chunk "index" was not emitted; the entry-graph check cannot run. Keep the `index` input in rollupOptions or update this check.'
+      )
+    }
+
+    // Static import chain from the entry to each chunk, for the error message.
+    const importedBy = new Map<string, string | null>([[entry.fileName, null]])
+    const visit = (fileName: string) => {
+      chunks
+        .find(chunk => chunk.fileName === fileName)
+        ?.imports.forEach(imported => {
+          if (importedBy.has(imported)) return
+          importedBy.set(imported, fileName)
+          visit(imported)
+        })
+    }
+    visit(entry.fileName)
+    const staticGraph = new Set(importedBy.keys())
+    const chainTo = (fileName: string): string => {
+      const parent = importedBy.get(fileName)
+      return parent ? `${chainTo(parent)} -> ${fileName}` : fileName
+    }
+
+    const offenders = chunks
+      .filter(chunk => staticGraph.has(chunk.fileName))
+      .flatMap(chunk =>
+        Object.keys(chunk.modules)
+          .filter(id =>
+            popupEntryGraphForbiddenModules.some(forbidden =>
+              id.replace(/\\/g, '/').includes(forbidden)
+            )
+          )
+          .map(
+            id =>
+              `${chainTo(chunk.fileName)}: ${id.replace(/^.*node_modules\//, '')}`
+          )
+      )
+
+    if (offenders.length > 0) {
+      this.error(
+        `The popup entry graph statically includes modules that must load after home paints (see loadMpcEngine / loadWalletCore):\n${offenders.slice(0, 10).join('\n')}${offenders.length > 10 ? `\n...and ${offenders.length - 10} more` : ''}`
+      )
+    }
+  },
+})
+
 /** One physical copy of MPC entry + types across chunks (vultisig-windows#3831 / #3777). */
 const vultisigMpcDedupe: readonly string[] = [
   '@vultisig/sdk',
@@ -192,7 +257,11 @@ export default defineConfig(async ({ mode }) => {
           onwarn: () => {},
           output: {
             assetFileNames: 'assets/[name].[ext]',
-            chunkFileNames: 'assets/[name].js',
+            // Every build writes into the same dist/assets. The app build owns the
+            // bare chunk names; the service worker and inpage builds prefix theirs,
+            // otherwise a chunk both graphs emit (the SDK entry, once the app loads
+            // it on demand) is overwritten by whichever build runs last.
+            chunkFileNames: `assets/${chunk}-[name].js`,
             entryFileNames: '[name].js',
             format,
             manualChunks: isFirefoxBuild
@@ -221,6 +290,11 @@ export default defineConfig(async ({ mode }) => {
         viteStaticCopy({
           targets: getStaticCopyTargets(),
         }),
+        // The Firefox build keeps every module of a package in one vendor chunk,
+        // so the transaction builders in @vultisig/core-mpc and core-chain, which
+        // only lazy pages use, sit next to the modules home needs and drag
+        // WalletCore in statically. Only the Chromium build can hold this line.
+        ...(isFirefoxBuild ? [] : [assertPopupEntryGraphModules()]),
       ],
       build: {
         // Keep the SDK/WASM top-level-await wrapper output modern; the plugin's

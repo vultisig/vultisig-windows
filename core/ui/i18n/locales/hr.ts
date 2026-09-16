@@ -229,7 +229,6 @@ export const hr = {
   custom_token: 'Prilagođeni token',
   customize_chains: 'Prilagodi lance',
   date: 'Datum',
-  decrypting_vault_keyshares: 'Dešifriranje dijeljenja ključeva trezora...',
   deeplink: 'Duboka veza',
   defi: 'DeFi',
   defiChainTabs: {
@@ -288,7 +287,6 @@ export const hr = {
     'Generiraj postkvantni (MLDSA) ključ za ovaj trezor',
   enable_token_instruction:
     'Omogućite barem jedan token za pregled stanja i upravljanje pozicijama.',
-  encrypting_vault_keyshares: 'Šifriranje dijeljenja ključeva trezora...',
   enter: 'Unesi',
   enter_address: 'Unesite adresu',
   enter_address_here: 'Unesite adresu ovdje',
@@ -1970,4 +1968,10 @@ export const hr = {
     'Transakcija je istekla prije nego što je potvrđena',
   solana_blockhash_expired_description:
     'Vaši su uređaji potpisali transakciju, ali Solana mreža je nije potvrdila prije isteka blockhash-a, tako da nikada nije prošla. Potpišite je ponovno da biste je poslali s novim blockhash-om.',
+  no_tokens_selected: 'Nije odabran nijedan token',
+  no_tokens_selected_description:
+    'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',
+  enable_ton_w5_wallet: 'Koristite TON W5 novčanik',
+  enable_ton_w5_wallet_description:
+    'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
 }

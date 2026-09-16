@@ -1,6 +1,7 @@
 import { create, fromBinary } from '@bufbuild/protobuf'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { findSwapQuote } from '@vultisig/core-chain/swap/quote/findSwapQuote'
+import { isValidRecipient } from '@vultisig/core-chain/utils/isValidRecipient'
 import { buildSendKeysignPayload } from '@vultisig/core-mpc/keysign/send/build'
 import { buildSwapKeysignPayload } from '@vultisig/core-mpc/keysign/swap/build'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -14,6 +15,10 @@ import { handleBuildSwapTx } from './buildSwapTx'
 
 vi.mock('@vultisig/core-chain/publicKey/getPublicKey', () => ({
   getPublicKey: vi.fn(() => ({ data: () => new Uint8Array() })),
+}))
+
+vi.mock('@vultisig/core-chain/utils/isValidRecipient', () => ({
+  isValidRecipient: vi.fn(() => true),
 }))
 
 vi.mock('@vultisig/core-chain/swap/quote/findSwapQuote', () => ({
@@ -84,6 +89,13 @@ const context: ToolContext = {
       decimals: 8,
       isNativeToken: true,
     },
+    {
+      chain: 'Solana',
+      ticker: 'SOL',
+      address: 'solana-sender',
+      decimals: 9,
+      isNativeToken: true,
+    },
   ],
 }
 
@@ -93,6 +105,7 @@ const decodePayload = (value: unknown) =>
 describe('agent transaction amount precision', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.mocked(isValidRecipient).mockReturnValue(true)
     vi.mocked(buildSendKeysignPayload).mockImplementation(async input =>
       create(KeysignPayloadSchema, {
         toAddress: input.receiver,
@@ -128,6 +141,30 @@ describe('agent transaction amount precision', () => {
     expect(buildSendKeysignPayload).toHaveBeenCalledWith(
       expect.objectContaining({ amount: exactChainAmount })
     )
+  })
+
+  it('rejects an invalid Solana wallet recipient before payload preparation', async () => {
+    vi.mocked(isValidRecipient).mockReturnValue(false)
+
+    await expect(
+      handleBuildSendTx(
+        {
+          chain: 'Solana',
+          symbol: 'SOL',
+          address: 'off-curve-recipient',
+          amount: '1',
+        },
+        context
+      )
+    ).rejects.toThrow('Invalid recipient address for Solana')
+
+    expect(isValidRecipient).toHaveBeenCalledWith(
+      expect.objectContaining({
+        address: 'off-curve-recipient',
+        chain: 'Solana',
+      })
+    )
+    expect(buildSendKeysignPayload).not.toHaveBeenCalled()
   })
 
   it('preserves exact swap input through quote and payload construction', async () => {

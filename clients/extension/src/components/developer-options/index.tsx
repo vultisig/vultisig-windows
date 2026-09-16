@@ -10,6 +10,10 @@ import {
 import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import {
+  useIsTonW5Enabled,
+  useSetIsTonW5EnabledMutation,
+} from '@core/ui/storage/tonW5Enabled'
+import {
   useIsTssBatchingEnabled,
   useSetIsTssBatchingEnabledMutation,
 } from '@core/ui/storage/tssBatchingEnabled'
@@ -22,6 +26,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { TFunction } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -51,6 +56,12 @@ export const ExtensionDeveloperOptions = () => {
   const isTssBatchingEnabled = useIsTssBatchingEnabled()
   const { mutate: setIsTssBatchingEnabled } =
     useSetIsTssBatchingEnabledMutation()
+  const isTonW5Enabled = useIsTonW5Enabled()
+  const {
+    mutate: setIsTonW5Enabled,
+    isPending: isTonW5Pending,
+    error: tonW5Error,
+  } = useSetIsTonW5EnabledMutation()
   const [pushServerUrlValue, setPushServerUrlValue] = useState('')
   const shouldShowPluginServerUrl = currentProductBrand !== 'station'
 
@@ -106,6 +117,22 @@ export const ExtensionDeveloperOptions = () => {
               label={t('enable_tss_batching')}
               onChange={() => setIsTssBatchingEnabled(!isTssBatchingEnabled)}
             />
+            <VStack gap={4}>
+              <Switch
+                checked={isTonW5Enabled}
+                label={t('enable_ton_w5_wallet')}
+                loading={isTonW5Pending}
+                onChange={value => setIsTonW5Enabled(value)}
+              />
+              <Text size={12} color="shy">
+                {t('enable_ton_w5_wallet_description')}
+              </Text>
+              {tonW5Error ? (
+                <Text size={12} color="danger">
+                  {extractErrorMsg(tonW5Error)}
+                </Text>
+              ) : null}
+            </VStack>
             <VStack gap={4}>
               <TextInput
                 label={t('push_notification_server_url')}

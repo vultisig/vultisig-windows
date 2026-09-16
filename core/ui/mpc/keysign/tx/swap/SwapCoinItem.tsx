@@ -50,11 +50,13 @@ export const SwapCoinItem = ({
   )
 }
 
+// The two cards share the row evenly; a floor on their width would push the
+// pair past the 328px the popup gives the page.
 const SwapVStackItem = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   ${borderRadius.lg};
   flex: 1;
-  min-width: 169px;
+  min-width: 0;
   padding: 24px 16px;
 `

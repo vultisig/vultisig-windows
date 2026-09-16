@@ -3,7 +3,7 @@ import { kaminoConfig } from '@vultisig/core-chain/chains/solana/kamino/config'
 import { KaminoVaultDescriptor } from '@vultisig/core-chain/chains/solana/kamino/registry'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getKnownToken } from '@vultisig/core-chain/coin/knownTokens/utils'
 
 /**
  * The coin a vault's balance is denominated and priced in — its UNDERLYING
@@ -17,10 +17,8 @@ import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
  * carry — wrapping is a 1:1 escrow of the native coin and the two share a
  * price, so it resolves to native SOL.
  *
- * `knownTokensIndex` is keyed by LOWERCASED id, while a Solana mint is
- * case-sensitive base58, so the mint has to be lowered for the lookup. It
- * returns the known token itself, whose `id` keeps the mint's real case —
- * which is what the price query keys on.
+ * Curated lookup preserves the exact case of the Solana mint so metadata
+ * and price queries refer to the same underlying asset.
  *
  * A mint the token store does not carry still yields a coin, built from the
  * registry's own pinned mint and decimals: a vault must not vanish from the
@@ -38,7 +36,7 @@ export const kaminoUnderlyingCoin = (
   }
 
   return (
-    knownTokensIndex[Chain.Solana]?.[tokenMint.toLowerCase()] ?? {
+    getKnownToken({ chain: Chain.Solana, id: tokenMint }) ?? {
       chain: Chain.Solana,
       id: tokenMint,
       ticker: fallbackName,

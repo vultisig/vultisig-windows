@@ -3,6 +3,7 @@ import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { SolanaJupiterToken } from '@vultisig/core-chain/coin/jupiter/token'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getKnownTokenIndexId } from '@vultisig/core-chain/coin/knownTokens/getKnownTokenIndexId'
 import { OneInchTokensResponse } from '@vultisig/core-chain/coin/oneInch/token'
 import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
 import { baseJupiterTokensUrl } from '@vultisig/core-chain/coin/token/metadata/resolvers/solana'
@@ -83,7 +84,10 @@ const searchKnownTokens = (
 
     for (const [address, token] of Object.entries(tokens)) {
       if (isAddress) {
-        if (address.toLowerCase() === queryLower) {
+        if (
+          getKnownTokenIndexId(chain, address) ===
+          getKnownTokenIndexId(chain, query)
+        ) {
           results.push({
             chain,
             ticker: token.ticker,
@@ -199,7 +203,11 @@ const dedupeAndRank = (
   const seen = new Map<string, TokenResult>()
 
   for (const r of results) {
-    const key = `${r.chain}:${r.contract_address.toLowerCase()}`
+    const chain = getChainFromString(r.chain)
+    const tokenId = chain
+      ? getKnownTokenIndexId(chain, r.contract_address)
+      : r.contract_address
+    const key = `${r.chain}:${tokenId}`
     const existing = seen.get(key)
     if (!existing || r.source === 'known') {
       seen.set(key, r)

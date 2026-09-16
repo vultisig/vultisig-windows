@@ -93,7 +93,7 @@ export const CustomRpcPage = () => {
                         </EditBadge>
                       )}
                     </ChainIconFrame>
-                    <ChainName variant="caption" centerHorizontally nowrap>
+                    <ChainName variant="caption" centerHorizontally>
                       {getCustomRpcChainName(chain)}
                     </ChainName>
                   </ChainTile>
@@ -177,12 +177,17 @@ const StyledSearchInput = styled.input`
   }
 `
 
+/**
+ * Four columns that share whatever width the page gives them. Fixed 74px
+ * tracks came to more than the popup can show and overflowed into a sideways
+ * scroll; `minmax(0, …)` also stops a long chain name widening its own track.
+ */
 const ChainGrid = styled.div`
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(4, 74px);
-  width: 344px;
-  max-width: calc(100vw - 32px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  max-width: 344px;
 `
 
 const ChainTile = styled.button`
@@ -195,7 +200,8 @@ const ChainTile = styled.button`
   flex-direction: column;
   gap: 11px;
   padding: 0;
-  width: 74px;
+  min-width: 0;
+  width: 100%;
 `
 
 const ChainIconFrame = styled.div<{ $isCustom: boolean }>`
@@ -231,5 +237,5 @@ const EditBadge = styled.div`
 const ChainName = styled(Text)`
   align-self: center;
   letter-spacing: 0.12px;
-  max-width: 88px;
+  max-width: 100%;
 `

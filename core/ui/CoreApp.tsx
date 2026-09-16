@@ -1,7 +1,7 @@
-import './mpc/bootstrapMpcEngine'
-
-import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { StartupSplashProvider } from '@core/ui/product/startupSplash'
+import {
+  StartupMode,
+  StartupSplashProvider,
+} from '@core/ui/product/startupSplash'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { CustomRpcOverridesSync } from '@core/ui/storage/CustomRpcOverridesSync'
@@ -20,9 +20,15 @@ import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { stationTheme } from '@lib/ui/theme/stationTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
-import React from 'react'
+import React, { Suspense, useEffect } from 'react'
 import styled from 'styled-components'
 
+import {
+  loadWalletCore,
+  WalletCoreProvider,
+} from './chain/providers/WalletCoreProvider'
+import { loadMpcEngine } from './mpc/bootstrapMpcEngine'
+import { MpcEngineGate } from './mpc/MpcEngineGate'
 import { NotificationBannerProvider } from './notifications/NotificationBannerProvider'
 import { currentProductBrand } from './product/brand'
 
@@ -30,6 +36,7 @@ type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
   migrationsManager?: React.ComponentType<ChildrenProp>
   isLimited?: boolean
+  startupMode?: StartupMode
 }
 
 const Container = styled.div`
@@ -56,34 +63,58 @@ const VaultDependentContent = () => {
   )
 }
 
+/**
+ * The shell shared by every client: theme, core state, startup gates,
+ * storage-backed providers and the background managers that run for the
+ * active vault. `startupMode` picks between the branded splash and the
+ * action popup's instant boot.
+ */
 export const CoreApp = ({
   children,
   coreState,
   migrationsManager: MigrationsManager,
   isLimited = false,
+  startupMode = 'splash',
 }: CoreAppProps) => {
   const theme = currentProductBrand === 'station' ? stationTheme : darkTheme
+  const isBlockingStartup = startupMode === 'splash'
+
+  // A blocking boot waits on WalletCore and then on the SDK; starting both here
+  // lets the two loads overlap instead of running back to back. Each gate
+  // attaches its own rejection handling to these shared promises.
+  useEffect(() => {
+    if (!isBlockingStartup) return
+
+    loadWalletCore().catch(() => undefined)
+    loadMpcEngine().catch(() => undefined)
+  }, [isBlockingStartup])
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <CoreProvider value={coreState}>
-        <StartupSplashProvider>
-          <WalletCoreProvider>
-            <Wrap wrap={MigrationsManager}>
-              <StorageDependant>
-                <ToastProvider>
-                  <NotificationBannerProvider>
-                    <ResponsivenessProvider>
-                      <Container>
-                        {children}
-                        {!isLimited && <VaultDependentContent />}
-                      </Container>
-                    </ResponsivenessProvider>
-                  </NotificationBannerProvider>
-                </ToastProvider>
-              </StorageDependant>
-            </Wrap>
+        <StartupSplashProvider mode={startupMode}>
+          <WalletCoreProvider blocking={isBlockingStartup}>
+            <MpcEngineGate blocking={isBlockingStartup}>
+              <Wrap wrap={MigrationsManager}>
+                <StorageDependant>
+                  <ToastProvider>
+                    <NotificationBannerProvider>
+                      <ResponsivenessProvider>
+                        <Container>
+                          {children}
+                          {!isLimited && (
+                            <Suspense fallback={null}>
+                              <VaultDependentContent />
+                            </Suspense>
+                          )}
+                        </Container>
+                      </ResponsivenessProvider>
+                    </NotificationBannerProvider>
+                  </ToastProvider>
+                </StorageDependant>
+              </Wrap>
+            </MpcEngineGate>
           </WalletCoreProvider>
         </StartupSplashProvider>
       </CoreProvider>

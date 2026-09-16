@@ -1,4 +1,5 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useTonWalletVersion } from '@core/ui/storage/tonW5Enabled'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
@@ -28,6 +29,7 @@ export const useVaultNameForAddress = ({
 }: UseVaultNameForAddressInput): string | null => {
   const vaults = useVaults()
   const walletCore = useAssertWalletCore()
+  const tonWalletVersion = useTonWalletVersion()
 
   return getVaultNameForAddress({
     address,
@@ -47,6 +49,7 @@ export const useVaultNameForAddress = ({
           publicKeys: vault.publicKeys,
           publicKeyMldsa: vault.publicKeyMldsa,
           chainPublicKeys: vault.chainPublicKeys,
+          tonWalletVersion,
         })
       } catch {
         return null

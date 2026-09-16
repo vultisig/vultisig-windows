@@ -1,13 +1,13 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
-import { panel } from '@lib/ui/panel/Panel'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useCore } from '../../state/core'
 import { usePasscodeEncryption } from '../../storage/passcodeEncryption'
@@ -28,17 +28,51 @@ import { usePasscode } from '../state/passcode'
 
 const Wrapper = styled.div`
   ${takeWholeSpace}
+  position: relative;
+  overflow: hidden;
   background: ${getColor('background')};
 `
 
-const Container = styled.div`
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    rgba(4, 57, 199, 0.57) 0%,
-    rgba(2, 18, 42, 0.41) 100%
-  );
+// The design's backdrop: a blurred 648px glow and a faint 590px ring sharing
+// a centre 20px right of and 50px below the frame's centre.
+const glowDiameter = 648
+const ringDiameter = 590.8
 
+const backdropCircle = css`
+  position: absolute;
+  left: calc(50% + 20px);
+  top: calc(50% + 50px);
+  transform: translate(-50%, -50%);
+  ${borderRadius.pill};
+  pointer-events: none;
+`
+
+const Glow = styled.div`
+  ${backdropCircle};
+  width: ${glowDiameter}px;
+  height: ${glowDiameter}px;
+  background: ${({ theme }) => `radial-gradient(
+    circle,
+    ${theme.colors.primaryAccentTwo.getVariant({ a: () => 0.57 }).toCssValue()} 0%,
+    ${theme.colors.background.getVariant({ a: () => 0.41 }).toCssValue()} 100%
+  )`};
+  opacity: 0.5;
+  filter: blur(4.4px);
+`
+
+const Ring = styled.div`
+  ${backdropCircle};
+  width: ${ringDiameter}px;
+  height: ${ringDiameter}px;
+  border: 0.7px solid
+    ${({ theme }) =>
+      theme.colors.primary.getVariant({ a: () => 0.05 }).toCssValue()};
+`
+
+const Container = styled.div`
   ${takeWholeSpace};
+  position: relative;
+  padding: 0 16px;
 
   ${vStack({
     alignItems: 'center',
@@ -47,17 +81,29 @@ const Container = styled.div`
   })}
 `
 
+// The design's 360px frame minus its 16px side margins.
+const panelMaxWidth = 328
+
 const Content = styled.div`
-  ${panel()}
-  padding: 26px;
-  ${vStack({
-    gap: 24,
-  })}
+  width: 100%;
+  max-width: ${panelMaxWidth}px;
+  padding: 16px;
+  ${borderRadius.xl};
   background: ${({ theme }) =>
     theme.colors.foregroundSuper.getVariant({ a: () => 0.1 }).toCssValue()};
-  border: 1px solid ${getColor('mistExtra')};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.colors.contrast.getVariant({ a: () => 0.1 }).toCssValue()};
+  ${vStack({
+    alignItems: 'center',
+    gap: 24,
+  })}
 `
 
+/**
+ * The App Locked screen. Verifies the entered passcode once it reaches the
+ * stored length, throttles repeated failures, and unlocks the app on success.
+ */
 export const EnterPasscode = () => {
   const { i18n, t } = useTranslation()
   const { getPasscodeEncryption, getVaults, setPasscodeEncryption } = useCore()
@@ -242,17 +288,27 @@ export const EnterPasscode = () => {
 
   return (
     <Wrapper>
+      <Glow />
+      <Ring />
       <Container>
-        <VStack alignItems="center" gap={16}>
-          <Text size={34} color="contrast">
+        {/* 15 lands the subtitle baseline 37px under the title's, as designed */}
+        <VStack alignItems="center" gap={15}>
+          <Text
+            size={34}
+            weight={500}
+            letterSpacing={-1}
+            color="regular"
+            centerHorizontally
+          >
             {t('app_locked')}
           </Text>
-          <Text size={13} color="supporting">
+          <Text variant="footnote" color="shy" centerHorizontally>
             {t('app_locked_description')}
           </Text>
         </VStack>
         <Content>
           <PasscodeInput
+            appearance="dots"
             length={passcodeLength}
             onChange={value => {
               setInputValue(value)

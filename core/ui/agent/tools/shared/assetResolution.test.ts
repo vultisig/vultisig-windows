@@ -2,7 +2,10 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { describe, expect, it } from 'vitest'
 
-import { formatHumanAmount } from './assetResolution'
+import {
+  formatHumanAmount,
+  resolveTickerByChainAndToken,
+} from './assetResolution'
 
 describe('formatHumanAmount', () => {
   it('formats a known native asset with canonical precision', () => {
@@ -29,5 +32,25 @@ describe('formatHumanAmount', () => {
     expect(formatHumanAmount('1000000000000000000', chain, tokenAddress)).toBe(
       null
     )
+  })
+})
+
+const solanaUsdc = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+
+describe('canonical non-EVM token identity', () => {
+  it('resolves the canonical Solana ticker and precision', () => {
+    expect(resolveTickerByChainAndToken(Chain.Solana, solanaUsdc)).toBe('USDC')
+    expect(formatHumanAmount('1234567', Chain.Solana, solanaUsdc)).toBe(
+      '1.234567'
+    )
+  })
+
+  it('does not trust metadata for a case-mutated Solana mint', () => {
+    expect(
+      resolveTickerByChainAndToken(Chain.Solana, solanaUsdc.toLowerCase())
+    ).not.toBe('USDC')
+    expect(
+      formatHumanAmount('1234567', Chain.Solana, solanaUsdc.toLowerCase())
+    ).toBeNull()
   })
 })

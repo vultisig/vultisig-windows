@@ -116,7 +116,7 @@ export default defineConfig({
   use: {
     // Chrome extensions require headed Chromium
     headless: false,
-    viewport: { width: 480, height: 600 }, // Extension popup dimensions
+    viewport: { width: 360, height: 600 }, // Extension popup dimensions
     actionTimeout: 15_000,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
@@ -148,8 +148,12 @@ export default defineConfig({
         '**/search-field.spec.ts',
         '**/navigation-design.spec.ts',
         '**/viewport-fit.spec.ts',
+        '**/ton-w5-toggle.spec.ts',
         '**/undecryptable-vault.spec.ts',
         '**/swap-custom-token-empty-state.spec.ts',
+        '**/folder-vault-rows.spec.ts',
+        '**/long-vault-name-fit.spec.ts',
+        '**/chain-tokens-empty-state.spec.ts',
       ],
       use: {
         launchOptions: {
@@ -180,6 +184,7 @@ export default defineConfig({
         '**/xrp-destination-tag.spec.ts',
         '**/send-coin-selection.spec.ts',
         '**/signed-transaction-decoder.spec.ts',
+        '**/swap-from-fiat-input.spec.ts',
       ],
       use: {
         launchOptions: {

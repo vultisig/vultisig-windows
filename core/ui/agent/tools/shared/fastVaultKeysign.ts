@@ -3,6 +3,7 @@ import { keysign } from '@vultisig/core-mpc/keysign'
 import type { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { v4 as uuidv4 } from 'uuid'
 
+import { loadMpcEngine } from '../../../mpc/bootstrapMpcEngine'
 import { relayUrl } from '../../config'
 import type { VaultMeta } from '../types'
 import { callFastVaultSign } from './fastVaultApi'
@@ -97,7 +98,13 @@ async function fastVaultKeysignAttempt({
   const isEcdsa = signatureAlgorithm === 'ecdsa'
   const publicKey = isEcdsa ? vault.publicKeyEcdsa : vault.publicKeyEddsa
 
-  await registerSession(relayUrl, sessionId, vault.localPartyId)
+  // The SDK has to be loaded before the server is asked to sign, or it waits
+  // out its timeout for a local party that cannot join; registering the relay
+  // session does not depend on it, so the two overlap.
+  await Promise.all([
+    loadMpcEngine(),
+    registerSession(relayUrl, sessionId, vault.localPartyId),
+  ])
 
   await callFastVaultSign({
     publicKey,

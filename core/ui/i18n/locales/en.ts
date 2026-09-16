@@ -268,7 +268,6 @@ export const en = {
   deadline: 'Deadline',
   domain: 'Domain',
   decimals: 'Decimals',
-  decrypting_vault_keyshares: 'Decrypting vault keyshares...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
   defiChainTabs: {
@@ -371,7 +370,6 @@ export const en = {
     'Generate a post-quantum (MLDSA) key for this vault',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
-  encrypting_vault_keyshares: 'Encrypting vault keyshares...',
   enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
@@ -707,6 +705,9 @@ export const en = {
   no_token_found: 'Token not found',
   no_transactions_yet: 'No transactions yet',
   no_tokens_found: 'No tokens found',
+  no_tokens_selected: 'No tokens selected',
+  no_tokens_selected_description:
+    "You've disabled all tokens. Make sure that the token you're looking for is enabled.",
   no_positions_found: 'No positions found',
   no_positions_selected: 'No positions selected',
   no_positions_selected_description:
@@ -1942,4 +1943,7 @@ export const en = {
   token_verification_scam: 'SCAM',
   token_verification_scam_hint:
     'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
+  enable_ton_w5_wallet: 'Use TON W5 wallet',
+  enable_ton_w5_wallet_description:
+    "Use the W5 (v5r1) contract instead of V4R2 when deriving this vault's TON addresses. This changes which address the wallet uses, and each contract is a separate address with its own balance — it moves no funds, so anything held at the other address stays there until you send it.",
 }

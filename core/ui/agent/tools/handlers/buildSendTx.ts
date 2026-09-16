@@ -1,5 +1,6 @@
 import { toBinary } from '@bufbuild/protobuf'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { isValidRecipient } from '@vultisig/core-chain/utils/isValidRecipient'
 import { buildSendKeysignPayload } from '@vultisig/core-mpc/keysign/send/build'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
@@ -32,6 +33,10 @@ export const handleBuildSendTx: ToolHandler = async (input, context) => {
   })
 
   const { walletCore, vault } = getWalletContext()
+
+  if (!isValidRecipient({ address, chain: coin.chain, walletCore })) {
+    throw new Error(`Invalid recipient address for ${coin.chain}`)
+  }
 
   const publicKey = getPublicKey({
     chain: coin.chain,

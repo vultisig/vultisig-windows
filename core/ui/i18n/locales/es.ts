@@ -230,7 +230,6 @@ export const es = {
   custom_token: 'Token personalizado',
   customize_chains: 'Personalizar cadenas',
   date: 'Fecha',
-  decrypting_vault_keyshares: 'Descifrando claves compartidas de bóveda...',
   deeplink: 'Enlace profundo',
   defi: 'DeFi',
   defiChainTabs: {
@@ -292,7 +291,6 @@ export const es = {
     'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
   enable_token_instruction:
     'Habilite al menos un token para ver saldos y administrar posiciones.',
-  encrypting_vault_keyshares: 'Cifrado de claves compartidas de bóveda...',
   enter: 'Ingresar',
   enter_address: 'Introduzca la dirección',
   enter_address_here: 'Introduzca la dirección aquí',
@@ -2001,4 +1999,10 @@ export const es = {
   solana_blockhash_expired: 'La transacción expiró antes de ser confirmada.',
   solana_blockhash_expired_description:
     'Tus dispositivos firmaron la transacción, pero la red Solana no la confirmó antes de que expirara su blockhash, por lo que no se procesó. Vuelve a firmarla para enviarla con un blockhash actualizado.',
+  no_tokens_selected: 'No se han seleccionado tokens',
+  no_tokens_selected_description:
+    'Has desactivado todos los tokens. Asegúrate de que el token que buscas esté activado.',
+  enable_ton_w5_wallet: 'Utilice la cartera W5 TON',
+  enable_ton_w5_wallet_description:
+    'Utilice el contrato W5 (v5r1) en lugar del V4R2 al derivar las direcciones TON de esta bóveda. Esto cambia la dirección que utiliza la billetera, y cada contrato es una dirección independiente con su propio saldo; no transfiere fondos, por lo que cualquier saldo en la otra dirección permanece allí hasta que usted lo envíe.',
 }

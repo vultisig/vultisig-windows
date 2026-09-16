@@ -2,12 +2,17 @@ import '../polyfills/installFirefoxProcessGlobal'
 import '@core/ui/animations/configureRiveRuntime'
 
 import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
-import { views } from '@clients/extension/src/navigation/views'
+import {
+  viewLoaders,
+  viewPrefetchPriority,
+  views,
+} from '@clients/extension/src/navigation/views'
 import { ExtensionNotificationManager } from '@clients/extension/src/notifications/ExtensionNotificationManager'
 import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
+import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
@@ -15,10 +20,20 @@ import {
   useNavigateBack,
   usePopNavigationHistory,
 } from '@lib/ui/navigation/hooks/useNavigateBack'
+import { PrefetchViews } from '@lib/ui/navigation/PrefetchViews'
+import { extensionPopupWidth } from '@lib/ui/responsive/mediaQuery'
 import { createGlobalStyle, css } from 'styled-components'
 
 const isPopup = isPopupView()
-const popupWidth = 480
+
+// The SDK registers the MPC engine and is needed by every signing and keygen
+// flow, so it is warmed before any page chunk.
+const prefetchLoaders = { mpcEngine: loadMpcEngine, ...viewLoaders }
+const prefetchPriority: (keyof typeof prefetchLoaders)[] = [
+  'mpcEngine',
+  ...viewPrefetchPriority,
+]
+const popupWidth = extensionPopupWidth
 const popupHeight = 600
 
 const ExtensionGlobalStyle = createGlobalStyle`
@@ -43,7 +58,7 @@ const ExtensionGlobalStyle = createGlobalStyle`
     min-height: ${
       isPopup ? `${popupHeight}px` : `min(${popupHeight}px, 100dvh)`
     };
-    min-width: ${isPopup ? `${popupWidth}px` : 'min(480px, 100vw)'};
+    min-width: ${isPopup ? `${popupWidth}px` : `min(${popupWidth}px, 100vw)`};
     overflow: hidden;
 
     ${
@@ -69,8 +84,10 @@ const App = () => {
       goBack={goBack}
       goHome={() => navigate(initialCoreView)}
       popNavigationHistory={popNavigationHistory}
+      startupMode={isPopup ? 'instant' : 'splash'}
     >
       <ActiveView views={views} />
+      <PrefetchViews loaders={prefetchLoaders} priority={prefetchPriority} />
       <ExtensionNotificationManager />
     </ExtensionCoreApp>
   )

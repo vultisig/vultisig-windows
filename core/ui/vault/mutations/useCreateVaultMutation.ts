@@ -26,6 +26,7 @@ import { currentProductBrand } from '../../product/brand'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { StorageKey } from '../../storage/StorageKey'
+import { getTonWalletVersion } from '../../storage/tonW5Enabled'
 import { getDefaultVaultChains } from '../chains/defaultVaultChains'
 
 export const useCreateVaultMutation = (
@@ -37,7 +38,12 @@ export const useCreateVaultMutation = (
   const hasPasscodeEncryption = useIsPasscodeRequired()
   const [passcode] = usePasscode()
 
-  const { createVault, replaceVault, validateLegacyVaultKeyShares } = useCore()
+  const {
+    createVault,
+    getIsTonW5Enabled,
+    replaceVault,
+    validateLegacyVaultKeyShares,
+  } = useCore()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const { mutateAsync: createCoins } = useCreateCoinsMutation()
@@ -76,6 +82,8 @@ export const useCreateVaultMutation = (
           ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))
           : getDefaultVaultChains(currentProductBrand)
 
+        const tonWalletVersion = getTonWalletVersion(await getIsTonW5Enabled())
+
         const coins = await Promise.all(
           chainsToCreate.map(async chain => {
             const address = getChainAddress({
@@ -85,6 +93,7 @@ export const useCreateVaultMutation = (
               publicKeys: vault.publicKeys,
               publicKeyMldsa: vault.publicKeyMldsa,
               chainPublicKeys: vault.chainPublicKeys,
+              tonWalletVersion,
             })
 
             return {

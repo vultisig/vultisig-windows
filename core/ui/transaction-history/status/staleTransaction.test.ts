@@ -73,6 +73,14 @@ const swapRecord = ({
 })
 
 describe('getTxStatusRecordUpdate', () => {
+  it('fails a pending send when the chain reports its validity window expired', () => {
+    const update = getTxStatusRecordUpdate({
+      record: sendRecord({ timestamp: freshTimestamp() }),
+      result: { status: 'expired' },
+    })
+    expect(update?.status).toBe('failed')
+  })
+
   afterEach(() => {
     vi.useRealTimers()
   })

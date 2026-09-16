@@ -31,6 +31,14 @@ export const SwapCoinInputField = ({
   const { t } = useTranslation()
   const side = useTransferDirection()
 
+  const coinPill = (
+    <CoinPillButton
+      value={value}
+      onClick={onCoinClick}
+      testId={`swap-${side}-coin-selector`}
+    />
+  )
+
   return (
     <Container
       side={side}
@@ -66,17 +74,19 @@ export const SwapCoinInputField = ({
         </HStack>
         <CoinBalance value={value} />
       </HStack>
-      <HStack flexGrow justifyContent="space-between" alignItems="flex-start">
-        <CoinPillButton
-          value={value}
-          onClick={onCoinClick}
-          testId={`swap-${side}-coin-selector`}
-        />
-        {match(side, {
-          to: () => <ToAmount />,
-          from: () => <ManageFromAmount />,
-        })}
-      </HStack>
+      {match(side, {
+        to: () => (
+          <HStack
+            flexGrow
+            justifyContent="space-between"
+            alignItems="flex-start"
+          >
+            {coinPill}
+            <ToAmount />
+          </HStack>
+        ),
+        from: () => <ManageFromAmount coinPill={coinPill} />,
+      })}
     </Container>
   )
 }

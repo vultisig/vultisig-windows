@@ -20,6 +20,10 @@ describe('getCosmosChainFromAddress', () => {
       expect(getCosmosChainFromAddress('akash1abc123xyz')).toBe('Akash')
     })
 
+    it('returns null for the retired Kujira chain', () => {
+      expect(getCosmosChainFromAddress('kujira1abc123xyz')).toBeNull()
+    })
+
     it('returns Noble for noble1... addresses', () => {
       expect(getCosmosChainFromAddress('noble1abc123xyz')).toBe('Noble')
     })

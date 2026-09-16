@@ -36,7 +36,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
-import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getKnownToken } from '@vultisig/core-chain/coin/knownTokens/utils'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -151,9 +151,7 @@ export const TxSuccess = ({
     const tokenKey = { chain: coin.chain, id: pair.tokenAddress }
 
     const vaultCoin = vaultCoins.find(c => areEqualCoins(c, tokenKey))
-    const knownCoin =
-      vaultCoin ??
-      knownTokensIndex[coin.chain]?.[pair.tokenAddress.toLowerCase()]
+    const knownCoin = vaultCoin ?? getKnownToken(tokenKey)
     if (!knownCoin) return null
 
     // BigInt() throws on non-numeric strings; an uncaught throw here would

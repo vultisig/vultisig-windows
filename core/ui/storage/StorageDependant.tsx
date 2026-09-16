@@ -1,4 +1,4 @@
-import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { StartupPlaceholder } from '@core/ui/product/StartupPlaceholder'
 import { useStartupSplash } from '@core/ui/product/startupSplash'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
@@ -28,6 +28,7 @@ import { useIsMLDSAEnabledQuery } from './mldsaEnabled'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
 import { usePasscodeEncryptionQuery } from './passcodeEncryption'
+import { useIsTonW5EnabledQuery } from './tonW5Enabled'
 import { useIsTssBatchingEnabledQuery } from './tssBatchingEnabled'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
@@ -47,6 +48,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
   const isMLDSAEnabled = useIsMLDSAEnabledQuery()
   const isTssBatchingEnabled = useIsTssBatchingEnabledQuery()
+  const isTonW5Enabled = useIsTonW5EnabledQuery()
   const customRpcOverrides = useCustomRpcOverridesQuery()
 
   const { processError, targetVaultId } = useCore()
@@ -67,6 +69,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     isBlockaidEnabled,
     isMLDSAEnabled,
     isTssBatchingEnabled,
+    isTonW5Enabled,
     customRpcOverrides,
   })
 
@@ -75,7 +78,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       value={query}
       success={({ currentVaultId, vaults }) => {
         if (!hasCompletedStartupSplash) {
-          return <ProductLogoBlock />
+          return <StartupPlaceholder />
         }
 
         return (
@@ -106,7 +109,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
           error={error}
         />
       )}
-      pending={() => <ProductLogoBlock />}
+      pending={() => <StartupPlaceholder />}
     />
   )
 }

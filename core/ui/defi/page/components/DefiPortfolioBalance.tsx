@@ -63,7 +63,6 @@ const Container = styled.div`
   gap: 16px;
   padding: 24px 20px;
   ${borderRadius.lg};
-  margin: 0 20px;
   height: 136px;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
@@ -74,11 +73,13 @@ const Container = styled.div`
 // eslint-disable-next-line local/no-hardcoded-border-radius -- a decorative glow, not a surface
 const BlurEffect = styled.div`
   position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   ${borderRadius.lg};
   border-radius: 350px;
   top: -30px;
   height: 200px;
-  width: 450px;
+  width: 350px;
   opacity: 0.7;
   background: radial-gradient(
     50% 50% at 50% 50%,

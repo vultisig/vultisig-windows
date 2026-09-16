@@ -63,11 +63,11 @@ const messagesByPopupError: Record<
   string
 > = {
   [PopupError.SigningFailed]:
-    'Signing failed in the Vultisig popup. The transaction was not signed.',
+    'Signing failed in the wallet popup. The transaction was not signed.',
   [PopupError.BroadcastFailed]:
     'The transaction was signed but the network rejected the broadcast.',
   [PopupError.CallNotFound]:
-    'Vultisig could not load the pending request. It may have expired.',
+    'The wallet could not load the pending request. It may have expired.',
 }
 
 const popupErrorMessages = new Map<string, string>(
