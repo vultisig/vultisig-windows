@@ -14,6 +14,11 @@ type TxStatusTrackerProps = {
   lastValidBlockHeight?: number
 }
 
+/**
+ * Live status animation for a just-broadcast transaction, with the chain's
+ * failure reason underneath when it reverts. Keeps showing "pending" while the
+ * hash is merely unindexed, and treats an expired transaction as a failure.
+ */
 export const TxStatusTracker = ({
   chain,
   hash,

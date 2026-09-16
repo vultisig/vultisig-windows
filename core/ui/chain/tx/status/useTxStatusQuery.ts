@@ -12,6 +12,11 @@ type UseTxStatusQueryInput = {
   lastValidBlockHeight?: number
 }
 
+/**
+ * Polls a broadcast transaction's on-chain status every few seconds and stops
+ * once it reaches a terminal state. `not_found` keeps polling: the node may
+ * simply not have indexed the hash yet.
+ */
 export const useTxStatusQuery = ({
   chain,
   hash,
