@@ -4,6 +4,7 @@ import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFr
 import { getSwapPriceImpactFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapPriceImpactFromPayload'
 import { formatPriceImpact } from '@core/ui/vault/swap/form/info/priceImpact'
 import { PriceImpactValue } from '@core/ui/vault/swap/form/info/PriceImpactValue'
+import { getSwapNetworkFeeLabelKey } from '@core/ui/vault/swap/form/info/swapNetworkFeeLabel'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { SwapVerifyAmount } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyAmount'
@@ -117,7 +118,7 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
           }
         />
         <SwapVerifyRow
-          label={t('network_fee')}
+          label={t(getSwapNetworkFeeLabelKey(fromCoin.chain))}
           value={<JoinKeysignNetworkFeeValue value={value} />}
         />
         {priceImpact && (

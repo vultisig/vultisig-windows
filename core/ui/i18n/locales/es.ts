@@ -2002,4 +2002,5 @@ export const es = {
   enable_ton_w5_wallet: 'Utilice la cartera W5 TON',
   enable_ton_w5_wallet_description:
     'Utilice el contrato W5 (v5r1) en lugar del V4R2 al derivar las direcciones TON de esta bóveda. Esto cambia la dirección que utiliza la billetera, y cada contrato es una dirección independiente con su propio saldo; no transfiere fondos, por lo que cualquier saldo en la otra dirección permanece allí hasta que usted lo envíe.',
+  max_network_fee: 'Tarifa máxima de red',
 }

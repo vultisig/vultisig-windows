@@ -15,8 +15,10 @@ import styled from 'styled-components'
 import { getSwapFeeDisclosure } from '../../affiliate/affiliateBps'
 import { getSwapFeeEntries } from '../../queries/resolveSwapFees'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
+import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapDiscountInfo } from './SwapDiscountInfo'
 import { SwapFeeRowRenderer } from './swapFeeRow'
+import { getSwapNetworkFeeLabelKey } from './swapNetworkFeeLabel'
 import { SwapNetworkFeeRow } from './SwapNetworkFeeRow'
 import { SwapPriceImpactRow } from './SwapPriceImpactRow'
 import { SwapProviderFeeRows } from './SwapProviderFeeRows'
@@ -34,6 +36,8 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery(swapQuote)
   const disclosure = getSwapFeeDisclosure(swapQuote.discounts)
+  const [{ chain: fromChain }] = useSwapFromCoin()
+  const networkFeeLabel = t(getSwapNetworkFeeLabelKey(fromChain))
 
   const renderRow: SwapFeeRowRenderer = ({ label, value }) => (
     <RowComponent>
@@ -80,13 +84,13 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                 value={query}
                 pending={() => (
                   <RowComponent>
-                    <Text>{t('network_fee')}</Text>
+                    <Text>{networkFeeLabel}</Text>
                     <Skeleton width="48px" height="12px" />
                   </RowComponent>
                 )}
                 error={() => (
                   <RowComponent>
-                    <Text>{t('network_fee')}</Text>
+                    <Text>{networkFeeLabel}</Text>
                     <Text color="danger">{t('failed_to_load')}</Text>
                   </RowComponent>
                 )}

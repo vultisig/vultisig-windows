@@ -657,6 +657,7 @@ export const en = {
   max: 'Max',
   max_4_characters: 'Max 4 characters',
   max_supply: 'Max Supply',
+  max_network_fee: 'Max. Network Fee',
   max_total_fee: 'Max. Total Fee',
   memo: 'Memo',
   message: 'Message',
