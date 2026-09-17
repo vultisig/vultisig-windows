@@ -17,6 +17,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
+import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
 import { useSendAmount } from '../state/amount'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
@@ -36,6 +37,7 @@ export const useSendKeysignPayloadQuery = ({
   const [memo] = useSendMemo()
   const [amount] = useSendAmount()
   const { destinationTag } = useSendDestinationTag()
+  const { isEnabled: tonGasless } = useTonGaslessSend()
 
   const vault = useCurrentVault()
 
@@ -56,6 +58,7 @@ export const useSendKeysignPayloadQuery = ({
       walletCore,
       feeSettings,
       hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
+      tonGasless,
     }),
     [
       amount,
@@ -65,6 +68,7 @@ export const useSendKeysignPayloadQuery = ({
       memo,
       publicKey,
       receiver,
+      tonGasless,
       vault,
       walletCore,
     ]

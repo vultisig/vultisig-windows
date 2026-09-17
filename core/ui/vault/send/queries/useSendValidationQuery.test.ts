@@ -1,4 +1,5 @@
 import { Chain } from '@vultisig/core-chain/Chain'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -15,6 +16,9 @@ const mocks = vi.hoisted(() => ({
 vi.mock('../state/sendCoin', () => ({ useCurrentSendCoin: mocks.coin }))
 vi.mock('../amount/useSpendableSendAmount', () => ({
   useSpendableSendAmount: mocks.amount,
+}))
+vi.mock('../fee/useIsSendFeePaidInCoin', () => ({
+  useIsSendFeePaidInCoin: () => isFeeCoin(mocks.coin()),
 }))
 vi.mock('./useSendBalanceQuery', () => ({ useSendBalanceQuery: mocks.balance }))
 vi.mock('./useSendFeeEstimateQuery', () => ({

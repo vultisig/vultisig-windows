@@ -53,6 +53,12 @@ export const validateSendForm = (
     t: TFunction
     fee?: bigint
     nativeBalance?: bigint
+    /**
+     * Whether `fee` is charged in the coin being sent rather than the chain's
+     * native coin. True for a native send; also for a gasless TON jetton send.
+     * Defaults to whether the coin is the chain's fee coin.
+     */
+    isFeePaidInCoin?: boolean
   }
 ): ValidationResult<SendFormShape> => {
   const {
@@ -62,7 +68,14 @@ export const validateSendForm = (
     senderAddress,
     receiverAddress,
   } = values
-  const { balance, walletCore, t, fee, nativeBalance } = helpers
+  const {
+    balance,
+    walletCore,
+    t,
+    fee,
+    nativeBalance,
+    isFeePaidInCoin = isFeeCoin(coin),
+  } = helpers
   const { chain } = coin
   const errors: ValidationResult<SendFormShape> = {}
 
@@ -71,7 +84,7 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else {
-    if (isFeeCoin(coin) && fee != null) {
+    if (isFeePaidInCoin && fee != null) {
       if (amount + fee > balance) {
         errors.amount = t('insufficient_balance')
       }
@@ -80,7 +93,7 @@ export const validateSendForm = (
     }
 
     if (
-      !isFeeCoin(coin) &&
+      !isFeePaidInCoin &&
       nativeBalance != null &&
       fee != null &&
       nativeBalance < fee

@@ -13,6 +13,7 @@ import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
 import { getSendFeeEstimateWithTronMemo } from '../../../mpc/keysign/fee/tronMemoFee'
+import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
@@ -24,6 +25,7 @@ export const useSendFeeEstimateQuery = () => {
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
   const { destinationTag } = useSendDestinationTag()
+  const { isEnabled: tonGasless } = useTonGaslessSend()
 
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
@@ -47,6 +49,7 @@ export const useSendFeeEstimateQuery = () => {
       libType: toKeysignLibType(vault),
       walletCore,
       hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
+      tonGasless,
     }
   }, [
     balance,
@@ -55,6 +58,7 @@ export const useSendFeeEstimateQuery = () => {
     memo,
     publicKey,
     receiver,
+    tonGasless,
     vault,
     walletCore,
   ])

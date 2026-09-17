@@ -2,13 +2,13 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useSpendableSendAmount } from '../amount/useSpendableSendAmount'
+import { useIsSendFeePaidInCoin } from '../fee/useIsSendFeePaidInCoin'
 import { validateSendForm } from '../form/validateSendForm'
 import { useSendDestinationTagInput } from '../state/destinationTag'
 import { useSendReceiver } from '../state/receiver'
@@ -20,9 +20,12 @@ export const useSendValidationQuery = () => {
   const { t } = useTranslation()
 
   const coin = useCurrentSendCoin()
+  // A gasless TON jetton send pays the relay in the jetton, so the fee is
+  // judged against the jetton balance and no TON is needed at all.
+  const isFeePaidInCoin = useIsSendFeePaidInCoin()
   // XRPL issued currencies pay fees in XRP. Other token families may pay in
   // the token itself, so do not infer their fee asset from chainFeeCoin.
-  const requiresNativeFee = isFeeCoin(coin) || coin.chain === Chain.Ripple
+  const requiresNativeFee = isFeePaidInCoin || coin.chain === Chain.Ripple
   // The spendable amount, not the entered one: an entered amount that only
   // overshoots once the fee is added is adjusted down to what the balance
   // covers, and the send is committed at that amount — so the form must judge
@@ -58,9 +61,10 @@ export const useSendValidationQuery = () => {
             walletCore,
             t,
             fee: requiresNativeFee ? feeEstimateQuery.data : undefined,
-            nativeBalance: isFeeCoin(coin)
+            nativeBalance: isFeePaidInCoin
               ? undefined
               : nativeBalanceQuery.data,
+            isFeePaidInCoin,
           }
         ),
       [
@@ -69,6 +73,7 @@ export const useSendValidationQuery = () => {
         coin,
         destinationTag,
         feeEstimateQuery.data,
+        isFeePaidInCoin,
         nativeBalanceQuery.data,
         requiresNativeFee,
         t,
@@ -86,7 +91,7 @@ export const useSendValidationQuery = () => {
   ) {
     const fundingError =
       feeEstimateQuery.error ??
-      (!isFeeCoin(coin) ? nativeBalanceQuery.error : null)
+      (!isFeePaidInCoin ? nativeBalanceQuery.error : null)
     if (fundingError) {
       return {
         ...validationQuery,
@@ -97,7 +102,7 @@ export const useSendValidationQuery = () => {
     }
     if (
       feeEstimateQuery.data == null ||
-      (!isFeeCoin(coin) && nativeBalanceQuery.data == null)
+      (!isFeePaidInCoin && nativeBalanceQuery.data == null)
     ) {
       return { ...validationQuery, data: undefined, isPending: true }
     }
