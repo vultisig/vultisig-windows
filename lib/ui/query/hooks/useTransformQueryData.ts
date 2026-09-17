@@ -3,6 +3,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { useMemo } from 'react'
 
 import { Query } from '../Query'
+import { noRefetchQueryOptions } from '../utils/options'
 
 type QueryBase<T> = Pick<Query<T>, 'data' | 'error'>
 
@@ -38,6 +39,13 @@ export const useTransformQueryData = <
 /**
  * Transforms resolved query data with an async transform.
  *
+ * The result is keyed by the source data and `transformKey`, and is computed
+ * once per key: a second consumer mounting on the same inputs reads the cached
+ * value rather than running the transform again. A transform that reads live
+ * state (the swap fee resolver queries an OP-stack L1 fee oracle) would
+ * otherwise hand each screen a different answer for the same source data.
+ * Refresh the source query to get a fresh transform.
+ *
  * @param queryResult - Source query whose data should be transformed.
  * @param transform - Async function that maps source data to the output value.
  * @param transformKey - Stable key parts that identify this transform.
@@ -59,6 +67,7 @@ export const useTransformQueryDataAsync = <TInput, TOutput, TError = unknown>(
       return transform(initialData)
     },
     enabled: initialData !== undefined && queryResult.error === null,
+    ...noRefetchQueryOptions,
   })
 
   if (initialData === undefined) {
