@@ -2,12 +2,14 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getSwapFeeDisclosure } from '@core/ui/vault/swap/affiliate/affiliateBps'
 import { SwapDiscountInfo } from '@core/ui/vault/swap/form/info/SwapDiscountInfo'
+import { getSwapNetworkFeeLabelKey } from '@core/ui/vault/swap/form/info/swapNetworkFeeLabel'
 import { SwapNetworkFeeRow } from '@core/ui/vault/swap/form/info/SwapNetworkFeeRow'
 import { SwapPriceImpactRow } from '@core/ui/vault/swap/form/info/SwapPriceImpactRow'
 import { SwapProviderFeeRows } from '@core/ui/vault/swap/form/info/SwapProviderFeeRows'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapFeeEntries } from '@core/ui/vault/swap/queries/resolveSwapFees'
 import { useSwapFeesQuery } from '@core/ui/vault/swap/queries/useSwapFeesQuery'
+import { useSwapFromCoin } from '@core/ui/vault/swap/state/fromCoin'
 import {
   renderSwapVerifyRow,
   SwapVerifyRow,
@@ -39,6 +41,8 @@ export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ swapQuote }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery(swapQuote)
   const disclosure = getSwapFeeDisclosure(swapQuote.discounts)
+  const [{ chain: fromChain }] = useSwapFromCoin()
+  const networkFeeLabel = t(getSwapNetworkFeeLabelKey(fromChain))
   const provider = getSwapQuoteProviderName(swapQuote)
   const providerLogoSrc = getSwapProviderLogoSrc(provider)
 
@@ -62,13 +66,13 @@ export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ swapQuote }) => {
         value={query}
         pending={() => (
           <SwapVerifyRow
-            label={t('network_fee')}
+            label={networkFeeLabel}
             value={<Skeleton width="48px" height="12px" />}
           />
         )}
         error={() => (
           <SwapVerifyRow
-            label={t('network_fee')}
+            label={networkFeeLabel}
             value={<Text color="danger">{t('failed_to_load')}</Text>}
           />
         )}
