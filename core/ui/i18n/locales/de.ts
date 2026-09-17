@@ -2017,4 +2017,8 @@ export const de = {
   enable_ton_w5_wallet: 'Verwenden Sie TON W5-Wallet',
   enable_ton_w5_wallet_description:
     'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
+  ton_gasless_pay_fee_in_token: 'Netzwerkgebühr in {{ticker}} bezahlen',
+  ton_gasless_description:
+    'Kein TON erforderlich: Ein Relay zahlt die Netzwerk-Gasgebühren und erhebt stattdessen eine kleine {{ticker}} -Kommission.',
+  ton_gasless_fee_note: 'Zahlung über Relay',
 }

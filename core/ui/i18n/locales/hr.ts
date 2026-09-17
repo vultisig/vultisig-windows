@@ -1970,4 +1970,8 @@ export const hr = {
   enable_ton_w5_wallet: 'Koristite TON W5 novčanik',
   enable_ton_w5_wallet_description:
     'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
+  ton_gasless_pay_fee_in_token: 'Platite mrežnu naknadu u {{ticker}}',
+  ton_gasless_description:
+    'Nije potreban TON : relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju {{ticker}} .',
+  ton_gasless_fee_note: 'plaćeno putem releja',
 }

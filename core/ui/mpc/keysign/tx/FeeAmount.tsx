@@ -2,8 +2,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getKeysignFeeCoin } from '@vultisig/core-mpc/keysign/fee/getKeysignFeeCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 
@@ -17,11 +16,13 @@ type KeysignFeeAmountProps = {
 
 export const KeysignFeeAmount = ({ keysignPayload }: KeysignFeeAmountProps) => {
   const formatFiatAmount = useFormatFiatAmount()
-  const chain = getKeysignChain(keysignPayload)
 
-  const { decimals, ticker } = chainFeeCoin[chain]
+  // The chain's native coin, except for a gasless TON send, whose relay
+  // commission is charged in the jetton being sent.
+  const feeCoin = getKeysignFeeCoin(keysignPayload)
+  const { decimals, ticker } = feeCoin
 
-  const feeCoinPriceQuery = useCoinPriceQuery({ coin: chainFeeCoin[chain] })
+  const feeCoinPriceQuery = useCoinPriceQuery({ coin: feeCoin })
 
   const feeQuery = useKeysignFee(keysignPayload)
 

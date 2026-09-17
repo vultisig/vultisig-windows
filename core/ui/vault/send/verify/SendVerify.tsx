@@ -16,12 +16,14 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ListItem } from '@lib/ui/list/item'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import {
   FeeSettings,
   FeeSettingsChain,
   feeSettingsChains,
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
+import { getKeysignTonGasless } from '@vultisig/core-mpc/keysign/ton/gasless'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { FC, useState } from 'react'
@@ -111,18 +113,26 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           receiverAddressLabel={addressLabel}
           chain={coin.chain}
           keysignPayloadQuery={keysignPayloadQuery}
-          renderFeeExtra={
-            feeSettingsChain
-              ? keysignPayload => (
-                  <ManageFee
-                    keysignPayload={keysignPayload}
-                    feeSettings={feeSettings}
-                    onChange={setFeeSettings}
-                    chain={feeSettingsChain}
-                  />
-                )
-              : undefined
-          }
+          renderFeeExtra={keysignPayload => {
+            if (feeSettingsChain) {
+              return (
+                <ManageFee
+                  keysignPayload={keysignPayload}
+                  feeSettings={feeSettings}
+                  onChange={setFeeSettings}
+                  chain={feeSettingsChain}
+                />
+              )
+            }
+
+            // The relay's commission stands in for the network fee: it is
+            // charged in the jetton, and no TON leaves the account.
+            return getKeysignTonGasless(keysignPayload) ? (
+              <Text as="span" size={12} color="shy">
+                {t('ton_gasless_fee_note')}
+              </Text>
+            ) : null
+          }}
         >
           {displayMemo && (
             <ListItem
