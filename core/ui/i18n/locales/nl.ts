@@ -1979,6 +1979,10 @@ export const nl = {
   token_verification_scam: 'SCAM',
   token_verification_scam_hint:
     'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
+  solana_blockhash_expired:
+    'De transactie is verlopen voordat deze bevestigd kon worden.',
+  solana_blockhash_expired_description:
+    'Uw apparaten hebben de transactie ondertekend, maar het Solana-netwerk heeft deze niet bevestigd voordat de blockhash verliep, waardoor de transactie nooit is voltooid. Onderteken de transactie opnieuw om deze met een nieuwe blockhash te verzenden.',
   no_tokens_selected: 'Geen tokens geselecteerd',
   no_tokens_selected_description:
     'Je hebt alle tokens uitgeschakeld. Zorg ervoor dat het token dat je zoekt is ingeschakeld.',

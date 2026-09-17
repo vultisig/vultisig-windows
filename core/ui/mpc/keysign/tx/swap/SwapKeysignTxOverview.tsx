@@ -32,6 +32,7 @@ import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackingUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -144,9 +145,11 @@ export const SwapKeysignTxOverview = ({
   )
 
   const mainTxHash = getLastItem(txHashes)
+  const lastValidBlockHeight = getKeysignLastValidBlockHeight(value)
   const txStatusQuery = useTxStatusQuery({
     chain: blockExplorerChain,
     hash: mainTxHash,
+    lastValidBlockHeight,
   })
   const receipt = txStatusQuery.data?.receipt
 
@@ -164,6 +167,7 @@ export const SwapKeysignTxOverview = ({
       <TxStatusTracker
         chain={blockExplorerChain}
         hash={getLastItem(txHashes)}
+        lastValidBlockHeight={lastValidBlockHeight}
       />
       <VStack alignItems="center" gap={8} fullWidth>
         <VStack gap={8} fullWidth>
