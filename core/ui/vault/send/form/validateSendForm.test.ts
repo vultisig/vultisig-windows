@@ -19,12 +19,13 @@ vi.mock(
   })
 )
 
-// Minimal interpolating stub so the composed error+hint message is exercised.
+// Minimal interpolating stub so composed messages are exercised.
+const templates: Record<string, string> = {
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  send_receiver_dangerous_address: 'dangerous: {{reason}}',
+}
 const t = ((key: string, options?: Record<string, unknown>) => {
-  const template =
-    key === 'send_invalid_receiver_address_with_hint'
-      ? '{{error}}. {{hint}}'
-      : key
+  const template = templates[key] ?? key
   if (!options) return template
   return template.replace(/{{(\w+)}}/g, (_, name) =>
     String(options[name] ?? `{{${name}}}`)
@@ -286,18 +287,13 @@ describe('validateSendReceiver', () => {
     (chain, receiverAddress, reason) => {
       vi.mocked(isValidRecipient).mockReturnValue(true)
 
-      const reasonT = ((key: string, options?: { reason?: string }) =>
-        key === 'send_receiver_dangerous_address'
-          ? `dangerous: ${options?.reason}`
-          : key) as TFunction
-
       expect(
         validateSendReceiver({
           receiverAddress,
           senderAddress: 'sender',
           chain,
           walletCore,
-          t: reasonT,
+          t,
         })
       ).toMatch(new RegExp(`^dangerous: .*${reason}`))
     }
