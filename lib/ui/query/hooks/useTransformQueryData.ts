@@ -44,7 +44,8 @@ export const useTransformQueryData = <
  * value rather than running the transform again. A transform that reads live
  * state (the swap fee resolver queries an OP-stack L1 fee oracle) would
  * otherwise hand each screen a different answer for the same source data.
- * Refresh the source query to get a fresh transform.
+ * A fresh transform needs a change in the source data or in `transformKey`;
+ * a source refetch that returns equivalent data keeps the cached result.
  *
  * @param queryResult - Source query whose data should be transformed.
  * @param transform - Async function that maps source data to the output value.
