@@ -1,10 +1,18 @@
+import { create } from '@bufbuild/protobuf'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { NativeSwapQuote } from '@vultisig/core-chain/swap/native/NativeSwapQuote'
 import { SwapQuoteResult } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
+import { SolanaSpecificSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
+import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { describe, expect, it } from 'vitest'
 
+import { getKeysignFeeAmount } from '../../../mpc/keysign/fee/tronMemoFee'
 import { SwapAffiliateBps } from '../affiliate/affiliateBps'
 import { getSwapFeeEntries, resolveSwapFees } from './resolveSwapFees'
 
@@ -90,16 +98,16 @@ describe('resolveSwapFees', () => {
     expect(result.affiliate).toBe(providerSwapFee)
   })
 
-  it('uses the provider network fee for a Solana swap when it exceeds the computed one', () => {
+  it('ignores the provider network fee for a Solana swap even when it exceeds the computed one (#4954)', () => {
     const quote: SwapQuoteResult = {
       general: {
         dstAmount: '1000000',
-        provider: 'swapkit',
+        provider: 'jupiter',
         tx: {
           solana: {
             data: '',
-            // Provider reports a higher fee than we computed.
-            networkFee: 8000n,
+            // Jupiter's estimate: base fee plus the fee-ATA rent buffer.
+            networkFee: 2_044_280n,
             swapFee: providerSwapFee,
           },
         },
@@ -115,8 +123,66 @@ describe('resolveSwapFees', () => {
       affiliateBps: noDiscount,
     })
 
-    expect(result.network.amount).toBe(8000n)
-    expect(result.network.decimals).toBe(computedNetworkFee.decimals)
+    // The co-signer only has the payload, so the provider's figure must not
+    // lift the initiator's number above what the co-signer can derive.
+    expect(result.network).toBe(computedNetworkFee)
+  })
+
+  it('shows the co-signer the same Solana network fee as the initiator for one keysign payload (#4954)', async () => {
+    const keysignPayload = create(KeysignPayloadSchema, {
+      coin: create(CoinSchema, {
+        chain: Chain.Solana,
+        ticker: 'SOL',
+        address: 'initiator-address',
+        decimals: 9,
+        isNativeToken: true,
+      }),
+      blockchainSpecific: {
+        case: 'solanaSpecific',
+        value: create(SolanaSpecificSchema, {
+          recentBlockHash: 'blockhash',
+          priorityFee: '1000000',
+          computeLimit: '100000',
+        }),
+      },
+    })
+    const feeInput = {
+      keysignPayload,
+      // The Solana fee resolver reads the payload alone.
+      walletCore: {} as WalletCore,
+      publicKey: {} as PublicKey,
+    }
+
+    // JoinKeysignNetworkFeeValue → useKeysignFee
+    const coSignerFee = await getKeysignFeeAmount(feeInput)
+
+    // VerifySwapFees → useSwapFeesQuery
+    const initiatorFees = resolveSwapFees({
+      quote: {
+        general: {
+          dstAmount: '1000000',
+          provider: 'jupiter',
+          tx: {
+            solana: {
+              data: '',
+              networkFee: 2_044_280n,
+              swapFee: providerSwapFee,
+            },
+          },
+        },
+      },
+      network: {
+        ...chainFeeCoin[Chain.Solana],
+        amount: await getKeysignFeeAmount(feeInput),
+      },
+      toCoinKey,
+      toCoin: undefined,
+      fromCoin: undefined,
+      affiliateBps: noDiscount,
+    })
+
+    expect(initiatorFees.network.amount).toBe(coSignerFee)
+    expect(coSignerFee).toBe(105_000n)
   })
 
   it('threads the computed network fee through the transfer branch and discloses no affiliate amount', () => {
