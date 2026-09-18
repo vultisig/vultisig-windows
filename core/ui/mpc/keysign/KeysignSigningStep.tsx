@@ -251,6 +251,7 @@ export const KeysignSigningStep = ({
                     <PageHeader title={t('done')} hasBorder />
                     <PageContent alignItems="center" scrollable>
                       <VStack gap={16} maxWidth={576} fullWidth>
+                        <DappRequestBanner value={payload.dappMetadata} />
                         <Panel>
                           <SeparatedByLine gap={16}>
                             <KeysignCustomMessageInfo value={payload} />

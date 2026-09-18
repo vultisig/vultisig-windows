@@ -1,4 +1,3 @@
-import { create } from '@bufbuild/protobuf'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { CustomMessageVerifyContent } from '@core/ui/mpc/keysign/custom/CustomMessageVerifyContent'
 import { Button } from '@lib/ui/buttons/Button'
@@ -9,7 +8,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +17,7 @@ import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignProm
 import { StartKeysignPromptProps } from '../../../mpc/keysign/prompt/StartKeysignPromptProps'
 import { useCurrentVault } from '../../state/currentVault'
 import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
+import { buildManualCustomMessagePayload } from './buildManualCustomMessagePayload'
 
 const steps = ['form', 'verify'] as const
 
@@ -45,7 +44,7 @@ export const SignCustomMessagePage = () => {
 
   const keysignPayload = useMemo(() => {
     return {
-      custom: create(CustomMessagePayloadSchema, {
+      custom: buildManualCustomMessagePayload({
         method,
         message,
         vaultPublicKeyEcdsa: getVaultId(vault),
