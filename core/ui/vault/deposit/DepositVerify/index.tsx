@@ -1,17 +1,11 @@
 import { getTronStakingDisplay } from '@core/ui/chain/tx/getTronStakingDisplay'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
+import { ReviewDivider, ReviewRow } from '@core/ui/mpc/keysign/review/ReviewRow'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
-import { DepositFee } from '@core/ui/vault/deposit/fee/DepositFee'
 import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
 import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
-import { ProgressLine } from '@lib/ui/flow/ProgressLine'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
+import { Fragment, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
@@ -25,8 +19,21 @@ import {
   tronWithdrawExpireUnfreezeAction,
 } from '../tron/withdrawExpireUnfreeze'
 import { BondOverview } from './BondOverview'
+import { DepositFeeRow, DepositReviewValue } from './DepositReviewRows'
+import { DepositReviewSheet } from './DepositReviewSheet'
 import { StakeOverview } from './StakeOverview'
 
+type Row = {
+  key: string
+  label: ReactNode
+  value: ReactNode
+}
+
+/**
+ * The deposit flow's review sheet. Bond/unbond and the staking actions opened
+ * from the DeFi tab get their own overviews; every other action lists the
+ * form's fields as it filled them in.
+ */
 export const DepositVerify = ({ onBack }: OnBackProp) => {
   const [selectedChainAction] = useDepositAction()
   const [coin] = useDepositCoin()
@@ -89,70 +96,78 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
     return <StakeOverview onBack={onBack} />
   }
 
-  return (
-    <>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={t('verify')}
-        hasBorder
-      />
-      <PageContent gap={16} scrollable>
-        <ProgressLine value={0.3} />
-        <List>
-          <ListItem description={sender} title={t('from')} />
-          {selectedChainAction === tronWithdrawExpireUnfreezeAction && (
-            <>
-              <ListItem
-                description={t(tronWithdrawExpireUnfreezeAction)}
-                title={t('action')}
-              />
-              {tronClaimAmount && (
-                <ListItem description={tronClaimAmount} title={t('amount')} />
-              )}
-            </>
-          )}
-          {actionFields.map(field => {
-            if (
-              formattedDepositFormData[field.name] == null ||
-              formattedDepositFormData[field.name] === '' ||
-              field?.name === 'memo'
-            ) {
-              return null
-            }
+  const fieldRows = actionFields.flatMap<Row>(field => {
+    if (
+      formattedDepositFormData[field.name] == null ||
+      formattedDepositFormData[field.name] === '' ||
+      field?.name === 'memo'
+    ) {
+      return []
+    }
 
-            return field.type === 'number' || field.type === 'percentage' ? (
-              <ListItem
-                description={`${String(formattedDepositFormData[field.name])}${field.name === 'amount' ? ` ${amountTicker}` : ''}`}
-                key={field.name}
-                title={field.label}
-              />
-            ) : (
-              <ListItem
-                description={String(formattedDepositFormData[field.name])}
-                key={field.name}
-                title={field.label}
-              />
-            )
-          })}
-          {selectedChainAction === 'leave' && (
-            <ListItem description={`0 ${coin.ticker}`} title={t('amount')} />
-          )}
-          {isOpenTrustLine && (
-            <ListItem
-              description={String(depositData['issuer'] ?? '')}
-              title={t('trust_line_issuer')}
+    const value = String(formattedDepositFormData[field.name])
+
+    return [
+      {
+        key: field.name,
+        label: field.label,
+        value:
+          (field.type === 'number' || field.type === 'percentage') &&
+          field.name === 'amount'
+            ? `${value} ${amountTicker}`
+            : value,
+      },
+    ]
+  })
+
+  const rows: Row[] = [
+    { key: 'from', label: t('from'), value: sender },
+    ...(selectedChainAction === tronWithdrawExpireUnfreezeAction
+      ? [
+          {
+            key: 'action',
+            label: t('action'),
+            value: t(tronWithdrawExpireUnfreezeAction),
+          },
+          ...(tronClaimAmount
+            ? [{ key: 'amount', label: t('amount'), value: tronClaimAmount }]
+            : []),
+        ]
+      : []),
+    ...fieldRows,
+    ...(selectedChainAction === 'leave'
+      ? [{ key: 'amount', label: t('amount'), value: `0 ${coin.ticker}` }]
+      : []),
+    ...(isOpenTrustLine
+      ? [
+          {
+            key: 'issuer',
+            label: t('trust_line_issuer'),
+            value: String(depositData['issuer'] ?? ''),
+          },
+        ]
+      : []),
+    ...(displayMemo
+      ? [{ key: 'memo', label: t('memo'), value: String(displayMemo) }]
+      : []),
+  ]
+
+  return (
+    <DepositReviewSheet title={t('verify')} onBack={onBack}>
+      <VStack gap={12}>
+        {rows.map(({ key, label, value }, index) => (
+          <Fragment key={`${key}-${index}`}>
+            {index > 0 && <ReviewDivider />}
+            <ReviewRow
+              label={label}
+              value={<DepositReviewValue>{value}</DepositReviewValue>}
             />
-          )}
-          {Boolean(displayMemo) && (
-            <ListItem description={String(displayMemo)} title={t('memo')} />
-          )}
-          <ListItem description={<DepositFee />} title={t('est_network_fee')} />
-        </List>
-        {isOpenTrustLine ? <TrustLineReserveWarning /> : null}
-      </PageContent>
-      <PageFooter>
-        <DepositConfirmButton />
-      </PageFooter>
-    </>
+          </Fragment>
+        ))}
+        <ReviewDivider />
+        <DepositFeeRow />
+      </VStack>
+      {isOpenTrustLine ? <TrustLineReserveWarning /> : null}
+    </DepositReviewSheet>
   )
 }

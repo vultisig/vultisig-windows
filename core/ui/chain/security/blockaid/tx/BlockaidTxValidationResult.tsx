@@ -13,9 +13,23 @@ import { getBlockaidScanEntityName } from '../utils/entity'
 import { BlockaidTxScanResult } from './queries/blockaidTxValidation'
 import { getRiskyTxColor } from './utils/color'
 
+type BlockaidTxValidationResultProps = ValueProp<BlockaidTxScanResult> & {
+  /**
+   * Whether a flagged transaction also raises the blocking overlay. Screens
+   * that present the verdict in their own surface (the review sheet) render
+   * the status line alone.
+   */
+  withOverlay?: boolean
+}
+
+/**
+ * The scan's status line: the verdict with the Blockaid mark, and — unless the
+ * caller shows the verdict itself — the blocking overlay for a flagged tx.
+ */
 export const BlockaidTxValidationResult = ({
   value,
-}: ValueProp<BlockaidTxScanResult>) => {
+  withOverlay = true,
+}: BlockaidTxValidationResultProps) => {
   const { colors } = useTheme()
 
   const { t } = useTranslation()
@@ -29,13 +43,15 @@ export const BlockaidTxValidationResult = ({
 
     return (
       <>
-        <BlockaidOverlay
-          riskLevel={value.level}
-          description={warning}
-          title={t('risky_transaction_detected', {
-            riskLevel: capitalizeFirstLetter(value.level),
-          })}
-        />
+        {withOverlay && (
+          <BlockaidOverlay
+            riskLevel={value.level}
+            description={warning}
+            title={t('risky_transaction_detected', {
+              riskLevel: capitalizeFirstLetter(value.level),
+            })}
+          />
+        )}
         <Tooltip
           content={warning}
           renderOpener={props => (

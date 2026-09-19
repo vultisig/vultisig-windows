@@ -1971,4 +1971,6 @@ export const hr = {
   enable_ton_w5_wallet_description:
     'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
   max_network_fee: 'Maks. mrežna naknada',
+  review_not_enough_funds:
+    'Izgleda da vaš trezor nema dovoljno sredstava za ovu transakciju. Prilagodite iznos i pokušajte ponovno.',
 }

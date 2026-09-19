@@ -965,6 +965,8 @@ export const en = {
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',
   risky_site_detected: 'Malicious site detected',
+  review_not_enough_funds:
+    "Looks like your vault doesn't have enough funds for this transaction. Adjust the amount and try again.",
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   risky_tx_warning:
     'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',

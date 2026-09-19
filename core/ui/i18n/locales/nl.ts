@@ -1986,4 +1986,6 @@ export const nl = {
   enable_ton_w5_wallet_description:
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
   max_network_fee: 'Maximale netwerkkosten',
+  review_not_enough_funds:
+    'Het lijkt erop dat uw kluis onvoldoende saldo heeft voor deze transactie. Pas het bedrag aan en probeer het opnieuw.',
 }

@@ -2018,4 +2018,6 @@ export const de = {
   enable_ton_w5_wallet_description:
     'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
   max_network_fee: 'Maximale Netzwerkgebühr',
+  review_not_enough_funds:
+    'Ihr Konto verfügt anscheinend nicht über ausreichend Guthaben für diese Transaktion. Passen Sie den Betrag an und versuchen Sie es erneut.',
 }

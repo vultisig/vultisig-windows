@@ -7,8 +7,7 @@ import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
 
-/** Coin icon size of a trade side, shared so a placeholder row lines up with it. */
-export const swapVerifyCoinIconSize = 32
+const swapVerifyCoinIconSize = 32
 
 type SwapVerifyAmountProps = {
   coin: Coin

@@ -13,9 +13,19 @@ import { useKeysignFee } from '../fee/useKeysignFee'
 
 type KeysignFeeAmountProps = {
   keysignPayload: KeysignPayload
+  /**
+   * `inline` puts the fiat estimate beside the fee; `stacked` puts it on its
+   * own line underneath, right-aligned, for the narrow value column of a
+   * review sheet.
+   */
+  layout?: 'inline' | 'stacked'
 }
 
-export const KeysignFeeAmount = ({ keysignPayload }: KeysignFeeAmountProps) => {
+/** The network fee a payload will pay, with its fiat estimate. */
+export const KeysignFeeAmount = ({
+  keysignPayload,
+  layout = 'inline',
+}: KeysignFeeAmountProps) => {
   const formatFiatAmount = useFormatFiatAmount()
   const chain = getKeysignChain(keysignPayload)
 
@@ -25,10 +35,21 @@ export const KeysignFeeAmount = ({ keysignPayload }: KeysignFeeAmountProps) => {
 
   const feeQuery = useKeysignFee(keysignPayload)
 
+  const isStacked = layout === 'stacked'
+
   return (
     // Fee loading renders a block-level spinner. Use a div container so the
     // pending state never produces invalid <p><div /></p> markup.
-    <Text as="div" size={14} centerVertically={{ gap: 8 }}>
+    <Text
+      as="div"
+      size={14}
+      centerVertically={{ gap: isStacked ? 0 : 8 }}
+      style={
+        isStacked
+          ? { flexDirection: 'column', alignItems: 'flex-end' }
+          : undefined
+      }
+    >
       <MatchQuery
         value={feeQuery}
         pending={() => <Spinner />}
