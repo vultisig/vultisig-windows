@@ -1,7 +1,6 @@
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ValueProp } from '@lib/ui/props'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { Trans, useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
 
@@ -48,7 +47,7 @@ export const BlockaidTxValidationResult = ({
             riskLevel={value.level}
             description={warning}
             title={t('risky_transaction_detected', {
-              riskLevel: capitalizeFirstLetter(value.level),
+              riskLevel: t(`risk_level.${value.level}`),
             })}
           />
         )}
@@ -65,7 +64,7 @@ export const BlockaidTxValidationResult = ({
               <Trans
                 i18nKey="transaction_has_risk"
                 components={{ provider: <BlockaidLogo /> }}
-                values={{ riskLevel: capitalizeFirstLetter(value.level) }}
+                values={{ riskLevel: t(`risk_level.${value.level}`) }}
               />
             </BlockaidScanStatusContainer>
           )}

@@ -2005,4 +2005,8 @@ export const pt = {
   max_network_fee: 'Taxa máxima de rede',
   review_not_enough_funds:
     'Parece que seu cofre não tem fundos suficientes para esta transação. Ajuste o valor e tente novamente.',
+  risk_level: {
+    medium: 'Médio',
+    high: 'Alto',
+  },
 }

@@ -1,17 +1,17 @@
-import { getTronStakingDisplay } from '@core/ui/chain/tx/getTronStakingDisplay'
-import { ReviewDivider, ReviewRow } from '@core/ui/mpc/keysign/review/ReviewRow'
-import { ReviewTruncatedValue } from '@core/ui/mpc/keysign/review/ReviewTruncatedValue'
-import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
-import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
-import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
 import { Fragment, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getTronStakingDisplay } from '../../../chain/tx/getTronStakingDisplay'
+import { ReviewDivider } from '../../../mpc/keysign/review/ReviewDivider'
+import { ReviewRow } from '../../../mpc/keysign/review/ReviewRow'
+import { ReviewTruncatedValue } from '../../../mpc/keysign/review/ReviewTruncatedValue'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { TrustLineReserveWarning } from '../DepositForm/ActionSpecific/OpenTrustLineSpecific/TrustLineReserveWarning'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
+import { useDepositMemo } from '../hooks/useDepositMemo'
+import { useSender } from '../hooks/useSender'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositData } from '../state/data'
@@ -20,9 +20,10 @@ import {
   tronWithdrawExpireUnfreezeAction,
 } from '../tron/withdrawExpireUnfreeze'
 import { BondOverview } from './BondOverview'
-import { DepositFeeRow } from './DepositReviewRows'
+import { DepositFeeRow } from './DepositFeeRow'
 import { DepositReviewSheet } from './DepositReviewSheet'
 import { StakeOverview } from './StakeOverview'
+import { getFormattedFormData } from './utils'
 
 type Row = {
   key: string

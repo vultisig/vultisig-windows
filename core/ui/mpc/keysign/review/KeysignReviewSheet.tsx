@@ -1,20 +1,23 @@
-import {
-  BlockaidRiskReview,
-  BlockaidRiskReviewActions,
-} from '@core/ui/chain/security/blockaid/tx/BlockaidRiskReview'
-import { BlockaidTxScan } from '@core/ui/chain/security/blockaid/tx/BlockaidTxScan'
-import { useBlockaidTxScanQuery } from '@core/ui/chain/security/blockaid/tx/queries/useBlockaidTxScanQuery'
-import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { equals } from '@bufbuild/protobuf'
 import { OnCloseProp, TitleProp } from '@lib/ui/props'
 import { Query } from '@lib/ui/query/Query'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
-import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
 import { match } from '@vultisig/lib-utils/match'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import {
+  BlockaidRiskReview,
+  BlockaidRiskReviewActions,
+} from '../../../chain/security/blockaid/tx/BlockaidRiskReview'
+import { BlockaidTxScan } from '../../../chain/security/blockaid/tx/BlockaidTxScan'
+import { useBlockaidTxScanQuery } from '../../../chain/security/blockaid/tx/queries/useBlockaidTxScanQuery'
 import { RefetchableKeysignPayloadQuery } from '../start/refreshKeysignPayload'
 import { resolveStartKeysignPromptProps } from '../start/resolveStartKeysignPromptProps'
 import { StartKeysignPromptWithRefresh } from '../start/StartKeysignPromptWithRefresh'
@@ -75,7 +78,14 @@ export const KeysignReviewSheet = ({
 
   const { data: scanResult, isScanning } =
     useBlockaidTxScanQuery(keysignPayloadQuery)
-  const [isRiskDismissed, { set: dismissRisk }] = useBoolean(false)
+  // "Continue anyway" waives the verdict for the payload it was given for, and
+  // that payload only: a rebuilt transaction (new fee settings, a refresh at
+  // sign time) is scanned afresh and shows its own warning.
+  const [dismissedPayload, setDismissedPayload] = useState<KeysignPayload>()
+  const isRiskDismissed =
+    dismissedPayload !== undefined &&
+    keysignPayloadQuery.data !== undefined &&
+    equals(KeysignPayloadSchema, dismissedPayload, keysignPayloadQuery.data)
   const flaggedTx = isRiskDismissed ? null : (scanResult ?? null)
 
   // The badge's ring reports the verdict; no verdict yet (or none possible)
@@ -116,7 +126,7 @@ export const KeysignReviewSheet = ({
         footer={
           <BlockaidRiskReviewActions
             onGoBack={onClose}
-            onContinue={dismissRisk}
+            onContinue={() => setDismissedPayload(keysignPayloadQuery.data)}
           />
         }
       >

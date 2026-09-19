@@ -1,6 +1,5 @@
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text, TextColor } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
@@ -60,10 +59,3 @@ export const ReviewRow = ({
     </Value>
   </Container>
 )
-
-/** Hairline between review rows. */
-export const ReviewDivider = styled.div`
-  height: 1px;
-  flex-shrink: 0;
-  background: ${getColor('foregroundExtra')};
-`

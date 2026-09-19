@@ -1,6 +1,3 @@
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
-import { TransactionOverviewFiatAmount } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewFiatAmount'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -12,6 +9,10 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
+
+import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
+import { TokenVerificationBadge } from '../../../chain/coin/verification/TokenVerificationBadge'
+import { TransactionOverviewFiatAmount } from '../verify/components/TransactionOverviewFiatAmount'
 
 type HeadlineCoin = CoinKey & Pick<CoinMetadata, 'decimals' | 'ticker' | 'logo'>
 

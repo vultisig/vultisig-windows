@@ -1,8 +1,9 @@
-import { ReviewSheet } from '@core/ui/mpc/keysign/review/ReviewSheet'
-import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
-import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { OnBackProp, TitleProp } from '@lib/ui/props'
 import { ReactNode } from 'react'
+
+import { ReviewSheet } from '../../../mpc/keysign/review/ReviewSheet'
+import { useIsBlockaidEnabledQuery } from '../../../storage/blockaid'
+import { DepositConfirmButton } from '../DepositConfirmButton'
 
 type DepositReviewSheetProps = OnBackProp &
   TitleProp & {

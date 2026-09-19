@@ -1,6 +1,3 @@
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { ReviewCard } from '@core/ui/mpc/keysign/review/ReviewCard'
-import { TransactionOverviewFiatAmount } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewFiatAmount'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -11,6 +8,10 @@ import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
+
+import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
+import { ReviewCard } from '../../../mpc/keysign/review/ReviewCard'
+import { TransactionOverviewFiatAmount } from '../../../mpc/keysign/verify/components/TransactionOverviewFiatAmount'
 
 type DepositCoin = CoinKey & Pick<CoinMetadata, 'decimals' | 'ticker' | 'logo'>
 

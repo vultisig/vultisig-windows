@@ -1973,4 +1973,8 @@ export const hr = {
   max_network_fee: 'Maks. mrežna naknada',
   review_not_enough_funds:
     'Izgleda da vaš trezor nema dovoljno sredstava za ovu transakciju. Prilagodite iznos i pokušajte ponovno.',
+  risk_level: {
+    medium: 'Srednji',
+    high: 'Visoko',
+  },
 }

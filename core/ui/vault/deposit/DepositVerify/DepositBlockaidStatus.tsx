@@ -1,11 +1,12 @@
-import { BlockaidLogo } from '@core/ui/chain/security/blockaid/BlockaidLogo'
-import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { BlockaidLogo } from '../../../chain/security/blockaid/BlockaidLogo'
+import { useIsBlockaidEnabledQuery } from '../../../storage/blockaid'
 
 const Container = styled(HStack)`
   justify-content: center;

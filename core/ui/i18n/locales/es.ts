@@ -2005,4 +2005,8 @@ export const es = {
   max_network_fee: 'Tarifa máxima de red',
   review_not_enough_funds:
     'Parece que tu bóveda no tiene fondos suficientes para esta transacción. Ajusta la cantidad e inténtalo de nuevo.',
+  risk_level: {
+    medium: 'Medio',
+    high: 'Alto',
+  },
 }

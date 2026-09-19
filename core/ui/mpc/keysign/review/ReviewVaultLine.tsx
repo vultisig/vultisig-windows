@@ -1,8 +1,9 @@
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
+
+import { useCurrentVault } from '../../../vault/state/currentVault'
 
 /**
  * The vault a review sheet signs from — its name and an abbreviated address —

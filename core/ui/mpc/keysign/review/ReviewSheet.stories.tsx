@@ -1,11 +1,3 @@
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import {
-  BlockaidRiskReview,
-  BlockaidRiskReviewActions,
-} from '@core/ui/chain/security/blockaid/tx/BlockaidRiskReview'
-import { ReviewTruncatedValue } from '@core/ui/mpc/keysign/review/ReviewTruncatedValue'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { DevicesIcon } from '@lib/ui/icons/DevicesIcon'
@@ -17,12 +9,21 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import { ChainEntityIcon } from '../../../chain/coin/icon/ChainEntityIcon'
+import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
+import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
+import {
+  BlockaidRiskReview,
+  BlockaidRiskReviewActions,
+} from '../../../chain/security/blockaid/tx/BlockaidRiskReview'
 import { ReviewAddressCards } from './ReviewAddressCards'
 import { ReviewCard } from './ReviewCard'
 import { ReviewConnector } from './ReviewConnector'
-import { ReviewDivider, ReviewRow } from './ReviewRow'
+import { ReviewDivider } from './ReviewDivider'
+import { ReviewRow } from './ReviewRow'
 import { ReviewSheet } from './ReviewSheet'
 import { ReviewTerms } from './ReviewTerms'
+import { ReviewTruncatedValue } from './ReviewTruncatedValue'
 import { ReviewWarningBanner } from './ReviewWarningBanner'
 
 const meta = {

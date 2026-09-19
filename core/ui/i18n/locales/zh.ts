@@ -1842,4 +1842,8 @@ export const zh = {
   max_network_fee: '最高网络费用',
   review_not_enough_funds:
     '您的账户余额似乎不足以支付这笔交易。请调整金额后重试。',
+  risk_level: {
+    medium: '中等的',
+    high: '高的',
+  },
 }

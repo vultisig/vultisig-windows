@@ -1,18 +1,19 @@
-import { centerContent } from '@lib/ui/css/centerContent'
-import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { BodyPortal } from '@lib/ui/dom/BodyPortal'
-import { CrossIcon } from '@lib/ui/icons/CrossIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { OnCloseProp, TitleProp } from '@lib/ui/props'
-import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
-import { text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { KeyboardEvent, ReactNode, useId, useRef } from 'react'
 import FocusLock from 'react-focus-lock'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../buttons/UnstyledButton'
 import { borderRadius } from '../css/borderRadius'
+import { centerContent } from '../css/centerContent'
+import { sameDimensions } from '../css/sameDimensions'
+import { BodyPortal } from '../dom/BodyPortal'
+import { CrossIcon } from '../icons/CrossIcon'
+import { HStack, VStack } from '../layout/Stack'
+import { OnCloseProp, TitleProp } from '../props'
+import { mediaQuery } from '../responsive/mediaQuery'
+import { text } from '../text'
+import { getColor } from '../theme/getters'
 
 const desktopWidth = 400
 const sideGutter = 16
@@ -145,6 +146,7 @@ export const Sheet = ({
   footer,
   onClose,
 }: SheetProps) => {
+  const { t } = useTranslation()
   const titleId = useId()
   const isPointerDownOnBackdrop = useRef(false)
 
@@ -156,8 +158,8 @@ export const Sheet = ({
             isPointerDownOnBackdrop.current = true
           }
         }}
-        onPointerUp={() => {
-          if (isPointerDownOnBackdrop.current) {
+        onPointerUp={({ target, currentTarget }) => {
+          if (isPointerDownOnBackdrop.current && target === currentTarget) {
             onClose()
           }
           isPointerDownOnBackdrop.current = false
@@ -185,7 +187,11 @@ export const Sheet = ({
               <HeaderSlot>{leading}</HeaderSlot>
               <Title id={titleId}>{title}</Title>
               <HeaderSlot>
-                <CloseButton data-testid="sheet-close-button" onClick={onClose}>
+                <CloseButton
+                  data-testid="sheet-close-button"
+                  aria-label={t('close')}
+                  onClick={onClose}
+                >
                   <CrossIcon />
                 </CloseButton>
               </HeaderSlot>

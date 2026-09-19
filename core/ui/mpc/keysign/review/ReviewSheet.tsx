@@ -1,4 +1,3 @@
-import { BlockaidLogomark } from '@core/ui/chain/security/blockaid/BlockaidLogomark'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -8,6 +7,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@vultisig/lib-utils/match'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
+
+import { BlockaidLogomark } from '../../../chain/security/blockaid/BlockaidLogomark'
 
 /**
  * What the badge's ring says about the transaction's Blockaid scan: it came

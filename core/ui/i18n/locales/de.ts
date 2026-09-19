@@ -2020,4 +2020,8 @@ export const de = {
   max_network_fee: 'Maximale Netzwerkgebühr',
   review_not_enough_funds:
     'Ihr Konto verfügt anscheinend nicht über ausreichend Guthaben für diese Transaktion. Passen Sie den Betrag an und versuchen Sie es erneut.',
+  risk_level: {
+    medium: 'Medium',
+    high: 'Hoch',
+  },
 }

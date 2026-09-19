@@ -1,30 +1,3 @@
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { getRippleDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
-import {
-  isEvmContractCallMemo,
-  TxOverviewMemo,
-} from '@core/ui/chain/tx/TxOverviewMemo'
-import { KeysignReviewSheet } from '@core/ui/mpc/keysign/review/KeysignReviewSheet'
-import { ReviewAddressCards } from '@core/ui/mpc/keysign/review/ReviewAddressCards'
-import { ReviewAmountHeadline } from '@core/ui/mpc/keysign/review/ReviewAmountHeadline'
-import { ReviewDivider, ReviewRow } from '@core/ui/mpc/keysign/review/ReviewRow'
-import {
-  decodedAmountCanBeShown,
-  decodeSignedTransaction,
-} from '@core/ui/mpc/keysign/transaction-decoding/decodeSignedTransaction'
-import { getVerifyTransactionTitleKey } from '@core/ui/mpc/keysign/transaction-decoding/presentation'
-import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
-import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
-import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
-import { useSendKeysignPayloadQuery } from '@core/ui/vault/send/keysignPayload/query'
-import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
-import { useSendDestinationTag } from '@core/ui/vault/send/state/destinationTag'
-import { useSendMemo } from '@core/ui/vault/send/state/memo'
-import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
-import { useSendReceiverLabel } from '@core/ui/vault/send/state/receiverLabel'
-import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnBackProp } from '@lib/ui/props'
@@ -43,7 +16,35 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { ChainEntityIcon } from '../../../chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '../../../chain/metadata/getChainLogoSrc'
+import { getRippleDisplay } from '../../../chain/tx/getRippleKeysignDisplay'
+import {
+  isEvmContractCallMemo,
+  TxOverviewMemo,
+} from '../../../chain/tx/TxOverviewMemo'
+import { KeysignReviewSheet } from '../../../mpc/keysign/review/KeysignReviewSheet'
+import { ReviewAddressCards } from '../../../mpc/keysign/review/ReviewAddressCards'
+import { ReviewAmountHeadline } from '../../../mpc/keysign/review/ReviewAmountHeadline'
+import { ReviewDivider } from '../../../mpc/keysign/review/ReviewDivider'
+import { ReviewRow } from '../../../mpc/keysign/review/ReviewRow'
+import {
+  decodedAmountCanBeShown,
+  decodeSignedTransaction,
+} from '../../../mpc/keysign/transaction-decoding/decodeSignedTransaction'
+import { getVerifyTransactionTitleKey } from '../../../mpc/keysign/transaction-decoding/presentation'
+import { KeysignFeeAmount } from '../../../mpc/keysign/tx/FeeAmount'
+import { useAddressBookNameForAddress } from '../../hooks/useAddressBookNameForAddress'
+import { useVaultNameForAddress } from '../../hooks/useVaultNameForAddress'
+import { useCurrentVault } from '../../state/currentVault'
+import { useSendKeysignPayloadQuery } from '../keysignPayload/query'
+import { useSender } from '../sender/hooks/useSender'
 import { useSendAmount } from '../state/amount'
+import { useSendDestinationTag } from '../state/destinationTag'
+import { useSendMemo } from '../state/memo'
+import { useSendReceiver } from '../state/receiver'
+import { useSendReceiverLabel } from '../state/receiverLabel'
+import { useCurrentSendCoin } from '../state/sendCoin'
 import { ManageFee } from './ManageFee'
 
 const sendTerms = ['send_terms_1', 'send_terms_0'] as const

@@ -1988,4 +1988,8 @@ export const nl = {
   max_network_fee: 'Maximale netwerkkosten',
   review_not_enough_funds:
     'Het lijkt erop dat uw kluis onvoldoende saldo heeft voor deze transactie. Pas het bedrag aan en probeer het opnieuw.',
+  risk_level: {
+    medium: 'Medium',
+    high: 'Hoog',
+  },
 }

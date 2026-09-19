@@ -6,7 +6,6 @@ import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { Trans, useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
@@ -109,7 +108,7 @@ export const BlockaidRiskReview = ({ value }: BlockaidRiskReviewProps) => {
       <VStack gap={12} fullWidth>
         <Title $color={color}>
           {t('risky_transaction_detected', {
-            riskLevel: capitalizeFirstLetter(value.level),
+            riskLevel: t(`risk_level.${value.level}`),
           })}
         </Title>
         <Description

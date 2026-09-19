@@ -2009,4 +2009,8 @@ export const it = {
   max_network_fee: 'Tariffa massima di rete',
   review_not_enough_funds:
     "Sembra che il tuo conto non disponga di fondi sufficienti per questa transazione. Modifica l'importo e riprova.",
+  risk_level: {
+    medium: 'Mezzo',
+    high: 'Alto',
+  },
 }

@@ -1964,4 +1964,8 @@ export const ko = {
   max_network_fee: '최대 네트워크 수수료',
   review_not_enough_funds:
     '금고에 이 거래를 처리할 만큼 충분한 금액이 없는 것 같습니다. 금액을 조정한 후 다시 시도해 주세요.',
+  risk_level: {
+    medium: '중간',
+    high: '높은',
+  },
 }
