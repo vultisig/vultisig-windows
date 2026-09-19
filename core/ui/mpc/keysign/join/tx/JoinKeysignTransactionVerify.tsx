@@ -107,7 +107,7 @@ export const JoinKeysignTransactionVerify = ({
   return (
     <>
       <PageContent gap={12} scrollable>
-        {isSwap ? null : <DappRequestBanner value={value.dappMetadata} />}
+        <DappRequestBanner value={value.dappMetadata} />
         {content}
         {terms.length > 0 && (
           <VStack>

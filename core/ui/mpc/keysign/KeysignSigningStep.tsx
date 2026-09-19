@@ -143,10 +143,13 @@ export const KeysignSigningStep = ({
                               width: '100%',
                             }}
                           >
-                            <SwapKeysignTxOverview
-                              txHashes={txs.map(tx => tx.hash)}
-                              value={payload}
-                            />
+                            <VStack gap={16} maxWidth={576} fullWidth>
+                              <DappRequestBanner value={payload.dappMetadata} />
+                              <SwapKeysignTxOverview
+                                txHashes={txs.map(tx => tx.hash)}
+                                value={payload}
+                              />
+                            </VStack>
                           </AnimatedVisibility>
                         </PageContent>
                       </>
