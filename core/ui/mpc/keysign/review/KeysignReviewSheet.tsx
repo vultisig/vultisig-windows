@@ -1,6 +1,7 @@
 import { equals } from '@bufbuild/protobuf'
 import { OnCloseProp, TitleProp } from '@lib/ui/props'
 import { Query } from '@lib/ui/query/Query'
+import { RiskLevel } from '@vultisig/core-chain/security/blockaid/core/riskLevel'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import {
@@ -17,6 +18,7 @@ import {
   BlockaidRiskReviewActions,
 } from '../../../chain/security/blockaid/tx/BlockaidRiskReview'
 import { BlockaidTxScan } from '../../../chain/security/blockaid/tx/BlockaidTxScan'
+import { BlockaidTxScanResult } from '../../../chain/security/blockaid/tx/queries/blockaidTxValidation'
 import { useBlockaidTxScanQuery } from '../../../chain/security/blockaid/tx/queries/useBlockaidTxScanQuery'
 import { RefetchableKeysignPayloadQuery } from '../start/refreshKeysignPayload'
 import { resolveStartKeysignPromptProps } from '../start/resolveStartKeysignPromptProps'
@@ -24,6 +26,18 @@ import { StartKeysignPromptWithRefresh } from '../start/StartKeysignPromptWithRe
 import { ReviewBadgeTone, ReviewSheet } from './ReviewSheet'
 import { ReviewTerms } from './ReviewTerms'
 import { ReviewWarningBanner } from './ReviewWarningBanner'
+
+const getReviewBadgeTone = (
+  scanResult: BlockaidTxScanResult | undefined
+): ReviewBadgeTone | undefined => {
+  if (scanResult === undefined) return undefined
+  if (scanResult === null) return 'safe'
+
+  return match<RiskLevel, ReviewBadgeTone>(scanResult.level, {
+    medium: () => 'warning',
+    high: () => 'danger',
+  })
+}
 
 type KeysignReviewSheetProps = OnCloseProp &
   TitleProp & {
@@ -90,15 +104,7 @@ export const KeysignReviewSheet = ({
 
   // The badge's ring reports the verdict; no verdict yet (or none possible)
   // leaves it off.
-  const badgeTone: ReviewBadgeTone | undefined =
-    scanResult === undefined
-      ? undefined
-      : scanResult === null
-        ? 'safe'
-        : match(scanResult.level, {
-            medium: () => 'warning' as const,
-            high: () => 'danger' as const,
-          })
+  const badgeTone = getReviewBadgeTone(scanResult)
 
   const startKeysignPromptProps = resolveStartKeysignPromptProps({
     t,

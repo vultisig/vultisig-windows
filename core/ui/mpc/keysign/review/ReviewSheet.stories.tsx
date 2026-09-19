@@ -299,12 +299,7 @@ export const SwapOverview: Story = {
 
 export const BondOverview: Story = {
   render: () => (
-    <ReviewSheet
-      title="Overview"
-      onClose={() => {}}
-      badgeTone="safe"
-      footer={<SignButtons />}
-    >
+    <ReviewSheet title="Overview" onClose={() => {}} footer={<SignButtons />}>
       <ReviewCard>
         <Text as="span" variant="stationBodyS" color="shy">
           {"You're bonding"}
