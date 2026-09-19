@@ -1,4 +1,5 @@
 import { ReviewSheet } from '@core/ui/mpc/keysign/review/ReviewSheet'
+import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { OnBackProp, TitleProp } from '@lib/ui/props'
 import { ReactNode } from 'react'
@@ -10,14 +11,25 @@ type DepositReviewSheetProps = OnBackProp &
 
 /**
  * The deposit flow's review sheet: the overview in the body, the start-keysign
- * controls pinned below. Closing it returns to the deposit form.
+ * controls pinned below. Closing it returns to the deposit form. The badge
+ * reads as scanned whenever Blockaid is on, matching the status line the DeFi
+ * overviews show.
  */
 export const DepositReviewSheet = ({
   title,
   children,
   onBack,
-}: DepositReviewSheetProps) => (
-  <ReviewSheet title={title} onClose={onBack} footer={<DepositConfirmButton />}>
-    {children}
-  </ReviewSheet>
-)
+}: DepositReviewSheetProps) => {
+  const { data: isBlockaidEnabled } = useIsBlockaidEnabledQuery()
+
+  return (
+    <ReviewSheet
+      title={title}
+      onClose={onBack}
+      badgeTone={isBlockaidEnabled ? 'safe' : undefined}
+      footer={<DepositConfirmButton />}
+    >
+      {children}
+    </ReviewSheet>
+  )
+}

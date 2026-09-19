@@ -288,6 +288,7 @@ export const SwapOverview: Story = {
     <ReviewSheet
       title="Swap Overview"
       onClose={() => {}}
+      badgeTone="safe"
       footer={<TermsFooter terms={swapTerms} initiallyChecked />}
     >
       <SwapBody feesExpanded />
@@ -297,7 +298,12 @@ export const SwapOverview: Story = {
 
 export const BondOverview: Story = {
   render: () => (
-    <ReviewSheet title="Overview" onClose={() => {}} footer={<SignButtons />}>
+    <ReviewSheet
+      title="Overview"
+      onClose={() => {}}
+      badgeTone="safe"
+      footer={<SignButtons />}
+    >
       <ReviewCard>
         <Text as="span" variant="stationBodyS" color="shy">
           {"You're bonding"}
@@ -356,6 +362,7 @@ export const BlockaidMediumRisk: Story = {
     <ReviewSheet
       title="Swap Overview"
       onClose={() => {}}
+      badgeTone="warning"
       footer={
         <BlockaidRiskReviewActions onGoBack={() => {}} onContinue={() => {}} />
       }
@@ -376,6 +383,7 @@ export const BlockaidHighRisk: Story = {
     <ReviewSheet
       title="Send Overview"
       onClose={() => {}}
+      badgeTone="danger"
       footer={
         <BlockaidRiskReviewActions onGoBack={() => {}} onContinue={() => {}} />
       }

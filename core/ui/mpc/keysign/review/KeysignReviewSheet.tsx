@@ -11,13 +11,14 @@ import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
+import { match } from '@vultisig/lib-utils/match'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { RefetchableKeysignPayloadQuery } from '../start/refreshKeysignPayload'
 import { resolveStartKeysignPromptProps } from '../start/resolveStartKeysignPromptProps'
 import { StartKeysignPromptWithRefresh } from '../start/StartKeysignPromptWithRefresh'
-import { ReviewSheet } from './ReviewSheet'
+import { ReviewBadgeTone, ReviewSheet } from './ReviewSheet'
 import { ReviewTerms } from './ReviewTerms'
 import { ReviewWarningBanner } from './ReviewWarningBanner'
 
@@ -77,6 +78,18 @@ export const KeysignReviewSheet = ({
   const [isRiskDismissed, { set: dismissRisk }] = useBoolean(false)
   const flaggedTx = isRiskDismissed ? null : (scanResult ?? null)
 
+  // The badge's ring reports the verdict; no verdict yet (or none possible)
+  // leaves it off.
+  const badgeTone: ReviewBadgeTone | undefined =
+    scanResult === undefined
+      ? undefined
+      : scanResult === null
+        ? 'safe'
+        : match(scanResult.level, {
+            medium: () => 'warning' as const,
+            high: () => 'danger' as const,
+          })
+
   const startKeysignPromptProps = resolveStartKeysignPromptProps({
     t,
     termsAccepted,
@@ -99,6 +112,7 @@ export const KeysignReviewSheet = ({
       <ReviewSheet
         title={title}
         onClose={onClose}
+        badgeTone={badgeTone}
         footer={
           <BlockaidRiskReviewActions
             onGoBack={onClose}
@@ -115,6 +129,7 @@ export const KeysignReviewSheet = ({
     <ReviewSheet
       title={title}
       onClose={onClose}
+      badgeTone={badgeTone}
       footer={
         isUnaffordable ? (
           <ReviewWarningBanner>

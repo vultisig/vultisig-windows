@@ -1,46 +1,68 @@
-import { ProductLogo } from '@core/ui/product/ProductLogo'
+import { BlockaidLogomark } from '@core/ui/chain/security/blockaid/BlockaidLogomark'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { OnCloseProp, TitleProp } from '@lib/ui/props'
 import { Sheet } from '@lib/ui/sheet/Sheet'
 import { getColor } from '@lib/ui/theme/getters'
+import { match } from '@vultisig/lib-utils/match'
 import { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-const LogoBadge = styled.div`
+/**
+ * What the badge's ring says about the transaction's Blockaid scan: it came
+ * back clean, flagged as risky, or flagged as malicious. Without a verdict
+ * (scan off, running, failed or not applicable) the ring stays off.
+ */
+export type ReviewBadgeTone = 'safe' | 'warning' | 'danger'
+
+const Badge = styled.div<{ $tone?: ReviewBadgeTone }>`
   ${sameDimensions(32)};
   ${centerContent};
   ${borderRadius.pill};
-  background: ${getColor('textShyExtra')};
-  color: ${getColor('background')};
-  font-size: 18px;
+  background: ${getColor('foregroundSuper')};
+  color: ${getColor('contrast')};
+  font-size: 14px;
+
+  ${({ $tone }) =>
+    $tone &&
+    css`
+      border: 1px solid
+        ${match($tone, {
+          safe: () => getColor('success'),
+          warning: () => getColor('idle'),
+          danger: () => getColor('danger'),
+        })};
+    `}
 `
 
 type ReviewSheetProps = OnCloseProp &
   TitleProp & {
     children: ReactNode
     footer?: ReactNode
+    badgeTone?: ReviewBadgeTone
   }
 
 /**
- * The sheet every transaction is reviewed on before signing: the product mark
- * in the header, the flow's summary in the body and the sign controls pinned
- * at the bottom. Closing it returns to the form it was opened from.
+ * The sheet every transaction is reviewed on before signing: the Blockaid
+ * badge in the header (ringed in the colour of the scan's verdict), the flow's
+ * summary in the body and the sign controls pinned at the bottom. Closing it
+ * returns to the form it was opened from.
  */
 export const ReviewSheet = ({
   title,
   children,
   footer,
+  badgeTone,
   onClose,
 }: ReviewSheetProps) => (
   <Sheet
     title={title}
     onClose={onClose}
     leading={
-      <LogoBadge>
-        <ProductLogo />
-      </LogoBadge>
+      <Badge $tone={badgeTone}>
+        <BlockaidLogomark />
+      </Badge>
     }
     footer={footer}
   >
