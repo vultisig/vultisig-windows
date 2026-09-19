@@ -10,24 +10,34 @@ const polkadotSigningPayloadHashThreshold = 256
 // nothing else, so any other value can only produce an unusable signature.
 const checkMetadataHashModes = [0, 1] as const
 
-const encodeCheckMetadataHashMode = (
-  mode: PolkadotSignerPayloadJSON['mode']
-): Uint8Array => {
-  const value = mode ?? 0
-  if (!isOneOf(value, checkMetadataHashModes)) {
-    throw new Error(`Invalid CheckMetadataHash mode: ${value}`)
-  }
-
-  return new Uint8Array([value])
-}
-
 const metadataHashLength = 32
 
-const encodeMetadataHashOption = (
-  metadataHash: PolkadotSignerPayloadJSON['metadataHash']
-): Uint8Array => {
-  if (!metadataHash) {
-    return new Uint8Array([0])
+type CheckMetadataHashInput = Pick<
+  PolkadotSignerPayloadJSON,
+  'mode' | 'metadataHash'
+>
+
+// The runtime derives the implicit as `mode == 1 ? Some(hash) : None`, so a
+// payload whose two fields disagree can never verify on-chain. Reject it here
+// rather than sign bytes the chain will bounce with an opaque "bad signature".
+const encodeCheckMetadataHash = ({
+  mode = 0,
+  metadataHash = null,
+}: CheckMetadataHashInput) => {
+  if (!isOneOf(mode, checkMetadataHashModes)) {
+    throw new Error(`Invalid CheckMetadataHash mode: ${mode}`)
+  }
+
+  if ((mode === 1) !== (metadataHash !== null)) {
+    throw new Error(
+      `CheckMetadataHash mode ${mode} does not match metadataHash ${metadataHash === null ? 'absence' : 'presence'}`
+    )
+  }
+
+  const extra = new Uint8Array([mode])
+
+  if (metadataHash === null) {
+    return { extra, implicit: new Uint8Array([0]) }
   }
 
   const hash = hexToU8a(metadataHash)
@@ -37,7 +47,7 @@ const encodeMetadataHashOption = (
     )
   }
 
-  return u8aConcat(new Uint8Array([1]), hash)
+  return { extra, implicit: u8aConcat(new Uint8Array([1]), hash) }
 }
 
 /**
@@ -51,7 +61,8 @@ const encodeMetadataHashOption = (
  *
  * `mode` defaults to 0 and `metadataHash` to `None` when the payload omits
  * them, which is what the runtime reconstructs for a dApp that did not opt
- * into metadata-hash verification.
+ * into metadata-hash verification. A `mode` outside {0, 1}, a `metadataHash`
+ * that disagrees with `mode`, or one that is not 32 bytes is rejected.
  *
  * If the payload exceeds 256 bytes, it is blake2b-256 hashed before signing.
  */
@@ -62,7 +73,8 @@ export const constructPolkadotSigningPayload = (
   const era = hexToU8a(payload.era)
   const nonce = compactToU8a(parseInt(payload.nonce, 16))
   const tip = compactToU8a(payload.tip ? BigInt(payload.tip) : 0n)
-  const mode = encodeCheckMetadataHashMode(payload.mode)
+  const { extra: mode, implicit: metadataHash } =
+    encodeCheckMetadataHash(payload)
 
   const specVersion = new Uint8Array(4)
   new DataView(specVersion.buffer).setUint32(
@@ -80,7 +92,6 @@ export const constructPolkadotSigningPayload = (
 
   const genesisHash = hexToU8a(payload.genesisHash)
   const blockHash = hexToU8a(payload.blockHash)
-  const metadataHash = encodeMetadataHashOption(payload.metadataHash)
 
   const raw = u8aConcat(
     method,

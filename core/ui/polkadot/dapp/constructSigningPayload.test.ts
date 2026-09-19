@@ -248,6 +248,55 @@ describe('constructPolkadotSigningPayload', () => {
         })
       ).toThrow('Invalid metadataHash length')
     })
+
+    it('rejects an empty metadata hash instead of treating it as None', () => {
+      expect(() =>
+        constructPolkadotSigningPayload({
+          ...layoutPayload,
+          mode: 1,
+          metadataHash: '',
+        })
+      ).toThrow('Invalid metadataHash length')
+
+      expect(() =>
+        constructPolkadotSigningPayload({
+          ...layoutPayload,
+          mode: 0,
+          metadataHash: '',
+        })
+      ).toThrow('does not match')
+    })
+
+    it('rejects mode=1 without a metadata hash', () => {
+      expect(() =>
+        constructPolkadotSigningPayload({ ...layoutPayload, mode: 1 })
+      ).toThrow('mode 1 does not match metadataHash absence')
+
+      expect(() =>
+        constructPolkadotSigningPayload({
+          ...layoutPayload,
+          mode: 1,
+          metadataHash: null,
+        })
+      ).toThrow('mode 1 does not match metadataHash absence')
+    })
+
+    it('rejects mode=0 with a metadata hash', () => {
+      expect(() =>
+        constructPolkadotSigningPayload({
+          ...layoutPayload,
+          mode: 0,
+          metadataHash: sampleMetadataHash,
+        })
+      ).toThrow('mode 0 does not match metadataHash presence')
+
+      expect(() =>
+        constructPolkadotSigningPayload({
+          ...layoutPayload,
+          metadataHash: sampleMetadataHash,
+        })
+      ).toThrow('mode 0 does not match metadataHash presence')
+    })
   })
 
   describe('256-byte hashing threshold', () => {
