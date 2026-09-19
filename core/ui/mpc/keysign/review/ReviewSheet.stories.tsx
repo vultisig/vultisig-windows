@@ -5,6 +5,7 @@ import {
   BlockaidRiskReview,
   BlockaidRiskReviewActions,
 } from '@core/ui/chain/security/blockaid/tx/BlockaidRiskReview'
+import { ReviewTruncatedValue } from '@core/ui/mpc/keysign/review/ReviewTruncatedValue'
 import { Button } from '@lib/ui/buttons/Button'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { DevicesIcon } from '@lib/ui/icons/DevicesIcon'
@@ -328,11 +329,21 @@ export const BondOverview: Story = {
           </Text>
         </HStack>
         <ReviewDivider />
-        <ReviewRow label="To" value="thor43jf9840fkfjn38fk0dk9Ac5" />
+        <ReviewRow
+          label="To"
+          value={
+            <ReviewTruncatedValue value="thor1h4kjq4xrxsm7ajpkstqgp9jcwxlc8khyfpwkfr" />
+          }
+        />
         <ReviewDivider />
         <NetworkRow chain={Chain.THORChain} />
         <ReviewDivider />
-        <ReviewRow label="Memo" value="bond:x/tcy:100000000" />
+        <ReviewRow
+          label="Memo"
+          value={
+            <ReviewTruncatedValue value="BOND:thor1h4kjq4xrxsm7ajpkstqgp9jcwxlc8khyfpwkfr" />
+          }
+        />
         <ReviewDivider />
         <FeeRow />
       </VStack>

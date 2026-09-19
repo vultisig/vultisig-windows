@@ -1,5 +1,6 @@
 import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
 import { ReviewDivider, ReviewRow } from '@core/ui/mpc/keysign/review/ReviewRow'
+import { ReviewTruncatedValue } from '@core/ui/mpc/keysign/review/ReviewTruncatedValue'
 import { ReviewVaultLine } from '@core/ui/mpc/keysign/review/ReviewVaultLine'
 import { isBruneStakeCoin } from '@core/ui/vault/deposit/config'
 import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
@@ -20,11 +21,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DepositBlockaidStatus } from './DepositBlockaidStatus'
 import { DepositReviewCard } from './DepositReviewCard'
-import {
-  DepositFeeRow,
-  DepositNetworkRow,
-  DepositReviewValue,
-} from './DepositReviewRows'
+import { DepositFeeRow, DepositNetworkRow } from './DepositReviewRows'
 import { DepositReviewSheet } from './DepositReviewSheet'
 
 /**
@@ -141,7 +138,7 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
             <ReviewDivider />
             <ReviewRow
               label={t('memo')}
-              value={<DepositReviewValue>{memo}</DepositReviewValue>}
+              value={<ReviewTruncatedValue value={memo} />}
             />
           </>
         ) : null}

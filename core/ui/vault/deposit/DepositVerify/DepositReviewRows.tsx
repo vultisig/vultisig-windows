@@ -4,21 +4,11 @@ import { ReviewRow } from '@core/ui/mpc/keysign/review/ReviewRow'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { useDepositKeysignPayloadQuery } from '@core/ui/vault/deposit/keysignPayload/query'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { ChildrenProp, ValueProp } from '@lib/ui/props'
+import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-const Wrapping = styled.span`
-  overflow-wrap: anywhere;
-`
-
-/** A review value that may be long — an address, a memo — and wraps instead of overflowing. */
-export const DepositReviewValue = ({ children }: ChildrenProp) => (
-  <Wrapping>{children}</Wrapping>
-)
 
 /** The chain the deposit lands on, with its logo. */
 export const DepositNetworkRow = ({ value }: ValueProp<Chain>) => {

@@ -1,4 +1,5 @@
 import { ReviewDivider, ReviewRow } from '@core/ui/mpc/keysign/review/ReviewRow'
+import { ReviewTruncatedValue } from '@core/ui/mpc/keysign/review/ReviewTruncatedValue'
 import { ReviewVaultLine } from '@core/ui/mpc/keysign/review/ReviewVaultLine'
 import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
 import { useDepositKeysignPayloadQuery } from '@core/ui/vault/deposit/keysignPayload/query'
@@ -13,11 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DepositBlockaidStatus } from './DepositBlockaidStatus'
 import { DepositReviewCard } from './DepositReviewCard'
-import {
-  DepositFeeRow,
-  DepositNetworkRow,
-  DepositReviewValue,
-} from './DepositReviewRows'
+import { DepositFeeRow, DepositNetworkRow } from './DepositReviewRows'
 import { DepositReviewSheet } from './DepositReviewSheet'
 
 const Missing = () => (
@@ -64,7 +61,7 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
           label={t('to')}
           value={
             nodeAddress ? (
-              <DepositReviewValue>{nodeAddress}</DepositReviewValue>
+              <ReviewTruncatedValue value={nodeAddress} />
             ) : (
               <Missing />
             )
@@ -75,9 +72,7 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
         <ReviewDivider />
         <ReviewRow
           label={t('memo')}
-          value={
-            memo ? <DepositReviewValue>{memo}</DepositReviewValue> : <Missing />
-          }
+          value={memo ? <ReviewTruncatedValue value={memo} /> : <Missing />}
         />
         <ReviewDivider />
         <DepositFeeRow />

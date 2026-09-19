@@ -1,5 +1,6 @@
 import { getTronStakingDisplay } from '@core/ui/chain/tx/getTronStakingDisplay'
 import { ReviewDivider, ReviewRow } from '@core/ui/mpc/keysign/review/ReviewRow'
+import { ReviewTruncatedValue } from '@core/ui/mpc/keysign/review/ReviewTruncatedValue'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
 import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
 import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
@@ -19,14 +20,14 @@ import {
   tronWithdrawExpireUnfreezeAction,
 } from '../tron/withdrawExpireUnfreeze'
 import { BondOverview } from './BondOverview'
-import { DepositFeeRow, DepositReviewValue } from './DepositReviewRows'
+import { DepositFeeRow } from './DepositReviewRows'
 import { DepositReviewSheet } from './DepositReviewSheet'
 import { StakeOverview } from './StakeOverview'
 
 type Row = {
   key: string
   label: ReactNode
-  value: ReactNode
+  value: string
 }
 
 /**
@@ -160,7 +161,7 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
             {index > 0 && <ReviewDivider />}
             <ReviewRow
               label={label}
-              value={<DepositReviewValue>{value}</DepositReviewValue>}
+              value={<ReviewTruncatedValue value={value} />}
             />
           </Fragment>
         ))}

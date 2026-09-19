@@ -16,6 +16,7 @@ const Label = styled(Text)`
 `
 
 const Value = styled(Text)`
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: flex-end;
