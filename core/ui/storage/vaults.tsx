@@ -156,14 +156,14 @@ export const useVaultOrders = () => {
  * rendering without a current vault when the last one goes.
  */
 export const useDeleteVaultMutation = (
-  options?: UseMutationOptions<void, Error, string>
+  options?: Omit<UseMutationOptions<void, Error, string>, 'mutationFn'>
 ) => {
   const { deleteVault } = useCore()
   const refetchQueries = useRefetchQueries()
 
   return useMutation({
-    mutationFn: vaultId => deleteVault(vaultId),
     ...options,
+    mutationFn: vaultId => deleteVault(vaultId),
     onSuccess: async (...args) => {
       await options?.onSuccess?.(...args)
       await refetchQueries([StorageKey.vaults], [StorageKey.vaultsCoins])
