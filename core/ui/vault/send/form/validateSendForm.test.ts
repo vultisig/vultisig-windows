@@ -313,12 +313,29 @@ describe('validateSendReceiver', () => {
     ).toBeUndefined()
   })
 
+  // The Incinerator is off-curve, so the wallet-recipient check rejects it.
+  // The burn reason must still win over the generic format error.
+  it('names the Solana Incinerator even though it fails the recipient check', () => {
+    vi.mocked(isValidRecipient).mockReturnValue(false)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress: '1nc1nerator11111111111111111111111111111111',
+        senderAddress: 'sender',
+        chain: Chain.Solana,
+        walletCore,
+        t,
+      })
+    ).toMatch(/^dangerous: .*Solana Incinerator/)
+    expect(isValidRecipient).not.toHaveBeenCalled()
+  })
+
   it('reports the format error, not the burn reason, for a malformed burn lookalike', () => {
     vi.mocked(isValidRecipient).mockReturnValue(false)
 
     expect(
       validateSendReceiver({
-        receiverAddress: '0x0000000000000000000000000000000000000000',
+        receiverAddress: '0x000000000000000000000000000000000000000',
         senderAddress: 'sender',
         chain: Chain.Ethereum,
         walletCore,

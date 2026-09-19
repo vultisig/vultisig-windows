@@ -41,24 +41,26 @@ export const validateSendReceiver = ({
     return t('send_receiver_address_same_as_sender')
   }
 
-  if (!isValidRecipient({ address: receiverAddress, chain, walletCore })) {
-    return t('send_invalid_receiver_address_with_hint', {
-      error: t('send_invalid_receiver_address'),
-      hint: getReceiverAddressFormatHint({ chain, senderAddress, t }),
-    })
-  }
-
-  // A well-formed address can still be a known burn / program destination.
-  // The SDK refuses to build the keysign payload for these, but by then the
-  // user is on the Continue button; naming it here keeps the reason next to
-  // the field that needs fixing. Same lists the SDK uses: EVM by shape, the
-  // rest keyed by chain.
+  // Known burn / program destinations are named before format validation:
+  // some of them (the Solana Incinerator is off-curve) would otherwise fail
+  // the wallet-recipient check and surface as a generic format error. The SDK
+  // refuses to build the keysign payload for these too, but by then the user
+  // is on the Continue button; naming it here keeps the reason next to the
+  // field that needs fixing. Same lists the SDK uses: EVM by shape, the rest
+  // keyed by chain.
   const dangerousReason =
     getEvmDangerousReason(receiverAddress) ??
     getChainDangerousReason(chain, receiverAddress)
 
   if (dangerousReason) {
     return t('send_receiver_dangerous_address', { reason: dangerousReason })
+  }
+
+  if (!isValidRecipient({ address: receiverAddress, chain, walletCore })) {
+    return t('send_invalid_receiver_address_with_hint', {
+      error: t('send_invalid_receiver_address'),
+      hint: getReceiverAddressFormatHint({ chain, senderAddress, t }),
+    })
   }
 }
 
