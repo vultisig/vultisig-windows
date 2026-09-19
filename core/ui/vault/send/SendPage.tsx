@@ -1,4 +1,3 @@
-import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
@@ -11,6 +10,11 @@ import { SendVerify } from './verify/SendVerify'
 
 const sendSteps = ['form', 'verify'] as const
 
+/**
+ * The send flow: the form, and the review sheet that opens over it. The form
+ * stays mounted underneath the sheet so closing the review lands back on the
+ * fields exactly as they were left.
+ */
 export const SendPage = () => {
   const { goBack } = useCore()
   const [{ address, skipToVerify }] = useCoreViewState<'send'>()
@@ -25,11 +29,8 @@ export const SendPage = () => {
     <SendFormFieldsStateProvider>
       <SendReceiverProvider initialValue={address ?? ''}>
         <SendReceiverLabelProvider>
-          <Match
-            value={step}
-            form={() => <SendForm onFinish={toNextStep} />}
-            verify={() => <SendVerify onBack={toPreviousStep} />}
-          />
+          <SendForm onFinish={toNextStep} />
+          {step === 'verify' && <SendVerify onBack={toPreviousStep} />}
         </SendReceiverLabelProvider>
       </SendReceiverProvider>
     </SendFormFieldsStateProvider>

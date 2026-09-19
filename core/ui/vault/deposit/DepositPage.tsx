@@ -2,8 +2,8 @@ import {
   useForgetSolanaMoveStakeDestinationsMutation,
   useSetSolanaMoveStakeDestinationMutation,
 } from '@core/ui/storage/solanaMoveStakeDestinations'
-import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { attempt } from '@vultisig/lib-utils/attempt'
+import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
 import { DepositForm } from './DepositForm'
@@ -13,9 +13,10 @@ import { useDepositCoin } from './providers/DepositCoinProvider'
 import { DepositDataProvider } from './state/data'
 
 /**
- * Deposit flow: the action form, then the verify step that starts the keysign.
- * Solana move-stake also has to remember its destination validator across the
- * two steps of the move, which happen days apart (see `onSubmit`).
+ * Deposit flow: the action form, then the review sheet — over the form, which
+ * stays mounted — that starts the keysign. Solana move-stake also has to
+ * remember its destination validator across the two steps of the move, which
+ * happen days apart (see `onSubmit`).
  */
 export const DepositPage = () => {
   const [action] = useDepositAction()
@@ -24,6 +25,7 @@ export const DepositPage = () => {
     useSetSolanaMoveStakeDestinationMutation()
   const { mutateAsync: forgetMoveDestinations } =
     useForgetSolanaMoveStakeDestinationsMutation()
+  const [submittedData, setSubmittedData] = useState<FieldValues | null>(null)
 
   // A Solana move deactivates the stake account now and re-delegates it only
   // after the ~1-epoch cooldown, so the destination picked on the Move step has
@@ -51,23 +53,18 @@ export const DepositPage = () => {
     if (action === 'solana_unstake') {
       await attempt(() => forgetMoveDestinations([stakeAccount]))
     }
+
+    setSubmittedData(data)
   }
 
   return (
-    <ValueTransfer<FieldValues>
-      from={({ onFinish }) => (
-        <DepositForm
-          onSubmit={async data => {
-            await onSubmit(data)
-            onFinish(data)
-          }}
-        />
-      )}
-      to={({ value, onBack }) => (
-        <DepositDataProvider value={value}>
-          <DepositVerify onBack={onBack} />
+    <>
+      <DepositForm onSubmit={onSubmit} />
+      {submittedData && (
+        <DepositDataProvider value={submittedData}>
+          <DepositVerify onBack={() => setSubmittedData(null)} />
         </DepositDataProvider>
       )}
-    />
+    </>
   )
 }

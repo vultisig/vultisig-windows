@@ -8,6 +8,8 @@ import { Query } from '@lib/ui/query/Query'
 
 type BlockaidTxScanStatusProps = {
   value: Query<BlockaidTxScanResult | undefined>
+  /** See {@link BlockaidTxValidationResult}. */
+  withOverlay?: boolean
 }
 
 /**
@@ -15,10 +17,15 @@ type BlockaidTxScanStatusProps = {
  * status UI. Shared by every screen that surfaces the scan so the banner stays
  * identical across the initiator and joiner flows.
  */
-export const BlockaidTxScanStatus = ({ value }: BlockaidTxScanStatusProps) => (
+export const BlockaidTxScanStatus = ({
+  value,
+  withOverlay,
+}: BlockaidTxScanStatusProps) => (
   <MatchQuery
     value={value}
-    success={result => <BlockaidTxValidationResult value={result} />}
+    success={result => (
+      <BlockaidTxValidationResult value={result} withOverlay={withOverlay} />
+    )}
     pending={() => <BlockaidScanning />}
     error={() => <BlockaidNoScanStatus entity="tx" />}
     inactive={() => <BlockaidScanStatusContainer />}

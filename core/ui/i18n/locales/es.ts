@@ -2003,4 +2003,10 @@ export const es = {
   enable_ton_w5_wallet_description:
     'Utilice el contrato W5 (v5r1) en lugar del V4R2 al derivar las direcciones TON de esta bóveda. Esto cambia la dirección que utiliza la billetera, y cada contrato es una dirección independiente con su propio saldo; no transfiere fondos, por lo que cualquier saldo en la otra dirección permanece allí hasta que usted lo envíe.',
   max_network_fee: 'Tarifa máxima de red',
+  review_not_enough_funds:
+    'Parece que tu bóveda no tiene fondos suficientes para esta transacción. Ajusta la cantidad e inténtalo de nuevo.',
+  risk_level: {
+    medium: 'Medio',
+    high: 'Alto',
+  },
 }
