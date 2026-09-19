@@ -3,7 +3,11 @@ import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+} from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
@@ -142,16 +146,27 @@ export const useVaultOrders = () => {
   return useMemo(() => vaults.map(v => v.order), [vaults])
 }
 
-export const useDeleteVaultMutation = () => {
+/**
+ * Deletes a vault from storage, then refreshes the vault list. The caller's
+ * `onSuccess` runs before that refresh, not after it: once the list no longer
+ * has the deleted vault, another vault becomes current and the tree under
+ * `RootCurrentVaultProvider` is withheld until its shares are read, so a
+ * screen that waited for the refreshed list to leave would be torn down
+ * before it could (#4969). Leaving first also keeps the screen from ever
+ * rendering without a current vault when the last one goes.
+ */
+export const useDeleteVaultMutation = (
+  options?: UseMutationOptions<void, Error, string>
+) => {
   const { deleteVault } = useCore()
   const refetchQueries = useRefetchQueries()
 
-  const mutationFn: DeleteVaultFunction = async input => {
-    await deleteVault(input)
-    await refetchQueries([StorageKey.vaults], [StorageKey.vaultsCoins])
-  }
-
   return useMutation({
-    mutationFn,
+    mutationFn: vaultId => deleteVault(vaultId),
+    ...options,
+    onSuccess: async (...args) => {
+      await options?.onSuccess?.(...args)
+      await refetchQueries([StorageKey.vaults], [StorageKey.vaultsCoins])
+    },
   })
 }
