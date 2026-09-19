@@ -862,6 +862,8 @@ export const es = {
   send_overview: 'Enviar descripción general',
   send_receiver_address_same_as_sender:
     'La dirección del receptor no puede ser la misma que la dirección del remitente',
+  send_receiver_dangerous_address:
+    'Esta dirección no puede recibir fondos. Es un {{reason}}.',
   send_terms_0: 'Estoy enviando a la dirección correcta',
   send_terms_1: 'La cantidad es correcta',
   send_to: 'Enviar a',

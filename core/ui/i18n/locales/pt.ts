@@ -858,6 +858,8 @@ export const pt = {
   send_overview: 'Enviar visão geral',
   send_receiver_address_same_as_sender:
     'O endereço do destinatário não pode ser o mesmo que o endereço do remetente.',
+  send_receiver_dangerous_address:
+    'Este endereço não pode receber fundos. É um {{reason}}.',
   send_terms_0: 'Estou enviando para o endereço correto.',
   send_terms_1: 'O valor está correto.',
   send_to: 'Enviar para',

@@ -867,6 +867,8 @@ export const de = {
   send_overview: 'Übersicht senden',
   send_receiver_address_same_as_sender:
     'Die Empfängeradresse darf nicht mit der Absenderadresse übereinstimmen.',
+  send_receiver_dangerous_address:
+    'Diese Adresse kann keine Gelder empfangen. Sie ist ein {{reason}}.',
   send_terms_0: 'Ich sende an die richtige Adresse',
   send_terms_1: 'Der Betrag stimmt.',
   send_to: 'Senden an',
