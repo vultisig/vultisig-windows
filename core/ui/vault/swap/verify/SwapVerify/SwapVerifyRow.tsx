@@ -1,4 +1,3 @@
-import { SwapFeeRowRenderer } from '@core/ui/vault/swap/form/info/swapFeeRow'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -37,9 +36,4 @@ export const SwapVerifyRow = ({ label, value }: SwapVerifyRowProps) => (
       {value}
     </Value>
   </Container>
-)
-
-/** {@link SwapVerifyRow} in the shape the shared swap fee rows render through. */
-export const renderSwapVerifyRow: SwapFeeRowRenderer = ({ label, value }) => (
-  <SwapVerifyRow label={label} value={value} />
 )
