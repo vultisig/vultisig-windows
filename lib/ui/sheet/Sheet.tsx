@@ -22,7 +22,7 @@ const headerControlSize = 32
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 1000;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: flex-end;
