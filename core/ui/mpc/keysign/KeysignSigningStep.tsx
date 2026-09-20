@@ -30,6 +30,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { TonBroadcastRejectedError } from '@vultisig/core-chain/chains/ton/failure'
+import { toSolanaBlockhashExpiredError } from '@vultisig/core-chain/tx/broadcast/solanaBlockhashExpired'
 import { getKeysignLimitSwapCancel } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapCancel'
 import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
@@ -314,6 +315,22 @@ export const KeysignSigningStep = ({
         // as an on-chain failure, not a device/connection timeout. The raw RPC
         // reason stays available under "Show exact error".
         if (error instanceof BroadcastError) {
+          // The signed bytes outlived their Solana blockhash before any node
+          // confirmed them. Nothing was rejected on-chain and nothing landed;
+          // signing again (which fetches a fresh blockhash) is the only fix,
+          // so say that instead of the generic network-rejection copy.
+          const blockhashExpiry = toSolanaBlockhashExpiredError(error.cause)
+          if (blockhashExpiry) {
+            return (
+              <FullPageFlowErrorState
+                variant="error"
+                error={blockhashExpiry}
+                title={t('solana_blockhash_expired')}
+                description={t('solana_blockhash_expired_description')}
+              />
+            )
+          }
+
           // A TON wallet contract refusing the message has a known cause and a
           // known fix (a replayed seqno, an expired deadline from a drifted
           // clock, …): lead with that, and keep toncenter's raw text behind

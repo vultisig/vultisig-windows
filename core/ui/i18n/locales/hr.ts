@@ -1966,6 +1966,10 @@ export const hr = {
   token_verification_scam: 'PRIJEVARA',
   token_verification_scam_hint:
     'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
+  solana_blockhash_expired:
+    'Transakcija je istekla prije nego što je potvrđena',
+  solana_blockhash_expired_description:
+    'Vaši su uređaji potpisali transakciju, ali Solana mreža je nije potvrdila prije isteka blockhash-a, tako da nikada nije prošla. Potpišite je ponovno da biste je poslali s novim blockhash-om.',
   no_tokens_selected: 'Nije odabran nijedan token',
   no_tokens_selected_description:
     'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',

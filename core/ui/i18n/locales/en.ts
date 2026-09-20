@@ -114,6 +114,9 @@ export const en = {
   broadcast_error: 'The network rejected this transaction',
   broadcast_error_description:
     'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
+  solana_blockhash_expired: 'Transaction expired before it was confirmed',
+  solana_blockhash_expired_description:
+    'Your devices signed the transaction, but the Solana network did not confirm it before its blockhash expired, so it never went through. Sign it again to send it with a fresh blockhash.',
   broadcast_refused: 'Broadcast not confirmed',
   broadcast_refused_description:
     'Your devices signed this transaction, but this device declined to broadcast it after a final safety check. Another signing device may have broadcast it anyway — watch the status below and confirm the outcome before signing again.',
