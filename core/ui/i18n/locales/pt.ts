@@ -2008,4 +2008,7 @@ export const pt = {
   enable_ton_w5_wallet_description:
     'Use o contrato W5 (v5r1) em vez do V4R2 ao derivar os endereços TON deste cofre. Isso altera o endereço usado pela carteira, e cada contrato é um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
   max_network_fee: 'Taxa máxima de rede',
+  swap_failed_refunded: 'Reembolsado pelo provedor de troca.',
+  swap_failed_refunded_description:
+    'A troca não pôde ser concluída, portanto o provedor devolveu seus fundos para sua carteira em vez do ativo solicitado. Nenhuma transação foi realizada. Tente novamente para obter uma nova cotação.',
 }

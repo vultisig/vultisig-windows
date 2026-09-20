@@ -2,15 +2,17 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { decodeErrorResult, Hex, isHex, slice, toFunctionSelector } from 'viem'
 
 /**
- * Why a swap the chain reverted failed, in terms history can explain. Only
- * reasons the user can act on are modelled — every other revert stays a plain
- * failure rather than being given an explanation it does not have.
+ * Why a swap failed, in terms history can explain. Only reasons the user can
+ * act on are modelled — every other failure stays plain rather than being
+ * given an explanation it does not have. `slippage` is read off an EVM
+ * revert; `refunded` is the provider's own verdict on a native swap whose
+ * deposit confirmed but which could not be filled.
  *
  * Listed rather than declared as a union so a stored value can be checked
  * against it: records outlive the build that wrote them, and one written by a
  * newer build carries a reason this build has no wording for.
  */
-export const swapFailureReasons = ['slippage'] as const
+export const swapFailureReasons = ['slippage', 'refunded'] as const
 
 /** A recognised swap failure, narrow enough that history has wording for it. */
 export type SwapFailureReason = (typeof swapFailureReasons)[number]

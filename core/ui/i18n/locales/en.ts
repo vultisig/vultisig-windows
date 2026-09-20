@@ -1315,6 +1315,9 @@ export const en = {
   swap_same_asset: 'Cannot swap between the same asset',
   swap_all_providers_failed:
     'Swap providers are temporarily unavailable. Please try again in a moment.',
+  swap_failed_refunded: 'Refunded by the swap provider',
+  swap_failed_refunded_description:
+    'The swap could not be completed, so the provider sent your funds back to your wallet instead of the asset you asked for. Nothing was exchanged. Try again to get a fresh quote.',
   swap_failed_slippage: 'Price moved past slippage tolerance',
   swap_failed_slippage_description:
     'The price moved before this swap landed, so it would have paid out less than your slippage tolerance allowed and the network reverted it. Raise your slippage tolerance or try again.',

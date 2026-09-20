@@ -2013,4 +2013,7 @@ export const it = {
   enable_ton_w5_wallet_description:
     "Utilizza il contratto W5 (v5r1) anziché V4R2 quando derivi gli indirizzi TON di questo vault. Questo modifica l'indirizzo utilizzato dal wallet e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
   max_network_fee: 'Tariffa massima di rete',
+  swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
+  swap_failed_refunded_description:
+    "L'operazione di scambio non è andata a buon fine, pertanto il fornitore ha riaccreditato i fondi sul tuo portafoglio anziché accreditare l'asset richiesto. Non è stato effettuato alcuno scambio. Riprova per ottenere un nuovo preventivo.",
 }

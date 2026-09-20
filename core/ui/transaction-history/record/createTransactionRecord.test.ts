@@ -209,6 +209,35 @@ describe('createTransactionRecord', () => {
     expect(record.chain).toBe(Chain.THORChain)
   })
 
+  // A native swap's deposit confirms long before the swap resolves, so the
+  // record names the provider the poller asks whether it paid out or refunded.
+  // An aggregator swap settles inside its own transaction and names none.
+  it('names the arrival provider for a native swap only', () => {
+    const native = createTransactionRecord({
+      payload: keysignPayload({
+        coin: commRuneCoin(),
+        swapPayload: thorchainSwap(),
+      }),
+      txHash: '0xbb',
+      vaultId: 'vault-1',
+    })
+    const general = createTransactionRecord({
+      payload: keysignPayload({
+        coin: commEthCoin(),
+        swapPayload: oneInchSwap('1inch'),
+      }),
+      txHash: '0xdd',
+      vaultId: 'vault-1',
+    })
+
+    expect(native.type === 'swap' && native.data.arrivalProvider).toBe(
+      'thorchain'
+    )
+    expect(
+      general.type === 'swap' && general.data.arrivalProvider
+    ).toBeUndefined()
+  })
+
   it('uses source chain block explorer for non-swap send', () => {
     const txHash =
       '0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'
