@@ -32,6 +32,7 @@ import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackingUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -49,6 +50,7 @@ import { useTxStatusQuery } from '../../../../chain/tx/status/useTxStatusQuery'
 import { useOptionalSwapQuote } from '../../state/swapQuote'
 import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
+import { TxVaultSourceLabel } from '../components/TxVaultSourceLabel'
 import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
 import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
@@ -143,9 +145,11 @@ export const SwapKeysignTxOverview = ({
   )
 
   const mainTxHash = getLastItem(txHashes)
+  const lastValidBlockHeight = getKeysignLastValidBlockHeight(value)
   const txStatusQuery = useTxStatusQuery({
     chain: blockExplorerChain,
     hash: mainTxHash,
+    lastValidBlockHeight,
   })
   const receipt = txStatusQuery.data?.receipt
 
@@ -163,6 +167,7 @@ export const SwapKeysignTxOverview = ({
       <TxStatusTracker
         chain={blockExplorerChain}
         hash={getLastItem(txHashes)}
+        lastValidBlockHeight={lastValidBlockHeight}
       />
       <VStack alignItems="center" gap={8} fullWidth>
         <VStack gap={8} fullWidth>
@@ -226,17 +231,20 @@ export const SwapKeysignTxOverview = ({
               </Text>
             </HStack>
           </HStack>
-          <HStack fullWidth justifyContent="space-between" alignItems="center">
-            <Text weight="500" size={14} color="shy">
+          <HStack
+            fullWidth
+            justifyContent="space-between"
+            alignItems="center"
+            gap={8}
+            wrap="nowrap"
+          >
+            <RowTitle weight="500" size={14} color="shy">
               {t('from')}
-            </Text>
-
-            <Text weight={500} size={14} color="contrast">
-              {vault.name}{' '}
-              <Text cropped as="span" color="shy">
-                ({truncateId(fromCoin.address)})
-              </Text>
-            </Text>
+            </RowTitle>
+            <TxVaultSourceLabel
+              name={vault.name}
+              address={`(${truncateId(fromCoin.address)})`}
+            />
           </HStack>
           {toCoin && (
             <HStack
@@ -312,6 +320,10 @@ export const SwapKeysignTxOverview = ({
 const AddressWrapper = styled(Text)`
   overflow: hidden;
   text-align: right;
+`
+
+const RowTitle = styled(Text)`
+  flex-shrink: 0;
 `
 
 const SwapInfoWrapper = styled(SeparatedByLine)`

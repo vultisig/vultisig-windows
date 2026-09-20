@@ -861,6 +861,8 @@ export const it = {
   send_overview: 'Invia panoramica',
   send_receiver_address_same_as_sender:
     "L'indirizzo del destinatario non può essere uguale all'indirizzo del mittente",
+  send_receiver_dangerous_address:
+    'Questo indirizzo non può ricevere fondi. È un {{reason}}.',
   send_terms_0: "Sto inviando all'indirizzo giusto",
   send_terms_1: "L'importo è corretto",
   send_to: 'Invia a',
@@ -2000,12 +2002,17 @@ export const it = {
   token_verification_scam: 'TRUFFA',
   token_verification_scam_hint:
     'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
+  solana_blockhash_expired:
+    'La transazione è scaduta prima di essere confermata.',
+  solana_blockhash_expired_description:
+    "I tuoi dispositivi hanno firmato la transazione, ma la rete Solana non l'ha confermata prima della scadenza del suo blockhash, quindi non è andata a buon fine. Firmala di nuovo per inviarla con un blockhash aggiornato.",
   no_tokens_selected: 'Nessun token selezionato',
   no_tokens_selected_description:
     'Hai disabilitato tutti i token. Assicurati che il token che stai cercando sia abilitato.',
   enable_ton_w5_wallet: 'Utilizza il wallet W5 TON',
   enable_ton_w5_wallet_description:
     "Utilizza il contratto W5 (v5r1) anziché V4R2 quando derivi gli indirizzi TON di questo vault. Questo modifica l'indirizzo utilizzato dal wallet e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
+  max_network_fee: 'Tariffa massima di rete',
   substrate_account_will_be_reaped:
     'Questo trasferimento svuota il conto del mittente: qualsiasi somma rimasta al di sotto del deposito minimo necessario viene distrutta e il conto viene disattivato.',
 }

@@ -3,6 +3,7 @@ import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
 
 import { TransactionRecord } from '../core'
+import { getRecordLastValidBlockHeight } from './getRecordLastValidBlockHeight'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
 import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpdate'
 
@@ -42,7 +43,11 @@ export const useHealFailedTransactions = (records: TransactionRecord[]) => {
 
     candidates.forEach(async record => {
       const result = await attempt(() =>
-        getTxStatus({ chain: record.chain, hash: record.txHash })
+        getTxStatus({
+          chain: record.chain,
+          hash: record.txHash,
+          lastValidBlockHeight: getRecordLastValidBlockHeight(record),
+        })
       )
 
       // A failed status lookup says nothing about the tx itself — leave the

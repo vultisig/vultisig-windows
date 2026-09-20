@@ -114,6 +114,9 @@ export const en = {
   broadcast_error: 'The network rejected this transaction',
   broadcast_error_description:
     'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
+  solana_blockhash_expired: 'Transaction expired before it was confirmed',
+  solana_blockhash_expired_description:
+    'Your devices signed the transaction, but the Solana network did not confirm it before its blockhash expired, so it never went through. Sign it again to send it with a fresh blockhash.',
   broadcast_refused: 'Broadcast not confirmed',
   broadcast_refused_description:
     'Your devices signed this transaction, but this device declined to broadcast it after a final safety check. Another signing device may have broadcast it anyway — watch the status below and confirm the outcome before signing again.',
@@ -657,6 +660,7 @@ export const en = {
   max: 'Max',
   max_4_characters: 'Max 4 characters',
   max_supply: 'Max Supply',
+  max_network_fee: 'Max. Network Fee',
   max_total_fee: 'Max. Total Fee',
   memo: 'Memo',
   message: 'Message',
@@ -1057,6 +1061,8 @@ export const en = {
   send_overview: 'Send Overview',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
+  send_receiver_dangerous_address:
+    'This address cannot receive funds. Reason: {{reason}}.',
   send_receiver_format_hint_cardano:
     'Enter a Cardano address that starts with addr1.',
   send_receiver_format_hint_cosmos:

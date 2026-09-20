@@ -11,6 +11,7 @@ import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getK
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackingUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { TransactionType } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -114,6 +115,19 @@ const createSignedLimitOrderIdentity = ({
   }
 }
 
+/**
+ * The Solana blockhash deadline as a spreadable fragment: present on a Solana
+ * payload that carries one, empty otherwise, so no record stores an explicit
+ * undefined.
+ */
+const solanaDeadline = (
+  payload: KeysignPayload
+): Pick<SendTransactionData, 'lastValidBlockHeight'> => {
+  const lastValidBlockHeight = getKeysignLastValidBlockHeight(payload)
+
+  return lastValidBlockHeight === undefined ? {} : { lastValidBlockHeight }
+}
+
 const createSendData = (payload: KeysignPayload): SendTransactionData => {
   const coin = getKeysignCoin(payload)
   const isTronClaim = isTronWithdrawExpireUnfreezePayload({
@@ -133,6 +147,7 @@ const createSendData = (payload: KeysignPayload): SendTransactionData => {
     memo: isTronClaim ? undefined : payload.memo || undefined,
     messageTypeUrl: getPrimaryCosmosMessageTypeUrl(payload),
     operation: isTronClaim ? 'tronWithdrawExpireUnfreeze' : undefined,
+    ...solanaDeadline(payload),
   }
 }
 
@@ -234,6 +249,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         toDecimals: to.decimals,
         provider,
         route: `${from.token} → ${to.token}`,
+        ...solanaDeadline(payload),
       }
     },
     general: (general): SwapTransactionData => {
@@ -268,6 +284,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         provider,
         route: `${from.token} → ${to.token}`,
         ...(cowSwapData ? { cowSwapOrderApiBase: cowSwapData.apiBase } : {}),
+        ...solanaDeadline(payload),
       }
     },
   })

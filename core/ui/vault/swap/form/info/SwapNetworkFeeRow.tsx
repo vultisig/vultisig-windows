@@ -7,6 +7,7 @@ import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
 import { SwapFeeRowRenderer } from './swapFeeRow'
+import { getSwapNetworkFeeLabelKey } from './swapNetworkFeeLabel'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
 type SwapNetworkFeeRowProps = {
@@ -36,7 +37,7 @@ export const SwapNetworkFeeRow = ({
   return (
     <>
       {renderRow({
-        label: t('network_fee'),
+        label: t(getSwapNetworkFeeLabelKey(fee.chain)),
         value:
           layout === 'stacked' ? (
             <VStack alignItems="end" gap={2}>

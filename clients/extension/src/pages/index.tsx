@@ -21,6 +21,7 @@ import {
   usePopNavigationHistory,
 } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PrefetchViews } from '@lib/ui/navigation/PrefetchViews'
+import { extensionPopupWidth } from '@lib/ui/responsive/mediaQuery'
 import { createGlobalStyle, css } from 'styled-components'
 
 const isPopup = isPopupView()
@@ -32,7 +33,7 @@ const prefetchPriority: (keyof typeof prefetchLoaders)[] = [
   'mpcEngine',
   ...viewPrefetchPriority,
 ]
-const popupWidth = 360
+const popupWidth = extensionPopupWidth
 const popupHeight = 600
 
 const ExtensionGlobalStyle = createGlobalStyle`
@@ -57,7 +58,7 @@ const ExtensionGlobalStyle = createGlobalStyle`
     min-height: ${
       isPopup ? `${popupHeight}px` : `min(${popupHeight}px, 100dvh)`
     };
-    min-width: ${isPopup ? `${popupWidth}px` : 'min(480px, 100vw)'};
+    min-width: ${isPopup ? `${popupWidth}px` : `min(${popupWidth}px, 100vw)`};
     overflow: hidden;
 
     ${

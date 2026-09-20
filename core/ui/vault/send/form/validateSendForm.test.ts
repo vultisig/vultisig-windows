@@ -19,12 +19,13 @@ vi.mock(
   })
 )
 
-// Minimal interpolating stub so the composed error+hint message is exercised.
+// Minimal interpolating stub so composed messages are exercised.
+const templates: Record<string, string> = {
+  send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
+  send_receiver_dangerous_address: 'dangerous: {{reason}}',
+}
 const t = ((key: string, options?: Record<string, unknown>) => {
-  const template =
-    key === 'send_invalid_receiver_address_with_hint'
-      ? '{{error}}. {{hint}}'
-      : key
+  const template = templates[key] ?? key
   if (!options) return template
   return template.replace(/{{(\w+)}}/g, (_, name) =>
     String(options[name] ?? `{{${name}}}`)
@@ -258,6 +259,89 @@ describe('validateSendReceiver', () => {
         t: cosmosT,
       })
     ).toBe('send_invalid_receiver_address. starts with thor')
+  })
+
+  // Format-valid but unspendable: the SDK's keysign build refuses these too,
+  // but the field-level message is what the user sees while typing.
+  it.each([
+    [Chain.Solana, '11111111111111111111111111111111', 'Solana System Program'],
+    [
+      Chain.Solana,
+      '1nc1nerator11111111111111111111111111111111',
+      'Solana Incinerator',
+    ],
+    [
+      Chain.Ethereum,
+      '0x0000000000000000000000000000000000000000',
+      'zero address',
+    ],
+    [
+      Chain.Arbitrum,
+      '0x000000000000000000000000000000000000dEaD',
+      'dead address',
+    ],
+    [Chain.Bitcoin, '1BitcoinEaterAddressDontSendf59kuE', 'Bitcoin eater'],
+    [Chain.Ripple, 'rrrrrrrrrrrrrrrrrrrrrhoLvTp', 'black-hole'],
+  ])(
+    'names the reason for a burn address on %s',
+    (chain, receiverAddress, reason) => {
+      vi.mocked(isValidRecipient).mockReturnValue(true)
+
+      expect(
+        validateSendReceiver({
+          receiverAddress,
+          senderAddress: 'sender',
+          chain,
+          walletCore,
+          t,
+        })
+      ).toMatch(new RegExp(`^dangerous: .*${reason}`))
+    }
+  )
+
+  it('does not treat a Solana program id as a burn address on another chain', () => {
+    vi.mocked(isValidRecipient).mockReturnValue(true)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress: '11111111111111111111111111111111',
+        senderAddress: 'sender',
+        chain: Chain.Ethereum,
+        walletCore,
+        t,
+      })
+    ).toBeUndefined()
+  })
+
+  // The Incinerator is off-curve, so the wallet-recipient check rejects it.
+  // The burn reason must still win over the generic format error.
+  it('names the Solana Incinerator even though it fails the recipient check', () => {
+    vi.mocked(isValidRecipient).mockReturnValue(false)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress: '1nc1nerator11111111111111111111111111111111',
+        senderAddress: 'sender',
+        chain: Chain.Solana,
+        walletCore,
+        t,
+      })
+    ).toMatch(/^dangerous: .*Solana Incinerator/)
+    expect(isValidRecipient).not.toHaveBeenCalled()
+  })
+
+  it('reports the format error, not the burn reason, for a malformed burn lookalike', () => {
+    vi.mocked(isValidRecipient).mockReturnValue(false)
+
+    expect(
+      validateSendReceiver({
+        receiverAddress: '0x000000000000000000000000000000000000000',
+        senderAddress: 'sender',
+        chain: Chain.Ethereum,
+        walletCore,
+        t,
+      })
+    ).toContain('send_invalid_receiver_address')
   })
 
   it('resolves a format hint for every acceptance-criteria chain family', () => {

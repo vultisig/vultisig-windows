@@ -7,6 +7,7 @@ import {
   getCowSwapOrderApiBase,
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
+import { getRecordLastValidBlockHeight } from './getRecordLastValidBlockHeight'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
 import { isChainPollable } from './pendingRecord'
 import { getStatusPollingInterval } from './staleTransaction'
@@ -58,6 +59,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
       const result = await getTxStatus({
         chain: current.chain,
         hash: current.txHash,
+        lastValidBlockHeight: getRecordLastValidBlockHeight(current),
       })
 
       const update = getTxStatusRecordUpdate({ record: current, result })

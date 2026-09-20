@@ -794,6 +794,7 @@ export const zh = {
   send_invalid_receiver_address: '请输入有效的收件人地址',
   send_overview: '发送概览',
   send_receiver_address_same_as_sender: '接收地址不能与发送地址相同',
+  send_receiver_dangerous_address: '此地址无法接收资金。它是 {{reason}}。',
   send_terms_0: '我寄到了正确的地址。',
   send_terms_1: '金额正确',
   send_to: '发送至',
@@ -1833,12 +1834,16 @@ export const zh = {
   token_verification_scam: '骗局',
   token_verification_scam_hint:
     '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
+  solana_blockhash_expired: '交易在确认前已过期',
+  solana_blockhash_expired_description:
+    '您的设备已对交易进行签名，但 Solana 网络在区块哈希过期前未确认该交易，因此交易未成功。请重新签名以使用新的区块哈希发送该交易。',
   no_tokens_selected: '未选择代币',
   no_tokens_selected_description:
     '您已禁用所有代币。确保您要查找的代币已启用。',
   enable_ton_w5_wallet: '使用TON W5 钱包',
   enable_ton_w5_wallet_description:
     '生成此金库的TON地址时，请使用 W5 (v5r1) 合约代替 V4R2 合约。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有各自的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',
+  max_network_fee: '最高网络费用',
   substrate_account_will_be_reaped:
     '此次转账会清空汇款人的账户：低于最低存款额的剩余资金将被销毁，账户将被停用。',
 }

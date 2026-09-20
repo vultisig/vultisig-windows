@@ -2,6 +2,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BlockaidLogo } from '@core/ui/chain/security/blockaid/BlockaidLogo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { TxVaultSourceLabel } from '@core/ui/mpc/keysign/tx/components/TxVaultSourceLabel'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { TransactionOverviewAmount } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewAmount'
 import { TransactionOverviewItem } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewItem'
@@ -86,14 +87,10 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
           <TransactionOverviewItem
             label={t('from')}
             value={
-              <HStack alignItems="center" gap={8}>
-                <Text as="span" size={14} weight={600}>
-                  {vaultName}
-                </Text>
-                <Text as="span" color="shy" size={14} weight={500}>
-                  ({formatWalletAddress(vaultAddress)})
-                </Text>
-              </HStack>
+              <TxVaultSourceLabel
+                name={vaultName}
+                address={`(${formatWalletAddress(vaultAddress)})`}
+              />
             }
           />
           <TransactionOverviewItem

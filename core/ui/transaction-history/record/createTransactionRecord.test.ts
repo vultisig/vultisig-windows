@@ -7,6 +7,7 @@ import {
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import {
   RippleSpecificSchema,
+  SolanaSpecificSchema,
   TransactionType,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
@@ -100,7 +101,50 @@ const keysignPayload = ({
     swapPayload,
   })
 
+const solanaSendPayload = (lastValidBlockHeight?: bigint): KeysignPayload =>
+  create(KeysignPayloadSchema, {
+    coin: create(CoinSchema, {
+      chain: Chain.Solana,
+      ticker: 'SOL',
+      address: '7Zb1h3Z4vYtHk1qSQ9HAtpNQJ4T4r1CqWn2zPnyjF4Lt',
+      decimals: 9,
+      isNativeToken: true,
+    }),
+    toAddress: '9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin',
+    toAmount: '1000000',
+    blockchainSpecific: {
+      case: 'solanaSpecific',
+      value: create(SolanaSpecificSchema, {
+        recentBlockHash: 'blockhash',
+        priorityFee: '0',
+        lastValidBlockHeight,
+      }),
+    },
+  })
+
 describe('createTransactionRecord', () => {
+  it("carries a Solana send's blockhash deadline for the status poll", () => {
+    const record = createTransactionRecord({
+      payload: solanaSendPayload(312_456_789n),
+      txHash: 'solana-signature',
+      vaultId: 'vault-1',
+    })
+
+    expect(record.type).toBe('send')
+    if (record.type !== 'send') return
+    expect(record.data.lastValidBlockHeight).toBe(312_456_789)
+  })
+
+  it('stores no deadline for a Solana payload that predates the field', () => {
+    const record = createTransactionRecord({
+      payload: solanaSendPayload(),
+      txHash: 'solana-signature',
+      vaultId: 'vault-1',
+    })
+
+    expect(record.data).not.toHaveProperty('lastValidBlockHeight')
+  })
+
   it('records a TRON expired-unfreeze as a claim operation without persisting its routing marker', () => {
     const owner = 'TClaimOwner'
     const payload = create(KeysignPayloadSchema, {

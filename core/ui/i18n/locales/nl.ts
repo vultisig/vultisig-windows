@@ -851,6 +851,8 @@ export const nl = {
   send_overview: 'Verzendoverzicht',
   send_receiver_address_same_as_sender:
     'Ontvangeradres kan niet hetzelfde zijn als afzenderadres',
+  send_receiver_dangerous_address:
+    'Dit adres kan geen geld ontvangen. Het is een {{reason}}.',
   send_terms_0: 'Ik verstuur naar het juiste adres',
   send_terms_1: 'Het bedrag klopt',
   send_to: 'Verzenden naar',
@@ -1979,12 +1981,17 @@ export const nl = {
   token_verification_scam: 'SCAM',
   token_verification_scam_hint:
     'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
+  solana_blockhash_expired:
+    'De transactie is verlopen voordat deze bevestigd kon worden.',
+  solana_blockhash_expired_description:
+    'Uw apparaten hebben de transactie ondertekend, maar het Solana-netwerk heeft deze niet bevestigd voordat de blockhash verliep, waardoor de transactie nooit is voltooid. Onderteken de transactie opnieuw om deze met een nieuwe blockhash te verzenden.',
   no_tokens_selected: 'Geen tokens geselecteerd',
   no_tokens_selected_description:
     'Je hebt alle tokens uitgeschakeld. Zorg ervoor dat het token dat je zoekt is ingeschakeld.',
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
+  max_network_fee: 'Maximale netwerkkosten',
   substrate_account_will_be_reaped:
     'Deze overschrijving leegt de rekening van de afzender: alles wat onder het minimale stortingsbedrag overblijft, wordt vernietigd en de rekening wordt gedeactiveerd.',
 }

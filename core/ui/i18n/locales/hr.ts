@@ -855,6 +855,8 @@ export const hr = {
   send_overview: 'Pošalji pregled',
   send_receiver_address_same_as_sender:
     'Adresa primatelja ne može biti ista kao adresa pošiljatelja',
+  send_receiver_dangerous_address:
+    'Ova adresa ne može primati sredstva. To je {{reason}}.',
   send_terms_0: 'Šaljem na pravu adresu',
   send_terms_1: 'Iznos je točan',
   send_to: 'Pošalji',
@@ -1964,12 +1966,17 @@ export const hr = {
   token_verification_scam: 'PRIJEVARA',
   token_verification_scam_hint:
     'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
+  solana_blockhash_expired:
+    'Transakcija je istekla prije nego što je potvrđena',
+  solana_blockhash_expired_description:
+    'Vaši su uređaji potpisali transakciju, ali Solana mreža je nije potvrdila prije isteka blockhash-a, tako da nikada nije prošla. Potpišite je ponovno da biste je poslali s novim blockhash-om.',
   no_tokens_selected: 'Nije odabran nijedan token',
   no_tokens_selected_description:
     'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',
   enable_ton_w5_wallet: 'Koristite TON W5 novčanik',
   enable_ton_w5_wallet_description:
     'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
+  max_network_fee: 'Maks. mrežna naknada',
   substrate_account_will_be_reaped:
     'Ovim transferom se prazni račun pošiljatelja: sve što ostane ispod egzistencijalnog pologa se uništava i račun se deaktivira.',
 }
