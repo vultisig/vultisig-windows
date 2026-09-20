@@ -121,7 +121,7 @@ const CloseButton = styled(UnstyledButton)`
   width: fit-content;
 
   svg {
-    color: ${getColor('foreground')};
-    fill: ${getColor('textShy')};
+    color: ${getColor('textShy')};
+    fill: none;
   }
 `

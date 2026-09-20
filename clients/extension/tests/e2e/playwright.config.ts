@@ -146,6 +146,7 @@ export default defineConfig({
         '**/station-migration.spec.ts',
         '**/storage-preservation.spec.ts',
         '**/search-field.spec.ts',
+        '**/earn-search.spec.ts',
         '**/navigation-design.spec.ts',
         '**/viewport-fit.spec.ts',
         '**/ton-w5-toggle.spec.ts',
