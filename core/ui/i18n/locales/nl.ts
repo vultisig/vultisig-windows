@@ -1994,5 +1994,5 @@ export const nl = {
   max_network_fee: 'Maximale netwerkkosten',
   swap_failed_refunded: 'Terugbetaald door de swapaanbieder',
   swap_failed_refunded_description:
-    'De transactie kon niet worden voltooid, daarom heeft de aanbieder uw geld teruggestuurd naar uw wallet in plaats van de door u gevraagde activa. Er is niets uitgewisseld. Probeer het opnieuw voor een nieuwe offerte.',
+    'De swap kon niet worden voltooid, daarom heeft de aanbieder uw geld teruggestuurd naar uw wallet in plaats van de door u aangevraagde activa. Er is geen swap voltooid. Probeer het opnieuw om een nieuwe offerte te ontvangen.',
 }

@@ -2015,5 +2015,5 @@ export const it = {
   max_network_fee: 'Tariffa massima di rete',
   swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
   swap_failed_refunded_description:
-    "L'operazione di scambio non è andata a buon fine, pertanto il fornitore ha riaccreditato i fondi sul tuo portafoglio anziché accreditare l'asset richiesto. Non è stato effettuato alcuno scambio. Riprova per ottenere un nuovo preventivo.",
+    "Lo scambio non è andato a buon fine, pertanto il fornitore ha riaccreditato i fondi sul tuo portafoglio anziché sull'asset richiesto. Nessuno scambio è stato completato. Riprova per ottenere un nuovo preventivo.",
 }

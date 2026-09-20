@@ -2010,5 +2010,5 @@ export const es = {
   max_network_fee: 'Tarifa máxima de red',
   swap_failed_refunded: 'Reembolsado por el proveedor de intercambio.',
   swap_failed_refunded_description:
-    'El intercambio no pudo completarse, por lo que el proveedor devolvió sus fondos a su billetera en lugar del activo que solicitó. No se realizó ningún intercambio. Inténtelo de nuevo para obtener una nueva cotización.',
+    'No se pudo completar el intercambio, por lo que el proveedor devolvió sus fondos a su billetera en lugar del activo que solicitó. No se realizó ningún intercambio. Inténtelo de nuevo para obtener una nueva cotización.',
 }

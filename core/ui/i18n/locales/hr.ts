@@ -1979,5 +1979,5 @@ export const hr = {
   max_network_fee: 'Maks. mrežna naknada',
   swap_failed_refunded: 'Povrat novca izvršio je pružatelj zamjene',
   swap_failed_refunded_description:
-    'Zamjena nije mogla biti dovršena pa je pružatelj usluga poslao vaša sredstva natrag u vaš novčanik umjesto tražene imovine. Ništa nije zamijenjeno. Pokušajte ponovno kako biste dobili novu ponudu.',
+    'Zamjena nije mogla biti dovršena pa je pružatelj usluga poslao vaša sredstva natrag u vaš novčanik umjesto imovine koju ste tražili. Zamjena nije dovršena. Pokušajte ponovno kako biste dobili novu ponudu.',
 }

@@ -2026,5 +2026,5 @@ export const de = {
   max_network_fee: 'Maximale Netzwerkgebühr',
   swap_failed_refunded: 'Rückerstattung durch den Tauschanbieter',
   swap_failed_refunded_description:
-    'Der Tausch konnte nicht abgeschlossen werden. Daher hat der Anbieter Ihre Gelder an Ihre Wallet zurückgesendet, anstatt Ihnen den gewünschten Vermögenswert zu senden. Es fand kein Tausch statt. Versuchen Sie es erneut, um ein neues Angebot zu erhalten.',
+    'Der Tausch konnte nicht abgeschlossen werden. Daher hat der Anbieter Ihre Gelder an Ihre Wallet zurückgesendet, anstatt Ihnen den gewünschten Vermögenswert zu senden. Es wurde kein Tausch durchgeführt. Versuchen Sie es erneut, um ein neues Angebot zu erhalten.',
 }

@@ -2010,5 +2010,5 @@ export const pt = {
   max_network_fee: 'Taxa máxima de rede',
   swap_failed_refunded: 'Reembolsado pelo provedor de troca.',
   swap_failed_refunded_description:
-    'A troca não pôde ser concluída, portanto o provedor devolveu seus fundos para sua carteira em vez do ativo solicitado. Nenhuma transação foi realizada. Tente novamente para obter uma nova cotação.',
+    'A troca não pôde ser concluída, portanto o provedor devolveu seus fundos para sua carteira em vez do ativo solicitado. Nenhuma troca foi concluída. Tente novamente para obter uma nova cotação.',
 }
