@@ -855,6 +855,8 @@ export const hr = {
   send_overview: 'Pošalji pregled',
   send_receiver_address_same_as_sender:
     'Adresa primatelja ne može biti ista kao adresa pošiljatelja',
+  send_receiver_dangerous_address:
+    'Ova adresa ne može primati sredstva. To je {{reason}}.',
   send_terms_0: 'Šaljem na pravu adresu',
   send_terms_1: 'Iznos je točan',
   send_to: 'Pošalji',

@@ -1056,6 +1056,8 @@ export const en = {
   send_overview: 'Send Overview',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
+  send_receiver_dangerous_address:
+    'This address cannot receive funds. Reason: {{reason}}.',
   send_receiver_format_hint_cardano:
     'Enter a Cardano address that starts with addr1.',
   send_receiver_format_hint_cosmos:

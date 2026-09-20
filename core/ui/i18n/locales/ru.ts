@@ -849,6 +849,8 @@ export const ru = {
   send_overview: 'Обзор отправки',
   send_receiver_address_same_as_sender:
     'Адрес получателя не может совпадать с адресом отправителя',
+  send_receiver_dangerous_address:
+    'Этот адрес не может получать средства. Это {{reason}}.',
   send_terms_0: 'Я отправляю на правильный адрес',
   send_terms_1: 'Сумма указана верно',
   send_to: 'Отправить на',
