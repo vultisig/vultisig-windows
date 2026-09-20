@@ -28,6 +28,11 @@ import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getMaxValue } from '@vultisig/core-chain/amount/getMaxValue'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  areEqualCoins,
+  CoinKey,
+  extractCoinKey,
+} from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
@@ -43,6 +48,11 @@ const suggestions = [0.25, 0.5, 0.75, 1]
 
 export type CurrencyInputMode = 'base' | 'fiat'
 
+type SelectedSuggestion = {
+  coin: CoinKey
+  fraction: number
+}
+
 export const ManageAmountInputField = () => {
   const { t } = useTranslation()
 
@@ -54,11 +64,11 @@ export const ManageAmountInputField = () => {
   // suggestion happens to resolve to the current amount: fee clamping makes
   // several fractions collapse onto the same value (75% and Max on a small
   // native balance), and on an empty balance every one of them is 0n. The
-  // pick only shows while the field still holds the amount it produced, so a
-  // coin switch (which keeps the amount) does not carry a stale highlight.
-  const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(
-    null
-  )
+  // pick is tied to the coin it was made for and only shows while the field
+  // still holds the amount it produced, so a coin switch (which keeps the
+  // amount) does not carry a stale highlight.
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<SelectedSuggestion | null>(null)
 
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
@@ -227,7 +237,10 @@ export const ManageAmountInputField = () => {
                 const handleSuggestionClick = () => {
                   if (balance == null) return
 
-                  setSelectedSuggestion(suggestion)
+                  setSelectedSuggestion({
+                    coin: extractCoinKey(coin),
+                    fraction: suggestion,
+                  })
 
                   if (!isNative) {
                     setValue(suggestionValue)
@@ -250,7 +263,9 @@ export const ManageAmountInputField = () => {
                     onClick={handleSuggestionClick}
                     disabled={!hasBalance}
                     isActive={
-                      selectedSuggestion === suggestion &&
+                      selectedSuggestion !== null &&
+                      selectedSuggestion.fraction === suggestion &&
+                      areEqualCoins(selectedSuggestion.coin, coin) &&
                       value === effectiveAmount
                     }
                   />
