@@ -1992,6 +1992,6 @@ export const nl = {
   enable_ton_w5_wallet_description:
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
   max_network_fee: 'Maximale netwerkkosten',
-  substrate_account_will_be_reaped:
-    'Deze overschrijving leegt de rekening van de afzender: alles wat onder het minimale stortingsbedrag overblijft, wordt vernietigd en de rekening wordt gedeactiveerd.',
+  substrate_account_may_be_reaped:
+    'De afzender heeft deze overschrijving toegestaan om de rekening leeg te halen: als het resterende saldo lager is dan het minimumsaldo, wordt het resterende bedrag vernietigd en de rekening gedeactiveerd.',
 }

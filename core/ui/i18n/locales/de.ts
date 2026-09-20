@@ -2024,6 +2024,6 @@ export const de = {
   enable_ton_w5_wallet_description:
     'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
   max_network_fee: 'Maximale Netzwerkgebühr',
-  substrate_account_will_be_reaped:
-    'Diese Überweisung leert das Konto des Absenders: Alles, was unterhalb der Mindesteinlage verbleibt, wird vernichtet und das Konto deaktiviert.',
+  substrate_account_may_be_reaped:
+    'Der Absender hat zugelassen, dass das Konto leergeräumt wird: Liegt der verbleibende Saldo unter der Mindesteinlage, wird der Restbetrag vernichtet und das Konto deaktiviert.',
 }

@@ -1977,6 +1977,6 @@ export const hr = {
   enable_ton_w5_wallet_description:
     'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
   max_network_fee: 'Maks. mrežna naknada',
-  substrate_account_will_be_reaped:
-    'Ovim transferom se prazni račun pošiljatelja: sve što ostane ispod egzistencijalnog pologa se uništava i račun se deaktivira.',
+  substrate_account_may_be_reaped:
+    'Pošiljatelj je dopustio da se ovim transferom isprazni račun: ako je preostali saldo manji od egzistencijalnog pologa, ostatak se uništava i račun se deaktivira.',
 }
