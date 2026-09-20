@@ -19,7 +19,8 @@ import { getVaultFromServer } from '@vultisig/core-mpc/fast/api/getVaultFromServ
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { TFunction } from 'i18next'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
+import FocusLock from 'react-focus-lock'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -70,6 +71,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
+  const titleId = useId()
   const schema = useMemo(() => createSchema(t), [t])
   const {
     error: mutationError,
@@ -144,9 +146,13 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   return showModal ? (
     <Backdrop onClose={mutationIsPending ? undefined : onBack}>
       <ModalWrapper
-        role="dialog"
-        aria-modal="true"
-        data-testid="fast-vault-password-modal"
+        returnFocus
+        lockProps={{
+          role: 'dialog',
+          'aria-modal': true,
+          'aria-labelledby': titleId,
+          'data-testid': 'fast-vault-password-modal',
+        }}
       >
         <CloseButton onClick={onBack} disabled={mutationIsPending}>
           <CrossIcon />
@@ -157,7 +163,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
         </IconWrapper>
 
         <VStack gap={8} alignItems="center">
-          <Text size={17} weight={500} centerHorizontally>
+          <Text id={titleId} size={17} weight={500} centerHorizontally>
             {title ?? t('enter_your_password')}
           </Text>
           {subtitle && (
@@ -220,7 +226,7 @@ const CloseButton = styled(IconButton)`
   background: ${getColor('foregroundExtra')};
 `
 
-const ModalWrapper = styled(VStack)`
+const ModalWrapper = styled(FocusLock)`
   position: relative;
   display: flex;
   width: 311px;
