@@ -867,6 +867,8 @@ export const de = {
   send_overview: 'Übersicht senden',
   send_receiver_address_same_as_sender:
     'Die Empfängeradresse darf nicht mit der Absenderadresse übereinstimmen.',
+  send_receiver_dangerous_address:
+    'Diese Adresse kann keine Gelder empfangen. Sie ist ein {{reason}}.',
   send_terms_0: 'Ich sende an die richtige Adresse',
   send_terms_1: 'Der Betrag stimmt.',
   send_to: 'Senden an',
@@ -2011,6 +2013,10 @@ export const de = {
   token_verification_scam: 'BETRUG',
   token_verification_scam_hint:
     'Dieser Token kopiert den Namen eines verifizierten Tokens, befindet sich aber auf einer anderen Vertragsadresse. Es handelt sich um eine Fälschung – vertrauen Sie ihm nicht.',
+  solana_blockhash_expired:
+    'Die Transaktion ist abgelaufen, bevor sie bestätigt werden konnte.',
+  solana_blockhash_expired_description:
+    'Ihre Geräte haben die Transaktion signiert, aber das Solana-Netzwerk hat sie nicht vor Ablauf des Blockhashs bestätigt, daher wurde sie nicht ausgeführt. Signieren Sie sie erneut, um sie mit einem neuen Blockhash zu senden.',
   no_tokens_selected: 'Keine Token ausgewählt',
   no_tokens_selected_description:
     'Sie haben alle Token deaktiviert. Stellen Sie sicher, dass das gesuchte Token aktiviert ist.',

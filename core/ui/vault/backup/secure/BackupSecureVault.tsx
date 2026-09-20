@@ -36,7 +36,10 @@ export const BackupSecureVault = () => {
   const vault = useCurrentVault()
   const vaults = useVaults()
   const navigate = useCoreNavigate()
-  const { mutate: deleteVault } = useDeleteVaultMutation()
+  const isLastVault = vaults.length <= 1
+  const { mutate: deleteVault } = useDeleteVaultMutation({
+    onSuccess: () => navigate({ id: isLastVault ? 'newVault' : 'vault' }),
+  })
   const keygenOperation = useKeygenOperation()
   const userDeviceCount = vault.signers.filter(s => !isServer(s)).length
   const isReshare = 'reshare' in keygenOperation
@@ -45,12 +48,7 @@ export const BackupSecureVault = () => {
     steps: isReshare ? reshareSteps : stepsWithReview,
   })
 
-  const abandonVault = () => {
-    const isLastVault = vaults.length <= 1
-    deleteVault(getVaultId(vault), {
-      onSuccess: () => navigate({ id: isLastVault ? 'newVault' : 'vault' }),
-    })
-  }
+  const abandonVault = () => deleteVault(getVaultId(vault))
 
   const secureInfoRows = [
     {
