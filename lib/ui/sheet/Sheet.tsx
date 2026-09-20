@@ -175,7 +175,16 @@ export const Sheet = ({
             'aria-modal': true,
             'aria-labelledby': titleId,
             onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => {
-              if (event.key === 'Escape') {
+              if (event.key !== 'Escape') return
+
+              // A dialog opened inside the sheet (the fast-vault password
+              // prompt) owns Escape while it is up; the sheet only closes
+              // when it is the innermost dialog the key was pressed in.
+              const dialog =
+                event.target instanceof Element
+                  ? event.target.closest('[role="dialog"]')
+                  : null
+              if (dialog === event.currentTarget) {
                 onClose()
               }
             },

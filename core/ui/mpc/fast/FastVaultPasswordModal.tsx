@@ -10,7 +10,7 @@ import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Backdrop } from '@lib/ui/modal/Backdrop'
-import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { OnBackProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMutation } from '@tanstack/react-query'
@@ -45,14 +45,19 @@ export type FastVaultPasswordModalResult = {
   cachePassword: boolean
 }
 
-type FastVaultPasswordModalProps = OnBackProp &
-  OnFinishProp<FastVaultPasswordModalResult> & {
-    title?: string
-    subtitle?: string
-    description: string
-    showModal?: boolean
-    withPasswordCache?: boolean
-  }
+type FastVaultPasswordModalProps = OnBackProp & {
+  /**
+   * Awaited while the confirm button keeps its loading state, so a caller
+   * that continues with async work (rebuilding the keysign payload at sign
+   * time) does not leave the prompt idle in between.
+   */
+  onFinish: (value: FastVaultPasswordModalResult) => void | Promise<void>
+  title?: string
+  subtitle?: string
+  description: string
+  showModal?: boolean
+  withPasswordCache?: boolean
+}
 
 export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   showModal,
@@ -81,7 +86,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
           })
         )
       }
-      onFinish({
+      await onFinish({
         password: variables.password,
         cachePassword,
       })
@@ -138,7 +143,11 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 
   return showModal ? (
     <Backdrop onClose={mutationIsPending ? undefined : onBack}>
-      <ModalWrapper data-testid="fast-vault-password-modal">
+      <ModalWrapper
+        role="dialog"
+        aria-modal="true"
+        data-testid="fast-vault-password-modal"
+      >
         <CloseButton onClick={onBack} disabled={mutationIsPending}>
           <CrossIcon />
         </CloseButton>
