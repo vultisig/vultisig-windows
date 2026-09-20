@@ -56,9 +56,10 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const { t } = useTranslation()
   const { toAddress, memo } = value
   const { destinationTag, memo: displayMemo } = getRippleKeysignDisplay(value)
-  // A Substrate transfer signed as transfer_allow_death may reap the sender;
-  // the initiator chose that explicitly, and the co-signer must see it too.
-  const emptiesAccount =
+  // A Substrate transfer signed as transfer_allow_death may reap the sender if
+  // it leaves less than the existential deposit; the initiator chose that
+  // explicitly, and the co-signer must see it too.
+  const allowsReaping =
     value.blockchainSpecific.case === 'polkadotSpecific' &&
     value.blockchainSpecific.value.allowDeath
 
@@ -240,8 +241,8 @@ export const JoinKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           />
         )}
       </VerifyTransactionOverview>
-      {emptiesAccount && (
-        <WarningBlock>{t('substrate_account_will_be_reaped')}</WarningBlock>
+      {allowsReaping && (
+        <WarningBlock>{t('substrate_account_may_be_reaped')}</WarningBlock>
       )}
       {value.signData.case === 'signAmino' && (
         <SignAminoDisplay signAmino={value.signData.value} />

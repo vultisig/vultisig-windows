@@ -947,8 +947,8 @@ export const en = {
   ripple_field_type: 'Type',
   ripple_field_destination: 'Destination',
   ripple_field_destination_tag: 'Destination tag',
-  substrate_account_will_be_reaped:
-    'This transfer empties the sender’s account: anything left below the existential deposit is destroyed and the account is deactivated.',
+  substrate_account_may_be_reaped:
+    'The sender has allowed this transfer to empty the account: if the balance it leaves is below the existential deposit, the remainder is destroyed and the account is deactivated.',
   ripple_destination_tag_invalid:
     'Enter a whole number between 0 and 4,294,967,295.',
   ripple_destination_tag_optional: 'Optional destination tag',
