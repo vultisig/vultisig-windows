@@ -15,7 +15,6 @@ import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { omit } from '@vultisig/lib-utils/record/omit'
-import { useMemo } from 'react'
 
 import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
 import { useSendAmount } from '../state/amount'
@@ -44,35 +43,21 @@ export const useSendKeysignPayloadQuery = ({
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
 
-  const input: BuildSendKeysignPayloadInput = useMemo(
-    () => ({
-      coin,
-      receiver,
-      amount: shouldBePresent(amount),
-      destinationTag,
-      memo,
-      vaultId: getVaultId(vault),
-      localPartyId: vault.localPartyId,
-      publicKey,
-      libType: toKeysignLibType(vault),
-      walletCore,
-      feeSettings,
-      hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
-      tonGasless,
-    }),
-    [
-      amount,
-      coin,
-      destinationTag,
-      feeSettings,
-      memo,
-      publicKey,
-      receiver,
-      tonGasless,
-      vault,
-      walletCore,
-    ]
-  )
+  const input: BuildSendKeysignPayloadInput = {
+    coin,
+    receiver,
+    amount: shouldBePresent(amount),
+    destinationTag,
+    memo,
+    vaultId: getVaultId(vault),
+    localPartyId: vault.localPartyId,
+    publicKey,
+    libType: toKeysignLibType(vault),
+    walletCore,
+    feeSettings,
+    hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
+    tonGasless,
+  }
 
   return useQuery({
     queryKey: ['sendTxKeysignPayload', omit(input, 'walletCore', 'publicKey')],

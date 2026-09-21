@@ -41,7 +41,23 @@ const usdtCoin = {
 
 const relayConfig = { relayAddress: relay, gasJettonMasters: [relay, usdt] }
 
-const read = () => {
+type HarnessResult = {
+  isAvailable: boolean
+  isEnabled: boolean
+  isPending: boolean
+}
+
+const isHarnessResult = (value: unknown): value is HarnessResult =>
+  typeof value === 'object' &&
+  value !== null &&
+  'isAvailable' in value &&
+  typeof value.isAvailable === 'boolean' &&
+  'isEnabled' in value &&
+  typeof value.isEnabled === 'boolean' &&
+  'isPending' in value &&
+  typeof value.isPending === 'boolean'
+
+const read = (): HarnessResult => {
   const Harness = () => {
     const { isAvailable, isEnabled, isPending } = useTonGaslessSend()
     return createElement(
@@ -51,9 +67,13 @@ const read = () => {
     )
   }
   const html = renderToStaticMarkup(createElement(Harness))
-  return JSON.parse(
+  const parsed: unknown = JSON.parse(
     html.slice(html.indexOf('>') + 1, html.lastIndexOf('</script>'))
-  ) as { isAvailable: boolean; isEnabled: boolean; isPending: boolean }
+  )
+  if (!isHarnessResult(parsed)) {
+    throw new Error('Unexpected harness output')
+  }
+  return parsed
 }
 
 describe('useTonGaslessSend', () => {

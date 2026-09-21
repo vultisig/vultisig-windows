@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
   amount: vi.fn(),
   balance: vi.fn(),
   fee: vi.fn(),
+  feePaidInCoin: vi.fn(),
 }))
 
 vi.mock('../state/sendCoin', () => ({ useCurrentSendCoin: mocks.coin }))
@@ -18,7 +19,7 @@ vi.mock('../amount/useSpendableSendAmount', () => ({
   useSpendableSendAmount: mocks.amount,
 }))
 vi.mock('../fee/useIsSendFeePaidInCoin', () => ({
-  useIsSendFeePaidInCoin: () => isFeeCoin(mocks.coin()),
+  useIsSendFeePaidInCoin: mocks.feePaidInCoin,
 }))
 vi.mock('./useSendBalanceQuery', () => ({ useSendBalanceQuery: mocks.balance }))
 vi.mock('./useSendFeeEstimateQuery', () => ({
@@ -90,6 +91,7 @@ describe('useSendValidationQuery token funding', () => {
       ready(id ? 100n : 10n)
     )
     mocks.fee.mockReturnValue(ready(2n))
+    mocks.feePaidInCoin.mockImplementation(() => isFeeCoin(mocks.coin()))
   })
 
   it('allows a token send only when its balance and native fee funding are known', () => {
@@ -174,6 +176,57 @@ describe('useSendValidationQuery token funding', () => {
     mocks.amount.mockReturnValue(101n)
     mocks.fee.mockReturnValue(pending)
     expect(readValidation().data).toEqual({ amount: 'insufficient_balance' })
+  })
+
+  describe('gasless TON jetton send', () => {
+    const usdt = 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs'
+
+    beforeEach(() => {
+      mocks.coin.mockReturnValue({
+        chain: Chain.Ton,
+        id: usdt,
+        address: 'UQCvaZohosTA0ak9ZFMs-cvL1JrXqogqJH8sI2uO6k8clJpn',
+      })
+      // The relay commission is charged in the jetton itself.
+      mocks.feePaidInCoin.mockReturnValue(true)
+      // The account holds the jetton and not a single nanoton.
+      mocks.balance.mockImplementation(({ id }: { id?: string }) =>
+        ready(id ? 100n : 0n)
+      )
+    })
+
+    it('needs no TON when the jetton covers the amount and the commission', () => {
+      mocks.amount.mockReturnValue(98n)
+      expect(readValidation()).toMatchObject({
+        data: {},
+        error: null,
+        isPending: false,
+      })
+    })
+
+    it('does not wait for the native balance at all', () => {
+      mocks.balance.mockImplementation(({ id }: { id?: string }) =>
+        id ? ready(100n) : pending
+      )
+      expect(readValidation()).toMatchObject({
+        data: {},
+        error: null,
+        isPending: false,
+      })
+    })
+
+    it('reports the jetton balance as insufficient once the commission no longer fits', () => {
+      mocks.amount.mockReturnValue(99n)
+      expect(readValidation().data).toEqual({ amount: 'insufficient_balance' })
+    })
+
+    it('waits for the relay commission before enabling Continue', () => {
+      mocks.fee.mockReturnValue(pending)
+      expect(readValidation()).toMatchObject({
+        data: undefined,
+        isPending: true,
+      })
+    })
   })
 
   it('does not require a separate native-balance result for native XRP sends', () => {
