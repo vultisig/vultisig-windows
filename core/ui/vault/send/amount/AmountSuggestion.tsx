@@ -30,15 +30,26 @@ const Container = styled(UnstyledButton)<{
   ${centerContent};
   background-color: ${({ isActive }) =>
     isActive ? getColor('buttonPrimary') : getColor('foreground')};
+
+  &:disabled {
+    color: ${getColor('buttonTextDisabled')};
+    cursor: default;
+  }
 `
 
+/**
+ * One of the fraction-of-balance shortcuts (25% … Max) shown under an amount
+ * field. `disabled` is for when there is no balance to take a fraction of, so
+ * the row does not read as clickable while doing nothing.
+ */
 export const AmountSuggestion: FC<
   ValueProp<number> &
     Partial<OnClickProp> & {
       isActive?: boolean
+      disabled?: boolean
       className?: string
     }
-> = ({ value, onClick, isActive, className }) => {
+> = ({ value, onClick, isActive, disabled, className }) => {
   const formattedValue = toPercents(value)
   const { t } = useTranslation()
 
@@ -46,6 +57,7 @@ export const AmountSuggestion: FC<
     <Container
       className={className}
       isActive={isActive}
+      disabled={disabled}
       onClick={onClick ? () => onClick() : undefined}
     >
       <Text size={14} weight="500">

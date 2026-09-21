@@ -31,19 +31,23 @@ export const DeleteVaultPage = () => {
   const { t } = useTranslation()
   const [termsAccepted, setTermsAccepted] = useState(terms.map(() => false))
   const { data: vaultBalance } = useVaultTotalBalanceQuery()
-  const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const vault = useCurrentVault()
   const vaults = useVaults()
+  const isLastVault = vaults.length <= 1
+  const {
+    mutate: deleteVault,
+    isPending,
+    error,
+  } = useDeleteVaultMutation({
+    onSuccess: () => navigate({ id: isLastVault ? 'newVault' : 'vaults' }),
+  })
   const isDisabled = !termsAccepted.every(Boolean)
 
   const handleConfirm = () => {
     if (!isDisabled && !isPending) {
-      const isLastVault = vaults.length <= 1
-      deleteVault(getVaultId(vault), {
-        onSuccess: () => navigate({ id: isLastVault ? 'newVault' : 'vaults' }),
-      })
+      deleteVault(getVaultId(vault))
     }
   }
 

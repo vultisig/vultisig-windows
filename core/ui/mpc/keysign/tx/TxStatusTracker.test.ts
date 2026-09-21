@@ -11,17 +11,16 @@ const { query } = vi.hoisted(() => ({ query: vi.fn() }))
 vi.mock('../../../chain/tx/status/useTxStatusQuery', () => ({
   useTxStatusQuery: query,
 }))
-vi.mock('./TransactionStatusAnimation', () => ({
-  TransactionStatusAnimation: () => null,
+vi.mock('./TxStatusView', () => ({
+  TxStatusView: () => null,
 }))
 
-// The tracker wraps the animation so a failed transaction can print why it
-// failed underneath it; the animation is the first child.
+// The tracker hands the view a resolved status and, for a failed transaction,
+// the reason to print underneath the animation.
 const render = () => {
-  const wrapper = TxStatusTracker({ chain: Chain.Tron, hash: 'hash' })
-  const [animation, failure] = wrapper.props.children
+  const { props } = TxStatusTracker({ chain: Chain.Tron, hash: 'hash' })
 
-  return { animation, failure }
+  return { status: props.status, description: props.description }
 }
 
 describe('TxStatusTracker SDK status compatibility', () => {
@@ -36,13 +35,13 @@ describe('TxStatusTracker SDK status compatibility', () => {
   ])('renders %s as %s', (status, expected) => {
     query.mockReturnValue({ data: { status }, isPending: false })
 
-    expect(render().animation.props.status).toBe(expected)
+    expect(render().status).toBe(expected)
   })
 
   it('keeps the broadcast state until the first status resolves', () => {
     query.mockReturnValue({ data: undefined, isPending: true })
 
-    expect(render().animation.props.status).toBe('broadcasted')
+    expect(render().status).toBe('broadcasted')
   })
 
   it('prints the reason under a failed transaction, and nothing when there is none', () => {
@@ -54,10 +53,10 @@ describe('TxStatusTracker SDK status compatibility', () => {
       isPending: false,
     })
 
-    expect(render().failure).not.toBeNull()
+    expect(render().description).toBeDefined()
 
     query.mockReturnValue({ data: { status: 'error' }, isPending: false })
 
-    expect(render().failure).toBeNull()
+    expect(render().description).toBeUndefined()
   })
 })

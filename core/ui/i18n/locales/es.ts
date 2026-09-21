@@ -862,6 +862,8 @@ export const es = {
   send_overview: 'Enviar descripción general',
   send_receiver_address_same_as_sender:
     'La dirección del receptor no puede ser la misma que la dirección del remitente',
+  send_receiver_dangerous_address:
+    'Esta dirección no puede recibir fondos. Es un {{reason}}.',
   send_terms_0: 'Estoy enviando a la dirección correcta',
   send_terms_1: 'La cantidad es correcta',
   send_to: 'Enviar a',
@@ -1996,6 +1998,9 @@ export const es = {
   token_verification_scam: 'ESTAFA',
   token_verification_scam_hint:
     'Este token copia el nombre de un token verificado, pero reside en una dirección de contrato diferente. Es falso; no confíe en él.',
+  solana_blockhash_expired: 'La transacción expiró antes de ser confirmada.',
+  solana_blockhash_expired_description:
+    'Tus dispositivos firmaron la transacción, pero la red Solana no la confirmó antes de que expirara su blockhash, por lo que no se procesó. Vuelve a firmarla para enviarla con un blockhash actualizado.',
   no_tokens_selected: 'No se han seleccionado tokens',
   no_tokens_selected_description:
     'Has desactivado todos los tokens. Asegúrate de que el token que buscas esté activado.',
@@ -2006,4 +2011,16 @@ export const es = {
   ton_gasless_description:
     'No se necesita TON : un relé paga el gas de la red y cobra una pequeña comisión {{ticker}} en su lugar.',
   ton_gasless_fee_note: 'pagado mediante retransmisión',
+  max_network_fee: 'Tarifa máxima de red',
+  swap_failed_refunded: 'Reembolsado por el proveedor de intercambio.',
+  swap_failed_refunded_description:
+    'No se pudo completar el intercambio, por lo que el proveedor devolvió sus fondos a su billetera en lugar del activo que solicitó. No se realizó ningún intercambio. Inténtelo de nuevo para obtener una nueva cotización.',
+  substrate_account_may_be_reaped:
+    'El remitente ha autorizado esta transferencia para vaciar la cuenta: si el saldo restante es inferior al depósito inicial, el resto se destruye y la cuenta se desactiva.',
+  review_not_enough_funds:
+    'Parece que tu bóveda no tiene fondos suficientes para esta transacción. Ajusta la cantidad e inténtalo de nuevo.',
+  risk_level: {
+    medium: 'Medio',
+    high: 'Alto',
+  },
 }

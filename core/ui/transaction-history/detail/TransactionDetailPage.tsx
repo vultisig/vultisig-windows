@@ -28,6 +28,7 @@ import {
   useLimitOrderStatusLabels,
 } from '@core/ui/vault/swap/limit/tracking/presentation'
 import { useLimitOrderTracking } from '@core/ui/vault/swap/limit/tracking/useLimitOrderTracking'
+import { useSwapRetry } from '@core/ui/vault/swap/retry/useSwapRetry'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -524,6 +525,28 @@ const LimitSwapDetailPanel = ({
   )
 }
 
+/**
+ * "Try again" for a market swap that ended without paying out: reopens the
+ * swap form on the same pair. Renders nothing while the swap is still in
+ * flight, and nothing when either coin has since left the vault.
+ */
+const SwapTryAgainButton = ({ record }: { record: SwapTransactionRecord }) => {
+  const { t } = useTranslation()
+  const { data } = record
+  const retrySwap = useSwapRetry({
+    fromCoin: { chain: data.fromChain, id: data.fromTokenId },
+    toCoin: { chain: data.toChain, id: data.toTokenId },
+  })
+
+  if (record.status !== 'failed' || !retrySwap) return null
+
+  return (
+    <Button data-testid="swap-try-again" onClick={retrySwap}>
+      {t('try_again')}
+    </Button>
+  )
+}
+
 /** Displays detailed information for a single transaction record, including amounts, addresses, status, and an explorer link. */
 export const TransactionDetailPage = () => {
   const goBack = useNavigateBack()
@@ -632,6 +655,8 @@ export const TransactionDetailPage = () => {
             </DetailRow>
           </SeparatedByLine>
         </Panel>
+
+        {record.type === 'swap' ? <SwapTryAgainButton record={record} /> : null}
 
         <Button
           kind="secondary"

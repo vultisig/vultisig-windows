@@ -851,6 +851,8 @@ export const nl = {
   send_overview: 'Verzendoverzicht',
   send_receiver_address_same_as_sender:
     'Ontvangeradres kan niet hetzelfde zijn als afzenderadres',
+  send_receiver_dangerous_address:
+    'Dit adres kan geen geld ontvangen. Het is een {{reason}}.',
   send_terms_0: 'Ik verstuur naar het juiste adres',
   send_terms_1: 'Het bedrag klopt',
   send_to: 'Verzenden naar',
@@ -1979,6 +1981,10 @@ export const nl = {
   token_verification_scam: 'SCAM',
   token_verification_scam_hint:
     'Dit token kopieert de naam van een geverifieerd token, maar bevindt zich op een ander contractadres. Het is een vervalsing – vertrouw het niet.',
+  solana_blockhash_expired:
+    'De transactie is verlopen voordat deze bevestigd kon worden.',
+  solana_blockhash_expired_description:
+    'Uw apparaten hebben de transactie ondertekend, maar het Solana-netwerk heeft deze niet bevestigd voordat de blockhash verliep, waardoor de transactie nooit is voltooid. Onderteken de transactie opnieuw om deze met een nieuwe blockhash te verzenden.',
   no_tokens_selected: 'Geen tokens geselecteerd',
   no_tokens_selected_description:
     'Je hebt alle tokens uitgeschakeld. Zorg ervoor dat het token dat je zoekt is ingeschakeld.',
@@ -1989,4 +1995,16 @@ export const nl = {
   ton_gasless_description:
     'Geen TON nodig: een relay betaalt de netwerkgaskosten en brengt in plaats daarvan een kleine {{ticker}} commissie in rekening.',
   ton_gasless_fee_note: 'betaald via relay',
+  max_network_fee: 'Maximale netwerkkosten',
+  swap_failed_refunded: 'Terugbetaald door de swapaanbieder',
+  swap_failed_refunded_description:
+    'De swap kon niet worden voltooid, daarom heeft de aanbieder uw geld teruggestuurd naar uw wallet in plaats van de door u aangevraagde activa. Er is geen swap voltooid. Probeer het opnieuw om een nieuwe offerte te ontvangen.',
+  substrate_account_may_be_reaped:
+    'De afzender heeft deze overschrijving toegestaan om de rekening leeg te halen: als het resterende saldo lager is dan het minimumsaldo, wordt het resterende bedrag vernietigd en de rekening gedeactiveerd.',
+  review_not_enough_funds:
+    'Het lijkt erop dat uw kluis onvoldoende saldo heeft voor deze transactie. Pas het bedrag aan en probeer het opnieuw.',
+  risk_level: {
+    medium: 'Medium',
+    high: 'Hoog',
+  },
 }

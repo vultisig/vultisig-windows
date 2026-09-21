@@ -1,47 +1,39 @@
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { BlockaidLogo } from '@core/ui/chain/security/blockaid/BlockaidLogo'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { TxVaultSourceLabel } from '@core/ui/mpc/keysign/tx/components/TxVaultSourceLabel'
-import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
-import { TransactionOverviewAmount } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewAmount'
-import { TransactionOverviewItem } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewItem'
-import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
-import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
-import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
-import { useDepositKeysignPayloadQuery } from '@core/ui/vault/deposit/keysignPayload/query'
-import { useDepositAction } from '@core/ui/vault/deposit/providers/DepositActionProvider'
-import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
-import { useDepositData } from '@core/ui/vault/deposit/state/data'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
-import { HStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
-import { MiddleTruncate } from '@lib/ui/truncate'
-import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
+import { ReviewDivider } from '../../../mpc/keysign/review/ReviewDivider'
+import { ReviewRow } from '../../../mpc/keysign/review/ReviewRow'
+import { ReviewTruncatedValue } from '../../../mpc/keysign/review/ReviewTruncatedValue'
+import { ReviewVaultLine } from '../../../mpc/keysign/review/ReviewVaultLine'
+import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
+import { useDepositMemo } from '../hooks/useDepositMemo'
+import { useDepositKeysignPayloadQuery } from '../keysignPayload/query'
+import { useDepositAction } from '../providers/DepositActionProvider'
+import { useDepositCoin } from '../providers/DepositCoinProvider'
+import { useDepositData } from '../state/data'
+import { DepositBlockaidStatus } from './DepositBlockaidStatus'
+import { DepositFeeRow } from './DepositFeeRow'
+import { DepositNetworkRow } from './DepositNetworkRow'
+import { DepositReviewCard } from './DepositReviewCard'
+import { DepositReviewSheet } from './DepositReviewSheet'
+
+const Missing = () => (
+  <Text as="span" size={14} color="shy">
+    —
+  </Text>
+)
+
+/** Review sheet for a THORChain bond or unbond opened from the DeFi tab. */
 export const BondOverview = ({ onBack }: OnBackProp) => {
   const { t } = useTranslation()
   const depositData = useDepositData()
   const [coin] = useDepositCoin()
   const [action] = useDepositAction()
   const memo = useDepositMemo()
-  const { name: vaultName } = useCurrentVault()
   const vaultAddress = useCurrentVaultAddress(coin.chain)
   const keysignPayloadQuery = useDepositKeysignPayloadQuery()
-  const { data: isBlockaidEnabled } = useIsBlockaidEnabledQuery()
 
   const isUnbond = action === 'unbond'
   const actionLabel = isUnbond
@@ -56,165 +48,37 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
   const nodeAddress = (depositData?.nodeAddress as string | undefined) ?? ''
 
   return (
-    <>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={t('overview')}
-        hasBorder
+    <DepositReviewSheet title={t('overview')} onBack={onBack}>
+      <DepositBlockaidStatus />
+      <DepositReviewCard
+        label={actionLabel}
+        coin={coin}
+        fallbackAmount={fallbackAmount}
+        keysignPayloadQuery={keysignPayloadQuery}
       />
-      <PageContent gap={16} scrollable>
-        {isBlockaidEnabled && (
-          <BlockaidStatus>
-            <SuccessIconWrapper>
-              <CheckmarkIcon />
-            </SuccessIconWrapper>
-            <BlockaidLabel as="span">
-              {t('transaction_scanned_by', { provider: '' }).trim()}
-            </BlockaidLabel>
-            <BlockaidLogoWrapper>
-              <BlockaidLogo />
-            </BlockaidLogoWrapper>
-          </BlockaidStatus>
-        )}
-
-        <List border="gradient" radius={borderRadiusPx.lg}>
-          <TransactionOverviewAmount
-            label={actionLabel}
-            coin={coin}
-            fallbackAmount={fallbackAmount}
-            keysignPayloadQuery={keysignPayloadQuery}
-          />
-          <TransactionOverviewItem
-            label={t('from')}
-            value={
-              <TxVaultSourceLabel
-                name={vaultName}
-                address={`(${formatWalletAddress(vaultAddress)})`}
-              />
-            }
-          />
-          <TransactionOverviewItem
-            label={t('to')}
-            value={
-              nodeAddress ? (
-                <MiddleTruncate
-                  size={14}
-                  text={nodeAddress}
-                  weight={500}
-                  width={220}
-                />
-              ) : (
-                <Text as="span" size={14} color="shy">
-                  —
-                </Text>
-              )
-            }
-          />
-          <TransactionOverviewItem
-            label={t('memo')}
-            value={
-              memo ? (
-                <MiddleTruncate
-                  size={14}
-                  text={memo}
-                  weight={500}
-                  width={220}
-                />
-              ) : (
-                <Text as="span" size={14} color="shy">
-                  —
-                </Text>
-              )
-            }
-          />
-          <TransactionOverviewItem
-            label={t('network')}
-            value={
-              <HStack alignItems="center" gap={6}>
-                <ChainEntityIcon
-                  value={getChainLogoSrc(coin.chain)}
-                  style={{ fontSize: 16 }}
-                />
-                <Text size={14} weight={500}>
-                  {coin.chain}
-                </Text>
-              </HStack>
-            }
-          />
-          <TransactionOverviewItem
-            label={t('est_network_fee')}
-            value={
-              <MatchQuery
-                value={keysignPayloadQuery}
-                pending={() => <Spinner />}
-                success={payload => (
-                  <KeysignFeeAmount keysignPayload={payload} />
-                )}
-                error={() => (
-                  <Text as="span" size={14} color="shy">
-                    —
-                  </Text>
-                )}
-              />
-            }
-          />
-        </List>
-      </PageContent>
-      <PageFooter>
-        <DepositConfirmButton />
-      </PageFooter>
-    </>
+      <VStack gap={12}>
+        <ReviewVaultLine value={vaultAddress} />
+        <ReviewDivider />
+        <ReviewRow
+          label={t('to')}
+          value={
+            nodeAddress ? (
+              <ReviewTruncatedValue value={nodeAddress} />
+            ) : (
+              <Missing />
+            )
+          }
+        />
+        <ReviewDivider />
+        <DepositNetworkRow value={coin.chain} />
+        <ReviewDivider />
+        <ReviewRow
+          label={t('memo')}
+          value={memo ? <ReviewTruncatedValue value={memo} /> : <Missing />}
+        />
+        <ReviewDivider />
+        <DepositFeeRow />
+      </VStack>
+    </DepositReviewSheet>
   )
 }
-
-const BlockaidStatus = styled(HStack)`
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  padding: 0 4px;
-  background: transparent;
-  border: none;
-  color: #c9d6e8;
-  font-family: 'Brockmann', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0.06px;
-  white-space: nowrap;
-`
-
-const SuccessIconWrapper = styled.div`
-  color: ${getColor('success')};
-  display: inline-flex;
-  width: 20px;
-  height: 20px;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  margin-right: 2px;
-`
-
-const BlockaidLabel = styled(Text)`
-  color: #c9d6e8;
-  font-family: 'Brockmann', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0.06px;
-  margin-right: 6px;
-  white-space: nowrap;
-  text-align: center;
-`
-
-const BlockaidLogoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  height: 10px;
-  width: 55px;
-
-  svg {
-    width: 55px;
-    height: 10px;
-  }
-`

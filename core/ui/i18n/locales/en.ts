@@ -114,6 +114,9 @@ export const en = {
   broadcast_error: 'The network rejected this transaction',
   broadcast_error_description:
     'Your devices signed the transaction, but the network rejected it. Review the on-chain reason below, then sign again to retry.',
+  solana_blockhash_expired: 'Transaction expired before it was confirmed',
+  solana_blockhash_expired_description:
+    'Your devices signed the transaction, but the Solana network did not confirm it before its blockhash expired, so it never went through. Sign it again to send it with a fresh blockhash.',
   broadcast_refused: 'Broadcast not confirmed',
   broadcast_refused_description:
     'Your devices signed this transaction, but this device declined to broadcast it after a final safety check. Another signing device may have broadcast it anyway — watch the status below and confirm the outcome before signing again.',
@@ -657,6 +660,7 @@ export const en = {
   max: 'Max',
   max_4_characters: 'Max 4 characters',
   max_supply: 'Max Supply',
+  max_network_fee: 'Max. Network Fee',
   max_total_fee: 'Max. Total Fee',
   memo: 'Memo',
   message: 'Message',
@@ -943,6 +947,8 @@ export const en = {
   ripple_field_type: 'Type',
   ripple_field_destination: 'Destination',
   ripple_field_destination_tag: 'Destination tag',
+  substrate_account_may_be_reaped:
+    'The sender has allowed this transfer to empty the account: if the balance it leaves is below the existential deposit, the remainder is destroyed and the account is deactivated.',
   ripple_destination_tag_invalid:
     'Enter a whole number between 0 and 4,294,967,295.',
   ripple_destination_tag_optional: 'Optional destination tag',
@@ -964,6 +970,12 @@ export const en = {
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',
   risky_site_detected: 'Malicious site detected',
+  review_not_enough_funds:
+    "Looks like your vault doesn't have enough funds for this transaction. Adjust the amount and try again.",
+  risk_level: {
+    medium: 'Medium',
+    high: 'High',
+  },
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   risky_tx_warning:
     'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',
@@ -1055,6 +1067,8 @@ export const en = {
   send_overview: 'Send Overview',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
+  send_receiver_dangerous_address:
+    'This address cannot receive funds. Reason: {{reason}}.',
   send_receiver_format_hint_cardano:
     'Enter a Cardano address that starts with addr1.',
   send_receiver_format_hint_cosmos:
@@ -1309,6 +1323,9 @@ export const en = {
   swap_same_asset: 'Cannot swap between the same asset',
   swap_all_providers_failed:
     'Swap providers are temporarily unavailable. Please try again in a moment.',
+  swap_failed_refunded: 'Refunded by the swap provider',
+  swap_failed_refunded_description:
+    'The swap could not be completed, so the provider sent your funds back to your wallet instead of the asset you asked for. No swap was completed. Try again to get a fresh quote.',
   swap_failed_slippage: 'Price moved past slippage tolerance',
   swap_failed_slippage_description:
     'The price moved before this swap landed, so it would have paid out less than your slippage tolerance allowed and the network reverted it. Raise your slippage tolerance or try again.',

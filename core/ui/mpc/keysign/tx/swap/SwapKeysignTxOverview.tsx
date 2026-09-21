@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
+import { getTxFailureDescription } from '@core/ui/chain/tx/failure/getTxFailureDescription'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -7,6 +8,12 @@ import {
   getSwapFeeDisclosure,
   getSwapQuoteAffiliateBps,
 } from '@core/ui/vault/swap/affiliate/affiliateBps'
+import { getKeysignSwapArrivalProvider } from '@core/ui/vault/swap/arrival/swapArrivalProvider'
+import {
+  getSwapOutcome,
+  SwapOutcome,
+} from '@core/ui/vault/swap/arrival/swapOutcome'
+import { useSwapArrivalStatusQuery } from '@core/ui/vault/swap/arrival/useSwapArrivalStatusQuery'
 import { SwapDiscountInfo } from '@core/ui/vault/swap/form/info/SwapDiscountInfo'
 import { SwapFeeRowRenderer } from '@core/ui/vault/swap/form/info/swapFeeRow'
 import { SwapPriceImpactRow } from '@core/ui/vault/swap/form/info/SwapPriceImpactRow'
@@ -14,6 +21,7 @@ import { SwapProviderFeeRows } from '@core/ui/vault/swap/form/info/SwapProviderF
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
 import { getSwapProviderFees } from '@core/ui/vault/swap/queries/resolveSwapFees'
+import { useSwapRetry } from '@core/ui/vault/swap/retry/useSwapRetry'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -27,20 +35,25 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { Coin, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
+import { SwapArrivalStatusResult } from '@vultisig/core-chain/swap/utils/getSwapArrivalStatus'
+import { TxStatusResult } from '@vultisig/core-chain/tx/status/resolver'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
+import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackingUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { match } from '@vultisig/lib-utils/match'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { truncateId } from '@vultisig/lib-utils/string/truncate'
+import { TFunction } from 'i18next'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -51,7 +64,7 @@ import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
 import { TxVaultSourceLabel } from '../components/TxVaultSourceLabel'
 import { KeysignFeeAmount } from '../FeeAmount'
-import { TxStatusTracker } from '../TxStatusTracker'
+import { TxStatusView } from '../TxStatusView'
 import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -90,6 +103,31 @@ const getKeysignQuoteFees = ({
       affiliateBps,
     }),
   }
+}
+
+type GetSwapFailureDescriptionInput = {
+  source: TxStatusResult | undefined
+  arrival: SwapArrivalStatusResult | undefined
+  t: TFunction
+}
+
+/**
+ * What to print under a failed swap: the chain's own reason when the source
+ * transaction reverted, the refund wording when the provider sent the funds
+ * back, and the provider's message for any other terminal failure.
+ */
+const getSwapFailureDescription = ({
+  source,
+  arrival,
+  t,
+}: GetSwapFailureDescriptionInput): string | undefined => {
+  if (source?.status === 'error' && source.failure) {
+    return getTxFailureDescription({ failure: source.failure, t })
+  }
+  if (arrival?.status === 'refunded') {
+    return t('swap_failed_refunded_description')
+  }
+  return arrival?.status === 'error' ? arrival.message : undefined
 }
 
 export const SwapKeysignTxOverview = ({
@@ -144,11 +182,49 @@ export const SwapKeysignTxOverview = ({
   )
 
   const mainTxHash = getLastItem(txHashes)
+  const lastValidBlockHeight = getKeysignLastValidBlockHeight(value)
+  // The fee was paid, and any revert happened, on the chain the funds left
+  // from — a native swap's THORChain/MayaChain node has never heard of the
+  // source hash.
   const txStatusQuery = useTxStatusQuery({
-    chain: blockExplorerChain,
+    chain: sourceChain,
     hash: mainTxHash,
+    lastValidBlockHeight,
   })
   const receipt = txStatusQuery.data?.receipt
+
+  // A confirmed deposit only starts a native swap; the provider decides
+  // whether it pays out or refunds, so its verdict is what the screen settles
+  // on.
+  const arrivalProvider = getKeysignSwapArrivalProvider(swapPayload)
+  const arrivalQuery = useSwapArrivalStatusQuery({
+    provider: arrivalProvider,
+    txHash: mainTxHash,
+    enabled: txStatusQuery.data?.status === 'success',
+  })
+  const outcome = getSwapOutcome({
+    source: txStatusQuery.data,
+    arrival: arrivalQuery.data,
+    tracksArrival: arrivalProvider !== undefined,
+  })
+  const failureDescription =
+    outcome === 'failed'
+      ? getSwapFailureDescription({
+          source: txStatusQuery.data,
+          arrival: arrivalQuery.data,
+          t,
+        })
+      : undefined
+
+  // Only offered once the swap is over without paying out. Leaves this screen
+  // behind so Back does not return to a failure the user has already moved on
+  // from.
+  const retrySwap = useSwapRetry({
+    fromCoin: extractCoinKey(fromCoin),
+    toCoin: toCoin ? extractCoinKey(toCoin) : undefined,
+    replace: true,
+  })
+  const showTryAgain = outcome === 'failed' && !!retrySwap
 
   const trackTransaction = (tx: string) =>
     openUrl(
@@ -161,9 +237,17 @@ export const SwapKeysignTxOverview = ({
 
   return (
     <VStack gap={36} maxWidth={576} fullWidth>
-      <TxStatusTracker
-        chain={blockExplorerChain}
-        hash={getLastItem(txHashes)}
+      <TxStatusView
+        status={
+          txStatusQuery.isPending
+            ? 'broadcasted'
+            : match<SwapOutcome, 'pending' | 'success' | 'error'>(outcome, {
+                pending: () => 'pending',
+                success: () => 'success',
+                failed: () => 'error',
+              })
+        }
+        description={failureDescription}
       />
       <VStack alignItems="center" gap={8} fullWidth>
         <VStack gap={8} fullWidth>
@@ -259,10 +343,7 @@ export const SwapKeysignTxOverview = ({
           )}
           <TxFeeRow label={receipt ? t('network_fee') : t('est_network_fee')}>
             {receipt ? (
-              <TxActualFeeDisplay
-                chain={blockExplorerChain}
-                receipt={receipt}
-              />
+              <TxActualFeeDisplay chain={sourceChain} receipt={receipt} />
             ) : (
               <KeysignFeeAmount keysignPayload={value} />
             )}
@@ -297,12 +378,22 @@ export const SwapKeysignTxOverview = ({
           overlayStyles={{ width: '100%' }}
         >
           <HStack gap={8} fullWidth>
-            <Button
-              kind="secondary"
-              onClick={() => trackTransaction(getLastItem(txHashes))}
-            >
-              {t('track')}
-            </Button>
+            {showTryAgain ? (
+              <Button
+                kind="secondary"
+                data-testid="swap-try-again"
+                onClick={retrySwap}
+              >
+                {t('try_again')}
+              </Button>
+            ) : (
+              <Button
+                kind="secondary"
+                onClick={() => trackTransaction(getLastItem(txHashes))}
+              >
+                {t('track')}
+              </Button>
+            )}
             <Button data-testid="tx-success-done" onClick={goHome}>
               {t('done')}
             </Button>

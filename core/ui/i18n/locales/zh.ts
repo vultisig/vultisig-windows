@@ -794,6 +794,7 @@ export const zh = {
   send_invalid_receiver_address: '请输入有效的收件人地址',
   send_overview: '发送概览',
   send_receiver_address_same_as_sender: '接收地址不能与发送地址相同',
+  send_receiver_dangerous_address: '此地址无法接收资金。它是 {{reason}}。',
   send_terms_0: '我寄到了正确的地址。',
   send_terms_1: '金额正确',
   send_to: '发送至',
@@ -1833,6 +1834,9 @@ export const zh = {
   token_verification_scam: '骗局',
   token_verification_scam_hint:
     '这种代币名称与已验证代币相同，但实际存在于不同的合约地址中。它是伪造的，请勿信任。',
+  solana_blockhash_expired: '交易在确认前已过期',
+  solana_blockhash_expired_description:
+    '您的设备已对交易进行签名，但 Solana 网络在区块哈希过期前未确认该交易，因此交易未成功。请重新签名以使用新的区块哈希发送该交易。',
   no_tokens_selected: '未选择代币',
   no_tokens_selected_description:
     '您已禁用所有代币。确保您要查找的代币已启用。',
@@ -1843,4 +1847,16 @@ export const zh = {
   ton_gasless_description:
     '不需要TON ：中继器支付网络 gas 费用，并收取少量{{ticker}}佣金。',
   ton_gasless_fee_note: '通过中继支付',
+  max_network_fee: '最高网络费用',
+  swap_failed_refunded: '由互换提供商退款',
+  swap_failed_refunded_description:
+    '兑换未能完成，因此服务提供商已将您的资金退回至您的钱包，而非您请求的资产。兑换未完成。请重试以获取新的报价。',
+  substrate_account_may_be_reaped:
+    '汇款人已允许此转账清空账户：如果转账后余额低于存根，则剩余余额将被销毁，账户将被停用。',
+  review_not_enough_funds:
+    '您的账户余额似乎不足以支付这笔交易。请调整金额后重试。',
+  risk_level: {
+    medium: '中等的',
+    high: '高的',
+  },
 }

@@ -8,7 +8,8 @@ import styled from 'styled-components'
 
 import { TransactionErrorIcon } from './TransactionErrorIcon'
 
-type TransactionStatus = 'broadcasted' | 'pending' | 'success' | 'error'
+/** The states the post-broadcast animation can show. */
+export type TransactionStatus = 'broadcasted' | 'pending' | 'success' | 'error'
 
 type TransactionStatusAnimationProps = {
   status: TransactionStatus

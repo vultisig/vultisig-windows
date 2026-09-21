@@ -9,10 +9,11 @@ import { adjustAmountForFee } from './adjustAmountForFee'
 
 /**
  * The amount the send will actually move: the entered amount, reduced to what
- * the balance still covers once the network fee is reserved out of it. Tokens
- * pay their fee from the native balance, so their entered amount is spendable
- * in full and is returned as typed — unless the fee is charged in the token
- * itself, as a gasless TON send's relay commission is.
+ * the balance still covers once the network fee — and, on chains that reap an
+ * emptied account, the balance the sender must keep — is reserved out of it.
+ * Tokens pay their fee from the native balance, so their entered amount is
+ * spendable in full and is returned as typed — unless the fee is charged in
+ * the token itself, as a gasless TON send's relay commission is.
  */
 export const useSpendableSendAmount = () => {
   const coin = useCurrentSendCoin()
@@ -28,5 +29,5 @@ export const useSpendableSendAmount = () => {
     return amount
   }
 
-  return adjustAmountForFee({ amount, balance, fee })
+  return adjustAmountForFee({ chain: coin.chain, amount, balance, fee })
 }

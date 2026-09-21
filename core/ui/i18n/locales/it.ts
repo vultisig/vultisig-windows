@@ -861,6 +861,8 @@ export const it = {
   send_overview: 'Invia panoramica',
   send_receiver_address_same_as_sender:
     "L'indirizzo del destinatario non può essere uguale all'indirizzo del mittente",
+  send_receiver_dangerous_address:
+    'Questo indirizzo non può ricevere fondi. È un {{reason}}.',
   send_terms_0: "Sto inviando all'indirizzo giusto",
   send_terms_1: "L'importo è corretto",
   send_to: 'Invia a',
@@ -2000,6 +2002,10 @@ export const it = {
   token_verification_scam: 'TRUFFA',
   token_verification_scam_hint:
     'Questo token copia il nome di un token verificato, ma risiede a un indirizzo di contratto diverso. È contraffatto: non fidatevi.',
+  solana_blockhash_expired:
+    'La transazione è scaduta prima di essere confermata.',
+  solana_blockhash_expired_description:
+    "I tuoi dispositivi hanno firmato la transazione, ma la rete Solana non l'ha confermata prima della scadenza del suo blockhash, quindi non è andata a buon fine. Firmala di nuovo per inviarla con un blockhash aggiornato.",
   no_tokens_selected: 'Nessun token selezionato',
   no_tokens_selected_description:
     'Hai disabilitato tutti i token. Assicurati che il token che stai cercando sia abilitato.',
@@ -2010,4 +2016,16 @@ export const it = {
   ton_gasless_description:
     'Non è necessario TON : un relay paga il gas di rete e addebita invece una piccola commissione {{ticker}} .',
   ton_gasless_fee_note: 'pagato tramite relè',
+  max_network_fee: 'Tariffa massima di rete',
+  swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
+  swap_failed_refunded_description:
+    "Lo scambio non è andato a buon fine, pertanto il fornitore ha riaccreditato i fondi sul tuo portafoglio anziché sull'asset richiesto. Nessuno scambio è stato completato. Riprova per ottenere un nuovo preventivo.",
+  substrate_account_may_be_reaped:
+    'Il mittente ha autorizzato questo trasferimento a svuotare il conto: se il saldo risultante è inferiore al deposito minimo necessario, il resto viene distrutto e il conto disattivato.',
+  review_not_enough_funds:
+    "Sembra che il tuo conto non disponga di fondi sufficienti per questa transazione. Modifica l'importo e riprova.",
+  risk_level: {
+    medium: 'Mezzo',
+    high: 'Alto',
+  },
 }

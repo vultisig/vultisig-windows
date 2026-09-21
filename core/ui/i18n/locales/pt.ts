@@ -858,6 +858,8 @@ export const pt = {
   send_overview: 'Enviar visão geral',
   send_receiver_address_same_as_sender:
     'O endereço do destinatário não pode ser o mesmo que o endereço do remetente.',
+  send_receiver_dangerous_address:
+    'Este endereço não pode receber fundos. É um {{reason}}.',
   send_terms_0: 'Estou enviando para o endereço correto.',
   send_terms_1: 'O valor está correto.',
   send_to: 'Enviar para',
@@ -1996,6 +1998,9 @@ export const pt = {
   token_verification_scam: 'FRAUDE',
   token_verification_scam_hint:
     'Este token copia o nome de um token verificado, mas reside em um endereço de contrato diferente. É uma falsificação — não confie nele.',
+  solana_blockhash_expired: 'A transação expirou antes de ser confirmada.',
+  solana_blockhash_expired_description:
+    'Seus dispositivos assinaram a transação, mas a rede Solana não a confirmou antes que o hash do bloco expirasse, portanto, ela não foi processada. Assine-a novamente para enviá-la com um hash de bloco atualizado.',
   no_tokens_selected: 'Nenhum token selecionado',
   no_tokens_selected_description:
     'Você desativou todos os tokens. Certifique-se de que o token que você está procurando esteja ativado.',
@@ -2006,4 +2011,16 @@ export const pt = {
   ton_gasless_description:
     'Não é necessário o TON : um relay paga o gás da rede e cobra uma pequena comissão de {{ticker}} .',
   ton_gasless_fee_note: 'pago via retransmissão',
+  max_network_fee: 'Taxa máxima de rede',
+  swap_failed_refunded: 'Reembolsado pelo provedor de troca.',
+  swap_failed_refunded_description:
+    'A troca não pôde ser concluída, portanto o provedor devolveu seus fundos para sua carteira em vez do ativo solicitado. Nenhuma troca foi concluída. Tente novamente para obter uma nova cotação.',
+  substrate_account_may_be_reaped:
+    'O remetente autorizou esta transferência para esvaziar a conta: se o saldo restante for inferior ao depósito mínimo, o saldo remanescente será destruído e a conta será desativada.',
+  review_not_enough_funds:
+    'Parece que seu cofre não tem fundos suficientes para esta transação. Ajuste o valor e tente novamente.',
+  risk_level: {
+    medium: 'Médio',
+    high: 'Alto',
+  },
 }

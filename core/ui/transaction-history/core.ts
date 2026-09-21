@@ -1,6 +1,7 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { limitSwapOrderStatuses } from '@vultisig/core-chain/swap/native/limitSwapOrderStatus'
 
+import { TrackedSwapArrivalProvider } from '../vault/swap/arrival/swapArrivalProvider'
 import { SwapFailureReason } from './status/swapFailureReason'
 
 export const transactionRecordTypes = [
@@ -51,6 +52,13 @@ export type SendTransactionData = {
   messageTypeUrl?: string
   /** Native system operation carried by an internal keysign marker. */
   operation?: 'tronWithdrawExpireUnfreeze'
+  /**
+   * Solana only: the block height past which the signed blockhash is dead,
+   * copied off the payload at broadcast. The status poll uses it to call an
+   * unseen signature expired instead of pending forever. Absent on records
+   * written before it was carried.
+   */
+  lastValidBlockHeight?: number
 }
 
 export type SwapTransactionData = {
@@ -77,6 +85,11 @@ export type SwapTransactionData = {
    * instead of a chain tx hash. Once the order settles, the poller replaces
    * `txHash` with the on-chain settlement hash. */
   cowSwapOrderApiBase?: string
+  /** Present on a native swap, whose source transaction is only a deposit:
+   * the poller asks this provider whether the swap paid out or refunded once
+   * that deposit confirms, instead of calling the deposit's confirmation the
+   * swap's success. */
+  arrivalProvider?: TrackedSwapArrivalProvider
   /** Why the chain rejected this swap, once the revert has been read back and
    * recognised. Absent whenever the reason could not be established. Set while
    * the record is `failed` but never cleared when one heals, so
@@ -86,6 +99,8 @@ export type SwapTransactionData = {
    * answer. Present means never ask again: an unanswered replay is a block no
    * node holds state for any more, and waiting only ages it further. */
   failureReasonCheckedAt?: string
+  /** Solana only; see the same field on a send. */
+  lastValidBlockHeight?: number
 }
 
 export type SendTransactionRecord = TransactionRecordBase & {

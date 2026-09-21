@@ -855,6 +855,8 @@ export const hr = {
   send_overview: 'Pošalji pregled',
   send_receiver_address_same_as_sender:
     'Adresa primatelja ne može biti ista kao adresa pošiljatelja',
+  send_receiver_dangerous_address:
+    'Ova adresa ne može primati sredstva. To je {{reason}}.',
   send_terms_0: 'Šaljem na pravu adresu',
   send_terms_1: 'Iznos je točan',
   send_to: 'Pošalji',
@@ -1964,6 +1966,10 @@ export const hr = {
   token_verification_scam: 'PRIJEVARA',
   token_verification_scam_hint:
     'Ovaj token kopira ime verificiranog tokena, ali se nalazi na drugoj ugovornoj adresi. To je krivotvorina - nemojte joj vjerovati.',
+  solana_blockhash_expired:
+    'Transakcija je istekla prije nego što je potvrđena',
+  solana_blockhash_expired_description:
+    'Vaši su uređaji potpisali transakciju, ali Solana mreža je nije potvrdila prije isteka blockhash-a, tako da nikada nije prošla. Potpišite je ponovno da biste je poslali s novim blockhash-om.',
   no_tokens_selected: 'Nije odabran nijedan token',
   no_tokens_selected_description:
     'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',
@@ -1974,4 +1980,16 @@ export const hr = {
   ton_gasless_description:
     'Nije potreban TON : relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju {{ticker}} .',
   ton_gasless_fee_note: 'plaćeno putem releja',
+  max_network_fee: 'Maks. mrežna naknada',
+  swap_failed_refunded: 'Povrat novca izvršio je pružatelj zamjene',
+  swap_failed_refunded_description:
+    'Zamjena nije mogla biti dovršena pa je pružatelj usluga poslao vaša sredstva natrag u vaš novčanik umjesto imovine koju ste tražili. Zamjena nije dovršena. Pokušajte ponovno kako biste dobili novu ponudu.',
+  substrate_account_may_be_reaped:
+    'Pošiljatelj je dopustio da se ovim transferom isprazni račun: ako je preostali saldo manji od egzistencijalnog pologa, ostatak se uništava i račun se deaktivira.',
+  review_not_enough_funds:
+    'Izgleda da vaš trezor nema dovoljno sredstava za ovu transakciju. Prilagodite iznos i pokušajte ponovno.',
+  risk_level: {
+    medium: 'Srednji',
+    high: 'Visoko',
+  },
 }
