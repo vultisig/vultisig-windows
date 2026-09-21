@@ -1,50 +1,36 @@
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { useCosmosValidatorsQuery } from '@core/ui/chain/cosmos/staking/queries/useCosmosValidatorsQuery'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { BlockaidLogo } from '@core/ui/chain/security/blockaid/BlockaidLogo'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { TxVaultSourceLabel } from '@core/ui/mpc/keysign/tx/components/TxVaultSourceLabel'
-import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
-import { TransactionOverviewAmount } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewAmount'
-import { TransactionOverviewItem } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewItem'
-import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
-import { isBruneStakeCoin } from '@core/ui/vault/deposit/config'
-import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
-import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
-import { useDepositKeysignPayloadQuery } from '@core/ui/vault/deposit/keysignPayload/query'
-import { useDepositAction } from '@core/ui/vault/deposit/providers/DepositActionProvider'
-import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
-import { useDepositData } from '@core/ui/vault/deposit/state/data'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
-import { HStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
-import { MiddleTruncate } from '@lib/ui/truncate'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { StakingChain } from '@vultisig/core-chain/chains/cosmos/staking/lcdQueries'
 import { bruneBondConfig } from '@vultisig/core-chain/chains/cosmos/thor/brune-bond/config'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
-import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+
+import { useCosmosValidatorsQuery } from '../../../chain/cosmos/staking/queries/useCosmosValidatorsQuery'
+import { ReviewDivider } from '../../../mpc/keysign/review/ReviewDivider'
+import { ReviewRow } from '../../../mpc/keysign/review/ReviewRow'
+import { ReviewTruncatedValue } from '../../../mpc/keysign/review/ReviewTruncatedValue'
+import { ReviewVaultLine } from '../../../mpc/keysign/review/ReviewVaultLine'
+import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
+import { isBruneStakeCoin } from '../config'
+import { useDepositMemo } from '../hooks/useDepositMemo'
+import { useDepositKeysignPayloadQuery } from '../keysignPayload/query'
+import { useDepositAction } from '../providers/DepositActionProvider'
+import { useDepositCoin } from '../providers/DepositCoinProvider'
+import { useDepositData } from '../state/data'
+import { DepositBlockaidStatus } from './DepositBlockaidStatus'
+import { DepositFeeRow } from './DepositFeeRow'
+import { DepositNetworkRow } from './DepositNetworkRow'
+import { DepositReviewCard } from './DepositReviewCard'
+import { DepositReviewSheet } from './DepositReviewSheet'
 
 /**
- * Verify-screen overview for deposit/stake actions. Renders the action label,
- * amount, fee and total, swapping the memo row for validator row(s) on Cosmos
- * native staking actions (delegate / undelegate / redelegate / claim). `onBack`
- * returns to the form.
+ * Review sheet for deposit/stake actions. Renders the action label, amount and
+ * fee, swapping the memo row for validator row(s) on Cosmos native staking
+ * actions (delegate / undelegate / redelegate / claim). `onBack` returns to
+ * the form.
  */
 export const StakeOverview = ({ onBack }: OnBackProp) => {
   const { t } = useTranslation()
@@ -52,10 +38,8 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
   const [coin] = useDepositCoin()
   const [action] = useDepositAction()
   const memo = useDepositMemo()
-  const { name: vaultName } = useCurrentVault()
   const vaultAddress = useCurrentVaultAddress(coin.chain)
   const keysignPayloadQuery = useDepositKeysignPayloadQuery()
-  const { data: isBlockaidEnabled } = useIsBlockaidEnabledQuery()
 
   const actionLabels: Record<string, string> = {
     stake: t('you_are_staking'),
@@ -124,209 +108,87 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
 
   // For native TCY unstaking, the payload.toAmount is '0' because the amount is
   // encoded in the memo as a percentage. We need to use the form amount instead.
-  const getPayloadAmount = useCallback(
-    (payload: KeysignPayload) => {
-      const payloadAmount = payload.toAmount
-      // If payload amount is 0 or empty, use the form amount (converted to chain units)
-      if (!payloadAmount || payloadAmount === '0') {
-        return toChainAmount(exactAmount, coin.decimals).toString()
-      }
-      return payloadAmount
-    },
-    [exactAmount, coin.decimals]
-  )
+  const getPayloadAmount = (payload: KeysignPayload) => {
+    const payloadAmount = payload.toAmount
+    // If payload amount is 0 or empty, use the form amount (converted to chain units)
+    if (!payloadAmount || payloadAmount === '0') {
+      return toChainAmount(exactAmount, coin.decimals).toString()
+    }
+    return payloadAmount
+  }
+
+  const validatorValue = (value: string | null) => value ?? '—'
 
   return (
-    <>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={t('overview')}
-        hasBorder
-      />
-      <PageContent gap={16} scrollable>
-        {isBlockaidEnabled && (
-          <BlockaidStatus>
-            <SuccessIconWrapper>
-              <CheckmarkIcon />
-            </SuccessIconWrapper>
-            <BlockaidLabel as="span">
-              {t('transaction_scanned_by', { provider: '' }).trim()}
-            </BlockaidLabel>
-            <BlockaidLogoWrapper>
-              <BlockaidLogo />
-            </BlockaidLogoWrapper>
-          </BlockaidStatus>
-        )}
-
-        <List border="gradient" radius={borderRadiusPx.lg}>
-          {/* Hide amount row for native TCY unstake when fallback is 0, as the actual
-              amount is determined by THORChain based on the percentage in the memo */}
-          {!(isNativeTcyUnstake && fallbackAmount === 0) && (
-            <TransactionOverviewAmount
-              label={actionLabel}
-              coin={displayCoin}
-              fallbackAmount={fallbackAmount}
-              keysignPayloadQuery={keysignPayloadQuery}
-              getPayloadAmount={getPayloadAmount}
-            />
-          )}
-          <TransactionOverviewItem
-            label={t('from')}
-            value={
-              <TxVaultSourceLabel
-                name={vaultName}
-                address={`(${formatWalletAddress(vaultAddress)})`}
-              />
-            }
-          />
-          {memo ? (
-            <TransactionOverviewItem
+    <DepositReviewSheet title={t('overview')} onBack={onBack}>
+      <DepositBlockaidStatus />
+      {/* Hide amount row for native TCY unstake when fallback is 0, as the actual
+          amount is determined by THORChain based on the percentage in the memo */}
+      {!(isNativeTcyUnstake && fallbackAmount === 0) && (
+        <DepositReviewCard
+          label={actionLabel}
+          coin={displayCoin}
+          fallbackAmount={fallbackAmount}
+          keysignPayloadQuery={keysignPayloadQuery}
+          getPayloadAmount={getPayloadAmount}
+        />
+      )}
+      <VStack gap={12}>
+        <ReviewVaultLine value={vaultAddress} />
+        {memo ? (
+          <>
+            <ReviewDivider />
+            <ReviewRow
               label={t('memo')}
-              value={
-                <StyledTruncate
-                  size={14}
-                  text={memo}
-                  weight={500}
-                  width={220}
-                />
-              }
+              value={<ReviewTruncatedValue value={memo} />}
             />
-          ) : null}
-          {isCosmosStakingAction && action === 'redelegate' && srcValidator ? (
-            <TransactionOverviewItem
+          </>
+        ) : null}
+        {isCosmosStakingAction && action === 'redelegate' && srcValidator ? (
+          <>
+            <ReviewDivider />
+            <ReviewRow
               label={t('source_validator')}
-              value={
-                <Text as="span" size={14} weight={500}>
-                  {resolveMoniker(srcValidator)}
-                </Text>
-              }
+              value={validatorValue(resolveMoniker(srcValidator))}
             />
-          ) : null}
-          {isCosmosStakingAction &&
-          action !== 'claim_rewards' &&
-          dstValidator ? (
-            <TransactionOverviewItem
+          </>
+        ) : null}
+        {isCosmosStakingAction && action !== 'claim_rewards' && dstValidator ? (
+          <>
+            <ReviewDivider />
+            <ReviewRow
               label={
                 action === 'redelegate'
                   ? t('destination_validator')
                   : t('validator')
               }
-              value={
-                <Text as="span" size={14} weight={500}>
-                  {resolveMoniker(dstValidator)}
-                </Text>
-              }
+              value={validatorValue(resolveMoniker(dstValidator))}
             />
-          ) : null}
-          {isCosmosStakingAction &&
-          action === 'claim_rewards' &&
-          claimValidators &&
-          claimValidators.length > 0 ? (
-            <TransactionOverviewItem
+          </>
+        ) : null}
+        {isCosmosStakingAction &&
+        action === 'claim_rewards' &&
+        claimValidators &&
+        claimValidators.length > 0 ? (
+          <>
+            <ReviewDivider />
+            <ReviewRow
               label={t('validator')}
               value={
-                <Text as="span" size={14} weight={500}>
-                  {claimValidators.length === 1
-                    ? resolveMoniker(claimValidators[0])
-                    : t('claim_n_validators', {
-                        count: claimValidators.length,
-                      })}
-                </Text>
+                claimValidators.length === 1
+                  ? validatorValue(resolveMoniker(claimValidators[0]))
+                  : t('claim_n_validators', {
+                      count: claimValidators.length,
+                    })
               }
             />
-          ) : null}
-          <TransactionOverviewItem
-            label={t('network')}
-            value={
-              <HStack alignItems="center" gap={6}>
-                <ChainEntityIcon
-                  value={getChainLogoSrc(coin.chain)}
-                  style={{ fontSize: 16 }}
-                />
-                <Text size={14} weight={500}>
-                  {coin.chain}
-                </Text>
-              </HStack>
-            }
-          />
-          <TransactionOverviewItem
-            label={t('est_network_fee')}
-            value={
-              <MatchQuery
-                value={keysignPayloadQuery}
-                pending={() => <Spinner />}
-                success={payload => (
-                  <KeysignFeeAmount keysignPayload={payload} />
-                )}
-                error={() => (
-                  <Text as="span" size={14} color="shy">
-                    —
-                  </Text>
-                )}
-              />
-            }
-          />
-        </List>
-      </PageContent>
-      <PageFooter>
-        <DepositConfirmButton />
-      </PageFooter>
-    </>
+          </>
+        ) : null}
+        <ReviewDivider />
+        <DepositNetworkRow value={coin.chain} />
+        <ReviewDivider />
+        <DepositFeeRow />
+      </VStack>
+    </DepositReviewSheet>
   )
 }
-
-const BlockaidStatus = styled(HStack)`
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  padding: 0 4px;
-  background: transparent;
-  border: none;
-  color: ${getColor('textShy')};
-  font-family: 'Brockmann', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0.06px;
-  white-space: nowrap;
-`
-
-const SuccessIconWrapper = styled.div`
-  color: ${getColor('success')};
-  display: inline-flex;
-  width: 20px;
-  height: 20px;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  margin-right: 2px;
-`
-
-const BlockaidLabel = styled(Text)`
-  color: ${getColor('textShy')};
-  font-family: 'Brockmann', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0.06px;
-  margin-right: 6px;
-  white-space: nowrap;
-  text-align: center;
-`
-
-const StyledTruncate = styled(MiddleTruncate)`
-  justify-content: flex-end;
-`
-
-const BlockaidLogoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  height: 10px;
-  width: 55px;
-
-  svg {
-    width: 55px;
-    height: 10px;
-  }
-`

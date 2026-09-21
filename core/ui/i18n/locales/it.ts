@@ -2015,4 +2015,10 @@ export const it = {
   max_network_fee: 'Tariffa massima di rete',
   substrate_account_may_be_reaped:
     'Il mittente ha autorizzato questo trasferimento a svuotare il conto: se il saldo risultante è inferiore al deposito minimo necessario, il resto viene distrutto e il conto disattivato.',
+  review_not_enough_funds:
+    "Sembra che il tuo conto non disponga di fondi sufficienti per questa transazione. Modifica l'importo e riprova.",
+  risk_level: {
+    medium: 'Mezzo',
+    high: 'Alto',
+  },
 }

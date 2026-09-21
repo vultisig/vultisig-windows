@@ -1994,4 +1994,10 @@ export const nl = {
   max_network_fee: 'Maximale netwerkkosten',
   substrate_account_may_be_reaped:
     'De afzender heeft deze overschrijving toegestaan om de rekening leeg te halen: als het resterende saldo lager is dan het minimumsaldo, wordt het resterende bedrag vernietigd en de rekening gedeactiveerd.',
+  review_not_enough_funds:
+    'Het lijkt erop dat uw kluis onvoldoende saldo heeft voor deze transactie. Pas het bedrag aan en probeer het opnieuw.',
+  risk_level: {
+    medium: 'Medium',
+    high: 'Hoog',
+  },
 }

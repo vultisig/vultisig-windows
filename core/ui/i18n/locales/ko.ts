@@ -1969,4 +1969,10 @@ export const ko = {
   max_network_fee: '최대 네트워크 수수료',
   substrate_account_may_be_reaped:
     '송금인은 이 이체로 계좌 잔액이 모두 소진되도록 허용했습니다. 만약 남은 잔액이 최소 예치금보다 적으면, 남은 금액은 소멸되고 계좌는 비활성화됩니다.',
+  review_not_enough_funds:
+    '금고에 이 거래를 처리할 만큼 충분한 금액이 없는 것 같습니다. 금액을 조정한 후 다시 시도해 주세요.',
+  risk_level: {
+    medium: '중간',
+    high: '높은',
+  },
 }

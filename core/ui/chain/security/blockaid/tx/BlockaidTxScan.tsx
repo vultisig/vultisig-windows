@@ -6,6 +6,8 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 
 type BlockaidTxScanProps = {
   keysignPayloadQuery: Query<KeysignPayload>
+  /** See {@link BlockaidTxScanStatus}. */
+  withOverlay?: boolean
 }
 
 /**
@@ -16,6 +18,7 @@ type BlockaidTxScanProps = {
  */
 export const BlockaidTxScan = ({
   keysignPayloadQuery,
+  withOverlay,
 }: BlockaidTxScanProps) => {
   const isBlockaidEnabled = useIsBlockaidEnabled()
   const txScanQuery = useBlockaidTxScanQuery(keysignPayloadQuery)
@@ -24,5 +27,5 @@ export const BlockaidTxScan = ({
     return null
   }
 
-  return <BlockaidTxScanStatus value={txScanQuery} />
+  return <BlockaidTxScanStatus value={txScanQuery} withOverlay={withOverlay} />
 }

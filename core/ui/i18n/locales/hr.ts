@@ -1979,4 +1979,10 @@ export const hr = {
   max_network_fee: 'Maks. mrežna naknada',
   substrate_account_may_be_reaped:
     'Pošiljatelj je dopustio da se ovim transferom isprazni račun: ako je preostali saldo manji od egzistencijalnog pologa, ostatak se uništava i račun se deaktivira.',
+  review_not_enough_funds:
+    'Izgleda da vaš trezor nema dovoljno sredstava za ovu transakciju. Prilagodite iznos i pokušajte ponovno.',
+  risk_level: {
+    medium: 'Srednji',
+    high: 'Visoko',
+  },
 }

@@ -2010,4 +2010,10 @@ export const es = {
   max_network_fee: 'Tarifa máxima de red',
   substrate_account_may_be_reaped:
     'El remitente ha autorizado esta transferencia para vaciar la cuenta: si el saldo restante es inferior al depósito inicial, el resto se destruye y la cuenta se desactiva.',
+  review_not_enough_funds:
+    'Parece que tu bóveda no tiene fondos suficientes para esta transacción. Ajusta la cantidad e inténtalo de nuevo.',
+  risk_level: {
+    medium: 'Medio',
+    high: 'Alto',
+  },
 }

@@ -1846,4 +1846,10 @@ export const zh = {
   max_network_fee: '最高网络费用',
   substrate_account_may_be_reaped:
     '汇款人已允许此转账清空账户：如果转账后余额低于存根，则剩余余额将被销毁，账户将被停用。',
+  review_not_enough_funds:
+    '您的账户余额似乎不足以支付这笔交易。请调整金额后重试。',
+  risk_level: {
+    medium: '中等的',
+    high: '高的',
+  },
 }

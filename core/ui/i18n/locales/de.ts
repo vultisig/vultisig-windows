@@ -2026,4 +2026,10 @@ export const de = {
   max_network_fee: 'Maximale Netzwerkgebühr',
   substrate_account_may_be_reaped:
     'Der Absender hat zugelassen, dass das Konto leergeräumt wird: Liegt der verbleibende Saldo unter der Mindesteinlage, wird der Restbetrag vernichtet und das Konto deaktiviert.',
+  review_not_enough_funds:
+    'Ihr Konto verfügt anscheinend nicht über ausreichend Guthaben für diese Transaktion. Passen Sie den Betrag an und versuchen Sie es erneut.',
+  risk_level: {
+    medium: 'Medium',
+    high: 'Hoch',
+  },
 }

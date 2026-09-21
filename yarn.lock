@@ -734,6 +734,7 @@ __metadata:
     react-circular-progressbar: "npm:^2.2.0"
     react-dom: "npm:19.2.4"
     react-dropzone: "npm:^15.0.0"
+    react-focus-lock: "npm:^2.13.7"
     react-hook-form: "npm:^7.78.0"
     react-i18next: "npm:^16.5.8"
     react-qr-code: "npm:^2.2.0"
