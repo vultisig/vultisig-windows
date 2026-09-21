@@ -2008,6 +2008,8 @@ export const pt = {
   enable_ton_w5_wallet_description:
     'Use o contrato W5 (v5r1) em vez do V4R2 ao derivar os endereços TON deste cofre. Isso altera o endereço usado pela carteira, e cada contrato é um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
   max_network_fee: 'Taxa máxima de rede',
+  substrate_account_may_be_reaped:
+    'O remetente autorizou esta transferência para esvaziar a conta: se o saldo restante for inferior ao depósito mínimo, o saldo remanescente será destruído e a conta será desativada.',
   review_not_enough_funds:
     'Parece que seu cofre não tem fundos suficientes para esta transação. Ajuste o valor e tente novamente.',
   risk_level: {

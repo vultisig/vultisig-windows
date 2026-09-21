@@ -26,7 +26,7 @@ import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { getMaxValue } from '@vultisig/core-chain/amount/getMaxValue'
+import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   areEqualCoins,
@@ -96,7 +96,11 @@ export const ManageAmountInputField = () => {
     const suggestionValue = multiplyBigInt(balance, pendingSuggestion)
     const maxSendable =
       isNative && feeEstimateQuery.data != null
-        ? getMaxValue(balance, feeEstimateQuery.data)
+        ? getMaxSendableAmount({
+            chain: coin.chain,
+            balance,
+            fee: feeEstimateQuery.data,
+          })
         : balance
     const effectiveAmount = isNative
       ? minBigInt(suggestionValue, maxSendable)
@@ -104,7 +108,14 @@ export const ManageAmountInputField = () => {
 
     setValue(effectiveAmount)
     setPendingSuggestion(null)
-  }, [balance, feeEstimateQuery.data, isNative, pendingSuggestion, setValue])
+  }, [
+    balance,
+    coin.chain,
+    feeEstimateQuery.data,
+    isNative,
+    pendingSuggestion,
+    setValue,
+  ])
 
   const [currencyInputMode, setCurrencyInputMode] = useStateCorrector(
     useState<CurrencyInputMode>('base'),
@@ -225,7 +236,11 @@ export const ManageAmountInputField = () => {
                   balance != null ? multiplyBigInt(balance, suggestion) : 0n
                 const maxSendable =
                   balance != null && isNative && feeEstimateQuery.data != null
-                    ? getMaxValue(balance, feeEstimateQuery.data)
+                    ? getMaxSendableAmount({
+                        chain: coin.chain,
+                        balance,
+                        fee: feeEstimateQuery.data,
+                      })
                     : (balance ?? 0n)
                 const effectiveAmount =
                   balance != null
