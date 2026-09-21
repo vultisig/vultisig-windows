@@ -947,6 +947,8 @@ export const en = {
   ripple_field_type: 'Type',
   ripple_field_destination: 'Destination',
   ripple_field_destination_tag: 'Destination tag',
+  substrate_account_may_be_reaped:
+    'The sender has allowed this transfer to empty the account: if the balance it leaves is below the existential deposit, the remainder is destroyed and the account is deactivated.',
   ripple_destination_tag_invalid:
     'Enter a whole number between 0 and 4,294,967,295.',
   ripple_destination_tag_optional: 'Optional destination tag',
@@ -968,6 +970,12 @@ export const en = {
     "Make sure that these are the correct devices you've added:",
   review_your_vault_devices: 'Review your vault devices',
   risky_site_detected: 'Malicious site detected',
+  review_not_enough_funds:
+    "Looks like your vault doesn't have enough funds for this transaction. Adjust the amount and try again.",
+  risk_level: {
+    medium: 'Medium',
+    high: 'High',
+  },
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   risky_tx_warning:
     'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',

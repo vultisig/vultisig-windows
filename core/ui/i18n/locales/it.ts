@@ -2016,4 +2016,12 @@ export const it = {
   swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
   swap_failed_refunded_description:
     "Lo scambio non è andato a buon fine, pertanto il fornitore ha riaccreditato i fondi sul tuo portafoglio anziché sull'asset richiesto. Nessuno scambio è stato completato. Riprova per ottenere un nuovo preventivo.",
+  substrate_account_may_be_reaped:
+    'Il mittente ha autorizzato questo trasferimento a svuotare il conto: se il saldo risultante è inferiore al deposito minimo necessario, il resto viene distrutto e il conto disattivato.',
+  review_not_enough_funds:
+    "Sembra che il tuo conto non disponga di fondi sufficienti per questa transazione. Modifica l'importo e riprova.",
+  risk_level: {
+    medium: 'Mezzo',
+    high: 'Alto',
+  },
 }

@@ -2011,4 +2011,12 @@ export const pt = {
   swap_failed_refunded: 'Reembolsado pelo provedor de troca.',
   swap_failed_refunded_description:
     'A troca não pôde ser concluída, portanto o provedor devolveu seus fundos para sua carteira em vez do ativo solicitado. Nenhuma troca foi concluída. Tente novamente para obter uma nova cotação.',
+  substrate_account_may_be_reaped:
+    'O remetente autorizou esta transferência para esvaziar a conta: se o saldo restante for inferior ao depósito mínimo, o saldo remanescente será destruído e a conta será desativada.',
+  review_not_enough_funds:
+    'Parece que seu cofre não tem fundos suficientes para esta transação. Ajuste o valor e tente novamente.',
+  risk_level: {
+    medium: 'Médio',
+    high: 'Alto',
+  },
 }

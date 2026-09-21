@@ -26,8 +26,13 @@ import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { getMaxValue } from '@vultisig/core-chain/amount/getMaxValue'
+import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  areEqualCoins,
+  CoinKey,
+  extractCoinKey,
+} from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
@@ -43,6 +48,11 @@ const suggestions = [0.25, 0.5, 0.75, 1]
 
 export type CurrencyInputMode = 'base' | 'fiat'
 
+type SelectedSuggestion = {
+  coin: CoinKey
+  fraction: number
+}
+
 export const ManageAmountInputField = () => {
   const { t } = useTranslation()
 
@@ -50,6 +60,15 @@ export const ManageAmountInputField = () => {
   const [pendingSuggestion, setPendingSuggestion] = useState<number | null>(
     null
   )
+  // The highlighted button is the one the user picked, not whichever
+  // suggestion happens to resolve to the current amount: fee clamping makes
+  // several fractions collapse onto the same value (75% and Max on a small
+  // native balance), and on an empty balance every one of them is 0n. The
+  // pick is tied to the coin it was made for and only shows while the field
+  // still holds the amount it produced, so a coin switch (which keeps the
+  // amount) does not carry a stale highlight.
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<SelectedSuggestion | null>(null)
 
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
@@ -57,6 +76,12 @@ export const ManageAmountInputField = () => {
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
   const isNative = isFeeCoin(coin)
+  const hasBalance = balance != null && balance > 0n
+
+  const handleAmountChange = (amount: bigint | null) => {
+    setValue(amount)
+    setSelectedSuggestion(null)
+  }
 
   // When user clicked a suggestion and we were waiting for fee: apply amount once fee is available
   useEffect(() => {
@@ -71,7 +96,11 @@ export const ManageAmountInputField = () => {
     const suggestionValue = multiplyBigInt(balance, pendingSuggestion)
     const maxSendable =
       isNative && feeEstimateQuery.data != null
-        ? getMaxValue(balance, feeEstimateQuery.data)
+        ? getMaxSendableAmount({
+            chain: coin.chain,
+            balance,
+            fee: feeEstimateQuery.data,
+          })
         : balance
     const effectiveAmount = isNative
       ? minBigInt(suggestionValue, maxSendable)
@@ -79,7 +108,14 @@ export const ManageAmountInputField = () => {
 
     setValue(effectiveAmount)
     setPendingSuggestion(null)
-  }, [balance, feeEstimateQuery.data, isNative, pendingSuggestion, setValue])
+  }, [
+    balance,
+    coin.chain,
+    feeEstimateQuery.data,
+    isNative,
+    pendingSuggestion,
+    setValue,
+  ])
 
   const [currencyInputMode, setCurrencyInputMode] = useStateCorrector(
     useState<CurrencyInputMode>('base'),
@@ -155,7 +191,7 @@ export const ManageAmountInputField = () => {
                           <FiatSendAmountInput
                             {...sharedInputProps}
                             value={value}
-                            onChange={setValue}
+                            onChange={handleAmountChange}
                             decimals={coin.decimals}
                             price={shouldBePresent(coinPriceQuery.data)}
                           />
@@ -166,7 +202,7 @@ export const ManageAmountInputField = () => {
                             placeholder={sharedInputProps.placeholder}
                             disabled={sharedInputProps.disabled}
                             value={value}
-                            onChange={setValue}
+                            onChange={handleAmountChange}
                             decimals={coin.decimals}
                           />
                         )}
@@ -200,7 +236,11 @@ export const ManageAmountInputField = () => {
                   balance != null ? multiplyBigInt(balance, suggestion) : 0n
                 const maxSendable =
                   balance != null && isNative && feeEstimateQuery.data != null
-                    ? getMaxValue(balance, feeEstimateQuery.data)
+                    ? getMaxSendableAmount({
+                        chain: coin.chain,
+                        balance,
+                        fee: feeEstimateQuery.data,
+                      })
                     : (balance ?? 0n)
                 const effectiveAmount =
                   balance != null
@@ -211,6 +251,11 @@ export const ManageAmountInputField = () => {
 
                 const handleSuggestionClick = () => {
                   if (balance == null) return
+
+                  setSelectedSuggestion({
+                    coin: extractCoinKey(coin),
+                    fraction: suggestion,
+                  })
 
                   if (!isNative) {
                     setValue(suggestionValue)
@@ -231,7 +276,13 @@ export const ManageAmountInputField = () => {
                     key={suggestion}
                     value={suggestion}
                     onClick={handleSuggestionClick}
-                    isActive={value === effectiveAmount}
+                    disabled={!hasBalance}
+                    isActive={
+                      selectedSuggestion !== null &&
+                      selectedSuggestion.fraction === suggestion &&
+                      areEqualCoins(selectedSuggestion.coin, coin) &&
+                      value === effectiveAmount
+                    }
                   />
                 )
               })}

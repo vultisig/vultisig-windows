@@ -2027,4 +2027,12 @@ export const de = {
   swap_failed_refunded: 'Rückerstattung durch den Tauschanbieter',
   swap_failed_refunded_description:
     'Der Tausch konnte nicht abgeschlossen werden. Daher hat der Anbieter Ihre Gelder an Ihre Wallet zurückgesendet, anstatt Ihnen den gewünschten Vermögenswert zu senden. Es wurde kein Tausch durchgeführt. Versuchen Sie es erneut, um ein neues Angebot zu erhalten.',
+  substrate_account_may_be_reaped:
+    'Der Absender hat zugelassen, dass das Konto leergeräumt wird: Liegt der verbleibende Saldo unter der Mindesteinlage, wird der Restbetrag vernichtet und das Konto deaktiviert.',
+  review_not_enough_funds:
+    'Ihr Konto verfügt anscheinend nicht über ausreichend Guthaben für diese Transaktion. Passen Sie den Betrag an und versuchen Sie es erneut.',
+  risk_level: {
+    medium: 'Medium',
+    high: 'Hoch',
+  },
 }

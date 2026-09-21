@@ -1980,4 +1980,12 @@ export const hr = {
   swap_failed_refunded: 'Povrat novca izvršio je pružatelj zamjene',
   swap_failed_refunded_description:
     'Zamjena nije mogla biti dovršena pa je pružatelj usluga poslao vaša sredstva natrag u vaš novčanik umjesto imovine koju ste tražili. Zamjena nije dovršena. Pokušajte ponovno kako biste dobili novu ponudu.',
+  substrate_account_may_be_reaped:
+    'Pošiljatelj je dopustio da se ovim transferom isprazni račun: ako je preostali saldo manji od egzistencijalnog pologa, ostatak se uništava i račun se deaktivira.',
+  review_not_enough_funds:
+    'Izgleda da vaš trezor nema dovoljno sredstava za ovu transakciju. Prilagodite iznos i pokušajte ponovno.',
+  risk_level: {
+    medium: 'Srednji',
+    high: 'Visoko',
+  },
 }

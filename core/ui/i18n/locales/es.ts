@@ -2011,4 +2011,12 @@ export const es = {
   swap_failed_refunded: 'Reembolsado por el proveedor de intercambio.',
   swap_failed_refunded_description:
     'No se pudo completar el intercambio, por lo que el proveedor devolvió sus fondos a su billetera en lugar del activo que solicitó. No se realizó ningún intercambio. Inténtelo de nuevo para obtener una nueva cotización.',
+  substrate_account_may_be_reaped:
+    'El remitente ha autorizado esta transferencia para vaciar la cuenta: si el saldo restante es inferior al depósito inicial, el resto se destruye y la cuenta se desactiva.',
+  review_not_enough_funds:
+    'Parece que tu bóveda no tiene fondos suficientes para esta transacción. Ajusta la cantidad e inténtalo de nuevo.',
+  risk_level: {
+    medium: 'Medio',
+    high: 'Alto',
+  },
 }

@@ -6,11 +6,15 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps, useRef } from 'react'
 import styled from 'styled-components'
 
+// Same layer as Sheet, PromptSheet and ResponsiveModal: every body-portalled
+// dialog shares it, so the one opened last paints on top. A modal opened from
+// inside a sheet (fee settings on the send review) would otherwise sit under
+// the sheet's overlay.
 const Container = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: 1000;
   ${takeWholeSpace};
   ${centerContent};
   background: ${getColor('overlay')};

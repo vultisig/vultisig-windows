@@ -1995,4 +1995,12 @@ export const nl = {
   swap_failed_refunded: 'Terugbetaald door de swapaanbieder',
   swap_failed_refunded_description:
     'De swap kon niet worden voltooid, daarom heeft de aanbieder uw geld teruggestuurd naar uw wallet in plaats van de door u aangevraagde activa. Er is geen swap voltooid. Probeer het opnieuw om een nieuwe offerte te ontvangen.',
+  substrate_account_may_be_reaped:
+    'De afzender heeft deze overschrijving toegestaan om de rekening leeg te halen: als het resterende saldo lager is dan het minimumsaldo, wordt het resterende bedrag vernietigd en de rekening gedeactiveerd.',
+  review_not_enough_funds:
+    'Het lijkt erop dat uw kluis onvoldoende saldo heeft voor deze transactie. Pas het bedrag aan en probeer het opnieuw.',
+  risk_level: {
+    medium: 'Medium',
+    high: 'Hoog',
+  },
 }
