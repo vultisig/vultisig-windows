@@ -16,6 +16,10 @@ export const swapFailureCopy = {
     label: 'swap_failed_slippage',
     description: 'swap_failed_slippage_description',
   },
+  refunded: {
+    label: 'swap_failed_refunded',
+    description: 'swap_failed_refunded_description',
+  },
 } as const satisfies Record<
   SwapFailureReason,
   { label: string; description: string }

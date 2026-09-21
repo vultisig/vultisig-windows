@@ -2013,6 +2013,9 @@ export const it = {
   enable_ton_w5_wallet_description:
     "Utilizza il contratto W5 (v5r1) anziché V4R2 quando derivi gli indirizzi TON di questo vault. Questo modifica l'indirizzo utilizzato dal wallet e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
   max_network_fee: 'Tariffa massima di rete',
+  swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
+  swap_failed_refunded_description:
+    "Lo scambio non è andato a buon fine, pertanto il fornitore ha riaccreditato i fondi sul tuo portafoglio anziché sull'asset richiesto. Nessuno scambio è stato completato. Riprova per ottenere un nuovo preventivo.",
   substrate_account_may_be_reaped:
     'Il mittente ha autorizzato questo trasferimento a svuotare il conto: se il saldo risultante è inferiore al deposito minimo necessario, il resto viene distrutto e il conto disattivato.',
   review_not_enough_funds:

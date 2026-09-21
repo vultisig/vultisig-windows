@@ -22,6 +22,7 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import { getThorchainAssetTicker } from '../../mpc/keysign/join/tx/thorchainAssetTicker'
 import { isTronWithdrawExpireUnfreezePayload } from '../../vault/deposit/tron/withdrawExpireUnfreeze'
+import { getKeysignSwapArrivalProvider } from '../../vault/swap/arrival/swapArrivalProvider'
 import { toThorchainFixedPoint } from '../../vault/swap/limit/amount'
 import {
   LimitSwapTransactionData,
@@ -249,6 +250,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         toDecimals: to.decimals,
         provider,
         route: `${from.token} → ${to.token}`,
+        arrivalProvider: getKeysignSwapArrivalProvider(swapPayload),
         ...solanaDeadline(payload),
       }
     },

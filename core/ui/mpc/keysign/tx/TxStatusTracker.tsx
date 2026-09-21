@@ -1,11 +1,9 @@
 import { getTxFailureDescription } from '@core/ui/chain/tx/failure/getTxFailureDescription'
-import { VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
 
 import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
-import { TransactionStatusAnimation } from './TransactionStatusAnimation'
+import { TxStatusView } from './TxStatusView'
 
 type TxStatusTrackerProps = {
   chain: Chain
@@ -35,31 +33,21 @@ export const TxStatusTracker = ({
   const failure = status === 'error' ? data?.failure : undefined
 
   return (
-    <VStack gap={12} fullWidth>
-      <TransactionStatusAnimation
-        // `not_found` means the node has not seen the hash yet (broadcast still
-        // propagating); keep showing the pending animation until it resolves.
-        status={
-          isPending
-            ? 'broadcasted'
-            : status === 'not_found'
-              ? 'pending'
-              : status === 'expired'
-                ? 'error'
-                : status
-        }
-      />
-      {failure ? (
-        <Text
-          color="shyExtra"
-          size={13}
-          weight={500}
-          centerHorizontally
-          data-testid="tx-failure-description"
-        >
-          {getTxFailureDescription({ failure, t })}
-        </Text>
-      ) : null}
-    </VStack>
+    <TxStatusView
+      // `not_found` means the node has not seen the hash yet (broadcast still
+      // propagating); keep showing the pending animation until it resolves.
+      status={
+        isPending
+          ? 'broadcasted'
+          : status === 'not_found'
+            ? 'pending'
+            : status === 'expired'
+              ? 'error'
+              : status
+      }
+      description={
+        failure ? getTxFailureDescription({ failure, t }) : undefined
+      }
+    />
   )
 }

@@ -8,6 +8,10 @@ import {
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
 import { getRecordLastValidBlockHeight } from './getRecordLastValidBlockHeight'
+import {
+  getArrivalTrackedSwap,
+  getSwapArrivalRecordUpdate,
+} from './getSwapArrivalRecordUpdate'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
 import { isChainPollable } from './pendingRecord'
 import { getStatusPollingInterval } from './staleTransaction'
@@ -50,6 +54,19 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
             record: cowSwapOrder.record,
             apiBase: cowSwapOrder.apiBase,
           })
+        if (updatedRecord) {
+          applyRecordUpdate({ previous: current, update: updatedRecord })
+        }
+        return { status }
+      }
+
+      // A native swap's source transaction is a deposit, not the swap: the
+      // provider is asked whether it paid out or refunded once that deposit
+      // confirms, and the record settles on the provider's word.
+      const arrivalTrackedSwap = getArrivalTrackedSwap(current)
+      if (arrivalTrackedSwap) {
+        const { status, record: updatedRecord } =
+          await getSwapArrivalRecordUpdate(arrivalTrackedSwap)
         if (updatedRecord) {
           applyRecordUpdate({ previous: current, update: updatedRecord })
         }

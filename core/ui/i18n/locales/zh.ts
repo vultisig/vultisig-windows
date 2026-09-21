@@ -1844,6 +1844,9 @@ export const zh = {
   enable_ton_w5_wallet_description:
     '生成此金库的TON地址时，请使用 W5 (v5r1) 合约代替 V4R2 合约。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有各自的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',
   max_network_fee: '最高网络费用',
+  swap_failed_refunded: '由互换提供商退款',
+  swap_failed_refunded_description:
+    '兑换未能完成，因此服务提供商已将您的资金退回至您的钱包，而非您请求的资产。兑换未完成。请重试以获取新的报价。',
   substrate_account_may_be_reaped:
     '汇款人已允许此转账清空账户：如果转账后余额低于存根，则剩余余额将被销毁，账户将被停用。',
   review_not_enough_funds:

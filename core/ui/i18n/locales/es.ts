@@ -2008,6 +2008,9 @@ export const es = {
   enable_ton_w5_wallet_description:
     'Utilice el contrato W5 (v5r1) en lugar del V4R2 al derivar las direcciones TON de esta bóveda. Esto cambia la dirección que utiliza la billetera, y cada contrato es una dirección independiente con su propio saldo; no transfiere fondos, por lo que cualquier saldo en la otra dirección permanece allí hasta que usted lo envíe.',
   max_network_fee: 'Tarifa máxima de red',
+  swap_failed_refunded: 'Reembolsado por el proveedor de intercambio.',
+  swap_failed_refunded_description:
+    'No se pudo completar el intercambio, por lo que el proveedor devolvió sus fondos a su billetera en lugar del activo que solicitó. No se realizó ningún intercambio. Inténtelo de nuevo para obtener una nueva cotización.',
   substrate_account_may_be_reaped:
     'El remitente ha autorizado esta transferencia para vaciar la cuenta: si el saldo restante es inferior al depósito inicial, el resto se destruye y la cuenta se desactiva.',
   review_not_enough_funds:

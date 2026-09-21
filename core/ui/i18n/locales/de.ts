@@ -2024,6 +2024,9 @@ export const de = {
   enable_ton_w5_wallet_description:
     'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
   max_network_fee: 'Maximale Netzwerkgebühr',
+  swap_failed_refunded: 'Rückerstattung durch den Tauschanbieter',
+  swap_failed_refunded_description:
+    'Der Tausch konnte nicht abgeschlossen werden. Daher hat der Anbieter Ihre Gelder an Ihre Wallet zurückgesendet, anstatt Ihnen den gewünschten Vermögenswert zu senden. Es wurde kein Tausch durchgeführt. Versuchen Sie es erneut, um ein neues Angebot zu erhalten.',
   substrate_account_may_be_reaped:
     'Der Absender hat zugelassen, dass das Konto leergeräumt wird: Liegt der verbleibende Saldo unter der Mindesteinlage, wird der Restbetrag vernichtet und das Konto deaktiviert.',
   review_not_enough_funds:

@@ -1967,6 +1967,9 @@ export const ko = {
   enable_ton_w5_wallet_description:
     '이 볼트의 TON 주소를 생성할 때 V4R2 대신 W5(v5r1) 컨트랙트를 사용하세요. 이렇게 하면 지갑에서 사용하는 주소가 변경되며, 각 컨트랙트는 자체 잔액을 가진 별도의 주소입니다. 자금 이동은 없으므로 다른 주소에 있는 모든 자산은 사용자가 전송하기 전까지 해당 주소에 그대로 유지됩니다.',
   max_network_fee: '최대 네트워크 수수료',
+  swap_failed_refunded: '교환 제공업체로부터 환불받음',
+  swap_failed_refunded_description:
+    '스왑 거래가 완료되지 않아 제공업체에서 요청하신 자산 대신 자금을 지갑으로 반환했습니다. 스왑 거래가 완료되지 않았습니다. 다시 시도하여 새 견적을 받아보세요.',
   substrate_account_may_be_reaped:
     '송금인은 이 이체로 계좌 잔액이 모두 소진되도록 허용했습니다. 만약 남은 잔액이 최소 예치금보다 적으면, 남은 금액은 소멸되고 계좌는 비활성화됩니다.',
   review_not_enough_funds:
