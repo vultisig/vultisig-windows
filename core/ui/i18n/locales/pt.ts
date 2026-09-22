@@ -2023,7 +2023,7 @@ export const pt = {
     medium: 'Médio',
     high: 'Alto',
   },
-  tx_failed_expired: 'Expirou antes de ser confirmado.',
+  tx_failed_expired: 'Expirou antes de ser confirmada.',
   tx_failed_expired_description:
-    'A rede não confirmou esta transação antes do prazo expirar, portanto ela não foi concluída e nenhum valor foi enviado para sua carteira. Tente assinar e enviar novamente com um novo prazo.',
+    'A rede não confirmou esta transação antes do prazo expirar, portanto ela não foi concluída e nenhum valor saiu da sua carteira. Tente assinar e enviar novamente com um novo prazo.',
 }

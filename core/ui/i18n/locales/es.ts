@@ -2023,7 +2023,7 @@ export const es = {
     medium: 'Medio',
     high: 'Alto',
   },
-  tx_failed_expired: 'Caducó antes de ser confirmado.',
+  tx_failed_expired: 'Caducó antes de ser confirmada.',
   tx_failed_expired_description:
-    'La red no confirmó esta transacción antes de que expirara, por lo que no se procesó y no se envió nada a tu billetera. Intenta firmar y enviar de nuevo con una nueva fecha límite.',
+    'La red no confirmó esta transacción antes de que expirara, por lo que no se procesó y nada salió de tu billetera. Intenta firmar y enviar de nuevo con una nueva fecha límite.',
 }

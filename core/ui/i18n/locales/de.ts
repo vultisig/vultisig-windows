@@ -2041,5 +2041,5 @@ export const de = {
   },
   tx_failed_expired: 'Ist abgelaufen, bevor es bestätigt wurde.',
   tx_failed_expired_description:
-    'Das Netzwerk hat diese Transaktion vor Ablauf der Frist nicht bestätigt, daher wurde sie nicht ausgeführt und Ihr Wallet wurde nicht verlassen. Versuchen Sie erneut, die Transaktion mit einer neuen Frist zu signieren und zu senden.',
+    'Das Netzwerk hat diese Transaktion vor Ablauf der Frist nicht bestätigt, daher wurde sie nicht ausgeführt und nichts hat Ihr Wallet verlassen. Versuchen Sie erneut, die Transaktion mit einer neuen Frist zu signieren und zu senden.',
 }
