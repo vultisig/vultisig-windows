@@ -630,8 +630,10 @@ export const TransactionDetailPage = () => {
         {/*
          * Explains why the explorer may not find this hash: the wallet only
          * signed, and the network sees the transaction only if the dApp sent it.
+         * A limit order tells its own lifecycle below instead of a status row,
+         * so it gets no status explanation either.
          */}
-        {record.status === 'signed' && (
+        {record.status === 'signed' && record.type !== 'limitSwap' && (
           <InfoBlock>{t('signed_awaiting_broadcast_description')}</InfoBlock>
         )}
 

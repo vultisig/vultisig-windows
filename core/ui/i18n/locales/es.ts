@@ -2023,7 +2023,7 @@ export const es = {
     medium: 'Medio',
     high: 'Alto',
   },
-  signed_awaiting_broadcast: 'Firmado, pendiente de emisión.',
+  signed_awaiting_broadcast: 'Firmado, aún no enviado a la red.',
   signed_awaiting_broadcast_description:
-    'Esta transacción fue firmada y devuelta al dApp que la solicitó. El envío a la red depende del dApp ; el estado se actualiza una vez que la red la recibe.',
+    'Esta transacción fue firmada pero no enviada. La aplicación que la solicitó es responsable de enviarla a la red; el estado se actualiza una vez que la red la recibe.',
 }
