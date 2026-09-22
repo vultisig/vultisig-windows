@@ -1,24 +1,7 @@
 import { MarketChartPoint } from '@core/ui/chain/coin/price/market/marketChart'
 
-import { limitPricePresets } from '../price'
-
-/**
- * Floor and ceiling of the plot, as multiples of the market rate. The ceiling
- * clears the furthest preset stop so every pill lands inside the plot; the
- * floor keeps just enough room below market for the at-or-below-market region
- * to read as a region rather than an edge.
- */
-const domainFloorMultiplier = 0.97
-const domainCeilingMultiplier = 1.12
-
-/** Slack above and below the anchored window, so nothing touches the frame. */
+/** Slack above and below the fitted window, so nothing touches the frame. */
 const domainHeadroom = 0.06
-
-/**
- * The preset stops drawn as guide lines: the two furthest-above-market pills.
- * Derived from the preset list so a change there moves the guides with it.
- */
-export const limitChartGuidePresets = limitPricePresets.slice(-2)
 
 /** Vertical window the limit chart is drawn in, in buy units per sell unit. */
 type LimitChartDomain = {
@@ -28,32 +11,27 @@ type LimitChartDomain = {
 
 type GetLimitChartDomainInput = {
   points: MarketChartPoint[]
-  marketPrice: number
+  /** Undefined while the pair's quote is still resolving. */
+  marketPrice: number | undefined
 }
 
 /**
- * Vertical window for the limit chart, anchored on the **market rate** rather
- * than on the data or the target: the drag zone a limit order cares about is a
- * few percent around market, and a domain fitted to the history would rescale
- * the moment the range changed. The series only ever widens the window, and the
- * target never enters it — so dragging cannot make the plot move under the
- * pointer.
+ * Vertical window for the limit chart: the charted history plus the market
+ * rate, with headroom, so the series fills the plot whatever the range. The
+ * target never enters it — a dragged rule would otherwise rescale the plot
+ * under the pointer — so a target outside the window is pinned to the edge by
+ * `getLimitChartPlacement` rather than fitted.
  */
 export const getLimitChartDomain = ({
   points,
   marketPrice,
 }: GetLimitChartDomainInput): LimitChartDomain => {
-  const prices = points.map(({ price }) => price)
+  const bounds = points.map(({ price }) => price)
 
-  const anchors =
-    marketPrice > 0
-      ? [
-          marketPrice * domainFloorMultiplier,
-          marketPrice * domainCeilingMultiplier,
-        ]
-      : []
+  if (marketPrice !== undefined && marketPrice > 0) {
+    bounds.push(marketPrice)
+  }
 
-  const bounds = [...prices, ...anchors]
   if (bounds.length === 0) {
     return { min: 0, max: 1 }
   }
@@ -105,8 +83,8 @@ export const getLimitChartValue = ({
 /**
  * Where a target price is drawn, and whether it had to be pinned to get there.
  * A target outside the window keeps its value everywhere else — only its mark
- * is pinned, and `offScale` tells the chart to label it instead of pretending
- * it sits on the edge.
+ * is pinned, and `offScale` tells the chart to draw it as a limit of the plot
+ * rather than pretending it sits on the edge.
  */
 type LimitChartPlacement = {
   fraction: number

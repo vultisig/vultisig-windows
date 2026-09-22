@@ -1,7 +1,7 @@
 import { MarketChartRange } from '@core/ui/chain/coin/price/market/MarketChartRange'
 import { CoinChartRangePicker } from '@core/ui/vault/chain/coin/market/CoinChartRangePicker'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
@@ -14,10 +14,11 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useIsLimitPriceChartExpanded } from '../../../../storage/limitPriceChartExpanded'
+import { getLimitChartReach } from './chartReach'
 import { limitChartHeight } from './config'
 import { LimitPriceChart } from './LimitPriceChart'
 import { LimitPriceChartVerdict } from './LimitPriceChartVerdict'
-import { limitChartRanges } from './range'
+import { defaultLimitChartRange, limitChartRanges } from './range'
 import { useLimitPairChartQuery } from './useLimitPairChartQuery'
 
 type LimitPriceChartSectionProps = {
@@ -37,9 +38,11 @@ type LimitPriceChartSectionProps = {
  * traded there.
  *
  * Collapsed costs nothing — neither leg is fetched until it is opened — and the
- * choice is remembered. Whenever the series cannot be built honestly the
- * section says so and stops; it never blocks or alters the numeric form, which
- * remains the way an order is priced.
+ * choice is remembered. The history draws as soon as it arrives, before the
+ * pair's quote has resolved; only the rule and its caption wait for a price to
+ * judge. Whenever the series cannot be built honestly the section says so and
+ * stops; it never blocks or alters the numeric form, which remains the way an
+ * order is priced.
  */
 export const LimitPriceChartSection = ({
   fromCoin,
@@ -52,14 +55,18 @@ export const LimitPriceChartSection = ({
   const { t } = useTranslation()
   const prefersReduced = useReducedMotion()
   const [isExpanded, setIsExpanded] = useIsLimitPriceChartExpanded()
-  const [range, setRange] = useState<MarketChartRange>(limitChartRanges[0])
+  const [range, setRange] = useState<MarketChartRange>(defaultLimitChartRange)
 
   const query = useLimitPairChartQuery({
     fromCoin,
     toCoin,
     range,
-    isEnabled: isExpanded && marketPrice !== undefined,
+    isEnabled: isExpanded,
   })
+
+  // While the field is empty the rule sits at market — where the "Market"
+  // preset would put it — so the chart has a price to judge from the start.
+  const rulePrice = targetPrice ?? marketPrice
 
   const unavailable = (
     <Text size={12} color="shy">
@@ -106,8 +113,21 @@ export const LimitPriceChartSection = ({
                   />
                 )}
                 error={() => unavailable}
-                success={points =>
-                  points && marketPrice !== undefined ? (
+                success={points => {
+                  if (!points) {
+                    return unavailable
+                  }
+
+                  const reach =
+                    rulePrice === undefined
+                      ? null
+                      : getLimitChartReach({
+                          points,
+                          targetPrice: rulePrice,
+                          marketPrice,
+                        })
+
+                  return (
                     // Dimmed while a range switch is in flight: the legs resolve
                     // independently, so for a moment the ratio is drawn over
                     // whichever window arrived first.
@@ -118,23 +138,20 @@ export const LimitPriceChartSection = ({
                       <LimitPriceChart
                         points={points}
                         marketPrice={marketPrice}
-                        targetPrice={targetPrice}
+                        targetPrice={rulePrice}
+                        reach={reach}
                         formatPrice={formatPrice}
                         onTargetChange={onTargetChange}
                       />
-                      {targetPrice !== null ? (
+                      {reach ? (
                         <LimitPriceChartVerdict
-                          points={points}
-                          marketPrice={marketPrice}
-                          targetPrice={targetPrice}
+                          reach={reach}
                           formatPrice={formatPrice}
                         />
                       ) : null}
                     </VStack>
-                  ) : (
-                    unavailable
                   )
-                }
+                }}
               />
               <CoinChartRangePicker
                 value={range}
@@ -149,15 +166,15 @@ export const LimitPriceChartSection = ({
   )
 }
 
+// A flat row inside the price card, not a box of its own: only the label and
+// the chevron say it opens.
 const DisclosureRow = styled(UnstyledButton)`
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   width: 100%;
-  padding: 12px 16px;
-  ${borderRadius.md};
-  border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
+  padding: 6px 0;
   cursor: pointer;
 `
 
