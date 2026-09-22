@@ -14,9 +14,9 @@ import { OnCloseProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { CoinKey } from '@vultisig/core-chain/coin/Coin'
-import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -49,6 +49,12 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   )
 }
 
+/**
+ * Address book for the send recipient field. The "Vault" tab derives the
+ * selected chain's address for every stored vault that can produce one and
+ * silently skips vaults that cannot (key-import vaults without the chain,
+ * or pre-MLDSA vaults when the chain is QBTC).
+ */
 export const AddressBookModalContent = ({
   coin,
   onSelect,
@@ -77,18 +83,17 @@ export const AddressBookModalContent = ({
           return acc
         }
 
-        const publicKey = getPublicKey({
+        if (coin.chain === Chain.QBTC && !vault.publicKeyMldsa) {
+          return acc
+        }
+
+        const address = getChainAddress({
           chain: coin.chain,
           walletCore,
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
+          publicKeyMldsa: vault.publicKeyMldsa,
           chainPublicKeys: vault.chainPublicKeys,
-        })
-
-        const address = deriveAddress({
-          chain: coin.chain,
-          publicKey,
-          walletCore,
         })
         acc.push({ name: vault.name, address })
       }
