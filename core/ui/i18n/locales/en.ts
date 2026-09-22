@@ -1957,6 +1957,10 @@ export const en = {
   token_verification_scam: 'SCAM',
   token_verification_scam_hint:
     'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
+  ton_gasless_pay_fee_in_token: 'Pay network fee in {{ticker}}',
+  ton_gasless_description:
+    'No TON needed: a relay pays the network gas and charges a small {{ticker}} commission instead.',
+  ton_gasless_fee_note: 'paid via relay',
   enable_ton_w5_wallet: 'Use TON W5 wallet',
   enable_ton_w5_wallet_description:
     "Use the W5 (v5r1) contract instead of V4R2 when deriving this vault's TON addresses. This changes which address the wallet uses, and each contract is a separate address with its own balance — it moves no funds, so anything held at the other address stays there until you send it.",

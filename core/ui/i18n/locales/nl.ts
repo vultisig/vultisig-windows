@@ -1991,6 +1991,10 @@ export const nl = {
   enable_ton_w5_wallet: 'Gebruik TON W5-wallet',
   enable_ton_w5_wallet_description:
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
+  ton_gasless_pay_fee_in_token: 'Betaal netwerkkosten in {{ticker}}',
+  ton_gasless_description:
+    'Geen TON nodig: een relay betaalt de netwerkgaskosten en brengt in plaats daarvan een kleine {{ticker}} commissie in rekening.',
+  ton_gasless_fee_note: 'betaald via relay',
   max_network_fee: 'Maximale netwerkkosten',
   swap_failed_refunded: 'Terugbetaald door de swapaanbieder',
   swap_failed_refunded_description:

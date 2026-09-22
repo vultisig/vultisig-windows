@@ -8,6 +8,8 @@ import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableS
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { ManageTonGaslessFee } from '@core/ui/vault/send/fee/tonGasless/ManageTonGaslessFee'
+import { useIsSendFeePaidInCoin } from '@core/ui/vault/send/fee/useIsSendFeePaidInCoin'
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
@@ -33,7 +35,6 @@ import {
   CoinKey,
   extractCoinKey,
 } from '@vultisig/core-chain/coin/Coin'
-import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
@@ -75,7 +76,9 @@ export const ManageAmountInputField = () => {
   const feeEstimateQuery = useSendFeeEstimateQuery()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
-  const isNative = isFeeCoin(coin)
+  // The fee is reserved from this balance for a native send and for a gasless
+  // TON jetton send, whose relay commission comes out of the jetton.
+  const isNative = useIsSendFeePaidInCoin()
   const hasBalance = balance != null && balance > 0n
 
   const handleAmountChange = (amount: bigint | null) => {
@@ -315,6 +318,7 @@ export const ManageAmountInputField = () => {
       </VStack>
       <ManageMemo />
       <ManageDestinationTag />
+      <ManageTonGaslessFee />
     </SendInputContainer>
   )
 }

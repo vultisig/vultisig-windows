@@ -1843,6 +1843,10 @@ export const zh = {
   enable_ton_w5_wallet: '使用TON W5 钱包',
   enable_ton_w5_wallet_description:
     '生成此金库的TON地址时，请使用 W5 (v5r1) 合约代替 V4R2 合约。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有各自的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',
+  ton_gasless_pay_fee_in_token: '在{{ticker}}中支付网络费用',
+  ton_gasless_description:
+    '不需要TON ：中继器支付网络 gas 费用，并收取少量{{ticker}}佣金。',
+  ton_gasless_fee_note: '通过中继支付',
   max_network_fee: '最高网络费用',
   swap_failed_refunded: '由互换提供商退款',
   swap_failed_refunded_description:

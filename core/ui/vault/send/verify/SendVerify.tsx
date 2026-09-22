@@ -10,6 +10,7 @@ import {
   FeeSettingsChain,
   feeSettingsChains,
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
+import { getKeysignTonGasless } from '@vultisig/core-mpc/keysign/ton/gasless'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { FC, useState } from 'react'
@@ -207,6 +208,13 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                       onChange={setFeeSettings}
                       chain={feeSettingsChain}
                     />
+                  )}
+                  {getKeysignTonGasless(keysignPayload) && (
+                    // The relay's commission stands in for the network fee: it
+                    // is charged in the jetton, and no TON leaves the account.
+                    <Text as="span" variant="stationBodyS" color="shy">
+                      {t('ton_gasless_fee_note')}
+                    </Text>
                   )}
                 </HStack>
               )}

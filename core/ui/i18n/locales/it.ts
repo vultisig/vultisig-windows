@@ -2012,6 +2012,10 @@ export const it = {
   enable_ton_w5_wallet: 'Utilizza il wallet W5 TON',
   enable_ton_w5_wallet_description:
     "Utilizza il contratto W5 (v5r1) anziché V4R2 quando derivi gli indirizzi TON di questo vault. Questo modifica l'indirizzo utilizzato dal wallet e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
+  ton_gasless_pay_fee_in_token: 'Paga la tariffa di rete in {{ticker}}',
+  ton_gasless_description:
+    'Non è necessario TON : un relay paga il gas di rete e addebita invece una piccola commissione {{ticker}} .',
+  ton_gasless_fee_note: 'pagato tramite relè',
   max_network_fee: 'Tariffa massima di rete',
   swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
   swap_failed_refunded_description:

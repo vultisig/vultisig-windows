@@ -1966,6 +1966,10 @@ export const ko = {
   enable_ton_w5_wallet: 'TON W5 지갑을 사용하세요',
   enable_ton_w5_wallet_description:
     '이 볼트의 TON 주소를 생성할 때 V4R2 대신 W5(v5r1) 컨트랙트를 사용하세요. 이렇게 하면 지갑에서 사용하는 주소가 변경되며, 각 컨트랙트는 자체 잔액을 가진 별도의 주소입니다. 자금 이동은 없으므로 다른 주소에 있는 모든 자산은 사용자가 전송하기 전까지 해당 주소에 그대로 유지됩니다.',
+  ton_gasless_pay_fee_in_token: '{{ticker}} 로 네트워크 수수료를 지불하세요',
+  ton_gasless_description:
+    'TON 필요하지 않습니다. 릴레이가 네트워크 가스 비용을 지불하고 대신 소액의 {{ticker}} 수수료를 부과합니다.',
+  ton_gasless_fee_note: '릴레이를 통해 지불됨',
   max_network_fee: '최대 네트워크 수수료',
   swap_failed_refunded: '교환 제공업체로부터 환불받음',
   swap_failed_refunded_description:

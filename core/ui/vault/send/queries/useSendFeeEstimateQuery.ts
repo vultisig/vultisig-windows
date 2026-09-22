@@ -10,9 +10,9 @@ import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { omit } from '@vultisig/lib-utils/record/omit'
-import { useMemo } from 'react'
 
 import { getSendFeeEstimateWithTronMemo } from '../../../mpc/keysign/fee/tronMemoFee'
+import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
@@ -24,6 +24,7 @@ export const useSendFeeEstimateQuery = () => {
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
   const { destinationTag } = useSendDestinationTag()
+  const { isEnabled: tonGasless } = useTonGaslessSend()
 
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
@@ -32,32 +33,23 @@ export const useSendFeeEstimateQuery = () => {
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
 
-  const input = useMemo(() => {
-    if (balance == null) return null
-
-    return {
-      coin,
-      receiver,
-      amount: balance,
-      destinationTag,
-      memo,
-      vaultId: getVaultId(vault),
-      localPartyId: vault.localPartyId,
-      publicKey,
-      libType: toKeysignLibType(vault),
-      walletCore,
-      hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
-    }
-  }, [
-    balance,
-    coin,
-    destinationTag,
-    memo,
-    publicKey,
-    receiver,
-    vault,
-    walletCore,
-  ])
+  const input =
+    balance == null
+      ? null
+      : {
+          coin,
+          receiver,
+          amount: balance,
+          destinationTag,
+          memo,
+          vaultId: getVaultId(vault),
+          localPartyId: vault.localPartyId,
+          publicKey,
+          libType: toKeysignLibType(vault),
+          walletCore,
+          hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
+          tonGasless,
+        }
 
   return useQuery({
     queryKey: [

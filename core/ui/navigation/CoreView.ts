@@ -92,6 +92,8 @@ export type CoreView =
         destinationTag?: string
         memo?: string
         skipToVerify?: boolean
+        /** TON jetton sends: pay the fee in the jetton through the relay. Unset means "decide from the TON balance". */
+        tonGasless?: boolean
       }
     }
   | { id: 'settings' }

@@ -26,6 +26,8 @@ export const KeysignFeeAmount = ({
   layout = 'inline',
 }: KeysignFeeAmountProps) => {
   const formatFiatAmount = useFormatFiatAmount()
+  // The chain's native coin, except for a gasless TON send, whose relay
+  // commission is charged in the jetton being sent.
   const feeCoin = getKeysignFeeCoin(keysignPayload)
 
   const { decimals, ticker } = feeCoin
