@@ -2007,4 +2007,7 @@ export const nl = {
     medium: 'Medium',
     high: 'Hoog',
   },
+  tx_failed_expired: 'Verlopen voordat het bevestigd was',
+  tx_failed_expired_description:
+    'Het netwerk heeft deze transactie niet bevestigd voordat de deadline verstreek, waardoor deze nooit is voltooid en er niets van uw portemonnee is afgeschreven. Probeer de transactie opnieuw te ondertekenen en te verzenden met een nieuwe deadline.',
 }

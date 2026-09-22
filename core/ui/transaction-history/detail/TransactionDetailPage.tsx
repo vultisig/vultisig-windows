@@ -58,7 +58,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { LimitOrderCancelActions } from '../../vault/swap/limit/cancel/LimitOrderCancelActions'
-import { getRecordFailureReason, swapFailureCopy } from '../swapFailureCopy'
+import { failureCopy, getRecordFailureReason } from '../failureCopy'
 
 const safeBigInt = (value: string): bigint => {
   try {
@@ -597,6 +597,11 @@ export const TransactionDetailPage = () => {
         {record.type === 'send' && (
           <>
             <SendAmountDisplay record={record} />
+            {failureReason && (
+              <WarningBlock>
+                {t(failureCopy[failureReason].description)}
+              </WarningBlock>
+            )}
             <SendDetailPanel record={record} />
           </>
         )}
@@ -606,7 +611,7 @@ export const TransactionDetailPage = () => {
             <SwapAmountDisplay record={record} />
             {failureReason && (
               <WarningBlock>
-                {t(swapFailureCopy[failureReason].description)}
+                {t(failureCopy[failureReason].description)}
               </WarningBlock>
             )}
             <SwapDetailPanel record={record} />

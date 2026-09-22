@@ -1329,6 +1329,9 @@ export const en = {
   swap_failed_slippage: 'Price moved past slippage tolerance',
   swap_failed_slippage_description:
     'The price moved before this swap landed, so it would have paid out less than your slippage tolerance allowed and the network reverted it. Raise your slippage tolerance or try again.',
+  tx_failed_expired: 'Expired before it was confirmed',
+  tx_failed_expired_description:
+    'The network did not confirm this transaction before it expired, so it never went through and nothing left your wallet. Try again to sign and send it with a fresh deadline.',
   swap_amount_below_minimum:
     "Increase the amount to meet the provider's minimum swap amount.",
   swap_amount_too_small: 'Enter a larger amount to get a swap quote.',

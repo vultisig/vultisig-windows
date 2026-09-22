@@ -1982,4 +1982,7 @@ export const ko = {
     medium: '중간',
     high: '높은',
   },
+  tx_failed_expired: '확정되기 전에 만료되었습니다.',
+  tx_failed_expired_description:
+    '네트워크에서 해당 거래가 만료되기 전에 확인되지 않아 거래가 완료되지 않았고 지갑에서 아무것도 인출되지 않았습니다. 새로운 마감일을 설정하고 다시 서명하고 전송해 보세요.',
 }

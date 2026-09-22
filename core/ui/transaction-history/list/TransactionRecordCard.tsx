@@ -26,7 +26,7 @@ import {
   TransactionRecordStatus,
 } from '../core'
 import { getTransactionTagLabel } from '../cosmosMessageLabel'
-import { getRecordFailureReason, swapFailureCopy } from '../swapFailureCopy'
+import { failureCopy, getRecordFailureReason } from '../failureCopy'
 import {
   TransactionHistoryCard,
   TransactionHistoryCardPill,
@@ -355,7 +355,7 @@ export const TransactionRecordCard = ({
         symbol={display.symbol}
         pill={display.pill}
         errorMessage={
-          failureReason ? t(swapFailureCopy[failureReason].label) : undefined
+          failureReason ? t(failureCopy[failureReason].label) : undefined
         }
         coin={display.coin}
       />

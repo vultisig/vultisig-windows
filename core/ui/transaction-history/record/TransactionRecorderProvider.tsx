@@ -22,6 +22,7 @@ import { useKeysignMessagePayload } from '../../mpc/keysign/state/keysignMessage
 import { applyLimitOrderCancel } from './applyLimitOrderCancel'
 import { createTransactionRecord } from './createTransactionRecord'
 import { getKeysignAffectedCoinKeys } from './getKeysignAffectedCoinKeys'
+import { withSolanaDeadline } from './withSolanaDeadline'
 
 export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
   const parentListener = useKeysignMutationListener()
@@ -44,7 +45,9 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
    * Async because the records are only needed at this point, and only for the
    * cancel case: reading them lazily keeps the crash-on-first-render out of the
    * render path, and awaiting a refetch when the cache is cold is what stops a
-   * cancellation being mistaken for an ordinary send.
+   * cancellation being mistaken for an ordinary send. A Solana record may
+   * also have to ask the chain for a deadline before it is written, so a
+   * dropped transaction can still be proved dead — see `withSolanaDeadline`.
    */
   const recordKeysign = async (
     keysignPayload: KeysignPayload,
@@ -82,7 +85,9 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
     }
 
     saveRecord(
-      createTransactionRecord({ payload: keysignPayload, txHash, vaultId })
+      await withSolanaDeadline(
+        createTransactionRecord({ payload: keysignPayload, txHash, vaultId })
+      )
     )
   }
 

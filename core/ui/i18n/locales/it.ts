@@ -2028,4 +2028,7 @@ export const it = {
     medium: 'Mezzo',
     high: 'Alto',
   },
+  tx_failed_expired: 'Scaduto prima della conferma',
+  tx_failed_expired_description:
+    'La rete non ha confermato la transazione prima della scadenza, quindi non è andata a buon fine e non è stato prelevato alcun importo dal tuo portafoglio. Prova a firmarla e inviarla nuovamente impostando una nuova scadenza.',
 }
