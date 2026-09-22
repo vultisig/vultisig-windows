@@ -67,6 +67,16 @@ describe('getLimitChartReach', () => {
     expect(reach).toEqual({ lastTraded: 2000 })
   })
 
+  it('dates a pair that is above the target right now to the newest sample, not the upward crossing', () => {
+    const reach = getLimitChartReach({
+      points: makePoints([90, 100]),
+      targetPrice: 95,
+      marketPrice: undefined,
+    })
+
+    expect(reach).toEqual({ lastTraded: 1000 })
+  })
+
   it('walks the series while the market rate is still unknown', () => {
     const reach = getLimitChartReach({
       points: makePoints([100, 90]),

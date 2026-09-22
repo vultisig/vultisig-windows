@@ -62,6 +62,9 @@ export const getLimitChartReach = ({
   const reached = points[lastReachedIndex]
   const next = points[lastReachedIndex + 1]
 
+  // Still at or above the target on the newest sample: the pair is there now,
+  // so the newest sample is the answer. Dating it to the earlier upward
+  // crossing instead would read as though the price had since left.
   if (!next) {
     return { lastTraded: reached.timestamp }
   }
