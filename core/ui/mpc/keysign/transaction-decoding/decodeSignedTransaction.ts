@@ -12,6 +12,7 @@ import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { ThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
 import { thorchainLpChainCode } from '@vultisig/core-chain/chains/cosmos/thor/thorchainLp'
+import { tonStakingWithdrawFee } from '@vultisig/core-chain/chains/ton/staking'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { TransactionType } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -784,12 +785,18 @@ const decodeTronMemo = (
   )
 }
 
+// A jetton carries its comment in the forward payload and its amount in jetton
+// units, so a pool comment on one names neither a deposit a pool accepts nor a
+// GRAM figure to show for it. A withdrawal request is the comment AND the fixed
+// withdraw fee it rides on; a transfer commented `w` with any other amount is a
+// plain send that keeps its amount and memo in view.
 const decodeTonMemo = (
   payload: KeysignPayload,
   chain: Chain
 ): DecodedTransaction | undefined => {
   if (
     chain !== Chain.Ton ||
+    !payload.coin?.isNativeToken ||
     payload.contractPayload.case ||
     payload.swapPayload.case ||
     payload.erc20ApprovePayload
@@ -805,6 +812,10 @@ const decodeTonMemo = (
     )
   }
   if (payload.memo === 'w' || payload.memo === 'Withdraw') {
+    const carrier = attempt(() => BigInt(payload.toAmount))
+    if ('error' in carrier || carrier.data !== tonStakingWithdrawFee) {
+      return undefined
+    }
     return decoded('unstake', { kind: 'unstated' }, 'memo', payload.toAddress)
   }
   return undefined

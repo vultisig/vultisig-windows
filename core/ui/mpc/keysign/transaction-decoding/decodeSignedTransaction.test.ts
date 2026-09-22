@@ -104,9 +104,53 @@ describe('decodeSignedTransaction', () => {
       )
     ).toMatchObject({ operation: 'unstake', amount: { kind: 'unstated' } })
     expect(
+      decodeSignedTransaction(
+        payload(Chain.Ton, { memo: 'w', toAmount: '200000000' })
+      )
+    ).toMatchObject({ operation: 'unstake', amount: { kind: 'unstated' } })
+    expect(
       decodeSignedTransaction(payload(Chain.Ton, { memo: ' Withdraw ' }))
         .operation
     ).toBe('unknown')
+  })
+
+  it.each(['w', 'Withdraw'])(
+    'keeps a TON send commented %s a plain send unless it carries the withdraw fee',
+    memo => {
+      expect(
+        decodeSignedTransaction(
+          payload(Chain.Ton, { memo, toAmount: '500000000000' })
+        )
+      ).toEqual({
+        operation: 'unknown',
+        amount: { kind: 'unstated' },
+        evidence: 'unread',
+      })
+    }
+  )
+
+  it('never reads a pool comment on a TON jetton transfer', () => {
+    const jetton = (input: Partial<KeysignPayload>) =>
+      payload(Chain.Ton, {
+        coin: create(CoinSchema, {
+          chain: Chain.Ton,
+          ticker: 'USDT',
+          address: 'sender',
+          decimals: 6,
+          isNativeToken: false,
+          contractAddress: 'jetton-master',
+        }),
+        ...input,
+      })
+
+    expect(
+      decodeSignedTransaction(
+        jetton({ memo: 'Withdraw', toAmount: '200000000' })
+      ).operation
+    ).toBe('unknown')
+    expect(decodeSignedTransaction(jetton({ memo: 'Deposit' })).operation).toBe(
+      'unknown'
+    )
   })
 
   it('decodes native THORChain pool and node memos', () => {
