@@ -1,20 +1,30 @@
 import { MarketChartPoint } from '@core/ui/chain/coin/price/market/marketChart'
 import { describe, expect, it } from 'vitest'
 
-import { getLimitChartReach } from './chartReach'
+import { getLimitChartReach, getLimitChartReachColor } from './chartReach'
 
 const makePoints = (prices: number[]): MarketChartPoint[] =>
   prices.map((price, index) => ({ timestamp: index * 1000, price }))
 
 describe('getLimitChartReach', () => {
-  it('calls a target at or below market a fill on arrival', () => {
+  it('calls a target below market a fill on arrival', () => {
     expect(
       getLimitChartReach({
         points: makePoints([1, 2, 3]),
-        targetPrice: 100,
+        targetPrice: 90,
         marketPrice: 100,
       })
-    ).toEqual({ atOrBelowMarket: true })
+    ).toEqual({ belowMarket: true })
+  })
+
+  it('reads a target at market off the series like any other', () => {
+    expect(
+      getLimitChartReach({
+        points: makePoints([1, 2, 3]),
+        targetPrice: 3,
+        marketPrice: 3,
+      })
+    ).toEqual({ lastTraded: 2000 })
   })
 
   it('reports the highest the pair got when the target was never reached', () => {
@@ -57,6 +67,26 @@ describe('getLimitChartReach', () => {
     expect(reach).toEqual({ lastTraded: 2000 })
   })
 
+  it('dates a pair that is above the target right now to the newest sample, not the upward crossing', () => {
+    const reach = getLimitChartReach({
+      points: makePoints([90, 100]),
+      targetPrice: 95,
+      marketPrice: undefined,
+    })
+
+    expect(reach).toEqual({ lastTraded: 1000 })
+  })
+
+  it('walks the series while the market rate is still unknown', () => {
+    const reach = getLimitChartReach({
+      points: makePoints([100, 90]),
+      targetPrice: 95,
+      marketPrice: undefined,
+    })
+
+    expect(reach).toEqual({ lastTraded: 500 })
+  })
+
   it('has nothing to say without a series', () => {
     expect(
       getLimitChartReach({ points: [], targetPrice: 1, marketPrice: 1 })
@@ -71,5 +101,13 @@ describe('getLimitChartReach', () => {
         marketPrice: 1,
       })
     ).toBeNull()
+  })
+})
+
+describe('getLimitChartReachColor', () => {
+  it('tints each verdict', () => {
+    expect(getLimitChartReachColor({ belowMarket: true })).toBe('danger')
+    expect(getLimitChartReachColor({ lastTraded: 1 })).toBe('success')
+    expect(getLimitChartReachColor({ notReached: 1 })).toBe('shy')
   })
 })

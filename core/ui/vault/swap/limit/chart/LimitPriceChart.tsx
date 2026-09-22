@@ -1,24 +1,21 @@
 import { MarketChartPoint } from '@core/ui/chain/coin/price/market/marketChart'
 import { HSLA } from '@lib/ui/colors/HSLA'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { KeyboardEvent, PointerEvent, useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
 import {
-  getLimitPriceWarning,
-  getPresetPrice,
-  LimitPriceWarning,
-} from '../price'
-import {
   getLimitChartDomain,
   getLimitChartFraction,
   getLimitChartPlacement,
   getLimitChartValue,
-  limitChartGuidePresets,
 } from './chartDomain'
+import {
+  getLimitChartReachColor,
+  LimitChartReach,
+  LimitChartReachColor,
+} from './chartReach'
 import {
   limitChartHeight,
   limitChartViewBoxSize as viewBoxSize,
@@ -27,16 +24,20 @@ import {
 /** How much one arrow-key press moves the target, as a share of the plot. */
 const keyboardStepFraction = 0.01
 
-/** Marks a target the plot could not fit, and which way it ran off. */
-const offScaleMarker = { above: '▲', below: '▼' }
-
 type LimitPriceChartProps = {
   /** Pair-ratio history: buy units per sell unit. */
   points: MarketChartPoint[]
-  marketPrice: number
-  /** The form's target rate, or null while the price field is empty. */
-  targetPrice: number | null
-  /** Formats a rate for the target's label, in the pair's own units. */
+  /** Undefined while the pair's quote is still resolving; the history draws without it. */
+  marketPrice: number | undefined
+  /**
+   * Where the rule is drawn: the typed target, or the market rate while the
+   * price field is empty. Undefined when neither is known yet, in which case
+   * only the history is drawn.
+   */
+  targetPrice: number | undefined
+  /** The verdict for the drawn rule, which tints it; null when there is nothing to judge. */
+  reach: LimitChartReach | null
+  /** Formats a rate for assistive technology, in the pair's own units. */
   formatPrice: (rate: number) => string
   onTargetChange: (rate: number) => void
 }
@@ -44,17 +45,18 @@ type LimitPriceChartProps = {
 /**
  * Pair-ratio history with the target price drawn as a rule the user drags.
  *
- * The plot is anchored on the market rate, so the axis holds still while the
- * target moves through it. A target outside the axis is pinned to the edge and
- * labelled with an arrow rather than clamped — the price field stays
- * authoritative, and the chart never rewrites what was typed. The target's tint
- * comes from `getLimitPriceWarning`, the same call the form's advisory row
- * makes, so the two can never disagree.
+ * The plot is fitted to the history and the market rate, never to the target,
+ * so dragging cannot rescale it under the pointer. A target outside the plot
+ * is pinned to the edge and drawn dashed rather than clamped — the price field
+ * stays authoritative, and the chart never rewrites what was typed. The rule's
+ * colour is the verdict's, the same one the caption under the chart is drawn
+ * in, so the two can never disagree.
  */
 export const LimitPriceChart = ({
   points,
   marketPrice,
   targetPrice,
+  reach,
   formatPrice,
   onTargetChange,
 }: LimitPriceChartProps) => {
@@ -77,38 +79,21 @@ export const LimitPriceChart = ({
     .join(' ')
   const areaPath = `${linePath} L ${viewBoxSize} ${viewBoxSize} L 0 ${viewBoxSize} Z`
 
-  const warningTint: Record<LimitPriceWarning, HSLA> = {
-    atOrBelowMarket: colors.danger,
-    farAboveMarket: colors.idle,
+  // The theme colours behind the `Text` names of the same verdicts, so the rule
+  // matches the caption drawn under it.
+  const reachTint: Record<LimitChartReachColor, HSLA> = {
+    success: colors.primary,
+    danger: colors.danger,
+    shy: colors.textShy,
   }
-  const warning =
-    targetPrice === null
-      ? undefined
-      : getLimitPriceWarning({ price: targetPrice, marketPrice })
-  const tint = (() => {
-    if (targetPrice === null) return colors.textShy
+  const tint = reach
+    ? reachTint[getLimitChartReachColor(reach)]
+    : colors.textShy
 
-    return warning ? warningTint[warning] : colors.primary
-  })()
-
-  const marketFraction = getLimitChartPlacement({
-    value: marketPrice,
-    domain,
-  }).fraction
-  const target =
-    targetPrice === null
+  const placement =
+    targetPrice === undefined
       ? null
       : getLimitChartPlacement({ value: targetPrice, domain })
-  const handleFraction = target ? target.fraction : marketFraction
-
-  const guides = limitChartGuidePresets
-    .map(preset =>
-      getLimitChartFraction({
-        value: getPresetPrice({ marketPrice, preset }),
-        domain,
-      })
-    )
-    .filter(fraction => fraction >= 0 && fraction <= 1)
 
   const dragTo = (clientY: number) => {
     const plot = plotRef.current
@@ -126,8 +111,10 @@ export const LimitPriceChart = ({
   }
 
   const nudge = (direction: number) => {
+    if (targetPrice === undefined) return
+
     const step = (domain.max - domain.min) * keyboardStepFraction
-    const next = (targetPrice ?? marketPrice) + direction * step
+    const next = targetPrice + direction * step
 
     if (next > 0) {
       onTargetChange(next)
@@ -163,12 +150,12 @@ export const LimitPriceChart = ({
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop
               offset="0%"
-              stopColor={colors.textShy.toCssValue()}
-              stopOpacity={0.28}
+              stopColor={colors.primaryAlt.toCssValue()}
+              stopOpacity={0.3}
             />
             <stop
               offset="100%"
-              stopColor={colors.textShy.toCssValue()}
+              stopColor={colors.primaryAlt.toCssValue()}
               stopOpacity={0}
             />
           </linearGradient>
@@ -177,7 +164,7 @@ export const LimitPriceChart = ({
         <path
           d={linePath}
           fill="none"
-          stroke={colors.textSupporting.toCssValue()}
+          stroke={colors.primaryAlt.toCssValue()}
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -185,67 +172,40 @@ export const LimitPriceChart = ({
         />
       </Svg>
 
-      {guides.map(fraction => (
-        <GuideRule key={fraction} style={{ top: `${fraction * 100}%` }} />
-      ))}
-
-      {target && !target.offScale ? (
-        <Band
-          style={{
-            top: `${Math.min(handleFraction, marketFraction) * 100}%`,
-            height: `${Math.abs(handleFraction - marketFraction) * 100}%`,
-            background: tint.withAlpha(0.14).toCssValue(),
-          }}
-        />
-      ) : null}
-
-      <MarketRule style={{ top: `${marketFraction * 100}%` }} />
-
-      {target && targetPrice !== null ? (
+      {placement && targetPrice !== undefined ? (
         <>
           <TargetRule
             style={{
-              top: `${handleFraction * 100}%`,
+              top: `${placement.fraction * 100}%`,
               borderTopColor: tint.toCssValue(),
-              borderTopStyle: target.offScale ? 'dashed' : 'solid',
+              borderTopStyle: placement.offScale ? 'dashed' : 'solid',
             }}
           />
-          <TargetLabel
-            style={{
-              top: `${handleFraction * 100}%`,
-              background: tint.withAlpha(0.16).toCssValue(),
-            }}
-          >
-            <Text size={11} weight={600} as="span" color="contrast">
-              {target.offScale
-                ? `${offScaleMarker[target.offScale]} ${formatPrice(targetPrice)}`
-                : formatPrice(targetPrice)}
-            </Text>
-          </TargetLabel>
+          <DragHandle
+            role="slider"
+            tabIndex={0}
+            aria-label={t('swap_limit_chart_drag_label')}
+            aria-orientation="vertical"
+            aria-valuemin={domain.min}
+            aria-valuemax={domain.max}
+            // The pinned value, so it never contradicts the declared range;
+            // the real target, off-scale or not, is what `aria-valuetext`
+            // reads out.
+            aria-valuenow={getLimitChartValue({
+              fraction: placement.fraction,
+              domain,
+            })}
+            aria-valuetext={formatPrice(targetPrice)}
+            style={{ top: `${placement.fraction * 100}%` }}
+            onKeyDown={handleKeyDown}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={event =>
+              event.currentTarget.releasePointerCapture(event.pointerId)
+            }
+          />
         </>
       ) : null}
-
-      <DragHandle
-        role="slider"
-        tabIndex={0}
-        aria-label={t('swap_limit_chart_drag_label')}
-        aria-orientation="vertical"
-        aria-valuemin={domain.min}
-        aria-valuemax={domain.max}
-        // The pinned value, so it never contradicts the declared range; the
-        // real target, off-scale or not, is what `aria-valuetext` reads out.
-        aria-valuenow={getLimitChartValue({ fraction: handleFraction, domain })}
-        aria-valuetext={formatPrice(targetPrice ?? marketPrice)}
-        style={{ top: `${handleFraction * 100}%` }}
-        onKeyDown={handleKeyDown}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={event =>
-          event.currentTarget.releasePointerCapture(event.pointerId)
-        }
-      >
-        <HandleGrip style={{ background: tint.toCssValue() }} />
-      </DragHandle>
     </Plot>
   )
 }
@@ -262,51 +222,23 @@ const Svg = styled.svg`
   height: 100%;
 `
 
-const Rule = styled.div`
+const TargetRule = styled.div`
   position: absolute;
   left: 0;
   right: 0;
   height: 0;
-  pointer-events: none;
-`
-
-const GuideRule = styled(Rule)`
-  border-top: 1px dotted ${getColor('foregroundSuper')};
-`
-
-const MarketRule = styled(Rule)`
-  border-top: 1px dashed ${getColor('textShy')};
-`
-
-const TargetRule = styled(Rule)`
   border-top: 2px solid transparent;
-`
-
-const Band = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
   pointer-events: none;
 `
 
-const TargetLabel = styled.div`
-  position: absolute;
-  right: 0;
-  transform: translateY(-50%);
-  padding: 2px 6px;
-  ${borderRadius.xs};
-  pointer-events: none;
-  white-space: nowrap;
-`
-
+// The rule's hit area: tall enough to grab, drawn as nothing so the rule
+// itself is the handle.
 const DragHandle = styled.div`
   position: absolute;
   left: 0;
   right: 0;
   height: 28px;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
   cursor: ns-resize;
   touch-action: none;
 
@@ -314,10 +246,4 @@ const DragHandle = styled.div`
     outline: 1px solid ${getColor('primary')};
     outline-offset: 2px;
   }
-`
-
-const HandleGrip = styled.div`
-  width: 22px;
-  height: 4px;
-  ${borderRadius.pill};
 `
