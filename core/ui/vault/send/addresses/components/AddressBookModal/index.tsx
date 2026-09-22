@@ -154,7 +154,7 @@ export const AddressBookModalContent = ({
               OptionButton: ({ children, active, ...rest }) => {
                 const buttonProps = active
                   ? { kind: 'primary' as const, status: 'default' as const }
-                  : { kind: 'secondary' as const }
+                  : { kind: 'link' as const }
 
                 return (
                   <OptionButton
