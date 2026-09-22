@@ -19,7 +19,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
-import { BookmarksIcon } from '@lib/ui/icons/BookmarksIcon'
+import { BookBookmarkFilledIcon } from '@lib/ui/icons/BookBookmarkFilledIcon'
 import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
@@ -271,7 +271,7 @@ export const ManageReceiverAddressInputField = () => {
                   <CameraFilledIcon />
                 </ActionIconButton>
                 <ActionIconButton onClick={() => setViewState('addressBook')}>
-                  <BookmarksIcon />
+                  <BookBookmarkFilledIcon />
                 </ActionIconButton>
               </HStack>
             </VStack>
