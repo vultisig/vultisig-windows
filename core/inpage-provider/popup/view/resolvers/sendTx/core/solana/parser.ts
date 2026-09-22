@@ -119,7 +119,14 @@ export const parseSolanaTx = async ({
       data: blockaidTxSimulationInput.data,
     })
 
-    const simulationResult = await parseBlockaidSolanaSimulation(sim)
+    const { data: simulationResult } = await attempt(() =>
+      parseBlockaidSolanaSimulation(sim)
+    )
+    // A completed simulation with no safe summary must not be replaced by a
+    // partial instruction summary that can hide other asset movements.
+    if (!simulationResult) {
+      return getSolanaRawTxFallback(data)
+    }
     return await matchRecordUnion<
       BlockaidSolanaSimulationInfo,
       Promise<SolanaTxData>
