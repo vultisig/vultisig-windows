@@ -2039,4 +2039,7 @@ export const de = {
     medium: 'Medium',
     high: 'Hoch',
   },
+  signed_awaiting_broadcast: 'Unterschrieben, wartet auf die Ausstrahlung.',
+  signed_awaiting_broadcast_description:
+    'Diese Transaktion wurde signiert und an den anfordernden dApp zurückgesendet. Die Übermittlung an das Netzwerk obliegt dem dApp ; der Status wird aktualisiert, sobald das Netzwerk die Transaktion empfängt.',
 }

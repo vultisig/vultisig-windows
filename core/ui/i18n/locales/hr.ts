@@ -1992,4 +1992,7 @@ export const hr = {
     medium: 'Srednji',
     high: 'Visoko',
   },
+  signed_awaiting_broadcast: 'Potpisano, čeka se emitiranje',
+  signed_awaiting_broadcast_description:
+    'Ova je transakcija potpisana i vraćena dApp koji ju je zatražio. Slanje u mrežu ovisi o dApp ; status se ažurira nakon što je mreža vidi.',
 }

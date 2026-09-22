@@ -1982,4 +1982,7 @@ export const ko = {
     medium: '중간',
     high: '높은',
   },
+  signed_awaiting_broadcast: '서명 완료, 방송 대기 중',
+  signed_awaiting_broadcast_description:
+    '이 거래는 서명되어 요청한 dApp 에게 반환되었습니다. 네트워크로 전송하는 것은 dApp 의 책임이며, 네트워크에서 이를 수신하면 상태가 업데이트됩니다.',
 }

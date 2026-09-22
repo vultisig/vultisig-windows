@@ -2023,4 +2023,7 @@ export const pt = {
     medium: 'Médio',
     high: 'Alto',
   },
+  signed_awaiting_broadcast: 'Assinado, aguardando transmissão.',
+  signed_awaiting_broadcast_description:
+    'Esta transação foi assinada e devolvida ao dApp que a solicitou. O envio para a rede é de responsabilidade do dApp ; o status é atualizado assim que a rede a recebe.',
 }
