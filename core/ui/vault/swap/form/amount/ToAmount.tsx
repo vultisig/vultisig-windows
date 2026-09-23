@@ -3,6 +3,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '@lib/ui/text'
+import { FitText } from '@lib/ui/text/FitText'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import styled from 'styled-components'
 
@@ -12,16 +13,29 @@ import { useSwapToCoin } from '../../state/toCoin'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
+const valueFontSize = 22
+const minValueFontSize = 14
+
 const Value = styled.div`
   ${takeWholeSpace};
   text-align: right;
 
   ${text({
     weight: 500,
-    size: 22,
+    size: valueFontSize,
     color: 'shy',
     centerVertically: true,
   })}
+`
+
+/**
+ * Shares the row with the coin pill, so it takes whatever the pill leaves
+ * rather than its content width — a long amount then shrinks inside the card
+ * instead of pushing past its edge.
+ */
+const Container = styled(AmountContainer)`
+  flex: 1;
+  min-width: 0;
 `
 
 const ToAmountSkeleton = () => (
@@ -39,24 +53,30 @@ export const ToAmount = () => {
   const shouldShowFirmQuote = firmOutputAmount !== undefined
   const shouldShowIndicative = query.isPending || query.isPlaceholderData
 
+  const renderValue = (value: string) => (
+    <FitText value={value} size={valueFontSize} minSize={minValueFontSize} />
+  )
+
   return (
-    <AmountContainer gap={6} alignItems="flex-end">
+    <Container gap={6} alignItems="flex-end">
       <Value data-testid="swap-to-amount">
         {shouldShowFirmQuote ? (
-          formatAmount(firmOutputAmount, { precision: 'high' })
+          renderValue(formatAmount(firmOutputAmount, { precision: 'high' }))
         ) : shouldShowIndicative ? (
           <MatchQuery
             value={indicativeQuery}
             pending={() => <ToAmountSkeleton />}
             error={() => <ToAmountSkeleton />}
-            inactive={() => formatAmount(0)}
-            success={value => formatAmount(value, { precision: 'high' })}
+            inactive={() => renderValue(formatAmount(0))}
+            success={value =>
+              renderValue(formatAmount(value, { precision: 'high' }))
+            }
           />
         ) : (
           <MatchQuery
             value={query}
-            error={() => formatAmount(0)}
-            inactive={() => formatAmount(0)}
+            error={() => renderValue(formatAmount(0))}
+            inactive={() => renderValue(formatAmount(0))}
           />
         )}
       </Value>
@@ -75,6 +95,6 @@ export const ToAmount = () => {
           />
         )
       )}
-    </AmountContainer>
+    </Container>
   )
 }
