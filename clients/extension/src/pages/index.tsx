@@ -82,7 +82,7 @@ const App = () => {
     <ExtensionCoreApp
       processError={processError}
       goBack={goBack}
-      goHome={() => navigate(initialCoreView)}
+      goHome={() => navigate(initialCoreView, { reset: true })}
       popNavigationHistory={popNavigationHistory}
       startupMode={isPopup ? 'instant' : 'splash'}
     >
