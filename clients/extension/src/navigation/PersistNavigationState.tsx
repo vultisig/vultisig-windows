@@ -1,6 +1,5 @@
 import { useNavigation } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
-import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { useEffect, useRef } from 'react'
 
 import {
@@ -8,11 +7,14 @@ import {
   setPersistedHistory,
 } from '../storage/persistedView'
 import { AppView } from './AppView'
-import { shouldPersistView } from './persistableViews'
+import { getPersistableHistory } from './persistableViews'
 
+/**
+ * Mirrors the navigation history to extension storage so the popup reopens
+ * where the user left it, writing only views that are safe to keep on disk.
+ */
 export const PersistNavigationState = ({ children }: ChildrenProp) => {
   const [{ history }] = useNavigation()
-  const currentView = getLastItem(history) as AppView
 
   const isFirstRender = useRef(true)
 
@@ -22,12 +24,13 @@ export const PersistNavigationState = ({ children }: ChildrenProp) => {
       return
     }
 
-    if (shouldPersistView(currentView.id)) {
-      setPersistedHistory(history as AppView[])
+    const persistableHistory = getPersistableHistory(history as AppView[])
+    if (persistableHistory) {
+      setPersistedHistory(persistableHistory)
     } else {
       removePersistedHistory()
     }
-  }, [currentView.id, history])
+  }, [history])
 
   return children
 }
