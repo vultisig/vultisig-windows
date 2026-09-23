@@ -1,3 +1,5 @@
+import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
+
 import { AppView, AppViewId } from './AppView'
 
 const persistableViews: ReadonlySet<AppViewId> = new Set<AppViewId>([
@@ -49,8 +51,7 @@ const canPersistView = (view: AppView): boolean => {
  * are dropped from the stack, so their state never reaches extension storage.
  */
 export const getPersistableHistory = (history: AppView[]): AppView[] | null => {
-  const currentView = history.at(-1)
-  if (!currentView || !canPersistView(currentView)) {
+  if (!canPersistView(getLastItem(history))) {
     return null
   }
 
