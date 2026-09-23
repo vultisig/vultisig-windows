@@ -3,6 +3,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { useFitFontSize } from '@lib/ui/hooks/useFitFontSize'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -19,6 +20,14 @@ import styled, { css } from 'styled-components'
 
 import { LimitPricePreset, limitPricePresets } from './price'
 import { useLimitExpiryLabels } from './useLimitExpiryLabels'
+
+const priceFontSize = 36
+const minPriceFontSize = 16
+const priceInputPlaceholder = '0.0'
+const valueRowGap = 8
+const caretWidth = 2
+const unitToggleSize = 32
+const unitTogglePadding = 3
 
 export const limitPriceUnits = ['asset', 'fiat'] as const
 
@@ -81,6 +90,17 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
 }) => {
   const { t } = useTranslation()
   const expiryLabel = useLimitExpiryLabels()
+  const affixes = [valuePrefix, valueSuffix].filter(Boolean)
+  const { setContainer: setValueRow, fontSize: valueFontSize } = useFitFontSize(
+    {
+      size: priceFontSize,
+      minSize: minPriceFontSize,
+      text: [valuePrefix, priceInput || priceInputPlaceholder, valueSuffix]
+        .filter(Boolean)
+        .join(''),
+      fixedWidth: affixes.length * valueRowGap + caretWidth,
+    }
+  )
 
   return (
     <Card gap={20}>
@@ -98,7 +118,7 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
       ) : null}
 
       <PriceRow>
-        <VStack gap={6} alignItems="center">
+        <PriceColumn gap={6} alignItems="center">
           <HStack alignItems="center" gap={6}>
             <Text size={13} color="supporting">
               {t('swap_limit_when_one')}
@@ -108,16 +128,22 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
               {`${fromCoin.ticker} ${t('swap_limit_is_worth')}`}
             </Text>
           </HStack>
-          <ValueRow>
+          <ValueRow ref={setValueRow} style={{ fontSize: valueFontSize }}>
             {valuePrefix ? <Affix>{valuePrefix}</Affix> : null}
-            <PriceInput
-              value={priceInput}
-              onChange={event => onPriceInputChange(event.currentTarget.value)}
-              placeholder="0.0"
-              inputMode="decimal"
-              size={Math.max(priceInput.length || 3, 3)}
-              data-testid="limit-price-input"
-            />
+            <PriceInputSizer>
+              <PriceInputMeasure aria-hidden>
+                {priceInput || priceInputPlaceholder}
+              </PriceInputMeasure>
+              <PriceInput
+                value={priceInput}
+                onChange={event =>
+                  onPriceInputChange(event.currentTarget.value)
+                }
+                placeholder={priceInputPlaceholder}
+                inputMode="decimal"
+                data-testid="limit-price-input"
+              />
+            </PriceInputSizer>
             {valueSuffix ? <Affix>{valueSuffix}</Affix> : null}
           </ValueRow>
           {secondaryLabel ? (
@@ -125,7 +151,7 @@ export const LimitExecuteWhen: FC<LimitExecuteWhenProps> = ({
               {secondaryLabel}
             </Text>
           ) : null}
-        </VStack>
+        </PriceColumn>
         <UnitToggleGroup>
           <UnitToggle
             type="button"
@@ -215,27 +241,61 @@ const PriceRow = styled.div`
   padding: 8px 0 16px;
 `
 
+/**
+ * Keeps the value clear of the unit toggle on the right, and by the same
+ * amount on the left so it stays centred.
+ */
+const PriceColumn = styled(VStack)`
+  padding: 0 ${unitToggleSize + unitTogglePadding * 2 + valueRowGap}px;
+`
+
 const ValueRow = styled.div`
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 8px;
-`
-
-const Affix = styled.span`
-  font-size: 36px;
+  gap: ${valueRowGap}px;
+  width: 100%;
+  min-width: 0;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.contrast.toCssValue()};
 `
 
+const Affix = styled.span`
+  flex-shrink: 0;
+`
+
+/**
+ * The input takes its width from a hidden copy of its text, so the affixes sit
+ * flush against the digits; the extra pixels leave room for the caret. Past
+ * the smallest font size it shrinks and the input scrolls instead of the row
+ * overflowing the card.
+ */
+const PriceInputSizer = styled.div`
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+`
+
+const PriceInputMeasure = styled.span`
+  display: block;
+  visibility: hidden;
+  white-space: pre;
+  padding-right: ${caretWidth}px;
+`
+
 const PriceInput = styled.input`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
   background: transparent;
   border: none;
   outline: none;
   text-align: center;
-  font-size: 36px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.contrast.toCssValue()};
+  font: inherit;
+  color: inherit;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textShy.toCssValue()};
@@ -250,13 +310,13 @@ const UnitToggleGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 3px;
+  padding: ${unitTogglePadding}px;
   ${borderRadius.pill};
   background: ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
 `
 
 const UnitToggle = styled(UnstyledButton)<IsActiveProp>`
-  ${sameDimensions(32)};
+  ${sameDimensions(unitToggleSize)};
   ${centerContent};
   ${borderRadius.pill};
   cursor: pointer;
