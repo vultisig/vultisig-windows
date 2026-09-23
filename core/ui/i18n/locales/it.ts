@@ -315,6 +315,7 @@ export const it = {
   est_network_fee: 'Costo stimato della rete',
   expand_view: 'Espandi vista',
   open_as_side_panel: 'Apri come pannello laterale',
+  opened_in_new_tab: 'Aperto in una nuova scheda',
   push_notifications: 'Notifiche push',
   push_notifications_description:
     "Ricevi una notifica quando è richiesta la tua firma o quando un dispositivo richiede l'accesso.",

@@ -1,6 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
@@ -41,7 +41,7 @@ export const TronResourcesInfoModal = ({
   onClose,
 }: TronResourcesInfoModalProps) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const [expanded, setExpanded] = useState<AccordionSection | null>(null)
 
   const toggle = (section: AccordionSection) => {
@@ -166,7 +166,7 @@ export const TronResourcesInfoModal = ({
           </RowWrapper>
         </AccordionWrapper>
 
-        <Button kind="secondary" onClick={() => openUrl(tronDocsUrl)}>
+        <Button kind="secondary" onClick={() => openExternalUrl(tronDocsUrl)}>
           {t('learnMore')}
         </Button>
       </ContentContainer>

@@ -1,4 +1,4 @@
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { Button } from '@lib/ui/buttons/Button'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -29,7 +29,7 @@ export const LimitOrderCancelActions: FC<LimitOrderCancelActionsProps> = ({
   record,
 }) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const { cancelTxHash } = record.data
 
   return (
@@ -38,7 +38,7 @@ export const LimitOrderCancelActions: FC<LimitOrderCancelActionsProps> = ({
         <Button
           kind="secondary"
           onClick={() =>
-            openUrl(
+            openExternalUrl(
               getBlockExplorerUrl({
                 chain: record.chain,
                 entity: 'tx',

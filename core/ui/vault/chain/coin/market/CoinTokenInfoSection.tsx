@@ -1,6 +1,6 @@
 import { resolveMarketDataSource } from '@core/ui/chain/coin/price/market/MarketDataSource'
 import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
@@ -37,7 +37,7 @@ type CoinTokenInfoSectionProps = {
 export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
   const { t } = useTranslation()
   const { addToast } = useToast()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const { priceProviderId } = useCurrentVaultCoin(coin)
   const address = useCurrentVaultAddress(coin.chain)
   const { id } = coin
@@ -91,7 +91,7 @@ export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
       <CoinMarketStatRow label={t('decimals')} value={String(coin.decimals)} />
       <CoinMarketStatRow
         label={t('view_on_explorer')}
-        onClick={() => openUrl(explorerUrl)}
+        onClick={() => openExternalUrl(explorerUrl)}
         value={
           <IconWrapper size={16}>
             <ArrowUpRightIcon />

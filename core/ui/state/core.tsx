@@ -29,6 +29,12 @@ type DeveloperOptions = {
 export type CoreState = CoreStorage & {
   client: Client
   openUrl: (url: string) => void
+  /**
+   * Opens `url` without taking focus from the app. Only set where losing
+   * focus tears the UI down (the extension action popup); prefer
+   * `useOpenExternalUrl`, which falls back to `openUrl` and confirms the open.
+   */
+  openUrlInBackground?: (url: string) => Promise<void>
   saveFile: SaveFileFunction
   mpcDevice: MpcDevice
   vaultCreationMpcLib: MpcLib

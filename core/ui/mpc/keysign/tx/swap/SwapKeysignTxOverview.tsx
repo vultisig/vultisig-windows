@@ -2,6 +2,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getTxFailureDescription } from '@core/ui/chain/tx/failure/getTxFailureDescription'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import {
@@ -137,7 +138,8 @@ export const SwapKeysignTxOverview = ({
   txHashes: string[]
 }) => {
   const { t } = useTranslation()
-  const { openUrl, goHome } = useCore()
+  const { goHome } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const vault = useCurrentVault()
   const { coin: potentialFromCoin } = value
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
@@ -227,7 +229,7 @@ export const SwapKeysignTxOverview = ({
   const showTryAgain = outcome === 'failed' && !!retrySwap
 
   const trackTransaction = (tx: string) =>
-    openUrl(
+    openExternalUrl(
       getSwapTrackingUrl({
         swapPayload,
         txHash: tx,

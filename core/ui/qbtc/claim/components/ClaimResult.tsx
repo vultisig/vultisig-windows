@@ -1,4 +1,4 @@
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { Button } from '@lib/ui/buttons/Button'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
@@ -37,7 +37,7 @@ export const ClaimResult = ({
 }: ClaimResultProps) => {
   const { t } = useTranslation()
   const [, copyToClipboard] = useCopyToClipboard()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
 
   const totalBtc = Number(totalAmountClaimed) / 10 ** btcDecimals
   const blockExplorerUrl = getBlockExplorerUrl({
@@ -105,7 +105,9 @@ export const ClaimResult = ({
               >
                 <ClipboardCopyIcon />
               </TxRowIconButton>
-              <TxRowIconButton onClick={() => openUrl(blockExplorerUrl)}>
+              <TxRowIconButton
+                onClick={() => openExternalUrl(blockExplorerUrl)}
+              >
                 <SquareArrowTopRightIcon />
               </TxRowIconButton>
             </HStack>

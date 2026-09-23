@@ -312,6 +312,7 @@ export const pt = {
   est_network_fee: 'Taxa de rede estimada',
   expand_view: 'Ampliar visualização',
   open_as_side_panel: 'Abrir como painel lateral',
+  opened_in_new_tab: 'Aberto em uma nova aba',
   push_notifications: 'Notificações Push',
   push_notifications_description:
     'Receba notificações quando sua assinatura for necessária ou quando um dispositivo solicitar acesso.',

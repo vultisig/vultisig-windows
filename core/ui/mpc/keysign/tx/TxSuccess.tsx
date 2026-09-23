@@ -20,6 +20,7 @@ import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-d
 import { UniversalRouterSwapSummary } from '@core/ui/mpc/keysign/tx/swap/UniversalRouterSwapSummary'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -50,7 +51,6 @@ import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
 
 import { useTxHash } from '../../../chain/state/txHash'
-import { useCore } from '../../../state/core'
 import { getTxSuccessAmountPresentation } from './getTxSuccessAmountPresentation'
 import { getWasmExecuteTxDisplay } from './getWasmExecuteTxDisplay'
 import { TransactionStatusAnimation } from './TransactionStatusAnimation'
@@ -68,7 +68,7 @@ export const TxSuccess = ({
   const walletCore = useAssertWalletCore()
   const txHash = useTxHash()
   const [, copyToClipboard] = useCopyToClipboard()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
 
   // A wasm contract execute (stake/unstake) is signed entirely from
   // `contractPayload`; its `toAmount` is empty, so derive the amount + asset
@@ -333,7 +333,9 @@ export const TxSuccess = ({
                   >
                     <ClipboardCopyIcon />
                   </TxRowIconButton>
-                  <TxRowIconButton onClick={() => openUrl(blockExplorerUrl)}>
+                  <TxRowIconButton
+                    onClick={() => openExternalUrl(blockExplorerUrl)}
+                  >
                     <SquareArrowTopRightIcon />
                   </TxRowIconButton>
                 </HStack>

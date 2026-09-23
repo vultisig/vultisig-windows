@@ -311,6 +311,7 @@ export const nl = {
   est_network_fee: 'Geschatte netwerkfee',
   expand_view: 'Weergave uitvouwen',
   open_as_side_panel: 'Openen als zijpaneel',
+  opened_in_new_tab: 'Geopend in een nieuw tabblad',
   push_notifications: 'Pushmeldingen',
   push_notifications_description:
     'Ontvang een melding wanneer uw handtekening vereist is of wanneer een apparaat toegang aanvraagt.',

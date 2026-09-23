@@ -309,6 +309,7 @@ export const ko = {
   est_network_fee: '예상 네트워크 수수료',
   expand_view: '확대 보기',
   open_as_side_panel: '측면 패널로 열기',
+  opened_in_new_tab: '새 탭에서 열림',
   push_notifications: '푸시 알림',
   push_notifications_description:
     '서명이 필요하거나 기기에서 접근 권한을 요청할 때 알림을 받으세요.',

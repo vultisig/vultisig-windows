@@ -1,7 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
 import { CoinMarketStatsSection } from '@core/ui/vault/chain/coin/market/CoinMarketStatsSection'
@@ -34,7 +34,7 @@ type CoinDetailModalProps = OnCloseProp & {
 }
 
 export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const formatFiatAmount = useFormatFiatAmount()
   const balance = fromChainAmount(coin.amount, coin.decimals)
   const fiatValue = (coin.price || 0) * balance
@@ -62,7 +62,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
                 style={{ color: 'hsl(215, 40%, 85%)', fontSize: 16 }}
                 onClick={onClose}
               />
-              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+              <IconButton onClick={() => openExternalUrl(blockExplorerUrl)}>
                 <IconWrapper size={20}>
                   <ArCubeIcon />
                 </IconWrapper>

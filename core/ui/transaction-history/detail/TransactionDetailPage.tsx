@@ -6,7 +6,7 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useTransactionRecords } from '@core/ui/storage/transactionHistory'
 import {
   LimitSwapTransactionRecord,
@@ -555,7 +555,7 @@ export const TransactionDetailPage = () => {
   const goBack = useNavigateBack()
   const { t, i18n } = useTranslation()
   const [{ id }] = useCoreViewState<'transactionDetail'>()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const records = useTransactionRecords()
 
   const record = shouldBePresent(
@@ -678,7 +678,7 @@ export const TransactionDetailPage = () => {
 
         <Button
           kind="secondary"
-          onClick={() => openUrl(explorerUrl)}
+          onClick={() => openExternalUrl(explorerUrl)}
           icon={<SquareArrowOutUpRightIcon />}
         >
           {t('view_on_explorer')}
