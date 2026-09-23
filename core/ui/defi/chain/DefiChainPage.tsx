@@ -1,10 +1,10 @@
 import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
-import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { ComponentType } from 'react'
 import styled from 'styled-components'
@@ -29,7 +29,8 @@ export const DefiChainPage = () => {
       flexGrow
     >
       <VStack flexGrow>
-        <VaultHeader
+        <PageHeader
+          hasBorder
           primaryControls={<PageHeaderBackButton />}
           secondaryControls={<RefreshDefiData />}
         />

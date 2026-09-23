@@ -1,8 +1,8 @@
 import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { Tab, Tabs } from '@lib/ui/base/Tabs'
 import { VStack } from '@lib/ui/layout/Stack'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -27,7 +27,8 @@ export const CircleHomeView = () => {
 
   return (
     <>
-      <VaultHeader
+      <PageHeader
+        hasBorder
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<RefreshDefiData />}
       />
