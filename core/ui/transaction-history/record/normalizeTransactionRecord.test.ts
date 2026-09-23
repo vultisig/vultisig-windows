@@ -6,6 +6,7 @@ import {
   SendTransactionRecord,
   TransactionRecord,
 } from '../core'
+import { getRecordLastValidBlockHeight } from '../status/getRecordLastValidBlockHeight'
 import { normalizeTransactionRecord } from './normalizeTransactionRecord'
 
 const securedUsdc = 'ETH-USDC-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
@@ -117,5 +118,35 @@ describe('normalizeTransactionRecord', () => {
     }
 
     expect(normalizeTransactionRecord(record)).toBe(record)
+  })
+
+  // Sends written before the Solana blockhash deadline was carried have no
+  // `lastValidBlockHeight`. They must load exactly as they always did and read
+  // as having no deadline, so the status poll treats them as it did before.
+  it('passes a Solana send from before the deadline was carried through untouched', () => {
+    const fromOlderBuild: TransactionRecord = JSON.parse(
+      JSON.stringify({
+        id: 'send-2',
+        vaultId: 'vault',
+        type: 'send',
+        status: 'pending',
+        chain: Chain.Solana,
+        timestamp: '2026-08-09T13:39:00.000Z',
+        txHash: 'signature',
+        explorerUrl: '',
+        fiatValue: '',
+        data: {
+          fromAddress: '7Zb1h3Z4vYtHk1qSQ9HAtpNQJ4T4r1CqWn2zPnyjF4Lt',
+          toAddress: '9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin',
+          amount: '1000000',
+          decimals: 9,
+          token: 'SOL',
+          tokenLogo: 'sol',
+        },
+      } satisfies SendTransactionRecord)
+    )
+
+    expect(normalizeTransactionRecord(fromOlderBuild)).toBe(fromOlderBuild)
+    expect(getRecordLastValidBlockHeight(fromOlderBuild)).toBeUndefined()
   })
 })

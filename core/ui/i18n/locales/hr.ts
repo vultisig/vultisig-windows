@@ -1992,6 +1992,9 @@ export const hr = {
     medium: 'Srednji',
     high: 'Visoko',
   },
+  tx_failed_expired: 'Isteklo prije nego što je potvrđeno',
+  tx_failed_expired_description:
+    'Mreža nije potvrdila ovu transakciju prije isteka, pa nije prošla i ništa nije napustilo vaš novčanik. Pokušajte ponovno potpisati i poslati je s novim rokom.',
   signed_awaiting_broadcast: 'Potpisano, još nije poslano na mrežu',
   signed_awaiting_broadcast_description:
     'Ova je transakcija potpisana, ali nije poslana. Aplikacija koja ju je zatražila odgovorna je za slanje na mrežu; status se ažurira nakon što je mreža vidi.',

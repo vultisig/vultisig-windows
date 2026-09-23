@@ -2,6 +2,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { limitSwapOrderStatuses } from '@vultisig/core-chain/swap/native/limitSwapOrderStatus'
 
 import { TrackedSwapArrivalProvider } from '../vault/swap/arrival/swapArrivalProvider'
+import { SendFailureReason } from './status/sendFailureReason'
 import { SwapFailureReason } from './status/swapFailureReason'
 
 export const transactionRecordTypes = [
@@ -67,6 +68,12 @@ export type SendTransactionData = {
    * written before it was carried.
    */
   lastValidBlockHeight?: number
+  /** Why the chain failed this send, when it gave a reason. Only ever
+   * `expired` so far, written by the status poll once the chain proves the
+   * transaction can no longer land. Set while the record is `failed` but never
+   * cleared when one heals, so `getRecordFailureReason` — not this field —
+   * decides what a row shows. */
+  failureReason?: SendFailureReason
 }
 
 export type SwapTransactionData = {
@@ -99,9 +106,11 @@ export type SwapTransactionData = {
    * swap's success. */
   arrivalProvider?: TrackedSwapArrivalProvider
   /** Why the chain rejected this swap, once the revert has been read back and
-   * recognised. Absent whenever the reason could not be established. Set while
-   * the record is `failed` but never cleared when one heals, so
-   * `getRecordFailureReason` — not this field — decides what a row shows. */
+   * recognised — or, for a source transaction that expired unseen, the chain's
+   * own proof that it never went through. Absent whenever the reason could not
+   * be established. Set while the record is `failed` but never cleared when
+   * one heals, so `getRecordFailureReason` — not this field — decides what a
+   * row shows. */
   failureReason?: SwapFailureReason
   /** When the chain was asked why this swap failed, whether or not it gave an
    * answer. Present means never ask again: an unanswered replay is a block no

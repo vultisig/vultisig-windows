@@ -2028,6 +2028,9 @@ export const it = {
     medium: 'Mezzo',
     high: 'Alto',
   },
+  tx_failed_expired: 'Scaduto prima della conferma',
+  tx_failed_expired_description:
+    'La rete non ha confermato la transazione prima della scadenza, quindi non è andata a buon fine e non è stato prelevato alcun importo dal tuo portafoglio. Prova a firmarla e inviarla nuovamente impostando una nuova scadenza.',
   signed_awaiting_broadcast: 'Firmato, ma non ancora inviato alla rete',
   signed_awaiting_broadcast_description:
     "Questa transazione è stata firmata ma non inviata. L'applicazione che l'ha richiesta è responsabile dell'invio alla rete; lo stato si aggiorna non appena la rete la riceve.",

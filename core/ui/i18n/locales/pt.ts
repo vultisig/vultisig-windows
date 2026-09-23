@@ -2023,6 +2023,9 @@ export const pt = {
     medium: 'Médio',
     high: 'Alto',
   },
+  tx_failed_expired: 'Expirou antes de ser confirmada.',
+  tx_failed_expired_description:
+    'A rede não confirmou esta transação antes do prazo expirar, portanto ela não foi concluída e nenhum valor saiu da sua carteira. Tente assinar e enviar novamente com um novo prazo.',
   signed_awaiting_broadcast: 'Assinado, ainda não enviado para a rede.',
   signed_awaiting_broadcast_description:
     'Esta transação foi assinada, mas não enviada. O aplicativo que a solicitou é responsável por enviá-la à rede; o status será atualizado assim que a rede a receber.',
