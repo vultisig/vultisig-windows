@@ -282,6 +282,16 @@ describe('validateSendReceiver', () => {
     ],
     [Chain.Bitcoin, '1BitcoinEaterAddressDontSendf59kuE', 'Bitcoin eater'],
     [Chain.Ripple, 'rrrrrrrrrrrrrrrrrrrrrhoLvTp', 'black-hole'],
+    [
+      Chain.Bittensor,
+      '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM',
+      'Bittensor zero account',
+    ],
+    [
+      Chain.Polkadot,
+      '111111111111111111111111111111111HC1',
+      'Polkadot zero account',
+    ],
   ])(
     'names the reason for a burn address on %s',
     (chain, receiverAddress, reason) => {
