@@ -3,13 +3,13 @@ import { QbtcClaimBanner } from '@core/ui/qbtc/claim/components/QbtcClaimBanner'
 import { QbtcClaimSection } from '@core/ui/qbtc/claim/components/QbtcClaimSection'
 import { useCore } from '@core/ui/state/core'
 import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
-import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { ArCubeIcon } from '@lib/ui/icons/ArCubeIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar, PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import styled from 'styled-components'
@@ -39,7 +39,8 @@ export const VaultChainPage = () => {
       flexGrow
     >
       <VStack flexGrow>
-        <VaultHeader
+        <PageHeader
+          hasBorder
           primaryControls={<PageHeaderBackButton />}
           secondaryControls={
             <HStack gap={4} alignItems="center">
