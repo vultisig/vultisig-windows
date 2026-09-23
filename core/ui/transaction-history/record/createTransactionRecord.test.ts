@@ -456,3 +456,52 @@ describe('createTransactionRecord — a send of an already-held XRPL token', () 
     ).toBe('send')
   })
 })
+
+describe('createTransactionRecord — what the wallet can vouch for', () => {
+  const sendPayload = (skipBroadcast: boolean): KeysignPayload =>
+    create(KeysignPayloadSchema, {
+      coin: commEthCoin(),
+      toAddress: '0x2222222222222222222222222222222222222222',
+      toAmount: '1000000000000000000',
+      skipBroadcast,
+    })
+
+  it('records a transaction the wallet broadcast as broadcasted', () => {
+    const record = createTransactionRecord({
+      payload: sendPayload(false),
+      txHash: '0xbroadcast',
+      vaultId: 'vault-1',
+    })
+
+    expect(record.status).toBe('broadcasted')
+  })
+
+  // A `skipBroadcast` payload is signed for a dApp, which sends it — or fails
+  // to — on its own. The wallet cannot claim the network has it.
+  it('records a transaction only signed for a dApp as signed, not broadcasted', () => {
+    const record = createTransactionRecord({
+      payload: sendPayload(true),
+      txHash: '0xsigned',
+      vaultId: 'vault-1',
+    })
+
+    expect(record.status).toBe('signed')
+  })
+
+  it('records a dApp swap that was only signed as signed too', () => {
+    const record = createTransactionRecord({
+      payload: create(KeysignPayloadSchema, {
+        coin: commEthCoin(),
+        toAddress: '0x2222222222222222222222222222222222222222',
+        toAmount: '1000000000000000000',
+        swapPayload: oneInchSwap('1inch'),
+        skipBroadcast: true,
+      }),
+      txHash: '0xsignedswap',
+      vaultId: 'vault-1',
+    })
+
+    expect(record.type).toBe('swap')
+    expect(record.status).toBe('signed')
+  })
+})

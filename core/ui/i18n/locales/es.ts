@@ -2023,4 +2023,7 @@ export const es = {
     medium: 'Medio',
     high: 'Alto',
   },
+  signed_awaiting_broadcast: 'Firmado, aún no enviado a la red.',
+  signed_awaiting_broadcast_description:
+    'Esta transacción fue firmada pero no enviada. La aplicación que la solicitó es responsable de enviarla a la red; el estado se actualiza una vez que la red la recibe.',
 }

@@ -1982,4 +1982,8 @@ export const ko = {
     medium: '중간',
     high: '높은',
   },
+  signed_awaiting_broadcast:
+    '서명은 완료되었지만 아직 네트워크로 전송되지 않았습니다.',
+  signed_awaiting_broadcast_description:
+    '이 거래는 서명되었지만 아직 전송되지 않았습니다. 거래를 요청한 애플리케이션이 네트워크로 전송해야 하며, 네트워크에서 이를 수신하면 상태가 업데이트됩니다.',
 }

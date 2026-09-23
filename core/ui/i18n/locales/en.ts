@@ -1964,4 +1964,7 @@ export const en = {
   enable_ton_w5_wallet: 'Use TON W5 wallet',
   enable_ton_w5_wallet_description:
     "Use the W5 (v5r1) contract instead of V4R2 when deriving this vault's TON addresses. This changes which address the wallet uses, and each contract is a separate address with its own balance — it moves no funds, so anything held at the other address stays there until you send it.",
+  signed_awaiting_broadcast: 'Signed, not yet sent to the network',
+  signed_awaiting_broadcast_description:
+    'This transaction was signed but not sent. The application that requested it is responsible for sending it to the network; the status updates once the network sees it.',
 }

@@ -2023,4 +2023,7 @@ export const pt = {
     medium: 'Médio',
     high: 'Alto',
   },
+  signed_awaiting_broadcast: 'Assinado, ainda não enviado para a rede.',
+  signed_awaiting_broadcast_description:
+    'Esta transação foi assinada, mas não enviada. O aplicativo que a solicitou é responsável por enviá-la à rede; o status será atualizado assim que a rede a receber.',
 }

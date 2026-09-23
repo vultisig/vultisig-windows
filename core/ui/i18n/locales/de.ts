@@ -2039,4 +2039,8 @@ export const de = {
     medium: 'Medium',
     high: 'Hoch',
   },
+  signed_awaiting_broadcast:
+    'Unterschrieben, noch nicht an das Netzwerk gesendet',
+  signed_awaiting_broadcast_description:
+    'Diese Transaktion wurde signiert, aber noch nicht gesendet. Die anfragende Anwendung ist für die Übermittlung an das Netzwerk verantwortlich; der Status wird aktualisiert, sobald das Netzwerk die Transaktion empfängt.',
 }

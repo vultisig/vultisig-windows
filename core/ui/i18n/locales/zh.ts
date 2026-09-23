@@ -1859,4 +1859,7 @@ export const zh = {
     medium: '中等的',
     high: '高的',
   },
+  signed_awaiting_broadcast: '已签名，但尚未发送到网络',
+  signed_awaiting_broadcast_description:
+    '此交易已签名但尚未发送。请求此交易的应用程序负责将其发送到网络；网络收到交易后，状态将更新。',
 }

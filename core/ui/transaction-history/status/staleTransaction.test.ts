@@ -203,6 +203,82 @@ describe('getTxStatusRecordUpdate', () => {
   })
 })
 
+describe('getTxStatusRecordUpdate — signed for a dApp, never broadcast by the wallet', () => {
+  const signedRecord = () =>
+    sendRecord({ timestamp: freshTimestamp(), status: 'signed' })
+
+  // A hash the node has never seen is exactly what a transaction the dApp
+  // dropped looks like; it must not be dressed up as in flight.
+  it('stays signed while the node has not seen the hash', () => {
+    const update = getTxStatusRecordUpdate({
+      record: signedRecord(),
+      result: { status: 'not_found', isKnown: false },
+    })
+
+    expect(update).toBeNull()
+  })
+
+  it('stays signed when the status lookup is inconclusive', () => {
+    expect(
+      getTxStatusRecordUpdate({
+        record: signedRecord(),
+        result: { status: 'pending', isKnown: false },
+      })
+    ).toBeNull()
+    expect(
+      getTxStatusRecordUpdate({
+        record: signedRecord(),
+        result: { status: 'pending' },
+      })
+    ).toBeNull()
+  })
+
+  it('moves to pending once the node reports the hash in flight', () => {
+    const update = getTxStatusRecordUpdate({
+      record: signedRecord(),
+      result: { status: 'pending', isKnown: true },
+    })
+
+    expect(update?.status).toBe('pending')
+  })
+
+  it('confirms once the chain reports success', () => {
+    const update = getTxStatusRecordUpdate({
+      record: signedRecord(),
+      result: { status: 'success' },
+    })
+
+    expect(update?.status).toBe('confirmed')
+  })
+
+  it('fails on an authoritative on-chain failure', () => {
+    const update = getTxStatusRecordUpdate({
+      record: signedRecord(),
+      result: { status: 'error' },
+    })
+
+    expect(update?.status).toBe('failed')
+  })
+
+  it('fails when the chain itself proves the transaction expired', () => {
+    const update = getTxStatusRecordUpdate({
+      record: signedRecord(),
+      result: { status: 'expired', isKnown: true },
+    })
+
+    expect(update?.status).toBe('failed')
+  })
+
+  it('stays signed on an expiry the chain does not vouch for', () => {
+    const update = getTxStatusRecordUpdate({
+      record: signedRecord(),
+      result: { status: 'expired' },
+    })
+
+    expect(update).toBeNull()
+  })
+})
+
 describe('getStatusPollingInterval', () => {
   afterEach(() => {
     vi.useRealTimers()

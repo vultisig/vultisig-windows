@@ -56,6 +56,7 @@ const statusToCardStatus: Record<
   TransactionRecordStatus,
   TransactionHistoryCardStatus
 > = {
+  signed: 'pending',
   broadcasted: 'pending',
   pending: 'pending',
   confirmed: 'successful',
@@ -322,10 +323,15 @@ export const TransactionRecordCard = ({
       ? limitOrderCardStatus[record.data.orderStatus]
       : statusToCardStatus[record.status]
 
+  // A signed-only record shares the neutral colour of an in-flight one, but
+  // not its wording: the wallet handed the signed bytes to a dApp, and only
+  // the chain can say whether they were ever sent.
   const statusLabelOverride =
     record.type === 'limitSwap'
       ? limitStatusLabel[record.data.orderStatus]
-      : undefined
+      : record.status === 'signed'
+        ? t('signed_awaiting_broadcast')
+        : undefined
 
   const failureReason = getRecordFailureReason(record)
 

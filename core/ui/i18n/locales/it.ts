@@ -2028,4 +2028,7 @@ export const it = {
     medium: 'Mezzo',
     high: 'Alto',
   },
+  signed_awaiting_broadcast: 'Firmato, ma non ancora inviato alla rete',
+  signed_awaiting_broadcast_description:
+    "Questa transazione è stata firmata ma non inviata. L'applicazione che l'ha richiesta è responsabile dell'invio alla rete; lo stato si aggiorna non appena la rete la riceve.",
 }

@@ -2007,4 +2007,8 @@ export const nl = {
     medium: 'Medium',
     high: 'Hoog',
   },
+  signed_awaiting_broadcast:
+    'Ondertekend, maar nog niet naar het netwerk verzonden.',
+  signed_awaiting_broadcast_description:
+    'Deze transactie is ondertekend maar nog niet verzonden. De applicatie die de transactie heeft aangevraagd, is verantwoordelijk voor het verzenden ervan naar het netwerk; de status wordt bijgewerkt zodra het netwerk de transactie heeft ontvangen.',
 }
