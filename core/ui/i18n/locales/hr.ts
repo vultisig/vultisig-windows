@@ -311,6 +311,7 @@ export const hr = {
   est_network_fee: 'Procijenjena mrežna naknada',
   expand_view: 'Proširi prikaz',
   open_as_side_panel: 'Otvori kao bočnu ploču',
+  opened_in_new_tab: 'Otvoreno u novoj kartici',
   push_notifications: 'Push obavijesti',
   push_notifications_description:
     'Primajte obavijesti kada je potreban vaš potpis ili kada uređaj zatraži pristup.',

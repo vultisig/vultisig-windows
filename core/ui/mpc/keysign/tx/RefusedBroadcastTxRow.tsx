@@ -1,4 +1,4 @@
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
@@ -29,7 +29,7 @@ export const RefusedBroadcastTxRow = ({
   hash,
 }: RefusedBroadcastTxRowProps) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const [, copyToClipboard] = useCopyToClipboard()
   const { data } = useTxStatusQuery({ chain, hash })
 
@@ -59,7 +59,9 @@ export const RefusedBroadcastTxRow = ({
           </IconButton>
           <IconButton
             onClick={() =>
-              openUrl(getBlockExplorerUrl({ chain, entity: 'tx', value: hash }))
+              openExternalUrl(
+                getBlockExplorerUrl({ chain, entity: 'tx', value: hash })
+              )
             }
           >
             <SquareArrowOutUpRightIcon />

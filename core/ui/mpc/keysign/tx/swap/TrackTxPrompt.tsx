@@ -1,4 +1,4 @@
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -24,11 +24,11 @@ export const TrackTxPrompt = ({
   swapPayload,
   sourceChain,
 }: TrackTxPromptProps) => {
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
 
   const trackTransaction = (tx: string) => {
     if (swapPayload && sourceChain) {
-      openUrl(
+      openExternalUrl(
         getSwapTrackingUrl({
           swapPayload,
           txHash: tx,
@@ -36,7 +36,7 @@ export const TrackTxPrompt = ({
         })
       )
     } else {
-      openUrl(
+      openExternalUrl(
         getBlockExplorerUrl({
           chain,
           entity: 'tx',

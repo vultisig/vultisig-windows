@@ -309,6 +309,7 @@ export const ru = {
   est_network_fee: 'Оценка комиссии сети',
   expand_view: 'Развернуть',
   open_as_side_panel: 'Открывается как боковая панель',
+  opened_in_new_tab: 'Открыто в новой вкладке',
   push_notifications: 'Push-уведомления',
   push_notifications_description:
     'Получайте уведомления, когда потребуется ваша подпись или устройство запросит доступ.',

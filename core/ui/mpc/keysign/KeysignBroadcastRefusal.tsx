@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
@@ -44,7 +45,8 @@ export const KeysignBroadcastRefusal = ({
   error,
 }: KeysignBroadcastRefusalProps) => {
   const { t } = useTranslation()
-  const { goHome, openUrl } = useCore()
+  const { goHome } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const onClose = useFlowErrorClose()
   const keysignPayload = getRecordUnionValue(
     useKeysignMessagePayload(),
@@ -106,7 +108,7 @@ export const KeysignBroadcastRefusal = ({
             error={error}
             title={t('broadcast_refused')}
             description={t('broadcast_refused_description')}
-            onReportBug={() => openUrl(reportBugUrl)}
+            onReportBug={() => openExternalUrl(reportBugUrl)}
           />
           <Panel>
             <SeparatedByLine gap={16}>

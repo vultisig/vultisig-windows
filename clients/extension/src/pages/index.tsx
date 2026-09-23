@@ -85,6 +85,7 @@ const App = () => {
       goHome={() => navigate(initialCoreView)}
       popNavigationHistory={popNavigationHistory}
       startupMode={isPopup ? 'instant' : 'splash'}
+      isPopup={isPopup}
     >
       <ActiveView views={views} />
       <PrefetchViews loaders={prefetchLoaders} priority={prefetchPriority} />

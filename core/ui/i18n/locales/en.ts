@@ -397,6 +397,7 @@ export const en = {
   expand_view: 'Expand View',
   on_chain: 'on {{chain}}',
   open_as_side_panel: 'Open as Side Panel',
+  opened_in_new_tab: 'Opened in a new tab',
   push_notifications: 'Push Notifications',
   push_notifications_description:
     'Get notified when your signature is required or a device requests access.',

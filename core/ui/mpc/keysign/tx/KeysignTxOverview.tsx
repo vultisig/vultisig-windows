@@ -16,7 +16,7 @@ import { getDoneTransactionTitleKey } from '@core/ui/mpc/keysign/transaction-dec
 import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-decoding/useThorchainInboundAddresses'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
-import { useCore } from '@core/ui/state/core'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
 import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -55,7 +55,7 @@ export const KeysignTxOverview = ({
   toAddressLabel,
 }: KeysignTxOverviewProps) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const { name } = useCurrentVault()
   const keysignPayload = getRecordUnionValue(
     useKeysignMessagePayload(),
@@ -179,7 +179,7 @@ export const KeysignTxOverview = ({
               </Text>
               <HStack alignItems="center" gap={4}>
                 <MiddleTruncate text={txHash} width={140} />
-                <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+                <IconButton onClick={() => openExternalUrl(blockExplorerUrl)}>
                   <SquareArrowOutUpRightIcon />
                 </IconButton>
               </HStack>
