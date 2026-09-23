@@ -2010,4 +2010,8 @@ export const nl = {
   tx_failed_expired: 'Verlopen voordat het bevestigd was',
   tx_failed_expired_description:
     'Het netwerk heeft deze transactie niet bevestigd voordat de deadline verstreek, waardoor deze nooit is voltooid en er niets van uw portemonnee is afgeschreven. Probeer de transactie opnieuw te ondertekenen en te verzenden met een nieuwe deadline.',
+  signed_awaiting_broadcast:
+    'Ondertekend, maar nog niet naar het netwerk verzonden.',
+  signed_awaiting_broadcast_description:
+    'Deze transactie is ondertekend maar nog niet verzonden. De applicatie die de transactie heeft aangevraagd, is verantwoordelijk voor het verzenden ervan naar het netwerk; de status wordt bijgewerkt zodra het netwerk de transactie heeft ontvangen.',
 }

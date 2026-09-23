@@ -40,6 +40,7 @@ import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { Panel } from '@lib/ui/panel/Panel'
+import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text, TextColor } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -69,6 +70,7 @@ const safeBigInt = (value: string): bigint => {
 }
 
 const statusLabelKey = {
+  signed: 'signed_awaiting_broadcast',
   broadcasted: 'broadcasted',
   pending: 'pending',
   confirmed: 'confirmed',
@@ -76,6 +78,7 @@ const statusLabelKey = {
 } as const satisfies Record<TransactionRecordStatus, string>
 
 const statusColor: Record<TransactionRecordStatus, TextColor> = {
+  signed: 'idle',
   broadcasted: 'idle',
   pending: 'idle',
   confirmed: 'success',
@@ -627,6 +630,16 @@ export const TransactionDetailPage = () => {
             <LimitSwapAmountDisplay record={record} />
             <LimitSwapDetailPanel record={record} />
           </>
+        )}
+
+        {/*
+         * Explains why the explorer may not find this hash: the wallet only
+         * signed, and the network sees the transaction only if the dApp sent it.
+         * A limit order tells its own lifecycle below instead of a status row,
+         * so it gets no status explanation either.
+         */}
+        {record.status === 'signed' && record.type !== 'limitSwap' && (
+          <InfoBlock>{t('signed_awaiting_broadcast_description')}</InfoBlock>
         )}
 
         <Panel>

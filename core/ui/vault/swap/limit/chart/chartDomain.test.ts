@@ -6,35 +6,45 @@ import {
   getLimitChartFraction,
   getLimitChartPlacement,
   getLimitChartValue,
-  limitChartGuidePresets,
 } from './chartDomain'
 
 const makePoints = (prices: number[]): MarketChartPoint[] =>
   prices.map((price, index) => ({ timestamp: index * 1000, price }))
 
 describe('getLimitChartDomain', () => {
-  it('anchors on the market rate when the series sits inside it', () => {
+  it('fits the charted series with headroom', () => {
     const domain = getLimitChartDomain({
       points: makePoints([100, 101, 99]),
       marketPrice: 100,
     })
 
-    const span = 112 - 97
+    const span = 101 - 99
 
-    expect(domain.min).toBeCloseTo(97 - span * 0.06, 8)
-    expect(domain.max).toBeCloseTo(112 + span * 0.06, 8)
+    expect(domain.min).toBeCloseTo(99 - span * 0.06, 8)
+    expect(domain.max).toBeCloseTo(101 + span * 0.06, 8)
   })
 
-  it('is widened by a series that runs past the anchors', () => {
+  it('is widened by a market rate outside the series', () => {
     const domain = getLimitChartDomain({
       points: makePoints([80, 130]),
-      marketPrice: 100,
+      marketPrice: 140,
     })
 
-    const span = 130 - 80
+    const span = 140 - 80
 
     expect(domain.min).toBeCloseTo(80 - span * 0.06, 8)
-    expect(domain.max).toBeCloseTo(130 + span * 0.06, 8)
+    expect(domain.max).toBeCloseTo(140 + span * 0.06, 8)
+  })
+
+  it('draws the series alone while the market rate is unknown', () => {
+    expect(
+      getLimitChartDomain({
+        points: makePoints([80, 130]),
+        marketPrice: undefined,
+      })
+    ).toEqual(
+      getLimitChartDomain({ points: makePoints([80, 130]), marketPrice: 100 })
+    )
   })
 
   it('keeps the same window whatever the target is, so dragging cannot rescale it', () => {
@@ -43,24 +53,19 @@ describe('getLimitChartDomain', () => {
     expect(getLimitChartDomain(input)).toEqual(getLimitChartDomain(input))
   })
 
-  it('pads a flat series with no market rate rather than collapsing', () => {
+  it('pads a flat series rather than collapsing', () => {
     const domain = getLimitChartDomain({
       points: makePoints([50, 50]),
-      marketPrice: 0,
+      marketPrice: undefined,
     })
 
     expect(domain.max).toBeGreaterThan(domain.min)
   })
 
-  it('falls back to a unit window with nothing to anchor on', () => {
-    expect(getLimitChartDomain({ points: [], marketPrice: 0 })).toEqual({
-      min: 0,
-      max: 1,
-    })
-  })
-
-  it('guides the two furthest-above-market preset stops', () => {
-    expect(limitChartGuidePresets).toEqual([5, 10])
+  it('falls back to a unit window with nothing to draw', () => {
+    expect(getLimitChartDomain({ points: [], marketPrice: undefined })).toEqual(
+      { min: 0, max: 1 }
+    )
   })
 })
 

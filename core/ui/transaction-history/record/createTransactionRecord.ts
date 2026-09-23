@@ -32,6 +32,7 @@ import {
   SwapTransactionData,
   SwapTransactionRecord,
   TransactionRecord,
+  TransactionRecordStatus,
   TrustLineTransactionData,
   TrustLineTransactionRecord,
 } from '../core'
@@ -331,6 +332,13 @@ export const createTransactionRecord = ({
           value: txHash,
         })
 
+  // A `skipBroadcast` payload was signed for a dApp, which broadcasts it — or
+  // fails to — on its own. Recording it as broadcast would show an in-progress
+  // transaction for a hash the network may never see.
+  const status: TransactionRecordStatus = payload.skipBroadcast
+    ? 'signed'
+    : 'broadcasted'
+
   const base = {
     id,
     vaultId,
@@ -339,7 +347,7 @@ export const createTransactionRecord = ({
     txHash,
     explorerUrl,
     fiatValue: '',
-    status: 'broadcasted' as const,
+    status,
   }
 
   // Checked before the swap-payload branch: only ERC20-sourced limit orders

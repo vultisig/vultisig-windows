@@ -2042,4 +2042,8 @@ export const de = {
   tx_failed_expired: 'Ist abgelaufen, bevor es bestätigt wurde.',
   tx_failed_expired_description:
     'Das Netzwerk hat diese Transaktion vor Ablauf der Frist nicht bestätigt, daher wurde sie nicht ausgeführt und nichts hat Ihr Wallet verlassen. Versuchen Sie erneut, die Transaktion mit einer neuen Frist zu signieren und zu senden.',
+  signed_awaiting_broadcast:
+    'Unterschrieben, noch nicht an das Netzwerk gesendet',
+  signed_awaiting_broadcast_description:
+    'Diese Transaktion wurde signiert, aber noch nicht gesendet. Die anfragende Anwendung ist für die Übermittlung an das Netzwerk verantwortlich; der Status wird aktualisiert, sobald das Netzwerk die Transaktion empfängt.',
 }

@@ -59,6 +59,12 @@ describe('isChainPollable', () => {
     expect(isChainPollable(sendWith('pending'))).toBe(true)
   })
 
+  // The wallet only signed it; whether the dApp broadcast it is something only
+  // the chain can answer.
+  it('polls a send that was signed for a dApp but never broadcast', () => {
+    expect(isChainPollable(sendWith('signed'))).toBe(true)
+  })
+
   it('stops polling once a send is confirmed', () => {
     expect(isChainPollable(sendWith('confirmed'))).toBe(false)
   })
@@ -100,6 +106,14 @@ describe('isSettlingTransition', () => {
 
   it('does not settle while still in flight', () => {
     expect(transition({ from: 'broadcasted', to: 'pending' })).toBe(false)
+  })
+
+  it('settles when a signed send turns out to have confirmed', () => {
+    expect(transition({ from: 'signed', to: 'confirmed' })).toBe(true)
+  })
+
+  it('does not settle when a signed send is first seen in flight', () => {
+    expect(transition({ from: 'signed', to: 'pending' })).toBe(false)
   })
 
   it('does not settle twice on a re-poll of the same verdict', () => {

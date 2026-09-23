@@ -13,7 +13,15 @@ export const transactionRecordTypes = [
 ] as const
 export type TransactionRecordType = (typeof transactionRecordTypes)[number]
 
+/**
+ * A record's lifecycle as far as the wallet can vouch for it. `signed` is the
+ * one state before broadcast: the wallet signed the transaction and handed it
+ * back to the dApp that asked for it, without sending it to the network. Only
+ * the chain can say whether the dApp did, so a `signed` record moves on once
+ * the chain reports the hash and never on the wallet's own say-so.
+ */
 export const transactionRecordStatuses = [
+  'signed',
   'broadcasted',
   'pending',
   'confirmed',

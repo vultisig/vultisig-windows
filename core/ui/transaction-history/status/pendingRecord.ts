@@ -9,6 +9,17 @@ export const pendingStatuses: TransactionRecordStatus[] = [
 const settledStatuses: TransactionRecordStatus[] = ['confirmed', 'failed']
 
 /**
+ * The statuses worth asking the chain about. A `signed` record is not in
+ * flight — the wallet handed the signed bytes to a dApp and does not know
+ * whether they were ever sent — but the chain is the only way to find out, so
+ * it is polled alongside the in-flight ones.
+ */
+const chainPollableStatuses: TransactionRecordStatus[] = [
+  'signed',
+  ...pendingStatuses,
+]
+
+/**
  * Whether a record's status should be driven by reading chain state.
  *
  * Limit orders are queue-driven: their inbound deposit confirms in seconds
@@ -17,7 +28,7 @@ const settledStatuses: TransactionRecordStatus[] = ['confirmed', 'failed']
  * owns their lifecycle.
  */
 export const isChainPollable = (record: TransactionRecord) =>
-  pendingStatuses.includes(record.status) && record.type !== 'limitSwap'
+  chainPollableStatuses.includes(record.status) && record.type !== 'limitSwap'
 
 type IsSettlingTransitionInput = {
   previous: TransactionRecord

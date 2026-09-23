@@ -1985,4 +1985,8 @@ export const ko = {
   tx_failed_expired: '확정되기 전에 만료되었습니다.',
   tx_failed_expired_description:
     '네트워크에서 해당 거래가 만료되기 전에 확인되지 않아 거래가 완료되지 않았고 지갑에서 아무것도 인출되지 않았습니다. 새로운 마감일을 설정하고 다시 서명하고 전송해 보세요.',
+  signed_awaiting_broadcast:
+    '서명은 완료되었지만 아직 네트워크로 전송되지 않았습니다.',
+  signed_awaiting_broadcast_description:
+    '이 거래는 서명되었지만 아직 전송되지 않았습니다. 거래를 요청한 애플리케이션이 네트워크로 전송해야 하며, 네트워크에서 이를 수신하면 상태가 업데이트됩니다.',
 }

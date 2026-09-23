@@ -1,4 +1,7 @@
-import { marketChartRanges } from '@core/ui/chain/coin/price/market/MarketChartRange'
+import {
+  MarketChartRange,
+  marketChartRanges,
+} from '@core/ui/chain/coin/price/market/MarketChartRange'
 
 /**
  * History windows offered on the limit chart: the coin-detail ranges without
@@ -8,3 +11,6 @@ import { marketChartRanges } from '@core/ui/chain/coin/price/market/MarketChartR
 export const limitChartRanges = marketChartRanges.filter(
   range => range !== 'day'
 )
+
+/** The window the chart opens on: a month shows enough movement to judge a target against. */
+export const defaultLimitChartRange: MarketChartRange = 'month'

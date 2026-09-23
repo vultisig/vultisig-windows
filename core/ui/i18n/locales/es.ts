@@ -2026,4 +2026,7 @@ export const es = {
   tx_failed_expired: 'Caducó antes de ser confirmada.',
   tx_failed_expired_description:
     'La red no confirmó esta transacción antes de que expirara, por lo que no se procesó y nada salió de tu billetera. Intenta firmar y enviar de nuevo con una nueva fecha límite.',
+  signed_awaiting_broadcast: 'Firmado, aún no enviado a la red.',
+  signed_awaiting_broadcast_description:
+    'Esta transacción fue firmada pero no enviada. La aplicación que la solicitó es responsable de enviarla a la red; el estado se actualiza una vez que la red la recibe.',
 }

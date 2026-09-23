@@ -1862,4 +1862,7 @@ export const zh = {
   tx_failed_expired: '过期前未得到确认',
   tx_failed_expired_description:
     '网络未能在交易过期前确认此交易，因此交易未成功，您的钱包中没有任何资金流出。请尝试重新签名并发送，并设置新的截止日期。',
+  signed_awaiting_broadcast: '已签名，但尚未发送到网络',
+  signed_awaiting_broadcast_description:
+    '此交易已签名但尚未发送。请求此交易的应用程序负责将其发送到网络；网络收到交易后，状态将更新。',
 }
