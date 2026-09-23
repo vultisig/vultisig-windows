@@ -82,7 +82,7 @@ export const KeysignSigningStep = ({
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { version, goHome } = useCore()
+  const { version, goHome, isLimited } = useCore()
   const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
   const { mutate: startKeysign, ...mutationStatus } =
@@ -196,7 +196,9 @@ export const KeysignSigningStep = ({
                                 }}
                               >
                                 <VStack maxWidth={576} fullWidth gap={8}>
-                                  {getKeysignLimitSwapOrder(payload) ? (
+                                  {/* The dApp popup has no Limit Orders view to navigate to. */}
+                                  {getKeysignLimitSwapOrder(payload) &&
+                                  !isLimited ? (
                                     <Button
                                       kind="secondary"
                                       onClick={() =>
