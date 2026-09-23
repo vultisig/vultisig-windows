@@ -314,7 +314,7 @@ export const es = {
   est_network_fee: 'Tarifa de red estimada',
   expand_view: 'Ampliar vista',
   open_as_side_panel: 'Abrir como panel lateral',
-  opened_in_new_tab: 'Abierto en una nueva pestaña',
+  opened_in_new_tab: 'Abierto en una pestaña nueva',
   push_notifications: 'Notificaciones push',
   push_notifications_description:
     'Reciba notificaciones cuando se requiera su firma o cuando un dispositivo solicite acceso.',

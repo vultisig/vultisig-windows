@@ -294,7 +294,7 @@ export const zh = {
   est_network_fee: '预计网络费用',
   expand_view: '展开视图',
   open_as_side_panel: '打开方式为侧面板',
-  opened_in_new_tab: '已在新标签页中打开',
+  opened_in_new_tab: '在新标签页中打开',
   push_notifications: '推送通知',
   push_notifications_description:
     '当需要您签名或设备请求访问权限时，您将收到通知。',

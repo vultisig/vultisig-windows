@@ -315,7 +315,7 @@ export const de = {
   est_network_fee: 'Geschätzte Netzwerkgebühr',
   expand_view: 'Ansicht erweitern',
   open_as_side_panel: 'Als Seitenwand öffnen',
-  opened_in_new_tab: 'In neuem Tab geöffnet',
+  opened_in_new_tab: 'In einem neuen Tab geöffnet',
   push_notifications: 'Push-Benachrichtigungen',
   push_notifications_description:
     'Lassen Sie sich benachrichtigen, wenn Ihre Unterschrift erforderlich ist oder ein Gerät Zugriff anfordert.',
