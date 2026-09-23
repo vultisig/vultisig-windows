@@ -1,7 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { QbtcClaimBanner } from '@core/ui/qbtc/claim/components/QbtcClaimBanner'
 import { QbtcClaimSection } from '@core/ui/qbtc/claim/components/QbtcClaimSection'
-import { useCore } from '@core/ui/state/core'
 import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -22,7 +22,7 @@ import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultChainOverview } from './VaultChainOverview'
 
 export const VaultChainPage = () => {
-  const { openUrl } = useCore()
+  const openExternalUrl = useOpenExternalUrl()
   const chain = useCurrentVaultChain()
   const address = useCurrentVaultAddress(chain)
 
@@ -44,7 +44,7 @@ export const VaultChainPage = () => {
           secondaryControls={
             <HStack gap={4} alignItems="center">
               <RefreshVaultChainBalance />
-              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+              <IconButton onClick={() => openExternalUrl(blockExplorerUrl)}>
                 <IconWrapper size={24}>
                   <ArCubeIcon />
                 </IconWrapper>
