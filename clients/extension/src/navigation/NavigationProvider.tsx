@@ -10,14 +10,14 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
 import { getInitialView, removeInitialView } from '../storage/initialView'
-import { getPersistedHistory } from '../storage/persistedView'
+import { getPersistedView } from '../storage/persistedView'
 import { PersistNavigationState } from './PersistNavigationState'
 import { resolveInitialHistory } from './resolveInitialHistory'
 
 const getInitialHistory = async (): Promise<View[]> => {
-  const [initialView, persistedHistory, vaults] = await Promise.all([
+  const [initialView, persistedView, vaults] = await Promise.all([
     getInitialView(),
-    getPersistedHistory(),
+    getPersistedView(),
     vaultsStorage.getVaults(),
   ])
 
@@ -27,7 +27,7 @@ const getInitialHistory = async (): Promise<View[]> => {
 
   return resolveInitialHistory({
     initialView,
-    persistedHistory,
+    persistedView,
     hasVaults: vaults.length > 0,
   })
 }
