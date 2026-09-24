@@ -2,7 +2,7 @@
 Version=1.0
 Name=Vultisig
 Comment=Vultisig Linux Application
-Exec=/usr/local/bin/vultisig
+Exec=/usr/bin/vultisig
 Icon=/usr/share/icons/hicolor/scalable/apps/vultisig.svg
 Terminal=false
 Type=Application
