@@ -2038,5 +2038,5 @@ export const it = {
   no_active_chains_found_partial_description:
     'Non abbiamo rilevato alcun asset sulle blockchain che abbiamo potuto controllare.',
   unscanned_chains_warning:
-    'Non è stato possibile verificare i saldi su {{chains}} . Se disponi di fondi in questo conto, selezionali manualmente.',
+    'Non è stato possibile verificare i saldi su queste blockchain. Se possiedi fondi su di esse, selezionali manualmente:',
 }

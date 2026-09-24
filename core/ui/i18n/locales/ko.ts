@@ -1993,5 +1993,5 @@ export const ko = {
   no_active_chains_found_partial_description:
     '우리가 확인할 수 있는 블록체인 상에서 어떠한 자산도 발견되지 않았습니다.',
   unscanned_chains_warning:
-    '{{chains}} 의 잔액을 확인할 수 없습니다. 해당 계정에 자금이 있는 경우 수동으로 선택하십시오.',
+    '해당 블록체인의 잔액을 확인할 수 없습니다. 해당 블록체인에 자금이 있는 경우 수동으로 선택하세요.',
 }

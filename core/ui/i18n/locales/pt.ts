@@ -2033,5 +2033,5 @@ export const pt = {
   no_active_chains_found_partial_description:
     'Não detectamos nenhum ativo nas blockchains que pudemos verificar.',
   unscanned_chains_warning:
-    'Não foi possível verificar os saldos em {{chains}} . Se você tiver fundos lá, selecione-os manualmente.',
+    'Não foi possível verificar os saldos nessas blockchains. Se você tiver fundos nelas, selecione-as manualmente:',
 }

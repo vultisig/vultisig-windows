@@ -2018,5 +2018,5 @@ export const nl = {
   no_active_chains_found_partial_description:
     'We hebben geen activa aangetroffen op de blockchains die we konden controleren.',
   unscanned_chains_warning:
-    'We konden het saldo op {{chains}} niet controleren. Als er tegoed op staat, selecteer dit dan handmatig.',
+    'We konden de saldi op deze blockchains niet controleren. Als u er tegoeden op heeft staan, selecteer ze dan handmatig:',
 }

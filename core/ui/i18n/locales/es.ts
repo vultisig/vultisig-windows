@@ -2033,5 +2033,5 @@ export const es = {
   no_active_chains_found_partial_description:
     'No detectamos ningún activo en las cadenas que pudimos comprobar.',
   unscanned_chains_warning:
-    'No pudimos consultar los saldos de {{chains}} . Si tiene fondos allí, selecciónelos manualmente.',
+    'No pudimos consultar los saldos de estas cadenas de bloques. Si tiene fondos en ellas, selecciónelas manualmente:',
 }

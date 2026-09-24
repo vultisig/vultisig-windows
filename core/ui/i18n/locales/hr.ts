@@ -2002,5 +2002,5 @@ export const hr = {
   no_active_chains_found_partial_description:
     'Nismo otkrili nikakvu imovinu na lancima koje smo mogli provjeriti.',
   unscanned_chains_warning:
-    'Nismo mogli provjeriti stanje na {{chains}} . Ako tamo imate sredstava, odaberite ih ručno.',
+    'Nismo mogli provjeriti stanje na ovim blockchain mrežama. Ako imate sredstava na njima, odaberite ih ručno:',
 }

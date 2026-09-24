@@ -2050,5 +2050,5 @@ export const de = {
   no_active_chains_found_partial_description:
     'Wir konnten in den von uns überprüfbaren Blockchains keine Vermögenswerte feststellen.',
   unscanned_chains_warning:
-    'Wir konnten die Guthaben auf {{chains}} nicht prüfen. Falls Sie dort Guthaben haben, wählen Sie diese bitte manuell aus.',
+    'Wir konnten die Kontostände dieser Blockchains nicht überprüfen. Falls Sie Guthaben darauf haben, wählen Sie diese bitte manuell aus:',
 }

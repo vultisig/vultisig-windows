@@ -1869,5 +1869,5 @@ export const zh = {
   no_active_chains_found_partial_description:
     '我们在能够检查的链上没有发现任何资产。',
   unscanned_chains_warning:
-    '我们无法查询{{chains}}的余额。如果您在该账户中有资金，请手动选择。',
+    '我们无法查询这些区块链上的余额。如果您在这些区块链上有资金，请手动选择：',
 }
