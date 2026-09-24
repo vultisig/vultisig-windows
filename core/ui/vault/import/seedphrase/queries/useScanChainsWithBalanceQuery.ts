@@ -48,16 +48,6 @@ export const useScanChainsWithBalanceQuery =
     return useMemo(() => {
       const { isPending, errors, data: balances } = balancesQuery
 
-      // Never advance the import from a partial balance set. A failed chain is
-      // unknown, not empty, even when other chains resolved successfully.
-      if (errors.length > 0) {
-        return {
-          isPending,
-          errors,
-          data: undefined,
-        }
-      }
-
       // Check if all inputs have been resolved (based on data object size)
       const allInputsResolved =
         balances !== undefined &&
@@ -67,6 +57,17 @@ export const useScanChainsWithBalanceQuery =
       if (isPending && !allInputsResolved) {
         return {
           isPending: true,
+          errors,
+          data: undefined,
+        }
+      }
+
+      // A chain whose balance read failed is left out of the suggestions rather
+      // than blocking the rest; the user can still add it via "Customize chains".
+      // The scan only fails when no chain resolved at all.
+      if (!balances) {
+        return {
+          isPending,
           errors,
           data: undefined,
         }
@@ -82,8 +83,10 @@ export const useScanChainsWithBalanceQuery =
         : ''
       const phantomSolanaKey = accountCoinKeyToString(phantomSolanaInput)
 
-      const trustSolanaBalance = balances?.[trustSolanaKey] ?? 0n
-      const phantomSolanaBalance = balances?.[phantomSolanaKey] ?? 0n
+      // Undefined when the Trust Wallet Solana read failed, so the Phantom path
+      // is only chosen when the Trust Wallet path is known to be empty.
+      const trustSolanaBalance: bigint | undefined = balances[trustSolanaKey]
+      const phantomSolanaBalance = balances[phantomSolanaKey] ?? 0n
 
       // All queries settled - filter chains with positive balance
       const chainsWithBalance = SEEDPHRASE_IMPORT_SUPPORTED_CHAINS.filter(
@@ -91,7 +94,7 @@ export const useScanChainsWithBalanceQuery =
           const input = trustWalletInputs.find(i => i.chain === chain)
           if (!input) return false
           const key = accountCoinKeyToString(input)
-          const balance = balances?.[key]
+          const balance = balances[key]
           return balance !== undefined && balance > 0n
         }
       )
