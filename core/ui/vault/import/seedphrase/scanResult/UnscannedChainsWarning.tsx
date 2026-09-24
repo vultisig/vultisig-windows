@@ -1,4 +1,5 @@
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { useUnscannedChains } from '../state/unscannedChains'
@@ -15,7 +16,11 @@ export const UnscannedChainsWarning = () => {
 
   return (
     <WarningBlock>
-      {t('unscanned_chains_warning', { chains: unscannedChains.join(', ') })}
+      {t('unscanned_chains_warning')}
+      <br />
+      <Text as="span" weight={600}>
+        {unscannedChains.join(', ')}
+      </Text>
     </WarningBlock>
   )
 }
