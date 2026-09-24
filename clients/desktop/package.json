@@ -43,7 +43,7 @@
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "4.0.0",
     "@vultisig/lib-utils": "0.10.7",
-    "@vultisig/sdk": "7.8.1",
+    "@vultisig/sdk": "8.0.0",
     "@wailsapp/runtime": "workspace:^",
     "react": "19.2.4",
     "react-dom": "19.2.4",

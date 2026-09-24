@@ -56,7 +56,7 @@
     "@vultisig/core-chain": "6.0.0",
     "@vultisig/core-mpc": "4.0.0",
     "@vultisig/lib-utils": "0.10.7",
-    "@vultisig/sdk": "7.8.1",
+    "@vultisig/sdk": "8.0.0",
     "@wallet-standard/base": "^1.1.1",
     "@wallet-standard/features": "^1.1.1",
     "bech32": "^2.0.0",
