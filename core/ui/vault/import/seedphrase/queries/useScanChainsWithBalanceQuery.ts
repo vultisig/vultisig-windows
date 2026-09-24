@@ -5,6 +5,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
 import { deriveAddressFromMnemonic } from '@vultisig/core-chain/publicKey/address/deriveAddressFromMnemonic'
 import { deriveSolanaAddressWithPhantomPath } from '@vultisig/core-chain/publicKey/address/deriveSolanaAddressFromMnemonic'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { SEEDPHRASE_IMPORT_SUPPORTED_CHAINS } from '@vultisig/sdk'
 import { useMemo } from 'react'
 
@@ -12,9 +13,15 @@ import { useMnemonic } from '../state/mnemonic'
 
 type ScanChainsResult = {
   chains: Chain[]
+  unscannedChains: Chain[]
   usePhantomSolanaPath: boolean
 }
 
+/**
+ * Checks the balance of every seedphrase-importable chain and suggests the
+ * funded ones. Chains whose read failed are returned as `unscannedChains`
+ * instead of blocking the result; the query only fails when every read failed.
+ */
 export const useScanChainsWithBalanceQuery =
   (): EagerQuery<ScanChainsResult> => {
     const walletCore = useAssertWalletCore()
@@ -62,9 +69,9 @@ export const useScanChainsWithBalanceQuery =
         }
       }
 
-      // A chain whose balance read failed is left out of the suggestions rather
-      // than blocking the rest; the user can still add it via "Customize chains".
-      // The scan only fails when no chain resolved at all.
+      // A chain whose balance read failed is reported as unscanned rather than
+      // blocking the rest, so the user can pick it manually. The scan only fails
+      // when no chain resolved at all.
       if (!balances) {
         return {
           isPending,
@@ -83,9 +90,7 @@ export const useScanChainsWithBalanceQuery =
         : ''
       const phantomSolanaKey = accountCoinKeyToString(phantomSolanaInput)
 
-      // Undefined when the Trust Wallet Solana read failed, so the Phantom path
-      // is only chosen when the Trust Wallet path is known to be empty.
-      const trustSolanaBalance: bigint | undefined = balances[trustSolanaKey]
+      const trustSolanaBalance = balances[trustSolanaKey] ?? 0n
       const phantomSolanaBalance = balances[phantomSolanaKey] ?? 0n
 
       // All queries settled - filter chains with positive balance
@@ -99,6 +104,8 @@ export const useScanChainsWithBalanceQuery =
         }
       )
 
+      // Follow the path with confirmed funds: a failed Trust Wallet read must not
+      // import Solana on a path we never saw a balance on.
       const usePhantomSolanaPath =
         phantomSolanaBalance > 0n && trustSolanaBalance === 0n
 
@@ -109,13 +116,21 @@ export const useScanChainsWithBalanceQuery =
         chainsWithBalance.push(Chain.Solana)
       }
 
+      const failedCoins = new Set(balancesQuery.failedCoins)
+      const unscannedChains = withoutDuplicates(
+        allInputs
+          .filter(input => failedCoins.has(accountCoinKeyToString(input)))
+          .map(({ chain }) => chain)
+      ).filter(chain => !chainsWithBalance.includes(chain))
+
       return {
         isPending,
         errors,
         data: {
           chains: chainsWithBalance,
+          unscannedChains,
           usePhantomSolanaPath,
         },
       }
-    }, [balancesQuery, allInputs.length, trustWalletInputs, phantomSolanaInput])
+    }, [balancesQuery, allInputs, trustWalletInputs, phantomSolanaInput])
   }
