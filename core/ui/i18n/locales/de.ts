@@ -2047,4 +2047,8 @@ export const de = {
     'Unterschrieben, noch nicht an das Netzwerk gesendet',
   signed_awaiting_broadcast_description:
     'Diese Transaktion wurde signiert, aber noch nicht gesendet. Die anfragende Anwendung ist für die Übermittlung an das Netzwerk verantwortlich; der Status wird aktualisiert, sobald das Netzwerk die Transaktion empfängt.',
+  no_active_chains_found_partial_description:
+    'Wir konnten in den von uns überprüfbaren Blockchains keine Vermögenswerte feststellen.',
+  unscanned_chains_warning:
+    'Wir konnten die Guthaben auf {{chains}} nicht prüfen. Falls Sie dort Guthaben haben, wählen Sie diese bitte manuell aus.',
 }

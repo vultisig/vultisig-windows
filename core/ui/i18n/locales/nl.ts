@@ -2015,4 +2015,8 @@ export const nl = {
     'Ondertekend, maar nog niet naar het netwerk verzonden.',
   signed_awaiting_broadcast_description:
     'Deze transactie is ondertekend maar nog niet verzonden. De applicatie die de transactie heeft aangevraagd, is verantwoordelijk voor het verzenden ervan naar het netwerk; de status wordt bijgewerkt zodra het netwerk de transactie heeft ontvangen.',
+  no_active_chains_found_partial_description:
+    'We hebben geen activa aangetroffen op de blockchains die we konden controleren.',
+  unscanned_chains_warning:
+    'We konden het saldo op {{chains}} niet controleren. Als er tegoed op staat, selecteer dit dan handmatig.',
 }

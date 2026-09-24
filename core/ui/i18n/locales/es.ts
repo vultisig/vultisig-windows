@@ -2030,4 +2030,8 @@ export const es = {
   signed_awaiting_broadcast: 'Firmado, aún no enviado a la red.',
   signed_awaiting_broadcast_description:
     'Esta transacción fue firmada pero no enviada. La aplicación que la solicitó es responsable de enviarla a la red; el estado se actualiza una vez que la red la recibe.',
+  no_active_chains_found_partial_description:
+    'No detectamos ningún activo en las cadenas que pudimos comprobar.',
+  unscanned_chains_warning:
+    'No pudimos consultar los saldos de {{chains}} . Si tiene fondos allí, selecciónelos manualmente.',
 }
