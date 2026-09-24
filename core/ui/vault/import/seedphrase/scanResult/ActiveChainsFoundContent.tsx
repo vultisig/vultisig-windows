@@ -8,7 +8,12 @@ import { useImportSeedphraseStep } from '../state/step'
 import { useFinishSeedphraseImport } from '../utils/useFinishSeedphraseImport'
 import { ScanResultChainItem } from './ScanResultChainItem'
 import { ScanResultHeader } from './ScanResultHeader'
+import { UnscannedChainsWarning } from './UnscannedChainsWarning'
 
+/**
+ * Scan result listing the funded chains to import, plus any chains the scan
+ * could not check.
+ */
 export const ActiveChainsFoundContent = () => {
   const { t } = useTranslation()
   const [selectedChains] = useSelectedChains()
@@ -28,6 +33,8 @@ export const ActiveChainsFoundContent = () => {
           <ScanResultChainItem key={chain} value={chain} />
         ))}
       </VStack>
+
+      <UnscannedChainsWarning />
 
       <VStack fullWidth gap={20} style={{ marginTop: 'auto' }}>
         <Button onClick={handleFinish}>{t('next')}</Button>

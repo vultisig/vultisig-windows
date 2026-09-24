@@ -696,6 +696,10 @@ export const en = {
   no_expiry: 'No expiry',
   no_active_chains_found_description:
     "We didn't detect any assets on this seed phrase.",
+  no_active_chains_found_partial_description:
+    "We didn't detect any assets on the chains we could check.",
+  unscanned_chains_warning:
+    "We couldn't check balances on {{chains}}. If you have funds there, select them manually.",
   no_chains_enabled: 'No chains enabled',
   no_chains_enabled_description:
     "You've disabled all chains. Make sure that at least one chain is enabled.",
