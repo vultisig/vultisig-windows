@@ -13,7 +13,10 @@ import { join } from 'node:path'
 import type { BrowserContext, Page } from '@playwright/test'
 
 import { expect, test } from '../fixtures/extension-loader'
-import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
+import {
+  writeChromeSessionStorage,
+  writeChromeStorageMultiple,
+} from '../helpers/chrome-storage'
 import { createSeededVault } from '../helpers/seeded-vault'
 
 const longVaultName = 'Ahmad-Ehsan Family Treasury Vault With A Long Name'
@@ -44,11 +47,11 @@ const seedScreen = async (context: BrowserContext, screen: Screen) => {
   await writeChromeStorageMultiple(context, {
     currentVaultId: vaultId,
     hasFinishedOnboarding: true,
-    initialView: screen.initialView,
     vaultFolders: [{ id: folderId, name: 'Family', order: 0 }],
     vaults: [{ ...vault, folderId: screen.vaultFolderId }],
     vaultsCoins: { [vaultId]: [] },
   })
+  await writeChromeSessionStorage(context, 'initialView', screen.initialView)
 }
 
 const getRowGeometry = (page: Page) =>

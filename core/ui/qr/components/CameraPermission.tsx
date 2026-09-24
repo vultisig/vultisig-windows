@@ -45,7 +45,8 @@ const persistInitialView = async (view: unknown) => {
     return
   }
 
-  const storage = chrome.storage?.local
+  // The extension reads the handed-off view from session storage.
+  const storage = chrome.storage?.session
   if (!storage?.set) {
     return
   }

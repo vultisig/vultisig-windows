@@ -11,7 +11,10 @@
 import type { BrowserContext, Page } from '@playwright/test'
 
 import { expect, test } from '../fixtures/extension-loader'
-import { writeChromeStorageMultiple } from '../helpers/chrome-storage'
+import {
+  writeChromeSessionStorage,
+  writeChromeStorageMultiple,
+} from '../helpers/chrome-storage'
 import { createSeededVault } from '../helpers/seeded-vault'
 
 const longVaultName = 'Fast-DKLSFast-DKLSFast-DKLSFast-DKLSFast-DKLSDKLS'
@@ -39,10 +42,10 @@ const seed = async ({ context, screen }: SeedInput) => {
   await writeChromeStorageMultiple(context, {
     currentVaultId: vaultId,
     hasFinishedOnboarding: true,
-    initialView: screen.initialView,
     vaults: [vault],
     vaultsCoins: { [vaultId]: [] },
   })
+  await writeChromeSessionStorage(context, 'initialView', screen.initialView)
 }
 
 /**

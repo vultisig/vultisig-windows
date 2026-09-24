@@ -1,7 +1,8 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { registerNavigationStateCleanup } from '@clients/extension/src/background/registerNavigationStateCleanup'
 import { AppView } from '@clients/extension/src/navigation/AppView'
+import { handleNotificationClickEvent } from '@clients/extension/src/notifications/handlePushEvents'
 import {
   getInitialView,
   removeInitialView,
@@ -62,5 +63,29 @@ describe('initial view handoff', () => {
     await removeInitialView()
 
     await expect(getInitialView()).resolves.toBeNull()
+  })
+})
+
+describe('push notification click', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('hands the keysign deeplink to the page it opens through session storage', async () => {
+    const qrCodeData = 'vultisig://vultisig.com?type=SignTransaction'
+    vi.stubGlobal('self', { clients: { matchAll: vi.fn(async () => []) } })
+
+    await handleNotificationClickEvent({
+      notification: { close: vi.fn(), data: { qrCodeData } },
+    })
+
+    expect(chromeMock.tabs.create).toHaveBeenCalledWith({
+      url: 'chrome-extension://mock-extension-id/index.html',
+    })
+    await expect(getInitialView()).resolves.toEqual({
+      id: 'deeplink',
+      state: { url: qrCodeData },
+    })
+    expect(chromeMock.storage.local.set).not.toHaveBeenCalled()
   })
 })
