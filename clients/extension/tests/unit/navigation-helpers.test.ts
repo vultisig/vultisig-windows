@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { shouldAlwaysExpand } from '@clients/extension/src/navigation/alwaysExpandViews'
-import { shouldPersistView } from '@clients/extension/src/navigation/persistableViews'
+import { getPersistableView } from '@clients/extension/src/navigation/persistableViews'
 
 // Cast helper for type safety in tests
 const asViewId = (id: string) => id as any
@@ -32,7 +32,9 @@ describe('shouldAlwaysExpand', () => {
   })
 })
 
-describe('shouldPersistView', () => {
+describe('getPersistableView by view id', () => {
+  const isPersisted = (id: string) => getPersistableView([{ id }]) !== null
+
   const persistableViewIds = [
     'addressBook',
     'createAddressBookItem',
@@ -56,30 +58,30 @@ describe('shouldPersistView', () => {
   ]
 
   it.each(persistableViewIds)(
-    'returns true for persistable view: %s',
+    'persists view: %s',
     viewId => {
-      expect(shouldPersistView(asViewId(viewId))).toBe(true)
+      expect(isPersisted(viewId)).toBe(true)
     }
   )
 
   it('returns false for onboarding', () => {
-    expect(shouldPersistView(asViewId('onboarding'))).toBe(false)
+    expect(isPersisted('onboarding')).toBe(false)
   })
 
   it('returns false for connectedDapps', () => {
-    expect(shouldPersistView(asViewId('connectedDapps'))).toBe(false)
+    expect(isPersisted('connectedDapps')).toBe(false)
   })
 
   it('returns false for random unknown view ID', () => {
-    expect(shouldPersistView(asViewId('randomUnknownView'))).toBe(false)
+    expect(isPersisted('randomUnknownView')).toBe(false)
   })
 
   it('returns false for empty string', () => {
-    expect(shouldPersistView(asViewId(''))).toBe(false)
+    expect(isPersisted('')).toBe(false)
   })
 
   it('returns false for home', () => {
-    expect(shouldPersistView(asViewId('home'))).toBe(false)
+    expect(isPersisted('home')).toBe(false)
   })
 
   it('has exactly 19 persistable views', () => {

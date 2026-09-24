@@ -1,59 +1,74 @@
+import { View } from '@lib/ui/navigation/View'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
+import { pick } from '@vultisig/lib-utils/record/pick'
 
 import { AppView, AppViewId } from './AppView'
 
-const persistableViews: ReadonlySet<AppViewId> = new Set<AppViewId>([
-  'addressBook',
-  'createAddressBookItem',
-  'createVaultFolder',
-  'defi',
-  'defiChainDetail',
-  'deposit',
-  'importVault',
-  'manageDefiChains',
-  'manageVaultChains',
-  'referral',
-  'send',
-  'settings',
-  'setupVault',
-  'signCustomMessage',
-  'swap',
-  'updateAddressBookItem',
-  'vault',
-  'vaultChainDetail',
-  'vaultSettings',
-])
+type ViewState<K extends AppViewId> =
+  Extract<AppView, { id: K }> extends { state?: infer S }
+    ? NonNullable<S>
+    : never
+
+type KeysOfUnion<T> = T extends unknown ? keyof T : never
 
 /**
- * Whether views with this id may be written to extension storage so the
- * popup can reopen on them.
+ * Views the popup may reopen on, each with the state fields it keeps on disk.
+ * Everything else in a view's state (form input, amounts, flow data) is
+ * dropped before it is persisted.
  */
-export const shouldPersistView = (viewId: AppViewId): boolean => {
-  return persistableViews.has(viewId)
+const persistedStateFields = {
+  addressBook: [],
+  createAddressBookItem: ['chain'],
+  createVaultFolder: [],
+  defi: ['protocol'],
+  defiChainDetail: ['chain', 'tab'],
+  deposit: ['coin', 'action', 'entryPoint'],
+  importVault: [],
+  manageDefiChains: [],
+  manageVaultChains: [],
+  referral: [],
+  send: ['fromChain', 'coin'],
+  settings: [],
+  setupVault: ['type', 'skipStationMigration'],
+  signCustomMessage: [],
+  swap: ['fromCoin', 'toCoin'],
+  updateAddressBookItem: ['id'],
+  vault: [],
+  vaultChainDetail: ['chain'],
+  vaultSettings: [],
+} as const satisfies {
+  [K in AppViewId]?: readonly KeysOfUnion<ViewState<K>>[]
 }
 
-const canPersistView = (view: AppView): boolean => {
-  if (!shouldPersistView(view.id)) {
-    return false
-  }
+type PersistableViewId = keyof typeof persistedStateFields
 
-  // Key import input holds the seed phrase or private key being imported.
-  if (view.id === 'setupVault' && view.state.keyImportInput) {
-    return false
-  }
+const persistableViewIds: ReadonlySet<string> = new Set(
+  Object.keys(persistedStateFields)
+)
 
-  return true
-}
+const isPersistableViewId = (id: string): id is PersistableViewId =>
+  persistableViewIds.has(id)
 
 /**
- * Reduces a navigation history to what may be written to disk, or `null` when
- * the current view must not be persisted. Views that are not safe to store
- * are dropped from the stack, so their state never reaches extension storage.
+ * The view the popup should reopen on: the current view with only its
+ * allowlisted state, or `null` when the current view must not be persisted.
  */
-export const getPersistableHistory = (history: AppView[]): AppView[] | null => {
-  if (!canPersistView(getLastItem(history))) {
+export const getPersistableView = (history: View[]): View | null => {
+  const { id, state } = getLastItem(history)
+
+  if (!isPersistableViewId(id)) {
     return null
   }
 
-  return history.filter(canPersistView)
+  // Key import input holds the seed phrase or private key being imported.
+  if (id === 'setupVault' && state?.keyImportInput) {
+    return null
+  }
+
+  const fields: readonly string[] = persistedStateFields[id]
+  if (fields.length === 0) {
+    return { id }
+  }
+
+  return { id, state: pick(state ?? {}, fields) }
 }

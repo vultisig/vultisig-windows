@@ -9,13 +9,13 @@ const settingsView: AppView = { id: 'settings' }
 
 describe('resolveInitialHistory', () => {
   describe('with no vaults', () => {
-    it('ignores persisted history and opens on the initial core view', () => {
+    it('ignores the persisted view and opens on the initial core view', () => {
       // Regression for #4514: abandoning setup mid-flow persisted
-      // [vault, setupVault], which skipped the splash on the next open
+      // setupVault, which skipped the splash on the next open
       expect(
         resolveInitialHistory({
           initialView: null,
-          persistedHistory: [vaultView, setupVaultView],
+          persistedView: setupVaultView,
           hasVaults: false,
         })
       ).toEqual([vaultView])
@@ -25,7 +25,7 @@ describe('resolveInitialHistory', () => {
       expect(
         resolveInitialHistory({
           initialView: settingsView,
-          persistedHistory: null,
+          persistedView: null,
           hasVaults: false,
         })
       ).toEqual([vaultView])
@@ -35,7 +35,7 @@ describe('resolveInitialHistory', () => {
       expect(
         resolveInitialHistory({
           initialView: setupVaultView,
-          persistedHistory: null,
+          persistedView: null,
           hasVaults: false,
         })
       ).toEqual([vaultView, setupVaultView])
@@ -47,7 +47,7 @@ describe('resolveInitialHistory', () => {
       expect(
         resolveInitialHistory({
           initialView: importVaultView,
-          persistedHistory: null,
+          persistedView: null,
           hasVaults: false,
         })
       ).toEqual([vaultView, importVaultView])
@@ -57,7 +57,7 @@ describe('resolveInitialHistory', () => {
       expect(
         resolveInitialHistory({
           initialView: null,
-          persistedHistory: null,
+          persistedView: null,
           hasVaults: false,
         })
       ).toEqual([vaultView])
@@ -65,11 +65,11 @@ describe('resolveInitialHistory', () => {
   })
 
   describe('with vaults', () => {
-    it('prefers the stored initial view over persisted history', () => {
+    it('prefers the stored initial view over the persisted view', () => {
       expect(
         resolveInitialHistory({
           initialView: settingsView,
-          persistedHistory: [vaultView, setupVaultView],
+          persistedView: setupVaultView,
           hasVaults: true,
         })
       ).toEqual([vaultView, settingsView])
@@ -79,27 +79,27 @@ describe('resolveInitialHistory', () => {
       expect(
         resolveInitialHistory({
           initialView: vaultView,
-          persistedHistory: null,
+          persistedView: null,
           hasVaults: true,
         })
       ).toEqual([vaultView])
     })
 
-    it('restores persisted history', () => {
+    it('restores the persisted view on top of the initial core view', () => {
       expect(
         resolveInitialHistory({
           initialView: null,
-          persistedHistory: [vaultView, setupVaultView],
+          persistedView: setupVaultView,
           hasVaults: true,
         })
       ).toEqual([vaultView, setupVaultView])
     })
 
-    it('falls back to the initial core view for empty persisted history', () => {
+    it('does not duplicate a persisted initial core view', () => {
       expect(
         resolveInitialHistory({
           initialView: null,
-          persistedHistory: [],
+          persistedView: vaultView,
           hasVaults: true,
         })
       ).toEqual([vaultView])

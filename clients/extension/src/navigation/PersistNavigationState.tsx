@@ -2,16 +2,12 @@ import { useNavigation } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect, useRef } from 'react'
 
-import {
-  removePersistedHistory,
-  setPersistedHistory,
-} from '../storage/persistedView'
-import { AppView } from './AppView'
-import { getPersistableHistory } from './persistableViews'
+import { removePersistedView, setPersistedView } from '../storage/persistedView'
+import { getPersistableView } from './persistableViews'
 
 /**
- * Mirrors the navigation history to extension storage so the popup reopens
- * where the user left it, writing only views that are safe to keep on disk.
+ * Saves the view the popup should reopen on to extension storage, keeping
+ * only the state fields allowlisted for it.
  */
 export const PersistNavigationState = ({ children }: ChildrenProp) => {
   const [{ history }] = useNavigation()
@@ -24,11 +20,11 @@ export const PersistNavigationState = ({ children }: ChildrenProp) => {
       return
     }
 
-    const persistableHistory = getPersistableHistory(history as AppView[])
-    if (persistableHistory) {
-      setPersistedHistory(persistableHistory)
+    const view = getPersistableView(history)
+    if (view) {
+      setPersistedView(view)
     } else {
-      removePersistedHistory()
+      removePersistedView()
     }
   }, [history])
 

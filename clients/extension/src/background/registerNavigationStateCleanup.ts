@@ -1,6 +1,6 @@
 import { removeStorageValue } from '@lib/extension/storage/remove'
 
-import { removePersistedHistory } from '../storage/persistedView'
+import { removePersistedView } from '../storage/persistedView'
 
 // Older versions kept the expanded-tab handoff view here, in local storage.
 const legacyInitialViewKey = 'initialView'
@@ -17,7 +17,7 @@ export const registerNavigationStateCleanup = (): void => {
     }
 
     Promise.all([
-      removePersistedHistory(),
+      removePersistedView(),
       removeStorageValue(legacyInitialViewKey),
     ]).catch(console.error)
   })

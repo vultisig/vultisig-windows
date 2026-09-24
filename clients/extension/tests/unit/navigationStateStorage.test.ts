@@ -8,6 +8,7 @@ import {
   removeInitialView,
   setInitialView,
 } from '@clients/extension/src/storage/initialView'
+import { getPersistedView } from '@clients/extension/src/storage/persistedView'
 
 import { chromeMock, getInstalledListeners } from './mocks/chrome'
 
@@ -87,5 +88,15 @@ describe('push notification click', () => {
       state: { url: qrCodeData },
     })
     expect(chromeMock.storage.local.set).not.toHaveBeenCalled()
+  })
+})
+
+describe('persisted view', () => {
+  it('ignores the history older versions stored under the key', async () => {
+    await chromeMock.storage.local.set({
+      persistedView: [{ id: 'vault' }, { id: 'settings' }],
+    })
+
+    await expect(getPersistedView()).resolves.toBeNull()
   })
 })
