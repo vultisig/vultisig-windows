@@ -8,6 +8,7 @@ import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificati
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
 import { currentProductBrandConfig } from '@core/ui/product/brand'
 
+import { setInitialView } from '../storage/initialView'
 import {
   openKeysignFromPushNotificationType,
   PushForceRegisterVaultMessage,
@@ -521,12 +522,7 @@ const openExtensionFromPushNotificationClick = async (input: {
   const extensionUrl = extensionIndexPageUrl(extensionId)
 
   if (qrCodeData) {
-    await chrome.storage.local.set({
-      initialView: {
-        id: 'deeplink',
-        state: { url: qrCodeData },
-      },
-    })
+    await setInitialView({ id: 'deeplink', state: { url: qrCodeData } })
   }
 
   if (await focusReloadExtensionTab(extensionId)) {

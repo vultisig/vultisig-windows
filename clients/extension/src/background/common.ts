@@ -4,8 +4,10 @@ import { resetPendingRequestsBadge } from '@core/inpage-provider/popup/resolvers
 
 import { getIsSidePanelEnabled } from '../storage/isSidePanelEnabled'
 import { registerFastVaultPasswordCacheExpiry } from './registerFastVaultPasswordCacheExpiry'
+import { registerNavigationStateCleanup } from './registerNavigationStateCleanup'
 
 registerFastVaultPasswordCacheExpiry()
+registerNavigationStateCleanup()
 
 /**
  * Bootstraps the extension background: locks down built-in prototypes (non-Firefox),

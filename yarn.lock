@@ -506,6 +506,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@clients/extension@workspace:clients/extension"
   dependencies:
+    "@bufbuild/protobuf": "npm:^2.12.0"
     "@core/extension": "workspace:^"
     "@core/inpage-provider": "workspace:^"
     "@core/ui": "workspace:^"

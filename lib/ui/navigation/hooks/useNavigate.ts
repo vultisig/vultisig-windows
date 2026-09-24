@@ -6,6 +6,8 @@ import { View } from '../View'
 
 type NavigateOptions = {
   replace?: boolean
+  /** Drops the whole history so the view becomes the only entry. */
+  reset?: boolean
 }
 
 export function useNavigate<T extends View = View>() {
@@ -13,9 +15,13 @@ export function useNavigate<T extends View = View>() {
 
   return useCallback(
     (view: T, options: NavigateOptions = {}) => {
-      const { replace } = options
+      const { replace, reset } = options
 
       setState(prev => {
+        if (reset) {
+          return { ...prev, history: [view] }
+        }
+
         if (replace) {
           return {
             ...prev,

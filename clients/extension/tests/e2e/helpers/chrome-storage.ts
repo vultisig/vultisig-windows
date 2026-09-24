@@ -124,6 +124,33 @@ export async function readChromeSessionStorage<T = unknown>(
 }
 
 /**
+ * Write a value to chrome.storage.session, where the extension reads the
+ * view handed off to the next page (`initialView`).
+ */
+export async function writeChromeSessionStorage(
+  context: BrowserContext,
+  key: string,
+  value: unknown
+): Promise<void> {
+  const worker = await getServiceWorker(context)
+
+  await worker.evaluate(
+    async ({ key, value }: { key: string; value: unknown }) => {
+      return new Promise<void>((resolve, reject) => {
+        chrome.storage.session.set({ [key]: value }, () => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message))
+          } else {
+            resolve()
+          }
+        })
+      })
+    },
+    { key, value }
+  )
+}
+
+/**
  * Remove one value from chrome.storage.session.
  */
 export async function removeChromeSessionStorage(
