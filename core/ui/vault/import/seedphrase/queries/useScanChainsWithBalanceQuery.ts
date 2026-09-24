@@ -1,5 +1,6 @@
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useTonWalletVersion } from '@core/ui/storage/tonW5Enabled'
 import { EagerQuery } from '@lib/ui/query/Query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
@@ -26,12 +27,18 @@ export const useScanChainsWithBalanceQuery =
   (): EagerQuery<ScanChainsResult> => {
     const walletCore = useAssertWalletCore()
     const [mnemonic] = useMnemonic()
+    const tonWalletVersion = useTonWalletVersion()
 
     const { trustWalletInputs, phantomSolanaInput } = useMemo(() => {
       const trustWalletInputs = SEEDPHRASE_IMPORT_SUPPORTED_CHAINS.map(
         chain => ({
           chain,
-          address: deriveAddressFromMnemonic({ chain, mnemonic, walletCore }),
+          address: deriveAddressFromMnemonic({
+            chain,
+            mnemonic,
+            walletCore,
+            tonWalletVersion,
+          }),
         })
       )
 
@@ -41,7 +48,7 @@ export const useScanChainsWithBalanceQuery =
       }
 
       return { trustWalletInputs, phantomSolanaInput }
-    }, [mnemonic, walletCore])
+    }, [mnemonic, walletCore, tonWalletVersion])
 
     const allInputs = useMemo(
       () => [...trustWalletInputs, phantomSolanaInput],
