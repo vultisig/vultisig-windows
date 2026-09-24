@@ -2030,4 +2030,8 @@ export const pt = {
   signed_awaiting_broadcast: 'Assinado, ainda não enviado para a rede.',
   signed_awaiting_broadcast_description:
     'Esta transação foi assinada, mas não enviada. O aplicativo que a solicitou é responsável por enviá-la à rede; o status será atualizado assim que a rede a receber.',
+  no_active_chains_found_partial_description:
+    'Não detectamos nenhum ativo nas blockchains que pudemos verificar.',
+  unscanned_chains_warning:
+    'Não foi possível verificar os saldos nessas blockchains. Se você tiver fundos nelas, selecione-as manualmente:',
 }

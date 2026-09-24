@@ -1999,4 +1999,8 @@ export const hr = {
   signed_awaiting_broadcast: 'Potpisano, još nije poslano na mrežu',
   signed_awaiting_broadcast_description:
     'Ova je transakcija potpisana, ali nije poslana. Aplikacija koja ju je zatražila odgovorna je za slanje na mrežu; status se ažurira nakon što je mreža vidi.',
+  no_active_chains_found_partial_description:
+    'Nismo otkrili nikakvu imovinu na lancima koje smo mogli provjeriti.',
+  unscanned_chains_warning:
+    'Nismo mogli provjeriti stanje na ovim blockchain mrežama. Ako imate sredstava na njima, odaberite ih ručno:',
 }

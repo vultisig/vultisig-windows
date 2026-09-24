@@ -1990,4 +1990,8 @@ export const ko = {
     '서명은 완료되었지만 아직 네트워크로 전송되지 않았습니다.',
   signed_awaiting_broadcast_description:
     '이 거래는 서명되었지만 아직 전송되지 않았습니다. 거래를 요청한 애플리케이션이 네트워크로 전송해야 하며, 네트워크에서 이를 수신하면 상태가 업데이트됩니다.',
+  no_active_chains_found_partial_description:
+    '우리가 확인할 수 있는 블록체인 상에서 어떠한 자산도 발견되지 않았습니다.',
+  unscanned_chains_warning:
+    '해당 블록체인의 잔액을 확인할 수 없습니다. 해당 블록체인에 자금이 있는 경우 수동으로 선택하세요.',
 }

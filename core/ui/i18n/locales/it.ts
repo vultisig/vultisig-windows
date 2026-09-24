@@ -2035,4 +2035,8 @@ export const it = {
   signed_awaiting_broadcast: 'Firmato, ma non ancora inviato alla rete',
   signed_awaiting_broadcast_description:
     "Questa transazione è stata firmata ma non inviata. L'applicazione che l'ha richiesta è responsabile dell'invio alla rete; lo stato si aggiorna non appena la rete la riceve.",
+  no_active_chains_found_partial_description:
+    'Non abbiamo rilevato alcun asset sulle blockchain che abbiamo potuto controllare.',
+  unscanned_chains_warning:
+    'Non è stato possibile verificare i saldi su queste blockchain. Se possiedi fondi su di esse, selezionali manualmente:',
 }

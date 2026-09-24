@@ -9,25 +9,38 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useScanChainsWithBalanceQuery } from './queries/useScanChainsWithBalanceQuery'
 import { useSelectedChains } from './state/selectedChains'
 import { useImportSeedphraseStep } from './state/step'
+import { useUnscannedChains } from './state/unscannedChains'
 import { useUsePhantomSolanaPath } from './state/usePhantomSolanaPath'
 
+/**
+ * Runs the balance scan and hands its suggested and unchecked chains to the
+ * scan result step. Shows a failure only when no balance could be read.
+ */
 export const ScanningChainsStep = () => {
   const { t } = useTranslation()
   const [, setSelectedChains] = useSelectedChains()
   const [, setStep] = useImportSeedphraseStep()
   const [, setUsePhantomSolanaPath] = useUsePhantomSolanaPath()
+  const [, setUnscannedChains] = useUnscannedChains()
 
   const { data, errors, isPending } = useScanChainsWithBalanceQuery()
   const hasFailed = !isPending && errors.length > 0 && !data
 
   useEffect(() => {
     if (data) {
-      const { chains, usePhantomSolanaPath } = data
+      const { chains, unscannedChains, usePhantomSolanaPath } = data
       setSelectedChains(chains)
+      setUnscannedChains(unscannedChains)
       setUsePhantomSolanaPath(usePhantomSolanaPath)
       setStep('scanResult')
     }
-  }, [data, setSelectedChains, setStep, setUsePhantomSolanaPath])
+  }, [
+    data,
+    setSelectedChains,
+    setStep,
+    setUnscannedChains,
+    setUsePhantomSolanaPath,
+  ])
 
   const handleSelectManually = () => {
     setSelectedChains([])

@@ -1866,4 +1866,8 @@ export const zh = {
   signed_awaiting_broadcast: '已签名，但尚未发送到网络',
   signed_awaiting_broadcast_description:
     '此交易已签名但尚未发送。请求此交易的应用程序负责将其发送到网络；网络收到交易后，状态将更新。',
+  no_active_chains_found_partial_description:
+    '我们在能够检查的链上没有发现任何资产。',
+  unscanned_chains_warning:
+    '我们无法查询这些区块链上的余额。如果您在这些区块链上有资金，请手动选择：',
 }

@@ -5,6 +5,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
 import { deriveAddressFromMnemonic } from '@vultisig/core-chain/publicKey/address/deriveAddressFromMnemonic'
 import { deriveSolanaAddressWithPhantomPath } from '@vultisig/core-chain/publicKey/address/deriveSolanaAddressFromMnemonic'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { SEEDPHRASE_IMPORT_SUPPORTED_CHAINS } from '@vultisig/sdk'
 import { useMemo } from 'react'
 
@@ -12,9 +13,15 @@ import { useMnemonic } from '../state/mnemonic'
 
 type ScanChainsResult = {
   chains: Chain[]
+  unscannedChains: Chain[]
   usePhantomSolanaPath: boolean
 }
 
+/**
+ * Checks the balance of every seedphrase-importable chain and suggests the
+ * funded ones. Chains whose read failed are returned as `unscannedChains`
+ * instead of blocking the result; the query only fails when every read failed.
+ */
 export const useScanChainsWithBalanceQuery =
   (): EagerQuery<ScanChainsResult> => {
     const walletCore = useAssertWalletCore()
@@ -48,16 +55,6 @@ export const useScanChainsWithBalanceQuery =
     return useMemo(() => {
       const { isPending, errors, data: balances } = balancesQuery
 
-      // Never advance the import from a partial balance set. A failed chain is
-      // unknown, not empty, even when other chains resolved successfully.
-      if (errors.length > 0) {
-        return {
-          isPending,
-          errors,
-          data: undefined,
-        }
-      }
-
       // Check if all inputs have been resolved (based on data object size)
       const allInputsResolved =
         balances !== undefined &&
@@ -67,6 +64,17 @@ export const useScanChainsWithBalanceQuery =
       if (isPending && !allInputsResolved) {
         return {
           isPending: true,
+          errors,
+          data: undefined,
+        }
+      }
+
+      // A chain whose balance read failed is reported as unscanned rather than
+      // blocking the rest, so the user can pick it manually. The scan only fails
+      // when no chain resolved at all.
+      if (!balances) {
+        return {
+          isPending,
           errors,
           data: undefined,
         }
@@ -82,8 +90,8 @@ export const useScanChainsWithBalanceQuery =
         : ''
       const phantomSolanaKey = accountCoinKeyToString(phantomSolanaInput)
 
-      const trustSolanaBalance = balances?.[trustSolanaKey] ?? 0n
-      const phantomSolanaBalance = balances?.[phantomSolanaKey] ?? 0n
+      const trustSolanaBalance = balances[trustSolanaKey] ?? 0n
+      const phantomSolanaBalance = balances[phantomSolanaKey] ?? 0n
 
       // All queries settled - filter chains with positive balance
       const chainsWithBalance = SEEDPHRASE_IMPORT_SUPPORTED_CHAINS.filter(
@@ -91,11 +99,13 @@ export const useScanChainsWithBalanceQuery =
           const input = trustWalletInputs.find(i => i.chain === chain)
           if (!input) return false
           const key = accountCoinKeyToString(input)
-          const balance = balances?.[key]
+          const balance = balances[key]
           return balance !== undefined && balance > 0n
         }
       )
 
+      // Follow the path with confirmed funds: a failed Trust Wallet read must not
+      // import Solana on a path we never saw a balance on.
       const usePhantomSolanaPath =
         phantomSolanaBalance > 0n && trustSolanaBalance === 0n
 
@@ -106,13 +116,21 @@ export const useScanChainsWithBalanceQuery =
         chainsWithBalance.push(Chain.Solana)
       }
 
+      const failedCoins = new Set(balancesQuery.failedCoins)
+      const unscannedChains = withoutDuplicates(
+        allInputs
+          .filter(input => failedCoins.has(accountCoinKeyToString(input)))
+          .map(({ chain }) => chain)
+      ).filter(chain => !chainsWithBalance.includes(chain))
+
       return {
         isPending,
         errors,
         data: {
           chains: chainsWithBalance,
+          unscannedChains,
           usePhantomSolanaPath,
         },
       }
-    }, [balancesQuery, allInputs.length, trustWalletInputs, phantomSolanaInput])
+    }, [balancesQuery, allInputs, trustWalletInputs, phantomSolanaInput])
   }
