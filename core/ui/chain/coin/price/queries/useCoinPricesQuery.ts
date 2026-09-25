@@ -1,7 +1,7 @@
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { EagerQuery, Query } from '@lib/ui/query/Query'
 import { pricePersistQueryOptions } from '@lib/ui/query/utils/options'
-import { useQueries } from '@tanstack/react-query'
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { Chain, CosmosChain, EvmChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { fetchNavPerShare } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/services/fetchNavPerShare'
@@ -57,6 +57,7 @@ export function useCoinPricesQuery(
   input: UseCoinPricesQueryInput
 ): EagerQuery<Record<string, number>> | Query<Record<string, number>> {
   const defaultFiatCurrency = useFiatCurrency()
+  const queryClient = useQueryClient()
 
   const { eager = true, fiatCurrency = defaultFiatCurrency, coins } = input
 
@@ -120,18 +121,19 @@ export function useCoinPricesQuery(
     )
 
     toEntries(groupedByChain).forEach(({ key: chain, value: coins }) => {
+      const queryKey = getCoinPricesQueryKeys({
+        coins,
+        fiatCurrency,
+      })
       queries.push({
-        queryKey: getCoinPricesQueryKeys({
-          coins,
-          fiatCurrency,
-        }),
-        queryFn: async ({ client, queryKey }) =>
+        queryKey,
+        queryFn: async () =>
           fetchErc20PricesKeepingFailedChunks({
             coins,
             chain,
             fiatCurrency,
             previous:
-              client.getQueryData<Record<string, number>>(queryKey) ?? {},
+              queryClient.getQueryData<Record<string, number>>(queryKey) ?? {},
           }),
         ...pricePersistQueryOptions,
       })
