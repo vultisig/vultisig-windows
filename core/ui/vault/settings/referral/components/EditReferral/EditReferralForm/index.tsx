@@ -100,7 +100,9 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     <VStack flexGrow gap={40}>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'referral' })} />
+          <PageHeaderBackButton
+            onClick={() => navigate({ id: 'referral' }, { replace: true })}
+          />
         }
         title={t('referrals_default_title')}
       />
