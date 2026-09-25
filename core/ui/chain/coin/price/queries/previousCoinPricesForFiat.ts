@@ -4,7 +4,7 @@ import {
   FiatCurrency,
 } from '@vultisig/core-config/FiatCurrency'
 
-export type CachedCoinPrices = {
+type CachedCoinPrices = {
   fiatCurrency?: FiatCurrency
   updatedAt: number
   prices?: Record<string, number>
