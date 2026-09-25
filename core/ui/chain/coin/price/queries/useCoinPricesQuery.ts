@@ -8,7 +8,6 @@ import { fetchNavPerShare } from '@vultisig/core-chain/chains/cosmos/thor/yield-
 import { yieldBearingThorChainTokens } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { CoinKey, coinKeyToString, Token } from '@vultisig/core-chain/coin/Coin'
-import { getErc20Prices } from '@vultisig/core-chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
 import { groupItems } from '@vultisig/lib-utils/array/groupItems'
@@ -30,6 +29,7 @@ import {
   getThorchainSecuredAssetFiatPrices,
   isThorchainSecuredAssetDenom,
 } from '../thor/getThorchainSecuredAssetPrices'
+import { fetchErc20PricesKeepingFailedChunks } from './fetchErc20PricesKeepingFailedChunks'
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[]
@@ -125,27 +125,14 @@ export function useCoinPricesQuery(
           coins,
           fiatCurrency,
         }),
-        queryFn: async () => {
-          const prices = await getErc20Prices({
-            ids: coins.map(({ id }) => id),
+        queryFn: async ({ client, queryKey }) =>
+          fetchErc20PricesKeepingFailedChunks({
+            coins,
             chain,
             fiatCurrency,
-          })
-
-          const result: Record<string, number> = {}
-
-          Object.entries(prices).forEach(([id, price]) => {
-            const coin = shouldBePresent(
-              coins.find(coin =>
-                areLowerCaseEqual(shouldBePresent(coin.id), id)
-              )
-            )
-
-            result[coinKeyToString(coin)] = price
-          })
-
-          return result
-        },
+            previous:
+              client.getQueryData<Record<string, number>>(queryKey) ?? {},
+          }),
         ...pricePersistQueryOptions,
       })
     })
