@@ -15,7 +15,7 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
     const listed = coin('0xaaaa')
     const dropped = coin('0xbbbb')
     const filler = Array.from({ length: erc20PriceBatchSize - 1 }, (_, index) =>
-      coin(`0x${(index + 1).toString(16).padStart(40, '0')}`),
+      coin(`0x${(index + 1).toString(16).padStart(40, '0')}`)
     )
     const getPrices = vi
       .fn()
@@ -34,14 +34,14 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
       getPrices,
     })
 
-    expect(prices[coinKeyToString({ chain: Chain.Ethereum, id: failed.id })]).toBe(
-      1.96,
-    )
-    expect(prices[coinKeyToString({ chain: Chain.Ethereum, id: listed.id })]).toBe(
-      2.8,
-    )
     expect(
-      prices[coinKeyToString({ chain: Chain.Ethereum, id: dropped.id })],
+      prices[coinKeyToString({ chain: Chain.Ethereum, id: failed.id })]
+    ).toBe(1.96)
+    expect(
+      prices[coinKeyToString({ chain: Chain.Ethereum, id: listed.id })]
+    ).toBe(2.8)
+    expect(
+      prices[coinKeyToString({ chain: Chain.Ethereum, id: dropped.id })]
     ).toBeUndefined()
     expect(getPrices).toHaveBeenCalledTimes(3)
   })
@@ -58,7 +58,7 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
           [coinKeyToString({ chain: Chain.Ethereum, id: '0xdead' })]: 4,
         },
         getPrices,
-      }),
+      })
     ).rejects.toThrow('every contract price batch failed')
     expect(getPrices).toHaveBeenCalledTimes(2)
   })

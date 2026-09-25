@@ -43,13 +43,13 @@ export async function fetchErc20PricesKeepingFailedChunks({
           ids: batch.map(coin => shouldBePresent(coin.id)),
           chain,
           fiatCurrency,
-        }),
+        })
       )
       for (const [id, price] of Object.entries(prices)) {
         const coin = shouldBePresent(
           batch.find(candidate =>
-            areLowerCaseEqual(shouldBePresent(candidate.id), id),
-          ),
+            areLowerCaseEqual(shouldBePresent(candidate.id), id)
+          )
         )
         fresh[coinKeyToString(coin)] = price
       }
