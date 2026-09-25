@@ -22,9 +22,7 @@ export const ReferralsGuard = ({ children }: ChildrenProp) => {
         status: 'warning',
       })
 
-      navigate({
-        id: 'settings',
-      })
+      navigate({ id: 'settings' }, { replace: true })
     }
   }, [addToast, notEligibleForReferrals, navigate, t])
 

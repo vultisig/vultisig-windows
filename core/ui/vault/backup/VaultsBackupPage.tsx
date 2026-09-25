@@ -13,9 +13,6 @@ export const VaultsBackupPage = () => {
       onFinish={() => {
         navigate({ id: 'vault' })
       }}
-      onBack={() => {
-        navigate({ id: 'selectVaultsBackup' })
-      }}
     />
   )
 }

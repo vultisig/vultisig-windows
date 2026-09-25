@@ -14,7 +14,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
-import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { VaultsPage } from '../../../../vaultsOrganisation'
 import { useCurrentVault } from '../../../state/currentVault'
 import { AddFriendsReferralPrompt } from './AddFriendsReferralPrompt'
@@ -35,7 +34,6 @@ export const ManageMissingReferral = ({
   onEditFriendReferral,
 }: Props) => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
   const { name: vaultName } = useCurrentVault()
   const { colors } = useTheme()
 
@@ -44,15 +42,7 @@ export const ManageMissingReferral = ({
       renderOpener={({ onOpen }) => (
         <>
           <PageHeader
-            primaryControls={
-              <PageHeaderBackButton
-                onClick={() =>
-                  navigate({
-                    id: 'vault',
-                  })
-                }
-              />
-            }
+            primaryControls={<PageHeaderBackButton />}
             title={t('your_referrals')}
           />
           <ReferralPageWrapper>

@@ -78,7 +78,9 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
     <>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'referral' })} />
+          <PageHeaderBackButton
+            onClick={() => navigate({ id: 'referral' }, { replace: true })}
+          />
         }
         title={t('manage_referral_title')}
       />

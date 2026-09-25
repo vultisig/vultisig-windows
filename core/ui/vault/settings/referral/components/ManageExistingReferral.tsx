@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled, { useTheme } from 'styled-components'
 
-import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
 import { VaultsPage } from '../../../../vaultsOrganisation'
@@ -58,7 +57,6 @@ export const ManageExistingReferral = ({
   const { t } = useTranslation()
   const vaultId = useAssertCurrentVaultId()
   const { data: friendsReferralCode } = useFriendReferralQuery(vaultId)
-  const navigate = useCoreNavigate()
   const { name: vaultName } = useCurrentVault()
 
   return (
@@ -67,15 +65,7 @@ export const ManageExistingReferral = ({
         <>
           <PageHeader
             hasBorder
-            primaryControls={
-              <PageHeaderBackButton
-                onClick={() =>
-                  navigate({
-                    id: 'settings',
-                  })
-                }
-              />
-            }
+            primaryControls={<PageHeaderBackButton />}
             title={t('your_referrals')}
           />
           <ReferralPageWrapper>

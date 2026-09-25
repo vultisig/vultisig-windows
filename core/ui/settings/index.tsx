@@ -29,6 +29,7 @@ import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
+import { useNavigation } from '@lib/ui/navigation/state'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -63,7 +64,8 @@ type Props = {
 
 export const SettingsPage: FC<Props> = props => {
   const { t } = useTranslation()
-  const { openUrl, client } = useCore()
+  const { openUrl, client, goBack } = useCore()
+  const [{ history }] = useNavigation()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
@@ -79,11 +81,13 @@ export const SettingsPage: FC<Props> = props => {
         <PageHeader
           primaryControls={
             <PageHeaderBackButton
-              onClick={() =>
-                navigate({
-                  id: 'vault',
-                })
-              }
+              onClick={() => {
+                if (history.length > 1) {
+                  goBack()
+                } else {
+                  navigate({ id: 'vault' }, { replace: true })
+                }
+              }}
             />
           }
           title={t('settings')}

@@ -26,9 +26,7 @@ export const VaultSettingsPage: FC = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'settings' })} />
-        }
+        primaryControls={<PageHeaderBackButton />}
         title={t('vault_settings')}
       />
       <PageContent gap={14} flexGrow scrollable>
