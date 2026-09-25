@@ -51,11 +51,7 @@ export const CustomRpcPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={() => navigate({ id: 'vaultSettingsAdvanced' })}
-          />
-        }
+        primaryControls={<PageHeaderBackButton />}
         title={t('custom_rpc')}
       />
       <PageContent flexGrow scrollable>
