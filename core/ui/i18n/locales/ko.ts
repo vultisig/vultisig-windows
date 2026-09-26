@@ -463,7 +463,6 @@ export const ko = {
   having_trouble_scanning_tip_3:
     '두 기기를 잠시 동안 움직이지 않게 고정하세요.',
   hide_balance: '잔액 숨기기',
-  hide_defi_balance: 'DeFi 잔액 숨기기',
   how_it_works: '작동 방식',
   ibc_transaction_not_supporting_memo_desc:
     '이 IBC 거래에는 메모가 포함되어 있지만, {{productName}}는 현재 IBC 전송 메시지 내에 메모를 삽입하는 기능을 지원하지 않습니다.<br> 이 거래를 진행할 경우 <b>돌이킬 수 없는 자금 손실이</b> 발생할 수 있습니다.',
@@ -863,7 +862,6 @@ export const ko = {
     '나만의 추천 코드를 공유하여 친구를 초대하세요. 친구는 할인을 받고, 친구가 거래할수록 당신의 수익도 늘어납니다. 수익은 당신의 금고로 바로 지급됩니다.',
   shares: '주식',
   show_balance: '균형을 보여주세요',
-  show_defi_balance: 'DeFi 잔액을 표시합니다.',
   sign: '서명',
   signAmino: '아미노 사인',
   signDirect: '다이렉트 사인',

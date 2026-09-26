@@ -470,7 +470,6 @@ export const es = {
   having_trouble_scanning_tip_3:
     'Mantenga ambos dispositivos quietos por un momento',
   hide_balance: 'Ocultar saldo',
-  hide_defi_balance: 'Ocultar saldo DeFi',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transacción de IBC incluye una nota, pero {{productName}} actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
@@ -882,7 +881,6 @@ export const es = {
     'Comparte tu código de referencia único para invitar a tus amigos. Ellos recibirán un descuento y, cuanto más operen, más ganarás, directamente en tu billetera.',
   shares: 'Acciones',
   show_balance: 'Mostrar saldo',
-  show_defi_balance: 'Mostrar saldo DeFi',
   sign: 'Firmar',
   signAmino: 'Firma Amino',
   signDirect: 'Firma Direct',

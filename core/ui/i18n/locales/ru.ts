@@ -464,7 +464,6 @@ export const ru = {
   having_trouble_scanning_tip_3:
     'Держите оба устройства неподвижно на мгновение',
   hide_balance: 'Скрыть баланс',
-  hide_defi_balance: 'Скрыть DeFi-баланс',
   how_it_works: 'Как это работает',
   ibc_transaction_not_supporting_memo_desc:
     'Эта IBC-транзакция содержит memo, но {{productName}} сейчас не поддерживает встраивание memo в сообщения IBC-перевода.<br> Продолжение может привести к <b>необратимой потере средств</b>.',
@@ -868,7 +867,6 @@ export const ru = {
     'Поделитесь своим уникальным referral-кодом, чтобы пригласить друзей. Они получат скидку, а чем больше они торгуют, тем больше вы зарабатываете — напрямую в ваш кошелёк.',
   shares: 'Доли',
   show_balance: 'Показать баланс',
-  show_defi_balance: 'Показать DeFi-баланс',
   sign: 'Подписать',
   signAmino: 'Amino-подпись',
   signDirect: 'Прямая подпись',

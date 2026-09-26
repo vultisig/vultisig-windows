@@ -475,7 +475,6 @@ export const it = {
   having_trouble_scanning_tip_3:
     'Tieni entrambi i dispositivi fermi per un momento',
   hide_balance: 'Nascondi saldo',
-  hide_defi_balance: 'Nascondi saldo DeFi',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:
     "Questa transazione IBC include un promemoria, ma {{productName}} attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
@@ -881,7 +880,6 @@ export const it = {
     'Condividi il tuo codice di riferimento univoco per invitare i tuoi amici. Riceveranno uno sconto e più scambi faranno, più guadagni, direttamente sul tuo portafoglio.',
   shares: 'Azioni',
   show_balance: 'Mostra saldo',
-  show_defi_balance: 'Mostra saldo DeFi',
   sign: 'Firma',
   signAmino: 'Firma Amino',
   signDirect: 'Firma Direct',
