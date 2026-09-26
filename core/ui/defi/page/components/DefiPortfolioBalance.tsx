@@ -46,10 +46,7 @@ export const DefiPortfolioBalance = () => {
             </HStack>
           )}
         />
-        <ManageVaultBalanceVisibility
-          hideText={t('hide_defi_balance')}
-          showText={t('show_defi_balance')}
-        />
+        <ManageVaultBalanceVisibility />
       </VStack>
     </Container>
   )

@@ -551,7 +551,6 @@ export const en = {
   having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
   high_24h: '24h High',
   hide_balance: 'Hide balance',
-  hide_defi_balance: 'Hide DeFi balance',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
     'This IBC transaction includes a memo, but {{productName}} currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
@@ -1112,7 +1111,6 @@ export const en = {
   shares: 'Shares',
   show_balance: 'Show balance',
   show_exact_error: 'Show exact error',
-  show_defi_balance: 'Show DeFi balance',
   sign: 'Sign',
   signAmino: 'Amino Sign',
   signDirect: 'Direct Sign',

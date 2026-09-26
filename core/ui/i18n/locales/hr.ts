@@ -464,7 +464,6 @@ export const hr = {
     'Provjerite je li zaslon dobro osvjetljen i bez odsjaja',
   having_trouble_scanning_tip_3: 'Drzite oba uredaja mirno trenutak',
   hide_balance: 'Sakrij stanje',
-  hide_defi_balance: 'Sakrij DeFi stanje',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
     'Ova IBC transakcija uključuje memorandum, ali {{productName}} trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
@@ -875,7 +874,6 @@ export const hr = {
     'Podijelite svoj jedinstveni referalni kod kako biste pozvali prijatelje. Oni dobivaju popust i što više trguju, to više zarađujete — izravno u svoj novčanik.',
   shares: 'Dionice',
   show_balance: 'Prikaži stanje',
-  show_defi_balance: 'Prikaži DeFi stanje',
   sign: 'Potpiši',
   signAmino: 'Amino znak',
   signDirect: 'Direct znak',

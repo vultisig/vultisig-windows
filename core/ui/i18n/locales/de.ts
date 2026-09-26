@@ -476,7 +476,6 @@ export const de = {
   having_trouble_scanning_tip_3:
     'Halten Sie beide Geräte einen Moment lang ruhig',
   hide_balance: 'Guthaben ausblenden',
-  hide_defi_balance: 'DeFi-Guthaben ausblenden',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
     'Diese IBC-Transaktion enthält ein Memo, aber {{productName}} unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Die Durchführung dieser Transaktion kann zu <b>einem irreversiblen Verlust von Geldern</b> führen.',
@@ -886,7 +885,6 @@ export const de = {
     'Teile deinen persönlichen Empfehlungscode, um Freunde einzuladen. Sie erhalten einen Rabatt, und je mehr sie handeln, desto mehr verdienst du – direkt in deiner Wallet.',
   shares: 'Anteile',
   show_balance: 'Guthaben anzeigen',
-  show_defi_balance: 'DeFi-Guthaben anzeigen',
   sign: 'Signieren',
   signAmino: 'Amino signieren',
   signDirect: 'Direkt signieren',

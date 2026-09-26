@@ -433,7 +433,6 @@ export const zh = {
   having_trouble_scanning_tip_2: '确保屏幕光线充足且无眩光',
   having_trouble_scanning_tip_3: '保持两台设备片刻不动',
   hide_balance: '隐藏余额',
-  hide_defi_balance: '隐藏DeFi余额',
   how_it_works: '工作原理',
   ibc_transaction_not_supporting_memo_desc:
     '此 IBC 交易包含备注，但 {{productName}} 目前不支持在 IBC 转账消息中嵌入备注。<br>继续进行此交易可能会导致<b>资金的不可逆转损失</b>。',
@@ -812,7 +811,6 @@ export const zh = {
     '分享您的专属邀请码邀请好友。好友可享受折扣，交易越多，您获得的奖励就越多——直接存入您的钱包。',
   shares: '份额',
   show_balance: '显示平衡',
-  show_defi_balance: '显示DeFi余额',
   sign: '签名',
   signAmino: 'Amino Sign',
   signDirect: 'Direct sign',
