@@ -2001,4 +2001,9 @@ export const hr = {
     'Nismo otkrili nikakvu imovinu na lancima koje smo mogli provjeriti.',
   unscanned_chains_warning:
     'Nismo mogli provjeriti stanje na ovim blockchain mrežama. Ako imate sredstava na njima, odaberite ih ručno:',
+  substrate_allow_death_toggle: 'Ispraznite račun',
+  substrate_allow_death_description:
+    'Šalje cijeli saldo umanjen za mrežnu naknadu i zatvara račun. Sve što ostane ispod egzistencijalnog pologa se uništava.',
+  substrate_allow_death_review_warning:
+    'Ovim prijenosom se prazni vaš račun. Račun se deaktivira, a sav preostali saldo ispod egzistencijalnog pologa se uništava.',
 }

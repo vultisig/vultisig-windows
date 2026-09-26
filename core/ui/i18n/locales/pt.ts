@@ -2032,4 +2032,9 @@ export const pt = {
     'Não detectamos nenhum ativo nas blockchains que pudemos verificar.',
   unscanned_chains_warning:
     'Não foi possível verificar os saldos nessas blockchains. Se você tiver fundos nelas, selecione-as manualmente:',
+  substrate_allow_death_toggle: 'Esvazie a conta',
+  substrate_allow_death_description:
+    'Envia todo o saldo menos a taxa de rede e encerra a conta. Qualquer valor restante abaixo do depósito mínimo é perdido.',
+  substrate_allow_death_review_warning:
+    'Essa transferência esvaziará sua conta. A conta será desativada e qualquer saldo restante abaixo do depósito mínimo será perdido.',
 }

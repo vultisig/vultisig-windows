@@ -2049,4 +2049,9 @@ export const de = {
     'Wir konnten in den von uns überprüfbaren Blockchains keine Vermögenswerte feststellen.',
   unscanned_chains_warning:
     'Wir konnten die Kontostände dieser Blockchains nicht überprüfen. Falls Sie Guthaben darauf haben, wählen Sie diese bitte manuell aus:',
+  substrate_allow_death_toggle: 'Leeren Sie das Konto.',
+  substrate_allow_death_description:
+    'Überweist den gesamten Kontostand abzüglich der Netzwerkgebühr und schließt das Konto. Alles, was unterhalb der Mindesteinlage verbleibt, wird vernichtet.',
+  substrate_allow_death_review_warning:
+    'Durch diese Überweisung wird Ihr Konto geleert. Das Konto wird deaktiviert, und ein etwaiges Guthaben unterhalb der Mindesteinlage verfällt.',
 }

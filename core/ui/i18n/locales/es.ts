@@ -2032,4 +2032,9 @@ export const es = {
     'No detectamos ningún activo en las cadenas que pudimos comprobar.',
   unscanned_chains_warning:
     'No pudimos consultar los saldos de estas cadenas de bloques. Si tiene fondos en ellas, selecciónelas manualmente:',
+  substrate_allow_death_toggle: 'Vaciar la cuenta',
+  substrate_allow_death_description:
+    'Envía el saldo completo menos la comisión de red y cierra la cuenta. Cualquier saldo restante por debajo del depósito inicial se destruye.',
+  substrate_allow_death_review_warning:
+    'Esta transferencia vacía tu cuenta. La cuenta se desactiva y cualquier saldo restante por debajo del depósito inicial se pierde.',
 }
