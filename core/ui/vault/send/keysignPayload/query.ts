@@ -16,6 +16,7 @@ import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { omit } from '@vultisig/lib-utils/record/omit'
 
+import { useSendAllowDeath } from '../allowDeath/useSendAllowDeath'
 import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
 import { useSendAmount } from '../state/amount'
 import { useSendDestinationTag } from '../state/destinationTag'
@@ -37,6 +38,7 @@ export const useSendKeysignPayloadQuery = ({
   const [amount] = useSendAmount()
   const { destinationTag } = useSendDestinationTag()
   const { isEnabled: tonGasless } = useTonGaslessSend()
+  const { isEnabled: allowDeath } = useSendAllowDeath()
 
   const vault = useCurrentVault()
 
@@ -57,6 +59,7 @@ export const useSendKeysignPayloadQuery = ({
     feeSettings,
     hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     tonGasless,
+    allowDeath,
   }
 
   return useQuery({

@@ -12,6 +12,7 @@ import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { getSendFeeEstimateWithTronMemo } from '../../../mpc/keysign/fee/tronMemoFee'
+import { useSendAllowDeath } from '../allowDeath/useSendAllowDeath'
 import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
@@ -25,6 +26,9 @@ export const useSendFeeEstimateQuery = () => {
   const [memo] = useSendMemo()
   const { destinationTag } = useSendDestinationTag()
   const { isEnabled: tonGasless } = useTonGaslessSend()
+  // Priced for the call actually signed: an account-emptying send signs
+  // transfer_allow_death, not the keep-alive transfer.
+  const { isEnabled: allowDeath } = useSendAllowDeath()
 
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
@@ -49,6 +53,7 @@ export const useSendFeeEstimateQuery = () => {
           walletCore,
           hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
           tonGasless,
+          allowDeath,
         }
 
   return useQuery({

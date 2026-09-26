@@ -1994,4 +1994,9 @@ export const ko = {
     '우리가 확인할 수 있는 블록체인 상에서 어떠한 자산도 발견되지 않았습니다.',
   unscanned_chains_warning:
     '해당 블록체인의 잔액을 확인할 수 없습니다. 해당 블록체인에 자금이 있는 경우 수동으로 선택하세요.',
+  substrate_allow_death_toggle: '계좌를 비우세요',
+  substrate_allow_death_description:
+    '네트워크 수수료를 제외한 전체 잔액을 보내고 계정을 폐쇄합니다. 최소 예치금 미만의 잔액은 모두 소멸됩니다.',
+  substrate_allow_death_review_warning:
+    '이체로 인해 계좌 잔액이 모두 소진됩니다. 계좌는 비활성화되며, 최소 예치금 미만의 잔액은 모두 소멸됩니다.',
 }

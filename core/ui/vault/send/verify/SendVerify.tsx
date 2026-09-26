@@ -2,6 +2,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -222,6 +223,21 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           }
         />
       </VStack>
+      <MatchQuery
+        value={keysignPayloadQuery}
+        pending={() => null}
+        error={() => null}
+        success={({ blockchainSpecific }) =>
+          // Read from the payload being signed, so the warning appears exactly
+          // when the account will be emptied.
+          blockchainSpecific.case === 'polkadotSpecific' &&
+          blockchainSpecific.value.allowDeath ? (
+            <WarningBlock>
+              {t('substrate_allow_death_review_warning')}
+            </WarningBlock>
+          ) : null
+        }
+      />
     </KeysignReviewSheet>
   )
 }

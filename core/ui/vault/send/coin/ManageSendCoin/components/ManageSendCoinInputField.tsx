@@ -18,7 +18,9 @@ export const ManageSendCoinInputField = () => {
       <SendCoinInput
         value={coin}
         onChange={coin => {
-          setViewState(prev => ({ ...prev, coin }))
+          // Emptying the account is a choice made for one account, so it
+          // never carries over to another coin.
+          setViewState(prev => ({ ...prev, coin, allowDeath: undefined }))
         }}
       />
     </SendInputContainer>

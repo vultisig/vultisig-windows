@@ -1870,4 +1870,9 @@ export const zh = {
     '我们在能够检查的链上没有发现任何资产。',
   unscanned_chains_warning:
     '我们无法查询这些区块链上的余额。如果您在这些区块链上有资金，请手动选择：',
+  substrate_allow_death_toggle: '清空账户',
+  substrate_allow_death_description:
+    '扣除网络费用后，账户余额将被全部转出并关闭。低于最低存款额的剩余款项将被销毁。',
+  substrate_allow_death_review_warning:
+    '此次转账将清空您的账户。账户将被停用，低于存根金额的剩余余额将被销毁。',
 }

@@ -954,6 +954,11 @@ export const en = {
   ripple_field_destination_tag: 'Destination tag',
   substrate_account_may_be_reaped:
     'The sender has allowed this transfer to empty the account: if the balance it leaves is below the existential deposit, the remainder is destroyed and the account is deactivated.',
+  substrate_allow_death_toggle: 'Empty the account',
+  substrate_allow_death_description:
+    'Sends the whole balance minus the network fee and closes the account. Anything left below the existential deposit is destroyed.',
+  substrate_allow_death_review_warning:
+    'This transfer empties your account. The account is deactivated, and any balance left below the existential deposit is destroyed.',
   ripple_destination_tag_invalid:
     'Enter a whole number between 0 and 4,294,967,295.',
   ripple_destination_tag_optional: 'Optional destination tag',

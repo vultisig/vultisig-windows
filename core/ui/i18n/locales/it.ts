@@ -2039,4 +2039,9 @@ export const it = {
     'Non abbiamo rilevato alcun asset sulle blockchain che abbiamo potuto controllare.',
   unscanned_chains_warning:
     'Non è stato possibile verificare i saldi su queste blockchain. Se possiedi fondi su di esse, selezionali manualmente:',
+  substrate_allow_death_toggle: 'Svuota il conto',
+  substrate_allow_death_description:
+    "Invia l'intero saldo meno la commissione di rete e chiude il conto. Tutto ciò che rimane al di sotto del deposito minimo viene distrutto.",
+  substrate_allow_death_review_warning:
+    'Questo trasferimento svuota il tuo conto. Il conto viene disattivato e qualsiasi saldo residuo al di sotto del deposito minimo viene distrutto.',
 }

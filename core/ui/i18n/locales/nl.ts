@@ -2019,4 +2019,9 @@ export const nl = {
     'We hebben geen activa aangetroffen op de blockchains die we konden controleren.',
   unscanned_chains_warning:
     'We konden de saldi op deze blockchains niet controleren. Als u er tegoeden op heeft staan, selecteer ze dan handmatig:',
+  substrate_allow_death_toggle: 'Maak het account leeg',
+  substrate_allow_death_description:
+    'Het volledige saldo, minus de netwerkkosten, wordt overgemaakt en de rekening wordt gesloten. Alles wat onder het minimale stortingsbedrag overblijft, wordt vernietigd.',
+  substrate_allow_death_review_warning:
+    'Deze overschrijving maakt uw rekening leeg. De rekening wordt gedeactiveerd en elk resterend saldo onder het minimale stortingsbedrag wordt vernietigd.',
 }

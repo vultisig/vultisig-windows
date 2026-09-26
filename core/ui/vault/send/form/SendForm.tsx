@@ -1,6 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
+import { useSyncAllowDeathAmount } from '@core/ui/vault/send/allowDeath/useSyncAllowDeathAmount'
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
 import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
@@ -21,6 +22,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { data, error, isPending } = useSendValidationQuery()
   const [amount, setAmount] = useSendAmount()
   const spendableAmount = useSpendableSendAmount()
+  const isAllowDeathSyncing = useSyncAllowDeathAmount()
 
   // Commit a fee-driven adjustment only here, never while the field is being
   // typed into: rewriting the amount on every keystroke would fight the user
@@ -43,7 +45,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
       return extractErrorMsg(error)
     }
 
-    return isPending
+    return isPending || isAllowDeathSyncing
   })()
 
   return (
