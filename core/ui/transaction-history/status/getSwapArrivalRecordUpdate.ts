@@ -1,6 +1,7 @@
 import { getSwapArrivalStatus } from '@vultisig/core-chain/swap/utils/getSwapArrivalStatus'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 
 import {
@@ -58,7 +59,9 @@ type SwapArrivalRecordUpdate = {
  * funds back rather than what they asked for.
  *
  * The deposit's fee is stored as soon as its receipt is read, without waiting
- * for the provider: it is final from then on, whatever the swap's outcome.
+ * for the provider: it is final from then on, whatever the swap's outcome. A
+ * provider that cannot be reached has said nothing yet, so the swap stays
+ * pending and the fee is stored all the same.
  */
 export const getSwapArrivalRecordUpdate = async ({
   record: storedRecord,
@@ -92,10 +95,18 @@ export const getSwapArrivalRecordUpdate = async ({
   })
   const record = withFee ?? storedRecord
 
-  const arrival = await getSwapArrivalStatus({
-    provider,
-    txHash: record.txHash,
-  })
+  const arrivalResult = await attempt(
+    getSwapArrivalStatus({
+      provider,
+      txHash: record.txHash,
+    })
+  )
+
+  if ('error' in arrivalResult) {
+    return { status: 'pending', record: withFee ?? undefined }
+  }
+
+  const arrival = arrivalResult.data
 
   return match<SwapOutcome, SwapArrivalRecordUpdate>(
     getSwapArrivalOutcome(arrival),

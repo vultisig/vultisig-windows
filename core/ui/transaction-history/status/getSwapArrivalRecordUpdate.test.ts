@@ -196,6 +196,18 @@ describe('getSwapArrivalRecordUpdate', () => {
       })
     })
 
+    it('is stored even when the provider cannot be reached', async () => {
+      getTxStatus.mockResolvedValue({ status: 'success', receipt })
+      getSwapArrivalStatus.mockRejectedValue(new Error('Midgard is down'))
+
+      const update = await getSwapArrivalRecordUpdate(tracked)
+
+      expect(update).toMatchObject({
+        status: 'pending',
+        record: { status: 'pending', data: { networkFee } },
+      })
+    })
+
     it('is not written again once stored', async () => {
       getTxStatus.mockResolvedValue({ status: 'success', receipt })
       getSwapArrivalStatus.mockResolvedValue({

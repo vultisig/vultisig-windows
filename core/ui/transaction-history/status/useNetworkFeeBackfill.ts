@@ -17,10 +17,11 @@ import {
  * Reads the fee a settled send or swap paid when its record has none yet, and
  * stores it. The status poll stores the fee with its verdict, so this only
  * covers records that settled before fees were stored: the first open of one
- * asks the chain, and later opens read the stored fee.
+ * asks the chain, and later opens read the stored fee. An open that got no
+ * receipt, or could not store the fee, leaves the next open to ask again.
  */
 export const useNetworkFeeBackfill = (record: TransactionRecord) => {
-  const { mutate: updateRecord } = useUpdateTransactionRecordMutation()
+  const { mutateAsync: updateRecord } = useUpdateTransactionRecordMutation()
   const recordRef = useRef(record)
   recordRef.current = record
   const backfillRecord = getNetworkFeeBackfillRecord(record)
@@ -37,18 +38,21 @@ export const useNetworkFeeBackfill = (record: TransactionRecord) => {
 
       // Written onto the record as it is now, not the one the lookup started
       // from: anything the app stored meanwhile is newer than that snapshot.
+      // The hook may be showing another record by then, and a receipt only
+      // belongs to the transaction it was read for.
       const current = getNetworkFeeBackfillRecord(recordRef.current)
-      const update = current
-        ? withReceiptNetworkFee({ record: current, receipt })
-        : null
+      const update =
+        current?.id === target.id && current.txHash === target.txHash
+          ? withReceiptNetworkFee({ record: current, receipt })
+          : null
       if (update) {
-        updateRecord(update)
+        await updateRecord(update)
       }
 
       return receipt ?? null
     },
     enabled: backfillRecord !== null,
     ...noRefetchQueryOptions,
-    staleTime: Infinity,
+    refetchOnMount: true,
   })
 }
