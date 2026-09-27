@@ -4,10 +4,16 @@ import { getErc20Prices } from '@vultisig/core-chain/coin/price/evm/getErc20Pric
 import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
 import { toBatches } from '@vultisig/lib-utils/array/toBatches'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { retry } from '@vultisig/lib-utils/query/retry'
+import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
+
+import { keptPriceMaxAge, StampedPrice } from './previousCoinPricesForFiat'
 
 /** Matches the SDK contract-price batch. One failed URL must not blank the chain. */
 export const erc20PriceBatchSize = 25
+
+export const erc20PriceRetryDelayMs = 1_000
 
 type PricedCoin = Token<CoinKey<EvmChain>>
 
@@ -28,55 +34,57 @@ export async function fetchErc20PricesKeepingFailedChunks({
   coins: PricedCoin[]
   chain: EvmChain
   fiatCurrency: FiatCurrency
-  previous: Record<string, number>
+  previous: Record<string, StampedPrice>
   getPrices?: GetPrices
-}): Promise<Record<string, number>> {
+}): Promise<Record<string, StampedPrice>> {
   const batches = toBatches(coins, erc20PriceBatchSize)
-  const fresh: Record<string, number> = {}
-  const failedKeys = new Set<string>()
+  const freshPrices: Record<string, number> = {}
+  const kept: Record<string, StampedPrice> = {}
+  const now = Date.now()
   let failures = 0
 
   for (const batch of batches) {
     try {
-      const prices = await attemptTwice(() =>
-        getPrices({
-          ids: batch.map(coin => shouldBePresent(coin.id)),
-          chain,
-          fiatCurrency,
-        })
-      )
+      const prices = await retry({
+        func: () =>
+          getPrices({
+            ids: batch.map(coin => shouldBePresent(coin.id)),
+            chain,
+            fiatCurrency,
+          }),
+        attempts: 1,
+        delay: erc20PriceRetryDelayMs,
+      })
       for (const [id, price] of Object.entries(prices)) {
         const coin = shouldBePresent(
           batch.find(candidate =>
             areLowerCaseEqual(shouldBePresent(candidate.id), id)
           )
         )
-        fresh[coinKeyToString(coin)] = price
+        freshPrices[coinKeyToString(coin)] = price
       }
     } catch {
       failures += 1
       for (const coin of batch) {
         const key = coinKeyToString(coin)
-        if (key in previous) failedKeys.add(key)
+        const prior = previous[key]
+        if (prior && now - prior.fetchedAt <= keptPriceMaxAge) kept[key] = prior
       }
     }
   }
 
-  if (batches.length > 0 && failures === batches.length) {
+  if (
+    batches.length > 0 &&
+    failures === batches.length &&
+    isRecordEmpty(kept)
+  ) {
     throw new Error('every contract price batch failed')
   }
 
-  const kept: Record<string, number> = {}
-  for (const key of failedKeys) {
-    kept[key] = previous[key]
+  const fetchedAt = Date.now()
+  const fresh: Record<string, StampedPrice> = {}
+  for (const [key, price] of Object.entries(freshPrices)) {
+    fresh[key] = { price, fetchedAt }
   }
   return { ...kept, ...fresh }
-}
-
-async function attemptTwice<T>(fetchPrices: () => Promise<T>): Promise<T> {
-  try {
-    return await fetchPrices()
-  } catch {
-    return fetchPrices()
-  }
 }

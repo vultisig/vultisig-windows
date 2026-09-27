@@ -30,7 +30,11 @@ import {
   isThorchainSecuredAssetDenom,
 } from '../thor/getThorchainSecuredAssetPrices'
 import { fetchErc20PricesKeepingFailedChunks } from './fetchErc20PricesKeepingFailedChunks'
-import { cachedCoinPricesForFiat } from './previousCoinPricesForFiat'
+import {
+  cachedCoinPricesForFiat,
+  erc20PricesFromQueryData,
+  StampedPrice,
+} from './previousCoinPricesForFiat'
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[]
@@ -136,6 +140,8 @@ export function useCoinPricesQuery(
             previous: cachedCoinPricesForFiat(queryClient, fiatCurrency),
           }),
         ...pricePersistQueryOptions,
+        select: (data: Record<string, StampedPrice> | Record<string, number>) =>
+          erc20PricesFromQueryData(data) ?? {},
       })
     })
   }

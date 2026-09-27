@@ -3,44 +3,60 @@ import {
   fiatCurrencies,
   FiatCurrency,
 } from '@vultisig/core-config/FiatCurrency'
+import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
+
+export const keptPriceMaxAge = convertDuration(1, 'h', 'ms')
+
+export type StampedPrice = {
+  price: number
+  fetchedAt: number
+}
 
 type CachedCoinPrices = {
   fiatCurrency?: FiatCurrency
   updatedAt: number
-  prices?: Record<string, number>
+  prices?: unknown
 }
 
 export function previousCoinPricesForFiat(
   cached: readonly CachedCoinPrices[],
-  fiatCurrency: FiatCurrency
-): Record<string, number> {
-  const merged: Record<string, number> = {}
+  fiatCurrency: FiatCurrency,
+  now = Date.now()
+): Record<string, StampedPrice> {
+  const merged: Record<string, StampedPrice> = {}
   const ordered = [...cached].sort(
     (left, right) => left.updatedAt - right.updatedAt
   )
   for (const entry of ordered) {
-    if (entry.fiatCurrency !== fiatCurrency || !entry.prices) continue
-    for (const [key, price] of Object.entries(entry.prices)) {
-      // A stored 0 is the missing-price fill, not a quote.
-      if (price > 0) merged[key] = price
+    if (entry.fiatCurrency !== fiatCurrency) continue
+    const stamps = stampsFrom(entry.prices, entry.updatedAt)
+    if (!stamps) continue
+    for (const [key, stamp] of Object.entries(stamps)) {
+      const current = merged[key]
+      if (!current || stamp.fetchedAt >= current.fetchedAt) merged[key] = stamp
     }
   }
-  return merged
+  return Object.fromEntries(
+    Object.entries(merged).filter(
+      ([, stamp]) => now - stamp.fetchedAt <= keptPriceMaxAge
+    )
+  )
 }
 
 export function cachedCoinPricesForFiat(
   queryClient: QueryClient,
-  fiatCurrency: FiatCurrency
-): Record<string, number> {
+  fiatCurrency: FiatCurrency,
+  now = Date.now()
+): Record<string, StampedPrice> {
   const cached = queryClient
     .getQueryCache()
     .findAll({ queryKey: ['coinPrices'] })
     .map(query => ({
       fiatCurrency: fiatCurrencyFromQueryKey(query.queryKey),
       updatedAt: query.state.dataUpdatedAt,
-      prices: priceRecord(query.state.data),
+      prices: query.state.data,
     }))
-  return previousCoinPricesForFiat(cached, fiatCurrency)
+  return previousCoinPricesForFiat(cached, fiatCurrency, now)
 }
 
 function fiatCurrencyFromQueryKey(
@@ -52,9 +68,45 @@ function fiatCurrencyFromQueryKey(
   return fiatCurrencies.find(currency => currency === fiatCurrency)
 }
 
-function priceRecord(value: unknown): Record<string, number> | undefined {
+function stampsFrom(
+  value: unknown,
+  updatedAt: number
+): Record<string, StampedPrice> | undefined {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return
   const record = value as Record<string, unknown>
-  if (!Object.values(record).every(item => typeof item === 'number')) return
-  return record as Record<string, number>
+  const values = Object.values(record)
+  if (values.every(isStampedPrice))
+    return record as Record<string, StampedPrice>
+  if (!values.every(item => typeof item === 'number')) return
+  const stamps: Record<string, StampedPrice> = {}
+  for (const [key, price] of Object.entries(record)) {
+    if (typeof price === 'number' && price > 0) {
+      stamps[key] = { price, fetchedAt: updatedAt }
+    }
+  }
+  return stamps
+}
+
+const isStampedPrice = (value: unknown): value is StampedPrice => {
+  if (!value || typeof value !== 'object') return false
+  const stamp = value as StampedPrice
+  return typeof stamp.price === 'number' && typeof stamp.fetchedAt === 'number'
+}
+
+export const erc20PricesFromQueryData = (
+  value: unknown
+): Record<string, number> | undefined => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return
+  const record = value as Record<string, unknown>
+  const values = Object.values(record)
+  if (values.every(item => typeof item === 'number')) {
+    return record as Record<string, number>
+  }
+  if (!values.every(isStampedPrice)) return
+  return Object.fromEntries(
+    Object.entries(record).map(([key, stamp]) => [
+      key,
+      (stamp as StampedPrice).price,
+    ])
+  )
 }
