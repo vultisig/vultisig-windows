@@ -9,7 +9,6 @@ import {
   fetchErc20PricesKeepingFailedChunks,
 } from './fetchErc20PricesKeepingFailedChunks'
 import { cachedCoinPricesForFiat } from './previousCoinPricesForFiat'
-import { getCoinPricesQueryKeys } from './useCoinPricesQuery'
 
 const coin = (id: string) => ({ id, chain: EvmChain.Ethereum })
 const keyFor = (id: string) => coinKeyToString({ chain: Chain.Ethereum, id })
@@ -66,11 +65,10 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
     const current = coin('0xdead')
     const client = new QueryClient()
     client.setQueryData(
-      getCoinPricesQueryKeys({
-        coins: [older, current],
-        fiatCurrency: 'usd',
-      }),
-      { [keyFor(current.id)]: stamp(4, 5_000) }
+      ['erc20Prices', { coins: [older, current], fiatCurrency: 'usd' }],
+      {
+        [keyFor(current.id)]: stamp(4, 5_000),
+      }
     )
     const getPrices = vi.fn().mockRejectedValue(new Error('down'))
 

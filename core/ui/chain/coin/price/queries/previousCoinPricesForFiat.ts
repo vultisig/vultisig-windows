@@ -29,7 +29,7 @@ export function previousCoinPricesForFiat(
   )
   for (const entry of ordered) {
     if (entry.fiatCurrency !== fiatCurrency) continue
-    const stamps = stampsFrom(entry.prices, entry.updatedAt)
+    const stamps = stampsFrom(entry.prices)
     if (!stamps) continue
     for (const [key, stamp] of Object.entries(stamps)) {
       const current = merged[key]
@@ -50,7 +50,7 @@ export function cachedCoinPricesForFiat(
 ): Record<string, StampedPrice> {
   const cached = queryClient
     .getQueryCache()
-    .findAll({ queryKey: ['coinPrices'] })
+    .findAll({ queryKey: ['erc20Prices'] })
     .map(query => ({
       fiatCurrency: fiatCurrencyFromQueryKey(query.queryKey),
       updatedAt: query.state.dataUpdatedAt,
@@ -68,45 +68,15 @@ function fiatCurrencyFromQueryKey(
   return fiatCurrencies.find(currency => currency === fiatCurrency)
 }
 
-function stampsFrom(
-  value: unknown,
-  updatedAt: number
-): Record<string, StampedPrice> | undefined {
+function stampsFrom(value: unknown): Record<string, StampedPrice> | undefined {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return
   const record = value as Record<string, unknown>
-  const values = Object.values(record)
-  if (values.every(isStampedPrice))
-    return record as Record<string, StampedPrice>
-  if (!values.every(item => typeof item === 'number')) return
-  const stamps: Record<string, StampedPrice> = {}
-  for (const [key, price] of Object.entries(record)) {
-    if (typeof price === 'number' && price > 0) {
-      stamps[key] = { price, fetchedAt: updatedAt }
-    }
-  }
-  return stamps
+  if (!Object.values(record).every(isStampedPrice)) return
+  return record as Record<string, StampedPrice>
 }
 
 const isStampedPrice = (value: unknown): value is StampedPrice => {
   if (!value || typeof value !== 'object') return false
   const stamp = value as StampedPrice
   return typeof stamp.price === 'number' && typeof stamp.fetchedAt === 'number'
-}
-
-export const erc20PricesFromQueryData = (
-  value: unknown
-): Record<string, number> | undefined => {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return
-  const record = value as Record<string, unknown>
-  const values = Object.values(record)
-  if (values.every(item => typeof item === 'number')) {
-    return record as Record<string, number>
-  }
-  if (!values.every(isStampedPrice)) return
-  return Object.fromEntries(
-    Object.entries(record).map(([key, stamp]) => [
-      key,
-      (stamp as StampedPrice).price,
-    ])
-  )
 }

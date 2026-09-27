@@ -8,8 +8,6 @@ import {
   keptPriceMaxAge,
   previousCoinPricesForFiat,
 } from './previousCoinPricesForFiat'
-import { getCoinPricesQueryKeys } from './useCoinPricesQuery'
-
 const cake = coinKeyToString({ chain: Chain.Ethereum, id: '0xcake' })
 
 describe('previousCoinPricesForFiat', () => {
@@ -57,16 +55,6 @@ describe('previousCoinPricesForFiat', () => {
 
     expect(prices[cake]).toBeUndefined()
   })
-
-  it('reads a legacy number map using the entry time as the fetch time', () => {
-    const prices = previousCoinPricesForFiat(
-      [{ fiatCurrency: 'usd', updatedAt: 50, prices: { [cake]: 1.96 } }],
-      'usd',
-      50
-    )
-
-    expect(prices[cake]).toEqual({ price: 1.96, fetchedAt: 50 })
-  })
 })
 
 describe('cachedCoinPricesForFiat', () => {
@@ -74,18 +62,25 @@ describe('cachedCoinPricesForFiat', () => {
     const client = new QueryClient()
     const coin = { chain: Chain.Ethereum, id: '0xcake' }
     client.setQueryData(
-      getCoinPricesQueryKeys({ coins: [coin], fiatCurrency: 'usd' }),
-      { [cake]: 1.96 }
+      ['erc20Prices', { coins: [coin], fiatCurrency: 'usd' }],
+      {
+        [cake]: { price: 1.96, fetchedAt: 10 },
+      }
     )
     client.setQueryData(
-      getCoinPricesQueryKeys({ coins: [coin], fiatCurrency: 'eur' }),
-      { [cake]: 9 }
+      ['erc20Prices', { coins: [coin], fiatCurrency: 'eur' }],
+      {
+        [cake]: { price: 9, fetchedAt: 10 },
+      }
     )
 
-    const usd = cachedCoinPricesForFiat(client, 'usd')[cake]
-    const eur = cachedCoinPricesForFiat(client, 'eur')[cake]
-    expect(usd?.price).toBe(1.96)
-    expect(eur?.price).toBe(9)
-    expect(Date.now() - (usd?.fetchedAt ?? 0)).toBeLessThan(keptPriceMaxAge)
+    expect(cachedCoinPricesForFiat(client, 'usd', 10)[cake]).toEqual({
+      price: 1.96,
+      fetchedAt: 10,
+    })
+    expect(cachedCoinPricesForFiat(client, 'eur', 10)[cake]).toEqual({
+      price: 9,
+      fetchedAt: 10,
+    })
   })
 })

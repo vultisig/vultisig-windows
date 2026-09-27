@@ -16,6 +16,7 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { mergeRecords } from '@vultisig/lib-utils/record/mergeRecords'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
@@ -32,7 +33,6 @@ import {
 import { fetchErc20PricesKeepingFailedChunks } from './fetchErc20PricesKeepingFailedChunks'
 import {
   cachedCoinPricesForFiat,
-  erc20PricesFromQueryData,
   StampedPrice,
 } from './previousCoinPricesForFiat'
 
@@ -126,10 +126,13 @@ export function useCoinPricesQuery(
     )
 
     toEntries(groupedByChain).forEach(({ key: chain, value: coins }) => {
-      const queryKey = getCoinPricesQueryKeys({
-        coins,
-        fiatCurrency,
-      })
+      const queryKey = [
+        'erc20Prices',
+        {
+          coins,
+          fiatCurrency,
+        },
+      ]
       queries.push({
         queryKey,
         queryFn: async () =>
@@ -140,8 +143,8 @@ export function useCoinPricesQuery(
             previous: cachedCoinPricesForFiat(queryClient, fiatCurrency),
           }),
         ...pricePersistQueryOptions,
-        select: (data: Record<string, StampedPrice> | Record<string, number>) =>
-          erc20PricesFromQueryData(data) ?? {},
+        select: (data: Record<string, StampedPrice>) =>
+          recordMap(data, stamp => stamp.price),
       })
     })
   }
