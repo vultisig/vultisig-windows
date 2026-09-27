@@ -1,6 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
-import { getTxFailureDescription } from '@core/ui/chain/tx/failure/getTxFailureDescription'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useCore } from '@core/ui/state/core'
@@ -9,12 +8,7 @@ import {
   getSwapFeeDisclosure,
   getSwapQuoteAffiliateBps,
 } from '@core/ui/vault/swap/affiliate/affiliateBps'
-import { getKeysignSwapArrivalProvider } from '@core/ui/vault/swap/arrival/swapArrivalProvider'
-import {
-  getSwapOutcome,
-  SwapOutcome,
-} from '@core/ui/vault/swap/arrival/swapOutcome'
-import { useSwapArrivalStatusQuery } from '@core/ui/vault/swap/arrival/useSwapArrivalStatusQuery'
+import { getSwapSourceOutcome } from '@core/ui/vault/swap/arrival/swapOutcome'
 import { SwapDiscountInfo } from '@core/ui/vault/swap/form/info/SwapDiscountInfo'
 import { SwapFeeRowRenderer } from '@core/ui/vault/swap/form/info/swapFeeRow'
 import { SwapPriceImpactRow } from '@core/ui/vault/swap/form/info/SwapPriceImpactRow'
@@ -38,8 +32,6 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { Coin, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { SwapArrivalStatusResult } from '@vultisig/core-chain/swap/utils/getSwapArrivalStatus'
-import { TxStatusResult } from '@vultisig/core-chain/tx/status/resolver'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
@@ -50,11 +42,9 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { match } from '@vultisig/lib-utils/match'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { truncateId } from '@vultisig/lib-utils/string/truncate'
-import { TFunction } from 'i18next'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -65,7 +55,7 @@ import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
 import { TxVaultSourceLabel } from '../components/TxVaultSourceLabel'
 import { KeysignFeeAmount } from '../FeeAmount'
-import { TxStatusView } from '../TxStatusView'
+import { TxStatusTracker } from '../TxStatusTracker'
 import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -104,31 +94,6 @@ const getKeysignQuoteFees = ({
       affiliateBps,
     }),
   }
-}
-
-type GetSwapFailureDescriptionInput = {
-  source: TxStatusResult | undefined
-  arrival: SwapArrivalStatusResult | undefined
-  t: TFunction
-}
-
-/**
- * What to print under a failed swap: the chain's own reason when the source
- * transaction reverted, the refund wording when the provider sent the funds
- * back, and the provider's message for any other terminal failure.
- */
-const getSwapFailureDescription = ({
-  source,
-  arrival,
-  t,
-}: GetSwapFailureDescriptionInput): string | undefined => {
-  if (source?.status === 'error' && source.failure) {
-    return getTxFailureDescription({ failure: source.failure, t })
-  }
-  if (arrival?.status === 'refunded') {
-    return t('swap_failed_refunded_description')
-  }
-  return arrival?.status === 'error' ? arrival.message : undefined
 }
 
 export const SwapKeysignTxOverview = ({
@@ -195,30 +160,15 @@ export const SwapKeysignTxOverview = ({
   })
   const receipt = txStatusQuery.data?.receipt
 
-  // A confirmed deposit only starts a native swap; the provider decides
-  // whether it pays out or refunds, so its verdict is what the screen settles
-  // on.
-  const arrivalProvider = getKeysignSwapArrivalProvider(swapPayload)
-  const arrivalQuery = useSwapArrivalStatusQuery({
-    provider: arrivalProvider,
-    txHash: mainTxHash,
-    enabled: txStatusQuery.data?.status === 'success',
-  })
-  const outcome = getSwapOutcome({
-    source: txStatusQuery.data,
-    arrival: arrivalQuery.data,
-    tracksArrival: arrivalProvider !== undefined,
-  })
-  const failureDescription =
-    outcome === 'failed'
-      ? getSwapFailureDescription({
-          source: txStatusQuery.data,
-          arrival: arrivalQuery.data,
-          t,
-        })
-      : undefined
+  // This screen settles on the transaction this device signed. For a native
+  // swap that is only the deposit: whether THORChain/MayaChain then pays out
+  // or refunds is followed by the history record, which keeps polling the
+  // provider after this screen is gone.
+  const hasSourceFailed =
+    !!txStatusQuery.data &&
+    getSwapSourceOutcome(txStatusQuery.data) === 'failed'
 
-  // Only offered once the swap is over without paying out. Leaves this screen
+  // Only offered once the signed transaction has failed. Leaves this screen
   // behind so Back does not return to a failure the user has already moved on
   // from.
   const retrySwap = useSwapRetry({
@@ -226,7 +176,7 @@ export const SwapKeysignTxOverview = ({
     toCoin: toCoin ? extractCoinKey(toCoin) : undefined,
     replace: true,
   })
-  const showTryAgain = outcome === 'failed' && !!retrySwap
+  const showTryAgain = hasSourceFailed && !!retrySwap
 
   const trackTransaction = (tx: string) =>
     openExternalUrl(
@@ -239,17 +189,10 @@ export const SwapKeysignTxOverview = ({
 
   return (
     <VStack gap={36} maxWidth={576} fullWidth>
-      <TxStatusView
-        status={
-          txStatusQuery.isPending
-            ? 'broadcasted'
-            : match<SwapOutcome, 'pending' | 'success' | 'error'>(outcome, {
-                pending: () => 'pending',
-                success: () => 'success',
-                failed: () => 'error',
-              })
-        }
-        description={failureDescription}
+      <TxStatusTracker
+        chain={sourceChain}
+        hash={mainTxHash}
+        lastValidBlockHeight={lastValidBlockHeight}
       />
       <VStack alignItems="center" gap={8} fullWidth>
         <VStack gap={8} fullWidth>
