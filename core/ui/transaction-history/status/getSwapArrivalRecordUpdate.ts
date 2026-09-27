@@ -15,6 +15,7 @@ import {
 import { SwapTransactionRecord, TransactionRecord } from '../core'
 import { getRecordLastValidBlockHeight } from './getRecordLastValidBlockHeight'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
+import { withReceiptNetworkFee } from './networkFee'
 
 /** A swap record whose provider is asked whether it paid out. */
 export type ArrivalTrackedSwap = {
@@ -55,19 +56,25 @@ type SwapArrivalRecordUpdate = {
  * pending, not confirmed, until the provider reports a payout or a refund; a
  * refund is stored as a failure with its reason, since the user got their
  * funds back rather than what they asked for.
+ *
+ * The deposit's fee is stored as soon as its receipt is read, without waiting
+ * for the provider: it is final from then on, whatever the swap's outcome.
  */
 export const getSwapArrivalRecordUpdate = async ({
-  record,
+  record: storedRecord,
   provider,
 }: ArrivalTrackedSwap): Promise<SwapArrivalRecordUpdate> => {
   const source = await getTxStatus({
-    chain: record.data.fromChain,
-    hash: record.txHash,
-    lastValidBlockHeight: getRecordLastValidBlockHeight(record),
+    chain: storedRecord.data.fromChain,
+    hash: storedRecord.txHash,
+    lastValidBlockHeight: getRecordLastValidBlockHeight(storedRecord),
   })
 
   if (getSwapSourceOutcome(source) !== 'success') {
-    const update = getTxStatusRecordUpdate({ record, result: source })
+    const update = getTxStatusRecordUpdate({
+      record: storedRecord,
+      result: source,
+    })
 
     return {
       status: match(getSwapSourceOutcome(source), {
@@ -79,6 +86,12 @@ export const getSwapArrivalRecordUpdate = async ({
     }
   }
 
+  const withFee = withReceiptNetworkFee({
+    record: storedRecord,
+    receipt: source.receipt,
+  })
+  const record = withFee ?? storedRecord
+
   const arrival = await getSwapArrivalStatus({
     provider,
     txHash: record.txHash,
@@ -87,19 +100,19 @@ export const getSwapArrivalRecordUpdate = async ({
   return match<SwapOutcome, SwapArrivalRecordUpdate>(
     getSwapArrivalOutcome(arrival),
     {
-      pending: () => ({ status: 'pending' }),
+      pending: () => ({ status: 'pending', record: withFee ?? undefined }),
       success: () => ({
         status: 'success',
         record:
           record.status === 'confirmed'
-            ? undefined
+            ? (withFee ?? undefined)
             : { ...record, status: 'confirmed' },
       }),
       failed: () => ({
         status: 'error',
         record:
           record.status === 'failed'
-            ? undefined
+            ? (withFee ?? undefined)
             : {
                 ...record,
                 status: 'failed',
