@@ -8,7 +8,10 @@ import {
   erc20PriceRetryDelayMs,
   fetchErc20PricesKeepingFailedChunks,
 } from './fetchErc20PricesKeepingFailedChunks'
-import { cachedCoinPricesForFiat } from './previousCoinPricesForFiat'
+import {
+  cachedCoinPricesForFiat,
+  keptPriceMaxAge,
+} from './previousCoinPricesForFiat'
 
 const coin = (id: string) => ({ id, chain: EvmChain.Ethereum })
 const keyFor = (id: string) => coinKeyToString({ chain: Chain.Ethereum, id })
@@ -103,6 +106,29 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
     await vi.advanceTimersByTimeAsync(erc20PriceRetryDelayMs)
     await assertion
     expect(getPrices).toHaveBeenCalledTimes(2)
+  })
+
+  it('drops a price that expires during the retry', async () => {
+    vi.useFakeTimers()
+    const start = 10_000_000
+    vi.setSystemTime(start)
+    const expired = coin('0xdead')
+    const getPrices = vi.fn().mockRejectedValue(new Error('down'))
+
+    const pending = fetchErc20PricesKeepingFailedChunks({
+      coins: [expired],
+      chain: EvmChain.Ethereum,
+      fiatCurrency: 'usd',
+      previous: {
+        [keyFor(expired.id)]: stamp(1.96, start - keptPriceMaxAge + 500),
+      },
+      getPrices,
+    })
+    const assertion = expect(pending).rejects.toThrow(
+      'every contract price batch failed'
+    )
+    await vi.advanceTimersByTimeAsync(erc20PriceRetryDelayMs)
+    await assertion
   })
 
   it('waits before the second try', async () => {

@@ -39,8 +39,7 @@ export async function fetchErc20PricesKeepingFailedChunks({
 }): Promise<Record<string, StampedPrice>> {
   const batches = toBatches(coins, erc20PriceBatchSize)
   const freshPrices: Record<string, number> = {}
-  const kept: Record<string, StampedPrice> = {}
-  const now = Date.now()
+  const retained: Record<string, StampedPrice> = {}
   let failures = 0
 
   for (const batch of batches) {
@@ -68,9 +67,15 @@ export async function fetchErc20PricesKeepingFailedChunks({
       for (const coin of batch) {
         const key = coinKeyToString(coin)
         const prior = previous[key]
-        if (prior && now - prior.fetchedAt <= keptPriceMaxAge) kept[key] = prior
+        if (prior) retained[key] = prior
       }
     }
+  }
+
+  const checkedAt = Date.now()
+  const kept: Record<string, StampedPrice> = {}
+  for (const [key, stamp] of Object.entries(retained)) {
+    if (checkedAt - stamp.fetchedAt <= keptPriceMaxAge) kept[key] = stamp
   }
 
   if (
