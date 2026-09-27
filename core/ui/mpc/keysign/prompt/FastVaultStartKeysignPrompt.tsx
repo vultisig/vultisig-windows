@@ -1,13 +1,13 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { DevicesIcon } from '@lib/ui/icons/DevicesIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { useMutation } from '@tanstack/react-query'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-import { VaultSecurityType } from '../../../vault/VaultSecurityType'
 import {
   FastVaultPasswordModal,
   FastVaultPasswordModalResult,
@@ -23,6 +23,10 @@ const PairedButton = styled(Button)`
   flex: 0 0 132px;
 `
 
+/**
+ * The start-keysign buttons for a fast vault: Fast Sign co-signs with the
+ * server after a password prompt, Paired signs with the user's other devices.
+ */
 export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
@@ -39,26 +43,25 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   const resolvePayload = async () =>
     onBeforeStart ? onBeforeStart() : shouldBePresent(keysignPayload)
 
-  const executeNavigation = async (securityType: VaultSecurityType) => {
-    if (securityType === 'fast') {
-      setShowModal(true)
-      return
-    }
+  // Spans the payload rebuild, a network round-trip, so Paired shows the click
+  // registered and both buttons ignore input until the keysign screen opens.
+  const { mutate: startPaired, isPending: isPairedStarting } = useMutation({
+    mutationFn: async () => {
+      const payload = await resolvePayload()
+      if (!payload) {
+        return
+      }
 
-    const payload = await resolvePayload()
-    if (!payload) {
-      return
-    }
-
-    navigate({
-      id: 'keysign',
-      state: {
-        ...navigationProps,
-        keysignPayload: payload,
-        securityType,
-      },
-    })
-  }
+      navigate({
+        id: 'keysign',
+        state: {
+          ...navigationProps,
+          keysignPayload: payload,
+          securityType: 'secure',
+        },
+      })
+    },
+  })
 
   const onGetPassword = async ({ password }: FastVaultPasswordModalResult) => {
     // Rebuilt after the password prompt, not before it: entering a password is
@@ -82,7 +85,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   }
 
   const disabled = keysignPayload
-    ? false
+    ? isPairedStarting
     : 'disabledMessage' in props
       ? props.disabledMessage
       : true
@@ -93,15 +96,16 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         <PairedButton
           disabled={disabled}
           kind="secondary"
+          loading={isPairedStarting}
           icon={<DevicesIcon />}
-          onClick={() => executeNavigation('secure')}
+          onClick={() => startPaired()}
         >
           {t('paired')}
         </PairedButton>
         <FastSignButton
           disabled={disabled}
           loading={isLoading}
-          onClick={() => executeNavigation('fast')}
+          onClick={() => setShowModal(true)}
         >
           {t('fast_sign')}
         </FastSignButton>

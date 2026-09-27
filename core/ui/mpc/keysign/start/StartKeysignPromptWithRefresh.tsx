@@ -34,9 +34,9 @@ export const StartKeysignPromptWithRefresh = <T,>({
 }: StartKeysignPromptWithRefreshProps<T>) => {
   const [refreshError, setRefreshError] = useState<string | null>(null)
 
-  // A rebuild is a network round-trip and this button gives no feedback while
-  // it runs, so a second click is likely. Without this the two rebuilds race
-  // and both start a ceremony, the later one interrupting the session the
+  // A rebuild is a network round-trip. The prompts disable their button while
+  // it runs, and this is the backstop behind that: two rebuilds that did race
+  // would both start a ceremony, the later one interrupting the session the
   // earlier one already opened.
   const isRebuilding = useRef(false)
 
