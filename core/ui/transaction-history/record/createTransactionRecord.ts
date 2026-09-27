@@ -293,7 +293,11 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
   })
 }
 
-/** Returns the chain associated with transaction status and record metadata. */
+/**
+ * The chain a swap record is filed under: the protocol chain for a native
+ * swap, the source chain for an aggregator swap. Status is still read on the
+ * source chain, where the hash was broadcast; see `getRecordTxChain`.
+ */
 const getSwapExplorerChain = (
   swapPayload: KeysignSwapPayload,
   sourceChain: Chain
