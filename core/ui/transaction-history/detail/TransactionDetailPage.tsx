@@ -5,6 +5,7 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
+import { TxActualFeeDisplay } from '@core/ui/mpc/keysign/tx/components/TxActualFeeDisplay'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useTransactionRecords } from '@core/ui/storage/transactionHistory'
@@ -16,6 +17,11 @@ import {
   TrustLineTransactionRecord,
 } from '@core/ui/transaction-history/core'
 import { getRecordTagType } from '@core/ui/transaction-history/recordTagType'
+import {
+  FeeBearingRecord,
+  getRecordFeeChain,
+} from '@core/ui/transaction-history/status/networkFee'
+import { useNetworkFeeBackfill } from '@core/ui/transaction-history/status/useNetworkFeeBackfill'
 import { useTransactionStatusPolling } from '@core/ui/transaction-history/status/useTransactionStatusPolling'
 import { TransactionHistoryTag } from '@core/ui/transaction-history/TransactionHistoryTag'
 import { getTronClaimChainAmountDisplay } from '@core/ui/vault/deposit/tron/withdrawExpireUnfreeze'
@@ -117,6 +123,31 @@ const DetailRow = ({ label, children }: DetailRowProps) => (
     {children}
   </HStack>
 )
+
+/**
+ * What the record's transaction paid, as its receipt reported it. Nothing
+ * until the receipt has been read: an estimate would be the maximum signed
+ * for, not the fee.
+ */
+const NetworkFeeDetailRow = ({ record }: { record: FeeBearingRecord }) => {
+  const { t } = useTranslation()
+  const { networkFee } = record.data
+
+  if (!networkFee) return null
+
+  return (
+    <DetailRow label={t('network_fee')}>
+      <TxActualFeeDisplay
+        chain={getRecordFeeChain(record)}
+        receipt={{
+          feeAmount: BigInt(networkFee.amount),
+          feeDecimals: networkFee.decimals,
+          feeTicker: networkFee.ticker,
+        }}
+      />
+    </DetailRow>
+  )
+}
 
 const formatCryptoDisplay = (amount: bigint, decimals: number): string => {
   const raw = Number(fromChainAmount(amount, decimals))
@@ -227,11 +258,7 @@ const SendDetailPanel = ({ record }: { record: SendTransactionRecord }) => {
             <MiddleTruncate text={data.toAddress} width={160} />
           </DetailRow>
         )}
-        {data.feeEstimate && (
-          <DetailRow label={t('network_fee')}>
-            <Text>{data.feeEstimate}</Text>
-          </DetailRow>
-        )}
+        <NetworkFeeDetailRow record={record} />
         {data.memo && (
           <DetailRow label={t('memo')}>
             <Text>{data.memo}</Text>
@@ -385,7 +412,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
 const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
   const { t } = useTranslation()
   const { data } = record
-  const hasDetails = data.provider || data.route
+  const hasDetails = data.provider || data.route || data.networkFee
 
   if (!hasDetails) return null
 
@@ -404,6 +431,7 @@ const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
             <SwapProviderValue provider={data.provider} />
           </DetailRow>
         )}
+        <NetworkFeeDetailRow record={record} />
       </SeparatedByLine>
     </Panel>
   )
@@ -567,6 +595,7 @@ export const TransactionDetailPage = () => {
     record.data.operation === 'tronWithdrawExpireUnfreeze'
 
   useTransactionStatusPolling(record)
+  useNetworkFeeBackfill(record)
   // Keeps a limit order's own state fresh while its detail is on screen; the
   // generic poller above deliberately ignores limit records.
   useLimitOrderTracking()

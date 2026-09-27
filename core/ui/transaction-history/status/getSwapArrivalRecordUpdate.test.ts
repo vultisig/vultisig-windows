@@ -143,6 +143,90 @@ describe('getSwapArrivalRecordUpdate', () => {
     })
   })
 
+  describe('the deposit fee', () => {
+    const receipt = {
+      feeAmount: 904_337_000_000_000n,
+      feeDecimals: 18,
+      feeTicker: 'ETH',
+    }
+    const networkFee = {
+      amount: '904337000000000',
+      decimals: 18,
+      ticker: 'ETH',
+    }
+
+    it('is stored once the deposit confirms, before the provider settles', async () => {
+      getTxStatus.mockResolvedValue({ status: 'success', receipt })
+      getSwapArrivalStatus.mockResolvedValue({
+        status: 'pending',
+        stage: 'swapping',
+      })
+
+      const update = await getSwapArrivalRecordUpdate(tracked)
+
+      expect(update).toMatchObject({
+        status: 'pending',
+        record: { status: 'pending', data: { networkFee } },
+      })
+    })
+
+    it('is kept when the provider pays out', async () => {
+      getTxStatus.mockResolvedValue({ status: 'success', receipt })
+      getSwapArrivalStatus.mockResolvedValue({
+        status: 'success',
+        stage: 'complete',
+      })
+
+      const update = await getSwapArrivalRecordUpdate(tracked)
+
+      expect(update.record).toMatchObject({
+        status: 'confirmed',
+        data: { networkFee },
+      })
+    })
+
+    it('is stored when the deposit itself reverts', async () => {
+      getTxStatus.mockResolvedValue({ status: 'error', receipt })
+
+      const update = await getSwapArrivalRecordUpdate(tracked)
+
+      expect(update.record).toMatchObject({
+        status: 'failed',
+        data: { networkFee },
+      })
+    })
+
+    it('is stored even when the provider cannot be reached', async () => {
+      getTxStatus.mockResolvedValue({ status: 'success', receipt })
+      getSwapArrivalStatus.mockRejectedValue(new Error('Midgard is down'))
+
+      const update = await getSwapArrivalRecordUpdate(tracked)
+
+      expect(update).toMatchObject({
+        status: 'pending',
+        record: { status: 'pending', data: { networkFee } },
+      })
+    })
+
+    it('is not written again once stored', async () => {
+      getTxStatus.mockResolvedValue({ status: 'success', receipt })
+      getSwapArrivalStatus.mockResolvedValue({
+        status: 'pending',
+        stage: 'swapping',
+      })
+
+      const update = await getSwapArrivalRecordUpdate({
+        ...tracked,
+        record: {
+          ...pendingSwap,
+          data: { ...pendingSwap.data, networkFee },
+        },
+      })
+
+      expect(update).toEqual({ status: 'pending' })
+    })
+  })
+
   it('fails the record without a reason when the provider reports a plain failure', async () => {
     getTxStatus.mockResolvedValue({ status: 'success' })
     getSwapArrivalStatus.mockResolvedValue({ status: 'error', stage: 'failed' })
