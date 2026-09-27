@@ -11,7 +11,6 @@ fi
 
 CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
-CONTENT=$(echo "$INPUT" | jq -r '.tool_input.content // empty')
 
 # --- Dangerous git commands ---
 if echo "$CMD" | grep -qE 'git (push.*(--force([^-]|$)|-f( |$)|-F( |$))|reset --hard|clean -[a-z]*f|branch.*(--delete|-D))'; then
@@ -26,9 +25,9 @@ if echo "$CMD" | grep -qE 'git push.*(origin|upstream).*(main|master)(\s|$)'; th
 fi
 
 # --- Mainnet RPC calls ---
-MAINNET_RPCS="mainnet\.infura\.io|rpc\.ankr\.com/eth|api\.etherscan\.io|btc\.getblock\.io|rpc\.mainnet|solana-mainnet|thornode\.ninerealms\.com|mayanode\.mayachain\.info"
-COMBINED="$CMD $FILE_PATH $CONTENT"
-if echo "$COMBINED" | grep -qiE "$MAINNET_RPCS"; then
+# Checks the Bash command only: a file that mentions an endpoint is not a call.
+MAINNET_RPCS="mainnet\.infura\.io|rpc\.ankr\.com/eth|api\.etherscan\.io|btc\.getblock\.io|rpc\.mainnet|solana-mainnet|gateway\.liquify\.com/chain/thorchain_|mayanode\.mayachain\.info"
+if echo "$CMD" | grep -qiE "$MAINNET_RPCS"; then
   echo "Mainnet RPC endpoint detected. Use testnet for development." >&2
   exit 2
 fi
