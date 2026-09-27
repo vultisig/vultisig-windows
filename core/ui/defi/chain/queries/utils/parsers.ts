@@ -44,8 +44,15 @@ export const toBondStatusLabel = (status?: string) => {
   return bondStatusMap[normalized] ?? 'unknown'
 }
 
+const unbondableNodeStatuses = new Set(['standby', 'disabled', 'whitelisted'])
+
+/**
+ * Whether the chain accepts an unbond from a node in this status. THORChain and
+ * MayaChain reject unbonds from Active and Ready nodes, so only statuses known
+ * to be unbondable pass; anything unrecognized fails closed.
+ */
 export const canUnbondNode = (status: string) =>
-  status.toLowerCase() !== 'active'
+  unbondableNodeStatuses.has(toBondStatusLabel(status))
 
 type EstimateNextChurnInput = {
   nextChurnHeight?: number
