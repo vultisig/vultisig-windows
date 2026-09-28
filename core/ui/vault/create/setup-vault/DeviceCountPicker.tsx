@@ -90,8 +90,12 @@ export const DeviceCountPicker = ({
   renderBelowMin,
 }: DeviceCountPickerProps) => {
   const { t } = useTranslation()
-  const { RiveComponent, selectedDeviceCount, setSelectedDeviceCount } =
-    useDeviceSelectionAnimation({ initialIndex })
+  const {
+    RiveComponent,
+    isSelectionReady,
+    selectedDeviceCount,
+    setSelectedDeviceCount,
+  } = useDeviceSelectionAnimation({ initialIndex })
   const isDraggingSliderRef = useRef(false)
 
   const isWithinSliderBand = (event: PointerEvent<HTMLCanvasElement>) => {
@@ -129,7 +133,11 @@ export const DeviceCountPicker = ({
         }
       >
         <VStack flexGrow alignItems="center" justifyContent="center">
-          <AnimationContainer>
+          <AnimationContainer
+            data-testid="device-count-picker"
+            data-selection-ready={isSelectionReady}
+            data-selection-index={selectedDeviceCount}
+          >
             <RiveComponent
               style={{ width: '100%', height: '100%' }}
               onPointerDown={event => {

@@ -1,5 +1,6 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { TxStatusResult } from '@vultisig/core-chain/tx/status/resolver'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { describe, expect, it } from 'vitest'
 
 import {
@@ -127,6 +128,59 @@ describe('getTxStatusRecordUpdate', () => {
         result: { status: 'pending', isKnown: true },
       })
     ).toBeNull()
+  })
+
+  describe('the fee the transaction paid', () => {
+    const receipt = {
+      feeAmount: 5000n,
+      feeDecimals: 9,
+      feeTicker: 'SOL',
+    }
+    const networkFee = { amount: '5000', decimals: 9, ticker: 'SOL' }
+
+    it('is stored with the verdict that brought its receipt', () => {
+      expect(
+        getTxStatusRecordUpdate({
+          record: send('broadcasted'),
+          result: { status: 'success', receipt },
+        })
+      ).toMatchObject({ status: 'confirmed', data: { networkFee } })
+    })
+
+    // A reverted transaction still burned its fee.
+    it('is stored on a failure too', () => {
+      expect(
+        getTxStatusRecordUpdate({
+          record: swap(),
+          result: { status: 'error', receipt },
+        })
+      ).toMatchObject({ status: 'failed', data: { networkFee } })
+    })
+
+    it('is stored even when the verdict is the one already held', () => {
+      expect(
+        getTxStatusRecordUpdate({
+          record: send('failed'),
+          result: { status: 'error', receipt },
+        })
+      ).toMatchObject({ status: 'failed', data: { networkFee } })
+    })
+
+    it('is not rewritten once stored', () => {
+      const stored = shouldBePresent(
+        getTxStatusRecordUpdate({
+          record: send('failed'),
+          result: { status: 'error', receipt },
+        })
+      )
+
+      expect(
+        getTxStatusRecordUpdate({
+          record: stored,
+          result: { status: 'error', receipt },
+        })
+      ).toBeNull()
+    })
   })
 
   describe('a record already stored as failed', () => {

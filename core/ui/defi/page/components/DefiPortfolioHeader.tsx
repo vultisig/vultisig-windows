@@ -1,19 +1,19 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { IconButton } from '@lib/ui/buttons/IconButton'
+import { ManagePillButton } from '@core/ui/vault/components/ManagePillButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 import { SearchChain } from './SearchChain'
 
 export const DefiPortfolioHeader = () => {
-  const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
   const { t } = useTranslation()
@@ -63,17 +63,17 @@ export const DefiPortfolioHeader = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
-              <IconButton
+              <ManagePillButton
                 data-testid="manage-defi-chains-button"
-                kind="secondary"
                 onClick={() => navigate({ id: 'manageDefiChains' })}
-                style={{
-                  color: colors.primaryAccentFour.toCssValue(),
-                }}
-                size="lg"
               >
-                <HousePenIcon />
-              </IconButton>
+                <IconWrapper size={16}>
+                  <PencilIcon />
+                </IconWrapper>
+                <Text variant="footnote" color="contrast">
+                  {t('chains')}
+                </Text>
+              </ManagePillButton>
             </ManageButtonMotion>
           )}
         </AnimatePresence>

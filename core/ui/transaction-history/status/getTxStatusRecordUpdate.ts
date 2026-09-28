@@ -7,6 +7,7 @@ import {
   TransactionRecord,
   TransactionRecordStatus,
 } from '../core'
+import { isFeeBearingRecord, withReceiptNetworkFee } from './networkFee'
 
 const toRecordStatus: Record<
   TxStatusResult['status'],
@@ -63,8 +64,8 @@ type GetTxStatusRecordUpdateInput = {
 }
 
 /**
- * Maps a chain status result onto a record, returning the update to persist or
- * `null` when nothing changed. The chain is the only authority: a pending
+ * The record's new status, from a chain status result, or `null` when the
+ * verdict is the one already stored. The chain is the only authority: a pending
  * record stays pending until the chain reports success or an on-chain failure,
  * no matter how old the record is. An `expired` verdict is such a failure —
  * the chain proved the transaction could no longer be included, and it never
@@ -80,7 +81,7 @@ type GetTxStatusRecordUpdateInput = {
  * for the hash. A dApp that dropped the transaction leaves it honestly
  * `signed` rather than "in progress" for good.
  */
-export const getTxStatusRecordUpdate = ({
+const getVerdictUpdate = ({
   record,
   result,
 }: GetTxStatusRecordUpdateInput): TransactionRecord | null => {
@@ -112,4 +113,23 @@ export const getTxStatusRecordUpdate = ({
   return result.status === 'expired' && isExplainable(update)
     ? withExpiredReason(update)
     : update
+}
+
+/**
+ * Maps a chain status result onto a record, returning the update to persist or
+ * `null` when nothing changed: the new verdict (see `getVerdictUpdate`), plus
+ * the fee from the result's receipt on a send or swap that has none stored
+ * yet. A reverted transaction still paid its fee, so a failure keeps it too.
+ */
+export const getTxStatusRecordUpdate = (
+  input: GetTxStatusRecordUpdateInput
+): TransactionRecord | null => {
+  const verdict = getVerdictUpdate(input)
+  const current = verdict ?? input.record
+
+  const withFee = isFeeBearingRecord(current)
+    ? withReceiptNetworkFee({ record: current, receipt: input.result.receipt })
+    : null
+
+  return withFee ?? verdict
 }
