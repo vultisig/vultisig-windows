@@ -10,17 +10,10 @@ import { sameDimensions } from '../css/sameDimensions'
 import { BodyPortal } from '../dom/BodyPortal'
 import { CrossIcon } from '../icons/CrossIcon'
 import { HStack, VStack } from '../layout/Stack'
+import { pageConfig } from '../page/config'
 import { OnCloseProp, TitleProp } from '../props'
 import { text } from '../text'
 import { getColor } from '../theme/getters'
-
-/**
- * The sheet is edge-to-edge, but a phone-sized layout stretched across a
- * maximised desktop window reads badly, so it stops growing here and centres
- * instead. Comfortably wider than both the extension popup and the design's
- * phone frame.
- */
-const maxWidth = 480
 
 const contentInset = 24
 const headerControlSize = 32
@@ -39,7 +32,7 @@ const Card = styled(FocusLock)`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: ${maxWidth}px;
+  max-width: ${pageConfig.actionColumnWidth}px;
   max-height: 100%;
   min-height: 0;
   padding: 7px ${contentInset}px 32px;
@@ -129,9 +122,10 @@ type SheetProps = OnCloseProp &
 /**
  * A sheet rising from the bottom of the screen it was opened from, which stays
  * visible (dimmed) behind it. It meets the left, right and bottom edges of the
- * window and rounds only its top corners, up to `maxWidth`, beyond which it
- * centres. Escape and the backdrop close it, and the body scrolls on its own so
- * the header and footer stay put.
+ * window and rounds only its top corners, stopping at the width of the action
+ * column it covers so it lines up with the form behind it rather than
+ * stretching across a maximised desktop window. Escape and the backdrop close
+ * it, and the body scrolls on its own so the header and footer stay put.
  */
 export const Sheet = ({
   title,
