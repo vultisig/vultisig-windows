@@ -116,6 +116,7 @@ export const useDeviceSelectionAnimation = ({
 
   return {
     RiveComponent,
+    isSelectionReady: indexProperty.value !== null,
     selectedDeviceCount: indexProperty?.value ?? 0,
     setSelectedDeviceCount,
   }
