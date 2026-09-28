@@ -165,7 +165,13 @@ export const KeysignTxOverview = ({
               </HStack>
             </VStack>
           )}
-          {memoValue && <TxOverviewMemo value={memoValue} chain={chain} />}
+          {memoValue && (
+            <TxOverviewMemo
+              value={memoValue}
+              chain={chain}
+              withinDetailsSection
+            />
+          )}
           {destinationTag !== undefined && (
             <HStack justifyContent="space-between">
               <Text color="shy" weight="500">
