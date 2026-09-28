@@ -1,15 +1,17 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { ManagePillButton } from '@core/ui/vault/components/ManagePillButton'
 import { Tabs } from '@lib/ui/base/Tabs'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { HousePenIcon } from '@lib/ui/icons/HousePenIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css, useTheme } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { getDefiChainTabs } from './config'
@@ -52,7 +54,6 @@ export const DefiChainTabs = () => {
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
     requestedTab ?? getLastDefiChainTab(chain) ?? defaultTab
   )
-  const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const tabs = useMemo(
     () =>
@@ -97,21 +98,22 @@ export const DefiChainTabs = () => {
           <HStack gap={12} alignItems="center">
             {children}
           </HStack>
-          <IconButton
-            kind="secondary"
+          <ManagePillButton
+            data-testid="manage-defi-positions-button"
             onClick={() =>
               navigate({
                 id: 'manageDefiPositions',
                 state: { chain, returnTab: activeTab },
               })
             }
-            style={{
-              color: colors.info.toCssValue(),
-            }}
-            size="lg"
           >
-            <HousePenIcon />
-          </IconButton>
+            <IconWrapper size={16}>
+              <WalletIcon />
+            </IconWrapper>
+            <Text variant="footnote" color="contrast">
+              {t('position_label')}
+            </Text>
+          </ManagePillButton>
         </TabsHeader>
       )}
     />
