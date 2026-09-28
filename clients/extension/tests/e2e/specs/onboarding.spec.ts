@@ -143,8 +143,8 @@ test.describe('Onboarding Flow', () => {
       throw new Error('Device-selection Rive canvas is unavailable')
     }
 
-    const plusY = canvasBounds.y + canvasBounds.height * 0.36
-    // Center of the visible Rive plus control at the popup viewport.
+    const plusY = canvasBounds.y + canvasBounds.height * 0.33
+    // Upper half of the visible plus control, outside the slider pointer band.
     await page.mouse.click(canvasBounds.x + canvasBounds.width * 0.91, plusY)
 
     await expect(picker).toHaveAttribute('data-selection-index', '1')
