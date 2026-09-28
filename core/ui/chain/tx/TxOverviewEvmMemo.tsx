@@ -32,30 +32,36 @@ export const TxOverviewEvmMemo = ({ value }: ValueProp<string>) => {
         const { functionSignature, functionArguments } = info
 
         return (
-          <Collapse title={t('transaction_details')}>
-            <VStack gap={4}>
-              <Text color="shy" size={12}>
-                {t('function_signature')}
-              </Text>
-              <Text color="primary" family="mono" size={14} weight="700">
-                {functionSignature}
-              </Text>
-            </VStack>
-            <VStack gap={4}>
-              <Text color="shy" size={12}>
-                {t('function_arguments')}
-              </Text>
-              <Text
-                color="primary"
-                family="mono"
-                size={14}
-                weight="700"
-                style={{ wordBreak: 'break-all' }}
-              >
-                {functionArguments}
-              </Text>
-            </VStack>
-          </Collapse>
+          // `Collapse` draws its own border, so it must not sit as a direct
+          // child of a container that spaces children with padding
+          // (`SeparatedByLine`): that padding lands inside the card and leaves
+          // dead space under the collapsed header. The wrapper takes it instead.
+          <VStack>
+            <Collapse title={t('transaction_details')}>
+              <VStack gap={4}>
+                <Text color="shy" size={12}>
+                  {t('function_signature')}
+                </Text>
+                <Text color="primary" family="mono" size={14} weight="700">
+                  {functionSignature}
+                </Text>
+              </VStack>
+              <VStack gap={4}>
+                <Text color="shy" size={12}>
+                  {t('function_arguments')}
+                </Text>
+                <Text
+                  color="primary"
+                  family="mono"
+                  size={14}
+                  weight="700"
+                  style={{ wordBreak: 'break-all' }}
+                >
+                  {functionArguments}
+                </Text>
+              </VStack>
+            </Collapse>
+          </VStack>
         )
       }}
     />
