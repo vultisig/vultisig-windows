@@ -25,6 +25,7 @@ import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareArrowTopRightIcon } from '@lib/ui/icons/SquareArrowTopRightIcon'
+import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -45,7 +46,7 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { formatUnits } from 'ethers'
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
@@ -53,14 +54,28 @@ import styled from 'styled-components'
 import { useTxHash } from '../../../chain/state/txHash'
 import { getTxSuccessAmountPresentation } from './getTxSuccessAmountPresentation'
 import { getWasmExecuteTxDisplay } from './getWasmExecuteTxDisplay'
+import { isAmountlessRippleSignData } from './isAmountlessRippleSignData'
 import { TransactionStatusAnimation } from './TransactionStatusAnimation'
 import { TxStatusTracker } from './TxStatusTracker'
 
+/**
+ * The done screen for a signed transaction: the status tracker, the single hero
+ * naming the operation and the asset it moves, and the tx-hash row.
+ *
+ * Owns the only hero on this screen. `txDetails` is revealed in place beneath
+ * it rather than on a screen of its own, so one signed transaction cannot be
+ * described two different ways — the same two-slot composition iOS
+ * (`DoneScreen`) and Android (`TxDoneScaffold`) use.
+ */
 export const TxSuccess = ({
-  onSeeTxDetails,
+  areTxDetailsOpen,
+  onToggleTxDetails,
+  txDetails,
   value,
 }: ValueProp<KeysignPayload> & {
-  onSeeTxDetails: () => void
+  areTxDetailsOpen: boolean
+  onToggleTxDetails: () => void
+  txDetails: ReactNode
 }) => {
   const { t } = useTranslation()
   const { coin: potentialCoin, toAmount, skipBroadcast } = value
@@ -227,6 +242,11 @@ export const TxSuccess = ({
     txActionLabel,
   })
 
+  // An offer or a trust line carries no single send amount, so the hero must
+  // not claim "0 XRP"; `SignRippleDisplay` reports their real figures in the
+  // details below. A dApp `Payment` does bind its drops, and keeps its hero.
+  const hidesRippleAmount = isAmountlessRippleSignData(value)
+
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
     entity: 'tx',
@@ -280,10 +300,11 @@ export const TxSuccess = ({
             amountOverride={displayAmountOverride}
             hideZeroAmount={amountPresentation.hideZeroAmount}
             hideAmount={
-              usesDecodedTitle &&
-              !wasmDisplay &&
-              !txActionHasAmount &&
-              !decodedAmountCanBeShown(decodedTransaction.amount)
+              hidesRippleAmount ||
+              (usesDecodedTitle &&
+                !wasmDisplay &&
+                !txActionHasAmount &&
+                !decodedAmountCanBeShown(decodedTransaction.amount))
             }
           />
         )}
@@ -348,12 +369,17 @@ export const TxSuccess = ({
             />
           )}
           <ListItem
-            onClick={onSeeTxDetails}
+            onClick={onToggleTxDetails}
             title={<Text size={14}>{t('transaction_details')}</Text>}
             hoverable
-            showArrow
+            extra={
+              <IconWrapper size={16} color="textShy">
+                <CollapsableStateIndicator isOpen={areTxDetailsOpen} />
+              </IconWrapper>
+            }
           />
         </List>
+        {areTxDetailsOpen ? txDetails : null}
       </VStack>
     </VStack>
   )

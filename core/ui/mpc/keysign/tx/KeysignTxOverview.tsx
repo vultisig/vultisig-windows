@@ -2,33 +2,17 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTxHash } from '@core/ui/chain/state/txHash'
 import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
-import {
-  getTronStakingDisplay,
-  tronStakingTitleKey,
-} from '@core/ui/chain/tx/getTronStakingDisplay'
+import { getTronStakingDisplay } from '@core/ui/chain/tx/getTronStakingDisplay'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
-import {
-  decodedAmountCanBeShown,
-  decodeSignedTransaction,
-} from '@core/ui/mpc/keysign/transaction-decoding/decodeSignedTransaction'
-import { getDoneTransactionTitleKey } from '@core/ui/mpc/keysign/transaction-decoding/presentation'
-import { useThorchainInboundAddresses } from '@core/ui/mpc/keysign/transaction-decoding/useThorchainInboundAddresses'
-import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
-import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
-import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
 import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -51,62 +35,42 @@ type KeysignTxOverviewProps = {
   toAddressLabel?: string
 }
 
+/**
+ * The signed transaction's detail rows — from, to, memo, network and fee —
+ * revealed in place beneath the done screen's hero.
+ *
+ * Renders no amount hero and no tx-hash row on purpose: both belong to the
+ * hero above, which reads the payload far more thoroughly (4byte function
+ * names, ERC-20 token resolution, Blockaid simulation). A hero here would be a
+ * second, poorer answer to the question the first one already answered — which
+ * is exactly how an ERC-20 approve came to be reported as a 0 ETH contract
+ * execution once the details were opened.
+ */
 export const KeysignTxOverview = ({
   toAddressLabel,
 }: KeysignTxOverviewProps) => {
   const { t } = useTranslation()
-  const openExternalUrl = useOpenExternalUrl()
   const { name } = useCurrentVault()
   const keysignPayload = getRecordUnionValue(
     useKeysignMessagePayload(),
     'keysign'
   )
-  const { toAddress, toAmount, coin: potentialCoin } = keysignPayload
+  const { toAddress, coin: potentialCoin } = keysignPayload
   const { destinationTag, memo } = getRippleKeysignDisplay(keysignPayload)
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const { address, chain } = shouldBePresent(coin)
 
   // A wasm contract execute (e.g. stake/unstake) is signed purely from
-  // `contractPayload`; derive its amount / asset / destination from that same
-  // payload so display can't diverge from what is signed.
+  // `contractPayload`; take its destination from that same payload so display
+  // can't diverge from what is signed.
   const wasmDisplay = getWasmExecuteTxDisplay(keysignPayload)
-  const displayCoin = wasmDisplay?.coin ?? coin
   const displayToAddress = wasmDisplay?.receiver ?? toAddress ?? ''
 
-  const formattedToAmount = wasmDisplay
-    ? fromChainAmount(BigInt(wasmDisplay.fundAmount), displayCoin.decimals)
-    : toAmount
-      ? fromChainAmount(BigInt(toAmount), displayCoin.decimals)
-      : null
-
   // A TRON freeze/unfreeze carries its operation as an internal memo marker
-  // that the signer turns into a staking contract, so name the operation and
-  // surface the staked resource instead of reporting a send with a raw marker
-  // for a memo the chain never sees.
+  // that the signer turns into a staking contract, so surface the staked
+  // resource instead of a raw marker the chain never sees.
   const tronStaking = getTronStakingDisplay({ chain, memo })
   const memoValue = tronStaking ? tronStaking.resource : memo
-
-  const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
-  const thorchainInboundAddresses = useThorchainInboundAddresses(keysignPayload)
-  const decodedTransaction = decodeSignedTransaction(keysignPayload, {
-    thorchainInboundAddresses,
-  })
-  const decodedDoneTitleKey = getDoneTransactionTitleKey(
-    decodedTransaction.operation
-  )
-  const usesDecodedTitle =
-    !tronStaking &&
-    (!txAction || txAction.action === 'send') &&
-    decodedDoneTitleKey !== undefined
-
-  const showAmountOrAction =
-    // A dApp XRPL transaction carries no single send amount (`toAmount` is 0,
-    // an offer is two-sided); SignRippleDisplay renders the real figures, so
-    // suppress the generic "0 XRP" header here.
-    keysignPayload.signData.case !== 'signRipple' &&
-    (formattedToAmount !== null ||
-      (txAction !== null && txAction.action !== 'send') ||
-      usesDecodedTitle)
 
   const toVaultName = useVaultNameForAddress({
     address: displayToAddress,
@@ -125,12 +89,6 @@ export const KeysignTxOverview = ({
   })
   const receipt = txStatusQuery.data?.receipt
 
-  const blockExplorerUrl = getBlockExplorerUrl({
-    chain,
-    entity: 'tx',
-    value: txHash,
-  })
-
   const suiTxData =
     keysignPayload.signData.case === 'signSui'
       ? parseSuiTx(keysignPayload.signData.value.unsignedTxMsg)
@@ -143,48 +101,10 @@ export const KeysignTxOverview = ({
 
   return (
     <>
-      {showAmountOrAction && (
-        <TxOverviewAmount
-          amount={
-            txAction && 'amount' in txAction && txAction.amount !== undefined
-              ? txAction.amount
-              : (formattedToAmount ?? 0)
-          }
-          value={displayCoin}
-          actionLabel={
-            txAction?.action !== 'send' ? txAction?.labelKey : undefined
-          }
-          resolvedLabel={
-            tronStaking
-              ? t(tronStakingTitleKey[tronStaking.operation])
-              : usesDecodedTitle && decodedDoneTitleKey
-                ? t(decodedDoneTitleKey)
-                : undefined
-          }
-          hideAmount={
-            usesDecodedTitle &&
-            !wasmDisplay &&
-            !decodedAmountCanBeShown(decodedTransaction.amount)
-          }
-        />
-      )}
       {suiTxData && <SignSuiDisplay data={suiTxData} />}
       {rippleRawJson !== null && <SignRippleDisplay rawJson={rippleRawJson} />}
       <Panel>
         <SeparatedByLine gap={16}>
-          {!keysignPayload.skipBroadcast && (
-            <HStack alignItems="center" gap={4} justifyContent="space-between">
-              <Text color="shy" weight="500">
-                {t('tx_hash')}
-              </Text>
-              <HStack alignItems="center" gap={4}>
-                <MiddleTruncate text={txHash} width={140} />
-                <IconButton onClick={() => openExternalUrl(blockExplorerUrl)}>
-                  <SquareArrowOutUpRightIcon />
-                </IconButton>
-              </HStack>
-            </HStack>
-          )}
           <HStack
             alignItems="center"
             gap={8}
@@ -245,7 +165,13 @@ export const KeysignTxOverview = ({
               </HStack>
             </VStack>
           )}
-          {memoValue && <TxOverviewMemo value={memoValue} chain={chain} />}
+          {memoValue && (
+            <TxOverviewMemo
+              value={memoValue}
+              chain={chain}
+              withinDetailsSection
+            />
+          )}
           {destinationTag !== undefined && (
             <HStack justifyContent="space-between">
               <Text color="shy" weight="500">
