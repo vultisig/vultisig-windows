@@ -1,4 +1,5 @@
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useState } from 'react'
 
 import { SwapFlowResult } from '../form/swapFlowResult'
@@ -6,7 +7,7 @@ import { SwapForm } from '../form/SwapForm'
 import { LimitOrderReview } from '../limit/LimitOrderReview'
 import { AdvancedSwapSettingsProvider } from '../state/advancedSettings'
 import { FromAmountProvider } from '../state/fromAmount'
-import { FromAmountDecimalsSync } from '../state/FromAmountDecimalsSync'
+import { useSwapFromCoin } from '../state/fromCoin'
 import { SwapRouteOverrideProvider } from '../state/routeOverride'
 import { SwapRouteOverrideReset } from '../state/SwapRouteOverrideReset'
 import { SwapVerify } from '../verify/SwapVerify'
@@ -18,12 +19,13 @@ import { SwapVerify } from '../verify/SwapVerify'
  */
 export const SwapPage = () => {
   const [{ fromAmount }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
+  const { decimals } = useCurrentVaultCoin(fromCoinKey)
   const [result, setResult] = useState<SwapFlowResult | null>(null)
   const onBack = () => setResult(null)
 
   return (
-    <FromAmountProvider initialValue={fromAmount ?? null}>
-      <FromAmountDecimalsSync />
+    <FromAmountProvider initialValue={{ amount: fromAmount ?? null, decimals }}>
       <AdvancedSwapSettingsProvider>
         <SwapRouteOverrideProvider initialValue={null}>
           <SwapRouteOverrideReset />
