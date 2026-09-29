@@ -36,29 +36,3 @@ export const getSwapArrivalOutcome = ({
     refunded: () => 'failed',
     error: () => 'failed',
   })
-
-type GetSwapOutcomeInput = {
-  source: TxStatusResult | undefined
-  arrival: SwapArrivalStatusResult | undefined
-  tracksArrival: boolean
-}
-
-/**
- * The swap's outcome from both reads. The source transaction decides first:
- * until it confirms there is nothing for the provider to have seen, and if it
- * fails the swap never started. Once it confirms, a tracked provider has the
- * last word, and until it gives one the swap is still pending — a confirmed
- * deposit is not a completed swap.
- */
-export const getSwapOutcome = ({
-  source,
-  arrival,
-  tracksArrival,
-}: GetSwapOutcomeInput): SwapOutcome => {
-  if (!source) return 'pending'
-
-  const sourceOutcome = getSwapSourceOutcome(source)
-  if (sourceOutcome !== 'success' || !tracksArrival) return sourceOutcome
-
-  return arrival ? getSwapArrivalOutcome(arrival) : 'pending'
-}
