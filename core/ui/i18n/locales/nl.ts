@@ -479,10 +479,11 @@ export const nl = {
   seedPhraseImportTip: 'Tip: Je kunt een browser als apparaat gebruiken.',
   enter_your_seedphrase: 'Voer je seed phrase in',
   enter_seedphrase_subtitle:
-    'Laat een spatie tussen elk woord. Seed phrases van <h>12 of 24 woorden</h> worden ondersteund.',
-  mnemonic_placeholder: 'Voer de 12 of 24 woorden van je seed phrase in',
+    'Laat een spatie tussen elk woord. Ondersteunde lengtes:<h> 12, 15, 18, 21 of 24 woorden</h>',
+  mnemonic_placeholder:
+    'Voer de 12, 15, 18, 21 of 24 woorden van uw seedphrase in.',
   seedphrase_word_count_error:
-    'Je hebt {{count}} woorden ingevoerd. Seed phrase moet 12 of 24 woorden zijn',
+    'U hebt {{count}} woorden ingevoerd. De seed phrase moet 12, 15, 18, 21 of 24 woorden lang zijn.',
   seedphrase_invalid_error:
     'Seed phrase is niet correct, controleer alle woorden.',
   seedphrase_duplicate_vault_error:

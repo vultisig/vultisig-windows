@@ -479,10 +479,10 @@ export const ru = {
     'Совет: Вы можете использовать браузер в качестве устройства.',
   enter_your_seedphrase: 'Введите вашу seed phrase',
   enter_seedphrase_subtitle:
-    'Оставляйте пробел между словами. Поддерживаются seed phrases из <h>12 или 24 слов</h>.',
-  mnemonic_placeholder: 'Введите 12 или 24 слова вашей seed phrase',
+    'Оставляйте пробел между словами. Поддерживаемые длины:<h> 12, 15, 18, 21 или 24 слова</h>',
+  mnemonic_placeholder: 'Введите 12, 15, 18, 21 или 24 слова вашей сид-фразы.',
   seedphrase_word_count_error:
-    'Вы ввели {{count}} слов. Seed phrase должна содержать 12 или 24 слова',
+    'Вы ввели {{count}} слов. Начальная фраза должна состоять из 12, 15, 18, 21 или 24 слов.',
   seedphrase_invalid_error: 'Seed phrase неверна, проверьте все слова.',
   seedphrase_duplicate_vault_error:
     'Эта сид-фраза уже импортирована в хранилище как &quot;{{vaultName}}&quot;. Пожалуйста, импортируйте другую сид-фразу.',

@@ -490,10 +490,11 @@ export const de = {
   seedPhraseImportTip: 'Tipp: Sie können einen Browser als Gerät verwenden',
   enter_your_seedphrase: 'Geben Sie Ihre Seed-Phrase ein',
   enter_seedphrase_subtitle:
-    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Unterstützt werden Seed-Phrasen mit <h>12 oder 24 Wörtern</h>.',
-  mnemonic_placeholder: 'Geben Sie die 12 oder 24 Wörter Ihrer Seedphrase ein.',
+    'Lassen Sie zwischen den Wörtern jeweils ein Leerzeichen. Unterstützte Längen:<h> 12, 15, 18, 21 oder 24 Wörter</h>',
+  mnemonic_placeholder:
+    'Geben Sie die 12, 15, 18, 21 oder 24 Wörter Ihrer Seedphrase ein.',
   seedphrase_word_count_error:
-    'Sie haben {{count}} Wörter eingegeben. Der Startsatz muss 12 oder 24 Wörter lang sein.',
+    'Sie haben {{count}} Wörter eingegeben. Die Seed-Phrase muss 12, 15, 18, 21 oder 24 Wörter lang sein.',
   seedphrase_invalid_error:
     'Der Seed-Phrase ist nicht korrekt, bitte überprüfen Sie alle Wörter.',
   seedphrase_duplicate_vault_error:
