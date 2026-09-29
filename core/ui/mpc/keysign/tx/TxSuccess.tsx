@@ -54,6 +54,7 @@ import styled from 'styled-components'
 import { useTxHash } from '../../../chain/state/txHash'
 import { getTxSuccessAmountPresentation } from './getTxSuccessAmountPresentation'
 import { getWasmExecuteTxDisplay } from './getWasmExecuteTxDisplay'
+import { isAmountlessRippleSignData } from './isAmountlessRippleSignData'
 import { TransactionStatusAnimation } from './TransactionStatusAnimation'
 import { TxStatusTracker } from './TxStatusTracker'
 
@@ -241,10 +242,10 @@ export const TxSuccess = ({
     txActionLabel,
   })
 
-  // A dApp XRPL transaction carries no single send amount (`toAmount` is 0 and
-  // an offer is two-sided); `SignRippleDisplay` reports the real figures in the
-  // details below, so the hero must not claim "0 XRP".
-  const isRippleSignData = value.signData.case === 'signRipple'
+  // An offer or a trust line carries no single send amount, so the hero must
+  // not claim "0 XRP"; `SignRippleDisplay` reports their real figures in the
+  // details below. A dApp `Payment` does bind its drops, and keeps its hero.
+  const hidesRippleAmount = isAmountlessRippleSignData(value)
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
@@ -299,7 +300,7 @@ export const TxSuccess = ({
             amountOverride={displayAmountOverride}
             hideZeroAmount={amountPresentation.hideZeroAmount}
             hideAmount={
-              isRippleSignData ||
+              hidesRippleAmount ||
               (usesDecodedTitle &&
                 !wasmDisplay &&
                 !txActionHasAmount &&
