@@ -6,6 +6,7 @@ import { SwapForm } from '../form/SwapForm'
 import { LimitOrderReview } from '../limit/LimitOrderReview'
 import { AdvancedSwapSettingsProvider } from '../state/advancedSettings'
 import { FromAmountProvider } from '../state/fromAmount'
+import { FromAmountDecimalsSync } from '../state/FromAmountDecimalsSync'
 import { SwapRouteOverrideProvider } from '../state/routeOverride'
 import { SwapRouteOverrideReset } from '../state/SwapRouteOverrideReset'
 import { SwapVerify } from '../verify/SwapVerify'
@@ -22,6 +23,7 @@ export const SwapPage = () => {
 
   return (
     <FromAmountProvider initialValue={fromAmount ?? null}>
+      <FromAmountDecimalsSync />
       <AdvancedSwapSettingsProvider>
         <SwapRouteOverrideProvider initialValue={null}>
           <SwapRouteOverrideReset />
