@@ -6,6 +6,8 @@ import {
 } from '@clients/extension/src/inpage/providers/ethereum/handlers'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import EventEmitter from 'events'
 
@@ -13,6 +15,19 @@ import { toEip1193Error } from './eip1193Translate'
 
 export { processSignature }
 
+/** Methods after which the background's EVM chain for this site may differ. */
+const chainSyncMethods = [
+  'eth_requestAccounts',
+  'wallet_requestPermissions',
+  'wallet_switchEthereumChain',
+  'wallet_addEthereumChain',
+] as const
+
+/**
+ * EIP-1193 provider injected into dApp pages. `chainId` and `networkVersion`
+ * mirror the chain the background resolves for this site and are kept in
+ * sync on load, after chain-affecting requests and on background events.
+ */
 export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   public chainId: string
   public connected: boolean
@@ -25,6 +40,7 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   public selectedAddress: string
   public sendAsync
   public static instance: Ethereum | null = null
+  private chainIdSyncId = 0
 
   constructor() {
     super()
@@ -53,10 +69,29 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
       })
 
       addBackgroundEventListener('evmChainChanged', chainId => {
-        this.chainId = chainId
-        this.emit('networkChanged', Number(this.chainId))
-        this.emit('chainChanged', this.chainId)
+        this.chainIdSyncId++
+        this.setChainId(chainId)
       })
+
+      void attempt(this.syncChainId)
+    }
+  }
+
+  private setChainId(chainId: string) {
+    if (chainId === this.chainId) return
+
+    this.chainId = chainId
+    this.networkVersion = Number(chainId).toString()
+    this.emit('networkChanged', Number(chainId))
+    this.emit('chainChanged', chainId)
+  }
+
+  private syncChainId = async () => {
+    const syncId = ++this.chainIdSyncId
+    const chainId = await ethereumHandlers.eth_chainId()
+
+    if (syncId === this.chainIdSyncId) {
+      this.setChainId(chainId)
     }
   }
 
@@ -80,12 +115,21 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     return this.request({ method: 'eth_requestAccounts', params: [] })
   }
 
-  async request(data: RequestInput) {
+  request = async (data: RequestInput) => {
     if (data.method in ethereumHandlers) {
       try {
-        return await ethereumHandlers[
+        const result = await ethereumHandlers[
           data.method as keyof typeof ethereumHandlers
         ](data.params as never)
+
+        if (data.method === 'eth_chainId' && typeof result === 'string') {
+          this.chainIdSyncId++
+          this.setChainId(result)
+        } else if (isOneOf(data.method, chainSyncMethods)) {
+          await attempt(this.syncChainId)
+        }
+
+        return result
       } catch (error) {
         throw toEip1193Error(error)
       }
