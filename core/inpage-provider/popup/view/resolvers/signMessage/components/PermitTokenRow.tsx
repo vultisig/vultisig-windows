@@ -101,6 +101,7 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
             size={14}
             text={numericLabel}
             weight={500}
+            flexGrow
           />
         )}
       </HStack>

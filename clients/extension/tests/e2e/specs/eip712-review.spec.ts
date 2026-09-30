@@ -163,6 +163,10 @@ test('EIP-712 review shows nested data, copies exact values, retains raw data an
       path: test.info().outputPath('generic-narrow.png'),
     })
     await popup.setViewportSize({ width: 480, height: 600 })
+    await popup.getByText(contents, { exact: true }).scrollIntoViewIfNeeded()
+    await popup.screenshot({
+      path: test.info().outputPath('generic-contents.png'),
+    })
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
     for (const [label, expected] of [
       ['id', id],
@@ -182,6 +186,12 @@ test('EIP-712 review shows nested data, copies exact values, retains raw data an
     await popup.getByText('taker', { exact: true }).scrollIntoViewIfNeeded()
     await popup.screenshot({
       path: test.info().outputPath('generic-nested.png'),
+    })
+    await popup
+      .getByText(order.message.unexpected.note, { exact: true })
+      .scrollIntoViewIfNeeded()
+    await popup.screenshot({
+      path: test.info().outputPath('generic-unexpected.png'),
     })
     const raw = popup.getByRole('button', { name: /raw message/i })
     await raw.click()
@@ -217,8 +227,12 @@ test('EIP-712 review shows nested data, copies exact values, retains raw data an
     }
     const permitPopup = await openReview(permit)
     await expect(
-      permitPopup.getByText('Token approval', { exact: true })
+      permitPopup.getByText('Token Approval', { exact: true })
     ).toBeVisible()
+    await expect(permitPopup.getByText('1 USDC', { exact: true })).toBeVisible()
+    await permitPopup
+      .getByText('No expiry', { exact: true })
+      .scrollIntoViewIfNeeded()
     await expect(
       permitPopup.getByText('Spender', { exact: true })
     ).toBeVisible()
