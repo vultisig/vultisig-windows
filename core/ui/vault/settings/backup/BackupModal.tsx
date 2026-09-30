@@ -34,6 +34,7 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
         const Icon = backupOptionIcon[option]
         return (
           <BackupOption
+            isSmall={isSmall}
             title={t(`${option}_backup`)}
             key={option}
             icon={<Icon />}
