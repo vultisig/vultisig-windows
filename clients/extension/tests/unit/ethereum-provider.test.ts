@@ -34,6 +34,7 @@ vi.mock('@clients/extension/src/inpage/providers/ethereum/handlers', () => ({
 }))
 
 // Now import the class under test and the mocked handlers
+import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { ethereumHandlers } from '@clients/extension/src/inpage/providers/ethereum/handlers'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum/index'
 
@@ -352,6 +353,38 @@ describe('Ethereum Provider', () => {
       eth.emit('chainChanged', '0xb')
 
       expect(listener).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('background accountsChanged event', () => {
+    const getAccountsChangedListener = () => {
+      const call = vi
+        .mocked(addBackgroundEventListener)
+        .mock.calls.find(([event]) => event === 'accountsChanged')
+
+      return call?.[1] as () => Promise<void>
+    }
+
+    it('re-reads the accounts and emits them', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      mockedHandlers.eth_accounts.mockResolvedValue(['0xb0b'])
+
+      await getAccountsChangedListener()()
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith(['0xb0b'])
+    })
+
+    it('emits an empty list when the site has no accounts in the new vault', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      mockedHandlers.eth_accounts.mockResolvedValue([])
+
+      await getAccountsChangedListener()()
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith([])
     })
   })
 })

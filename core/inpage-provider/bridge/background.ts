@@ -19,7 +19,11 @@ import {
 } from '../background/interface'
 import { BackgroundMessage } from '../background/resolver'
 import { backgroundResolvers } from '../background/resolvers'
-import { AuthorizedCallContext, CallContext } from '../call/context'
+import {
+  AuthorizedCallContext,
+  CallContext,
+  CallInitialContext,
+} from '../call/context'
 import {
   AuthorizedPopupMethod,
   authorizedPopupMethods,
@@ -28,6 +32,7 @@ import {
 } from '../popup/interface'
 import { PopupMessage } from '../popup/resolver'
 import { callPopupFromBackground } from '../popup/resolvers/background'
+import { getBridgeMessageAccount } from './getBridgeMessageAccount'
 import { InpageProviderBridgeMessage } from './message'
 
 /** Resolve a background call using the given context. */
@@ -141,7 +146,7 @@ async function authorizePopupContext({
   initialContext,
 }: {
   call: PopupMessage<AuthorizedPopupMethod>['call']
-  initialContext: CallContext
+  initialContext: CallInitialContext
 }): Promise<AuthorizedCallContext> {
   const context = await authorizeContext(initialContext)
   assertPopupAuthorization({ call, context })
@@ -151,7 +156,7 @@ async function authorizePopupContext({
 /** Build call context: authorize from storage (bound to the trusted origin) for authorized methods. */
 async function buildCallContext(
   message: InpageProviderBridgeMessage,
-  initialContext: CallContext
+  initialContext: CallInitialContext
 ): Promise<CallContext> {
   if (
     'popup' in message &&
@@ -174,7 +179,10 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
   runBridgeBackgroundAgent<InpageProviderBridgeMessage, Result>({
     handleRequest: ({ message, context: initialContext, reply }) => {
       attempt(async () => {
-        const context = await buildCallContext(message, initialContext)
+        const context = await buildCallContext(message, {
+          ...initialContext,
+          account: getBridgeMessageAccount(message),
+        })
 
         return matchRecordUnion<InpageProviderBridgeMessage, Promise<unknown>>(
           message,
