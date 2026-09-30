@@ -170,6 +170,7 @@ export default defineConfig({
         '**/fast-vault-creation.spec.ts',
         '**/seedphrase-import.spec.ts',
         '**/dapp-provider.spec.ts',
+        '**/eip712-review.spec.ts',
         '**/keysign-stability.spec.ts',
         '**/extension.spec.ts',
         '**/extension-ui.spec.ts',

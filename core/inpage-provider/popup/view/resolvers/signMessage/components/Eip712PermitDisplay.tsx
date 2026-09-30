@@ -1,4 +1,5 @@
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
+import { Eip712TypedDataDisplay } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Eip712TypedDataDisplay'
 import { PermitTokenRow } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/PermitTokenRow'
 import {
   Divider,
@@ -154,6 +155,8 @@ const permitParsers: Record<string, PermitParser> = {
 }
 
 const parsePermit = (payload: Eip712V4Payload): PermitInfo | null => {
+  if (!Object.prototype.hasOwnProperty.call(permitParsers, payload.primaryType))
+    return null
   const parser = permitParsers[payload.primaryType]
   if (!parser) return null
   const parsed = parser(payload.message, payload.domain)
@@ -169,13 +172,6 @@ const formatDeadline = (deadline: bigint, fallback: string): string => {
   const ms = deadline * 1000n
   if (ms > BigInt(Number.MAX_SAFE_INTEGER)) return fallback
   return new Date(Number(ms)).toLocaleString()
-}
-
-const formatPrimitive = (value: unknown): string => {
-  if (value === null || value === undefined) return ''
-  if (typeof value === 'bigint') return value.toString()
-  if (typeof value === 'object') return JSON.stringify(value)
-  return String(value)
 }
 
 // Long, unbroken values (keys, hashes) are flex items inside a nowrap row.
@@ -218,34 +214,7 @@ export const Eip712PermitDisplay: FC<Eip712PermitDisplayProps> = ({
   const permitInfo = parsePermit(payload)
 
   if (!permitInfo) {
-    const { domain, primaryType, message } = payload
-    const entries = Object.entries(message)
-    return (
-      <Section gap={12} padding={24}>
-        {isString(domain.name) && (
-          <>
-            <Row label={t('domain')} value={domain.name} />
-            <Divider />
-          </>
-        )}
-        {domain.chainId !== undefined && (
-          <>
-            <Row
-              label={t('chain_id')}
-              value={formatPrimitive(domain.chainId)}
-            />
-            <Divider />
-          </>
-        )}
-        <Row label={t('primary_type')} value={primaryType} />
-        {entries.map(([key, value]) => (
-          <Fragment key={key}>
-            <Divider />
-            <Row label={key} value={formatPrimitive(value)} />
-          </Fragment>
-        ))}
-      </Section>
-    )
+    return <Eip712TypedDataDisplay payload={payload} />
   }
 
   const noExpiryLabel = t('no_expiry')
