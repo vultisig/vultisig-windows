@@ -120,19 +120,42 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const hasPasscodeEncryption = useIsPasscodeRequired()
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
+  const viewId = navigationHistory?.[navigationHistory.length - 1]?.id
+  const isLocked = hasPasscodeEncryption && !passcode
+  const provenSource = useRef<VaultReadabilityInputs | null>(null)
+
+  const currentInputs = vault
+    ? getVaultReadabilityInputs({
+        vault,
+        hasPasscodeEncryption,
+        passcode,
+        validateLegacyVaultKeyShares,
+      })
+    : null
+
+  // Ordinary locking deliberately removes only the in-memory passcode. The
+  // existing BlockingOverlay owns access and focus; keep the proven vault-home
+  // tree under it so Receive survives unlock. Other views still tear down:
+  // signing/session callbacks must not advance using retained shares while
+  // locked. Every other readability input must still match, and cold starts
+  // have no committed proof to reuse.
+  const lockedSource =
+    isLocked &&
+    viewId === 'vault' &&
+    currentInputs &&
+    provenSource.current &&
+    hasSameReadabilityInputs({
+      resolved: provenSource.current,
+      current: { ...currentInputs, passcode: provenSource.current.passcode },
+    })
+      ? provenSource.current
+      : null
 
   // Snapshotted during render, before any read is started, so a result can
   // never be attributed to inputs it was not read under, and stable while
   // nothing it carries changes, so it can be the read's only dependency.
   const readabilityInputs = useStableReadabilityInputs(
-    vault && !(hasPasscodeEncryption && !passcode)
-      ? getVaultReadabilityInputs({
-          vault,
-          hasPasscodeEncryption,
-          passcode,
-          validateLegacyVaultKeyShares,
-        })
-      : null
+    isLocked ? lockedSource : currentInputs
   )
 
   // The result is tagged with the exact inputs it was read under. A reshare
@@ -209,7 +232,6 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       ? shareState.result
       : null
 
-  const viewId = navigationHistory?.[navigationHistory.length - 1]?.id
   const isImportView = viewId === 'importVault'
   const isVaultWritingView =
     viewId !== undefined && vaultWritingViews.has(viewId)
@@ -229,7 +251,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       return { value: undefined }
     }
 
-    if (hasPasscodeEncryption && !passcode) {
+    if (isLocked && !lockedSource) {
       return null
     }
 
@@ -259,6 +281,10 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   })()
 
   useEffect(() => {
+    // Once the tree is withheld, its old proof cannot revive it while locked,
+    // even if storage later changes back to the old bytes.
+    provenSource.current =
+      provided && resolution?.status === 'ready' ? readabilityInputs : null
     if (provided) {
       heldValue.current = provided
     }

@@ -27,11 +27,12 @@
  *   replaced on the same object while it was in flight are never provided —
  *   and are re-read rather than leaving the tree withheld for good
  */
+import { UnreadableVaultKeySharesError } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
 import { RootCurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { act, render, screen } from '@testing-library/react'
 import type { Vault, VaultAllKeyShares } from '@vultisig/core-mpc/vault/Vault'
-import { useEffect } from 'react'
+import { Component, ReactNode, useEffect } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const storage: {
@@ -66,7 +67,10 @@ vi.mock('@core/ui/vault/state/UnreadableVaultRecovery', () => ({
 
 // The provider only reads `validateLegacyVaultKeyShares` off the core state and
 // passes it through to the share reader, which is stubbed below.
-vi.mock('@core/ui/state/core', () => ({ useCore: () => ({}) }))
+let validateLegacyVaultKeyShares: (() => Promise<void>) | undefined
+vi.mock('@core/ui/state/core', () => ({
+  useCore: () => ({ validateLegacyVaultKeyShares }),
+}))
 
 vi.mock('@lib/ui/navigation/state', () => ({
   useOptionalNavigationHistory: () => [{ id: currentViewId }],
@@ -152,6 +156,25 @@ const SetupFlow = () => {
   )
 }
 
+class ReadErrorBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  render() {
+    return this.state.failed ? (
+      <div>vault read failed</div>
+    ) : (
+      this.props.children
+    )
+  }
+}
+
 const renderTree = (children = <SetupFlow />) =>
   render(<RootCurrentVaultProvider>{children}</RootCurrentVaultProvider>)
 
@@ -180,6 +203,7 @@ describe('RootCurrentVaultProvider tree continuity', () => {
     currentViewId = 'setupFastVault'
     readCalls = []
     mountCount = 0
+    validateLegacyVaultKeyShares = undefined
   })
 
   it('keeps a running setup flow mounted when the vault it wrote becomes current', async () => {
@@ -461,5 +485,220 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
     expect(screen.queryByTestId('splash')).toBeNull()
     expect(screen.getByText('name your vault')).toBeDefined()
+  })
+
+  describe('passcode lock continuity (#5018)', () => {
+    beforeEach(() => {
+      currentViewId = 'vault'
+      storage.vaults = [makeVault()]
+      storage.currentVaultId = vaultId
+      storage.hasPasscodeEncryption = true
+      storage.passcode = '135790'
+    })
+
+    const rerenderTree = (rerender: ReturnType<typeof render>['rerender']) =>
+      rerender(
+        <RootCurrentVaultProvider>
+          <SetupFlow />
+        </RootCurrentVaultProvider>
+      )
+
+    it('preserves mounted state through repeated unchanged lock/unlock cycles without re-reading shares', async () => {
+      const { rerender } = renderTree()
+      await resolveRead()
+      await act(async () => {
+        screen.getByText('name your vault').click()
+      })
+
+      for (let cycle = 0; cycle < 2; cycle++) {
+        storage.passcode = null
+        rerenderTree(rerender)
+        await settle()
+        expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+        expect(screen.queryByTestId('splash')).toBeNull()
+
+        storage.passcode = '135790'
+        rerenderTree(rerender)
+        await settle()
+        expect(screen.getByText('keygen for Vault #1')).toBeDefined()
+        expect(mountCount).toBe(1)
+        expect(readCalls).toHaveLength(1)
+      }
+    })
+
+    it('withholds a cold-start locked vault without reading its shares', async () => {
+      storage.passcode = null
+      renderTree()
+      await settle()
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(mountCount).toBe(0)
+      expect(readCalls).toHaveLength(0)
+    })
+
+    it.each([
+      'keysign',
+      'joinKeysign',
+      'signCustomMessage',
+      'vaultBackup',
+      undefined,
+    ])(
+      'tears down the %s view on lock instead of retaining signing/session callbacks',
+      async viewId => {
+        const { rerender } = renderTree()
+        await resolveRead()
+        currentViewId = viewId as string
+        rerenderTree(rerender)
+        storage.passcode = null
+        rerenderTree(rerender)
+        await settle()
+        expect(screen.getByTestId('splash')).toBeDefined()
+        expect(screen.queryByText('name your vault')).toBeNull()
+      }
+    )
+
+    it('does not accept an in-flight read after locking an unproven vault', async () => {
+      const { rerender } = renderTree()
+      storage.passcode = null
+      rerenderTree(rerender)
+      await resolveReadAt(0)
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(mountCount).toBe(0)
+    })
+
+    it('withholds navigation away from vault home while locked and discards the continuity proof', async () => {
+      const { rerender } = renderTree()
+      await resolveRead()
+      storage.passcode = null
+      rerenderTree(rerender)
+      expect(screen.queryByTestId('splash')).toBeNull()
+
+      currentViewId = 'keysign'
+      rerenderTree(rerender)
+      expect(screen.getByTestId('splash')).toBeDefined()
+      currentViewId = 'vault'
+      rerenderTree(rerender)
+      expect(screen.getByTestId('splash')).toBeDefined()
+    })
+
+    it.each([
+      ['key shares', { keyShares: { ecdsa: 'new', eddsa: 'new' } }],
+      ['chain shares', { chainKeyShares: { Ethereum: 'new' } }],
+      ['MLDSA share', { keyShareMldsa: 'new' }],
+      ['public keys', { publicKeys: { ecdsa: vaultId, eddsa: 'new' } }],
+      ['chain public keys', { chainPublicKeys: { Ethereum: 'new' } }],
+      ['MLDSA public key', { publicKeyMldsa: 'new' }],
+      ['library type', { libType: 'GG20' }],
+    ] as const)(
+      'withholds changed %s while locked and cannot revive discarded proof',
+      async (_name, overrides) => {
+        const originalVault = storage.vaults[0]
+        const { rerender } = renderTree()
+        await resolveRead()
+        storage.passcode = null
+        rerenderTree(rerender)
+        expect(screen.queryByTestId('splash')).toBeNull()
+
+        storage.vaults = [{ ...originalVault, ...overrides } as Vault]
+        rerenderTree(rerender)
+        await settle()
+        expect(screen.getByTestId('splash')).toBeDefined()
+        expect(readCalls).toHaveLength(1)
+
+        storage.vaults = [originalVault]
+        rerenderTree(rerender)
+        await settle()
+        expect(screen.getByTestId('splash')).toBeDefined()
+
+        storage.passcode = '135790'
+        rerenderTree(rerender)
+        expect(screen.getByTestId('splash')).toBeDefined()
+        await resolveRead()
+        expect(mountCount).toBe(2)
+      }
+    )
+
+    it('withholds another vault selected while locked, including in a setup view', async () => {
+      const { rerender } = renderTree()
+      await resolveRead()
+      storage.passcode = null
+      currentViewId = 'setupFastVault'
+      storage.vaults.push(
+        makeVault({
+          publicKeys: { ecdsa: secondVaultId, eddsa: 'second-eddsa' },
+        })
+      )
+      storage.currentVaultId = secondVaultId
+      rerenderTree(rerender)
+      await settle()
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(readCalls).toHaveLength(1)
+    })
+
+    it('withholds changed encryption and validator inputs until re-proven', async () => {
+      const { rerender } = renderTree()
+      await resolveRead()
+      storage.hasPasscodeEncryption = false
+      rerenderTree(rerender)
+      expect(screen.getByTestId('splash')).toBeDefined()
+      await resolveRead()
+      expect(mountCount).toBe(2)
+
+      storage.hasPasscodeEncryption = true
+      storage.passcode = null
+      rerenderTree(rerender)
+      await settle()
+      expect(screen.getByTestId('splash')).toBeDefined()
+
+      storage.passcode = '135790'
+      rerenderTree(rerender)
+      await resolveRead()
+      storage.passcode = null
+      validateLegacyVaultKeyShares = async () => {}
+      rerenderTree(rerender)
+      expect(screen.getByTestId('splash')).toBeDefined()
+    })
+
+    it('withholds a different unlock passcode until its read succeeds', async () => {
+      const { rerender } = renderTree()
+      await resolveRead()
+      storage.passcode = null
+      rerenderTree(rerender)
+      storage.passcode = '246801'
+      rerenderTree(rerender)
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(readCalls).toHaveLength(2)
+    })
+
+    it('does not retain unreadable shares under the lock', async () => {
+      const { rerender } = renderTree()
+      await act(async () => {
+        readCalls[0].reject(new UnreadableVaultKeySharesError())
+      })
+      expect(screen.getByTestId('unreadable-recovery')).toBeDefined()
+      storage.passcode = null
+      rerenderTree(rerender)
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(mountCount).toBe(0)
+    })
+
+    it('surfaces read errors without ever mounting the vault tree', async () => {
+      const errorLog = vi.spyOn(console, 'error').mockImplementation(() => {})
+      try {
+        render(
+          <ReadErrorBoundary>
+            <RootCurrentVaultProvider>
+              <SetupFlow />
+            </RootCurrentVaultProvider>
+          </ReadErrorBoundary>
+        )
+        await act(async () => {
+          readCalls[0].reject(new Error('vault read failed'))
+        })
+        expect(screen.getByText('vault read failed')).toBeDefined()
+        expect(mountCount).toBe(0)
+      } finally {
+        errorLog.mockRestore()
+      }
+    })
   })
 })
