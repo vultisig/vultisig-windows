@@ -16,15 +16,14 @@ export const ShareAppModal = ({ onClose }: OnCloseProp) => {
 
   if (isSmall) {
     return (
-      <>
-        <Backdrop onClose={onClose} />
+      <Backdrop onClose={onClose}>
         <Wrapper>
           <Text size={15} weight={500} centerHorizontally>
             {currentProductBrandConfig.name}
           </Text>
           <ShareAppModalContent />
         </Wrapper>
-      </>
+      </Backdrop>
     )
   }
 
@@ -42,7 +41,6 @@ const Wrapper = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1;
 
   ${vStack({
     gap: 24,

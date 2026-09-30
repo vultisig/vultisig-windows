@@ -50,8 +50,7 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
 
   if (isSmall) {
     return (
-      <>
-        <Backdrop onClose={onClose} />
+      <Backdrop onClose={onClose}>
         <Wrapper>
           <VStack gap={26}>
             <HStack justifyContent="space-between">
@@ -67,7 +66,7 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
           </VStack>
           {modalContent()}
         </Wrapper>
-      </>
+      </Backdrop>
     )
   }
 
@@ -83,7 +82,6 @@ const Wrapper = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1;
 
   ${vStack({
     gap: 16,
