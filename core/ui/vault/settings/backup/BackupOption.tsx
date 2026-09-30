@@ -11,7 +11,7 @@ import styled from 'styled-components'
 
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('primaryAccentFour')};
-  font-size: 24px;
+  font-size: 20px;
 `
 
 const InteractiveIndicator = styled(ChevronRightIcon)`
@@ -50,10 +50,10 @@ export const BackupOption = ({
     <Container onClick={onClick}>
       <IconContainer>{icon}</IconContainer>
       <VStack flexGrow alignItems="start" gap={4}>
-        <Text size={15} weight="500">
+        <Text size={14} weight="500" color="regular">
           {title}
         </Text>
-        <Text size={13} weight="500" color="shyExtra">
+        <Text size={12} weight="500" color="shyExtra">
           {children}
         </Text>
       </VStack>
