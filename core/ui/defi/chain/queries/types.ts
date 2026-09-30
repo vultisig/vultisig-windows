@@ -1,3 +1,5 @@
+import { BondChurn } from './bondRewards/churns'
+
 /**
  * How a position's fiat value is derived from live prices at render time:
  * `fiatValue = amount × price(coinKey)`. `amount` is human-readable and
@@ -83,6 +85,8 @@ export type RawDefiChainPositions = {
     totalBonded: bigint
     positions: RawThorchainBondPosition[]
     availableNodes: string[]
+    /** The churns a bonded node's reward history can reach, newest first. */
+    recentChurns: BondChurn[]
   }
   stake?: {
     positions: RawThorchainStakePosition[]
@@ -95,6 +99,7 @@ export type DefiChainPositions = {
     totalBonded: bigint
     positions: ThorchainBondPosition[]
     availableNodes: string[]
+    recentChurns: BondChurn[]
   }
   stake?: {
     positions: ThorchainStakePosition[]

@@ -18,3 +18,11 @@ export const formatDateShort = (date?: Date, locale?: string) => {
     year: '2-digit',
   })
 }
+
+/** Formats a date with its full year, e.g. "Sep 7, 2026". */
+export const formatDateWithFullYear = (date: Date, locale?: string) =>
+  date.toLocaleDateString(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
