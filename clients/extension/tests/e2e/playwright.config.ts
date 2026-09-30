@@ -139,6 +139,7 @@ export default defineConfig({
         '**/onboarding.spec.ts',
         '**/vault-management.spec.ts',
         '**/vault-import-export.spec.ts',
+        '**/unfinished-import.spec.ts',
         '**/transaction-history.spec.ts',
         '**/address-book.spec.ts',
         '**/passcode-lock-layering.spec.ts',

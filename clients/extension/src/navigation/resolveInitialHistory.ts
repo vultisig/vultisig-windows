@@ -40,7 +40,14 @@ export const resolveInitialHistory = ({
     return withInitialCoreViewBelow(initialView)
   }
 
-  if (hasVaults && persistedView) {
+  // Older installations may still have an unfinished tab-only flow saved.
+  // Only explicit initialView handoffs should open Import or Setup again.
+  if (
+    hasVaults &&
+    persistedView &&
+    persistedView.id !== 'importVault' &&
+    persistedView.id !== 'setupVault'
+  ) {
     return withInitialCoreViewBelow(persistedView)
   }
 

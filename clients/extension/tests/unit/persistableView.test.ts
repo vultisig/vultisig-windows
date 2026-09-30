@@ -101,10 +101,10 @@ describe('getPersistableView', () => {
     ).toBeNull()
   })
 
-  it('keeps a plain vault setup view', () => {
+  it('does not persist a plain vault setup view', () => {
     expect(
       getPersistableView([vaultView, { id: 'setupVault', state: { type: 'fast' } }])
-    ).toEqual({ id: 'setupVault', state: { type: 'fast' } })
+    ).toBeNull()
   })
 
   it('persists no credentials from earlier flows once back home', () => {

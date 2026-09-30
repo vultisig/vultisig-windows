@@ -6,6 +6,7 @@ import { resolveInitialHistory } from '@clients/extension/src/navigation/resolve
 const vaultView: AppView = { id: 'vault' }
 const setupVaultView: AppView = { id: 'setupVault', state: {} }
 const settingsView: AppView = { id: 'settings' }
+const importVaultView: AppView = { id: 'importVault' }
 
 describe('resolveInitialHistory', () => {
   describe('with no vaults', () => {
@@ -85,14 +86,40 @@ describe('resolveInitialHistory', () => {
       ).toEqual([vaultView])
     })
 
-    it('restores the persisted view on top of the initial core view', () => {
+    it.each([importVaultView, setupVaultView])(
+      'ignores a previously persisted $id',
+      persistedView => {
+        expect(
+          resolveInitialHistory({
+            initialView: null,
+            persistedView,
+            hasVaults: true,
+          })
+        ).toEqual([vaultView])
+      }
+    )
+
+    it.each([importVaultView, setupVaultView])(
+      'honors an explicit $id tab launch over a persisted view',
+      initialView => {
+        expect(
+          resolveInitialHistory({
+            initialView,
+            persistedView: settingsView,
+            hasVaults: true,
+          })
+        ).toEqual([vaultView, initialView])
+      }
+    )
+
+    it('restores an unrelated persisted view on top of the initial core view', () => {
       expect(
         resolveInitialHistory({
           initialView: null,
-          persistedView: setupVaultView,
+          persistedView: settingsView,
           hasVaults: true,
         })
-      ).toEqual([vaultView, setupVaultView])
+      ).toEqual([vaultView, settingsView])
     })
 
     it('does not duplicate a persisted initial core view', () => {

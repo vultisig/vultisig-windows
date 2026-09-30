@@ -7,6 +7,10 @@ import { getPersistableView } from '@clients/extension/src/navigation/persistabl
 const asViewId = (id: string) => id as any
 
 describe('shouldAlwaysExpand', () => {
+  it('returns true for importVault', () => {
+    expect(shouldAlwaysExpand(asViewId('importVault'))).toBe(true)
+  })
+
   it('returns true for setupVault', () => {
     expect(shouldAlwaysExpand(asViewId('setupVault'))).toBe(true)
   })
@@ -42,13 +46,11 @@ describe('getPersistableView by view id', () => {
     'defi',
     'defiChainDetail',
     'deposit',
-    'importVault',
     'manageDefiChains',
     'manageVaultChains',
     'referral',
     'send',
     'settings',
-    'setupVault',
     'signCustomMessage',
     'swap',
     'updateAddressBookItem',
@@ -57,15 +59,16 @@ describe('getPersistableView by view id', () => {
     'vaultSettings',
   ]
 
-  it.each(persistableViewIds)(
-    'persists view: %s',
-    viewId => {
-      expect(isPersisted(viewId)).toBe(true)
-    }
-  )
+  it.each(persistableViewIds)('persists view: %s', viewId => {
+    expect(isPersisted(viewId)).toBe(true)
+  })
 
   it('returns false for onboarding', () => {
     expect(isPersisted('onboarding')).toBe(false)
+  })
+
+  it.each(['importVault', 'setupVault'])('does not persist %s', viewId => {
+    expect(isPersisted(viewId)).toBe(false)
   })
 
   it('returns false for connectedDapps', () => {
@@ -84,7 +87,7 @@ describe('getPersistableView by view id', () => {
     expect(isPersisted('home')).toBe(false)
   })
 
-  it('has exactly 19 persistable views', () => {
-    expect(persistableViewIds.length).toBe(19)
+  it('has exactly 17 persistable views', () => {
+    expect(persistableViewIds.length).toBe(17)
   })
 })
