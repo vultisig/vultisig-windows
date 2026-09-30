@@ -167,6 +167,15 @@ test('EIP-712 review shows nested data, copies exact values, retains raw data an
     await popup.screenshot({
       path: test.info().outputPath('generic-contents.png'),
     })
+    for (const index of [0, 1]) {
+      await popup
+        .getByText(`[${index}]`, { exact: true })
+        .first()
+        .scrollIntoViewIfNeeded()
+      await popup.screenshot({
+        path: test.info().outputPath(`generic-item-${index}.png`),
+      })
+    }
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
     for (const [label, expected] of [
       ['id', id],
