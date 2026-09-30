@@ -435,5 +435,28 @@ describe('Ethereum Provider', () => {
 
       expect(eth.chainId).toBe('0xa')
     })
+
+    it('ignores an eth_chainId response that arrives after a newer background event', async () => {
+      mockedHandlers.eth_chainId.mockResolvedValue('0x1')
+      const eth = new Ethereum()
+      await flushPromises()
+      const listener = vi.fn()
+      eth.on('chainChanged', listener)
+
+      let resolveRequest: (chainId: string) => void = () => {}
+      mockedHandlers.eth_chainId.mockReturnValue(
+        new Promise(resolve => {
+          resolveRequest = resolve
+        })
+      )
+      const request = eth.request({ method: 'eth_chainId', params: [] })
+
+      getEvmChainChangedListener()('0xa')
+      resolveRequest('0x89')
+
+      await expect(request).resolves.toBe('0x89')
+      expect(eth.chainId).toBe('0xa')
+      expect(listener).toHaveBeenCalledExactlyOnceWith('0xa')
+    })
   })
 })

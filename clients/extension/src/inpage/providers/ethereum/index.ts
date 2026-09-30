@@ -93,6 +93,8 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     if (syncId === this.chainIdSyncId) {
       this.setChainId(chainId)
     }
+
+    return chainId
   }
 
   static getInstance(): Ethereum {
@@ -118,14 +120,15 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   request = async (data: RequestInput) => {
     if (data.method in ethereumHandlers) {
       try {
+        if (data.method === 'eth_chainId') {
+          return await this.syncChainId()
+        }
+
         const result = await ethereumHandlers[
           data.method as keyof typeof ethereumHandlers
         ](data.params as never)
 
-        if (data.method === 'eth_chainId' && typeof result === 'string') {
-          this.chainIdSyncId++
-          this.setChainId(result)
-        } else if (isOneOf(data.method, chainSyncMethods)) {
+        if (isOneOf(data.method, chainSyncMethods)) {
           await attempt(this.syncChainId)
         }
 
