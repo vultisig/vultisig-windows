@@ -19,11 +19,9 @@ describe('live persisted balance refresh', () => {
     vi.useRealTimers()
   })
 
-  // The extension popup remounts on every open, so an unthrottled
-  // `refetchOnMount` would fan out a full balance refresh each time the user
-  // reopens it. `staleTime` is what bounds that; see
-  // `balancePersistQueryOptions`.
-  it('leaves a still-fresh hydrated balance alone when the popup remounts', async () => {
+  // Desktop retains this throttle; the extension explicitly invalidates its
+  // portfolio after restoration rather than changing the shared options.
+  it('leaves a still-fresh hydrated balance alone on a desktop remount', async () => {
     const queryClient = new QueryClient()
     const options = getLiveBalanceQueryOptions(input)
     queryClient.setQueryData(options.queryKey, { balance: 1n })

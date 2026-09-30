@@ -1,12 +1,14 @@
 import { CoreApp } from '@core/ui/CoreApp'
 import { StartupMode } from '@core/ui/product/startupSplash'
 import { CoreState } from '@core/ui/state/core'
+import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { mpcServerUrl } from '@vultisig/core-mpc/MpcServerType'
 import { initiateFileDownload } from '@vultisig/lib-utils/file/initiateFileDownload'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 
+import { ExtensionPortfolioRefresh } from './ExtensionPortfolioRefresh'
 import { storage } from './storage'
 import { getDeveloperOptions } from './storage/developerOptions'
 import { StorageMigrationsManager } from './storage/migrations/StorageMigrationManager'
@@ -109,6 +111,13 @@ export const ExtensionCoreApp = ({
       startupMode={startupMode}
     >
       {children}
+      {!isLimited && (
+        <Suspense fallback={null}>
+          <ActiveVaultOnly>
+            <ExtensionPortfolioRefresh />
+          </ActiveVaultOnly>
+        </Suspense>
+      )}
     </CoreApp>
   )
 }

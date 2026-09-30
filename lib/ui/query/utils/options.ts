@@ -69,13 +69,9 @@ export const balanceQueryRefetchInterval = convertDuration(2, 'min', 'ms')
  * Persisted balance queries: cached amounts render instantly, but staleness is
  * respected so balances renew without a manual refresh.
  *
- * `staleTime` is load-bearing rather than cosmetic. The extension popup tears
- * down its whole React tree on close, so every open is a remount — with
- * `refetchOnMount` enabled and no throttle, opening the popup twice in a row
- * would fan out a full balance refresh each time. Persistence keeps
- * `dataUpdatedAt` across popup sessions, so `staleTime` becomes a real
- * cross-session throttle: the disk-backed equivalent of the in-memory interval
- * iOS gets from `throttledOnAppear`.
+ * Persistence keeps `dataUpdatedAt` across sessions, so `staleTime` throttles
+ * automatic desktop mount/focus/reconnect reads. The extension separately
+ * refreshes its active portfolio once per opening, after cache restoration.
  *
  * `refetchIntervalInBackground` stays false so a backgrounded desktop window
  * does not keep fanning out RPCs; the interval exists for long-lived windows
