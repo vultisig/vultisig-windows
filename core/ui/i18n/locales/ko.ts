@@ -1997,4 +1997,7 @@ export const ko = {
     '네트워크 수수료를 제외한 전체 잔액을 보내고 계정을 폐쇄합니다. 최소 예치금 미만의 잔액은 모두 소멸됩니다.',
   substrate_allow_death_review_warning:
     '이체로 인해 계좌 잔액이 모두 소진됩니다. 계좌는 비활성화되며, 최소 예치금 미만의 잔액은 모두 소멸됩니다.',
+  copy_link: '링크 복사',
+  share_qr_code: 'QR 코드 공유',
+  share_qr_image: 'QR 이미지 공유',
 }

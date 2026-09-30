@@ -2037,4 +2037,7 @@ export const pt = {
     'Envia todo o saldo menos a taxa de rede e encerra a conta. Qualquer valor restante abaixo do depósito mínimo é perdido.',
   substrate_allow_death_review_warning:
     'Essa transferência esvaziará sua conta. A conta será desativada e qualquer saldo restante abaixo do depósito mínimo será perdido.',
+  copy_link: 'Copiar link',
+  share_qr_code: 'Compartilhar código QR',
+  share_qr_image: 'Compartilhar imagem QR',
 }

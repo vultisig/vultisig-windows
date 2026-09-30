@@ -2042,4 +2042,7 @@ export const it = {
     "Invia l'intero saldo meno la commissione di rete e chiude il conto. Tutto ciò che rimane al di sotto del deposito minimo viene distrutto.",
   substrate_allow_death_review_warning:
     'Questo trasferimento svuota il tuo conto. Il conto viene disattivato e qualsiasi saldo residuo al di sotto del deposito minimo viene distrutto.',
+  copy_link: 'Copia collegamento',
+  share_qr_code: 'Condividi il codice QR',
+  share_qr_image: "Condividi l'immagine QR",
 }

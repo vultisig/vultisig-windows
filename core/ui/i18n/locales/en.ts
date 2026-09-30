@@ -227,6 +227,7 @@ export const en = {
   contract_execution: 'Contract Execution',
   copied: 'Copied',
   copy: 'Copy',
+  copy_link: 'Copy Link',
   copy_address: 'Copy Address',
   create_new_vault: 'Create new Vault',
   create_vault: 'Create vault',
@@ -1111,6 +1112,8 @@ export const en = {
   settings: 'Settings',
   share: 'Share',
   share_app: 'Share The App',
+  share_qr_code: 'Share QR Code',
+  share_qr_image: 'Share QR Image',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
   shares: 'Shares',

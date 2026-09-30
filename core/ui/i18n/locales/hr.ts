@@ -2006,4 +2006,7 @@ export const hr = {
     'Šalje cijeli saldo umanjen za mrežnu naknadu i zatvara račun. Sve što ostane ispod egzistencijalnog pologa se uništava.',
   substrate_allow_death_review_warning:
     'Ovim prijenosom se prazni vaš račun. Račun se deaktivira, a sav preostali saldo ispod egzistencijalnog pologa se uništava.',
+  copy_link: 'Kopiraj poveznicu',
+  share_qr_code: 'Podijeli QR kod',
+  share_qr_image: 'Podijeli QR sliku',
 }

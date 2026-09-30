@@ -21,13 +21,16 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { useTranslation } from 'react-i18next'
 
 import { currentProductBrandConfig } from '../../product/brand'
+import { useCore } from '../../state/core'
 import { getVaultExportUid } from '../../vault/export/core/uid'
+import { ShareKeysignQrCode } from './ShareKeysignQrCode'
 
 export const DownloadKeysignQrCode = ({
   value: keysignPayload,
 }: ValueProp<KeysignMessagePayload>) => {
   const joinKeysignUrlQuery = useJoinKeysignUrlQuery(keysignPayload)
   const { t } = useTranslation()
+  const { client } = useCore()
   const vault = useCurrentVault()
   const { name } = vault
 
@@ -70,11 +73,15 @@ export const DownloadKeysignQrCode = ({
       success={data => (
         <SaveAsImage
           fileName={`VaultKeysignQR-${name}-${getVaultExportUid(vault).slice(-3)}`}
-          renderTrigger={({ onClick }) => (
-            <IconButton onClick={onClick}>
-              <FileUpIcon />
-            </IconButton>
-          )}
+          renderTrigger={({ onClick }) =>
+            client === 'extension' ? (
+              <ShareKeysignQrCode value={data} onClick={onClick} />
+            ) : (
+              <IconButton onClick={onClick}>
+                <FileUpIcon />
+              </IconButton>
+            )
+          }
           value={
             <PrintableQrCode
               value={data}

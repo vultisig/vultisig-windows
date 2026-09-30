@@ -2054,4 +2054,7 @@ export const de = {
     'Überweist den gesamten Kontostand abzüglich der Netzwerkgebühr und schließt das Konto. Alles, was unterhalb der Mindesteinlage verbleibt, wird vernichtet.',
   substrate_allow_death_review_warning:
     'Durch diese Überweisung wird Ihr Konto geleert. Das Konto wird deaktiviert, und ein etwaiges Guthaben unterhalb der Mindesteinlage verfällt.',
+  copy_link: 'Link kopieren',
+  share_qr_code: 'QR-Code teilen',
+  share_qr_image: 'QR-Code teilen',
 }

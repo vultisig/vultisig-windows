@@ -2037,4 +2037,7 @@ export const es = {
     'Envía el saldo completo menos la comisión de red y cierra la cuenta. Cualquier saldo restante por debajo del depósito inicial se destruye.',
   substrate_allow_death_review_warning:
     'Esta transferencia vacía tu cuenta. La cuenta se desactiva y cualquier saldo restante por debajo del depósito inicial se pierde.',
+  copy_link: 'Copiar enlace',
+  share_qr_code: 'Compartir código QR',
+  share_qr_image: 'Compartir imagen QR',
 }

@@ -2022,4 +2022,7 @@ export const nl = {
     'Het volledige saldo, minus de netwerkkosten, wordt overgemaakt en de rekening wordt gesloten. Alles wat onder het minimale stortingsbedrag overblijft, wordt vernietigd.',
   substrate_allow_death_review_warning:
     'Deze overschrijving maakt uw rekening leeg. De rekening wordt gedeactiveerd en elk resterend saldo onder het minimale stortingsbedrag wordt vernietigd.',
+  copy_link: 'Link kopiëren',
+  share_qr_code: 'Deel de QR-code',
+  share_qr_image: 'Deel de QR-code',
 }

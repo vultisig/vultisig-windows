@@ -1873,4 +1873,7 @@ export const zh = {
     '扣除网络费用后，账户余额将被全部转出并关闭。低于最低存款额的剩余款项将被销毁。',
   substrate_allow_death_review_warning:
     '此次转账将清空您的账户。账户将被停用，低于存根金额的剩余余额将被销毁。',
+  copy_link: '复制链接',
+  share_qr_code: '分享二维码',
+  share_qr_image: '分享二维码图片',
 }
