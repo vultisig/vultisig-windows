@@ -25,6 +25,7 @@ import {
   CallContext,
   CallInitialContext,
 } from '../call/context'
+import { PopupError } from '../popup/error'
 import {
   AuthorizedPopupMethod,
   authorizedPopupMethods,
@@ -34,6 +35,7 @@ import {
 import { PopupMessage, PopupOptions } from '../popup/resolver'
 import { callPopupFromBackground } from '../popup/resolvers/background'
 import { InpageProviderBridgeMessage } from './message'
+import { serializeBridgeError } from './serializeBridgeError'
 
 /** Resolve a background call using the given context. */
 function resolveBackgroundCall({
@@ -218,7 +220,21 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
               }),
           }
         )
-      }).then(reply)
+      }).then(result => {
+        if ('error' in result) {
+          if (result.error !== PopupError.RejectedByUser) {
+            console.error(
+              '[inpage-provider] background call failed',
+              getRecordUnionKey(message),
+              result.error
+            )
+          }
+          reply({ error: serializeBridgeError(result.error) })
+          return
+        }
+
+        reply(result)
+      })
     },
   })
 }
