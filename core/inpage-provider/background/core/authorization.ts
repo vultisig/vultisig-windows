@@ -1,14 +1,18 @@
 import { storage } from '@core/extension/storage'
-import { getVaultAppSessions } from '@core/extension/storage/appSessions'
-import { coinsStorage } from '@core/extension/storage/coins'
+import {
+  getVaultAppSessions,
+  getVaultsAppSessions,
+  VaultAppSession,
+} from '@core/extension/storage/appSessions'
+import { getVault } from '@core/extension/storage/vaults'
 import { BackgroundError } from '@core/inpage-provider/background/error'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { sleep } from '@vultisig/lib-utils/sleep'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 
 import { AuthorizedCallContext, CallInitialContext } from '../../call/context'
+import { getVaultChainAddress } from './getVaultChainAddress'
 
 type AuthorizeContextOptions = {
   /**
@@ -28,44 +32,60 @@ const sessionLookupRetryDelayMs = 50
  * Resolve the authorized call context by binding the trusted `requestOrigin`
  * to a session stored for the resolved vault. The session is always read from
  * storage keyed by origin — never taken from caller input — so a forged call
- * cannot authorize itself for a vault its origin was never granted.
+ * cannot authorize itself for a vault its origin was never granted. With an
+ * account hint, a connected vault that derives that address wins; otherwise
+ * (or when none does) the current vault's session is used.
  */
 export const authorizeContext = async (
   context: CallInitialContext,
   { retryOnMissing = false }: AuthorizeContextOptions = {}
 ): Promise<AuthorizedCallContext> => {
   const { requestOrigin, account } = context
+  const host = getUrlBaseDomain(requestOrigin)
 
-  const getVaultId = async () => {
-    if (account) {
-      const coinsRecord = await coinsStorage.getCoins()
+  // When the caller names an address, prefer the vault connected to this
+  // origin that derives it. Ownership is checked against vault key material,
+  // the same derivation `getAccount` reports, so it holds for chains the user
+  // never added to their portfolio.
+  const resolveAccountSession = async (): Promise<VaultAppSession | null> => {
+    if (!account) return null
 
-      const vaultId = getRecordKeys(coinsRecord).find(vaultId =>
-        coinsRecord[vaultId]?.some(c => areLowerCaseEqual(c.address, account))
-      )
+    const sessions = await getVaultsAppSessions()
 
-      if (vaultId) {
-        return vaultId
+    for (const [vaultId, vaultSessions] of Object.entries(sessions)) {
+      const appSession = vaultSessions[host]
+      if (!appSession) continue
+
+      const vault = await getVault(vaultId)
+      const address = await getVaultChainAddress({
+        vault,
+        chain: account.chain,
+      })
+
+      if (address && areLowerCaseEqual(address, account.address)) {
+        return { ...appSession, vaultId }
       }
-
-      throw BackgroundError.Unauthorized
     }
 
-    return shouldBePresent(await storage.getCurrentVaultId(), 'currentVaultId')
+    return null
   }
 
-  const resolveAppSession = async () => {
-    const vaultId = await getVaultId()
-    const vaultSessions = await getVaultAppSessions(vaultId)
-    const appSession = vaultSessions[getUrlBaseDomain(requestOrigin)]
+  const resolveCurrentVaultSession =
+    async (): Promise<VaultAppSession | null> => {
+      const vaultId = shouldBePresent(
+        await storage.getCurrentVaultId(),
+        'currentVaultId'
+      )
+      const appSession = (await getVaultAppSessions(vaultId))[host]
 
-    return appSession ? { ...appSession, vaultId } : null
-  }
+      return appSession ? { ...appSession, vaultId } : null
+    }
 
   const attempts = retryOnMissing ? sessionLookupRetries : 1
 
   for (let attempt = 0; attempt < attempts; attempt++) {
-    const appSession = await resolveAppSession()
+    const appSession =
+      (await resolveAccountSession()) ?? (await resolveCurrentVaultSession())
 
     if (appSession) {
       return { ...context, appSession }

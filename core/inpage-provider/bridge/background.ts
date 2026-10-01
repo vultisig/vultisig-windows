@@ -21,6 +21,7 @@ import { BackgroundMessage } from '../background/resolver'
 import { backgroundResolvers } from '../background/resolvers'
 import {
   AuthorizedCallContext,
+  CallAccountHint,
   CallContext,
   CallInitialContext,
 } from '../call/context'
@@ -30,9 +31,8 @@ import {
   PopupInterface,
   SignMessageInput,
 } from '../popup/interface'
-import { PopupMessage } from '../popup/resolver'
+import { PopupMessage, PopupOptions } from '../popup/resolver'
 import { callPopupFromBackground } from '../popup/resolvers/background'
-import { getBridgeMessageAccount } from './getBridgeMessageAccount'
 import { InpageProviderBridgeMessage } from './message'
 
 /** Resolve a background call using the given context. */
@@ -141,14 +141,37 @@ function assertPopupAuthorization({
   }
 }
 
+/**
+ * The signer a popup call names (`options.account`), tied to the chain the
+ * call targets so authorization can match it against vault key material.
+ */
+function getPopupAccountHint({
+  call,
+  options,
+}: {
+  call: PopupMessage<AuthorizedPopupMethod>['call']
+  options: PopupOptions
+}): CallAccountHint | undefined {
+  const [chain] = getPopupAuthorizationChains(call)
+
+  return options.account && chain
+    ? { address: options.account, chain }
+    : undefined
+}
+
 async function authorizePopupContext({
   call,
+  options,
   initialContext,
 }: {
   call: PopupMessage<AuthorizedPopupMethod>['call']
+  options: PopupOptions
   initialContext: CallInitialContext
 }): Promise<AuthorizedCallContext> {
-  const context = await authorizeContext(initialContext)
+  const context = await authorizeContext({
+    ...initialContext,
+    account: getPopupAccountHint({ call, options }),
+  })
   assertPopupAuthorization({ call, context })
   return context
 }
@@ -164,6 +187,7 @@ async function buildCallContext(
   ) {
     return authorizePopupContext({
       call: message.popup.call,
+      options: message.popup.options,
       initialContext,
     })
   }
@@ -179,10 +203,7 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
   runBridgeBackgroundAgent<InpageProviderBridgeMessage, Result>({
     handleRequest: ({ message, context: initialContext, reply }) => {
       attempt(async () => {
-        const context = await buildCallContext(message, {
-          ...initialContext,
-          account: getBridgeMessageAccount(message),
-        })
+        const context = await buildCallContext(message, initialContext)
 
         return matchRecordUnion<InpageProviderBridgeMessage, Promise<unknown>>(
           message,

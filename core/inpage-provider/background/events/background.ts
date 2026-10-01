@@ -1,18 +1,12 @@
 import { storage } from '@core/extension/storage'
-import {
-  getVaultAppSessions,
-  VaultsAppSessions,
-} from '@core/extension/storage/appSessions'
+import { VaultsAppSessions } from '@core/extension/storage/appSessions'
 import { CurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { without } from '@vultisig/lib-utils/array/without'
 
 import { getEvmChainChangedEvents } from './getEvmChainChangedEvents'
-import { getVaultSwitchEvents } from './getVaultSwitchEvents'
+import { notifyVaultSwitch } from './notifyVaultSwitch'
 import { sendEventToApp } from './sendEventToApp'
-
-const getVaultSessions = async (vaultId: CurrentVaultId | undefined) =>
-  vaultId ? getVaultAppSessions(vaultId) : {}
 
 /**
  * Watches the current vault and its app sessions and notifies connected tabs
@@ -31,25 +25,10 @@ export const runBackgroundEventsAgent = () => {
         oldValue?: CurrentVaultId
       }
 
-      if (oldValue && newValue !== oldValue) {
-        const [prevVaultSessions, nextVaultSessions] = await Promise.all([
-          getVaultSessions(oldValue),
-          getVaultSessions(newValue),
-        ])
-
-        const { disconnect, accountsChanged } = getVaultSwitchEvents({
-          prevVaultSessions,
-          nextVaultSessions,
-        })
-
-        for (const appId of disconnect) {
-          sendEventToApp({ appId, event: 'disconnect', value: undefined })
-        }
-
-        for (const appId of accountsChanged) {
-          sendEventToApp({ appId, event: 'accountsChanged', value: undefined })
-        }
-      }
+      await notifyVaultSwitch({
+        prevVaultId: oldValue ?? null,
+        nextVaultId: newValue ?? null,
+      })
     }
 
     if (!(StorageKey.appSessions in changes)) return

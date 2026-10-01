@@ -490,5 +490,29 @@ describe('Ethereum Provider', () => {
 
       expect(listener).toHaveBeenCalledExactlyOnceWith([])
     })
+
+    it('drops a read that resolves after a newer disconnect or read', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+
+      let resolveSlowRead: (accounts: string[]) => void = () => {}
+      mockedHandlers.eth_accounts.mockReturnValueOnce(
+        new Promise(resolve => {
+          resolveSlowRead = resolve
+        })
+      )
+      const slowRead = getAccountsChangedListener()()
+
+      const disconnect = vi
+        .mocked(addBackgroundEventListener)
+        .mock.calls.find(([event]) => event === 'disconnect')?.[1] as () => void
+      disconnect()
+
+      resolveSlowRead(['0xstale'])
+      await slowRead
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith([])
+    })
   })
 })
