@@ -75,7 +75,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   withPasswordCache = false,
 }) => {
   const { t } = useTranslation()
-  const vault = useCurrentVault()
+  const vaultId = getVaultId(useCurrentVault())
   const titleId = useId()
   const schema = useMemo(() => createSchema(t), [t])
   const {
@@ -88,7 +88,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
       if (cachePassword) {
         await attempt(() =>
           cacheVaultPassword({
-            vaultId: getVaultId(vault),
+            vaultId,
             password: variables.password,
           })
         )
@@ -126,6 +126,9 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 
   const isPending = mutationIsPending || cachedPasswordIsPending
 
+  // Keyed by vault id, not the vault object: the provider rebuilds that object
+  // on every render, and re-running this effect would clear the tick the user
+  // just set.
   useEffect(() => {
     if (!showModal) return
 
@@ -136,9 +139,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     if (!withPasswordCache) return
 
     const checkCache = async () => {
-      const cached = await getCachedVaultPassword({
-        vaultId: getVaultId(vault),
-      })
+      const cached = await getCachedVaultPassword({ vaultId })
       if (cancelled || !cached) return
 
       finishWithCachedPassword(cached)
@@ -149,10 +150,10 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     return () => {
       cancelled = true
     }
-  }, [showModal, withPasswordCache, vault, finishWithCachedPassword])
+  }, [showModal, withPasswordCache, vaultId, finishWithCachedPassword])
 
   const onSubmit = ({ password }: Schema) => {
-    mutate({ vaultId: getVaultId(vault), password })
+    mutate({ vaultId, password })
   }
 
   const passwordErrorMessage = useMemo(() => {
