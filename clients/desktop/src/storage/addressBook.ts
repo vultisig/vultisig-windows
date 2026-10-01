@@ -11,6 +11,9 @@ import {
   SaveAddressBookItem,
 } from '../../wailsjs/go/storage/Store'
 
+/**
+ * Desktop address book storage backed by the Wails SQLite store.
+ */
 export const addressBookStorage: AddressBookStorage = {
   getAddressBookItems: async () => {
     const addressBookItems =
@@ -20,12 +23,12 @@ export const addressBookStorage: AddressBookStorage = {
   createAddressBookItem: async item => {
     await SaveAddressBookItem(item)
   },
-  updateAddressBookItem: async item => {
-    const oldAddressBookItem = await GetAddressBookItem(item.id)
+  updateAddressBookItem: async ({ id, fields }) => {
+    const oldAddressBookItem = await GetAddressBookItem(id)
 
     const newAddressBookItem = {
       ...oldAddressBookItem,
-      ...item,
+      ...fields,
     }
 
     await SaveAddressBookItem(newAddressBookItem)
