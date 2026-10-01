@@ -96,6 +96,8 @@ export type CoreView =
         tonGasless?: boolean
         /** Native Polkadot/Bittensor sends: empty the account with `transfer_allow_death`. Unset means keep it alive. */
         allowDeath?: boolean
+        /** UTXO sends: the amount is everything the balance can spend, so the transaction sweeps its inputs. Set when the form is submitted. */
+        sendMaxAmount?: boolean
       }
     }
   | { id: 'settings' }

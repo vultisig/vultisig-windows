@@ -3,11 +3,13 @@ import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
 import { useSyncAllowDeathAmount } from '@core/ui/vault/send/allowDeath/useSyncAllowDeathAmount'
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
+import { useIsUtxoMaxSend } from '@core/ui/vault/send/amount/useIsUtxoMaxSend'
 import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
+import { useSendMaxAmount } from '@core/ui/vault/send/state/sendMaxAmount'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -17,11 +19,18 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * The send form. Submitting commits the amount Verify signs: reduced to what
+ * the balance covers after the fee, and flagged as a UTXO max spend when it is
+ * everything the balance can spend.
+ */
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const { data, error, isPending } = useSendValidationQuery()
   const [amount, setAmount] = useSendAmount()
   const spendableAmount = useSpendableSendAmount()
+  const isUtxoMaxSend = useIsUtxoMaxSend()
+  const [, setSendMaxAmount] = useSendMaxAmount()
   const isAllowDeathSyncing = useSyncAllowDeathAmount()
 
   // Commit a fee-driven adjustment only here, never while the field is being
@@ -32,6 +41,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
     if (spendableAmount !== null && spendableAmount !== amount) {
       setAmount(spendableAmount)
     }
+    setSendMaxAmount(isUtxoMaxSend)
 
     onFinish()
   }

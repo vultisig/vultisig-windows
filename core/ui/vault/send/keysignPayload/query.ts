@@ -23,12 +23,18 @@ import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
+import { useSendMaxAmount } from '../state/sendMaxAmount'
 import { reconcileUtxoPlanAmount } from './reconcileUtxoPlanAmount'
 
 type UseSendKeysignPayloadQueryProps = {
   feeSettings?: FeeSettings
 }
 
+/**
+ * Builds the keysign payload Verify signs from the committed send state,
+ * including the max-spend flag the form sets for a UTXO send of everything
+ * the balance can spend.
+ */
 export const useSendKeysignPayloadQuery = ({
   feeSettings,
 }: UseSendKeysignPayloadQueryProps = {}) => {
@@ -39,6 +45,7 @@ export const useSendKeysignPayloadQuery = ({
   const { destinationTag } = useSendDestinationTag()
   const { isEnabled: tonGasless } = useTonGaslessSend()
   const { isEnabled: allowDeath } = useSendAllowDeath()
+  const [sendMaxAmount] = useSendMaxAmount()
 
   const vault = useCurrentVault()
 
@@ -60,6 +67,7 @@ export const useSendKeysignPayloadQuery = ({
     hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     tonGasless,
     allowDeath,
+    sendMaxAmount,
   }
 
   return useQuery({
