@@ -683,32 +683,42 @@ const pushChromeNotificationIdPrefix = 'vultisig-push-'
 const pushChromeNotificationPayloadKey = (notificationId: string) =>
   `vultisigPushQr:${notificationId}`
 
-const handlePushChromeNotificationClicked = (notificationId: string) => {
+/**
+ * Opens the keysign request behind a clicked push notification and dismisses
+ * the notification, since its payload is consumed by the first click.
+ * Invoked from {@link ./pushServiceWorkerBindings} via dynamic import.
+ */
+export const handlePushChromeNotificationClicked = async (
+  notificationId: string
+): Promise<void> => {
   if (!notificationId.startsWith(pushChromeNotificationIdPrefix)) {
     return
   }
 
   const key = pushChromeNotificationPayloadKey(notificationId)
-  void chrome.storage.session.get(key).then(async result => {
-    const raw = result[key]
-    await chrome.storage.session.remove(key)
-    const qrCodeData = typeof raw === 'string' ? raw : undefined
-    try {
-      await openExtensionFromPushNotificationClick({ qrCodeData })
-    } catch (error) {
-      console.error(
-        '[Extension Push] chrome.notifications click failed:',
-        error
-      )
-    }
-  })
+  const result = await chrome.storage.session.get(key)
+  const raw = result[key]
+  await chrome.storage.session.remove(key)
+  await chrome.notifications.clear(notificationId)
+  const qrCodeData = typeof raw === 'string' ? raw : undefined
+  try {
+    await openExtensionFromPushNotificationClick({ qrCodeData })
+  } catch (error) {
+    console.error('[Extension Push] chrome.notifications click failed:', error)
+  }
 }
 
-const handlePushChromeNotificationClosed = (notificationId: string) => {
+/**
+ * Drops the stored payload of a push notification the user dismissed.
+ * Invoked from {@link ./pushServiceWorkerBindings} via dynamic import.
+ */
+export const handlePushChromeNotificationClosed = async (
+  notificationId: string
+): Promise<void> => {
   if (!notificationId.startsWith(pushChromeNotificationIdPrefix)) {
     return
   }
-  void chrome.storage.session.remove(
+  await chrome.storage.session.remove(
     pushChromeNotificationPayloadKey(notificationId)
   )
 }
@@ -720,15 +730,6 @@ const handlePushChromeNotificationClosed = (notificationId: string) => {
  */
 export const initPushExtensionRuntime = () => {
   console.log('[Extension Push] Service worker push handler initialized')
-
-  if (typeof chrome !== 'undefined' && chrome.notifications) {
-    chrome.notifications.onClicked.addListener(
-      handlePushChromeNotificationClicked
-    )
-    chrome.notifications.onClosed.addListener(
-      handlePushChromeNotificationClosed
-    )
-  }
 
   pushStartupWork = (async () => {
     try {
