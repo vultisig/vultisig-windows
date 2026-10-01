@@ -1,3 +1,4 @@
+import { getBackgroundEvmClient } from '@core/inpage-provider/background/core/getBackgroundEvmClient'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { Chain } from '@vultisig/core-chain/Chain'
 import {
@@ -7,7 +8,6 @@ import {
 import { getCosmosClient } from '@vultisig/core-chain/chains/cosmos/client'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
-import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
 import { getBlockchairBaseUrl } from '@vultisig/core-chain/chains/utxo/client/getBlockchairBaseUrl'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
@@ -23,7 +23,7 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
     toChainKindRecordUnion(chain),
     {
       evm: async chain => {
-        const client = getEvmClient(chain)
+        const client = getBackgroundEvmClient(chain)
 
         return client.request({
           method: 'eth_getTransactionByHash',
