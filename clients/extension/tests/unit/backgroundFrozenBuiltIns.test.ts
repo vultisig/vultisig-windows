@@ -1,5 +1,9 @@
 import { Chain } from '@vultisig/core-chain/Chain'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('@core/inpage-provider/background/resolvers/getAppChain', () => ({
+  getAppChain: async () => Chain.Ethereum,
+}))
 
 // Mirrors the prototype lockdown `initExtensionBackground` applies when the
 // service worker starts. Freezing is irreversible, so this file relies on
@@ -21,19 +25,25 @@ const freezeBuiltIns = () =>
   ].forEach(Object.freeze)
 
 describe('background with frozen built-ins', () => {
-  // Documents #5076: viem's public client assigns `.call` onto functions, which
-  // a frozen Function.prototype rejects. `evmClientRequest` and `getTx` build
-  // their client with `getEvmClient`, so every dApp EVM read hits this and the
-  // dApp only sees "Internal error". Flip this to expect a working client once
-  // the background stops using the public client.
-  it('cannot build the public EVM client', async () => {
-    const { getEvmClient } =
-      await import('@vultisig/core-chain/chains/evm/client')
+  // Regression test for #5076: with the built-ins frozen, `evmClientRequest`
+  // throws "Cannot assign to read only property 'call'" while building viem's
+  // public client, so every dApp EVM read fails with "Internal error".
+  it('serves a dApp eth_blockNumber request', async () => {
+    const { evmClientRequest } =
+      await import('@core/inpage-provider/background/resolvers/evmClientRequest')
 
+    // A plain stub: vi.fn() records calls by assigning to objects the freeze
+    // has locked.
+    vi.stubGlobal('fetch', async () =>
+      Response.json({ jsonrpc: '2.0', id: 1, result: '0x18e2337' })
+    )
     freezeBuiltIns()
 
-    expect(() => getEvmClient(Chain.Ethereum)).toThrow(
-      /Cannot assign to read only property 'call'/
-    )
+    const outcome = await evmClientRequest({
+      context: { requestOrigin: 'https://example.com' },
+      input: { method: 'eth_blockNumber' },
+    }).catch((error: unknown) => `failed: ${String(error)}`)
+
+    expect(outcome).toBe('0x18e2337')
   })
 })
