@@ -14,22 +14,28 @@ vi.mock('./sendEventToApp', () => ({
 import { storage } from '@core/extension/storage'
 import { getVaultAppSessions } from '@core/extension/storage/appSessions'
 
-import { notifyVaultSwitch } from './notifyVaultSwitch'
+import { createVaultSwitchNotifier } from './notifyVaultSwitch'
 import { sendEventToApp } from './sendEventToApp'
 
 const mockGetCurrentVaultId = vi.mocked(storage.getCurrentVaultId)
 const mockGetVaultAppSessions = vi.mocked(getVaultAppSessions)
 const mockSendEventToApp = vi.mocked(sendEventToApp)
 
+const session = (host: string): AppSession => ({
+  host,
+  url: `https://${host}`,
+})
+
 const sessionsByVault: Record<string, Record<string, AppSession>> = {
-  'vault-a': { 'a.com': { host: 'a.com', url: 'https://a.com' } },
+  'vault-a': { 'a.com': session('a.com') },
   'vault-b': {},
+  'vault-c': { 'c.com': session('c.com') },
 }
 
 const sentEvents = () =>
   mockSendEventToApp.mock.calls.map(([{ appId, event }]) => ({ appId, event }))
 
-describe('notifyVaultSwitch', () => {
+describe('createVaultSwitchNotifier', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockGetVaultAppSessions.mockImplementation(
@@ -38,54 +44,56 @@ describe('notifyVaultSwitch', () => {
   })
 
   it('disconnects apps of the previous vault and refreshes apps of the new one', async () => {
-    mockGetCurrentVaultId.mockResolvedValue('vault-a')
+    const notify = createVaultSwitchNotifier()
 
-    await notifyVaultSwitch({ prevVaultId: 'vault-b', nextVaultId: 'vault-a' })
-    expect(sentEvents()).toEqual([{ appId: 'a.com', event: 'accountsChanged' }])
+    mockGetCurrentVaultId.mockResolvedValue('vault-b')
+    await notify({ prevVaultId: 'vault-a' })
+    expect(sentEvents()).toEqual([{ appId: 'a.com', event: 'disconnect' }])
 
     mockSendEventToApp.mockClear()
-    mockGetCurrentVaultId.mockResolvedValue('vault-b')
-
-    await notifyVaultSwitch({ prevVaultId: 'vault-a', nextVaultId: 'vault-b' })
-    expect(sentEvents()).toEqual([{ appId: 'a.com', event: 'disconnect' }])
-  })
-
-  it('drops a stale switch whose reads finish after a newer switch (A -> B -> A)', async () => {
-    let releaseSlowReads: () => void = () => {}
-    const slowReads = new Promise<void>(resolve => {
-      releaseSlowReads = resolve
-    })
-
-    // The A -> B handler's session reads are slow; the B -> A handler's are not.
-    mockGetVaultAppSessions.mockImplementationOnce(async vaultId => {
-      await slowReads
-      return sessionsByVault[vaultId]
-    })
-    mockGetVaultAppSessions.mockImplementationOnce(async vaultId => {
-      await slowReads
-      return sessionsByVault[vaultId]
-    })
-
-    const staleSwitch = notifyVaultSwitch({
-      prevVaultId: 'vault-a',
-      nextVaultId: 'vault-b',
-    })
-
-    // By the time anything is dispatched, vault A is current again.
     mockGetCurrentVaultId.mockResolvedValue('vault-a')
-
-    await notifyVaultSwitch({ prevVaultId: 'vault-b', nextVaultId: 'vault-a' })
-    releaseSlowReads()
-    await staleSwitch
-
+    await notify({ prevVaultId: 'vault-b' })
     expect(sentEvents()).toEqual([{ appId: 'a.com', event: 'accountsChanged' }])
   })
 
-  it('does nothing without a previous vault or when the vault did not change', async () => {
+  it('still disconnects the first vault when a middle switch is superseded (A -> B -> C)', async () => {
+    const notify = createVaultSwitchNotifier()
+    // Both storage changes are handled after the user has landed on C, and
+    // the session reads are slow.
+    mockGetCurrentVaultId.mockResolvedValue('vault-c')
+    mockGetVaultAppSessions.mockImplementation(async vaultId => {
+      await new Promise(resolve => setTimeout(resolve, 5))
+      return sessionsByVault[vaultId]
+    })
+
+    await Promise.all([
+      notify({ prevVaultId: 'vault-a' }),
+      notify({ prevVaultId: 'vault-b' }),
+    ])
+
+    expect(sentEvents()).toEqual([
+      { appId: 'a.com', event: 'disconnect' },
+      { appId: 'c.com', event: 'accountsChanged' },
+    ])
+  })
+
+  it('sends nothing when a burst of switches ends on the starting vault (A -> B -> A)', async () => {
+    const notify = createVaultSwitchNotifier()
     mockGetCurrentVaultId.mockResolvedValue('vault-a')
 
-    await notifyVaultSwitch({ prevVaultId: null, nextVaultId: 'vault-a' })
-    await notifyVaultSwitch({ prevVaultId: 'vault-a', nextVaultId: 'vault-a' })
+    await Promise.all([
+      notify({ prevVaultId: 'vault-a' }),
+      notify({ prevVaultId: 'vault-b' }),
+    ])
+
+    expect(mockSendEventToApp).not.toHaveBeenCalled()
+  })
+
+  it('does nothing without a previous vault', async () => {
+    const notify = createVaultSwitchNotifier()
+    mockGetCurrentVaultId.mockResolvedValue('vault-a')
+
+    await notify({ prevVaultId: null })
 
     expect(mockSendEventToApp).not.toHaveBeenCalled()
   })

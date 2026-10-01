@@ -6,42 +6,58 @@ import { getVaultSwitchEvents } from './getVaultSwitchEvents'
 import { sendEventToApp } from './sendEventToApp'
 
 type NotifyVaultSwitchInput = {
+  /** The vault the storage change replaced. */
   prevVaultId: CurrentVaultId
-  nextVaultId: CurrentVaultId
 }
 
 const getVaultSessions = async (vaultId: CurrentVaultId) =>
   vaultId ? getVaultAppSessions(vaultId) : {}
 
 /**
- * Tells connected apps the current vault changed. Storage listeners run
- * concurrently, so a slow handler for an older switch could finish after a
- * newer one; events are only sent if `nextVaultId` is still current once the
- * sessions are read, so a stale switch never disconnects an app.
+ * Creates the handler that tells connected apps the current vault changed.
+ * Storage listeners run concurrently, so switches are processed one at a
+ * time and each one reconciles the last vault apps were told about with the
+ * vault that is current now. A burst like A -> B -> C therefore disconnects
+ * A's apps even if the B handler is superseded, and A -> B -> A sends
+ * nothing.
  */
-export const notifyVaultSwitch = async ({
-  prevVaultId,
-  nextVaultId,
-}: NotifyVaultSwitchInput) => {
-  if (!prevVaultId || prevVaultId === nextVaultId) return
+export const createVaultSwitchNotifier = () => {
+  let lastNotifiedVaultId: CurrentVaultId = null
+  let queue: Promise<void> = Promise.resolve()
 
-  const [prevVaultSessions, nextVaultSessions] = await Promise.all([
-    getVaultSessions(prevVaultId),
-    getVaultSessions(nextVaultId),
-  ])
+  const notify = async ({ prevVaultId }: NotifyVaultSwitchInput) => {
+    const fromVaultId = lastNotifiedVaultId ?? prevVaultId
+    const toVaultId = await storage.getCurrentVaultId()
 
-  if ((await storage.getCurrentVaultId()) !== nextVaultId) return
+    if (!fromVaultId || fromVaultId === toVaultId) {
+      lastNotifiedVaultId = toVaultId
+      return
+    }
 
-  const { disconnect, accountsChanged } = getVaultSwitchEvents({
-    prevVaultSessions,
-    nextVaultSessions,
-  })
+    const [prevVaultSessions, nextVaultSessions] = await Promise.all([
+      getVaultSessions(fromVaultId),
+      getVaultSessions(toVaultId),
+    ])
 
-  for (const appId of disconnect) {
-    sendEventToApp({ appId, event: 'disconnect', value: undefined })
+    const { disconnect, accountsChanged } = getVaultSwitchEvents({
+      prevVaultSessions,
+      nextVaultSessions,
+    })
+
+    for (const appId of disconnect) {
+      sendEventToApp({ appId, event: 'disconnect', value: undefined })
+    }
+
+    for (const appId of accountsChanged) {
+      sendEventToApp({ appId, event: 'accountsChanged', value: undefined })
+    }
+
+    lastNotifiedVaultId = toVaultId
   }
 
-  for (const appId of accountsChanged) {
-    sendEventToApp({ appId, event: 'accountsChanged', value: undefined })
+  return (input: NotifyVaultSwitchInput) => {
+    const next = queue.then(() => notify(input))
+    queue = next.catch(() => undefined)
+    return next
   }
 }

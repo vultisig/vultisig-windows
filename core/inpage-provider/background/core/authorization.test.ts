@@ -11,7 +11,7 @@ vi.mock('@core/extension/storage/appSessions', () => ({
   getVaultsAppSessions: vi.fn(),
 }))
 vi.mock('@core/extension/storage/vaults', () => ({
-  getVault: vi.fn(),
+  findVault: vi.fn(),
 }))
 vi.mock('./getVaultChainAddress', () => ({
   getVaultChainAddress: vi.fn(),
@@ -26,7 +26,7 @@ import {
   getVaultAppSessions,
   getVaultsAppSessions,
 } from '@core/extension/storage/appSessions'
-import { getVault } from '@core/extension/storage/vaults'
+import { findVault } from '@core/extension/storage/vaults'
 
 import { authorizeContext } from './authorization'
 import { getVaultChainAddress } from './getVaultChainAddress'
@@ -34,7 +34,7 @@ import { getVaultChainAddress } from './getVaultChainAddress'
 const mockGetCurrentVaultId = vi.mocked(storage.getCurrentVaultId)
 const mockGetVaultAppSessions = vi.mocked(getVaultAppSessions)
 const mockGetVaultsAppSessions = vi.mocked(getVaultsAppSessions)
-const mockGetVault = vi.mocked(getVault)
+const mockFindVault = vi.mocked(findVault)
 const mockGetVaultChainAddress = vi.mocked(getVaultChainAddress)
 
 const origin = 'https://dapp.example.com'
@@ -112,7 +112,9 @@ describe('authorizeContext', () => {
     }
 
     beforeEach(() => {
-      mockGetVault.mockImplementation(async vaultId => ({ vaultId }) as never)
+      mockFindVault.mockImplementation(async vaultId =>
+        vaultId === 'deleted-vault' ? undefined : ({ vaultId } as never)
+      )
       mockGetVaultChainAddress.mockImplementation(async ({ vault }) => {
         const { vaultId } = vault as Vault & { vaultId: string }
         return derivedAddresses[vaultId] ?? ''
@@ -170,6 +172,17 @@ describe('authorizeContext', () => {
       })
 
       expect(result.appSession).toEqual({ ...session, vaultId: 'vault-1' })
+    })
+
+    it('skips a session left behind by a deleted vault', async () => {
+      mockGetVaultsAppSessions.mockResolvedValue({
+        'deleted-vault': { 'example.com': session },
+        'vault-2': { 'example.com': session },
+      })
+
+      const result = await authorizeContext({ requestOrigin: origin, account })
+
+      expect(result.appSession.vaultId).toBe('vault-2')
     })
 
     it('rejects when neither the account nor the current vault is connected', async () => {

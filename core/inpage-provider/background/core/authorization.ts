@@ -4,7 +4,7 @@ import {
   getVaultsAppSessions,
   VaultAppSession,
 } from '@core/extension/storage/appSessions'
-import { getVault } from '@core/extension/storage/vaults'
+import { findVault } from '@core/extension/storage/vaults'
 import { BackgroundError } from '@core/inpage-provider/background/error'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { sleep } from '@vultisig/lib-utils/sleep'
@@ -56,7 +56,11 @@ export const authorizeContext = async (
       const appSession = vaultSessions[host]
       if (!appSession) continue
 
-      const vault = await getVault(vaultId)
+      // Deleting a vault leaves its sessions behind, so a session can point
+      // at a vault that is gone.
+      const vault = await findVault(vaultId)
+      if (!vault) continue
+
       const address = await getVaultChainAddress({
         vault,
         chain: account.chain,

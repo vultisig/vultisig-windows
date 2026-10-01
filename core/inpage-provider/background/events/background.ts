@@ -5,7 +5,7 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 import { without } from '@vultisig/lib-utils/array/without'
 
 import { getEvmChainChangedEvents } from './getEvmChainChangedEvents'
-import { notifyVaultSwitch } from './notifyVaultSwitch'
+import { createVaultSwitchNotifier } from './notifyVaultSwitch'
 import { sendEventToApp } from './sendEventToApp'
 
 /**
@@ -16,19 +16,17 @@ import { sendEventToApp } from './sendEventToApp'
  * connected to the new one).
  */
 export const runBackgroundEventsAgent = () => {
+  const notifyVaultSwitch = createVaultSwitchNotifier()
+
   chrome.storage.onChanged.addListener(async (changes, areaName) => {
     if (areaName !== 'local') return
 
     if (StorageKey.currentVaultId in changes) {
-      const { newValue, oldValue } = changes[StorageKey.currentVaultId] as {
-        newValue?: CurrentVaultId
+      const { oldValue } = changes[StorageKey.currentVaultId] as {
         oldValue?: CurrentVaultId
       }
 
-      await notifyVaultSwitch({
-        prevVaultId: oldValue ?? null,
-        nextVaultId: newValue ?? null,
-      })
+      await notifyVaultSwitch({ prevVaultId: oldValue ?? null })
     }
 
     if (!(StorageKey.appSessions in changes)) return
