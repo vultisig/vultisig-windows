@@ -6,12 +6,17 @@ import {
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { addQueryParams } from '@vultisig/lib-utils/query/addQueryParams'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
+import { toRecentBondChurns } from '../bondRewards/churns'
+import {
+  getBondProviderReward,
+  getThorchainBondProviderRewards,
+} from '../bondRewards/providerRewards'
 import { midgardBaseUrl, thornodeBaseUrl } from '../constants'
 import { runeCoin } from '../tokens'
 import { RawThorchainBondPosition } from '../types'
-import { toDecimalFactor } from '../utils/decimals'
 import {
   canUnbondNode,
   estimateNextChurn,
@@ -22,8 +27,6 @@ import {
 
 // Set to true to use mock bonded positions for testing
 const useMockBondPositions = false
-
-const runeDecimalFactor = toDecimalFactor(runeCoin.decimals)
 
 type BondProvider = {
   bond_address?: string
@@ -79,6 +82,31 @@ const getBondedNodes = (address: string) =>
 const getNodeDetails = (address: string) =>
   queryUrl<NodeDetailsResponse>(`${thornodeBaseUrl}/node/${address}`)
 
+type NodeAtHeightInput = {
+  nodeAddress: string
+  height: number
+}
+
+const getNodeDetailsAtHeight = ({ nodeAddress, height }: NodeAtHeightInput) =>
+  queryUrl<NodeDetailsResponse>(
+    addQueryParams(`${thornodeBaseUrl}/node/${nodeAddress}`, { height })
+  )
+
+const getNodeProviderRewards = (details: NodeDetailsResponse) =>
+  getThorchainBondProviderRewards({
+    award: parseBigint(details.current_award),
+    operatorFeeBps: parseBigint(details.bond_providers?.node_operator_fee),
+    providers: details.bond_providers?.providers ?? [],
+  })
+
+/**
+ * Each bond provider's share of the award the node held at a past block.
+ * Read one block before a churn, it is what that churn paid out.
+ */
+export const fetchThorchainBondProviderRewards = async (
+  input: NodeAtHeightInput
+) => getNodeProviderRewards(await getNodeDetailsAtHeight(input))
+
 const getNodes = () => queryUrl<ThorchainNode[]>(`${thornodeBaseUrl}/nodes`)
 
 export const fetchChurns = () =>
@@ -101,16 +129,14 @@ const calculateBondMetrics = async (
   const myBond = providers
     .filter(p => p.bond_address?.toLowerCase() === bondAddress.toLowerCase())
     .reduce((acc, provider) => acc + parseBigint(provider.bond), 0n)
-  const totalBond = providers.reduce(
-    (acc, provider) => acc + parseBigint(provider.bond),
-    0n
-  )
 
-  const ownership = totalBond > 0n ? Number(myBond) / Number(totalBond) : 0
-  const nodeOperatorFee =
-    (parseNumber(details?.bond_providers?.node_operator_fee) ?? 0) / 10_000
-  const currentAward = parseNumber(details?.current_award) / runeDecimalFactor
-  const myAward = currentAward * (1 - nodeOperatorFee) * ownership
+  const myAward = fromChainAmount(
+    getBondProviderReward({
+      rewards: getNodeProviderRewards(details),
+      bondAddress,
+    }) ?? 0n,
+    runeCoin.decimals
+  )
 
   const mostRecentChurn = churns?.[0]
   const recentChurnTimestamp =
@@ -180,6 +206,7 @@ export const fetchBondPositions = async (
       positions: mockPositions,
       totalBonded: mockAmount1 + mockAmount2,
       availableNodes: [],
+      recentChurns: toRecentBondChurns(churns),
     }
   }
 
@@ -253,5 +280,6 @@ export const fetchBondPositions = async (
     positions,
     totalBonded,
     availableNodes,
+    recentChurns: toRecentBondChurns(churns),
   }
 }

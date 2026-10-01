@@ -621,7 +621,6 @@ export const hr = {
   next_payout: 'Sljedeća isplata',
   estimated_reward: 'Procijenjena nagrada',
   next_churn: 'Sljedeća rotacija',
-  next_award: 'Sljedeća nagrada',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: 'Još nema trezora',
@@ -2006,4 +2005,10 @@ export const hr = {
     'Šalje cijeli saldo umanjen za mrežnu naknadu i zatvara račun. Sve što ostane ispod egzistencijalnog pologa se uništava.',
   substrate_allow_death_review_warning:
     'Ovim prijenosom se prazni vaš račun. Račun se deaktivira, a sav preostali saldo ispod egzistencijalnog pologa se uništava.',
+  next_reward: 'Sljedeća nagrada',
+  last_reward: 'Posljednja nagrada',
+  total_rewards_earned: 'Ukupno osvojenih nagrada',
+  upcoming: 'Nadolazeće',
+  bond_reward_history_node: 'Čvor: {{address}}',
+  bond_reward_history_error: 'Nije moguće učitati povijest nagrada',
 }

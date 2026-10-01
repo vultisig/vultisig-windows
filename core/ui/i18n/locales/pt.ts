@@ -629,7 +629,6 @@ export const pt = {
   next_payout: 'Próximo pagamento',
   estimated_reward: 'Recompensa estimada',
   next_churn: 'Próxima rotação',
-  next_award: 'Próxima recompensa',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: 'Ainda não há cofres.',
@@ -2037,4 +2036,11 @@ export const pt = {
     'Envia todo o saldo menos a taxa de rede e encerra a conta. Qualquer valor restante abaixo do depósito mínimo é perdido.',
   substrate_allow_death_review_warning:
     'Essa transferência esvaziará sua conta. A conta será desativada e qualquer saldo restante abaixo do depósito mínimo será perdido.',
+  next_reward: 'Próxima recompensa',
+  last_reward: 'Última recompensa',
+  total_rewards_earned: 'Total de recompensas obtidas',
+  upcoming: 'Por vir',
+  bond_reward_history_node: 'Nó: {{address}}',
+  bond_reward_history_error:
+    'Não foi possível carregar o histórico de recompensas.',
 }
