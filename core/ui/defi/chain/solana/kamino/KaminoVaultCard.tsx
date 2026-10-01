@@ -40,10 +40,13 @@ export type KaminoCardPosition =
   | { status: 'unavailable' }
   | {
       status: 'settled'
-      /** Value in the underlying token; `0` is a confirmed empty vault. */
+      /** Current value in the underlying token; `0` is a confirmed empty vault. */
       tokenAmount: number
-      /** Lifetime PnL in the underlying token, absent when unreadable. */
-      pnlToken?: number
+      /**
+       * The value split into what was deposited and the lifetime PnL on top,
+       * in the underlying token. Absent when the PnL could not be read.
+       */
+      breakdown?: { deposited: number; pnl: number }
     }
 
 /**
@@ -119,26 +122,31 @@ export const KaminoVaultCard = ({
         </Identity>
       </HStack>
 
-      {position.status === 'settled' && hasPosition ? (
+      {position.status === 'settled' && hasPosition && position.breakdown ? (
         <>
           <KaminoPositionFigure
             label={t('kamino_earn_deposited', {
-              amount: formatAmount(position.tokenAmount, {
+              amount: formatAmount(position.breakdown.deposited, {
                 ticker: coin.ticker,
               }),
             })}
-            fiat={toFiat(position.tokenAmount)}
+            fiat={toFiat(position.breakdown.deposited)}
           />
-          {position.pnlToken !== undefined ? (
-            <KaminoPositionFigure
-              label={t('kamino_earn_earned', {
-                amount: formatAmount(position.pnlToken, {
+          {/* Unsigned beside a label that names the direction: "Earned: -3"
+              would still assert the loss was earned. */}
+          <KaminoPositionFigure
+            label={t(
+              position.breakdown.pnl < 0
+                ? 'kamino_earn_lost'
+                : 'kamino_earn_earned',
+              {
+                amount: formatAmount(Math.abs(position.breakdown.pnl), {
                   ticker: coin.ticker,
                 }),
-              })}
-              fiat={toFiat(position.pnlToken)}
-            />
-          ) : null}
+              }
+            )}
+            fiat={toFiat(Math.abs(position.breakdown.pnl))}
+          />
         </>
       ) : null}
 

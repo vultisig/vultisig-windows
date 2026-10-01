@@ -1937,6 +1937,7 @@ export const es = {
   kamino_earn_card_withdraw: 'Retirar',
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganado: {{amount}}',
+  kamino_earn_lost: 'Perdido: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'en {{chain}}',
   max_total_fee: 'Tarifa total máxima',

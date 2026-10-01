@@ -1519,6 +1519,7 @@ export const en = {
   kamino_earn_card_withdraw: 'Withdraw',
   kamino_earn_deposited: 'Deposited: {{amount}}',
   kamino_earn_earned: 'Earned: {{amount}}',
+  kamino_earn_lost: 'Lost: {{amount}}',
   kamino_earn_positions_unavailable:
     'Balances could not be loaded. The vaults shown are up to date.',
   kamino_earn_protocol: 'Kamino',
