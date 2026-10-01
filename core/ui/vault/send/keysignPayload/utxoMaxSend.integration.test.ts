@@ -18,12 +18,16 @@ const address = 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'
 const hexPublicKey = `02${'ab'.repeat(32)}`
 const balance = 1_000_000n
 
+const defaultByteFee = 5n
+
 const getPayload = ({
   amount,
   sendMaxAmount,
+  byteFee = defaultByteFee,
 }: {
   amount: bigint
   sendMaxAmount: boolean
+  byteFee?: bigint
 }) =>
   create(KeysignPayloadSchema, {
     coin: toCommCoin({
@@ -44,7 +48,10 @@ const getPayload = ({
     ],
     blockchainSpecific: {
       case: 'utxoSpecific',
-      value: create(UTXOSpecificSchema, { sendMaxAmount, byteFee: '5' }),
+      value: create(UTXOSpecificSchema, {
+        sendMaxAmount,
+        byteFee: byteFee.toString(),
+      }),
     },
   })
 
@@ -62,9 +69,13 @@ describe('UTXO Max send WalletCore integration', () => {
     )
   })
 
-  const getMaxAmount = async () => {
+  const getMaxAmount = async (byteFee = defaultByteFee) => {
     const estimatePayload = await refineKeysignUtxo({
-      keysignPayload: getPayload({ amount: balance, sendMaxAmount: false }),
+      keysignPayload: getPayload({
+        amount: balance,
+        sendMaxAmount: false,
+        byteFee,
+      }),
       walletCore,
       publicKey,
     })
@@ -116,5 +127,32 @@ describe('UTXO Max send WalletCore integration', () => {
         publicKey,
       })
     ).rejects.toThrow('insufficient balance')
+  })
+
+  it('sweeps what a higher fee chosen on Verify leaves of a Max amount', async () => {
+    const { amount } = await getMaxAmount()
+    const byteFee = 6n
+    const { fee } = await getMaxAmount(byteFee)
+    const sendMaxAmount = isUtxoMaxSend({
+      chain: Chain.Bitcoin,
+      amount,
+      balance,
+      fee,
+    })
+
+    expect(sendMaxAmount).toBe(true)
+
+    const refined = await refineKeysignUtxo({
+      keysignPayload: getPayload({ amount, sendMaxAmount, byteFee }),
+      walletCore,
+      publicKey,
+    })
+    const reconciled = await reconcileUtxoPlanAmount({
+      keysignPayload: refined,
+      publicKey,
+      walletCore,
+    })
+
+    expect(reconciled.toAmount).toBe('999340')
   })
 })

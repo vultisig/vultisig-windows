@@ -31,9 +31,9 @@ type UseSendKeysignPayloadQueryProps = {
 }
 
 /**
- * Builds the keysign payload Verify signs from the committed send state. A
- * UTXO send waits for the current fee estimate, which decides whether it is
- * signed as a max spend.
+ * Builds the keysign payload Verify signs from the committed send state and
+ * the fee settings chosen on Verify. A UTXO send waits for the fee at those
+ * settings, which decides whether it is signed as a max spend.
  */
 export const useSendKeysignPayloadQuery = ({
   feeSettings,
@@ -45,7 +45,7 @@ export const useSendKeysignPayloadQuery = ({
   const { destinationTag } = useSendDestinationTag()
   const { isEnabled: tonGasless } = useTonGaslessSend()
   const { isEnabled: allowDeath } = useSendAllowDeath()
-  const sendMaxAmount = useSendMaxAmount()
+  const sendMaxAmount = useSendMaxAmount({ feeSettings })
 
   const vault = useCurrentVault()
 
