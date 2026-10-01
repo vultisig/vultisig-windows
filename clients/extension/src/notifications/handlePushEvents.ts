@@ -25,10 +25,12 @@ import {
   getPushNotificationRegistrations,
   getPushServerUrl,
   getPushVaultIdMigrationCompleted,
+  getSilentPushRejectedUserAgent,
   removePushNotificationRegistration,
   setOptInMigrationCompleted,
   setPushNotificationRegistration,
   setPushVaultIdMigrationCompleted,
+  setSilentPushRejectedUserAgent,
 } from './pushNotificationStorage'
 
 declare const self: {
@@ -125,6 +127,50 @@ const createPushSubscribeError = ({
   return result
 }
 
+/**
+ * Keysign notifications go through `chrome.notifications`, which Chrome does
+ * not count toward a `userVisibleOnly` subscription's promise to show one, so
+ * such a subscription gets Chrome's generic "This site has been updated in the
+ * background" notification next to ours. Extensions may subscribe silently
+ * since Chrome 121; older builds refuse with `NotAllowedError` and fall back to
+ * a user-visible subscription, remembered so it is not replaced on every run.
+ */
+const subscribeSilentlyWhereSupported = async (
+  applicationServerKey: ArrayBuffer
+): Promise<PushSubscription> => {
+  try {
+    return await self.registration.pushManager.subscribe({
+      userVisibleOnly: false,
+      applicationServerKey,
+    })
+  } catch (error) {
+    if (getErrorName(error) !== 'NotAllowedError') {
+      throw error
+    }
+
+    console.warn(
+      '[Extension Push] Silent push subscription refused; subscribing with userVisibleOnly'
+    )
+    const subscription = await self.registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey,
+    })
+    await setSilentPushRejectedUserAgent(navigator.userAgent)
+    return subscription
+  }
+}
+
+/**
+ * Whether an existing subscription should give way to a silent one: it was
+ * made with `userVisibleOnly` (installs from before silent subscriptions, or a
+ * browser that refused them and has since updated).
+ */
+const shouldReplaceWithSilentSubscription = async (
+  subscription: PushSubscription
+): Promise<boolean> =>
+  subscription.options.userVisibleOnly &&
+  (await getSilentPushRejectedUserAgent()) !== navigator.userAgent
+
 const subscribeToPushManager = async ({
   serverUrl,
   vapidPublicKey,
@@ -152,10 +198,7 @@ const subscribeToPushManager = async ({
       console.log(
         `[Extension Push] Subscribing to push manager (attempt ${attempt}/${maxAttempts})...`
       )
-      return await self.registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey,
-      })
+      return await subscribeSilentlyWhereSupported(applicationServerKey)
     } catch (error) {
       console.error('[Extension Push] pushManager.subscribe failed:', {
         attempt,
@@ -189,13 +232,13 @@ const resolvePushSubscription = async (
 ): Promise<PushSubscription> => {
   console.log('[Extension Push] Checking existing push subscription...')
   const existing = await self.registration.pushManager.getSubscription()
-  if (existing) {
+  if (existing && !(await shouldReplaceWithSilentSubscription(existing))) {
     console.log('[Extension Push] Using existing push subscription')
     return existing
   }
 
   console.log(
-    `[Extension Push] No existing subscription. Fetching VAPID key from ${serverUrl}...`
+    `[Extension Push] ${existing ? 'Replacing user-visible subscription' : 'No existing subscription'}. Fetching VAPID key from ${serverUrl}...`
   )
   const vapidPublicKey = await fetchVapidPublicKey({ serverUrl })
   console.log(
@@ -209,6 +252,14 @@ const resolvePushSubscription = async (
     vapidPublicKeyLength: vapidPublicKey.length,
     applicationServerKeyBytes: applicationServerKey.byteLength,
   })
+
+  // A worker holds one subscription, so the user-visible one goes first. Every
+  // opted-in vault is re-registered with the new one on worker startup, and the
+  // server drops the old endpoint once a push to it comes back 410.
+  if (existing) {
+    await existing.unsubscribe()
+  }
+
   const subscription = await subscribeToPushManager({
     serverUrl,
     vapidPublicKey,
