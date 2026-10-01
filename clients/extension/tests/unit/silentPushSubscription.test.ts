@@ -18,6 +18,7 @@ type FakeSubscription = {
 const browser = {
   current: null as FakeSubscription | null,
   acceptsSilentSubscriptions: true,
+  pushServiceAvailable: true,
   subscriptionCount: 0,
 }
 
@@ -41,6 +42,12 @@ const pushManager = {
   getSubscription: vi.fn(async () => browser.current),
   subscribe: vi.fn(
     async ({ userVisibleOnly }: { userVisibleOnly: boolean }) => {
+      if (!browser.pushServiceAvailable) {
+        throw new DOMException(
+          'Registration failed - push service error',
+          'AbortError'
+        )
+      }
       if (!userVisibleOnly && !browser.acceptsSilentSubscriptions) {
         throw new DOMException(
           'Registration failed - permission denied',
@@ -86,6 +93,7 @@ describe('push subscription', () => {
     vi.resetModules()
     browser.current = null
     browser.acceptsSilentSubscriptions = true
+    browser.pushServiceAvailable = true
     browser.subscriptionCount = 0
     registeredEndpoints.length = 0
     vi.stubGlobal('self', { registration: { pushManager } })
@@ -104,6 +112,7 @@ describe('push subscription', () => {
   })
 
   afterEach(() => {
+    vi.useRealTimers()
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
   })
@@ -193,5 +202,28 @@ describe('push subscription', () => {
 
     expect(legacy.unsubscribe).not.toHaveBeenCalled()
     expect(browser.current).toBe(legacy)
+  })
+
+  // The old subscription has to go before the new one can be made, so a push
+  // service failure in between leaves none until the next startup subscribes.
+  it('subscribes again on the next startup when the replacement fails', async () => {
+    vi.useFakeTimers()
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    browser.current = makeSubscription('https://fcm.test/legacy', true)
+    browser.pushServiceAvailable = false
+
+    const failedRun = reRegisterOptedInVaults()
+    await vi.runAllTimersAsync()
+    await failedRun
+
+    expect(browser.current).toBeNull()
+    expect(registeredEndpoints).toEqual([])
+
+    browser.pushServiceAvailable = true
+    vi.resetModules()
+    await reRegisterOptedInVaults()
+
+    expect(browser.current?.options.userVisibleOnly).toBe(false)
+    expect(registeredEndpoints).toEqual(['https://fcm.test/1'])
   })
 })
