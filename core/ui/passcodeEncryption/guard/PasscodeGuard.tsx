@@ -22,7 +22,11 @@ export const PasscodeGuard = () => {
     passcodeAutoLock,
   })
 
-  const isLocked = hasPasscodeEnabled && !passcode
+  // The passcode state starts empty on every mount, so while an unlock session
+  // is being restored the app is not known to be locked. Treating it as locked
+  // would clear the cached fast-vault password on every popup open.
+  const isLocked =
+    hasPasscodeEnabled && !passcode && !pendingPasscodeUnlockRestore
 
   useClearSigningCredentialsOnLock(isLocked)
 
@@ -34,7 +38,7 @@ export const PasscodeGuard = () => {
           <StartupPlaceholder />
         </BlockingOverlay>
       )}
-      {isLocked && !pendingPasscodeUnlockRestore && (
+      {isLocked && (
         <BlockingOverlay>
           <EnterPasscode />
         </BlockingOverlay>

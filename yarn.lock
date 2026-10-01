@@ -477,11 +477,11 @@ __metadata:
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
-    "@vultisig/core-chain": "npm:6.1.2"
+    "@vultisig/core-chain": "npm:6.1.3"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:5.0.2"
+    "@vultisig/core-mpc": "npm:5.0.3"
     "@vultisig/lib-utils": "npm:0.10.7"
-    "@vultisig/sdk": "npm:8.1.2"
+    "@vultisig/sdk": "npm:9.0.0"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -542,10 +542,10 @@ __metadata:
     "@types/react-dom": "npm:^19.2.3"
     "@types/web-push": "npm:^3"
     "@types/ws": "npm:^8"
-    "@vultisig/core-chain": "npm:6.1.2"
-    "@vultisig/core-mpc": "npm:5.0.2"
+    "@vultisig/core-chain": "npm:6.1.3"
+    "@vultisig/core-mpc": "npm:5.0.3"
     "@vultisig/lib-utils": "npm:0.10.7"
-    "@vultisig/sdk": "npm:8.1.2"
+    "@vultisig/sdk": "npm:9.0.0"
     "@wallet-standard/base": "npm:^1.1.1"
     "@wallet-standard/features": "npm:^1.1.1"
     bech32: "npm:^2.0.0"
@@ -640,9 +640,9 @@ __metadata:
     "@tanstack/react-query": "npm:^5.101.0"
     "@tanstack/react-query-persist-client": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:6.1.2"
+    "@vultisig/core-chain": "npm:6.1.3"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:5.0.2"
+    "@vultisig/core-mpc": "npm:5.0.3"
     "@vultisig/lib-utils": "npm:0.10.7"
     react: "npm:19.2.4"
     react-i18next: "npm:^16.5.8"
@@ -664,9 +664,9 @@ __metadata:
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.101.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
-    "@vultisig/core-chain": "npm:6.1.2"
+    "@vultisig/core-chain": "npm:6.1.3"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:5.0.2"
+    "@vultisig/core-mpc": "npm:5.0.3"
     "@vultisig/lib-utils": "npm:0.10.7"
     bitcoinjs-lib: "npm:^7.0.1"
     cosmjs-types: "npm:^0.11.0"
@@ -716,12 +716,12 @@ __metadata:
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitejs/plugin-react": "npm:5.1.3"
-    "@vultisig/core-chain": "npm:6.1.2"
+    "@vultisig/core-chain": "npm:6.1.3"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:5.0.2"
+    "@vultisig/core-mpc": "npm:5.0.3"
     "@vultisig/lib-mldsa": "npm:0.9.0"
     "@vultisig/lib-utils": "npm:0.10.7"
-    "@vultisig/sdk": "npm:8.1.2"
+    "@vultisig/sdk": "npm:9.0.0"
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
@@ -1682,75 +1682,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/bigdecimal@npm:0.2.7":
-  version: 0.2.7
-  resolution: "@formatjs/bigdecimal@npm:0.2.7"
-  checksum: 10c0/9583a4d615553d1353284d0f66d30b6d7ab54b8d57c50f14d42db5fa48029b01c26ac7705b493c4bde716fcffbaee4d2f3cfcb6550d6c111e3a33bcc61cc719a
-  languageName: node
-  linkType: hard
-
-"@formatjs/fast-memoize@npm:3.1.7":
-  version: 3.1.7
-  resolution: "@formatjs/fast-memoize@npm:3.1.7"
-  checksum: 10c0/dee801f82eda1f6fdc166b0c907e8750c15e409e20b2006c215d9247fe0db720d84d53fcb2fb7559cec21a24932b69dda326c81ee2885aad2cde31bc25449fd0
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-getcanonicallocales@npm:3.2.11, @formatjs/intl-getcanonicallocales@npm:^3.2.11":
-  version: 3.2.11
-  resolution: "@formatjs/intl-getcanonicallocales@npm:3.2.11"
-  checksum: 10c0/8083c055fc4c86e307a70266f06489745e1e17f44539a5742023a5224ed6672b513905d2f1acab4b13f586e70a9416f8eb53cb4ac9eafb149a5e6055a2f96db2
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-locale@npm:^5.3.10":
-  version: 5.3.10
-  resolution: "@formatjs/intl-locale@npm:5.3.10"
-  dependencies:
-    "@formatjs/intl-getcanonicallocales": "npm:3.2.11"
-    "@formatjs/intl-supportedvaluesof": "npm:2.3.9"
-  checksum: 10c0/b2de54b5ff032b968b427ac65d45e6a0aca8aadb291819a61d4a12596c8782922d279a49eacd3d1c8c07b446127948f122f9420eb41741aee3076ca553514a6c
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-localematcher@npm:0.8.13":
-  version: 0.8.13
-  resolution: "@formatjs/intl-localematcher@npm:0.8.13"
-  dependencies:
-    "@formatjs/fast-memoize": "npm:3.1.7"
-  checksum: 10c0/8b36937837751b71c4957cfbae6f515edc9faf2ae341de0529b444aa8e1cdee19f59dce1c7c8b30f315aff082fd97dc96f27ea4e2cbadafb3c1d34247244e664
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-numberformat@npm:^9.3.11":
-  version: 9.4.0
-  resolution: "@formatjs/intl-numberformat@npm:9.4.0"
-  dependencies:
-    "@formatjs/bigdecimal": "npm:0.2.7"
-    "@formatjs/intl-localematcher": "npm:0.8.13"
-  checksum: 10c0/abd4240d5761de0d036aa69a68b60888a1e437ba1a479e88df35ea5ba7997040ea136fdf17999e8577eae28a7b58368d0ce831638d7a0fb74c9b742e18237cf6
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-pluralrules@npm:^6.3.10":
-  version: 6.3.13
-  resolution: "@formatjs/intl-pluralrules@npm:6.3.13"
-  dependencies:
-    "@formatjs/bigdecimal": "npm:0.2.7"
-    "@formatjs/intl-localematcher": "npm:0.8.13"
-  checksum: 10c0/7002a52e3d0d1126ef2e1703c0078dde2a33b162170d880da6f1aeae3e559487ec832761c115b76df2cbf7a4d1b40e648f0154b762b4acb9a78315a2990b4ea9
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-supportedvaluesof@npm:2.3.9":
-  version: 2.3.9
-  resolution: "@formatjs/intl-supportedvaluesof@npm:2.3.9"
-  dependencies:
-    "@formatjs/fast-memoize": "npm:3.1.7"
-  checksum: 10c0/7b3d8fe5c16e9c7d93ee34161cda4a91facad7c9dc33d0e8cf22c3acd6a09b405d98ea838473c290bc8fcc2053e3358b0874a5e9f88336c2c3c50b9e4e7f4cdc
-  languageName: node
-  linkType: hard
-
 "@gemwallet/api@npm:^3.8.0":
   version: 3.8.0
   resolution: "@gemwallet/api@npm:3.8.0"
@@ -1853,13 +1784,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/grpc-js@npm:1.14.4":
-  version: 1.14.4
-  resolution: "@grpc/grpc-js@npm:1.14.4"
+"@grpc/grpc-js@npm:1.14.5":
+  version: 1.14.5
+  resolution: "@grpc/grpc-js@npm:1.14.5"
   dependencies:
     "@grpc/proto-loader": "npm:^0.8.0"
     "@js-sdsl/ordered-map": "npm:^4.4.2"
-  checksum: 10c0/0ff6395e8112ad30e8f99dbb684b997ebc3264e770b8e354f23effeedf181a380e0ecef8bca466cbbf3e9141968656144851de1da50f840a1efd9314c9812449
+  checksum: 10c0/25a44d80127ed166181fc3db25d9815a62081e33331938bdae31830296ec94a1c8ed3ade79fae26642ec3158e97a79936145c680f95c19528ffff334cca491e0
   languageName: node
   linkType: hard
 
@@ -3947,9 +3878,9 @@ __metadata:
     "@core/ui": "workspace:^"
     "@lib/ui": "workspace:^"
     "@tanstack/react-query": "npm:^5.101.0"
-    "@vultisig/core-chain": "npm:6.1.2"
+    "@vultisig/core-chain": "npm:6.1.3"
     "@vultisig/core-config": "npm:0.9.1"
-    "@vultisig/core-mpc": "npm:5.0.2"
+    "@vultisig/core-mpc": "npm:5.0.3"
     "@vultisig/lib-utils": "npm:0.10.7"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
@@ -5909,9 +5840,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-chain@npm:6.1.2":
-  version: 6.1.2
-  resolution: "@vultisig/core-chain@npm:6.1.2"
+"@vultisig/core-chain@npm:6.1.3":
+  version: 6.1.3
+  resolution: "@vultisig/core-chain@npm:6.1.3"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.13.0"
@@ -5946,7 +5877,7 @@ __metadata:
     tiny-secp256k1: "npm:^2.2.4"
     viem: "npm:^2.55.10"
     xrpl: "npm:^5.0.0"
-  checksum: 10c0/0871f02675eb9078c4a1ac941dbdf78809f54f7725d4575c515bbdd6186029149a89cae0df40b4ca9787280667bf462aae88ceb80bf71b236d399c1b44920288
+  checksum: 10c0/75caf8188407ddb7536c75018f6a0abe70a5a6efe5a64892a5f1daef341554a59f3605ab1c5c673d25f9519c3be7160a68ea5dbbb5c6db43a6492e5cf3d6ad4e
   languageName: node
   linkType: hard
 
@@ -5957,9 +5888,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/core-mpc@npm:5.0.2":
-  version: 5.0.2
-  resolution: "@vultisig/core-mpc@npm:5.0.2"
+"@vultisig/core-mpc@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@vultisig/core-mpc@npm:5.0.3"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.13.0"
@@ -5968,7 +5899,7 @@ __metadata:
     "@noble/hashes": "npm:^2.2.0"
     "@solana/web3.js": "npm:^1.98.4"
     "@trustwallet/wallet-core": "npm:^4.7.3"
-    "@vultisig/core-chain": "npm:6.1.2"
+    "@vultisig/core-chain": "npm:6.1.3"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/lib-dkls": "npm:0.9.0"
     "@vultisig/lib-mldsa": "npm:0.9.0"
@@ -5981,7 +5912,7 @@ __metadata:
     cosmjs-types: "npm:^0.11.0"
     long: "npm:^5.3.2"
     viem: "npm:^2.55.10"
-  checksum: 10c0/2977faa9192098dc26aa7b8c9c371a3095afecc44ef9898d3bff3c59b9e1814a2146280afe55175ebcded4aa21771fecf2ecddd0a165fcc72a16ad79f4499144
+  checksum: 10c0/c895983f6a4cd0acf5961775611540a28f4a353bfb32c6cdc36b982f8650926d3bb342850990fd3f36cc05e576c0d92d5d3f93fc1585d5ef7743328515eaece2
   languageName: node
   linkType: hard
 
@@ -6032,9 +5963,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/sdk@npm:8.1.2":
-  version: 8.1.2
-  resolution: "@vultisig/sdk@npm:8.1.2"
+"@vultisig/sdk@npm:9.0.0":
+  version: 9.0.0
+  resolution: "@vultisig/sdk@npm:9.0.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@balancer-labs/balancer-maths": "npm:^0.0.41"
@@ -6043,10 +5974,6 @@ __metadata:
     "@coral-xyz/anchor": "npm:^0.32.1"
     "@cosmjs/encoding": "npm:^0.39.0"
     "@cosmjs/stargate": "npm:^0.39.0"
-    "@formatjs/intl-getcanonicallocales": "npm:^3.2.11"
-    "@formatjs/intl-locale": "npm:^5.3.10"
-    "@formatjs/intl-numberformat": "npm:^9.3.11"
-    "@formatjs/intl-pluralrules": "npm:^6.3.10"
     "@lifi/sdk": "npm:^4.1.0"
     "@mysten/sui": "npm:^2.22.1"
     "@noble/hashes": "npm:^2.2.0"
@@ -6058,8 +5985,8 @@ __metadata:
     "@ton/core": "npm:^0.63.1"
     "@ton/crypto": "npm:^3.3.0"
     "@trustwallet/wallet-core": "npm:^4.7.3"
-    "@vultisig/core-chain": "npm:6.1.2"
-    "@vultisig/core-mpc": "npm:5.0.2"
+    "@vultisig/core-chain": "npm:6.1.3"
+    "@vultisig/core-mpc": "npm:5.0.3"
     "@vultisig/lib-dkls": "npm:0.9.0"
     "@vultisig/lib-mldsa": "npm:0.9.0"
     "@vultisig/lib-schnorr": "npm:0.9.0"
@@ -6117,7 +6044,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/624613aa557707e488f84e8de9367529676ebdd6c4ba5a05fc9f153ebacf6211c3d22879ca2a5eefc70c566dd344c5eae7917584bc0cf27f1008f8a0854bb685
+  checksum: 10c0/67f97da66429f243c28f95bc96745bc3d8f70a5de6d66abfa532709dae6e37b57f81f19c5801faf564c500f87834cfdded87138b1674efcb6d08e0828e08f855
   languageName: node
   linkType: hard
 
@@ -6684,15 +6611,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.18.1":
-  version: 1.18.1
-  resolution: "axios@npm:1.18.1"
+"axios@npm:1.20.0":
+  version: 1.20.0
+  resolution: "axios@npm:1.20.0"
   dependencies:
     follow-redirects: "npm:^1.16.0"
-    form-data: "npm:^4.0.5"
+    form-data: "npm:^4.0.6"
     https-proxy-agent: "npm:^5.0.1"
     proxy-from-env: "npm:^2.1.0"
-  checksum: 10c0/9d9378a3af0d0ad730a52ad9d15ec7201f3926ad6e7e8bbffc5ae21ca2835ad11d1d9598698f5dd9718917486039f55ea1d7dc23d8e44fa827a55cc3262c02fc
+  checksum: 10c0/976088acf532286356f4c2e65df1ef47ba7da3936d83e928d0d64357bbf5370456abd3eb5826c15df322335fcb1fe200d4a84b4fcf20ffccdd63b40d80fa495c
   languageName: node
   linkType: hard
 
