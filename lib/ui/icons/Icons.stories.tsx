@@ -12,6 +12,7 @@ import { ArrowUpDownIcon } from './ArrowUpDownIcon'
 import { ArrowUpRightIcon } from './ArrowUpRightIcon'
 import { ArrowWallDownIcon } from './ArrowWallDownIcon'
 import { BadgeCheckIcon } from './BadgeCheckIcon'
+import { BagClockIcon } from './BagClockIcon'
 import { BellIcon } from './BellIcon'
 import { BookIcon } from './BookIcon'
 import { BooksIcon } from './BooksIcon'
@@ -19,6 +20,7 @@ import { BoxIcon } from './BoxIcon'
 import { BrokenChainLink3Icon } from './BrokenChainLink3Icon'
 import { BrowserExtensionIcon } from './BrowserExtensionIcon'
 import { BubbleQuestionIcon } from './BubbleQuestionIcon'
+import { CalendarBlankIcon } from './CalendarBlankIcon'
 import { CalendarClockIcon } from './CalendarClockIcon'
 import { CalendarIcon } from './CalendarIcon'
 import { CameraFilledIcon } from './CameraFilledIcon'
@@ -188,6 +190,7 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   ArrowUpRightIcon,
   ArrowWallDownIcon,
   BadgeCheckIcon,
+  BagClockIcon,
   BellIcon,
   BookIcon,
   BooksIcon,
@@ -195,6 +198,7 @@ const vultisigIcons: Record<string, FC<SvgProps>> = {
   BrokenChainLink3Icon,
   BrowserExtensionIcon,
   BubbleQuestionIcon,
+  CalendarBlankIcon,
   CalendarClockIcon,
   CalendarIcon,
   CameraFilledIcon,

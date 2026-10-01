@@ -9,9 +9,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-const IconContainer = styled(IconWrapper)`
+const IconContainer = styled(IconWrapper)<{ $isSmall: boolean }>`
   color: ${getColor('primaryAccentFour')};
-  font-size: 24px;
+  font-size: ${({ $isSmall }) => ($isSmall ? 20 : 24)}px;
 `
 
 const InteractiveIndicator = styled(ChevronRightIcon)`
@@ -36,6 +36,8 @@ const Container = styled(UnstyledButton)`
 
 type InfoItemProps = {
   icon: ReactNode
+  /** Uses the compact sizes of the small-screen sheet instead of the desktop ones. */
+  isSmall?: boolean
 } & ChildrenProp &
   TitleProp &
   OnClickProp
@@ -45,15 +47,20 @@ export const BackupOption = ({
   children,
   onClick,
   title,
+  isSmall = false,
 }: InfoItemProps) => {
   return (
     <Container onClick={onClick}>
-      <IconContainer>{icon}</IconContainer>
+      <IconContainer $isSmall={isSmall}>{icon}</IconContainer>
       <VStack flexGrow alignItems="start" gap={4}>
-        <Text size={15} weight="500">
+        <Text
+          size={isSmall ? 14 : 15}
+          weight="500"
+          color={isSmall ? 'regular' : undefined}
+        >
           {title}
         </Text>
-        <Text size={13} weight="500" color="shyExtra">
+        <Text size={isSmall ? 12 : 13} weight="500" color="shyExtra">
           {children}
         </Text>
       </VStack>

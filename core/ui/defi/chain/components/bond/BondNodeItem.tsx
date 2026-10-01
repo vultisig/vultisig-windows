@@ -3,10 +3,9 @@ import {
   formatDateShort,
   formatStatusLabel,
 } from '@core/ui/defi/shared/formatters'
-import { Button } from '@lib/ui/buttons/Button'
-import { BrokenChainLink3Icon } from '@lib/ui/icons/BrokenChainLink3Icon'
-import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
+import { CalendarBlankIcon } from '@lib/ui/icons/CalendarBlankIcon'
 import { ChainLinkIcon3 } from '@lib/ui/icons/ChainLinkIcon3'
+import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -20,12 +19,20 @@ import { CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { BondChurn } from '../../queries/bondRewards/churns'
+import { BondChain } from '../../queries/bondRewards/config'
+import { BondActionButton } from './BondActionButton'
+import { BondInfoLabel } from './BondInfoLabel'
+import { BondRewardsRow } from './rewards/BondRewardsRow'
+
 type Props = {
+  chain: BondChain
   coin: Coin
   nodeAddress: string
   amount: bigint
   apy: number
   nextReward: number
+  recentChurns: BondChurn[]
   nextChurn?: Date
   status: string
   onBond: () => void
@@ -42,30 +49,23 @@ const Divider = styled.div`
   background: ${getColor('foregroundExtra')};
 `
 
-const InfoRow = styled(HStack)`
-  align-items: center;
-  gap: 8px;
-`
-
-const InfoIcon = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${getColor('textShy')};
-  font-size: 16px;
-`
-
 const ButtonRow = styled(HStack)`
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
 `
 
+/**
+ * One bonded node on the Bonded tab: the vault's bond, APY and next churn,
+ * its Next and Last Reward, and the Bond / Unbond actions.
+ */
 export const BondNodeItem = ({
+  chain,
   coin,
   nodeAddress,
   amount,
   apy,
   nextReward,
+  recentChurns,
   nextChurn,
   status,
   onBond,
@@ -142,14 +142,7 @@ export const BondNodeItem = ({
 
       {/* APY Row */}
       <HStack justifyContent="space-between" alignItems="center">
-        <InfoRow>
-          <InfoIcon>
-            <PercentIcon />
-          </InfoIcon>
-          <Text size={13} color="shy">
-            {t('apy')}
-          </Text>
-        </InfoRow>
+        <BondInfoLabel icon={<PercentIcon />}>{t('apy')}</BondInfoLabel>
         <Text size={14} weight="600" color={apy > 0 ? 'success' : 'shy'}>
           {apy === 0
             ? t('percentage_zero')
@@ -157,61 +150,50 @@ export const BondNodeItem = ({
         </Text>
       </HStack>
 
+      {/* Next Churn Row */}
+      <HStack justifyContent="space-between" alignItems="center">
+        <BondInfoLabel icon={<CalendarBlankIcon />}>
+          {t('next_churn')}
+        </BondInfoLabel>
+        <Text size={14} weight="600" color="shyExtra">
+          {formatDateShort(nextChurn, i18n.language) ?? t('pending')}
+        </Text>
+      </HStack>
+
       <Divider />
 
-      {/* Next Churn and Next Award Row */}
-      <HStack gap={48}>
-        <VStack gap={4}>
-          <InfoRow>
-            <InfoIcon>
-              <CalendarIcon />
-            </InfoIcon>
-            <Text size={13} color="shy">
-              {t('next_churn')}
-            </Text>
-          </InfoRow>
-          <Text size={14} weight="600" color="shyExtra">
-            {formatDateShort(nextChurn, i18n.language) ?? t('pending')}
-          </Text>
-        </VStack>
-        <VStack gap={4}>
-          <InfoRow>
-            <InfoIcon>
-              <CalendarIcon />
-            </InfoIcon>
-            <Text size={13} color="shy">
-              {t('next_award')}
-            </Text>
-          </InfoRow>
-          <Text size={14} weight="600" color="shyExtra">
-            {formatAmount(nextReward, { ticker: coin.ticker })}
-          </Text>
-        </VStack>
-      </HStack>
+      <BondRewardsRow
+        chain={chain}
+        coin={coin}
+        nodeAddress={nodeAddress}
+        nextReward={nextReward}
+        recentChurns={recentChurns}
+      />
 
       {/* Action Buttons */}
       <ButtonRow>
         {renderAction(
-          <Button
+          <BondActionButton
             kind="secondary"
             onClick={onUnbond}
             disabled={unbondDisabled}
             style={{ flex: 1 }}
-            icon={<BrokenChainLink3Icon />}
+            icon={<LinkTwoOffIcon />}
           >
             {t('unbond')}
-          </Button>,
+          </BondActionButton>,
           { flex: 1 }
         )}
         {renderAction(
-          <Button
+          <BondActionButton
+            kind="primary"
             onClick={onBond}
             disabled={bondDisabled}
             style={{ flex: 1 }}
             icon={<ChainLinkIcon3 />}
           >
             {t('bond')}
-          </Button>,
+          </BondActionButton>,
           { flex: 1 }
         )}
       </ButtonRow>

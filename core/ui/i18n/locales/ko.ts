@@ -620,7 +620,6 @@ export const ko = {
   next_payout: '다음 지급',
   estimated_reward: '예상 보상',
   next_churn: '다음 교체',
-  next_award: '다음 수상',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: '아직 금고가 없습니다',
@@ -1997,4 +1996,10 @@ export const ko = {
     '네트워크 수수료를 제외한 전체 잔액을 보내고 계정을 폐쇄합니다. 최소 예치금 미만의 잔액은 모두 소멸됩니다.',
   substrate_allow_death_review_warning:
     '이체로 인해 계좌 잔액이 모두 소진됩니다. 계좌는 비활성화되며, 최소 예치금 미만의 잔액은 모두 소멸됩니다.',
+  next_reward: '다음 보상',
+  last_reward: '마지막 보상',
+  total_rewards_earned: '총 적립 리워드',
+  upcoming: '다가오는',
+  bond_reward_history_node: '노드: {{address}}',
+  bond_reward_history_error: '보상 내역을 불러올 수 없습니다.',
 }

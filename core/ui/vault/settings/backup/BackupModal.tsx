@@ -1,8 +1,7 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius, borderRadiusPx } from '@lib/ui/css/borderRadius'
-import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
+import { borderRadiusPx } from '@lib/ui/css/borderRadius'
 import { CloudIcon } from '@lib/ui/icons/CloudIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
@@ -35,6 +34,7 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
         const Icon = backupOptionIcon[option]
         return (
           <BackupOption
+            isSmall={isSmall}
             title={t(`${option}_backup`)}
             key={option}
             icon={<Icon />}
@@ -50,24 +50,30 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
 
   if (isSmall) {
     return (
-      <>
-        <Backdrop onClose={onClose} />
+      <Backdrop onClose={onClose}>
         <Wrapper>
-          <VStack gap={26}>
-            <HStack justifyContent="space-between">
-              <CancelButton onClick={onClose}>
-                <IconWrapper size={44} color="textSupporting">
-                  <CloseIcon />
-                </IconWrapper>
-              </CancelButton>
-            </HStack>
-            <Text size={22} weight={500}>
+          <HStack alignItems="center" justifyContent="space-between" gap={12}>
+            <IconButton
+              aria-label={t('close')}
+              kind="secondary"
+              size="lg"
+              onClick={onClose}
+            >
+              <CrossIcon />
+            </IconButton>
+            <Text
+              size={16}
+              weight={500}
+              color="contrast"
+              style={{ flex: 1, textAlign: 'center' }}
+            >
               {t('choose_backup_method')}
             </Text>
-          </VStack>
+            <TitleBalance />
+          </HStack>
           {modalContent()}
         </Wrapper>
-      </>
+      </Backdrop>
     )
   }
 
@@ -83,10 +89,9 @@ const Wrapper = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1;
 
   ${vStack({
-    gap: 16,
+    gap: 20,
   })};
 
   padding: 20px;
@@ -98,17 +103,7 @@ const DesktopModalWrapper = styled.div`
   margin-top: -8px;
 `
 
-const ActionButton = styled(UnstyledButton)`
-  width: 44px;
-  height: 44px;
-  ${borderRadius.pill};
-`
-
-const CancelButton = styled(ActionButton)`
-  fill: var(--Fills-Secondary, rgba(120, 120, 128, 0.32));
-  mix-blend-mode: plus-lighter;
-
-  &:hover {
-    color: ${getColor('contrast')};
-  }
+// Mirrors the close button's width so the title stays centred.
+const TitleBalance = styled.div`
+  width: ${iconButtonSize.lg}px;
 `

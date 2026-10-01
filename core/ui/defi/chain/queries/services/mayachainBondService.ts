@@ -6,12 +6,17 @@ import {
 } from '@core/ui/defi/chain/constants/time'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { addQueryParams } from '@vultisig/lib-utils/query/addQueryParams'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
+import { toRecentBondChurns } from '../bondRewards/churns'
+import {
+  getBondProviderReward,
+  getMayachainBondProviderRewards,
+} from '../bondRewards/providerRewards'
 import { mayaMidgardBaseUrl, mayanodeBaseUrl } from '../constants'
 import { mayaCoin } from '../tokens'
 import { RawThorchainBondPosition } from '../types'
-import { toDecimalFactor } from '../utils/decimals'
 import {
   canUnbondNode,
   estimateNextChurn,
@@ -20,13 +25,12 @@ import {
   toBondStatusLabel,
 } from '../utils/parsers'
 
-const mayaDecimalFactor = toDecimalFactor(mayaCoin.decimals)
-
 const mayanodeHeaders = { 'X-Client-ID': 'vultisig' }
 
 type BondProvider = {
   bond_address?: string
   bond?: string
+  reward?: string
 }
 
 type ChurnEntry = {
@@ -46,12 +50,16 @@ type HealthInfo = {
   }
 }
 
-/** Full node response from mayanode /nodes endpoint. */
+/**
+ * Full node response from mayanode /nodes endpoint. MAYANode names the
+ * accruing award `reward` (THORNode's `current_award`) and reports each
+ * provider's share of it on their own row.
+ */
 type MayachainNode = {
   node_address?: string
   status?: string
   bond_address?: string
-  current_award?: string
+  reward?: string
   bond_providers?: {
     node_operator_fee?: string
     providers?: BondProvider[]
@@ -63,6 +71,29 @@ const fetchAllNodes = () =>
   queryUrl<MayachainNode[]>(`${mayanodeBaseUrl}/nodes`, {
     headers: mayanodeHeaders,
   })
+
+type NodeAtHeightInput = {
+  nodeAddress: string
+  height: number
+}
+
+const fetchNodeAtHeight = ({ nodeAddress, height }: NodeAtHeightInput) =>
+  queryUrl<MayachainNode>(
+    addQueryParams(`${mayanodeBaseUrl}/node/${nodeAddress}`, { height }),
+    { headers: mayanodeHeaders }
+  )
+
+/**
+ * Each bond provider's share of the award the node held at a past block.
+ * Read one block before a churn, it is what that churn paid out.
+ */
+export const fetchMayachainBondProviderRewards = async (
+  input: NodeAtHeightInput
+) => {
+  const node = await fetchNodeAtHeight(input)
+
+  return getMayachainBondProviderRewards(node.bond_providers?.providers ?? [])
+}
 
 /** Fetches the list of churn events from MayaChain Midgard. */
 export const fetchChurns = () =>
@@ -95,16 +126,13 @@ const calculateBondMetrics = ({
     .filter(p => p.bond_address?.toLowerCase() === normalizedAddress)
     .reduce((acc, provider) => acc + parseBigint(provider.bond), 0n)
 
-  const totalBond = providers.reduce(
-    (acc, provider) => acc + parseBigint(provider.bond),
-    0n
+  const myAward = fromChainAmount(
+    getBondProviderReward({
+      rewards: getMayachainBondProviderRewards(providers),
+      bondAddress: address,
+    }) ?? 0n,
+    mayaCoin.decimals
   )
-
-  const ownership = totalBond > 0n ? Number(myBond) / Number(totalBond) : 0
-  const nodeOperatorFee =
-    parseNumber(node.bond_providers?.node_operator_fee) / 10_000
-  const currentAward = parseNumber(node.current_award) / mayaDecimalFactor
-  const myAward = currentAward * (1 - nodeOperatorFee) * ownership
 
   const mostRecentChurn = churns[0]
   const recentChurnTimestamp =
@@ -148,6 +176,7 @@ export const fetchBondPositions = async ({
       positions: [],
       totalBonded: 0n,
       availableNodes: [],
+      recentChurns: toRecentBondChurns(churns),
     }
   }
 
@@ -225,5 +254,6 @@ export const fetchBondPositions = async ({
     positions,
     totalBonded,
     availableNodes,
+    recentChurns: toRecentBondChurns(churns),
   }
 }

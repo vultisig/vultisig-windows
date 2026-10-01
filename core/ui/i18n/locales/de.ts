@@ -637,7 +637,6 @@ export const de = {
   next_payout: 'Nächste Auszahlung',
   estimated_reward: 'Geschätzte Belohnung',
   next_churn: 'Nächste Rotation',
-  next_award: 'Nächste Belohnung',
   percentage_zero: '0 %',
   percentage_value: '{{value}}%',
   no_vaults: 'Noch keine Tresore',
@@ -2055,4 +2054,10 @@ export const de = {
     'Überweist den gesamten Kontostand abzüglich der Netzwerkgebühr und schließt das Konto. Alles, was unterhalb der Mindesteinlage verbleibt, wird vernichtet.',
   substrate_allow_death_review_warning:
     'Durch diese Überweisung wird Ihr Konto geleert. Das Konto wird deaktiviert, und ein etwaiges Guthaben unterhalb der Mindesteinlage verfällt.',
+  next_reward: 'Nächste Belohnung',
+  last_reward: 'Letzte Belohnung',
+  total_rewards_earned: 'Gesamt erhaltene Prämien',
+  upcoming: 'Demnächst',
+  bond_reward_history_node: 'Knoten: {{address}}',
+  bond_reward_history_error: 'Prämienverlauf konnte nicht geladen werden',
 }

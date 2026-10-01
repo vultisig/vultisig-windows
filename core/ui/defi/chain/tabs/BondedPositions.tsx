@@ -15,6 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { sum } from '@vultisig/lib-utils/array/sum'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode, useState } from 'react'
@@ -23,6 +24,7 @@ import styled from 'styled-components'
 
 import { BondedSummaryCard } from '../components/bond/BondedSummaryCard'
 import { BondNodeItem } from '../components/bond/BondNodeItem'
+import { bondChains } from '../queries/bondRewards/config'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
@@ -106,8 +108,7 @@ export const BondedPositions = () => {
   const createCoin = useCreateCoinMutation()
   const removeFromIgnored = useRemoveFromCoinFinderIgnoreMutation()
 
-  const isBondingDisabledByChain =
-    chain !== Chain.THORChain && chain !== Chain.MayaChain
+  const isBondingDisabledByChain = !isOneOf(chain, bondChains)
   const bondCoin = {
     ...(chainFeeCoin[chain] ?? chainFeeCoin[Chain.THORChain]),
     chain,
@@ -149,6 +150,7 @@ export const BondedPositions = () => {
   )
   const totalFiat = sum(positions.map(position => position.fiatValue))
   const availableNodes = data?.bond?.availableNodes ?? []
+  const recentChurns = data?.bond?.recentChurns ?? []
 
   const navigateToBond = async (overrides?: { nodeAddress?: string }) => {
     if (isBondingDisabled) return
@@ -228,15 +230,17 @@ export const BondedPositions = () => {
                   </SkeletonItem>
                 ))}
               </>
-            ) : (
+            ) : isOneOf(chain, bondChains) ? (
               positions.map(position => (
                 <SectionItem key={position.nodeAddress}>
                   <BondNodeItem
+                    chain={chain}
                     coin={bondCoin}
                     nodeAddress={position.nodeAddress}
                     amount={position.amount}
                     apy={position.apy}
                     nextReward={position.nextReward}
+                    recentChurns={recentChurns}
                     nextChurn={position.nextChurn}
                     status={position.status}
                     onBond={() =>
@@ -251,7 +255,7 @@ export const BondedPositions = () => {
                   />
                 </SectionItem>
               ))
-            )}
+            ) : null}
           </Collapsible>
         </SectionContainer>
       )}

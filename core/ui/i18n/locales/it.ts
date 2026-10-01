@@ -633,7 +633,6 @@ export const it = {
   next_payout: 'Prossimo pagamento',
   estimated_reward: 'Ricompensa stimata',
   next_churn: 'Prossima rotazione',
-  next_award: 'Prossima ricompensa',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: 'Ancora nessun caveau',
@@ -2043,4 +2042,10 @@ export const it = {
     "Invia l'intero saldo meno la commissione di rete e chiude il conto. Tutto ciò che rimane al di sotto del deposito minimo viene distrutto.",
   substrate_allow_death_review_warning:
     'Questo trasferimento svuota il tuo conto. Il conto viene disattivato e qualsiasi saldo residuo al di sotto del deposito minimo viene distrutto.',
+  next_reward: 'Prossima ricompensa',
+  last_reward: 'Ultima ricompensa',
+  total_rewards_earned: 'Premi totali guadagnati',
+  upcoming: 'Prossimamente',
+  bond_reward_history_node: 'Nodo: {{address}}',
+  bond_reward_history_error: 'Impossibile caricare la cronologia dei premi',
 }

@@ -621,7 +621,6 @@ export const ru = {
   next_payout: 'Следующая выплата',
   estimated_reward: 'Оценочная награда',
   next_churn: 'Следующий churn',
-  next_award: 'Следующая награда',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: 'Пока нет хранилищ',
@@ -2014,4 +2013,10 @@ export const ru = {
     'Переводит весь баланс за вычетом сетевой комиссии и закрывает счет. Все средства, оставшиеся ниже суммы депозита, уничтожаются.',
   substrate_allow_death_review_warning:
     'Этот перевод опустошит ваш счет. Счет будет деактивирован, и любой остаток средств, не достигший необходимой суммы, будет уничтожен.',
+  next_reward: 'Следующая награда',
+  last_reward: 'Последняя награда',
+  total_rewards_earned: 'Общая сумма полученных вознаграждений',
+  upcoming: 'Предстоящие',
+  bond_reward_history_node: 'Узел: {{address}}',
+  bond_reward_history_error: 'Не удалось загрузить историю наград.',
 }

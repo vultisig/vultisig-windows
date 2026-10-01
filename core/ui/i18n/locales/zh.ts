@@ -580,7 +580,6 @@ export const zh = {
   next_payout: '下次支付',
   estimated_reward: '预估奖励',
   next_churn: '下次轮换',
-  next_award: '下次奖励',
   percentage_zero: '0%',
   percentage_value: '{{value}}％',
   no_vaults: '目前还没有金库',
@@ -1873,4 +1872,10 @@ export const zh = {
     '扣除网络费用后，账户余额将被全部转出并关闭。低于最低存款额的剩余款项将被销毁。',
   substrate_allow_death_review_warning:
     '此次转账将清空您的账户。账户将被停用，低于存根金额的剩余余额将被销毁。',
+  next_reward: '下一个奖励',
+  last_reward: '最后的奖励',
+  total_rewards_earned: '已获得的总奖励',
+  upcoming: '即将推出',
+  bond_reward_history_node: '节点： {{address}}',
+  bond_reward_history_error: '无法加载奖励历史记录',
 }
