@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinPillButton } from '@core/ui/chain/coin/inputs/CoinPillButton'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
@@ -46,7 +47,7 @@ export const SendCoinInputField = ({
               alignItems="center"
             >
               <Text weight="500" size={12} color="contrast">
-                {chain}
+                {getChainDisplayName(chain)}
               </Text>
               <ChevronDownIcon />
             </HStack>

@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
 import { hStack } from '@lib/ui/layout/Stack'
@@ -20,7 +21,7 @@ export const VaultAddressCopyButton = ({
     navigator.clipboard.writeText(address)
 
     addToast({
-      message: t('chain_address_copied', { chain }),
+      message: t('chain_address_copied', { chain: getChainDisplayName(chain) }),
     })
   }
 

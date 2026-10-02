@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -47,7 +48,7 @@ export const VaultChainOverview = () => {
             style={{ fontSize: 24 }}
           />
           <Text weight="500" color="contrast" size={16}>
-            {chain}
+            {getChainDisplayName(chain)}
           </Text>
         </HStack>
         <VStack alignItems="center" gap={8}>

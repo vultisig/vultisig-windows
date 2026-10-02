@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
@@ -130,7 +131,9 @@ export const getImmediateSwapValidationError = ({
     recipient &&
     !isValidAddress({ chain: toCoinKey.chain, address: recipient, walletCore })
   ) {
-    return t('swap_invalid_external_recipient', { chain: toCoinKey.chain })
+    return t('swap_invalid_external_recipient', {
+      chain: getChainDisplayName(toCoinKey.chain),
+    })
   }
 
   return null

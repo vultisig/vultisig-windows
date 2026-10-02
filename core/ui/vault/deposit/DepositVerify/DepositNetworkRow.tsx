@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { ValueProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +20,7 @@ export const DepositNetworkRow = ({ value }: ValueProp<Chain>) => {
             value={getChainLogoSrc(value)}
             style={{ fontSize: 16 }}
           />
-          {value}
+          {getChainDisplayName(value)}
         </>
       }
     />

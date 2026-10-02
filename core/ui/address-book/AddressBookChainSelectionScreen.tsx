@@ -6,6 +6,7 @@ import {
   FullScreenContainer,
 } from '@core/ui/chain/chainSelection/ChainSelectionScreen.styles'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
@@ -59,7 +60,7 @@ export const AddressBookChainSelectionScreen = ({
     if (option.kind === 'evm') {
       return t('evm_chains')
     }
-    return option.chain
+    return getChainDisplayName(option.chain)
   }
 
   const getLogoSrc = (option: AddressBookChainType): string => {

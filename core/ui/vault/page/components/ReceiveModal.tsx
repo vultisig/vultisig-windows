@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { currentProductBrand } from '@core/ui/product/brand'
 import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
@@ -235,7 +236,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
                     {ticker}
                   </Text>
                   <ChainBadge as="span" size={10} color="shyExtra" weight="500">
-                    {chain}
+                    {getChainDisplayName(chain)}
                   </ChainBadge>
                 </ChainListItem>
               )

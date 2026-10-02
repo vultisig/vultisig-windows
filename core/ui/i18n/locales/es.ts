@@ -1971,9 +1971,9 @@ export const es = {
   ton_tx_failure_wallet_id_mismatch:
     'La transacción se creó para una versión del contrato de la billetera diferente a la que está desplegada en esta dirección.',
   ton_tx_failure_insufficient_funds:
-    'No hay suficientes TON para cubrir el importe más las comisiones de red. Reserve aproximadamente 0,05 TON para las comisiones e inténtelo de nuevo.',
+    'No hay suficientes GRAM para cubrir el importe más las comisiones de red. Reserve aproximadamente 0,05 GRAM para las comisiones e inténtelo de nuevo.',
   ton_tx_failure_out_of_gas:
-    'La transacción se quedó sin gas antes de poder finalizar. Añada más TON a la transferencia e inténtelo de nuevo.',
+    'La transacción se quedó sin gas antes de poder finalizar. Añada más GRAM a la transferencia e inténtelo de nuevo.',
   ton_tx_failure_invalid_destination:
     'La dirección de destino no es válida en TON. Verifique la dirección e inténtelo de nuevo.',
   ton_tx_failure_not_enough_jettons:
@@ -2007,7 +2007,7 @@ export const es = {
     'Utilice el contrato W5 (v5r1) en lugar del V4R2 al derivar las direcciones TON de esta bóveda. Esto cambia la dirección que utiliza la billetera, y cada contrato es una dirección independiente con su propio saldo; no transfiere fondos, por lo que cualquier saldo en la otra dirección permanece allí hasta que usted lo envíe.',
   ton_gasless_pay_fee_in_token: 'Pague la tarifa de red en {{ticker}}',
   ton_gasless_description:
-    'No se necesita TON : un relé paga el gas de la red y cobra una pequeña comisión {{ticker}} en su lugar.',
+    'No se necesita GRAM : un relé paga el gas de la red y cobra una pequeña comisión {{ticker}} en su lugar.',
   ton_gasless_fee_note: 'pagado mediante retransmisión',
   max_network_fee: 'Tarifa máxima de red',
   swap_failed_refunded: 'Reembolsado por el proveedor de intercambio.',
