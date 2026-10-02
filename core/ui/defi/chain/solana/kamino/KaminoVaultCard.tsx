@@ -42,11 +42,10 @@ export type KaminoCardPosition =
       status: 'settled'
       /** Current value in the underlying token; `0` is a confirmed empty vault. */
       tokenAmount: number
-      /**
-       * The value split into what was deposited and the lifetime PnL on top,
-       * in the underlying token. Absent when the PnL could not be read.
-       */
-      breakdown?: { deposited: number; pnl: number }
+      /** What was deposited (value less lifetime PnL), or the value while the PnL is unread. */
+      deposited: number
+      /** Lifetime PnL in the underlying token, absent when unreadable. */
+      pnl?: number
     }
 
 /**
@@ -122,31 +121,31 @@ export const KaminoVaultCard = ({
         </Identity>
       </HStack>
 
-      {position.status === 'settled' && hasPosition && position.breakdown ? (
+      {position.status === 'settled' && hasPosition ? (
         <>
           <KaminoPositionFigure
             label={t('kamino_earn_deposited', {
-              amount: formatAmount(position.breakdown.deposited, {
+              amount: formatAmount(position.deposited, {
                 ticker: coin.ticker,
               }),
             })}
-            fiat={toFiat(position.breakdown.deposited)}
+            fiat={toFiat(position.deposited)}
           />
           {/* Unsigned beside a label that names the direction: "Earned: -3"
               would still assert the loss was earned. */}
-          <KaminoPositionFigure
-            label={t(
-              position.breakdown.pnl < 0
-                ? 'kamino_earn_lost'
-                : 'kamino_earn_earned',
-              {
-                amount: formatAmount(Math.abs(position.breakdown.pnl), {
-                  ticker: coin.ticker,
-                }),
-              }
-            )}
-            fiat={toFiat(Math.abs(position.breakdown.pnl))}
-          />
+          {position.pnl !== undefined ? (
+            <KaminoPositionFigure
+              label={t(
+                position.pnl < 0 ? 'kamino_earn_lost' : 'kamino_earn_earned',
+                {
+                  amount: formatAmount(Math.abs(position.pnl), {
+                    ticker: coin.ticker,
+                  }),
+                }
+              )}
+              fiat={toFiat(Math.abs(position.pnl))}
+            />
+          ) : null}
         </>
       ) : null}
 

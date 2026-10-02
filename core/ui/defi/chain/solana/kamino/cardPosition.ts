@@ -32,8 +32,8 @@ type CardPositionInput = {
  * be valued are the same failure.
  *
  * The current value already contains the interest, so the deposit is the
- * value minus the lifetime PnL. Without a readable PnL there is no deposit to
- * show, rather than the value passed off as one.
+ * value minus the lifetime PnL. Without a readable PnL the deposit falls back
+ * to the value, so an outage never takes the holding off the card.
  */
 export const cardPosition = ({
   holding,
@@ -44,7 +44,7 @@ export const cardPosition = ({
 }: CardPositionInput): KaminoCardPosition => {
   if (isPending) return { status: 'pending' }
   if (hasFailed) return { status: 'unavailable' }
-  if (!holding) return { status: 'settled', tokenAmount: 0 }
+  if (!holding) return { status: 'settled', tokenAmount: 0, deposited: 0 }
 
   const value = kaminoShareToTokenValue({
     shares: holding.shares,
@@ -56,18 +56,13 @@ export const cardPosition = ({
   const tokenAmount = fromChainAmount(value.baseUnits, value.decimals)
   const { pnlToken } = holding
   const pnl = pnlToken === undefined ? undefined : parseKaminoRate(pnlToken)
-  if (!pnl) return { status: 'settled', tokenAmount }
+  if (!pnl) return { status: 'settled', tokenAmount, deposited: tokenAmount }
 
   return {
     status: 'settled',
     tokenAmount,
-    breakdown: {
-      deposited: fromChainAmount(
-        depositedBaseUnits(value, pnl),
-        value.decimals
-      ),
-      pnl: Number(pnlToken),
-    },
+    deposited: fromChainAmount(depositedBaseUnits(value, pnl), value.decimals),
+    pnl: Number(pnlToken),
   }
 }
 

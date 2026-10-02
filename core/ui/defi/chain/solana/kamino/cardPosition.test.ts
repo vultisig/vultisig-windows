@@ -30,7 +30,11 @@ describe('cardPosition', () => {
   })
 
   it('reports a settled empty vault as empty', () => {
-    expect(cardPosition(vault)).toEqual({ status: 'settled', tokenAmount: 0 })
+    expect(cardPosition(vault)).toEqual({
+      status: 'settled',
+      tokenAmount: 0,
+      deposited: 0,
+    })
   })
 
   it('reports shares that cannot be valued as unavailable, not empty', () => {
@@ -52,7 +56,8 @@ describe('cardPosition', () => {
     ).toEqual({
       status: 'settled',
       tokenAmount: 199.943661,
-      breakdown: { deposited: 199.441617, pnl: 0.502044 },
+      deposited: 199.441617,
+      pnl: 0.502044,
     })
   })
 
@@ -62,7 +67,8 @@ describe('cardPosition', () => {
     ).toEqual({
       status: 'settled',
       tokenAmount: 97,
-      breakdown: { deposited: 100, pnl: -3 },
+      deposited: 100,
+      pnl: -3,
     })
   })
 
@@ -73,17 +79,21 @@ describe('cardPosition', () => {
     ).toEqual({
       status: 'settled',
       tokenAmount: 1,
-      breakdown: { deposited: 0.999999, pnl: 0.0000004 },
+      deposited: 0.999999,
+      pnl: 0.0000004,
     })
   })
 
-  it('claims no deposit when the PnL could not be read', () => {
-    // Without the PnL the deposit is unknown; showing the value under the
-    // "Deposited" label is the double count this guards against.
+  it('falls back to the value when the PnL could not be read', () => {
+    // A PnL outage must not take the holding off the card; only Earned goes.
     for (const pnlToken of [undefined, '1,000.5']) {
       expect(
         cardPosition({ ...vault, holding: holding(5_240_045n, pnlToken) })
-      ).toEqual({ status: 'settled', tokenAmount: 5.240045 })
+      ).toEqual({
+        status: 'settled',
+        tokenAmount: 5.240045,
+        deposited: 5.240045,
+      })
     }
   })
 
