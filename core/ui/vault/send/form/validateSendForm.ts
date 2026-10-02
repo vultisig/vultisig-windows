@@ -66,6 +66,72 @@ export const validateSendReceiver = ({
   }
 }
 
+type GetSendFundsErrorInput = {
+  coin: SendFormShape['coin']
+  amount: bigint
+  balance: bigint
+  fee?: bigint
+  nativeBalance?: bigint
+  isFeePaidInCoin: boolean
+  t: TFunction
+}
+
+const getSendFundsError = ({
+  coin,
+  amount,
+  balance,
+  fee,
+  nativeBalance,
+  isFeePaidInCoin,
+  t,
+}: GetSendFundsErrorInput): string | undefined => {
+  if (
+    !isFeePaidInCoin &&
+    nativeBalance != null &&
+    fee != null &&
+    nativeBalance < fee
+  ) {
+    const { ticker, decimals } = chainFeeCoin[coin.chain]
+    return getInsufficientFundsMessage(
+      {
+        required: fee,
+        available: nativeBalance,
+        ticker,
+        decimals,
+        includesNetworkCosts: true,
+      },
+      t
+    )
+  }
+
+  const { ticker, decimals } = coin
+  if (isFeePaidInCoin && fee != null) {
+    if (amount + fee <= balance) return undefined
+    return getInsufficientFundsMessage(
+      {
+        required: amount + fee,
+        available: balance,
+        ticker,
+        decimals,
+        includesNetworkCosts: true,
+      },
+      t
+    )
+  }
+
+  if (amount <= balance) return undefined
+  return getInsufficientFundsMessage(
+    {
+      required: amount,
+      available: balance,
+      ticker,
+      decimals,
+      includesNetworkCosts: false,
+    },
+    t
+  )
+}
+
 export const validateSendForm = (
   values: SendFormShape,
   helpers: {
@@ -105,50 +171,17 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else {
-    const { ticker, decimals } = coin
-    if (isFeePaidInCoin && fee != null) {
-      if (amount + fee > balance) {
-        errors.amount = getInsufficientFundsMessage(
-          {
-            required: amount + fee,
-            available: balance,
-            ticker,
-            decimals,
-            includesNetworkCosts: true,
-          },
-          t
-        )
-      }
-    } else if (amount > balance) {
-      errors.amount = getInsufficientFundsMessage(
-        {
-          required: amount,
-          available: balance,
-          ticker,
-          decimals,
-          includesNetworkCosts: false,
-        },
-        t
-      )
-    }
-
-    if (
-      !isFeePaidInCoin &&
-      nativeBalance != null &&
-      fee != null &&
-      nativeBalance < fee
-    ) {
-      const feeCoin = chainFeeCoin[chain]
-      errors.amount = getInsufficientFundsMessage(
-        {
-          required: fee,
-          available: nativeBalance,
-          ticker: feeCoin.ticker,
-          decimals: feeCoin.decimals,
-          includesNetworkCosts: true,
-        },
-        t
-      )
+    const fundsError = getSendFundsError({
+      coin,
+      amount,
+      balance,
+      fee,
+      nativeBalance,
+      isFeePaidInCoin,
+      t,
+    })
+    if (fundsError) {
+      errors.amount = fundsError
     }
 
     if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {
