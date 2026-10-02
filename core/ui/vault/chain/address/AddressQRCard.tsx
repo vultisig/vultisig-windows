@@ -118,7 +118,7 @@ export const AddressQRCard = ({
   const { addToast } = useToast()
   const qrNodeRef = useRef<HTMLDivElement | null>(null)
 
-  const displayName = coin?.ticker || chain
+  const displayName = coin?.ticker || getChainDisplayName(chain)
 
   const handleCopy = useCallback(async () => {
     if (address) {

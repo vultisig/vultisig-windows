@@ -186,7 +186,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
     return orderedChains.filter(chain => {
       const ticker = chainFeeCoin[chain]?.ticker ?? ''
       return (
-        chain.toLowerCase().includes(normalized) ||
+        getChainDisplayName(chain).toLowerCase().includes(normalized) ||
         ticker.toLowerCase().includes(normalized)
       )
     })

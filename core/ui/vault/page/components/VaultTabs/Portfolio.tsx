@@ -1,4 +1,5 @@
 import { ChainsEmptyState } from '@core/ui/chain/components/ChainsEmptyState'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { useCore } from '@core/ui/state/core'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { Match } from '@lib/ui/base/Match'
@@ -52,7 +53,7 @@ export const Portfolio = () => {
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
   const matchesChain = (chain: Chain) =>
-    chain.toLowerCase().includes(normalizedQuery)
+    getChainDisplayName(chain).toLowerCase().includes(normalizedQuery)
 
   const filteredBalances = normalizedQuery
     ? balances.filter(

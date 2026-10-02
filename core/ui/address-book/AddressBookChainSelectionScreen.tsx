@@ -43,7 +43,9 @@ export const AddressBookChainSelectionScreen = ({
           chainName.toLowerCase().includes(normalizedSearch)
         )
       }
-      return option.chain.toLowerCase().includes(normalizedSearch)
+      return getChainDisplayName(option.chain)
+        .toLowerCase()
+        .includes(normalizedSearch)
     })
   }, [options, search])
 
