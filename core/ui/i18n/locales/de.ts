@@ -522,6 +522,10 @@ export const de = {
   install_plugin: 'App installieren',
   installation_progress: 'Installationsfortschritt: {{progress}}%',
   insufficient_balance: 'Unzureichendes Guthaben',
+  insufficient_funds_asset:
+    'Nicht genug {{ticker}}: Diese Überweisung benötigt {{required}}, Sie haben {{available}}',
+  insufficient_funds_including_network_costs:
+    'Nicht genug {{ticker}}: Diese Überweisung benötigt {{required}} inklusive Netzwerkkosten, Sie haben {{available}}',
   insufficient_native_balance_for_fee:
     'Unzureichendes Guthaben an nativen Token zur Bezahlung der Transaktionsgebühr',
   insufficient_gas_limit: 'Unzureichende Gasmenge',

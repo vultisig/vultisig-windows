@@ -512,6 +512,10 @@ export const nl = {
   install_plugin: 'App installeren',
   installation_progress: 'Installatievoortgang: {{progress}}%',
   insufficient_balance: 'Onvoldoende saldo',
+  insufficient_funds_asset:
+    'Niet genoeg {{ticker}}: deze verzending heeft {{required}} nodig, je hebt {{available}}',
+  insufficient_funds_including_network_costs:
+    'Niet genoeg {{ticker}}: deze verzending heeft {{required}} nodig inclusief netwerkkosten, je hebt {{available}}',
   insufficient_native_balance_for_fee:
     'Onvoldoende saldo aan native tokens om de transactiekosten te betalen.',
   insufficient_gas_limit: 'Onvoldoende gaslimiet',

@@ -1,6 +1,8 @@
+import { getInsufficientFundsMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, UtxoBasedChain } from '@vultisig/core-chain/Chain'
 import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import {
   getChainDangerousReason,
@@ -64,6 +66,72 @@ export const validateSendReceiver = ({
   }
 }
 
+type GetSendFundsErrorInput = {
+  coin: SendFormShape['coin']
+  amount: bigint
+  balance: bigint
+  fee?: bigint
+  nativeBalance?: bigint
+  isFeePaidInCoin: boolean
+  t: TFunction
+}
+
+const getSendFundsError = ({
+  coin,
+  amount,
+  balance,
+  fee,
+  nativeBalance,
+  isFeePaidInCoin,
+  t,
+}: GetSendFundsErrorInput): string | undefined => {
+  if (
+    !isFeePaidInCoin &&
+    nativeBalance != null &&
+    fee != null &&
+    nativeBalance < fee
+  ) {
+    const { ticker, decimals } = chainFeeCoin[coin.chain]
+    return getInsufficientFundsMessage(
+      {
+        required: fee,
+        available: nativeBalance,
+        ticker,
+        decimals,
+        includesNetworkCosts: true,
+      },
+      t
+    )
+  }
+
+  const { ticker, decimals } = coin
+  if (isFeePaidInCoin && fee != null) {
+    if (amount + fee <= balance) return undefined
+    return getInsufficientFundsMessage(
+      {
+        required: amount + fee,
+        available: balance,
+        ticker,
+        decimals,
+        includesNetworkCosts: true,
+      },
+      t
+    )
+  }
+
+  if (amount <= balance) return undefined
+  return getInsufficientFundsMessage(
+    {
+      required: amount,
+      available: balance,
+      ticker,
+      decimals,
+      includesNetworkCosts: false,
+    },
+    t
+  )
+}
+
 export const validateSendForm = (
   values: SendFormShape,
   helpers: {
@@ -103,21 +171,17 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else {
-    if (isFeePaidInCoin && fee != null) {
-      if (amount + fee > balance) {
-        errors.amount = t('insufficient_balance')
-      }
-    } else if (amount > balance) {
-      errors.amount = t('insufficient_balance')
-    }
-
-    if (
-      !isFeePaidInCoin &&
-      nativeBalance != null &&
-      fee != null &&
-      nativeBalance < fee
-    ) {
-      errors.amount = t('insufficient_native_balance_for_fee')
+    const fundsError = getSendFundsError({
+      coin,
+      amount,
+      balance,
+      fee,
+      nativeBalance,
+      isFeePaidInCoin,
+      t,
+    })
+    if (fundsError) {
+      errors.amount = fundsError
     }
 
     if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {
