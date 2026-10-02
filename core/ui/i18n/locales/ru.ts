@@ -511,6 +511,10 @@ export const ru = {
   install_plugin: 'Установить приложение',
   installation_progress: 'Ход установки: {{progress}}%',
   insufficient_balance: 'Недостаточный баланс',
+  insufficient_funds_asset:
+    'Недостаточно {{ticker}}: для этой отправки нужно {{required}}, у вас {{available}}',
+  insufficient_funds_including_network_costs:
+    'Недостаточно {{ticker}}: для этой отправки нужно {{required}} с учётом сетевых расходов, у вас {{available}}',
   insufficient_native_balance_for_fee:
     'Недостаточно средств на балансе собственных токенов для оплаты комиссии за транзакцию.',
   insufficient_gas_limit: 'Недостаточный лимит gas',
