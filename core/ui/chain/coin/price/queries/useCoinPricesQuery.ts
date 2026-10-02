@@ -1,14 +1,13 @@
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { EagerQuery, Query } from '@lib/ui/query/Query'
 import { pricePersistQueryOptions } from '@lib/ui/query/utils/options'
-import { useQueries } from '@tanstack/react-query'
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { Chain, CosmosChain, EvmChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { fetchNavPerShare } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/services/fetchNavPerShare'
 import { yieldBearingThorChainTokens } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { CoinKey, coinKeyToString, Token } from '@vultisig/core-chain/coin/Coin'
-import { getErc20Prices } from '@vultisig/core-chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
 import { groupItems } from '@vultisig/lib-utils/array/groupItems'
@@ -17,6 +16,7 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { mergeRecords } from '@vultisig/lib-utils/record/mergeRecords'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
@@ -30,6 +30,11 @@ import {
   getThorchainSecuredAssetFiatPrices,
   isThorchainSecuredAssetDenom,
 } from '../thor/getThorchainSecuredAssetPrices'
+import { fetchErc20PricesKeepingFailedChunks } from './fetchErc20PricesKeepingFailedChunks'
+import {
+  cachedCoinPricesForFiat,
+  StampedPrice,
+} from './previousCoinPricesForFiat'
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[]
@@ -57,6 +62,7 @@ export function useCoinPricesQuery(
   input: UseCoinPricesQueryInput
 ): EagerQuery<Record<string, number>> | Query<Record<string, number>> {
   const defaultFiatCurrency = useFiatCurrency()
+  const queryClient = useQueryClient()
 
   const { eager = true, fiatCurrency = defaultFiatCurrency, coins } = input
 
@@ -120,33 +126,25 @@ export function useCoinPricesQuery(
     )
 
     toEntries(groupedByChain).forEach(({ key: chain, value: coins }) => {
-      queries.push({
-        queryKey: getCoinPricesQueryKeys({
+      const queryKey = [
+        'erc20Prices',
+        {
           coins,
           fiatCurrency,
-        }),
-        queryFn: async () => {
-          const prices = await getErc20Prices({
-            ids: coins.map(({ id }) => id),
+        },
+      ]
+      queries.push({
+        queryKey,
+        queryFn: async () =>
+          fetchErc20PricesKeepingFailedChunks({
+            coins,
             chain,
             fiatCurrency,
-          })
-
-          const result: Record<string, number> = {}
-
-          Object.entries(prices).forEach(([id, price]) => {
-            const coin = shouldBePresent(
-              coins.find(coin =>
-                areLowerCaseEqual(shouldBePresent(coin.id), id)
-              )
-            )
-
-            result[coinKeyToString(coin)] = price
-          })
-
-          return result
-        },
+            previous: cachedCoinPricesForFiat(queryClient, fiatCurrency),
+          }),
         ...pricePersistQueryOptions,
+        select: (data: Record<string, StampedPrice>) =>
+          recordMap(data, stamp => stamp.price),
       })
     })
   }
