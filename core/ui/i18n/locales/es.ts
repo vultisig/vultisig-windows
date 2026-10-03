@@ -484,10 +484,11 @@ export const es = {
   seedPhraseImportTip: 'Consejo: Puedes usar un navegador como dispositivo',
   enter_your_seedphrase: 'Ingresa tu frase semilla',
   enter_seedphrase_subtitle:
-    'Deje un espacio entre cada palabra. Se admiten frases semilla de <h> de 12 o 24 palabras </h> .',
-  mnemonic_placeholder: 'Ingresa las 12 o 24 palabras de tu frase semilla',
+    'Deje un espacio entre cada palabra. Longitudes admitidas:<h> 12, 15, 18, 21 o 24 palabras</h>',
+  mnemonic_placeholder:
+    'Introduce las 12, 15, 18, 21 o 24 palabras de tu frase semilla.',
   seedphrase_word_count_error:
-    'Ingresó {{count}} palabras. La frase inicial debe tener 12 o 24 palabras.',
+    'Ingresaste {{count}} palabras. La frase semilla debe tener 12, 15, 18, 21 o 24 palabras.',
   seedphrase_invalid_error:
     'La frase semilla no es correcta, por favor verifique todas las palabras.',
   seedphrase_duplicate_vault_error:

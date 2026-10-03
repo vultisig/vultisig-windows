@@ -446,10 +446,10 @@ export const zh = {
   seedPhraseImportTip: '提示：您可以使用浏览器作为设备',
   enter_your_seedphrase: '请输入您的助记词',
   enter_seedphrase_subtitle:
-    '每个单词之间留一个空格。种子短语<h>12或24个字</h>已支持。',
-  mnemonic_placeholder: '输入您的助记词的 12 或 24 个单词',
+    '每个单词之间留一个空格。支持的长度：<h> 12、15、18、21 或 24 个字</h>',
+  mnemonic_placeholder: '输入助记词的 12、15、18、21 或 24 个单词',
   seedphrase_word_count_error:
-    '您输入了 {{count}} 个单词。种子短语必须为 12 或 24 个单词。',
+    '您输入了{{count}}个单词。助记词必须为 12、15、18、21 或 24 个单词。',
   seedphrase_invalid_error: '助记词不正确，请核对所有单词。',
   seedphrase_duplicate_vault_error:
     '此助记词已导入为保险库“{{vaultName}}”。请导入另一个助记词。',
