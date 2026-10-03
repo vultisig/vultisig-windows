@@ -2007,7 +2007,7 @@ export const es = {
     'Utilice el contrato W5 (v5r1) en lugar del V4R2 al derivar las direcciones TON de esta bóveda. Esto cambia la dirección que utiliza la billetera, y cada contrato es una dirección independiente con su propio saldo; no transfiere fondos, por lo que cualquier saldo en la otra dirección permanece allí hasta que usted lo envíe.',
   ton_gasless_pay_fee_in_token: 'Pague la tarifa de red en {{ticker}}',
   ton_gasless_description:
-    'No se necesita GRAM : un relé paga el gas de la red y cobra una pequeña comisión {{ticker}} en su lugar.',
+    'No se necesita GRAM: un relé paga el gas de la red y cobra en su lugar una pequeña comisión en {{ticker}}.',
   ton_gasless_fee_note: 'pagado mediante retransmisión',
   max_network_fee: 'Tarifa máxima de red',
   swap_failed_refunded: 'Reembolsado por el proveedor de intercambio.',

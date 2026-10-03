@@ -131,7 +131,9 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               }}
               options={coins.filter(isFeeCoin)}
               filterFunction={(option, query) =>
-                option.chain.toLowerCase().startsWith(query.toLowerCase())
+                getChainDisplayName(option.chain)
+                  .toLowerCase()
+                  .includes(query.toLowerCase())
               }
               renderListHeader={() => (
                 <HStack alignItems="center" justifyContent="space-between">

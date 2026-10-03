@@ -2007,7 +2007,7 @@ export const pt = {
     'Use o contrato W5 (v5r1) em vez do V4R2 ao derivar os endereços TON deste cofre. Isso altera o endereço usado pela carteira, e cada contrato é um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
   ton_gasless_pay_fee_in_token: 'Pagar taxa de rede em {{ticker}}',
   ton_gasless_description:
-    'Não é necessário o GRAM : um relay paga o gás da rede e cobra uma pequena comissão de {{ticker}} .',
+    'Não é necessário GRAM: um relay paga o gás da rede e cobra, em vez disso, uma pequena comissão em {{ticker}}.',
   ton_gasless_fee_note: 'pago via retransmissão',
   max_network_fee: 'Taxa máxima de rede',
   swap_failed_refunded: 'Reembolsado pelo provedor de troca.',

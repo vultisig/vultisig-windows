@@ -82,7 +82,7 @@ export const ChainItem = ({
         )}
       </ChainIconWrapper>
       <ChainNameWrapper>
-        <Text cropped color="contrast" size={12} weight={500}>
+        <Text color="contrast" size={12} weight={500}>
           {getChainDisplayName(coin.chain)}
         </Text>
       </ChainNameWrapper>
