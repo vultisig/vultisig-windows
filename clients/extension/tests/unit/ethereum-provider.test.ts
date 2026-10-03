@@ -459,4 +459,60 @@ describe('Ethereum Provider', () => {
       expect(listener).toHaveBeenCalledExactlyOnceWith('0xa')
     })
   })
+
+  describe('background accountsChanged event', () => {
+    const getAccountsChangedListener = () => {
+      const call = vi
+        .mocked(addBackgroundEventListener)
+        .mock.calls.find(([event]) => event === 'accountsChanged')
+
+      return call?.[1] as () => Promise<void>
+    }
+
+    it('re-reads the accounts and emits them', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      mockedHandlers.eth_accounts.mockResolvedValue(['0xb0b'])
+
+      await getAccountsChangedListener()()
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith(['0xb0b'])
+    })
+
+    it('emits an empty list when the site has no accounts in the new vault', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      mockedHandlers.eth_accounts.mockResolvedValue([])
+
+      await getAccountsChangedListener()()
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith([])
+    })
+
+    it('drops a read that resolves after a newer disconnect or read', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+
+      let resolveSlowRead: (accounts: string[]) => void = () => {}
+      mockedHandlers.eth_accounts.mockReturnValueOnce(
+        new Promise(resolve => {
+          resolveSlowRead = resolve
+        })
+      )
+      const slowRead = getAccountsChangedListener()()
+
+      const disconnect = vi
+        .mocked(addBackgroundEventListener)
+        .mock.calls.find(([event]) => event === 'disconnect')?.[1] as () => void
+      disconnect()
+
+      resolveSlowRead(['0xstale'])
+      await slowRead
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith([])
+    })
+  })
 })

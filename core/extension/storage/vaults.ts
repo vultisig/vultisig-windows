@@ -26,10 +26,14 @@ export const updateVaults = async (vaults: Vault[]) => {
   await setStorageValue(StorageKey.vaults, vaults)
 }
 
-export const getVault = async (vaultId: string) => {
+/** The stored vault with this id, or `undefined` when it no longer exists. */
+export const findVault = async (vaultId: string) => {
   const vaults = await getVaults()
-  return shouldBePresent(vaults.find(v => getVaultId(v) === vaultId))
+  return vaults.find(v => getVaultId(v) === vaultId)
 }
+
+export const getVault = async (vaultId: string) =>
+  shouldBePresent(await findVault(vaultId))
 
 export const vaultsStorage: VaultsStorage = {
   deleteVault: vaultId =>
