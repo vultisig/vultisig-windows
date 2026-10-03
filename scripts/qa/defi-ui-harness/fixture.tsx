@@ -179,6 +179,7 @@ export const seedStoredSettings = ({
   queryClient.setQueryData([StorageKey.fiatCurrency], fiatCurrency)
   queryClient.setQueryData([StorageKey.language], language)
   queryClient.setQueryData([StorageKey.isBalanceVisible], isBalanceVisible)
+  queryClient.setQueryData([StorageKey.isTonW5Enabled], false)
 }
 
 /**

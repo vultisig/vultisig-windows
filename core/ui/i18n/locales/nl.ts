@@ -1921,6 +1921,7 @@ export const nl = {
   kamino_earn_card_withdraw: 'Opnemen',
   kamino_earn_deposited: 'Gestort: {{amount}}',
   kamino_earn_earned: 'Verdiend: {{amount}}',
+  kamino_earn_lost: 'Verloren: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'op {{chain}}',
   max_total_fee: 'Maximale totale kosten',

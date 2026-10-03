@@ -1954,6 +1954,7 @@ export const de = {
   kamino_earn_card_withdraw: 'Abheben',
   kamino_earn_deposited: 'Eingezahlt: {{amount}}',
   kamino_earn_earned: 'Verdient: {{amount}}',
+  kamino_earn_lost: 'Verloren: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'auf {{chain}}',
   max_total_fee: 'Maximale Gesamtgebühr',

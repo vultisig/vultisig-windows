@@ -1943,6 +1943,7 @@ export const it = {
   kamino_earn_card_withdraw: 'Preleva',
   kamino_earn_deposited: 'Depositato: {{amount}}',
   kamino_earn_earned: 'Guadagnato: {{amount}}',
+  kamino_earn_lost: 'Perso: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'su {{chain}}',
   max_total_fee: 'Tariffa totale massima',
