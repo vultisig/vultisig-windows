@@ -1931,9 +1931,9 @@ export const ko = {
   ton_tx_failure_wallet_id_mismatch:
     '해당 거래는 이 주소에 배포된 지갑 계약 버전과 다른 버전을 기준으로 생성되었습니다.',
   ton_tx_failure_insufficient_funds:
-    '결제 금액과 네트워크 수수료를 충당하기에 TON 부족합니다. 수수료를 위해 약 0.05 TON 토큰을 남겨두고 다시 시도해 주세요.',
+    '결제 금액과 네트워크 수수료를 충당하기에 GRAM이 부족합니다. 수수료를 위해 약 0.05 GRAM 토큰을 남겨두고 다시 시도해 주세요.',
   ton_tx_failure_out_of_gas:
-    '거래가 완료되기 전에 가스가 부족해졌습니다. 전송에 TON 더 추가하고 다시 시도하십시오.',
+    '거래가 완료되기 전에 가스가 부족해졌습니다. 전송에 GRAM을 더 추가하고 다시 시도하십시오.',
   ton_tx_failure_invalid_destination:
     '목적지 주소가 TON 에서 유효하지 않습니다. 주소를 확인하고 다시 시도하십시오.',
   ton_tx_failure_not_enough_jettons:
@@ -1967,7 +1967,7 @@ export const ko = {
     '이 볼트의 TON 주소를 생성할 때 V4R2 대신 W5(v5r1) 컨트랙트를 사용하세요. 이렇게 하면 지갑에서 사용하는 주소가 변경되며, 각 컨트랙트는 자체 잔액을 가진 별도의 주소입니다. 자금 이동은 없으므로 다른 주소에 있는 모든 자산은 사용자가 전송하기 전까지 해당 주소에 그대로 유지됩니다.',
   ton_gasless_pay_fee_in_token: '{{ticker}} 로 네트워크 수수료를 지불하세요',
   ton_gasless_description:
-    'TON 필요하지 않습니다. 릴레이가 네트워크 가스 비용을 지불하고 대신 소액의 {{ticker}} 수수료를 부과합니다.',
+    'GRAM이 필요하지 않습니다. 릴레이가 네트워크 가스 비용을 지불하고 대신 소액의 {{ticker}} 수수료를 부과합니다.',
   ton_gasless_fee_note: '릴레이를 통해 지불됨',
   max_network_fee: '최대 네트워크 수수료',
   swap_failed_refunded: '교환 제공업체로부터 환불받음',

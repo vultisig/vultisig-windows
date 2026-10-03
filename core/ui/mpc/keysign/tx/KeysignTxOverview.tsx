@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTxHash } from '@core/ui/chain/state/txHash'
 import { getRippleKeysignDisplay } from '@core/ui/chain/tx/getRippleKeysignDisplay'
@@ -189,7 +190,7 @@ export const KeysignTxOverview = ({
                 value={getChainLogoSrc(chain)}
                 style={{ fontSize: 16 }}
               />
-              <Text>{chain}</Text>
+              <Text>{getChainDisplayName(chain)}</Text>
             </HStack>
           </HStack>
           <TxFeeRow label={receipt ? t('network_fee') : t('est_network_fee')}>

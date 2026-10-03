@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { SelectableChainItem } from '@core/ui/chain/selection/SelectableChainItem'
 import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
@@ -38,7 +39,7 @@ export const SelectChainsStep = () => {
 
   const filteredChains = search
     ? allChains.filter(chain =>
-        chain.toLowerCase().includes(search.toLowerCase())
+        getChainDisplayName(chain).toLowerCase().includes(search.toLowerCase())
       )
     : allChains
 

@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -48,7 +49,7 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
           gap={20}
         >
           <Text color="contrast" size={14}>
-            {chain}
+            {getChainDisplayName(chain)}
           </Text>
           <TrailingGroup gap={8} alignItems="center">
             <BalanceGroup gap={4} alignItems="flex-end">

@@ -1,5 +1,6 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
@@ -80,7 +81,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                     <CoinIcon coin={coin} style={{ fontSize: 16 }} />
                     <HStack alignItems="center">
                       <Text size={12} weight={500}>
-                        {coin.chain}
+                        {getChainDisplayName(coin.chain)}
                       </Text>
                       <ChevronDownIcon />
                     </HStack>
@@ -130,7 +131,9 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               }}
               options={coins.filter(isFeeCoin)}
               filterFunction={(option, query) =>
-                option.chain.toLowerCase().startsWith(query.toLowerCase())
+                getChainDisplayName(option.chain)
+                  .toLowerCase()
+                  .includes(query.toLowerCase())
               }
               renderListHeader={() => (
                 <HStack alignItems="center" justifyContent="space-between">

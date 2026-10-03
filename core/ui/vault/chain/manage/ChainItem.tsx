@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
   useCreateCoinMutation,
@@ -81,8 +82,8 @@ export const ChainItem = ({
         )}
       </ChainIconWrapper>
       <ChainNameWrapper>
-        <Text cropped color="contrast" size={12} weight={500}>
-          {coin.chain}
+        <Text color="contrast" size={12} weight={500}>
+          {getChainDisplayName(coin.chain)}
         </Text>
       </ChainNameWrapper>
     </ChainCard>

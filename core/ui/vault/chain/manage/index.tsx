@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { orderChainItemsForProduct } from '@core/ui/chain/utils/orderChainItemsForProduct'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -60,7 +61,7 @@ export const ManageVaultChainsPage = () => {
       const normalizedSearch = search.toLowerCase()
       coins = nativeCoins.filter(
         ({ chain, ticker }) =>
-          chain.toLowerCase().includes(normalizedSearch) ||
+          getChainDisplayName(chain).toLowerCase().includes(normalizedSearch) ||
           ticker.toLowerCase().includes(normalizedSearch)
       )
     }

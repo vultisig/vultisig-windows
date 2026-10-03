@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
@@ -117,13 +118,15 @@ export const AddressQRCard = ({
   const { addToast } = useToast()
   const qrNodeRef = useRef<HTMLDivElement | null>(null)
 
-  const displayName = coin?.ticker || chain
+  const displayName = coin?.ticker || getChainDisplayName(chain)
 
   const handleCopy = useCallback(async () => {
     if (address) {
       await navigator.clipboard.writeText(address)
       addToast({
-        message: t('chain_address_copied', { chain }),
+        message: t('chain_address_copied', {
+          chain: getChainDisplayName(chain),
+        }),
       })
       onClose?.()
     }

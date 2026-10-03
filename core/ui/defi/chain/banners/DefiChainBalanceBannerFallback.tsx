@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -33,7 +34,7 @@ export const DefiChainBalanceBannerFallback = ({
             fallback={<FallbackLogo>{chain.charAt(0)}</FallbackLogo>}
           />
           <VStack gap={2}>
-            <ChainTitle>{chain}</ChainTitle>
+            <ChainTitle>{getChainDisplayName(chain)}</ChainTitle>
           </VStack>
         </HStack>
         <DefiBannerBalance chain={chain} value={totalFiat} />
