@@ -25,7 +25,7 @@ const vaults = [
     apy30d: 0.0733,
     tokensPerShare: '1.25',
     shares: 800,
-    pnlToken: 200,
+    pnlToken: '200',
   },
   {
     descriptor: qaKaminoDescriptor(1),
