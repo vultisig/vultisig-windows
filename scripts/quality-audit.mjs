@@ -44,11 +44,11 @@ const suppressions = [
     id: 1240992,
     advisory: 'GHSA-vfj7-8cjw-p6xm',
     package: 'braces',
-    path: 'micromatch > braces, chokidar > braces',
+    path: 'vite-plugin-static-copy > chokidar > braces; fast-glob > micromatch > braces; markdownlint-cli2 > micromatch > braces',
     reason:
-      'Stack-exhaustion DoS via deeply nested brace patterns in braces (<=3.0.3). No patched release exists (first_patched_version is null; 3.0.3 is the latest). Only reachable through build/dev tooling globbing (micromatch, chokidar) over repo-controlled patterns, never untrusted input or shipped runtime code. Retain until upstream publishes a fix, then bump and delete this entry.',
+      'Stack-exhaustion denial of service when braces expands deeply nested patterns (<=3.0.3). It is only reachable through build and lint tooling (vite-plugin-static-copy, fast-glob, markdownlint-cli2) over glob patterns this repo controls, and is never bundled into the shipped desktop or extension runtime. The advisory has no patched version (first_patched_version is null) and 3.0.3 is the latest braces release, so there is nothing to upgrade to; suppression retained until upstream publishes a fix.',
     owner: 'vultisig/windows',
-    reviewBy: '2026-12-01',
+    reviewBy: '2027-01-01',
   },
 ]
 
