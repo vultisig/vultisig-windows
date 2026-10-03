@@ -111,7 +111,7 @@ export const VaultChainOverview = () => {
             onClick={handleCopyAddress}
             aria-label={t('copy_address')}
           >
-            <Text weight={500} color="info" size={12}>
+            <Text as="span" weight={500} color="info" size={12}>
               {formatWalletAddress(address)}
             </Text>
             <CopyIcon size={12}>
