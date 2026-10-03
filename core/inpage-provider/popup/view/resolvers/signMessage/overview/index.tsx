@@ -1,4 +1,3 @@
-import { create } from '@bufbuild/protobuf'
 import { getDeveloperOptions } from '@core/extension/storage/developerOptions'
 import {
   Eip712V4Payload,
@@ -25,7 +24,6 @@ import { StrictText } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
 import { Chain, EvmChain, OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
-import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
@@ -39,6 +37,7 @@ import { useTranslation } from 'react-i18next'
 import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
 import { usePopupContext } from '../../../state/context'
 import { isTrustedProductOrigin } from '../utils'
+import { buildDappCustomMessagePayload } from './buildDappCustomMessagePayload'
 
 /**
  * Raw message bytes for an XRPL `signMessage`, mirroring GemWallet: a hex
@@ -62,7 +61,8 @@ const getRippleMessageBytes = ({
 export const Overview = () => {
   const { t } = useTranslation()
   const input = usePopupInput<'signMessage'>()
-  const { requestOrigin } = usePopupContext<'signMessage'>()
+  const { requestFavicon, requestName, requestOrigin } =
+    usePopupContext<'signMessage'>()
   const method = getRecordUnionKey(input)
   const { chain } = getRecordUnionValue(input)
   const [{ signature }] = useViewState<{ signature?: string }>()
@@ -185,14 +185,23 @@ export const Overview = () => {
 
   const keysignMessagePayload = useMemo(
     () => ({
-      custom: create(CustomMessagePayloadSchema, {
+      custom: buildDappCustomMessagePayload({
         method,
         message,
         chain: keysignChain,
         vaultPublicKeyEcdsa: getVaultId(vault),
+        context: { requestFavicon, requestName, requestOrigin },
       }),
     }),
-    [method, message, keysignChain, vault]
+    [
+      method,
+      message,
+      keysignChain,
+      vault,
+      requestFavicon,
+      requestName,
+      requestOrigin,
+    ]
   )
 
   return (
