@@ -40,6 +40,16 @@ const suppressions = [
     owner: 'vultisig/windows',
     reviewBy: '2027-01-01',
   },
+  {
+    id: 1240992,
+    advisory: 'GHSA-vfj7-8cjw-p6xm',
+    package: 'braces',
+    path: 'micromatch > braces, chokidar > braces',
+    reason:
+      'Stack-exhaustion DoS via deeply nested brace patterns in braces (<=3.0.3). No patched release exists (first_patched_version is null; 3.0.3 is the latest). Only reachable through build/dev tooling globbing (micromatch, chokidar) over repo-controlled patterns, never untrusted input or shipped runtime code. Retain until upstream publishes a fix, then bump and delete this entry.',
+    owner: 'vultisig/windows',
+    reviewBy: '2026-12-01',
+  },
 ]
 
 const args = [
