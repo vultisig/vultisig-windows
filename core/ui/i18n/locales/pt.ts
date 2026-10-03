@@ -484,10 +484,11 @@ export const pt = {
   seedPhraseImportTip: 'Dica: Você pode usar um navegador como dispositivo',
   enter_your_seedphrase: 'Insira sua frase mnemônica',
   enter_seedphrase_subtitle:
-    'Deixe um espaço entre cada palavra. Frases-semente de <h>12 ou 24 palavras</h> são suportadas.',
-  mnemonic_placeholder: 'Insira as 12 ou 24 palavras da sua frase-semente.',
+    'Deixe um espaço entre cada palavra. Comprimentos suportados:<h> 12, 15, 18, 21 ou 24 palavras</h>',
+  mnemonic_placeholder:
+    'Insira as 12, 15, 18, 21 ou 24 palavras da sua frase-semente.',
   seedphrase_word_count_error:
-    'Você digitou {{count}} palavras. A frase inicial deve ter 12 ou 24 palavras.',
+    'Você inseriu {{count}} palavras. A frase-semente deve ter 12, 15, 18, 21 ou 24 palavras.',
   seedphrase_invalid_error:
     'A frase-semente está incorreta. Por favor, verifique todas as palavras.',
   seedphrase_duplicate_vault_error:
@@ -1938,6 +1939,7 @@ export const pt = {
   kamino_earn_card_withdraw: 'Retirar',
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganho: {{amount}}',
+  kamino_earn_lost: 'Perdido: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'em {{chain}}',
   max_total_fee: 'Taxa máxima total',

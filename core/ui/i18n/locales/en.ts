@@ -566,10 +566,11 @@ export const en = {
   seedPhraseImportTip: 'Tip: You can use a browser as a device',
   enter_your_seedphrase: 'Enter your seed phrase',
   enter_seedphrase_subtitle:
-    'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
-  mnemonic_placeholder: 'Enter the 12 or 24 words of your seedphrase',
+    'Leave a space between each word. Supported lengths: <h>12, 15, 18, 21 or 24 words</h>',
+  mnemonic_placeholder:
+    'Enter the 12, 15, 18, 21 or 24 words of your seedphrase',
   seedphrase_word_count_error:
-    'You entered {{count}} words. Seed phrase must be 12 or 24',
+    'You entered {{count}} words. Seed phrase must be 12, 15, 18, 21 or 24 words',
   seedphrase_invalid_error:
     'Seed phrase is not correct, please verify all words.',
   seedphrase_duplicate_vault_error:
@@ -1519,6 +1520,7 @@ export const en = {
   kamino_earn_card_withdraw: 'Withdraw',
   kamino_earn_deposited: 'Deposited: {{amount}}',
   kamino_earn_earned: 'Earned: {{amount}}',
+  kamino_earn_lost: 'Lost: {{amount}}',
   kamino_earn_positions_unavailable:
     'Balances could not be loaded. The vaults shown are up to date.',
   kamino_earn_protocol: 'Kamino',
