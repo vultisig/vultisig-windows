@@ -1,4 +1,4 @@
-import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
+import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { orderChainItemsForProduct } from '@core/ui/chain/utils/orderChainItemsForProduct'
 import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -66,7 +66,7 @@ export const ManageDefiChainsPage = () => {
     if (search) {
       const normalizedSearch = search.toLowerCase()
       chains = chainAvailability.filter(({ chain }) =>
-        getChainDisplayName(chain).toLowerCase().includes(normalizedSearch)
+        matchesChainSearch({ chain, query: normalizedSearch })
       )
     }
 

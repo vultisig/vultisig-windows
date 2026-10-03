@@ -8,6 +8,7 @@ import {
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -20,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AddressBookChainType } from './AddressBookChainType'
 
-const evmChainNames = Object.values(EvmChain) as string[]
+const evmChains = Object.values(EvmChain)
 
 type Props = InputProps<AddressBookChainType | undefined> &
   OptionsProp<AddressBookChainType>
@@ -39,13 +40,14 @@ export const AddressBookChainSelectionScreen = ({
     const normalizedSearch = search.toLowerCase()
     return options.filter(option => {
       if (option.kind === 'evm') {
-        return evmChainNames.some(chainName =>
-          chainName.toLowerCase().includes(normalizedSearch)
+        return evmChains.some(chain =>
+          matchesChainSearch({ chain, query: normalizedSearch })
         )
       }
-      return getChainDisplayName(option.chain)
-        .toLowerCase()
-        .includes(normalizedSearch)
+      return matchesChainSearch({
+        chain: option.chain,
+        query: normalizedSearch,
+      })
     })
   }, [options, search])
 
