@@ -478,10 +478,11 @@ export const hr = {
   seedPhraseImportTip: 'Savjet: Možete koristiti preglednik kao uređaj',
   enter_your_seedphrase: 'Unesite svoju početnu frazu',
   enter_seedphrase_subtitle:
-    'Ostavite razmak između svake riječi. Podržane su početne fraze od <h>12 ili 24 riječi</h>.',
-  mnemonic_placeholder: 'Unesite 12 ili 24 riječi vaše početne fraze',
+    'Ostavite razmak između svake riječi. Podržane duljine:<h> 12, 15, 18, 21 ili 24 riječi</h>',
+  mnemonic_placeholder:
+    'Unesite 12, 15, 18, 21 ili 24 riječi vaše početne fraze',
   seedphrase_word_count_error:
-    'Unijeli ste {{count}} riječi. Početna fraza mora biti dugačka 12 ili 24',
+    'Unijeli ste {{count}} riječi. Početna fraza mora imati 12, 15, 18, 21 ili 24 riječi.',
   seedphrase_invalid_error:
     'Početna fraza nije ispravna, molimo provjerite sve riječi.',
   seedphrase_duplicate_vault_error:
@@ -1907,6 +1908,7 @@ export const hr = {
   kamino_earn_card_withdraw: 'Povući',
   kamino_earn_deposited: 'Položeno: {{amount}}',
   kamino_earn_earned: 'Zarađeno: {{amount}}',
+  kamino_earn_lost: 'Izgubljeno: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'na {{chain}}',
   max_total_fee: 'Maks. ukupna naknada',

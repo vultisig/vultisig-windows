@@ -2,7 +2,7 @@
  * Seedphrase Wizard Page Object Model
  *
  * Handles seedphrase import flow:
- * - enterSeedphrase(words) - enter 12/24 word mnemonic
+ * - enterSeedphrase(words) - enter a 12, 15, 18, 21 or 24-word mnemonic
  * - waitForScan() - wait for chain scanning
  * - selectChains(chains) - select which chains to import
  * - confirm() - confirm and create vault
@@ -47,7 +47,7 @@ export class SeedphraseWizard extends BasePage {
       .or(this.page.locator('.error-message'))
       .or(
         this.page.getByText(
-          /seed phrase must be 12 or 24|seed phrase is not correct/i
+          /seed phrase must be 12, 15, 18, 21 or 24|seed phrase is not correct/i
         )
       )
       .first()

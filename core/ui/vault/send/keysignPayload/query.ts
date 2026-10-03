@@ -24,11 +24,17 @@ import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { reconcileUtxoPlanAmount } from './reconcileUtxoPlanAmount'
+import { useSendMaxAmount } from './useSendMaxAmount'
 
 type UseSendKeysignPayloadQueryProps = {
   feeSettings?: FeeSettings
 }
 
+/**
+ * Builds the keysign payload Verify signs from the committed send state and
+ * the fee settings chosen on Verify. A UTXO send waits for the fee at those
+ * settings, which decides whether it is signed as a max spend.
+ */
 export const useSendKeysignPayloadQuery = ({
   feeSettings,
 }: UseSendKeysignPayloadQueryProps = {}) => {
@@ -39,6 +45,7 @@ export const useSendKeysignPayloadQuery = ({
   const { destinationTag } = useSendDestinationTag()
   const { isEnabled: tonGasless } = useTonGaslessSend()
   const { isEnabled: allowDeath } = useSendAllowDeath()
+  const sendMaxAmount = useSendMaxAmount({ feeSettings })
 
   const vault = useCurrentVault()
 
@@ -60,6 +67,7 @@ export const useSendKeysignPayloadQuery = ({
     hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     tonGasless,
     allowDeath,
+    sendMaxAmount: sendMaxAmount === true,
   }
 
   return useQuery({
@@ -73,6 +81,7 @@ export const useSendKeysignPayloadQuery = ({
         walletCore: input.walletCore,
       })
     },
+    enabled: sendMaxAmount !== null,
     ...noRefetchQueryOptions,
     retry: (failureCount, error) => {
       if (error instanceof BuildKeysignPayloadError) {
