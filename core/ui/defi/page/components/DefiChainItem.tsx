@@ -60,7 +60,7 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
                   </BalanceVisibilityAware>
                 )}
               </Text>
-              <Text color="shy" weight="500" size={12} centerVertically>
+              <Text color="shy" weight="500" size={12} centerVertically nowrap>
                 {isLoading ? (
                   <Spinner size={12} />
                 ) : (
@@ -88,7 +88,6 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
 
 const StyledPanel = styled(Panel)`
   cursor: pointer;
-  max-height: 64px;
   transition: background-color 0.3s ease;
 
   &:hover {
@@ -100,7 +99,6 @@ const StyledPanel = styled(Panel)`
     css`
       border-radius: 0;
       background: ${theme.colors.foreground.toCssValue()};
-      max-height: none;
       padding: 12px;
 
       &:hover {
