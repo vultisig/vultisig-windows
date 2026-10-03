@@ -4,19 +4,18 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../buttons/UnstyledButton'
-import { borderRadius } from '../css/borderRadius'
+import { borderRadius, borderRadiusPx } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'
 import { sameDimensions } from '../css/sameDimensions'
 import { BodyPortal } from '../dom/BodyPortal'
 import { CrossIcon } from '../icons/CrossIcon'
 import { HStack, VStack } from '../layout/Stack'
+import { pageConfig } from '../page/config'
 import { OnCloseProp, TitleProp } from '../props'
-import { mediaQuery } from '../responsive/mediaQuery'
 import { text } from '../text'
 import { getColor } from '../theme/getters'
 
-const desktopWidth = 400
-const sideGutter = 16
+const contentInset = 24
 const headerControlSize = 32
 
 const Overlay = styled.div`
@@ -27,31 +26,23 @@ const Overlay = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: ${sideGutter}px;
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    align-items: center;
-  }
 `
 
 const Card = styled(FocusLock)`
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: ${pageConfig.actionColumnWidth}px;
   max-height: 100%;
   min-height: 0;
-  padding: 7px ${sideGutter}px 32px;
+  padding: 7px ${contentInset}px 32px;
   gap: 28px;
-  ${borderRadius.xl};
+  border-radius: ${borderRadiusPx.xl}px ${borderRadiusPx.xl}px 0 0;
   background: ${getColor('foreground')};
   box-shadow:
     inset 0 0 0 1px ${({ theme }) => theme.colors.white.toRgba(0.03)},
     0 15px 75px rgba(0, 0, 0, 0.18);
   overscroll-behavior: contain;
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    width: ${desktopWidth}px;
-  }
 `
 
 const Header = styled(VStack)`
@@ -66,10 +57,6 @@ const Grabber = styled.div`
   margin-bottom: 5px;
   ${borderRadius.pill};
   background: ${getColor('foregroundSuper')};
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    visibility: hidden;
-  }
 `
 
 const HeaderRow = styled(HStack)`
@@ -133,11 +120,12 @@ type SheetProps = OnCloseProp &
   }
 
 /**
- * A floating sheet over the screen it was opened from, which stays visible
- * (dimmed) behind it. Rises from the bottom on narrow layouts such as the
- * extension popup and sits centred on wider ones; the card itself is the same
- * on both. Escape and the backdrop close it, and the body scrolls on its own
- * so the header and footer stay put.
+ * A sheet rising from the bottom of the screen it was opened from, which stays
+ * visible (dimmed) behind it. It meets the left, right and bottom edges of the
+ * window and rounds only its top corners, stopping at the width of the action
+ * column it covers so it lines up with the form behind it rather than
+ * stretching across a maximised desktop window. Escape and the backdrop close
+ * it, and the body scrolls on its own so the header and footer stay put.
  */
 export const Sheet = ({
   title,
