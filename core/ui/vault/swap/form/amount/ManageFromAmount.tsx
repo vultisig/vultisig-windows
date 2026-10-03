@@ -5,6 +5,7 @@ import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -304,7 +305,7 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
         success={amount => (
           <SuggestionRow alignItems="center" gap={8}>
             {suggestions.map(suggestion => (
-              <AmountSuggestion
+              <SwapAmountSuggestion
                 onClick={() => {
                   const suggestionAmount = multiplyBigInt(amount, suggestion)
 
@@ -337,6 +338,22 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
  */
 const SuggestionRow = styled(HStack)`
   width: 100%;
+`
+
+/**
+ * The shared suggestion is a solid chip; the swap form draws it as an
+ * equal-width outlined capsule. Doubled selector so the overrides win over the
+ * shared component's own rules whatever order the styles are injected in.
+ */
+const SwapAmountSuggestion = styled(AmountSuggestion)`
+  && {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    ${borderRadius.pill};
+    background-color: transparent;
+    border: 1px solid ${getColor('foregroundExtra')};
+  }
 `
 
 /**
@@ -406,7 +423,7 @@ const FiatAmountInput = styled.input`
   ${fiatInputFont};
 
   &::placeholder {
-    ${text({ color: 'shy', size: 18, weight: '500' })}
+    ${text({ color: 'shy', size: 22, weight: '500' })}
   }
 `
 
