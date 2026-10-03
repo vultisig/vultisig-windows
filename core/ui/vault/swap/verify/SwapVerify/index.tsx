@@ -100,6 +100,7 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                 <SwapReviewSide
                   coin={toCoin}
                   amount={parseFloat(toAmountDecimal)}
+                  fitAmount
                   caption={
                     toAmountLimit === null
                       ? undefined
