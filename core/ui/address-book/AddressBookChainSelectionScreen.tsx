@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AddressBookChainType } from './AddressBookChainType'
 
-const evmChainNames = Object.values(EvmChain) as string[]
+const evmChains = Object.values(EvmChain)
 
 type Props = InputProps<AddressBookChainType | undefined> &
   OptionsProp<AddressBookChainType>
@@ -40,8 +40,8 @@ export const AddressBookChainSelectionScreen = ({
     const normalizedSearch = search.toLowerCase()
     return options.filter(option => {
       if (option.kind === 'evm') {
-        return evmChainNames.some(chainName =>
-          chainName.toLowerCase().includes(normalizedSearch)
+        return evmChains.some(chain =>
+          matchesChainSearch({ chain, query: normalizedSearch })
         )
       }
       return matchesChainSearch({
