@@ -27,7 +27,8 @@ export const getAmountCandidates = (amount: number, coin: Coin) => {
 
     const number = digits ? `${whole}.${digits}${suffix}` : `${whole}${suffix}`
     const candidate = `${number}${ticker}`
-    if (candidates[candidates.length - 1] !== candidate) candidates.push(candidate)
+    if (candidates[candidates.length - 1] !== candidate)
+      candidates.push(candidate)
   }
 
   return candidates.length > 0 ? candidates : [full]
