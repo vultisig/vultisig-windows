@@ -40,10 +40,12 @@ export type KaminoCardPosition =
   | { status: 'unavailable' }
   | {
       status: 'settled'
-      /** Value in the underlying token; `0` is a confirmed empty vault. */
+      /** Current value in the underlying token; `0` is a confirmed empty vault. */
       tokenAmount: number
+      /** What was deposited (value less lifetime PnL), or the value while the PnL is unread. */
+      deposited: number
       /** Lifetime PnL in the underlying token, absent when unreadable. */
-      pnlToken?: number
+      pnl?: number
     }
 
 /**
@@ -123,20 +125,25 @@ export const KaminoVaultCard = ({
         <>
           <KaminoPositionFigure
             label={t('kamino_earn_deposited', {
-              amount: formatAmount(position.tokenAmount, {
+              amount: formatAmount(position.deposited, {
                 ticker: coin.ticker,
               }),
             })}
-            fiat={toFiat(position.tokenAmount)}
+            fiat={toFiat(position.deposited)}
           />
-          {position.pnlToken !== undefined ? (
+          {/* Unsigned beside a label that names the direction: "Earned: -3"
+              would still assert the loss was earned. */}
+          {position.pnl !== undefined ? (
             <KaminoPositionFigure
-              label={t('kamino_earn_earned', {
-                amount: formatAmount(position.pnlToken, {
-                  ticker: coin.ticker,
-                }),
-              })}
-              fiat={toFiat(position.pnlToken)}
+              label={t(
+                position.pnl < 0 ? 'kamino_earn_lost' : 'kamino_earn_earned',
+                {
+                  amount: formatAmount(Math.abs(position.pnl), {
+                    ticker: coin.ticker,
+                  }),
+                }
+              )}
+              fiat={toFiat(Math.abs(position.pnl))}
             />
           ) : null}
         </>

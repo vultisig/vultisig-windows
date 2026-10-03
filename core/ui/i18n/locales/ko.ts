@@ -477,11 +477,11 @@ export const ko = {
   seedPhraseImportTip: '팁: 브라우저를 기기로 사용할 수 있습니다.',
   enter_your_seedphrase: '시드 구문을 입력하세요',
   enter_seedphrase_subtitle:
-    '각 단어 사이에 공백을 두세요. 시드 구문<h> 12단어 또는 24단어</h> 지원됩니다.',
+    '각 단어 사이에 공백을 두세요. 지원되는 길이:<h> 12, 15, 18, 21 또는 24 단어</h>',
   mnemonic_placeholder:
-    '시드 구문에 사용할 12개 또는 24개의 단어를 입력하세요.',
+    '시드 구문에 사용할 12, 15, 18, 21 또는 24개의 단어를 입력하세요.',
   seedphrase_word_count_error:
-    '{{count}}개의 단어를 입력하셨습니다. 시드 구문은 12단어 또는 24단어여야 합니다.',
+    '{{count}} 개의 단어를 입력하셨습니다. 시드 구문은 12, 15, 18, 21 또는 24개의 단어여야 합니다.',
   seedphrase_invalid_error:
     '시드 구문이 올바르지 않습니다. 모든 단어를 확인해 주세요.',
   seedphrase_duplicate_vault_error:
@@ -1897,6 +1897,7 @@ export const ko = {
   kamino_earn_card_withdraw: '출금',
   kamino_earn_deposited: '예치됨: {{amount}}',
   kamino_earn_earned: '수익: {{amount}}',
+  kamino_earn_lost: '손실: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: '{{chain}} 에서',
   max_total_fee: '최대 총 수수료',
