@@ -84,6 +84,18 @@ describe('cardPosition', () => {
     })
   })
 
+  it('never reports a negative deposit when lifetime PnL exceeds the value', () => {
+    // Lifetime PnL includes interest already withdrawn, so it can outgrow what is left.
+    expect(
+      cardPosition({ ...vault, holding: holding(5_000_000n, '8') })
+    ).toEqual({
+      status: 'settled',
+      tokenAmount: 5,
+      deposited: 0,
+      pnl: 8,
+    })
+  })
+
   it('falls back to the value when the PnL could not be read', () => {
     // A PnL outage must not take the holding off the card; only Earned goes.
     for (const pnlToken of [undefined, '1,000.5']) {

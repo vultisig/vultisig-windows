@@ -66,10 +66,16 @@ export const cardPosition = ({
   }
 }
 
-/** `value − pnl` in exact integers, truncated toward zero at the value's scale. */
+/**
+ * `value − pnl` in exact integers, truncated toward zero at the value's scale.
+ * Floored at zero: lifetime PnL includes interest already withdrawn, so after
+ * a partial withdrawal it can exceed what the vault still holds.
+ */
 const depositedBaseUnits = (value: KaminoTokenAmount, pnl: KaminoRate) => {
   const scale = Math.max(value.decimals, pnl.scale)
   const valueAtScale = value.baseUnits * 10n ** BigInt(scale - value.decimals)
   const pnlAtScale = pnl.numerator * 10n ** BigInt(scale - pnl.scale)
-  return (valueAtScale - pnlAtScale) / 10n ** BigInt(scale - value.decimals)
+  const deposited =
+    (valueAtScale - pnlAtScale) / 10n ** BigInt(scale - value.decimals)
+  return deposited > 0n ? deposited : 0n
 }
