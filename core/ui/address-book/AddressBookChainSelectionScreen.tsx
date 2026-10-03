@@ -8,6 +8,7 @@ import {
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -43,9 +44,10 @@ export const AddressBookChainSelectionScreen = ({
           chainName.toLowerCase().includes(normalizedSearch)
         )
       }
-      return getChainDisplayName(option.chain)
-        .toLowerCase()
-        .includes(normalizedSearch)
+      return matchesChainSearch({
+        chain: option.chain,
+        query: normalizedSearch,
+      })
     })
   }, [options, search])
 

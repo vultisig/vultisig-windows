@@ -1,4 +1,4 @@
-import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
+import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { SelectableChainItem } from '@core/ui/chain/selection/SelectableChainItem'
 import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
@@ -38,9 +38,7 @@ export const SelectChainsStep = () => {
   const allChains = SEEDPHRASE_IMPORT_SUPPORTED_CHAINS
 
   const filteredChains = search
-    ? allChains.filter(chain =>
-        getChainDisplayName(chain).toLowerCase().includes(search.toLowerCase())
-      )
+    ? allChains.filter(chain => matchesChainSearch({ chain, query: search }))
     : allChains
 
   const sortedChains = [...filteredChains].sort((a, b) => a.localeCompare(b))

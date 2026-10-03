@@ -82,9 +82,9 @@ export const ChainItem = ({
         )}
       </ChainIconWrapper>
       <ChainNameWrapper>
-        <Text color="contrast" size={12} weight={500}>
+        <ChainName color="contrast" size={12} weight={500}>
           {getChainDisplayName(coin.chain)}
-        </Text>
+        </ChainName>
       </ChainNameWrapper>
     </ChainCard>
   )
@@ -94,6 +94,14 @@ const ChainNameWrapper = styled.div`
   min-width: 0;
   width: 100%;
   text-align: center;
+`
+
+const ChainName = styled(Text)`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 `
 
 const ChainCard = styled(UnstyledButton)<{
