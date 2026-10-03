@@ -5,6 +5,7 @@ import { useSyncAllowDeathAmount } from '@core/ui/vault/send/allowDeath/useSyncA
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
 import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
+import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
@@ -17,12 +18,18 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * The send form. Submitting commits the amount Verify signs, reduced to what
+ * the balance covers after the fee. It waits while the fee is re-estimated for
+ * a new receiver or memo, so that reduction never uses the previous estimate.
+ */
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const { data, error, isPending } = useSendValidationQuery()
   const [amount, setAmount] = useSendAmount()
   const spendableAmount = useSpendableSendAmount()
   const isAllowDeathSyncing = useSyncAllowDeathAmount()
+  const { isPlaceholderData: isFeeRefreshing } = useSendFeeEstimateQuery()
 
   // Commit a fee-driven adjustment only here, never while the field is being
   // typed into: rewriting the amount on every keystroke would fight the user
@@ -45,7 +52,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
       return extractErrorMsg(error)
     }
 
-    return isPending || isAllowDeathSyncing
+    return isPending || isAllowDeathSyncing || isFeeRefreshing
   })()
 
   return (
@@ -74,7 +81,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         </VStack>
         <Button
           disabled={isDisabled}
-          loading={isPending}
+          loading={isPending || isFeeRefreshing}
           type="submit"
           data-testid="send-continue"
         >
