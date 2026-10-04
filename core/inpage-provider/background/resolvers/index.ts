@@ -9,6 +9,7 @@ import { exportVault } from './exportVault'
 import { getAccount } from './getAccount'
 import { getAppChain } from './getAppChain'
 import { getAppChainId } from './getAppChainId'
+import { getEvmSigningChain } from './getEvmSigningChain'
 import { getTx } from './getTx'
 import { hasAppSession } from './hasAppSession'
 import { hasChainInVault } from './hasChainInVault'
@@ -28,6 +29,7 @@ type BackgroundResolvers = {
 export const backgroundResolvers: BackgroundResolvers = {
   getAppChainId,
   getAppChain,
+  getEvmSigningChain,
   setAppChain,
   getAccount,
   signOut,

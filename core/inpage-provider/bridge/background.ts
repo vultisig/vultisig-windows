@@ -19,7 +19,12 @@ import {
 } from '../background/interface'
 import { BackgroundMessage } from '../background/resolver'
 import { backgroundResolvers } from '../background/resolvers'
-import { AuthorizedCallContext, CallContext } from '../call/context'
+import {
+  AuthorizedCallContext,
+  CallAccountHint,
+  CallContext,
+  CallInitialContext,
+} from '../call/context'
 import { PopupError } from '../popup/error'
 import {
   AuthorizedPopupMethod,
@@ -27,7 +32,7 @@ import {
   PopupInterface,
   SignMessageInput,
 } from '../popup/interface'
-import { PopupMessage } from '../popup/resolver'
+import { PopupMessage, PopupOptions } from '../popup/resolver'
 import { callPopupFromBackground } from '../popup/resolvers/background'
 import { InpageProviderBridgeMessage } from './message'
 import { serializeBridgeError } from './serializeBridgeError'
@@ -138,14 +143,37 @@ function assertPopupAuthorization({
   }
 }
 
+/**
+ * The signer a popup call names (`options.account`), tied to the chain the
+ * call targets so authorization can match it against vault key material.
+ */
+function getPopupAccountHint({
+  call,
+  options,
+}: {
+  call: PopupMessage<AuthorizedPopupMethod>['call']
+  options: PopupOptions
+}): CallAccountHint | undefined {
+  const [chain] = getPopupAuthorizationChains(call)
+
+  return options.account && chain
+    ? { address: options.account, chain }
+    : undefined
+}
+
 async function authorizePopupContext({
   call,
+  options,
   initialContext,
 }: {
   call: PopupMessage<AuthorizedPopupMethod>['call']
-  initialContext: CallContext
+  options: PopupOptions
+  initialContext: CallInitialContext
 }): Promise<AuthorizedCallContext> {
-  const context = await authorizeContext(initialContext)
+  const context = await authorizeContext({
+    ...initialContext,
+    account: getPopupAccountHint({ call, options }),
+  })
   assertPopupAuthorization({ call, context })
   return context
 }
@@ -153,7 +181,7 @@ async function authorizePopupContext({
 /** Build call context: authorize from storage (bound to the trusted origin) for authorized methods. */
 async function buildCallContext(
   message: InpageProviderBridgeMessage,
-  initialContext: CallContext
+  initialContext: CallInitialContext
 ): Promise<CallContext> {
   if (
     'popup' in message &&
@@ -161,6 +189,7 @@ async function buildCallContext(
   ) {
     return authorizePopupContext({
       call: message.popup.call,
+      options: message.popup.options,
       initialContext,
     })
   }

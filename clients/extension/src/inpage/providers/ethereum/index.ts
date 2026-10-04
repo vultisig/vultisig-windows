@@ -41,6 +41,7 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   public sendAsync
   public static instance: Ethereum | null = null
   private chainIdSyncId = 0
+  private accountsReadId = 0
 
   constructor() {
     super()
@@ -63,9 +64,23 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
 
     if (!validateUrl(window.location.href)) {
       addBackgroundEventListener('disconnect', () => {
+        this.accountsReadId++
+        void attempt(this.syncChainId)
         this.connected = false
         this.emit('accountsChanged', [])
         this.emit('disconnect', [])
+      })
+
+      addBackgroundEventListener('accountsChanged', async () => {
+        const readId = ++this.accountsReadId
+        const [accounts] = await Promise.all([
+          ethereumHandlers.eth_accounts(),
+          attempt(this.syncChainId),
+        ])
+
+        if (readId === this.accountsReadId) {
+          this.emit('accountsChanged', accounts)
+        }
       })
 
       addBackgroundEventListener('evmChainChanged', chainId => {
