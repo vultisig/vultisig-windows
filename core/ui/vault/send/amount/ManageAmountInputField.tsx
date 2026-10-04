@@ -93,6 +93,7 @@ export const ManageAmountInputField = () => {
   // the option off.
   const handleAmountChange = (amount: bigint | null) => {
     setValue(amount)
+    setPendingSuggestion(null)
     setSelectedSuggestion(null)
     if (allowDeath.isEnabled) {
       allowDeath.setEnabled(false)
@@ -154,8 +155,9 @@ export const ManageAmountInputField = () => {
 
   const error = !!amountError && value ? amountError : undefined
   // The fee is estimated for a concrete receiver, so without one the query
-  // stays idle and never settles. Waiting on it would lock the field for good.
-  const isFeeEstimateUnavailable = !receiver && feeEstimateQuery.data == null
+  // stays idle and never settles. Waiting on it would lock the field for good,
+  // and any fee kept from a previous receiver is stale.
+  const isFeeEstimateUnavailable = !receiver
   const isWaitingForFee =
     (pendingSuggestion != null &&
       isNative &&
