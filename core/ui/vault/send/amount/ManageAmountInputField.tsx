@@ -15,6 +15,7 @@ import { ManageTonGaslessFee } from '@core/ui/vault/send/fee/tonGasless/ManageTo
 import { useIsSendFeePaidInCoin } from '@core/ui/vault/send/fee/useIsSendFeePaidInCoin'
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
+import { useNearSendLimitsQuery } from '@core/ui/vault/send/queries/useNearSendLimitsQuery'
 import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
@@ -33,6 +34,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   areEqualCoins,
@@ -87,6 +89,29 @@ export const ManageAmountInputField = () => {
   const hasBalance = balance != null && balance > 0n
   const allowDeath = useSendAllowDeath()
   const { isSyncing: isAllowDeathSyncing } = useAllowDeathSendAmount()
+  const nearSendLimitsQuery = useNearSendLimitsQuery()
+  const isNearSend = coin.chain === Chain.Near
+
+  // NEAR also keeps back the balance backing the account's own storage, which
+  // only the chain knows, so its maximum is read rather than derived from the fee.
+  const getMaxSendable = (isAllowDeathSend: boolean): bigint | null => {
+    if (isNearSend) {
+      return nearSendLimitsQuery.data?.maxSendable ?? null
+    }
+    if (balance == null || feeEstimateQuery.data == null) {
+      return null
+    }
+    return getMaxSendableAmount({
+      chain: coin.chain,
+      balance,
+      fee: feeEstimateQuery.data,
+      allowDeath: isAllowDeathSend,
+    })
+  }
+  const pendingMaxSendable =
+    pendingSuggestion == null
+      ? null
+      : getMaxSendable(allowDeath.isEnabled && pendingSuggestion === 1)
 
   // Emptying the account is only ever done at the full amount: any other
   // amount could leave a remainder the chain destroys, so choosing one turns
@@ -100,41 +125,25 @@ export const ManageAmountInputField = () => {
     }
   }
 
-  // When user clicked a suggestion and we were waiting for fee: apply amount once fee is available
+  // When user clicked a suggestion and we were waiting for the maximum: apply amount once it is known
   useEffect(() => {
     if (
       pendingSuggestion == null ||
       balance == null ||
-      (isNative && feeEstimateQuery.data == null)
+      (isNative && pendingMaxSendable == null)
     ) {
       return
     }
 
     const suggestionValue = multiplyBigInt(balance, pendingSuggestion)
-    const maxSendable =
-      isNative && feeEstimateQuery.data != null
-        ? getMaxSendableAmount({
-            chain: coin.chain,
-            balance,
-            fee: feeEstimateQuery.data,
-            allowDeath: allowDeath.isEnabled && pendingSuggestion === 1,
-          })
-        : balance
-    const effectiveAmount = isNative
-      ? minBigInt(suggestionValue, maxSendable)
-      : suggestionValue
+    const effectiveAmount =
+      isNative && pendingMaxSendable != null
+        ? minBigInt(suggestionValue, pendingMaxSendable)
+        : suggestionValue
 
     setValue(effectiveAmount)
     setPendingSuggestion(null)
-  }, [
-    allowDeath.isEnabled,
-    balance,
-    coin.chain,
-    feeEstimateQuery.data,
-    isNative,
-    pendingSuggestion,
-    setValue,
-  ])
+  }, [balance, isNative, pendingMaxSendable, pendingSuggestion, setValue])
 
   const [currencyInputMode, setCurrencyInputMode] = useStateCorrector(
     useState<CurrencyInputMode>('base'),
@@ -162,7 +171,7 @@ export const ManageAmountInputField = () => {
     (pendingSuggestion != null &&
       isNative &&
       !isFeeEstimateUnavailable &&
-      feeEstimateQuery.isPending) ||
+      (isNearSend ? nearSendLimitsQuery : feeEstimateQuery).isPending) ||
     isAllowDeathSyncing
 
   // Announced while the field still holds the typed amount — the write itself
@@ -264,18 +273,12 @@ export const ManageAmountInputField = () => {
               {suggestions.map(suggestion => {
                 const suggestionValue =
                   balance != null ? multiplyBigInt(balance, suggestion) : 0n
-                const maxSendable =
-                  balance != null && isNative && feeEstimateQuery.data != null
-                    ? getMaxSendableAmount({
-                        chain: coin.chain,
-                        balance,
-                        fee: feeEstimateQuery.data,
-                        allowDeath: allowDeath.isEnabled && suggestion === 1,
-                      })
-                    : (balance ?? 0n)
+                const maxSendable = isNative
+                  ? getMaxSendable(allowDeath.isEnabled && suggestion === 1)
+                  : null
                 const effectiveAmount =
                   balance != null
-                    ? isNative
+                    ? maxSendable != null
                       ? minBigInt(suggestionValue, maxSendable)
                       : suggestionValue
                     : 0n
@@ -298,7 +301,7 @@ export const ManageAmountInputField = () => {
                     return
                   }
 
-                  if (feeEstimateQuery.data != null) {
+                  if (maxSendable != null) {
                     setValue(effectiveAmount)
                     setPendingSuggestion(null)
                   } else {
