@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -50,7 +51,7 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
           title={t('coin_not_found_in_current_vault')}
           description={t('coin_not_found_in_any_vault', {
             ticker: value.ticker,
-            chain: value.chain,
+            chain: getChainDisplayName(value.chain),
           })}
         />
       </>

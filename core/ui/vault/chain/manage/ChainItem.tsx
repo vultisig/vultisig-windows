@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
   useCreateCoinMutation,
@@ -81,9 +82,9 @@ export const ChainItem = ({
         )}
       </ChainIconWrapper>
       <ChainNameWrapper>
-        <Text cropped color="contrast" size={12} weight={500}>
-          {coin.chain}
-        </Text>
+        <ChainName color="contrast" size={12} weight={500}>
+          {getChainDisplayName(coin.chain)}
+        </ChainName>
       </ChainNameWrapper>
     </ChainCard>
   )
@@ -93,6 +94,14 @@ const ChainNameWrapper = styled.div`
   min-width: 0;
   width: 100%;
   text-align: center;
+`
+
+const ChainName = styled(Text)`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 `
 
 const ChainCard = styled(UnstyledButton)<{

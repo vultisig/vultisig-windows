@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
   decodedAmountCanBeShown,
@@ -149,7 +150,7 @@ export const VerifyTransactionOverview = ({
               style={{ fontSize: 16 }}
             />
             <Text size={14} weight={500}>
-              {chain}
+              {getChainDisplayName(chain)}
             </Text>
           </HStack>
         }

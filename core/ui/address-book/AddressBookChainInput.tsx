@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -56,7 +57,7 @@ export const AddressBookChainInput = ({
   const displayName = selectedChainType
     ? selectedChainType.kind === 'evm'
       ? t('evm_chains')
-      : selectedChainType.chain
+      : getChainDisplayName(selectedChainType.chain)
     : undefined
 
   const logoSrc = selectedChainType

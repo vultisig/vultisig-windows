@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { measureTextWidth } from './measureTextWidth'
 import { useElementSize } from './useElementSize'
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
@@ -12,21 +13,6 @@ type UseFitFontSizeInput = {
   text: string
   /** Width inside the container that does not scale with the font, such as gaps. */
   fixedWidth?: number
-}
-
-let measureContext: CanvasRenderingContext2D | null = null
-
-type MeasureTextWidthInput = {
-  text: string
-  font: string
-}
-
-const measureTextWidth = ({ text, font }: MeasureTextWidthInput) => {
-  measureContext ??= document.createElement('canvas').getContext('2d')
-  if (!measureContext) return null
-
-  measureContext.font = font
-  return measureContext.measureText(text).width
 }
 
 /**

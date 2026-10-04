@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
   isSupportedDefiChain,
@@ -58,7 +59,7 @@ export const DefiChainItem = ({
   return (
     <DefiItem
       icon={<ChainEntityIcon value={getChainLogoSrc(chain)} />}
-      name={chain}
+      name={getChainDisplayName(chain)}
       isSelected={isSelected}
       isPending={showPending}
       isDisabled={isDisabled}

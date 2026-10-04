@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { InputPasteAction } from '@core/ui/components/InputPasteAction'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -27,8 +28,6 @@ import { match } from '@vultisig/lib-utils/match'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { getCustomRpcChainName } from '.'
 
 const isValidRpcUrl = (raw: string): boolean => {
   const result = attempt(() => new URL(raw))
@@ -119,7 +118,7 @@ export const CustomRpcDetailPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={goBack} />}
-        title={`${getCustomRpcChainName(chain)} RPC`}
+        title={`${getChainDisplayName(chain)} RPC`}
       />
       <PageContent flexGrow scrollable>
         <ContentFrame>

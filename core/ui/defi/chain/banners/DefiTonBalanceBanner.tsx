@@ -1,4 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { useTonStakePositionQuery } from '@core/ui/chain/ton/staking/queries/useTonStakePositionQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -79,7 +80,7 @@ export const DefiTonBalanceBanner = () => {
         />
       </TonLogoWrapper>
       <BannerContent gap={8} style={{ alignItems: 'flex-start' }}>
-        <ChainTitle>{Chain.Ton}</ChainTitle>
+        <ChainTitle>{getChainDisplayName(Chain.Ton)}</ChainTitle>
         {isLoading ? (
           <Spinner size={20} />
         ) : (

@@ -48,6 +48,26 @@ const topLevelTranslationOverrides: Partial<
     signed_tx_you_are_rebonding: '재본딩 중이에요',
     signed_tx_rebonded: '재본딩됨',
   },
+  es: {
+    // Machine translation leaves stray spaces before punctuation around placeholders.
+    ton_gasless_description:
+      'No se necesita GRAM: un relé paga el gas de la red y cobra en su lugar una pequeña comisión en {{ticker}}.',
+  },
+  hr: {
+    // Machine translation leaves stray spaces before punctuation around placeholders.
+    ton_gasless_description:
+      'Nije potreban GRAM: relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju u {{ticker}}.',
+  },
+  pt: {
+    // Machine translation leaves stray spaces before punctuation around placeholders.
+    ton_gasless_description:
+      'Não é necessário GRAM: um relay paga o gás da rede e cobra, em vez disso, uma pequena comissão em {{ticker}}.',
+  },
+  it: {
+    // Machine translation leaves stray spaces before punctuation around placeholders.
+    ton_gasless_description:
+      'GRAM non è necessario: un relay paga il gas di rete e addebita invece una piccola commissione in {{ticker}}.',
+  },
 }
 
 const isRecursiveRecord = (value: unknown): value is RecursiveRecord =>

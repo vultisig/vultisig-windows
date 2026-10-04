@@ -3,7 +3,6 @@ import {
   fetchKaminoPnl,
   fetchKaminoUserPositions,
 } from '@vultisig/core-chain/chains/solana/kamino/api'
-import { parseKaminoDisplayDecimal } from '@vultisig/core-chain/chains/solana/kamino/decimal'
 import {
   KaminoSharePosition,
   parseKaminoSharePosition,
@@ -15,11 +14,10 @@ type KaminoOwnedPosition = {
   vaultAddress: string
   shares: KaminoSharePosition
   /**
-   * Lifetime profit and loss in the vault's underlying token, `undefined`
-   * when the PnL read failed — one display line is dropped rather than the
-   * whole position, which the balance depends on.
+   * Lifetime PnL in the underlying token as Kamino's decimal string, so the
+   * split stays exact; `undefined` when the read failed, which drops the split.
    */
-  pnlToken?: number
+  pnlToken?: string
 }
 
 /** The query key for one owner's Kamino positions, shared with the refresh. */
@@ -64,12 +62,7 @@ export const useKaminoPositionsQuery = (owner: string) =>
             vault: position.vaultAddress,
           }).catch(() => undefined)
 
-          return {
-            ...position,
-            pnlToken: pnl
-              ? parseKaminoDisplayDecimal(pnl.totalPnl.token)
-              : undefined,
-          }
+          return { ...position, pnlToken: pnl?.totalPnl.token }
         })
       )
 

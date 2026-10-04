@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinPillButton } from '@core/ui/chain/coin/inputs/CoinPillButton'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { useTransferDirection } from '@core/ui/state/transferDirection'
 import { ManageFromAmount } from '@core/ui/vault/swap/form/amount/ManageFromAmount'
 import { ToAmount } from '@core/ui/vault/swap/form/amount/ToAmount'
@@ -66,7 +67,7 @@ export const SwapCoinInputField = ({
               data-testid={`swap-${side}-chain-selector`}
             >
               <Text weight="500" size={12} color="contrast">
-                {chain}
+                {getChainDisplayName(chain)}
               </Text>
               <ChevronDownIcon />
             </HStack>

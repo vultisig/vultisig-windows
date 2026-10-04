@@ -1,5 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCustomRpcOverrides } from '@core/ui/storage/customRpcOverrides'
@@ -11,23 +13,11 @@ import { PageContent as BasePageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { Chain } from '@vultisig/core-chain/Chain'
 import { customRpcSupportedChains } from '@vultisig/core-chain/chains/customRpc/customRpcSupportedChains'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const chainNameOverrides: Partial<Record<Chain, string>> = {
-  [Chain.BSC]: 'BSC',
-  [Chain.CronosChain]: 'Cronos Chain',
-  [Chain.Dydx]: 'dYdX',
-  [Chain.TerraClassic]: 'Terra Classic',
-  [Chain.Zksync]: 'ZKsync',
-}
-
-export const getCustomRpcChainName = (chain: Chain) =>
-  chainNameOverrides[chain] ?? chain
 
 export const CustomRpcPage = () => {
   const { t } = useTranslation()
@@ -39,10 +29,8 @@ export const CustomRpcPage = () => {
   const chains = normalized
     ? customRpcSupportedChains.filter(chain => {
         const coin = chainFeeCoin[chain]
-        const displayName = getCustomRpcChainName(chain)
-
         return (
-          displayName.toLowerCase().includes(normalized) ||
+          matchesChainSearch({ chain, query: normalized }) ||
           coin.ticker.toLowerCase().includes(normalized)
         )
       })
@@ -90,7 +78,7 @@ export const CustomRpcPage = () => {
                       )}
                     </ChainIconFrame>
                     <ChainName variant="caption" centerHorizontally>
-                      {getCustomRpcChainName(chain)}
+                      {getChainDisplayName(chain)}
                     </ChainName>
                   </ChainTile>
                 )

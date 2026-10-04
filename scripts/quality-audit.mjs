@@ -36,40 +36,21 @@ const suppressions = [
     package: 'bigint-buffer',
     path: '@solana/buffer-layout-utils > bigint-buffer',
     reason:
-      'Buffer overflow via toBigIntLE() in bigint-buffer (<=1.1.5), a transitive dep pulled in through the Solana SDK (@solana/buffer-layout-utils). The package is unmaintained and 1.1.5 is its latest release, so there is no fixed version to upgrade to. Inherited from #4352; suppression retained until a maintained replacement is available upstream.',
+      'Buffer overflow via toBigIntLE() in bigint-buffer (<=1.1.5), a transitive dep pulled in through the Solana SDK (@solana/spl-token > @solana/buffer-layout-utils). The package is unmaintained and 1.1.5 (2022) is still its latest release, so there is no fixed version to upgrade to; @solana/buffer-layout-utils 0.3.0 is also still the latest. Inherited from #4352; re-checked for #5087, suppression retained until a maintained replacement is available upstream.',
     owner: 'vultisig/windows',
-    reviewBy: '2026-10-01',
+    reviewBy: '2027-01-01',
   },
   {
-    id: 1124012,
-    advisory: 'GHSA-v245-v573-v5vm',
-    package: 'linkify-it',
-    path: 'markdown-it > linkify-it',
+    id: 1240992,
+    advisory: 'GHSA-vfj7-8cjw-p6xm',
+    package: 'braces',
+    path: 'vite-plugin-static-copy > chokidar > braces; fast-glob > micromatch > braces; markdownlint-cli2 > micromatch > braces',
     reason:
-      'Quadratic-complexity ReDoS in the mailto: validator scan-loop. Reachable only from Markdown/dev tooling (markdown-it), never bundled into the shipped desktop/extension runtime. No fixed linkify-it (>5.0.1) is resolvable in our dependency tree yet.',
+      'Stack-exhaustion denial of service when braces expands deeply nested patterns (<=3.0.3). It is only reachable through build and lint tooling (vite-plugin-static-copy, fast-glob, markdownlint-cli2) over glob patterns this repo controls, and is never bundled into the shipped desktop or extension runtime. The advisory has no patched version (first_patched_version is null) and 3.0.3 is the latest braces release, so there is nothing to upgrade to; suppression retained until upstream publishes a fix.',
     owner: 'vultisig/windows',
-    reviewBy: '2026-10-01',
-  },
-  {
-    id: 1124334,
-    advisory: 'GHSA-mh99-v99m-4gvg',
-    package: 'brace-expansion',
-    path: 'minimatch@3.1.5 > brace-expansion',
-    reason:
-      'False positive: the advisory range ("<=5.0.7") is written against the current 5.x line, but npm audit compares it numerically against our tree version 1.1.16, which belongs to the separately maintained legacy v1 line (npm dist-tag maintenance-v1). 1.1.16 was published 2026-07-23, the day before this advisory, as the v1-line maintenance fix. No newer 1.x release exists to upgrade to.',
-    owner: 'vultisig/windows',
-    reviewBy: '2026-10-01',
+    reviewBy: '2027-01-01',
   },
 ]
-
-const today = new Date().toISOString().slice(0, 10)
-for (const { id, package: pkg, reviewBy } of suppressions) {
-  if (reviewBy < today) {
-    console.warn(
-      `⚠ audit suppression ${id} (${pkg}) is past its review-by date ${reviewBy} — re-evaluate or upgrade the dependency.`
-    )
-  }
-}
 
 const args = [
   'npm',
@@ -85,7 +66,25 @@ const socketTimeoutPattern = /RequestError: Timeout awaiting 'socket' for \d+ms/
 const retryDelaysMs = [2_000, 15_000, 45_000, 90_000]
 const isMain = fileURLToPath(import.meta.url) === process.argv[1]
 
+/**
+ * Warns about suppressions past their review-by date. Only run when this
+ * file is the entry point, so importing it never prints date-dependent
+ * output.
+ */
+function warnAboutExpiredSuppressions() {
+  const today = new Date().toISOString().slice(0, 10)
+  for (const { id, package: pkg, reviewBy } of suppressions) {
+    if (reviewBy < today) {
+      console.warn(
+        `⚠ audit suppression ${id} (${pkg}) is past its review-by date ${reviewBy} — re-evaluate or upgrade the dependency.`
+      )
+    }
+  }
+}
+
 if (isMain) {
+  warnAboutExpiredSuppressions()
+
   if (process.argv.includes('--print')) {
     console.log(`yarn ${args.join(' ')}`)
   } else {

@@ -479,10 +479,11 @@ export const nl = {
   seedPhraseImportTip: 'Tip: Je kunt een browser als apparaat gebruiken.',
   enter_your_seedphrase: 'Voer je seed phrase in',
   enter_seedphrase_subtitle:
-    'Laat een spatie tussen elk woord. Seed phrases van <h>12 of 24 woorden</h> worden ondersteund.',
-  mnemonic_placeholder: 'Voer de 12 of 24 woorden van je seed phrase in',
+    'Laat een spatie tussen elk woord. Ondersteunde lengtes:<h> 12, 15, 18, 21 of 24 woorden</h>',
+  mnemonic_placeholder:
+    'Voer de 12, 15, 18, 21 of 24 woorden van uw seedphrase in.',
   seedphrase_word_count_error:
-    'Je hebt {{count}} woorden ingevoerd. Seed phrase moet 12 of 24 woorden zijn',
+    'U hebt {{count}} woorden ingevoerd. De seed phrase moet 12, 15, 18, 21 of 24 woorden lang zijn.',
   seedphrase_invalid_error:
     'Seed phrase is niet correct, controleer alle woorden.',
   seedphrase_duplicate_vault_error:
@@ -1920,6 +1921,7 @@ export const nl = {
   kamino_earn_card_withdraw: 'Opnemen',
   kamino_earn_deposited: 'Gestort: {{amount}}',
   kamino_earn_earned: 'Verdiend: {{amount}}',
+  kamino_earn_lost: 'Verloren: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'op {{chain}}',
   max_total_fee: 'Maximale totale kosten',
@@ -1954,9 +1956,9 @@ export const nl = {
   ton_tx_failure_wallet_id_mismatch:
     'De transactie is opgezet voor een andere versie van het walletcontract dan degene die op dit adres wordt gebruikt.',
   ton_tx_failure_insufficient_funds:
-    'Er is onvoldoende TON beschikbaar om het bedrag plus netwerkkosten te dekken. Houd ongeveer 0,05 TON over voor de kosten en probeer het opnieuw.',
+    'Er is onvoldoende GRAM beschikbaar om het bedrag plus netwerkkosten te dekken. Houd ongeveer 0,05 GRAM over voor de kosten en probeer het opnieuw.',
   ton_tx_failure_out_of_gas:
-    'De transactie is voortijdig beëindigd vanwege gasgebrek. Voeg meer TON toe aan de overdracht en probeer het opnieuw.',
+    'De transactie is voortijdig beëindigd vanwege gasgebrek. Voeg meer GRAM toe aan de overdracht en probeer het opnieuw.',
   ton_tx_failure_invalid_destination:
     'Het bestemmingsadres is niet geldig op TON. Controleer het adres en probeer het opnieuw.',
   ton_tx_failure_not_enough_jettons:
@@ -1991,7 +1993,7 @@ export const nl = {
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
   ton_gasless_pay_fee_in_token: 'Betaal netwerkkosten in {{ticker}}',
   ton_gasless_description:
-    'Geen TON nodig: een relay betaalt de netwerkgaskosten en brengt in plaats daarvan een kleine {{ticker}} commissie in rekening.',
+    'Geen GRAM nodig: een relay betaalt de netwerkgaskosten en brengt in plaats daarvan een kleine {{ticker}} commissie in rekening.',
   ton_gasless_fee_note: 'betaald via relay',
   max_network_fee: 'Maximale netwerkkosten',
   swap_failed_refunded: 'Terugbetaald door de swapaanbieder',
@@ -2028,4 +2030,6 @@ export const nl = {
   bond_reward_history_node: 'Knooppunt: {{address}}',
   bond_reward_history_error:
     'De beloningsgeschiedenis kon niet worden geladen.',
+  send_enter_address_first_for_percentage:
+    'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
 }
