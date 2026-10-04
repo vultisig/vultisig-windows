@@ -844,6 +844,8 @@ func (s *Store) SaveCoins(vaultPublicKeyECDSA string, coins []Coin) ([]string, e
 	return coinIDs, nil
 }
 
+// SaveVaultFolder creates the folder or updates its name and order in place,
+// leaving the vaults assigned to it untouched.
 func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 	if folder.ID == "" {
 		folder.ID = uuid.New().String()
