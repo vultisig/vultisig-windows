@@ -1,7 +1,9 @@
 import { Query } from '@lib/ui/query/Query'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
+import { getKeysignSwapKitDepositRecipient } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapKitDepositRecipient'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { TFunction } from 'i18next'
 
@@ -83,6 +85,12 @@ export const resolveStartKeysignPromptProps = ({
 
   if (!keysign) {
     return {}
+  }
+
+  if ('error' in attempt(() => getKeysignSwapKitDepositRecipient(keysign))) {
+    return {
+      disabledMessage: `${t('swap_deposit_address')}: ${t('swap_deposit_address_unverifiable')}`,
+    }
   }
 
   if (disabledMessage) {
