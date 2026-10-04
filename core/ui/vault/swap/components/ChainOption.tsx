@@ -1,5 +1,6 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
@@ -41,7 +42,7 @@ export const ChainOption = ({
           />
           <VStack alignItems="start">
             <Text color="contrast" size={14} weight="500">
-              {chain}
+              {getChainDisplayName(chain)}
             </Text>
           </VStack>
         </ChainDetails>

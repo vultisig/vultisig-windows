@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnBackProp } from '@lib/ui/props'
@@ -173,7 +174,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                 value={getChainLogoSrc(coin.chain)}
                 style={{ fontSize: 16 }}
               />
-              {coin.chain}
+              {getChainDisplayName(coin.chain)}
             </>
           }
         />

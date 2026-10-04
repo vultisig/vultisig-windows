@@ -4,12 +4,7 @@ import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
-import {
-  kaminoShareToTokenValue,
-  KaminoTokenAmount,
-} from '@vultisig/core-chain/chains/solana/kamino/amount'
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 
@@ -28,8 +23,8 @@ import { kaminoUnderlyingCoin } from './underlyingCoin'
 
 /**
  * Kamino Earn on the Solana DeFi tab: the curated vaults the user has enabled,
- * each with its live 30-day APY and — where the vault holds one — what the
- * position is worth and what it has earned, each with its fiat value.
+ * each with its live 30-day APY and — where the vault holds one — what was
+ * deposited and what it has earned, each with its fiat value.
  *
  * A position's value is its SHARE balance valued through `tokensPerShare`,
  * never through the metrics endpoint's USD `sharePrice`: the two only coincide
@@ -88,13 +83,6 @@ export const KaminoEarnView = () => {
             {enabled.map(info => {
               const coin = kaminoUnderlyingCoin(info.descriptor)
               const position = positionsQuery.data?.[info.descriptor.address]
-              const tokenValue: KaminoTokenAmount | undefined = position
-                ? kaminoShareToTokenValue({
-                    shares: position.shares.total,
-                    tokensPerShare: info.tokensPerShare,
-                    tokenDecimals: coin.decimals,
-                  })
-                : undefined
 
               return (
                 <KaminoVaultCard
@@ -107,10 +95,12 @@ export const KaminoEarnView = () => {
                     ] ?? 0
                   }
                   position={cardPosition({
-                    tokenAmount: tokenValue
-                      ? fromChainAmount(tokenValue.baseUnits, coin.decimals)
-                      : 0,
-                    pnlToken: position?.pnlToken,
+                    holding: position && {
+                      shares: position.shares.total,
+                      pnlToken: position.pnlToken,
+                    },
+                    tokensPerShare: info.tokensPerShare,
+                    tokenDecimals: coin.decimals,
                     isPending: positionsQuery.isPending,
                     hasFailed: positionsQuery.data === undefined,
                   })}

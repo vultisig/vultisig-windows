@@ -23,8 +23,11 @@ type QaKaminoVault = {
   tokensPerShare: string
   /** Share balance the owner holds, in human units; `0` leaves the vault empty. */
   shares: number
-  /** Lifetime PnL in the underlying token, or `undefined` for an unread one. */
-  pnlToken?: number
+  /**
+   * Lifetime PnL in the underlying token as Kamino's decimal string, or
+   * `undefined` for an unread one.
+   */
+  pnlToken?: string
 }
 
 type SeedKaminoInput = {
@@ -71,7 +74,11 @@ const buildVaultInfo = ({
   ),
 })
 
-const buildOwnedPosition = ({ descriptor, shares, pnlToken }: QaKaminoVault) => {
+const buildOwnedPosition = ({
+  descriptor,
+  shares,
+  pnlToken,
+}: QaKaminoVault) => {
   const amount = kaminoShareAmount(
     toBaseUnits({ value: shares, decimals: descriptor.sharesDecimals }),
     descriptor.sharesDecimals

@@ -8,13 +8,18 @@ import { Text } from '@lib/ui/text'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { seedphraseWordCounts } from './config'
 import { EnterSeedphraseHeader } from './EnterSeedphraseHeader'
 import { useMnemonic } from './state/mnemonic'
 import { useImportSeedphraseStep } from './state/step'
 import { checkDuplicateMnemonicVault } from './utils/checkDuplicateMnemonicVault'
+import { getSeedphraseTargetWordCount } from './utils/getSeedphraseTargetWordCount'
 import { cleanMnemonic, validateMnemonic } from './utils/validateMnemonic'
 
+/**
+ * Step where the user enters the seedphrase to import. Import stays disabled
+ * until the phrase is a valid mnemonic of a supported length that no existing
+ * vault already holds.
+ */
 export const EnterSeedphraseStep = () => {
   const { t } = useTranslation()
   const [mnemonic, setMnemonic] = useMnemonic()
@@ -47,9 +52,7 @@ export const EnterSeedphraseStep = () => {
 
   const words = cleanedMnemonic.split(' ')
   const wordsCount = cleanedMnemonic === '' ? 0 : words.length
-  const [minWordCount, maxWordCount] = seedphraseWordCounts
-  const maxWords = wordsCount > minWordCount ? maxWordCount : minWordCount
-  const accessory = `${wordsCount}/${maxWords}`
+  const accessory = `${wordsCount}/${getSeedphraseTargetWordCount(wordsCount)}`
 
   return (
     <VStack

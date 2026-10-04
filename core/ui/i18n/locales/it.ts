@@ -489,10 +489,11 @@ export const it = {
   seedPhraseImportTip: 'Suggerimento: Puoi usare un browser como dispositivo',
   enter_your_seedphrase: 'Inserisci la tua frase seme',
   enter_seedphrase_subtitle:
-    'Lascia uno spazio tra ogni parola. Sono supportate frasi iniziali di <h>12 o 24 parole</h>.',
-  mnemonic_placeholder: 'Inserisci le 12 o 24 parole della tua seedphrase',
+    'Lascia uno spazio tra ogni parola. Lunghezze supportate:<h> 12, 15, 18, 21 o 24 parole</h>',
+  mnemonic_placeholder:
+    'Inserisci le 12, 15, 18, 21 o 24 parole della tua frase di partenza',
   seedphrase_word_count_error:
-    'Hai inserito {{count}} parole. La frase seme deve essere composta da 12 o 24 parole.',
+    'Hai inserito {{count}} parole. La frase di recupero deve essere composta da 12, 15, 18, 21 o 24 parole.',
   seedphrase_invalid_error:
     'La frase iniziale non è corretta, verifica tutte le parole.',
   seedphrase_duplicate_vault_error:
@@ -1942,6 +1943,7 @@ export const it = {
   kamino_earn_card_withdraw: 'Preleva',
   kamino_earn_deposited: 'Depositato: {{amount}}',
   kamino_earn_earned: 'Guadagnato: {{amount}}',
+  kamino_earn_lost: 'Perso: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'su {{chain}}',
   max_total_fee: 'Tariffa totale massima',
@@ -1975,9 +1977,9 @@ export const it = {
   ton_tx_failure_wallet_id_mismatch:
     'La transazione è stata creata per una versione del contratto del portafoglio diversa da quella utilizzata a questo indirizzo.',
   ton_tx_failure_insufficient_funds:
-    "Non ci sono abbastanza TON per coprire l'importo più le commissioni di rete. Tieni da parte circa 0,05 TON per le commissioni e riprova.",
+    "Non ci sono abbastanza GRAM per coprire l'importo più le commissioni di rete. Tieni da parte circa 0,05 GRAM per le commissioni e riprova.",
   ton_tx_failure_out_of_gas:
-    'La transazione ha esaurito il gas prima di poter essere completata. Aggiungi altro TON al trasferimento e riprova.',
+    'La transazione ha esaurito il gas prima di poter essere completata. Aggiungi altro GRAM al trasferimento e riprova.',
   ton_tx_failure_invalid_destination:
     "L'indirizzo di destinazione non è valido su TON. Verifica l'indirizzo e riprova.",
   ton_tx_failure_not_enough_jettons:
@@ -2012,7 +2014,7 @@ export const it = {
     "Utilizza il contratto W5 (v5r1) anziché V4R2 quando derivi gli indirizzi TON di questo vault. Questo modifica l'indirizzo utilizzato dal wallet e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
   ton_gasless_pay_fee_in_token: 'Paga la tariffa di rete in {{ticker}}',
   ton_gasless_description:
-    'Non è necessario TON : un relay paga il gas di rete e addebita invece una piccola commissione {{ticker}} .',
+    'GRAM non è necessario: un relay paga il gas di rete e addebita invece una piccola commissione in {{ticker}}.',
   ton_gasless_fee_note: 'pagato tramite relè',
   max_network_fee: 'Tariffa massima di rete',
   swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
