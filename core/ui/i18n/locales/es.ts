@@ -1752,6 +1752,8 @@ export const es = {
   ripple_destination_tag_invalid:
     'Introduce un número entero entre 0 y 4.294.967.295.',
   ripple_destination_tag_optional: 'Etiqueta de destino opcional',
+  near_destination_not_found:
+    'Esta cuenta NEAR no existe. Revisa el destinatario: una transferencia a ella solo consumiría gas.',
   ripple_destination_tag_required:
     'Esta cuenta XRP requiere una etiqueta de destino.',
   ripple_field_amount: 'Cantidad',

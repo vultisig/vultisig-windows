@@ -1616,6 +1616,8 @@ export const zh = {
   ripple_field_destination_tag: '目的地标签',
   ripple_destination_tag_invalid: '请输入 0 到 4,294,967,295 之间的整数。',
   ripple_destination_tag_optional: '可选目的地标签',
+  near_destination_not_found:
+    '此 NEAR 账户不存在。请检查收款方：向其转账只会消耗 Gas。',
   ripple_destination_tag_required: '此 XRP 账户需要目的地标签。',
   ripple_field_amount: '数量',
   ripple_field_send_max: '支付最多',

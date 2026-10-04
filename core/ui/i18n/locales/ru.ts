@@ -1734,6 +1734,8 @@ export const ru = {
   ripple_field_destination_tag: 'Метка назначения',
   ripple_destination_tag_invalid: 'Введите целое число от 0 до 4 294 967 295.',
   ripple_destination_tag_optional: 'Необязательная метка назначения',
+  near_destination_not_found:
+    'Этот аккаунт NEAR не существует. Проверьте получателя: перевод на него лишь сожжёт газ.',
   ripple_destination_tag_required:
     'Для этого счёта XRP требуется метка назначения.',
   ripple_field_amount: 'Количество',

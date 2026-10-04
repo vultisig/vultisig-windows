@@ -1717,6 +1717,8 @@ export const ko = {
   ripple_destination_tag_invalid:
     '0에서 4,294,967,295 사이의 정수를 입력하세요.',
   ripple_destination_tag_optional: '선택적 목적지 태그',
+  near_destination_not_found:
+    '이 NEAR 계정은 존재하지 않습니다. 받는 사람을 확인하세요. 이 계정으로 전송하면 가스만 소모됩니다.',
   ripple_destination_tag_required: '이 XRP 계정에는 목적지 태그가 필요합니다.',
   ripple_field_amount: '양',
   ripple_field_send_max: '최대 지불',

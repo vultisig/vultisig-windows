@@ -971,6 +971,8 @@ export const en = {
   ripple_destination_tag_invalid:
     'Enter a whole number between 0 and 4,294,967,295.',
   ripple_destination_tag_optional: 'Optional destination tag',
+  near_destination_not_found:
+    "This NEAR account doesn't exist. Check the recipient: a transfer to it would only burn gas.",
   ripple_destination_tag_required:
     'This XRP account requires a destination tag.',
   ripple_field_amount: 'Amount',

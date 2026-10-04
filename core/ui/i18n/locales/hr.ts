@@ -1728,6 +1728,8 @@ export const hr = {
   ripple_destination_tag_invalid:
     'Unesite cijeli broj između 0 i 4.294.967.295.',
   ripple_destination_tag_optional: 'Neobavezna oznaka odredišta',
+  near_destination_not_found:
+    'Ovaj NEAR račun ne postoji. Provjerite primatelja: prijenos na njega samo bi potrošio gas.',
   ripple_destination_tag_required: 'Ovaj XRP račun zahtijeva oznaku odredišta.',
   ripple_field_amount: 'Iznositi',
   ripple_field_send_max: 'Plati najviše',

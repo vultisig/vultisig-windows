@@ -1736,6 +1736,8 @@ export const nl = {
   ripple_destination_tag_invalid:
     'Voer een geheel getal tussen 0 en 4.294.967.295 in.',
   ripple_destination_tag_optional: 'Optioneel bestemmingslabel',
+  near_destination_not_found:
+    'Dit NEAR-account bestaat niet. Controleer de ontvanger: een overboeking ernaartoe verbruikt alleen gas.',
   ripple_destination_tag_required:
     'Voor deze XRP-rekening is een bestemmingslabel vereist.',
   ripple_field_amount: 'Hoeveelheid',

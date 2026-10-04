@@ -11,6 +11,7 @@ const buildKeysignPayloadErrorMessages: Partial<
 > = {
   'not-enough-funds': t => t('not_enough_funds'),
   'ripple-destination-tag-required': t => t('ripple_destination_tag_required'),
+  'near-destination-not-found': t => t('near_destination_not_found'),
 }
 
 /**
