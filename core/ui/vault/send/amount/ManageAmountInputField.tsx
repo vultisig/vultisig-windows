@@ -19,6 +19,7 @@ import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQ
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
+import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -76,6 +77,7 @@ export const ManageAmountInputField = () => {
 
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
+  const [receiver] = useSendReceiver()
   const feeEstimateQuery = useSendFeeEstimateQuery()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
@@ -151,8 +153,14 @@ export const ManageAmountInputField = () => {
   const amountError = data?.amount
 
   const error = !!amountError && value ? amountError : undefined
+  // The fee is estimated for a concrete receiver, so without one the query
+  // stays idle and never settles. Waiting on it would lock the field for good.
+  const isFeeEstimateUnavailable = !receiver && feeEstimateQuery.data == null
   const isWaitingForFee =
-    (pendingSuggestion != null && isNative && feeEstimateQuery.isPending) ||
+    (pendingSuggestion != null &&
+      isNative &&
+      !isFeeEstimateUnavailable &&
+      feeEstimateQuery.isPending) ||
     isAllowDeathSyncing
 
   // Announced while the field still holds the typed amount — the write itself
@@ -301,7 +309,9 @@ export const ManageAmountInputField = () => {
                     key={suggestion}
                     value={suggestion}
                     onClick={handleSuggestionClick}
-                    disabled={!hasBalance}
+                    disabled={
+                      !hasBalance || (isNative && isFeeEstimateUnavailable)
+                    }
                     isActive={
                       (allowDeath.isEnabled && suggestion === 1) ||
                       (selectedSuggestion !== null &&
