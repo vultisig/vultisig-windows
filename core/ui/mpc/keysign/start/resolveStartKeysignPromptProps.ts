@@ -1,3 +1,4 @@
+import { getBuildKeysignPayloadFundsMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { Query } from '@lib/ui/query/Query'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
@@ -65,6 +66,13 @@ export const resolveStartKeysignPromptProps = ({
   }
 
   if (keysignPayloadQuery.error) {
+    const fundsMessage = getBuildKeysignPayloadFundsMessage(
+      keysignPayloadQuery.error,
+      t
+    )
+    if (fundsMessage) {
+      return { disabledMessage: fundsMessage }
+    }
     if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
       if (keysignPayloadQuery.error.type === 'not-enough-funds') {
         return { disabledMessage: t('not_enough_funds') }

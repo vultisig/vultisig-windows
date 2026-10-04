@@ -511,6 +511,10 @@ export const hr = {
   install_plugin: 'Instaliraj aplikaciju',
   installation_progress: 'Napredak instalacije: {{progress}}%',
   insufficient_balance: 'Nedovoljan saldo',
+  insufficient_funds_asset:
+    'Nedovoljno {{ticker}}: ovo slanje treba {{required}}, imate {{available}}',
+  insufficient_funds_including_network_costs:
+    'Nedovoljno {{ticker}}: ovo slanje treba {{required}} uključujući mrežne troškove, imate {{available}}',
   insufficient_native_balance_for_fee:
     'Nedovoljan saldo izvornog tokena za plaćanje naknade za transakciju',
   insufficient_gas_limit: 'Nedovoljno ograničenje plina',

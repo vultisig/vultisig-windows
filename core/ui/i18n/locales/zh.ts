@@ -475,6 +475,10 @@ export const zh = {
   install_plugin: '安装应用',
   installation_progress: '安装进度：{{progress}}%',
   insufficient_balance: '余额不足',
+  insufficient_funds_asset:
+    '{{ticker}} 不足：此次发送需要 {{required}}，您有 {{available}}',
+  insufficient_funds_including_network_costs:
+    '{{ticker}} 不足：此次发送需要 {{required}}（含网络费用），您有 {{available}}',
   insufficient_native_balance_for_fee: '本地代币余额不足以支付交易费用',
   insufficient_gas_limit: 'Gas 限额不足',
   insufficient_gas_limit_description:
