@@ -2004,7 +2004,7 @@ export const ko = {
   bond_reward_history_node: '노드: {{address}}',
   bond_reward_history_error: '보상 내역을 불러올 수 없습니다.',
   send_amount_reduced_at_review:
-    '금액을 설정한 후 네트워크 수수료 또는 잔액이 변경되어 금액이 {{requestedAmount}} 에서 {{amount}} 로 낮아졌습니다.',
+    '금액을 설정한 후 네트워크 수수료 또는 잔액이 변경되어 금액이 {{requestedAmount}}에서 {{amount}}로 낮아졌습니다.',
   send_enter_address_first_for_percentage:
     '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
 }
