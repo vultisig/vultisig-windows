@@ -9,6 +9,6 @@ import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
  * exact fee and keeps the plain label.
  */
 export const getSwapNetworkFeeLabelKey = (chain: Chain) =>
-  isChainOfKind(chain, 'evm') || chain === Chain.Near
+  isChainOfKind(chain, 'evm') || isChainOfKind(chain, 'near')
     ? 'max_network_fee'
     : 'network_fee'

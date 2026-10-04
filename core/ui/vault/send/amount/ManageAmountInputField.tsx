@@ -7,6 +7,7 @@ import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
 import { BaseSendAmountInput } from '@core/ui/vault/send/amount/BaseSendAmountInput'
 import { FiatSendAmountInput } from '@core/ui/vault/send/amount/FiatSendAmountInput'
+import { useSendMaxSendable } from '@core/ui/vault/send/amount/useSendMaxSendable'
 import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
@@ -15,9 +16,7 @@ import { ManageTonGaslessFee } from '@core/ui/vault/send/fee/tonGasless/ManageTo
 import { useIsSendFeePaidInCoin } from '@core/ui/vault/send/fee/useIsSendFeePaidInCoin'
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
-import { useNearSendLimitsQuery } from '@core/ui/vault/send/queries/useNearSendLimitsQuery'
 import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
-import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
@@ -33,8 +32,6 @@ import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
-import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   areEqualCoins,
@@ -80,7 +77,6 @@ export const ManageAmountInputField = () => {
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
   const [receiver] = useSendReceiver()
-  const feeEstimateQuery = useSendFeeEstimateQuery()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
   // The fee is reserved from this balance for a native send and for a gasless
@@ -89,25 +85,8 @@ export const ManageAmountInputField = () => {
   const hasBalance = balance != null && balance > 0n
   const allowDeath = useSendAllowDeath()
   const { isSyncing: isAllowDeathSyncing } = useAllowDeathSendAmount()
-  const nearSendLimitsQuery = useNearSendLimitsQuery()
-  const isNearSend = coin.chain === Chain.Near
-
-  // NEAR also keeps back the balance backing the account's own storage, which
-  // only the chain knows, so its maximum is read rather than derived from the fee.
-  const getMaxSendable = (isAllowDeathSend: boolean): bigint | null => {
-    if (isNearSend) {
-      return nearSendLimitsQuery.data?.maxSendable ?? null
-    }
-    if (balance == null || feeEstimateQuery.data == null) {
-      return null
-    }
-    return getMaxSendableAmount({
-      chain: coin.chain,
-      balance,
-      fee: feeEstimateQuery.data,
-      allowDeath: isAllowDeathSend,
-    })
-  }
+  const { get: getMaxSendable, isPending: isMaxSendablePending } =
+    useSendMaxSendable()
   const pendingMaxSendable =
     pendingSuggestion == null
       ? null
@@ -171,7 +150,7 @@ export const ManageAmountInputField = () => {
     (pendingSuggestion != null &&
       isNative &&
       !isFeeEstimateUnavailable &&
-      (isNearSend ? nearSendLimitsQuery : feeEstimateQuery).isPending) ||
+      isMaxSendablePending) ||
     isAllowDeathSyncing
 
   // Announced while the field still holds the typed amount — the write itself

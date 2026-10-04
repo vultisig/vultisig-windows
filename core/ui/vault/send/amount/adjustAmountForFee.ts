@@ -1,25 +1,17 @@
-import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
-import { Chain } from '@vultisig/core-chain/Chain'
-
 type AdjustAmountForFeeInput = {
-  chain: Chain
   amount: bigint
   balance: bigint
-  fee: bigint
   /**
-   * The send empties the account, so nothing is kept back for the existential
-   * deposit.
+   * The most the balance can spend once the fee, and whatever the chain
+   * requires the sender to keep, are reserved out of it.
    */
-  allowDeath?: boolean
-  /** The chain's own spendable maximum, when it keeps back more than the fee (NEAR storage). */
-  maxSendable?: bigint
+  maxSendable: bigint
 }
 
 /**
- * Reduces an amount to the most the balance can spend — `balance - fee`, less
- * whatever the chain requires the sender to keep so the account is not reaped
- * — when the balance covers the amount on its own but not together with those.
- * Only ever reduces, so a send never grows past what was asked for.
+ * Reduces an amount to the most the balance can spend when the balance covers
+ * the amount on its own but not together with the fee and what the chain
+ * keeps back. Only ever reduces, so a send never grows past what was asked for.
  *
  * An amount that overshoots the balance by itself is returned untouched — that
  * is a real over-entry for the caller to reject, not a fee edge — and so is one
@@ -27,23 +19,17 @@ type AdjustAmountForFeeInput = {
  * to.
  */
 export const adjustAmountForFee = ({
-  chain,
   amount,
   balance,
-  fee,
-  allowDeath,
   maxSendable,
 }: AdjustAmountForFeeInput): bigint => {
   if (amount > balance) {
     return amount
   }
 
-  const spendable =
-    maxSendable ?? getMaxSendableAmount({ chain, balance, fee, allowDeath })
-
-  if (amount <= spendable) {
+  if (amount <= maxSendable) {
     return amount
   }
 
-  return spendable > 0n ? spendable : amount
+  return maxSendable > 0n ? maxSendable : amount
 }

@@ -2,12 +2,11 @@ import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 
 import { useSendAllowDeath } from '../allowDeath/useSendAllowDeath'
 import { useIsSendFeePaidInCoin } from '../fee/useIsSendFeePaidInCoin'
-import { useNearSendLimitsQuery } from '../queries/useNearSendLimitsQuery'
 import { useSendBalanceQuery } from '../queries/useSendBalanceQuery'
-import { useSendFeeEstimateQuery } from '../queries/useSendFeeEstimateQuery'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { adjustAmountForFee } from './adjustAmountForFee'
+import { useSendMaxSendable } from './useSendMaxSendable'
 
 /**
  * The amount the send will actually move: the entered amount, reduced to what
@@ -21,24 +20,21 @@ export const useSpendableSendAmount = () => {
   const coin = useCurrentSendCoin()
   const [amount] = useSendAmount()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
-  const feeEstimateQuery = useSendFeeEstimateQuery()
   const isFeePaidInCoin = useIsSendFeePaidInCoin()
   const { isEnabled: allowDeath } = useSendAllowDeath()
-  const nearSendLimitsQuery = useNearSendLimitsQuery()
+  const { get: getMaxSendable } = useSendMaxSendable()
 
   const balance = balanceQuery.data
-  const fee = feeEstimateQuery.data
 
-  if (amount === null || balance == null || fee == null || !isFeePaidInCoin) {
+  if (amount === null || balance == null || !isFeePaidInCoin) {
     return amount
   }
 
-  return adjustAmountForFee({
-    chain: coin.chain,
-    amount,
-    balance,
-    fee,
-    allowDeath,
-    maxSendable: nearSendLimitsQuery.data?.maxSendable,
-  })
+  const maxSendable = getMaxSendable(allowDeath)
+
+  if (maxSendable === null) {
+    return amount
+  }
+
+  return adjustAmountForFee({ amount, balance, maxSendable })
 }
