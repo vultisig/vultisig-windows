@@ -1878,4 +1878,6 @@ export const zh = {
   upcoming: '即将推出',
   bond_reward_history_node: '节点： {{address}}',
   bond_reward_history_error: '无法加载奖励历史记录',
+  send_enter_address_first_for_percentage:
+    '请先输入收件人地址才能使用百分比按钮',
 }

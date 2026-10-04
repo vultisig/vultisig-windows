@@ -324,6 +324,11 @@ export const ManageAmountInputField = () => {
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
+            {!error && hasBalance && isNative && isFeeEstimateUnavailable ? (
+              <Text size={12} color="shy">
+                {t('send_enter_address_first_for_percentage')}
+              </Text>
+            ) : null}
             {adjustedAmount !== null ? (
               <Text size={12} color="shy">
                 {t('send_amount_adjusted_for_fee', { amount: adjustedAmount })}

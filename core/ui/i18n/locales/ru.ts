@@ -2019,4 +2019,6 @@ export const ru = {
   upcoming: 'Предстоящие',
   bond_reward_history_node: 'Узел: {{address}}',
   bond_reward_history_error: 'Не удалось загрузить историю наград.',
+  send_enter_address_first_for_percentage:
+    'Для использования кнопок отображения процентов сначала введите адрес получателя.',
 }

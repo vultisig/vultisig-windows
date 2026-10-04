@@ -2059,4 +2059,6 @@ export const de = {
   upcoming: 'Demnächst',
   bond_reward_history_node: 'Knoten: {{address}}',
   bond_reward_history_error: 'Prämienverlauf konnte nicht geladen werden',
+  send_enter_address_first_for_percentage:
+    'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
 }

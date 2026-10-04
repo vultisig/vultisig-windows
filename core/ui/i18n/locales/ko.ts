@@ -2002,4 +2002,6 @@ export const ko = {
   upcoming: '다가오는',
   bond_reward_history_node: '노드: {{address}}',
   bond_reward_history_error: '보상 내역을 불러올 수 없습니다.',
+  send_enter_address_first_for_percentage:
+    '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
 }

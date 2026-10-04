@@ -2042,4 +2042,6 @@ export const es = {
   upcoming: 'Próximamente',
   bond_reward_history_node: 'Nodo: {{address}}',
   bond_reward_history_error: 'No se pudo cargar el historial de recompensas',
+  send_enter_address_first_for_percentage:
+    'Introduzca primero la dirección del destinatario para poder usar los botones de porcentaje.',
 }
