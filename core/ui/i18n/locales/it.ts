@@ -2049,4 +2049,6 @@ export const it = {
   upcoming: 'Prossimamente',
   bond_reward_history_node: 'Nodo: {{address}}',
   bond_reward_history_error: 'Impossibile caricare la cronologia dei premi',
+  send_enter_address_first_for_percentage:
+    "Inserisci prima l'indirizzo del destinatario per utilizzare i pulsanti percentuali",
 }

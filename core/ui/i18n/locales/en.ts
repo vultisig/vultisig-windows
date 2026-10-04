@@ -1076,6 +1076,8 @@ export const en = {
   sends: 'Sends',
   send_amount_adjusted_for_fee:
     'Amount adjusted to {{amount}} to cover the network fee',
+  send_enter_address_first_for_percentage:
+    'Enter the recipient address first to use the percentage buttons',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   send_invalid_receiver_address: 'Wrong address for selected chain',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',

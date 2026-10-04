@@ -2013,4 +2013,6 @@ export const hr = {
   upcoming: 'Nadolazeće',
   bond_reward_history_node: 'Čvor: {{address}}',
   bond_reward_history_error: 'Nije moguće učitati povijest nagrada',
+  send_enter_address_first_for_percentage:
+    'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
 }

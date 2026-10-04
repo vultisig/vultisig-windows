@@ -2045,4 +2045,6 @@ export const pt = {
   bond_reward_history_node: 'Nó: {{address}}',
   bond_reward_history_error:
     'Não foi possível carregar o histórico de recompensas.',
+  send_enter_address_first_for_percentage:
+    'Primeiro, insira o endereço do destinatário para usar os botões de porcentagem.',
 }

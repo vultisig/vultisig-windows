@@ -2030,4 +2030,6 @@ export const nl = {
   bond_reward_history_node: 'Knooppunt: {{address}}',
   bond_reward_history_error:
     'De beloningsgeschiedenis kon niet worden geladen.',
+  send_enter_address_first_for_percentage:
+    'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
 }
