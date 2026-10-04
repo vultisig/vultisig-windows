@@ -5,6 +5,7 @@ import { useSyncAllowDeathAmount } from '@core/ui/vault/send/allowDeath/useSyncA
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
 import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
+import { getBuildKeysignPayloadFundsMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
@@ -49,7 +50,9 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
     }
 
     if (error) {
-      return extractErrorMsg(error)
+      return (
+        getBuildKeysignPayloadFundsMessage(error, t) ?? extractErrorMsg(error)
+      )
     }
 
     return isPending || isAllowDeathSyncing || isFeeRefreshing

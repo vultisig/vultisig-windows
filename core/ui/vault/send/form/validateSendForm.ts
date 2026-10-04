@@ -1,6 +1,8 @@
+import { getInsufficientFundsMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, UtxoBasedChain } from '@vultisig/core-chain/Chain'
 import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import {
   getChainDangerousReason,
@@ -103,12 +105,31 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else {
+    const { ticker, decimals } = coin
     if (isFeePaidInCoin && fee != null) {
       if (amount + fee > balance) {
-        errors.amount = t('insufficient_balance')
+        errors.amount = getInsufficientFundsMessage(
+          {
+            required: amount + fee,
+            available: balance,
+            ticker,
+            decimals,
+            includesNetworkCosts: true,
+          },
+          t
+        )
       }
     } else if (amount > balance) {
-      errors.amount = t('insufficient_balance')
+      errors.amount = getInsufficientFundsMessage(
+        {
+          required: amount,
+          available: balance,
+          ticker,
+          decimals,
+          includesNetworkCosts: false,
+        },
+        t
+      )
     }
 
     if (
@@ -117,7 +138,17 @@ export const validateSendForm = (
       fee != null &&
       nativeBalance < fee
     ) {
-      errors.amount = t('insufficient_native_balance_for_fee')
+      const feeCoin = chainFeeCoin[chain]
+      errors.amount = getInsufficientFundsMessage(
+        {
+          required: fee,
+          available: nativeBalance,
+          ticker: feeCoin.ticker,
+          decimals: feeCoin.decimals,
+          includesNetworkCosts: true,
+        },
+        t
+      )
     }
 
     if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {
