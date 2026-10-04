@@ -2044,4 +2044,6 @@ export const es = {
   upcoming: 'Próximamente',
   bond_reward_history_node: 'Nodo: {{address}}',
   bond_reward_history_error: 'No se pudo cargar el historial de recompensas',
+  send_amount_reduced_at_review:
+    'La tarifa de red o su saldo cambiaron después de que usted estableció el monto, por lo que el monto se redujo de {{requestedAmount}} a {{amount}} .',
 }

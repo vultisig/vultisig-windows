@@ -1879,4 +1879,6 @@ export const zh = {
   upcoming: '即将推出',
   bond_reward_history_node: '节点： {{address}}',
   bond_reward_history_error: '无法加载奖励历史记录',
+  send_amount_reduced_at_review:
+    '设置金额后，网络费用或余额发生了变化，因此金额从{{requestedAmount}}减少到{{amount}} 。',
 }

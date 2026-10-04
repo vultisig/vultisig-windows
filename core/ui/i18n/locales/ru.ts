@@ -2020,4 +2020,6 @@ export const ru = {
   upcoming: 'Предстоящие',
   bond_reward_history_node: 'Узел: {{address}}',
   bond_reward_history_error: 'Не удалось загрузить историю наград.',
+  send_amount_reduced_at_review:
+    'После установки суммы сетевая комиссия или баланс изменились, поэтому сумма была уменьшена с {{requestedAmount}} до {{amount}} .',
 }

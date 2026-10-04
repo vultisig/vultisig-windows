@@ -2049,4 +2049,6 @@ export const it = {
   upcoming: 'Prossimamente',
   bond_reward_history_node: 'Nodo: {{address}}',
   bond_reward_history_error: 'Impossibile caricare la cronologia dei premi',
+  send_amount_reduced_at_review:
+    "La commissione di rete o il tuo saldo sono cambiati dopo che hai impostato l'importo, quindi l'importo è stato ridotto da {{requestedAmount}} a {{amount}} .",
 }

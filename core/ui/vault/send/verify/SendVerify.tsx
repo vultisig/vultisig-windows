@@ -49,6 +49,7 @@ import { useSendReceiver } from '../state/receiver'
 import { useSendReceiverLabel } from '../state/receiverLabel'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { ManageFee } from './ManageFee'
+import { SendAmountReducedWarning } from './SendAmountReducedWarning'
 
 const sendTerms = ['send_terms_1', 'send_terms_0'] as const
 
@@ -224,6 +225,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           }
         />
       </VStack>
+      <SendAmountReducedWarning keysignPayloadQuery={keysignPayloadQuery} />
       <MatchQuery
         value={keysignPayloadQuery}
         pending={() => null}

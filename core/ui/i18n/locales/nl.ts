@@ -2030,4 +2030,6 @@ export const nl = {
   bond_reward_history_node: 'Knooppunt: {{address}}',
   bond_reward_history_error:
     'De beloningsgeschiedenis kon niet worden geladen.',
+  send_amount_reduced_at_review:
+    'De netwerkkosten of uw saldo zijn gewijzigd nadat u het bedrag had ingesteld, waardoor het bedrag is verlaagd van {{requestedAmount}} naar {{amount}} .',
 }
