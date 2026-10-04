@@ -18,18 +18,21 @@ const getVaultSessions = async (vaultId: CurrentVaultId) =>
  * Storage listeners run concurrently, so switches are processed one at a
  * time and each one reconciles the last vault apps were told about with the
  * vault that is current now. A burst like A -> B -> C therefore disconnects
- * A's apps even if the B handler is superseded, and A -> B -> A sends
- * nothing.
+ * A's apps even if the B handler is superseded, A -> B -> A sends
+ * nothing, and activating a vault from none refreshes its saved sessions.
  */
 export const createVaultSwitchNotifier = () => {
-  let lastNotifiedVaultId: CurrentVaultId = null
+  // `undefined` until the first switch is handled; `null` means apps were
+  // last told there is no current vault.
+  let lastNotifiedVaultId: CurrentVaultId | undefined
   let queue: Promise<void> = Promise.resolve()
 
   const notify = async ({ prevVaultId }: NotifyVaultSwitchInput) => {
-    const fromVaultId = lastNotifiedVaultId ?? prevVaultId
+    const fromVaultId =
+      lastNotifiedVaultId === undefined ? prevVaultId : lastNotifiedVaultId
     let toVaultId = await storage.getCurrentVaultId()
 
-    while (fromVaultId && fromVaultId !== toVaultId) {
+    while (fromVaultId !== toVaultId) {
       const [prevVaultSessions, nextVaultSessions] = await Promise.all([
         getVaultSessions(fromVaultId),
         getVaultSessions(toVaultId),

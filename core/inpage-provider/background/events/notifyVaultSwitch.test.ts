@@ -92,6 +92,10 @@ describe('createVaultSwitchNotifier', () => {
   it.each([
     { nextVaultId: 'vault-a', expectedEvents: [] },
     {
+      nextVaultId: null,
+      expectedEvents: [{ appId: 'a.com', event: 'disconnect' }],
+    },
+    {
       nextVaultId: 'vault-c',
       expectedEvents: [
         { appId: 'a.com', event: 'disconnect' },
@@ -127,12 +131,36 @@ describe('createVaultSwitchNotifier', () => {
     }
   )
 
-  it('does nothing without a previous vault', async () => {
+  it('refreshes saved sessions when activating a vault from no current vault', async () => {
     const notify = createVaultSwitchNotifier()
     mockGetCurrentVaultId.mockResolvedValue('vault-a')
 
     await notify({ prevVaultId: null })
 
+    expect(sentEvents()).toEqual([{ appId: 'a.com', event: 'accountsChanged' }])
+  })
+
+  it('disconnects and restores saved sessions across a completed A -> null -> A transition', async () => {
+    const notify = createVaultSwitchNotifier()
+    mockGetCurrentVaultId.mockResolvedValue(null)
+    await notify({ prevVaultId: 'vault-a' })
+
+    mockGetCurrentVaultId.mockResolvedValue('vault-a')
+    await notify({ prevVaultId: null })
+
+    expect(sentEvents()).toEqual([
+      { appId: 'a.com', event: 'disconnect' },
+      { appId: 'a.com', event: 'accountsChanged' },
+    ])
+  })
+
+  it('does nothing when both the previous and current vault are null', async () => {
+    const notify = createVaultSwitchNotifier()
+    mockGetCurrentVaultId.mockResolvedValue(null)
+
+    await notify({ prevVaultId: null })
+
     expect(mockSendEventToApp).not.toHaveBeenCalled()
+    expect(mockGetVaultAppSessions).not.toHaveBeenCalled()
   })
 })
