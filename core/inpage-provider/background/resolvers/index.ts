@@ -14,8 +14,8 @@ import { getTx } from './getTx'
 import { hasAppSession } from './hasAppSession'
 import { hasChainInVault } from './hasChainInVault'
 import {
-  addKeplrSuggestedChain,
   getKeplrSuggestedChains,
+  suggestKeplrChain,
 } from './keplrSuggestedChains'
 import { setAppChain } from './setAppChain'
 import { signOut } from './signOut'
@@ -42,7 +42,7 @@ export const backgroundResolvers: BackgroundResolvers = {
   getIsWalletPrioritized: () => getIsWalletPrioritized(),
   hasChainInVault,
   getKeplrSuggestedChains,
-  addKeplrSuggestedChain,
+  suggestKeplrChain,
   suiBuildTransaction,
   suiExecuteTransaction,
 }

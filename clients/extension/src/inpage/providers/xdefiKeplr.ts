@@ -1,6 +1,7 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { BackgroundError } from '@core/inpage-provider/background/error'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
+import { validateSuggestedChainInfo } from '@core/inpage-provider/keplr/validateSuggestedChainInfo'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
 import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
@@ -442,43 +443,6 @@ class SimpleMutex {
     this.queue = p
 
     return result
-  }
-}
-// Minimal `experimentalSuggestChain` schema check. Keplr's reference
-// implementation validates a long list of fields with bech32 parsing and
-// regex constraints — we just enforce the ones cosmos-kit dApps depend on
-// (chainId, chainName, rpc/rest, bech32 prefix, at least one currency).
-// Anything malformed gets a Keplr-shaped throw so the dApp can surface a
-// useful error to the user instead of silently failing later.
-const validateSuggestedChainInfo = (info: unknown): void => {
-  if (!info || typeof info !== 'object') {
-    throw new Error('chainInfo must be an object')
-  }
-  const ci = info as Partial<ChainInfo>
-  const requireString = (key: keyof ChainInfo): void => {
-    const value = ci[key]
-    if (typeof value !== 'string' || value.length === 0) {
-      throw new Error(`chainInfo.${String(key)} must be a non-empty string`)
-    }
-  }
-  requireString('chainId')
-  requireString('chainName')
-  requireString('rpc')
-  requireString('rest')
-  if (
-    !ci.bech32Config ||
-    typeof ci.bech32Config.bech32PrefixAccAddr !== 'string'
-  ) {
-    throw new Error('chainInfo.bech32Config.bech32PrefixAccAddr is required')
-  }
-  if (!Array.isArray(ci.currencies) || ci.currencies.length === 0) {
-    throw new Error('chainInfo.currencies must be a non-empty array')
-  }
-  if (!Array.isArray(ci.feeCurrencies) || ci.feeCurrencies.length === 0) {
-    throw new Error('chainInfo.feeCurrencies must be a non-empty array')
-  }
-  if (!ci.bip44 || typeof ci.bip44.coinType !== 'number') {
-    throw new Error('chainInfo.bip44.coinType must be a number')
   }
 }
 
@@ -1124,11 +1088,11 @@ export class XDEFIKeplrProvider extends Keplr {
    * - Validates the ChainInfo shape and rejects malformed input with a
    *   Keplr-shaped error so dApps can surface a useful message.
    * - Idempotent: subsequent calls for an already-known `chainId` (native or
-   *   previously suggested) resolve silently with no popup.
-   * - On first call for a new chainId, opens the suggest-chain approval
-   *   popup. If the user approves, the entry is persisted via
-   *   `addKeplrSuggestedChain` and survives browser restarts. If the user
-   *   rejects, the promise rejects with a Keplr-shaped error.
+   *   previously suggested by this site) resolve silently with no popup.
+   * - On first call for a new chainId, the background opens the suggest-chain
+   *   approval popup and persists the entry for this site only if the user
+   *   approves, so it survives browser restarts. If the user rejects, the
+   *   promise rejects with a Keplr-shaped error.
    * - cosmos-kit / graz dApps that target a chain not in our hardcoded list
    *   call this before `enable` to bootstrap the chain into the wallet;
    *   without it `enable` fails with `"There is no chain info for ${chainId}"`.
@@ -1149,15 +1113,11 @@ export class XDEFIKeplrProvider extends Keplr {
 
     const work = this.suggestMutex
       .runExclusive(async () => {
-        // Re-check inside the lock: a prior parallel call for this chain (or
-        // a previous session) may have already persisted it. The same lock
-        // also serializes popups for different chains so the user sees them
-        // one at a time instead of N stacked windows.
-        const existing = await callBackground({ getKeplrSuggestedChains: {} })
-        if (existing[chainInfo.chainId]) return
-
+        // The lock serializes popups for different chains so the user sees
+        // them one at a time instead of N stacked windows. The background
+        // skips the popup for a chain this site already registered.
         const { error } = await attempt(
-          callPopup({ suggestKeplrChain: { chainInfo } })
+          callBackground({ suggestKeplrChain: { chainInfo } })
         )
         if (error === PopupError.RejectedByUser) {
           throw new Error(`Request rejected by user`)
@@ -1165,8 +1125,6 @@ export class XDEFIKeplrProvider extends Keplr {
         if (error) {
           throw error
         }
-
-        await callBackground({ addKeplrSuggestedChain: { chainInfo } })
       })
       .finally(() => {
         this.suggestInFlight.delete(chainInfo.chainId)

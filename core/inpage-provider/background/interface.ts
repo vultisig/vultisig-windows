@@ -38,6 +38,11 @@ export type GetAccountInput = {
 
 type BroadcastTxChain = CosmosChain | OtherChain.QBTC
 
+/**
+ * Methods the inpage provider can call on the background. Pages can post
+ * these directly, so anything that needs user approval must open its popup
+ * from the resolver rather than rely on the inpage provider.
+ */
 export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   setAppChain: Method<SetAppChainInput>
@@ -68,7 +73,7 @@ export type BackgroundInterface = {
   getIsWalletPrioritized: Method<{}, boolean>
   hasChainInVault: Method<{ chain: Chain }, boolean>
   getKeplrSuggestedChains: Method<{}, KeplrSuggestedChainsRecord>
-  addKeplrSuggestedChain: Method<{ chainInfo: ChainInfo }>
+  suggestKeplrChain: Method<{ chainInfo: ChainInfo }>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

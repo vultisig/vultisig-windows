@@ -11,44 +11,65 @@ const serialize = <T>(fn: () => Promise<T>): Promise<T> => {
   return next
 }
 
+/** Suggested chains one site registered, keyed by chainId. */
 export type KeplrSuggestedChainsRecord = Record<string, ChainInfo>
 
-// Per-vault registry of dApp-suggested chains. Scoped to vaultId so a chain
-// the user approved while using one vault doesn't silently leak into another
-// vault's session — a key-import vault may not even hold the secp256k1 key
-// the suggested chain would derive from.
-type VaultsKeplrSuggestedChains = Record<string, KeplrSuggestedChainsRecord>
+// Registry of dApp-suggested chains, scoped to vaultId and then to the
+// requesting site's host. Vault scoping keeps a chain approved under one vault
+// out of another vault's session — a key-import vault may not even hold the
+// secp256k1 key the suggested chain would derive from. Host scoping keeps one
+// site from deciding the chain info, bech32 prefix and endpoints another site
+// gets for the same chainId.
+type VaultsKeplrSuggestedChains = Record<
+  string,
+  Record<string, KeplrSuggestedChainsRecord>
+>
 
 const allInitialValue: VaultsKeplrSuggestedChains = {}
 
 const getAll = (): Promise<VaultsKeplrSuggestedChains> =>
   getStorageValue<VaultsKeplrSuggestedChains>(
-    StorageKey.keplrSuggestedChains,
+    StorageKey.keplrSuggestedChainsByHost,
     allInitialValue
   )
 
-export const getKeplrSuggestedChainsForVault = async (
-  vaultId: string
-): Promise<KeplrSuggestedChainsRecord> => {
+type KeplrSuggestedChainsScope = { vaultId: string; host: string }
+
+/** Suggested chains the user approved for this host under this vault. */
+export const getKeplrSuggestedChainsForHost = async ({
+  vaultId,
+  host,
+}: KeplrSuggestedChainsScope): Promise<KeplrSuggestedChainsRecord> => {
   const all = await getAll()
-  return all[vaultId] ?? {}
+  return all[vaultId]?.[host] ?? {}
 }
 
-type AddInput = { vaultId: string; chainInfo: ChainInfo }
+type AddKeplrSuggestedChainForHostInput = KeplrSuggestedChainsScope & {
+  chainInfo: ChainInfo
+}
 
-export const addKeplrSuggestedChainForVault = ({
+/**
+ * Persists a chain the user approved for this host under this vault. The
+ * first entry for a chainId wins, so a repeated approval never replaces it.
+ */
+export const addKeplrSuggestedChainForHost = ({
   vaultId,
+  host,
   chainInfo,
-}: AddInput): Promise<void> =>
+}: AddKeplrSuggestedChainForHostInput): Promise<void> =>
   serialize(async () => {
     const all = await getAll()
     const forVault = all[vaultId] ?? {}
-    if (forVault[chainInfo.chainId]) return
+    const forHost = forVault[host] ?? {}
+    if (forHost[chainInfo.chainId]) return
     await setStorageValue<VaultsKeplrSuggestedChains>(
-      StorageKey.keplrSuggestedChains,
+      StorageKey.keplrSuggestedChainsByHost,
       {
         ...all,
-        [vaultId]: { ...forVault, [chainInfo.chainId]: chainInfo },
+        [vaultId]: {
+          ...forVault,
+          [host]: { ...forHost, [chainInfo.chainId]: chainInfo },
+        },
       }
     )
   })
