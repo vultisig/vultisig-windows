@@ -853,7 +853,9 @@ func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 		"name",
 		"\"order\"",
 	}
-	query := fmt.Sprintf(`INSERT OR REPLACE INTO vault_folders (%s) VALUES (%s)`,
+	// A real upsert, not INSERT OR REPLACE: REPLACE deletes the existing row,
+	// which fires vaults.folder_id ON DELETE SET NULL and empties the folder.
+	query := fmt.Sprintf(`INSERT INTO vault_folders (%s) VALUES (%s) ON CONFLICT(id) DO UPDATE SET name = excluded.name, "order" = excluded."order"`,
 		strings.Join(columns, ", "),
 		generatePlaceholders(len(columns)))
 	_, err := s.db.Exec(query, folder.ID, folder.Name, folder.Order)
