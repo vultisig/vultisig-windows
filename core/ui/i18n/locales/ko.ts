@@ -515,6 +515,8 @@ export const ko = {
     '{{ticker}} 부족: 이 전송에는 네트워크 비용을 포함해 {{required}}이(가) 필요하지만 보유량은 {{available}}입니다',
   send_receiver_format_hint_near:
     'alice.near 같은 NEAR 계정 ID 또는 64자리 소문자 16진수 주소를 입력하세요.',
+  send_memo_not_supported:
+    '{{chain}} 전송에는 메모를 포함할 수 없습니다. 계속하려면 메모를 삭제하세요.',
   insufficient_native_balance_for_fee:
     '거래 수수료를 지불하기에 네이티브 토큰 잔액이 부족합니다.',
   insufficient_gas_limit: '가스 제한 부족',

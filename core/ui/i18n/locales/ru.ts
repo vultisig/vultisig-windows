@@ -517,6 +517,8 @@ export const ru = {
     'Недостаточно {{ticker}}: для этой отправки нужно {{required}} с учётом сетевых расходов, у вас {{available}}',
   send_receiver_format_hint_near:
     'Введите ID аккаунта NEAR, например alice.near, или 64-символьный шестнадцатеричный адрес в нижнем регистре.',
+  send_memo_not_supported:
+    'Переводы {{chain}} не поддерживают memo. Удалите memo, чтобы продолжить.',
   insufficient_native_balance_for_fee:
     'Недостаточно средств на балансе собственных токенов для оплаты комиссии за транзакцию.',
   insufficient_gas_limit: 'Недостаточный лимит gas',

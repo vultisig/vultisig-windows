@@ -517,6 +517,8 @@ export const hr = {
     'Nedovoljno {{ticker}}: ovo slanje treba {{required}} uključujući mrežne troškove, imate {{available}}',
   send_receiver_format_hint_near:
     'Unesite NEAR ID računa poput alice.near ili heksadecimalnu adresu od 64 mala znaka.',
+  send_memo_not_supported:
+    '{{chain}} prijenosi ne mogu sadržavati dopis. Uklonite dopis za nastavak.',
   insufficient_native_balance_for_fee:
     'Nedovoljan saldo izvornog tokena za plaćanje naknade za transakciju',
   insufficient_gas_limit: 'Nedovoljno ograničenje plina',

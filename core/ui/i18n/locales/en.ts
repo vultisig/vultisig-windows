@@ -1100,6 +1100,8 @@ export const en = {
     'Enter an EVM address that starts with 0x and has 40 hexadecimal characters.',
   send_receiver_format_hint_near:
     'Enter a NEAR account ID such as alice.near, or a 64-character lowercase hex address.',
+  send_memo_not_supported:
+    "{{chain}} transfers can't carry a memo. Remove the memo to continue.",
   send_receiver_format_hint_qbtc: 'Enter a QBTC address that starts with qbtc.',
   send_receiver_format_hint_ripple:
     'Enter an XRP address that starts with the letter r.',

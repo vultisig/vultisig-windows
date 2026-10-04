@@ -523,6 +523,8 @@ export const es = {
     'No hay suficiente {{ticker}}: este envío necesita {{required}} incluidos los costos de red, tienes {{available}}',
   send_receiver_format_hint_near:
     'Introduce un ID de cuenta NEAR como alice.near o una dirección hexadecimal de 64 caracteres en minúsculas.',
+  send_memo_not_supported:
+    'Las transferencias de {{chain}} no admiten nota. Elimina la nota para continuar.',
   insufficient_native_balance_for_fee:
     'Saldo de token nativo insuficiente para pagar la tarifa de transacción',
   insufficient_gas_limit: 'Límite de gas insuficiente',
