@@ -27,29 +27,36 @@ export const createVaultSwitchNotifier = () => {
 
   const notify = async ({ prevVaultId }: NotifyVaultSwitchInput) => {
     const fromVaultId = lastNotifiedVaultId ?? prevVaultId
-    const toVaultId = await storage.getCurrentVaultId()
+    let toVaultId = await storage.getCurrentVaultId()
 
-    if (!fromVaultId || fromVaultId === toVaultId) {
-      lastNotifiedVaultId = toVaultId
-      return
-    }
+    while (fromVaultId && fromVaultId !== toVaultId) {
+      const [prevVaultSessions, nextVaultSessions] = await Promise.all([
+        getVaultSessions(fromVaultId),
+        getVaultSessions(toVaultId),
+      ])
 
-    const [prevVaultSessions, nextVaultSessions] = await Promise.all([
-      getVaultSessions(fromVaultId),
-      getVaultSessions(toVaultId),
-    ])
+      // Session reads may outlive another switch. Keep the original source
+      // until events are actually sent, and reconcile against the latest vault.
+      const currentVaultId = await storage.getCurrentVaultId()
+      if (currentVaultId !== toVaultId) {
+        toVaultId = currentVaultId
+        continue
+      }
 
-    const { disconnect, accountsChanged } = getVaultSwitchEvents({
-      prevVaultSessions,
-      nextVaultSessions,
-    })
+      const { disconnect, accountsChanged } = getVaultSwitchEvents({
+        prevVaultSessions,
+        nextVaultSessions,
+      })
 
-    for (const appId of disconnect) {
-      sendEventToApp({ appId, event: 'disconnect', value: undefined })
-    }
+      for (const appId of disconnect) {
+        sendEventToApp({ appId, event: 'disconnect', value: undefined })
+      }
 
-    for (const appId of accountsChanged) {
-      sendEventToApp({ appId, event: 'accountsChanged', value: undefined })
+      for (const appId of accountsChanged) {
+        sendEventToApp({ appId, event: 'accountsChanged', value: undefined })
+      }
+
+      break
     }
 
     lastNotifiedVaultId = toVaultId

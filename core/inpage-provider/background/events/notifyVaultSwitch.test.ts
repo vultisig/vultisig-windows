@@ -89,6 +89,44 @@ describe('createVaultSwitchNotifier', () => {
     expect(mockSendEventToApp).not.toHaveBeenCalled()
   })
 
+  it.each([
+    { nextVaultId: 'vault-a', expectedEvents: [] },
+    {
+      nextVaultId: 'vault-c',
+      expectedEvents: [
+        { appId: 'a.com', event: 'disconnect' },
+        { appId: 'c.com', event: 'accountsChanged' },
+      ],
+    },
+  ])(
+    'reconciles from A when the vault changes to $nextVaultId while reading B sessions',
+    async ({ nextVaultId, expectedEvents }) => {
+      const notify = createVaultSwitchNotifier()
+      const readStarted = Promise.withResolvers<void>()
+      const releaseRead = Promise.withResolvers<void>()
+      mockGetCurrentVaultId.mockResolvedValue('vault-b')
+      mockGetVaultAppSessions.mockImplementation(async vaultId => {
+        if (vaultId === 'vault-b') {
+          readStarted.resolve()
+          await releaseRead.promise
+          return { 'b.com': session('b.com') }
+        }
+        return sessionsByVault[vaultId]
+      })
+
+      const firstSwitch = notify({ prevVaultId: 'vault-a' })
+      await readStarted.promise
+      expect(mockSendEventToApp).not.toHaveBeenCalled()
+
+      mockGetCurrentVaultId.mockResolvedValue(nextVaultId)
+      const secondSwitch = notify({ prevVaultId: 'vault-b' })
+      releaseRead.resolve()
+      await Promise.all([firstSwitch, secondSwitch])
+
+      expect(sentEvents()).toEqual(expectedEvents)
+    }
+  )
+
   it('does nothing without a previous vault', async () => {
     const notify = createVaultSwitchNotifier()
     mockGetCurrentVaultId.mockResolvedValue('vault-a')
