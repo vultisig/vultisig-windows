@@ -146,6 +146,19 @@ describe('Ethereum Resolvers', () => {
       expect(mockCallPopup).not.toHaveBeenCalled()
     })
 
+    it.each<{ chainId: `0x${string}` }>([
+      { chainId: '0x' },
+      { chainId: '0xgg' },
+      { chainId: '0x1.1' },
+    ])('rejects malformed chainId $chainId as invalid params', async ({ chainId }) => {
+      mockGetChain.mockResolvedValue('Polygon')
+
+      await expect(sendEthTransaction([{ from, chainId }])).rejects.toMatchObject({
+        code: -32602,
+      })
+      expect(mockCallPopup).not.toHaveBeenCalled()
+    })
+
     it('uses the signer session when the transaction omits chainId', async () => {
       mockGetChain.mockResolvedValue('Polygon')
       mockCallPopup.mockResolvedValue([{ hash: '0xhash' }])
