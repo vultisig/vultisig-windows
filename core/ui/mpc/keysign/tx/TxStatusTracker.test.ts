@@ -18,7 +18,11 @@ vi.mock('./TxStatusView', () => ({
 // The tracker hands the view a resolved status and, for a failed transaction,
 // the reason to print underneath the animation.
 const render = () => {
-  const { props } = TxStatusTracker({ chain: Chain.Tron, hash: 'hash' })
+  const { props } = TxStatusTracker({
+    chain: Chain.Tron,
+    hash: 'hash',
+    senderAccountId: 'T',
+  })
 
   return { status: props.status, description: props.description }
 }

@@ -281,6 +281,7 @@ export const TxSuccess = ({
           chain={coin.chain}
           hash={txHash}
           lastValidBlockHeight={getKeysignLastValidBlockHeight(value)}
+          senderAccountId={coin.address}
         />
       )}
       <VStack gap={8}>

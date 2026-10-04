@@ -66,11 +66,15 @@ type SwapArrivalRecordUpdate = {
 export const getSwapArrivalRecordUpdate = async ({
   record: storedRecord,
   provider,
-}: ArrivalTrackedSwap): Promise<SwapArrivalRecordUpdate> => {
+  senderAccountId,
+}: ArrivalTrackedSwap & {
+  senderAccountId: string | undefined
+}): Promise<SwapArrivalRecordUpdate> => {
   const source = await getTxStatus({
     chain: storedRecord.data.fromChain,
     hash: storedRecord.txHash,
     lastValidBlockHeight: getRecordLastValidBlockHeight(storedRecord),
+    senderAccountId,
   })
 
   if (getSwapSourceOutcome(source) !== 'success') {

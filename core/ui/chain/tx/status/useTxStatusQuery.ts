@@ -10,6 +10,9 @@ type UseTxStatusQueryInput = {
    * `expired` once the chain passes that height instead of running for good.
    */
   lastValidBlockHeight?: number
+  /** The account that sent the transaction. NEAR looks a hash up by its sender
+   * and fails the lookup without one; other chains ignore it. */
+  senderAccountId: string
 }
 
 /**
@@ -21,10 +24,12 @@ export const useTxStatusQuery = ({
   chain,
   hash,
   lastValidBlockHeight,
+  senderAccountId,
 }: UseTxStatusQueryInput) => {
   return useQuery({
-    queryKey: ['txStatus', chain, hash, lastValidBlockHeight],
-    queryFn: () => getTxStatus({ chain, hash, lastValidBlockHeight }),
+    queryKey: ['txStatus', chain, hash, lastValidBlockHeight, senderAccountId],
+    queryFn: () =>
+      getTxStatus({ chain, hash, lastValidBlockHeight, senderAccountId }),
     refetchInterval: query => {
       const status = query.state.data?.status
       if (status === 'success' || status === 'error' || status === 'expired') {
