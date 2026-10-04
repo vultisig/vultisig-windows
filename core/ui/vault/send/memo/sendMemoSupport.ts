@@ -29,6 +29,6 @@ export const getSendMemoError = ({
   memo,
   t,
 }: GetSendMemoErrorInput): string | undefined =>
-  memo && isOneOf(chain, chainsWithoutMemoSupport)
+  memo?.trim() && isOneOf(chain, chainsWithoutMemoSupport)
     ? t('send_memo_not_supported', { chain })
     : undefined
