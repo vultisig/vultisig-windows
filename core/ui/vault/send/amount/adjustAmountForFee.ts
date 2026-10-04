@@ -11,6 +11,8 @@ type AdjustAmountForFeeInput = {
    * deposit.
    */
   allowDeath?: boolean
+  /** The chain's own spendable maximum, when it keeps back more than the fee (NEAR storage). */
+  maxSendable?: bigint
 }
 
 /**
@@ -30,12 +32,14 @@ export const adjustAmountForFee = ({
   balance,
   fee,
   allowDeath,
+  maxSendable,
 }: AdjustAmountForFeeInput): bigint => {
   if (amount > balance) {
     return amount
   }
 
-  const spendable = getMaxSendableAmount({ chain, balance, fee, allowDeath })
+  const spendable =
+    maxSendable ?? getMaxSendableAmount({ chain, balance, fee, allowDeath })
 
   if (amount <= spendable) {
     return amount
