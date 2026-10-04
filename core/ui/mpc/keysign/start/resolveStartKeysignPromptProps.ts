@@ -1,7 +1,6 @@
-import { getBuildKeysignPayloadFundsMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
+import { getBuildKeysignPayloadErrorMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { Query } from '@lib/ui/query/Query'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { TFunction } from 'i18next'
@@ -66,25 +65,10 @@ export const resolveStartKeysignPromptProps = ({
   }
 
   if (keysignPayloadQuery.error) {
-    const fundsMessage = getBuildKeysignPayloadFundsMessage(
-      keysignPayloadQuery.error,
-      t
-    )
-    if (fundsMessage) {
-      return { disabledMessage: fundsMessage }
-    }
-    if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
-      if (keysignPayloadQuery.error.type === 'not-enough-funds') {
-        return { disabledMessage: t('not_enough_funds') }
-      }
-      if (
-        keysignPayloadQuery.error.type === 'ripple-destination-tag-required'
-      ) {
-        return { disabledMessage: t('ripple_destination_tag_required') }
-      }
-    }
     return {
-      disabledMessage: extractErrorMsg(keysignPayloadQuery.error),
+      disabledMessage:
+        getBuildKeysignPayloadErrorMessage(keysignPayloadQuery.error, t) ??
+        extractErrorMsg(keysignPayloadQuery.error),
     }
   }
 
