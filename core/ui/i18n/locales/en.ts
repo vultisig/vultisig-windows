@@ -1076,6 +1076,8 @@ export const en = {
   sends: 'Sends',
   send_amount_adjusted_for_fee:
     'Amount adjusted to {{amount}} to cover the network fee',
+  send_enter_address_first_for_percentage:
+    'Enter the recipient address first to use the percentage buttons',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   send_amount_reduced_at_review:
     'The network fee or your balance changed after you set the amount, so the amount was lowered from {{requestedAmount}} to {{amount}}.',

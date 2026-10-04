@@ -2046,4 +2046,6 @@ export const es = {
   bond_reward_history_error: 'No se pudo cargar el historial de recompensas',
   send_amount_reduced_at_review:
     'La tarifa de red o su saldo cambiaron después de que usted estableció el monto, por lo que el monto se redujo de {{requestedAmount}} a {{amount}} .',
+  send_enter_address_first_for_percentage:
+    'Introduzca primero la dirección del destinatario para poder usar los botones de porcentaje.',
 }

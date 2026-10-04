@@ -2032,4 +2032,6 @@ export const nl = {
     'De beloningsgeschiedenis kon niet worden geladen.',
   send_amount_reduced_at_review:
     'De netwerkkosten of uw saldo zijn gewijzigd nadat u het bedrag had ingesteld, waardoor het bedrag is verlaagd van {{requestedAmount}} naar {{amount}} .',
+  send_enter_address_first_for_percentage:
+    'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
 }

@@ -2047,4 +2047,6 @@ export const pt = {
     'Não foi possível carregar o histórico de recompensas.',
   send_amount_reduced_at_review:
     'A taxa de rede ou seu saldo mudou depois que você definiu o valor, então o valor foi reduzido de {{requestedAmount}} para {{amount}} .',
+  send_enter_address_first_for_percentage:
+    'Primeiro, insira o endereço do destinatário para usar os botões de porcentagem.',
 }
