@@ -1098,6 +1098,8 @@ export const en = {
     'Enter a Bech32 address that starts with the {{prefix}} prefix.',
   send_receiver_format_hint_evm:
     'Enter an EVM address that starts with 0x and has 40 hexadecimal characters.',
+  send_receiver_format_hint_near:
+    'Enter a NEAR account ID such as alice.near, or a 64-character lowercase hex address.',
   send_receiver_format_hint_qbtc: 'Enter a QBTC address that starts with qbtc.',
   send_receiver_format_hint_ripple:
     'Enter an XRP address that starts with the letter r.',

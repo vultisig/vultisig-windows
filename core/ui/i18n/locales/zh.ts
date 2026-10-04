@@ -479,6 +479,8 @@ export const zh = {
     '{{ticker}} 不足：此次发送需要 {{required}}，您有 {{available}}',
   insufficient_funds_including_network_costs:
     '{{ticker}} 不足：此次发送需要 {{required}}（含网络费用），您有 {{available}}',
+  send_receiver_format_hint_near:
+    '请输入 NEAR 账户 ID（如 alice.near）或 64 位小写十六进制地址。',
   insufficient_native_balance_for_fee: '本地代币余额不足以支付交易费用',
   insufficient_gas_limit: 'Gas 限额不足',
   insufficient_gas_limit_description:

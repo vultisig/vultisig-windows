@@ -526,6 +526,8 @@ export const it = {
     '{{ticker}} insufficiente: questo invio richiede {{required}}, hai {{available}}',
   insufficient_funds_including_network_costs:
     '{{ticker}} insufficiente: questo invio richiede {{required}} inclusi i costi di rete, hai {{available}}',
+  send_receiver_format_hint_near:
+    'Inserisci un ID account NEAR come alice.near o un indirizzo esadecimale minuscolo di 64 caratteri.',
   insufficient_native_balance_for_fee:
     'Saldo token nativo insufficiente per pagare la commissione di transazione',
   insufficient_gas_limit: 'Limite di gas insufficiente',

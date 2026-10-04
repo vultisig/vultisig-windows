@@ -44,6 +44,7 @@ export const getReceiverAddressFormatHint = ({
     ripple: () => t('send_receiver_format_hint_ripple'),
     tron: () => t('send_receiver_format_hint_tron'),
     cardano: () => t('send_receiver_format_hint_cardano'),
+    near: () => t('send_receiver_format_hint_near'),
     qbtc: () => t('send_receiver_format_hint_qbtc'),
   }
 

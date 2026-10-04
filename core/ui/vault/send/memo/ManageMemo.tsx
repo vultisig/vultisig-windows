@@ -19,9 +19,14 @@ import { TextInputWithPasteAction } from '../../../components/TextInputWithPaste
 /**
  * Chains whose transfer transaction has no field to carry a memo, so the
  * input would silently be dropped at signing time. Bittensor's balance
- * transfer extrinsic has no remark, and Sui transfers carry no memo.
+ * transfer extrinsic has no remark, Sui transfers carry no memo, and the
+ * NEAR native transfer builder rejects a payload that carries one.
  */
-const chainsWithoutMemoSupport: Chain[] = [Chain.Sui, Chain.Bittensor]
+const chainsWithoutMemoSupport: Chain[] = [
+  Chain.Sui,
+  Chain.Bittensor,
+  Chain.Near,
+]
 
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()

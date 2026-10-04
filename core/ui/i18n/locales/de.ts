@@ -527,6 +527,8 @@ export const de = {
     'Nicht genug {{ticker}}: Diese Überweisung benötigt {{required}}, Sie haben {{available}}',
   insufficient_funds_including_network_costs:
     'Nicht genug {{ticker}}: Diese Überweisung benötigt {{required}} inklusive Netzwerkkosten, Sie haben {{available}}',
+  send_receiver_format_hint_near:
+    'Geben Sie eine NEAR-Konto-ID wie alice.near oder eine 64-stellige Hex-Adresse in Kleinbuchstaben ein.',
   insufficient_native_balance_for_fee:
     'Unzureichendes Guthaben an nativen Token zur Bezahlung der Transaktionsgebühr',
   insufficient_gas_limit: 'Unzureichende Gasmenge',

@@ -517,6 +517,8 @@ export const nl = {
     'Niet genoeg {{ticker}}: deze verzending heeft {{required}} nodig, je hebt {{available}}',
   insufficient_funds_including_network_costs:
     'Niet genoeg {{ticker}}: deze verzending heeft {{required}} nodig inclusief netwerkkosten, je hebt {{available}}',
+  send_receiver_format_hint_near:
+    'Voer een NEAR-account-ID in zoals alice.near, of een hexadecimaal adres van 64 kleine letters.',
   insufficient_native_balance_for_fee:
     'Onvoldoende saldo aan native tokens om de transactiekosten te betalen.',
   insufficient_gas_limit: 'Onvoldoende gaslimiet',
