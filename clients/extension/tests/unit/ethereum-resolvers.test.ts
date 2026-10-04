@@ -1,3 +1,4 @@
+import { sendEthTransaction } from '@clients/extension/src/inpage/providers/ethereum/resolvers/eth_sendTransaction'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock external modules
@@ -31,6 +32,7 @@ vi.mock('@clients/extension/src/inpage/providers/ethereum/utils', () => ({
 import { getEthChainId } from '@clients/extension/src/inpage/providers/ethereum/resolvers/eth_chainId'
 import { getEthAccounts } from '@clients/extension/src/inpage/providers/ethereum/resolvers/eth_accounts'
 import { requestEthAccounts } from '@clients/extension/src/inpage/providers/ethereum/resolvers/eth_requestAccounts'
+import { signEthTypedDataV4 } from '@clients/extension/src/inpage/providers/ethereum/resolvers/eth_signTypedData_v4'
 import { personalSign } from '@clients/extension/src/inpage/providers/ethereum/resolvers/personal_sign'
 
 describe('Ethereum Resolvers', () => {
@@ -118,6 +120,70 @@ describe('Ethereum Resolvers', () => {
     })
   })
 
+  describe('eth_sendTransaction', () => {
+    const from = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+
+    it('uses the named signer to resolve the network before opening the popup', async () => {
+      mockGetChain.mockResolvedValue('Polygon')
+      mockCallPopup.mockResolvedValue([{ hash: '0xhash' }])
+
+      await expect(
+        sendEthTransaction([{ from, chainId: '0x89' }])
+      ).resolves.toBe('0xhash')
+      expect(mockGetChain).toHaveBeenCalledWith(from)
+      expect(mockCallPopup).toHaveBeenCalledWith(
+        { sendTx: { keysign: expect.objectContaining({ chain: 'Polygon' }) } },
+        { account: from }
+      )
+    })
+
+    it('rejects an explicit network that conflicts with the signer session', async () => {
+      mockGetChain.mockResolvedValue('Polygon')
+
+      await expect(
+        sendEthTransaction([{ from, chainId: '0x1' }])
+      ).rejects.toMatchObject({ code: -32602 })
+      expect(mockCallPopup).not.toHaveBeenCalled()
+    })
+
+    it('uses the signer session when the transaction omits chainId', async () => {
+      mockGetChain.mockResolvedValue('Polygon')
+      mockCallPopup.mockResolvedValue([{ hash: '0xhash' }])
+
+      await sendEthTransaction([{ from }])
+
+      expect(mockCallPopup).toHaveBeenCalledWith(
+        { sendTx: { keysign: expect.objectContaining({ chain: 'Polygon' }) } },
+        { account: from }
+      )
+    })
+  })
+
+  it('resolves typed-data signing on the named account session', async () => {
+    mockGetChain.mockResolvedValue('Polygon')
+    mockCallPopup.mockResolvedValue('0xsig')
+    mockProcessSignature.mockReturnValue('0xprocessed')
+    const account = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    const payload = {
+      primaryType: 'Mail',
+      domain: { chainId: 137 },
+      types: { Mail: [{ name: 'contents', type: 'string' }] },
+      message: { contents: 'hello' },
+    }
+
+    await signEthTypedDataV4([account, payload])
+
+    expect(mockGetChain).toHaveBeenCalledWith(account)
+    expect(mockCallPopup).toHaveBeenCalledWith(
+      {
+        signMessage: {
+          eth_signTypedData_v4: { chain: 'Polygon', message: payload },
+        },
+      },
+      { account }
+    )
+  })
+
   describe('personal_sign', () => {
     it('calls callPopup with signMessage and processes the signature', async () => {
       mockGetChain.mockResolvedValue('Ethereum')
@@ -126,6 +192,7 @@ describe('Ethereum Resolvers', () => {
 
       const result = await personalSign(['0x68656c6c6f', '0xAccountAddr'])
 
+      expect(mockGetChain).toHaveBeenCalledWith('0xAccountAddr')
       expect(result).toBe('0xprocessed')
       expect(mockCallPopup).toHaveBeenCalledWith(
         {

@@ -1,4 +1,6 @@
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { callPopup } from '@core/inpage-provider/popup'
+import { getEvmChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { ethers } from 'ethers'
@@ -7,11 +9,17 @@ import { type RpcTransactionRequest } from 'viem'
 import { getChain } from '../utils'
 
 export const sendEthTransaction = async ([tx]: [
-  RpcTransactionRequest,
+  RpcTransactionRequest & { chainId?: `0x${string}` },
 ]): Promise<string> => {
-  const chain = await getChain()
-
   const from = shouldBePresent(tx.from, 'tx.from')
+  const chain = await getChain(from)
+
+  if (
+    tx.chainId !== undefined &&
+    BigInt(tx.chainId) !== BigInt(getEvmChainId(chain))
+  ) {
+    throw new EIP1193Error('InvalidParams')
+  }
 
   const { decimals, ticker } = chainFeeCoin[chain]
 

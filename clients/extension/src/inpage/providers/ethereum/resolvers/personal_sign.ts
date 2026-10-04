@@ -7,7 +7,7 @@ export const personalSign = async ([rawMessage, account]: [
   string,
   string,
 ]): Promise<string> => {
-  const chain = await getChain()
+  const chain = await getChain(account)
 
   const messageBytes = isHexString(rawMessage)
     ? getBytes(rawMessage)

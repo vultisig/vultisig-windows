@@ -23,7 +23,11 @@ export const processSignature = (signature: string) => {
   return ensureHexPrefix(result.serialized)
 }
 
-export const getChain = async () => {
+export const getChain = async (account?: string) => {
+  if (account !== undefined) {
+    return callBackground({ getEvmSigningChain: { account } })
+  }
+
   const chain = await callBackground({
     getAppChain: { chainKind: 'evm' },
   })
