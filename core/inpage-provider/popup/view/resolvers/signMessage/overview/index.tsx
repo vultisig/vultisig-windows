@@ -7,7 +7,10 @@ import {
 } from '@core/inpage-provider/popup/interface'
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
 import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
-import { getPersonalSignMessage } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getPersonalSignMessage'
+import {
+  getPersonalSignMessage,
+  getPersonalSignMessageBytes,
+} from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getPersonalSignMessage'
 import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
@@ -94,8 +97,7 @@ export const Overview = () => {
       }
       return message
     },
-    personal_sign: ({ message, bytesCount }) =>
-      getPersonalSignMessage({ message, bytesCount }),
+    personal_sign: ({ message }) => getPersonalSignMessage(message),
     // The signed digest is sha256 of the canonical ADR-36 StdSignDoc; carry
     // those bytes (hex) through to `getCustomMessageHex`, which hashes them.
     cosmos_sign_arbitrary: ({ data }) =>
@@ -117,13 +119,8 @@ export const Overview = () => {
       if (isV2) return rawMessage
       return message
     },
-    personal_sign: ({ message }) => {
-      const bytes =
-        message.startsWith('0x') || message.startsWith('0X')
-          ? getBytes(message)
-          : new TextEncoder().encode(message)
-      return toDisplayMessageString(bytes)
-    },
+    personal_sign: ({ message }) =>
+      toDisplayMessageString(getPersonalSignMessageBytes(message)),
     cosmos_sign_arbitrary: ({ data }) =>
       toDisplayMessageString(fromBase64(data)),
   })

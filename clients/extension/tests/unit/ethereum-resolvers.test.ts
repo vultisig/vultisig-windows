@@ -211,7 +211,6 @@ describe('Ethereum Resolvers', () => {
         {
           signMessage: {
             personal_sign: {
-              bytesCount: expect.any(Number),
               chain: 'Ethereum',
               message: '0x68656c6c6f',
               type: 'default',
@@ -231,12 +230,10 @@ describe('Ethereum Resolvers', () => {
       const result = await personalSign(['Hello World', '0xAddr'])
 
       expect(result).toBe('0xresult')
-      // For non-hex string, bytesCount should be the byte length of the UTF-8 encoded string
       expect(mockCallPopup).toHaveBeenCalledWith(
         {
           signMessage: {
             personal_sign: {
-              bytesCount: 11, // "Hello World" = 11 bytes
               chain: 'Ethereum',
               message: 'Hello World',
               type: 'default',

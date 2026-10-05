@@ -1,46 +1,59 @@
 import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { hashMessage, hexlify } from 'ethers'
+import { hashMessage, hexlify, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
 
 import { getPersonalSignMessage } from './getPersonalSignMessage'
 
-const getSignedDigest = (input: { message: string; bytesCount: number }) =>
+const getSignedDigest = (message: string) =>
   getCustomMessageHex({
     chain: Chain.Ethereum,
     method: 'personal_sign',
-    message: getPersonalSignMessage(input),
+    message: getPersonalSignMessage(message),
   })
 
 const withoutHexPrefix = (hash: string) => hash.slice(2)
 
 describe('getPersonalSignMessage', () => {
-  it('signs the EIP-191 hash of the message when bytesCount is correct', () => {
+  it('signs the EIP-191 hash of a text message', () => {
     const message = 'hello world!'
 
-    expect(getSignedDigest({ message, bytesCount: 12 })).toBe(
+    expect(getSignedDigest(message)).toBe(
       withoutHexPrefix(hashMessage(message))
     )
   })
 
-  // Issue #5119: bytesCount comes from the page and is never checked against
-  // the message, so the popup shows one message while the signature covers
-  // another. The two tests below fail until that is fixed.
-  it('signs the message that the popup shows, whatever bytesCount says', () => {
+  it('signs the EIP-191 hash of a hex message', () => {
+    const bytes = toUtf8Bytes('hello world!')
+
+    expect(getSignedDigest(hexlify(bytes))).toBe(
+      withoutHexPrefix(hashMessage(bytes))
+    )
+  })
+
+  it('uses the UTF-8 byte length, not the character count, for text', () => {
+    const message = 'héllo 👋'
+
+    expect(getPersonalSignMessage(message)).toBe(
+      `\x19Ethereum Signed Message:\n11${message}`
+    )
+  })
+
+  // Issue #5119: the length used to come from the page, so a message starting
+  // with digits could have its start swallowed into the prefix.
+  it('signs the message that the popup shows when it starts with digits', () => {
     const shownMessage = '2hello world!'
 
-    expect(getSignedDigest({ message: shownMessage, bytesCount: 1 })).toBe(
+    expect(getSignedDigest(shownMessage)).toBe(
       withoutHexPrefix(hashMessage(shownMessage))
     )
   })
 
-  it('ignores a bytesCount that does not match a hex message', () => {
-    const shownBytes = Uint8Array.from(
-      Buffer.from('3268656c6c6f20776f726c6421', 'hex')
-    )
+  it('signs the hex message that the popup shows when it starts with digits', () => {
+    const shownBytes = toUtf8Bytes('2hello world!')
 
-    expect(
-      getSignedDigest({ message: hexlify(shownBytes), bytesCount: 1 })
-    ).toBe(withoutHexPrefix(hashMessage(shownBytes)))
+    expect(getSignedDigest(hexlify(shownBytes))).toBe(
+      withoutHexPrefix(hashMessage(shownBytes))
+    )
   })
 })

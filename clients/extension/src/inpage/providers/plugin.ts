@@ -31,7 +31,6 @@ export class Plugin extends EventEmitter {
           {
             signMessage: {
               personal_sign: {
-                bytesCount: new TextEncoder().encode(rawMessage).length,
                 chain: Chain.Ethereum,
                 message: rawMessage,
                 type,
