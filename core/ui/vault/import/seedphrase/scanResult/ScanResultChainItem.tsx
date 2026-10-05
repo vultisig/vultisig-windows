@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hStack } from '@lib/ui/layout/Stack'
@@ -23,6 +24,6 @@ const Container = styled.div`
 export const ScanResultChainItem = ({ value }: ValueProp<Chain>) => (
   <Container>
     <ChainEntityIcon value={getChainLogoSrc(value)} style={{ fontSize: 25 }} />
-    {value}
+    {getChainDisplayName(value)}
   </Container>
 )

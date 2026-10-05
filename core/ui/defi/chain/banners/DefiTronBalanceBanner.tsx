@@ -1,4 +1,5 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -84,7 +85,7 @@ export const DefiTronBalanceBanner = () => {
             fallback={<FallbackLogo>T</FallbackLogo>}
           />
           <VStack gap={2}>
-            <ChainTitle>{chain}</ChainTitle>
+            <ChainTitle>{getChainDisplayName(chain)}</ChainTitle>
           </VStack>
         </HStack>
         {isLoading ? (

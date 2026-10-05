@@ -1941,9 +1941,9 @@ export const hr = {
   ton_tx_failure_wallet_id_mismatch:
     'Transakcija je izrađena za drugačiju verziju ugovora o novčaniku od one koja je implementirana na ovoj adresi.',
   ton_tx_failure_insufficient_funds:
-    'Nema dovoljno TON za pokrivanje iznosa plus mrežnih naknada. Ostavite oko 0,05 TON rezerve za naknade i pokušajte ponovno.',
+    'Nema dovoljno GRAM za pokrivanje iznosa plus mrežnih naknada. Ostavite oko 0,05 GRAM rezerve za naknade i pokušajte ponovno.',
   ton_tx_failure_out_of_gas:
-    'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još TON transferu i pokušajte ponovno.',
+    'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još GRAM transferu i pokušajte ponovno.',
   ton_tx_failure_invalid_destination:
     'Odredišna adresa nije valjana na TON. Provjerite adresu i pokušajte ponovno.',
   ton_tx_failure_not_enough_jettons:
@@ -1978,7 +1978,7 @@ export const hr = {
     'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
   ton_gasless_pay_fee_in_token: 'Platite mrežnu naknadu u {{ticker}}',
   ton_gasless_description:
-    'Nije potreban TON : relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju {{ticker}} .',
+    'Nije potreban GRAM: relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju u {{ticker}}.',
   ton_gasless_fee_note: 'plaćeno putem releja',
   max_network_fee: 'Maks. mrežna naknada',
   swap_failed_refunded: 'Povrat novca izvršio je pružatelj zamjene',
@@ -2013,4 +2013,8 @@ export const hr = {
   upcoming: 'Nadolazeće',
   bond_reward_history_node: 'Čvor: {{address}}',
   bond_reward_history_error: 'Nije moguće učitati povijest nagrada',
+  send_amount_reduced_at_review:
+    'Mrežna naknada ili vaš saldo promijenili su se nakon što ste postavili iznos, pa je iznos smanjen s {{requestedAmount}} na {{amount}}.',
+  send_enter_address_first_for_percentage:
+    'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
 }

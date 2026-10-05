@@ -1076,7 +1076,11 @@ export const en = {
   sends: 'Sends',
   send_amount_adjusted_for_fee:
     'Amount adjusted to {{amount}} to cover the network fee',
+  send_enter_address_first_for_percentage:
+    'Enter the recipient address first to use the percentage buttons',
   send_amount_exceeds_balance: 'Amount exceeds balance',
+  send_amount_reduced_at_review:
+    'The network fee or your balance changed after you set the amount, so the amount was lowered from {{requestedAmount}} to {{amount}}.',
   send_invalid_receiver_address: 'Wrong address for selected chain',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_overview: 'Send Overview',
@@ -1950,9 +1954,9 @@ export const en = {
   ton_tx_failure_wallet_id_mismatch:
     'The transaction was built for a different wallet contract version than the one deployed at this address.',
   ton_tx_failure_insufficient_funds:
-    'Not enough TON to cover the amount plus network fees. Keep about 0.05 TON spare for fees and try again.',
+    'Not enough GRAM to cover the amount plus network fees. Keep about 0.05 GRAM spare for fees and try again.',
   ton_tx_failure_out_of_gas:
-    'The transaction ran out of gas before it could finish. Attach more TON to the transfer and try again.',
+    'The transaction ran out of gas before it could finish. Attach more GRAM to the transfer and try again.',
   ton_tx_failure_invalid_destination:
     'The destination address is not valid on TON. Check the address and try again.',
   ton_tx_failure_not_enough_jettons:
@@ -1977,7 +1981,7 @@ export const en = {
     'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
   ton_gasless_pay_fee_in_token: 'Pay network fee in {{ticker}}',
   ton_gasless_description:
-    'No TON needed: a relay pays the network gas and charges a small {{ticker}} commission instead.',
+    'No GRAM needed: a relay pays the network gas and charges a small {{ticker}} commission instead.',
   ton_gasless_fee_note: 'paid via relay',
   enable_ton_w5_wallet: 'Use TON W5 wallet',
   enable_ton_w5_wallet_description:

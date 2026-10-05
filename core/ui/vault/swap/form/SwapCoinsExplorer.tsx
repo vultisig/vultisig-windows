@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
@@ -253,7 +254,7 @@ export const SwapCoinsExplorer = ({
                     >
                       <CoinIcon coin={c} style={{ fontSize: 16 }} />
                       <Text size={12} weight={500}>
-                        {chain}
+                        {getChainDisplayName(chain)}
                       </Text>
                     </FooterItem>
                   )

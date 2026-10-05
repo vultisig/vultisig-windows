@@ -1,8 +1,10 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
+import { shrinkable } from '@lib/ui/css/shrinkable'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { StationChevronRightSmallIcon } from '@lib/ui/icons/StationFigmaIcons'
@@ -40,17 +42,17 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
           style={{ fontSize: iconStyle === 'station' ? 36 : 32 }}
         />
 
-        <HStack
+        <ContentRow
           fullWidth
           alignItems="center"
           justifyContent="space-between"
           gap={20}
         >
           <Text color="contrast" size={14}>
-            {chain}
+            {getChainDisplayName(chain)}
           </Text>
-          <HStack gap={8} alignItems="center">
-            <VStack gap={4} alignItems="flex-end">
+          <TrailingGroup gap={8} alignItems="center">
+            <BalanceGroup gap={4} alignItems="flex-end">
               <Text centerVertically color="contrast" weight="550" size={14}>
                 {isLoading ? (
                   <Spinner size={16} />
@@ -60,18 +62,20 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
                   </BalanceVisibilityAware>
                 )}
               </Text>
-              <Text color="shy" weight="500" size={12} centerVertically>
-                {isLoading ? (
+              {isLoading ? (
+                <Text color="shy" weight="500" size={12} centerVertically>
                   <Spinner size={12} />
-                ) : (
+                </Text>
+              ) : (
+                <Text color="shy" weight="500" size={12} cropped>
                   <BalanceVisibilityAware>
                     {positionsWithBalanceCount > 0
                       ? `${positionsWithBalanceCount} ${t('positions')}`
                       : t('no_positions_found')}
                   </BalanceVisibilityAware>
-                )}
-              </Text>
-            </VStack>
+                </Text>
+              )}
+            </BalanceGroup>
             <IconWrapper>
               {iconStyle === 'station' ? (
                 <StationChevronRightSmallIcon />
@@ -79,16 +83,27 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
                 <ChevronRightIcon />
               )}
             </IconWrapper>
-          </HStack>
-        </HStack>
+          </TrailingGroup>
+        </ContentRow>
       </HStack>
     </StyledPanel>
   )
 }
 
+const ContentRow = styled(HStack)`
+  ${shrinkable};
+`
+
+const TrailingGroup = styled(HStack)`
+  ${shrinkable};
+`
+
+const BalanceGroup = styled(VStack)`
+  ${shrinkable};
+`
+
 const StyledPanel = styled(Panel)`
   cursor: pointer;
-  max-height: 64px;
   transition: background-color 0.3s ease;
 
   &:hover {
@@ -100,7 +115,6 @@ const StyledPanel = styled(Panel)`
     css`
       border-radius: 0;
       background: ${theme.colors.foreground.toCssValue()};
-      max-height: none;
       padding: 12px;
 
       &:hover {

@@ -1,5 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { currentProductBrand } from '@core/ui/product/brand'
 import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
 import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
@@ -185,7 +187,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
     return orderedChains.filter(chain => {
       const ticker = chainFeeCoin[chain]?.ticker ?? ''
       return (
-        chain.toLowerCase().includes(normalized) ||
+        matchesChainSearch({ chain, query: normalized }) ||
         ticker.toLowerCase().includes(normalized)
       )
     })
@@ -235,7 +237,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
                     {ticker}
                   </Text>
                   <ChainBadge as="span" size={10} color="shyExtra" weight="500">
-                    {chain}
+                    {getChainDisplayName(chain)}
                   </ChainBadge>
                 </ChainListItem>
               )

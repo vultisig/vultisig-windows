@@ -2,6 +2,7 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getLimitOrderBuyCoin } from '@core/ui/mpc/keysign/join/tx/limitOrderBuyCoin'
@@ -694,7 +695,7 @@ export const TransactionDetailPage = () => {
                   value={getChainLogoSrc(record.chain)}
                   style={{ fontSize: 16 }}
                 />
-                <Text>{record.chain}</Text>
+                <Text>{getChainDisplayName(record.chain)}</Text>
               </HStack>
             </DetailRow>
             <DetailRow label={t('tx_hash')}>

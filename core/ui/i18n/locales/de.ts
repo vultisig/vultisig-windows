@@ -1988,9 +1988,9 @@ export const de = {
   ton_tx_failure_wallet_id_mismatch:
     'Die Transaktion wurde für eine andere Wallet-Vertragsversion erstellt als die, die an dieser Adresse eingesetzt wird.',
   ton_tx_failure_insufficient_funds:
-    'Nicht genügend TON um den Betrag zuzüglich Netzwerkgebühren zu decken. Halten Sie etwa 0,05 TON für Gebühren bereit und versuchen Sie es erneut.',
+    'Nicht genügend GRAM um den Betrag zuzüglich Netzwerkgebühren zu decken. Halten Sie etwa 0,05 GRAM für Gebühren bereit und versuchen Sie es erneut.',
   ton_tx_failure_out_of_gas:
-    'Die Transaktion konnte nicht abgeschlossen werden, da das Gas nicht ausreichte. Fügen Sie der Überweisung weitere TON hinzu und versuchen Sie es erneut.',
+    'Die Transaktion konnte nicht abgeschlossen werden, da das Gas nicht ausreichte. Fügen Sie der Überweisung weitere GRAM hinzu und versuchen Sie es erneut.',
   ton_tx_failure_invalid_destination:
     'Die Zieladresse ist für TON ungültig. Überprüfen Sie die Adresse und versuchen Sie es erneut.',
   ton_tx_failure_not_enough_jettons:
@@ -2025,7 +2025,7 @@ export const de = {
     'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
   ton_gasless_pay_fee_in_token: 'Netzwerkgebühr in {{ticker}} bezahlen',
   ton_gasless_description:
-    'Kein TON erforderlich: Ein Relay zahlt die Netzwerk-Gasgebühren und erhebt stattdessen eine kleine {{ticker}} -Kommission.',
+    'Kein GRAM erforderlich: Ein Relay zahlt die Netzwerk-Gasgebühren und erhebt stattdessen eine kleine {{ticker}} -Kommission.',
   ton_gasless_fee_note: 'Zahlung über Relay',
   max_network_fee: 'Maximale Netzwerkgebühr',
   swap_failed_refunded: 'Rückerstattung durch den Tauschanbieter',
@@ -2061,4 +2061,8 @@ export const de = {
   upcoming: 'Demnächst',
   bond_reward_history_node: 'Knoten: {{address}}',
   bond_reward_history_error: 'Prämienverlauf konnte nicht geladen werden',
+  send_amount_reduced_at_review:
+    'Die Netzwerkgebühr bzw. Ihr Guthaben hat sich nach der Festlegung des Betrags geändert, daher wurde der Betrag von {{requestedAmount}} auf {{amount}} reduziert.',
+  send_enter_address_first_for_percentage:
+    'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
 }

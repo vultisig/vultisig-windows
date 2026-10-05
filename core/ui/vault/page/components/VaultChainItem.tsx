@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCore } from '@core/ui/state/core'
 import { useHandleVaultChainItemPress } from '@core/ui/vault/page/components/useHandleVaultChainItemPress'
@@ -67,7 +68,7 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
     }
 
     addToast({
-      message: t('chain_address_copied', { chain }),
+      message: t('chain_address_copied', { chain: getChainDisplayName(chain) }),
     })
   }
 
@@ -92,7 +93,7 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
           >
             <VStack>
               <Text color="contrast" size={14}>
-                {chain}
+                {getChainDisplayName(chain)}
               </Text>
               <AddressRow
                 alignItems="center"
@@ -106,7 +107,7 @@ export const VaultChainItem = ({ chain, children }: VaultChainItemProps) => {
                 }}
                 role="button"
                 tabIndex={0}
-                aria-label={`Copy ${chain} address`}
+                aria-label={`Copy ${getChainDisplayName(chain)} address`}
               >
                 <Text weight={500} color="shy" size={12}>
                   {formatWalletAddress(address)}

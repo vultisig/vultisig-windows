@@ -1,19 +1,18 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { ChainEntityIcon } from '../../../../chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '../../../../chain/coin/icon/CoinIcon'
-import { TokenVerificationBadge } from '../../../../chain/coin/verification/TokenVerificationBadge'
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { ReviewCard } from '../../../../mpc/keysign/review/ReviewCard'
+import { SwapReviewAmount } from './SwapReviewAmount'
 import { SwapVerifyFiatAmount } from './SwapVerifyFiatAmount'
 
 const coinIconSize = 36
@@ -47,6 +46,8 @@ type SwapReviewSideProps = {
   /** The floor the trade guarantees, when it has one. */
   caption?: ReactNode
   withChainBadge?: boolean
+  /** Shortens the amount to fit the card; for an estimate, never what is signed. */
+  fitAmount?: boolean
 }
 
 /** One side of the trade: coin, amount and its fiat estimate, as a card. */
@@ -55,6 +56,7 @@ export const SwapReviewSide = ({
   amount,
   caption,
   withChainBadge,
+  fitAmount,
 }: SwapReviewSideProps) => (
   <Side>
     {withChainBadge ? (
@@ -70,17 +72,7 @@ export const SwapReviewSide = ({
     <VStack alignItems="center" gap={0} fullWidth>
       {typeof amount === 'number' ? (
         <>
-          <HStack alignItems="center" justifyContent="center" gap={4}>
-            <Text
-              as="span"
-              variant="stationBodyS"
-              color="regular"
-              centerHorizontally
-            >
-              {formatAmount(amount, coin)}
-            </Text>
-            <TokenVerificationBadge value={coin} />
-          </HStack>
+          <SwapReviewAmount coin={coin} amount={amount} fit={fitAmount} />
           <SwapVerifyFiatAmount coin={coin} amount={amount} />
         </>
       ) : (

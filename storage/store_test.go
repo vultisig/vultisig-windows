@@ -82,6 +82,42 @@ func TestSaveVaultUpdatePreservesChildRows(t *testing.T) {
 	}
 }
 
+func TestSaveVaultFolderUpdateKeepsFolderVaults(t *testing.T) {
+	store := newTestStore(t)
+
+	folderID, err := store.SaveVaultFolder(&VaultFolder{Name: "Folder", Order: 1})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	vault := testVault()
+	vault.FolderID = &folderID
+	if err := store.SaveVault(vault); err != nil {
+		t.Fatal(err)
+	}
+
+	update := VaultFolder{ID: folderID, Name: "Renamed Folder", Order: 2}
+	if _, err := store.SaveVaultFolder(&update); err != nil {
+		t.Fatal(err)
+	}
+
+	savedFolder, err := store.GetVaultFolder(folderID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if savedFolder.Name != update.Name || savedFolder.Order != update.Order {
+		t.Fatalf("expected folder %#v, got %#v", update, savedFolder)
+	}
+
+	savedVault, err := store.GetVault(vault.PublicKeyECDSA)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if savedVault.FolderID == nil || *savedVault.FolderID != folderID {
+		t.Fatalf("expected vault to stay in folder %q, got %v", folderID, savedVault.FolderID)
+	}
+}
+
 func TestSaveVaultsKeySharesRollsBackFailedChainKeyShareWrite(t *testing.T) {
 	store := newTestStore(t)
 

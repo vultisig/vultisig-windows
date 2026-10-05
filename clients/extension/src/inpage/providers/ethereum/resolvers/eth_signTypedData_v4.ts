@@ -70,7 +70,7 @@ export const signEthTypedDataV4 = async ([first, second]: [
     )
   }
 
-  const chain = await getChain()
+  const chain = await getChain(account)
 
   const result = await callPopup(
     {

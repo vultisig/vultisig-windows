@@ -1956,9 +1956,9 @@ export const nl = {
   ton_tx_failure_wallet_id_mismatch:
     'De transactie is opgezet voor een andere versie van het walletcontract dan degene die op dit adres wordt gebruikt.',
   ton_tx_failure_insufficient_funds:
-    'Er is onvoldoende TON beschikbaar om het bedrag plus netwerkkosten te dekken. Houd ongeveer 0,05 TON over voor de kosten en probeer het opnieuw.',
+    'Er is onvoldoende GRAM beschikbaar om het bedrag plus netwerkkosten te dekken. Houd ongeveer 0,05 GRAM over voor de kosten en probeer het opnieuw.',
   ton_tx_failure_out_of_gas:
-    'De transactie is voortijdig beëindigd vanwege gasgebrek. Voeg meer TON toe aan de overdracht en probeer het opnieuw.',
+    'De transactie is voortijdig beëindigd vanwege gasgebrek. Voeg meer GRAM toe aan de overdracht en probeer het opnieuw.',
   ton_tx_failure_invalid_destination:
     'Het bestemmingsadres is niet geldig op TON. Controleer het adres en probeer het opnieuw.',
   ton_tx_failure_not_enough_jettons:
@@ -1993,7 +1993,7 @@ export const nl = {
     'Gebruik het W5 (v5r1)-contract in plaats van V4R2 bij het afleiden van de TON-adressen van deze kluis. Dit verandert welk adres de portemonnee gebruikt, en elk contract is een afzonderlijk adres met een eigen saldo — er worden geen fondsen verplaatst, dus alles wat op het andere adres staat, blijft daar totdat u het verzendt.',
   ton_gasless_pay_fee_in_token: 'Betaal netwerkkosten in {{ticker}}',
   ton_gasless_description:
-    'Geen TON nodig: een relay betaalt de netwerkgaskosten en brengt in plaats daarvan een kleine {{ticker}} commissie in rekening.',
+    'Geen GRAM nodig: een relay betaalt de netwerkgaskosten en brengt in plaats daarvan een kleine {{ticker}} commissie in rekening.',
   ton_gasless_fee_note: 'betaald via relay',
   max_network_fee: 'Maximale netwerkkosten',
   swap_failed_refunded: 'Terugbetaald door de swapaanbieder',
@@ -2030,4 +2030,8 @@ export const nl = {
   bond_reward_history_node: 'Knooppunt: {{address}}',
   bond_reward_history_error:
     'De beloningsgeschiedenis kon niet worden geladen.',
+  send_amount_reduced_at_review:
+    'De netwerkkosten of uw saldo zijn gewijzigd nadat u het bedrag had ingesteld, waardoor het bedrag is verlaagd van {{requestedAmount}} naar {{amount}}.',
+  send_enter_address_first_for_percentage:
+    'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
 }

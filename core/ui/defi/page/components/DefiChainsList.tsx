@@ -1,4 +1,5 @@
 import { ChainsEmptyState } from '@core/ui/chain/components/ChainsEmptyState'
+import { matchesChainSearch } from '@core/ui/chain/metadata/matchesChainSearch'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import {
@@ -49,7 +50,7 @@ export const DefiChainsList = () => {
 
   const filteredBalances = normalizedQuery
     ? defiChainBalances.filter(({ chain }) =>
-        String(chain).toLowerCase().includes(normalizedQuery)
+        matchesChainSearch({ chain, query: normalizedQuery })
       )
     : defiChainBalances
 

@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { Image } from '@lib/ui/image/Image'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -41,7 +42,7 @@ export const DefiThorchainBalanceBanner = () => {
         />
       </ThorchainLogoWrapper>
       <BannerContent gap={8} style={{ alignItems: 'flex-start' }}>
-        <ChainTitle>{chain}</ChainTitle>
+        <ChainTitle>{getChainDisplayName(chain)}</ChainTitle>
         {isLoading ? (
           <Spinner size={20} />
         ) : (

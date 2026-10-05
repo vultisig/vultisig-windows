@@ -1811,9 +1811,9 @@ export const zh = {
   ton_tx_failure_wallet_id_mismatch:
     '该交易是为与部署在此地址的钱包合约版本不同的钱包合约版本构建的。',
   ton_tx_failure_insufficient_funds:
-    'TON金额不足，无法支付交易金额及网络费用。请预留约 0.05 TON用于支付费用，并重试。',
+    'GRAM金额不足，无法支付交易金额及网络费用。请预留约 0.05 GRAM用于支付费用，并重试。',
   ton_tx_failure_out_of_gas:
-    '交易因 gas 不足而无法完成。请为转账附加更多TON，然后重试。',
+    '交易因 gas 不足而无法完成。请为转账附加更多GRAM，然后重试。',
   ton_tx_failure_invalid_destination: '目标地址在TON上无效。请检查地址并重试。',
   ton_tx_failure_not_enough_jettons: '此钱包中没有足够的代币来发送该金额。',
   ton_tx_failure_jetton_unauthorized:
@@ -1844,7 +1844,7 @@ export const zh = {
     '生成此金库的TON地址时，请使用 W5 (v5r1) 合约代替 V4R2 合约。这将改变钱包使用的地址，每个合约都是一个独立的地址，拥有各自的余额——它不会转移任何资金，因此其他地址中的任何资金都会保留在那里，直到您将其发送出去。',
   ton_gasless_pay_fee_in_token: '在{{ticker}}中支付网络费用',
   ton_gasless_description:
-    '不需要TON ：中继器支付网络 gas 费用，并收取少量{{ticker}}佣金。',
+    '不需要GRAM ：中继器支付网络 gas 费用，并收取少量{{ticker}}佣金。',
   ton_gasless_fee_note: '通过中继支付',
   max_network_fee: '最高网络费用',
   swap_failed_refunded: '由互换提供商退款',
@@ -1879,4 +1879,8 @@ export const zh = {
   upcoming: '即将推出',
   bond_reward_history_node: '节点： {{address}}',
   bond_reward_history_error: '无法加载奖励历史记录',
+  send_amount_reduced_at_review:
+    '设置金额后，网络费用或余额发生了变化，因此金额从{{requestedAmount}}减少到{{amount}}。',
+  send_enter_address_first_for_percentage:
+    '请先输入收件人地址才能使用百分比按钮',
 }

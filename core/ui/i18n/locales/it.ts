@@ -1977,9 +1977,9 @@ export const it = {
   ton_tx_failure_wallet_id_mismatch:
     'La transazione è stata creata per una versione del contratto del portafoglio diversa da quella utilizzata a questo indirizzo.',
   ton_tx_failure_insufficient_funds:
-    "Non ci sono abbastanza TON per coprire l'importo più le commissioni di rete. Tieni da parte circa 0,05 TON per le commissioni e riprova.",
+    "Non ci sono abbastanza GRAM per coprire l'importo più le commissioni di rete. Tieni da parte circa 0,05 GRAM per le commissioni e riprova.",
   ton_tx_failure_out_of_gas:
-    'La transazione ha esaurito il gas prima di poter essere completata. Aggiungi altro TON al trasferimento e riprova.',
+    'La transazione ha esaurito il gas prima di poter essere completata. Aggiungi altro GRAM al trasferimento e riprova.',
   ton_tx_failure_invalid_destination:
     "L'indirizzo di destinazione non è valido su TON. Verifica l'indirizzo e riprova.",
   ton_tx_failure_not_enough_jettons:
@@ -2014,7 +2014,7 @@ export const it = {
     "Utilizza il contratto W5 (v5r1) anziché V4R2 quando derivi gli indirizzi TON di questo vault. Questo modifica l'indirizzo utilizzato dal wallet e ogni contratto rappresenta un indirizzo separato con un proprio saldo: non sposta alcun fondo, quindi tutto ciò che è detenuto nell'altro indirizzo rimane lì finché non lo invii.",
   ton_gasless_pay_fee_in_token: 'Paga la tariffa di rete in {{ticker}}',
   ton_gasless_description:
-    'Non è necessario TON : un relay paga il gas di rete e addebita invece una piccola commissione {{ticker}} .',
+    'GRAM non è necessario: un relay paga il gas di rete e addebita invece una piccola commissione in {{ticker}}.',
   ton_gasless_fee_note: 'pagato tramite relè',
   max_network_fee: 'Tariffa massima di rete',
   swap_failed_refunded: 'Rimborso effettuato dal fornitore dello scambio',
@@ -2049,4 +2049,8 @@ export const it = {
   upcoming: 'Prossimamente',
   bond_reward_history_node: 'Nodo: {{address}}',
   bond_reward_history_error: 'Impossibile caricare la cronologia dei premi',
+  send_amount_reduced_at_review:
+    "La commissione di rete o il tuo saldo sono cambiati dopo che hai impostato l'importo, quindi l'importo è stato ridotto da {{requestedAmount}} a {{amount}}.",
+  send_enter_address_first_for_percentage:
+    "Inserisci prima l'indirizzo del destinatario per utilizzare i pulsanti percentuali",
 }
