@@ -14,6 +14,7 @@ import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { ManageTonGaslessFee } from '@core/ui/vault/send/fee/tonGasless/ManageTonGaslessFee'
 import { useIsSendFeePaidInCoin } from '@core/ui/vault/send/fee/useIsSendFeePaidInCoin'
+import { getBuildKeysignPayloadErrorMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
@@ -40,6 +41,7 @@ import {
 } from '@vultisig/core-chain/coin/Coin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { minBigInt } from '@vultisig/lib-utils/math/minBigInt'
 import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
@@ -85,8 +87,11 @@ export const ManageAmountInputField = () => {
   const hasBalance = balance != null && balance > 0n
   const allowDeath = useSendAllowDeath()
   const { isSyncing: isAllowDeathSyncing } = useAllowDeathSendAmount()
-  const { get: getMaxSendable, isPending: isMaxSendablePending } =
-    useSendMaxSendable()
+  const {
+    get: getMaxSendable,
+    isPending: isMaxSendablePending,
+    error: maxSendableError,
+  } = useSendMaxSendable()
   const pendingMaxSendable =
     pendingSuggestion == null
       ? null
@@ -146,6 +151,17 @@ export const ManageAmountInputField = () => {
   // stays idle and never settles. Waiting on it would lock the field for good,
   // and any fee kept from a previous receiver is stale.
   const isFeeEstimateUnavailable = !receiver
+  const suggestionsUnavailableReason = (() => {
+    if (!hasBalance || !isNative) return null
+    if (isFeeEstimateUnavailable)
+      return t('send_enter_address_first_for_percentage')
+    if (maxSendableError)
+      return (
+        getBuildKeysignPayloadErrorMessage(maxSendableError, t) ??
+        extractErrorMsg(maxSendableError)
+      )
+    return null
+  })()
   const isWaitingForFee =
     (pendingSuggestion != null &&
       isNative &&
@@ -294,7 +310,7 @@ export const ManageAmountInputField = () => {
                     value={suggestion}
                     onClick={handleSuggestionClick}
                     disabled={
-                      !hasBalance || (isNative && isFeeEstimateUnavailable)
+                      !hasBalance || suggestionsUnavailableReason !== null
                     }
                     isActive={
                       (allowDeath.isEnabled && suggestion === 1) ||
@@ -308,9 +324,9 @@ export const ManageAmountInputField = () => {
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
-            {!error && hasBalance && isNative && isFeeEstimateUnavailable ? (
+            {!error && suggestionsUnavailableReason !== null ? (
               <Text size={12} color="shy">
-                {t('send_enter_address_first_for_percentage')}
+                {suggestionsUnavailableReason}
               </Text>
             ) : null}
             {adjustedAmount !== null ? (

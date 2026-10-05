@@ -15,6 +15,8 @@ type SendMaxSendable = {
   get: (allowDeath: boolean) => bigint | null
   /** What the maximum is read from is still loading. */
   isPending: boolean
+  /** Why the maximum could not be read; `null` unless that failed. */
+  error: unknown
 }
 
 type MaxSendableResolverInput = {
@@ -39,6 +41,7 @@ const getFeeBasedMaxSendable: MaxSendableResolver = ({
     return getMaxSendableAmount({ chain, balance, fee, allowDeath })
   },
   isPending: feeEstimateQuery.isPending,
+  error: feeEstimateQuery.error,
 })
 
 const maxSendableResolvers: Partial<Record<ChainKind, MaxSendableResolver>> = {
@@ -46,6 +49,7 @@ const maxSendableResolvers: Partial<Record<ChainKind, MaxSendableResolver>> = {
   near: ({ nearSendLimitsQuery }) => ({
     get: () => nearSendLimitsQuery.data?.maxSendable ?? null,
     isPending: nearSendLimitsQuery.isPending,
+    error: nearSendLimitsQuery.error,
   }),
 }
 
