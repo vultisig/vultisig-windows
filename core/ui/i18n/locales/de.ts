@@ -2061,6 +2061,8 @@ export const de = {
   upcoming: 'Demnächst',
   bond_reward_history_node: 'Knoten: {{address}}',
   bond_reward_history_error: 'Prämienverlauf konnte nicht geladen werden',
+  send_amount_reduced_at_review:
+    'Die Netzwerkgebühr bzw. Ihr Guthaben hat sich nach der Festlegung des Betrags geändert, daher wurde der Betrag von {{requestedAmount}} auf {{amount}} reduziert.',
   send_enter_address_first_for_percentage:
     'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
 }
