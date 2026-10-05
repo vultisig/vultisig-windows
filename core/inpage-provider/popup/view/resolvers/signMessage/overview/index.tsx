@@ -7,6 +7,7 @@ import {
 } from '@core/inpage-provider/popup/interface'
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
 import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
+import { getPersonalSignMessage } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getPersonalSignMessage'
 import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
@@ -93,21 +94,8 @@ export const Overview = () => {
       }
       return message
     },
-    personal_sign: ({ message, bytesCount }) => {
-      const isHex = message.startsWith('0x') || message.startsWith('0X')
-      const prefix = `\x19Ethereum Signed Message:\n${bytesCount}`
-
-      if (isHex) {
-        const prefixBytes = new TextEncoder().encode(prefix)
-        const msgBytes = getBytes(message)
-        const combined = new Uint8Array(prefixBytes.length + msgBytes.length)
-        combined.set(prefixBytes)
-        combined.set(msgBytes, prefixBytes.length)
-        return hexlify(combined)
-      }
-
-      return `${prefix}${message}`
-    },
+    personal_sign: ({ message, bytesCount }) =>
+      getPersonalSignMessage({ message, bytesCount }),
     // The signed digest is sha256 of the canonical ADR-36 StdSignDoc; carry
     // those bytes (hex) through to `getCustomMessageHex`, which hashes them.
     cosmos_sign_arbitrary: ({ data }) =>
