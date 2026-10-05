@@ -61,7 +61,7 @@ export const addKeplrSuggestedChainForHost = ({
     const all = await getAll()
     const forVault = all[vaultId] ?? {}
     const forHost = forVault[host] ?? {}
-    if (forHost[chainInfo.chainId]) return
+    if (Object.prototype.hasOwnProperty.call(forHost, chainInfo.chainId)) return
     await setStorageValue<VaultsKeplrSuggestedChains>(
       StorageKey.keplrSuggestedChainsByHost,
       {

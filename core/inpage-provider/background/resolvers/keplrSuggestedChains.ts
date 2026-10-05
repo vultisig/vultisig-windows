@@ -5,6 +5,7 @@ import {
   KeplrSuggestedChainsRecord,
 } from '@core/extension/storage/keplrSuggestedChains'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 
 import { validateSuggestedChainInfo } from '../../keplr/validateSuggestedChainInfo'
@@ -35,12 +36,14 @@ export const suggestKeplrChain: BackgroundResolver<
 > = async ({ input: { chainInfo }, context }) => {
   validateSuggestedChainInfo(chainInfo)
 
-  const vaultId = await storage.getCurrentVaultId()
-  if (!vaultId) return
+  const vaultId = shouldBePresent(
+    await storage.getCurrentVaultId(),
+    'currentVaultId'
+  )
 
   const host = getUrlBaseDomain(context.requestOrigin)
   const existing = await getKeplrSuggestedChainsForHost({ vaultId, host })
-  if (existing[chainInfo.chainId]) return
+  if (Object.prototype.hasOwnProperty.call(existing, chainInfo.chainId)) return
 
   await callPopupFromBackground({
     call: { suggestKeplrChain: { chainInfo } },

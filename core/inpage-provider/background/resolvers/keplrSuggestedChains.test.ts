@@ -4,11 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const mockCallPopupFromBackground = vi.hoisted(() => vi.fn())
 const storageState = vi.hoisted(() => ({
   values: {} as Record<string, unknown>,
+  currentVaultId: 'vault-1' as string | null,
 }))
 
 vi.mock('@core/extension/storage', () => ({
   storage: {
-    getCurrentVaultId: async () => 'vault-1',
+    getCurrentVaultId: async () => storageState.currentVaultId,
   },
 }))
 
@@ -75,6 +76,7 @@ const getChains = (origin: string) =>
 describe('suggestKeplrChain', () => {
   beforeEach(() => {
     storageState.values = {}
+    storageState.currentVaultId = 'vault-1'
     mockCallPopupFromBackground.mockReset()
     mockCallPopupFromBackground.mockResolvedValue(true)
   })
@@ -117,6 +119,46 @@ describe('suggestKeplrChain', () => {
     ).rejects.toThrow('chainInfo.rpc must be a non-empty string')
 
     expect(mockCallPopupFromBackground).not.toHaveBeenCalled()
+  })
+
+  it('rejects an empty account-address prefix without opening the popup', async () => {
+    const { bech32Config } = makeChainInfo('')
+
+    await expect(
+      suggest({
+        origin: 'https://good.example.com',
+        chainInfo: { ...makeChainInfo('good'), bech32Config },
+      })
+    ).rejects.toThrow('bech32PrefixAccAddr is required')
+
+    expect(mockCallPopupFromBackground).not.toHaveBeenCalled()
+  })
+
+  it('fails without opening the popup when no vault is selected', async () => {
+    storageState.currentVaultId = null
+
+    await expect(
+      suggest({
+        origin: 'https://good.example.com',
+        chainInfo: makeChainInfo('good'),
+      })
+    ).rejects.toThrow('currentVaultId')
+
+    expect(mockCallPopupFromBackground).not.toHaveBeenCalled()
+  })
+
+  it('treats a chainId named after an Object.prototype member as new', async () => {
+    const chainInfo = { ...makeChainInfo('good'), chainId: 'constructor' }
+
+    await suggest({ origin: 'https://good.example.com', chainInfo })
+
+    expect(mockCallPopupFromBackground).toHaveBeenCalledOnce()
+    expect(
+      Object.prototype.hasOwnProperty.call(
+        await getChains('https://good.example.com'),
+        'constructor'
+      )
+    ).toBe(true)
   })
 
   it('skips the popup for a chain the same site already registered', async () => {

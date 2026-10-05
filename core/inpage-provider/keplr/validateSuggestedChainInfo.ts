@@ -26,7 +26,8 @@ export const validateSuggestedChainInfo = (info: unknown): void => {
   requireString('rest')
   if (
     !ci.bech32Config ||
-    typeof ci.bech32Config.bech32PrefixAccAddr !== 'string'
+    typeof ci.bech32Config.bech32PrefixAccAddr !== 'string' ||
+    ci.bech32Config.bech32PrefixAccAddr.length === 0
   ) {
     throw new Error('chainInfo.bech32Config.bech32PrefixAccAddr is required')
   }
