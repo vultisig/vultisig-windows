@@ -13,6 +13,21 @@ export const chainsWithoutMemoSupport = [
   Chain.Near,
 ] as const
 
+type GetSendPayloadMemoInput = {
+  chain: Chain
+  memo: string
+}
+
+/**
+ * The memo a send payload carries: none on a chain whose transfer cannot carry
+ * one. Any non-blank memo there is already refused by `getSendMemoError`.
+ */
+export const getSendPayloadMemo = ({
+  chain,
+  memo,
+}: GetSendPayloadMemoInput): string | undefined =>
+  isOneOf(chain, chainsWithoutMemoSupport) ? undefined : memo
+
 type GetSendMemoErrorInput = {
   chain: Chain
   memo: string | undefined
