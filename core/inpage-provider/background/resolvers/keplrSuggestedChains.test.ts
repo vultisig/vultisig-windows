@@ -147,6 +147,33 @@ describe('suggestKeplrChain', () => {
     expect(mockCallPopupFromBackground).not.toHaveBeenCalled()
   })
 
+  it('stores the chain under the vault selected when the user approves', async () => {
+    let approve = (): void => {}
+    mockCallPopupFromBackground.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          approve = () => resolve(true)
+        })
+    )
+
+    const pending = suggest({
+      origin: 'https://good.example.com',
+      chainInfo: makeChainInfo('good'),
+    })
+    await vi.waitFor(() =>
+      expect(mockCallPopupFromBackground).toHaveBeenCalledOnce()
+    )
+    storageState.currentVaultId = 'vault-2'
+    approve()
+    await pending
+
+    expect(Object.keys(await getChains('https://good.example.com'))).toEqual([
+      'test-chain-1',
+    ])
+    storageState.currentVaultId = 'vault-1'
+    expect(await getChains('https://good.example.com')).toEqual({})
+  })
+
   it('treats a chainId named after an Object.prototype member as new', async () => {
     const chainInfo = { ...makeChainInfo('good'), chainId: 'constructor' }
 
