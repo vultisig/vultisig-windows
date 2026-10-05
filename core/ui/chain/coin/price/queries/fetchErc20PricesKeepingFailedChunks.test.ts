@@ -50,6 +50,9 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
         previous: {
           [keyFor(failed.id)]: stamp(1.96),
           [keyFor(dropped.id)]: stamp(9),
+          ...Object.fromEntries(
+            filler.map(coin => [keyFor(coin.id), stamp(1)])
+          ),
         },
         getPrices,
       })
@@ -129,6 +132,89 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
     )
     await vi.advanceTimersByTimeAsync(erc20PriceRetryDelayMs)
     await assertion
+  })
+
+  it('throws when every batch fails and only some coins have a usable price', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(5_000)
+    const kept = coin('0xaaaa')
+    const missing = coin('0xbbbb')
+    const getPrices = vi.fn().mockRejectedValue(new Error('down'))
+
+    const pending = fetchErc20PricesKeepingFailedChunks({
+      coins: [kept, missing],
+      chain: EvmChain.Ethereum,
+      fiatCurrency: 'usd',
+      previous: { [keyFor(kept.id)]: stamp(1.96, 5_000) },
+      getPrices,
+    })
+    const assertion = expect(pending).rejects.toThrow(
+      'every contract price batch failed'
+    )
+    await vi.advanceTimersByTimeAsync(erc20PriceRetryDelayMs)
+    await assertion
+  })
+
+  it('throws when another batch succeeded but a failed coin has no usable price', async () => {
+    vi.useFakeTimers()
+    const failed = coin('0xdead')
+    const listed = Array.from({ length: erc20PriceBatchSize }, (_, index) =>
+      coin(`0x${(index + 1).toString(16).padStart(40, '0')}`)
+    )
+    const getPrices = vi
+      .fn()
+      .mockImplementation(async ({ ids }: { ids: string[] }) => {
+        if (ids.includes(failed.id)) throw new Error('batch failed')
+        return Object.fromEntries(ids.map(id => [id, 2.8]))
+      })
+
+    const pending = fetchErc20PricesKeepingFailedChunks({
+      coins: [...listed, failed],
+      chain: EvmChain.Ethereum,
+      fiatCurrency: 'usd',
+      previous: {},
+      getPrices,
+    })
+    const assertion = expect(pending).rejects.toThrow(
+      'a failed contract price batch has no usable price'
+    )
+    await vi.advanceTimersByTimeAsync(erc20PriceRetryDelayMs)
+    await assertion
+  })
+
+  it('throws when a success returns an id the batch did not ask for', async () => {
+    const listed = coin('0xaaaa')
+    const getPrices = vi.fn().mockResolvedValue({ '0xnot-requested': 1 })
+
+    await expect(
+      fetchErc20PricesKeepingFailedChunks({
+        coins: [listed],
+        chain: EvmChain.Ethereum,
+        fiatCurrency: 'usd',
+        previous: { [keyFor(listed.id)]: stamp(1.96) },
+        getPrices,
+      })
+    ).rejects.toThrow()
+  })
+
+  it('skips a non-finite price from a successful batch', async () => {
+    const listed = coin('0xaaaa')
+    const blank = coin('0xbbbb')
+    const getPrices = vi.fn().mockResolvedValue({
+      [listed.id]: 2.8,
+      [blank.id]: Number.NaN,
+    })
+
+    const prices = await fetchErc20PricesKeepingFailedChunks({
+      coins: [listed, blank],
+      chain: EvmChain.Ethereum,
+      fiatCurrency: 'usd',
+      previous: { [keyFor(blank.id)]: stamp(9) },
+      getPrices,
+    })
+
+    expect(prices[keyFor(listed.id)]?.price).toBe(2.8)
+    expect(prices[keyFor(blank.id)]).toBeUndefined()
   })
 
   it('waits before the second try', async () => {

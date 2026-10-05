@@ -5,7 +5,6 @@ import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
 import { toBatches } from '@vultisig/lib-utils/array/toBatches'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { retry } from '@vultisig/lib-utils/query/retry'
-import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
 import { keptPriceMaxAge, StampedPrice } from './previousCoinPricesForFiat'
@@ -23,7 +22,11 @@ type GetPrices = (input: {
   fiatCurrency: FiatCurrency
 }) => Promise<Record<string, number>>
 
-/** A failed batch keeps its previous prices. A success that omits a contract drops it. */
+/**
+ * A failed batch keeps prices it already has. If any coin in that batch has
+ * none, this throws so the query keeps its last full result. A success that
+ * omits a contract drops it.
+ */
 export async function fetchErc20PricesKeepingFailedChunks({
   coins,
   chain,
@@ -40,11 +43,13 @@ export async function fetchErc20PricesKeepingFailedChunks({
   const batches = toBatches(coins, erc20PriceBatchSize)
   const freshPrices: Record<string, number> = {}
   const retained: Record<string, StampedPrice> = {}
+  const failedKeys = new Set<string>()
   let failures = 0
 
   for (const batch of batches) {
+    let prices: Record<string, number>
     try {
-      const prices = await retry({
+      prices = await retry({
         func: () =>
           getPrices({
             ids: batch.map(coin => shouldBePresent(coin.id)),
@@ -54,21 +59,24 @@ export async function fetchErc20PricesKeepingFailedChunks({
         attempts: 1,
         delay: erc20PriceRetryDelayMs,
       })
-      for (const [id, price] of Object.entries(prices)) {
-        const coin = shouldBePresent(
-          batch.find(candidate =>
-            areLowerCaseEqual(shouldBePresent(candidate.id), id)
-          )
-        )
-        freshPrices[coinKeyToString(coin)] = price
-      }
     } catch {
       failures += 1
       for (const coin of batch) {
         const key = coinKeyToString(coin)
+        failedKeys.add(key)
         const prior = previous[key]
         if (prior) retained[key] = prior
       }
+      continue
+    }
+    for (const [id, price] of Object.entries(prices)) {
+      if (!Number.isFinite(price)) continue
+      const coin = shouldBePresent(
+        batch.find(candidate =>
+          areLowerCaseEqual(shouldBePresent(candidate.id), id)
+        )
+      )
+      freshPrices[coinKeyToString(coin)] = price
     }
   }
 
@@ -78,12 +86,13 @@ export async function fetchErc20PricesKeepingFailedChunks({
     if (checkedAt - stamp.fetchedAt <= keptPriceMaxAge) kept[key] = stamp
   }
 
-  if (
-    batches.length > 0 &&
-    failures === batches.length &&
-    isRecordEmpty(kept)
-  ) {
-    throw new Error('every contract price batch failed')
+  const uncovered = [...failedKeys].filter(key => !(key in kept))
+  if (uncovered.length > 0) {
+    throw new Error(
+      failures === batches.length
+        ? 'every contract price batch failed'
+        : 'a failed contract price batch has no usable price'
+    )
   }
 
   const fetchedAt = Date.now()

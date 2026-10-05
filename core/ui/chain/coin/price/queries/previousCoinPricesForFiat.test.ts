@@ -55,6 +55,43 @@ describe('previousCoinPricesForFiat', () => {
 
     expect(prices[cake]).toBeUndefined()
   })
+
+  it('keeps the valid stamps when one cached value is not a stamp', () => {
+    const other = coinKeyToString({ chain: Chain.Ethereum, id: '0xother' })
+    const prices = previousCoinPricesForFiat(
+      [
+        {
+          fiatCurrency: 'usd',
+          updatedAt: 2,
+          prices: {
+            [cake]: { price: 1.96, fetchedAt: 2 },
+            [other]: { fetchedAt: 2 },
+          },
+        },
+      ],
+      'usd',
+      2
+    )
+
+    expect(prices[cake]).toEqual({ price: 1.96, fetchedAt: 2 })
+    expect(prices[other]).toBeUndefined()
+  })
+
+  it('skips a non-finite price', () => {
+    const prices = previousCoinPricesForFiat(
+      [
+        {
+          fiatCurrency: 'usd',
+          updatedAt: 2,
+          prices: { [cake]: { price: Number.NaN, fetchedAt: 2 } },
+        },
+      ],
+      'usd',
+      2
+    )
+
+    expect(prices[cake]).toBeUndefined()
+  })
 })
 
 describe('cachedCoinPricesForFiat', () => {

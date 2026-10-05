@@ -70,9 +70,14 @@ function fiatCurrencyFromQueryKey(
 
 function stampsFrom(value: unknown): Record<string, StampedPrice> | undefined {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return
-  const record = value as Record<string, unknown>
-  if (!Object.values(record).every(isStampedPrice)) return
-  return record as Record<string, StampedPrice>
+  const stamps: Record<string, StampedPrice> = {}
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (!isStampedPrice(entry)) continue
+    if (!Number.isFinite(entry.price) || !Number.isFinite(entry.fetchedAt))
+      continue
+    stamps[key] = entry
+  }
+  return stamps
 }
 
 const isStampedPrice = (value: unknown): value is StampedPrice => {
