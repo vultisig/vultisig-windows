@@ -23,22 +23,18 @@ describe('getPersonalSignMessage', () => {
     )
   })
 
-  // Issue: bytesCount comes from the page and is never checked against the
-  // message, so the popup shows one message while the signature covers another.
-  // `it.fails` keeps CI green while the bug exists and fails once it is fixed,
-  // at which point the `.fails` should be removed.
-  it.fails(
-    'signs the message that the popup shows, whatever bytesCount says',
-    () => {
-      const shownMessage = '2hello world!'
+  // Issue #5119: bytesCount comes from the page and is never checked against
+  // the message, so the popup shows one message while the signature covers
+  // another. The two tests below fail until that is fixed.
+  it('signs the message that the popup shows, whatever bytesCount says', () => {
+    const shownMessage = '2hello world!'
 
-      expect(getSignedDigest({ message: shownMessage, bytesCount: 1 })).toBe(
-        withoutHexPrefix(hashMessage(shownMessage))
-      )
-    }
-  )
+    expect(getSignedDigest({ message: shownMessage, bytesCount: 1 })).toBe(
+      withoutHexPrefix(hashMessage(shownMessage))
+    )
+  })
 
-  it.fails('ignores a bytesCount that does not match a hex message', () => {
+  it('ignores a bytesCount that does not match a hex message', () => {
     const shownBytes = Uint8Array.from(
       Buffer.from('3268656c6c6f20776f726c6421', 'hex')
     )
