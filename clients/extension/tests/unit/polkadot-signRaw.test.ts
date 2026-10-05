@@ -47,11 +47,10 @@ describe('Polkadot signRaw', () => {
     expect(mockCallPopup).toHaveBeenCalledTimes(1)
   })
 
-  // Issue: the data is signed as is. polkadot-js wraps raw data in
+  // Issue #5118: the data is signed as is. polkadot-js wraps raw data in
   // `<Bytes>...</Bytes>` so it can never be a valid extrinsic signing payload.
-  // `it.fails` keeps CI green while the bug exists and fails once it is fixed,
-  // at which point remove the `.fails`.
-  it.fails('wraps the data in <Bytes> tags before signing', async () => {
+  // This test fails until that is fixed.
+  it('wraps the data in <Bytes> tags before signing', async () => {
     await signRaw('0x68656c6c6f')
 
     expect(getSignedMessageBytes().toString()).toBe('<Bytes>hello</Bytes>')
