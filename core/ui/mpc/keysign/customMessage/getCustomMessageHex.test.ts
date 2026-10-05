@@ -32,11 +32,11 @@ describe('getCustomMessageHex', () => {
     ).toBe(Buffer.from('Sign in to example.com').toString('hex'))
   })
 
-  // Issue: custom messages are signed as raw bytes with no domain separation,
-  // so a transaction can go through the message flow and the signature works
-  // as a transaction signature. `it.fails` keeps CI green while the bug
-  // exists and fails once it is fixed, at which point remove the `.fails`.
-  it.fails('refuses to sign a Solana transaction message as a message', () => {
+  // Issue #5118: custom messages are signed as raw bytes with no domain
+  // separation, so a transaction can go through the message flow and the
+  // signature works as a transaction signature. The two tests below fail
+  // until that is fixed.
+  it('refuses to sign a Solana transaction message as a message', () => {
     expect(() =>
       getCustomMessageHex({
         chain: Chain.Solana,
@@ -46,7 +46,7 @@ describe('getCustomMessageHex', () => {
     ).toThrow()
   })
 
-  it.fails('refuses to sign an XRPL transaction hash as a message', () => {
+  it('refuses to sign an XRPL transaction hash as a message', () => {
     expect(() =>
       getCustomMessageHex({
         chain: Chain.Ripple,
