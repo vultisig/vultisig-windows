@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { TFunction } from 'i18next'
@@ -45,5 +46,5 @@ export const getSendMemoError = ({
   t,
 }: GetSendMemoErrorInput): string | undefined =>
   memo?.trim() && isOneOf(chain, chainsWithoutMemoSupport)
-    ? t('send_memo_not_supported', { chain })
+    ? t('send_memo_not_supported', { chain: getChainDisplayName(chain) })
     : undefined
