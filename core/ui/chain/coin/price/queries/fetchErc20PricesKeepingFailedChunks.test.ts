@@ -275,7 +275,9 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
     const failed = run([cake, y], async () => {
       throw new Error('down')
     })
-    const assertion = expect(failed).rejects.toThrow()
+    const assertion = expect(failed).rejects.toThrow(
+      'every contract price batch failed'
+    )
     await vi.advanceTimersByTimeAsync(erc20PriceRetryDelayMs)
     await assertion
   })
