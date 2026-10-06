@@ -11,14 +11,13 @@ import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getKeysignLimitSwapCancel } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapCancel'
 import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
-import { getKeysignSwapKitDepositRecipient } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapKitDepositRecipient'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
-import { attempt } from '@vultisig/lib-utils/attempt'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { getSwapKitDepositUnverifiableMessage } from '../../tx/swap/getSwapKitDepositUnverifiableMessage'
 import { JoinKeysignButton } from './JoinKeysignButton'
 import { JoinKeysignLimitOrderCancelVerify } from './JoinKeysignLimitOrderCancelVerify'
 import { JoinKeysignLimitOrderVerify } from './JoinKeysignLimitOrderVerify'
@@ -106,8 +105,10 @@ export const JoinKeysignTransactionVerify = ({
   // would contribute a signature to bytes nobody on this screen has read.
   const disabled = 'unreadable' in kamino || termsAccepted.some(term => !term)
   // Whichever view renders it, a SwapKit deposit the signer would refuse is not joinable.
-  const isDepositUnverifiable =
-    'error' in attempt(() => getKeysignSwapKitDepositRecipient(value))
+  const depositUnverifiableMessage = getSwapKitDepositUnverifiableMessage(
+    value,
+    t
+  )
 
   return (
     <>
@@ -136,8 +137,8 @@ export const JoinKeysignTransactionVerify = ({
           disabled={
             'unreadable' in kamino
               ? t('kamino_earn_unreadable_title')
-              : isDepositUnverifiable
-                ? `${t('swap_deposit_address')}: ${t('swap_deposit_address_unverifiable')}`
+              : depositUnverifiableMessage
+                ? depositUnverifiableMessage
                 : disabled
                   ? t('terms_required')
                   : undefined
