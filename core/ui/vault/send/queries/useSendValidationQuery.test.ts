@@ -85,6 +85,8 @@ describe('useSendValidationQuery token funding', () => {
       chain: Chain.Ripple,
       id: 'RLUSD.issuer',
       address: 'rSender',
+      ticker: 'RLUSD',
+      decimals: 15,
     })
     mocks.amount.mockReturnValue(50n)
     mocks.balance.mockImplementation(({ id }: { id?: string }) =>
@@ -188,6 +190,8 @@ describe('useSendValidationQuery token funding', () => {
         chain: Chain.Ton,
         id: usdt,
         address: 'UQCvaZohosTA0ak9ZFMs-cvL1JrXqogqJH8sI2uO6k8clJpn',
+        ticker: 'USDT',
+        decimals: 6,
       })
       // The relay commission is charged in the jetton itself.
       mocks.feePaidInCoin.mockReturnValue(true)
