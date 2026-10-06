@@ -1,4 +1,4 @@
-type AdjustAmountForFeeInput = {
+type ClampToMaxSendableInput = {
   amount: bigint
   balance: bigint
   /**
@@ -18,11 +18,11 @@ type AdjustAmountForFeeInput = {
  * whose fee swallows the whole balance, since there is nothing left to adjust
  * to.
  */
-export const adjustAmountForFee = ({
+export const clampToMaxSendable = ({
   amount,
   balance,
   maxSendable,
-}: AdjustAmountForFeeInput): bigint => {
+}: ClampToMaxSendableInput): bigint => {
   if (amount > balance) {
     return amount
   }

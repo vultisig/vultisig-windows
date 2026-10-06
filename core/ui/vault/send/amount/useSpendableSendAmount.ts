@@ -5,7 +5,7 @@ import { useIsSendFeePaidInCoin } from '../fee/useIsSendFeePaidInCoin'
 import { useSendBalanceQuery } from '../queries/useSendBalanceQuery'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
-import { adjustAmountForFee } from './adjustAmountForFee'
+import { clampToMaxSendable } from './clampToMaxSendable'
 import { useSendMaxSendable } from './useSendMaxSendable'
 
 /**
@@ -36,5 +36,5 @@ export const useSpendableSendAmount = () => {
     return amount
   }
 
-  return adjustAmountForFee({ amount, balance, maxSendable })
+  return clampToMaxSendable({ amount, balance, maxSendable })
 }

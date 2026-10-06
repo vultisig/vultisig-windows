@@ -149,11 +149,10 @@ export const ManageAmountInputField = () => {
   // The fee is estimated for a concrete receiver, so without one the query
   // stays idle and never settles. Waiting on it would lock the field for good,
   // and any fee kept from a previous receiver is stale.
-  const isFeeEstimateUnavailable = !receiver
+  const isReceiverMissing = !receiver
   const suggestionsUnavailableReason = (() => {
     if (!hasBalance || !isNative) return null
-    if (isFeeEstimateUnavailable)
-      return t('send_enter_address_first_for_percentage')
+    if (isReceiverMissing) return t('send_enter_address_first_for_percentage')
     if (maxSendableError)
       return getBuildKeysignPayloadErrorMessage(maxSendableError, t)
     return null
@@ -161,7 +160,7 @@ export const ManageAmountInputField = () => {
   const isWaitingForFee =
     (pendingSuggestion != null &&
       isNative &&
-      !isFeeEstimateUnavailable &&
+      !isReceiverMissing &&
       isMaxSendablePending) ||
     isAllowDeathSyncing
 

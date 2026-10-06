@@ -2,7 +2,7 @@ import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendable
 import { Chain } from '@vultisig/core-chain/Chain'
 import { describe, expect, it } from 'vitest'
 
-import { adjustAmountForFee } from './adjustAmountForFee'
+import { clampToMaxSendable } from './clampToMaxSendable'
 
 type AdjustInput = {
   chain?: Chain
@@ -19,13 +19,13 @@ const adjust = ({
   fee,
   allowDeath,
 }: AdjustInput) =>
-  adjustAmountForFee({
+  clampToMaxSendable({
     amount,
     balance,
     maxSendable: getMaxSendableAmount({ chain, balance, fee, allowDeath }),
   })
 
-describe('adjustAmountForFee', () => {
+describe('clampToMaxSendable', () => {
   it('adjusts down to balance - fee when only the fee overshoots', () => {
     expect(adjust({ amount: 95n, balance: 100n, fee: 6n })).toBe(94n)
   })
