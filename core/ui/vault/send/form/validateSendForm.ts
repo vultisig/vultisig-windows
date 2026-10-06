@@ -9,6 +9,7 @@ import {
   getEvmDangerousReason,
 } from '@vultisig/core-chain/security/dangerousAddresses'
 import { isValidRecipient } from '@vultisig/core-chain/utils/isValidRecipient'
+import { BuildKeysignPayloadShortfall } from '@vultisig/core-mpc/keysign/error'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
@@ -66,25 +67,23 @@ export const validateSendReceiver = ({
   }
 }
 
-type GetSendFundsErrorInput = {
+type GetSendFundsShortfallInput = {
   coin: SendFormShape['coin']
   amount: bigint
   balance: bigint
   fee?: bigint
   nativeBalance?: bigint
   isFeePaidInCoin: boolean
-  t: TFunction
 }
 
-const getSendFundsError = ({
+const getSendFundsShortfall = ({
   coin,
   amount,
   balance,
   fee,
   nativeBalance,
   isFeePaidInCoin,
-  t,
-}: GetSendFundsErrorInput): string | undefined => {
+}: GetSendFundsShortfallInput): BuildKeysignPayloadShortfall | undefined => {
   if (
     !isFeePaidInCoin &&
     nativeBalance != null &&
@@ -92,44 +91,27 @@ const getSendFundsError = ({
     nativeBalance < fee
   ) {
     const { ticker, decimals } = chainFeeCoin[coin.chain]
-    return getInsufficientFundsMessage(
-      {
-        required: fee,
-        available: nativeBalance,
-        ticker,
-        decimals,
-        includesNetworkCosts: true,
-      },
-      t
-    )
-  }
-
-  const { ticker, decimals } = coin
-  if (isFeePaidInCoin && fee != null) {
-    if (amount + fee <= balance) return undefined
-    return getInsufficientFundsMessage(
-      {
-        required: amount + fee,
-        available: balance,
-        ticker,
-        decimals,
-        includesNetworkCosts: true,
-      },
-      t
-    )
-  }
-
-  if (amount <= balance) return undefined
-  return getInsufficientFundsMessage(
-    {
-      required: amount,
-      available: balance,
+    return {
+      required: fee,
+      available: nativeBalance,
       ticker,
       decimals,
-      includesNetworkCosts: false,
-    },
-    t
-  )
+      includesNetworkCosts: true,
+    }
+  }
+
+  const includesNetworkCosts = isFeePaidInCoin && fee != null
+  const required = includesNetworkCosts ? amount + fee : amount
+  if (required <= balance) return undefined
+
+  const { ticker, decimals } = coin
+  return {
+    required,
+    available: balance,
+    ticker,
+    decimals,
+    includesNetworkCosts,
+  }
 }
 
 export const validateSendForm = (
@@ -171,17 +153,16 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else {
-    const fundsError = getSendFundsError({
+    const shortfall = getSendFundsShortfall({
       coin,
       amount,
       balance,
       fee,
       nativeBalance,
       isFeePaidInCoin,
-      t,
     })
-    if (fundsError) {
-      errors.amount = fundsError
+    if (shortfall) {
+      errors.amount = getInsufficientFundsMessage(shortfall, t)
     }
 
     if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {
