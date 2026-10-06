@@ -1,6 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { TokenVerificationBadge } from '@core/ui/chain/coin/verification/TokenVerificationBadge'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -111,7 +112,7 @@ export const CustomTokenResult = ({
                   <TokenVerificationBadge value={coin} />
                 </HStack>
                 <Text color="shy" size={12} cropped>
-                  {coin.chain}
+                  {getChainDisplayName(coin.chain)}
                 </Text>
               </VStack>
             </HStack>

@@ -464,7 +464,6 @@ export const hr = {
     'Provjerite je li zaslon dobro osvjetljen i bez odsjaja',
   having_trouble_scanning_tip_3: 'Drzite oba uredaja mirno trenutak',
   hide_balance: 'Sakrij stanje',
-  hide_defi_balance: 'Sakrij DeFi stanje',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
     'Ova IBC transakcija uključuje memorandum, ali {{productName}} trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
@@ -479,10 +478,11 @@ export const hr = {
   seedPhraseImportTip: 'Savjet: Možete koristiti preglednik kao uređaj',
   enter_your_seedphrase: 'Unesite svoju početnu frazu',
   enter_seedphrase_subtitle:
-    'Ostavite razmak između svake riječi. Podržane su početne fraze od <h>12 ili 24 riječi</h>.',
-  mnemonic_placeholder: 'Unesite 12 ili 24 riječi vaše početne fraze',
+    'Ostavite razmak između svake riječi. Podržane duljine:<h> 12, 15, 18, 21 ili 24 riječi</h>',
+  mnemonic_placeholder:
+    'Unesite 12, 15, 18, 21 ili 24 riječi vaše početne fraze',
   seedphrase_word_count_error:
-    'Unijeli ste {{count}} riječi. Početna fraza mora biti dugačka 12 ili 24',
+    'Unijeli ste {{count}} riječi. Početna fraza mora imati 12, 15, 18, 21 ili 24 riječi.',
   seedphrase_invalid_error:
     'Početna fraza nije ispravna, molimo provjerite sve riječi.',
   seedphrase_duplicate_vault_error:
@@ -622,7 +622,6 @@ export const hr = {
   next_payout: 'Sljedeća isplata',
   estimated_reward: 'Procijenjena nagrada',
   next_churn: 'Sljedeća rotacija',
-  next_award: 'Sljedeća nagrada',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: 'Još nema trezora',
@@ -875,7 +874,6 @@ export const hr = {
     'Podijelite svoj jedinstveni referalni kod kako biste pozvali prijatelje. Oni dobivaju popust i što više trguju, to više zarađujete — izravno u svoj novčanik.',
   shares: 'Dionice',
   show_balance: 'Prikaži stanje',
-  show_defi_balance: 'Prikaži DeFi stanje',
   sign: 'Potpiši',
   signAmino: 'Amino znak',
   signDirect: 'Direct znak',
@@ -1910,6 +1908,7 @@ export const hr = {
   kamino_earn_card_withdraw: 'Povući',
   kamino_earn_deposited: 'Položeno: {{amount}}',
   kamino_earn_earned: 'Zarađeno: {{amount}}',
+  kamino_earn_lost: 'Izgubljeno: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'na {{chain}}',
   max_total_fee: 'Maks. ukupna naknada',
@@ -1942,9 +1941,9 @@ export const hr = {
   ton_tx_failure_wallet_id_mismatch:
     'Transakcija je izrađena za drugačiju verziju ugovora o novčaniku od one koja je implementirana na ovoj adresi.',
   ton_tx_failure_insufficient_funds:
-    'Nema dovoljno TON za pokrivanje iznosa plus mrežnih naknada. Ostavite oko 0,05 TON rezerve za naknade i pokušajte ponovno.',
+    'Nema dovoljno GRAM za pokrivanje iznosa plus mrežnih naknada. Ostavite oko 0,05 GRAM rezerve za naknade i pokušajte ponovno.',
   ton_tx_failure_out_of_gas:
-    'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još TON transferu i pokušajte ponovno.',
+    'Transakcija je ostala bez goriva prije nego što je mogla završiti. Priložite još GRAM transferu i pokušajte ponovno.',
   ton_tx_failure_invalid_destination:
     'Odredišna adresa nije valjana na TON. Provjerite adresu i pokušajte ponovno.',
   ton_tx_failure_not_enough_jettons:
@@ -1979,7 +1978,7 @@ export const hr = {
     'Koristite W5 (v5r1) ugovor umjesto V4R2 prilikom izvođenja TON adresa ovog trezora. To mijenja koju adresu novčanik koristi, a svaki ugovor je zasebna adresa sa svojim vlastitim stanjem - ne prenosi nikakva sredstva, tako da sve što se nalazi na drugoj adresi ostaje tamo dok to ne pošaljete.',
   ton_gasless_pay_fee_in_token: 'Platite mrežnu naknadu u {{ticker}}',
   ton_gasless_description:
-    'Nije potreban TON : relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju {{ticker}} .',
+    'Nije potreban GRAM: relej plaća mrežni plin i umjesto toga naplaćuje malu proviziju u {{ticker}}.',
   ton_gasless_fee_note: 'plaćeno putem releja',
   max_network_fee: 'Maks. mrežna naknada',
   swap_failed_refunded: 'Povrat novca izvršio je pružatelj zamjene',
@@ -2003,4 +2002,19 @@ export const hr = {
     'Nismo otkrili nikakvu imovinu na lancima koje smo mogli provjeriti.',
   unscanned_chains_warning:
     'Nismo mogli provjeriti stanje na ovim blockchain mrežama. Ako imate sredstava na njima, odaberite ih ručno:',
+  substrate_allow_death_toggle: 'Ispraznite račun',
+  substrate_allow_death_description:
+    'Šalje cijeli saldo umanjen za mrežnu naknadu i zatvara račun. Sve što ostane ispod egzistencijalnog pologa se uništava.',
+  substrate_allow_death_review_warning:
+    'Ovim prijenosom se prazni vaš račun. Račun se deaktivira, a sav preostali saldo ispod egzistencijalnog pologa se uništava.',
+  next_reward: 'Sljedeća nagrada',
+  last_reward: 'Posljednja nagrada',
+  total_rewards_earned: 'Ukupno osvojenih nagrada',
+  upcoming: 'Nadolazeće',
+  bond_reward_history_node: 'Čvor: {{address}}',
+  bond_reward_history_error: 'Nije moguće učitati povijest nagrada',
+  send_amount_reduced_at_review:
+    'Mrežna naknada ili vaš saldo promijenili su se nakon što ste postavili iznos, pa je iznos smanjen s {{requestedAmount}} na {{amount}}.',
+  send_enter_address_first_for_percentage:
+    'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
 }

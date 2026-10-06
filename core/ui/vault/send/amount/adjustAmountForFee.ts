@@ -6,6 +6,11 @@ type AdjustAmountForFeeInput = {
   amount: bigint
   balance: bigint
   fee: bigint
+  /**
+   * The send empties the account, so nothing is kept back for the existential
+   * deposit.
+   */
+  allowDeath?: boolean
 }
 
 /**
@@ -24,12 +29,13 @@ export const adjustAmountForFee = ({
   amount,
   balance,
   fee,
+  allowDeath,
 }: AdjustAmountForFeeInput): bigint => {
   if (amount > balance) {
     return amount
   }
 
-  const spendable = getMaxSendableAmount({ chain, balance, fee })
+  const spendable = getMaxSendableAmount({ chain, balance, fee, allowDeath })
 
   if (amount <= spendable) {
     return amount

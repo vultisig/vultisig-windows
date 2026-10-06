@@ -72,8 +72,10 @@ type ManagedExtensionNotificationSocket = {
 
 /**
  * WebSocket client for opted-in vaults (same server stream as desktop). Shows the
- * in-app keysign banner when the extension UI is open; push is still handled by
- * the service worker when the UI is closed.
+ * in-app keysign banner while the extension UI is open. On Chromium the system
+ * notification always comes from the service worker's Web Push handler, so a
+ * request is announced once whether or not the UI is open; on Firefox, which has
+ * no push path, this client shows it.
  */
 export const ExtensionNotificationManager = () => {
   const { t } = useTranslation()
@@ -225,45 +227,50 @@ export const ExtensionNotificationManager = () => {
         bringAppToFront: () => {
           window.focus()
         },
-        showOsNotification: ({ title, body, onClick }) => {
-          if (typeof chrome === 'undefined' || !chrome.notifications) {
-            return
-          }
-          const notificationId = `vultisig-keysign-${crypto.randomUUID()}`
-          function teardown() {
-            activeNotificationTeardowns.delete(teardown)
-            chrome.notifications.onClicked.removeListener(handleClick)
-            chrome.notifications.onClosed.removeListener(handleClosed)
-          }
-          activeNotificationTeardowns.add(teardown)
-          function handleClosed(closedId: string) {
-            if (closedId !== notificationId) {
-              return
+        // On Chromium every request delivered here also arrives as a Web Push,
+        // and the service worker shows the system notification for it, so one
+        // from this page would be a duplicate. Firefox has no push path.
+        showOsNotification: __IS_FIREFOX_EXTENSION_BUILD__
+          ? ({ title, body, onClick }) => {
+              if (typeof chrome === 'undefined' || !chrome.notifications) {
+                return
+              }
+              const notificationId = `vultisig-keysign-${crypto.randomUUID()}`
+              function teardown() {
+                activeNotificationTeardowns.delete(teardown)
+                chrome.notifications.onClicked.removeListener(handleClick)
+                chrome.notifications.onClosed.removeListener(handleClosed)
+              }
+              activeNotificationTeardowns.add(teardown)
+              function handleClosed(closedId: string) {
+                if (closedId !== notificationId) {
+                  return
+                }
+                teardown()
+              }
+              function handleClick(clickedId: string) {
+                if (clickedId !== notificationId) {
+                  return
+                }
+                teardown()
+                window.focus()
+                onClick?.()
+              }
+              chrome.notifications.onClicked.addListener(handleClick)
+              chrome.notifications.onClosed.addListener(handleClosed)
+              void chrome.notifications
+                .create(notificationId, {
+                  type: 'basic',
+                  iconUrl: chrome.runtime.getURL('icon128.png'),
+                  title,
+                  message: body,
+                  requireInteraction: true,
+                })
+                .catch(() => {
+                  teardown()
+                })
             }
-            teardown()
-          }
-          function handleClick(clickedId: string) {
-            if (clickedId !== notificationId) {
-              return
-            }
-            teardown()
-            window.focus()
-            onClick?.()
-          }
-          chrome.notifications.onClicked.addListener(handleClick)
-          chrome.notifications.onClosed.addListener(handleClosed)
-          void chrome.notifications
-            .create(notificationId, {
-              type: 'basic',
-              iconUrl: chrome.runtime.getURL('icon128.png'),
-              title,
-              message: body,
-              requireInteraction: true,
-            })
-            .catch(() => {
-              teardown()
-            })
-        },
+          : undefined,
       })
     }
 

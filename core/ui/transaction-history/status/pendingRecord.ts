@@ -6,7 +6,11 @@ export const pendingStatuses: TransactionRecordStatus[] = [
   'pending',
 ]
 
-const settledStatuses: TransactionRecordStatus[] = ['confirmed', 'failed']
+/** The statuses a transaction holds once the chain has given its verdict. */
+export const settledStatuses: TransactionRecordStatus[] = [
+  'confirmed',
+  'failed',
+]
 
 /**
  * The statuses worth asking the chain about. A `signed` record is not in

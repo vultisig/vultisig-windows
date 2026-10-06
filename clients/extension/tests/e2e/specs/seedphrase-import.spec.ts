@@ -80,7 +80,7 @@ test.describe('Seedphrase Import', () => {
     await seedphraseWizard.enterSeedphrase(INVALID_MNEMONIC)
 
     await expect(seedphraseWizard.validationError).toContainText(
-      /12 or 24|not correct/i
+      /12, 15, 18, 21 or 24|not correct/i
     )
     await expect(seedphraseWizard.continueButton).toBeDisabled()
 

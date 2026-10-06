@@ -2,7 +2,12 @@ import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { KeplrSuggestedChainsRecord } from '@core/extension/storage/keplrSuggestedChains'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { ChainInfo } from '@keplr-wallet/types'
-import { Chain, CosmosChain, OtherChain } from '@vultisig/core-chain/Chain'
+import {
+  Chain,
+  CosmosChain,
+  EvmChain,
+  OtherChain,
+} from '@vultisig/core-chain/Chain'
 import { ChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CoinKey, CoinMetadata, Token } from '@vultisig/core-chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
@@ -33,10 +38,16 @@ export type GetAccountInput = {
 
 type BroadcastTxChain = CosmosChain | OtherChain.QBTC
 
+/**
+ * Methods the inpage provider can call on the background. Pages can post
+ * these directly, so anything that needs user approval must open its popup
+ * from the resolver rather than rely on the inpage provider.
+ */
 export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   setAppChain: Method<SetAppChainInput>
   getAppChain: GetAppChainMethod
+  getEvmSigningChain: Method<{ account: string }, EvmChain>
   getAccount: Method<GetAccountInput, { address: string; publicKey: string }>
   signOut: Method<{}>
   hasAppSession: Method<{}, boolean>
@@ -62,7 +73,7 @@ export type BackgroundInterface = {
   getIsWalletPrioritized: Method<{}, boolean>
   hasChainInVault: Method<{ chain: Chain }, boolean>
   getKeplrSuggestedChains: Method<{}, KeplrSuggestedChainsRecord>
-  addKeplrSuggestedChain: Method<{ chainInfo: ChainInfo }>
+  suggestKeplrChain: Method<{ chainInfo: ChainInfo }>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

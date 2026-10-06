@@ -90,11 +90,15 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
   },
 }
 
+type RefreshDefiDataProps = {
+  iconSize?: number
+}
+
 /**
  * Refresh button for the DeFi tab: refetches every enabled chain's positions
  * and pool data and invalidates all price queries by category.
  */
-export const RefreshDefiData = () => {
+export const RefreshDefiData = ({ iconSize = 24 }: RefreshDefiDataProps) => {
   const refetchQueries = useRefetchQueries()
   const refetchQueriesByCategory = useRefetchQueriesByCategory()
   const thorchainAddress = useCurrentVaultAddress(Chain.THORChain)
@@ -163,7 +167,7 @@ export const RefreshDefiData = () => {
 
   return (
     <IconButton loading={isPending} onClick={() => refresh()}>
-      <IconWrapper size={24}>
+      <IconWrapper size={iconSize}>
         <RefreshCwIcon />
       </IconWrapper>
     </IconButton>

@@ -1,4 +1,7 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { ManageSendAllowDeath } from '@core/ui/vault/send/allowDeath/ManageSendAllowDeath'
+import { useAllowDeathSendAmount } from '@core/ui/vault/send/allowDeath/useAllowDeathSendAmount'
+import { useSendAllowDeath } from '@core/ui/vault/send/allowDeath/useSendAllowDeath'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
@@ -16,6 +19,7 @@ import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQ
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
+import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -73,6 +77,7 @@ export const ManageAmountInputField = () => {
 
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
+  const [receiver] = useSendReceiver()
   const feeEstimateQuery = useSendFeeEstimateQuery()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
@@ -80,10 +85,19 @@ export const ManageAmountInputField = () => {
   // TON jetton send, whose relay commission comes out of the jetton.
   const isNative = useIsSendFeePaidInCoin()
   const hasBalance = balance != null && balance > 0n
+  const allowDeath = useSendAllowDeath()
+  const { isSyncing: isAllowDeathSyncing } = useAllowDeathSendAmount()
 
+  // Emptying the account is only ever done at the full amount: any other
+  // amount could leave a remainder the chain destroys, so choosing one turns
+  // the option off.
   const handleAmountChange = (amount: bigint | null) => {
     setValue(amount)
+    setPendingSuggestion(null)
     setSelectedSuggestion(null)
+    if (allowDeath.isEnabled) {
+      allowDeath.setEnabled(false)
+    }
   }
 
   // When user clicked a suggestion and we were waiting for fee: apply amount once fee is available
@@ -103,6 +117,7 @@ export const ManageAmountInputField = () => {
             chain: coin.chain,
             balance,
             fee: feeEstimateQuery.data,
+            allowDeath: allowDeath.isEnabled && pendingSuggestion === 1,
           })
         : balance
     const effectiveAmount = isNative
@@ -112,6 +127,7 @@ export const ManageAmountInputField = () => {
     setValue(effectiveAmount)
     setPendingSuggestion(null)
   }, [
+    allowDeath.isEnabled,
     balance,
     coin.chain,
     feeEstimateQuery.data,
@@ -138,8 +154,16 @@ export const ManageAmountInputField = () => {
   const amountError = data?.amount
 
   const error = !!amountError && value ? amountError : undefined
+  // The fee is estimated for a concrete receiver, so without one the query
+  // stays idle and never settles. Waiting on it would lock the field for good,
+  // and any fee kept from a previous receiver is stale.
+  const isFeeEstimateUnavailable = !receiver
   const isWaitingForFee =
-    pendingSuggestion != null && isNative && feeEstimateQuery.isPending
+    (pendingSuggestion != null &&
+      isNative &&
+      !isFeeEstimateUnavailable &&
+      feeEstimateQuery.isPending) ||
+    isAllowDeathSyncing
 
   // Announced while the field still holds the typed amount — the write itself
   // happens on submit — so the user learns what will be sent before committing
@@ -151,7 +175,10 @@ export const ManageAmountInputField = () => {
   const spendableAmount = useSpendableSendAmount()
   const isFormClean = data === undefined || isRecordEmpty(data)
   const adjustedAmount =
-    isFormClean && spendableAmount !== null && spendableAmount !== value
+    isFormClean &&
+    !isAllowDeathSyncing &&
+    spendableAmount !== null &&
+    spendableAmount !== value
       ? formatAmount(fromChainAmount(spendableAmount, coin.decimals), coin)
       : null
 
@@ -243,6 +270,7 @@ export const ManageAmountInputField = () => {
                         chain: coin.chain,
                         balance,
                         fee: feeEstimateQuery.data,
+                        allowDeath: allowDeath.isEnabled && suggestion === 1,
                       })
                     : (balance ?? 0n)
                 const effectiveAmount =
@@ -254,6 +282,10 @@ export const ManageAmountInputField = () => {
 
                 const handleSuggestionClick = () => {
                   if (balance == null) return
+
+                  if (allowDeath.isEnabled && suggestion !== 1) {
+                    allowDeath.setEnabled(false)
+                  }
 
                   setSelectedSuggestion({
                     coin: extractCoinKey(coin),
@@ -279,18 +311,26 @@ export const ManageAmountInputField = () => {
                     key={suggestion}
                     value={suggestion}
                     onClick={handleSuggestionClick}
-                    disabled={!hasBalance}
+                    disabled={
+                      !hasBalance || (isNative && isFeeEstimateUnavailable)
+                    }
                     isActive={
-                      selectedSuggestion !== null &&
-                      selectedSuggestion.fraction === suggestion &&
-                      areEqualCoins(selectedSuggestion.coin, coin) &&
-                      value === effectiveAmount
+                      (allowDeath.isEnabled && suggestion === 1) ||
+                      (selectedSuggestion !== null &&
+                        selectedSuggestion.fraction === suggestion &&
+                        areEqualCoins(selectedSuggestion.coin, coin) &&
+                        value === effectiveAmount)
                     }
                   />
                 )
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
+            {!error && hasBalance && isNative && isFeeEstimateUnavailable ? (
+              <Text size={12} color="shy">
+                {t('send_enter_address_first_for_percentage')}
+              </Text>
+            ) : null}
             {adjustedAmount !== null ? (
               <Text size={12} color="shy">
                 {t('send_amount_adjusted_for_fee', { amount: adjustedAmount })}
@@ -319,6 +359,7 @@ export const ManageAmountInputField = () => {
       <ManageMemo />
       <ManageDestinationTag />
       <ManageTonGaslessFee />
+      <ManageSendAllowDeath />
     </SendInputContainer>
   )
 }

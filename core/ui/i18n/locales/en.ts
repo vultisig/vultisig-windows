@@ -551,7 +551,6 @@ export const en = {
   having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
   high_24h: '24h High',
   hide_balance: 'Hide balance',
-  hide_defi_balance: 'Hide DeFi balance',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
     'This IBC transaction includes a memo, but {{productName}} currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
@@ -567,10 +566,11 @@ export const en = {
   seedPhraseImportTip: 'Tip: You can use a browser as a device',
   enter_your_seedphrase: 'Enter your seed phrase',
   enter_seedphrase_subtitle:
-    'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
-  mnemonic_placeholder: 'Enter the 12 or 24 words of your seedphrase',
+    'Leave a space between each word. Supported lengths: <h>12, 15, 18, 21 or 24 words</h>',
+  mnemonic_placeholder:
+    'Enter the 12, 15, 18, 21 or 24 words of your seedphrase',
   seedphrase_word_count_error:
-    'You entered {{count}} words. Seed phrase must be 12 or 24',
+    'You entered {{count}} words. Seed phrase must be 12, 15, 18, 21 or 24 words',
   seedphrase_invalid_error:
     'Seed phrase is not correct, please verify all words.',
   seedphrase_duplicate_vault_error:
@@ -741,7 +741,12 @@ export const en = {
   next_payout: 'Next payout',
   estimated_reward: 'Estimated reward',
   next_churn: 'Next churn',
-  next_award: 'Next award',
+  next_reward: 'Next Reward',
+  last_reward: 'Last Reward',
+  total_rewards_earned: 'Total Rewards Earned',
+  upcoming: 'Upcoming',
+  bond_reward_history_node: 'Node: {{address}}',
+  bond_reward_history_error: "Couldn't load reward history",
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: 'No vaults yet',
@@ -954,6 +959,11 @@ export const en = {
   ripple_field_destination_tag: 'Destination tag',
   substrate_account_may_be_reaped:
     'The sender has allowed this transfer to empty the account: if the balance it leaves is below the existential deposit, the remainder is destroyed and the account is deactivated.',
+  substrate_allow_death_toggle: 'Empty the account',
+  substrate_allow_death_description:
+    'Sends the whole balance minus the network fee and closes the account. Anything left below the existential deposit is destroyed.',
+  substrate_allow_death_review_warning:
+    'This transfer empties your account. The account is deactivated, and any balance left below the existential deposit is destroyed.',
   ripple_destination_tag_invalid:
     'Enter a whole number between 0 and 4,294,967,295.',
   ripple_destination_tag_optional: 'Optional destination tag',
@@ -1066,7 +1076,11 @@ export const en = {
   sends: 'Sends',
   send_amount_adjusted_for_fee:
     'Amount adjusted to {{amount}} to cover the network fee',
+  send_enter_address_first_for_percentage:
+    'Enter the recipient address first to use the percentage buttons',
   send_amount_exceeds_balance: 'Amount exceeds balance',
+  send_amount_reduced_at_review:
+    'The network fee or your balance changed after you set the amount, so the amount was lowered from {{requestedAmount}} to {{amount}}.',
   send_invalid_receiver_address: 'Wrong address for selected chain',
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_overview: 'Send Overview',
@@ -1112,7 +1126,6 @@ export const en = {
   shares: 'Shares',
   show_balance: 'Show balance',
   show_exact_error: 'Show exact error',
-  show_defi_balance: 'Show DeFi balance',
   sign: 'Sign',
   signAmino: 'Amino Sign',
   signDirect: 'Direct Sign',
@@ -1511,6 +1524,7 @@ export const en = {
   kamino_earn_card_withdraw: 'Withdraw',
   kamino_earn_deposited: 'Deposited: {{amount}}',
   kamino_earn_earned: 'Earned: {{amount}}',
+  kamino_earn_lost: 'Lost: {{amount}}',
   kamino_earn_positions_unavailable:
     'Balances could not be loaded. The vaults shown are up to date.',
   kamino_earn_protocol: 'Kamino',
@@ -1940,9 +1954,9 @@ export const en = {
   ton_tx_failure_wallet_id_mismatch:
     'The transaction was built for a different wallet contract version than the one deployed at this address.',
   ton_tx_failure_insufficient_funds:
-    'Not enough TON to cover the amount plus network fees. Keep about 0.05 TON spare for fees and try again.',
+    'Not enough GRAM to cover the amount plus network fees. Keep about 0.05 GRAM spare for fees and try again.',
   ton_tx_failure_out_of_gas:
-    'The transaction ran out of gas before it could finish. Attach more TON to the transfer and try again.',
+    'The transaction ran out of gas before it could finish. Attach more GRAM to the transfer and try again.',
   ton_tx_failure_invalid_destination:
     'The destination address is not valid on TON. Check the address and try again.',
   ton_tx_failure_not_enough_jettons:
@@ -1967,7 +1981,7 @@ export const en = {
     'This token copies the name of a verified token but lives at a different contract address. It is a counterfeit — do not trust it.',
   ton_gasless_pay_fee_in_token: 'Pay network fee in {{ticker}}',
   ton_gasless_description:
-    'No TON needed: a relay pays the network gas and charges a small {{ticker}} commission instead.',
+    'No GRAM needed: a relay pays the network gas and charges a small {{ticker}} commission instead.',
   ton_gasless_fee_note: 'paid via relay',
   enable_ton_w5_wallet: 'Use TON W5 wallet',
   enable_ton_w5_wallet_description:

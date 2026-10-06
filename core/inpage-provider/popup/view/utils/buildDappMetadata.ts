@@ -3,7 +3,7 @@ import { BridgeContext } from '@lib/extension/bridge/context'
 import {
   DAppMetadata,
   DAppMetadataSchema,
-} from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/dapp_metadata_pb'
 
 export const buildDappMetadata = ({
   requestFavicon,

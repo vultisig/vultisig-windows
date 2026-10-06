@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
 import { Entry } from '@vultisig/lib-utils/entities/Entry'
 import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useMemo } from 'react'
@@ -39,12 +40,20 @@ export type VaultFoldersStorage = {
   createVaultFolder: CreateVaultFolderFunction
 }
 
+/**
+ * Loads the vault folders sorted by their saved `order`, so every client shows
+ * them in the same order regardless of how its storage returns them.
+ */
 export const useVaultFoldersQuery = () => {
   const { getVaultFolders } = useCore()
 
   return useQuery({
     queryKey: [StorageKey.vaultFolders],
-    queryFn: getVaultFolders,
+    queryFn: async () => {
+      const folders = await getVaultFolders()
+
+      return sortEntitiesWithOrder(folders)
+    },
     ...noRefetchQueryOptions,
   })
 }

@@ -5,6 +5,7 @@ import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -14,6 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
@@ -32,6 +34,12 @@ import { SwapFiatAmount } from './SwapFiatAmount'
 
 type ManageFromAmountProps = {
   coinPill: ReactNode
+}
+
+type SelectedSuggestion = {
+  coin: CoinKey
+  fraction: number
+  amount: bigint
 }
 
 type FromAmountInputMode = 'token' | 'fiat'
@@ -131,6 +139,10 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
   const trimmedDecimalString = toTokenInputValue(value)
   const [inputValue, setInputValue] = useState<string>(trimmedDecimalString)
   const [fiatInputValue, setFiatInputValue] = useState<string>('')
+  // The pick only shows while the field still holds the amount it produced
+  // for the coin it was made for, so typing or switching coin clears it.
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<SelectedSuggestion | null>(null)
   const isFeeCoinSelected = isFeeCoin(fromCoinKey)
 
   useEffect(() => {
@@ -304,7 +316,7 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
         success={amount => (
           <SuggestionRow alignItems="center" gap={8}>
             {suggestions.map(suggestion => (
-              <AmountSuggestion
+              <SwapAmountSuggestion
                 onClick={() => {
                   const suggestionAmount = multiplyBigInt(amount, suggestion)
 
@@ -318,9 +330,20 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
                   setFiatInputValue(toFiatInputValue(suggestionAmount))
                   previousValueRef.current = suggestionAmount
                   setValue(suggestionAmount)
+                  setSelectedSuggestion({
+                    coin: fromCoinKey,
+                    fraction: suggestion,
+                    amount: suggestionAmount,
+                  })
                 }}
                 key={suggestion}
                 value={suggestion}
+                isActive={
+                  selectedSuggestion !== null &&
+                  selectedSuggestion.fraction === suggestion &&
+                  areEqualCoins(selectedSuggestion.coin, fromCoinKey) &&
+                  selectedSuggestion.amount === value
+                }
               />
             ))}
           </SuggestionRow>
@@ -337,6 +360,27 @@ export const ManageFromAmount = ({ coinPill }: ManageFromAmountProps) => {
  */
 const SuggestionRow = styled(HStack)`
   width: 100%;
+`
+
+/**
+ * The shared suggestion is a solid chip; the swap form draws it as an
+ * equal-width outlined capsule that fills with the primary colour when picked. Doubled selector so the overrides win over the
+ * shared component's own rules whatever order the styles are injected in.
+ */
+const SwapAmountSuggestion = styled(AmountSuggestion)<{
+  isActive?: boolean
+}>`
+  && {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    ${borderRadius.pill};
+    background-color: ${({ isActive }) =>
+      isActive ? getColor('buttonPrimary') : 'transparent'};
+    border: 1px solid
+      ${({ isActive }) =>
+        isActive ? getColor('buttonPrimary') : getColor('foregroundExtra')};
+  }
 `
 
 /**
@@ -406,7 +450,7 @@ const FiatAmountInput = styled.input`
   ${fiatInputFont};
 
   &::placeholder {
-    ${text({ color: 'shy', size: 18, weight: '500' })}
+    ${text({ color: 'shy', size: 22, weight: '500' })}
   }
 `
 

@@ -26,8 +26,8 @@ import {
   PolkadotSpecificSchema,
   TransactionType,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { DAppMetadata } from '@vultisig/core-mpc/types/vultisig/keysign/v1/dapp_metadata_pb'
 import {
-  DAppMetadata,
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'

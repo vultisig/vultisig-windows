@@ -34,6 +34,7 @@ vi.mock('@clients/extension/src/inpage/providers/ethereum/handlers', () => ({
 }))
 
 // Now import the class under test and the mocked handlers
+import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { ethereumHandlers } from '@clients/extension/src/inpage/providers/ethereum/handlers'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum/index'
 
@@ -45,6 +46,16 @@ const mockedHandlers = ethereumHandlers as unknown as {
   eth_signTypedData_v4: ReturnType<typeof vi.fn>
   personal_sign: ReturnType<typeof vi.fn>
   wallet_watchAsset: ReturnType<typeof vi.fn>
+}
+
+const flushPromises = () => new Promise(resolve => setTimeout(resolve, 0))
+
+const getEvmChainChangedListener = () => {
+  const call = vi
+    .mocked(addBackgroundEventListener)
+    .mock.calls.find(([event]) => event === 'evmChainChanged')
+
+  return call?.[1] as (chainId: string) => void
 }
 
 describe('Ethereum Provider', () => {
@@ -61,7 +72,8 @@ describe('Ethereum Provider', () => {
         pathname: '/',
       },
     }
-    vi.clearAllMocks()
+    vi.resetAllMocks()
+    mockedHandlers.eth_chainId.mockResolvedValue('0x1')
   })
 
   describe('constructor defaults', () => {
@@ -352,6 +364,237 @@ describe('Ethereum Provider', () => {
       eth.emit('chainChanged', '0xb')
 
       expect(listener).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('chain id sync', () => {
+    it('syncs chainId and networkVersion from the background on creation', async () => {
+      mockedHandlers.eth_chainId.mockResolvedValue('0x89')
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('chainChanged', listener)
+
+      await flushPromises()
+
+      expect(eth.chainId).toBe('0x89')
+      expect(eth.networkVersion).toBe('137')
+      expect(listener).toHaveBeenCalledExactlyOnceWith('0x89')
+    })
+
+    it('updates chainId from an eth_chainId response and emits only on change', async () => {
+      mockedHandlers.eth_chainId.mockResolvedValue('0x1')
+      const eth = new Ethereum()
+      await flushPromises()
+      const listener = vi.fn()
+      eth.on('chainChanged', listener)
+
+      mockedHandlers.eth_chainId.mockResolvedValue('0xa')
+      await eth.request({ method: 'eth_chainId', params: [] })
+      await eth.request({ method: 'eth_chainId', params: [] })
+
+      expect(eth.chainId).toBe('0xa')
+      expect(listener).toHaveBeenCalledExactlyOnceWith('0xa')
+    })
+
+    it('syncs chainId after connecting', async () => {
+      mockedHandlers.eth_chainId.mockResolvedValue('0x1')
+      const eth = new Ethereum()
+      await flushPromises()
+
+      mockedHandlers.eth_chainId.mockResolvedValue('0x89')
+      mockedHandlers.eth_requestAccounts.mockResolvedValue(['0x123'])
+
+      await eth.request({ method: 'eth_requestAccounts', params: [] })
+
+      expect(eth.chainId).toBe('0x89')
+    })
+
+    it('does not emit twice when a background event repeats a synced chain', async () => {
+      mockedHandlers.eth_chainId.mockResolvedValue('0x89')
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('chainChanged', listener)
+      await flushPromises()
+
+      getEvmChainChangedListener()('0x89')
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith('0x89')
+    })
+
+    it('ignores a sync result that arrives after a newer background event', async () => {
+      let resolveInitialSync: (chainId: string) => void = () => {}
+      mockedHandlers.eth_chainId.mockReturnValue(
+        new Promise(resolve => {
+          resolveInitialSync = resolve
+        })
+      )
+      const eth = new Ethereum()
+
+      getEvmChainChangedListener()('0xa')
+      resolveInitialSync('0x89')
+      await flushPromises()
+
+      expect(eth.chainId).toBe('0xa')
+    })
+
+    it('ignores an eth_chainId response that arrives after a newer background event', async () => {
+      mockedHandlers.eth_chainId.mockResolvedValue('0x1')
+      const eth = new Ethereum()
+      await flushPromises()
+      const listener = vi.fn()
+      eth.on('chainChanged', listener)
+
+      let resolveRequest: (chainId: string) => void = () => {}
+      mockedHandlers.eth_chainId.mockReturnValue(
+        new Promise(resolve => {
+          resolveRequest = resolve
+        })
+      )
+      const request = eth.request({ method: 'eth_chainId', params: [] })
+
+      getEvmChainChangedListener()('0xa')
+      resolveRequest('0x89')
+
+      await expect(request).resolves.toBe('0x89')
+      expect(eth.chainId).toBe('0xa')
+      expect(listener).toHaveBeenCalledExactlyOnceWith('0xa')
+    })
+  })
+
+  describe('background accountsChanged event', () => {
+    const getAccountsChangedListener = () => {
+      const call = vi
+        .mocked(addBackgroundEventListener)
+        .mock.calls.find(([event]) => event === 'accountsChanged')
+
+      return call?.[1] as () => Promise<void>
+    }
+
+    it('re-reads the accounts and emits them', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      mockedHandlers.eth_accounts.mockResolvedValue(['0xb0b'])
+
+      await getAccountsChangedListener()()
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith(['0xb0b'])
+    })
+
+    it('emits an empty list when the site has no accounts in the new vault', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      mockedHandlers.eth_accounts.mockResolvedValue([])
+
+      await getAccountsChangedListener()()
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith([])
+    })
+
+    it('updates the network before announcing restored accounts', async () => {
+      const eth = new Ethereum()
+      await flushPromises()
+      const events: string[] = []
+      eth.on('chainChanged', chainId => events.push(chainId))
+      eth.on('accountsChanged', () => events.push(eth.chainId))
+      mockedHandlers.eth_chainId.mockResolvedValue('0x89')
+      mockedHandlers.eth_accounts.mockResolvedValue(['0xb0b'])
+
+      await getAccountsChangedListener()()
+
+      expect(eth.chainId).toBe('0x89')
+      expect(eth.networkVersion).toBe('137')
+      expect(events).toEqual(['0x89', '0x89'])
+    })
+
+    it('drops both accounts and network from a superseded vault refresh', async () => {
+      const eth = new Ethereum()
+      await flushPromises()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      let resolveChain: (chainId: string) => void = () => {}
+      mockedHandlers.eth_chainId.mockReturnValueOnce(
+        new Promise(resolve => {
+          resolveChain = resolve
+        })
+      )
+      mockedHandlers.eth_accounts.mockResolvedValueOnce(['0xold'])
+      const slowRead = getAccountsChangedListener()()
+
+      mockedHandlers.eth_chainId.mockResolvedValue('0xa')
+      mockedHandlers.eth_accounts.mockResolvedValue(['0xnew'])
+      await getAccountsChangedListener()()
+      resolveChain('0x89')
+      await slowRead
+
+      expect(eth.chainId).toBe('0xa')
+      expect(listener).toHaveBeenCalledExactlyOnceWith(['0xnew'])
+    })
+
+    it('still announces accounts when a concurrent chain-id request finishes first', async () => {
+      const eth = new Ethereum()
+      await flushPromises()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+      let resolveChain: (chainId: string) => void = () => {}
+      mockedHandlers.eth_chainId.mockReturnValueOnce(
+        new Promise(resolve => {
+          resolveChain = resolve
+        })
+      )
+      mockedHandlers.eth_accounts.mockResolvedValue(['0xnew'])
+      const refresh = getAccountsChangedListener()()
+
+      mockedHandlers.eth_chainId.mockResolvedValue('0x89')
+      await eth.request({ method: 'eth_chainId', params: [] })
+      resolveChain('0x89')
+      await refresh
+
+      expect(eth.chainId).toBe('0x89')
+      expect(listener).toHaveBeenCalledExactlyOnceWith(['0xnew'])
+    })
+
+    it('keeps a newer chain event when a vault refresh finishes late', async () => {
+      const eth = new Ethereum()
+      await flushPromises()
+      let resolveChain: (chainId: string) => void = () => {}
+      mockedHandlers.eth_chainId.mockReturnValueOnce(
+        new Promise(resolve => {
+          resolveChain = resolve
+        })
+      )
+      mockedHandlers.eth_accounts.mockResolvedValue(['0xold'])
+      const slowRead = getAccountsChangedListener()()
+      getEvmChainChangedListener()('0xa')
+      resolveChain('0x89')
+      await slowRead
+
+      expect(eth.chainId).toBe('0xa')
+    })
+
+    it('drops a read that resolves after a newer disconnect or read', async () => {
+      const eth = new Ethereum()
+      const listener = vi.fn()
+      eth.on('accountsChanged', listener)
+
+      let resolveSlowRead: (accounts: string[]) => void = () => {}
+      mockedHandlers.eth_accounts.mockReturnValueOnce(
+        new Promise(resolve => {
+          resolveSlowRead = resolve
+        })
+      )
+      const slowRead = getAccountsChangedListener()()
+
+      const disconnect = vi
+        .mocked(addBackgroundEventListener)
+        .mock.calls.find(([event]) => event === 'disconnect')?.[1] as () => void
+      disconnect()
+
+      resolveSlowRead(['0xstale'])
+      await slowRead
+
+      expect(listener).toHaveBeenCalledExactlyOnceWith([])
     })
   })
 })

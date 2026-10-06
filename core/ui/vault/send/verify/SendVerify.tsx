@@ -1,7 +1,9 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -47,6 +49,7 @@ import { useSendReceiver } from '../state/receiver'
 import { useSendReceiverLabel } from '../state/receiverLabel'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { ManageFee } from './ManageFee'
+import { SendAmountReducedWarning } from './SendAmountReducedWarning'
 
 const sendTerms = ['send_terms_1', 'send_terms_0'] as const
 
@@ -172,7 +175,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                 value={getChainLogoSrc(coin.chain)}
                 style={{ fontSize: 16 }}
               />
-              {coin.chain}
+              {getChainDisplayName(coin.chain)}
             </>
           }
         />
@@ -222,6 +225,22 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           }
         />
       </VStack>
+      <SendAmountReducedWarning keysignPayloadQuery={keysignPayloadQuery} />
+      <MatchQuery
+        value={keysignPayloadQuery}
+        pending={() => null}
+        error={() => null}
+        success={({ blockchainSpecific }) =>
+          // Read from the payload being signed, so the warning appears exactly
+          // when the account will be emptied.
+          blockchainSpecific.case === 'polkadotSpecific' &&
+          blockchainSpecific.value.allowDeath ? (
+            <WarningBlock>
+              {t('substrate_allow_death_review_warning')}
+            </WarningBlock>
+          ) : null
+        }
+      />
     </KeysignReviewSheet>
   )
 }

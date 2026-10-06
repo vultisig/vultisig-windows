@@ -1,5 +1,6 @@
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 
+import { useSendAllowDeath } from '../allowDeath/useSendAllowDeath'
 import { useIsSendFeePaidInCoin } from '../fee/useIsSendFeePaidInCoin'
 import { useSendBalanceQuery } from '../queries/useSendBalanceQuery'
 import { useSendFeeEstimateQuery } from '../queries/useSendFeeEstimateQuery'
@@ -21,6 +22,7 @@ export const useSpendableSendAmount = () => {
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const feeEstimateQuery = useSendFeeEstimateQuery()
   const isFeePaidInCoin = useIsSendFeePaidInCoin()
+  const { isEnabled: allowDeath } = useSendAllowDeath()
 
   const balance = balanceQuery.data
   const fee = feeEstimateQuery.data
@@ -29,5 +31,11 @@ export const useSpendableSendAmount = () => {
     return amount
   }
 
-  return adjustAmountForFee({ chain: coin.chain, amount, balance, fee })
+  return adjustAmountForFee({
+    chain: coin.chain,
+    amount,
+    balance,
+    fee,
+    allowDeath,
+  })
 }

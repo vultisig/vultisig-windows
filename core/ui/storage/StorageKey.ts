@@ -27,7 +27,7 @@ export enum StorageKey {
   isTonW5Enabled = 'isTonW5Enabled',
   transactionHistory = 'transactionHistory',
   hasSeenNotificationPrompt = 'hasSeenNotificationPrompt',
-  keplrSuggestedChains = 'keplrSuggestedChains',
+  keplrSuggestedChainsByHost = 'keplrSuggestedChainsByHost',
   customRpcOverrides = 'customRpcOverrides',
   solanaMoveStakeDestinations = 'solanaMoveStakeDestinations',
 }

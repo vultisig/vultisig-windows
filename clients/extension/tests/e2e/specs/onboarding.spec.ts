@@ -120,6 +120,10 @@ test.describe('Onboarding Flow', () => {
     extensionId,
   }) => {
     const page = await context.newPage()
+    // The canvas uses Rive layout, so its controls do not scale with height.
+    // Exercise the actual extension popup viewport instead of the fixture's
+    // default desktop page size.
+    await page.setViewportSize({ width: 360, height: 600 })
     const onboardingPage = new OnboardingPage(page, extensionId)
 
     await onboardingPage.goto()
@@ -127,7 +131,11 @@ test.describe('Onboarding Flow', () => {
     await onboardingPage.completeOnboarding()
     await onboardingPage.navigateToSetupVault()
 
-    const riveCanvas = page.locator('canvas').first()
+    const picker = page.getByTestId('device-count-picker')
+    await expect(picker).toHaveAttribute('data-selection-ready', 'true')
+    await expect(picker).toHaveAttribute('data-selection-index', '0')
+
+    const riveCanvas = picker.locator('canvas')
     const canvasBounds = await riveCanvas.boundingBox()
     expect(canvasBounds).not.toBeNull()
 
@@ -135,17 +143,19 @@ test.describe('Onboarding Flow', () => {
       throw new Error('Device-selection Rive canvas is unavailable')
     }
 
-    const plusY = canvasBounds.y + canvasBounds.height * 0.29
-    // The Rive +/- controls remain the primary interaction.
+    const plusY = canvasBounds.y + canvasBounds.height * 0.33
+    // Upper half of the visible plus control, outside the slider pointer band.
     await page.mouse.click(canvasBounds.x + canvasBounds.width * 0.91, plusY)
+
+    await expect(picker).toHaveAttribute('data-selection-index', '1')
 
     await page
       .getByRole('button', { name: /get.*started/i })
       .first()
       .click()
-    await expect(
-      page.locator('[data-testid="vault-setup-overview-content"]')
-    ).toContainText(/2-device vault/i)
+    const overview = page.getByTestId('vault-setup-overview-content')
+    await expect(overview).toContainText('Secure Vault')
+    await expect(overview).toContainText(/2-device vault/i)
 
     await page.close()
   })

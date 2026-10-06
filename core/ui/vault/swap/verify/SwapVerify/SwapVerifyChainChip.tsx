@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { HStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
@@ -23,7 +24,7 @@ export const SwapVerifyChainChip = ({ value }: ValueProp<Chain>) => {
         style={{ fontSize: logoSize }}
       />
       <Text color="shy" size={13} cropped>
-        {t('on_chain', { chain: value })}
+        {t('on_chain', { chain: getChainDisplayName(value) })}
       </Text>
     </HStack>
   )

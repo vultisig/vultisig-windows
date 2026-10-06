@@ -470,7 +470,6 @@ export const pt = {
   having_trouble_scanning_tip_3:
     'Mantenha ambos os dispositivos estaveis por um momento',
   hide_balance: 'Ocultar saldo',
-  hide_defi_balance: 'Ocultar saldo DeFi',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transação IBC inclui um memorando, mas a {{productName}} atualmente não suporta a incorporação de memorandos em mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
@@ -485,10 +484,11 @@ export const pt = {
   seedPhraseImportTip: 'Dica: Você pode usar um navegador como dispositivo',
   enter_your_seedphrase: 'Insira sua frase mnemônica',
   enter_seedphrase_subtitle:
-    'Deixe um espaço entre cada palavra. Frases-semente de <h>12 ou 24 palavras</h> são suportadas.',
-  mnemonic_placeholder: 'Insira as 12 ou 24 palavras da sua frase-semente.',
+    'Deixe um espaço entre cada palavra. Comprimentos suportados:<h> 12, 15, 18, 21 ou 24 palavras</h>',
+  mnemonic_placeholder:
+    'Insira as 12, 15, 18, 21 ou 24 palavras da sua frase-semente.',
   seedphrase_word_count_error:
-    'Você digitou {{count}} palavras. A frase inicial deve ter 12 ou 24 palavras.',
+    'Você inseriu {{count}} palavras. A frase-semente deve ter 12, 15, 18, 21 ou 24 palavras.',
   seedphrase_invalid_error:
     'A frase-semente está incorreta. Por favor, verifique todas as palavras.',
   seedphrase_duplicate_vault_error:
@@ -630,7 +630,6 @@ export const pt = {
   next_payout: 'Próximo pagamento',
   estimated_reward: 'Recompensa estimada',
   next_churn: 'Próxima rotação',
-  next_award: 'Próxima recompensa',
   percentage_zero: '0%',
   percentage_value: '{{value}}%',
   no_vaults: 'Ainda não há cofres.',
@@ -878,7 +877,6 @@ export const pt = {
     'Compartilhe seu código de indicação exclusivo para convidar amigos. Eles ganham um desconto e, quanto mais negociarem, mais você ganha — diretamente na sua carteira.',
   shares: 'Ações',
   show_balance: 'Mostrar saldo',
-  show_defi_balance: 'Mostrar saldo DeFi',
   sign: 'Assinar',
   signAmino: 'Assinatura Amino',
   signDirect: 'Assinatura Direct',
@@ -1941,6 +1939,7 @@ export const pt = {
   kamino_earn_card_withdraw: 'Retirar',
   kamino_earn_deposited: 'Depositado: {{amount}}',
   kamino_earn_earned: 'Ganho: {{amount}}',
+  kamino_earn_lost: 'Perdido: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'em {{chain}}',
   max_total_fee: 'Taxa máxima total',
@@ -1974,9 +1973,9 @@ export const pt = {
   ton_tx_failure_wallet_id_mismatch:
     'A transação foi criada para uma versão de contrato de carteira diferente daquela implantada neste endereço.',
   ton_tx_failure_insufficient_funds:
-    'Não há TON suficientes para cobrir o valor mais as taxas de rede. Reserve cerca de 0,05 TON para taxas e tente novamente.',
+    'Não há GRAM suficientes para cobrir o valor mais as taxas de rede. Reserve cerca de 0,05 GRAM para taxas e tente novamente.',
   ton_tx_failure_out_of_gas:
-    'A transação ficou sem gás antes de ser concluída. Anexe mais TON à transferência e tente novamente.',
+    'A transação ficou sem gás antes de ser concluída. Anexe mais GRAM à transferência e tente novamente.',
   ton_tx_failure_invalid_destination:
     'O endereço de destino não é válido em TON. Verifique o endereço e tente novamente.',
   ton_tx_failure_not_enough_jettons:
@@ -2010,7 +2009,7 @@ export const pt = {
     'Use o contrato W5 (v5r1) em vez do V4R2 ao derivar os endereços TON deste cofre. Isso altera o endereço usado pela carteira, e cada contrato é um endereço separado com seu próprio saldo — nenhum fundo é transferido, portanto, qualquer valor mantido no outro endereço permanece lá até que você o envie.',
   ton_gasless_pay_fee_in_token: 'Pagar taxa de rede em {{ticker}}',
   ton_gasless_description:
-    'Não é necessário o TON : um relay paga o gás da rede e cobra uma pequena comissão de {{ticker}} .',
+    'Não é necessário GRAM: um relay paga o gás da rede e cobra, em vez disso, uma pequena comissão em {{ticker}}.',
   ton_gasless_fee_note: 'pago via retransmissão',
   max_network_fee: 'Taxa máxima de rede',
   swap_failed_refunded: 'Reembolsado pelo provedor de troca.',
@@ -2034,4 +2033,20 @@ export const pt = {
     'Não detectamos nenhum ativo nas blockchains que pudemos verificar.',
   unscanned_chains_warning:
     'Não foi possível verificar os saldos nessas blockchains. Se você tiver fundos nelas, selecione-as manualmente:',
+  substrate_allow_death_toggle: 'Esvazie a conta',
+  substrate_allow_death_description:
+    'Envia todo o saldo menos a taxa de rede e encerra a conta. Qualquer valor restante abaixo do depósito mínimo é perdido.',
+  substrate_allow_death_review_warning:
+    'Essa transferência esvaziará sua conta. A conta será desativada e qualquer saldo restante abaixo do depósito mínimo será perdido.',
+  next_reward: 'Próxima recompensa',
+  last_reward: 'Última recompensa',
+  total_rewards_earned: 'Total de recompensas obtidas',
+  upcoming: 'Por vir',
+  bond_reward_history_node: 'Nó: {{address}}',
+  bond_reward_history_error:
+    'Não foi possível carregar o histórico de recompensas.',
+  send_amount_reduced_at_review:
+    'A taxa de rede ou seu saldo mudou depois que você definiu o valor, então o valor foi reduzido de {{requestedAmount}} para {{amount}}.',
+  send_enter_address_first_for_percentage:
+    'Primeiro, insira o endereço do destinatário para usar os botões de porcentagem.',
 }

@@ -1,5 +1,6 @@
 import { resolveMarketDataSource } from '@core/ui/chain/coin/price/market/MarketDataSource'
 import { FiatAmountText } from '@core/ui/chain/components/FiatAmountText'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { useOpenExternalUrl } from '@core/ui/navigation/hooks/useOpenExternalUrl'
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import {
@@ -72,7 +73,10 @@ export const CoinTokenInfoSection = ({ coin }: CoinTokenInfoSectionProps) => {
           value={<FiatAmountText value={coin.price || 0} />}
         />
       ) : null}
-      <CoinMarketStatRow label={t('network')} value={coin.chain} />
+      <CoinMarketStatRow
+        label={t('network')}
+        value={getChainDisplayName(coin.chain)}
+      />
       {id ? (
         <CoinMarketStatRow
           label={t('contract')}

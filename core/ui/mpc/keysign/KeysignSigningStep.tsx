@@ -1,20 +1,15 @@
 import { getTxFailureDescription } from '@core/ui/chain/tx/failure/getTxFailureDescription'
 import { DappRequestBanner } from '@core/ui/dapp/DappRequestBanner'
-import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
 import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
 import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
-import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
-import { LimitOrdersDoneHint } from '@core/ui/mpc/keysign/tx/LimitOrdersDoneHint'
+import { KeysignTxDoneScreen } from '@core/ui/mpc/keysign/tx/KeysignTxDoneScreen'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
-import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
-import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
@@ -31,8 +26,6 @@ import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { TonBroadcastRejectedError } from '@vultisig/core-chain/chains/ton/failure'
 import { toSolanaBlockhashExpiredError } from '@vultisig/core-chain/tx/broadcast/solanaBlockhashExpired'
-import { getKeysignLimitSwapCancel } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapCancel'
-import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
@@ -46,7 +39,6 @@ import { BroadcastRefusedError } from './assertReadyToBroadcast'
 import { BroadcastError } from './broadcastKeysignTx'
 import { KeysignBroadcastRefusal } from './KeysignBroadcastRefusal'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
-import { LimitOrderCancelDoneHint } from './tx/LimitOrderCancelDoneHint'
 
 type KeysignSigningStepProps = Partial<OnBackProp> & {
   onSettled?: () => void
@@ -81,8 +73,7 @@ export const KeysignSigningStep = ({
   toAddressLabel,
 }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
-  const { version, goHome, isLimited } = useCore()
+  const { version, goHome } = useCore()
   const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
   const { mutate: startKeysign, ...mutationStatus } =
@@ -155,95 +146,9 @@ export const KeysignSigningStep = ({
                         </PageContent>
                       </>
                     ) : (
-                      <StepTransition
-                        from={({ onFinish: onSeeTxDetails }) => (
-                          <>
-                            <PageHeader title={t('done')} hasBorder />
-                            <PageContent alignItems="center" scrollable>
-                              <AnimatedVisibility
-                                animationConfig="bottomToTop"
-                                overlayStyles={{
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  width: '100%',
-                                }}
-                              >
-                                <VStack gap={16} maxWidth={576} fullWidth>
-                                  <DappRequestBanner
-                                    value={payload.dappMetadata}
-                                  />
-                                  <TxSuccess
-                                    value={payload}
-                                    onSeeTxDetails={onSeeTxDetails}
-                                  />
-                                  {getKeysignLimitSwapOrder(payload) ? (
-                                    <LimitOrdersDoneHint />
-                                  ) : null}
-                                  {getKeysignLimitSwapCancel(payload) ? (
-                                    <LimitOrderCancelDoneHint />
-                                  ) : null}
-                                </VStack>
-                              </AnimatedVisibility>
-                            </PageContent>
-                            <PageFooter alignItems="center">
-                              <AnimatedVisibility
-                                delay={180}
-                                animationConfig="bottomToTop"
-                                overlayStyles={{
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  width: '100%',
-                                }}
-                              >
-                                <VStack maxWidth={576} fullWidth gap={8}>
-                                  {/* The dApp popup has no Limit Orders view to navigate to. */}
-                                  {getKeysignLimitSwapOrder(payload) &&
-                                  !isLimited ? (
-                                    <Button
-                                      kind="secondary"
-                                      onClick={() =>
-                                        navigate({ id: 'limitOrders' })
-                                      }
-                                    >
-                                      {t('track')}
-                                    </Button>
-                                  ) : null}
-                                  <Button
-                                    data-testid="tx-success-done"
-                                    onClick={goHome}
-                                  >
-                                    {t('done')}
-                                  </Button>
-                                </VStack>
-                              </AnimatedVisibility>
-                            </PageFooter>
-                          </>
-                        )}
-                        to={({ onBack: onBackToReceipt }) => (
-                          <>
-                            <FlowPageHeader
-                              title={t('transaction_details')}
-                              onBack={onBackToReceipt}
-                            />
-                            <PageContent alignItems="center" scrollable>
-                              <VStack gap={16} maxWidth={576} fullWidth>
-                                <DappRequestBanner
-                                  value={payload.dappMetadata}
-                                />
-                                <KeysignTxOverview
-                                  toAddressLabel={toAddressLabel}
-                                />
-                              </VStack>
-                            </PageContent>
-                            <PageFooter alignItems="center">
-                              <VStack maxWidth={576} fullWidth>
-                                <Button onClick={goHome}>
-                                  {t('complete')}
-                                </Button>
-                              </VStack>
-                            </PageFooter>
-                          </>
-                        )}
+                      <KeysignTxDoneScreen
+                        value={payload}
+                        toAddressLabel={toAddressLabel}
                       />
                     )}
                   </TxHashProvider>

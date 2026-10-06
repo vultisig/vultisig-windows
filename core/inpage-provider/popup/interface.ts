@@ -56,7 +56,6 @@ export type SignMessageInput =
   | { eth_signTypedData_v4: { chain: EvmChain; message: Eip712V4Payload } }
   | {
       personal_sign: {
-        bytesCount: number
         chain: EvmChain
         message: string
         type: SignMessageType

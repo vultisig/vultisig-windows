@@ -29,6 +29,20 @@ export const transactionRecordStatuses = [
 ] as const
 export type TransactionRecordStatus = (typeof transactionRecordStatuses)[number]
 
+/**
+ * The fee a transaction actually paid, copied off its receipt — on EVM,
+ * `gasUsed × effectiveGasPrice` — rather than the maximum the wallet signed
+ * for. Covers that one transaction only: a swap's ERC-20 approval is a
+ * separate transaction with a fee of its own.
+ */
+export type TransactionNetworkFee = {
+  /** In the fee coin's smallest units. A string because records are stored as
+   * JSON, which has no bigint. */
+  amount: string
+  decimals: number
+  ticker: string
+}
+
 type TransactionRecordBase = {
   id: string
   vaultId: string
@@ -49,7 +63,9 @@ export type SendTransactionData = {
   tokenLogo: string
   tokenId?: string
   decimals: number
-  feeEstimate?: string
+  /** Written by the status poll once the chain returns a receipt. Absent before
+   * that, and on records written before it was carried. */
+  networkFee?: TransactionNetworkFee
   memo?: string
   /**
    * For Cosmos SDK chains (QBTC dApp txs and in-wallet staking), the typeUrl of
@@ -118,6 +134,10 @@ export type SwapTransactionData = {
   failureReasonCheckedAt?: string
   /** Solana only; see the same field on a send. */
   lastValidBlockHeight?: number
+  /** What the source transaction paid, on `fromChain`; see the same field on
+   * a send. Never set for a CowSwap order, whose settlement gas the solver
+   * pays. */
+  networkFee?: TransactionNetworkFee
 }
 
 export type SendTransactionRecord = TransactionRecordBase & {

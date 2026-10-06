@@ -101,6 +101,9 @@ const getSwapAffiliateNotional = ({
  * that were sent. `protocol` is derived as `total - affiliate` rather than from
  * `fees.outbound`: that covers the liquidity fee the quote type does not expose
  * and guarantees the itemized rows still sum to the headline total.
+ *
+ * General quotes itemize the aggregator's own cut (LI.FI's share of its fixed
+ * fee, SwapKit's service fee) as `protocolFee`, apart from the affiliate fee.
  */
 export const getSwapProviderFees = (
   input: GetSwapProviderFeesInput
@@ -113,6 +116,12 @@ export const getSwapProviderFees = (
 
   return affiliateNotional ? { ...charges, affiliateNotional } : charges
 }
+
+// LI.FI and SwapKit report their own cut apart from the integrator's
+// (`protocolFee`). It is not the product's money, so it must never be folded
+// into the affiliate slot.
+const toProtocolCharge = (protocolFee: SwapFee | undefined): SwapCharges =>
+  protocolFee && protocolFee.amount > 0n ? { protocol: protocolFee } : {}
 
 const getSwapProviderCharges = ({
   quote,
@@ -154,9 +163,14 @@ const getSwapProviderCharges = ({
     },
     general: ({ tx }) =>
       matchRecordUnion<typeof tx, SwapCharges>(tx, {
-        evm: ({ affiliateFee }) =>
-          affiliateFee ? { affiliate: affiliateFee } : {},
-        solana: ({ swapFee }) => ({ affiliate: swapFee }),
+        evm: ({ affiliateFee, protocolFee }) => ({
+          ...(affiliateFee ? { affiliate: affiliateFee } : {}),
+          ...toProtocolCharge(protocolFee),
+        }),
+        solana: ({ swapFee, protocolFee }) => ({
+          affiliate: swapFee,
+          ...toProtocolCharge(protocolFee),
+        }),
         // Deposit-channel transfers carry no affiliate metadata. The rate is
         // still known from the bps that were sent, so the row discloses the
         // percentage and reports the amount as part of the quoted rate.

@@ -94,6 +94,8 @@ export type CoreView =
         skipToVerify?: boolean
         /** TON jetton sends: pay the fee in the jetton through the relay. Unset means "decide from the TON balance". */
         tonGasless?: boolean
+        /** Native Polkadot/Bittensor sends: empty the account with `transfer_allow_death`. Unset means keep it alive. */
+        allowDeath?: boolean
       }
     }
   | { id: 'settings' }

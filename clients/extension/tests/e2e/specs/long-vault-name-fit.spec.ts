@@ -27,6 +27,7 @@ type Screen = {
 
 const screens: Screen[] = [
   { title: 'Vault home', initialView: { id: 'vault' } },
+  { title: 'Earn', initialView: { id: 'defi', state: {} } },
   { title: 'Vault settings', initialView: { id: 'settings' } },
   { title: 'Vault list', initialView: { id: 'vaults' } },
 ]

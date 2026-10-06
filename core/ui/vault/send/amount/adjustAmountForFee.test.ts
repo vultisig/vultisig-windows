@@ -63,5 +63,30 @@ describe('adjustAmountForFee', () => {
         adjustAmountForFee({ chain: Chain.Bittensor, amount, balance, fee })
       ).toBe(amount)
     })
+
+    it('keeps nothing back when the send empties the account', () => {
+      expect(
+        adjustAmountForFee({
+          chain: Chain.Bittensor,
+          amount: balance,
+          balance,
+          fee,
+          allowDeath: true,
+        })
+      ).toBe(balance - fee)
+    })
+
+    it('leaves a whole-balance-less-fee amount alone when emptying', () => {
+      const amount = balance - fee
+      expect(
+        adjustAmountForFee({
+          chain: Chain.Bittensor,
+          amount,
+          balance,
+          fee,
+          allowDeath: true,
+        })
+      ).toBe(amount)
+    })
   })
 })

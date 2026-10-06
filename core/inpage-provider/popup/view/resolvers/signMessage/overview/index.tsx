@@ -7,6 +7,10 @@ import {
 } from '@core/inpage-provider/popup/interface'
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
 import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
+import {
+  getPersonalSignMessage,
+  getPersonalSignMessageBytes,
+} from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getPersonalSignMessage'
 import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
@@ -93,21 +97,7 @@ export const Overview = () => {
       }
       return message
     },
-    personal_sign: ({ message, bytesCount }) => {
-      const isHex = message.startsWith('0x') || message.startsWith('0X')
-      const prefix = `\x19Ethereum Signed Message:\n${bytesCount}`
-
-      if (isHex) {
-        const prefixBytes = new TextEncoder().encode(prefix)
-        const msgBytes = getBytes(message)
-        const combined = new Uint8Array(prefixBytes.length + msgBytes.length)
-        combined.set(prefixBytes)
-        combined.set(msgBytes, prefixBytes.length)
-        return hexlify(combined)
-      }
-
-      return `${prefix}${message}`
-    },
+    personal_sign: ({ message }) => getPersonalSignMessage(message),
     // The signed digest is sha256 of the canonical ADR-36 StdSignDoc; carry
     // those bytes (hex) through to `getCustomMessageHex`, which hashes them.
     cosmos_sign_arbitrary: ({ data }) =>
@@ -129,13 +119,8 @@ export const Overview = () => {
       if (isV2) return rawMessage
       return message
     },
-    personal_sign: ({ message }) => {
-      const bytes =
-        message.startsWith('0x') || message.startsWith('0X')
-          ? getBytes(message)
-          : new TextEncoder().encode(message)
-      return toDisplayMessageString(bytes)
-    },
+    personal_sign: ({ message }) =>
+      toDisplayMessageString(getPersonalSignMessageBytes(message)),
     cosmos_sign_arbitrary: ({ data }) =>
       toDisplayMessageString(fromBase64(data)),
   })

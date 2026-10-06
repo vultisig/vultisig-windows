@@ -1,4 +1,5 @@
 import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -117,7 +118,9 @@ export const AddressBookModalContent = ({
       }
     }
 
-    const chainLabel = isEvmChain(coin.chain) ? t('evm_chains') : coin.chain
+    const chainLabel = isEvmChain(coin.chain)
+      ? t('evm_chains')
+      : getChainDisplayName(coin.chain)
     return {
       title: t('address_book_no_eligible_addresses_title', {
         chain: chainLabel,

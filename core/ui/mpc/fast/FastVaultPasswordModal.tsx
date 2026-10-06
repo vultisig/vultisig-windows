@@ -60,6 +60,11 @@ type FastVaultPasswordModalProps = OnBackProp & {
   withPasswordCache?: boolean
 }
 
+/**
+ * Asks for the fast vault's password and checks it against the server before
+ * handing it to `onFinish`. With `withPasswordCache`, a cached password skips
+ * the form and goes straight to `onFinish`.
+ */
 export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   showModal,
   onFinish,
@@ -70,7 +75,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   withPasswordCache = false,
 }) => {
   const { t } = useTranslation()
-  const vault = useCurrentVault()
+  const vaultId = getVaultId(useCurrentVault())
   const titleId = useId()
   const schema = useMemo(() => createSchema(t), [t])
   const {
@@ -83,7 +88,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
       if (cachePassword) {
         await attempt(() =>
           cacheVaultPassword({
-            vaultId: getVaultId(vault),
+            vaultId,
             password: variables.password,
           })
         )
@@ -106,6 +111,24 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 
   const [cachePassword, setCachePassword] = useState(false)
 
+  // A cached password skips the form, but `onFinish` can still take a while
+  // (the keysign payload is rebuilt after it), so it runs as a mutation too:
+  // Confirm spins and the modal cannot be closed until it settles. `mutate` is
+  // stable, so a re-render while it runs does not re-run the cache effect and
+  // hand the password over a second time.
+  const {
+    isPending: cachedPasswordIsPending,
+    mutate: finishWithCachedPassword,
+  } = useMutation({
+    mutationFn: async (password: string) =>
+      onFinish({ password, cachePassword: true }),
+  })
+
+  const isPending = mutationIsPending || cachedPasswordIsPending
+
+  // Keyed by vault id, not the vault object: the provider rebuilds that object
+  // on every render, and re-running this effect would clear the tick the user
+  // just set.
   useEffect(() => {
     if (!showModal) return
 
@@ -116,12 +139,10 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     if (!withPasswordCache) return
 
     const checkCache = async () => {
-      const cached = await getCachedVaultPassword({
-        vaultId: getVaultId(vault),
-      })
+      const cached = await getCachedVaultPassword({ vaultId })
       if (cancelled || !cached) return
 
-      onFinish({ password: cached, cachePassword: true })
+      finishWithCachedPassword(cached)
     }
 
     checkCache()
@@ -129,10 +150,10 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     return () => {
       cancelled = true
     }
-  }, [showModal, withPasswordCache, vault, onFinish])
+  }, [showModal, withPasswordCache, vaultId, finishWithCachedPassword])
 
   const onSubmit = ({ password }: Schema) => {
-    mutate({ vaultId: getVaultId(vault), password })
+    mutate({ vaultId, password })
   }
 
   const passwordErrorMessage = useMemo(() => {
@@ -144,7 +165,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   }, [mutationError, errors.password, t])
 
   return showModal ? (
-    <Backdrop onClose={mutationIsPending ? undefined : onBack}>
+    <Backdrop onClose={isPending ? undefined : onBack}>
       <ModalWrapper
         returnFocus
         lockProps={{
@@ -154,7 +175,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
           'data-testid': 'fast-vault-password-modal',
         }}
       >
-        <CloseButton onClick={onBack} disabled={mutationIsPending}>
+        <CloseButton onClick={onBack} disabled={isPending}>
           <CrossIcon />
         </CloseButton>
 
@@ -200,8 +221,8 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 
           <Button
             data-testid="fast-vault-submit"
-            disabled={mutationIsPending || !isValid}
-            loading={mutationIsPending}
+            disabled={isPending || !isValid}
+            loading={isPending}
             type="submit"
             kind="primary"
           >

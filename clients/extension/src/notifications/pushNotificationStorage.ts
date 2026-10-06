@@ -95,3 +95,21 @@ export const getOptInMigrationCompleted = async (): Promise<boolean> =>
 export const setOptInMigrationCompleted = async (): Promise<void> => {
   await setStorageValue(optInMigrationKey, true)
 }
+
+const silentPushRejectedUserAgentKey = 'pushSilentSubscriptionRejectedUserAgent'
+
+/**
+ * User agent of the browser build that last refused a silent push
+ * subscription, or null when none has. A different user agent (the browser
+ * updated) means the silent subscription is worth trying again.
+ */
+export const getSilentPushRejectedUserAgent = async (): Promise<
+  string | null
+> => getStorageValue<string | null>(silentPushRejectedUserAgentKey, null)
+
+/** Records that this browser build refuses silent push subscriptions. */
+export const setSilentPushRejectedUserAgent = async (
+  userAgent: string
+): Promise<void> => {
+  await setStorageValue(silentPushRejectedUserAgentKey, userAgent)
+}

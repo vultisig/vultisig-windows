@@ -1,3 +1,4 @@
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
@@ -265,7 +266,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                   <InputContainer>
                     <InputFieldWrapper>
                       {t('chain_message_deposit', {
-                        chain: coin.chain,
+                        chain: getChainDisplayName(coin.chain),
                       })}
                     </InputFieldWrapper>
                   </InputContainer>

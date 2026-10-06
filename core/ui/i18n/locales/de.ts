@@ -476,7 +476,6 @@ export const de = {
   having_trouble_scanning_tip_3:
     'Halten Sie beide Geräte einen Moment lang ruhig',
   hide_balance: 'Guthaben ausblenden',
-  hide_defi_balance: 'DeFi-Guthaben ausblenden',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
     'Diese IBC-Transaktion enthält ein Memo, aber {{productName}} unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Die Durchführung dieser Transaktion kann zu <b>einem irreversiblen Verlust von Geldern</b> führen.',
@@ -491,10 +490,11 @@ export const de = {
   seedPhraseImportTip: 'Tipp: Sie können einen Browser als Gerät verwenden',
   enter_your_seedphrase: 'Geben Sie Ihre Seed-Phrase ein',
   enter_seedphrase_subtitle:
-    'Lassen Sie zwischen den einzelnen Wörtern ein Leerzeichen. Unterstützt werden Seed-Phrasen mit <h>12 oder 24 Wörtern</h>.',
-  mnemonic_placeholder: 'Geben Sie die 12 oder 24 Wörter Ihrer Seedphrase ein.',
+    'Lassen Sie zwischen den Wörtern jeweils ein Leerzeichen. Unterstützte Längen:<h> 12, 15, 18, 21 oder 24 Wörter</h>',
+  mnemonic_placeholder:
+    'Geben Sie die 12, 15, 18, 21 oder 24 Wörter Ihrer Seedphrase ein.',
   seedphrase_word_count_error:
-    'Sie haben {{count}} Wörter eingegeben. Der Startsatz muss 12 oder 24 Wörter lang sein.',
+    'Sie haben {{count}} Wörter eingegeben. Die Seed-Phrase muss 12, 15, 18, 21 oder 24 Wörter lang sein.',
   seedphrase_invalid_error:
     'Der Seed-Phrase ist nicht korrekt, bitte überprüfen Sie alle Wörter.',
   seedphrase_duplicate_vault_error:
@@ -637,7 +637,6 @@ export const de = {
   next_payout: 'Nächste Auszahlung',
   estimated_reward: 'Geschätzte Belohnung',
   next_churn: 'Nächste Rotation',
-  next_award: 'Nächste Belohnung',
   percentage_zero: '0 %',
   percentage_value: '{{value}}%',
   no_vaults: 'Noch keine Tresore',
@@ -886,7 +885,6 @@ export const de = {
     'Teile deinen persönlichen Empfehlungscode, um Freunde einzuladen. Sie erhalten einen Rabatt, und je mehr sie handeln, desto mehr verdienst du – direkt in deiner Wallet.',
   shares: 'Anteile',
   show_balance: 'Guthaben anzeigen',
-  show_defi_balance: 'DeFi-Guthaben anzeigen',
   sign: 'Signieren',
   signAmino: 'Amino signieren',
   signDirect: 'Direkt signieren',
@@ -1956,6 +1954,7 @@ export const de = {
   kamino_earn_card_withdraw: 'Abheben',
   kamino_earn_deposited: 'Eingezahlt: {{amount}}',
   kamino_earn_earned: 'Verdient: {{amount}}',
+  kamino_earn_lost: 'Verloren: {{amount}}',
   kamino_earn_protocol: 'Kamino',
   on_chain: 'auf {{chain}}',
   max_total_fee: 'Maximale Gesamtgebühr',
@@ -1989,9 +1988,9 @@ export const de = {
   ton_tx_failure_wallet_id_mismatch:
     'Die Transaktion wurde für eine andere Wallet-Vertragsversion erstellt als die, die an dieser Adresse eingesetzt wird.',
   ton_tx_failure_insufficient_funds:
-    'Nicht genügend TON um den Betrag zuzüglich Netzwerkgebühren zu decken. Halten Sie etwa 0,05 TON für Gebühren bereit und versuchen Sie es erneut.',
+    'Nicht genügend GRAM um den Betrag zuzüglich Netzwerkgebühren zu decken. Halten Sie etwa 0,05 GRAM für Gebühren bereit und versuchen Sie es erneut.',
   ton_tx_failure_out_of_gas:
-    'Die Transaktion konnte nicht abgeschlossen werden, da das Gas nicht ausreichte. Fügen Sie der Überweisung weitere TON hinzu und versuchen Sie es erneut.',
+    'Die Transaktion konnte nicht abgeschlossen werden, da das Gas nicht ausreichte. Fügen Sie der Überweisung weitere GRAM hinzu und versuchen Sie es erneut.',
   ton_tx_failure_invalid_destination:
     'Die Zieladresse ist für TON ungültig. Überprüfen Sie die Adresse und versuchen Sie es erneut.',
   ton_tx_failure_not_enough_jettons:
@@ -2026,7 +2025,7 @@ export const de = {
     'Verwenden Sie beim Ableiten der TON-Adressen dieses Vaults den W5-Vertrag (v5r1) anstelle des V4R2-Vertrags. Dadurch ändert sich die vom Wallet verwendete Adresse. Jeder Vertrag ist eine separate Adresse mit eigenem Guthaben – es werden keine Gelder transferiert, sodass Guthaben auf der anderen Adresse dort verbleibt, bis Sie es senden.',
   ton_gasless_pay_fee_in_token: 'Netzwerkgebühr in {{ticker}} bezahlen',
   ton_gasless_description:
-    'Kein TON erforderlich: Ein Relay zahlt die Netzwerk-Gasgebühren und erhebt stattdessen eine kleine {{ticker}} -Kommission.',
+    'Kein GRAM erforderlich: Ein Relay zahlt die Netzwerk-Gasgebühren und erhebt stattdessen eine kleine {{ticker}} -Kommission.',
   ton_gasless_fee_note: 'Zahlung über Relay',
   max_network_fee: 'Maximale Netzwerkgebühr',
   swap_failed_refunded: 'Rückerstattung durch den Tauschanbieter',
@@ -2051,4 +2050,19 @@ export const de = {
     'Wir konnten in den von uns überprüfbaren Blockchains keine Vermögenswerte feststellen.',
   unscanned_chains_warning:
     'Wir konnten die Kontostände dieser Blockchains nicht überprüfen. Falls Sie Guthaben darauf haben, wählen Sie diese bitte manuell aus:',
+  substrate_allow_death_toggle: 'Leeren Sie das Konto.',
+  substrate_allow_death_description:
+    'Überweist den gesamten Kontostand abzüglich der Netzwerkgebühr und schließt das Konto. Alles, was unterhalb der Mindesteinlage verbleibt, wird vernichtet.',
+  substrate_allow_death_review_warning:
+    'Durch diese Überweisung wird Ihr Konto geleert. Das Konto wird deaktiviert, und ein etwaiges Guthaben unterhalb der Mindesteinlage verfällt.',
+  next_reward: 'Nächste Belohnung',
+  last_reward: 'Letzte Belohnung',
+  total_rewards_earned: 'Gesamt erhaltene Prämien',
+  upcoming: 'Demnächst',
+  bond_reward_history_node: 'Knoten: {{address}}',
+  bond_reward_history_error: 'Prämienverlauf konnte nicht geladen werden',
+  send_amount_reduced_at_review:
+    'Die Netzwerkgebühr bzw. Ihr Guthaben hat sich nach der Festlegung des Betrags geändert, daher wurde der Betrag von {{requestedAmount}} auf {{amount}} reduziert.',
+  send_enter_address_first_for_percentage:
+    'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
 }

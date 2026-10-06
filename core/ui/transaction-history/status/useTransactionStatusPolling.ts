@@ -8,6 +8,7 @@ import {
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
 import { getRecordLastValidBlockHeight } from './getRecordLastValidBlockHeight'
+import { getRecordTxChain } from './getRecordTxChain'
 import {
   getArrivalTrackedSwap,
   getSwapArrivalRecordUpdate,
@@ -74,7 +75,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
       }
 
       const result = await getTxStatus({
-        chain: current.chain,
+        chain: getRecordTxChain(current),
         hash: current.txHash,
         lastValidBlockHeight: getRecordLastValidBlockHeight(current),
       })
