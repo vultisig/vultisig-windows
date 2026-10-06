@@ -10,8 +10,10 @@ type UseTxStatusQueryInput = {
    * `expired` once the chain passes that height instead of running for good.
    */
   lastValidBlockHeight?: number
-  /** The account that sent the transaction. NEAR looks a hash up by its sender
-   * and fails the lookup without one; other chains ignore it. */
+  /**
+   * The account that sent the transaction. NEAR looks a hash up by its sender
+   * and fails the lookup without one; other chains ignore it.
+   */
   senderAccountId: string
 }
 
