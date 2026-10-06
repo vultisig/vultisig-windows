@@ -127,7 +127,7 @@
     "protobufjs": "8.7.0",
     "rollup": "4.63.1",
     "js-cookie": "3.0.8",
-    "shell-quote": "1.9.0",
+    "shell-quote": "1.11.0",
     "toml@npm:^3.0.0": "4.3.0",
     "undici": "8.10.2",
     "vite": "7.3.6",
