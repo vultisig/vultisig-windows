@@ -6,7 +6,7 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { TFunction } from 'i18next'
 
 import { StartKeysignPromptProps } from '../prompt/StartKeysignPromptProps'
-import { getSwapKitDepositUnverifiableMessage } from '../tx/swap/getSwapKitDepositUnverifiableMessage'
+import { getSwapPayloadRefusalMessage } from '../tx/swap/getSwapPayloadRefusalMessage'
 
 type ResolveStartKeysignPromptPropsInput = {
   t: TFunction
@@ -86,12 +86,9 @@ export const resolveStartKeysignPromptProps = ({
     return {}
   }
 
-  const depositUnverifiableMessage = getSwapKitDepositUnverifiableMessage(
-    keysign,
-    t
-  )
-  if (depositUnverifiableMessage) {
-    return { disabledMessage: depositUnverifiableMessage }
+  const swapPayloadRefusalMessage = getSwapPayloadRefusalMessage(keysign, t)
+  if (swapPayloadRefusalMessage) {
+    return { disabledMessage: swapPayloadRefusalMessage }
   }
 
   if (disabledMessage) {

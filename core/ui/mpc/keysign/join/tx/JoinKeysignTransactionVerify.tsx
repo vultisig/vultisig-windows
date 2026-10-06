@@ -17,7 +17,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { getSwapKitDepositUnverifiableMessage } from '../../tx/swap/getSwapKitDepositUnverifiableMessage'
+import { getSwapPayloadRefusalMessage } from '../../tx/swap/getSwapPayloadRefusalMessage'
 import { JoinKeysignButton } from './JoinKeysignButton'
 import { JoinKeysignLimitOrderCancelVerify } from './JoinKeysignLimitOrderCancelVerify'
 import { JoinKeysignLimitOrderVerify } from './JoinKeysignLimitOrderVerify'
@@ -106,12 +106,9 @@ export const JoinKeysignTransactionVerify = ({
     // would contribute a signature to bytes nobody on this screen has read.
     if ('unreadable' in kamino) return t('kamino_earn_unreadable_title')
 
-    // Whichever view renders it, a SwapKit deposit the signer would refuse is not joinable.
-    const depositUnverifiableMessage = getSwapKitDepositUnverifiableMessage(
-      value,
-      t
-    )
-    if (depositUnverifiableMessage) return depositUnverifiableMessage
+    // Whichever view renders it, a swap payload the signer would refuse is not joinable.
+    const swapPayloadRefusalMessage = getSwapPayloadRefusalMessage(value, t)
+    if (swapPayloadRefusalMessage) return swapPayloadRefusalMessage
 
     if (termsAccepted.some(term => !term)) return t('terms_required')
   })()
