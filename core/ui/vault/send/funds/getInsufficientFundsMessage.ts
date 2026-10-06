@@ -30,7 +30,7 @@ export const getInsufficientFundsMessage = (
 }
 
 /** The shortfall message for a failed payload build that reports one, otherwise undefined. */
-export const getBuildKeysignPayloadFundsMessage = (
+const getBuildKeysignPayloadFundsMessage = (
   error: unknown,
   t: TFunction
 ): string | undefined =>
