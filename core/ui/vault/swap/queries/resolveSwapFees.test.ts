@@ -353,6 +353,99 @@ describe('resolveSwapFees', () => {
     expect(result.protocol).toBeUndefined()
   })
 
+  it("books LI.FI's own cut of an EVM route as a protocol charge and keeps it in the total", () => {
+    const usdc = { chain: Chain.Ethereum, id: '0xusdc', decimals: 6 }
+    const quote: SwapQuoteResult = {
+      general: {
+        dstAmount: '1000000',
+        provider: 'li.fi',
+        tx: {
+          evm: {
+            from: '0xfrom',
+            to: '0xdiamond',
+            data: '0x',
+            value: '0',
+            affiliateFee: { ...usdc, amount: 5_000n },
+            protocolFee: { ...usdc, amount: 2_500n },
+          },
+        },
+      },
+    }
+
+    const result = resolveSwapFees({
+      quote,
+      network: computedNetworkFee,
+      toCoinKey,
+      toCoin: undefined,
+      fromCoin: undefined,
+      affiliateBps: noDiscount,
+    })
+
+    expect(result.affiliate?.amount).toBe(5_000n)
+    expect(result.protocol?.amount).toBe(2_500n)
+    // The co-signer's Verify screen shows both together from the payload's
+    // `swap_fee`, so dropping the provider's cut here would understate the
+    // initiator's total.
+    expect(getSwapFeeEntries(result)).toHaveLength(3)
+  })
+
+  it("books SwapKit's service fee on a Solana route as a protocol charge", () => {
+    const quote: SwapQuoteResult = {
+      general: {
+        dstAmount: '1000000',
+        provider: 'swapkit',
+        tx: {
+          solana: {
+            data: '',
+            networkFee: 0n,
+            swapFee: providerSwapFee,
+            protocolFee: { ...providerSwapFee, amount: 7_000n },
+          },
+        },
+      },
+    }
+
+    const result = resolveSwapFees({
+      quote,
+      network: computedNetworkFee,
+      toCoinKey,
+      toCoin: undefined,
+      fromCoin: undefined,
+      affiliateBps: noDiscount,
+    })
+
+    expect(result.affiliate).toBe(providerSwapFee)
+    expect(result.protocol?.amount).toBe(7_000n)
+  })
+
+  it('shows no protocol row for a zero provider fee', () => {
+    const quote: SwapQuoteResult = {
+      general: {
+        dstAmount: '1000000',
+        provider: 'swapkit',
+        tx: {
+          solana: {
+            data: '',
+            networkFee: 0n,
+            swapFee: providerSwapFee,
+            protocolFee: { ...providerSwapFee, amount: 0n },
+          },
+        },
+      },
+    }
+
+    const result = resolveSwapFees({
+      quote,
+      network: computedNetworkFee,
+      toCoinKey,
+      toCoin: undefined,
+      fromCoin: undefined,
+      affiliateBps: noDiscount,
+    })
+
+    expect(result.protocol).toBeUndefined()
+  })
+
   it('books the CowSwap settlement fee as a protocol charge, not the product cut', () => {
     const quote: SwapQuoteResult = {
       general: {
@@ -449,8 +542,7 @@ describe('resolveSwapFees', () => {
           cosmosWasm: {
             sender: 'thor1sender',
             contract: 'thor1market',
-            executeMsg:
-              '{"swap":{"min":{"min_return":"990000","to":"thor1dest"}}}',
+            executeMsg: '{"swap":{"min_return":"990000","to":"thor1dest"}}',
             funds: [{ denom: 'rune', amount: '1000' }],
           },
         },
