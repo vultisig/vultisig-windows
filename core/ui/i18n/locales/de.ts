@@ -2065,4 +2065,7 @@ export const de = {
     'Die Netzwerkgebühr bzw. Ihr Guthaben hat sich nach der Festlegung des Betrags geändert, daher wurde der Betrag von {{requestedAmount}} auf {{amount}} reduziert.',
   send_enter_address_first_for_percentage:
     'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
+  ton_proof_domain: 'Beweis für',
+  ton_proof_domain_mismatch:
+    'Dieser Nachweis ist für eine andere Website als die, die ihn angefordert hat. Fahren Sie nur fort, wenn Sie beiden vertrauen.',
 }

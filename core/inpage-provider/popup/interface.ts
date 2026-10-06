@@ -1,5 +1,6 @@
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { TonSignDataPayload } from '@core/ui/mpc/keysign/customMessage/ton/tonSignData'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { ChainInfo } from '@keplr-wallet/types'
 import {
@@ -52,6 +53,36 @@ export const isEip712V4Payload = (value: unknown): value is Eip712V4Payload => {
   return true
 }
 
+/**
+ * Chains whose dApp `sign_message` requests carry the message bytes to sign.
+ * TON is absent: a raw TON signature over a 32-byte hash can authorize a
+ * transfer, so TON requests come as `ton_proof` / `ton_sign_data` and the
+ * popup builds the hash itself.
+ */
+export const rawSignMessageChains = [
+  OtherChain.Solana,
+  OtherChain.Sui,
+  OtherChain.Tron,
+  OtherChain.Polkadot,
+  OtherChain.Bittensor,
+  OtherChain.Cardano,
+  OtherChain.Ripple,
+] as const
+
+type RawSignMessageChain = (typeof rawSignMessageChains)[number]
+
+/** A dApp request to sign message bytes with a non-EVM chain key. */
+export type RawSignMessageInput = {
+  chain: RawSignMessageChain
+  useTronHeader?: boolean
+  isV2?: boolean
+  // XRPL (GemWallet `signMessage`): when true `message` is raw hex,
+  // otherwise it is UTF-8 text. Ignored by the other chains.
+  isHex?: boolean
+  message: string
+}
+
+/** A dApp request to sign a message, keyed by the signing method. */
 export type SignMessageInput =
   | { eth_signTypedData_v4: { chain: EvmChain; message: Eip712V4Payload } }
   | {
@@ -62,30 +93,29 @@ export type SignMessageInput =
         pluginId?: string
       }
     }
-  | {
-      sign_message: {
-        chain:
-          | OtherChain.Solana
-          | OtherChain.Sui
-          | OtherChain.Ton
-          | OtherChain.Tron
-          | OtherChain.Polkadot
-          | OtherChain.Bittensor
-          | OtherChain.Cardano
-          | OtherChain.Ripple
-        useTronHeader?: boolean
-        isV2?: boolean
-        // XRPL (GemWallet `signMessage`): when true `message` is raw hex,
-        // otherwise it is UTF-8 text. Ignored by the other chains.
-        isHex?: boolean
-        message: string
-      }
-    }
+  | { sign_message: RawSignMessageInput }
   | {
       cosmos_sign_arbitrary: {
         chain: CosmosChain
         // base64-encoded arbitrary payload (ADR-36 MsgSignData `data`)
         data: string
+      }
+    }
+  | {
+      ton_proof: {
+        chain: OtherChain.Ton
+        // App domain from the dApp's manifest, which the dApp controls; the
+        // popup shows it next to the real request origin.
+        domain: string
+        timestamp: number
+        payload: string
+      }
+    }
+  | {
+      ton_sign_data: {
+        chain: OtherChain.Ton
+        timestamp: number
+        payload: TonSignDataPayload
       }
     }
 

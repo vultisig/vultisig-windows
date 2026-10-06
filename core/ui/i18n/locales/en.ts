@@ -1560,6 +1560,9 @@ export const en = {
   failed_to_load_validators: 'Failed to load validators',
   no_active_delegations: 'No active delegations',
   ton_nominator_pool: 'Nominator Pool',
+  ton_proof_domain: 'Proof for',
+  ton_proof_domain_mismatch:
+    'This proof is for a different site than the one asking for it. Only continue if you trust both.',
   ton_stake_title: 'Stake {{ticker}}',
   ton_stake_cta: 'Stake {{ticker}}',
   ton_stake_select_pool: 'Select a Pool',

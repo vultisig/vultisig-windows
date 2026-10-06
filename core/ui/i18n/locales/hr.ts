@@ -2017,4 +2017,7 @@ export const hr = {
     'Mrežna naknada ili vaš saldo promijenili su se nakon što ste postavili iznos, pa je iznos smanjen s {{requestedAmount}} na {{amount}}.',
   send_enter_address_first_for_percentage:
     'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
+  ton_proof_domain: 'Dokaz za',
+  ton_proof_domain_mismatch:
+    'Ovaj dokaz je za drugu stranicu od one koja ga traži. Nastavite samo ako vjerujete objema.',
 }

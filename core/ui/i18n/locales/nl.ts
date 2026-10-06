@@ -2034,4 +2034,7 @@ export const nl = {
     'De netwerkkosten of uw saldo zijn gewijzigd nadat u het bedrag had ingesteld, waardoor het bedrag is verlaagd van {{requestedAmount}} naar {{amount}}.',
   send_enter_address_first_for_percentage:
     'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
+  ton_proof_domain: 'Bewijs voor',
+  ton_proof_domain_mismatch:
+    'Dit bewijs is voor een andere website dan degene die erom vraagt. Ga alleen verder als je beide websites vertrouwt.',
 }

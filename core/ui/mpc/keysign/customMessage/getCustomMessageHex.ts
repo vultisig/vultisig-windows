@@ -8,6 +8,7 @@ import { TypedDataEncoder } from 'ethers'
 import { keccak256, sha256 } from 'viem'
 
 import { CustomMessageSupportedChain } from './chains'
+import { getCustomMessageBytes } from './getCustomMessageBytes'
 
 type GetCustomMessageHexInput = {
   chain: CustomMessageSupportedChain
@@ -19,13 +20,15 @@ type GetCustomMessageHexInput = {
 // through the standard keysign pipeline (`signSui` keysign payload), not here.
 // `getSuiPersonalMessageDigest` handles the BCS `vector<u8>` wrap and the
 // PersonalMessage intent.
-const getSuiDigestHex = ({ message }: { message: string }): string => {
-  const messageBytes = message.startsWith('0x')
-    ? Buffer.from(stripHexPrefix(message), 'hex')
-    : new TextEncoder().encode(message)
-  return Buffer.from(getSuiPersonalMessageDigest(messageBytes)).toString('hex')
-}
+const getSuiDigestHex = (messageBytes: Uint8Array): string =>
+  Buffer.from(getSuiPersonalMessageDigest(messageBytes)).toString('hex')
 
+/**
+ * The hex digest the MPC keysign signs for a custom message. Every co-signer
+ * computes it independently from the shared payload, so a change here must
+ * ship on every platform at once; domain separation belongs in the popup,
+ * which builds the payload's `message`.
+ */
 export const getCustomMessageHex = ({
   chain,
   message,
@@ -38,9 +41,7 @@ export const getCustomMessageHex = ({
     )
   }
 
-  const bytes = message.startsWith('0x')
-    ? Buffer.from(stripHexPrefix(message), 'hex')
-    : new TextEncoder().encode(message)
+  const bytes = getCustomMessageBytes(message)
 
   return match(getChainKind(chain), {
     evm: () => stripHexPrefix(keccak256(bytes)),
@@ -48,7 +49,7 @@ export const getCustomMessageHex = ({
     // StdSignDoc{MsgSignData} bytes; the signed digest is their sha256.
     cosmos: () => stripHexPrefix(sha256(bytes)),
     solana: () => Buffer.from(bytes).toString('hex'),
-    sui: () => getSuiDigestHex({ message }),
+    sui: () => getSuiDigestHex(bytes),
     ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
     polkadot: () => Buffer.from(bytes).toString('hex'),

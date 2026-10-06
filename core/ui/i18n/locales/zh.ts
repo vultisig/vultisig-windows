@@ -1883,4 +1883,7 @@ export const zh = {
     '设置金额后，网络费用或余额发生了变化，因此金额从{{requestedAmount}}减少到{{amount}}。',
   send_enter_address_first_for_percentage:
     '请先输入收件人地址才能使用百分比按钮',
+  ton_proof_domain: '证明',
+  ton_proof_domain_mismatch:
+    '此证明文件并非用于索取证明的网站。请仅在您信任这两个网站的情况下继续操作。',
 }

@@ -2,6 +2,10 @@ import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
 import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import {
+  getTonSignDataPayloadIssue,
+  TonSignDataPayload,
+} from '@core/ui/mpc/keysign/customMessage/ton/tonSignData'
 import { Address } from '@ton/core'
 import type {
   AppRequest,
@@ -22,12 +26,7 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { getWalletStateInit } from './getWalletStateInit'
-import { buildSignDataCellHash, buildSignDataTextBinaryHash } from './signData'
-import {
-  buildTonProofPayload,
-  formatTonProofReply,
-  getTonProofHash,
-} from './tonProof'
+import { formatTonProofReply } from './tonProof'
 import {
   getTonConnectDeviceInfo,
   getTonConnectWalletInfo,
@@ -244,21 +243,14 @@ export class TonConnectBridge {
       const domain = domainResult.data
       const timestamp = Math.floor(Date.now() / 1000)
 
-      const proofMessage = buildTonProofPayload({
-        address: account.address,
-        domain,
-        timestamp,
-        payload: tonProofRequest.payload,
-      })
-
-      const proofHash = getTonProofHash(proofMessage)
-
       const { data: signatureHex, error: signError } = await attempt(
         callPopup({
           signMessage: {
-            sign_message: {
-              message: `0x${proofHash}`,
+            ton_proof: {
               chain: Chain.Ton,
+              domain,
+              timestamp,
+              payload: tonProofRequest.payload,
             },
           },
         })
@@ -430,56 +422,31 @@ export class TonConnectBridge {
       }
     }
 
-    const domain = window.location.hostname
-    const timestamp = Math.floor(Date.now() / 1000)
+    const signDataPayload: TonSignDataPayload =
+      payload.type === 'text'
+        ? { type: 'text', text: payload.text }
+        : payload.type === 'binary'
+          ? { type: 'binary', bytes: payload.bytes }
+          : { type: 'cell', schema: payload.schema, cell: payload.cell }
 
-    const hashResult = attempt((): string => {
-      if (payload.type === 'text') {
-        return buildSignDataTextBinaryHash({
-          address: account.address,
-          domain,
-          timestamp,
-          type: 'text',
-          payloadData: Buffer.from(payload.text, 'utf-8'),
-        })
-      }
-      if (payload.type === 'binary') {
-        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(payload.bytes)) {
-          throw new Error('Invalid base64 in binary payload')
-        }
-        return buildSignDataTextBinaryHash({
-          address: account.address,
-          domain,
-          timestamp,
-          type: 'binary',
-          payloadData: Buffer.from(payload.bytes, 'base64'),
-        })
-      }
-      if (payload.type === 'cell') {
-        return buildSignDataCellHash({
-          address: account.address,
-          domain,
-          timestamp,
-          schema: payload.schema,
-          cellBase64: payload.cell,
-        })
-      }
-      throw new Error('Unsupported signData payload type')
-    })
-
-    if ('error' in hashResult) {
-      return getBadRequestError('Failed to build signData hash')
+    const payloadIssue = getTonSignDataPayloadIssue(signDataPayload)
+    if (payloadIssue) {
+      return getBadRequestError(payloadIssue)
     }
 
-    const hashHex = hashResult.data
+    // The popup binds the signature to the real request origin, which for
+    // this frame has the same hostname.
+    const domain = window.location.hostname
+    const timestamp = Math.floor(Date.now() / 1000)
 
     const { data: signatureHex, error: signError } = await attempt(
       callPopup(
         {
           signMessage: {
-            sign_message: {
-              message: `0x${hashHex}`,
+            ton_sign_data: {
               chain: Chain.Ton,
+              timestamp,
+              payload: signDataPayload,
             },
           },
         },

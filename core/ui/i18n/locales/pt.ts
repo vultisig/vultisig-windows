@@ -2049,4 +2049,7 @@ export const pt = {
     'A taxa de rede ou seu saldo mudou depois que você definiu o valor, então o valor foi reduzido de {{requestedAmount}} para {{amount}}.',
   send_enter_address_first_for_percentage:
     'Primeiro, insira o endereço do destinatário para usar os botões de porcentagem.',
+  ton_proof_domain: 'Prova para',
+  ton_proof_domain_mismatch:
+    'Esta prova é para um site diferente daquele que a solicitou. Só prossiga se confiar em ambos.',
 }
