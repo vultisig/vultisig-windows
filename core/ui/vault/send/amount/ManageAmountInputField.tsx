@@ -41,7 +41,6 @@ import {
 } from '@vultisig/core-chain/coin/Coin'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { minBigInt } from '@vultisig/lib-utils/math/minBigInt'
 import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
@@ -156,10 +155,7 @@ export const ManageAmountInputField = () => {
     if (isFeeEstimateUnavailable)
       return t('send_enter_address_first_for_percentage')
     if (maxSendableError)
-      return (
-        getBuildKeysignPayloadErrorMessage(maxSendableError, t) ??
-        extractErrorMsg(maxSendableError)
-      )
+      return getBuildKeysignPayloadErrorMessage(maxSendableError, t)
     return null
   })()
   const isWaitingForFee =
