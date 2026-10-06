@@ -50,6 +50,10 @@ type SwapArrivalRecordUpdate = {
   record?: TransactionRecord
 }
 
+type GetSwapArrivalRecordUpdateInput = ArrivalTrackedSwap & {
+  senderAccountId: string | undefined
+}
+
 /**
  * Settles a native swap from both reads. The source transaction goes first: it
  * is the deposit that starts the swap, and until it confirms — or if it
@@ -67,9 +71,7 @@ export const getSwapArrivalRecordUpdate = async ({
   record: storedRecord,
   provider,
   senderAccountId,
-}: ArrivalTrackedSwap & {
-  senderAccountId: string | undefined
-}): Promise<SwapArrivalRecordUpdate> => {
+}: GetSwapArrivalRecordUpdateInput): Promise<SwapArrivalRecordUpdate> => {
   const source = await getTxStatus({
     chain: storedRecord.data.fromChain,
     hash: storedRecord.txHash,
