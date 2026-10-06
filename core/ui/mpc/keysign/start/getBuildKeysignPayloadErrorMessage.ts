@@ -1,24 +1,22 @@
 import { getInsufficientFundsMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { TFunction } from 'i18next'
 
-/** The shortfall message for a failed payload build that reports one, otherwise undefined. */
-const getBuildKeysignPayloadFundsMessage = (
-  error: unknown,
-  t: TFunction
-): string | undefined =>
-  error instanceof BuildKeysignPayloadError && error.shortfall
-    ? getInsufficientFundsMessage(error.shortfall, t)
-    : undefined
-
-/** The translated reason a payload build refused, for every surface that shows one. */
+/**
+ * The translated reason a payload build refused, for every surface that shows
+ * one; the error's own text when there is no translation for it.
+ */
 export const getBuildKeysignPayloadErrorMessage = (
   error: unknown,
   t: TFunction
-): string | undefined => {
-  const fundsMessage = getBuildKeysignPayloadFundsMessage(error, t)
-  if (fundsMessage || !(error instanceof BuildKeysignPayloadError)) {
-    return fundsMessage
+): string => {
+  if (!(error instanceof BuildKeysignPayloadError)) {
+    return extractErrorMsg(error)
+  }
+
+  if (error.shortfall) {
+    return getInsufficientFundsMessage(error.shortfall, t)
   }
 
   switch (error.type) {
@@ -27,6 +25,6 @@ export const getBuildKeysignPayloadErrorMessage = (
     case 'ripple-destination-tag-required':
       return t('ripple_destination_tag_required')
     default:
-      return undefined
+      return extractErrorMsg(error)
   }
 }

@@ -15,7 +15,6 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { useTranslation } from 'react-i18next'
 
@@ -50,9 +49,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
     }
 
     if (error) {
-      return (
-        getBuildKeysignPayloadErrorMessage(error, t) ?? extractErrorMsg(error)
-      )
+      return getBuildKeysignPayloadErrorMessage(error, t)
     }
 
     return isPending || isAllowDeathSyncing || isFeeRefreshing
