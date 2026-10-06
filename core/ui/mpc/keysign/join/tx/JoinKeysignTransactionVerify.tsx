@@ -100,15 +100,21 @@ export const JoinKeysignTransactionVerify = ({
       <JoinKeysignTxOverview value={value} />
     )
 
-  // A transaction that reaches the kVaults program and does not decode is not
-  // joinable: this device cannot say what it authorises, and joining anyway
-  // would contribute a signature to bytes nobody on this screen has read.
-  const disabled = 'unreadable' in kamino || termsAccepted.some(term => !term)
-  // Whichever view renders it, a SwapKit deposit the signer would refuse is not joinable.
-  const depositUnverifiableMessage = getSwapKitDepositUnverifiableMessage(
-    value,
-    t
-  )
+  const disabledMessage = (() => {
+    // A transaction that reaches the kVaults program and does not decode is not
+    // joinable: this device cannot say what it authorises, and joining anyway
+    // would contribute a signature to bytes nobody on this screen has read.
+    if ('unreadable' in kamino) return t('kamino_earn_unreadable_title')
+
+    // Whichever view renders it, a SwapKit deposit the signer would refuse is not joinable.
+    const depositUnverifiableMessage = getSwapKitDepositUnverifiableMessage(
+      value,
+      t
+    )
+    if (depositUnverifiableMessage) return depositUnverifiableMessage
+
+    if (termsAccepted.some(term => !term)) return t('terms_required')
+  })()
 
   return (
     <>
@@ -132,18 +138,7 @@ export const JoinKeysignTransactionVerify = ({
         )}
       </PageContent>
       <PageFooter>
-        <JoinKeysignButton
-          onClick={onFinish}
-          disabled={
-            'unreadable' in kamino
-              ? t('kamino_earn_unreadable_title')
-              : depositUnverifiableMessage
-                ? depositUnverifiableMessage
-                : disabled
-                  ? t('terms_required')
-                  : undefined
-          }
-        />
+        <JoinKeysignButton onClick={onFinish} disabled={disabledMessage} />
       </PageFooter>
     </>
   )
