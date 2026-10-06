@@ -1,4 +1,3 @@
-import { getBuildKeysignPayloadErrorMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { Query } from '@lib/ui/query/Query'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -7,6 +6,7 @@ import { TFunction } from 'i18next'
 
 import { StartKeysignPromptProps } from '../prompt/StartKeysignPromptProps'
 import { getSwapPayloadRefusalMessage } from '../tx/swap/getSwapPayloadRefusalMessage'
+import { getBuildKeysignPayloadErrorMessage } from './getBuildKeysignPayloadErrorMessage'
 
 type ResolveStartKeysignPromptPropsInput = {
   t: TFunction
