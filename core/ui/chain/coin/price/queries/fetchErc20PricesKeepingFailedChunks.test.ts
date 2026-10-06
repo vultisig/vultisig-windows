@@ -60,7 +60,7 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
 
     expect(prices[keyFor(failed.id)]).toEqual(stamp(1.96))
     expect(prices[keyFor(listed.id)]?.price).toBe(2.8)
-    expect(prices[keyFor(dropped.id)]).toBeUndefined()
+    expect(prices[keyFor(dropped.id)]?.price).toBeNull()
     expect(getPrices).toHaveBeenCalledTimes(3)
   })
 
@@ -214,7 +214,7 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
     })
 
     expect(prices[keyFor(listed.id)]?.price).toBe(2.8)
-    expect(prices[keyFor(blank.id)]).toBeUndefined()
+    expect(prices[keyFor(blank.id)]?.price).toBeNull()
   })
 
   it('waits before the second try', async () => {
@@ -238,5 +238,45 @@ describe('fetchErc20PricesKeepingFailedChunks', () => {
     const prices = await pending
     expect(prices[keyFor(listed.id)]?.price).toBe(2)
     expect(getPrices).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not revive a price that a newer successful lookup omitted', async () => {
+    vi.useFakeTimers()
+    const cake = coin('0xcake')
+    const x = coin('0xaaaa')
+    const y = coin('0xbbbb')
+    const client = new QueryClient()
+    const run = async (
+      coins: ReturnType<typeof coin>[],
+      getPrices: () => Promise<Record<string, number>>
+    ) => {
+      const prices = await fetchErc20PricesKeepingFailedChunks({
+        coins,
+        chain: EvmChain.Ethereum,
+        fiatCurrency: 'usd',
+        previous: cachedCoinPricesForFiat(client, 'usd'),
+        getPrices,
+      })
+      client.setQueryData(
+        ['erc20Prices', { coins, fiatCurrency: 'usd' }],
+        prices
+      )
+    }
+
+    vi.setSystemTime(1_000)
+    await run([cake, x, y], async () => ({
+      [cake.id]: 1.96,
+      [x.id]: 1,
+      [y.id]: 3,
+    }))
+    vi.setSystemTime(2_000)
+    await run([cake], async () => ({}))
+    vi.setSystemTime(3_000)
+    const failed = run([cake, y], async () => {
+      throw new Error('down')
+    })
+    const assertion = expect(failed).rejects.toThrow()
+    await vi.advanceTimersByTimeAsync(erc20PriceRetryDelayMs)
+    await assertion
   })
 })

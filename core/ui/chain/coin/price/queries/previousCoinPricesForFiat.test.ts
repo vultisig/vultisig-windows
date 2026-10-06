@@ -77,6 +77,27 @@ describe('previousCoinPricesForFiat', () => {
     expect(prices[other]).toBeUndefined()
   })
 
+  it('drops a price when a newer entry recorded the coin as omitted', () => {
+    const prices = previousCoinPricesForFiat(
+      [
+        {
+          fiatCurrency: 'usd',
+          updatedAt: 1,
+          prices: { [cake]: { price: 1.96, fetchedAt: 1 } },
+        },
+        {
+          fiatCurrency: 'usd',
+          updatedAt: 2,
+          prices: { [cake]: { price: null, fetchedAt: 2 } },
+        },
+      ],
+      'usd',
+      2
+    )
+
+    expect(prices[cake]).toBeUndefined()
+  })
+
   it('skips a non-finite price', () => {
     const prices = previousCoinPricesForFiat(
       [

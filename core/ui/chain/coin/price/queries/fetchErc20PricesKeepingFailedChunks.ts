@@ -7,7 +7,11 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { retry } from '@vultisig/lib-utils/query/retry'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
-import { keptPriceMaxAge, StampedPrice } from './previousCoinPricesForFiat'
+import {
+  CachedPrice,
+  keptPriceMaxAge,
+  StampedPrice,
+} from './previousCoinPricesForFiat'
 
 /** Matches the SDK contract-price batch. One failed URL must not blank the chain. */
 export const erc20PriceBatchSize = 25
@@ -25,7 +29,8 @@ type GetPrices = (input: {
 /**
  * A failed batch keeps prices it already has. If any coin in that batch has
  * none, this throws so the query keeps its last full result. A success that
- * omits a contract drops it.
+ * omits a contract records `price: null`, so an older cached quote for it is
+ * not revived by a later failed batch.
  */
 export async function fetchErc20PricesKeepingFailedChunks({
   coins,
@@ -39,9 +44,9 @@ export async function fetchErc20PricesKeepingFailedChunks({
   fiatCurrency: FiatCurrency
   previous: Record<string, StampedPrice>
   getPrices?: GetPrices
-}): Promise<Record<string, StampedPrice>> {
+}): Promise<Record<string, CachedPrice>> {
   const batches = toBatches(coins, erc20PriceBatchSize)
-  const freshPrices: Record<string, number> = {}
+  const freshPrices: Record<string, number | null> = {}
   const retained: Record<string, StampedPrice> = {}
   const failedKeys = new Set<string>()
   let failures = 0
@@ -69,6 +74,7 @@ export async function fetchErc20PricesKeepingFailedChunks({
       }
       continue
     }
+    for (const coin of batch) freshPrices[coinKeyToString(coin)] = null
     for (const [id, price] of Object.entries(prices)) {
       if (!Number.isFinite(price)) continue
       const coin = shouldBePresent(
@@ -96,7 +102,7 @@ export async function fetchErc20PricesKeepingFailedChunks({
   }
 
   const fetchedAt = Date.now()
-  const fresh: Record<string, StampedPrice> = {}
+  const fresh: Record<string, CachedPrice> = {}
   for (const [key, price] of Object.entries(freshPrices)) {
     fresh[key] = { price, fetchedAt }
   }

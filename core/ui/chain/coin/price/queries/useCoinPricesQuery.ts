@@ -16,7 +16,6 @@ import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { mergeRecords } from '@vultisig/lib-utils/record/mergeRecords'
-import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
@@ -33,7 +32,7 @@ import {
 import { fetchErc20PricesKeepingFailedChunks } from './fetchErc20PricesKeepingFailedChunks'
 import {
   cachedCoinPricesForFiat,
-  StampedPrice,
+  CachedPrice,
 } from './previousCoinPricesForFiat'
 
 type GetCoinPricesQueryKeysInput = {
@@ -143,8 +142,7 @@ export function useCoinPricesQuery(
             previous: cachedCoinPricesForFiat(queryClient, fiatCurrency),
           }),
         ...pricePersistQueryOptions,
-        select: (data: Record<string, StampedPrice>) =>
-          recordMap(data, stamp => stamp.price),
+        select: pricedOnly,
       })
     })
   }
@@ -302,4 +300,12 @@ export function useCoinPricesQuery(
     },
     eager,
   })
+}
+
+const pricedOnly = (data: Record<string, CachedPrice>) => {
+  const prices: Record<string, number> = {}
+  for (const [key, { price }] of Object.entries(data)) {
+    if (price !== null) prices[key] = price
+  }
+  return prices
 }
