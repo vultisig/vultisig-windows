@@ -101,6 +101,9 @@ const getSwapAffiliateNotional = ({
  * that were sent. `protocol` is derived as `total - affiliate` rather than from
  * `fees.outbound`: that covers the liquidity fee the quote type does not expose
  * and guarantees the itemized rows still sum to the headline total.
+ *
+ * General quotes itemize the aggregator's own cut (LI.FI's share of its fixed
+ * fee, SwapKit's service fee) as `protocolFee`, apart from the affiliate fee.
  */
 export const getSwapProviderFees = (
   input: GetSwapProviderFeesInput

@@ -494,6 +494,45 @@ describe('resolveSwapFees', () => {
     expect(result.affiliate).toBeUndefined()
   })
 
+  it("books an aggregator's own fee as a protocol charge, not the product cut", () => {
+    // vultisig-sdk#2396: a SwapKit 1inch route paid 0.30% to the product and
+    // another 0.15% to SwapKit, both in the destination USDT.
+    const usdt = {
+      chain: Chain.Ethereum,
+      id: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+      decimals: 6,
+    }
+    const quote: SwapQuoteResult = {
+      general: {
+        dstAmount: '954272',
+        provider: 'swapkit',
+        tx: {
+          evm: {
+            from: '0xfrom',
+            to: '0xrouter',
+            data: '0x',
+            value: '400000000000000',
+            affiliateFee: { ...usdt, amount: 2875n },
+            protocolFee: { ...usdt, amount: 1437n },
+          },
+        },
+      },
+    }
+
+    const result = resolveSwapFees({
+      quote,
+      network: computedNetworkFee,
+      toCoinKey: usdt,
+      toCoin: undefined,
+      fromCoin: undefined,
+      affiliateBps: noDiscount,
+    })
+
+    expect(result.affiliate?.amount).toBe(2875n)
+    expect(result.protocol?.amount).toBe(1437n)
+    expect(getSwapFeeEntries(result)).toHaveLength(3)
+  })
+
   it('itemizes no charge for a RUJI Trade execute and keeps the computed gas', () => {
     const quote: SwapQuoteResult = {
       general: {

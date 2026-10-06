@@ -189,3 +189,65 @@ describe('swap fee breakdown', () => {
     ).toBeUndefined()
   })
 })
+
+describe('an aggregator that charges a fee of its own', () => {
+  // vultisig-sdk#2396: 0.01 SOL to USDC through LI.FI at the Gold rate. The
+  // swap paid 30000 lamports to the product and another 25000 to LI.FI.
+  const discounts = [vultDiscount('gold')]
+  const disclosure = getSwapFeeDisclosure(discounts)
+  const solanaNetwork: SwapFee = {
+    chain: Chain.Solana,
+    amount: 19_113n,
+    decimals: 9,
+  }
+  const fees = resolveSwapFees({
+    quote: {
+      general: {
+        dstAmount: '964936',
+        provider: 'li.fi',
+        tx: {
+          solana: {
+            data: '',
+            networkFee: 0n,
+            swapFee: { chain: Chain.Solana, amount: 30_000n, decimals: 9 },
+            protocolFee: { chain: Chain.Solana, amount: 25_000n, decimals: 9 },
+          },
+        },
+      },
+    },
+    network: solanaNetwork,
+    toCoinKey: {
+      chain: Chain.Solana,
+      id: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+    },
+    toCoin: undefined,
+    fromCoin: undefined,
+    affiliateBps: getSwapQuoteAffiliateBps(discounts),
+  })
+
+  it("quotes the list rate on the product's cut alone", () => {
+    const listRateFee = getSwapListRateFee({
+      affiliate: fees.affiliate,
+      referral: fees.referral,
+      notional: fees.affiliateNotional,
+      disclosure,
+    })
+
+    // 0.50% of 0.01 SOL. Scaling LI.FI's cut along with ours made this row
+    // read 91666 lamports — 0.92% under a 0.50% label.
+    expect(listRateFee?.amount).toBe(50_000n)
+  })
+
+  it("itemizes the provider's cut on a row of its own", () => {
+    expect(fees.protocol?.amount).toBe(25_000n)
+  })
+
+  it('counts both cuts in the total', () => {
+    const total = getSwapFeeEntries(fees).reduce(
+      (sum, { amount }) => sum + amount,
+      0n
+    )
+
+    expect(total).toBe(solanaNetwork.amount + 30_000n + 25_000n)
+  })
+})
