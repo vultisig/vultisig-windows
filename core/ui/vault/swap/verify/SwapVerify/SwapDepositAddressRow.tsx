@@ -27,31 +27,21 @@ export const SwapDepositAddressRow = ({
     getKeysignSwapKitDepositRecipient(keysignPayload)
   )
 
-  if ('error' in result) {
-    return (
-      <>
-        {renderRow({
-          label: t('swap_deposit_address'),
-          value: (
-            <Text as="span" color="danger">
-              {t('swap_deposit_address_unverifiable')}
-            </Text>
-          ),
-        })}
-      </>
-    )
-  }
+  const value = (() => {
+    if ('error' in result) {
+      return (
+        <Text as="span" color="danger">
+          {t('swap_deposit_address_unverifiable')}
+        </Text>
+      )
+    }
 
-  if (!result.data) return null
+    if (result.data) {
+      return <MiddleTruncate text={result.data} flexGrow justifyContent="end" />
+    }
+  })()
 
-  return (
-    <>
-      {renderRow({
-        label: t('swap_deposit_address'),
-        value: (
-          <MiddleTruncate text={result.data} flexGrow justifyContent="end" />
-        ),
-      })}
-    </>
-  )
+  if (!value) return null
+
+  return <>{renderRow({ label: t('swap_deposit_address'), value })}</>
 }
