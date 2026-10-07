@@ -77,11 +77,11 @@ export const hasSameReadabilityInputs = ({
   getRecordKeys(resolved).every(key => resolved[key] === current[key])
 
 /**
- * Whether shares proven under `resolved` still apply while the lock has taken
- * the passcode away, or while they are read again once it is back. Locking
- * changes nothing the stored shares decrypt to, so a withdrawn passcode is not
- * a difference — but any other input is, and so is a different passcode after
- * unlocking.
+ * Whether a read proven under `resolved` still vouches for the stored shares
+ * while the lock has taken the passcode away, or while they are read again
+ * once it is back. Locking changes nothing the stored shares decrypt to, so a
+ * withdrawn passcode is not a difference — but any other input is, and so is a
+ * different passcode after unlocking.
  */
 export const canHoldProvenSharesAcrossLock = ({
   resolved,

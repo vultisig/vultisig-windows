@@ -26,10 +26,12 @@
  * - a read is tagged with the inputs it was requested under, so shares
  *   replaced on the same object while it was in flight are never provided —
  *   and are re-read rather than leaving the tree withheld for good
- * - the passcode lock keeps the tree mounted with the shares already proven,
- *   through the lock and the re-read after unlocking, so an open sheet survives
- *   it (#5018) — but not when the shares change underneath it, nor when a
- *   different passcode comes back, and never for a tree that opens locked
+ * - the tree stays mounted through the passcode lock and the re-read after
+ *   unlocking, so an open sheet survives it (#5018) — but not when the shares
+ *   change underneath it, nor when a different passcode comes back, and never
+ *   for a tree that opens locked
+ * - while locked the tree is given only the stored shares, and the proven ones
+ *   come back with the passcode
  */
 import {
   RootCurrentVaultProvider,
@@ -532,8 +534,9 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
       expect(screen.queryByTestId('splash')).toBeNull()
       expect(screen.getByText('Select chain')).toBeDefined()
-      // The shares the tree keeps are the proven ones, never the stored bytes.
-      expect(screen.getByTestId('shares').textContent).toBe('proven-ecdsa')
+      // The lock withholds every credential: whatever keeps running under it
+      // sees only the stored, still-encrypted shares.
+      expect(screen.getByTestId('shares').textContent).toBe('stored-ecdsa')
       // Nothing can be read without the passcode.
       expect(readCalls).toHaveLength(1)
 
@@ -543,6 +546,8 @@ describe('RootCurrentVaultProvider tree continuity', () => {
       expect(readCalls).toHaveLength(2)
       expect(screen.queryByTestId('splash')).toBeNull()
       expect(screen.getByText('Select chain')).toBeDefined()
+      // The proven shares are back with the passcode, before the read settles.
+      expect(screen.getByTestId('shares').textContent).toBe('proven-ecdsa')
 
       await resolveRead()
 

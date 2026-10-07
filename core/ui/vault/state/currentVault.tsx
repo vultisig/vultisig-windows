@@ -51,7 +51,7 @@ type CurrentVaultValue = (Vault & Partial<{ coins: AccountCoin[] }>) | undefined
 
 /**
  * A value handed to the tree, with the read that proved its shares when it
- * carries any — which is what lets those shares be held across a lock.
+ * carries any — which is what lets the tree stay mounted across a lock.
  */
 type ProvidedVault = {
   value: CurrentVaultValue
@@ -250,11 +250,15 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
       // Locking takes the passcode away and unlocking reads the shares again
       // under it, but neither changes what the stored shares decrypt to. While
-      // they are the bytes the held shares were proven from, the tree keeps
-      // them and stays mounted under the lock screen, which covers it and takes
-      // every click and keystroke (#4596). Withholding it instead unmounts
-      // every screen, so an open sheet or a half-filled form was gone after
-      // unlocking (#5018).
+      // they are the bytes the held proof was read from, the tree stays mounted
+      // under the lock screen, which covers it and takes every click and
+      // keystroke (#4596). Withholding it instead unmounts every screen, so an
+      // open sheet or a half-filled form was gone after unlocking (#5018).
+      //
+      // The lock withholds every credential, so while it is up the tree gets
+      // the stored shares, still encrypted: code that keeps running under it,
+      // such as the agent, cannot sign with them. The proven shares come back
+      // with the passcode, without waiting for the read to finish again.
       if (
         held?.proof &&
         canHoldProvenSharesAcrossLock({
@@ -267,7 +271,10 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
           }),
         })
       ) {
-        return { value: { ...vault, ...held.proof.shares }, proof: held.proof }
+        return {
+          value: isLocked ? vault : { ...vault, ...held.proof.shares },
+          proof: held.proof,
+        }
       }
 
       if (isLocked) {
@@ -301,8 +308,10 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     }
   })()
 
+  // A value given under the lock carries the stored shares, so it is never
+  // what a setup flow is held on once the lock is gone.
   useEffect(() => {
-    if (provided) {
+    if (provided && !isLocked) {
       heldValue.current = provided
     }
   })
