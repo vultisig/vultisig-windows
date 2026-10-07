@@ -527,6 +527,10 @@ export const de = {
     'Nicht genug {{ticker}}: Diese Überweisung benötigt {{required}}, Sie haben {{available}}',
   insufficient_funds_including_network_costs:
     'Nicht genug {{ticker}}: Diese Überweisung benötigt {{required}} inklusive Netzwerkkosten, Sie haben {{available}}',
+  send_receiver_format_hint_near:
+    'Geben Sie eine NEAR-Konto-ID wie alice.near oder eine 64-stellige Hex-Adresse in Kleinbuchstaben ein.',
+  send_memo_not_supported:
+    '{{chain}}-Überweisungen können kein Memo enthalten. Entfernen Sie das Memo, um fortzufahren.',
   insufficient_native_balance_for_fee:
     'Unzureichendes Guthaben an nativen Token zur Bezahlung der Transaktionsgebühr',
   insufficient_gas_limit: 'Unzureichende Gasmenge',
@@ -1761,6 +1765,8 @@ export const de = {
   ripple_destination_tag_invalid:
     'Gib eine ganze Zahl zwischen 0 und 4.294.967.295 ein.',
   ripple_destination_tag_optional: 'Optionaler Ziel-Tag',
+  near_destination_not_found:
+    'Dieses NEAR-Konto existiert nicht. Prüfen Sie den Empfänger: Eine Überweisung dorthin würde nur Gas verbrauchen.',
   ripple_destination_tag_required: 'Dieses XRP-Konto erfordert einen Ziel-Tag.',
   ripple_field_amount: 'Menge',
   ripple_field_send_max: 'Zahlen Sie höchstens',

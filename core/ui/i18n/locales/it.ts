@@ -526,6 +526,10 @@ export const it = {
     '{{ticker}} insufficiente: questo invio richiede {{required}}, hai {{available}}',
   insufficient_funds_including_network_costs:
     '{{ticker}} insufficiente: questo invio richiede {{required}} inclusi i costi di rete, hai {{available}}',
+  send_receiver_format_hint_near:
+    'Inserisci un ID account NEAR come alice.near o un indirizzo esadecimale minuscolo di 64 caratteri.',
+  send_memo_not_supported:
+    'I trasferimenti {{chain}} non possono contenere un promemoria. Rimuovi il promemoria per continuare.',
   insufficient_native_balance_for_fee:
     'Saldo token nativo insufficiente per pagare la commissione di transazione',
   insufficient_gas_limit: 'Limite di gas insufficiente',
@@ -1751,6 +1755,8 @@ export const it = {
   ripple_destination_tag_invalid:
     'Inserisci un numero intero compreso tra 0 e 4.294.967.295.',
   ripple_destination_tag_optional: 'Etichetta di destinazione facoltativa',
+  near_destination_not_found:
+    'Questo account NEAR non esiste. Controlla il destinatario: un trasferimento verso di esso consumerebbe solo gas.',
   ripple_destination_tag_required:
     'Questo account XRP richiede un’etichetta di destinazione.',
   ripple_field_amount: 'Quantità',

@@ -26,6 +26,7 @@ const templates: Record<string, string> = {
   insufficient_funds_asset: 'short {{ticker}}: {{required}} / {{available}}',
   insufficient_funds_including_network_costs:
     'short {{ticker}} with costs: {{required}} / {{available}}',
+  send_memo_not_supported: 'no memo on {{chain}}',
 }
 const t = ((key: string, options?: Record<string, unknown>) => {
   const template = templates[key] ?? key
@@ -171,6 +172,17 @@ describe('validateSendForm', () => {
       fee: undefined,
       skipDustCheck: true,
     })
+  })
+
+  it('blocks a memo on a chain whose transfer cannot carry one', () => {
+    const validate = (chain: Chain) =>
+      validateSendForm(
+        { ...validSendForm(nativeCoin(chain)), memo: 'deposit-42' },
+        { balance: 100n, fee: 1n, walletCore, t }
+      )
+
+    expect(validate(Chain.Near).memo).toBe(`no memo on ${Chain.Near}`)
+    expect(validate(Chain.THORChain).memo).toBeUndefined()
   })
 })
 

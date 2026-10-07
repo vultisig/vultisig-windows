@@ -517,6 +517,10 @@ export const nl = {
     'Niet genoeg {{ticker}}: deze verzending heeft {{required}} nodig, je hebt {{available}}',
   insufficient_funds_including_network_costs:
     'Niet genoeg {{ticker}}: deze verzending heeft {{required}} nodig inclusief netwerkkosten, je hebt {{available}}',
+  send_receiver_format_hint_near:
+    'Voer een NEAR-account-ID in zoals alice.near, of een hexadecimaal adres van 64 kleine letters.',
+  send_memo_not_supported:
+    '{{chain}}-overboekingen kunnen geen memo bevatten. Verwijder de memo om door te gaan.',
   insufficient_native_balance_for_fee:
     'Onvoldoende saldo aan native tokens om de transactiekosten te betalen.',
   insufficient_gas_limit: 'Onvoldoende gaslimiet',
@@ -1730,6 +1734,8 @@ export const nl = {
   ripple_destination_tag_invalid:
     'Voer een geheel getal tussen 0 en 4.294.967.295 in.',
   ripple_destination_tag_optional: 'Optioneel bestemmingslabel',
+  near_destination_not_found:
+    'Dit NEAR-account bestaat niet. Controleer de ontvanger: een overboeking ernaartoe verbruikt alleen gas.',
   ripple_destination_tag_required:
     'Voor deze XRP-rekening is een bestemmingslabel vereist.',
   ripple_field_amount: 'Hoeveelheid',

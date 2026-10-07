@@ -15,6 +15,7 @@ import { omit } from '@vultisig/lib-utils/record/omit'
 import { getSendFeeEstimateWithTronMemo } from '../../../mpc/keysign/fee/tronMemoFee'
 import { useSendAllowDeath } from '../allowDeath/useSendAllowDeath'
 import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
+import { getSendPayloadMemo } from '../memo/sendMemoSupport'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
@@ -57,7 +58,7 @@ export const useSendFeeEstimateQuery = ({
           receiver,
           amount: balance,
           destinationTag,
-          memo,
+          memo: getSendPayloadMemo({ chain: coin.chain, memo }),
           vaultId: getVaultId(vault),
           localPartyId: vault.localPartyId,
           publicKey,

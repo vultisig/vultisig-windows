@@ -26,6 +26,7 @@ vi.mock('./useSendFeeEstimateQuery', () => ({
   useSendFeeEstimateQuery: mocks.fee,
 }))
 vi.mock('../state/receiver', () => ({ useSendReceiver: () => ['rRecipient'] }))
+vi.mock('../state/memo', () => ({ useSendMemo: () => [''] }))
 vi.mock('../state/destinationTag', () => ({
   useSendDestinationTagInput: () => [''],
   getSendDestinationTag: () => ({ error: false }),

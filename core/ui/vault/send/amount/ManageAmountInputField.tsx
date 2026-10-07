@@ -1,4 +1,5 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { getBuildKeysignPayloadErrorMessage } from '@core/ui/mpc/keysign/start/getBuildKeysignPayloadErrorMessage'
 import { ManageSendAllowDeath } from '@core/ui/vault/send/allowDeath/ManageSendAllowDeath'
 import { useAllowDeathSendAmount } from '@core/ui/vault/send/allowDeath/useAllowDeathSendAmount'
 import { useSendAllowDeath } from '@core/ui/vault/send/allowDeath/useSendAllowDeath'
@@ -7,6 +8,7 @@ import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
 import { BaseSendAmountInput } from '@core/ui/vault/send/amount/BaseSendAmountInput'
 import { FiatSendAmountInput } from '@core/ui/vault/send/amount/FiatSendAmountInput'
+import { useSendMaxSendable } from '@core/ui/vault/send/amount/useSendMaxSendable'
 import { useSpendableSendAmount } from '@core/ui/vault/send/amount/useSpendableSendAmount'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
@@ -16,7 +18,6 @@ import { useIsSendFeePaidInCoin } from '@core/ui/vault/send/fee/useIsSendFeePaid
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
-import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
@@ -32,7 +33,6 @@ import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   areEqualCoins,
@@ -78,7 +78,6 @@ export const ManageAmountInputField = () => {
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
   const [receiver] = useSendReceiver()
-  const feeEstimateQuery = useSendFeeEstimateQuery()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
   // The fee is reserved from this balance for a native send and for a gasless
@@ -87,6 +86,15 @@ export const ManageAmountInputField = () => {
   const hasBalance = balance != null && balance > 0n
   const allowDeath = useSendAllowDeath()
   const { isSyncing: isAllowDeathSyncing } = useAllowDeathSendAmount()
+  const {
+    get: getMaxSendable,
+    isPending: isMaxSendablePending,
+    error: maxSendableError,
+  } = useSendMaxSendable()
+  const pendingMaxSendable =
+    pendingSuggestion == null
+      ? null
+      : getMaxSendable(allowDeath.isEnabled && pendingSuggestion === 1)
 
   // Emptying the account is only ever done at the full amount: any other
   // amount could leave a remainder the chain destroys, so choosing one turns
@@ -100,41 +108,25 @@ export const ManageAmountInputField = () => {
     }
   }
 
-  // When user clicked a suggestion and we were waiting for fee: apply amount once fee is available
+  // When user clicked a suggestion and we were waiting for the maximum: apply amount once it is known
   useEffect(() => {
     if (
       pendingSuggestion == null ||
       balance == null ||
-      (isNative && feeEstimateQuery.data == null)
+      (isNative && pendingMaxSendable == null)
     ) {
       return
     }
 
     const suggestionValue = multiplyBigInt(balance, pendingSuggestion)
-    const maxSendable =
-      isNative && feeEstimateQuery.data != null
-        ? getMaxSendableAmount({
-            chain: coin.chain,
-            balance,
-            fee: feeEstimateQuery.data,
-            allowDeath: allowDeath.isEnabled && pendingSuggestion === 1,
-          })
-        : balance
-    const effectiveAmount = isNative
-      ? minBigInt(suggestionValue, maxSendable)
-      : suggestionValue
+    const effectiveAmount =
+      isNative && pendingMaxSendable != null
+        ? minBigInt(suggestionValue, pendingMaxSendable)
+        : suggestionValue
 
     setValue(effectiveAmount)
     setPendingSuggestion(null)
-  }, [
-    allowDeath.isEnabled,
-    balance,
-    coin.chain,
-    feeEstimateQuery.data,
-    isNative,
-    pendingSuggestion,
-    setValue,
-  ])
+  }, [balance, isNative, pendingMaxSendable, pendingSuggestion, setValue])
 
   const [currencyInputMode, setCurrencyInputMode] = useStateCorrector(
     useState<CurrencyInputMode>('base'),
@@ -157,12 +149,19 @@ export const ManageAmountInputField = () => {
   // The fee is estimated for a concrete receiver, so without one the query
   // stays idle and never settles. Waiting on it would lock the field for good,
   // and any fee kept from a previous receiver is stale.
-  const isFeeEstimateUnavailable = !receiver
+  const isReceiverMissing = !receiver
+  const suggestionsUnavailableReason = (() => {
+    if (!hasBalance || !isNative) return null
+    if (isReceiverMissing) return t('send_enter_address_first_for_percentage')
+    if (maxSendableError)
+      return getBuildKeysignPayloadErrorMessage(maxSendableError, t)
+    return null
+  })()
   const isWaitingForFee =
     (pendingSuggestion != null &&
       isNative &&
-      !isFeeEstimateUnavailable &&
-      feeEstimateQuery.isPending) ||
+      !isReceiverMissing &&
+      isMaxSendablePending) ||
     isAllowDeathSyncing
 
   // Announced while the field still holds the typed amount — the write itself
@@ -264,18 +263,12 @@ export const ManageAmountInputField = () => {
               {suggestions.map(suggestion => {
                 const suggestionValue =
                   balance != null ? multiplyBigInt(balance, suggestion) : 0n
-                const maxSendable =
-                  balance != null && isNative && feeEstimateQuery.data != null
-                    ? getMaxSendableAmount({
-                        chain: coin.chain,
-                        balance,
-                        fee: feeEstimateQuery.data,
-                        allowDeath: allowDeath.isEnabled && suggestion === 1,
-                      })
-                    : (balance ?? 0n)
+                const maxSendable = isNative
+                  ? getMaxSendable(allowDeath.isEnabled && suggestion === 1)
+                  : null
                 const effectiveAmount =
                   balance != null
-                    ? isNative
+                    ? maxSendable != null
                       ? minBigInt(suggestionValue, maxSendable)
                       : suggestionValue
                     : 0n
@@ -298,7 +291,7 @@ export const ManageAmountInputField = () => {
                     return
                   }
 
-                  if (feeEstimateQuery.data != null) {
+                  if (maxSendable != null) {
                     setValue(effectiveAmount)
                     setPendingSuggestion(null)
                   } else {
@@ -312,7 +305,7 @@ export const ManageAmountInputField = () => {
                     value={suggestion}
                     onClick={handleSuggestionClick}
                     disabled={
-                      !hasBalance || (isNative && isFeeEstimateUnavailable)
+                      !hasBalance || suggestionsUnavailableReason !== null
                     }
                     isActive={
                       (allowDeath.isEnabled && suggestion === 1) ||
@@ -326,9 +319,9 @@ export const ManageAmountInputField = () => {
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
-            {!error && hasBalance && isNative && isFeeEstimateUnavailable ? (
+            {!error && suggestionsUnavailableReason !== null ? (
               <Text size={12} color="shy">
-                {t('send_enter_address_first_for_percentage')}
+                {suggestionsUnavailableReason}
               </Text>
             ) : null}
             {adjustedAmount !== null ? (

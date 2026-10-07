@@ -1,3 +1,4 @@
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { useQuery } from '@tanstack/react-query'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { useRef } from 'react'
@@ -8,6 +9,7 @@ import {
   getCowSwapOrderRecordUpdate,
 } from './getCowSwapOrderRecordUpdate'
 import { getRecordLastValidBlockHeight } from './getRecordLastValidBlockHeight'
+import { getRecordSenderAddress } from './getRecordSenderAddress'
 import { getRecordTxChain } from './getRecordTxChain'
 import {
   getArrivalTrackedSwap,
@@ -35,6 +37,7 @@ import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpda
  */
 export const useTransactionStatusPolling = (record: TransactionRecord) => {
   const applyRecordUpdate = useApplyTransactionRecordUpdate()
+  const vaultAddresses = useCurrentVaultAddresses()
   const isPending = isChainPollable(record)
   const recordRef = useRef(record)
   recordRef.current = record
@@ -43,6 +46,10 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
     queryKey: ['transactionStatusPolling', record.id, record.txHash],
     queryFn: async () => {
       const current = recordRef.current
+      const senderAccountId = getRecordSenderAddress({
+        record: current,
+        vaultAddresses,
+      })
 
       // CowSwap orders settle off-chain. Poll the orderbook by UID instead of
       // a chain hash: an order can rest up to its 15-min validity window, and
@@ -67,7 +74,10 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
       const arrivalTrackedSwap = getArrivalTrackedSwap(current)
       if (arrivalTrackedSwap) {
         const { status, record: updatedRecord } =
-          await getSwapArrivalRecordUpdate(arrivalTrackedSwap)
+          await getSwapArrivalRecordUpdate({
+            ...arrivalTrackedSwap,
+            senderAccountId,
+          })
         if (updatedRecord) {
           applyRecordUpdate({ previous: current, update: updatedRecord })
         }
@@ -78,6 +88,7 @@ export const useTransactionStatusPolling = (record: TransactionRecord) => {
         chain: getRecordTxChain(current),
         hash: current.txHash,
         lastValidBlockHeight: getRecordLastValidBlockHeight(current),
+        senderAccountId,
       })
 
       const update = getTxStatusRecordUpdate({ record: current, result })

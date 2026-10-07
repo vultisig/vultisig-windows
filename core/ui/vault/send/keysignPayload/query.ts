@@ -18,6 +18,7 @@ import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { useSendAllowDeath } from '../allowDeath/useSendAllowDeath'
 import { useTonGaslessSend } from '../fee/tonGasless/useTonGaslessSend'
+import { getSendPayloadMemo } from '../memo/sendMemoSupport'
 import { useSendAmount } from '../state/amount'
 import { useSendDestinationTag } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
@@ -57,7 +58,7 @@ export const useSendKeysignPayloadQuery = ({
     receiver,
     amount: shouldBePresent(amount),
     destinationTag,
-    memo,
+    memo: getSendPayloadMemo({ chain: coin.chain, memo }),
     vaultId: getVaultId(vault),
     localPartyId: vault.localPartyId,
     publicKey,
