@@ -21,6 +21,7 @@ import {
 import {
   getPasscodeEntryLength,
   isPasscodeEntryCandidate,
+  isShortLegacyPasscodeProbe,
   verifyPasscodeEntry,
 } from '../core/passcodeLock'
 import { PasscodeInput } from '../manage/PasscodeInput'
@@ -102,7 +103,9 @@ const Content = styled.div`
 
 /**
  * The App Locked screen. Verifies the entered passcode once it reaches the
- * stored length, throttles repeated failures, and unlocks the app on success.
+ * stored length, or at every shorter length when the proof records none,
+ * throttles repeated failures, and unlocks the app on success, recording the
+ * passcode length if it was unknown.
  */
 export const EnterPasscode = () => {
   const { i18n, t } = useTranslation()
@@ -130,14 +133,15 @@ export const EnterPasscode = () => {
   const retryDelayMs = getPasscodeAttemptDelayMs({ state: attemptState, now })
   const isLockedOut = retryDelayMs > 0
 
+  const entry = {
+    encryptedSample,
+    passcode: inputValue ?? '',
+    storedPasscodeLength: passcodeEncryption?.passcodeLength,
+  }
   const isComplete =
     !!inputValue &&
-    (legacyRecoverySubmission === inputValue ||
-      isPasscodeEntryCandidate({
-        encryptedSample,
-        passcode: inputValue,
-        storedPasscodeLength: passcodeEncryption?.passcodeLength,
-      }))
+    (legacyRecoverySubmission === inputValue || isPasscodeEntryCandidate(entry))
+  const isProbe = isShortLegacyPasscodeProbe(entry)
 
   useEffect(() => {
     setAttemptState(passcodeEncryption?.attemptState)
@@ -153,7 +157,7 @@ export const EnterPasscode = () => {
     return () => window.clearInterval(interval)
   }, [isLockedOut])
 
-  // Validate only once the full passcode is entered, and asynchronously:
+  // Validate only once the entry is a candidate, and asynchronously:
   // verifyPasscode runs the PBKDF2 key derivation, so validating synchronously
   // on every keystroke would block the UI. On success the passcode unlocks the
   // app.
@@ -165,9 +169,18 @@ export const EnterPasscode = () => {
     let cancelled = false
 
     const verifyEnteredPasscode = async () => {
-      setIsVerifying(true)
+      // A short legacy probe runs while the user may still be typing, and the
+      // loading state would disable the cells.
+      if (!isProbe) {
+        setIsVerifying(true)
+      }
 
       await withPasscodeOperationLock(async () => {
+        // Each keystroke queues a verification; skip the superseded ones.
+        if (cancelled) {
+          return
+        }
+
         const [current, currentVaults] = await Promise.all([
           getPasscodeEncryption(),
           getVaults(),
@@ -225,9 +238,15 @@ export const EnterPasscode = () => {
           return
         }
 
-        if (current?.attemptState) {
+        const isLengthUnrecorded =
+          !!current?.encryptedSample && current.passcodeLength === undefined
+
+        if (current?.attemptState || isLengthUnrecorded) {
           const cleared = { ...current }
           delete cleared.attemptState
+          if (isLengthUnrecorded) {
+            cleared.passcodeLength = inputValue.length
+          }
           await setPasscodeEncryption(
             cleared.encryptedSample === null ? null : cleared
           )
@@ -264,6 +283,7 @@ export const EnterPasscode = () => {
     inputValue,
     isComplete,
     isLockedOut,
+    isProbe,
     legacyRecoverySubmission,
     refetchQueries,
     setPasscode,
