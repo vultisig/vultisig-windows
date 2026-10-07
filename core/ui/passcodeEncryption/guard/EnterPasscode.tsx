@@ -176,11 +176,6 @@ export const EnterPasscode = () => {
       }
 
       await withPasscodeOperationLock(async () => {
-        // Each keystroke queues a verification; skip the superseded ones.
-        if (cancelled) {
-          return
-        }
-
         const [current, currentVaults] = await Promise.all([
           getPasscodeEncryption(),
           getVaults(),
@@ -253,9 +248,11 @@ export const EnterPasscode = () => {
           await refetchQueries([StorageKey.passcodeEncryption])
         }
 
+        // A verified passcode unlocks even if the user has typed past it, as
+        // a short legacy probe allows.
+        setPasscode(inputValue)
         if (!cancelled) {
           setIsInvalid(false)
-          setPasscode(inputValue)
         }
       })
     }
