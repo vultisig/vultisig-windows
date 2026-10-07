@@ -10,7 +10,10 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { useCore } from '../../state/core'
-import { usePasscodeEncryption } from '../../storage/passcodeEncryption'
+import {
+  type PasscodeEncryptionValue,
+  usePasscodeEncryption,
+} from '../../storage/passcodeEncryption'
 import { StorageKey } from '../../storage/StorageKey'
 import { passcodeEncryptionConfig } from '../core/config'
 import {
@@ -101,6 +104,36 @@ const Content = styled.div`
   })}
 `
 
+type GetUnlockedPasscodeEncryptionInput = {
+  current: PasscodeEncryptionValue
+  passcode: string
+}
+
+/**
+ * The passcode record to store after a successful unlock, or `undefined` when
+ * it needs no write: attempt throttling cleared, and the verified length
+ * recorded when the proof records none.
+ */
+const getUnlockedPasscodeEncryption = ({
+  current,
+  passcode,
+}: GetUnlockedPasscodeEncryptionInput): PasscodeEncryptionValue | undefined => {
+  const isLengthUnrecorded =
+    !!current?.encryptedSample && current.passcodeLength === undefined
+
+  if (!current?.attemptState && !isLengthUnrecorded) {
+    return undefined
+  }
+
+  const next = { ...current }
+  delete next.attemptState
+  if (isLengthUnrecorded) {
+    next.passcodeLength = passcode.length
+  }
+
+  return next.encryptedSample === null ? null : next
+}
+
 /**
  * The App Locked screen. Verifies the entered passcode once it reaches the
  * stored length, or at every shorter length when the proof records none,
@@ -169,8 +202,7 @@ export const EnterPasscode = () => {
     let cancelled = false
 
     const verifyEnteredPasscode = async () => {
-      // A short legacy probe runs while the user may still be typing, and the
-      // loading state would disable the cells.
+      // Loading disables the cells, and a probe runs mid-typing.
       if (!isProbe) {
         setIsVerifying(true)
       }
@@ -233,23 +265,17 @@ export const EnterPasscode = () => {
           return
         }
 
-        const isLengthUnrecorded =
-          !!current?.encryptedSample && current.passcodeLength === undefined
+        const unlocked = getUnlockedPasscodeEncryption({
+          current,
+          passcode: inputValue,
+        })
 
-        if (current?.attemptState || isLengthUnrecorded) {
-          const cleared = { ...current }
-          delete cleared.attemptState
-          if (isLengthUnrecorded) {
-            cleared.passcodeLength = inputValue.length
-          }
-          await setPasscodeEncryption(
-            cleared.encryptedSample === null ? null : cleared
-          )
+        if (unlocked !== undefined) {
+          await setPasscodeEncryption(unlocked)
           await refetchQueries([StorageKey.passcodeEncryption])
         }
 
-        // A verified passcode unlocks even if the user has typed past it, as
-        // a short legacy probe allows.
+        // Unlock even if the user typed past a verified short passcode.
         setPasscode(inputValue)
         if (!cancelled) {
           setIsInvalid(false)

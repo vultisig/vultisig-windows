@@ -2,10 +2,7 @@ import { VaultAllKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { passcodeEncryptionConfig } from './config'
-import {
-  getStoredPasscodeLength,
-  isLegacyPasscodeLength,
-} from './passcodePolicy'
+import { getStoredPasscodeLength } from './passcodePolicy'
 import { decryptSample } from './sample'
 import {
   decryptVaultAllKeyShares,
@@ -98,8 +95,8 @@ export const isShortLegacyPasscodeProbe = ({
 >): boolean =>
   encryptedSample !== null &&
   storedPasscodeLength === undefined &&
-  passcode.length < passcodeEncryptionConfig.legacyPasscodeLength &&
-  isLegacyPasscodeLength(passcode.length)
+  passcode.length > 0 &&
+  passcode.length < passcodeEncryptionConfig.legacyPasscodeLength
 
 /**
  * Whether the entered passcode is complete enough to verify.
