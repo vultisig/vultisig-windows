@@ -1512,6 +1512,8 @@ export const ko = {
   swap_mode_market: '시장',
   use_external_recipient: '외부 수신자 사용',
   swap_external_recipient_warning: '외부 주소로 전송',
+  swap_deposit_address: '입금 주소',
+  swap_deposit_address_unverifiable: '확인할 수 없음',
   custom_rpc_gate_description:
     '{{productName}}를 자체 노드에 지정하세요. 더 빠른 쿼리, 더 높은 처리량 제한, 그리고 체인별 완벽한 개인 정보 보호를 누릴 수 있습니다.',
   feature_gate_requires: '필수 사항',

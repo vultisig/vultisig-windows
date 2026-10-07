@@ -1555,6 +1555,8 @@ export const de = {
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externen Empfänger verwenden',
   swap_external_recipient_warning: 'Senden an eine externe Adresse',
+  swap_deposit_address: 'Einzahlungsadresse',
+  swap_deposit_address_unverifiable: 'Kann nicht überprüft werden',
   custom_rpc_gate_description:
     'Platzieren Sie {{productName}} auf Ihren eigenen Knoten. Schnellere Abfragen, höhere Ratenlimits und vollständige Privatsphäre pro Kette.',
   feature_gate_requires: 'Erfordert',

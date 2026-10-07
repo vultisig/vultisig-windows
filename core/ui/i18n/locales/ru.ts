@@ -1523,6 +1523,8 @@ export const ru = {
   swap_mode_market: 'Рынок',
   use_external_recipient: 'Использовать внешнего получателя',
   swap_external_recipient_warning: 'Отправка на внешний адрес',
+  swap_deposit_address: 'Адрес депозита',
+  swap_deposit_address_unverifiable: 'Невозможно проверить',
   custom_rpc_gate_description:
     'Направьте {{productName}} на свои собственные узлы. Более быстрые запросы, более высокие лимиты скорости и полная конфиденциальность для каждой цепочки.',
   feature_gate_requires: 'Требует',

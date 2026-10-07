@@ -1526,6 +1526,8 @@ export const nl = {
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externe ontvanger gebruiken',
   swap_external_recipient_warning: 'Verzenden naar een extern adres',
+  swap_deposit_address: 'Stortingsadres',
+  swap_deposit_address_unverifiable: 'Kan niet worden geverifieerd',
   custom_rpc_gate_description:
     'Koppel {{productName}} aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
   feature_gate_requires: 'Vereist',
