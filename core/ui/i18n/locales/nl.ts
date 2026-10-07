@@ -949,6 +949,8 @@ export const nl = {
   transaction_details: 'Transactiedetails',
   transaction_has_risk:
     '{{riskLevel}}-risico transactie gedetecteerd door <provider></provider>',
+  swap_deposit_address_has_risk:
+    '{{riskLevel}}-risico stortingsadres gedetecteerd door <provider></provider>',
   transaction_failed: 'Transactie<error> mislukt</error>',
   transaction_pending: 'Transactie in behandeling...',
   transaction_successful: 'Transactie <g> succesvol </g>',
@@ -1526,6 +1528,8 @@ export const nl = {
   swap_mode_market: 'Markt',
   use_external_recipient: 'Externe ontvanger gebruiken',
   swap_external_recipient_warning: 'Verzenden naar een extern adres',
+  swap_deposit_address: 'Stortingsadres',
+  swap_deposit_address_unverifiable: 'Kan niet worden geverifieerd',
   custom_rpc_gate_description:
     'Koppel {{productName}} aan uw eigen nodes. Snellere query&#39;s, hogere snelheidslimieten en volledige privacy per keten.',
   feature_gate_requires: 'Vereist',

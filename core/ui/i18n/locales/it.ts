@@ -962,6 +962,8 @@ export const it = {
   transaction_details: 'Dettagli della transazione',
   transaction_has_risk:
     'Transazione di rischio {{riskLevel}} rilevata da <provider></provider>',
+  swap_deposit_address_has_risk:
+    'Indirizzo di deposito di rischio {{riskLevel}} rilevato da <provider></provider>',
   transaction_failed: 'Transazione<error> fallito</error>',
   transaction_pending: 'Transazione in sospeso...',
   transaction_successful: 'Transazione <g> riuscita </g>',
@@ -1547,6 +1549,8 @@ export const it = {
   swap_mode_market: 'Mercato',
   use_external_recipient: 'Utilizzare un destinatario esterno',
   swap_external_recipient_warning: 'Invio a un indirizzo esterno',
+  swap_deposit_address: 'Indirizzo di deposito',
+  swap_deposit_address_unverifiable: 'Impossibile verificare',
   custom_rpc_gate_description:
     'Punta {{productName}} ai tuoi nodi. Query più veloci, limiti di frequenza più elevati e privacy completa per ogni catena.',
   feature_gate_requires: 'Richiede',

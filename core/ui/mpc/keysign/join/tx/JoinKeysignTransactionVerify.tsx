@@ -13,10 +13,13 @@ import { getKeysignLimitSwapCancel } from '@vultisig/core-mpc/keysign/swap/getKe
 import { getKeysignLimitSwapOrder } from '@vultisig/core-mpc/keysign/swap/getKeysignLimitSwapOrder'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { getSwapPayloadRefusalMessage } from '../../tx/swap/getSwapPayloadRefusalMessage'
+import { useSwapKitDepositRecipientScreenQuery } from '../../tx/swap/useSwapKitDepositRecipientScreenQuery'
 import { JoinKeysignButton } from './JoinKeysignButton'
 import { JoinKeysignLimitOrderCancelVerify } from './JoinKeysignLimitOrderCancelVerify'
 import { JoinKeysignLimitOrderVerify } from './JoinKeysignLimitOrderVerify'
@@ -78,6 +81,8 @@ export const JoinKeysignTransactionVerify = ({
   const [termsAccepted, setTermsAccepted] = useState<boolean[]>(
     new Array(terms.length).fill(false)
   )
+  const depositRecipientScreenQuery =
+    useSwapKitDepositRecipientScreenQuery(value)
 
   const content =
     'decoded' in kamino ? (
@@ -99,10 +104,21 @@ export const JoinKeysignTransactionVerify = ({
       <JoinKeysignTxOverview value={value} />
     )
 
-  // A transaction that reaches the kVaults program and does not decode is not
-  // joinable: this device cannot say what it authorises, and joining anyway
-  // would contribute a signature to bytes nobody on this screen has read.
-  const disabled = 'unreadable' in kamino || termsAccepted.some(term => !term)
+  const disabledMessage = (() => {
+    // A transaction that reaches the kVaults program and does not decode is not
+    // joinable: this device cannot say what it authorises, and joining anyway
+    // would contribute a signature to bytes nobody on this screen has read.
+    if ('unreadable' in kamino) return t('kamino_earn_unreadable_title')
+
+    // Whichever view renders it, a swap payload the signer would refuse is not joinable.
+    const swapPayloadRefusalMessage = getSwapPayloadRefusalMessage(value, t)
+    if (swapPayloadRefusalMessage) return swapPayloadRefusalMessage
+    if (depositRecipientScreenQuery.error) {
+      return extractErrorMsg(depositRecipientScreenQuery.error)
+    }
+
+    if (termsAccepted.some(term => !term)) return t('terms_required')
+  })()
 
   return (
     <>
@@ -126,16 +142,7 @@ export const JoinKeysignTransactionVerify = ({
         )}
       </PageContent>
       <PageFooter>
-        <JoinKeysignButton
-          onClick={onFinish}
-          disabled={
-            'unreadable' in kamino
-              ? t('kamino_earn_unreadable_title')
-              : disabled
-                ? t('terms_required')
-                : undefined
-          }
-        />
+        <JoinKeysignButton onClick={onFinish} disabled={disabledMessage} />
       </PageFooter>
     </>
   )

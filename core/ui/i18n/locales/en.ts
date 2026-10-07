@@ -1234,6 +1234,8 @@ export const en = {
   swap_no_token_found: 'No token found',
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
+  swap_deposit_address: 'Deposit address',
+  swap_deposit_address_unverifiable: 'Cannot be verified',
   swap_fee: 'Swap Fee',
   swap_fee_included_in_rate: 'Included in the quoted exchange rate',
   swap_protocol_fee: 'Protocol Fee',
@@ -1391,6 +1393,8 @@ export const en = {
   transaction_details: 'Transaction Details',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
+  swap_deposit_address_has_risk:
+    '{{riskLevel}} risk deposit address detected by <provider></provider>',
   transaction_failed: 'Transaction <error>failed</error>',
   transaction_broadcasted: 'The transaction has been broadcast to the network',
   transaction_pending: 'Transaction pending...',
