@@ -16,6 +16,7 @@ import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 type RefusedBroadcastTxRowProps = {
   chain: Chain
   hash: string
+  senderAccountId: string
 }
 
 /**
@@ -27,11 +28,12 @@ type RefusedBroadcastTxRowProps = {
 export const RefusedBroadcastTxRow = ({
   chain,
   hash,
+  senderAccountId,
 }: RefusedBroadcastTxRowProps) => {
   const { t } = useTranslation()
   const openExternalUrl = useOpenExternalUrl()
   const [, copyToClipboard] = useCopyToClipboard()
-  const { data } = useTxStatusQuery({ chain, hash })
+  const { data } = useTxStatusQuery({ chain, hash, senderAccountId })
 
   const status = data?.status ?? 'pending'
 

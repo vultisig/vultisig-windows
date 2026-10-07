@@ -517,6 +517,10 @@ export const es = {
   install_plugin: 'Instalar aplicación',
   installation_progress: 'Progreso de la instalación: {{progress}}%',
   insufficient_balance: 'Saldo insuficiente',
+  send_receiver_format_hint_near:
+    'Introduce un ID de cuenta NEAR como alice.near o una dirección hexadecimal de 64 caracteres en minúsculas.',
+  send_memo_not_supported:
+    'Las transferencias de {{chain}} no admiten nota. Elimina la nota para continuar.',
   insufficient_native_balance_for_fee:
     'Saldo de token nativo insuficiente para pagar la tarifa de transacción',
   insufficient_gas_limit: 'Límite de gas insuficiente',
@@ -1742,6 +1746,8 @@ export const es = {
   ripple_destination_tag_invalid:
     'Introduce un número entero entre 0 y 4.294.967.295.',
   ripple_destination_tag_optional: 'Etiqueta de destino opcional',
+  near_destination_not_found:
+    'Esta cuenta NEAR no existe. Revisa el destinatario: una transferencia a ella solo consumiría gas.',
   ripple_destination_tag_required:
     'Esta cuenta XRP requiere una etiqueta de destino.',
   ripple_field_amount: 'Cantidad',

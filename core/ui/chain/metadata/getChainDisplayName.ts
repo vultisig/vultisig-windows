@@ -40,6 +40,7 @@ const chainDisplayNames: Record<Chain, string> = {
   [Chain.Zksync]: 'ZKsync',
   [Chain.Mantle]: 'Mantle',
   [Chain.Robinhood]: 'Robinhood',
+  [Chain.Near]: 'Near',
 }
 
 /**

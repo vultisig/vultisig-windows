@@ -475,6 +475,9 @@ export const zh = {
   install_plugin: '安装应用',
   installation_progress: '安装进度：{{progress}}%',
   insufficient_balance: '余额不足',
+  send_receiver_format_hint_near:
+    '请输入 NEAR 账户 ID（如 alice.near）或 64 位小写十六进制地址。',
+  send_memo_not_supported: '{{chain}} 转账无法携带备忘录。请删除备忘录后继续。',
   insufficient_native_balance_for_fee: '本地代币余额不足以支付交易费用',
   insufficient_gas_limit: 'Gas 限额不足',
   insufficient_gas_limit_description:
@@ -1607,6 +1610,8 @@ export const zh = {
   ripple_field_destination_tag: '目的地标签',
   ripple_destination_tag_invalid: '请输入 0 到 4,294,967,295 之间的整数。',
   ripple_destination_tag_optional: '可选目的地标签',
+  near_destination_not_found:
+    '此 NEAR 账户不存在。请检查收款方：向其转账只会消耗 Gas。',
   ripple_destination_tag_required: '此 XRP 账户需要目的地标签。',
   ripple_field_amount: '数量',
   ripple_field_send_max: '支付最多',

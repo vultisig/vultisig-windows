@@ -511,6 +511,10 @@ export const hr = {
   install_plugin: 'Instaliraj aplikaciju',
   installation_progress: 'Napredak instalacije: {{progress}}%',
   insufficient_balance: 'Nedovoljan saldo',
+  send_receiver_format_hint_near:
+    'Unesite NEAR ID računa poput alice.near ili heksadecimalnu adresu od 64 mala znaka.',
+  send_memo_not_supported:
+    '{{chain}} prijenosi ne mogu sadržavati dopis. Uklonite dopis za nastavak.',
   insufficient_native_balance_for_fee:
     'Nedovoljan saldo izvornog tokena za plaćanje naknade za transakciju',
   insufficient_gas_limit: 'Nedovoljno ograničenje plina',
@@ -1718,6 +1722,8 @@ export const hr = {
   ripple_destination_tag_invalid:
     'Unesite cijeli broj između 0 i 4.294.967.295.',
   ripple_destination_tag_optional: 'Neobavezna oznaka odredišta',
+  near_destination_not_found:
+    'Ovaj NEAR račun ne postoji. Provjerite primatelja: prijenos na njega samo bi potrošio gas.',
   ripple_destination_tag_required: 'Ovaj XRP račun zahtijeva oznaku odredišta.',
   ripple_field_amount: 'Iznositi',
   ripple_field_send_max: 'Plati najviše',

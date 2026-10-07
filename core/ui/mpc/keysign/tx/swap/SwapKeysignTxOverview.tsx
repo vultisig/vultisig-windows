@@ -157,6 +157,7 @@ export const SwapKeysignTxOverview = ({
     chain: sourceChain,
     hash: mainTxHash,
     lastValidBlockHeight,
+    senderAccountId: fromCoin.address,
   })
   const receipt = txStatusQuery.data?.receipt
 
@@ -193,6 +194,7 @@ export const SwapKeysignTxOverview = ({
         chain={sourceChain}
         hash={mainTxHash}
         lastValidBlockHeight={lastValidBlockHeight}
+        senderAccountId={fromCoin.address}
       />
       <VStack alignItems="center" gap={8} fullWidth>
         <VStack gap={8} fullWidth>

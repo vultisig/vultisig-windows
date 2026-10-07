@@ -509,6 +509,10 @@ export const ko = {
   install_plugin: '앱 설치',
   installation_progress: '설치 진행률: {{progress}}%',
   insufficient_balance: '잔액 부족',
+  send_receiver_format_hint_near:
+    'alice.near 같은 NEAR 계정 ID 또는 64자리 소문자 16진수 주소를 입력하세요.',
+  send_memo_not_supported:
+    '{{chain}} 전송에는 메모를 포함할 수 없습니다. 계속하려면 메모를 삭제하세요.',
   insufficient_native_balance_for_fee:
     '거래 수수료를 지불하기에 네이티브 토큰 잔액이 부족합니다.',
   insufficient_gas_limit: '가스 제한 부족',
@@ -1707,6 +1711,8 @@ export const ko = {
   ripple_destination_tag_invalid:
     '0에서 4,294,967,295 사이의 정수를 입력하세요.',
   ripple_destination_tag_optional: '선택적 목적지 태그',
+  near_destination_not_found:
+    '이 NEAR 계정은 존재하지 않습니다. 받는 사람을 확인하세요. 이 계정으로 전송하면 가스만 소모됩니다.',
   ripple_destination_tag_required: '이 XRP 계정에는 목적지 태그가 필요합니다.',
   ripple_field_amount: '양',
   ripple_field_send_max: '최대 지불',

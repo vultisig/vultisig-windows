@@ -11,6 +11,7 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
 
+import { getSendMemoError } from '../memo/sendMemoSupport'
 import { getSendDestinationTag } from '../state/destinationTag'
 import { SendFormShape, ValidationResult } from './formShape'
 import { getReceiverAddressFormatHint } from './getReceiverAddressFormatHint'
@@ -84,6 +85,7 @@ export const validateSendForm = (
     coin,
     amount,
     destinationTag = '',
+    memo,
     senderAddress,
     receiverAddress,
   } = values
@@ -156,6 +158,11 @@ export const validateSendForm = (
     }).error
   ) {
     errors.destinationTag = t('ripple_destination_tag_invalid')
+  }
+
+  const memoError = getSendMemoError({ chain, memo, t })
+  if (memoError) {
+    errors.memo = memoError
   }
 
   return errors

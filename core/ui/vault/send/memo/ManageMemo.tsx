@@ -1,3 +1,6 @@
+import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
+import { chainsWithoutMemoSupport } from '@core/ui/vault/send/memo/sendMemoSupport'
+import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { interactive } from '@lib/ui/css/interactive'
@@ -8,7 +11,7 @@ import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text, text } from '@lib/ui/text'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { motion } from 'framer-motion'
 import { AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
@@ -16,20 +19,17 @@ import styled from 'styled-components'
 
 import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
 
-/**
- * Chains whose transfer transaction has no field to carry a memo, so the
- * input would silently be dropped at signing time. Bittensor's balance
- * transfer extrinsic has no remark, and Sui transfers carry no memo.
- */
-const chainsWithoutMemoSupport: Chain[] = [Chain.Sui, Chain.Bittensor]
-
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()
   const { t } = useTranslation()
   const { chain } = useCurrentSendCoin()
   const [isOpen, { toggle }] = useBoolean(!!value)
+  const { data } = useSendValidationQuery()
+  const error = data?.memo
 
-  if (chainsWithoutMemoSupport.includes(chain)) {
+  // Shown on these chains only to explain, and let the user clear, a memo a
+  // deeplink or the agent handed in.
+  if (isOneOf(chain, chainsWithoutMemoSupport) && !value) {
     return null
   }
 
@@ -56,12 +56,14 @@ export const ManageMemo = () => {
           >
             <StyledTextInput
               placeholder={t('enter_memo')}
+              validation={error ? 'warning' : undefined}
               value={value}
               onValueChange={setValue}
             />
           </motion.div>
         )}
       </AnimatePresence>
+      {error && <AnimatedSendFormInputError error={error} />}
     </InputContainer>
   )
 }

@@ -23,6 +23,7 @@ vi.mock(
 const templates: Record<string, string> = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_receiver_dangerous_address: 'dangerous: {{reason}}',
+  send_memo_not_supported: 'no memo on {{chain}}',
 }
 const t = ((key: string, options?: Record<string, unknown>) => {
   const template = templates[key] ?? key
@@ -164,6 +165,17 @@ describe('validateSendForm', () => {
       fee: undefined,
       skipDustCheck: true,
     })
+  })
+
+  it('blocks a memo on a chain whose transfer cannot carry one', () => {
+    const validate = (chain: Chain) =>
+      validateSendForm(
+        { ...validSendForm(nativeCoin(chain)), memo: 'deposit-42' },
+        { balance: 100n, fee: 1n, walletCore, t }
+      )
+
+    expect(validate(Chain.Near).memo).toBe(`no memo on ${Chain.Near}`)
+    expect(validate(Chain.THORChain).memo).toBeUndefined()
   })
 })
 
