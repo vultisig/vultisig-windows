@@ -26,8 +26,15 @@
  * - a read is tagged with the inputs it was requested under, so shares
  *   replaced on the same object while it was in flight are never provided —
  *   and are re-read rather than leaving the tree withheld for good
+ * - the passcode lock keeps the tree mounted with the shares already proven,
+ *   through the lock and the re-read after unlocking, so an open sheet survives
+ *   it (#5018) — but not when the shares change underneath it, nor when a
+ *   different passcode comes back, and never for a tree that opens locked
  */
-import { RootCurrentVaultProvider } from '@core/ui/vault/state/currentVault'
+import {
+  RootCurrentVaultProvider,
+  useCurrentVault,
+} from '@core/ui/vault/state/currentVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { act, render, screen } from '@testing-library/react'
 import type { Vault, VaultAllKeyShares } from '@vultisig/core-mpc/vault/Vault'
@@ -461,5 +468,135 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
     expect(screen.queryByTestId('splash')).toBeNull()
     expect(screen.getByText('name your vault')).toBeDefined()
+  })
+
+  describe('passcode lock', () => {
+    const passcode = 'passcode'
+
+    // Stands in for a vault screen with something open on it — the Receive
+    // chain picker in the report — and shows which shares it was given.
+    const VaultScreen = () => {
+      const { keyShares } = useCurrentVault()
+
+      useEffect(() => {
+        mountCount += 1
+      }, [])
+
+      return (
+        <>
+          <ValueTransfer<string>
+            from={({ onFinish }) => (
+              <button onClick={() => onFinish('Select chain')}>receive</button>
+            )}
+            to={({ value }) => <div>{value}</div>}
+          />
+          <div data-testid="shares">{keyShares.ecdsa}</div>
+        </>
+      )
+    }
+
+    const rerenderTree = (rerender: ReturnType<typeof render>['rerender']) =>
+      act(async () => {
+        rerender(
+          <RootCurrentVaultProvider>
+            <VaultScreen />
+          </RootCurrentVaultProvider>
+        )
+      })
+
+    const renderUnlocked = async () => {
+      currentViewId = 'vault'
+      storage.vaults = [makeVault()]
+      storage.currentVaultId = vaultId
+      storage.hasPasscodeEncryption = true
+      storage.passcode = passcode
+
+      const view = renderTree(<VaultScreen />)
+      await settle()
+      await resolveRead()
+
+      await act(async () => {
+        screen.getByText('receive').click()
+      })
+      expect(screen.getByText('Select chain')).toBeDefined()
+      expect(mountCount).toBe(1)
+
+      return view
+    }
+
+    it('keeps an open screen mounted through the lock and the re-read after unlocking', async () => {
+      const { rerender } = await renderUnlocked()
+
+      storage.passcode = null
+      await rerenderTree(rerender)
+
+      expect(screen.queryByTestId('splash')).toBeNull()
+      expect(screen.getByText('Select chain')).toBeDefined()
+      // The shares the tree keeps are the proven ones, never the stored bytes.
+      expect(screen.getByTestId('shares').textContent).toBe('proven-ecdsa')
+      // Nothing can be read without the passcode.
+      expect(readCalls).toHaveLength(1)
+
+      storage.passcode = passcode
+      await rerenderTree(rerender)
+
+      expect(readCalls).toHaveLength(2)
+      expect(screen.queryByTestId('splash')).toBeNull()
+      expect(screen.getByText('Select chain')).toBeDefined()
+
+      await resolveRead()
+
+      expect(screen.getByText('Select chain')).toBeDefined()
+      expect(screen.getByTestId('shares').textContent).toBe('proven-ecdsa')
+      expect(mountCount).toBe(1)
+    })
+
+    it('withholds the tree when the shares change while locked', async () => {
+      const { rerender } = await renderUnlocked()
+
+      storage.passcode = null
+      storage.vaults = [
+        makeVault({
+          keyShares: { ecdsa: 'reshared-ecdsa', eddsa: 'reshared-eddsa' },
+        }),
+      ]
+      await rerenderTree(rerender)
+
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(screen.queryByText('Select chain')).toBeNull()
+    })
+
+    it('withholds the tree until a different passcode proves the shares again', async () => {
+      const { rerender } = await renderUnlocked()
+
+      storage.passcode = null
+      await rerenderTree(rerender)
+      expect(screen.getByText('Select chain')).toBeDefined()
+
+      storage.passcode = 'another passcode'
+      await rerenderTree(rerender)
+
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(screen.queryByText('Select chain')).toBeNull()
+
+      await resolveRead()
+
+      expect(screen.queryByTestId('splash')).toBeNull()
+      expect(mountCount).toBe(2)
+    })
+
+    it('withholds the tree when it opens locked', async () => {
+      currentViewId = 'vault'
+      storage.vaults = [makeVault()]
+      storage.currentVaultId = vaultId
+      storage.hasPasscodeEncryption = true
+
+      renderTree(<VaultScreen />)
+      await settle()
+
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(readCalls).toHaveLength(0)
+      expect(mountCount).toBe(0)
+    })
   })
 })
