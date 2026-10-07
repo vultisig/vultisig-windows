@@ -109,11 +109,7 @@ type GetUnlockedPasscodeEncryptionInput = {
   passcode: string
 }
 
-/**
- * The passcode record to store after a successful unlock, or `undefined` when
- * it needs no write: attempt throttling cleared, and the verified length
- * recorded when the proof records none.
- */
+/** The record to store after an unlock, or `undefined` when nothing changes. */
 const getUnlockedPasscodeEncryption = ({
   current,
   passcode,
