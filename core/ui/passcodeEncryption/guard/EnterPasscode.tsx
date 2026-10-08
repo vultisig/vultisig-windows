@@ -5,12 +5,15 @@ import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { useCore } from '../../state/core'
-import { usePasscodeEncryption } from '../../storage/passcodeEncryption'
+import {
+  type PasscodeEncryptionValue,
+  usePasscodeEncryption,
+} from '../../storage/passcodeEncryption'
 import { StorageKey } from '../../storage/StorageKey'
 import { passcodeEncryptionConfig } from '../core/config'
 import {
@@ -21,6 +24,7 @@ import {
 import {
   getPasscodeEntryLength,
   isPasscodeEntryCandidate,
+  isShortLegacyPasscodeProbe,
   verifyPasscodeEntry,
 } from '../core/passcodeLock'
 import { PasscodeInput } from '../manage/PasscodeInput'
@@ -100,9 +104,37 @@ const Content = styled.div`
   })}
 `
 
+type GetUnlockedPasscodeEncryptionInput = {
+  current: PasscodeEncryptionValue
+  passcode: string
+}
+
+/** The record to store after an unlock, or `undefined` when nothing changes. */
+const getUnlockedPasscodeEncryption = ({
+  current,
+  passcode,
+}: GetUnlockedPasscodeEncryptionInput): PasscodeEncryptionValue | undefined => {
+  const isLengthUnrecorded =
+    !!current?.encryptedSample && current.passcodeLength === undefined
+
+  if (!current?.attemptState && !isLengthUnrecorded) {
+    return undefined
+  }
+
+  const next = { ...current }
+  delete next.attemptState
+  if (isLengthUnrecorded) {
+    next.passcodeLength = passcode.length
+  }
+
+  return next.encryptedSample === null ? null : next
+}
+
 /**
  * The App Locked screen. Verifies the entered passcode once it reaches the
- * stored length, throttles repeated failures, and unlocks the app on success.
+ * stored length, or at every shorter length when the proof records none,
+ * throttles repeated failures, and unlocks the app on success, recording the
+ * passcode length if it was unknown.
  */
 export const EnterPasscode = () => {
   const { i18n, t } = useTranslation()
@@ -121,6 +153,12 @@ export const EnterPasscode = () => {
     passcodeEncryption?.attemptState
   )
   const [now, setNow] = useState(Date.now)
+  // Short probes keep the cells live, so this screen's checks can overlap.
+  // Chain them so each reads what the one before it wrote, also where Web
+  // Locks are unavailable, and drop the rest once one unlocks: with the length
+  // recorded, a queued edit would be charged as a failure.
+  const verificationQueueRef = useRef<Promise<unknown>>(Promise.resolve())
+  const hasUnlockedRef = useRef(false)
 
   const encryptedSample = passcodeEncryption?.encryptedSample ?? null
   const passcodeLength = getPasscodeEntryLength({
@@ -130,14 +168,15 @@ export const EnterPasscode = () => {
   const retryDelayMs = getPasscodeAttemptDelayMs({ state: attemptState, now })
   const isLockedOut = retryDelayMs > 0
 
+  const entry = {
+    encryptedSample,
+    passcode: inputValue ?? '',
+    storedPasscodeLength: passcodeEncryption?.passcodeLength,
+  }
   const isComplete =
     !!inputValue &&
-    (legacyRecoverySubmission === inputValue ||
-      isPasscodeEntryCandidate({
-        encryptedSample,
-        passcode: inputValue,
-        storedPasscodeLength: passcodeEncryption?.passcodeLength,
-      }))
+    (legacyRecoverySubmission === inputValue || isPasscodeEntryCandidate(entry))
+  const isProbe = isShortLegacyPasscodeProbe(entry)
 
   useEffect(() => {
     setAttemptState(passcodeEncryption?.attemptState)
@@ -153,7 +192,7 @@ export const EnterPasscode = () => {
     return () => window.clearInterval(interval)
   }, [isLockedOut])
 
-  // Validate only once the full passcode is entered, and asynchronously:
+  // Validate only once the entry is a candidate, and asynchronously:
   // verifyPasscode runs the PBKDF2 key derivation, so validating synchronously
   // on every keystroke would block the UI. On success the passcode unlocks the
   // app.
@@ -164,10 +203,8 @@ export const EnterPasscode = () => {
 
     let cancelled = false
 
-    const verifyEnteredPasscode = async () => {
-      setIsVerifying(true)
-
-      await withPasscodeOperationLock(async () => {
+    const checkEntry = () =>
+      withPasscodeOperationLock(async () => {
         const [current, currentVaults] = await Promise.all([
           getPasscodeEncryption(),
           getVaults(),
@@ -225,20 +262,37 @@ export const EnterPasscode = () => {
           return
         }
 
-        if (current?.attemptState) {
-          const cleared = { ...current }
-          delete cleared.attemptState
-          await setPasscodeEncryption(
-            cleared.encryptedSample === null ? null : cleared
-          )
+        const unlocked = getUnlockedPasscodeEncryption({
+          current,
+          passcode: inputValue,
+        })
+
+        if (unlocked !== undefined) {
+          await setPasscodeEncryption(unlocked)
           await refetchQueries([StorageKey.passcodeEncryption])
         }
 
+        // Unlock even if the user typed past a verified short passcode. Set
+        // only once the record is written, so a failed write can be retried.
+        hasUnlockedRef.current = true
+        setPasscode(inputValue)
         if (!cancelled) {
           setIsInvalid(false)
-          setPasscode(inputValue)
         }
       })
+
+    const verifyEnteredPasscode = async () => {
+      // Loading disables the cells, and a probe runs mid-typing.
+      if (!isProbe) {
+        setIsVerifying(true)
+      }
+
+      const verification = verificationQueueRef.current.then(() =>
+        hasUnlockedRef.current ? undefined : checkEntry()
+      )
+      verificationQueueRef.current = verification.catch(() => {})
+
+      await verification
     }
 
     verifyEnteredPasscode()
@@ -264,6 +318,7 @@ export const EnterPasscode = () => {
     inputValue,
     isComplete,
     isLockedOut,
+    isProbe,
     legacyRecoverySubmission,
     refetchQueries,
     setPasscode,
