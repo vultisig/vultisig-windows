@@ -11,6 +11,7 @@ import {
   PasscodeProvider,
   usePasscode,
 } from '@core/ui/passcodeEncryption/state/passcode'
+import type { PasscodeEncryptionValue } from '@core/ui/storage/passcodeEncryption'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
@@ -39,28 +40,49 @@ const cipher = vi.hoisted(() => {
   return { decrypted, holds, releases }
 })
 
+// Every storage call and decryption the lock screen has in flight, so a test
+// can wait for all of its queued checks to finish rather than sleeping.
+const lockScreenWork = vi.hoisted(() => {
+  const pending = new Set<Promise<unknown>>()
+
+  const track = <T,>(work: Promise<T>): Promise<T> => {
+    pending.add(work)
+    const forget = () => {
+      pending.delete(work)
+    }
+    work.then(forget, forget)
+
+    return work
+  }
+
+  return { pending, track }
+})
+
 vi.mock(
   '@core/ui/passcodeEncryption/core/passcodeCipher',
   async importOriginal => ({
     ...(await importOriginal<
       typeof import('@core/ui/passcodeEncryption/core/passcodeCipher')
     >()),
-    decryptWithPasscode: async ({
+    decryptWithPasscode: ({
       passcode,
       values,
     }: {
       passcode: string
       values: Buffer[]
-    }) => {
-      cipher.decrypted.push(passcode)
-      await cipher.holds.get(passcode)
+    }) =>
+      lockScreenWork.track(
+        (async () => {
+          cipher.decrypted.push(passcode)
+          await cipher.holds.get(passcode)
 
-      if (passcode !== legacyPasscode) {
-        throw new Error('Wrong passcode')
-      }
+          if (passcode !== legacyPasscode) {
+            throw new Error('Wrong passcode')
+          }
 
-      return values
-    },
+          return values
+        })()
+      ),
   })
 )
 
@@ -107,6 +129,13 @@ vi.mock('@core/ui/state/core', () => ({
 coreHolder.value = {
   ...vaultsStorage,
   ...passcodeEncryptionStorage,
+  getVaults: () => lockScreenWork.track(vaultsStorage.getVaults()),
+  getPasscodeEncryption: () =>
+    lockScreenWork.track(passcodeEncryptionStorage.getPasscodeEncryption()),
+  setPasscodeEncryption: (value: PasscodeEncryptionValue) =>
+    lockScreenWork.track(
+      passcodeEncryptionStorage.setPasscodeEncryption(value)
+    ),
 }
 
 /** Mirrors PasscodeGuard: the lock screen unmounts once a passcode is held. */
@@ -198,9 +227,15 @@ const waitForUnlock = () =>
     )
   )
 
+// Each step of a queued check starts the next on a microtask, so the screen is
+// idle once a macrotask turn passes with no tracked work in flight.
 const settlePasscodeOperations = async () => {
   await withPasscodeOperationLock(async () => {})
-  await new Promise(resolve => setTimeout(resolve, 50))
+
+  do {
+    await Promise.allSettled(lockScreenWork.pending)
+    await new Promise(resolve => setTimeout(resolve, 0))
+  } while (lockScreenWork.pending.size > 0)
 }
 
 const lockModes = [
