@@ -2,9 +2,11 @@ import { getBytes, hexlify } from 'ethers'
 
 const eip191Prefix = '\x19Ethereum Signed Message:\n'
 
-// Only well-formed hex is signed as raw bytes. Text that merely starts with
-// `0x` (e.g. typed into the vault's sign-message form) is signed as UTF-8.
-const isHexMessage = (message: string) => /^0x(?:[0-9a-f]{2})*$/i.test(message)
+// Only well-formed hex behind a lowercase `0x`, the prefix getCustomMessageHex
+// and the co-signers decode, is signed as raw bytes. Anything else, such as
+// `0xhello` typed into the vault's sign-message form, is signed as UTF-8.
+const isHexMessage = (message: string) =>
+  /^0x(?:[0-9a-fA-F]{2})*$/.test(message)
 
 const decimalLength = /^(?:0|[1-9][0-9]*)$/
 

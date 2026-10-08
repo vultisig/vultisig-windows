@@ -1,5 +1,5 @@
 import { Chain } from '@vultisig/core-chain/Chain'
-import { hashMessage, hexlify, toUtf8Bytes } from 'ethers'
+import { getBytes, hashMessage, hexlify, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
 
 import { getCustomMessageHex } from './getCustomMessageHex'
@@ -60,7 +60,13 @@ describe('getPersonalSignMessage', () => {
     )
   })
 
-  it.each(['0xhello', '0xabc'])(
+  it('reads uppercase hex digits behind 0x as bytes', () => {
+    expect(getSignedDigest('0xABCD')).toBe(
+      withoutHexPrefix(hashMessage(getBytes('0xABCD')))
+    )
+  })
+
+  it.each(['0xhello', '0xabc', '0XABCD'])(
     'signs %s, which only looks like hex, as text',
     message => {
       expect(getSignedDigest(message)).toBe(
