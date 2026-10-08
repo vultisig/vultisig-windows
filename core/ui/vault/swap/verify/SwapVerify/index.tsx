@@ -6,12 +6,15 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
 import { KeysignReviewSheet } from '../../../../mpc/keysign/review/KeysignReviewSheet'
 import { ReviewVaultLine } from '../../../../mpc/keysign/review/ReviewVaultLine'
+import { SwapKitDepositRecipientScan } from '../../../../mpc/keysign/tx/swap/SwapKitDepositRecipientScan'
+import { useSwapKitDepositRecipientScreenQuery } from '../../../../mpc/keysign/tx/swap/useSwapKitDepositRecipientScreenQuery'
 import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 import { getSwapToAmountLimit } from '../../keysignPayload/getSwapToAmountLimit'
 import { useSwapKeysignPayloadQuery } from '../../keysignPayload/query'
@@ -42,6 +45,9 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const [fromAmount] = useFromAmount()
   const keysignPayloadQuery = useSwapKeysignPayloadQuery(swapQuote)
+  const depositRecipientScreenQuery = useSwapKitDepositRecipientScreenQuery(
+    keysignPayloadQuery.data
+  )
 
   const translatedTerms = swapTerms.map(term => t(`swap_terms.${term}`))
 
@@ -65,7 +71,13 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
       keysignPayloadQuery={keysignPayloadQuery}
       terms={translatedTerms}
       swapQuote={swapQuote}
+      disabledMessage={
+        depositRecipientScreenQuery.error
+          ? extractErrorMsg(depositRecipientScreenQuery.error)
+          : undefined
+      }
     >
+      <SwapKitDepositRecipientScan value={depositRecipientScreenQuery} />
       <SwapReviewCards
         from={<SwapReviewSide coin={fromCoin} amount={fromAmountDecimal} />}
         to={

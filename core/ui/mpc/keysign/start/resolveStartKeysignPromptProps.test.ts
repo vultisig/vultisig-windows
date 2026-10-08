@@ -1,6 +1,13 @@
 import { create } from '@bufbuild/protobuf'
 import { Query } from '@lib/ui/query/Query'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
+import {
+  OneInchQuoteSchema,
+  OneInchSwapPayloadSchema,
+  OneInchTransactionSchema,
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { CoinSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/coin_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
@@ -140,5 +147,43 @@ describe('resolveStartKeysignPromptProps', () => {
         },
       })
     ).toStrictEqual({ disabledMessage: message })
+  })
+
+  it('blocks a SwapKit deposit that does not transfer the sold amount', () => {
+    const usdc = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+    const word = (hex: string) => hex.padStart(64, '0')
+    const coin = create(CoinSchema, {
+      chain: Chain.Ethereum,
+      ticker: 'USDC',
+      contractAddress: usdc,
+    })
+    const deposit = create(KeysignPayloadSchema, {
+      coin,
+      swapPayload: {
+        case: 'oneinchSwapPayload',
+        value: create(OneInchSwapPayloadSchema, {
+          provider: 'swapkit',
+          fromCoin: coin,
+          fromAmount: '20000000',
+          quote: create(OneInchQuoteSchema, {
+            tx: create(OneInchTransactionSchema, {
+              to: usdc,
+              // transfer(0x1f01…c121, 1) while the payload sells 20 USDC
+              data: `0xa9059cbb${word('1f01af4e50082e2982ba5041707efddd3aa4c121')}${word('1')}`,
+              value: '0',
+            }),
+          }),
+        }),
+      },
+    })
+
+    expect(
+      resolve({
+        keysignPayloadQuery: { data: deposit, error: null, isPending: false },
+      })
+    ).toStrictEqual({
+      disabledMessage:
+        'swap_deposit_address: swap_deposit_address_unverifiable',
+    })
   })
 })

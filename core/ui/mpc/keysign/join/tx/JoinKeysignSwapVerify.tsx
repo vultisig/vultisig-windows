@@ -2,6 +2,8 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getSwapProviderLogoSrc } from '@core/ui/chain/metadata/getSwapProviderLogoSrc'
 import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFromPayload'
 import { getSwapPriceImpactFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapPriceImpactFromPayload'
+import { SwapKitDepositRecipientScan } from '@core/ui/mpc/keysign/tx/swap/SwapKitDepositRecipientScan'
+import { useSwapKitDepositRecipientScreenQuery } from '@core/ui/mpc/keysign/tx/swap/useSwapKitDepositRecipientScreenQuery'
 import { formatPriceImpact } from '@core/ui/vault/swap/form/info/priceImpact'
 import { PriceImpactValue } from '@core/ui/vault/swap/form/info/PriceImpactValue'
 import { getSwapNetworkFeeLabelKey } from '@core/ui/vault/swap/form/info/swapNetworkFeeLabel'
@@ -74,9 +76,12 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
   const providerLogoSrc = getSwapProviderLogoSrc(provider)
   const swapFee = getSwapFeeFromPayload(value)
   const priceImpact = formatPriceImpact(getSwapPriceImpactFromPayload(value))
+  const depositRecipientScreenQuery =
+    useSwapKitDepositRecipientScreenQuery(value)
 
   return (
     <>
+      <SwapKitDepositRecipientScan value={depositRecipientScreenQuery} />
       <SwapVerifyCard>
         <VStack gap={24} padding={24}>
           <Text color="supporting" size={15}>

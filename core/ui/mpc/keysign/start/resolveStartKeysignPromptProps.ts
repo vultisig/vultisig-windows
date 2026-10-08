@@ -6,6 +6,7 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { TFunction } from 'i18next'
 
 import { StartKeysignPromptProps } from '../prompt/StartKeysignPromptProps'
+import { getSwapPayloadRefusalMessage } from '../tx/swap/getSwapPayloadRefusalMessage'
 
 type ResolveStartKeysignPromptPropsInput = {
   t: TFunction
@@ -83,6 +84,11 @@ export const resolveStartKeysignPromptProps = ({
 
   if (!keysign) {
     return {}
+  }
+
+  const swapPayloadRefusalMessage = getSwapPayloadRefusalMessage(keysign, t)
+  if (swapPayloadRefusalMessage) {
+    return { disabledMessage: swapPayloadRefusalMessage }
   }
 
   if (disabledMessage) {
