@@ -1,11 +1,12 @@
 import { PermitToken } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Eip712PermitDisplay'
+import { PermitAmountValue } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/PermitAmountValue'
 import { Divider } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
 import { useTokenMetadataQuery } from '@core/ui/chain/coin/addCustomToken/queries/tokenMetadata'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
-import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { EvmChain } from '@vultisig/core-chain/Chain'
@@ -18,12 +19,12 @@ type PermitTokenRowProps = {
   primaryType: string
 }
 
-const primaryTypeToFunctionName: Record<string, string> = {
-  Permit: 'permit',
-  PermitSingle: 'permitSingle',
-  PermitBatch: 'permitBatch',
-}
-
+/**
+ * Token and approval amount rows for one token of a permit. The amount waits
+ * for the token's metadata so it never shows base units as if they were
+ * token units, and falls back to base units only when the metadata lookup
+ * fails.
+ */
 export const PermitTokenRow: FC<PermitTokenRowProps> = ({
   chain,
   token,
@@ -32,21 +33,6 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
   const { t } = useTranslation()
   const metadataQuery = useTokenMetadataQuery({ chain, id: token.address })
   const metadata = metadataQuery.data
-
-  const functionName = primaryTypeToFunctionName[primaryType]
-  const formatted = metadata
-    ? formatTokenAmount({
-        rawAmount: token.amount,
-        decimals: metadata.decimals,
-        functionName,
-      })
-    : null
-
-  const ticker = metadata?.ticker ?? ''
-  const isUnlimited = !!formatted?.isSentinel && !!formatted.display
-  const numericLabel = formatted?.display
-    ? `${formatted.display}${ticker ? ` ${ticker}` : ''}`
-    : `${token.amount.toString()}${ticker ? ` ${ticker}` : ''}`
 
   return (
     <>
@@ -59,7 +45,14 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
         <Text as="span" color="shy" size={14} weight={500} nowrap>
           {t('token')}
         </Text>
-        <HStack alignItems="center" gap={8} wrap="nowrap">
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="end"
+          wrap="nowrap"
+          overflow="hidden"
+          flexGrow
+        >
           <ChainEntityIcon
             value={metadata?.logo ? getCoinLogoSrc(metadata.logo) : undefined}
             style={{ fontSize: 20 }}
@@ -74,6 +67,7 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
               size={14}
               text={token.address}
               weight={500}
+              flexGrow
             />
           )}
         </HStack>
@@ -88,21 +82,25 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
         <Text as="span" color="shy" size={14} weight={500} nowrap>
           {t('approval_amount')}
         </Text>
-        {isUnlimited ? (
-          <HStack alignItems="center" gap={6} wrap="nowrap">
-            <Text as={TriangleAlertIcon} color="warning" size={14} />
-            <Text as="span" color="warning" size={14} weight={500} nowrap>
-              {`${t('unlimited')}${ticker ? ` ${ticker}` : ''}`}
-            </Text>
-          </HStack>
-        ) : (
-          <MiddleTruncate
-            justifyContent="end"
-            size={14}
-            text={numericLabel}
-            weight={500}
-          />
-        )}
+        <MatchQuery
+          value={metadataQuery}
+          pending={() => <Spinner />}
+          error={() => (
+            <PermitAmountValue
+              amount={token.amount}
+              primaryType={primaryType}
+              decimals={0}
+            />
+          )}
+          success={({ decimals, ticker }) => (
+            <PermitAmountValue
+              amount={token.amount}
+              primaryType={primaryType}
+              decimals={decimals}
+              ticker={ticker}
+            />
+          )}
+        />
       </HStack>
     </>
   )
