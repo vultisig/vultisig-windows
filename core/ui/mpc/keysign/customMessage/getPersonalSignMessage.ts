@@ -1,7 +1,12 @@
 import { getBytes, hexlify } from 'ethers'
 
-const isHexMessage = (message: string) =>
-  message.startsWith('0x') || message.startsWith('0X')
+const eip191Prefix = '\x19Ethereum Signed Message:\n'
+
+// Only well-formed hex is signed as raw bytes. Text that merely starts with
+// `0x` (e.g. typed into the vault's sign-message form) is signed as UTF-8.
+const isHexMessage = (message: string) => /^0x(?:[0-9a-f]{2})*$/i.test(message)
+
+const decimalLength = /^(?:0|[1-9][0-9]*)$/
 
 /**
  * Bytes of a `personal_sign` message as the popup shows them: hex messages
@@ -16,10 +21,14 @@ export const getPersonalSignMessageBytes = (message: string) =>
  * The length always comes from the message bytes the popup shows, never from
  * the caller, so the signature covers exactly the displayed message.
  * Hex messages come back as hex, plain text as a string.
+ *
+ * Co-signers on every platform hash a custom-message payload as-is, so every
+ * `personal_sign` initiator must put this payload on the wire, not the bare
+ * message.
  */
 export const getPersonalSignMessage = (message: string) => {
   const msgBytes = getPersonalSignMessageBytes(message)
-  const prefix = `\x19Ethereum Signed Message:\n${msgBytes.length}`
+  const prefix = `${eip191Prefix}${msgBytes.length}`
 
   if (isHexMessage(message)) {
     const prefixBytes = new TextEncoder().encode(prefix)
@@ -30,4 +39,41 @@ export const getPersonalSignMessage = (message: string) => {
   }
 
   return `${prefix}${message}`
+}
+
+/**
+ * Reverses `getPersonalSignMessage`: the message inside an EIP-191 payload,
+ * hex if the payload is hex and text otherwise. Returns `undefined` for
+ * anything that is not a well-formed envelope, so callers can show the
+ * payload as-is.
+ */
+export const unwrapPersonalSignMessage = (
+  payload: string
+): string | undefined => {
+  const bytes = getPersonalSignMessageBytes(payload)
+  const prefixBytes = new TextEncoder().encode(eip191Prefix)
+
+  if (!prefixBytes.every((byte, index) => bytes[index] === byte)) {
+    return undefined
+  }
+
+  const rest = bytes.subarray(prefixBytes.length)
+  const decoder = new TextDecoder()
+
+  // The length runs straight into the message, so a message that starts with
+  // digits leaves several candidate splits. At most one matches the byte count.
+  for (let digitCount = 1; digitCount <= rest.length; digitCount++) {
+    const length = decoder.decode(rest.subarray(0, digitCount))
+
+    if (!decimalLength.test(length)) return undefined
+
+    if (Number(length) === rest.length - digitCount) {
+      const msgBytes = rest.subarray(digitCount)
+      return isHexMessage(payload)
+        ? hexlify(msgBytes)
+        : decoder.decode(msgBytes)
+    }
+  }
+
+  return undefined
 }
