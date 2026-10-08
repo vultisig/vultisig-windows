@@ -1424,6 +1424,8 @@ export const zh = {
   swap_mode_market: '市场',
   use_external_recipient: '使用外部收件人',
   swap_external_recipient_warning: '发送到外部地址',
+  swap_deposit_address: '存款地址',
+  swap_deposit_address_unverifiable: '无法验证',
   custom_rpc_gate_description:
     '将 {{productName}} 指向您自己的节点。更快的查询速度、更高的速率限制以及每条链的完全隐私。',
   feature_gate_requires: '需要',

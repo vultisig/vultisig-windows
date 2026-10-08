@@ -1234,6 +1234,8 @@ export const en = {
   swap_no_token_found: 'No token found',
   swap_expected_payout: 'expected payout',
   swap_external_recipient_warning: 'Sending to an external address',
+  swap_deposit_address: 'Deposit address',
+  swap_deposit_address_unverifiable: 'Cannot be verified',
   swap_fee: 'Swap Fee',
   swap_fee_included_in_rate: 'Included in the quoted exchange rate',
   swap_protocol_fee: 'Protocol Fee',

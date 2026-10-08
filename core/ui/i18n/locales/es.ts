@@ -1539,6 +1539,8 @@ export const es = {
   swap_mode_market: 'Mercado',
   use_external_recipient: 'Utilizar destinatario externo',
   swap_external_recipient_warning: 'Enviar a una dirección externa',
+  swap_deposit_address: 'Dirección de depósito',
+  swap_deposit_address_unverifiable: 'No se puede verificar',
   custom_rpc_gate_description:
     'Apunte {{productName}} a sus propios nodos. Consultas más rápidas, límites de velocidad más altos y privacidad total por cadena.',
   feature_gate_requires: 'Requiere',

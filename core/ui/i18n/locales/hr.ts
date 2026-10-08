@@ -1528,6 +1528,8 @@ export const hr = {
   swap_mode_market: 'Tržište',
   use_external_recipient: 'Koristi vanjskog primatelja',
   swap_external_recipient_warning: 'Slanje na vanjsku adresu',
+  swap_deposit_address: 'Adresa za uplatu',
+  swap_deposit_address_unverifiable: 'Nije moguće provjeriti',
   custom_rpc_gate_description:
     'Usmjerite {{productName}} na vlastite čvorove. Brži upiti, veća ograničenja brzine i potpuna privatnost po lancu.',
   feature_gate_requires: 'Zahtijeva',
