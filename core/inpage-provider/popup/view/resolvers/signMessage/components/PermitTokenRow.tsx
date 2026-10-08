@@ -1,9 +1,14 @@
 import { PermitToken } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Eip712PermitDisplay'
-import { PermitAmountValue } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/PermitAmountValue'
-import { Divider } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
+import {
+  Divider,
+  RowValue,
+} from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
+import { formatPermitAmount } from '@core/inpage-provider/popup/view/resolvers/signMessage/utils/formatPermitAmount'
+import { isUnlimitedPermitAmount } from '@core/inpage-provider/popup/view/resolvers/signMessage/utils/isUnlimitedPermitAmount'
 import { useTokenMetadataQuery } from '@core/ui/chain/coin/addCustomToken/queries/tokenMetadata'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -20,10 +25,10 @@ type PermitTokenRowProps = {
 }
 
 /**
- * Token and approval amount rows for one token of a permit. The amount waits
- * for the token's metadata so it never shows base units as if they were
- * token units, and falls back to base units only when the metadata lookup
- * fails.
+ * Token and approval amount rows for one token of a permit. An unlimited
+ * approval is flagged straight away. A finite amount waits for the token's
+ * decimals so base units never pass for token units, shows every digit, and
+ * falls back to base units only when the metadata lookup fails.
  */
 export const PermitTokenRow: FC<PermitTokenRowProps> = ({
   chain,
@@ -31,8 +36,12 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
   primaryType,
 }) => {
   const { t } = useTranslation()
+  const { amount } = token
   const metadataQuery = useTokenMetadataQuery({ chain, id: token.address })
   const metadata = metadataQuery.data
+
+  const withTicker = (value: string) =>
+    metadata?.ticker ? `${value} ${metadata.ticker}` : value
 
   return (
     <>
@@ -82,25 +91,29 @@ export const PermitTokenRow: FC<PermitTokenRowProps> = ({
         <Text as="span" color="shy" size={14} weight={500} nowrap>
           {t('approval_amount')}
         </Text>
-        <MatchQuery
-          value={metadataQuery}
-          pending={() => <Spinner />}
-          error={() => (
-            <PermitAmountValue
-              amount={token.amount}
-              primaryType={primaryType}
-              decimals={0}
-            />
-          )}
-          success={({ decimals, ticker }) => (
-            <PermitAmountValue
-              amount={token.amount}
-              primaryType={primaryType}
-              decimals={decimals}
-              ticker={ticker}
-            />
-          )}
-        />
+        {isUnlimitedPermitAmount({ amount, primaryType }) ? (
+          <HStack alignItems="center" gap={6} wrap="nowrap">
+            <Text as={TriangleAlertIcon} color="warning" size={14} />
+            <Text as="span" color="warning" size={14} weight={500} nowrap>
+              {withTicker(t('unlimited'))}
+            </Text>
+          </HStack>
+        ) : (
+          <MatchQuery
+            value={metadataQuery}
+            pending={() => <Spinner role="status" aria-label={t('loading')} />}
+            error={() => (
+              <RowValue as="span" size={14} weight={500}>
+                {amount.toString()}
+              </RowValue>
+            )}
+            success={({ decimals }) => (
+              <RowValue as="span" size={14} weight={500}>
+                {withTicker(formatPermitAmount({ amount, decimals }))}
+              </RowValue>
+            )}
+          />
+        )}
       </HStack>
     </>
   )

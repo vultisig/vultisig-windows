@@ -132,6 +132,7 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
   useEffect(() => {
     setState(prevState => ({
       ...prevState,
+      counter: 0,
       ellipsis: text,
       truncating: true,
       wrapperWidth: width,
