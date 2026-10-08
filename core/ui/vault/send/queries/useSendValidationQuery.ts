@@ -11,6 +11,7 @@ import { useSpendableSendAmount } from '../amount/useSpendableSendAmount'
 import { useIsSendFeePaidInCoin } from '../fee/useIsSendFeePaidInCoin'
 import { validateSendForm } from '../form/validateSendForm'
 import { useSendDestinationTagInput } from '../state/destinationTag'
+import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendBalanceQuery } from './useSendBalanceQuery'
@@ -32,6 +33,7 @@ export const useSendValidationQuery = () => {
   // the amount it will actually sign.
   const amount = useSpendableSendAmount()
   const [destinationTag] = useSendDestinationTagInput()
+  const [memo] = useSendMemo()
   const [address] = useSendReceiver()
   const walletCore = useAssertWalletCore()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
@@ -53,6 +55,7 @@ export const useSendValidationQuery = () => {
             coin,
             amount,
             destinationTag,
+            memo,
             receiverAddress: address,
             senderAddress: coin.address,
           },
@@ -74,6 +77,7 @@ export const useSendValidationQuery = () => {
         destinationTag,
         feeEstimateQuery.data,
         isFeePaidInCoin,
+        memo,
         nativeBalanceQuery.data,
         requiresNativeFee,
         t,

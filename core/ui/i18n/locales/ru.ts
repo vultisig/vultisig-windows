@@ -511,6 +511,10 @@ export const ru = {
   install_plugin: 'Установить приложение',
   installation_progress: 'Ход установки: {{progress}}%',
   insufficient_balance: 'Недостаточный баланс',
+  send_receiver_format_hint_near:
+    'Введите ID аккаунта NEAR, например alice.near, или 64-символьный шестнадцатеричный адрес в нижнем регистре.',
+  send_memo_not_supported:
+    'Переводы {{chain}} не поддерживают memo. Удалите memo, чтобы продолжить.',
   insufficient_native_balance_for_fee:
     'Недостаточно средств на балансе собственных токенов для оплаты комиссии за транзакцию.',
   insufficient_gas_limit: 'Недостаточный лимит gas',
@@ -1724,6 +1728,8 @@ export const ru = {
   ripple_field_destination_tag: 'Метка назначения',
   ripple_destination_tag_invalid: 'Введите целое число от 0 до 4 294 967 295.',
   ripple_destination_tag_optional: 'Необязательная метка назначения',
+  near_destination_not_found:
+    'Этот аккаунт NEAR не существует. Проверьте получателя: перевод на него лишь сожжёт газ.',
   ripple_destination_tag_required:
     'Для этого счёта XRP требуется метка назначения.',
   ripple_field_amount: 'Количество',

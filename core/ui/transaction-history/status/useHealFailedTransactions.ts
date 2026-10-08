@@ -1,9 +1,11 @@
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
 
 import { TransactionRecord } from '../core'
 import { getRecordLastValidBlockHeight } from './getRecordLastValidBlockHeight'
+import { getRecordSenderAddress } from './getRecordSenderAddress'
 import { getTxStatusRecordUpdate } from './getTxStatusRecordUpdate'
 import { useApplyTransactionRecordUpdate } from './useApplyTransactionRecordUpdate'
 
@@ -30,6 +32,7 @@ const isHealCandidate = (record: TransactionRecord): boolean =>
  */
 export const useHealFailedTransactions = (records: TransactionRecord[]) => {
   const applyRecordUpdate = useApplyTransactionRecordUpdate()
+  const vaultAddresses = useCurrentVaultAddresses()
   const checkedIdsRef = useRef(new Set<string>())
 
   useEffect(() => {
@@ -47,6 +50,7 @@ export const useHealFailedTransactions = (records: TransactionRecord[]) => {
           chain: record.chain,
           hash: record.txHash,
           lastValidBlockHeight: getRecordLastValidBlockHeight(record),
+          senderAccountId: getRecordSenderAddress({ record, vaultAddresses }),
         })
       )
 
@@ -59,5 +63,5 @@ export const useHealFailedTransactions = (records: TransactionRecord[]) => {
         applyRecordUpdate({ previous: record, update })
       }
     })
-  }, [records, applyRecordUpdate])
+  }, [records, applyRecordUpdate, vaultAddresses])
 }

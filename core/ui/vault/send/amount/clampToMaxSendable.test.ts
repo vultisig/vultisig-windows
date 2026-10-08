@@ -1,12 +1,31 @@
+import { getMaxSendableAmount } from '@vultisig/core-chain/amount/getMaxSendableAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { describe, expect, it } from 'vitest'
 
-import { adjustAmountForFee } from './adjustAmountForFee'
+import { clampToMaxSendable } from './clampToMaxSendable'
 
-const adjust = (input: { amount: bigint; balance: bigint; fee: bigint }) =>
-  adjustAmountForFee({ chain: Chain.Ethereum, ...input })
+type AdjustInput = {
+  chain?: Chain
+  amount: bigint
+  balance: bigint
+  fee: bigint
+  allowDeath?: boolean
+}
 
-describe('adjustAmountForFee', () => {
+const adjust = ({
+  chain = Chain.Ethereum,
+  amount,
+  balance,
+  fee,
+  allowDeath,
+}: AdjustInput) =>
+  clampToMaxSendable({
+    amount,
+    balance,
+    maxSendable: getMaxSendableAmount({ chain, balance, fee, allowDeath }),
+  })
+
+describe('clampToMaxSendable', () => {
   it('adjusts down to balance - fee when only the fee overshoots', () => {
     expect(adjust({ amount: 95n, balance: 100n, fee: 6n })).toBe(94n)
   })
@@ -37,7 +56,7 @@ describe('adjustAmountForFee', () => {
 
     it('keeps the existential deposit back from a full-balance amount', () => {
       expect(
-        adjustAmountForFee({
+        adjust({
           chain: Chain.Bittensor,
           amount: balance,
           balance,
@@ -48,7 +67,7 @@ describe('adjustAmountForFee', () => {
 
     it('adjusts an amount that only leaves the fee, not the deposit', () => {
       expect(
-        adjustAmountForFee({
+        adjust({
           chain: Chain.Bittensor,
           amount: balance - fee,
           balance,
@@ -59,14 +78,14 @@ describe('adjustAmountForFee', () => {
 
     it('leaves an amount that already keeps the deposit', () => {
       const amount = balance - fee - 500n
-      expect(
-        adjustAmountForFee({ chain: Chain.Bittensor, amount, balance, fee })
-      ).toBe(amount)
+      expect(adjust({ chain: Chain.Bittensor, amount, balance, fee })).toBe(
+        amount
+      )
     })
 
     it('keeps nothing back when the send empties the account', () => {
       expect(
-        adjustAmountForFee({
+        adjust({
           chain: Chain.Bittensor,
           amount: balance,
           balance,
@@ -79,7 +98,7 @@ describe('adjustAmountForFee', () => {
     it('leaves a whole-balance-less-fee amount alone when emptying', () => {
       const amount = balance - fee
       expect(
-        adjustAmountForFee({
+        adjust({
           chain: Chain.Bittensor,
           amount,
           balance,

@@ -967,6 +967,8 @@ export const en = {
   ripple_destination_tag_invalid:
     'Enter a whole number between 0 and 4,294,967,295.',
   ripple_destination_tag_optional: 'Optional destination tag',
+  near_destination_not_found:
+    "This NEAR account doesn't exist. Check the recipient: a transfer to it would only burn gas.",
   ripple_destination_tag_required:
     'This XRP account requires a destination tag.',
   ripple_field_amount: 'Amount',
@@ -1094,6 +1096,10 @@ export const en = {
     'Enter a Bech32 address that starts with the {{prefix}} prefix.',
   send_receiver_format_hint_evm:
     'Enter an EVM address that starts with 0x and has 40 hexadecimal characters.',
+  send_receiver_format_hint_near:
+    'Enter a NEAR account ID such as alice.near, or a 64-character lowercase hex address.',
+  send_memo_not_supported:
+    "{{chain}} transfers can't carry a memo. Remove the memo to continue.",
   send_receiver_format_hint_qbtc: 'Enter a QBTC address that starts with qbtc.',
   send_receiver_format_hint_ripple:
     'Enter an XRP address that starts with the letter r.',
