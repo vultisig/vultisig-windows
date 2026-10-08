@@ -5,7 +5,7 @@ import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -153,6 +153,12 @@ export const EnterPasscode = () => {
     passcodeEncryption?.attemptState
   )
   const [now, setNow] = useState(Date.now)
+  // Short probes keep the cells live, so this screen's checks can overlap.
+  // Chain them so each reads what the one before it wrote, also where Web
+  // Locks are unavailable, and drop the rest once one unlocks: with the length
+  // recorded, a queued edit would be charged as a failure.
+  const verificationQueueRef = useRef<Promise<unknown>>(Promise.resolve())
+  const hasUnlockedRef = useRef(false)
 
   const encryptedSample = passcodeEncryption?.encryptedSample ?? null
   const passcodeLength = getPasscodeEntryLength({
@@ -197,13 +203,8 @@ export const EnterPasscode = () => {
 
     let cancelled = false
 
-    const verifyEnteredPasscode = async () => {
-      // Loading disables the cells, and a probe runs mid-typing.
-      if (!isProbe) {
-        setIsVerifying(true)
-      }
-
-      await withPasscodeOperationLock(async () => {
+    const checkEntry = () =>
+      withPasscodeOperationLock(async () => {
         const [current, currentVaults] = await Promise.all([
           getPasscodeEncryption(),
           getVaults(),
@@ -271,12 +272,27 @@ export const EnterPasscode = () => {
           await refetchQueries([StorageKey.passcodeEncryption])
         }
 
-        // Unlock even if the user typed past a verified short passcode.
+        // Unlock even if the user typed past a verified short passcode. Set
+        // only once the record is written, so a failed write can be retried.
+        hasUnlockedRef.current = true
         setPasscode(inputValue)
         if (!cancelled) {
           setIsInvalid(false)
         }
       })
+
+    const verifyEnteredPasscode = async () => {
+      // Loading disables the cells, and a probe runs mid-typing.
+      if (!isProbe) {
+        setIsVerifying(true)
+      }
+
+      const verification = verificationQueueRef.current.then(() =>
+        hasUnlockedRef.current ? undefined : checkEntry()
+      )
+      verificationQueueRef.current = verification.catch(() => {})
+
+      await verification
     }
 
     verifyEnteredPasscode()
