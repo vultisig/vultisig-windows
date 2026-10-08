@@ -7,15 +7,15 @@ import {
 } from '@core/inpage-provider/popup/interface'
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
 import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
-import {
-  getPersonalSignMessage,
-  getPersonalSignMessageBytes,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getPersonalSignMessage'
 import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
 import { toDisplayMessageString } from '@core/inpage-provider/popup/view/utils/toDisplayMessage'
 import { serializeAdr36SignDoc } from '@core/ui/mpc/keysign/customMessage/adr36'
+import {
+  getPersonalSignMessage,
+  getPersonalSignMessageBytes,
+} from '@core/ui/mpc/keysign/customMessage/getPersonalSignMessage'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'

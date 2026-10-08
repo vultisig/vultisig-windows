@@ -1,8 +1,8 @@
-import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { hashMessage, hexlify, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
 
+import { getCustomMessageHex } from './getCustomMessageHex'
 import { getPersonalSignMessage } from './getPersonalSignMessage'
 
 const getSignedDigest = (message: string) =>
