@@ -85,6 +85,8 @@ describe('useSendValidationQuery token funding', () => {
       chain: Chain.Ripple,
       id: 'RLUSD.issuer',
       address: 'rSender',
+      ticker: 'RLUSD',
+      decimals: 15,
     })
     mocks.amount.mockReturnValue(50n)
     mocks.balance.mockImplementation(({ id }: { id?: string }) =>
@@ -108,7 +110,7 @@ describe('useSendValidationQuery token funding', () => {
     )
 
     expect(readValidation().data).toEqual({
-      amount: 'insufficient_native_balance_for_fee',
+      amount: 'insufficient_funds_including_network_costs',
     })
   })
 
@@ -133,7 +135,7 @@ describe('useSendValidationQuery token funding', () => {
       ready(id ? 100n : 0n)
     )
     expect(readValidation()).toMatchObject({
-      data: { amount: 'insufficient_native_balance_for_fee' },
+      data: { amount: 'insufficient_funds_including_network_costs' },
       isPending: false,
     })
   })
@@ -175,7 +177,9 @@ describe('useSendValidationQuery token funding', () => {
   it('still reports a known token-amount error while funding is pending', () => {
     mocks.amount.mockReturnValue(101n)
     mocks.fee.mockReturnValue(pending)
-    expect(readValidation().data).toEqual({ amount: 'insufficient_balance' })
+    expect(readValidation().data).toEqual({
+      amount: 'insufficient_funds_asset',
+    })
   })
 
   describe('gasless TON jetton send', () => {
@@ -186,6 +190,8 @@ describe('useSendValidationQuery token funding', () => {
         chain: Chain.Ton,
         id: usdt,
         address: 'UQCvaZohosTA0ak9ZFMs-cvL1JrXqogqJH8sI2uO6k8clJpn',
+        ticker: 'USDT',
+        decimals: 6,
       })
       // The relay commission is charged in the jetton itself.
       mocks.feePaidInCoin.mockReturnValue(true)
@@ -217,7 +223,9 @@ describe('useSendValidationQuery token funding', () => {
 
     it('reports the jetton balance as insufficient once the commission no longer fits', () => {
       mocks.amount.mockReturnValue(99n)
-      expect(readValidation().data).toEqual({ amount: 'insufficient_balance' })
+      expect(readValidation().data).toEqual({
+        amount: 'insufficient_funds_including_network_costs',
+      })
     })
 
     it('waits for the relay commission before enabling Continue', () => {

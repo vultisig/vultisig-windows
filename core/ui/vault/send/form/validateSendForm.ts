@@ -1,12 +1,15 @@
+import { getInsufficientFundsMessage } from '@core/ui/vault/send/funds/getInsufficientFundsMessage'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, UtxoBasedChain } from '@vultisig/core-chain/Chain'
 import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import {
   getChainDangerousReason,
   getEvmDangerousReason,
 } from '@vultisig/core-chain/security/dangerousAddresses'
 import { isValidRecipient } from '@vultisig/core-chain/utils/isValidRecipient'
+import { BuildKeysignPayloadShortfall } from '@vultisig/core-mpc/keysign/error'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
@@ -64,6 +67,53 @@ export const validateSendReceiver = ({
   }
 }
 
+type GetSendFundsShortfallInput = {
+  coin: SendFormShape['coin']
+  amount: bigint
+  balance: bigint
+  fee?: bigint
+  nativeBalance?: bigint
+  isFeePaidInCoin: boolean
+}
+
+const getSendFundsShortfall = ({
+  coin,
+  amount,
+  balance,
+  fee,
+  nativeBalance,
+  isFeePaidInCoin,
+}: GetSendFundsShortfallInput): BuildKeysignPayloadShortfall | undefined => {
+  if (
+    !isFeePaidInCoin &&
+    nativeBalance != null &&
+    fee != null &&
+    nativeBalance < fee
+  ) {
+    const { ticker, decimals } = chainFeeCoin[coin.chain]
+    return {
+      required: fee,
+      available: nativeBalance,
+      ticker,
+      decimals,
+      includesNetworkCosts: true,
+    }
+  }
+
+  const includesNetworkCosts = isFeePaidInCoin && fee != null
+  const required = includesNetworkCosts ? amount + fee : amount
+  if (required <= balance) return undefined
+
+  const { ticker, decimals } = coin
+  return {
+    required,
+    available: balance,
+    ticker,
+    decimals,
+    includesNetworkCosts,
+  }
+}
+
 export const validateSendForm = (
   values: SendFormShape,
   helpers: {
@@ -103,21 +153,16 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else {
-    if (isFeePaidInCoin && fee != null) {
-      if (amount + fee > balance) {
-        errors.amount = t('insufficient_balance')
-      }
-    } else if (amount > balance) {
-      errors.amount = t('insufficient_balance')
-    }
-
-    if (
-      !isFeePaidInCoin &&
-      nativeBalance != null &&
-      fee != null &&
-      nativeBalance < fee
-    ) {
-      errors.amount = t('insufficient_native_balance_for_fee')
+    const shortfall = getSendFundsShortfall({
+      coin,
+      amount,
+      balance,
+      fee,
+      nativeBalance,
+      isFeePaidInCoin,
+    })
+    if (shortfall) {
+      errors.amount = getInsufficientFundsMessage(shortfall, t)
     }
 
     if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {

@@ -517,6 +517,10 @@ export const es = {
   install_plugin: 'Instalar aplicación',
   installation_progress: 'Progreso de la instalación: {{progress}}%',
   insufficient_balance: 'Saldo insuficiente',
+  insufficient_funds_asset:
+    'No hay suficiente {{ticker}}: este envío necesita {{required}}, tienes {{available}}',
+  insufficient_funds_including_network_costs:
+    'No hay suficiente {{ticker}}: este envío necesita {{required}} incluidos los costos de red, tienes {{available}}',
   insufficient_native_balance_for_fee:
     'Saldo de token nativo insuficiente para pagar la tarifa de transacción',
   insufficient_gas_limit: 'Límite de gas insuficiente',

@@ -23,6 +23,9 @@ vi.mock(
 const templates: Record<string, string> = {
   send_invalid_receiver_address_with_hint: '{{error}}. {{hint}}',
   send_receiver_dangerous_address: 'dangerous: {{reason}}',
+  insufficient_funds_asset: 'short {{ticker}}: {{required}} / {{available}}',
+  insufficient_funds_including_network_costs:
+    'short {{ticker}} with costs: {{required}} / {{available}}',
 }
 const t = ((key: string, options?: Record<string, unknown>) => {
   const template = templates[key] ?? key
@@ -36,12 +39,16 @@ const walletCore = {} as WalletCore
 const nativeCoin = (chain: Chain): Coin =>
   ({
     chain,
+    ticker: 'ETH',
+    decimals: 0,
   }) as Coin
 
 const tokenCoin = (chain: Chain): Coin =>
   ({
     chain,
     id: 'token-id',
+    ticker: 'USDT',
+    decimals: 0,
   }) as Coin
 
 const validSendForm = (coin: Coin) => ({
@@ -72,7 +79,7 @@ describe('validateSendForm', () => {
         }
       )
     ).toEqual({
-      amount: 'insufficient_balance',
+      amount: 'short ETH with costs: 101 ETH / 100 ETH',
     })
   })
 
@@ -92,7 +99,7 @@ describe('validateSendForm', () => {
         }
       )
     ).toEqual({
-      amount: 'insufficient_balance',
+      amount: 'short USDT: 101 USDT / 100 USDT',
     })
   })
 
@@ -105,14 +112,14 @@ describe('validateSendForm', () => {
         },
         {
           balance: 100n,
-          nativeBalance: 1n,
-          fee: 2n,
+          nativeBalance: 1_000_000_000_000_000n,
+          fee: 2_000_000_000_000_000n,
           walletCore,
           t,
         }
       )
     ).toEqual({
-      amount: 'insufficient_native_balance_for_fee',
+      amount: 'short ETH with costs: 0.002 ETH / 0.001 ETH',
     })
   })
 

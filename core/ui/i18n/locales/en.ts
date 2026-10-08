@@ -597,6 +597,10 @@ export const en = {
   install_plugin: 'Install App',
   installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
+  insufficient_funds_asset:
+    'Not enough {{ticker}}: this send needs {{required}}, you have {{available}}',
+  insufficient_funds_including_network_costs:
+    'Not enough {{ticker}}: this send needs {{required}} including network costs, you have {{available}}',
   swap_insufficient_funds:
     'Insufficient funds to execute the swap. Please fund the wallet.',
   insufficient_native_balance_for_fee:

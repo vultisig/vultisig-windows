@@ -1,11 +1,10 @@
 import { Query } from '@lib/ui/query/Query'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
-import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { TFunction } from 'i18next'
 
 import { StartKeysignPromptProps } from '../prompt/StartKeysignPromptProps'
+import { getBuildKeysignPayloadErrorMessage } from './getBuildKeysignPayloadErrorMessage'
 
 type ResolveStartKeysignPromptPropsInput = {
   t: TFunction
@@ -64,18 +63,11 @@ export const resolveStartKeysignPromptProps = ({
   }
 
   if (keysignPayloadQuery.error) {
-    if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
-      if (keysignPayloadQuery.error.type === 'not-enough-funds') {
-        return { disabledMessage: t('not_enough_funds') }
-      }
-      if (
-        keysignPayloadQuery.error.type === 'ripple-destination-tag-required'
-      ) {
-        return { disabledMessage: t('ripple_destination_tag_required') }
-      }
-    }
     return {
-      disabledMessage: extractErrorMsg(keysignPayloadQuery.error),
+      disabledMessage: getBuildKeysignPayloadErrorMessage(
+        keysignPayloadQuery.error,
+        t
+      ),
     }
   }
 

@@ -509,6 +509,10 @@ export const ko = {
   install_plugin: '앱 설치',
   installation_progress: '설치 진행률: {{progress}}%',
   insufficient_balance: '잔액 부족',
+  insufficient_funds_asset:
+    '{{ticker}} 부족: 이 전송에는 {{required}}이(가) 필요하지만 보유량은 {{available}}입니다',
+  insufficient_funds_including_network_costs:
+    '{{ticker}} 부족: 이 전송에는 네트워크 비용을 포함해 {{required}}이(가) 필요하지만 보유량은 {{available}}입니다',
   insufficient_native_balance_for_fee:
     '거래 수수료를 지불하기에 네이티브 토큰 잔액이 부족합니다.',
   insufficient_gas_limit: '가스 제한 부족',
