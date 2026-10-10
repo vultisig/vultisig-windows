@@ -79,6 +79,12 @@ type MiddleTruncateProps = {
   text: string
 } & Styles
 
+/**
+ * Single-line text that drops characters from its middle until it fits.
+ * Give it a width of its own (`width`, `flexGrow`, or a block parent): the
+ * text is out of flow while it is measured, so a content-sized flex item
+ * collapses to 0px and renders nothing.
+ */
 export const MiddleTruncate: FC<MiddleTruncateProps> = ({
   onClick,
   text,
@@ -102,10 +108,12 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
     if (elmRef.current) {
       const [child] = elmRef.current.children
       const clientWidth = child?.clientWidth ?? 0
+      const chunkLen = Math.ceil(text.length / 2) - counter
 
-      if (clientWidth > wrapperWidth) {
-        const chunkLen = Math.ceil(text.length / 2) - counter
-
+      // Stop once there is nothing left to cut: a wrapper with no room
+      // (e.g. collapsed to 0px) would otherwise re-render forever with the
+      // text hidden.
+      if (clientWidth > wrapperWidth && chunkLen > 0) {
         setState(prevState => ({
           ...prevState,
           counter: counter + 1,
@@ -124,6 +132,7 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
   useEffect(() => {
     setState(prevState => ({
       ...prevState,
+      counter: 0,
       ellipsis: text,
       truncating: true,
       wrapperWidth: width,
