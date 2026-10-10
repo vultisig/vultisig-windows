@@ -2053,4 +2053,7 @@ export const it = {
     "La commissione di rete o il tuo saldo sono cambiati dopo che hai impostato l'importo, quindi l'importo è stato ridotto da {{requestedAmount}} a {{amount}}.",
   send_enter_address_first_for_percentage:
     "Inserisci prima l'indirizzo del destinatario per utilizzare i pulsanti percentuali",
+  ton_proof_domain: 'Prova per',
+  ton_proof_domain_mismatch:
+    'Questa prova si riferisce a un sito diverso da quello che la richiede. Prosegui solo se ti fidi di entrambi.',
 }

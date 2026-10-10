@@ -2048,4 +2048,7 @@ export const es = {
     'La tarifa de red o su saldo cambiaron después de que usted estableció el monto, por lo que el monto se redujo de {{requestedAmount}} a {{amount}}.',
   send_enter_address_first_for_percentage:
     'Introduzca primero la dirección del destinatario para poder usar los botones de porcentaje.',
+  ton_proof_domain: 'Prueba de',
+  ton_proof_domain_mismatch:
+    'Esta prueba corresponde a un sitio web distinto al que la solicita. Continúa solo si confías en ambos.',
 }

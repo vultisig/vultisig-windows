@@ -2007,4 +2007,7 @@ export const ko = {
     '금액을 설정한 후 네트워크 수수료 또는 잔액이 변경되어 금액이 {{requestedAmount}}에서 {{amount}}로 낮아졌습니다.',
   send_enter_address_first_for_percentage:
     '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
+  ton_proof_domain: '증명',
+  ton_proof_domain_mismatch:
+    '이 증명은 요청하신 사이트와는 다른 사이트에 대한 것입니다. 두 사이트 모두 신뢰하시는 경우에만 계속 진행하십시오.',
 }

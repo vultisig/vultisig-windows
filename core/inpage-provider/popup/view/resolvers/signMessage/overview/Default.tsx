@@ -4,6 +4,7 @@ import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage
 import { Eip712PermitDisplay } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Eip712PermitDisplay'
 import { Request } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Request'
 import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Sender'
+import { TonProofDomain } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/TonProofDomain'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
@@ -18,6 +19,7 @@ import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+/** Props shared by the sign-message overview screens. */
 export type SignMessageOverview = {
   address: string
   keysignPayload: KeysignMessagePayload
@@ -25,8 +27,13 @@ export type SignMessageOverview = {
   method: string
   signature?: string
   typedData?: { chain: EvmChain; payload: Eip712V4Payload }
+  tonProofDomain?: string
 }
 
+/**
+ * The overview every untrusted origin gets: it always shows the request's
+ * origin and the message being signed.
+ */
 export const DefaultOverview: FC<SignMessageOverview> = ({
   address,
   keysignPayload,
@@ -34,6 +41,7 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
   method,
   signature,
   typedData,
+  tonProofDomain,
 }) => {
   const { t } = useTranslation()
   const { goHome } = useCore()
@@ -60,6 +68,9 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
         {isFinished && <Animation />}
         <Sender favicon={requestFavicon} origin={requestOrigin} />
         <Request address={address} method={method} />
+        {!isFinished && tonProofDomain && (
+          <TonProofDomain domain={tonProofDomain} origin={requestOrigin} />
+        )}
         {!isFinished && typedData && (
           <Eip712PermitDisplay
             chain={typedData.chain}

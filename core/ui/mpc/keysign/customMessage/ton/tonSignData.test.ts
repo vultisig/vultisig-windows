@@ -1,12 +1,14 @@
+import { sha256 } from '@noble/hashes/sha2.js'
 import { Address, beginCell } from '@ton/core'
-import { sha256_sync } from '@ton/crypto'
 import { describe, expect, it } from 'vitest'
 
 import {
   buildSignDataCellHash,
   buildSignDataTextBinaryHash,
   encodeDnsDomain,
-} from '@clients/extension/src/inpage/providers/tonConnect/signData'
+  getTonSignDataHash,
+  getTonSignDataPayloadIssue,
+} from './tonSignData'
 
 const testAddress =
   '0:8a8627861a5dd96c9db3ce0807b122da5ed473934ce7568a5b4b1c361cbb28ae'
@@ -71,7 +73,7 @@ describe('buildSignDataTextBinaryHash', () => {
       payloadData,
     ])
 
-    const expected = sha256_sync(message).toString('hex')
+    const expected = Buffer.from(sha256(message)).toString('hex')
 
     const hash = buildSignDataTextBinaryHash({
       address: testAddress,
@@ -114,7 +116,7 @@ describe('buildSignDataTextBinaryHash', () => {
       binaryData,
     ])
 
-    const expected = sha256_sync(message).toString('hex')
+    const expected = Buffer.from(sha256(message)).toString('hex')
 
     const hash = buildSignDataTextBinaryHash({
       address: testAddress,
@@ -398,5 +400,93 @@ describe('encodeDnsDomain', () => {
 
   it('should handle single-label domains', () => {
     expect(encodeDnsDomain('localhost')).toBe('localhost\0')
+  })
+})
+
+describe('getTonSignDataHash', () => {
+  const base = {
+    address: testAddress,
+    domain: testDomain,
+    timestamp: testTimestamp,
+  }
+
+  it('hashes a text payload as text', () => {
+    expect(
+      getTonSignDataHash({ ...base, payload: { type: 'text', text: 'Hello' } })
+    ).toBe(
+      buildSignDataTextBinaryHash({
+        ...base,
+        type: 'text',
+        payloadData: Buffer.from('Hello', 'utf-8'),
+      })
+    )
+  })
+
+  it('hashes a binary payload from its base64 bytes', () => {
+    const bytes = Buffer.from([0xde, 0xad, 0xbe, 0xef])
+
+    expect(
+      getTonSignDataHash({
+        ...base,
+        payload: { type: 'binary', bytes: bytes.toString('base64') },
+      })
+    ).toBe(
+      buildSignDataTextBinaryHash({
+        ...base,
+        type: 'binary',
+        payloadData: bytes,
+      })
+    )
+  })
+
+  it('hashes a cell payload inside the sign-data message cell', () => {
+    const schema = 'counter#_ value:uint32 = Counter;'
+    const cell = Buffer.from(
+      beginCell().storeUint(42, 32).endCell().toBoc()
+    ).toString('base64')
+
+    expect(
+      getTonSignDataHash({ ...base, payload: { type: 'cell', schema, cell } })
+    ).toBe(buildSignDataCellHash({ ...base, schema, cellBase64: cell }))
+  })
+})
+
+describe('getTonSignDataPayloadIssue', () => {
+  it('accepts valid text, binary and cell payloads', () => {
+    const cell = Buffer.from(
+      beginCell().storeUint(1, 8).endCell().toBoc()
+    ).toString('base64')
+
+    expect(
+      getTonSignDataPayloadIssue({ type: 'text', text: '' })
+    ).toBeUndefined()
+    expect(
+      getTonSignDataPayloadIssue({ type: 'binary', bytes: 'AQID' })
+    ).toBeUndefined()
+    expect(
+      getTonSignDataPayloadIssue({ type: 'cell', schema: 'x#_ = X;', cell })
+    ).toBeUndefined()
+  })
+
+  it('rejects binary data that is not base64', () => {
+    expect(
+      getTonSignDataPayloadIssue({ type: 'binary', bytes: '@@@' })
+    ).toMatch(/base64/)
+  })
+
+  it('rejects a cell that is not a single-root BoC', () => {
+    expect(
+      getTonSignDataPayloadIssue({
+        type: 'cell',
+        schema: 'x#_ = X;',
+        cell: 'not-a-valid-boc',
+      })
+    ).toMatch(/cell/)
+  })
+
+  it('rejects an unknown payload type', () => {
+    const payload = JSON.parse('{"type":"transfer","to":"x"}')
+
+    expect(getTonSignDataPayloadIssue(payload)).toMatch(/Unsupported/)
   })
 })

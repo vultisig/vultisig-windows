@@ -1,5 +1,6 @@
+import { sha256 } from '@noble/hashes/sha2.js'
 import { Address, beginCell, Cell } from '@ton/core'
-import { sha256_sync } from '@ton/crypto'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 const signDataPrefix = 'ton-connect/sign-data/'
 
@@ -35,6 +36,16 @@ export const encodeDnsDomain = (domain: string): string =>
     .reverse()
     .map(part => part + '\0')
     .join('')
+
+const parseSignDataCell = (cellBase64: string): Cell => {
+  const cells = Cell.fromBoc(Buffer.from(cellBase64, 'base64'))
+  if (cells.length !== 1) {
+    throw new Error('Invalid cell: expected exactly one root cell')
+  }
+  return cells[0]
+}
+
+const base64Pattern = /^[A-Za-z0-9+/]*={0,2}$/
 
 type BuildSignDataTextBinaryHashInput = {
   address: string
@@ -87,7 +98,7 @@ export const buildSignDataTextBinaryHash = ({
     payloadData,
   ])
 
-  return sha256_sync(message).toString('hex')
+  return Buffer.from(sha256(message)).toString('hex')
 }
 
 type BuildSignDataCellHashInput = {
@@ -115,11 +126,7 @@ export const buildSignDataCellHash = ({
   const schemaHash = crc32(Buffer.from(schema, 'utf-8'))
   const dnsDomain = encodeDnsDomain(domain)
 
-  const cells = Cell.fromBoc(Buffer.from(cellBase64, 'base64'))
-  if (cells.length !== 1) {
-    throw new Error('Invalid cell: expected exactly one root cell')
-  }
-  const [payloadCell] = cells
+  const payloadCell = parseSignDataCell(cellBase64)
 
   const messageCell = beginCell()
     .storeUint(0x75569022, 32)
@@ -131,4 +138,88 @@ export const buildSignDataCellHash = ({
     .endCell()
 
   return messageCell.hash().toString('hex')
+}
+
+/** The data a TON Connect `signData` request asks the wallet to sign. */
+export type TonSignDataPayload =
+  | { type: 'text'; text: string }
+  | { type: 'binary'; bytes: string }
+  | { type: 'cell'; schema: string; cell: string }
+
+type GetTonSignDataHashInput = {
+  address: string
+  domain: string
+  timestamp: number
+  payload: TonSignDataPayload
+}
+
+/**
+ * The hash a TON Connect `signData` signature covers. Text and binary
+ * payloads are hashed with the `0xffff` sign-data prefix and cell payloads
+ * are wrapped in the sign-data message cell, so the result can never be the
+ * hash of a wallet transfer.
+ */
+export const getTonSignDataHash = ({
+  address,
+  domain,
+  timestamp,
+  payload,
+}: GetTonSignDataHashInput): string => {
+  switch (payload.type) {
+    case 'text':
+      return buildSignDataTextBinaryHash({
+        address,
+        domain,
+        timestamp,
+        type: 'text',
+        payloadData: Buffer.from(payload.text, 'utf-8'),
+      })
+    case 'binary':
+      return buildSignDataTextBinaryHash({
+        address,
+        domain,
+        timestamp,
+        type: 'binary',
+        payloadData: Buffer.from(payload.bytes, 'base64'),
+      })
+    case 'cell':
+      return buildSignDataCellHash({
+        address,
+        domain,
+        timestamp,
+        schema: payload.schema,
+        cellBase64: payload.cell,
+      })
+  }
+}
+
+/**
+ * Why a page-supplied `signData` payload cannot be signed, or `undefined`
+ * when it can. The payload crosses from the page untyped, so every field is
+ * checked at runtime before the popup hashes it.
+ */
+export const getTonSignDataPayloadIssue = (
+  payload: TonSignDataPayload
+): string | undefined => {
+  switch (payload.type) {
+    case 'text':
+      return typeof payload.text === 'string'
+        ? undefined
+        : 'signData text must be a string'
+    case 'binary':
+      return typeof payload.bytes === 'string' &&
+        base64Pattern.test(payload.bytes)
+        ? undefined
+        : 'signData bytes must be base64'
+    case 'cell':
+      if (typeof payload.schema !== 'string') {
+        return 'signData schema must be a string'
+      }
+      return typeof payload.cell === 'string' &&
+        'data' in attempt(() => parseSignDataCell(payload.cell))
+        ? undefined
+        : 'signData cell must be a base64 BoC with one root cell'
+    default:
+      return 'Unsupported signData payload type'
+  }
 }

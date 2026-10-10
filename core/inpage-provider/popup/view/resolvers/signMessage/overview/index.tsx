@@ -5,17 +5,26 @@ import {
   SignMessageInput,
   SignMessageType,
 } from '@core/inpage-provider/popup/interface'
+import { getOriginHostname } from '@core/inpage-provider/popup/signMessage/getOriginHostname'
+import { getRawSignMessagePayload } from '@core/inpage-provider/popup/signMessage/getRawSignMessagePayload'
+import { getRippleMessageBytes } from '@core/inpage-provider/popup/signMessage/getRippleMessageBytes'
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
 import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
 import {
   getPersonalSignMessage,
   getPersonalSignMessageBytes,
 } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getPersonalSignMessage'
+import { getTonSignDataDisplayMessage } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getTonSignDataDisplayMessage'
 import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
-import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
 import { toDisplayMessageString } from '@core/inpage-provider/popup/view/utils/toDisplayMessage'
 import { serializeAdr36SignDoc } from '@core/ui/mpc/keysign/customMessage/adr36'
+import { getCustomMessageBytes } from '@core/ui/mpc/keysign/customMessage/getCustomMessageBytes'
+import {
+  buildTonProofPayload,
+  getTonProofHash,
+} from '@core/ui/mpc/keysign/customMessage/ton/tonProof'
+import { getTonSignDataHash } from '@core/ui/mpc/keysign/customMessage/ton/tonSignData'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
@@ -36,7 +45,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
-import { getBytes, hexlify, toUtf8Bytes } from 'ethers'
+import { hexlify } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -45,24 +54,10 @@ import { usePopupContext } from '../../../state/context'
 import { isTrustedProductOrigin } from '../utils'
 
 /**
- * Raw message bytes for an XRPL `signMessage`, mirroring GemWallet: a hex
- * string is decoded verbatim, otherwise the text is UTF-8 encoded.
+ * The sign-message popup's first screen. It turns the dApp request into the
+ * keysign payload, applying each chain's domain separation, and shows the
+ * user a readable form of what is signed.
  */
-const getRippleMessageBytes = ({
-  message,
-  isHex,
-}: {
-  message: string
-  isHex?: boolean
-}): Uint8Array =>
-  isHex
-    ? getBytes(
-        message.startsWith('0x') || message.startsWith('0X')
-          ? message
-          : `0x${message}`
-      )
-    : toUtf8Bytes(message)
-
 export const Overview = () => {
   const { t } = useTranslation()
   const input = usePopupInput<'signMessage'>()
@@ -74,34 +69,26 @@ export const Overview = () => {
   const vault = useCurrentVault()
   const message = matchRecordUnion<SignMessageInput, string>(input, {
     eth_signTypedData_v4: ({ message }) => JSON.stringify(message),
-    sign_message: ({ message, chain, useTronHeader, isV2, isHex }) => {
-      if (chain === Chain.Tron) {
-        if (isV2) {
-          const msgBytes = toUtf8Bytes(message)
-          const tip191Header = `\x19TRON Signed Message:\n${msgBytes.length}`
-          const allBytes = [...toUtf8Bytes(tip191Header), ...msgBytes]
-          return hexlify(new Uint8Array(allBytes))
-        }
-        const tronMessageHeader = '\x19TRON Signed Message:\n32'
-        const ethMessageHeader = '\x19Ethereum Signed Message:\n32'
-        const messageBytes = [
-          ...toUtf8Bytes(useTronHeader ? tronMessageHeader : ethMessageHeader),
-          ...hexStr2byteArray(message),
-        ]
-        return hexlify(new Uint8Array(messageBytes))
-      }
-      // XRPL signs SHA-512-half of the raw message bytes (done in
-      // `getCustomMessageHex`); carry those exact bytes through as hex.
-      if (chain === OtherChain.Ripple) {
-        return hexlify(getRippleMessageBytes({ message, isHex }))
-      }
-      return message
-    },
+    sign_message: getRawSignMessagePayload,
     personal_sign: ({ message }) => getPersonalSignMessage(message),
     // The signed digest is sha256 of the canonical ADR-36 StdSignDoc; carry
     // those bytes (hex) through to `getCustomMessageHex`, which hashes them.
     cosmos_sign_arbitrary: ({ data }) =>
       hexlify(serializeAdr36SignDoc({ signer: address, dataBase64: data })),
+    // TON hashes are built here from the readable request, never taken from
+    // the page: a raw TON signature over a page-chosen hash could sign a
+    // transfer.
+    ton_proof: ({ domain, timestamp, payload }) =>
+      `0x${getTonProofHash(
+        buildTonProofPayload({ address, domain, timestamp, payload })
+      )}`,
+    ton_sign_data: ({ timestamp, payload }) =>
+      `0x${getTonSignDataHash({
+        address,
+        domain: shouldBePresent(getOriginHostname(requestOrigin)),
+        timestamp,
+        payload,
+      })}`,
   })
 
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
@@ -116,13 +103,18 @@ export const Overview = () => {
           getRippleMessageBytes({ message: rawMessage, isHex })
         )
       }
-      if (isV2) return rawMessage
-      return message
+      if (chain === Chain.Tron) {
+        return isV2 ? rawMessage : message
+      }
+      return toDisplayMessageString(getCustomMessageBytes(rawMessage))
     },
     personal_sign: ({ message }) =>
       toDisplayMessageString(getPersonalSignMessageBytes(message)),
     cosmos_sign_arbitrary: ({ data }) =>
       toDisplayMessageString(fromBase64(data)),
+    ton_proof: ({ domain, timestamp, payload }) =>
+      JSON.stringify({ domain, timestamp, payload }),
+    ton_sign_data: ({ payload }) => getTonSignDataDisplayMessage(payload),
   })
 
   const requestedType = matchRecordUnion<SignMessageInput, SignMessageType>(
@@ -132,6 +124,8 @@ export const Overview = () => {
       sign_message: () => 'default',
       personal_sign: ({ type }) => type,
       cosmos_sign_arbitrary: () => 'default',
+      ton_proof: () => 'default',
+      ton_sign_data: () => 'default',
     }
   )
 
@@ -149,7 +143,21 @@ export const Overview = () => {
     sign_message: () => undefined,
     personal_sign: () => undefined,
     cosmos_sign_arbitrary: () => undefined,
+    ton_proof: () => undefined,
+    ton_sign_data: () => undefined,
   })
+
+  const tonProofDomain = matchRecordUnion<SignMessageInput, string | undefined>(
+    input,
+    {
+      eth_signTypedData_v4: () => undefined,
+      sign_message: () => undefined,
+      personal_sign: () => undefined,
+      cosmos_sign_arbitrary: () => undefined,
+      ton_proof: ({ domain }) => domain,
+      ton_sign_data: () => undefined,
+    }
+  )
 
   const pluginId = matchRecordUnion<SignMessageInput, string | undefined>(
     input,
@@ -158,8 +166,21 @@ export const Overview = () => {
       sign_message: () => undefined,
       personal_sign: ({ pluginId }) => pluginId,
       cosmos_sign_arbitrary: () => undefined,
+      ton_proof: () => undefined,
+      ton_sign_data: () => undefined,
     }
   )
+
+  // TON requests keep the `sign_message` method co-signers already handle:
+  // the payload carries only the hash the popup built.
+  const keysignMethod = matchRecordUnion<SignMessageInput, string>(input, {
+    eth_signTypedData_v4: () => method,
+    sign_message: () => method,
+    personal_sign: () => method,
+    cosmos_sign_arbitrary: () => method,
+    ton_proof: () => 'sign_message',
+    ton_sign_data: () => 'sign_message',
+  })
 
   const developerOptionsQuery = useQuery({
     queryKey: [StorageKey.developerOptions],
@@ -171,13 +192,13 @@ export const Overview = () => {
   const keysignMessagePayload = useMemo(
     () => ({
       custom: create(CustomMessagePayloadSchema, {
-        method,
+        method: keysignMethod,
         message,
         chain: keysignChain,
         vaultPublicKeyEcdsa: getVaultId(vault),
       }),
     }),
-    [method, message, keysignChain, vault]
+    [keysignMethod, message, keysignChain, vault]
   )
 
   return (
@@ -200,6 +221,7 @@ export const Overview = () => {
           method={method}
           signature={signature}
           typedData={typedData}
+          tonProofDomain={tonProofDomain}
         />
       )}
       policy={() => (
