@@ -1,9 +1,12 @@
-import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { hashMessage, hexlify, toUtf8Bytes } from 'ethers'
+import { getBytes, hashMessage, hexlify, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
 
-import { getPersonalSignMessage } from './getPersonalSignMessage'
+import { getCustomMessageHex } from './getCustomMessageHex'
+import {
+  getPersonalSignMessage,
+  unwrapPersonalSignMessage,
+} from './getPersonalSignMessage'
 
 const getSignedDigest = (message: string) =>
   getCustomMessageHex({
@@ -55,5 +58,46 @@ describe('getPersonalSignMessage', () => {
     expect(getSignedDigest(hexlify(shownBytes))).toBe(
       withoutHexPrefix(hashMessage(shownBytes))
     )
+  })
+
+  it('reads uppercase hex digits behind 0x as bytes', () => {
+    expect(getSignedDigest('0xABCD')).toBe(
+      withoutHexPrefix(hashMessage(getBytes('0xABCD')))
+    )
+  })
+
+  it.each(['0xhello', '0xabc', '0XABCD'])(
+    'signs %s, which only looks like hex, as text',
+    message => {
+      expect(getSignedDigest(message)).toBe(
+        withoutHexPrefix(hashMessage(message))
+      )
+    }
+  )
+})
+
+describe('unwrapPersonalSignMessage', () => {
+  it.each([
+    'hello world!',
+    'héllo 👋',
+    '2hello world!',
+    '1234567890123',
+    '',
+    hexlify(toUtf8Bytes('hello world!')),
+    `0x${'ab'.repeat(32)}`,
+    '0x',
+  ])('recovers %j from its EIP-191 payload', message => {
+    expect(unwrapPersonalSignMessage(getPersonalSignMessage(message))).toBe(
+      message
+    )
+  })
+
+  it.each([
+    ['a message without the prefix', 'hello world!'],
+    ['a length that does not match', '\x19Ethereum Signed Message:\n5hi'],
+    ['a zero-padded length', '\x19Ethereum Signed Message:\n05hello'],
+    ['a missing length', '\x19Ethereum Signed Message:\nhello'],
+  ])('rejects %s', (_, payload) => {
+    expect(unwrapPersonalSignMessage(payload)).toBeUndefined()
   })
 })
