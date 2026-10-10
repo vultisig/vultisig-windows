@@ -29,6 +29,7 @@ import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
 import { UnreadableVaultRecovery } from './UnreadableVaultRecovery'
 import {
+  canHoldProvenSharesAcrossLock,
   getVaultReadabilityInputs,
   hasSameReadabilityInputs,
   VaultReadabilityInputs,
@@ -47,6 +48,19 @@ export const [CurrentVaultProvider, useCurrentVault, CurrentVaultContext] =
   )
 
 type CurrentVaultValue = (Vault & Partial<{ coins: AccountCoin[] }>) | undefined
+
+/**
+ * A value handed to the tree, with the read that proved its shares when it
+ * carries any — which is what lets the tree stay mounted across a lock.
+ */
+type ProvidedVault = {
+  value: CurrentVaultValue
+  proof?: {
+    /** The inputs the shares were read under. */
+    source: VaultReadabilityInputs
+    shares: VaultAllKeyShares
+  }
+}
 
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
@@ -120,12 +134,13 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const hasPasscodeEncryption = useIsPasscodeRequired()
 
   const vault = vaults.find(vault => getVaultId(vault) === id)
+  const isLocked = hasPasscodeEncryption && !passcode
 
   // Snapshotted during render, before any read is started, so a result can
   // never be attributed to inputs it was not read under, and stable while
   // nothing it carries changes, so it can be the read's only dependency.
   const readabilityInputs = useStableReadabilityInputs(
-    vault && !(hasPasscodeEncryption && !passcode)
+    vault && !isLocked
       ? getVaultReadabilityInputs({
           vault,
           hasPasscodeEncryption,
@@ -199,15 +214,16 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     }
   }, [readabilityInputs])
 
-  const resolution =
+  const settled =
     shareState &&
     readabilityInputs &&
     hasSameReadabilityInputs({
       resolved: shareState.source,
       current: readabilityInputs,
     })
-      ? shareState.result
+      ? shareState
       : null
+  const resolution = settled?.result
 
   const viewId = navigationHistory?.[navigationHistory.length - 1]?.id
   const isImportView = viewId === 'importVault'
@@ -222,19 +238,48 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   // flow back on its first step when the vault it had just saved became
   // current (#4832). Holding never exposes unproven shares: the held value was
   // either absent or proven.
-  const heldValue = useRef<{ value: CurrentVaultValue } | null>(null)
+  const heldValue = useRef<ProvidedVault | null>(null)
 
-  const provided: { value: CurrentVaultValue } | null = (() => {
+  const provided = ((): ProvidedVault | null => {
     if (!vault) {
       return { value: undefined }
     }
 
-    if (hasPasscodeEncryption && !passcode) {
-      return null
-    }
-
-    if (!resolution) {
+    if (!settled) {
       const held = heldValue.current
+
+      // Locking takes the passcode away and unlocking reads the shares again
+      // under it, but neither changes what the stored shares decrypt to. While
+      // they are the bytes the held proof was read from, the tree stays mounted
+      // under the lock screen, which covers it and takes every click and
+      // keystroke (#4596). Withholding it instead unmounts every screen, so an
+      // open sheet or a half-filled form was gone after unlocking (#5018).
+      //
+      // The lock withholds every credential, so while it is up the tree gets
+      // the stored shares, still encrypted: code that keeps running under it,
+      // such as the agent, cannot sign with them. The proven shares come back
+      // with the passcode, without waiting for the read to finish again.
+      if (
+        held?.proof &&
+        canHoldProvenSharesAcrossLock({
+          resolved: held.proof.source,
+          current: getVaultReadabilityInputs({
+            vault,
+            hasPasscodeEncryption,
+            passcode,
+            validateLegacyVaultKeyShares,
+          }),
+        })
+      ) {
+        return {
+          value: isLocked ? vault : { ...vault, ...held.proof.shares },
+          proof: held.proof,
+        }
+      }
+
+      if (isLocked) {
+        return null
+      }
 
       // A reshare keeps the vault id and replaces the shares, so holding here
       // would pair this vault with shares it no longer has. Nothing is held
@@ -247,19 +292,26 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       return isVaultWritingView && !isStaleSameVault ? held : null
     }
 
-    if (resolution.status === 'error') {
+    const { source, result } = settled
+
+    if (result.status === 'error') {
       return null
     }
 
-    if (resolution.status === 'unreadable') {
+    if (result.status === 'unreadable') {
       return isImportView ? { value: undefined } : null
     }
 
-    return { value: { ...vault, ...resolution.shares } }
+    return {
+      value: { ...vault, ...result.shares },
+      proof: { source, shares: result.shares },
+    }
   })()
 
+  // A value given under the lock carries the stored shares, so it is never
+  // what a setup flow is held on once the lock is gone.
   useEffect(() => {
-    if (provided) {
+    if (provided && !isLocked) {
       heldValue.current = provided
     }
   })
