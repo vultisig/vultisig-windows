@@ -27,4 +27,11 @@ describe('passcodePolicy', () => {
     expect(getStoredPasscodeLength(6)).toBe(6)
     expect(getStoredPasscodeLength(99)).toBe(6)
   })
+
+  it('honours a recorded legacy length shorter than five digits', () => {
+    expect(getStoredPasscodeLength(1)).toBe(1)
+    expect(getStoredPasscodeLength(4)).toBe(4)
+    expect(getStoredPasscodeLength(0)).toBe(6)
+    expect(getStoredPasscodeLength(4.5)).toBe(6)
+  })
 })
