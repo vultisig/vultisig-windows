@@ -1,8 +1,8 @@
 import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { InputPasteAction } from '@core/ui/components/InputPasteAction'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useCore } from '@core/ui/state/core'
 import {
   useClearCustomRpcOverrideMutation,
   useCustomRpcOverrides,
@@ -52,7 +52,7 @@ const getDefaultRpcUrl = (chain: Chain) => {
 
 export const CustomRpcDetailPage = () => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
+  const { goBack } = useCore()
   const [{ chain }] = useCoreViewState<'customRpcDetail'>()
   const overrides = useCustomRpcOverrides()
   const { addToast } = useToast()
@@ -85,8 +85,6 @@ export const CustomRpcDetailPage = () => {
     probe.reset()
   }
 
-  const goBack = () => navigate({ id: 'customRpc' })
-
   const onSave = async () => {
     if (clearsExisting) {
       clearOverride.mutate(chain, {
@@ -117,7 +115,7 @@ export const CustomRpcDetailPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={goBack} />}
+        primaryControls={<PageHeaderBackButton />}
         title={`${getChainDisplayName(chain)} RPC`}
       />
       <PageContent flexGrow scrollable>
