@@ -1,9 +1,15 @@
-import { ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  TokenInstruction,
+} from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
-import { findAtaRecipient } from './parseTokenInstruction'
+import {
+  findAtaRecipient,
+  parseTokenInstruction,
+} from './parseTokenInstruction'
 
 const publicKeyFromSeed = (seed: number) =>
   new PublicKey(new Uint8Array(32).fill(seed))
@@ -56,5 +62,34 @@ describe('findAtaRecipient', () => {
     ])
 
     expect(() => findAtaRecipient({ tx, keys })).toThrow()
+  })
+})
+
+describe('parseTokenInstruction', () => {
+  it('rejects a token instruction that is not a transfer before reading any account', async () => {
+    const instruction = {
+      programId: 1,
+      accounts: [0, 1, 3],
+      programData: Uint8Array.from([
+        TokenInstruction.Approve,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+      ]),
+    }
+
+    await expect(
+      parseTokenInstruction({
+        tx: txWithInstructions([instruction]),
+        instruction,
+        keys,
+        getCoin: vi.fn(),
+      })
+    ).rejects.toThrow('Unsupported token instruction: Approve')
   })
 })
