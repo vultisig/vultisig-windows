@@ -159,4 +159,17 @@ describe('applyGovVoteSignData', () => {
   it('refuses a vote without a valid ballot', () => {
     expect(() => vote(true)).toThrow(/Invalid governance vote option/)
   })
+
+  // `BigInt('')` is 0n, so without the check an empty id would become a vote
+  // on proposal 0.
+  it.each(['', '0'])('refuses proposal id %j', proposalId => {
+    expect(() =>
+      applyGovVoteSignData({
+        coin,
+        depositData: { proposalId, option: 'yes' },
+        publicKey,
+        keysignPayload: buildPayload(),
+      })
+    ).toThrow(/proposal id/)
+  })
 })

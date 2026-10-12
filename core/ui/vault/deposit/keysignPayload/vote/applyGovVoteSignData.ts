@@ -17,6 +17,7 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { FieldValues } from 'react-hook-form'
 
+import { parseGovProposalId } from '../../vote/govProposalId'
 import {
   govVoteOptionProtoValue,
   govVoteOptions,
@@ -66,7 +67,7 @@ export const applyGovVoteSignData = ({
       {
         typeUrl: msgVoteTypeUrl,
         value: {
-          proposalId: BigInt(shouldBePresent(proposalId, 'Proposal ID')),
+          proposalId: parseGovProposalId(proposalId),
           voter: coin.address,
           option: govVoteOptionProtoValue[option],
         },

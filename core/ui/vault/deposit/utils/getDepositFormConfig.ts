@@ -17,6 +17,7 @@ import { z } from 'zod'
 import { ChainAction } from '../ChainAction'
 import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
 import { tronWithdrawExpireUnfreezeAction } from '../tron/withdrawExpireUnfreeze'
+import { parseGovProposalId } from '../vote/govProposalId'
 import { govVoteOptions } from '../vote/govVoteOption'
 import {
   optionalNonNegativeAmountSchema,
@@ -491,13 +492,11 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        // A positive integer of at most 19 digits always fits the uint64
-        // the vote message carries.
         proposalId: z
           .string()
           .trim()
-          .regex(
-            /^[1-9]\d{0,18}$/,
+          .refine(
+            value => 'data' in attempt(() => parseGovProposalId(value)),
             t('chainFunctions.vote.validations.proposalId')
           ),
         option: z.enum(govVoteOptions),
