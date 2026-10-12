@@ -91,6 +91,7 @@ import {
   toEncodeObjects,
 } from './cosmosStaking/encodeStakingMsgs'
 import { scaleCosmosStakingFee } from './cosmosStaking/scaleCosmosStakingFee'
+import { applyGovVoteSignData } from './vote/applyGovVoteSignData'
 
 export type BuildDepositKeysignPayloadInput = {
   coin: AccountCoin
@@ -265,6 +266,15 @@ export const buildDepositKeysignPayload = async ({
       amountUnits,
       publicKey,
       hexPublicKey,
+      keysignPayload,
+    })
+  }
+
+  if (action === 'vote') {
+    return applyGovVoteSignData({
+      coin,
+      depositData,
+      publicKey,
       keysignPayload,
     })
   }
@@ -537,7 +547,7 @@ export const buildDepositKeysignPayload = async ({
       toAddress: receiver ?? keysignPayload.toAddress,
       toAmount: toAmountForAction,
     })
-  } else if (!isOneOf(action, ['vote'])) {
+  } else {
     if (hasAmount && amountUnits) {
       keysignPayload = create(KeysignPayloadSchema, {
         ...keysignPayload,

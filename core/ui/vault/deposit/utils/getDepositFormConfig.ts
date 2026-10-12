@@ -1,6 +1,5 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { dydxVoteOptions } from '@vultisig/core-chain/chains/cosmos/dydx/dydxVoteMemo'
 import { toXrplCurrencyCode } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import {
   solanaStakingConfig,
@@ -18,6 +17,7 @@ import { z } from 'zod'
 import { ChainAction } from '../ChainAction'
 import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
 import { tronWithdrawExpireUnfreezeAction } from '../tron/withdrawExpireUnfreeze'
+import { govVoteOptions } from '../vote/govVoteOption'
 import {
   optionalNonNegativeAmountSchema,
   optionalPositiveAmountSchema,
@@ -500,7 +500,7 @@ export const getDepositFormConfig = ({
             /^[1-9]\d{0,18}$/,
             t('chainFunctions.vote.validations.proposalId')
           ),
-        option: z.enum(dydxVoteOptions),
+        option: z.enum(govVoteOptions),
       }),
     }),
     stake: () => ({

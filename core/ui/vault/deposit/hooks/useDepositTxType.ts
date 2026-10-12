@@ -20,7 +20,6 @@ export function useDepositTxType() {
 
   return useMemo(() => {
     if (action === 'ibc_transfer') return TransactionType.IBC_TRANSFER
-    if (action === 'vote') return TransactionType.VOTE
     if (action === 'add_thor_lp') return undefined
     if (action === 'remove_thor_lp') return undefined
 

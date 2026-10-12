@@ -1,14 +1,9 @@
 import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
-import {
-  dydxVoteOptions,
-  toDydxVoteMemo,
-} from '@vultisig/core-chain/chains/cosmos/dydx/dydxVoteMemo'
 import { rujiraStakingConfig } from '@vultisig/core-chain/chains/cosmos/thor/rujira/config'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
-import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { match } from '@vultisig/lib-utils/match'
 import { FieldValues } from 'react-hook-form'
@@ -162,17 +157,9 @@ export const generateMemo = ({
     },
     custom: () => shouldBePresent(customMemo, 'Custom memo'),
     leave: () => `LEAVE:${nodeAddress}`,
-    vote: () => {
-      const { option, proposalId } = depositFormData
-      if (!isOneOf(option, dydxVoteOptions)) {
-        throw new Error(`Invalid dYdX vote option: ${option}`)
-      }
-
-      return toDydxVoteMemo({
-        option,
-        proposalId: BigInt(shouldBePresent(proposalId, 'Proposal ID')),
-      })
-    },
+    // A governance vote is a typed MsgVote carried in signDirect bytes (see
+    // `applyGovVoteSignData`), not a memo.
+    vote: () => '',
     ibc_transfer: () => {
       if (!destinationChain || !nodeAddress) {
         throw new Error('Invalid IBC transfer parameters')

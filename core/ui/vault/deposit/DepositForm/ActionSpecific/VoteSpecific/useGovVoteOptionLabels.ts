@@ -1,8 +1,9 @@
-import { DydxVoteOption } from '@vultisig/core-chain/chains/cosmos/dydx/dydxVoteMemo'
 import { useTranslation } from 'react-i18next'
 
-/** What the user reads for each dYdX governance ballot. */
-export const useDydxVoteOptionLabels = (): Record<DydxVoteOption, string> => {
+import { GovVoteOption } from '../../../vote/govVoteOption'
+
+/** What the user reads for each governance ballot. */
+export const useGovVoteOptionLabels = (): Record<GovVoteOption, string> => {
   const { t } = useTranslation()
 
   return {

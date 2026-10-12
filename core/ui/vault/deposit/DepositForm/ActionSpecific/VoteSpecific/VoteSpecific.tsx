@@ -1,13 +1,13 @@
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { RadioInput } from '@lib/ui/inputs/RadioInput'
 import { Text } from '@lib/ui/text'
-import { dydxVoteOptions } from '@vultisig/core-chain/chains/cosmos/dydx/dydxVoteMemo'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
-import { useDydxVoteOptionLabels } from './useDydxVoteOptionLabels'
+import { govVoteOptions } from '../../../vote/govVoteOption'
+import { useGovVoteOptionLabels } from './useGovVoteOptionLabels'
 
 /**
  * The dYdX governance ballot picker. Nothing is preselected, so a vote is
@@ -17,7 +17,7 @@ export const VoteSpecific = () => {
   const { t } = useTranslation()
   const [{ setValue, control }] = useDepositFormHandlers()
   const option = useWatch({ control, name: 'option' })
-  const optionLabels = useDydxVoteOptionLabels()
+  const optionLabels = useGovVoteOptionLabels()
 
   return (
     <InputContainer>
@@ -30,9 +30,9 @@ export const VoteSpecific = () => {
       <RadioInput
         // Four options overflow a single row at popup width.
         style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}
-        value={isOneOf(option, dydxVoteOptions) ? option : null}
+        value={isOneOf(option, govVoteOptions) ? option : null}
         onChange={value => setValue('option', value, { shouldValidate: true })}
-        options={dydxVoteOptions}
+        options={govVoteOptions}
         renderOption={value => optionLabels[value]}
       />
     </InputContainer>
