@@ -146,9 +146,9 @@ export const ko = {
         proposalId: '유효한 제안 ID를 입력하세요',
       },
       options: {
-        yes: '찬성',
+        yes: '예',
         abstain: '기권',
-        no: '반대',
+        no: '아니요',
         noWithVeto: '거부권 행사',
       },
     },

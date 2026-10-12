@@ -152,9 +152,9 @@ export const pt = {
       },
       options: {
         yes: 'Sim',
-        abstain: 'Abstenção',
+        abstain: 'Abster-se',
         no: 'Não',
-        noWithVeto: 'Não com veto',
+        noWithVeto: 'Não, com veto',
       },
     },
   },

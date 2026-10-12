@@ -144,7 +144,7 @@ export const de = {
     vote: {
       labels: {
         proposalId: 'Vorschlags-ID',
-        option: 'Stimme',
+        option: 'Abstimmung',
       },
       validations: {
         proposalId: 'Geben Sie eine gültige Vorschlags-ID ein.',
@@ -153,7 +153,7 @@ export const de = {
         yes: 'Ja',
         abstain: 'Enthaltung',
         no: 'Nein',
-        noWithVeto: 'Nein mit Veto',
+        noWithVeto: 'Nein, mit Veto',
       },
     },
   },

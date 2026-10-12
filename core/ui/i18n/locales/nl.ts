@@ -143,7 +143,7 @@ export const nl = {
     vote: {
       labels: {
         proposalId: 'Voorstel-ID',
-        option: 'Stem',
+        option: 'Stemmen',
       },
       validations: {
         proposalId: 'Voer een geldig voorstel-ID in',

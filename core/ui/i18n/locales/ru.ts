@@ -142,7 +142,7 @@ export const ru = {
     vote: {
       labels: {
         proposalId: 'ID предложения',
-        option: 'Голос',
+        option: 'Голосование',
       },
       validations: {
         proposalId: 'Введите действительный идентификатор предложения.',
@@ -151,7 +151,7 @@ export const ru = {
         yes: 'Да',
         abstain: 'Воздержаться',
         no: 'Нет',
-        noWithVeto: 'Нет с вето',
+        noWithVeto: 'Нет, с правом вето',
       },
     },
   },
