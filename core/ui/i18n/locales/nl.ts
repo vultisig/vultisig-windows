@@ -143,10 +143,16 @@ export const nl = {
     vote: {
       labels: {
         proposalId: 'Voorstel-ID',
-        support: 'Steunen',
+        option: 'Stem',
       },
       validations: {
-        proposalId: 'Voorstel-ID is verplicht',
+        proposalId: 'Voer een geldig voorstel-ID in',
+      },
+      options: {
+        yes: 'Ja',
+        abstain: 'Onthouding',
+        no: 'Nee',
+        noWithVeto: 'Nee met veto',
       },
     },
   },

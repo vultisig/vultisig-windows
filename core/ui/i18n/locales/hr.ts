@@ -142,10 +142,16 @@ export const hr = {
     vote: {
       labels: {
         proposalId: 'ID prijedloga',
-        support: 'Podrška',
+        option: 'Glas',
       },
       validations: {
-        proposalId: 'ID prijedloga je obavezan',
+        proposalId: 'Unesite važeći ID prijedloga',
+      },
+      options: {
+        yes: 'Da',
+        abstain: 'Suzdržan',
+        no: 'Ne',
+        noWithVeto: 'Ne s vetom',
       },
     },
   },

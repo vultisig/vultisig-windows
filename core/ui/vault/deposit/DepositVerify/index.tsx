@@ -1,5 +1,7 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
+import { dydxVoteOptions } from '@vultisig/core-chain/chains/cosmos/dydx/dydxVoteMemo'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { Fragment, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,6 +11,7 @@ import { ReviewRow } from '../../../mpc/keysign/review/ReviewRow'
 import { ReviewTruncatedValue } from '../../../mpc/keysign/review/ReviewTruncatedValue'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { TrustLineReserveWarning } from '../DepositForm/ActionSpecific/OpenTrustLineSpecific/TrustLineReserveWarning'
+import { useDydxVoteOptionLabels } from '../DepositForm/ActionSpecific/VoteSpecific/useDydxVoteOptionLabels'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositMemo } from '../hooks/useDepositMemo'
 import { useSender } from '../hooks/useSender'
@@ -54,13 +57,22 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
   // and never reaches the chain, so show the staked resource the way the other
   // signing device does instead of the raw `FREEZE:<resource>` marker.
   const tronStaking = getTronStakingDisplay({ chain: coin.chain, memo })
-  const displayMemo = tronStaking
-    ? tronStaking.resource
-    : formattedDepositFormData['memo']
+  const getDisplayMemo = () => {
+    if (tronStaking) return tronStaking.resource
+
+    // A dYdX vote's memo only relays the ballot to the co-signer: the signed
+    // MsgVote carries no memo, and the ballot already has its own rows.
+    if (selectedChainAction === 'vote') return undefined
+
+    return formattedDepositFormData['memo']
+  }
+
+  const displayMemo = getDisplayMemo()
 
   const sender = useSender()
   const { t } = useTranslation()
   const { fields: actionFields } = useDepositFormConfig()
+  const voteOptionLabels = useDydxVoteOptionLabels()
 
   const isOpenTrustLine = selectedChainAction === 'open_trust_line'
   // The trust-line limit is denominated in the issued currency, not the native
@@ -107,7 +119,11 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
       return []
     }
 
-    const value = String(formattedDepositFormData[field.name])
+    const rawValue = formattedDepositFormData[field.name]
+    const value =
+      selectedChainAction === 'vote' && isOneOf(rawValue, dydxVoteOptions)
+        ? voteOptionLabels[rawValue]
+        : String(rawValue)
 
     return [
       {

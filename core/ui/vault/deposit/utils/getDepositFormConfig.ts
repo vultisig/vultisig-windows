@@ -1,5 +1,6 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { dydxVoteOptions } from '@vultisig/core-chain/chains/cosmos/dydx/dydxVoteMemo'
 import { toXrplCurrencyCode } from '@vultisig/core-chain/chains/ripple/issuedCurrency'
 import {
   solanaStakingConfig,
@@ -104,7 +105,9 @@ type GetChainActionConfigParams = {
 type ChainActionConfig = {
   fields: Array<{
     name: string
-    type: string
+    // The generic renderer passes this to an <input>, so a value it cannot
+    // render (a boolean, a choice) is picked in the action's own component.
+    type: 'text' | 'number' | 'percentage'
     label: string
     required?: boolean
     hidden?: boolean
@@ -478,18 +481,26 @@ export const getDepositFormConfig = ({
           label: t('chainFunctions.vote.labels.proposalId'),
           required: true,
         },
+        // Picked in VoteSpecific; listed so the review sheet shows it.
         {
-          name: 'support',
-          type: 'boolean',
-          label: t('chainFunctions.vote.labels.support'),
+          name: 'option',
+          type: 'text',
+          label: t('chainFunctions.vote.labels.option'),
           required: true,
+          hidden: true,
         },
       ],
       schema: z.object({
+        // A positive integer of at most 19 digits always fits the uint64
+        // the vote message carries.
         proposalId: z
           .string()
-          .min(1, t('chainFunctions.vote.validations.proposalId')),
-        support: z.boolean(),
+          .trim()
+          .regex(
+            /^[1-9]\d{0,18}$/,
+            t('chainFunctions.vote.validations.proposalId')
+          ),
+        option: z.enum(dydxVoteOptions),
       }),
     }),
     stake: () => ({

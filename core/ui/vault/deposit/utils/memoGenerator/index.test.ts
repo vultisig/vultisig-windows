@@ -60,4 +60,25 @@ describe('generateMemo', () => {
 
     expect(memo).toBe(tronWithdrawExpireUnfreezeMemo)
   })
+
+  const voteMemo = (depositFormData: Record<string, unknown>) =>
+    generateMemo({
+      selectedChainAction: 'vote',
+      depositFormData,
+      bondableAsset: 'THOR.RUNE',
+      chain: Chain.Dydx,
+      coin: { chain: Chain.Dydx, ticker: 'DYDX', decimals: 18 } as AccountCoin,
+    })
+
+  it('encodes a dYdX vote in the memo format co-signers parse', () => {
+    expect(voteMemo({ proposalId: '42', option: 'noWithVeto' })).toBe(
+      'DYDX_VOTE:No with Veto:42'
+    )
+  })
+
+  it('refuses a dYdX vote without a ballot option', () => {
+    expect(() => voteMemo({ proposalId: '42', option: true })).toThrow(
+      /Invalid dYdX vote option/
+    )
+  })
 })
