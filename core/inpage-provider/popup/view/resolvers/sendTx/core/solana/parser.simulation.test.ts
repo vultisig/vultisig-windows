@@ -1,5 +1,12 @@
 import { create } from '@bufbuild/protobuf'
-import { Keypair, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
+import {
+  ComputeBudgetProgram,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  TransactionInstruction,
+} from '@solana/web3.js'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
@@ -67,23 +74,33 @@ const noMovement: BlockaidSolanaSimulation = {
 let walletCore: WalletCore
 const sender = Keypair.fromSeed(new Uint8Array(32).fill(1)).publicKey
 const recipient = Keypair.fromSeed(new Uint8Array(32).fill(2)).publicKey
-const serializeTransfer = (to: PublicKey) => [
+const unknownProgram = Keypair.fromSeed(new Uint8Array(32).fill(3)).publicKey
+const serialize = (...instructions: TransactionInstruction[]) => [
   new Transaction({
     feePayer: sender,
     recentBlockhash: wsol,
   })
-    .add(
-      SystemProgram.transfer({
-        fromPubkey: sender,
-        toPubkey: to,
-        lamports: 1,
-      })
-    )
+    .add(...instructions)
     .serialize({ requireAllSignatures: false, verifySignatures: false })
     .toString('base64'),
 ]
-const data = serializeTransfer(recipient)
-const selfTransferData = serializeTransfer(sender)
+const transferTo = (to: PublicKey) =>
+  SystemProgram.transfer({ fromPubkey: sender, toPubkey: to, lamports: 1 })
+const data = serialize(transferTo(recipient))
+const selfTransferData = serialize(transferTo(sender))
+const transferWithPriorityFee = serialize(
+  ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 1 }),
+  transferTo(recipient)
+)
+const transferWithUnknownInstruction = serialize(
+  transferTo(recipient),
+  new TransactionInstruction({
+    programId: unknownProgram,
+    keys: [],
+    data: Buffer.alloc(0),
+  })
+)
+const twoTransfers = serialize(transferTo(recipient), transferTo(sender))
 const fromCoin = create(CoinSchema, {
   chain: Chain.Solana,
   address: sender.toBase58(),
@@ -152,6 +169,17 @@ describe('Solana approval with the shared simulation parser', () => {
     })
   })
 
+  it('leaves the destination unknown when the transfer shares the transaction with an unknown instruction', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(solSent(1n))
+    await expect(parse(transferWithUnknownInstruction)).resolves.toMatchObject({
+      transfer: {
+        inAmount: '1',
+        receiverAddress: '',
+        rawTransactions: transferWithUnknownInstruction,
+      },
+    })
+  })
+
   it('decodes a transfer back to the sender when the simulation reports no movement', async () => {
     vi.mocked(getTxBlockaidSimulation).mockResolvedValue(noMovement)
     await expect(parse(selfTransferData)).resolves.toMatchObject({
@@ -160,6 +188,34 @@ describe('Solana approval with the shared simulation parser', () => {
         receiverAddress: sender.toBase58(),
         rawTransactions: selfTransferData,
       },
+    })
+  })
+
+  describe('with no simulation to lean on', () => {
+    beforeEach(() => {
+      vi.mocked(getTxBlockaidSimulation).mockRejectedValue(
+        new Error('Unavailable')
+      )
+    })
+
+    it('decodes a transfer that only carries a priority fee alongside', async () => {
+      await expect(parse(transferWithPriorityFee)).resolves.toMatchObject({
+        transfer: { inAmount: '1', receiverAddress: recipient.toBase58() },
+      })
+    })
+
+    it('keeps a transfer that shares the transaction with an unknown instruction on raw review', async () => {
+      await expect(parse(transferWithUnknownInstruction)).resolves.toEqual({
+        raw: expect.objectContaining({
+          transactions: transferWithUnknownInstruction,
+        }),
+      })
+    })
+
+    it('keeps a transaction with two transfers on raw review', async () => {
+      await expect(parse(twoTransfers)).resolves.toEqual({
+        raw: expect.objectContaining({ transactions: twoTransfers }),
+      })
     })
   })
 
