@@ -30,6 +30,13 @@ const tokenProgram = TOKEN_PROGRAM_ID.toBase58()
 const systemProgram = SystemProgram.programId.toBase58()
 const associatedTokenProgram = ASSOCIATED_TOKEN_PROGRAM_ID.toBase58()
 const ataPayerAccountIndex = 0
+// `Create` is sent with no data by older clients and as a single 0 byte by
+// newer ones; `CreateIdempotent` is a single 1. Anything longer or different
+// (`RecoverNested` moves tokens and closes an account) is not a creation.
+const ataCreateInstructionTypes = new Set([0, 1])
+const isAtaCreation = (programData: Uint8Array) =>
+  programData.length === 0 ||
+  (programData.length === 1 && ataCreateInstructionTypes.has(programData[0]))
 
 // Programs whose instructions never move the sender's funds: priority-fee
 // settings and memos.
@@ -52,10 +59,11 @@ const getRawFallback = (data: string): SolanaTxData => ({
  * recognised from its swap instruction; a transfer is reported only when every
  * other instruction is a companion that moves none of the sender's funds,
  * since the summary would otherwise omit whatever the rest of the transaction
- * moves. Creating an associated token account counts only when someone else
- * pays for it: the rent-exempt deposit lands in an account its owner can close
- * to reclaim it, so a vault-funded creation is a SOL movement the transfer
- * card would hide. Anything else lands in the raw review.
+ * moves. Creating an associated token account counts only when the
+ * instruction really is a creation and someone else pays for it: the
+ * rent-exempt deposit lands in an account its owner can close to reclaim it,
+ * so a vault-funded creation is a SOL movement the transfer card would hide.
+ * Anything else lands in the raw review.
  */
 export const parseProgramCall = async ({
   tx,
@@ -75,6 +83,12 @@ export const parseProgramCall = async ({
     const program = programOf(instruction)
     if (movementFreePrograms.has(program)) return true
     if (program !== associatedTokenProgram) return false
+
+    const programData = shouldBePresent(
+      instruction.programData,
+      'instruction.programData'
+    )
+    if (!isAtaCreation(programData)) return false
 
     const accounts = shouldBePresent(
       instruction.accounts,

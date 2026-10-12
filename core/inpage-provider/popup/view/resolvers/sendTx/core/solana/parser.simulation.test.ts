@@ -1,5 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountIdempotentInstruction,
   createAssociatedTokenAccountInstruction,
   getAssociatedTokenAddressSync,
 } from '@solana/spl-token'
@@ -118,6 +120,29 @@ const transferWithVaultFundedTokenAccount = serialize(
 )
 const transferWithSponsoredTokenAccount = serialize(
   createTokenAccount(unknownProgram),
+  transferTo(recipient)
+)
+const transferWithSponsoredIdempotentTokenAccount = serialize(
+  createAssociatedTokenAccountIdempotentInstruction(
+    unknownProgram,
+    getAssociatedTokenAddressSync(new PublicKey(mint), recipient),
+    recipient,
+    new PublicKey(mint)
+  ),
+  transferTo(recipient)
+)
+// RecoverNested: account 0 is the nested token account, not a payer.
+const transferWithRecoverNested = serialize(
+  new TransactionInstruction({
+    programId: ASSOCIATED_TOKEN_PROGRAM_ID,
+    keys: [
+      { pubkey: unknownProgram, isSigner: false, isWritable: true },
+      { pubkey: new PublicKey(mint), isSigner: false, isWritable: false },
+      { pubkey: recipient, isSigner: false, isWritable: true },
+      { pubkey: sender, isSigner: true, isWritable: true },
+    ],
+    data: Buffer.from([2]),
+  }),
   transferTo(recipient)
 )
 const fromCoin = create(CoinSchema, {
@@ -247,11 +272,23 @@ describe('Solana approval with the shared simulation parser', () => {
       )
     })
 
-    it('decodes a transfer when someone else pays for the token account it creates', async () => {
-      await expect(
-        parse(transferWithSponsoredTokenAccount)
-      ).resolves.toMatchObject({
-        transfer: { inAmount: '1', receiverAddress: recipient.toBase58() },
+    it.each([
+      ['create', transferWithSponsoredTokenAccount],
+      ['create idempotent', transferWithSponsoredIdempotentTokenAccount],
+    ])(
+      'decodes a transfer when someone else pays for the token account it creates (%s)',
+      async (_, transactions) => {
+        await expect(parse(transactions)).resolves.toMatchObject({
+          transfer: { inAmount: '1', receiverAddress: recipient.toBase58() },
+        })
+      }
+    )
+
+    it('keeps a transfer on raw review next to any other associated token instruction', async () => {
+      await expect(parse(transferWithRecoverNested)).resolves.toEqual({
+        raw: expect.objectContaining({
+          transactions: transferWithRecoverNested,
+        }),
       })
     })
   })
