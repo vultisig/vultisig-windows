@@ -4,9 +4,12 @@ import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { solanaRpcUrl } from '@vultisig/core-chain/chains/solana/client'
-import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { areEqualCoins, Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
-import { parseBlockaidSolanaSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
+import {
+  BlockaidSolanaSimulation,
+  parseBlockaidSolanaSimulation,
+} from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import { getBlockaidTxSimulationInput } from '@vultisig/core-mpc/security/blockaid/tx/simulation/input'
@@ -50,6 +53,47 @@ const toAddressTableLookups = (
     readonlyIndexes: readonlyIndexes ?? [],
   }))
 
+const hasAssetMovements = ({ account_summary }: BlockaidSolanaSimulation) =>
+  'account_assets_diff' in account_summary &&
+  account_summary.account_assets_diff.length > 0
+
+type GetConfirmedReceiverAddressInput = {
+  decodeInstructions: () => Promise<SolanaTxData>
+  inputCoin: Coin
+  inAmount: string
+}
+
+/**
+ * Blockaid's summary proves what leaves the account but not where it goes.
+ * The destination comes from the decoded transfer instruction, and only when
+ * that instruction moves exactly the coin and amount the simulation reported;
+ * any disagreement leaves the destination unknown rather than naming an
+ * account the simulated movement may not reach.
+ */
+const getConfirmedReceiverAddress = async ({
+  decodeInstructions,
+  inputCoin,
+  inAmount,
+}: GetConfirmedReceiverAddressInput) => {
+  const { data: decoded } = await attempt(decodeInstructions)
+  if (!decoded || !('transfer' in decoded)) {
+    return ''
+  }
+
+  const { transfer } = decoded
+  const isSameMovement =
+    areEqualCoins(transfer.inputCoin, inputCoin) &&
+    transfer.inAmount === inAmount
+
+  return isSameMovement ? transfer.receiverAddress : ''
+}
+
+/**
+ * Builds the approval view for a dApp-supplied Solana transaction. Blockaid's
+ * simulation decides what the transaction moves; the decoded instructions
+ * supply the destination it cannot see, and carry the whole review when the
+ * simulation is unreachable or reports no net movement for the sender.
+ */
 export const parseSolanaTx = async ({
   fromCoin,
   walletCore,
@@ -76,7 +120,65 @@ export const parseSolanaTx = async ({
   if (!tx)
     throw new Error('Invalid Solana transaction: missing v0 transaction data')
 
-  const { data: parsedSimulation } = await attempt(async () => {
+  const addressTableLookups = decodedTx.transaction.v0?.addressTableLookups
+
+  const decodeInstructions = async (): Promise<SolanaTxData> => {
+    const resolvedKeys = await attempt(async () =>
+      resolveAddressTableKeys({
+        lookups: toAddressTableLookups(addressTableLookups),
+        connection: new Connection(solanaRpcUrl),
+      })
+    )
+
+    if ('error' in resolvedKeys) {
+      console.warn(
+        'could not resolve Solana address lookup tables, returning raw fallback',
+        resolvedKeys.error
+      )
+      return getSolanaRawTxFallback(data)
+    }
+
+    const staticKeys = (tx.accountKeys ?? []).map(k => new PublicKey(k))
+    const keys = mergedKeys(staticKeys, resolvedKeys.data)
+
+    const { data: parsedTx } = await attempt(
+      parseProgramCall({
+        tx,
+        keys,
+        getCoin,
+        swapProvider,
+        data: data[0],
+      })
+    )
+
+    if (parsedTx && 'raw' in parsedTx) {
+      return {
+        raw: parsedTx.raw,
+      }
+    }
+
+    if (parsedTx && 'transfer' in parsedTx) {
+      return {
+        transfer: {
+          ...parsedTx.transfer,
+          rawTransactions: data,
+        },
+      }
+    }
+
+    if (parsedTx && 'swap' in parsedTx) {
+      return {
+        swap: {
+          ...parsedTx.swap,
+          rawTransactions: data,
+        },
+      }
+    }
+
+    return getSolanaRawTxFallback(data)
+  }
+
+  const { data: simulation } = await attempt(async () => {
     const keysignPayload = create(KeysignPayloadSchema, {
       coin: fromCoin,
 
@@ -114,23 +216,32 @@ export const parseSolanaTx = async ({
     if (!blockaidTxSimulationInput) {
       throw new Error('Error getting blockaid tx simulation input')
     }
-    const sim = await getTxBlockaidSimulation({
+
+    return getTxBlockaidSimulation({
       chain: Chain.Solana,
       data: blockaidTxSimulationInput.data,
     })
+  })
 
-    const { data: simulationResult } = await attempt(() =>
-      parseBlockaidSolanaSimulation(sim)
-    )
-    // A completed simulation with no safe summary must not be replaced by a
-    // partial instruction summary that can hide other asset movements.
-    if (!simulationResult) {
-      return getSolanaRawTxFallback(data)
-    }
-    return await matchRecordUnion<
-      BlockaidSolanaSimulationInfo,
-      Promise<SolanaTxData>
-    >(simulationResult, {
+  // Without a simulation, or with one that saw no net movement for the sender
+  // (a transfer back to the sender's own address), there is nothing a partial
+  // instruction summary could hide, so the instructions carry the review.
+  if (!simulation || !hasAssetMovements(simulation)) {
+    return decodeInstructions()
+  }
+
+  const { data: simulationResult } = await attempt(() =>
+    parseBlockaidSolanaSimulation(simulation)
+  )
+  // A completed simulation with no safe summary must not be replaced by a
+  // partial instruction summary that can hide other asset movements.
+  if (!simulationResult) {
+    return getSolanaRawTxFallback(data)
+  }
+
+  return matchRecordUnion<BlockaidSolanaSimulationInfo, Promise<SolanaTxData>>(
+    simulationResult,
+    {
       swap: async ({ fromMint, toMint, fromAmount, toAmount }) => {
         const [inputCoin, outputCoin] = await Promise.all(
           [fromMint, toMint].map(mint => {
@@ -149,84 +260,27 @@ export const parseSolanaTx = async ({
             swapProvider,
             rawTransactions: data,
           },
-        } as SolanaTxData
+        }
       },
       transfer: async ({ fromAmount, fromMint }) => {
-        const [inputCoin] = await Promise.all(
-          [fromMint].map(mint => {
-            const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
-            return getCoin({ chain: Chain.Solana, id })
-          })
-        )
+        const id = fromMint === NATIVE_MINT.toBase58() ? undefined : fromMint
+        const inputCoin = await getCoin({ chain: Chain.Solana, id })
+        const inAmount = fromAmount.toString()
+
         return {
           transfer: {
             authority: fromCoin.address,
             inputCoin,
-            inAmount: fromAmount.toString(),
-            receiverAddress: '',
+            inAmount,
+            receiverAddress: await getConfirmedReceiverAddress({
+              decodeInstructions,
+              inputCoin,
+              inAmount,
+            }),
             rawTransactions: data,
           },
-        } as SolanaTxData
+        }
       },
-    })
-  })
-
-  if (parsedSimulation) {
-    return parsedSimulation
-  }
-  const addressTableLookups = decodedTx.transaction.v0?.addressTableLookups
-
-  const resolvedKeys = await attempt(async () =>
-    resolveAddressTableKeys({
-      lookups: toAddressTableLookups(addressTableLookups),
-      connection: new Connection(solanaRpcUrl),
-    })
+    }
   )
-
-  if ('error' in resolvedKeys) {
-    console.warn(
-      'could not resolve Solana address lookup tables, returning raw fallback',
-      resolvedKeys.error
-    )
-    return getSolanaRawTxFallback(data)
-  }
-
-  const staticKeys = (tx.accountKeys ?? []).map(k => new PublicKey(k))
-  const keys = mergedKeys(staticKeys, resolvedKeys.data)
-
-  const { data: parsedTx } = await attempt(
-    parseProgramCall({
-      tx,
-      keys,
-      getCoin,
-      swapProvider,
-      data: data[0],
-    })
-  )
-
-  if (parsedTx && 'raw' in parsedTx) {
-    return {
-      raw: parsedTx.raw,
-    }
-  }
-
-  if (parsedTx && 'transfer' in parsedTx) {
-    return {
-      transfer: {
-        ...parsedTx.transfer,
-        rawTransactions: data,
-      },
-    }
-  }
-
-  if (parsedTx && 'swap' in parsedTx) {
-    return {
-      swap: {
-        ...parsedTx.swap,
-        rawTransactions: data,
-      },
-    }
-  }
-
-  return getSolanaRawTxFallback(data)
 }

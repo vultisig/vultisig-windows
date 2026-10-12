@@ -1,5 +1,5 @@
 import { create } from '@bufbuild/protobuf'
-import { Keypair, SystemProgram, Transaction } from '@solana/web3.js'
+import { Keypair, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
@@ -53,24 +53,37 @@ const simulation = (sol: bigint, token: bigint): BlockaidSolanaSimulation => ({
     ],
   },
 })
+const solSent = (lamports: bigint): BlockaidSolanaSimulation => ({
+  account_summary: {
+    account_assets_diff: [
+      movement({ type: 'SOL', decimals: 9, logo: '' }, -lamports),
+    ],
+  },
+})
+const noMovement: BlockaidSolanaSimulation = {
+  account_summary: { account_assets_diff: [] },
+}
 
 let walletCore: WalletCore
 const sender = Keypair.fromSeed(new Uint8Array(32).fill(1)).publicKey
-const transaction = new Transaction({
-  feePayer: sender,
-  recentBlockhash: wsol,
-}).add(
-  SystemProgram.transfer({
-    fromPubkey: sender,
-    toPubkey: Keypair.fromSeed(new Uint8Array(32).fill(2)).publicKey,
-    lamports: 1,
+const recipient = Keypair.fromSeed(new Uint8Array(32).fill(2)).publicKey
+const serializeTransfer = (to: PublicKey) => [
+  new Transaction({
+    feePayer: sender,
+    recentBlockhash: wsol,
   })
-)
-const data = [
-  transaction
+    .add(
+      SystemProgram.transfer({
+        fromPubkey: sender,
+        toPubkey: to,
+        lamports: 1,
+      })
+    )
     .serialize({ requireAllSignatures: false, verifySignatures: false })
     .toString('base64'),
 ]
+const data = serializeTransfer(recipient)
+const selfTransferData = serializeTransfer(sender)
 const fromCoin = create(CoinSchema, {
   chain: Chain.Solana,
   address: sender.toBase58(),
@@ -82,8 +95,14 @@ const getCoin = vi.fn(async ({ id }: { id?: string }) =>
     ? { chain: Chain.Solana, id, ticker: 'USDC', decimals: 6, logo: '' }
     : chainFeeCoin.Solana
 )
-const parse = () =>
-  parseSolanaTx({ fromCoin, walletCore, data, getCoin, swapProvider: 'test' })
+const parse = (transactions = data) =>
+  parseSolanaTx({
+    fromCoin,
+    walletCore,
+    data: transactions,
+    getCoin,
+    swapProvider: 'test',
+  })
 
 beforeAll(async () => {
   walletCore = await initWasm()
@@ -106,7 +125,41 @@ describe('Solana approval with the shared simulation parser', () => {
       new Error('Unavailable')
     )
     await expect(parse()).resolves.toMatchObject({
-      transfer: { inAmount: '1', rawTransactions: data },
+      transfer: {
+        inAmount: '1',
+        receiverAddress: recipient.toBase58(),
+        rawTransactions: data,
+      },
+    })
+  })
+
+  it('names the destination when the decoded transfer matches the simulated movement', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(solSent(1n))
+    await expect(parse()).resolves.toMatchObject({
+      transfer: {
+        inAmount: '1',
+        inputCoin: { ticker: 'SOL' },
+        receiverAddress: recipient.toBase58(),
+        rawTransactions: data,
+      },
+    })
+  })
+
+  it('leaves the destination unknown when the decoded transfer disagrees with the simulation', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(solSent(2n))
+    await expect(parse()).resolves.toMatchObject({
+      transfer: { inAmount: '2', receiverAddress: '', rawTransactions: data },
+    })
+  })
+
+  it('decodes a transfer back to the sender when the simulation reports no movement', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(noMovement)
+    await expect(parse(selfTransferData)).resolves.toMatchObject({
+      transfer: {
+        inAmount: '1',
+        receiverAddress: sender.toBase58(),
+        rawTransactions: selfTransferData,
+      },
     })
   })
 

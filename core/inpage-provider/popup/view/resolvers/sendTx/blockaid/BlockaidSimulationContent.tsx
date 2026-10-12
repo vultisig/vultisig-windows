@@ -31,6 +31,7 @@ import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
@@ -164,6 +165,23 @@ const BlockaidSolanaSimulationContent = ({
     )
   )
 
+  // The payload carries the transfer the instruction decoder found. It is all
+  // there is to show when the simulation is unavailable or reports no net
+  // movement, as it does for a transfer back to the sender's own address.
+  const fallback = keysignPayload.toAddress ? (
+    <BlockaidTransferDisplay
+      transfer={{
+        fromAmount: BigInt(keysignPayload.toAmount),
+        fromCoin: getKeysignCoin(keysignPayload),
+      }}
+      fromAddress={address}
+      toAddress={keysignPayload.toAddress}
+      memo={keysignPayload.memo}
+      chain={chain}
+      networkFeeProps={networkFeeProps}
+    />
+  ) : null
+
   return (
     <MatchQuery
       value={blockaidSimulationQuery}
@@ -175,7 +193,7 @@ const BlockaidSolanaSimulationContent = ({
             value={enrichedSolanaSimulationQuery}
             success={enrichedInfo => {
               if (!enrichedInfo) {
-                return null
+                return fallback
               }
 
               return matchRecordUnion(enrichedInfo, {
@@ -207,15 +225,15 @@ const BlockaidSolanaSimulationContent = ({
                 ),
               })
             }}
-            pending={() => null}
-            error={() => null}
-            inactive={() => null}
+            pending={() => fallback}
+            error={() => fallback}
+            inactive={() => fallback}
           />
         )
       }}
-      error={() => null}
-      pending={() => null}
-      inactive={() => null}
+      error={() => fallback}
+      pending={() => fallback}
+      inactive={() => fallback}
     />
   )
 }
