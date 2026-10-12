@@ -18,20 +18,23 @@ import { oneInchSwapProgram } from './swapPrograms'
 type Input = {
   tx: TW.Solana.Proto.RawMessage.IMessageLegacy
   keys: PublicKey[]
+  senderAddress: string
   getCoin: (coinKey: CoinKey) => Promise<Coin>
   swapProvider: string
   data: string
 }
 
+type Instruction = TW.Solana.Proto.RawMessage.IInstruction
+
 const tokenProgram = TOKEN_PROGRAM_ID.toBase58()
 const systemProgram = SystemProgram.programId.toBase58()
+const associatedTokenProgram = ASSOCIATED_TOKEN_PROGRAM_ID.toBase58()
+const ataPayerAccountIndex = 0
 
-// Programs whose instructions ride along with a transfer without moving
-// anything else: priority-fee settings, memos, and the associated token
-// account an SPL recipient may still need.
-const transferCompanionPrograms = new Set([
+// Programs whose instructions never move the sender's funds: priority-fee
+// settings and memos.
+const movementFreePrograms = new Set([
   ComputeBudgetProgram.programId.toBase58(),
-  ASSOCIATED_TOKEN_PROGRAM_ID.toBase58(),
   'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
   'Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo',
 ])
@@ -47,13 +50,17 @@ const getRawFallback = (data: string): SolanaTxData => ({
 /**
  * Classifies a decoded Solana transaction by its program calls. A swap is
  * recognised from its swap instruction; a transfer is reported only when every
- * other instruction is a known companion, since the summary would otherwise
- * omit whatever the rest of the transaction moves. Anything else lands in the
- * raw review.
+ * other instruction is a companion that moves none of the sender's funds,
+ * since the summary would otherwise omit whatever the rest of the transaction
+ * moves. Creating an associated token account counts only when someone else
+ * pays for it: the rent-exempt deposit lands in an account its owner can close
+ * to reclaim it, so a vault-funded creation is a SOL movement the transfer
+ * card would hide. Anything else lands in the raw review.
  */
 export const parseProgramCall = async ({
   tx,
   keys,
+  senderAddress,
   getCoin,
   swapProvider,
   data,
@@ -61,8 +68,24 @@ export const parseProgramCall = async ({
   const instructions = tx.instructions ?? []
   if (instructions.length === 0) throw new Error('Instructions not found')
 
-  const programOf = (instruction: TW.Solana.Proto.RawMessage.IInstruction) =>
+  const programOf = (instruction: Instruction) =>
     accountKeyAt(keys, shouldBePresent(instruction.programId)).toBase58()
+
+  const isTransferCompanion = (instruction: Instruction) => {
+    const program = programOf(instruction)
+    if (movementFreePrograms.has(program)) return true
+    if (program !== associatedTokenProgram) return false
+
+    const accounts = shouldBePresent(
+      instruction.accounts,
+      'instruction.accounts'
+    )
+    const payer = accountKeyAt(
+      keys,
+      shouldBePresent(accounts[ataPayerAccountIndex])
+    ).toBase58()
+    return payer !== senderAddress
+  }
 
   for (const instruction of instructions) {
     const program = programOf(instruction)
@@ -79,8 +102,7 @@ export const parseProgramCall = async ({
     if (program !== tokenProgram && program !== systemProgram) continue
 
     const hasOnlyCompanions = instructions.every(
-      other =>
-        other === instruction || transferCompanionPrograms.has(programOf(other))
+      other => other === instruction || isTransferCompanion(other)
     )
     if (!hasOnlyCompanions) {
       console.error(

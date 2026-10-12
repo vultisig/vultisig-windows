@@ -1,5 +1,9 @@
 import { create } from '@bufbuild/protobuf'
 import {
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddressSync,
+} from '@solana/spl-token'
+import {
   ComputeBudgetProgram,
   Keypair,
   PublicKey,
@@ -101,6 +105,21 @@ const transferWithUnknownInstruction = serialize(
   })
 )
 const twoTransfers = serialize(transferTo(recipient), transferTo(sender))
+const createTokenAccount = (payer: PublicKey) =>
+  createAssociatedTokenAccountInstruction(
+    payer,
+    getAssociatedTokenAddressSync(new PublicKey(mint), recipient),
+    recipient,
+    new PublicKey(mint)
+  )
+const transferWithVaultFundedTokenAccount = serialize(
+  createTokenAccount(sender),
+  transferTo(recipient)
+)
+const transferWithSponsoredTokenAccount = serialize(
+  createTokenAccount(unknownProgram),
+  transferTo(recipient)
+)
 const fromCoin = create(CoinSchema, {
   chain: Chain.Solana,
   address: sender.toBase58(),
@@ -215,6 +234,24 @@ describe('Solana approval with the shared simulation parser', () => {
     it('keeps a transaction with two transfers on raw review', async () => {
       await expect(parse(twoTransfers)).resolves.toEqual({
         raw: expect.objectContaining({ transactions: twoTransfers }),
+      })
+    })
+
+    it('keeps a transfer on raw review when the vault also pays to create a token account', async () => {
+      await expect(parse(transferWithVaultFundedTokenAccount)).resolves.toEqual(
+        {
+          raw: expect.objectContaining({
+            transactions: transferWithVaultFundedTokenAccount,
+          }),
+        }
+      )
+    })
+
+    it('decodes a transfer when someone else pays for the token account it creates', async () => {
+      await expect(
+        parse(transferWithSponsoredTokenAccount)
+      ).resolves.toMatchObject({
+        transfer: { inAmount: '1', receiverAddress: recipient.toBase58() },
       })
     })
   })

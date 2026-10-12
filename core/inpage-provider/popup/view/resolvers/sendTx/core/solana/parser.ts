@@ -145,6 +145,7 @@ export const parseSolanaTx = async ({
       parseProgramCall({
         tx,
         keys,
+        senderAddress: fromCoin.address,
         getCoin,
         swapProvider,
         data: data[0],
