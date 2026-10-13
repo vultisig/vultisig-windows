@@ -1889,4 +1889,9 @@ export const zh = {
     '设置金额后，网络费用或余额发生了变化，因此金额从{{requestedAmount}}减少到{{amount}}。',
   send_enter_address_first_for_percentage:
     '请先输入收件人地址才能使用百分比按钮',
+  custom_message_tx_any_network: '任何 EVM 网络（无重放保护）',
+  custom_message_tx_chain_id: '链 ID {{chainId}}',
+  custom_message_tx_new_contract: '新合约',
+  custom_message_tx_warning:
+    '这条消息实际上是一笔交易。签署这条消息会授权下方的交易，而不仅仅是授权这条消息本身。',
 }

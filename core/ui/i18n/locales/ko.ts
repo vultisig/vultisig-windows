@@ -2013,4 +2013,9 @@ export const ko = {
     '금액을 설정한 후 네트워크 수수료 또는 잔액이 변경되어 금액이 {{requestedAmount}}에서 {{amount}}로 낮아졌습니다.',
   send_enter_address_first_for_percentage:
     '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
+  custom_message_tx_any_network: '모든 EVM 네트워크(재실행 방지 기능 없음)',
+  custom_message_tx_chain_id: '체인 ID {{chainId}}',
+  custom_message_tx_new_contract: '새로운 계약',
+  custom_message_tx_warning:
+    '이 메시지는 실제로는 거래입니다. 이 메시지에 서명하면 단순히 메시지 자체를 승인하는 것이 아니라 아래의 거래를 승인하는 것입니다.',
 }

@@ -200,6 +200,11 @@ export const i18nGlossary = [
     targetTerms: ['Pool', 'pool'],
   },
   {
+    term: 'EVM',
+    preserve: true,
+    note: 'Ethereum Virtual Machine; avoid electronic-voting-machine false friends.',
+  },
+  {
     term: 'contract',
     preserve: false,
     note: 'Translate as the smart-contract noun, not a verb.',

@@ -2023,4 +2023,10 @@ export const hr = {
     'Mrežna naknada ili vaš saldo promijenili su se nakon što ste postavili iznos, pa je iznos smanjen s {{requestedAmount}} na {{amount}}.',
   send_enter_address_first_for_percentage:
     'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
+  custom_message_tx_any_network:
+    'Bilo koja EVM mreža (bez zaštite od ponavljanja)',
+  custom_message_tx_chain_id: 'ID lanca {{chainId}}',
+  custom_message_tx_new_contract: 'Novi ugovor',
+  custom_message_tx_warning:
+    'Ova poruka je zapravo transakcija. Potpisivanjem se autorizira donja transakcija, a ne samo poruka.',
 }

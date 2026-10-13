@@ -1,5 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { JoinKeysignCustomMessageVerify } from '@core/ui/mpc/keysign/join/JoinKeysignCustomMessageVerify'
+import { CustomMessageVerifyContent } from '@core/ui/mpc/keysign/custom/CustomMessageVerifyContent'
 import { JoinKeysignQbtcClaimVerify } from '@core/ui/mpc/keysign/join/JoinKeysignQbtcClaimVerify'
 import { JoinKeysignButton } from '@core/ui/mpc/keysign/join/tx/JoinKeysignButton'
 import { JoinKeysignTransactionVerify } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTransactionVerify'
@@ -55,7 +55,7 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
             <>
               <PageContent scrollable>
                 <VStack flexGrow>
-                  <JoinKeysignCustomMessageVerify value={value} />
+                  <CustomMessageVerifyContent value={value} />
                 </VStack>
               </PageContent>
               <PageFooter>

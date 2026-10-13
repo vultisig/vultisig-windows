@@ -1,66 +1,44 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { VStack, vStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { getCustomMessageDisplayMessage } from '@core/ui/mpc/keysign/customMessage/getCustomMessageDisplayMessage'
+import { getCustomMessageEvmTx } from '@core/ui/mpc/keysign/customMessage/getCustomMessageEvmTx'
+import { VStack } from '@lib/ui/layout/Stack'
+import { ValueProp } from '@lib/ui/props'
+import { CustomMessagePayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-type CustomMessageVerifyContentProps = {
-  method: string
-  message: string
-}
+import { CustomMessageEvmTxOverview } from './CustomMessageEvmTxOverview'
+import { CustomMessageReviewField } from './CustomMessageReviewField'
 
+/**
+ * Verify step of a custom-message keysign, on the initiating and the joining
+ * device alike. A message whose signature would also sign an EVM transaction
+ * is called out above the raw message, which stays visible.
+ */
 export const CustomMessageVerifyContent = ({
-  method,
-  message,
-}: CustomMessageVerifyContentProps) => {
+  value,
+}: ValueProp<CustomMessagePayload>) => {
   const { t } = useTranslation()
+
+  const message = getCustomMessageDisplayMessage(value)
 
   const formattedMessage = withFallback(
     attempt(() => JSON.stringify(JSON.parse(message), null, 2)),
     message
   )
 
-  const showMethod = method.trim() !== ''
+  const evmTx = getCustomMessageEvmTx(value)
 
   return (
     <VStack gap={16}>
-      {showMethod && (
-        <ReviewItem>
-          <Text size={12} color="shy" weight={500}>
-            {t('signing_method')}
-          </Text>
-          <Text size={14} weight={500}>
-            {method}
-          </Text>
-        </ReviewItem>
+      {evmTx ? <CustomMessageEvmTxOverview value={evmTx} /> : null}
+      {value.method.trim() === '' ? null : (
+        <CustomMessageReviewField title={t('signing_method')}>
+          {value.method}
+        </CustomMessageReviewField>
       )}
-      <ReviewItem>
-        <Text size={12} color="shy" weight={500}>
-          {t('message_to_sign')}
-        </Text>
-        <MessageText size={14} weight={500}>
-          {formattedMessage}
-        </MessageText>
-      </ReviewItem>
+      <CustomMessageReviewField title={t('message_to_sign')}>
+        {formattedMessage}
+      </CustomMessageReviewField>
     </VStack>
   )
 }
-
-const ReviewItem = styled.div`
-  ${vStack({
-    gap: 12,
-  })};
-
-  padding: 16px 20px;
-  ${borderRadius.md};
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: rgba(11, 26, 58, 0.5);
-  min-width: 0;
-`
-
-const MessageText = styled(Text)`
-  white-space: pre-wrap;
-  word-break: break-word;
-`

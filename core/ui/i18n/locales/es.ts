@@ -2054,4 +2054,10 @@ export const es = {
     'La tarifa de red o su saldo cambiaron después de que usted estableció el monto, por lo que el monto se redujo de {{requestedAmount}} a {{amount}}.',
   send_enter_address_first_for_percentage:
     'Introduzca primero la dirección del destinatario para poder usar los botones de porcentaje.',
+  custom_message_tx_any_network:
+    'Cualquier red EVM (sin protección contra repetición)',
+  custom_message_tx_chain_id: 'ID de cadena {{chainId}}',
+  custom_message_tx_new_contract: 'Nuevo contrato',
+  custom_message_tx_warning:
+    'Este mensaje es en realidad una transacción. Firmarlo autoriza la transacción que se describe a continuación, no es solo un mensaje.',
 }

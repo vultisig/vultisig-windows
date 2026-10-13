@@ -89,7 +89,7 @@ export const SignCustomMessagePage = () => {
             />
           </VStack>
         ) : (
-          <CustomMessageVerifyContent method={method} message={message} />
+          <CustomMessageVerifyContent value={keysignPayload.custom} />
         )}
       </PageContent>
       <PageFooter>

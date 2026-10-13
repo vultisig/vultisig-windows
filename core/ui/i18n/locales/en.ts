@@ -249,6 +249,11 @@ export const en = {
   current_expiry: 'Current expiry',
   current_passcode: 'Current Passcode',
   custom: 'Custom Action',
+  custom_message_tx_any_network: 'Any EVM network (no replay protection)',
+  custom_message_tx_chain_id: 'Chain ID {{chainId}}',
+  custom_message_tx_new_contract: 'New contract',
+  custom_message_tx_warning:
+    'This message is actually a transaction. Signing it authorizes the transaction below, not just a message.',
   custom_rpc: 'Custom RPCs',
   custom_rpc_chip_custom: 'Custom',
   custom_rpc_description: 'Use your own nodes per chain',

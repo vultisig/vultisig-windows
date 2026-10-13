@@ -8,6 +8,7 @@ import { TypedDataEncoder } from 'ethers'
 import { keccak256, sha256 } from 'viem'
 
 import { CustomMessageSupportedChain } from './chains'
+import { getCustomMessageBytes } from './getCustomMessageBytes'
 
 type GetCustomMessageHexInput = {
   chain: CustomMessageSupportedChain
@@ -20,12 +21,15 @@ type GetCustomMessageHexInput = {
 // `getSuiPersonalMessageDigest` handles the BCS `vector<u8>` wrap and the
 // PersonalMessage intent.
 const getSuiDigestHex = ({ message }: { message: string }): string => {
-  const messageBytes = message.startsWith('0x')
-    ? Buffer.from(stripHexPrefix(message), 'hex')
-    : new TextEncoder().encode(message)
+  const messageBytes = getCustomMessageBytes(message)
   return Buffer.from(getSuiPersonalMessageDigest(messageBytes)).toString('hex')
 }
 
+/**
+ * The hex digest every signer derives from a custom-message payload. Apart
+ * from EIP-712 typed data and Sui, it is the chain's hash of the message bytes
+ * alone, with no domain separation.
+ */
 export const getCustomMessageHex = ({
   chain,
   message,
@@ -38,9 +42,7 @@ export const getCustomMessageHex = ({
     )
   }
 
-  const bytes = message.startsWith('0x')
-    ? Buffer.from(stripHexPrefix(message), 'hex')
-    : new TextEncoder().encode(message)
+  const bytes = getCustomMessageBytes(message)
 
   return match(getChainKind(chain), {
     evm: () => stripHexPrefix(keccak256(bytes)),
