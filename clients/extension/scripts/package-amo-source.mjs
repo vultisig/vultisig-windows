@@ -46,13 +46,37 @@ if (untrackedFiles.length > 0) {
     `Untracked files would be missing from the source package:\n${untrackedFiles.join('\n')}`
   )
 }
-const hasRootEnv = await access(path.join(repoRoot, '.env')).then(
-  () => true,
-  () => false
+
+// vite build runs in production mode and reads these from the repo root
+// (loadEnv in vite.config.ts) and from clients/extension (Vite's own envDir).
+// The gitignored ones pass the untracked check above, yet the archive lacks them.
+const viteEnvFiles = [
+  '.env',
+  '.env.local',
+  '.env.production',
+  '.env.production.local',
+]
+const viteEnvPaths = ['', 'clients/extension'].flatMap(dir =>
+  viteEnvFiles.map(file => path.posix.join(dir, file))
 )
-if (hasRootEnv) {
+const trackedEnvPaths = new Set(listFiles(['--', ...viteEnvPaths]))
+const envPathCandidates = viteEnvPaths.filter(
+  file => !trackedEnvPaths.has(file)
+)
+const envPathPresence = await Promise.all(
+  envPathCandidates.map(file =>
+    access(path.join(repoRoot, file)).then(
+      () => true,
+      () => false
+    )
+  )
+)
+const localEnvPaths = envPathCandidates.filter(
+  (_, index) => envPathPresence[index]
+)
+if (localEnvPaths.length > 0) {
   throw new Error(
-    'vite.config.ts loads the root .env, which the source package excludes. Build and package from a checkout without one.'
+    `Vite loads these into the build, but the source package excludes them. Build and package from a checkout without them:\n${localEnvPaths.join('\n')}`
   )
 }
 
@@ -128,7 +152,7 @@ No JavaScript file in this archive has a line over ${maxSourceLineLength} charac
 
 - Node.js ${nodeVersion} (\`.nvmrc\`)
 - ${packageManager} via Corepack
-- No root \`.env\` (\`vite.config.ts\` would load it)
+- No ${viteEnvFiles.map(file => `\`${file}\``).join(', ')} in the repo root or \`clients/extension/\` beyond those in this archive (Vite loads them)
 
 ## Steps
 
