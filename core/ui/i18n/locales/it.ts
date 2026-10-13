@@ -2059,6 +2059,7 @@ export const it = {
     "La commissione di rete o il tuo saldo sono cambiati dopo che hai impostato l'importo, quindi l'importo è stato ridotto da {{requestedAmount}} a {{amount}}.",
   send_enter_address_first_for_percentage:
     "Inserisci prima l'indirizzo del destinatario per utilizzare i pulsanti percentuali",
+  custom_message_tx_amount_wei: '{{value}} wei',
   custom_message_tx_any_network:
     'Qualsiasi rete EVM (senza protezione contro gli attacchi di replay)',
   custom_message_tx_chain_id: 'ID della catena {{chainId}}',

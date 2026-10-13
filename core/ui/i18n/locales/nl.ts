@@ -2040,6 +2040,7 @@ export const nl = {
     'De netwerkkosten of uw saldo zijn gewijzigd nadat u het bedrag had ingesteld, waardoor het bedrag is verlaagd van {{requestedAmount}} naar {{amount}}.',
   send_enter_address_first_for_percentage:
     'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
+  custom_message_tx_amount_wei: '{{value}} wei',
   custom_message_tx_any_network: 'Elk EVM-netwerk (zonder replay-beveiliging)',
   custom_message_tx_chain_id: 'Chain ID {{chainId}}',
   custom_message_tx_new_contract: 'Nieuw contract',

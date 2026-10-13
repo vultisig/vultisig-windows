@@ -33,7 +33,9 @@ export const CustomMessageEvmTxOverview = ({
   }
 
   const getAmount = () => {
-    if (!chain) return `${value} wei`
+    if (!chain) {
+      return t('custom_message_tx_amount_wei', { value: value.toString() })
+    }
 
     const { decimals, ticker } = chainFeeCoin[chain]
 

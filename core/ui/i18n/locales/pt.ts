@@ -2055,6 +2055,7 @@ export const pt = {
     'A taxa de rede ou seu saldo mudou depois que você definiu o valor, então o valor foi reduzido de {{requestedAmount}} para {{amount}}.',
   send_enter_address_first_for_percentage:
     'Primeiro, insira o endereço do destinatário para usar os botões de porcentagem.',
+  custom_message_tx_amount_wei: '{{value}} wei',
   custom_message_tx_any_network:
     'Qualquer rede EVM (sem proteção contra repetição)',
   custom_message_tx_chain_id: 'ID da cadeia {{chainId}}',

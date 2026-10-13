@@ -205,6 +205,11 @@ export const i18nGlossary = [
     note: 'Ethereum Virtual Machine; avoid electronic-voting-machine false friends.',
   },
   {
+    term: 'wei',
+    preserve: true,
+    note: 'Smallest EVM native unit; a unit symbol, not a word.',
+  },
+  {
     term: 'contract',
     preserve: false,
     note: 'Translate as the smart-contract noun, not a verb.',

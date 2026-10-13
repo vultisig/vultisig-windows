@@ -2071,6 +2071,7 @@ export const de = {
     'Die Netzwerkgebühr bzw. Ihr Guthaben hat sich nach der Festlegung des Betrags geändert, daher wurde der Betrag von {{requestedAmount}} auf {{amount}} reduziert.',
   send_enter_address_first_for_percentage:
     'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
+  custom_message_tx_amount_wei: '{{value}} wei',
   custom_message_tx_any_network: 'Beliebiges EVM-Netzwerk (ohne Replay-Schutz)',
   custom_message_tx_chain_id: 'Ketten-ID {{chainId}}',
   custom_message_tx_new_contract: 'Neuer Vertrag',

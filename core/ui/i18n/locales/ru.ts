@@ -2030,6 +2030,7 @@ export const ru = {
     'После установки суммы сетевая комиссия или баланс изменились, поэтому сумма была уменьшена с {{requestedAmount}} до {{amount}}.',
   send_enter_address_first_for_percentage:
     'Для использования кнопок отображения процентов сначала введите адрес получателя.',
+  custom_message_tx_amount_wei: '{{value}} wei',
   custom_message_tx_any_network:
     'Любая сеть EVM (без защиты от повторного воспроизведения)',
   custom_message_tx_chain_id: 'Идентификатор цепочки {{chainId}}',

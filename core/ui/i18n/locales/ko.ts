@@ -2013,6 +2013,7 @@ export const ko = {
     '금액을 설정한 후 네트워크 수수료 또는 잔액이 변경되어 금액이 {{requestedAmount}}에서 {{amount}}로 낮아졌습니다.',
   send_enter_address_first_for_percentage:
     '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
+  custom_message_tx_amount_wei: '{{value}} wei',
   custom_message_tx_any_network: '모든 EVM 네트워크(재실행 방지 기능 없음)',
   custom_message_tx_chain_id: '체인 ID {{chainId}}',
   custom_message_tx_new_contract: '새로운 계약',
