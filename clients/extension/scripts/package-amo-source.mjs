@@ -16,7 +16,7 @@ import path from 'node:path'
 const excludedPrefix = '.yarn/releases/'
 const yarnConfigFile = '.yarnrc.yml'
 const readmeFile = 'AMO-BUILD-README.md'
-const scannedExtensions = ['.js', '.cjs', '.mjs', '.mts', '.cts']
+const scannedExtensions = ['.js', '.jsx', '.cjs', '.mjs', '.mts', '.cts']
 const maxSourceLineLength = 1000
 
 const repoRoot = execFileSync('git', ['rev-parse', '--show-toplevel'], {
@@ -60,6 +60,15 @@ const deletedFiles = new Set(listFiles(['--deleted']))
 const files = listFiles([]).filter(
   file => !file.startsWith(excludedPrefix) && !deletedFiles.has(file)
 )
+
+// zip -@ reads one path per line and also breaks on \r, so such a path would
+// reach zip as two paths, and the second could name an ignored file.
+const unlistableFiles = files.filter(file => /[\r\n]/.test(file))
+if (unlistableFiles.length > 0) {
+  throw new Error(
+    `Paths with line breaks cannot be passed to zip:\n${unlistableFiles.map(file => JSON.stringify(file)).join('\n')}`
+  )
+}
 
 const findMinifiedFiles = async () => {
   const scripts = files.filter(file =>
@@ -140,7 +149,9 @@ try {
   const stagedZip = path.join(stagingDir, 'source.zip')
   await writeFile(path.join(stagingDir, yarnConfigFile), yarnConfig)
   await writeFile(path.join(stagingDir, readmeFile), readme)
-  execFileSync('zip', ['-q', '-X', '-nw', stagedZip, '-@'], {
+  // -y stores a tracked symlink as the link git checks out, never the
+  // contents of whatever it points at.
+  execFileSync('zip', ['-q', '-X', '-nw', '-y', stagedZip, '-@'], {
     cwd: repoRoot,
     input: files.filter(file => file !== yarnConfigFile).join('\n'),
   })
