@@ -102,7 +102,7 @@ describe('VultisigTronWeb.trx.sign', () => {
                 amount: '10000000000000000000',
                 decimals: 18,
               },
-              to: recipientHex,
+              to: fromHex(recipientHex),
             }),
           },
         },
@@ -110,6 +110,32 @@ describe('VultisigTronWeb.trx.sign', () => {
       {
         account: fromHex(ownerHex),
       }
+    )
+  })
+
+  it('reports the decoded TRC-20 recipient as a base58 address', async () => {
+    vi.mocked(callBackground).mockResolvedValue({
+      ticker: 'USDT',
+      decimals: 6,
+      logo: undefined,
+    } as never)
+
+    const tronWeb = new VultisigTronWeb()
+    await tronWeb.trx.sign(makeTriggerSmartContractTransaction(50_000n))
+
+    expect(callPopup).toHaveBeenCalledWith(
+      {
+        sendTx: {
+          keysign: {
+            chain: Chain.Tron,
+            transactionDetails: expect.objectContaining({
+              to: fromHex(recipientHex),
+              from: fromHex(ownerHex),
+            }),
+          },
+        },
+      },
+      { account: fromHex(ownerHex) }
     )
   })
 

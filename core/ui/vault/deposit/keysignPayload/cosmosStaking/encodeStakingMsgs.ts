@@ -1,19 +1,12 @@
-import {
-  type EncodeObject,
-  encodePubkey,
-  Registry,
-} from '@cosmjs/proto-signing'
-import { defaultRegistryTypes } from '@cosmjs/stargate'
-import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing'
-import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { type EncodeObject } from '@cosmjs/proto-signing'
+
+import { buildCosmosSignDirectBytes } from '../cosmosSignDirect/buildCosmosSignDirectBytes'
 
 const msgDelegateTypeUrl = '/cosmos.staking.v1beta1.MsgDelegate'
 const msgUndelegateTypeUrl = '/cosmos.staking.v1beta1.MsgUndelegate'
 const msgBeginRedelegateTypeUrl = '/cosmos.staking.v1beta1.MsgBeginRedelegate'
 const msgWithdrawDelegatorRewardTypeUrl =
   '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
-
-const registry = new Registry(defaultRegistryTypes)
 
 export type CosmosStakingInput =
   | {
@@ -117,61 +110,19 @@ type BuildStakingSignDirectBytesInput = {
 
 /**
  * Encodes a Cosmos SDK staking transaction into the proto-direct `bodyBytes` /
- * `authInfoBytes` pair required by `KeysignPayload.signData.signDirect`. The
- * Vultisig Cosmos signing resolver consumes these bytes verbatim — it decodes
- * them only to extract the fee and memo for display, the actual sign-over is
- * the canonical SignDoc(bodyBytes, authInfoBytes, chainId, accountNumber).
- *
- * Sequence MUST match the sequence in `cosmosSpecific.sequence` (populated by
- * `getChainSpecific`) — the signing resolver passes both to WalletCore and the
- * chain rejects on mismatch.
+ * `authInfoBytes` pair required by `KeysignPayload.signData.signDirect`. See
+ * {@link buildCosmosSignDirectBytes} for how signers consume them.
  */
 export const buildStakingSignDirectBytes = ({
   input,
   delegatorAddress,
   denom,
-  memo,
-  publicKey,
-  sequence,
-  feeAmount,
-  gasLimit,
+  ...rest
 }: BuildStakingSignDirectBytesInput): {
   bodyBytes: Uint8Array
   authInfoBytes: Uint8Array
-} => {
-  const encoded = toEncodeObjects({ input, delegatorAddress, denom }).map(obj =>
-    registry.encodeAsAny(obj)
-  )
-
-  const bodyBytes = TxBody.encode(
-    TxBody.fromPartial({
-      messages: encoded,
-      memo: memo ?? '',
-    })
-  ).finish()
-
-  const pubkeyAny = encodePubkey({
-    type: 'tendermint/PubKeySecp256k1',
-    value: Buffer.from(publicKey).toString('base64'),
+} =>
+  buildCosmosSignDirectBytes({
+    messages: toEncodeObjects({ input, delegatorAddress, denom }),
+    ...rest,
   })
-
-  const authInfoBytes = AuthInfo.encode(
-    AuthInfo.fromPartial({
-      signerInfos: [
-        {
-          publicKey: pubkeyAny,
-          modeInfo: { single: { mode: SignMode.SIGN_MODE_DIRECT } },
-          sequence,
-        },
-      ],
-      fee: {
-        amount: [feeAmount],
-        gasLimit,
-        payer: '',
-        granter: '',
-      },
-    })
-  ).finish()
-
-  return { bodyBytes, authInfoBytes }
-}

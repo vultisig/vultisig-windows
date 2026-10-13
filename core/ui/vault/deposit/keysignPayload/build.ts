@@ -91,6 +91,7 @@ import {
   toEncodeObjects,
 } from './cosmosStaking/encodeStakingMsgs'
 import { scaleCosmosStakingFee } from './cosmosStaking/scaleCosmosStakingFee'
+import { applyGovVoteSignData } from './vote/applyGovVoteSignData'
 
 export type BuildDepositKeysignPayloadInput = {
   coin: AccountCoin
@@ -120,6 +121,14 @@ export type BuildDepositKeysignPayloadInput = {
 /** Narrows an untyped react-hook-form field value to a string, else undefined. */
 const asOptionalString = (value: unknown): string | undefined =>
   typeof value === 'string' ? value : undefined
+
+// TRON Stake 2.0 owner-only system contracts. They have no recipient, so the
+// payload is addressed to the vault itself.
+const tronSelfAddressedActions = [
+  'freeze',
+  'unfreeze',
+  tronWithdrawExpireUnfreezeAction,
+] as const satisfies readonly ChainAction[]
 
 export const buildDepositKeysignPayload = async ({
   coin,
@@ -206,6 +215,10 @@ export const buildDepositKeysignPayload = async ({
   const isNonThorChainLp =
     action === 'add_thor_lp' && coin.chain !== Chain.THORChain
 
+  // Address the vault before the fee lookup below: the TRON fee resolver
+  // queries the recipient account and rejects an empty address (#5150).
+  const isTronSelfAddressed = isOneOf(action, tronSelfAddressedActions)
+
   let keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
@@ -217,7 +230,7 @@ export const buildDepositKeysignPayload = async ({
     vaultPublicKeyEcdsa: vaultId,
     libType,
     utxoInfo: await getKeysignUtxoInfo(coin),
-    toAddress: receiver,
+    toAddress: isTronSelfAddressed ? coin.address : receiver,
     toAmount: hasAmount && amountUnits ? amountUnits : '0',
   })
 
@@ -265,6 +278,15 @@ export const buildDepositKeysignPayload = async ({
       amountUnits,
       publicKey,
       hexPublicKey,
+      keysignPayload,
+    })
+  }
+
+  if (action === 'vote') {
+    return applyGovVoteSignData({
+      coin,
+      depositData,
+      publicKey,
       keysignPayload,
     })
   }
@@ -503,7 +525,6 @@ export const buildDepositKeysignPayload = async ({
       ...keysignPayload,
       contractPayload: { case: undefined },
       memo: tronWithdrawExpireUnfreezeMemo,
-      toAddress: coin.address,
       toAmount: shouldBePresent(amountUnits, 'Claimable TRON amount'),
     })
 
@@ -515,7 +536,6 @@ export const buildDepositKeysignPayload = async ({
     keysignPayload = create(KeysignPayloadSchema, {
       ...keysignPayload,
       contractPayload: { case: undefined },
-      toAddress: coin.address,
       toAmount: shouldBePresent(amountUnits, 'Amount'),
     })
 
@@ -537,7 +557,7 @@ export const buildDepositKeysignPayload = async ({
       toAddress: receiver ?? keysignPayload.toAddress,
       toAmount: toAmountForAction,
     })
-  } else if (!isOneOf(action, ['vote'])) {
+  } else {
     if (hasAmount && amountUnits) {
       keysignPayload = create(KeysignPayloadSchema, {
         ...keysignPayload,

@@ -1,3 +1,4 @@
+import { getCustomMessageDisplayMessage } from '@core/ui/mpc/keysign/customMessage/getCustomMessageDisplayMessage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -6,14 +7,20 @@ import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+/**
+ * Method and message of a signed custom-message payload, shown on the keysign
+ * done screen. JSON messages are pretty-printed.
+ */
 export const KeysignCustomMessageInfo = ({
   value,
 }: ValueProp<CustomMessagePayload>) => {
   const { t } = useTranslation()
 
+  const message = getCustomMessageDisplayMessage(value)
+
   const formattedMessage = withFallback(
-    attempt(() => JSON.stringify(JSON.parse(value.message), null, 2)),
-    value.message
+    attempt(() => JSON.stringify(JSON.parse(message), null, 2)),
+    message
   )
 
   return (

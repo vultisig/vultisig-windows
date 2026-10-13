@@ -27,8 +27,16 @@ export const assertValidNewPasscode = (passcode: string) => {
   }
 }
 
-export const getStoredPasscodeLength = (length?: number): number =>
-  length === undefined ||
-  length === passcodeEncryptionConfig.legacyPasscodeLength
-    ? passcodeEncryptionConfig.legacyPasscodeLength
+/**
+ * Number of digits of the stored passcode: the recorded length, or five for a
+ * record written before lengths were recorded. Before six digits were
+ * enforced, any length up to five could be saved.
+ */
+export const getStoredPasscodeLength = (
+  length: number = passcodeEncryptionConfig.legacyPasscodeLength
+): number =>
+  Number.isInteger(length) &&
+  length > 0 &&
+  length <= passcodeEncryptionConfig.legacyPasscodeLength
+    ? length
     : passcodeEncryptionConfig.passcodeLength

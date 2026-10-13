@@ -134,10 +134,16 @@ export const zh = {
     vote: {
       labels: {
         proposalId: '提案编号',
-        support: '支持',
+        option: '投票',
       },
       validations: {
-        proposalId: '需要提案编号。',
+        proposalId: '请输入有效的提案编号',
+      },
+      options: {
+        yes: '赞成',
+        abstain: '弃权',
+        no: '反对',
+        noWithVeto: '否决',
       },
     },
   },
