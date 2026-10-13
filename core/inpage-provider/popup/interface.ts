@@ -1,5 +1,6 @@
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { CustomMessageSupportedChain } from '@core/ui/mpc/keysign/customMessage/chains'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { ChainInfo } from '@keplr-wallet/types'
 import {
@@ -64,15 +65,9 @@ export type SignMessageInput =
     }
   | {
       sign_message: {
-        chain:
-          | OtherChain.Solana
-          | OtherChain.Sui
-          | OtherChain.Ton
-          | OtherChain.Tron
-          | OtherChain.Polkadot
-          | OtherChain.Bittensor
-          | OtherChain.Cardano
-          | OtherChain.Ripple
+        // Derived from the keysign allowlist so a provider cannot request a
+        // chain the custom-message signer rejects.
+        chain: Extract<CustomMessageSupportedChain, OtherChain>
         useTronHeader?: boolean
         isV2?: boolean
         // XRPL (GemWallet `signMessage`): when true `message` is raw hex,
