@@ -51,7 +51,10 @@ export const getCustomMessageHex = ({
     sui: () => getSuiDigestHex({ message }),
     ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
+    // Substrate `signRaw` (Polkadot, Bittensor): ed25519 signs the message
+    // bytes directly, so no digest is taken here.
     polkadot: () => Buffer.from(bytes).toString('hex'),
+    bittensor: () => Buffer.from(bytes).toString('hex'),
     cardano: () => Buffer.from(bytes).toString('hex'),
     // XRPL (GemWallet signMessage / ripple-keypairs): the signed digest is
     // SHA-512-half — the first 32 bytes of SHA-512 — of the message bytes.
