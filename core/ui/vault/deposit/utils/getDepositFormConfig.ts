@@ -17,6 +17,8 @@ import { z } from 'zod'
 import { ChainAction } from '../ChainAction'
 import { isBruneStakeCoin, isStakeableChain, StakeableChain } from '../config'
 import { tronWithdrawExpireUnfreezeAction } from '../tron/withdrawExpireUnfreeze'
+import { parseGovProposalId } from '../vote/govProposalId'
+import { govVoteOptions } from '../vote/govVoteOption'
 import {
   optionalNonNegativeAmountSchema,
   optionalPositiveAmountSchema,
@@ -104,7 +106,9 @@ type GetChainActionConfigParams = {
 type ChainActionConfig = {
   fields: Array<{
     name: string
-    type: string
+    // The generic renderer passes this to an <input>, so a value it cannot
+    // render (a boolean, a choice) is picked in the action's own component.
+    type: 'text' | 'number' | 'percentage'
     label: string
     required?: boolean
     hidden?: boolean
@@ -478,18 +482,24 @@ export const getDepositFormConfig = ({
           label: t('chainFunctions.vote.labels.proposalId'),
           required: true,
         },
+        // Picked in VoteSpecific; listed so the review sheet shows it.
         {
-          name: 'support',
-          type: 'boolean',
-          label: t('chainFunctions.vote.labels.support'),
+          name: 'option',
+          type: 'text',
+          label: t('chainFunctions.vote.labels.option'),
           required: true,
+          hidden: true,
         },
       ],
       schema: z.object({
         proposalId: z
           .string()
-          .min(1, t('chainFunctions.vote.validations.proposalId')),
-        support: z.boolean(),
+          .trim()
+          .refine(
+            value => 'data' in attempt(() => parseGovProposalId(value)),
+            t('chainFunctions.vote.validations.proposalId')
+          ),
+        option: z.enum(govVoteOptions),
       }),
     }),
     stake: () => ({

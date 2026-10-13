@@ -62,7 +62,7 @@ export const useCorrectSelectedCoin = () => {
         ibc_transfer: () => currentDepositCoin,
         bond_with_lp: () => shouldBePresent(potentialCACAOCoin),
         unbond_with_lp: () => shouldBePresent(potentialCACAOCoin),
-        vote: () => shouldBePresent(potentialRUNECoin),
+        vote: selectNativeCoin,
         custom: () => currentDepositCoin,
         mint: () => {
           const currentCoin = findByTicker({
