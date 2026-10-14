@@ -5,7 +5,6 @@ import {
   SignMessageInput,
   SignMessageType,
 } from '@core/inpage-provider/popup/interface'
-import { getOriginHostname } from '@core/inpage-provider/popup/signMessage/getOriginHostname'
 import { getRawSignMessagePayload } from '@core/inpage-provider/popup/signMessage/getRawSignMessagePayload'
 import { getRippleMessageBytes } from '@core/inpage-provider/popup/signMessage/getRippleMessageBytes'
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
@@ -77,18 +76,14 @@ export const Overview = () => {
       hexlify(serializeAdr36SignDoc({ signer: address, dataBase64: data })),
     // TON hashes are built here from the readable request, never taken from
     // the page: a raw TON signature over a page-chosen hash could sign a
-    // transfer.
+    // transfer. The background has already checked every field, and that
+    // the domain is the requesting page's hostname.
     ton_proof: ({ domain, timestamp, payload }) =>
       `0x${getTonProofHash(
         buildTonProofPayload({ address, domain, timestamp, payload })
       )}`,
-    ton_sign_data: ({ timestamp, payload }) =>
-      `0x${getTonSignDataHash({
-        address,
-        domain: shouldBePresent(getOriginHostname(requestOrigin)),
-        timestamp,
-        payload,
-      })}`,
+    ton_sign_data: ({ domain, timestamp, payload }) =>
+      `0x${getTonSignDataHash({ address, domain, timestamp, payload })}`,
   })
 
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
@@ -146,18 +141,6 @@ export const Overview = () => {
     ton_proof: () => undefined,
     ton_sign_data: () => undefined,
   })
-
-  const tonProofDomain = matchRecordUnion<SignMessageInput, string | undefined>(
-    input,
-    {
-      eth_signTypedData_v4: () => undefined,
-      sign_message: () => undefined,
-      personal_sign: () => undefined,
-      cosmos_sign_arbitrary: () => undefined,
-      ton_proof: ({ domain }) => domain,
-      ton_sign_data: () => undefined,
-    }
-  )
 
   const pluginId = matchRecordUnion<SignMessageInput, string | undefined>(
     input,
@@ -221,7 +204,6 @@ export const Overview = () => {
           method={method}
           signature={signature}
           typedData={typedData}
-          tonProofDomain={tonProofDomain}
         />
       )}
       policy={() => (

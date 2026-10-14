@@ -106,8 +106,9 @@ export type SignMessageInput =
   | {
       ton_proof: {
         chain: OtherChain.Ton
-        // App domain from the dApp's manifest, which the dApp controls; the
-        // popup shows it next to the real request origin.
+        // App domain from the dApp's manifest. The background refuses the
+        // request unless it is the requesting page's hostname, so a page
+        // cannot get a proof for another app's domain.
         domain: string
         timestamp: number
         payload: string
@@ -116,6 +117,11 @@ export type SignMessageInput =
   | {
       ton_sign_data: {
         chain: OtherChain.Ton
+        // Hostname the dApp expects the signature to bind to. The background
+        // refuses the request unless it is the requesting page's hostname, so
+        // a mismatch fails loudly instead of yielding a signature the dApp
+        // cannot verify.
+        domain: string
         timestamp: number
         payload: TonSignDataPayload
       }

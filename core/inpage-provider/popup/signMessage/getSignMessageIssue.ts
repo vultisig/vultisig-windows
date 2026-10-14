@@ -49,8 +49,19 @@ const getRawSignMessageIssue = ({
 const isTonTimestamp = (value: number) =>
   Number.isSafeInteger(value) && value >= 0
 
-const isHostname = (value: string) =>
-  typeof value === 'string' && getOriginHostname(`https://${value}`) === value
+type IsRequestHostnameInput = {
+  domain: string
+  requestOrigin: string
+}
+
+const isRequestHostname = ({
+  domain,
+  requestOrigin,
+}: IsRequestHostnameInput) => {
+  const hostname = getOriginHostname(requestOrigin)
+
+  return hostname !== undefined && domain === hostname
+}
 
 type GetSignMessageIssueInput = {
   input: SignMessageInput
@@ -76,8 +87,8 @@ export const getSignMessageIssue = ({
       if (chain !== OtherChain.Ton) {
         return 'ton_proof is only supported on TON'
       }
-      if (!isHostname(domain)) {
-        return 'The ton_proof domain must be a hostname'
+      if (!isRequestHostname({ domain, requestOrigin })) {
+        return 'The ton_proof domain is not the hostname of the requesting page'
       }
       if (!isTonTimestamp(timestamp)) {
         return 'The ton_proof timestamp must be a non-negative integer'
@@ -86,12 +97,12 @@ export const getSignMessageIssue = ({
         return 'The ton_proof payload must be a string'
       }
     },
-    ton_sign_data: ({ chain, timestamp, payload }) => {
+    ton_sign_data: ({ chain, domain, timestamp, payload }) => {
       if (chain !== OtherChain.Ton) {
         return 'signData is only supported on TON'
       }
-      if (!getOriginHostname(requestOrigin)) {
-        return 'signData needs a page with a hostname'
+      if (!isRequestHostname({ domain, requestOrigin })) {
+        return 'The signData domain is not the hostname of the requesting page'
       }
       if (!isTonTimestamp(timestamp)) {
         return 'The signData timestamp must be a non-negative integer'

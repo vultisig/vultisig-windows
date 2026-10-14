@@ -434,8 +434,6 @@ export class TonConnectBridge {
       return getBadRequestError(payloadIssue)
     }
 
-    // The popup binds the signature to the real request origin, which for
-    // this frame has the same hostname.
     const domain = window.location.hostname
     const timestamp = Math.floor(Date.now() / 1000)
 
@@ -445,6 +443,7 @@ export class TonConnectBridge {
           signMessage: {
             ton_sign_data: {
               chain: Chain.Ton,
+              domain,
               timestamp,
               payload: signDataPayload,
             },

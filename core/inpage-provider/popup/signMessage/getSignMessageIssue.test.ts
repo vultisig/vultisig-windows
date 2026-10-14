@@ -150,10 +150,22 @@ describe('getSignMessageIssue', () => {
       expect(check(tonProof())).toBeUndefined()
     })
 
+    it("rejects a proof for another site's domain", () => {
+      expect(check(tonProof({ domain: 'victim.example.org' }))).toMatch(
+        /hostname of the requesting page/
+      )
+    })
+
     it('rejects a domain that is not a bare hostname', () => {
       expect(check(tonProof({ domain: 'app.example.com/path' }))).toMatch(
-        /hostname/
+        /hostname of the requesting page/
       )
+    })
+
+    it('rejects a request from an origin without a hostname', () => {
+      expect(
+        getSignMessageIssue({ input: tonProof(), requestOrigin: 'null' })
+      ).toMatch(/hostname of the requesting page/)
     })
 
     it('rejects a negative timestamp', () => {
@@ -162,12 +174,26 @@ describe('getSignMessageIssue', () => {
   })
 
   describe('ton_sign_data', () => {
-    const signData = (payload: TonSignDataPayload): SignMessageInput => ({
-      ton_sign_data: { chain: OtherChain.Ton, timestamp: 1700000000, payload },
+    const signData = (
+      payload: TonSignDataPayload,
+      domain = 'app.example.com'
+    ): SignMessageInput => ({
+      ton_sign_data: {
+        chain: OtherChain.Ton,
+        domain,
+        timestamp: 1700000000,
+        payload,
+      },
     })
 
     it('accepts a text payload', () => {
       expect(check(signData({ type: 'text', text: 'Hello' }))).toBeUndefined()
+    })
+
+    it('rejects a domain other than the hostname of the requesting page', () => {
+      expect(
+        check(signData({ type: 'text', text: 'Hello' }, 'widget.example.org'))
+      ).toMatch(/hostname of the requesting page/)
     })
 
     it('rejects binary data that is not base64', () => {
@@ -182,7 +208,7 @@ describe('getSignMessageIssue', () => {
           input: signData({ type: 'text', text: 'Hello' }),
           requestOrigin: 'null',
         })
-      ).toMatch(/hostname/)
+      ).toMatch(/hostname of the requesting page/)
     })
   })
 
