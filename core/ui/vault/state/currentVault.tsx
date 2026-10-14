@@ -50,16 +50,24 @@ export const [CurrentVaultProvider, useCurrentVault, CurrentVaultContext] =
 type CurrentVaultValue = (Vault & Partial<{ coins: AccountCoin[] }>) | undefined
 
 /**
+ * The outcome of a key-share read, tagged with the exact inputs it was
+ * requested under.
+ */
+type VaultSharesRead = {
+  source: VaultReadabilityInputs
+} & (
+  | { status: 'ready'; shares: VaultAllKeyShares }
+  | { status: 'unreadable' }
+  | { status: 'error'; error: Error }
+)
+
+/**
  * A value handed to the tree, with the read that proved its shares when it
  * carries any — which is what lets the tree stay mounted across a lock.
  */
 type ProvidedVault = {
   value: CurrentVaultValue
-  proof?: {
-    /** The inputs the shares were read under. */
-    source: VaultReadabilityInputs
-    shares: VaultAllKeyShares
-  }
+  proof?: Extract<VaultSharesRead, { status: 'ready' }>
 }
 
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
@@ -136,31 +144,28 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const vault = vaults.find(vault => getVaultId(vault) === id)
   const isLocked = hasPasscodeEncryption && !passcode
 
-  // Snapshotted during render, before any read is started, so a result can
-  // never be attributed to inputs it was not read under, and stable while
-  // nothing it carries changes, so it can be the read's only dependency.
+  // Snapshotted once per render, before any read is started, so a result can
+  // never be attributed to inputs it was not read under. The read is keyed on
+  // it while unlocked, and a held proof is checked against it under the lock.
+  const currentInputs = vault
+    ? getVaultReadabilityInputs({
+        vault,
+        hasPasscodeEncryption,
+        passcode,
+        validateLegacyVaultKeyShares,
+      })
+    : null
+
+  // Stable while nothing it carries changes, so it can be the read's only
+  // dependency.
   const readabilityInputs = useStableReadabilityInputs(
-    vault && !isLocked
-      ? getVaultReadabilityInputs({
-          vault,
-          hasPasscodeEncryption,
-          passcode,
-          validateLegacyVaultKeyShares,
-        })
-      : null
+    isLocked ? null : currentInputs
   )
 
-  // The result is tagged with the exact inputs it was read under. A reshare
-  // keeps the same id but changes the shares, and a passcode change re-reads
-  // the same bytes, so id-only state could expose a stale result. Stored shares
-  // are never provided while readability is unresolved.
-  const [shareState, setShareState] = useState<{
-    source: VaultReadabilityInputs
-    result:
-      | { status: 'ready'; shares: VaultAllKeyShares }
-      | { status: 'unreadable' }
-      | { status: 'error'; error: Error }
-  } | null>(null)
+  // A reshare keeps the same id but changes the shares, and a passcode change
+  // re-reads the same bytes, so id-only state could expose a stale result.
+  // Stored shares are never provided while readability is unresolved.
+  const [shareState, setShareState] = useState<VaultSharesRead | null>(null)
 
   useEffect(() => {
     if (!readabilityInputs) {
@@ -185,27 +190,23 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     })
       .then(shares => {
         if (!cancelled) {
-          setShareState({
-            source,
-            result: { status: 'ready', shares },
-          })
+          setShareState({ source, status: 'ready', shares })
         }
       })
       .catch(error => {
         if (!cancelled) {
-          setShareState({
-            source,
-            result:
-              error instanceof UnreadableVaultKeySharesError
-                ? { status: 'unreadable' }
-                : {
-                    status: 'error',
-                    error:
-                      error instanceof Error
-                        ? error
-                        : new Error('Failed to read vault key shares'),
-                  },
-          })
+          setShareState(
+            error instanceof UnreadableVaultKeySharesError
+              ? { source, status: 'unreadable' }
+              : {
+                  source,
+                  status: 'error',
+                  error:
+                    error instanceof Error
+                      ? error
+                      : new Error('Failed to read vault key shares'),
+                }
+          )
         }
       })
 
@@ -223,7 +224,6 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     })
       ? shareState
       : null
-  const resolution = settled?.result
 
   const viewId = navigationHistory?.[navigationHistory.length - 1]?.id
   const isImportView = viewId === 'importVault'
@@ -259,16 +259,16 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       // the stored shares, still encrypted: code that keeps running under it,
       // such as the agent, cannot sign with them. The proven shares come back
       // with the passcode, without waiting for the read to finish again.
+      //
+      // Work that starts under the lock reads those stored shares too, so an
+      // MPC ceremony, which can advance on its own once its peers are in,
+      // holds the auto-lock for as long as it is mounted instead.
       if (
         held?.proof &&
+        currentInputs &&
         canHoldProvenSharesAcrossLock({
           resolved: held.proof.source,
-          current: getVaultReadabilityInputs({
-            vault,
-            hasPasscodeEncryption,
-            passcode,
-            validateLegacyVaultKeyShares,
-          }),
+          current: currentInputs,
         })
       ) {
         return {
@@ -292,19 +292,17 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
       return isVaultWritingView && !isStaleSameVault ? held : null
     }
 
-    const { source, result } = settled
-
-    if (result.status === 'error') {
+    if (settled.status === 'error') {
       return null
     }
 
-    if (result.status === 'unreadable') {
+    if (settled.status === 'unreadable') {
       return isImportView ? { value: undefined } : null
     }
 
     return {
-      value: { ...vault, ...result.shares },
-      proof: { source, shares: result.shares },
+      value: { ...vault, ...settled.shares },
+      proof: settled,
     }
   })()
 
@@ -316,11 +314,11 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     }
   })
 
-  if (resolution?.status === 'error') {
-    throw resolution.error
+  if (settled?.status === 'error') {
+    throw settled.error
   }
 
-  const isUnreadable = resolution?.status === 'unreadable'
+  const isUnreadable = settled?.status === 'unreadable'
 
   if (!provided) {
     return isUnreadable ? <UnreadableVaultRecovery /> : <StartupPlaceholder />

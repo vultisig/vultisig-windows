@@ -31,17 +31,28 @@
  *   change underneath it, nor when a different passcode comes back, and never
  *   for a tree that opens locked
  * - while locked the tree is given only the stored shares, and the proven ones
- *   come back with the passcode
+ *   come back with the passcode — also through a second lock that lands before
+ *   the re-read settles, and for a step that mounts while the lock is up
+ * - a failed re-read after unlocking surfaces as an error instead of leaving
+ *   the tree on the shares proven before the lock
  */
 import {
   RootCurrentVaultProvider,
   useCurrentVault,
 } from '@core/ui/vault/state/currentVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { act, render, screen } from '@testing-library/react'
 import type { Vault, VaultAllKeyShares } from '@vultisig/core-mpc/vault/Vault'
-import { useEffect } from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { useEffect, useState } from 'react'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+  onTestFinished,
+  vi,
+} from 'vitest'
 
 const storage: {
   vaults: Vault[]
@@ -588,6 +599,134 @@ describe('RootCurrentVaultProvider tree continuity', () => {
 
       expect(screen.queryByTestId('splash')).toBeNull()
       expect(mountCount).toBe(2)
+    })
+
+    it('keeps the screen through a second lock that lands before the re-read settles', async () => {
+      const { rerender } = await renderUnlocked()
+
+      storage.passcode = null
+      await rerenderTree(rerender)
+
+      storage.passcode = passcode
+      await rerenderTree(rerender)
+      expect(readCalls).toHaveLength(2)
+
+      storage.passcode = null
+      await rerenderTree(rerender)
+      expect(screen.getByTestId('shares').textContent).toBe('stored-ecdsa')
+
+      // The read started under the first unlock answers for a passcode that
+      // has been withdrawn again, so it must not hand the proven shares over.
+      await resolveReadAt(1)
+
+      expect(screen.getByText('Select chain')).toBeDefined()
+      expect(screen.getByTestId('shares').textContent).toBe('stored-ecdsa')
+
+      storage.passcode = passcode
+      await rerenderTree(rerender)
+
+      expect(readCalls).toHaveLength(3)
+      expect(screen.getByTestId('shares').textContent).toBe('proven-ecdsa')
+
+      await resolveRead()
+
+      expect(screen.getByText('Select chain')).toBeDefined()
+      expect(screen.getByTestId('shares').textContent).toBe('proven-ecdsa')
+      expect(mountCount).toBe(1)
+    })
+
+    it('withholds the tree when passcode encryption is turned off while locked', async () => {
+      const { rerender } = await renderUnlocked()
+
+      storage.passcode = null
+      await rerenderTree(rerender)
+      expect(screen.getByText('Select chain')).toBeDefined()
+
+      // The same bytes, but they are no longer read through the passcode, so
+      // the proof taken under it does not vouch for them.
+      storage.hasPasscodeEncryption = false
+      await rerenderTree(rerender)
+
+      expect(screen.getByTestId('splash')).toBeDefined()
+      expect(screen.queryByText('Select chain')).toBeNull()
+
+      await resolveRead()
+
+      expect(screen.queryByTestId('splash')).toBeNull()
+      expect(mountCount).toBe(2)
+    })
+
+    it('throws when the re-read after unlocking fails, rather than keep the held shares', async () => {
+      // React reports the caught error on the console; that is expected here.
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {})
+      onTestFinished(() => consoleError.mockRestore())
+
+      currentViewId = 'vault'
+      storage.vaults = [makeVault()]
+      storage.currentVaultId = vaultId
+      storage.hasPasscodeEncryption = true
+      storage.passcode = passcode
+
+      const tree = () => (
+        <ErrorBoundary fallback={() => <div data-testid="read-error" />}>
+          <RootCurrentVaultProvider>
+            <VaultScreen />
+          </RootCurrentVaultProvider>
+        </ErrorBoundary>
+      )
+
+      const { rerender } = render(tree())
+      await settle()
+      await resolveRead()
+      expect(screen.getByTestId('shares').textContent).toBe('proven-ecdsa')
+
+      storage.passcode = null
+      await act(async () => {
+        rerender(tree())
+      })
+      storage.passcode = passcode
+      await act(async () => {
+        rerender(tree())
+      })
+
+      await act(async () => {
+        readCalls[1].reject(new Error('failed to read the shares'))
+      })
+
+      expect(screen.getByTestId('read-error')).toBeDefined()
+      expect(screen.queryByTestId('shares')).toBeNull()
+    })
+
+    it('gives a step that mounts under the lock only the stored shares', async () => {
+      // Stands in for a step that starts on its own, as keysign's signing
+      // step does once the co-signers are in: whatever it captures when it
+      // mounts is what it works with. The lock must never let that be the
+      // proven shares, which is why ceremonies hold the auto-lock instead.
+      const SelfStartingStep = () => {
+        const { keyShares } = useCurrentVault()
+        const [sharesAtMount] = useState(keyShares.ecdsa)
+
+        return <div data-testid="shares-at-mount">{sharesAtMount}</div>
+      }
+
+      const { rerender } = await renderUnlocked()
+
+      storage.passcode = null
+      await act(async () => {
+        rerender(
+          <RootCurrentVaultProvider>
+            <VaultScreen />
+            <SelfStartingStep />
+          </RootCurrentVaultProvider>
+        )
+      })
+
+      expect(screen.getByTestId('shares-at-mount').textContent).toBe(
+        'stored-ecdsa'
+      )
+      expect(screen.getByText('Select chain')).toBeDefined()
     })
 
     it('withholds the tree when it opens locked', async () => {
