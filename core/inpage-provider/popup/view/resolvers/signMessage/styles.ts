@@ -1,5 +1,6 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
@@ -23,6 +24,18 @@ export const Divider = styled.div`
 export const Image = styled.img`
   height: 36px;
   width: 36px;
+`
+
+/**
+ * Right-aligned value cell of a nowrap label/value row. `min-width: 0` lets
+ * the flex item shrink below its content, so long unbroken values (keys,
+ * hashes, large amounts) wrap instead of widening the row into horizontal
+ * scroll.
+ */
+export const RowValue = styled(Text)`
+  min-width: 0;
+  flex: 1;
+  text-align: right;
 `
 
 export const Section = styled(VStack)`

@@ -1,5 +1,6 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { Fragment, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,6 +10,7 @@ import { ReviewRow } from '../../../mpc/keysign/review/ReviewRow'
 import { ReviewTruncatedValue } from '../../../mpc/keysign/review/ReviewTruncatedValue'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { TrustLineReserveWarning } from '../DepositForm/ActionSpecific/OpenTrustLineSpecific/TrustLineReserveWarning'
+import { useGovVoteOptionLabels } from '../DepositForm/ActionSpecific/VoteSpecific/useGovVoteOptionLabels'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositMemo } from '../hooks/useDepositMemo'
 import { useSender } from '../hooks/useSender'
@@ -19,6 +21,7 @@ import {
   getTronClaimAmountDisplay,
   tronWithdrawExpireUnfreezeAction,
 } from '../tron/withdrawExpireUnfreeze'
+import { govVoteOptions } from '../vote/govVoteOption'
 import { BondOverview } from './BondOverview'
 import { DepositFeeRow } from './DepositFeeRow'
 import { DepositReviewSheet } from './DepositReviewSheet'
@@ -61,6 +64,7 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
   const sender = useSender()
   const { t } = useTranslation()
   const { fields: actionFields } = useDepositFormConfig()
+  const voteOptionLabels = useGovVoteOptionLabels()
 
   const isOpenTrustLine = selectedChainAction === 'open_trust_line'
   // The trust-line limit is denominated in the issued currency, not the native
@@ -107,7 +111,11 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
       return []
     }
 
-    const value = String(formattedDepositFormData[field.name])
+    const rawValue = formattedDepositFormData[field.name]
+    const value =
+      selectedChainAction === 'vote' && isOneOf(rawValue, govVoteOptions)
+        ? voteOptionLabels[rawValue]
+        : String(rawValue)
 
     return [
       {

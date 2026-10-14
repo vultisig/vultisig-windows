@@ -9,6 +9,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import {
   getPasscodeEntryLength,
   isPasscodeRequired,
+  isShortLegacyPasscodeProbe,
   mayNeedPasscodeSampleRewrite,
   needsPasscodeSampleRewrite,
   verifyPasscode,
@@ -239,6 +240,79 @@ describe('passcode entry recovery', () => {
         storedPasscodeLength: 6,
       })
     ).toBe(6)
+  })
+})
+
+describe('short legacy passcode probes', () => {
+  const shortPasscode = '1357'
+  let shortSample: string
+
+  beforeAll(async () => {
+    shortSample = await encryptSample({ key: shortPasscode, value: 'sample' })
+  })
+
+  it('probes entries shorter than five digits only when the proof records no length', () => {
+    const isProbe = (entry: string, storedPasscodeLength?: number) =>
+      isShortLegacyPasscodeProbe({
+        encryptedSample: shortSample,
+        passcode: entry,
+        storedPasscodeLength,
+      })
+
+    expect(isProbe('1')).toBe(true)
+    expect(isProbe(shortPasscode)).toBe(true)
+    expect(isProbe('')).toBe(false)
+    expect(isProbe('13579')).toBe(false)
+    expect(isProbe(shortPasscode, 4)).toBe(false)
+    expect(isProbe(shortPasscode, 6)).toBe(false)
+    expect(
+      isShortLegacyPasscodeProbe({
+        encryptedSample: null,
+        passcode: shortPasscode,
+      })
+    ).toBe(false)
+  })
+
+  it('accepts a short passcode whose proof records no length', async () => {
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [plainShares],
+        encryptedSample: shortSample,
+        passcode: shortPasscode,
+      })
+    ).resolves.toBe('valid')
+  })
+
+  it('reads a failed short probe as incomplete so it is not charged', async () => {
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [plainShares],
+        encryptedSample: shortSample,
+        passcode: '2468',
+      })
+    ).resolves.toBe('incomplete')
+  })
+
+  it('charges a wrong entry at a recorded short length', async () => {
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [plainShares],
+        encryptedSample: shortSample,
+        passcode: '2468',
+        storedPasscodeLength: 4,
+      })
+    ).resolves.toBe('invalid')
+  })
+
+  it('never verifies a short entry against a recorded six-digit passcode', async () => {
+    await expect(
+      verifyPasscodeEntry({
+        vaults: [sealedShares],
+        encryptedSample: sample,
+        passcode: passcode.slice(0, 4),
+        storedPasscodeLength: 6,
+      })
+    ).resolves.toBe('incomplete')
   })
 })
 

@@ -121,7 +121,9 @@ class VultisigTronWebTrx extends Trx {
             return {
               asset,
               amount,
-              to: trc20Transfer ? trc20Transfer.recipient : contractAddress,
+              to: trc20Transfer
+                ? fromHex(trc20Transfer.recipient)
+                : contractAddress,
               from: fromHex(triggerSmartContract.owner_address),
               data: transaction.raw_data.data
                 ? Buffer.from(
