@@ -151,10 +151,16 @@ export const en = {
     vote: {
       labels: {
         proposalId: 'Proposal ID',
-        support: 'Support',
+        option: 'Vote',
+      },
+      options: {
+        yes: 'Yes',
+        abstain: 'Abstain',
+        no: 'No',
+        noWithVeto: 'No with veto',
       },
       validations: {
-        proposalId: 'Proposal ID is required',
+        proposalId: 'Enter a valid proposal ID',
       },
     },
   },

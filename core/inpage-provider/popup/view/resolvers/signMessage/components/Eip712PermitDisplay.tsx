@@ -2,6 +2,7 @@ import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 import { PermitTokenRow } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/PermitTokenRow'
 import {
   Divider,
+  RowValue,
   Section,
 } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -11,7 +12,6 @@ import { EvmChain } from '@vultisig/core-chain/Chain'
 import { TypedDataDomain } from 'ethers'
 import { FC, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 type Eip712PermitDisplayProps = {
   chain: EvmChain
@@ -177,15 +177,6 @@ const formatPrimitive = (value: unknown): string => {
   if (typeof value === 'object') return JSON.stringify(value)
   return String(value)
 }
-
-// Long, unbroken values (keys, hashes) are flex items inside a nowrap row.
-// `min-width: 0` lets the cell shrink below its content so `break-word` can
-// wrap instead of widening the row and forcing horizontal scroll.
-const RowValue = styled(Text)`
-  min-width: 0;
-  flex: 1;
-  text-align: right;
-`
 
 const Row: FC<{ label: string; value: React.ReactNode }> = ({
   label,

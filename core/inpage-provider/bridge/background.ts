@@ -30,10 +30,12 @@ import {
   AuthorizedPopupMethod,
   authorizedPopupMethods,
   PopupInterface,
+  PopupMethod,
   SignMessageInput,
 } from '../popup/interface'
 import { PopupMessage, PopupOptions } from '../popup/resolver'
 import { callPopupFromBackground } from '../popup/resolvers/background'
+import { getSignMessageIssue } from '../popup/signMessage/getSignMessageIssue'
 import { InpageProviderBridgeMessage } from './message'
 import { serializeBridgeError } from './serializeBridgeError'
 
@@ -91,7 +93,33 @@ function getSignMessageChain(input: SignMessageInput): Chain {
     eth_signTypedData_v4: ({ chain }) => chain,
     personal_sign: ({ chain }) => chain,
     sign_message: ({ chain }) => chain,
+    ton_proof: ({ chain }) => chain,
+    ton_sign_data: ({ chain }) => chain,
   })
+}
+
+/**
+ * Refuses a popup call whose input must never reach a signing popup. Runs in
+ * the background because the page can post popup calls without going through
+ * the inpage provider.
+ */
+function assertPopupCallInput({
+  call,
+  context,
+}: {
+  call: PopupMessage<PopupMethod>['call']
+  context: CallContext
+}) {
+  if (getRecordUnionKey(call) !== 'signMessage') return
+
+  const issue = getSignMessageIssue({
+    input: getRecordUnionValue(call, 'signMessage'),
+    requestOrigin: context.requestOrigin,
+  })
+
+  if (issue) {
+    throw new Error(issue)
+  }
 }
 
 function getPopupAuthorizationChains(
@@ -212,12 +240,15 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
           {
             background: async ({ call }) =>
               resolveBackgroundCall({ call, context }),
-            popup: async ({ call, options }) =>
-              callPopupFromBackground({
+            popup: async ({ call, options }) => {
+              assertPopupCallInput({ call, context })
+
+              return callPopupFromBackground({
                 call,
                 options,
                 context,
-              }),
+              })
+            },
           }
         )
       }).then(result => {

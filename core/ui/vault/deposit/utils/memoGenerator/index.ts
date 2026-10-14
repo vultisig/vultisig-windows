@@ -157,7 +157,9 @@ export const generateMemo = ({
     },
     custom: () => shouldBePresent(customMemo, 'Custom memo'),
     leave: () => `LEAVE:${nodeAddress}`,
-    vote: () => 'VOTE',
+    // A governance vote is a typed MsgVote carried in signDirect bytes (see
+    // `applyGovVoteSignData`), not a memo.
+    vote: () => '',
     ibc_transfer: () => {
       if (!destinationChain || !nodeAddress) {
         throw new Error('Invalid IBC transfer parameters')

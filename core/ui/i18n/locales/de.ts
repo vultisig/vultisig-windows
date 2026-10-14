@@ -144,10 +144,16 @@ export const de = {
     vote: {
       labels: {
         proposalId: 'Vorschlags-ID',
-        support: 'Unterstützung',
+        option: 'Abstimmung',
       },
       validations: {
-        proposalId: 'Eine Angebots-ID ist erforderlich.',
+        proposalId: 'Geben Sie eine gültige Vorschlags-ID ein.',
+      },
+      options: {
+        yes: 'Ja',
+        abstain: 'Enthaltung',
+        no: 'Nein',
+        noWithVeto: 'Nein, mit Veto',
       },
     },
   },

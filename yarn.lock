@@ -514,7 +514,6 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.9.1"
     "@testing-library/react": "npm:^16.3.2"
     "@ton/core": "npm:^0.63.1"
-    "@ton/crypto": "npm:^3.3.0"
     "@ton/ton": "npm:^16.3.0"
     "@tonconnect/protocol": "npm:^2.4.0"
     "@trustwallet/wallet-core": "npm:^4.7.0"
