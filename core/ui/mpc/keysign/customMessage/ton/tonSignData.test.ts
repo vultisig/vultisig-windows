@@ -474,6 +474,24 @@ describe('getTonSignDataPayloadIssue', () => {
     ).toMatch(/base64/)
   })
 
+  it.each(['A', 'AAAAA', 'AAAAA=', 'A=='])(
+    'rejects %s, whose last character decoders would drop',
+    bytes => {
+      expect(getTonSignDataPayloadIssue({ type: 'binary', bytes })).toMatch(
+        /base64/
+      )
+    }
+  )
+
+  it.each(['', 'AA', 'AA==', 'AAA', 'AAA=', 'AQID'])(
+    'accepts %s, whose characters all decode',
+    bytes => {
+      expect(
+        getTonSignDataPayloadIssue({ type: 'binary', bytes })
+      ).toBeUndefined()
+    }
+  )
+
   it('rejects a cell that is not a single-root BoC', () => {
     expect(
       getTonSignDataPayloadIssue({

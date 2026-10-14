@@ -47,6 +47,11 @@ const parseSignDataCell = (cellBase64: string): Cell => {
 
 const base64Pattern = /^[A-Za-z0-9+/]*={0,2}$/
 
+// A lone trailing character holds six bits, less than a byte, and decoders
+// drop it silently, so such a string would sign other bytes than the page sent.
+const isBase64 = (value: string) =>
+  base64Pattern.test(value) && value.replace(/=+$/, '').length % 4 !== 1
+
 type BuildSignDataTextBinaryHashInput = {
   address: string
   domain: string
@@ -207,8 +212,7 @@ export const getTonSignDataPayloadIssue = (
         ? undefined
         : 'signData text must be a string'
     case 'binary':
-      return typeof payload.bytes === 'string' &&
-        base64Pattern.test(payload.bytes)
+      return typeof payload.bytes === 'string' && isBase64(payload.bytes)
         ? undefined
         : 'signData bytes must be base64'
     case 'cell':
