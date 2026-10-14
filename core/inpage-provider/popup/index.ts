@@ -12,9 +12,9 @@ import { toPopupCallError } from './error'
  * Calls the popup from the inpage context. For the background context use
  * `callPopupFromBackground` and provide the appropriate `context`.
  *
- * Failures are rethrown through {@link toPopupCallError}, so a rejection keeps
- * the `PopupError.RejectedByUser` identity providers match on while every other
- * sentinel arrives as an `Error` a dApp can read.
+ * Failures are rethrown through {@link toPopupCallError}, so a rejection
+ * arrives as a `4001` `UserRejectedRequestError` and every other sentinel as an
+ * `Error` a dApp can read.
  */
 export const callPopup = async <M extends PopupMethod>(
   call: PopupCall<M>,

@@ -1,5 +1,5 @@
 import { BackgroundError } from '@core/inpage-provider/background/error'
-import { PopupError } from '@core/inpage-provider/popup/error'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // We need to mock callBackground and callPopup before importing requestAccount
@@ -135,7 +135,7 @@ describe('requestAccount', () => {
     mockCallBackground.mockRejectedValueOnce(BackgroundError.Unauthorized)
 
     // User rejects in popup
-    mockCallPopup.mockRejectedValue(PopupError.RejectedByUser)
+    mockCallPopup.mockRejectedValue(new UserRejectedRequestError())
 
     await expect(requestAccount(Chain.Ethereum)).rejects.toMatchObject({
       code: 4001,
@@ -161,7 +161,7 @@ describe('requestAccount', () => {
   it('throws EIP1193Error(InternalError) when popup rejects with a non-PopupError', async () => {
     mockCallBackground.mockRejectedValueOnce(BackgroundError.Unauthorized)
 
-    // Popup rejects with something other than RejectedByUser — this is a
+    // Popup rejects with something other than a user rejection — this is a
     // genuinely unexpected popup-internal failure.
     mockCallPopup.mockRejectedValue(new Error('popup crashed'))
 
