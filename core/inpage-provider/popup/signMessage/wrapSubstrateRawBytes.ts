@@ -1,20 +1,25 @@
 import { OtherChain } from '@vultisig/core-chain/Chain'
 
-import { endsWithBytes, startsWithBytes } from './bytes'
-
 /** Substrate chains whose `signRaw` data must be `<Bytes>`-wrapped. */
 export const substrateRawSignChains = [
   OtherChain.Polkadot,
   OtherChain.Bittensor,
 ] as const
 
-const bytesPrefix = new TextEncoder().encode('<Bytes>')
-const bytesSuffix = new TextEncoder().encode('</Bytes>')
+// Buffers, not Uint8Arrays: the browser Buffer polyfill's `equals` only takes
+// a Buffer.
+const bytesPrefix = Buffer.from('<Bytes>')
+const bytesSuffix = Buffer.from('</Bytes>')
 
-const isWrapped = (bytes: Uint8Array) =>
-  bytes.length >= bytesPrefix.length + bytesSuffix.length &&
-  startsWithBytes({ bytes, prefix: bytesPrefix }) &&
-  endsWithBytes({ bytes, suffix: bytesSuffix })
+const isWrapped = (bytes: Uint8Array) => {
+  const buffer = Buffer.from(bytes)
+
+  return (
+    buffer.length >= bytesPrefix.length + bytesSuffix.length &&
+    buffer.subarray(0, bytesPrefix.length).equals(bytesPrefix) &&
+    buffer.subarray(buffer.length - bytesSuffix.length).equals(bytesSuffix)
+  )
+}
 
 /**
  * Wraps Substrate `signRaw` data in `<Bytes>…</Bytes>`, as polkadot-js does,

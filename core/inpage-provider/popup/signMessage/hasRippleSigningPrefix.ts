@@ -1,10 +1,10 @@
-import { startsWithBytes } from './bytes'
-
 // rippled `HashPrefix` tags whose SHA-512-half digest an account key signs to
 // authorize something: a single-signed transaction, a multi-signed
 // transaction, a payment channel claim and a batch.
-const rippleSigningPrefixes = ['STX', 'SMT', 'CLM', 'BCH'].map(
-  tag => new Uint8Array([...new TextEncoder().encode(tag), 0])
+// Buffers, not Uint8Arrays: the browser Buffer polyfill's `equals` only takes
+// a Buffer.
+const rippleSigningPrefixes = ['STX', 'SMT', 'CLM', 'BCH'].map(tag =>
+  Buffer.from(`${tag}\0`)
 )
 
 /**
@@ -13,4 +13,6 @@ const rippleSigningPrefixes = ['STX', 'SMT', 'CLM', 'BCH'].map(
  * signature for whatever the rest of them encodes.
  */
 export const hasRippleSigningPrefix = (bytes: Uint8Array): boolean =>
-  rippleSigningPrefixes.some(prefix => startsWithBytes({ bytes, prefix }))
+  rippleSigningPrefixes.some(prefix =>
+    Buffer.from(bytes).subarray(0, prefix.length).equals(prefix)
+  )
