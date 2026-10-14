@@ -1,5 +1,18 @@
 import { create } from '@bufbuild/protobuf'
-import { Keypair, SystemProgram, Transaction } from '@solana/web3.js'
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountIdempotentInstruction,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddressSync,
+} from '@solana/spl-token'
+import {
+  ComputeBudgetProgram,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  TransactionInstruction,
+} from '@solana/web3.js'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
@@ -53,24 +66,85 @@ const simulation = (sol: bigint, token: bigint): BlockaidSolanaSimulation => ({
     ],
   },
 })
+const solSent = (lamports: bigint): BlockaidSolanaSimulation => ({
+  account_summary: {
+    account_assets_diff: [
+      movement({ type: 'SOL', decimals: 9, logo: '' }, -lamports),
+    ],
+  },
+})
+const noMovement: BlockaidSolanaSimulation = {
+  account_summary: { account_assets_diff: [] },
+}
 
 let walletCore: WalletCore
 const sender = Keypair.fromSeed(new Uint8Array(32).fill(1)).publicKey
-const transaction = new Transaction({
-  feePayer: sender,
-  recentBlockhash: wsol,
-}).add(
-  SystemProgram.transfer({
-    fromPubkey: sender,
-    toPubkey: Keypair.fromSeed(new Uint8Array(32).fill(2)).publicKey,
-    lamports: 1,
+const recipient = Keypair.fromSeed(new Uint8Array(32).fill(2)).publicKey
+const unknownProgram = Keypair.fromSeed(new Uint8Array(32).fill(3)).publicKey
+const serialize = (...instructions: TransactionInstruction[]) => [
+  new Transaction({
+    feePayer: sender,
+    recentBlockhash: wsol,
   })
-)
-const data = [
-  transaction
+    .add(...instructions)
     .serialize({ requireAllSignatures: false, verifySignatures: false })
     .toString('base64'),
 ]
+const transferTo = (to: PublicKey) =>
+  SystemProgram.transfer({ fromPubkey: sender, toPubkey: to, lamports: 1 })
+const data = serialize(transferTo(recipient))
+const selfTransferData = serialize(transferTo(sender))
+const transferWithPriorityFee = serialize(
+  ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 1 }),
+  transferTo(recipient)
+)
+const transferWithUnknownInstruction = serialize(
+  transferTo(recipient),
+  new TransactionInstruction({
+    programId: unknownProgram,
+    keys: [],
+    data: Buffer.alloc(0),
+  })
+)
+const twoTransfers = serialize(transferTo(recipient), transferTo(sender))
+const createTokenAccount = (payer: PublicKey) =>
+  createAssociatedTokenAccountInstruction(
+    payer,
+    getAssociatedTokenAddressSync(new PublicKey(mint), recipient),
+    recipient,
+    new PublicKey(mint)
+  )
+const transferWithVaultFundedTokenAccount = serialize(
+  createTokenAccount(sender),
+  transferTo(recipient)
+)
+const transferWithSponsoredTokenAccount = serialize(
+  createTokenAccount(unknownProgram),
+  transferTo(recipient)
+)
+const transferWithSponsoredIdempotentTokenAccount = serialize(
+  createAssociatedTokenAccountIdempotentInstruction(
+    unknownProgram,
+    getAssociatedTokenAddressSync(new PublicKey(mint), recipient),
+    recipient,
+    new PublicKey(mint)
+  ),
+  transferTo(recipient)
+)
+// RecoverNested: account 0 is the nested token account, not a payer.
+const transferWithRecoverNested = serialize(
+  new TransactionInstruction({
+    programId: ASSOCIATED_TOKEN_PROGRAM_ID,
+    keys: [
+      { pubkey: unknownProgram, isSigner: false, isWritable: true },
+      { pubkey: new PublicKey(mint), isSigner: false, isWritable: false },
+      { pubkey: recipient, isSigner: false, isWritable: true },
+      { pubkey: sender, isSigner: true, isWritable: true },
+    ],
+    data: Buffer.from([2]),
+  }),
+  transferTo(recipient)
+)
 const fromCoin = create(CoinSchema, {
   chain: Chain.Solana,
   address: sender.toBase58(),
@@ -82,8 +156,14 @@ const getCoin = vi.fn(async ({ id }: { id?: string }) =>
     ? { chain: Chain.Solana, id, ticker: 'USDC', decimals: 6, logo: '' }
     : chainFeeCoin.Solana
 )
-const parse = () =>
-  parseSolanaTx({ fromCoin, walletCore, data, getCoin, swapProvider: 'test' })
+const parse = (transactions = data) =>
+  parseSolanaTx({
+    fromCoin,
+    walletCore,
+    data: transactions,
+    getCoin,
+    swapProvider: 'test',
+  })
 
 beforeAll(async () => {
   walletCore = await initWasm()
@@ -106,7 +186,110 @@ describe('Solana approval with the shared simulation parser', () => {
       new Error('Unavailable')
     )
     await expect(parse()).resolves.toMatchObject({
-      transfer: { inAmount: '1', rawTransactions: data },
+      transfer: {
+        inAmount: '1',
+        receiverAddress: recipient.toBase58(),
+        rawTransactions: data,
+      },
+    })
+  })
+
+  it('names the destination when the decoded transfer matches the simulated movement', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(solSent(1n))
+    await expect(parse()).resolves.toMatchObject({
+      transfer: {
+        inAmount: '1',
+        inputCoin: { ticker: 'SOL' },
+        receiverAddress: recipient.toBase58(),
+        rawTransactions: data,
+      },
+    })
+  })
+
+  it('leaves the destination unknown when the decoded transfer disagrees with the simulation', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(solSent(2n))
+    await expect(parse()).resolves.toMatchObject({
+      transfer: { inAmount: '2', receiverAddress: '', rawTransactions: data },
+    })
+  })
+
+  it('leaves the destination unknown when the transfer shares the transaction with an unknown instruction', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(solSent(1n))
+    await expect(parse(transferWithUnknownInstruction)).resolves.toMatchObject({
+      transfer: {
+        inAmount: '1',
+        receiverAddress: '',
+        rawTransactions: transferWithUnknownInstruction,
+      },
+    })
+  })
+
+  it('decodes a transfer back to the sender when the simulation reports no movement', async () => {
+    vi.mocked(getTxBlockaidSimulation).mockResolvedValue(noMovement)
+    await expect(parse(selfTransferData)).resolves.toMatchObject({
+      transfer: {
+        inAmount: '1',
+        receiverAddress: sender.toBase58(),
+        rawTransactions: selfTransferData,
+      },
+    })
+  })
+
+  describe('with no simulation to lean on', () => {
+    beforeEach(() => {
+      vi.mocked(getTxBlockaidSimulation).mockRejectedValue(
+        new Error('Unavailable')
+      )
+    })
+
+    it('decodes a transfer that only carries a priority fee alongside', async () => {
+      await expect(parse(transferWithPriorityFee)).resolves.toMatchObject({
+        transfer: { inAmount: '1', receiverAddress: recipient.toBase58() },
+      })
+    })
+
+    it('keeps a transfer that shares the transaction with an unknown instruction on raw review', async () => {
+      await expect(parse(transferWithUnknownInstruction)).resolves.toEqual({
+        raw: expect.objectContaining({
+          transactions: transferWithUnknownInstruction,
+        }),
+      })
+    })
+
+    it('keeps a transaction with two transfers on raw review', async () => {
+      await expect(parse(twoTransfers)).resolves.toEqual({
+        raw: expect.objectContaining({ transactions: twoTransfers }),
+      })
+    })
+
+    it('keeps a transfer on raw review when the vault also pays to create a token account', async () => {
+      await expect(parse(transferWithVaultFundedTokenAccount)).resolves.toEqual(
+        {
+          raw: expect.objectContaining({
+            transactions: transferWithVaultFundedTokenAccount,
+          }),
+        }
+      )
+    })
+
+    it.each([
+      ['create', transferWithSponsoredTokenAccount],
+      ['create idempotent', transferWithSponsoredIdempotentTokenAccount],
+    ])(
+      'decodes a transfer when someone else pays for the token account it creates (%s)',
+      async (_, transactions) => {
+        await expect(parse(transactions)).resolves.toMatchObject({
+          transfer: { inAmount: '1', receiverAddress: recipient.toBase58() },
+        })
+      }
+    )
+
+    it('keeps a transfer on raw review next to any other associated token instruction', async () => {
+      await expect(parse(transferWithRecoverNested)).resolves.toEqual({
+        raw: expect.objectContaining({
+          transactions: transferWithRecoverNested,
+        }),
+      })
     })
   })
 

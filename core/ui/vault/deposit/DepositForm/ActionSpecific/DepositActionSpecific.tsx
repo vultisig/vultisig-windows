@@ -25,6 +25,7 @@ import { SolanaWithdrawSpecific } from './SolanaStakingSpecific/SolanaWithdrawSp
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { ThorLpSpecific } from './ThorLpSpecific'
+import { VoteSpecific } from './VoteSpecific/VoteSpecific'
 import { WithdrawRujiRewardsSpecific } from './WithdrawRujiRewardsSpecific'
 
 export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
@@ -63,6 +64,7 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
         undelegate: () => <UndelegateSpecific />,
         redelegate: () => <RedelegateSpecific />,
         claim_rewards: () => <ClaimRewardsSpecific />,
+        vote: () => <VoteSpecific />,
         solana_delegate: () => <SolanaDelegateSpecific />,
         solana_unstake: () => <SolanaUnstakeSpecific />,
         solana_withdraw: () => <SolanaWithdrawSpecific />,

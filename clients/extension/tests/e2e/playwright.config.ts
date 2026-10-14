@@ -183,6 +183,7 @@ export default defineConfig({
         '**/station-migration.spec.ts',
         '**/xrp-destination-tag.spec.ts',
         '**/send-coin-selection.spec.ts',
+        '**/qr-send-deeplink.spec.ts',
         '**/signed-transaction-decoder.spec.ts',
         '**/swap-from-fiat-input.spec.ts',
       ],

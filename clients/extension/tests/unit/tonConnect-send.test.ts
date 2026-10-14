@@ -54,17 +54,7 @@ vi.mock(
 vi.mock(
   '@clients/extension/src/inpage/providers/tonConnect/tonProof',
   () => ({
-    buildTonProofPayload: vi.fn(),
     formatTonProofReply: vi.fn(),
-    getTonProofHash: vi.fn(),
-  })
-)
-
-vi.mock(
-  '@clients/extension/src/inpage/providers/tonConnect/signData',
-  () => ({
-    buildSignDataTextBinaryHash: vi.fn(),
-    buildSignDataCellHash: vi.fn(),
   })
 )
 

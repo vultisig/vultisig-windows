@@ -2,6 +2,7 @@ import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { getTransactionAuthority } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { toCustomMessage } from '@core/ui/mpc/keysign/customMessage/toCustomMessage'
 import {
   SolanaSignAndSendTransaction,
   type SolanaSignAndSendTransactionFeature,
@@ -333,13 +334,11 @@ export class Solana implements Wallet {
     message: Uint8Array
   ): Promise<{ signature: Uint8Array }> => {
     if (!this.account) throw new Error('not connected')
-    const messageBuffer = Buffer.from(message)
-    const decodedString = new TextDecoder().decode(messageBuffer)
 
     const signature = await callPopup({
       signMessage: {
         sign_message: {
-          message: decodedString,
+          message: toCustomMessage(Buffer.from(message)),
           chain: Chain.Solana,
         },
       },

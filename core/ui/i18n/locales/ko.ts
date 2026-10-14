@@ -140,10 +140,16 @@ export const ko = {
     vote: {
       labels: {
         proposalId: '제안 ID',
-        support: '지원하다',
+        option: '투표',
       },
       validations: {
-        proposalId: '제안서 ID는 필수 입력 사항입니다.',
+        proposalId: '유효한 제안 ID를 입력하세요',
+      },
+      options: {
+        yes: '예',
+        abstain: '기권',
+        no: '아니요',
+        noWithVeto: '거부권 행사',
       },
     },
   },

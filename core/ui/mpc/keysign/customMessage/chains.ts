@@ -8,6 +8,7 @@ export const customMessageSupportedChains = [
   Chain.Ton,
   Chain.Tron,
   Chain.Polkadot,
+  Chain.Bittensor,
   Chain.Cardano,
   Chain.Ripple,
 ] as const
