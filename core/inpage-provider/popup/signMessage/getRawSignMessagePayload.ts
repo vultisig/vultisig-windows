@@ -1,4 +1,3 @@
-import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2byteArray'
 import { getCustomMessageBytes } from '@core/ui/mpc/keysign/customMessage/getCustomMessageBytes'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
@@ -6,6 +5,7 @@ import { hexlify, toUtf8Bytes } from 'ethers'
 
 import { RawSignMessageInput } from '../interface'
 import { getRippleMessageBytes } from './getRippleMessageBytes'
+import { getTronV1MessageBytes } from './tronV1Message'
 import {
   substrateRawSignChains,
   wrapSubstrateRawBytes,
@@ -34,7 +34,7 @@ export const getRawSignMessagePayload = ({
     const ethMessageHeader = '\x19Ethereum Signed Message:\n32'
     const messageBytes = [
       ...toUtf8Bytes(useTronHeader ? tronMessageHeader : ethMessageHeader),
-      ...hexStr2byteArray(message),
+      ...getTronV1MessageBytes(message),
     ]
     return hexlify(new Uint8Array(messageBytes))
   }

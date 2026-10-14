@@ -75,6 +75,36 @@ describe('getRawSignMessagePayload', () => {
     })
   })
 
+  describe('TRON v1', () => {
+    const hash = 'ab'.repeat(32)
+
+    it('prefixes the hex bytes with the TRON header', () => {
+      expect(
+        getRawSignMessagePayload({
+          chain: OtherChain.Tron,
+          message: hash,
+          useTronHeader: true,
+        })
+      ).toBe(`${utf8Hex('\x19TRON Signed Message:\n32')}${hash}`)
+    })
+
+    it('drops a 0x prefix, as TronWeb does', () => {
+      expect(
+        getRawSignMessagePayload({
+          chain: OtherChain.Tron,
+          message: `0x${hash}`,
+          useTronHeader: true,
+        })
+      ).toBe(
+        getRawSignMessagePayload({
+          chain: OtherChain.Tron,
+          message: hash,
+          useTronHeader: true,
+        })
+      )
+    })
+  })
+
   it('passes a Solana text message through unchanged', () => {
     expect(
       getRawSignMessagePayload({

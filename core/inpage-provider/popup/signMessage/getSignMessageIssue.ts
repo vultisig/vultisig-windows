@@ -14,11 +14,13 @@ import { getOriginHostname } from './getOriginHostname'
 import { getRippleMessageBytes } from './getRippleMessageBytes'
 import { hasRippleSigningPrefix } from './hasRippleSigningPrefix'
 import { isSolanaTransactionMessage } from './isSolanaTransactionMessage'
+import { isTronV1HexMessage } from './tronV1Message'
 
 const getRawSignMessageIssue = ({
   chain,
   message,
   isHex,
+  isV2,
 }: RawSignMessageInput): string | undefined => {
   if (!isOneOf(chain, rawSignMessageChains)) {
     return 'Raw message signing is not supported on this chain'
@@ -33,6 +35,10 @@ const getRawSignMessageIssue = ({
     isSolanaTransactionMessage(getCustomMessageBytes(message))
   ) {
     return 'The message is a Solana transaction. Send it as a transaction so it can be reviewed.'
+  }
+
+  if (chain === OtherChain.Tron && !isV2 && !isTronV1HexMessage(message)) {
+    return 'The TRON message must be hex'
   }
 
   if (chain === OtherChain.Ripple) {

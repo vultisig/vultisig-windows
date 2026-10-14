@@ -118,6 +118,34 @@ describe('getSignMessageIssue', () => {
     })
   })
 
+  describe('TRON', () => {
+    const tronMessage = (
+      message: string,
+      isV2?: boolean
+    ): SignMessageInput => ({
+      sign_message: { chain: OtherChain.Tron, message, isV2 },
+    })
+
+    it.each([
+      ['plain', 'ab'.repeat(32)],
+      ['0x-prefixed', `0x${'ab'.repeat(32)}`],
+    ])('accepts a %s hex v1 message', (_, message) => {
+      expect(check(tronMessage(message))).toBeUndefined()
+    })
+
+    it.each([
+      ['non-hex characters', 'zz'],
+      ['an empty string', ''],
+      ['a bare 0x', '0x'],
+    ])('rejects a v1 message with %s', (_, message) => {
+      expect(check(tronMessage(message))).toMatch(/must be hex/)
+    })
+
+    it('accepts plain text as a v2 message', () => {
+      expect(check(tronMessage(signInText, true))).toBeUndefined()
+    })
+  })
+
   describe('raw TON', () => {
     it('rejects a raw TON message, which could be a transfer hash', () => {
       const input: SignMessageInput = JSON.parse(
