@@ -289,6 +289,30 @@ describe('Solana Provider', () => {
         },
       })
     })
+
+    it('sends bytes that are not UTF-8 as hex, so none are lost', async () => {
+      mockCallBackground
+        .mockRejectedValueOnce(new Error('no account')) // constructor #connected
+        .mockResolvedValue(undefined)
+
+      const sol = new Solana('VultiConnect')
+      ;(sol as any).account = {
+        address: 'SolAddr',
+        publicKey: new Uint8Array(32),
+      }
+      mockCallPopup.mockResolvedValue('aabbccdd')
+
+      await sol.signMessage(new Uint8Array([0x68, 0xff, 0x00, 0x80]))
+
+      expect(mockCallPopup).toHaveBeenCalledWith({
+        signMessage: {
+          sign_message: {
+            message: '0x68ff0080',
+            chain: Chain.Solana,
+          },
+        },
+      })
+    })
   })
 
   describe('signAndSendAllTransactions()', () => {
