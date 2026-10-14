@@ -10,16 +10,16 @@ import { getRawSignMessagePayload } from '@core/inpage-provider/popup/signMessag
 import { getRippleMessageBytes } from '@core/inpage-provider/popup/signMessage/getRippleMessageBytes'
 import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
 import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
-import {
-  getPersonalSignMessage,
-  getPersonalSignMessageBytes,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getPersonalSignMessage'
 import { getTonSignDataDisplayMessage } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/getTonSignDataDisplayMessage'
 import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { toDisplayMessageString } from '@core/inpage-provider/popup/view/utils/toDisplayMessage'
 import { serializeAdr36SignDoc } from '@core/ui/mpc/keysign/customMessage/adr36'
 import { getCustomMessageBytes } from '@core/ui/mpc/keysign/customMessage/getCustomMessageBytes'
+import {
+  getPersonalSignMessage,
+  getPersonalSignMessageBytes,
+} from '@core/ui/mpc/keysign/customMessage/getPersonalSignMessage'
 import {
   buildTonProofPayload,
   getTonProofHash,

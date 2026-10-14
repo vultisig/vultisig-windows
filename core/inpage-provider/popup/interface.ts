@@ -1,5 +1,6 @@
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { CustomMessageSupportedChain } from '@core/ui/mpc/keysign/customMessage/chains'
 import { TonSignDataPayload } from '@core/ui/mpc/keysign/customMessage/ton/tonSignData'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { ChainInfo } from '@keplr-wallet/types'
@@ -55,9 +56,10 @@ export const isEip712V4Payload = (value: unknown): value is Eip712V4Payload => {
 
 /**
  * Chains whose dApp `sign_message` requests carry the message bytes to sign.
- * TON is absent: a raw TON signature over a 32-byte hash can authorize a
- * transfer, so TON requests come as `ton_proof` / `ton_sign_data` and the
- * popup builds the hash itself.
+ * Every entry must be in the keysign allowlist, so a provider cannot request
+ * a chain the custom-message signer rejects. TON is absent: a raw TON
+ * signature over a 32-byte hash can authorize a transfer, so TON requests
+ * come as `ton_proof` / `ton_sign_data` and the popup builds the hash itself.
  */
 export const rawSignMessageChains = [
   OtherChain.Solana,
@@ -67,7 +69,7 @@ export const rawSignMessageChains = [
   OtherChain.Bittensor,
   OtherChain.Cardano,
   OtherChain.Ripple,
-] as const
+] as const satisfies readonly Extract<CustomMessageSupportedChain, OtherChain>[]
 
 type RawSignMessageChain = (typeof rawSignMessageChains)[number]
 

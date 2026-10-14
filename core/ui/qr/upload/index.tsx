@@ -1,3 +1,4 @@
+import { isDeeplinkUrl } from '@core/ui/deeplink/isDeeplinkUrl'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -18,6 +19,10 @@ import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * Scans or uploads a QR from the camera button. Links open the deeplink view;
+ * anything else is treated as a wallet address to send to.
+ */
 export const UploadQrPage = () => {
   const { t } = useTranslation()
   const [{ title = t('keysign') }] = useCoreViewState<'uploadQr'>()
@@ -31,9 +36,7 @@ export const UploadQrPage = () => {
   const onScanSuccess = useCallback(
     (value: string) => {
       if (vault) {
-        const isURL = value.startsWith('http')
-
-        if (isURL) {
+        if (isDeeplinkUrl(value)) {
           navigate({ id: 'deeplink', state: { url: value } })
 
           return
