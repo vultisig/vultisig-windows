@@ -1,6 +1,7 @@
 import { useHorizontalWheelPaging } from '@lib/ui/hooks/useHorizontalWheelPaging'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { requestIdle } from '@lib/ui/utils/requestIdle'
 import { useQueryClient } from '@tanstack/react-query'
 import { enforceRange } from '@vultisig/lib-utils/enforceRange'
 import { animate, motion, useReducedMotion, useTransform } from 'framer-motion'
@@ -39,7 +40,7 @@ type HomePagerProps = {
  * Wallet and DeFi side by side in one horizontal track. A tab change slides
  * the track with a spring; a two-finger trackpad swipe follows the fingers and
  * pages once it passes a threshold. Both pages stay mounted once shown, so
- * each keeps its scroll position. The DeFi page loads on first need.
+ * each keeps its scroll position. The DeFi page mounts once home is idle.
  */
 export const HomePager = ({ tab }: HomePagerProps) => {
   const { position } = useHomeMotion()
@@ -54,6 +55,9 @@ export const HomePager = ({ tab }: HomePagerProps) => {
   if (tab === 'defi' && !isDefiNeeded) {
     setIsDefiNeeded(true)
   }
+
+  // Mounted off screen once home is idle, so the first switch only slides.
+  useEffect(() => requestIdle(() => setIsDefiNeeded(true)), [])
 
   const settle = (index: number, transition = tabSwitchTransition) => {
     if (shouldReduceMotion) {
