@@ -1,7 +1,6 @@
 import { getIsWalletPrioritized } from '@core/extension/storage/isWalletPrioritized'
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { getTokenMetadata } from '@vultisig/core-chain/coin/token/metadata'
 
 import { broadcastTx } from './broadcastTx'
 import { evmClientRequest } from './evmClientRequest'
@@ -10,6 +9,7 @@ import { getAccount } from './getAccount'
 import { getAppChain } from './getAppChain'
 import { getAppChainId } from './getAppChainId'
 import { getEvmSigningChain } from './getEvmSigningChain'
+import { getTokenMetadata } from './getTokenMetadata'
 import { getTx } from './getTx'
 import { hasAppSession } from './hasAppSession'
 import { hasChainInVault } from './hasChainInVault'
@@ -38,7 +38,7 @@ export const backgroundResolvers: BackgroundResolvers = {
   exportVault,
   getTx,
   broadcastTx,
-  getTokenMetadata: ({ input }) => getTokenMetadata(input),
+  getTokenMetadata,
   getIsWalletPrioritized: () => getIsWalletPrioritized(),
   hasChainInVault,
   getKeplrSuggestedChains,
