@@ -10,7 +10,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
-import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
 import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
@@ -52,13 +52,14 @@ export const KeysignBroadcastRefusal = ({
     useKeysignMessagePayload(),
     'keysign'
   )
-  const chain = getKeysignChain(keysignPayload)
+  const { chain, address: senderAccountId } = getKeysignCoin(keysignPayload)
   const txHashes = error.txs.map(({ hash }) => hash)
   const mainTxHash = getLastItem(error.txs).hash
   const { data: txStatus } = useTxStatusQuery({
     chain,
     hash: mainTxHash,
     lastValidBlockHeight: getKeysignLastValidBlockHeight(keysignPayload),
+    senderAccountId,
   })
 
   // `isKnown` distinguishes "the node has indexed this hash" from "no record /
@@ -113,7 +114,12 @@ export const KeysignBroadcastRefusal = ({
           <Panel>
             <SeparatedByLine gap={16}>
               {error.txs.map(({ hash }) => (
-                <RefusedBroadcastTxRow key={hash} chain={chain} hash={hash} />
+                <RefusedBroadcastTxRow
+                  key={hash}
+                  chain={chain}
+                  hash={hash}
+                  senderAccountId={senderAccountId}
+                />
               ))}
             </SeparatedByLine>
           </Panel>

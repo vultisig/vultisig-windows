@@ -4,6 +4,7 @@ import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { PasscodeAutoLockHold } from '@core/ui/passcodeEncryption/autoLock/PasscodeAutoLockHold'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { getKeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { useMemo } from 'react'
@@ -25,16 +26,23 @@ export const JoinKeysignPage = () => {
         <StepTransition
           from={({ onFinish }) => <JoinKeysignVerifyStep onFinish={onFinish} />}
           to={({ onBack }) => (
-            <JoinMpcSessionFlow
-              value="keysign"
-              render={() => (
-                <KeysignActionProvider>
-                  <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-                    <KeysignSigningStep onBack={onBack} />
-                  </KeysignMessagePayloadProvider>
-                </KeysignActionProvider>
-              )}
-            />
+            <>
+              {/* Once joined, the ceremony waits on the initiator and then
+              signs on its own, which it cannot do under the lock. */}
+              <PasscodeAutoLockHold />
+              <JoinMpcSessionFlow
+                value="keysign"
+                render={() => (
+                  <KeysignActionProvider>
+                    <KeysignMessagePayloadProvider
+                      value={keysignMessagePayload}
+                    >
+                      <KeysignSigningStep onBack={onBack} />
+                    </KeysignMessagePayloadProvider>
+                  </KeysignActionProvider>
+                )}
+              />
+            </>
           )}
         />
       </JoinMpcServerUrlProvider>

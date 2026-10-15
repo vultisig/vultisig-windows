@@ -1,3 +1,4 @@
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mockCallBackground = vi.fn()
@@ -9,10 +10,6 @@ vi.mock('@core/inpage-provider/background', () => ({
 
 vi.mock('@core/inpage-provider/popup', () => ({
   callPopup: (...args: unknown[]) => mockCallPopup(...args),
-}))
-
-vi.mock('@core/inpage-provider/popup/error', () => ({
-  PopupError: { RejectedByUser: 'RejectedByUser' },
 }))
 
 vi.mock('@vultisig/core-chain/Chain', () => ({
@@ -54,17 +51,7 @@ vi.mock(
 vi.mock(
   '@clients/extension/src/inpage/providers/tonConnect/tonProof',
   () => ({
-    buildTonProofPayload: vi.fn(),
     formatTonProofReply: vi.fn(),
-    getTonProofHash: vi.fn(),
-  })
-)
-
-vi.mock(
-  '@clients/extension/src/inpage/providers/tonConnect/signData',
-  () => ({
-    buildSignDataTextBinaryHash: vi.fn(),
-    buildSignDataCellHash: vi.fn(),
   })
 )
 
@@ -397,7 +384,7 @@ describe('TonConnectBridge.send', () => {
 
   describe('sendTransaction error handling', () => {
     it('should return user rejected error when popup is rejected', async () => {
-      mockCallPopup.mockRejectedValue('RejectedByUser')
+      mockCallPopup.mockRejectedValue(new UserRejectedRequestError())
 
       const result = await bridge.send(
         makeSendTxRequest({

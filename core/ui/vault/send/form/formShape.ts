@@ -6,6 +6,7 @@ export type SendFormShape = {
   receiverAddress: string
   coin: Coin
   destinationTag?: string
+  memo?: string
 }
 
 export type ValidationResult<T> = Partial<{ [P in keyof T]: string }>

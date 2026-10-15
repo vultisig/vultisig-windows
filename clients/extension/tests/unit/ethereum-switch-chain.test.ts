@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { BackgroundError } from '@core/inpage-provider/background/error'
-import { PopupError } from '@core/inpage-provider/popup/error'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { Chain } from '@vultisig/core-chain/Chain'
 
 const mockCallBackground = vi.fn()
@@ -82,7 +82,7 @@ describe('switchChainHandler', () => {
 
   it('surfaces popup user rejection as a user rejection', async () => {
     mockCallBackground.mockRejectedValueOnce(BackgroundError.Unauthorized)
-    mockCallPopup.mockRejectedValue(PopupError.RejectedByUser)
+    mockCallPopup.mockRejectedValue(new UserRejectedRequestError())
 
     await expect(switchChainHandler([{ chainId: '0x89' }])).rejects.toMatchObject(
       {

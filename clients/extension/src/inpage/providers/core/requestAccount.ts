@@ -1,7 +1,7 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { BackgroundError } from '@core/inpage-provider/background/error'
 import { callPopup } from '@core/inpage-provider/popup'
-import { PopupError } from '@core/inpage-provider/popup/error'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
@@ -102,10 +102,10 @@ export const requestAccount = async (
       }
       throw new EIP1193Error('Unauthorized')
     }
-    // Window closed via X aborts to RejectedByUser. A resolved-but-empty
-    // response means the popup was dismissed mid-flow — treat as a user
-    // rejection so dApps can retry intelligently.
-    if (result.error === PopupError.RejectedByUser || !result.error) {
+    // Window closed via X aborts to UserRejectedRequestError. A
+    // resolved-but-empty response means the popup was dismissed mid-flow —
+    // treat as a user rejection so dApps can retry intelligently.
+    if (result.error instanceof UserRejectedRequestError || !result.error) {
       throw new EIP1193Error('UserRejectedRequest')
     }
     throw new EIP1193Error('InternalError')

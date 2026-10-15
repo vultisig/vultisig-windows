@@ -68,6 +68,9 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
       cardano: () => {
         throw new NotImplementedError('Get tx for Cardano chain')
       },
+      near: () => {
+        throw new NotImplementedError('Get tx for Near chain')
+      },
       sui: () => {
         throw new NotImplementedError('Get tx for Sui chain')
       },

@@ -10,6 +10,7 @@ type TxStatusTrackerProps = {
   hash: string
   /** Solana only: lets the poll settle on `expired` past the blockhash deadline. */
   lastValidBlockHeight?: number
+  senderAccountId: string
 }
 
 /**
@@ -21,12 +22,14 @@ export const TxStatusTracker = ({
   chain,
   hash,
   lastValidBlockHeight,
+  senderAccountId,
 }: TxStatusTrackerProps) => {
   const { t } = useTranslation()
   const { data, isPending } = useTxStatusQuery({
     chain,
     hash,
     lastValidBlockHeight,
+    senderAccountId,
   })
 
   const status = data?.status ?? 'pending'

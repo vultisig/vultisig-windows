@@ -41,6 +41,7 @@ import { useAddressBookNameForAddress } from '../../hooks/useAddressBookNameForA
 import { useVaultNameForAddress } from '../../hooks/useVaultNameForAddress'
 import { useCurrentVault } from '../../state/currentVault'
 import { useSendKeysignPayloadQuery } from '../keysignPayload/query'
+import { getSendMemoError } from '../memo/sendMemoSupport'
 import { useSender } from '../sender/hooks/useSender'
 import { useSendAmount } from '../state/amount'
 import { useSendDestinationTag } from '../state/destinationTag'
@@ -127,6 +128,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       keysignPayloadQuery={keysignPayloadQuery}
       terms={translatedTerms}
       toAddressLabel={addressLabel}
+      disabledMessage={getSendMemoError({ chain: coin.chain, memo, t })}
     >
       <ReviewAmountHeadline
         coin={coin}

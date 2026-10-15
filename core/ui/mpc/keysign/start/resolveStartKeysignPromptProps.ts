@@ -74,6 +74,9 @@ export const resolveStartKeysignPromptProps = ({
       ) {
         return { disabledMessage: t('ripple_destination_tag_required') }
       }
+      if (keysignPayloadQuery.error.type === 'near-destination-not-found') {
+        return { disabledMessage: t('near_destination_not_found') }
+      }
     }
     return {
       disabledMessage: extractErrorMsg(keysignPayloadQuery.error),

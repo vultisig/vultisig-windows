@@ -3,6 +3,8 @@ import {
   callNotFoundPopupResult,
   PopupError,
   signingFailedPopupResult,
+  toPopupCallError,
+  userRejectedPopupResult,
 } from '@core/inpage-provider/popup/error'
 import { describe, expect, it } from 'vitest'
 
@@ -47,7 +49,7 @@ describe('toEip1193Error', () => {
 
   it('still maps a rejection to 4001', () => {
     const error = toEip1193Error(
-      overMessaging({ error: PopupError.RejectedByUser })
+      toPopupCallError(overMessaging(userRejectedPopupResult))
     )
 
     expect(error.code).toBe(4001)

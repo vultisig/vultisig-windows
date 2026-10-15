@@ -17,7 +17,7 @@ describe('useTxStatusQuery polling', () => {
     ['pending', 3000],
     [undefined, 3000],
   ])('uses the correct polling interval for %s', (status, expected) => {
-    useTxStatusQuery({ chain: Chain.Tron, hash: 'hash' })
+    useTxStatusQuery({ chain: Chain.Tron, hash: 'hash', senderAccountId: 'T' })
     const options = query.mock.calls[0][0]
     expect(options.refetchInterval({ state: { data: { status } } })).toBe(
       expected

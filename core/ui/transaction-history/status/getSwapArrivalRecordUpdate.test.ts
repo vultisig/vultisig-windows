@@ -75,15 +75,23 @@ describe('getArrivalTrackedSwap', () => {
 describe('getSwapArrivalRecordUpdate', () => {
   beforeEach(() => vi.clearAllMocks())
 
-  const tracked = { record: pendingSwap, provider: 'thorchain' as const }
+  const tracked = {
+    record: pendingSwap,
+    provider: 'thorchain' as const,
+    senderAccountId: '0xsender',
+  }
 
-  it('reads the deposit on the chain the funds left from, not the provider chain', async () => {
+  it('reads the deposit by its sender on the chain the funds left from, not the provider chain', async () => {
     getTxStatus.mockResolvedValue({ status: 'pending' })
 
     await getSwapArrivalRecordUpdate(tracked)
 
     expect(getTxStatus).toHaveBeenCalledWith(
-      expect.objectContaining({ chain: Chain.Ethereum, hash: '0xabc' })
+      expect.objectContaining({
+        chain: Chain.Ethereum,
+        hash: '0xabc',
+        senderAccountId: '0xsender',
+      })
     )
     expect(getSwapArrivalStatus).not.toHaveBeenCalled()
   })
