@@ -1,6 +1,6 @@
 import {
   getPopupErrorMessage,
-  PopupError,
+  UserRejectedRequestError,
 } from '@core/inpage-provider/popup/error'
 
 import { EIP1193Error } from '../../../background/handlers/errorHandler'
@@ -27,13 +27,13 @@ const internalErrorCode = -32603
  * EIP-1193 `ProviderRpcError`.
  *
  * EIP-1193 §5.4 requires providers to reject with an `Error` instance
- * carrying a numeric `code`. Internally the wallet rejects popup calls
- * with the plain `PopupError.RejectedByUser` string, and background
- * plumbing can surface other shapes (e.g. node JSON-RPC errors with
- * revert `data`). This routes them all through a single conversion.
+ * carrying a numeric `code`. Popup calls reject with the wallet's own
+ * `UserRejectedRequestError`, and background plumbing can surface other
+ * shapes (e.g. node JSON-RPC errors with revert `data`). This routes them
+ * all through a single conversion.
  *
  * - `EIP1193Error` passes through by reference.
- * - `PopupError.RejectedByUser` → `EIP1193Error('UserRejectedRequest')` (code 4001).
+ * - `UserRejectedRequestError` → `EIP1193Error('UserRejectedRequest')` (code 4001).
  * - Other `PopupError` sentinels → `InternalError` (-32603) carrying the
  *   readable wording from `getPopupErrorMessage`, so a failed sign reports
  *   what went wrong rather than a bare `"Internal error"`.
@@ -50,7 +50,7 @@ export const toEip1193Error = (error: unknown): EIP1193Error => {
     return error
   }
 
-  if (error === PopupError.RejectedByUser) {
+  if (error instanceof UserRejectedRequestError) {
     return new EIP1193Error('UserRejectedRequest')
   }
 

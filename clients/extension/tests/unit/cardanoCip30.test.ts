@@ -1,5 +1,5 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
-import { PopupError } from '@core/inpage-provider/popup/error'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -561,7 +561,7 @@ describe('CIP-30 full API', () => {
 
     it('throws CIP-30 TxSignError(UserDeclined=2) when the signing popup is cancelled', async () => {
       mockCardanoTxBodyHash.mockReturnValueOnce(new Uint8Array([0x01]))
-      mockCallPopup.mockRejectedValueOnce(PopupError.RejectedByUser)
+      mockCallPopup.mockRejectedValueOnce(new UserRejectedRequestError())
 
       const api = await enableApi()
 
@@ -657,7 +657,7 @@ describe('CIP-30 full API', () => {
     it('throws CIP-30 DataSignError(UserDeclined=3) when the signing popup is cancelled', async () => {
       mockBuildProtectedHeaderBytes.mockReturnValueOnce(new Uint8Array([0x10]))
       mockBuildSigStructure.mockReturnValueOnce(new Uint8Array([0x20]))
-      mockCallPopup.mockRejectedValueOnce(PopupError.RejectedByUser)
+      mockCallPopup.mockRejectedValueOnce(new UserRejectedRequestError())
 
       const api = await enableApi()
 

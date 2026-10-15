@@ -1,3 +1,4 @@
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { EIP1193Error } from '../../../background/handlers/errorHandler'
@@ -14,12 +15,21 @@ export { createXrplProvider } from './provider'
 const userRejectedCode = new EIP1193Error('UserRejectedRequest').code
 
 /**
+ * Both shapes a decline reaches this adapter in: a declined keysign popup
+ * rejects with `UserRejectedRequestError`, a declined grant-access popup with
+ * the `EIP1193Error` that `requestAccount` throws.
+ */
+const isUserRejection = (error: unknown) =>
+  error instanceof UserRejectedRequestError ||
+  (error instanceof EIP1193Error && error.code === userRejectedCode)
+
+/**
  * The SDK turns a result-less response into `{ type: 'reject' }` and a
  * serialized error into a thrown `Error`. dApps branch on the former when the
  * user declines, so a rejection must not reach them as a throw.
  */
 const toErrorBody = (error: unknown): XrplResponseBody => {
-  if (error instanceof EIP1193Error && error.code === userRejectedCode) {
+  if (isUserRejection(error)) {
     return { result: undefined }
   }
 
