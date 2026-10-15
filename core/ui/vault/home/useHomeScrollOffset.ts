@@ -3,10 +3,7 @@ import { useTransform } from 'framer-motion'
 
 import { useHomeMotion } from './homeMotion'
 
-/**
- * The shared header's scroll offset: the visible page's, blended between the
- * two pages' offsets mid-swipe so the header never jumps.
- */
+/** Blended between the two pages' offsets mid-swipe so the header never jumps. */
 export const useHomeScrollOffset = () => {
   const { position, scrollY } = useHomeMotion()
 

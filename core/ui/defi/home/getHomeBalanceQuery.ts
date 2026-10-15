@@ -18,11 +18,7 @@ type GetHomeBalanceQueryInput = {
   walletHeldDefiFiat: number
 }
 
-/**
- * The total the home header shows. `separate` shows the tab's own total;
- * `combined` adds to the wallet total only the DeFi value it does not
- * already hold, so receipt tokens are never counted twice.
- */
+/** `combined` adds only DeFi value the wallet total doesn't already hold, so receipt tokens never count twice. */
 export const getHomeBalanceQuery = ({
   display,
   tab,

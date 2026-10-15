@@ -2,10 +2,7 @@ import { useEffect, useRef } from 'react'
 
 /** Horizontal travel, in px, that turns a trackpad swipe into a page change. */
 const pageThreshold = 60
-/**
- * Quiet time that ends a gesture. A trackpad keeps sending momentum events
- * after the fingers lift, so one swipe pages once and its tail is swallowed.
- */
+/** Quiet time that ends a gesture, so a trackpad's momentum tail is swallowed. */
 const gestureIdleMs = 180
 const lineHeightPx = 16
 
@@ -20,11 +17,7 @@ type UseHorizontalWheelPagingInput = {
   ignoreSelector?: string
 }
 
-/**
- * Pages on two-finger horizontal trackpad swipes (wheel `deltaX`) over the
- * element the returned callback ref is attached to; vertical scrolling and
- * mouse drags are untouched. Each gesture pages at most once.
- */
+/** Pages on horizontal trackpad swipes (wheel `deltaX`); each gesture pages at most once. */
 export const useHorizontalWheelPaging = ({
   onPage,
   onDrag,

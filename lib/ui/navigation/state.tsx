@@ -21,7 +21,6 @@ type NavigationProviderProps = ChildrenProp & {
   initialValue: NavigationState
 }
 
-/** Holds the navigation history for everything below it. */
 export const NavigationProvider = ({
   children,
   initialValue,

@@ -10,10 +10,7 @@ type HomeBalanceQueryProps = {
   children: RenderHomeBalance
 }
 
-/**
- * Hands `children` the total the home header shows for the current tab and
- * Home display setting. The wallet-only case never loads DeFi code or data.
- */
+/** The wallet-only case never loads DeFi code or data. */
 export const HomeBalanceQuery = ({ children }: HomeBalanceQueryProps) => {
   const display = useHomeDisplay()
   const tab = useHomeTab()

@@ -17,11 +17,7 @@ type VaultPageProps = {
   primaryControls?: ReactNode
 }
 
-/**
- * The home: one header, a Wallet ↔ DeFi pager under it and one bottom
- * navigation. Serves both the `vault` and `defi` routes; the route picks the
- * tab, so deep links and back navigation land on the right one.
- */
+/** Serves both `vault` and `defi` routes; the route picks the tab so deep links and back land on it. */
 export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
   const vault = useCurrentVault()
   const isFastVault = hasServer(vault.signers)

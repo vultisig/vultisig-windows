@@ -36,12 +36,7 @@ type HomePagerProps = {
   tab: HomeTab
 }
 
-/**
- * Wallet and DeFi side by side in one horizontal track. A tab change slides
- * the track with a spring; a two-finger trackpad swipe follows the fingers and
- * pages once it passes a threshold. Both pages stay mounted once shown, so
- * each keeps its scroll position. The DeFi page mounts once home is idle.
- */
+/** Both pages stay mounted once shown, so each keeps its scroll position. */
 export const HomePager = ({ tab }: HomePagerProps) => {
   const { position } = useHomeMotion()
   const navigateToTab = useNavigateToHomeTab()
@@ -78,8 +73,7 @@ export const HomePager = ({ tab }: HomePagerProps) => {
     }
   }, [tabIndex, position, shouldReduceMotion])
 
-  // A tab used to remount its page, which refetched its stale queries. Both
-  // pages now stay mounted, so a switch refetches what has gone stale.
+  // Pages stay mounted, so a switch must refetch what has gone stale.
   const shownIndexRef = useRef(tabIndex)
   useEffect(() => {
     if (shownIndexRef.current === tabIndex) return

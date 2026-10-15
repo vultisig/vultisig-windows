@@ -31,10 +31,7 @@ const indicatorOvershoot = 0.15
 
 type AgentBottomNavigationContentProps = {
   activeTab?: Tab | 'agent'
-  /**
-   * Live tab position from a pager (`0` Wallet, `1` DeFi, fractional mid
-   * swipe). Without it the pill rests on `activeTab`.
-   */
+  /** Live pager position (fractional mid swipe); without it the pill rests on `activeTab`. */
   indicator?: MotionValue<number>
   isExtension?: boolean
   onTabChange: (tab: Tab) => void

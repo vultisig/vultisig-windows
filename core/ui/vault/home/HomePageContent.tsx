@@ -2,10 +2,7 @@ import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { PageContent } from '@lib/ui/page/PageContent'
 import styled, { css } from 'styled-components'
 
-/**
- * Padding and spacing shared by both home pages and the header layer that
- * floats over them, so the header lines up with each page's slot.
- */
+/** Shared with the floating header layer so it lines up with each page's slot. */
 export const HomePageContent = styled(PageContent)<{ $isExtension: boolean }>`
   ${hideScrollbars};
   position: relative;

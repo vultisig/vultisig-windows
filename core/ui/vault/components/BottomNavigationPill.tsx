@@ -18,10 +18,6 @@ type BottomNavigationPillProps = {
   tabCount: number
 }
 
-/**
- * The selected-tab pill. It tracks `indicator` live and stretches, from its
- * centre, as it travels between two tabs.
- */
 export const BottomNavigationPill = ({
   indicator,
   tabCount,

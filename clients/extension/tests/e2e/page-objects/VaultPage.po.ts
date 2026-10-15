@@ -85,12 +85,7 @@ export class VaultPage extends BasePage {
     await this.dismissPromptSheets()
   }
 
-  /**
-   * Dismiss the one-time home overlays: the EnableNotificationsPromptSheet
-   * shown after the first vault load, then the swipe hint that follows it.
-   * Both are modal dialogs that intercept pointer events on the home; Escape
-   * closes each and persists its seen flag so subsequent loads skip it.
-   */
+  /** Escape closes each one-time home overlay (notifications prompt, then swipe hint) and persists its seen flag. */
   async dismissPromptSheets(): Promise<void> {
     const dialog = this.page.locator('[role="dialog"][aria-modal="true"]').first()
     for (let overlay = 0; overlay < 2; overlay++) {

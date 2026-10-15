@@ -6,10 +6,7 @@ const loadDefiAwareBalanceQuery = () =>
 const loadDefiHomeHeaderControls = () =>
   import('@core/ui/defi/home/DefiHomeHeaderControls')
 
-/**
- * The home's DeFi pieces stay out of the popup's entry chunk; they load the
- * first time DeFi is shown or needed by the header, or once home is idle.
- */
+/** Kept out of the popup's entry chunk; loaded on first need or once home is idle. */
 export const loadDefiHome = () =>
   Promise.all([
     loadDefiHomePage(),

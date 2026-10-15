@@ -6,7 +6,6 @@ type WalletBalanceQueryProps = {
   children: RenderHomeBalance
 }
 
-/** Hands the wallet total to `children`. */
 export const WalletBalanceQuery = ({ children }: WalletBalanceQueryProps) => (
   <>{children(useVaultTotalBalanceQuery())}</>
 )

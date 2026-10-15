@@ -18,10 +18,6 @@ type HomeHeaderProps = {
   primaryControls?: ReactNode
 }
 
-/**
- * The home's top bar, drawn once for both tabs. Its collapsed row shows the
- * same total as the large balance; the controls follow the tab in place.
- */
 export const HomeHeader = ({ primaryControls }: HomeHeaderProps) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()

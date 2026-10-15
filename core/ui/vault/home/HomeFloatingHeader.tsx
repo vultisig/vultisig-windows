@@ -18,11 +18,7 @@ import { homeTabs } from './homeTab'
 import { HomeTotalBalance } from './HomeTotalBalance'
 import { useHomeScrollOffset } from './useHomeScrollOffset'
 
-/**
- * The large balance and the action buttons, drawn once over both home pages.
- * It rides the visible page's slot as that page scrolls and blends between
- * the two slots mid-swipe, so it never slides sideways or appears twice.
- */
+/** Drawn once over both pages and blended between their slots mid-swipe, so it never slides sideways or appears twice. */
 export const HomeFloatingHeader = () => {
   const { client } = useCore()
   const isExtension = client === 'extension'

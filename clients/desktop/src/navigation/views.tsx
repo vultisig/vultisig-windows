@@ -84,10 +84,7 @@ export const views: Views<AppViewId> = {
   ...desktopSharedViewOverrides,
 }
 
-/**
- * Loaders for the shared views outside the entry chunk, plus the home's DeFi
- * tab, to warm once home has painted.
- */
+/** Off-entry-chunk loaders, warmed once home has painted. */
 export const viewLoaders = {
   defiHome: loadDefiHome,
   ...omit(lazy.loaders, 'vault', 'chooseVaults'),

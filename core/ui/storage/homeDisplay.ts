@@ -6,14 +6,9 @@ import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-/**
- * What the home header's balance means, app-wide: `separate` shows the wallet
- * total on the Wallet tab and the DeFi total on the DeFi tab; `combined` shows
- * wallet plus DeFi on both.
- */
+/** `separate`: each tab shows its own total; `combined`: wallet plus DeFi on both. */
 export const homeDisplays = ['separate', 'combined'] as const
 
-/** One of {@link homeDisplays}. */
 export type HomeDisplay = (typeof homeDisplays)[number]
 
 /** The home display for fresh installs and for users who never picked one. */

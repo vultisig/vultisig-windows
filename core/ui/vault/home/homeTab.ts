@@ -5,7 +5,6 @@ import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 /** The home pager's pages, left to right. */
 export const homeTabs = ['wallet', 'defi'] as const
 
-/** One of {@link homeTabs}. */
 export type HomeTab = (typeof homeTabs)[number]
 
 /** The route each home tab lives on, so deep links and back land on it. */

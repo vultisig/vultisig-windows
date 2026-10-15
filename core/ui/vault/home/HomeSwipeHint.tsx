@@ -12,12 +12,7 @@ type HomeSwipeHintProps = {
   tab: HomeTab
 }
 
-/**
- * One-time hint that the Wallet and DeFi tabs switch by swiping, shown once
- * the notification prompt is out of the way. Got it, a click on the dim, a
- * swipe on the dim (which also switches) or any tab switch dismisses it for
- * good.
- */
+/** Shown after the notification prompt; any dismissal or tab switch hides it for good. */
 export const HomeSwipeHint = ({ tab }: HomeSwipeHintProps) => {
   const { data: hasSeen } = useHasSeenHomeSwipeHintQuery()
   const [hasSeenNotificationPrompt] = useHasSeenNotificationPrompt()

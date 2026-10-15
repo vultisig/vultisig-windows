@@ -1,10 +1,6 @@
 import { useHomeMotion } from './homeMotion'
 import { HomeTab } from './homeTab'
 
-/**
- * Callback ref for a home page's scroll container: registers it with the
- * pager and mirrors its scroll offset into the page's motion value.
- */
 export const useHomePageScrollRef = (tab: HomeTab) => {
   const { scrollY, scrollContainers } = useHomeMotion()
 

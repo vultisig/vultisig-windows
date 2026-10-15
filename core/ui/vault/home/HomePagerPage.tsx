@@ -9,10 +9,7 @@ type HomePagerPageProps = ChildrenProp & {
   isActive: boolean
 }
 
-/**
- * One full-width page of the home pager. Only the active page is focusable
- * and exposed to assistive tech; a page fully out of view is hidden.
- */
+/** Only the active page is focusable and exposed to assistive tech. */
 export const HomePagerPage = ({
   index,
   isActive,

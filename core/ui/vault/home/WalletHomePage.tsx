@@ -30,10 +30,6 @@ const PromptsWrapper = ({ children }: ChildrenProp) => {
   )
 }
 
-/**
- * The home's Wallet page: the room for the shared header, the promo carousel
- * and the asset tabs.
- */
 export const WalletHomePage = () => {
   const { client } = useCore()
   const isExtension = client === 'extension'

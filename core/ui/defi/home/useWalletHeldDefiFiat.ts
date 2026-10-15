@@ -8,22 +8,14 @@ import { sum } from '@vultisig/lib-utils/array/sum'
 import { thorchainTokens } from '../chain/queries/tokens'
 import { useThorchainDefiPositionsQuery } from '../chain/queries/useThorchainDefiPositionsQuery'
 
-/**
- * THORChain stake positions read straight from a receipt token's bank
- * balance. When the vault also holds that token as a wallet coin, the wallet
- * total already counts it.
- */
+/** Positions read from a receipt token's bank balance, which the wallet total already counts when held as a coin. */
 const walletReceiptCoinByPositionId: Record<string, Coin> = {
   'thor-stake-stcy': thorchainTokens.stcy,
   'thor-stake-yrune': thorchainTokens.yRune,
   'thor-stake-ytcy': thorchainTokens.yTcy,
 }
 
-/**
- * The part of the DeFi total, in fiat, that the wallet total already counts:
- * selected receipt-token positions whose token is one of the vault's
- * portfolio coins. Mirrors the selection `aggregateDefiPositions` sums.
- */
+/** Fiat the wallet total already counts; mirrors the selection `aggregateDefiPositions` sums. */
 export const useWalletHeldDefiFiat = () => {
   const enabledChains = useDefiChains()
   const selectedPositionIds = useDefiPositions(Chain.THORChain)
