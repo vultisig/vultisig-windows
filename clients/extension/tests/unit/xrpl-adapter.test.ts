@@ -24,6 +24,7 @@ import {
   buildPaymentTx,
   buildTrustSetTx,
 } from '@clients/extension/src/inpage/providers/xrpl/transactions'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import {
   cancelOffer,
   createOffer,
@@ -225,7 +226,7 @@ describe('XRPL adapter (GemWallet-compatible)', () => {
     })
 
     it('surfaces a declined signing popup as a reject', async () => {
-      mockCallPopup.mockRejectedValue(new EIP1193Error('UserRejectedRequest'))
+      mockCallPopup.mockRejectedValue(new UserRejectedRequestError())
 
       await expect(
         submitTransaction({ transaction: payment })
@@ -285,7 +286,7 @@ describe('XRPL adapter (GemWallet-compatible)', () => {
     })
 
     it('surfaces a declined signing popup as a reject', async () => {
-      mockCallPopup.mockRejectedValue(new EIP1193Error('UserRejectedRequest'))
+      mockCallPopup.mockRejectedValue(new UserRejectedRequestError())
 
       await expect(signMessage('gm from a dApp')).resolves.toEqual({
         type: 'reject',

@@ -1,4 +1,5 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { fromChainAmountNumber } from '@core/ui/chain/utils/fromChainAmountNumber'
 import { ManageSendAllowDeath } from '@core/ui/vault/send/allowDeath/ManageSendAllowDeath'
 import { useAllowDeathSendAmount } from '@core/ui/vault/send/allowDeath/useAllowDeathSendAmount'
 import { useSendAllowDeath } from '@core/ui/vault/send/allowDeath/useSendAllowDeath'
@@ -340,7 +341,7 @@ export const ManageAmountInputField = () => {
                     {t('balance_available')}:
                   </Text>{' '}
                   <Text size={14}>
-                    {`${fromChainAmount(amount, coin.decimals)} ${coin.ticker} `}
+                    {`${fromChainAmountNumber({ amount, decimals: coin.decimals })} ${coin.ticker} `}
                   </Text>
                 </TotalBalanceWrapper>
               )}

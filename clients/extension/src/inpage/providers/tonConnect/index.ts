@@ -1,6 +1,6 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
-import { PopupError } from '@core/inpage-provider/popup/error'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import {
   getTonSignDataPayloadIssue,
@@ -164,7 +164,7 @@ export class TonConnectBridge {
       })
     )
 
-    if (error === PopupError.RejectedByUser) {
+    if (error instanceof UserRejectedRequestError) {
       return {
         event: 'connect_error',
         id: 0,
@@ -256,7 +256,7 @@ export class TonConnectBridge {
         })
       )
 
-      if (signError === PopupError.RejectedByUser) {
+      if (signError instanceof UserRejectedRequestError) {
         return {
           event: 'connect_error',
           id: 0,
@@ -453,7 +453,7 @@ export class TonConnectBridge {
       )
     )
 
-    if (signError === PopupError.RejectedByUser) {
+    if (signError instanceof UserRejectedRequestError) {
       return {
         id: message.id,
         error: {
@@ -650,7 +650,7 @@ export class TonConnectBridge {
         }
       )
     )
-    if (error === PopupError.RejectedByUser) {
+    if (error instanceof UserRejectedRequestError) {
       return {
         id: message.id,
         error: {

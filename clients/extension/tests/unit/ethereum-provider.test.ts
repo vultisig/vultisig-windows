@@ -1,5 +1,5 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
-import { PopupError } from '@core/inpage-provider/popup/error'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock all external dependencies before importing the Ethereum provider
@@ -34,9 +34,9 @@ vi.mock('@clients/extension/src/inpage/providers/ethereum/handlers', () => ({
 }))
 
 // Now import the class under test and the mocked handlers
-import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { ethereumHandlers } from '@clients/extension/src/inpage/providers/ethereum/handlers'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum/index'
+import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 
 const mockedHandlers = ethereumHandlers as unknown as {
   eth_chainId: ReturnType<typeof vi.fn>
@@ -209,10 +209,10 @@ describe('Ethereum Provider', () => {
     ] as const
 
     it.each(popupMethods)(
-      'translates PopupError.RejectedByUser from %s to EIP1193Error(UserRejectedRequest) (code 4001)',
+      'translates a declined popup from %s to EIP1193Error(UserRejectedRequest) (code 4001)',
       async method => {
         const eth = new Ethereum()
-        mockedHandlers[method].mockRejectedValue(PopupError.RejectedByUser)
+        mockedHandlers[method].mockRejectedValue(new UserRejectedRequestError())
 
         await expect(eth.request({ method, params: [] })).rejects.toMatchObject(
           {

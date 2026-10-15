@@ -2,6 +2,7 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { Chain } from '@vultisig/core-chain/Chain'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { isRecordEmpty } from '@vultisig/lib-utils/record/isRecordEmpty'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +15,7 @@ import { useSendDestinationTagInput } from '../state/destinationTag'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
+import { useNearSendLimitsQuery } from './useNearSendLimitsQuery'
 import { useSendBalanceQuery } from './useSendBalanceQuery'
 import { useSendFeeEstimateQuery } from './useSendFeeEstimateQuery'
 
@@ -38,6 +40,7 @@ export const useSendValidationQuery = () => {
   const walletCore = useAssertWalletCore()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const feeEstimateQuery = useSendFeeEstimateQuery()
+  const nearSendLimitsQuery = useNearSendLimitsQuery()
 
   const nativeBalanceQuery = useSendBalanceQuery(
     extractAccountCoinKey({
@@ -108,6 +111,22 @@ export const useSendValidationQuery = () => {
       feeEstimateQuery.data == null ||
       (!isFeePaidInCoin && nativeBalanceQuery.data == null)
     ) {
+      return { ...validationQuery, data: undefined, isPending: true }
+    }
+  }
+
+  // NEAR keeps a storage reserve back, known only once its limits load. Judging
+  // the amount before then would let Continue pass on one the builder refuses.
+  if (coin.chain === Chain.Near && isFeeCoin(coin)) {
+    if (nearSendLimitsQuery.error) {
+      return {
+        ...validationQuery,
+        data: undefined,
+        error: nearSendLimitsQuery.error,
+        isPending: false,
+      }
+    }
+    if (nearSendLimitsQuery.data == null) {
       return { ...validationQuery, data: undefined, isPending: true }
     }
   }
