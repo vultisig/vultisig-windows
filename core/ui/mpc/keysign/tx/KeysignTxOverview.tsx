@@ -87,6 +87,7 @@ export const KeysignTxOverview = ({
     chain,
     hash: txHash,
     lastValidBlockHeight: getKeysignLastValidBlockHeight(keysignPayload),
+    senderAccountId: address,
   })
   const receipt = txStatusQuery.data?.receipt
 

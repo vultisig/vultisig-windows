@@ -83,15 +83,38 @@ export const getPopupErrorMessage = (error: unknown): string | undefined =>
   typeof error === 'string' ? popupErrorMessages.get(error) : undefined
 
 /**
- * The form a popup failure should reach dApp-facing provider code in.
- * `RejectedByUser` stays the bare sentinel because providers compare against
- * it by identity; every other sentinel becomes an `Error` carrying its
- * dApp-facing wording, so the many providers that simply let the rejection
- * propagate hand the dApp a readable message instead of the raw
+ * What `callPopup` rejects with when the user declines the request: an `Error`
+ * carrying the `4001` user-rejection code injected wallets share across
+ * ecosystems (EIP-1193, Phantom, Unisat). Providers that let the rejection
+ * propagate hand it to the dApp as is; providers with their own convention
+ * (EVM, TON, Cardano, XRPL) recognise it with `instanceof`.
+ *
+ * Only created on the inpage side, after the last `chrome.runtime` hop. The
+ * wire keeps the {@link PopupError.RejectedByUser} string.
+ */
+export class UserRejectedRequestError extends Error {
+  readonly code = 4001
+
+  constructor() {
+    super('User rejected the request')
+    this.name = 'UserRejectedRequestError'
+  }
+}
+
+/**
+ * The form a popup failure should reach dApp-facing provider code in. Every
+ * sentinel becomes an `Error`: the rejection a {@link UserRejectedRequestError}
+ * with code `4001`, the others an `Error` carrying their dApp-facing wording.
+ * The many providers that simply let the failure propagate then hand the dApp
+ * something it can recognise instead of the raw `"rejectedByUser"` or
  * `"signingFailed"` identifier. Applied once, at the inpage `callPopup`
  * boundary — the last hop before dApp code, so nothing serializes it again.
  */
 export const toPopupCallError = (error: unknown): unknown => {
+  if (error === PopupError.RejectedByUser) {
+    return new UserRejectedRequestError()
+  }
+
   const message = getPopupErrorMessage(error)
 
   return message ? new Error(message) : error

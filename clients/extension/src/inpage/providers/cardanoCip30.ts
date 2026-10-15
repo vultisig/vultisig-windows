@@ -8,7 +8,7 @@
  */
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
-import { PopupError } from '@core/inpage-provider/popup/error'
+import { UserRejectedRequestError } from '@core/inpage-provider/popup/error'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { buildCardanoWitnessSet } from '@vultisig/core-chain/chains/cardano/cip30/buildCardanoWitnessSet'
 import {
@@ -240,7 +240,7 @@ const createCardanoCip30FullApi = ({
         return toHex(witnessSet)
       })
       if ('error' in result) {
-        if (result.error === PopupError.RejectedByUser) {
+        if (result.error instanceof UserRejectedRequestError) {
           throw apiError(TxSignErrorCode.UserDeclined, 'User declined signing')
         }
         throw apiError(
@@ -276,7 +276,7 @@ const createCardanoCip30FullApi = ({
         return { signature: toHex(coseSign1), key: toHex(coseKey) }
       })
       if ('error' in result) {
-        if (result.error === PopupError.RejectedByUser) {
+        if (result.error instanceof UserRejectedRequestError) {
           throw apiError(
             DataSignErrorCode.UserDeclined,
             'User declined signing'

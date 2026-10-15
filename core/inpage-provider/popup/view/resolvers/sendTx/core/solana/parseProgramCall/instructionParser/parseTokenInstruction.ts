@@ -2,6 +2,7 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAccount,
   TokenError,
+  TokenInstruction,
 } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
@@ -16,6 +17,14 @@ import { accountKeyAt } from '../../utils'
 const senderAccountIndex = 0
 const receiverAccountIndex = 2
 const ataOwnerAccountIndex = 2
+
+// Only these move tokens out of the sender's account. Approvals, burns and
+// authority changes share the program and the amount layout, so reading one
+// of them as a transfer would show a movement that never happens.
+const transferInstructionTypes = new Set<number>([
+  TokenInstruction.Transfer,
+  TokenInstruction.TransferChecked,
+])
 
 const debugPrefix = '[parseTokenInstruction]'
 
@@ -74,6 +83,17 @@ export const parseTokenInstruction = async ({
   getCoin,
 }: Input): Promise<SolanaTxData> => {
   const accounts = shouldBePresent(instruction.accounts, 'instruction.accounts')
+  const programData = shouldBePresent(
+    instruction.programData,
+    'instruction.programData'
+  )
+
+  const instructionType = programData[0]
+  if (!transferInstructionTypes.has(instructionType)) {
+    throw new Error(
+      `Unsupported token instruction: ${TokenInstruction[instructionType] ?? instructionType}`
+    )
+  }
 
   const connection = new Connection(`${rootApiUrl}/solana/`)
   const senderTokenAccountInfo = await getAccount(
@@ -109,10 +129,6 @@ export const parseTokenInstruction = async ({
     recipient = ataRecipient.toBase58()
   }
 
-  const programData = shouldBePresent(
-    instruction.programData,
-    'instruction.programData'
-  )
   const amountBytes = programData.slice(1, 9)
 
   const amount = new DataView(Uint8Array.from(amountBytes).buffer).getBigUint64(

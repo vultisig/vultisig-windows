@@ -193,6 +193,7 @@ export const enforceMinNetworkFee = (
     ripple: noOp,
     tron: noOp,
     cardano: noOp,
+    near: noOp,
     qbtc: noOp,
   })
 }
