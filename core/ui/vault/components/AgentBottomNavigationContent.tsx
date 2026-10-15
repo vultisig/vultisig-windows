@@ -6,6 +6,7 @@ import { CameraFilledIcon } from '@lib/ui/icons/CameraFilledIcon'
 import { NodesIcon } from '@lib/ui/icons/NodesIcon'
 import { StationWalletFilledIcon } from '@lib/ui/icons/StationFigmaIcons'
 import { getColor } from '@lib/ui/theme/getters'
+import { enforceRange } from '@vultisig/lib-utils/enforceRange'
 import {
   MotionValue,
   useMotionValue,
@@ -56,8 +57,9 @@ export const AgentBottomNavigationContent = ({
   }, [restingIndicator, activeIndex])
 
   const clampedIndicator = useTransform(indicator ?? restingIndicator, value =>
-    Math.min(
-      Math.max(value, -indicatorOvershoot),
+    enforceRange(
+      value,
+      -indicatorOvershoot,
       tabs.length - 1 + indicatorOvershoot
     )
   )

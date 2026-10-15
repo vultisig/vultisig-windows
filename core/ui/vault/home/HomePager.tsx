@@ -2,6 +2,7 @@ import { useHorizontalWheelPaging } from '@lib/ui/hooks/useHorizontalWheelPaging
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useQueryClient } from '@tanstack/react-query'
+import { enforceRange } from '@vultisig/lib-utils/enforceRange'
 import { animate, motion, useReducedMotion, useTransform } from 'framer-motion'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -94,8 +95,9 @@ export const HomePager = ({ tab }: HomePagerProps) => {
     },
     onCancel: () => settle(targetIndexRef.current),
     onPage: direction => {
-      const nextIndex = Math.min(
-        Math.max(targetIndexRef.current + direction, 0),
+      const nextIndex = enforceRange(
+        targetIndexRef.current + direction,
+        0,
         lastIndex
       )
       if (nextIndex === targetIndexRef.current) {

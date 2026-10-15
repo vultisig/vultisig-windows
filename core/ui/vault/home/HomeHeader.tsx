@@ -54,15 +54,12 @@ export const HomeHeader = ({ primaryControls }: HomeHeaderProps) => {
       }
       balance={
         <HomeBalanceQuery>
-          {({ data, error }) =>
-            data === undefined && error ? (
-              t('failed_to_load')
-            ) : data === undefined ? (
-              <Spinner size="0.9em" />
-            ) : (
-              formatFiatAmount(data)
-            )
-          }
+          {({ data, error }) => {
+            if (data !== undefined) return formatFiatAmount(data)
+            if (error) return t('failed_to_load')
+
+            return <Spinner size="0.9em" />
+          }}
         </HomeBalanceQuery>
       }
       testId="vault-page-header"
