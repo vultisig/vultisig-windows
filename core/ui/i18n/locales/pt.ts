@@ -486,6 +486,7 @@ export const pt = {
   having_trouble_scanning_tip_3:
     'Mantenha ambos os dispositivos estaveis por um momento',
   hide_balance: 'Ocultar saldo',
+  hide_total_balance: 'Ocultar saldo total',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transação IBC inclui um memorando, mas a {{productName}} atualmente não suporta a incorporação de memorandos em mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
@@ -892,6 +893,7 @@ export const pt = {
     'Compartilhe seu código de indicação exclusivo para convidar amigos. Eles ganham um desconto e, quanto mais negociarem, mais você ganha — diretamente na sua carteira.',
   shares: 'Ações',
   show_balance: 'Mostrar saldo',
+  show_total_balance: 'Mostrar saldo total',
   sign: 'Assinar',
   signAmino: 'Assinatura Amino',
   signDirect: 'Assinatura Direct',

@@ -481,6 +481,7 @@ export const nl = {
     'Zorg ervoor dat het scherm goed verlicht en vrij van schittering is',
   having_trouble_scanning_tip_3: 'Houd beide apparaten even stil',
   hide_balance: 'Saldo verbergen',
+  hide_total_balance: 'Totaal saldo verbergen',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
     'Deze IBC-transactie bevat een memo, maar {{productName}} ondersteunt momenteel geen memos binnen IBC transfer-berichten.<br> Doorgaan met deze transactie kan leiden tot <b>onomkeerbaar verlies van funds</b>.',
@@ -884,6 +885,7 @@ export const nl = {
     'Deel je unieke referralcode om vrienden uit te nodigen. Zij krijgen korting en hoe meer zij traden, hoe meer jij verdient — direct naar je wallet.',
   shares: 'Shares',
   show_balance: 'Saldo tonen',
+  show_total_balance: 'Totaal saldo tonen',
   sign: 'Ondertekenen',
   signAmino: 'Amino-ondertekening',
   signDirect: 'Direct ondertekenen',

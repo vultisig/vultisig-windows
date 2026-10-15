@@ -17,6 +17,7 @@ import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVis
 
 type VaultTotalBalanceProps = {
   query: TotalBalanceQuery
+  isTotal?: boolean
 }
 
 /**
@@ -26,7 +27,10 @@ type VaultTotalBalanceProps = {
  * independent because both states can hold at once. The amount rolls to its
  * new value, including when the home tab or display setting changes it.
  */
-export const VaultTotalBalance = ({ query }: VaultTotalBalanceProps) => {
+export const VaultTotalBalance = ({
+  query,
+  isTotal,
+}: VaultTotalBalanceProps) => {
   const { client } = useCore()
   const isExtension = client === 'extension'
   const fiatCurrency = useFiatCurrency()
@@ -73,7 +77,7 @@ export const VaultTotalBalance = ({ query }: VaultTotalBalanceProps) => {
           </HStack>
         )}
       />
-      <ManageVaultBalanceVisibility />
+      <ManageVaultBalanceVisibility isTotal={isTotal} />
     </VStack>
   )
 }
