@@ -86,18 +86,24 @@ export class VaultPage extends BasePage {
   }
 
   /**
-   * Dismiss any modal PromptSheet (e.g. EnableNotificationsPromptSheet shown
-   * once after first vault load). The PromptSheet renders as a fixed Overlay
-   * with z-index 1 that intercepts pointer events on header buttons. Pressing
-   * Escape triggers its useKeyDown handler, which calls onClose and persists
-   * hasSeenNotificationPrompt so subsequent loads skip it.
+   * Dismiss the one-time home overlays: the EnableNotificationsPromptSheet
+   * shown after the first vault load, then the swipe hint that follows it.
+   * Both are modal dialogs that intercept pointer events on the home; Escape
+   * closes each and persists its seen flag so subsequent loads skip it.
    */
   async dismissPromptSheets(): Promise<void> {
     const dialog = this.page.locator('[role="dialog"][aria-modal="true"]').first()
-    const visible = await dialog.isVisible({ timeout: 1000 }).catch(() => false)
-    if (!visible) return
-    await this.page.keyboard.press('Escape')
-    await dialog.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {})
+    for (let overlay = 0; overlay < 2; overlay++) {
+      const visible = await dialog
+        .waitFor({ state: 'visible', timeout: 1000 })
+        .then(
+          () => true,
+          () => false
+        )
+      if (!visible) return
+      await this.page.keyboard.press('Escape')
+      await dialog.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {})
+    }
   }
 
   /**

@@ -10,7 +10,9 @@ import { DefiChainsStorage } from './defiChains'
 import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
 import { FiatCurrencyStorage } from './fiatCurrency'
+import { HasSeenHomeSwipeHintStorage } from './hasSeenHomeSwipeHint'
 import { HasSeenNotificationPromptStorage } from './hasSeenNotificationPrompt'
+import { HomeDisplayStorage } from './homeDisplay'
 import { LanguageStorage } from './language'
 import { LimitPriceChartExpansionStorage } from './limitPriceChartExpanded'
 import { MLDSAEnabledStorage } from './mldsaEnabled'
@@ -32,6 +34,8 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   DefiPositionsStorage &
   FiatCurrencyStorage &
   HasSeenNotificationPromptStorage &
+  HasSeenHomeSwipeHintStorage &
+  HomeDisplayStorage &
   CurrentVaultIdStorage &
   VaultsStorage &
   VaultFoldersStorage &

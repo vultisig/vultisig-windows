@@ -465,6 +465,17 @@ export const it = {
   go_back: 'Torna indietro',
   go_to_vault: 'Vai al caveau',
   go_to_wallet: 'Vai al portafoglio',
+  got_it: 'Ho capito',
+  home_display: 'Schermata iniziale',
+  home_display_separate_description:
+    'La scheda Portafoglio mostra solo il saldo del portafoglio e la scheda DeFi mostra il tuo saldo DeFi.',
+  home_display_separate_title: 'Portafoglio e DeFi separati',
+  home_display_combined_description:
+    'Entrambe le schede mostrano il saldo combinato di portafoglio e DeFi.',
+  home_display_combined_title: 'Portafoglio + DeFi',
+  home_swipe_hint_description:
+    'Passa dalla scheda portafoglio a quella DeFi e viceversa',
+  home_swipe_hint_title: 'Scorri per cambiare',
   gold: 'Oro',
   grant_camera_permission: "Concedi l'autorizzazione alla telecamera",
   gwei: 'GWEI',
@@ -687,7 +698,6 @@ export const it = {
   app_install_timeout_invalid: 'Inserisci un numero valido.',
   app_install_timeout_min: 'Deve essere 0 o maggiore.',
   to_start_plugin_installation: "Per avviare l'installazione dell'app",
-  portfolio: 'Portafoglio',
   portfolio_balance: 'Saldo del portafoglio',
   positions: 'Posizioni',
   powered_by: 'Fornito da <provider></provider>',

@@ -12,7 +12,9 @@ import { defiChainsStorage } from './defiChains'
 import { defiPositionsStorage } from './defiPositions'
 import { dismissedBannersStorage } from './dismissedBanners'
 import { fiatCurrencyStorage } from './fiatCurrency'
+import { hasSeenHomeSwipeHintStorage } from './hasSeenHomeSwipeHint'
 import { hasSeenNotificationPromptStorage } from './hasSeenNotificationPrompt'
+import { homeDisplayStorage } from './homeDisplay'
 import { languageStorage } from './language'
 import { limitPriceChartExpansionStorage } from './limitPriceChartExpanded'
 import { mldsaEnabledStorage } from './mldsaEnabled'
@@ -45,6 +47,8 @@ export const storage: CoreStorage = {
   ...blockaidStorage,
   ...onboardingStorage,
   ...hasSeenNotificationPromptStorage,
+  ...hasSeenHomeSwipeHintStorage,
+  ...homeDisplayStorage,
   ...passcodeEncryptionStorage,
   ...passcodeAutoLockStorage,
   ...passcodeUnlockSessionStorage,

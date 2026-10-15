@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 
-import { useNavigation } from '../state'
+import { useSetNavigation } from '../state'
 
 /**
  * Pops one or more views from the navigation history stack (never below the root view).
  */
 export const usePopNavigationHistory = () => {
-  const [, setState] = useNavigation()
+  const setState = useSetNavigation()
 
   return useCallback(
     (steps: number) => {

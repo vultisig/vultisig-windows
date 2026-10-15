@@ -455,6 +455,17 @@ export const hr = {
   go_back: 'Natrag',
   go_to_vault: 'Idi u trezor',
   go_to_wallet: 'Idi na novčanik',
+  got_it: 'Razumijem',
+  home_display: 'Početni prikaz',
+  home_display_separate_description:
+    'Kartica Novčanik prikazuje samo stanje novčanika, a kartica DeFi prikazuje vaše DeFi stanje.',
+  home_display_separate_title: 'Novčanik i DeFi odvojeno',
+  home_display_combined_description:
+    'Obje kartice prikazuju zbirno stanje novčanika i DeFi-ja.',
+  home_display_combined_title: 'Novčanik + DeFi',
+  home_swipe_hint_description:
+    'Prebacujte se između kartica novčanika i DeFi-ja',
+  home_swipe_hint_title: 'Povucite za promjenu',
   gold: 'Zlato',
   grant_camera_permission: 'Odobri dopuštenje za kameru',
   gwei: 'GWEI',
@@ -675,7 +686,6 @@ export const hr = {
   app_install_timeout_invalid: 'Molimo unesite važeći broj.',
   app_install_timeout_min: 'Mora biti 0 ili veće.',
   to_start_plugin_installation: 'Za početak instalacije aplikacije',
-  portfolio: 'Portfelj',
   portfolio_balance: 'Stanje portfelja',
   positions: 'Pozicije',
   powered_by: 'Pokreće <provider></provider>',

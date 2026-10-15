@@ -3,45 +3,46 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
-import { ReactNode, useRef } from 'react'
+import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
 import { BottomNavigation } from '../../components/BottomNavigation'
-import { VaultOverview } from './VaultOverview'
-import { VaultPageHeader } from './VaultPageHeader'
+import { HomeHeader } from '../../home/HomeHeader'
+import { createHomeMotion, HomeMotionProvider } from '../../home/homeMotion'
+import { HomePager } from '../../home/HomePager'
+import { HomeSwipeHint } from '../../home/HomeSwipeHint'
+import { homeTabs, useHomeTab } from '../../home/homeTab'
 
 type VaultPageProps = {
   primaryControls?: ReactNode
 }
 
+/**
+ * The home: one header, a Wallet ↔ DeFi pager under it and one bottom
+ * navigation. Serves both the `vault` and `defi` routes; the route picks the
+ * tab, so deep links and back navigation land on the right one.
+ */
 export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
   const vault = useCurrentVault()
-  const { signers } = vault
-  const isFastVault = hasServer(signers)
+  const isFastVault = hasServer(vault.signers)
   const vaultId = getVaultId(vault)
-  const scrollContainerRef = useRef<HTMLDivElement>(null!)
+  const tab = useHomeTab()
+  const [homeMotion] = useState(() => createHomeMotion(homeTabs.indexOf(tab)))
 
   return (
-    <Wrapper justifyContent="space-between" flexGrow data-testid="vault-page">
-      <Content flexGrow>
-        <VaultPageHeader
-          vault={vault}
-          scrollContainerRef={scrollContainerRef}
-          primaryControls={primaryControls}
-        />
-        <VaultOverview scrollContainerRef={scrollContainerRef} />
+    <HomeMotionProvider value={homeMotion}>
+      <Wrapper flexGrow data-testid="home-page">
+        <HomeHeader primaryControls={primaryControls} />
+        <HomePager tab={tab} />
         {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
-      </Content>
-      <BottomNavigation />
-    </Wrapper>
+      </Wrapper>
+      <BottomNavigation activeTab={tab} indicator={homeMotion.position} />
+      <HomeSwipeHint tab={tab} />
+    </HomeMotionProvider>
   )
 }
 
 const Wrapper = styled(VStack)`
   position: relative;
-  min-height: 0;
-`
-
-const Content = styled(VStack)`
   min-height: 0;
 `

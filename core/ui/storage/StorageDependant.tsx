@@ -23,6 +23,7 @@ import {
 } from './currentVaultId'
 import { useCustomRpcOverridesQuery } from './customRpcOverrides'
 import { useFiatCurrencyQuery } from './fiatCurrency'
+import { useHomeDisplayQuery } from './homeDisplay'
 import { useLanguageQuery } from './language'
 import { useIsMLDSAEnabledQuery } from './mldsaEnabled'
 import { useHasFinishedOnboardingQuery } from './onboarding'
@@ -37,6 +38,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
   const fiatCurrency = useFiatCurrencyQuery()
+  const homeDisplay = useHomeDisplayQuery()
   const currentVaultId = useCurrentVaultIdQuery()
   const addressBookItems = useAddressBookItemsQuery()
   const language = useLanguageQuery()
@@ -58,6 +60,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     vaults,
     vaultFolders,
     fiatCurrency,
+    homeDisplay,
     currentVaultId,
     addressBookItems,
     language,

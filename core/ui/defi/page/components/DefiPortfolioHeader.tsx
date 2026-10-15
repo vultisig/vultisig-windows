@@ -30,7 +30,7 @@ export const DefiPortfolioHeader = () => {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
             <TabText size={16} weight="500">
-              {t('portfolio')}
+              {t('positions')}
             </TabText>
             <ActiveIndicator />
           </TabsHeaderMotion>

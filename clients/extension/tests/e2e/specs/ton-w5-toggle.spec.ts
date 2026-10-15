@@ -66,6 +66,7 @@ test('the TON W5 switch moves the coins, persists, and can be turned back off', 
     vaultsCoins: { [ecdsa]: tonCoins },
     hasFinishedOnboarding: true,
     hasSeenNotificationPrompt: true,
+    hasSeenHomeSwipeHint: true,
   })
 
   const page = await context.newPage()

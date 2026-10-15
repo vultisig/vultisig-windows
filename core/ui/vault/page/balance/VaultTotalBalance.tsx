@@ -2,7 +2,7 @@ import { AnimatedFiatAmount } from '@core/ui/chain/components/AnimatedFiatAmount
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
-import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
+import { TotalBalanceQuery } from '@core/ui/vault/queries/resolveCoinsTotalBalance'
 import { CircleAlertIcon } from '@lib/ui/icons/CircleAlertIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -15,16 +15,20 @@ import { useTranslation } from 'react-i18next'
 
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility'
 
+type VaultTotalBalanceProps = {
+  query: TotalBalanceQuery
+}
+
 /**
- * Vault-wide fiat total for the vault home header. Shows the running total as
- * soon as any coin resolves, a spinner while other coins are still loading and
- * an alert when the total excludes chains whose balances failed to load; the
- * two indicators are independent because both states can hold at once.
+ * The home header's large fiat total. Shows the running total as soon as any
+ * source resolves, a spinner while others are still loading and an alert when
+ * the total excludes sources that failed to load; the two indicators are
+ * independent because both states can hold at once. The amount rolls to its
+ * new value, including when the home tab or display setting changes it.
  */
-export const VaultTotalBalance = () => {
+export const VaultTotalBalance = ({ query }: VaultTotalBalanceProps) => {
   const { client } = useCore()
   const isExtension = client === 'extension'
-  const query = useVaultTotalBalanceQuery()
   const fiatCurrency = useFiatCurrency()
 
   const { t } = useTranslation()

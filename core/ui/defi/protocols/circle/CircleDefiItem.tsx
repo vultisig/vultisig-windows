@@ -25,7 +25,7 @@ export const CircleDefiItem = () => {
   const fiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
 
   const handleClick = () => {
-    navigate({ id: 'defi', state: { protocol: 'circle' } })
+    navigate({ id: 'defiProtocol', state: { protocol: 'circle' } })
   }
 
   return (
