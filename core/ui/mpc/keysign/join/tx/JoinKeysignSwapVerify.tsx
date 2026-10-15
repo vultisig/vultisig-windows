@@ -4,9 +4,11 @@ import { getSwapFeeFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapFeeFr
 import { getSwapPriceImpactFromPayload } from '@core/ui/mpc/keysign/tx/swap/getSwapPriceImpactFromPayload'
 import { formatPriceImpact } from '@core/ui/vault/swap/form/info/priceImpact'
 import { PriceImpactValue } from '@core/ui/vault/swap/form/info/PriceImpactValue'
+import { SwapFeeRowRenderer } from '@core/ui/vault/swap/form/info/swapFeeRow'
 import { getSwapNetworkFeeLabelKey } from '@core/ui/vault/swap/form/info/swapNetworkFeeLabel'
 import { SwapFeeFiatValue } from '@core/ui/vault/swap/form/info/SwapTotalFeeFiatValue'
 import { getSwapToAmountLimit } from '@core/ui/vault/swap/keysignPayload/getSwapToAmountLimit'
+import { SwapDepositAddressRow } from '@core/ui/vault/swap/verify/SwapVerify/SwapDepositAddressRow'
 import { SwapVerifyAmount } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyAmount'
 import { SwapVerifyCard } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyCard'
 import { SwapVerifyChainChip } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerifyChainChip'
@@ -31,6 +33,10 @@ import { JoinKeysignNetworkFeeValue } from './JoinKeysignNetworkFeeValue'
 import { JoinKeysignSwapTotalFee } from './JoinKeysignSwapTotalFee'
 
 const logoSize = 14
+
+const renderVerifyRow: SwapFeeRowRenderer = ({ label, value }) => (
+  <SwapVerifyRow label={label} value={value} />
+)
 
 /**
  * Joiner verify view for a swap. Carries the same cost breakdown and signing
@@ -116,6 +122,10 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
               <Text cropped>{provider}</Text>
             </HStack>
           }
+        />
+        <SwapDepositAddressRow
+          renderRow={renderVerifyRow}
+          keysignPayload={value}
         />
         <SwapVerifyRow
           label={t(getSwapNetworkFeeLabelKey(fromCoin.chain))}

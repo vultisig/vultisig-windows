@@ -11,19 +11,26 @@ import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordU
 import { useTranslation } from 'react-i18next'
 
 import { KeysignReviewSheet } from '../../../../mpc/keysign/review/KeysignReviewSheet'
+import { ReviewRow } from '../../../../mpc/keysign/review/ReviewRow'
 import { ReviewVaultLine } from '../../../../mpc/keysign/review/ReviewVaultLine'
 import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
+import { SwapFeeRowRenderer } from '../../form/info/swapFeeRow'
 import { getSwapToAmountLimit } from '../../keysignPayload/getSwapToAmountLimit'
 import { useSwapKeysignPayloadQuery } from '../../keysignPayload/query'
 import { useFromAmount } from '../../state/fromAmount'
 import { useSwapFromCoin } from '../../state/fromCoin'
 import { useSwapToCoin } from '../../state/toCoin'
+import { SwapDepositAddressRow } from './SwapDepositAddressRow'
 import { SwapReviewCards } from './SwapReviewCards'
 import { SwapReviewFees } from './SwapReviewFees'
 import { SwapReviewSide } from './SwapReviewSide'
 import { SwapVerifyRecipient } from './SwapVerifyRecipient'
 
 const swapTerms = ['input', 'output'] as const
+
+const renderReviewRow: SwapFeeRowRenderer = ({ label, value }) => (
+  <ReviewRow label={label} value={value} size="small" valueColor="shyExtra" />
+)
 
 type SwapVerifyProps = {
   swapQuote: SwapQuote
@@ -118,6 +125,15 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
       />
       <VStack gap={12}>
         <ReviewVaultLine value={fromCoin.address} />
+        <MatchQuery
+          value={keysignPayloadQuery}
+          success={keysignPayload => (
+            <SwapDepositAddressRow
+              renderRow={renderReviewRow}
+              keysignPayload={keysignPayload}
+            />
+          )}
+        />
         <SwapReviewFees swapQuote={swapQuote} />
       </VStack>
       <MatchQuery
