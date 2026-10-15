@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
   balance: vi.fn(),
   fee: vi.fn(),
   feePaidInCoin: vi.fn(),
+  nearLimits: vi.fn(),
 }))
 
 vi.mock('../state/sendCoin', () => ({ useCurrentSendCoin: mocks.coin }))
@@ -22,6 +23,9 @@ vi.mock('../fee/useIsSendFeePaidInCoin', () => ({
   useIsSendFeePaidInCoin: mocks.feePaidInCoin,
 }))
 vi.mock('./useSendBalanceQuery', () => ({ useSendBalanceQuery: mocks.balance }))
+vi.mock('./useNearSendLimitsQuery', () => ({
+  useNearSendLimitsQuery: mocks.nearLimits,
+}))
 vi.mock('./useSendFeeEstimateQuery', () => ({
   useSendFeeEstimateQuery: mocks.fee,
 }))
@@ -92,6 +96,11 @@ describe('useSendValidationQuery token funding', () => {
       ready(id ? 100n : 10n)
     )
     mocks.fee.mockReturnValue(ready(2n))
+    mocks.nearLimits.mockReturnValue({
+      data: { maxSendable: 90n },
+      error: null,
+      isPending: false,
+    })
     mocks.feePaidInCoin.mockImplementation(() => isFeeCoin(mocks.coin()))
   })
 
@@ -240,6 +249,46 @@ describe('useSendValidationQuery token funding', () => {
       data: {},
       error: null,
       isPending: false,
+    })
+  })
+
+  describe('NEAR native send', () => {
+    beforeEach(() => {
+      mocks.coin.mockReturnValue({ chain: Chain.Near, address: 'sender' })
+      mocks.balance.mockReturnValue(ready(100n))
+    })
+
+    it('waits for the send limits before enabling Continue', () => {
+      mocks.nearLimits.mockReturnValue({
+        data: undefined,
+        error: null,
+        isPending: true,
+      })
+      expect(readValidation()).toMatchObject({
+        data: undefined,
+        isPending: true,
+      })
+    })
+
+    it('surfaces a failed send limits lookup instead of enabling Continue', () => {
+      mocks.nearLimits.mockReturnValue({
+        data: undefined,
+        error: new Error('limits failed'),
+        isPending: false,
+      })
+      expect(readValidation()).toMatchObject({
+        data: undefined,
+        error: { message: 'limits failed' },
+        isPending: false,
+      })
+    })
+
+    it('validates once the send limits are known', () => {
+      expect(readValidation()).toMatchObject({
+        data: {},
+        error: null,
+        isPending: false,
+      })
     })
   })
 })
