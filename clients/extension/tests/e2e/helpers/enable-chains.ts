@@ -40,6 +40,7 @@ export const CHAIN_UI_LABELS: Record<string, string> = {
   polkadot: 'Polkadot',
   cardano: 'Cardano',
   bittensor: 'Bittensor',
+  near: 'Near',
 }
 
 async function openChainManagement(page: Page): Promise<void> {

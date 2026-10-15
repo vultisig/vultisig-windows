@@ -11,6 +11,7 @@ import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEv
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { lookupKnownEvmContract } from '@core/ui/chain/tx/utils/knownEvmContracts'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
+import { fromChainAmountNumber } from '@core/ui/chain/utils/fromChainAmountNumber'
 import {
   decodedAmountCanBeShown,
   decodeSignedTransaction,
@@ -34,7 +35,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
@@ -92,9 +92,15 @@ export const TxSuccess = ({
   const wasmDisplay = getWasmExecuteTxDisplay(value)
 
   const formattedToAmount = wasmDisplay
-    ? fromChainAmount(BigInt(wasmDisplay.fundAmount), wasmDisplay.coin.decimals)
+    ? fromChainAmountNumber({
+        amount: BigInt(wasmDisplay.fundAmount),
+        decimals: wasmDisplay.coin.decimals,
+      })
     : toAmount
-      ? fromChainAmount(BigInt(toAmount), coin.decimals)
+      ? fromChainAmountNumber({
+          amount: BigInt(toAmount),
+          decimals: coin.decimals,
+        })
       : 0
 
   const txAction = useMemo(
@@ -281,6 +287,7 @@ export const TxSuccess = ({
           chain={coin.chain}
           hash={txHash}
           lastValidBlockHeight={getKeysignLastValidBlockHeight(value)}
+          senderAccountId={coin.address}
         />
       )}
       <VStack gap={8}>

@@ -1,3 +1,4 @@
+import { fromChainAmountNumber } from '@core/ui/chain/utils/fromChainAmountNumber'
 import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
@@ -12,7 +13,6 @@ import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -40,7 +40,9 @@ export const ManageAmountInputFieldCollapsed = () => {
       <HStack gap={12} alignItems="center">
         <Text size={14}>{t('amount')}</Text>
         <Text size={12} color="shy">
-          {amount === null ? null : fromChainAmount(amount, coin.decimals)}
+          {amount === null
+            ? null
+            : fromChainAmountNumber({ amount, decimals: coin.decimals })}
         </Text>
       </HStack>
       <ActionFormIconsWrapper gap={12}>
