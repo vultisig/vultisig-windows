@@ -1,6 +1,8 @@
 import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { useEffect } from 'react'
 
+import { requestIdle } from '../utils/requestIdle'
+
 /** Anything worth warming after home paints: view loaders, or a module load such as the SDK. */
 type PrefetchLoaders<T extends string> = Record<T, () => Promise<unknown>>
 
@@ -8,21 +10,6 @@ type PrefetchViewsProps<T extends string> = {
   loaders: PrefetchLoaders<T>
   /** Loaded first, in this order; every other loader follows in registry order. */
   priority?: T[]
-}
-
-const idleTimeoutMs = 2000
-const noIdleCallbackDelayMs = 200
-
-const requestIdle = (callback: () => void) => {
-  if (typeof requestIdleCallback === 'function') {
-    const id = requestIdleCallback(callback, { timeout: idleTimeoutMs })
-
-    return () => cancelIdleCallback(id)
-  }
-
-  const id = setTimeout(callback, noIdleCallbackDelayMs)
-
-  return () => clearTimeout(id)
 }
 
 const prefetchViews = <T extends string>({

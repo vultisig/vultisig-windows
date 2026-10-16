@@ -465,6 +465,13 @@ export const it = {
   go_back: 'Torna indietro',
   go_to_vault: 'Vai al caveau',
   go_to_wallet: 'Vai al portafoglio',
+  home_display: 'Schermata iniziale',
+  home_display_separate_description:
+    'La scheda Portafoglio mostra solo il saldo del portafoglio e la scheda DeFi mostra il tuo saldo DeFi.',
+  home_display_separate_title: 'Portafoglio e DeFi separati',
+  home_display_combined_description:
+    'Entrambe le schede mostrano il saldo combinato di portafoglio e DeFi.',
+  home_display_combined_title: 'Portafoglio + DeFi',
   gold: 'Oro',
   grant_camera_permission: "Concedi l'autorizzazione alla telecamera",
   gwei: 'GWEI',
@@ -481,6 +488,7 @@ export const it = {
   having_trouble_scanning_tip_3:
     'Tieni entrambi i dispositivi fermi per un momento',
   hide_balance: 'Nascondi saldo',
+  hide_total_balance: 'Nascondi saldo totale',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:
     "Questa transazione IBC include un promemoria, ma {{productName}} attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
@@ -691,7 +699,6 @@ export const it = {
   app_install_timeout_invalid: 'Inserisci un numero valido.',
   app_install_timeout_min: 'Deve essere 0 o maggiore.',
   to_start_plugin_installation: "Per avviare l'installazione dell'app",
-  portfolio: 'Portafoglio',
   portfolio_balance: 'Saldo del portafoglio',
   positions: 'Posizioni',
   powered_by: 'Fornito da <provider></provider>',
@@ -890,6 +897,7 @@ export const it = {
     'Condividi il tuo codice di riferimento univoco per invitare i tuoi amici. Riceveranno uno sconto e più scambi faranno, più guadagni, direttamente sul tuo portafoglio.',
   shares: 'Azioni',
   show_balance: 'Mostra saldo',
+  show_total_balance: 'Mostra saldo totale',
   sign: 'Firma',
   signAmino: 'Firma Amino',
   signDirect: 'Firma Direct',

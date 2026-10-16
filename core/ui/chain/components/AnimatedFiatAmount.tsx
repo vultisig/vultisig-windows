@@ -1,5 +1,6 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useAnimatedNumber } from '@lib/ui/hooks/useAnimatedNumber'
+import { useReducedMotion } from 'framer-motion'
 import styled from 'styled-components'
 
 type AnimatedFiatAmountProps = {
@@ -12,7 +13,8 @@ type AnimatedFiatAmountProps = {
  * changes — used for vault and DeFi totals. The `cacheKey` keeps each usage's
  * last shown value isolated so re-entering a screen with an unchanged total does
  * not replay the animation. Digits are rendered tabular (equal width) so the
- * currency symbol and surrounding layout don't jitter as digits change.
+ * currency symbol and surrounding layout don't jitter as digits change. With
+ * reduced motion requested the amount changes at once.
  */
 export const AnimatedFiatAmount = ({
   value,
@@ -20,8 +22,13 @@ export const AnimatedFiatAmount = ({
 }: AnimatedFiatAmountProps) => {
   const formatFiatAmount = useFormatFiatAmount()
   const animatedValue = useAnimatedNumber({ value, cacheKey })
+  const shouldReduceMotion = useReducedMotion() === true
 
-  return <TabularNumbers>{formatFiatAmount(animatedValue)}</TabularNumbers>
+  return (
+    <TabularNumbers>
+      {formatFiatAmount(shouldReduceMotion ? value : animatedValue)}
+    </TabularNumbers>
+  )
 }
 
 const TabularNumbers = styled.span`

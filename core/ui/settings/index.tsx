@@ -27,6 +27,7 @@ import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
+import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { useNavigation } from '@lib/ui/navigation/state'
@@ -166,6 +167,17 @@ export const SettingsPage: FC<Props> = props => {
               onClick={() => navigate({ id: 'currencySettings' })}
               title={t('currency')}
               showArrow
+            />
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <WalletIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => navigate({ id: 'homeDisplaySettings' })}
+              title={t('home_display')}
+              showArrow
+              data-testid="home-display-settings-link"
             />
             <ListItem
               icon={

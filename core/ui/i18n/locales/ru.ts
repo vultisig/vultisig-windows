@@ -454,6 +454,13 @@ export const ru = {
   go_back: 'Назад',
   go_to_vault: 'Перейти в хранилище',
   go_to_wallet: 'Перейти в кошелек',
+  home_display: 'Главный экран',
+  home_display_separate_description:
+    'Вкладка «Кошелёк» показывает только баланс кошелька, а вкладка DeFi — ваш баланс в DeFi.',
+  home_display_separate_title: 'Кошелёк и DeFi отдельно',
+  home_display_combined_description:
+    'Обе вкладки показывают общий баланс кошелька и DeFi.',
+  home_display_combined_title: 'Кошелёк + DeFi',
   gold: 'Золото',
   grant_camera_permission: 'Разрешить доступ к камере',
   gwei: 'GWEI',
@@ -470,6 +477,7 @@ export const ru = {
   having_trouble_scanning_tip_3:
     'Держите оба устройства неподвижно на мгновение',
   hide_balance: 'Скрыть баланс',
+  hide_total_balance: 'Скрыть общий баланс',
   how_it_works: 'Как это работает',
   ibc_transaction_not_supporting_memo_desc:
     'Эта IBC-транзакция содержит memo, но {{productName}} сейчас не поддерживает встраивание memo в сообщения IBC-перевода.<br> Продолжение может привести к <b>необратимой потере средств</b>.',
@@ -678,7 +686,6 @@ export const ru = {
   app_install_timeout_invalid: 'Введите корректное число.',
   app_install_timeout_min: 'Должно быть 0 или больше.',
   to_start_plugin_installation: 'Чтобы начать установку плагина',
-  portfolio: 'Портфель',
   portfolio_balance: 'Баланс портфеля',
   positions: 'Позиции',
   powered_by: 'Работает на <provider></provider>',
@@ -876,6 +883,7 @@ export const ru = {
     'Поделитесь своим уникальным referral-кодом, чтобы пригласить друзей. Они получат скидку, а чем больше они торгуют, тем больше вы зарабатываете — напрямую в ваш кошелёк.',
   shares: 'Доли',
   show_balance: 'Показать баланс',
+  show_total_balance: 'Показать общий баланс',
   sign: 'Подписать',
   signAmino: 'Amino-подпись',
   signDirect: 'Прямая подпись',

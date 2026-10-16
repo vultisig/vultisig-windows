@@ -12,10 +12,15 @@ import { omit } from '@vultisig/lib-utils/record/omit'
 import { ExtensionChooseVaultsView } from '../components/notifications/ExtensionChooseVaultsView'
 import { ExtensionVaultPage } from './views/ExtensionVaultPage'
 
-type StaticViewId = 'vault' | 'newVault' | 'chooseVaults' | 'migrateVault'
+type StaticViewId =
+  | 'vault'
+  | 'defi'
+  | 'newVault'
+  | 'chooseVaults'
+  | 'migrateVault'
 
 const appCustomViewLoaders: ViewLoaders<
-  Exclude<AppViewId, SharedViewId | 'migrateVault'>
+  Exclude<AppViewId, SharedViewId | StaticViewId>
 > = {
   connectedDapps: () =>
     import('@clients/extension/src/pages/connected-dapps').then(
@@ -90,10 +95,12 @@ const appCustomViewLoaders: ViewLoaders<
 
 /**
  * Views that ship in the entry chunk: the home screens the action popup must
- * paint immediately, plus a view with nothing to load.
+ * paint immediately, plus a view with nothing to load. Both home tabs share
+ * one component, so switching between them keeps the pager mounted.
  */
 const staticViews: Pick<Views<AppViewId>, StaticViewId> = {
   vault: ExtensionVaultPage,
+  defi: ExtensionVaultPage,
   newVault: NewVaultPage,
   chooseVaults: ExtensionChooseVaultsView,
   migrateVault: () => null,
@@ -120,6 +127,5 @@ export const viewPrefetchPriority: (keyof typeof viewLoaders)[] = [
   'send',
   'swap',
   'vaultChainDetail',
-  'defi',
   'settings',
 ]

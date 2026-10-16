@@ -14,9 +14,10 @@ export type SharedViewId = Extract<
   | 'createVaultFolder'
   | 'chooseVaults'
   | 'currencySettings'
+  | 'homeDisplaySettings'
   | 'deeplink'
-  | 'defi'
   | 'defiChainDetail'
+  | 'defiProtocol'
   | 'deleteVault'
   | 'deposit'
   | 'languageSettings'
@@ -119,10 +120,13 @@ export const sharedViewLoaders: ViewLoaders<SharedViewId> = {
     import('@core/ui/deeplink/components/DeeplinkPage').then(
       ({ DeeplinkPage }) => DeeplinkPage
     ),
-  defi: () => import('../defi/page/DefiPage').then(({ DefiPage }) => DefiPage),
   defiChainDetail: () =>
     import('../defi/chain/DefiChainPage').then(
       ({ DefiChainPage }) => DefiChainPage
+    ),
+  defiProtocol: () =>
+    import('../defi/protocols/DefiProtocolPage').then(
+      ({ DefiProtocolPage }) => DefiProtocolPage
     ),
   deleteVault: () =>
     import('@core/ui/vault/settings/delete').then(
@@ -131,6 +135,10 @@ export const sharedViewLoaders: ViewLoaders<SharedViewId> = {
   deposit: () =>
     import('../vault/deposit/DepositView').then(
       ({ DepositView }) => DepositView
+    ),
+  homeDisplaySettings: () =>
+    import('@core/ui/preferences/homeDisplay').then(
+      ({ HomeDisplayPage }) => HomeDisplayPage
     ),
   languageSettings: () =>
     import('@core/ui/preferences/language').then(

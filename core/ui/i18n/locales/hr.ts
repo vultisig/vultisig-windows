@@ -455,6 +455,13 @@ export const hr = {
   go_back: 'Natrag',
   go_to_vault: 'Idi u trezor',
   go_to_wallet: 'Idi na novčanik',
+  home_display: 'Početni prikaz',
+  home_display_separate_description:
+    'Kartica Novčanik prikazuje samo stanje novčanika, a kartica DeFi prikazuje vaše DeFi stanje.',
+  home_display_separate_title: 'Novčanik i DeFi odvojeno',
+  home_display_combined_description:
+    'Obje kartice prikazuju zbirno stanje novčanika i DeFi-ja.',
+  home_display_combined_title: 'Novčanik + DeFi',
   gold: 'Zlato',
   grant_camera_permission: 'Odobri dopuštenje za kameru',
   gwei: 'GWEI',
@@ -470,6 +477,7 @@ export const hr = {
     'Provjerite je li zaslon dobro osvjetljen i bez odsjaja',
   having_trouble_scanning_tip_3: 'Drzite oba uredaja mirno trenutak',
   hide_balance: 'Sakrij stanje',
+  hide_total_balance: 'Sakrij ukupno stanje',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
     'Ova IBC transakcija uključuje memorandum, ali {{productName}} trenutno ne podržava ugrađivanje memoranduma unutar IBC poruka o prijenosu.<br> Nastavak ove transakcije može rezultirati <b>nepovratnim gubitkom sredstava</b>.',
@@ -679,7 +687,6 @@ export const hr = {
   app_install_timeout_invalid: 'Molimo unesite važeći broj.',
   app_install_timeout_min: 'Mora biti 0 ili veće.',
   to_start_plugin_installation: 'Za početak instalacije aplikacije',
-  portfolio: 'Portfelj',
   portfolio_balance: 'Stanje portfelja',
   positions: 'Pozicije',
   powered_by: 'Pokreće <provider></provider>',
@@ -884,6 +891,7 @@ export const hr = {
     'Podijelite svoj jedinstveni referalni kod kako biste pozvali prijatelje. Oni dobivaju popust i što više trguju, to više zarađujete — izravno u svoj novčanik.',
   shares: 'Dionice',
   show_balance: 'Prikaži stanje',
+  show_total_balance: 'Prikaži ukupno stanje',
   sign: 'Potpiši',
   signAmino: 'Amino znak',
   signDirect: 'Direct znak',

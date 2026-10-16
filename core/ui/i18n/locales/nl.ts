@@ -456,6 +456,13 @@ export const nl = {
   go_back: 'Ga terug',
   go_to_vault: 'Ga naar kluis',
   go_to_wallet: 'Ga naar de portemonnee',
+  home_display: 'Startweergave',
+  home_display_separate_description:
+    'Je Wallet-tabblad toont alleen je walletsaldo en je DeFi-tabblad toont je DeFi-saldo.',
+  home_display_separate_title: 'Wallet en DeFi apart',
+  home_display_combined_description:
+    'Beide tabbladen tonen je gecombineerde wallet- en DeFi-saldo.',
+  home_display_combined_title: 'Wallet + DeFi',
   gold: 'Goud',
   grant_camera_permission: 'Cameratoestemming geven',
   gwei: 'GWEI',
@@ -471,6 +478,7 @@ export const nl = {
     'Zorg ervoor dat het scherm goed verlicht en vrij van schittering is',
   having_trouble_scanning_tip_3: 'Houd beide apparaten even stil',
   hide_balance: 'Saldo verbergen',
+  hide_total_balance: 'Totaal saldo verbergen',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
     'Deze IBC-transactie bevat een memo, maar {{productName}} ondersteunt momenteel geen memos binnen IBC transfer-berichten.<br> Doorgaan met deze transactie kan leiden tot <b>onomkeerbaar verlies van funds</b>.',
@@ -683,7 +691,6 @@ export const nl = {
   app_install_timeout_invalid: 'Voer een geldig getal in.',
   app_install_timeout_min: 'Moet 0 of groter zijn.',
   to_start_plugin_installation: 'Om de plugininstallatie te starten',
-  portfolio: 'Portfolio',
   portfolio_balance: 'Portfoliosaldo',
   positions: 'Posities',
   powered_by: 'Aangedreven door <provider></provider>',
@@ -879,6 +886,7 @@ export const nl = {
     'Deel je unieke referralcode om vrienden uit te nodigen. Zij krijgen korting en hoe meer zij traden, hoe meer jij verdient — direct naar je wallet.',
   shares: 'Shares',
   show_balance: 'Saldo tonen',
+  show_total_balance: 'Totaal saldo tonen',
   sign: 'Ondertekenen',
   signAmino: 'Amino-ondertekening',
   signDirect: 'Direct ondertekenen',

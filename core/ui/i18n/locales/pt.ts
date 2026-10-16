@@ -459,6 +459,13 @@ export const pt = {
   go_back: 'Volte',
   go_to_vault: 'Vá para o cofre',
   go_to_wallet: 'Acesse a carteira',
+  home_display: 'Exibição inicial',
+  home_display_separate_description:
+    'A aba Carteira mostra apenas o saldo da carteira, e a aba DeFi mostra seu saldo em DeFi.',
+  home_display_separate_title: 'Carteira e DeFi separados',
+  home_display_combined_description:
+    'As duas abas mostram o saldo combinado da carteira e DeFi.',
+  home_display_combined_title: 'Carteira + DeFi',
   gold: 'Ouro',
   grant_camera_permission: 'Conceder permissão à câmera',
   gwei: 'GWEI',
@@ -476,6 +483,7 @@ export const pt = {
   having_trouble_scanning_tip_3:
     'Mantenha ambos os dispositivos estaveis por um momento',
   hide_balance: 'Ocultar saldo',
+  hide_total_balance: 'Ocultar saldo total',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transação IBC inclui um memorando, mas a {{productName}} atualmente não suporta a incorporação de memorandos em mensagens de transferência IBC.<br> Prosseguir com esta transação pode resultar em <b>perda irreversível de fundos</b>.',
@@ -688,9 +696,8 @@ export const pt = {
   app_install_timeout_invalid: 'Por favor, insira um número válido.',
   app_install_timeout_min: 'Deve ser igual ou superior a 0.',
   to_start_plugin_installation: 'Para iniciar a instalação do aplicativo',
-  portfolio: 'Portfólio',
   portfolio_balance: 'Saldo do portfólio',
-  positions: 'Cargos',
+  positions: 'Posições',
   powered_by: 'Alimentado por <provider> </provider>',
   price: 'Preço',
   price_impact_average: 'Média',
@@ -887,6 +894,7 @@ export const pt = {
     'Compartilhe seu código de indicação exclusivo para convidar amigos. Eles ganham um desconto e, quanto mais negociarem, mais você ganha — diretamente na sua carteira.',
   shares: 'Ações',
   show_balance: 'Mostrar saldo',
+  show_total_balance: 'Mostrar saldo total',
   sign: 'Assinar',
   signAmino: 'Assinatura Amino',
   signDirect: 'Assinatura Direct',

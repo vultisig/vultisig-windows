@@ -1,6 +1,3 @@
-import { useScroll } from '@lib/ui/hooks/useScroll'
-import { RefObject } from 'react'
-
 const collapseDistance = 100
 
 const contentBalanceFadeEnd = 0.5
@@ -9,17 +6,12 @@ const normalHeaderFadeEnd = 0.75
 const clamp = (value: number) => Math.min(Math.max(value, 0), 1)
 
 /**
- * 0…1 progress of a page header collapse, driven by the page's scroll
- * position over roughly the height of the large balance block, so the
- * handoff completes as that balance slides under the header.
+ * 0…1 progress of a page header collapse for a scroll offset, run over
+ * roughly the height of the large balance block, so the handoff completes as
+ * that balance slides under the header.
  */
-export const useHeaderCollapseProgress = (
-  scrollContainerRef: RefObject<HTMLElement>
-) => {
-  const { y } = useScroll(scrollContainerRef)
-
-  return clamp(y / collapseDistance)
-}
+export const getHeaderCollapseProgress = (scrollY: number) =>
+  clamp(scrollY / collapseDistance)
 
 /**
  * Opacity of the large in-content balance. It fades out over the first half

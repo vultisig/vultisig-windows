@@ -25,13 +25,14 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
+import { loadDefiHome } from '@core/ui/vault/home/lazyDefiHome'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
 import { lazyViews } from '@lib/ui/navigation/lazyViews'
 import { Views } from '@lib/ui/navigation/Views'
 import { omit } from '@vultisig/lib-utils/record/omit'
 
-const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
+const appCustomViews: Views<Exclude<AppViewId, SharedViewId | 'defi'>> = {
   checkUpdate: CheckUpdatePage,
   importSeedphrase: ImportSeedphrasePage,
   importVault: ImportVaultPage,
@@ -67,10 +68,11 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
 
 const desktopSharedViewOverrides: Pick<
   Views<AppViewId>,
-  'vault' | 'chooseVaults'
+  'vault' | 'defi' | 'chooseVaults'
 > = {
   chooseVaults: DesktopChooseVaultsView,
   vault: DesktopVaultPage,
+  defi: DesktopVaultPage,
 }
 
 const lazy = lazyViews(sharedViewLoaders)
@@ -82,13 +84,16 @@ export const views: Views<AppViewId> = {
   ...desktopSharedViewOverrides,
 }
 
-/** Loaders for the shared views outside the entry chunk, to warm once home has painted. */
-export const viewLoaders = omit(lazy.loaders, 'vault', 'chooseVaults')
+/** Off-entry-chunk loaders, warmed once home has painted. */
+export const viewLoaders = {
+  defiHome: loadDefiHome,
+  ...omit(lazy.loaders, 'vault', 'chooseVaults'),
+}
 
 /** The views a user is most likely to open next from home, warmed first. */
 export const viewPrefetchPriority: (keyof typeof viewLoaders)[] = [
+  'defiHome',
   'send',
   'swap',
   'vaultChainDetail',
-  'defi',
 ]

@@ -460,6 +460,13 @@ export const es = {
   go_back: 'Volver',
   go_to_vault: 'Ir a la bóveda',
   go_to_wallet: 'Ir a la cartera',
+  home_display: 'Pantalla de inicio',
+  home_display_separate_description:
+    'Tu pestaña Cartera muestra solo el saldo de tu cartera y tu pestaña DeFi muestra tu saldo DeFi.',
+  home_display_separate_title: 'Cartera y DeFi por separado',
+  home_display_combined_description:
+    'Ambas pestañas muestran el saldo combinado de tu cartera y DeFi.',
+  home_display_combined_title: 'Cartera + DeFi',
   gold: 'Oro',
   grant_camera_permission: 'Conceder permiso para la cámara',
   gwei: 'GWEI',
@@ -476,6 +483,7 @@ export const es = {
   having_trouble_scanning_tip_3:
     'Mantenga ambos dispositivos quietos por un momento',
   hide_balance: 'Ocultar saldo',
+  hide_total_balance: 'Ocultar saldo total',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
     'Esta transacción de IBC incluye una nota, pero {{productName}} actualmente no admite la incorporación de notas dentro de los mensajes de transferencia de IBC.<br>Continuar con esta transacción puede resultar en una <b>pérdida irreversible de fondos</b>.',
@@ -688,7 +696,6 @@ export const es = {
   app_install_timeout_invalid: 'Por favor, introduzca un número válido.',
   app_install_timeout_min: 'Debe ser 0 o mayor.',
   to_start_plugin_installation: 'Para iniciar la instalación de la aplicación',
-  portfolio: 'Portafolio',
   portfolio_balance: 'Saldo de la cartera',
   positions: 'Posiciones',
   powered_by: 'Desarrollado por <provider></provider>',
@@ -891,6 +898,7 @@ export const es = {
     'Comparte tu código de referencia único para invitar a tus amigos. Ellos recibirán un descuento y, cuanto más operen, más ganarás, directamente en tu billetera.',
   shares: 'Acciones',
   show_balance: 'Mostrar saldo',
+  show_total_balance: 'Mostrar saldo total',
   sign: 'Firmar',
   signAmino: 'Firma Amino',
   signDirect: 'Firma Direct',
