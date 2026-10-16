@@ -541,7 +541,6 @@ export const en = {
   go_back: 'Go Back',
   go_to_vault: 'Go to vault',
   go_to_wallet: 'Go to wallet',
-  got_it: 'Got it',
   home_display: 'Home display',
   home_display_separate_description:
     'Your Wallet tab shows your wallet balance only, and your DeFi tab shows your DeFi balance.',
@@ -549,8 +548,6 @@ export const en = {
   home_display_combined_description:
     'Both tabs show your combined wallet and DeFi balance.',
   home_display_combined_title: 'Wallet + DeFi',
-  home_swipe_hint_description: 'Switch between your wallet and DeFi tabs',
-  home_swipe_hint_title: 'Swipe to switch',
   gold: 'Gold',
   grant_camera_permission: 'Grant Camera Permission',
   gwei: 'GWEI',

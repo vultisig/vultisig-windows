@@ -466,7 +466,6 @@ export const de = {
   go_back: 'Geh zurück',
   go_to_vault: 'Gehe zum Tresor.',
   go_to_wallet: 'Gehe zu deiner Brieftasche',
-  got_it: 'Verstanden',
   home_display: 'Startansicht',
   home_display_separate_description:
     'Dein Wallet-Tab zeigt nur dein Wallet-Guthaben, und dein DeFi-Tab zeigt dein DeFi-Guthaben.',
@@ -474,8 +473,6 @@ export const de = {
   home_display_combined_description:
     'Beide Tabs zeigen dein kombiniertes Wallet- und DeFi-Guthaben.',
   home_display_combined_title: 'Wallet + DeFi',
-  home_swipe_hint_description: 'Wechsle zwischen deinem Wallet- und DeFi-Tab',
-  home_swipe_hint_title: 'Wischen zum Wechseln',
   gold: 'Gold',
   grant_camera_permission: 'Kameraerlaubnis erteilen',
   gwei: 'GWEI',

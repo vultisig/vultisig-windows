@@ -3,7 +3,7 @@ import { MotionValue, motionValue } from 'framer-motion'
 
 import { HomeTab } from './homeTab'
 
-/** Motion values, so a swipe or scroll restyles followers without re-rendering React. */
+/** Motion values, so a slide or scroll restyles followers without re-rendering React. */
 type HomeMotion = {
   /** Pager travel in pages: `0` on Wallet, `1` on DeFi, fractional between. */
   position: MotionValue<number>

@@ -459,7 +459,6 @@ export const pt = {
   go_back: 'Volte',
   go_to_vault: 'Vá para o cofre',
   go_to_wallet: 'Acesse a carteira',
-  got_it: 'Entendi',
   home_display: 'Exibição inicial',
   home_display_separate_description:
     'A aba Carteira mostra apenas o saldo da carteira, e a aba DeFi mostra seu saldo em DeFi.',
@@ -467,8 +466,6 @@ export const pt = {
   home_display_combined_description:
     'As duas abas mostram o saldo combinado da carteira e DeFi.',
   home_display_combined_title: 'Carteira + DeFi',
-  home_swipe_hint_description: 'Alterne entre as abas da carteira e DeFi',
-  home_swipe_hint_title: 'Deslize para alternar',
   gold: 'Ouro',
   grant_camera_permission: 'Conceder permissão à câmera',
   gwei: 'GWEI',

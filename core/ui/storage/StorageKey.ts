@@ -27,7 +27,6 @@ export enum StorageKey {
   isTonW5Enabled = 'isTonW5Enabled',
   transactionHistory = 'transactionHistory',
   hasSeenNotificationPrompt = 'hasSeenNotificationPrompt',
-  hasSeenHomeSwipeHint = 'hasSeenHomeSwipeHint',
   homeDisplay = 'homeDisplay',
   keplrSuggestedChainsByHost = 'keplrSuggestedChainsByHost',
   customRpcOverrides = 'customRpcOverrides',

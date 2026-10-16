@@ -1,36 +1,18 @@
-import { useHorizontalWheelPaging } from '@lib/ui/hooks/useHorizontalWheelPaging'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { requestIdle } from '@lib/ui/utils/requestIdle'
 import { useQueryClient } from '@tanstack/react-query'
-import { enforceRange } from '@vultisig/lib-utils/enforceRange'
 import { animate, motion, useReducedMotion, useTransform } from 'framer-motion'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { HomeFloatingHeader } from './HomeFloatingHeader'
 import { useHomeMotion } from './homeMotion'
-import { swipeSettleTransition, tabSwitchTransition } from './homeMotionConfig'
+import { tabSwitchTransition } from './homeMotionConfig'
 import { HomePagerPage } from './HomePagerPage'
-import { HomeTab, homeTabs, useNavigateToHomeTab } from './homeTab'
+import { HomeTab, homeTabs } from './homeTab'
 import { LazyDefiHomePage } from './lazyDefiHome'
 import { WalletHomePage } from './WalletHomePage'
-
-/** Elements whose horizontal swipes are their own, not the pager's. */
-const homePagerIgnoreSelector = '[data-home-pager-ignore]'
-
-const lastIndex = homeTabs.length - 1
-/** Share of a drag past either end that still moves the pages. */
-const edgeResistance = 0.3
-
-const withEdgeResistance = (position: number) => {
-  if (position < 0) return position * edgeResistance
-  if (position > lastIndex) {
-    return lastIndex + (position - lastIndex) * edgeResistance
-  }
-
-  return position
-}
 
 type HomePagerProps = {
   tab: HomeTab
@@ -39,11 +21,9 @@ type HomePagerProps = {
 /** Both pages stay mounted once shown, so each keeps its scroll position. */
 export const HomePager = ({ tab }: HomePagerProps) => {
   const { position } = useHomeMotion()
-  const navigateToTab = useNavigateToHomeTab()
   const queryClient = useQueryClient()
   const shouldReduceMotion = useReducedMotion() === true
   const tabIndex = homeTabs.indexOf(tab)
-  const targetIndexRef = useRef(tabIndex)
   const [isDefiNeeded, setIsDefiNeeded] = useState(tab === 'defi')
   const trackX = useTransform(position, value => `${-value * 100}%`)
 
@@ -54,63 +34,22 @@ export const HomePager = ({ tab }: HomePagerProps) => {
   // Mounted off screen once home is idle, so the first switch only slides.
   useEffect(() => requestIdle(() => setIsDefiNeeded(true)), [])
 
-  const settle = (index: number, transition = tabSwitchTransition) => {
-    if (shouldReduceMotion) {
-      position.set(index)
-    } else {
-      animate(position, index, transition)
-    }
-  }
-
-  useEffect(() => {
-    if (targetIndexRef.current === tabIndex) return
-
-    targetIndexRef.current = tabIndex
-    if (shouldReduceMotion) {
-      position.set(tabIndex)
-    } else {
-      animate(position, tabIndex, tabSwitchTransition)
-    }
-  }, [tabIndex, position, shouldReduceMotion])
-
-  // Pages stay mounted, so a switch must refetch what has gone stale.
+  // Pages stay mounted, so a switch must also refetch what has gone stale.
   const shownIndexRef = useRef(tabIndex)
   useEffect(() => {
     if (shownIndexRef.current === tabIndex) return
 
     shownIndexRef.current = tabIndex
+    if (shouldReduceMotion) {
+      position.set(tabIndex)
+    } else {
+      animate(position, tabIndex, tabSwitchTransition)
+    }
     queryClient.refetchQueries({ type: 'active', stale: true })
-  }, [tabIndex, queryClient])
-
-  const wheelPagingRef = useHorizontalWheelPaging({
-    ignoreSelector: homePagerIgnoreSelector,
-    onDrag: (offsetPx, width) => {
-      setIsDefiNeeded(true)
-      position.stop()
-      position.set(
-        withEdgeResistance(targetIndexRef.current + offsetPx / width)
-      )
-    },
-    onCancel: () => settle(targetIndexRef.current),
-    onPage: direction => {
-      const nextIndex = enforceRange(
-        targetIndexRef.current + direction,
-        0,
-        lastIndex
-      )
-      if (nextIndex === targetIndexRef.current) {
-        settle(nextIndex)
-        return
-      }
-
-      targetIndexRef.current = nextIndex
-      navigateToTab(homeTabs[nextIndex])
-      settle(nextIndex, swipeSettleTransition)
-    },
-  })
+  }, [tabIndex, position, shouldReduceMotion, queryClient])
 
   return (
-    <Viewport ref={wheelPagingRef}>
+    <Viewport>
       <Track style={{ x: trackX }}>
         <HomePagerPage index={0} isActive={tab === 'wallet'}>
           <WalletHomePage />

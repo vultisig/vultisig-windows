@@ -12,7 +12,7 @@ const bottomNavigationHeight = 66
 type BottomNavigationProps = {
   activeTab?: 'wallet' | 'defi' | 'agent'
   isActiveTabRoot?: boolean
-  /** The home pager's live position, so the pill follows a swipe. */
+  /** The home pager's live position, so the pill follows the slide. */
   indicator?: MotionValue<number>
 }
 

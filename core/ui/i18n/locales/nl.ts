@@ -456,7 +456,6 @@ export const nl = {
   go_back: 'Ga terug',
   go_to_vault: 'Ga naar kluis',
   go_to_wallet: 'Ga naar de portemonnee',
-  got_it: 'Begrepen',
   home_display: 'Startweergave',
   home_display_separate_description:
     'Je Wallet-tabblad toont alleen je walletsaldo en je DeFi-tabblad toont je DeFi-saldo.',
@@ -464,8 +463,6 @@ export const nl = {
   home_display_combined_description:
     'Beide tabbladen tonen je gecombineerde wallet- en DeFi-saldo.',
   home_display_combined_title: 'Wallet + DeFi',
-  home_swipe_hint_description: 'Schakel tussen je wallet- en DeFi-tabblad',
-  home_swipe_hint_title: 'Veeg om te wisselen',
   gold: 'Goud',
   grant_camera_permission: 'Cameratoestemming geven',
   gwei: 'GWEI',

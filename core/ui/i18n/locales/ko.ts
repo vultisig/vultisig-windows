@@ -454,7 +454,6 @@ export const ko = {
   go_back: '뒤로 가기',
   go_to_vault: '금고로 이동',
   go_to_wallet: '지갑으로 이동',
-  got_it: '확인',
   home_display: '홈 화면 표시',
   home_display_separate_description:
     '지갑 탭에는 지갑 잔액만, DeFi 탭에는 DeFi 잔액이 표시돼요.',
@@ -462,8 +461,6 @@ export const ko = {
   home_display_combined_description:
     '두 탭 모두 지갑과 DeFi를 합산한 잔액을 보여줘요.',
   home_display_combined_title: '지갑 + DeFi',
-  home_swipe_hint_description: '지갑 탭과 DeFi 탭 사이를 전환하세요',
-  home_swipe_hint_title: '밀어서 전환',
   gold: '금',
   grant_camera_permission: '카메라 촬영 권한을 부여해 주세요',
   gwei: 'GWEI',

@@ -3,7 +3,6 @@ import {
   useDismissBanner,
   useDismissedBanners,
 } from '@core/ui/storage/dismissedBanners'
-import { useHorizontalWheelPaging } from '@lib/ui/hooks/useHorizontalWheelPaging'
 import { ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -54,14 +53,6 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
     return () => window.clearInterval(interval)
   }, [activeBanners.length, isPaused])
 
-  // A horizontal swipe on the carousel moves the banners, never the home tabs.
-  const wheelPagingRef = useHorizontalWheelPaging({
-    onPage: direction =>
-      setCurrentIndex(prev =>
-        Math.min(Math.max(prev + direction, 0), activeBanners.length - 1)
-      ),
-  })
-
   if (!hasLoaded || activeBanners.length === 0) {
     return null
   }
@@ -85,8 +76,6 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
 
   return (
     <CarouselContainer
-      ref={wheelPagingRef}
-      data-home-pager-ignore
       onMouseEnter={() => setIsHoverPaused(true)}
       onMouseLeave={() => setIsHoverPaused(false)}
       onFocusCapture={() => setIsFocusPaused(true)}

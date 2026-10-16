@@ -455,7 +455,6 @@ export const hr = {
   go_back: 'Natrag',
   go_to_vault: 'Idi u trezor',
   go_to_wallet: 'Idi na novčanik',
-  got_it: 'Razumijem',
   home_display: 'Početni prikaz',
   home_display_separate_description:
     'Kartica Novčanik prikazuje samo stanje novčanika, a kartica DeFi prikazuje vaše DeFi stanje.',
@@ -463,9 +462,6 @@ export const hr = {
   home_display_combined_description:
     'Obje kartice prikazuju zbirno stanje novčanika i DeFi-ja.',
   home_display_combined_title: 'Novčanik + DeFi',
-  home_swipe_hint_description:
-    'Prebacujte se između kartica novčanika i DeFi-ja',
-  home_swipe_hint_title: 'Povucite za promjenu',
   gold: 'Zlato',
   grant_camera_permission: 'Odobri dopuštenje za kameru',
   gwei: 'GWEI',

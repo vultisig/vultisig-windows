@@ -460,7 +460,6 @@ export const es = {
   go_back: 'Volver',
   go_to_vault: 'Ir a la bóveda',
   go_to_wallet: 'Ir a la cartera',
-  got_it: 'Entendido',
   home_display: 'Pantalla de inicio',
   home_display_separate_description:
     'Tu pestaña Cartera muestra solo el saldo de tu cartera y tu pestaña DeFi muestra tu saldo DeFi.',
@@ -468,8 +467,6 @@ export const es = {
   home_display_combined_description:
     'Ambas pestañas muestran el saldo combinado de tu cartera y DeFi.',
   home_display_combined_title: 'Cartera + DeFi',
-  home_swipe_hint_description: 'Cambia entre tus pestañas de cartera y DeFi',
-  home_swipe_hint_title: 'Desliza para cambiar',
   gold: 'Oro',
   grant_camera_permission: 'Conceder permiso para la cámara',
   gwei: 'GWEI',

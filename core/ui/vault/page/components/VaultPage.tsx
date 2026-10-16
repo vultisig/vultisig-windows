@@ -10,7 +10,6 @@ import { BottomNavigation } from '../../components/BottomNavigation'
 import { HomeHeader } from '../../home/HomeHeader'
 import { createHomeMotion, HomeMotionProvider } from '../../home/homeMotion'
 import { HomePager } from '../../home/HomePager'
-import { HomeSwipeHint } from '../../home/HomeSwipeHint'
 import { homeTabs, useHomeTab } from '../../home/homeTab'
 
 type VaultPageProps = {
@@ -33,7 +32,6 @@ export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
         {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
       </Wrapper>
       <BottomNavigation activeTab={tab} indicator={homeMotion.position} />
-      <HomeSwipeHint tab={tab} />
     </HomeMotionProvider>
   )
 }

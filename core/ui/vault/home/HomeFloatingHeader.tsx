@@ -18,7 +18,7 @@ import { homeTabs } from './homeTab'
 import { HomeTotalBalance } from './HomeTotalBalance'
 import { useHomeScrollOffset } from './useHomeScrollOffset'
 
-/** Drawn once over both pages and blended between their slots mid-swipe, so it never slides sideways or appears twice. */
+/** Drawn once over both pages and blended between their slots mid-slide, so it never slides sideways or appears twice. */
 export const HomeFloatingHeader = () => {
   const { client } = useCore()
   const isExtension = client === 'extension'

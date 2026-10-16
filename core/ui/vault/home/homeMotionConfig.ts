@@ -12,11 +12,3 @@ export const tabSwitchTransition: Transition = {
   damping: 2 * tabSwitchDampingRatio * tabSwitchAngularFrequency,
   mass: 1,
 }
-
-/** A swipe that committed: settles onto the tab without overshoot. */
-export const swipeSettleTransition: Transition = {
-  type: 'spring',
-  stiffness: tabSwitchAngularFrequency ** 2,
-  damping: 2 * tabSwitchAngularFrequency,
-  mass: 1,
-}
