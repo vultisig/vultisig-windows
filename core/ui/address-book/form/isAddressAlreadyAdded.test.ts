@@ -10,7 +10,7 @@ describe('isAddressAlreadyAdded', () => {
   it('rejects an EVM address that differs only by letter case', () => {
     expect(
       isAddressAlreadyAdded({
-        items: [{ address: checksumEvmAddress }],
+        items: [{ id: 'a', address: checksumEvmAddress }],
         address: checksumEvmAddress.toLowerCase(),
         chain: Chain.Ethereum,
       })
@@ -20,7 +20,7 @@ describe('isAddressAlreadyAdded', () => {
   it('compares non-EVM addresses case-sensitively', () => {
     expect(
       isAddressAlreadyAdded({
-        items: [{ address: solanaAddress }],
+        items: [{ id: 'a', address: solanaAddress }],
         address: solanaAddress.toLowerCase(),
         chain: Chain.Solana,
       })
@@ -30,7 +30,7 @@ describe('isAddressAlreadyAdded', () => {
   it('rejects an exact duplicate', () => {
     expect(
       isAddressAlreadyAdded({
-        items: [{ address: solanaAddress }],
+        items: [{ id: 'a', address: solanaAddress }],
         address: solanaAddress,
         chain: Chain.Solana,
       })
@@ -40,18 +40,32 @@ describe('isAddressAlreadyAdded', () => {
   it('lets the edited entry keep its address in another case', () => {
     expect(
       isAddressAlreadyAdded({
-        items: [{ address: checksumEvmAddress }],
+        items: [{ id: 'a', address: checksumEvmAddress }],
         address: checksumEvmAddress.toLowerCase(),
         chain: Chain.Ethereum,
-        ignoredAddress: checksumEvmAddress,
+        editedItemId: 'a',
       })
     ).toBe(false)
+  })
+
+  it('still flags another entry with the same address while editing', () => {
+    expect(
+      isAddressAlreadyAdded({
+        items: [
+          { id: 'a', address: checksumEvmAddress },
+          { id: 'b', address: checksumEvmAddress.toLowerCase() },
+        ],
+        address: checksumEvmAddress,
+        chain: Chain.Ethereum,
+        editedItemId: 'a',
+      })
+    ).toBe(true)
   })
 
   it('accepts a new address', () => {
     expect(
       isAddressAlreadyAdded({
-        items: [{ address: checksumEvmAddress }],
+        items: [{ id: 'a', address: checksumEvmAddress }],
         address: '0x14F6Ed6CBb27b607b0e2a48551a988F1a19c89B6',
         chain: Chain.Ethereum,
       })

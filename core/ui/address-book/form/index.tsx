@@ -49,6 +49,7 @@ export type AddressBookFormValues = Pick<
 
 type AddressBookFormProps = {
   defaultValues?: AddressBookFormValues
+  editedItemId?: string
   error: UseMutationResult['error']
   isPending: UseMutationResult['isPending']
   onSubmit: (values: AddressBookFormValues) => void
@@ -58,6 +59,7 @@ type AddressBookFormProps = {
 
 export const AddressBookForm: FC<AddressBookFormProps> = ({
   defaultValues = { address: '', chain: undefined, title: '' },
+  editedItemId,
   error,
   isPending,
   onSubmit,
@@ -102,7 +104,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
           items: addressBookItems,
           address,
           chain,
-          ignoredAddress: defaultValues.address,
+          editedItemId,
         })
       ) {
         ctx.addIssue({
