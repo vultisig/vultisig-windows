@@ -33,6 +33,7 @@ import { z } from 'zod'
 
 import { InputPasteAction } from '../../components/InputPasteAction'
 import { UploadQrView } from '../../qr/components/UploadQrView'
+import { isAddressAlreadyAdded } from './isAddressAlreadyAdded'
 
 const PositionQrCodeOverlay = styled.div`
   ${takeWholeSpaceAbsolutely}
@@ -96,12 +97,14 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
         })
       }
 
-      const isAddressAlreadyAdded = addressBookItems.some(
-        item =>
-          item.address === address && item.address !== defaultValues?.address
-      )
-
-      if (isAddressAlreadyAdded) {
+      if (
+        isAddressAlreadyAdded({
+          items: addressBookItems,
+          address,
+          chain,
+          ignoredAddress: defaultValues.address,
+        })
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['address'],
