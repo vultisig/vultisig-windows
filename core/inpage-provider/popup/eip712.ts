@@ -1,12 +1,15 @@
-import { attempt } from '@vultisig/lib-utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { TypedDataEncoder } from 'ethers'
 
 import { Eip712V4Payload } from './interface'
 
-const bytesTypePattern = /^bytes(?:[1-9]|[12]\d|3[0-2])?$/
-const arrayTypePattern = /^(.*)\[\d*\]$/
+/** Matches the EIP-712 `bytes` and `bytes1`…`bytes32` types. */
+export const bytesTypePattern = /^bytes(?:[1-9]|[12]\d|3[0-2])?$/
+
+/** Matches an EIP-712 array type; the first group is the item type. */
+export const arrayTypePattern = /^(.*)\[\d*\]$/
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null
@@ -66,6 +69,23 @@ export const findEmptyEip712BytesFields = ({
 
   return result
 }
+
+/**
+ * The struct type the keysign hash signs. `getCustomMessageHex` hands the
+ * types to ethers, which infers the primary type from them and ignores the
+ * payload's `primaryType`, so the review screen follows the same inference
+ * or a page could label one struct and sign another. Falls back to the
+ * declared `primaryType` when the types cannot be resolved; such a payload
+ * cannot be hashed for signing anyway.
+ */
+export const getEip712SignedPrimaryType = ({
+  primaryType,
+  types,
+}: Eip712V4Payload): string =>
+  withFallback(
+    attempt(() => TypedDataEncoder.getPrimaryType(omit(types, 'EIP712Domain'))),
+    primaryType
+  )
 
 /**
  * Why the payload cannot be hashed for signing, or `undefined` when it can.

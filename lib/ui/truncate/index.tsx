@@ -97,6 +97,7 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
     wrapperWidth: 0,
   })
   const { counter, ellipsis, truncating, wrapperWidth } = state
+  const [fontLoads, setFontLoads] = useState(0)
   const elmRef = useRef<HTMLElement | null>(null)
   const { width = 0 } = useElementSize(elmRef.current) ?? {}
 
@@ -127,7 +128,7 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
         }))
       }
     }
-  }, [ellipsis, counter, elmRef, text, wrapperWidth])
+  }, [ellipsis, counter, elmRef, text, wrapperWidth, fontLoads])
 
   useEffect(() => {
     setState(prevState => ({
@@ -138,6 +139,27 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
       wrapperWidth: width,
     }))
   }, [text, width])
+
+  // A cut measured in the fallback font can overflow once the web font
+  // arrives with wider glyphs, clipping the first characters, so truncate
+  // again from the full text. `fontLoads` reruns the measuring effect even
+  // when the text had fit untruncated. jsdom has no `document.fonts`.
+  useEffect(() => {
+    if (!('fonts' in document)) return
+
+    const retruncate = () => {
+      setFontLoads(prev => prev + 1)
+      setState(prevState => ({
+        ...prevState,
+        counter: 0,
+        ellipsis: text,
+        truncating: true,
+      }))
+    }
+
+    document.fonts.addEventListener('loadingdone', retruncate)
+    return () => document.fonts.removeEventListener('loadingdone', retruncate)
+  }, [text])
 
   return onClick ? (
     <StyledMiddleTruncate
