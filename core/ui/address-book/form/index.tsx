@@ -118,7 +118,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     watch,
   } = useForm<AddressBookFormValues>({
     resolver: zodResolver(schema),
-    mode: 'onBlur',
+    mode: 'onTouched',
     defaultValues,
   })
 

@@ -68,7 +68,7 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
     formState: { errors, isValid },
   } = useForm<Schema>({
     resolver: zodResolver(schema),
-    mode: 'onBlur',
+    mode: 'onTouched',
   })
 
   const emailValue = watch('email') ?? ''
