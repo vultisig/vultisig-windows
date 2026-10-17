@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { findEmptyEip712BytesFields, getEip712PayloadIssue } from './eip712'
+import {
+  findEmptyEip712BytesFields,
+  getEip712PayloadIssue,
+  getEip712SignedPrimaryType,
+} from './eip712'
 import { Eip712V4Payload } from './interface'
 
 const makePayload = (
@@ -110,5 +114,37 @@ describe('findEmptyEip712BytesFields', () => {
 
   it('returns nothing for a well-formed payload', () => {
     expect(findEmptyEip712BytesFields(makePayload())).toEqual([])
+  })
+})
+
+describe('getEip712SignedPrimaryType', () => {
+  it('returns the declared primary type of a well-formed payload', () => {
+    expect(getEip712SignedPrimaryType(makePayload())).toBe('Order')
+  })
+
+  it('ignores an EIP712Domain entry in the types', () => {
+    const payload = makePayload({
+      types: {
+        ...makePayload().types,
+        EIP712Domain: [{ name: 'name', type: 'string' }],
+      },
+    })
+    expect(getEip712SignedPrimaryType(payload)).toBe('Order')
+  })
+
+  it('follows the struct the hash signs when the declared type differs', () => {
+    const payload = makePayload({ primaryType: 'Permit' })
+    expect(getEip712SignedPrimaryType(payload)).toBe('Order')
+  })
+
+  it('falls back to the declared type when the types cannot be resolved', () => {
+    const payload = makePayload({
+      primaryType: 'A',
+      types: {
+        A: [{ name: 'a', type: 'string' }],
+        B: [{ name: 'b', type: 'string' }],
+      },
+    })
+    expect(getEip712SignedPrimaryType(payload)).toBe('A')
   })
 })

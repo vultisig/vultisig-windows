@@ -1,13 +1,17 @@
-import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
+import { getEip712SignedPrimaryType } from '@core/inpage-provider/popup/eip712'
+import {
+  Eip712V4Payload,
+  isEip712V4Payload,
+} from '@core/inpage-provider/popup/interface'
+import { CopyableHexRow } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/CopyableHexRow'
+import { LabeledValueRow } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/LabeledValueRow'
 import { PermitTokenRow } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/PermitTokenRow'
+import { TypedDataDisplay } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/TypedDataDisplay'
 import {
   Divider,
-  RowValue,
   Section,
 } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
-import { HStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import { MiddleTruncate } from '@lib/ui/truncate'
+import { toBigInt } from '@core/inpage-provider/popup/view/resolvers/signMessage/utils/toBigInt'
 import { EvmChain } from '@vultisig/core-chain/Chain'
 import { TypedDataDomain } from 'ethers'
 import { FC, Fragment } from 'react'
@@ -18,6 +22,7 @@ type Eip712PermitDisplayProps = {
   payload: Eip712V4Payload
 }
 
+/** One token a permit lets the spender move, with its approved amount. */
 export type PermitToken = {
   address: string
   amount: bigint
@@ -43,19 +48,6 @@ const isObjectRecord = (v: unknown): v is Record<string, unknown> =>
 
 const isArrayOfRecords = (v: unknown): v is Record<string, unknown>[] =>
   Array.isArray(v) && v.every(isObjectRecord)
-
-const toBigInt = (v: unknown): bigint | undefined => {
-  if (typeof v === 'bigint') return v
-  if (typeof v === 'number' && Number.isInteger(v)) return BigInt(v)
-  if (typeof v === 'string' && v.length > 0) {
-    try {
-      return BigInt(v)
-    } catch {
-      return undefined
-    }
-  }
-  return undefined
-}
 
 const parseEip2612Permit: PermitParser = (message, domain) => {
   if (!isString(domain.verifyingContract)) return null
@@ -145,20 +137,34 @@ const parsePermitBatchTransferFrom: PermitParser = message => {
   }
 }
 
-const permitParsers: Record<string, PermitParser> = {
+const permitParsers = {
   Permit: parseEip2612Permit,
   PermitSingle: parsePermitSingle,
   PermitBatch: parsePermitBatch,
   PermitTransferFrom: parsePermitTransferFrom,
   PermitBatchTransferFrom: parsePermitBatchTransferFrom,
+} satisfies Record<string, PermitParser>
+
+// Own-property check so a type named e.g. `constructor` never picks up an
+// `Object.prototype` member as its parser.
+const isPermitPrimaryType = (
+  primaryType: string
+): primaryType is keyof typeof permitParsers =>
+  Object.prototype.hasOwnProperty.call(permitParsers, primaryType)
+
+type ParsePermitInput = {
+  payload: Eip712V4Payload
+  primaryType: string
 }
 
-const parsePermit = (payload: Eip712V4Payload): PermitInfo | null => {
-  const parser = permitParsers[payload.primaryType]
-  if (!parser) return null
-  const parsed = parser(payload.message, payload.domain)
+const parsePermit = ({
+  payload,
+  primaryType,
+}: ParsePermitInput): PermitInfo | null => {
+  if (!isPermitPrimaryType(primaryType)) return null
+  const parsed = permitParsers[primaryType](payload.message, payload.domain)
   if (!parsed) return null
-  return { ...parsed, primaryType: payload.primaryType }
+  return { ...parsed, primaryType }
 }
 
 // Permit2 uses uint48 for expiration; uint48 max == "no expiry".
@@ -171,79 +177,35 @@ const formatDeadline = (deadline: bigint, fallback: string): string => {
   return new Date(Number(ms)).toLocaleString()
 }
 
-const formatPrimitive = (value: unknown): string => {
-  if (value === null || value === undefined) return ''
-  if (typeof value === 'bigint') return value.toString()
-  if (typeof value === 'object') return JSON.stringify(value)
-  return String(value)
-}
-
-const Row: FC<{ label: string; value: React.ReactNode }> = ({
-  label,
-  value,
-}) => (
-  <HStack
-    alignItems="center"
-    gap={8}
-    justifyContent="space-between"
-    wrap="nowrap"
-  >
-    <Text as="span" color="shy" size={14} weight={500} nowrap>
-      {label}
-    </Text>
-    {typeof value === 'string' ? (
-      <RowValue as="span" size={14} weight={500}>
-        {value}
-      </RowValue>
-    ) : (
-      value
-    )}
-  </HStack>
-)
-
+/**
+ * Readable review of an `eth_signTypedData_v4` request: a token-approval
+ * summary for recognised permits, and a field-by-field breakdown of any
+ * other payload. Both key off the primary type the hash signs, not the one
+ * the page declares.
+ */
 export const Eip712PermitDisplay: FC<Eip712PermitDisplayProps> = ({
   chain,
   payload,
 }) => {
   const { t } = useTranslation()
-  const permitInfo = parsePermit(payload)
+
+  // The page can post the popup call without the inpage provider, and the
+  // background does not check typed-data payloads, so a malformed one shows
+  // only the raw message instead of crashing the screen.
+  if (!isEip712V4Payload(payload)) return null
+
+  const primaryType = getEip712SignedPrimaryType(payload)
+  const permitInfo = parsePermit({ payload, primaryType })
 
   if (!permitInfo) {
-    const { domain, primaryType, message } = payload
-    const entries = Object.entries(message)
-    return (
-      <Section gap={12} padding={24}>
-        {isString(domain.name) && (
-          <>
-            <Row label={t('domain')} value={domain.name} />
-            <Divider />
-          </>
-        )}
-        {domain.chainId !== undefined && (
-          <>
-            <Row
-              label={t('chain_id')}
-              value={formatPrimitive(domain.chainId)}
-            />
-            <Divider />
-          </>
-        )}
-        <Row label={t('primary_type')} value={primaryType} />
-        {entries.map(([key, value]) => (
-          <Fragment key={key}>
-            <Divider />
-            <Row label={key} value={formatPrimitive(value)} />
-          </Fragment>
-        ))}
-      </Section>
-    )
+    return <TypedDataDisplay payload={payload} primaryType={primaryType} />
   }
 
   const noExpiryLabel = t('no_expiry')
 
   return (
     <Section gap={12} padding={24}>
-      <Row label={t('action')} value={t('token_approval')} />
+      <LabeledValueRow label={t('action')} value={t('token_approval')} />
       {permitInfo.tokens.map((token, index) => (
         <Fragment key={`${token.address}-${index}`}>
           <Divider />
@@ -255,7 +217,7 @@ export const Eip712PermitDisplay: FC<Eip712PermitDisplayProps> = ({
           {token.expiration !== undefined && (
             <>
               <Divider />
-              <Row
+              <LabeledValueRow
                 label={t('approval_expires')}
                 value={formatDeadline(token.expiration, noExpiryLabel)}
               />
@@ -264,22 +226,11 @@ export const Eip712PermitDisplay: FC<Eip712PermitDisplayProps> = ({
         </Fragment>
       ))}
       <Divider />
-      <Row
-        label={t('spender')}
-        value={
-          <MiddleTruncate
-            justifyContent="end"
-            size={14}
-            text={permitInfo.spender}
-            weight={500}
-            flexGrow
-          />
-        }
-      />
+      <CopyableHexRow label={t('spender')} value={permitInfo.spender} />
       {permitInfo.deadline !== undefined && (
         <>
           <Divider />
-          <Row
+          <LabeledValueRow
             label={t('deadline')}
             value={formatDeadline(permitInfo.deadline, noExpiryLabel)}
           />
