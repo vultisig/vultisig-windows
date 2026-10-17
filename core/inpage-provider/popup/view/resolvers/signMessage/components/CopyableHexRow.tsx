@@ -16,6 +16,18 @@ type CopyableHexRowProps = {
   value: string
 }
 
+// MiddleTruncate drops one character from each end per render until the text
+// fits, and the page decides how long a `bytes` value is: 40 KB of calldata
+// kept the popup re-rendering for ~40s. The row shows a few dozen characters
+// at most, so long values are cut to their ends first; copy keeps the full
+// value. Addresses and bytes32 values are shorter and pass through unchanged.
+const maxDisplayLength = 128
+
+const toDisplayText = (value: string) =>
+  value.length > maxDisplayLength
+    ? `${value.slice(0, maxDisplayLength / 2)}...${value.slice(-maxDisplayLength / 2)}`
+    : value
+
 /**
  * A sign-message detail row for an address or hex value: kept on one line
  * with its middle truncated, plus a button that copies the full value.
@@ -48,7 +60,7 @@ export const CopyableHexRow: FC<CopyableHexRowProps> = ({ label, value }) => {
         <MiddleTruncate
           justifyContent="end"
           size={14}
-          text={value}
+          text={toDisplayText(value)}
           weight={500}
           flexGrow
         />

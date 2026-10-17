@@ -13,6 +13,13 @@ vi.mock(
   '@core/inpage-provider/popup/view/resolvers/signMessage/components/PermitTokenRow',
   () => ({ PermitTokenRow: () => <span>permit-token-row</span> })
 )
+// The real component measures layout before showing anything, so it renders
+// empty on the server; expose the text it is handed instead.
+vi.mock('@lib/ui/truncate', () => ({
+  MiddleTruncate: ({ text }: { text: string }) => (
+    <span data-truncate>{text}</span>
+  ),
+}))
 
 import { Eip712PermitDisplay } from './Eip712PermitDisplay'
 
@@ -144,6 +151,27 @@ describe('Eip712PermitDisplay', () => {
 
     expect(html).not.toContain('token_approval')
     expect(html).toContain('>hello<')
+  })
+
+  it('hands truncation only the ends of a long bytes value', () => {
+    const data = `0x${'ab'.repeat(40_000)}`
+    const html = render({
+      primaryType: 'Call',
+      domain: {},
+      types: {
+        Call: [
+          { name: 'to', type: 'address' },
+          { name: 'data', type: 'bytes' },
+        ],
+      },
+      message: { to: spender, data },
+    })
+
+    expect(html).toContain(`<span data-truncate="true">${spender}</span>`)
+    expect(html).toContain(
+      `<span data-truncate="true">${data.slice(0, 64)}...${data.slice(-64)}</span>`
+    )
+    expect(html).not.toContain(data)
   })
 
   it('renders nothing for a payload missing its message', () => {
