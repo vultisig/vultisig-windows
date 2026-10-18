@@ -2069,4 +2069,6 @@ export const pt = {
     'A taxa de rede ou seu saldo mudou depois que você definiu o valor, então o valor foi reduzido de {{requestedAmount}} para {{amount}}.',
   send_enter_address_first_for_percentage:
     'Primeiro, insira o endereço do destinatário para usar os botões de porcentagem.',
+  send_insufficient_balance_for_fee:
+    'Saldo insuficiente para cobrir a taxa de rede.',
 }

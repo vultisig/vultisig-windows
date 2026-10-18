@@ -2037,4 +2037,6 @@ export const hr = {
     'Mrežna naknada ili vaš saldo promijenili su se nakon što ste postavili iznos, pa je iznos smanjen s {{requestedAmount}} na {{amount}}.',
   send_enter_address_first_for_percentage:
     'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
+  send_insufficient_balance_for_fee:
+    'Nedovoljan saldo za pokrivanje mrežne naknade',
 }

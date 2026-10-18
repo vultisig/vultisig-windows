@@ -2085,4 +2085,6 @@ export const de = {
     'Die Netzwerkgebühr bzw. Ihr Guthaben hat sich nach der Festlegung des Betrags geändert, daher wurde der Betrag von {{requestedAmount}} auf {{amount}} reduziert.',
   send_enter_address_first_for_percentage:
     'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
+  send_insufficient_balance_for_fee:
+    'Unzureichendes Guthaben zur Deckung der Netzwerkgebühr',
 }

@@ -151,10 +151,16 @@ export const ManageAmountInputField = () => {
   // stays idle and never settles. Waiting on it would lock the field for good,
   // and any fee kept from a previous receiver is stale.
   const isReceiverMissing = !receiver
+  // Even an emptied account cannot move anything once the fee alone is more
+  // than the balance, so every suggestion would come out as 0. Say why instead
+  // of letting the buttons look broken.
+  const isFeeAboveBalance =
+    hasBalance && isNative && !isReceiverMissing && getMaxSendable(true) === 0n
   const suggestionsUnavailableReason = (() => {
     if (!hasBalance || !isNative) return null
     if (isReceiverMissing) return t('send_enter_address_first_for_percentage')
     if (maxSendableError) return extractErrorMsg(maxSendableError)
+    if (isFeeAboveBalance) return t('send_insufficient_balance_for_fee')
     return null
   })()
   const isWaitingForFee =
@@ -319,7 +325,14 @@ export const ManageAmountInputField = () => {
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
-            {!error && suggestionsUnavailableReason !== null ? (
+            {!error && isFeeAboveBalance ? (
+              <AnimatedSendFormInputError
+                error={t('send_insufficient_balance_for_fee')}
+              />
+            ) : null}
+            {!error &&
+            !isFeeAboveBalance &&
+            suggestionsUnavailableReason !== null ? (
               <Text size={12} color="shy">
                 {suggestionsUnavailableReason}
               </Text>
