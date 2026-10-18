@@ -7,7 +7,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
-import { useMemo } from 'react'
+import { useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useIBCAcceptedTokens } from '../../../hooks/useIBCAcceptedTokens'
@@ -22,10 +22,18 @@ import {
 import { TokenExplorer } from '../../TokenExplorer'
 import { IBCTransferExplorer } from './IBCTransferExplorer'
 
+/**
+ * IBC transfer fields of the deposit form: destination chain, token and the
+ * vault's address on the destination chain. Reads the form through
+ * `useWatch` because nothing above it re-renders after `setValue`.
+ */
 export const IBCTransferSpecific = () => {
-  const [{ setValue, watch, getValues, chain }] = useDepositFormHandlers()
+  const [{ setValue, control, chain }] = useDepositFormHandlers()
   const { t } = useTranslation()
-  const selectedDestinationChain = getValues('destinationChain')
+  const selectedDestinationChain = useWatch({
+    control,
+    name: 'destinationChain',
+  })
   const tokens = useIBCAcceptedTokens(selectedDestinationChain)
   const filteredTokens = tokens.filter(
     token =>
@@ -33,8 +41,8 @@ export const IBCTransferSpecific = () => {
   )
   const [selectedCoin, setDepositCoin] = useDepositCoin()
   const vaultCoins = useCurrentVaultCoins()
-  const selectedAddress = getValues('nodeAddress') as string
-  const ibcOptions = useMemo(() => getIbcDropdownOptions(chain), [chain])
+  const selectedAddress = useWatch({ control, name: 'nodeAddress' })
+  const ibcOptions = getIbcDropdownOptions(chain)
 
   return (
     <VStack gap={28}>
@@ -59,7 +67,7 @@ export const IBCTransferSpecific = () => {
         renderContent={({ onClose }) => (
           <IBCTransferExplorer
             onClose={onClose}
-            activeOption={watch('destinationChain')}
+            activeOption={selectedDestinationChain}
             onOptionClick={selectedChain => {
               setValue('destinationChain', selectedChain, {
                 shouldValidate: true,
