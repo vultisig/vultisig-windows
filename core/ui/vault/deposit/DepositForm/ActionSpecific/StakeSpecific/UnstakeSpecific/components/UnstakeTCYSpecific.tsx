@@ -1,15 +1,20 @@
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Controller } from 'react-hook-form'
+import { Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositFormHandlers } from '../../../../../providers/DepositFormHandlersProvider'
 import { UnstakeSTCY } from './UnstakeSTCY'
 import { UnstakeTCYNative } from './UnstakeTCYNative'
 
+/**
+ * TCY unstake controls, switching between native TCY and auto-compounded
+ * sTCY on the `autoCompound` checkbox. Reads the form through `useWatch`
+ * because nothing above it re-renders after the checkbox changes.
+ */
 export const UnstakeTCYSpecific = () => {
-  const [{ control, setValue, watch }] = useDepositFormHandlers()
-  const autoCompound = watch('autoCompound')
+  const [{ control, setValue }] = useDepositFormHandlers()
+  const autoCompound = useWatch({ control, name: 'autoCompound' })
   const { t } = useTranslation()
 
   return (
