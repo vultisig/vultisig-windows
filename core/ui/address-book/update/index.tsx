@@ -32,6 +32,7 @@ export const UpdateAddressBookItemPage = () => {
   return (
     <AddressBookForm
       defaultValues={addressBookItem}
+      editedItemId={id}
       error={error}
       isPending={isPending}
       onSubmit={handleUpdateAddress}
