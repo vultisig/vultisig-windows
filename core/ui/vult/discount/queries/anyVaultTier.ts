@@ -64,5 +64,12 @@ export const useHighestVaultDiscountTier = (): HighestVaultDiscountTier => {
       : best
   }, null)
 
-  return { tier, isPending: queries.some(query => query.isPending) }
+  // `placeholderData` keeps these queries out of `isPending`, so a tier is
+  // only unknown while a query still shows its placeholder and is fetching.
+  return {
+    tier,
+    isPending: queries.some(
+      query => query.isPlaceholderData && query.isFetching
+    ),
+  }
 }
