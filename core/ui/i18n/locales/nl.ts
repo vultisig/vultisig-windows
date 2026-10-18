@@ -2055,5 +2055,5 @@ export const nl = {
   send_enter_address_first_for_percentage:
     'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
   send_insufficient_balance_for_fee:
-    'Onvoldoende saldo om de netwerkkosten te dekken.',
+    'Onvoldoende saldo om de netwerkkosten te betalen.',
 }

@@ -2038,5 +2038,5 @@ export const hr = {
   send_enter_address_first_for_percentage:
     'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
   send_insufficient_balance_for_fee:
-    'Nedovoljan saldo za pokrivanje mrežne naknade',
+    'Nema dovoljno stanja za plaćanje mrežne naknade',
 }

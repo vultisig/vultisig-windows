@@ -2069,5 +2069,5 @@ export const es = {
   send_enter_address_first_for_percentage:
     'Introduzca primero la dirección del destinatario para poder usar los botones de porcentaje.',
   send_insufficient_balance_for_fee:
-    'Saldo insuficiente para cubrir la tarifa de red.',
+    'Saldo insuficiente para pagar la tarifa de red.',
 }

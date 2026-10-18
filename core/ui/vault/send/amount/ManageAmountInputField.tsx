@@ -18,6 +18,7 @@ import { useIsSendFeePaidInCoin } from '@core/ui/vault/send/fee/useIsSendFeePaid
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
+import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
@@ -92,6 +93,7 @@ export const ManageAmountInputField = () => {
     isPending: isMaxSendablePending,
     error: maxSendableError,
   } = useSendMaxSendable()
+  const { data: sendFee } = useSendFeeEstimateQuery()
   const pendingMaxSendable =
     pendingSuggestion == null
       ? null
@@ -151,11 +153,17 @@ export const ManageAmountInputField = () => {
   // stays idle and never settles. Waiting on it would lock the field for good,
   // and any fee kept from a previous receiver is stale.
   const isReceiverMissing = !receiver
-  // Even an emptied account cannot move anything once the fee alone is more
-  // than the balance, so every suggestion would come out as 0. Say why instead
-  // of letting the buttons look broken.
+  // Once the fee alone takes the whole balance every suggestion comes out as
+  // 0, so say why instead of letting the buttons look broken. Compared against
+  // the fee itself rather than a zero maximum: NEAR's maximum also holds back
+  // the storage reserve, which is a different reason.
   const isFeeAboveBalance =
-    hasBalance && isNative && !isReceiverMissing && getMaxSendable(true) === 0n
+    isNative &&
+    !isReceiverMissing &&
+    balance != null &&
+    balance > 0n &&
+    sendFee != null &&
+    balance <= sendFee
   const suggestionsUnavailableReason = (() => {
     if (!hasBalance || !isNative) return null
     if (isReceiverMissing) return t('send_enter_address_first_for_percentage')
