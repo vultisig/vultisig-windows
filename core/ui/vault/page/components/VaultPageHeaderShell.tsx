@@ -2,18 +2,18 @@ import {
   getCollapsedHeaderOpacity,
   getNormalHeaderOpacity,
   isHeaderCollapsed,
-  useHeaderCollapseProgress,
 } from '@core/ui/page/headerCollapse'
 import { useCore } from '@core/ui/state/core'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
-import { ReactNode, RefObject } from 'react'
+import { motion, MotionValue, useTransform } from 'framer-motion'
+import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { VaultPageHeaderRow } from './VaultPageHeaderRow'
@@ -43,8 +43,9 @@ const HeaderContainer = styled.div<{ $isExtension: boolean }>`
     `}
 `
 
-const CollapsedContent = styled(HStack)<{ $isExtension: boolean }>`
+const CollapsedContent = styled(motion.div)<{ $isExtension: boolean }>`
   grid-area: 1 / 1;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   background: ${getColor('background')};
@@ -62,7 +63,7 @@ const CollapsedContent = styled(HStack)<{ $isExtension: boolean }>`
         `}
 `
 
-const NormalContent = styled.div<{ $isExtension: boolean }>`
+const NormalContent = styled(motion.div)<{ $isExtension: boolean }>`
   display: grid;
   grid-area: 1 / 1;
 
@@ -71,7 +72,8 @@ const NormalContent = styled.div<{ $isExtension: boolean }>`
 
 type VaultPageHeaderShellProps = {
   vault: Vault
-  scrollContainerRef: RefObject<HTMLElement>
+  /** 0…1 collapse of the header, driven by the page scroll. */
+  collapseProgress: MotionValue<number>
   primaryControls?: ReactNode
   secondaryControls: ReactNode
   balanceLabel: ReactNode
@@ -80,14 +82,14 @@ type VaultPageHeaderShellProps = {
 }
 
 /**
- * Sticky header shared by the home tabs (Wallet, Earn). As the page scrolls it
- * hands over from the full row, with the vault selector between the controls,
- * to a collapsed row showing the vault and the tab's balance. Every tab gets
- * the same box, so switching tabs never moves the header or its controls.
+ * Sticky header drawn once above the home tabs (Wallet, Earn). As the page
+ * scrolls it hands over from the full row, with the vault selector between the
+ * controls, to a collapsed row showing the vault and the balance. The
+ * handover runs on motion values, so scrolling never re-renders it.
  */
 export const VaultPageHeaderShell = ({
   vault,
-  scrollContainerRef,
+  collapseProgress,
   primaryControls,
   secondaryControls,
   balanceLabel,
@@ -96,16 +98,25 @@ export const VaultPageHeaderShell = ({
 }: VaultPageHeaderShellProps) => {
   const { client } = useCore()
   const isExtension = client === 'extension'
-  const progress = useHeaderCollapseProgress(scrollContainerRef)
-  const isCollapsed = isHeaderCollapsed(progress)
+  const collapsedOpacity = useTransform(
+    collapseProgress,
+    getCollapsedHeaderOpacity
+  )
+  const normalOpacity = useTransform(collapseProgress, getNormalHeaderOpacity)
+  const collapsedPointerEvents = useTransform(collapseProgress, progress =>
+    isHeaderCollapsed(progress) ? 'auto' : 'none'
+  )
+  const normalPointerEvents = useTransform(collapseProgress, progress =>
+    isHeaderCollapsed(progress) ? 'none' : 'auto'
+  )
 
   return (
     <HeaderContainer $isExtension={isExtension} data-testid={testId}>
       <CollapsedContent
         $isExtension={isExtension}
         style={{
-          opacity: getCollapsedHeaderOpacity(progress),
-          pointerEvents: isCollapsed ? 'auto' : 'none',
+          opacity: collapsedOpacity,
+          pointerEvents: collapsedPointerEvents,
         }}
       >
         <VaultSelector isExtension={isExtension} value={vault} />
@@ -122,8 +133,8 @@ export const VaultPageHeaderShell = ({
       <NormalContent
         $isExtension={isExtension}
         style={{
-          opacity: getNormalHeaderOpacity(progress),
-          pointerEvents: isCollapsed ? 'none' : 'auto',
+          opacity: normalOpacity,
+          pointerEvents: normalPointerEvents,
         }}
       >
         <VaultPageHeaderRow

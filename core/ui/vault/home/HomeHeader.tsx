@@ -1,0 +1,64 @@
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getHeaderCollapseProgress } from '@core/ui/page/headerCollapse'
+import { useHomeDisplay } from '@core/ui/storage/homeDisplay'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { useTransform } from 'framer-motion'
+import { ReactNode, Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { VaultPageHeaderControls } from '../page/components/VaultPageHeaderControls'
+import { VaultPageHeaderShell } from '../page/components/VaultPageHeaderShell'
+import { HomeBalanceQuery } from './HomeBalanceQuery'
+import { useHomeTab } from './homeTab'
+import { LazyDefiHomeHeaderControls } from './lazyDefiHome'
+import { useHomeScrollOffset } from './useHomeScrollOffset'
+
+type HomeHeaderProps = {
+  primaryControls?: ReactNode
+}
+
+export const HomeHeader = ({ primaryControls }: HomeHeaderProps) => {
+  const { t } = useTranslation()
+  const vault = useCurrentVault()
+  const tab = useHomeTab()
+  const display = useHomeDisplay()
+  const formatFiatAmount = useFormatFiatAmount()
+  const collapseProgress = useTransform(
+    useHomeScrollOffset(),
+    getHeaderCollapseProgress
+  )
+
+  return (
+    <VaultPageHeaderShell
+      vault={vault}
+      collapseProgress={collapseProgress}
+      primaryControls={primaryControls}
+      secondaryControls={
+        tab === 'wallet' ? (
+          <VaultPageHeaderControls />
+        ) : (
+          <Suspense fallback={null}>
+            <LazyDefiHomeHeaderControls />
+          </Suspense>
+        )
+      }
+      balanceLabel={
+        display === 'separate' && tab === 'defi'
+          ? t('defi')
+          : t('portfolio_balance')
+      }
+      balance={
+        <HomeBalanceQuery>
+          {({ data, error }) => {
+            if (data !== undefined) return formatFiatAmount(data)
+            if (error) return t('failed_to_load')
+
+            return <Spinner size="0.9em" />
+          }}
+        </HomeBalanceQuery>
+      }
+      testId="vault-page-header"
+    />
+  )
+}

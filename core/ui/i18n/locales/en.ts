@@ -541,6 +541,13 @@ export const en = {
   go_back: 'Go Back',
   go_to_vault: 'Go to vault',
   go_to_wallet: 'Go to wallet',
+  home_display: 'Home display',
+  home_display_separate_description:
+    'Your Wallet tab shows your wallet balance only, and your DeFi tab shows your DeFi balance.',
+  home_display_separate_title: 'Wallet & DeFi separate',
+  home_display_combined_description:
+    'Both tabs show your combined wallet and DeFi balance.',
+  home_display_combined_title: 'Wallet + DeFi',
   gold: 'Gold',
   grant_camera_permission: 'Grant Camera Permission',
   gwei: 'GWEI',
@@ -557,6 +564,7 @@ export const en = {
   having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
   high_24h: '24h High',
   hide_balance: 'Hide balance',
+  hide_total_balance: 'Hide total balance',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
     'This IBC transaction includes a memo, but {{productName}} currently does not support embedding memos inside IBC transfer messages.<br> Proceeding with this transaction may result in <b>irreversible loss of funds</b>.',
@@ -810,7 +818,6 @@ export const en = {
   app_install_timeout_min: 'Must be 0 or greater.',
   extension_version: '{{brand}} V{{version}}',
   to_start_plugin_installation: 'To start the plugin installation',
-  portfolio: 'Portfolio',
   portfolio_balance: 'Portfolio Balance',
   positions: 'Positions',
   powered_by: 'Powered by <provider></provider>',
@@ -1137,6 +1144,7 @@ export const en = {
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
   shares: 'Shares',
   show_balance: 'Show balance',
+  show_total_balance: 'Show total balance',
   show_exact_error: 'Show exact error',
   sign: 'Sign',
   signAmino: 'Amino Sign',

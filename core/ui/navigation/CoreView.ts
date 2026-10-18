@@ -37,6 +37,7 @@ export type CoreView =
     }
   | { id: 'createVaultFolder' }
   | { id: 'currencySettings' }
+  | { id: 'homeDisplaySettings' }
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'deleteVault' }
   | {
@@ -130,7 +131,8 @@ export type CoreView =
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
-  | { id: 'defi'; state: { protocol?: DefiProtocol } }
+  | { id: 'defi'; state: Record<string, never> }
+  | { id: 'defiProtocol'; state: { protocol: DefiProtocol } }
   | { id: 'defiChainDetail'; state: { chain: Chain; tab?: DefiChainPageTab } }
   | { id: 'manageDefiChains' }
   | { id: 'manageDefiPositions'; state: { chain: Chain; returnTab?: string } }

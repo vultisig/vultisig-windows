@@ -1,7 +1,7 @@
 import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
 import { useCallback } from 'react'
 
-import { useNavigation } from '../state'
+import { useSetNavigation } from '../state'
 import { View } from '../View'
 
 type NavigateOptions = {
@@ -11,7 +11,7 @@ type NavigateOptions = {
 }
 
 export function useNavigate<T extends View = View>() {
-  const [, setState] = useNavigation()
+  const setState = useSetNavigation()
 
   return useCallback(
     (view: T, options: NavigateOptions = {}) => {

@@ -14,6 +14,7 @@ import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
 import { loadMpcEngine } from '@core/ui/mpc/bootstrapMpcEngine'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
+import { loadDefiHome } from '@core/ui/vault/home/lazyDefiHome'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import {
@@ -27,10 +28,15 @@ import { createGlobalStyle, css } from 'styled-components'
 const isPopup = isPopupView()
 
 // The SDK registers the MPC engine and is needed by every signing and keygen
-// flow, so it is warmed before any page chunk.
-const prefetchLoaders = { mpcEngine: loadMpcEngine, ...viewLoaders }
+// flow, so it is warmed before any page chunk; the home's DeFi tab follows.
+const prefetchLoaders = {
+  mpcEngine: loadMpcEngine,
+  defiHome: loadDefiHome,
+  ...viewLoaders,
+}
 const prefetchPriority: (keyof typeof prefetchLoaders)[] = [
   'mpcEngine',
+  'defiHome',
   ...viewPrefetchPriority,
 ]
 const popupWidth = extensionPopupWidth

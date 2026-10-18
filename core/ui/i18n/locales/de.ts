@@ -466,6 +466,13 @@ export const de = {
   go_back: 'Geh zurück',
   go_to_vault: 'Gehe zum Tresor.',
   go_to_wallet: 'Gehe zu deiner Brieftasche',
+  home_display: 'Startansicht',
+  home_display_separate_description:
+    'Dein Wallet-Tab zeigt nur dein Wallet-Guthaben, und dein DeFi-Tab zeigt dein DeFi-Guthaben.',
+  home_display_separate_title: 'Wallet & DeFi getrennt',
+  home_display_combined_description:
+    'Beide Tabs zeigen dein kombiniertes Wallet- und DeFi-Guthaben.',
+  home_display_combined_title: 'Wallet + DeFi',
   gold: 'Gold',
   grant_camera_permission: 'Kameraerlaubnis erteilen',
   gwei: 'GWEI',
@@ -482,6 +489,7 @@ export const de = {
   having_trouble_scanning_tip_3:
     'Halten Sie beide Geräte einen Moment lang ruhig',
   hide_balance: 'Guthaben ausblenden',
+  hide_total_balance: 'Gesamtguthaben ausblenden',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
     'Diese IBC-Transaktion enthält ein Memo, aber {{productName}} unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Die Durchführung dieser Transaktion kann zu <b>einem irreversiblen Verlust von Geldern</b> führen.',
@@ -695,7 +703,6 @@ export const de = {
   app_install_timeout_invalid: 'Bitte geben Sie eine gültige Nummer ein.',
   app_install_timeout_min: 'Muss 0 oder größer sein.',
   to_start_plugin_installation: 'Um die App-Installation zu starten',
-  portfolio: 'Portfolio',
   portfolio_balance: 'Portfoliobilanz',
   positions: 'Positionen',
   powered_by: 'Bereitgestellt von <provider></provider>',
@@ -895,6 +902,7 @@ export const de = {
     'Teile deinen persönlichen Empfehlungscode, um Freunde einzuladen. Sie erhalten einen Rabatt, und je mehr sie handeln, desto mehr verdienst du – direkt in deiner Wallet.',
   shares: 'Anteile',
   show_balance: 'Guthaben anzeigen',
+  show_total_balance: 'Gesamtguthaben anzeigen',
   sign: 'Signieren',
   signAmino: 'Amino signieren',
   signDirect: 'Direkt signieren',

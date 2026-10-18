@@ -454,6 +454,13 @@ export const ko = {
   go_back: '뒤로 가기',
   go_to_vault: '금고로 이동',
   go_to_wallet: '지갑으로 이동',
+  home_display: '홈 화면 표시',
+  home_display_separate_description:
+    '지갑 탭에는 지갑 잔액만, DeFi 탭에는 DeFi 잔액이 표시돼요.',
+  home_display_separate_title: '지갑과 DeFi 분리',
+  home_display_combined_description:
+    '두 탭 모두 지갑과 DeFi를 합산한 잔액을 보여줘요.',
+  home_display_combined_title: '지갑 + DeFi',
   gold: '금',
   grant_camera_permission: '카메라 촬영 권한을 부여해 주세요',
   gwei: 'GWEI',
@@ -469,6 +476,7 @@ export const ko = {
   having_trouble_scanning_tip_3:
     '두 기기를 잠시 동안 움직이지 않게 고정하세요.',
   hide_balance: '잔액 숨기기',
+  hide_total_balance: '총 잔액 숨기기',
   how_it_works: '작동 방식',
   ibc_transaction_not_supporting_memo_desc:
     '이 IBC 거래에는 메모가 포함되어 있지만, {{productName}}는 현재 IBC 전송 메시지 내에 메모를 삽입하는 기능을 지원하지 않습니다.<br> 이 거래를 진행할 경우 <b>돌이킬 수 없는 자금 손실이</b> 발생할 수 있습니다.',
@@ -677,7 +685,6 @@ export const ko = {
   app_install_timeout_invalid: '유효한 숫자를 입력하세요.',
   app_install_timeout_min: '0 이상이어야 합니다.',
   to_start_plugin_installation: '플러그인 설치를 시작하려면',
-  portfolio: '포트폴리오',
   portfolio_balance: '포트폴리오 잔액',
   positions: '포지션',
   powered_by: 'Powered by<provider></provider>',
@@ -871,6 +878,7 @@ export const ko = {
     '나만의 추천 코드를 공유하여 친구를 초대하세요. 친구는 할인을 받고, 친구가 거래할수록 당신의 수익도 늘어납니다. 수익은 당신의 금고로 바로 지급됩니다.',
   shares: '주식',
   show_balance: '균형을 보여주세요',
+  show_total_balance: '총 잔액 표시',
   sign: '서명',
   signAmino: '아미노 사인',
   signDirect: '다이렉트 사인',

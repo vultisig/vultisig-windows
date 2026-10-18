@@ -317,6 +317,8 @@ const createQaCoreState = (vault: QaVault): CoreState => {
     setHasFinishedOnboarding: noop,
     getHasSeenNotificationPrompt: async () => true,
     setHasSeenNotificationPrompt: noop,
+    getHomeDisplay: async () => 'separate',
+    setHomeDisplay: noop,
     getIsLimitPriceChartExpanded: async () => qaIsLimitPriceChartExpanded,
     setIsLimitPriceChartExpanded: async isExpanded => {
       qaIsLimitPriceChartExpanded = isExpanded
@@ -381,7 +383,7 @@ const createQaCoreState = (vault: QaVault): CoreState => {
 export const DefiQaProviders = ({
   queryClient,
   vault,
-  initialView = { id: 'defi', state: { protocol: 'circle' } },
+  initialView = { id: 'defiProtocol', state: { protocol: 'circle' } },
   children,
 }: DefiQaProvidersProps) => {
   const vaultId = getVaultId(vault)

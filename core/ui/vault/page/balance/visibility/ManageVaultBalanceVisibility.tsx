@@ -10,12 +10,19 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+type ManageVaultBalanceVisibilityProps = {
+  /** The balance includes DeFi, so the labels name it the total. */
+  isTotal?: boolean
+}
+
 /**
  * Pill that flips the global balance-visibility flag. The eye icon and label
  * crossfade into their counterparts in place, and the pill is always as wide
  * as its longer label, so it doesn't resize mid-swap.
  */
-export const ManageVaultBalanceVisibility = () => {
+export const ManageVaultBalanceVisibility = ({
+  isTotal = false,
+}: ManageVaultBalanceVisibilityProps) => {
   const { t } = useTranslation()
   const isVisible = useIsBalanceVisible()
   const { mutateAsync: setIsBalanceVisible } = useSetIsBalanceVisibleMutation()
@@ -36,10 +43,10 @@ export const ManageVaultBalanceVisibility = () => {
       </IconStack>
       <LabelStack>
         <Label $isActive={isVisible} size={12} color="primaryAlt" nowrap>
-          {t('hide_balance')}
+          {t(isTotal ? 'hide_total_balance' : 'hide_balance')}
         </Label>
         <Label $isActive={!isVisible} size={12} color="primaryAlt" nowrap>
-          {t('show_balance')}
+          {t(isTotal ? 'show_total_balance' : 'show_balance')}
         </Label>
       </LabelStack>
     </Wrapper>

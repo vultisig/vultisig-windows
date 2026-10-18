@@ -21,7 +21,9 @@ const defaultFallback = (
 /**
  * Renders the view on top of the navigation history behind a Suspense
  * boundary, so registries built from `lazyViews` can load a page's module on
- * first use. Each navigation remounts the view.
+ * first use. Each navigation remounts the view, except a replace between two
+ * ids that share one component: the home tabs keep their pager mounted so
+ * switching between them can animate.
  */
 export const ActiveView = ({
   views,
@@ -35,7 +37,7 @@ export const ActiveView = ({
   const currentView = getLastItem(history)
   if (
     prevHistoryLengthRef.current !== history.length ||
-    prevViewIdRef.current !== currentView.id
+    views[prevViewIdRef.current] !== views[currentView.id]
   ) {
     viewKeyRef.current++
     prevHistoryLengthRef.current = history.length
