@@ -1554,8 +1554,6 @@ export const it = {
   custom_rpc_unreachable: 'Punto di accesso irraggiungibile',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Questo endpoint serve una catena diversa',
-  vult_tier_label: 'Livello {{tier}}',
-  vult_tier_required: 'Livello {{tier}} richiesto',
   send_to_different_address: 'Inviare a un indirizzo diverso',
   slippage_custom: 'Personalizzato',
   slippage_helper:

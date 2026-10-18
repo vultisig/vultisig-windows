@@ -736,8 +736,6 @@ export const en = {
   total_bonded: 'Total Bonded {{ticker}}',
   active_nodes: 'Active Nodes',
   vulti_node: 'VultiNode',
-  vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: '{{tier}} Tier Required',
   feature_gate_requires: 'Requires',
   feature_gate_requires_tier: '$VULT {{tier}} Tier or above',
   feature_gate_hold_at_least: 'Hold at least {{amount}} in your vault',

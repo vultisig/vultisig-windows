@@ -1530,8 +1530,6 @@ export const ru = {
   custom_rpc_unreachable: 'Конечная точка недоступна',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Этот конечный пункт обслуживает другую цепочку.',
-  vult_tier_label: '{{tier}} Уровень',
-  vult_tier_required: '{{tier}} Требуется уровень',
   send_to_different_address: 'Отправить на другой адрес',
   slippage_custom: 'Пользовательский',
   slippage_helper:

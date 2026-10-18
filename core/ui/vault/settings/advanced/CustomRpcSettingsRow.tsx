@@ -1,14 +1,11 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { MobileSignalIcon } from '@lib/ui/icons/MobileSignalIcon'
-import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
-import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FeatureTierGate } from '../../../vult/discount/featureGate/FeatureTierGate'
-import { TierBadge } from '../../../vult/discount/featureGate/TierBadge'
-import { useTierBadge } from '../../../vult/discount/featureGate/useTierBadge'
+import { useTierEligibility } from '../../../vult/discount/featureGate/useTierEligibility'
 import {
   DescriptionText,
   ListItemIconWrapper,
@@ -20,13 +17,13 @@ const requiredTier = 'silver'
  * Custom RPC entry on the Advanced screen. App-wide custom RPC endpoints are a
  * Silver-tier perk, evaluated across ALL vaults: if any one vault qualifies the
  * user opens the chain list, otherwise they are routed to the discount tiers
- * upsell. The badge shows the user's highest tier.
+ * upsell.
  */
 export const CustomRpcSettingsRow = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const [isGateOpen, setIsGateOpen] = useState(false)
-  const { isEligible, isPending, badge } = useTierBadge({ requiredTier })
+  const { isEligible, isPending } = useTierEligibility({ requiredTier })
 
   return (
     <>
@@ -47,12 +44,7 @@ export const CustomRpcSettingsRow = () => {
             setIsGateOpen(true)
           }
         }}
-        title={
-          <HStack alignItems="center" gap={8}>
-            <Text as="span">{t('custom_rpc')}</Text>
-            <TierBadge badge={badge} />
-          </HStack>
-        }
+        title={t('custom_rpc')}
         hoverable
         showArrow
       />

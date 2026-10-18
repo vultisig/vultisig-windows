@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FeatureTierGate } from '../../../../vult/discount/featureGate/FeatureTierGate'
-import { useTierBadge } from '../../../../vult/discount/featureGate/useTierBadge'
+import { useTierEligibility } from '../../../../vult/discount/featureGate/useTierEligibility'
 import { useAdvancedSwapSettings } from '../../state/advancedSettings'
 import { AdvancedSwapSettingsSheet } from './AdvancedSwapSettingsSheet'
 
@@ -23,7 +23,7 @@ export const AdvancedSwapSettings = () => {
   const [isOpen, { set: open, unset: close }] = useBoolean(false)
   const [isGateOpen, setIsGateOpen] = useState(false)
   const [settings, setSettings] = useAdvancedSwapSettings()
-  const { isEligible, isPending } = useTierBadge({ requiredTier })
+  const { isEligible, isPending } = useTierEligibility({ requiredTier })
 
   return (
     <>

@@ -1546,8 +1546,6 @@ export const es = {
   custom_rpc_unreachable: 'Punto final inaccesible',
   custom_rpc_url_hint: 'https://tu-nodo.ejemplo',
   custom_rpc_wrong_chain: 'Este punto final sirve a una cadena diferente',
-  vult_tier_label: '{{tier}} Nivel',
-  vult_tier_required: 'Se requiere nivel {{tier}}',
   send_to_different_address: 'Enviar a una dirección diferente',
   slippage_custom: 'Personalizado',
   slippage_helper:
