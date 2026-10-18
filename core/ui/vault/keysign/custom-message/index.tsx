@@ -1,15 +1,17 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { CustomMessageVerifyContent } from '@core/ui/mpc/keysign/custom/CustomMessageVerifyContent'
+import { isSignableCustomMessage } from '@core/ui/mpc/keysign/customMessage/isSignableCustomMessage'
 import { Button } from '@lib/ui/buttons/Button'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -32,41 +34,40 @@ export const SignCustomMessagePage = () => {
   const { t } = useTranslation()
 
   const [method, setMethod] = useState('')
+  const [isMethodTouched, setIsMethodTouched] = useState(false)
   const [message, setMessage] = useState('')
   const vault = useCurrentVault()
   const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
 
   const isFillingForm = step === 'form'
 
-  const isDisabled = useMemo(() => {
+  const custom = buildManualCustomMessagePayload({
+    method,
+    message,
+    vaultPublicKeyEcdsa: getVaultId(vault),
+  })
+
+  // The form wraps a personal_sign message in its envelope itself, so only
+  // the method can make the payload unsignable.
+  const isMethodUnsupported =
+    method.trim() !== '' && !isSignableCustomMessage(custom)
+
+  const getDisabledMessage = () => {
     if (!ethereumAddress.trim()) {
       return t('sign_custom_message_unavailable_imported_no_ethereum')
     }
     if (!method.trim()) return t('method_required')
+    if (isMethodUnsupported) return t('custom_message_unsupported_method')
     if (!message) return t('message_required')
-  }, [ethereumAddress, method, message, t])
+  }
 
-  const keysignPayload = useMemo(() => {
-    return {
-      custom: buildManualCustomMessagePayload({
-        method,
-        message,
-        vaultPublicKeyEcdsa: getVaultId(vault),
-      }),
-    }
-  }, [method, message, vault])
+  const disabledMessage = getDisabledMessage()
 
-  const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
-    if (isDisabled) {
-      return {
-        disabledMessage: isDisabled,
-      }
-    }
+  const isMethodErrorShown = isMethodTouched && isMethodUnsupported
 
-    return {
-      keysignPayload,
-    }
-  }, [keysignPayload, isDisabled])
+  const startKeysignPromptProps: StartKeysignPromptProps = disabledMessage
+    ? { disabledMessage }
+    : { keysignPayload: { custom } }
 
   return (
     <VStack fullHeight>
@@ -77,11 +78,19 @@ export const SignCustomMessagePage = () => {
       <PageContent gap={24} flexGrow scrollable>
         {isFillingForm ? (
           <VStack gap={16}>
-            <StyledTextInput
-              value={method}
-              onValueChange={setMethod}
-              placeholder={t('signing_method')}
-            />
+            <VStack gap={8}>
+              <StyledTextInput
+                value={method}
+                onValueChange={setMethod}
+                onBlur={() => setIsMethodTouched(true)}
+                placeholder={t('signing_method')}
+              />
+              {isMethodErrorShown && (
+                <Text size={12} color="danger">
+                  {t('custom_message_unsupported_method')}
+                </Text>
+              )}
+            </VStack>
             <StyledTextInput
               value={message}
               onValueChange={setMessage}
@@ -94,7 +103,7 @@ export const SignCustomMessagePage = () => {
       </PageContent>
       <PageFooter>
         {isFillingForm ? (
-          <Button disabled={isDisabled} onClick={toNextStep}>
+          <Button disabled={disabledMessage} onClick={toNextStep}>
             {t('continue')}
           </Button>
         ) : (

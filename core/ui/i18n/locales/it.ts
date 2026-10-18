@@ -2080,4 +2080,8 @@ export const it = {
   copy_link: 'Copia collegamento',
   share_qr_code: 'Condividi il codice QR',
   share_qr_image: "Condividi l'immagine QR",
+  custom_message_unsupported_format:
+    'Questo messaggio non è in un formato di firma riconosciuto, pertanto non può essere firmato.',
+  custom_message_unsupported_method:
+    'Metodo di firma non supportato. Utilizzare personal_sign o eth_signTypedData_v4.',
 }

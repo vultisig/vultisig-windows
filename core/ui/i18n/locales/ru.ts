@@ -2051,4 +2051,8 @@ export const ru = {
   copy_link: 'Скопировать ссылку',
   share_qr_code: 'Поделиться QR-кодом',
   share_qr_image: 'Поделиться QR-изображением',
+  custom_message_unsupported_format:
+    'Это сообщение не имеет общепринятого формата для подписания, поэтому его нельзя подписать.',
+  custom_message_unsupported_method:
+    'Неподдерживаемый метод подписи. Используйте personal_sign или eth_signTypedData_v4.',
 }

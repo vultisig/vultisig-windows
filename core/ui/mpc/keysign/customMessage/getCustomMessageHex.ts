@@ -9,6 +9,7 @@ import { keccak256, sha256 } from 'viem'
 
 import { CustomMessageSupportedChain } from './chains'
 import { getCustomMessageBytes } from './getCustomMessageBytes'
+import { isSignableCustomMessage } from './isSignableCustomMessage'
 
 type GetCustomMessageHexInput = {
   chain: CustomMessageSupportedChain
@@ -27,13 +28,20 @@ const getSuiDigestHex = (messageBytes: Uint8Array): string =>
  * The hex digest the MPC keysign signs for a custom message. Every co-signer
  * computes it independently from the shared payload, so a change here must
  * ship on every platform at once; domain separation belongs in the popup,
- * which builds the payload's `message`.
+ * which builds the payload's `message`. Throws for a payload that
+ * `isSignableCustomMessage` refuses, so no path signs one unchecked.
  */
 export const getCustomMessageHex = ({
   chain,
   message,
   method,
 }: GetCustomMessageHexInput) => {
+  if (!isSignableCustomMessage({ chain, method, message })) {
+    throw new Error(
+      `Refusing to sign a ${chain} custom message with method "${method}": it is not a recognised signing format`
+    )
+  }
+
   if (method === 'eth_signTypedData_v4') {
     const { domain, types, message: msg } = JSON.parse(message)
     return stripHexPrefix(

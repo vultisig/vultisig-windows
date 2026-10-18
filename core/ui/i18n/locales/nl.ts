@@ -2061,4 +2061,8 @@ export const nl = {
   copy_link: 'Link kopiëren',
   share_qr_code: 'Deel de QR-code',
   share_qr_image: 'Deel de QR-afbeelding',
+  custom_message_unsupported_format:
+    'Dit bericht heeft geen erkend ondertekeningsformaat en kan daarom niet worden ondertekend.',
+  custom_message_unsupported_method:
+    'Niet-ondersteunde ondertekeningsmethode. Gebruik personal_sign of eth_signTypedData_v4.',
 }
