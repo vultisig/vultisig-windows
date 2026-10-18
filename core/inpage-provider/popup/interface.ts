@@ -13,6 +13,7 @@ import {
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { SerializedSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
 import { Tx } from '@vultisig/core-chain/tx'
+import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { Method } from '@vultisig/lib-utils/types/Method'
 import { TypedDataDomain, TypedDataField } from 'ethers'
 
@@ -156,6 +157,23 @@ export type PopupInterface = {
 }
 
 export type PopupMethod = keyof PopupInterface
+
+const popupMethodRecord: Record<PopupMethod, true> = {
+  grantVaultAccess: true,
+  exportVaults: true,
+  pluginReshare: true,
+  signMessage: true,
+  sendTx: true,
+  watchAsset: true,
+  suggestKeplrChain: true,
+}
+
+/**
+ * Every popup method, available at runtime. The background checks the method
+ * a page posts against it before opening a popup, since the view resolvers
+ * that implement each method are not loaded there.
+ */
+export const popupMethods = getRecordKeys(popupMethodRecord)
 
 export const mergeableInFlightPopupMethods: PopupMethod[] = ['grantVaultAccess']
 
