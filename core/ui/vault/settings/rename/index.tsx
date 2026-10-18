@@ -74,7 +74,7 @@ export const VaultRenamePage = () => {
     formState: { errors, isValid, isDirty },
   } = useForm<Schema>({
     defaultValues: { name: currentVault.name },
-    mode: 'onBlur',
+    mode: 'onTouched',
     resolver: zodResolver(schema),
   })
 

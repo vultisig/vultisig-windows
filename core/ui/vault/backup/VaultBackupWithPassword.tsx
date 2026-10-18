@@ -54,7 +54,7 @@ export const VaultBackupWithPassword = ({
     handleSubmit,
     register,
   } = useForm<Schema>({
-    mode: 'onBlur',
+    mode: 'onTouched',
     resolver: zodResolver(schema),
   })
 
