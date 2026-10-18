@@ -8,6 +8,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { Result } from '@vultisig/lib-utils/types/Result'
@@ -31,6 +32,7 @@ import {
   authorizedPopupMethods,
   PopupInterface,
   PopupMethod,
+  popupMethods,
   SignMessageInput,
 } from '../popup/interface'
 import { PopupMessage, PopupOptions } from '../popup/resolver'
@@ -38,6 +40,31 @@ import { callPopupFromBackground } from '../popup/resolvers/background'
 import { getSignMessageIssue } from '../popup/signMessage/getSignMessageIssue'
 import { InpageProviderBridgeMessage } from './message'
 import { serializeBridgeError } from './serializeBridgeError'
+import { UnsupportedMethodError } from './unsupportedMethodError'
+
+/**
+ * Refuses a message naming a method the background does not implement, such
+ * as one a later release removed. Pages can post bridge messages directly, so
+ * the method name is untrusted: dispatched unchecked, a background call would
+ * invoke an undefined resolver and a popup call would open a popup with no
+ * view for it.
+ */
+function assertSupportedMethod(message: InpageProviderBridgeMessage) {
+  const [method, supportedMethods] = matchRecordUnion<
+    InpageProviderBridgeMessage,
+    [string, readonly string[]]
+  >(message, {
+    background: ({ call }) => [
+      getRecordUnionKey(call),
+      getRecordKeys(backgroundResolvers),
+    ],
+    popup: ({ call }) => [getRecordUnionKey(call), popupMethods],
+  })
+
+  if (!isOneOf(method, supportedMethods)) {
+    throw new UnsupportedMethodError(method)
+  }
+}
 
 /** Resolve a background call using the given context. */
 function resolveBackgroundCall({
@@ -233,6 +260,8 @@ export const runInpageProviderBridgeBackgroundAgent = () => {
   runBridgeBackgroundAgent<InpageProviderBridgeMessage, Result>({
     handleRequest: ({ message, context: initialContext, reply }) => {
       attempt(async () => {
+        assertSupportedMethod(message)
+
         const context = await buildCallContext(message, initialContext)
 
         return matchRecordUnion<InpageProviderBridgeMessage, Promise<unknown>>(
