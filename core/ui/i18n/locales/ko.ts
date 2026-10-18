@@ -1519,8 +1519,6 @@ export const ko = {
   custom_rpc_unreachable: '엔드포인트에 연결할 수 없습니다.',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: '이 엔드포인트는 다른 체인을 제공합니다.',
-  vult_tier_label: '{{tier}} 티어',
-  vult_tier_required: '{{tier}} 등급 필요',
   send_to_different_address: '다른 주소로 보내기',
   slippage_custom: '사용자 지정',
   slippage_helper:

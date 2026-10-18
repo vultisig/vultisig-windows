@@ -1533,8 +1533,6 @@ export const nl = {
   custom_rpc_unreachable: 'Eindpunt onbereikbaar',
   custom_rpc_url_hint: 'https://jouw-node.voorbeeld',
   custom_rpc_wrong_chain: 'Dit eindpunt bedient een andere keten.',
-  vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: '{{tier}} Vereiste tier',
   send_to_different_address: 'Verzenden naar een ander adres',
   slippage_custom: 'Aangepast',
   slippage_helper:

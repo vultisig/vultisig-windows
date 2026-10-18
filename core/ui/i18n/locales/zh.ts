@@ -1430,8 +1430,6 @@ export const zh = {
   custom_rpc_unreachable: '端点无法访问',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: '这个端点服务于不同的链',
-  vult_tier_label: '{{tier}} 层',
-  vult_tier_required: '{{tier}} 层级要求',
   send_to_different_address: '寄送到不同的地址',
   slippage_custom: '自定义',
   slippage_helper: '限制价格在交易取消前可以变动的幅度。',

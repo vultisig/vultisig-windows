@@ -1535,8 +1535,6 @@ export const hr = {
   custom_rpc_unreachable: 'Krajnja točka nije dostupna',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Ova krajnja točka opslužuje drugi lanac',
-  vult_tier_label: 'Razina {{tier}}',
-  vult_tier_required: '{{tier}} Potrebna razina',
   send_to_different_address: 'Pošalji na drugu adresu',
   slippage_custom: 'Prilagođeno',
   slippage_helper:

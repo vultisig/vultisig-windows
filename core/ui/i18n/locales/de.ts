@@ -1562,8 +1562,6 @@ export const de = {
   custom_rpc_unreachable: 'Endpunkt nicht erreichbar',
   custom_rpc_url_hint: 'https://your-node.example',
   custom_rpc_wrong_chain: 'Dieser Endpunkt dient einer anderen Kette',
-  vult_tier_label: '{{tier}} Tier',
-  vult_tier_required: '{{tier}} Stufe erforderlich',
   send_to_different_address: 'An eine andere Adresse senden',
   slippage_custom: 'Benutzerdefiniert',
   slippage_helper:
