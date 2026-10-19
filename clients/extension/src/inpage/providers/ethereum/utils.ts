@@ -35,8 +35,12 @@ export const getChain = async (account?: string) => {
 }
 
 export const switchChainHandler = async ([{ chainId }]: [
-  { chainId: string },
+  { chainId: unknown },
 ]) => {
+  if (typeof chainId !== 'string') {
+    throw new EIP1193Error('UnrecognizedChain')
+  }
+
   const chain = getEvmChainByChainId(chainId.toLowerCase())
   if (!chain) {
     throw new EIP1193Error('UnrecognizedChain')

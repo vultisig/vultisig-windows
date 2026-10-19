@@ -47,7 +47,7 @@ describe('switchChainHandler', () => {
     })
   })
 
-  it.each(['0xffffff', 'a86a', '0xa86z'])(
+  it.each(['0xffffff', 'a86a', '0xa86z', 43114, undefined])(
     'rejects %s as an unrecognized chain',
     async chainId => {
       await expect(switchChainHandler([{ chainId }])).rejects.toMatchObject({
