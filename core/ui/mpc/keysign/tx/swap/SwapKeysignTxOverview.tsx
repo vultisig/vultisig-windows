@@ -9,7 +9,6 @@ import {
   getSwapQuoteAffiliateBps,
 } from '@core/ui/vault/swap/affiliate/affiliateBps'
 import { getSwapSourceOutcome } from '@core/ui/vault/swap/arrival/swapOutcome'
-import { SwapDiscountInfo } from '@core/ui/vault/swap/form/info/SwapDiscountInfo'
 import { SwapFeeRowRenderer } from '@core/ui/vault/swap/form/info/swapFeeRow'
 import { SwapPriceImpactRow } from '@core/ui/vault/swap/form/info/SwapPriceImpactRow'
 import { SwapProviderFeeRows } from '@core/ui/vault/swap/form/info/SwapProviderFeeRows'
@@ -301,10 +300,6 @@ export const SwapKeysignTxOverview = ({
                 renderRow={renderFeeRow}
                 fees={quoteFees.fees}
                 disclosure={quoteFees.disclosure}
-              />
-              <SwapDiscountInfo
-                renderRow={renderFeeRow}
-                savings={quoteFees.disclosure.savings}
               />
               <SwapPriceImpactRow
                 renderRow={renderFeeRow}

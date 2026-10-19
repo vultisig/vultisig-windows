@@ -1,12 +1,14 @@
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
 import { useTranslation } from 'react-i18next'
 
 import { currentProductBrandConfig } from '../../../../product/brand'
 import {
   formatFeeRateLabel,
-  getSwapListRateFee,
+  getSwapListRateBreakdown,
   SwapFeeDisclosure,
 } from '../../affiliate/affiliateBps'
 import { SwapProviderFees } from '../../queries/resolveSwapFees'
+import { SwapDiscountInfo } from './SwapDiscountInfo'
 import { SwapFeeRowRenderer } from './swapFeeRow'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
@@ -17,13 +19,20 @@ type SwapProviderFeeRowsProps = {
 }
 
 /**
- * The provider-side fee rows, one per recipient of the money.
+ * The provider-side fee rows, one per recipient of the money, followed by the
+ * discounts that came off the product's cut.
  *
  * The affiliate row always renders — including at a fully discounted rate — so
  * the product's cut is disclosed on every route rather than only where it
  * happens to be non-zero. It quotes the list rate and the undiscounted amount;
- * the discounts that bring it down to what was charged are itemized below by
- * `SwapDiscountInfo`, so a reduction is never counted twice.
+ * each discount below it states the money it takes off, so the rows subtract
+ * to what was charged and a reduction is never counted twice. Both are priced
+ * here from one breakdown, so neither can be read off a different base.
+ *
+ * A fee folded into the quoted rate has no amount to take a discount off. A
+ * discounted one there itemizes nothing and states no rate, as Android does: a
+ * discount row would subtract from nothing, and the list rate alone would claim
+ * more than was charged. Undiscounted, the list rate is what was charged.
  *
  * The referrer's share has no row of its own: it is part of the same list rate,
  * and billing it separately would make the expanded rows overshoot the total.
@@ -35,7 +44,7 @@ export const SwapProviderFeeRows = ({
 }: SwapProviderFeeRowsProps) => {
   const { t } = useTranslation()
 
-  const listRateFee = getSwapListRateFee({
+  const breakdown = getSwapListRateBreakdown({
     affiliate,
     referral,
     notional: affiliateNotional,
@@ -53,17 +62,21 @@ export const SwapProviderFeeRows = ({
   // what it charges.
   const name = `${currentProductBrandConfig.name} ${t('swap_fee')}`
 
+  // A route that charges nothing at all must not advertise a rate it never
+  // applied, so it keeps the bare name against its zero — as does a discounted
+  // fee folded into the rate, whose list rate nothing below brings down.
+  const isRateStated = breakdown
+    ? breakdown.listRateFee.amount > 0n
+    : isEmpty(disclosure.savings)
+
   return (
     <>
       {renderRow({
-        // A route that charges nothing at all must not advertise a rate it
-        // never applied, so it keeps the bare name against its zero.
-        label:
-          listRateFee?.amount === 0n
-            ? name
-            : formatFeeRateLabel({ name, bps: disclosure.listBps }),
-        value: listRateFee ? (
-          <SwapFeeFiatValue value={[listRateFee]} />
+        label: isRateStated
+          ? formatFeeRateLabel({ name, bps: disclosure.listBps })
+          : name,
+        value: breakdown ? (
+          <SwapFeeFiatValue value={[breakdown.listRateFee]} />
         ) : (
           <>{t('swap_fee_included_in_rate')}</>
         ),
@@ -74,6 +87,9 @@ export const SwapProviderFeeRows = ({
             value: <SwapFeeFiatValue value={[protocol]} />,
           })
         : null}
+      {breakdown && (
+        <SwapDiscountInfo renderRow={renderRow} savings={breakdown.savings} />
+      )}
     </>
   )
 }
