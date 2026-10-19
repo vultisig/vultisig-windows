@@ -35,6 +35,28 @@ describe('switchChainHandler', () => {
     expect(mockCallPopup).not.toHaveBeenCalled()
   })
 
+  it('treats an uppercase hex chainId as the same chain', async () => {
+    mockCallBackground.mockResolvedValue(undefined)
+
+    await expect(
+      switchChainHandler([{ chainId: '0xA86A' }])
+    ).resolves.toBeNull()
+
+    expect(mockCallBackground).toHaveBeenCalledWith({
+      setAppChain: { evm: Chain.Avalanche },
+    })
+  })
+
+  it.each(['0xffffff', 'a86a', '0xa86z'])(
+    'rejects %s as an unrecognized chain',
+    async chainId => {
+      await expect(switchChainHandler([{ chainId }])).rejects.toMatchObject({
+        code: 4902,
+      })
+      expect(mockCallBackground).not.toHaveBeenCalled()
+    }
+  )
+
   it('prompts and retries when the requested chain is not authorized yet', async () => {
     mockCallBackground
       .mockRejectedValueOnce(BackgroundError.Unauthorized)
