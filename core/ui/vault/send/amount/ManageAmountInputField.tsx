@@ -18,6 +18,7 @@ import { useIsSendFeePaidInCoin } from '@core/ui/vault/send/fee/useIsSendFeePaid
 import { ManageDestinationTag } from '@core/ui/vault/send/memo/ManageDestinationTag'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQuery'
+import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
@@ -92,6 +93,7 @@ export const ManageAmountInputField = () => {
     isPending: isMaxSendablePending,
     error: maxSendableError,
   } = useSendMaxSendable()
+  const { data: sendFee } = useSendFeeEstimateQuery()
   const pendingMaxSendable =
     pendingSuggestion == null
       ? null
@@ -151,10 +153,22 @@ export const ManageAmountInputField = () => {
   // stays idle and never settles. Waiting on it would lock the field for good,
   // and any fee kept from a previous receiver is stale.
   const isReceiverMissing = !receiver
+  // Once the fee alone takes the whole balance every suggestion comes out as
+  // 0, so say why instead of letting the buttons look broken. Compared against
+  // the fee itself rather than a zero maximum: NEAR's maximum also holds back
+  // the storage reserve, which is a different reason.
+  const isFeeAboveBalance =
+    isNative &&
+    !isReceiverMissing &&
+    balance != null &&
+    balance > 0n &&
+    sendFee != null &&
+    balance <= sendFee
   const suggestionsUnavailableReason = (() => {
     if (!hasBalance || !isNative) return null
     if (isReceiverMissing) return t('send_enter_address_first_for_percentage')
     if (maxSendableError) return extractErrorMsg(maxSendableError)
+    if (isFeeAboveBalance) return t('send_insufficient_balance_for_fee')
     return null
   })()
   const isWaitingForFee =
@@ -319,7 +333,14 @@ export const ManageAmountInputField = () => {
               })}
             </HStack>
             {error && <AnimatedSendFormInputError error={error} />}
-            {!error && suggestionsUnavailableReason !== null ? (
+            {!error && isFeeAboveBalance ? (
+              <AnimatedSendFormInputError
+                error={t('send_insufficient_balance_for_fee')}
+              />
+            ) : null}
+            {!error &&
+            !isFeeAboveBalance &&
+            suggestionsUnavailableReason !== null ? (
               <Text size={12} color="shy">
                 {suggestionsUnavailableReason}
               </Text>

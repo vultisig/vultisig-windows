@@ -2054,4 +2054,6 @@ export const nl = {
     'De netwerkkosten of uw saldo zijn gewijzigd nadat u het bedrag had ingesteld, waardoor het bedrag is verlaagd van {{requestedAmount}} naar {{amount}}.',
   send_enter_address_first_for_percentage:
     'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
+  send_insufficient_balance_for_fee:
+    'Onvoldoende saldo om de netwerkkosten te betalen.',
 }

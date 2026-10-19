@@ -2073,4 +2073,6 @@ export const it = {
     "La commissione di rete o il tuo saldo sono cambiati dopo che hai impostato l'importo, quindi l'importo è stato ridotto da {{requestedAmount}} a {{amount}}.",
   send_enter_address_first_for_percentage:
     "Inserisci prima l'indirizzo del destinatario per utilizzare i pulsanti percentuali",
+  send_insufficient_balance_for_fee:
+    'Saldo insufficiente per pagare la tariffa di rete.',
 }

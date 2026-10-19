@@ -2027,4 +2027,6 @@ export const ko = {
     '금액을 설정한 후 네트워크 수수료 또는 잔액이 변경되어 금액이 {{requestedAmount}}에서 {{amount}}로 낮아졌습니다.',
   send_enter_address_first_for_percentage:
     '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
+  send_insufficient_balance_for_fee:
+    '네트워크 요금을 지불하기에 잔액이 부족합니다.',
 }
