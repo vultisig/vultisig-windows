@@ -16,5 +16,5 @@ if grep --fixed-strings --quiet "[${WEBKIT_SONAME}]" <<<"$needed"; then
   exit 0
 fi
 
-echo "Linux build must link ${WEBKIT_SONAME}. Pass -tags webkit2_41 on Ubuntu 24.04 / Debian 13." >&2
+echo "Linux build must link ${WEBKIT_SONAME}. Build with wails build (wails.json sets webkit2_41) and libwebkit2gtk-4.1-dev installed." >&2
 exit 1

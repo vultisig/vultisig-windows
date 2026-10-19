@@ -13,16 +13,17 @@ This project uses Wails. Please refer to https://wails.io/docs/gettingstarted/in
 
 ### For Linux Users
 
-Released Linux builds link WebKitGTK 4.1. On Debian 13 and Ubuntu 24.04:
+Linux builds link WebKitGTK 4.1 (`libwebkit2gtk-4.1-0`), which is available on
+Ubuntu 22.04+, Debian 12 and Debian 13:
 
 ```bash
 sudo apt update
 sudo apt install libwebkit2gtk-4.1-0
 ```
 
-Ubuntu 22.04 local development still uses WebKitGTK 4.0 (`libwebkit2gtk-4.0-dev`).
-Do not add `webkit2_41` to `wails.json` — Wails v2.11 applies those tags on every
-`wails build` / `wails dev`, which fails on 22.04.
+`wails.json` sets the `webkit2_41` build tag, so every `wails build` and
+`wails dev` on Linux needs `libwebkit2gtk-4.1-dev`. A binary built against
+WebKitGTK 4.0 does not start on Debian 13, which no longer ships it.
 
 ### Development
 
@@ -49,13 +50,14 @@ yarn build:desktop
 To build the native desktop binary:
 
 ```bash
-# Ubuntu 22.04 (WebKitGTK 4.0)
-sudo apt install libgtk-3-dev libwebkit2gtk-4.0-dev
-wails build
-
-# Ubuntu 24.04 / Debian 13 (WebKitGTK 4.1)
 sudo apt install libgtk-3-dev libwebkit2gtk-4.1-dev
-wails build -tags webkit2_41
+wails build
+```
+
+Before packaging a Linux release, confirm the binary links WebKitGTK 4.1:
+
+```bash
+bash scripts/verify-linux-webkit.sh build/bin/vultisig
 ```
 
 ## Vultisig Extension Extension
