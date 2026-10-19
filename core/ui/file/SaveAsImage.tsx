@@ -7,6 +7,8 @@ import { useState } from 'react'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
+import { savedImagePixelRatio } from './savedImagePixelRatio'
+
 type SaveAsImageProps = ValueProp<ReactNode> & {
   fileName: string
   renderTrigger: (props: OnClickProp) => ReactNode
@@ -20,6 +22,11 @@ const Wrapper = styled.div`
   opacity: 0;
 `
 
+/**
+ * Renders `value` off-screen and saves it as a PNG when the trigger is clicked.
+ * The PNG is rendered at a fixed pixel ratio, so a saved QR stays readable
+ * whatever the saving screen's pixel density.
+ */
 export const SaveAsImage = ({
   value,
   fileName,
@@ -30,7 +37,7 @@ export const SaveAsImage = ({
 
   const { mutate: saveImage } = useMutation({
     mutationFn: async (node: HTMLDivElement) => {
-      const dataUrl = await toPng(node)
+      const dataUrl = await toPng(node, { pixelRatio: savedImagePixelRatio })
       const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '')
       const byteCharacters = atob(base64Data)
       const byteArrays = new Uint8Array(byteCharacters.length)
