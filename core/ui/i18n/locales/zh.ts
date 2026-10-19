@@ -1902,4 +1902,6 @@ export const zh = {
   send_enter_address_first_for_percentage:
     '请先输入收件人地址才能使用百分比按钮',
   send_insufficient_balance_for_fee: '余额不足，无法支付网络费用',
+  failed_to_copy_tx_hash: '复制交易哈希失败',
+  tx_hash_copied: '交易哈希已复制',
 }

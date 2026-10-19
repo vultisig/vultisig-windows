@@ -2029,4 +2029,6 @@ export const ko = {
     '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
   send_insufficient_balance_for_fee:
     '네트워크 요금을 지불하기에 잔액이 부족합니다.',
+  failed_to_copy_tx_hash: '거래 해시 복사에 실패했습니다.',
+  tx_hash_copied: '거래 해시가 복사되었습니다',
 }

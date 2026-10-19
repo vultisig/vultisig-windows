@@ -2039,4 +2039,6 @@ export const hr = {
     'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
   send_insufficient_balance_for_fee:
     'Nema dovoljno stanja za plaćanje mrežne naknade',
+  failed_to_copy_tx_hash: 'Kopiranje hash-a transakcije nije uspjelo',
+  tx_hash_copied: 'Hash transakcije kopiran',
 }

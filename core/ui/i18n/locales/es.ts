@@ -2070,4 +2070,6 @@ export const es = {
     'Introduzca primero la dirección del destinatario para poder usar los botones de porcentaje.',
   send_insufficient_balance_for_fee:
     'Saldo insuficiente para pagar la tarifa de red.',
+  failed_to_copy_tx_hash: 'No se pudo copiar el hash de la transacción.',
+  tx_hash_copied: 'Se copió el hash de la transacción.',
 }

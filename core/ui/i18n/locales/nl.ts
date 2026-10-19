@@ -2056,4 +2056,6 @@ export const nl = {
     'Voer eerst het adres van de ontvanger in voordat u de percentageknoppen kunt gebruiken.',
   send_insufficient_balance_for_fee:
     'Onvoldoende saldo om de netwerkkosten te betalen.',
+  failed_to_copy_tx_hash: 'Het kopiëren van de transactiehash is mislukt.',
+  tx_hash_copied: 'Transactiehash gekopieerd',
 }
