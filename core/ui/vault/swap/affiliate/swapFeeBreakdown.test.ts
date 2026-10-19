@@ -195,6 +195,46 @@ describe('swap fee breakdown', () => {
   })
 })
 
+describe('an aggregator that omits a fully waived fee', () => {
+  // SwapKit quoting an Ultimate swap: 0 bps were sent, so there is no affiliate
+  // fee, and the SDK leaves the slot out rather than itemize a zero.
+  const discounts = [vultDiscount('ultimate')]
+  const fees = resolveSwapFees({
+    quote: {
+      general: {
+        dstAmount: grossPayout.toString(),
+        provider: 'swapkit',
+        tx: { evm: { from: '0x', to: '0x', data: '0x', value: '0' } },
+      },
+    },
+    network,
+    toCoinKey,
+    toCoin: { ...toCoinKey, decimals: 8, ticker: 'ETH' },
+    fromCoin: undefined,
+    affiliateBps: getSwapQuoteAffiliateBps(discounts),
+  })
+
+  const breakdown = getSwapListRateBreakdown({
+    affiliate: fees.affiliate,
+    referral: fees.referral,
+    notional: fees.affiliateNotional,
+    disclosure: getSwapFeeDisclosure(discounts),
+  })
+
+  it('arrives with no affiliate fee to scale from', () => {
+    expect(fees.affiliate).toBeUndefined()
+  })
+
+  it('waives the whole list rate instead of folding it into the quoted rate', () => {
+    const listRateAmount = (grossPayout * listBps) / bpsPerUnit
+
+    expect(breakdown?.listRateFee.amount).toBe(listRateAmount)
+    expect(breakdown?.savings.map(({ fee }) => fee.amount)).toEqual([
+      listRateAmount,
+    ])
+  })
+})
+
 describe('an aggregator that charges a fee of its own', () => {
   // vultisig-sdk#2396: 0.01 SOL to USDC through LI.FI at the Gold rate. The
   // swap paid 30000 lamports to the product and another 25000 to LI.FI.

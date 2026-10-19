@@ -193,13 +193,19 @@ type GetSwapListRateBreakdownInput = {
  *
  * Preferred form scales what every affiliate was actually charged by each
  * saving's share of it — exact, and free of any second guess at the notional.
- * A rate discounted all the way to zero leaves nothing to scale from, so the
- * savings are charged against the payout instead. The list rate is then the
- * charge plus the savings rather than scaled on its own, so the rows subtract
- * to the charge to the last base unit instead of drifting by a rounding.
+ * The list rate is then the charge plus the savings rather than scaled on its
+ * own, so the rows subtract to the charge to the last base unit instead of
+ * drifting by a rounding.
  *
- * A provider that itemizes no affiliate fee at all gets nothing: its cut is
- * inside the quoted rate, and inventing an amount for it would disclose a
+ * A rate discounted all the way to zero leaves nothing to scale from, so the
+ * savings are charged against the payout instead — whether or not the provider
+ * itemized the zero. The bps sent already prove nothing was charged, and
+ * SwapKit and LI.FI drop a zero affiliate fee from the quote rather than report
+ * it; requiring one would tell a fully discounted user that the fee is hidden
+ * in the rate.
+ *
+ * Above zero, a provider that itemizes no affiliate fee gets nothing: its cut
+ * is inside the quoted rate, and inventing an amount for it would disclose a
  * charge the quote never made.
  */
 export const getSwapListRateBreakdown = ({
@@ -208,18 +214,17 @@ export const getSwapListRateBreakdown = ({
   notional,
   disclosure: { chargedBps, savings },
 }: GetSwapListRateBreakdownInput): SwapListRateBreakdown | undefined => {
-  if (!affiliate) {
-    return undefined
+  const chargedFee = affiliate && {
+    ...affiliate,
+    amount: affiliate.amount + (referral?.amount ?? 0n),
   }
-
-  const chargedAmount = affiliate.amount + (referral?.amount ?? 0n)
 
   // `base` is worth `baseBps` of the swap; every saving is a share of it.
   const basis =
     chargedBps > 0
-      ? {
-          charged: { ...affiliate, amount: chargedAmount },
-          base: chargedAmount,
+      ? chargedFee && {
+          charged: chargedFee,
+          base: chargedFee.amount,
           baseBps: chargedBps,
         }
       : notional && {

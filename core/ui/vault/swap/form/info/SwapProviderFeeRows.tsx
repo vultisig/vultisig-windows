@@ -32,7 +32,10 @@ type SwapProviderFeeRowsProps = {
  * A fee folded into the quoted rate has no amount to take a discount off. A
  * discounted one there itemizes nothing and states no rate, as Android does: a
  * discount row would subtract from nothing, and the list rate alone would claim
- * more than was charged. Undiscounted, the list rate is what was charged.
+ * more than was charged. Undiscounted, the list rate is what was charged. A
+ * fully waived fee is never treated as folded in, even where the provider
+ * itemizes nothing: no money was charged, so it is priced against the payout
+ * like any other zero.
  *
  * The referrer's share has no row of its own: it is part of the same list rate,
  * and billing it separately would make the expanded rows overshoot the total.

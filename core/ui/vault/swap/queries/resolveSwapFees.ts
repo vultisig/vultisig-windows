@@ -24,8 +24,9 @@ type SwapCharges = {
 export type SwapProviderFees = SwapCharges & {
   /**
    * Output the affiliate rate is charged on. Not a charge itself and never part
-   * of the total — it exists so a discount can still be valued on routes where
-   * the provider bakes its fee into the quoted rate and itemizes nothing.
+   * of the total — it exists so a fully waived rate can still be valued, where
+   * no charged fee is left to scale from. That includes routes whose provider
+   * drops a zero affiliate fee from the quote rather than itemizing it.
    */
   affiliateNotional?: SwapFee
 }

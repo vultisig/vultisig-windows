@@ -195,6 +195,15 @@ export const Ultimate: Story = {
   },
 }
 
+export const UltimateFeeOmitted: Story = {
+  name: 'Ultimate, with the zero fee left out of the quote',
+  // SwapKit and LI.FI drop a zero affiliate fee rather than itemize it.
+  args: {
+    fees: { affiliateNotional: usdc(100_000_000n) },
+    discounts: [vultDiscount('ultimate')],
+  },
+}
+
 export const GoldWithProviderFee: Story = {
   name: "Gold, beside the provider's own fee",
   args: {

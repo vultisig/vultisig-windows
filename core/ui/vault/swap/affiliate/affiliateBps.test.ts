@@ -235,6 +235,21 @@ describe('getSwapListRateBreakdown', () => {
     expect(savingAmounts(breakdown)).toEqual([5_000n])
   })
 
+  it('values a waived fee against the payout when the provider omits the zero', () => {
+    // SwapKit and LI.FI drop a zero affiliate fee instead of itemizing it. The
+    // bps sent still prove nothing was charged, so the waiver is priced rather
+    // than reported as a fee hidden in the rate.
+    const breakdown = getSwapListRateBreakdown({
+      affiliate: undefined,
+      referral: undefined,
+      notional,
+      disclosure: getSwapFeeDisclosure([vultDiscount('ultimate')]),
+    })
+
+    expect(breakdown?.listRateFee).toEqual({ ...notional, amount: 5_000n })
+    expect(savingAmounts(breakdown)).toEqual([5_000n])
+  })
+
   it('reports nothing when the provider bakes its fee into the quoted rate', () => {
     // Inventing an amount here would disclose a charge the quote never made.
     expect(
