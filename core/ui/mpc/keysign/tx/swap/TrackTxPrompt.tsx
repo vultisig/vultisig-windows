@@ -52,7 +52,12 @@ export const TrackTxPrompt = ({
         <Text weight="500" size={14} color="contrast">
           {truncateId(value)}
         </Text>
-        <IconButton data-testid="tx-hash-copy" onClick={copyHash} size="sm">
+        <IconButton
+          data-testid="tx-hash-copy"
+          aria-label={t('copy')}
+          onClick={copyHash}
+          size="sm"
+        >
           <ClipboardCopyIcon />
         </IconButton>
         <IconButton
