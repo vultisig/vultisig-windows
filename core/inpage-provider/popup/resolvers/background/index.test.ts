@@ -2,10 +2,12 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mockAddPopupViewCall = vi.hoisted(() => vi.fn())
+const mockRemovePopupViewCall = vi.hoisted(() => vi.fn())
 const mockInNewWindow = vi.hoisted(() => vi.fn())
 
 vi.mock('../../view/state/calls', () => ({
   addPopupViewCall: (...args: unknown[]) => mockAddPopupViewCall(...args),
+  removePopupViewCall: (...args: unknown[]) => mockRemovePopupViewCall(...args),
 }))
 
 vi.mock('./inNewWindow', () => ({
@@ -29,6 +31,7 @@ describe('callPopupFromBackground', () => {
       },
     })
     mockAddPopupViewCall.mockResolvedValue('call-1')
+    mockRemovePopupViewCall.mockResolvedValue(undefined)
   })
 
   it('coalesces concurrent grantVaultAccess popups with the same origin and input', async () => {
@@ -205,5 +208,49 @@ describe('callPopupFromBackground', () => {
     listeners.forEach(listener => listener(response))
 
     await expect(call).rejects.toBe(PopupError.SigningFailed)
+  })
+
+  it('drops the stored call once the popup has answered', async () => {
+    mockInNewWindow.mockResolvedValue({ appSession: undefined })
+
+    await callPopupFromBackground({
+      call: { grantVaultAccess: { chain: Chain.Ethereum } },
+      options: {},
+      context: { requestOrigin: 'https://answered.example.com' },
+    })
+
+    expect(mockRemovePopupViewCall).toHaveBeenCalledWith('call-1')
+  })
+
+  it('drops the stored call when its popup window cannot be opened', async () => {
+    mockInNewWindow.mockRejectedValue(new Error('Failed to create new window'))
+
+    await expect(
+      callPopupFromBackground({
+        call: { grantVaultAccess: { chain: Chain.Ethereum } },
+        options: {},
+        context: { requestOrigin: 'https://no-window.example.com' },
+      })
+    ).rejects.toThrow('Failed to create new window')
+
+    expect(mockRemovePopupViewCall).toHaveBeenCalledWith('call-1')
+  })
+
+  it('keeps the popup answer when dropping the stored call fails', async () => {
+    const appSession = {
+      vaultId: 'vault-1',
+      host: 'example.com',
+      url: 'https://example.com',
+    }
+    mockInNewWindow.mockResolvedValue({ appSession })
+    mockRemovePopupViewCall.mockRejectedValue(new Error('Storage unavailable'))
+
+    await expect(
+      callPopupFromBackground({
+        call: { grantVaultAccess: { chain: Chain.Ethereum } },
+        options: {},
+        context: { requestOrigin: 'https://cleanup.example.com' },
+      })
+    ).resolves.toEqual({ appSession })
   })
 })
