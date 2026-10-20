@@ -42,6 +42,11 @@ import { canReceiverAddressGrow } from '../utils/canReceiverAddressGrow'
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
+const isPasteOrDropInput = (event: Event) =>
+  event instanceof InputEvent &&
+  (event.inputType === 'insertFromPaste' ||
+    event.inputType === 'insertFromDrop')
+
 export const ManageReceiverAddressInputField = () => {
   const { t } = useTranslation()
   const address = useSender()
@@ -250,10 +255,10 @@ export const ManageReceiverAddressInputField = () => {
                   validation={error ? 'warning' : undefined}
                   placeholder={t('enter_address_here')}
                   value={value}
-                  onValueChange={newValue =>
+                  onChange={({ currentTarget, nativeEvent }) =>
                     handleUpdateReceiverAddress({
-                      value: newValue,
-                      isTyped: true,
+                      value: currentTarget.value,
+                      isTyped: !isPasteOrDropInput(nativeEvent),
                     })
                   }
                   onBlur={() => setTouched(true)}
