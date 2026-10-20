@@ -16,7 +16,6 @@ import { getSwapFeeDisclosure } from '../../affiliate/affiliateBps'
 import { getSwapFeeEntries } from '../../queries/resolveSwapFees'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapFromCoin } from '../../state/fromCoin'
-import { SwapDiscountInfo } from './SwapDiscountInfo'
 import { SwapFeeRowRenderer } from './swapFeeRow'
 import { getSwapNetworkFeeLabelKey } from './swapNetworkFeeLabel'
 import { SwapNetworkFeeRow } from './SwapNetworkFeeRow'
@@ -104,10 +103,6 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                       renderRow={renderRow}
                       fees={fees}
                       disclosure={disclosure}
-                    />
-                    <SwapDiscountInfo
-                      renderRow={renderRow}
-                      savings={disclosure.savings}
                     />
                     <SwapPriceImpactRow
                       renderRow={renderRow}

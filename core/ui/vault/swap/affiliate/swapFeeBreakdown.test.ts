@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest'
 import { getSwapFeeEntries, resolveSwapFees } from '../queries/resolveSwapFees'
 import {
   getSwapFeeDisclosure,
-  getSwapListRateFee,
+  getSwapListRateBreakdown,
   getSwapQuoteAffiliateBps,
 } from './affiliateBps'
 
@@ -72,7 +72,7 @@ const breakdownFor = (discounts: SwapDiscount[]) => {
     affiliateBps,
   })
 
-  const listRateFee = getSwapListRateFee({
+  const breakdown = getSwapListRateBreakdown({
     affiliate: fees.affiliate,
     referral: fees.referral,
     notional: fees.affiliateNotional,
@@ -84,7 +84,7 @@ const breakdownFor = (discounts: SwapDiscount[]) => {
     fees,
     // Every case here charges a real, itemized affiliate fee, so a row without
     // an amount would be the bug rather than a branch worth tolerating.
-    listRateFee: shouldBePresent(listRateFee, 'list rate fee'),
+    breakdown: shouldBePresent(breakdown, 'list rate breakdown'),
     affiliate: shouldBePresent(fees.affiliate, 'affiliate fee'),
   }
 }
@@ -110,7 +110,8 @@ const discountCases: [string, SwapDiscount[]][] = [
 
 describe('swap fee breakdown', () => {
   describe.each(discountCases)('%s', (_, discounts) => {
-    const { disclosure, fees, listRateFee, affiliate } = breakdownFor(discounts)
+    const { disclosure, fees, breakdown, affiliate } = breakdownFor(discounts)
+    const { listRateFee, savings } = breakdown
 
     it('quotes the undiscounted list price on the fee row', () => {
       // 0.50% of the swap, whatever the tier — the row states the price, and
@@ -119,13 +120,17 @@ describe('swap fee breakdown', () => {
       expect(listRateFee.amount).toBe((grossPayout * listBps) / bpsPerUnit)
     })
 
-    it('adds the expanded rows back up to what was charged', () => {
-      const saved = disclosure.savings.reduce(
-        (total, { bps }) =>
-          total +
-          (listRateFee.amount * BigInt(bps)) / BigInt(disclosure.listBps),
-        0n
+    it('prices every discount row as the share of the swap it waives', () => {
+      expect(savings.map(({ bps }) => bps)).toEqual(
+        disclosure.savings.map(({ bps }) => bps)
       )
+      savings.forEach(({ bps, fee }) => {
+        expect(fee.amount).toBe((grossPayout * BigInt(bps)) / bpsPerUnit)
+      })
+    })
+
+    it('subtracts the discount rows down to what was charged', () => {
+      const saved = savings.reduce((total, { fee }) => total + fee.amount, 0n)
 
       expect(listRateFee.amount - saved).toBe(
         (grossPayout * BigInt(disclosure.chargedBps)) / bpsPerUnit
@@ -180,13 +185,53 @@ describe('swap fee breakdown', () => {
     // Inventing an amount here would disclose a charge the quote never made,
     // so the row falls back to naming the rate the fee is folded into.
     expect(
-      getSwapListRateFee({
+      getSwapListRateBreakdown({
         affiliate: fees.affiliate,
         referral: fees.referral,
         notional: fees.affiliateNotional,
         disclosure,
       })
     ).toBeUndefined()
+  })
+})
+
+describe('an aggregator that omits a fully waived fee', () => {
+  // SwapKit quoting an Ultimate swap: 0 bps were sent, so there is no affiliate
+  // fee, and the SDK leaves the slot out rather than itemize a zero.
+  const discounts = [vultDiscount('ultimate')]
+  const fees = resolveSwapFees({
+    quote: {
+      general: {
+        dstAmount: grossPayout.toString(),
+        provider: 'swapkit',
+        tx: { evm: { from: '0x', to: '0x', data: '0x', value: '0' } },
+      },
+    },
+    network,
+    toCoinKey,
+    toCoin: { ...toCoinKey, decimals: 8, ticker: 'ETH' },
+    fromCoin: undefined,
+    affiliateBps: getSwapQuoteAffiliateBps(discounts),
+  })
+
+  const breakdown = getSwapListRateBreakdown({
+    affiliate: fees.affiliate,
+    referral: fees.referral,
+    notional: fees.affiliateNotional,
+    disclosure: getSwapFeeDisclosure(discounts),
+  })
+
+  it('arrives with no affiliate fee to scale from', () => {
+    expect(fees.affiliate).toBeUndefined()
+  })
+
+  it('waives the whole list rate instead of folding it into the quoted rate', () => {
+    const listRateAmount = (grossPayout * listBps) / bpsPerUnit
+
+    expect(breakdown?.listRateFee.amount).toBe(listRateAmount)
+    expect(breakdown?.savings.map(({ fee }) => fee.amount)).toEqual([
+      listRateAmount,
+    ])
   })
 })
 
@@ -225,17 +270,23 @@ describe('an aggregator that charges a fee of its own', () => {
     affiliateBps: getSwapQuoteAffiliateBps(discounts),
   })
 
-  it("quotes the list rate on the product's cut alone", () => {
-    const listRateFee = getSwapListRateFee({
-      affiliate: fees.affiliate,
-      referral: fees.referral,
-      notional: fees.affiliateNotional,
-      disclosure,
-    })
+  const breakdown = getSwapListRateBreakdown({
+    affiliate: fees.affiliate,
+    referral: fees.referral,
+    notional: fees.affiliateNotional,
+    disclosure,
+  })
 
+  it("quotes the list rate on the product's cut alone", () => {
     // 0.50% of 0.01 SOL. Scaling LI.FI's cut along with ours made this row
     // read 91666 lamports — 0.92% under a 0.50% label.
-    expect(listRateFee?.amount).toBe(50_000n)
+    expect(breakdown?.listRateFee.amount).toBe(50_000n)
+  })
+
+  it("prices the discount against the product's cut, not the provider's", () => {
+    // Gold's 20 bps of 0.01 SOL. The row above less this one is the 30000
+    // lamports the product was paid.
+    expect(breakdown?.savings.map(({ fee }) => fee.amount)).toEqual([20_000n])
   })
 
   it("itemizes the provider's cut on a row of its own", () => {

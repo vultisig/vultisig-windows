@@ -4,14 +4,14 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SwapDiscountSaving } from '../../affiliate/affiliateBps'
+import { PricedSwapDiscountSaving } from '../../affiliate/affiliateBps'
 import { ReferralDiscountRow } from './ReferralDiscountRow'
 import { SwapFeeRowRenderer } from './swapFeeRow'
 import { VultDiscountRow } from './VultDiscountRow'
 
 type SwapDiscountInfoProps = {
   renderRow: SwapFeeRowRenderer
-  savings: SwapDiscountSaving[]
+  savings: PricedSwapDiscountSaving[]
 }
 
 /**
@@ -35,7 +35,7 @@ export const SwapDiscountInfo = ({
   return (
     <>
       {renderRow({ label: t('swap_applied_discounts'), value: null })}
-      {savings.map(({ discount, bps }, index) =>
+      {savings.map(({ discount, bps, fee }, index) =>
         matchRecordUnion<SwapDiscount, ReactNode>(discount, {
           vult: ({ tier }) => (
             <VultDiscountRow
@@ -43,10 +43,16 @@ export const SwapDiscountInfo = ({
               renderRow={renderRow}
               tier={tier}
               bps={bps}
+              fee={fee}
             />
           ),
           referral: () => (
-            <ReferralDiscountRow key={index} renderRow={renderRow} bps={bps} />
+            <ReferralDiscountRow
+              key={index}
+              renderRow={renderRow}
+              bps={bps}
+              fee={fee}
+            />
           ),
         })
       )}

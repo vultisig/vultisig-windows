@@ -2,9 +2,11 @@ import { Text } from '@lib/ui/text'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
+// Block-level flex, not inline: an inline box sits on the baseline of a line box
+// the icon makes taller, which drops the row's amount below the label text.
 const LabelContainer = styled.span`
   align-items: center;
-  display: inline-flex;
+  display: flex;
   gap: 4px;
 `
 
