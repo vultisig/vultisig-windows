@@ -12,6 +12,7 @@ import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import EventEmitter from 'events'
 
 import { toEip1193Error } from './eip1193Translate'
+import { hasValidEthereumParams } from './params'
 
 export { processSignature }
 
@@ -22,6 +23,11 @@ const chainSyncMethods = [
   'wallet_switchEthereumChain',
   'wallet_addEthereumChain',
 ] as const
+
+const isEthereumMethod = (
+  method: string
+): method is keyof typeof ethereumHandlers =>
+  Object.prototype.hasOwnProperty.call(ethereumHandlers, method)
 
 /**
  * EIP-1193 provider injected into dApp pages. `chainId` and `networkVersion`
@@ -133,17 +139,21 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   }
 
   request = async (data: RequestInput) => {
-    if (data.method in ethereumHandlers) {
+    const { method } = data
+
+    if (isEthereumMethod(method)) {
+      if (!hasValidEthereumParams({ method, params: data.params })) {
+        throw new EIP1193Error('InvalidParams')
+      }
+
       try {
-        if (data.method === 'eth_chainId') {
+        if (method === 'eth_chainId') {
           return await this.syncChainId()
         }
 
-        const result = await ethereumHandlers[
-          data.method as keyof typeof ethereumHandlers
-        ](data.params as never)
+        const result = await ethereumHandlers[method](data.params as never)
 
-        if (isOneOf(data.method, chainSyncMethods)) {
+        if (isOneOf(method, chainSyncMethods)) {
           await attempt(this.syncChainId)
         }
 
