@@ -1,11 +1,13 @@
 import { changeFeeCoinKey } from './entries/changeFeeCoinKey'
 import { removeDuplicateCoins } from './entries/removeDuplicateCoins'
+import { removeLegacyPopupViewCalls } from './entries/removeLegacyPopupViewCalls'
 import { removeUnapprovedKeplrSuggestedChains } from './entries/removeUnapprovedKeplrSuggestedChains'
 
 export const storageMigrationKeys = [
   'changeFeeCoinKey',
   'removeDuplicateCoins',
   'removeUnapprovedKeplrSuggestedChains',
+  'removeLegacyPopupViewCalls',
 ] as const
 
 export type StorageMigrationKey = (typeof storageMigrationKeys)[number]
@@ -17,4 +19,5 @@ export const storageMigrations: Record<
   changeFeeCoinKey,
   removeDuplicateCoins,
   removeUnapprovedKeplrSuggestedChains,
+  removeLegacyPopupViewCalls,
 }

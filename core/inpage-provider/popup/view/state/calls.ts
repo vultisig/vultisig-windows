@@ -1,42 +1,38 @@
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { BridgeContext } from '@lib/extension/bridge/context'
 import { getStorageValue } from '@lib/extension/storage/get'
+import { removeStorageValue } from '@lib/extension/storage/remove'
 import { setStorageValue } from '@lib/extension/storage/set'
-import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { PopupCall } from '../../resolver'
 
-const popupViewCallsKey = 'popupViewCalls'
+// Each pending call gets its own storage key. The background adds calls and
+// the popup window removes them, from two separate JavaScript contexts, so a
+// shared record rewritten on every change would let concurrent writers drop
+// each other's calls, and no in-memory lock spans both contexts.
+const getPopupViewCallKey = (id: string) => `popupViewCall:${id}`
 
 type PopupViewCallEntry = {
   call: PopupCall<any>
   context?: BridgeContext & { appSession?: VaultAppSession }
 }
 
-type PopupViewCalls = Record<string, PopupViewCallEntry>
-
-const getPopupViewCalls = async () =>
-  getStorageValue<PopupViewCalls>(popupViewCallsKey, {})
-
+/** Stores a pending popup call and returns the id its popup window loads it by. */
 export const addPopupViewCall = async (input: PopupViewCallEntry) => {
-  const calls = await getPopupViewCalls()
-
   const id = crypto.randomUUID()
 
-  await setStorageValue(popupViewCallsKey, {
-    ...calls,
-    [id]: input,
-  })
+  await setStorageValue(getPopupViewCallKey(id), input)
 
   return id
 }
 
-export const removePopupViewCall = async (id: string) => {
-  const calls = await getPopupViewCalls()
-  return setStorageValue(popupViewCallsKey, omit(calls, id))
-}
+/** Drops a pending popup call once its popup window has loaded it. */
+export const removePopupViewCall = (id: string) =>
+  removeStorageValue(getPopupViewCallKey(id))
 
-export const getPopupViewCall = async (id: string) => {
-  const calls = await getPopupViewCalls()
-  return calls[id]
-}
+/** Returns the pending popup call stored under this id, if there is one. */
+export const getPopupViewCall = (id: string) =>
+  getStorageValue<PopupViewCallEntry | undefined>(
+    getPopupViewCallKey(id),
+    undefined
+  )
