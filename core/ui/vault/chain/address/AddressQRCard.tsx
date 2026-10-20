@@ -23,6 +23,8 @@ import { useTranslation } from 'react-i18next'
 import QRCode from 'react-qr-code'
 import styled from 'styled-components'
 
+import { savedImagePixelRatio } from '../../../file/savedImagePixelRatio'
+
 type AddressQRCardProps = {
   chain: Chain
   coin?: CoinKey & Partial<Pick<CoinMetadata, 'logo' | 'ticker'>>
@@ -106,6 +108,10 @@ const RowButton = styled(Button)`
   flex: 1;
 `
 
+/**
+ * Shows a chain address as a QR with copy and share actions. Sharing sends a
+ * PNG of the QR, or saves it where the Web Share API cannot take files.
+ */
 export const AddressQRCard = ({
   chain,
   coin,
@@ -145,7 +151,7 @@ export const AddressQRCard = ({
     if (node) {
       const fileName = `${displayName}.png`
       const imageResult = await attempt(async () => {
-        const dataUrl = await toPng(node)
+        const dataUrl = await toPng(node, { pixelRatio: savedImagePixelRatio })
         const blob = await (await fetch(dataUrl)).blob()
         return { blob, file: new File([blob], fileName, { type: 'image/png' }) }
       })
