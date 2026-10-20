@@ -38,6 +38,8 @@ import styled from 'styled-components'
 import { getAddress } from 'viem'
 import { getEnsAddress, normalize } from 'viem/ens'
 
+import { canReceiverAddressGrow } from '../utils/canReceiverAddressGrow'
+
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
 export const ManageReceiverAddressInputField = () => {
@@ -60,7 +62,7 @@ export const ManageReceiverAddressInputField = () => {
   const error = touched ? data?.receiverAddress : undefined
 
   const handleUpdateReceiverAddress = useCallback(
-    (value: string) => {
+    ({ value, isTyped }: { value: string; isTyped: boolean }) => {
       setTouched(true)
       setValue(value)
       // Clear the receiver label whenever the user provides a raw address directly
@@ -75,7 +77,11 @@ export const ManageReceiverAddressInputField = () => {
         walletCore,
         t,
       })
-      if (!receiverError) {
+      // A typed address that could still grow (e.g. `al` on the way to
+      // `alice.near`) stays open; pasted, scanned or picked ones are complete.
+      const mayBeIncomplete =
+        isTyped && canReceiverAddressGrow({ address: value, chain: coin.chain })
+      if (!receiverError && !mayBeIncomplete) {
         setFocusedSendField(state => ({
           ...state,
           field: 'amount',
@@ -92,7 +98,7 @@ export const ManageReceiverAddressInputField = () => {
 
   const onScanSuccess = useCallback(
     (address: string) => {
-      handleUpdateReceiverAddress(address)
+      handleUpdateReceiverAddress({ value: address, isTyped: false })
       closeQrModal()
     },
     [closeQrModal, handleUpdateReceiverAddress]
@@ -229,7 +235,10 @@ export const ManageReceiverAddressInputField = () => {
             <AddressBookModal
               onClose={() => setViewState('default')}
               onSelect={selectedAddress => {
-                handleUpdateReceiverAddress(selectedAddress)
+                handleUpdateReceiverAddress({
+                  value: selectedAddress,
+                  isTyped: false,
+                })
                 setViewState('default')
               }}
             />
@@ -242,7 +251,10 @@ export const ManageReceiverAddressInputField = () => {
                   placeholder={t('enter_address_here')}
                   value={value}
                   onValueChange={newValue =>
-                    handleUpdateReceiverAddress(newValue)
+                    handleUpdateReceiverAddress({
+                      value: newValue,
+                      isTyped: true,
+                    })
                   }
                   onBlur={() => setTouched(true)}
                   data-testid="send-address-input"
@@ -256,7 +268,10 @@ export const ManageReceiverAddressInputField = () => {
                     const { data } = await attempt(getClipboardText)
 
                     if (data) {
-                      handleUpdateReceiverAddress(data)
+                      handleUpdateReceiverAddress({
+                        value: data,
+                        isTyped: false,
+                      })
                     }
                   }}
                 >
