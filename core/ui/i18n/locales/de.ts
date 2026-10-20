@@ -2087,4 +2087,6 @@ export const de = {
     'Geben Sie zuerst die Empfängeradresse ein, um die Prozenttasten verwenden zu können.',
   send_insufficient_balance_for_fee:
     'Nicht genügend Guthaben zur Zahlung der Netzwerkgebühr',
+  failed_to_copy_tx_hash: 'Fehler beim Kopieren des Transaktions-Hashs',
+  tx_hash_copied: 'Transaktions-Hash kopiert',
 }

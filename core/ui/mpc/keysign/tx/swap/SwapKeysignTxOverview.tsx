@@ -28,12 +28,11 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import { Chain } from '@vultisig/core-chain/Chain'
 import { Coin, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
+import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
-import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignLastValidBlockHeight } from '@vultisig/core-mpc/keysign/utils/getKeysignLastValidBlockHeight'
 import { getSwapTrackingUrl } from '@vultisig/core-mpc/swap/utils/getSwapTrackingUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -41,7 +40,6 @@ import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/key
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
-import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { truncateId } from '@vultisig/lib-utils/string/truncate'
 import { useMemo } from 'react'
@@ -56,6 +54,7 @@ import { TxVaultSourceLabel } from '../components/TxVaultSourceLabel'
 import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
 import { getSwapFeeFromPayload } from './getSwapFeeFromPayload'
+import { getSwapTxExplorerUrl } from './getSwapTxExplorerUrl'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
 const renderFeeRow: SwapFeeRowRenderer = ({ label, value }) => (
@@ -139,14 +138,6 @@ export const SwapKeysignTxOverview = ({
     return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
   }, [fromAmount, fromCoin.decimals])
 
-  const blockExplorerChain = matchRecordUnion<KeysignSwapPayload, Chain>(
-    swapPayload,
-    {
-      native: ({ chain }) => chain,
-      general: () => sourceChain,
-    }
-  )
-
   const mainTxHash = getLastItem(txHashes)
   const lastValidBlockHeight = getKeysignLastValidBlockHeight(value)
   // The fee was paid, and any revert happened, on the chain the funds left
@@ -228,16 +219,22 @@ export const SwapKeysignTxOverview = ({
         <SwapInfoWrapper gap={16} fullWidth>
           <TrackTxPrompt
             title={t('transaction')}
-            value={getLastItem(txHashes)}
-            chain={blockExplorerChain}
-            swapPayload={swapPayload}
-            sourceChain={sourceChain}
+            value={mainTxHash}
+            explorerUrl={getSwapTxExplorerUrl({
+              swapPayload,
+              txHash: mainTxHash,
+              sourceChain,
+            })}
           />
           {'erc20Approve' in value && (
             <TrackTxPrompt
               title={t('approval_tx')}
               value={txHashes[0]}
-              chain={sourceChain}
+              explorerUrl={getBlockExplorerUrl({
+                chain: sourceChain,
+                entity: 'tx',
+                value: txHashes[0],
+              })}
             />
           )}
           <HStack fullWidth justifyContent="space-between" alignItems="center">
