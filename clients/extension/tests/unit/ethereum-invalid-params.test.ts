@@ -25,8 +25,9 @@ describe('Ethereum provider params validation', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     Ethereum.instance = null
-    mockCallBackground.mockImplementation(async (call: Record<string, unknown>) =>
-      'getAppChainId' in call ? '0x1' : '0x0'
+    mockCallBackground.mockImplementation(
+      async (call: Record<string, unknown>) =>
+        'getAppChainId' in call ? '0x1' : '0x0'
     )
   })
 
@@ -145,6 +146,9 @@ describe('hasValidEthereumParams', () => {
     ['wallet_addEthereumChain', [{ chainId: '0x89', chainName: 'Polygon' }]],
     ['wallet_watchAsset', { type: 'ERC20', options: { address } }],
     ['eth_getStorageAt', [address, '0x0']],
+    ['eth_getBalance', [address, 'latest']],
+    ['eth_getBalance', [address, { blockHash: '0xabc' }]],
+    ['eth_getCode', [address, '0x10']],
     ['eth_feeHistory', [4, 'latest']],
     ['eth_call', [{ to: address }]],
     ['eth_getLogs', [{ address }]],
@@ -161,6 +165,9 @@ describe('hasValidEthereumParams', () => {
     ['wallet_watchAsset', [{ type: 'ERC20', options: { address } }]],
     ['wallet_requestPermissions', ['eth_accounts']],
     ['eth_getStorageAt', [address]],
+    ['eth_getBalance', [address, 123]],
+    ['eth_getTransactionCount', [address, true]],
+    ['eth_getStorageAt', [address, '0x0', 1]],
     ['eth_feeHistory', [4]],
     ['eth_call', undefined],
     ['eth_getLogs', []],

@@ -11,6 +11,13 @@ const isPresent: ParamCheck = value => value !== undefined && value !== null
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
 
+/** Optional block: omitted, a tag or hex number, or an EIP-1898 object. */
+const isOptionalBlock: ParamCheck = value =>
+  value === undefined ||
+  value === null ||
+  isString(value) ||
+  isPlainObject(value)
+
 /**
  * Positional params: an array whose leading elements pass `checks` in order.
  * Trailing optional positions are left for the resolver or node to default.
@@ -41,16 +48,16 @@ const ethereumParamChecks: Record<keyof typeof ethereumHandlers, ParamCheck> = {
       (params[0] === undefined || isPlainObject(params[0]))),
   wallet_revokePermissions: isAnything,
   net_version: isAnything,
-  eth_getCode: positional(isString),
-  eth_getTransactionCount: positional(isString),
-  eth_getBalance: positional(isString),
+  eth_getCode: positional(isString, isOptionalBlock),
+  eth_getTransactionCount: positional(isString, isOptionalBlock),
+  eth_getBalance: positional(isString, isOptionalBlock),
   eth_blockNumber: isAnything,
   eth_getBlockByHash: positional(isString),
   eth_getBlockByNumber: positional(isString),
   eth_feeHistory: positional(isPresent, isPresent),
   eth_gasPrice: isAnything,
   eth_getLogs: positional(isPlainObject),
-  eth_getStorageAt: positional(isString, isString),
+  eth_getStorageAt: positional(isString, isString, isOptionalBlock),
   eth_maxPriorityFeePerGas: isAnything,
   eth_estimateGas: positional(isPlainObject),
   eth_call: positional(isPlainObject),
