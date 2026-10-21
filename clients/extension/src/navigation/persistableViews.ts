@@ -14,7 +14,8 @@ type KeysOfUnion<T> = T extends unknown ? keyof T : never
 /**
  * Views the popup may reopen on, each with the state fields it keeps on disk.
  * Everything else in a view's state (form input, amounts, flow data) is
- * dropped before it is persisted.
+ * dropped before it is persisted. Tab-only views (`importVault`, `setupVault`)
+ * are left out: reopening the popup on them would spawn another tab.
  */
 const persistedStateFields = {
   addressBook: [],
@@ -23,13 +24,11 @@ const persistedStateFields = {
   defi: ['protocol'],
   defiChainDetail: ['chain', 'tab'],
   deposit: ['coin', 'action', 'entryPoint'],
-  importVault: [],
   manageDefiChains: [],
   manageVaultChains: [],
   referral: [],
   send: ['fromChain', 'coin'],
   settings: [],
-  setupVault: ['type', 'skipStationMigration'],
   signCustomMessage: [],
   swap: ['fromCoin', 'toCoin'],
   updateAddressBookItem: ['id'],
@@ -57,11 +56,6 @@ export const getPersistableView = (history: View[]): View | null => {
   const { id, state } = getLastItem(history)
 
   if (!isPersistableViewId(id)) {
-    return null
-  }
-
-  // Key import input holds the seed phrase or private key being imported.
-  if (id === 'setupVault' && state?.keyImportInput) {
     return null
   }
 

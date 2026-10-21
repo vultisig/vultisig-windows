@@ -1,7 +1,6 @@
-import { describe, expect, it } from 'vitest'
-
 import { shouldAlwaysExpand } from '@clients/extension/src/navigation/alwaysExpandViews'
 import { getPersistableView } from '@clients/extension/src/navigation/persistableViews'
+import { describe, expect, it } from 'vitest'
 
 // Cast helper for type safety in tests
 const asViewId = (id: string) => id as any
@@ -42,13 +41,11 @@ describe('getPersistableView by view id', () => {
     'defi',
     'defiChainDetail',
     'deposit',
-    'importVault',
     'manageDefiChains',
     'manageVaultChains',
     'referral',
     'send',
     'settings',
-    'setupVault',
     'signCustomMessage',
     'swap',
     'updateAddressBookItem',
@@ -57,12 +54,9 @@ describe('getPersistableView by view id', () => {
     'vaultSettings',
   ]
 
-  it.each(persistableViewIds)(
-    'persists view: %s',
-    viewId => {
-      expect(isPersisted(viewId)).toBe(true)
-    }
-  )
+  it.each(persistableViewIds)('persists view: %s', viewId => {
+    expect(isPersisted(viewId)).toBe(true)
+  })
 
   it('returns false for onboarding', () => {
     expect(isPersisted('onboarding')).toBe(false)
@@ -80,11 +74,18 @@ describe('getPersistableView by view id', () => {
     expect(isPersisted('')).toBe(false)
   })
 
+  it.each(['importVault', 'setupVault'])(
+    'does not persist tab-only view: %s',
+    viewId => {
+      expect(isPersisted(viewId)).toBe(false)
+    }
+  )
+
   it('returns false for home', () => {
     expect(isPersisted('home')).toBe(false)
   })
 
-  it('has exactly 19 persistable views', () => {
-    expect(persistableViewIds.length).toBe(19)
+  it('has exactly 17 persistable views', () => {
+    expect(persistableViewIds.length).toBe(17)
   })
 })
