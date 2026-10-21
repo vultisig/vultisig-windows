@@ -45,7 +45,8 @@ const persistableViewIds: ReadonlySet<string> = new Set(
   Object.keys(persistedStateFields)
 )
 
-const isPersistableViewId = (id: string): id is PersistableViewId =>
+/** Whether the popup may reopen on the view with this id. */
+export const isPersistableViewId = (id: string): id is PersistableViewId =>
   persistableViewIds.has(id)
 
 /**
