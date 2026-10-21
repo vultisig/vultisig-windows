@@ -2058,4 +2058,5 @@ export const nl = {
     'Onvoldoende saldo om de netwerkkosten te betalen.',
   failed_to_copy_tx_hash: 'Het kopiëren van de transactiehash is mislukt.',
   tx_hash_copied: 'Transactiehash gekopieerd',
+  failed_to_save_image: 'Het opslaan van de afbeelding is mislukt.',
 }

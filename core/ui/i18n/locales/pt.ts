@@ -2073,4 +2073,5 @@ export const pt = {
     'Saldo insuficiente para pagar a taxa de rede.',
   failed_to_copy_tx_hash: 'Falha ao copiar o hash da transação.',
   tx_hash_copied: 'Hash da transação copiado',
+  failed_to_save_image: 'Falha ao salvar a imagem',
 }

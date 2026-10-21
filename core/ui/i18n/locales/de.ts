@@ -2089,4 +2089,5 @@ export const de = {
     'Nicht genügend Guthaben zur Zahlung der Netzwerkgebühr',
   failed_to_copy_tx_hash: 'Fehler beim Kopieren des Transaktions-Hashs',
   tx_hash_copied: 'Transaktions-Hash kopiert',
+  failed_to_save_image: 'Bild konnte nicht gespeichert werden',
 }

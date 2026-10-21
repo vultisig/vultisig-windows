@@ -2031,4 +2031,5 @@ export const ko = {
     '네트워크 요금을 지불하기에 잔액이 부족합니다.',
   failed_to_copy_tx_hash: '거래 해시 복사에 실패했습니다.',
   tx_hash_copied: '거래 해시가 복사되었습니다',
+  failed_to_save_image: '이미지 저장에 실패했습니다',
 }
