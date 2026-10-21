@@ -1,11 +1,14 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { SaveAsImage } from '@core/ui/file/SaveAsImage'
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
+import { ShareKeysignQrCodeDialog } from '@core/ui/mpc/keysign/ShareKeysignQrCodeDialog'
 import {
   PrintableQrCode,
   PrintableQrCodeRow,
 } from '@core/ui/qr/PrintableQrCode'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -23,11 +26,17 @@ import { useTranslation } from 'react-i18next'
 import { currentProductBrandConfig } from '../../product/brand'
 import { getVaultExportUid } from '../../vault/export/core/uid'
 
+/**
+ * Header control on the secure keysign pairing screen for handing the join QR
+ * to a co-signer. The extension opens a share dialog with Copy Link and Share
+ * QR Image; the desktop app saves the branded QR PNG straight away.
+ */
 export const DownloadKeysignQrCode = ({
   value: keysignPayload,
 }: ValueProp<KeysignMessagePayload>) => {
   const joinKeysignUrlQuery = useJoinKeysignUrlQuery(keysignPayload)
   const { t } = useTranslation()
+  const { client } = useCore()
   const vault = useCurrentVault()
   const { name } = vault
 
@@ -70,10 +79,23 @@ export const DownloadKeysignQrCode = ({
       success={data => (
         <SaveAsImage
           fileName={`VaultKeysignQR-${name}-${getVaultExportUid(vault).slice(-3)}`}
-          renderTrigger={({ onClick }) => (
-            <IconButton onClick={onClick}>
-              <FileUpIcon />
-            </IconButton>
+          renderTrigger={({ onClick: saveImage }) => (
+            <Opener
+              renderOpener={({ onOpen }) => (
+                <IconButton
+                  onClick={client === 'extension' ? onOpen : saveImage}
+                >
+                  <FileUpIcon />
+                </IconButton>
+              )}
+              renderContent={({ onClose }) => (
+                <ShareKeysignQrCodeDialog
+                  joinUrl={data}
+                  onSaveImage={saveImage}
+                  onClose={onClose}
+                />
+              )}
+            />
           )}
           value={
             <PrintableQrCode

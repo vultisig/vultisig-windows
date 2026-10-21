@@ -1904,4 +1904,7 @@ export const zh = {
   send_insufficient_balance_for_fee: '余额不足，无法支付网络费用',
   failed_to_copy_tx_hash: '复制交易哈希失败',
   tx_hash_copied: '交易哈希已复制',
+  copy_link: '复制链接',
+  share_qr_code: '分享二维码',
+  share_qr_image: '分享二维码图片',
 }

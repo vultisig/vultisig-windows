@@ -234,6 +234,7 @@ export const en = {
   copied: 'Copied',
   copy: 'Copy',
   copy_address: 'Copy Address',
+  copy_link: 'Copy Link',
   create_new_vault: 'Create new Vault',
   create_vault: 'Create vault',
   create_referral_form: 'Create referral',
@@ -1143,6 +1144,8 @@ export const en = {
   share_app: 'Share The App',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
+  share_qr_code: 'Share QR Code',
+  share_qr_image: 'Share QR Image',
   shares: 'Shares',
   show_balance: 'Show balance',
   show_total_balance: 'Show total balance',
