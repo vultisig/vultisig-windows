@@ -83,6 +83,7 @@ export const DownloadKeysignQrCode = ({
             <Opener
               renderOpener={({ onOpen }) => (
                 <IconButton
+                  aria-label={t('share_qr_code')}
                   onClick={client === 'extension' ? onOpen : saveImage}
                 >
                   <FileUpIcon />

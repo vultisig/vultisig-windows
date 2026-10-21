@@ -76,7 +76,7 @@ const renderControl = () =>
 
 const openDialog = () => {
   renderControl()
-  fireEvent.click(screen.getByRole('button'))
+  fireEvent.click(screen.getByRole('button', { name: 'share_qr_code' }))
 }
 
 describe('DownloadKeysignQrCode', () => {

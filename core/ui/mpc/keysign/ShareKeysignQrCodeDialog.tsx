@@ -8,6 +8,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { attempt } from '@vultisig/lib-utils/attempt'
+import FocusLock from 'react-focus-lock'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -54,7 +55,14 @@ export const ShareKeysignQrCodeDialog = ({
       onClose={onClose}
       modalProps={{ withDefaultStructure: false }}
     >
-      <Frame role="dialog" aria-modal aria-label={t('share_qr_code')}>
+      <Frame
+        returnFocus
+        lockProps={{
+          role: 'dialog',
+          'aria-modal': true,
+          'aria-label': t('share_qr_code'),
+        }}
+      >
         <Text size={18} weight={500} color="contrast" centerHorizontally>
           {t('share_qr_code')}
         </Text>
@@ -69,7 +77,7 @@ export const ShareKeysignQrCodeDialog = ({
   )
 }
 
-const Frame = styled.div`
+const Frame = styled(FocusLock)`
   ${vStack({ gap: 24 })};
   padding: 8px 16px 24px;
 

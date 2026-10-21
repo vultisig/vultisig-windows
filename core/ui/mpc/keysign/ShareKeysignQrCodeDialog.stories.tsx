@@ -1,3 +1,6 @@
+import { Opener } from '@lib/ui/base/Opener'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
@@ -15,10 +18,20 @@ type Story = StoryObj
 export const Default: Story = {
   render: () => (
     <ToastProvider>
-      <ShareKeysignQrCodeDialog
-        joinUrl="https://vultisig.com?type=SignTransaction&vault=03abc&jsonData=GzA%2BAIyU"
-        onSaveImage={() => {}}
-        onClose={() => {}}
+      <Opener
+        initialIsOpen
+        renderOpener={({ onOpen }) => (
+          <IconButton aria-label="Share QR Code" onClick={onOpen}>
+            <FileUpIcon />
+          </IconButton>
+        )}
+        renderContent={({ onClose }) => (
+          <ShareKeysignQrCodeDialog
+            joinUrl="https://vultisig.com?type=SignTransaction&vault=03abc&jsonData=GzA%2BAIyU"
+            onSaveImage={() => {}}
+            onClose={onClose}
+          />
+        )}
       />
     </ToastProvider>
   ),
