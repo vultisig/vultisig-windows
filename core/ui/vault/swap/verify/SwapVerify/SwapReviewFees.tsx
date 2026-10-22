@@ -17,7 +17,6 @@ import { ReviewDivider } from '../../../../mpc/keysign/review/ReviewDivider'
 import { ReviewRow } from '../../../../mpc/keysign/review/ReviewRow'
 import { getSwapFeeDisclosure } from '../../affiliate/affiliateBps'
 import { formatSlippage } from '../../form/advanced/slippage'
-import { SwapDiscountInfo } from '../../form/info/SwapDiscountInfo'
 import { SwapFeeRowRenderer } from '../../form/info/swapFeeRow'
 import { getSwapNetworkFeeLabelKey } from '../../form/info/swapNetworkFeeLabel'
 import { SwapNetworkFeeRow } from '../../form/info/SwapNetworkFeeRow'
@@ -155,10 +154,6 @@ export const SwapReviewFees = ({ swapQuote }: SwapReviewFeesProps) => {
                   renderRow={renderBreakdownRow}
                   fees={fees}
                   disclosure={disclosure}
-                />
-                <SwapDiscountInfo
-                  renderRow={renderBreakdownRow}
-                  savings={disclosure.savings}
                 />
               </>
             )}

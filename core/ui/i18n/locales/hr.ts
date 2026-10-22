@@ -2047,4 +2047,10 @@ export const hr = {
     '{{name}} nije registriran. Provjerite ime i pokušajte ponovno.',
   send_receiver_name_unsupported_chain:
     '{{name}} se ne može koristiti na {{chain}} . Umjesto toga unesite adresu {{chain}} .',
+  failed_to_copy_tx_hash: 'Kopiranje hash-a transakcije nije uspjelo',
+  tx_hash_copied: 'Hash transakcije kopiran',
+  copy_link: 'Kopiraj poveznicu',
+  share_qr_code: 'Podijeli QR kod',
+  share_qr_image: 'Podijeli QR sliku',
+  failed_to_save_image: 'Spremanje slike nije uspjelo',
 }

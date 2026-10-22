@@ -1,5 +1,3 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
-
 import { registerNavigationStateCleanup } from '@clients/extension/src/background/registerNavigationStateCleanup'
 import { AppView } from '@clients/extension/src/navigation/AppView'
 import { handleNotificationClickEvent } from '@clients/extension/src/notifications/handlePushEvents'
@@ -9,6 +7,7 @@ import {
   setInitialView,
 } from '@clients/extension/src/storage/initialView'
 import { getPersistedView } from '@clients/extension/src/storage/persistedView'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { chromeMock, getInstalledListeners } from './mocks/chrome'
 
@@ -98,5 +97,20 @@ describe('persisted view', () => {
     })
 
     await expect(getPersistedView()).resolves.toBeNull()
+  })
+
+  it.each(['importVault', 'setupVault'])(
+    'ignores a stored tab-only view: %s',
+    async id => {
+      await chromeMock.storage.local.set({ persistedView: { id } })
+
+      await expect(getPersistedView()).resolves.toBeNull()
+    }
+  )
+
+  it('returns a stored persistable view', async () => {
+    await chromeMock.storage.local.set({ persistedView: { id: 'settings' } })
+
+    await expect(getPersistedView()).resolves.toEqual({ id: 'settings' })
   })
 })

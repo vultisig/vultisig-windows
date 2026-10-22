@@ -32,13 +32,20 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { canReceiverAddressGrow } from '../utils/canReceiverAddressGrow'
+
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
+
+const isPasteOrDropInput = (event: Event) =>
+  event instanceof InputEvent &&
+  (event.inputType === 'insertFromPaste' ||
+    event.inputType === 'insertFromDrop')
 
 /**
  * The open receiver field. Takes an address, or a `.eth`, `.thor` or `.maya`
  * name (the suffix optional on Ethereum, THORChain and MayaChain), typed,
- * pasted, scanned or picked from the address book. A name is replaced by its address
- * once it resolves; see `SendReceiverResolutionProvider`.
+ * pasted, scanned or picked from the address book. A name is replaced by its
+ * address once it resolves; see `SendReceiverResolutionProvider`.
  */
 export const ManageReceiverAddressInputField = () => {
   const { t } = useTranslation()
@@ -59,11 +66,9 @@ export const ManageReceiverAddressInputField = () => {
   const error = touched ? data?.receiverAddress : undefined
 
   const handleUpdateReceiverAddress = useCallback(
-    (value: string) => {
+    ({ value, isTyped }: { value: string; isTyped: boolean }) => {
       setTouched(true)
       setValue(value)
-      // A valid address moves on to the amount right away; a name does once
-      // it resolves.
       const receiverError = validateSendReceiver({
         receiverAddress: value,
         chain: coin.chain,
@@ -71,7 +76,12 @@ export const ManageReceiverAddressInputField = () => {
         walletCore,
         t,
       })
-      if (!receiverError) {
+      // A typed address that could still grow (e.g. `al` on the way to
+      // `alice.near`) stays open; pasted, scanned or picked ones are complete.
+      // A name moves on once it resolves, in SendReceiverResolutionProvider.
+      const mayBeIncomplete =
+        isTyped && canReceiverAddressGrow({ address: value, chain: coin.chain })
+      if (!receiverError && !mayBeIncomplete) {
         setFocusedSendField(state => ({
           ...state,
           field: 'amount',
@@ -88,7 +98,7 @@ export const ManageReceiverAddressInputField = () => {
 
   const onScanSuccess = useCallback(
     (address: string) => {
-      handleUpdateReceiverAddress(address)
+      handleUpdateReceiverAddress({ value: address, isTyped: false })
       closeQrModal()
     },
     [closeQrModal, handleUpdateReceiverAddress]
@@ -155,7 +165,10 @@ export const ManageReceiverAddressInputField = () => {
             <AddressBookModal
               onClose={() => setViewState('default')}
               onSelect={selectedAddress => {
-                handleUpdateReceiverAddress(selectedAddress)
+                handleUpdateReceiverAddress({
+                  value: selectedAddress,
+                  isTyped: false,
+                })
                 setViewState('default')
               }}
             />
@@ -167,8 +180,11 @@ export const ManageReceiverAddressInputField = () => {
                   validation={error ? 'warning' : undefined}
                   placeholder={t('enter_address_here')}
                   value={value}
-                  onValueChange={newValue =>
-                    handleUpdateReceiverAddress(newValue)
+                  onChange={({ currentTarget, nativeEvent }) =>
+                    handleUpdateReceiverAddress({
+                      value: currentTarget.value,
+                      isTyped: !isPasteOrDropInput(nativeEvent),
+                    })
                   }
                   onBlur={() => setTouched(true)}
                   data-testid="send-address-input"
@@ -182,7 +198,10 @@ export const ManageReceiverAddressInputField = () => {
                     const { data } = await attempt(getClipboardText)
 
                     if (data) {
-                      handleUpdateReceiverAddress(data)
+                      handleUpdateReceiverAddress({
+                        value: data,
+                        isTyped: false,
+                      })
                     }
                   }}
                 >

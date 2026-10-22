@@ -2095,4 +2095,10 @@ export const de = {
     '{{name}} ist nicht registriert. Überprüfen Sie den Namen und versuchen Sie es erneut.',
   send_receiver_name_unsupported_chain:
     '{{name}} kann nicht für {{chain}} verwendet werden. Geben Sie stattdessen eine {{chain}} -Adresse ein.',
+  failed_to_copy_tx_hash: 'Fehler beim Kopieren des Transaktions-Hashs',
+  tx_hash_copied: 'Transaktions-Hash kopiert',
+  copy_link: 'Link kopieren',
+  share_qr_code: 'QR-Code teilen',
+  share_qr_image: 'QR-Bild teilen',
+  failed_to_save_image: 'Bild konnte nicht gespeichert werden',
 }

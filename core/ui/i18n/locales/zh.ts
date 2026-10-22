@@ -1908,4 +1908,10 @@ export const zh = {
   send_receiver_name_not_found: '{{name}}未注册。请检查名称并重试。',
   send_receiver_name_unsupported_chain:
     '{{name}}不能用于{{chain}} 。请改用{{chain}}地址。',
+  failed_to_copy_tx_hash: '复制交易哈希失败',
+  tx_hash_copied: '交易哈希已复制',
+  copy_link: '复制链接',
+  share_qr_code: '分享二维码',
+  share_qr_image: '分享二维码图片',
+  failed_to_save_image: '图像保存失败',
 }

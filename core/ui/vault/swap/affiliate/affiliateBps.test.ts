@@ -7,8 +7,9 @@ import { describe, expect, it } from 'vitest'
 import {
   formatAffiliateBpsPercent,
   getSwapFeeDisclosure,
-  getSwapListRateFee,
+  getSwapListRateBreakdown,
   getSwapQuoteAffiliateBps,
+  SwapListRateBreakdown,
 } from './affiliateBps'
 
 const vultDiscount = (tier: VultDiscountTier): SwapDiscount => ({
@@ -157,8 +158,12 @@ describe('getSwapFeeDisclosure', () => {
   })
 })
 
-describe('getSwapListRateFee', () => {
+describe('getSwapListRateBreakdown', () => {
   const disclosure = getSwapFeeDisclosure([vultDiscount('gold')])
+  const referredDisclosure = getSwapFeeDisclosure([
+    vultDiscount('gold'),
+    referralDiscount,
+  ])
 
   // 300 charged at 30 bps puts the 50 bps list rate at 500.
   const affiliate: SwapFee = {
@@ -174,48 +179,81 @@ describe('getSwapListRateFee', () => {
     decimals: 8,
   }
 
+  const savingAmounts = (breakdown: SwapListRateBreakdown | undefined) =>
+    breakdown?.savings.map(({ fee }) => fee.amount)
+
   it('scales the charged fee up to the list rate', () => {
-    expect(
-      getSwapListRateFee({
-        affiliate,
-        referral: undefined,
-        notional,
-        disclosure,
-      })
-    ).toEqual({ ...affiliate, amount: 500n })
+    const breakdown = getSwapListRateBreakdown({
+      affiliate,
+      referral: undefined,
+      notional,
+      disclosure,
+    })
+
+    expect(breakdown?.listRateFee).toEqual({ ...affiliate, amount: 500n })
+    // The 20 bps Gold waives is the 200 between the list rate and the charge.
+    expect(savingAmounts(breakdown)).toEqual([200n])
   })
 
   it('counts the referrer inside the list rate rather than beside it', () => {
     // 150 to the product and 100 to the referrer is the same 25 bps the quote
     // was requested with, so the list rate is still worth 500.
-    expect(
-      getSwapListRateFee({
-        affiliate: { ...affiliate, amount: 150n },
-        referral: { ...affiliate, amount: 100n },
-        notional,
-        disclosure: getSwapFeeDisclosure([
-          vultDiscount('gold'),
-          referralDiscount,
-        ]),
-      })
-    ).toEqual({ ...affiliate, amount: 500n })
+    const breakdown = getSwapListRateBreakdown({
+      affiliate: { ...affiliate, amount: 150n },
+      referral: { ...affiliate, amount: 100n },
+      notional,
+      disclosure: referredDisclosure,
+    })
+
+    expect(breakdown?.listRateFee).toEqual({ ...affiliate, amount: 500n })
+    expect(savingAmounts(breakdown)).toEqual([200n, 50n])
+  })
+
+  it('subtracts to the charge exactly when the rate does not divide it', () => {
+    // 7 at 25 bps is 14 at the list rate, but the savings round down to 5 and
+    // 1 — scaling the list rate on its own would leave the rows one unit over.
+    const breakdown = getSwapListRateBreakdown({
+      affiliate: { ...affiliate, amount: 7n },
+      referral: undefined,
+      notional,
+      disclosure: referredDisclosure,
+    })
+
+    expect(savingAmounts(breakdown)).toEqual([5n, 1n])
+    expect(breakdown?.listRateFee.amount).toBe(13n)
   })
 
   it('charges the list rate against the payout when nothing was charged at all', () => {
-    expect(
-      getSwapListRateFee({
-        affiliate: { ...affiliate, amount: 0n },
-        referral: undefined,
-        notional,
-        disclosure: getSwapFeeDisclosure([vultDiscount('ultimate')]),
-      })
-    ).toEqual({ ...notional, amount: 5_000n })
+    const breakdown = getSwapListRateBreakdown({
+      affiliate: { ...affiliate, amount: 0n },
+      referral: undefined,
+      notional,
+      disclosure: getSwapFeeDisclosure([vultDiscount('ultimate')]),
+    })
+
+    expect(breakdown?.listRateFee).toEqual({ ...notional, amount: 5_000n })
+    expect(savingAmounts(breakdown)).toEqual([5_000n])
+  })
+
+  it('values a waived fee against the payout when the provider omits the zero', () => {
+    // SwapKit and LI.FI drop a zero affiliate fee instead of itemizing it. The
+    // bps sent still prove nothing was charged, so the waiver is priced rather
+    // than reported as a fee hidden in the rate.
+    const breakdown = getSwapListRateBreakdown({
+      affiliate: undefined,
+      referral: undefined,
+      notional,
+      disclosure: getSwapFeeDisclosure([vultDiscount('ultimate')]),
+    })
+
+    expect(breakdown?.listRateFee).toEqual({ ...notional, amount: 5_000n })
+    expect(savingAmounts(breakdown)).toEqual([5_000n])
   })
 
   it('reports nothing when the provider bakes its fee into the quoted rate', () => {
     // Inventing an amount here would disclose a charge the quote never made.
     expect(
-      getSwapListRateFee({
+      getSwapListRateBreakdown({
         affiliate: undefined,
         referral: undefined,
         notional,
@@ -226,7 +264,7 @@ describe('getSwapListRateFee', () => {
 
   it('reports nothing when neither the fee nor the payout is known', () => {
     expect(
-      getSwapListRateFee({
+      getSwapListRateBreakdown({
         affiliate: { ...affiliate, amount: 0n },
         referral: undefined,
         notional: undefined,

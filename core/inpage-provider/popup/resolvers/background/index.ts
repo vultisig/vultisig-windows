@@ -1,4 +1,5 @@
 import { mergeableInFlightPopupMethods } from '@core/inpage-provider/popup/interface'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { withInFlightCoalescer } from '@vultisig/lib-utils/promise/coalesceInFlight'
 import { addQueryParams } from '@vultisig/lib-utils/query/addQueryParams'
 import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUnionKey'
@@ -11,49 +12,57 @@ import {
   PopupCallResolver,
   PopupResponse,
 } from '../../resolver'
-import { addPopupViewCall } from '../../view/state/calls'
+import { addPopupViewCall, removePopupViewCall } from '../../view/state/calls'
 import { inNewWindow } from './inNewWindow'
 
 export const callPopupFromBackground: PopupCallResolver = withInFlightCoalescer(
   async ({ call, options, context }) => {
     const callId = await addPopupViewCall({ call, context })
 
-    return inNewWindow({
-      ...options,
-      url: chrome.runtime.getURL(
-        addQueryParams('popup.html', { [callIdQueryParam]: callId })
-      ),
-      execute: ({ abortSignal, close }) =>
-        new Promise<any>((resolve, reject) => {
-          const handleMessage = (response: any) => {
-            if (!isPopupMessage<PopupResponse<any>>(response, 'popup')) return
+    try {
+      return await inNewWindow({
+        ...options,
+        url: chrome.runtime.getURL(
+          addQueryParams('popup.html', { [callIdQueryParam]: callId })
+        ),
+        execute: ({ abortSignal, close }) =>
+          new Promise<any>((resolve, reject) => {
+            const handleMessage = (response: any) => {
+              if (!isPopupMessage<PopupResponse<any>>(response, 'popup')) return
 
-            if (response.callId !== callId) return
+              if (response.callId !== callId) return
 
-            chrome.runtime.onMessage.removeListener(handleMessage)
-            abortSignal.removeEventListener('abort', handleAbort)
+              chrome.runtime.onMessage.removeListener(handleMessage)
+              abortSignal.removeEventListener('abort', handleAbort)
 
-            const { error, data } = response.result
-            if (error) {
-              reject(error)
-            } else {
-              resolve(data)
+              const { error, data } = response.result
+              if (error) {
+                reject(error)
+              } else {
+                resolve(data)
+              }
+
+              if (response.shouldClosePopup || options.shouldClosePopup) {
+                close()
+              }
             }
 
-            if (response.shouldClosePopup || options.shouldClosePopup) {
-              close()
+            const handleAbort = () => {
+              chrome.runtime.onMessage.removeListener(handleMessage)
+              reject(PopupError.RejectedByUser)
             }
-          }
 
-          const handleAbort = () => {
-            chrome.runtime.onMessage.removeListener(handleMessage)
-            reject(PopupError.RejectedByUser)
-          }
-
-          chrome.runtime.onMessage.addListener(handleMessage)
-          abortSignal.addEventListener('abort', handleAbort, { once: true })
-        }),
-    })
+            chrome.runtime.onMessage.addListener(handleMessage)
+            abortSignal.addEventListener('abort', handleAbort, { once: true })
+          }),
+      })
+    } finally {
+      // The popup drops its call as soon as it loads it. A popup that never
+      // gets that far, because its window failed to open or was closed first,
+      // would leave the call in storage for good. Removing it here is a no-op
+      // otherwise, and a failed cleanup must not replace the popup's answer.
+      await attempt(() => removePopupViewCall(callId))
+    }
   },
   {
     shouldCoalesce: ({ call }) =>

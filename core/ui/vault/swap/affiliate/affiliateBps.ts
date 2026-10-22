@@ -167,7 +167,18 @@ export const getSwapFeeDisclosure = (
   }
 }
 
-type GetSwapListRateFeeInput = {
+/** A discount priced as the amount it takes off the swap fee row. */
+export type PricedSwapDiscountSaving = SwapDiscountSaving & {
+  fee: SwapFee
+}
+
+/** The swap fee row at the list rate, and what each discount takes off it. */
+export type SwapListRateBreakdown = {
+  listRateFee: SwapFee
+  savings: PricedSwapDiscountSaving[]
+}
+
+type GetSwapListRateBreakdownInput = {
   affiliate: SwapFee | undefined
   referral: SwapFee | undefined
   /** Output the rate is charged on; see `SwapProviderFees.affiliateNotional`. */
@@ -176,39 +187,74 @@ type GetSwapListRateFeeInput = {
 }
 
 /**
- * Values the list rate in the coin the affiliate fee is charged in, so the fee
- * row can quote the undiscounted price while the total stays net.
+ * Values the list rate and every saving in the coin the affiliate fee is
+ * charged in, so the fee row can quote the undiscounted price, each discount
+ * row the money it takes off, and the total stay net.
  *
- * Preferred form scales what every affiliate was actually charged up to the
- * list rate — exact, and free of any second guess at the notional. A rate
- * discounted all the way to zero leaves nothing to scale from, so it charges
- * the list rate against the payout instead. A provider that itemizes no
- * affiliate fee at all gets nothing: its cut is inside the quoted rate, and
- * inventing an amount for it would disclose a charge the quote never made.
+ * Preferred form scales what every affiliate was actually charged by each
+ * saving's share of it — exact, and free of any second guess at the notional.
+ * The list rate is then the charge plus the savings rather than scaled on its
+ * own, so the rows subtract to the charge to the last base unit instead of
+ * drifting by a rounding.
+ *
+ * A rate discounted all the way to zero leaves nothing to scale from, so the
+ * savings are charged against the payout instead — whether or not the provider
+ * itemized the zero. The bps sent already prove nothing was charged, and
+ * SwapKit and LI.FI drop a zero affiliate fee from the quote rather than report
+ * it; requiring one would tell a fully discounted user that the fee is hidden
+ * in the rate.
+ *
+ * Above zero, a provider that itemizes no affiliate fee gets nothing: its cut
+ * is inside the quoted rate, and inventing an amount for it would disclose a
+ * charge the quote never made.
  */
-export const getSwapListRateFee = ({
+export const getSwapListRateBreakdown = ({
   affiliate,
   referral,
   notional,
-  disclosure: { chargedBps, listBps },
-}: GetSwapListRateFeeInput): SwapFee | undefined => {
-  if (!affiliate) {
+  disclosure: { chargedBps, savings },
+}: GetSwapListRateBreakdownInput): SwapListRateBreakdown | undefined => {
+  const chargedFee = affiliate && {
+    ...affiliate,
+    amount: affiliate.amount + (referral?.amount ?? 0n),
+  }
+
+  // `base` is worth `baseBps` of the swap; every saving is a share of it.
+  const basis =
+    chargedBps > 0
+      ? chargedFee && {
+          charged: chargedFee,
+          base: chargedFee.amount,
+          baseBps: chargedBps,
+        }
+      : notional && {
+          charged: { ...notional, amount: 0n },
+          base: notional.amount,
+          baseBps: bpsPerUnit,
+        }
+
+  if (!basis) {
     return undefined
   }
 
-  if (chargedBps > 0) {
-    const chargedAmount = affiliate.amount + (referral?.amount ?? 0n)
+  const { charged, base, baseBps } = basis
 
-    return {
-      ...affiliate,
-      amount: (chargedAmount * BigInt(listBps)) / BigInt(chargedBps),
-    }
+  const pricedSavings = savings.map(saving => ({
+    ...saving,
+    fee: {
+      ...charged,
+      amount: (base * BigInt(saving.bps)) / BigInt(baseBps),
+    },
+  }))
+
+  return {
+    listRateFee: {
+      ...charged,
+      amount: pricedSavings.reduce(
+        (total, { fee }) => total + fee.amount,
+        charged.amount
+      ),
+    },
+    savings: pricedSavings,
   }
-
-  return notional
-    ? {
-        ...notional,
-        amount: (notional.amount * BigInt(listBps)) / BigInt(bpsPerUnit),
-      }
-    : undefined
 }

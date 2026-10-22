@@ -2037,4 +2037,10 @@ export const ko = {
     '{{name}} 는 등록되지 않았습니다. 이름을 확인하고 다시 시도하십시오.',
   send_receiver_name_unsupported_chain:
     '{{name}} {{chain}} 주소에 사용할 수 없습니다. 대신 {{chain}} 주소를 입력하십시오.',
+  failed_to_copy_tx_hash: '거래 해시 복사에 실패했습니다.',
+  tx_hash_copied: '거래 해시가 복사되었습니다',
+  copy_link: '링크 복사',
+  share_qr_code: 'QR 코드 공유',
+  share_qr_image: 'QR 이미지 공유',
+  failed_to_save_image: '이미지 저장에 실패했습니다',
 }

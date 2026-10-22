@@ -2054,4 +2054,10 @@ export const ru = {
     '{{name}} не зарегистрирован. Проверьте имя и повторите попытку.',
   send_receiver_name_unsupported_chain:
     '{{name}} нельзя использовать с {{chain}} . Вместо этого введите адрес {{chain}} .',
+  failed_to_copy_tx_hash: 'Не удалось скопировать хэш транзакции.',
+  tx_hash_copied: 'Хэш транзакции скопирован',
+  copy_link: 'Скопировать ссылку',
+  share_qr_code: 'Поделиться QR-кодом',
+  share_qr_image: 'Поделиться QR-изображением',
+  failed_to_save_image: 'Не удалось сохранить изображение',
 }

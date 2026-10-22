@@ -2064,4 +2064,10 @@ export const nl = {
     '{{name}} is niet geregistreerd. Controleer de naam en probeer het opnieuw.',
   send_receiver_name_unsupported_chain:
     '{{name}} kan niet worden gebruikt op {{chain}} . Voer in plaats daarvan een {{chain}} -adres in.',
+  failed_to_copy_tx_hash: 'Het kopiëren van de transactiehash is mislukt.',
+  tx_hash_copied: 'Transactiehash gekopieerd',
+  copy_link: 'Link kopiëren',
+  share_qr_code: 'Deel de QR-code',
+  share_qr_image: 'Deel de QR-afbeelding',
+  failed_to_save_image: 'Het opslaan van de afbeelding is mislukt.',
 }

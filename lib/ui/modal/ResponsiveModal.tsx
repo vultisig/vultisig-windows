@@ -1,4 +1,5 @@
 import { BodyPortal } from '@lib/ui/dom/BodyPortal'
+import { useKeyDown } from '@lib/ui/hooks/useKeyDown'
 import { VStack } from '@lib/ui/layout/Stack'
 import {
   mediaQuery,
@@ -96,6 +97,11 @@ const DesktopWrapper = styled.div`
   }
 `
 
+/**
+ * Centered Modal from tablet width up, bottom drawer below it. Both close on
+ * Escape and on a press outside; the drawer can also be dragged down to close
+ * when `grabbable`.
+ */
 export const ResponsiveModal = ({
   isOpen,
   onClose,
@@ -113,6 +119,8 @@ export const ResponsiveModal = ({
   const dragStartYRef = useRef<number | null>(null)
   const [translateY, setTranslateY] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
+  // The tablet-and-up Modal's Backdrop already closes on Escape.
+  useKeyDown('Escape', onClose, { isEnabled: isOpen && !isTabletAndUp })
 
   if (!isOpen) return null
 

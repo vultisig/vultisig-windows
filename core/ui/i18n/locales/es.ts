@@ -2078,4 +2078,10 @@ export const es = {
     '{{name}} no está registrado. Compruebe el nombre e inténtelo de nuevo.',
   send_receiver_name_unsupported_chain:
     '{{name}} no se puede usar en {{chain}} . Introduzca una dirección {{chain}} en su lugar.',
+  failed_to_copy_tx_hash: 'No se pudo copiar el hash de la transacción.',
+  tx_hash_copied: 'Se copió el hash de la transacción.',
+  copy_link: 'Copiar enlace',
+  share_qr_code: 'Compartir código QR',
+  share_qr_image: 'Compartir imagen QR',
+  failed_to_save_image: 'No se pudo guardar la imagen.',
 }

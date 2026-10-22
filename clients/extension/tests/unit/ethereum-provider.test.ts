@@ -201,28 +201,27 @@ describe('Ethereum Provider', () => {
 
     // The four popup-driven resolvers called out in #3928. All must
     // surface a spec-conforming 4001 when the user dismisses the popup.
-    const popupMethods = [
-      'eth_sendTransaction',
-      'eth_signTypedData_v4',
-      'personal_sign',
-      'wallet_watchAsset',
-    ] as const
+    const popupRequests = {
+      eth_sendTransaction: [{ from: '0xabc' }],
+      eth_signTypedData_v4: ['0xabc', '{}'],
+      personal_sign: ['0x68656c6c6f', '0xabc'],
+      wallet_watchAsset: { type: 'ERC20', options: { address: '0xabc' } },
+    } as const
 
-    it.each(popupMethods)(
+    it.each(Object.entries(popupRequests))(
       'translates a declined popup from %s to EIP1193Error(UserRejectedRequest) (code 4001)',
-      async method => {
+      async (method, params) => {
         const eth = new Ethereum()
-        mockedHandlers[method].mockRejectedValue(new UserRejectedRequestError())
-
-        await expect(eth.request({ method, params: [] })).rejects.toMatchObject(
-          {
-            code: 4001,
-            message: 'User rejected the request',
-          }
+        mockedHandlers[method as keyof typeof popupRequests].mockRejectedValue(
+          new UserRejectedRequestError()
         )
-        await expect(
-          eth.request({ method, params: [] })
-        ).rejects.toBeInstanceOf(EIP1193Error)
+        const request = { method, params: params as unknown as unknown[] }
+
+        await expect(eth.request(request)).rejects.toMatchObject({
+          code: 4001,
+          message: 'User rejected the request',
+        })
+        await expect(eth.request(request)).rejects.toBeInstanceOf(EIP1193Error)
       }
     )
 
@@ -263,7 +262,10 @@ describe('Ethereum Provider', () => {
       })
 
       await expect(
-        eth.request({ method: 'eth_sendTransaction', params: [] })
+        eth.request({
+          method: 'eth_sendTransaction',
+          params: [{ from: '0xabc' }],
+        })
       ).rejects.toMatchObject({
         code: 3,
         message: 'execution reverted',
@@ -278,7 +280,10 @@ describe('Ethereum Provider', () => {
       )
 
       await expect(
-        eth.request({ method: 'wallet_watchAsset', params: [] })
+        eth.request({
+          method: 'wallet_watchAsset',
+          params: { type: 'ERC721', options: {} } as unknown as unknown[],
+        })
       ).rejects.toMatchObject({
         code: -32603,
         message: 'Asset type not supported',
