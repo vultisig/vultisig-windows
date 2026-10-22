@@ -1907,4 +1907,5 @@ export const zh = {
   copy_link: '复制链接',
   share_qr_code: '分享二维码',
   share_qr_image: '分享二维码图片',
+  failed_to_save_image: '图像保存失败',
 }

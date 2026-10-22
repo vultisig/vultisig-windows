@@ -1,10 +1,12 @@
 import { useCore } from '@core/ui/state/core'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useMutation } from '@tanstack/react-query'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { toPng } from 'html-to-image'
 import { useState } from 'react'
 import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { savedImagePixelRatio } from './savedImagePixelRatio'
@@ -25,7 +27,8 @@ const Wrapper = styled.div`
 /**
  * Renders `value` off-screen and saves it as a PNG when the trigger is clicked.
  * The PNG is rendered at a fixed pixel ratio, so a saved QR stays readable
- * whatever the saving screen's pixel density.
+ * whatever the saving screen's pixel density. A failed save raises an error
+ * toast; a cancelled desktop save dialog resolves normally and shows nothing.
  */
 export const SaveAsImage = ({
   value,
@@ -34,6 +37,8 @@ export const SaveAsImage = ({
 }: SaveAsImageProps) => {
   const [node, setNode] = useState<HTMLDivElement | null>(null)
   const { saveFile } = useCore()
+  const { addToast } = useToast()
+  const { t } = useTranslation()
 
   const { mutate: saveImage } = useMutation({
     mutationFn: async (node: HTMLDivElement) => {
@@ -52,6 +57,9 @@ export const SaveAsImage = ({
         name: `${fileName}.png`,
         blob,
       })
+    },
+    onError: () => {
+      addToast({ message: t('failed_to_save_image'), status: 'error' })
     },
   })
 

@@ -2061,4 +2061,5 @@ export const nl = {
   copy_link: 'Link kopiëren',
   share_qr_code: 'Deel de QR-code',
   share_qr_image: 'Deel de QR-afbeelding',
+  failed_to_save_image: 'Het opslaan van de afbeelding is mislukt.',
 }

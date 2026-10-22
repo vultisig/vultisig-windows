@@ -442,6 +442,7 @@ export const en = {
   failed_to_process_transaction: 'Failed to process transaction',
   failed_to_process_url: 'Failed to process URL',
   failed_to_read_qr_code: 'Failed to read QR code',
+  failed_to_save_image: 'Failed to save image',
   failed_to_save_vault: 'Failed to save vault',
   faq: 'FAQ',
   faq_comparison_content:

@@ -2080,4 +2080,5 @@ export const it = {
   copy_link: 'Copia collegamento',
   share_qr_code: 'Condividi il codice QR',
   share_qr_image: "Condividi l'immagine QR",
+  failed_to_save_image: "Impossibile salvare l'immagine",
 }

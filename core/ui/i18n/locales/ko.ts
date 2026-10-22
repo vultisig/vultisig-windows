@@ -2034,4 +2034,5 @@ export const ko = {
   copy_link: '링크 복사',
   share_qr_code: 'QR 코드 공유',
   share_qr_image: 'QR 이미지 공유',
+  failed_to_save_image: '이미지 저장에 실패했습니다',
 }
