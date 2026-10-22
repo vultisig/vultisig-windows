@@ -1,10 +1,10 @@
 import { updateAppSession } from '@core/extension/storage/appSessions'
 import { setCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
-import { BackgroundError } from '@core/inpage-provider/background/error'
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { getEvmChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { BackgroundError } from '../error'
 import { setAppChain } from './setAppChain'
 
 vi.mock('@core/extension/storage/appSessions', () => ({
