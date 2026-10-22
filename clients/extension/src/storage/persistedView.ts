@@ -3,6 +3,8 @@ import { removeStorageValue } from '@lib/extension/storage/remove'
 import { setStorageValue } from '@lib/extension/storage/set'
 import { View } from '@lib/ui/navigation/View'
 
+import { isPersistableViewId } from '../navigation/persistableViews'
+
 const persistedViewKey = 'persistedView'
 
 const isView = (value: unknown): value is View =>
@@ -13,12 +15,13 @@ const isView = (value: unknown): value is View =>
 
 /**
  * Reads the view the popup reopens on. Anything else under the key, like the
- * whole history older versions stored, is ignored.
+ * whole history older versions stored or a view no longer persistable, is
+ * ignored.
  */
 export const getPersistedView = async (): Promise<View | null> => {
   const value = await getStorageValue<unknown>(persistedViewKey, null)
 
-  return isView(value) ? value : null
+  return isView(value) && isPersistableViewId(value.id) ? value : null
 }
 
 /** Saves the view the popup reopens on. */
