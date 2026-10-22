@@ -2029,4 +2029,12 @@ export const ko = {
     '백분율 버튼을 사용하려면 먼저 수신자 주소를 입력하세요.',
   send_insufficient_balance_for_fee:
     '네트워크 요금을 지불하기에 잔액이 부족합니다.',
+  send_receiver_name_lookup_failed:
+    '{{name}} 조회하기 위한 네임 서비스에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하십시오.',
+  send_receiver_name_no_address_for_chain:
+    '{{name}} 에 대해 등록된 {{chain}} 주소가 없습니다.',
+  send_receiver_name_not_found:
+    '{{name}} 는 등록되지 않았습니다. 이름을 확인하고 다시 시도하십시오.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} {{chain}} 주소에 사용할 수 없습니다. 대신 {{chain}} 주소를 입력하십시오.',
 }

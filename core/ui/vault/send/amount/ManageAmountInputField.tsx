@@ -21,7 +21,7 @@ import { useSendBalanceQuery } from '@core/ui/vault/send/queries/useSendBalanceQ
 import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
-import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useSendReceiverAddress } from '@core/ui/vault/send/state/receiverResolution'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -60,6 +60,10 @@ type SelectedSuggestion = {
   fraction: number
 }
 
+/**
+ * The open amount field, with balance-percentage suggestions that need a
+ * receiver address to price the fee against.
+ */
 export const ManageAmountInputField = () => {
   const { t } = useTranslation()
 
@@ -79,7 +83,7 @@ export const ManageAmountInputField = () => {
 
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
-  const [receiver] = useSendReceiver()
+  const receiver = useSendReceiverAddress()
   const balanceQuery = useSendBalanceQuery(extractAccountCoinKey(coin))
   const balance = balanceQuery.data
   // The fee is reserved from this balance for a native send and for a gasless

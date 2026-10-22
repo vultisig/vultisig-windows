@@ -1902,4 +1902,10 @@ export const zh = {
   send_enter_address_first_for_percentage:
     '请先输入收件人地址才能使用百分比按钮',
   send_insufficient_balance_for_fee: '余额不足，无法支付网络费用',
+  send_receiver_name_lookup_failed:
+    '无法连接到名称服务以查找{{name}} 。请检查您的连接并重试。',
+  send_receiver_name_no_address_for_chain: '没有为{{chain}}注册{{name}}地址。',
+  send_receiver_name_not_found: '{{name}}未注册。请检查名称并重试。',
+  send_receiver_name_unsupported_chain:
+    '{{name}}不能用于{{chain}} 。请改用{{chain}}地址。',
 }

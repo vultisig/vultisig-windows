@@ -2039,4 +2039,12 @@ export const hr = {
     'Prvo unesite adresu primatelja da biste mogli koristiti gumbe za postotke',
   send_insufficient_balance_for_fee:
     'Nema dovoljno stanja za plaćanje mrežne naknade',
+  send_receiver_name_lookup_failed:
+    'Nije moguće pristupiti servisu imena za pretraživanje {{name}} . Provjerite vezu i pokušajte ponovno.',
+  send_receiver_name_no_address_for_chain:
+    'Nije registrirana nijedna adresa {{chain}} za {{name}} .',
+  send_receiver_name_not_found:
+    '{{name}} nije registriran. Provjerite ime i pokušajte ponovno.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} se ne može koristiti na {{chain}} . Umjesto toga unesite adresu {{chain}} .',
 }

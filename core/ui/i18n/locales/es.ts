@@ -2070,4 +2070,12 @@ export const es = {
     'Introduzca primero la dirección del destinatario para poder usar los botones de porcentaje.',
   send_insufficient_balance_for_fee:
     'Saldo insuficiente para pagar la tarifa de red.',
+  send_receiver_name_lookup_failed:
+    'No se pudo acceder al servicio de nombres para buscar {{name}} . Compruebe su conexión e inténtelo de nuevo.',
+  send_receiver_name_no_address_for_chain:
+    'No hay ninguna dirección {{chain}} registrada para {{name}} .',
+  send_receiver_name_not_found:
+    '{{name}} no está registrado. Compruebe el nombre e inténtelo de nuevo.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} no se puede usar en {{chain}} . Introduzca una dirección {{chain}} en su lugar.',
 }
