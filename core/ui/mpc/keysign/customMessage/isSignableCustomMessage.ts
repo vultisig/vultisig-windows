@@ -1,6 +1,7 @@
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { CustomMessagePayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { match } from '@vultisig/lib-utils/match'
 
 import { isAdr36SignBytes } from './adr36'
@@ -10,6 +11,7 @@ import {
 } from './chains'
 import { getCustomMessageBytes } from './getCustomMessageBytes'
 import { unwrapPersonalSignMessage } from './getPersonalSignMessage'
+import { getTypedDataHex } from './getTypedDataHex'
 
 type IsSignableCustomMessageInput = Pick<
   CustomMessagePayload,
@@ -42,7 +44,12 @@ export const isSignableCustomMessage = ({
 }: IsSignableCustomMessageInput) => {
   if (!isOneOf(chain, customMessageSupportedChains)) return false
 
-  if (method === 'eth_signTypedData_v4') return getChainKind(chain) === 'evm'
+  if (method === 'eth_signTypedData_v4') {
+    return (
+      getChainKind(chain) === 'evm' &&
+      'data' in attempt(() => getTypedDataHex(message))
+    )
+  }
 
   // The bytes the keysign hashes, so a check on them holds for what is signed.
   const bytes = getCustomMessageBytes(message)

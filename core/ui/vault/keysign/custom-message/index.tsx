@@ -11,6 +11,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -22,6 +23,10 @@ import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 import { buildManualCustomMessagePayload } from './buildManualCustomMessagePayload'
 
 const steps = ['form', 'verify'] as const
+
+// The methods the unsupported-method error names. `isSignableCustomMessage`
+// still has the final say on whether the payload can be signed.
+const signingMethods = ['personal_sign', 'eth_signTypedData_v4'] as const
 
 /**
  * Vault settings flow for signing a message the user types in, under a
@@ -47,18 +52,21 @@ export const SignCustomMessagePage = () => {
     vaultPublicKeyEcdsa: getVaultId(vault),
   })
 
-  // The form wraps a personal_sign message in its envelope itself, so only
-  // the method can make the payload unsignable.
+  const signingMethod = method.trim()
+
   const isMethodUnsupported =
-    method.trim() !== '' && !isSignableCustomMessage(custom)
+    signingMethod !== '' && !isOneOf(signingMethod, signingMethods)
 
   const getDisabledMessage = () => {
     if (!ethereumAddress.trim()) {
       return t('sign_custom_message_unavailable_imported_no_ethereum')
     }
-    if (!method.trim()) return t('method_required')
+    if (!signingMethod) return t('method_required')
     if (isMethodUnsupported) return t('custom_message_unsupported_method')
     if (!message) return t('message_required')
+    if (!isSignableCustomMessage(custom)) {
+      return t('custom_message_unsupported_format')
+    }
   }
 
   const disabledMessage = getDisabledMessage()

@@ -46,6 +46,7 @@ describe('getCustomMessageHex', () => {
     it.each([
       ['another method', 'eth_sign', '0xdeadbeef'],
       ['personal_sign without an envelope', 'personal_sign', '0xdeadbeef'],
+      ['malformed typed data', 'eth_signTypedData_v4', 'not json'],
     ])('refuses %s', (_, method, message) => {
       expect(() =>
         getCustomMessageHex({ chain: Chain.Ethereum, method, message })

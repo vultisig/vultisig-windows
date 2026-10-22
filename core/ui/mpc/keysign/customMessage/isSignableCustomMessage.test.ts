@@ -57,6 +57,27 @@ describe('isSignableCustomMessage', () => {
     }
   )
 
+  it.each([
+    ['text', 'Hello from Vultisig'],
+    ['JSON null', 'null'],
+    [
+      'typed data without types',
+      JSON.stringify({ domain: {}, types: {}, message: {} }),
+    ],
+    [
+      'typed data missing a field',
+      JSON.stringify({ ...JSON.parse(typedData), message: {} }),
+    ],
+  ])('refuses eth_signTypedData_v4 that is %s', (_, message) => {
+    expect(
+      isSignableCustomMessage({
+        chain: Chain.Ethereum,
+        method: 'eth_signTypedData_v4',
+        message,
+      })
+    ).toBe(false)
+  })
+
   it.each(['eth_sign', 'sign_message', 'Personal_Sign', ' personal_sign', ''])(
     'refuses the %j method, even around a valid envelope',
     method => {
