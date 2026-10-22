@@ -2044,6 +2044,7 @@ export const hr = {
   copy_link: 'Kopiraj poveznicu',
   share_qr_code: 'Podijeli QR kod',
   share_qr_image: 'Podijeli QR sliku',
+  failed_to_save_image: 'Spremanje slike nije uspjelo',
   custom_message_unsupported_format:
     'Ova poruka nije u prepoznatom formatu za potpisivanje, stoga se ne može potpisati.',
   custom_message_unsupported_method:

@@ -1907,6 +1907,7 @@ export const zh = {
   copy_link: '复制链接',
   share_qr_code: '分享二维码',
   share_qr_image: '分享二维码图片',
+  failed_to_save_image: '图像保存失败',
   custom_message_unsupported_format:
     '此消息格式不符合认可的签名格式，因此无法签名。',
   custom_message_unsupported_method:

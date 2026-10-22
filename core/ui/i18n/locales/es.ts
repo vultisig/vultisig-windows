@@ -2075,6 +2075,7 @@ export const es = {
   copy_link: 'Copiar enlace',
   share_qr_code: 'Compartir código QR',
   share_qr_image: 'Compartir imagen QR',
+  failed_to_save_image: 'No se pudo guardar la imagen.',
   custom_message_unsupported_format:
     'Este mensaje no está en un formato de firma reconocido, por lo que no se puede firmar.',
   custom_message_unsupported_method:

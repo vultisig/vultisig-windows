@@ -2061,6 +2061,7 @@ export const nl = {
   copy_link: 'Link kopiëren',
   share_qr_code: 'Deel de QR-code',
   share_qr_image: 'Deel de QR-afbeelding',
+  failed_to_save_image: 'Het opslaan van de afbeelding is mislukt.',
   custom_message_unsupported_format:
     'Dit bericht heeft geen erkend ondertekeningsformaat en kan daarom niet worden ondertekend.',
   custom_message_unsupported_method:

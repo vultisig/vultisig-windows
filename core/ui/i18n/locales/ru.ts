@@ -2051,6 +2051,7 @@ export const ru = {
   copy_link: 'Скопировать ссылку',
   share_qr_code: 'Поделиться QR-кодом',
   share_qr_image: 'Поделиться QR-изображением',
+  failed_to_save_image: 'Не удалось сохранить изображение',
   custom_message_unsupported_format:
     'Это сообщение не имеет общепринятого формата для подписания, поэтому его нельзя подписать.',
   custom_message_unsupported_method:

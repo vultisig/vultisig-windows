@@ -2092,6 +2092,7 @@ export const de = {
   copy_link: 'Link kopieren',
   share_qr_code: 'QR-Code teilen',
   share_qr_image: 'QR-Bild teilen',
+  failed_to_save_image: 'Bild konnte nicht gespeichert werden',
   custom_message_unsupported_format:
     'Diese Nachricht liegt nicht in einem anerkannten Signaturformat vor und kann daher nicht signiert werden.',
   custom_message_unsupported_method:

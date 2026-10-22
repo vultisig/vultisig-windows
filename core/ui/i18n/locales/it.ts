@@ -2080,6 +2080,7 @@ export const it = {
   copy_link: 'Copia collegamento',
   share_qr_code: 'Condividi il codice QR',
   share_qr_image: "Condividi l'immagine QR",
+  failed_to_save_image: "Impossibile salvare l'immagine",
   custom_message_unsupported_format:
     'Questo messaggio non è in un formato di firma riconosciuto, pertanto non può essere firmato.',
   custom_message_unsupported_method:
