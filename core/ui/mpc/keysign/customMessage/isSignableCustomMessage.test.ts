@@ -31,15 +31,31 @@ describe('isSignableCustomMessage', () => {
     ).toBe(true)
   })
 
-  it('accepts eth_signTypedData_v4', () => {
-    expect(
-      isSignableCustomMessage({
-        chain: Chain.Ethereum,
-        method: 'eth_signTypedData_v4',
-        message: typedData,
-      })
-    ).toBe(true)
-  })
+  it.each([Chain.Ethereum, Chain.Arbitrum])(
+    'accepts eth_signTypedData_v4 on %s',
+    chain => {
+      expect(
+        isSignableCustomMessage({
+          chain,
+          method: 'eth_signTypedData_v4',
+          message: typedData,
+        })
+      ).toBe(true)
+    }
+  )
+
+  it.each([Chain.Tron, Chain.Cosmos, Chain.Solana])(
+    'refuses eth_signTypedData_v4 on %s',
+    chain => {
+      expect(
+        isSignableCustomMessage({
+          chain,
+          method: 'eth_signTypedData_v4',
+          message: typedData,
+        })
+      ).toBe(false)
+    }
+  )
 
   it.each(['eth_sign', 'sign_message', 'Personal_Sign', ' personal_sign', ''])(
     'refuses the %j method, even around a valid envelope',

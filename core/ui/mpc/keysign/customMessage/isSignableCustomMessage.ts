@@ -42,7 +42,7 @@ export const isSignableCustomMessage = ({
 }: IsSignableCustomMessageInput) => {
   if (!isOneOf(chain, customMessageSupportedChains)) return false
 
-  if (method === 'eth_signTypedData_v4') return true
+  if (method === 'eth_signTypedData_v4') return getChainKind(chain) === 'evm'
 
   // The bytes the keysign hashes, so a check on them holds for what is signed.
   const bytes = getCustomMessageBytes(message)
