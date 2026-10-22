@@ -37,26 +37,34 @@ export const getAppSessionFieldsForApprovedChains = ({
   return { authorizedChains }
 }
 
-export const isAppSessionAuthorizedForChain = ({
-  appSession,
-}: {
+type IsAppSessionAuthorizedForChainInput = {
   appSession: AppSession
   chain: Chain
-}): boolean =>
-  // Reaching this check means `authorizeContext` already bound a stored
-  // session to the request origin — i.e. the origin is already connected to
-  // this vault. Once connected, authorize every chain and chain switch
+}
+
+/**
+ * Whether the session may use or switch to the given chain. A connected
+ * session is authorized for every chain; a chain-only session (granted by a
+ * chain switch without account access) only for the chains the user approved.
+ */
+export const isAppSessionAuthorizedForChain = ({
+  appSession,
+  chain,
+}: IsAppSessionAuthorizedForChainInput): boolean =>
+  // Once an origin is connected, authorize every chain and chain switch
   // without a fresh `grantVaultAccess` popup, so a multi-chain dApp shows a
-  // single connect approval instead of one popup per chain. Unconnected
-  // origins never get here (`authorizeContext` throws `Unauthorized` first),
-  // so the #4214 fix — no silent chain switch from an unconnected page — is
-  // preserved for them. Account exposure stays gated separately by
-  // `isAppSessionAuthorizedForAccounts`.
+  // single connect approval instead of one popup per chain. Origins with no
+  // stored session never get here (`authorizeContext` throws `Unauthorized`
+  // first). A chain-only session (`isAccountAccessGranted: false`) is limited
+  // to its approved `authorizedChains`, so the #4214 fix — no silent chain
+  // switch from an unconnected page — still holds for it. Account exposure
+  // stays gated separately by `isAppSessionAuthorizedForAccounts`.
   //
   // Tradeoff (temporary): a connected origin can now switch the active chain
   // without an approval, partially re-opening #4214 for connected origins.
   // Accepted until the CAIP-25 multichain approval flow lands.
-  appSession.isAccountAccessGranted !== false
+  appSession.isAccountAccessGranted !== false ||
+  (appSession.authorizedChains?.includes(chain) ?? false)
 
 export const isAppSessionAuthorizedForAccounts = (
   appSession: AppSession
