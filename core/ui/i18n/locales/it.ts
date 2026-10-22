@@ -2077,4 +2077,7 @@ export const it = {
     'Saldo insufficiente per pagare la tariffa di rete.',
   failed_to_copy_tx_hash: "Impossibile copiare l'hash della transazione",
   tx_hash_copied: 'Hash della transazione copiato',
+  copy_link: 'Copia collegamento',
+  share_qr_code: 'Condividi il codice QR',
+  share_qr_image: "Condividi l'immagine QR",
 }
