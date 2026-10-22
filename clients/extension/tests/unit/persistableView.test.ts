@@ -1,10 +1,9 @@
 import { create } from '@bufbuild/protobuf'
+import { AppView } from '@clients/extension/src/navigation/AppView'
+import { getPersistableView } from '@clients/extension/src/navigation/persistableViews'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { describe, expect, it } from 'vitest'
-
-import { AppView } from '@clients/extension/src/navigation/AppView'
-import { getPersistableView } from '@clients/extension/src/navigation/persistableViews'
 
 const mnemonic = 'test mnemonic that must never reach extension storage'
 const password = 'fast-vault-password'
@@ -101,10 +100,14 @@ describe('getPersistableView', () => {
     ).toBeNull()
   })
 
-  it('keeps a plain vault setup view', () => {
+  it('persists nothing while a vault is being set up or imported in a tab', () => {
     expect(
-      getPersistableView([vaultView, { id: 'setupVault', state: { type: 'fast' } }])
-    ).toEqual({ id: 'setupVault', state: { type: 'fast' } })
+      getPersistableView([
+        vaultView,
+        { id: 'setupVault', state: { type: 'fast' } },
+      ])
+    ).toBeNull()
+    expect(getPersistableView([vaultView, { id: 'importVault' }])).toBeNull()
   })
 
   it('persists no credentials from earlier flows once back home', () => {
