@@ -1,7 +1,9 @@
+import { makeSignDoc, serializeSignDoc } from '@cosmjs/amino'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { hexlify, toUtf8Bytes } from 'ethers'
 import { describe, expect, it } from 'vitest'
 
+import { serializeAdr36SignDoc } from './adr36'
 import { getPersonalSignMessage } from './getPersonalSignMessage'
 import { isSignableCustomMessage } from './isSignableCustomMessage'
 
@@ -121,7 +123,100 @@ describe('isSignableCustomMessage', () => {
     }
   )
 
-  it.each([Chain.Solana, Chain.Tron, Chain.Cosmos])(
+  it.each([
+    ['its own header', '\x19TRON Signed Message:\n'],
+    ['the Ethereum header', '\x19Ethereum Signed Message:\n'],
+  ])('accepts a TRON message under %s', (_, header) => {
+    expect(
+      isSignableCustomMessage({
+        chain: Chain.Tron,
+        method: 'sign_message',
+        message: `${hexlify(toUtf8Bytes(`${header}32`))}${'ab'.repeat(32)}`,
+      })
+    ).toBe(true)
+  })
+
+  it.each([
+    ['hex', `0x${'ab'.repeat(32)}`],
+    ['text', 'Hello from Vultisig'],
+    ['an incomplete header', hexlify(toUtf8Bytes('\x19TRON Signed'))],
+  ])('refuses a TRON %s message without a header', (_, message) => {
+    expect(
+      isSignableCustomMessage({
+        chain: Chain.Tron,
+        method: 'sign_message',
+        message,
+      })
+    ).toBe(false)
+  })
+
+  describe('Cosmos', () => {
+    const signer = 'cosmos1qypqxpq9qcrsszg2pvxq6rs0zqg3yyc5lzv7xu'
+    const dataBase64 = Buffer.from('Hello from Vultisig').toString('base64')
+    const signDoc = serializeAdr36SignDoc({ signer, dataBase64 })
+
+    const serializeAminoSignDoc = (type: string, chainId: string) =>
+      hexlify(
+        serializeSignDoc(
+          makeSignDoc(
+            [{ type, value: { signer, data: dataBase64 } }],
+            { gas: '0', amount: [] },
+            chainId,
+            '',
+            '0',
+            '0'
+          )
+        )
+      )
+
+    it.each([Chain.Cosmos, Chain.THORChain])(
+      'accepts an ADR-36 sign doc on %s',
+      chain => {
+        expect(
+          isSignableCustomMessage({
+            chain,
+            method: 'cosmos_sign_arbitrary',
+            message: hexlify(signDoc),
+          })
+        ).toBe(true)
+      }
+    )
+
+    it.each([
+      ['a hash', `0x${'ab'.repeat(32)}`],
+      ['text', 'Hello from Vultisig'],
+      [
+        'a sign doc with a chain id',
+        serializeAminoSignDoc('sign/MsgSignData', 'cosmoshub-4'),
+      ],
+      [
+        'a sign doc with another message',
+        serializeAminoSignDoc('cosmos-sdk/MsgSend', ''),
+      ],
+      [
+        'a sign doc serialized differently',
+        hexlify(
+          toUtf8Bytes(
+            JSON.stringify(
+              JSON.parse(new TextDecoder().decode(signDoc)),
+              null,
+              2
+            )
+          )
+        ),
+      ],
+    ])('refuses %s', (_, message) => {
+      expect(
+        isSignableCustomMessage({
+          chain: Chain.Cosmos,
+          method: 'cosmos_sign_arbitrary',
+          message,
+        })
+      ).toBe(false)
+    })
+  })
+
+  it.each([Chain.Solana])(
     'leaves %s custom messages to their own chain',
     chain => {
       expect(
