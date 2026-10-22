@@ -43,6 +43,15 @@ describe('getEip712PayloadIssue', () => {
     expect(getEip712PayloadIssue(makePayload())).toBeUndefined()
   })
 
+  it.each(['Item', 'Permit'])(
+    'refuses a %s primaryType that is not the struct the hash signs',
+    primaryType => {
+      expect(getEip712PayloadIssue(makePayload({ primaryType }))).toContain(
+        'primaryType'
+      )
+    }
+  )
+
   it('names a fixed-width bytes field holding an empty string', () => {
     const issue = getEip712PayloadIssue(withMessage({ salt: '' }))
     expect(issue).toContain('message.salt')

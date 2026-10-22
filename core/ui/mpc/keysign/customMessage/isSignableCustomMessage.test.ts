@@ -68,6 +68,22 @@ describe('isSignableCustomMessage', () => {
       'typed data missing a field',
       JSON.stringify({ ...JSON.parse(typedData), message: {} }),
     ],
+    [
+      'typed data without a primaryType',
+      JSON.stringify({ ...JSON.parse(typedData), primaryType: undefined }),
+    ],
+    [
+      'typed data whose primaryType is not the signed struct',
+      JSON.stringify({
+        domain: { name: 'Vultisig', chainId: 1 },
+        types: {
+          Permit: [{ name: 'details', type: 'Details' }],
+          Details: [{ name: 'amount', type: 'uint256' }],
+        },
+        primaryType: 'Details',
+        message: { details: { amount: 1 } },
+      }),
+    ],
   ])('refuses eth_signTypedData_v4 that is %s', (_, message) => {
     expect(
       isSignableCustomMessage({
