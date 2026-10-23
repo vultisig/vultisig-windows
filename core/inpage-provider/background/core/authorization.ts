@@ -51,8 +51,8 @@ export const authorizeContext = async (
     const sessions = await getVaultsAppSessions()
 
     for (const [vaultId, vaultSessions] of Object.entries(sessions)) {
+      if (!Object.prototype.hasOwnProperty.call(vaultSessions, host)) continue
       const appSession = vaultSessions[host]
-      if (!appSession) continue
 
       // Deleting a vault leaves its sessions behind, so a session can point
       // at a vault that is gone.

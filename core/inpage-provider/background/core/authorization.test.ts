@@ -68,6 +68,25 @@ describe('authorizeContext', () => {
     expect(result.appSession).toEqual({ ...session, vaultId: 'vault-2' })
   })
 
+  it.each(['http://constructor', 'http://__proto__'])(
+    'rejects unconnected %s, whose host is an Object.prototype key',
+    async requestOrigin => {
+      mockGetVaultsAppSessions.mockResolvedValue({ 'vault-1': {} })
+      mockFindVault.mockResolvedValue({} as Vault)
+      mockGetVaultChainAddress.mockResolvedValue('0xdead')
+
+      await expect(authorizeContext({ requestOrigin })).rejects.toBe(
+        BackgroundError.Unauthorized
+      )
+      await expect(
+        authorizeContext({
+          requestOrigin,
+          account: { address: '0xdead', chain: Chain.Ethereum },
+        })
+      ).rejects.toBe(BackgroundError.Unauthorized)
+    }
+  )
+
   it('rejects a site whose only session belongs to a deleted vault', async () => {
     mockGetVaultsAppSessions.mockResolvedValue({
       'deleted-vault': { 'example.com': session },

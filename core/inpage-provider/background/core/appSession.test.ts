@@ -70,4 +70,22 @@ describe('resolveSiteSessions', () => {
 
     expect(siteSessions).toEqual({})
   })
+
+  it('serves sites whose hosts are Object.prototype keys', () => {
+    const siteSessions = resolveSiteSessions({
+      sessions: {
+        'vault-a': {
+          constructor: session('constructor'),
+          'a.com': session('a.com'),
+        },
+      },
+      currentVaultId: 'vault-a',
+      vaultIds: ['vault-a'],
+    })
+
+    expect(siteSessions).toEqual({
+      constructor: { ...session('constructor'), vaultId: 'vault-a' },
+      'a.com': { ...session('a.com'), vaultId: 'vault-a' },
+    })
+  })
 })

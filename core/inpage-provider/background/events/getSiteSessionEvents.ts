@@ -24,15 +24,15 @@ export const getSiteSessionEvents = ({
   nextSiteSessions,
 }: GetSiteSessionEventsInput): SiteSessionEvents => {
   const prevApps = Object.keys(prevSiteSessions)
+  const isServed = (appId: string) =>
+    Object.prototype.hasOwnProperty.call(nextSiteSessions, appId)
 
   return {
-    disconnect: prevApps.filter(appId => !(appId in nextSiteSessions)),
-    accountsChanged: prevApps.filter(appId => {
-      const nextSession = nextSiteSessions[appId]
-      return (
-        nextSession !== undefined &&
-        nextSession.vaultId !== prevSiteSessions[appId].vaultId
-      )
-    }),
+    disconnect: prevApps.filter(appId => !isServed(appId)),
+    accountsChanged: prevApps.filter(
+      appId =>
+        isServed(appId) &&
+        nextSiteSessions[appId].vaultId !== prevSiteSessions[appId].vaultId
+    ),
   }
 }

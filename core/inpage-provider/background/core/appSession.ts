@@ -30,19 +30,19 @@ export const resolveSiteSessions = ({
   currentVaultId,
   vaultIds,
 }: SiteSessionsState): SiteSessions => {
-  const sessionsByHost: Record<string, VaultAppSession[]> = {}
+  const sessionsByHost = new Map<string, VaultAppSession[]>()
 
   for (const vaultId of vaultIds) {
     for (const [host, session] of Object.entries(sessions[vaultId] ?? {})) {
-      sessionsByHost[host] = [
-        ...(sessionsByHost[host] ?? []),
+      sessionsByHost.set(host, [
+        ...(sessionsByHost.get(host) ?? []),
         { ...session, vaultId },
-      ]
+      ])
     }
   }
 
   return Object.fromEntries(
-    Object.entries(sessionsByHost).flatMap(([host, hostSessions]) => {
+    [...sessionsByHost].flatMap(([host, hostSessions]) => {
       const session =
         hostSessions.find(({ vaultId }) => vaultId === currentVaultId) ??
         (hostSessions.length === 1 ? hostSessions[0] : undefined)
@@ -68,8 +68,11 @@ export const getAppSession = async (
   requestOrigin: string
 ): Promise<VaultAppSession | undefined> => {
   const siteSessions = resolveSiteSessions(await getSiteSessionsState())
+  const host = getUrlBaseDomain(requestOrigin)
 
-  return siteSessions[getUrlBaseDomain(requestOrigin)]
+  return Object.prototype.hasOwnProperty.call(siteSessions, host)
+    ? siteSessions[host]
+    : undefined
 }
 
 /**
