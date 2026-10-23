@@ -1,4 +1,3 @@
-import { storage } from '@core/extension/storage'
 import {
   addKeplrSuggestedChainForHost,
   getKeplrSuggestedChainsForHost,
@@ -10,17 +9,18 @@ import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 
 import { validateSuggestedChainInfo } from '../../keplr/validateSuggestedChainInfo'
 import { callPopupFromBackground } from '../../popup/resolvers/background'
+import { getSiteVaultId } from '../core/appSession'
 
 const emptyRecord: KeplrSuggestedChainsRecord = {}
 
-const getRequiredCurrentVaultId = async () =>
-  shouldBePresent(await storage.getCurrentVaultId(), 'currentVaultId')
+const getRequiredSiteVaultId = async (requestOrigin: string) =>
+  shouldBePresent(await getSiteVaultId(requestOrigin), 'siteVaultId')
 
 /** Suggested chains the user approved for the requesting site. */
 export const getKeplrSuggestedChains: BackgroundResolver<
   'getKeplrSuggestedChains'
 > = async ({ context: { requestOrigin } }) => {
-  const vaultId = await storage.getCurrentVaultId()
+  const vaultId = await getSiteVaultId(requestOrigin)
   if (!vaultId) return emptyRecord
   return getKeplrSuggestedChainsForHost({
     vaultId,
@@ -33,8 +33,9 @@ export const getKeplrSuggestedChains: BackgroundResolver<
  * `suggestKeplrChain` popup this resolver opens itself. The approval can't be
  * left to the inpage provider: a page can post bridge messages directly and
  * skip it. A chain the site already registered resolves without a popup.
- * The chain is stored under the vault selected when the user approves, which
- * is the one the site's follow-up `enable` reads.
+ * The chain is stored under the vault serving the site once the user approves
+ * (the current vault while the site isn't connected), which is the one the
+ * site's follow-up `enable` reads.
  */
 export const suggestKeplrChain: BackgroundResolver<
   'suggestKeplrChain'
@@ -43,7 +44,7 @@ export const suggestKeplrChain: BackgroundResolver<
 
   const host = getUrlBaseDomain(context.requestOrigin)
   const existing = await getKeplrSuggestedChainsForHost({
-    vaultId: await getRequiredCurrentVaultId(),
+    vaultId: await getRequiredSiteVaultId(context.requestOrigin),
     host,
   })
   if (Object.prototype.hasOwnProperty.call(existing, chainInfo.chainId)) return
@@ -54,11 +55,11 @@ export const suggestKeplrChain: BackgroundResolver<
     context,
   })
 
-  // The selected vault can change while the popup waits in the queue — an
-  // earlier connection popup selects one — or while it's open, so read it
-  // again rather than reuse the one from before the wait.
+  // The vault serving the site can change while the popup waits in the
+  // queue — an earlier connection popup selects one — or while it's open, so
+  // read it again rather than reuse the one from before the wait.
   await addKeplrSuggestedChainForHost({
-    vaultId: await getRequiredCurrentVaultId(),
+    vaultId: await getRequiredSiteVaultId(context.requestOrigin),
     host,
     chainInfo,
   })

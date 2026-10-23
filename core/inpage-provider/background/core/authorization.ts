@@ -1,17 +1,15 @@
-import { storage } from '@core/extension/storage'
 import {
-  getVaultAppSessions,
   getVaultsAppSessions,
   VaultAppSession,
 } from '@core/extension/storage/appSessions'
 import { findVault } from '@core/extension/storage/vaults'
 import { BackgroundError } from '@core/inpage-provider/background/error'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { sleep } from '@vultisig/lib-utils/sleep'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 
 import { AuthorizedCallContext, CallInitialContext } from '../../call/context'
+import { getAppSession } from './appSession'
 import { getVaultChainAddress } from './getVaultChainAddress'
 
 type AuthorizeContextOptions = {
@@ -34,7 +32,7 @@ const sessionLookupRetryDelayMs = 50
  * storage keyed by origin — never taken from caller input — so a forged call
  * cannot authorize itself for a vault its origin was never granted. With an
  * account hint, a connected vault that derives that address wins; otherwise
- * (or when none does) the current vault's session is used.
+ * (or when none does) the vault serving the site is used.
  */
 export const authorizeContext = async (
   context: CallInitialContext,
@@ -74,22 +72,11 @@ export const authorizeContext = async (
     return null
   }
 
-  const resolveCurrentVaultSession =
-    async (): Promise<VaultAppSession | null> => {
-      const vaultId = shouldBePresent(
-        await storage.getCurrentVaultId(),
-        'currentVaultId'
-      )
-      const appSession = (await getVaultAppSessions(vaultId))[host]
-
-      return appSession ? { ...appSession, vaultId } : null
-    }
-
   const attempts = retryOnMissing ? sessionLookupRetries : 1
 
   for (let attempt = 0; attempt < attempts; attempt++) {
     const appSession =
-      (await resolveAccountSession()) ?? (await resolveCurrentVaultSession())
+      (await resolveAccountSession()) ?? (await getAppSession(requestOrigin))
 
     if (appSession) {
       return { ...context, appSession }
