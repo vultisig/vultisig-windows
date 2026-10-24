@@ -90,6 +90,34 @@ describe('app session chain authorization', () => {
     ).toBe(false)
   })
 
+  it('authorizes a chain-only session for the chains the user approved', () => {
+    expect(
+      isAppSessionAuthorizedForChain({
+        appSession: {
+          host: 'example.com',
+          url: 'https://example.com',
+          authorizedChains: [Chain.Polygon],
+          isAccountAccessGranted: false,
+        },
+        chain: Chain.Polygon,
+      })
+    ).toBe(true)
+  })
+
+  it('rejects a chain-only session for a chain the user has not approved', () => {
+    expect(
+      isAppSessionAuthorizedForChain({
+        appSession: {
+          host: 'example.com',
+          url: 'https://example.com',
+          authorizedChains: [Chain.Polygon],
+          isAccountAccessGranted: false,
+        },
+        chain: Chain.Ethereum,
+      })
+    ).toBe(false)
+  })
+
   it('does not treat a chainless denied session as legacy authorized', () => {
     expect(
       isAppSessionAuthorizedForChain({
