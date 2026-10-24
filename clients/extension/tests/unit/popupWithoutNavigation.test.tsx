@@ -22,7 +22,10 @@ import { useContext } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
+  useTranslation: () => ({
+    t: (key: string, options?: { name?: string }) =>
+      options?.name ? `${key}:${options.name}` : key,
+  }),
 }))
 
 // The splash reaches the Lottie player, which needs a real canvas.
@@ -147,12 +150,35 @@ describe('RootCurrentVaultProvider without a NavigationProvider', () => {
 
     renderProvider()
 
-    expect(await screen.findByText('vault_cannot_be_opened')).toBeTruthy()
+    expect(
+      await screen.findByText('vault_cannot_be_opened:Popup vault')
+    ).toBeTruthy()
     expect(screen.queryByText('import_vult_backup')).toBeNull()
 
     fireEvent.click(screen.getByText('close'))
 
     expect(goBack).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('UnreadableVaultRecovery', () => {
+  it.each([
+    ['without a NavigationProvider', undefined],
+    ['with a NavigationProvider', [{ id: 'vault' }]],
+  ])('names the vault and shows the cause %s', async (_host, history) => {
+    readVaultAllKeyShares.mockRejectedValue(
+      new UnreadableVaultKeySharesError(new Error('Invalid MPC keyshare'))
+    )
+
+    renderProvider(history)
+
+    expect(
+      await screen.findByText('vault_cannot_be_opened:Popup vault')
+    ).toBeTruthy()
+
+    fireEvent.click(screen.getByText('show_exact_error'))
+
+    expect(await screen.findByText('Invalid MPC keyshare')).toBeTruthy()
   })
 })
 

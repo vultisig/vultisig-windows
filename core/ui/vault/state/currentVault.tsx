@@ -57,7 +57,7 @@ type VaultSharesRead = {
   source: VaultReadabilityInputs
 } & (
   | { status: 'ready'; shares: VaultAllKeyShares }
-  | { status: 'unreadable' }
+  | { status: 'unreadable'; error: UnreadableVaultKeySharesError }
   | { status: 'error'; error: Error }
 )
 
@@ -197,7 +197,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
         if (!cancelled) {
           setShareState(
             error instanceof UnreadableVaultKeySharesError
-              ? { source, status: 'unreadable' }
+              ? { source, status: 'unreadable', error }
               : {
                   source,
                   status: 'error',
@@ -321,7 +321,11 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const isUnreadable = settled?.status === 'unreadable'
 
   if (!provided) {
-    return isUnreadable ? <UnreadableVaultRecovery /> : <StartupPlaceholder />
+    return isUnreadable && vault ? (
+      <UnreadableVaultRecovery name={vault.name} error={settled.error} />
+    ) : (
+      <StartupPlaceholder />
+    )
   }
 
   const tree = (

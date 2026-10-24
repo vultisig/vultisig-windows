@@ -1040,7 +1040,8 @@ export const ru = {
     version: 'Версия {{latestVersion}}',
   },
   vault_already_exists: 'Хранилище "{{name}}" уже существует',
-  vault_cannot_be_opened: 'Это хранилище нельзя открыть на этом устройстве',
+  vault_cannot_be_opened:
+    'Хранилище «{{name}}» нельзя открыть на этом устройстве',
   vault_cannot_be_opened_backup_description:
     'Резервная копия .vult поможет вернуть доступ. Импортируйте её, и это хранилище снова заработает.',
   vault_cannot_be_opened_description:

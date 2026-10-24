@@ -58,7 +58,7 @@ test('unreadable shares fail closed and route to backup import', async ({
         passcodeEncryption: null,
         vaults: [
           {
-            name: 'Ciphertext must not render',
+            name: 'Bricked vault',
             publicKeys: {
               ecdsa: currentVaultId,
               eddsa: '04'.repeat(32),
@@ -84,7 +84,9 @@ test('unreadable shares fail closed and route to backup import', async ({
   await extensionPage.setViewportSize({ width: 480, height: 600 })
 
   await expect(
-    extensionPage.getByText("This vault can't be opened on this device").first()
+    extensionPage
+      .getByText(`"Bricked vault" can't be opened on this device`)
+      .first()
   ).toBeVisible()
   await expect(
     extensionPage.getByText(
@@ -92,8 +94,15 @@ test('unreadable shares fail closed and route to backup import', async ({
     )
   ).toBeVisible()
   await expect(
-    extensionPage.getByText('Ciphertext must not render')
+    extensionPage.getByText('Bricked vault', { exact: true })
   ).not.toBeVisible()
+
+  await extensionPage.getByText('Show exact error').click()
+  await expect(extensionPage.getByText('Error message')).toBeVisible()
+  await expect(
+    extensionPage.getByText(malformedShare, { exact: false })
+  ).not.toBeVisible()
+  await extensionPage.keyboard.press('Escape')
 
   const importButton = extensionPage.getByRole('button', {
     name: 'Import .vult backup',
