@@ -2077,4 +2077,8 @@ export const pt = {
   share_qr_code: 'Compartilhar código QR',
   share_qr_image: 'Compartilhar imagem QR',
   failed_to_save_image: 'Falha ao salvar a imagem',
+  custom_message_unsupported_format:
+    'Esta mensagem não está em um formato de assinatura reconhecido, portanto não pode ser assinada.',
+  custom_message_unsupported_method:
+    'Método de assinatura não suportado. Use personal_sign ou eth_signTypedData_v4.',
 }

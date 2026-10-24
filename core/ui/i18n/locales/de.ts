@@ -2093,4 +2093,8 @@ export const de = {
   share_qr_code: 'QR-Code teilen',
   share_qr_image: 'QR-Bild teilen',
   failed_to_save_image: 'Bild konnte nicht gespeichert werden',
+  custom_message_unsupported_format:
+    'Diese Nachricht liegt nicht in einem anerkannten Signaturformat vor und kann daher nicht signiert werden.',
+  custom_message_unsupported_method:
+    'Nicht unterstützte Signaturmethode. Verwenden Sie personal_sign oder eth_signTypedData_v4.',
 }

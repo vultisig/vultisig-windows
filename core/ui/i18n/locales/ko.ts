@@ -2035,4 +2035,8 @@ export const ko = {
   share_qr_code: 'QR 코드 공유',
   share_qr_image: 'QR 이미지 공유',
   failed_to_save_image: '이미지 저장에 실패했습니다',
+  custom_message_unsupported_format:
+    '이 메시지는 인식된 서명 형식이 아니므로 서명할 수 없습니다.',
+  custom_message_unsupported_method:
+    '지원되지 않는 서명 방식입니다. personal_sign 또는 eth_signTypedData_v4를 사용하십시오.',
 }
