@@ -979,7 +979,7 @@ export const zh = {
     version: '版本 {{latestVersion}}',
   },
   vault_already_exists: 'Vault "{{name}}" 已存在',
-  vault_cannot_be_opened: '本设备无法打开此 vault',
+  vault_cannot_be_opened: '本设备无法打开 vault “{{name}}”',
   vault_cannot_be_opened_backup_description:
     '您的 .vult 备份就是找回的途径。导入备份后，此 vault 即可恢复使用。',
   vault_cannot_be_opened_description:

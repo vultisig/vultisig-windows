@@ -1068,7 +1068,7 @@ export const de = {
   },
   vault_already_exists: 'Vault "{{name}}" existiert bereits',
   vault_cannot_be_opened:
-    'Dieser Vault lässt sich auf diesem Gerät nicht öffnen',
+    'Der Vault „{{name}}“ lässt sich auf diesem Gerät nicht öffnen',
   vault_cannot_be_opened_backup_description:
     'Ihr .vult-Backup ist der Weg zurück. Importieren Sie es, und dieser Vault funktioniert wieder.',
   vault_cannot_be_opened_description:

@@ -1058,7 +1058,8 @@ export const es = {
     version: 'Versión {{latestVersion}}',
   },
   vault_already_exists: 'La bóveda "{{name}}" ya existe',
-  vault_cannot_be_opened: 'Este vault no se puede abrir en este dispositivo',
+  vault_cannot_be_opened:
+    'El vault "{{name}}" no se puede abrir en este dispositivo',
   vault_cannot_be_opened_backup_description:
     'Tu copia de seguridad .vult es el camino de vuelta. Impórtala y este vault volverá a funcionar.',
   vault_cannot_be_opened_description:

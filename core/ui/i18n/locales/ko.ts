@@ -1066,7 +1066,7 @@ export const ko = {
     version: '버전 {{latestVersion}}',
   },
   vault_already_exists: 'Vault &quot;{{name}}&quot;이 이미 존재합니다.',
-  vault_cannot_be_opened: '이 기기에서는 이 볼트를 열 수 없습니다',
+  vault_cannot_be_opened: '이 기기에서는 "{{name}}" 볼트를 열 수 없습니다',
   vault_cannot_be_opened_backup_description:
     '.vult 백업이 돌아가는 길입니다. 백업을 가져오면 이 볼트를 다시 사용할 수 있습니다.',
   vault_cannot_be_opened_description:
