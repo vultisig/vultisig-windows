@@ -173,6 +173,16 @@ export const i18nGlossary = [
     note: 'Token standard acronym; keep exactly as written.',
   },
   {
+    term: 'personal_sign',
+    preserve: true,
+    note: 'Signing method name the user types; keep exactly as written.',
+  },
+  {
+    term: 'eth_signTypedData_v4',
+    preserve: true,
+    note: 'Signing method name the user types; keep exactly as written.',
+  },
+  {
     term: 'dApps',
     preserve: true,
     note: 'Web3 app term; keep capitalization exactly as written.',

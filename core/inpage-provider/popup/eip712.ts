@@ -1,3 +1,4 @@
+import { getTypedDataHex } from '@core/ui/mpc/keysign/customMessage/getTypedDataHex'
 import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { omit } from '@vultisig/lib-utils/record/omit'
@@ -89,21 +90,15 @@ export const getEip712SignedPrimaryType = ({
 
 /**
  * Why the payload cannot be hashed for signing, or `undefined` when it can.
- * Runs the same ethers `TypedDataEncoder` hashing the keysign pipeline
- * performs (see `getCustomMessageHex`), so an unsignable dApp payload is
- * rejected at request time — with empty bytes fields called out by path —
- * instead of failing deep in keysign after the user has already approved.
+ * Runs the keysign pipeline's own `getTypedDataHex` on the string the popup
+ * puts in the keysign payload, so an unsignable dApp payload is rejected at
+ * request time — with empty bytes fields called out by path — instead of
+ * failing deep in keysign after the user has already approved.
  */
 export const getEip712PayloadIssue = (
   payload: Eip712V4Payload
 ): string | undefined => {
-  const result = attempt(() =>
-    TypedDataEncoder.hash(
-      payload.domain,
-      omit(payload.types, 'EIP712Domain'),
-      payload.message
-    )
-  )
+  const result = attempt(() => getTypedDataHex(JSON.stringify(payload)))
   if ('data' in result) {
     return undefined
   }

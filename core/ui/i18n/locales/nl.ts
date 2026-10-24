@@ -2074,4 +2074,8 @@ export const nl = {
   maya_lp_cacao_alone: 'Dit voegt alleen CACAO toe, zonder gekoppelde activa.',
   maya_lp_cacao_only_position:
     'Uw {{pool}} positie bevat alleen CACAO. MayaChain stort een gekoppelde storting terug, dus voeg in plaats daarvan alleen CACAO toe.',
+  custom_message_unsupported_format:
+    'Dit bericht heeft geen erkend ondertekeningsformaat en kan daarom niet worden ondertekend.',
+  custom_message_unsupported_method:
+    'Niet-ondersteunde ondertekeningsmethode. Gebruik personal_sign of eth_signTypedData_v4.',
 }

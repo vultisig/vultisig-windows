@@ -2046,4 +2046,8 @@ export const ko = {
   maya_lp_pending_address_mismatch:
     '{{pool}} 에 대한 보류 중인 입금은 CACAO 또는 이 볼트와 일치하지 않는 자산 주소를 사용합니다. MayaChain 이 입금을 환불합니다.',
   maya_lp_cacao_alone: '이는 쌍을 이루는 자산 없이 CACAO 만 추가합니다.',
+  custom_message_unsupported_format:
+    '이 메시지는 인식된 서명 형식이 아니므로 서명할 수 없습니다.',
+  custom_message_unsupported_method:
+    '지원되지 않는 서명 방식입니다. personal_sign 또는 eth_signTypedData_v4를 사용하십시오.',
 }

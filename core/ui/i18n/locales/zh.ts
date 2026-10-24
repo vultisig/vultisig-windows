@@ -1919,4 +1919,8 @@ export const zh = {
   maya_lp_pending_address_mismatch:
     '一笔存入 {{pool}} 的待处理存款所使用的 CACAO 或资产地址与此保险库不匹配。MayaChain 将退还此笔存款。',
   maya_lp_cacao_alone: '这将仅添加 CACAO，不含配对资产。',
+  custom_message_unsupported_format:
+    '此消息格式不符合认可的签名格式，因此无法签名。',
+  custom_message_unsupported_method:
+    '不支持的签名方法。请使用personal_sign或eth_signTypedData_v4。',
 }

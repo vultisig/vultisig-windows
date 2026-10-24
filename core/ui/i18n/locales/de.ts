@@ -2106,4 +2106,8 @@ export const de = {
     'Dadurch wird nur CACAO hinzugefügt, ohne zugehöriges Asset.',
   maya_lp_cacao_only_position:
     'Ihre {{pool}}-Position enthält nur CACAO. MayaChain erstattet eine gepaarte Einzahlung darauf zurück, fügen Sie daher stattdessen nur CACAO hinzu.',
+  custom_message_unsupported_format:
+    'Diese Nachricht liegt nicht in einem anerkannten Signaturformat vor und kann daher nicht signiert werden.',
+  custom_message_unsupported_method:
+    'Nicht unterstützte Signaturmethode. Verwenden Sie personal_sign oder eth_signTypedData_v4.',
 }

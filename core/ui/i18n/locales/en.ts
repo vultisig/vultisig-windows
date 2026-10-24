@@ -250,6 +250,10 @@ export const en = {
   current_expiry: 'Current expiry',
   current_passcode: 'Current Passcode',
   custom: 'Custom Action',
+  custom_message_unsupported_format:
+    "This message isn't in a recognised signing format, so it can't be signed.",
+  custom_message_unsupported_method:
+    'Unsupported signing method. Use personal_sign or eth_signTypedData_v4.',
   custom_rpc: 'Custom RPCs',
   custom_rpc_chip_custom: 'Custom',
   custom_rpc_description: 'Use your own nodes per chain',

@@ -2087,4 +2087,8 @@ export const es = {
   maya_lp_cacao_alone: 'Esto agrega CACAO solo, sin ningún activo asociado.',
   maya_lp_cacao_only_position:
     'Su posición {{pool}} contiene únicamente CACAO. MayaChain reembolsa un depósito asociado, por lo que debe agregar solo CACAO.',
+  custom_message_unsupported_format:
+    'Este mensaje no está en un formato de firma reconocido, por lo que no se puede firmar.',
+  custom_message_unsupported_method:
+    'Método de firma no compatible. Utilice personal_sign o eth_signTypedData_v4.',
 }

@@ -3,12 +3,12 @@ import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { getSuiPersonalMessageDigest } from '@vultisig/core-chain/chains/sui/sign'
 import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
 import { match } from '@vultisig/lib-utils/match'
-import { omit } from '@vultisig/lib-utils/record/omit'
-import { TypedDataEncoder } from 'ethers'
 import { keccak256, sha256 } from 'viem'
 
 import { CustomMessageSupportedChain } from './chains'
 import { getCustomMessageBytes } from './getCustomMessageBytes'
+import { getTypedDataHex } from './getTypedDataHex'
+import { isSignableCustomMessage } from './isSignableCustomMessage'
 
 type GetCustomMessageHexInput = {
   chain: CustomMessageSupportedChain
@@ -27,19 +27,21 @@ const getSuiDigestHex = (messageBytes: Uint8Array): string =>
  * The hex digest the MPC keysign signs for a custom message. Every co-signer
  * computes it independently from the shared payload, so a change here must
  * ship on every platform at once; domain separation belongs in the popup,
- * which builds the payload's `message`.
+ * which builds the payload's `message`. Throws for a payload that
+ * `isSignableCustomMessage` refuses, so no path signs one unchecked.
  */
 export const getCustomMessageHex = ({
   chain,
   message,
   method,
 }: GetCustomMessageHexInput) => {
-  if (method === 'eth_signTypedData_v4') {
-    const { domain, types, message: msg } = JSON.parse(message)
-    return stripHexPrefix(
-      TypedDataEncoder.hash(domain, omit(types, 'EIP712Domain'), msg)
+  if (!isSignableCustomMessage({ chain, method, message })) {
+    throw new Error(
+      `Refusing to sign a ${chain} custom message with method "${method}": it is not a recognised signing format`
     )
   }
+
+  if (method === 'eth_signTypedData_v4') return getTypedDataHex(message)
 
   const bytes = getCustomMessageBytes(message)
 

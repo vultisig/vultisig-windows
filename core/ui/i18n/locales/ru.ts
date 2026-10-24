@@ -2063,4 +2063,8 @@ export const ru = {
   maya_lp_cacao_only_position:
     'Ваша позиция {{pool}} содержит только CACAO. MayaChain возвращает на неё парный депозит, поэтому вместо этого добавьте только CACAO.',
   maya_lp_cacao_alone: 'Это добавляет только CACAO, без парного актива.',
+  custom_message_unsupported_format:
+    'Это сообщение не имеет общепринятого формата для подписания, поэтому его нельзя подписать.',
+  custom_message_unsupported_method:
+    'Неподдерживаемый метод подписи. Используйте personal_sign или eth_signTypedData_v4.',
 }

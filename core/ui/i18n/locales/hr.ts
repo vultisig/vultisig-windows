@@ -2057,4 +2057,8 @@ export const hr = {
   maya_lp_cacao_alone: 'Ovo dodaje CACAO samostalno, bez uparene imovine.',
   maya_lp_cacao_only_position:
     'Vaša pozicija {{pool}} sadrži samo CACAO. MayaChain vraća upareni depozit, stoga umjesto toga dodajte samo CACAO.',
+  custom_message_unsupported_format:
+    'Ova poruka nije u prepoznatom formatu za potpisivanje, stoga se ne može potpisati.',
+  custom_message_unsupported_method:
+    'Nepodržana metoda potpisivanja. Koristite personal_sign ili eth_signTypedData_v4.',
 }

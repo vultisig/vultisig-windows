@@ -2090,4 +2090,8 @@ export const pt = {
     'Sua posição {{pool}} contém apenas CACAO. MayaChain reembolsa um depósito pareado, portanto, adicione apenas CACAO.',
   maya_lp_cacao_alone:
     'Isso adiciona apenas CACAO, sem nenhum ativo associado.',
+  custom_message_unsupported_format:
+    'Esta mensagem não está em um formato de assinatura reconhecido, portanto não pode ser assinada.',
+  custom_message_unsupported_method:
+    'Método de assinatura não suportado. Use personal_sign ou eth_signTypedData_v4.',
 }
