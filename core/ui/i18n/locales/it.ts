@@ -2089,7 +2089,7 @@ export const it = {
   maya_lp_paired_with_other_address:
     'La tua posizione {{pool}} è associata a un indirizzo diverso. MayaChain rimborserebbe questo deposito.',
   maya_lp_pending_address_mismatch:
-    'Un deposito in sospeso {{pool}} utilizza un CACAO o un indirizzo di asset che non corrisponde a questo vault. MayaChain rimborserebbe questo deposito.',
+    'Un deposito in sospeso su {{pool}} utilizza un CACAO o un indirizzo di asset che non corrisponde a questo vault. MayaChain rimborserebbe questo deposito.',
   maya_lp_cacao_alone:
     'Questo aggiunge CACAO da solo, senza alcun asset associato.',
   maya_lp_cacao_only_position:

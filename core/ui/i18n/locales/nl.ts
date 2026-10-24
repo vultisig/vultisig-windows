@@ -2070,7 +2070,7 @@ export const nl = {
   maya_lp_paired_with_other_address:
     'Uw {{pool}} positie is gekoppeld aan een ander adres. MayaChain zou deze storting terugbetalen.',
   maya_lp_pending_address_mismatch:
-    'Een lopende {{pool}} -storting maakt gebruik van een CACAO of activa-adres dat niet overeenkomt met deze kluis. MayaChain zou deze storting terugbetalen.',
+    'Een lopende storting op {{pool}} maakt gebruik van een CACAO of activa-adres dat niet overeenkomt met deze kluis. MayaChain zou deze storting terugbetalen.',
   maya_lp_cacao_alone: 'Dit voegt alleen CACAO toe, zonder gekoppelde activa.',
   maya_lp_cacao_only_position:
     'Uw {{pool}} positie bevat alleen CACAO. MayaChain stort een gekoppelde storting terug, dus voeg in plaats daarvan alleen CACAO toe.',

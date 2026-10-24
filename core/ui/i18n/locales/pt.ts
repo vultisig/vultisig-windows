@@ -2085,7 +2085,7 @@ export const pt = {
   maya_lp_paired_with_other_address:
     'Sua posição {{pool}} está associada a um endereço diferente. MayaChain reembolsaria esse depósito.',
   maya_lp_pending_address_mismatch:
-    'Um depósito pendente {{pool}} usa um endereço de ativo ou CACAO que não corresponde a este cofre. MayaChain reembolsaria este depósito.',
+    'Um depósito pendente em {{pool}} usa um endereço de ativo ou CACAO que não corresponde a este cofre. MayaChain reembolsaria este depósito.',
   maya_lp_cacao_only_position:
     'Sua posição {{pool}} contém apenas CACAO. MayaChain reembolsa um depósito pareado, portanto, adicione apenas CACAO.',
   maya_lp_cacao_alone:

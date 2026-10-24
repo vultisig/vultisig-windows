@@ -2044,6 +2044,6 @@ export const ko = {
   maya_lp_paired_with_other_address:
     '귀하의 {{pool}} 포지션은 다른 주소와 연결되어 있습니다. MayaChain 해당 입금액이 환불됩니다.',
   maya_lp_pending_address_mismatch:
-    '보류 중인 {{pool}} 입금은 이 볼트와 일치하지 않는 CACAO 또는 자산 주소를 사용합니다. MayaChain 이 입금을 환불해 드립니다.',
+    '{{pool}} 에 대한 보류 중인 입금은 CACAO 또는 이 볼트와 일치하지 않는 자산 주소를 사용합니다. MayaChain 이 입금을 환불합니다.',
   maya_lp_cacao_alone: '이는 쌍을 이루는 자산 없이 CACAO 만 추가합니다.',
 }

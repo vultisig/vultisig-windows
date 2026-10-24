@@ -2053,7 +2053,7 @@ export const hr = {
   maya_lp_paired_with_other_address:
     'Vaša pozicija {{pool}} je uparena s drugom adresom. MayaChain bi vratio ovaj depozit.',
   maya_lp_pending_address_mismatch:
-    'Depozit {{pool}} na čekanju koristi CACAO ili adresu imovine koja se ne podudara s ovim trezorom. MayaChain bi vratio ovaj depozit.',
+    'Uplata na čekanju za {{pool}} koristi CACAO ili adresu imovine koja se ne podudara s ovim trezorom. MayaChain bi vratio ovaj depozit.',
   maya_lp_cacao_alone: 'Ovo dodaje CACAO samostalno, bez uparene imovine.',
   maya_lp_cacao_only_position:
     'Vaša pozicija {{pool}} sadrži samo CACAO. MayaChain vraća upareni depozit, stoga umjesto toga dodajte samo CACAO.',

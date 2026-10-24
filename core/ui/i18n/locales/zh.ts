@@ -1917,6 +1917,6 @@ export const zh = {
   maya_lp_paired_with_other_address:
     '您的 {{pool}} 仓位已与另一个地址配对。MayaChain 将退还此笔存款。',
   maya_lp_pending_address_mismatch:
-    '一笔待处理的 {{pool}} 存款使用的 CACAO 或资产地址与此保险库不匹配。MayaChain 将退还此笔存款。',
+    '一笔存入 {{pool}} 的待处理存款所使用的 CACAO 或资产地址与此保险库不匹配。MayaChain 将退还此笔存款。',
   maya_lp_cacao_alone: '这将仅添加 CACAO，不含配对资产。',
 }

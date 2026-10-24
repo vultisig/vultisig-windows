@@ -2101,7 +2101,7 @@ export const de = {
   maya_lp_paired_with_other_address:
     'Ihre Position {{pool}} ist mit einer anderen Adresse verknüpft. MayaChain würde diese Einzahlung zurückerstatten.',
   maya_lp_pending_address_mismatch:
-    'Eine ausstehende {{pool}}-Einzahlung verwendet eine CACAO- oder Asset-Adresse, die nicht zu diesem Tresor passt. MayaChain würde diese Einzahlung zurückerstatten.',
+    'Eine ausstehende Einzahlung an {{pool}} verwendet eine CACAO oder Asset-Adresse, die nicht mit diesem Tresor übereinstimmt. MayaChain würde diese Einzahlung erstatten.',
   maya_lp_cacao_alone:
     'Dadurch wird nur CACAO hinzugefügt, ohne zugehöriges Asset.',
   maya_lp_cacao_only_position:

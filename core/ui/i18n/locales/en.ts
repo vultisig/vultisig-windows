@@ -1723,7 +1723,7 @@ export const en = {
   maya_lp_paired_with_other_address:
     'Your {{pool}} position is paired with a different address. MayaChain would refund this deposit.',
   maya_lp_pending_address_mismatch:
-    "A pending {{pool}} deposit uses a CACAO or asset address that doesn't match this vault. MayaChain would refund this deposit.",
+    "A pending deposit to {{pool}} uses a CACAO or asset address that doesn't match this vault. MayaChain would refund this deposit.",
   maya_lp_cacao_alone: 'This adds CACAO alone, with no paired asset.',
   open_trust_line: 'Open Trust Line',
   activate: 'Activate',
