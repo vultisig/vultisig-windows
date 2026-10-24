@@ -4,15 +4,18 @@ import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { isKeyImportVault, Vault } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
+import { getSiteVaultId } from '../core/appSession'
+
 /**
- * Checks if the current vault has keys for the given chain.
+ * Checks if the vault serving the requesting site has keys for the given chain.
  * Returns true for non-imported vaults (they derive all chains).
  * For key-import vaults, returns true only if the chain exists in chainPublicKeys.
  */
 export const hasChainInVault: BackgroundResolver<'hasChainInVault'> = async ({
   input: { chain },
+  context: { requestOrigin },
 }) => {
-  const vault = await resolveCurrentVault()
+  const vault = await resolveSiteVault(requestOrigin)
   if (!vault) {
     return false
   }
@@ -24,9 +27,11 @@ export const hasChainInVault: BackgroundResolver<'hasChainInVault'> = async ({
   return !!vault.chainPublicKeys?.[chain]
 }
 
-/** Tries getCurrentVaultId first, then falls back to the first vault in storage. */
-const resolveCurrentVault = async (): Promise<Vault | undefined> => {
-  const vaultId = await storage.getCurrentVaultId()
+/** Tries the site's vault first, then falls back to the first vault in storage. */
+const resolveSiteVault = async (
+  requestOrigin: string
+): Promise<Vault | undefined> => {
+  const vaultId = await getSiteVaultId(requestOrigin)
   if (vaultId) {
     const { data } = await attempt(getVault(vaultId))
     if (data) return data
