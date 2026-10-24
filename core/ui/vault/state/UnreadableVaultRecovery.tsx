@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ImportVaultBackupButton } from './ImportVaultBackupButton'
+import { SwitchFromUnreadableVault } from './SwitchFromUnreadableVault'
 
 type UnreadableVaultRecoveryProps = {
   name: string
@@ -19,9 +20,9 @@ type UnreadableVaultRecoveryProps = {
 /**
  * Dead end for a vault whose key shares cannot be read. Names the vault and
  * shows the validation failure behind the exact-error card. Offers the backup
- * import where the host has a navigation stack to reach it; a host without
- * one (the extension's dApp popup) can only be closed, and the vault is
- * recovered from the main app instead.
+ * import and a switch to any other vault where the host has a navigation
+ * stack to reach them; a host without one (the extension's dApp popup) can
+ * only be closed, and the vault is recovered from the main app instead.
  */
 export const UnreadableVaultRecovery = ({
   name,
@@ -44,7 +45,10 @@ export const UnreadableVaultRecovery = ({
         action={
           <VStack gap={8} fullWidth>
             {canImportBackup ? (
-              <ImportVaultBackupButton />
+              <>
+                <ImportVaultBackupButton />
+                <SwitchFromUnreadableVault />
+              </>
             ) : (
               <Button onClick={goBack}>{t('close')}</Button>
             )}
