@@ -4,9 +4,11 @@ import { Chain } from '@vultisig/core-chain/Chain'
 
 import { DefiPosition, useDefiPositions } from '../../../storage/defiPositions'
 import { useCurrentVaultAddress } from '../../../vault/state/currentVaultCoins'
-import { fetchMayachainLpPositions } from './services/mayachainLpService'
+import {
+  fetchMayachainLpPositions,
+  getMayaLpRedeemAmounts,
+} from './services/mayachainLpService'
 import { ThorchainLpPositionData } from './services/thorchainLpService'
-import { mayaCoin } from './tokens'
 
 type MayaLpPositionWithData = {
   position: DefiPosition
@@ -19,6 +21,10 @@ type UseMayaLpPositionsQueryInput = {
   selectedPositions: DefiPosition[]
 }
 
+/**
+ * Redeemable CACAO and asset amounts for the vault's selected MayaChain LP
+ * positions. A selected pool with no mayanode record reads as zero.
+ */
 export const useMayaLpPositionsQuery = ({
   selectedPositions,
 }: UseMayaLpPositionsQueryInput) => {
@@ -45,13 +51,9 @@ export const useMayaLpPositionsQuery = ({
             (a: ThorchainLpPositionData) => a.poolAsset === position.poolAsset
           )
 
-          const runeAmount = apiData
-            ? Number(apiData.runeRedeemValue) / Math.pow(10, mayaCoin.decimals)
-            : 0
-
-          const assetAmount = apiData
-            ? Number(apiData.assetRedeemValue) / Math.pow(10, mayaCoin.decimals)
-            : 0
+          const { runeAmount, assetAmount } = apiData
+            ? getMayaLpRedeemAmounts(apiData)
+            : { runeAmount: 0, assetAmount: 0 }
 
           return {
             position,
