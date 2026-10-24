@@ -2071,6 +2071,14 @@ export const pt = {
     'Primeiro, insira o endereço do destinatário para usar os botões de porcentagem.',
   send_insufficient_balance_for_fee:
     'Saldo insuficiente para pagar a taxa de rede.',
+  send_receiver_name_lookup_failed:
+    'Não foi possível acessar o serviço de nomes para consultar {{name}} . Verifique sua conexão e tente novamente.',
+  send_receiver_name_no_address_for_chain:
+    'Nenhum endereço {{chain}} está registrado para {{name}} .',
+  send_receiver_name_not_found:
+    '{{name}} não está registrado. Verifique o nome e tente novamente.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} não pode ser usado em {{chain}} . Insira um endereço {{chain}} em vez disso.',
   failed_to_copy_tx_hash: 'Falha ao copiar o hash da transação.',
   tx_hash_copied: 'Hash da transação copiado',
   copy_link: 'Copiar link',

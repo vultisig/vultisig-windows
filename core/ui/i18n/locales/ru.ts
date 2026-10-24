@@ -2046,6 +2046,14 @@ export const ru = {
     'Для использования кнопок отображения процентов сначала введите адрес получателя.',
   send_insufficient_balance_for_fee:
     'Недостаточно средств для оплаты сетевой комиссии.',
+  send_receiver_name_lookup_failed:
+    'Не удалось подключиться к службе имен для поиска {{name}} . Проверьте соединение и повторите попытку.',
+  send_receiver_name_no_address_for_chain:
+    'Для {{chain}} не зарегистрирован ни один адрес {{name}} .',
+  send_receiver_name_not_found:
+    '{{name}} не зарегистрирован. Проверьте имя и повторите попытку.',
+  send_receiver_name_unsupported_chain:
+    '{{name}} нельзя использовать с {{chain}} . Вместо этого введите адрес {{chain}} .',
   failed_to_copy_tx_hash: 'Не удалось скопировать хэш транзакции.',
   tx_hash_copied: 'Хэш транзакции скопирован',
   copy_link: 'Скопировать ссылку',

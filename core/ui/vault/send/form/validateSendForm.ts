@@ -2,6 +2,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, UtxoBasedChain } from '@vultisig/core-chain/Chain'
 import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import { getNameServiceName } from '@vultisig/core-chain/nameService/getNameServiceName'
 import {
   getChainDangerousReason,
   getEvmDangerousReason,
@@ -11,6 +12,7 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
 
+import { getChainDisplayName } from '../../../chain/metadata/getChainDisplayName'
 import { getSendMemoError } from '../memo/sendMemoSupport'
 import { getSendDestinationTag } from '../state/destinationTag'
 import { SendFormShape, ValidationResult } from './formShape'
@@ -24,6 +26,10 @@ type ValidateSendReceiverInput = {
   t: TFunction
 }
 
+/**
+ * Why an address cannot receive this send, or undefined when it can. Takes the
+ * address itself: a typed name is resolved first and its address checked here.
+ */
 export const validateSendReceiver = ({
   receiverAddress,
   chain,
@@ -58,6 +64,16 @@ export const validateSendReceiver = ({
   }
 
   if (!isValidRecipient({ address: receiverAddress, chain, walletCore })) {
+    // A name reaches validation as typed only on a chain its service cannot
+    // hold an address for; say so rather than call it a malformed address.
+    const typedName = getNameServiceName(receiverAddress)
+    if (typedName) {
+      return t('send_receiver_name_unsupported_chain', {
+        name: typedName.name,
+        chain: getChainDisplayName(chain),
+      })
+    }
+
     return t('send_invalid_receiver_address_with_hint', {
       error: t('send_invalid_receiver_address'),
       hint: getReceiverAddressFormatHint({ chain, senderAddress, t }),

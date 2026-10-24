@@ -1130,6 +1130,14 @@ export const en = {
     'Enter a TRON address that starts with the letter T.',
   send_receiver_format_hint_utxo:
     'Enter a valid address for this network (bech32 or legacy format).',
+  send_receiver_name_lookup_failed:
+    "Couldn't reach the name service to look up {{name}}. Check your connection and try again.",
+  send_receiver_name_no_address_for_chain:
+    'No {{chain}} address is registered for {{name}}.',
+  send_receiver_name_not_found:
+    '{{name}} is not registered. Check the name and try again.',
+  send_receiver_name_unsupported_chain:
+    "{{name}} can't be used on {{chain}}. Enter a {{chain}} address instead.",
   send_terms_0: "I'm sending to the right address",
   send_terms_1: 'The amount is correct',
   send_to: 'Send to',
