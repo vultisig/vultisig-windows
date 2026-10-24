@@ -2056,11 +2056,11 @@ export const ru = {
   maya_lp_checking_position: 'Проверка позиции вашего MayaChain в этом pool …',
   maya_lp_position_unavailable:
     'Не удалось прочитать вашу позицию MayaChain в этом pool , поэтому проверить этот депозит невозможно. Попробуйте позже.',
-  maya_lp_cacao_only_position:
-    'Ваша позиция {{pool}} содержит только CACAO . MayaChain возвращает на неё парный депозит, поэтому вместо этого добавьте только CACAO .',
   maya_lp_paired_with_other_address:
     'Ваша позиция {{pool}} связана с другим адресом. MayaChain вернет этот депозит.',
   maya_lp_pending_address_mismatch:
-    'Ожидающий обработки депозит {{pool}} поступает на другой адрес. Депозит MayaChain будет возвращен.',
-  maya_lp_cacao_alone: 'Это добавляет только CACAO , без парного ресурса.',
+    'Ожидающий депозит {{pool}} использует CACAO или адрес актива, не соответствующий этому хранилищу. Депозит MayaChain будет возвращен.',
+  maya_lp_cacao_only_position:
+    'Ваша позиция {{pool}} содержит только CACAO. MayaChain возвращает на неё парный депозит, поэтому вместо этого добавьте только CACAO.',
+  maya_lp_cacao_alone: 'Это добавляет только CACAO, без парного актива.',
 }

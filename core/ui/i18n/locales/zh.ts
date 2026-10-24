@@ -1908,15 +1908,15 @@ export const zh = {
   share_qr_code: '分享二维码',
   share_qr_image: '分享二维码图片',
   failed_to_save_image: '图像保存失败',
-  add_maya_lp: '添加MayaChain LP',
-  maya_lp_checking_position: '检查MayaChain在此pool中的位置……',
+  add_maya_lp: '添加 MayaChain LP',
+  maya_lp_checking_position: '正在检查您在此 pool 中的 MayaChain 仓位……',
   maya_lp_position_unavailable:
-    '无法读取您在pool中的MayaChain位置，因此无法核实此次存款。请稍后再试。',
+    '无法读取您在此 pool 中的 MayaChain 仓位，因此无法核验此笔存款。请稍后再试。',
   maya_lp_cacao_only_position:
-    '您的{{pool}}仓位仅持有CACAO MayaChain配对存款退还到该仓位，因此请单独添加CACAO 。',
+    '您的 {{pool}} 仓位仅持有 CACAO。MayaChain 会退还向该仓位进行的配对存款，因此请改为仅添加 CACAO。',
   maya_lp_paired_with_other_address:
-    '您的{{pool}}仓位与另一个地址配对MayaChain将退还这笔押金。',
+    '您的 {{pool}} 仓位已与另一个地址配对。MayaChain 将退还此笔存款。',
   maya_lp_pending_address_mismatch:
-    '一笔待处理的{{pool}}存款正在等待到账MayaChain地址不同。MayaChain 将退还这笔存款。',
-  maya_lp_cacao_alone: '这将单独添加CACAO ，不包含任何配对资产。',
+    '一笔待处理的 {{pool}} 存款使用的 CACAO 或资产地址与此保险库不匹配。MayaChain 将退还此笔存款。',
+  maya_lp_cacao_alone: '这将仅添加 CACAO，不含配对资产。',
 }

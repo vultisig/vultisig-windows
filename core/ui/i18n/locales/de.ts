@@ -2095,15 +2095,15 @@ export const de = {
   failed_to_save_image: 'Bild konnte nicht gespeichert werden',
   add_maya_lp: 'Füge MayaChain LP hinzu',
   maya_lp_checking_position:
-    'Überprüfung Ihrer MayaChain Position in diesem pool …',
+    'Ihre MayaChain-Position in diesem Pool wird überprüft …',
   maya_lp_position_unavailable:
-    'Ihre Position MayaChain in diesem pool konnte nicht gelesen werden, daher kann diese Einzahlung nicht überprüft werden. Bitte versuchen Sie es später erneut.',
-  maya_lp_cacao_only_position:
-    'Ihre Position {{pool}} enthält nur CACAO . MayaChain erstattet eine zugehörige Einzahlung, fügen Sie daher stattdessen nur CACAO hinzu.',
+    'Ihre MayaChain-Position in diesem Pool konnte nicht gelesen werden, daher kann diese Einzahlung nicht überprüft werden. Bitte versuchen Sie es später erneut.',
   maya_lp_paired_with_other_address:
     'Ihre Position {{pool}} ist mit einer anderen Adresse verknüpft. MayaChain würde diese Einzahlung zurückerstatten.',
   maya_lp_pending_address_mismatch:
-    'Eine ausstehende Einzahlung {{pool}} wartet auf eine andere Adresse. MayaChain würde diese Einzahlung zurückerstattet werden.',
+    'Eine ausstehende {{pool}}-Einzahlung verwendet eine CACAO- oder Asset-Adresse, die nicht zu diesem Tresor passt. MayaChain würde diese Einzahlung zurückerstatten.',
   maya_lp_cacao_alone:
     'Dadurch wird nur CACAO hinzugefügt, ohne zugehöriges Asset.',
+  maya_lp_cacao_only_position:
+    'Ihre {{pool}}-Position enthält nur CACAO. MayaChain erstattet eine gepaarte Einzahlung darauf zurück, fügen Sie daher stattdessen nur CACAO hinzu.',
 }

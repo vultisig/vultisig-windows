@@ -2067,11 +2067,11 @@ export const nl = {
     'Uw MayaChain positie in deze pool wordt gecontroleerd...',
   maya_lp_position_unavailable:
     'Uw MayaChain positie in deze pool kon niet worden gelezen, waardoor deze storting niet kan worden gecontroleerd. Probeer het later opnieuw.',
-  maya_lp_cacao_only_position:
-    'Uw {{pool}} positie bevat alleen CACAO . MayaChain stort een gekoppelde storting terug, dus voeg in plaats daarvan alleen CACAO toe.',
   maya_lp_paired_with_other_address:
     'Uw {{pool}} positie is gekoppeld aan een ander adres. MayaChain zou deze storting terugbetalen.',
   maya_lp_pending_address_mismatch:
-    'Een openstaande storting {{pool}} staat op een ander adres te wachten. MayaChain zal deze storting terugbetalen.',
+    'Een lopende {{pool}} -storting maakt gebruik van een CACAO of activa-adres dat niet overeenkomt met deze kluis. MayaChain zou deze storting terugbetalen.',
   maya_lp_cacao_alone: 'Dit voegt alleen CACAO toe, zonder gekoppelde activa.',
+  maya_lp_cacao_only_position:
+    'Uw {{pool}} positie bevat alleen CACAO. MayaChain stort een gekoppelde storting terug, dus voeg in plaats daarvan alleen CACAO toe.',
 }
